@@ -11,12 +11,16 @@
 
 #include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <osl/file.hxx>
+#include <rtl/bootstrap.hxx>
+#include <tools/urlobj.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/msgbox.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
@@ -61,8 +65,11 @@ OUString SelectPersonaDialog::GetPersonaURL() const
 {
     OUString aText( m_pEdit->GetText() );
 
-    if ( !aText.startsWith( "http://www.getpersonas.com/" ) )
+    if ( !aText.startsWith( "http://www.getpersonas.com/" ) &&
+         !aText.startsWith( "https://www.getpersonas.com/" ) )
+    {
         return OUString();
+    }
 
     return aText;
 }
@@ -128,7 +135,8 @@ sal_Bool SvxPersonalizationTabPage::FillItemSet( SfxItemSet & )
     if ( xContext.is() &&
             ( aBackground != officecfg::Office::Common::Misc::BackgroundImage::get( xContext ) ||
               m_aBackgroundURL != officecfg::Office::Common::Misc::BackgroundImageURL::get( xContext ) ||
-              aPersona != officecfg::Office::Common::Misc::Persona::get( xContext ) ) )
+              aPersona != officecfg::Office::Common::Misc::Persona::get( xContext ) ||
+              m_aPersonaSettings != officecfg::Office::Common::Misc::PersonaSettings::get( xContext ) ) )
     {
         bModified = true;
     }
@@ -139,6 +147,7 @@ sal_Bool SvxPersonalizationTabPage::FillItemSet( SfxItemSet & )
     officecfg::Office::Common::Misc::BackgroundImage::set( aBackground, batch );
     officecfg::Office::Common::Misc::BackgroundImageURL::set( m_aBackgroundURL, batch );
     officecfg::Office::Common::Misc::Persona::set( aPersona, batch );
+    officecfg::Office::Common::Misc::PersonaSettings::set( m_aPersonaSettings, batch );
 
     batch->commit();
 
@@ -167,7 +176,10 @@ void SvxPersonalizationTabPage::Reset( const SfxItemSet & )
     // persona
     OUString aPersona( "default" );
     if ( xContext.is() )
+    {
         aPersona = officecfg::Office::Common::Misc::Persona::get( xContext );
+        m_aPersonaSettings = officecfg::Office::Common::Misc::PersonaSettings::get( xContext );
+    }
 
     if ( aPersona == "no" )
         m_pNoPersona->Check();
@@ -223,14 +235,117 @@ IMPL_LINK( SvxPersonalizationTabPage, SelectPersona, PushButton*, /*pButton*/ )
         OUString aURL( aDialog.GetPersonaURL() );
         if ( aURL != "" )
         {
-            // TODO parse the results
-            m_pOwnPersona->Check();
+            if ( CopyPersonaToGallery( aURL ) )
+                m_pOwnPersona->Check();
             break;
         }
         // else TODO msgbox that the URL did not match
     }
 
     return 0;
+}
+
+/// Find the value on the Persona page, and convert it to a usable form.
+static OUString searchValue( const OString &rBuffer, sal_Int32 from, const OString &rIdentifier )
+{
+    sal_Int32 where = rBuffer.indexOf( rIdentifier, from );
+    if ( where < 0 )
+        return OUString();
+
+    where += rIdentifier.getLength();
+
+    sal_Int32 end = rBuffer.indexOf( "&quot;", where );
+    if ( end < 0 )
+        return OUString();
+
+    OString aOString( rBuffer.copy( where, end - where ) );
+    OUString aString( aOString.getStr(),  aOString.getLength(), RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS );
+
+    return aString.replaceAll( "\\/", "/" );
+}
+
+/// Parse the Persona web page, and find where to get the bitmaps + the color values.
+static bool parsePersonaInfo( const OString &rBuffer, OUString *pHeaderURL, OUString *pFooterURL, OUString *pTextColor, OUString *pAccentColor )
+{
+    // it is the first attribute that contains "persona="
+    sal_Int32 persona = rBuffer.indexOf( "persona=\"{" );
+    if ( persona < 0 )
+        return false;
+
+    // now search inside
+    *pHeaderURL = searchValue( rBuffer, persona, "&quot;headerURL&quot;:&quot;" );
+    if ( pHeaderURL->isEmpty() )
+        return false;
+
+    *pFooterURL = searchValue( rBuffer, persona, "&quot;footerURL&quot;:&quot;" );
+    if ( pFooterURL->isEmpty() )
+        return false;
+
+    *pTextColor = searchValue( rBuffer, persona, "&quot;textcolor&quot;:&quot;" );
+    if ( pTextColor->isEmpty() )
+        return false;
+
+    *pAccentColor = searchValue( rBuffer, persona, "&quot;accentcolor&quot;:&quot;" );
+    if ( pAccentColor->isEmpty() )
+        return false;
+
+    return true;
+}
+
+bool SvxPersonalizationTabPage::CopyPersonaToGallery( const OUString &rURL )
+{
+    // init the input stream
+    uno::Reference< ucb::XSimpleFileAccess3 > xFileAccess( ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() ), uno::UNO_QUERY );
+    if ( !xFileAccess.is() )
+        return false;
+
+    uno::Reference< io::XInputStream > xStream( xFileAccess->openFileRead( rURL ), uno::UNO_QUERY );
+    if ( !xStream.is() )
+        return false;
+
+    // read the persona specification
+    // NOTE: Parsing for real is an overkill here; and worse - I tried, and
+    // the HTML the site provides is not 100% valid ;-)
+    const sal_Int32 BUF_LEN = 8000;
+    uno::Sequence< sal_Int8 > buffer( BUF_LEN );
+    OStringBuffer aBuffer( 64000 );
+
+    sal_Int32 nRead = 0;
+    while ( ( nRead = xStream->readBytes( buffer, BUF_LEN ) ) == BUF_LEN )
+        aBuffer.append( reinterpret_cast< const char* >( buffer.getConstArray() ), nRead );
+
+    if ( nRead > 0 )
+        aBuffer.append( reinterpret_cast< const char* >( buffer.getConstArray() ), nRead );
+
+    xStream->closeInput();
+
+    // get the important bits of info
+    OUString aHeaderURL, aFooterURL, aTextColor, aAccentColor;
+
+    if ( !parsePersonaInfo( aBuffer.makeStringAndClear(), &aHeaderURL, &aFooterURL, &aTextColor, &aAccentColor ) )
+        return false;
+
+    // copy the images to the user's gallery
+    OUString gallery = "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
+    rtl::Bootstrap::expandMacros( gallery );
+    gallery += "/user/gallery/personas/";
+    osl::Directory::createPath( gallery );
+
+    OUString aHeaderFile( INetURLObject( aHeaderURL ).getName() );
+    OUString aFooterFile( INetURLObject( aFooterURL ).getName() );
+
+    try {
+        xFileAccess->copy( aHeaderURL, gallery + aHeaderFile );
+        xFileAccess->copy( aFooterURL, gallery + aFooterFile );
+    }
+    catch ( const uno::Exception & )
+    {
+        return false;
+    }
+
+    m_aPersonaSettings = aHeaderFile + ";" + aFooterFile + ";" + aTextColor + ";" + aAccentColor;
+
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
