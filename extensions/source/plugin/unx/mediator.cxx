@@ -202,7 +202,7 @@ void MediatorListener::run()
         sal_uLong nHeader[ 3 ];
         int nBytes;
 
-        if( m_pMediator && ( nBytes = read( m_pMediator->m_nSocket, nHeader, sizeof( nHeader ) ) ) == sizeof( nHeader ) && nHeader[2] == MEDIATOR_MAGIC)
+        if( ( nBytes = read( m_pMediator->m_nSocket, nHeader, sizeof( nHeader ) ) ) == sizeof( nHeader ) && nHeader[2] == MEDIATOR_MAGIC)
         {
             if( nHeader[ 0 ] == 0 && nHeader[ 1 ] == 0 )
                 return;
