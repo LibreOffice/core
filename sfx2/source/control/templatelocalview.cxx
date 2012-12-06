@@ -59,12 +59,18 @@ public:
             if (isValid(rTemplates[i].aType))
             {
                 ++nVisCount;
-
-                // Update the thumbnails
-                if (nVisCount == 1)
-                    pFolderItem->maPreview1 = rTemplates[i].aThumbnail;
-                else if (nVisCount == 2)
-                    pFolderItem->maPreview2 = rTemplates[i].aThumbnail;
+                if ( pFolderItem->maPreview1.IsEmpty( ) )
+                {
+                    pFolderItem->maPreview1 = TemplateAbstractView::scaleImg(rTemplates[i].aThumbnail,
+                                                                       TEMPLATE_THUMBNAIL_MAX_WIDTH*0.75,
+                                                                       TEMPLATE_THUMBNAIL_MAX_HEIGHT*0.75);
+                }
+                else if ( pFolderItem->maPreview2.IsEmpty() )
+                {
+                    pFolderItem->maPreview2 = TemplateAbstractView::scaleImg(rTemplates[i].aThumbnail,
+                                                                       TEMPLATE_THUMBNAIL_MAX_WIDTH*0.75,
+                                                                       TEMPLATE_THUMBNAIL_MAX_HEIGHT*0.75);
+                }
             }
         }
 
