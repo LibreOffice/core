@@ -167,6 +167,13 @@ extern SfxViewShell* pScActiveViewShell;            // global.cxx
 extern sal_uInt16 nScClickMouseModifier;                // global.cxx
 extern sal_uInt16 nScFillModeMouseModifier;             // global.cxx
 
+struct ScGridWindow::MouseEventState
+{
+    bool mbActivatePart;
+
+    MouseEventState() : mbActivatePart(false) {}
+};
+
 #define SC_FILTERLISTBOX_LINES  12
 
 // ============================================================================
@@ -1734,7 +1741,10 @@ void ScGridWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
     nNestedButtonState = SC_NESTEDBUTTON_DOWN;
 
-    HandleMouseButtonDown( rMEvt );
+    MouseEventState aState;
+    HandleMouseButtonDown(rMEvt, aState);
+    if (aState.mbActivatePart)
+        pViewData->GetView()->ActivatePart(eWhich);
 
     if ( nNestedButtonState == SC_NESTEDBUTTON_UP )
     {
@@ -1751,7 +1761,7 @@ void ScGridWindow::MouseButtonDown( const MouseEvent& rMEvt )
     nNestedButtonState = SC_NESTEDBUTTON_NONE;
 }
 
-void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt )
+void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventState& rState )
 {
     // We have to check if a context menu is shown and we have an UI
     // active inplace client. In that case we have to ignore the event.
@@ -1835,12 +1845,9 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt )
     if (!bDouble)
         nMouseStatus = SC_GM_NONE;
 
-    if (!bFormulaMode)
-    {
-        if ( pViewData->GetActivePart() != eWhich )
-            pViewData->GetView()->ActivatePart( eWhich );
-    }
-    else
+    rState.mbActivatePart = !bFormulaMode; // Don't activate when in formula mode.
+
+    if (bFormulaMode)
     {
         ScViewSelectionEngine* pSelEng = pViewData->GetView()->GetSelEngine();
         pSelEng->SetWindow(this);
@@ -1896,9 +1903,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt )
     {
         bRFMouse = true;        // die anderen Variablen sind oben initialisiert
 
-        if ( pViewData->GetActivePart() != eWhich )
-            pViewData->GetView()->ActivatePart( eWhich );   //! schon oben immer ???
-
+        rState.mbActivatePart = true; // always activate ?
         StartTracking();
         return;
     }
@@ -1909,7 +1914,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt )
         if ( bDouble )
             pViewData->GetView()->FillCrossDblClick();
         else
-        pScMod->InputEnterHandler();                                // Autofill etc.
+            pScMod->InputEnterHandler();                                // Autofill etc.
     }
 
     if ( !bCrossPointer )
@@ -1944,10 +1949,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt )
     SCTAB nTab = pViewData->GetTabNo();
     ScDocument* pDoc = pViewData->GetDocument();
 
-
-            //
-            //      AutoFilter buttons
-            //
+    // Auto filter / pivot table / data select popup.  This shouldn't activate the part.
 
     if ( !bDouble && !bFormulaMode && rMEvt.IsLeft() )
     {
@@ -1956,11 +1958,15 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt )
         if (pAttr->HasAutoFilter())
         {
             if (DoAutoFilterButton(nPosX, nPosY, rMEvt))
+            {
+                rState.mbActivatePart = false;
                 return;
+            }
         }
         if (pAttr->HasButton())
         {
             DoPushButton( nPosX, nPosY, rMEvt );    // setzt evtl. bPivotMouse / bDPMouse
+            rState.mbActivatePart = false;
             return;
         }
 
@@ -1975,6 +1981,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt )
 
                 nMouseStatus = SC_GM_FILTER;    // not set in DoAutoFilterMenue for bDataSelect
                 CaptureMouse();
+                rState.mbActivatePart = false;
                 return;
             }
         }
