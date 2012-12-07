@@ -79,10 +79,13 @@ void TextContext::onCharacters( const OUString& rChars )
 {
     if( isCurrentElement( C_TOKEN( v ) ) )
     {
-        // Static text is stored as a single string formula token.
+        // Static text is stored as a single string formula token for Excel document.
         OUStringBuffer aBuf;
         aBuf.append('"').append(rChars).append('"');
         mrModel.mxDataSeq.create().maFormula = aBuf.makeStringAndClear();
+
+        // Also store it as a single element type for non-Excel document.
+        mrModel.mxDataSeq->maData[0] <<= rChars;
     }
 }
 
