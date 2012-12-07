@@ -734,7 +734,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
     OSL_ENSURE( pDrop->GetPart(),"DropPortion without part during font calculation");
 
     SwDropPortionPart* pCurrPart = pDrop->GetPart();
-    const sal_Bool bUseCache = ! pCurrPart->GetFollow();
+    const bool bUseCache = ! pCurrPart->GetFollow();
     xub_StrLen nIdx = rInf.GetIdx();
     XubString aStr( rInf.GetTxt(), nIdx, pCurrPart->GetLen() );
 
@@ -792,7 +792,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
             aFactor[ nTmpIdx ] = (sal_uInt16)nFactor;
         }
 
-        sal_Bool bGrow = ( pDrop->GetLen() != 0 );
+        bool bGrow = ( pDrop->GetLen() != 0 );
 
         // for growing controll
         long nMax = KSHRT_MAX;
@@ -801,7 +801,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
         long nGrow = 0;
 #endif
 
-        sal_Bool bWinUsed = sal_False;
+        bool bWinUsed = false;
         Font aOldFnt;
         MapMode aOldMap( MAP_TWIP );
         OutputDevice* pOut = rInf.GetOut();
@@ -815,8 +815,8 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
         {
             // reset pCurrPart to first part
             pCurrPart = pDrop->GetPart();
-            sal_Bool bFirstGlyphRect = sal_True;
-            sal_Bool bHaveGlyphRect = sal_False;
+            bool bFirstGlyphRect = true;
+            bool bHaveGlyphRect = false;
             Rectangle aCommonRect, aRect;
 
             while ( pCurrPart )
@@ -852,7 +852,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
                     {
                         if ( ! bWinUsed )
                         {
-                            bWinUsed = sal_True;
+                            bWinUsed = true;
                             aOldMap = pWin->GetMapMode( );
                             pWin->SetMapMode( MapMode( MAP_TWIP ) );
                             aOldFnt = pWin->GetFont();
@@ -885,7 +885,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
                 if ( bFirstGlyphRect )
                 {
                     aCommonRect = aRect;
-                    bFirstGlyphRect = sal_False;
+                    bFirstGlyphRect = false;
                 }
                 else
                     aCommonRect.Union( aRect );
@@ -935,7 +935,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
                 nIdx = rInf.GetIdx();
             }
             else
-                bGrow = sal_False;
+                bGrow = false;
         }
 
         if ( bWinUsed )

@@ -76,7 +76,7 @@ sal_Bool SwTxtFrm::_IsFtnNumFrm() const
 SwTxtFrm *SwTxtFrm::FindFtnRef( const SwTxtFtn *pFtn )
 {
     SwTxtFrm *pFrm = this;
-    const sal_Bool bFwd = *pFtn->GetStart() >= GetOfst();
+    const bool bFwd = *pFtn->GetStart() >= GetOfst();
     while( pFrm )
     {
         if( SwFtnBossFrm::FindFtn( pFrm, pFtn ) )
@@ -143,7 +143,7 @@ sal_Bool SwTxtFrm::CalcPrepFtnAdjust()
         !((SwSectionFrm*)pBoss->GetUpper())->IsFtnAtEnd() ) )
     {
         const SwFtnContFrm *pCont = pBoss->FindFtnCont();
-        sal_Bool bReArrange = sal_True;
+        bool bReArrange = true;
 
         SWRECTFN( this )
         if ( pCont && (*fnRect->fnYDiff)( (pCont->Frm().*fnRect->fnGetTop)(),
@@ -156,7 +156,7 @@ sal_Bool SwTxtFrm::CalcPrepFtnAdjust()
             pFtn = pBoss->FindFirstFtn( this );
         }
         else
-            bReArrange = sal_False;
+            bReArrange = false;
         if( !pCont || !pFtn || bReArrange != (pFtn->FindFtnBossFrm() == pBoss) )
         {
             SwTxtFormatInfo aInf( this );
@@ -213,7 +213,7 @@ static SwTwips lcl_GetFtnLower( const SwTxtFrm* pFrm, SwTwips nLower )
         OSL_ENSURE( pTabFrm && pRow &&
                 pRow->GetUpper()->IsTabFrm(), "Upper of row should be tab" );
 
-        const sal_Bool bDontSplit = !pTabFrm->IsFollow() &&
+        const bool bDontSplit = !pTabFrm->IsFollow() &&
                                 !pTabFrm->IsLayoutSplitAllowed();
 
         SwTwips nMin = 0;
@@ -352,7 +352,7 @@ SwTwips SwTxtFrm::_GetFtnFrmHeight() const
 #if OSL_DEBUG_LEVEL > 0
         if( nTmp < 0 )
         {
-            sal_Bool bInvalidPos = sal_False;
+            bool bInvalidPos = false;
             const SwLayoutFrm* pTmp = GetUpper();
             while( !bInvalidPos && pTmp )
             {
@@ -436,7 +436,7 @@ void SwTxtFrm::RemoveFtn( const xub_StrLen nStart, const xub_StrLen nLen )
     if( !pHints )
         return;
 
-    sal_Bool bRollBack = nLen != STRING_LEN;
+    bool bRollBack = nLen != STRING_LEN;
     sal_uInt16 nSize = pHints->Count();
     xub_StrLen nEnd;
     SwTxtFrm* pSource;
@@ -456,10 +456,10 @@ void SwTxtFrm::RemoveFtn( const xub_StrLen nStart, const xub_StrLen nLen )
     if( nSize )
     {
         SwPageFrm* pUpdate = NULL;
-        sal_Bool bRemove = sal_False;
+        bool bRemove = false;
         SwFtnBossFrm *pFtnBoss = 0;
         SwFtnBossFrm *pEndBoss = 0;
-        sal_Bool bFtnEndDoc
+        bool bFtnEndDoc
             = FTNPOS_CHAPTER == GetNode()->GetDoc()->GetFtnInfo().ePos;
         for ( sal_uInt16 i = nSize; i; )
         {
@@ -491,7 +491,7 @@ void SwTxtFrm::RemoveFtn( const xub_StrLen nStart, const xub_StrLen nLen )
                             SwSectionFrm* pSect = (SwSectionFrm*)
                                                   pFtnBoss->GetUpper();
                             if( pSect->IsFtnAtEnd() )
-                                bFtnEndDoc = sal_False;
+                                bFtnEndDoc = false;
                         }
                     }
                 }
@@ -511,7 +511,7 @@ void SwTxtFrm::RemoveFtn( const xub_StrLen nStart, const xub_StrLen nLen )
 
                 if( pFtnFrm )
                 {
-                    const sal_Bool bEndDoc = bEndn ? sal_True : bFtnEndDoc;
+                    const bool bEndDoc = bEndn ? true : bFtnEndDoc;
                     if( bRollBack )
                     {
                         while ( pFtnFrm )
@@ -552,7 +552,7 @@ void SwTxtFrm::RemoveFtn( const xub_StrLen nStart, const xub_StrLen nLen )
                                 pEndBoss->MoveFtns( this, pDest, pFtn );
                             else
                                 pFtnBoss->MoveFtns( this, pDest, pFtn );
-                            bRemove = sal_True;
+                            bRemove = true;
                         }
                         ((SwTxtFrm*)pDest)->SetFtn( sal_True );
 
@@ -652,7 +652,7 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
 #endif
 
     pSect = pBoss->FindSctFrm();
-    sal_Bool bDocEnd = bEnd ? !( pSect && pSect->IsEndnAtEnd() ) :
+    bool bDocEnd = bEnd ? !( pSect && pSect->IsEndnAtEnd() ) :
                    ( !( pSect && pSect->IsFtnAtEnd() ) &&
                        FTNPOS_CHAPTER == GetNode()->GetDoc()->GetFtnInfo().ePos );
     //Ftn kann beim Follow angemeldet sein.
@@ -721,7 +721,7 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
         SwFtnFrm *pFtnFrm = pBoss->FindFtn( pSrcFrm, pFtn );
         SwFtnBossFrm *pFtnBoss = pFtnFrm->FindFtnBossFrm();
 
-        sal_Bool bBrutal = sal_False;
+        bool bBrutal = false;
 
         if( pFtnBoss == pBoss ) // Ref und Ftn sind auf der selben Seite/Spalte.
         {
@@ -754,7 +754,7 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
                 return;
             }
             else
-                bBrutal = sal_True;
+                bBrutal = true;
         }
         else
         {
@@ -763,13 +763,13 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
             while( pTmp->GetNext() && pSrcFrm != pTmp )
                 pTmp = pTmp->GetNext();
             if( pSrcFrm == pTmp )
-                bBrutal = sal_True;
+                bBrutal = true;
             else
             {   // Wenn unser Boss in einem spaltigen Bereich sitzt, es aber auf
                 // der Seite schon einen FtnContainer gibt, hilft nur die brutale
                 // Methode
                 if( pSect && pSect->FindFtnBossFrm( !bEnd )->FindFtnCont() )
-                    bBrutal = sal_True;
+                    bBrutal = true;
                 // OD 08.11.2002 #104840# - use <SwLayoutFrm::IsBefore(..)>
                 else if ( !pFtnFrm->GetPrev() ||
                           pFtnBoss->IsBefore( pBoss )
@@ -900,7 +900,7 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
     if( !rFtn.IsEndNote() )
     {
         SwSectionFrm *pSct = pBoss->FindSctFrm();
-        sal_Bool bAtSctEnd = pSct && pSct->IsFtnAtEnd();
+        bool bAtSctEnd = pSct && pSct->IsFtnAtEnd();
         if( FTNPOS_CHAPTER != pDoc->GetFtnInfo().ePos || bAtSctEnd )
         {
             SwFrm* pFtnCont = pBoss->FindFtnCont();

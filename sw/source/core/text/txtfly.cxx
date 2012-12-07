@@ -304,8 +304,8 @@ const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
         MSHORT nIdx = 0;
         while( nIdx < nCount && (*pTmp)[ nIdx ] < nXPos )
             ++nIdx;
-        sal_Bool bOdd = (nIdx % 2) ? sal_True : sal_False;
-        sal_Bool bSet = sal_True;
+        bool bOdd = (nIdx % 2);
+        bool bSet = true;
         if( bOdd )
             --nIdx; // within interval
         else if( ! bRight && ( nIdx >= nCount || (*pTmp)[ nIdx ] != nXPos ) )
@@ -313,7 +313,7 @@ const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
             if( nIdx )
                 nIdx -= 2; // an interval to the left
             else
-                bSet = sal_False; // before the first interval
+                bSet = false; // before the first interval
         }
 
         if( bSet && nIdx < nCount )
@@ -508,7 +508,7 @@ sal_Bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
 
     SwRegionRects aRegion( aRect );
 
-    sal_Bool bOpaque = sal_False;
+    bool bOpaque = false;
     // #i68520#
     const sal_uInt32 nCurrOrd = mpCurrAnchoredObj
                             ? mpCurrAnchoredObj->GetDrawObj()->GetOrdNum()
@@ -558,7 +558,7 @@ sal_Bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
                         if ( !pNoTxt ||
                              (!pNoTxt->IsTransparent() && !rSur.IsContour()) )
                         {
-                            bOpaque = sal_True;
+                            bOpaque = true;
                             aRegion -= pFly->Frm();
                         }
                     }
@@ -699,7 +699,7 @@ sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
                 if ( bInFooterOrHeader )
                 {
                     SwFmtVertOrient aVert( rFrmFmt.GetVertOrient() );
-                    sal_Bool bVertPrt = aVert.GetRelationOrient() == text::RelOrientation::PRINT_AREA ||
+                    bool bVertPrt = aVert.GetRelationOrient() == text::RelOrientation::PRINT_AREA ||
                             aVert.GetRelationOrient() == text::RelOrientation::PAGE_PRINT_AREA;
                     if( bVertPrt )
                         return sal_False;
@@ -881,7 +881,7 @@ SwAnchoredObjList* SwTxtFly::InitAnchoredObjList()
     const bool bFooterHeader = 0 != pCurrFrm->FindFooterOrHeader();
     const IDocumentSettingAccess* pIDSA = pCurrFrm->GetTxtNode()->getIDocumentSettingAccess();
     // #i40155# - check, if frame is marked not to wrap
-    const sal_Bool bWrapAllowed = ( pIDSA->get(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING) ||
+    const bool bWrapAllowed = ( pIDSA->get(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING) ||
                                     ( !pCurrFrm->IsInFtn() && !bFooterHeader ) );
 
     bOn = sal_False;
@@ -1153,7 +1153,7 @@ void SwTxtFly::CalcRightMargin( SwRect &rFly,
     // #i68520#
     SwSurround eSurroundForTextWrap;
 
-    sal_Bool bStop = sal_False;
+    bool bStop = false;
     // #i68520#
     SwAnchoredObjList::size_type nPos = 0;
 
@@ -1211,7 +1211,7 @@ void SwTxtFly::CalcRightMargin( SwRect &rFly,
                 // overrule the FlyFrm
                 if( nRight > nFlyRight )
                     nRight = nFlyRight;
-                bStop = sal_True;
+                bStop = true;
             }
         }
     }

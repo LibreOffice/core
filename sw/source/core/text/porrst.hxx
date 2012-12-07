@@ -66,8 +66,8 @@ public:
 class SwKernPortion : public SwLinePortion
 {
     short nKern;
-    sal_Bool bBackground;
-    sal_Bool bGridKern;
+    bool bBackground;
+    bool bGridKern;
 
 public:
 
@@ -77,7 +77,7 @@ public:
     // bGridKern indicates, that the kerning portion is used to provide
     // additional space in grid mode.
     SwKernPortion( SwLinePortion &rPortion, short nKrn,
-                   sal_Bool bBG = sal_False, sal_Bool bGridKern = sal_False );
+                   bool bBG = false, bool bGridKern = false );
 
     // This constructor only sets the height and ascent to the values
     // of rPortion. It is only used for kerning portions for grid mode
@@ -96,13 +96,13 @@ public:
 class SwArrowPortion : public SwLinePortion
 {
     Point aPos;
-    sal_Bool bLeft;
+    bool bLeft;
 public:
             SwArrowPortion( const SwLinePortion &rPortion );
             SwArrowPortion( const SwTxtPaintInfo &rInf );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     virtual SwLinePortion *Compress();
-    inline sal_Bool IsLeft() const { return bLeft; }
+    inline bool IsLeft() const { return bLeft; }
     inline const Point& GetPos() const { return aPos; }
     OUTPUT_OPERATOR
 };

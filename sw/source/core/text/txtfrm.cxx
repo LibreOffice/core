@@ -720,7 +720,7 @@ void SwTxtFrm::_InvalidateRange( const SwCharRange &aRange, const long nD)
     SetWidow( sal_False );
     SwParaPortion *pPara = GetPara();
 
-    sal_Bool bInv = sal_False;
+    bool bInv = false;
     if( 0 != nD )
     {
         //Auf nDelta werden die Differenzen zwischen alter und
@@ -728,7 +728,7 @@ void SwTxtFrm::_InvalidateRange( const SwCharRange &aRange, const long nD)
         //wenn Zeichen eingefuegt wurden, positiv, wenn Zeichen
         //geloescht wurden.
         *(pPara->GetDelta()) += nD;
-        bInv = sal_True;
+        bInv = true;
     }
     SwCharRange &rReformat = *(pPara->GetReformat());
     if(aRange != rReformat) {
@@ -736,7 +736,7 @@ void SwTxtFrm::_InvalidateRange( const SwCharRange &aRange, const long nD)
             rReformat = aRange;
         else
             rReformat += aRange;
-        bInv = sal_True;
+        bInv = true;
     }
     if(bInv)
     {
@@ -948,8 +948,8 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
     // Dies spart Stack, man muss nur aufpassen,
     // dass sie Variablen gesetzt werden.
     xub_StrLen nPos, nLen;
-    sal_Bool bSetFldsDirty = sal_False;
-    sal_Bool bRecalcFtnFlag = sal_False;
+    bool bSetFldsDirty = false;
+    bool bRecalcFtnFlag = false;
 
     switch( nWhich )
     {
@@ -977,7 +977,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             }
             SET_WRONG( nPos, nLen, true )
             SET_SCRIPT_INVAL( nPos )
-            bSetFldsDirty = sal_True;
+            bSetFldsDirty = true;
             if( HasFollow() )
                 lcl_ModifyOfst( this, nPos, nLen );
         }
@@ -988,7 +988,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             InvalidateRange( SwCharRange( nPos, 1 ), -1 );
             SET_WRONG( nPos, -1, true )
             SET_SCRIPT_INVAL( nPos )
-            bSetFldsDirty = bRecalcFtnFlag = sal_True;
+            bSetFldsDirty = bRecalcFtnFlag = true;
             if( HasFollow() )
                 lcl_ModifyOfst( this, nPos, STRING_LEN );
         }
@@ -1008,7 +1008,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             }
             SET_WRONG( nPos, m, true )
             SET_SCRIPT_INVAL( nPos )
-            bSetFldsDirty = bRecalcFtnFlag = sal_True;
+            bSetFldsDirty = bRecalcFtnFlag = true;
             if( HasFollow() )
                 lcl_ModifyOfst( this, nPos, nLen );
         }
@@ -1086,7 +1086,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                 else
                     _InvalidateRange( SwCharRange( nPos, 1 ) );
             }
-            bSetFldsDirty = sal_True;
+            bSetFldsDirty = true;
             // ST2
             if ( SwSmartTagMgr::Get().IsSmartTagsEnabled() )
                 SET_WRONG( nPos, nPos + 1, false )
@@ -1140,7 +1140,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                 nClear |= 0x02;
                 --nCount;
             }
-            sal_Bool bLineSpace = SFX_ITEM_SET == rNewSet.GetItemState(
+            bool bLineSpace = SFX_ITEM_SET == rNewSet.GetItemState(
                                             RES_PARATR_LINESPACING, sal_False ),
                      bRegister  = SFX_ITEM_SET == rNewSet.GetItemState(
                                             RES_PARATR_REGISTER, sal_False );
@@ -1322,7 +1322,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             if ( GetPrev() )
                 CheckKeep();
             Prepare( PREP_CLEAR );
-            bSetFldsDirty = sal_True;
+            bSetFldsDirty = true;
             break;
         case RES_FRAMEDIR :
             SetDerivedR2L( sal_False );
@@ -1408,7 +1408,7 @@ void SwTxtFrm::PrepWidows( const MSHORT nNeed, sal_Bool bNotify )
     // muss der Master darueber hinaus die Widow-Regel ueberpruefen.
     if( !nHave )
     {
-        sal_Bool bSplit;
+        bool bSplit;
         if( !IsFollow() )   //Nur ein Master entscheidet ueber Orphans
         {
             const WidowsAndOrphans aWidOrp( this );
@@ -1416,7 +1416,7 @@ void SwTxtFrm::PrepWidows( const MSHORT nNeed, sal_Bool bNotify )
                        aLine.GetLineNr() >= aLine.GetDropLines() );
         }
         else
-            bSplit = sal_True;
+            bSplit = true;
 
         if( bSplit )
         {
@@ -1439,19 +1439,19 @@ void SwTxtFrm::PrepWidows( const MSHORT nNeed, sal_Bool bNotify )
  *                      SwTxtFrm::Prepare
  *************************************************************************/
 
-static sal_Bool lcl_ErgoVadis( SwTxtFrm* pFrm, xub_StrLen &rPos, const PrepareHint ePrep )
+static bool lcl_ErgoVadis( SwTxtFrm* pFrm, xub_StrLen &rPos, const PrepareHint ePrep )
 {
     const SwFtnInfo &rFtnInfo = pFrm->GetNode()->GetDoc()->GetFtnInfo();
     if( ePrep == PREP_ERGOSUM )
     {
         if( !rFtnInfo.aErgoSum.Len() )
-            return sal_False;;
+            return false;;
         rPos = pFrm->GetOfst();
     }
     else
     {
         if( !rFtnInfo.aQuoVadis.Len() )
-            return sal_False;
+            return false;
         if( pFrm->HasFollow() )
             rPos = pFrm->GetFollow()->GetOfst();
         else
@@ -1459,7 +1459,7 @@ static sal_Bool lcl_ErgoVadis( SwTxtFrm* pFrm, xub_StrLen &rPos, const PrepareHi
         if( rPos )
             --rPos; // unser letztes Zeichen
     }
-    return sal_True;
+    return true;
 }
 
 void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,

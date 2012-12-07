@@ -150,7 +150,7 @@ static sal_uInt16 lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr
     // Here starts the good old "Look for blanks and add space to them" part.
     // Note: We do not want to add space to an isolated latin blank in front
     // of some complex characters in RTL environment
-    const sal_Bool bDoNotAddSpace =
+    const bool bDoNotAddSpace =
             LATIN == nScript && ( nEnd == nPos + 1 ) && pSI &&
             ( i18n::ScriptType::COMPLEX ==
               pSI->ScriptType( nPos + 1 ) ) &&
@@ -286,7 +286,7 @@ void SwTxtPortion::BreakUnderflow( SwTxtFormatInfo &rInf )
  *                      SwTxtPortion::_Format()
  *************************************************************************/
 
-static sal_Bool lcl_HasContent( const SwFldPortion& rFld, SwTxtFormatInfo &rInf )
+static bool lcl_HasContent( const SwFldPortion& rFld, SwTxtFormatInfo &rInf )
 {
     String aTxt;
     return rFld.GetExpTxt( rInf, aTxt ) && aTxt.Len();
@@ -432,7 +432,7 @@ sal_Bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
     // breakPos < index or no breakpos at all
     else
     {
-        sal_Bool bFirstPor = rInf.GetLineStart() == rInf.GetIdx();
+        bool bFirstPor = rInf.GetLineStart() == rInf.GetIdx();
         if( aGuess.BreakPos() != STRING_LEN &&
             aGuess.BreakPos() != rInf.GetLineStart() &&
             ( !bFirstPor || rInf.GetFly() || rInf.GetLast()->IsFlyPortion() ||

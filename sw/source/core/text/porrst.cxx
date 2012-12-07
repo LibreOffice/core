@@ -126,7 +126,7 @@ void SwBreakPortion::HandlePortion( SwPortionHandler& rPH ) const
 
 
 SwKernPortion::SwKernPortion( SwLinePortion &rPortion, short nKrn,
-                              sal_Bool bBG, sal_Bool bGK ) :
+                              bool bBG, bool bGK ) :
     nKern( nKrn ), bBackground( bBG ), bGridKern( bGK )
 {
     Height( rPortion.Height() );
@@ -139,7 +139,7 @@ SwKernPortion::SwKernPortion( SwLinePortion &rPortion, short nKrn,
 }
 
 SwKernPortion::SwKernPortion( const SwLinePortion& rPortion ) :
-    nKern( 0 ), bBackground( sal_False ), bGridKern( sal_True )
+    nKern( 0 ), bBackground( false ), bGridKern( true )
 {
     Height( rPortion.Height() );
     SetAscent( rPortion.GetAscent() );
@@ -191,7 +191,7 @@ void SwKernPortion::FormatEOL( SwTxtFormatInfo &rInf )
 }
 
 SwArrowPortion::SwArrowPortion( const SwLinePortion &rPortion ) :
-    bLeft( sal_True )
+    bLeft( true )
 {
     Height( rPortion.Height() );
     SetAscent( rPortion.GetAscent() );
@@ -200,7 +200,7 @@ SwArrowPortion::SwArrowPortion( const SwLinePortion &rPortion ) :
 }
 
 SwArrowPortion::SwArrowPortion( const SwTxtPaintInfo &rInf )
-    : bLeft( sal_False )
+    : bLeft( false )
 {
     Height( (sal_uInt16)(rInf.GetTxtFrm()->Prt().Height()) );
     aPos.X() = rInf.GetTxtFrm()->Frm().Left() +
@@ -320,7 +320,7 @@ sal_Bool SwTxtFrm::FormatEmpty()
     {
         SwTxtFly aTxtFly( this );
         SwRect aRect;
-        sal_Bool bFirstFlyCheck = 0 != Prt().Height();
+        bool bFirstFlyCheck = 0 != Prt().Height();
         if ( !bCollapse && bFirstFlyCheck &&
              aTxtFly.IsOn() && aTxtFly.IsAnyObj( aRect ) )
             return sal_False;

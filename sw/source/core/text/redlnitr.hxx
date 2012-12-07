@@ -39,13 +39,13 @@ class SwExtend
     xub_StrLen nPos;
     xub_StrLen nEnd;
     sal_Bool _Leave( SwFont& rFnt, xub_StrLen nNew );
-    sal_Bool Inside() const { return ( nPos >= nStart && nPos < nEnd ); }
+    bool Inside() const { return ( nPos >= nStart && nPos < nEnd ); }
     void ActualizeFont( SwFont &rFnt, xub_StrLen nAttr );
 public:
     SwExtend( const std::vector<sal_uInt16> &rA, xub_StrLen nSt ) : pFnt(0), rArr( rA ),
         nStart( nSt ), nPos( STRING_LEN ), nEnd( nStart + rA.size() ) {}
     ~SwExtend() { delete pFnt; }
-    sal_Bool IsOn() const { return pFnt != 0; }
+    bool IsOn() const { return pFnt != 0; }
     void Reset() { if( pFnt ) { delete pFnt; pFnt = NULL; } nPos = STRING_LEN; }
     sal_Bool Leave( SwFont& rFnt, xub_StrLen nNew )
         { if( pFnt ) return _Leave( rFnt, nNew ); return sal_False; }
@@ -84,7 +84,7 @@ public:
         xub_StrLen nRedlPos, sal_Bool bShw, const std::vector<sal_uInt16> *pArr = 0,
         xub_StrLen nStart = STRING_LEN );
     ~SwRedlineItr();
-    inline sal_Bool IsOn() const { return bOn || ( pExt && pExt->IsOn() ); }
+    inline bool IsOn() const { return bOn || ( pExt && pExt->IsOn() ); }
     inline void Clear( SwFont* pFnt ) { if( bOn ) _Clear( pFnt ); }
     void ChangeTxtAttr( SwFont* pFnt, SwTxtAttr &rHt, sal_Bool bChg );
     inline short Seek( SwFont& rFnt, xub_StrLen nNew, xub_StrLen nOld )
@@ -98,7 +98,7 @@ public:
     sal_Bool CheckLine( xub_StrLen nChkStart, xub_StrLen nChkEnd );
     inline sal_Bool LeaveExtend( SwFont& rFnt, xub_StrLen nNew )
         { return pExt->Leave(rFnt, nNew ); }
-    inline sal_Bool ExtOn() { if( pExt ) return pExt->IsOn(); return sal_False; }
+    inline bool ExtOn() { if( pExt ) return pExt->IsOn(); return false; }
     inline void UpdateExtFont( SwFont &rFnt ) {
         OSL_ENSURE( ExtOn(), "UpdateExtFont without ExtOn" );
         pExt->UpdateFont( rFnt ); }

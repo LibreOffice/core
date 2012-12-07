@@ -41,7 +41,7 @@ public:
     sal_Bool PostFormat( SwTxtFormatInfo &rInf );
     inline  sal_Bool IsFilled() const { return 0 != cFill; }
     inline  KSHORT GetTabPos() const { return nTabPos; }
-    inline  sal_Bool IsAutoTabStop() const { return bAutoTabStop; }
+    inline  bool IsAutoTabStop() const { return bAutoTabStop; }
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const;
