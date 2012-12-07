@@ -31,7 +31,6 @@
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
 
-using rtl::OUString;
 using namespace ::oox::core;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -55,7 +54,7 @@ CustomShapeProperties::~CustomShapeProperties()
 {
 }
 
-::rtl::OUString CustomShapeProperties::getShapePresetTypeName() const
+OUString CustomShapeProperties::getShapePresetTypeName() const
 {
     return StaticTokenMap::get().getUnicodeTokenName( mnShapePresetType );
 }
@@ -75,7 +74,7 @@ sal_Int32 CustomShapeProperties::SetCustomShapeGuideValue( std::vector< CustomSh
 
 // returns the index into the guidelist for a given formula name,
 // if the return value is < 0 then the guide value could not be found
-sal_Int32 CustomShapeProperties::GetCustomShapeGuideValue( const std::vector< CustomShapeGuide >& rGuideList, const rtl::OUString& rFormulaName )
+sal_Int32 CustomShapeProperties::GetCustomShapeGuideValue( const std::vector< CustomShapeGuide >& rGuideList, const OUString& rFormulaName )
 {
     // traverse the list from the end, because guide names can be reused
     // and current is the last one
@@ -157,7 +156,7 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
         if ( maAdjustmentGuideList.size() )
         {
             const OUString sType = CREATE_OUSTRING( "Type" );
-            const OUString sCustomShapeGeometry( RTL_CONSTASCII_USTRINGPARAM( "CustomShapeGeometry" ) );
+            const OUString sCustomShapeGeometry("CustomShapeGeometry");
             uno::Any aGeoPropSet = xPropSet->getPropertyValue( sCustomShapeGeometry );
             uno::Sequence< beans::PropertyValue > aGeoPropSeq;
             if ( aGeoPropSet >>= aGeoPropSeq )
@@ -165,7 +164,7 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
                 sal_Int32 i, nCount = aGeoPropSeq.getLength();
                 for ( i = 0; i < nCount; i++ )
                 {
-                    const rtl::OUString sAdjustmentValues( RTL_CONSTASCII_USTRINGPARAM( "AdjustmentValues" ) );
+                    const OUString sAdjustmentValues("AdjustmentValues");
                     if ( aGeoPropSeq[ i ].Name.equals( sAdjustmentValues ) )
                     {
                         uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue > aAdjustmentSeq;
@@ -283,7 +282,7 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
         Sequence< PropertyValue > aPathSequence = aPath.makePropertyValueSequence();
         aPropertyMap[ PROP_Path ] <<= aPathSequence;
 
-        Sequence< rtl::OUString > aEquations( maGuideList.size() );
+        Sequence< OUString > aEquations( maGuideList.size() );
         for ( i = 0; i < maGuideList.size(); i++ )
             aEquations[ i ] = maGuideList[ i ].maFormula;
         aPropertyMap[ PROP_Equations ] <<= aEquations;
@@ -359,7 +358,7 @@ Any CustomShapeProvider::createStringSequence( size_t nStrings, const char **pSt
 {
     Sequence< OUString > aStringSequence( nStrings );
     for (size_t i = 0; i < nStrings; i++)
-        aStringSequence[i] = ::rtl::OUString::intern(
+        aStringSequence[i] = OUString::intern(
                                 pStrings[i], strlen( pStrings[i] ),
                                 RTL_TEXTENCODING_ASCII_US );
     return makeAny( aStringSequence );

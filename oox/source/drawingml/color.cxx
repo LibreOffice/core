@@ -26,8 +26,6 @@
 #include "oox/token/namespaces.hxx"
 #include "oox/token/tokens.hxx"
 
-using ::rtl::OUString;
-
 namespace oox {
 namespace drawingml {
 

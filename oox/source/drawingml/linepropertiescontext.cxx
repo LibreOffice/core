@@ -23,7 +23,6 @@
 #include "oox/drawingml/lineproperties.hxx"
 #include "oox/helper/attributelist.hxx"
 
-using ::rtl::OUString;
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;

@@ -44,7 +44,6 @@
 #include <oox/ppt/slidepersist.hxx>
 #endif
 
-using rtl::OUString;
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -310,15 +309,15 @@ void BulletList::pushToPropMap( const ::oox::core::XmlFilterBase* pFilterBase, P
             aFontDesc.Name = aBulletFontName;
             aFontDesc.Pitch = nBulletFontPitch;
             aFontDesc.Family = nBulletFontFamily;
-            if ( aBulletFontName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("Wingdings")) ||
-                 aBulletFontName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("Wingdings 2")) ||
-                 aBulletFontName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("Wingdings 3")) ||
-                 aBulletFontName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("Monotype Sorts")) ||
-                 aBulletFontName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("Monotype Sorts 2")) ||
-                 aBulletFontName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("Webdings")) ||
-                 aBulletFontName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("StarBats")) ||
-                 aBulletFontName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("StarMath")) ||
-                 aBulletFontName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("ZapfDingbats")) ) {
+            if ( aBulletFontName.equalsIgnoreAsciiCaseAscii("Wingdings") ||
+                 aBulletFontName.equalsIgnoreAsciiCaseAscii("Wingdings 2") ||
+                 aBulletFontName.equalsIgnoreAsciiCaseAscii("Wingdings 3") ||
+                 aBulletFontName.equalsIgnoreAsciiCaseAscii("Monotype Sorts") ||
+                 aBulletFontName.equalsIgnoreAsciiCaseAscii("Monotype Sorts 2") ||
+                 aBulletFontName.equalsIgnoreAsciiCaseAscii("Webdings") ||
+                 aBulletFontName.equalsIgnoreAsciiCaseAscii("StarBats") ||
+                 aBulletFontName.equalsIgnoreAsciiCaseAscii("StarMath") ||
+                 aBulletFontName.equalsIgnoreAsciiCaseAscii("ZapfDingbats") ) {
                 aFontDesc.CharSet = RTL_TEXTENCODING_SYMBOL;
                 bSymbolFont = sal_True;
             }

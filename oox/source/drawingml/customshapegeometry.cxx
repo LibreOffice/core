@@ -26,7 +26,6 @@
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/propertymap.hxx"
 
-using ::rtl::OUString;
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -84,14 +83,14 @@ static FormularCommandNameTable pFormularCommandNameTable[] =
     { "val",    FC_VAL }
 
 };
-typedef boost::unordered_map< rtl::OUString, FormularCommand, rtl::OUStringHash, comphelper::UStringEqual > FormulaCommandHMap;
+typedef boost::unordered_map< OUString, FormularCommand, OUStringHash, comphelper::UStringEqual > FormulaCommandHMap;
 
 static const FormulaCommandHMap* pCommandHashMap;
 
 //
-rtl::OUString GetFormulaParameter( const EnhancedCustomShapeParameter& rParameter )
+OUString GetFormulaParameter( const EnhancedCustomShapeParameter& rParameter )
 {
-    rtl::OUString aRet;
+    OUString aRet;
     switch( rParameter.Type )
     {
         case EnhancedCustomShapeParameterType::NORMAL :
@@ -100,13 +99,13 @@ rtl::OUString GetFormulaParameter( const EnhancedCustomShapeParameter& rParamete
             {
                 double fValue = 0.0;
                 if ( rParameter.Value >>= fValue )
-                    aRet = rtl::OUString::valueOf( fValue );
+                    aRet = OUString::valueOf( fValue );
             }
             else
             {
                 sal_Int32 nValue = 0;
                 if ( rParameter.Value >>= nValue )
-                    aRet = rtl::OUString::valueOf( nValue );
+                    aRet = OUString::valueOf( nValue );
             }
         }
         break;
@@ -118,7 +117,7 @@ rtl::OUString GetFormulaParameter( const EnhancedCustomShapeParameter& rParamete
                 if ( rParameter.Value >>= nFormulaIndex )
                 {
                     aRet = CREATE_OUSTRING( "?" )
-                        + rtl::OUString::valueOf( nFormulaIndex )
+                        + OUString::valueOf( nFormulaIndex )
                             + CREATE_OUSTRING( " " );
                 }
             }
@@ -136,7 +135,7 @@ rtl::OUString GetFormulaParameter( const EnhancedCustomShapeParameter& rParamete
                 if ( rParameter.Value >>= nAdjustmentIndex )
                 {
                     aRet = CREATE_OUSTRING( "$" )
-                        + rtl::OUString::valueOf( nAdjustmentIndex )
+                        + OUString::valueOf( nAdjustmentIndex )
                             + CREATE_OUSTRING( " " );
                 }
             }
@@ -148,73 +147,73 @@ rtl::OUString GetFormulaParameter( const EnhancedCustomShapeParameter& rParamete
         break;
         case EnhancedCustomShapeParameterType::LEFT :
         {
-            const rtl::OUString sLeft( CREATE_OUSTRING( "left" ) );
+            const OUString sLeft( CREATE_OUSTRING( "left" ) );
             aRet = sLeft;
         }
         break;
         case EnhancedCustomShapeParameterType::TOP :
         {
-            const rtl::OUString sTop( CREATE_OUSTRING( "top" ) );
+            const OUString sTop( CREATE_OUSTRING( "top" ) );
             aRet = sTop;
         }
         break;
         case EnhancedCustomShapeParameterType::RIGHT :
         {
-            const rtl::OUString sRight( CREATE_OUSTRING( "right" ) );
+            const OUString sRight( CREATE_OUSTRING( "right" ) );
             aRet = sRight;
         }
         break;
         case EnhancedCustomShapeParameterType::BOTTOM :
         {
-            const rtl::OUString sBottom( CREATE_OUSTRING( "bottom" ) );
+            const OUString sBottom( CREATE_OUSTRING( "bottom" ) );
             aRet = sBottom;
         }
         break;
         case EnhancedCustomShapeParameterType::XSTRETCH :
         {
-            const rtl::OUString sXStretch( CREATE_OUSTRING( "xstretch" ) );
+            const OUString sXStretch( CREATE_OUSTRING( "xstretch" ) );
             aRet = sXStretch;
         }
         break;
         case EnhancedCustomShapeParameterType::YSTRETCH :
         {
-            const rtl::OUString sYStretch( CREATE_OUSTRING( "ystretch" ) );
+            const OUString sYStretch( CREATE_OUSTRING( "ystretch" ) );
             aRet = sYStretch;
         }
         break;
         case EnhancedCustomShapeParameterType::HASSTROKE :
         {
-            const rtl::OUString sHasStroke( CREATE_OUSTRING( "hasstroke" ) );
+            const OUString sHasStroke( CREATE_OUSTRING( "hasstroke" ) );
             aRet = sHasStroke;
         }
         break;
         case EnhancedCustomShapeParameterType::HASFILL :
         {
-            const rtl::OUString sHasFill( CREATE_OUSTRING( "hasfill" ) );
+            const OUString sHasFill( CREATE_OUSTRING( "hasfill" ) );
             aRet = sHasFill;
         }
         break;
         case EnhancedCustomShapeParameterType::WIDTH :
         {
-            const rtl::OUString sWidth( CREATE_OUSTRING( "width" ) );
+            const OUString sWidth( CREATE_OUSTRING( "width" ) );
             aRet = sWidth;
         }
         break;
         case EnhancedCustomShapeParameterType::HEIGHT :
         {
-            const rtl::OUString sHeight( CREATE_OUSTRING( "height" ) );
+            const OUString sHeight( CREATE_OUSTRING( "height" ) );
             aRet = sHeight;
         }
         break;
         case EnhancedCustomShapeParameterType::LOGWIDTH :
         {
-            const rtl::OUString sLogWidth( CREATE_OUSTRING( "logwidth" ) );
+            const OUString sLogWidth( CREATE_OUSTRING( "logwidth" ) );
             aRet = sLogWidth;
         }
         break;
         case EnhancedCustomShapeParameterType::LOGHEIGHT :
         {
-            const rtl::OUString sLogHeight( CREATE_OUSTRING( "logheight" ) );
+            const OUString sLogHeight( CREATE_OUSTRING( "logheight" ) );
             aRet = sLogHeight;
         }
         break;
@@ -224,7 +223,7 @@ rtl::OUString GetFormulaParameter( const EnhancedCustomShapeParameter& rParamete
 
 // ---------------------------------------------------------------------
 
-static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCustomShapeProperties, const::rtl::OUString& rValue, sal_Bool bNoSymbols = sal_True )
+static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCustomShapeProperties, const OUString& rValue, sal_Bool bNoSymbols = sal_True )
 {
     com::sun::star::drawing::EnhancedCustomShapeParameter aRet;
     if ( !rValue.isEmpty() )
@@ -282,7 +281,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
 
                 CustomShapeGuide aGuide;
                 aGuide.maName = rValue;
-                aGuide.maFormula = CREATE_OUSTRING( "logheight/" ) + rtl::OUString::valueOf( nIntVal );
+                aGuide.maFormula = CREATE_OUSTRING( "logheight/" ) + OUString::valueOf( nIntVal );
 
                 aRet.Value = Any( CustomShapeProperties::SetCustomShapeGuideValue( rCustomShapeProperties.getGuideList(), aGuide ) );
                 aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
@@ -333,7 +332,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
 
                 CustomShapeGuide aGuide;
                 aGuide.maName = rValue;
-                aGuide.maFormula = CREATE_OUSTRING( "min(logwidth,logheight)/" ) + rtl::OUString::valueOf( nIntVal );
+                aGuide.maFormula = CREATE_OUSTRING( "min(logwidth,logheight)/" ) + OUString::valueOf( nIntVal );
 
                 aRet.Value = Any( CustomShapeProperties::SetCustomShapeGuideValue( rCustomShapeProperties.getGuideList(), aGuide ) );
                 aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
@@ -380,7 +379,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
 
                 CustomShapeGuide aGuide;
                 aGuide.maName = rValue;
-                aGuide.maFormula = CREATE_OUSTRING( "logwidth/" ) + rtl::OUString::valueOf( nIntVal );
+                aGuide.maFormula = CREATE_OUSTRING( "logwidth/" ) + OUString::valueOf( nIntVal );
 
                 aRet.Value = Any( CustomShapeProperties::SetCustomShapeGuideValue( rCustomShapeProperties.getGuideList(), aGuide ) );
                 aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
@@ -459,7 +458,7 @@ GeomGuideListContext::GeomGuideListContext( ContextHandler& rParent, CustomShape
 {
 }
 
-static rtl::OUString convertToOOEquation( CustomShapeProperties& rCustomShapeProperties, const rtl::OUString& rSource )
+static OUString convertToOOEquation( CustomShapeProperties& rCustomShapeProperties, const OUString& rSource )
 {
     if ( !pCommandHashMap )
     {
@@ -469,24 +468,24 @@ static rtl::OUString convertToOOEquation( CustomShapeProperties& rCustomShapePro
         pCommandHashMap = pHM;
     }
 
-    std::vector< rtl::OUString > aTokens;
+    std::vector< OUString > aTokens;
     sal_Int32 nIndex = 0;
     do
     {
-        rtl::OUString aToken( rSource.getToken( 0, ' ', nIndex ) );
+        OUString aToken( rSource.getToken( 0, ' ', nIndex ) );
         if ( !aToken.isEmpty() )
             aTokens.push_back( aToken );
     }
     while ( nIndex >= 0 );
 
-    rtl::OUString aEquation;
+    OUString aEquation;
     if ( !aTokens.empty() )
     {
         sal_Int32 i, nParameters = aTokens.size() - 1;
         if ( nParameters > 3 )
             nParameters = 3;
 
-        rtl::OUString sParameters[ 3 ];
+        OUString sParameters[ 3 ];
 
         for ( i = 0; i < nParameters; i++ )
             sParameters[ i ] = GetFormulaParameter( GetAdjCoordinate( rCustomShapeProperties, aTokens[ i + 1 ], sal_False ) );
@@ -639,7 +638,7 @@ Reference< XFastContextHandler > GeomGuideListContext::createFastChildContext( s
 
 // ---------------------------------------------------------------------
 
-static const rtl::OUString GetGeomGuideName( const ::rtl::OUString& rValue )
+static const OUString GetGeomGuideName( const OUString& rValue )
 {
     return rValue;
 }
@@ -677,7 +676,7 @@ XYAdjustHandleContext::XYAdjustHandleContext( ContextHandler& rParent, const Ref
 , mrAdjustHandle( rAdjustHandle )
 , mrCustomShapeProperties( rCustomShapeProperties )
 {
-    const rtl::OUString aEmptyDefault;
+    const OUString aEmptyDefault;
     AttributeList aAttribs( xAttribs );
     if ( aAttribs.hasAttribute( XML_gdRefX ) )
     {
@@ -731,7 +730,7 @@ PolarAdjustHandleContext::PolarAdjustHandleContext( ContextHandler& rParent, con
 , mrAdjustHandle( rAdjustHandle )
 , mrCustomShapeProperties( rCustomShapeProperties )
 {
-    const rtl::OUString aEmptyDefault;
+    const OUString aEmptyDefault;
     AttributeList aAttribs( xAttribs );
     if ( aAttribs.hasAttribute( XML_gdRefR ) )
     {
@@ -987,7 +986,7 @@ Path2DContext::Path2DContext( ContextHandler& rParent, const Reference< XFastAtt
 , mrSegments( rSegments )
 , mrCustomShapeProperties( rCustomShapeProperties )
 {
-    const rtl::OUString aEmptyString;
+    const OUString aEmptyString;
 
     AttributeList aAttribs( xAttribs );
     rPath2D.w = aAttribs.getString( XML_w, aEmptyString ).toInt64();
@@ -1101,7 +1100,7 @@ Reference< XFastContextHandler > Path2DContext::createFastChildContext( sal_Int3
             sal_Int32 nArcNum = mrCustomShapeProperties.getArcNum();
 
             // start angle
-            aGuide.maName = CREATE_OUSTRING("arctosa") + rtl::OUString::valueOf( nArcNum );
+            aGuide.maName = CREATE_OUSTRING("arctosa") + OUString::valueOf( nArcNum );
             aGuide.maFormula = CREATE_OUSTRING( "(")
                 + GetFormulaParameter( GetAdjCoordinate( mrCustomShapeProperties, xAttribs->getOptionalValue( XML_stAng ) ) )
                 + CREATE_OUSTRING( ")/60000.0" );
@@ -1109,7 +1108,7 @@ Reference< XFastContextHandler > Path2DContext::createFastChildContext( sal_Int3
             aAngles.First.Type = EnhancedCustomShapeParameterType::EQUATION;
 
             // swing angle
-            aGuide.maName = CREATE_OUSTRING("arctosw") + rtl::OUString::valueOf( nArcNum );
+            aGuide.maName = CREATE_OUSTRING("arctosw") + OUString::valueOf( nArcNum );
             aGuide.maFormula = CREATE_OUSTRING( "(")
                 + GetFormulaParameter( GetAdjCoordinate( mrCustomShapeProperties, xAttribs->getOptionalValue( XML_swAng ) ) )
                 + CREATE_OUSTRING( ")/60000.0" );

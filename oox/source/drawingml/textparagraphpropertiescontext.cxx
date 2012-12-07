@@ -29,7 +29,6 @@
 #include "textspacingcontext.hxx"
 #include "texttabstoplistcontext.hxx"
 
-using ::rtl::OUString;
 using namespace ::oox::core;
 using ::com::sun::star::awt::FontDescriptor;
 using namespace ::com::sun::star::uno;
@@ -101,7 +100,7 @@ TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler& 
 
     char name[] = "Outline X";
     name[8] = static_cast<char>( '1' + nLevel );
-    const OUString sStyleNameValue( rtl::OUString::createFromAscii( name ) );
+    const OUString sStyleNameValue( OUString::createFromAscii( name ) );
     mrBulletList.setStyleName( sStyleNameValue );
 
     // ST_TextMargin

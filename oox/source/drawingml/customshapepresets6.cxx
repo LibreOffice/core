@@ -10,7 +10,6 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
 
-using rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::drawing;
@@ -3315,17 +3314,17 @@ class ShapeCribbon : public CustomShapeProvider
 } // anonymous namespace
 void CustomShapeProperties::initializePresetsMap6()
 {
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "star5" ) ) ) ] = new ShapeCstar5();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "lineInv" ) ) ) ] = new ShapeClineInv();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "straightConnector1" ) ) ) ] = new ShapeCstraightConnector1();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "stripedRightArrow" ) ) ) ] = new ShapeCstripedRightArrow();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "callout3" ) ) ) ] = new ShapeCcallout3();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "bentUpArrow" ) ) ) ] = new ShapeCbentUpArrow();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "noSmoking" ) ) ) ] = new ShapeCnoSmoking();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "trapezoid" ) ) ) ] = new ShapeCtrapezoid();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "cloudCallout" ) ) ) ] = new ShapeCcloudCallout();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "callout1" ) ) ) ] = new ShapeCcallout1();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "ribbon" ) ) ) ] = new ShapeCribbon();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "star5" ) ] = new ShapeCstar5();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "lineInv" ) ] = new ShapeClineInv();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "straightConnector1" ) ] = new ShapeCstraightConnector1();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "stripedRightArrow" ) ] = new ShapeCstripedRightArrow();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "callout3" ) ] = new ShapeCcallout3();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "bentUpArrow" ) ] = new ShapeCbentUpArrow();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "noSmoking" ) ] = new ShapeCnoSmoking();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "trapezoid" ) ] = new ShapeCtrapezoid();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "cloudCallout" ) ] = new ShapeCcloudCallout();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "callout1" ) ] = new ShapeCcallout1();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "ribbon" ) ] = new ShapeCribbon();
 }
 
 } } // oox // drawingml

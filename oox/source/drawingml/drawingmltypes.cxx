@@ -25,7 +25,6 @@
 #include <sax/tools/converter.hxx>
 #include "oox/token/tokens.hxx"
 
-using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::xml::sax::XFastAttributeList;
 using namespace ::com::sun::star::awt;

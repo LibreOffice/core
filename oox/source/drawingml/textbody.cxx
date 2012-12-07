@@ -22,7 +22,6 @@
 #include <com/sun/star/text/XTextCursor.hpp>
 #include "oox/drawingml/textparagraph.hxx"
 
-using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::frame;

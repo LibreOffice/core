@@ -24,7 +24,6 @@
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/fillproperties.hxx"
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
@@ -217,7 +216,7 @@ Reference< XFastContextHandler > BlipFillContext::createFastChildContext(
 
         case A_TOKEN( srcRect ):
             {
-                rtl::OUString aDefault( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "0" ) ) );
+                OUString aDefault( "0" );
                 ::com::sun::star::geometry::IntegerRectangle2D aClipRect;
                 aClipRect.X1 = GetPercent( aAttribs.getString( XML_l, aDefault ) );
                 aClipRect.Y1 = GetPercent( aAttribs.getString( XML_t, aDefault ) );

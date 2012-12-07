@@ -19,8 +19,6 @@
 
 #include "oox/drawingml/theme.hxx"
 
-using ::rtl::OUString;
-
 namespace oox {
 namespace drawingml {
 

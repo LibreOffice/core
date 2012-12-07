@@ -25,7 +25,6 @@
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "texttabstoplistcontext.hxx"
 
-using ::rtl::OUString;
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::style;

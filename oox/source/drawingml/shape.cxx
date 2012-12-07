@@ -53,7 +53,6 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <com/sun/star/document/XActionLockable.hpp>
 
-using rtl::OUString;
 using namespace ::oox::core;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;
@@ -202,7 +201,7 @@ void Shape::addShape(
 
     try
     {
-        rtl::OUString sServiceName( msServiceName );
+        OUString sServiceName( msServiceName );
         if( !sServiceName.isEmpty() )
         {
             basegfx::B2DHomMatrix aMatrix( aTransformation );
@@ -317,7 +316,7 @@ void Shape::addChildren(
 
 Reference< XShape > Shape::createAndInsert(
         ::oox::core::XmlFilterBase& rFilterBase,
-        const rtl::OUString& rServiceName,
+        const OUString& rServiceName,
         const Theme* pTheme,
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
         const awt::Rectangle* /* pShapeRect */,

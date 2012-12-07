@@ -22,7 +22,6 @@
 #include "oox/helper/attributelist.hxx"
 #include "oox/drawingml/colorchoicecontext.hxx"
 
-using ::rtl::OUString;
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
