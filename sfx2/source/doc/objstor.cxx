@@ -1469,7 +1469,6 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                 aInfo.Comment = pVersionItem->GetValue();
 
                 // version author
-                String aAuthor;
                 if ( pAuthorItem )
                     aInfo.Author = pAuthorItem->GetValue();
                 else
@@ -2133,7 +2132,6 @@ sal_Bool SfxObjectShell::ConvertFrom
 
 sal_Bool SfxObjectShell::ImportFrom( SfxMedium& rMedium, bool bInsert )
 {
-    ::rtl::OUString aTypeName( rMedium.GetFilter()->GetTypeName() );
     ::rtl::OUString aFilterName( rMedium.GetFilter()->GetFilterName() );
 
     uno::Reference< lang::XMultiServiceFactory >  xMan = ::comphelper::getProcessServiceFactory();
@@ -2244,7 +2242,6 @@ sal_Bool SfxObjectShell::ImportFrom( SfxMedium& rMedium, bool bInsert )
 
 sal_Bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
 {
-    ::rtl::OUString aTypeName( rMedium.GetFilter()->GetTypeName() );
     ::rtl::OUString aFilterName( rMedium.GetFilter()->GetFilterName() );
     uno::Reference< document::XExporter > xExporter;
 

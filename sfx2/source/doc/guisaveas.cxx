@@ -1734,7 +1734,7 @@ void SfxStoringHelper::SetDocInfoState(
     }
     catch (const uno::Exception& e)
     {
-        SAL_INFO("sfx.doc", "SetDocInfoState: caught exception: " << e.Message);
+        SAL_INFO("sfx2.doc", "SetDocInfoState: caught exception: " << e.Message);
     }
 
     // set the modified flag back if required

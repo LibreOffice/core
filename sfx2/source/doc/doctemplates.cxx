@@ -444,7 +444,7 @@ void SfxDocTplService_Impl::init_Impl()
             m_xDocProps.set(document::DocumentProperties::create(
                         ::comphelper::getProcessComponentContext()));
         } catch (uno::RuntimeException const& e) {
-            SAL_WARN("sfx.doc", "SfxDocTplService_Impl::init_Impl: "
+            SAL_WARN("sfx2.doc", "SfxDocTplService_Impl::init_Impl: "
                 "cannot create DocumentProperties service:" << e.Message);
         }
 
@@ -1903,7 +1903,6 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
         aStoreArgs[1].Name = ::rtl::OUString("DocumentTitle");
         aStoreArgs[1].Value <<= rTemplateName;
 
-        ::rtl::OUString aCurrentDocumentURL = rStorable->getLocation();
         if( !::utl::UCBContentHelper::EqualURLs( aNewTemplateTargetURL, rStorable->getLocation() ))
             rStorable->storeToURL( aNewTemplateTargetURL, aStoreArgs );
         else
@@ -1987,7 +1986,7 @@ sal_Bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
     }
 
     // Get the content type
-    OUString aTitle, aType, aTargetURL2, aFullName;
+    OUString aTitle, aType, aTargetURL2;
 
     sal_Bool bDocHasTitle = sal_False;
     if( !getTitleFromURL( rSourceURL, aTitle, aType, bDocHasTitle ) )
