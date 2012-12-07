@@ -236,15 +236,12 @@ sub print_error     #09.07.2007 11:21
 sub usage       #09.07.2007 08:39
 ############################################################################
  {
-    print "Usage:\t $myname <-e filename> <-f filename> <-p password> <-t timestamp> [-l filename] [-v] <file[list]> \n";
+    print "Usage:\t $myname [-e filename] [-f filename] [-p password] [-t timestamp] [-l filename] [-v] <file[list]> \n";
     print "Options:\n";
     print "\t -e filename\t\t\tFile which contains a list of files which don't have to be signed.\n";
-    print                            "Mandatory.\n";
-    print "\t -f pfx_filename\t\t\"Personal Information Exchange\" file. ";
-    print                            "Mandatory.\n";
-    print "\t -p password\t\t\tPassword for \"Personal Information Exchange\" file. Mandatory.\n";
+    print "\t -f pfx_filename\t\t\"Personal Information Exchange\" file.\n";
+    print "\t -p password\t\t\tPassword for \"Personal Information Exchange\" file.\n";
     print "\t -t timestamp\t\t\tTimestamp URL e.g. \"http://timestamp.verisign.com/scripts/timstamp.dll\"\n";
-    print "\t\t\t\t\tMandatory.\n";
     print "\t -l log_filename\t\tFile for logging.\n";
     print "\t -v\t\t\t\tVerbose.\n";
 }   ##usage
