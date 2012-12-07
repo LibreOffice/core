@@ -55,7 +55,7 @@
 #include "swtablerep.hxx"
 
 
-SwTableRep::SwTableRep( const SwTabCols& rTabCol, bool bCplx )
+SwTableRep::SwTableRep( const SwTabCols& rTabCol )
     :
     nTblWidth(0),
     nSpace(0),
@@ -63,7 +63,6 @@ SwTableRep::SwTableRep( const SwTabCols& rTabCol, bool bCplx )
     nRightSpace(0),
     nAlign(0),
     nWidthPercent(0),
-    bComplex(bCplx),
     bLineSelected(sal_False),
     bWidthChanged(sal_False),
     bColsChanged(sal_False)

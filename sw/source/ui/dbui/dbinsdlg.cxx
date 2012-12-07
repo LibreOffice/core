@@ -710,7 +710,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblFmtHdl, PushButton*, pButton )
         SwTabCols aTabCols;
         aTabCols.SetRight( nWidth );
         aTabCols.SetRightMax( nWidth );
-        pRep = new SwTableRep( aTabCols, sal_False );
+        pRep = new SwTableRep( aTabCols );
         pRep->SetAlign( text::HoriOrientation::NONE );
         pRep->SetSpace( nWidth );
         pRep->SetWidth( nWidth );
@@ -736,7 +736,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblFmtHdl, PushButton*, pButton )
                 aTabCols.Insert( nW, sal_False, n );
             }
         delete pRep;
-        pRep = new SwTableRep( aTabCols, sal_False );
+        pRep = new SwTableRep( aTabCols );
         pRep->SetAlign( text::HoriOrientation::NONE );
         pRep->SetSpace( nWidth );
         pRep->SetWidth( nWidth );

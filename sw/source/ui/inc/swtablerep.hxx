@@ -38,13 +38,12 @@ class SW_DLLPUBLIC SwTableRep
     sal_uInt16      nColCount;
     sal_uInt16      nAllCols;
     sal_uInt16      nWidthPercent;
-    bool        bComplex : 1;
     sal_Bool        bLineSelected : 1;
     sal_Bool        bWidthChanged : 1;
     sal_Bool        bColsChanged : 1;
 
 public:
-    SwTableRep( const SwTabCols& rTabCol, bool bComplex );
+    SwTableRep( const SwTabCols& rTabCol );
     ~SwTableRep();
 
     sal_Bool        FillTabCols( SwTabCols& rTabCol ) const;

@@ -214,7 +214,7 @@ static SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
 
 
     // Pointer wird nach der Dialogausfuehrung geloescht
-    SwTableRep* pRep = new SwTableRep( aTabCols, rSh.IsTblComplex());
+    SwTableRep* pRep = new SwTableRep( aTabCols );
     pRep->SetSpace(aCols.GetRightMax());
 
     sal_uInt16 nPercent = 0;
