@@ -123,11 +123,6 @@ void SwTextShell::ExecCharAttr(SfxRequest &rReq)
                 aEscape.GetEsc() = DFLT_ESC_AUTO_SUPER;
             else if(eEscape == SVX_ESCAPEMENT_SUBSCRIPT)
                 aEscape.GetEsc() = DFLT_ESC_AUTO_SUB;
-            if(eState != STATE_OFF )
-            {
-                if(eEscape == FN_SET_SUPER_SCRIPT)
-                    aEscape.GetEsc() *= -1;
-            }
             rSh.SetAttr( aEscape );
             rReq.AppendItem( aEscape );
             rReq.Done();
