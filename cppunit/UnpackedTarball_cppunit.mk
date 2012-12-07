@@ -29,9 +29,5 @@ $(eval $(call gb_UnpackedTarball_add_patches,cppunit,\
 	cppunit/disable-dynloading.patch \
 ))
 endif
-$(eval $(call gb_UnpackedTarball_add_file,cppunit,src/cppunit/cppunit_dll.vcproj,cppunit/src/cppunit_dll.vcproj))
-$(eval $(call gb_UnpackedTarball_add_file,cppunit,src/cppunit/cppunit_dll.vcxproj,cppunit/src/cppunit_dll.vcxproj))
-$(eval $(call gb_UnpackedTarball_add_file,cppunit,src/DllPlugInTester/DllPlugInTester.vcproj,cppunit/src/DllPlugInTester.vcproj))
-$(eval $(call gb_UnpackedTarball_add_file,cppunit,src/DllPlugInTester/DllPlugInTester.vcxproj,cppunit/src/DllPlugInTester.vcxproj))
 
 # vim: set noet sw=4 ts=4:
