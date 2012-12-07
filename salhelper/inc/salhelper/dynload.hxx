@@ -156,9 +156,13 @@ public:
         if( m_pLoader != toAssign.m_pLoader )
         {
             if( toAssign.m_pLoader )
-            toAssign.m_pLoader->acquire();
+            {
+                toAssign.m_pLoader->acquire();
+            }
             if( m_pLoader )
-            m_pLoader->release();
+            {
+                m_pLoader->release();
+            }
             m_pLoader = toAssign.m_pLoader;
         }
 
