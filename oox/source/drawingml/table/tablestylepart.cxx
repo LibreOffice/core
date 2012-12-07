@@ -20,7 +20,6 @@
 #include "oox/drawingml/table/tablestylepart.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 
-using rtl::OUString;
 using namespace ::oox::core;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

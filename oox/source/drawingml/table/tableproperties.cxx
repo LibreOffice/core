@@ -29,7 +29,6 @@
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/helper/propertyset.hxx"
 
-using rtl::OUString;
 using namespace ::oox::core;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -61,7 +60,7 @@ void CreateTableRows( uno::Reference< XTableRows > xTableRows, const std::vector
     uno::Reference< container::XIndexAccess > xIndexAccess( xTableRows, UNO_QUERY_THROW );
     for ( sal_Int32 n = 0; n < xIndexAccess->getCount(); n++ )
     {
-        static const rtl::OUString  sHeight( RTL_CONSTASCII_USTRINGPARAM ( "Height" ) );
+        static const OUString  sHeight("Height");
         Reference< XPropertySet > xPropSet( xIndexAccess->getByIndex( n ), UNO_QUERY_THROW );
         xPropSet->setPropertyValue( sHeight, Any( static_cast< sal_Int32 >( aTableRowIter->getHeight() / 360 ) ) );
         ++aTableRowIter;
@@ -76,7 +75,7 @@ void CreateTableColumns( Reference< XTableColumns > xTableColumns, const std::ve
     uno::Reference< container::XIndexAccess > xIndexAccess( xTableColumns, UNO_QUERY_THROW );
     for ( sal_Int32 n = 0; n < xIndexAccess->getCount(); n++ )
     {
-        static const rtl::OUString  sWidth( RTL_CONSTASCII_USTRINGPARAM ( "Width" ) );
+        static const OUString  sWidth("Width");
         Reference< XPropertySet > xPropSet( xIndexAccess->getByIndex( n ), UNO_QUERY_THROW );
         xPropSet->setPropertyValue( sWidth, Any( static_cast< sal_Int32 >( *aTableGridIter++ / 360 ) ) );
     }
@@ -110,7 +109,7 @@ const TableStyle& TableProperties::getUsedTableStyle( const ::oox::core::XmlFilt
     else if ( rBase.getTableStyles() )
     {
         const std::vector< TableStyle >& rTableStyles( rBase.getTableStyles()->getTableStyles() );
-        const rtl::OUString aStyleId( getStyleId().isEmpty() ? rBase.getTableStyles()->getDefaultStyleId() : getStyleId() );
+        const OUString aStyleId( getStyleId().isEmpty() ? rBase.getTableStyles()->getDefaultStyleId() : getStyleId() );
         std::vector< TableStyle >::const_iterator aIter( rTableStyles.begin() );
         while( aIter != rTableStyles.end() )
         {
@@ -133,7 +132,7 @@ void TableProperties::pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBa
     const Reference < XPropertySet >& xPropSet, TextListStylePtr pMasterTextListStyle )
 {
     uno::Reference< XColumnRowRange > xColumnRowRange(
-         xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Model") ) ), uno::UNO_QUERY_THROW );
+         xPropSet->getPropertyValue("Model"), uno::UNO_QUERY_THROW );
 
     CreateTableColumns( xColumnRowRange->getColumns(), mvTableGrid );
     CreateTableRows( xColumnRowRange->getRows(), mvTableRows );
