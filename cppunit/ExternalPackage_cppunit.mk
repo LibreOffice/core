@@ -24,6 +24,7 @@ else
 $(eval $(call gb_ExternalPackage_add_file,cppunit,bin/DllPlugInTester,src/DllPlugInTester/.libs/DllPlugInTester))
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_ExternalPackage_add_file,cppunit,lib/libcppunit-1.13.0.dylib,src/cppunit/.libs/libcppunit-1.13.0.dylib))
+$(eval $(call gb_ExternalPackage_add_file,cppunit,lib/libcppunit.dylib,src/cppunit/.libs/libcppunit.dylib))
 else ifeq ($(OS),AIX)
 $(eval $(call gb_ExternalPackage_add_file,cppunit,lib/libcppunit-1.13.a,src/cppunit/.libs/libcppunit-1.13.a))
 else ifeq ($(OS),OPENBSD)
