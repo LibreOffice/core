@@ -693,7 +693,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
             sal_Int16 nZoom = 0;
             if(!(rValue >>= nZoom))
                 throw IllegalArgumentException();
-            SvxZoomType eZoom = (SvxZoomType)USHRT_MAX;
+            SvxZoomType eZoom;
             switch (nZoom)
             {
                 case view::DocumentZoomType::OPTIMAL:
@@ -716,11 +716,8 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
                         ::rtl::OUString( "SwXViewSettings: invalid zoom type"), 0, 0);
                 break;
             }
-            if(eZoom < USHRT_MAX)
-            {
-                mpViewOption->SetZoomType( eZoom );
-                mbApplyZoom = sal_True;
-            }
+            mpViewOption->SetZoomType( eZoom );
+            mbApplyZoom = sal_True;
         }
         break;
         case HANDLE_VIEWSET_ONLINE_LAYOUT :
