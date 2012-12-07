@@ -69,6 +69,33 @@ inline rtl::OUString pathnameToAbsoluteUrl(rtl::OUString const & pathname) {
     return url;
 }
 
+inline rtl::OUString pathnameToAbsoluteUrl(rtl::OString const & pathname)
+{
+    rtl::OUString url;
+    if (osl::FileBase::getFileURLFromSystemPath(OStringToOUString(pathname, RTL_TEXTENCODING_UTF8) , url)
+        != osl::FileBase::E_None)
+    {
+        std::cerr << "Error: Cannot convert input pathname to URL\n";
+        std::exit(EXIT_FAILURE);
+    }
+    static rtl::OUString cwd;
+    if(cwd.isEmpty())
+    {
+        if (osl_getProcessWorkingDir(&cwd.pData) != osl_Process_E_None)
+        {
+            std::cerr << "Error: Cannot determine cwd\n";
+            std::exit(EXIT_FAILURE);
+        }
+    }
+    if (osl::FileBase::getAbsoluteFileURL(cwd, url, url)
+        != osl::FileBase::E_None)
+    {
+        std::cerr << "Error: Cannot convert input URL to absolute URL\n";
+        std::exit(EXIT_FAILURE);
+    }
+    return url;
+}
+
 inline rtl::OString pathnameToken(char const * pathname, char const * root) {
     rtl::OUString full;
     if (!rtl_convertStringToUString(

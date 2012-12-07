@@ -29,13 +29,18 @@
 
 namespace
 {
-    static ::rtl::OString lcl_NormalizeFilename(const ::rtl::OString& rFilename)
+    static sal_Int32 lcl_BasenameIndex(const OString& rFilename)
     {
-        return rFilename.copy(
-            std::max(
-                rFilename.lastIndexOf( '\\' ),
-                rFilename.lastIndexOf( '/' ))+1);
-    };
+        sal_Int32 index;
+        for(index = rFilename.getLength() - 1; index >= 0 ; --index)
+        {
+            if(rFilename[index] == '/' || rFilename[index] == '\\')
+            {
+                break;
+            }
+        }
+        return index + 1;
+    }
 
     static bool lcl_ReadPoChecked(
         PoEntry& o_rPoEntry, PoIfstream& rPoFile,
@@ -165,7 +170,7 @@ MergeDataFile::MergeDataFile(
     while( !aInputStream.eof() )
     {
         const OString sHack("HACK");
-        const OString sFileName( lcl_NormalizeFilename(rFile) );
+        const OString sFileName( rFile.getStr() + lcl_BasenameIndex(rFile) );
         const bool bReadAll = sFileName.isEmpty();
         const OString sPoFileName(sPoFile.data(), sPoFile.length());
         PoIfstream aPoInput;
@@ -379,13 +384,7 @@ rtl::OString MergeDataFile::CreateKey(const rtl::OString& rTYP, const rtl::OStri
     const rtl::OString& rLID, const rtl::OString& rFilename, bool bCaseSensitive)
 {
     static const ::rtl::OString sStroke('-');
-    ::rtl::OString sKey( rTYP );
-    sKey += sStroke;
-    sKey += rGID;
-    sKey += sStroke;
-    sKey += rLID;
-    sKey += sStroke;
-    sKey += lcl_NormalizeFilename(rFilename);
+    ::rtl::OString sKey = rTYP + "-" + rGID + "-" + rLID + "-" + (rFilename.getStr() + lcl_BasenameIndex(rFilename) );
     OSL_TRACE("created key: %s", sKey.getStr());
     if(bCaseSensitive)
         return sKey;         // officecfg case sensitive identifier
