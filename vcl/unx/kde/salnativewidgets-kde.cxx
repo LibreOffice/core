@@ -32,6 +32,8 @@
 #include <vcl/vclenum.hxx>
 #include <rtl/ustrbuf.hxx>
 
+#include <config_vclplug.h>
+
 #ifdef ENABLE_TDE
 #define QPushButton_String      "TQPushButton"
 #define QRadioButton_String     "TQRadioButton"

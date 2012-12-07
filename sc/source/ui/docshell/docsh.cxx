@@ -105,6 +105,8 @@
 #include "markdata.hxx"
 #include "orcusfilters.hxx"
 
+#include <config_telepathy.h>
+
 #ifdef ENABLE_TELEPATHY
 #include "sccollaboration.hxx"
 #endif

@@ -40,6 +40,8 @@
 
 #include <osl/module.h>
 
+#include <config_vclplug.h>
+
 extern PluginConnector* pConnector;
 extern XtAppContext app_context;
 extern int wakeup_fd[];

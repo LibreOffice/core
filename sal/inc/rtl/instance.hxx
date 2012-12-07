@@ -20,6 +20,8 @@
 #ifndef INCLUDED_RTL_INSTANCE_HXX
 #define INCLUDED_RTL_INSTANCE_HXX
 
+#include <config_global.h>
+
 #include "osl/doublecheckedlocking.h"
 #include "osl/getglobalmutex.hxx"
 

@@ -92,6 +92,8 @@ extern "C" {
 #endif
 #endif
 
+#include <config_vclplug.h>
+
 #ifdef ENABLE_GTK
 #include <gtk/gtk.h>
 #include <gdk/gdkx.h>

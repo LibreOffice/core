@@ -95,6 +95,8 @@
 
 #include "langselect.hxx"
 
+#include <config_telepathy.h>
+
 #ifdef ENABLE_TELEPATHY
 #include <tubes/manager.hxx>
 #endif

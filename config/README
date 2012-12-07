@@ -1,0 +1,24 @@
+These are configuration files for various features as detected by configure.
+
+Include only those files you need (in order to reduce rebuilds when a setting changes).
+
+Settings here are only C/C++ #define directives, so they apply only to C/C++ source,
+not to Makefiles.
+
+
+
+Adding a new setting:
+=====================
+
+- do AC_DEFINE(HAVE_FOO) in configure.ac when a setting should be set
+- choose the proper config/config_xxx.h file to use
+    - if it is a global setting (such as availability of a compiler feature),
+        use config/config_global.h
+    - otherwise check if there is a matching config/config_hxx.h file
+    - if none matches, add a new one:
+        - add config/config_xxx.h.in here, with just #ifndef include guard
+        - add AC_CONFIG_HEADERS([config/config_xxx.h]) next to the others
+            in configure.ac
+        - add config_hxx.h to config/.gitignore
+- add #undef HAVE_FOO to the config/config_hxx.h , possibly with a comment
+- add #include <config_xxx.h> before any #ifdef HAVE_XXX in a source file

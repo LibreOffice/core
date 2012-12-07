@@ -30,6 +30,8 @@
 #include <iostream>
 #include <stdlib.h>
 
+#include <config_vclplug.h>
+
 #ifdef ENABLE_TDE
 #define THIS_DESKENV_NAME_CAP "TDE"
 #define THIS_DESKENV_NAME_LOW "tde"

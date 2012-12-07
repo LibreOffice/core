@@ -69,12 +69,6 @@ gb_CXXFLAGS := \
 	#-fsigned-char \ might be removed?
 	#-malign-natural \ might be removed?
 
-ifeq ($(HAVE_SFINAE_ANONYMOUS_BROKEN),TRUE)
-gb_COMPILERDEFS += \
-        -DHAVE_SFINAE_ANONYMOUS_BROKEN \
-
-endif
-
 # Without this I get struct/class clashes for "complex" when compiling
 # some source files in vcl, at least with the 10.7 SDK.
 ifneq ($(filter 1070,$(MACOSX_SDK_VERSION)),)

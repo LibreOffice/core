@@ -59,12 +59,6 @@ gb_COMPILERDEFS := \
 	-DCPPU_ENV=$(gb_CPPU_ENV) \
 	-DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH) \
 
-ifeq ($(HAVE_GCC_BUILTIN_ATOMIC),TRUE)
-gb_COMPILERDEFS += \
-    -DHAVE_GCC_BUILTIN_ATOMIC \
-
-endif
-
 gb_CFLAGS_COMMON := \
 	-Wall \
 	-Wendif-labels \
@@ -158,7 +152,9 @@ gb_DEBUG_CFLAGS := $(GGDB2) $(FINLINE_LIMIT0) $(FNO_INLINE)
 gb_DEBUG_CXXFLAGS := $(FNO_DEFAULT_INLINE)
 
 
-gb_LinkTarget_INCLUDE := $(subst -I. , ,$(SOLARINC))
+gb_LinkTarget_INCLUDE :=\
+    $(subst -I. , ,$(SOLARINC)) \
+    -I$(SRCDIR)/config \
 
 ifeq ($(COM_GCC_IS_CLANG),TRUE)
 ifeq ($(COMPILER_PLUGIN_TOOL),)

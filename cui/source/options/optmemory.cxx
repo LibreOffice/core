@@ -59,6 +59,8 @@
 #include "helpid.hrc"
 #include <dialmgr.hxx>
 
+#include <config_vclplug.h>
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;

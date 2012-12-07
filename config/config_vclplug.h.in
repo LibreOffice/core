@@ -1,0 +1,15 @@
+/*
+
+Settings about which X11 desktops have support enabled.
+
+*/
+
+#ifndef CONFIG_VCLPLUG_H
+#define CONFIG_VCLPLUG_H
+
+#undef ENABLE_GTK
+#undef ENABLE_KDE
+#undef ENABLE_KDE4
+#undef ENABLE_TDE
+
+#endif

@@ -43,6 +43,8 @@
 #include "markdata.hxx"
 #include "scabstdlg.hxx"
 
+#include <config_telepathy.h>
+
 #ifdef ENABLE_TELEPATHY
 #include "sccollaboration.hxx"
 #endif

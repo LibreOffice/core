@@ -1,0 +1,14 @@
+/*
+Global configuration file.
+
+Only for settings that apply to every source file and are unlikely to change often,
+such as whether a certain C++11 feature is available.
+
+Do NOT use for settings local to some code or for settings that can change often.
+Any change in this header will cause a rebuild of almost everything.
+
+*/
+
+#undef HAVE_GCC_BUILTIN_ATOMIC
+#undef HAVE_SFINAE_ANONYMOUS_BROKEN
+#undef HAVE_THREADSAFE_STATICS

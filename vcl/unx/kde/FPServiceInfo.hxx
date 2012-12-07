@@ -20,6 +20,8 @@
 #ifndef _FPSERVICEINFO_HXX_
 #define _FPSERVICEINFO_HXX_
 
+#include <config_vclplug.h>
+
 #ifdef ENABLE_TDE
 
 // the service names

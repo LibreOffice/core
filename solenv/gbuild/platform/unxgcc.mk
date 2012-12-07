@@ -76,12 +76,6 @@ else
 gb_CXXFLAGS += -Wnon-virtual-dtor
 endif
 
-ifeq ($(HAVE_SFINAE_ANONYMOUS_BROKEN),TRUE)
-gb_COMPILERDEFS += \
-        -DHAVE_SFINAE_ANONYMOUS_BROKEN \
-
-endif
-
 # enable debug STL
 ifeq ($(gb_ENABLE_DBGUTIL),$(true))
 gb_COMPILERDEFS += \

@@ -44,6 +44,8 @@
 #include <osl/file.h>
 #include <osl/module.h>
 
+#include <config_vclplug.h>
+
 PluginConnector* pConnector = NULL;
 
 int         nAppArguments = 0;

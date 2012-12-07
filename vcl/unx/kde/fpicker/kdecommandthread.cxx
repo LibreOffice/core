@@ -21,6 +21,8 @@
 
 #include <kdecommandthread.hxx>
 
+#include <config_vclplug.h>
+
 #ifdef ENABLE_TDE
 #include <tqstringlist.h>
 #else // ENABLE_TDE

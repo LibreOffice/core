@@ -25,6 +25,8 @@
 #define KAB_DRIVER_VERSION_MAJOR    0
 #define KAB_DRIVER_VERSION_MINOR    2
 
+#include <config_vclplug.h>
+
 #ifdef ENABLE_TDE
 
 // the minimum TDE version which is required at runtime

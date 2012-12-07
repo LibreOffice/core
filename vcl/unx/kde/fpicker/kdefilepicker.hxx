@@ -20,6 +20,8 @@
 #ifndef _KDEFILEPICKER_HXX_
 #define _KDEFILEPICKER_HXX_
 
+#include <config_vclplug.h>
+
 #ifdef ENABLE_TDE
 #include <shell/tde_defines.h>
 #endif // ENABLE_TDE

@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_KDE_HEADERS_H
 #define INCLUDED_VCL_KDE_HEADERS_H
 
+#include <config_vclplug.h>
+
 #ifdef ENABLE_TDE
 
 #include "shell/tde_headers.h"

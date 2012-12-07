@@ -22,6 +22,8 @@
 #include <kdecommandthread.hxx>
 #include <kdefilepicker.hxx>
 
+#include <config_vclplug.h>
+
 #ifdef ENABLE_TDE
 
 #include <tqcheckbox.h>

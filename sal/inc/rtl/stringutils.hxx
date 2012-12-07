@@ -31,6 +31,8 @@
 
 #include "sal/config.h"
 
+#include <config_global.h>
+
 // Manually defining RTL_DISABLE_FAST_STRING allows to force turning fast string concatenation off
 // (e.g. for debugging).
 #ifndef RTL_DISABLE_FAST_STRING

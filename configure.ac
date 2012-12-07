@@ -5579,6 +5579,7 @@ if test "$GCC" = "yes"; then
         AC_MSG_RESULT([broken (i.e., no)])
     else
         HAVE_THREADSAFE_STATICS=TRUE
+        AC_DEFINE(HAVE_THREADSAFE_STATICS)
         AC_MSG_RESULT([yes])
     fi
 else
@@ -5646,6 +5647,7 @@ if test "$GCC" = "yes"; then
 ]])],[HAVE_GCC_BUILTIN_ATOMIC=TRUE],[])
     if test "$HAVE_GCC_BUILTIN_ATOMIC" = "TRUE"; then
         AC_MSG_RESULT([yes])
+        AC_DEFINE(HAVE_GCC_BUILTIN_ATOMIC)
     else
         AC_MSG_RESULT([no])
     fi
@@ -5692,6 +5694,7 @@ return !(i != 0 && j != 0);
     fi
     if test "$HAVE_CXX0X" = "TRUE"; then
         AC_MSG_RESULT([yes])
+        AC_DEFINE([HAVE_CXX0X])
     else
         AC_MSG_RESULT([no])
     fi
@@ -5864,6 +5867,7 @@ void test( ... );
         AC_MSG_RESULT([$sfinae_anonymous_broken])
         if test "$sfinae_anonymous_broken" = "yes"; then
             HAVE_SFINAE_ANONYMOUS_BROKEN="TRUE"
+            AC_DEFINE(HAVE_SFINAE_ANONYMOUS_BROKEN)
         fi
     AC_LANG_POP([C++])
 fi
@@ -9432,6 +9436,7 @@ fi
 ENABLE_GTK=""
 if test "x$enable_gtk" = "xyes"; then
     ENABLE_GTK="TRUE"
+    AC_DEFINE(ENABLE_GTK)
     R="gtk $R"
 fi
 AC_SUBST(ENABLE_GTK)
@@ -9444,6 +9449,7 @@ if test "x$enable_tde" = "xyes"; then
         AC_MSG_ERROR([enabling both KDE and TDE is not supported])
     fi
     ENABLE_TDE="TRUE"
+    AC_DEFINE(ENABLE_TDE)
     R="$R tde"
 fi
 AC_SUBST(ENABLE_TDE)
@@ -9451,6 +9457,7 @@ AC_SUBST(ENABLE_TDE)
 ENABLE_KDE=""
 if test "x$enable_kde" = "xyes"; then
     ENABLE_KDE="TRUE"
+    AC_DEFINE(ENABLE_KDE)
     R="$R kde"
 fi
 AC_SUBST(ENABLE_KDE)
@@ -9458,6 +9465,7 @@ AC_SUBST(ENABLE_KDE)
 ENABLE_KDE4=""
 if test "x$enable_kde4" = "xyes"; then
     ENABLE_KDE4="TRUE"
+    AC_DEFINE(ENABLE_KDE4)
     R="$R kde4"
 fi
 AC_SUBST(ENABLE_KDE4)
@@ -9671,6 +9679,7 @@ TELEPATHY_LIBS=""
 AC_MSG_CHECKING([whether to enable Telepathy support])
 if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_telepathy" = "yes"; then
     ENABLE_TELEPATHY="TRUE"
+    AC_DEFINE(ENABLE_TELEPATHY)
     AC_MSG_RESULT([yes])
     PKG_CHECK_MODULES( TELEPATHY, telepathy-glib >= 0.18.0 glib-2.0 gobject-2.0 gthread-2.0 gio-2.0 )
 else
@@ -12461,6 +12470,9 @@ else
 fi
 
 AC_CONFIG_FILES([config_host.mk])
+AC_CONFIG_HEADERS([config/config_global.h])
+AC_CONFIG_HEADERS([config/config_telepathy.h])
+AC_CONFIG_HEADERS([config/config_vclplug.h])
 AC_OUTPUT
 
 # touch the config timestamp file

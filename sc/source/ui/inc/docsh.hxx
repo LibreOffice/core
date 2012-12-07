@@ -39,6 +39,8 @@
 #include <boost/unordered_map.hpp>
 #include <cppuhelper/implbase1.hxx>
 
+#include <config_telepathy.h>
+
 class ScEditEngineDefaulter;
 class SfxStyleSheetBasePool;
 class SfxStyleSheetHint;

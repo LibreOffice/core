@@ -1,0 +1,6 @@
+#ifndef CONFIG_TELEPATHY
+#define CONFIG_TELEPATHY
+
+#undef ENABLE_TELEPATHY
+
+#endif
