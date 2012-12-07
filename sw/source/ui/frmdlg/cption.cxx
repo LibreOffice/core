@@ -278,12 +278,17 @@ void SwCaptionDialog::Apply()
     aOpt.UseCaption() = sal_True;
     String aName( aCategoryBox.GetText() );
     if ( aName == sNone )
+    {
         aOpt.SetCategory( aEmptyStr );
+        aOpt.SetNumSeparator( aEmptyStr );
+    }
     else
+    {
         aOpt.SetCategory(comphelper::string::strip(aName, ' '));
+        aOpt.SetNumSeparator( aNumberingSeparatorED.GetText() );
+    }
     aOpt.SetNumType( (sal_uInt16)(sal_uIntPtr)aFormatBox.GetEntryData( aFormatBox.GetSelectEntryPos() ) );
     aOpt.SetSeparator( aSepEdit.IsEnabled() ? aSepEdit.GetText() : String() );
-    aOpt.SetNumSeparator( aNumberingSeparatorED.GetText() );
     aOpt.SetCaption( aTextEdit.GetText() );
     aOpt.SetPos( aPosBox.GetSelectEntryPos() );
     aOpt.IgnoreSeqOpts() = sal_True;
