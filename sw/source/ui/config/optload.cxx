@@ -345,8 +345,19 @@ SwCaptionOptDlg::~SwCaptionOptDlg()
 {
 }
 
+SwCaptionPreview::SwCaptionPreview( Window* pParent )
+    : Window( pParent )
+{
+    Init();
+}
+
 SwCaptionPreview::SwCaptionPreview( Window* pParent, const ResId& rResId )
     : Window( pParent, rResId )
+{
+    Init();
+}
+
+void SwCaptionPreview::Init()
 {
     maDrawPos = Point( 4, 6 );
 
@@ -375,6 +386,11 @@ void SwCaptionPreview::Paint( const Rectangle& rRect )
 
     DrawRect( Rectangle( Point( 0, 0 ), GetSizePixel() ) );
     DrawText( Point( 4, 6 ), maText );
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwCaptionPreview(Window* pParent)
+{
+    return new SwCaptionPreview(pParent);
 }
 
 SwCaptionOptPage::SwCaptionOptPage( Window* pParent, const SfxItemSet& rSet )
