@@ -164,7 +164,6 @@ void RTFSprms::ensureCopyBeforeWrite()
         for (std::vector< std::pair<Id, RTFValue::Pointer_t> >::const_iterator i = m_pSprms->begin(); i != m_pSprms->end(); ++i)
             pClone->push_back(std::make_pair(i->first, RTFValue::Pointer_t(i->second->Clone())));
         m_pSprms = pClone;
-        assert(m_pSprms->m_nRefCount == 1);
     }
 }
 
