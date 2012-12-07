@@ -39,10 +39,8 @@ using namespace com::sun::star::sdbc;
 
 void WpADOColumn::Create()
 {
-    HRESULT         hr = -1;
-
     _ADOColumn* pColumn = NULL;
-    hr = CoCreateInstance(ADOS::CLSID_ADOCOLUMN_25,
+    HRESULT hr = CoCreateInstance(ADOS::CLSID_ADOCOLUMN_25,
                           NULL,
                           CLSCTX_INPROC_SERVER,
                           ADOS::IID_ADOCOLUMN_25,

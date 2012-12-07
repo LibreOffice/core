@@ -37,9 +37,8 @@ using namespace com::sun::star::sdbcx;
 // -------------------------------------------------------------------------
 void WpADOGroup::Create()
 {
-    HRESULT         hr = -1;
     ADOGroup* pGroup = NULL;
-    hr = CoCreateInstance(ADOS::CLSID_ADOGROUP_25,
+    HRESULT hr = CoCreateInstance(ADOS::CLSID_ADOGROUP_25,
                           NULL,
                           CLSCTX_INPROC_SERVER,
                           ADOS::IID_ADOGROUP_25,

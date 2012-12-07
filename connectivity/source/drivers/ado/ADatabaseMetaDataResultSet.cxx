@@ -728,7 +728,6 @@ sal_Bool ODatabaseMetaDataResultSet::convertFastPropertyValue(
         case PROPERTY_ID_RESULTSETCONCURRENCY:
         case PROPERTY_ID_RESULTSETTYPE:
             throw ::com::sun::star::lang::IllegalArgumentException();
-            break;
         case PROPERTY_ID_FETCHDIRECTION:
             return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getFetchDirection());
         case PROPERTY_ID_FETCHSIZE:
@@ -753,7 +752,6 @@ void ODatabaseMetaDataResultSet::setFastPropertyValue_NoBroadcast(
         case PROPERTY_ID_FETCHDIRECTION:
         case PROPERTY_ID_FETCHSIZE:
             throw Exception();
-            break;
         default:
             OSL_FAIL("setFastPropertyValue_NoBroadcast: Illegal handle value!");
     }

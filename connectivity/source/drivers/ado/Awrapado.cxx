@@ -36,9 +36,8 @@ using namespace connectivity::ado;
 
 void WpADOCatalog::Create()
 {
-    HRESULT         hr = -1;
     _ADOCatalog* pCommand;
-    hr = CoCreateInstance(ADOS::CLSID_ADOCATALOG_25,
+    HRESULT hr = CoCreateInstance(ADOS::CLSID_ADOCATALOG_25,
                           NULL,
                           CLSCTX_INPROC_SERVER,
                           ADOS::IID_ADOCATALOG_25,

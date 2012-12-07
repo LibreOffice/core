@@ -119,9 +119,7 @@ static Any isCurrency( const rtl::OUString & typeName )
 
 static Any isAutoIncrement( const rtl::OUString & defaultValue )
 {
-    sal_Bool ret = sal_False;
-
-    ret = defaultValue.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "nextval(" ) );
+    sal_Bool ret = defaultValue.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "nextval(" ) );
 //     printf( "%s %d\n",
 //             OUStringToOString(defaultValue, RTL_TEXTENCODING_ASCII_US).getStr(),
 //             ret );
