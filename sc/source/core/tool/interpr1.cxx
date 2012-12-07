@@ -1544,45 +1544,44 @@ void ScInterpreter::ScRandom()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScRandom" );
 
-    static sal_Int32 aScRandomIx = 0, aScRandomIy = 0, aScRandomIz = 0, aScRandomIt = 0;
+    static sal_Int32 nScRandomIx = 0, nScRandomIy = 0, nScRandomIz = 0, nScRandomIt = 0;
     static rtlRandomPool aPool = rtl_random_createPool();
+    double fScRandomW;
 
     // Seeding for the PRNG: should be good enough but we
     // monitor the values to keep things under control.
-    if (aScRandomIx <= 0)
-    rtl_random_getBytes(aPool, &aScRandomIx, sizeof(aScRandomIx));
-    if (aScRandomIy <= 0)
-    rtl_random_getBytes(aPool, &aScRandomIy, sizeof(aScRandomIy));
-    if (aScRandomIz <= 0)
-    rtl_random_getBytes(aPool, &aScRandomIz, sizeof(aScRandomIz));
-    if (aScRandomIt <= 0)
-    rtl_random_getBytes(aPool, &aScRandomIt, sizeof(aScRandomIt));
+    if (nScRandomIx <= 0)
+    rtl_random_getBytes(aPool, &nScRandomIx, sizeof(nScRandomIx));
+    if (nScRandomIy <= 0)
+    rtl_random_getBytes(aPool, &nScRandomIy, sizeof(nScRandomIy));
+    if (nScRandomIz <= 0)
+    rtl_random_getBytes(aPool, &nScRandomIz, sizeof(nScRandomIz));
+    if (nScRandomIt <= 0)
+    rtl_random_getBytes(aPool, &nScRandomIt, sizeof(nScRandomIt));
 
     // Basically unmodified algorithm from
     // Wichman and Hill, "Generating good pseudo-random numbers",
     //      December 5, 2005.
 
-    double aScRandomW;
+    nScRandomIx = 11600L * (nScRandomIx % 185127L) - 10379L * (nScRandomIx / 185127L);
+    nScRandomIy = 47003L * (nScRandomIy %  45688L) - 10479L * (nScRandomIy /  45688L);
+    nScRandomIz = 23000L * (nScRandomIz %  93368L) - 19423L * (nScRandomIz /  93368L);
+    nScRandomIt = 33000L * (nScRandomIt %  65075L) -  8123L * (nScRandomIt /  65075L);
+    if (nScRandomIx < 0)
+    nScRandomIx += 2147483579L;
+    if (nScRandomIy < 0)
+    nScRandomIy += 2147483543L;
+    if (nScRandomIz < 0)
+    nScRandomIz += 2147483123L;
+    if (nScRandomIt < 0)
+    nScRandomIt += 2147483123L;
 
-    aScRandomIx = 11600L * (aScRandomIx % 185127L) - 10379L * (aScRandomIx / 185127L);
-    aScRandomIy = 47003L * (aScRandomIy %  45688L) - 10479L * (aScRandomIy /  45688L);
-    aScRandomIz = 23000L * (aScRandomIz %  93368L) - 19423L * (aScRandomIz /  93368L);
-    aScRandomIt = 33000L * (aScRandomIt %  65075L) -  8123L * (aScRandomIt /  65075L);
-    if (aScRandomIx < 0)
-    aScRandomIx += 2147483579L;
-    if (aScRandomIy < 0)
-    aScRandomIy += 2147483543L;
-    if (aScRandomIz < 0)
-    aScRandomIz += 2147483123L;
-    if (aScRandomIt < 0)
-    aScRandomIt += 2147483123L;
+    fScRandomW = (double)nScRandomIx*0.0000000004656613022697297188506231646486 +
+            (double)nScRandomIy*0.0000000004656613100759859932486569933169 +
+        (double)nScRandomIz*0.0000000004656613360968421314794009471615 +
+        (double)nScRandomIt*0.0000000004656614011489951998100056779817;
 
-    aScRandomW = (double)aScRandomIx*0.0000000004656613022697297188506231646486 +
-            (double)aScRandomIy*0.0000000004656613100759859932486569933169 +
-        (double)aScRandomIz*0.0000000004656613360968421314794009471615 +
-        (double)aScRandomIt*0.0000000004656614011489951998100056779817;
-
-    PushDouble(aScRandomW - (sal_Int64)aScRandomW);
+    PushDouble(fScRandomW - (sal_Int32)fScRandomW);
 }
 
 
