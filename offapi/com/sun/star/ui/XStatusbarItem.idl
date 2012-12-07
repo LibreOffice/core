@@ -18,6 +18,7 @@
 #ifndef __com_sun_star_ui_XStatusbarItem_idl__
 #define __com_sun_star_ui_XStatusbarItem_idl__
 
+#include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/awt/Rectangle.idl>
 
 module com {  module sun {  module star {  module ui {
