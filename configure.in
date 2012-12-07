@@ -360,7 +360,7 @@ AC_ARG_ENABLE(kde4,
 ],,)
 AC_ARG_ENABLE(binfilter,
 [  --enable-binfilter      Enable legacy binary file formats filters
-],,enable_binfilter=yes)
+],,enable_binfilter=no)
 AC_ARG_ENABLE(rpath,
 [  --disable-rpath         Disable the use of relative paths in shared libraries
 ],,)
