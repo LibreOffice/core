@@ -1059,6 +1059,11 @@ AC_ARG_ENABLE(release-build,
          See http://wiki.documentfoundation.org/DevBuild]),
 ,)
 
+AC_ARG_ENABLE(windows-build-signing,
+    AS_HELP_STRING([--enable-windows-build-signing],
+        [Enable signing of windows binaries (*.exe, *.dll)]),
+,)
+
 AC_ARG_ENABLE(silent-msi,
     AS_HELP_STRING([--enable-silent-msi],
         [Enable MSI with LIMITUI=1 (silent install).]),
@@ -2104,6 +2109,19 @@ else
     ENABLE_RELEASE_BUILD="TRUE"
 fi
 AC_SUBST(ENABLE_RELEASE_BUILD)
+
+dnl ===================================================================
+dnl Test whether to sign Windows Build
+dnl ===================================================================
+AC_MSG_CHECKING([whether to sign windows build])
+if test "$enable_windows_build_signing" = "yes" -a "$_os" = "WINNT" -a "$WITH_MINGW" != "YES" ; then
+    AC_MSG_RESULT([yes])
+    WINDOWS_BUILD_SIGNING="TRUE"
+else
+    AC_MSG_RESULT([no])
+    WINDOWS_BUILD_SIGNING="FALSE"
+fi
+AC_SUBST(WINDOWS_BUILD_SIGNING)
 
 dnl ===================================================================
 dnl MacOSX build and runtime environment options
