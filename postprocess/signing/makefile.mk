@@ -33,7 +33,7 @@ IMAGENAMES=$(SOLARBINDIR)$/*.dll $(SOLARBINDIR)$/so$/*.dll $(SOLARBINDIR)$/*.exe
 TIMESTAMPURL*="http://timestamp.verisign.com/scripts/timstamp.dll"
 
 signing.done :
-.IF "$(VISTA_SIGNING)"!=""
+.IF "$(WINDOWS_BUILD_SIGNING)"=="TRUE"
 .IF "$(COM)"=="MSC"
 .IF "$(product)"=="full"
     $(PERL) signing.pl -e $(EXCLUDELIST) -f $(PFXFILE) -p $(PFXPASSWORD) -t $(TIMESTAMPURL) $(IMAGENAMES) && $(TOUCH) $(MISC)$/signing.done
@@ -43,9 +43,9 @@ signing.done :
 .ELSE  # "$(GUI)"=="MSC"
     @echo Nothing to do, signing is Windows \(MSC\) only.
 .ENDIF # "$(GUI)"=="MSC"
-.ELSE  # "$(VISTA_SIGNING)"!=""
-    @echo Doing nothing. To switch on signing set VISTA_SIGNING=TRUE ...
-.ENDIF # "$(VISTA_SIGNING)"!=""
+.ELSE  # "$(WINDOWS_BUILD_SIGNING)"=="TRUE"
+    @echo Doing nothing. Windows build signing is disabled ...
+.ENDIF # "$(WINDOWS_BUILD_SIGNING)"=="TRUE"
 
 .INCLUDE : target.mk
 
