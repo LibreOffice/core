@@ -39,7 +39,7 @@ $(call gb_ExternalProject_get_state_target,libcdr,build) :
 	&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LCMS2_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,lcms2/include) \
 	&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
-	&& msbuild.exe libcdr.vcxproj /p:Configuration=Release \
+	&& '/cygdrive/c/Windows/Microsoft.NET/Framework/v4.0.30319/msbuild.exe' libcdr.vcxproj /p:Configuration=Release \
 	&& touch $@
 else
 $(call gb_ExternalProject_get_state_target,libcdr,build) :

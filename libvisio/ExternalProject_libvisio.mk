@@ -39,7 +39,7 @@ $(call gb_ExternalProject_get_state_target,libvisio,build) :
 	&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LIBXML_INCLUDE_DIR=$(OUTDIR)/inc/extrenal \
 	&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
-	&& msbuild.exe libvisio.vcxproj /p:Configuration=Release \
+	&& '/cygdrive/c/Windows/Microsoft.NET/Framework/v4.0.30319/msbuild.exe' libvisio.vcxproj /p:Configuration=Release \
 	&& touch $@
 else
 $(call gb_ExternalProject_get_state_target,libvisio,build) :

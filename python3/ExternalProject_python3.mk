@@ -32,7 +32,7 @@ ifeq ($(VCVER),110)
 	&& touch $@
 else ifeq ($(VCVER),100)
 	cd $(EXTERNAL_WORKDIR)/PCbuild \
-	&& MAKEFLAGS= MSBuild.exe pcbuild.sln /t:Build /p:Configuration=Release /ToolsVersion:4.0 \
+	&& MAKEFLAGS= '/cygdrive/c/Windows/Microsoft.NET/Framework/v4.0.30319/MSBuild.exe' pcbuild.sln /t:Build /p:Configuration=Release /ToolsVersion:4.0 \
 	&& cd $(EXTERNAL_WORKDIR) \
 	&& ln -s PCbuild LO_lib \
 	&& touch $@
