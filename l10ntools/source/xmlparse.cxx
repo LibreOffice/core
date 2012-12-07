@@ -72,7 +72,8 @@ XMLChildNode& XMLChildNode::operator=(const XMLChildNode& obj){
 XMLParentNode::~XMLParentNode()
 /*****************************************************************************/
 {
-    if( pChildList ){
+    if( pChildList )
+    {
             RemoveAndDeleteAllChildren();
             delete pChildList;
             pChildList = NULL;
@@ -168,9 +169,8 @@ void XMLFile::Write( rtl::OString const &aFilename )
     s.close();
 }
 
-void XMLFile::WriteString( ofstream &rStream, const rtl::OUString &sString )
+void XMLFile::WriteString( ofstream &rStream, const rtl::OString &sText )
 {
-    rtl::OString sText(rtl::OUStringToOString(sString, RTL_TEXTENCODING_UTF8));
     rStream << sText.getStr();
 }
 
@@ -193,7 +193,7 @@ sal_Bool XMLFile::Write( ofstream &rStream , XMLNode *pCur )
                 if ( pElement->GetAttributeList())
                     for ( size_t j = 0; j < pElement->GetAttributeList()->size(); j++ ) {
                         rStream << " ";
-                        rtl::OUString sData( (*pElement->GetAttributeList())[ j ]->GetName() );
+                        rtl::OString sData( (*pElement->GetAttributeList())[ j ]->GetName() );
                         XMLUtil::QuotHTML( sData );
                         WriteString( rStream , sData );
                         rStream << "=\"";
@@ -216,7 +216,7 @@ sal_Bool XMLFile::Write( ofstream &rStream , XMLNode *pCur )
             break;
             case XML_NODE_TYPE_DATA: {
                 XMLData *pData = ( XMLData * ) pCur;
-                rtl::OUString sData( pData->GetData());
+                rtl::OString sData( pData->GetData());
                 XMLUtil::QuotHTML( sData );
                 WriteString( rStream, sData );
             }
@@ -255,19 +255,17 @@ void XMLFile::Print( XMLNode *pCur, sal_uInt16 nLevel )
             case XML_NODE_TYPE_ELEMENT: {
                 XMLElement *pElement = ( XMLElement * ) pCur;
 
-                fprintf( stdout, "<%s", rtl::OUStringToOString(pElement->GetName(), RTL_TEXTENCODING_UTF8).getStr());
+                fprintf( stdout, "<%s", pElement->GetName().getStr());
                 if ( pElement->GetAttributeList())
                 {
                     for (size_t j = 0; j < pElement->GetAttributeList()->size(); ++j)
                     {
-                        rtl::OString aAttrName(rtl::OUStringToOString((*pElement->GetAttributeList())[j]->GetName(),
-                            RTL_TEXTENCODING_UTF8));
+                        rtl::OString aAttrName((*pElement->GetAttributeList())[j]->GetName());
                         if (!aAttrName.equalsIgnoreAsciiCase(XML_LANG))
                         {
                             fprintf( stdout, " %s=\"%s\"",
                                 aAttrName.getStr(),
-                                rtl::OUStringToOString( (*pElement->GetAttributeList())[ j ]->GetValue(),
-                                    RTL_TEXTENCODING_UTF8).getStr());
+                                     (*pElement->GetAttributeList())[ j ]->GetValue().getStr());
                         }
                     }
                 }
@@ -277,24 +275,23 @@ void XMLFile::Print( XMLNode *pCur, sal_uInt16 nLevel )
                     fprintf( stdout, ">" );
                     for ( size_t k = 0; k < pElement->GetChildList()->size(); k++ )
                         Print( (*pElement->GetChildList())[ k ], nLevel + 1 );
-                    fprintf( stdout, "</%s>", rtl::OUStringToOString(pElement->GetName(), RTL_TEXTENCODING_UTF8).getStr());
+                    fprintf( stdout, "</%s>", pElement->GetName().getStr());
                 }
             }
             break;
             case XML_NODE_TYPE_DATA: {
                 XMLData *pData = ( XMLData * ) pCur;
-                rtl::OUString sData = pData->GetData();
-                fprintf( stdout, "%s", rtl::OUStringToOString(sData, RTL_TEXTENCODING_UTF8).getStr());
+                fprintf( stdout, "%s", pData->GetData().getStr());
             }
             break;
             case XML_NODE_TYPE_COMMENT: {
                 XMLComment *pComment = ( XMLComment * ) pCur;
-                fprintf( stdout, "<!--%s-->", rtl::OUStringToOString(pComment->GetComment(), RTL_TEXTENCODING_UTF8).getStr());
+                fprintf( stdout, "<!--%s-->", pComment->GetComment().getStr());
             }
             break;
             case XML_NODE_TYPE_DEFAULT: {
                 XMLDefault *pDefault = ( XMLDefault * ) pCur;
-                fprintf( stdout, "%s", rtl::OUStringToOString(pDefault->GetDefault(), RTL_TEXTENCODING_UTF8).getStr());
+                fprintf( stdout, "%s", pDefault->GetDefault().getStr());
             }
             break;
         }
@@ -312,7 +309,7 @@ XMLFile::~XMLFile()
     }
 }
 /*****************************************************************************/
-XMLFile::XMLFile( const rtl::OUString &rFileName ) // the file name, empty if created from memory stream
+XMLFile::XMLFile( const rtl::OString &rFileName ) // the file name, empty if created from memory stream
 /*****************************************************************************/
                 : XMLParentNode( NULL ),
                   sFileName    ( rFileName ),
@@ -349,18 +346,21 @@ void XMLFile::Extract( XMLFile *pCur )
 /*****************************************************************************/
 void XMLFile::InsertL10NElement( XMLElement* pElement ){
 /*****************************************************************************/
-    rtl::OString tmpStr,id,oldref,language("");
+    rtl::OString id,oldref,language("");
     LangHashMap* elem;
 
     if( pElement->GetAttributeList() != NULL ){
         for ( size_t j = 0; j < pElement->GetAttributeList()->size(); j++ )
         {
-            tmpStr=rtl::OUStringToOString((*pElement->GetAttributeList())[ j ]->GetName(), RTL_TEXTENCODING_UTF8);
-            if (tmpStr == ID) { // Get the "id" Attribute
-                id = rtl::OUStringToOString((*pElement->GetAttributeList())[ j ]->GetValue(),RTL_TEXTENCODING_UTF8);
+            if ((*pElement->GetAttributeList())[ j ]->GetName() == ID)
+            {
+                // Get the "id" Attribute
+                id = (*pElement->GetAttributeList())[ j ]->GetValue();
             }
-            if (tmpStr == XML_LANG) { // Get the "xml-lang" Attribute
-                language = rtl::OUStringToOString((*pElement->GetAttributeList())[j]->GetValue(),RTL_TEXTENCODING_UTF8);
+            if ((*pElement->GetAttributeList())[ j ]->GetName() == XML_LANG)
+            {
+                // Get the "xml-lang" Attribute
+                language = (*pElement->GetAttributeList())[j]->GetValue();
             }
 
         }
@@ -381,7 +381,8 @@ void XMLFile::InsertL10NElement( XMLElement* pElement ){
         elem=pos->second;
         if ( (*elem)[ language ] )
         {
-            fprintf(stdout,"Error: Duplicated entry. ID = %s  LANG = %s in File %s\n", id.getStr(), language.getStr(), rtl::OUStringToOString(sFileName, RTL_TEXTENCODING_ASCII_US).getStr() );
+            fprintf(stdout,"Error: Duplicated entry. ID = %s  LANG = %s in File %s\n", id.getStr(), language.getStr(),
+                    sFileName.getStr() );
             exit( -1 );
         }
         (*elem)[ language ]=pElement;
@@ -457,24 +458,30 @@ void XMLFile::SearchL10NElements( XMLParentNode *pCur , int pos)
             break;
             case XML_NODE_TYPE_ELEMENT: {
                 XMLElement *pElement = ( XMLElement * ) pCur;
-                rtl::OString sName(rtl::OUStringToOString(pElement->GetName(), RTL_TEXTENCODING_ASCII_US).toAsciiLowerCase());
                 rtl::OString language,tmpStrVal,oldref;
                 if ( pElement->GetAttributeList())
                 {
                     for ( size_t j = 0 , cnt = pElement->GetAttributeList()->size(); j < cnt && bInsert; ++j )
                     {
-                        const rtl::OString tmpStr = rtl::OUStringToOString((*pElement->GetAttributeList())[j]->GetName(), RTL_TEXTENCODING_UTF8);
-                        if (tmpStr == THEID) { // Get the "id" Attribute
-                            tmpStrVal=rtl::OUStringToOString( (*pElement->GetAttributeList())[ j ]->GetValue(),RTL_TEXTENCODING_UTF8 );
+                        if ((*pElement->GetAttributeList())[j]->GetName() == THEID)
+                        {
+                            // Get the "id" Attribute
+                            tmpStrVal= (*pElement->GetAttributeList())[ j ]->GetValue();
                         }
-                        if (tmpStr == LOCALIZE) { // Get the "localize" Attribute
+                        else if ((*pElement->GetAttributeList())[j]->GetName() == LOCALIZE)
+                        {
+                            // Get the "localize" Attribute
                             bInsert=false;
                         }
-                        if (tmpStr == XML_LANG) { // Get the "xml-lang" Attribute
-                            language=rtl::OUStringToOString( (*pElement->GetAttributeList())[ j ]->GetValue(),RTL_TEXTENCODING_UTF8 );
+                        else if ((*pElement->GetAttributeList())[j]->GetName() == XML_LANG)
+                        {
+                            // Get the "xml-lang" Attribute
+                            language= (*pElement->GetAttributeList())[ j ]->GetValue();
                         }
-                        if (tmpStr == OLDREF) { // Get the "oldref" Attribute
-                            oldref=rtl::OUStringToOString( (*pElement->GetAttributeList())[ j ]->GetValue(),RTL_TEXTENCODING_UTF8 );
+                        else if ((*pElement->GetAttributeList())[j]->GetName() == OLDREF)
+                        {
+                            // Get the "oldref" Attribute
+                            oldref=(*pElement->GetAttributeList())[ j ]->GetValue();
                         }
                     }
                     pElement->SetLanguageId ( language );
@@ -483,7 +490,7 @@ void XMLFile::SearchL10NElements( XMLParentNode *pCur , int pos)
                     pElement->SetPos( pos );
                 }
 
-                if ( bInsert && ( nodes_localize.find( sName ) != nodes_localize.end() ) )
+                if ( bInsert && ( nodes_localize.find( pElement->GetName() ) != nodes_localize.end() ) )
                     InsertL10NElement(pElement);
                 else if ( bInsert && pElement->GetChildList() ){
                     for ( size_t k = 0; k < pElement->GetChildList()->size(); k++ )
@@ -510,10 +517,10 @@ bool XMLFile::CheckExportStatus( XMLParentNode *pCur )
 {
     static bool bStatusExport = true;
     const rtl::OString LOCALIZE("localize");
-    const rtl::OString STATUS(RTL_CONSTASCII_STRINGPARAM("status"));
-    const rtl::OString PUBLISH(RTL_CONSTASCII_STRINGPARAM("PUBLISH"));
-    const rtl::OString DEPRECATED(RTL_CONSTASCII_STRINGPARAM("DEPRECATED"));
-    const rtl::OString TOPIC(RTL_CONSTASCII_STRINGPARAM("topic"));
+    const rtl::OString STATUS("status");
+    const rtl::OString PUBLISH("PUBLISH");
+    const rtl::OString DEPRECATED("DEPRECATED");
+    const rtl::OString TOPIC("topic");
 
     bool bInsert    = true;
     if ( !pCur )
@@ -532,19 +539,16 @@ bool XMLFile::CheckExportStatus( XMLParentNode *pCur )
             break;
             case XML_NODE_TYPE_ELEMENT: {
                 XMLElement *pElement = ( XMLElement * ) pCur;
-                rtl::OString sName(rtl::OUStringToOString(pElement->GetName(), RTL_TEXTENCODING_ASCII_US));
+                const rtl::OString sName = pElement->GetName();
                 if (sName.equalsIgnoreAsciiCase(TOPIC))
                 {
                     if ( pElement->GetAttributeList())
                     {
                         for (size_t j = 0 , cnt = pElement->GetAttributeList()->size(); j < cnt && bInsert; ++j)
                         {
-                            const rtl::OString tmpStr(rtl::OUStringToOString((*pElement->GetAttributeList())[j]->GetName(),
-                                RTL_TEXTENCODING_UTF8));
-                            if (tmpStr.equalsIgnoreAsciiCase(STATUS))
+                            if ((*pElement->GetAttributeList())[j]->GetName().equalsIgnoreAsciiCase(STATUS))
                             {
-                                rtl::OString tmpStrVal(rtl::OUStringToOString( (*pElement->GetAttributeList())[j]->GetValue(),
-                                    RTL_TEXTENCODING_UTF8));
+                                const rtl::OString tmpStrVal((*pElement->GetAttributeList())[j]->GetValue());
                                 if (!tmpStrVal.equalsIgnoreAsciiCase(PUBLISH) &&
                                     !tmpStrVal.equalsIgnoreAsciiCase(DEPRECATED))
                                 {
@@ -626,7 +630,7 @@ XMLElement& XMLElement::operator=(const XMLElement& obj){
 }
 
 /*****************************************************************************/
-void XMLElement::AddAttribute( const rtl::OUString &rAttribute, const rtl::OUString &rValue )
+void XMLElement::AddAttribute( const rtl::OString &rAttribute, const rtl::OString &rValue )
 /*****************************************************************************/
 {
     if ( !pAttributes )
@@ -635,9 +639,9 @@ void XMLElement::AddAttribute( const rtl::OUString &rAttribute, const rtl::OUStr
 }
 
 /*****************************************************************************/
-void XMLElement::ChangeLanguageTag( const rtl::OUString &rValue )
+void XMLElement::ChangeLanguageTag( const rtl::OString &rValue )
 {
-    SetLanguageId(rtl::OUStringToOString(rValue, RTL_TEXTENCODING_UTF8));
+    SetLanguageId(rValue);
     if ( pAttributes )
     {
         for (size_t i = 0; i < pAttributes->size(); ++i)
@@ -659,7 +663,7 @@ void XMLElement::ChangeLanguageTag( const rtl::OUString &rValue )
             {
                 pElem = static_cast< XMLElement* >(pNode);
                 pElem->ChangeLanguageTag( rValue );
-                pElem->SetLanguageId(rtl::OUStringToOString(rValue, RTL_TEXTENCODING_UTF8));
+                pElem->SetLanguageId(rValue);
                 pElem  = NULL;
                 pNode  = NULL;
             }
@@ -682,94 +686,110 @@ XMLElement::~XMLElement()
 }
 
 /*****************************************************************************/
-OUString XMLElement::ToOUString(){
+OString XMLElement::ToOString(){
 /*****************************************************************************/
-    OUStringBuffer* buffer = new OUStringBuffer();
+    OStringBuffer* buffer = new OStringBuffer();
     Print(this,*buffer,true);
-    OUString result=buffer->makeStringAndClear();
-    rtl::OUString xy(result.getStr());
-    result=OUString(xy);
+    OString result=buffer->makeStringAndClear();
     delete buffer;
     return result;
 }
 /*****************************************************************************/
-void XMLElement::Print(XMLNode *pCur, OUStringBuffer& buffer , bool rootelement ){
+void XMLElement::Print(XMLNode *pCur, OStringBuffer& buffer , bool rootelement ){
 /*****************************************************************************/
-    static const OUString XML_LANG ( "xml-lang" );
+    static const OString XML_LANG ( "xml-lang" );
 
-    if(pCur!=NULL){
-        if(rootelement){
+    if(pCur!=NULL)
+    {
+        if(rootelement)
+        {
             XMLElement *pElement = ( XMLElement * ) pCur;
-            if ( pElement->GetAttributeList()){
-                if ( pElement->GetChildList()){
+            if ( pElement->GetAttributeList())
+            {
+                if ( pElement->GetChildList())
+                {
                     XMLChildNode* tmp=NULL;
-                    for ( size_t k = 0; k < pElement->GetChildList()->size(); k++ ){
+                    for ( size_t k = 0; k < pElement->GetChildList()->size(); k++ )
+                    {
                         tmp = (*pElement->GetChildList())[ k ];
                         Print( tmp, buffer , false);
                     }
                 }
             }
         }
-        else{
-
-        switch( pCur->GetNodeType()) {
-            case XML_NODE_TYPE_ELEMENT: {
+        else
+        {
+            switch( pCur->GetNodeType())
+            {
+            case XML_NODE_TYPE_ELEMENT:
+            {
                 XMLElement *pElement = ( XMLElement * ) pCur;
 
-                if( !pElement->GetName().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("comment")) ){
-                    buffer.append( OUString("\\<") );
+                if( !pElement->GetName().equalsIgnoreAsciiCase("comment") )
+                {
+                    buffer.append( "\\<");
                     buffer.append( pElement->GetName() );
-                    if ( pElement->GetAttributeList()){
-                        for ( size_t j = 0; j < pElement->GetAttributeList()->size(); j++ ){
+                    if ( pElement->GetAttributeList())
+                    {
+                        for ( size_t j = 0; j < pElement->GetAttributeList()->size(); j++ )
+                        {
 
-                            OUString aAttrName( (*pElement->GetAttributeList())[ j ]->GetName() );
-                            if( !aAttrName.equalsIgnoreAsciiCase( XML_LANG ) ) {
-                                buffer.append( OUString(" ") );
+                            const OString aAttrName = (*pElement->GetAttributeList())[ j ]->GetName();
+                            if( !aAttrName.equalsIgnoreAsciiCase( XML_LANG ) )
+                            {
+                                buffer.append( " ");
                                 buffer.append( aAttrName );
-                                buffer.append( OUString("=") );
-                                buffer.append( OUString("\\\"") );
+                                buffer.append( "=\\\"");
                                 buffer.append( (*pElement->GetAttributeList())[ j ]->GetValue() );
-                                buffer.append( OUString("\\\"") );
+                                buffer.append( "\\\"");
                             }
                         }
                     }
                     if ( !pElement->GetChildList())
-                        buffer.append( OUString("/\\>") );
-                    else {
-                        buffer.append( OUString("\\>") );
+                    {
+                        buffer.append( "/\\>");
+                    }
+                    else
+                    {
+                        buffer.append( "\\>" );
                         XMLChildNode* tmp=NULL;
-                        for ( size_t k = 0; k < pElement->GetChildList()->size(); k++ ){
+                        for ( size_t k = 0; k < pElement->GetChildList()->size(); k++ )
+                        {
                             tmp = (*pElement->GetChildList())[ k ];
                             Print( tmp, buffer , false);
                         }
-                        buffer.append( OUString("\\</") );
+                        buffer.append( "\\</" );
                         buffer.append( pElement->GetName() );
-                        buffer.append( OUString("\\>") );
+                        buffer.append( "\\>" );
                     }
                 }
             }
             break;
-            case XML_NODE_TYPE_DATA: {
+            case XML_NODE_TYPE_DATA:
+            {
                 XMLData *pData = ( XMLData * ) pCur;
-                rtl::OUString sData = pData->GetData();
-                buffer.append( sData );
+                buffer.append( pData->GetData() );
             }
             break;
-            case XML_NODE_TYPE_COMMENT: {
+            case XML_NODE_TYPE_COMMENT:
+            {
                 XMLComment *pComment = ( XMLComment * ) pCur;
-                buffer.append( OUString("<!--") );
+                buffer.append( "<!--" );
                 buffer.append( pComment->GetComment() );
-                buffer.append( OUString("-->") );
+                buffer.append( "-->" );
             }
             break;
-            case XML_NODE_TYPE_DEFAULT: {
+            case XML_NODE_TYPE_DEFAULT:
+            {
                 XMLDefault *pDefault = ( XMLDefault * ) pCur;
                 buffer.append( pDefault->GetDefault() );
             }
             break;
+            }
         }
-        }
-    }else {
+    }
+    else
+    {
         fprintf(stdout,"\n#+------Error: NULL Pointer in XMLELement::Print------+#\n");
         return;
     }
@@ -797,7 +817,7 @@ XMLData& XMLData::operator=(const XMLData& obj){
     return *this;
 }
 /*****************************************************************************/
-void XMLData::AddData( const rtl::OUString &rData) {
+void XMLData::AddData( const rtl::OString &rData) {
 /*****************************************************************************/
     sData += rData;
 }
@@ -866,8 +886,8 @@ XMLDefault& XMLDefault::operator=(const XMLDefault& obj){
 // class SimpleXMLParser
 //
 
-#define XML_CHAR_TO_OUSTRING(x) OStringToOUString(OString(x), RTL_TEXTENCODING_UTF8)
-#define XML_CHAR_N_TO_OUSTRING(x,n) OStringToOUString(OString(x,n), RTL_TEXTENCODING_UTF8 )
+//#define XML_CHAR_TO_OUSTRING(x) OStringToOUString(OString(x), RTL_TEXTENCODING_UTF8)
+//#define XML_CHAR_N_TO_OUSTRING(x,n) OStringToOUString(OString(x,n), RTL_TEXTENCODING_UTF8 )
 
 
 /*****************************************************************************/
@@ -936,7 +956,7 @@ void SimpleXMLParser::StartElement(
     const XML_Char *name, const XML_Char **atts )
 /*****************************************************************************/
 {
-    rtl::OUString sElementName = rtl::OUString( XML_CHAR_TO_OUSTRING( name ));
+    rtl::OString sElementName( name );
     XMLElement *pElement = new XMLElement( sElementName, ( XMLParentNode * ) pCurNode );
     pCurNode = pElement;
     pCurData = NULL;
@@ -944,8 +964,8 @@ void SimpleXMLParser::StartElement(
     int i = 0;
     while( atts[i] ) {
         pElement->AddAttribute(
-            rtl::OUString( XML_CHAR_TO_OUSTRING( atts[ i ] )),
-            rtl::OUString( XML_CHAR_TO_OUSTRING( atts[ i + 1 ] )));
+            rtl::OString(  atts[ i ] ),
+            rtl::OString( atts[ i + 1 ] ));
         i += 2;
     }
 }
@@ -969,11 +989,11 @@ void SimpleXMLParser::CharacterData(
 /*****************************************************************************/
 {
     if ( !pCurData ){
-        rtl::OUString x = XML_CHAR_N_TO_OUSTRING( s, len );
+        rtl::OString x( s, len );
         XMLUtil::UnQuotHTML(x);
         pCurData = new XMLData( x , pCurNode );
     }else{
-        rtl::OUString x = XML_CHAR_N_TO_OUSTRING( s, len );
+        rtl::OString x( s, len );
         XMLUtil::UnQuotHTML(x);
         pCurData->AddData( x );
 
@@ -986,7 +1006,7 @@ void SimpleXMLParser::Comment(
 /*****************************************************************************/
 {
     pCurData = NULL;
-    new XMLComment( rtl::OUString( XML_CHAR_TO_OUSTRING( data )), pCurNode );
+    new XMLComment( OString( data ), pCurNode );
 }
 
 /*****************************************************************************/
@@ -995,18 +1015,17 @@ void SimpleXMLParser::Default(
 /*****************************************************************************/
 {
     pCurData = NULL;
-    new XMLDefault(
-        rtl::OUString( XML_CHAR_N_TO_OUSTRING( s, len )), pCurNode );
+    new XMLDefault( OString( s, len), pCurNode );
 }
 
 /*****************************************************************************/
-XMLFile *SimpleXMLParser::Execute( const rtl::OUString &rFileName, XMLFile* pXMLFileIn )
+XMLFile *SimpleXMLParser::Execute( const rtl::OString &rFileName, XMLFile* pXMLFileIn )
 /*****************************************************************************/
 {
     aErrorInformation.eCode = XML_ERROR_NONE;
     aErrorInformation.nLine = 0;
     aErrorInformation.nColumn = 0;
-    aErrorInformation.sMessage = rtl::OUString( "ERROR: Unable to open file ");
+    aErrorInformation.sMessage = "ERROR: Unable to open file ";
     aErrorInformation.sMessage += rFileName;
 
     rtl::OUString aFileURL(common::pathnameToAbsoluteUrl(rFileName));
@@ -1039,12 +1058,10 @@ XMLFile *SimpleXMLParser::Execute( const rtl::OUString &rFileName, XMLFile* pXML
     aErrorInformation.nLine = 0;
     aErrorInformation.nColumn = 0;
     if ( !pXMLFile->GetName().isEmpty()) {
-        aErrorInformation.sMessage = rtl::OUString( "File ");
-        aErrorInformation.sMessage += pXMLFile->GetName();
-        aErrorInformation.sMessage += rtl::OUString( " parsed successfully");
+        aErrorInformation.sMessage = "File " + pXMLFile->GetName() + " parsed successfully";
     }
     else
-        aErrorInformation.sMessage = rtl::OUString( "XML-File parsed successfully");
+        aErrorInformation.sMessage = "XML-File parsed successfully";
 
     if (!XML_Parse(aParser, reinterpret_cast< char * >(p), s, true))
     {
@@ -1052,84 +1069,82 @@ XMLFile *SimpleXMLParser::Execute( const rtl::OUString &rFileName, XMLFile* pXML
         aErrorInformation.nLine = XML_GetErrorLineNumber( aParser );
         aErrorInformation.nColumn = XML_GetErrorColumnNumber( aParser );
 
-        aErrorInformation.sMessage = rtl::OUString( "ERROR: ");
+        aErrorInformation.sMessage = rtl::OString( "ERROR: ");
         if ( !pXMLFile->GetName().isEmpty())
             aErrorInformation.sMessage += pXMLFile->GetName();
         else
-            aErrorInformation.sMessage += rtl::OUString( "XML-File (");
-        aErrorInformation.sMessage += rtl::OUString::valueOf(
-            sal::static_int_cast< sal_Int64 >(aErrorInformation.nLine));
-        aErrorInformation.sMessage += rtl::OUString( ",");
-        aErrorInformation.sMessage += rtl::OUString::valueOf(
-            sal::static_int_cast< sal_Int64 >(aErrorInformation.nColumn));
-        aErrorInformation.sMessage += rtl::OUString( "): ");
+            aErrorInformation.sMessage += "XML-File (";
 
-        switch (aErrorInformation.eCode) {
+        aErrorInformation.sMessage += rtl::OString::valueOf( sal::static_int_cast< sal_Int64 >(aErrorInformation.nLine)) +
+            "," + rtl::OString::valueOf( sal::static_int_cast< sal_Int64 >(aErrorInformation.nColumn)) + "): ";
+
+        switch (aErrorInformation.eCode)
+        {
         case XML_ERROR_NO_MEMORY:
-            aErrorInformation.sMessage += rtl::OUString( "No memory");
+            aErrorInformation.sMessage += "No memory";
             break;
         case XML_ERROR_SYNTAX:
-            aErrorInformation.sMessage += rtl::OUString( "Syntax");
+            aErrorInformation.sMessage += "Syntax";
             break;
         case XML_ERROR_NO_ELEMENTS:
-            aErrorInformation.sMessage += rtl::OUString( "No elements");
+            aErrorInformation.sMessage += "No elements";
             break;
         case XML_ERROR_INVALID_TOKEN:
-            aErrorInformation.sMessage += rtl::OUString( "Invalid token");
+            aErrorInformation.sMessage += "Invalid token";
             break;
         case XML_ERROR_UNCLOSED_TOKEN:
-            aErrorInformation.sMessage += rtl::OUString( "Unclosed token");
+            aErrorInformation.sMessage += "Unclosed token";
             break;
         case XML_ERROR_PARTIAL_CHAR:
-            aErrorInformation.sMessage += rtl::OUString( "Partial char");
+            aErrorInformation.sMessage += "Partial char";
             break;
         case XML_ERROR_TAG_MISMATCH:
-            aErrorInformation.sMessage += rtl::OUString( "Tag mismatch");
+            aErrorInformation.sMessage += "Tag mismatch";
             break;
         case XML_ERROR_DUPLICATE_ATTRIBUTE:
-            aErrorInformation.sMessage += rtl::OUString( "Dublicat attribute");
+            aErrorInformation.sMessage += "Dublicat attribute";
             break;
         case XML_ERROR_JUNK_AFTER_DOC_ELEMENT:
-            aErrorInformation.sMessage += rtl::OUString( "Junk after doc element");
+            aErrorInformation.sMessage += "Junk after doc element";
             break;
         case XML_ERROR_PARAM_ENTITY_REF:
-            aErrorInformation.sMessage += rtl::OUString( "Param entity ref");
+            aErrorInformation.sMessage += "Param entity ref";
             break;
         case XML_ERROR_UNDEFINED_ENTITY:
-            aErrorInformation.sMessage += rtl::OUString( "Undefined entity");
+            aErrorInformation.sMessage += "Undefined entity";
             break;
         case XML_ERROR_RECURSIVE_ENTITY_REF:
-            aErrorInformation.sMessage += rtl::OUString( "Recursive entity ref");
+            aErrorInformation.sMessage += "Recursive entity ref";
             break;
         case XML_ERROR_ASYNC_ENTITY:
-            aErrorInformation.sMessage += rtl::OUString( "Async_entity");
+            aErrorInformation.sMessage += "Async_entity";
             break;
         case XML_ERROR_BAD_CHAR_REF:
-            aErrorInformation.sMessage += rtl::OUString( "Bad char ref");
+            aErrorInformation.sMessage += "Bad char ref";
             break;
         case XML_ERROR_BINARY_ENTITY_REF:
-            aErrorInformation.sMessage += rtl::OUString( "Binary entity");
+            aErrorInformation.sMessage += "Binary entity";
             break;
         case XML_ERROR_ATTRIBUTE_EXTERNAL_ENTITY_REF:
-            aErrorInformation.sMessage += rtl::OUString( "Attribute external entity ref");
+            aErrorInformation.sMessage += "Attribute external entity ref";
             break;
         case XML_ERROR_MISPLACED_XML_PI:
-            aErrorInformation.sMessage += rtl::OUString( "Misplaced xml pi");
+            aErrorInformation.sMessage += "Misplaced xml pi";
             break;
         case XML_ERROR_UNKNOWN_ENCODING:
-            aErrorInformation.sMessage += rtl::OUString( "Unknown encoding");
+            aErrorInformation.sMessage += "Unknown encoding";
             break;
         case XML_ERROR_INCORRECT_ENCODING:
-            aErrorInformation.sMessage += rtl::OUString( "Incorrect encoding");
+            aErrorInformation.sMessage += "Incorrect encoding";
             break;
         case XML_ERROR_UNCLOSED_CDATA_SECTION:
-            aErrorInformation.sMessage += rtl::OUString( "Unclosed cdata section");
+            aErrorInformation.sMessage += "Unclosed cdata section";
             break;
         case XML_ERROR_EXTERNAL_ENTITY_HANDLING:
-            aErrorInformation.sMessage += rtl::OUString( "External entity handling");
+            aErrorInformation.sMessage += "External entity handling";
             break;
         case XML_ERROR_NOT_STANDALONE:
-            aErrorInformation.sMessage += rtl::OUString( "Not standalone");
+            aErrorInformation.sMessage += "Not standalone";
             break;
         case XML_ERROR_NONE:
             break;
@@ -1147,10 +1162,10 @@ XMLFile *SimpleXMLParser::Execute( const rtl::OUString &rFileName, XMLFile* pXML
 }
 
 /*****************************************************************************/
-void XMLUtil::QuotHTML( rtl::OUString &rString )
+void XMLUtil::QuotHTML( rtl::OString &rString )
 /*****************************************************************************/
 {
-    OUStringBuffer sReturn;
+    OStringBuffer sReturn;
     for (sal_Int32 i = 0; i < rString.getLength(); ++i) {
         switch (rString[i]) {
         case '\\':
@@ -1170,56 +1185,238 @@ void XMLUtil::QuotHTML( rtl::OUString &rString )
             break;
 
         case '<':
-            sReturn.appendAscii(RTL_CONSTASCII_STRINGPARAM("&lt;"));
+            sReturn.append("&lt;");
             break;
 
         case '>':
-            sReturn.appendAscii(RTL_CONSTASCII_STRINGPARAM("&gt;"));
+            sReturn.append("&gt;");
             break;
 
         case '"':
-            sReturn.appendAscii(RTL_CONSTASCII_STRINGPARAM("&quot;"));
+            sReturn.append("&quot;");
             break;
 
         case '&':
-            if (rString.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("&amp;"), i))
-                sReturn.append('&');
+            if (rString.match("&amp;", i))
+                sReturn.append("&");
             else
-                sReturn.appendAscii(RTL_CONSTASCII_STRINGPARAM("&amp;"));
+                sReturn.append("&amp;");
             break;
         }
     }
     rString = sReturn.makeStringAndClear();
 }
 
-void XMLUtil::UnQuotHTML( rtl::OUString &rString ){
-    rtl::OStringBuffer sReturn;
-    rtl::OString sString(rtl::OUStringToOString(rString, RTL_TEXTENCODING_UTF8));
-    for (sal_Int32 i = 0; i != sString.getLength();) {
-        if (sString[i] == '\\') {
-            sReturn.append(RTL_CONSTASCII_STRINGPARAM("\\\\"));
-            ++i;
-        } else if (sString.match("&amp;", i)) {
-            sReturn.append('&');
-            i += RTL_CONSTASCII_LENGTH("&amp;");
-        } else if (sString.match("&lt;", i)) {
-            sReturn.append('<');
-            i += RTL_CONSTASCII_LENGTH("&lt;");
-        } else if (sString.match("&gt;", i)) {
-            sReturn.append('>');
-            i += RTL_CONSTASCII_LENGTH("&gt;");
-        } else if (sString.match("&quot;", i)) {
-            sReturn.append('"');
-            i += RTL_CONSTASCII_LENGTH("&quot;");
-        } else if (sString.match("&apos;", i)) {
-            sReturn.append('\'');
-            i += RTL_CONSTASCII_LENGTH("&apos;");
-        } else {
-            sReturn.append(sString[i]);
-            ++i;
+void XMLUtil::UnQuotHTML( rtl::OString &sString )
+{
+    sal_Int32 i;
+    sal_Int32 len = sString.getLength();
+
+    for(i = 0; i < len; ++i)
+    {
+        if(sString[i] == '\\')
+        {
+            break;
+        }
+        else if(sString[i] == '&')
+        {
+            if(i < len - 5)
+            {
+                if(sString[i+3] == ';')
+                {
+                    if(sString[2] == 't')
+                    {
+                        if(sString[1] == 'l' || sString[1] == 'g')
+                        {
+                            break;
+                        }
+                    }
+                }
+                else if(sString[i+4] == ';')
+                {
+                    if(!memcmp(sString.getStr() + 1, "amp;" , 4))
+                    {
+                        break;
+                    }
+                }
+                else if(sString[i+5] == ';')
+                {
+                    if(sString[i + 3] == 'o')
+                    {
+                        if(!memcmp(sString.getStr() + 1, "quot" , 4))
+                        {
+                            break;
+                        }
+                        if(!memcmp(sString.getStr() + 1, "apos" , 4))
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+            else if (i < len - 4)
+            {
+                if(sString[i+3] == ';')
+                {
+                    if(sString[2] == 't')
+                    {
+                        if(sString[1] == 'l' || sString[1] == 'g')
+                        {
+                            break;
+                        }
+                    }
+                }
+                else if(sString[i+4] == ';')
+                {
+                    if(!memcmp(sString.getStr() + 1, "amp;" , 4))
+                    {
+                        break;
+                    }
+                }
+            }
+            else if (i < len - 3)
+            {
+                if(sString[i+3] == ';')
+                {
+                    if(sString[2] == 't')
+                    {
+                        if(sString[1] == 'l' || sString[1] == 'g')
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
         }
     }
-    rString = rtl::OStringToOUString(sReturn.makeStringAndClear(), RTL_TEXTENCODING_UTF8);
+
+    if(i == len)
+    {
+        return;
+    }
+    /* here we have some unquoting to do */
+    /* at worse we have only '\' and we need to double the size */
+    OStringBuffer sBuff(sString.getLength() * 2);
+    sBuff.append(sString.getStr(), i);
+    const sal_Char* in = sString.getStr() + i;
+    sal_Char* out = &sBuff[i];
+
+    while(*in)
+    {
+        if(*in == '\\')
+        {
+            *out++ = '\\';
+            *out++ = '\\';
+            in += 1;
+            continue;
+        }
+        else if(sString[i] == '&')
+        {
+            if(i < len - 5)
+            {
+                if(sString[i+3] == ';')
+                {
+                    if(sString[2] == 't')
+                    {
+                        if(sString[1] == 'l')
+                        {
+                            *out++ = '<';
+                            in += 4;
+                            continue;
+                        }
+                        else if (sString[1] == 'g')
+                        {
+                            *out++ = '>';
+                            in += 4;
+                            continue;
+                        }
+                    }
+                }
+                else if(sString[i+4] == ';')
+                {
+                    if(!memcmp(sString.getStr() + 1, "amp;" , 4))
+                    {
+                        *out++ = '&';
+                        in += 5;
+                        continue;
+                    }
+                }
+                else if(sString[i+5] == ';')
+                {
+                    if(sString[i + 3] == 'o')
+                    {
+                        if(!memcmp(sString.getStr() + 1, "quot" , 4))
+                        {
+                            *out++ ='"';
+                            in += 6;
+                            break;
+                        }
+                        if(!memcmp(sString.getStr() + 1, "apos" , 4))
+                        {
+                            *out++ ='\'';
+                            in += 6;
+                            break;
+                        }
+                    }
+                }
+            }
+            else if (i < len - 4)
+            {
+                if(sString[i+3] == ';')
+                {
+                    if(sString[2] == 't')
+                    {
+                        if(sString[1] == 'l')
+                        {
+                            *out++ = '<';
+                            in += 4;
+                            continue;
+                        }
+                        else if (sString[1] == 'g')
+                        {
+                            *out++ = '>';
+                            in += 4;
+                            continue;
+                        }
+                    }
+                }
+                else if(sString[i+4] == ';')
+                {
+                    if(!memcmp(sString.getStr() + 1, "amp;" , 4))
+                    {
+                        *out++ = '&';
+                        in += 5;
+                        continue;
+                    }
+                }
+            }
+            else if (i < len - 3)
+            {
+                if(sString[i+3] == ';')
+                {
+                    if(sString[2] == 't')
+                    {
+                        if(sString[1] == 'l')
+                        {
+                            *out++ = '<';
+                            in += 4;
+                            continue;
+                        }
+                        else if (sString[1] == 'g')
+                        {
+                            *out++ = '>';
+                            in += 4;
+                            continue;
+                        }
+                    }
+                }
+            }
+        }
+        *out++ = *in++;
+    }
+    *out = 0;
+    sString = OString(sBuff.getStr());
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
