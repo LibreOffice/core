@@ -36,10 +36,13 @@ import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.accessibility.XAccessibleStateSet;
 import com.sun.star.awt.XWindow;
 import com.sun.star.container.XIndexAccess;
+import com.sun.star.frame.DispatchResultEvent;
 import com.sun.star.frame.XController;
-import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
+import com.sun.star.frame.XDispatchResultListener;
 import com.sun.star.frame.XModel;
+import com.sun.star.frame.XNotifyingDispatch;
+import com.sun.star.lang.EventObject;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sheet.XSpreadsheet;
 import com.sun.star.sheet.XSpreadsheetDocument;
@@ -124,17 +127,43 @@ public class ScAccessiblePageHeaderArea extends TestCase {
             aParseURL[0].Complete = ".uno:PrintPreview";
             xParser.parseStrict(aParseURL);
             URL aURL = aParseURL[0];
-            XDispatch xDispatcher = xDispProv.queryDispatch(aURL, "", 0);
-            if(xDispatcher != null)
-                xDispatcher.dispatch( aURL, null );
+            XNotifyingDispatch xDispatcher = UnoRuntime.queryInterface(
+                XNotifyingDispatch.class, xDispProv.queryDispatch(aURL, "", 0));
+            final int[] ok = new int[] { 0 };
+            XDispatchResultListener listener = new XDispatchResultListener() {
+                    public void disposing(EventObject Source) {
+                        synchronized (ok) {
+                            if (ok[0] == 0) {
+                                ok[0] = 1;
+                            }
+                            ok.notifyAll();
+                        }
+                    }
+                    public void dispatchFinished(DispatchResultEvent Result) {
+                        synchronized (ok) {
+                            ok[0] = 2;
+                            ok.notifyAll();
+                        }
+                    }
+                };
+            xDispatcher.dispatchWithNotification(
+                aURL, null, listener);
+            synchronized (ok) {
+                while (ok[0] == 0) {
+                    try {
+                        ok.wait();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                if (ok[0] != 2) {
+                    throw new RuntimeException("missing disptachFinished");
+                }
+            }
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't change mode");
             throw new StatusException(Status.failed("Couldn't change mode"));
         }
-
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException ex) {}
 
         AccessibilityTools at = new AccessibilityTools();
 
