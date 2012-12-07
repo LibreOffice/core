@@ -128,9 +128,6 @@ TypeDescriptionEnumerationImpl::createInstance(
                             aBytes.getConstArray(), aBytes.getLength(), false,
                             TYPEREG_VERSION_1);
 
-                        rtl::OUString aName(
-                            aReader.getTypeName().replace( '/', '.' ) );
-
                         if ( aReader.getTypeClass() == RT_TYPE_MODULE )
                         {
                             // Do not close xKey!

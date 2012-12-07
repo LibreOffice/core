@@ -21,8 +21,6 @@
 #include "jvmargs.hxx"
 #include <rtl/ustring.hxx>
 
-
-using ::rtl::OUString;
 namespace stoc_javavm {
 
 JVM::JVM() throw()//: _enabled(sal_False)
@@ -31,19 +29,8 @@ JVM::JVM() throw()//: _enabled(sal_False)
 
 void JVM::pushProp(const OUString & property)
 {
-    sal_Int32 index = property.indexOf((sal_Unicode)'=');
-    if(index > 0)
-    {
-        OUString left = property.copy(0, index).trim();
-        OUString right(property.copy(index + 1).trim());
-        _props.push_back(property);
-    }
-    else
-    { // no '=', could be -X
-        _props.push_back(property);
-    }
+    _props.push_back(property);
 }
-
 
 const ::std::vector< ::rtl::OUString > & JVM::getProperties() const
 {

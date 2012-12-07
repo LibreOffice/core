@@ -356,10 +356,6 @@ sal_Int32 IntrospectionAccessStatic_Impl::getMethodIndex( const ::rtl::OUString&
                         for( int i = 0 ; i < nLen ; ++i )
                         {
                             const Reference<XIdlMethod> xMethod2 = pMethods[ i ];
-
-                            ::rtl::OUString aTestClassName = xMethod2->getDeclaringClass()->getName();
-                            ::rtl::OUString aTestMethodName = xMethod2->getName();
-
                             if( xMethod2->getName() == aPureMethodName )
                             {
                                 Reference< XIdlClass > xMethClass2 = xMethod2->getDeclaringClass();

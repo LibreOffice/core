@@ -1657,7 +1657,6 @@ Sequence< OUString > ImplementationRegistration::getImplementations(
     const OUString & locationUrl)
     throw ( RuntimeException )
 {
-    OUString implLoaderUrl(implementationLoaderUrl);
     OUString activatorName;
 
     if (!implementationLoaderUrl.isEmpty())
@@ -1668,7 +1667,7 @@ Sequence< OUString > ImplementationRegistration::getImplementations(
     } else
     {
         // check locationUrl to find out what kind of loader is needed
-        // set implLoaderUrl
+        // set implementationLoaderUrl
     }
 
     if( m_xSMgr.is() ) {
