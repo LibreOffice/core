@@ -1367,11 +1367,11 @@ bool SwDoc::IsPoolFmtUsed( sal_uInt16 nId ) const
     sal_uInt16 nArrCnt = 1;
     bool bFnd = true;
 
-    if( RES_POOLCHR_BEGIN <= nId && nId < RES_POOLCHR_END )
+    if (RES_POOLCHR_BEGIN <= nId && nId < RES_POOLCHR_END)
     {
         pArray[0] = pCharFmtTbl;
     }
-    if( RES_POOLFRM_BEGIN <= nId && nId < RES_POOLFRM_END )
+    else if (RES_POOLFRM_BEGIN <= nId && nId < RES_POOLFRM_END)
     {
         pArray[0] = pFrmFmtTbl;
         pArray[1] = pSpzFrmFmtTbl;
@@ -1379,7 +1379,9 @@ bool SwDoc::IsPoolFmtUsed( sal_uInt16 nId ) const
     }
     else
     {
-        OSL_FAIL( "invalid Id" );
+        SAL_WARN("sw.core", "Invalid Pool Id: " << nId << " should be within " <<
+            "[" << int(RES_POOLCHR_BEGIN) << "," << int(RES_POOLCHR_END) << ") or " <<
+            "[" << int(RES_POOLFRM_BEGIN) << "," << int(RES_POOLFRM_END) << ")");
         bFnd = false;
     }
 
