@@ -47,7 +47,7 @@ if ( $#ARGV < 2 ) {
     exit(1);
 }
 @args = parse_options();
-get_exclude_files();
+get_exclude_files() if ($opt_exclude != "");
 @files_to_sign = get_files(\@args);
 if ( $opt_log ) {               # logging
     open(LOG,">$opt_log") || die "Can't open log file $opt_log\n";
@@ -75,11 +75,6 @@ sub parse_options       #09.07.2007 08:13
          'd=s' => \$opt_dir, 'e=s'=>\$opt_exclude, 'f=s'=>\$opt_pfxfile, 'l=s'=>\$opt_log,
          'p=s'=>\$opt_pass,'v'=>\$opt_verbose, 't=s'=>\$opt_timestamp_url);
     if ( !$success || $opt_help ) {
-        usage();
-        exit(1);
-    }
-    if ( !$opt_exclude || !$opt_pfxfile || !$opt_pass || !$opt_timestamp_url) {
-        print "ERROR: Parameter missing!\n!";
         usage();
         exit(1);
     }
@@ -142,8 +137,6 @@ sub sign_files      #09.07.2007 10:36
     my $file = "";
     my $result = "";
 
-    print_error("Can't open PFX file: $opt_pfxfile\n") if ( ! -e $opt_pfxfile );
-    print_error("Password is empty\n") if ( !$opt_pass );
     if ( $opt_pass =~ /\.exe$/ ) {
         # get password by tool
         open(PIPE, "$opt_pass 2>&1 |") || die "Can't open PIPE!\n";
@@ -153,7 +146,10 @@ sub sign_files      #09.07.2007 10:36
         $opt_pass = $pass;
     }
     $signtool .= " -v" if ($opt_verbose);
-    $commandline_base = $signtool . " " . "-f $opt_pfxfile -p $opt_pass -t $opt_timestamp_url";
+    $commandline_base = $signtool;
+    $commandline_base .= " -f $opt_pfxfile" if ($opt_pfxfile != "");
+    $commandline_base .= " -p $opt_pass" if ($opt_pass != "");
+    $commandline_base .= " -t $opt_timestamp_url" if ($opt_timestamp_url != "");
 
     # Here switch between:
     # one command line for muliple files (all doesn't work, too much) / for each file one command line
