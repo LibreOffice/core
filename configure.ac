@@ -5296,9 +5296,19 @@ if test "$COM_GCC_IS_CLANG" = "TRUE"; then
         compiler_plugins=no
     fi
     if test "$compiler_plugins" != "no"; then
+        dnl The prefix where Clang resides, override to where Clang resides if
+        dnl using a source build:
+        if test -z "$CLANGDIR"; then
+            CLANGDIR=/usr
+        fi
+        dnl The build directory (different from CLANGDIR if using a Clang out-
+        dnl of-source build):
+        if test -z "$CLANGBUILD"; then
+            CLANGBUILD=/usr
+        fi
         AC_LANG_PUSH([C++])
         save_CPPFLAGS=$CPPFLAGS
-        CPPFLAGS="$CPPFLAGS $CLANGPLUGIN_CPPFLAGS -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS"
+        CPPFLAGS="$CPPFLAGS -I$CLANGDIR/include -I$CLANGDIR/tools/clang/include -I$CLANGBUILD/include -I$CLANGBUILD/tools/clang/include -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS"
         AC_CHECK_HEADER(clang/AST/RecursiveASTVisitor.h,
             [COMPILER_PLUGINS=TRUE],
             [
@@ -5318,7 +5328,8 @@ else
     fi
 fi
 AC_SUBST(COMPILER_PLUGINS)
-AC_SUBST(CLANGPLUGIN_CPPFLAGS)
+AC_SUBST(CLANGDIR)
+AC_SUBST(CLANGBUILD)
 
 dnl ===================================================================
 dnl Set the MinGW sys-root
