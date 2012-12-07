@@ -37,9 +37,9 @@ import com.sun.star.accessibility.XAccessibleStateSet;
 import com.sun.star.awt.XWindow;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.frame.XController;
-import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.frame.XModel;
+import com.sun.star.frame.XSynchronousDispatch;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sheet.XSpreadsheet;
 import com.sun.star.sheet.XSpreadsheetDocument;
@@ -124,17 +124,14 @@ public class ScAccessiblePageHeaderArea extends TestCase {
             aParseURL[0].Complete = ".uno:PrintPreview";
             xParser.parseStrict(aParseURL);
             URL aURL = aParseURL[0];
-            XDispatch xDispatcher = xDispProv.queryDispatch(aURL, "", 0);
-            if(xDispatcher != null)
-                xDispatcher.dispatch( aURL, null );
+            XSynchronousDispatch xDispatcher = UnoRuntime.queryInterface(
+                XSynchronousDispatch.class,
+                xDispProv.queryDispatch(aURL, "", 0));
+            xDispatcher.dispatch( aURL, null );
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't change mode");
             throw new StatusException(Status.failed("Couldn't change mode"));
         }
-
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException ex) {}
 
         AccessibilityTools at = new AccessibilityTools();
 
