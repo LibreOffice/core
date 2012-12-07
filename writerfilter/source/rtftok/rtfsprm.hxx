@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * Version: MPL 1.1 / GPLv3+ / LGPLv3+
  *
@@ -28,36 +29,58 @@
 #ifndef _RTFSPRM_HXX_
 #define _RTFSPRM_HXX_
 
+#include <boost/intrusive_ptr.hpp>
 #include <rtfcontrolwords.hxx>
 #include <rtfvalue.hxx>
 
 namespace writerfilter {
     namespace rtftok {
+
+        typedef std::vector< std::pair<Id, RTFValue::Pointer_t> > RTFSprmsImplBase;
+        class RTFSprmsImpl : public RTFSprmsImplBase
+        {
+        public:
+            sal_Int32 m_nRefCount;
+            RTFSprmsImpl() : RTFSprmsImplBase(), m_nRefCount(0) {}
+        };
+
+        inline void intrusive_ptr_add_ref(RTFSprmsImpl* p)
+        {
+            ++(p->m_nRefCount);
+        }
+        inline void intrusive_ptr_release(RTFSprmsImpl* p)
+        {
+            if (!--(p->m_nRefCount))
+                delete p;
+        }
+
         /// A list of RTFSprm with a copy constructor that performs a deep copy.
         class RTFSprms
         {
-            public:
-                typedef ::boost::shared_ptr<RTFSprms> Pointer_t;
-                typedef std::pair<Id, RTFValue::Pointer_t> Entry_t;
-                typedef std::vector<Entry_t>::iterator Iterator_t;
-                RTFSprms();
-                RTFSprms(const RTFSprms& rSprms);
-                RTFSprms& operator=(const RTFSprms& rOther);
-                RTFValue::Pointer_t find(Id nKeyword);
-                /// Does the same as ->push_back(), except that it can overwrite existing entries.
-                void set(Id nKeyword, RTFValue::Pointer_t pValue, bool bOverwrite = true);
-                bool erase(Id nKeyword);
-                /// Removes elements, which are already in the reference set.
-                void deduplicate(RTFSprms& rReference);
-                void swap(RTFSprms& rOther);
-                size_t size() const { return m_aSprms.size(); }
-                bool empty() const { return m_aSprms.empty(); }
-                Entry_t& back() { return m_aSprms.back(); }
-                Iterator_t begin() { return m_aSprms.begin(); }
-                Iterator_t end() { return m_aSprms.end(); }
-                void clear() { return m_aSprms.clear(); }
-            private:
-                std::vector< std::pair<Id, RTFValue::Pointer_t> > m_aSprms;
+        public:
+            typedef ::boost::shared_ptr<RTFSprms> Pointer_t;
+            typedef std::pair<Id, RTFValue::Pointer_t> Entry_t;
+            typedef std::vector<Entry_t>::iterator Iterator_t;
+            RTFSprms();
+            RTFSprms(const RTFSprms& rSprms);
+            ~RTFSprms();
+            RTFSprms& operator=(const RTFSprms& rOther);
+            RTFValue::Pointer_t find(Id nKeyword);
+            /// Does the same as ->push_back(), except that it can overwrite existing entries.
+            void set(Id nKeyword, RTFValue::Pointer_t pValue, bool bOverwrite = true);
+            bool erase(Id nKeyword);
+            /// Removes elements, which are already in the reference set.
+            void deduplicate(RTFSprms& rReference);
+            void swap(RTFSprms& rOther);
+            size_t size() const { return m_pSprms->size(); }
+            bool empty() const { return m_pSprms->empty(); }
+            Entry_t& back() { return m_pSprms->back(); }
+            Iterator_t begin() { return m_pSprms->begin(); }
+            Iterator_t end() { return m_pSprms->end(); }
+            void clear();
+        private:
+            void ensureCopyBeforeWrite();
+            boost::intrusive_ptr<RTFSprmsImpl> m_pSprms;
         };
 
         /// RTF keyword with a parameter
