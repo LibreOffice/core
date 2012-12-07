@@ -37,8 +37,15 @@
 #include <com/sun/star/frame/XDesktop.hpp>
 
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
 
 #include <sfx2/app.hxx>
 #include <sfx2/docfilt.hxx>
@@ -48,6 +55,7 @@
 
 #include <basic/sbxdef.hxx>
 
+#include <doc.hxx>
 #include "docsh.hxx"
 
 SO2_DECL_REF(SwDocShell)
@@ -73,6 +81,7 @@ public:
 
     //void testStarBasic();
     void testVba();
+    void testFdo55289();
     CPPUNIT_TEST_SUITE(SwMacrosTest);
 #if !defined(MACOSX) && !defined(WNT)
     //enable this test if you want to play with star basic macros in unit tests
@@ -80,6 +89,7 @@ public:
     //CPPUNIT_TEST(testStarBasic);
     CPPUNIT_TEST(testVba);
 #endif
+    CPPUNIT_TEST(testFdo55289);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -160,6 +170,39 @@ void SwMacrosTest::testVba()
         //CPPUNIT_ASSERT_MESSAGE( "script reported failure",aStringRes == "OK" );
         pFoundShell->DoClose();
     }
+}
+
+void SwMacrosTest::testFdo55289()
+{
+    SwDoc *const pDoc = new SwDoc;
+    SwDocShellRef pDocShell = new SwDocShell(pDoc, SFX_CREATE_MODE_EMBEDDED);
+    // this needs to run with no layout to tickle the bugs in the special
+    // cases in SwXShape re-anchoring
+    assert(!pDoc->GetCurrentLayout());
+
+    uno::Reference<frame::XModel> const xModel(pDocShell->GetModel());
+    uno::Reference<drawing::XDrawPageSupplier> const xDPS(xModel, UNO_QUERY);
+    uno::Reference<drawing::XShapes> const xShapes(xDPS->getDrawPage(),
+            UNO_QUERY);
+    uno::Reference<beans::XPropertySet> const xShape(
+        uno::Reference<lang::XMultiServiceFactory>(xModel, UNO_QUERY)->
+            createInstance("com.sun.star.drawing.GraphicObjectShape"),
+        UNO_QUERY);
+    xShape->setPropertyValue("AnchorType",
+            makeAny(text::TextContentAnchorType_AT_PAGE));
+    xShapes->add(uno::Reference<drawing::XShape>(xShape, UNO_QUERY));
+    xShape->setPropertyValue("AnchorType",
+            makeAny(text::TextContentAnchorType_AT_CHARACTER));
+    xShape->setPropertyValue("AnchorType",
+            makeAny(text::TextContentAnchorType_AS_CHARACTER));
+    xShape->setPropertyValue("AnchorType",
+            makeAny(text::TextContentAnchorType_AT_CHARACTER));
+    xShape->setPropertyValue("AnchorType",
+            makeAny(text::TextContentAnchorType_AS_CHARACTER));
+    uno::Reference<text::XTextRange> const xEnd =
+        uno::Reference<text::XTextDocument>(xModel, UNO_QUERY)->getText()->getEnd();
+    uno::Reference<text::XTextContent> const xShapeContent(xShape, UNO_QUERY);
+    xShapeContent->attach(xEnd);
 }
 
 SwMacrosTest::SwMacrosTest()
