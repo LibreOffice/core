@@ -96,7 +96,7 @@ class FmFormModel;
 class SdrModel;
 class Graphic;
 class FmFormModel;
-class Bitmap;
+class BitmapEx;
 class OutputDevice;
 
 class SVX_DLLPUBLIC GalleryExplorer
@@ -138,10 +138,10 @@ public:
     static sal_uIntPtr              GetObjCount( sal_uIntPtr nThemeId );
 
     static sal_Bool                 GetGraphicObj( const String& rThemeName, sal_uIntPtr nPos,
-                                               Graphic* pGraphic = NULL, Bitmap* pThumb = NULL,
+                                               Graphic* pGraphic = NULL, BitmapEx* pThumb = NULL,
                                                sal_Bool bProgess = sal_False );
     static sal_Bool                 GetGraphicObj( sal_uIntPtr nThemeId, sal_uIntPtr nPos,
-                                               Graphic* pGraphic = NULL, Bitmap* pThumb = NULL,
+                                               Graphic* pGraphic = NULL, BitmapEx* pThumb = NULL,
                                                sal_Bool bProgess = sal_False );
 
     static sal_Bool                 InsertGraphicObj( const String& rThemeName, const Graphic& rGraphic );
@@ -151,9 +151,9 @@ public:
     static sal_uIntPtr              GetSdrObjCount( sal_uIntPtr nThemeId );
 
     static sal_Bool                 GetSdrObj( const String& rThemeName, sal_uIntPtr nSdrModelPos,
-                                           SdrModel* pModel = NULL, Bitmap* pThumb = NULL );
+                                           SdrModel* pModel = NULL, BitmapEx* pThumb = NULL );
     static sal_Bool                 GetSdrObj( sal_uIntPtr nThemeId, sal_uIntPtr nSdrModelPos,
-                                           SdrModel* pModel = NULL, Bitmap* pThumb = NULL );
+                                           SdrModel* pModel = NULL, BitmapEx* pThumb = NULL );
 
     static sal_Bool                 InsertSdrObj( const String& rThemeName, FmFormModel& rModel );
     static sal_Bool                 InsertSdrObj( sal_uIntPtr nThemeId, FmFormModel& rModel );
@@ -163,8 +163,6 @@ public:
 
     static sal_Bool                 EndLocking( const String& rThemeName );
     static sal_Bool                 EndLocking( sal_uIntPtr nThemeId );
-
-    static sal_Bool                 DrawCentered( OutputDevice* pOut, const FmFormModel& rModel );
 };
 
 #endif // _GALLERY_HXX_
