@@ -87,25 +87,11 @@ sub print_path($$)
 
 sub print_windows_sdk_home()
 {
-    my ($value, $key);
+    my ($value);
 
-    # This is for the Windows SDK 8 distributed with MSVS 2012
-    $value = reg_get_value ('HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows Kits/Installed Roots/KitsRoot');
-	
-	if (!defined $value) {
-        $value = reg_get_value ('HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/CurrentInstallFolder');
-    }
-    if (!defined $value) {
-        $value = reg_get_value ('HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MicrosoftSDK/Directories/Install Dir');
-    }
-	
-    if (!defined $value) {
-        # Unclear whether we ever get here, don't the above match any
-        # recent Windows SDK?
-        foreach $key (File::Glob::bsd_glob('/proc/registry/HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MicrosoftSDK/InstalledSDKs/*/Install Dir')) {
-            $value = reg_get_value ($key);
-            last if defined $value;
-        }
+    foreach $ver (qw(7.1A 7.1 7.0A 7.0 6.0A)) {
+        $value = reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v$ver/InstallationFolder");
+        last if defined $value;
     }
 
     defined $value || die "Windows SDK not found";
@@ -121,52 +107,19 @@ sub print_al_home()
 
     my ($value, $key);
 
-    foreach $key (File::Glob::bsd_glob('/proc/registry/HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/*/WinSDK-NetFx40Tools/InstallationFolder')) {
-        $key =~ s!^/proc/registry/!!;
-        $value = reg_get_value ($key);
+    $value = reg_get_value('HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v7.0A/WinSDK-NetFx35Tools/InstallationFolder');
 
-        # Sigh, the same test that configure does for al.exe
-        # being either directly in it, or in a "bin" subdir... But on
-        # the other hand we don't want to be mislead by a registry key
-        # that matches the above but points to a directory that does
-        # in fact not contain an al.exe. For me, 
-        # HKLM/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v7.0A/WinSDK-NetFx40Tools/InstallationFolder
-        # contains
-        # c:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\NETFX 4.0 Tools\
-        # but that then does not contain any al.exe.
+    if (!defined $value) {
+        $value = reg_get_value('HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v6.0A/WinSDKNetFxTools/InstallationFolder');
+    }
 
-        if (-f "$value/bin/al.exe" || -f "$value/al.exe") {
-            print cygpath ($value, 'w', $output_format);
-            return;
-        }
+    if (-f "$value/bin/al.exe" || -f "$value/al.exe") {
+        print cygpath ($value, 'w', $output_format);
+        return;
     }
     die "Can't find al.exe";
 }
 
-my %msvs_2008 = (
-    'ver' => '9.0',
-    'key' => 'Microsoft/VisualStudio/9.0/Setup/VS/ProductDir',
-    'dll_path' => 'VC/redist/x86/Microsoft.VC90.CRT',
-    'dll_suffix' => '90'
-);
-my %msvc_2008 = (
-    'ver' => '9.0',
-    'key' => 'Microsoft/VisualStudio/9.0/Setup/VC/ProductDir',
-    'dll_path' => 'redist/x86/Microsoft.VC90.CRT',
-    'dll_suffix' => '90'
-);
-my %msvs_express_2008 = (
-    'ver' => '9.0',
-    'key' => 'Microsoft/VCExpress/9.0/Setup/VS/ProductDir',
-    'dll_path' => 'VC/redist/x86/Microsoft.VC90.CRT',
-    'dll_suffix' => '90'
-);
-my %msvc_express_2008 = (
-    'ver' => '9.0',
-    'key' => 'Microsoft/VCExpress/9.0/Setup/VC/ProductDir',
-    'dll_path' => 'redist/x86/Microsoft.VC90.CRT',
-    'dll_suffix' => '90'
-);
 my %msvs_2010 = (
     'ver' => '10.0',
     'key' => 'Microsoft/VisualStudio/10.0/Setup/VS/ProductDir',
@@ -179,22 +132,10 @@ my %msvc_2010 = (
     'dll_path' => 'redist/x86/Microsoft.VC100.CRT',
     'dll_suffix' => '100'
 );
-my %msvs_2012 = (
-    'ver' => '11.0',
-    'key' => 'Microsoft/VisualStudio/11.0/Setup/VS/ProductDir',
-    'dll_path' => 'VC/redist/x86/Microsoft.VC110.CRT',
-    'dll_suffix' => '110'
-);
-my %msvc_2012 = (
-    'ver' => '11.0',
-    'key' => 'Microsoft/VisualStudio/11.0/Setup/VC/ProductDir',
-    'dll_path' => 'redist/x86/Microsoft.VC110.CRT',
-    'dll_suffix' => '110'
-);
 
 sub find_msvs()
 {
-    my @ms_versions = ( \%msvs_2010, \%msvs_2012, \%msvs_2008, \%msvs_express_2008 );
+    my @ms_versions = ( \%msvs_2010 );
 
     for $ver (@ms_versions) {
         my $install = reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/" . $ver->{'key'});
@@ -208,7 +149,7 @@ sub find_msvs()
 
 sub find_msvc()
 {
-    my @ms_versions = ( \%msvc_2010, \%msvc_2012, \%msvc_2008, \%msvc_express_2008 );
+    my @ms_versions = ( \%msvc_2010 );
 
     for $ver (@ms_versions) {
         my $install = reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/" . $ver->{'key'});
@@ -242,18 +183,14 @@ sub print_csc_compiler_dir()
 {
     my $csc_exe;
     my $ver = find_msvc();
-    if ($ver->{'ver'} == "9.0") {
-        # We need to compile C# with the 3.5 or 2.0 compiler in order
-        # for the assemblies to be loadable by managed C++ code
-        # compiled with MSVC 2008.
-        $csc_exe =
-            reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/NET Framework Setup/NDP/v3.5/InstallPath") ||
-            reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/.NETFramework/InstallRoot") . "v2.0.50727";
-    } else {
-        # Is it enough to look for the 4.0 compiler?
-        $csc_exe =
-            reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/NET Framework Setup/NDP/v4/Client/InstallPath");
-    }
+
+    # We need to compile C# with the 3.5 or 2.0 compiler in order for
+    # the assemblies to be usable on at least vanilla XP SP3 with no
+    # .NET Framework 4 or later.
+
+    $csc_exe =
+      reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/NET Framework Setup/NDP/v3.5/InstallPath") ||
+        reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/.NETFramework/InstallRoot") . "v2.0.50727";
     print cygpath ($csc_exe, 'w', $output_format);
 }
 
