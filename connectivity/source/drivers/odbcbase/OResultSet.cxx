@@ -635,13 +635,13 @@ Any SAL_CALL OResultSet::getObject( sal_Int32 columnIndex, const Reference< ::co
     return getValue<ORowSetValue>( columnIndex ).makeAny();
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OResultSet::impl_getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+::rtl::OUString OResultSet::impl_getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     const SWORD nColumnType = impl_getColumnType_nothrow(columnIndex);
     return OTools::getStringValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,nColumnType,m_bWasNull,**this,m_nTextEncoding);
 }
-::rtl::OUString SAL_CALL OResultSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+::rtl::OUString OResultSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     return getValue<rtl::OUString>( columnIndex );
 }
@@ -1173,7 +1173,7 @@ Any SAL_CALL OResultSet::getBookmark(  ) throw( SQLException,  RuntimeException)
         throw SQLException();
     return m_aRow[0].makeAny();
 }
-Sequence<sal_Int8> SAL_CALL OResultSet::impl_getBookmark(  ) throw( SQLException,  RuntimeException)
+Sequence<sal_Int8> OResultSet::impl_getBookmark(  ) throw( SQLException,  RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::getBookmark" );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
