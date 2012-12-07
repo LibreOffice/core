@@ -20,10 +20,7 @@
 #include "oox/drawingml/table/tablestylelistfragmenthandler.hxx"
 #include "oox/drawingml/table/tablestylecontext.hxx"
 
-using ::rtl::OUString;
 using namespace ::oox::core;
-
-using rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::oox::core;
 using namespace ::oox::drawingml;

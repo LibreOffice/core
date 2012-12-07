@@ -27,7 +27,6 @@ using namespace ::oox::core;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
-using ::rtl::OUString;
 
 namespace oox { namespace drawingml { namespace table {
 
