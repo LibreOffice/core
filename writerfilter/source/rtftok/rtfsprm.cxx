@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * Version: MPL 1.1 / GPLv3+ / LGPLv3+
  *
@@ -99,7 +100,7 @@ std::string RTFSprm::toString() const
 
 RTFValue::Pointer_t RTFSprms::find(Id nKeyword)
 {
-    for (RTFSprms::Iterator_t i = m_aSprms.begin(); i != m_aSprms.end(); ++i)
+    for (RTFSprms::Iterator_t i = m_pSprms->begin(); i != m_pSprms->end(); ++i)
         if (i->first == nKeyword)
             return i->second;
     RTFValue::Pointer_t pValue;
@@ -108,33 +109,39 @@ RTFValue::Pointer_t RTFSprms::find(Id nKeyword)
 
 void RTFSprms::set(Id nKeyword, RTFValue::Pointer_t pValue, bool bOverwrite)
 {
+    ensureCopyBeforeWrite();
     if (bOverwrite)
     {
-        for (RTFSprms::Iterator_t i = m_aSprms.begin(); i != m_aSprms.end(); ++i)
+        for (RTFSprms::Iterator_t i = m_pSprms->begin(); i != m_pSprms->end(); ++i)
             if (i->first == nKeyword)
             {
                 i->second = pValue;
                 return;
             }
     }
-    m_aSprms.push_back(std::make_pair(nKeyword, pValue));
+    m_pSprms->push_back(std::make_pair(nKeyword, pValue));
 }
 
 bool RTFSprms::erase(Id nKeyword)
 {
-    for (RTFSprms::Iterator_t i = m_aSprms.begin(); i != m_aSprms.end(); ++i)
+    ensureCopyBeforeWrite();
+    for (RTFSprms::Iterator_t i = m_pSprms->begin(); i != m_pSprms->end(); ++i)
+    {
         if (i->first == nKeyword)
         {
-            m_aSprms.erase(i);
+            m_pSprms->erase(i);
             return true;
         }
+    }
     return false;
 }
 
 void RTFSprms::deduplicate(RTFSprms& rReference)
 {
-    RTFSprms::Iterator_t i = m_aSprms.begin();
-    while (i != m_aSprms.end())
+    ensureCopyBeforeWrite();
+
+    RTFSprms::Iterator_t i = m_pSprms->begin();
+    while (i != m_pSprms->end())
     {
         bool bIgnore = false;
         if (i->first != NS_rtf::LN_ISTD)
@@ -144,33 +151,56 @@ void RTFSprms::deduplicate(RTFSprms& rReference)
                 bIgnore = true;
         }
         if (bIgnore)
-            i = m_aSprms.erase(i);
+            i = m_pSprms->erase(i);
         else
             ++i;
     }
 }
 
+void RTFSprms::ensureCopyBeforeWrite()
+{
+    if (m_pSprms->m_nRefCount > 1) {
+        boost::intrusive_ptr<RTFSprmsImpl> pClone(new RTFSprmsImpl());
+        for (std::vector< std::pair<Id, RTFValue::Pointer_t> >::const_iterator i = m_pSprms->begin(); i != m_pSprms->end(); ++i)
+            pClone->push_back(std::make_pair(i->first, RTFValue::Pointer_t(i->second->Clone())));
+        m_pSprms = pClone;
+        assert(m_pSprms->m_nRefCount == 1);
+    }
+}
+
 RTFSprms::RTFSprms()
-    : m_aSprms()
+    : m_pSprms(new RTFSprmsImpl())
+{
+}
+
+RTFSprms::~RTFSprms()
 {
 }
 
 RTFSprms::RTFSprms(const RTFSprms& rSprms)
 {
-    for (std::vector< std::pair<Id, RTFValue::Pointer_t> >::const_iterator i = rSprms.m_aSprms.begin(); i != rSprms.m_aSprms.end(); ++i)
-        m_aSprms.push_back(std::make_pair(i->first, RTFValue::Pointer_t(i->second->Clone())));
+    *this = rSprms;
 }
 
 RTFSprms& RTFSprms::operator=(const RTFSprms& rOther)
 {
-    RTFSprms aTmp(rOther);
-    swap(aTmp);
+    m_pSprms = rOther.m_pSprms;
     return *this;
 }
 
 void RTFSprms::swap(RTFSprms& rOther)
 {
-    m_aSprms.swap(rOther.m_aSprms);
+    boost::intrusive_ptr<RTFSprmsImpl> pTmp = rOther.m_pSprms;
+    rOther.m_pSprms = m_pSprms;
+    m_pSprms = pTmp;
+}
+
+void RTFSprms::clear()
+{
+    if (m_pSprms->m_nRefCount == 1)
+        return m_pSprms->clear();
+    else
+        m_pSprms.reset(new RTFSprmsImpl());
 }
 
 } // namespace rtftok

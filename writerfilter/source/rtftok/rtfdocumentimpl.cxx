@@ -3407,16 +3407,15 @@ int RTFDocumentImpl::pushState()
 
     checkUnicode();
     m_nGroupStartPos = Strm().Tell();
-    RTFParserState aState(this);
+
     if (m_aStates.empty())
-        aState = m_aDefaultState;
+      m_aStates.push(m_aDefaultState);
     else
     {
         if (m_aStates.top().nDestinationState == DESTINATION_MR)
             lcl_DestinationToMath(m_aStates.top().aDestinationText, m_aMathBuffer);
-        aState = m_aStates.top();
+	m_aStates.push(m_aStates.top());
     }
-    m_aStates.push(aState);
     m_aStates.top().aDestinationText.setLength(0);
 
     m_pTokenizer->pushGroup();
