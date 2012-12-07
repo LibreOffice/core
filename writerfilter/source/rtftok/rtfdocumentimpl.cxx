@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * Version: MPL 1.1 / GPLv3+ / LGPLv3+
  *
@@ -3409,12 +3410,12 @@ int RTFDocumentImpl::pushState()
     m_nGroupStartPos = Strm().Tell();
 
     if (m_aStates.empty())
-      m_aStates.push(m_aDefaultState);
+        m_aStates.push(m_aDefaultState);
     else
     {
         if (m_aStates.top().nDestinationState == DESTINATION_MR)
             lcl_DestinationToMath(m_aStates.top().aDestinationText, m_aMathBuffer);
-	m_aStates.push(m_aStates.top());
+        m_aStates.push(m_aStates.top());
     }
     m_aStates.top().aDestinationText.setLength(0);
 
