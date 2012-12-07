@@ -69,6 +69,12 @@
 
 #define STR_NO_COLL                 (RC_GLOBALS_BEGIN + 41)
 
+#define STR_CAPTION_BEGINNING       (RC_GLOBALS_BEGIN + 42)
+#define STR_CAPTION_END             (RC_GLOBALS_BEGIN + 43)
+#define STR_CAPTION_ABOVE           (RC_GLOBALS_BEGIN + 44)
+#define STR_CAPTION_BELOW           (RC_GLOBALS_BEGIN + 45)
+#define STR_CAPTION_CATEGORY_NONE   (RC_GLOBALS_BEGIN + 46)
+
 // DIALOGS -----------------------------------------------------------
 
 #define DLG_THESAURUS               (RC_GLOBALS_BEGIN + 2)

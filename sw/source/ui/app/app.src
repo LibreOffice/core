@@ -240,6 +240,27 @@ String STR_NO_COLL
     Text [ en-US ] = "(none)" ;
 };
 
+String STR_CAPTION_BEGINNING
+{
+    Text [ en-US ] = "Above" ;
+};
+String STR_CAPTION_END
+{
+    Text [ en-US ] = "Below" ;
+};
+String STR_CAPTION_ABOVE
+{
+    Text [ en-US ] = "Above" ;
+};
+String STR_CAPTION_BELOW
+{
+    Text [ en-US ] = "Below" ;
+};
+String STR_CAPTION_CATEGORY_NONE
+{
+    Text [ en-US ] = "<None>" ;
+};
+
 InfoBox MSG_ERROR_SEND_MAIL
 {
     BUTTONS = WB_OK ;

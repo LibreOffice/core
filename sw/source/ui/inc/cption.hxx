@@ -49,42 +49,37 @@ class SwView;
 #include "optload.hxx"
 #include "swlbox.hxx"
 
+class CategoryBox : public ComboBox
+{
+public:
+    CategoryBox( Window* pParent, WinBits nStyle = 0 )
+        : ComboBox( pParent, nStyle )
+    {}
+
+    virtual long PreNotify( NotifyEvent& rNEvt );
+};
+
 
 class SwCaptionDialog : public SvxStandardDialog
 {
-    class CategoryBox : public ComboBox
-    {
-    public:
-        CategoryBox( Window* pParent, const ResId& rResId )
-            : ComboBox( pParent, rResId )
-        {}
-
-        virtual long    PreNotify( NotifyEvent& rNEvt );
-    };
-
-    FixedText    aTextText;
-    Edit         aTextEdit;
-    FixedLine    aSettingsFL;
-    FixedText    aCategoryText;
-    CategoryBox  aCategoryBox;
-    FixedText    aFormatText;
-    ListBox      aFormatBox;
+    Edit*        m_pTextEdit;
+    CategoryBox* m_pCategoryBox;
+    FixedText*   m_pFormatText;
+    ListBox*     m_pFormatBox;
     //#i61007# order of captions
-    FixedText    aNumberingSeparatorFT;
-    Edit         aNumberingSeparatorED;
-    FixedText    aSepText;
-    Edit         aSepEdit;
-    FixedText    aPosText;
-    ListBox      aPosBox;
-    OKButton     aOKButton;
-    CancelButton aCancelButton;
-    HelpButton   aHelpButton;
-    PushButton   aAutoCaptionButton;
-    PushButton   aOptionButton;
+    FixedText*   m_pNumberingSeparatorFT;
+    Edit*        m_pNumberingSeparatorED;
+    FixedText*   m_pSepText;
+    Edit*        m_pSepEdit;
+    FixedText*   m_pPosText;
+    ListBox*     m_pPosBox;
+    OKButton*    m_pOKButton;
+    PushButton*  m_pAutoCaptionButton;
+    PushButton*  m_pOptionButton;
+
+    SwCaptionPreview* m_pPreview;
 
     String       sNone;
-
-    SwCaptionPreview    aPrevWin;
 
     SwView       &rView; // search per active, avoid ::com::sun::star::sdbcx::View
     SwFldMgr     *pMgr;      // pointer to save the include
@@ -100,7 +95,7 @@ class SwCaptionDialog : public SvxStandardDialog
 
     DECL_LINK(SelectHdl, void *);
     DECL_LINK(ModifyHdl, void *);
-    DECL_LINK( OptionHdl, Button * );
+    DECL_LINK(OptionHdl, Button *);
     DECL_LINK(CaptionHdl, void *);
 
     virtual void Apply();
