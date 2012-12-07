@@ -75,15 +75,13 @@ Reference< XFastContextHandler > ShapePropertiesContext::createFastChildContext(
             // TODO: Move the following checks to a separate place or as a separate function
             if ( nToken == XML_line )
             {
-                static const OUString sLineShape( "com.sun.star.drawing.LineShape" );
-                mrShape.getServiceName() = sLineShape;
+                mrShape.getServiceName() = "com.sun.star.drawing.LineShape";
             }
             if( ( nToken >= XML_bentConnector2 && nToken <= XML_bentConnector5 ) ||
                 ( nToken >= XML_curvedConnector2 && nToken <= XML_curvedConnector5 ) ||
                   nToken == XML_straightConnector1 )
             {
-                static const OUString sCustomShape( "com.sun.star.drawing.CustomShape" );
-                mrShape.getServiceName() = sCustomShape;
+                mrShape.getServiceName() = "com.sun.star.drawing.CustomShape";
             }
             xRet.set( new PresetShapeGeometryContext( *this, xAttribs, *(mrShape.getCustomShapeProperties()) ) );
         }

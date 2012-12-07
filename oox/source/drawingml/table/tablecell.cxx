@@ -123,17 +123,11 @@ void applyTableStylePart( oox::drawingml::FillProperties& rFillProperties,
 
 void applyTableCellProperties( const Reference < ::com::sun::star::table::XCell >& rxCell, const TableCell& rTableCell )
 {
-    static const OUString  sTopBorder( RTL_CONSTASCII_USTRINGPARAM( "TextUpperDistance" ) );
-    static const OUString  sBottomBorder( RTL_CONSTASCII_USTRINGPARAM( "TextLowerDistance" ) );
-    static const OUString  sLeftBorder( RTL_CONSTASCII_USTRINGPARAM( "TextLeftDistance" ) );
-    static const OUString  sRightBorder( RTL_CONSTASCII_USTRINGPARAM( "TextRightDistance" ) );
-    static const OUString  sVerticalAdjust( RTL_CONSTASCII_USTRINGPARAM( "TextVerticalAdjust" ) );
-
     Reference< XPropertySet > xPropSet( rxCell, UNO_QUERY_THROW );
-    xPropSet->setPropertyValue( sTopBorder, Any( static_cast< sal_Int32 >( rTableCell.getTopMargin() / 360 ) ) );
-    xPropSet->setPropertyValue( sRightBorder, Any( static_cast< sal_Int32 >( rTableCell.getRightMargin() / 360 ) ) );
-    xPropSet->setPropertyValue( sLeftBorder, Any( static_cast< sal_Int32 >( rTableCell.getLeftMargin() / 360 ) ) );
-    xPropSet->setPropertyValue( sBottomBorder, Any( static_cast< sal_Int32 >( rTableCell.getBottomMargin() / 360 ) ) );
+    xPropSet->setPropertyValue( "TextUpperDistance", Any( static_cast< sal_Int32 >( rTableCell.getTopMargin() / 360 ) ) );
+    xPropSet->setPropertyValue( "TextRightDistance", Any( static_cast< sal_Int32 >( rTableCell.getRightMargin() / 360 ) ) );
+    xPropSet->setPropertyValue( "TextLeftDistance", Any( static_cast< sal_Int32 >( rTableCell.getLeftMargin() / 360 ) ) );
+    xPropSet->setPropertyValue( "TextLowerDistance", Any( static_cast< sal_Int32 >( rTableCell.getBottomMargin() / 360 ) ) );
 
     drawing::TextVerticalAdjust eVA;
     switch( rTableCell.getAnchorToken() )
@@ -145,7 +139,7 @@ void applyTableCellProperties( const Reference < ::com::sun::star::table::XCell 
         default:
         case XML_t:     eVA = drawing::TextVerticalAdjust_TOP; break;
     }
-    xPropSet->setPropertyValue( sVerticalAdjust, Any( eVA ) );
+    xPropSet->setPropertyValue( "TextVerticalAdjust", Any( eVA ) );
 }
 
 void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oox::drawingml::TextListStylePtr pMasterTextListStyle,

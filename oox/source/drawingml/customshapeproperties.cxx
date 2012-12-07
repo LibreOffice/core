@@ -98,10 +98,9 @@ static OUString GetConnectorShapeType( sal_Int32 nType )
     OUString sType;
     switch( nType )
     {
-        case XML_straightConnector1: {
-            static const OUString sStraightConnector1 = CREATE_OUSTRING( "mso-spt32" );
-            sType = sStraightConnector1;
-            } break;
+        case XML_straightConnector1:
+            sType = "mso-spt32";
+            break;
         default:
             break;
     }

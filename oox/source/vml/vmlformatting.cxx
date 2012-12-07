@@ -129,12 +129,11 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
         return 0;
 
     // process trailing unit, convert to EMU
-    static const OUString saPx = CREATE_OUSTRING( "px" );
     OUString aUnit;
     if( (0 < nEndPos) && (nEndPos < rValue.getLength()) )
         aUnit = rValue.copy( nEndPos );
     else if( bDefaultAsPixel )
-        aUnit = saPx;
+        aUnit = "px";
     // else default is EMU
 
     if( aUnit.getLength() == 2 )

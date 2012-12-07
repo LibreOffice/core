@@ -353,27 +353,20 @@ bool PresentationFragmentHandler::importSlide( const FragmentHandlerRef& rxSlide
     Reference< XPropertySet > xPropertySet( xSlide, UNO_QUERY );
     if ( xPropertySet.is() )
     {
-        static const OUString sWidth = CREATE_OUSTRING( "Width" );
-        static const OUString sHeight = CREATE_OUSTRING( "Height" );
         awt::Size& rPageSize( pSlidePersistPtr->isNotesPage() ? maNotesSize : maSlideSize );
-        xPropertySet->setPropertyValue( sWidth, Any( rPageSize.Width ) );
-        xPropertySet->setPropertyValue( sHeight, Any( rPageSize.Height ) );
+        xPropertySet->setPropertyValue( "Width", Any( rPageSize.Width ) );
+        xPropertySet->setPropertyValue( "Height", Any( rPageSize.Height ) );
 
         oox::ppt::HeaderFooter aHeaderFooter( pSlidePersistPtr->getHeaderFooter() );
         if ( !pSlidePersistPtr->isMasterPage() )
             aHeaderFooter.mbSlideNumber = aHeaderFooter.mbHeader = aHeaderFooter.mbFooter = aHeaderFooter.mbDateTime = sal_False;
         try
         {
-            static const OUString sIsHeaderVisible = CREATE_OUSTRING( "IsHeaderVisible" );
-            static const OUString sIsFooterVisible = CREATE_OUSTRING( "IsFooterVisible" );
-            static const OUString sIsDateTimeVisible = CREATE_OUSTRING( "IsDateTimeVisible" );
-            static const OUString sIsPageNumberVisible = CREATE_OUSTRING( "IsPageNumberVisible" );
-
             if ( pSlidePersistPtr->isNotesPage() )
-                xPropertySet->setPropertyValue( sIsHeaderVisible, Any( aHeaderFooter.mbHeader ) );
-            xPropertySet->setPropertyValue( sIsFooterVisible, Any( aHeaderFooter.mbFooter ) );
-            xPropertySet->setPropertyValue( sIsDateTimeVisible, Any( aHeaderFooter.mbDateTime ) );
-            xPropertySet->setPropertyValue( sIsPageNumberVisible, Any( aHeaderFooter.mbSlideNumber ) );
+                xPropertySet->setPropertyValue( "sIsHeaderVisible", Any( aHeaderFooter.mbHeader ) );
+            xPropertySet->setPropertyValue( "IsFooterVisible", Any( aHeaderFooter.mbFooter ) );
+            xPropertySet->setPropertyValue( "IsDateTimeVisible", Any( aHeaderFooter.mbDateTime ) );
+            xPropertySet->setPropertyValue( "IsPageNumberVisible", Any( aHeaderFooter.mbSlideNumber ) );
         }
         catch( uno::Exception& )
         {
