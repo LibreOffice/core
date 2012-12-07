@@ -141,8 +141,7 @@ void ScMacrosTest::testVba()
         rtl::OUString aFileName;
         createFileURL(testInfo[i].sFileBaseName, aFileExtension, aFileName);
         uno::Reference< com::sun::star::lang::XComponent > xComponent = loadFromDesktop(aFileName);
-        rtl::OUString sMsg( RTL_CONSTASCII_USTRINGPARAM("Failed to load ") );
-        sMsg.concat( aFileName );
+        rtl::OUString sMsg( "Failed to load " + aFileName );
         CPPUNIT_ASSERT_MESSAGE( rtl::OUStringToOString( sMsg, RTL_TEXTENCODING_UTF8 ).getStr(), xComponent.is() );
 
         String sUrl = testInfo[i].sMacroUrl;
