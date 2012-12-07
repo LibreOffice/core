@@ -43,8 +43,10 @@
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <comphelper/string.hxx>
 #include <frmui.hrc>
+#include <globals.hrc>
 #include <cption.hrc>
 #include <SwStyleNameMapper.hxx>
+
 using namespace ::com::sun::star;
 
 extern String* GetOldGrfCat();
@@ -97,37 +99,30 @@ public:
 String SwCaptionDialog::our_aSepTextSave = rtl::OUString(": "); // Caption separator text
 
 SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
-
-    SvxStandardDialog( pParent, SW_RES(DLG_CAPTION) ),
-
-    aTextText     (this, SW_RES(TXT_TEXT    )),
-    aTextEdit     (this, SW_RES(EDT_TEXT    )),
-    aSettingsFL  (this, SW_RES(FL_SETTINGS)),
-    aCategoryText (this, SW_RES(TXT_CATEGORY)),
-    aCategoryBox  (this, SW_RES(BOX_CATEGORY)),
-    aFormatText   (this, SW_RES(TXT_FORMAT  )),
-    aFormatBox    (this, SW_RES(BOX_FORMAT  )),
-    aNumberingSeparatorFT(this, SW_RES(FT_NUM_SEP  )),
-    aNumberingSeparatorED(this, SW_RES(ED_NUM_SEP  )),
-    aSepText      (this, SW_RES(TXT_SEP     )),
-    aSepEdit      (this, SW_RES(EDT_SEP     )),
-    aPosText      (this, SW_RES(TXT_POS     )),
-    aPosBox       (this, SW_RES(BOX_POS     )),
-    aOKButton     (this, SW_RES(BTN_OK      )),
-    aCancelButton (this, SW_RES(BTN_CANCEL  )),
-    aHelpButton   (this, SW_RES(BTN_HELP    )),
-    aAutoCaptionButton(this, SW_RES(BTN_AUTOCAPTION)),
-    aOptionButton (this, SW_RES(BTN_OPTION  )),
-    sNone(      SW_RES( STR_CATEGORY_NONE )),
-    aPrevWin      (this, SW_RES(WIN_SAMPLE  )),
+    SvxStandardDialog( pParent, "InsertCaptionDialog", "modules/swriter/ui/insertcaption.ui" ),
+    sNone( SW_RES( STR_CAPTION_CATEGORY_NONE )),
     rView( rV ),
     pMgr( new SwFldMgr(rView.GetWrtShellPtr()) ),
     bCopyAttributes( sal_False ),
     bOrderNumberingFirst( SW_MOD()->GetModuleConfig()->IsCaptionOrderNumberingFirst() )
 {
+    get(m_pTextEdit, "caption_edit");
+    get(m_pCategoryBox, "category");
+    get(m_pFormatText, "numbering_label");
+    get(m_pFormatBox, "numbering");
+    get(m_pNumberingSeparatorFT, "num_separator");
+    get(m_pNumberingSeparatorED, "num_seperator_edit");
+    get(m_pSepText, "separator_label");
+    get(m_pSepEdit, "separator_edit");
+    get(m_pPosText, "position_label");
+    get(m_pPosBox, "position");
+    get(m_pPreview, "preview");
+    get(m_pOKButton, "ok");
+    get(m_pAutoCaptionButton, "auto");
+    get(m_pOptionButton, "options");
+
     //#i61007# order of captions
-    if( bOrderNumberingFirst )
-        ApplyCaptionOrder();
+    ApplyCaptionOrder();
     SwWrtShell &rSh = rView.GetWrtShell();
      uno::Reference< frame::XModel >  xModel = rView.GetDocShell()->GetBaseModel();
 
@@ -140,25 +135,25 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     }
 
     Link aLk = LINK( this, SwCaptionDialog, ModifyHdl );
-    aCategoryBox.SetModifyHdl( aLk );
-    aTextEdit   .SetModifyHdl( aLk );
-    aNumberingSeparatorED.SetModifyHdl ( aLk );
-    aSepEdit    .SetModifyHdl( aLk );
+    m_pCategoryBox->SetModifyHdl( aLk );
+    m_pTextEdit->SetModifyHdl( aLk );
+    m_pNumberingSeparatorED->SetModifyHdl ( aLk );
+    m_pSepEdit->SetModifyHdl( aLk );
 
     aLk = LINK(this, SwCaptionDialog, SelectHdl);
-    aCategoryBox.SetSelectHdl( aLk );
-    aFormatBox  .SetSelectHdl( aLk );
-    aOptionButton.SetClickHdl( LINK( this, SwCaptionDialog, OptionHdl ) );
-    aAutoCaptionButton.SetClickHdl(LINK(this, SwCaptionDialog, CaptionHdl));
+    m_pCategoryBox->SetSelectHdl( aLk );
+    m_pFormatBox->SetSelectHdl( aLk );
+    m_pOptionButton->SetClickHdl( LINK( this, SwCaptionDialog, OptionHdl ) );
+    m_pAutoCaptionButton->SetClickHdl(LINK(this, SwCaptionDialog, CaptionHdl));
 
-    aCategoryBox.InsertEntry( sNone );
+    m_pCategoryBox->InsertEntry( sNone );
     sal_uInt16 i, nCount = pMgr->GetFldTypeCount();
     for (i = 0; i < nCount; i++)
     {
         SwFieldType *pType = pMgr->GetFldType( USHRT_MAX, i );
         if( pType->Which() == RES_SETEXPFLD &&
             ((SwSetExpFieldType *) pType)->GetType() & nsSwGetSetExpType::GSE_SEQ )
-            aCategoryBox.InsertEntry(pType->GetName());
+            m_pCategoryBox->InsertEntry(pType->GetName());
     }
 
     String* pString = 0;
@@ -206,9 +201,9 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     if( nPoolId )
     {
         if( pString && pString->Len())
-            aCategoryBox.SetText( *pString );
+            m_pCategoryBox->SetText( *pString );
         else
-            aCategoryBox.SetText(
+            m_pCategoryBox->SetText(
                     SwStyleNameMapper::GetUIName( nPoolId, aEmptyStr ));
     }
 
@@ -219,7 +214,7 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     for ( i = nCount; i; )
     {
         pFldType = pMgr->GetFldType(USHRT_MAX, --i);
-        if( pFldType->GetName().equals(aCategoryBox.GetText()) )
+        if( pFldType->GetName().equals(m_pCategoryBox->GetText()) )
         {
             nSelFmt = (sal_uInt16)((SwSetExpFieldType*)pFldType)->GetSeqFormat();
             break;
@@ -229,11 +224,11 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     nCount = pMgr->GetFormatCount(TYP_SEQFLD, sal_False);
     for ( i = 0; i < nCount; ++i )
     {
-        aFormatBox.InsertEntry( pMgr->GetFormatStr(TYP_SEQFLD, i) );
+        m_pFormatBox->InsertEntry( pMgr->GetFormatStr(TYP_SEQFLD, i) );
         sal_uInt16 nFmtId = pMgr->GetFormatId(TYP_SEQFLD, i);
-        aFormatBox.SetEntryData( i, reinterpret_cast<void*>( nFmtId ) );
+        m_pFormatBox->SetEntryData( i, reinterpret_cast<void*>( nFmtId ) );
         if( nFmtId == nSelFmt )
-            aFormatBox.SelectEntryPos( i );
+            m_pFormatBox->SelectEntryPos( i );
     }
 
     // aPosBox
@@ -246,29 +241,26 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
         case nsSelectionType::SEL_TBL | nsSelectionType::SEL_NUM | nsSelectionType::SEL_TXT:
         case nsSelectionType::SEL_DRW:
         case nsSelectionType::SEL_DRW | nsSelectionType::SEL_BEZ:
-            aPosBox.InsertEntry(SW_RESSTR(STR_ABOVE));
-            aPosBox.InsertEntry(SW_RESSTR(STR_CP_BELOW));
+            m_pPosBox->InsertEntry(SW_RESSTR(STR_CAPTION_ABOVE));
+            m_pPosBox->InsertEntry(SW_RESSTR(STR_CAPTION_BELOW));
             break;
         case nsSelectionType::SEL_FRM:
         case nsSelectionType::SEL_TXT:
-            aPosBox.InsertEntry(SW_RESSTR(STR_BEGINNING));
-            aPosBox.InsertEntry(SW_RESSTR(STR_END     ));
+            m_pPosBox->InsertEntry(SW_RESSTR(STR_CAPTION_BEGINNING));
+            m_pPosBox->InsertEntry(SW_RESSTR(STR_CAPTION_END     ));
             break;
     }
-    aPosBox.SelectEntryPos(1);
+    m_pPosBox->SelectEntryPos(1);
     if (eType & (nsSelectionType::SEL_GRF|nsSelectionType::SEL_DRW))
     {
-        aPosText.Enable( sal_False );
-        aPosBox.Enable( sal_False );
+        m_pPosText->Enable( sal_False );
+        m_pPosBox->Enable( sal_False );
     }
 
-    aCategoryBox.GetModifyHdl().Call(&aCategoryBox);
+    m_pCategoryBox->GetModifyHdl().Call(m_pCategoryBox);
 
-    FreeResource();
-
-    CheckButtonWidth();
-    aSepEdit.SetText(our_aSepTextSave);
-    aTextEdit.GrabFocus();
+    m_pSepEdit->SetText(our_aSepTextSave);
+    m_pTextEdit->GrabFocus();
     DrawSample();
 }
 
@@ -276,7 +268,7 @@ void SwCaptionDialog::Apply()
 {
     InsCaptionOpt aOpt;
     aOpt.UseCaption() = sal_True;
-    String aName( aCategoryBox.GetText() );
+    String aName( m_pCategoryBox->GetText() );
     if ( aName == sNone )
     {
         aOpt.SetCategory( aEmptyStr );
@@ -285,22 +277,22 @@ void SwCaptionDialog::Apply()
     else
     {
         aOpt.SetCategory(comphelper::string::strip(aName, ' '));
-        aOpt.SetNumSeparator( aNumberingSeparatorED.GetText() );
+        aOpt.SetNumSeparator( m_pNumberingSeparatorED->GetText() );
     }
-    aOpt.SetNumType( (sal_uInt16)(sal_uIntPtr)aFormatBox.GetEntryData( aFormatBox.GetSelectEntryPos() ) );
-    aOpt.SetSeparator( aSepEdit.IsEnabled() ? aSepEdit.GetText() : String() );
-    aOpt.SetCaption( aTextEdit.GetText() );
-    aOpt.SetPos( aPosBox.GetSelectEntryPos() );
+    aOpt.SetNumType( (sal_uInt16)(sal_uIntPtr)m_pFormatBox->GetEntryData( m_pFormatBox->GetSelectEntryPos() ) );
+    aOpt.SetSeparator( m_pSepEdit->IsEnabled() ? m_pSepEdit->GetText() : String() );
+    aOpt.SetCaption( m_pTextEdit->GetText() );
+    aOpt.SetPos( m_pPosBox->GetSelectEntryPos() );
     aOpt.IgnoreSeqOpts() = sal_True;
     aOpt.CopyAttributes() = bCopyAttributes;
     aOpt.SetCharacterStyle( sCharacterStyle );
     rView.InsertCaption( &aOpt );
-    our_aSepTextSave = aSepEdit.GetText();
+    our_aSepTextSave = m_pSepEdit->GetText();
 }
 
 IMPL_LINK_INLINE_START( SwCaptionDialog, OptionHdl, Button*, pButton )
 {
-    String sFldTypeName = aCategoryBox.GetText();
+    String sFldTypeName = m_pCategoryBox->GetText();
     if(sFldTypeName == sNone)
         sFldTypeName = aEmptyStr;
     SwSequenceOptionDialog  aDlg( pButton, rView, sFldTypeName );
@@ -332,21 +324,23 @@ IMPL_LINK_NOARG_INLINE_END(SwCaptionDialog, SelectHdl)
 IMPL_LINK_NOARG(SwCaptionDialog, ModifyHdl)
 {
     SwWrtShell &rSh = rView.GetWrtShell();
-    String sFldTypeName = aCategoryBox.GetText();
+    String sFldTypeName = m_pCategoryBox->GetText();
     sal_Bool bCorrectFldName = sFldTypeName.Len() > 0;
     sal_Bool bNone = sFldTypeName == sNone;
     SwFieldType* pType = (bCorrectFldName && !bNone)
                     ? rSh.GetFldType( RES_SETEXPFLD, sFldTypeName )
                     : 0;
-    aOKButton.Enable( bCorrectFldName &&
+    m_pOKButton->Enable( bCorrectFldName &&
                         (!pType ||
                             ((SwSetExpFieldType*)pType)->GetType() == nsSwGetSetExpType::GSE_SEQ)
                                 && 0 != sFldTypeName.Len() );
-    aOptionButton.Enable( aOKButton.IsEnabled() && !bNone );
-    aFormatText.Enable( !bNone );
-    aFormatBox.Enable( !bNone );
-    aSepText.Enable( !bNone );
-    aSepEdit.Enable( !bNone );
+    m_pOptionButton->Enable( m_pOKButton->IsEnabled() && !bNone );
+    m_pNumberingSeparatorFT->Enable( bOrderNumberingFirst && !bNone );
+    m_pNumberingSeparatorED->Enable( bOrderNumberingFirst && !bNone );
+    m_pFormatText->Enable( !bNone );
+    m_pFormatBox->Enable( !bNone );
+    m_pSepText->Enable( !bNone );
+    m_pSepEdit->Enable( !bNone );
     DrawSample();
     return 0;
 }
@@ -363,15 +357,15 @@ IMPL_LINK_NOARG(SwCaptionDialog, CaptionHdl)
 void SwCaptionDialog::DrawSample()
 {
     String aStr;
-    String sCaption = aTextEdit.GetText();
+    String sCaption = m_pTextEdit->GetText();
 
     // number
-    String sFldTypeName = aCategoryBox.GetText();
+    String sFldTypeName = m_pCategoryBox->GetText();
     sal_Bool bNone = sFldTypeName == sNone;
     if( !bNone )
     {
-        sal_uInt16 nNumFmt = (sal_uInt16)(sal_uIntPtr)aFormatBox.GetEntryData(
-                                        aFormatBox.GetSelectEntryPos() );
+        sal_uInt16 nNumFmt = (sal_uInt16)(sal_uIntPtr)m_pFormatBox->GetEntryData(
+                                        m_pFormatBox->GetSelectEntryPos() );
         if( SVX_NUM_NUMBER_NONE != nNumFmt )
         {
             // category
@@ -412,51 +406,19 @@ void SwCaptionDialog::DrawSample()
             //#i61007# order of captions
             if( bOrderNumberingFirst )
             {
-                aStr += aNumberingSeparatorED.GetText();
+                aStr += m_pNumberingSeparatorED->GetText();
                 aStr += sFldTypeName;
             }
 
         }
         if( sCaption.Len() > 0 )
         {
-            aStr += aSepEdit.GetText();
+            aStr += m_pSepEdit->GetText();
         }
     }
     aStr += sCaption;
     // do preview!
-    aPrevWin.SetPreviewText( aStr );
-}
-
-void SwCaptionDialog::CheckButtonWidth()
-{
-    // check if the text of the AutoCaption button is to wide
-    const long nOffset = 10;
-    String sText = aAutoCaptionButton.GetText();
-    long nTxtW = aAutoCaptionButton.GetTextWidth( sText );
-    if ( sText.Search( '~' ) == STRING_NOTFOUND )
-        nTxtW += nOffset;
-    long nBtnW = aAutoCaptionButton.GetSizePixel().Width();
-    if ( nTxtW > nBtnW )
-    {
-        // then broaden all buttons
-        Size aNewSize;
-        long nDelta = Max( ( nTxtW - nBtnW ), nOffset );
-        Button* pBtns[] =
-        {
-            &aOKButton, &aCancelButton, &aHelpButton, &aAutoCaptionButton, &aOptionButton
-        };
-        Button** pCurrent = pBtns;
-        for ( sal_uInt32 i = 0; i < sizeof( pBtns ) / sizeof( pBtns[ 0 ] ); ++i, ++pCurrent )
-        {
-            aNewSize = (*pCurrent)->GetSizePixel();
-            aNewSize.Width() += nDelta;
-            (*pCurrent)->SetSizePixel( aNewSize );
-        }
-        // and the dialog
-        aNewSize = GetOutputSizePixel();
-        aNewSize.Width() += nDelta;
-        SetOutputSizePixel( aNewSize );
-    }
+    m_pPreview->SetPreviewText( aStr );
 }
 
 SwCaptionDialog::~SwCaptionDialog()
@@ -558,7 +520,7 @@ void    SwSequenceOptionDialog::SetCharacterStyle(const String& rStyle)
     aLbCharStyle.SelectEntry(rStyle);
 }
 
-long SwCaptionDialog::CategoryBox::PreNotify( NotifyEvent& rNEvt )
+long CategoryBox::PreNotify( NotifyEvent& rNEvt )
 {
     long nHandled = 0;
     if( rNEvt.GetType() == EVENT_KEYINPUT &&
@@ -587,43 +549,20 @@ long SwCaptionDialog::CategoryBox::PreNotify( NotifyEvent& rNEvt )
     return nHandled;
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeCategoryBox(Window* pParent)
+{
+    CategoryBox* pCategoryBox = new CategoryBox(pParent, WB_LEFT | WB_DROPDOWN | WB_VCENTER | WB_3DLOOK);
+    pCategoryBox->EnableAutoSize(true);
+    return pCategoryBox;
+}
+
 /*-------------------------------------------------------------------------
     //#i61007# order of captions
   -----------------------------------------------------------------------*/
-static void lcl_MoveH( Window& rWin, sal_Int32 nMove )
-{
-    Point aPos( rWin.GetPosPixel() );
-    aPos.Y() += nMove;
-    rWin.SetPosPixel(aPos);
-}
-
 void SwCaptionDialog::ApplyCaptionOrder()
 {
-    //have the settings changed?
-    bool bVisible = aNumberingSeparatorED.IsVisible() != 0;
-    if( bOrderNumberingFirst != bVisible )
-    {
-        sal_Int32 nDiff = aPosBox.GetPosPixel().Y() - aSepEdit.GetPosPixel().Y();
-
-        aNumberingSeparatorFT.Show( bOrderNumberingFirst );
-        aNumberingSeparatorED.Show( bOrderNumberingFirst );
-        if( !bOrderNumberingFirst )
-        {
-            nDiff = -nDiff;
-        }
-        lcl_MoveH( aCategoryText, 2 * nDiff);
-        lcl_MoveH( aFormatText, -nDiff );
-        lcl_MoveH( aFormatBox, -nDiff );
-        lcl_MoveH( aCategoryBox, 2 * nDiff);
-        lcl_MoveH( aSepText, nDiff );
-        lcl_MoveH( aSepEdit, nDiff );
-        lcl_MoveH( aPosText, nDiff );
-        lcl_MoveH( aPosBox, nDiff );
-        lcl_MoveH( aPrevWin, nDiff );
-        Size aDlgSize( GetSizePixel() );
-        aDlgSize.Height() += nDiff;
-        SetSizePixel( aDlgSize );
-    }
+    m_pNumberingSeparatorFT->Enable(bOrderNumberingFirst);
+    m_pNumberingSeparatorED->Enable(bOrderNumberingFirst);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

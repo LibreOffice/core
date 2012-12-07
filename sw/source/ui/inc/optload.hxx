@@ -98,12 +98,14 @@ public:
 class SwCaptionPreview : public Window
 {
 private:
-    String          maText;
-    Point           maDrawPos;
+    String maText;
+    Point maDrawPos;
 public:
-                    SwCaptionPreview( Window* pParent, const ResId& rResId );
-    void            SetPreviewText( const String& rText );
-    virtual void    Paint( const Rectangle& rRect );
+    SwCaptionPreview( Window* pParent );
+    SwCaptionPreview( Window* pParent, const ResId& rResId );
+    void Init();
+    void SetPreviewText( const String& rText );
+    virtual void Paint( const Rectangle& rRect );
 };
 
 class SwCaptionOptPage : public SfxTabPage

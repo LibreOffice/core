@@ -21,26 +21,12 @@
 
 #define BTN_OK         1
 #define BTN_CANCEL     2
-#define TXT_CATEGORY   4
-#define BOX_CATEGORY   5
-#define TXT_FORMAT     6
-#define BOX_FORMAT     7
-#define TXT_TEXT       8
-#define EDT_TEXT       9
-#define TXT_POS       10
-#define BOX_POS       11
-#define FL_SETTINGS  12
-#define BTN_HELP        13
-#define BTN_OPTION    14
-#define FL_HEADER         15
+#define BTN_HELP      13
+#define FL_HEADER     15
 #define FT_LEVEL      16
 #define LB_LEVEL      17
 #define FT_SEPARATOR  18
 #define ED_SEPARATOR  19
-#define BTN_AUTOCAPTION 23
-#define TXT_SEP         24
-#define EDT_SEP         25
-#define WIN_SAMPLE      26
 
 #define FL_CATANDFRAME  27
 #define FT_CHARSTYLE    28
@@ -49,9 +35,6 @@
 #define FL_ORDER        31
 #define FT_ORDER        32
 #define LB_ORDER        33
-
-#define FT_NUM_SEP      34
-#define ED_NUM_SEP       35
 
 #define STR_BEGINNING       1
 #define STR_END             2
