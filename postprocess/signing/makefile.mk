@@ -36,7 +36,7 @@ signing.done :
 .IF "$(WINDOWS_BUILD_SIGNING)"=="TRUE"
 .IF "$(COM)"=="MSC"
 .IF "$(product)"=="full"
-    $(PERL) signing.pl -e $(EXCLUDELIST) -f $(PFXFILE) -p $(PFXPASSWORD) -t $(TIMESTAMPURL) $(IMAGENAMES) && $(TOUCH) $(MISC)$/signing.done
+    $(PERL) signing.pl -e $(EXCLUDELIST) -l $(LOGFILE) -f $(PFXFILE) -p $(PFXPASSWORD) -t $(TIMESTAMPURL) $(IMAGENAMES) && $(TOUCH) $(MISC)$/signing.done
 .ELSE  # "$(product)"=="full"
     @echo Doing nothing on non product builds ...
 .ENDIF # "$(product)"=="full"
