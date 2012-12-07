@@ -33,6 +33,7 @@
 #include "VAxisBase.hxx"
 #include "ViewDefines.hxx"
 #include "DataSeriesHelper.hxx"
+#include "defines.hxx"
 #include "chartview/ExplicitValueProvider.hxx"
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>

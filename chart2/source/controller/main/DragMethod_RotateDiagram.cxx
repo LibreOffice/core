@@ -26,6 +26,7 @@
 #include "DiagramHelper.hxx"
 #include "ChartTypeHelper.hxx"
 #include "ThreeDHelper.hxx"
+#include "defines.hxx"
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 
@@ -36,8 +37,6 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
 #include <drawinglayer/geometry/viewinformation3d.hxx>
-
-#define FIXED_SIZE_FOR_3D_CHART_VOLUME (10000.0)
 
 //.............................................................................
 namespace chart

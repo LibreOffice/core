@@ -42,6 +42,7 @@
 #include "RelativePositionHelper.hxx"
 #include "DateHelper.hxx"
 #include "DiagramHelper.hxx"
+#include "defines.hxx"
 
 //only for creation: @todo remove if all plotter are uno components and instanciated via servicefactory
 #include "BarChart.hxx"

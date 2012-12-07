@@ -28,6 +28,7 @@
 #include "CommonConverters.hxx"
 #include "ChartTypeHelper.hxx"
 #include "ThreeDHelper.hxx"
+#include "defines.hxx"
 #include <editeng/unoprnms.hxx>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>

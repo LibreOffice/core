@@ -16,25 +16,12 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __CHART2_VIEWDEFINES_HXX__
-#define __CHART2_VIEWDEFINES_HXX__
 
-namespace chart
-{
+#ifndef __CHART2_DEFINES_HXX__
+#define __CHART2_DEFINES_HXX__
 
-//=========================================================================
-//
-//=========================================================================
-#define CHART_3DOBJECT_SEGMENTCOUNT ((sal_Int32)32)
-//There needs to be a little distance betweengrid lines and walls in 3D, otherwise the lines are partly hidden by the walls
-#define GRID_TO_WALL_DISTANCE (1.0)
+#define FIXED_SIZE_FOR_3D_CHART_VOLUME 10000.0
 
-const double    ZDIRECTION = 1.0;
-const sal_Int32 AXIS2D_TICKLENGTH = 150;//value like in old chart
-const sal_Int32 AXIS2D_TICKLABELSPACING = 100;//value like in old chart
-
-
-}//end namespace chart
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
