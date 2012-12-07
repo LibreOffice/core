@@ -19,14 +19,13 @@
 
 #include "oox/drawingml/guidcontext.hxx"
 
-using ::rtl::OUString;
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml {
 
-GuidContext::GuidContext( ContextHandler& rParent, rtl::OUString& rGuidId )
+GuidContext::GuidContext( ContextHandler& rParent, OUString& rGuidId )
 : ContextHandler( rParent )
 , mrGuidId( rGuidId )
 {

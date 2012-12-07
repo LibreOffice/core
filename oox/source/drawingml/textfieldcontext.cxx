@@ -22,7 +22,6 @@
 #include "oox/drawingml/textcharacterpropertiescontext.hxx"
 #include "oox/drawingml/textfield.hxx"
 
-using ::rtl::OUString;
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;

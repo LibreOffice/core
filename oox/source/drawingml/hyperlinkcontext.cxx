@@ -26,7 +26,6 @@
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/embeddedwavaudiofile.hxx"
 
-using ::rtl::OUString;
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
@@ -43,11 +42,11 @@ HyperLinkContext::HyperLinkContext( ContextHandler& rParent,
     OUString aRelId = xAttributes->getOptionalValue( R_TOKEN( id ) );
     if ( !aRelId.isEmpty() )
     {
-        OSL_TRACE("OOX: URI rId %s", ::rtl::OUStringToOString (aRelId, RTL_TEXTENCODING_UTF8).pData->buffer);
+        OSL_TRACE("OOX: URI rId %s", OUStringToOString (aRelId, RTL_TEXTENCODING_UTF8).pData->buffer);
         sHref = getRelations().getExternalTargetFromRelId( aRelId );
         if( !sHref.isEmpty() )
         {
-            OSL_TRACE("OOX: URI href %s", ::rtl::OUStringToOString (sHref, RTL_TEXTENCODING_UTF8).pData->buffer);
+            OSL_TRACE("OOX: URI href %s", OUStringToOString (sHref, RTL_TEXTENCODING_UTF8).pData->buffer);
             sURL = getFilter().getAbsoluteUrl( sHref );
         }
     }
@@ -122,9 +121,9 @@ HyperLinkContext::HyperLinkContext( ContextHandler& rParent,
                         const OUString sNotesSlide( CREATE_OUSTRING( "notesSlide" ) );
                         const OUString aSlideType( sHref.copy( 0, nIndex2 ) );
                         if ( aSlideType.match( sSlide ) )
-                            sURL = CREATE_OUSTRING( "#Slide " ).concat( rtl::OUString::valueOf( nPageNumber ) );
+                            sURL = CREATE_OUSTRING( "#Slide " ).concat( OUString::valueOf( nPageNumber ) );
                         else if ( aSlideType.match( sNotesSlide ) )
-                            sURL = CREATE_OUSTRING( "#Notes " ).concat( rtl::OUString::valueOf( nPageNumber ) );
+                            sURL = CREATE_OUSTRING( "#Notes " ).concat( OUString::valueOf( nPageNumber ) );
 //                      else: todo for other types such as notesMaster or slideMaster as they can't be referenced easily
                     }
                 }

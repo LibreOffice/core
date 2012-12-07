@@ -27,7 +27,6 @@
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/token/tokens.hxx"
 
-using ::rtl::OUString;
 using ::oox::core::XmlFilterBase;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

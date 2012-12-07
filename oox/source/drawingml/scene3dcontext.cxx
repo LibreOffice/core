@@ -29,7 +29,6 @@
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/helper/attributelist.hxx"
 
-using ::rtl::OUString;
 using ::oox::core::ContextHandler;
 using ::oox::core::XmlFilterBase;
 using namespace ::com::sun::star;

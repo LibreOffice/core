@@ -33,8 +33,6 @@
 #include "oox/drawingml/textparagraphproperties.hxx"
 #include "oox/drawingml/textcharacterproperties.hxx"
 
-using ::rtl::OString;
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
@@ -64,7 +62,7 @@ void lclCreateTextFields( std::list< Reference< XTextField > > & aFields,
 
     if( sType.compareToAscii( "datetime", 8 ) == 0)
     {
-        OString s = ::rtl::OUStringToOString( sType, RTL_TEXTENCODING_UTF8);
+        OString s = OUStringToOString( sType, RTL_TEXTENCODING_UTF8);
         OString p( s.pData->buffer + 8 );
         try
         {

@@ -21,7 +21,6 @@
 #include "oox/drawingml/spdefcontext.hxx"
 #include "oox/drawingml/theme.hxx"
 
-using rtl::OUString;
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;

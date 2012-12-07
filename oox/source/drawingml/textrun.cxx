@@ -29,7 +29,6 @@
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/token/tokens.hxx"
 
-using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
@@ -110,7 +109,7 @@ sal_Int32 TextRun::insertAt(
                             aPropSet.setAnyProperty( PROP_CharFontPitch, Any( nLatinFontPitch ) );
                             aPropSet.setAnyProperty( PROP_CharFontFamily, Any( nLatinFontFamily ) );
                         }
-                        rtl::OUString aSubString( getText().copy( nIndex, nCount ) );
+                        OUString aSubString( getText().copy( nIndex, nCount ) );
                         xText->insertString( xStart, aSubString, sal_False );
                         nIndex += nCount;
 

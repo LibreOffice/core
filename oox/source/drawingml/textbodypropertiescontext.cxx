@@ -27,7 +27,6 @@
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/propertymap.hxx"
 
-using ::rtl::OUString;
 using namespace ::oox::core;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;

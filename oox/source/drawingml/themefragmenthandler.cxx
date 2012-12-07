@@ -22,7 +22,6 @@
 #include "oox/drawingml/theme.hxx"
 #include "oox/drawingml/themeelementscontext.hxx"
 
-using ::rtl::OUString;
 using namespace ::oox::core;
 
 namespace oox {

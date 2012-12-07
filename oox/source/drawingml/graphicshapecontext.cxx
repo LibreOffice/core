@@ -38,7 +38,6 @@
 #include "oox/helper/binaryoutputstream.hxx"
 #include <comphelper/processfactory.hxx>
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;

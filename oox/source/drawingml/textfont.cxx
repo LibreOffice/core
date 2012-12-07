@@ -24,7 +24,6 @@
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/helper/attributelist.hxx"
 
-using ::rtl::OUString;
 using ::oox::core::XmlFilterBase;
 
 namespace oox {

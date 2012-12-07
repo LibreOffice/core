@@ -32,7 +32,6 @@
 #include "oox/drawingml/customshapegeometry.hxx"
 #include "oox/drawingml/effectpropertiescontext.hxx"
 
-using rtl::OUString;
 using namespace oox::core;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -76,14 +75,14 @@ Reference< XFastContextHandler > ShapePropertiesContext::createFastChildContext(
             // TODO: Move the following checks to a separate place or as a separate function
             if ( nToken == XML_line )
             {
-                static const OUString sLineShape( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.LineShape" ) );
+                static const OUString sLineShape( "com.sun.star.drawing.LineShape" );
                 mrShape.getServiceName() = sLineShape;
             }
             if( ( nToken >= XML_bentConnector2 && nToken <= XML_bentConnector5 ) ||
                 ( nToken >= XML_curvedConnector2 && nToken <= XML_curvedConnector5 ) ||
                   nToken == XML_straightConnector1 )
             {
-                static const OUString sCustomShape( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.CustomShape" ) );
+                static const OUString sCustomShape( "com.sun.star.drawing.CustomShape" );
                 mrShape.getServiceName() = sCustomShape;
             }
             xRet.set( new PresetShapeGeometryContext( *this, xAttribs, *(mrShape.getCustomShapeProperties()) ) );
