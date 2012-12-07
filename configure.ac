@@ -5705,6 +5705,34 @@ AC_SUBST(HAVE_GCC_NO_LONG_DOUBLE)
 AC_SUBST(HAVE_GCC_AVX)
 AC_SUBST(HAVE_GCC_BUILTIN_ATOMIC)
 
+dnl ==================================
+dnl Check for C++11 "= delete" support
+dnl ==================================
+
+AC_MSG_CHECKING([whether $CXX supports C++11 = delete syntax])
+if test "$HAVE_CXX0X" = "TRUE"; then
+    save_CXXFLAGS=$CXXFLAGS
+    CXXFLAGS="$CXXFLAGS -std=gnu++0x"
+    AC_LANG_PUSH([C++])
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+struct A
+    {
+    void test() = delete;
+    };
+]])],[HAVE_CXX11_DELETE=TRUE],[])
+
+    AC_LANG_POP([C++])
+    CXXFLAGS=$save_CXXFLAGS
+    if test "$HAVE_CXX11_DELETE" = "TRUE"; then
+        AC_MSG_RESULT([yes])
+        AC_DEFINE([HAVE_CXX11_DELETE])
+    else
+        AC_MSG_RESULT([no])
+    fi
+else
+    AC_MSG_RESULT([no (C++11 disabled)])
+fi
+
 dnl ===================================================================
 dnl system stl sanity tests
 dnl ===================================================================

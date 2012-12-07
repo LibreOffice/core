@@ -88,19 +88,22 @@ So char[] and const char[] should always be used with their contents specified (
 turns them into char[N] or const char[N]), or char* and const char* should be used.
 */
 struct Dummy {};
-template< typename T1, typename T2 >
+template< typename T1, typename T2 = void >
 struct CharPtrDetector
 {
+    static const bool ok = false;
 };
 template< typename T >
 struct CharPtrDetector< const char*, T >
 {
     typedef T Type;
+    static const bool ok = true;
 };
 template< typename T >
 struct CharPtrDetector< char*, T >
 {
     typedef T Type;
+    static const bool ok = true;
 };
 
 template< typename T1, typename T2 >
@@ -165,6 +168,24 @@ struct ExceptCharArrayDetector< char[ N ] >
 template< int N >
 struct ExceptCharArrayDetector< const char[ N ] >
 {
+};
+
+template< typename T1, typename T2 = void >
+struct SalUnicodePtrDetector
+{
+    static const bool ok = false;
+};
+template< typename T >
+struct SalUnicodePtrDetector< const sal_Unicode*, T >
+{
+    typedef T Type;
+    static const bool ok = true;
+};
+template< typename T >
+struct SalUnicodePtrDetector< sal_Unicode*, T >
+{
+    typedef T Type;
+    static const bool ok = true;
 };
 
 // SFINAE helper class

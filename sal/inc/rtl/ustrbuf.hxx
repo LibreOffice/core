@@ -557,6 +557,46 @@ public:
     }
 
     /**
+        Appends the string representation of the <code>bool</code>
+        argument to the string buffer.
+
+        The argument is converted to a string as if by the method
+        <code>String.valueOf</code>, and the characters of that
+        string are then appended to this string buffer.
+
+        @param   b   a <code>bool</code>.
+        @return  this string buffer.
+
+        @since LibreOffice 4.1
+     */
+    OUStringBuffer & append(bool b)
+    {
+        sal_Unicode sz[RTL_USTR_MAX_VALUEOFBOOLEAN];
+        return append( sz, rtl_ustr_valueOfBoolean( sz, b ) );
+    }
+#ifdef HAVE_CXX11_DELETE
+#ifndef HAVE_SFINAE_ANONYMOUS_BROKEN
+    // Pointer can be automatically converted to bool, which is unwanted here.
+    // Explicitly delete all pointer append() overloads to prevent this
+    // (except for char* and sal_Unicode* overloads, which are handled elsewhere).
+    template< typename T >
+    typename internal::Enable< void,
+        !internal::CharPtrDetector< T* >::ok && !internal::SalUnicodePtrDetector< T* >::ok >::Type
+        append( T* ) = delete;
+#endif
+#endif
+
+    // This overload is needed because OUString has a ctor from rtl_uString*, but
+    // the bool overload above would be prefered to the conversion.
+    /**
+     @internal
+    */
+    OUStringBuffer & append(rtl_uString* str)
+    {
+        return append( OUString( str ));
+    }
+
+    /**
         Appends the string representation of the <code>sal_Bool</code>
         argument to the string buffer.
 
