@@ -237,7 +237,7 @@ sal_Bool GalleryExplorer::InsertURL( sal_uIntPtr nThemeId, const String& rURL, c
 // ------------------------------------------------------------------------
 
 sal_Bool GalleryExplorer::GetGraphicObj( const String& rThemeName, sal_uIntPtr nPos,
-                                     Graphic* pGraphic, Bitmap* pThumb,
+                                     Graphic* pGraphic, BitmapEx* pThumb,
                                      sal_Bool bProgress )
 {
     Gallery*    pGal = ImplGetGallery();
@@ -266,7 +266,7 @@ sal_Bool GalleryExplorer::GetGraphicObj( const String& rThemeName, sal_uIntPtr n
 // ------------------------------------------------------------------------
 
 sal_Bool GalleryExplorer::GetGraphicObj( sal_uIntPtr nThemeId, sal_uIntPtr nPos,
-                                     Graphic* pGraphic, Bitmap* pThumb,
+                                     Graphic* pGraphic, BitmapEx* pThumb,
                                      sal_Bool bProgress )
 {
     Gallery* pGal = ImplGetGallery();
@@ -309,7 +309,7 @@ sal_uIntPtr GalleryExplorer::GetSdrObjCount( sal_uIntPtr nThemeId  )
 // ------------------------------------------------------------------------
 
 sal_Bool GalleryExplorer::GetSdrObj( const String& rThemeName, sal_uIntPtr nSdrModelPos,
-                                 SdrModel* pModel, Bitmap* pThumb )
+                                 SdrModel* pModel, BitmapEx* pThumb )
 {
     Gallery*    pGal = ImplGetGallery();
     sal_Bool        bRet = sal_False;
@@ -346,7 +346,7 @@ sal_Bool GalleryExplorer::GetSdrObj( const String& rThemeName, sal_uIntPtr nSdrM
 // ------------------------------------------------------------------------
 
 sal_Bool GalleryExplorer::GetSdrObj( sal_uIntPtr nThemeId, sal_uIntPtr nSdrModelPos,
-                                 SdrModel* pModel, Bitmap* pThumb )
+                                 SdrModel* pModel, BitmapEx* pThumb )
 {
     Gallery* pGal = ImplGetGallery();
     return( pGal ? GetSdrObj( pGal->GetThemeName( nThemeId ), nSdrModelPos, pModel, pThumb ) : sal_False );

@@ -57,7 +57,7 @@ private:
 
 protected:
 
-    Bitmap                  aThumbBmp;
+    BitmapEx                aThumbBmp; // Allow transparence to survive
     GDIMetaFile             aThumbMtf;
     INetURLObject           aURL;
     String                  aUserName;
@@ -78,7 +78,7 @@ public:
     virtual SgaObjKind      GetObjKind() const = 0;
     virtual sal_uInt16          GetVersion() const = 0;
 
-    virtual Bitmap          GetThumbBmp() const { return aThumbBmp; }
+    virtual BitmapEx        GetThumbBmp() const { return aThumbBmp; }
     const GDIMetaFile&      GetThumbMtf() const { return aThumbMtf; }
     const INetURLObject&    GetURL() const { return aURL; }
     sal_Bool                    IsValid() const { return bIsValid; }
@@ -109,7 +109,7 @@ public:
     virtual            ~SgaObjectSound();
 
     virtual SgaObjKind  GetObjKind() const { return SGA_OBJ_SOUND; }
-    virtual Bitmap      GetThumbBmp() const;
+    virtual BitmapEx    GetThumbBmp() const;
     GalSoundType        GetSoundType() const { return eSoundType; }
 };
 
@@ -136,10 +136,6 @@ public:
     virtual            ~SgaObjectSvDraw() {};
 
     virtual SgaObjKind  GetObjKind() const { return SGA_OBJ_SVDRAW; }
-
-public:
-
-    static sal_Bool         DrawCentered( OutputDevice* pOut, const FmFormModel& rModel );
 };
 
 class SgaObjectBmp: public SgaObject

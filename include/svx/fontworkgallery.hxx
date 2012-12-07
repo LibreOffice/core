@@ -103,11 +103,11 @@ class SVX_DLLPUBLIC FontWorkGalleryDialog : public ModalDialog
     SdrObject**         mppSdrObject;
     SdrModel*           mpDestModel;
 
-    void            initfavorites(sal_uInt16 nThemeId, std::vector< Bitmap * >& rFavorites);
+    void            initFavorites(sal_uInt16 nThemeId);
     void            insertSelectedFontwork();
-    void            fillFavorites( sal_uInt16 nThemeId, std::vector< Bitmap * >& rFavorites );
+    void            fillFavorites(sal_uInt16 nThemeId);
 
-    std::vector< Bitmap * > maFavoritesHorizontal;
+    std::vector< BitmapEx> maFavoritesHorizontal;
 
 public:
     FontWorkGalleryDialog( SdrView* pView, Window* pParent, sal_uInt16 nSID );

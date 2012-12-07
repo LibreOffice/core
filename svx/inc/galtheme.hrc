@@ -22,8 +22,14 @@
 #define RID_GALLERYSTR_THEME_START          (6000)
 
 // ATTENTION: This list has to be in sync with
-//  * svx/inc/svx/gallery.hxx
+//  * include/svx/gallery.hxx
 //  * share/gallery (theme files are identified by id)
+//
+// These defines are used to map gallery names to translated string ressources. Since
+// galleries may be copied from older offices to newer, do *never* change this
+// IDs except adding new ones (and adapting RID_GALLERYSTR_THEME_LAST). The ID
+// *is* written into the binary file *.thm (which is a galler theme combined of
+// three files, *.thm, *.sdv and *.sdg)
 
 #define RID_GALLERYSTR_THEME_3D             (RID_GALLERYSTR_THEME_START + 1)
 #define RID_GALLERYSTR_THEME_ANIMATIONS                 (RID_GALLERYSTR_THEME_START + 2)

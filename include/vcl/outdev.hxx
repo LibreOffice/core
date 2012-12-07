@@ -794,6 +794,14 @@ public:
     bool                DrawEPS( const Point& rPt, const Size& rSz,
                                  const GfxLink& rGfxLink, GDIMetaFile* pSubst = NULL );
 
+    /// Fill the given rectangle with checkered rectangles of size nLen x nLen using the colors aStart and aEnd
+    void DrawCheckered(
+        const Point& rPos,
+        const Size& rSize,
+        sal_uInt32 nLen = 8,
+        Color aStart = Color(COL_WHITE),
+        Color aEnd = Color(COL_BLACK));
+
     Color               GetPixel( const Point& rPt ) const;
 
     Bitmap              GetBitmap( const Point& rSrcPt, const Size& rSize ) const;

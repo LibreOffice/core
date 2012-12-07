@@ -93,21 +93,18 @@ FontWorkGalleryDialog::FontWorkGalleryDialog( SdrView* pSdrView, Window* pParent
     maCtlFavorites.SetLineCount( nLineCount );
     maCtlFavorites.SetExtraSpacing( 3 );
 
-    initfavorites( GALLERY_THEME_FONTWORK, maFavoritesHorizontal );
-    fillFavorites( GALLERY_THEME_FONTWORK, maFavoritesHorizontal );
+    initFavorites( GALLERY_THEME_FONTWORK );
+    fillFavorites( GALLERY_THEME_FONTWORK );
 }
-
-static void delete_bitmap( Bitmap* p ) { delete p; }
 
 // -----------------------------------------------------------------------
 FontWorkGalleryDialog::~FontWorkGalleryDialog()
 {
-    std::for_each( maFavoritesHorizontal.begin(), maFavoritesHorizontal.end(), delete_bitmap );
 }
 
 // -----------------------------------------------------------------------
 
-void FontWorkGalleryDialog::initfavorites(sal_uInt16 nThemeId, std::vector< Bitmap * >& rFavorites)
+void FontWorkGalleryDialog::initFavorites(sal_uInt16 nThemeId)
 {
     // Ueber die Gallery werden die Favoriten eingelesen
     sal_uIntPtr nFavCount = GalleryExplorer::GetSdrObjCount( nThemeId );
@@ -119,20 +116,32 @@ void FontWorkGalleryDialog::initfavorites(sal_uInt16 nThemeId, std::vector< Bitm
     FmFormModel *pModel = NULL;
     for( nModelPos = 0; nModelPos < nFavCount; nModelPos++ )
     {
-        Bitmap* pThumb = new Bitmap;
+        BitmapEx aThumb;
 
-        if( GalleryExplorer::GetSdrObj( nThemeId, nModelPos, pModel, pThumb ) )
+        GalleryExplorer::GetSdrObj(nThemeId, nModelPos, pModel, &aThumb);
+
+        if(!!aThumb)
         {
-        }
+            static const sal_uInt32 nLen(8);
+            static const Color aW(COL_WHITE);
+            static const Color aG(0xef, 0xef, 0xef);
+            VirtualDevice aVDev;
+            const Point aNull(0, 0);
+            const Size aSize(aThumb.GetSizePixel());
 
-        rFavorites.push_back( pThumb );
+            aVDev.SetOutputSizePixel(aSize);
+            aVDev.DrawCheckered(aNull, aSize, nLen, aW, aG);
+            aVDev.DrawBitmapEx(aNull, aThumb);
+
+            maFavoritesHorizontal.push_back(aVDev.GetBitmap(aNull, aSize));
+        }
     }
 
     // Gallery thema freigeben
     GalleryExplorer::EndLocking(nThemeId);
 }
 
-void FontWorkGalleryDialog::fillFavorites( sal_uInt16 nThemeId, std::vector< Bitmap * >& rFavorites )
+void FontWorkGalleryDialog::fillFavorites(sal_uInt16 nThemeId)
 {
     mnThemeId = nThemeId;
 
@@ -142,7 +151,7 @@ void FontWorkGalleryDialog::fillFavorites( sal_uInt16 nThemeId, std::vector< Bit
     aThumbSize.Width() -= 12;
     aThumbSize.Height() -= 12;
 
-    std::vector< Bitmap * >::size_type nFavCount = rFavorites.size();
+    std::vector< Bitmap * >::size_type nFavCount = maFavoritesHorizontal.size();
 
     // ValueSet Favoriten
     if( nFavCount > (nColCount * nLineCount) )
@@ -160,7 +169,7 @@ void FontWorkGalleryDialog::fillFavorites( sal_uInt16 nThemeId, std::vector< Bit
         String aStr(SVX_RES(RID_SVXFLOAT3D_FAVORITE));
         aStr += sal_Unicode(' ');
         aStr += OUString::number((sal_Int32)nFavorite);
-        Image aThumbImage( *rFavorites[nFavorite-1] );
+        Image aThumbImage( maFavoritesHorizontal[nFavorite-1] );
         maCtlFavorites.InsertItem( (sal_uInt16)nFavorite, aThumbImage, aStr );
     }
 }

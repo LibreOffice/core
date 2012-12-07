@@ -55,7 +55,7 @@ class FmFormModel;
 class SdrModel;
 class Graphic;
 class FmFormModel;
-class Bitmap;
+class BitmapEx;
 class OutputDevice;
 
 class SVX_DLLPUBLIC GalleryExplorer
@@ -94,19 +94,19 @@ public:
                                            const sal_uIntPtr nSgaFormat /* = SGA_FORMAT_ALL */ );
 
     static sal_Bool                 GetGraphicObj( const String& rThemeName, sal_uIntPtr nPos,
-                                               Graphic* pGraphic = NULL, Bitmap* pThumb = NULL,
+                                               Graphic* pGraphic = NULL, BitmapEx* pThumb = NULL,
                                                sal_Bool bProgess = sal_False );
     static sal_Bool                 GetGraphicObj( sal_uIntPtr nThemeId, sal_uIntPtr nPos,
-                                               Graphic* pGraphic = NULL, Bitmap* pThumb = NULL,
+                                               Graphic* pGraphic = NULL, BitmapEx* pThumb = NULL,
                                                sal_Bool bProgess = sal_False );
 
     static sal_uIntPtr              GetSdrObjCount( const String& rThemeName );
     static sal_uIntPtr              GetSdrObjCount( sal_uIntPtr nThemeId );
 
     static sal_Bool                 GetSdrObj( const String& rThemeName, sal_uIntPtr nSdrModelPos,
-                                           SdrModel* pModel = NULL, Bitmap* pThumb = NULL );
+                                           SdrModel* pModel = NULL, BitmapEx* pThumb = NULL );
     static sal_Bool                 GetSdrObj( sal_uIntPtr nThemeId, sal_uIntPtr nSdrModelPos,
-                                           SdrModel* pModel = NULL, Bitmap* pThumb = NULL );
+                                           SdrModel* pModel = NULL, BitmapEx* pThumb = NULL );
 
     static sal_Bool                 BeginLocking( const String& rThemeName );
     static sal_Bool                 BeginLocking( sal_uIntPtr nThemeId );

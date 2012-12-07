@@ -190,7 +190,7 @@ public:
                                     return ImplGetGalleryObject( nPos )->aURL;
                                 }
 
-    sal_Bool                        GetThumb( sal_uIntPtr nPos, Bitmap& rBmp, sal_Bool bProgress = sal_False );
+    sal_Bool                        GetThumb( sal_uIntPtr nPos, BitmapEx& rBmp, sal_Bool bProgress = sal_False );
 
     SVX_DLLPUBLIC sal_Bool                      GetGraphic( sal_uIntPtr nPos, Graphic& rGraphic, sal_Bool bProgress = sal_False );
     SVX_DLLPUBLIC sal_Bool                      InsertGraphic( const Graphic& rGraphic, sal_uIntPtr nInsertPos = LIST_APPEND );

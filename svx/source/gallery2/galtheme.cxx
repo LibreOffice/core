@@ -769,7 +769,7 @@ GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, sa
 
 // -----------------------------------------------------------------------------
 
-sal_Bool GalleryTheme::GetThumb( sal_uIntPtr nPos, Bitmap& rBmp, sal_Bool )
+sal_Bool GalleryTheme::GetThumb( sal_uIntPtr nPos, BitmapEx& rBmp, sal_Bool )
 {
     SgaObject*  pObj = AcquireObject( nPos );
     sal_Bool        bRet = sal_False;
@@ -841,9 +841,10 @@ sal_Bool GalleryTheme::GetGraphic( sal_uIntPtr nPos, Graphic& rGraphic, sal_Bool
 
                 if( pObj )
                 {
-                    Bitmap aBmp( pObj->GetThumbBmp() );
-                    aBmp.Replace( COL_LIGHTMAGENTA, COL_WHITE );
-                    rGraphic = aBmp;
+                    rGraphic = pObj->GetThumbBmp();
+                    //Bitmap aBmp( pObj->GetThumbBmp() );
+                    //aBmp.Replace( COL_LIGHTMAGENTA, COL_WHITE );
+                    //rGraphic = aBmp;
                     ReleaseObject( pObj );
                     bRet = sal_True;
                 }

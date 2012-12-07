@@ -258,6 +258,16 @@ void GalleryPreview::PreviewMedia( const INetURLObject& rURL )
     }
 }
 
+void drawCheckered(OutputDevice& rOut, const Point& rPos, const Size& rSize)
+{
+    // draw checkered background
+    static const sal_uInt32 nLen(8);
+    static const Color aW(COL_WHITE);
+    static const Color aG(0xef, 0xef, 0xef);
+
+    rOut.DrawCheckered(rPos, rSize, nLen, aW, aG);
+}
+
 DBG_NAME(GalleryIconView)
 
 GalleryIconView::GalleryIconView( GalleryBrowser2* pParent, GalleryTheme* pTheme ) :
@@ -311,21 +321,37 @@ void GalleryIconView::UserDraw( const UserDrawEvent& rUDEvt )
             const Rectangle&    rRect = rUDEvt.GetRect();
             OutputDevice*       pDev = rUDEvt.GetDevice();
             Graphic             aGraphic;
+            bool bTransparent(false);
 
             if( pObj->IsThumbBitmap() )
             {
-                Bitmap aBmp( pObj->GetThumbBmp() );
+                BitmapEx aBitmapEx;
 
                 if( pObj->GetObjKind() == SGA_OBJ_SOUND )
-                    aBmp.Replace( COL_LIGHTMAGENTA, COL_WHITE );
+                {
+                    Bitmap aTemp = pObj->GetThumbBmp().GetBitmap();
 
-                if( ( pDev->GetBitCount() <= 8 ) && ( aBmp.GetBitCount() >= 8 ) )
-                    aBmp.Dither( BMP_DITHER_FLOYD );
+                    aTemp.Replace( COL_LIGHTMAGENTA, COL_WHITE );
+                    aBitmapEx = BitmapEx(aTemp);
+                }
+                else
+                {
+                    aBitmapEx = pObj->GetThumbBmp();
+                    bTransparent = aBitmapEx.IsTransparent();
+                }
 
-                aGraphic = aBmp;
+                if( ( pDev->GetBitCount() <= 8 ) && ( aBitmapEx.GetBitCount() >= 8 ) )
+                {
+                    aBitmapEx.Dither( BMP_DITHER_FLOYD );
+                }
+
+                aGraphic = aBitmapEx;
             }
             else
+            {
                 aGraphic = pObj->GetThumbMtf();
+                bTransparent = true;
+            }
 
             Size aSize( aGraphic.GetSizePixel( pDev ) );
 
@@ -351,6 +377,12 @@ void GalleryIconView::UserDraw( const UserDrawEvent& rUDEvt )
 
                 const Point aPos( ( ( rRect.GetWidth() - aSize.Width() ) >> 1 ) + rRect.Left(),
                                   ( ( rRect.GetHeight() - aSize.Height() ) >> 1 ) + rRect.Top() );
+
+                if(bTransparent)
+                {
+                    // draw checkered background
+                    drawCheckered(*pDev, aPos, aSize);
+                }
 
                 aGraphic.Draw( pDev, aPos, aSize );
             }
@@ -517,13 +549,24 @@ void GalleryListView::PaintField( OutputDevice& rDev, const Rectangle& rRect, sa
             {
                 Rectangle       aOutputRect( rRect.TopLeft(), Size( rRect.GetHeight(), rRect.GetHeight() ) );
                 GraphicObject   aGrfObj;
+                bool bTransparent(false);
 
                 if( pObj->GetObjKind() == SGA_OBJ_SOUND )
+                {
                     aGrfObj = Graphic( BitmapEx( GAL_RES( RID_SVXBMP_GALLERY_MEDIA ) ) );
+                }
                 else if( pObj->IsThumbBitmap() )
-                    aGrfObj = Graphic( pObj->GetThumbBmp() );
+                {
+                    const BitmapEx aBitmapEx(pObj->GetThumbBmp());
+
+                    bTransparent = aBitmapEx.IsTransparent();
+                    aGrfObj = Graphic(aBitmapEx);
+                }
                 else
+                {
                     aGrfObj = Graphic( pObj->GetThumbMtf() );
+                    bTransparent = true;
+                }
 
                 Size aSize( rDev.LogicToPixel( aGrfObj.GetPrefSize(), aGrfObj.GetPrefMapMode() ) );
 
@@ -552,6 +595,12 @@ void GalleryListView::PaintField( OutputDevice& rDev, const Rectangle& rRect, sa
 
                     const Point aPos( ( ( aOutputRect.GetWidth() - aSize.Width() ) >> 1 ) + aOutputRect.Left(),
                                       ( ( aOutputRect.GetHeight() - aSize.Height() ) >> 1 ) + aOutputRect.Top() );
+
+                    if(bTransparent)
+                    {
+                        // draw checkered background
+                        drawCheckered(rDev, aPos, aSize);
+                    }
 
                     aGrfObj.Draw( &rDev, aPos, aSize );
                 }
