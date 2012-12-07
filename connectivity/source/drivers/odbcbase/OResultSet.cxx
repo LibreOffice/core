@@ -462,7 +462,7 @@ template < typename T > T OResultSet::impl_getValue( const sal_Int32 _nColumnInd
 }
 // -------------------------------------------------------------------------
 // this function exists for the implicit conversion to sal_Bool (compared to a direct call to impl_getValue)
-sal_Bool SAL_CALL OResultSet::impl_getBoolean( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+sal_Bool OResultSet::impl_getBoolean( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     return impl_getValue<sal_Int8>(columnIndex, SQL_C_BIT);
 }
@@ -510,7 +510,7 @@ Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex ) thro
     }
     return nRet;
 }
-Sequence< sal_Int8 > SAL_CALL OResultSet::impl_getBytes( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Sequence< sal_Int8 > OResultSet::impl_getBytes( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     const SWORD nColumnType = impl_getColumnType_nothrow(columnIndex);
 
@@ -531,7 +531,7 @@ Sequence< sal_Int8 > SAL_CALL OResultSet::impl_getBytes( sal_Int32 columnIndex )
     }
 }
 // -------------------------------------------------------------------------
-Date SAL_CALL OResultSet::impl_getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Date OResultSet::impl_getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     DATE_STRUCT aDate = impl_getValue< DATE_STRUCT> ( columnIndex,
                                                       m_pStatement->getOwnConnection()->useOldDateFormat() ? SQL_C_DATE : SQL_C_TYPE_DATE  );
@@ -570,7 +570,7 @@ sal_Int64 SAL_CALL OResultSet::getLong( sal_Int32 columnIndex ) throw(SQLExcepti
 {
     return getValue<sal_Int64>( columnIndex );
 }
-sal_Int64 SAL_CALL OResultSet::impl_getLong( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+sal_Int64 OResultSet::impl_getLong( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     try
     {
@@ -646,7 +646,7 @@ Any SAL_CALL OResultSet::getObject( sal_Int32 columnIndex, const Reference< ::co
     return getValue<rtl::OUString>( columnIndex );
 }
 // -------------------------------------------------------------------------
-Time SAL_CALL OResultSet::impl_getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Time OResultSet::impl_getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     TIME_STRUCT aTime = impl_getValue< TIME_STRUCT > ( columnIndex,
                                                       m_pStatement->getOwnConnection()->useOldDateFormat() ? SQL_C_TIME : SQL_C_TYPE_TIME );
@@ -658,7 +658,7 @@ Time SAL_CALL OResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, R
     return getValue<Time>( columnIndex );
 }
 // -------------------------------------------------------------------------
-DateTime SAL_CALL OResultSet::impl_getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+DateTime OResultSet::impl_getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     TIMESTAMP_STRUCT aTime = impl_getValue< TIMESTAMP_STRUCT > ( columnIndex,
                                                                  m_pStatement->getOwnConnection()->useOldDateFormat() ? SQL_C_TIMESTAMP : SQL_C_TYPE_TIMESTAMP );
