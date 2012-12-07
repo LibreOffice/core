@@ -168,17 +168,6 @@ static bool lcl_RemoveItems( StatusBar* pStatusbar,
     return true;
 }
 
-/*
-static ::cppu::OWeakObject* CreateController(
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMGR,
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame,
-    StatusBar* pStatusbar,
-    const ::rtl::OUString& rCommandURL,
-    sal_uInt16 nId,
-    sal_uInt16 nWidth,
-    const ::rtl::OUString& rControlType );
-
-*/
 }
 
 bool StatusbarMerger::IsCorrectContext(
