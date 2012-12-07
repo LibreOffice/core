@@ -1382,7 +1382,12 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                             SwFmtFlyCnt aFmt( pFlyFmt );
                             pNd->InsertItem(aFmt,
                                 aPam.GetPoint()->nContent.GetIndex(), 0 );
-                            //aPam.GetPoint()->nContent--;
+                            aPam.GetPoint()->nContent--; // InsertItem moved it
+                            SwFmtAnchor aNewAnchor(
+                                dynamic_cast<const SwFmtAnchor&>(
+                                    aSet.Get(RES_ANCHOR)));
+                            aNewAnchor.SetAnchor( aPam.GetPoint() );
+                            aSet.Put( aNewAnchor );
                         }
                         if( bSetAttr )
                             pFmt->SetFmtAttr(aSet);
