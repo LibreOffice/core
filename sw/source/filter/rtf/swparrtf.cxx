@@ -225,54 +225,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT Reader* SAL_CALL ImportRTF()
     return new SwRTFReader();
 }
 
-// Aufruf fuer die allg. Reader-Schnittstelle
-sal_uLong RtfReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, const String &)
-{
-    if( !pStrm )
-    {
-        OSL_FAIL( "RTF-Read ohne Stream" );
-        return ERR_SWG_READ_ERROR;
-    }
-
-    if( !bInsertMode )
-    {
-        // MIB 27.09.96: Umrandung uns Abstaende aus Frm-Vorlagen entf.
-        Reader::ResetFrmFmts( rDoc );
-    }
-
-    sal_uLong nRet = 0;
-    SwDocShell *pDocShell(rDoc.GetDocShell());
-    OSL_ENSURE(pDocShell, "no SwDocShell");
-    uno::Reference<document::XDocumentProperties> xDocProps;
-    if (pDocShell) {
-        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-            pDocShell->GetModel(), uno::UNO_QUERY_THROW);
-        xDocProps.set(xDPS->getDocumentProperties());
-    }
-
-    SvParserRef xParser = new SwRTFParser( &rDoc, xDocProps,
-                                rPam, *pStrm, rBaseURL, !bInsertMode );
-    SvParserState eState = xParser->CallParser();
-    if( SVPAR_PENDING != eState && SVPAR_ACCEPTED != eState )
-    {
-        String sErr( String::CreateFromInt32( xParser->GetLineNr() ));
-        sErr += ',';
-        sErr += String::CreateFromInt32( xParser->GetLinePos() );
-
-        nRet = *new StringErrorInfo( ERR_FORMAT_ROWCOL, sErr,
-                                    ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR );
-    }
-
-
-    return nRet;
-}
-
-sal_uLong RtfReader::Read(SvStream* pStream, SwDoc& rDoc, const String& rBaseURL, SwPaM& rPam)
-{
-    pStrm = pStream;
-    return Read(rDoc, rBaseURL, rPam, rBaseURL);
-}
-
 SwRTFParser::SwRTFParser(SwDoc* pD,
         uno::Reference<document::XDocumentProperties> i_xDocProps,
         const SwPaM& rCrsr, SvStream& rIn, const String& rBaseURL,

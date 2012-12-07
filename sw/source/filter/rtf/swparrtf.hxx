@@ -57,13 +57,6 @@ class SwNodeNum;
 class SwTxtNode;
 struct SvxRTFPictureType;
 
-class RtfReader: public Reader
-{
-    virtual sal_uLong Read( SwDoc &, const String& rBaseURL, SwPaM &,const String &);
-public:
-    virtual sal_uLong Read( SvStream* pStrm, SwDoc &, const String& rBaseURL, SwPaM &);
-};
-
 class SwNodeIdx : public SvxNodeIdx
 {
     SwNodeIndex aIdx;
