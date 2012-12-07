@@ -24,6 +24,8 @@
 #include "ChartTypeHelper.hxx"
 #include "BaseGFXHelper.hxx"
 #include "DataSeriesHelper.hxx"
+#include "defines.hxx"
+
 #include <editeng/unoprnms.hxx>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
@@ -42,8 +44,6 @@ using ::rtl::OUString;
 using ::rtl::math::cos;
 using ::rtl::math::sin;
 using ::rtl::math::tan;
-
-#define FIXED_SIZE_FOR_3D_CHART_VOLUME (10000.0)
 
 namespace
 {

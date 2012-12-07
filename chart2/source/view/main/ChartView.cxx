@@ -46,6 +46,7 @@
 #include "BaseGFXHelper.hxx"
 #include "DataSeriesHelper.hxx"
 #include "DateHelper.hxx"
+#include "defines.hxx"
 
 #include <rtl/uuid.h>
 #include <comphelper/scopeguard.hxx>

@@ -25,6 +25,7 @@
 #include "ShapeFactory.hxx"
 #include "PropertyMapper.hxx"
 #include "DateHelper.hxx"
+#include "defines.hxx"
 
 #include <com/sun/star/chart/TimeUnit.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
