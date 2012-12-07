@@ -181,7 +181,7 @@ int MasterPageDescriptor::UpdatePageObject (
     sal_Int32 nCostThreshold,
     SdDrawDocument* pDocument)
 {
-    int bModified = 0;
+    int nModified = 0;
 
     // Update the page object when that is not yet known.
     if (mpMasterPage == NULL
@@ -224,10 +224,10 @@ int MasterPageDescriptor::UpdatePageObject (
             return -1;
         }
 
-        bModified = 1;
+        nModified = 1;
     }
 
-    return bModified;
+    return nModified;
 }
 
 

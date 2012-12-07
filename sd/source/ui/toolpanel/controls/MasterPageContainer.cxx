@@ -1159,18 +1159,18 @@ bool MasterPageContainer::Implementation::UpdateDescriptor (
     // Update the page object (which may be used for the preview update).
     if (bForcePageObject)
         GetDocument();
-    int bPageObjectModified (rpDescriptor->UpdatePageObject(
+    int nPageObjectModified (rpDescriptor->UpdatePageObject(
         (bForcePageObject ? -1 : nCostThreshold),
         mpDocument));
-    if (bPageObjectModified == 1 && bSendEvents)
+    if (nPageObjectModified == 1 && bSendEvents)
         FireContainerChange(
             MasterPageContainerChangeEvent::DATA_CHANGED,
             rpDescriptor->maToken);
-    if (bPageObjectModified == -1 && bSendEvents)
+    if (nPageObjectModified == -1 && bSendEvents)
         FireContainerChange(
             MasterPageContainerChangeEvent::CHILD_REMOVED,
             rpDescriptor->maToken);
-    if (bPageObjectModified && ! mbFirstPageObjectSeen)
+    if (nPageObjectModified && ! mbFirstPageObjectSeen)
         UpdatePreviewSizePixel();
 
     // Update the preview.
@@ -1185,7 +1185,7 @@ bool MasterPageContainer::Implementation::UpdateDescriptor (
             MasterPageContainerChangeEvent::PREVIEW_CHANGED,
             rpDescriptor->maToken);
 
-    return bPageObjectModified || bPreviewModified;
+    return nPageObjectModified || bPreviewModified;
 }
 
 
