@@ -30,6 +30,8 @@ boost_patches += boost.4100.warnings.patch
 boost_patches += boost.4510.warnings.patch
 #https://svn.boost.org/trac/boost/ticket/6940
 boost_patches += boost.6940.glibc.patch
+#https://svn.boost.org/trac/boost/ticket/7774
+boost_patches += boost.7774.warnings.patch.1
 
 boost_patches += boost.windows.patch
 boost_patches += boost.vc2012.patch
