@@ -44,7 +44,7 @@ SvtFolderPicker::~SvtFolderPicker()
 {
 }
 
-void SAL_CALL SvtFolderPicker::setTitle( const ::rtl::OUString& _rTitle ) throw (RuntimeException)
+void SAL_CALL SvtFolderPicker::setTitle( const OUString& _rTitle ) throw (RuntimeException)
 {
     OCommonPicker::setTitle( _rTitle );
 }
@@ -54,7 +54,7 @@ sal_Int16 SAL_CALL SvtFolderPicker::execute(  ) throw (RuntimeException)
     return OCommonPicker::execute();
 }
 
-void SAL_CALL SvtFolderPicker::setDialogTitle( const ::rtl::OUString& _rTitle) throw (RuntimeException)
+void SAL_CALL SvtFolderPicker::setDialogTitle( const OUString& _rTitle) throw (RuntimeException)
 {
     setTitle( _rTitle );
 }
@@ -109,39 +109,39 @@ IMPL_LINK( SvtFolderPicker, DialogClosedHdl, Dialog*, pDlg )
     return 0;
   }
 
-void SAL_CALL SvtFolderPicker::setDisplayDirectory( const ::rtl::OUString& aDirectory )
+void SAL_CALL SvtFolderPicker::setDisplayDirectory( const OUString& aDirectory )
     throw( IllegalArgumentException, RuntimeException )
 {
     m_aDisplayDirectory = aDirectory;
 }
 
-::rtl::OUString SAL_CALL SvtFolderPicker::getDisplayDirectory() throw( RuntimeException )
+OUString SAL_CALL SvtFolderPicker::getDisplayDirectory() throw( RuntimeException )
 {
     if ( ! getDialog() )
         return m_aDisplayDirectory;
 
-    std::vector<rtl::OUString> aPathList(getDialog()->GetPathList());
+    std::vector<OUString> aPathList(getDialog()->GetPathList());
 
     if(!aPathList.empty())
         return aPathList[0];
 
-    return rtl::OUString();
+    return OUString();
 }
 
-::rtl::OUString SAL_CALL SvtFolderPicker::getDirectory() throw( RuntimeException )
+OUString SAL_CALL SvtFolderPicker::getDirectory() throw( RuntimeException )
 {
     if ( ! getDialog() )
         return m_aDisplayDirectory;
 
-    std::vector<rtl::OUString> aPathList(getDialog()->GetPathList());
+    std::vector<OUString> aPathList(getDialog()->GetPathList());
 
     if(!aPathList.empty())
         return aPathList[0];
 
-    return rtl::OUString();
+    return OUString();
 }
 
-void SAL_CALL SvtFolderPicker::setDescription( const ::rtl::OUString& aDescription )
+void SAL_CALL SvtFolderPicker::setDescription( const OUString& aDescription )
     throw( RuntimeException )
 {
     m_aDescription = aDescription;
@@ -153,16 +153,16 @@ void SvtFolderPicker::cancel() throw (RuntimeException)
 }
 
 /* XServiceInfo */
-::rtl::OUString SAL_CALL SvtFolderPicker::getImplementationName() throw( RuntimeException )
+OUString SAL_CALL SvtFolderPicker::getImplementationName() throw( RuntimeException )
 {
     return impl_getStaticImplementationName();
 }
 
 /* XServiceInfo */
-sal_Bool SAL_CALL SvtFolderPicker::supportsService( const ::rtl::OUString& sServiceName ) throw( RuntimeException )
+sal_Bool SAL_CALL SvtFolderPicker::supportsService( const OUString& sServiceName ) throw( RuntimeException )
 {
-    Sequence< ::rtl::OUString > seqServiceNames = getSupportedServiceNames();
-    const ::rtl::OUString* pArray = seqServiceNames.getConstArray();
+    Sequence< OUString > seqServiceNames = getSupportedServiceNames();
+    const OUString* pArray = seqServiceNames.getConstArray();
     for ( sal_Int32 i = 0; i < seqServiceNames.getLength(); i++ )
     {
         if ( sServiceName == pArray[i] )
@@ -174,23 +174,23 @@ sal_Bool SAL_CALL SvtFolderPicker::supportsService( const ::rtl::OUString& sServ
 }
 
 /* XServiceInfo */
-Sequence< ::rtl::OUString > SAL_CALL SvtFolderPicker::getSupportedServiceNames() throw( RuntimeException )
+Sequence< OUString > SAL_CALL SvtFolderPicker::getSupportedServiceNames() throw( RuntimeException )
 {
     return impl_getStaticSupportedServiceNames();
 }
 
 /* Helper for XServiceInfo */
-Sequence< ::rtl::OUString > SvtFolderPicker::impl_getStaticSupportedServiceNames()
+Sequence< OUString > SvtFolderPicker::impl_getStaticSupportedServiceNames()
 {
-    Sequence< ::rtl::OUString > seqServiceNames(1);
-    seqServiceNames[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.OfficeFolderPicker" ));
+    Sequence< OUString > seqServiceNames(1);
+    seqServiceNames[0] = OUString( "com.sun.star.ui.dialogs.OfficeFolderPicker" );
     return seqServiceNames ;
 }
 
 /* Helper for XServiceInfo */
-::rtl::OUString SvtFolderPicker::impl_getStaticImplementationName()
+OUString SvtFolderPicker::impl_getStaticImplementationName()
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.svtools.OfficeFolderPicker" ));
+    return OUString( "com.sun.star.svtools.OfficeFolderPicker" );
 }
 
 /* Helper for registry */

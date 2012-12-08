@@ -45,17 +45,17 @@ using namespace ::utl;
 
 // some stuff for easier changes for SvtViewOptions
 static const sal_Char*      pViewOptDataName = "dialog data";
-#define VIEWOPT_DATANAME    ::rtl::OUString::createFromAscii( pViewOptDataName )
+#define VIEWOPT_DATANAME    OUString::createFromAscii( pViewOptDataName )
 
 static inline void SetViewOptUserItem( SvtViewOptions& rOpt, const String& rData )
 {
-    rOpt.SetUserItem( VIEWOPT_DATANAME, makeAny( ::rtl::OUString( rData ) ) );
+    rOpt.SetUserItem( VIEWOPT_DATANAME, makeAny( OUString( rData ) ) );
 }
 
 static inline String GetViewOptUserItem( const SvtViewOptions& rOpt )
 {
     Any aAny( rOpt.GetUserItem( VIEWOPT_DATANAME ) );
-    ::rtl::OUString aUserData;
+    OUString aUserData;
     aAny >>= aUserData;
 
     return String( aUserData );
@@ -311,7 +311,7 @@ void SvtExpFileDlg_Impl::SetStandardDir( const String& _rDir )
 namespace {
     String lcl_DecoratedFilter( const String& _rOriginalFilter )
     {
-        rtl::OUStringBuffer aDecoratedFilter;
+        OUStringBuffer aDecoratedFilter;
         aDecoratedFilter.append('<');
         aDecoratedFilter.append(_rOriginalFilter);
         aDecoratedFilter.append('>');
@@ -343,7 +343,7 @@ void SvtExpFileDlg_Impl::InsertFilterListEntry( const SvtFileDialogFilter_Impl* 
 {
     String sName = _pFilterDesc->GetName();
     if ( _pFilterDesc->isGroupSeparator() )
-        sName = rtl::OUString( "------------------------------------------" );
+        sName = OUString( "------------------------------------------" );
     else
         sName = _pFilterDesc->GetName();
 

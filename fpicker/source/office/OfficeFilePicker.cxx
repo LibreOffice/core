@@ -65,22 +65,22 @@ using namespace     ::utl;
 struct FilterEntry
 {
 protected:
-    ::rtl::OUString     m_sTitle;
-    ::rtl::OUString     m_sFilter;
+    OUString     m_sTitle;
+    OUString     m_sFilter;
 
     UnoFilterList       m_aSubFilters;
 
 public:
-    FilterEntry( const ::rtl::OUString& _rTitle, const ::rtl::OUString& _rFilter )
+    FilterEntry( const OUString& _rTitle, const OUString& _rFilter )
         :m_sTitle( _rTitle )
         ,m_sFilter( _rFilter )
     {
     }
 
-    FilterEntry( const ::rtl::OUString& _rTitle, const UnoFilterList& _rSubFilters );
+    FilterEntry( const OUString& _rTitle, const UnoFilterList& _rSubFilters );
 
-    ::rtl::OUString     getTitle() const { return m_sTitle; }
-    ::rtl::OUString     getFilter() const { return m_sFilter; }
+    OUString     getTitle() const { return m_sTitle; }
+    OUString     getFilter() const { return m_sFilter; }
 
     /// determines if the filter has sub filter (i.e., the filter is a filter group in real)
     sal_Bool            hasSubFilters( ) const;
@@ -99,7 +99,7 @@ public:
 //=====================================================================
 
 //---------------------------------------------------------------------
-FilterEntry::FilterEntry( const ::rtl::OUString& _rTitle, const UnoFilterList& _rSubFilters )
+FilterEntry::FilterEntry( const OUString& _rTitle, const UnoFilterList& _rSubFilters )
     :m_sTitle( _rTitle )
     ,m_aSubFilters( _rSubFilters )
 {
@@ -125,7 +125,7 @@ struct ElementEntry_Impl
     sal_Int16       m_nElementID;
     sal_Int16       m_nControlAction;
     Any         m_aValue;
-    rtl::OUString       m_aLabel;
+    OUString       m_aLabel;
     sal_Bool        m_bEnabled      : 1;
 
     sal_Bool        m_bHasValue     : 1;
@@ -136,7 +136,7 @@ struct ElementEntry_Impl
 
     void            setValue( const Any& rVal ) { m_aValue = rVal; m_bHasValue = sal_True; }
     void            setAction( sal_Int16 nAction ) { m_nControlAction = nAction; }
-    void            setLabel( const rtl::OUString& rVal ) { m_aLabel = rVal; m_bHasLabel = sal_True; }
+    void            setLabel( const OUString& rVal ) { m_aLabel = rVal; m_bHasLabel = sal_True; }
     void            setEnabled( sal_Bool bEnabled ) { m_bEnabled = bEnabled; m_bHasEnabled = sal_True; }
 };
 
@@ -252,7 +252,7 @@ WinBits SvtFilePicker::getWinBits( WinBits& rExtraBits )
     WinBits nBits = 0L;
     rExtraBits = 0L;
 
-    // set the standard bits acording to the service name
+    // set the standard bits according to the service name
     if ( m_nServiceType == TemplateDescription::FILEOPEN_SIMPLE )
     {
         nBits = WB_OPEN;
@@ -350,10 +350,10 @@ namespace {
     struct FilterTitleMatch : public ::std::unary_function< FilterEntry, bool >
     {
     protected:
-        const ::rtl::OUString& rTitle;
+        const OUString& rTitle;
 
     public:
-        FilterTitleMatch( const ::rtl::OUString& _rTitle ) : rTitle( _rTitle ) { }
+        FilterTitleMatch( const OUString& _rTitle ) : rTitle( _rTitle ) { }
 
         //............................................................................
         bool operator () ( const FilterEntry& _rEntry )
@@ -381,7 +381,7 @@ namespace {
 }
 
 //------------------------------------------------------------------------------------
-sal_Bool SvtFilePicker::FilterNameExists( const ::rtl::OUString& rTitle )
+sal_Bool SvtFilePicker::FilterNameExists( const OUString& rTitle )
 {
     sal_Bool bRet = sal_False;
 
@@ -416,7 +416,7 @@ sal_Bool SvtFilePicker::FilterNameExists( const UnoFilterList& _rGroupedFilters 
 }
 
 //------------------------------------------------------------------------------------
-void SvtFilePicker::ensureFilterList( const ::rtl::OUString& _rInitialCurrentFilter )
+void SvtFilePicker::ensureFilterList( const OUString& _rInitialCurrentFilter )
 {
     if ( !m_pFilterList )
     {
@@ -503,7 +503,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( SvtFilePicker, OCommonPicker, SvtFilePicker_Ba
 //------------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------------
-void SAL_CALL SvtFilePicker::setTitle( const ::rtl::OUString& _rTitle ) throw (RuntimeException)
+void SAL_CALL SvtFilePicker::setTitle( const OUString& _rTitle ) throw (RuntimeException)
 {
     OCommonPicker::setTitle( _rTitle );
 }
@@ -519,7 +519,7 @@ sal_Int16 SAL_CALL SvtFilePicker::execute(  ) throw (RuntimeException)
 //------------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------------
-void SAL_CALL SvtFilePicker::setDialogTitle( const ::rtl::OUString& _rTitle ) throw (RuntimeException)
+void SAL_CALL SvtFilePicker::setDialogTitle( const OUString& _rTitle ) throw (RuntimeException)
 {
     setTitle( _rTitle );
 }
@@ -546,7 +546,7 @@ void SAL_CALL SvtFilePicker::setMultiSelectionMode( sal_Bool bMode ) throw( Runt
     m_bMultiSelection = bMode;
 }
 
-void SAL_CALL SvtFilePicker::setDefaultName( const rtl::OUString& aName ) throw( RuntimeException )
+void SAL_CALL SvtFilePicker::setDefaultName( const OUString& aName ) throw( RuntimeException )
 {
     checkAlive();
 
@@ -554,7 +554,7 @@ void SAL_CALL SvtFilePicker::setDefaultName( const rtl::OUString& aName ) throw(
     m_aDefaultName = aName;
 }
 
-void SAL_CALL SvtFilePicker::setDisplayDirectory( const rtl::OUString& aDirectory )
+void SAL_CALL SvtFilePicker::setDisplayDirectory( const OUString& aDirectory )
     throw( IllegalArgumentException, RuntimeException )
 {
     checkAlive();
@@ -563,14 +563,14 @@ void SAL_CALL SvtFilePicker::setDisplayDirectory( const rtl::OUString& aDirector
     m_aDisplayDirectory = aDirectory;
 }
 
-rtl::OUString SAL_CALL SvtFilePicker::getDisplayDirectory() throw( RuntimeException )
+OUString SAL_CALL SvtFilePicker::getDisplayDirectory() throw( RuntimeException )
 {
     checkAlive();
 
     SolarMutexGuard aGuard;
     if ( getDialog() )
     {
-        rtl::OUString aPath = getDialog()->GetPath();
+        OUString aPath = getDialog()->GetPath();
 
         // #97148# ----
         if( m_aOldHideDirectory == aPath )
@@ -591,28 +591,28 @@ rtl::OUString SAL_CALL SvtFilePicker::getDisplayDirectory() throw( RuntimeExcept
         return m_aDisplayDirectory;
 }
 
-Sequence< rtl::OUString > SAL_CALL SvtFilePicker::getFiles() throw( RuntimeException )
+Sequence< OUString > SAL_CALL SvtFilePicker::getFiles() throw( RuntimeException )
 {
     checkAlive();
 
     SolarMutexGuard aGuard;
     if ( ! getDialog() )
     {
-        Sequence< rtl::OUString > aEmpty;
+        Sequence< OUString > aEmpty;
         return aEmpty;
     }
 
     // if there is more than one path we have to return the path to the
     // files first and then the list of the selected entries
 
-    std::vector<rtl::OUString> aPathList(getDialog()->GetPathList());
+    std::vector<OUString> aPathList(getDialog()->GetPathList());
     size_t nCount = aPathList.size();
     size_t nTotal = nCount > 1 ? nCount+1: nCount;
 
-    Sequence< rtl::OUString > aPath( nTotal );
+    Sequence< OUString > aPath( nTotal );
 
     if ( nCount == 1 )
-        aPath[0] = rtl::OUString(aPathList[0]);
+        aPath[0] = OUString(aPathList[0]);
     else if ( nCount > 1 )
     {
         INetURLObject aObj(aPathList[0]);
@@ -715,7 +715,7 @@ Any SAL_CALL SvtFilePicker::getValue( sal_Int16 nElementID, sal_Int16 nControlAc
 
 
 //------------------------------------------------------------------------------------
-void SAL_CALL SvtFilePicker::setLabel( sal_Int16 nLabelID, const rtl::OUString& rValue )
+void SAL_CALL SvtFilePicker::setLabel( sal_Int16 nLabelID, const OUString& rValue )
     throw ( RuntimeException )
 {
     checkAlive();
@@ -755,13 +755,13 @@ void SAL_CALL SvtFilePicker::setLabel( sal_Int16 nLabelID, const rtl::OUString& 
 }
 
 //------------------------------------------------------------------------------------
-rtl::OUString SAL_CALL SvtFilePicker::getLabel( sal_Int16 nLabelID )
+OUString SAL_CALL SvtFilePicker::getLabel( sal_Int16 nLabelID )
     throw ( RuntimeException )
 {
     checkAlive();
 
     SolarMutexGuard aGuard;
-    rtl::OUString aLabel;
+    OUString aLabel;
 
     if ( getDialog() )
     {
@@ -951,7 +951,7 @@ sal_Bool SAL_CALL SvtFilePicker::getShowState() throw ( RuntimeException )
 // XFilterGroupManager functions
 //------------------------------------------------------------------------------------
 
-void SAL_CALL SvtFilePicker::appendFilterGroup( const ::rtl::OUString& sGroupTitle,
+void SAL_CALL SvtFilePicker::appendFilterGroup( const OUString& sGroupTitle,
                                                 const Sequence< StringPair >& aFilters )
     throw ( IllegalArgumentException, RuntimeException )
 {
@@ -962,11 +962,11 @@ void SAL_CALL SvtFilePicker::appendFilterGroup( const ::rtl::OUString& sGroupTit
     // check the names
     if ( FilterNameExists( aFilters ) )
         throw IllegalArgumentException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("filter name exists")),
+            OUString("filter name exists"),
             static_cast< OWeakObject * >(this), 1);
 
     // ensure that we have a filter list
-    ::rtl::OUString sInitialCurrentFilter;
+    OUString sInitialCurrentFilter;
     if ( aFilters.getLength() )
         sInitialCurrentFilter = aFilters[0].First;
     ensureFilterList( sInitialCurrentFilter );
@@ -979,8 +979,8 @@ void SAL_CALL SvtFilePicker::appendFilterGroup( const ::rtl::OUString& sGroupTit
 // XFilterManager functions
 //------------------------------------------------------------------------------------
 
-void SAL_CALL SvtFilePicker::appendFilter( const rtl::OUString& aTitle,
-                                           const rtl::OUString& aFilter )
+void SAL_CALL SvtFilePicker::appendFilter( const OUString& aTitle,
+                                           const OUString& aFilter )
     throw( IllegalArgumentException, RuntimeException )
 {
     checkAlive();
@@ -999,7 +999,7 @@ void SAL_CALL SvtFilePicker::appendFilter( const rtl::OUString& aTitle,
 }
 
 //------------------------------------------------------------------------------------
-void SAL_CALL SvtFilePicker::setCurrentFilter( const rtl::OUString& aTitle )
+void SAL_CALL SvtFilePicker::setCurrentFilter( const OUString& aTitle )
     throw( IllegalArgumentException, RuntimeException )
 {
     checkAlive();
@@ -1015,14 +1015,14 @@ void SAL_CALL SvtFilePicker::setCurrentFilter( const rtl::OUString& aTitle )
 }
 
 //------------------------------------------------------------------------------------
-rtl::OUString SAL_CALL SvtFilePicker::getCurrentFilter()
+OUString SAL_CALL SvtFilePicker::getCurrentFilter()
     throw( RuntimeException )
 {
     checkAlive();
 
     SolarMutexGuard aGuard;
-    rtl::OUString aFilter = getDialog() ? rtl::OUString( getDialog()->GetCurFilter() ) :
-                                            rtl::OUString( m_aCurrentFilter );
+    OUString aFilter = getDialog() ? OUString( getDialog()->GetCurFilter() ) :
+                                            OUString( m_aCurrentFilter );
     return aFilter;
 }
 
@@ -1063,7 +1063,7 @@ void SAL_CALL SvtFilePicker::initialize( const Sequence< Any >& _rArguments )
 
                 if ( namedValue.Name == "StandardDir" )
                 {
-                    ::rtl::OUString sStandardDir;
+                    OUString sStandardDir;
 
                     namedValue.Value >>= sStandardDir;
 
@@ -1086,7 +1086,7 @@ void SAL_CALL SvtFilePicker::initialize( const Sequence< Any >& _rArguments )
 }
 
 //-------------------------------------------------------------------------
-sal_Bool SvtFilePicker::implHandleInitializationArgument( const ::rtl::OUString& _rName, const Any& _rValue ) SAL_THROW( ( Exception, RuntimeException ) )
+sal_Bool SvtFilePicker::implHandleInitializationArgument( const OUString& _rName, const Any& _rValue ) SAL_THROW( ( Exception, RuntimeException ) )
 {
     if ( _rName == "TemplateDescription" )
     {
@@ -1116,16 +1116,16 @@ sal_Bool SvtFilePicker::implHandleInitializationArgument( const ::rtl::OUString&
 //------------------------------------------------------------------------------------
 
 /* XServiceInfo */
-rtl::OUString SAL_CALL SvtFilePicker::getImplementationName() throw( RuntimeException )
+OUString SAL_CALL SvtFilePicker::getImplementationName() throw( RuntimeException )
 {
     return impl_getStaticImplementationName();
 }
 
 /* XServiceInfo */
-sal_Bool SAL_CALL SvtFilePicker::supportsService( const rtl::OUString& sServiceName ) throw( RuntimeException )
+sal_Bool SAL_CALL SvtFilePicker::supportsService( const OUString& sServiceName ) throw( RuntimeException )
 {
-    Sequence< rtl::OUString > seqServiceNames = getSupportedServiceNames();
-    const rtl::OUString* pArray = seqServiceNames.getConstArray();
+    Sequence< OUString > seqServiceNames = getSupportedServiceNames();
+    const OUString* pArray = seqServiceNames.getConstArray();
     for ( sal_Int32 i = 0; i < seqServiceNames.getLength(); i++ )
     {
         if ( sServiceName == pArray[i] )
@@ -1137,24 +1137,24 @@ sal_Bool SAL_CALL SvtFilePicker::supportsService( const rtl::OUString& sServiceN
 }
 
 /* XServiceInfo */
-Sequence< rtl::OUString > SAL_CALL SvtFilePicker::getSupportedServiceNames() throw( RuntimeException )
+Sequence< OUString > SAL_CALL SvtFilePicker::getSupportedServiceNames() throw( RuntimeException )
 {
     return impl_getStaticSupportedServiceNames();
 }
 
 /* Helper for XServiceInfo */
-Sequence< rtl::OUString > SvtFilePicker::impl_getStaticSupportedServiceNames()
+Sequence< OUString > SvtFilePicker::impl_getStaticSupportedServiceNames()
 {
-    Sequence< rtl::OUString > seqServiceNames( 1 );
-    rtl::OUString* pArray = seqServiceNames.getArray();
-    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.OfficeFilePicker" ));
+    Sequence< OUString > seqServiceNames( 1 );
+    OUString* pArray = seqServiceNames.getArray();
+    pArray[0] = OUString( "com.sun.star.ui.dialogs.OfficeFilePicker" );
     return seqServiceNames ;
 }
 
 /* Helper for XServiceInfo */
-rtl::OUString SvtFilePicker::impl_getStaticImplementationName()
+OUString SvtFilePicker::impl_getStaticImplementationName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.svtools.OfficeFilePicker" ));
+    return OUString( "com.sun.star.svtools.OfficeFilePicker" );
 }
 
 /* Helper for registry */

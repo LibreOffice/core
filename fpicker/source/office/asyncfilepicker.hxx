@@ -29,7 +29,7 @@
 class SvtFileView;
 class SvtFileDialog;
 
-typedef ::com::sun::star::uno::Sequence< ::rtl::OUString >  OUStringList;
+typedef ::com::sun::star::uno::Sequence< OUString >  OUStringList;
 
 //........................................................................
 namespace svt

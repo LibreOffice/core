@@ -40,7 +40,7 @@ typedef
 class SvtFolderPicker: public SvtFolderPicker_Base
 {
 private:
-    ::rtl::OUString         m_aDescription;
+    OUString         m_aDescription;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XDialogClosedListener >
                             m_xListener;
@@ -56,10 +56,10 @@ public:
     // XFolderPicker2 functions
     //------------------------------------------------------------------------------------
 
-    virtual void SAL_CALL           setDisplayDirectory( const ::rtl::OUString& aDirectory ) throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
-    virtual ::rtl::OUString SAL_CALL    getDisplayDirectory() throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::rtl::OUString SAL_CALL    getDirectory() throw( ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL           setDescription( const ::rtl::OUString& aDescription ) throw ( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL           setDisplayDirectory( const OUString& aDirectory ) throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
+    virtual OUString SAL_CALL    getDisplayDirectory() throw( ::com::sun::star::uno::RuntimeException );
+    virtual OUString SAL_CALL    getDirectory() throw( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL           setDescription( const OUString& aDescription ) throw ( ::com::sun::star::uno::RuntimeException );
 
     virtual void SAL_CALL cancel()
         throw (com::sun::star::uno::RuntimeException);
@@ -67,13 +67,13 @@ public:
     //------------------------------------------------------------------------------------
     // XExecutableDialog functions
     //------------------------------------------------------------------------------------
-    virtual void SAL_CALL setTitle( const ::rtl::OUString& _rTitle ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setTitle( const OUString& _rTitle ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Int16 SAL_CALL execute(  ) throw (::com::sun::star::uno::RuntimeException);
 
     //------------------------------------------------------------------------------------
     // XAsynchronousExecutableDialog functions
     //------------------------------------------------------------------------------------
-    virtual void SAL_CALL       setDialogTitle( const ::rtl::OUString& _rTitle ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL       setDialogTitle( const OUString& _rTitle ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL       startExecuteModal( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XDialogClosedListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
 
     //------------------------------------------------------------------------------------
@@ -81,14 +81,14 @@ public:
     //------------------------------------------------------------------------------------
 
     /* XServiceInfo */
-    virtual ::rtl::OUString SAL_CALL    getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL       supportsService( const ::rtl::OUString& sServiceName ) throw( ::com::sun::star::uno::RuntimeException );
-    virtual com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+    virtual OUString SAL_CALL    getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL       supportsService( const OUString& sServiceName ) throw( ::com::sun::star::uno::RuntimeException );
+    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
                                     getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );
 
     /* Helper for XServiceInfo */
-    static com::sun::star::uno::Sequence< ::rtl::OUString > impl_getStaticSupportedServiceNames();
-    static ::rtl::OUString impl_getStaticImplementationName();
+    static com::sun::star::uno::Sequence< OUString > impl_getStaticSupportedServiceNames();
+    static OUString impl_getStaticImplementationName();
 
     /* Helper for registry */
     static ::com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL impl_createInstance (

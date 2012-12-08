@@ -60,7 +60,7 @@ namespace svt
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xORB;
 
         // <properties>
-        ::rtl::OUString                                                     m_sHelpURL;
+        OUString                                                     m_sHelpURL;
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >  m_xWindow;
         // </properties>
 
@@ -74,8 +74,8 @@ namespace svt
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >  m_xParentListenerAdapter;
 
     protected:
-        ::rtl::OUString     m_aTitle;
-        ::rtl::OUString     m_aDisplayDirectory;
+        OUString     m_aTitle;
+        OUString     m_aDisplayDirectory;
 
     protected:
         inline  SvtFileDialog*  getDialog() { return m_pDlg; }
@@ -135,22 +135,22 @@ namespace svt
         //------------------------------------------------------------------------------------
         // XExecutableDialog functions
         //------------------------------------------------------------------------------------
-        virtual void SAL_CALL           setTitle( const ::rtl::OUString& _rTitle ) throw( ::com::sun::star::uno::RuntimeException );
+        virtual void SAL_CALL           setTitle( const OUString& _rTitle ) throw( ::com::sun::star::uno::RuntimeException );
         virtual sal_Int16 SAL_CALL      execute() throw( ::com::sun::star::uno::RuntimeException );
 
         //------------------------------------------------------------------------------------
         // XControlAccess functions
         //------------------------------------------------------------------------------------
-        virtual void SAL_CALL setControlProperty( const ::rtl::OUString& aControlName, const ::rtl::OUString& aControlProperty, const ::com::sun::star::uno::Any& aValue ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Any SAL_CALL getControlProperty( const ::rtl::OUString& aControlName, const ::rtl::OUString& aControlProperty ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setControlProperty( const OUString& aControlName, const OUString& aControlProperty, const ::com::sun::star::uno::Any& aValue ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Any SAL_CALL getControlProperty( const OUString& aControlName, const OUString& aControlProperty ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
         //------------------------------------------------------------------------------------
         // XControlInformation functions
         //------------------------------------------------------------------------------------
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedControls(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL isControlSupported( const ::rtl::OUString& aControlName ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedControlProperties( const ::rtl::OUString& aControlName ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL isControlPropertySupported( const ::rtl::OUString& aControlName, const ::rtl::OUString& aControlProperty ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedControls(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL isControlSupported( const OUString& aControlName ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedControlProperties( const OUString& aControlName ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL isControlPropertySupported( const OUString& aControlName, const OUString& aControlProperty ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
         //------------------------------------------------------------------------------------
         // XCancellable functions
@@ -178,7 +178,7 @@ namespace svt
             @return <TRUE/> if the argument could be handled
         */
         virtual sal_Bool    implHandleInitializationArgument(
-                                const ::rtl::OUString& _rName,
+                                const OUString& _rName,
                                 const ::com::sun::star::uno::Any& _rValue
                             )
                             SAL_THROW( ( ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException ) );

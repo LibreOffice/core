@@ -56,13 +56,13 @@ namespace svt
     {
         // the two properties we have
         registerProperty(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "HelpURL" )), PROPERTY_ID_HELPURL,
+            OUString( "HelpURL" ), PROPERTY_ID_HELPURL,
             PropertyAttribute::TRANSIENT,
             &m_sHelpURL, ::getCppuType( &m_sHelpURL )
         );
 
         registerProperty(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Window" )), PROPERTY_ID_WINDOW,
+            OUString( "Window" ), PROPERTY_ID_WINDOW,
             PropertyAttribute::TRANSIENT | PropertyAttribute::READONLY,
             &m_xWindow, ::getCppuType( &m_xWindow )
         );
@@ -248,7 +248,7 @@ namespace svt
     //---------------------------------------------------------------------
     // XControlAccess functions
     //---------------------------------------------------------------------
-    void SAL_CALL OCommonPicker::setControlProperty( const ::rtl::OUString& aControlName, const ::rtl::OUString& aControlProperty, const Any& aValue ) throw (IllegalArgumentException, RuntimeException)
+    void SAL_CALL OCommonPicker::setControlProperty( const OUString& aControlName, const OUString& aControlProperty, const Any& aValue ) throw (IllegalArgumentException, RuntimeException)
     {
         checkAlive();
 
@@ -261,7 +261,7 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    Any SAL_CALL OCommonPicker::getControlProperty( const ::rtl::OUString& aControlName, const ::rtl::OUString& aControlProperty ) throw (IllegalArgumentException, RuntimeException)
+    Any SAL_CALL OCommonPicker::getControlProperty( const OUString& aControlName, const OUString& aControlProperty ) throw (IllegalArgumentException, RuntimeException)
     {
         checkAlive();
 
@@ -278,7 +278,7 @@ namespace svt
     //---------------------------------------------------------------------
     // XControlInformation functions
     //---------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL OCommonPicker::getSupportedControls(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL OCommonPicker::getSupportedControls(  ) throw (RuntimeException)
     {
         checkAlive();
 
@@ -289,11 +289,11 @@ namespace svt
             return aAccess.getSupportedControls( );
         }
 
-        return Sequence< ::rtl::OUString >();
+        return Sequence< OUString >();
     }
 
     //---------------------------------------------------------------------
-    sal_Bool SAL_CALL OCommonPicker::isControlSupported( const ::rtl::OUString& aControlName ) throw (RuntimeException)
+    sal_Bool SAL_CALL OCommonPicker::isControlSupported( const OUString& aControlName ) throw (RuntimeException)
     {
         checkAlive();
 
@@ -308,7 +308,7 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL OCommonPicker::getSupportedControlProperties( const ::rtl::OUString& aControlName ) throw (IllegalArgumentException, RuntimeException)
+    Sequence< OUString > SAL_CALL OCommonPicker::getSupportedControlProperties( const OUString& aControlName ) throw (IllegalArgumentException, RuntimeException)
     {
         checkAlive();
 
@@ -319,11 +319,11 @@ namespace svt
             return aAccess.getSupportedControlProperties( aControlName );
         }
 
-        return Sequence< ::rtl::OUString >();
+        return Sequence< OUString >();
     }
 
     //---------------------------------------------------------------------
-    sal_Bool SAL_CALL OCommonPicker::isControlPropertySupported( const ::rtl::OUString& aControlName, const ::rtl::OUString& aControlProperty ) throw (IllegalArgumentException, RuntimeException)
+    sal_Bool SAL_CALL OCommonPicker::isControlPropertySupported( const OUString& aControlName, const OUString& aControlProperty ) throw (IllegalArgumentException, RuntimeException)
     {
         checkAlive();
 
@@ -340,7 +340,7 @@ namespace svt
     //---------------------------------------------------------------------
     // XExecutableDialog functions
     //---------------------------------------------------------------------
-    void SAL_CALL OCommonPicker::setTitle( const rtl::OUString& _rTitle ) throw( RuntimeException )
+    void SAL_CALL OCommonPicker::setTitle( const OUString& _rTitle ) throw( RuntimeException )
     {
         SolarMutexGuard aGuard;
         m_aTitle = _rTitle;
@@ -400,7 +400,7 @@ namespace svt
         m_nCancelEvent = 0;
 
         if ( !m_bExecuting )
-            // nothing to do. This may be because the dialog was cancelled after our cancel method
+            // nothing to do. This may be because the dialog was canceled after our cancel method
             // posted this async event, or because somebody called cancel without the dialog
             // being executed at this time.
             return 0;
@@ -420,7 +420,7 @@ namespace svt
     {
         checkAlive();
 
-        ::rtl::OUString sSettingName;
+        OUString sSettingName;
         Any             aSettingValue;
 
         PropertyValue   aPropArg;
@@ -455,8 +455,8 @@ namespace svt
             else
             {
                 OSL_FAIL(
-                    (   ::rtl::OString( "OCommonPicker::initialize: unknown argument type at position " )
-                    +=  ::rtl::OString::valueOf( (sal_Int32)( pArguments - _rArguments.getConstArray() ) )
+                    (   OString( "OCommonPicker::initialize: unknown argument type at position " )
+                    +=  OString::valueOf( (sal_Int32)( pArguments - _rArguments.getConstArray() ) )
                     ).getStr()
                 );
                 continue;
@@ -467,16 +467,16 @@ namespace svt
 #endif
             implHandleInitializationArgument( sSettingName, aSettingValue );
             DBG_ASSERT( bKnownSetting,
-                (   ::rtl::OString( "OCommonPicker::initialize: unknown argument \"" )
-                +=  ::rtl::OString( sSettingName.getStr(), sSettingName.getLength(), osl_getThreadTextEncoding() )
-                +=  ::rtl::OString( "\"!" )
+                (   OString( "OCommonPicker::initialize: unknown argument \"" )
+                +=  OString( sSettingName.getStr(), sSettingName.getLength(), osl_getThreadTextEncoding() )
+                +=  OString( "\"!" )
                 ).getStr()
             );
         }
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OCommonPicker::implHandleInitializationArgument( const ::rtl::OUString& _rName, const Any& _rValue ) SAL_THROW( ( Exception, RuntimeException ) )
+    sal_Bool OCommonPicker::implHandleInitializationArgument( const OUString& _rName, const Any& _rValue ) SAL_THROW( ( Exception, RuntimeException ) )
     {
         sal_Bool bKnown = sal_True;
         if ( _rName == "ParentWindow" )

@@ -100,7 +100,7 @@ protected:
 class SvtUpButton_Impl : public SvtFileDialogURLSelector
 {
 private:
-    std::vector<rtl::OUString> _aURLs;
+    std::vector<OUString> _aURLs;
 
 public:
     SvtUpButton_Impl( SvtFileDialog* pParent, const ResId& rResId );
@@ -129,7 +129,7 @@ private:
     const SvtFileDialogFilter_Impl* _pCurFilter;
     String                          m_sCurrentFilterDisplayName;    // may differ from _pCurFilter->GetName in case it is a cached entry
 
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > _aBlackList;
+    ::com::sun::star::uno::Sequence< OUString > _aBlackList;
 
 public:
     SvtFileDialogFilterList_Impl*   _pFilter;
@@ -194,8 +194,8 @@ public:
                             ~SvtExpFileDlg_Impl();
 
 
-    inline void             SetBlackList( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList ) { _aBlackList = rBlackList; }
-    inline const ::com::sun::star::uno::Sequence< ::rtl::OUString >& GetBlackList() const { return _aBlackList; }
+    inline void             SetBlackList( const ::com::sun::star::uno::Sequence< OUString >& rBlackList ) { _aBlackList = rBlackList; }
+    inline const ::com::sun::star::uno::Sequence< OUString >& GetBlackList() const { return _aBlackList; }
     void                    SetStandardDir( const String& _rDir );
     inline const String&    GetStandardDir() const          { return _aStdDir; }
     inline void             DisableFilterBoxAutoWidth()     { _pLbFilter->EnableDDAutoWidth( sal_False ); }

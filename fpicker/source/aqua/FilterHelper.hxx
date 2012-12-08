@@ -37,25 +37,25 @@
 typedef ::com::sun::star::beans::StringPair UnoFilterEntry;
 typedef ::com::sun::star::uno::Sequence< UnoFilterEntry >   UnoFilterList;  // can be transported more effectively
 typedef ::std::list<NSString *> NSStringList;
-typedef ::std::list<rtl::OUString> OUStringList;
+typedef ::std::list<OUString> OUStringList;
 
 struct FilterEntry
 {
 protected:
-    rtl::OUString       m_sTitle;
+    OUString       m_sTitle;
     OUStringList        m_sFilterSuffixList;
     UnoFilterList       m_aSubFilters;
 
 public:
-    FilterEntry( const rtl::OUString& _rTitle, const OUStringList _rFilter )
+    FilterEntry( const OUString& _rTitle, const OUStringList _rFilter )
     : m_sTitle( _rTitle )
     , m_sFilterSuffixList( _rFilter )
     {
     }
 
-    FilterEntry( const rtl::OUString& _rTitle, const UnoFilterList& _rSubFilters );
+    FilterEntry( const OUString& _rTitle, const UnoFilterList& _rSubFilters );
 
-    rtl::OUString       getTitle() const { return m_sTitle; }
+    OUString       getTitle() const { return m_sTitle; }
     OUStringList    getFilterSuffixList() const { return m_sFilterSuffixList; }
 
     /// determines if the filter has sub filter (i.e., the filter is a filter group in real)
@@ -81,17 +81,17 @@ public:
     virtual ~FilterHelper();
 
     //XFilterManager delegates
-    void SAL_CALL appendFilter( const ::rtl::OUString& aTitle, const ::rtl::OUString& aFilter )
+    void SAL_CALL appendFilter( const OUString& aTitle, const OUString& aFilter )
         throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
 
-    void SAL_CALL setCurrentFilter( const ::rtl::OUString& aTitle )
+    void SAL_CALL setCurrentFilter( const OUString& aTitle )
         throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
 
-    ::rtl::OUString SAL_CALL getCurrentFilter(  )
+    OUString SAL_CALL getCurrentFilter(  )
         throw( ::com::sun::star::uno::RuntimeException );
 
     //XFilterGroupManager delegates
-    void SAL_CALL appendFilterGroup( const ::rtl::OUString& sGroupTitle, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair >& aFilters )
+    void SAL_CALL appendFilterGroup( const OUString& sGroupTitle, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair >& aFilters )
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
 
@@ -100,7 +100,7 @@ public:
     NSStringList* getFilterNames();
 
     //misc
-    void SetCurFilter( const rtl::OUString& rFilter );
+    void SetCurFilter( const OUString& rFilter );
     void SetFilterAtIndex(unsigned index);
     OUStringList getCurrentFilterSuffixList();
     int getCurrentFilterIndex();
@@ -109,19 +109,19 @@ public:
 
 private:
     FilterList *m_pFilterList;
-    rtl::OUString m_aCurrentFilter;
+    OUString m_aCurrentFilter;
     NSStringList *m_pFilterNames;
 
-    int implAddFilter( const rtl::OUString rFilter, const OUStringList rSuffixList);
-    int implAddFilterGroup( const rtl::OUString rFilter,
+    int implAddFilter( const OUString rFilter, const OUStringList rSuffixList);
+    int implAddFilterGroup( const OUString rFilter,
                             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair>& _rFilters );
 
-    sal_Bool FilterNameExists( const rtl::OUString rTitle );
+    sal_Bool FilterNameExists( const OUString rTitle );
     sal_Bool FilterNameExists( const UnoFilterList& _rGroupedFilters );
 
-    void ensureFilterList( const ::rtl::OUString& _rInitialCurrentFilter );
+    void ensureFilterList( const OUString& _rInitialCurrentFilter );
 
-    void fillSuffixList(OUStringList& aSuffixList, const ::rtl::OUString& suffixString);
+    void fillSuffixList(OUStringList& aSuffixList, const OUString& suffixString);
 
 };
 

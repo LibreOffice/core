@@ -122,11 +122,11 @@ namespace svt
         };
 
         // ................................................................
-        struct ExtractControlName : public ::std::unary_function< ControlDescription, ::rtl::OUString >
+        struct ExtractControlName : public ::std::unary_function< ControlDescription, OUString >
         {
-            ::rtl::OUString operator()( const ControlDescription& _rDesc )
+            OUString operator()( const ControlDescription& _rDesc )
             {
-                return ::rtl::OUString::createFromAscii( _rDesc.pControlName );
+                return OUString::createFromAscii( _rDesc.pControlName );
             }
         };
 
@@ -161,8 +161,8 @@ namespace svt
         // ................................................................
         struct ControlPropertyLookup
         {
-            ::rtl::OUString m_sLookup;
-            ControlPropertyLookup( const ::rtl::OUString& _rLookup ) : m_sLookup( _rLookup ) { }
+            OUString m_sLookup;
+            ControlPropertyLookup( const OUString& _rLookup ) : m_sLookup( _rLookup ) { }
 
             sal_Bool operator()( const ControlProperty& _rProp )
             {
@@ -187,15 +187,15 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    void OControlAccess::setHelpURL( Window* _pControl, const ::rtl::OUString& sHelpURL, sal_Bool _bFileView )
+    void OControlAccess::setHelpURL( Window* _pControl, const OUString& sHelpURL, sal_Bool _bFileView )
     {
-        rtl::OUString sHelpID( sHelpURL );
+        OUString sHelpID( sHelpURL );
         INetURLObject aHID( sHelpURL );
         if ( aHID.GetProtocol() == INET_PROT_HID )
               sHelpID = aHID.GetURLPath();
 
         // URLs should always be UTF8 encoded and escaped
-        rtl::OString sID( rtl::OUStringToOString( sHelpID, RTL_TEXTENCODING_UTF8 ) );
+        OString sID( OUStringToOString( sHelpID, RTL_TEXTENCODING_UTF8 ) );
         if ( _bFileView )
             // the file view "overloaded" the SetHelpId
             static_cast< SvtFileView* >( _pControl )->SetHelpId( sID );
@@ -204,24 +204,24 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    ::rtl::OUString OControlAccess::getHelpURL( Window* _pControl, sal_Bool _bFileView )
+    OUString OControlAccess::getHelpURL( Window* _pControl, sal_Bool _bFileView )
     {
-        rtl::OString aHelpId = _pControl->GetHelpId();
+        OString aHelpId = _pControl->GetHelpId();
         if ( _bFileView )
             // the file view "overloaded" the SetHelpId
             aHelpId = static_cast< SvtFileView* >( _pControl )->GetHelpId( );
 
-        ::rtl::OUString sHelpURL;
-        ::rtl::OUString aTmp( rtl::OStringToOUString( aHelpId, RTL_TEXTENCODING_UTF8 ) );
+        OUString sHelpURL;
+        OUString aTmp( OStringToOUString( aHelpId, RTL_TEXTENCODING_UTF8 ) );
         INetURLObject aHID( aTmp );
         if ( aHID.GetProtocol() == INET_PROT_NOT_VALID )
-            sHelpURL = rtl::OUString::createFromAscii( INET_HID_SCHEME );
+            sHelpURL = OUString::createFromAscii( INET_HID_SCHEME );
         sHelpURL += aTmp;
         return sHelpURL;
     }
 
     // --------------------------------------------------------------------------
-    Any OControlAccess::getControlProperty( const ::rtl::OUString& _rControlName, const ::rtl::OUString& _rControlProperty )
+    Any OControlAccess::getControlProperty( const OUString& _rControlName, const OUString& _rControlProperty )
     {
         // look up the control
         sal_Int16 nControlId = -1;
@@ -243,7 +243,7 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    Control* OControlAccess::implGetControl( const ::rtl::OUString& _rControlName, sal_Int16* _pId, sal_Int32* _pPropertyMask ) const SAL_THROW( (IllegalArgumentException) )
+    Control* OControlAccess::implGetControl( const OUString& _rControlName, sal_Int16* _pId, sal_Int32* _pPropertyMask ) const SAL_THROW( (IllegalArgumentException) )
     {
         Control* pControl = NULL;
         ControlDescription tmpDesc;
@@ -271,7 +271,7 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    void OControlAccess::setControlProperty( const ::rtl::OUString& _rControlName, const ::rtl::OUString& _rControlProperty, const ::com::sun::star::uno::Any& _rValue )
+    void OControlAccess::setControlProperty( const OUString& _rControlName, const OUString& _rControlProperty, const ::com::sun::star::uno::Any& _rValue )
     {
         // look up the control
         sal_Int16 nControlId = -1;
@@ -288,16 +288,16 @@ namespace svt
     }
 
     // --------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > OControlAccess::getSupportedControls(  )
+    Sequence< OUString > OControlAccess::getSupportedControls(  )
     {
-        Sequence< ::rtl::OUString > aControls( s_nControlCount );
-        ::rtl::OUString* pControls = aControls.getArray();
+        Sequence< OUString > aControls( s_nControlCount );
+        OUString* pControls = aControls.getArray();
 
         // collect the names of all _actually_existent_ controls
         for ( ControlDescIterator aControl = s_pControls; aControl != s_pControlsEnd; ++aControl )
         {
             if ( m_pFilePickerController->getControl( aControl->nControlId ) )
-                *pControls++ = ::rtl::OUString::createFromAscii( aControl->pControlName );
+                *pControls++ = OUString::createFromAscii( aControl->pControlName );
         }
 
         aControls.realloc( pControls - aControls.getArray() );
@@ -305,7 +305,7 @@ namespace svt
     }
 
     // --------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > OControlAccess::getSupportedControlProperties( const ::rtl::OUString& _rControlName )
+    Sequence< OUString > OControlAccess::getSupportedControlProperties( const OUString& _rControlName )
     {
         sal_Int16 nControlId = -1;
         sal_Int32 nPropertyMask = 0;
@@ -313,19 +313,19 @@ namespace svt
             // will throw an IllegalArgumentException if the name is not valid
 
         // fill in the property names
-        Sequence< ::rtl::OUString > aProps( s_nPropertyCount );
-        ::rtl::OUString* pProperty = aProps.getArray();
+        Sequence< OUString > aProps( s_nPropertyCount );
+        OUString* pProperty = aProps.getArray();
 
         for ( ControlPropertyIterator aProp = s_pProperties; aProp != s_pPropertiesEnd; ++aProp )
             if ( 0 != ( nPropertyMask & aProp->nPropertyId ) )
-                *pProperty++ = ::rtl::OUString::createFromAscii( aProp->pPropertyName );
+                *pProperty++ = OUString::createFromAscii( aProp->pPropertyName );
 
         aProps.realloc( pProperty - aProps.getArray() );
         return aProps;
     }
 
     // --------------------------------------------------------------------------
-    sal_Bool OControlAccess::isControlSupported( const ::rtl::OUString& _rControlName )
+    sal_Bool OControlAccess::isControlSupported( const OUString& _rControlName )
     {
         ControlDescription tmpDesc;
         tmpDesc.pControlName = OUStringToOString(_rControlName, RTL_TEXTENCODING_UTF8).getStr();
@@ -333,7 +333,7 @@ namespace svt
     }
 
     // --------------------------------------------------------------------------
-    sal_Bool OControlAccess::isControlPropertySupported( const ::rtl::OUString& _rControlName, const ::rtl::OUString& _rControlProperty )
+    sal_Bool OControlAccess::isControlPropertySupported( const OUString& _rControlName, const OUString& _rControlProperty )
     {
         // look up the control
         sal_Int16 nControlId = -1;
@@ -432,7 +432,7 @@ namespace svt
                     case LISTBOX_FILTER:
                         if ( ControlActions::GET_SELECTED_ITEM == _nControlAction )
                         {
-                            aRet <<= ::rtl::OUString( m_pFilePickerController->getCurFilter() );;
+                            aRet <<= OUString( m_pFilePickerController->getCurFilter() );;
                         }
                         else
                         {
@@ -470,7 +470,7 @@ namespace svt
     }
 
     //-----------------------------------------------------------------------------
-    void OControlAccess::setLabel( sal_Int16 nId, const ::rtl::OUString &rLabel )
+    void OControlAccess::setLabel( sal_Int16 nId, const OUString &rLabel )
     {
         Control* pControl = m_pFilePickerController->getControl( nId, sal_True );
         DBG_ASSERT( pControl, "OControlAccess::GetValue: don't have this control in the current mode!" );
@@ -479,9 +479,9 @@ namespace svt
     }
 
     //-----------------------------------------------------------------------------
-    ::rtl::OUString OControlAccess::getLabel( sal_Int16 nId ) const
+    OUString OControlAccess::getLabel( sal_Int16 nId ) const
     {
-        ::rtl::OUString sLabel;
+        OUString sLabel;
 
         Control* pControl = m_pFilePickerController->getControl( nId, sal_True );
         DBG_ASSERT( pControl, "OControlAccess::GetValue: don't have this control in the current mode!" );
@@ -504,7 +504,7 @@ namespace svt
         {
             case ControlActions::ADD_ITEM:
             {
-                ::rtl::OUString aEntry;
+                OUString aEntry;
                 _rValue >>= aEntry;
                 if ( !aEntry.isEmpty() )
                     _pListbox->InsertEntry( aEntry );
@@ -513,7 +513,7 @@ namespace svt
 
             case ControlActions::ADD_ITEMS:
             {
-                Sequence < ::rtl::OUString > aTemplateList;
+                Sequence < OUString > aTemplateList;
                 _rValue >>= aTemplateList;
 
                 if ( aTemplateList.getLength() )
@@ -557,7 +557,7 @@ namespace svt
         {
             case PROPERTY_FLAG_TEXT:
             {
-                ::rtl::OUString sText;
+                OUString sText;
                 if ( _rValue >>= sText )
                 {
                     _pControl->SetText( sText );
@@ -599,7 +599,7 @@ namespace svt
 
             case PROPERTY_FLAG_HELPURL:
             {
-                ::rtl::OUString sHelpURL;
+                OUString sHelpURL;
                 if ( _rValue >>= sHelpURL )
                 {
                     setHelpURL( _pControl, sHelpURL, m_pFileView == _pControl );
@@ -616,16 +616,16 @@ namespace svt
                 DBG_ASSERT( WINDOW_LISTBOX == _pControl->GetType(),
                     "OControlAccess::implSetControlProperty: invalid control/property combination!" );
 
-                Sequence< ::rtl::OUString > aItems;
+                Sequence< OUString > aItems;
                 if ( _rValue >>= aItems )
                 {
                     // remove all previous items
                     static_cast< ListBox* >( _pControl )->Clear();
 
                     // add the new ones
-                    const ::rtl::OUString* pItems       = aItems.getConstArray();
-                    const ::rtl::OUString* pItemsEnd    = aItems.getConstArray() + aItems.getLength();
-                    for (   const ::rtl::OUString* pItem = pItems;
+                    const OUString* pItems       = aItems.getConstArray();
+                    const OUString* pItemsEnd    = aItems.getConstArray() + aItems.getLength();
+                    for (   const OUString* pItem = pItems;
                             pItem != pItemsEnd;
                             ++pItem
                         )
@@ -646,7 +646,7 @@ namespace svt
                 DBG_ASSERT( WINDOW_LISTBOX == _pControl->GetType(),
                     "OControlAccess::implSetControlProperty: invalid control/property combination!" );
 
-                ::rtl::OUString sSelected;
+                OUString sSelected;
                 if ( _rValue >>= sSelected )
                 {
                     static_cast< ListBox* >( _pControl )->SelectEntry( sSelected );
@@ -706,7 +706,7 @@ namespace svt
         switch ( _nProperty )
         {
             case PROPERTY_FLAG_TEXT:
-                aReturn <<= ::rtl::OUString( _pControl->GetText() );
+                aReturn <<= OUString( _pControl->GetText() );
                 break;
 
             case PROPERTY_FLAG_ENDBALED:
@@ -726,8 +726,8 @@ namespace svt
                 DBG_ASSERT( WINDOW_LISTBOX == _pControl->GetType(),
                     "OControlAccess::implGetControlProperty: invalid control/property combination!" );
 
-                Sequence< ::rtl::OUString > aItems( static_cast< ListBox* >( _pControl )->GetEntryCount() );
-                ::rtl::OUString* pItems = aItems.getArray();
+                Sequence< OUString > aItems( static_cast< ListBox* >( _pControl )->GetEntryCount() );
+                OUString* pItems = aItems.getArray();
                 for ( sal_uInt16 i=0; i<static_cast< ListBox* >( _pControl )->GetEntryCount(); ++i )
                     *pItems++ = static_cast< ListBox* >( _pControl )->GetEntry( i );
 
@@ -741,7 +741,7 @@ namespace svt
                     "OControlAccess::implGetControlProperty: invalid control/property combination!" );
 
                 sal_uInt16 nSelected = static_cast< ListBox* >( _pControl )->GetSelectEntryPos();
-                ::rtl::OUString sSelected;
+                OUString sSelected;
                 if ( LISTBOX_ENTRY_NOTFOUND != nSelected )
                     sSelected = static_cast< ListBox* >( _pControl )->GetSelectEntry();
                 aReturn <<= sSelected;

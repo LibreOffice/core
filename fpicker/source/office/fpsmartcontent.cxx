@@ -53,7 +53,7 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    SmartContent::SmartContent( const ::rtl::OUString& _rInitialURL )
+    SmartContent::SmartContent( const OUString& _rInitialURL )
         :m_pContent( NULL )
         ,m_eState( NOT_BOUND )
     {
@@ -137,7 +137,7 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    void SmartContent::bindTo( const ::rtl::OUString& _rURL )
+    void SmartContent::bindTo( const OUString& _rURL )
     {
         if ( getURL() == _rURL )
             // nothing to do, regardless of the state
@@ -182,7 +182,7 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    sal_Bool SmartContent::implIs( const ::rtl::OUString& _rURL, Type _eType )
+    sal_Bool SmartContent::implIs( const OUString& _rURL, Type _eType )
     {
         // bind to this content
         bindTo( _rURL );
@@ -215,15 +215,15 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    void SmartContent::getTitle( ::rtl::OUString& /* [out] */ _rTitle )
+    void SmartContent::getTitle( OUString& /* [out] */ _rTitle )
     {
         if ( !isBound() || isInvalid() )
             return;
 
         try
         {
-            ::rtl::OUString sTitle;
-            m_pContent->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Title" )) ) >>= sTitle;
+            OUString sTitle;
+            m_pContent->getPropertyValue( OUString( "Title" ) ) >>= sTitle;
             _rTitle =  sTitle;
 
             // from here on, we definately know that the content is valid
@@ -251,7 +251,7 @@ namespace svt
                 Reference< XContent > xParent( xChild->getParent(), UNO_QUERY );
                 if ( xParent.is() )
                 {
-                    const ::rtl::OUString aParentURL( xParent->getIdentifier()->getContentIdentifier() );
+                    const OUString aParentURL( xParent->getIdentifier()->getContentIdentifier() );
                     bRet = ( !aParentURL.isEmpty() && aParentURL != m_pContent->getURL() );
 
                     // now we're definately valid
@@ -300,12 +300,12 @@ namespace svt
         return bRet;
     }
 
-    rtl::OUString SmartContent::createFolder( const rtl::OUString& _rTitle )
+    OUString SmartContent::createFolder( const OUString& _rTitle )
     {
-        rtl::OUString aCreatedUrl;
+        OUString aCreatedUrl;
         try
         {
-            rtl::OUString sFolderType;
+            OUString sFolderType;
 
             Sequence< ContentInfo > aInfo = m_pContent->queryCreatableContentsInfo();
             const ContentInfo* pInfo = aInfo.getConstArray();
@@ -323,9 +323,9 @@ namespace svt
             if ( !sFolderType.isEmpty() )
             {
                 ucbhelper::Content aCreated;
-                Sequence< rtl::OUString > aNames( 1 );
-                rtl::OUString* pNames = aNames.getArray();
-                pNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) );
+                Sequence< OUString > aNames( 1 );
+                OUString* pNames = aNames.getArray();
+                pNames[0] = OUString( "Title" );
                 Sequence< Any > aValues( 1 );
                 Any* pValues = aValues.getArray();
                 pValues[0] = makeAny( _rTitle );

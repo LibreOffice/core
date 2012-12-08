@@ -49,7 +49,7 @@ namespace svt
         };
 
     private:
-        ::rtl::OUString                                                                  m_sURL;
+        OUString                                                                  m_sURL;
         ::ucbhelper::Content*                                                            m_pContent;
         State                                                                            m_eState;
         ::com::sun::star::uno::Reference < ::com::sun::star::ucb::XCommandEnvironment >  m_xCmdEnv;
@@ -59,14 +59,14 @@ namespace svt
     private:
         enum Type { Folder, Document };
         /// checks if the currently bound content is a folder or document
-        sal_Bool implIs( const ::rtl::OUString& _rURL, Type _eType );
+        sal_Bool implIs( const OUString& _rURL, Type _eType );
 
         SmartContent( const SmartContent& _rSource );               // never implemented
         SmartContent& operator=( const SmartContent& _rSource );    // never implemented
 
     public:
         SmartContent();
-        SmartContent( const ::rtl::OUString& _rInitialURL );
+        SmartContent( const OUString& _rInitialURL );
         ~SmartContent();
 
     public:
@@ -131,7 +131,7 @@ namespace svt
 
         /** returns the URL of the content
         */
-        inline ::rtl::OUString  getURL() const { return m_pContent ? m_pContent->getURL() : m_sURL; }
+        inline OUString  getURL() const { return m_pContent ? m_pContent->getURL() : m_sURL; }
 
         /** (re)creates the content for the given URL
 
@@ -143,13 +143,13 @@ namespace svt
             @postcond
                 <member>getState</member> does not return NOT_BOUND after the call returns
         */
-        void    bindTo( const ::rtl::OUString& _rURL );
+        void    bindTo( const OUString& _rURL );
 
         /** retrieves the title of the content
             @precond
                 the content is bound and not invalid
         */
-        void    getTitle( ::rtl::OUString& /* [out] */ _rTitle );
+        void    getTitle( OUString& /* [out] */ _rTitle );
 
         /** checks if the content has a parent folder
             @precond
@@ -168,14 +168,14 @@ namespace svt
             @return
                 the URL of the created folder or an empty string
           */
-        rtl::OUString    createFolder( const rtl::OUString& _rTitle );
+        OUString    createFolder( const OUString& _rTitle );
 
         /** binds to the given URL, checks whether or not it refers to a folder
 
             @postcond
                 the content is not in the state UNKNOWN
         */
-        inline  sal_Bool    isFolder( const ::rtl::OUString& _rURL )
+        inline  sal_Bool    isFolder( const OUString& _rURL )
         {
             return implIs( _rURL, Folder );
         }
@@ -185,14 +185,14 @@ namespace svt
             @postcond
                 the content is not in the state UNKNOWN
         */
-        inline  sal_Bool    isDocument(  const ::rtl::OUString& _rURL )
+        inline  sal_Bool    isDocument(  const OUString& _rURL )
         {
             return implIs( _rURL, Document );
         }
 
         /** checks if the content is existent (it is if and only if it is a document or a folder)
         */
-        inline  sal_Bool    is( const ::rtl::OUString& _rURL )
+        inline  sal_Bool    is( const OUString& _rURL )
         {
             return  implIs( _rURL, Folder ) || implIs( _rURL, Document );
         }

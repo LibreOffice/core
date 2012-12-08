@@ -36,7 +36,6 @@
 
 using css::uno::Reference;
 using css::uno::Sequence;
-using rtl::OUString;
 
 /*
  * FilePicker implementation.
@@ -46,18 +45,18 @@ static OUString FilePicker_getSystemPickerServiceName()
 #ifdef UNX
     OUString aDesktopEnvironment (Application::GetDesktopEnvironment());
     if (aDesktopEnvironment.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("tde")))
-        return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.TDEFilePicker"));
+        return OUString ("com.sun.star.ui.dialogs.TDEFilePicker");
     else if (aDesktopEnvironment.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("kde")))
-        return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.KDEFilePicker"));
+        return OUString ("com.sun.star.ui.dialogs.KDEFilePicker");
     else if (aDesktopEnvironment.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("kde4")))
-        return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.KDE4FilePicker"));
+        return OUString ("com.sun.star.ui.dialogs.KDE4FilePicker");
     else if (aDesktopEnvironment.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("macosx")))
-        return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.AquaFilePicker"));
+        return OUString ("com.sun.star.ui.dialogs.AquaFilePicker");
     else
-        return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.SystemFilePicker"));
+        return OUString ("com.sun.star.ui.dialogs.SystemFilePicker");
 #endif
 #ifdef WNT
-    return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.Win32FilePicker"));
+    return OUString ("com.sun.star.ui.dialogs.Win32FilePicker");
 #endif
 }
 

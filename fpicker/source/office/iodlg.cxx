@@ -238,7 +238,7 @@ namespace
                     INetURLObject aURL( aNewFile );
                     if ( INET_PROT_NOT_VALID == aURL.GetProtocol() )
                     {
-                        rtl::OUString sURL;
+                        OUString sURL;
                         if ( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aNewFile, sURL ) )
                             aURL = INetURLObject( sURL );
                     }
@@ -284,10 +284,10 @@ namespace
             if ( xProviderProps.is() )
             {
                 Reference< XPropertySetInfo > xPropInfo = xProviderProps->getPropertySetInfo();
-                const ::rtl::OUString sHomeDirPropertyName( RTL_CONSTASCII_USTRINGPARAM( "HomeDirectory" ) );
+                const OUString sHomeDirPropertyName( "HomeDirectory" );
                 if ( !xPropInfo.is() || xPropInfo->hasPropertyByName( sHomeDirPropertyName ) )
                 {
-                    ::rtl::OUString sHomeDirectory;
+                    OUString sHomeDirectory;
                     xProviderProps->getPropertyValue( sHomeDirPropertyName ) >>= sHomeDirectory;
                     _rHomeDir = sHomeDirectory;
                 }
@@ -326,10 +326,10 @@ namespace
     /** retrieves the value of an environment variable
         @return <TRUE/> if and only if the retrieved string value is not empty
     */
-    bool getEnvironmentValue( const sal_Char* _pAsciiEnvName, ::rtl::OUString& _rValue )
+    bool getEnvironmentValue( const sal_Char* _pAsciiEnvName, OUString& _rValue )
     {
-        _rValue = ::rtl::OUString();
-        ::rtl::OUString sEnvName = ::rtl::OUString::createFromAscii( _pAsciiEnvName );
+        _rValue = OUString();
+        OUString sEnvName = OUString::createFromAscii( _pAsciiEnvName );
         osl_getEnvironment( sEnvName.pData, &_rValue.pData );
         return !_rValue.isEmpty();
     }
@@ -434,10 +434,10 @@ SvtFileDialog::~SvtFileDialog()
     {
         // save window state
         SvtViewOptions aDlgOpt( E_DIALOG, _pImp->_aIniKey );
-        aDlgOpt.SetWindowState(::rtl::OStringToOUString(GetWindowState(), osl_getThreadTextEncoding()));
+        aDlgOpt.SetWindowState(OStringToOUString(GetWindowState(), osl_getThreadTextEncoding()));
         String sUserData = _pFileView->GetConfigString();
-        aDlgOpt.SetUserItem( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "UserData" )),
-                             makeAny( ::rtl::OUString( sUserData ) ) );
+        aDlgOpt.SetUserItem( OUString( "UserData" ),
+                             makeAny( OUString( sUserData ) ) );
     }
 
     _pFileView->SetSelectHdl( Link() );
@@ -445,8 +445,8 @@ SvtFileDialog::~SvtFileDialog()
     // Save bookmarked places
     if(_pImp->_pPlaces->IsUpdated()) {
         const std::vector<PlacePtr> aPlaces = _pImp->_pPlaces->GetPlaces();
-        Sequence< ::rtl::OUString > placesUrlsList(_pImp->_pPlaces->GetNbEditablePlaces());
-        Sequence< ::rtl::OUString > placesNamesList(_pImp->_pPlaces->GetNbEditablePlaces());
+        Sequence< OUString > placesUrlsList(_pImp->_pPlaces->GetNbEditablePlaces());
+        Sequence< OUString > placesNamesList(_pImp->_pPlaces->GetNbEditablePlaces());
         int i(0);
         for(std::vector<PlacePtr>::const_iterator it = aPlaces.begin(); it != aPlaces.end(); ++it) {
             if((*it)->IsEditable()) {
@@ -778,7 +778,7 @@ void SvtFileDialog::Init_Impl
     /// read our settings from the configuration
     m_aConfiguration = OConfigurationTreeRoot::createWithServiceFactory(
         ::comphelper::getProcessServiceFactory(),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.UI/FilePicker" ) )
+        OUString( "/org.openoffice.Office.UI/FilePicker" )
     );
 }
 
@@ -789,7 +789,7 @@ IMPL_STATIC_LINK( SvtFileDialog, NewFolderHdl_Impl, PushButton*, EMPTYARG )
     pThis->_pFileView->EndInplaceEditing( false );
 
     SmartContent aContent( pThis->_pFileView->GetViewURL( ) );
-    rtl::OUString aTitle;
+    OUString aTitle;
     aContent.getTitle( aTitle );
     svtools::QueryFolderNameDialog aDlg( pThis, aTitle, String( SvtResId( STR_SVT_NEW_FOLDER ) ) );
     sal_Bool bHandled = sal_False;
@@ -798,7 +798,7 @@ IMPL_STATIC_LINK( SvtFileDialog, NewFolderHdl_Impl, PushButton*, EMPTYARG )
     {
         if ( aDlg.Execute() == RET_OK )
         {
-            rtl::OUString aUrl = aContent.createFolder( aDlg.GetName( ) );
+            OUString aUrl = aContent.createFolder( aDlg.GetName( ) );
             if ( !aUrl.isEmpty( ) )
             {
                 pThis->_pFileView->CreatedFolder( aUrl, aDlg.GetName() );
@@ -1069,7 +1069,7 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
     // does the same thing for the same content twice, s/he wants both fails to be displayed.
     // Without the reset, it could be that the content cached all relevant information, and will not display any
     // error messages for the same content a second time ....
-    pThis->m_aContent.bindTo( ::rtl::OUString( ) );
+    pThis->m_aContent.bindTo( OUString( ) );
 
     if ( aFileName.Len() )
     {
@@ -1236,8 +1236,8 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
                     String sInvalidFile( aFileObj.GetMainURL( INetURLObject::DECODE_TO_IURI ) );
                     if ( INET_PROT_FILE == aFileObj.GetProtocol() )
                     {   // if it's a file URL, transform the URL into system notation
-                        ::rtl::OUString sURL( sInvalidFile );
-                        ::rtl::OUString sSystem;
+                        OUString sURL( sInvalidFile );
+                        OUString sSystem;
                         osl_getSystemPathFromFileURL( sURL.pData, &sSystem.pData );
                         sInvalidFile = sSystem;
                     }
@@ -1425,7 +1425,7 @@ IMPL_LINK_NOARG ( SvtFileDialog, AddPlacePressed_Hdl )
     INetURLObject aURLObj( _pFileView->GetViewURL() );
     PlacePtr newPlace(
         new Place( aURLObj.GetLastName(INetURLObject::DECODE_WITH_CHARSET),
-                ::rtl::OUString(_pFileView->GetViewURL()), true));
+                OUString(_pFileView->GetViewURL()), true));
     _pImp->_pPlaces->AppendPlace(newPlace);
     return 0;
 }
@@ -1619,7 +1619,7 @@ IMPL_LINK( SvtFileDialog, SelectHdl_Impl, SvTabListBox*, pBox )
                 _aPath = pUserData->maURL;
             }
             else
-                _pImp->_pEdFileName->SetText( rtl::OUString() );
+                _pImp->_pEdFileName->SetText( OUString() );
         }
         else
         {
@@ -1980,9 +1980,9 @@ void SvtFileDialog::displayIOException( const String& _rURL, IOErrorCode _eCode 
         // build an own exception which tells "access denied"
         InteractiveAugmentedIOException aException;
         aException.Arguments.realloc( 2 );
-        aException.Arguments[ 0 ] <<= ::rtl::OUString( sDisplayPath );
+        aException.Arguments[ 0 ] <<= OUString( sDisplayPath );
         aException.Arguments[ 1 ] <<= PropertyValue(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Uri" ) ),
+            OUString( "Uri" ),
             -1, aException.Arguments[ 0 ], PropertyState_DIRECT_VALUE
         );
             // (formerly, it was sufficient to put the URL first parameter. Nowadays,
@@ -2048,19 +2048,19 @@ void SvtFileDialog::EnableControl( Control* _pControl, sal_Bool _bEnable )
 
 short SvtFileDialog::PrepareExecute()
 {
-    rtl::OUString aEnvValue;
+    OUString aEnvValue;
     if ( getEnvironmentValue( "WorkDirMustContainRemovableMedia", aEnvValue ) && aEnvValue == "1" )
     {
         try
         {
             INetURLObject aStdDir( GetStandardDir() );
-            ::ucbhelper::Content aCnt( rtl::OUString( aStdDir.GetMainURL(
+            ::ucbhelper::Content aCnt( OUString( aStdDir.GetMainURL(
                                                     INetURLObject::NO_DECODE ) ),
                                  Reference< XCommandEnvironment >(),
                                  comphelper::getProcessComponentContext() );
-            Sequence< rtl::OUString > aProps(2);
-            aProps[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "IsVolume" ));
-            aProps[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "IsRemoveable" ));
+            Sequence< OUString > aProps(2);
+            aProps[0] = OUString( "IsVolume" );
+            aProps[1] = OUString( "IsRemoveable" );
 
             Reference< XResultSet > xResultSet
                 = aCnt.createCursor( aProps, ::ucbhelper::INCLUDE_FOLDERS_ONLY );
@@ -2142,7 +2142,7 @@ short SvtFileDialog::PrepareExecute()
 
     // set up initial filter
     sal_uInt16 nFilterCount = GetFilterCount();
-    rtl::OUString aAll = SvtResId( STR_FILTERNAME_ALL ).toString();
+    OUString aAll = SvtResId( STR_FILTERNAME_ALL ).toString();
     sal_Bool bHasAll = _pImp->HasFilterListEntry( aAll );
     if ( _pImp->GetCurFilter() || nFilterCount == 1 || ( nFilterCount == 2 && bHasAll ) )
     {
@@ -2156,7 +2156,7 @@ short SvtFileDialog::PrepareExecute()
                 nPos = nFilterCount;
                 while ( nPos-- )
                 {
-                    if ( aAll != rtl::OUString( GetFilterName( nPos ) ) )
+                    if ( aAll != OUString( GetFilterName( nPos ) ) )
                         break;
                 }
             }
@@ -2177,7 +2177,7 @@ short SvtFileDialog::PrepareExecute()
         // if applicable set respectively create filter for all files
         if ( !bHasAll )
         {
-            SvtFileDialogFilter_Impl* pAllFilter = implAddFilter( aAll, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(FILEDIALOG_FILTER_ALL)) );
+            SvtFileDialogFilter_Impl* pAllFilter = implAddFilter( aAll, OUString(RTL_CONSTASCII_USTRINGPARAM(FILEDIALOG_FILTER_ALL)) );
             _pImp->InsertFilterListEntry( pAllFilter );
             _pImp->SetCurFilter( pAllFilter, aAll );
         }
@@ -2243,12 +2243,12 @@ void SvtFileDialog::executeAsync( ::svt::AsyncPickerAction::Action _eAction,
     m_pCurrentAsyncAction = new AsyncPickerAction( this, _pFileView, _eAction );
 
     bool bReallyAsync = true;
-    m_aConfiguration.getNodeValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillAsynchronously" ) ) ) >>= bReallyAsync;
+    m_aConfiguration.getNodeValue( OUString( "FillAsynchronously" ) ) >>= bReallyAsync;
 
     sal_Int32 nMinTimeout = 0;
-    m_aConfiguration.getNodeValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Timeout/Min" ) ) ) >>= nMinTimeout;
+    m_aConfiguration.getNodeValue( OUString( "Timeout/Min" ) ) >>= nMinTimeout;
     sal_Int32 nMaxTimeout = 0;
-    m_aConfiguration.getNodeValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Timeout/Max" ) ) ) >>= nMaxTimeout;
+    m_aConfiguration.getNodeValue( OUString( "Timeout/Max" ) ) >>= nMaxTimeout;
 
     m_bInExecuteAsync = true;
     m_pCurrentAsyncAction->execute( _rURL, _rFilter, bReallyAsync ? nMinTimeout : -1, nMaxTimeout, GetBlackList() );
@@ -2288,14 +2288,14 @@ void SvtFileDialog::SetStandardDir( const String& rStdDir )
     _pImp->SetStandardDir( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
 }
 
-void SvtFileDialog::SetBlackList( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList )
+void SvtFileDialog::SetBlackList( const ::com::sun::star::uno::Sequence< OUString >& rBlackList )
 {
     _pImp->SetBlackList( rBlackList );
 }
 
 //*****************************************************************************
 
-const ::com::sun::star::uno::Sequence< ::rtl::OUString >& SvtFileDialog::GetBlackList() const
+const ::com::sun::star::uno::Sequence< OUString >& SvtFileDialog::GetBlackList() const
 {
     return _pImp->GetBlackList();
 }
@@ -2439,10 +2439,10 @@ void SvtFileDialog::InitSize()
 
     if ( aDlgOpt.Exists() )
     {
-        SetWindowState(rtl::OUStringToOString(aDlgOpt.GetWindowState(), osl_getThreadTextEncoding()));
+        SetWindowState(OUStringToOString(aDlgOpt.GetWindowState(), osl_getThreadTextEncoding()));
 
-        Any aUserData = aDlgOpt.GetUserItem( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "UserData" ) ));
-        ::rtl::OUString sCfgStr;
+        Any aUserData = aDlgOpt.GetUserItem( OUString( "UserData" ));
+        OUString sCfgStr;
         if ( aUserData >>= sCfgStr )
             _pFileView->SetConfigString( String( sCfgStr ) );
     }
@@ -2450,9 +2450,9 @@ void SvtFileDialog::InitSize()
 
 //*****************************************************************************
 
-std::vector<rtl::OUString> SvtFileDialog::GetPathList() const
+std::vector<OUString> SvtFileDialog::GetPathList() const
 {
-    std::vector<rtl::OUString> aList;
+    std::vector<OUString> aList;
     sal_uLong           nCount = _pFileView->GetSelectionCount();
     SvTreeListEntry*    pEntry = nCount ? _pFileView->FirstSelected() : NULL;
 
@@ -2547,7 +2547,7 @@ sal_Bool SvtFileDialog::IsolateFilterFromPath_Impl( String& rPath, String& rFilt
 
         if ( nPathTokenPos == STRING_NOTFOUND )
         {
-            rtl::OUString aDelim(
+            OUString aDelim(
 #if defined(WNT)
                     '\\'
 #else
@@ -3260,7 +3260,7 @@ sal_Bool SvtFileDialog::AddControl( Window* pControl, sal_Bool bNewLine )
     return sal_True;
 }
 
-sal_Bool SvtFileDialog::ContentHasParentFolder( const rtl::OUString& rURL )
+sal_Bool SvtFileDialog::ContentHasParentFolder( const OUString& rURL )
 {
     m_aContent.bindTo( rURL );
 
@@ -3270,7 +3270,7 @@ sal_Bool SvtFileDialog::ContentHasParentFolder( const rtl::OUString& rURL )
     return m_aContent.hasParentFolder( ) && m_aContent.isValid();
 }
 
-sal_Bool SvtFileDialog::ContentCanMakeFolder( const rtl::OUString& rURL )
+sal_Bool SvtFileDialog::ContentCanMakeFolder( const OUString& rURL )
 {
     m_aContent.bindTo( rURL );
 
@@ -3280,14 +3280,14 @@ sal_Bool SvtFileDialog::ContentCanMakeFolder( const rtl::OUString& rURL )
     return m_aContent.canCreateFolder( ) && m_aContent.isValid();
 }
 
-sal_Bool SvtFileDialog::ContentGetTitle( const rtl::OUString& rURL, String& rTitle )
+sal_Bool SvtFileDialog::ContentGetTitle( const OUString& rURL, String& rTitle )
 {
     m_aContent.bindTo( rURL );
 
     if ( m_aContent.isInvalid() )
         return sal_False;
 
-    ::rtl::OUString sTitle;
+    OUString sTitle;
     m_aContent.getTitle( sTitle );
     rTitle = sTitle;
 
@@ -3335,8 +3335,8 @@ void SvtFileDialog::initDefaultPlaces( )
     _pImp->_pPlaces->AppendPlace( pRootPlace );
 
     // Load from user settings
-    Sequence< ::rtl::OUString > placesUrlsList(officecfg::Office::Common::Misc::FilePickerPlacesUrls::get(m_context));
-    Sequence< ::rtl::OUString > placesNamesList(officecfg::Office::Common::Misc::FilePickerPlacesNames::get(m_context));
+    Sequence< OUString > placesUrlsList(officecfg::Office::Common::Misc::FilePickerPlacesUrls::get(m_context));
+    Sequence< OUString > placesNamesList(officecfg::Office::Common::Misc::FilePickerPlacesNames::get(m_context));
 
     for(sal_Int32 nPlace = 0; nPlace < placesUrlsList.getLength() && nPlace < placesNamesList.getLength(); ++nPlace)
     {
