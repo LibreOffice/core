@@ -37,6 +37,38 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL osl_tryToAcquireSemaphore(void *) {
     for (;;) { std::abort(); } // avoid "must return a value" warnings
 }
 
+SAL_DLLPUBLIC_EXPORT sal_Int32 SAL_CALL rtl_compareMemory(
+    void const *, void const *, sal_Size)
+{
+    for (;;) { std::abort(); } // avoid "must return a value" warnings
+}
+
+SAL_DLLPUBLIC_EXPORT void SAL_CALL rtl_copyMemory(
+    void *, void const *, sal_Size)
+{
+    std::abort();
+}
+
+SAL_DLLPUBLIC_EXPORT void SAL_CALL rtl_fillMemory(void *, sal_Size, sal_uInt8) {
+    std::abort();
+}
+
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL rtl_findInMemory(
+    void const *, sal_uInt8, sal_Size)
+{
+    for (;;) { std::abort(); } // avoid "must return a value" warnings
+}
+
+SAL_DLLPUBLIC_EXPORT void SAL_CALL rtl_moveMemory(
+    void *, void const *, sal_Size)
+{
+    std::abort();
+}
+
+SAL_DLLPUBLIC_EXPORT void SAL_CALL rtl_zeroMemory(void *, sal_Size) {
+    std::abort();
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
