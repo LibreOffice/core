@@ -188,13 +188,8 @@ UDK_3_0_0 {
         osl_sendResourcePipe;
         osl_receiveResourcePipe;
         rtl_allocateMemory;
-        rtl_compareMemory;
-        rtl_copyMemory;
-        rtl_fillMemory;
         rtl_freeMemory;
-        rtl_moveMemory;
         rtl_reallocateMemory;
-        rtl_zeroMemory;
         rtl_findInMemory;
         rtl_hashentry_destroy;
         rtl_hashfunc;
