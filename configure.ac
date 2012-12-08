@@ -4197,7 +4197,6 @@ if test "$cross_compiling" = "yes"; then
     # Don't bother having configure look for stuff not needed for the build platform anyway
     ./configure \
         --disable-graphite \
-        --disable-build-mozilla \
         --disable-postgresql-sdbc \
         --disable-zenity \
         --with-parallelism="$with_parallelism" \
