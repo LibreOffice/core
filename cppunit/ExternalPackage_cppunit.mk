@@ -21,7 +21,11 @@ $(eval $(call gb_ExternalPackage_add_file,cppunit,lib/cppunit.dll.a,src/cppunit/
 $(eval $(call gb_ExternalPackage_add_file,cppunit,bin/DllPlugInTester.exe,src/DllPlugInTester/.libs/DllPlugInTester.exe))
 endif
 else
+ifneq ($(DISABLE_DYNLOADING),TRUE)
 $(eval $(call gb_ExternalPackage_add_file,cppunit,bin/DllPlugInTester,src/DllPlugInTester/.libs/DllPlugInTester))
+else
+$(eval $(call gb_ExternalPackage_add_file,cppunit,bin/DllPlugInTester,src/DllPlugInTester/DllPlugInTester))
+endif
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_ExternalPackage_add_file,cppunit,lib/libcppunit-1.13.0.dylib,src/cppunit/.libs/libcppunit-1.13.0.dylib))
 $(eval $(call gb_ExternalPackage_add_file,cppunit,lib/libcppunit.dylib,src/cppunit/.libs/libcppunit.dylib))
