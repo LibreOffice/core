@@ -291,14 +291,15 @@ void DataLabelResources::EnableControls()
 {
     m_aCBSymbol.Enable( m_aCBNumber.IsChecked() || (m_aCBPercent.IsChecked() && m_aCBPercent.IsEnabled()) || m_aCBCategory.IsChecked() );
 
-    //enable separator
+    // Enable or disable separator, placement and direction based on the check
+    // box states. Note that the check boxes are tri-state.
     {
         long nNumberOfCheckedLabelParts = 0;
-        if( m_aCBNumber.IsChecked() )
+        if (m_aCBNumber.GetState() != STATE_NOCHECK)
             ++nNumberOfCheckedLabelParts;
-        if( m_aCBPercent.IsChecked() && m_aCBPercent.IsEnabled() )
+        if (m_aCBPercent.GetState() != STATE_NOCHECK && m_aCBPercent.IsEnabled())
             ++nNumberOfCheckedLabelParts;
-        if( m_aCBCategory.IsChecked() )
+        if (m_aCBCategory.GetState() != STATE_NOCHECK)
             ++nNumberOfCheckedLabelParts;
         m_aSeparatorResources.Enable( nNumberOfCheckedLabelParts > 1 );
         bool bEnableTextDir = nNumberOfCheckedLabelParts > 0;
