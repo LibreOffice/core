@@ -119,7 +119,6 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/rtl/source/locale \
 	sal/rtl/source/logfile \
 	sal/rtl/source/math \
-	sal/rtl/source/memory \
 	sal/rtl/source/random \
 	sal/rtl/source/rtl_process \
 	sal/rtl/source/strbuf \
