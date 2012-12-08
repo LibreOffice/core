@@ -47,7 +47,7 @@ public:
     int run();
     int runandwaitforresult();
 
-    inline rtl::OUString getDisplayDirectory() { return m_sDisplayDirectory; }
+    inline OUString getDisplayDirectory() { return m_sDisplayDirectory; }
 
     inline ControlHelper* getControlHelper() const {
         return m_pControlHelper;
@@ -55,7 +55,7 @@ public:
 
 protected:
 
-    rtl::OUString m_sDisplayDirectory;
+    OUString m_sDisplayDirectory;
 
     NSSavePanel *m_pDialog;
 
@@ -72,13 +72,13 @@ protected:
 
     NavigationServices_DialogType m_nDialogType;
 
-    void implsetTitle( const ::rtl::OUString& aTitle )
+    void implsetTitle( const OUString& aTitle )
         throw( ::com::sun::star::uno::RuntimeException );
 
-    void implsetDisplayDirectory( const rtl::OUString& rDirectory )
+    void implsetDisplayDirectory( const OUString& rDirectory )
         throw( com::sun::star::lang::IllegalArgumentException, com::sun::star::uno::RuntimeException );
 
-    rtl::OUString implgetDisplayDirectory(  )
+    OUString implgetDisplayDirectory(  )
         throw( com::sun::star::uno::RuntimeException );
 
     void implInitialize( );

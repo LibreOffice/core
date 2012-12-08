@@ -55,7 +55,7 @@ public:
     // XExecutableDialog functions
     //------------------------------------------------------------------------------------
 
-    virtual void SAL_CALL setTitle( const ::rtl::OUString& aTitle )
+    virtual void SAL_CALL setTitle( const OUString& aTitle )
         throw( ::com::sun::star::uno::RuntimeException );
 
     virtual sal_Int16 SAL_CALL execute(  )
@@ -65,29 +65,29 @@ public:
     // XFolderPicker functions
     //------------------------------------------------------------------------------------
 
-    virtual void SAL_CALL setDisplayDirectory( const rtl::OUString& rDirectory )
+    virtual void SAL_CALL setDisplayDirectory( const OUString& rDirectory )
         throw( com::sun::star::lang::IllegalArgumentException, com::sun::star::uno::RuntimeException );
 
-    virtual rtl::OUString SAL_CALL getDisplayDirectory(  )
+    virtual OUString SAL_CALL getDisplayDirectory(  )
         throw( com::sun::star::uno::RuntimeException );
 
-    virtual rtl::OUString SAL_CALL getDirectory( )
+    virtual OUString SAL_CALL getDirectory( )
         throw( com::sun::star::uno::RuntimeException );
 
-    virtual void SAL_CALL setDescription( const rtl::OUString& rDescription )
+    virtual void SAL_CALL setDescription( const OUString& rDescription )
         throw( com::sun::star::uno::RuntimeException );
 
     //------------------------------------------------
     // XServiceInfo
     //------------------------------------------------
 
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  )
+    virtual OUString SAL_CALL getImplementationName(  )
         throw(::com::sun::star::uno::RuntimeException);
 
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
         throw(::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
         throw(::com::sun::star::uno::RuntimeException);
 
     //------------------------------------------------

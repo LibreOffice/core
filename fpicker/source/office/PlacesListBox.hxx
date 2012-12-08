@@ -46,7 +46,7 @@ class PlacesListBox_Impl : public SvHeaderTabListBox
         PlacesListBox*       mpParent;
 
     public:
-        PlacesListBox_Impl( PlacesListBox* pParent, const rtl::OUString& rTitle );
+        PlacesListBox_Impl( PlacesListBox* pParent, const OUString& rTitle );
         ~PlacesListBox_Impl( );
 
         virtual void MouseButtonUp( const MouseEvent& rMEvt );
@@ -67,7 +67,7 @@ class PlacesListBox : public Control
         bool                 mbSelectionChanged;
 
     public:
-        PlacesListBox( SvtFileDialog* pFileDlg, const rtl::OUString& rTitle, const ResId& rResId );
+        PlacesListBox( SvtFileDialog* pFileDlg, const OUString& rTitle, const ResId& rResId );
         ~PlacesListBox( );
 
         void AppendPlace( PlacePtr pPlace );

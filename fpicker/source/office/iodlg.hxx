@@ -212,11 +212,11 @@ public:
             void                FileSelect();
             void                FilterSelect();
 
-    void                        SetBlackList( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList );
-    const ::com::sun::star::uno::Sequence< ::rtl::OUString >& GetBlackList() const;
+    void                        SetBlackList( const ::com::sun::star::uno::Sequence< OUString >& rBlackList );
+    const ::com::sun::star::uno::Sequence< OUString >& GetBlackList() const;
     void                        SetStandardDir( const String& rStdDir );
     const String&               GetStandardDir() const;
-    std::vector<rtl::OUString>  GetPathList() const;        // for MultiSelection
+    std::vector<OUString>  GetPathList() const;        // for MultiSelection
 
             void                AddFilter( const String& rFilter,
                                            const String& rType );
@@ -286,10 +286,10 @@ public:
 
     inline Image                GetButtonImage( sal_uInt16 _nButtonId ) const { return m_aImages.GetImage( _nButtonId ); }
 
-    sal_Bool                    ContentIsFolder( const rtl::OUString& rURL ) { return m_aContent.isFolder( rURL ) && m_aContent.isValid(); }
-    sal_Bool                    ContentHasParentFolder( const rtl::OUString& rURL );
-    sal_Bool                    ContentCanMakeFolder( const rtl::OUString& rURL );
-    sal_Bool                    ContentGetTitle( const rtl::OUString& rURL, String& rTitle );
+    sal_Bool                    ContentIsFolder( const OUString& rURL ) { return m_aContent.isFolder( rURL ) && m_aContent.isValid(); }
+    sal_Bool                    ContentHasParentFolder( const OUString& rURL );
+    sal_Bool                    ContentCanMakeFolder( const OUString& rURL );
+    sal_Bool                    ContentGetTitle( const OUString& rURL, String& rTitle );
 
     /** updates the sizes of the listboxes in the bottom area of the dialog, and of their labels,
         according to the space occupied by the current label texts

@@ -52,24 +52,24 @@ namespace svt
         OControlAccess( IFilePickerController* _pController, SvtFileView* _pFileView );
 
         // XControlAccess implementation
-        void setControlProperty( const ::rtl::OUString& _rControlName, const ::rtl::OUString& _rControlProperty, const ::com::sun::star::uno::Any& _rValue );
-        ::com::sun::star::uno::Any  getControlProperty( const ::rtl::OUString& _rControlName, const ::rtl::OUString& _rControlProperty );
+        void setControlProperty( const OUString& _rControlName, const OUString& _rControlProperty, const ::com::sun::star::uno::Any& _rValue );
+        ::com::sun::star::uno::Any  getControlProperty( const OUString& _rControlName, const OUString& _rControlProperty );
 
         // XControlInformation implementation
-        ::com::sun::star::uno::Sequence< ::rtl::OUString >  getSupportedControls(  );
-        ::com::sun::star::uno::Sequence< ::rtl::OUString >  getSupportedControlProperties( const ::rtl::OUString& _rControlName );
-        sal_Bool                                            isControlSupported( const ::rtl::OUString& _rControlName );
-        sal_Bool                                            isControlPropertySupported( const ::rtl::OUString& _rControlName, const ::rtl::OUString& _rControlProperty );
+        ::com::sun::star::uno::Sequence< OUString >  getSupportedControls(  );
+        ::com::sun::star::uno::Sequence< OUString >  getSupportedControlProperties( const OUString& _rControlName );
+        sal_Bool                                            isControlSupported( const OUString& _rControlName );
+        sal_Bool                                            isControlPropertySupported( const OUString& _rControlName, const OUString& _rControlProperty );
 
         // XFilePickerControlAccess
         void                        setValue( sal_Int16 _nId, sal_Int16 _nCtrlAction, const ::com::sun::star::uno::Any& _rValue );
         ::com::sun::star::uno::Any  getValue( sal_Int16 _nId, sal_Int16 _nCtrlAction ) const;
-        void                        setLabel( sal_Int16 _nId, const ::rtl::OUString& _rValue );
-        ::rtl::OUString             getLabel( sal_Int16 _nId ) const;
+        void                        setLabel( sal_Int16 _nId, const OUString& _rValue );
+        OUString             getLabel( sal_Int16 _nId ) const;
         void                        enableControl( sal_Int16 _nId, sal_Bool _bEnable );
 
-        static void             setHelpURL( Window* _pControl, const ::rtl::OUString& _rURL, sal_Bool _bFileView );
-        static ::rtl::OUString  getHelpURL( Window* _pControl, sal_Bool _bFileView );
+        static void             setHelpURL( Window* _pControl, const OUString& _rURL, sal_Bool _bFileView );
+        static OUString  getHelpURL( Window* _pControl, sal_Bool _bFileView );
 
     private:
         /** implements the various methods for setting properties on controls
@@ -91,7 +91,7 @@ namespace svt
                                         Control* _pControl, sal_Int16 _nProperty, const ::com::sun::star::uno::Any& _rValue,
                                         sal_Bool _bIgnoreIllegalArgument = sal_True );
 
-        Control* implGetControl( const ::rtl::OUString& _rControlName, sal_Int16* _pId = NULL, sal_Int32* _pPropertyMask = NULL ) const SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) );
+        Control* implGetControl( const OUString& _rControlName, sal_Int16* _pId = NULL, sal_Int32* _pPropertyMask = NULL ) const SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) );
 
         /** implements the various methods for retrieving properties from controls
 

@@ -34,10 +34,10 @@ enum InfoType {
     PATHWITHOUTLASTCOMPONENT
 };
 
-rtl::OUString CFStringToOUString(const CFStringRef sOrig);
-rtl::OUString FSRefToOUString(FSRef fsRef, InfoType info = FULLPATH);
-rtl::OUString CFURLRefToOUString(CFURLRef aUrlRef, InfoType info);
-CFStringRef CFStringCreateWithOUString(const rtl::OUString& aString);
+OUString CFStringToOUString(const CFStringRef sOrig);
+OUString FSRefToOUString(FSRef fsRef, InfoType info = FULLPATH);
+OUString CFURLRefToOUString(CFURLRef aUrlRef, InfoType info);
+CFStringRef CFStringCreateWithOUString(const OUString& aString);
 
 //debug utils
 #define PARAMFILLER "\n                    "
@@ -54,7 +54,7 @@ inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, con
     OSL_TRACE(">>> %s::%s%s%s = %s", classname, methodname, PARAMFILLER, param1, value1);
 }
 
-inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, const char* param1, const rtl::OUString& value1) {
+inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, const char* param1, const OUString& value1) {
     OSL_TRACE(">>> %s::%s%s%s = %s", classname, methodname, PARAMFILLER, param1, OUStringToOString(value1, RTL_TEXTENCODING_UTF8).getStr());
 }
 
@@ -122,11 +122,11 @@ inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, con
 }
 
 
-inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, const char* param1, const rtl::OUString& value1, const char* param2, const rtl::OUString& value2) {
+inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, const char* param1, const OUString& value1, const char* param2, const OUString& value2) {
     OSL_TRACE(">>> %s::%s%s%s = %s%s%s = %s", classname, methodname, PARAMFILLER, param1, OUStringToOString(value1, RTL_TEXTENCODING_UTF8).getStr(), PARAMFILLER, param2, OUStringToOString(value2, RTL_TEXTENCODING_UTF8).getStr());
 }
 
-inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, const char* param1, const rtl::OUString& value1, const char* param2, const int value2) {
+inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, const char* param1, const OUString& value1, const char* param2, const int value2) {
     OSL_TRACE(">>> %s::%s%s%s = %s%s%s = %d", classname, methodname, PARAMFILLER, param1, OUStringToOString(value1, RTL_TEXTENCODING_UTF8).getStr(), PARAMFILLER, param2, value2);
 }
 
@@ -174,7 +174,7 @@ inline void DBG_PRINT_EXIT(const char * classname, const char * methodname, cons
 }
 #endif
 
-inline void DBG_PRINT_EXIT(const char * classname, const char * methodname, const rtl::OUString& retVal) {
+inline void DBG_PRINT_EXIT(const char * classname, const char * methodname, const OUString& retVal) {
     OSL_TRACE("<<< %s::%s%sreturnValue = %s", classname, methodname, PARAMFILLER, OUStringToOString(retVal, RTL_TEXTENCODING_UTF8).getStr());
 }
 

@@ -36,9 +36,8 @@
 
 #define COLUMN_NAME     1
 
-using rtl::OUString;
 
-PlacesListBox_Impl::PlacesListBox_Impl( PlacesListBox* pParent, const rtl::OUString& rTitle ) :
+PlacesListBox_Impl::PlacesListBox_Impl( PlacesListBox* pParent, const OUString& rTitle ) :
     SvHeaderTabListBox( pParent, WB_TABSTOP | WB_NOINITIALSELECTION ),
     mpHeaderBar( NULL ),
     mpParent( pParent )
@@ -73,7 +72,7 @@ void PlacesListBox_Impl::MouseButtonUp( const MouseEvent& rMEvt )
     mpParent->updateView( );
 }
 
-PlacesListBox::PlacesListBox( SvtFileDialog* pFileDlg, const rtl::OUString& rTitle, const ResId& rResId ) :
+PlacesListBox::PlacesListBox( SvtFileDialog* pFileDlg, const OUString& rTitle, const ResId& rResId ) :
     Control( pFileDlg, rResId ),
     maPlaces( ),
     mpDlg( pFileDlg ),
@@ -90,12 +89,12 @@ PlacesListBox::PlacesListBox( SvtFileDialog* pFileDlg, const rtl::OUString& rTit
     mpImpl->SetDoubleClickHdl( LINK( this, PlacesListBox, DoubleClick ) ) ;
 
     mpAddBtn = new ImageButton( this, 0 );
-    mpAddBtn->SetText( rtl::OUString( "+" ) );
+    mpAddBtn->SetText( OUString( "+" ) );
     mpAddBtn->SetPosSizePixel( Point( 0, 0 ), Size( 24, 24 ) );
     mpAddBtn->Show();
 
     mpDelBtn = new ImageButton( this, 0 );
-    mpDelBtn->SetText( rtl::OUString( "-" ) );
+    mpDelBtn->SetText( OUString( "-" ) );
     mpDelBtn->SetPosSizePixel( Point( 0, 0 ), Size( 24, 24 ) );
     mpDelBtn->Show();
 }

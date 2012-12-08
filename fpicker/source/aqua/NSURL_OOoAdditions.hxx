@@ -27,7 +27,7 @@
 #include <rtl/ustring.hxx>
 
 @interface NSURL (OOoAdditions)
-- (rtl::OUString) OUStringForInfo:(InfoType)info;
+- (OUString) OUStringForInfo:(InfoType)info;
 @end
 
 /*
