@@ -242,7 +242,7 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
                                         xObjectProperties, xSeries, rDrawModel.GetItemPool(), rDrawModel,
                                         pNumberFormatterWrapper,
                                         uno::Reference< lang::XMultiServiceFactory >( xChartModel, uno::UNO_QUERY ),
-                                        eMapTo, pRefSize, bDataSeries, bUseSpecialFillColor, nSpecialFillColor, false,
+                                        eMapTo, pRefSize, bDataSeries, bUseSpecialFillColor, nSpecialFillColor, true,
                                         nNumberFormat, nPercentNumberFormat );
                     break;
             }
