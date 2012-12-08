@@ -36,6 +36,10 @@ $(eval $(call gb_Library_set_include,updchk,\
 	-I$(SRCDIR)/extensions/inc \
 ))
 
+$(eval $(call gb_Library_use_packages,updchk,\
+    tools_inc \
+))
+
 $(eval $(call gb_Library_use_sdk_api,updchk))
 
 $(eval $(call gb_Library_use_libraries,updchk,\
