@@ -36,20 +36,6 @@
 
 using namespace com::sun::star;
 
-// Set all values to defaultt; is called after loading the bitmap!
-void SvxRTFPictureType::ResetValues()
-{   // Set all values RTF-Defaults
-    eStyle = RTF_BITMAP;
-    nMode = HEX_MODE;
-    nType = nGoalWidth = nGoalHeight = 0;
-    nWidth = nHeight = nWidthBytes = 0;
-    uPicLen = 0;
-    nBitsPerPixel = nPlanes = 1;
-    nScalX = nScalY = 100;      // Scale in percent
-    nCropT = nCropB = nCropL = nCropR = 0;
-    aPropertyPairs.clear();
-}
-
 ImportInfo::ImportInfo( ImportState eSt, SvParser* pPrsrs, const ESelection& rSel )
     : aSelection( rSel )
 {

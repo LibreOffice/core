@@ -2796,12 +2796,6 @@ void SwTableBox::RegisterToFormat( SwFmt& rFmt )
     rFmt.Add( this );
 }
 
-void SwTableBox::ForgetFrmFmt()
-{
-    if ( GetRegisteredIn() )
-        GetRegisteredInNonConst()->Remove(this);
-}
-
 // free's any remaining child objects
 SwTableLines::~SwTableLines()
 {

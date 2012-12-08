@@ -42,10 +42,6 @@
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
-VbaDocumentBase::VbaDocumentBase( const uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext) :VbaDocumentBase_BASE( xParent, xContext ), mxModel(NULL)
-{
-}
-
 VbaDocumentBase::VbaDocumentBase( const uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, uno::Reference< frame::XModel > xModel ) : VbaDocumentBase_BASE( xParent, xContext ),  mxModel( xModel )
 {
 }

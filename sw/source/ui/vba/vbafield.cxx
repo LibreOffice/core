@@ -81,13 +81,10 @@ public:
     SwVbaReadFieldParams( const String& rData );
     ~SwVbaReadFieldParams();
 
-    xub_StrLen GoToTokenParam();
     long SkipToNextToken();
     xub_StrLen GetTokenSttPtr() const   { return nFnd;  }
 
     xub_StrLen FindNextStringPiece( xub_StrLen _nStart = STRING_NOTFOUND );
-    bool GetTokenSttFromTo(xub_StrLen* _pFrom, xub_StrLen* _pTo,
-        xub_StrLen _nMax);
 
     String GetResult() const;
     String GetFieldName()const { return aFieldName; }
@@ -132,15 +129,6 @@ String SwVbaReadFieldParams::GetResult() const
             : aData.Copy( nFnd, (nSavPtr - nFnd) );
 }
 
-
-xub_StrLen SwVbaReadFieldParams::GoToTokenParam()
-{
-    xub_StrLen nOld = nNext;
-    if( -2 == SkipToNextToken() )
-        return GetTokenSttPtr();
-    nNext = nOld;
-    return STRING_NOTFOUND;
-}
 
 // ret: -2: NOT a '\' parameter but normal Text
 long SwVbaReadFieldParams::SkipToNextToken()
@@ -236,33 +224,6 @@ xub_StrLen SwVbaReadFieldParams::FindNextStringPiece(const xub_StrLen nStart)
         nNext = n2;
     }
     return n;
-}
-
-
-
-// read parameters "1-3" or 1-3 with both values between 1 and nMax
-bool SwVbaReadFieldParams::GetTokenSttFromTo(sal_uInt16* pFrom, sal_uInt16* pTo, sal_uInt16 nMax)
-{
-    sal_uInt16 nStart = 0;
-    sal_uInt16 nEnd   = 0;
-    xub_StrLen n = GoToTokenParam();
-    if( STRING_NOTFOUND != n )
-    {
-
-        String sParams( GetResult() );
-
-        xub_StrLen nIndex = 0;
-        String sStart( sParams.GetToken(0, '-', nIndex) );
-        if( STRING_NOTFOUND != nIndex )
-        {
-            nStart = static_cast<sal_uInt16>(sStart.ToInt32());
-            nEnd   = static_cast<sal_uInt16>(sParams.Copy(nIndex).ToInt32());
-        }
-    }
-    if( pFrom ) *pFrom = nStart;
-    if( pTo )   *pTo   = nEnd;
-
-    return nStart && nEnd && (nMax >= nStart) && (nMax >= nEnd);
 }
 
 // *** SwVbaFields ***********************************************

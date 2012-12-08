@@ -70,8 +70,7 @@ private:
     bool                        mbUseFont;      /// true = Use maEntryFont/mpEntryColor in InitEntry().
 
 public:
-                                SvxFontListBox(Window* pParent, const ResId& rResId);
-                                SvxFontListBox(Window* pParent, WinBits nStyle = WB_BORDER);
+    SvxFontListBox(Window* pParent, WinBits nStyle = WB_BORDER);
 
     /** Inserts a list entry and sets the font used for this entry.
         @param pColor  The font color. NULL = use default listbox text color. */

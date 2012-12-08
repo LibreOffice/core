@@ -173,7 +173,6 @@ protected:
         ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
     void FieldFocusChanged(size_t nOldSelected, size_t nFieldSelected);
-    void AccessibleSetFocus(bool bOn);
 
     /** Updates the tab stop style bits. */
     void UpdateStyle();

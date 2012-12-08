@@ -242,7 +242,6 @@ public:
                     sal_uInt16 nCnt = 1, bool bBehind = true );
     bool InsertRow( SwDoc*, const SwSelBoxes& rBoxes,
                     sal_uInt16 nCnt = 1, bool bBehind = true );
-    bool AppendRow( SwDoc* pDoc, sal_uInt16 nCnt = 1 );
     void PrepareDelBoxes( const SwSelBoxes& rBoxes );
     bool DeleteSel( SwDoc*, const SwSelBoxes& rBoxes, const SwSelBoxes* pMerged,
         SwUndo* pUndo, const bool bDelMakeFrms, const bool bCorrBorder );
@@ -478,7 +477,6 @@ public:
         sal_uInt16 nMaxStep = USHRT_MAX ) const
         { return const_cast<SwTableBox*>(this)->FindEndOfRowSpan( rTable, nMaxStep ); }
     void RegisterToFormat( SwFmt& rFmt ) ;
-    void ForgetFrmFmt();
 };
 
 class SwCellFrm;

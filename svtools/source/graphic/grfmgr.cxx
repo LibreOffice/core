@@ -1038,31 +1038,6 @@ sal_Bool GraphicObject::SwapIn()
     return bRet;
 }
 
-sal_Bool GraphicObject::SwapIn( SvStream* pIStm )
-{
-    sal_Bool bRet;
-
-    if( mbAutoSwapped )
-    {
-        ImplAutoSwapIn();
-        bRet = sal_True;
-    }
-    else if( mpMgr && mpMgr->ImplFillSwappedGraphicObject( *this, maGraphic ) )
-        bRet = sal_True;
-    else
-    {
-        bRet = maGraphic.SwapIn( pIStm );
-
-        if( bRet && mpMgr )
-            mpMgr->ImplGraphicObjectWasSwappedIn( *this );
-    }
-
-    if( bRet )
-        ImplAssignGraphicData();
-
-    return bRet;
-}
-
 void GraphicObject::SetSwapState()
 {
     if( !IsSwappedOut() )

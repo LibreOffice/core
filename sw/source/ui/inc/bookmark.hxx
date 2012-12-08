@@ -38,7 +38,6 @@ class BookmarkCombo : public SwComboBox
     virtual long    PreNotify(NotifyEvent& rNEvt);
 public:
     BookmarkCombo( Window* pWin );
-    BookmarkCombo( Window* pWin, const ResId& rResId );
 
     sal_uInt16          GetSelectEntryCount() const;
     sal_uInt16          GetSelectEntryPos( sal_uInt16 nSelIndex = 0 ) const;

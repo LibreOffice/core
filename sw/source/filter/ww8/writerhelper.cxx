@@ -757,6 +757,62 @@ namespace sw
             return nRet;
         }
     }
+
+    namespace util
+    {
+        InsertedTableClient::InsertedTableClient(SwTableNode & rNode)
+        {
+            rNode.Add(this);
+        }
+
+        SwTableNode * InsertedTableClient::GetTableNode()
+        {
+            return dynamic_cast<SwTableNode *> (GetRegisteredInNonConst());
+        }
+
+        InsertedTablesManager::InsertedTablesManager(const SwDoc &rDoc)
+            : mbHasRoot(rDoc.GetCurrentLayout())    //swmod 080218
+        {
+        }
+
+        void InsertedTablesManager::DelAndMakeTblFrms()
+        {
+            if (!mbHasRoot)
+                return;
+            TblMapIter aEnd = maTables.end();
+            for (TblMapIter aIter = maTables.begin(); aIter != aEnd; ++aIter)
+            {
+                // exitiert schon ein Layout, dann muss an dieser Tabelle die BoxFrames
+                // neu erzeugt
+                SwTableNode *pTable = aIter->first->GetTableNode();
+                OSL_ENSURE(pTable, "Why no expected table");
+                if (pTable)
+                {
+                    SwFrmFmt * pFrmFmt = pTable->GetTable().GetFrmFmt();
+
+                    if (pFrmFmt != NULL)
+                    {
+                        SwNodeIndex *pIndex = aIter->second;
+                        pTable->DelFrms();
+                        pTable->MakeFrms(pIndex);
+                    }
+                }
+            }
+        }
+
+        void InsertedTablesManager::InsertTable(SwTableNode &rTableNode, SwPaM &rPaM)
+        {
+            if (!mbHasRoot)
+                return;
+            //Associate this tablenode with this after position, replace an //old
+            //node association if necessary
+
+            InsertedTableClient * pClient = new InsertedTableClient(rTableNode);
+
+            maTables.insert(TblMap::value_type(pClient, &(rPaM.GetPoint()->nNode)));
+        }
+    }
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

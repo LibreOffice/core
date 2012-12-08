@@ -143,20 +143,6 @@ namespace
 
 namespace ww
 {
-    //Original code/idea by Takashi Ono for CJK
-    sti GetCanonicalStiFromEnglishName(const String &rName) throw()
-    {
-        typedef const sal_Char** myIter;
-        sti eRet = stiUser;
-        myIter aBegin = GetStiNames();
-        myIter aEnd(aBegin);
-        std::advance(aEnd, stiMax);
-        myIter aIter = std::find_if(aBegin, aEnd, SameName(rName));
-        if (aIter != aEnd)
-            eRet = static_cast<sti>(std::distance(aBegin, aIter));
-        return eRet;
-    }
-
     const sal_Char* GetEnglishNameFromSti(sti eSti) throw()
     {
         if (eSti >= stiMax)

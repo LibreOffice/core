@@ -72,7 +72,6 @@ public:
 
     SwCharFmt* GetCharFmt() const { return (SwCharFmt*)GetRegisteredIn(); }
     void SetCharFmt( SwCharFmt* );
-    void ForgetCharFmt();
 
     virtual void            SetCharFmtName(const String& rSet);
     virtual const String&   GetCharFmtName()const;

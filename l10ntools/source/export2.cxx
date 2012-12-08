@@ -88,7 +88,6 @@ ResData::~ResData()
 
 /*****************************************************************************/
 rtl::OString Export::sLanguages;
-rtl::OString Export::sForcedLanguages;
 /*****************************************************************************/
 
 bool Export::handleArguments(
@@ -203,11 +202,6 @@ void Export::SetLanguages( std::vector<rtl::OString> val ){
 std::vector<rtl::OString> Export::GetLanguages(){
 /*****************************************************************************/
     return aLanguages;
-}
-/*****************************************************************************/
-std::vector<rtl::OString> Export::GetForcedLanguages(){
-/*****************************************************************************/
-    return aForcedLanguages;
 }
 std::vector<rtl::OString> Export::aLanguages       = std::vector<rtl::OString>();
 std::vector<rtl::OString> Export::aForcedLanguages = std::vector<rtl::OString>();
@@ -337,27 +331,8 @@ void Export::InitLanguages( bool bMergeMode ){
         }
         while ( nIndex >= 0 );
 
-        InitForcedLanguages( bMergeMode );
         isInitialized = true;
     }
-}
-/*****************************************************************************/
-void Export::InitForcedLanguages( bool bMergeMode ){
-/*****************************************************************************/
-    rtl::OString sTmp;
-    OStringBoolHashMap aEnvLangs;
-
-    sal_Int32 nIndex = 0;
-    do
-    {
-        rtl::OString aToken = sForcedLanguages.getToken(0, ',', nIndex);
-
-        sTmp = aToken.getToken(0, '=').trim();
-        if( bMergeMode && isAllowed( sTmp ) ){}
-        else if( !( (sTmp[0]=='x' || sTmp[0]=='X') && sTmp[1]=='-' ) )
-            aForcedLanguages.push_back( sTmp );
-    }
-    while ( nIndex >= 0 );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -88,15 +88,6 @@ void SvLBoxFontString::InitViewData( SvTreeListBox* pView, SvTreeListEntry* pEnt
 
 // ============================================================================
 
-SvxFontListBox::SvxFontListBox(Window* pParent, const ResId& rResId)
-    : SvTabListBox(pParent, rResId)
-    , maStdFont(GetFont())
-    , mbUseFont(false)
-{
-    maStdFont.SetTransparent(sal_True);
-    maEntryFont = maStdFont;
-}
-
 SvxFontListBox::SvxFontListBox(Window* pParent, WinBits nStyle)
     : SvTabListBox(pParent, nStyle)
     , maStdFont(GetFont())

@@ -154,13 +154,8 @@ SwInsertBookmarkDlg::~SwInsertBookmarkDlg()
 {
 }
 
-BookmarkCombo::BookmarkCombo(Window* pWin) :
-    SwComboBox(pWin)
-{
-}
-
-BookmarkCombo::BookmarkCombo( Window* pWin, const ResId& rResId ) :
-    SwComboBox(pWin, rResId)
+BookmarkCombo::BookmarkCombo(Window* pWin)
+    : SwComboBox(pWin)
 {
 }
 

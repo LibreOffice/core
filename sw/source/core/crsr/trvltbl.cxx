@@ -696,16 +696,6 @@ sal_Bool SwCrsrShell::MoveTable( SwWhichTable fnWhichTbl, SwPosTable fnPosTbl )
     return bRet;
 }
 
-
-bool SwCrsrShell::IsTblComplex() const
-{
-    SwFrm *pFrm = GetCurrFrm( sal_False );
-    if ( pFrm && pFrm->IsInTab() )
-        return pFrm->FindTabFrm()->GetTable()->IsTblComplex();
-    return false;
-}
-
-
 bool SwCrsrShell::IsTblComplexForChart()
 {
     bool bRet = false;

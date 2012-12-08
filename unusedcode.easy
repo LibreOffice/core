@@ -1,21 +1,21 @@
 FontSelectPattern::FontSelectPattern(PhysicalFontFace const&, Size const&, float, int, bool)
-GraphicObject::SwapIn(SvStream*)
-Line::GetLength() const
 Line::Intersection(Rectangle const&, Line&) const
-PoHeader::getLanguage() const
 SanExtensionImpl::setCertExtn(unsigned char*, unsigned int, unsigned char*, unsigned int, unsigned char)
 ScFiltersTest::testColorScaleODS()
 ScFiltersTest::testColorScaleXLSX()
 ScMenuFloatingWindow::getDoc()
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
 ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any const&)
+SfxDocumentTemplateDlg::SfxDocumentTemplateDlg(Window*, SfxDocumentTemplates*)
+String::Assign(unsigned short const*, unsigned short)
 String::String(unsigned short)
-SvNumberFormatter::PutandConvertEntrySystem(rtl::OUString&, int&, short&, unsigned int&, unsigned short, unsigned short)
+SvListView::HasEntryFocus(SvTreeListEntry*) const
 SvTreeList::GetChildIterators(SvTreeListEntry const*) const
-SvTreeListBox::GetParent(SvTreeListEntry const*) const
+SvViewDataEntry::SetCursored(bool)
 SvtGraphicStroke::toString() const
 TextEngine::GetLeftMargin() const
 ThumbnailViewItemAcc::FireAccessibleEvent(short, com::sun::star::uno::Any const&, com::sun::star::uno::Any const&)
+TransitionScene::clear()
 UnoControl::UnoControl()
 VirtualDevice::SetOutputSizePixelScaleOffsetAndBuffer(Size const&, Fraction const&, Point const&, boost::shared_array<unsigned char> const&)
 Window::PostUserEvent(unsigned long&, unsigned long, void*)
@@ -66,8 +66,9 @@ unicode::isDigit(unsigned short)
 unicode::isLower(unsigned short)
 unicode::isPrint(unsigned short)
 unicode::isUpper(unsigned short)
-writerfilter::createStreamHandler()
 writerfilter::doctokidsToXML(std::basic_ostream<char, std::char_traits<char> >&)
+writerfilter::logger(std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::basic_string<char, std::char_traits<char>, std::allocator<char> >)
 writerfilter::ooxmlidsToXML(std::basic_ostream<char, std::char_traits<char> >&)
 writerfilter::ooxmlsprmidsToXML(std::basic_ostream<char, std::char_traits<char> >&)
+writerfilter::rtftok::RTFSprms::swap(writerfilter::rtftok::RTFSprms&)
 writerfilter::sprmidsToXML(std::basic_ostream<char, std::char_traits<char> >&)

@@ -96,11 +96,6 @@ public:
     */
     void AddUserData (const ::boost::shared_ptr<UserData>& rpData);
 
-    /** Remove a previously added user data object.  When the object
-        was never added or removed before then this call is ignored.
-    */
-    void RemoveUserData (const ::boost::shared_ptr<UserData>& rpData);
-
     /** Return the number of user data objects.
     */
     sal_Int32 GetUserDataCount (void) const;

@@ -1261,7 +1261,7 @@ sal_uInt16 SfxOrganizeListBox_Impl::GetLevelCount_Impl(SvTreeListEntry* pParent)
 //-------------------------------------------------------------------------
 
 SvTreeListEntry* SfxOrganizeListBox_Impl::InsertEntryByBmpType(
-    const XubString& rText,
+    const OUString& rText,
     BMPTYPE eBmpType,
     SvTreeListEntry* pParent,
     sal_Bool bChildrenOnDemand,

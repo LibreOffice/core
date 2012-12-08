@@ -399,12 +399,6 @@ SvxNumValueSet::SvxNumValueSet( Window* pParent, const ResId& rResId, sal_uInt16
     init(nType);
 }
 
-SvxNumValueSet::SvxNumValueSet( Window* pParent, WinBits nWinStyle, sal_uInt16 nType )
-    : ValueSet( pParent, nWinStyle )
-{
-    init(nType);
-}
-
 void SvxNumValueSet::init(sal_uInt16 nType)
 {
     aLineColor = COL_LIGHTGRAY;
@@ -468,12 +462,6 @@ void SvxNumValueSet::SetOutlineNumberingSettings(
 
 SvxBmpNumValueSet::SvxBmpNumValueSet( Window* pParent, const ResId& rResId )
     : SvxNumValueSet( pParent, rResId, NUM_PAGETYPE_BMP )
-{
-    init();
-}
-
-SvxBmpNumValueSet::SvxBmpNumValueSet( Window* pParent, WinBits nWinStyle )
-    : SvxNumValueSet( pParent, nWinStyle, NUM_PAGETYPE_BMP )
 {
     init();
 }

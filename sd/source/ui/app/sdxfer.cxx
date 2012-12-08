@@ -773,11 +773,6 @@ void SdTransferable::AddUserData (const ::boost::shared_ptr<UserData>& rpData)
     maUserData.push_back(rpData);
 }
 
-void SdTransferable::RemoveUserData (const ::boost::shared_ptr<UserData>& rpData)
-{
-    maUserData.erase(::std::find(maUserData.begin(), maUserData.end(), rpData));
-}
-
 sal_Int32 SdTransferable::GetUserDataCount (void) const
 {
     return maUserData.size();

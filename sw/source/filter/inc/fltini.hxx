@@ -73,15 +73,9 @@ class SW_DLLPUBLIC SwRelNumRuleSpaces
     SwNumRuleTbl* pNumRuleTbl;  // Liste aller benannten NumRules
     sal_Bool bNewDoc;
 
-    void SetNumLSpace( SwTxtNode& rNd, const SwNumRule& rRule );
-
 public:
     SwRelNumRuleSpaces( SwDoc& rDoc, sal_Bool bNewDoc );
     ~SwRelNumRuleSpaces();
-
-    void SetNumRelSpaces( SwDoc& rDoc );
-    void SetOultineRelSpaces( const SwNodeIndex& rStt,
-                                const SwNodeIndex& rEnd );
 };
 
 #define SW_SV_BRUSH_25          0

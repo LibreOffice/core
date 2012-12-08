@@ -518,10 +518,6 @@ public:
                            OUString& sOutString, Color** ppColor,
                            LanguageType eLnge = LANGUAGE_DONTKNOW );
 
-    bool GetPreviewString( const String& sFormatString, const String& sPreviewString,
-                           String& sOutString, Color** ppColor,
-                           LanguageType eLnge = LANGUAGE_DONTKNOW );
-
     /** Test whether the format code string is already present in container
         @return
             NUMBERFORMAT_ENTRY_NOT_FOUND if not found, else the format index.

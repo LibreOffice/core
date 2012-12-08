@@ -430,7 +430,6 @@ public:
     sal_Bool                SwapOut();
     sal_Bool                SwapOut( SvStream* pOStm );
     sal_Bool                SwapIn();
-    sal_Bool                SwapIn( SvStream* pIStm );
 
     sal_Bool                IsInSwapIn() const { return mbIsInSwapIn; }
     sal_Bool                IsInSwapOut() const { return mbIsInSwapOut; }

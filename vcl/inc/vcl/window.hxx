@@ -390,7 +390,6 @@ public:
     SAL_DLLPRIVATE WinBits             ImplInitRes( const ResId& rResId );
     SAL_DLLPRIVATE WindowResHeader     ImplLoadResHeader( const ResId& rResId );
     SAL_DLLPRIVATE void                ImplLoadRes( const ResId& rResId );
-    SAL_DLLPRIVATE void                loadAndSetJustHelpID( const ResId& rResId );
     SAL_DLLPRIVATE void                ImplSetFrameParent( const Window* pParent );
     SAL_DLLPRIVATE void                ImplInsertWindow( Window* pParent );
     SAL_DLLPRIVATE void                ImplRemoveWindow( sal_Bool bRemoveFrameData );

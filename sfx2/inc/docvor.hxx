@@ -115,7 +115,7 @@ private:
                                          SvTreeListEntry* pParent, SvTreeListEntry* pEntry = 0 ) const;
     sal_uInt16              GetLevelCount_Impl( SvTreeListEntry* pParent ) const;
 
-    SvTreeListEntry*        InsertEntryByBmpType( const XubString& rText, BMPTYPE eBmpType,
+    SvTreeListEntry*        InsertEntryByBmpType( const OUString& rText, BMPTYPE eBmpType,
                             SvTreeListEntry* pParent = NULL, sal_Bool bChildrenOnDemand = sal_False,
                             sal_uIntPtr nPos = LIST_APPEND, void* pUserData = NULL );
 };

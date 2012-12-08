@@ -99,44 +99,6 @@ struct SvxRTFStyleType
 };
 
 
-// Bitmap - Mode
-typedef ::std::vector< ::std::pair< ::rtl::OUString, ::rtl::OUString > > PictPropertyNameValuePairs;
-struct EDITENG_DLLPUBLIC SvxRTFPictureType
-{
-    // Bitmap Format
-    enum RTF_BMPSTYLE
-    {
-        RTF_BITMAP,         // Meta data: Bitmap
-        WIN_METAFILE,       // Meta data: Window-Metafile
-        MAC_QUICKDRAW,      // Meta data: Mac-QuickDraw
-        OS2_METAFILE,       // Meta data: OS2-Metafile
-        RTF_DI_BMP,         // Meta data: Device Independent Bitmap
-        ENHANCED_MF,        // Meta data: Enhanced-Metafile
-        RTF_PNG,            // Meta data: PNG file
-        RTF_JPG             // Meta data: JPG file
-    } eStyle;
-
-    enum RTF_BMPMODE
-    {
-        BINARY_MODE,
-        HEX_MODE
-    } nMode;
-
-    sal_uInt16  nType;
-    sal_uInt32 uPicLen;
-    sal_uInt16  nWidth, nHeight;
-    sal_uInt16  nGoalWidth, nGoalHeight;
-    sal_uInt16  nBitsPerPixel;
-    sal_uInt16  nPlanes;
-    sal_uInt16  nWidthBytes;
-    sal_uInt16  nScalX, nScalY;
-    short   nCropT, nCropB, nCropL, nCropR;
-    PictPropertyNameValuePairs aPropertyPairs;
-    SvxRTFPictureType() { ResetValues(); }
-    // Reset all values to default; is called after loading the Bitmap
-    void ResetValues();
-};
-
 // Here are the IDs for all character attributes, which can be detected by
 // SvxParser and can be set in a SfxItemSet. The IDs are set correctly throught
 // the SlotIds from POOL.
@@ -358,15 +320,6 @@ protected:
     SvxRTFFontTbl& GetFontTbl()                 { return aFontTbl; }
 
     const String& GetBaseURL() const            { return sBaseURL; }
-
-    // Read the graphics data and make up for the graphics and the picture
-    // meta data.
-    // Return - sal_True: the graphic is valid
-    sal_Bool ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType );
-        // Change the ASCII-HexCodes into binary characters. If invalid data is
-        // found (strings not 0-9 | a-f | A-F, then USHRT_MAX is returned,
-        // otherwise the number of the converted character.
-    xub_StrLen HexToBin( String& rToken );
 
 public:
 

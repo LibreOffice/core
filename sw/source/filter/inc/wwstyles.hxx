@@ -135,31 +135,6 @@ namespace ww
         stiNil = 0x0fff                 // max for 12 bits
     };
 
-    /** Find the WinWord sti index of an english style name.
-
-        When importing a RTF document we would like to treat styles as similiar
-        to how word does as possible, to this end word will treat some styles
-        with special names as inbuilt styles, and some as user defined styles.
-
-        See OpenOffice.org issue 21881
-        (http://www.openoffice.org/issues/show_bug.cgi?id=21881)
-        and OpenOffice.org issue 17503
-        (http://www.openoffice.org/issues/show_bug.cgi?id=17503)
-
-        @param
-        rSting the Style name to test to see what winword sti word would give
-        such a name if it has no other information to work with (e.g. importing
-        a RTF document)
-
-        @return the sti that word would give it. stiUser if word would treat
-        it as a user defined style.
-
-        @author
-        <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
-        <a href="mailto:tono@openoffice.org">Takashi Ono</a>
-    */
-    sti GetCanonicalStiFromEnglishName(const String &rString) throw();
-
     /** Find the WinWord sti index of an old <= Word2 stc (style code)
 
         When importing a Word 2 document we would like to treat styles as

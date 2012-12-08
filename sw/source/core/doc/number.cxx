@@ -316,13 +316,6 @@ const String&   SwNumFmt::GetCharFmtName() const
         return aEmptyStr;
 }
 
-void SwNumFmt::ForgetCharFmt()
-{
-    if ( GetRegisteredIn() )
-        GetRegisteredInNonConst()->Remove( this );
-}
-
-
 void    SwNumFmt::SetGraphicBrush( const SvxBrushItem* pBrushItem, const Size* pSize,
     const sal_Int16* pOrient)
 {

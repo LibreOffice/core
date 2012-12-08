@@ -32,9 +32,6 @@ class ScVbaWorkbook : public ScVbaWorkbook_BASE
     void initColorData( const css::uno::Sequence< sal_Int32 >& sColors );
     void init();
 
-protected:
-
-    ScVbaWorkbook(  const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext);
 public:
     ScVbaWorkbook(  const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,
             css::uno::Reference< css::frame::XModel > xModel );

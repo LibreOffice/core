@@ -483,9 +483,6 @@ public:
     void SetReadOnlyAvailable( sal_Bool bFlag );
     sal_Bool IsOverReadOnlyPos( const Point& rPt ) const;
 
-    /// Is the rPt point in the header or footer area?
-    sal_Bool IsOverHeaderFooterPos( const Point& rPt ) const;
-
     // Methods for aFlyMacroLnk.
     void        SetFlyMacroLnk( const Link& rLnk ) { aFlyMacroLnk = rLnk; }
     const Link& GetFlyMacroLnk() const             { return aFlyMacroLnk; }
@@ -585,7 +582,6 @@ public:
     inline const  SwPaM* GetTblCrs() const;
     inline        SwPaM* GetTblCrs();
 
-    bool IsTblComplex() const;
     bool IsTblComplexForChart();
     // get current table selection as text
     String GetBoxNms() const;

@@ -531,18 +531,6 @@ void ScDPFieldControlBase::FieldFocusChanged(size_t nOldSelected, size_t nFieldS
         xRef->FieldFocusChange(nOldSelected, nFieldSelected);
 }
 
-void ScDPFieldControlBase::AccessibleSetFocus(bool bOn)
-{
-    AccessRef xRef( mxAccessible );
-    if ( !xRef.is() )
-        return;
-
-    if (bOn)
-        xRef->GotFocus();
-    else
-        xRef->LostFocus();
-}
-
 void ScDPFieldControlBase::UpdateStyle()
 {
     WinBits nMask = ~(WB_TABSTOP | WB_NOTABSTOP);

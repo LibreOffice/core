@@ -67,9 +67,6 @@ $(eval $(call gb_Library_use_externals,msword,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,msword,\
-    sw/source/filter/rtf/rtffld \
-    sw/source/filter/rtf/rtffly \
-    sw/source/filter/rtf/rtfnum \
     sw/source/filter/rtf/swparrtf \
     sw/source/filter/ww8/docxattributeoutput \
     sw/source/filter/ww8/docxexport \

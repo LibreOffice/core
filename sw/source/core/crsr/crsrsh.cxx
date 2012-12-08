@@ -2289,15 +2289,6 @@ sal_Bool SwCrsrShell::IsOverReadOnlyPos( const Point& rPt ) const
     return aPam.HasReadonlySel( GetViewOptions()->IsFormView() );
 }
 
-sal_Bool SwCrsrShell::IsOverHeaderFooterPos( const Point& rPt ) const
-{
-    Point aPt( rPt );
-    SwPaM aPam( *pCurCrsr->GetPoint() );
-    GetLayout()->GetCrsrOfst( aPam.GetPoint(), aPt );
-
-    return GetDoc()->IsInHeaderFooter( aPam.GetPoint()->nNode );
-}
-
 /** Get the number of elements in the ring of cursors
 
     @param bAll If <false> get only spanned ones (= with selections) (Basic).

@@ -304,7 +304,6 @@ private:
 public:
     ParserQueue* pParseQueue; // public ?
     static rtl::OString sLanguages; // public ?
-    static rtl::OString sForcedLanguages; // public ?
 
     static bool handleArguments(int argc, char * argv[], HandledArgs& o_aHandledArgs);
     static void writeUsage(const OString& rName, const OString& rFileType);
@@ -312,7 +311,6 @@ public:
     static void InitLanguages( bool bMergeMode = false );
     static void InitForcedLanguages( bool bMergeMode = false );
     static std::vector<rtl::OString> GetLanguages();
-    static std::vector<rtl::OString> GetForcedLanguages();
 
     static void SetLanguages( std::vector<rtl::OString> val );
     static void RemoveUTF8ByteOrderMarker( rtl::OString &rString );

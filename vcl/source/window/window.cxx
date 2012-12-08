@@ -1266,13 +1266,6 @@ WindowResHeader Window::ImplLoadResHeader( const ResId& rResId )
     return aHeader;
 }
 
-void Window::loadAndSetJustHelpID(const ResId& rResId)
-{
-    WindowResHeader aHeader = ImplLoadResHeader(rResId);
-    SetHelpId(aHeader.aHelpId);
-    IncrementRes(GetRemainSizeRes());
-}
-
 void Window::ImplLoadRes( const ResId& rResId )
 {
     WindowResHeader aHeader = ImplLoadResHeader( rResId );
