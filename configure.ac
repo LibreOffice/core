@@ -677,11 +677,6 @@ AC_ARG_ENABLE(vba,
         [Disables the vba compatibility feature.])
 )
 
-AC_ARG_ENABLE(pch,
-    AS_HELP_STRING([--enable-pch],
-        [DEPRECATED : is ignored])
-)
-
 AC_ARG_ENABLE(win-mozab-driver,
     AS_HELP_STRING([--enable-win-mozab-driver],
         [LibreOffice includes a driver to connect to Mozilla 
@@ -1245,11 +1240,6 @@ AC_ARG_WITH(system-nss,
         [Use NSS/nspr libraries already on system.]),,
     [with_system_nss="$with_system_libs"])
 
-AC_ARG_WITH(mozilla-toolkit,
-    AS_HELP_STRING([--with-mozilla-toolkit],
-        [DEPRECATED : is ignored]),
-,)
-
 AC_ARG_WITH(myspell-dicts,
     AS_HELP_STRING([--without-myspell-dicts],
         [Removes myspell dictionaries from LibreOffice installation set, for
@@ -1645,11 +1635,6 @@ AC_ARG_WITH(system-liblangtag,
     AS_HELP_STRING([--with-system-liblangtag],
         [Use liblangtag library already on system.]),,
     [with_system_liblangtag="$with_system_libs"])
-
-AC_ARG_WITH(system-mozilla,
-    AS_HELP_STRING([--with-system-mozilla],
-        [DEPRECATED : is ignored]),,
-)
 
 AC_ARG_WITH(system-npapi-headers,
     AS_HELP_STRING([--with-system-npapi-headers],
