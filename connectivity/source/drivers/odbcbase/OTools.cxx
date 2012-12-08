@@ -682,8 +682,10 @@ SQLSMALLINT OTools::jdbcTypeToOdbc(sal_Int32 jdbcType)
     // ODBC doesn't have any notion of CLOB or BLOB
     case DataType::CLOB:
         odbcType = SQL_LONGVARCHAR;
+        break;
     case DataType::BLOB:
         odbcType = SQL_LONGVARBINARY;
+        break;
     }
 
     return odbcType;
