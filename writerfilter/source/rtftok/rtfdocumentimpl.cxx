@@ -1759,10 +1759,23 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             break;
         case RTF_COLUMN:
             {
-                sal_uInt8 sBreak[] = { 0xe };
-                Mapper().startCharacterGroup();
-                Mapper().text(sBreak, 1);
-                Mapper().endCharacterGroup();
+                bool bColumns = false; // If we have multiple columns
+                RTFValue::Pointer_t pCols = m_aStates.top().aSectionSprms.find(NS_ooxml::LN_EG_SectPrContents_cols);
+                if (pCols.get())
+                {
+                    RTFValue::Pointer_t pNum = pCols->getAttributes().find(NS_ooxml::LN_CT_Columns_num);
+                    if (pNum.get() && pNum->getInt() > 1)
+                        bColumns = true;
+                }
+                if (bColumns)
+                {
+                    sal_uInt8 sBreak[] = { 0xe };
+                    Mapper().startCharacterGroup();
+                    Mapper().text(sBreak, 1);
+                    Mapper().endCharacterGroup();
+                }
+                else
+                    dispatchSymbol(RTF_PAGE);
             }
             break;
         case RTF_CHFTN:
