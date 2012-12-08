@@ -803,9 +803,17 @@ IMPL_LINK_NOARG_INLINE_END(SwCaptionOptPage, SelectHdl)
 IMPL_LINK( SwCaptionOptPage, OrderHdl, ListBox*, pBox )
 {
     DrawSample();
+
+    SvTreeListEntry* pSelEntry = aCheckLB.FirstSelected();
+    sal_Bool bChecked = sal_False;
+    if (pSelEntry)
+    {
+        bChecked = aCheckLB.IsChecked((sal_uInt16)aCheckLB.GetModel()->GetAbsPos(pSelEntry));
+    }
+
     sal_Int32 nPos = pBox->GetSelectEntryPos();
-    aNumberingSeparatorFT.Enable( nPos == 1 );
-    aNumberingSeparatorED.Enable( nPos == 1 );
+    aNumberingSeparatorFT.Enable( bChecked && nPos == 1 );
+    aNumberingSeparatorED.Enable( bChecked && nPos == 1 );
     return 0;
 }
 
