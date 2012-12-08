@@ -4137,8 +4137,8 @@ if test -n "$with_system_lucene" -o -n "$with_system_libs" && \
         AC_MSG_RESULT([external])
         SYSTEM_LUCENE=YES
         if test -z $LUCENE_CORE_JAR; then
-          AC_CHECK_FILE(/usr/share/java/lucene-core-2.3.jar, 
-            [ LUCENE_CORE_JAR=/usr/share/java/lucene-core-2.3.jar ],
+          AC_CHECK_FILE(/usr/share/java/lucene-core-2.9.4.jar, 
+            [ LUCENE_CORE_JAR=/usr/share/java/lucene-core-2.9.4.jar ],
             [
               AC_CHECK_FILE(/usr/share/java/lucene-core.jar, 
                 [ LUCENE_CORE_JAR=/usr/share/java/lucene-core.jar ],
@@ -6672,8 +6672,8 @@ if test "$ENABLE_MEDIAWIKI" = "YES" -o "$ENABLE_REPORTBUILDER" = "YES"; then
     AC_MSG_RESULT([external])
     if test "$ENABLE_MEDIAWIKI" = "YES"; then
       if test -z $COMMONS_CODEC_JAR; then
-        AC_CHECK_FILE(/usr/share/java/commons-codec-1.3.jar, 
-          [ COMMONS_CODEC_JAR=/usr/share/java/commons-codec-1.3.jar ],
+        AC_CHECK_FILE(/usr/share/java/commons-codec-1.6.jar, 
+          [ COMMONS_CODEC_JAR=/usr/share/java/commons-codec-1.6.jar ],
           [
             AC_CHECK_FILE(/usr/share/java/commons-codec.jar, 
               [ COMMONS_CODEC_JAR=/usr/share/java/commons-codec.jar ],
@@ -6687,8 +6687,8 @@ if test "$ENABLE_MEDIAWIKI" = "YES" -o "$ENABLE_REPORTBUILDER" = "YES"; then
       fi
 
       if test -z $COMMONS_LANG_JAR; then
-        AC_CHECK_FILE(/usr/share/java/commons-lang-2.3.jar, 
-          [ COMMONS_LANG_JAR=/usr/share/java/commons-lang-2.3.jar ],
+        AC_CHECK_FILE(/usr/share/java/commons-lang-2.4.jar, 
+          [ COMMONS_LANG_JAR=/usr/share/java/commons-lang-2.4.jar ],
           [
             AC_CHECK_FILE(/usr/share/java/commons-lang.jar, 
               [ COMMONS_LANG_JAR=/usr/share/java/commons-lang.jar ],
