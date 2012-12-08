@@ -460,9 +460,15 @@ void PieChart::createShapes()
                     }
 
                     sal_Int32 nLabelPlacement = pSeries->getLabelPlacement( nPointIndex, m_xChartTypeModel, m_nDimension, m_pPosHelper->isSwapXAndY() );
+
+                    // AVOID_OVERLAP is in fact "Best fit" in the UI.
                     bool bMovementAllowed = ( nLabelPlacement == ::com::sun::star::chart::DataLabelPlacement::AVOID_OVERLAP );
                     if( bMovementAllowed )
-                        nLabelPlacement = ::com::sun::star::chart::DataLabelPlacement::OUTSIDE;
+                        // Use center for "Best fit" for now. In the future we
+                        // may want to implement a real best fit algorithm.
+                        // But center is good enough, and close to what Excel
+                        // does.
+                        nLabelPlacement = ::com::sun::star::chart::DataLabelPlacement::CENTER;
 
                     LabelAlignment eAlignment(LABEL_ALIGN_CENTER);
                     sal_Int32 nScreenValueOffsetInRadiusDirection = 0 ;
