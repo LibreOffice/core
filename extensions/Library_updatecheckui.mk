@@ -30,6 +30,10 @@ $(eval $(call gb_Library_Library,updatecheckui))
 
 $(eval $(call gb_Library_set_componentfile,updatecheckui,extensions/source/update/ui/updchk))
 
+$(eval $(call gb_Library_use_packages,updatecheckui,\
+    sfx2_inc \
+))
+
 $(eval $(call gb_Library_use_sdk_api,updatecheckui))
 
 $(eval $(call gb_Library_use_libraries,updatecheckui,\
