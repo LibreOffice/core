@@ -128,6 +128,7 @@ public:
     void testFdo55525();
     void testFdo57708();
     void testFdo54473();
+    void testFdo49934();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -206,6 +207,7 @@ void Test::run()
         {"fdo55525.rtf", &Test::testFdo55525},
         {"fdo57708.rtf", &Test::testFdo57708},
         {"fdo54473.rtf", &Test::testFdo54473},
+        {"fdo49934.rtf", &Test::testFdo49934},
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
@@ -948,6 +950,12 @@ void Test::testFdo54473()
     // The problem was that character styles were not imported due to a typo.
     CPPUNIT_ASSERT_EQUAL(OUString("Anot"), getProperty<OUString>(getRun(getParagraph(1), 1, "Text "), "CharStyleName"));
     CPPUNIT_ASSERT_EQUAL(OUString("ForeignTxt"), getProperty<OUString>(getRun(getParagraph(1), 3, "character "), "CharStyleName"));
+}
+
+void Test::testFdo49934()
+{
+    // Column break without columns defined should be a page break, but it was just ignored.
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
