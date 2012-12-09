@@ -45,7 +45,6 @@ public:
            void Reset();
     inline sal_Bool IsOn()  const { return bOn; }
     inline sal_Bool IsChg() const { return bChg; }
-    inline sal_Bool IsOut() const { return 0 != pOut; }
     inline OutputDevice *GetOut() { return pOut; }
 };
 
