@@ -39,6 +39,7 @@
 #include <vector>   /* std::vector*/
 #include <queue>
 #include <string>
+#include <map>
 
 #include <unistd.h>
 #ifdef WNT
@@ -329,6 +330,7 @@ public:
 private:
     static std::vector<rtl::OString> aLanguages;
     static std::vector<rtl::OString> aForcedLanguages;
+    std::map<OString,OString> aOrigListItems;
 
     sal_Bool WriteData( ResData *pResData, sal_Bool bCreateNew = sal_False );// called befor dest. cur ResData
     sal_Bool WriteExportList( ResData *pResData, ExportList *pExportList,

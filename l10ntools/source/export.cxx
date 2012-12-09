@@ -988,7 +988,7 @@ sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
         rtl::OString sList( "pairedlist" );
         WriteExportList( pResData, pResData->pPairedList, sList, bCreateNew );
         if ( bCreateNew )
-            pResData->pItemList = 0;
+            pResData->pPairedList = 0;
     }
     if ( pResData->pUIEntries ) {
         rtl::OString sList( "uientries" );
@@ -1531,6 +1531,7 @@ sal_Bool Export::PrepareTextToMerge(rtl::OString &rText, sal_uInt16 nTyp,
     }
 
     PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
+    const OString sKey = pResData->sId + pResData->sGId + pResData->sResTyp;
     pResData->sId = sOldId;
     pResData->sGId = sOldGId;
     pResData->sResTyp = sOldTyp;
@@ -1547,6 +1548,9 @@ sal_Bool Export::PrepareTextToMerge(rtl::OString &rText, sal_uInt16 nTyp,
         rText = sOrigText;
         return sal_False; // no data found
     }
+
+    if (rLangIndex == "en-US")
+        aOrigListItems.insert(std::pair<OString,OString>(sKey,rText.copy(nStart+1,nEnd-nStart-1)));
 
     if (Export::isSourceLanguage(rLangIndex))
         return sal_False;
@@ -1687,14 +1691,12 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
                         if ( pList )
                             nMaxIndex = pList->GetSourceLanguageListEntryCount();
                         pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
-                        while( pEntrys  && ( nLIndex < nMaxIndex )) {
+                        while( nLIndex < nMaxIndex ) {
                             rtl::OString sText;
-                            sal_Bool bText;
-                            bText = pEntrys->GetTransex3Text( sText, STRING_TYP_TEXT, sCur, sal_True );
-                            if( !bText )
-                                bText = pEntrys->GetTransex3Text( sText , STRING_TYP_TEXT, SOURCE_LANGUAGE , sal_False );
+                            if( !pEntrys || !pEntrys->GetTransex3Text( sText, STRING_TYP_TEXT, sCur, sal_True ) )
+                                sText = aOrigListItems.find(pResData->sId + pResData->sGId + pResData->sResTyp)->second;
 
-                            if ( bText && !sText.isEmpty())
+                            if (!sText.isEmpty())
                             {
                                 if ( nIdx == 1 )
                                 {
