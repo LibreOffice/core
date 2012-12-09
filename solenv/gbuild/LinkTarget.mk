@@ -1212,6 +1212,10 @@ $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : PCH_DEFS := $$(DEFS)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : PCH_CXXFLAGS := $$(T_CXXFLAGS) $(call gb_LinkTarget__get_cxxflags,$(1))
+
+$(call gb_PrecompiledHeader_get_target,$(3)) : VISIBILITY :=
+$(call gb_NoexPrecompiledHeader_get_target,$(3)) : VISIBILITY :=
+
 ifeq ($(gb_FULLDEPS),$(true))
 -include \
 	$(call gb_PrecompiledHeader_get_dep_target,$(3)) \
@@ -1282,6 +1286,12 @@ define gb_LinkTarget_set_visibility_default
 $(call gb_LinkTarget_get_target,$(1)) : VISIBILITY := default
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : VISIBILITY := default
+endif
+ifeq ($(gb_ENABLE_PCH),$(true))
+ifneq ($(strip $$(PCH_NAME)),)
+$(call gb_PrecompiledHeader_get_target,$$(PCH_NAME)) : VISIBILITY := default
+$(call gb_NoexPrecompiledHeader_get_target,$$(PCH_NAME)) : VISIBILITY := default
+endif
 endif
 
 endef

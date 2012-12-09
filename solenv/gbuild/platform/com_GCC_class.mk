@@ -156,6 +156,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		-x c++-header \
 		$(4) $(5) \
 		$(gb_COMPILERDEPFLAGS) \
+		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
 		$(6) \
 		$(call gb_cxx_dep_generation_options,$(1),$(call gb_PrecompiledHeader_get_dep_target,$(2))) \
 		-c $(patsubst %.cxx,%.hxx,$(3)) \
@@ -176,6 +177,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		-x c++-header \
 		$(4) $(5) \
 		$(gb_COMPILERDEPFLAGS) \
+		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
 		$(6) \
 		$(call gb_cxx_dep_generation_options,$(1),$(call gb_NoexPrecompiledHeader_get_dep_target,$(2))) \
 		-c $(patsubst %.cxx,%.hxx,$(3)) \
