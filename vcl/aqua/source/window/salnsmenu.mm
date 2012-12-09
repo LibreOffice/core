@@ -132,8 +132,8 @@
         for( size_t i = 0; i < rButtons.size(); ++i )
         {
             NSRect aFromRect = { { 0, 0 },
-                                 { rButtons[i].maButton.maImage.GetSizePixel().Width(),
-                                   rButtons[i].maButton.maImage.GetSizePixel().Height() } };
+                                 { static_cast<CGFloat>(rButtons[i].maButton.maImage.GetSizePixel().Width()),
+                                   static_cast<CGFloat>(rButtons[i].maButton.maImage.GetSizePixel().Height()) } };
             aImgRect.origin.y = floor((aFrame.size.height - aFromRect.size.height)/2);
             aImgRect.size = aFromRect.size;
             if( rButtons[i].mpNSImage )
@@ -156,8 +156,8 @@
         for( size_t i = 0; i < rButtons.size(); ++i )
         {
             NSRect aFromRect = { { 0, 0 },
-                                 { rButtons[i].maButton.maImage.GetSizePixel().Width(),
-                                   rButtons[i].maButton.maImage.GetSizePixel().Height() } };
+                                 { static_cast<CGFloat>(rButtons[i].maButton.maImage.GetSizePixel().Width()),
+                                   static_cast<CGFloat>(rButtons[i].maButton.maImage.GetSizePixel().Height()) } };
             aImgRect.origin.y = (aFrame.size.height - aFromRect.size.height)/2;
             aImgRect.size = aFromRect.size;
             if( aMousePt.x >= aImgRect.origin.x && aMousePt.x <= (aImgRect.origin.x+aImgRect.size.width) &&
@@ -189,9 +189,10 @@
             aSize.width = 2;
             for( size_t i = 0; i < rButtons.size(); ++i )
             {
-                NSRect aImgRect = { { aSize.width, floor((aSize.height-rButtons[i].maButton.maImage.GetSizePixel().Height())/2) },
-                                     { rButtons[i].maButton.maImage.GetSizePixel().Width(),
-                                       rButtons[i].maButton.maImage.GetSizePixel().Height() } };
+                NSRect aImgRect = { { static_cast<CGFloat>(aSize.width),
+                                      static_cast<CGFloat>(floor((aSize.height-rButtons[i].maButton.maImage.GetSizePixel().Height())/2)) },
+                                    { static_cast<CGFloat>(rButtons[i].maButton.maImage.GetSizePixel().Width()),
+                                      static_cast<CGFloat>(rButtons[i].maButton.maImage.GetSizePixel().Height()) } };
                 if( rButtons[i].mpToolTipString )
                     [self addToolTipRect: aImgRect owner: rButtons[i].mpToolTipString userData: NULL];
                 aSize.width += 2 + aImgRect.size.width;

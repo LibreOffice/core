@@ -799,7 +799,7 @@ static void addBool( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
                     ControlTarget* pCtrlTarget
                     )
 {
-    NSRect aCheckRect = { { rCurX + nAttachOffset, 0 }, { 0, 15 } };
+    NSRect aCheckRect = { { static_cast<CGFloat>(rCurX + nAttachOffset), 0 }, { 0, 15 } };
     NSButton* pBtn = [[NSButton alloc] initWithFrame: aCheckRect];
     [pBtn setButtonType: NSSwitchButton];                
     [pBtn setState: bValue ? NSOnState : NSOffState];
@@ -868,7 +868,7 @@ static void addRadio( NSView* pCurParent, long& rCurX, long& rCurY, long nAttach
     // setup radio matrix
     NSButtonCell* pProto = [[NSButtonCell alloc] init];
     
-    NSRect aRadioRect = { { rCurX + nOff, 0 }, { 280 - rCurX, 5*rChoices.getLength() } };
+    NSRect aRadioRect = { { static_cast<CGFloat>(rCurX + nOff), 0 }, { static_cast<CGFloat>(280 - rCurX), static_cast<CGFloat>(5*rChoices.getLength()) } };
     [pProto setTitle: @"RadioButtonGroup"];
     [pProto setButtonType: NSRadioButton];
     NSMatrix* pMatrix = [[NSMatrix alloc] initWithFrame: aRadioRect
@@ -1002,7 +1002,7 @@ static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
         nOff = aTextRect.size.width + 5;
     }
     
-    NSRect aFieldRect = { { rCurX + nOff +  nAttachOffset, 0 }, { 100, 25 } };
+    NSRect aFieldRect = { { static_cast<CGFloat>(rCurX + nOff + nAttachOffset), 0 }, { 100, 25 } };
     NSTextField* pFieldView = [[NSTextField alloc] initWithFrame: aFieldRect];
     [pFieldView setEditable: YES];
     [pFieldView setSelectable: YES];

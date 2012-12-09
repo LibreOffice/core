@@ -143,8 +143,8 @@ static AquaSalFrame* getMouseContainerFrame()
 {
 	mDraggingDestinationHandler = nil;
     mpFrame = pFrame;
-    NSRect aRect = { { pFrame->maGeometry.nX, pFrame->maGeometry.nY },
-                     { pFrame->maGeometry.nWidth, pFrame->maGeometry.nHeight } };
+    NSRect aRect = { { static_cast<CGFloat>(pFrame->maGeometry.nX), static_cast<CGFloat>(pFrame->maGeometry.nY) },
+                     { static_cast<CGFloat>(pFrame->maGeometry.nWidth), static_cast<CGFloat>(pFrame->maGeometry.nHeight) } };
     pFrame->VCLToCocoa( aRect );
     NSWindow* pNSWindow = [super initWithContentRect: aRect styleMask: mpFrame->getStyleMask() backing: NSBackingStoreBuffered defer: NO ];
     [pNSWindow useOptimizedDrawing: YES]; // OSX recommendation when there are no overlapping subviews within the receiver
@@ -410,7 +410,7 @@ static AquaSalFrame* getMouseContainerFrame()
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
     {
         // FIXME: does this leak the returned NSCursor of getCurrentCursor ?
-        NSRect aRect = { { 0, 0 }, { mpFrame->maGeometry.nWidth, mpFrame->maGeometry.nHeight } };
+        NSRect aRect = { { 0, 0 }, { static_cast<CGFloat>(mpFrame->maGeometry.nWidth), static_cast<CGFloat>(mpFrame->maGeometry.nHeight) } };
         [self addCursorRect: aRect cursor: mpFrame->getCurrentCursor()];
     }
 }

@@ -236,7 +236,7 @@ bool ATSLayout::LayoutText( ImplLayoutArgs& rArgs )
 #endif
 
     // create the ATSUI layout
-    UniCharCount nRunLengths[1] = { mnCharCount };
+    UniCharCount nRunLengths[1] = { static_cast<UniCharCount>(mnCharCount) };
     const int nRunCount = sizeof(nRunLengths)/sizeof(*nRunLengths);
     OSStatus eStatus = ATSUCreateTextLayoutWithTextPtr( rArgs.mpStr,
         rArgs.mnMinCharPos, mnCharCount, rArgs.mnLength,

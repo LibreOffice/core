@@ -49,7 +49,7 @@
     // #i101108# sanity check
     if( nWidth < 1 )
         nWidth = 1;
-    NSRect aRect = { { page % nWidth, page / nWidth }, aPaperSize };
+    NSRect aRect = { { static_cast<CGFloat>(page % nWidth), static_cast<CGFloat>(page / nWidth) }, aPaperSize };
     return aRect;
 }
 
