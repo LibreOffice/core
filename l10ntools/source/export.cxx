@@ -1473,13 +1473,6 @@ sal_Bool Export::PrepareTextToMerge(rtl::OString &rText, sal_uInt16 nTyp,
                 pResData->sGId = pResData->sGId + rtl::OString('.');
             pResData->sGId = pResData->sGId + sOldId;
             nTyp = STRING_TYP_TEXT;
-            if (rLangIndex == "en-US")
-            {
-                aOrigListItems.insert(
-                    std::pair<OString,OString>(
-                        pResData->sId + pResData->sGId + pResData->sResTyp,
-                        rText.copy(nStart+1,nEnd-nStart-1)));
-            }
         }
         break;
         case STRING_TYP_TEXT :
@@ -1538,6 +1531,7 @@ sal_Bool Export::PrepareTextToMerge(rtl::OString &rText, sal_uInt16 nTyp,
     }
 
     PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
+    const OString sKey = pResData->sId + pResData->sGId + pResData->sResTyp;
     pResData->sId = sOldId;
     pResData->sGId = sOldGId;
     pResData->sResTyp = sOldTyp;
@@ -1554,6 +1548,9 @@ sal_Bool Export::PrepareTextToMerge(rtl::OString &rText, sal_uInt16 nTyp,
         rText = sOrigText;
         return sal_False; // no data found
     }
+
+    if (rLangIndex == "en-US")
+        aOrigListItems.insert(std::pair<OString,OString>(sKey,rText.copy(nStart+1,nEnd-nStart-1)));
 
     if (Export::isSourceLanguage(rLangIndex))
         return sal_False;
