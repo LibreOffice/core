@@ -32,7 +32,7 @@
 ifeq ($(gb_ENABLE_PCH),$(true))
 
 # gb_PrecompiledHeader_get_enableflags defined by platform
-ifeq ($(gb_DEBUGLEVEL),2)
+ifneq ($(strip $(gb_DEBUGLEVEL)$(gb_SYMBOLS)),0)
 gb_PrecompiledHeader_DEBUGDIR := debug
 gb_NoexPrecompiledHeader_DEBUGDIR := debug
 else
