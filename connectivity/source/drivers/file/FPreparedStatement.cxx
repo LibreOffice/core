@@ -48,7 +48,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::container;
-using namespace com::sun::star::util;
+using namespace com::sun::star;
 
 IMPLEMENT_SERVICE_INFO(OPreparedStatement,"com.sun.star.sdbc.driver.file.PreparedStatement","com.sun.star.sdbc.PreparedStatement");
 
@@ -231,20 +231,20 @@ void SAL_CALL OPreparedStatement::setByte( sal_Int32 parameterIndex, sal_Int8 x 
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OPreparedStatement::setDate( sal_Int32 parameterIndex, const Date& aData ) throw(SQLException, RuntimeException)
+void SAL_CALL OPreparedStatement::setDate( sal_Int32 parameterIndex, const util::Date& aData ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OPreparedStatement::setDate" );
     setParameter(parameterIndex,DBTypeConversion::toDouble(aData));
 }
 // -------------------------------------------------------------------------
-void SAL_CALL OPreparedStatement::setTime( sal_Int32 parameterIndex, const Time& aVal ) throw(SQLException, RuntimeException)
+void SAL_CALL OPreparedStatement::setTime( sal_Int32 parameterIndex, const util::Time& aVal ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OPreparedStatement::setTime" );
     setParameter(parameterIndex,DBTypeConversion::toDouble(aVal));
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OPreparedStatement::setTimestamp( sal_Int32 parameterIndex, const DateTime& aVal ) throw(SQLException, RuntimeException)
+void SAL_CALL OPreparedStatement::setTimestamp( sal_Int32 parameterIndex, const util::DateTime& aVal ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OPreparedStatement::setTimestamp" );
     setParameter(parameterIndex,DBTypeConversion::toDouble(aVal));

@@ -41,7 +41,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdb;
 using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::util;
+using namespace com::sun::star;
 
 DBG_NAME(OPredicateCompiler)
 //------------------------------------------------------------------
@@ -376,16 +376,16 @@ OOperand* OPredicateCompiler::execute_BETWEEN(OSQLParseNode* pPredicateNode) thr
                 pOb2->setValue((double)pOb2->getValue());
                 break;
             case DataType::DATE:
-                pOb1->setValue((Date)pOb1->getValue());
-                pOb2->setValue((Date)pOb2->getValue());
+                pOb1->setValue((util::Date)pOb1->getValue());
+                pOb2->setValue((util::Date)pOb2->getValue());
                 break;
             case DataType::TIME:
-                pOb1->setValue((Time)pOb1->getValue());
-                pOb2->setValue((Time)pOb2->getValue());
+                pOb1->setValue((util::Time)pOb1->getValue());
+                pOb2->setValue((util::Time)pOb2->getValue());
                 break;
             case DataType::TIMESTAMP:
-                pOb1->setValue((DateTime)pOb1->getValue());
-                pOb2->setValue((DateTime)pOb2->getValue());
+                pOb1->setValue((util::DateTime)pOb1->getValue());
+                pOb2->setValue((util::DateTime)pOb2->getValue());
                 break;
         }
     }
