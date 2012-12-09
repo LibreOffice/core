@@ -579,17 +579,10 @@ public:
     // Pointer can be automatically converted to bool, which is unwanted here.
     // Explicitly delete all pointer append() overloads to prevent this
     // (except for char* and sal_Unicode* overloads, which are handled elsewhere).
-#if defined(__clang__) && defined(LIBO_WERROR)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wc++11-extensions"
-#endif
     template< typename T >
     typename internal::Enable< void,
         !internal::CharPtrDetector< T* >::ok && !internal::SalUnicodePtrDetector< T* >::ok >::Type
         append( T* ) = delete;
-#if defined(__clang__) && defined(LIBO_WERROR)
-#pragma GCC diagnostic pop
-#endif
 #endif
 #endif
 
