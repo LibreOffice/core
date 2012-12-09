@@ -65,6 +65,9 @@ using namespace ::com::sun::star::frame;
 void SwView::SetZoom( SvxZoomType eZoomType, short nFactor, sal_Bool bViewOnly )
 {
     _SetZoom( GetEditWin().GetOutputSizePixel(), eZoomType, nFactor, bViewOnly );
+
+    //fdo40465 force the cursor to stay in view whilst zooming, by moving the cursor 0 positions
+    pWrtShell->Right( 1, 0, 0, 0, 0 );
 }
 
 void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
