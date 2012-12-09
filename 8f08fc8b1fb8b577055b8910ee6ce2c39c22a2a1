@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAARH///tk\u003d",
+        "filename": "l10ntools/source/po.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-12-09T05:26:24Z",
+      "side": 1,
+      "message": "these escape/unescape function were the worse cpu hog of the entire helpex...  (well, after the re-compile of the icu regex at every call)\nbear in mind that most of the time there is nothing to escape at all\n\nfor instance right now: XMLUtil::QuotHTML which I have not optimized cost 41,525,370 Ir for 36075 call\nwhereas UnQuoteHTML which I have optimized cost\n2,700,876 for 20,522 call\nbefore optimization UnQuote was as costly as Quote",
+      "parentUuid": "AAAARH///uc\u003d",
+      "revId": "8f08fc8b1fb8b577055b8910ee6ce2c39c22a2a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAARH///uU\u003d",
         "filename": "l10ntools/source/po.cxx",
         "patchSetId": 2
@@ -53,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "AAAARH///tg\u003d",
+        "filename": "l10ntools/source/po.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-12-09T05:26:24Z",
+      "side": 1,
+      "message": "True. I should used that one a delete the one line 114\nthe point is to avoid copying rText if there is nothing to escape, which is most of the time",
+      "parentUuid": "AAAARH///uA\u003d",
+      "revId": "8f08fc8b1fb8b577055b8910ee6ce2c39c22a2a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAARH///t4\u003d",
         "filename": "l10ntools/source/po.cxx",
         "patchSetId": 2
@@ -64,6 +100,24 @@
       "writtenOn": "2012-12-09T01:56:20Z",
       "side": 1,
       "message": "Why not use makeStringAndClear() method. Is it not more efficient than the constructor?",
+      "revId": "8f08fc8b1fb8b577055b8910ee6ce2c39c22a2a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAARH///tc\u003d",
+        "filename": "l10ntools/source/po.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-12-09T05:26:24Z",
+      "side": 1,
+      "message": "because makeStringAndCler() would use the buffer getLength()\nwhich line 165 render wrong... but yeah SetLength() would solve that and we can then use MakeStringAndClear()\n\nFixed",
+      "parentUuid": "AAAARH///t4\u003d",
       "revId": "8f08fc8b1fb8b577055b8910ee6ce2c39c22a2a1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
