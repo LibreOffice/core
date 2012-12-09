@@ -876,11 +876,11 @@ $(call gb_CxxObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target
 $(call gb_CxxObject_get_target,$(2)) : T_CXXFLAGS += $(3)
 $(call gb_CxxObject_get_target,$(2)) : \
 	OBJECTOWNER := $(call gb_Object__owner,$(2),$(1))
+$(call gb_CxxObject_get_target,$(2)) : $(call gb_PrecompiledHeader_get_timestamp,$(1))
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : CXXOBJECTS += $(2)
 $(call gb_LinkTarget_get_dep_target,$(1)) : $(call gb_CxxObject_get_dep_target,$(2))
-$(call gb_CxxObject_get_target,$(2)) : $(call gb_PrecompiledHeader_get_timestamp,$(1))
 endif
 
 endef
@@ -973,6 +973,8 @@ $(call gb_GenCxxObject_get_target,$(2)) : T_CXXFLAGS += $(3)
 $(call gb_GenCxxObject_get_target,$(2)) : \
 	OBJECTOWNER := $(call gb_Object__owner,$(2),$(1))
 $(call gb_GenCxxObject_get_target,$(2)) : GEN_CXX_SOURCE := $(call gb_GenCxxObject_get_source,$(2),$(1))
+
+$(call gb_GenCxxObject_get_target,$(2)) : $(call gb_PrecompiledHeader_get_timestamp,$(1))
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : GENCXXOBJECTS += $(2)
@@ -1216,12 +1218,13 @@ $(call gb_LinkTarget_get_target,$(1)) : PCH_CXXFLAGS := $$(T_CXXFLAGS) $(call gb
 $(call gb_PrecompiledHeader_get_target,$(3)) : VISIBILITY :=
 $(call gb_NoexPrecompiledHeader_get_target,$(3)) : VISIBILITY :=
 
+$(call gb_PrecompiledHeader_get_timestamp,$(1)) : $(call gb_PrecompiledHeader_get_target,$(3))
+$(call gb_NoexPrecompiledHeader_get_timestamp,$(1)) : $(call gb_NoexPrecompiledHeader_get_target,$(3))
+
 ifeq ($(gb_FULLDEPS),$(true))
 -include \
 	$(call gb_PrecompiledHeader_get_dep_target,$(3)) \
 	$(call gb_NoexPrecompiledHeader_get_dep_target,$(3))
-$(call gb_PrecompiledHeader_get_timestamp,$(1)) : $(call gb_PrecompiledHeader_get_target,$(3))
-$(call gb_NoexPrecompiledHeader_get_timestamp,$(1)) : $(call gb_NoexPrecompiledHeader_get_target,$(3))
 $(call gb_LinkTarget_get_dep_target,$(1)) : PCH_DEFS := $$(DEFS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : PCH_CXXFLAGS := $$(T_CXXFLAGS) $(call gb_LinkTarget__get_cxxflags,$(1))
 endif
