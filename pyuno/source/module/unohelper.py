@@ -145,19 +145,19 @@ class ImplementationHelper:
 
     def getComponentFactory( self, implementationName , regKey, smgr ):
         entry = self.impls.get( implementationName, None )
-        if entry == None:
+        if entry is None:
             raise RuntimeException( implementationName + " is unknown" , None )
         return createSingleServiceFactory( entry.ctor, implementationName, entry.serviceNames )
 
     def getSupportedServiceNames( self, implementationName ):
         entry = self.impls.get( implementationName, None )
-        if entry == None:
+        if entry is None:
             raise RuntimeException( implementationName + " is unknown" , None )
         return entry.serviceNames
 
     def supportsService( self, implementationName, serviceName ):
         entry = self.impls.get( implementationName,None )
-        if entry == None:
+        if entry is None:
             raise RuntimeException( implementationName + " is unknown", None )
         return serviceName in entry.serviceNames
 
@@ -265,7 +265,7 @@ class CurrentContext(XCurrentContext, Base ):
     def getValueByName( self, name ):
         if name in self.hashMap:
             return self.hashMap[name]
-        elif self.oldContext != None:
+        elif self.oldContext is not None:
             return self.oldContext.getValueByName( name )
         else:
             return None

@@ -134,7 +134,7 @@ class Loader( XImplementationLoader, XServiceInfo, unohelper.Base ):
         implHelper = mod.__dict__.get( "g_ImplementationHelper" , None )
         if DEBUG:
             print ("Fetched ImplHelper as " + str(implHelper))
-        if implHelper == None:
+        if implHelper is None:
             return mod.getComponentFactory( implementationName, self.ctx.ServiceManager, regKey )
         else:
             return implHelper.getComponentFactory( implementationName,regKey,self.ctx.ServiceManager)
@@ -145,7 +145,7 @@ class Loader( XImplementationLoader, XServiceInfo, unohelper.Base ):
 
         mod = self.getModuleFromUrl( locationUrl )
         implHelper = mod.__dict__.get( "g_ImplementationHelper" , None )
-        if implHelper == None:
+        if implHelper is None:
             return mod.writeRegistryInfo( self.ctx.ServiceManager, regKey )
         else:
             return implHelper.writeRegistryInfo( regKey, self.ctx.ServiceManager )
