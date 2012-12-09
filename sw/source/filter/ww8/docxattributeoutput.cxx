@@ -1062,6 +1062,14 @@ void DocxAttributeOutput::RunText( const String& rText, rtl_TextEncoding /*eChar
                 impl_WriteRunText( m_pSerializer, nTextToken, pBegin, pIt );
                 m_pSerializer->singleElementNS( XML_w, XML_br, FSEND );
                 break;
+            case 0x1E: //non-breaking hyphen
+                impl_WriteRunText( m_pSerializer, nTextToken, pBegin, pIt );
+                m_pSerializer->singleElementNS( XML_w, XML_noBreakHyphen, FSEND );
+                break;
+            case 0x1F: //soft (on demand) hyphen
+                impl_WriteRunText( m_pSerializer, nTextToken, pBegin, pIt );
+                m_pSerializer->singleElementNS( XML_w, XML_softHyphen, FSEND );
+                break;
             default:
                 if ( *pIt < 0x0020 ) // filter out the control codes
                 {
