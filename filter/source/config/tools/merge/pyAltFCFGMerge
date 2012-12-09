@@ -247,8 +247,8 @@ def readprops(buff):
 
             i += 1
 
-        # no dlimiter was found, name is entire line, there is no value
-        if name == None:
+        # no delimiter was found, name is entire line, there is no value
+        if name is None:
             name = unescapestr(line.lstrip())
 
         # skip delimiter
@@ -340,12 +340,12 @@ class ConfigHelper:
         # Do it only, if a valid file name was given.
         # But in case this file name is wrong, throw an exception.
         # So the outside code can react!
-        if sPropFile != None and len(sPropFile) > 0:
+        if sPropFile is not None and len(sPropFile) > 0:
             self.props = Properties()
             self.props.read(sPropFile)
 
         count = 0
-        if lCommandLineArgs != None:
+        if lCommandLineArgs is not None:
             count = len(lCommandLineArgs)
         self.m_bEmpty = (count < 1)
 
