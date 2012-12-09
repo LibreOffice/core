@@ -55,7 +55,7 @@ namespace osl
         */
         sal_Bool acquire()
         {
-            return osl_acquireMutex(mutex);
+            return OSL_MUTEX_ACQUIRE(mutex);
         }
 
         /** Try to acquire the mutex without blocking.
@@ -73,7 +73,7 @@ namespace osl
         */
         sal_Bool release()
         {
-            return osl_releaseMutex(mutex);
+            return OSL_MUTEX_RELEASE(mutex);
         }
 
         /** Returns a global static mutex object.

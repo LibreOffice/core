@@ -781,14 +781,14 @@ getInternMutex()
     {
         oslMutex pGlobalGuard;
         pGlobalGuard = *osl_getGlobalMutex();
-        osl_acquireMutex( pGlobalGuard );
+        OSL_MUTEX_ACQUIRE( pGlobalGuard );
         if( !pPoolGuard )
         {
             oslMutex p = osl_createMutex();
             OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
             pPoolGuard = p;
         }
-        osl_releaseMutex( pGlobalGuard );
+        OSL_MUTEX_RELEASE( pGlobalGuard );
     }
     else
     {
@@ -807,11 +807,11 @@ static void rtl_ustring_intern_internal( rtl_uString ** newStr,
 
     pPoolMutex = getInternMutex();
 
-    osl_acquireMutex( pPoolMutex );
+    OSL_MUTEX_ACQUIRE( pPoolMutex );
 
     *newStr = rtl_str_hash_intern (str, can_return);
 
-    osl_releaseMutex( pPoolMutex );
+    OSL_MUTEX_RELEASE( pPoolMutex );
 
     if( can_return && *newStr != str )
     { /* we dupped, then found a match */
@@ -944,7 +944,7 @@ internRelease (rtl_uString *pThis)
              osl_atomic_decrement( &(pThis->refCount) ) ) == 0)
     {
         pPoolMutex = getInternMutex();
-        osl_acquireMutex( pPoolMutex );
+        OSL_MUTEX_ACQUIRE( pPoolMutex );
 
         rtl_str_hash_remove (pThis);
 
@@ -960,7 +960,7 @@ internRelease (rtl_uString *pThis)
             internRelease (pThis);
         }
 
-        osl_releaseMutex( pPoolMutex );
+        OSL_MUTEX_RELEASE( pPoolMutex );
     }
     if (pFree)
         rtl_freeMemory (pFree);

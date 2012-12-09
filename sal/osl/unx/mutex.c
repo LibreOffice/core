@@ -25,17 +25,13 @@
 #include <pthread.h>
 #include <stdlib.h>
 
+typedef _oslMutexImpl oslMutexImpl;
+
 #if defined LINUX /* bad hack */
 int pthread_mutexattr_setkind_np(pthread_mutexattr_t *, int);
 #define pthread_mutexattr_settype pthread_mutexattr_setkind_np
 #define PTHREAD_MUTEX_RECURSIVE PTHREAD_MUTEX_RECURSIVE_NP
 #endif
-
-typedef struct _oslMutexImpl
-{
-    pthread_mutex_t mutex;
-} oslMutexImpl;
-
 
 /*****************************************************************************/
 /* osl_createMutex */
@@ -57,7 +53,7 @@ oslMutex SAL_CALL osl_createMutex()
 
     nRet = pthread_mutexattr_settype(&aMutexAttr, PTHREAD_MUTEX_RECURSIVE);
     if( nRet == 0 )
-        nRet = pthread_mutex_init(&(pMutex->mutex), &aMutexAttr);
+        nRet = pthread_mutex_init(pMutex, &aMutexAttr);
     if ( nRet != 0 )
     {
         OSL_TRACE("osl_createMutex : mutex init/setattr failed. Errno: %d; %s\n",
@@ -85,7 +81,7 @@ void SAL_CALL osl_destroyMutex(oslMutex Mutex)
     {
         int nRet=0;
 
-        nRet = pthread_mutex_destroy(&(pMutex->mutex));
+        nRet = pthread_mutex_destroy(pMutex);
         if ( nRet != 0 )
         {
             OSL_TRACE("osl_destroyMutex : mutex destroy failed. Errno: %d; %s\n",
@@ -111,7 +107,7 @@ sal_Bool SAL_CALL osl_acquireMutex(oslMutex Mutex)
     {
         int nRet=0;
 
-        nRet = pthread_mutex_lock(&(pMutex->mutex));
+        nRet = pthread_mutex_lock(pMutex);
         if ( nRet != 0 )
         {
             OSL_TRACE("osl_acquireMutex : mutex lock failed. Errno: %d; %s\n",
@@ -137,7 +133,7 @@ sal_Bool SAL_CALL osl_tryToAcquireMutex(oslMutex Mutex)
     if ( pMutex )
     {
         int nRet = 0;
-        nRet = pthread_mutex_trylock(&(pMutex->mutex));
+        nRet = pthread_mutex_trylock(pMutex);
         if ( nRet != 0  )
             return sal_False;
 
@@ -160,7 +156,7 @@ sal_Bool SAL_CALL osl_releaseMutex(oslMutex Mutex)
     if ( pMutex )
     {
         int nRet=0;
-        nRet = pthread_mutex_unlock(&(pMutex->mutex));
+        nRet = pthread_mutex_unlock(pMutex);
         if ( nRet != 0 )
         {
             OSL_TRACE("osl_releaseMutex : mutex unlock failed. Errno: %d; %s\n",
@@ -185,7 +181,7 @@ static void globalMutexInitImpl(void) {
     pthread_mutexattr_t attr;
     if (pthread_mutexattr_init(&attr) != 0 ||
         pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE) ||
-        pthread_mutex_init(&globalMutexImpl.mutex, &attr) != 0 ||
+        pthread_mutex_init(&globalMutexImpl, &attr) != 0 ||
         pthread_mutexattr_destroy(&attr) != 0)
     {
         abort();
