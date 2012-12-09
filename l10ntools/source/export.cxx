@@ -1531,7 +1531,6 @@ sal_Bool Export::PrepareTextToMerge(rtl::OString &rText, sal_uInt16 nTyp,
     }
 
     PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
-    const OString sKey = pResData->sId + pResData->sGId + pResData->sResTyp;
     pResData->sId = sOldId;
     pResData->sGId = sOldGId;
     pResData->sResTyp = sOldTyp;
@@ -1548,9 +1547,6 @@ sal_Bool Export::PrepareTextToMerge(rtl::OString &rText, sal_uInt16 nTyp,
         rText = sOrigText;
         return sal_False; // no data found
     }
-
-    if (rLangIndex == "en-US")
-        aOrigListItems.insert(std::pair<OString,OString>(sKey,rText.copy(nStart+1,nEnd-nStart-1)));
 
     if (Export::isSourceLanguage(rLangIndex))
         return sal_False;
