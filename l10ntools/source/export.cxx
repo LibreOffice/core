@@ -988,7 +988,7 @@ sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
         rtl::OString sList( "pairedlist" );
         WriteExportList( pResData, pResData->pPairedList, sList, bCreateNew );
         if ( bCreateNew )
-            pResData->pPairedList = 0;
+            pResData->pItemList = 0;
     }
     if ( pResData->pUIEntries ) {
         rtl::OString sList( "uientries" );
@@ -1694,12 +1694,14 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
                         if ( pList )
                             nMaxIndex = pList->GetSourceLanguageListEntryCount();
                         pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
-                        while( nLIndex < nMaxIndex ) {
+                        while( pEntrys  && ( nLIndex < nMaxIndex )) {
                             rtl::OString sText;
-                            if( !pEntrys || !pEntrys->GetTransex3Text( sText, STRING_TYP_TEXT, sCur, sal_True ) )
-                                sText = aOrigListItems.find(pResData->sId + pResData->sGId + pResData->sResTyp)->second;
+                            sal_Bool bText;
+                            bText = pEntrys->GetTransex3Text( sText, STRING_TYP_TEXT, sCur, sal_True );
+                            if( !bText )
+                                bText = pEntrys->GetTransex3Text( sText , STRING_TYP_TEXT, SOURCE_LANGUAGE , sal_False );
 
-                            if (!sText.isEmpty())
+                            if ( bText && !sText.isEmpty())
                             {
                                 if ( nIdx == 1 )
                                 {
