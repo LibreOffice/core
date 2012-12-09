@@ -328,7 +328,7 @@ class ProviderContext:
         packageName = self.getPackageNameFromUrl( url )
         transientPart = self.getTransientPartFromUrl( url )
         log.isDebugLevel() and log.debug( "addPackageByUrl : " + packageName + ", " + transientPart + "("+url+")" + ", rootUrl="+self.rootUrl )
-        if self.mapPackageName2Path.has_key( packageName ):
+        if packageName in self.mapPackageName2Path:
             package = self.mapPackageName2Path[ packageName ]
             package.pathes = package.pathes + (url, )
         else:
@@ -380,7 +380,7 @@ class ProviderContext:
 
         allFuncs = []
 
-        if code == None:
+        if code is None:
             return allFuncs
 
         g_exportedScripts = []
