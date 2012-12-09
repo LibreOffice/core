@@ -646,11 +646,6 @@ inline SwTwips SwTxtFrm::GrowTst( const SwTwips nGrow )
     return Grow( nGrow, sal_True );
 }
 
-#ifdef DBG_UTIL
-// query WYSIWYG DBG
-extern sal_Bool IsDbg( const SwTxtFrm *pFrm );
-#endif
-
 inline sal_Bool SwTxtFrm::IsInside( const xub_StrLen nPos ) const
 {
     sal_Bool bRet = sal_True;
