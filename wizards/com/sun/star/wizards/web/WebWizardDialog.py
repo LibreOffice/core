@@ -721,7 +721,7 @@ class WebWizardDialog(WizardDialog):
 
         def getImageUrls(self, listItem):
             oResIds = None
-            if listItem != None:
+            if listItem is not None:
                 oResIds = listItem.getImageUrls()
 
             return oResIds

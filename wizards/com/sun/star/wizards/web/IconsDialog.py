@@ -61,7 +61,7 @@ class IconsDialog(ImageListDialog):
         self.build()
 
     def getIconset(self):
-        if getSelected() == None:
+        if getSelected() is None:
             return None
         else:
             return self.set.getKey((getSelected()) / len(self.icons))
@@ -91,7 +91,7 @@ class IconsDialog(ImageListDialog):
         return sRetUrls
 
     def render(self, object):
-        if object == None:
+        if object is None:
             return ""
 
         i = (object).intValue()

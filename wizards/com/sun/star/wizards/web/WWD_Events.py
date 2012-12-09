@@ -340,7 +340,7 @@ class WWD_Events(WWD_Startup):
     '''
 
     def setBackground(self, background):
-        if background == None:
+        if background is None:
             background = ""
 
         WWD_Startup.settings.cp_DefaultSession.cp_Design.cp_BackgroundImage \
@@ -390,7 +390,7 @@ class WWD_Events(WWD_Startup):
     updates the ui....
     '''
     def setPublishUrl(self, publisher, url, number):
-        if url == None:
+        if url is None:
             return None
 
         p = getPublisher(publisher)
@@ -465,7 +465,7 @@ class WWD_Events(WWD_Startup):
 
     def documentPreview(self):
         try:
-            if self.docPreview == None:
+            if self.docPreview is None:
                 self.docPreview = TOCPreview(
                     self.xMSF, settings, resources,
                     stylePreview.tempDir, myFrame)
@@ -653,7 +653,7 @@ class WWD_Events(WWD_Startup):
             # first I check if a session with the given name exists
             try:
                 node = Configuration.getNode(name, conf)
-                if node != None:
+                if node is not None:
                     if not AbstractErrorHandler.showMessage(
                             self.xMSF, self.xUnoDialog.Peer,
                             resources.resSessionExists.replace("${NAME}", name),
@@ -755,7 +755,7 @@ class WWD_Events(WWD_Startup):
         '''
         p = getPublisher(FTP_PUBLISHER)
         # if ftp is checked, and no proxies are set, and password is empty...
-        if p.cp_Publish and not proxies and p.password == None or \
+        if p.cp_Publish and not proxies and p.password is None or \
                 p.password == "":
             if showFTPDialog(p):
                 updatePublishUI(2)

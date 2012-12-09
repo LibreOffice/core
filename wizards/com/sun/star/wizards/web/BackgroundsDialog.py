@@ -56,7 +56,7 @@ class BackgroundsDialog(ImageListDialog):
     def other(self):
         filename = self.sd.callOpenDialog(
             False, self.settings.cp_DefaultSession.cp_InDirectory)
-        if filename != None and filename.length > 0 and filename[0] != None:
+        if filename is not None and filename.length > 0 and filename[0] is not None:
             self.settings.cp_DefaultSession.cp_InDirectory = \
                 FileAccess.getParentDir(filename[0])
             i = add(filename[0])
@@ -107,7 +107,7 @@ class BackgroundsDialog(ImageListDialog):
             self.cut = cut_
 
         def getImageUrls(self, listItem):
-            if listItem != None:
+            if listItem is not None:
                 sRetUrls = range(1)
                 sRetUrls[0] = listItem
                 return sRetUrls

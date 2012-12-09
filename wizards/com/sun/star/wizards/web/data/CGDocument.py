@@ -110,7 +110,7 @@ class CGDocument(ConfigGroup):
         #task.advance(True)
         #4
         #now use the object to read some document properties.
-        if xProps != None:
+        if xProps is not None:
             title = xProps.Title
             description = xProps.Description
             author = xProps.Author
@@ -138,7 +138,7 @@ class CGDocument(ConfigGroup):
         if self.cp_Author == "":
             cp_Author = self.author
 
-        if self.cp_Exporter == None or self.cp_Exporter == "":
+        if self.cp_Exporter is None or self.cp_Exporter == "":
             cp_Exporter = \
                 self.root.cp_Exporters.getKey(self.root.getExporters(CGDocument.appType))
 
@@ -197,13 +197,13 @@ class CGDocument(ConfigGroup):
         d.cp_DisplayFormatIcon ? getIcon(exp) : "", self.dirName, self.urlFilename])'''
 
     def updateDate(self):
-        if self.updateDate == None:
+        if self.updateDate is None:
             return ""
 
         return getSettings().formatter.formatCreated(self.updateDate)
 
     def createDate(self):
-        if self.createDate == None:
+        if self.createDate is None:
             return ""
 
         return getSettings().formatter.formatCreated(self.createDate)
@@ -272,7 +272,7 @@ class CGDocument(ConfigGroup):
     '''
 
     def getExporterIndex(self):
-        if self.cp_Exporter == None:
+        if self.cp_Exporter is None:
             return 0
 
         exporter = getSettings().cp_Exporters.getElement(self.cp_Exporter)
