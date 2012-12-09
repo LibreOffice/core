@@ -61,6 +61,7 @@
 /configure
 /desktop/scripts/soffice.sh
 /makefile.mk
+/Makefile
 /src.downloaded
 /intltool-extract.in
 /intltool-merge.in
@@ -98,8 +99,6 @@ TAGS
 /solenv/gdb/libreoffice/*.py[co]
 /solenv/gdb/libreoffice/util/*.py[co]
 
-# test output files
-test/user-template/user/psprint/pspfontcache
 
 # MSVC debug information
 /*/vc90.pdb

@@ -13,23 +13,25 @@ MAKECMDGOALS:=all
 endif
 
 SHELL=/usr/bin/env bash
-SRCDIR:=$(patsubst %/,%,$(dir $(realpath $(firstword $(MAKEFILE_LIST)))))
+export SRCDIR:=@SRC_ROOT@
+export BUILD_DIR:=$(patsubst %/,%,$(dir $(realpath $(firstword $(MAKEFILE_LIST)))))
 
-.PHONY : $(filter-out $(SRCDIR)/config_host.mk,$(MAKECMDGOALS))
+.PHONY : $(filter-out $(BUILD_DIR)/config_host.mk,$(MAKECMDGOALS))
 
 # recursively invoke Makefile.top, which includes config_host.mk
-$(filter-out help,$(firstword $(MAKECMDGOALS))) : $(SRCDIR)/config_host.mk
+$(filter-out help,$(firstword $(MAKECMDGOALS))) : $(BUILD_DIR)/config_host.mk
 	$(MAKE) -r -f $(SRCDIR)/Makefile.top $(MAKECMDGOALS)
 
 # run configure in an environment not polluted by config_host.mk
-$(SRCDIR)/config_host.mk : \
+$(BUILD_DIR)/config_host.mk : \
 		$(SRCDIR)/config_host.mk.in \
+		$(SRCDIR)/Makefile.in \
 		$(SRCDIR)/configure.ac \
 		$(SRCDIR)/autogen.lastrun
-	./autogen.sh
+	$(SRCDIR)/autogen.sh
 
 # dummy rule in case autogen.lastrun does not exist
-$(SRCDIR)/autogen.lastrun:
+autogen.lastrun:
 	@true
 
 help:
@@ -37,3 +39,4 @@ help:
 	@true
 
 # vim: set noet sw=4 ts=4:
+

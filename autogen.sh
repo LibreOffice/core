@@ -4,6 +4,18 @@
 
 use strict;
 use Cwd ('cwd', 'realpath');
+use File::Basename;
+
+my $src_path=dirname(realpath($0));
+my $build_path=realpath(cwd());
+# since this looks crazy, if you have a symlink on a path up to and including
+# the current directory, we need our configure to run in the realpath of that
+# such that compiled (realpath'd) dependency filenames match the filenames
+# used in our makefiles - ie. this gets dependencies right via SRC_ROOT
+chdir ($build_path);
+# more amazingly, if you don't clobber 'PWD' shells will re-assert their
+# old path from the environment, not cwd.
+$ENV{PWD} = $build_path;
 
 sub clean()
 {
@@ -79,7 +91,7 @@ sub invalid_distro($$)
     print STDERR "Can't find distro option set: $config\nThis is not necessarily a problem.\n";
     print STDERR "Distros with distro option sets are:\n";
     my $dirh;
-    opendir ($dirh, "distro-configs");
+    opendir ($dirh, "$src_path/distro-configs");
     while (($_ = readdir ($dirh))) {
         /(.*)\.conf$/ || next;
         print STDERR "\t$1\n";
@@ -104,7 +116,7 @@ if (!@ARGV) {
 }
 
 my @args;
-my $default_config = "distro-configs/default.conf";
+my $default_config = "$src_path/distro-configs/default.conf";
 if (-f $default_config) {
     print STDERR "Reading default config file: $default_config\n";
     push @args, read_args ($default_config);
@@ -113,7 +125,7 @@ for my $arg (@cmdline_args) {
     if ($arg eq '--clean') {
         clean();
     } elsif ($arg =~ m/--with-distro=(.*)$/) {
-        my $config = "distro-configs/$1.conf";
+        my $config = "$src_path/distro-configs/$1.conf";
         if (! -f $config) {
             invalid_distro ($config, $1);
         } else {
@@ -137,26 +149,21 @@ chomp $system;
 
 sanity_checks ($system) unless($system eq 'Darwin');
 
-# since this looks crazy, if you have a symlink on a path up to and including
-# the current directory, we need our configure to run in the realpath of that
-# such that compiled (realpath'd) dependency filenames match the filenames
-# used in our makefiles - ie. this gets dependencies right via SRC_ROOT
-my $cwd_str = realpath(cwd());
-chdir ($cwd_str);
-# more amazingly, if you don't clobber 'PWD' shells will re-assert their
-# old path from the environment, not cwd.
-$ENV{PWD} = $cwd_str;
-
 my $aclocal_flags = $ENV{ACLOCAL_FLAGS};
 
-$aclocal_flags .= " -I ./m4";
-$aclocal_flags .= " -I ./m4/mac" if ($system eq 'Darwin');
+$aclocal_flags .= " -I $src_path/m4";
+$aclocal_flags .= " -I $src_path/m4/mac" if ($system eq 'Darwin');
 
 $ENV{AUTOMAKE_EXTRA_FLAGS} = '--warnings=no-portability' if (!($system eq 'Darwin'));
 
+if ($src_path ne $build_path)
+{
+    system ("cp -fp $src_path/configure.ac configure.ac");
+    system ("ln -sf $src_path/g g");
+}
 system ("$aclocal $aclocal_flags") && die "Failed to run aclocal";
 unlink ("configure");
-system ("autoconf") && die "Failed to run autoconf";
+system ("autoconf -I ${src_path}") && die "Failed to run autoconf";
 die "failed to generate configure" if (! -f "configure");
 
 if (defined $ENV{NOCONFIGURE}) {
@@ -188,6 +195,8 @@ if (defined $ENV{NOCONFIGURE}) {
         open (my $fh, ">autogen.lastrun") || die "can't create autogen.lastrun";
         close ($fh);
     }
+    push @args, "--srcdir=$src_path";
+
     print "running ./configure with '" . join ("' '", @args), "'\n";
     system ("./configure", @args) && die "Error running configure";
 }

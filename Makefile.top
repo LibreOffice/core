@@ -9,13 +9,13 @@ endif
 all: build
 
 SHELL=/usr/bin/env bash
-SRCDIR:=$(patsubst %/,%,$(dir $(realpath $(firstword $(MAKEFILE_LIST)))))
 
 ifeq ($(gb_Side),)
 gb_Side:=host
 endif
 
-include $(SRCDIR)/config_$(gb_Side).mk
+include $(BUILD_DIR)/config_$(gb_Side).mk
+SRCDIR:=$(SRC_ROOT)
 
 ifeq ($(GMAKE_OPTIONS),)
 ifeq ($(verbose)$(VERBOSE),)
@@ -27,7 +27,7 @@ endif
 
 # This list tells which modules are gbuild ones. It does *not* tell which modules to build. That is directed
 # by the module being mentioned in packimages/prj/build.lst, etc, recursively.
-$(WORKDIR)/modules.mk: $(wildcard */Module_*.mk) $(wildcard */prj/dmake) $(SRCDIR)/config_host.mk
+$(WORKDIR)/modules.mk: $(wildcard */Module_*.mk) $(wildcard */prj/dmake) $(BUILD_DIR)/config_host.mk
 	mkdir -p $(dir $@)
 	echo -n "gbuild_modules:= tail_build \\" > $@
 	for m in */Module_*.mk; do echo $$m | sed -e 's/\/.*$$/ \\/'; done >> $@
@@ -50,10 +50,10 @@ $(1): bootstrap fetch
 
 $(1).all: bootstrap fetch
 	$$(if $$(filter $(1),$$(shell $(GNUMAKE) -r -f $(SRCDIR)/tail_build/Makefile showmodules)), \
-		cd tail_build && unset MAKEFLAGS && \
+		cd $(SRC_ROOT)/tail_build && unset MAKEFLAGS && \
 		export gb_TAILBUILDTARGET="$(WORKDIR)/Module/$(1) $(WORKDIR)/Module/check/$(1) $(WORKDIR)/Module/slowcheck/$(1)" && \
 	, \
-		cd $(1) && unset MAKEFLAGS && \
+		cd $(SRC_ROOT)/$(1) && unset MAKEFLAGS && \
 	) \
 	$(SOLARENV)/bin/build.pl -P$(PARALLELISM) --all -- -P$(PARALLELISM)
 
@@ -76,18 +76,18 @@ define dmake_module_rules
 .PHONY: $(1) $(1).all $(1).deliver $(1).clean
 
 $(1): bootstrap fetch
-	cd $(1) && unset MAKEFLAGS && \
+	cd $(SRC_ROOT)/$(1) && unset MAKEFLAGS && \
         $(SOLARENV)/bin/build.pl -P$(PARALLELISM) -- -P$(PARALLELISM)
 
 $(1).all: bootstrap fetch
-	cd $(1) && unset MAKEFLAGS && \
+	cd $(SRC_ROOT)/$(1) && unset MAKEFLAGS && \
         $(SOLARENV)/bin/build.pl -P$(PARALLELISM) --all -- -P$(PARALLELISM)
 
 $(1).deliver: $(1)
-	cd $(1) && $(SOLARENV)/bin/deliver.pl
+	cd $(SRC_ROOT)/$(1) && $(SOLARENV)/bin/deliver.pl
 
 $(1).clean:
-	cd $(1) && $(SOLARENV)/bin/deliver.pl -delete
+	cd $(SRC_ROOT)/$(1) && $(SOLARENV)/bin/deliver.pl -delete
 	rm -fr $(1)/$(INPATH)
 
 endef
@@ -143,9 +143,9 @@ ifeq ($(BUILD_DMAKE),YES)
 	(if [ -f dmake/Makefile ] ; then $(GNUMAKE) -j $(PARALLELISM) -C dmake distclean; fi) && \
 	rm -f solenv/*/bin/dmake*
 endif
-	rm -fr config_host.mk config_build.mk aclocal.m4 autom4te.cache \
-	config.log config.status configure \
-	config_host.mk.last config_host.mk.stamp warn config/*.h
+	rm -fr $(BUILD_DIR)/config_host.mk $(BUILD_DIR)/config_build.mk $(BUILD_DIR)/aclocal.m4 $(BUILD_DIR)/autom4te.cache \
+	$(BUILD_DIR)/config.log $(BUILD_DIR)/config.status $(BUILD_DIR)/configure \
+	$(BUILD_DIR)/config_host.mk.last $(BUILD_DIR)/config_host.mk.stamp $(BUILD_DIR)/warn $(BUILD_DIR)/config/*.h
 	find $(SOLARENV)/gdb -name "*.pyc" -exec rm {} \;
 
 #
@@ -166,11 +166,11 @@ include $(SRCDIR)/Makefile.fetch
 fetch: download
 fetch: get-submodules
 
-ifneq (,$(wildcard .git))
+ifneq (,$(wildcard $(SRCDIR)/.git))
 get-submodules:
 ifneq ($(foreach i,$(GIT_NEEDED_SUBMODULES),$(i)/.git),$(wildcard $(foreach i,$(GIT_NEEDED_SUBMODULES),$(i)/.git)))
 ifeq (,$(GIT_LINK_SRC))
-	./g -f clone
+	cd $(SRCDIR) && ./g -f clone
 else # space-saving clone from another local workdir
 	@echo "FIXME: GIT_LINK_SRC method is not yet implemented with submodules" 1>&2
 	true $(foreach i,$(GIT_NEEDED_SUBMODULES),\
@@ -225,15 +225,15 @@ ifeq ($(DISABLE_DBCONNECTIVITY),TRUE)
 # Ditto for dbconnectivity in the --disable-database-connectivity case
 	cd connectivity && sed -e 's/^\(export [A-Z0-9_]*=\)\(.*\)$$/\1"\2"/' <../config_host.mk >conftmp.sh && . conftmp.sh && rm conftmp.sh && $(SOLARENV)/bin/deliver.pl
 endif
-	cd packimages && unset MAKEFLAGS && \
+	cd $(SRC_ROOT)/packimages && unset MAKEFLAGS && \
 		$(SOLARENV)/bin/build.pl -P$(PARALLELISM) --all -- -P$(PARALLELISM) && \
 		$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS)
 
 build: build-packimages
 ifeq ($(OS_FOR_BUILD),WNT)
-	cd instsetoo_native && unset MAKEFLAGS && $(SOLARENV)/bin/build.pl
+	cd $(SRC_ROOT)/instsetoo_native && unset MAKEFLAGS && $(SOLARENV)/bin/build.pl
 else
-	cd instsetoo_native && unset MAKEFLAGS && \
+	cd $(SRC_ROOT)/instsetoo_native && unset MAKEFLAGS && \
         $(SOLARENV)/bin/build.pl -P$(PARALLELISM) -- -P$(PARALLELISM)
 endif
 ifeq ($(OS),ANDROID)
@@ -274,7 +274,7 @@ dev-install: build
 	@rm -rf $(DEVINSTALLDIR)
 	@mkdir $(DEVINSTALLDIR)
 ifeq ($(OS_FOR_BUILD),WNT)
-	cd instsetoo_native && unset MAKEFLAGS && $(SOLARENV)/bin/build.pl LIBO_DEV_INSTALL=TRUE
+	cd $(SRC_ROOT)/instsetoo_native && unset MAKEFLAGS && $(SOLARENV)/bin/build.pl LIBO_DEV_INSTALL=TRUE
 	unzip -q -d "$(DEVINSTALLDIR)" "$(SRCDIR)/instsetoo_native/$(INPATH)/LibreOffice/archive/install/en-US/LibO*_install-arc_en-US.zip"
 	mv "$(DEVINSTALLDIR)"/LibO*_install-arc_en-US/* "$(DEVINSTALLDIR)"/opt
 else
@@ -301,7 +301,7 @@ install-tb:
 	@rm -rf $(DEVINSTALLDIR)
 	@mkdir $(DEVINSTALLDIR)
 ifeq ($(OS_FOR_BUILD),WNT)
-	cd instsetoo_native && unset MAKEFLAGS && $(SOLARENV)/bin/build.pl LIBO_DEV_INSTALL=TRUE
+	cd $(SRC_ROOT)/instsetoo_native && unset MAKEFLAGS && $(SOLARENV)/bin/build.pl LIBO_DEV_INSTALL=TRUE
 	unzip -q -d "$(DEVINSTALLDIR)" "$(SRCDIR)/instsetoo_native/$(INPATH)/LibreOffice/archive/install/en-US/LibO*_install-arc_en-US.zip"
 	mv "$(DEVINSTALLDIR)"/LibO*_install-arc_en-US/* "$(DEVINSTALLDIR)"/opt
 else
@@ -328,7 +328,7 @@ docs:
 findunusedcode:
 	@which callcatcher > /dev/null 2>&1 || \
 	    (echo "callcatcher not installed" && false)
-	@sed -e s,$$INPATH,callcatcher,g $(SRCDIR)/config_host.mk | sed -e s,"export OOO_JUNIT_JAR=.*","export OOO_JUNIT_JAR=",g > $(SRCDIR)/config_host_callcatcher.mk
+	@sed -e s,$$INPATH,callcatcher,g config_host.mk | sed -e s,"export OOO_JUNIT_JAR=.*","export OOO_JUNIT_JAR=",g > $(SRCDIR)/config_host_callcatcher.mk
 	@echo unexport ARCH_FLAGS >> $(SRCDIR)/config_host_callcatcher.mk
 	@echo unexport CFLAGS >> $(SRCDIR)/config_host_callcatcher.mk
 	@echo unexport CXXFLAGS >> $(SRCDIR)/config_host_callcatcher.mk
@@ -370,10 +370,10 @@ findunusedcode:
 check: dev-install subsequentcheck
 
 subsequentcheck :| $(if $(filter-out subsequentcheck,$(MAKECMDGOALS)),dev-install)
-	$(GNUMAKE) -j $(CHECK_PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.post $@
+	$(GNUMAKE) -j $(CHECK_PARALLELISM) $(GMAKE_OPTIONS) -f $(SRC_ROOT)/Makefile.post $@
 
 unitcheck slowcheck debugrun:
-	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.post $@
+	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f $(SRC_ROOT)/Makefile.post $@
 
 endif # not clean or distclean
 
