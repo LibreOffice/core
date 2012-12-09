@@ -427,7 +427,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             self.xDialogModel.numLogoY.Enabled = True
             self.setPossibleLogo(False)
         else:
-            if self.BusCompanyLogo != None:
+            if self.BusCompanyLogo is not None:
                 self.BusCompanyLogo.removeFrame()
 
             self.xDialogModel.numLogoHeight.Enabled = False
@@ -501,7 +501,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
                 self.setPossibleSenderData(False)
 
         else:
-            if self.BusCompanyAddressReceiver != None:
+            if self.BusCompanyAddressReceiver is not None:
                 self.BusCompanyAddressReceiver.removeFrame()
 
             self.setPossibleAddressReceiver(True)
@@ -527,7 +527,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             self.xDialogModel.lblFooterHeight.Enabled = True
             self.setPossibleFooter(False)
         else:
-            if self.BusFooter != None:
+            if self.BusFooter is not None:
                 self.BusFooter.removeFrame()
 
             self.xDialogModel.numFooterHeight.Enabled = False
@@ -732,16 +732,16 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             BPaperItem = self.getRoadmapItemByID(
                 LetterWizardDialogImpl.RM_BUSINESSPAPER)
             BPaperItem.Enabled = False
-            if self.BusCompanyLogo != None:
+            if self.BusCompanyLogo is not None:
                 self.BusCompanyLogo.removeFrame()
 
-            if self.BusCompanyAddress != None:
+            if self.BusCompanyAddress is not None:
                 self.BusCompanyAddress.removeFrame()
 
-            if self.BusFooter != None:
+            if self.BusFooter is not None:
                 self.BusFooter.removeFrame()
 
-            if self.BusCompanyAddressReceiver != None:
+            if self.BusCompanyAddressReceiver is not None:
                 self.BusCompanyAddressReceiver.removeFrame()
 
             self.setPossibleAddressReceiver(True)

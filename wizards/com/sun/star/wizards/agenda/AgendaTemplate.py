@@ -560,8 +560,8 @@ class AgendaTemplate(TextDocument):
         paraStyle = Range.ParaStyleName
         Range.setString(text)
         Range.ParaStyleName = paraStyle
-        if text == None or text == "":
-            if placeholder != None and not placeholder == "":
+        if text is None or text == "":
+            if placeholder is not None and not placeholder == "":
                 placeHolder = createPlaceHolder(
                     self.xTextDocument, placeholder,
                     self.resources.resPlaceHolderHint)

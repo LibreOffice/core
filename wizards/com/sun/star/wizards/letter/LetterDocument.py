@@ -60,7 +60,7 @@ class LetterDocument(TextDocument):
         FH.updateDateFields()
 
     def switchFooter(self, sPageStyle, bState, bPageNumber, sText):
-        if self.xTextDocument != None:
+        if self.xTextDocument is not None:
             try:
                 self.xTextDocument.lockControllers()
                 xNameAccess = self.xTextDocument.StyleFamilies
@@ -94,7 +94,7 @@ class LetterDocument(TextDocument):
                 traceback.print_exc()
 
     def hasElement(self, sElement):
-        if self.xTextDocument != None:
+        if self.xTextDocument is not None:
             SH = TextSectionHandler(self.xMSF, self.xTextDocument)
             return SH.hasTextSectionByName(sElement)
         else:
@@ -137,31 +137,31 @@ class LetterDocument(TextDocument):
             if not self.keepLogoFrame:
                 xTF = self.getFrameByName(
                     "Company Logo", self.xTextDocument)
-                if xTF != None:
+                if xTF is not None:
                     xTF.dispose()
 
             if not self.keepBendMarksFrame:
                 xTF = self.getFrameByName(
                     "Bend Marks", self.xTextDocument)
-                if xTF != None:
+                if xTF is not None:
                     xTF.dispose()
 
             if not self.keepLetterSignsFrame:
                 xTF = self.getFrameByName(
                     "Letter Signs", self.xTextDocument)
-                if xTF != None:
+                if xTF is not None:
                     xTF.dispose()
 
             if not self.keepSenderAddressRepeatedFrame:
                 xTF = self.getFrameByName(
                     "Sender Address Repeated", self.xTextDocument)
-                if xTF != None:
+                if xTF is not None:
                     xTF.dispose()
 
             if not self.keepAddressFrame:
                 xTF = self.getFrameByName(
                     "Sender Address", self.xTextDocument)
-                if xTF != None:
+                if xTF is not None:
                     xTF.dispose()
 
         except Exception:
