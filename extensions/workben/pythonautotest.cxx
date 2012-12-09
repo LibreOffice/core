@@ -396,7 +396,7 @@ BOOL PythonCodeLibrary::queryInterface( Uik aUik, XInterfaceRef & rOut )
 /*
  * main.
  */
-int __LOADONCALLAPI main (int argc, char **argv)
+int SAL_CALL main (int argc, char **argv)
 {
     // necessary startup code
     XMultiServiceFactoryRef xSMgr = createRegistryServiceManager();

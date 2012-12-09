@@ -499,7 +499,7 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
 #define GraphicImport ipsGraphicImport
 #endif
 
-extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool __LOADONCALLAPI
+extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL
 GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Bool)
 {
     if ( rStream.GetError() )

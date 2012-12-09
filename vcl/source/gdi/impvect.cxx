@@ -122,7 +122,7 @@ inline sal_Bool ImplColorSet::operator>( const ImplColorSet& rSet ) const
 
 // ----------------------------------------------------------------------------
 
-extern "C" int __LOADONCALLAPI ImplColorSetCmpFnc( const void* p1, const void* p2 )
+extern "C" int SAL_CALL ImplColorSetCmpFnc( const void* p1, const void* p2 )
 {
     ImplColorSet*   pSet1 = (ImplColorSet*) p1;
     ImplColorSet*   pSet2 = (ImplColorSet*) p2;

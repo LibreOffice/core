@@ -404,7 +404,7 @@ void PCXReader::ImplReadPalette( sal_uLong nCol )
 #define GraphicImport ipxGraphicImport
 #endif
 
-extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool __LOADONCALLAPI
+extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL
 GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Bool)
 {
     PCXReader aPCXReader(rStream);

@@ -35,12 +35,6 @@ typedef sal_uIntPtr    sal_uLong; /* Replaces type ULONG */
 
 #define DELETEZ( p )    ( delete p,p = 0 )
 
-#ifdef WNT
-#define __LOADONCALLAPI __cdecl
-#else
-#define __LOADONCALLAPI
-#endif
-
 // solar binary types
 
 /* Solar (portable) Binary (exchange) Type; OSI 6 subset

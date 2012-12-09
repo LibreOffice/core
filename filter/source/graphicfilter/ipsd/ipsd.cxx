@@ -724,7 +724,7 @@ sal_Bool PSDReader::ImplReadBody()
 #define GraphicImport ipdGraphicImport
 #endif
 
-extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool __LOADONCALLAPI
+extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL
 GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Bool)
 {
     PSDReader aPSDReader(rStream);

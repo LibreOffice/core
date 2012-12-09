@@ -1634,7 +1634,7 @@ struct PopularColorCount
     sal_uInt32  mnCount;
 };
 
-extern "C" int __LOADONCALLAPI ImplPopularCmpFnc( const void* p1, const void* p2 )
+extern "C" int SAL_CALL ImplPopularCmpFnc( const void* p1, const void* p2 )
 {
     int nRet;
 

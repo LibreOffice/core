@@ -298,7 +298,7 @@ struct SortStruct
 typedef SortStruct  SORT;
 typedef SORT*       PSORT;
 
-extern "C" int __LOADONCALLAPI SortFunc( const void* p1, const void* p2 );
+extern "C" int SAL_CALL SortFunc( const void* p1, const void* p2 );
 
 SdXShape::SdXShape( SvxShape* pShape, SdXImpressDocument* pModel) throw()
 :   mpShape( pShape ),

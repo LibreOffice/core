@@ -1369,7 +1369,7 @@ sal_Bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
 #define GraphicImport itiGraphicImport
 #endif
 
-extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool __LOADONCALLAPI
+extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL
 GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Bool)
 {
     TIFFReader aTIFFReader;

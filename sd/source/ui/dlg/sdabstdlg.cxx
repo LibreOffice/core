@@ -24,7 +24,7 @@
 #include <rtl/ustring.hxx>
 #include <vcl/unohelp.hxx>
 
-typedef SdAbstractDialogFactory* (__LOADONCALLAPI *SdFuncPtrCreateDialogFactory)();
+typedef SdAbstractDialogFactory* (SAL_CALL *SdFuncPtrCreateDialogFactory)();
 
 #ifndef DISABLE_DYNLOADING
 
@@ -43,7 +43,7 @@ SdAbstractDialogFactory* SdAbstractDialogFactory::Create()
     static ::osl::Module aDialogLibrary;
     static const ::rtl::OUString sLibName(::vcl::unohelper::CreateLibraryName("sdui", sal_True));
     if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, sLibName ) )
-        fp = ( SdAbstractDialogFactory* (__LOADONCALLAPI*)() )
+        fp = ( SdAbstractDialogFactory* (SAL_CALL*)() )
             aDialogLibrary.getFunctionSymbol( "CreateDialogFactory" );
     if ( fp )
         return fp();

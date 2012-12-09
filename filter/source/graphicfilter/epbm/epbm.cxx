@@ -193,7 +193,7 @@ void PBMWriter::ImplWriteNumber(sal_Int32 nNumber)
 #define GraphicExport epbGraphicExport
 #endif
 
-extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool __LOADONCALLAPI
+extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL
 GraphicExport(SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem, sal_Bool)
 {
     PBMWriter aPBMWriter(rStream);

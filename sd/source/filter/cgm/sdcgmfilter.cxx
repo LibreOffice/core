@@ -58,8 +58,8 @@ using namespace ::com::sun::star::frame;
 // ------------
 
 
-typedef sal_uInt32 ( __LOADONCALLAPI *ImportCGMPointer )( ::rtl::OUString&, Reference< XModel >&, sal_uInt32, Reference< XStatusIndicator >& );
-typedef sal_Bool ( __LOADONCALLAPI *ExportCGMPointer )( ::rtl::OUString&, Reference< XModel >&, Reference< XStatusIndicator >&, void* );
+typedef sal_uInt32 ( SAL_CALL *ImportCGMPointer )( ::rtl::OUString&, Reference< XModel >&, sal_uInt32, Reference< XStatusIndicator >& );
+typedef sal_Bool ( SAL_CALL *ExportCGMPointer )( ::rtl::OUString&, Reference< XModel >&, Reference< XStatusIndicator >&, void* );
 
 #ifdef DISABLE_DYNLOADING
 

@@ -933,7 +933,7 @@ struct PopArtEntry
 
 // ------------------------------------------------------------------------
 
-extern "C" int __LOADONCALLAPI ImplPopArtCmpFnc( const void* p1, const void* p2 )
+extern "C" int SAL_CALL ImplPopArtCmpFnc( const void* p1, const void* p2 )
 {
     int nRet;
 

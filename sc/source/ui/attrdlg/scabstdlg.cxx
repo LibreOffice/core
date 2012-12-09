@@ -25,7 +25,7 @@
 
 using ::rtl::OUStringBuffer;
 
-typedef ScAbstractDialogFactory* (__LOADONCALLAPI *ScFuncPtrCreateDialogFactory)();
+typedef ScAbstractDialogFactory* (SAL_CALL *ScFuncPtrCreateDialogFactory)();
 
 #ifndef DISABLE_DYNLOADING
 
@@ -48,7 +48,7 @@ ScAbstractDialogFactory* ScAbstractDialogFactory::Create()
 
     if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, aStrBuf.makeStringAndClear(),
                                                              SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY ) )
-        fp = ( ScAbstractDialogFactory* (__LOADONCALLAPI*)() )
+        fp = ( ScAbstractDialogFactory* (SAL_CALL*)() )
             aDialogLibrary.getFunctionSymbol( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreateDialogFactory")) );
     if ( fp )
         return fp();

@@ -254,7 +254,7 @@ void XPMWriter::ImplWriteColor( sal_uInt16 nNumber )
 #define GraphicExport expGraphicExport
 #endif
 
-extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool __LOADONCALLAPI
+extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL
 GraphicExport(SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem, sal_Bool)
 {
     XPMWriter aXPMWriter(rStream);

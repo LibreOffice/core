@@ -54,7 +54,7 @@
 // - Cmp-Function -
 // ----------------
 
-extern "C" int __LOADONCALLAPI ImplHatchCmpFnc( const void* p1, const void* p2 )
+extern "C" int SAL_CALL ImplHatchCmpFnc( const void* p1, const void* p2 )
 {
     const long nX1 = ( (Point*) p1 )->X();
     const long nX2 = ( (Point*) p2 )->X();

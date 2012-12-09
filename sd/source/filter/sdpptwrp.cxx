@@ -40,14 +40,14 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::frame;
 
-typedef sal_Bool ( __LOADONCALLAPI *ExportPPTPointer )( const std::vector< com::sun::star::beans::PropertyValue >&, SvStorageRef&,
+typedef sal_Bool ( SAL_CALL *ExportPPTPointer )( const std::vector< com::sun::star::beans::PropertyValue >&, SvStorageRef&,
                                              Reference< XModel > &,
                                              Reference< XStatusIndicator > &,
                                              SvMemoryStream*, sal_uInt32 nCnvrtFlags );
 
 typedef sal_Bool ( SAL_CALL *ImportPPTPointer )( SdDrawDocument*, SvStream&, SvStorage&, SfxMedium& );
 
-typedef sal_Bool ( __LOADONCALLAPI *SaveVBAPointer )( SfxObjectShell&, SvMemoryStream*& );
+typedef sal_Bool ( SAL_CALL *SaveVBAPointer )( SfxObjectShell&, SvMemoryStream*& );
 
 #ifdef DISABLE_DYNLOADING
 

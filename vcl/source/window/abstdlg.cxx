@@ -23,7 +23,7 @@
 #include <osl/module.hxx>
 #include <tools/string.hxx>
 
-typedef VclAbstractDialogFactory* (__LOADONCALLAPI *FuncPtrCreateDialogFactory)();
+typedef VclAbstractDialogFactory* (SAL_CALL *FuncPtrCreateDialogFactory)();
 
 #ifndef DISABLE_DYNLOADING
 extern "C" { static void SAL_CALL thisModule() {} }
@@ -38,7 +38,7 @@ VclAbstractDialogFactory* VclAbstractDialogFactory::Create()
     static ::osl::Module aDialogLibrary;
     if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, String( CUI_DLL_NAME  ),
                                                              SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY ) )
-        fp = ( VclAbstractDialogFactory* (__LOADONCALLAPI*)() )
+        fp = ( VclAbstractDialogFactory* (SAL_CALL*)() )
             aDialogLibrary.getFunctionSymbol( ::rtl::OUString("CreateDialogFactory") );
 #else
     fp = CreateDialogFactory;

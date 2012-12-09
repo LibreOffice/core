@@ -562,7 +562,7 @@ void GIFWriter::WriteTerminator()
 #define GraphicExport egiGraphicExport
 #endif
 
-extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool __LOADONCALLAPI
+extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL
 GraphicExport( SvStream& rStream, Graphic& rGraphic,
                                                FilterConfigItem* pConfigItem, sal_Bool )
 {

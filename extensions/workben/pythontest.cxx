@@ -463,7 +463,7 @@ BOOL CmdDebugger::queryInterface( Uik aUik, XInterfaceRef & rOut )
 /*
  * main.
  */
-int __LOADONCALLAPI main (int argc, char **argv)
+int SAL_CALL main (int argc, char **argv)
 {
     XMultiServiceFactoryRef xSMgr = createRegistryServiceManager();
     registerUsrServices( xSMgr );

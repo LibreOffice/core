@@ -50,7 +50,7 @@ using ::rtl::OStringToOWString;
 extern "C" void ChangeGlobalInit();
 #endif
 
-int __LOADONCALLAPI main (int argc, char **argv)
+int SAL_CALL main (int argc, char **argv)
 {
 
     if( argc < 3) {

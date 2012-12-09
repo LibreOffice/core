@@ -1730,7 +1730,7 @@ struct ImplHdlAndIndex
 
 // Helper method for sorting handles taking care of OrdNums, keeping order in
 // single objects and re-sorting polygon handles intuitively
-extern "C" int __LOADONCALLAPI ImplSortHdlFunc( const void* pVoid1, const void* pVoid2 )
+extern "C" int SAL_CALL ImplSortHdlFunc( const void* pVoid1, const void* pVoid2 )
 {
     const ImplHdlAndIndex* p1 = (ImplHdlAndIndex*)pVoid1;
     const ImplHdlAndIndex* p2 = (ImplHdlAndIndex*)pVoid2;

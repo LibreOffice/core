@@ -167,7 +167,7 @@ void ScTestListener::selectionChanged(const EventObject& aEvent)
 
 //-----------------------------------------------------------------------
 
-extern "C" Window* __LOADONCALLAPI CreateWindow( Window *pParent, const String& rParam )
+extern "C" Window* SAL_CALL CreateWindow( Window *pParent, const String& rParam )
 {
     MyWindow *pWin = new MyWindow( pParent );
     return pWin;
