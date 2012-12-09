@@ -20,10 +20,10 @@
 
 #ifdef DBG_UTIL
 
-#include "viewsh.hxx"       // IsDbg()
-#include "viewopt.hxx"      // IsDbg()
+#include "viewsh.hxx"
+#include "viewopt.hxx"
 #include "txtatr.hxx"
-#include "txtfrm.hxx"       // IsDbg()
+#include "txtfrm.hxx"
 #include "rootfrm.hxx"
 #include "flyfrms.hxx"
 #include "inftxt.hxx"
@@ -51,18 +51,6 @@ SvStream &operator<<( SvStream &rOs, const SwpHints & ) //$ ostream
     rOs << " {HINTS:";
     rOs << '}';
     return rOs;
-}
-
-/*************************************************************************
- *                          IsDbg()
- *************************************************************************/
-
-sal_Bool IsDbg( const SwTxtFrm *pFrm )
-{
-    if( pFrm && pFrm->getRootFrm()->GetCurrShell() )
-        return pFrm->getRootFrm()->GetCurrShell()->GetViewOptions()->IsTest4();
-    else
-        return sal_False;
 }
 
 #if OSL_DEBUG_LEVEL < 2
