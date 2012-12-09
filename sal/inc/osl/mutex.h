@@ -29,18 +29,43 @@
 extern "C" {
 #endif
 
-struct _oslMutexImpl;
-typedef struct _oslMutexImpl * oslMutex;
+#if defined(SAL_W32)
+
+#include "system.h"
+
+typedef CRITICAL_SECTION oslMutex_t;
+
+#elif defined(SAL_UNX)
+
+#include <pthread.h>
+
+typedef pthread_mutex_t oslMutex_t;
+
+#endif
+
+typedef oslMutex_t* oslMutex;
 
 /** Create a thread-local mutex.
     @return 0 if the mutex could not be created, otherwise a handle to the mutex.
 */
 SAL_DLLPUBLIC oslMutex SAL_CALL osl_createMutex(void);
 
+/** Construct a new mutex.
+    @param Mutex Mutex to initialize
+    @return False if the Mutex could not be initialized
+*/
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_initializeMutex(oslMutex pMutex);
+
 /** Release the OS-structures and free mutex data-structure.
     @param Mutex the mutex-handle
 */
 SAL_DLLPUBLIC void SAL_CALL osl_destroyMutex(oslMutex Mutex);
+
+/** Release the os-structures of the mutex.
+    @param Mutex the mutex-handle
+*/
+SAL_DLLPUBLIC void SAL_CALL osl_clearMutex(oslMutex pMutex);
+
 
 /** Acquire the mutex, block if already acquired by another thread.
     @param Mutex handle to a created mutex.

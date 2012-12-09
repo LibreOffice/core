@@ -24,8 +24,7 @@
 
 /*
     Implementation notes:
-    The void* hidden by oslMutex points to a WIN32
-    CRITICAL_SECTION structure.
+    The oslMutex type is a typedef to CRITICAL_SECTION* .
 */
 
 /*****************************************************************************/
@@ -41,20 +40,40 @@ oslMutex SAL_CALL osl_createMutex(void)
 
     InitializeCriticalSection(pMutexImpl);
 
-    return (oslMutex)pMutexImpl;
+    return pMutexImpl;
+}
+
+sal_Bool SAL_CALL osl_initializeMutex(oslMutex pMutex)
+{
+
+    OSL_ASSERT(pMutexImpl);
+
+    if (pMutex)
+    {
+        InitializeCriticalSection(pMutexImpl);
+
+        return sal_True;
+    }
+    return sal_False;
 }
 
 /*****************************************************************************/
 /* osl_destroyMutex */
 /*****************************************************************************/
-void SAL_CALL osl_destroyMutex(oslMutex Mutex)
+void SAL_CALL osl_destroyMutex(oslMutex pMutex)
 {
-    CRITICAL_SECTION *pMutexImpl = (CRITICAL_SECTION *)Mutex;
-
-    if (pMutexImpl)
+    if (pMutex)
     {
-        DeleteCriticalSection(pMutexImpl);
-        free(pMutexImpl);
+        DeleteCriticalSection(pMutex);
+        free(pMutex);
+    }
+}
+
+void SAL_CALL osl_clearMutex(oslMutex pMutex)
+{
+    if (pMutex)
+    {
+        DeleteCriticalSection(pMutex);
     }
 }
 
@@ -63,11 +82,9 @@ void SAL_CALL osl_destroyMutex(oslMutex Mutex)
 /*****************************************************************************/
 sal_Bool SAL_CALL osl_acquireMutex(oslMutex Mutex)
 {
-    CRITICAL_SECTION *pMutexImpl = (CRITICAL_SECTION *)Mutex;
+    OSL_ASSERT(pMutex);
 
-    OSL_ASSERT(Mutex);
-
-    EnterCriticalSection(pMutexImpl);
+    EnterCriticalSection(pMutex);
 
     return sal_True;
 }
@@ -75,25 +92,21 @@ sal_Bool SAL_CALL osl_acquireMutex(oslMutex Mutex)
 /*****************************************************************************/
 /* osl_tryToAcquireMutex */
 /*****************************************************************************/
-sal_Bool SAL_CALL osl_tryToAcquireMutex(oslMutex Mutex)
+sal_Bool SAL_CALL osl_tryToAcquireMutex(oslMutex pMutex)
 {
-    CRITICAL_SECTION *pMutexImpl = (CRITICAL_SECTION *)Mutex;
+    OSL_ASSERT(pMutex);
 
-    OSL_ASSERT(Mutex);
-
-    return (sal_Bool)(TryEnterCriticalSection(pMutexImpl) != FALSE);
+    return (sal_Bool)(TryEnterCriticalSection(pMutex) != FALSE);
 }
 
 /*****************************************************************************/
 /* osl_releaseMutex */
 /*****************************************************************************/
-sal_Bool SAL_CALL osl_releaseMutex(oslMutex Mutex)
+sal_Bool SAL_CALL osl_releaseMutex(oslMutex pMutex)
 {
-    CRITICAL_SECTION *pMutexImpl = (CRITICAL_SECTION *)Mutex;
+    OSL_ASSERT(pMutex);
 
-    OSL_ASSERT(Mutex);
-
-    LeaveCriticalSection(pMutexImpl);
+    LeaveCriticalSection(pMutex);
 
     return sal_True;
 }
