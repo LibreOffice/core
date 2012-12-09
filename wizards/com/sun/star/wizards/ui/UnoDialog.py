@@ -180,19 +180,19 @@ class UnoDialog(object):
     '''
 
     def executeDialog(self, FramePosSize):
-        if self.xUnoDialog.getPeer() == None:
+        if self.xUnoDialog.getPeer() is None:
             raise AttributeError(
                 "Please create a peer, using your own frame")
 
         self.calculateDialogPosition(FramePosSize)
 
-        if self.xWindowPeer == None:
+        if self.xWindowPeer is None:
             self.createWindowPeer()
         return self.xUnoDialog.execute()
 
     def setVisible(self, parent):
         self.calculateDialogPosition(parent.xWindow.getPosSize())
-        if self.xWindowPeer == None:
+        if self.xWindowPeer is None:
             self.createWindowPeer()
 
         self.xUnoDialog.setVisible(True)
@@ -237,7 +237,7 @@ class UnoDialog(object):
     def createWindowPeer(self, parentPeer=None):
         self.xUnoDialog.setVisible(False)
         xToolkit = self.xMSF.createInstance("com.sun.star.awt.Toolkit")
-        if parentPeer == None:
+        if parentPeer is None:
             parentPeer = xToolkit.getDesktopWindow()
 
         self.xUnoDialog.createPeer(xToolkit, parentPeer)

@@ -327,7 +327,7 @@ class ImageList(object):
 
     @synchronized(lock)
     def addItemListener(self, listener):
-        if self.itemListenerList == None:
+        if self.itemListenerList is None:
             self.itemListenerList = java.util.ArrayList.ArrayList()
 
         self.itemListenerList.append(listener)
@@ -339,7 +339,7 @@ class ImageList(object):
 
     @synchronized(lock)
     def removeItemListener(self, listener):
-        if self.itemListenerList != None:
+        if self.itemListenerList is not None:
             self.itemListenerList.remove(listener)
 
     '''
