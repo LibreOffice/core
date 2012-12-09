@@ -30,42 +30,31 @@
 class SVX_DLLPUBLIC CompressGraphicsDialog : public ModalDialog
 {
 private:
-    FixedLine       m_aImageDetailsFL;
-    FixedText       m_aFixedText2X;
-    FixedText       m_aFixedText2;
-    FixedText       m_aFixedText3X;
-    FixedText       m_aFixedText3;
-    FixedText       m_aFixedText5X;
-    FixedText       m_aFixedText5;
-    FixedText       m_aFixedText6X;
-    FixedText       m_aFixedText6;
+    FixedText*       m_aFixedText2;
+    FixedText*       m_aFixedText3;
+    FixedText*       m_aFixedText5;
+    FixedText*       m_aFixedText6;
 
-    FixedLine       m_aSettingsFL;
-    CheckBox        m_aReduceResolutionCB;
-    FixedText       m_aNewWidthFT;
-    MetricField     m_aMFNewWidth;
-    FixedText       m_aNewHeightFT;
-    MetricField     m_aMFNewHeight;
-    FixedText       m_aResolutionFT;
-    ComboBox        m_aResolutionLB;
-    FixedText       m_aFixedTextDPI;
-    RadioButton     m_aLosslessRB;
-    RadioButton     m_aJpegCompRB;
-    FixedText       m_aCompressionFT;
-    MetricField     m_aCompressionMF;
-    FixedText       m_aQualityFT;
-    MetricField     m_aQualityMF;
-    CheckBox        m_aCropCB;
-    OKButton        m_aBtnOK;
-    CancelButton    m_aBtnCancel;
-    HelpButton      m_aBtnHelp;
-    PushButton      m_aBtnCalculate;
+    CheckBox*        m_aReduceResolutionCB;
+    NumericField*    m_aMFNewWidth;
+    NumericField*    m_aMFNewHeight;
+    ComboBox*        m_aResolutionLB;
+    RadioButton*     m_aLosslessRB;
+    RadioButton*     m_aJpegCompRB;
+    NumericField*    m_aCompressionMF;
+    NumericField*    m_aQualityMF;
+    PushButton*      m_aBtnCalculate;
+    ListBox*         m_aInterpolationCombo;
 
+    SdrGrafObj*     m_pGraphicObj;
     Graphic         m_aGraphic;
     Size            m_aViewSize100mm;
+    Rectangle       m_aCropRectangle;
     SfxBindings&    m_rBindings;
 
     double          m_dResolution;
+
+    void Initialize();
 
     DECL_LINK( NewWidthModifiedHdl, void* );
     DECL_LINK( NewHeightModifiedHdl, void* );
@@ -82,15 +71,18 @@ private:
 
     void Compress(SvStream& aStream);
 
-
     double GetViewWidthInch();
     double GetViewHeightInch();
 
+    sal_uLong GetSelectedInterpolationType();
+
 public:
-    CompressGraphicsDialog( Window* pParent, const Graphic& rGraphic, const Size& rViewSize100mm, SfxBindings& rBindings );
+    CompressGraphicsDialog( Window* pParent, SdrGrafObj* pGraphicObj, SfxBindings& rBindings );
+    CompressGraphicsDialog( Window* pParent, const Graphic& rGraphic, Size& rViewSize100mm, Rectangle& rCropRectangle, SfxBindings& rBindings );
     virtual ~CompressGraphicsDialog();
 
-    Graphic GetCompressedGraphic();
+    SdrGrafObj* GetCompressedSdrGrafObj();
+    Graphic&    GetCompressedGraphic();
 };
 
 #endif

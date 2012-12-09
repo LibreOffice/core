@@ -226,18 +226,14 @@ void ScGraphicShell::ExecuteCompressGraphic( SfxRequest& )
 
         if( pObj && pObj->ISA( SdrGrafObj ) && ( (SdrGrafObj*) pObj )->GetGraphicType() == GRAPHIC_BITMAP )
         {
-            GraphicObject aGraphicObject( ( (SdrGrafObj*) pObj )->GetGraphicObject() );
-            CompressGraphicsDialog dialog( GetViewData()->GetDialogParent(), aGraphicObject.GetGraphic(), pObj->GetLogicRect().GetSize(), GetViewData()->GetBindings() );
+            SdrGrafObj* pGraphicObj = (SdrGrafObj*) pObj;
+            CompressGraphicsDialog dialog( GetViewData()->GetDialogParent(), pGraphicObj, GetViewData()->GetBindings() );
             if ( dialog.Execute() == RET_OK )
             {
-                SdrGrafObj* pNewObject = (SdrGrafObj*) pObj->Clone();
-                const Graphic aNewGraphic = dialog.GetCompressedGraphic();
+                SdrGrafObj* pNewObject = dialog.GetCompressedSdrGrafObj();
                 SdrPageView* pPageView = pView->GetSdrPageView();
-                pNewObject->SetEmptyPresObj( sal_False );
-                pNewObject->SetGraphic( aNewGraphic );
                 String aUndoString( pView->GetDescriptionOfMarkedObjects() );
-                aUndoString += (sal_Unicode) ' ';
-                aUndoString += String( "Compress" );
+                aUndoString += String( " Compress" );
                 pView->BegUndo( aUndoString );
                 pView->ReplaceObjectAtView( pObj, *pPageView, pNewObject );
                 pView->EndUndo();
