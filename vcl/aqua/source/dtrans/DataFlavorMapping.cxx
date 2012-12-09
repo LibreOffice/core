@@ -515,7 +515,7 @@ DataFlavor DataFlavorMapper::systemToOpenOfficeFlavor(NSString* systemDataFlavor
       if ([systemDataFlavor caseInsensitiveCompare: flavorMap[i].SystemFlavor] == NSOrderedSame)
         {
           oOOFlavor.MimeType = OUString::createFromAscii(flavorMap[i].OOoFlavor);
-          oOOFlavor.HumanPresentableName = OUString(RTL_CONSTASCII_USTRINGPARAM(flavorMap[i].HumanPresentableName));
+          oOOFlavor.HumanPresentableName = OUString::createFromAscii(flavorMap[i].HumanPresentableName);
           oOOFlavor.DataType = flavorMap[i].DataTypeOUString ? getCppuType( (OUString*)0 ) : getCppuType((Sequence<sal_Int8>*)0);
           return oOOFlavor;
         }
