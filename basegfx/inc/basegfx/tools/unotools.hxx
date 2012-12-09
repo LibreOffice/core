@@ -31,6 +31,7 @@
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase3.hxx>
+#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/rendering/FillRule.hpp>
 #include <com/sun/star/rendering/XLinePolyPolygon2D.hpp>
