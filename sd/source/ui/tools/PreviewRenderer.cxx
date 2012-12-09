@@ -231,67 +231,62 @@ bool PreviewRenderer::Initialize (
     const Size& rPixelSize,
     const bool bObeyHighContrastMode)
 {
-    bool bSuccess = false;
-    do
+    if (pPage == NULL)
+        return false;
+
+    SdrModel* pModel = pPage->GetModel();
+    if (pModel == NULL)
+        return false;
+
+    SetupOutputSize(*pPage, rPixelSize);
+
+    SdDrawDocument* pDocument
+        = static_cast<SdDrawDocument*>(pPage->GetModel());
+    DrawDocShell* pDocShell = pDocument->GetDocSh();
+
+    // Create view
+    ProvideView (pDocShell);
+    if (mpView.get() == NULL)
+        return false;
+
+    // Adjust contrast mode.
+    bool bUseContrast (bObeyHighContrastMode
+        && Application::GetSettings().GetStyleSettings().GetHighContrastMode());
+    mpPreviewDevice->SetDrawMode (bUseContrast
+        ? ViewShell::OUTPUT_DRAWMODE_CONTRAST
+        : ViewShell::OUTPUT_DRAWMODE_COLOR);
+    mpPreviewDevice->SetSettings(Application::GetSettings());
+
+    // Tell the view to show the given page.
+    SdPage* pNonConstPage = const_cast<SdPage*>(pPage);
+    if (pPage->IsMasterPage())
     {
-        if (pPage == NULL)
-            break;
-
-        SdrModel* pModel = pPage->GetModel();
-        if (pModel == NULL)
-            break;
-
-        SetupOutputSize(*pPage, rPixelSize);
-
-        SdDrawDocument* pDocument
-            = static_cast<SdDrawDocument*>(pPage->GetModel());
-        DrawDocShell* pDocShell = pDocument->GetDocSh();
-
-        // Create view
-        ProvideView (pDocShell);
-        if (mpView.get() == NULL)
-            break;
-
-        // Adjust contrast mode.
-        bool bUseContrast (bObeyHighContrastMode
-            && Application::GetSettings().GetStyleSettings().GetHighContrastMode());
-        mpPreviewDevice->SetDrawMode (bUseContrast
-            ? ViewShell::OUTPUT_DRAWMODE_CONTRAST
-            : ViewShell::OUTPUT_DRAWMODE_COLOR);
-        mpPreviewDevice->SetSettings(Application::GetSettings());
-
-        // Tell the view to show the given page.
-        SdPage* pNonConstPage = const_cast<SdPage*>(pPage);
-        if (pPage->IsMasterPage())
-        {
-            mpView->ShowSdrPage(mpView->GetModel()->GetMasterPage(pPage->GetPageNum()));
-        }
-        else
-        {
-            mpView->ShowSdrPage(pNonConstPage);
-        }
-
-        // Make sure that a page view exists.
-        SdrPageView* pPageView = mpView->GetSdrPageView();
-        if (pPageView == NULL)
-            break;
-        // Set background color of page view and outliner.
-        svtools::ColorConfig aColorConfig;
-        const Color aPageBackgroundColor(pPage->GetPageBackgroundColor(pPageView));
-        pPageView->SetApplicationBackgroundColor(aPageBackgroundColor);
-        SdrOutliner& rOutliner (pDocument->GetDrawOutliner(NULL));
-        rOutliner.SetBackgroundColor(aPageBackgroundColor);
-        rOutliner.SetDefaultLanguage(pDocument->GetLanguage(EE_CHAR_LANGUAGE));
-        mpView->SetApplicationBackgroundColor(
-            Color(aColorConfig.GetColorValue(svtools::APPBACKGROUND).nColor));
-        mpPreviewDevice->SetBackground(Wallpaper(aPageBackgroundColor));
-        mpPreviewDevice->Erase();
-
-        bSuccess = true;
+        mpView->ShowSdrPage(mpView->GetModel()->GetMasterPage(pPage->GetPageNum()));
     }
-    while (false);
+    else
+    {
+        mpView->ShowSdrPage(pNonConstPage);
+    }
 
-    return bSuccess;
+    // Make sure that a page view exists.
+    SdrPageView* pPageView = mpView->GetSdrPageView();
+
+    if (pPageView == NULL)
+        return false;
+
+    // Set background color of page view and outliner.
+    svtools::ColorConfig aColorConfig;
+    const Color aPageBackgroundColor(pPage->GetPageBackgroundColor(pPageView));
+    pPageView->SetApplicationBackgroundColor(aPageBackgroundColor);
+    SdrOutliner& rOutliner (pDocument->GetDrawOutliner(NULL));
+    rOutliner.SetBackgroundColor(aPageBackgroundColor);
+    rOutliner.SetDefaultLanguage(pDocument->GetLanguage(EE_CHAR_LANGUAGE));
+    mpView->SetApplicationBackgroundColor(
+        Color(aColorConfig.GetColorValue(svtools::APPBACKGROUND).nColor));
+    mpPreviewDevice->SetBackground(Wallpaper(aPageBackgroundColor));
+    mpPreviewDevice->Erase();
+
+    return true;
 }
 
 
@@ -453,6 +448,10 @@ void PreviewRenderer::ProvideView (DrawDocShell* pDocShell)
     mpView->SetPageVisible(false);
     mpView->SetPageBorderVisible(true);
     mpView->SetBordVisible(false);
+    mpView->SetGridVisible(false);
+    mpView->SetHlplVisible(false);
+    mpView->SetGlueVisible(false);
+
 #else
     // This works in the slide sorter but prevents the master page
     // background being painted in the list of current master pages in the
