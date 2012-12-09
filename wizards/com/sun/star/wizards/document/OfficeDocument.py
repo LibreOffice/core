@@ -64,7 +64,7 @@ class OfficeDocument(object):
 
     def dispose(self, xMSF, xComponent):
         try:
-            if xComponent != None:
+            if xComponent is not None:
                 xFrame = xComponent.CurrentController.Frame
                 if xComponent.isModified():
                     xComponent.setModified(False)
@@ -228,7 +228,7 @@ class OfficeDocument(object):
 
     def close(self, xComponent):
         bState = False
-        if xComponent != None:
+        if xComponent is not None:
             try:
                 xComponent.close(True)
                 bState = True
