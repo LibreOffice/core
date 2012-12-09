@@ -44,8 +44,8 @@ static const sal_Unicode uFtnEdnRef = 0x2;
 static const sal_Unicode uFtnEdnSep = 0x3;
 static const sal_Unicode uTab = 0x9;
 static const sal_Unicode uPgNum = 0x0;
-static const sal_Unicode uNoBreakHyphen = 0x1e;
-static const sal_Unicode uSoftHyphen = 0x1f;
+static const sal_Unicode uNoBreakHyphen = 0x2011;
+static const sal_Unicode uSoftHyphen = 0xAD;
 
 static const sal_uInt8 cFtnEdnCont = 0x4;
 static const sal_uInt8 cFieldStart = 0x13;
