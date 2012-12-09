@@ -50,6 +50,10 @@ TARFILE_ROOTDIR=$(LUCENE_NAME)
 
 PATCH_FILES=lucene.patch 
 
+.IF "$(OS)" == "WNT"
+PATCH_FILES+= long_path.patch
+.ENDIF
+
 BUILD_DIR=.
 BUILD_ACTION= ${ANT} -buildfile .$/contrib$/analyzers$/build.xml
 

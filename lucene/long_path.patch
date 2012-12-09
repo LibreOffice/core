@@ -1,0 +1,35 @@
+--- misc/lucene-2.9.4/src/java/org/apache/lucene/store/FSDirectory.java	2010-11-27 19:21:44.000000000 -0500
++++ misc/build/lucene-2.9.4/src/java/org/apache/lucene/store/FSDirectory.java	2012-12-08 19:23:23.000000000 -0500
+@@ -266,7 +266,14 @@
+   public static FSDirectory getDirectory(File file, LockFactory lockFactory)
+     throws IOException
+   {
+-    file = getCanonicalPath(file);
++    String path = file.getPath();
++    //File.getCanonicalPath fails on Windows with long path names
++    //Long path names created by osl_getSystemPathFromFileURL are already
++    //unique because its implementation replaces the occurrences of .. and .
++    //That is using the com.sun.star.help.HelpIndexer service from c++ is
++    //relatively safe.
++    if (!path.startsWith("\\\\?\\"))
++	file = getCanonicalPath(file);
+ 
+     FSDirectory dir;
+     synchronized (DIRECTORIES) {
+@@ -721,7 +728,15 @@
+     ensureOpen();
+     String dirName;                               // name to be hashed
+     try {
+-      dirName = directory.getCanonicalPath();
++      //File.getCanonicalPath fails on Windows with long path names
++      //Long path names created by osl_getSystemPathFromFileURL are already
++      //unique because its implementation replaces the occurrences of .. and .
++      //That is using the com.sun.star.help.HelpIndexer service from c++ is
++      //relatively safe.
++      if (!directory.getPath().startsWith("\\\\?\\"))
++	  dirName = directory.getCanonicalPath();
++      else
++	  dirName = directory.getPath();
+     } catch (IOException e) {
+       throw new RuntimeException(e.toString(), e);
+     }
