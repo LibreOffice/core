@@ -192,7 +192,7 @@ class ConfigSet(ConfigNode):
         i = 0
         while i < v.size():
             member = v.get(i)
-            if member != None:
+            if member is not None:
                 Configuration.set((index + 1), indexPropertyName, member)
 
             i += 1

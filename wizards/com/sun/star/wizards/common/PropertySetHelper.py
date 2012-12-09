@@ -47,7 +47,7 @@ class PropertySetHelper(object):
     '''
 
     def setPropertyValue(self, _sName, _aValue):
-        if self.m_xPropertySet != None:
+        if self.m_xPropertySet is not None:
             try:
                 self.m_xPropertySet.setPropertyValue(_sName, _aValue)
             except com.sun.star.beans.UnknownPropertyException, e:
@@ -76,7 +76,7 @@ class PropertySetHelper(object):
     def getPropertyValueAsInteger(self, _sName, _nDefault):
         aObject = None
         nValue = _nDefault
-        if self.m_xPropertySet != None:
+        if self.m_xPropertySet is not None:
             try:
                 aObject = self.m_xPropertySet.getPropertyValue(_sName)
             except com.sun.star.beans.UnknownPropertyException, e:
@@ -84,7 +84,7 @@ class PropertySetHelper(object):
             except com.sun.star.lang.WrappedTargetException, e:
                 DebugHelper.writeInfo(e.getMessage())
 
-        if aObject != None:
+        if aObject is not None:
             try:
                 nValue = NumericalHelper.toInt(aObject)
             except ValueError, e:
@@ -103,7 +103,7 @@ class PropertySetHelper(object):
     def getPropertyValueAsShort(self, _sName, _nDefault):
         aObject = None
         nValue = _nDefault
-        if self.m_xPropertySet != None:
+        if self.m_xPropertySet is not None:
             try:
                 aObject = self.m_xPropertySet.getPropertyValue(_sName)
             except com.sun.star.beans.UnknownPropertyException, e:
@@ -111,7 +111,7 @@ class PropertySetHelper(object):
             except com.sun.star.lang.WrappedTargetException, e:
                 DebugHelper.writeInfo(e.getMessage())
 
-        if aObject != None:
+        if aObject is not None:
             try:
                 nValue = NumericalHelper.toShort(aObject)
             except ValueError, e:
@@ -129,7 +129,7 @@ class PropertySetHelper(object):
     def getPropertyValueAsDouble(self, _sName, _nDefault):
         aObject = None
         nValue = _nDefault
-        if self.m_xPropertySet != None:
+        if self.m_xPropertySet is not None:
             try:
                 aObject = self.m_xPropertySet.getPropertyValue(_sName)
             except com.sun.star.beans.UnknownPropertyException, e:
@@ -139,11 +139,11 @@ class PropertySetHelper(object):
 
         # TODO: I wonder why the same thing is not done in the rest of the
         # getPropertyValueAs* functions...
-        if aObject == None:
+        if aObject is None:
             if _sName in self.m_aHashMap:
                 aObject = self.m_aHashMap[_sName]
 
-        if aObject != None:
+        if aObject is not None:
             try:
                 nValue = NumericalHelper.toDouble(aObject)
             except ValueError, e:
@@ -161,7 +161,7 @@ class PropertySetHelper(object):
     def getPropertyValueAsBoolean(self, _sName, _bDefault):
         aObject = None
         bValue = _bDefault
-        if self.m_xPropertySet != None:
+        if self.m_xPropertySet is not None:
             try:
                 aObject = self.m_xPropertySet.getPropertyValue(_sName)
             except com.sun.star.beans.UnknownPropertyException, e:
@@ -171,7 +171,7 @@ class PropertySetHelper(object):
             except com.sun.star.lang.WrappedTargetException, e:
                 DebugHelper.writeInfo(e.getMessage())
 
-        if aObject != None:
+        if aObject is not None:
             try:
                 bValue = NumericalHelper.toBoolean(aObject)
             except ValueError, e:
@@ -189,7 +189,7 @@ class PropertySetHelper(object):
     def getPropertyValueAsString(self, _sName, _sDefault):
         aObject = None
         sValue = _sDefault
-        if self.m_xPropertySet != None:
+        if self.m_xPropertySet is not None:
             try:
                 aObject = self.m_xPropertySet.getPropertyValue(_sName)
             except com.sun.star.beans.UnknownPropertyException, e:
@@ -197,7 +197,7 @@ class PropertySetHelper(object):
             except com.sun.star.lang.WrappedTargetException, e:
                 DebugHelper.writeInfo(e.getMessage())
 
-        if aObject != None:
+        if aObject is not None:
             try:
                 sValue = AnyConverter.toString(aObject)
             except ValueError, e:
@@ -213,7 +213,7 @@ class PropertySetHelper(object):
 
     def getPropertyValueAsObject(self, _sName):
         aObject = None
-        if self.m_xPropertySet != None:
+        if self.m_xPropertySet is not None:
             try:
                 aObject = self.m_xPropertySet.getPropertyValue(_sName)
             except com.sun.star.beans.UnknownPropertyException, e:
@@ -241,7 +241,7 @@ class PropertySetHelper(object):
 
     def showProperties(self):
         sName = ""
-        if self.m_xPropertySet != None:
+        if self.m_xPropertySet is not None:
             sName = self.m_xPropertySet.getImplementationName()
 
             xInfo = self.m_xPropertySet.getPropertySetInfo()
