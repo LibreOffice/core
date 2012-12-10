@@ -11493,6 +11493,10 @@ AC_SUBST(SCPDEFS)
 #
 WGET=
 MD5SUM=
+CURL=
+
+if test "$enable_fetch_external" != "no"; then
+
 CURL=`which curl 2>/dev/null`
 
 for i in wget /usr/bin/wget /usr/local/bin/wget /usr/sfw/bin/wget /opt/sfw/bin/wget /opt/local/bin/wget; do
@@ -11532,6 +11536,8 @@ fi
 if test -z "$MD5SUM"; then
     AC_MSG_WARN([no md5sum: found!])
     add_warning "no md5sum: found!"
+fi
+
 fi
 
 AC_SUBST(WGET)
