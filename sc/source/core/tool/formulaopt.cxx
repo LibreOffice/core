@@ -58,7 +58,8 @@ ScFormulaOptions::ScFormulaOptions( const ScFormulaOptions& rCpy ) :
     aCalcConfig(rCpy.aCalcConfig),
     aFormulaSepArg      ( rCpy.aFormulaSepArg ),
     aFormulaSepArrayRow ( rCpy.aFormulaSepArrayRow ),
-    aFormulaSepArrayCol ( rCpy.aFormulaSepArrayCol )
+    aFormulaSepArrayCol ( rCpy.aFormulaSepArrayCol ),
+    meOOXMLRecalc       ( rCpy.meOOXMLRecalc )
 {
 }
 
@@ -70,6 +71,7 @@ void ScFormulaOptions::SetDefaults()
 {
     bUseEnglishFuncName = false;
     eFormulaGrammar     = ::formula::FormulaGrammar::GRAM_NATIVE;
+    meOOXMLRecalc = RECALC_ASK;
 
     // unspecified means use the current formula syntax.
     aCalcConfig.reset();
@@ -148,6 +150,7 @@ ScFormulaOptions& ScFormulaOptions::operator=( const ScFormulaOptions& rCpy )
     aFormulaSepArg      = rCpy.aFormulaSepArg;
     aFormulaSepArrayRow = rCpy.aFormulaSepArrayRow;
     aFormulaSepArrayCol = rCpy.aFormulaSepArrayCol;
+    meOOXMLRecalc       = rCpy.meOOXMLRecalc;
     return *this;
 }
 
@@ -158,7 +161,8 @@ bool ScFormulaOptions::operator==( const ScFormulaOptions& rOpt ) const
         && aCalcConfig == rOpt.aCalcConfig
         && aFormulaSepArg      == rOpt.aFormulaSepArg
         && aFormulaSepArrayRow == rOpt.aFormulaSepArrayRow
-        && aFormulaSepArrayCol == rOpt.aFormulaSepArrayCol;
+        && aFormulaSepArrayCol == rOpt.aFormulaSepArrayCol
+        && meOOXMLRecalc       == rOpt.meOOXMLRecalc;
 }
 
 bool ScFormulaOptions::operator!=( const ScFormulaOptions& rOpt ) const
@@ -214,7 +218,8 @@ SfxPoolItem* ScTpFormulaItem::Clone( SfxItemPool * ) const
 #define SCFORMULAOPT_SEP_ARRAY_COL        4
 #define SCFORMULAOPT_STRING_REF_SYNTAX    5
 #define SCFORMULAOPT_EMPTY_STRING_AS_ZERO 6
-#define SCFORMULAOPT_COUNT                7
+#define SCFORMULAOPT_OOXML_RECALC         7
+#define SCFORMULAOPT_COUNT                8
 
 Sequence<OUString> ScFormulaCfg::GetPropertyNames()
 {
@@ -227,6 +232,7 @@ Sequence<OUString> ScFormulaCfg::GetPropertyNames()
         "Syntax/SeparatorArrayCol",      // SCFORMULAOPT_SEP_ARRAY_COL
         "Syntax/StringRefAddressSyntax", // SCFORMULAOPT_STRING_REF_SYNTAX
         "Syntax/EmptyStringAsZero",      // SCFORMULAOPT_EMPTY_STRING_AS_ZERO
+        "Load/OOXMLRecalcMode",          // SCFORMULAOPT_OOXML_RECALC
     };
     Sequence<OUString> aNames(SCFORMULAOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -350,6 +356,30 @@ ScFormulaCfg::ScFormulaCfg() :
                     GetCalcConfig().mbEmptyStringAsZero = bVal;
                 }
                 break;
+                case SCFORMULAOPT_OOXML_RECALC:
+                {
+                    ScRecalcOptions eOpt = RECALC_ASK;
+                    if (pValues[nProp] >>= nIntVal)
+                    {
+                        switch (nIntVal)
+                        {
+                            case 0:
+                                eOpt = RECALC_ALWAYS;
+                                break;
+                            case 1:
+                                eOpt = RECALC_ASK;
+                                break;
+                            case 2:
+                                eOpt = RECALC_NEVER;
+                                break;
+                            default:
+                                SAL_WARN("sc", "unknown ooxml recalc option!");
+                        }
+                    }
+
+                    SetOOXMLRecalcOptions(eOpt);
+                }
+                break;
                 default:
                     ;
                 }
@@ -412,6 +442,25 @@ void ScFormulaCfg::Commit()
             {
                 sal_Bool bVal = GetCalcConfig().mbEmptyStringAsZero;
                 pValues[nProp] <<= bVal;
+            }
+            break;
+            case SCFORMULAOPT_OOXML_RECALC:
+            {
+                sal_Int32 nVal = 1;
+                switch (GetOOXMLRecalcOptions())
+                {
+                    case RECALC_ALWAYS:
+                        nVal = 0;
+                        break;
+                    case RECALC_ASK:
+                        nVal = 1;
+                        break;
+                    case RECALC_NEVER:
+                        nVal = 2;
+                        break;
+                }
+
+                pValues[nProp] <<= nVal;
             }
             break;
             default:

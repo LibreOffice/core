@@ -37,6 +37,14 @@
 #include "global.hxx"
 #include "calcconfig.hxx"
 
+// have to match the registry values
+enum SC_DLLPUBLIC ScRecalcOptions
+{
+    RECALC_ALWAYS = 0,
+    RECALC_ASK = 1,
+    RECALC_NEVER = 2
+};
+
 class SC_DLLPUBLIC ScFormulaOptions
 {
 private:
@@ -47,6 +55,8 @@ private:
     ::rtl::OUString aFormulaSepArg;
     ::rtl::OUString aFormulaSepArrayRow;
     ::rtl::OUString aFormulaSepArrayCol;
+
+    ScRecalcOptions meOOXMLRecalc;
 
 public:
     ScFormulaOptions();
@@ -73,6 +83,9 @@ public:
 
     void SetFormulaSepArrayCol(const ::rtl::OUString& rSep) { aFormulaSepArrayCol = rSep; }
     ::rtl::OUString GetFormulaSepArrayCol() const { return aFormulaSepArrayCol; }
+
+    void SetOOXMLRecalcOptions( ScRecalcOptions eOpt ) { meOOXMLRecalc = eOpt; }
+    ScRecalcOptions GetOOXMLRecalcOptions() const { return meOOXMLRecalc; }
 
     void ResetFormulaSeparators();
 

@@ -284,6 +284,25 @@ TabPage RID_SCPAGE_FORMULA
         Size = MAP_APPFONT ( 60, 14 ) ;
         Text [ en-US ] = "Details...";
     };
+    FixedLine FL_RECALC_OPTIONS
+    {
+        Pos = MAP_APPFONT ( 6, 178 );
+        Size = MAP_APPFONT( 248, 8 );
+        Text [ en-US ] = "Recalculation after laod settings";
+    };
+    ListBox LB_OOXML_RECALC
+    {
+        Pos = MAP_APPFONT( 21, 188);
+        Size = MAP_APPFONT( 100, 50 );
+        Border = TRUE;
+        DropDown = TRUE;
+        StringList [ en-US ] =
+        {
+            "Recalculate always";
+            "Ask before recalculation";
+            "Recalculate never";
+        };
+    };
 };
 
 TabPage RID_SCPAGE_COMPATIBILITY
