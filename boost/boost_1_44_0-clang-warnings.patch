@@ -97,4 +97,14 @@
          }
      }
      
-
+--- misc/boost_1_44_0/boost/random/discard_block.hpp
++++ misc/build/boost_1_44_0/boost/random/discard_block.hpp
+@@ -76,7 +76,7 @@
+ 
+   result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return (_rng.min)(); }
+   result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return (_rng.max)(); }
+-  static bool validation(result_type x) { return true; }  // dummy
++  static bool validation(result_type) { return true; }  // dummy
+ 
+ #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
+ 
