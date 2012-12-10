@@ -35,6 +35,10 @@
     <MeasurementSystem>Metric</MeasurementSystem>
   </LC_CTYPE>
   <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$kr-14]">
+    <DateAcceptancePattern>D.M</DateAcceptancePattern>
+    <DateAcceptancePattern>D/M/Y</DateAcceptancePattern>
+    <DateAcceptancePattern>D/M</DateAcceptancePattern>
+    <DateAcceptancePattern>D/M Y</DateAcceptancePattern>
     <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
       <FormatCode>DD.MM.YY</FormatCode>
     </FormatElement>
