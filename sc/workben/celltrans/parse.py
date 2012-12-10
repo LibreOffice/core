@@ -22,7 +22,7 @@ import sys
 localeNames = {'fr': 'French', 'hu': 'Hungarian', 'de': 'German'}
 def getLocaleName (code):
     global localeNames
-    if localeNames.has_key(code):
+    if code in localeNames:
         return localeNames[code]
     else:
         return "(unknown locale)"
@@ -39,7 +39,7 @@ class LocaleData(object):
         self.funcList = {}
 
     def addKeywordMap (self, funcName, localeName, engName):
-        if not self.funcList.has_key(funcName):
+        if not funcName in self.funcList:
             self.funcList[funcName] = []
 
         self.funcList[funcName].append([localeName, engName])
@@ -54,13 +54,12 @@ class LocaleData(object):
         chars += "// " + "-"*75 + "\n"
         chars += "// %s language locale (automatically generated)\n"%getLocaleName(self.locale)
         chars += "// " + "-"*75 + "\n"
-        chars += "static const Locale a" + self.locale.capitalize() + "(OUString::createFromAscii(\""
+        chars += "static const Locale a" + self.locale.capitalize() + "(OUString(RTL_CONSTASCII_USTRINGPARAM(\""
         chars += self.locale
-        chars += "\"), OUString(), OUString());\n\n"
+        chars += "\")), OUString(), OUString());\n\n"
 
         # pre instantiations of localized function names.
-        funcs = self.funcList.keys()
-        funcs.sort()
+        funcs = sorted(self.funcList.keys())
         chars += "// pre instantiations of localized function names\n"
         for func in funcs:
             for item in self.funcList[func]:
@@ -115,9 +114,12 @@ class Parser(object):
 
     def getDByte (self):
         # Assume little endian.
-        bh = ord(self.bytes[self.i])
-        bl = ord(self.bytes[self.i+1])
-        dbyte = bl*256 + bh
+        bh = self.bytes[self.i]
+        bl = self.bytes[self.i+1]
+        try:
+            dbyte = ord(bl)*256 + ord(bh)
+        except:
+            dbyte = bl*256 + bh
         self.i += 2
         return dbyte
 
@@ -134,11 +136,11 @@ class Parser(object):
         for item in buf:
             sys.stdout.write(chr(item))
         if linefeed:
-            print ''
+            print ('')
 
     def parse (self):
 
-        file = open(self.infile, 'r')
+        file = open(self.infile, 'rb')
         self.bytes = file.read()
         file.close()
 
