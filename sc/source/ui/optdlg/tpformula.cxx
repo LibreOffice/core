@@ -60,7 +60,8 @@ ScTpFormulaOptions::ScTpFormulaOptions(Window* pParent, const SfxItemSet& rCoreA
     maBtnCustomCalcDefault(this, ScResId(BTN_CUSTOM_CALC_DEFAULT)),
     maBtnCustomCalcCustom(this, ScResId(BTN_CUSTOM_CALC_CUSTOM)),
     maBtnCustomCalcDetails(this, ScResId(BTN_CUSTOM_CALC_DETAILS)),
-
+    maFlRecalcOptions(this, ScResId(FL_RECALC_OPTIONS)),
+    maLbOOXMLRecalcOptions( this, ScResId(LB_OOXML_RECALC)),
     mnDecSep(0)
 {
     maLbFormulaSyntax.InsertEntry(ScResId(SCSTR_FORMULA_SYNTAX_CALC_A1).toString());
@@ -245,6 +246,7 @@ sal_Bool ScTpFormulaOptions::FillItemSet(SfxItemSet& rCoreSet)
     OUString aSep             = maEdSepFuncArg.GetText();
     OUString aSepArrayCol     = maEdSepArrayCol.GetText();
     OUString aSepArrayRow     = maEdSepArrayRow.GetText();
+    sal_Int16 aOOXMLRecalcMode = maLbOOXMLRecalcOptions.GetSelectEntryPos();
 
     if (maBtnCustomCalcDefault.IsChecked())
     {
@@ -257,6 +259,7 @@ sal_Bool ScTpFormulaOptions::FillItemSet(SfxItemSet& rCoreSet)
          || static_cast<OUString>(maEdSepFuncArg.GetSavedValue()) != aSep
          || static_cast<OUString>(maEdSepArrayCol.GetSavedValue()) != aSepArrayCol
          || static_cast<OUString>(maEdSepArrayRow.GetSavedValue()) != aSepArrayRow
+         || maLbOOXMLRecalcOptions.GetSavedValue() != aOOXMLRecalcMode
          || maSavedConfig != maCurrentConfig )
     {
         ::formula::FormulaGrammar::Grammar eGram = ::formula::FormulaGrammar::GRAM_DEFAULT;
@@ -274,12 +277,27 @@ sal_Bool ScTpFormulaOptions::FillItemSet(SfxItemSet& rCoreSet)
         break;
         }
 
+        ScRecalcOptions eOOXMLRecalc = RECALC_ASK;
+        switch (aOOXMLRecalcMode)
+        {
+            case 0:
+                eOOXMLRecalc = RECALC_ALWAYS;
+                break;
+            case 1:
+                eOOXMLRecalc = RECALC_ASK;
+                break;
+            case 2:
+                eOOXMLRecalc = RECALC_NEVER;
+                break;
+        };
+
         aOpt.SetFormulaSyntax(eGram);
         aOpt.SetUseEnglishFuncName(bEnglishFuncName);
         aOpt.SetFormulaSepArg(aSep);
         aOpt.SetFormulaSepArrayCol(aSepArrayCol);
         aOpt.SetFormulaSepArrayRow(aSepArrayRow);
         aOpt.SetCalcConfig(maCurrentConfig);
+        aOpt.SetOOXMLRecalcOptions(eOOXMLRecalc);
 
         rCoreSet.Put( ScTpFormulaItem( SID_SCFORMULAOPTIONS, aOpt ) );
         bRet = true;
@@ -314,6 +332,23 @@ void ScTpFormulaOptions::Reset(const SfxItemSet& rCoreSet)
     }
 
     maLbFormulaSyntax.SaveValue();
+
+    ScRecalcOptions eOOXMLRecalc = aOpt.GetOOXMLRecalcOptions();
+
+    switch (eOOXMLRecalc)
+    {
+        case RECALC_ALWAYS:
+            maLbOOXMLRecalcOptions.SelectEntryPos(0);
+            break;
+        case RECALC_ASK:
+            maLbOOXMLRecalcOptions.SelectEntryPos(1);
+            break;
+        case RECALC_NEVER:
+            maLbOOXMLRecalcOptions.SelectEntryPos(2);
+            break;
+    }
+
+    maLbOOXMLRecalcOptions.SaveValue();
 
     // english function name.
     maCbEnglishFuncName.Check( aOpt.GetUseEnglishFuncName() );

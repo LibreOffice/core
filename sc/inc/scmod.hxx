@@ -173,14 +173,14 @@ public:
     const ScDocOptions&     GetDocOptions   ();
 SC_DLLPUBLIC    const ScAppOptions&     GetAppOptions   ();
 SC_DLLPUBLIC    const ScDefaultsOptions&   GetDefaultsOptions ();
-    const ScFormulaOptions&   GetFormulaOptions ();
+    SC_DLLPUBLIC const ScFormulaOptions&   GetFormulaOptions ();
     const ScInputOptions&   GetInputOptions ();
 SC_DLLPUBLIC    const ScPrintOptions&   GetPrintOptions ();
     void                    SetViewOptions  ( const ScViewOptions& rOpt );
     void                    SetDocOptions   ( const ScDocOptions& rOpt );
 SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rOpt );
     void                    SetDefaultsOptions ( const ScDefaultsOptions& rOpt );
-    void                    SetFormulaOptions ( const ScFormulaOptions& rOpt );
+    SC_DLLPUBLIC void                    SetFormulaOptions ( const ScFormulaOptions& rOpt );
     void                    SetInputOptions ( const ScInputOptions& rOpt );
     void                    SetPrintOptions ( const ScPrintOptions& rOpt );
     void                    InsertEntryToLRUList(sal_uInt16 nFIndex);

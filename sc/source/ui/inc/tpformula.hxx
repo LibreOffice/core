@@ -75,6 +75,9 @@ private:
     RadioButton maBtnCustomCalcCustom;
     PushButton maBtnCustomCalcDetails;
 
+    FixedLine maFlRecalcOptions;
+    ListBox maLbOOXMLRecalcOptions;
+
     /** Stores old separator value of currently focused separator edit box.
         This value is used to revert undesired value change. */
     ::rtl::OUString maOldSepValue;
