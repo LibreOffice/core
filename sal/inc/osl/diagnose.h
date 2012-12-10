@@ -83,6 +83,10 @@
     OSL_DEBUG_ONLY(expr)
  */
 
+#if !defined OSL_DEBUG_LEVEL
+#define OSL_DEBUG_LEVEL 0
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif  /* __cplusplus */
