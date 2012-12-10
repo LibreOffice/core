@@ -730,7 +730,7 @@ sal_Bool SwAccessibleParagraph::GetGlyphBoundary(
              rText, nPos, aLocale, nIterMode, 1, nDone );
         rBound.startPos = pBreakIt->GetBreakIter()->previousCharacters(
              rText, rBound.endPos, aLocale, nIterMode, 1, nDone );
-
+        bRet = ((rBound.startPos <= nPos) && (nPos <= rBound.endPos));
         OSL_ENSURE( rBound.startPos <= nPos, "start pos too high" );
         OSL_ENSURE( rBound.endPos >= nPos, "end pos too low" );
     }
