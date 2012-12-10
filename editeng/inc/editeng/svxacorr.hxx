@@ -33,6 +33,7 @@
 
 #include <map>
 #include <set>
+#include <boost/unordered_map.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
 
 class CharClass;
@@ -132,7 +133,7 @@ public:
 
     const String& GetShort() const                  { return sShort; }
     const String& GetLong() const                   { return sLong; }
-    sal_Bool IsTextOnly() const                         { return bIsTxtOnly; }
+    sal_Bool IsTextOnly() const                     { return bIsTxtOnly; }
 };
 
 struct CompareSvxAutocorrWordList
@@ -140,20 +141,32 @@ struct CompareSvxAutocorrWordList
   bool operator()( SvxAutocorrWord* const& lhs, SvxAutocorrWord* const& rhs ) const;
 };
 
-typedef std::set<SvxAutocorrWord*, CompareSvxAutocorrWordList> SvxAutocorrWordList_Base;
-class EDITENG_DLLPUBLIC SvxAutocorrWordList : SvxAutocorrWordList_Base
+typedef std::set<SvxAutocorrWord*, CompareSvxAutocorrWordList> SvxAutocorrWordList_Set;
+typedef ::boost::unordered_map< ::rtl::OUString, SvxAutocorrWord *,
+                                ::rtl::OUStringHash >          SvxAutocorrWordList_Hash;
+
+class EDITENG_DLLPUBLIC SvxAutocorrWordList
 {
+    // only one of these contains the data
+    mutable SvxAutocorrWordList_Set  maSet;
+    mutable SvxAutocorrWordList_Hash maHash; // key is 'Short'
+
+    bool                   WordMatches(const SvxAutocorrWord *pFnd,
+                                       const String &rTxt,
+                                       xub_StrLen &rStt,
+                                       xub_StrLen nEndPos) const;
 public:
-    typedef SvxAutocorrWordList_Base::iterator iterator;
+                           // free any objects still in the set
+                           ~SvxAutocorrWordList();
+    void                   DeleteAndDestroyAll();
+    bool                   Insert(SvxAutocorrWord *pWord);
+    SvxAutocorrWord*       FindAndRemove(SvxAutocorrWord *pWord);
+    void                   LoadEntry(String sWrong, String sRight, sal_Bool bOnlyTxt);
+    bool                   empty() const;
+
     typedef std::vector<SvxAutocorrWord *> Content;
-    // free any objects still in the set
-    ~SvxAutocorrWordList();
-    void DeleteAndDestroyAll();
-    bool Insert(SvxAutocorrWord *pWord);
-    SvxAutocorrWord *FindAndRemove(SvxAutocorrWord *pWord);
-    void LoadEntry(String sWrong, String sRight, sal_Bool bOnlyTxt);
-    bool     empty() const;
-    Content  getSortedContent() const;
+    Content                getSortedContent() const;
+
     const SvxAutocorrWord* SearchWordsInList(const String& rTxt, xub_StrLen& rStt, xub_StrLen nEndPos) const;
 };
 
