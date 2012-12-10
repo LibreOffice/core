@@ -4832,8 +4832,8 @@ sal_Bool lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, sal_Bool bInva )
                         if ( pTabFrm &&
                              !( pTabFrm->IsFollow() &&
                                 pTabFrm->FindMaster()->IsRebuildLastLine() ) &&
-                             !pAnchoredObj->GetFrmFmt().GetAnchor().GetAnchorId()
-                                                            == FLY_AS_CHAR )
+                            (pAnchoredObj->GetFrmFmt().GetAnchor().GetAnchorId()
+                                                            != FLY_AS_CHAR))
                         {
                             SwPageFrm* pPageFrm = pAnchoredObj->GetPageFrm();
                             SwPageFrm* pPageOfAnchor = pFrm->FindPageFrm();
