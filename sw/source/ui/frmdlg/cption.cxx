@@ -551,7 +551,7 @@ long CategoryBox::PreNotify( NotifyEvent& rNEvt )
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeCategoryBox(Window* pParent)
 {
-    CategoryBox* pCategoryBox = new CategoryBox(pParent, WB_LEFT | WB_DROPDOWN | WB_VCENTER | WB_3DLOOK);
+    CategoryBox* pCategoryBox = new CategoryBox(pParent, WB_LEFT | WB_DROPDOWN | WB_VCENTER | WB_3DLOOK | WB_SORT);
     pCategoryBox->EnableAutoSize(true);
     return pCategoryBox;
 }

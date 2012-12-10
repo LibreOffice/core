@@ -60,7 +60,6 @@
 
 #define HID_INSERT_CHART                                        "SW_HID_INSERT_CHART"
 #define HID_NAVIGATOR_TREELIST                                  "SW_HID_NAVIGATOR_TREELIST"
-#define HID_DLG_CAPTION                                         "SW_HID_DLG_CAPTION"
 #define HID_DLG_GLOSS_DECIDE                                    "SW_HID_DLG_GLOSS_DECIDE"
 #define HID_NAVIGATOR_TOOLBOX                                   "SW_HID_NAVIGATOR_TOOLBOX"
 #define HID_NAVIGATOR_LISTBOX                                   "SW_HID_NAVIGATOR_LISTBOX"
