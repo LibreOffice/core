@@ -492,8 +492,9 @@ Size WinMtfOutput::ImplMap( const Size& rSz )
 {
     if ( mnWinExtX && mnWinExtY )
     {
-        double fWidth = rSz.Width() * maXForm.eM11;
-        double fHeight = rSz.Height() * maXForm.eM22;
+        // #121382# apply the whole WorldTransform, else a rotation will be misinterpreted
+        double fWidth = rSz.Width() * maXForm.eM11 + rSz.Height() * maXForm.eM21;
+        double fHeight = rSz.Width() * maXForm.eM12 + rSz.Height() * maXForm.eM22;
 
         if ( mnGfxMode == GM_COMPATIBLE )
         {
@@ -1476,7 +1477,10 @@ void WinMtfOutput::DrawText( Point& rPosition, String& rText, sal_Int32* pDXArry
 
         for( i = 0, nSum = 0; i < nLen; i++ )
         {
-            sal_Int32 nTemp = ImplMap( Size( pDXArry[ i ], 0 ) ).Width();
+            // #121382# Map DXArray using WorldTransform
+            const Size aSize(ImplMap(Size( pDXArry[i], 0)));
+            const basegfx::B2DVector aVector(aSize.Width(), aSize.Height());
+            const sal_Int32 nTemp(basegfx::fround(aVector.getLength()));
             nSum += nTemp;
             pDXArry[ i ] = nSum;
         }
