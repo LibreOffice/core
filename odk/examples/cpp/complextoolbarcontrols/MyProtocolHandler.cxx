@@ -22,14 +22,14 @@
 #include "MyProtocolHandler.h"
 
 #include <com/sun/star/awt/MessageBoxButtons.hpp>
+#include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/XMessageBoxFactory.hpp>
 #include <com/sun/star/frame/ControlCommand.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/sheet/XSpreadsheetView.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/system/XSystemShellExecute.hpp>
-
-#include <compphelper/componentcontext.hxx>
 
 using namespace com::sun::star::awt;
 using namespace com::sun::star::frame;
@@ -38,7 +38,6 @@ using namespace com::sun::star::uno;
 
 using com::sun::star::beans::NamedValue;
 using com::sun::star::beans::PropertyValue;
-using com::sun::star::lang::XMultiServiceFactory;
 using com::sun::star::sheet::XSpreadsheetView;
 using com::sun::star::text::XTextViewCursorSupplier;
 using com::sun::star::util::URL;
@@ -48,7 +47,7 @@ ListenerHelper aListenerHelper;
 void BaseDispatch::ShowMessageBox( const Reference< XFrame >& rFrame, const ::rtl::OUString& aTitle, const ::rtl::OUString& aMsgText )
 {
     if ( !mxToolkit.is() )
-        mxToolkit = Reference< XToolkit > ( Toolkit::create(comphelper::getComponentContext(mxMSF)), UNO_QUERY_THROW );
+        mxToolkit = Toolkit::create(mxContext);
     Reference< XMessageBoxFactory > xMsgBoxFactory( mxToolkit, UNO_QUERY );
     if ( rFrame.is() && xMsgBoxFactory.is() )
     {
@@ -141,8 +140,8 @@ Reference< XDispatch > SAL_CALL MyProtocolHandler::queryDispatch(   const URL& a
             xRet = aListenerHelper.GetDispatch( mxFrame, aURL.Path );
             if ( !xRet.is() )
             {
-                xRet = xCursor.is() ? (BaseDispatch*) new WriterDispatch( mxMSF, mxFrame ) :
-                    (BaseDispatch*) new CalcDispatch( mxMSF, mxFrame );
+                xRet = xCursor.is() ? (BaseDispatch*) new WriterDispatch( mxContext, mxFrame ) :
+                    (BaseDispatch*) new CalcDispatch( mxContext, mxFrame );
                 aListenerHelper.AddDispatch( xRet, mxFrame, aURL.Path );
             }
         }
@@ -186,7 +185,7 @@ Sequence< ::rtl::OUString > SAL_CALL MyProtocolHandler_getSupportedServiceNames(
 
 #undef SERVICE_NAME
 
-Reference< XInterface > SAL_CALL MyProtocolHandler_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
+Reference< XInterface > SAL_CALL MyProtocolHandler_createInstance( const Reference< XComponentContext > & rSMgr)
     throw( Exception )
 {
     return (cppu::OWeakObject*) new MyProtocolHandler( rSMgr );
@@ -228,19 +227,15 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
         {
             // open the LibreOffice web page
             ::rtl::OUString sURL("http://www.libreoffice.org");
-            Reference< XSystemShellExecute > xSystemShellExecute( mxMSF->createInstance(
-                "com.sun.star.system.SystemShellExecute"), UNO_QUERY );
-            if ( xSystemShellExecute.is() )
+            Reference< XSystemShellExecute > xSystemShellExecute(
+                SystemShellExecute::create(mxContext) );
+            try
             {
-                try
-
-                {
-                    xSystemShellExecute->execute( sURL, ::rtl::OUString(), SystemShellExecuteFlags::URIS_ONLY );
-                }
-                catch( Exception& rEx )
-                {
-                    (void)rEx;
-                }
+                xSystemShellExecute->execute( sURL, ::rtl::OUString(), SystemShellExecuteFlags::URIS_ONLY );
+            }
+            catch( Exception& rEx )
+            {
+                (void)rEx;
             }
         }
         else if ( aURL.Path == "ComboboxCmd" )
@@ -496,10 +491,10 @@ void SAL_CALL BaseDispatch::controlEvent( const ControlEvent& Event ) throw (Run
     }
 }
 
-BaseDispatch::BaseDispatch( const Reference< XMultiServiceFactory > &rxMSF,
+BaseDispatch::BaseDispatch( const Reference< XComponentContext > &rxContext,
                             const Reference< XFrame >& xFrame,
                             const ::rtl::OUString& rServiceName )
-        : mxMSF( rxMSF )
+        : mxContext( rxContext )
         , mxFrame( xFrame )
         , msDocService( rServiceName )
         , mbButtonEnabled( sal_True )
@@ -510,7 +505,7 @@ BaseDispatch::BaseDispatch( const Reference< XMultiServiceFactory > &rxMSF,
 BaseDispatch::~BaseDispatch()
 {
     mxFrame.clear();
-    mxMSF.clear();
+    mxContext.clear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

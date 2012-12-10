@@ -32,7 +32,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(const sal_Char* pImplNa
     if ( !pServiceManager || !pImplName )
         return 0;
 
-    css::uno::Reference< css::lang::XSingleServiceFactory > xFactory  ;
+    css::uno::Reference< css::uno::XInterface > xFactory  ;
     css::uno::Reference< css::lang::XMultiServiceFactory >  xSMGR     (reinterpret_cast< css::lang::XMultiServiceFactory* >(pServiceManager), css::uno::UNO_QUERY);
     ::rtl::OUString                                         sImplName = ::rtl::OUString::createFromAscii(pImplName);
 
@@ -46,7 +46,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(const sal_Char* pImplNa
     {
         css::uno::Sequence< ::rtl::OUString > lNames(1);
         lNames[0] = MYPROTOCOLHANDLER_SERVICENAME;
-        xFactory = ::cppu::createSingleFactory(xSMGR, sImplName, MyProtocolHandler_createInstance, lNames);
+        xFactory = ::cppu::createSingleComponentFactory(MyProtocolHandler_createInstance, sImplName, lNames);
     }
 
     if (!xFactory.is())
