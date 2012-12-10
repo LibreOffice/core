@@ -678,6 +678,12 @@ AC_ARG_ENABLE(ext-wiki-publisher,
 
 dnl ---------- *** ----------
 
+AC_ARG_ENABLE([hardlink-deliver],
+    AS_HELP_STRING([--enable-hardlink-deliver],
+        [Put files into deliver folder as hardlinks instead of copying them
+        over. Saves space and speeds up build.])
+)
+
 AC_ARG_ENABLE(mergelibs,
     AS_HELP_STRING([--enable-mergelibs],
         [Enables linking of big, merged, library. Experimental feature tested
@@ -12239,6 +12245,19 @@ else
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(MERGELIBS)
+
+# ===================================================================
+# Create hardlinks on deliver instead of copying for smaller size and speed up
+# ===================================================================
+AC_MSG_CHECKING([whether to create hardlinks for delivering files])
+HARDLINKDELIVER=
+if test "$enable_hardlink_deliver" = "yes"; then
+    HARDLINKDELIVER="TRUE"
+    AC_MSG_RESULT([yes])
+else
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(HARDLINKDELIVER)
 
 dnl ===================================================================
 dnl icerun is a wrapper that stops us spawning tens of processes

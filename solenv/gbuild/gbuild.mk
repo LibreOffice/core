@@ -133,6 +133,10 @@ ENABLE_DEBUGINFO_FOR := all
 endif
 endif
 
+ifeq ($(HARDLINKDELIVER),TRUE)
+gb_Deliver_HARDLINK := $(true)
+endif
+
 ifeq ($(or $(ENABLE_SYMBOLS),$(enable_symbols)),FALSE)
 gb_SYMBOL := $(false)
 else
