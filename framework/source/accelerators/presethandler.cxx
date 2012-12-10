@@ -32,6 +32,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/embed/FileSystemStorageFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include <vcl/svapp.hxx>
@@ -254,7 +255,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     lArgs[0] <<= sShareLayer;
     lArgs[1] <<= css::embed::ElementModes::READ | css::embed::ElementModes::NOCREATE;
 
-    css::uno::Reference< css::lang::XSingleServiceFactory > xStorageFactory(xSMGR->createInstance(SERVICENAME_FILESYSTEMSTORAGEFACTORY)  , css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::lang::XSingleServiceFactory > xStorageFactory = css::embed::FileSystemStorageFactory::create( comphelper::getComponentContext(xSMGR) );
     css::uno::Reference< css::embed::XStorage >             xStorage;
 
     try
@@ -304,7 +305,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     lArgs[0] <<= sUserLayer;
     lArgs[1] <<= css::embed::ElementModes::READWRITE;
 
-    css::uno::Reference< css::lang::XSingleServiceFactory > xStorageFactory(xSMGR->createInstance(SERVICENAME_FILESYSTEMSTORAGEFACTORY)  , css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::lang::XSingleServiceFactory > xStorageFactory = css::embed::FileSystemStorageFactory::create( comphelper::getComponentContext(xSMGR) );
     css::uno::Reference< css::embed::XStorage >             xStorage;
 
     try

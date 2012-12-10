@@ -22,6 +22,7 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/StorageFactory.hpp>
+#include <com/sun/star/embed/FileSystemStorageFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -60,26 +61,12 @@ uno::Reference< lang::XSingleServiceFactory > OStorageHelper::GetStorageFactory(
 
 // ----------------------------------------------------------------------
 uno::Reference< lang::XSingleServiceFactory > OStorageHelper::GetFileSystemStorageFactory(
-                            const uno::Reference< lang::XMultiServiceFactory >& xSF )
+                            const uno::Reference< uno::XComponentContext >& rxContext )
         throw ( uno::Exception )
 {
-    uno::Reference< lang::XMultiServiceFactory > xFactory = xSF.is() ? xSF : ::comphelper::getProcessServiceFactory();
-    if ( !xFactory.is() )
-        throw uno::RuntimeException();
+    uno::Reference< uno::XComponentContext> xContext = rxContext.is() ? rxContext : ::comphelper::getProcessComponentContext();
 
-    rtl::OUString sService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.FileSystemStorageFactory"));
-
-    uno::Reference < lang::XSingleServiceFactory > xStorageFactory(
-                    xFactory->createInstance(sService), uno::UNO_QUERY);
-
-    if ( !xStorageFactory.is() )
-    {
-        throw uno::RuntimeException(rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM("Could not load: ")) + sService,
-            uno::Reference< uno::XInterface >());
-    }
-
-    return xStorageFactory;
+    return embed::FileSystemStorageFactory::create(rxContext);
 }
 
 // ----------------------------------------------------------------------
@@ -118,7 +105,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromURL(
 uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromURL2(
             const ::rtl::OUString& aURL,
             sal_Int32 nStorageMode,
-            const uno::Reference< lang::XMultiServiceFactory >& xFactory )
+            const uno::Reference< uno::XComponentContext >& rxContext )
     throw ( uno::Exception )
 {
     uno::Sequence< uno::Any > aArgs( 2 );
@@ -131,9 +118,9 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromURL2(
             uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > (),
             getProcessComponentContext() );
         if (aCntnt.isDocument()) {
-            xFact = GetStorageFactory( comphelper::getComponentContext(xFactory) );
+            xFact = GetStorageFactory( rxContext );
         } else {
-            xFact = GetFileSystemStorageFactory( xFactory );
+            xFact = GetFileSystemStorageFactory( rxContext );
         }
     } catch (uno::Exception &) { }
 

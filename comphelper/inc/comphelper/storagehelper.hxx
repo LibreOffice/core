@@ -77,8 +77,8 @@ public:
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory >
         GetFileSystemStorageFactory(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xSF
-                            = ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >() )
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext
+                            = ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >() )
         throw ( ::com::sun::star::uno::Exception );
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
@@ -92,7 +92,7 @@ public:
         GetStorageFromURL(
             const ::rtl::OUString& aURL,
             sal_Int32 nStorageMode,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xrxContext
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext
                             = ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >() )
         throw ( ::com::sun::star::uno::Exception );
 
@@ -101,8 +101,8 @@ public:
         GetStorageFromURL2(
             const ::rtl::OUString& aURL,
             sal_Int32 nStorageMode,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory
-                            = ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >() )
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext
+                            = ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >() )
 
         throw ( ::com::sun::star::uno::Exception );
 
