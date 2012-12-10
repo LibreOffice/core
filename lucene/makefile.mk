@@ -31,9 +31,17 @@ TARGET=so_lucene
 
 .INCLUDE :	settings.mk
 .INCLUDE :	antsettings.mk
-# --- Files --------------------------------------------------------
 
 .IF "$(SOLAR_JAVA)" != ""
+.IF "$(SYSTEM_LUCENE)" == "YES"
+
+all:
+    @echo "An already available installation of Apache Lucene should exist on your system."
+    @echo "Therefore the version provided here does not need to be built in addition."
+
+.ENDIF
+
+# --- Files --------------------------------------------------------
 
 LUCENE_MAJOR=2
 LUCENE_MINOR=9
@@ -59,7 +67,10 @@ BUILD_ACTION= ${ANT} -buildfile .$/contrib$/analyzers$/build.xml
 
 OUT2BIN=.$/build$/$(LUCENE_CORE_JAR) .$/build$/contrib$/analyzers/common$/$(LUCENE_ANALYZERS_JAR)
 
-.ENDIF
+.ELSE			# $(SOLAR_JAVA)!= ""
+nojava:
+    @echo "Not building $(PRJNAME) because Java is disabled"
+.ENDIF			# $(SOLAR_JAVA)!= ""
 
 # --- Targets ------------------------------------------------------
 

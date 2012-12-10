@@ -70,7 +70,7 @@ if ( true )
     name = Adobe-Core35_AFMs-314.tar.gz
     URL1 = $(OOO_EXTRAS)$(MD5)-$(name)
 
-if (SOLAR_JAVA == TRUE)
+if (SOLAR_JAVA==TRUE && SYSTEM_LUCENE!=YES)
     MD5 = 17960f35b2239654ba608cf1f3e256b3
     name = lucene-2.9.4-src.tar.gz
     URL1 = http://archive.apache.org/dist/lucene/java/2.9.4/lucene-2.9.4-src.tar.gz
