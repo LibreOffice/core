@@ -16,7 +16,9 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
+#include <string>
+#include <iostream>
+#include "vcl/svapp.hxx"
 #include "PresenterHelpView.hxx"
 #include "PresenterButton.hxx"
 #include "PresenterCanvasHelper.hxx"
@@ -311,6 +313,8 @@ void PresenterHelpView::Paint (const awt::Rectangle& rUpdateBox)
     TextContainer::const_iterator iBlockEnd (mpTextContainer->end());
     for ( ; iBlock!=iBlockEnd; ++iBlock)
     {
+     // check whether RTL interface or not
+     if(!Application::GetSettings().GetLayoutRTL()){
         const double nLeftHeight (
             (*iBlock)->maLeft.Paint(mxCanvas,
                 geometry::RealRectangle2D(
@@ -334,6 +338,31 @@ void PresenterHelpView::Paint (const awt::Rectangle& rUpdateBox)
                 aRenderState,
                 mpFont->mxFont));
         nY += ::std::max(nLeftHeight,nRightHeight);
+     }else{
+        const double nLeftHeight (
+            (*iBlock)->maLeft.Paint(mxCanvas,
+                geometry::RealRectangle2D(
+                    aWindowBox.Width/2 + gnHorizontalGap,
+                    nY,
+                    aWindowBox.Width - gnHorizontalGap,
+                    aWindowBox.Height - gnVerticalBorder),
+                false,
+                aViewState,
+                aRenderState,
+                mpFont->mxFont));
+        const double nRightHeight (
+            (*iBlock)->maRight.Paint(mxCanvas,
+                geometry::RealRectangle2D(
+                    gnHorizontalGap,
+                    nY,
+                    aWindowBox.Width/2 - gnHorizontalGap,
+                    aWindowBox.Height - gnVerticalBorder),
+                true,
+                aViewState,
+                aRenderState,
+                mpFont->mxFont));
+        nY += ::std::max(nLeftHeight,nRightHeight);
+     }
     }
 
     Reference<rendering::XSpriteCanvas> xSpriteCanvas (mxCanvas, UNO_QUERY);
@@ -565,24 +594,85 @@ double LineDescriptorList::Paint(
     double nY (rBBox.Y1);
     vector<LineDescriptor>::const_iterator iLine (mpLineDescriptors->begin());
     vector<LineDescriptor>::const_iterator iEnd (mpLineDescriptors->end());
-    for ( ; iLine!=iEnd; ++iLine)
-    {
-        double nX (rBBox.X1);
-        if ( ! bFlushLeft)
-            nX = rBBox.X2 - iLine->maSize.Width;
-        rRenderState.AffineTransform.m02 = nX;
-        rRenderState.AffineTransform.m12 = nY + iLine->maSize.Height - iLine->mnVerticalOffset;
+    // check whether RTL interface or not
+    if(!Application::GetSettings().GetLayoutRTL()){
+        for ( ; iLine!=iEnd; ++iLine)
+        {
+            double nX (rBBox.X1);
+            if ( ! bFlushLeft)
+                nX = rBBox.X2 - iLine->maSize.Width;
+            rRenderState.AffineTransform.m02 = nX;
+            rRenderState.AffineTransform.m12 = nY + iLine->maSize.Height - iLine->mnVerticalOffset;
 
-        const rendering::StringContext aContext (iLine->msLine, 0, iLine->msLine.getLength());
+            const rendering::StringContext aContext (iLine->msLine, 0, iLine->msLine.getLength());
 
-        rxCanvas->drawText (
-            aContext,
-            rxFont,
-            rViewState,
-            rRenderState,
-            rendering::TextDirection::WEAK_LEFT_TO_RIGHT);
+            rxCanvas->drawText (
+                aContext,
+                rxFont,
+                rViewState,
+                rRenderState,
+                rendering::TextDirection::WEAK_LEFT_TO_RIGHT);
 
-        nY += iLine->maSize.Height * 1.2;
+            nY += iLine->maSize.Height * 1.2;
+        }
+    }else{
+        for ( ; iLine!=iEnd; ++iLine)
+        {
+            double nX (rBBox.X2);
+            OUString msTemp=iLine->msLine;
+            bool ctlLine=false;
+            // this 'for' to check if the line contain ctl character
+            for(sal_Int32 Pos=0; Pos<iLine->msLine.getLength(); Pos++)
+                if(!isprint(iLine->msLine.copy(Pos,1).toChar()))
+                    ctlLine=true;
+            // this is an ugly solution for fix the RTL Languages on help view
+            if(ctlLine){
+                if ( ! bFlushLeft){
+                    nX = rBBox.X1 + iLine->maSize.Width;
+                    for(sal_Int32 Pos=0; Pos<msTemp.getLength(); Pos++)
+                        if(isalpha(msTemp.copy(Pos,1).toChar())){
+                            sal_Int32 tempP=Pos;
+                            sal_Int32 nPos=Pos;
+                            while(isalpha(msTemp.copy(nPos+1,1).toChar())
+                                || (isspace(msTemp.copy(nPos+1,1).toChar())
+                                    && isalpha(msTemp.copy(nPos+2,1).toChar())))
+                                nPos++;
+                            Pos=nPos;
+                            while(nPos>tempP){
+                                msTemp=msTemp.replaceAt(nPos,1,iLine->msLine.copy(tempP,1));
+                                msTemp=msTemp.replaceAt(tempP,1,iLine->msLine.copy(nPos,1));
+                                tempP++;
+                                nPos--;
+                            }
+                        }
+               }
+                rRenderState.AffineTransform.m02 = nX;
+                rRenderState.AffineTransform.m12 = nY + iLine->maSize.Height - iLine->mnVerticalOffset;
+                const rendering::StringContext aContext (msTemp, 0, iLine->msLine.getLength());
+
+                rxCanvas->drawText (
+                    aContext,
+                    rxFont,
+                    rViewState,
+                    rRenderState,
+                    rendering::TextDirection::WEAK_RIGHT_TO_LEFT);
+           }else{
+                // this will Paint the Line Left_To_Right if not translated
+                nX = rBBox.X1;
+                rRenderState.AffineTransform.m02 = nX;
+                rRenderState.AffineTransform.m12 = nY + iLine->maSize.Height - iLine->mnVerticalOffset;
+                const rendering::StringContext aContext (iLine->msLine, 0, iLine->msLine.getLength());
+
+                rxCanvas->drawText (
+                    aContext,
+                    rxFont,
+                    rViewState,
+                    rRenderState,
+                    rendering::TextDirection::WEAK_LEFT_TO_RIGHT);
+           }
+
+            nY += iLine->maSize.Height * 1.2;
+        }
     }
 
     return nY - rBBox.Y1;
