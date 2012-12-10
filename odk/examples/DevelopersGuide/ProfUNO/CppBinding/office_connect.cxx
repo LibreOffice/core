@@ -47,6 +47,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::bridge;
 using namespace cppu;
 
+using ::rtl::OString;
 using ::rtl::OUString;
 using ::rtl::OUStringToOString;
 
