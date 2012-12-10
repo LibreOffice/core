@@ -913,7 +913,7 @@ double EnhancedCustomShape2d::GetEquationValueAsDouble( const sal_Int32 nIndex )
                     struct EquationResult &aResult = ((EnhancedCustomShape2d*)this)->vEquationResults[ nIndex ];
 
                     fNumber = aResult.fValue = (*vNodesSharedPtr[ nIndex ])();
-                    aResult.bReady = sal_True;
+                    aResult.bReady = true;
 
                     if ( !rtl::math::isFinite( fNumber ) )
                         fNumber = 0.0;
@@ -1729,21 +1729,34 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                 break;
 
                 case QUADRATICCURVETO :
+                {
                     for ( sal_Int32 i(0L); ( i < nPntCount ) && ( rSrcPt + 1 < nCoordSize ); i++ )
                     {
-                        const Point aControl(GetPoint( seqCoordinates[ rSrcPt++ ], true, true ));
-                        const Point aEnd(GetPoint( seqCoordinates[ rSrcPt++ ], true, true ));
+                        if ( rSrcPt )
+                        {
+                            const Point aPreviousEndPoint(GetPoint( seqCoordinates[ rSrcPt - 1 ], true, true));
+                            const Point aControlQ(GetPoint( seqCoordinates[ rSrcPt++ ], true, true ));
+                            const Point aEnd(GetPoint( seqCoordinates[ rSrcPt++ ], true, true ));
+                            const Point aControlA((aPreviousEndPoint + (aControlQ * 2.0)) / 3.0);
+                            const Point aControlB(((aControlQ * 2.0) + aEnd) / 3.0);
 
-                        DBG_ASSERT(aNewB2DPolygon.count(), "EnhancedCustomShape2d::CreateSubPath: Error in adding control point (!)");
-                        basegfx::B2DPoint aStartPointB2D( aNewB2DPolygon.getB2DPoint(aNewB2DPolygon.count() - 1 ) );
-                        Point aStartPoint( aStartPointB2D.getX(), aStartPointB2D.getY() );
+                            DBG_ASSERT(aNewB2DPolygon.count(), "EnhancedCustomShape2d::CreateSubPath: Error in adding Q control point (!)");
+                            aNewB2DPolygon.appendBezierSegment(
+                                basegfx::B2DPoint(aControlA.X(), aControlA.Y()),
+                                basegfx::B2DPoint(aControlB.X(), aControlB.Y()),
+                                basegfx::B2DPoint(aEnd.X(), aEnd.Y()));
+                        }
+                        else // no previous point , do a moveto
+                        {
+                            rSrcPt++; // skip control point
+                            const Point aEnd(GetPoint( seqCoordinates[ rSrcPt++ ], true, true ));
 
-                        aNewB2DPolygon.appendBezierSegment(
-                            basegfx::B2DPoint(aStartPoint.X() + 2.0*(aControl.X() - aStartPoint.X())/3.0, aStartPoint.Y() + 2.0*(aControl.Y() - aStartPoint.Y())/3.0),
-                            basegfx::B2DPoint(aEnd.X() + 2.0*(aControl.X() - aEnd.X())/3.0, aEnd.Y() + 2.0*(aControl.Y() - aEnd.Y())/3.0),
-                            basegfx::B2DPoint(aEnd.X(), aEnd.Y()));
+                            DBG_ASSERT(aNewB2DPolygon.count(), "EnhancedCustomShape2d::CreateSubPath: Error in adding Q control point (!)");
+                            aNewB2DPolygon.append(basegfx::B2DPoint(aEnd.X(), aEnd.Y()));
+                        }
                     }
-                    break;
+                }
+                break;
 
                 case LINETO :
                 {
@@ -2380,7 +2393,7 @@ bool EnhancedCustomShape2d::IsPostRotate() const
 
 SdrObject* EnhancedCustomShape2d::CreateLineGeometry()
 {
-    return CreateObject( sal_True );
+    return CreateObject( true );
 }
 
 
