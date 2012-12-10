@@ -64,7 +64,7 @@ gb_CXXFLAGS := \
 	-Wno-non-virtual-dtor \
 	-fno-strict-aliasing \
 	-fsigned-char \
-	$(if $(filter TRUE,$(COM_GCC_IS_CLANG)),-std=gnu++0x,-malign-natural) \
+	$(if $(filter TRUE,$(COM_GCC_IS_CLANG)),$(CXXFLAGS_CXX11),-malign-natural) \
 
 	#-Wshadow \ break in compiler headers already
 	#-fsigned-char \ might be removed?

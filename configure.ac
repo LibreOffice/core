@@ -5572,8 +5572,9 @@ fi
 AC_SUBST(HAVE_THREADSAFE_STATICS)
 
 dnl ===================================================================
-dnl visibility and c++0x features
+dnl visibility and C++11 features
 dnl ===================================================================
+CXXFLAGS_CXX11=
 if test "$GCC" = "yes"; then
     AC_MSG_CHECKING([whether $CC supports -fvisibility=hidden])
     save_CFLAGS=$CFLAGS
@@ -5636,7 +5637,7 @@ if test "$GCC" = "yes"; then
         AC_MSG_RESULT([no])
     fi
 
-    AC_MSG_CHECKING([whether $CXX supports -std=gnu++0x without Language Defect 757])
+    AC_MSG_CHECKING([whether $CXX supports C++11 without Language Defect 757])
     if test "$GCCVER" -ge 040700 -a "$GCCVER" -lt 040702; then
         AC_MSG_NOTICE([Not using -std=gnu++0x on $CXX version 4.7.0/4.7.1 due to libstdc++ ABI breakage.])
     else
@@ -5648,7 +5649,8 @@ if test "$GCC" = "yes"; then
 #include <stddef.h>
 
 #include <vector>
-    // some Clang fail when compiling against GCC 4.7 headers with --std=gnu++0x
+    // some Clang fail when compiling against GCC 4.7 headers with -std=gnu++0x
+    // (__float128)
 
 template <typename T, size_t S> char (&sal_n_array_size( T(&)[S] ))[S];
 
@@ -5671,19 +5673,55 @@ b thingb[]={{0,0}, {1,1}};
 size_t i = sizeof(sal_n_array_size(thinga));
 size_t j = sizeof(sal_n_array_size(thingb));
 return !(i != 0 && j != 0);
-]])],[HAVE_CXX0X=TRUE],[])
+]])],[HAVE_CXX0X=TRUE CXXFLAGS_CXX11=-std=gnu++0x],[])
 
         AC_LANG_POP([C++])
         CXXFLAGS=$save_CXXFLAGS
+
+        if test "$HAVE_CXX0X" != "TRUE"; then
+            save_CXXFLAGS=$CXXFLAGS
+            CXXFLAGS="$CXXFLAGS -std=c++11"
+            AC_LANG_PUSH([C++])
+            AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+                #include <stddef.h>
+                #include <vector>
+                    // some Clang fail when compiling against GCC 4.7 headers
+                    // with -std=gnu++0x (__float128)
+                template <typename T, size_t S> char
+                    (&sal_n_array_size( T(&)[S] ))[S];
+                namespace
+                {
+                    struct b
+                    {
+                        int i;
+                        int j;
+                    };
+                }
+            ]], [[
+                struct a
+                {
+                    int i;
+                    int j;
+                };
+                a thinga[]={{0,0}, {1,1}};
+                b thingb[]={{0,0}, {1,1}};
+                size_t i = sizeof(sal_n_array_size(thinga));
+                size_t j = sizeof(sal_n_array_size(thingb));
+                return !(i != 0 && j != 0);
+            ]])],[HAVE_CXX0X=TRUE CXXFLAGS_CXX11=-std=c++11],[])
+            AC_LANG_POP([C++])
+            CXXFLAGS=$save_CXXFLAGS
+        fi
     fi
     if test "$HAVE_CXX0X" = "TRUE"; then
-        AC_MSG_RESULT([yes])
+        AC_MSG_RESULT([yes ($CXXFLAGS_CXX11)])
         AC_DEFINE([HAVE_CXX0X])
     else
         AC_MSG_RESULT([no])
     fi
 fi
 
+AC_SUBST(CXXFLAGS_CXX11)
 AC_SUBST(HAVE_CXX0X)
 AC_SUBST(HAVE_GCC_NO_LONG_DOUBLE)
 AC_SUBST(HAVE_GCC_AVX)
@@ -5696,7 +5734,7 @@ dnl ==================================
 AC_MSG_CHECKING([whether $CXX supports C++11 = delete syntax])
 if test "$HAVE_CXX0X" = "TRUE"; then
     save_CXXFLAGS=$CXXFLAGS
-    CXXFLAGS="$CXXFLAGS -std=gnu++0x"
+    CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
     AC_LANG_PUSH([C++])
     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 struct A
@@ -8153,7 +8191,7 @@ if test "$with_system_mdds" = "yes"; then
     dnl ===================================================================
     AC_MSG_CHECKING([which hash container mdds shall use])
     if test "x$HAVE_CXX0X" = "xTRUE"; then
-        MDDS_CPPFLAGS="-std=gnu++0x"
+        MDDS_CPPFLAGS=$CXXFLAGS_CXX11
         AC_MSG_RESULT([std::unordered_map])
     else
         MDDS_CPPFLAGS="-DMDDS_HASH_CONTAINER_BOOST"
