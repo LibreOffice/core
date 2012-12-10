@@ -319,8 +319,7 @@ SwDoc::SwDoc()
 
     // COMPATIBILITY FLAGS END
 
-    mbStartIdleTimer(false),
-    mbSetDrawDefaults(false)
+    mbStartIdleTimer(false)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDoc::SwDoc" );
 

@@ -595,8 +595,6 @@ private:
 
     bool mbStartIdleTimer;                    ///< idle timer mode start/stop
 
-    bool mbSetDrawDefaults;                   ///< set draw pool defaults for freshly created documents
-
     static SwAutoCompleteWord *mpACmpltWords;  ///< List of all words for AutoComplete
 
     //---------------- private methods ------------------------------
@@ -2080,12 +2078,7 @@ public:
      */
     void dumpAsXml( xmlTextWriterPtr writer = NULL );
 
-    /// must be called only in SwDocShell::InitNew, causes UpdateDrawDefaults to be called when drawing layer is created
-    void SetDrawDefaults();
-
 private:
-    /// method to set new graphics pool defaults, must only be called by SetDrawDefaults!
-    void UpdateDrawDefaults();
     /// Copies master header to left / first one, if necessary - used by ChgPageDesc().
     void CopyMasterHeader(const SwPageDesc &rChged, const SwFmtHeader &rHead, SwPageDesc *pDesc, bool bLeft);
     /// Copies master footer to left / first one, if necessary - used by ChgPageDesc().

@@ -1889,12 +1889,6 @@ void ScDocument::SetLanguage( LanguageType eLatin, LanguageType eCjk, LanguageTy
     UpdateDrawLanguages();      // set edit engine defaults in drawing layer pool
 }
 
-void ScDocument::SetDrawDefaults()
-{
-    bSetDrawDefaults = true;
-    UpdateDrawDefaults();
-}
-
 Rectangle ScDocument::GetMMRect( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, SCTAB nTab, bool bHiddenAsZero ) const
 {
     if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab])

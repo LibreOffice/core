@@ -394,7 +394,6 @@ private:
 
     sal_uInt8               nAsianCompression;
     sal_uInt8               nAsianKerning;
-    bool                bSetDrawDefaults;
 
     bool                bPastingDrawFromOtherDoc;
 
@@ -456,8 +455,6 @@ public:
 
     SC_DLLPUBLIC void       GetLanguage( LanguageType& rLatin, LanguageType& rCjk, LanguageType& rCtl ) const;
     void                    SetLanguage( LanguageType eLatin, LanguageType eCjk, LanguageType eCtl );
-
-    void                    SetDrawDefaults();
 
     void                        SetConsolidateDlgData( const ScConsolidateParam* pData );
     const ScConsolidateParam*   GetConsolidateDlgData() const { return pConsolidateDlgData; }
@@ -2001,7 +1998,6 @@ private: // CLOOK-Impl-methods
 
     void    UpdateDrawPrinter();
     void    UpdateDrawLanguages();
-    void    UpdateDrawDefaults();
     SC_DLLPUBLIC void   InitClipPtrs( ScDocument* pSourceDoc );
 
     void    LoadDdeLinks(SvStream& rStream);

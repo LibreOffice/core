@@ -41,11 +41,11 @@ XOutdevItemPool::XOutdevItemPool(
     const XubString aNullStr;
     const Graphic aNullGraphic;
     const basegfx::B2DPolyPolygon aNullPol;
-    const Color aNullLineCol(RGB_Color(COL_BLACK));
-    const Color aNullFillCol(RGB_COLORDATA( 153, 204, 255 ));
+    const Color aNullLineCol(COL_DEFAULT_SHAPE_STROKE); // #i121448# Use defined default color
+    const Color aNullFillCol(COL_DEFAULT_SHAPE_FILLING); // #i121448# Use defined default color
     const Color aNullShadowCol(RGB_Color(COL_LIGHTGRAY));
     const XDash aNullDash;
-    const XGradient aNullGrad(aNullLineCol, RGB_Color(COL_WHITE));
+    const XGradient aNullGrad(RGB_Color(COL_BLACK), RGB_Color(COL_WHITE));
     const XHatch aNullHatch(aNullLineCol);
 
     // get master pointer, evtl. add myself to the end of the pools

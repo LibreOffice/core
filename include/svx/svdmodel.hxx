@@ -679,8 +679,6 @@ public:
         This returns false if undo was disabled using EnableUndo( false ) and
         also during the runtime of the Undo() and Redo() methods. */
     bool IsUndoEnabled() const;
-
-    void SetDrawingLayerPoolDefaults();
 };
 
 typedef tools::WeakReference< SdrModel > SdrModelWeakRef;

@@ -2072,18 +2072,6 @@ const ::com::sun::star::uno::Sequence< sal_Int8 >& SdrModel::getUnoTunnelImpleme
     return theSdrModelUnoTunnelImplementationId::get().getSeq();
 }
 
-void SdrModel::SetDrawingLayerPoolDefaults()
-{
-    const String aNullStr;
-    const Color aNullLineCol(COL_DEFAULT_SHAPE_STROKE);
-    const Color aNullFillCol(COL_DEFAULT_SHAPE_FILLING);
-    const XHatch aNullHatch(aNullLineCol);
-
-    pItemPool->SetPoolDefaultItem( XFillColorItem(aNullStr,aNullFillCol) );
-    pItemPool->SetPoolDefaultItem( XFillHatchItem(pItemPool,aNullHatch) );
-    pItemPool->SetPoolDefaultItem( XLineColorItem(aNullStr,aNullLineCol) );
-}
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 TYPEINIT1(SdrHint,SfxHint);
