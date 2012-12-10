@@ -2657,38 +2657,63 @@ SvxAutocorrWordList::~SvxAutocorrWordList()
 
 void SvxAutocorrWordList::DeleteAndDestroyAll()
 {
-    for( const_iterator it = SvxAutocorrWordList_Base::begin();
-         it != SvxAutocorrWordList_Base::end(); ++it )
-        delete *it;
-    clear();
+    for( SvxAutocorrWordList_Hash::const_iterator it = maHash.begin(); it != maHash.end(); ++it )
+        delete it->second;
+    maHash.clear();
+
+    for( SvxAutocorrWordList_Set::const_iterator it2 = maSet.begin(); it2 != maSet.end(); ++it2 )
+        delete *it2;
+    maSet.clear();
 }
 
+// returns true if inserted
 bool SvxAutocorrWordList::Insert(SvxAutocorrWord *pWord)
 {
-    return SvxAutocorrWordList_Base::insert( pWord ).second;
+    if ( maSet.size() == 0 ) // use the hash
+    {
+        rtl::OUString aShort( pWord->GetShort() );
+        bool bThere = maHash.find( aShort ) != maHash.end();
+        if (!bThere)
+            maHash.insert( std::pair<rtl::OUString, SvxAutocorrWord *>( aShort, pWord ) );
+        return !bThere;
+    }
+    else
+        return maSet.insert( pWord ).second;
 }
 
 void SvxAutocorrWordList::LoadEntry(String sWrong, String sRight, sal_Bool bOnlyTxt)
 {
     SvxAutocorrWord* pNew = new SvxAutocorrWord( sWrong, sRight, bOnlyTxt );
-
     if( !Insert( pNew ) )
         delete pNew;
 }
 
 bool SvxAutocorrWordList::empty() const
 {
-    return SvxAutocorrWordList_Base::empty();
+    return maHash.empty() && maSet.empty();
 }
 
 SvxAutocorrWord *SvxAutocorrWordList::FindAndRemove(SvxAutocorrWord *pWord)
 {
     SvxAutocorrWord *pMatch = NULL;
-    SvxAutocorrWordList::iterator it = find( pWord );
-    if( it != end() )
+
+    if ( maSet.size() == 0 ) // use the hash
     {
-        pMatch = *it;
-        erase (it);
+        SvxAutocorrWordList_Hash::iterator it = maHash.find( pWord->GetShort() );
+        if( it != maHash.end() )
+        {
+            pMatch = it->second;
+            maHash.erase (it);
+        }
+    }
+    else
+    {
+        SvxAutocorrWordList_Set::iterator it = maSet.find( pWord );
+        if( it != maSet.end() )
+        {
+            pMatch = *it;
+            maSet.erase (it);
+        }
     }
     return pMatch;
 }
@@ -2697,34 +2722,60 @@ SvxAutocorrWord *SvxAutocorrWordList::FindAndRemove(SvxAutocorrWord *pWord)
 SvxAutocorrWordList::Content SvxAutocorrWordList::getSortedContent() const
 {
     Content aContent;
-    for( const_iterator it = begin(); it != SvxAutocorrWordList_Base::end(); ++it )
+
+    // convert from hash to set permanantly
+    if ( maSet.size() == 0 )
+    {
+        // This beasty has some O(N log(N)) in a terribly slow ICU collate fn.
+        for( SvxAutocorrWordList_Hash::const_iterator it = maHash.begin(); it != maHash.end(); ++it )
+            maSet.insert( it->second );
+        maHash.clear();
+    }
+    for( SvxAutocorrWordList_Set::const_iterator it = maSet.begin(); it != maSet.end(); ++it )
         aContent.push_back( *it );
+
     return aContent;
+}
+
+bool SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *pFnd,
+                                      const String &rTxt,
+                                      xub_StrLen &rStt,
+                                      xub_StrLen nEndPos) const
+{
+    const String& rChk = pFnd->GetShort();
+    if( nEndPos >= rChk.Len() )
+    {
+        xub_StrLen nCalcStt = nEndPos - rChk.Len();
+        if( ( !nCalcStt || nCalcStt == rStt ||
+              ( nCalcStt < rStt &&
+                IsWordDelim( rTxt.GetChar( nCalcStt - 1 ) ))) )
+        {
+            TransliterationWrapper& rCmp = GetIgnoreTranslWrapper();
+
+            rtl::OUString sWord(rTxt.GetBuffer() + nCalcStt, rChk.Len());
+            if( rCmp.isEqual( rChk, sWord ))
+            {
+                rStt = nCalcStt;
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 const SvxAutocorrWord* SvxAutocorrWordList::SearchWordsInList(const String& rTxt, xub_StrLen& rStt,
                                                               xub_StrLen nEndPos) const
 {
-    TransliterationWrapper& rCmp = GetIgnoreTranslWrapper();
-    for( SvxAutocorrWordList::const_iterator it = begin(); it != SvxAutocorrWordList_Base::end(); ++it )
+    for( SvxAutocorrWordList_Hash::const_iterator it = maHash.begin(); it != maHash.end(); ++it )
     {
-        const SvxAutocorrWord* pFnd = *it;
-        const String& rChk = pFnd->GetShort();
-        if( nEndPos >= rChk.Len() )
-        {
-            xub_StrLen nCalcStt = nEndPos - rChk.Len();
-            if( ( !nCalcStt || nCalcStt == rStt ||
-                ( nCalcStt < rStt &&
-                    IsWordDelim( rTxt.GetChar(nCalcStt - 1 ) ))) )
-            {
-                rtl::OUString sWord(rTxt.GetBuffer() + nCalcStt, rChk.Len());
-                if( rCmp.isEqual( rChk, sWord ))
-                {
-                    rStt = nCalcStt;
-                    return pFnd;
-                }
-            }
-        }
+        if( WordMatches( it->second, rTxt, rStt, nEndPos ) )
+            return it->second;
+    }
+
+    for( SvxAutocorrWordList_Set::const_iterator it2 = maSet.begin(); it2 != maSet.end(); ++it2 )
+    {
+        if( WordMatches( *it2, rTxt, rStt, nEndPos ) )
+            return *it2;
     }
     return 0;
 }
