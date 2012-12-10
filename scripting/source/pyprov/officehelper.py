@@ -81,7 +81,7 @@ def bootstrap():
 
     except BootstrapException:
         raise
-    except Exception, e:  # Any other exception
+    except Exception as e:  # Any other exception
         raise BootstrapException("Caught exception " + str(e), None)
 
     return xContext

@@ -28,6 +28,11 @@ import imp
 import time
 import ast
 
+try:
+    unicode
+except NameError:
+    unicode = str
+
 class LogLevel:
     NONE = 0
     ERROR = 1
@@ -69,8 +74,8 @@ def getLogTarget():
             if len( userInstallation ) > 0:
                 systemPath = uno.fileUrlToSystemPath( userInstallation + "/Scripts/python/log.txt" )
                 ret = file( systemPath , "a" )
-        except Exception,e:
-            print "Exception during creation of pythonscript logfile: "+ lastException2String() + "\n, delagating log to stdout\n"
+        except Exception as e:
+            print("Exception during creation of pythonscript logfile: "+ lastException2String() + "\n, delagating log to stdout\n")
     return ret
 
 class Logger(LogLevel):
@@ -102,8 +107,8 @@ class Logger(LogLevel):
                     encfile(msg) +
                     "\n" )
                 self.target.flush()
-            except Exception,e:
-                print "Error during writing to stdout: " +lastException2String() + "\n"
+            except Exception as e:
+                print("Error during writing to stdout: " +lastException2String() + "\n")
 
 log = Logger( getLogTarget() )
 
@@ -202,10 +207,10 @@ class MyUriHelper:
             ret = self.m_baseUri + "/" + myUri.getName().replace( "|", "/" )
             log.debug( "converting scriptURI="+scriptURI + " to storageURI=" + ret )
             return ret
-        except UnoException, e:
+        except UnoException as e:
             log.error( "error during converting scriptURI="+scriptURI + ": " + e.Message)
             raise RuntimeException( "pythonscript:scriptURI2StorageUri: " +e.getMessage(), None )
-        except Exception, e:
+        except Exception as e:
             log.error( "error during converting scriptURI="+scriptURI + ": " + str(e))
             raise RuntimeException( "pythonscript:scriptURI2StorageUri: " + str(e), None )
 
@@ -320,7 +325,7 @@ class ProviderContext:
 
 
     def removePackageByUrl( self, url ):
-        items = self.mapPackageName2Path.items()
+        items = list(self.mapPackageName2Path.items())
         for i in items:
             if url in i[1].pathes:
                 self.mapPackageName2Path.pop(i[0])
@@ -330,7 +335,7 @@ class ProviderContext:
         packageName = self.getPackageNameFromUrl( url )
         transientPart = self.getTransientPartFromUrl( url )
         log.debug( "addPackageByUrl : " + packageName + ", " + transientPart + "("+url+")" + ", rootUrl="+self.rootUrl )
-        if self.mapPackageName2Path.has_key( packageName ):
+        if packageName in self.mapPackageName2Path:
             package = self.mapPackageName2Path[ packageName ]
             package.pathes = package.pathes + (url, )
         else:
@@ -338,7 +343,7 @@ class ProviderContext:
             self.mapPackageName2Path[ packageName ] = package
 
     def isUrlInPackage( self, url ):
-        values = self.mapPackageName2Path.values()
+        values = list(self.mapPackageName2Path.values())
         for i in values:
 #           print "checking " + url + " in " + str(i.pathes)
             if url in i.pathes:
@@ -432,7 +437,7 @@ class ProviderContext:
                 code = compile( src, encfile(uno.fileUrlToSystemPath( url ) ), "exec" )
             else:
                 code = compile( src, url, "exec" )
-            exec code in entry.module.__dict__
+            exec(code, entry.module.__dict__)
             entry.module.__file__ = url
             self.modules[ url ] = entry
             log.debug( "mapped " + url + " to " + str( entry.module ) )
@@ -475,7 +480,7 @@ class ScriptBrowseNode( unohelper.Base, XBrowseNode , XPropertySet, XInvocation,
                 ret = not self.provCtx.sfa.isReadOnly( self.uri )
 
             log.debug( "ScriptBrowseNode.getPropertyValue called for " + name + ", returning " + str(ret) )
-        except Exception,e:
+        except Exception as e:
             log.error( "ScriptBrowseNode.getPropertyValue error " + lastException2String())
             raise
 
@@ -520,10 +525,10 @@ class ScriptBrowseNode( unohelper.Base, XBrowseNode , XPropertySet, XInvocation,
                 code = ensureSourceState( code )
                 mod = imp.new_module("ooo_script_framework")
                 mod.__dict__[GLOBAL_SCRIPTCONTEXT_NAME] = self.provCtx.scriptContext
-                exec code in mod.__dict__
+                exec(code, mod.__dict__)
                 values = mod.__dict__.get( CALLABLE_CONTAINER_NAME , None )
                 if not values:
-                    values = mod.__dict__.values()
+                    values = list(mod.__dict__.values())
 
                 for i in values:
                     if isScript( i ):
@@ -544,7 +549,7 @@ class ScriptBrowseNode( unohelper.Base, XBrowseNode , XPropertySet, XInvocation,
 #                log.debug("Save is not implemented yet")
 #                text = self.editor.getControl("EditorTextField").getText()
 #                log.debug("Would save: " + text)
-        except Exception,e:
+        except Exception as e:
             # TODO: add an error box here !
             log.error( lastException2String() )
 
@@ -585,7 +590,7 @@ class FileBrowseNode( unohelper.Base, XBrowseNode ):
                     self.provCtx, self.uri, self.name, i ))
             ret = tuple( scriptNodeList )
             log.debug( "returning " +str(len(ret)) + " ScriptChildNodes on " + self.uri )
-        except Exception, e:
+        except Exception as e:
             text = lastException2String()
             log.error( "Error while evaluating " + self.uri + ":" + text )
             raise
@@ -594,7 +599,7 @@ class FileBrowseNode( unohelper.Base, XBrowseNode ):
     def hasChildNodes(self):
         try:
             return len(self.getChildNodes()) > 0
-        except Exception, e:
+        except Exception as e:
             return False
 
     def getType( self):
@@ -625,7 +630,7 @@ class DirBrowseNode( unohelper.Base, XBrowseNode ):
                     log.debug( "adding DirBrowseNode " + i )
                     browseNodeList.append( DirBrowseNode( self.provCtx, i[i.rfind("/")+1:len(i)],i))
             return tuple( browseNodeList )
-        except Exception, e:
+        except Exception as e:
             text = lastException2String()
             log.error( "DirBrowseNode error: " + str(e) + " while evaluating " + self.rootUrl)
             log.error( text)
@@ -697,7 +702,7 @@ def getPathesFromPackage( rootUrl, sfa ):
             if not isPyFileInPath( sfa, i ):
                 handler.urlList.remove(i)
         ret = tuple( handler.urlList )
-    except UnoException, e:
+    except UnoException as e:
         text = lastException2String()
         log.debug( "getPathesFromPackage " + fileUrl + " Exception: " +text )
         pass
@@ -765,7 +770,7 @@ def getModelFromDocUrl(ctx, url):
     try:
         ret = content.execute(c, 0, env)
         doc = ret.getObject(1, None)
-    except Exception, e:
+    except Exception as e:
         log.isErrorLevel() and log.error("getModelFromDocUrl: %s" % url)
     return doc
 
@@ -818,7 +823,7 @@ class PackageBrowseNode( unohelper.Base, XBrowseNode ):
         return self.name
 
     def getChildNodes( self ):
-        items = self.provCtx.mapPackageName2Path.items()
+        items = list(self.provCtx.mapPackageName2Path.items())
         browseNodeList = []
         for i in items:
             if len( i[1].pathes ) == 1:
@@ -851,7 +856,7 @@ class PythonScript( unohelper.Base, XScript ):
         log.debug( "PythonScript.invoke " + str( args ) )
         try:
             ret = self.func( *args )
-        except UnoException,e:
+        except UnoException as e:
             # UNO Exception continue to fly ...
             text = lastException2String()
             complete = "Error during invoking function " + \
@@ -864,7 +869,7 @@ class PythonScript( unohelper.Base, XScript ):
             # this is really bad for most users.
             e.Message = e.Message + " (" + complete + ")"
             raise
-        except Exception,e:
+        except Exception as e:
             # General python exception are converted to uno RuntimeException
             text = lastException2String()
             complete = "Error during invoking function " + \
@@ -911,7 +916,7 @@ class PythonScriptProvider( unohelper.Base, XBrowseNode, XScriptProvider, XNameC
                     "com.sun.star.frame.TransientDocumentsDocumentContentFactory",
                     ctx).createDocumentContent(doc)
                 storageType = content.getIdentifier().getContentIdentifier()
-            except Exception, e:
+            except Exception as e:
                 text = lastException2String()
                 log.error( text )
 
@@ -941,7 +946,7 @@ class PythonScriptProvider( unohelper.Base, XBrowseNode, XScriptProvider, XNameC
             else:
                 self.dirBrowseNode = DirBrowseNode( self.provCtx, LANGUAGENAME, rootUrl )
 
-        except Exception, e:
+        except Exception as e:
             text = lastException2String()
             log.debug( "PythonScriptProvider could not be instantiated because of : " + text )
             raise e
@@ -980,7 +985,7 @@ class PythonScriptProvider( unohelper.Base, XBrowseNode, XScriptProvider, XNameC
 
             log.debug( "got func " + str( func ) )
             return PythonScript( func, mod )
-        except Exception, e:
+        except Exception as e:
             text = lastException2String()
             log.error( text )
             raise ScriptFrameworkErrorException( text, self, scriptUri, LANGUAGENAME, 0 )
@@ -1012,7 +1017,7 @@ class PythonScriptProvider( unohelper.Base, XBrowseNode, XScriptProvider, XNameC
             ret = self.provCtx.isUrlInPackage( uri )
             log.debug( "hasByName " + uri + " " +str( ret ) )
             return ret
-        except Exception, e:
+        except Exception as e:
             text = lastException2String()
             log.debug( "Error in hasByName:" +  text )
             return False
