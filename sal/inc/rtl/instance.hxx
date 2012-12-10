@@ -20,7 +20,9 @@
 #ifndef INCLUDED_RTL_INSTANCE_HXX
 #define INCLUDED_RTL_INSTANCE_HXX
 
+#if defined LIBO_INTERNAL_ONLY
 #include <config_global.h>
+#endif
 
 #include "osl/doublecheckedlocking.h"
 #include "osl/getglobalmutex.hxx"
