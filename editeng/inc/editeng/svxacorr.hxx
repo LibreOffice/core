@@ -139,12 +139,22 @@ struct CompareSvxAutocorrWordList
 {
   bool operator()( SvxAutocorrWord* const& lhs, SvxAutocorrWord* const& rhs ) const;
 };
-class EDITENG_DLLPUBLIC SvxAutocorrWordList : public std::set<SvxAutocorrWord*, CompareSvxAutocorrWordList>
+
+typedef std::set<SvxAutocorrWord*, CompareSvxAutocorrWordList> SvxAutocorrWordList_Base;
+class EDITENG_DLLPUBLIC SvxAutocorrWordList : SvxAutocorrWordList_Base
 {
 public:
+    typedef SvxAutocorrWordList_Base::iterator iterator;
+    typedef std::vector<SvxAutocorrWord *> Content;
     // free any objects still in the set
     ~SvxAutocorrWordList();
     void DeleteAndDestroyAll();
+    bool Insert(SvxAutocorrWord *pWord);
+    SvxAutocorrWord *FindAndRemove(SvxAutocorrWord *pWord);
+    void LoadEntry(String sWrong, String sRight, sal_Bool bOnlyTxt);
+    bool     empty() const;
+    Content  getSortedContent() const;
+    const SvxAutocorrWord* SearchWordsInList(const String& rTxt, xub_StrLen& rStt, xub_StrLen nEndPos) const;
 };
 
 class EDITENG_DLLPUBLIC SvxAutoCorrectLanguageLists

@@ -1024,7 +1024,9 @@ void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
         SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
         SvxAutocorrWordList* pWordList = pAutoCorrect->LoadAutocorrWordList(eLang);
         aReplaceTLB.SetUpdateMode(sal_False);
-        for( SvxAutocorrWordList::iterator it = pWordList->begin(); it != pWordList->end(); ++it )
+        SvxAutocorrWordList::Content aContent = pWordList->getSortedContent();
+        for( SvxAutocorrWordList::Content::const_iterator it = aContent.begin();
+             it != aContent.end(); ++it )
         {
             SvxAutocorrWord* pWordPtr = *it;
             sal_Bool bTextOnly = pWordPtr->IsTextOnly();
