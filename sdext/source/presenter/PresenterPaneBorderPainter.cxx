@@ -16,7 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
 #include "vcl/svapp.hxx"
 #include "PresenterPaneBorderPainter.hxx"
 #include "PresenterCanvasHelper.hxx"
@@ -526,20 +525,21 @@ void PresenterPaneBorderPainter::Renderer::PaintTitle (
     if ( ! xFont.is())
         return;
 
-    rendering::StringContext aContext (
-        rsTitle,
-        0,
-        rsTitle.getLength());
-    Reference<rendering::XTextLayout> xLayout (xFont->createTextLayout(
-        aContext,
-        rendering::TextDirection::WEAK_LEFT_TO_RIGHT,
-        0));
-    if ( ! xLayout.is())
-        return;
-
     /// this is responsible of the texts above the slide windows
     /// check whether RTL interface or not
     if(!Application::GetSettings().GetLayoutRTL()){
+        rendering::StringContext aContext (
+            rsTitle,
+            0,
+            rsTitle.getLength());
+
+        Reference<rendering::XTextLayout> xLayout (xFont->createTextLayout(
+            aContext,
+            rendering::TextDirection::WEAK_LEFT_TO_RIGHT,
+            0));
+        if ( ! xLayout.is())
+            return;
+
         geometry::RealRectangle2D aBox (xLayout->queryTextBounds());
         const double nTextHeight = aBox.Y2 - aBox.Y1;
         const double nTextWidth = aBox.X1 + aBox.X2;
@@ -611,6 +611,35 @@ void PresenterPaneBorderPainter::Renderer::PaintTitle (
         }
     }
     else{
+            OUString rsTemp=rsTitle;
+            // this code are for reverse the number of sildes in Title
+            // on RTL interface
+            for(sal_Int32 Pos=0; Pos<rsTitle.getLength(); Pos++)
+                if(isdigit(rsTitle.copy(Pos,1).toChar())){
+                    sal_Int32 nPos=Pos;
+                    sal_Int32 tempP=Pos;
+                    while(isdigit(rsTitle.copy(nPos+1,1).toChar()))
+                        nPos++;
+                    Pos=nPos;
+                    while(nPos>tempP){
+                        rsTemp=rsTemp.replaceAt(nPos,1,rsTitle.copy(tempP,1));
+                        rsTemp=rsTemp.replaceAt(tempP,1,rsTitle.copy(nPos,1));
+                        tempP++;
+                        nPos--;
+                    }
+                }
+            rendering::StringContext aContext (
+                rsTemp,
+                0,
+                rsTitle.getLength());
+
+            Reference<rendering::XTextLayout> xLayout (xFont->createTextLayout(
+                aContext,
+                rendering::TextDirection::WEAK_LEFT_TO_RIGHT,
+                0));
+            if ( ! xLayout.is())
+                return;
+
             geometry::RealRectangle2D aBox (xLayout->queryTextBounds());
             const double nTextHeight = aBox.Y2 - aBox.Y1;
             const double nTextWidth = aBox.X1 - aBox.X2;
