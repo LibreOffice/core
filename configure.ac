@@ -5658,6 +5658,8 @@ if test "$GCC" = "yes"; then
     fi
 
     AC_MSG_CHECKING([whether $CXX supports C++11 without Language Defect 757])
+    # This should check libstdc++ version, not gcc, but clang has incidentally C++11 support
+    # disabled in this case by the __float128 case below.
     if test "$GCCVER" -ge 040700 -a "$GCCVER" -lt 040702; then
         AC_MSG_NOTICE([Not using -std=gnu++0x on $CXX version 4.7.0/4.7.1 due to libstdc++ ABI breakage.])
     else
@@ -5697,41 +5699,6 @@ return !(i != 0 && j != 0);
 
         AC_LANG_POP([C++])
         CXXFLAGS=$save_CXXFLAGS
-
-        if test "$HAVE_CXX0X" != "TRUE"; then
-            save_CXXFLAGS=$CXXFLAGS
-            CXXFLAGS="$CXXFLAGS -std=c++11"
-            AC_LANG_PUSH([C++])
-            AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
-                #include <stddef.h>
-                #include <vector>
-                    // some Clang fail when compiling against GCC 4.7 headers
-                    // with -std=gnu++0x (__float128)
-                template <typename T, size_t S> char
-                    (&sal_n_array_size( T(&)[S] ))[S];
-                namespace
-                {
-                    struct b
-                    {
-                        int i;
-                        int j;
-                    };
-                }
-            ]], [[
-                struct a
-                {
-                    int i;
-                    int j;
-                };
-                a thinga[]={{0,0}, {1,1}};
-                b thingb[]={{0,0}, {1,1}};
-                size_t i = sizeof(sal_n_array_size(thinga));
-                size_t j = sizeof(sal_n_array_size(thingb));
-                return !(i != 0 && j != 0);
-            ]])],[HAVE_CXX0X=TRUE CXXFLAGS_CXX11=-std=c++11],[])
-            AC_LANG_POP([C++])
-            CXXFLAGS=$save_CXXFLAGS
-        fi
     fi
     if test "$HAVE_CXX0X" = "TRUE"; then
         AC_MSG_RESULT([yes ($CXXFLAGS_CXX11)])
