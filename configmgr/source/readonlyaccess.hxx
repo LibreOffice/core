@@ -40,7 +40,6 @@ namespace com { namespace sun { namespace star {
         class XInterface;
     }
 } } }
-namespace rtl { class OUString; }
 
 namespace configmgr { namespace read_only_access {
 
@@ -49,9 +48,9 @@ create(
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
         const &);
 
-rtl::OUString SAL_CALL getImplementationName();
+OUString SAL_CALL getImplementationName();
 
-com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
+com::sun::star::uno::Sequence< OUString > SAL_CALL
 getSupportedServiceNames();
 
 } }

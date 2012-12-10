@@ -27,7 +27,6 @@
 
 #include "nodemap.hxx"
 
-namespace rtl { class OUString; }
 
 namespace configmgr {
 
@@ -42,7 +41,7 @@ public:
     virtual rtl::Reference< Node > clone(bool keepTemplateName) const = 0;
 
     virtual NodeMap & getMembers();
-    virtual rtl::OUString getTemplateName() const;
+    virtual OUString getTemplateName() const;
 
     virtual void setMandatory(int layer);
     virtual int getMandatory() const;
@@ -53,7 +52,7 @@ public:
     void setFinalized(int layer);
     int getFinalized() const;
 
-    rtl::Reference< Node > getMember(rtl::OUString const & name);
+    rtl::Reference< Node > getMember(OUString const & name);
 
 protected:
     explicit Node(int layer);

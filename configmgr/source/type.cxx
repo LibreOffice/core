@@ -61,7 +61,7 @@ Type elementType(Type type) {
     default:
         assert(false);
         throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
+            OUString("this cannot happen"),
             css::uno::Reference< css::uno::XInterface >());
     }
 }
@@ -81,7 +81,7 @@ css::uno::Type mapType(Type type) {
     case TYPE_DOUBLE:
         return cppu::UnoType< double >::get();
     case TYPE_STRING:
-        return cppu::UnoType< rtl::OUString >::get();
+        return cppu::UnoType< OUString >::get();
     case TYPE_HEXBINARY:
         return cppu::UnoType< css::uno::Sequence< sal_Int8 > >::get();
     case TYPE_BOOLEAN_LIST:
@@ -95,14 +95,14 @@ css::uno::Type mapType(Type type) {
     case TYPE_DOUBLE_LIST:
         return cppu::UnoType< css::uno::Sequence< double > >::get();
     case TYPE_STRING_LIST:
-        return cppu::UnoType< css::uno::Sequence< rtl::OUString > >::get();
+        return cppu::UnoType< css::uno::Sequence< OUString > >::get();
     case TYPE_HEXBINARY_LIST:
         return cppu::UnoType<
             css::uno::Sequence< css::uno::Sequence< sal_Int8 > > >::get();
     default:
         assert(false);
         throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
+            OUString("this cannot happen"),
             css::uno::Reference< css::uno::XInterface >());
     }
 }
@@ -134,7 +134,7 @@ Type getDynamicType(css::uno::Any const & value) {
         return TYPE_STRING;
     case css::uno::TypeClass_SEQUENCE: //TODO
         {
-            rtl::OUString name(value.getValueType().getTypeName());
+            OUString name(value.getValueType().getTypeName());
             if ( name == "[]byte" ) {
                 return TYPE_HEXBINARY;
             } else if (name.equalsAsciiL(

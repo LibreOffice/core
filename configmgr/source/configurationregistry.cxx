@@ -79,22 +79,22 @@ public:
 private:
     virtual ~Service() {}
 
-    virtual rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException)
     { return configuration_registry::getImplementationName(); }
 
-    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & ServiceName)
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
         throw (css::uno::RuntimeException)
     { return ServiceName == getSupportedServiceNames()[0]; } //TODO
 
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL
+    virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() throw (css::uno::RuntimeException)
     { return configuration_registry::getSupportedServiceNames(); }
 
-    virtual rtl::OUString SAL_CALL getURL() throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getURL() throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL open(
-        rtl::OUString const & rURL, sal_Bool bReadOnly, sal_Bool)
+        OUString const & rURL, sal_Bool bReadOnly, sal_Bool)
         throw (
             css::registry::InvalidRegistryException,
             css::uno::RuntimeException);
@@ -119,7 +119,7 @@ private:
 
     virtual sal_Bool SAL_CALL isReadOnly() throw (css::uno::RuntimeException);
 
-    virtual void SAL_CALL mergeKey(rtl::OUString const &, rtl::OUString const &)
+    virtual void SAL_CALL mergeKey(OUString const &, OUString const &)
         throw (
             css::registry::InvalidRegistryException,
             css::registry::MergeConflictException, css::uno::RuntimeException);
@@ -143,7 +143,7 @@ private:
     css::uno::Reference< css::lang::XMultiServiceFactory > provider_;
     osl::Mutex mutex_;
     css::uno::Reference< css::uno::XInterface > access_;
-    rtl::OUString url_;
+    OUString url_;
     bool readOnly_;
 
     friend class RegistryKey;
@@ -160,7 +160,7 @@ public:
 private:
     virtual ~RegistryKey() {}
 
-    virtual rtl::OUString SAL_CALL getKeyName()
+    virtual OUString SAL_CALL getKeyName()
         throw (css::uno::RuntimeException);
 
     virtual sal_Bool SAL_CALL isReadOnly()
@@ -171,7 +171,7 @@ private:
     virtual sal_Bool SAL_CALL isValid() throw (css::uno::RuntimeException);
 
     virtual css::registry::RegistryKeyType SAL_CALL getKeyType(
-        rtl::OUString const &)
+        OUString const &)
         throw (
             css::registry::InvalidRegistryException,
             css::uno::RuntimeException);
@@ -202,44 +202,44 @@ private:
             css::registry::InvalidRegistryException,
             css::uno::RuntimeException);
 
-    virtual rtl::OUString SAL_CALL getAsciiValue()
+    virtual OUString SAL_CALL getAsciiValue()
         throw (
             css::registry::InvalidRegistryException,
             css::registry::InvalidValueException, css::uno::RuntimeException);
 
-    virtual void SAL_CALL setAsciiValue(rtl::OUString const &)
+    virtual void SAL_CALL setAsciiValue(OUString const &)
         throw (
             css::registry::InvalidRegistryException,
             css::uno::RuntimeException);
 
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL getAsciiListValue()
+    virtual css::uno::Sequence< OUString > SAL_CALL getAsciiListValue()
         throw (
             css::registry::InvalidRegistryException,
             css::registry::InvalidValueException, css::uno::RuntimeException);
 
     virtual void SAL_CALL setAsciiListValue(
-        css::uno::Sequence< rtl::OUString > const &)
+        css::uno::Sequence< OUString > const &)
         throw (
             css::registry::InvalidRegistryException,
             css::uno::RuntimeException);
 
-    virtual rtl::OUString SAL_CALL getStringValue()
+    virtual OUString SAL_CALL getStringValue()
         throw (
             css::registry::InvalidRegistryException,
             css::registry::InvalidValueException, css::uno::RuntimeException);
 
-    virtual void SAL_CALL setStringValue(rtl::OUString const &)
+    virtual void SAL_CALL setStringValue(OUString const &)
         throw (
             css::registry::InvalidRegistryException,
             css::uno::RuntimeException);
 
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL getStringListValue()
+    virtual css::uno::Sequence< OUString > SAL_CALL getStringListValue()
         throw (
             css::registry::InvalidRegistryException,
             css::registry::InvalidValueException, css::uno::RuntimeException);
 
     virtual void SAL_CALL setStringListValue(
-        css::uno::Sequence< rtl::OUString > const &)
+        css::uno::Sequence< OUString > const &)
         throw (
             css::registry::InvalidRegistryException,
             css::uno::RuntimeException);
@@ -255,13 +255,13 @@ private:
             css::uno::RuntimeException);
 
     virtual css::uno::Reference< css::registry::XRegistryKey > SAL_CALL openKey(
-        rtl::OUString const & aKeyName)
+        OUString const & aKeyName)
         throw (
             css::registry::InvalidRegistryException,
             css::uno::RuntimeException);
 
     virtual css::uno::Reference< css::registry::XRegistryKey > SAL_CALL
-    createKey(rtl::OUString const &)
+    createKey(OUString const &)
         throw (
             css::registry::InvalidRegistryException,
             css::uno::RuntimeException);
@@ -271,7 +271,7 @@ private:
             css::registry::InvalidRegistryException,
             css::uno::RuntimeException);
 
-    virtual void SAL_CALL deleteKey(rtl::OUString const &)
+    virtual void SAL_CALL deleteKey(OUString const &)
         throw (
             css::registry::InvalidRegistryException,
             css::uno::RuntimeException);
@@ -283,29 +283,29 @@ private:
             css::registry::InvalidRegistryException,
             css::uno::RuntimeException);
 
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL getKeyNames()
+    virtual css::uno::Sequence< OUString > SAL_CALL getKeyNames()
         throw (
             css::registry::InvalidRegistryException,
             css::uno::RuntimeException);
 
     virtual sal_Bool SAL_CALL createLink(
-        rtl::OUString const &, rtl::OUString const &)
+        OUString const &, OUString const &)
         throw (
             css::registry::InvalidRegistryException,
             css::uno::RuntimeException);
 
-    virtual void SAL_CALL deleteLink(rtl::OUString const &)
+    virtual void SAL_CALL deleteLink(OUString const &)
         throw (
             css::registry::InvalidRegistryException,
             css::uno::RuntimeException);
 
-    virtual rtl::OUString SAL_CALL getLinkTarget(rtl::OUString const &)
+    virtual OUString SAL_CALL getLinkTarget(OUString const &)
         throw (
             css::registry::InvalidRegistryException,
             css::uno::RuntimeException);
 
-    virtual rtl::OUString SAL_CALL getResolvedName(
-        rtl::OUString const & aKeyName)
+    virtual OUString SAL_CALL getResolvedName(
+        OUString const & aKeyName)
         throw (
             css::registry::InvalidRegistryException,
             css::uno::RuntimeException);
@@ -321,32 +321,28 @@ Service::Service(
     try {
         provider_ = css::uno::Reference< css::lang::XMultiServiceFactory >(
             context->getServiceManager()->createInstanceWithContext(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.configuration.DefaultProvider")),
+                OUString("com.sun.star.configuration.DefaultProvider"),
                 context),
             css::uno::UNO_QUERY_THROW);
     } catch (css::uno::RuntimeException &) {
         throw;
     } catch (css::uno::Exception & e) {
         throw css::uno::DeploymentException(
-            (rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "component context fails to supply service"
+            (OUString("component context fails to supply service"
                     " com.sun.star.configuration.DefaultProvider of type"
-                    " com.sun.star.lang.XMultiServiceFactory: ")) +
+                    " com.sun.star.lang.XMultiServiceFactory: ") +
              e.Message),
             context);
     }
 }
 
-rtl::OUString Service::getURL() throw (css::uno::RuntimeException) {
+OUString Service::getURL() throw (css::uno::RuntimeException) {
     osl::MutexGuard g(mutex_);
     checkValid_RuntimeException();
     return url_;
 }
 
-void Service::open(rtl::OUString const & rURL, sal_Bool bReadOnly, sal_Bool)
+void Service::open(OUString const & rURL, sal_Bool bReadOnly, sal_Bool)
     throw (css::registry::InvalidRegistryException, css::uno::RuntimeException)
 {
     //TODO: bCreate
@@ -356,26 +352,20 @@ void Service::open(rtl::OUString const & rURL, sal_Bool bReadOnly, sal_Bool)
     }
     css::uno::Sequence< css::uno::Any > args(1);
     args[0] <<= css::beans::NamedValue(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")),
+        OUString("nodepath"),
         css::uno::makeAny(rURL));
     try {
         access_ = provider_->createInstanceWithArguments(
             (bReadOnly
-             ? rtl::OUString(
-                 RTL_CONSTASCII_USTRINGPARAM(
-                     "com.sun.star.configuration.ConfigurationAccess"))
-             : rtl::OUString(
-                 RTL_CONSTASCII_USTRINGPARAM(
-                     "com.sun.star.configuration.ConfigurationUpdateAccess"))),
+             ? OUString("com.sun.star.configuration.ConfigurationAccess")
+             : OUString("com.sun.star.configuration.ConfigurationUpdateAccess")),
             args);
     } catch (css::uno::RuntimeException &) {
         throw;
     } catch (css::uno::Exception & e) {
         throw css::uno::RuntimeException(
-            (rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.configuration.ConfigurationRegistry: open"
-                    " failed: ")) +
+            (OUString("com.sun.star.configuration.ConfigurationRegistry: open"
+                    " failed: ") +
              e.Message),
             static_cast< cppu::OWeakObject * >(this));
     }
@@ -400,10 +390,8 @@ void Service::destroy()
     throw (css::registry::InvalidRegistryException, css::uno::RuntimeException)
 {
     throw css::uno::RuntimeException(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.ConfigurationRegistry: not"
-                " implemented")),
+        OUString("com.sun.star.configuration.ConfigurationRegistry: not"
+                " implemented"),
         static_cast< cppu::OWeakObject * >(this));
 }
 
@@ -421,26 +409,22 @@ sal_Bool Service::isReadOnly() throw (css::uno::RuntimeException) {
     return readOnly_;
 }
 
-void Service::mergeKey(rtl::OUString const &, rtl::OUString const &)
+void Service::mergeKey(OUString const &, OUString const &)
     throw (
         css::registry::InvalidRegistryException,
         css::registry::MergeConflictException, css::uno::RuntimeException)
 {
     throw css::uno::RuntimeException(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.ConfigurationRegistry: not"
-                " implemented")),
+        OUString("com.sun.star.configuration.ConfigurationRegistry: not"
+                " implemented"),
         static_cast< cppu::OWeakObject * >(this));
 }
 
 void Service::flush() throw (css::uno::RuntimeException)
 {
     throw css::uno::RuntimeException(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.ConfigurationRegistry: not"
-                " implemented")),
+        OUString("com.sun.star.configuration.ConfigurationRegistry: not"
+                " implemented"),
         static_cast< cppu::OWeakObject * >(this));
 }
 
@@ -449,10 +433,8 @@ void Service::addFlushListener(
     throw (css::uno::RuntimeException)
 {
     throw css::uno::RuntimeException(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.ConfigurationRegistry: not"
-                " implemented")),
+        OUString("com.sun.star.configuration.ConfigurationRegistry: not"
+                " implemented"),
         static_cast< cppu::OWeakObject * >(this));
 }
 
@@ -461,20 +443,16 @@ void Service::removeFlushListener(
     throw (css::uno::RuntimeException)
 {
     throw css::uno::RuntimeException(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.ConfigurationRegistry: not"
-                " implemented")),
+        OUString("com.sun.star.configuration.ConfigurationRegistry: not"
+                " implemented"),
         static_cast< cppu::OWeakObject * >(this));
 }
 
 void Service::checkValid() {
     if (!access_.is()) {
         throw css::registry::InvalidRegistryException(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.configuration.ConfigurationRegistry: not"
-                    " valid")),
+            OUString("com.sun.star.configuration.ConfigurationRegistry: not"
+                    " valid"),
             static_cast< cppu::OWeakObject * >(this));
     }
 }
@@ -482,10 +460,8 @@ void Service::checkValid() {
 void Service::checkValid_RuntimeException() {
     if (!access_.is()) {
         throw css::uno::RuntimeException(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.configuration.ConfigurationRegistry: not"
-                    " valid")),
+            OUString("com.sun.star.configuration.ConfigurationRegistry: not"
+                    " valid"),
             static_cast< cppu::OWeakObject * >(this));
     }
 }
@@ -494,7 +470,7 @@ void Service::doClose() {
     access_.clear();
 }
 
-rtl::OUString RegistryKey::getKeyName() throw (css::uno::RuntimeException) {
+OUString RegistryKey::getKeyName() throw (css::uno::RuntimeException) {
     osl::MutexGuard g(service_.mutex_);
     service_.checkValid_RuntimeException();
     css::uno::Reference< css::container::XNamed > named;
@@ -502,10 +478,8 @@ rtl::OUString RegistryKey::getKeyName() throw (css::uno::RuntimeException) {
         return named->getName();
     }
     throw css::uno::RuntimeException(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.ConfigurationRegistry: not"
-                " implemented")),
+        OUString("com.sun.star.configuration.ConfigurationRegistry: not"
+                " implemented"),
         static_cast< cppu::OWeakObject * >(this));
 }
 
@@ -521,7 +495,7 @@ sal_Bool RegistryKey::isValid() throw (css::uno::RuntimeException) {
     return service_.isValid();
 }
 
-css::registry::RegistryKeyType RegistryKey::getKeyType(rtl::OUString const &)
+css::registry::RegistryKeyType RegistryKey::getKeyType(OUString const &)
     throw (css::registry::InvalidRegistryException, css::uno::RuntimeException)
 {
     osl::MutexGuard g(service_.mutex_);
@@ -547,7 +521,7 @@ css::registry::RegistryValueType RegistryKey::getValueType()
         {
             return css::registry::RegistryValueType_LONGLIST;
         } else if (t ==
-                   cppu::UnoType< css::uno::Sequence< rtl::OUString > >::get())
+                   cppu::UnoType< css::uno::Sequence< OUString > >::get())
         {
             return css::registry::RegistryValueType_STRINGLIST;
         }
@@ -569,9 +543,7 @@ sal_Int32 RegistryKey::getLongValue()
         return v;
     }
     throw css::registry::InvalidValueException(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.ConfigurationRegistry")),
+        OUString("com.sun.star.configuration.ConfigurationRegistry"),
         static_cast< cppu::OWeakObject * >(this));
 }
 
@@ -579,10 +551,8 @@ void RegistryKey::setLongValue(sal_Int32)
     throw (css::registry::InvalidRegistryException, css::uno::RuntimeException)
 {
     throw css::uno::RuntimeException(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.ConfigurationRegistry: not"
-                " implemented")),
+        OUString("com.sun.star.configuration.ConfigurationRegistry: not"
+                " implemented"),
         static_cast< cppu::OWeakObject * >(this));
 }
 
@@ -598,9 +568,7 @@ css::uno::Sequence< sal_Int32 > RegistryKey::getLongListValue()
         return v;
     }
     throw css::registry::InvalidValueException(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.ConfigurationRegistry")),
+        OUString("com.sun.star.configuration.ConfigurationRegistry"),
         static_cast< cppu::OWeakObject * >(this));
 }
 
@@ -608,127 +576,109 @@ void RegistryKey::setLongListValue(css::uno::Sequence< sal_Int32 > const &)
     throw (css::registry::InvalidRegistryException, css::uno::RuntimeException)
 {
     throw css::uno::RuntimeException(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.ConfigurationRegistry: not"
-                " implemented")),
+        OUString("com.sun.star.configuration.ConfigurationRegistry: not"
+                " implemented"),
         static_cast< cppu::OWeakObject * >(this));
 }
 
-rtl::OUString RegistryKey::getAsciiValue()
+OUString RegistryKey::getAsciiValue()
     throw (
         css::registry::InvalidRegistryException,
         css::registry::InvalidValueException, css::uno::RuntimeException)
 {
     osl::MutexGuard g(service_.mutex_);
     service_.checkValid();
-    rtl::OUString v;
+    OUString v;
     if (value_ >>= v) {
         return v;
     }
     throw css::registry::InvalidValueException(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.ConfigurationRegistry")),
+        OUString("com.sun.star.configuration.ConfigurationRegistry"),
         static_cast< cppu::OWeakObject * >(this));
 }
 
-void RegistryKey::setAsciiValue(rtl::OUString const &)
+void RegistryKey::setAsciiValue(OUString const &)
     throw (css::registry::InvalidRegistryException, css::uno::RuntimeException)
 {
     throw css::uno::RuntimeException(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.ConfigurationRegistry: not"
-                " implemented")),
+        OUString("com.sun.star.configuration.ConfigurationRegistry: not"
+                " implemented"),
         static_cast< cppu::OWeakObject * >(this));
 }
 
-css::uno::Sequence< rtl::OUString > RegistryKey::getAsciiListValue()
+css::uno::Sequence< OUString > RegistryKey::getAsciiListValue()
     throw (
         css::registry::InvalidRegistryException,
         css::registry::InvalidValueException, css::uno::RuntimeException)
 {
     osl::MutexGuard g(service_.mutex_);
     service_.checkValid();
-    css::uno::Sequence< rtl::OUString > v;
+    css::uno::Sequence< OUString > v;
     if (value_ >>= v) {
         return v;
     }
     throw css::registry::InvalidValueException(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.ConfigurationRegistry")),
+        OUString("com.sun.star.configuration.ConfigurationRegistry"),
         static_cast< cppu::OWeakObject * >(this));
 }
 
-void RegistryKey::setAsciiListValue(css::uno::Sequence< rtl::OUString > const &)
+void RegistryKey::setAsciiListValue(css::uno::Sequence< OUString > const &)
     throw (css::registry::InvalidRegistryException, css::uno::RuntimeException)
 {
     throw css::uno::RuntimeException(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.ConfigurationRegistry: not"
-                " implemented")),
+        OUString("com.sun.star.configuration.ConfigurationRegistry: not"
+                " implemented"),
         static_cast< cppu::OWeakObject * >(this));
 }
 
-rtl::OUString RegistryKey::getStringValue()
+OUString RegistryKey::getStringValue()
     throw (
         css::registry::InvalidRegistryException,
         css::registry::InvalidValueException, css::uno::RuntimeException)
 {
     osl::MutexGuard g(service_.mutex_);
     service_.checkValid();
-    rtl::OUString v;
+    OUString v;
     if (value_ >>= v) {
         return v;
     }
     throw css::registry::InvalidValueException(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.ConfigurationRegistry")),
+        OUString("com.sun.star.configuration.ConfigurationRegistry"),
         static_cast< cppu::OWeakObject * >(this));
 }
 
-void RegistryKey::setStringValue(rtl::OUString const &)
+void RegistryKey::setStringValue(OUString const &)
     throw (css::registry::InvalidRegistryException, css::uno::RuntimeException)
 {
     throw css::uno::RuntimeException(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.ConfigurationRegistry: not"
-                " implemented")),
+        OUString("com.sun.star.configuration.ConfigurationRegistry: not"
+                " implemented"),
         static_cast< cppu::OWeakObject * >(this));
 }
 
-css::uno::Sequence< rtl::OUString > RegistryKey::getStringListValue()
+css::uno::Sequence< OUString > RegistryKey::getStringListValue()
     throw (
         css::registry::InvalidRegistryException,
         css::registry::InvalidValueException, css::uno::RuntimeException)
 {
     osl::MutexGuard g(service_.mutex_);
     service_.checkValid();
-    css::uno::Sequence< rtl::OUString > v;
+    css::uno::Sequence< OUString > v;
     if (value_ >>= v) {
         return v;
     }
     throw css::registry::InvalidValueException(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.ConfigurationRegistry")),
+        OUString("com.sun.star.configuration.ConfigurationRegistry"),
         static_cast< cppu::OWeakObject * >(this));
 }
 
 void RegistryKey::setStringListValue(
-    css::uno::Sequence< rtl::OUString > const &)
+    css::uno::Sequence< OUString > const &)
     throw (css::registry::InvalidRegistryException, css::uno::RuntimeException)
 {
     throw css::uno::RuntimeException(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.ConfigurationRegistry: not"
-                " implemented")),
+        OUString("com.sun.star.configuration.ConfigurationRegistry: not"
+                " implemented"),
         static_cast< cppu::OWeakObject * >(this));
 }
 
@@ -744,9 +694,7 @@ css::uno::Sequence< sal_Int8 > RegistryKey::getBinaryValue()
         return v;
     }
     throw css::registry::InvalidValueException(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.ConfigurationRegistry")),
+        OUString("com.sun.star.configuration.ConfigurationRegistry"),
         static_cast< cppu::OWeakObject * >(this));
 }
 
@@ -754,15 +702,13 @@ void RegistryKey::setBinaryValue(css::uno::Sequence< sal_Int8 > const &)
     throw (css::registry::InvalidRegistryException, css::uno::RuntimeException)
 {
     throw css::uno::RuntimeException(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.ConfigurationRegistry: not"
-                " implemented")),
+        OUString("com.sun.star.configuration.ConfigurationRegistry: not"
+                " implemented"),
         static_cast< cppu::OWeakObject * >(this));
 }
 
 css::uno::Reference< css::registry::XRegistryKey > RegistryKey::openKey(
-    rtl::OUString const & aKeyName)
+    OUString const & aKeyName)
     throw (css::registry::InvalidRegistryException, css::uno::RuntimeException)
 {
     osl::MutexGuard g(service_.mutex_);
@@ -778,15 +724,13 @@ css::uno::Reference< css::registry::XRegistryKey > RegistryKey::openKey(
 }
 
 css::uno::Reference< css::registry::XRegistryKey > RegistryKey::createKey(
-    rtl::OUString const &)
+    OUString const &)
     throw (
         css::registry::InvalidRegistryException, css::uno::RuntimeException)
 {
     throw css::uno::RuntimeException(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.ConfigurationRegistry: not"
-                " implemented")),
+        OUString("com.sun.star.configuration.ConfigurationRegistry: not"
+                " implemented"),
         static_cast< cppu::OWeakObject * >(this));
 }
 
@@ -798,14 +742,12 @@ void RegistryKey::closeKey()
     service_.checkValid_RuntimeException();
 }
 
-void RegistryKey::deleteKey(rtl::OUString const &)
+void RegistryKey::deleteKey(OUString const &)
     throw (css::registry::InvalidRegistryException, css::uno::RuntimeException)
 {
     throw css::uno::RuntimeException(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.ConfigurationRegistry: not"
-                " implemented")),
+        OUString("com.sun.star.configuration.ConfigurationRegistry: not"
+                " implemented"),
         static_cast< cppu::OWeakObject * >(this));
 }
 
@@ -814,25 +756,21 @@ RegistryKey::openKeys()
     throw (css::registry::InvalidRegistryException, css::uno::RuntimeException)
 {
     throw css::uno::RuntimeException(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.ConfigurationRegistry: not"
-                " implemented")),
+        OUString("com.sun.star.configuration.ConfigurationRegistry: not"
+                " implemented"),
         static_cast< cppu::OWeakObject * >(this));
 }
 
-css::uno::Sequence< rtl::OUString > RegistryKey::getKeyNames()
+css::uno::Sequence< OUString > RegistryKey::getKeyNames()
     throw (css::registry::InvalidRegistryException, css::uno::RuntimeException)
 {
     throw css::uno::RuntimeException(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.ConfigurationRegistry: not"
-                " implemented")),
+        OUString("com.sun.star.configuration.ConfigurationRegistry: not"
+                " implemented"),
         static_cast< cppu::OWeakObject * >(this));
 }
 
-sal_Bool RegistryKey::createLink(rtl::OUString const &, rtl::OUString const &)
+sal_Bool RegistryKey::createLink(OUString const &, OUString const &)
     throw (css::registry::InvalidRegistryException, css::uno::RuntimeException)
 {
     osl::MutexGuard g(service_.mutex_);
@@ -840,22 +778,22 @@ sal_Bool RegistryKey::createLink(rtl::OUString const &, rtl::OUString const &)
     return false;
 }
 
-void RegistryKey::deleteLink(rtl::OUString const &)
+void RegistryKey::deleteLink(OUString const &)
     throw (css::registry::InvalidRegistryException, css::uno::RuntimeException)
 {
     osl::MutexGuard g(service_.mutex_);
     service_.checkValid_RuntimeException();
 }
 
-rtl::OUString RegistryKey::getLinkTarget(rtl::OUString const &)
+OUString RegistryKey::getLinkTarget(OUString const &)
     throw (css::registry::InvalidRegistryException, css::uno::RuntimeException)
 {
     osl::MutexGuard g(service_.mutex_);
     service_.checkValid_RuntimeException();
-    return rtl::OUString();
+    return OUString();
 }
 
-rtl::OUString RegistryKey::getResolvedName(rtl::OUString const & aKeyName)
+OUString RegistryKey::getResolvedName(OUString const & aKeyName)
     throw (css::registry::InvalidRegistryException, css::uno::RuntimeException)
 {
     osl::MutexGuard g(service_.mutex_);
@@ -871,17 +809,13 @@ css::uno::Reference< css::uno::XInterface > create(
     return static_cast< cppu::OWeakObject * >(new Service(context));
 }
 
-rtl::OUString getImplementationName() {
-    return rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.comp.configuration.ConfigurationRegistry"));
+OUString getImplementationName() {
+    return OUString("com.sun.star.comp.configuration.ConfigurationRegistry");
 }
 
-css::uno::Sequence< rtl::OUString > getSupportedServiceNames() {
-    rtl::OUString name(
-        RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.configuration.ConfigurationRegistry"));
-    return css::uno::Sequence< rtl::OUString >(&name, 1);
+css::uno::Sequence< OUString > getSupportedServiceNames() {
+    OUString name("com.sun.star.configuration.ConfigurationRegistry");
+    return css::uno::Sequence< OUString >(&name, 1);
 }
 
 } }

@@ -29,7 +29,6 @@
 
 #include "path.hxx"
 
-namespace rtl { class OUString; }
 
 namespace configmgr {
 
@@ -38,8 +37,8 @@ public:
     enum Containment { CONTAINS_NOT, CONTAINS_SUBNODES, CONTAINS_NODE };
 
     Partial(
-        std::set< rtl::OUString > const & includedPaths,
-        std::set< rtl::OUString > const & excludedPaths);
+        std::set< OUString > const & includedPaths,
+        std::set< OUString > const & excludedPaths);
 
     ~Partial();
 
@@ -47,7 +46,7 @@ public:
 
 private:
     struct Node {
-        typedef std::map< rtl::OUString, Node > Children;
+        typedef std::map< OUString, Node > Children;
 
         Node(): startInclude(false) {}
 

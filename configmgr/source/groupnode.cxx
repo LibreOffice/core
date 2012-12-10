@@ -30,7 +30,7 @@
 namespace configmgr {
 
 GroupNode::GroupNode(
-    int layer, bool extensible, rtl::OUString const & templateName):
+    int layer, bool extensible, OUString const & templateName):
     Node(layer), extensible_(extensible), templateName_(templateName),
     mandatory_(Data::NO_LAYER)
 {}
@@ -43,7 +43,7 @@ NodeMap & GroupNode::getMembers() {
     return members_;
 }
 
-rtl::OUString GroupNode::getTemplateName() const {
+OUString GroupNode::getTemplateName() const {
     return templateName_;
 }
 

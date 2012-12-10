@@ -51,7 +51,7 @@ private:
 
     virtual bool startElement(
         xmlreader::XmlReader & reader, int nsId, xmlreader::Span const & name,
-        std::set< rtl::OUString > const * existingDependencies);
+        std::set< OUString > const * existingDependencies);
 
     virtual void endElement(xmlreader::XmlReader const & reader);
 
@@ -78,11 +78,11 @@ private:
 
     struct Element {
         rtl::Reference< Node > node;
-        rtl::OUString name;
+        OUString name;
 
         inline Element(
             rtl::Reference< Node > const & theNode,
-            rtl::OUString const & theName):
+            OUString const & theName):
             node(theNode), name(theName) {}
     };
 
@@ -90,7 +90,7 @@ private:
 
     ValueParser valueParser_;
     Data & data_;
-    rtl::OUString componentName_;
+    OUString componentName_;
     State state_;
     long ignoring_;
     ElementStack elements_;

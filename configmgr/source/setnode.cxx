@@ -38,24 +38,24 @@ namespace {
 // Work around some compilers' failure to accept
 // std::binder1st(std::ptr_fun(&Data::equalTemplateNames), ...):
 class EqualTemplateNames:
-    public std::unary_function< rtl::OUString const &, bool >
+    public std::unary_function< OUString const &, bool >
 {
 public:
-    inline explicit EqualTemplateNames(rtl::OUString const & shortName):
+    inline explicit EqualTemplateNames(OUString const & shortName):
         shortName_(shortName) {}
 
-    inline bool operator ()(rtl::OUString const & longName) const
+    inline bool operator ()(OUString const & longName) const
     { return Data::equalTemplateNames(shortName_, longName); }
 
 private:
-    rtl::OUString const & shortName_;
+    OUString const & shortName_;
 };
 
 }
 
 SetNode::SetNode(
-    int layer, rtl::OUString const & defaultTemplateName,
-    rtl::OUString const & templateName):
+    int layer, OUString const & defaultTemplateName,
+    OUString const & templateName):
     Node(layer), defaultTemplateName_(defaultTemplateName),
     templateName_(templateName), mandatory_(Data::NO_LAYER)
 {}
@@ -68,7 +68,7 @@ NodeMap & SetNode::getMembers() {
     return members_;
 }
 
-rtl::OUString SetNode::getTemplateName() const {
+OUString SetNode::getTemplateName() const {
     return templateName_;
 }
 
@@ -80,15 +80,15 @@ int SetNode::getMandatory() const {
     return mandatory_;
 }
 
-rtl::OUString const & SetNode::getDefaultTemplateName() const {
+OUString const & SetNode::getDefaultTemplateName() const {
     return defaultTemplateName_;
 }
 
-std::vector< rtl::OUString > & SetNode::getAdditionalTemplateNames() {
+std::vector< OUString > & SetNode::getAdditionalTemplateNames() {
     return additionalTemplateNames_;
 }
 
-bool SetNode::isValidTemplate(rtl::OUString const & templateName) const {
+bool SetNode::isValidTemplate(OUString const & templateName) const {
     return Data::equalTemplateNames(templateName, defaultTemplateName_) ||
         (std::find_if(
             additionalTemplateNames_.begin(),

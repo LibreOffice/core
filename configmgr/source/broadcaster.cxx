@@ -45,9 +45,9 @@ namespace configmgr {
 namespace {
 
 void appendMessage(
-    rtl::OUStringBuffer & buffer, css::uno::Exception const & exception)
+    OUStringBuffer & buffer, css::uno::Exception const & exception)
 {
-    buffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("; "));
+    buffer.appendAscii("; ");
     buffer.append(exception.Message);
 }
 
@@ -110,7 +110,7 @@ void Broadcaster::addChangesNotification(
 
 void Broadcaster::send() {
     css::uno::Any exception;
-    rtl::OUStringBuffer messages;
+    OUStringBuffer messages;
     for (DisposeNotifications::iterator i(disposeNotifications_.begin());
          i != disposeNotifications_.end(); ++i) {
         try {
@@ -193,9 +193,7 @@ void Broadcaster::send() {
     }
     if (exception.hasValue()) {
         throw css::lang::WrappedTargetRuntimeException(
-            (rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "configmgr exceptions during listener notification")) +
+            (OUString("configmgr exceptions during listener notification") +
              messages.makeStringAndClear()),
             css::uno::Reference< css::uno::XInterface >(),
             exception);

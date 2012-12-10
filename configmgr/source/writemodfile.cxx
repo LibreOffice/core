@@ -58,7 +58,7 @@ class Components;
 namespace {
 
 rtl::OString convertToUtf8(
-    rtl::OUString const & text, sal_Int32 offset, sal_Int32 length)
+    OUString const & text, sal_Int32 offset, sal_Int32 length)
 {
     assert(offset <= text.getLength() && text.getLength() - offset >= length);
     rtl::OString s;
@@ -69,7 +69,7 @@ rtl::OString convertToUtf8(
              RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
     {
         throw css::uno::RuntimeException(
-            rtl::OUString(
+            OUString(
                 RTL_CONSTASCII_USTRINGPARAM("cannot convert to UTF-8")),
             css::uno::Reference< css::uno::XInterface >());
     }
@@ -77,7 +77,7 @@ rtl::OString convertToUtf8(
 }
 
 struct TempFile: public boost::noncopyable {
-    rtl::OUString url;
+    OUString url;
     oslFileHandle handle;
     bool closed;
 
@@ -111,7 +111,7 @@ void writeData(oslFileHandle handle, char const * begin, sal_Int32 length) {
         n != static_cast< sal_uInt32 >(length))
     {
         throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("write failure")),
+            OUString("write failure"),
             css::uno::Reference< css::uno::XInterface >());
     }
 }
@@ -120,7 +120,7 @@ void writeData(oslFileHandle handle, rtl::OString const & text) {
     writeData(handle, text.getStr(), text.getLength());
 }
 
-void writeAttributeValue(oslFileHandle handle, rtl::OUString const & value) {
+void writeAttributeValue(oslFileHandle handle, OUString const & value) {
     sal_Int32 i = 0;
     sal_Int32 j = i;
     for (; j < value.getLength(); ++j) {
@@ -189,7 +189,7 @@ void writeValueContent(oslFileHandle handle, double value) {
     writeData(handle, rtl::OString::valueOf(value));
 }
 
-void writeValueContent(oslFileHandle handle, rtl::OUString const & value) {
+void writeValueContent(oslFileHandle handle, OUString const & value) {
     sal_Int32 i = 0;
     sal_Int32 j = i;
     for (; j < value.getLength(); ++j) {
@@ -296,7 +296,7 @@ void writeValue(oslFileHandle handle, Type type, css::uno::Any const & value) {
         writeSingleValue< double >(handle, value);
         break;
     case TYPE_STRING:
-        writeSingleValue< rtl::OUString >(handle, value);
+        writeSingleValue< OUString >(handle, value);
         break;
     case TYPE_HEXBINARY:
         writeSingleValue< css::uno::Sequence< sal_Int8 > >(handle, value);
@@ -317,7 +317,7 @@ void writeValue(oslFileHandle handle, Type type, css::uno::Any const & value) {
         writeListValue< double >(handle, value);
         break;
     case TYPE_STRING_LIST:
-        writeItemListValue< rtl::OUString >(handle, value);
+        writeItemListValue< OUString >(handle, value);
         break;
     case TYPE_HEXBINARY_LIST:
         writeItemListValue< css::uno::Sequence< sal_Int8 > >(handle, value);
@@ -329,7 +329,7 @@ void writeValue(oslFileHandle handle, Type type, css::uno::Any const & value) {
 
 void writeNode(
     Components & components, oslFileHandle handle,
-    rtl::Reference< Node > const & parent, rtl::OUString const & name,
+    rtl::Reference< Node > const & parent, OUString const & name,
     rtl::Reference< Node > const & node)
 {
     static xmlreader::Span const typeNames[] = {
@@ -446,8 +446,8 @@ void writeNode(
 
 void writeModifications(
     Components & components, oslFileHandle handle,
-    rtl::OUString const & parentPathRepresentation,
-    rtl::Reference< Node > const & parent, rtl::OUString const & nodeName,
+    OUString const & parentPathRepresentation,
+    rtl::Reference< Node > const & parent, OUString const & nodeName,
     rtl::Reference< Node > const & node,
     Modifications::Node const & modifications)
 {
@@ -500,9 +500,9 @@ void writeModifications(
         writeData(handle, RTL_CONSTASCII_STRINGPARAM("</item>\n"));
     } else {
         assert(node.is());
-        rtl::OUString pathRep(
+        OUString pathRep(
             parentPathRepresentation +
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) +
+            OUString("/") +
             Data::createSegment(node->getTemplateName(), nodeName));
         for (Modifications::Node::Children::const_iterator i(
                  modifications.children.begin());
@@ -518,11 +518,11 @@ void writeModifications(
 }
 
 void writeModFile(
-    Components & components, rtl::OUString const & url, Data const & data)
+    Components & components, OUString const & url, Data const & data)
 {
     sal_Int32 i = url.lastIndexOf('/');
     assert(i != -1);
-    rtl::OUString dir(url.copy(0, i));
+    OUString dir(url.copy(0, i));
     switch (osl::Directory::createPath(dir)) {
     case osl::FileBase::E_None:
     case osl::FileBase::E_EXIST:
@@ -535,8 +535,7 @@ void writeModFile(
         return;
     default:
         throw css::uno::RuntimeException(
-            (rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("cannot create directory ")) +
+            (OUString("cannot create directory ") +
              dir),
             css::uno::Reference< css::uno::XInterface >());
     }
@@ -552,9 +551,7 @@ void writeModFile(
         return;
     default:
         throw css::uno::RuntimeException(
-            (rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "cannot create temporary file in ")) +
+            (OUString("cannot create temporary file in ") +
              dir),
             css::uno::Reference< css::uno::XInterface >());
     }
@@ -573,7 +570,7 @@ void writeModFile(
          j != data.modifications.getRoot().children.end(); ++j)
     {
         writeModifications(
-            components, tmp.handle, rtl::OUString(), rtl::Reference< Node >(),
+            components, tmp.handle, OUString(), rtl::Reference< Node >(),
             j->first,
             Data::findNode(Data::NO_LAYER, data.getComponents(), j->first),
             j->second);
@@ -583,13 +580,13 @@ void writeModFile(
     tmp.closed = true;
     if (e != osl_File_E_None) {
         throw css::uno::RuntimeException(
-            (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cannot close ")) +
+            (OUString("cannot close ") +
              tmp.url),
             css::uno::Reference< css::uno::XInterface >());
     }
     if (osl::File::move(tmp.url, url) != osl::FileBase::E_None) {
         throw css::uno::RuntimeException(
-            (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cannot move ")) +
+            (OUString("cannot move ") +
              tmp.url),
             css::uno::Reference< css::uno::XInterface >());
     }

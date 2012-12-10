@@ -101,18 +101,14 @@ bool XcdParser::startElement(
                 }
                 if (!attrFile.is()) {
                     throw css::uno::RuntimeException(
-                        (rtl::OUString(
-                            RTL_CONSTASCII_USTRINGPARAM(
-                                "no dependency file attribute in ")) +
+                        (OUString("no dependency file attribute in ") +
                          reader.getUrl()),
                         css::uno::Reference< css::uno::XInterface >());
                 }
                 dependencyFile_ = attrFile.convertFromUtf8();
                 if (dependencyFile_.isEmpty()) {
                     throw css::uno::RuntimeException(
-                        (rtl::OUString(
-                            RTL_CONSTASCII_USTRINGPARAM(
-                                "bad dependency file attribute in ")) +
+                        (OUString("bad dependency file attribute in ") +
                          reader.getUrl()),
                         css::uno::Reference< css::uno::XInterface >());
                 }
@@ -126,7 +122,7 @@ bool XcdParser::startElement(
                 return false;
             }
             state_ = STATE_DEPENDENCY;
-            dependencyFile_ = rtl::OUString();
+            dependencyFile_ = OUString();
             return true;
         }
         state_ = STATE_COMPONENTS;
@@ -154,9 +150,9 @@ bool XcdParser::startElement(
         break;
     }
     throw css::uno::RuntimeException(
-        (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad member <")) +
+        (OUString("bad member <") +
          name.convertFromUtf8() +
-         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("> in ")) + reader.getUrl()),
+         OUString("> in ") + reader.getUrl()),
         css::uno::Reference< css::uno::XInterface >());
 }
 

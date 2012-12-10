@@ -24,11 +24,10 @@
 
 #include <vector>
 
-namespace rtl { class OUString; }
 
 namespace configmgr {
 
-typedef std::vector< rtl::OUString > Path;
+typedef std::vector< OUString > Path;
 
 }
 

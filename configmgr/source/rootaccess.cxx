@@ -58,8 +58,8 @@
 namespace configmgr {
 
 RootAccess::RootAccess(
-    Components & components, rtl::OUString const & pathRepresentation,
-    rtl::OUString const & locale, bool update):
+    Components & components, OUString const & pathRepresentation,
+    OUString const & locale, bool update):
     Access(components), pathRepresentation_(pathRepresentation),
     locale_(locale), update_(update), finalized_(false), alive_(true)
 {
@@ -101,12 +101,12 @@ void RootAccess::release() throw () {
     Access::release();
 }
 
-rtl::OUString RootAccess::getAbsolutePathRepresentation() {
+OUString RootAccess::getAbsolutePathRepresentation() {
     getNode(); // turn pathRepresentation_ into canonic form
     return pathRepresentation_;
 }
 
-rtl::OUString RootAccess::getLocale() const {
+OUString RootAccess::getLocale() const {
     return locale_;
 }
 
@@ -128,7 +128,7 @@ void RootAccess::addChangesListener(
         checkLocalizedPropertyAccess();
         if (!aListener.is()) {
             throw css::uno::RuntimeException(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("null listener")),
+                OUString("null listener"),
                 static_cast< cppu::OWeakObject * >(this));
         }
         if (!isDisposed()) {
@@ -214,19 +214,19 @@ Path RootAccess::getRelativePath() {
     return Path();
 }
 
-rtl::OUString RootAccess::getRelativePathRepresentation() {
-    return rtl::OUString();
+OUString RootAccess::getRelativePathRepresentation() {
+    return OUString();
 }
 
 rtl::Reference< Node > RootAccess::getNode() {
     if (!node_.is()) {
-        rtl::OUString canonic;
+        OUString canonic;
         int finalizedLayer;
         node_ = getComponents().resolvePathRepresentation(
             pathRepresentation_, &canonic, &path_, &finalizedLayer);
         if (!node_.is()) {
             throw css::uno::RuntimeException(
-                (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cannot find ")) +
+                (OUString("cannot find ") +
                  pathRepresentation_),
                 0);
                 // RootAccess::queryInterface indirectly calls
@@ -250,7 +250,7 @@ bool RootAccess::isFinalized() {
     return finalized_;
 }
 
-rtl::OUString RootAccess::getNameInternal() {
+OUString RootAccess::getNameInternal() {
     getNode();
     return name_;
 }
@@ -270,18 +270,14 @@ void RootAccess::addTypes(std::vector< css::uno::Type > * types) const {
 }
 
 void RootAccess::addSupportedServiceNames(
-    std::vector< rtl::OUString > * services)
+    std::vector< OUString > * services)
 {
     assert(services != 0);
     services->push_back(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.AccessRootElement")));
+        OUString("com.sun.star.configuration.AccessRootElement"));
     if (update_) {
         services->push_back(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.configuration.UpdateRootElement")));
+            OUString("com.sun.star.configuration.UpdateRootElement"));
     }
 }
 
@@ -324,13 +320,13 @@ css::uno::Any RootAccess::queryInterface(css::uno::Type const & aType)
     return res;
 }
 
-rtl::OUString RootAccess::getImplementationName()
+OUString RootAccess::getImplementationName()
     throw (css::uno::RuntimeException)
 {
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("configmgr.RootAccess"));
+    return OUString("configmgr.RootAccess");
 }
 
 }

@@ -32,13 +32,13 @@ namespace configmgr {
 
 class GroupNode: public Node {
 public:
-    GroupNode(int layer, bool extensible, rtl::OUString const & templateName);
+    GroupNode(int layer, bool extensible, OUString const & templateName);
 
     virtual rtl::Reference< Node > clone(bool keepTemplateName) const;
 
     virtual NodeMap & getMembers();
 
-    virtual rtl::OUString getTemplateName() const;
+    virtual OUString getTemplateName() const;
 
     virtual void setMandatory(int layer);
 
@@ -57,8 +57,8 @@ private:
 
     bool extensible_;
     NodeMap members_;
-    rtl::OUString templateName_;
-        // non-empty iff this node is a template, free node, or set member
+    OUString templateName_;
+        // non-empty if this node is a template, free node, or set member
     int mandatory_;
 };
 

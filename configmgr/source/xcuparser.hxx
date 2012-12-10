@@ -87,17 +87,17 @@ private:
 
     void handleUnknownGroupProp(
         xmlreader::XmlReader const & reader, GroupNode * group,
-        rtl::OUString const & name, Type type, Operation operation,
+        OUString const & name, Type type, Operation operation,
         bool finalized);
 
     void handlePlainGroupProp(
         xmlreader::XmlReader const & reader, GroupNode * group,
-        NodeMap::iterator const & propertyIndex, rtl::OUString const & name,
+        NodeMap::iterator const & propertyIndex, OUString const & name,
         Type type, Operation operation, bool finalized);
 
     void handleLocalizedGroupProp(
         xmlreader::XmlReader const & reader, LocalizedPropertyNode * property,
-        rtl::OUString const & name, Type type, Operation operation,
+        OUString const & name, Type type, Operation operation,
         bool finalized);
 
     void handleGroupNode(
@@ -108,8 +108,8 @@ private:
     void recordModification(bool addition);
 
     struct State {
-        rtl::Reference< Node > node; // empty iff ignore or <items>
-        rtl::OUString name; // empty and ignored if !insert
+        rtl::Reference< Node > node; // empty if ignore or <items>
+        OUString name; // empty and ignored if !insert
         bool ignore;
         bool insert;
         bool locked;
@@ -126,7 +126,7 @@ private:
 
         inline State(
             rtl::Reference< Node > const & theNode,
-            rtl::OUString const & theName, bool theLocked):
+            OUString const & theName, bool theLocked):
             node(theNode), name(theName), ignore(false), insert(true),
             locked(theLocked), pop(true)
         {}
@@ -141,7 +141,7 @@ private:
     Additions * additions_;
     bool recordModifications_;
     bool trackPath_;
-    rtl::OUString componentName_;
+    OUString componentName_;
     StateStack state_;
     Path path_;
 };

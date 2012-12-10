@@ -43,7 +43,6 @@ namespace com { namespace sun { namespace star {
         class XComponentContext;
     }
 } } }
-namespace rtl { class OUString; }
 
 namespace configmgr {
 
@@ -58,15 +57,15 @@ public:
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
             const & context);
 
-    static bool allLocales(rtl::OUString const & locale);
+    static bool allLocales(OUString const & locale);
 
     rtl::Reference< Node > resolvePathRepresentation(
-        rtl::OUString const & pathRepresentation,
-        rtl::OUString * canonicRepresenation, Path * path, int * finalizedLayer)
+        OUString const & pathRepresentation,
+        OUString * canonicRepresenation, Path * path, int * finalizedLayer)
         const;
 
     rtl::Reference< Node > getTemplate(
-        int layer, rtl::OUString const & fullName) const;
+        int layer, OUString const & fullName) const;
 
     void addRootAccess(rtl::Reference< RootAccess > const & access);
 
@@ -88,27 +87,27 @@ public:
         // shutdown if writeModifications has ever been called (probably
         // indirectly, via removeExtensionXcuFile)
 
-    void insertExtensionXcsFile(bool shared, rtl::OUString const & fileUri);
+    void insertExtensionXcsFile(bool shared, OUString const & fileUri);
 
     void insertExtensionXcuFile(
-        bool shared, rtl::OUString const & fileUri,
+        bool shared, OUString const & fileUri,
         Modifications * modifications);
 
     void removeExtensionXcuFile(
-        rtl::OUString const & fileUri, Modifications * modifications);
+        OUString const & fileUri, Modifications * modifications);
 
     void insertModificationXcuFile(
-        rtl::OUString const & fileUri,
-        std::set< rtl::OUString > const & includedPaths,
-        std::set< rtl::OUString > const & excludedPaths,
+        OUString const & fileUri,
+        std::set< OUString > const & includedPaths,
+        std::set< OUString > const & excludedPaths,
         Modifications * modifications);
 
     com::sun::star::beans::Optional< com::sun::star::uno::Any >
-    getExternalValue(rtl::OUString const & descriptor);
+    getExternalValue(OUString const & descriptor);
 
 private:
     typedef void FileParser(
-        rtl::OUString const &, int, Data &, Partial const *, Modifications *,
+        OUString const &, int, Data &, Partial const *, Modifications *,
         Additions *);
 public:
     Components(
@@ -119,30 +118,30 @@ public:
 private:
 
     void parseFileLeniently(
-        FileParser * parseFile, rtl::OUString const & url, int layer,
+        FileParser * parseFile, OUString const & url, int layer,
         Data & data, Partial const * partial, Modifications * modifications,
         Additions * additions);
 
     void parseFiles(
-        int layer, rtl::OUString const & extension, FileParser * parseFile,
-        rtl::OUString const & url, bool recursive);
+        int layer, OUString const & extension, FileParser * parseFile,
+        OUString const & url, bool recursive);
 
     void parseFileList(
-        int layer, FileParser * parseFile, rtl::OUString const & urls,
+        int layer, FileParser * parseFile, OUString const & urls,
         bool recordAdditions);
 
-    void parseXcdFiles(int layer, rtl::OUString const & url);
+    void parseXcdFiles(int layer, OUString const & url);
 
-    void parseXcsXcuLayer(int layer, rtl::OUString const & url);
+    void parseXcsXcuLayer(int layer, OUString const & url);
 
     void parseXcsXcuIniLayer(
-        int layer, rtl::OUString const & url, bool recordAdditions);
+        int layer, OUString const & url, bool recordAdditions);
 
-    void parseModuleLayer(int layer, rtl::OUString const & url);
+    void parseModuleLayer(int layer, OUString const & url);
 
-    void parseResLayer(int layer, rtl::OUString const & url);
+    void parseResLayer(int layer, OUString const & url);
 
-    void parseModificationLayer(rtl::OUString const & url);
+    void parseModificationLayer(OUString const & url);
 
     int getExtensionLayer(bool shared);
 
@@ -150,7 +149,7 @@ private:
 
     typedef
         std::map<
-            rtl::OUString,
+            OUString,
             com::sun::star::uno::Reference<
                 com::sun::star::beans::XPropertySet > >
         ExternalServices;
@@ -165,7 +164,7 @@ private:
     rtl::Reference< WriteThread > writeThread_;
     int sharedExtensionLayer_;
     int userExtensionLayer_;
-    rtl::OUString modificationFileUrl_;
+    OUString modificationFileUrl_;
     boost::shared_ptr<osl::Mutex> lock_;
 };
 

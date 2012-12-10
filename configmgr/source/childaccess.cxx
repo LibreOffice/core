@@ -73,7 +73,7 @@ css::uno::Sequence< sal_Int8 > ChildAccess::getTunnelId()
 
 ChildAccess::ChildAccess(
     Components & components, rtl::Reference< RootAccess > const & root,
-    rtl::Reference< Access > const & parent, rtl::OUString const & name,
+    rtl::Reference< Access > const & parent, OUString const & name,
     rtl::Reference< Node > const & node):
     Access(components), root_(root), parent_(parent), name_(name), node_(node),
     inTransaction_(false)
@@ -108,8 +108,8 @@ Path ChildAccess::getRelativePath() {
     return path;
 }
 
-rtl::OUString ChildAccess::getRelativePathRepresentation() {
-    rtl::OUStringBuffer path;
+OUString ChildAccess::getRelativePathRepresentation() {
+    OUStringBuffer path;
     rtl::Reference< Access > parent(getParentAccess());
     if (parent.is()) {
         path.append(parent->getRelativePathRepresentation());
@@ -130,7 +130,7 @@ bool ChildAccess::isFinalized() {
         (parent_.is() && parent_->isFinalized());
 }
 
-rtl::OUString ChildAccess::getNameInternal() {
+OUString ChildAccess::getNameInternal() {
     return name_;
 }
 
@@ -166,7 +166,7 @@ void ChildAccess::setParent(css::uno::Reference< css::uno::XInterface > const &)
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     throw css::lang::NoSupportException(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("setParent")),
+        OUString("setParent"),
         static_cast< cppu::OWeakObject * >(this));
 }
 
@@ -183,7 +183,7 @@ sal_Int64 ChildAccess::getSomething(
 
 void ChildAccess::bind(
     rtl::Reference< RootAccess > const & root,
-    rtl::Reference< Access > const & parent, rtl::OUString const & name)
+    rtl::Reference< Access > const & parent, OUString const & name)
     throw ()
 {
     assert(!parent_.is() && root.is() && parent.is() && !name.isEmpty());
@@ -223,7 +223,7 @@ void ChildAccess::setProperty(
         break;
     case Node::KIND_LOCALIZED_PROPERTY:
         {
-            rtl::OUString locale(getRootAccess()->getLocale());
+            OUString locale(getRootAccess()->getLocale());
             if (!Components::allLocales(locale)) {
                 rtl::Reference< ChildAccess > child(getChild(locale));
                 if (child.is()) {
@@ -321,17 +321,13 @@ void ChildAccess::addTypes(std::vector< css::uno::Type > * types) const {
 }
 
 void ChildAccess::addSupportedServiceNames(
-    std::vector< rtl::OUString > * services)
+    std::vector< OUString > * services)
 {
     assert(services != 0);
     services->push_back(
         getParentNode()->kind() == Node::KIND_GROUP
-        ? rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.GroupElement"))
-        : rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.SetElement")));
+        ? OUString("com.sun.star.configuration.GroupElement")
+        : OUString("com.sun.star.configuration.SetElement"));
 }
 
 css::uno::Any ChildAccess::queryInterface(css::uno::Type const & aType)

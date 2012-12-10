@@ -62,7 +62,7 @@ private:
     std::set< OUString > const & processedDependencies_;
     Data & data_;
     State state_;
-    rtl::OUString dependencyFile_;
+    OUString dependencyFile_;
     bool dependencyOptional_;
     rtl::Reference< Parser > nestedParser_;
     long nesting_;

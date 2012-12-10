@@ -37,12 +37,12 @@ namespace configmgr {
 NodeMap & Node::getMembers() {
     assert(false);
     throw css::uno::RuntimeException(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
+        OUString("this cannot happen"),
         css::uno::Reference< css::uno::XInterface >());
 }
 
-rtl::OUString Node::getTemplateName() const {
-    return rtl::OUString();
+OUString Node::getTemplateName() const {
+    return OUString();
 }
 
 void Node::setMandatory(int layer) {
@@ -71,7 +71,7 @@ int Node::getFinalized() const {
     return finalized_;
 }
 
-rtl::Reference< Node > Node::getMember(rtl::OUString const & name) {
+rtl::Reference< Node > Node::getMember(OUString const & name) {
     NodeMap const & members = getMembers();
     NodeMap::const_iterator i(members.find(name));
     return i == members.end() ? rtl::Reference< Node >() : i->second;

@@ -28,7 +28,6 @@
 #include "nodemap.hxx"
 #include "type.hxx"
 
-namespace rtl { class OUString; }
 
 namespace configmgr {
 

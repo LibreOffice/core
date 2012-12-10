@@ -22,7 +22,6 @@
 
 #include "sal/config.h"
 
-namespace rtl { class OUString; }
 
 namespace configmgr {
 
@@ -30,7 +29,7 @@ class Components;
 struct Data;
 
 void writeModFile(
-    Components & components, rtl::OUString const & url, Data const & data);
+    Components & components, OUString const & url, Data const & data);
 
 }
 

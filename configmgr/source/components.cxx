@@ -71,11 +71,11 @@ namespace configmgr {
 namespace {
 
 struct UnresolvedListItem {
-    rtl::OUString name;
+    OUString name;
     rtl::Reference< ParseManager > manager;
 
     UnresolvedListItem(
-        rtl::OUString const & theName,
+        OUString const & theName,
         rtl::Reference< ParseManager > theManager):
         name(theName), manager(theManager) {}
 };
@@ -83,7 +83,7 @@ struct UnresolvedListItem {
 typedef std::list< UnresolvedListItem > UnresolvedList;
 
 void parseXcsFile(
-    rtl::OUString const & url, int layer, Data & data, Partial const * partial,
+    OUString const & url, int layer, Data & data, Partial const * partial,
     Modifications * modifications, Additions * additions)
     SAL_THROW((
         css::container::NoSuchElementException, css::uno::RuntimeException))
@@ -97,7 +97,7 @@ void parseXcsFile(
 }
 
 void parseXcuFile(
-    rtl::OUString const & url, int layer, Data & data, Partial const * partial,
+    OUString const & url, int layer, Data & data, Partial const * partial,
     Modifications * modifications, Additions * additions)
     SAL_THROW((
         css::container::NoSuchElementException, css::uno::RuntimeException))
@@ -111,8 +111,8 @@ void parseXcuFile(
     (void) ok; // avoid warnings
 }
 
-rtl::OUString expand(rtl::OUString const & str) {
-    rtl::OUString s(str);
+OUString expand(OUString const & str) {
+    OUString s(str);
     rtl::Bootstrap::expandMacros(s); //TODO: detect failure
     return s;
 }
@@ -146,7 +146,7 @@ class Components::WriteThread: public salhelper::Thread {
 public:
     WriteThread(
         rtl::Reference< WriteThread > * reference, Components & components,
-        rtl::OUString const & url, Data const & data);
+        OUString const & url, Data const & data);
 
     void flush() { delay_.set(); }
 
@@ -157,7 +157,7 @@ private:
 
     rtl::Reference< WriteThread > * reference_;
     Components & components_;
-    rtl::OUString url_;
+    OUString url_;
     Data const & data_;
     osl::Condition delay_;
     boost::shared_ptr<osl::Mutex> lock_;
@@ -165,7 +165,7 @@ private:
 
 Components::WriteThread::WriteThread(
     rtl::Reference< WriteThread > * reference, Components & components,
-    rtl::OUString const & url, Data const & data):
+    OUString const & url, Data const & data):
     Thread("configmgrWriter"), reference_(reference), components_(components),
     url_(url), data_(data)
 {
@@ -208,13 +208,13 @@ Components & Components::getSingleton(
     return theComponentsSingleton::get(context);
 }
 
-bool Components::allLocales(rtl::OUString const & locale) {
+bool Components::allLocales(OUString const & locale) {
     return locale == "*";
 }
 
 rtl::Reference< Node > Components::resolvePathRepresentation(
-    rtl::OUString const & pathRepresentation,
-    rtl::OUString * canonicRepresentation, Path * path, int * finalizedLayer)
+    OUString const & pathRepresentation,
+    OUString * canonicRepresentation, Path * path, int * finalizedLayer)
     const
 {
     return data_.resolvePathRepresentation(
@@ -222,7 +222,7 @@ rtl::Reference< Node > Components::resolvePathRepresentation(
 }
 
 rtl::Reference< Node > Components::getTemplate(
-    int layer, rtl::OUString const & fullName) const
+    int layer, OUString const & fullName) const
 {
     return data_.getTemplate(layer, fullName);
 }
@@ -305,23 +305,21 @@ void Components::flushModifications() {
 }
 
 void Components::insertExtensionXcsFile(
-    bool shared, rtl::OUString const & fileUri)
+    bool shared, OUString const & fileUri)
 {
     int layer = getExtensionLayer(shared);
     try {
         parseXcsFile(fileUri, layer, data_, 0, 0, 0);
     } catch (css::container::NoSuchElementException & e) {
         throw css::uno::RuntimeException(
-            (rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "insertExtensionXcsFile does not exist: ")) +
+            (OUString("insertExtensionXcsFile does not exist: ") +
              e.Message),
             css::uno::Reference< css::uno::XInterface >());
     }
 }
 
 void Components::insertExtensionXcuFile(
-    bool shared, rtl::OUString const & fileUri, Modifications * modifications)
+    bool shared, OUString const & fileUri, Modifications * modifications)
 {
     assert(modifications != 0);
     int layer = getExtensionLayer(shared) + 1;
@@ -331,16 +329,14 @@ void Components::insertExtensionXcuFile(
     } catch (css::container::NoSuchElementException & e) {
         data_.removeExtensionXcuAdditions(fileUri);
         throw css::uno::RuntimeException(
-            (rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "insertExtensionXcuFile does not exist: ")) +
+            (OUString("insertExtensionXcuFile does not exist: ") +
              e.Message),
             css::uno::Reference< css::uno::XInterface >());
     }
 }
 
 void Components::removeExtensionXcuFile(
-    rtl::OUString const & fileUri, Modifications * modifications)
+    OUString const & fileUri, Modifications * modifications)
 {
     //TODO: Ideally, exactly the data coming from the specified xcu file would
     // be removed.  However, not enough information is recorded in the in-memory
@@ -392,9 +388,9 @@ void Components::removeExtensionXcuFile(
 }
 
 void Components::insertModificationXcuFile(
-    rtl::OUString const & fileUri,
-    std::set< rtl::OUString > const & includedPaths,
-    std::set< rtl::OUString > const & excludedPaths,
+    OUString const & fileUri,
+    std::set< OUString > const & includedPaths,
+    std::set< OUString > const & excludedPaths,
     Modifications * modifications)
 {
     assert(modifications != 0);
@@ -412,18 +408,17 @@ void Components::insertModificationXcuFile(
 }
 
 css::beans::Optional< css::uno::Any > Components::getExternalValue(
-    rtl::OUString const & descriptor)
+    OUString const & descriptor)
 {
     sal_Int32 i = descriptor.indexOf(' ');
     if (i <= 0) {
         throw css::uno::RuntimeException(
-            (rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("bad external value descriptor ")) +
+            (OUString("bad external value descriptor ") +
              descriptor),
             css::uno::Reference< css::uno::XInterface >());
     }
     //TODO: Do not make calls with mutex locked:
-    rtl::OUString name(descriptor.copy(0, i));
+    OUString name(descriptor.copy(0, i));
     ExternalServices::iterator j(externalServices_.find(name));
     if (j == externalServices_.end()) {
         css::uno::Reference< css::uno::XInterface > service;
@@ -456,24 +451,18 @@ css::beans::Optional< css::uno::Any > Components::getExternalValue(
                   value))
             {
                 throw css::uno::RuntimeException(
-                    (rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "cannot obtain external value through ")) +
+                    (OUString("cannot obtain external value through ") +
                      descriptor),
                     css::uno::Reference< css::uno::XInterface >());
             }
         } catch (css::beans::UnknownPropertyException & e) {
             throw css::uno::RuntimeException(
-                (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "unknown external value descriptor ID: ")) +
+                (OUString("unknown external value descriptor ID: ") +
                  e.Message),
                 css::uno::Reference< css::uno::XInterface >());
         } catch (css::lang::WrappedTargetException & e) {
             throw css::uno::RuntimeException(
-                (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "cannot obtain external value: ")) +
+                (OUString("cannot obtain external value: ") +
                  e.Message),
                 css::uno::Reference< css::uno::XInterface >());
         }
@@ -487,10 +476,9 @@ Components::Components(
 {
     assert(context.is());
     lock_ = lock();
-    rtl::OUString conf(
+    OUString conf(
         expand(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("${CONFIGURATION_LAYERS}"))));
+            OUString("${CONFIGURATION_LAYERS}")));
     RTL_LOGFILE_TRACE("configmgr : begin parsing");
     int layer = 0;
     for (sal_Int32 i = 0;;) {
@@ -502,19 +490,15 @@ Components::Components(
         }
         if (!modificationFileUrl_.isEmpty()) {
             throw css::uno::RuntimeException(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "CONFIGURATION_LAYERS: \"user\" followed by further"
-                        " layers")),
+                OUString("CONFIGURATION_LAYERS: \"user\" followed by further"
+                        " layers"),
                 css::uno::Reference< css::uno::XInterface >());
         }
         sal_Int32 c = i;
         for (;; ++c) {
             if (c == conf.getLength() || conf[c] == ' ') {
                 throw css::uno::RuntimeException(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "CONFIGURATION_LAYERS: missing \":\"")),
+                    OUString("CONFIGURATION_LAYERS: missing \":\""),
                     css::uno::Reference< css::uno::XInterface >());
             }
             if (conf[c] == ':') {
@@ -525,8 +509,8 @@ Components::Components(
         if (n == -1) {
             n = conf.getLength();
         }
-        rtl::OUString type(conf.copy(i, c - i));
-        rtl::OUString url(conf.copy(c + 1, n - c - 1));
+        OUString type(conf.copy(i, c - i));
+        OUString url(conf.copy(c + 1, n - c - 1));
         if ( type == "xcsxcu" ) {
             parseXcsXcuLayer(layer, url);
             layer += 2; //TODO: overflow
@@ -537,10 +521,8 @@ Components::Components(
         } else if ( type == "sharedext" ) {
             if (sharedExtensionLayer_ != -1) {
                 throw css::uno::RuntimeException(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "CONFIGURATION_LAYERS: multiple \"sharedext\""
-                            " layers")),
+                    OUString("CONFIGURATION_LAYERS: multiple \"sharedext\""
+                            " layers"),
                     css::uno::Reference< css::uno::XInterface >());
             }
             sharedExtensionLayer_ = layer;
@@ -549,10 +531,8 @@ Components::Components(
         } else if ( type == "userext" ) {
             if (userExtensionLayer_ != -1) {
                 throw css::uno::RuntimeException(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "CONFIGURATION_LAYERS: multiple \"userext\""
-                            " layers")),
+                    OUString("CONFIGURATION_LAYERS: multiple \"userext\""
+                            " layers"),
                     css::uno::Reference< css::uno::XInterface >());
             }
             userExtensionLayer_ = layer;
@@ -567,20 +547,16 @@ Components::Components(
         } else if ( type == "user" ) {
             if (url.isEmpty()) {
                 throw css::uno::RuntimeException(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "CONFIGURATION_LAYERS: empty \"user\" URL")),
+                    OUString("CONFIGURATION_LAYERS: empty \"user\" URL"),
                     css::uno::Reference< css::uno::XInterface >());
             }
             modificationFileUrl_ = url;
             parseModificationLayer(url);
         } else {
             throw css::uno::RuntimeException(
-                (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "CONFIGURATION_LAYERS: unknown layer type \"")) +
+                (OUString("CONFIGURATION_LAYERS: unknown layer type \"") +
                  type +
-                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\""))),
+                 OUString("\"")),
                 css::uno::Reference< css::uno::XInterface >());
         }
         i = n;
@@ -597,7 +573,7 @@ Components::~Components()
 }
 
 void Components::parseFileLeniently(
-    FileParser * parseFile, rtl::OUString const & url, int layer, Data & data,
+    FileParser * parseFile, OUString const & url, int layer, Data & data,
     Partial const * partial, Modifications * modifications,
     Additions * additions)
 {
@@ -616,8 +592,8 @@ void Components::parseFileLeniently(
 }
 
 void Components::parseFiles(
-    int layer, rtl::OUString const & extension, FileParser * parseFile,
-    rtl::OUString const & url, bool recursive)
+    int layer, OUString const & extension, FileParser * parseFile,
+    OUString const & url, bool recursive)
 {
     osl::Directory dir(url);
     switch (dir.open()) {
@@ -630,8 +606,7 @@ void Components::parseFiles(
         // fall through
     default:
         throw css::uno::RuntimeException(
-            (rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("cannot open directory ")) +
+            (OUString("cannot open directory ") +
              url),
             css::uno::Reference< css::uno::XInterface >());
     }
@@ -643,8 +618,7 @@ void Components::parseFiles(
         }
         if (rc != osl::FileBase::E_None) {
             throw css::uno::RuntimeException(
-                (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("cannot iterate directory ")) +
+                (OUString("cannot iterate directory ") +
                  url),
                 css::uno::Reference< css::uno::XInterface >());
         }
@@ -653,15 +627,14 @@ void Components::parseFiles(
             osl_FileStatus_Mask_FileURL);
         if (i.getFileStatus(stat) != osl::FileBase::E_None) {
             throw css::uno::RuntimeException(
-                (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("cannot stat in directory ")) +
+                (OUString("cannot stat in directory ") +
                  url),
                 css::uno::Reference< css::uno::XInterface >());
         }
         if (stat.getFileType() == osl::FileStatus::Directory) { //TODO: symlinks
             parseFiles(layer, extension, parseFile, stat.getFileURL(), true);
         } else {
-            rtl::OUString file(stat.getFileName());
+            OUString file(stat.getFileName());
             if (file.getLength() >= extension.getLength() &&
                 file.match(extension, file.getLength() - extension.getLength()))
             {
@@ -670,9 +643,7 @@ void Components::parseFiles(
                         parseFile, stat.getFileURL(), layer, data_, 0, 0, 0);
                 } catch (css::container::NoSuchElementException & e) {
                     throw css::uno::RuntimeException(
-                        (rtl::OUString(
-                            RTL_CONSTASCII_USTRINGPARAM(
-                                "stat'ed file does not exist: ")) +
+                        (OUString("stat'ed file does not exist: ") +
                          e.Message),
                         css::uno::Reference< css::uno::XInterface >());
                 }
@@ -682,11 +653,11 @@ void Components::parseFiles(
 }
 
 void Components::parseFileList(
-    int layer, FileParser * parseFile, rtl::OUString const & urls,
+    int layer, FileParser * parseFile, OUString const & urls,
     bool recordAdditions)
 {
     for (sal_Int32 i = 0;;) {
-        rtl::OUString url(urls.getToken(0, ' ', i));
+        OUString url(urls.getToken(0, ' ', i));
         if (!url.isEmpty()) {
             Additions * adds = 0;
             if (recordAdditions) {
@@ -708,7 +679,7 @@ void Components::parseFileList(
     }
 }
 
-void Components::parseXcdFiles(int layer, rtl::OUString const & url) {
+void Components::parseXcdFiles(int layer, OUString const & url) {
     osl::Directory dir(url);
     switch (dir.open()) {
     case osl::FileBase::E_None:
@@ -717,8 +688,7 @@ void Components::parseXcdFiles(int layer, rtl::OUString const & url) {
         return;
     default:
         throw css::uno::RuntimeException(
-            (rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("cannot open directory ")) +
+            (OUString("cannot open directory ") +
              url),
             css::uno::Reference< css::uno::XInterface >());
     }
@@ -733,8 +703,7 @@ void Components::parseXcdFiles(int layer, rtl::OUString const & url) {
         }
         if (rc != osl::FileBase::E_None) {
             throw css::uno::RuntimeException(
-                (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("cannot iterate directory ")) +
+                (OUString("cannot iterate directory ") +
                  url),
                 css::uno::Reference< css::uno::XInterface >());
         }
@@ -743,19 +712,18 @@ void Components::parseXcdFiles(int layer, rtl::OUString const & url) {
             osl_FileStatus_Mask_FileURL);
         if (i.getFileStatus(stat) != osl::FileBase::E_None) {
             throw css::uno::RuntimeException(
-                (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("cannot stat in directory ")) +
+                (OUString("cannot stat in directory ") +
                  url),
                 css::uno::Reference< css::uno::XInterface >());
         }
         if (stat.getFileType() != osl::FileStatus::Directory) { //TODO: symlinks
-            rtl::OUString file(stat.getFileName());
+            OUString file(stat.getFileName());
             if (file.getLength() >= RTL_CONSTASCII_LENGTH(".xcd") &&
                 file.matchAsciiL(
                     RTL_CONSTASCII_STRINGPARAM(".xcd"),
                     file.getLength() - RTL_CONSTASCII_LENGTH(".xcd")))
             {
-                rtl::OUString name(
+                OUString name(
                     file.copy(
                         0, file.getLength() - RTL_CONSTASCII_LENGTH(".xcd")));
                 existingDeps.insert(name);
@@ -766,9 +734,7 @@ void Components::parseXcdFiles(int layer, rtl::OUString const & url) {
                         new XcdParser(layer, processedDeps, data_));
                 } catch (css::container::NoSuchElementException & e) {
                     throw css::uno::RuntimeException(
-                        (rtl::OUString(
-                            RTL_CONSTASCII_USTRINGPARAM(
-                                "stat'ed file does not exist: ")) +
+                        (OUString("stat'ed file does not exist: ") +
                          e.Message),
                         css::uno::Reference< css::uno::XInterface >());
                 }
@@ -793,35 +759,33 @@ void Components::parseXcdFiles(int layer, rtl::OUString const & url) {
         }
         if (!resolved) {
             throw css::uno::RuntimeException(
-                (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "xcd: unresolved dependencies in ")) +
+                (OUString("xcd: unresolved dependencies in ") +
                  url),
                 css::uno::Reference< css::uno::XInterface >());
         }
     }
 }
 
-void Components::parseXcsXcuLayer(int layer, rtl::OUString const & url) {
+void Components::parseXcsXcuLayer(int layer, OUString const & url) {
     parseXcdFiles(layer, url);
     parseFiles(
-        layer, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".xcs")),
+        layer, OUString(".xcs"),
         &parseXcsFile,
-        url + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/schema")), false);
+        url + OUString("/schema"), false);
     parseFiles(
-        layer + 1, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".xcu")),
+        layer + 1, OUString(".xcu"),
         &parseXcuFile,
-        url + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/data")), false);
+        url + OUString("/data"), false);
 }
 
 void Components::parseXcsXcuIniLayer(
-    int layer, rtl::OUString const & url, bool recordAdditions)
+    int layer, OUString const & url, bool recordAdditions)
 {
     // Check if ini file exists (otherwise .override would still read global
     // SCHEMA/DATA variables, which could interfere with unrelated environment
     // variables):
     if (rtl::Bootstrap(url).getHandle() != 0) {
-        rtl::OUStringBuffer prefix("${.override:");
+        OUStringBuffer prefix("${.override:");
         for (sal_Int32 i = 0; i != url.getLength(); ++i) {
             sal_Unicode c = url[i];
             switch (c) {
@@ -835,13 +799,13 @@ void Components::parseXcsXcuIniLayer(
             }
         }
         prefix.append(':');
-        rtl::OUString urls(prefix.toString() + rtl::OUString("SCHEMA}"));
+        OUString urls(prefix.toString() + OUString("SCHEMA}"));
         rtl::Bootstrap::expandMacros(urls);
         if (!urls.isEmpty())
         {
             parseFileList(layer, &parseXcsFile, urls, false);
         }
-        urls = prefix.makeStringAndClear() + rtl::OUString("DATA}");
+        urls = prefix.makeStringAndClear() + OUString("DATA}");
         rtl::Bootstrap::expandMacros(urls);
         if (!urls.isEmpty())
         {
@@ -850,22 +814,22 @@ void Components::parseXcsXcuIniLayer(
     }
 }
 
-void Components::parseModuleLayer(int layer, rtl::OUString const & url) {
+void Components::parseModuleLayer(int layer, OUString const & url) {
     parseFiles(
-        layer, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".xcu")),
+        layer, OUString(".xcu"),
         &parseXcuFile, url, false);
 }
 
-void Components::parseResLayer(int layer, rtl::OUString const & url) {
-    rtl::OUString resUrl(
-        url + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/res")));
+void Components::parseResLayer(int layer, OUString const & url) {
+    OUString resUrl(
+        url + OUString("/res"));
     parseXcdFiles(layer, resUrl);
     parseFiles(
-        layer, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".xcu")),
+        layer, OUString(".xcu"),
         &parseXcuFile, resUrl, false);
 }
 
-void Components::parseModificationLayer(rtl::OUString const & url) {
+void Components::parseModificationLayer(OUString const & url) {
     try {
         parseFileLeniently(&parseXcuFile, url, Data::NO_LAYER, data_, 0, 0, 0);
     } catch (css::container::NoSuchElementException &) {
@@ -875,13 +839,11 @@ void Components::parseModificationLayer(rtl::OUString const & url) {
         // longer relevant, probably OOo 4; also see hack for xsi namespace in
         // xmlreader::XmlReader::registerNamespaceIri):
         parseFiles(
-            Data::NO_LAYER, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".xcu")),
+            Data::NO_LAYER, OUString(".xcu"),
             &parseXcuFile,
             expand(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("bootstrap")
-                        ":UserInstallation}/user/registry/data"))),
+                OUString("${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("bootstrap")
+                        ":UserInstallation}/user/registry/data")),
             false);
     }
 }
@@ -890,9 +852,7 @@ int Components::getExtensionLayer(bool shared) {
     int layer = shared ? sharedExtensionLayer_ : userExtensionLayer_;
     if (layer == -1) {
         throw css::uno::RuntimeException(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "insert extension xcs/xcu file into undefined layer")),
+            OUString("insert extension xcs/xcu file into undefined layer"),
             css::uno::Reference< css::uno::XInterface >());
     }
     return layer;

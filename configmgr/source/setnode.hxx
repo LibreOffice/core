@@ -35,24 +35,24 @@ namespace configmgr {
 class SetNode: public Node {
 public:
     SetNode(
-        int layer, rtl::OUString const & defaultTemplateName,
-        rtl::OUString const & templateName);
+        int layer, OUString const & defaultTemplateName,
+        OUString const & templateName);
 
     virtual rtl::Reference< Node > clone(bool keepTemplateName) const;
 
     virtual NodeMap & getMembers();
 
-    virtual rtl::OUString getTemplateName() const;
+    virtual OUString getTemplateName() const;
 
     virtual void setMandatory(int layer);
 
     virtual int getMandatory() const;
 
-    rtl::OUString const & getDefaultTemplateName() const;
+    OUString const & getDefaultTemplateName() const;
 
-    std::vector< rtl::OUString > & getAdditionalTemplateNames();
+    std::vector< OUString > & getAdditionalTemplateNames();
 
-    bool isValidTemplate(rtl::OUString const & templateName) const;
+    bool isValidTemplate(OUString const & templateName) const;
 
 private:
     SetNode(SetNode const & other, bool keepTemplateName);
@@ -63,11 +63,11 @@ private:
 
     virtual void clear();
 
-    rtl::OUString defaultTemplateName_;
-    std::vector< rtl::OUString > additionalTemplateNames_;
+    OUString defaultTemplateName_;
+    std::vector< OUString > additionalTemplateNames_;
     NodeMap members_;
-    rtl::OUString templateName_;
-        // non-empty iff this node is a template, free node, or set member
+    OUString templateName_;
+        // non-empty if this node is a template, free node, or set member
     int mandatory_;
 };
 

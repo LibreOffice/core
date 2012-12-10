@@ -38,15 +38,15 @@ namespace configmgr {
 namespace {
 
 bool parseSegment(
-    rtl::OUString const & path, sal_Int32 * index, rtl::OUString * segment)
+    OUString const & path, sal_Int32 * index, OUString * segment)
 {
     assert(
         index != 0 && *index >= 0 && *index <= path.getLength() &&
         segment != 0);
     if (path[(*index)++] == '/') {
-        rtl::OUString name;
+        OUString name;
         bool setElement;
-        rtl::OUString templateName;
+        OUString templateName;
         *index = Data::parseSegment(
             path, *index, &name, &setElement, &templateName);
         if (*index != -1) {
@@ -55,15 +55,15 @@ bool parseSegment(
         }
     }
     throw css::uno::RuntimeException(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad path ")) + path,
+        OUString("bad path ") + path,
         css::uno::Reference< css::uno::XInterface >());
 }
 
 }
 
 Partial::Partial(
-    std::set< rtl::OUString > const & includedPaths,
-    std::set< rtl::OUString > const & excludedPaths)
+    std::set< OUString > const & includedPaths,
+    std::set< OUString > const & excludedPaths)
 {
     // The Partial::Node tree built up here encodes the following information:
     // * Inner node, startInclude: an include starts here that contains excluded
@@ -71,12 +71,12 @@ Partial::Partial(
     // * Inner node, !startInclude: contains in-/excluded sub-trees
     // * Leaf node, startInclude: an include starts here
     // * Leaf node, !startInclude: an exclude starts here
-    for (std::set< rtl::OUString >::const_iterator i(includedPaths.begin());
+    for (std::set< OUString >::const_iterator i(includedPaths.begin());
          i != includedPaths.end(); ++i)
     {
         sal_Int32 n = 0;
         for (Node * p = &root_;;) {
-            rtl::OUString seg;
+            OUString seg;
             bool end = parseSegment(*i, &n, &seg);
             p = &p->children[seg];
             if (p->startInclude) {
@@ -89,12 +89,12 @@ Partial::Partial(
             }
         }
     }
-    for (std::set< rtl::OUString >::const_iterator i(excludedPaths.begin());
+    for (std::set< OUString >::const_iterator i(excludedPaths.begin());
          i != excludedPaths.end(); ++i)
     {
         sal_Int32 n = 0;
         for (Node * p = &root_;;) {
-            rtl::OUString seg;
+            OUString seg;
             bool end = parseSegment(*i, &n, &seg);
             if (end) {
                 p->children[seg] = Node();
