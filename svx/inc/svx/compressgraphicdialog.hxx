@@ -82,7 +82,7 @@ public:
     virtual ~CompressGraphicsDialog();
 
     SdrGrafObj* GetCompressedSdrGrafObj();
-    Graphic&    GetCompressedGraphic();
+    Graphic     GetCompressedGraphic();
 };
 
 #endif

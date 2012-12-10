@@ -346,7 +346,7 @@ SdrGrafObj* CompressGraphicsDialog::GetCompressedSdrGrafObj()
     return NULL;
 }
 
-Graphic& CompressGraphicsDialog::GetCompressedGraphic()
+Graphic CompressGraphicsDialog::GetCompressedGraphic()
 {
     if ( m_dResolution > 0  )
     {
