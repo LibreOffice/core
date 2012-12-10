@@ -36,6 +36,8 @@
   </LC_CTYPE>
   <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$kn-41A]">
     <DateAcceptancePattern>D.M</DateAcceptancePattern>
+    <DateAcceptancePattern>D/M/Y</DateAcceptancePattern>
+    <DateAcceptancePattern>D/M</DateAcceptancePattern>
     <FormatElement msgid="DateFormatskey1" default="false" type="medium" usage="DATE" formatindex="34">
       <FormatCode>MM.YY</FormatCode>
     </FormatElement>
