@@ -10,7 +10,7 @@
 $(eval $(call gb_UI_UI,svx))
 
 $(eval $(call gb_UI_add_uifiles,svx,\
-	svx/source/dialog/compressgraphicdialog \
+	svx/uiconfig/ui/compressgraphicdialog \
 ))
 
 # vim: set noet sw=4 ts=4:

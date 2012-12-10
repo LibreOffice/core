@@ -1,47 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
-  <object class="GtkAdjustment" id="compression-adjustment">
-    <property name="lower">1</property>
-    <property name="upper">9</property>
-    <property name="value">9</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">1</property>
-  </object>
-  <object class="GtkAdjustment" id="height-adjustment">
-    <property name="lower">1</property>
-    <property name="upper">20000</property>
-    <property name="value">1</property>
-    <property name="step_increment">100</property>
-    <property name="page_increment">100</property>
-  </object>
-  <object class="GtkListStore" id="interpolation-method-store">
-    <columns>
-      <!-- column-name scale-method-name -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">None</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Bilinear</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Bicubic</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Lanczos</col>
-      </row>
-    </data>
-  </object>
-  <object class="GtkAdjustment" id="quality-adjustment">
-    <property name="lower">1</property>
-    <property name="upper">99</property>
-    <property name="value">90</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
   <object class="GtkDialog" id="CompressGraphicDialog">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
@@ -58,10 +17,13 @@
             <child>
               <object class="GtkButton" id="ok">
                 <property name="label">gtk-ok</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
+                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -73,10 +35,11 @@
             <child>
               <object class="GtkButton" id="cancel">
                 <property name="label">gtk-cancel</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="has_default">True</property>
                 <property name="receives_default">True</property>
+                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -141,7 +104,7 @@
                                 <property name="can_focus">False</property>
                                 <property name="hexpand">True</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">???</property>
+                                <property name="label">???</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -201,7 +164,7 @@
                                 <property name="can_focus">False</property>
                                 <property name="hexpand">True</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">???</property>
+                                <property name="label">???</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -216,7 +179,7 @@
                                 <property name="can_focus">False</property>
                                 <property name="hexpand">True</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">???</property>
+                                <property name="label">???</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -231,7 +194,7 @@
                                 <property name="can_focus">False</property>
                                 <property name="hexpand">True</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">???</property>
+                                <property name="label">???</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -243,9 +206,11 @@
                             <child>
                               <object class="GtkButton" id="calculate">
                                 <property name="label">Calculate</property>
+                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
+                                <property name="use_action_appearance">False</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -286,9 +251,11 @@
                 <child>
                   <object class="GtkRadioButton" id="radio-lossless">
                     <property name="label" translatable="yes">Lossless Compression</property>
+                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
+                    <property name="use_action_appearance">False</property>
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
@@ -303,9 +270,11 @@
                 <child>
                   <object class="GtkCheckButton" id="checkbox-reduce-resolution">
                     <property name="label" translatable="yes">Reduce Image Resolution</property>
+                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
+                    <property name="use_action_appearance">False</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -366,9 +335,11 @@
                 <child>
                   <object class="GtkRadioButton" id="radio-jpeg">
                     <property name="label" translatable="yes">JPEG Compression</property>
+                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
+                    <property name="use_action_appearance">False</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">radio-lossless</property>
@@ -607,6 +578,47 @@
       <action-widget response="0">ok</action-widget>
       <action-widget response="0">cancel</action-widget>
     </action-widgets>
+  </object>
+  <object class="GtkAdjustment" id="compression-adjustment">
+    <property name="lower">1</property>
+    <property name="upper">9</property>
+    <property name="value">9</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">1</property>
+  </object>
+  <object class="GtkAdjustment" id="height-adjustment">
+    <property name="lower">1</property>
+    <property name="upper">20000</property>
+    <property name="value">1</property>
+    <property name="step_increment">100</property>
+    <property name="page_increment">100</property>
+  </object>
+  <object class="GtkListStore" id="interpolation-method-store">
+    <columns>
+      <!-- column-name scale-method-name -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">None</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Bilinear</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Bicubic</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Lanczos</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkAdjustment" id="quality-adjustment">
+    <property name="lower">1</property>
+    <property name="upper">99</property>
+    <property name="value">90</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
   </object>
   <object class="GtkAdjustment" id="width-adjustment">
     <property name="lower">1</property>
