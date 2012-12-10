@@ -1298,6 +1298,21 @@ public:
         return stripStart(c) + stripEnd(c);
     }
 
+#ifdef LIBO_INTERNAL_ONLY
+    // This is to complement the RTL_FAST_STRING operator+, which allows any combination of valid operands,
+    // even two buffers. It's intentional it returns OUString, just like the operator+ would in the fast variant.
+#ifndef RTL_FAST_STRING
+    /**
+     @internal
+     @since LibreOffice 4.1
+    */
+    friend OUString operator+( const OUStringBuffer& str1, const OUStringBuffer& str2  ) SAL_THROW(())
+    {
+        return OUString( str1.pData ).concat( str2.pData );
+    }
+#endif
+#endif
+
 private:
     /**
         A pointer to the data structur which contains the data.
