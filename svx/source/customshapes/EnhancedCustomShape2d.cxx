@@ -1562,6 +1562,36 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                 }
                 break;
 
+                case QUADRATICCURVETO :
+                {
+                    for ( sal_uInt16 i = 0; ( i < nPntCount ) && ( ( rSrcPt + 1 ) < nCoordSize ); i++ )
+                    {
+                        if ( rSrcPt )
+                        {
+                            const Point aPreviousEndPoint(GetPoint( seqCoordinates[ rSrcPt - 1 ], sal_True, sal_True));
+                            const Point aControlQ(GetPoint( seqCoordinates[ rSrcPt++ ], sal_True, sal_True ));
+                            const Point aEnd(GetPoint( seqCoordinates[ rSrcPt++ ], sal_True, sal_True ));
+                            const Point aControlA((aPreviousEndPoint + (aControlQ * 2)) / 3);
+                            const Point aControlB(((aControlQ * 2) + aEnd) / 3);
+
+                            DBG_ASSERT(aNewB2DPolygon.count(), "EnhancedCustomShape2d::CreateSubPath: Error in adding Q control point (!)");
+                            aNewB2DPolygon.appendBezierSegment(
+                                basegfx::B2DPoint(aControlA.X(), aControlA.Y()),
+                                basegfx::B2DPoint(aControlB.X(), aControlB.Y()),
+                                basegfx::B2DPoint(aEnd.X(), aEnd.Y()));
+                        }
+                        else // no previous point , do a moveto
+                        {
+                            rSrcPt++; // skip control point
+                            const Point aEnd(GetPoint( seqCoordinates[ rSrcPt++ ], sal_True, sal_True ));
+
+                            DBG_ASSERT(aNewB2DPolygon.count(), "EnhancedCustomShape2d::CreateSubPath: Error in adding Q control point (!)");
+                            aNewB2DPolygon.append(basegfx::B2DPoint(aEnd.X(), aEnd.Y()));
+                        }
+                    }
+                }
+                break;
+
                 case ANGLEELLIPSE :
                 {
                     if ( nPntCount )
