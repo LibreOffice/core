@@ -5735,7 +5735,6 @@ return !(i != 0 && j != 0);
     fi
     if test "$HAVE_CXX0X" = "TRUE"; then
         AC_MSG_RESULT([yes ($CXXFLAGS_CXX11)])
-        AC_DEFINE([HAVE_CXX0X])
     else
         AC_MSG_RESULT([no])
     fi
