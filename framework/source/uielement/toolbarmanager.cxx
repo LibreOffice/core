@@ -41,6 +41,7 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
+#include <com/sun/star/ui/GlobalAcceleratorConfiguration.hpp>
 #include <com/sun/star/ui/XUIElementSettings.hpp>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
@@ -2267,9 +2268,7 @@ bool ToolBarManager::RetrieveShortcut( const rtl::OUString& rCommandURL, rtl::OU
 
             if ( !xGlobalAccelCfg.is() )
             {
-                xGlobalAccelCfg = Reference< XAcceleratorConfiguration >( m_xServiceManager->createInstance(
-                                                                            SERVICENAME_GLOBALACCELERATORCONFIGURATION ),
-                                                                          UNO_QUERY );
+                xGlobalAccelCfg = GlobalAcceleratorConfiguration::create( comphelper::getComponentContext(m_xServiceManager) );
                 m_xGlobalAcceleratorManager = xGlobalAccelCfg;
             }
         }

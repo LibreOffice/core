@@ -53,7 +53,7 @@ DEFINE_XTYPEPROVIDER_2_WITH_BASECLASS(GlobalAcceleratorConfiguration,
 
 DEFINE_XSERVICEINFO_MULTISERVICE(GlobalAcceleratorConfiguration                   ,
                                  ::cppu::OWeakObject                              ,
-                                 SERVICENAME_GLOBALACCELERATORCONFIGURATION       ,
+                                 DECLARE_ASCII("com.sun.star.ui.GlobalAcceleratorConfiguration"),
                                  IMPLEMENTATIONNAME_GLOBALACCELERATORCONFIGURATION)
 
 DEFINE_INIT_SERVICE(GlobalAcceleratorConfiguration,

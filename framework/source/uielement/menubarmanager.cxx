@@ -44,6 +44,7 @@
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <com/sun/star/frame/XUIControllerRegistration.hpp>
 #include <com/sun/star/lang/SystemDependent.hpp>
+#include <com/sun/star/ui/GlobalAcceleratorConfiguration.hpp>
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/ui/ImageType.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -1598,9 +1599,7 @@ void MenuBarManager::RetrieveShortcuts( std::vector< MenuItemHandler* >& aMenuSh
 
             if ( !xGlobalAccelCfg.is() )
             {
-                xGlobalAccelCfg = Reference< XAcceleratorConfiguration >( getServiceFactory()->createInstance(
-                                                                            SERVICENAME_GLOBALACCELERATORCONFIGURATION ),
-                                                                          UNO_QUERY );
+                xGlobalAccelCfg = GlobalAcceleratorConfiguration::create( comphelper::getComponentContext(getServiceFactory()) );
                 m_xGlobalAcceleratorManager = xGlobalAccelCfg;
             }
         }

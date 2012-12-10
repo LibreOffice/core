@@ -21,6 +21,7 @@
 
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/ui/GlobalAcceleratorConfiguration.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
@@ -142,11 +143,11 @@ void AcceleratorExecute::init(const css::uno::Reference< css::lang::XMultiServic
     css::uno::Reference< css::ui::XAcceleratorConfiguration > xDocCfg   ;
 
     // global cfg
-    xGlobalCfg = AcceleratorExecute::st_openGlobalConfig(xSMGR);
+    xGlobalCfg = css::ui::GlobalAcceleratorConfiguration::create(comphelper::getComponentContext(xSMGR));
     if (!bDesktopIsUsed)
     {
         // module cfg
-        xModuleCfg = AcceleratorExecute::st_openModuleConfig(xSMGR, xEnv);
+        xModuleCfg = AcceleratorExecute::st_openModuleConfig(comphelper::getComponentContext(xSMGR), xEnv);
 
         // doc cfg
         css::uno::Reference< css::frame::XController > xController;
@@ -365,20 +366,11 @@ KeyCode AcceleratorExecute::st_AWTKey2VCLKey(const css::awt::KeyEvent& aAWTKey)
 }
 
 //-----------------------------------------------
-css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st_openGlobalConfig(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
-{
-    css::uno::Reference< css::ui::XAcceleratorConfiguration > xAccCfg(
-        xSMGR->createInstance(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.GlobalAcceleratorConfiguration" ))),
-        css::uno::UNO_QUERY_THROW);
-    return xAccCfg;
-}
-
-//-----------------------------------------------
-css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st_openModuleConfig(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR ,
+css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st_openModuleConfig(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                                                                                                    const css::uno::Reference< css::frame::XFrame >&              xFrame)
 {
     css::uno::Reference< css::frame::XModuleManager2 > xModuleDetection(
-        css::frame::ModuleManager::create(comphelper::getComponentContext(xSMGR)));
+        css::frame::ModuleManager::create(rxContext));
 
     ::rtl::OUString sModule;
     try
@@ -391,7 +383,7 @@ css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st
         { return css::uno::Reference< css::ui::XAcceleratorConfiguration >(); }
 
     css::uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier > xUISupplier(
-        css::ui::ModuleUIConfigurationManagerSupplier::create(comphelper::getComponentContext(xSMGR)) );
+        css::ui::ModuleUIConfigurationManagerSupplier::create(rxContext) );
 
     css::uno::Reference< css::ui::XAcceleratorConfiguration > xAccCfg;
     try

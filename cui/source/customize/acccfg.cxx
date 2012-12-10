@@ -32,6 +32,7 @@
 #include <svl/stritem.hxx>
 #include "svtools/treelistentry.hxx"
 #include <com/sun/star/embed/StorageFactory.hpp>
+#include <com/sun/star/ui/GlobalAcceleratorConfiguration.hpp>
 
 #include <sal/macros.h>
 
@@ -77,7 +78,6 @@ using namespace com::sun::star;
 //-----------------------------------------------
 static ::rtl::OUString SERVICE_UICONFIGMGR              (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.UIConfigurationManager"              ));
 static ::rtl::OUString SERVICE_DESKTOP                  (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"                               ));
-static ::rtl::OUString SERVICE_GLOBALACCCFG             (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.GlobalAcceleratorConfiguration"      ));
 
 static ::rtl::OUString MODULEPROP_SHORTNAME             (RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryShortName"                                  ));
 static ::rtl::OUString MODULEPROP_UINAME                (RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryUIName"                                     ));
@@ -852,7 +852,7 @@ void SfxAcceleratorConfigPage::InitAccCfg()
         m_sModuleUIName    = lModuleProps.getUnpackedValueOrDefault(MODULEPROP_UINAME   , ::rtl::OUString());
 
         // get global accelerator configuration
-        m_xGlobal = css::uno::Reference< css::ui::XAcceleratorConfiguration >(m_xSMGR->createInstance(SERVICE_GLOBALACCCFG), css::uno::UNO_QUERY_THROW);
+        m_xGlobal = css::ui::GlobalAcceleratorConfiguration::create(comphelper::getComponentContext(m_xSMGR));
 
         // get module accelerator configuration
 

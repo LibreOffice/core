@@ -27,8 +27,7 @@ module com {  module sun {  module star {  module ui {
 
     @since OOo 2.0
 */
-service GlobalAcceleratorConfiguration : XAcceleratorConfiguration
-{};
+service GlobalAcceleratorConfiguration : XAcceleratorConfiguration;
 
 }; }; }; }; // com.sun.star
 

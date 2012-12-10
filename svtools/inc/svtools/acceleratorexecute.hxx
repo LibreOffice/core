@@ -25,6 +25,7 @@
 #include <vector>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
@@ -201,11 +202,11 @@ class SVT_DLLPUBLIC AcceleratorExecute : private TMutexInit
 
         //---------------------------------------
         /** TODO document me */
-        static css::uno::Reference< css::ui::XAcceleratorConfiguration > st_openGlobalConfig(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
+        static css::uno::Reference< css::ui::XAcceleratorConfiguration > st_openGlobalConfig(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
 
         //---------------------------------------
         /** TODO document me */
-        static css::uno::Reference< css::ui::XAcceleratorConfiguration > st_openModuleConfig(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR ,
+        static css::uno::Reference< css::ui::XAcceleratorConfiguration > st_openModuleConfig(const css::uno::Reference< css::uno::XComponentContext >& rxContext ,
                                                                                               const css::uno::Reference< css::frame::XFrame >&              xFrame);
 
         //---------------------------------------

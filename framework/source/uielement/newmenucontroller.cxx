@@ -32,6 +32,7 @@
 #include <com/sun/star/awt/MenuItemStyle.hpp>
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/GlobalAcceleratorConfiguration.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 
 #include <vcl/svapp.hxx>
@@ -215,9 +216,7 @@ void NewMenuController::setAccelerators( PopupMenu* pPopupMenu )
 
             if ( !xGlobalAccelCfg.is() )
             {
-                xGlobalAccelCfg = Reference< XAcceleratorConfiguration >( m_xServiceManager->createInstance(
-                                                                            SERVICENAME_GLOBALACCELERATORCONFIGURATION ),
-                                                                          UNO_QUERY );
+                xGlobalAccelCfg = GlobalAcceleratorConfiguration::create( comphelper::getComponentContext(m_xServiceManager) );
                 m_xGlobalAcceleratorManager = xGlobalAccelCfg;
             }
         }
