@@ -139,7 +139,7 @@ void Access::markChildAsModified(rtl::Reference< ChildAccess > const & child) {
     }
 }
 
-void Access::releaseChild(rtl::OUString const & name) {
+void Access::releaseChild(OUString const & name) {
     cachedChildren_.erase(name);
 }
 
@@ -210,22 +210,21 @@ css::uno::Sequence< sal_Int8 > Access::getImplementationId()
     return css::uno::Sequence< sal_Int8 >();
 }
 
-rtl::OUString Access::getImplementationName() throw (css::uno::RuntimeException)
+OUString Access::getImplementationName() throw (css::uno::RuntimeException)
 {
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
-    return rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("org.openoffice-configmgr::Access"));
+    return OUString("org.openoffice-configmgr::Access");
 }
 
-sal_Bool Access::supportsService(rtl::OUString const & ServiceName)
+sal_Bool Access::supportsService(OUString const & ServiceName)
     throw (css::uno::RuntimeException)
 {
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
-    css::uno::Sequence< rtl::OUString > names(getSupportedServiceNames());
+    css::uno::Sequence< OUString > names(getSupportedServiceNames());
     for (sal_Int32 i = 0; i < names.getLength(); ++i) {
         if (names[i] == ServiceName) {
             return true;
@@ -234,64 +233,42 @@ sal_Bool Access::supportsService(rtl::OUString const & ServiceName)
     return false;
 }
 
-css::uno::Sequence< rtl::OUString > Access::getSupportedServiceNames()
+css::uno::Sequence< OUString > Access::getSupportedServiceNames()
     throw (css::uno::RuntimeException)
 {
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
-    comphelper::SequenceAsVector< rtl::OUString > services;
+    comphelper::SequenceAsVector< OUString > services;
     services.push_back(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.ConfigurationAccess")));
+        OUString("com.sun.star.configuration.ConfigurationAccess"));
     if (getRootAccess()->isUpdate()) {
         services.push_back(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.configuration.ConfigurationUpdateAccess")));
+            OUString("com.sun.star.configuration.ConfigurationUpdateAccess"));
     }
     services.push_back(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.HierarchyAccess")));
+        OUString("com.sun.star.configuration.HierarchyAccess"));
     services.push_back(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.HierarchyElement")));
+        OUString("com.sun.star.configuration.HierarchyElement"));
     if (getNode()->kind() == Node::KIND_GROUP) {
         services.push_back(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.configuration.GroupAccess")));
+            OUString("com.sun.star.configuration.GroupAccess"));
         services.push_back(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.configuration.PropertyHierarchy")));
+            OUString("com.sun.star.configuration.PropertyHierarchy"));
         if (getRootAccess()->isUpdate()) {
             services.push_back(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.configuration.GroupUpdate")));
+                OUString("com.sun.star.configuration.GroupUpdate"));
         }
     } else {
         services.push_back(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.configuration.SetAccess")));
+            OUString("com.sun.star.configuration.SetAccess"));
         services.push_back(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.configuration.SimpleSetAccess")));
+            OUString("com.sun.star.configuration.SimpleSetAccess"));
         if (getRootAccess()->isUpdate()) {
             services.push_back(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.configuration.SetUpdate")));
+                OUString("com.sun.star.configuration.SetUpdate"));
             services.push_back(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.configuration.SimpleSetUpdate")));
+                OUString("com.sun.star.configuration.SimpleSetUpdate"));
         }
     }
     addSupportedServiceNames(&services);
@@ -306,9 +283,7 @@ void Access::dispose() throw (css::uno::RuntimeException) {
         checkLocalizedPropertyAccess();
         if (getParentAccess().is()) {
             throw css::uno::RuntimeException(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "configmgr dispose inappropriate Access")),
+                OUString("configmgr dispose inappropriate Access"),
                 static_cast< cppu::OWeakObject * >(this));
         }
         if (disposed_) {
@@ -331,7 +306,7 @@ void Access::addEventListener(
         checkLocalizedPropertyAccess();
         if (!xListener.is()) {
             throw css::uno::RuntimeException(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("null listener")),
+                OUString("null listener"),
                 static_cast< cppu::OWeakObject * >(this));
         }
         if (!disposed_) {
@@ -377,7 +352,7 @@ css::uno::Type Access::getElementType() throw (css::uno::RuntimeException) {
     default:
         assert(false);
         throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
+            OUString("this cannot happen"),
             static_cast< cppu::OWeakObject * >(this));
     }
 }
@@ -389,7 +364,7 @@ sal_Bool Access::hasElements() throw (css::uno::RuntimeException) {
     return !getAllChildren().empty(); //TODO: optimize
 }
 
-css::uno::Any Access::getByName(rtl::OUString const & aName)
+css::uno::Any Access::getByName(OUString const & aName)
     throw (
         css::container::NoSuchElementException,
         css::lang::WrappedTargetException, css::uno::RuntimeException)
@@ -405,14 +380,14 @@ css::uno::Any Access::getByName(rtl::OUString const & aName)
     return child->asValue();
 }
 
-css::uno::Sequence< rtl::OUString > Access::getElementNames()
+css::uno::Sequence< OUString > Access::getElementNames()
     throw (css::uno::RuntimeException)
 {
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     std::vector< rtl::Reference< ChildAccess > > children(getAllChildren());
-    comphelper::SequenceAsVector< rtl::OUString > names;
+    comphelper::SequenceAsVector< OUString > names;
     for (std::vector< rtl::Reference< ChildAccess > >::iterator i(
              children.begin());
          i != children.end(); ++i)
@@ -422,7 +397,7 @@ css::uno::Sequence< rtl::OUString > Access::getElementNames()
     return names.getAsConstList();
 }
 
-sal_Bool Access::hasByName(rtl::OUString const & aName)
+sal_Bool Access::hasByName(OUString const & aName)
     throw (css::uno::RuntimeException)
 {
     assert(thisIs(IS_ANY));
@@ -431,7 +406,7 @@ sal_Bool Access::hasByName(rtl::OUString const & aName)
     return getChild(aName).is();
 }
 
-css::uno::Any Access::getByHierarchicalName(rtl::OUString const & aName)
+css::uno::Any Access::getByHierarchicalName(OUString const & aName)
     throw (css::container::NoSuchElementException, css::uno::RuntimeException)
 {
     assert(thisIs(IS_ANY));
@@ -445,7 +420,7 @@ css::uno::Any Access::getByHierarchicalName(rtl::OUString const & aName)
     return child->asValue();
 }
 
-sal_Bool Access::hasByHierarchicalName(rtl::OUString const & aName)
+sal_Bool Access::hasByHierarchicalName(OUString const & aName)
     throw (css::uno::RuntimeException)
 {
     assert(thisIs(IS_ANY));
@@ -455,7 +430,7 @@ sal_Bool Access::hasByHierarchicalName(rtl::OUString const & aName)
 }
 
 void Access::replaceByHierarchicalName(
-    rtl::OUString const & aName, css::uno::Any const & aElement)
+    OUString const & aName, css::uno::Any const & aElement)
     throw (
         css::lang::IllegalArgumentException,
         css::container::NoSuchElementException,
@@ -483,17 +458,13 @@ void Access::replaceByHierarchicalName(
             break;
         case Node::KIND_SET:
             throw css::lang::IllegalArgumentException(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "configmgr::Access::replaceByHierarchicalName does not"
-                        " currently support set members")),
+                OUString("configmgr::Access::replaceByHierarchicalName does not"
+                        " currently support set members"),
                 static_cast< cppu::OWeakObject * >(this), 0);
         case Node::KIND_ROOT:
             throw css::lang::IllegalArgumentException(
-                (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "configmgr::Access::replaceByHierarchicalName does not"
-                        " allow changing component "))
+                (OUString("configmgr::Access::replaceByHierarchicalName does not"
+                        " allow changing component ")
                  + aName),
                 static_cast< cppu::OWeakObject * >(this), 0);
         default:
@@ -515,7 +486,7 @@ void Access::addContainerListener(
         checkLocalizedPropertyAccess();
         if (!xListener.is()) {
             throw css::uno::RuntimeException(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("null listener")),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("null listener")),
                 static_cast< cppu::OWeakObject * >(this));
         }
         if (!disposed_) {
@@ -542,7 +513,7 @@ void Access::removeContainerListener(
     }
 }
 
-rtl::OUString Access::getExactName(rtl::OUString const & aApproximateName)
+OUString Access::getExactName(OUString const & aApproximateName)
     throw (css::uno::RuntimeException)
 {
     assert(thisIs(IS_ANY));
@@ -567,7 +538,7 @@ css::uno::Sequence< css::beans::Property > Access::getProperties()
     return properties.getAsConstList();
 }
 
-css::beans::Property Access::getPropertyByName(rtl::OUString const & aName)
+css::beans::Property Access::getPropertyByName(OUString const & aName)
     throw (css::beans::UnknownPropertyException, css::uno::RuntimeException)
 {
     assert(thisIs(IS_GROUP));
@@ -580,7 +551,7 @@ css::beans::Property Access::getPropertyByName(rtl::OUString const & aName)
     return child->asProperty();
 }
 
-sal_Bool Access::hasPropertyByName(rtl::OUString const & Name)
+sal_Bool Access::hasPropertyByName(OUString const & Name)
     throw (css::uno::RuntimeException)
 {
     assert(thisIs(IS_GROUP));
@@ -588,18 +559,18 @@ sal_Bool Access::hasPropertyByName(rtl::OUString const & Name)
     return getChild(Name).is();
 }
 
-rtl::OUString Access::getHierarchicalName() throw (css::uno::RuntimeException) {
+OUString Access::getHierarchicalName() throw (css::uno::RuntimeException) {
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     // For backwards compatibility, return an absolute path representation where
     // available:
-    rtl::OUStringBuffer path;
+    OUStringBuffer path;
     rtl::Reference< RootAccess > root(getRootAccess());
     if (root.is()) {
         path.append(root->getAbsolutePathRepresentation());
     }
-    rtl::OUString rel(getRelativePathRepresentation());
+    OUString rel(getRelativePathRepresentation());
     if (path.getLength() != 0 && !rel.isEmpty()) {
         path.append(sal_Unicode('/'));
     }
@@ -607,8 +578,8 @@ rtl::OUString Access::getHierarchicalName() throw (css::uno::RuntimeException) {
     return path.makeStringAndClear();
 }
 
-rtl::OUString Access::composeHierarchicalName(
-    rtl::OUString const & aRelativeName)
+OUString Access::composeHierarchicalName(
+    OUString const & aRelativeName)
     throw (
         css::lang::IllegalArgumentException, css::lang::NoSupportException,
         css::uno::RuntimeException)
@@ -618,13 +589,11 @@ rtl::OUString Access::composeHierarchicalName(
     checkLocalizedPropertyAccess();
     if (aRelativeName.isEmpty() || aRelativeName[0] == '/') {
         throw css::lang::IllegalArgumentException(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "configmgr composeHierarchicalName inappropriate relative"
-                    " name")),
+            OUString("configmgr composeHierarchicalName inappropriate relative"
+                    " name"),
             static_cast< cppu::OWeakObject * >(this), -1);
     }
-    rtl::OUStringBuffer path(getRelativePathRepresentation());
+    OUStringBuffer path(getRelativePathRepresentation());
     if (path.getLength() != 0) {
         path.append(sal_Unicode('/'));
     }
@@ -632,14 +601,14 @@ rtl::OUString Access::composeHierarchicalName(
     return path.makeStringAndClear();
 }
 
-rtl::OUString Access::getName() throw (css::uno::RuntimeException) {
+OUString Access::getName() throw (css::uno::RuntimeException) {
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     return getNameInternal();
 }
 
-void Access::setName(rtl::OUString const & aName)
+void Access::setName(OUString const & aName)
     throw (css::uno::RuntimeException)
 {
     assert(thisIs(IS_ANY));
@@ -693,9 +662,7 @@ void Access::setName(rtl::OUString const & aName)
             // renaming a property could only work for an extension property,
             // but a localized property is never an extension property
             throw css::uno::RuntimeException(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "configmgr setName inappropriate node")),
+                OUString("configmgr setName inappropriate node"),
                 static_cast< cppu::OWeakObject * >(this));
         default:
             assert(false); // this cannot happen
@@ -722,7 +689,7 @@ css::uno::Reference< css::beans::XPropertySetInfo > Access::getPropertySetInfo()
 }
 
 void Access::setPropertyValue(
-    rtl::OUString const & aPropertyName, css::uno::Any const & aValue)
+    OUString const & aPropertyName, css::uno::Any const & aValue)
     throw (
         css::beans::UnknownPropertyException, css::beans::PropertyVetoException,
         css::lang::IllegalArgumentException, css::lang::WrappedTargetException,
@@ -734,9 +701,7 @@ void Access::setPropertyValue(
         osl::MutexGuard g(*lock_);
         if (!getRootAccess()->isUpdate()) {
             throw css::uno::RuntimeException(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "configmgr setPropertyValue on non-update access")),
+                OUString("configmgr setPropertyValue on non-update access"),
                 static_cast< cppu::OWeakObject * >(this));
         }
         Modifications localMods;
@@ -749,7 +714,7 @@ void Access::setPropertyValue(
     bc.send();
 }
 
-css::uno::Any Access::getPropertyValue(rtl::OUString const & PropertyName)
+css::uno::Any Access::getPropertyValue(OUString const & PropertyName)
     throw (
         css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
         css::uno::RuntimeException)
@@ -765,7 +730,7 @@ css::uno::Any Access::getPropertyValue(rtl::OUString const & PropertyName)
 }
 
 void Access::addPropertyChangeListener(
-    rtl::OUString const & aPropertyName,
+    OUString const & aPropertyName,
     css::uno::Reference< css::beans::XPropertyChangeListener > const &
         xListener)
     throw (
@@ -777,7 +742,7 @@ void Access::addPropertyChangeListener(
         osl::MutexGuard g(*lock_);
         if (!xListener.is()) {
             throw css::uno::RuntimeException(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("null listener")),
+                OUString("null listener"),
                 static_cast< cppu::OWeakObject * >(this));
         }
         checkKnownProperty(aPropertyName);
@@ -793,7 +758,7 @@ void Access::addPropertyChangeListener(
 }
 
 void Access::removePropertyChangeListener(
-    rtl::OUString const & aPropertyName,
+    OUString const & aPropertyName,
     css::uno::Reference< css::beans::XPropertyChangeListener > const &
         aListener)
     throw (
@@ -817,7 +782,7 @@ void Access::removePropertyChangeListener(
 }
 
 void Access::addVetoableChangeListener(
-    rtl::OUString const & PropertyName,
+    OUString const & PropertyName,
     css::uno::Reference< css::beans::XVetoableChangeListener > const &
         aListener)
     throw (
@@ -829,7 +794,7 @@ void Access::addVetoableChangeListener(
         osl::MutexGuard g(*lock_);
         if (!aListener.is()) {
             throw css::uno::RuntimeException(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("null listener")),
+                OUString("null listener"),
                 static_cast< cppu::OWeakObject * >(this));
         }
         checkKnownProperty(PropertyName);
@@ -846,7 +811,7 @@ void Access::addVetoableChangeListener(
 }
 
 void Access::removeVetoableChangeListener(
-    rtl::OUString const & PropertyName,
+    OUString const & PropertyName,
     css::uno::Reference< css::beans::XVetoableChangeListener > const &
         aListener)
     throw (
@@ -870,7 +835,7 @@ void Access::removeVetoableChangeListener(
 }
 
 void Access::setPropertyValues(
-    css::uno::Sequence< rtl::OUString > const & aPropertyNames,
+    css::uno::Sequence< OUString > const & aPropertyNames,
     css::uno::Sequence< css::uno::Any > const & aValues)
     throw (
         css::beans::PropertyVetoException, css::lang::IllegalArgumentException,
@@ -882,27 +847,21 @@ void Access::setPropertyValues(
         osl::MutexGuard g(*lock_);
         if (!getRootAccess()->isUpdate()) {
             throw css::uno::RuntimeException(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "configmgr setPropertyValues on non-update access")),
+                OUString("configmgr setPropertyValues on non-update access"),
                 static_cast< cppu::OWeakObject * >(this));
         }
         if (aPropertyNames.getLength() != aValues.getLength()) {
             throw css::lang::IllegalArgumentException(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "configmgr setPropertyValues: aPropertyNames/aValues of"
-                        " different length")),
+                OUString("configmgr setPropertyValues: aPropertyNames/aValues of"
+                        " different length"),
                 static_cast< cppu::OWeakObject * >(this), -1);
         }
         Modifications localMods;
         for (sal_Int32 i = 0; i < aPropertyNames.getLength(); ++i) {
             if (!setChildProperty(aPropertyNames[i], aValues[i], &localMods)) {
                 throw css::lang::IllegalArgumentException(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "configmgr setPropertyValues inappropriate property"
-                            " name")),
+                    OUString("configmgr setPropertyValues inappropriate property"
+                            " name"),
                     static_cast< cppu::OWeakObject * >(this), -1);
             }
         }
@@ -912,7 +871,7 @@ void Access::setPropertyValues(
 }
 
 css::uno::Sequence< css::uno::Any > Access::getPropertyValues(
-    css::uno::Sequence< rtl::OUString > const & aPropertyNames)
+    css::uno::Sequence< OUString > const & aPropertyNames)
     throw (css::uno::RuntimeException)
 {
     assert(thisIs(IS_GROUP));
@@ -922,10 +881,8 @@ css::uno::Sequence< css::uno::Any > Access::getPropertyValues(
         rtl::Reference< ChildAccess > child(getChild(aPropertyNames[i]));
         if (!child.is()) {
             throw css::uno::RuntimeException(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "configmgr getPropertyValues inappropriate property"
-                        " name")),
+                OUString("configmgr getPropertyValues inappropriate property"
+                        " name"),
                 static_cast< cppu::OWeakObject * >(this));
         }
         vals[i] = child->asValue();
@@ -934,7 +891,7 @@ css::uno::Sequence< css::uno::Any > Access::getPropertyValues(
 }
 
 void Access::addPropertiesChangeListener(
-    css::uno::Sequence< rtl::OUString > const &,
+    css::uno::Sequence< OUString > const &,
     css::uno::Reference< css::beans::XPropertiesChangeListener > const &
         xListener)
     throw (css::uno::RuntimeException)
@@ -944,7 +901,7 @@ void Access::addPropertiesChangeListener(
         osl::MutexGuard g(*lock_);
         if (!xListener.is()) {
             throw css::uno::RuntimeException(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("null listener")),
+                OUString("null listener"),
                 static_cast< cppu::OWeakObject * >(this));
         }
         if (!disposed_) {
@@ -973,7 +930,7 @@ void Access::removePropertiesChangeListener(
 }
 
 void Access::firePropertiesChangeEvent(
-    css::uno::Sequence< rtl::OUString > const & aPropertyNames,
+    css::uno::Sequence< OUString > const & aPropertyNames,
     css::uno::Reference< css::beans::XPropertiesChangeListener > const &
         xListener)
     throw (css::uno::RuntimeException)
@@ -997,7 +954,7 @@ Access::getHierarchicalPropertySetInfo() throw (css::uno::RuntimeException) {
 }
 
 void Access::setHierarchicalPropertyValue(
-    rtl::OUString const & aHierarchicalPropertyName,
+    OUString const & aHierarchicalPropertyName,
     css::uno::Any const & aValue)
     throw (
         css::beans::UnknownPropertyException, css::beans::PropertyVetoException,
@@ -1010,10 +967,8 @@ void Access::setHierarchicalPropertyValue(
         osl::MutexGuard g(*lock_);
         if (!getRootAccess()->isUpdate()) {
             throw css::uno::RuntimeException(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "configmgr setHierarchicalPropertyName on non-update"
-                        " access")),
+                OUString("configmgr setHierarchicalPropertyName on non-update"
+                        " access"),
                 static_cast< cppu::OWeakObject * >(this));
         }
         rtl::Reference< ChildAccess > child(
@@ -1032,7 +987,7 @@ void Access::setHierarchicalPropertyValue(
 }
 
 css::uno::Any Access::getHierarchicalPropertyValue(
-    rtl::OUString const & aHierarchicalPropertyName)
+    OUString const & aHierarchicalPropertyName)
     throw (
         css::beans::UnknownPropertyException,
         css::lang::IllegalArgumentException, css::lang::WrappedTargetException,
@@ -1050,7 +1005,7 @@ css::uno::Any Access::getHierarchicalPropertyValue(
 }
 
 void Access::setHierarchicalPropertyValues(
-    css::uno::Sequence< rtl::OUString > const & aHierarchicalPropertyNames,
+    css::uno::Sequence< OUString > const & aHierarchicalPropertyNames,
     css::uno::Sequence< css::uno::Any > const & Values)
     throw (
         css::beans::PropertyVetoException, css::lang::IllegalArgumentException,
@@ -1062,18 +1017,14 @@ void Access::setHierarchicalPropertyValues(
         osl::MutexGuard g(*lock_);
         if (!getRootAccess()->isUpdate()) {
             throw css::uno::RuntimeException(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "configmgr setPropertyValues on non-update access")),
+                OUString("configmgr setPropertyValues on non-update access"),
                 static_cast< cppu::OWeakObject * >(this));
         }
         if (aHierarchicalPropertyNames.getLength() != Values.getLength()) {
             throw css::lang::IllegalArgumentException(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "configmgr setHierarchicalPropertyValues:"
+                OUString("configmgr setHierarchicalPropertyValues:"
                         " aHierarchicalPropertyNames/Values of different"
-                        " length")),
+                        " length"),
                 static_cast< cppu::OWeakObject * >(this), -1);
         }
         Modifications localMods;
@@ -1082,10 +1033,8 @@ void Access::setHierarchicalPropertyValues(
                 getSubChild(aHierarchicalPropertyNames[i]));
             if (!child.is()) {
                 throw css::lang::IllegalArgumentException(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "configmgr setHierarchicalPropertyValues"
-                            " inappropriate property name")),
+                    OUString("configmgr setHierarchicalPropertyValues"
+                            " inappropriate property name"),
                     static_cast< cppu::OWeakObject * >(this), -1);
             }
             child->checkFinalized();
@@ -1097,7 +1046,7 @@ void Access::setHierarchicalPropertyValues(
 }
 
 css::uno::Sequence< css::uno::Any > Access::getHierarchicalPropertyValues(
-    css::uno::Sequence< rtl::OUString > const & aHierarchicalPropertyNames)
+    css::uno::Sequence< OUString > const & aHierarchicalPropertyNames)
     throw (
         css::lang::IllegalArgumentException, css::lang::WrappedTargetException,
         css::uno::RuntimeException)
@@ -1111,10 +1060,8 @@ css::uno::Sequence< css::uno::Any > Access::getHierarchicalPropertyValues(
             getSubChild(aHierarchicalPropertyNames[i]));
         if (!child.is()) {
             throw css::lang::IllegalArgumentException(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "configmgr getHierarchicalPropertyValues inappropriate"
-                        " hierarchical property name")),
+                OUString("configmgr getHierarchicalPropertyValues inappropriate"
+                        " hierarchical property name"),
                 static_cast< cppu::OWeakObject * >(this), -1);
         }
         vals[i] = child->asValue();
@@ -1123,7 +1070,7 @@ css::uno::Sequence< css::uno::Any > Access::getHierarchicalPropertyValues(
 }
 
 css::beans::Property Access::getPropertyByHierarchicalName(
-    rtl::OUString const & aHierarchicalName)
+    OUString const & aHierarchicalName)
     throw (css::beans::UnknownPropertyException, css::uno::RuntimeException)
 {
     assert(thisIs(IS_GROUP));
@@ -1137,7 +1084,7 @@ css::beans::Property Access::getPropertyByHierarchicalName(
 }
 
 sal_Bool Access::hasPropertyByHierarchicalName(
-    rtl::OUString const & aHierarchicalName)
+    OUString const & aHierarchicalName)
     throw (css::uno::RuntimeException)
 {
     assert(thisIs(IS_GROUP));
@@ -1146,7 +1093,7 @@ sal_Bool Access::hasPropertyByHierarchicalName(
 }
 
 void Access::replaceByName(
-    rtl::OUString const & aName, css::uno::Any const & aElement)
+    OUString const & aName, css::uno::Any const & aElement)
     throw (
         css::lang::IllegalArgumentException,
         css::container::NoSuchElementException,
@@ -1190,7 +1137,7 @@ void Access::replaceByName(
 }
 
 void Access::insertByName(
-    rtl::OUString const & aName, css::uno::Any const & aElement)
+    OUString const & aName, css::uno::Any const & aElement)
     throw (
         css::lang::IllegalArgumentException,
         css::container::ElementExistException,
@@ -1241,7 +1188,7 @@ void Access::insertByName(
     bc.send();
 }
 
-void Access::removeByName(rtl::OUString const & aName)
+void Access::removeByName(OUString const & aName)
     throw (
         css::container::NoSuchElementException,
         css::lang::WrappedTargetException, css::uno::RuntimeException)
@@ -1282,13 +1229,13 @@ css::uno::Reference< css::uno::XInterface > Access::createInstance()
     throw (css::uno::Exception, css::uno::RuntimeException)
 {
     assert(thisIs(IS_SET|IS_UPDATE));
-    rtl::OUString tmplName(
+    OUString tmplName(
         dynamic_cast< SetNode * >(getNode().get())->getDefaultTemplateName());
     rtl::Reference< Node > tmpl(
         components_.getTemplate(Data::NO_LAYER, tmplName));
     if (!tmpl.is()) {
         throw css::uno::Exception(
-            (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("unknown template ")) +
+            (OUString("unknown template ") +
              tmplName),
             static_cast< cppu::OWeakObject * >(this));
     }
@@ -1305,10 +1252,8 @@ css::uno::Reference< css::uno::XInterface > Access::createInstanceWithArguments(
     assert(thisIs(IS_SET|IS_UPDATE));
     if (aArguments.getLength() != 0) {
         throw css::uno::Exception(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "configuration SimpleSetUpdate createInstanceWithArguments"
-                    " must not specify any arguments")),
+            OUString("configuration SimpleSetUpdate createInstanceWithArguments"
+                    " must not specify any arguments"),
             static_cast< cppu::OWeakObject * >(this));
     }
     return createInstance();
@@ -1465,9 +1410,7 @@ void Access::checkLocalizedPropertyAccess() {
         !Components::allLocales(getRootAccess()->getLocale()))
     {
         throw css::uno::RuntimeException(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "configmgr Access to specialized LocalizedPropertyNode")),
+            OUString("configmgr Access to specialized LocalizedPropertyNode"),
             static_cast< cppu::OWeakObject * >(this));
     }
 }
@@ -1477,7 +1420,7 @@ rtl::Reference< Node > Access::getParentNode() {
     return parent.is() ? parent->getNode() : rtl::Reference< Node >();
 }
 
-rtl::Reference< ChildAccess > Access::getChild(rtl::OUString const & name) {
+rtl::Reference< ChildAccess > Access::getChild(OUString const & name) {
     if (getNode()->kind() == Node::KIND_LOCALIZED_PROPERTY && name.match("*")) {
         OUString locale(name.copy(1));
         if (locale.match("*")) {
@@ -1609,15 +1552,13 @@ void Access::checkValue(css::uno::Any const & value, Type type, bool nillable) {
     }
     if (!ok) {
         throw css::lang::IllegalArgumentException(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "configmgr inappropriate property value")),
+            OUString("configmgr inappropriate property value"),
             static_cast< cppu::OWeakObject * >(this), -1);
     }
 }
 
 void Access::insertLocalizedValueChild(
-    rtl::OUString const & name, css::uno::Any const & value,
+    OUString const & name, css::uno::Any const & value,
     Modifications * localModifications)
 {
     assert(localModifications != 0);
@@ -1755,7 +1696,7 @@ void Access::initBroadcasterAndChanges(
                                         css::uno::Any()));
                             }
                         }
-                        j = propertyChangeListeners_.find(rtl::OUString());
+                        j = propertyChangeListeners_.find(OUString());
                         if (j != propertyChangeListeners_.end()) {
                             for (PropertyChangeListenersElement::iterator k(
                                      j->second.begin());
@@ -1843,7 +1784,7 @@ void Access::initBroadcasterAndChanges(
                                     css::uno::Any()));
                         }
                     }
-                    j = propertyChangeListeners_.find(rtl::OUString());
+                    j = propertyChangeListeners_.find(OUString());
                     if (j != propertyChangeListeners_.end()) {
                         for (PropertyChangeListenersElement::iterator k(
                                  j->second.begin());
@@ -1931,13 +1872,13 @@ void Access::initBroadcasterAndChanges(
                         //TODO: non-void ReplacedElement
                 }
                 if (allChanges != 0) {
-                    rtl::OUStringBuffer path(getRelativePathRepresentation());
+                    OUStringBuffer path(getRelativePathRepresentation());
                     if (path.getLength() != 0) {
                         path.append(sal_Unicode('/'));
                     }
                     path.append(
                         Data::createSegment(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")),
+                            OUString("*"),
                             i->first));
                     allChanges->push_back(
                         css::util::ElementChange(
@@ -1977,7 +1918,7 @@ void Access::initBroadcasterAndChanges(
                                     css::uno::Any()));
                         }
                     }
-                    j = propertyChangeListeners_.find(rtl::OUString());
+                    j = propertyChangeListeners_.find(OUString());
                     if (j != propertyChangeListeners_.end()) {
                         for (PropertyChangeListenersElement::iterator k(
                                  j->second.begin());
@@ -1992,7 +1933,7 @@ void Access::initBroadcasterAndChanges(
                         }
                     }
                     if (allChanges != 0) {
-                        rtl::OUStringBuffer path(
+                        OUStringBuffer path(
                             getRelativePathRepresentation());
                         if (path.getLength() != 0) {
                             path.append(sal_Unicode('/'));
@@ -2029,14 +1970,14 @@ void Access::initBroadcasterAndChanges(
                             //TODO: non-void ReplacedElement
                     }
                     if (allChanges != 0) {
-                        rtl::OUStringBuffer path(
+                        OUStringBuffer path(
                             getRelativePathRepresentation());
                         if (path.getLength() != 0) {
                             path.append(sal_Unicode('/'));
                         }
                         path.append(
                             Data::createSegment(
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")),
+                                OUString("*"),
                                 i->first));
                         allChanges->push_back(
                             css::util::ElementChange(
@@ -2086,7 +2027,7 @@ rtl::Reference< ChildAccess > Access::getModifiedChild(
 }
 
 rtl::Reference< ChildAccess > Access::getUnmodifiedChild(
-    rtl::OUString const & name)
+    OUString const & name)
 {
     assert(modifiedChildren_.find(name) == modifiedChildren_.end());
     rtl::Reference< Node > node(getNode()->getMember(name));
@@ -2111,7 +2052,7 @@ rtl::Reference< ChildAccess > Access::getUnmodifiedChild(
     return child;
 }
 
-rtl::Reference< ChildAccess > Access::getSubChild(rtl::OUString const & path) {
+rtl::Reference< ChildAccess > Access::getSubChild(OUString const & path) {
     sal_Int32 i = 0;
     // For backwards compatibility, allow absolute paths where meaningful:
     if (!path.isEmpty() && path[0] == '/') {
@@ -2121,17 +2062,17 @@ rtl::Reference< ChildAccess > Access::getSubChild(rtl::OUString const & path) {
         }
         Path abs(getAbsolutePath());
         for (Path::iterator j(abs.begin()); j != abs.end(); ++j) {
-            rtl::OUString name1;
+            OUString name1;
             bool setElement1;
-            rtl::OUString templateName1;
+            OUString templateName1;
             i = Data::parseSegment(
                 path, i, &name1, &setElement1, &templateName1);
             if (i == -1 || (i != path.getLength() && path[i] != '/')) {
                 return rtl::Reference< ChildAccess >();
             }
-            rtl::OUString name2;
+            OUString name2;
             bool setElement2;
-            rtl::OUString templateName2;
+            OUString templateName2;
             Data::parseSegment(*j, 0, &name2, &setElement2, &templateName2);
             if (name1 != name2 || setElement1 != setElement2 ||
                 (setElement1 &&
@@ -2145,9 +2086,9 @@ rtl::Reference< ChildAccess > Access::getSubChild(rtl::OUString const & path) {
         }
     }
     for (rtl::Reference< Access > parent(this);;) {
-        rtl::OUString name;
+        OUString name;
         bool setElement;
-        rtl::OUString templateName;
+        OUString templateName;
         i = Data::parseSegment(path, i, &name, &setElement, &templateName);
         if (i == -1 || (i != path.getLength() && path[i] != '/')) {
             return rtl::Reference< ChildAccess >();
@@ -2192,7 +2133,7 @@ rtl::Reference< ChildAccess > Access::getSubChild(rtl::OUString const & path) {
 }
 
 bool Access::setChildProperty(
-    rtl::OUString const & name, css::uno::Any const & value,
+    OUString const & name, css::uno::Any const & value,
     Modifications * localModifications)
 {
     assert(localModifications != 0);
@@ -2263,14 +2204,12 @@ css::beans::Property Access::asProperty() {
 void Access::checkFinalized() {
     if (isFinalized()) {
         throw css::lang::IllegalArgumentException(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "configmgr modification of finalized item")),
+            OUString("configmgr modification of finalized item"),
             static_cast< cppu::OWeakObject * >(this), -1);
     }
 }
 
-void Access::checkKnownProperty(rtl::OUString const & descriptor) {
+void Access::checkKnownProperty(OUString const & descriptor) {
     if (descriptor.isEmpty()) {
         return;
     }
@@ -2313,9 +2252,7 @@ rtl::Reference< ChildAccess > Access::getFreeSetMember(
          freeAcc->getRootAccess() != getRootAccess()))
     {
         throw css::lang::IllegalArgumentException(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "configmgr inappropriate set element")),
+            OUString("configmgr inappropriate set element"),
             static_cast< cppu::OWeakObject * >(this), 1);
     }
     assert(dynamic_cast< SetNode * >(getNode().get()) != 0);
@@ -2323,9 +2260,7 @@ rtl::Reference< ChildAccess > Access::getFreeSetMember(
             freeAcc->getNode()->getTemplateName()))
     {
         throw css::lang::IllegalArgumentException(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "configmgr inappropriate set element")),
+            OUString("configmgr inappropriate set element"),
             static_cast< cppu::OWeakObject * >(this), 1);
     }
     return freeAcc;

@@ -61,7 +61,7 @@ public:
 
     void start(
         rtl::Reference< Node > const & property,
-        rtl::OUString const & localizedName = rtl::OUString());
+        OUString const & localizedName = OUString());
 
     int getLayer() const;
 
@@ -75,7 +75,7 @@ private:
 
     int layer_;
     rtl::Reference< Node > node_;
-    rtl::OUString localizedName_;
+    OUString localizedName_;
     State state_;
     xmlreader::Pad pad_;
     std::vector< com::sun::star::uno::Any > items_;

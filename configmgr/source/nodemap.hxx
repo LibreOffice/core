@@ -24,13 +24,12 @@
 #include <map>
 #include "rtl/ref.hxx"
 
-namespace rtl { class OUString; }
 
 namespace configmgr {
 
 class Node;
 
-typedef std::map< rtl::OUString, rtl::Reference< Node > > NodeMap;
+typedef std::map< OUString, rtl::Reference< Node > > NodeMap;
 
 void cloneNodeMap(NodeMap const & source, NodeMap * target);
 

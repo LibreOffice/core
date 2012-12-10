@@ -139,7 +139,7 @@ bool parseValue(xmlreader::Span const & text, double * value) {
     return true;
 }
 
-bool parseValue(xmlreader::Span const & text, rtl::OUString * value) {
+bool parseValue(xmlreader::Span const & text, OUString * value) {
     assert(text.is() && value != 0);
     *value = text.convertFromUtf8();
     return true;
@@ -173,7 +173,7 @@ template< typename T > css::uno::Any parseSingleValue(
     T val;
     if (!parseValue(text, &val)) {
         throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("invalid value")),
+            OUString("invalid value"),
             css::uno::Reference< css::uno::XInterface >());
     }
     return css::uno::makeAny(val);
@@ -198,7 +198,7 @@ template< typename T > css::uno::Any parseListValue(
                     xmlreader::Span(t.begin, i == -1 ? t.length : i), &val))
             {
                 throw css::uno::RuntimeException(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("invalid value")),
+                    OUString("invalid value"),
                     css::uno::Reference< css::uno::XInterface >());
             }
             seq.push_back(val);
@@ -218,8 +218,7 @@ css::uno::Any parseValue(
     switch (type) {
     case TYPE_ANY:
         throw css::uno::RuntimeException(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("invalid value of type any")),
+            OUString("invalid value of type any"),
             css::uno::Reference< css::uno::XInterface >());
     case TYPE_BOOLEAN:
         return parseSingleValue< sal_Bool >(text);
@@ -232,7 +231,7 @@ css::uno::Any parseValue(
     case TYPE_DOUBLE:
         return parseSingleValue< double >(text);
     case TYPE_STRING:
-        return parseSingleValue< rtl::OUString >(text);
+        return parseSingleValue< OUString >(text);
     case TYPE_HEXBINARY:
         return parseSingleValue< css::uno::Sequence< sal_Int8 > >(text);
     case TYPE_BOOLEAN_LIST:
@@ -246,14 +245,14 @@ css::uno::Any parseValue(
     case TYPE_DOUBLE_LIST:
         return parseListValue< double >(separator, text);
     case TYPE_STRING_LIST:
-        return parseListValue< rtl::OUString >(separator, text);
+        return parseListValue< OUString >(separator, text);
     case TYPE_HEXBINARY_LIST:
         return parseListValue< css::uno::Sequence< sal_Int8 > >(
             separator, text);
     default:
         assert(false);
         throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
+            OUString("this cannot happen"),
             css::uno::Reference< css::uno::XInterface >());
     }
 }
@@ -287,7 +286,7 @@ xmlreader::XmlReader::Text ValueParser::getTextMode() const {
 
 bool ValueParser::startElement(
     xmlreader::XmlReader & reader, int nsId, xmlreader::Span const & name,
-    std::set< rtl::OUString > const *)
+    std::set< OUString > const *)
 {
     if (!node_.is()) {
         return false;
@@ -337,9 +336,7 @@ bool ValueParser::startElement(
                 pad_.add(RTL_CONSTASCII_STRINGPARAM("\xEF\xBF\xBF"));
             } else {
                 throw css::uno::RuntimeException(
-                    (rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "bad unicode scalar attribute in ")) +
+                    (OUString("bad unicode scalar attribute in ") +
                      reader.getUrl()),
                     css::uno::Reference< css::uno::XInterface >());
             }
@@ -351,9 +348,9 @@ bool ValueParser::startElement(
         break;
     }
     throw css::uno::RuntimeException(
-        (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad member <")) +
+        (OUString("bad member <") +
          name.convertFromUtf8() +
-         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("> in ")) + reader.getUrl()),
+         OUString("> in ") + reader.getUrl()),
         css::uno::Reference< css::uno::XInterface >());
 }
 
@@ -386,7 +383,7 @@ bool ValueParser::endElement() {
                     value = convertItems< double >();
                     break;
                 case TYPE_STRING_LIST:
-                    value = convertItems< rtl::OUString >();
+                    value = convertItems< OUString >();
                     break;
                 case TYPE_HEXBINARY_LIST:
                     value = convertItems< css::uno::Sequence< sal_Int8 > >();
@@ -447,7 +444,7 @@ void ValueParser::characters(xmlreader::Span const & text) {
 }
 
 void ValueParser::start(
-    rtl::Reference< Node > const & node, rtl::OUString const & localizedName)
+    rtl::Reference< Node > const & node, OUString const & localizedName)
 {
     assert(node.is() && !node_.is());
     node_ = node;

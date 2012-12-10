@@ -28,7 +28,6 @@
 #include "salhelper/simplereferenceobject.hxx"
 #include "xmlreader/xmlreader.hxx"
 
-namespace rtl { class OUString; }
 namespace xmlreader { struct Span; }
 
 namespace configmgr {
@@ -39,7 +38,7 @@ public:
 
     virtual bool startElement(
         xmlreader::XmlReader & reader, int nsId, xmlreader::Span const & name,
-        std::set< rtl::OUString > const * existingDependencies) = 0;
+        std::set< OUString > const * existingDependencies) = 0;
 
     virtual void endElement(xmlreader::XmlReader const & reader) = 0;
 

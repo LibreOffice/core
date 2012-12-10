@@ -27,7 +27,6 @@
 
 #include "node.hxx"
 
-namespace rtl { class OUString; }
 
 namespace configmgr {
 
@@ -37,7 +36,7 @@ public:
 
     virtual rtl::Reference< Node > clone(bool keepTemplateName) const;
 
-    virtual rtl::OUString getTemplateName() const;
+    virtual OUString getTemplateName() const;
 
     com::sun::star::uno::Any getValue() const;
 

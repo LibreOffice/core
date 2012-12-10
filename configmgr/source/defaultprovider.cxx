@@ -42,17 +42,13 @@ css::uno::Reference< css::uno::XInterface > create(
     return singleton;
 }
 
-rtl::OUString getImplementationName() {
-    return rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.comp.configuration.DefaultProvider"));
+OUString getImplementationName() {
+    return OUString("com.sun.star.comp.configuration.DefaultProvider");
 }
 
-css::uno::Sequence< rtl::OUString > getSupportedServiceNames() {
-    rtl::OUString name(
-        RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.configuration.DefaultProvider"));
-    return css::uno::Sequence< rtl::OUString >(&name, 1);
+css::uno::Sequence< OUString > getSupportedServiceNames() {
+    OUString name("com.sun.star.configuration.DefaultProvider");
+    return css::uno::Sequence< OUString >(&name, 1);
 }
 
 } }

@@ -73,10 +73,8 @@ char const updateAccessServiceName[] =
 
 void badNodePath() {
     throw css::uno::Exception(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.ConfigurationProvider expects a"
-                " single, non-empty, string nodepath argument")),
+        OUString("com.sun.star.configuration.ConfigurationProvider expects a"
+                " single, non-empty, string nodepath argument"),
         0);
 }
 
@@ -93,7 +91,7 @@ class Service:
 public:
     Service(
         css::uno::Reference< css::uno::XComponentContext > const context,
-        rtl::OUString const & locale):
+        OUString const & locale):
         ServiceBase(*static_cast< osl::Mutex * >(this)), context_(context),
         locale_(locale)
     {
@@ -106,29 +104,29 @@ private:
 
     virtual void SAL_CALL disposing() { flushModifications(); }
 
-    virtual rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException)
     { return configuration_provider::getImplementationName(); }
 
-    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & ServiceName)
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
         throw (css::uno::RuntimeException)
     { return ServiceName == getSupportedServiceNames()[0]; } //TODO
 
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL
+    virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() throw (css::uno::RuntimeException)
     { return configuration_provider::getSupportedServiceNames(); }
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(
-        rtl::OUString const & aServiceSpecifier)
+        OUString const & aServiceSpecifier)
         throw (css::uno::Exception, css::uno::RuntimeException);
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
     createInstanceWithArguments(
-        rtl::OUString const & ServiceSpecifier,
+        OUString const & ServiceSpecifier,
         css::uno::Sequence< css::uno::Any > const & Arguments)
         throw (css::uno::Exception, css::uno::RuntimeException);
 
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL
+    virtual css::uno::Sequence< OUString > SAL_CALL
     getAvailableServiceNames() throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL refresh() throw (css::uno::RuntimeException);
@@ -160,12 +158,12 @@ private:
     void flushModifications() const;
 
     css::uno::Reference< css::uno::XComponentContext > context_;
-    rtl::OUString locale_;
+    OUString locale_;
     boost::shared_ptr<osl::Mutex> lock_;
 };
 
 css::uno::Reference< css::uno::XInterface > Service::createInstance(
-    rtl::OUString const & aServiceSpecifier)
+    OUString const & aServiceSpecifier)
     throw (css::uno::Exception, css::uno::RuntimeException)
 {
     return createInstanceWithArguments(
@@ -174,16 +172,16 @@ css::uno::Reference< css::uno::XInterface > Service::createInstance(
 
 css::uno::Reference< css::uno::XInterface >
 Service::createInstanceWithArguments(
-    rtl::OUString const & ServiceSpecifier,
+    OUString const & ServiceSpecifier,
     css::uno::Sequence< css::uno::Any > const & Arguments)
     throw (css::uno::Exception, css::uno::RuntimeException)
 {
-    rtl::OUString nodepath;
-    rtl::OUString locale;
+    OUString nodepath;
+    OUString locale;
     for (sal_Int32 i = 0; i < Arguments.getLength(); ++i) {
         css::beans::NamedValue v1;
         css::beans::PropertyValue v2;
-        rtl::OUString name;
+        OUString name;
         css::uno::Any value;
         if (Arguments[i] >>= v1) {
             name = v1.Name;
@@ -200,10 +198,8 @@ Service::createInstanceWithArguments(
             break;
         } else {
             throw css::uno::Exception(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.configuration.ConfigurationProvider"
-                        " expects NamedValue or PropertyValue arguments")),
+                OUString("com.sun.star.configuration.ConfigurationProvider"
+                        " expects NamedValue or PropertyValue arguments"),
                 0);
         }
         // For backwards compatibility, allow "nodepath" and "Locale" in any
@@ -223,11 +219,9 @@ Service::createInstanceWithArguments(
                 locale.isEmpty())
             {
                 throw css::uno::Exception(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "com.sun.star.configuration.ConfigurationProvider"
+                    OUString("com.sun.star.configuration.ConfigurationProvider"
                             " expects at most one, non-empty, string Locale"
-                            " argument")),
+                            " argument"),
                     0);
             }
         }
@@ -238,13 +232,13 @@ Service::createInstanceWithArguments(
     // For backwards compatibility, allow a nodepath that misses the leading
     // slash:
     if (nodepath[0] != '/') {
-        nodepath = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + nodepath;
+        nodepath = OUString("/") + nodepath;
     }
     if (locale.isEmpty()) {
         //TODO: should the Access use the dynamically changing locale_ instead?
         locale = locale_;
         if (locale.isEmpty()) {
-            locale = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en-US"));
+            locale = OUString("en-US");
         }
     }
     bool update;
@@ -256,10 +250,8 @@ Service::createInstanceWithArguments(
         update = true;
     } else {
         throw css::uno::Exception(
-            (rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.configuration.ConfigurationProvider does not"
-                    " support service ")) +
+            (OUString("com.sun.star.configuration.ConfigurationProvider does not"
+                    " support service ") +
              ServiceSpecifier),
             static_cast< cppu::OWeakObject * >(this));
     }
@@ -269,10 +261,8 @@ Service::createInstanceWithArguments(
         new RootAccess(components, nodepath, locale, update));
     if (root->isValue()) {
         throw css::uno::Exception(
-            (rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.configuration.ConfigurationProvider: there is"
-                    " a leaf value at nodepath ")) +
+            (OUString("com.sun.star.configuration.ConfigurationProvider: there is"
+                    " a leaf value at nodepath ") +
              nodepath),
             static_cast< cppu::OWeakObject * >(this));
     }
@@ -280,13 +270,12 @@ Service::createInstanceWithArguments(
     return static_cast< cppu::OWeakObject * >(root.get());
 }
 
-css::uno::Sequence< rtl::OUString > Service::getAvailableServiceNames()
+css::uno::Sequence< OUString > Service::getAvailableServiceNames()
     throw (css::uno::RuntimeException)
 {
-    css::uno::Sequence< rtl::OUString > names(2);
-    names[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(accessServiceName));
-    names[1] = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM(updateAccessServiceName));
+    css::uno::Sequence< OUString > names(2);
+    names[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(accessServiceName));
+    names[1] = OUString(RTL_CONSTASCII_USTRINGPARAM(updateAccessServiceName));
     return names;
 }
 
@@ -362,8 +351,7 @@ css::lang::Locale Service::getLocale() throw (css::uno::RuntimeException) {
             loc.Variant = l.getVariant();
         } catch (comphelper::Locale::MalFormedLocaleException & e) {
             throw css::uno::RuntimeException(
-                (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("MalformedLocaleException: ")) +
+                (OUString("MalformedLocaleException: ") +
                  e.Message),
                 static_cast< cppu::OWeakObject * >(this));
         }
@@ -402,15 +390,15 @@ private:
         css::uno::Reference< css::uno::XComponentContext > const & Context)
         throw (css::uno::Exception, css::uno::RuntimeException);
 
-    virtual rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException)
     { return configuration_provider::getImplementationName(); }
 
-    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & ServiceName)
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
         throw (css::uno::RuntimeException)
     { return ServiceName == getSupportedServiceNames()[0]; } //TODO
 
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL
+    virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() throw (css::uno::RuntimeException)
     { return configuration_provider::getSupportedServiceNames(); }
 };
@@ -432,11 +420,11 @@ Factory::createInstanceWithArgumentsAndContext(
     if (Arguments.getLength() == 0) {
         return css::configuration::theDefaultProvider::get(Context);
     } else {
-        rtl::OUString locale;
+        OUString locale;
         for (sal_Int32 i = 0; i < Arguments.getLength(); ++i) {
             css::beans::NamedValue v1;
             css::beans::PropertyValue v2;
-            rtl::OUString name;
+            OUString name;
             css::uno::Any value;
             if (Arguments[i] >>= v1) {
                 name = v1.Name;
@@ -446,11 +434,9 @@ Factory::createInstanceWithArgumentsAndContext(
                 value = v2.Value;
             } else {
                 throw css::uno::Exception(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "com.sun.star.configuration.ConfigurationProvider"
+                    OUString("com.sun.star.configuration.ConfigurationProvider"
                             " factory expects NamedValue or PropertyValue"
-                            " arguments")),
+                            " arguments"),
                     0);
             }
             // For backwards compatibility, allow "Locale" and (ignored)
@@ -462,21 +448,17 @@ Factory::createInstanceWithArgumentsAndContext(
                     locale.isEmpty())
                 {
                     throw css::uno::Exception(
-                        rtl::OUString(
-                            RTL_CONSTASCII_USTRINGPARAM(
-                                "com.sun.star.configuration."
+                        OUString("com.sun.star.configuration."
                                 "ConfigurationProvider factory expects at most"
-                                " one, non-empty, string Locale argument")),
+                                " one, non-empty, string Locale argument"),
                         0);
                 }
             } else if (!name.equalsIgnoreAsciiCaseAsciiL(
                            RTL_CONSTASCII_STRINGPARAM("enableasync")))
             {
                 throw css::uno::Exception(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "com.sun.star.configuration.ConfigurationProvider"
-                            " factory: unknown argument ")) + name,
+                    OUString("com.sun.star.configuration.ConfigurationProvider"
+                            " factory: unknown argument ") + name,
                     0);
             }
         }
@@ -490,27 +472,23 @@ css::uno::Reference< css::uno::XInterface > createDefault(
     css::uno::Reference< css::uno::XComponentContext > const & context)
 {
     return static_cast< cppu::OWeakObject * >(
-        new Service(context, rtl::OUString()));
+        new Service(context, OUString()));
 }
 
-rtl::OUString getImplementationName() {
-    return rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.comp.configuration.ConfigurationProvider"));
+OUString getImplementationName() {
+    return OUString("com.sun.star.comp.configuration.ConfigurationProvider");
 }
 
-css::uno::Sequence< rtl::OUString > getSupportedServiceNames() {
-    rtl::OUString name(
-        RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.configuration.ConfigurationProvider"));
-    return css::uno::Sequence< rtl::OUString >(&name, 1);
+css::uno::Sequence< OUString > getSupportedServiceNames() {
+    OUString name("com.sun.star.configuration.ConfigurationProvider");
+    return css::uno::Sequence< OUString >(&name, 1);
 }
 
 css::uno::Reference< css::lang::XSingleComponentFactory >
 createFactory(
     SAL_UNUSED_PARAMETER cppu::ComponentFactoryFunc,
-    SAL_UNUSED_PARAMETER rtl::OUString const &,
-    SAL_UNUSED_PARAMETER css::uno::Sequence< rtl::OUString > const &,
+    SAL_UNUSED_PARAMETER OUString const &,
+    SAL_UNUSED_PARAMETER css::uno::Sequence< OUString > const &,
     SAL_UNUSED_PARAMETER rtl_ModuleCount *)
     SAL_THROW(())
 {

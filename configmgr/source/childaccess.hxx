@@ -60,7 +60,7 @@ public:
 
     ChildAccess(
         Components & components, rtl::Reference< RootAccess > const & root,
-        rtl::Reference< Access > const & parent, rtl::OUString const & name,
+        rtl::Reference< Access > const & parent, OUString const & name,
         rtl::Reference< Node > const & node);
 
     ChildAccess(
@@ -70,12 +70,12 @@ public:
     virtual Path getAbsolutePath();
     virtual Path getRelativePath();
 
-    virtual rtl::OUString getRelativePathRepresentation();
+    virtual OUString getRelativePathRepresentation();
     virtual rtl::Reference< Node > getNode();
 
     virtual bool isFinalized();
 
-    virtual rtl::OUString getNameInternal();
+    virtual OUString getNameInternal();
 
     virtual rtl::Reference< RootAccess > getRootAccess();
     virtual rtl::Reference< Access > getParentAccess();
@@ -100,7 +100,7 @@ public:
 
     void bind(
         rtl::Reference< RootAccess > const & root,
-        rtl::Reference< Access > const & parent, rtl::OUString const & name)
+        rtl::Reference< Access > const & parent, OUString const & name)
         throw ();
 
     void unbind() throw ();
@@ -124,15 +124,15 @@ private:
         std::vector< com::sun::star::uno::Type > * types) const;
 
     virtual void addSupportedServiceNames(
-        std::vector< rtl::OUString > * services);
+        std::vector< OUString > * services);
 
     virtual com::sun::star::uno::Any SAL_CALL queryInterface(
         com::sun::star::uno::Type const & aType)
         throw (com::sun::star::uno::RuntimeException);
 
     rtl::Reference< RootAccess > root_;
-    rtl::Reference< Access > parent_; // null iff free node
-    rtl::OUString name_;
+    rtl::Reference< Access > parent_; // null if free node
+    OUString name_;
     rtl::Reference< Node > node_;
     std::auto_ptr< com::sun::star::uno::Any > changedValue_;
     bool inTransaction_;

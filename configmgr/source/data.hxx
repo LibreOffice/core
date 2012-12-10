@@ -53,43 +53,43 @@ struct Data: private boost::noncopyable {
 
     Modifications modifications;
 
-    static rtl::OUString createSegment(
-        rtl::OUString const & templateName, rtl::OUString const & name);
+    static OUString createSegment(
+        OUString const & templateName, OUString const & name);
 
     static sal_Int32 parseSegment(
-        rtl::OUString const & path, sal_Int32 index, rtl::OUString * name,
-        bool * setElement, rtl::OUString * templateName);
+        OUString const & path, sal_Int32 index, OUString * name,
+        bool * setElement, OUString * templateName);
 
-    static rtl::OUString fullTemplateName(
-        rtl::OUString const & component, rtl::OUString const & name);
+    static OUString fullTemplateName(
+        OUString const & component, OUString const & name);
 
     //TODO: better rules under which circumstances a short template name matches
     static bool equalTemplateNames(
-        rtl::OUString const & shortName, rtl::OUString const & longName);
+        OUString const & shortName, OUString const & longName);
 
     static rtl::Reference< Node > findNode(
-        int layer, NodeMap const & map, rtl::OUString const & name);
+        int layer, NodeMap const & map, OUString const & name);
 
     Data();
 
     rtl::Reference< Node > resolvePathRepresentation(
-        rtl::OUString const & pathRepresentation,
-        rtl::OUString * canonicRepresenation, Path * path, int * finalizedLayer)
+        OUString const & pathRepresentation,
+        OUString * canonicRepresenation, Path * path, int * finalizedLayer)
         const;
 
     rtl::Reference< Node > getTemplate(
-        int layer, rtl::OUString const & fullName) const;
+        int layer, OUString const & fullName) const;
 
     NodeMap & getComponents() const;
 
     Additions * addExtensionXcuAdditions(
-        rtl::OUString const & url, int layer);
+        OUString const & url, int layer);
 
     rtl::Reference< ExtensionXcu > removeExtensionXcuAdditions(
-        rtl::OUString const & url);
+        OUString const & url);
 
 private:
-    typedef std::map< rtl::OUString, rtl::Reference< ExtensionXcu > >
+    typedef std::map< OUString, rtl::Reference< ExtensionXcu > >
         ExtensionXcuAdditions;
 
     rtl::Reference< Node > root_;

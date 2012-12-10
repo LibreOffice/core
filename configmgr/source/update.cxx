@@ -49,10 +49,10 @@ namespace configmgr { namespace update {
 
 namespace {
 
-std::set< rtl::OUString > seqToSet(
-    css::uno::Sequence< rtl::OUString > const & sequence)
+std::set< OUString > seqToSet(
+    css::uno::Sequence< OUString > const & sequence)
 {
-    return std::set< rtl::OUString >(
+    return std::set< OUString >(
         sequence.getConstArray(),
         sequence.getConstArray() + sequence.getLength());
 }
@@ -73,20 +73,20 @@ private:
     virtual ~Service() {}
 
     virtual void SAL_CALL insertExtensionXcsFile(
-        sal_Bool shared, rtl::OUString const & fileUri)
+        sal_Bool shared, OUString const & fileUri)
         throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL insertExtensionXcuFile(
-        sal_Bool shared, rtl::OUString const & fileUri)
+        sal_Bool shared, OUString const & fileUri)
         throw (css::uno::RuntimeException);
 
-    virtual void SAL_CALL removeExtensionXcuFile(rtl::OUString const & fileUri)
+    virtual void SAL_CALL removeExtensionXcuFile(OUString const & fileUri)
         throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL insertModificationXcuFile(
-        rtl::OUString const & fileUri,
-        css::uno::Sequence< rtl::OUString > const & includedPaths,
-        css::uno::Sequence< rtl::OUString > const & excludedPaths)
+        OUString const & fileUri,
+        css::uno::Sequence< OUString > const & includedPaths,
+        css::uno::Sequence< OUString > const & excludedPaths)
         throw (css::uno::RuntimeException);
 
     boost::shared_ptr<osl::Mutex> lock_;
@@ -94,7 +94,7 @@ private:
 };
 
 void Service::insertExtensionXcsFile(
-    sal_Bool shared, rtl::OUString const & fileUri)
+    sal_Bool shared, OUString const & fileUri)
     throw (css::uno::RuntimeException)
 {
     osl::MutexGuard g(*lock_);
@@ -102,7 +102,7 @@ void Service::insertExtensionXcsFile(
 }
 
 void Service::insertExtensionXcuFile(
-    sal_Bool shared, rtl::OUString const & fileUri)
+    sal_Bool shared, OUString const & fileUri)
     throw (css::uno::RuntimeException)
 {
     Broadcaster bc;
@@ -117,7 +117,7 @@ void Service::insertExtensionXcuFile(
     bc.send();
 }
 
-void Service::removeExtensionXcuFile(rtl::OUString const & fileUri)
+void Service::removeExtensionXcuFile(OUString const & fileUri)
     throw (css::uno::RuntimeException)
 {
     Broadcaster bc;
@@ -133,9 +133,9 @@ void Service::removeExtensionXcuFile(rtl::OUString const & fileUri)
 }
 
 void Service::insertModificationXcuFile(
-    rtl::OUString const & fileUri,
-    css::uno::Sequence< rtl::OUString > const & includedPaths,
-    css::uno::Sequence< rtl::OUString > const & excludedPaths)
+    OUString const & fileUri,
+    css::uno::Sequence< OUString > const & includedPaths,
+    css::uno::Sequence< OUString > const & excludedPaths)
     throw (css::uno::RuntimeException)
 {
     Broadcaster bc;
@@ -159,16 +159,13 @@ css::uno::Reference< css::uno::XInterface > create(
     return static_cast< cppu::OWeakObject * >(new Service(context));
 }
 
-rtl::OUString getImplementationName() {
-    return rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.configuration.Update"));
+OUString getImplementationName() {
+    return OUString("com.sun.star.comp.configuration.Update");
 }
 
-css::uno::Sequence< rtl::OUString > getSupportedServiceNames() {
-    rtl::OUString name(
-        RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.configuration.Update_Service"));
-    return css::uno::Sequence< rtl::OUString >(&name, 1);
+css::uno::Sequence< OUString > getSupportedServiceNames() {
+    OUString name("com.sun.star.configuration.Update_Service");
+    return css::uno::Sequence< OUString >(&name, 1);
 }
 
 } }

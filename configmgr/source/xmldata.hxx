@@ -24,7 +24,6 @@
 
 #include "type.hxx"
 
-namespace rtl { class OUString; }
 namespace xmlreader {
     class XmlReader;
     struct Span;
@@ -39,9 +38,9 @@ Type parseType(
 
 bool parseBoolean(xmlreader::Span const & text);
 
-rtl::OUString parseTemplateReference(
-    rtl::OUString const & component, bool hasNodeType,
-    rtl::OUString const & nodeType, rtl::OUString const * defaultTemplateName);
+OUString parseTemplateReference(
+    OUString const & component, bool hasNodeType,
+    OUString const & nodeType, OUString const * defaultTemplateName);
 
 }
 

@@ -37,8 +37,8 @@ rtl::Reference< Node > LocalizedValueNode::clone(bool) const {
     return new LocalizedValueNode(*this);
 }
 
-rtl::OUString LocalizedValueNode::getTemplateName() const {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*"));
+OUString LocalizedValueNode::getTemplateName() const {
+    return OUString("*");
 }
 
 css::uno::Any LocalizedValueNode::getValue() const {

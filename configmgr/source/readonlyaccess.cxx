@@ -74,15 +74,15 @@ public:
 private:
     virtual ~Service() {}
 
-    virtual rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException)
     { return read_only_access::getImplementationName(); }
 
-    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const &)
+    virtual sal_Bool SAL_CALL supportsService(OUString const &)
         throw (css::uno::RuntimeException)
     { return false; }
 
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL
+    virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() throw (css::uno::RuntimeException)
     { return read_only_access::getSupportedServiceNames(); }
 
@@ -91,12 +91,12 @@ private:
         throw (css::uno::Exception, css::uno::RuntimeException);
 
     virtual css::uno::Any SAL_CALL getByHierarchicalName(
-        rtl::OUString const & aName)
+        OUString const & aName)
         throw (
             css::container::NoSuchElementException, css::uno::RuntimeException)
     { return getRoot()->getByHierarchicalName(aName); }
 
-    virtual sal_Bool SAL_CALL hasByHierarchicalName(rtl::OUString const & aName)
+    virtual sal_Bool SAL_CALL hasByHierarchicalName(OUString const & aName)
         throw (css::uno::RuntimeException)
     { return getRoot()->hasByHierarchicalName(aName); }
 
@@ -145,14 +145,12 @@ css::uno::Reference< css::uno::XInterface > create(
     return static_cast< cppu::OWeakObject * >(new Service(context));
 }
 
-rtl::OUString getImplementationName() {
-    return rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.comp.configuration.ReadOnlyAccess"));
+OUString getImplementationName() {
+    return OUString("com.sun.star.comp.configuration.ReadOnlyAccess");
 }
 
-css::uno::Sequence< rtl::OUString > getSupportedServiceNames() {
-    return css::uno::Sequence< rtl::OUString >();
+css::uno::Sequence< OUString > getSupportedServiceNames() {
+    return css::uno::Sequence< OUString >();
 }
 
 } }

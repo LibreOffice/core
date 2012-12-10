@@ -28,7 +28,6 @@
 #include "node.hxx"
 #include "type.hxx"
 
-namespace rtl { class OUString; }
 
 namespace configmgr {
 
@@ -50,7 +49,7 @@ public:
 
     void setValue(int layer, com::sun::star::uno::Any const & value);
 
-    void setExternal(int layer, rtl::OUString const & descriptor);
+    void setExternal(int layer, OUString const & descriptor);
 
     bool isExtension() const;
 
@@ -66,7 +65,7 @@ private:
         // TYPE_HEXBINARY_LIST; not TYPE_ERROR or TYPE_NIL)
     bool nillable_;
     bool extension_;
-    rtl::OUString externalDescriptor_;
+    OUString externalDescriptor_;
     com::sun::star::uno::Any value_;
 };
 

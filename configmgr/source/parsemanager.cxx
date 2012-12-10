@@ -34,7 +34,7 @@
 namespace configmgr {
 
 ParseManager::ParseManager(
-    rtl::OUString const & url, rtl::Reference< Parser > const & parser)
+    OUString const & url, rtl::Reference< Parser > const & parser)
     SAL_THROW((
         css::container::NoSuchElementException, css::uno::RuntimeException)):
     reader_(url), parser_(parser)

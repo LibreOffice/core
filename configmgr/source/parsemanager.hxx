@@ -32,7 +32,6 @@
 #include "xmlreader/span.hxx"
 #include "xmlreader/xmlreader.hxx"
 
-namespace rtl { class OUString; }
 
 namespace configmgr {
 
@@ -41,12 +40,12 @@ class Parser;
 class ParseManager: public salhelper::SimpleReferenceObject {
 public:
     ParseManager(
-        rtl::OUString const & url, rtl::Reference< Parser > const & parser)
+        OUString const & url, rtl::Reference< Parser > const & parser)
         SAL_THROW((
             com::sun::star::container::NoSuchElementException,
             com::sun::star::uno::RuntimeException));
 
-    bool parse(std::set< rtl::OUString > const * existingDependencies);
+    bool parse(std::set< OUString > const * existingDependencies);
 
     enum { NAMESPACE_OOR = 1, NAMESPACE_XS = 2, NAMESPACE_XSI = 3 };
 

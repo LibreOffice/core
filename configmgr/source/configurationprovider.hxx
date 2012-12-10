@@ -35,7 +35,6 @@ namespace com { namespace sun { namespace star {
         class XInterface;
     }
 } } }
-namespace rtl { class OUString; }
 
 namespace configmgr { namespace configuration_provider {
 
@@ -43,15 +42,15 @@ com::sun::star::uno::Reference< com::sun::star::uno::XInterface > createDefault(
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
         const & context);
 
-rtl::OUString SAL_CALL getImplementationName();
+OUString SAL_CALL getImplementationName();
 
-com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
+com::sun::star::uno::Sequence< OUString > SAL_CALL
 getSupportedServiceNames();
 
 com::sun::star::uno::Reference< com::sun::star::lang::XSingleComponentFactory >
 SAL_CALL createFactory(
-    cppu::ComponentFactoryFunc, rtl::OUString const &,
-    com::sun::star::uno::Sequence< rtl::OUString > const &, rtl_ModuleCount *)
+    cppu::ComponentFactoryFunc, OUString const &,
+    com::sun::star::uno::Sequence< OUString > const &, rtl_ModuleCount *)
     SAL_THROW(());
 
 } }

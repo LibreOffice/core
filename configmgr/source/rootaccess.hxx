@@ -59,8 +59,8 @@ class RootAccess:
 {
 public:
     RootAccess(
-        Components & components, rtl::OUString const & pathRepresenation,
-        rtl::OUString const & locale, bool update);
+        Components & components, OUString const & pathRepresenation,
+        OUString const & locale, bool update);
 
     virtual Path getAbsolutePath();
 
@@ -71,9 +71,9 @@ public:
 
     virtual void SAL_CALL release() throw ();
 
-    rtl::OUString getAbsolutePathRepresentation();
+    OUString getAbsolutePathRepresentation();
 
-    rtl::OUString getLocale() const;
+    OUString getLocale() const;
 
     bool isUpdate() const;
 
@@ -105,13 +105,13 @@ private:
 
     virtual Path getRelativePath();
 
-    virtual rtl::OUString getRelativePathRepresentation();
+    virtual OUString getRelativePathRepresentation();
 
     virtual rtl::Reference< Node > getNode();
 
     virtual bool isFinalized();
 
-    virtual rtl::OUString getNameInternal();
+    virtual OUString getNameInternal();
 
     virtual rtl::Reference< RootAccess > getRootAccess();
 
@@ -121,7 +121,7 @@ private:
         const;
 
     virtual void addSupportedServiceNames(
-        std::vector< rtl::OUString > * services);
+        std::vector< OUString > * services);
 
     virtual void initDisposeBroadcaster(Broadcaster * broadcaster);
 
@@ -131,7 +131,7 @@ private:
         com::sun::star::uno::Type const & aType)
         throw (com::sun::star::uno::RuntimeException);
 
-    virtual rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw (com::sun::star::uno::RuntimeException);
 
     typedef
@@ -140,11 +140,11 @@ private:
                 com::sun::star::util::XChangesListener > >
         ChangesListeners;
 
-    rtl::OUString pathRepresentation_;
-    rtl::OUString locale_;
+    OUString pathRepresentation_;
+    OUString locale_;
     Path path_;
     rtl::Reference< Node > node_;
-    rtl::OUString name_;
+    OUString name_;
     ChangesListeners changesListeners_;
 
     boost::shared_ptr<osl::Mutex> lock_;
