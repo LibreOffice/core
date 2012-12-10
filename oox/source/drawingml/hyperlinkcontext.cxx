@@ -53,11 +53,12 @@ HyperLinkContext::HyperLinkContext( ContextHandler& rParent,
     if ( !aRelId.isEmpty() )
     {
         OSL_TRACE("OOX: URI rId %s", ::rtl::OUStringToOString (aRelId, RTL_TEXTENCODING_UTF8).pData->buffer);
-        sHref = getRelations().getExternalTargetFromRelId( aRelId );
-        if( !sHref.isEmpty() )
+        OUString sExtHref = getRelations().getExternalTargetFromRelId( aRelId );
+        sURL = getRelations().getInternalTargetFromRelId( aRelId );
+        if( !sExtHref.isEmpty() )
         {
             OSL_TRACE("OOX: URI href %s", ::rtl::OUStringToOString (sHref, RTL_TEXTENCODING_UTF8).pData->buffer);
-            sURL = getFilter().getAbsoluteUrl( sHref );
+            sURL = getFilter().getAbsoluteUrl( sExtHref );
         }
     }
     OUString sTooltip = xAttributes->getOptionalValue( R_TOKEN( tooltip ) );
