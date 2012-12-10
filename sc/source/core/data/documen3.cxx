@@ -1914,12 +1914,6 @@ void ScDocument::SetLanguage( LanguageType eLatin, LanguageType eCjk, LanguageTy
     UpdateDrawLanguages();      // set edit engine defaults in drawing layer pool
 }
 
-void ScDocument::SetDrawDefaults()
-{
-    bSetDrawDefaults = sal_True;
-    UpdateDrawDefaults();
-}
-
 Rectangle ScDocument::GetMMRect( SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL nEndCol, SCROW nEndRow, SCTAB nTab )
 {
