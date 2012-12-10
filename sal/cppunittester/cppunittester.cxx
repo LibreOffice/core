@@ -23,7 +23,6 @@
 
 #include <cstdlib>
 #include <iostream>
-#include <limits>
 #include <string>
 #include <sal/types.h>
 #include "cppunittester/protectorfactory.hxx"
@@ -49,6 +48,7 @@
 
 #include "boost/noncopyable.hpp"
 #include "boost/ptr_container/ptr_vector.hpp"
+#include "boost/static_assert.hpp"
 
 namespace {
 
@@ -68,12 +68,10 @@ rtl::OUString getArgument(sal_Int32 index) {
 
 std::string convertLazy(rtl::OUString const & s16) {
     rtl::OString s8(rtl::OUStringToOString(s16, osl_getThreadTextEncoding()));
+    BOOST_STATIC_ASSERT(sizeof (sal_Int32) <= sizeof (std::string::size_type));
+        // ensure following cast is legitimate
     return std::string(
-        s8.getStr(),
-        ((static_cast< sal_uInt32 >(s8.getLength())
-          > (std::numeric_limits< std::string::size_type >::max)())
-         ? (std::numeric_limits< std::string::size_type >::max)()
-         : static_cast< std::string::size_type >(s8.getLength())));
+        s8.getStr(), static_cast< std::string::size_type >(s8.getLength()));
 }
 
 //Output how long each test took
