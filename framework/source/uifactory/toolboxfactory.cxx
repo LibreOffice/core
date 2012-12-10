@@ -74,7 +74,7 @@ throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::l
     Reference< ::com::sun::star::ui::XUIElement > xMenuBar( (OWeakObject *)pWrapper, UNO_QUERY );
     Reference< ::com::sun::star::frame::XModuleManager2 > xModuleManager = m_xModuleManager;
     aLock.unlock();
-    CreateUIElement(ResourceURL,Args,"PopupMode","private:resource/toolbar/",xMenuBar,xModuleManager,m_xServiceManager);
+    CreateUIElement(ResourceURL,Args,"PopupMode","private:resource/toolbar/",xMenuBar,xModuleManager,comphelper::getComponentContext(m_xServiceManager));
     return xMenuBar;
 }
 

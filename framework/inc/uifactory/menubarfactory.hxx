@@ -60,7 +60,7 @@ namespace framework
                         ,const char* _pAsciiName
                         ,const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement >& _xMenuBar
                         ,const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager2 >& _xModuleManager
-                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xServiceManager);
+                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);
 
         protected:
             MenuBarFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager,bool );

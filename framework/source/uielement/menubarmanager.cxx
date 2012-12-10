@@ -49,7 +49,7 @@
 #include <com/sun/star/ui/ImageType.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
-#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/ItemStyle.hpp>
 #include <com/sun/star/frame/status/Visibility.hpp>
@@ -1576,9 +1576,8 @@ void MenuBarManager::RetrieveShortcuts( std::vector< MenuItemHandler* >& aMenuSh
 
             if ( !xModuleAccelCfg.is() )
             {
-                Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier( getServiceFactory()->createInstance(
-                                                                                            SERVICENAME_MODULEUICONFIGURATIONMANAGERSUPPLIER ),
-                                                                                        UNO_QUERY );
+                Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier =
+                    ModuleUIConfigurationManagerSupplier::create( comphelper::getComponentContext(getServiceFactory()) );
                 try
                 {
                     Reference< XUIConfigurationManager > xUICfgMgr = xModuleCfgMgrSupplier->getUIConfigurationManager( m_aModuleIdentifier );
@@ -1662,9 +1661,8 @@ void MenuBarManager::RetrieveImageManagers()
 
     if ( !m_xModuleImageManager.is() )
     {
-        Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier( getServiceFactory()->createInstance(
-                                                                                    SERVICENAME_MODULEUICONFIGURATIONMANAGERSUPPLIER ),
-                                                                                  UNO_QUERY );
+        Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier =
+            ModuleUIConfigurationManagerSupplier::create( comphelper::getComponentContext(getServiceFactory()) );
         Reference< XUIConfigurationManager > xUICfgMgr = xModuleCfgMgrSupplier->getUIConfigurationManager( m_aModuleIdentifier );
         m_xModuleImageManager.set( xUICfgMgr->getImageManager(), UNO_QUERY );
         m_xModuleImageManager->addConfigurationListener( Reference< XUIConfigurationListener >(

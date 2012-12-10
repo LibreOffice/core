@@ -78,7 +78,7 @@ throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::l
     Reference< ::com::sun::star::ui::XUIElement > xMenuBar( (OWeakObject *)pWrapper, UNO_QUERY );
     Reference< ::com::sun::star::frame::XModuleManager2 > xModuleManager = m_xModuleManager;
     aLock.unlock();
-    MenuBarFactory::CreateUIElement(ResourceURL,Args,NULL,"private:resource/statusbar/",xMenuBar,xModuleManager,m_xServiceManager);
+    MenuBarFactory::CreateUIElement(ResourceURL,Args,NULL,"private:resource/statusbar/",xMenuBar,xModuleManager, comphelper::getComponentContext(m_xServiceManager));
     return xMenuBar;
 }
 

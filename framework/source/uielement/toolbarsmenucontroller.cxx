@@ -38,7 +38,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/ui/XUIElementSettings.hpp>
-#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
 
@@ -837,10 +837,8 @@ void SAL_CALL ToolbarsMenuController::initialize( const Sequence< Any >& aArgume
                     aModuleIdentifier = xModuleManager->identify( m_xFrame );
                     xPersistentWindowStateSupplier->getByName( aModuleIdentifier ) >>= m_xPersistentWindowState;
 
-                    Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier;
-                    if ( m_xServiceManager.is() )
-                        xModuleCfgSupplier = Reference< XModuleUIConfigurationManagerSupplier >(
-                            m_xServiceManager->createInstance( SERVICENAME_MODULEUICONFIGURATIONMANAGERSUPPLIER ), UNO_QUERY );
+                    Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier =
+                        ModuleUIConfigurationManagerSupplier::create( comphelper::getComponentContext(m_xServiceManager) );
                     m_xModuleCfgMgr = xModuleCfgSupplier->getUIConfigurationManager( aModuleIdentifier );
 
                     Reference< XController > xController = m_xFrame->getController();

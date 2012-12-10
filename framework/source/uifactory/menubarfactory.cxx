@@ -28,7 +28,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 
@@ -91,7 +91,7 @@ throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::l
     Reference< ::com::sun::star::ui::XUIElement > xMenuBar( (OWeakObject *)pMenuBarWrapper, UNO_QUERY );
     Reference< ::com::sun::star::frame::XModuleManager2 > xModuleManager = m_xModuleManager;
     aLock.unlock();
-    CreateUIElement(ResourceURL,Args,"MenuOnly","private:resource/menubar/",xMenuBar,xModuleManager,m_xServiceManager);
+    CreateUIElement(ResourceURL,Args,"MenuOnly","private:resource/menubar/",xMenuBar,xModuleManager, comphelper::getComponentContext(m_xServiceManager));
     return xMenuBar;
 }
 void MenuBarFactory::CreateUIElement(const ::rtl::OUString& ResourceURL
@@ -100,7 +100,7 @@ void MenuBarFactory::CreateUIElement(const ::rtl::OUString& ResourceURL
                                      ,const char* _pAsciiName
                                      ,const Reference< ::com::sun::star::ui::XUIElement >& _xMenuBar
                                      ,const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager2 >& _xModuleManager
-                                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xServiceManager)
+                                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext)
 {
     Reference< XUIConfigurationManager > xCfgMgr;
     Reference< XUIConfigurationManager > xConfigSource;
@@ -150,8 +150,8 @@ void MenuBarFactory::CreateUIElement(const ::rtl::OUString& ResourceURL
             rtl::OUString aModuleIdentifier = _xModuleManager->identify( Reference< XInterface >( xFrame, UNO_QUERY ));
             if ( !aModuleIdentifier.isEmpty() )
             {
-                Reference< ::com::sun::star::ui::XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier(
-                    _xServiceManager->createInstance( SERVICENAME_MODULEUICONFIGURATIONMANAGERSUPPLIER ), UNO_QUERY );
+                Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier =
+                    ModuleUIConfigurationManagerSupplier::create( _rxContext );
                 xCfgMgr = xModuleCfgSupplier->getUIConfigurationManager( aModuleIdentifier );
                 bHasSettings = xCfgMgr->hasSettings( aResourceURL );
             }

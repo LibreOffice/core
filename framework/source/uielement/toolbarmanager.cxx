@@ -44,7 +44,7 @@
 #include <com/sun/star/ui/GlobalAcceleratorConfiguration.hpp>
 #include <com/sun/star/ui/XUIElementSettings.hpp>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
-#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/ImageType.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
@@ -1220,9 +1220,8 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
 
     if ( !m_xModuleImageManager.is() )
     {
-        Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier( m_xServiceManager->createInstance(
-                                                                                    SERVICENAME_MODULEUICONFIGURATIONMANAGERSUPPLIER ),
-                                                                                  UNO_QUERY );
+        Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier =
+            ModuleUIConfigurationManagerSupplier::create( comphelper::getComponentContext( m_xServiceManager ) );
         m_xUICfgMgr = xModuleCfgMgrSupplier->getUIConfigurationManager( m_aModuleIdentifier );
         m_xModuleImageManager = Reference< XImageManager >( m_xUICfgMgr->getImageManager(), UNO_QUERY );
         m_xModuleImageManager->addConfigurationListener( Reference< XUIConfigurationListener >(
@@ -2245,9 +2244,8 @@ bool ToolBarManager::RetrieveShortcut( const rtl::OUString& rCommandURL, rtl::OU
 
             if ( !xModuleAccelCfg.is() )
             {
-                Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier( m_xServiceManager->createInstance(
-                                                                                            SERVICENAME_MODULEUICONFIGURATIONMANAGERSUPPLIER ),
-                                                                                        UNO_QUERY );
+                Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier =
+                    ModuleUIConfigurationManagerSupplier::create( comphelper::getComponentContext(m_xServiceManager) );
                 try
                 {
                     Reference< XUIConfigurationManager > xUICfgMgr = xModuleCfgMgrSupplier->getUIConfigurationManager( m_aModuleIdentifier );

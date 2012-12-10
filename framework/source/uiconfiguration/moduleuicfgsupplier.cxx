@@ -89,7 +89,7 @@ DEFINE_XTYPEPROVIDER_4                  (   ModuleUIConfigurationManagerSupplier
 
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   ModuleUIConfigurationManagerSupplier                    ,
                                             ::cppu::OWeakObject                                     ,
-                                            SERVICENAME_MODULEUICONFIGURATIONMANAGERSUPPLIER        ,
+                                            DECLARE_ASCII("com.sun.star.ui.ModuleUIConfigurationManagerSupplier" ),
                                             IMPLEMENTATIONNAME_MODULEUICONFIGURATIONMANAGERSUPPLIER
                                         )
 
