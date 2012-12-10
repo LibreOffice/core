@@ -681,6 +681,7 @@ public:
     void                SetMapMode( sal_uInt32 mnMapMode );
     void                SetUnitsPerInch( sal_uInt16 nUnitsPerInch );
     void                SetWorldTransform( const XForm& rXForm );
+    const XForm&        GetWorldTransform() const { return maXForm; }
     void                ModifyWorldTransform( const XForm& rXForm, sal_uInt32 nMode );
 
     void                Push();
