@@ -46,6 +46,9 @@ AVAILABLE TARGETS
        cmd              execute the command contained in the variable cmd=""
                         in a shell with config_host.mk or config_build.mk
                         environement set. (see gb_SIDE)
+       <target>         build gbuild target (such as Library_vbaswobj or
+                        CppunitTest_sw_macros_test)
+       <target>.clean   clean gbuild target
 
 INTERACTIVE VARIABLES:
        DEBUG / debug   If not empty, build as with --enable-debug.
