@@ -762,6 +762,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
 ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, const ScAddress& rPos, int nCloneFlags ) :
     ScBaseCell( rCell ),
     SvtListener(),
+    sHyperUrl( rCell.sHyperUrl ),
     aResult( rCell.aResult ),
     eTempGrammar( rCell.eTempGrammar),
     pDocument( &rDoc ),
@@ -1971,7 +1972,8 @@ EditTextObject* ScFormulaCell::CreateURLObject()
     rtl::OUString aCellText;
     rtl::OUString aURL;
     GetURLResult( aURL, aCellText );
-
+    if ( HasHyperlink() )
+       aURL = sHyperUrl;
     SvxURLField aUrlField( aURL, aCellText, SVXURLFORMAT_APPDEFAULT);
     EditEngine& rEE = pDocument->GetEditEngine();
     rEE.SetText( EMPTY_STRING );

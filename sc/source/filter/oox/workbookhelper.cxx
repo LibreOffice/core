@@ -78,6 +78,7 @@
 #include "tokenuno.hxx"
 
 #include "formulabuffer.hxx"
+#include "hyperlinkbuffer.hxx"
 namespace oox {
 namespace xls {
 
@@ -179,6 +180,7 @@ public:
     // buffers ----------------------------------------------------------------
 
     inline FormulaBuffer& getFormulaBuffer() const { return *mxFormulaBuffer; }
+    inline HyperlinkBuffer& getHyperlinkBuffer() const { return *mxHyperlinkBuffer; }
     /** Returns the global workbook settings object. */
     inline WorkbookSettings& getWorkbookSettings() const { return *mxWorkbookSettings; }
     /** Returns the workbook and sheet view settings object. */
@@ -241,6 +243,7 @@ private:
 
 private:
     typedef ::std::auto_ptr< FormulaBuffer >            FormulaBufferPtr;
+    typedef ::std::auto_ptr< HyperlinkBuffer >          HyperlinkBufferPtr;
     typedef ::std::auto_ptr< SegmentProgressBar >       ProgressBarPtr;
     typedef ::std::auto_ptr< WorkbookSettings >         WorkbookSettPtr;
     typedef ::std::auto_ptr< ViewSettings >             ViewSettingsPtr;
@@ -277,6 +280,7 @@ private:
 
     // buffers
     FormulaBufferPtr    mxFormulaBuffer;
+    HyperlinkBufferPtr  mxHyperlinkBuffer;
     WorkbookSettPtr     mxWorkbookSettings;     /// Global workbook settings.
     ViewSettingsPtr     mxViewSettings;         /// Workbook and sheet view settings.
     WorksheetBfrPtr     mxWorksheets;           /// Sheet info buffer.
@@ -514,6 +518,7 @@ void WorkbookGlobals::initialize( bool bWorkbookFile )
     OSL_ENSURE( mxDoc.is(), "WorkbookGlobals::initialize - no spreadsheet document" );
 
     mxFormulaBuffer.reset( new FormulaBuffer( *this ) );
+    mxHyperlinkBuffer.reset( new HyperlinkBuffer( *this ) );
     mxWorkbookSettings.reset( new WorkbookSettings( *this ) );
     mxViewSettings.reset( new ViewSettings( *this ) );
     mxWorksheets.reset( new WorksheetBuffer( *this ) );
@@ -663,6 +668,8 @@ void WorkbookHelper::finalizeWorkbookImport()
     mrBookGlob.getViewSettings().finalizeImport();
     // need to import formulas before scenarios
     mrBookGlob.getFormulaBuffer().finalizeImport();
+    // allow hyperlinks to be used with formula cells
+    mrBookGlob.getHyperlinkBuffer().finalizeImport();
     /*  Insert scenarios after all sheet processing is done, because new hidden
         sheets are created for scenarios which would confuse code that relies
         on certain sheet indexes. Must be done after pivot tables too. */
@@ -776,6 +783,11 @@ Reference< XStyle > WorkbookHelper::createStyleObject( OUString& orStyleName, bo
 FormulaBuffer& WorkbookHelper::getFormulaBuffer() const
 {
     return mrBookGlob.getFormulaBuffer();
+}
+
+HyperlinkBuffer& WorkbookHelper::getHyperlinkBuffer() const
+{
+    return mrBookGlob.getHyperlinkBuffer();
 }
 
 WorkbookSettings& WorkbookHelper::getWorkbookSettings() const

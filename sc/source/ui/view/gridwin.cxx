@@ -398,7 +398,8 @@ sal_Bool lcl_GetHyperlinkCell(ScDocument* pDoc, SCCOL& rPosX, SCROW& rPosY, SCTA
                 else if ( rpCell->GetCellType() == CELLTYPE_EDIT)
                     bFound = sal_True;
                 else if (rpCell->GetCellType() == CELLTYPE_FORMULA &&
-                  static_cast<ScFormulaCell*>(rpCell)->IsHyperLinkCell())
+                  ( static_cast<ScFormulaCell*>(rpCell)->IsHyperLinkCell() ||
+                    static_cast<ScFormulaCell*>(rpCell)->HasHyperlink() ) )
                     bFound = sal_True;
         else
             return false;                               // andere Zelle

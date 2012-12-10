@@ -115,6 +115,7 @@ class ViewSettings;
 class WorkbookSettings;
 class WorksheetBuffer;
 class FormulaBuffer;
+class HyperlinkBuffer;
 
 class WorkbookGlobals;
 typedef ::boost::shared_ptr< WorkbookGlobals > WorkbookGlobalsRef;
@@ -224,6 +225,7 @@ public:
     // buffers ----------------------------------------------------------------
 
     FormulaBuffer&      getFormulaBuffer() const;
+    HyperlinkBuffer&    getHyperlinkBuffer() const;
     /** Returns the global workbook settings object. */
     WorkbookSettings&   getWorkbookSettings() const;
     /** Returns the workbook and sheet view settings object. */

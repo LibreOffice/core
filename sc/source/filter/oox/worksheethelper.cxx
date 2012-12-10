@@ -75,6 +75,7 @@
 #include "worksheetbuffer.hxx"
 #include "worksheetsettings.hxx"
 #include "formulabuffer.hxx"
+#include "hyperlinkbuffer.hxx"
 
 namespace oox {
 namespace xls {
@@ -354,15 +355,7 @@ private:
     typedef ::std::map< sal_Int32, ColumnModelRange >   ColumnModelRangeMap;
     typedef ::std::pair< RowModel, sal_Int32 >          RowModelRange;
     typedef ::std::map< sal_Int32, RowModelRange >      RowModelRangeMap;
-    typedef ::std::list< HyperlinkModel >               HyperlinkModelList;
     typedef ::std::list< ValidationModel >              ValidationModelList;
-
-    /** Inserts all imported hyperlinks into their cell ranges. */
-    void                finalizeHyperlinkRanges() const;
-    /** Generates the final URL for the passed hyperlink. */
-    OUString            getHyperlinkUrl( const HyperlinkModel& rHyperlink ) const;
-    /** Inserts a hyperlinks into the specified cell. */
-    void                insertHyperlink( const CellAddress& rAddress, const OUString& rUrl ) const;
 
     /** Inserts all imported data validations into their cell ranges. */
     void                finalizeValidationRanges() const;
@@ -397,7 +390,6 @@ private:
     ColumnModelRangeMap maColModels;        /// Ranges of columns sorted by first column index.
     RowModel            maDefRowModel;      /// Default row formatting.
     RowModelRangeMap    maRowModels;        /// Ranges of rows sorted by first row index.
-    HyperlinkModelList  maHyperlinks;       /// Cell ranges containing hyperlinks.
     ValidationModelList maValidations;      /// Cell ranges containing data validation settings.
     SheetDataBuffer     maSheetData;        /// Buffer for cell contents and cell formatting.
     CondFormatBuffer    maCondFormats;      /// Buffer for conditional formatting.
@@ -752,7 +744,7 @@ void WorksheetGlobals::setPageBreak( const PageBreakModel& rModel, bool bRowBrea
 
 void WorksheetGlobals::setHyperlink( const HyperlinkModel& rModel )
 {
-    maHyperlinks.push_back( rModel );
+    getHyperlinkBuffer().createHyperlinkMapEntry( getSheetIndex(), rModel );
 }
 
 void WorksheetGlobals::setValidation( const ValidationModel& rModel )
@@ -951,7 +943,6 @@ void WorksheetGlobals::finalizeWorksheetImport()
     lclUpdateProgressBar( mxRowProgress, 1.0 );
     maSheetData.finalizeImport();
     lclUpdateProgressBar( mxFinalProgress, 0.25 );
-    finalizeHyperlinkRanges();
     finalizeValidationRanges();
     maAutoFilters.finalizeImport( getSheetIndex() );
     maCondFormats.finalizeImport();
@@ -972,102 +963,6 @@ void WorksheetGlobals::finalizeWorksheetImport()
 }
 
 // private --------------------------------------------------------------------
-
-void WorksheetGlobals::finalizeHyperlinkRanges() const
-{
-    for( HyperlinkModelList::const_iterator aIt = maHyperlinks.begin(), aEnd = maHyperlinks.end(); aIt != aEnd; ++aIt )
-    {
-        OUString aUrl = getHyperlinkUrl( *aIt );
-        // try to insert URL into each cell of the range
-        if( !aUrl.isEmpty() )
-            for( CellAddress aAddress( getSheetIndex(), aIt->maRange.StartColumn, aIt->maRange.StartRow ); aAddress.Row <= aIt->maRange.EndRow; ++aAddress.Row )
-                for( aAddress.Column = aIt->maRange.StartColumn; aAddress.Column <= aIt->maRange.EndColumn; ++aAddress.Column )
-                    insertHyperlink( aAddress, aUrl );
-    }
-}
-
-OUString WorksheetGlobals::getHyperlinkUrl( const HyperlinkModel& rHyperlink ) const
-{
-    OUStringBuffer aUrlBuffer;
-    if( !rHyperlink.maTarget.isEmpty() )
-        aUrlBuffer.append( getBaseFilter().getAbsoluteUrl( rHyperlink.maTarget ) );
-    if( !rHyperlink.maLocation.isEmpty() )
-        aUrlBuffer.append( sal_Unicode( '#' ) ).append( rHyperlink.maLocation );
-    OUString aUrl = aUrlBuffer.makeStringAndClear();
-
-    // convert '#SheetName!A1' to '#SheetName.A1'
-    if( !aUrl.isEmpty() && (aUrl[ 0 ] == '#') )
-    {
-        sal_Int32 nSepPos = aUrl.lastIndexOf( '!' );
-        if( nSepPos > 0 )
-        {
-            // replace the exclamation mark with a period
-            aUrl = aUrl.replaceAt( nSepPos, 1, OUString( sal_Unicode( '.' ) ) );
-            // #i66592# convert sheet names that have been renamed on import
-            OUString aSheetName = aUrl.copy( 1, nSepPos - 1 );
-            OUString aCalcName = getWorksheets().getCalcSheetName( aSheetName );
-            if( !aCalcName.isEmpty() )
-                aUrl = aUrl.replaceAt( 1, nSepPos - 1, aCalcName );
-        }
-    }
-
-    return aUrl;
-}
-
-void WorksheetGlobals::insertHyperlink( const CellAddress& rAddress, const OUString& rUrl ) const
-{
-    Reference< XCell > xCell = getCell( rAddress );
-    if( xCell.is() ) switch( xCell->getType() )
-    {
-        // #i54261# restrict creation of URL field to text cells
-        case CellContentType_TEXT:
-        {
-            Reference< XText > xText( xCell, UNO_QUERY );
-            if( xText.is() )
-            {
-                // create a URL field object and set its properties
-                Reference< XTextContent > xUrlField( getBaseFilter().getModelFactory()->createInstance( maUrlTextField ), UNO_QUERY );
-                OSL_ENSURE( xUrlField.is(), "WorksheetGlobals::insertHyperlink - cannot create text field" );
-                if( xUrlField.is() )
-                {
-                    // properties of the URL field
-                    PropertySet aPropSet( xUrlField );
-                    aPropSet.setProperty( PROP_URL, rUrl );
-                    aPropSet.setProperty( PROP_Representation, xText->getString() );
-                    try
-                    {
-                        // insert the field into the cell
-                        xText->setString( OUString() );
-                        Reference< XTextRange > xRange( xText->createTextCursor(), UNO_QUERY_THROW );
-                        xText->insertTextContent( xRange, xUrlField, sal_False );
-                    }
-                    catch( const Exception& )
-                    {
-                        OSL_FAIL( "WorksheetData::insertHyperlink - cannot insert text field" );
-                    }
-                }
-            }
-        }
-        break;
-
-        // fix for #i31050# disabled, HYPERLINK is not able to return numeric value (#i91351#)
-#if 0
-        // #i31050# replace number with HYPERLINK function
-        case CellContentType_VALUE:
-        {
-            Reference< XFormulaTokens > xTokens( xCell, UNO_QUERY );
-            ApiTokenSequence aTokens = getFormulaParser().convertNumberToHyperlink( rUrl, xCell->getValue() );
-            OSL_ENSURE( xTokens.is(), "WorksheetHelper::insertHyperlink - missing formula token interface" );
-            if( xTokens.is() && aTokens.hasElements() )
-                xTokens->setTokens( aTokens );
-        }
-        break;
-#endif
-
-        default:;
-    }
-}
-
 void WorksheetGlobals::finalizeValidationRanges() const
 {
     for( ValidationModelList::const_iterator aIt = maValidations.begin(), aEnd = maValidations.end(); aIt != aEnd; ++aIt )

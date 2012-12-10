@@ -315,6 +315,7 @@ enum ScMatrixMode {
 class SC_DLLPUBLIC ScFormulaCell : public ScBaseCell, public SvtListener
 {
 private:
+    rtl::OUString   sHyperUrl;
     ScFormulaResult aResult;
     formula::FormulaGrammar::Grammar  eTempGrammar;   // used between string (creation) and (re)compilation
     ScTokenArray*   pCode;              // The (new) token array
@@ -520,6 +521,8 @@ public:
     bool            IsMultilineResult();
 
     void            MaybeInterpret();
+    void            SetHyperlinkURL( const rtl::OUString& rUrl ) { sHyperUrl = rUrl; }
+    bool            HasHyperlink() { return !sHyperUrl.isEmpty(); }
 };
 
 //          Iterator for references in a formula cell
