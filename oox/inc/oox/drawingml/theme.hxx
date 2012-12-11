@@ -37,7 +37,7 @@ const sal_Int32 THEMED_STYLE_INTENSE    = 3;
 
 typedef RefVector< FillProperties >                     FillStyleList;
 typedef RefVector< LineProperties >                     LineStyleList;
-typedef RefVector< PropertyMap >                        EffectStyleList;
+typedef RefVector< EffectProperties >                   EffectStyleList;
 typedef RefMap< sal_Int32, TextCharacterProperties >    FontScheme;
 
 // ============================================================================
@@ -68,6 +68,7 @@ public:
 
     inline EffectStyleList&         getEffectStyleList() { return maEffectStyleList; }
     inline const EffectStyleList&   getEffectStyleList() const { return maEffectStyleList; }
+    const EffectProperties*         getEffectStyle( sal_Int32 nIndex ) const;
 
     inline FontScheme&              getFontScheme() { return maFontScheme; }
     inline const FontScheme&        getFontScheme() const { return maFontScheme; }
