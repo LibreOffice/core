@@ -29,10 +29,9 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/frame/XUIControllerRegistration.hpp>
+#include <com/sun/star/frame/XToolbarControllerFactory.hpp>
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <rtl/ustring.hxx>
 
 namespace framework
@@ -40,9 +39,8 @@ namespace framework
 
 class ConfigurationAccess_ControllerFactory;
 class ToolbarControllerFactory :  protected ThreadHelpBase                                          ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
-                                  public ::cppu::WeakImplHelper3<   com::sun::star::lang::XServiceInfo,
-                                                                    com::sun::star::lang::XMultiComponentFactory,
-                                                                    com::sun::star::frame::XUIControllerRegistration>
+                                  public ::cppu::WeakImplHelper2<   com::sun::star::lang::XServiceInfo,
+                                                                    com::sun::star::frame::XToolbarControllerFactory>
 {
     public:
         ToolbarControllerFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );

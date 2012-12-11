@@ -129,6 +129,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/frame,\
 	GlobalEventBroadcaster \
 	MediaTypeDetectionHelper \
 	ModuleManager \
+	PopupMenuControllerFactory \
     ToolBarControllerFactory \
 	UICommandDescription \
 ))
@@ -839,7 +840,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/frame,\
 	FramesContainer \
 	LayoutManager \
 	PopupMenuController \
-	PopupMenuControllerFactory \
 	ProtocolHandler \
 	SessionManager \
 	Settings \
@@ -2534,6 +2534,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/frame,\
 	XTitleChangeBroadcaster \
 	XTitleChangeListener \
 	XToolbarController \
+	XToolbarControllerFactory \
 	XToolbarControllerListener \
 	XTransientDocumentsDocumentContentFactory \
 	XUIControllerRegistration \

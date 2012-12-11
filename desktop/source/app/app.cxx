@@ -38,6 +38,7 @@
 #include <com/sun/star/frame/GlobalEventBroadcaster.hpp>
 #include <com/sun/star/frame/XSessionManagerListener.hpp>
 #include <com/sun/star/frame/XSynchronousDispatch.hpp>
+#include <com/sun/star/frame/PopupMenuControllerFactory.hpp>
 #include <com/sun/star/document/CorruptedFilterConfigurationException.hpp>
 #include <com/sun/star/configuration/CorruptedConfigurationException.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
@@ -2149,21 +2150,16 @@ void Desktop::PreloadConfigurationData()
 
     // preload popup menu controller factories. As all controllers are in the same
     // configuration file they also get preloaded!
-    Reference< ::com::sun::star::frame::XUIControllerRegistration > xPopupMenuControllerFactory(
-        rFactory->createInstance(
-            rtl::OUString( "com.sun.star.frame.PopupMenuControllerFactory" )),
-            UNO_QUERY );
-    if ( xPopupMenuControllerFactory.is() )
+    Reference< css::frame::XToolbarControllerFactory > xPopupMenuControllerFactory =
+        css::frame::PopupMenuControllerFactory::create( xContext );
+    try
     {
-        try
-        {
-            xPopupMenuControllerFactory->hasController(
-                        rtl::OUString( ".uno:CharFontName" ),
-                        OUString() );
-        }
-        catch ( const ::com::sun::star::uno::Exception& )
-        {
-        }
+        xPopupMenuControllerFactory->hasController(
+                    rtl::OUString( ".uno:CharFontName" ),
+                    OUString() );
+    }
+    catch ( const ::com::sun::star::uno::Exception& )
+    {
     }
 
     // preload filter configuration
@@ -2206,8 +2202,6 @@ void Desktop::OpenClients()
 
     const CommandLineArgs& rArgs = GetCommandLineArgs();
     SvtInternalOptions  aInternalOptions;
-
-    Reference<XMultiServiceFactory> rFactory = ::comphelper::getProcessServiceFactory();
 
     if (!rArgs.IsQuickstart())
     {

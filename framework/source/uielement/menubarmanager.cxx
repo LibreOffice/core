@@ -36,6 +36,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/PopupMenuControllerFactory.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/util/XStringWidth.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -188,9 +189,7 @@ MenuBarManager::MenuBarManager(
     , m_nSymbolsStyle( SvtMiscOptions().GetCurrentSymbolsStyle() )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::MenuBarManager" );
-    m_xPopupMenuControllerRegistration = Reference< ::com::sun::star::frame::XUIControllerRegistration >(
-        getServiceFactory()->createInstance( rtl::OUString( "com.sun.star.frame.PopupMenuControllerFactory" )),
-        UNO_QUERY );
+    m_xPopupMenuControllerRegistration = PopupMenuControllerFactory::create( comphelper::getComponentContext(getServiceFactory()) );
     FillMenuManager( pMenu, rFrame, rDispatchProvider, rModuleIdentifier, bDelete, bDeleteChildren );
 }
 
@@ -1195,37 +1194,33 @@ sal_Bool MenuBarManager::CreatePopupMenuController( MenuItemHandler* pMenuItemHa
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::CreatePopupMenuController" );
     rtl::OUString aItemCommand( pMenuItemHandler->aMenuItemURL );
 
-    // Try instanciate a popup menu controller. It is stored in the menu item handler.
-    Reference< XMultiComponentFactory > xPopupMenuControllerFactory( m_xPopupMenuControllerRegistration, UNO_QUERY );
-    if ( xPopupMenuControllerFactory.is() )
+    // Try instantiate a popup menu controller. It is stored in the menu item handler.
+    Sequence< Any > aSeq( 2 );
+    PropertyValue aPropValue;
+
+    aPropValue.Name         = rtl::OUString( "ModuleName" );
+    aPropValue.Value      <<= m_aModuleIdentifier;
+    aSeq[0] <<= aPropValue;
+    aPropValue.Name         = rtl::OUString( "Frame" );
+    aPropValue.Value      <<= m_xFrame;
+    aSeq[1] <<= aPropValue;
+
+    Reference< XComponentContext > xComponentContext(
+        comphelper::getComponentContext( getServiceFactory() ) );
+
+    Reference< XPopupMenuController > xPopupMenuController(
+                                            m_xPopupMenuControllerRegistration->createInstanceWithArgumentsAndContext(
+                                                aItemCommand,
+                                                aSeq,
+                                                xComponentContext ),
+                                            UNO_QUERY );
+
+    if ( xPopupMenuController.is() )
     {
-        Sequence< Any > aSeq( 2 );
-        PropertyValue aPropValue;
-
-        aPropValue.Name         = rtl::OUString( "ModuleName" );
-        aPropValue.Value      <<= m_aModuleIdentifier;
-        aSeq[0] <<= aPropValue;
-        aPropValue.Name         = rtl::OUString( "Frame" );
-        aPropValue.Value      <<= m_xFrame;
-        aSeq[1] <<= aPropValue;
-
-        Reference< XComponentContext > xComponentContext(
-            comphelper::getComponentContext( getServiceFactory() ) );
-
-        Reference< XPopupMenuController > xPopupMenuController(
-                                                xPopupMenuControllerFactory->createInstanceWithArgumentsAndContext(
-                                                    aItemCommand,
-                                                    aSeq,
-                                                    xComponentContext ),
-                                                UNO_QUERY );
-
-        if ( xPopupMenuController.is() )
-        {
-            // Provide our awt popup menu to the popup menu controller
-            pMenuItemHandler->xPopupMenuController = xPopupMenuController;
-            xPopupMenuController->setPopupMenu( pMenuItemHandler->xPopupMenu );
-            return sal_True;
-        }
+        // Provide our awt popup menu to the popup menu controller
+        pMenuItemHandler->xPopupMenuController = xPopupMenuController;
+        xPopupMenuController->setPopupMenu( pMenuItemHandler->xPopupMenu );
+        return sal_True;
     }
 
     return sal_False;
@@ -2028,9 +2023,7 @@ void MenuBarManager::Init(const Reference< XFrame >& rFrame,AddonMenu* pAddonMen
     m_bIsBookmarkMenu   = sal_True;
 
     rtl::OUString aModuleIdentifier;
-    m_xPopupMenuControllerRegistration = Reference< ::com::sun::star::frame::XUIControllerRegistration >(
-        getServiceFactory()->createInstance( rtl::OUString( "com.sun.star.frame.PopupMenuControllerFactory" )),
-        UNO_QUERY );
+    m_xPopupMenuControllerRegistration = PopupMenuControllerFactory::create( comphelper::getComponentContext(getServiceFactory()) );
 
     Reference< XStatusListener > xStatusListener;
     Reference< XDispatch > xDispatch;
