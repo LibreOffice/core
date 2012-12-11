@@ -23,6 +23,10 @@
 #include <sal/config.h>
 #include <sal/macros.h>
 
+#if defined LIBO_INTERNAL_ONLY
+#include <config_global.h>
+#endif
+
 /* Grab __SIZEOFxxx constants from typesconfig tool on Unix */
 #if defined UNX
   #include <sal/typesizes.h>
@@ -394,6 +398,20 @@ namespace com { namespace sun { namespace star { } } }
  @since LibreOffice 4.0
 */
 namespace css = ::com::sun::star;
+
+/** C++11 "= delete" feature.
+
+    With HAVE_CXX11_DELETE, calling a deleted function will cause a compile-time
+    error, while otherwise it will only cause a link-time error as the declared
+    function is not defined.
+
+    @since LibreOffice 4.1
+*/
+#if defined HAVE_CXX11_DELETE
+#define SAL_DELETE = delete
+#else
+#define SAL_DELETE
+#endif
 
 #endif /* __cplusplus */
 

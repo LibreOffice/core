@@ -94,7 +94,7 @@ public:
                         // original overload have been adapted (in platform
                         // specific code etc.):
                         SfxMedium(String const &, StreamMode, void *)
-                            /* = delete */;
+                            SAL_DELETE;
 
                         SfxMedium( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
                                     const String& rBaseURL,
