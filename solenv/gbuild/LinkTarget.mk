@@ -70,7 +70,7 @@ gb_LinkTarget__get_ldflags=$(if $(LDFLAGS),$(LDFLAGS),$(call gb_LinkTarget__get_
 #                                                          | LinkTarget/headers
 # LinkTarget/headers          all headers available        LinkTarget/external_headers
 #                              including own generated     own generated headers
-# PCH                         precompiled headers          LinkTarget/external_headers
+# PCH                         precompiled headers          LinkTarget/headers
 # LinkTarget/external_headers all external headers avail.  header files of linked libs
 #
 # CObject                     plain c compile              | LinkTarget/headers
@@ -1202,8 +1202,8 @@ $(call gb_PrecompiledHeader_get_target,$(3)) : $(2).cxx
 $(call gb_LinkTarget_get_clean_target,$(1)) : $(call gb_NoexPrecompiledHeader_get_clean_target,$(3))
 $(call gb_NoexPrecompiledHeader_get_target,$(3)) : $(2).cxx
 
-$(call gb_PrecompiledHeader_get_target,$(3)) : $(call gb_LinkTarget_get_external_headers_target,$(1))
-$(call gb_NoexPrecompiledHeader_get_target,$(3)) : $(call gb_LinkTarget_get_external_headers_target,$(1))
+$(call gb_PrecompiledHeader_get_target,$(3)) : $(call gb_LinkTarget_get_headers_target,$(1))
+$(call gb_NoexPrecompiledHeader_get_target,$(3)) : $(call gb_LinkTarget_get_headers_target,$(1))
 
 $(call gb_LinkTarget_get_target,$(1)) : PCH_NAME := $(3)
 $(call gb_LinkTarget_get_target,$(1)) : PCHOBJEX = $(call gb_PrecompiledHeader_get_target,$(3)).obj
