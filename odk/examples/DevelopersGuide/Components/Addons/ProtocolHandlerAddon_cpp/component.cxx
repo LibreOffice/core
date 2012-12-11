@@ -38,8 +38,7 @@
 #include <cppuhelper/queryinterface.hxx> // helper for queryInterface() impl
 #include <cppuhelper/factory.hxx> // helper for component factory
 // generated c++ interfaces
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
@@ -105,16 +104,15 @@ using namespace ::com::sun::star::registry;
  * @param pRegistryKey    the registry key for this component, need for persistent data
  * @return a component factory
  */
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey)
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(const sal_Char * pImplName, void * /*pServiceManager*/, void * pRegistryKey)
 {
     void * pRet = 0;
 
     if (rtl_str_compare( pImplName, IMPLEMENTATION_NAME ) == 0)
     {
-        Reference< XSingleServiceFactory > xFactory( createSingleFactory(
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-            OUString( RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATION_NAME ) ),
+        Reference< XSingleComponentFactory > xFactory( createSingleComponentFactory(
             Addon_createInstance,
+            OUString( RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATION_NAME ) ),
             Addon_getSupportedServiceNames() ) );
 
         if (xFactory.is())
