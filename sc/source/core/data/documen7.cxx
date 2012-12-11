@@ -271,7 +271,7 @@ bool ScDocument::IsInFormulaTree( ScFormulaCell* pCell ) const
 }
 
 
-void ScDocument::CalcFormulaTree( bool bOnlyForced, bool bNoProgress, bool bDirtyFlag )
+void ScDocument::CalcFormulaTree( bool bOnlyForced, bool bProgressBar, bool bSetAllDirty )
 {
     OSL_ENSURE( !IsCalculatingFormulaTree(), "CalcFormulaTree recursion" );
     // never ever recurse into this, might end up lost in infinity
@@ -308,13 +308,13 @@ void ScDocument::CalcFormulaTree( bool bOnlyForced, bool bNoProgress, bool bDirt
                 }
                 else
                 {   // andere simpel berechnen
-                    if( bDirtyFlag )
+                    if( bSetAllDirty )
                         pCell->SetDirtyVar();
                     pCell = pCell->GetNext();
                 }
             }
         }
-        bool bProgress = !bOnlyForced && nFormulaCodeInTree && !bNoProgress;
+        bool bProgress = !bOnlyForced && nFormulaCodeInTree && bProgressBar;
         if ( bProgress )
             ScProgress::CreateInterpretProgress( this, true );
 

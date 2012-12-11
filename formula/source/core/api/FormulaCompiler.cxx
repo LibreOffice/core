@@ -1069,7 +1069,10 @@ void FormulaCompiler::Factor()
                     pArr->SetRecalcModeOnRefMove();
                 break;
                 case ocHyperLink :
-                pArr->SetHyperLink(true);
+                    // cell with hyperlink needs to be calculated on load to
+                    // get its matrix result generated.
+                    pArr->SetRecalcModeOnLoad();
+                    pArr->SetHyperLink(true);
                 break;
                 default:
                     ;   // nothing

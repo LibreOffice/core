@@ -379,7 +379,7 @@ void WorkbookFragment::finalizeImport()
     if (bHardRecalc)
         pDocSh->DoHardRecalc(false);
     else
-        rDoc.CalcFormulaTree(false, false, false);
+        rDoc.CalcFormulaTree(false, true, false);
 }
 
 // private --------------------------------------------------------------------
