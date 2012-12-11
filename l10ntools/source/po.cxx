@@ -735,7 +735,6 @@ void PoOfstream::writeEntry( const PoEntry& rPoEntry )
 
 PoIfstream::PoIfstream()
     : m_aInPut()
-    , m_bIsAfterHeader( false )
     , m_bEof( false )
 {
 }
@@ -752,7 +751,14 @@ void PoIfstream::open( const OString& rFileName )
 {
     assert( !isOpen() );
     m_aInPut.open( rFileName.getStr(), std::ios_base::in );
-    m_bIsAfterHeader = false;
+
+    //Skip header
+    std::string sTemp;
+    std::getline(m_aInPut,sTemp);
+    while( !sTemp.empty() && !m_aInPut.eof() )
+    {
+        std::getline(m_aInPut,sTemp);
+    }
     m_bEof = false;
 }
 
@@ -762,35 +768,9 @@ void PoIfstream::close()
     m_aInPut.close();
 }
 
-void PoIfstream::readHeader( PoHeader& rPoHeader )
-{
-    assert( isOpen() && !eof() && !m_bIsAfterHeader );
-    GenPoEntry aGenPo;
-    aGenPo.readFromFile( m_aInPut );
-    if( !aGenPo.getExtractCom().isEmpty() &&
-        aGenPo.getMsgId().isEmpty() &&
-        !aGenPo.getMsgStr().isEmpty() )
-    {
-        if( rPoHeader.m_pGenPo )
-        {
-            *(rPoHeader.m_pGenPo) = aGenPo;
-        }
-        else
-        {
-            rPoHeader.m_pGenPo = new GenPoEntry( aGenPo );
-        }
-        rPoHeader.m_bIsInitialized = true;
-        m_bIsAfterHeader = true;
-    }
-    else
-    {
-        throw INVALIDHEADER;
-    }
-}
-
 void PoIfstream::readEntry( PoEntry& rPoEntry )
 {
-    assert( isOpen() && !eof() && m_bIsAfterHeader );
+    assert( isOpen() && !eof() );
     GenPoEntry aGenPo;
     aGenPo.readFromFile( m_aInPut );
     if( aGenPo.isNull() )
