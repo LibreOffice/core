@@ -21,7 +21,7 @@
 // ---------------------------------------------------------------------------
 // French language locale (automatically generated)
 // ---------------------------------------------------------------------------
-static const Locale aFr(OUString(RTL_CONSTASCII_USTRINGPARAM("fr")), OUString(), OUString());
+static const Locale aFr("fr", "", "");
 
 // pre instantiations of localized function names
 static const sal_Unicode cell_address_fr[] = {
@@ -76,7 +76,7 @@ addToMap(pFr, aFr);
 // ---------------------------------------------------------------------------
 // Hungarian language locale (automatically generated)
 // ---------------------------------------------------------------------------
-static const Locale aHu(OUString(RTL_CONSTASCII_USTRINGPARAM("hu")), OUString(), OUString());
+static const Locale aHu("hu", "", "");
 
 // pre instantiations of localized function names
 static const sal_Unicode cell_address_hu[] = {
@@ -146,7 +146,7 @@ addToMap(pHu, aHu);
 // ---------------------------------------------------------------------------
 // German language locale (automatically generated)
 // ---------------------------------------------------------------------------
-static const Locale aDe(OUString(RTL_CONSTASCII_USTRINGPARAM("de")), OUString(), OUString());
+static const Locale aDe("de", "", "");
 
 // pre instantiations of localized function names
 static const sal_Unicode cell_row_de[] = {
