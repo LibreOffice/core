@@ -129,6 +129,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/frame,\
 	GlobalEventBroadcaster \
 	MediaTypeDetectionHelper \
 	ModuleManager \
+    ToolBarControllerFactory \
 	UICommandDescription \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/graphic,\

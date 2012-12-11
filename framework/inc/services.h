@@ -65,7 +65,6 @@ namespace framework{
 #define SERVICENAME_DOCUMENTACCELERATORCONFIGURATION            DECLARE_ASCII("com.sun.star.ui.DocumentAcceleratorConfiguration")
 #define SERVICENAME_PACKAGESTRUCTURECREATOR                     DECLARE_ASCII("com.sun.star.embed.PackageStructureCreator"          )
 #define SERVICENAME_TOOLBARFACTORY                              DECLARE_ASCII("com.sun.star.ui.ToolBarFactory"               )
-#define SERVICENAME_TOOLBARCONTROLLERFACTORY                    DECLARE_ASCII("com.sun.star.frame.ToolBarControllerFactory"         )
 #define SERVICENAME_LICENSE                                     SERVICENAME_JOB
 #define SERVICENAME_STATUSBARFACTORY                            DECLARE_ASCII("com.sun.star.ui.StatusBarFactory"             )
 #define SERVICENAME_UICATEGORYDESCRIPTION                       DECLARE_ASCII("com.sun.star.ui.UICategoryDescription"               )

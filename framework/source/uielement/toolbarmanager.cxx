@@ -35,6 +35,7 @@
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/UICommandDescription.hpp>
+#include <com/sun/star/frame/ToolBarControllerFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/XDockableWindow.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
@@ -241,10 +242,7 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
 
     if ( m_xServiceManager.is() )
     {
-        m_xToolbarControllerRegistration = Reference< XUIControllerRegistration >(
-                                                    m_xServiceManager->createInstance( SERVICENAME_TOOLBARCONTROLLERFACTORY ),
-                                                UNO_QUERY );
-
+        m_xToolbarControllerRegistration = frame::ToolBarControllerFactory::create( comphelper::getComponentContext(m_xServiceManager) );
         m_xURLTransformer.set(
              URLTransformer::create(
                  ::comphelper::getComponentContext(m_xServiceManager)) );
