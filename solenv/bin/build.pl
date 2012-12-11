@@ -189,7 +189,7 @@
     my $incompatible = 0;
     my $local_host_ip = 'localhost';
     my $tail_build_modules_mk = "$ENV{SOLARENV}/gbuild/tail_build_modules.mk";
-    my $tail_build_module_dir = $ENV{"SRCDIR"};
+    my $tail_build_module_dir = $ENV{"SRC_ROOT"};
     my $tail_build_prj = "tail_build";
     my $cross_tail_build_prj = "cross_tail_build";
     my $total_modules = 0;

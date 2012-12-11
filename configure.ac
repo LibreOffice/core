@@ -4,7 +4,6 @@ dnl in order to create a configure script.
 
 AC_INIT([LibreOffice],[4.1],[],[],[http://documentfoundation.org/])
 AC_PREREQ([2.59])
-
 save_CC=$CC
 save_CXX=$CXX
 
@@ -87,16 +86,20 @@ AC_PROG_EGREP
 # AC_PROG_EGREP doesn't set GREP on all systems as well
 AC_PATH_PROG(GREP, grep)
 
+BUILD_DIR=`pwd`
+cd $srcdir
+SRC_ROOT=`pwd`
+cd $BUILD_DIR
+EXEEXT_FOR_BUILD=
+x_Cygwin=[\#]
+
 if test "$build_os" = "cygwin"; then
     EXEEXT_FOR_BUILD=.exe
-    SRC_ROOT=`pwd`
     PathFormat "$SRC_ROOT"
     SRC_ROOT="$formatted_path"
+    PathFormat "$BUILD_DIR"
+    BUILD_DIR="$formatted_path"
     x_Cygwin=
-else
-    EXEEXT_FOR_BUILD=
-    SRC_ROOT=`pwd`
-    x_Cygwin=[\#]
 fi
 
 AC_SUBST(SRC_ROOT)
@@ -2406,7 +2409,7 @@ if test -n "${with_solver_and_workdir_root}"; then
         SOLARVER=${formatted_path}/solver
     fi
 else
-    SOLARVER=${SRC_ROOT}/solver
+    SOLARVER=${BUILD_DIR}/solver
 fi
 
 dnl ===================================================================
@@ -4031,7 +4034,7 @@ if test -n "${with_solver_and_workdir_root}"; then
         WORKDIR=${formatted_path}/workdir/${INPATH}
     fi
 else
-    WORKDIR=${SRC_ROOT}/workdir/${INPATH}
+    WORKDIR=${BUILD_DIR}/workdir/${INPATH}
 fi
 OUTDIR="${SOLARVER}/${INPATH}"
 SOLARINC="-I. -I${SOLARVER}/$INPATH/inc/external -I${SOLARVER}/$INPATH/inc -I$SRC_ROOT/solenv/inc $SOLARINC"
@@ -4145,9 +4148,9 @@ if test "$cross_compiling" = "yes"; then
         config_host.mk.in \
         configure \
         bin/get_config_variables \
-        solenv/bin/getcompver.awk \
-        solenv/inc/langlist.mk \
-        solenv/inc/postset.mk \
+        $srcdir/solenv/bin/getcompver.awk \
+        $SRC_ROOT/solenv/inc/langlist.mk \
+        $SRC_ROOT/solenv/inc/postset.mk \
     | (cd CONF-FOR-BUILD && tar xf -)
     (
     unset COM GUI GUIBASE OS CPU CPUNAME
@@ -11824,7 +11827,7 @@ AC_MSG_CHECKING([which languages to be built])
 #   + adds " at the end of the value
 #   + removes en-US; we want to put it on the beginning
 #   + prints just the section starting with 'completelangiso=' and ending with the " at the end of line
-[eval $(sed -e :a -e '/\\$/N; s/\\\n//; ta' -n -e 's/=/="/;s/\([^\\]\)$/\1"/;s/en-US//;/^completelangiso/p' solenv/inc/langlist.mk)]
+[eval $(sed -e :a -e '/\\$/N; s/\\\n//; ta' -n -e 's/=/="/;s/\([^\\]\)$/\1"/;s/en-US//;/^completelangiso/p' $SRC_ROOT/solenv/inc/langlist.mk)]
 ALL_LANGS="en-US $completelangiso"
 # check the configured localizations
 WITH_LANG="$with_lang"
@@ -12511,7 +12514,7 @@ else
     echo > config_host.mk.last
 fi
 
-AC_CONFIG_FILES([config_host.mk])
+AC_CONFIG_FILES([config_host.mk Makefile])
 AC_CONFIG_HEADERS([config/config_global.h])
 AC_CONFIG_HEADERS([config/config_telepathy.h])
 AC_CONFIG_HEADERS([config/config_vclplug.h])
