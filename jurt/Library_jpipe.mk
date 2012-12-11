@@ -39,6 +39,10 @@ $(eval $(call gb_Library_add_cobjects,jpipe,\
     jurt/source/pipe/wrapper/wrapper \
 ))
 
+$(eval $(call gb_Library_use_packages,jpipe,\
+    sal_inc \
+))
+
 else
 
 $(eval $(call gb_Library_use_libraries,jpipe,\
