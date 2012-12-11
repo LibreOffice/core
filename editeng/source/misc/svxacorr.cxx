@@ -2669,7 +2669,7 @@ void SvxAutocorrWordList::DeleteAndDestroyAll()
 // returns true if inserted
 bool SvxAutocorrWordList::Insert(SvxAutocorrWord *pWord)
 {
-    if ( maSet.size() == 0 ) // use the hash
+    if ( maSet.empty() ) // use the hash
     {
         rtl::OUString aShort( pWord->GetShort() );
         bool bThere = maHash.find( aShort ) != maHash.end();
@@ -2697,7 +2697,7 @@ SvxAutocorrWord *SvxAutocorrWordList::FindAndRemove(SvxAutocorrWord *pWord)
 {
     SvxAutocorrWord *pMatch = NULL;
 
-    if ( maSet.size() == 0 ) // use the hash
+    if ( maSet.empty() ) // use the hash
     {
         SvxAutocorrWordList_Hash::iterator it = maHash.find( pWord->GetShort() );
         if( it != maHash.end() )
@@ -2724,7 +2724,7 @@ SvxAutocorrWordList::Content SvxAutocorrWordList::getSortedContent() const
     Content aContent;
 
     // convert from hash to set permanantly
-    if ( maSet.size() == 0 )
+    if ( maSet.empty() )
     {
         // This beasty has some O(N log(N)) in a terribly slow ICU collate fn.
         for( SvxAutocorrWordList_Hash::const_iterator it = maHash.begin(); it != maHash.end(); ++it )
