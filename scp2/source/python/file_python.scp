@@ -136,15 +136,6 @@ File gid_File_Scripts_Python
     Name = "ScriptsPython.zip";
 End
 
-//LibreLogo turtle graphics
-
-File gid_File_LibreLogo
-    TXT_FILE_BODY;
-    Styles = (ARCHIVE);
-    Dir = gid_Dir_Share_Scripts;
-    Name = "LibreLogo.zip";
-End
-
 // Scripting Framework Python configuration settings
 
 File gid_File_Share_Registry_Pyuno_Xcd

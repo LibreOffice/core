@@ -312,6 +312,21 @@ packageversion = "%ABOUTBOXPRODUCTVERSION"
 End
 
 Start
+module = "gid_Module_Optional_Pyuno_LibreLogo"
+solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-librelogo"
+solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core01, SUNWPython"
+packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-librelogo"
+freebsdrequires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core01"
+requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core01"
+copyright = "2012 The Document Foundation"
+solariscopyright = "solariscopyrightfile"
+vendor = "The Document Foundation"
+description = "LibreLogo toolbar for %PRODUCTNAME %PRODUCTVERSION Writer"
+destpath = "/opt"
+packageversion = "%ABOUTBOXPRODUCTVERSION"
+End
+
+Start
 module = "gid_Module_Optional_Pymailmerge"
 solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-emailmerge"
 solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-pyuno"

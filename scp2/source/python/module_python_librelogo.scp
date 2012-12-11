@@ -1,0 +1,25 @@
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include "macros.inc"
+
+#ifndef AIX
+#ifndef DISABLE_PYUNO
+Module gid_Module_Optional_Pyuno_LibreLogo
+    PackageInfo = "packinfo_office.txt";
+    MOD_NAME_DESC ( MODULE_OPTIONAL_PYTHON_LIBRELOGO );
+    ParentID = gid_Module_Optional_Pyuno;
+    Sortkey = "100";
+    Files = (gid_File_LibreLogo,
+             gid_File_Share_Registry_LibreLogo_Xcd);
+    Minimal = NO;
+    Default = YES;
+    Styles = ( );
+End
+#endif
+#endif
