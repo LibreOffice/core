@@ -1689,7 +1689,7 @@
             page through the objects since they do not always need to be loaded
             from the hard drive.</desc>
           </info>
-          <value>20</value>
+          <value>30</value>
         </prop>
       </group>
       <group oor:name="Writer">
