@@ -1348,26 +1348,25 @@ void ScInterpreter::ScCritBinom()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScCritBinom" );
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
-        double alpha  = GetDouble();                    // alpha
-        double p      = GetDouble();                    // p
+        double alpha  = GetDouble();
+        double p      = GetDouble();
         double n      = ::rtl::math::approxFloor(GetDouble());
         if (n < 0.0 || alpha <= 0.0 || alpha >= 1.0 || p < 0.0 || p > 1.0)
             PushIllegalArgument();
         else
         {
-            double q = 1.0 - p;
+            double q = (0.5 - p) + 0.5;           // get one bit more for p near 1.0
             double fFactor = pow(q,n);
-            if (fFactor == 0.0)
+            if (fFactor <= ::std::numeric_limits<double>::min())
             {
                 fFactor = pow(p, n);
-                if (fFactor == 0.0)
+                if (fFactor <= ::std::numeric_limits<double>::min())
                     PushNoValue();
                 else
                 {
-                    double fSum = 1.0 - fFactor; sal_uLong max = (sal_uLong) n;
-                    sal_uLong i;
-
-                    for ( i = 0; i < max && fSum >= alpha; i++)
+                    double fSum = 1.0 - fFactor;
+                    sal_uInt32 max = static_cast<sal_uInt32> (n), i;
+                    for (i = 0; i < max && fSum >= alpha; i++)
                     {
                         fFactor *= (n-i)/(i+1)*q/p;
                         fSum -= fFactor;
@@ -1377,10 +1376,9 @@ void ScInterpreter::ScCritBinom()
             }
             else
             {
-                double fSum = fFactor; sal_uLong max = (sal_uLong) n;
-                sal_uLong i;
-
-                for ( i = 0; i < max && fSum < alpha; i++)
+                double fSum = fFactor;
+                sal_uInt32 max = static_cast<sal_uInt32> (n), i;
+                for (i = 0; i < max && fSum < alpha; i++)
                 {
                     fFactor *= (n-i)/(i+1)*p/q;
                     fSum += fFactor;
