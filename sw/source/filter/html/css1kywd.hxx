@@ -275,6 +275,8 @@ extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_ltr, "ltr" );
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_rtl, "rtl" );
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_inherit, "inherit" );
 
+extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_display, "display" );
+
 #endif
 
 

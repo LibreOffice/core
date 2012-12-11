@@ -265,4 +265,6 @@ sal_Char CSS1_CONSTASCII_DEF( sCSS1_PV_ltr, "ltr" );
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_PV_rtl, "rtl" );
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_PV_inherit, "inherit" );
 
+sal_Char CSS1_CONSTASCII_DEF( sCSS1_P_display, "display" );
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
