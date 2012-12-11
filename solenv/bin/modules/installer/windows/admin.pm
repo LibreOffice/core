@@ -56,7 +56,7 @@ sub unpack_cabinet_file
 
     if ( $^O =~ /cygwin/i )
     {
-        $expandfile = qx(cygpath -u "$ENV{WINDIR}"/System32/expand.exe);
+        $expandfile = qx(cygpath -u c:/libo/expand/expand.exe);
         chomp $expandfile;
     }
 
