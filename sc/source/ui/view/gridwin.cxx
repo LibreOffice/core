@@ -119,6 +119,7 @@
 #include "markdata.hxx"
 #include "checklistmenu.hrc"
 #include "strload.hxx"
+#include "externalrefmgr.hxx"
 
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
@@ -2371,7 +2372,51 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         if ( GetEditUrl( rMEvt.GetPosPixel(), &aName, &aUrl, &aTarget ) )
         {
             nMouseStatus = SC_GM_NONE;              // keinen Doppelklick anfangen
-            ScGlobal::OpenURL( aUrl, aTarget );
+
+            // ScGlobal::OpenURL() only understands Calc A1 style syntax.
+            // Convert it to Calc A1 before calling OpenURL().
+
+            if (pDoc->GetAddressConvention() == formula::FormulaGrammar::CONV_OOO)
+                ScGlobal::OpenURL(aUrl, aTarget);
+            else
+            {
+                ScAddress aTempAddr;
+                ScAddress::ExternalInfo aExtInfo;
+                sal_uInt16 nRes = aTempAddr.Parse(aUrl, pDoc, pDoc->GetAddressConvention(), &aExtInfo);
+                if (!(nRes & SCA_VALID))
+                {
+                    // Not a reference string. Pass it through unmodified.
+                    ScGlobal::OpenURL(aUrl, aTarget);
+                    return;
+                }
+
+                OUStringBuffer aBuf;
+                if (aExtInfo.mbExternal)
+                {
+                    // External reference.
+                    ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
+                    const OUString* pStr = pRefMgr->getExternalFileName(aExtInfo.mnFileId);
+                    if (pStr)
+                        aBuf.append(*pStr);
+
+                    aBuf.append('#');
+                    aBuf.append(aExtInfo.maTabName);
+                    aBuf.append('.');
+                    OUString aRefCalcA1;
+                    aTempAddr.Format(aRefCalcA1, SCA_ABS, NULL, formula::FormulaGrammar::CONV_OOO);
+                    aBuf.append(aRefCalcA1);
+                    ScGlobal::OpenURL(aBuf.makeStringAndClear(), aTarget);
+                }
+                else
+                {
+                    // Internal reference.
+                    aBuf.append('#');
+                    OUString aUrlCalcA1;
+                    aTempAddr.Format(aUrlCalcA1, SCA_ABS_3D, pDoc, formula::FormulaGrammar::CONV_OOO);
+                    aBuf.append(aUrlCalcA1);
+                    ScGlobal::OpenURL(aBuf.makeStringAndClear(), aTarget);
+                }
+            }
 
             // fire worksheet_followhyperlink event
             uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents = pDoc->GetVbaEventProcessor();

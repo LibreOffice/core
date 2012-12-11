@@ -156,7 +156,24 @@ static bool lcl_ScRange_External_TabSpan(
 
     ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
     if (pRefMgr->isOwnDocument( rExternDocName))
+    {
+        // This is an internal document.  Get the sheet positions from the
+        // ScDocument instance.
+        if (rStartTabName.Len())
+        {
+            SCTAB nTab;
+            if (pDoc->GetTable(rStartTabName, nTab))
+                rRange.aStart.SetTab(nTab);
+        }
+
+        if (rEndTabName.Len())
+        {
+            SCTAB nTab;
+            if (pDoc->GetTable(rEndTabName, nTab))
+                rRange.aEnd.SetTab(nTab);
+        }
         return !pExtInfo || !pExtInfo->mbExternal;
+    }
 
     sal_uInt16 nFileId = pRefMgr->getExternalFileId( rExternDocName);
 
