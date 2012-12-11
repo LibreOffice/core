@@ -235,9 +235,10 @@ Sequence<OUString> SwLayoutViewConfig::GetPropertyNames()
         "ViewLayout/Columns",                   //15
         "ViewLayout/BookMode",                  //16
         "Other/IsSquaredPageMode",              //17
-        "Other/ApplyCharUnit"                   //18
+        "Other/ApplyCharUnit",                  //18
+        "Window/ShowScrollBarTips"              //19
     };
-    const int nCount = bWeb ? 13 : 19;
+    const int nCount = bWeb ? 13 : 20;
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
@@ -298,6 +299,7 @@ void SwLayoutViewConfig::Commit()
             case 16: rVal <<= (sal_Bool) rParent.IsViewLayoutBookMode(); break;     // "ViewLayout/BookMode",
             case 17: rVal <<= (sal_Bool) rParent.IsSquaredPageMode(); break;        // "Other/IsSquaredPageMode",
             case 18: rVal <<= (sal_Bool) rParent.IsApplyCharUnit(); break;        // "Other/ApplyCharUnit",
+            case 19: rVal <<= (sal_Bool) rParent.IsShowScrollBarTips(); break;      // "Window/ShowScrollBarTips",
         }
     }
     PutProperties(aNames, aValues);
@@ -351,6 +353,7 @@ void SwLayoutViewConfig::Load()
                     case 16: rParent.SetViewLayoutBookMode(bSet); break;// "ViewLayout/BookMode",
                     case 17: rParent.SetDefaultPageMode(bSet,sal_True); break;// "Other/IsSquaredPageMode",
                     case 18: rParent.SetApplyCharUnit(bSet); break;// "Other/ApplyUserChar"
+                    case 19: rParent.SetShowScrollBarTips(bSet); break;// "Window/ShowScrollBarTips",
                 }
             }
         }

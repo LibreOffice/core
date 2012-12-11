@@ -23,8 +23,7 @@
 #include <com/sun/star/view/DocumentZoomType.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-
- module com {  module sun {  module star {  module text {
+module com {  module sun {  module star {  module text {
 
 /** provides access to the settings of the controller of a text document.
  */
@@ -65,20 +64,17 @@ published service ViewSettings
      */
     [property] boolean ShowHiddenText;
 
+    /** ShowHoriRuler and ShowVertRuler determine whether a ruler is visible.
+     */
+    [property] boolean ShowRulers;
 
-         /** ShowHoriRuler and ShowVertRuler determine whether a ruler is visible.
-         */
-        [property] boolean ShowRulers;
-
-
-        /** If this property is `TRUE` and the property ShowRulers is `TRUE`,
-           the horizontal ruler is displayed.
+    /** If this property is `TRUE` and the property ShowRulers is `TRUE`,
+        the horizontal ruler is displayed.
      */
     [property] boolean ShowHoriRuler;
 
-
-        /** If this property is `TRUE` and the property ShowRulers is `TRUE`,
-           the horizontal scroll bar is displayed.
+    /** If this property is `TRUE` and the property ShowRulers is `TRUE`,
+        the horizontal scroll bar is displayed.
      */
     [property] boolean ShowHoriScrollBar;
 
@@ -220,7 +216,7 @@ published service ViewSettings
      */
     [optional, property] long RasterResolutionY;
 
-    /** If this property is `TRUE`, hidden characters are displayed
+    /** If this property is <TRUE/>, hidden characters are displayed
 
         @since OOo 3.0
      */
@@ -233,6 +229,7 @@ published service ViewSettings
         @since OOo 3.0
      */
     [optional, property] boolean ShowNonprintingCharacters;
+
     /** metric unit of the horizontal ruler
 
         <p>Uses values com::sun::star::awt::FieldUnit</p>
@@ -240,6 +237,7 @@ published service ViewSettings
         @since OOo 3.1
      */
     [optional, property] long HorizontalRulerMetric;
+
     /** metric unit of the vertical ruler
 
         <p>Uses values from com::sun::star::awt::FieldUnit</p>
@@ -247,15 +245,21 @@ published service ViewSettings
         @since OOo 3.1
      */
     [optional, property] long VerticalRulerMetric;
-    //-------------------------------------------------------------------------
+
     /** If this property is `TRUE`, tips for document content are shown,
         typically in a help balloon when the mouse is over the content.
 
         @since LibreOffice 4.1
      */
     [optional, property] boolean ShowContentTips;
-};
 
+    /** If this property is `TRUE`, and the scroll bar is shown, a tool tip
+        is displayed while scrolling.
+
+        @since LibreOffice 4.2
+     */
+    [optional, property] boolean ShowScrollBarTips;
+};
 
 }; }; }; };
 

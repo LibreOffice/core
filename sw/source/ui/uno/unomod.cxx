@@ -88,7 +88,8 @@ enum SwViewSettingsPropertyHandles
     HANDLE_VIEWSET_RASTER_SUBDIVISION_X,
     HANDLE_VIEWSET_RASTER_SUBDIVISION_Y,
     HANDLE_VIEWSET_HORI_RULER_METRIC,
-    HANDLE_VIEWSET_VERT_RULER_METRIC
+    HANDLE_VIEWSET_VERT_RULER_METRIC,
+    HANDLE_VIEWSET_SCROLLBAR_TIPS
 };
 
 enum SwPrintSettingsPropertyHandles
@@ -144,6 +145,7 @@ static ChainablePropertySetInfo * lcl_createViewSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM ( "ShowParaBreaks"),       HANDLE_VIEWSET_PARA_BREAKS          , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "ShowProtectedSpaces"),  HANDLE_VIEWSET_PROTECTED_SPACES     , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "ShowRulers"),           HANDLE_VIEWSET_SHOW_RULER           , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowScrollBarTips"),    HANDLE_VIEWSET_SCROLLBAR_TIPS       , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "ShowSoftHyphens"),      HANDLE_VIEWSET_SOFT_HYPHENS         , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "ShowSpaces"),           HANDLE_VIEWSET_SPACES               , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "ShowTableBoundaries"),  HANDLE_VIEWSET_TABLE_BOUNDARIES     , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
@@ -635,6 +637,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
         case  HANDLE_VIEWSET_SHOW_CONTENT_TIPS     :   mpViewOption->SetShowContentTips(bVal); break;
         case  HANDLE_VIEWSET_IS_RASTER_VISIBLE     : mpViewOption->SetGridVisible(bVal); break;
         case  HANDLE_VIEWSET_IS_SNAP_TO_RASTER     : mpViewOption->SetSnap(bVal); break;
+        case  HANDLE_VIEWSET_SCROLLBAR_TIPS        : mpViewOption->SetShowScrollBarTips(bVal); break;
         case  HANDLE_VIEWSET_RASTER_RESOLUTION_X   :
         {
             sal_Int32 nTmp = 0;
@@ -862,6 +865,7 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
         case  HANDLE_VIEWSET_SHOW_CONTENT_TIPS     :   bBoolVal = mpConstViewOption->IsShowContentTips(); break;
         case  HANDLE_VIEWSET_IS_RASTER_VISIBLE     : bBoolVal = mpConstViewOption->IsGridVisible(); break;
         case  HANDLE_VIEWSET_IS_SNAP_TO_RASTER     : bBoolVal = mpConstViewOption->IsSnap(); break;
+        case  HANDLE_VIEWSET_SCROLLBAR_TIPS        : bBoolVal = mpConstViewOption->IsShowScrollBarTips(); break;
         case  HANDLE_VIEWSET_RASTER_RESOLUTION_X   :
             bBool = false;
             rValue <<= (sal_Int32) TWIP_TO_MM100(mpConstViewOption->GetSnapSize().Width());

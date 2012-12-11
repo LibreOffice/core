@@ -85,7 +85,7 @@ namespace svtools{ class ColorConfig;}
 #define VIEWOPT_2_GRFKEEPZOOM       0x00040000L
 #define VIEWOPT_2_CONTENT_TIPS      0x00100000L
 #define VIEWOPT_2_RESERVED3         0x00200000L
-#define VIEWOPT_2_RESERVED4         0x00400000L
+#define VIEWOPT_2_SCROLLBAR_TIPS    0x00400000L
 #define VIEWOPT_2_PRTFORMAT         0x00800000L
 #define VIEWOPT_2_SHADOWCRSR        0x01000000L
 #define VIEWOPT_2_V_RULER_RIGHT     0x02000000L
@@ -468,6 +468,8 @@ public:
         { return nUIOptions & VIEWOPT_2_CONTENT_TIPS ? sal_True : sal_False; }
     sal_Bool    IsPrtFormat() const
         { return nUIOptions & VIEWOPT_2_PRTFORMAT ? sal_True : sal_False; }
+    sal_Bool    IsShowScrollBarTips() const
+        { return nUIOptions & VIEWOPT_2_SCROLLBAR_TIPS ? sal_True : sal_False; }
 
     SvxZoomType    GetZoomType()      const { return eZoom; }
 
@@ -485,6 +487,8 @@ public:
         { b ? (nUIOptions |= VIEWOPT_2_CONTENT_TIPS) : (nUIOptions &= ~VIEWOPT_2_CONTENT_TIPS); }
     void SetPrtFormat( sal_Bool b)
         { b ? (nUIOptions |= VIEWOPT_2_PRTFORMAT) : (nUIOptions &= ~VIEWOPT_2_PRTFORMAT); }
+    void SetShowScrollBarTips( sal_Bool b)
+        { b ? (nUIOptions |= VIEWOPT_2_SCROLLBAR_TIPS) : (nUIOptions &= ~VIEWOPT_2_SCROLLBAR_TIPS); }
 
     void            SetZoomType     (SvxZoomType eZoom_){ eZoom = eZoom_;  }
     void            SetTblDest( sal_uInt8 nNew )    { nTblDest = nNew;  }

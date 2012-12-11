@@ -680,20 +680,26 @@ IMPL_LINK( SwView, ScrollHdl, SwScrollbar *, pScrollbar )
         // so we dont must do it agin.
         EndScrollHdl(pScrollbar);
 
-        Point aPos( m_aVisArea.TopLeft() );
-        lcl_GetPos(this, aPos, pScrollbar, IsDocumentBorder());
-
-        sal_uInt16 nPhNum = 1;
-        sal_uInt16 nVirtNum = 1;
-
-        String sDisplay;
-        if(m_pWrtShell->GetPageNumber( aPos.Y(), sal_False, nPhNum, nVirtNum, sDisplay ))
+        if ( !m_bWheelScrollInProgress && Help::IsQuickHelpEnabled() &&
+             m_pWrtShell->GetViewOptions()->IsShowScrollBarTips())
         {
 
-            //QuickHelp:
-            if( !m_bWheelScrollInProgress && m_pWrtShell->GetPageCnt() > 1 && Help::IsQuickHelpEnabled() )
+            Point aPos( m_aVisArea.TopLeft() );
+            lcl_GetPos(this, aPos, pScrollbar, IsDocumentBorder());
+
+            sal_uInt16 nPhNum = 1;
+            sal_uInt16 nVirtNum = 1;
+
+            String sDisplay;
+            if(m_pWrtShell->GetPageNumber( aPos.Y(), sal_False, nPhNum, nVirtNum, sDisplay ))
             {
-                if( !nPgNum || nPgNum != nPhNum )
+                // JP 21.07.00: the end scrollhandler invalidate the FN_STAT_PAGE,
+                //                 so we dont must do it agin.
+        //      if(!GetViewFrame()->GetFrame().IsInPlace())
+        //            S F X_BINDINGS().Update(FN_STAT_PAGE);
+
+                //QuickHelp:
+                if( m_pWrtShell->GetPageCnt() > 1 )
                 {
                     Rectangle aRect;
                     aRect.Left() = pScrollbar->GetParent()->OutputToScreenPixel(
@@ -713,11 +719,8 @@ IMPL_LINK( SwView, ScrollHdl, SwScrollbar *, pScrollbar )
                         sPageStr.SearchAndReplaceAll( '\t', ' ' );
                         sPageStr.SearchAndReplaceAll( 0x0a, ' ' );
                     }
-
-                    Help::ShowQuickHelp( pScrollbar, aRect, sPageStr,
-                                    QUICKHELP_RIGHT|QUICKHELP_VCENTER);
+                    nPgNum = nPhNum;
                 }
-                nPgNum = nPhNum;
             }
         }
     }
