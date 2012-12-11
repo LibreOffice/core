@@ -79,7 +79,7 @@
 	</xsl:template>
 
 	<!-- text-shadow is a CSS2 feature and yet not common used in user-agents -->
-	<xsl:template match="@fo:color |@svg:font-family |@fo:font-size |@fo:font-style |@fo:font-weight |@fo:text-indent |@fo:text-shadow">
+	<xsl:template match="@fo:color |@svg:font-family |@fo:font-size |@fo:font-style |@fo:font-weight |@fo:text-indent |@fo:text-shadow |@text:display">
 		<xsl:value-of select="substring-after(name(), ':')"/>
 		<xsl:text>:</xsl:text>
 		<xsl:value-of select="."/>
