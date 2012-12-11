@@ -582,7 +582,7 @@ public:
     template< typename T >
     typename internal::Enable< void,
         !internal::CharPtrDetector< T* >::ok && !internal::SalUnicodePtrDetector< T* >::ok >::Type
-        append( T* ) SAL_DELETE;
+        append( T* ) SAL_DELETED_FUNCTION;
 #endif
 
     // This overload is needed because OUString has a ctor from rtl_uString*, but

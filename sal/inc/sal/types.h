@@ -408,9 +408,9 @@ namespace css = ::com::sun::star;
     @since LibreOffice 4.1
 */
 #if defined HAVE_CXX11_DELETE
-#define SAL_DELETE = delete
+#define SAL_DELETED_FUNCTION = delete
 #else
-#define SAL_DELETE
+#define SAL_DELETED_FUNCTION
 #endif
 
 #endif /* __cplusplus */
