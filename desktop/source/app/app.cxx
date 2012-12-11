@@ -63,6 +63,7 @@
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/frame/UICommandDescription.hpp>
 #include <com/sun/star/ui/XUIElementFactoryRegistration.hpp>
+#include <com/sun/star/ui/WindowStateConfiguration.hpp>
 #include <com/sun/star/frame/XUIControllerRegistration.hpp>
 
 #include <toolkit/unohlp.hxx>
@@ -127,6 +128,7 @@ using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::system;
+using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::container;
 
@@ -1977,8 +1979,6 @@ void Desktop::EnableOleAutomation()
 
 void Desktop::PreloadModuleData( const CommandLineArgs& rArgs )
 {
-    Reference< XMultiServiceFactory > rFactory = ::comphelper::getProcessServiceFactory();
-
     Sequence < com::sun::star::beans::PropertyValue > args(1);
     args[0].Name = ::rtl::OUString("Hidden");
     args[0].Value <<= sal_True;
@@ -2092,51 +2092,47 @@ void Desktop::PreloadConfigurationData()
     }
 
     // preload window state configuration
-    xNameAccess = Reference< XNameAccess >( rFactory->createInstance(
-                    rtl::OUString( "com.sun.star.ui.WindowStateConfiguration" )), UNO_QUERY );
-    if ( xNameAccess.is() )
+    xNameAccess = WindowStateConfiguration::create( xContext );
+    Reference< XNameAccess > xWindowAccess;
+    try
     {
-        Reference< XNameAccess > xWindowAccess;
-        try
-        {
-            a = xNameAccess->getByName( aWriterDoc );
-            a >>= xWindowAccess;
-            if ( xWindowAccess.is() )
-                xWindowAccess->getByName( rtl::OUString( "private:resource/toolbar/standardbar" ));
-        }
-        catch ( const ::com::sun::star::uno::Exception& )
-        {
-        }
-        try
-        {
-            a = xNameAccess->getByName( aCalcDoc );
-            a >>= xWindowAccess;
-            if ( xWindowAccess.is() )
-                xWindowAccess->getByName( rtl::OUString( "private:resource/toolbar/standardbar" ));
-        }
-        catch ( const ::com::sun::star::uno::Exception& )
-        {
-        }
-        try
-        {
-            a = xNameAccess->getByName( aDrawDoc );
-            a >>= xWindowAccess;
-            if ( xWindowAccess.is() )
-                xWindowAccess->getByName( rtl::OUString( "private:resource/toolbar/standardbar" ));
-        }
-        catch ( const ::com::sun::star::uno::Exception& )
-        {
-        }
-        try
-        {
-            a = xNameAccess->getByName( aImpressDoc );
-            a >>= xWindowAccess;
-            if ( xWindowAccess.is() )
-                xWindowAccess->getByName( rtl::OUString( "private:resource/toolbar/standardbar" ));
-        }
-        catch ( const ::com::sun::star::uno::Exception& )
-        {
-        }
+        a = xNameAccess->getByName( aWriterDoc );
+        a >>= xWindowAccess;
+        if ( xWindowAccess.is() )
+            xWindowAccess->getByName( rtl::OUString( "private:resource/toolbar/standardbar" ));
+    }
+    catch ( const ::com::sun::star::uno::Exception& )
+    {
+    }
+    try
+    {
+        a = xNameAccess->getByName( aCalcDoc );
+        a >>= xWindowAccess;
+        if ( xWindowAccess.is() )
+            xWindowAccess->getByName( rtl::OUString( "private:resource/toolbar/standardbar" ));
+    }
+    catch ( const ::com::sun::star::uno::Exception& )
+    {
+    }
+    try
+    {
+        a = xNameAccess->getByName( aDrawDoc );
+        a >>= xWindowAccess;
+        if ( xWindowAccess.is() )
+            xWindowAccess->getByName( rtl::OUString( "private:resource/toolbar/standardbar" ));
+    }
+    catch ( const ::com::sun::star::uno::Exception& )
+    {
+    }
+    try
+    {
+        a = xNameAccess->getByName( aImpressDoc );
+        a >>= xWindowAccess;
+        if ( xWindowAccess.is() )
+            xWindowAccess->getByName( rtl::OUString( "private:resource/toolbar/standardbar" ));
+    }
+    catch ( const ::com::sun::star::uno::Exception& )
+    {
     }
 
     // preload user interface element factories

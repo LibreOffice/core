@@ -305,6 +305,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/ui,\
 	GlobalAcceleratorConfiguration \
     ModuleUIConfigurationManagerSupplier \
 	WindowContentFactory \
+	WindowStateConfiguration \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/ui/dialogs,\
 	FolderPicker \
@@ -1448,7 +1449,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/ui,\
 	UIElementFactory \
 	UIElementFactoryManager \
 	UIElementSettings \
-	WindowStateConfiguration \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/ui/dialogs,\
 	FilePicker \

@@ -50,6 +50,7 @@
 #include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
+#include <com/sun/star/ui/WindowStateConfiguration.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/frame/LayoutManagerEvents.hpp>
@@ -132,8 +133,7 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
         , m_xModuleManager( ModuleManager::create( comphelper::getComponentContext(xServiceManager) ))
         , m_xUIElementFactoryManager( Reference< ui::XUIElementFactory >(
                 xServiceManager->createInstance( SERVICENAME_UIELEMENTFACTORYMANAGER ), UNO_QUERY ))
-        , m_xPersistentWindowStateSupplier( Reference< XNameAccess >(
-                xServiceManager->createInstance( SERVICENAME_WINDOWSTATECONFIGURATION ), UNO_QUERY ))
+        , m_xPersistentWindowStateSupplier( ui::WindowStateConfiguration::create( comphelper::getComponentContext(xServiceManager) ) )
         , m_pGlobalSettings( 0 )
         , m_aStatusBarAlias( "private:resource/statusbar/statusbar" )
         , m_aProgressBarAlias( "private:resource/progressbar/progressbar" )

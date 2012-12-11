@@ -1345,7 +1345,7 @@ DEFINE_XTYPEPROVIDER_4                  (   WindowStateConfiguration            
 
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(   WindowStateConfiguration                    ,
                                             ::cppu::OWeakObject                         ,
-                                            SERVICENAME_WINDOWSTATECONFIGURATION        ,
+                                            DECLARE_ASCII("com.sun.star.ui.WindowStateConfiguration"),
                                             IMPLEMENTATIONNAME_WINDOWSTATECONFIGURATION
                                         )
 

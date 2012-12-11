@@ -78,6 +78,7 @@
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/ui/ImageType.hpp>
+#include <com/sun/star/ui/WindowStateConfiguration.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
@@ -881,8 +882,7 @@ SaveInData::SaveInData(
             bDocConfig( isDocConfig ),
             bReadOnly( sal_False ),
             m_xCfgMgr( xCfgMgr ),
-            m_xParentCfgMgr( xParentCfgMgr ),
-            m_xComponentContext( comphelper::getProcessComponentContext() )
+            m_xParentCfgMgr( xParentCfgMgr )
 {
     m_aSeparatorSeq.realloc( 1 );
     m_aSeparatorSeq[0].Name  = OUString( ITEM_DESCRIPTOR_TYPE  );
@@ -896,12 +896,10 @@ SaveInData::SaveInData(
         bReadOnly = xDocPersistence->isReadOnly();
     }
 
-    m_xServiceManager = uno::Reference< lang::XMultiServiceFactory >(
-        ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
+    uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
 
     uno::Reference< container::XNameAccess > xNameAccess(
-        css::frame::UICommandDescription::create(
-            comphelper::getComponentContext(m_xServiceManager)) );
+        css::frame::UICommandDescription::create(xContext) );
 
     xNameAccess->getByName( aModuleId ) >>= m_xCommandToLabelMap;
 
@@ -1265,6 +1263,8 @@ void MenuSaveInData::Apply(
     SvxEntries::const_iterator iter = GetEntries()->begin();
     SvxEntries::const_iterator end = GetEntries()->end();
 
+    uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+
     for ( ; iter != end; ++iter )
     {
         SvxConfigEntry* pEntryData = *iter;
@@ -1273,7 +1273,7 @@ void MenuSaveInData::Apply(
             ConvertSvxConfigEntry( m_xCommandToLabelMap, pEntryData );
 
         uno::Reference< container::XIndexContainer > xSubMenuBar(
-            rFactory->createInstanceWithContext( m_xComponentContext ),
+            rFactory->createInstanceWithContext( xContext ),
             uno::UNO_QUERY );
 
         sal_Int32 nIndex = aPropValueSeq.getLength();
@@ -1291,6 +1291,8 @@ void MenuSaveInData::ApplyMenu(
     uno::Reference< lang::XSingleComponentFactory >& rFactory,
     SvxConfigEntry* pMenuData )
 {
+    uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+
     SvxEntries::const_iterator iter = pMenuData->GetEntries()->begin();
     SvxEntries::const_iterator end = pMenuData->GetEntries()->end();
 
@@ -1304,7 +1306,7 @@ void MenuSaveInData::ApplyMenu(
                 ConvertSvxConfigEntry( m_xCommandToLabelMap, pEntry );
 
             uno::Reference< container::XIndexContainer > xSubMenuBar(
-                rFactory->createInstanceWithContext( m_xComponentContext ),
+                rFactory->createInstanceWithContext( xContext ),
                     uno::UNO_QUERY );
 
             sal_Int32 nIndex = aPropValueSeq.getLength();
@@ -3706,13 +3708,9 @@ ToolbarSaveInData::ToolbarSaveInData(
 {
     // Initialize the m_xPersistentWindowState variable which is used
     // to get the default properties of system toolbars such as name
-    uno::Reference< container::XNameAccess > xPWSS(
-        m_xServiceManager->createInstance(
-            OUString( "com.sun.star.ui.WindowStateConfiguration"  ) ),
-        uno::UNO_QUERY );
+    uno::Reference< container::XNameAccess > xPWSS = css::ui::WindowStateConfiguration::create( m_xContext );
 
-    if ( xPWSS.is() )
-        xPWSS->getByName( aModuleId ) >>= m_xPersistentWindowState;
+    xPWSS->getByName( aModuleId ) >>= m_xPersistentWindowState;
 }
 
 ToolbarSaveInData::~ToolbarSaveInData()
@@ -4191,6 +4189,8 @@ void ToolbarSaveInData::ApplyToolbar(
     uno::Reference< lang::XSingleComponentFactory >& rFactory,
     SvxConfigEntry* pToolbarData )
 {
+    uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+
     SvxEntries::const_iterator iter = pToolbarData->GetEntries()->begin();
     SvxEntries::const_iterator end = pToolbarData->GetEntries()->end();
 
@@ -4204,7 +4204,7 @@ void ToolbarSaveInData::ApplyToolbar(
                 ConvertToolbarEntry( m_xCommandToLabelMap, pEntry );
 
             uno::Reference< container::XIndexContainer > xSubMenuBar(
-                rFactory->createInstanceWithContext( m_xComponentContext ),
+                rFactory->createInstanceWithContext( xContext ),
                     uno::UNO_QUERY );
 
             sal_Int32 nIndex = aPropValueSeq.getLength();

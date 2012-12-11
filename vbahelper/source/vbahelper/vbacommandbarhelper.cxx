@@ -24,6 +24,7 @@
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
+#include <com/sun/star/ui/WindowStateConfiguration.hpp>
 #include <comphelper/processfactory.hxx>
 #include <vbahelper/vbahelper.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -109,14 +110,12 @@ void VbaCommandBarHelper::Init( ) throw (css::uno::RuntimeException)
         throw uno::RuntimeException( "Not implemented" , uno::Reference< uno::XInterface >() );
     }
 
-    uno::Reference< lang::XMultiServiceFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
-
     css::uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier > xUICfgMgrSupp(
         css::ui::ModuleUIConfigurationManagerSupplier::create(mxContext) );
 
     m_xAppCfgMgr.set( xUICfgMgrSupp->getUIConfigurationManager( maModuleId ), uno::UNO_QUERY_THROW );
 
-    css::uno::Reference< css::container::XNameAccess > xNameAccess( xServiceManager->createInstance( "com.sun.star.ui.WindowStateConfiguration" ), uno::UNO_QUERY_THROW );
+    css::uno::Reference< css::container::XNameAccess > xNameAccess = css::ui::WindowStateConfiguration::create( mxContext );
 
     m_xWindowState.set( xNameAccess->getByName( maModuleId ), uno::UNO_QUERY_THROW );
 }

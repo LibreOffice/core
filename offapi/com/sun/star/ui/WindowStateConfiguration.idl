@@ -36,26 +36,23 @@ module com { module sun { module star { module ui {
     part of OpenOffice.org modules, like Writer or Calc.
     </p>
 
+    Provides access to window based information about user interface elements
+   of all installed application modules.
+
+    <p>
+    To access the window based information of a module, a unique module specifier
+    must be provided to <member scope="com::sun::star::container">XNameAccess::getByName()</member> function.
+    The module specifier can be retrieved from the <type scope="com::sun::star::frame">ModuleManager</type>
+    service. The interface provides references to a <type scope="com::sun:star::ui">ModuleWindowStateConfiguration</type>.
+    </p>
+
+    @see com::sun::star::frame::ModuleManager
+
     @since OOo 2.0
 */
 
-service WindowStateConfiguration
-{
-    /** provides access to window based information about user interface elements
-        of all installed application modules.
+service WindowStateConfiguration : com::sun::star::container::XNameAccess;
 
-        <p>
-        To access the window based information of a module, a unique module specifier
-        must be provided to <member scope="com::sun::star::container">XNameAccess::getByName()</member> function.
-        The module specifier can be retrieved from the <type scope="com::sun::star::frame">ModuleManager</type>
-        service. The interface provides references to a <type scope="com::sun:star::ui">ModuleWindowStateConfiguration</type>.
-        </p>
-
-        @see com::sun::star::frame::ModuleManager
-    */
-
-    interface com::sun::star::container::XNameAccess;
-};
 
 }; }; }; };
 

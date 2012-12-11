@@ -41,6 +41,7 @@
 #include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
+#include <com/sun/star/ui/WindowStateConfiguration.hpp>
 
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
@@ -824,38 +825,33 @@ void SAL_CALL ToolbarsMenuController::initialize( const Sequence< Any >& aArgume
         if ( m_bInitialized )
         {
             Reference< XModuleManager2 > xModuleManager = ModuleManager::create( comphelper::getComponentContext(m_xServiceManager) );
-            Reference< XNameAccess > xPersistentWindowStateSupplier( m_xServiceManager->createInstance(
-                                                                        SERVICENAME_WINDOWSTATECONFIGURATION ),
-                                                                     UNO_QUERY );
+            Reference< XNameAccess > xPersistentWindowStateSupplier = ::com::sun::star::ui::WindowStateConfiguration::create( comphelper::getComponentContext(m_xServiceManager) );
 
             // Retrieve persistent window state reference for our module
-            if ( xPersistentWindowStateSupplier.is() && xModuleManager.is() )
+            rtl::OUString aModuleIdentifier;
+            try
             {
-                rtl::OUString aModuleIdentifier;
-                try
-                {
-                    aModuleIdentifier = xModuleManager->identify( m_xFrame );
-                    xPersistentWindowStateSupplier->getByName( aModuleIdentifier ) >>= m_xPersistentWindowState;
+                aModuleIdentifier = xModuleManager->identify( m_xFrame );
+                xPersistentWindowStateSupplier->getByName( aModuleIdentifier ) >>= m_xPersistentWindowState;
 
-                    Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier =
-                        ModuleUIConfigurationManagerSupplier::create( comphelper::getComponentContext(m_xServiceManager) );
-                    m_xModuleCfgMgr = xModuleCfgSupplier->getUIConfigurationManager( aModuleIdentifier );
+                Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier =
+                    ModuleUIConfigurationManagerSupplier::create( comphelper::getComponentContext(m_xServiceManager) );
+                m_xModuleCfgMgr = xModuleCfgSupplier->getUIConfigurationManager( aModuleIdentifier );
 
-                    Reference< XController > xController = m_xFrame->getController();
-                    Reference< XModel >      xModel;
-                    if ( xController.is() )
-                        xModel = xController->getModel();
-                    if ( xModel.is() )
-                    {
-                        Reference< XUIConfigurationManagerSupplier > xUIConfigurationManagerSupplier( xModel, UNO_QUERY );
-                        if ( xUIConfigurationManagerSupplier.is() )
-                            m_xDocCfgMgr = xUIConfigurationManagerSupplier->getUIConfigurationManager();
-                    }
-                    m_aModuleIdentifier = aModuleIdentifier;
-                }
-                catch ( const Exception& )
+                Reference< XController > xController = m_xFrame->getController();
+                Reference< XModel >      xModel;
+                if ( xController.is() )
+                    xModel = xController->getModel();
+                if ( xModel.is() )
                 {
+                    Reference< XUIConfigurationManagerSupplier > xUIConfigurationManagerSupplier( xModel, UNO_QUERY );
+                    if ( xUIConfigurationManagerSupplier.is() )
+                        m_xDocCfgMgr = xUIConfigurationManagerSupplier->getUIConfigurationManager();
                 }
+                m_aModuleIdentifier = aModuleIdentifier;
+            }
+            catch ( const Exception& )
+            {
             }
         }
     }

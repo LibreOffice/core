@@ -132,13 +132,10 @@ public:
             GetParentImageManager() { return m_xParentImgMgr; };
 
     ::com::sun::star::uno::Reference
-        < com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
+        < com::sun::star::uno::XComponentContext > m_xContext;
 
     ::com::sun::star::uno::Reference
         < com::sun::star::container::XNameAccess > m_xCommandToLabelMap;
-
-    com::sun::star::uno::Reference
-        < com::sun::star::uno::XComponentContext > m_xComponentContext;
 
     com::sun::star::uno::Sequence
         < com::sun::star::beans::PropertyValue > m_aSeparatorSeq;
