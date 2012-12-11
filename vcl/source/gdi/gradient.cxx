@@ -286,13 +286,6 @@ void Gradient::GetBoundRect( const Rectangle& rRect, Rectangle& rBoundRect, Poin
             aSize.Width() = (long)( 0.5 + (double) aSize.Width()  * 1.4142 );
             aSize.Height() = (long)( 0.5 + (double) aSize.Height() * 1.4142 );
         }
-        else if( GetStyle() == GradientStyle_SQUARE )
-        {
-            if ( aSize.Width() > aSize.Height() )
-                aSize.Height() = aSize.Width();
-            else
-                aSize.Width() = aSize.Height();
-        }
 
         // neue Mittelpunkte berechnen
         long    nZWidth = aRect.GetWidth() * (long) GetOfsX() / 100;

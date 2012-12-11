@@ -481,7 +481,18 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
     double  fScanTop = aRect.Top();
     double  fScanRight = aRect.Right();
     double  fScanBottom = aRect.Bottom();
-    double  fScanInc = (double) nMinRect / (double) nSteps * 0.5;
+    double  fScanIncX = (double) aRect.GetWidth() / (double) nSteps * 0.5;
+    double  fScanIncY = (double) aRect.GetHeight() / (double) nSteps * 0.5;
+
+    // all gradients are rendered as nested rectangles which shrink
+    // equally in each dimension - except for 'square' gradients
+    // which shrink to a central vertex but are not per-se square.
+    if( rGradient.GetStyle() != GradientStyle_SQUARE )
+    {
+        fScanIncY = std::min( fScanIncY, fScanIncX );
+        fScanIncX = fScanIncY;
+    }
+
     sal_uInt8   nRed = (sal_uInt8) nStartRed, nGreen = (sal_uInt8) nStartGreen, nBlue = (sal_uInt8) nStartBlue;
     bool    bPaintLastPolygon( false ); // #107349# Paint last polygon only if loop has generated any output
 
@@ -512,10 +523,10 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
     for( long i = 1; i < nSteps; i++ )
     {
         // neues Polygon berechnen
-        aRect.Left() = (long)( fScanLeft += fScanInc );
-        aRect.Top() = (long)( fScanTop += fScanInc );
-        aRect.Right() = (long)( fScanRight -= fScanInc );
-        aRect.Bottom() = (long)( fScanBottom -= fScanInc );
+        aRect.Left() = (long)( fScanLeft += fScanIncX );
+        aRect.Top() = (long)( fScanTop += fScanIncY );
+        aRect.Right() = (long)( fScanRight -= fScanIncX );
+        aRect.Bottom() = (long)( fScanBottom -= fScanIncY );
 
         if( ( aRect.GetWidth() < 2 ) || ( aRect.GetHeight() < 2 ) )
             break;
