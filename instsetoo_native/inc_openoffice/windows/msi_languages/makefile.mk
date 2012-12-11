@@ -43,7 +43,7 @@ MLFFILES = $(foreach,i,$(ULFFILES) $(MISC)$/$(TARGET)$/$(i:b).mlf)
 
 .INCLUDE :  target.mk
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 
 ALLTAR : $(MLFFILES)
 

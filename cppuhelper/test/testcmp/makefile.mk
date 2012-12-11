@@ -29,7 +29,7 @@ SHL1TARGET     := $(TARGET)
 SHL1OBJS       := $(SLO)$/TestComponent.obj
 SHL1STDLIBS    := $(CPPUHELPERLIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB) 
 SHL1IMPLIB     := i$(SHL1TARGET)
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 SHL1DEF        := TestComponent.uno.def
 .ELSE
 DEF1NAME       := $(SHL1TARGET)

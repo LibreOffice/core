@@ -75,7 +75,7 @@ $(eval $(call gb_Library_use_system_win32_libs,sal,\
 ))
 
 $(eval $(call gb_Library_add_libs,sal,\
-	$(if $(filter $(GUI),UNX), \
+	$(if $(filter-out $(OS),WNT), \
 		$(if $(filter $(OS),ANDROID),, \
 			-lpthread \
 		) \
@@ -164,7 +164,7 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 ))
 endif
 
-ifeq ($(GUI),UNX)
+ifneq ($(OS),WNT)
 $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/osl/unx/conditn \
 	sal/osl/unx/diagnose \
@@ -224,7 +224,7 @@ $(eval $(call gb_Library_add_cobjects,sal,\
 ))
 endif
 
-else # $(GUI) != UNX
+else # $(OS) == WNT
 
 # FIXME ?
 # .IF "$(CCNUMVER)" >= "001400000000"
@@ -262,6 +262,6 @@ $(eval $(call gb_Library_add_cobjects,sal,\
 	sal/osl/w32/util \
 ))
 
-endif # ifeq ($(GUI),UNX)
+endif # ifneq ($(OS),WNT)
 
 # vim: set noet sw=4 ts=4:

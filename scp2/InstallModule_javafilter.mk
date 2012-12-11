@@ -33,7 +33,7 @@ $(eval $(call gb_InstallModule_add_scpfiles,scp2/javafilter,\
 
 $(eval $(call gb_InstallModule_add_localized_scpfiles,scp2/javafilter,\
     scp2/source/javafilter/module_javafilter \
-	$(if $(filter WNT,$(GUI)),\
+	$(if $(filter WNT,$(OS)),\
 		scp2/source/javafilter/registryitem_javafilter \
 	) \
 ))

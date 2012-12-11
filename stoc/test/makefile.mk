@@ -85,10 +85,10 @@ APP3STDLIBS= \
         $(REGLIB) 	\
         $(SALLIB) 	
 
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 APP3STDLIBS+= -l$(SHL1TARGET)
 .ENDIF
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 APP3STDLIBS+= i$(SHL1TARGET).lib
 .ENDIF
 
@@ -187,7 +187,7 @@ TESTPROXYFAC:=com.sun.star.reflection.XProxyFactory
 TESTSECURITY:=com.sun.star.security.AllPermission;com.sun.star.security.XPolicy;com.sun.star.security.XAccessController;com.sun.star.io.FilePermission;com.sun.star.connection.SocketPermission;com.sun.star.uno.XCurrentContext
 
 $(BIN)$/test1.rdb: $(SHL1TARGETN)
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
     cp $(SHL1TARGETN) $(BIN)
 .ENDIF
     cd $(BIN) && regcomp -register -r test1.rdb -c $(SHL1TARGET)

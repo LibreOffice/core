@@ -37,7 +37,7 @@ APP1STDLIBS= \
         $(SALHELPERLIB) 	\
         $(SALLIB)
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 APP1STDLIBS+= 
 #		$(LIBCIMT) $(LIBCMT)
 .ENDIF

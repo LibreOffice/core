@@ -36,7 +36,7 @@ $(SLOTARGET): $(SLOFILES) $(IDLSLOFILES)
 .ENDIF
     @echo "Making:   " $(@:f)
 #	@$(RM) $@
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
     +$(ECHONL) $(foreach,i,$(SLOFILES:f) $(RSLO)/$(i)) | xargs -n1 > $@
 .ELSE
@@ -45,16 +45,16 @@ $(SLOTARGET): $(SLOFILES) $(IDLSLOFILES)
 .ENDIF          # "$(LIBTARGET)"!="NO"
     $(COMMAND_ECHO)$(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(&:+"\n"))
 .ENDIF			# "$(COM)"=="GCC"
-.ENDIF			# "$(GUI)"=="WNT"
+.ENDIF			# "$(OS)"=="WNT"
 
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
     @echo $(foreach,i,$(SLOFILES:f) $(RSLO)/$(i:s/.obj/.o/)) | xargs -n1 > $@
 .IF "$(OS)"=="MACOSX"
     @-nm `cat $(SLOTARGET) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g` > $(@:d)$(@:b).dump
 .ELSE
     @nm `cat $(SLOTARGET) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g` > $(@:d)$(@:b).dump
 .ENDIF
-.ENDIF			# "$(GUI)"=="UNX"
+.ENDIF			# "$(OS)"!="WNT"
 .ENDIF			# "$(SLOTARGET)"!=""
 
 .IF "$(SECOND_BUILD)"!=""
@@ -65,7 +65,7 @@ $($(SECOND_BUILD)SLOTARGET): $(REAL_$(SECOND_BUILD)_SLOFILES)
     @echo $(&:+"\n")
 .ENDIF
     @echo "Making:   " $(@:f)
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
     +$(ECHONL) $(foreach,i,$(REAL_$(SECOND_BUILD)_SLOFILES:f) $(RSLO)/$(i)) | xargs -n1 > $@
 .ELSE
@@ -75,10 +75,10 @@ $($(SECOND_BUILD)SLOTARGET): $(REAL_$(SECOND_BUILD)_SLOFILES)
     $(COMMAND_ECHO)$(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(&:+"\n"))
 
 .ENDIF			# "$(COM)"=="GCC"
-.ENDIF			# "$(GUI)"=="WNT"
+.ENDIF			# "$(OS)"=="WNT"
 
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
     @echo $(foreach,i,$(REAL_$(SECOND_BUILD)_SLOFILES:f) $(RSLO)/$(i:s/.obj/.o/)) | xargs -n1 > $@
-.ENDIF			# "$(GUI)"=="UNX"
+.ENDIF			# "$(OS)"!="WNT"
 .ENDIF			# "$($(SECOND_BUILD)SLOTARGET)"!=""
 .ENDIF			# "$(SECOND_BUILD)"!=""

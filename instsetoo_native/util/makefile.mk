@@ -34,11 +34,11 @@ TARGET=util
 # PERL:=@echo
 
 # watch for the path delimiter
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 PYTHONPATH:=$(PWD)$/$(BIN);$(SOLARLIBDIR);$(SOLARLIBDIR)$/python;$(SOLARLIBDIR)$/python$/lib-dynload
-.ELSE			# "$(GUI)"=="WNT"
+.ELSE			# "$(OS)"=="WNT"
 PYTHONPATH:=$(PWD)$/$(BIN):$(SOLARLIBDIR):$(SOLARLIBDIR)$/python:$(SOLARLIBDIR)$/python$/lib-dynload
-.ENDIF			# "$(GUI)"=="WNT"
+.ENDIF			# "$(OS)"=="WNT"
 .EXPORT: PYTHONPATH
 
 ENABLE_DOWNLOADSETS*=TRUE
@@ -91,19 +91,19 @@ xxxx:
 .IF "$(LIBO_DEV_INSTALL)" == "TRUE"
 ALLTAR: openoffice_$(defaultlangiso).archive
 .ELSE
-.IF "$(GUI)"!="WNT" && "$(EPM)"=="NO"
+.IF "$(OS)"!="WNT" && "$(EPM)"=="NO"
 ALLTAR  : $(LOCALPYFILES)
     @echo "No EPM: do no packaging at this stage"
-.ELSE			# "$(GUI)"!="WNT" && "$(EPM)"=="NO"
+.ELSE			# "$(OS)"!="WNT" && "$(EPM)"=="NO"
 .IF "$(ENABLE_RELEASE_BUILD)"=="TRUE"
 .IF "$(BUILD_TYPE)"=="$(BUILD_TYPE:s/ODK//)"
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 ALLTAR : openofficeall $(OOOHELPPACK)
 .ELSE
 ALLTAR : openoffice_$(defaultlangiso) ooolanguagepack $(eq,$(OS),MACOSX $(NULL) $(OOOHELPPACK)) $(eq,$(OS),MACOSX $(NULL) lotest_en-US)
 .ENDIF
 .ELSE
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 ALLTAR : openofficeall $(OOOHELPPACK) sdkooall
 .ELSE
 ALLTAR : openoffice_$(defaultlangiso) ooolanguagepack $(eq,$(OS),MACOSX $(NULL) $(OOOHELPPACK)) $(eq,$(OS),MACOSX $(NULL) lotest_en-US) sdkoo_en-US
@@ -111,20 +111,20 @@ ALLTAR : openoffice_$(defaultlangiso) ooolanguagepack $(eq,$(OS),MACOSX $(NULL) 
 .ENDIF
 .ELSE # "$(ENABLE_RELEASE_BUILD)"=="TRUE"
 .IF "$(BUILD_TYPE)"=="$(BUILD_TYPE:s/ODK//)"
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 ALLTAR : openofficedevall $(OOODEVHELPPACK)
 .ELSE
 ALLTAR : openofficedev_$(defaultlangiso) ooodevlanguagepack $(eq,$(OS),MACOSX $(NULL) $(OOODEVHELPPACK)) $(eq,$(OS),MACOSX $(NULL) lodevtest_en-US)
 .ENDIF
 .ELSE
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 ALLTAR : openofficedevall $(OOODEVHELPPACK) sdkoodevall
 .ELSE
 ALLTAR : openofficedev_$(defaultlangiso) ooodevlanguagepack $(eq,$(OS),MACOSX $(NULL) $(OOODEVHELPPACK)) $(eq,$(OS),MACOSX $(NULL) lodevtest_en-US) sdkoodev_en-US
 .ENDIF
 .ENDIF
 .ENDIF # "$(ENABLE_RELEASE_BUILD)"=="TRUE"
-.ENDIF			# "$(GUI)"!="WNT" && "$(EPM)"=="NO"
+.ENDIF			# "$(OS)"!="WNT" && "$(EPM)"=="NO"
 .ENDIF # "$(LIBO_DEV_INSTALL)" == "TRUE"
 
 .IF "$(MAKETARGETS:e)"!=""
@@ -316,7 +316,7 @@ openoffice:
 $(foreach,i,$(alllangiso) openoffice_$i{$(PKGFORMAT:^".") .archive} openofficedev_$i{$(PKGFORMAT:^".")} sdkoo_$i{$(PKGFORMAT:^".")} lotest_$i{$(PKGFORMAT:^".")} oxygenoffice_$i{$(PKGFORMAT:^".") .archive}) updatepack : $(LOCALPYFILES)
 .ENDIF			# "$(LOCALPYFILES)"!=""
 
-.IF "$(GUI)"!="WNT"
+.IF "$(OS)"!="WNT"
 $(BIN)$/%.py : $(OUTDIR)$/lib$/pyuno$/%.py
     $(COPY) $< $@
 .ELSE

@@ -25,11 +25,11 @@
 #
 #*************************************************************************
 
-.IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC")
+.IF ("$(OS)"!="WNT" || "$(COM)"=="GCC")
 
 # workaround for MinGW to get the same DLL names as with MSC
 # e.g., uno_salhelper3gcc3.dll (vs. uno_salhelpergcc3.dll)
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
 COMID_WITH_VERSION = $(UDK_MAJOR)$(COMID)
 .ELSE
 COMID_WITH_VERSION = $(COMID)
@@ -40,7 +40,7 @@ COMID_WITH_VERSION = $(COMID)
 #
 AWTLIB*=-ljawt
 AVMEDIALIB=-lavmedia$(DLLPOSTFIX)
-.IF "$(GUI)$(COM)"=="WNTGCC" && "$(SYSTEM_ICU)"!="YES"
+.IF "$(OS)$(COM)"=="WNTGCC" && "$(SYSTEM_ICU)"!="YES"
 ICUINLIB=-licuin$(ICU_MAJOR)$(ICU_MINOR)
 ICULELIB=-licule$(ICU_MAJOR)$(ICU_MINOR)
 ICUUCLIB=-licuuc$(ICU_MAJOR)$(ICU_MINOR)
@@ -75,11 +75,11 @@ OPENSSLLIB=$(OPENSSL_LIBS)
 OPENSSLLIBST=$(STATIC) $(OPENSSL_LIBS) $(DYNAMIC)
 .ELSE           # "$(SYSTEM_OPENSSL)" == "YES
 OPENSSLLIB=-lssl -lcrypto
-.IF "$(GUI)$(COM)"=="WNTGCC"
+.IF "$(OS)$(COM)"=="WNTGCC"
 OPENSSLLIBST=-lssl_static -lcrypto_static
-.ELSE          # "$(GUI)$(COM)"=="WNTGCC"
+.ELSE          # "$(OS)$(COM)"=="WNTGCC"
 OPENSSLLIBST=$(STATIC) -lssl -lcrypto $(DYNAMIC)
-.ENDIF          # "$(GUI)$(COM)"=="WNTGCC"
+.ENDIF          # "$(OS)$(COM)"=="WNTGCC"
 .ENDIF          # "$(SYSTEM_OPENSSL)" == "YES"
 REGLIB=-lreg
 XMLOFFLIB=-lxo$(DLLPOSTFIX)
@@ -89,11 +89,11 @@ SALLIB=-luno_sal
 ODBCLIB=-lodbc$(DLLPOSTFIX)
 ODBCBASELIB=-lodbcbase$(DLLPOSTFIX)
 DBFILELIB=-lfile$(DLLPOSTFIX)
-.IF "$(GUI)$(COM)"=="WNTGCC"
+.IF "$(OS)$(COM)"=="WNTGCC"
 RMCXTLIB=-lrmcxt$(UDK_MAJOR)
-.ELSE			# "$(GUI)$(COM)"=="WNTGCC"
+.ELSE			# "$(OS)$(COM)"=="WNTGCC"
 RMCXTLIB=-lrmcxt
-.ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
+.ENDIF			# "$(OS)$(COM)"=="WNTGCC"
 BTSTRPLIB=-lbtstrp
 BTSTRPDTLIB=-lbootstrpdt$(DLLPOSTFIX)
 TRANSEXLIB=-ltransex
@@ -101,17 +101,17 @@ OTXLIB=-lotx_ind
 OSXLIB=-losx
 UNOTOOLSLIB=-lutl$(DLLPOSTFIX)
 SOTLIB=-lsot$(DLLPOSTFIX)
-.IF "$(GUI)$(COM)"=="WNTGCC"
+.IF "$(OS)$(COM)"=="WNTGCC"
 MOZBASELIBST=$(STATIC) -lnspr4_s -lxpcombase_s
-.ELSE			# "$(GUI)$(COM)"=="WNTGCC"
+.ELSE			# "$(OS)$(COM)"=="WNTGCC"
 MOZBASELIBST=$(STATIC) -lnspr4 -lxpcombase_s $(DYNAMIC)
-.ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
+.ENDIF			# "$(OS)$(COM)"=="WNTGCC"
 MOZBASELIB=-lnspr4 -lxpcom
-.IF "$(GUI)$(COM)"=="WNTGCC"
+.IF "$(OS)$(COM)"=="WNTGCC"
 LDAPSDKLIB=-lwldap32
-.ELSE			# "$(GUI)$(COM)"=="WNTGCC"
+.ELSE			# "$(OS)$(COM)"=="WNTGCC"
 LDAPSDKLIB=-lldap
-.ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
+.ENDIF			# "$(OS)$(COM)"=="WNTGCC"
 
 ICOLIB=-lico$(DLLPOSTFIX)
 VCLLIB=-lvcl$(DLLPOSTFIX)
@@ -145,10 +145,10 @@ NSS3LIB=-lnss3
 NSPR4LIB=-lnspr4
 PLC4LIB=-lplc4
 NSSCRYPTOLIBS=$(XMLSECLIB-NSS) $(XMLSECLIB) $(LIBXML2LIB) $(NSS3LIB) $(NSPR4LIB) $(PLC4LIB)
-.IF "$(GUI)$(COM)"=="WNTGCC"
+.IF "$(OS)$(COM)"=="WNTGCC"
 XMLSECLIB-MS=-lxmlsec1-mscrypto
 MSCRYPTOLIBS=$(XMLSECLIB) $(XMLSECLIB-MS) $(LIBXML2LIB) $(CRYPT32LIB) $(ADVAPI32LIB)
-.ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
+.ENDIF			# "$(OS)$(COM)"=="WNTGCC"
 BROOKERLIB=-lbrooker$(DLLPOSTFIX)
 SIMPLECMLIB=-lsimplecm$(DLLPOSTFIX)
 COMMUNILIB=-lcommuni$(DLLPOSTFIX)
@@ -317,7 +317,7 @@ CURLLIB+=$(ZLIB3RDLIB)
 
 .ENDIF
 
-.ELSE				# ("$(GUI)"=="UNX" || "$(COM)"=="GCC")
+.ELSE				# ("$(OS)"!="WNT" || "$(COM)"=="GCC")
 
 AWTLIB*=jawt.lib
 AVMEDIALIB=iavmedia.lib
@@ -464,4 +464,4 @@ TESTLIB=itest.lib
 UNOTESTLIB=iunotest.lib
 XMLREADERLIB=ixmlreader.lib
 
-.ENDIF              # ("$(GUI)"=="UNX" || "$(COM)"=="GCC")
+.ENDIF              # ("$(OS)"!="WNT" || "$(COM)"=="GCC")

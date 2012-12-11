@@ -25,7 +25,7 @@ LIBTARGET=NO
 # --- Settings ----------------------------------------------------- 
 .INCLUDE: settings.mk  
 
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
 
 OBJFILES=$(OBJ)$/regutil.obj  
 APP1TARGETDEPN=makefile.mk

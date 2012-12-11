@@ -132,10 +132,10 @@ ICONDEPN = \
 
 .INCLUDE :  target.mk
 
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 ALLTAR : $(LAUNCHERFLAGFILE) $(SPECFILES) $(COMMONMISC)$/{$(PRODUCTLIST)}$/build.flag
 
-.ENDIF          # "$(GUI)"=="UNIX"
+.ENDIF          # "$(OS)"!="WNT"
 
 #
 # Copy/patch the .desktop files to the output tree and 

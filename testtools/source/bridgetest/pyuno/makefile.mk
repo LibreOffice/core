@@ -48,22 +48,22 @@ PYTHON=$(AUGMENT_LIBRARY_PATH) $(WRAPCMD) $(SOLARBINDIR)/python
 .ELSE                   # "$(SYSTEM_PYTHON)"!="YES"
 PYTHON=$(AUGMENT_LIBRARY_PATH) $(WRAPCMD) python
 .ENDIF                  # "$(SYSTEM_PYTHON)"!="YES"
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 PYTHONPATH:=$(SOLARLIBDIR)$/pyuno;$(PWD);$(SOLARLIBDIR);$(SOLARLIBDIR)$/python;$(SOLARLIBDIR)$/python$/lib-dynload
-.ELSE                   # "$(GUI)"=="WNT"
+.ELSE                   # "$(OS)"=="WNT"
 PYTHONPATH:=$(SOLARLIBDIR)$/pyuno:$(PWD):$(SOLARLIBDIR):$(SOLARLIBDIR)$/python:$(SOLARLIBDIR)$/python$/lib-dynload
-.ENDIF                  # "$(GUI)"=="WNT"
+.ENDIF                  # "$(OS)"=="WNT"
 .EXPORT: PYTHONPATH
 
-.IF "$(GUI)"!="WNT"
+.IF "$(OS)"!="WNT"
 TEST_ENV=export FOO=file://$(shell @pwd)$/$(DLLDEST) \
     UNO_TYPES=uno_types.rdb UNO_SERVICES=pyuno_services.rdb
-.ELSE # "$(GUI)" != "WNT"
+.ELSE # "$(OS)" != "WNT"
 # aaaaaa, how to get the current working directory on windows ???
 CWD_TMP=$(strip $(shell @echo "import os;print os.getcwd()" | $(PYTHON)))
 TEST_ENV=export FOO=file:///$(strip $(subst,\,/ $(CWD_TMP)$/$(DLLDEST))) && \
         export UNO_TYPES=uno_types.rdb && export UNO_SERVICES=pyuno_services.rdb
-.ENDIF  # "$(GUI)"!="WNT"
+.ENDIF  # "$(OS)"!="WNT"
 PYFILES = \
     $(DLLDEST)$/core.py			\
     $(DLLDEST)$/importer.py			\

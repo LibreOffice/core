@@ -45,7 +45,7 @@ $(eval $(call gb_Library_use_static_libraries,npsoplugin,\
 	nputils \
 ))
 
-ifeq ($(GUI),UNX)
+ifneq ($(OS),WNT)
 
 $(eval $(call gb_Library_add_libs,npsoplugin,\
 	-ldl \

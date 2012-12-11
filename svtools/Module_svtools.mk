@@ -34,7 +34,7 @@ $(eval $(call gb_Module_add_targets,svtools,\
     Executable_g2g \
 ))
 
-ifeq ($(GUI),UNX)
+ifneq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,svtools,\
     Executable_langsupport \
 ))

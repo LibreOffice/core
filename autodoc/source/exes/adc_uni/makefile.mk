@@ -65,7 +65,7 @@ APP1OBJS=   $(OBJ)$/main.obj
 
 APP1RPATH=SDKBIN
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 APP1STDLIBS= $(COSVLIB) $(UDMLIB)
 .ELSE
 .IF "$(OS)"=="MACOSX"

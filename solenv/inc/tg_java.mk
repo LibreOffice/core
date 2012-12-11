@@ -32,13 +32,13 @@ $(CLASSDIR)/com/sun/star/upd/$(VERSIONINFOFILE)_updversion.class .PHONY: $(MISC)
 $(MISC)/java/com/sun/star/upd/$(VERSIONINFOFILE)_updversion.java .PHONY:
     @echo "Making:   " $(@:f)
     @-$(MKDIRHIER) $(MISC)/java/com/sun/star/upd
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
     @echo package com.sun.star.upd\; > $@
     @echo 'public class $(VERSIONINFOFILE)_updversion { public static String Version = "$(RSCREVISION)";}' >> $@
-.ELSE			# "$(GUI)"=="UNX"
+.ELSE			# "$(OS)"!="WNT"
     @echo package com.sun.star.upd; > $@
     @echo public class $(VERSIONINFOFILE)_updversion { public static String Version = "$(RSCREVISION)";} >> $@
-.ENDIF			# "$(GUI)"=="UNX"
+.ENDIF			# "$(OS)"!="WNT"
 
 .IF "$(JAVATARGET)"!=""
 .IF "$(PACKAGE)"!=""

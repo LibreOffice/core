@@ -26,7 +26,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 my $progname = "testdefaultbootstrapping";
 my $defExeExt;
 
-if ($ENV{GUI} eq "WNT") {
+if ($ENV{OS} eq "WNT") {
     %services = (
                  'com.sun.star.uno.NamingService'               => 'namingservice.uno.dll',
                  'com.sun.star.reflection.CoreReflection'       => 'reflection.uno.dll',
@@ -50,7 +50,7 @@ sub extendProgName($) {
     my $_extension = shift;
     my $_result;
 
-    if ($ENV{GUI} eq "WNT") {
+    if ($ENV{OS} eq "WNT") {
         $_result = $progname . $_extension;
     }
     else {
@@ -183,7 +183,7 @@ sub testBeneathLib_rdb() {
 
     my $_rdb_name;
 
-    if ($ENV{GUI} eq "WNT") {
+    if ($ENV{OS} eq "WNT") {
         $_rdb_name = "UNO" . "_services.rdb";
     }
     else {
@@ -206,7 +206,7 @@ sub testBeneathLib_rc() {
 
     my $_rc_name;
 
-    if ($ENV{GUI} eq "WNT") {
+    if ($ENV{OS} eq "WNT") {
         $_rc_name = "UNO.ini";
     }
     else {

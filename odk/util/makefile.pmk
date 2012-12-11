@@ -70,7 +70,7 @@ MY_COPY_RECURSIVE=$(GNUCOPY) -urf
 MY_DELETE_RECURSIVE=rm -rf
 MY_TEXTCOPY=@cp 
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 #--------------------
 # WNT ONLY
 #--------------------
@@ -154,7 +154,7 @@ INCLUDETOPDIRLIST= \
     $(INCOUT)/cppuhelper \
     $(INCOUT)/registry
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 INCLUDETOPDIRLIST += $(INCOUT)/systools
 .ENDIF
 

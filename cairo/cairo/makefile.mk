@@ -98,7 +98,7 @@ CONFIGURE_FLAGS=--disable-valgrind --disable-xlib --disable-ft --disable-pthread
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)$/src
-.IF "$(GUI)$(COM)"=="WNTGCC"
+.IF "$(OS)$(COM)"=="WNTGCC"
 .EXPORT : PWD
 .ENDIF
 

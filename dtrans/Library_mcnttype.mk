@@ -49,7 +49,7 @@ $(eval $(call gb_Library_add_exception_objects,mcnttype,\
 	dtrans/source/cnttype/mctfentry \
 ))
 
-ifeq ($(GUI),WNT)
+ifeq ($(OS),WNT)
 $(eval $(call gb_Library_use_libraries,mcnttype,\
 	uwinapi \
 ))

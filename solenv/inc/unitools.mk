@@ -82,7 +82,7 @@ PIPEERROR=2>&1 |
 CHECKZIPRESULT:=|| ret=$$?; if [[ "$$ret" != "12" && "$$ret" != "1" ]] ; then exit $$ret ; fi && echo "Nothing to update for zip"
 
 # Platform specific
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 AWK*=awk
 SORT*=sort
 SED*=sed
@@ -111,7 +111,7 @@ TOUCH*=touch
 TYPE*=cat
 DUMPBIN*=dumpbin
 
-.ELIF "$(GUI)"=="UNX"	# "$(GUI)"=="WNT"
+.ELIF "$(OS)"!="WNT"	# "$(OS)"=="WNT"
 SED*=sed
 SORT*=sort
 PERL*=perl
@@ -162,7 +162,7 @@ FIND=find
 LS=ls
 ECHON=echo -n
 ECHONL=echo
-.ENDIF			# "$(GUI)"=="UNX"
+.ENDIF			# "$(OS)"!="WNT"
 
 # (Global) Set if not set before
 DELAY*=sleep

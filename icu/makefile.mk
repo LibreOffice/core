@@ -85,7 +85,7 @@ EXTRA_CDEFS+=-DU_HAVE_GCC_ATOMICS=0
 # Describe it in the comment above instead.
 CONFIGURE_ACTION=unzip $(TARFILE_LOCATION)/$(ICU_DATA_SUBSET_ZIP) && mv icudt49l.dat data/in && 
 
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 
 .IF "$(SYSBASE)"!=""
 icu_CFLAGS+=-I$(SYSBASE)$/usr$/include
@@ -236,7 +236,7 @@ OUT2BIN_NONE= \
 
 .ENDIF
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 CONFIGURE_DIR=source
 .IF "$(COM)"=="GCC"
 .IF "$(MINGW_SHARED_GCCLIB)"=="YES"
@@ -305,7 +305,7 @@ OUT2BIN= \
     $(BUILD_DIR)$/bin$/gencmn.exe
 
 .ENDIF
-.ENDIF		# "$(GUI)"=="WNT"
+.ENDIF		# "$(OS)"=="WNT"
 
 #make sure that when we deliver the headers of a new icu that the timestamps
 #are newer than the last icu to ensure dependencies are correctly rebuilt
@@ -327,7 +327,7 @@ $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/so_add_binary
 
 .ENDIF
 
-.IF "$(GUI)$(COM)"=="WNTGCC"
+.IF "$(OS)$(COM)"=="WNTGCC"
 ALLTAR : \
     $(LB)$/icudata.lib \
     $(LB)$/icuin$(ICU_BUILD_LIBPOST).lib \

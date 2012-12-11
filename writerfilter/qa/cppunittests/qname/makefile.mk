@@ -31,7 +31,7 @@ CFLAGSCXX += $(CPPUNIT_CFLAGS)
 # BEGIN ----------------------------------------------------------------
 # auto generated Target:testjob by codegen.pl
 
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
     CFLAGS+=/Ob1
 .ENDIF
 
@@ -42,10 +42,10 @@ SHL1TARGET=$(TARGET)
 
 SHL1STDLIBS=$(SALLIB) $(TOOLSLIB) $(CPPUNITLIB)
 
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
 SHL1STDLIBS+=   $(LB)$/iodiapi.lib
 .ENDIF
-.IF "$(GUI)" == "UNX"
+.IF "$(OS)" != "WNT"
 SHL1STDLIBS+=$(LB)$/libodiapi.so
 .ENDIF
 

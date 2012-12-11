@@ -95,7 +95,7 @@ CONFIGURE_ACTION+= ; \
     sed -e 's\#@prefix@\#$(OUTDIR)\#' -e 's\#@includedir@\#$(OUTDIR)/inc/mozilla/nss\#' -e 's\#@MOD_MAJOR_VERSION@\#$(VER_MAJOR)\#' -e 's\#@MOD_MINOR_VERSION@\#$(VER_MINOR)\#' -e 's\#@MOD_PATCH_VERSION@\#$(VER_PATCH)\#' mozilla/security/nss/nss-config.in > mozilla/security/nss/nss-config ; \
     chmod a+x mozilla/security/nss/nss-config
 
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 .IF "$(OS)$(COM)"=="LINUXGCC"
 .IF "$(BUILD64)"=="1"
 # force 64-bit buildmode
@@ -168,10 +168,10 @@ BUILD_ACTION+=NS_USE_GCC=1
 BUILD_ACTION += NSS_USE_SYSTEM_SQLITE=1
 .END
 
-.ENDIF			# "$(GUI)"=="UNX"
+.ENDIF			# "$(OS)"!="WNT"
 
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 
 .IF "$(COM)"=="GCC"
 
@@ -255,7 +255,7 @@ OUT2BIN=mozilla/dist/out/lib/*$(DLLPOST) \
      config/nspr-config \
      mozilla/security/nss/nss-config
 
-.ENDIF			# "$(GUI)"=="WNT"
+.ENDIF			# "$(OS)"=="WNT"
 
 
 OUTDIR2INC=mozilla/dist/public/nss mozilla/dist/out/include

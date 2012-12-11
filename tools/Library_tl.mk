@@ -96,7 +96,7 @@ $(eval $(call gb_Library_add_exception_objects,tl,\
     tools/source/zcodec/zcodec \
 ))
 
-ifeq ($(GUI),UNX)
+ifneq ($(OS),WNT)
 $(eval $(call gb_Library_add_exception_objects,tl,\
     tools/unx/source/dll/toolsdll \
 ))

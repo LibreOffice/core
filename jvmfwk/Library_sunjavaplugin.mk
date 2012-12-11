@@ -59,7 +59,7 @@ $(eval $(call gb_Library_use_libraries,sunjavaplugin,\
 ))
 endif
 
-ifeq ($(GUI),WNT)
+ifeq ($(OS),WNT)
 $(eval $(call gb_Library_use_system_win32_libs,sunjavaplugin,\
 	advapi32 \
 ))

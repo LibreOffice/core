@@ -62,7 +62,7 @@ SHL1OBJS=	$(SLO)\test.obj
 # --- Targets ------------------------------------------------------
 !INCLUDE <target.mak>
 
-!IF "$(GUI)" == "WNT"
+!IF "$(OS)" == "WNT"
 
 $(MISC)\$(SHL1TARGET).def:  makefile
     @echo ------------------------------

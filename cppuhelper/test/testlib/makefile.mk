@@ -38,7 +38,7 @@ PERLINCS:=$(PERLINST)$/CORE
 
 CFLAGS += -I$(PERLINCS)
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 PERLLIB=perl58.lib
 
 LIB!:=$(LIB);$(PERLLIBS)
@@ -67,7 +67,7 @@ DEF1NAME=$(SHL1TARGET)
 SHL1VERSIONMAP=defbootstrap.map
 
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 UNODLL=$(DLLDEST)$/UNO.dll
 .ELSE
 UNODLL=$(DLLDEST)$/UNO.so	

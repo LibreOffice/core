@@ -21,7 +21,7 @@ $(call gb_ExternalProject_get_state_target,hunspell,build):
 	$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM))\
 	$(if $(filter AIX,$(OS)),CFLAGS="-D_LINUX_SOURCE_COMPAT") \
 	$(if $(filter C53,$(COM)),CFLAGS="-xc99=none") \
-	$(if $(filter-out WNTGCC,$(GUI)$(COM)),,LDFLAGS="-Wl,--enable-runtime-pseudo-reloc-v2") \
+	$(if $(filter-out WNTGCC,$(OS)$(COM)),,LDFLAGS="-Wl,--enable-runtime-pseudo-reloc-v2") \
 	&& $(MAKE) \
 	&& touch $@
 

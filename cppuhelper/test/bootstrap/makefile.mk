@@ -28,7 +28,7 @@ USE_DEFFILE        := TRUE
 .INCLUDE :  settings.mk
 
 
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 PURPENVHELPERLIB := -luno_purpenvhelper$(COMID)
 
 .ELSE

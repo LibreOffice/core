@@ -1,6 +1,6 @@
 # unroll begin
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 command_seperator=&&
 #command_seperator=^
 .ELSE
@@ -76,7 +76,7 @@ $(ZIP1TARGETN) : delzip $(ZIP1DEPS)
 
 # unroll begin
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 command_seperator=&&
 #command_seperator=^
 .ELSE
@@ -152,7 +152,7 @@ $(ZIP2TARGETN) : delzip $(ZIP2DEPS)
 
 # unroll begin
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 command_seperator=&&
 #command_seperator=^
 .ELSE
@@ -228,7 +228,7 @@ $(ZIP3TARGETN) : delzip $(ZIP3DEPS)
 
 # unroll begin
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 command_seperator=&&
 #command_seperator=^
 .ELSE
@@ -304,7 +304,7 @@ $(ZIP4TARGETN) : delzip $(ZIP4DEPS)
 
 # unroll begin
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 command_seperator=&&
 #command_seperator=^
 .ELSE
@@ -380,7 +380,7 @@ $(ZIP5TARGETN) : delzip $(ZIP5DEPS)
 
 # unroll begin
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 command_seperator=&&
 #command_seperator=^
 .ELSE
@@ -456,7 +456,7 @@ $(ZIP6TARGETN) : delzip $(ZIP6DEPS)
 
 # unroll begin
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 command_seperator=&&
 #command_seperator=^
 .ELSE
@@ -532,7 +532,7 @@ $(ZIP7TARGETN) : delzip $(ZIP7DEPS)
 
 # unroll begin
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 command_seperator=&&
 #command_seperator=^
 .ELSE
@@ -608,7 +608,7 @@ $(ZIP8TARGETN) : delzip $(ZIP8DEPS)
 
 # unroll begin
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 command_seperator=&&
 #command_seperator=^
 .ELSE
@@ -684,7 +684,7 @@ $(ZIP9TARGETN) : delzip $(ZIP9DEPS)
 
 # unroll begin
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 command_seperator=&&
 #command_seperator=^
 .ELSE

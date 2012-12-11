@@ -65,7 +65,7 @@ $(eval $(call gb_Executable_use_libraries,nsplugin,\
 	sal \
 ))
 
-ifeq ($(GUI),WNT)
+ifeq ($(OS),WNT)
 $(eval $(call gb_Executable_add_exception_objects,nsplugin,\
 	extensions/source/nsplugin/source/nsp_windows \
 ))
