@@ -27,13 +27,13 @@
 #include <ndtxt.hxx>
 #include <txatbase.hxx>
 
-using namespace ::com::sun::star::i18n;
+using namespace ::com::sun::star;
 
 
 SwScriptIterator::SwScriptIterator( const String& rStr, xub_StrLen nStt, bool bFrwrd )
     : rText( rStr ),
       nChgPos( rStr.Len() ),
-      nCurScript( ScriptType::WEAK ),
+      nCurScript( i18n::ScriptType::WEAK ),
       bForward( bFrwrd )
 {
     if( pBreakIt->GetBreakIter().is() )
@@ -43,7 +43,7 @@ SwScriptIterator::SwScriptIterator( const String& rStr, xub_StrLen nStt, bool bF
 
         xub_StrLen nPos = nStt;
         nCurScript = pBreakIt->GetBreakIter()->getScriptType( rText, nPos );
-        if( ScriptType::WEAK == nCurScript )
+        if( i18n::ScriptType::WEAK == nCurScript )
         {
             if( nPos )
             {

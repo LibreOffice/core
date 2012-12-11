@@ -2430,7 +2430,7 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
                 beans::PropertyValue* pValues = aValues.getArray();
                 pValues[0].Name = C2U("FilterName");
                 pValues[0].Value <<= ::rtl::OUString(pSfxFlt->GetFilterName());
-                uno::Reference< frame::XStorable > xStore( xDocShell->GetModel(), uno::UNO_QUERY);
+                uno::Reference< XStorable > xStore( xDocShell->GetModel(), uno::UNO_QUERY);
                 sTempURL = URIHelper::SmartRel2Abs( INetURLObject(), utl::TempFile::CreateTempName() );
                 xStore->storeToURL( sTempURL, aValues );
             }

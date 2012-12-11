@@ -3486,7 +3486,7 @@ namespace {
                     rTxtNode.RemoveFromList();
                     if ( bParagraphStyleChanged )
                     {
-                        ::lcl_ResetParAttrs(rTxtNode);
+                        lcl_ResetParAttrs(rTxtNode);
                     }
                 }
                 else
@@ -3514,7 +3514,7 @@ namespace {
                 rTxtNode.RemoveFromList();
                 if ( bParagraphStyleChanged )
                 {
-                    ::lcl_ResetParAttrs(rTxtNode);
+                    lcl_ResetParAttrs(rTxtNode);
                     // #i70748#
                     if ( dynamic_cast<const SfxUInt16Item &>(rTxtNode.GetAttr( RES_PARATR_OUTLINELEVEL, sal_False )).GetValue() > 0 )
                     {

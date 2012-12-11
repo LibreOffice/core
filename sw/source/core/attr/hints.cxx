@@ -237,15 +237,15 @@ sal_uInt16 GetWhichOfScript( sal_uInt16 nWhich, sal_uInt16 nScript )
     sal_uInt16 nRet;
     if( pM )
     {
-        using namespace ::com::sun::star::i18n;
+        using namespace ::com::sun::star;
         {
-            if( ScriptType::WEAK == nScript )
+            if( i18n::ScriptType::WEAK == nScript )
                 nScript = GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() );
             switch( nScript)
             {
-            case ScriptType::COMPLEX:
+            case i18n::ScriptType::COMPLEX:
                 ++pM;  // no break;
-            case ScriptType::ASIAN:
+            case i18n::ScriptType::ASIAN:
                 ++pM;  // no break;
             default:
                 nRet = *pM;

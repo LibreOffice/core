@@ -381,7 +381,7 @@ void SwModule::ShowDBObj(SwView& rView, const SwDBData& rData, sal_Bool /*bOnlyI
     Reference<XFrame> xFrame = rView.GetViewFrame()->GetFrame().GetFrameInterface();
     Reference<XDispatchProvider> xDP(xFrame, uno::UNO_QUERY);
 
-    uno::Reference<frame::XFrame> xBeamerFrame = xFrame->findFrame("_beamer", FrameSearchFlag::CHILDREN);
+    uno::Reference<XFrame> xBeamerFrame = xFrame->findFrame("_beamer", FrameSearchFlag::CHILDREN);
     if (xBeamerFrame.is())
     {   // the beamer has been opened by the SfxViewFrame
         Reference<XController> xController = xBeamerFrame->getController();

@@ -72,6 +72,7 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::frame;
 
 #define DB_DD_DELIM 0x0b
 
@@ -214,7 +215,7 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
                     aData.aDBColumn = ((SfxUsrAnyItem*)pColumnItem)->GetValue();
                 aFldMgr.InsertFld(aData);
                 SfxViewFrame* pViewFrame = GetView().GetViewFrame();
-                uno::Reference< frame::XDispatchRecorder > xRecorder =
+                uno::Reference< XDispatchRecorder > xRecorder =
                         pViewFrame->GetBindings().GetRecorder();
                 if ( xRecorder.is() )
                 {
