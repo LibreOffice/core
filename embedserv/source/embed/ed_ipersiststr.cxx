@@ -40,10 +40,17 @@
 #include <comphelper/processfactory.hxx>
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
+#include <sal/types.h>
 
 #include <string.h>
 
 #define EXT_STREAM_LENGTH 16
+
+namespace {
+
+const sal_Int32 nConstBufferSize = 32000;
+
+}
 
 using namespace ::com::sun::star;
 

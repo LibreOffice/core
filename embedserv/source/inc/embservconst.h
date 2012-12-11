@@ -26,15 +26,9 @@
 #include <comphelper/classids.hxx>
 #endif
 
-#ifndef _SAL_TYPES_H_
-#include <sal/types.h>
-#endif
-
 #if defined __MINGW32__
 #pragma GCC diagnostic warning "-Wmissing-braces"
 #endif
-
-const sal_Int32 nConstBufferSize = 32000;
 
 #define SUPPORTED_FACTORIES_NUM 10
 
