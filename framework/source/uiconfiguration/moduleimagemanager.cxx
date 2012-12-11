@@ -75,7 +75,7 @@ namespace framework
 {
 ModuleImageManager::ModuleImageManager( uno::Reference< XMultiServiceFactory > xServiceManager ) :
     ThreadHelpBase( &Application::GetSolarMutex() )
-    , m_pImpl( new ImageManagerImpl(xServiceManager,static_cast< OWeakObject* >(this),true) )
+    , m_pImpl( new ImageManagerImpl(comphelper::getComponentContext(xServiceManager),static_cast< OWeakObject* >(this),true) )
 {
 }
 

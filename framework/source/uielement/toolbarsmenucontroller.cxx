@@ -34,6 +34,7 @@
 #include <com/sun/star/awt/MenuItemStyle.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/frame/UICommandDescription.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
@@ -224,9 +225,7 @@ rtl::OUString ToolbarsMenuController::getUINameFromCommand( const rtl::OUString&
         {
             Reference< XModuleManager2 > xModuleManager = ModuleManager::create( comphelper::getComponentContext(m_xServiceManager) );
             m_aModuleIdentifier = xModuleManager->identify( m_xFrame );
-            Reference< XNameAccess > xNameAccess( m_xServiceManager->createInstance(
-                                                                    SERVICENAME_UICOMMANDDESCRIPTION ),
-                                                                UNO_QUERY );
+            Reference< XNameAccess > xNameAccess = frame::UICommandDescription::create( comphelper::getComponentContext(m_xServiceManager) );
             xNameAccess->getByName( m_aModuleIdentifier ) >>= m_xUICommandDescription;
         }
         catch ( const Exception& )

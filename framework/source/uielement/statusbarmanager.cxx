@@ -318,7 +318,7 @@ void StatusBarManager::RemoveControllers()
 
 rtl::OUString StatusBarManager::RetrieveLabelFromCommand( const rtl::OUString& aCmdURL )
 {
-    return framework::RetrieveLabelFromCommand(aCmdURL,m_xServiceManager,m_xUICommandLabels,m_xFrame,m_aModuleIdentifier,m_bModuleIdentified,"Name");
+    return framework::RetrieveLabelFromCommand(aCmdURL, comphelper::getComponentContext(m_xServiceManager), m_xUICommandLabels,m_xFrame,m_aModuleIdentifier,m_bModuleIdentified,"Name");
 }
 
 void StatusBarManager::CreateControllers()

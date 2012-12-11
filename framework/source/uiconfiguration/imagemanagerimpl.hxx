@@ -60,7 +60,7 @@ namespace framework
     class CmdImageList
     {
         public:
-            CmdImageList( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
+            CmdImageList( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                           const ::rtl::OUString& aModuleIdentifier );
             virtual ~CmdImageList();
 
@@ -80,7 +80,7 @@ namespace framework
             rtl::OUString                                                                    m_aModuleIdentifier;
             ImageList*                                                                       m_pImageList[ImageType_COUNT];
             CommandToImageNameMap                                                            m_aCommandToImageNameMap;
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
+            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >     m_xContext;
             ::std::vector< rtl::OUString >                                                   m_aImageNameVector;
             ::std::vector< rtl::OUString >                                                   m_aImageCommandNameVector;
             sal_Int16                                                                        m_nSymbolsStyle;
@@ -89,7 +89,7 @@ namespace framework
     class GlobalImageList : public CmdImageList, public rtl::IReference
     {
         public:
-            GlobalImageList( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rServiceManager );
+            GlobalImageList( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
             virtual ~GlobalImageList();
 
             virtual Image                           getImageFromCommandURL( sal_Int16 nImageType, const rtl::OUString& rCommandURL );
@@ -109,7 +109,7 @@ namespace framework
     {
         public:
 
-            ImageManagerImpl(const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xServiceManager
+            ImageManagerImpl(const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext
                 ,::cppu::OWeakObject *pOwner
                 ,bool _bUseGlobal);
             ~ImageManagerImpl();
@@ -180,7 +180,7 @@ namespace framework
             com::sun::star::uno::Reference< com::sun::star::embed::XStorage >               m_xUserImageStorage;
             com::sun::star::uno::Reference< com::sun::star::embed::XStorage >               m_xUserBitmapsStorage;
             com::sun::star::uno::Reference< com::sun::star::embed::XTransactedObject >      m_xUserRootCommit;
-            com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
+            com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >        m_xContext;
             ::cppu::OWeakObject*                                                            m_pOwner;
             rtl::Reference< GlobalImageList >                                               m_pGlobalImageList;
             CmdImageList*                                                                   m_pDefaultImageList;

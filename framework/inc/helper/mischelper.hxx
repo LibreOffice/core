@@ -101,7 +101,7 @@ public:
 };
 
 FWI_DLLPUBLIC ::rtl::OUString RetrieveLabelFromCommand( const ::rtl::OUString& aCmdURL
-            ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&    _xServiceFactory
+            ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&    _xContext
             ,::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >&        _xUICommandLabels
             ,const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame
             ,::rtl::OUString& _rModuleIdentifier

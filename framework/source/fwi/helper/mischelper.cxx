@@ -21,6 +21,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/document/XDocumentLanguages.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
+#include <com/sun/star/frame/UICommandDescription.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <tools/debug.hxx>
@@ -68,7 +69,7 @@ uno::Reference< linguistic2::XLanguageGuessing > LanguageGuessingHelper::GetGues
 
 ::rtl::OUString RetrieveLabelFromCommand(
     const ::rtl::OUString& aCmdURL,
-    const uno::Reference< lang::XMultiServiceFactory >& _xServiceFactory,
+    const uno::Reference< uno::XComponentContext >& _xContext,
     uno::Reference< container::XNameAccess >& _xUICommandLabels,
     const uno::Reference< frame::XFrame >& _xFrame,
     ::rtl::OUString& _rModuleIdentifier,
@@ -85,7 +86,7 @@ uno::Reference< linguistic2::XLanguageGuessing > LanguageGuessingHelper::GetGues
             if ( !_rIni )
             {
                 _rIni = sal_True;
-                Reference< XModuleManager2 > xModuleManager = ModuleManager::create( comphelper::getComponentContext(_xServiceFactory) );
+                Reference< XModuleManager2 > xModuleManager = ModuleManager::create( _xContext );
 
                 try
                 {
@@ -96,11 +97,8 @@ uno::Reference< linguistic2::XLanguageGuessing > LanguageGuessingHelper::GetGues
                 }
             }
 
-            Reference< XNameAccess > xNameAccess( _xServiceFactory->createInstance( SERVICENAME_UICOMMANDDESCRIPTION ), UNO_QUERY );
-            if ( xNameAccess.is() )
-            {
-                xNameAccess->getByName( _rModuleIdentifier ) >>= _xUICommandLabels;
-            }
+            Reference< XNameAccess > xNameAccess = frame::UICommandDescription::create( _xContext );
+            xNameAccess->getByName( _rModuleIdentifier ) >>= _xUICommandLabels;
         }
         catch ( const Exception& )
         {

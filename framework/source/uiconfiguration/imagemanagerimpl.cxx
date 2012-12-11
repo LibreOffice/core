@@ -26,6 +26,7 @@
 
 #include "properties.h"
 
+#include <com/sun/star/frame/UICommandDescription.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/ui/ConfigurationEvent.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -110,12 +111,12 @@ static osl::Mutex& getGlobalImageListMutex()
     return theGlobalImageListMutex::get();
 }
 
-static GlobalImageList* getGlobalImageList( const uno::Reference< XMultiServiceFactory >& rServiceManager )
+static GlobalImageList* getGlobalImageList( const uno::Reference< uno::XComponentContext >& rxContext )
 {
     osl::MutexGuard guard( getGlobalImageListMutex() );
 
     if ( pGlobalImageList == 0 )
-        pGlobalImageList = new GlobalImageList( rServiceManager );
+        pGlobalImageList = new GlobalImageList( rxContext );
 
     return pGlobalImageList;
 }
@@ -151,10 +152,10 @@ static rtl::OUString getCanonicalName( const rtl::OUString& rFileName )
 
 //_________________________________________________________________________________________________________________
 
-CmdImageList::CmdImageList( const uno::Reference< XMultiServiceFactory >& rServiceManager, const rtl::OUString& aModuleIdentifier ) :
+CmdImageList::CmdImageList( const uno::Reference< uno::XComponentContext >& rxContext, const rtl::OUString& aModuleIdentifier ) :
     m_bVectorInit( sal_False ),
     m_aModuleIdentifier( aModuleIdentifier ),
-    m_xServiceManager( rServiceManager ),
+    m_xContext( rxContext ),
     m_nSymbolsStyle( SvtMiscOptions().GetCurrentSymbolsStyle() )
 {
     for ( sal_Int32 n=0; n < ImageType_COUNT; n++ )
@@ -175,9 +176,7 @@ void CmdImageList::impl_fillCommandToImageNameMap()
     {
         const rtl::OUString aCommandImageList( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDIMAGELIST );
         Sequence< OUString > aCmdImageSeq;
-        uno::Reference< XNameAccess > xCmdDesc( m_xServiceManager->createInstance(
-                                                SERVICENAME_UICOMMANDDESCRIPTION ),
-                                            UNO_QUERY );
+        uno::Reference< XNameAccess > xCmdDesc = frame::UICommandDescription::create( m_xContext );
 
         if ( !m_aModuleIdentifier.isEmpty() )
         {
@@ -327,8 +326,8 @@ bool CmdImageList::hasImage( sal_Int16 /*nImageType*/, const rtl::OUString& rCom
 
 //_________________________________________________________________________________________________________________
 
-GlobalImageList::GlobalImageList( const uno::Reference< XMultiServiceFactory >& rServiceManager ) :
-    CmdImageList( rServiceManager, rtl::OUString() ),
+GlobalImageList::GlobalImageList( const uno::Reference< uno::XComponentContext >& rxContext ) :
+    CmdImageList( rxContext, rtl::OUString() ),
     m_nRefCount( 0 )
 {
 }
@@ -484,7 +483,7 @@ sal_Bool ImageManagerImpl::implts_loadUserImages(
             uno::Reference< XInputStream > xInputStream = xStream->getInputStream();
 
             ImageListsDescriptor aUserImageListInfo;
-            ImagesConfiguration::LoadImages( comphelper::getComponentContext(m_xServiceManager),
+            ImagesConfiguration::LoadImages( m_xContext,
                                              xInputStream,
                                              aUserImageListInfo );
             if (( aUserImageListInfo.pImageList != 0 ) &&
@@ -605,7 +604,7 @@ sal_Bool ImageManagerImpl::implts_storeUserImages(
 
                 xOutputStream = xStream->getOutputStream();
                 if ( xOutputStream.is() )
-                    ImagesConfiguration::StoreImages( comphelper::getComponentContext(m_xServiceManager), xOutputStream, aUserImageListInfo );
+                    ImagesConfiguration::StoreImages( m_xContext, xOutputStream, aUserImageListInfo );
 
                 // Commit user image storage
                 xTransaction = uno::Reference< XTransactedObject >( xUserImageStorage, UNO_QUERY );
@@ -658,7 +657,7 @@ const rtl::Reference< GlobalImageList >& ImageManagerImpl::implts_getGlobalImage
     ResetableGuard aGuard( m_aLock );
 
     if ( !m_pGlobalImageList.is() )
-        m_pGlobalImageList = getGlobalImageList( m_xServiceManager );
+        m_pGlobalImageList = getGlobalImageList( m_xContext );
     return m_pGlobalImageList;
 }
 
@@ -667,14 +666,14 @@ CmdImageList* ImageManagerImpl::implts_getDefaultImageList()
     ResetableGuard aGuard( m_aLock );
 
     if ( !m_pDefaultImageList )
-        m_pDefaultImageList = new CmdImageList( m_xServiceManager, m_aModuleIdentifier );
+        m_pDefaultImageList = new CmdImageList( m_xContext, m_aModuleIdentifier );
 
     return m_pDefaultImageList;
 }
 
-ImageManagerImpl::ImageManagerImpl( const uno::Reference< XMultiServiceFactory >& xServiceManager,::cppu::OWeakObject* pOwner,bool _bUseGlobal ) :
+ImageManagerImpl::ImageManagerImpl( const uno::Reference< uno::XComponentContext >& rxContext,::cppu::OWeakObject* pOwner,bool _bUseGlobal ) :
     ThreadHelpBase( &Application::GetSolarMutex() )
-    , m_xServiceManager( xServiceManager )
+    , m_xContext( rxContext )
     , m_pOwner(pOwner)
     , m_pDefaultImageList( 0 )
     , m_aXMLPostfix( ".xml" )
