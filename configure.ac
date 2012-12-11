@@ -3480,7 +3480,7 @@ aix*)
 cygwin*)
     COM=MSC
     GUI=WNT
-    GUIBASE=WIN
+    GUIBASE=not-used
     OS=WNT
     RTL_OS=Windows
     P_SEP=";"
@@ -3514,8 +3514,7 @@ cygwin*)
 darwin*)
     COM=GCC
     GUI=UNX
-    # Not sure if "Aqua" is the right term to use?
-    GUIBASE="aqua"
+    GUIBASE=not-used
     OS=MACOSX
     RTL_OS=MacOSX
     P_SEP=:
@@ -3525,7 +3524,6 @@ darwin*)
         CPU=R
         CPUNAME=ARM
         RTL_ARCH=ARM_EABI
-        GUIBASE=cocoatouch
         PLATFORMID=macosx_arm_eabi
         OUTPATH=unxiosr
         OS=IOS
@@ -3815,7 +3813,7 @@ linux-gnu*)
 linux-android*)
     COM=GCC
     GUI=UNX
-    GUIBASE=android
+    GUIBASE=not-used
     OS=ANDROID
     RTL_OS=Android
     P_SEP=:
@@ -3854,7 +3852,7 @@ linux-android*)
 mingw*)
     COM=GCC
     GUI=WNT
-    GUIBASE=WIN
+    GUIBASE=not-used
     OS=WNT
     RTL_OS=Windows
     P_SEP=:
@@ -4186,9 +4184,9 @@ if test "$cross_compiling" = "yes"; then
     test -f ./config_host.mk 2>/dev/null || exit
     cp config_host.mk ../config_build.mk
     cp config.log ../config.Build.log
-    . ./bin/get_config_variables COM GUI GUIBASE OS PATH CPU CPUNAME CC CXX DISABLE_PYTHON MACOSX_DEPLOYMENT_TARGET INPATH OUTPATH PYTHON SYSTEM_LIBXSLT OUTDIR SOLARINC SOLARLIB WORKDIR
+    . ./bin/get_config_variables COM GUI OS PATH CPU CPUNAME CC CXX DISABLE_PYTHON MACOSX_DEPLOYMENT_TARGET INPATH OUTPATH PYTHON SYSTEM_LIBXSLT OUTDIR SOLARINC SOLARLIB WORKDIR
 
-    for V in COM GUI GUIBASE OS CPU CPUNAME CC CXX DISABLE_PYTHON MACOSX_DEPLOYMENT_TARGET INPATH OUTPATH \
+    for V in COM GUI OS CPU CPUNAME CC CXX DISABLE_PYTHON MACOSX_DEPLOYMENT_TARGET INPATH OUTPATH \
              PYTHON SYSTEM_LIBXSLT; do
         VV='$'$V
         VV=`eval "echo $VV"`
@@ -4227,7 +4225,6 @@ else
     CPU_FOR_BUILD="$CPU"
     CXX_FOR_BUILD="$CXX"
     DISABLE_PYTHON_FOR_BUILD="$DISABLE_PYTHON"
-    GUIBASE_FOR_BUILD="$GUIBASE"
     GUI_FOR_BUILD="$GUI"
     INPATH_FOR_BUILD="$INPATH"
     MACOSX_DEPLOYMENT_TARGET_FOR_BUILD="$MACOSX_DEPLOYMENT_TARGET"
@@ -4239,7 +4236,6 @@ else
 fi
 AC_SUBST(COM_FOR_BUILD)
 AC_SUBST(GUI_FOR_BUILD)
-AC_SUBST(GUIBASE_FOR_BUILD)
 AC_SUBST(OS_FOR_BUILD)
 AC_SUBST(CPU_FOR_BUILD)
 AC_SUBST(CPUNAME_FOR_BUILD)

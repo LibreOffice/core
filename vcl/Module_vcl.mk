@@ -70,13 +70,13 @@ $(eval $(call gb_Module_add_targets,vcl,\
 endif
 endif
 
-ifeq ($(GUIBASE),aqua)
+ifeq ($(OS),MACOSX)
 $(eval $(call gb_Module_add_targets,vcl,\
     Zip_osxres \
 ))
 endif
 
-ifeq ($(GUIBASE),WIN)
+ifeq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,vcl,\
     WinResTarget_vcl \
 ))

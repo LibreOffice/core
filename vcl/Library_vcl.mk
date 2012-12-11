@@ -32,7 +32,7 @@ ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.macosx))
 else ifeq ($(OS),WNT)
 $(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.windows))
-else ifeq ($(GUIBASE),android)
+else ifeq ($(OS),ANDROID)
 $(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.android))
 else ifeq ($(OS),IOS)
 $(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.ios))
@@ -324,7 +324,7 @@ $(eval $(call gb_Library_use_packages,vcl,\
 
 # GUIBASE specific stuff
 
-ifeq ($(GUIBASE),aqua)
+ifeq ($(OS),MACOSX)
 
 $(eval $(call gb_Library_add_cxxflags,vcl,\
     $(gb_OBJCXXFLAGS) \
@@ -530,7 +530,7 @@ $(eval $(call gb_Library_use_externals,vcl,\
 ))
 endif
 
-ifeq ($(GUIBASE),android)
+ifeq ($(OS),ANDROID)
 $(eval $(call gb_Library_add_libs,vcl,\
 	-llog \
 	-landroid \
@@ -561,7 +561,7 @@ $(eval $(call gb_Library_use_externals,vcl,\
 ))
 endif
 
-ifeq ($(GUIBASE),cocoatouch)
+ifeq ($(OS),IOS)
 $(eval $(call gb_Library_add_cxxflags,vcl,\
     $(gb_OBJCXXFLAGS) \
 ))

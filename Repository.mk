@@ -589,7 +589,7 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     vbaobj \
     vbaswobj \
     vclcanvas \
-    $(if $(filter $(GUIBASE),aqua), \
+    $(if $(filter $(OS),MACOSX), \
         fps_aqua \
     ) \
 ))

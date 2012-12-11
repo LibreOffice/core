@@ -31,7 +31,7 @@ $(eval $(call gb_Module_add_targets,lingucomponent,\
 	Library_guesslang \
 	Library_hyphen \
 	Library_lnth \
-	$(if $(filter aqua,$(GUIBASE)),Library_MacOSXSpell) \
+	$(if $(filter MACOSX,$(OS)),Library_MacOSXSpell) \
 	Library_spell \
 	Package_config \
 	StaticLibrary_ulingu \

@@ -127,13 +127,13 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/helper/vclunohelper \
 ))
 
-ifeq ($(GUIBASE),aqua)
+ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_add_cxxflags,tk,\
 	$(gb_OBJCXXFLAGS) \
 ))
 endif
 
-ifeq ($(GUIBASE),cocoatouch)
+ifeq ($(OS),IOS)
 $(eval $(call gb_Library_add_cxxflags,tk,\
     $(gb_OBJCXXFLAGS)))
 endif
