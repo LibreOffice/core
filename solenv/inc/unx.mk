@@ -26,7 +26,7 @@
 #*************************************************************************
 
 # --- Unix-Environment ---------------------------------------
-# Used if "$(GUI)" == "UNX"
+# Used if "$(OS)" != "WNT"
 
 
 # Dieses Define gilt fuer alle  WNT- Plattformen

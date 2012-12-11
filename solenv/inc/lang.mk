@@ -17,11 +17,11 @@
 #
 
 
-#.IF "$(GUI)"=="UNX" || "$(OS)"=="WNT"
-#LANG_GUI=WIN
-#.ELSE
-LANG_GUI=$(GUI)
-#.ENDIF
+.IF "$(OS)"=="WNT"
+LANG_GUI=WNT
+.ELSE
+LANG_GUI=UNX
+.ENDIF
 
 ###################################################
 #

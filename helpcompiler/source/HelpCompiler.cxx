@@ -48,6 +48,7 @@ HelpCompiler::HelpCompiler(StreamTable &in_streamTable, const fs::path &in_input
     char* guitmp = getenv("GUI");
     if (guitmp)
     {
+        // WTF?
         gui = (strcmp(guitmp, "UNX") ? gui : "UNIX");
         gui = (strcmp(guitmp, "MAC") ? gui : "MAC");
         gui = (strcmp(guitmp, "WNT") ? gui : "WIN");

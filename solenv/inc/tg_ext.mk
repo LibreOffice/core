@@ -28,22 +28,22 @@
 .EXPORT : CC CXX
 
 # setup INCLUDE variable for use by VC++
-.IF "$(GUI)$(COM)"=="WNTMSC"
+.IF "$(OS)$(COM)"=="WNTMSC"
 INCLUDE!:=. $(SOLARINC)
 INCLUDE!:=$(INCLUDE:s/ -I/;/)
 .EXPORT : INCLUDE
-.ENDIF			# "$(GUI)$(COM)"=="WNTMSC"
+.ENDIF			# "$(OS)$(COM)"=="WNTMSC"
 
 .IF "$(OS)"=="MACOSX"
 LDFLAGS!:=$(EXTRA_LINKFLAGS) $(LDFLAGS)
 .EXPORT : LDFLAGS
 .ENDIF
 
-.IF "$(GUI_FOR_BUILD)"=="WNT"
+.IF "$(OS_FOR_BUILD)"=="WNT"
 PATH!:=.:$(SOLARBINDIR:^"/cygdrive/":s/://):$(PATH)
-.ELSE           # "$(GUI)"=="WNT"
+.ELSE           # "$(OS)"=="WNT"
 PATH!:=.$(PATH_SEPERATOR)$(SOLARBINDIR)$(PATH_SEPERATOR)$(PATH)
-.ENDIF          # "$(GUI)"=="WNT"
+.ENDIF          # "$(OS)"=="WNT"
 .EXPORT : PATH
 
 #override
@@ -105,31 +105,31 @@ clean:
 
 $(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.tar.bz2
     @-$(RM) $@
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
     @noop $(assign UNPACKCMD := sh -c "bzip2 -cd $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | $(GNUTAR) --no-same-owner -x$(tar_verbose_switch)f - ")
-.ELSE			# "$(GUI)"=="UNX"
+.ELSE			# "$(OS)"!="WNT"
     @noop $(assign UNPACKCMD := bzip2 -cd $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | $(GNUTAR) --no-same-owner -x$(tar_verbose_switch)f - )
-.ENDIF			# "$(GUI)"=="UNX"
+.ENDIF			# "$(OS)"!="WNT"
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
 $(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.tar.xz
     @-$(RM) $@
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
     @noop $(assign UNPACKCMD := sh -c "xz -cd $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar.xz $(TARFILE_FILTER) | $(GNUTAR) --no-same-owner -x$(tar_verbose_switch)f - ")
-.ELSE			# "$(GUI)"=="UNX"
+.ELSE			# "$(OS)"!="WNT"
     @noop $(assign UNPACKCMD := xz -cd $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar.xz $(TARFILE_FILTER) | $(GNUTAR) --no-same-owner -x$(tar_verbose_switch)f - )
-.ENDIF			# "$(GUI)"=="UNX"
+.ENDIF			# "$(OS)"!="WNT"
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
 $(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.tar.Z
     @-$(RM) $@
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
     @noop $(assign UNPACKCMD := sh -c "uncompress -c $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar.Z | $(GNUTAR) --no-same-owner -x$(tar_verbose_switch)f - ")
-.ELSE			# "$(GUI)"=="UNX"
+.ELSE			# "$(OS)"!="WNT"
     @noop $(assign UNPACKCMD := uncompress -c $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar.Z | $(GNUTAR) --no-same-owner -x$(tar_verbose_switch)f - )
-.ENDIF			# "$(GUI)"=="UNX"
+.ENDIF			# "$(OS)"!="WNT"
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
@@ -187,11 +187,11 @@ $(PACKAGE_DIR)/$(UNTAR_FLAG_FILE) : $(PRJ)/$(ROUT)/misc/$(TARFILE_MD5)-$(TARFILE
 #add new files to patch and remove files from patch
 $(PACKAGE_DIR)/$(ADD_FILES_FLAG_FILE) : $(PACKAGE_DIR)/$(UNTAR_FLAG_FILE) $(T_ADDITIONAL_FILES:+".dummy")
     $(RM) $(foreach,i,$(REMOVE_FILES) $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)/$i)
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
     @$(TOUCH) $@
-.ELSE			# "$(GUI)"=="WNT"
+.ELSE			# "$(OS)"=="WNT"
     @$(TOUCH) $@
-.ENDIF			# "$(GUI)"=="WNT"
+.ENDIF			# "$(OS)"=="WNT"
 
 #patch
 $(PACKAGE_DIR)/$(PATCH_FLAG_FILE) : $(PACKAGE_DIR)/$(ADD_FILES_FLAG_FILE)
@@ -199,17 +199,17 @@ $(PACKAGE_DIR)/$(PATCH_FLAG_FILE) : $(PACKAGE_DIR)/$(ADD_FILES_FLAG_FILE)
     @echo no patch needed...
     $(COMMAND_ECHO)$(TOUCH) $@
 .ELSE			# "$(PATCH_FILES)"=="none" ||	"$(PATCH_FILES)"==""
-.IF "$(GUI_FOR_BUILD)"=="WNT"
+.IF "$(OS_FOR_BUILD)"=="WNT"
     $(COMMAND_ECHO)cd $(PACKAGE_DIR) && $(TYPE:s/+//) $(BACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | tr -d "\015" | patch $(PATCHFLAGS) -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
-.ELSE           # "$(GUI)"=="WNT"
+.ELSE           # "$(OS)"=="WNT"
     $(COMMAND_ECHO)cd $(PACKAGE_DIR) && $(TYPE) $(BACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | $(GNUPATCH) $(PATCHFLAGS) -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
-.ENDIF          # "$(GUI)"=="WNT"
+.ENDIF          # "$(OS)"=="WNT"
 .ENDIF			# "$(PATCH_FILES)"=="none" ||	"$(PATCH_FILES)"==""
 .IF "$(T_ADDITIONAL_FILES)"!=""
-.IF "$(GUI_FOR_BUILD)"=="WNT"
+.IF "$(OS_FOR_BUILD)"=="WNT"
 # Native W32 tools generate only filedates with even seconds, cygwin also with odd seconds
     $(DELAY) 2
-.ENDIF # "$(GUI)"=="WNT"
+.ENDIF # "$(OS)"=="WNT"
     $(COMMAND_ECHO)$(TOUCH) $(PACKAGE_DIR)/$(PATCH_FLAG_FILE)
 .ENDIF          # "$(T_ADDITIONAL_FILES)"!=""
 
@@ -285,19 +285,19 @@ $(PACKAGE_DIR)/$(PREDELIVER_FLAG_FILE) : $(PACKAGE_DIR)/$(INSTALL_FLAG_FILE)
 .IF "$(OS)"=="MACOSX"
     $(COMMAND_ECHO)$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl app \
         $(EXTRPATH) $(shell ls $(foreach,j,$(OUT2BIN) $(BIN)/$(j:f)))
-.ELIF "$(GUI)$(COM)$(COMEX)"=="WNTMSC12"
+.ELIF "$(OS)$(COM)$(COMEX)"=="WNTMSC12"
     @noop $(foreach,j,$(foreach,k,$(OUT2BIN) \
         $(shell -ls -1 $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)/$k | $(GREP) .dll)) \
         $(shell @$(IFEXIST) $(j).manifest $(THEN) mt.exe \
         -manifest $(j).manifest -outputresource:$(BIN)/$(j:f)$(EMQ);2 $(FI)))
-.ENDIF          # "$(GUI)$(COM)$(COMEX)"=="WNTMSC12"
+.ENDIF          # "$(OS)$(COM)$(COMEX)"=="WNTMSC12"
 .ENDIF			# "$(OUT2BIN)"!=""
 .IF "$(OUT2BIN_NONE)"!=""
     $(COMMAND_ECHO)$(COPY) $(foreach,i,$(OUT2BIN_NONE) $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)/$i) $(BIN)
 .IF "$(OS)"=="MACOSX"
     $(COMMAND_ECHO)$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl app \
         NONE $(shell ls $(foreach,j,$(OUT2BIN_NONE) $(BIN)/$(j:f)))
-.ELIF "$(GUI)$(COM)$(COMEX)"=="WNTMSC12"
+.ELIF "$(OS)$(COM)$(COMEX)"=="WNTMSC12"
     @noop $(foreach,j,$(foreach,k,$(OUT2BIN_NONE) \
         $(shell -ls -1 $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)/$k | $(GREP) .dll)) \
         $(shell @$(IFEXIST) $(j).manifest $(THEN) mt.exe \
@@ -321,7 +321,7 @@ $(MISC)/$(TARFILE_ROOTDIR).done : $(MISC)/$(TARFILE_MD5)-$(TARFILE_NAME).unpack 
 .IF "$(CONVERTFILES)"!=""
     $(CONVERT) unix $(foreach,i,$(CONVERTFILES) $(MISC)/$(TARFILE_ROOTDIR)/$i)
 .ENDIF          # "$(CONVERTFILES)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 # hack to make 4nt version 4,01 work and still get propper
 # errorcodes for versions < 3,00
 #.IF "$(my4ver:s/.//:s/,//)" >= "300"
@@ -329,16 +329,16 @@ $(MISC)/$(TARFILE_ROOTDIR).done : $(MISC)/$(TARFILE_MD5)-$(TARFILE_NAME).unpack 
 #.ELSE			# "$(my4ver:s/.//:s/,//)" >= "300"
     $(COMMAND_ECHO)cd $(MISC) && $(TYPE:s/+//) $(MBACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | tr -d "\015" | patch $(PATCHFLAGS) -p2
 #.ENDIF			# "$(my4ver:s/.//:s/,//)" >= "300"
-.ELSE           # "$(GUI)"=="WNT"
+.ELSE           # "$(OS)"=="WNT"
     $(COMMAND_ECHO)cd $(MISC) && $(TYPE) $(MBACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | $(GNUPATCH) $(PATCHFLAGS) -p2
-.ENDIF          # "$(GUI)"=="WNT"
+.ENDIF          # "$(OS)"=="WNT"
 .IF "$(CONVERTFILES)"!=""
     $(COMMAND_ECHO)$(CONVERT) dos  $(foreach,i,$(CONVERTFILES) $(MISC)/$(TARFILE_ROOTDIR)/$i)
 .ENDIF          # "$(CONVERTFILES)"!=""
 .ENDIF			# "$(PATCH_FILES)"!="none" && "$(PATCH_FILES)"!="
-.IF "$(GUI)"=="UNX"	
+.IF "$(OS)"!="WNT"	
     $(COMMAND_ECHO)$(TOUCH) $@
-.ENDIF			# "$(GUI)"=="UNX"
+.ENDIF			# "$(OS)"!="WNT"
 
 .IF "$(T_ADDITIONAL_FILES)"!=""
 $(T_ADDITIONAL_FILES:+".dummy") : $(PACKAGE_DIR)/$(UNTAR_FLAG_FILE)

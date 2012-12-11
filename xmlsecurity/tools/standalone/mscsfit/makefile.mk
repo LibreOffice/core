@@ -43,7 +43,7 @@ SHARE_LIBS =	\
         $(CPPUHELPERLIB) \
         $(SALLIB)
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 SHARE_LIBS+= "libxml2.lib" "crypt32.lib" "advapi32.lib" "libxmlsec.lib" "libxmlsec-mscrypto.lib" "xsec_xmlsec.lib" "xs_comm.lib" "xs_mscrypt.lib"
 .ELSE
 SHARE_LIBS+= "-lxml2" "-lnss3" "-lnspr4" "-lxmlsec1" "-lxmlsec1-nss" "-lxsec_xmlsec" "-lxs_comm" "-lxs_nss"

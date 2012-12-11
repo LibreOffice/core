@@ -138,18 +138,18 @@ $(eval $(call gb_Library_add_exception_objects,sb,\
 	canvastools \
 ))
 
-ifeq ($(GUI),WNT)
+ifeq ($(OS),WNT)
 $(eval $(call gb_Library_use_system_win32_libs,sb,\
 	oleaut32 \
 ))
 endif
 
-ifeq ($(GUI)$(CPUNAME),WNTINTEL)
+ifeq ($(OS)$(CPUNAME),WNTINTEL)
 $(eval $(call gb_Library_add_exception_objects,sb,\
 	basic/source/runtime/dllmgr-x86 \
 ))
 else
-ifeq ($(GUI)$(CPUNAME),WNTX86_64)
+ifeq ($(OS)$(CPUNAME),WNTX86_64)
 $(eval $(call gb_Library_add_exception_objects,sb,\
 	basic/source/runtime/dllmgr-x64 \
 ))
@@ -159,12 +159,12 @@ $(eval $(call gb_Library_add_exception_objects,sb,\
 ))
 endif
 endif
-ifeq ($(GUI)$(COM)$(CPUNAME),WNTMSCINTEL)
+ifeq ($(OS)$(COM)$(CPUNAME),WNTMSCINTEL)
 $(eval $(call gb_Library_add_asmobjects,sb,\
 	basic/source/runtime/wnt-x86 \
 ))
 endif
-ifeq ($(GUI)$(COM)$(CPUNAME),WNTGCCINTEL)
+ifeq ($(OS)$(COM)$(CPUNAME),WNTGCCINTEL)
 $(eval $(call gb_Library_add_asmobjects,sb,\
 	basic/source/runtime/wnt-mingw \
 ))

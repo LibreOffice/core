@@ -15,11 +15,11 @@ $(eval $(call gb_ExternalProject_register_targets,lpsolve,\
 	build \
 ))
 
-ifeq ($(GUI),WNT)
+ifeq ($(OS),WNT)
 ifeq ($(COM),GCC)
 $(call gb_ExternalProject_get_state_target,lpsolve,build):
 	cd $(EXTERNAL_WORKDIR)/lpsolve55 \
-	&& $(if $(filter WNT,$(GUI_FOR_BUILD)), \
+	&& $(if $(filter WNT,$(OS_FOR_BUILD)), \
 	$(if $(filter YES,$(MINGW_SHARED_GCCLIB)) lpsolve_LDFLAGS="-shared-libgcc") \
 	$(if $(filter YES,$(MINGW_SHARED_GXXLIB)) lpsolve_LIBS="$(MINGW_SHARED_LIBSTDCPP)") \
 	cmd /c cgcc.bat, sh ccc) \
@@ -30,7 +30,7 @@ $(call gb_ExternalProject_get_state_target,lpsolve,build):
 	&& LIB="$(ILIB)" cmd /c cvc6.bat \
 	&& touch $@
 endif # $(COM)
-else # $(GUI)!=WNT
+else # $(OS)!=WNT
 $(call gb_ExternalProject_get_state_target,lpsolve,build):
 	cd $(EXTERNAL_WORKDIR)/lpsolve55 \
 	&& sh $(if $(filter MACOSX,$(OS)),ccc.osx, \
@@ -38,5 +38,5 @@ $(call gb_ExternalProject_get_state_target,lpsolve,build):
 	$(if $(filter AIXGCC,$(OS)$(COM)),ccc.aix.gcc, \
 	ccc))) \
 	&& touch $@
-endif # $(GUI)
+endif # $(OS)
 # vim: set noet sw=4 ts=4:

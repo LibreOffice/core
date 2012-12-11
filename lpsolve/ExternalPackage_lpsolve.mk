@@ -10,16 +10,16 @@
 $(eval $(call gb_ExternalPackage_ExternalPackage,lpsolve,lpsolve))
 $(eval $(call gb_ExternalPackage_use_external_project,lpsolve,lpsolve))
 
-ifeq ($(GUI),WNT)
+ifeq ($(OS),WNT)
 ifeq ($(COM),GCC)
-ifneq ($(GUI_FOR_BUILD),WNT)
+ifneq ($(OS_FOR_BUILD),WNT)
 $(eval $(call gb_ExternalPackage_add_files,lpsolve,lib,lpsolve55/liblpsolve55.dll.a))
-endif # $(GUI_FOR_BUILD)
+endif # $(OS_FOR_BUILD)
 else # $(COM)
 $(eval $(call gb_ExternalPackage_add_files,lpsolve,lib,lpsolve55/lpsolve55.lib))
 endif # $(COM)
 $(eval $(call gb_ExternalPackage_add_files,lpsolve,bin,lpsolve55/lpsolve55.dll))
-else # $(GUI)
+else # $(OS)
 
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_ExternalPackage_add_files,lpsolve,lib,lpsolve55/liblpsolve55.dylib))
@@ -31,5 +31,6 @@ $(eval $(call gb_ExternalPackage_add_files,lpsolve,lib,lpsolve55/liblpsolve55.so
 endif # $(DISABLE_DYNLOADING)
 
 endif # $(OS)
-endif # $(GUI)
+endif # $(OS)
+
 # vim: set noet sw=4 ts=4:

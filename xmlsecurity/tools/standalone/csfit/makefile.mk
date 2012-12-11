@@ -52,7 +52,7 @@ SHARE_LIBS =	\
         $(SALHELPERLIB)	\
         $(SALLIB)
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 SHARE_LIBS+= "ixml2.lib" "nss3.lib" "nspr4.lib" "libxmlsec.lib" "libxmlsec-nss.lib" "xsec_xmlsec.lib"
 .ELSE
 SHARE_LIBS+= "-lxml2" "-lnss3" "-lnspr4" "-lxmlsec1" "-lxmlsec1-nss" "-lxsec_xmlsec"

@@ -26,7 +26,7 @@ ENABLE_EXCEPTIONS = TRUE
 
 .INCLUDE: settings.mk
 
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
 GIVE_EXEC_RIGHTS = @echo
 .ELSE
 GIVE_EXEC_RIGHTS = chmod +x

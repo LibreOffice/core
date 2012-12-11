@@ -42,7 +42,7 @@ $(eval $(call gb_Library_set_componentfile,ucpchelp1,xmlhelp/util/ucpchelp1))
 # .ENDIF # "$(CCNUMVER)">="000400020000" && "$(CCNUMVER)"<="000400020003"
 # .ENDIF # "$(COM)"=="GCC"
 
-ifeq ($(GUI)$(COM),WNTMSC)
+ifeq ($(OS)$(COM),WNTMSC)
 $(eval $(call gb_Library_add_cxxflags,ucpchelp1,\
 	-GR \
 ))

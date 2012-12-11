@@ -172,7 +172,7 @@ my_components += \
     component/xmlhelp/source/treeview/tvhlp1 \
     component/xmlhelp/util/ucpchelp1 \
 
-.IF "$(GUI)" == "UNX"
+.IF "$(OS)" != "WNT"
 my_components += \
     component/shell/source/unix/exec/syssh \
 

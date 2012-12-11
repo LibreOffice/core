@@ -163,13 +163,13 @@ APP10DEPN=$(LB)$/isal.lib
 SHL10OBJS=$(SLO)$/t_osl_getVolInfo.obj
 SHL10TARGET=togvi
 
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
 APP10STDLIBS=$(KERNEL32LIB)
 SHL10STDLIBS=$(LB)$/isal.lib
 SHL10STDLIBS+=$(SOLARLIBDIR)$/cppunit.lib
 .ENDIF
 
-.IF "$(GUI)" == "UNX"
+.IF "$(OS)" != "WNT"
 SHL10STDLIBS=$(LB)$/libsal.so
 SHL10STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a
 .ENDIF
@@ -186,20 +186,20 @@ OBJFILES+=\
 APP10TARGET=ojpx
 APP10OBJS=$(OBJ)$/t_ojp_exe.obj
 
-.IF "$(GUI)" == "UNX"
+.IF "$(OS)" != "WNT"
 APP10STDLIBS=$(LB)$/libsal.so
 .ENDIF
 
 SHL10OBJS=$(SLO)$/t_osl_joinProcess.obj
 SHL10TARGET=tojp
 
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
 APP10STDLIBS=$(KERNEL32LIB)
 SHL10STDLIBS=$(LB)$/isal.lib
 SHL10STDLIBS+=$(SOLARLIBDIR)$/cppunit.lib
 .ENDIF
 
-.IF "$(GUI)" == "UNX"
+.IF "$(OS)" != "WNT"
 SHL10STDLIBS=$(LB)$/libsal.so
 SHL10STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a
 .ENDIF

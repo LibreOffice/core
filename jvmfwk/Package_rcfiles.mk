@@ -30,7 +30,7 @@ $(eval $(call gb_Package_Package,jvmfwk_rcfiles,$(SRCDIR)/jvmfwk))
 # The below files (intended to be also used during the build) need to go into
 # the same directory as dynamic libraries (either bin or lib):
 
-ifeq ($(GUI),WNT)
+ifeq ($(OS),WNT)
 jvmfwk_Package_RCFILESDIR := bin
 else
 jvmfwk_Package_RCFILESDIR := lib
@@ -39,7 +39,7 @@ endif
 $(eval $(call gb_Package_add_file,jvmfwk_rcfiles,$(call gb_Helper_get_rcfile,$(jvmfwk_Package_RCFILESDIR)/sunjavaplugin),plugins/sunmajor/pluginlib/sunjavapluginrc))
 $(eval $(call gb_Package_add_file,jvmfwk_rcfiles,$(call gb_Helper_get_rcfile,$(jvmfwk_Package_RCFILESDIR)/jvmfwk3),source/jvmfwk3rc))
 
-ifeq ($(GUI),UNX)
+ifneq ($(OS),WNT)
 ifeq ($(OS),FREEBSD)
 $(eval $(call gb_Package_add_file,jvmfwk_rcfiles,$(jvmfwk_Package_RCFILESDIR)/javavendors.xml,distributions/OpenOfficeorg/javavendors_freebsd.xml))
 else ifeq ($(OS),MACOSX)
@@ -51,7 +51,7 @@ $(eval $(call gb_Package_add_file,jvmfwk_rcfiles,$(jvmfwk_Package_RCFILESDIR)/ja
 else
 $(eval $(call gb_Package_add_file,jvmfwk_rcfiles,$(jvmfwk_Package_RCFILESDIR)/javavendors.xml,distributions/OpenOfficeorg/javavendors_unx.xml))
 endif
-else ifeq ($(GUI),WNT)
+else ifeq ($(OS),WNT)
 $(eval $(call gb_Package_add_file,jvmfwk_rcfiles,$(jvmfwk_Package_RCFILESDIR)/javavendors.xml,distributions/OpenOfficeorg/javavendors_wnt.xml))
 else
 $(call gb_Output_error,Unsupported platform)

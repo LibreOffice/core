@@ -88,7 +88,7 @@ $(BIN)$/$(TARGET).rdb .ERRREMOVE: $(MISC)$/$(TARGET)$/types.rdb \
     $(REGCOMP) -register -r $(MISC)$/$(TARGET)$/bootstrap.rdb \
         -c javaloader.uno$(DLLPOST) -c javavm.uno$(DLLPOST) \
         -c stocservices.uno$(DLLPOST)
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
     ERROR -- missing platform
 .ELSE # GUI, WNT
     + export OO_JAVA_PROPERTIES='RuntimeLib=$(JVM_LIB_URL)' && \
@@ -98,7 +98,7 @@ $(BIN)$/$(TARGET).rdb .ERRREMOVE: $(MISC)$/$(TARGET)$/types.rdb \
 .ENDIF # GUI, WNT
 
 test .PHONY: $(SHL1TARGETN) $(BIN)$/$(TARGET).uno.jar $(BIN)$/$(TARGET).rdb
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
     ERROR -- missing platform
 .ELSE # GUI, WNT
     $(AUGMENT_LIBRARY_PATH) uno -c test.javauno.nativethreadpool.server \

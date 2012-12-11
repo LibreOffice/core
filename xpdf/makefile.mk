@@ -65,7 +65,7 @@ CXXFLAGS+:=$(EXTRA_CDEFS)
 .EXPORT: CFLAGS CXXFLAGS
 .ENDIF
 
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 .IF "$(OS)"=="SOLARIS"
 CFLAGS:=-O $(ARCH_FLAGS)
 .IF "$(COM)$(CPU)" == "C52I"
@@ -123,7 +123,7 @@ OUT2INC= \
     aconf.h   \
     aconf2.h
 
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 OUT2LIB= \
     fofi$/lib*.a \
     goo$/lib*.a \

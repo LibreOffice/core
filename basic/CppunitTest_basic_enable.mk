@@ -31,7 +31,7 @@ $(eval $(call gb_CppunitTest_use_libraries,basic_enable, \
 	$(gb_UWINAPI) \
 ))
 
-ifeq ($(GUI),WNT)
+ifeq ($(OS),WNT)
 $(eval $(call gb_CppunitTest_use_system_win32_libs,basic_enable, \
 	oleaut32 \
 ))

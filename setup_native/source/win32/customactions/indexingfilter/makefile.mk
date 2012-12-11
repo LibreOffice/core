@@ -31,7 +31,7 @@ USE_DEFFILE=TRUE
 
 # --- Files --------------------------------------------------------
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 
 UWINAPILIB=
 

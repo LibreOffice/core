@@ -91,11 +91,11 @@ $(DESCRIPTION) $(PHONYDESC) : $(DESCRIPTION_SRC)
 # default OOo license text!!!
 # may not fit...
 .IF "$(CUSTOM_LICENSE)"==""
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
 PACKLICDEPS=$(SOLARVER)/$(INPATH)/bin/osl/license.txt
-.ELSE			# "$(GUI)" == "WNT"
+.ELSE			# "$(OS)" == "WNT"
 PACKLICDEPS=$(SOLARVER)/$(INPATH)/bin/osl/LICENSE
-.ENDIF			# "$(GUI)" == "WNT"
+.ENDIF			# "$(OS)" == "WNT"
 .ELSE			# "$(CUSTOM_LICENSE)" == ""
 PACKLICDEPS=$(CUSTOM_LICENSE)
 .ENDIF			# "$(CUSTOM_LICENSE)" == ""

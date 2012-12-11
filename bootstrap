@@ -20,7 +20,7 @@ fi
 
 # executables are *.exe for WNT. This variable is necessary since Cygwin 1.5.x
 # Use spawn instead of fork when building dmake on cygwin.
-if test "$GUI_FOR_BUILD" = "WNT"; then
+if test "$OS_FOR_BUILD" = "WNT"; then
     EXEEXT=".exe"
     DMAKE_CONF="--enable-spawn"
 else
@@ -37,7 +37,7 @@ if test "$BUILD_DMAKE" != "NO"; then
         cd "$SRC_ROOT/dmake" || exit
 
         # If cross-compiling then don't use the cross compilers to build dmake.
-        if test "$GUI_FOR_BUILD" = "WNT"; then
+        if test "$OS_FOR_BUILD" = "WNT"; then
             # Let the Cygwin gcc be found
             unset CC CXX AR NM OBJDUMP PKG_CONFIG RANLIB STRIP
         elif test "$CROSS_COMPILING" = "YES"; then

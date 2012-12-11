@@ -51,7 +51,7 @@ all:
                 STLport-4.5-gcc43_warnings.patch \
                 STLport-4.5-cxx0x.patch \
                 STLport-4.5-clang_locale_h.patch
-.ELIF "$(GUI)"=="WNT"
+.ELIF "$(OS)"=="WNT"
     TARFILE_NAME=STLport-4.5-0119
     TARFILE_MD5=7376930b0d3f3d77a685d94c4a3acda8
     PATCH_FILES=STLport-4.5-0119.patch
@@ -109,7 +109,7 @@ BUILD_FLAGS=-f vc7.mak EXFLAGS="/EHa /Zc:wchar_t-" CCNUMVER=$(CCNUMVER)
         # FreeBSD needs a special makefile
         .IF "$(OS)"=="FREEBSD"
             BUILD_FLAGS=-f gcc-3.0-freebsd.mak
-        .ELIF "$(GUI)"=="WNT"
+        .ELIF "$(OS)"=="WNT"
             BUILD_FLAGS=-f gcc-3.0-mingw.mak
         .ELSE
             BUILD_FLAGS=-f gcc-3.0.mak
@@ -150,7 +150,7 @@ OUT2INC= \
 OUTDIR2INC= \
     stlport
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
 
 OUT2LIB= \
@@ -170,12 +170,12 @@ OUT2BIN= \
 
 .ENDIF # "$(COM)"=="GCC"
 
-.ELSE          # "$(GUI)"=="WNT"
+.ELSE          # "$(OS)"=="WNT"
 
 OUT2LIB= \
     lib$/lib*
 
-.ENDIF          # "$(GUI)"=="WNT"
+.ENDIF          # "$(OS)"=="WNT"
 
 # --- Targets ------------------------------------------------------
 

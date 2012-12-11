@@ -28,7 +28,7 @@
 #######################################################
 # unroll begin
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 command_seperator=&&
 #command_seperator=^
 .ELSE

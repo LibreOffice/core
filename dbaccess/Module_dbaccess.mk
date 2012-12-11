@@ -35,7 +35,7 @@ $(eval $(call gb_Module_add_targets,dbaccess,\
     AllLangResTarget_dbmm \
     AllLangResTarget_dbu \
     AllLangResTarget_sdbt \
-    $(if $(filter WNT,$(GUI)),Executable_odbcconfig) \
+    $(if $(filter WNT,$(OS)),Executable_odbcconfig) \
     Library_dba \
     Library_dbaxml \
     Library_dbmm \

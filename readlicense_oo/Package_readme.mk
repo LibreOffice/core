@@ -11,7 +11,7 @@ $(eval $(call gb_Package_Package,readlicense_oo_readme_inc,$(call gb_CustomTarge
 
 $(eval $(call gb_Package_add_files,readlicense_oo_readme_inc,bin/osl,\
 	$(foreach lang,en-US $(filter-out en-US,$(gb_WITH_LANG)),\
-		$(if $(filter UNX,$(GUI)),README_$(lang),readme_$(lang).txt) \
+		$(if $(filter-out WNT,$(OS)),README_$(lang),readme_$(lang).txt) \
 	) \
 ))
 

@@ -26,11 +26,11 @@ $(RESLIB1TARGETN): \
         $(RESLIB1SRSFILES) \
         $(RESLIB1BMPS)
     @echo "Making:   " $(@:f)
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
     @@-$(RM) $(RSC_MULTI1)
-.ELSE				# "$(GUI)"=="UNX"
+.ELSE				# "$(OS)"!="WNT"
     @@-$(RM) $(RSC_MULTI1)
-.ENDIF              # "$(GUI)"=="UNX"
+.ENDIF              # "$(OS)"!="WNT"
 .ENDIF				# "$(RESLIB1TARGETN)"!=""
 
 
@@ -62,11 +62,11 @@ $(RESLIB2TARGETN): \
         $(RESLIB2SRSFILES) \
         $(RESLIB2BMPS)
     @echo "Making:   " $(@:f)
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
     @@-$(RM) $(RSC_MULTI2)
-.ELSE				# "$(GUI)"=="UNX"
+.ELSE				# "$(OS)"!="WNT"
     @@-$(RM) $(RSC_MULTI2)
-.ENDIF              # "$(GUI)"=="UNX"
+.ENDIF              # "$(OS)"!="WNT"
 .ENDIF				# "$(RESLIB2TARGETN)"!=""
 
 
@@ -98,11 +98,11 @@ $(RESLIB3TARGETN): \
         $(RESLIB3SRSFILES) \
         $(RESLIB3BMPS)
     @echo "Making:   " $(@:f)
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
     @@-$(RM) $(RSC_MULTI3)
-.ELSE				# "$(GUI)"=="UNX"
+.ELSE				# "$(OS)"!="WNT"
     @@-$(RM) $(RSC_MULTI3)
-.ENDIF              # "$(GUI)"=="UNX"
+.ENDIF              # "$(OS)"!="WNT"
 .ENDIF				# "$(RESLIB3TARGETN)"!=""
 
 
@@ -134,11 +134,11 @@ $(RESLIB4TARGETN): \
         $(RESLIB4SRSFILES) \
         $(RESLIB4BMPS)
     @echo "Making:   " $(@:f)
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
     @@-$(RM) $(RSC_MULTI4)
-.ELSE				# "$(GUI)"=="UNX"
+.ELSE				# "$(OS)"!="WNT"
     @@-$(RM) $(RSC_MULTI4)
-.ENDIF              # "$(GUI)"=="UNX"
+.ENDIF              # "$(OS)"!="WNT"
 .ENDIF				# "$(RESLIB4TARGETN)"!=""
 
 
@@ -170,11 +170,11 @@ $(RESLIB5TARGETN): \
         $(RESLIB5SRSFILES) \
         $(RESLIB5BMPS)
     @echo "Making:   " $(@:f)
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
     @@-$(RM) $(RSC_MULTI5)
-.ELSE				# "$(GUI)"=="UNX"
+.ELSE				# "$(OS)"!="WNT"
     @@-$(RM) $(RSC_MULTI5)
-.ENDIF              # "$(GUI)"=="UNX"
+.ENDIF              # "$(OS)"!="WNT"
 .ENDIF				# "$(RESLIB5TARGETN)"!=""
 
 
@@ -206,11 +206,11 @@ $(RESLIB6TARGETN): \
         $(RESLIB6SRSFILES) \
         $(RESLIB6BMPS)
     @echo "Making:   " $(@:f)
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
     @@-$(RM) $(RSC_MULTI6)
-.ELSE				# "$(GUI)"=="UNX"
+.ELSE				# "$(OS)"!="WNT"
     @@-$(RM) $(RSC_MULTI6)
-.ENDIF              # "$(GUI)"=="UNX"
+.ENDIF              # "$(OS)"!="WNT"
 .ENDIF				# "$(RESLIB6TARGETN)"!=""
 
 
@@ -242,11 +242,11 @@ $(RESLIB7TARGETN): \
         $(RESLIB7SRSFILES) \
         $(RESLIB7BMPS)
     @echo "Making:   " $(@:f)
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
     @@-$(RM) $(RSC_MULTI7)
-.ELSE				# "$(GUI)"=="UNX"
+.ELSE				# "$(OS)"!="WNT"
     @@-$(RM) $(RSC_MULTI7)
-.ENDIF              # "$(GUI)"=="UNX"
+.ENDIF              # "$(OS)"!="WNT"
 .ENDIF				# "$(RESLIB7TARGETN)"!=""
 
 
@@ -278,11 +278,11 @@ $(RESLIB8TARGETN): \
         $(RESLIB8SRSFILES) \
         $(RESLIB8BMPS)
     @echo "Making:   " $(@:f)
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
     @@-$(RM) $(RSC_MULTI8)
-.ELSE				# "$(GUI)"=="UNX"
+.ELSE				# "$(OS)"!="WNT"
     @@-$(RM) $(RSC_MULTI8)
-.ENDIF              # "$(GUI)"=="UNX"
+.ENDIF              # "$(OS)"!="WNT"
 .ENDIF				# "$(RESLIB8TARGETN)"!=""
 
 
@@ -314,11 +314,11 @@ $(RESLIB9TARGETN): \
         $(RESLIB9SRSFILES) \
         $(RESLIB9BMPS)
     @echo "Making:   " $(@:f)
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
     @@-$(RM) $(RSC_MULTI9)
-.ELSE				# "$(GUI)"=="UNX"
+.ELSE				# "$(OS)"!="WNT"
     @@-$(RM) $(RSC_MULTI9)
-.ENDIF              # "$(GUI)"=="UNX"
+.ENDIF              # "$(OS)"!="WNT"
 .ENDIF				# "$(RESLIB9TARGETN)"!=""
 
 
@@ -350,11 +350,11 @@ $(RESLIB10TARGETN): \
         $(RESLIB10SRSFILES) \
         $(RESLIB10BMPS)
     @echo "Making:   " $(@:f)
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
     @@-$(RM) $(RSC_MULTI10)
-.ELSE				# "$(GUI)"=="UNX"
+.ELSE				# "$(OS)"!="WNT"
     @@-$(RM) $(RSC_MULTI10)
-.ENDIF              # "$(GUI)"=="UNX"
+.ENDIF              # "$(OS)"!="WNT"
 .ENDIF				# "$(RESLIB10TARGETN)"!=""
 
 

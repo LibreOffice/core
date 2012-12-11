@@ -42,7 +42,7 @@ $(MISC)/%.xpt : %.idl
 
 .INCLUDE : target.mk
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 CPUCFG=_winnt.cfg
 .ENDIF
 

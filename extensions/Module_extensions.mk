@@ -109,7 +109,7 @@ $(eval $(call gb_Module_add_targets,extensions,\
 	Library_pl \
 ))
 
-ifeq ($(GUI),UNX)
+ifneq ($(OS),WNT)
 ifneq ($(OS),MACOSX)
 $(eval $(call gb_Module_add_targets,extensions,\
 	StaticLibrary_plugcon \

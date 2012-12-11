@@ -45,11 +45,11 @@ APP1OBJS=\
 
 .IF "$(COMPHELPERLIB)"==""
 
-.IF "$(GUI)" == "UNX"
+.IF "$(OS)" != "WNT"
 COMPHELPERLIB=-licomphelp2
 .ENDIF # unx
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 COMPHELPERLIB=icomphelp2.lib
 .ENDIF # wnt
 

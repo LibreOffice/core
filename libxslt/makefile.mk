@@ -90,7 +90,7 @@ CONFIGURE_FLAGS=--without-crypto --without-python --enable-static=no $(BUILD_AND
 BUILD_ACTION=chmod 777 xslt-config && $(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
-.IF "$(GUI)$(COM)"=="WNTGCC"
+.IF "$(OS)$(COM)"=="WNTGCC"
 .EXPORT : PWD
 .ENDIF
 .ELSE

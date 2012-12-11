@@ -39,7 +39,7 @@ $(eval $(call gb_Library_add_libs,avmediagst,$(GSTREAMER_LIBS)))
 
 $(eval $(call gb_Library_use_sdk_api,avmediagst))
 
-ifeq ($(GUI),WNT)
+ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_defs,avmediagst,\
 	-DWINNT
 ))

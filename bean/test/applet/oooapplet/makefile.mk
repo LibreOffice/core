@@ -52,7 +52,7 @@ COPY_FILES: example.html
 # --- Targets ------------------------------------------------------
 
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 RUN:
     firefox "$(CLASSDIR)$/example.html?$(office)"
 .ELSE

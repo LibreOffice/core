@@ -32,7 +32,7 @@ ENABLE_EXCEPTIONS := TRUE
 CDEFS += -DDLL_VERSION=$(EMQ)"$(DLLPOSTFIX)$(EMQ)"
 
 RGTLIB = rgt.lib
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 RGTLIB = -lrgt$(DLLPOSTFIX)
 .ENDIF
 
@@ -52,7 +52,7 @@ APP1STDLIBS=\
 APP2TARGET= test
 APP2OBJS=   $(OBJ)$/test.obj
 APP2RPATH=NONE
-.IF "$(GUI)"=="UNX" && "$(OS)"!="MACOSX"
+.IF "$(OS)"!="WNT" && "$(OS)"!="MACOSX"
 
 .IF "$(OS)"=="LINUX" || "$(OS)"=="FREEBSD"
 APP2LINKFLAGS=-Wl,-z,origin -Wl,-rpath,\''$$ORIGIN:$$ORIGIN/../lib'\'

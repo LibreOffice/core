@@ -41,7 +41,7 @@ $(eval $(call gb_Library_add_defs,dbu,\
     -DDBACCESS_DLLIMPLEMENTATION \
 ))
 
-ifeq ($(GUI)$(COM),WNTGCC) # for adoint.h
+ifeq ($(OS)$(COM),WNTGCC) # for adoint.h
 $(eval $(call gb_Library_add_cxxflags,dbu,\
     -fpermissive \
 ))
@@ -74,7 +74,7 @@ $(eval $(call gb_Library_use_libraries,dbu,\
 	$(gb_UWINAPI) \
 ))
 
-ifeq ($(GUI),WNT)
+ifeq ($(OS),WNT)
 $(eval $(call gb_Library_use_system_win32_libs,dbu,\
     ole32 \
     oleaut32 \
@@ -268,7 +268,7 @@ $(eval $(call gb_Library_add_exception_objects,dbu,\
     dbaccess/source/ui/uno/UserSettingsDlg \
 ))
 
-ifeq ($(GUI),WNT)
+ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_exception_objects,dbu,\
     dbaccess/source/ui/dlg/adodatalinks \
 ))

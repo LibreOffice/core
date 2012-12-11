@@ -34,7 +34,7 @@ TARGET=mingw-dlls
 
 # ------------------------------------------------------------------
 
-.IF "$(GUI)$(COM)" != "WNTGCC"
+.IF "$(OS)$(COM)" != "WNTGCC"
 
 dummy:
     @echo "Nothing to do."

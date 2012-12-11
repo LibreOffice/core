@@ -30,10 +30,10 @@ NO_DEFAULT_STL=TRUE
 .INCLUDE : settings.mk
 
 .IF "$(STORELIB)" == ""
-.IF "$(GUI)" == "UNX"
+.IF "$(OS)" != "WNT"
 STORELIB=	-lstore
 .ELSE  # unx
-.IF "$(GUI)$(COM)"=="WNTGCC"
+.IF "$(OS)$(COM)"=="WNTGCC"
 STORELIB=	-lstore$(UDK_MAJOR)
 .ELSE
 STORELIB=	$(LB)$/istore.lib
@@ -41,10 +41,10 @@ STORELIB=	$(LB)$/istore.lib
 .ENDIF # unx
 .ENDIF # storelib
 
-.IF "$(GUI)" == "UNX"
+.IF "$(OS)" != "WNT"
 STOREDBGLIB=	$(LB)$/libstoredbg.a
 .ELSE  # unx
-.IF "$(GUI)$(COM)"=="WNTGCC"
+.IF "$(OS)$(COM)"=="WNTGCC"
 STOREDBGLIB=	$(LB)$/libstoredbg.a
 .ELSE
 STOREDBGLIB=	$(LB)$/storedbg.lib

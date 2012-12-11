@@ -42,11 +42,11 @@ EXTRALIBPATHS1+=-L$(SOLAR_STLLIBPATH)
 .IF "$(VERSIONOBJ)"!=""
 SHL1VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL1TARGET))}$(VERSIONOBJ:f)
 USE_VERSIONH:=$(INCCOM)/$(SHL1VERSIONOBJ:b).h
-.IF "$(GUI)" == "UNX"
+.IF "$(OS)" != "WNT"
 SHL1VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL1TARGET))}$(VERSIONOBJ:f:s/.o/.obj/)
-.ELSE           # "$(GUI)" == "UNX"
+.ELSE           # "$(OS)" != "WNT"
 SHL1VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL1TARGET))}$(VERSIONOBJ:f)
-.ENDIF          # "$(GUI)" == "UNX"
+.ENDIF          # "$(OS)" != "WNT"
 $(MISC)/$(SHL1VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL1VERSIONOBJ:b).h
 #    $(COPY) $(SOLARENV)/src/version.c $@
     $(COMMAND_ECHO)$(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL1VERSIONOBJ:b).h/ > $@
@@ -55,8 +55,8 @@ $(MISC)/$(SHL1VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL1VERSIO
 .ENDIF			# "$(VERSIONOBJ)"!=""
 .ENDIF
 
-.IF "$(GUI)" != "UNX"
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
+.IF "$(OS)" == "WNT"
 .IF "$(SHL1IMPLIB)" == ""
 SHL1IMPLIB=i$(TARGET)_t1
 .ENDIF			# "$(SHL1IMPLIB)" == ""
@@ -74,9 +74,9 @@ ALLTAR : $(SHL1IMPLIBN)
 USE_1IMPLIB_DEPS=$(LB)/$(SHL1IMPLIB).lib
 .ENDIF
 .ENDIF			# "$(USE_DEFFILE)"==""
-.ENDIF			# "$(GUI)" == "WNT"
+.ENDIF			# "$(OS)" == "WNT"
 USE_SHL1DEF=$(SHL1DEF)
-.ELSE			# "$(GUI)" != "UNX"
+.ELSE			# "$(OS)" == "WNT"
 USE_SHL1DEF=
 SHL1DEPN+:=$(SHL1DEPNU)
 
@@ -185,13 +185,13 @@ $(USE_SHL1VERSIONMAP) .ERRREMOVE: $(SHL1VERSIONMAP)
 .ENDIF # .IF "$(OS)"=="MACOSX"
 .ENDIF			# "$(SHL1VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL1VERSIONMAP)"!=""
-.ENDIF			# "$(GUI)" != "UNX"
+.ENDIF			# "$(OS)" == "WNT"
 
 .IF "$(UNIXVERSIONNAMES)"!=""
 .IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID" && "$(OS)"!="AIX"
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 SHL1SONAME=\"$(SONAME_SWITCH)$(SHL1TARGETN:f)\"
-.ENDIF			# "$(GUI)"!="UNX"
+.ENDIF			# "$(OS)"=="WNT"
 .ENDIF			# "$(OS)"!="MACOSX"
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
 
@@ -211,7 +211,7 @@ SHL1LINKRESO*=$(MISC)/$(SHL1TARGET)_res.o
 #.IF "$(SHL1TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 .IF "$(SHL1LIBS)"!=""
 $(MISC)/$(SHL1TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
@@ -241,7 +241,7 @@ $(SHL1TARGETN) : \
                     $(SHL1RES)\
                     $(SHL1DEPN)
     @echo "Making:   " $(@:f)
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
 .IF "$(SHL1DEFAULTRES)"!=""
     @@-$(RM) $(MISC)/$(SHL1DEFAULTRES:b).rc
 .IF "$(SHL1ICON)" != ""
@@ -423,8 +423,8 @@ $(SHL1TARGETN) : \
         $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(COM)"=="GCC"
-.ENDIF			# "$(GUI)" == "WNT"
-.IF "$(GUI)"=="UNX"
+.ENDIF			# "$(OS)" == "WNT"
+.IF "$(OS)"!="WNT"
 .IF "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_1.cmd
@@ -479,7 +479,7 @@ $(SHL1TARGETN) : \
 .IF "$(VERBOSE)" == "TRUE"
     @ls -l $@
 .ENDIF
-.ENDIF			# "$(GUI)" == "UNX"
+.ENDIF			# "$(OS)" != "WNT"
 
 .ENDIF			# "$(SHL1TARGETN)"!=""
 
@@ -527,11 +527,11 @@ EXTRALIBPATHS2+=-L$(SOLAR_STLLIBPATH)
 .IF "$(VERSIONOBJ)"!=""
 SHL2VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL2TARGET))}$(VERSIONOBJ:f)
 USE_VERSIONH:=$(INCCOM)/$(SHL2VERSIONOBJ:b).h
-.IF "$(GUI)" == "UNX"
+.IF "$(OS)" != "WNT"
 SHL2VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL2TARGET))}$(VERSIONOBJ:f:s/.o/.obj/)
-.ELSE           # "$(GUI)" == "UNX"
+.ELSE           # "$(OS)" != "WNT"
 SHL2VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL2TARGET))}$(VERSIONOBJ:f)
-.ENDIF          # "$(GUI)" == "UNX"
+.ENDIF          # "$(OS)" != "WNT"
 $(MISC)/$(SHL2VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL2VERSIONOBJ:b).h
 #    $(COPY) $(SOLARENV)/src/version.c $@
     $(COMMAND_ECHO)$(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL2VERSIONOBJ:b).h/ > $@
@@ -540,8 +540,8 @@ $(MISC)/$(SHL2VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL2VERSIO
 .ENDIF			# "$(VERSIONOBJ)"!=""
 .ENDIF
 
-.IF "$(GUI)" != "UNX"
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
+.IF "$(OS)" == "WNT"
 .IF "$(SHL2IMPLIB)" == ""
 SHL2IMPLIB=i$(TARGET)_t2
 .ENDIF			# "$(SHL2IMPLIB)" == ""
@@ -559,9 +559,9 @@ ALLTAR : $(SHL2IMPLIBN)
 USE_2IMPLIB_DEPS=$(LB)/$(SHL2IMPLIB).lib
 .ENDIF
 .ENDIF			# "$(USE_DEFFILE)"==""
-.ENDIF			# "$(GUI)" == "WNT"
+.ENDIF			# "$(OS)" == "WNT"
 USE_SHL2DEF=$(SHL2DEF)
-.ELSE			# "$(GUI)" != "UNX"
+.ELSE			# "$(OS)" == "WNT"
 USE_SHL2DEF=
 SHL2DEPN+:=$(SHL2DEPNU)
 
@@ -670,13 +670,13 @@ $(USE_SHL2VERSIONMAP) .ERRREMOVE: $(SHL2VERSIONMAP)
 .ENDIF # .IF "$(OS)"=="MACOSX"
 .ENDIF			# "$(SHL2VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL2VERSIONMAP)"!=""
-.ENDIF			# "$(GUI)" != "UNX"
+.ENDIF			# "$(OS)" == "WNT"
 
 .IF "$(UNIXVERSIONNAMES)"!=""
 .IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID" && "$(OS)"!="AIX"
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 SHL2SONAME=\"$(SONAME_SWITCH)$(SHL2TARGETN:f)\"
-.ENDIF			# "$(GUI)"!="UNX"
+.ENDIF			# "$(OS)"=="WNT"
 .ENDIF			# "$(OS)"!="MACOSX"
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
 
@@ -696,7 +696,7 @@ SHL2LINKRESO*=$(MISC)/$(SHL2TARGET)_res.o
 #.IF "$(SHL2TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 .IF "$(SHL2LIBS)"!=""
 $(MISC)/$(SHL2TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
@@ -726,7 +726,7 @@ $(SHL2TARGETN) : \
                     $(SHL2RES)\
                     $(SHL2DEPN)
     @echo "Making:   " $(@:f)
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
 .IF "$(SHL2DEFAULTRES)"!=""
     @@-$(RM) $(MISC)/$(SHL2DEFAULTRES:b).rc
 .IF "$(SHL2ICON)" != ""
@@ -908,8 +908,8 @@ $(SHL2TARGETN) : \
         $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(COM)"=="GCC"
-.ENDIF			# "$(GUI)" == "WNT"
-.IF "$(GUI)"=="UNX"
+.ENDIF			# "$(OS)" == "WNT"
+.IF "$(OS)"!="WNT"
 .IF "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_2.cmd
@@ -964,7 +964,7 @@ $(SHL2TARGETN) : \
 .IF "$(VERBOSE)" == "TRUE"
     @ls -l $@
 .ENDIF
-.ENDIF			# "$(GUI)" == "UNX"
+.ENDIF			# "$(OS)" != "WNT"
 
 .ENDIF			# "$(SHL2TARGETN)"!=""
 
@@ -1012,11 +1012,11 @@ EXTRALIBPATHS3+=-L$(SOLAR_STLLIBPATH)
 .IF "$(VERSIONOBJ)"!=""
 SHL3VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL3TARGET))}$(VERSIONOBJ:f)
 USE_VERSIONH:=$(INCCOM)/$(SHL3VERSIONOBJ:b).h
-.IF "$(GUI)" == "UNX"
+.IF "$(OS)" != "WNT"
 SHL3VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL3TARGET))}$(VERSIONOBJ:f:s/.o/.obj/)
-.ELSE           # "$(GUI)" == "UNX"
+.ELSE           # "$(OS)" != "WNT"
 SHL3VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL3TARGET))}$(VERSIONOBJ:f)
-.ENDIF          # "$(GUI)" == "UNX"
+.ENDIF          # "$(OS)" != "WNT"
 $(MISC)/$(SHL3VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL3VERSIONOBJ:b).h
 #    $(COPY) $(SOLARENV)/src/version.c $@
     $(COMMAND_ECHO)$(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL3VERSIONOBJ:b).h/ > $@
@@ -1025,8 +1025,8 @@ $(MISC)/$(SHL3VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL3VERSIO
 .ENDIF			# "$(VERSIONOBJ)"!=""
 .ENDIF
 
-.IF "$(GUI)" != "UNX"
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
+.IF "$(OS)" == "WNT"
 .IF "$(SHL3IMPLIB)" == ""
 SHL3IMPLIB=i$(TARGET)_t3
 .ENDIF			# "$(SHL3IMPLIB)" == ""
@@ -1044,9 +1044,9 @@ ALLTAR : $(SHL3IMPLIBN)
 USE_3IMPLIB_DEPS=$(LB)/$(SHL3IMPLIB).lib
 .ENDIF
 .ENDIF			# "$(USE_DEFFILE)"==""
-.ENDIF			# "$(GUI)" == "WNT"
+.ENDIF			# "$(OS)" == "WNT"
 USE_SHL3DEF=$(SHL3DEF)
-.ELSE			# "$(GUI)" != "UNX"
+.ELSE			# "$(OS)" == "WNT"
 USE_SHL3DEF=
 SHL3DEPN+:=$(SHL3DEPNU)
 
@@ -1155,13 +1155,13 @@ $(USE_SHL3VERSIONMAP) .ERRREMOVE: $(SHL3VERSIONMAP)
 .ENDIF # .IF "$(OS)"=="MACOSX"
 .ENDIF			# "$(SHL3VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL3VERSIONMAP)"!=""
-.ENDIF			# "$(GUI)" != "UNX"
+.ENDIF			# "$(OS)" == "WNT"
 
 .IF "$(UNIXVERSIONNAMES)"!=""
 .IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID" && "$(OS)"!="AIX"
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 SHL3SONAME=\"$(SONAME_SWITCH)$(SHL3TARGETN:f)\"
-.ENDIF			# "$(GUI)"!="UNX"
+.ENDIF			# "$(OS)"=="WNT"
 .ENDIF			# "$(OS)"!="MACOSX"
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
 
@@ -1181,7 +1181,7 @@ SHL3LINKRESO*=$(MISC)/$(SHL3TARGET)_res.o
 #.IF "$(SHL3TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 .IF "$(SHL3LIBS)"!=""
 $(MISC)/$(SHL3TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
@@ -1211,7 +1211,7 @@ $(SHL3TARGETN) : \
                     $(SHL3RES)\
                     $(SHL3DEPN)
     @echo "Making:   " $(@:f)
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
 .IF "$(SHL3DEFAULTRES)"!=""
     @@-$(RM) $(MISC)/$(SHL3DEFAULTRES:b).rc
 .IF "$(SHL3ICON)" != ""
@@ -1393,8 +1393,8 @@ $(SHL3TARGETN) : \
         $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(COM)"=="GCC"
-.ENDIF			# "$(GUI)" == "WNT"
-.IF "$(GUI)"=="UNX"
+.ENDIF			# "$(OS)" == "WNT"
+.IF "$(OS)"!="WNT"
 .IF "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_3.cmd
@@ -1449,7 +1449,7 @@ $(SHL3TARGETN) : \
 .IF "$(VERBOSE)" == "TRUE"
     @ls -l $@
 .ENDIF
-.ENDIF			# "$(GUI)" == "UNX"
+.ENDIF			# "$(OS)" != "WNT"
 
 .ENDIF			# "$(SHL3TARGETN)"!=""
 
@@ -1497,11 +1497,11 @@ EXTRALIBPATHS4+=-L$(SOLAR_STLLIBPATH)
 .IF "$(VERSIONOBJ)"!=""
 SHL4VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL4TARGET))}$(VERSIONOBJ:f)
 USE_VERSIONH:=$(INCCOM)/$(SHL4VERSIONOBJ:b).h
-.IF "$(GUI)" == "UNX"
+.IF "$(OS)" != "WNT"
 SHL4VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL4TARGET))}$(VERSIONOBJ:f:s/.o/.obj/)
-.ELSE           # "$(GUI)" == "UNX"
+.ELSE           # "$(OS)" != "WNT"
 SHL4VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL4TARGET))}$(VERSIONOBJ:f)
-.ENDIF          # "$(GUI)" == "UNX"
+.ENDIF          # "$(OS)" != "WNT"
 $(MISC)/$(SHL4VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL4VERSIONOBJ:b).h
 #    $(COPY) $(SOLARENV)/src/version.c $@
     $(COMMAND_ECHO)$(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL4VERSIONOBJ:b).h/ > $@
@@ -1510,8 +1510,8 @@ $(MISC)/$(SHL4VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL4VERSIO
 .ENDIF			# "$(VERSIONOBJ)"!=""
 .ENDIF
 
-.IF "$(GUI)" != "UNX"
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
+.IF "$(OS)" == "WNT"
 .IF "$(SHL4IMPLIB)" == ""
 SHL4IMPLIB=i$(TARGET)_t4
 .ENDIF			# "$(SHL4IMPLIB)" == ""
@@ -1529,9 +1529,9 @@ ALLTAR : $(SHL4IMPLIBN)
 USE_4IMPLIB_DEPS=$(LB)/$(SHL4IMPLIB).lib
 .ENDIF
 .ENDIF			# "$(USE_DEFFILE)"==""
-.ENDIF			# "$(GUI)" == "WNT"
+.ENDIF			# "$(OS)" == "WNT"
 USE_SHL4DEF=$(SHL4DEF)
-.ELSE			# "$(GUI)" != "UNX"
+.ELSE			# "$(OS)" == "WNT"
 USE_SHL4DEF=
 SHL4DEPN+:=$(SHL4DEPNU)
 
@@ -1640,13 +1640,13 @@ $(USE_SHL4VERSIONMAP) .ERRREMOVE: $(SHL4VERSIONMAP)
 .ENDIF # .IF "$(OS)"=="MACOSX"
 .ENDIF			# "$(SHL4VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL4VERSIONMAP)"!=""
-.ENDIF			# "$(GUI)" != "UNX"
+.ENDIF			# "$(OS)" == "WNT"
 
 .IF "$(UNIXVERSIONNAMES)"!=""
 .IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID" && "$(OS)"!="AIX"
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 SHL4SONAME=\"$(SONAME_SWITCH)$(SHL4TARGETN:f)\"
-.ENDIF			# "$(GUI)"!="UNX"
+.ENDIF			# "$(OS)"=="WNT"
 .ENDIF			# "$(OS)"!="MACOSX"
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
 
@@ -1666,7 +1666,7 @@ SHL4LINKRESO*=$(MISC)/$(SHL4TARGET)_res.o
 #.IF "$(SHL4TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 .IF "$(SHL4LIBS)"!=""
 $(MISC)/$(SHL4TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
@@ -1696,7 +1696,7 @@ $(SHL4TARGETN) : \
                     $(SHL4RES)\
                     $(SHL4DEPN)
     @echo "Making:   " $(@:f)
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
 .IF "$(SHL4DEFAULTRES)"!=""
     @@-$(RM) $(MISC)/$(SHL4DEFAULTRES:b).rc
 .IF "$(SHL4ICON)" != ""
@@ -1878,8 +1878,8 @@ $(SHL4TARGETN) : \
         $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(COM)"=="GCC"
-.ENDIF			# "$(GUI)" == "WNT"
-.IF "$(GUI)"=="UNX"
+.ENDIF			# "$(OS)" == "WNT"
+.IF "$(OS)"!="WNT"
 .IF "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_4.cmd
@@ -1934,7 +1934,7 @@ $(SHL4TARGETN) : \
 .IF "$(VERBOSE)" == "TRUE"
     @ls -l $@
 .ENDIF
-.ENDIF			# "$(GUI)" == "UNX"
+.ENDIF			# "$(OS)" != "WNT"
 
 .ENDIF			# "$(SHL4TARGETN)"!=""
 
@@ -1982,11 +1982,11 @@ EXTRALIBPATHS5+=-L$(SOLAR_STLLIBPATH)
 .IF "$(VERSIONOBJ)"!=""
 SHL5VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL5TARGET))}$(VERSIONOBJ:f)
 USE_VERSIONH:=$(INCCOM)/$(SHL5VERSIONOBJ:b).h
-.IF "$(GUI)" == "UNX"
+.IF "$(OS)" != "WNT"
 SHL5VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL5TARGET))}$(VERSIONOBJ:f:s/.o/.obj/)
-.ELSE           # "$(GUI)" == "UNX"
+.ELSE           # "$(OS)" != "WNT"
 SHL5VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL5TARGET))}$(VERSIONOBJ:f)
-.ENDIF          # "$(GUI)" == "UNX"
+.ENDIF          # "$(OS)" != "WNT"
 $(MISC)/$(SHL5VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL5VERSIONOBJ:b).h
 #    $(COPY) $(SOLARENV)/src/version.c $@
     $(COMMAND_ECHO)$(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL5VERSIONOBJ:b).h/ > $@
@@ -1995,8 +1995,8 @@ $(MISC)/$(SHL5VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL5VERSIO
 .ENDIF			# "$(VERSIONOBJ)"!=""
 .ENDIF
 
-.IF "$(GUI)" != "UNX"
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
+.IF "$(OS)" == "WNT"
 .IF "$(SHL5IMPLIB)" == ""
 SHL5IMPLIB=i$(TARGET)_t5
 .ENDIF			# "$(SHL5IMPLIB)" == ""
@@ -2014,9 +2014,9 @@ ALLTAR : $(SHL5IMPLIBN)
 USE_5IMPLIB_DEPS=$(LB)/$(SHL5IMPLIB).lib
 .ENDIF
 .ENDIF			# "$(USE_DEFFILE)"==""
-.ENDIF			# "$(GUI)" == "WNT"
+.ENDIF			# "$(OS)" == "WNT"
 USE_SHL5DEF=$(SHL5DEF)
-.ELSE			# "$(GUI)" != "UNX"
+.ELSE			# "$(OS)" == "WNT"
 USE_SHL5DEF=
 SHL5DEPN+:=$(SHL5DEPNU)
 
@@ -2125,13 +2125,13 @@ $(USE_SHL5VERSIONMAP) .ERRREMOVE: $(SHL5VERSIONMAP)
 .ENDIF # .IF "$(OS)"=="MACOSX"
 .ENDIF			# "$(SHL5VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL5VERSIONMAP)"!=""
-.ENDIF			# "$(GUI)" != "UNX"
+.ENDIF			# "$(OS)" == "WNT"
 
 .IF "$(UNIXVERSIONNAMES)"!=""
 .IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID" && "$(OS)"!="AIX"
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 SHL5SONAME=\"$(SONAME_SWITCH)$(SHL5TARGETN:f)\"
-.ENDIF			# "$(GUI)"!="UNX"
+.ENDIF			# "$(OS)"=="WNT"
 .ENDIF			# "$(OS)"!="MACOSX"
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
 
@@ -2151,7 +2151,7 @@ SHL5LINKRESO*=$(MISC)/$(SHL5TARGET)_res.o
 #.IF "$(SHL5TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 .IF "$(SHL5LIBS)"!=""
 $(MISC)/$(SHL5TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
@@ -2181,7 +2181,7 @@ $(SHL5TARGETN) : \
                     $(SHL5RES)\
                     $(SHL5DEPN)
     @echo "Making:   " $(@:f)
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
 .IF "$(SHL5DEFAULTRES)"!=""
     @@-$(RM) $(MISC)/$(SHL5DEFAULTRES:b).rc
 .IF "$(SHL5ICON)" != ""
@@ -2363,8 +2363,8 @@ $(SHL5TARGETN) : \
         $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(COM)"=="GCC"
-.ENDIF			# "$(GUI)" == "WNT"
-.IF "$(GUI)"=="UNX"
+.ENDIF			# "$(OS)" == "WNT"
+.IF "$(OS)"!="WNT"
 .IF "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_5.cmd
@@ -2419,7 +2419,7 @@ $(SHL5TARGETN) : \
 .IF "$(VERBOSE)" == "TRUE"
     @ls -l $@
 .ENDIF
-.ENDIF			# "$(GUI)" == "UNX"
+.ENDIF			# "$(OS)" != "WNT"
 
 .ENDIF			# "$(SHL5TARGETN)"!=""
 
@@ -2467,11 +2467,11 @@ EXTRALIBPATHS6+=-L$(SOLAR_STLLIBPATH)
 .IF "$(VERSIONOBJ)"!=""
 SHL6VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL6TARGET))}$(VERSIONOBJ:f)
 USE_VERSIONH:=$(INCCOM)/$(SHL6VERSIONOBJ:b).h
-.IF "$(GUI)" == "UNX"
+.IF "$(OS)" != "WNT"
 SHL6VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL6TARGET))}$(VERSIONOBJ:f:s/.o/.obj/)
-.ELSE           # "$(GUI)" == "UNX"
+.ELSE           # "$(OS)" != "WNT"
 SHL6VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL6TARGET))}$(VERSIONOBJ:f)
-.ENDIF          # "$(GUI)" == "UNX"
+.ENDIF          # "$(OS)" != "WNT"
 $(MISC)/$(SHL6VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL6VERSIONOBJ:b).h
 #    $(COPY) $(SOLARENV)/src/version.c $@
     $(COMMAND_ECHO)$(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL6VERSIONOBJ:b).h/ > $@
@@ -2480,8 +2480,8 @@ $(MISC)/$(SHL6VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL6VERSIO
 .ENDIF			# "$(VERSIONOBJ)"!=""
 .ENDIF
 
-.IF "$(GUI)" != "UNX"
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
+.IF "$(OS)" == "WNT"
 .IF "$(SHL6IMPLIB)" == ""
 SHL6IMPLIB=i$(TARGET)_t6
 .ENDIF			# "$(SHL6IMPLIB)" == ""
@@ -2499,9 +2499,9 @@ ALLTAR : $(SHL6IMPLIBN)
 USE_6IMPLIB_DEPS=$(LB)/$(SHL6IMPLIB).lib
 .ENDIF
 .ENDIF			# "$(USE_DEFFILE)"==""
-.ENDIF			# "$(GUI)" == "WNT"
+.ENDIF			# "$(OS)" == "WNT"
 USE_SHL6DEF=$(SHL6DEF)
-.ELSE			# "$(GUI)" != "UNX"
+.ELSE			# "$(OS)" == "WNT"
 USE_SHL6DEF=
 SHL6DEPN+:=$(SHL6DEPNU)
 
@@ -2610,13 +2610,13 @@ $(USE_SHL6VERSIONMAP) .ERRREMOVE: $(SHL6VERSIONMAP)
 .ENDIF # .IF "$(OS)"=="MACOSX"
 .ENDIF			# "$(SHL6VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL6VERSIONMAP)"!=""
-.ENDIF			# "$(GUI)" != "UNX"
+.ENDIF			# "$(OS)" == "WNT"
 
 .IF "$(UNIXVERSIONNAMES)"!=""
 .IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID" && "$(OS)"!="AIX"
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 SHL6SONAME=\"$(SONAME_SWITCH)$(SHL6TARGETN:f)\"
-.ENDIF			# "$(GUI)"!="UNX"
+.ENDIF			# "$(OS)"=="WNT"
 .ENDIF			# "$(OS)"!="MACOSX"
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
 
@@ -2636,7 +2636,7 @@ SHL6LINKRESO*=$(MISC)/$(SHL6TARGET)_res.o
 #.IF "$(SHL6TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 .IF "$(SHL6LIBS)"!=""
 $(MISC)/$(SHL6TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
@@ -2666,7 +2666,7 @@ $(SHL6TARGETN) : \
                     $(SHL6RES)\
                     $(SHL6DEPN)
     @echo "Making:   " $(@:f)
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
 .IF "$(SHL6DEFAULTRES)"!=""
     @@-$(RM) $(MISC)/$(SHL6DEFAULTRES:b).rc
 .IF "$(SHL6ICON)" != ""
@@ -2848,8 +2848,8 @@ $(SHL6TARGETN) : \
         $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(COM)"=="GCC"
-.ENDIF			# "$(GUI)" == "WNT"
-.IF "$(GUI)"=="UNX"
+.ENDIF			# "$(OS)" == "WNT"
+.IF "$(OS)"!="WNT"
 .IF "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_6.cmd
@@ -2904,7 +2904,7 @@ $(SHL6TARGETN) : \
 .IF "$(VERBOSE)" == "TRUE"
     @ls -l $@
 .ENDIF
-.ENDIF			# "$(GUI)" == "UNX"
+.ENDIF			# "$(OS)" != "WNT"
 
 .ENDIF			# "$(SHL6TARGETN)"!=""
 
@@ -2952,11 +2952,11 @@ EXTRALIBPATHS7+=-L$(SOLAR_STLLIBPATH)
 .IF "$(VERSIONOBJ)"!=""
 SHL7VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL7TARGET))}$(VERSIONOBJ:f)
 USE_VERSIONH:=$(INCCOM)/$(SHL7VERSIONOBJ:b).h
-.IF "$(GUI)" == "UNX"
+.IF "$(OS)" != "WNT"
 SHL7VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL7TARGET))}$(VERSIONOBJ:f:s/.o/.obj/)
-.ELSE           # "$(GUI)" == "UNX"
+.ELSE           # "$(OS)" != "WNT"
 SHL7VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL7TARGET))}$(VERSIONOBJ:f)
-.ENDIF          # "$(GUI)" == "UNX"
+.ENDIF          # "$(OS)" != "WNT"
 $(MISC)/$(SHL7VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL7VERSIONOBJ:b).h
 #    $(COPY) $(SOLARENV)/src/version.c $@
     $(COMMAND_ECHO)$(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL7VERSIONOBJ:b).h/ > $@
@@ -2965,8 +2965,8 @@ $(MISC)/$(SHL7VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL7VERSIO
 .ENDIF			# "$(VERSIONOBJ)"!=""
 .ENDIF
 
-.IF "$(GUI)" != "UNX"
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
+.IF "$(OS)" == "WNT"
 .IF "$(SHL7IMPLIB)" == ""
 SHL7IMPLIB=i$(TARGET)_t7
 .ENDIF			# "$(SHL7IMPLIB)" == ""
@@ -2984,9 +2984,9 @@ ALLTAR : $(SHL7IMPLIBN)
 USE_7IMPLIB_DEPS=$(LB)/$(SHL7IMPLIB).lib
 .ENDIF
 .ENDIF			# "$(USE_DEFFILE)"==""
-.ENDIF			# "$(GUI)" == "WNT"
+.ENDIF			# "$(OS)" == "WNT"
 USE_SHL7DEF=$(SHL7DEF)
-.ELSE			# "$(GUI)" != "UNX"
+.ELSE			# "$(OS)" == "WNT"
 USE_SHL7DEF=
 SHL7DEPN+:=$(SHL7DEPNU)
 
@@ -3095,13 +3095,13 @@ $(USE_SHL7VERSIONMAP) .ERRREMOVE: $(SHL7VERSIONMAP)
 .ENDIF # .IF "$(OS)"=="MACOSX"
 .ENDIF			# "$(SHL7VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL7VERSIONMAP)"!=""
-.ENDIF			# "$(GUI)" != "UNX"
+.ENDIF			# "$(OS)" == "WNT"
 
 .IF "$(UNIXVERSIONNAMES)"!=""
 .IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID" && "$(OS)"!="AIX"
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 SHL7SONAME=\"$(SONAME_SWITCH)$(SHL7TARGETN:f)\"
-.ENDIF			# "$(GUI)"!="UNX"
+.ENDIF			# "$(OS)"=="WNT"
 .ENDIF			# "$(OS)"!="MACOSX"
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
 
@@ -3121,7 +3121,7 @@ SHL7LINKRESO*=$(MISC)/$(SHL7TARGET)_res.o
 #.IF "$(SHL7TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 .IF "$(SHL7LIBS)"!=""
 $(MISC)/$(SHL7TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
@@ -3151,7 +3151,7 @@ $(SHL7TARGETN) : \
                     $(SHL7RES)\
                     $(SHL7DEPN)
     @echo "Making:   " $(@:f)
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
 .IF "$(SHL7DEFAULTRES)"!=""
     @@-$(RM) $(MISC)/$(SHL7DEFAULTRES:b).rc
 .IF "$(SHL7ICON)" != ""
@@ -3333,8 +3333,8 @@ $(SHL7TARGETN) : \
         $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(COM)"=="GCC"
-.ENDIF			# "$(GUI)" == "WNT"
-.IF "$(GUI)"=="UNX"
+.ENDIF			# "$(OS)" == "WNT"
+.IF "$(OS)"!="WNT"
 .IF "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_7.cmd
@@ -3389,7 +3389,7 @@ $(SHL7TARGETN) : \
 .IF "$(VERBOSE)" == "TRUE"
     @ls -l $@
 .ENDIF
-.ENDIF			# "$(GUI)" == "UNX"
+.ENDIF			# "$(OS)" != "WNT"
 
 .ENDIF			# "$(SHL7TARGETN)"!=""
 
@@ -3437,11 +3437,11 @@ EXTRALIBPATHS8+=-L$(SOLAR_STLLIBPATH)
 .IF "$(VERSIONOBJ)"!=""
 SHL8VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL8TARGET))}$(VERSIONOBJ:f)
 USE_VERSIONH:=$(INCCOM)/$(SHL8VERSIONOBJ:b).h
-.IF "$(GUI)" == "UNX"
+.IF "$(OS)" != "WNT"
 SHL8VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL8TARGET))}$(VERSIONOBJ:f:s/.o/.obj/)
-.ELSE           # "$(GUI)" == "UNX"
+.ELSE           # "$(OS)" != "WNT"
 SHL8VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL8TARGET))}$(VERSIONOBJ:f)
-.ENDIF          # "$(GUI)" == "UNX"
+.ENDIF          # "$(OS)" != "WNT"
 $(MISC)/$(SHL8VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL8VERSIONOBJ:b).h
 #    $(COPY) $(SOLARENV)/src/version.c $@
     $(COMMAND_ECHO)$(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL8VERSIONOBJ:b).h/ > $@
@@ -3450,8 +3450,8 @@ $(MISC)/$(SHL8VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL8VERSIO
 .ENDIF			# "$(VERSIONOBJ)"!=""
 .ENDIF
 
-.IF "$(GUI)" != "UNX"
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
+.IF "$(OS)" == "WNT"
 .IF "$(SHL8IMPLIB)" == ""
 SHL8IMPLIB=i$(TARGET)_t8
 .ENDIF			# "$(SHL8IMPLIB)" == ""
@@ -3469,9 +3469,9 @@ ALLTAR : $(SHL8IMPLIBN)
 USE_8IMPLIB_DEPS=$(LB)/$(SHL8IMPLIB).lib
 .ENDIF
 .ENDIF			# "$(USE_DEFFILE)"==""
-.ENDIF			# "$(GUI)" == "WNT"
+.ENDIF			# "$(OS)" == "WNT"
 USE_SHL8DEF=$(SHL8DEF)
-.ELSE			# "$(GUI)" != "UNX"
+.ELSE			# "$(OS)" == "WNT"
 USE_SHL8DEF=
 SHL8DEPN+:=$(SHL8DEPNU)
 
@@ -3580,13 +3580,13 @@ $(USE_SHL8VERSIONMAP) .ERRREMOVE: $(SHL8VERSIONMAP)
 .ENDIF # .IF "$(OS)"=="MACOSX"
 .ENDIF			# "$(SHL8VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL8VERSIONMAP)"!=""
-.ENDIF			# "$(GUI)" != "UNX"
+.ENDIF			# "$(OS)" == "WNT"
 
 .IF "$(UNIXVERSIONNAMES)"!=""
 .IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID" && "$(OS)"!="AIX"
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 SHL8SONAME=\"$(SONAME_SWITCH)$(SHL8TARGETN:f)\"
-.ENDIF			# "$(GUI)"!="UNX"
+.ENDIF			# "$(OS)"=="WNT"
 .ENDIF			# "$(OS)"!="MACOSX"
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
 
@@ -3606,7 +3606,7 @@ SHL8LINKRESO*=$(MISC)/$(SHL8TARGET)_res.o
 #.IF "$(SHL8TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 .IF "$(SHL8LIBS)"!=""
 $(MISC)/$(SHL8TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
@@ -3636,7 +3636,7 @@ $(SHL8TARGETN) : \
                     $(SHL8RES)\
                     $(SHL8DEPN)
     @echo "Making:   " $(@:f)
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
 .IF "$(SHL8DEFAULTRES)"!=""
     @@-$(RM) $(MISC)/$(SHL8DEFAULTRES:b).rc
 .IF "$(SHL8ICON)" != ""
@@ -3818,8 +3818,8 @@ $(SHL8TARGETN) : \
         $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(COM)"=="GCC"
-.ENDIF			# "$(GUI)" == "WNT"
-.IF "$(GUI)"=="UNX"
+.ENDIF			# "$(OS)" == "WNT"
+.IF "$(OS)"!="WNT"
 .IF "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_8.cmd
@@ -3874,7 +3874,7 @@ $(SHL8TARGETN) : \
 .IF "$(VERBOSE)" == "TRUE"
     @ls -l $@
 .ENDIF
-.ENDIF			# "$(GUI)" == "UNX"
+.ENDIF			# "$(OS)" != "WNT"
 
 .ENDIF			# "$(SHL8TARGETN)"!=""
 
@@ -3922,11 +3922,11 @@ EXTRALIBPATHS9+=-L$(SOLAR_STLLIBPATH)
 .IF "$(VERSIONOBJ)"!=""
 SHL9VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL9TARGET))}$(VERSIONOBJ:f)
 USE_VERSIONH:=$(INCCOM)/$(SHL9VERSIONOBJ:b).h
-.IF "$(GUI)" == "UNX"
+.IF "$(OS)" != "WNT"
 SHL9VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL9TARGET))}$(VERSIONOBJ:f:s/.o/.obj/)
-.ELSE           # "$(GUI)" == "UNX"
+.ELSE           # "$(OS)" != "WNT"
 SHL9VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL9TARGET))}$(VERSIONOBJ:f)
-.ENDIF          # "$(GUI)" == "UNX"
+.ENDIF          # "$(OS)" != "WNT"
 $(MISC)/$(SHL9VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL9VERSIONOBJ:b).h
 #    $(COPY) $(SOLARENV)/src/version.c $@
     $(COMMAND_ECHO)$(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL9VERSIONOBJ:b).h/ > $@
@@ -3935,8 +3935,8 @@ $(MISC)/$(SHL9VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL9VERSIO
 .ENDIF			# "$(VERSIONOBJ)"!=""
 .ENDIF
 
-.IF "$(GUI)" != "UNX"
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
+.IF "$(OS)" == "WNT"
 .IF "$(SHL9IMPLIB)" == ""
 SHL9IMPLIB=i$(TARGET)_t9
 .ENDIF			# "$(SHL9IMPLIB)" == ""
@@ -3954,9 +3954,9 @@ ALLTAR : $(SHL9IMPLIBN)
 USE_9IMPLIB_DEPS=$(LB)/$(SHL9IMPLIB).lib
 .ENDIF
 .ENDIF			# "$(USE_DEFFILE)"==""
-.ENDIF			# "$(GUI)" == "WNT"
+.ENDIF			# "$(OS)" == "WNT"
 USE_SHL9DEF=$(SHL9DEF)
-.ELSE			# "$(GUI)" != "UNX"
+.ELSE			# "$(OS)" == "WNT"
 USE_SHL9DEF=
 SHL9DEPN+:=$(SHL9DEPNU)
 
@@ -4065,13 +4065,13 @@ $(USE_SHL9VERSIONMAP) .ERRREMOVE: $(SHL9VERSIONMAP)
 .ENDIF # .IF "$(OS)"=="MACOSX"
 .ENDIF			# "$(SHL9VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL9VERSIONMAP)"!=""
-.ENDIF			# "$(GUI)" != "UNX"
+.ENDIF			# "$(OS)" == "WNT"
 
 .IF "$(UNIXVERSIONNAMES)"!=""
 .IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID" && "$(OS)"!="AIX"
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 SHL9SONAME=\"$(SONAME_SWITCH)$(SHL9TARGETN:f)\"
-.ENDIF			# "$(GUI)"!="UNX"
+.ENDIF			# "$(OS)"=="WNT"
 .ENDIF			# "$(OS)"!="MACOSX"
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
 
@@ -4091,7 +4091,7 @@ SHL9LINKRESO*=$(MISC)/$(SHL9TARGET)_res.o
 #.IF "$(SHL9TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 .IF "$(SHL9LIBS)"!=""
 $(MISC)/$(SHL9TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
@@ -4121,7 +4121,7 @@ $(SHL9TARGETN) : \
                     $(SHL9RES)\
                     $(SHL9DEPN)
     @echo "Making:   " $(@:f)
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
 .IF "$(SHL9DEFAULTRES)"!=""
     @@-$(RM) $(MISC)/$(SHL9DEFAULTRES:b).rc
 .IF "$(SHL9ICON)" != ""
@@ -4303,8 +4303,8 @@ $(SHL9TARGETN) : \
         $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(COM)"=="GCC"
-.ENDIF			# "$(GUI)" == "WNT"
-.IF "$(GUI)"=="UNX"
+.ENDIF			# "$(OS)" == "WNT"
+.IF "$(OS)"!="WNT"
 .IF "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_9.cmd
@@ -4359,7 +4359,7 @@ $(SHL9TARGETN) : \
 .IF "$(VERBOSE)" == "TRUE"
     @ls -l $@
 .ENDIF
-.ENDIF			# "$(GUI)" == "UNX"
+.ENDIF			# "$(OS)" != "WNT"
 
 .ENDIF			# "$(SHL9TARGETN)"!=""
 
@@ -4407,11 +4407,11 @@ EXTRALIBPATHS10+=-L$(SOLAR_STLLIBPATH)
 .IF "$(VERSIONOBJ)"!=""
 SHL10VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL10TARGET))}$(VERSIONOBJ:f)
 USE_VERSIONH:=$(INCCOM)/$(SHL10VERSIONOBJ:b).h
-.IF "$(GUI)" == "UNX"
+.IF "$(OS)" != "WNT"
 SHL10VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL10TARGET))}$(VERSIONOBJ:f:s/.o/.obj/)
-.ELSE           # "$(GUI)" == "UNX"
+.ELSE           # "$(OS)" != "WNT"
 SHL10VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL10TARGET))}$(VERSIONOBJ:f)
-.ENDIF          # "$(GUI)" == "UNX"
+.ENDIF          # "$(OS)" != "WNT"
 $(MISC)/$(SHL10VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL10VERSIONOBJ:b).h
 #    $(COPY) $(SOLARENV)/src/version.c $@
     $(COMMAND_ECHO)$(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL10VERSIONOBJ:b).h/ > $@
@@ -4420,8 +4420,8 @@ $(MISC)/$(SHL10VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL10VERS
 .ENDIF			# "$(VERSIONOBJ)"!=""
 .ENDIF
 
-.IF "$(GUI)" != "UNX"
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
+.IF "$(OS)" == "WNT"
 .IF "$(SHL10IMPLIB)" == ""
 SHL10IMPLIB=i$(TARGET)_t10
 .ENDIF			# "$(SHL10IMPLIB)" == ""
@@ -4439,9 +4439,9 @@ ALLTAR : $(SHL10IMPLIBN)
 USE_10IMPLIB_DEPS=$(LB)/$(SHL10IMPLIB).lib
 .ENDIF
 .ENDIF			# "$(USE_DEFFILE)"==""
-.ENDIF			# "$(GUI)" == "WNT"
+.ENDIF			# "$(OS)" == "WNT"
 USE_SHL10DEF=$(SHL10DEF)
-.ELSE			# "$(GUI)" != "UNX"
+.ELSE			# "$(OS)" == "WNT"
 USE_SHL10DEF=
 SHL10DEPN+:=$(SHL10DEPNU)
 
@@ -4550,13 +4550,13 @@ $(USE_SHL10VERSIONMAP) .ERRREMOVE: $(SHL10VERSIONMAP)
 .ENDIF # .IF "$(OS)"=="MACOSX"
 .ENDIF			# "$(SHL10VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL10VERSIONMAP)"!=""
-.ENDIF			# "$(GUI)" != "UNX"
+.ENDIF			# "$(OS)" == "WNT"
 
 .IF "$(UNIXVERSIONNAMES)"!=""
 .IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID" && "$(OS)"!="AIX"
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 SHL10SONAME=\"$(SONAME_SWITCH)$(SHL10TARGETN:f)\"
-.ENDIF			# "$(GUI)"!="UNX"
+.ENDIF			# "$(OS)"=="WNT"
 .ENDIF			# "$(OS)"!="MACOSX"
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
 
@@ -4576,7 +4576,7 @@ SHL10LINKRESO*=$(MISC)/$(SHL10TARGET)_res.o
 #.IF "$(SHL10TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 .IF "$(SHL10LIBS)"!=""
 $(MISC)/$(SHL10TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
@@ -4606,7 +4606,7 @@ $(SHL10TARGETN) : \
                     $(SHL10RES)\
                     $(SHL10DEPN)
     @echo "Making:   " $(@:f)
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
 .IF "$(SHL10DEFAULTRES)"!=""
     @@-$(RM) $(MISC)/$(SHL10DEFAULTRES:b).rc
 .IF "$(SHL10ICON)" != ""
@@ -4788,8 +4788,8 @@ $(SHL10TARGETN) : \
         $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(COM)"=="GCC"
-.ENDIF			# "$(GUI)" == "WNT"
-.IF "$(GUI)"=="UNX"
+.ENDIF			# "$(OS)" == "WNT"
+.IF "$(OS)"!="WNT"
 .IF "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_10.cmd
@@ -4844,7 +4844,7 @@ $(SHL10TARGETN) : \
 .IF "$(VERBOSE)" == "TRUE"
     @ls -l $@
 .ENDIF
-.ENDIF			# "$(GUI)" == "UNX"
+.ENDIF			# "$(OS)" != "WNT"
 
 .ENDIF			# "$(SHL10TARGETN)"!=""
 
@@ -4858,8 +4858,8 @@ USELIB1DEPN+=$(SHL1LIBS)
 USE_SHL1TARGET=$(SHL1TARGETN)
 .ENDIF
 
-.IF "$(GUI)$(COM)" != "WNTGCC"
-.IF "$(GUI)" != "UNX"
+.IF "$(OS)$(COM)" != "WNTGCC"
+.IF "$(OS)" == "WNT"
 $(SHL1IMPLIBN):	\
                     $(SHL1DEF) \
                     $(USE_SHL1TARGET) \
@@ -4870,7 +4870,7 @@ $(SHL1IMPLIBN):	\
                     $(SHL1LIBS)
 .ENDIF
     @echo "Making:   " $(@:f)
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
 # bei use_deffile implib von linker erstellt
 .IF "$(USE_DEFFILE)"==""
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL1IMPLIBN) \
@@ -4898,8 +4898,8 @@ USELIB2DEPN+=$(SHL2LIBS)
 USE_SHL2TARGET=$(SHL2TARGETN)
 .ENDIF
 
-.IF "$(GUI)$(COM)" != "WNTGCC"
-.IF "$(GUI)" != "UNX"
+.IF "$(OS)$(COM)" != "WNTGCC"
+.IF "$(OS)" == "WNT"
 $(SHL2IMPLIBN):	\
                     $(SHL2DEF) \
                     $(USE_SHL2TARGET) \
@@ -4910,7 +4910,7 @@ $(SHL2IMPLIBN):	\
                     $(SHL2LIBS)
 .ENDIF
     @echo "Making:   " $(@:f)
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
 # bei use_deffile implib von linker erstellt
 .IF "$(USE_DEFFILE)"==""
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL2IMPLIBN) \
@@ -4938,8 +4938,8 @@ USELIB3DEPN+=$(SHL3LIBS)
 USE_SHL3TARGET=$(SHL3TARGETN)
 .ENDIF
 
-.IF "$(GUI)$(COM)" != "WNTGCC"
-.IF "$(GUI)" != "UNX"
+.IF "$(OS)$(COM)" != "WNTGCC"
+.IF "$(OS)" == "WNT"
 $(SHL3IMPLIBN):	\
                     $(SHL3DEF) \
                     $(USE_SHL3TARGET) \
@@ -4950,7 +4950,7 @@ $(SHL3IMPLIBN):	\
                     $(SHL3LIBS)
 .ENDIF
     @echo "Making:   " $(@:f)
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
 # bei use_deffile implib von linker erstellt
 .IF "$(USE_DEFFILE)"==""
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL3IMPLIBN) \
@@ -4978,8 +4978,8 @@ USELIB4DEPN+=$(SHL4LIBS)
 USE_SHL4TARGET=$(SHL4TARGETN)
 .ENDIF
 
-.IF "$(GUI)$(COM)" != "WNTGCC"
-.IF "$(GUI)" != "UNX"
+.IF "$(OS)$(COM)" != "WNTGCC"
+.IF "$(OS)" == "WNT"
 $(SHL4IMPLIBN):	\
                     $(SHL4DEF) \
                     $(USE_SHL4TARGET) \
@@ -4990,7 +4990,7 @@ $(SHL4IMPLIBN):	\
                     $(SHL4LIBS)
 .ENDIF
     @echo "Making:   " $(@:f)
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
 # bei use_deffile implib von linker erstellt
 .IF "$(USE_DEFFILE)"==""
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL4IMPLIBN) \
@@ -5018,8 +5018,8 @@ USELIB5DEPN+=$(SHL5LIBS)
 USE_SHL5TARGET=$(SHL5TARGETN)
 .ENDIF
 
-.IF "$(GUI)$(COM)" != "WNTGCC"
-.IF "$(GUI)" != "UNX"
+.IF "$(OS)$(COM)" != "WNTGCC"
+.IF "$(OS)" == "WNT"
 $(SHL5IMPLIBN):	\
                     $(SHL5DEF) \
                     $(USE_SHL5TARGET) \
@@ -5030,7 +5030,7 @@ $(SHL5IMPLIBN):	\
                     $(SHL5LIBS)
 .ENDIF
     @echo "Making:   " $(@:f)
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
 # bei use_deffile implib von linker erstellt
 .IF "$(USE_DEFFILE)"==""
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL5IMPLIBN) \
@@ -5058,8 +5058,8 @@ USELIB6DEPN+=$(SHL6LIBS)
 USE_SHL6TARGET=$(SHL6TARGETN)
 .ENDIF
 
-.IF "$(GUI)$(COM)" != "WNTGCC"
-.IF "$(GUI)" != "UNX"
+.IF "$(OS)$(COM)" != "WNTGCC"
+.IF "$(OS)" == "WNT"
 $(SHL6IMPLIBN):	\
                     $(SHL6DEF) \
                     $(USE_SHL6TARGET) \
@@ -5070,7 +5070,7 @@ $(SHL6IMPLIBN):	\
                     $(SHL6LIBS)
 .ENDIF
     @echo "Making:   " $(@:f)
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
 # bei use_deffile implib von linker erstellt
 .IF "$(USE_DEFFILE)"==""
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL6IMPLIBN) \
@@ -5098,8 +5098,8 @@ USELIB7DEPN+=$(SHL7LIBS)
 USE_SHL7TARGET=$(SHL7TARGETN)
 .ENDIF
 
-.IF "$(GUI)$(COM)" != "WNTGCC"
-.IF "$(GUI)" != "UNX"
+.IF "$(OS)$(COM)" != "WNTGCC"
+.IF "$(OS)" == "WNT"
 $(SHL7IMPLIBN):	\
                     $(SHL7DEF) \
                     $(USE_SHL7TARGET) \
@@ -5110,7 +5110,7 @@ $(SHL7IMPLIBN):	\
                     $(SHL7LIBS)
 .ENDIF
     @echo "Making:   " $(@:f)
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
 # bei use_deffile implib von linker erstellt
 .IF "$(USE_DEFFILE)"==""
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL7IMPLIBN) \
@@ -5138,8 +5138,8 @@ USELIB8DEPN+=$(SHL8LIBS)
 USE_SHL8TARGET=$(SHL8TARGETN)
 .ENDIF
 
-.IF "$(GUI)$(COM)" != "WNTGCC"
-.IF "$(GUI)" != "UNX"
+.IF "$(OS)$(COM)" != "WNTGCC"
+.IF "$(OS)" == "WNT"
 $(SHL8IMPLIBN):	\
                     $(SHL8DEF) \
                     $(USE_SHL8TARGET) \
@@ -5150,7 +5150,7 @@ $(SHL8IMPLIBN):	\
                     $(SHL8LIBS)
 .ENDIF
     @echo "Making:   " $(@:f)
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
 # bei use_deffile implib von linker erstellt
 .IF "$(USE_DEFFILE)"==""
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL8IMPLIBN) \
@@ -5178,8 +5178,8 @@ USELIB9DEPN+=$(SHL9LIBS)
 USE_SHL9TARGET=$(SHL9TARGETN)
 .ENDIF
 
-.IF "$(GUI)$(COM)" != "WNTGCC"
-.IF "$(GUI)" != "UNX"
+.IF "$(OS)$(COM)" != "WNTGCC"
+.IF "$(OS)" == "WNT"
 $(SHL9IMPLIBN):	\
                     $(SHL9DEF) \
                     $(USE_SHL9TARGET) \
@@ -5190,7 +5190,7 @@ $(SHL9IMPLIBN):	\
                     $(SHL9LIBS)
 .ENDIF
     @echo "Making:   " $(@:f)
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
 # bei use_deffile implib von linker erstellt
 .IF "$(USE_DEFFILE)"==""
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL9IMPLIBN) \
@@ -5218,8 +5218,8 @@ USELIB10DEPN+=$(SHL10LIBS)
 USE_SHL10TARGET=$(SHL10TARGETN)
 .ENDIF
 
-.IF "$(GUI)$(COM)" != "WNTGCC"
-.IF "$(GUI)" != "UNX"
+.IF "$(OS)$(COM)" != "WNTGCC"
+.IF "$(OS)" == "WNT"
 $(SHL10IMPLIBN):	\
                     $(SHL10DEF) \
                     $(USE_SHL10TARGET) \
@@ -5230,7 +5230,7 @@ $(SHL10IMPLIBN):	\
                     $(SHL10LIBS)
 .ENDIF
     @echo "Making:   " $(@:f)
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
 # bei use_deffile implib von linker erstellt
 .IF "$(USE_DEFFILE)"==""
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL10IMPLIBN) \

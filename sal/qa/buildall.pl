@@ -126,22 +126,17 @@ sub checkForKillobj()
 # ------------------------------------------------------------------------------
 sub initEnvironment()
 {
-    my $gui = $ENV{GUI};
+    my $os = $ENV{OS};
     # no error output in forms of message boxes
     $ENV{'DISABLE_SAL_DBGBOX'}="t";
 
   SWITCH: {
-      if ( $gui eq "WNT" ) {
+      if ( $os eq "WNT" ) {
           $FS             = "\\";
           $g_sTempDir         = $ENV{TMP}  ? "$ENV{TMP}${FS}" : "c:${FS}tmp${FS}";
           last SWITCH;
       }
-      if ( $gui eq "WIN" ) {
-          $FS             = "\\";
-          $g_sTempDir         = $ENV{TMP}  ? "$ENV{TMP}${FS}" : "c:${FS}tmp${FS}";
-          last SWITCH;
-      }
-      if ( $gui eq "UNX" ) {
+      else {
           $FS             = "/";
           $g_sTempDir         = $ENV{TMP}  ? "$ENV{TMP}${FS}" : "${FS}tmp${FS}";
           last SWITCH;

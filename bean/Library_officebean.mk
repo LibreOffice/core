@@ -30,7 +30,7 @@
 
 $(eval $(call gb_Library_Library,officebean))
 
-ifeq ($(GUI),UNX)
+ifneq ($(OS),WNT)
 $(eval $(call gb_Library_use_packages,officebean,\
 	sal_generated \
 	sal_inc \
@@ -42,7 +42,7 @@ $(eval $(call gb_Library_add_cobjects,officebean,\
 ))
 endif
 
-ifeq ($(GUI),WNT)
+ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_cobjects,officebean,\
 	bean/native/win32/com_sun_star_comp_beans_LocalOfficeWindow \
 	bean/native/win32/com_sun_star_beans_LocalOfficeWindow \

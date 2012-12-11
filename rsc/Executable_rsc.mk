@@ -90,7 +90,7 @@ $(eval $(call gb_Executable_add_cobjects,rsc,\
 	rsc/source/rscpp/cpp6 \
 ))
 
-ifeq ($(GUI),UNX)
+ifneq ($(OS),WNT)
 $(eval $(call gb_Executable_add_defs,rsc,\
 	-Dunix \
 ))

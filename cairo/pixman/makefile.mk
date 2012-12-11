@@ -68,7 +68,7 @@ CONFIGURE_FLAGS=--enable-static=yes --enable-shared=no --build=i586-pc-mingw32 -
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
-.IF "$(GUI)$(COM)"=="WNTGCC"
+.IF "$(OS)$(COM)"=="WNTGCC"
 .EXPORT : PWD
 .ENDIF
 

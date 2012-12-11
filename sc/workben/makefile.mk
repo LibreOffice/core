@@ -69,7 +69,7 @@ SHL1OBJS=	$(SLO)$/addin.obj $(SLO)$/result.obj $(SLO)$/workben$/testadd.obj
 # --- Targets ------------------------------------------------------
 .INCLUDE :  target.mk
 
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
 
 $(MISC)$/$(SHL1TARGET).def:  makefile.mk
     @echo ------------------------------

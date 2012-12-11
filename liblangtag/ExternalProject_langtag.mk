@@ -31,7 +31,7 @@ $(call gb_ExternalProject_get_state_target,langtag,build):
 	$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 	$(if $(filter-out LINUX FREEBSD,$(OS)),,LDFLAGS="-Wl,-z,origin -Wl,-rpath,$$ORIGIN:$$ORIGIN/../ure-link/lib") \
 	$(if $(filter-out SOLARIS,$(OS)),,LDFLAGS="-Wl,-z,origin -Wl,-R,$$ORIGIN:$$ORIGIN/../ure-link/lib") \
-	$(if $(filter-out WNTGCC,$(GUI)$(COM)),,LDFLAGS="-Wl,--enable-runtime-pseudo-reloc-v2") \
+	$(if $(filter-out WNTGCC,$(OS)$(COM)),,LDFLAGS="-Wl,--enable-runtime-pseudo-reloc-v2") \
 	&& $(MAKE) \
 	&& touch $@
 # vim: set noet sw=4 ts=4:

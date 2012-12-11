@@ -118,7 +118,7 @@ $(eval $(call gb_Module_add_targets,shell,\
 	Executable_lngconvex \
 ))
 
-ifeq ($(GUI),UNX)
+ifneq ($(OS),WNT)
 
 $(eval $(call gb_Module_add_targets,shell,\
 	Executable_gnome_open_url \

@@ -35,7 +35,7 @@
 $(LIB$(TNR)ARCHIV) :	$(LIB$(TNR)TARGET)
     @echo "Making:   " $(@:f)
     @@-$(RM) $@
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
     @-$(RM) $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
     @echo $(LIBMGR) $(LIB$(TNR)FLAGS) $(LIBFLAGS) $(LIB$(TNR)ARCHIV) `cat $(LIB$(TNR)TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g` > $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
 .IF "$(OS)$(COM)"=="NETBSDGCC"
@@ -48,8 +48,8 @@ $(LIB$(TNR)ARCHIV) :	$(LIB$(TNR)TARGET)
     @cat $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
 .ENDIF
     @+source $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
-.ELSE			# "$(GUI)"=="UNX"
-.IF "$(GUI)$(COM)"=="WNTGCC"
+.ELSE			# "$(OS)"!="WNT"
+.IF "$(OS)$(COM)"=="WNTGCC"
     @+-$(RM) $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
     @+echo $(LIBMGR) $(LIB$(TNR)FLAGS) $(LIBFLAGS) $(LIB$(TNR)ARCHIV) `cat $(LIB$(TNR)TARGET) | sed s#'^'$(ROUT)#$(PRJ)/$(ROUT)#g` > $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
     @+echo $(RANLIB) $(LIB$(TNR)ARCHIV) >> $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
@@ -59,8 +59,8 @@ $(LIB$(TNR)ARCHIV) :	$(LIB$(TNR)TARGET)
     @+source $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
 .ELSE
     @echo just a dummy > $@
-.ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
-.ENDIF			# "$(GUI)"=="UNX"
+.ENDIF			# "$(OS)$(COM)"=="WNTGCC"
+.ENDIF			# "$(OS)"!="WNT"
 
 .ENDIF			# "$(LIB$(TNR)ARCHIV)" != ""
 
@@ -75,7 +75,7 @@ $(LIB$(TNR)TARGET) :	$(LIB$(TNR)FILES) \
 .ENDIF
     @echo "Making:   " $(@:f)
     @@-$(RM) $@
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
     @echo $(LIB$(TNR)OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
     @cat /dev/null $(LIB$(TNR)FILES:s/.obj/.o/) | xargs -n 1 >> $@
     @$(RM) $(@:d)$(@:b).dump
@@ -85,8 +85,8 @@ $(LIB$(TNR)TARGET) :	$(LIB$(TNR)FILES) \
     @nm `cat $(LIB$(TNR)TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g` > $(@:d)$(@:b).dump
 .ENDIF
 
-.ELSE			# "$(GUI)"=="UNX"
-.IF "$(GUI)"=="WNT"
+.ELSE			# "$(OS)"!="WNT"
+.IF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
     +$(ECHONL) $(LIB$(TNR)OBJFILES) | sed "s#$(PRJ:s/././)/$(ROUT)#$(ROUT)#g" | xargs -n1 > $@
     @+cat /dev/null $(LIB$(TNR)FILES) | xargs -n1 >> $@
@@ -101,14 +101,14 @@ $(LIB$(TNR)TARGET) :	$(LIB$(TNR)FILES) \
 .ENDIF          # "$(LIB$(TNR)FILES)"!=""    
     @$(ECHONL)
 .ENDIF          # "$(LIB$(TNR)FILES)"!=""    
-.ELSE			# "$(GUI)"=="WNT"
+.ELSE			# "$(OS)"=="WNT"
     @-$(RM) $@
   .IF "$(VERBOSE)" == "TRUE"
     @echo $(LIBMGR) r $@ $(LIB$(TNR)OBJFILES)
   .ENDIF
     $(COMMAND_ECHO)$(LIBMGR) r $@ $(LIB$(TNR)OBJFILES) $(LIB$(TNR)FILES) bla.lib
-.ENDIF          # "$(GUI)"=="WNT"
-.ENDIF          # "$(GUI)"=="UNX"
+.ENDIF          # "$(OS)"=="WNT"
+.ENDIF          # "$(OS)"!="WNT"
 .ENDIF          # "$(LIB$(TNR)TARGET)" != ""
 
 # Anweisungen fuer das LIBTARGETs

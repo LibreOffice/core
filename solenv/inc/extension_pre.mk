@@ -38,7 +38,7 @@ DESCRIPTION_SRC*:=description.xml
 COMPONENT_MANIFEST*:=$(EXTENSIONDIR)/META-INF/manifest.xml
 MANIFEST_SRC*:=manifest.xml
 
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
 PACKLICS*:=$(EXTENSIONDIR)/registration/license.txt
 COMPONENT_LIC_TEMPL*:=registration/license.txt
 .ELSE

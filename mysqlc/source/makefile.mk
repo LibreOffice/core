@@ -67,7 +67,7 @@ EXTENSION_ZIPNAME:=$(EXTENSIONNAME)
 .ENDIF
 
 # use the static version
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
   MYSQL_LIBDIR=$(LIBMYSQL_PATH)$/lib
   MYSQL_INCDIR=$(LIBMYSQL_PATH)$/include
 .ELSE
@@ -93,7 +93,7 @@ CDEFS += -DCPPCONN_LIB=\"$(shell readlink /usr/lib/libmysqlcppconn.so)\"
 .ENDIF
 
 # --------------- MySQL settings ------------------
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
   MYSQL_INC=-I$(SOLARINCDIR)$/mysqlcppconn -I$(SOLARINCDIR)$/mysqlcppconn/cppconn -I$(MYSQL_INCDIR)
   MYSQL_LIB=$(MYSQL_LIBDIR)$/libmysql.lib
   MYSQL_LIBFILE=$(MYSQL_LIBDIR)$/libmysql.dll

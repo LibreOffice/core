@@ -64,7 +64,7 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 ))
 endif
 
-ifeq ($(GUI),UNX)
+ifneq ($(OS),WNT)
 
 ifeq ($(ENABLE_KAB),TRUE)
 $(eval $(call gb_Module_add_targets,connectivity,\
@@ -92,7 +92,7 @@ endif
 
 endif
 
-ifeq ($(GUI),WNT)
+ifeq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,connectivity,\
 	Configuration_ado \
 	Library_ado \
@@ -145,7 +145,7 @@ $(eval $(call gb_Module_add_check_targets,connectivity,\
 
 endif
 
-ifeq ($(GUI),WNT)
+ifeq ($(OS),WNT)
 $(eval $(call gb_Module_add_check_targets,connectivity,\
 	CppunitTest_connectivity_ado \
 ))

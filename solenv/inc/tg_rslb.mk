@@ -54,11 +54,11 @@ $(RESLIB$(TNR)TARGETN): \
         $(RESLIB$(TNR)SRSFILES) \
         $(RESLIB$(TNR)BMPS)
     @echo "Making:   " $(@:f)
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
     @@-$(RM) $(RSC_MULTI$(TNR))
-.ELSE				# "$(GUI)"=="UNX"
+.ELSE				# "$(OS)"!="WNT"
     @@-$(RM) $(RSC_MULTI$(TNR))
-.ENDIF              # "$(GUI)"=="UNX"
+.ENDIF              # "$(OS)"!="WNT"
 .ENDIF				# "$(RESLIB$(TNR)TARGETN)"!=""
 
 

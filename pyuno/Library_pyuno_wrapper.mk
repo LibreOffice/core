@@ -42,7 +42,7 @@ $(eval $(call gb_Library_use_externals,pyuno_wrapper,\
     python_headers \
 ))
 
-ifneq ($(GUI)$(COM),WNTMSC)
+ifneq ($(OS)$(COM),WNTMSC)
 ifeq ($(filter DRAGONFLY FREEBSD NETBSD OPENBSD MACOSX,$(OS)),)
 
 $(eval $(call gb_Library_add_libs,pyuno_wrapper,\

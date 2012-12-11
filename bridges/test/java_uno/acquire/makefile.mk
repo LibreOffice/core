@@ -48,7 +48,7 @@ ALLTAR: \
     $(BIN)$/testacquire-native-client \
     $(BIN)$/testacquire-native-server
 
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
 GIVE_EXEC_RIGHTS = @echo
 .ELSE # GUI, WNT
 GIVE_EXEC_RIGHTS = chmod +x

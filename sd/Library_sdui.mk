@@ -107,6 +107,6 @@ $(eval $(call gb_Library_add_exception_objects,sdui,\
 ))
 
 # $(WORKDIR)/inc/sd/sddll0.hxx :
-	# echo "#define" DLL_NAME \"$(if $(filter UNX,$(GUI)),lib)sd$(DLLPOSTFIX)$(DLLPOST)\" > $@
+	# echo "#define" DLL_NAME \"$(if $(filter-out WNT,$(OS)),lib)sd$(DLLPOSTFIX)$(DLLPOST)\" > $@
 
 # vim: set noet sw=4 ts=4:

@@ -29,7 +29,7 @@ MKFILENAME:=RULES.MK
 
 $(OBJ)/%.obj : %.cxx
     @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$(COMPILE_ECHO_FILE)
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
     @$(RM) $@ $(@:s/.obj/.o/)
     $(COMMAND_ECHO)$(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSCXXOBJ) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)/$*.o $(CFLAGSINCXX)$(PWD)/$*.cxx
 .IF "$(OS)$(COM)"=="SOLARISC52" && "$(product)"=="full" && "$(debug)"==""
@@ -53,7 +53,7 @@ $(OBJ)/%.obj : %.cxx
 
 $(OBJ)/%.obj : %.cpp
     @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$(COMPILE_ECHO_FILE)
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
     @$(RM) $@ $(@:s/.obj/.o/)
     $(COMMAND_ECHO)$(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSCXXOBJ) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)/$*.o $(CFLAGSINCXX)$(PWD)/$*.cpp
 .IF "$(OS)$(COM)"=="SOLARISC52" && "$(product)"=="full" && "$(debug)"==""
@@ -75,7 +75,7 @@ $(OBJ)/%.obj : %.cpp
 
 $(OBJ)/%.obj : %.cc
     @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$(COMPILE_ECHO_FILE)
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
     @$(RM) $@ $(@:s/.obj/.o/)
     $(COMMAND_ECHO)$(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSCXXOBJ) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)/$*.o $(CFLAGSINCXX)$(PWD)/$*.cc
 .IF "$(OS)$(COM)"=="SOLARISC52" && "$(product)"=="full" && "$(debug)"==""
@@ -93,7 +93,7 @@ $(OBJ)/%.obj : %.cc
 
 $(SLO)/%.obj : %.cxx
     @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$(COMPILE_ECHO_FILE)
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 .IF "$(TEST)"!=""
     $(COMMAND_ECHO)$(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSCXXSLO) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) -E  $(CFLAGSINCXX)$(PWD)/$*.cxx
 .ELSE
@@ -104,14 +104,14 @@ $(SLO)/%.obj : %.cxx
 .ENDIF          # "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"==""
     @$(IFEXIST) $(@:s/.obj/.o/) $(THEN) $(TOUCH) $@ $(FI)
 .ENDIF
-.ELSE			# "$(GUI)"=="UNX"
+.ELSE			# "$(OS)"!="WNT"
     @@-$(RM) $@
 .IF "$(COM)"=="GCC"
     $(COMMAND_ECHO)$(CAPTURE_COMMAND) $(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)/$*.obj $(CFLAGSINCXX)$(PWD)/$*.cxx $(CAPTURE_OUTPUT)
 .ELSE
     $(COMMAND_ECHO)$(CAPTURE_COMMAND) $(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)/$*.obj $(CFLAGSINCXX)$(PWD)/$*.cxx $(CAPTURE_OUTPUT)
 .ENDIF		    # "$(COM)"=="GCC"
-.ENDIF			# "$(GUI)"=="UNX"
+.ENDIF			# "$(OS)"!="WNT"
 .IF "$(nodep)"==""
 # fixme: write to file
     $(COMMAND_ECHO)$(MAKEDEPEND) @$(mktmp -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< ) > $(MISC)/s_$(@:f:s/.obj/.dpcc/)
@@ -120,7 +120,7 @@ $(SLO)/%.obj : %.cxx
 
 $(SLO)/%.obj : %.cpp
     @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$(COMPILE_ECHO_FILE)
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 .IF "$(TEST)"!=""
     $(COMMAND_ECHO)$(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSCXXSLO) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) -E  $(CFLAGSINCXX)$(PWD)/$*.cpp
 .ELSE
@@ -146,7 +146,7 @@ $(SLO)/%.obj : %.cpp
 
 $(SLO)/%.obj : $(MISC)/%.cxx
     @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(INPATH)/misc/$(COMPILE_ECHO_FILE)
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 .IF "$(TEST)"!=""
     $(COMMAND_ECHO)$(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSCXXSLO) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) -E  $(CFLAGSINCXX)$(MISC)/$*.cxx
 .ELSE
@@ -171,7 +171,7 @@ $(SLO)/%.obj : $(MISC)/%.cxx
 
 $(SLO)/%.obj : $(MISC)/%.cc
     @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(INPATH)/misc/$(COMPILE_ECHO_FILE)
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 .IF "$(TEST)"!=""
     $(COMMAND_ECHO)$(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSCXXSLO) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) -E  $(CFLAGSINCXX)$(MISC)/$*.cc
 .ELSE
@@ -188,7 +188,7 @@ $(SLO)/%.obj : $(MISC)/%.cc
 
 $(OBJ)/%.obj : $(MISC)/%.cxx
     @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(INPATH)/misc/$(COMPILE_ECHO_FILE)
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 .IF "$(TEST)"!=""
     $(COMMAND_ECHO)$(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSCXXOBJ) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) -E  $(CFLAGSINCXX)$(MISC)/$*.cxx
 .ELSE
@@ -213,7 +213,7 @@ $(OBJ)/%.obj : $(MISC)/%.cxx
 
 $(OBJ)/%.obj : %.c
     @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$(COMPILE_ECHO_FILE)
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 .IF "$(TEST)"!=""
     $(COMMAND_ECHO)$(CC) $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) -E $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)/$*.o $*.c
 .ELSE
@@ -243,7 +243,7 @@ $(OBJ)/%.obj : %.c
 
 $(OBJ)/%.obj : $(MISC)/%.c
     @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(INPATH)/misc/$(COMPILE_ECHO_FILE)
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
     @$(RM) $@ $(@:s/.obj/.o/)
     $(COMMAND_ECHO)$(CC) $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)/$*.o $(MISC)/$*.c
 .IF "$(OS)$(COM)"=="SOLARISC52" && "$(product)"=="full" && "$(debug)"==""
@@ -265,7 +265,7 @@ $(OBJ)/%.obj : $(MISC)/%.c
 
 $(SLO)/%.obj : $(MISC)/%.c
     @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(INPATH)/misc/$(COMPILE_ECHO_FILE)
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
     @$(RM) $@ $(@:s/.obj/.o/)
     $(COMMAND_ECHO)$(CC) $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(SLO)/$*.o $(MISC)/$*.c
 .IF "$(OS)$(COM)"=="SOLARISC52" && "$(product)"=="full" && "$(debug)"==""
@@ -288,7 +288,7 @@ $(SLO)/%.obj : $(MISC)/%.c
 
 $(SLO)/%.obj : %.c
     @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$(COMPILE_ECHO_FILE)
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
     @$(RM) $@ $(@:s/.obj/.o/)
     $(COMMAND_ECHO)$(CC) $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(SLO)/$*.o $*.c
 .IF "$(OS)$(COM)"=="SOLARISC52" && "$(product)"=="full" && "$(debug)"==""
@@ -474,20 +474,20 @@ $(MISC)/o_%.dpcc : %.m
 
 $(MISC)/s_%.dpcc : $(MISC)/%.m
     @@-$(RM) $@
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
     $(COMMAND_ECHO)$(MAKEDEPEND) -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< | sed s\#$(MISC)/\#\# > $@
-.ELSE			# "$(GUI)"=="UNX"
+.ELSE			# "$(OS)"!="WNT"
     $(COMMAND_ECHO)$(MAKEDEPEND) -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< | $(SED) s/$(MISC:s/\/\\/)\\// > $@
-.ENDIF			# "$(GUI)"=="UNX"
+.ENDIF			# "$(OS)"!="WNT"
     @echo $@ : $(SLO)/$(<:b).obj >> $@
 
 $(MISC)/o_%.dpcc : $(MISC)/%.m
     @@-$(RM) $@
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
     $(COMMAND_ECHO)$(MAKEDEPEND) -f - -p$(OBJ) $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< | sed s\#$(MISC)/\#\# > $@
-.ELSE			# "$(GUI)"=="UNX"
+.ELSE			# "$(OS)"!="WNT"
     $(COMMAND_ECHO)$(MAKEDEPEND) -f - -p$(OBJ) $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< | $(SED) s/$(MISC:s/\/\\/)\\// > $@
-.ENDIF			# "$(GUI)"=="UNX"
+.ENDIF			# "$(OS)"!="WNT"
     @echo $@ : $(OBJ)/$(<:b).obj >> $@
 
 # dependency dummy for *.s files
@@ -545,13 +545,13 @@ $(MISC)/%.dpz :
 $(MISC)/%.dpj :
     @echo "Making:   " $(@:f)
 .IF "$(nodep)"!=""
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
     @echo > $@
 .ELSE
     @$(ECHONL) > $@
 .ENDIF
 .ELSE 			# "$(ndep)"==""
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
     @echo $(shell @$(STARDEP) @$(mktmp -o $@ -i $(CLASSDIR) $(foreach,i,$(JAVADEPINCLUDES:s/:/ /) -i $i) $(JAVACLASSFILES)))
 .ELSE
     @echo javadeps

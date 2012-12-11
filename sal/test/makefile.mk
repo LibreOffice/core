@@ -33,7 +33,7 @@ CXXFLAGS+= $(LFS_CFLAGS)
 
 # ------------------------------------------------------------------
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 BOOTSTRAPSCRIPT=bootstrap.bat
 BOOTSTRAPINI=testbootstrap.ini
 MY_SCRIPTCAT=cat
@@ -73,7 +73,7 @@ ALL : ALLTAR \
       $(BIN)$/bootstrap.pl  
 
 
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 ALL:  $(BIN)$/$(APP2TARGET).exe \
       $(BIN)$/inirc \
       $(BIN)$/defaultrc
@@ -124,7 +124,7 @@ ALL: 	ALLDEP
 
 $(BIN)$/$(BOOTSTRAPSCRIPT) : $(BOOTSTRAPSCRIPT)
     $(MY_SCRIPTCAT) $(BOOTSTRAPSCRIPT) > $@
-.IF "$(GUI)"!="WNT"
+.IF "$(OS)"!="WNT"
     chmod ug+x $@
 .ENDIF
 

@@ -30,7 +30,7 @@ ENVINCPRE  := -I$(OUT)$/inc$/$(TARGET)
 
 APP1TARGET  := $(TARGET)
 APP1OBJS    := $(OBJ)$/loader.test.obj
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 APP1STDLIBS := iTestComponent.uno.lib
 .ELSE
 APP1STDLIBS := -lTestComponent.uno

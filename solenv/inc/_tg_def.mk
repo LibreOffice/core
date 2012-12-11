@@ -13,7 +13,7 @@ DEF1DEPN+=$(foreach,i,$(DEFLIB1NAME) $(SLB)/$(i).lib)
 
 .IF "$(SHL1VERSIONMAP)"!=""
 .IF "$(DEF1EXPORTFILE)"==""
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 DEF1EXPORTFILE=$(MISC)/$(SHL1VERSIONMAP:b)_$(SHL1TARGET).dxp
 .IF "$(COM)"=="GCC"
 $(DEF1EXPORTFILE) : $(SHL1OBJS) $(SHL1LIBS)
@@ -34,12 +34,12 @@ $(DEF1EXPORTFILE) : $(SHL1VERSIONMAP)
     $(COMMAND_ECHO)$(RENAME) $@.exported-symbols $@
 .ENDIF # .IF "$(COM)"=="GCC"
 
-.ENDIF			# "$(GUI)"=="WNT"
+.ENDIF			# "$(OS)"=="WNT"
 
 .ENDIF			# "$(DEF1EXPORTFILE)"==""
 .ENDIF			# "$(SHL1VERSIONMAP)"!=""
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 
 DEF1FILTER=$(SOLARENV)/inc/dummy.flt
 
@@ -155,9 +155,9 @@ $(DEF1TARGETN) .PHONY :
 .ENDIF
     $(COMMAND_ECHO)-$(RM) $@
     $(COMMAND_ECHO)$(RENAME) $@.tmpfile $@
-.ENDIF			# "$(GUI)"=="WNT"
+.ENDIF			# "$(OS)"=="WNT"
 
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 $(DEF1TARGETN): \
         $(DEF1DEPN) \
         $(DEF1EXPORTFILE)
@@ -182,7 +182,7 @@ DEF2DEPN+=$(foreach,i,$(DEFLIB2NAME) $(SLB)/$(i).lib)
 
 .IF "$(SHL2VERSIONMAP)"!=""
 .IF "$(DEF2EXPORTFILE)"==""
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 DEF2EXPORTFILE=$(MISC)/$(SHL2VERSIONMAP:b)_$(SHL2TARGET).dxp
 .IF "$(COM)"=="GCC"
 $(DEF2EXPORTFILE) : $(SHL2OBJS) $(SHL2LIBS)
@@ -203,12 +203,12 @@ $(DEF2EXPORTFILE) : $(SHL2VERSIONMAP)
     $(COMMAND_ECHO)$(RENAME) $@.exported-symbols $@
 .ENDIF # .IF "$(COM)"=="GCC"
 
-.ENDIF			# "$(GUI)"=="WNT"
+.ENDIF			# "$(OS)"=="WNT"
 
 .ENDIF			# "$(DEF2EXPORTFILE)"==""
 .ENDIF			# "$(SHL2VERSIONMAP)"!=""
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 
 DEF2FILTER=$(SOLARENV)/inc/dummy.flt
 
@@ -324,9 +324,9 @@ $(DEF2TARGETN) .PHONY :
 .ENDIF
     $(COMMAND_ECHO)-$(RM) $@
     $(COMMAND_ECHO)$(RENAME) $@.tmpfile $@
-.ENDIF			# "$(GUI)"=="WNT"
+.ENDIF			# "$(OS)"=="WNT"
 
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 $(DEF2TARGETN): \
         $(DEF2DEPN) \
         $(DEF2EXPORTFILE)
@@ -351,7 +351,7 @@ DEF3DEPN+=$(foreach,i,$(DEFLIB3NAME) $(SLB)/$(i).lib)
 
 .IF "$(SHL3VERSIONMAP)"!=""
 .IF "$(DEF3EXPORTFILE)"==""
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 DEF3EXPORTFILE=$(MISC)/$(SHL3VERSIONMAP:b)_$(SHL3TARGET).dxp
 .IF "$(COM)"=="GCC"
 $(DEF3EXPORTFILE) : $(SHL3OBJS) $(SHL3LIBS)
@@ -372,12 +372,12 @@ $(DEF3EXPORTFILE) : $(SHL3VERSIONMAP)
     $(COMMAND_ECHO)$(RENAME) $@.exported-symbols $@
 .ENDIF # .IF "$(COM)"=="GCC"
 
-.ENDIF			# "$(GUI)"=="WNT"
+.ENDIF			# "$(OS)"=="WNT"
 
 .ENDIF			# "$(DEF3EXPORTFILE)"==""
 .ENDIF			# "$(SHL3VERSIONMAP)"!=""
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 
 DEF3FILTER=$(SOLARENV)/inc/dummy.flt
 
@@ -493,9 +493,9 @@ $(DEF3TARGETN) .PHONY :
 .ENDIF
     $(COMMAND_ECHO)-$(RM) $@
     $(COMMAND_ECHO)$(RENAME) $@.tmpfile $@
-.ENDIF			# "$(GUI)"=="WNT"
+.ENDIF			# "$(OS)"=="WNT"
 
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 $(DEF3TARGETN): \
         $(DEF3DEPN) \
         $(DEF3EXPORTFILE)
@@ -520,7 +520,7 @@ DEF4DEPN+=$(foreach,i,$(DEFLIB4NAME) $(SLB)/$(i).lib)
 
 .IF "$(SHL4VERSIONMAP)"!=""
 .IF "$(DEF4EXPORTFILE)"==""
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 DEF4EXPORTFILE=$(MISC)/$(SHL4VERSIONMAP:b)_$(SHL4TARGET).dxp
 .IF "$(COM)"=="GCC"
 $(DEF4EXPORTFILE) : $(SHL4OBJS) $(SHL4LIBS)
@@ -541,12 +541,12 @@ $(DEF4EXPORTFILE) : $(SHL4VERSIONMAP)
     $(COMMAND_ECHO)$(RENAME) $@.exported-symbols $@
 .ENDIF # .IF "$(COM)"=="GCC"
 
-.ENDIF			# "$(GUI)"=="WNT"
+.ENDIF			# "$(OS)"=="WNT"
 
 .ENDIF			# "$(DEF4EXPORTFILE)"==""
 .ENDIF			# "$(SHL4VERSIONMAP)"!=""
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 
 DEF4FILTER=$(SOLARENV)/inc/dummy.flt
 
@@ -662,9 +662,9 @@ $(DEF4TARGETN) .PHONY :
 .ENDIF
     $(COMMAND_ECHO)-$(RM) $@
     $(COMMAND_ECHO)$(RENAME) $@.tmpfile $@
-.ENDIF			# "$(GUI)"=="WNT"
+.ENDIF			# "$(OS)"=="WNT"
 
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 $(DEF4TARGETN): \
         $(DEF4DEPN) \
         $(DEF4EXPORTFILE)
@@ -689,7 +689,7 @@ DEF5DEPN+=$(foreach,i,$(DEFLIB5NAME) $(SLB)/$(i).lib)
 
 .IF "$(SHL5VERSIONMAP)"!=""
 .IF "$(DEF5EXPORTFILE)"==""
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 DEF5EXPORTFILE=$(MISC)/$(SHL5VERSIONMAP:b)_$(SHL5TARGET).dxp
 .IF "$(COM)"=="GCC"
 $(DEF5EXPORTFILE) : $(SHL5OBJS) $(SHL5LIBS)
@@ -710,12 +710,12 @@ $(DEF5EXPORTFILE) : $(SHL5VERSIONMAP)
     $(COMMAND_ECHO)$(RENAME) $@.exported-symbols $@
 .ENDIF # .IF "$(COM)"=="GCC"
 
-.ENDIF			# "$(GUI)"=="WNT"
+.ENDIF			# "$(OS)"=="WNT"
 
 .ENDIF			# "$(DEF5EXPORTFILE)"==""
 .ENDIF			# "$(SHL5VERSIONMAP)"!=""
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 
 DEF5FILTER=$(SOLARENV)/inc/dummy.flt
 
@@ -831,9 +831,9 @@ $(DEF5TARGETN) .PHONY :
 .ENDIF
     $(COMMAND_ECHO)-$(RM) $@
     $(COMMAND_ECHO)$(RENAME) $@.tmpfile $@
-.ENDIF			# "$(GUI)"=="WNT"
+.ENDIF			# "$(OS)"=="WNT"
 
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 $(DEF5TARGETN): \
         $(DEF5DEPN) \
         $(DEF5EXPORTFILE)
@@ -858,7 +858,7 @@ DEF6DEPN+=$(foreach,i,$(DEFLIB6NAME) $(SLB)/$(i).lib)
 
 .IF "$(SHL6VERSIONMAP)"!=""
 .IF "$(DEF6EXPORTFILE)"==""
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 DEF6EXPORTFILE=$(MISC)/$(SHL6VERSIONMAP:b)_$(SHL6TARGET).dxp
 .IF "$(COM)"=="GCC"
 $(DEF6EXPORTFILE) : $(SHL6OBJS) $(SHL6LIBS)
@@ -879,12 +879,12 @@ $(DEF6EXPORTFILE) : $(SHL6VERSIONMAP)
     $(COMMAND_ECHO)$(RENAME) $@.exported-symbols $@
 .ENDIF # .IF "$(COM)"=="GCC"
 
-.ENDIF			# "$(GUI)"=="WNT"
+.ENDIF			# "$(OS)"=="WNT"
 
 .ENDIF			# "$(DEF6EXPORTFILE)"==""
 .ENDIF			# "$(SHL6VERSIONMAP)"!=""
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 
 DEF6FILTER=$(SOLARENV)/inc/dummy.flt
 
@@ -1000,9 +1000,9 @@ $(DEF6TARGETN) .PHONY :
 .ENDIF
     $(COMMAND_ECHO)-$(RM) $@
     $(COMMAND_ECHO)$(RENAME) $@.tmpfile $@
-.ENDIF			# "$(GUI)"=="WNT"
+.ENDIF			# "$(OS)"=="WNT"
 
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 $(DEF6TARGETN): \
         $(DEF6DEPN) \
         $(DEF6EXPORTFILE)
@@ -1027,7 +1027,7 @@ DEF7DEPN+=$(foreach,i,$(DEFLIB7NAME) $(SLB)/$(i).lib)
 
 .IF "$(SHL7VERSIONMAP)"!=""
 .IF "$(DEF7EXPORTFILE)"==""
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 DEF7EXPORTFILE=$(MISC)/$(SHL7VERSIONMAP:b)_$(SHL7TARGET).dxp
 .IF "$(COM)"=="GCC"
 $(DEF7EXPORTFILE) : $(SHL7OBJS) $(SHL7LIBS)
@@ -1048,12 +1048,12 @@ $(DEF7EXPORTFILE) : $(SHL7VERSIONMAP)
     $(COMMAND_ECHO)$(RENAME) $@.exported-symbols $@
 .ENDIF # .IF "$(COM)"=="GCC"
 
-.ENDIF			# "$(GUI)"=="WNT"
+.ENDIF			# "$(OS)"=="WNT"
 
 .ENDIF			# "$(DEF7EXPORTFILE)"==""
 .ENDIF			# "$(SHL7VERSIONMAP)"!=""
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 
 DEF7FILTER=$(SOLARENV)/inc/dummy.flt
 
@@ -1169,9 +1169,9 @@ $(DEF7TARGETN) .PHONY :
 .ENDIF
     $(COMMAND_ECHO)-$(RM) $@
     $(COMMAND_ECHO)$(RENAME) $@.tmpfile $@
-.ENDIF			# "$(GUI)"=="WNT"
+.ENDIF			# "$(OS)"=="WNT"
 
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 $(DEF7TARGETN): \
         $(DEF7DEPN) \
         $(DEF7EXPORTFILE)
@@ -1196,7 +1196,7 @@ DEF8DEPN+=$(foreach,i,$(DEFLIB8NAME) $(SLB)/$(i).lib)
 
 .IF "$(SHL8VERSIONMAP)"!=""
 .IF "$(DEF8EXPORTFILE)"==""
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 DEF8EXPORTFILE=$(MISC)/$(SHL8VERSIONMAP:b)_$(SHL8TARGET).dxp
 .IF "$(COM)"=="GCC"
 $(DEF8EXPORTFILE) : $(SHL8OBJS) $(SHL8LIBS)
@@ -1217,12 +1217,12 @@ $(DEF8EXPORTFILE) : $(SHL8VERSIONMAP)
     $(COMMAND_ECHO)$(RENAME) $@.exported-symbols $@
 .ENDIF # .IF "$(COM)"=="GCC"
 
-.ENDIF			# "$(GUI)"=="WNT"
+.ENDIF			# "$(OS)"=="WNT"
 
 .ENDIF			# "$(DEF8EXPORTFILE)"==""
 .ENDIF			# "$(SHL8VERSIONMAP)"!=""
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 
 DEF8FILTER=$(SOLARENV)/inc/dummy.flt
 
@@ -1338,9 +1338,9 @@ $(DEF8TARGETN) .PHONY :
 .ENDIF
     $(COMMAND_ECHO)-$(RM) $@
     $(COMMAND_ECHO)$(RENAME) $@.tmpfile $@
-.ENDIF			# "$(GUI)"=="WNT"
+.ENDIF			# "$(OS)"=="WNT"
 
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 $(DEF8TARGETN): \
         $(DEF8DEPN) \
         $(DEF8EXPORTFILE)
@@ -1365,7 +1365,7 @@ DEF9DEPN+=$(foreach,i,$(DEFLIB9NAME) $(SLB)/$(i).lib)
 
 .IF "$(SHL9VERSIONMAP)"!=""
 .IF "$(DEF9EXPORTFILE)"==""
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 DEF9EXPORTFILE=$(MISC)/$(SHL9VERSIONMAP:b)_$(SHL9TARGET).dxp
 .IF "$(COM)"=="GCC"
 $(DEF9EXPORTFILE) : $(SHL9OBJS) $(SHL9LIBS)
@@ -1386,12 +1386,12 @@ $(DEF9EXPORTFILE) : $(SHL9VERSIONMAP)
     $(COMMAND_ECHO)$(RENAME) $@.exported-symbols $@
 .ENDIF # .IF "$(COM)"=="GCC"
 
-.ENDIF			# "$(GUI)"=="WNT"
+.ENDIF			# "$(OS)"=="WNT"
 
 .ENDIF			# "$(DEF9EXPORTFILE)"==""
 .ENDIF			# "$(SHL9VERSIONMAP)"!=""
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 
 DEF9FILTER=$(SOLARENV)/inc/dummy.flt
 
@@ -1507,9 +1507,9 @@ $(DEF9TARGETN) .PHONY :
 .ENDIF
     $(COMMAND_ECHO)-$(RM) $@
     $(COMMAND_ECHO)$(RENAME) $@.tmpfile $@
-.ENDIF			# "$(GUI)"=="WNT"
+.ENDIF			# "$(OS)"=="WNT"
 
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 $(DEF9TARGETN): \
         $(DEF9DEPN) \
         $(DEF9EXPORTFILE)
@@ -1534,7 +1534,7 @@ DEF10DEPN+=$(foreach,i,$(DEFLIB10NAME) $(SLB)/$(i).lib)
 
 .IF "$(SHL10VERSIONMAP)"!=""
 .IF "$(DEF10EXPORTFILE)"==""
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 DEF10EXPORTFILE=$(MISC)/$(SHL10VERSIONMAP:b)_$(SHL10TARGET).dxp
 .IF "$(COM)"=="GCC"
 $(DEF10EXPORTFILE) : $(SHL10OBJS) $(SHL10LIBS)
@@ -1555,12 +1555,12 @@ $(DEF10EXPORTFILE) : $(SHL10VERSIONMAP)
     $(COMMAND_ECHO)$(RENAME) $@.exported-symbols $@
 .ENDIF # .IF "$(COM)"=="GCC"
 
-.ENDIF			# "$(GUI)"=="WNT"
+.ENDIF			# "$(OS)"=="WNT"
 
 .ENDIF			# "$(DEF10EXPORTFILE)"==""
 .ENDIF			# "$(SHL10VERSIONMAP)"!=""
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 
 DEF10FILTER=$(SOLARENV)/inc/dummy.flt
 
@@ -1676,9 +1676,9 @@ $(DEF10TARGETN) .PHONY :
 .ENDIF
     $(COMMAND_ECHO)-$(RM) $@
     $(COMMAND_ECHO)$(RENAME) $@.tmpfile $@
-.ENDIF			# "$(GUI)"=="WNT"
+.ENDIF			# "$(OS)"=="WNT"
 
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 $(DEF10TARGETN): \
         $(DEF10DEPN) \
         $(DEF10EXPORTFILE)

@@ -40,9 +40,9 @@ signing.done :
 .ELSE  # "$(product)"=="full"
     @echo Doing nothing on non product builds ...
 .ENDIF # "$(product)"=="full"
-.ELSE  # "$(GUI)"=="MSC"
+.ELSE  # "$(OS)"=="WNT"
     @echo Nothing to do, signing is Windows \(MSC\) only.
-.ENDIF # "$(GUI)"=="MSC"
+.ENDIF # "$(OS)"=="WNT"
 .ELSE  # "$(WINDOWS_BUILD_SIGNING)"=="TRUE"
     @echo Doing nothing. Windows build signing is disabled ...
 .ENDIF # "$(WINDOWS_BUILD_SIGNING)"=="TRUE"

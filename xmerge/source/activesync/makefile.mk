@@ -29,7 +29,7 @@ SOLARINC+=-I$(POCKETPCSDK_HOME)$/support$/ActiveSync$/inc
 .INCLUDE: settings.mk  
 
 .IF 0
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
 .IF "$(POCKETPCSDK_HOME)" != ""
 
 RCFILES=XMergeSync.rc
@@ -57,6 +57,6 @@ SHL1STDLIBS= uuid.lib Advapi32.lib
 .INCLUDE :  target.mk 
 
 ALLTAR :
-    .IF "$(GUI)" == "WNT"
+    .IF "$(OS)" == "WNT"
         $(COPY) BIN$/xmergesync.dll $(BIN)
     .ENDIF

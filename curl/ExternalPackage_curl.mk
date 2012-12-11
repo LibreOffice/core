@@ -11,7 +11,7 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,curl,curl))
 
 $(eval $(call gb_ExternalPackage_use_external_project,curl,curl))
 
-ifeq ($(GUI),UNX)
+ifneq ($(OS),WNT)
 
 ifeq ($(COM),GCC)
 $(eval $(call gb_ExternalPackage_add_file,curl,lib/pkgconfig/libcurl.pc,libcurl.pc))

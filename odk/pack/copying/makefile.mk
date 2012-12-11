@@ -52,12 +52,12 @@ EXELIST += \
 	$(DESTDIRBIN)/ucpp$(EXEPOSTFIX)
 .ENDIF
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 EXELIST += \
     $(DESTDIRBIN)/climaker$(EXEPOSTFIX)
 .ENDIF
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 CLILIST = \
     $(DESTDIRCLI)/cli_basetypes.dll 	\
     $(DESTDIRCLI)/cli_uretypes.dll 	\
@@ -67,7 +67,7 @@ CLILIST = \
 .ENDIF
 
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 LIBLIST = \
     $(DESTDIRLIB)/istore.lib 	\
     $(DESTDIRLIB)/ireg.lib 	\
@@ -99,11 +99,11 @@ SETTINGSLIST= \
     $(DESTDIRSETTINGS)/dk.mk
 
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 SETTINGSLIST+=$(DESTDIRSETTINGS)/component.uno.def
 .ENDIF
 
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 SETTINGSLIST+=$(DESTDIRSETTINGS)/component.uno.map
 .ENDIF
 
@@ -140,7 +140,7 @@ DOCUFILES= \
     $(DESTDIRDOCUIMAGES)/sdk_line-1.gif \
     $(DESTDIRDOCUIMAGES)/sdk_line-2.gif
 
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 INSTALLSCRIPT= \
     $(DESTDIR)/config.guess \
     $(DESTDIR)/config.sub \

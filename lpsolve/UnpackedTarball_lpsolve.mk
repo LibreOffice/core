@@ -13,7 +13,7 @@ $(eval $(call gb_UnpackedTarball_set_tarball,lpsolve,$(LPSOLVE_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,lpsolve,3))
 
-ifeq ($(GUI_FOR_BUILD),WNT)
+ifeq ($(OS_FOR_BUILD),WNT)
 
 $(eval $(call gb_UnpackedTarball_add_patches,lpsolve,\
 	lpsolve/lp_solve_5.5-windows.patch \

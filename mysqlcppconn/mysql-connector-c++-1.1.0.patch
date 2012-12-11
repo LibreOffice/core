@@ -114,7 +114,7 @@
  	NonScrollableException(const std::string& reason) : SQLException(reason, "", 0) {}
 --- misc/mysql-connector-c++-1.1.0/driver/makefile.mk	2009-09-11 09:42:34.087202551 +0200
 +++ misc/build/mysql-connector-c++-1.1.0/driver/makefile.mk	2009-09-11 09:42:25.902286382 +0200
-@@ -1 +1,64 @@
+@@ -1,1 +1,64 @@
 -dummy
 +PRJ=..$/..$/..$/..$/..
 +
@@ -131,7 +131,7 @@
 +
 +# --- Files --------------------------------------------------------
 +
-+.IF "$(GUI)-$(OS)-$(RTL_ARCH)" == "UNX-LINUX-x86"
++.IF "$(OS)-$(RTL_ARCH)" == "LINUX-x86"
 +    SHL1NOCHECK=TRUE
 +.ENDIF
 +SHL1TARGET=$(TARGET)

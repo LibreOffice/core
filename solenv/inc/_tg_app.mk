@@ -36,14 +36,14 @@ APP1STDLIB+= -lvclmain
 .ENDIF
 .ENDIF
 
-.IF "$(GUI)$(COM)" == "WNTGCC"
+.IF "$(OS)$(COM)" == "WNTGCC"
 APP1RESO=
 .IF "$(APP1LINKRES)" != "" || "$(APP1RES)" != ""
 APP1RESO=$(MISC)/$(APP1TARGET:b)_res.o
 .ENDIF
 .ENDIF
 
-.IF "$(GUI)" == "UNX"
+.IF "$(OS)" != "WNT"
 APP1DEPN+:=$(APP1DEPNU)
 USE_APP1DEF=
 .ENDIF
@@ -55,7 +55,7 @@ APP1PRODUCTDEF+:=-DPRODUCT_NAME=\"$(APP1PRODUCTNAME)\"
 .ENDIF			# "$(APP1PRODUCTNAME)"!=""
 
 .IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 .IF "$(APP1LIBS)"!=""
 $(MISC)/$(APP1TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
@@ -74,7 +74,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     $(APP1RES) \
     $(APP1ICON) $(APP1DEPN) $(USE_APP1DEF)
     @echo "Making:   " $(@:f)
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 .IF "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_1.cmd
@@ -114,7 +114,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
   .ENDIF
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
     @@-$(MKDIR) $(@:d:d)
 .IF "$(APP1LINKRES)" != ""
     @@-$(RM) $(MISC)/$(APP1LINKRES:b).rc
@@ -202,7 +202,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     $(COMMAND_ECHO)$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"
 
-.ENDIF			# "$(GUI)" == "WNT"
+.ENDIF			# "$(OS)" == "WNT"
 
 .ENDIF			# "$(APP1TARGETN)"!=""
 
@@ -246,14 +246,14 @@ APP2STDLIB+= -lvclmain
 .ENDIF
 .ENDIF
 
-.IF "$(GUI)$(COM)" == "WNTGCC"
+.IF "$(OS)$(COM)" == "WNTGCC"
 APP2RESO=
 .IF "$(APP2LINKRES)" != "" || "$(APP2RES)" != ""
 APP2RESO=$(MISC)/$(APP2TARGET:b)_res.o
 .ENDIF
 .ENDIF
 
-.IF "$(GUI)" == "UNX"
+.IF "$(OS)" != "WNT"
 APP2DEPN+:=$(APP2DEPNU)
 USE_APP2DEF=
 .ENDIF
@@ -265,7 +265,7 @@ APP2PRODUCTDEF+:=-DPRODUCT_NAME=\"$(APP2PRODUCTNAME)\"
 .ENDIF			# "$(APP2PRODUCTNAME)"!=""
 
 .IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 .IF "$(APP2LIBS)"!=""
 $(MISC)/$(APP2TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
@@ -284,7 +284,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     $(APP2RES) \
     $(APP2ICON) $(APP2DEPN) $(USE_APP2DEF)
     @echo "Making:   " $(@:f)
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 .IF "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_2.cmd
@@ -324,7 +324,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
   .ENDIF
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
     @@-$(MKDIR) $(@:d:d)
 .IF "$(APP2LINKRES)" != ""
     @@-$(RM) $(MISC)/$(APP2LINKRES:b).rc
@@ -412,7 +412,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     $(COMMAND_ECHO)$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"
 
-.ENDIF			# "$(GUI)" == "WNT"
+.ENDIF			# "$(OS)" == "WNT"
 
 .ENDIF			# "$(APP2TARGETN)"!=""
 
@@ -456,14 +456,14 @@ APP3STDLIB+= -lvclmain
 .ENDIF
 .ENDIF
 
-.IF "$(GUI)$(COM)" == "WNTGCC"
+.IF "$(OS)$(COM)" == "WNTGCC"
 APP3RESO=
 .IF "$(APP3LINKRES)" != "" || "$(APP3RES)" != ""
 APP3RESO=$(MISC)/$(APP3TARGET:b)_res.o
 .ENDIF
 .ENDIF
 
-.IF "$(GUI)" == "UNX"
+.IF "$(OS)" != "WNT"
 APP3DEPN+:=$(APP3DEPNU)
 USE_APP3DEF=
 .ENDIF
@@ -475,7 +475,7 @@ APP3PRODUCTDEF+:=-DPRODUCT_NAME=\"$(APP3PRODUCTNAME)\"
 .ENDIF			# "$(APP3PRODUCTNAME)"!=""
 
 .IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 .IF "$(APP3LIBS)"!=""
 $(MISC)/$(APP3TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
@@ -494,7 +494,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     $(APP3RES) \
     $(APP3ICON) $(APP3DEPN) $(USE_APP3DEF)
     @echo "Making:   " $(@:f)
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 .IF "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_3.cmd
@@ -534,7 +534,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
   .ENDIF
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
     @@-$(MKDIR) $(@:d:d)
 .IF "$(APP3LINKRES)" != ""
     @@-$(RM) $(MISC)/$(APP3LINKRES:b).rc
@@ -622,7 +622,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     $(COMMAND_ECHO)$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"
 
-.ENDIF			# "$(GUI)" == "WNT"
+.ENDIF			# "$(OS)" == "WNT"
 
 .ENDIF			# "$(APP3TARGETN)"!=""
 
@@ -666,14 +666,14 @@ APP4STDLIB+= -lvclmain
 .ENDIF
 .ENDIF
 
-.IF "$(GUI)$(COM)" == "WNTGCC"
+.IF "$(OS)$(COM)" == "WNTGCC"
 APP4RESO=
 .IF "$(APP4LINKRES)" != "" || "$(APP4RES)" != ""
 APP4RESO=$(MISC)/$(APP4TARGET:b)_res.o
 .ENDIF
 .ENDIF
 
-.IF "$(GUI)" == "UNX"
+.IF "$(OS)" != "WNT"
 APP4DEPN+:=$(APP4DEPNU)
 USE_APP4DEF=
 .ENDIF
@@ -685,7 +685,7 @@ APP4PRODUCTDEF+:=-DPRODUCT_NAME=\"$(APP4PRODUCTNAME)\"
 .ENDIF			# "$(APP4PRODUCTNAME)"!=""
 
 .IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 .IF "$(APP4LIBS)"!=""
 $(MISC)/$(APP4TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
@@ -704,7 +704,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     $(APP4RES) \
     $(APP4ICON) $(APP4DEPN) $(USE_APP4DEF)
     @echo "Making:   " $(@:f)
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 .IF "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_4.cmd
@@ -744,7 +744,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
   .ENDIF
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
     @@-$(MKDIR) $(@:d:d)
 .IF "$(APP4LINKRES)" != ""
     @@-$(RM) $(MISC)/$(APP4LINKRES:b).rc
@@ -832,7 +832,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     $(COMMAND_ECHO)$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"
 
-.ENDIF			# "$(GUI)" == "WNT"
+.ENDIF			# "$(OS)" == "WNT"
 
 .ENDIF			# "$(APP4TARGETN)"!=""
 
@@ -876,14 +876,14 @@ APP5STDLIB+= -lvclmain
 .ENDIF
 .ENDIF
 
-.IF "$(GUI)$(COM)" == "WNTGCC"
+.IF "$(OS)$(COM)" == "WNTGCC"
 APP5RESO=
 .IF "$(APP5LINKRES)" != "" || "$(APP5RES)" != ""
 APP5RESO=$(MISC)/$(APP5TARGET:b)_res.o
 .ENDIF
 .ENDIF
 
-.IF "$(GUI)" == "UNX"
+.IF "$(OS)" != "WNT"
 APP5DEPN+:=$(APP5DEPNU)
 USE_APP5DEF=
 .ENDIF
@@ -895,7 +895,7 @@ APP5PRODUCTDEF+:=-DPRODUCT_NAME=\"$(APP5PRODUCTNAME)\"
 .ENDIF			# "$(APP5PRODUCTNAME)"!=""
 
 .IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 .IF "$(APP5LIBS)"!=""
 $(MISC)/$(APP5TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
@@ -914,7 +914,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     $(APP5RES) \
     $(APP5ICON) $(APP5DEPN) $(USE_APP5DEF)
     @echo "Making:   " $(@:f)
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 .IF "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_5.cmd
@@ -954,7 +954,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
   .ENDIF
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
     @@-$(MKDIR) $(@:d:d)
 .IF "$(APP5LINKRES)" != ""
     @@-$(RM) $(MISC)/$(APP5LINKRES:b).rc
@@ -1042,7 +1042,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     $(COMMAND_ECHO)$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"
 
-.ENDIF			# "$(GUI)" == "WNT"
+.ENDIF			# "$(OS)" == "WNT"
 
 .ENDIF			# "$(APP5TARGETN)"!=""
 
@@ -1086,14 +1086,14 @@ APP6STDLIB+= -lvclmain
 .ENDIF
 .ENDIF
 
-.IF "$(GUI)$(COM)" == "WNTGCC"
+.IF "$(OS)$(COM)" == "WNTGCC"
 APP6RESO=
 .IF "$(APP6LINKRES)" != "" || "$(APP6RES)" != ""
 APP6RESO=$(MISC)/$(APP6TARGET:b)_res.o
 .ENDIF
 .ENDIF
 
-.IF "$(GUI)" == "UNX"
+.IF "$(OS)" != "WNT"
 APP6DEPN+:=$(APP6DEPNU)
 USE_APP6DEF=
 .ENDIF
@@ -1105,7 +1105,7 @@ APP6PRODUCTDEF+:=-DPRODUCT_NAME=\"$(APP6PRODUCTNAME)\"
 .ENDIF			# "$(APP6PRODUCTNAME)"!=""
 
 .IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 .IF "$(APP6LIBS)"!=""
 $(MISC)/$(APP6TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
@@ -1124,7 +1124,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     $(APP6RES) \
     $(APP6ICON) $(APP6DEPN) $(USE_APP6DEF)
     @echo "Making:   " $(@:f)
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 .IF "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_6.cmd
@@ -1164,7 +1164,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
   .ENDIF
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
     @@-$(MKDIR) $(@:d:d)
 .IF "$(APP6LINKRES)" != ""
     @@-$(RM) $(MISC)/$(APP6LINKRES:b).rc
@@ -1252,7 +1252,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     $(COMMAND_ECHO)$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"
 
-.ENDIF			# "$(GUI)" == "WNT"
+.ENDIF			# "$(OS)" == "WNT"
 
 .ENDIF			# "$(APP6TARGETN)"!=""
 
@@ -1296,14 +1296,14 @@ APP7STDLIB+= -lvclmain
 .ENDIF
 .ENDIF
 
-.IF "$(GUI)$(COM)" == "WNTGCC"
+.IF "$(OS)$(COM)" == "WNTGCC"
 APP7RESO=
 .IF "$(APP7LINKRES)" != "" || "$(APP7RES)" != ""
 APP7RESO=$(MISC)/$(APP7TARGET:b)_res.o
 .ENDIF
 .ENDIF
 
-.IF "$(GUI)" == "UNX"
+.IF "$(OS)" != "WNT"
 APP7DEPN+:=$(APP7DEPNU)
 USE_APP7DEF=
 .ENDIF
@@ -1315,7 +1315,7 @@ APP7PRODUCTDEF+:=-DPRODUCT_NAME=\"$(APP7PRODUCTNAME)\"
 .ENDIF			# "$(APP7PRODUCTNAME)"!=""
 
 .IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 .IF "$(APP7LIBS)"!=""
 $(MISC)/$(APP7TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
@@ -1334,7 +1334,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     $(APP7RES) \
     $(APP7ICON) $(APP7DEPN) $(USE_APP7DEF)
     @echo "Making:   " $(@:f)
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 .IF "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_7.cmd
@@ -1374,7 +1374,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
   .ENDIF
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
     @@-$(MKDIR) $(@:d:d)
 .IF "$(APP7LINKRES)" != ""
     @@-$(RM) $(MISC)/$(APP7LINKRES:b).rc
@@ -1462,7 +1462,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     $(COMMAND_ECHO)$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"
 
-.ENDIF			# "$(GUI)" == "WNT"
+.ENDIF			# "$(OS)" == "WNT"
 
 .ENDIF			# "$(APP7TARGETN)"!=""
 
@@ -1506,14 +1506,14 @@ APP8STDLIB+= -lvclmain
 .ENDIF
 .ENDIF
 
-.IF "$(GUI)$(COM)" == "WNTGCC"
+.IF "$(OS)$(COM)" == "WNTGCC"
 APP8RESO=
 .IF "$(APP8LINKRES)" != "" || "$(APP8RES)" != ""
 APP8RESO=$(MISC)/$(APP8TARGET:b)_res.o
 .ENDIF
 .ENDIF
 
-.IF "$(GUI)" == "UNX"
+.IF "$(OS)" != "WNT"
 APP8DEPN+:=$(APP8DEPNU)
 USE_APP8DEF=
 .ENDIF
@@ -1525,7 +1525,7 @@ APP8PRODUCTDEF+:=-DPRODUCT_NAME=\"$(APP8PRODUCTNAME)\"
 .ENDIF			# "$(APP8PRODUCTNAME)"!=""
 
 .IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 .IF "$(APP8LIBS)"!=""
 $(MISC)/$(APP8TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
@@ -1544,7 +1544,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     $(APP8RES) \
     $(APP8ICON) $(APP8DEPN) $(USE_APP8DEF)
     @echo "Making:   " $(@:f)
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 .IF "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_8.cmd
@@ -1584,7 +1584,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
   .ENDIF
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
     @@-$(MKDIR) $(@:d:d)
 .IF "$(APP8LINKRES)" != ""
     @@-$(RM) $(MISC)/$(APP8LINKRES:b).rc
@@ -1672,7 +1672,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     $(COMMAND_ECHO)$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"
 
-.ENDIF			# "$(GUI)" == "WNT"
+.ENDIF			# "$(OS)" == "WNT"
 
 .ENDIF			# "$(APP8TARGETN)"!=""
 
@@ -1716,14 +1716,14 @@ APP9STDLIB+= -lvclmain
 .ENDIF
 .ENDIF
 
-.IF "$(GUI)$(COM)" == "WNTGCC"
+.IF "$(OS)$(COM)" == "WNTGCC"
 APP9RESO=
 .IF "$(APP9LINKRES)" != "" || "$(APP9RES)" != ""
 APP9RESO=$(MISC)/$(APP9TARGET:b)_res.o
 .ENDIF
 .ENDIF
 
-.IF "$(GUI)" == "UNX"
+.IF "$(OS)" != "WNT"
 APP9DEPN+:=$(APP9DEPNU)
 USE_APP9DEF=
 .ENDIF
@@ -1735,7 +1735,7 @@ APP9PRODUCTDEF+:=-DPRODUCT_NAME=\"$(APP9PRODUCTNAME)\"
 .ENDIF			# "$(APP9PRODUCTNAME)"!=""
 
 .IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 .IF "$(APP9LIBS)"!=""
 $(MISC)/$(APP9TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
@@ -1754,7 +1754,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     $(APP9RES) \
     $(APP9ICON) $(APP9DEPN) $(USE_APP9DEF)
     @echo "Making:   " $(@:f)
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 .IF "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_9.cmd
@@ -1794,7 +1794,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
   .ENDIF
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
     @@-$(MKDIR) $(@:d:d)
 .IF "$(APP9LINKRES)" != ""
     @@-$(RM) $(MISC)/$(APP9LINKRES:b).rc
@@ -1882,7 +1882,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     $(COMMAND_ECHO)$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"
 
-.ENDIF			# "$(GUI)" == "WNT"
+.ENDIF			# "$(OS)" == "WNT"
 
 .ENDIF			# "$(APP9TARGETN)"!=""
 
@@ -1926,14 +1926,14 @@ APP10STDLIB+= -lvclmain
 .ENDIF
 .ENDIF
 
-.IF "$(GUI)$(COM)" == "WNTGCC"
+.IF "$(OS)$(COM)" == "WNTGCC"
 APP10RESO=
 .IF "$(APP10LINKRES)" != "" || "$(APP10RES)" != ""
 APP10RESO=$(MISC)/$(APP10TARGET:b)_res.o
 .ENDIF
 .ENDIF
 
-.IF "$(GUI)" == "UNX"
+.IF "$(OS)" != "WNT"
 APP10DEPN+:=$(APP10DEPNU)
 USE_APP10DEF=
 .ENDIF
@@ -1945,7 +1945,7 @@ APP10PRODUCTDEF+:=-DPRODUCT_NAME=\"$(APP10PRODUCTNAME)\"
 .ENDIF			# "$(APP10PRODUCTNAME)"!=""
 
 .IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 .IF "$(APP10LIBS)"!=""
 $(MISC)/$(APP10TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
@@ -1964,7 +1964,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     $(APP10RES) \
     $(APP10ICON) $(APP10DEPN) $(USE_APP10DEF)
     @echo "Making:   " $(@:f)
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 .IF "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_10.cmd
@@ -2004,7 +2004,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
   .ENDIF
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
     @@-$(MKDIR) $(@:d:d)
 .IF "$(APP10LINKRES)" != ""
     @@-$(RM) $(MISC)/$(APP10LINKRES:b).rc
@@ -2092,7 +2092,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     $(COMMAND_ECHO)$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"
 
-.ENDIF			# "$(GUI)" == "WNT"
+.ENDIF			# "$(OS)" == "WNT"
 
 .ENDIF			# "$(APP10TARGETN)"!=""
 

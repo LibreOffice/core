@@ -67,7 +67,7 @@ CT_NOOFFICE = -NoOffice
 # --- Targets ------------------------------------------------------
 
 RUN:
-.IF "$(GUI)"=="WNT" 
+.IF "$(OS)"=="WNT" 
     java -cp $(CLASSPATH) -Dcli_test=$(EXETARGET) -Dcli_test_arg=$(EXEARG) $(CT_APP) $(CT_NOOFFICE) $(CT_TESTBASE) $(CT_TEST) 	
 .ENDIF
 run: RUN

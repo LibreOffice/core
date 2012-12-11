@@ -76,7 +76,7 @@ $(eval $(call gb_Library_use_externals,cui,\
     icuuc \
 ))
 
-ifeq ($(GUI),WNT)
+ifeq ($(OS),WNT)
 $(eval $(call gb_Library_use_system_win32_libs,cui,\
     advapi32 \
     shlwapi \
@@ -207,7 +207,7 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/uno/services \
 ))
 
-ifeq ($(GUI),WNT)
+ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/dialogs/winpluginlib \
 ))

@@ -19,7 +19,7 @@
 +pic=
 +ldflags=
 +inline=
-+if [ "$GUI" = "WNT" -a "$COM" = "GCC" ]; then
++if [ "$OS" = "WNT" -a "$COM" = "GCC" ]; then
 +     so=dll
 +     a=dll.a
 +     inline=-DINLINE=static

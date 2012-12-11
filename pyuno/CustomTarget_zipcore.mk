@@ -29,7 +29,7 @@ $(eval $(call gb_CustomTarget_CustomTarget,pyuno/zipcore))
 # system python (only mingw)
 ifeq ($(SYSTEM_PYTHON),YES)
 # mingw: MINGW_SYSROOT is defined in configure
-ifeq ($(GUI)$(COM),WNTGCC)
+ifeq ($(OS)$(COM),WNTGCC)
 pyuno_PYTHON_LIB_DIR=$(MINGW_SYSROOT)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)
 endif
 else

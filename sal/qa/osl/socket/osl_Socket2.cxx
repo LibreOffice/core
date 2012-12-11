@@ -21,13 +21,13 @@
     1. the BSD socket function will meet "unresolved external symbol error" on Windows platform
     if you are not including ws2_32.lib in makefile.mk,  the including format will be like this:
 
-    .IF "$(GUI)" == "WNT"
+    .IF "$(OS)" == "WNT"
     SHL1STDLIBS +=  $(SOLARLIBDIR)$/cppunit.lib
     SHL1STDLIBS +=  ws2_32.lib
     .ENDIF
 
     likewise on Solaris platform.
-    .IF "$(GUI)" == "UNX"
+    .IF "$(OS)" != "WNT"
     SHL1STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a
     SHL1STDLIBS += -lsocket -ldl -lnsl
     .ENDIF

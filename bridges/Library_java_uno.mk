@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Library_Library,java_uno))
 
-ifeq ($(GUI)$(COM),WNTGCC)
+ifeq ($(OS)$(COM),WNTGCC)
 ifeq ($(EXCEPTIONS),sjlj)
 $(eval $(call gb_Library_add_defs,java_uno,\
 	-DBROKEN_ALLOCA \

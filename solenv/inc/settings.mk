@@ -270,7 +270,7 @@ ZIPDEP:="zipdep.pl"
 # ---------------------------------------------------------------------------
 
 DMAKE_WORK_DIR*:=$(subst,/,/ $(PWD))
-.IF "$(GUI_FOR_BUILD)"=="WNT"
+.IF "$(OS_FOR_BUILD)"=="WNT"
 posix_PWD:=/cygdrive/$(PWD:s/://)
 .ELSE
 posix_PWD:=$(PWD)
@@ -531,12 +531,12 @@ ROUT=$(OUTPATH).tt
 .ENDIF
 
 .IF "$(PRJ)"!="."
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 PATH_IN_MODULE:=\
     $(subst,$(normpath $(shell @+cd $(PRJ) && pwd $(PWDFLAGS)))/, $(PWD))
-.ELSE			# "$(GUI)"=="WNT"
+.ELSE			# "$(OS)"=="WNT"
 PATH_IN_MODULE:=$(subst,$(shell @+cd $(PRJ) && pwd $(PWDFLAGS))/, $(PWD))
-.ENDIF			# "$(GUI)"=="WNT"
+.ENDIF			# "$(OS)"=="WNT"
 .ELSE			# "$(PRJ)"!="."
 PATH_IN_MODULE:=
 .ENDIF			# "$(PRJ)"!="."
@@ -636,19 +636,19 @@ PROCESSOUT*:=$(MISC)
 # Makros fuer die Librarynamen des Solar
 .INCLUDE : libs.mk
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 VERSIONOBJ=$(SLO)/_version.obj
 .ENDIF
 
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 VERSIONOBJ=$(SLO)/_version.o
 .ENDIF
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 WINVERSIONNAMES=$(UNIXVERSIONNAMES)
-.ENDIF			# "$(GUI)"=="WNT"
+.ENDIF			# "$(OS)"=="WNT"
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
 SHELLLIB=-lgdi32 -lshell32 -ladvapi32 -lcomdlg32
 .ELSE
@@ -764,7 +764,7 @@ LIB:=$(LB);$(SLB);$(ILIB)
 .ENDIF
 
 # extend library path for MinGW Compiler
-.IF "$(GUI)$(COM)"=="WNTGCC"
+.IF "$(OS)$(COM)"=="WNTGCC"
 LIB:=$(LB);$(BIN);$(ILIB)
 .ENDIF
 
@@ -913,11 +913,11 @@ LNT=$(DEVROOT)/lint/lint
 LNTFLAGS=+v -i$(DEVROOT)/lint/ -mL options.lnt -u
 LNTFLAGSOUTOBJ=-os
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 .INCLUDE : wnt.mk
 .ENDIF
 
-.IF "$(GUI)" == "UNX"
+.IF "$(OS)" != "WNT"
 .INCLUDE : unx.mk
 .ENDIF
 

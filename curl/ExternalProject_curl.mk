@@ -15,7 +15,7 @@ $(eval $(call gb_ExternalProject_register_targets,curl,\
 	build \
 ))
 
-ifeq ($(GUI),UNX)
+ifneq ($(OS),WNT)
 
 $(call gb_ExternalProject_get_state_target,curl,build):
 	cd $(EXTERNAL_WORKDIR) \

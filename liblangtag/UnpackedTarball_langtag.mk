@@ -42,7 +42,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,langtag,\
 ))
 endif
 
-ifeq ($(GUI),WNT)
+ifeq ($(OS),WNT)
 ifeq ($(COM),GCC)
 $(eval $(call gb_UnpackedTarball_add_patches,langtag,\
 	liblangtag/liblangtag-0.4.0-mingw.patch \

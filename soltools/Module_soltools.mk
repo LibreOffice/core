@@ -16,7 +16,7 @@ $(eval $(call gb_Module_add_targets,soltools,\
     Executable_makedepend \
 ))
 
-ifeq ($(GUI),UNX)
+ifneq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,soltools,\
     Executable_checkdll \
 ))
@@ -30,7 +30,7 @@ endif # SOLARISC52
 
 endif # CROSS_COMPILING
 
-ifeq ($(GUI)$(COM),WNTMSC)
+ifeq ($(OS)$(COM),WNTMSC)
 $(eval $(call gb_Module_add_targets,soltools,\
     Executable_ldump4 \
     Package_inc \

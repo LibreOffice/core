@@ -40,16 +40,13 @@ sub create_pathvariables
     my %variables = ();
 
     # The following variables are needed in the path file list
-    # solarpath, solarenvpath, solarcommonpath, os, osdef, pmiscpath
+    # solarpath, solarenvpath, solarcommonpath, os, pmiscpath
 
     my $solarpath = $environment->{'SOLARVERSION'} . $installer::globals::separator . $installer::globals::compiler . $installer::globals::productextension;
     $variables{'solarpath'} = $solarpath;
 
     my $solarcommonpath = $environment->{'SOLARVERSION'} . $installer::globals::separator . "common" . $installer::globals::productextension;
     $variables{'solarcommonpath'} = $solarcommonpath;
-
-    my $osdef = lc($environment->{'GUI'});
-    $variables{'osdef'} = $osdef;
 
     $variables{'os'} = $installer::globals::compiler;
 

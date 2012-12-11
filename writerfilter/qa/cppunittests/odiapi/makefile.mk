@@ -36,9 +36,9 @@ SHL1OBJS=\
 SHL1TARGET=$(TARGET)
 SHL1STDLIBS=$(SALLIB) $(TOOLSLIB) $(CPPUNITLIB)
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 SHL1STDLIBS+=   $(LB)$/iodiapi.lib
-.ELIF "$(GUI)"=="UNX" && "$(OS)"!="MACOSX"
+.ELIF "$(OS)"!="WNT" && "$(OS)"!="MACOSX"
 SHL1STDLIBS+=$(LB)$/libodiapi.so
 .ELIF "$(OS)"=="MACOSX"
 SHL1STDLIBS+=$(LB)$/libodiapi.dylib
