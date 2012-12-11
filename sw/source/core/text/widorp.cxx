@@ -193,7 +193,7 @@ sal_Bool SwTxtFrmBreak::IsBreakNow( SwTxtMargin &rLine )
          */
         // 6010: include DropLines
 
-        sal_Bool bFirstLine = 1 == rLine.GetLineNr() && !rLine.GetPrev();
+        bool bFirstLine = 1 == rLine.GetLineNr() && !rLine.GetPrev();
         bBreak = sal_True;
         if( ( bFirstLine && pFrm->GetIndPrev() )
             || ( rLine.GetLineNr() <= rLine.GetDropLines() ) )

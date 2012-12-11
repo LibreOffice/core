@@ -201,7 +201,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     // bClip entscheidet darueber, ob geclippt werden muss.
     // Das Ganze muss vor der Retusche stehen
 
-    sal_Bool bClip = ( bDrawInWindow || bUnderSz ) && !rClip.IsChg();
+    bool bClip = ( bDrawInWindow || bUnderSz ) && !rClip.IsChg();
     if( bClip && pPor )
     {
         // Wenn TopLeft oder BottomLeft der Line ausserhalb liegen,
@@ -212,13 +212,13 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             GetInfo().GetPos().Y() < rPaint.Top() ||
             GetInfo().GetPos().Y() + nTmpHeight > rPaint.Top() + rPaint.Height() )
         {
-            bClip = sal_False;
+            bClip = false;
             rClip.ChgClip( rPaint, pFrm, pCurr->HasUnderscore() );
         }
 #if OSL_DEBUG_LEVEL > 1
-        static sal_Bool bClipAlways = sal_False;
+        static bool bClipAlways = false;
         if( bClip && bClipAlways )
-        {   bClip = sal_False;
+        {   bClip = false;
             rClip.ChgClip( rPaint );
         }
 #endif
@@ -243,7 +243,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     if( pCurr->IsClipping() )
     {
         rClip.ChgClip( aLineRect, pFrm );
-        bClip = sal_False;
+        bClip = false;
     }
 
     if( !pPor && !bEndPor )
@@ -346,7 +346,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         if( bClip &&
             GetInfo().X() + pPor->Width() + ( pPor->Height() / 2 ) > nMaxRight )
         {
-            bClip = sal_False;
+            bClip = false;
             rClip.ChgClip( rPaint, pFrm, pCurr->HasUnderscore() );
         }
 

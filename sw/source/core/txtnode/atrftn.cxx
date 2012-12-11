@@ -185,7 +185,7 @@ XubString SwFmtFtn::GetViewNumStr( const SwDoc& rDoc, sal_Bool bInclStrings ) co
     {
         // dann ist die Nummer von Interesse, also ueber die Info diese
         // besorgen.
-        sal_Bool bMakeNum = sal_True;
+        bool bMakeNum = true;
         const SwSectionNode* pSectNd = pTxtAttr
                     ? SwUpdFtnEndNtAtEnd::FindSectNdWithEndAttr( *pTxtAttr )
                     : 0;
@@ -200,7 +200,7 @@ XubString SwFmtFtn::GetViewNumStr( const SwDoc& rDoc, sal_Bool bInclStrings ) co
 
             if( FTNEND_ATTXTEND_OWNNUMANDFMT == rFtnEnd.GetValue() )
             {
-                bMakeNum = sal_False;
+                bMakeNum = false;
                 sRet = rFtnEnd.GetSwNumType().GetNumStr( GetNumber() );
                 if( bInclStrings )
                 {
@@ -430,7 +430,7 @@ void SwTxtFtn::DelFrms( const SwFrm* pSib )
         return;
 
     const SwRootFrm* pRoot = pSib ? pSib->getRootFrm() : 0;
-    sal_Bool bFrmFnd = sal_False;
+    bool bFrmFnd = false;
     {
         SwIterator<SwCntntFrm,SwTxtNode> aIter( *m_pTxtNode );
         for( SwCntntFrm* pFnd = aIter.First(); pFnd; pFnd = aIter.Next() )
@@ -441,7 +441,7 @@ void SwTxtFtn::DelFrms( const SwFrm* pSib )
             if( pPage )
             {
                 pPage->RemoveFtn( pFnd, this );
-                bFrmFnd = sal_True;
+                bFrmFnd = true;
             }
         }
     }

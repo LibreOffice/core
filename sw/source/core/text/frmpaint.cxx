@@ -84,7 +84,7 @@ class SwExtraPainter
     MSHORT nDivider;
     bool bGoLeft;
     bool bLineNum;
-    inline sal_Bool IsClipChg() { return aClip.IsChg(); }
+    inline bool IsClipChg() { return aClip.IsChg(); }
 public:
     SwExtraPainter( const SwTxtFrm *pFrm, ViewShell *pVwSh,
         const SwLineNumberInfo &rLnInf, const SwRect &rRct,

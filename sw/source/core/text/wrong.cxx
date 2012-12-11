@@ -265,7 +265,7 @@ void SwWrongList::Move( xub_StrLen nPos, long nDiff )
         MSHORT nLst = i;
         xub_StrLen nWrPos;
         xub_StrLen nWrLen;
-        sal_Bool bJump = sal_False;
+        bool bJump = false;
         while( nLst < Count() && Pos( nLst ) < nEnd )
             ++nLst;
         if( nLst > i && ( nWrPos = Pos( nLst - 1 ) ) <= nPos )
@@ -278,7 +278,7 @@ void SwWrongList::Move( xub_StrLen nPos, long nDiff )
             if( nWrLen )
             {
                 maList[--nLst].mnLen = nWrLen;
-                bJump = sal_True;
+                bJump = true;
             }
         }
         Remove( i, nLst - i );

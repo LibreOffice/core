@@ -30,8 +30,8 @@ class SwRect;               // SwSaveClip
 class SwSaveClip
 {
     Region   aClip;
-    const sal_Bool     bOn;
-          sal_Bool     bChg;
+    const bool     bOn;
+          bool     bChg;
 protected:
     OutputDevice* pOut;
     void _ChgClip( const SwRect &rRect, const SwTxtFrm* pFrm,
@@ -43,14 +43,14 @@ public:
                          sal_Bool bEnlargeRect = sal_False)
              { if( pOut ) _ChgClip( rRect, pFrm, bEnlargeRect ); }
            void Reset();
-    inline sal_Bool IsOn()  const { return bOn; }
-    inline sal_Bool IsChg() const { return bChg; }
+    inline bool IsOn()  const { return bOn; }
+    inline bool IsChg() const { return bChg; }
     inline OutputDevice *GetOut() { return pOut; }
 };
 
 inline SwSaveClip::SwSaveClip( OutputDevice* pOutDev ) :
     bOn( pOutDev && pOutDev->IsClipRegion() ),
-    bChg( sal_False ),
+    bChg( false ),
     pOut(pOutDev)
 {}
 

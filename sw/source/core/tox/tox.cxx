@@ -450,7 +450,7 @@ void SwForm::AdjustTabStops(SwDoc& rDoc, sal_Bool bInsertNewTapStops) // #i21237
             SwFormTokens aCurrentPattern = GetPattern(nLevel);
             SwFormTokens::iterator aIt = aCurrentPattern.begin();
 
-            sal_Bool bChanged = sal_False;
+            bool bChanged = false;
 
             for(sal_uInt16 nTab = 0; nTab < nTabCount; ++nTab)
             {
@@ -463,7 +463,7 @@ void SwForm::AdjustTabStops(SwDoc& rDoc, sal_Bool bInsertNewTapStops) // #i21237
                 {
                     if ( SVX_TAB_ADJUST_DEFAULT != rTab.GetAdjustment() )
                     {
-                        bChanged = sal_True;
+                        bChanged = true;
                         SwFormToken aToken(TOKEN_TAB_STOP);
                         aToken.bWithTab = sal_False;
                         aToken.nTabStopPosition = rTab.GetTabPos();
@@ -479,7 +479,7 @@ void SwForm::AdjustTabStops(SwDoc& rDoc, sal_Bool bInsertNewTapStops) // #i21237
                                   (TOKEN_TAB_STOP));
                     if ( aIt != aCurrentPattern.end() )
                     {
-                        bChanged = sal_True;
+                        bChanged = true;
                         aIt->nTabStopPosition = rTab.GetTabPos();
                         aIt->eTabAlign = nTab == nTabCount - 1 &&
                                          SVX_TAB_ADJUST_RIGHT == rTab.GetAdjustment() ?
@@ -539,7 +539,7 @@ SwTOXBase& SwTOXBase::CopyTOXBase( SwDoc* pDoc, const SwTOXBase& rSource )
     {
         // type not in pDoc, so create it now
         const SwTOXTypes& rTypes = pDoc->GetTOXTypes();
-        sal_Bool bFound = sal_False;
+        bool bFound = false;
         for( sal_uInt16 n = rTypes.size(); n; )
         {
             const SwTOXType* pCmp = rTypes[ --n ];
@@ -547,7 +547,7 @@ SwTOXBase& SwTOXBase::CopyTOXBase( SwDoc* pDoc, const SwTOXBase& rSource )
                 pCmp->GetTypeName() == pType->GetTypeName() )
             {
                 pType = (SwTOXType*)pCmp;
-                bFound = sal_True;
+                bFound = true;
                 break;
             }
         }
@@ -629,7 +629,7 @@ String SwFormToken::GetString() const
 {
     String sRet;
 
-    sal_Bool bAppend = sal_True;
+    bool bAppend = true;
     switch( eTokenType )
     {
         case TOKEN_ENTRY_NO:
@@ -707,7 +707,7 @@ String SwFormToken::GetString() const
             sRet += TOX_STYLE_DELIMITER;
         }
         else
-            bAppend = sal_False;
+            bAppend = false;
     }
     else if(TOKEN_ENTRY_NO == eTokenType)
     {
