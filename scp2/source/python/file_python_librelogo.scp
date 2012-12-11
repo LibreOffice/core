@@ -1,0 +1,27 @@
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include "macros.inc"
+
+#ifndef AIX
+#ifndef DISABLE_PYUNO
+File gid_File_LibreLogo
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE);
+    Dir = gid_Dir_Share_Scripts;
+    Name = "LibreLogo.zip";
+End
+
+File gid_File_Share_Registry_LibreLogo_Xcd
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Brand_Dir_Share_Registry;
+    Name = "librelogo.xcd";
+End
+#endif
+#endif

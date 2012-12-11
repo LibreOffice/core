@@ -57,7 +57,6 @@ Module gid_Module_Optional_Pyuno
              gid_File_Lib_Python_So,
              gid_File_Lib_Python3_So,
              gid_File_Scripts_Python,
-             gid_File_LibreLogo,
              gid_File_Share_Registry_Pyuno_Xcd);
     Unixlinks = (gid_Unixlink_Python_Headers,
                  gid_Unixlink_Python_LibreOfficePython,

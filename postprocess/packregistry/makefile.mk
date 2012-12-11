@@ -34,6 +34,7 @@ MY_XCDS = \
     $(MISC)/draw.xcd \
     $(MISC)/graphicfilter.xcd \
     $(MISC)/impress.xcd \
+    $(MISC)/librelogo.xcd \
     $(MISC)/korea.xcd \
     $(MISC)/lingucomponent.xcd \
     $(MISC)/main.xcd \
@@ -112,6 +113,11 @@ MY_FILES_impress = \
     $(MY_MOD)/org/openoffice/Office/Jobs-impress.xcu \
     $(MY_MOD)/org/openoffice/Office/ProtocolHandler-impress.xcu \
     $(MY_MOD)/org/openoffice/Setup-impress.xcu
+
+MY_DEPS_librelogo = main
+MY_FILES_librelogo = \
+    $(MY_MOD)/org/openoffice/Office/Addons-librelogo.xcu \
+    $(MY_MOD)/org/openoffice/Office/UI/WriterWindowState-librelogo.xcu
 
 MY_DEPS_korea = main
 MY_FILES_korea = \
@@ -213,7 +219,6 @@ MY_FILES_main = \
     $(MY_XCU)/Inet.xcu \
     $(MY_XCU)/Interaction.xcu \
     $(MY_XCU)/Office/Accelerators.xcu \
-    $(MY_XCU)/Office/Addons.xcu \
     $(MY_XCU)/Office/Calc.xcu \
     $(MY_XCU)/Office/Canvas.xcu \
     $(MY_XCU)/Office/Common.xcu \
