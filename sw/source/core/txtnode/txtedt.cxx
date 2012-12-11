@@ -1898,9 +1898,6 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
     // map start and end points onto the ConversionMap
     const sal_uInt32 nExpandBegin = aConversionMap.ConvertToViewPosition( nStt );
     const sal_uInt32 nExpandEnd   = aConversionMap.ConvertToViewPosition( nEnd );
-#ifdef FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
-    aExpandText = aExpandText.copy( nExpandBegin, nExpandEnd - nExpandBegin );
-#endif
 
     if (aExpandText.isEmpty() && !bCountNumbering)
     {
@@ -1922,49 +1919,9 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
     {
         if (pBreakIt->GetBreakIter().is())
         {
-#ifdef FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
-            // FIXME: check if in fact this is a (sadly) duplicated fix.
-
-            // split into different script languages
-            sal_Int32 nScriptBegin = 0;
-            while ( nScriptBegin < aExpandText.getLength() )
-            {
-                const sal_Int16 nCurrScript = pBreakIt->GetBreakIter()->getScriptType( aExpandText, nScriptBegin );
-                const sal_Int32 nScriptEnd = pBreakIt->GetBreakIter()->endOfScript( aExpandText, nScriptBegin, nCurrScript );
-                rtl::OUString aScriptText = aExpandText.copy( nScriptBegin, nScriptEnd - nScriptBegin );
-
-                // Asian languages count words as characters
-                if ( nCurrScript == ::com::sun::star::i18n::ScriptType::ASIAN )
-                {
-                    // substract white spaces
-                    sal_Int32 nSpaceCount = 0;
-                    sal_Int32 nSpacePos = 0;
-
-                    // substract normal white spaces
-                    nSpacePos = -1;
-                    while ( ( nSpacePos = aScriptText.indexOf( ' ', nSpacePos + 1 ) ) != -1 )
-                    {
-                        nSpaceCount++;
-                    }
-                    // substract Asian full-width white spaces
-                    nSpacePos = -1;
-                    while ( ( nSpacePos = aScriptText.indexOf( 12288, nSpacePos + 1 ) ) != -1 )
-                    {
-                        nSpaceCount++;
-                    }
-                    nTmpWords += nScriptEnd - nScriptBegin - nSpaceCount;
-                }
-                else
-                {
-#endif
-
             // zero is NULL for pLanguage -----------v               last param = true for clipping
             SwScanner aScanner( *this, aExpandText, 0, aConversionMap, i18n::WordType::WORD_COUNT,
-#ifdef FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
-                                (xub_StrLen)0, (xub_StrLen)aScriptText.getLength() );
-#else
                                 nExpandBegin, nExpandEnd, true );
-#endif
 
             // used to filter out scanner returning almost empty strings (len=1; unichar=0x0001)
             const rtl::OUString aBreakWord( CH_TXTATR_BREAKWORD );
@@ -1981,12 +1938,6 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
                     nTmpCharsExcludingSpaces += pBreakIt->getGraphemeCount(rWord);
                 }
             }
-
-#ifdef FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
-nScriptBegin = nScriptEnd;
-}
-}
-#endif
 
             nTmpCharsExcludingSpaces += aScanner.getOverriddenDashCount();
         }
