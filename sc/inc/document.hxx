@@ -1646,9 +1646,22 @@ public:
                                             SvtListener* pListener );
     void                PutInFormulaTree( ScFormulaCell* pCell );
     void                RemoveFromFormulaTree( ScFormulaCell* pCell );
-    SC_DLLPUBLIC void CalcFormulaTree( bool bOnlyForced = false,
-                                       bool bNoProgressBar = false,
-                                       bool bDirtyFlag=true );
+
+    /**
+     * Calculate formula cells that are on the formula tree either partially,
+     * or in full.
+     *
+     * @param bOnlyForced when true, it only calculates those formula cells
+     *                    that are marked "recalc forced".
+     * @param bProgressBar whether or not to use progress bar.
+     * @param bSetAllDirty when true, it marks all formula cells currently on
+     *                     the formula tree dirty, which forces all of them to
+     *                     be recalculated.  When false, only those cells
+     *                     that are marked dirty prior to this call get
+     *                     recalculated.
+     */
+    SC_DLLPUBLIC void CalcFormulaTree(
+        bool bOnlyForced = false, bool bProgressBar = true, bool bSetAllDirty = true );
     void                ClearFormulaTree();
     void                AppendToFormulaTrack( ScFormulaCell* pCell );
     void                RemoveFromFormulaTrack( ScFormulaCell* pCell );

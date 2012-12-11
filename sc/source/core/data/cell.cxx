@@ -1097,7 +1097,12 @@ void ScFormulaCell::CompileXML( ScProgress& rProgress )
     //volatile cells must be added here for import
     if( pCode->IsRecalcModeAlways() || pCode->IsRecalcModeForced() ||
         pCode->IsRecalcModeOnLoad() || pCode->IsRecalcModeOnLoadOnce() )
+    {
+        // During load, only those cells that are marked explicitly dirty get
+        // recalculated.  So we need to set it dirty here.
+        SetDirtyVar();
         pDocument->PutInFormulaTree(this);
+    }
 }
 
 

@@ -1060,7 +1060,7 @@ void Test::testSheetsFunc()
                             m_pDoc->InsertTab (SC_TAB_APPEND, aTabName1));
 
     m_pDoc->SetString(0, 0, 0, OUString("=SHEETS()"));
-    m_pDoc->CalcFormulaTree(false, true);
+    m_pDoc->CalcFormulaTree(false, false);
     double original;
     m_pDoc->GetValue(0, 0, 0, original);
 
@@ -1100,14 +1100,14 @@ void Test::testVolatileFunc()
 
     val = 0;
     m_pDoc->SetValue(0, 0, 0, val);
-    m_pDoc->CalcFormulaTree(false, true);
+    m_pDoc->CalcFormulaTree(false, false);
     double zero;
     m_pDoc->GetValue(0, 1, 0, zero);
     CPPUNIT_ASSERT_MESSAGE("Result should equal the 3rd parameter of IF, which is zero.", zero == 0.0);
 
     val = 1;
     m_pDoc->SetValue(0, 0, 0, val);
-    m_pDoc->CalcFormulaTree(false, true);
+    m_pDoc->CalcFormulaTree(false, false);
     double now2;
     m_pDoc->GetValue(0, 1, 0, now2);
     CPPUNIT_ASSERT_MESSAGE("Result should be the value of NOW() again.", (now2 - now1) >= 0.0);
@@ -1231,7 +1231,7 @@ void Test::testFuncParam()
 
     // First, the normal case, with no missing parameters.
     m_pDoc->SetString(0, 0, 0, OUString("=AVERAGE(1;2;3)"));
-    m_pDoc->CalcFormulaTree(false, true);
+    m_pDoc->CalcFormulaTree(false, false);
     double val;
     m_pDoc->GetValue(0, 0, 0, val);
     CPPUNIT_ASSERT_MESSAGE("incorrect result", val == 2);
@@ -1239,7 +1239,7 @@ void Test::testFuncParam()
     // Now function with missing parameters.  Missing values should be treated
     // as zeros.
     m_pDoc->SetString(0, 0, 0, OUString("=AVERAGE(1;;;)"));
-    m_pDoc->CalcFormulaTree(false, true);
+    m_pDoc->CalcFormulaTree(false, false);
     m_pDoc->GetValue(0, 0, 0, val);
     CPPUNIT_ASSERT_MESSAGE("incorrect result", val == 0.25);
 

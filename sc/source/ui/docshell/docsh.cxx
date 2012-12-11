@@ -442,7 +442,7 @@ sal_Bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const ::com::sun::star::un
         DoHardRecalc(false);
     else
         // still need to recalc volatile formula cells.
-        aDocument.CalcFormulaTree(false, false, false);
+        aDocument.CalcFormulaTree(false, true, false);
 
     aDocument.EnableAdjustHeight(false);
 
