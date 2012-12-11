@@ -161,9 +161,9 @@ gb_LinkTarget_INCLUDE :=\
 
 ifeq ($(COM_GCC_IS_CLANG),TRUE)
 ifeq ($(COMPILER_PLUGIN_TOOL),)
-gb_COMPILER_PLUGINS := -Xclang -load -Xclang $(SRCDIR)/compilerplugins/obj/plugin.so -Xclang -add-plugin -Xclang loplugin
+gb_COMPILER_PLUGINS := -Xclang -load -Xclang $(BUILDDIR)/compilerplugins/obj/plugin.so -Xclang -add-plugin -Xclang loplugin
 else
-gb_COMPILER_PLUGINS := -Xclang -load -Xclang $(SRCDIR)/compilerplugins/obj/plugin.so -Xclang -plugin -Xclang loplugin -Xclang -plugin-arg-loplugin -Xclang $(COMPILER_PLUGIN_TOOL)
+gb_COMPILER_PLUGINS := -Xclang -load -Xclang $(BUILDDIR)/compilerplugins/obj/plugin.so -Xclang -plugin -Xclang loplugin -Xclang -plugin-arg-loplugin -Xclang $(COMPILER_PLUGIN_TOOL)
 endif
 # extra EF variable to make the command line shorter (just like is done with $(SRCDIR) etc.)
 gb_COMPILER_PLUGINS_SETUP := EF=$(SRCDIR)/sal/inc/sal/log-areas.dox && ICECC_EXTRAFILES=$$EF CCACHE_EXTRAFILES=$$EF

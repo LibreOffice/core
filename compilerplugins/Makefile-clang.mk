@@ -37,7 +37,7 @@ CLANGINCLUDES=-I$(CLANGDIR)/include -I$(CLANGDIR)/tools/clang/include -I$(CLANGB
 CLANGINDIR=$(SRCDIR)/compilerplugins/clang
 # Cannot use $(WORKDIR), the plugin should survive even 'make clean', otherwise the rebuilt
 # plugin will cause cache misses with ccache.
-CLANGOUTDIR=$(SRCDIR)/compilerplugins/obj
+CLANGOUTDIR=$(BUILDDIR)/compilerplugins/obj
 
 compilerplugins: $(CLANGOUTDIR) $(CLANGOUTDIR)/plugin.so
 
@@ -63,7 +63,7 @@ endef
 $(foreach src, $(CLANGSRC), $(eval $(call clangbuildsrc,$(src),$(CLANGINDIR)/$(src),$(CLANGOUTDIR)/$(src:.cxx=.o))))
 
 $(CLANGOUTDIR)/plugin.so: $(CLANGOBJS)
-	@echo [build LNK] $(subst $(SRCDIR)/,,$@)
+	@echo [build LNK] $(subst $(BUILDDIR)/,,$@)
 	$(CXX) -shared $(CLANGOBJS) -o $@
 
 # Clang most probably doesn't maintain binary compatibility, so rebuild when clang changes.
