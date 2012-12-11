@@ -147,20 +147,15 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
                     nStartIndex - aSystemPrefix.getLength());
                 if (sChunk.isEmpty())
                     continue;
-                //We prefer (now) to use language tags
+                // We prefer (now) to use language tags.
+                // Avoid feeding in the older LANG_REGION scheme to the BCP47
+                // ctor as that triggers use of liblangtag and initializes its
+                // database which we do not want during startup. Convert
+                // instead.
+                sal_Int32 nPos;
+                if (sChunk.indexOf('-') < 0 && ((nPos = sChunk.indexOf('_')) > 0))
+                    sChunk = sChunk.replaceAt( nPos, 1, OUString('-'));
                 LanguageTag aLangTag(sChunk, true);
-                //On failure try older basic LANG_REGION scheme
-                if (!aLangTag.isValidBcp47())
-                {
-                    sal_Int32 nIndex = 0;
-                    OUString sLang = sChunk.getToken(0, '_', nIndex);
-                    if (!sLang.getLength())
-                        continue;
-                    OUString sRegion;
-                    if (nIndex != -1)
-                       sRegion = sChunk.copy(nIndex);
-                    aLangTag = LanguageTag(sLang, sRegion);
-                }
                 if (!aLangTag.isValidBcp47())
                     continue;
 
