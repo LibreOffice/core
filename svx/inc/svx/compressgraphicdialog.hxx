@@ -30,21 +30,21 @@
 class SVX_DLLPUBLIC CompressGraphicsDialog : public ModalDialog
 {
 private:
-    FixedText*       m_aFixedText2;
-    FixedText*       m_aFixedText3;
-    FixedText*       m_aFixedText5;
-    FixedText*       m_aFixedText6;
+    FixedText*       m_pFixedText2;
+    FixedText*       m_pFixedText3;
+    FixedText*       m_pFixedText5;
+    FixedText*       m_pFixedText6;
 
-    CheckBox*        m_aReduceResolutionCB;
-    NumericField*    m_aMFNewWidth;
-    NumericField*    m_aMFNewHeight;
-    ComboBox*        m_aResolutionLB;
-    RadioButton*     m_aLosslessRB;
-    RadioButton*     m_aJpegCompRB;
-    NumericField*    m_aCompressionMF;
-    NumericField*    m_aQualityMF;
-    PushButton*      m_aBtnCalculate;
-    ListBox*         m_aInterpolationCombo;
+    CheckBox*        m_pReduceResolutionCB;
+    NumericField*    m_pMFNewWidth;
+    NumericField*    m_pMFNewHeight;
+    ComboBox*        m_pResolutionLB;
+    RadioButton*     m_pLosslessRB;
+    RadioButton*     m_pJpegCompRB;
+    NumericField*    m_pCompressionMF;
+    NumericField*    m_pQualityMF;
+    PushButton*      m_pBtnCalculate;
+    ListBox*         m_pInterpolationCombo;
 
     SdrGrafObj*     m_pGraphicObj;
     Graphic         m_aGraphic;
