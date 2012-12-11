@@ -29,6 +29,7 @@
 #include <rtl/ustrbuf.h>
 #include <rtl/ustring.hxx>
 #include <rtl/stringutils.hxx>
+#include <sal/types.h>
 
 #ifdef RTL_FAST_STRING
 #include <rtl/stringconcat.hxx>
@@ -574,7 +575,6 @@ public:
         sal_Unicode sz[RTL_USTR_MAX_VALUEOFBOOLEAN];
         return append( sz, rtl_ustr_valueOfBoolean( sz, b ) );
     }
-#ifdef HAVE_CXX11_DELETE
 #ifndef HAVE_SFINAE_ANONYMOUS_BROKEN
     // Pointer can be automatically converted to bool, which is unwanted here.
     // Explicitly delete all pointer append() overloads to prevent this
@@ -582,8 +582,7 @@ public:
     template< typename T >
     typename internal::Enable< void,
         !internal::CharPtrDetector< T* >::ok && !internal::SalUnicodePtrDetector< T* >::ok >::Type
-        append( T* ) = delete;
-#endif
+        append( T* ) SAL_DELETE;
 #endif
 
     // This overload is needed because OUString has a ctor from rtl_uString*, but
