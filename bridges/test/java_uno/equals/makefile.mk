@@ -51,7 +51,7 @@ JARFILES = juh.jar jurt.jar ridl.jar
 
 ALLTAR: $(BIN)$/testequals
 
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
 GIVE_EXEC_RIGHTS = @echo
 .ELSE # GUI, WNT
 GIVE_EXEC_RIGHTS = chmod +x

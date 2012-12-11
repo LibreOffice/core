@@ -12,7 +12,7 @@ $(eval $(call gb_Module_Module,external))
 $(eval $(call gb_Module_add_targets,external,\
 ))
 
-ifeq ($(GUI)$(COM),WNTGCC)
+ifeq ($(OS)$(COM),WNTGCC)
 $(eval $(call gb_Module_add_targets,external,\
 	CustomTarget_jawt \
 	CustomTarget_mingw_dlls \

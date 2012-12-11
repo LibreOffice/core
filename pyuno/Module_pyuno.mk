@@ -59,7 +59,7 @@ endif
 ifneq ($(SYSTEM_PYTHON),YES)
 
 # zipcore: python.sh on Unix
-ifeq ($(GUI),UNX)
+ifneq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,pyuno,\
     CustomTarget_python_shell \
     Package_python_shell \

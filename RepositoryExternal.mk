@@ -126,7 +126,7 @@ endef
 
 endif
 
-ifeq (SANEUNX,$(filter SANE,$(BUILD_TYPE))$(GUI))
+ifeq (SANE,$(filter SANE,$(BUILD_TYPE))$(filter WNT,$(OS)))
 
 define gb_LinkTarget__use_sane_headers
 $(call gb_Library_use_packages,$(1),\
@@ -1724,7 +1724,7 @@ $(call gb_LinkTarget_use_static_libraries,$(1),\
 	$(if $(filter MSC,$(COM)),lib)pq \
 )
 
-ifeq ($(GUI)$(COM),WNTMSC)
+ifeq ($(OS)$(COM),WNTMSC)
 $(call gb_LinkTarget_use_external,$(1),openssl)
 
 $(call gb_LinkTarget_use_system_win32_libs,$(1),\
@@ -1775,7 +1775,7 @@ $(call gb_LinkTarget_use_static_libraries,$(1),\
 	mozreg_s \
 )
 
-ifeq ($(GUI),WNT)
+ifeq ($(OS),WNT)
 
 $(call gb_LinkTarget_add_defs,$(1),\
 	-DMOZILLA_CLIENT \
@@ -1818,7 +1818,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 
 endif # !GCC
 
-else ifeq ($(GUI),UNX)
+else
 
 $(call gb_LinkTarget_add_defs,$(1),\
 	-DMOZILLA_CLIENT \

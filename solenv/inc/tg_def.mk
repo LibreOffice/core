@@ -42,7 +42,7 @@ DEF$(TNR)DEPN+=$(foreach,i,$(DEFLIB$(TNR)NAME) $(SLB)/$(i).lib)
 
 .IF "$(SHL$(TNR)VERSIONMAP)"!=""
 .IF "$(DEF$(TNR)EXPORTFILE)"==""
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 DEF$(TNR)EXPORTFILE=$(MISC)/$(SHL$(TNR)VERSIONMAP:b)_$(SHL$(TNR)TARGET).dxp
 .IF "$(COM)"=="GCC"
 $(DEF$(TNR)EXPORTFILE) : $(SHL$(TNR)OBJS) $(SHL$(TNR)LIBS)
@@ -63,12 +63,12 @@ $(DEF$(TNR)EXPORTFILE) : $(SHL$(TNR)VERSIONMAP)
     $(COMMAND_ECHO)$(RENAME) $@.exported-symbols $@
 .ENDIF # .IF "$(COM)"=="GCC"
 
-.ENDIF			# "$(GUI)"=="WNT"
+.ENDIF			# "$(OS)"=="WNT"
 
 .ENDIF			# "$(DEF$(TNR)EXPORTFILE)"==""
 .ENDIF			# "$(SHL$(TNR)VERSIONMAP)"!=""
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 
 DEF$(TNR)FILTER=$(SOLARENV)/inc/dummy.flt
 
@@ -184,9 +184,9 @@ $(DEF$(TNR)TARGETN) .PHONY :
 .ENDIF
     $(COMMAND_ECHO)-$(RM) $@
     $(COMMAND_ECHO)$(RENAME) $@.tmpfile $@
-.ENDIF			# "$(GUI)"=="WNT"
+.ENDIF			# "$(OS)"=="WNT"
 
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 $(DEF$(TNR)TARGETN): \
         $(DEF$(TNR)DEPN) \
         $(DEF$(TNR)EXPORTFILE)

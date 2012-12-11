@@ -15,7 +15,7 @@ readlicense_oo_DIR := $(call gb_CustomTarget_get_workdir,readlicense_oo/readme)
 # what we need here is: gb_WITH_LANG_OR_DEFAULT ;-)
 readlicense_oo_LANGS := en-US $(filter-out en-US,$(gb_WITH_LANG))
 
-ifeq ($(GUI),UNX)
+ifneq ($(OS),WNT)
 readlicense_oo_READMEs := $(foreach lang,$(readlicense_oo_LANGS),$(readlicense_oo_DIR)/README_$(lang))
 readlicense_oo_README_PATTERN := $(readlicense_oo_DIR)/README_%
 else
@@ -68,7 +68,7 @@ $(readlicense_oo_README_PATTERN) : \
 			--stringparam type text \
 			$< \
 			$(readlicense_oo_README_XRM) && \
-		$(if $(filter WNT,$(GUI)) \
+		$(if $(filter WNT,$(OS)) \
 			,$(gb_AWK) 'sub("$$","\r")' $@.out > $@.tmp && \
 				mv $@.tmp $@ && \
 				rm $@.out \

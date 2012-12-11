@@ -29,7 +29,7 @@ USE_DEFFILE=TRUE
 
 .INCLUDE : settings.mk
 
-.IF "$(GUI)"=="WNT" && "$(WINDOWS_SDK_HOME)"!=""
+.IF "$(OS)"=="WNT" && "$(WINDOWS_SDK_HOME)"!=""
 
 CFLAGS+=-D_STLP_USE_STATIC_LIB
 

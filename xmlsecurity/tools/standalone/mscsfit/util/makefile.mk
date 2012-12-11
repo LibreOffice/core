@@ -58,13 +58,13 @@ REGISTERLIBS+= \
     $(DLLPRE)xsec_fw$(DLLPOST) \
     $(DLLPRE)xsec_xmlsec$(DLLPOST)
 
-.IF "$(GUI)" == "UNX"
+.IF "$(OS)" != "WNT"
 MY_DLLDIR=$(SOLARLIBDIR)
 REGISTERLIBS+= \
     $(DLLPRE)dtransX11$(DLLPOSTFIX)$(DLLPOST)
 
-.ELSE			# "$(GUI)" == "UNX"
-.IF "$(GUI)"=="WNT"
+.ELSE			# "$(OS)" != "WNT"
+.IF "$(OS)"=="WNT"
 
 MY_DLLDIR=$(SOLARBINDIR)
 REGISTERLIBS+= \
@@ -72,14 +72,14 @@ REGISTERLIBS+= \
     $(DLLPRE)ftransl$(DLLPOST) \
     $(DLLPRE)dnd$(DLLPOST)
 
-.ELSE			# "$(GUI)"=="WNT"
+.ELSE			# "$(OS)"=="WNT"
 
     @echo "**********************************************************"
     @echo "*** unknown platform: don't know which librarys to use ***"
     @echo "**********************************************************"
     force_dmake_to_error
-.ENDIF			# "$(GUI)"=="WNT"
-.ENDIF			# "$(GUI)" == "UNX"
+.ENDIF			# "$(OS)"=="WNT"
+.ENDIF			# "$(OS)" != "WNT"
 
 .IF "$(SOLAR_JAVA)" != ""
 .IF "$(JAVANUMVER)" >= "000100040000"
@@ -102,7 +102,7 @@ REGCOMP_JARS=unoil.jar java_uno.jar ridl.jar jurt.jar juh.jar
 MY_CLASSPATH_TMP=$(foreach,i,$(REGCOMP_JARS) $(SOLARBINDIR)$/$i)$(PATH_SEPERATOR)$(SOLARLIBDIR)$(PATH_SEPERATOR)$(XCLASSPATH)
 REGCOMP_CLASSPATH=$(strip $(subst,!,$(PATH_SEPERATOR) $(MY_CLASSPATH_TMP:s/ /!/)))
 
-.IF "$(GUI)"!="WNT"
+.IF "$(OS)"!="WNT"
 DOLLAR_SIGN=\$$
 MY_JAVA_COMPPATH=file://$(SOLARBINDIR)
 .IF "$(OS)"=="MACOSX"
@@ -114,7 +114,7 @@ REGCOMP_ENV=\
     setenv CLASSPATH $(REGCOMP_CLASSPATH) && \
     setenv LD_LIBRARY_PATH $(LD_LIBRARY_PATH):$(JDKLIB)
 .ENDIF
-.ELSE # "$(GUI)" != "WNT"
+.ELSE # "$(OS)" != "WNT"
 .IF "$(USE_SHELL)" != "4nt"
 DOLLAR_SIGN=\$$
 REGCOMP_ENV=\
@@ -128,7 +128,7 @@ REGCOMP_ENV=\
     set PATH=$(PATH);$(JREPATH)
 MY_JAVA_COMPPATH=$(strip $(subst,\,/ file:///$(SOLARBINDIR)))
 .ENDIF  # "$(USE_SHELL)" != "4nt"
-.ENDIF  # "$(GUI)"!="WNT"
+.ENDIF  # "$(OS)"!="WNT"
 .ENDIF  # "$(JAVANUMVER)" >= "000100040000"
 .ENDIF  # "$(SOLAR_JAVA)" != ""
 

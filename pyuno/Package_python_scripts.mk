@@ -26,7 +26,7 @@
 
 $(eval $(call gb_Package_Package,pyuno_python,$(SRCDIR)/pyuno/source))
 
-ifeq ($(GUI),WNT)
+ifeq ($(OS),WNT)
 pyuno_PYTHON_SCRIPT_DIR=bin
 else
 pyuno_PYTHON_SCRIPT_DIR=lib

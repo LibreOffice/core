@@ -46,7 +46,7 @@ APP1STDLIBS=$(TOOLSLIB) 		\
             $(VCLLIB)			\
             $(BASEGFXLIB)
 
-.IF "$(GUI)"!="UNX"
+.IF "$(OS)"=="WNT"
 APP1DEF=	$(MISC)$/$(TARGET).def
 .ENDIF
 

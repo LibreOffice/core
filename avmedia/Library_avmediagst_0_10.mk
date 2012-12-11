@@ -38,7 +38,7 @@ $(eval $(call gb_Library_set_include,avmediagst_0_10,\
 
 $(eval $(call gb_Library_use_sdk_api,avmediagst_0_10))
 
-ifeq ($(GUI),WNT)
+ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_defs,avmediagst_0_10,\
 	-DWINNT
 ))

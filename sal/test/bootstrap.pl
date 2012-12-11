@@ -64,7 +64,7 @@ if (!$rc) {
     $state = 0;
 }
 
-if ($ENV{GUI} eq "WNT") {
+if ($ENV{OS} eq "WNT") {
     $rc = system "./testbootstrap", "auxaux", "-env:iniName=ini.ini", '-env:MYBOOTSTRAPTESTVALUE=$CUSTOMINIVALUE';
 }
 else {
@@ -75,7 +75,7 @@ if (!$rc) {
     $state = 0;
 }
 
-if ($ENV{GUI} eq "WNT") {
+if ($ENV{OS} eq "WNT") {
     $comment = $comment . '$SYSUSERHOME not testable under windows' . "\n";
 }
 else {
@@ -86,7 +86,7 @@ else {
     }
 }
 
-if ($ENV{GUI} eq "WNT") {
+if ($ENV{OS} eq "WNT") {
     $comment = $comment . '$SYSUSERCONFIG' . " not testable under windows\n";
 }
 else {
@@ -97,7 +97,7 @@ else {
     }
 }
 
-if ($ENV{GUI} eq "WNT") {
+if ($ENV{OS} eq "WNT") {
     $comment = $comment . '$SYSBINDIR' . " not testable under windows\n";
 }
 else {
@@ -108,7 +108,7 @@ else {
     }
 }
 
-if ($ENV{GUI} eq "WNT") {
+if ($ENV{OS} eq "WNT") {
     $rc = system "./testbootstrap", "inherited_value", '-env:MYBOOTSTRAPTESTVALUE=$INHERITED_VALUE', "-env:iniName=ini.ini";
 }
 else {
@@ -119,7 +119,7 @@ if (!$rc) {
     $state = 0;
 }
 
-if ($ENV{GUI} eq "WNT") {
+if ($ENV{OS} eq "WNT") {
     $rc = system "./testbootstrap", "not_overwritten", '-env:MYBOOTSTRAPTESTVALUE=$INHERITED_OVERWRITTEN_VALUE', "-env:iniName=ini.ini";
 }
 else {
@@ -137,7 +137,7 @@ if (!$rc) {
     $state = 0;
 }
 
-if ($ENV{GUI} eq "WNT") {
+if ($ENV{OS} eq "WNT") {
     $rc = system "./testbootstrap",  "defaultValue", "-env:iniName=default.ini", "-env:INIFILENAME=", "-env:USEDEFAULT=1";
 }
 else {
@@ -213,7 +213,7 @@ if (!$rc) {
 }
 
 # test no infinit recursion
-if ($ENV{GUI} eq "WNT") {
+if ($ENV{OS} eq "WNT") {
     $rc = system "./testbootstrap",
     '"***RECURSION DETECTED***"',
     '-env:MYBOOTSTRAPTESTVALUE=$MYBOOTSTRAPTESTVALUE';

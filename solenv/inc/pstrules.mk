@@ -34,7 +34,7 @@
 
 $(OBJ)/$(SECOND_BUILD)_%.obj : %.cxx
     @echo "Making:   " $@
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
     @$(RM) $@ $(@:s/.obj/.o/)
     $(COMMAND_ECHO)$(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSCXXOBJ) $(CFLAGSOBJ) $(CDEFS) $($(SECOND_BUILD)CDEFS) $(CDEFSOBJ) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)/$(SECOND_BUILD)_$*.o $(CFLAGSINCXX)$(PWD)/$*.cxx
 .IF "$(OS)$(COM)"=="SOLARISC52" && "$(product)"=="full" && "$(debug)"==""
@@ -48,7 +48,7 @@ $(OBJ)/$(SECOND_BUILD)_%.obj : %.cxx
 
 $(OBJ)/$(SECOND_BUILD)_%.obj : %.c
     @echo "Making:   " $@
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 .IF "$(TEST)"!=""
     $(COMMAND_ECHO)$(CC) $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSOBJ) $(CDEFS) $($(SECOND_BUILD)CDEFS) $(CDEFSOBJ) -E $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)/$(SECOND_BUILD)_$*.o $*.c
 .ELSE
@@ -76,7 +76,7 @@ $(OBJ)/$(SECOND_BUILD)_%.obj : %.c
 
 $(SLO)/$(SECOND_BUILD)_%.obj : %.cxx
     @echo "Making:   " $@
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
     @$(RM) $@ $(@:s/.obj/.o/)
     $(COMMAND_ECHO)$(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSCXXSLO) $(CFLAGSSLO) $(CDEFS) $($(SECOND_BUILD)CDEFS) $(CDEFSSLO) $(CDEFSMT) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(SLO)/$(SECOND_BUILD)_$*.o $(CFLAGSINCXX)$(PWD)/$*.cxx
 .IF "$(OS)$(COM)"=="SOLARISC52" && "$(product)"=="full" && "$(debug)"==""
@@ -94,7 +94,7 @@ $(SLO)/$(SECOND_BUILD)_%.obj : %.cxx
 
 $(SLO)/$(SECOND_BUILD)_%.obj :  %.c
     @echo "Making:   " $@
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
     @$(RM) $@ $(@:s/.obj/.o/)
     $(COMMAND_ECHO)$(CC) $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSSLO) $(CDEFS) $($(SECOND_BUILD)CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(SLO)/$(SECOND_BUILD)_$*.o $*.c
 .IF "$(OS)$(COM)"=="SOLARISC52" && "$(product)"=="full" && "$(debug)"==""
@@ -125,7 +125,7 @@ ALLPARFILES=$(uniq $(ULFPARFILES) $(MOREPARFILES))
 
 SCP_PRODUCT_TYPE*=FAT
 
-.IF "$(GUI)" == "WNT"
+.IF "$(OS)" == "WNT"
 LANGFILEEXT=mlf
 .ELSE
 LANGFILEEXT=jlf
@@ -134,7 +134,7 @@ LANGFILEEXT=jlf
 $(PAR)/%.par :
     @echo "Making:   " $@
     @@-$(MKDIR) $(MISC)/{$(subst,$(@:d:d:d), $(@:d:d))}
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 .IF "$(CROSS_COMPILING)" == "NO"
     $(COMMAND_ECHO)$(CPPLCC) -+ -P $(INCLUDE) $(CDEFS) $(SCPDEFS) -DDLLPOSTFIX=$(DLLPOSTFIX) $(*:b).scp > $(MISC)/{$(subst,$(@:d:d:d), $(@:d:d))}/$(*:b).pre
 .ELSE
@@ -142,7 +142,7 @@ $(PAR)/%.par :
 .ENDIF
 .ENDIF
 # YD: INCLUDE macro too long, include only few items (scp2 compile)
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
     $(COMMAND_ECHO)$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/cpp.lcc -+ -P $(CDEFS) $(SCPDEFS) -DDLLPOSTFIX=$(DLLPOSTFIX) -I. -I$(INC) -I$(INCLOCAL) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) $(*:b).scp > $(MISC)/{$(subst,$(@:d:d:d), $(@:d:d))}/$(*:b).pre
 .ENDIF
     $(COMMAND_ECHO)$(SCPCOMP) -l {$(MISC)/$(TARGET)/$(@:b).$(LANGFILEEXT)} -s $(MISC)/{$(subst,$(@:d:d:d), $(@:d:d))}/$(*:b).pre -o $@

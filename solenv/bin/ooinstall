@@ -27,7 +27,7 @@ my $tmp_dir;
 # FIXME: really we should hunt and parse / source the config_host.mk magic I guess.
 die "You need your environment setup right, eg. run make cmd cmd='ooinstall /path/to/install'" if (!defined $ENV{SRC_ROOT});
 
-if ($ENV{GUI} eq 'WNT') {
+if ($ENV{OS} eq 'WNT') {
     $is_windows = 1;
 }
 

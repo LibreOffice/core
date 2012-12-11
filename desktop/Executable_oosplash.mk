@@ -58,7 +58,7 @@ $(eval $(call gb_Executable_add_libs,oosplash,\
 endif
 
 ifneq ($(GUIBASE),headless)
-ifeq ($(GUI),UNX)
+ifneq ($(OS),WNT)
 $(eval $(call gb_Executable_add_libs,oosplash,\
     -lX11 \
 ))

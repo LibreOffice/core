@@ -95,7 +95,7 @@ $(eval $(call gb_Library_add_exception_objects,xsec_xmlsec,\
 	xmlsecurity/source/xmlsec/nss/xsec_nss \
 ))
 
-ifeq ($(GUI)$(CROSS_COMPILING),WNT)
+ifeq ($(OS)$(CROSS_COMPILING),WNT)
 
 $(eval $(call gb_Library_add_defs,xsec_xmlsec,\
 	-DXMLSEC_CRYPTO_MSCRYPTO \
@@ -127,7 +127,7 @@ $(eval $(call gb_Library_add_defs,xsec_xmlsec,\
 	-DXMLSEC_CRYPTO_NSS \
 ))
 
-ifeq ($(GUI)$(CROSS_COMPILING),WNTYES)
+ifeq ($(OS)$(CROSS_COMPILING),WNTYES)
 $(eval $(call gb_Library_use_libraries,xsec_xmlsec,\
 	xmlsec1-nss \
 ))
@@ -152,7 +152,7 @@ $(eval $(call gb_Library_add_exception_objects,xsec_xmlsec,\
 	xmlsecurity/source/xmlsec/nss/xmlsignature_nssimpl \
 ))
 
-endif # ifeq ($(GUI)$(CROSS_COMPILING),WNT)
+endif # ifeq ($(OS)$(CROSS_COMPILING),WNT)
 
 ifeq ($(OS),SOLARIS)
 $(eval $(call gb_Library_add_libs,xsec_xmlsec,\

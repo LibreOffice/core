@@ -542,7 +542,7 @@ endif
 
 endif
 
-ifeq ($(strip $(GUI)),WNT)
+ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_cxxobjects,sd,\
     sd/source/ui/app/optsitem \
     sd/source/ui/func/futext \

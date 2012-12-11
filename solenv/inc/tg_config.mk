@@ -28,7 +28,7 @@
 PACKAGEDIR*:=$(subst,.,/ $(PACKAGE))
 XSLTPACKAGEDIR*:=$(subst,.,/ $(PACKAGE))
 XCSROOTURL!:=$(ABSXCSROOT)
-.IF $(GUI)==WNT
+.IF $(OS)==WNT
 XCSROOTURL!:=file:///$(subst,\,/ $(XCSROOTURL))
 .ENDIF
 SYSXSLDIR*:=$(XSLDIR)/

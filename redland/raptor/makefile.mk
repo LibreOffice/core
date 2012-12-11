@@ -62,7 +62,7 @@ OOO_PATCH_FILES= \
     raptor-aix.patch \
     $(TARFILE_NAME).entities.patch
 
-.IF "$(GUI)" == "UNX"
+.IF "$(OS)" != "WNT"
 OOO_PATCH_FILES+= \
     $(TARFILE_NAME).patch.bundled-soname
 .ENDIF

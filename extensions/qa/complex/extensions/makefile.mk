@@ -37,7 +37,7 @@ EXTRAJARFILES = $(OOO_JUNIT_JAR)
 
 
 
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
 command_seperator=&&
 .ELSE
 command_seperator=;

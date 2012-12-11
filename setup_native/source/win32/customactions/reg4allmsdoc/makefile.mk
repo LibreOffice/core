@@ -33,7 +33,7 @@ CFLAGS+=-DUNICODE -D_UNICODE
 
 # --- Files --------------------------------------------------------
 
-.IF "$(GUI)"=="WNT" && "$(WINDOWS_SDK_HOME)"!=""
+.IF "$(OS)"=="WNT" && "$(WINDOWS_SDK_HOME)"!=""
 
 UWINAPILIB=
 

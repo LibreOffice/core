@@ -29,6 +29,6 @@
 
 $(eval $(call gb_Package_Package,xmergesync,$(SRCDIR)/xmerge/source/activesync/BIN))
 
-ifeq ($(GUI),WNT)
+ifeq ($(OS),WNT)
 $(eval $(call gb_Package_add_file,xmergesync,bin/xmergesync.dll,xmergesync.dll))
 endif

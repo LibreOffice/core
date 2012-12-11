@@ -40,7 +40,7 @@ $(eval $(call gb_Module_add_targets,solenv,\
 ))
 endif
 
-ifeq ($(GUI),UNX)
+ifneq ($(OS),WNT)
 ifneq ($(OS),IOS)
 ifneq ($(OS),ANDROID)
 $(eval $(call gb_Module_add_targets,solenv,\

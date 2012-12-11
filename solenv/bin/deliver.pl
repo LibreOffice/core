@@ -114,7 +114,6 @@ if ($^O ne 'cygwin') {              # iz59477 - cygwin needes a dot "." at the e
     }
 }
 
-($gui       = lc($ENV{GUI}))        || die "Can't determine 'GUI'. Please set environment.\n";
 $tempcounter        = 0;
 
 # zip is default for RE master builds
@@ -384,7 +383,7 @@ sub parse_options
         $arg =~ /^-delete$/     and $opt_delete = 1  and next;
         $arg =~ /^-dontdeletecommon$/ and $dontdeletecommon = 1 and next;
         $arg =~ /^-help$/       and $opt_help   = 1  and $arg = '';
-        $arg =~ /^-link$/       and $ENV{GUI} ne 'WNT' and $opt_link = 1 and next;
+        $arg =~ /^-link$/       and $ENV{OS} ne 'WNT' and $opt_link = 1 and next;
         $arg =~ /^-deloutput$/  and $opt_deloutput = 1 and next;
         $arg =~ /^-debug$/      and $is_debug   = 1  and next;
         $arg =~ /^-checkdlst$/  and $opt_checkdlst = 1 and next;
@@ -458,11 +457,10 @@ sub init_globals
                 [ '%_DEST%',            $dest           ],
                 [ '%COMMON_OUTDIR%',    $common_outdir  ],
                 [ '%COMMON_DEST%',      $common_dest    ],
-                [ '%GUI%',              $gui            ]
               );
 
     # find out if the *HOST* system supports symlinks. They all do except Windows
-    $has_symlinks = $ENV{GUI} ne 'WNT';
+    $has_symlinks = $ENV{OS} ne 'WNT';
 }
 
 sub get_base
@@ -1321,7 +1319,7 @@ sub usage
     print STDERR "  -dontdeletecommon do not delete common files (for -delete option)\n";
     print STDERR "  -force       copy even if not newer\n";
     print STDERR "  -help        print this message\n";
-    if ( !defined($ENV{GUI}) || $ENV{GUI} ne 'WNT' ) {
+    if ( !defined($ENV{OS}) || $ENV{OS} ne 'WNT' ) {
         print STDERR "  -link        hard link files into the solver to save disk space\n";
     }
     print STDERR "  -quiet       be quiet, only report errors\n";

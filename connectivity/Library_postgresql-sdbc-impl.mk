@@ -62,7 +62,7 @@ $(eval $(call gb_Library_use_externals,postgresql-sdbc-impl,\
 ))
 
 ifneq ($(SYSTEM_POSTGRESQL),YES)
-ifneq ($(GUI)$(COM),WNTMSC)
+ifneq ($(OS)$(COM),WNTMSC)
 
 -include $(OUTDIR)/inc/postgresql/libpq-flags.mk
 

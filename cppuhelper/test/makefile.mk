@@ -85,7 +85,7 @@ ALL: $(BIN)$/cpputest.rdb				\
      $(BIN)$/$(APP2TARGET).Bin  			\
      $(BIN)$/$(APP2TARGET).Exe
 
-.IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="WNT"
 ALL:  $(BIN)$/$(APP2TARGET).exe
 
 $(BIN)$/$(APP2TARGET).exe : $(APP2TARGETN)
@@ -147,7 +147,7 @@ $(BIN)$/testdefaultbootstrapping.pl: testdefaultbootstrapping.pl
     cp testdefaultbootstrapping.pl $@
 
 $(BIN)$/testrc: makefile.mk
-.IF "$(GUI)"=="WNT"
+.IF "$(OS)"=="WNT"
     echo [Tests] > $@
     echo TestKey1=com.sun.star.uno.NamingService.rdb >> $@
 .ELSE

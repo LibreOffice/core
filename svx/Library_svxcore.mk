@@ -41,7 +41,7 @@ $(eval $(call gb_Library_set_precompiled_header,svxcore,$(SRCDIR)/svx/inc/pch/pr
 
 #BOOST switch in customshapes
 #dialog:
-#.IF "$(GUI)"=="WNT"
+#.IF "$(OS)"=="WNT"
 #CFLAGS+= -DUNICODE -D_UNICODE
 #.ENDIF
 
