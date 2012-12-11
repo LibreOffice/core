@@ -201,13 +201,9 @@ const String &SfxObjectList::GetBaseName(const _FileListEntry* p) const
 
 //-------------------------------------------------------------------------
 
-SfxOrganizeMgr::SfxOrganizeMgr( SfxOrganizeListBox_Impl *pLeft,
-                                SfxOrganizeListBox_Impl *pRight,
-                                SfxDocumentTemplates *pTempl) :
+SfxOrganizeMgr::SfxOrganizeMgr(SfxDocumentTemplates *pTempl) :
     pImpl(new SfxOrganizeMgr_Impl),
     pTemplates(pTempl? pTempl: new SfxDocumentTemplates),
-    pLeftBox(pLeft),
-    pRightBox(pRight),
     bDeleteTemplates(pTempl == 0),
     bModified(0)
 
@@ -241,7 +237,6 @@ SfxOrganizeMgr::~SfxOrganizeMgr()
     delete pImpl->pDocList;
     delete pImpl->pIntlWrapper;
     delete pImpl;
-    pLeftBox = pRightBox = NULL;
 }
 
 //-------------------------------------------------------------------------

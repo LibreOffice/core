@@ -200,7 +200,7 @@ SfxOrganizeDlg_Impl::SfxOrganizeDlg_Impl( SfxTemplateOrganizeDlg* pParent,
     aFilesBtn           ( pParent, SfxResId( BTN_FILES ) ),
 
     aEditAcc    ( SfxResId( ACC_EDIT ) ),
-    aMgr        ( &aLeftLb, &aRightLb, pTempl ),
+    aMgr        ( pTempl ),
     pFileDlg    ( NULL )
 
 {

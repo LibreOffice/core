@@ -52,17 +52,11 @@ class SfxOrganizeMgr
 private:
     SfxOrganizeMgr_Impl*        pImpl;
     SfxDocumentTemplates*       pTemplates;
-    SfxOrganizeListBox_Impl*    pLeftBox;
-    SfxOrganizeListBox_Impl*    pRightBox;
     sal_Bool                        bDeleteTemplates    :1;
     sal_Bool                        bModified           :1;
 
-    SfxOrganizeListBox_Impl*    GetOther( SfxOrganizeListBox_Impl* );
-
 public:
-    SfxOrganizeMgr( SfxOrganizeListBox_Impl* pLeft,
-                    SfxOrganizeListBox_Impl* pRight,
-                    SfxDocumentTemplates* pTempl = NULL );
+    SfxOrganizeMgr(SfxDocumentTemplates* pTempl = NULL);
     ~SfxOrganizeMgr();
 
     sal_Bool    Copy( sal_uInt16 nTargetRegion, sal_uInt16 nTargetIdx, sal_uInt16 nSourceRegion, sal_uInt16 nSourceIdx );
