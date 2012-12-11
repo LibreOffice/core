@@ -69,7 +69,7 @@ namespace connectivity
 
         ::std::auto_ptr< OSQLParseTreeIteratorImpl >    m_pImpl;
 
-        void                traverseParameter(const OSQLParseNode* _pParseNode,const OSQLParseNode* _pColumnRef,const ::rtl::OUString& _aColumnName,const ::rtl::OUString& _aTableRange, const ::rtl::OUString& _rColumnAlias);
+        void                traverseParameter(const OSQLParseNode* _pParseNode,const OSQLParseNode* _pColumnRef,const ::rtl::OUString& _aColumnName, ::rtl::OUString& _aTableRange, const ::rtl::OUString& _rColumnAlias);
         // inserts a table into the map
         void                traverseOneTableName( OSQLTables& _rTables,const OSQLParseNode * pTableName, const ::rtl::OUString & rTableRange );
         void                traverseORCriteria(OSQLParseNode * pSearchCondition);
@@ -92,25 +92,25 @@ namespace connectivity
             @param  rColumnName
                 the column name to look for
             @param  rTableRange
-                the table alias name
+                the table alias name; if empty, look in all tables
             @return
                 the desired column object, or <NULL/> if no such column could be found
         */
         static ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > findColumn(
-            const OSQLTables& _rTables, const ::rtl::OUString & rColumnName, const ::rtl::OUString & rTableRange );
+            const OSQLTables& _rTables, const ::rtl::OUString & rColumnName, ::rtl::OUString & rTableRange );
 
         /** finds a column with a given name, belonging to a given table
             @param  rColumnName
                 the column name to look for
             @param  rTableRange
-                    the table alias name
+                    the table alias name; if empty, look in all tables
             @param  _bLookInSubTables
                 <TRUE/> if and only if not only our direct tables, but also our sub tables (from sub selects)
                 should be searched
             @return
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > findColumn(
-            const ::rtl::OUString & rColumnName, const ::rtl::OUString & rTableRange, bool _bLookInSubTables );
+            const ::rtl::OUString & rColumnName, ::rtl::OUString & rTableRange, bool _bLookInSubTables );
 
       protected:
         void setSelectColumnName(::rtl::Reference<OSQLColumns>& _rColumns,const ::rtl::OUString & rColumnName,const ::rtl::OUString & rColumnAlias, const ::rtl::OUString & rTableRange,sal_Bool bFkt=sal_False,sal_Int32 _nType = com::sun::star::sdbc::DataType::VARCHAR,sal_Bool bAggFkt=sal_False);
@@ -320,8 +320,8 @@ namespace connectivity
         */
         void    impl_getQueryParameterColumns( const OSQLTable& _rQuery );
 
-        void setOrderByColumnName(const ::rtl::OUString & rColumnName, const ::rtl::OUString & rTableRange, sal_Bool bAscending);
-        void setGroupByColumnName(const ::rtl::OUString & rColumnName, const ::rtl::OUString & rTableRange);
+        void setOrderByColumnName(const ::rtl::OUString & rColumnName, ::rtl::OUString & rTableRange, sal_Bool bAscending);
+        void setGroupByColumnName(const ::rtl::OUString & rColumnName, ::rtl::OUString & rTableRange);
 
     private:
         /** appends an SQLException corresponding to the given error code to our error collection
