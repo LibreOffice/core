@@ -53,11 +53,9 @@
 
 #include "lwpfilter.hxx"
 
-using namespace ::rtl;
 using namespace com::sun::star;
 using rtl::OString;
 using rtl::OUStringBuffer;
-using rtl::OUString;
 using com::sun::star::uno::Sequence;
 using com::sun::star::lang::XComponent;
 using com::sun::star::uno::Any;
@@ -117,11 +115,11 @@ private:
         SvXMLAttributeList *pAttrList = new SvXMLAttributeList();
         uno::Reference < XAttributeList > xAttrList(pAttrList);
 
-        pAttrList->AddAttribute( OUString(RTL_CONSTASCII_USTRINGPARAM("text:style-name")),  OUString(RTL_CONSTASCII_USTRINGPARAM("Standard")));
+        pAttrList->AddAttribute( "text:style-name",  "Standard" );
 
-        m_xDocHandler->startElement( OUString(RTL_CONSTASCII_USTRINGPARAM("text:p")), xAttrList  );
+        m_xDocHandler->startElement( "text:p", xAttrList );
         m_xDocHandler->characters( sChunk );
-        m_xDocHandler->endElement( OUString(RTL_CONSTASCII_USTRINGPARAM("text:p") ) );
+        m_xDocHandler->endElement( "text:p" );
     }
 
     void writeDocContentPreamble()
@@ -152,7 +150,7 @@ private:
         addAttribute( pDocContentPropList, "xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
         addAttribute( pDocContentPropList, "xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance" );
         addAttribute( pDocContentPropList, "office:version", "1.0");
-        m_xDocHandler->startElement(OUString(RTL_CONSTASCII_USTRINGPARAM("office:document-content" ) ), xDocContentList );
+        m_xDocHandler->startElement("office:document-content" , xDocContentList );
     }
 
     void parseDoc()
@@ -226,7 +224,7 @@ private:
             writeDocContentPreamble(); // writes "office:document-content" elem
             uno::Reference < XAttributeList > xAttrList(pAttrList);
 
-            m_xDocHandler->startElement( OUString(RTL_CONSTASCII_USTRINGPARAM("office:body")), xAttrList  );
+            m_xDocHandler->startElement( "office:body", xAttrList  );
 
             // process strings imported
             std::vector< OUString >::const_iterator it = m_vStringChunks.begin();
@@ -234,8 +232,8 @@ private:
             for ( ; it!=it_end; ++it )
                 writeTextChunk( *it );
 
-            m_xDocHandler->endElement( OUString(RTL_CONSTASCII_USTRINGPARAM("office:body") ) );
-            m_xDocHandler->endElement( OUString(RTL_CONSTASCII_USTRINGPARAM("office:document-content")));
+            m_xDocHandler->endElement( "office:body" );
+            m_xDocHandler->endElement( "office:document-content" );
             m_xDocHandler->endDocument();
         }
     }
@@ -269,7 +267,7 @@ sal_Bool SAL_CALL LotusWordProImportFilter::importImpl( const Sequence< ::com::s
          return sal_False;
 
     // An XML import service: what we push sax messages to..
-    OUString sXMLImportService ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.XMLImporter" ) );
+    OUString sXMLImportService ( "com.sun.star.comp.Writer.XMLImporter" );
 
     uno::Reference< XDocumentHandler > xInternalHandler( mxMSF->createInstance( sXMLImportService ), UNO_QUERY );
     uno::Reference < XImporter > xImporter(xInternalHandler, UNO_QUERY);
@@ -303,7 +301,7 @@ OUString SAL_CALL LotusWordProImportFilter::detect( com::sun::star::uno::Sequenc
     throw( com::sun::star::uno::RuntimeException )
 {
 
-    OUString sTypeName(RTL_CONSTASCII_USTRINGPARAM("writer_LotusWordPro_Document"));
+    OUString sTypeName( "writer_LotusWordPro_Document" );
     sal_Int32 nLength = Descriptor.getLength();
     OUString sURL;
     const PropertyValue * pValue = Descriptor.getConstArray();
@@ -368,7 +366,7 @@ void SAL_CALL LotusWordProImportFilter::initialize( const Sequence< Any >& aArgu
 OUString LotusWordProImportFilter_getImplementationName ()
     throw (RuntimeException)
 {
-    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.LotusWordProImportFilter" ) );
+    return OUString ( "com.sun.star.comp.Writer.LotusWordProImportFilter" );
 }
 
 #define SERVICE_NAME1 "com.sun.star.document.ImportFilter"
@@ -383,8 +381,8 @@ Sequence< OUString > SAL_CALL LotusWordProImportFilter_getSupportedServiceNames(
 {
     Sequence < OUString > aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME1 ) );
-    pArray[1] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME2 ) );
+    pArray[0] =  OUString ( SERVICE_NAME1 );
+    pArray[1] =  OUString ( SERVICE_NAME2 );
     return aRet;
 }
 #undef SERVICE_NAME2
