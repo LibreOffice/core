@@ -51,9 +51,9 @@ executeErrorDialog(
 {
     SolarMutexGuard aGuard;
 
-    rtl::OUStringBuffer aText(rContext);
+    OUStringBuffer aText(rContext);
     if (!rContext.isEmpty() && !rMessage.isEmpty())
-        aText.appendAscii(RTL_CONSTASCII_STRINGPARAM(":\n"));
+        aText.appendAscii(":\n");
             //TODO! must be internationalized
     aText.append(rMessage);
 
@@ -99,8 +99,7 @@ executeErrorDialog(
     }
     catch (std::bad_alloc const &)
     {
-        throw uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
+        throw uno::RuntimeException(OUString("out of memory"),
             uno::Reference< uno::XInterface >());
     }
 

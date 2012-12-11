@@ -403,7 +403,7 @@ bool UUIInteractionHelper::handleTypedHandlerImplementations( Reference< XIntera
     // the base registration node for "typed" interaction handlers
     const ::utl::OConfigurationTreeRoot aConfigRoot( ::utl::OConfigurationTreeRoot::createWithServiceFactory(
         m_xServiceFactory,
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Interaction/InteractionHandlers" ) ),
+        OUString( "/org.openoffice.Interaction/InteractionHandlers" ),
         -1,
         ::utl::OConfigurationTreeRoot::CM_READONLY
     ) );
@@ -904,8 +904,7 @@ UUIInteractionHelper::handleRequest_impl(
     }
     catch (std::bad_alloc const &)
     {
-        throw uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
+        throw uno::RuntimeException(OUString("out of memory"),
             uno::Reference< uno::XInterface >());
     }
     catch( const uno::RuntimeException& )
@@ -935,31 +934,23 @@ UUIInteractionHelper::getInteractionHandlerList(
 
         uno::Sequence< uno::Any > aArguments( 1 );
         beans::PropertyValue      aProperty;
-        aProperty.Name
-            = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
+        aProperty.Name = OUString( "nodepath" );
         aProperty.Value <<= aFullPath.makeStringAndClear();
         aArguments[ 0 ] <<= aProperty;
 
         uno::Reference< uno::XInterface > xInterface(
                 xConfigProv->createInstanceWithArguments(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.configuration.ConfigurationAccess" ) ),
-                    aArguments ) );
+                    "com.sun.star.configuration.ConfigurationAccess" , aArguments ) );
 
         if ( !xInterface.is() )
-            throw uno::RuntimeException(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "unable to instanciate config access")),
+            throw uno::RuntimeException(OUString("unable to instanciate config access"),
                 uno::Reference< uno::XInterface >());
 
         uno::Reference< container::XNameAccess > xNameAccess(
             xInterface, uno::UNO_QUERY );
         if ( !xNameAccess.is() )
-            throw uno::RuntimeException(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "config access does not implement XNameAccess")),
+            throw uno::RuntimeException(OUString(
+                    "config access does not implement XNameAccess"),
                 uno::Reference< uno::XInterface >());
 
         uno::Sequence< rtl::OUString > aElems = xNameAccess->getElementNames();
@@ -972,10 +963,8 @@ UUIInteractionHelper::getInteractionHandlerList(
                                 xHierNameAccess( xInterface, uno::UNO_QUERY );
 
             if ( !xHierNameAccess.is() )
-            throw uno::RuntimeException(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "config access does not implement XHierarchicalNameAccess")),
+            throw uno::RuntimeException(OUString(
+                        "config access does not implement XHierarchicalNameAccess"),
                 uno::Reference< uno::XInterface >());
 
             // Iterate over children.
@@ -1214,16 +1203,16 @@ UUIInteractionHelper::handleGenericErrorRequest(
 
             boost::scoped_ptr< ResMgr > xManager(
                 ResMgr::CreateResMgr( "uui" ) );
-            rtl::OUString aTitle( utl::ConfigManager::getProductName() );
+            OUString aTitle( utl::ConfigManager::getProductName() );
 
-            ::rtl::OUString aErrTitle
+            OUString aErrTitle
                   = ResId( nError == ERRCODE_SFX_BROKENSIGNATURE
                                        ? STR_WARNING_BROKENSIGNATURE_TITLE
                                        : STR_WARNING_INCOMPLETE_ENCRYPTION_TITLE,
                                    *xManager.get() ).toString();
 
             if ( !aTitle.isEmpty() && !aErrTitle.isEmpty() )
-                aTitle += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " - " ) );
+                aTitle += " - " ;
             aTitle += aErrTitle;
 
             executeMessageBox(
@@ -1417,9 +1406,9 @@ UUIInteractionHelper::handleBrokenPackageRequest(
     else
         return;
 
-    rtl::OUString title(
+    OUString title(
         utl::ConfigManager::getProductName() +
-        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " ) ) +
+        OUString( " " ) +
         utl::ConfigManager::getProductVersion() );
 
     switch (

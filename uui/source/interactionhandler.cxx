@@ -125,17 +125,14 @@ UUIInteractionHandler::handle(
 char const UUIInteractionHandler::m_aImplementationName[]
     = "com.sun.star.comp.uui.UUIInteractionHandler";
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 UUIInteractionHandler::getSupportedServiceNames_static()
 {
-    uno::Sequence< rtl::OUString > aNames(3);
-    aNames[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.task.InteractionHandler"));
+    uno::Sequence< OUString > aNames(3);
+    aNames[0] = "com.sun.star.task.InteractionHandler";
     // added to indicate support for configuration.backend.MergeRecoveryRequest
-    aNames[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.configuration.backend.InteractionHandler"));
-    aNames[2] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.uui.InteractionHandler"));
+    aNames[1] = "com.sun.star.configuration.backend.InteractionHandler";
+    aNames[2] = "com.sun.star.uui.InteractionHandler";
     // for backwards compatibility
     return aNames;
 }
@@ -152,9 +149,7 @@ UUIInteractionHandler::createInstance(
     }
     catch (std::bad_alloc const &)
     {
-        throw uno::RuntimeException(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
-        0);
+        throw uno::RuntimeException(OUString("out of memory"), 0);
     }
 }
 

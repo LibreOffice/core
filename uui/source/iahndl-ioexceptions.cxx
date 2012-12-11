@@ -80,20 +80,13 @@ getResourceNameRequestArgument(uno::Sequence< uno::Any > const & rArguments,
                                rtl::OUString * pValue)
     SAL_THROW(())
 {
-    if (!getStringRequestArgument(rArguments,
-                                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                      "Uri")),
-                                  pValue))
+    if (!getStringRequestArgument(rArguments, "Uri",  pValue))
         return false;
     // Use the resource name only for file URLs, to avoid confusion:
     //TODO! work with ucp locality concept instead of hardcoded "file"?
     if (pValue
-        && pValue->matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM(
-                                                  "file:")))
-        getStringRequestArgument(rArguments,
-                                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                                   "ResourceName")),
-                                 pValue);
+        && pValue->matchIgnoreAsciiCaseAsciiL("file:", pValue->getLength()))
+        getStringRequestArgument(rArguments, "ResourceName", pValue);
     return true;
 }
 
@@ -194,14 +187,10 @@ UUIInteractionHelper::handleInteractiveIOException(
         {
         case ucb::IOErrorCode_CANT_CREATE:
             {
-                rtl::OUString aArgFolder;
-                if (getStringRequestArgument(
-                        aRequestArguments,
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                          "Folder")),
-                        &aArgFolder))
+                OUString aArgFolder;
+                if (getStringRequestArgument(aRequestArguments, "Folder", &aArgFolder))
                 {
-                    rtl::OUString aArgUri;
+                    OUString aArgUri;
                     if (getResourceNameRequestArgument(aRequestArguments,
                                                        &aArgUri))
                     {
@@ -227,18 +216,10 @@ UUIInteractionHelper::handleInteractiveIOException(
                 if (getResourceNameRequestArgument(aRequestArguments,
                                                    &aArgUri))
                 {
-                    rtl::OUString aResourceType;
-                    getStringRequestArgument(
-                        aRequestArguments,
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                          "ResourceType")),
-                        &aResourceType);
+                    OUString aResourceType;
+                    getStringRequestArgument(aRequestArguments, "ResourceType", &aResourceType);
                     bool bRemovable = false;
-                    getBoolRequestArgument(aRequestArguments,
-                                           rtl::OUString(
-                                               RTL_CONSTASCII_USTRINGPARAM(
-                                                   "Removable")),
-                                           &bRemovable);
+                    getBoolRequestArgument(aRequestArguments, "Removable", &bRemovable);
                     nErrorCode = aResourceType == "volume"
                         ? (bRemovable
                            ? ERRCODE_UUI_IO_NOTREADY_VOLUME_REMOVABLE
@@ -257,15 +238,8 @@ UUIInteractionHelper::handleInteractiveIOException(
             {
                 rtl::OUString aArgVolume;
                 rtl::OUString aArgOtherVolume;
-                if (getStringRequestArgument(
-                        aRequestArguments,
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                          "Volume")),
-                        &aArgVolume)
-                    && getStringRequestArgument(
-                        aRequestArguments,
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                          "OtherVolume")),
+                if (getStringRequestArgument(aRequestArguments, "Volume", &aArgVolume)
+                    && getStringRequestArgument(aRequestArguments, "OtherVolume",
                         &aArgOtherVolume))
                 {
                     nErrorCode = aErrorCode[aIoException.Code][1];
@@ -285,11 +259,8 @@ UUIInteractionHelper::handleInteractiveIOException(
                            &aArgUri))
                 {
                     rtl::OUString aResourceType;
-                    getStringRequestArgument(
-                        aRequestArguments,
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                          "ResourceType")),
-                        &aResourceType);
+                    getStringRequestArgument(aRequestArguments, "ResourceType",
+                                            &aResourceType);
                     nErrorCode = aResourceType == "volume"
                         ? ERRCODE_UUI_IO_NOTEXISTS_VOLUME
                         : (aResourceType == "folder"

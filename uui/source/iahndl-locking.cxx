@@ -140,8 +140,7 @@ handleLockedDocumentRequest_(
     }
     catch (std::bad_alloc const &)
     {
-        throw uno::RuntimeException(
-                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
+        throw uno::RuntimeException(OUString("out of memory"),
                   uno::Reference< uno::XInterface >());
     }
 }
@@ -178,8 +177,7 @@ handleChangedByOthersRequest_(
     }
     catch (std::bad_alloc const &)
     {
-        throw uno::RuntimeException(
-                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
+        throw uno::RuntimeException(OUString("out of memory"),
                   uno::Reference< uno::XInterface >());
     }
 }
@@ -216,8 +214,7 @@ handleLockFileIgnoreRequest_(
     }
     catch (std::bad_alloc const &)
     {
-        throw uno::RuntimeException(
-                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
+        throw uno::RuntimeException(OUString("out of memory"),
                   uno::Reference< uno::XInterface >());
     }
 }
