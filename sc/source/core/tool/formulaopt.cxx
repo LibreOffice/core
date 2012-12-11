@@ -69,7 +69,7 @@ ScFormulaOptions::~ScFormulaOptions()
 void ScFormulaOptions::SetDefaults()
 {
     bUseEnglishFuncName = false;
-    eFormulaGrammar     = ::formula::FormulaGrammar::GRAM_NATIVE;
+    eFormulaGrammar     = ::formula::FormulaGrammar::GRAM_NATIVE_XL_A1;
 
     // unspecified means use the current formula syntax.
     eStringRefSyntax = formula::FormulaGrammar::CONV_UNSPECIFIED;
