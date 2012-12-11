@@ -37,7 +37,7 @@
 
 #define DLG_NEW_FILE                        (RID_SFX_DOC_START+1)
 #define DLG_DOC_TEMPLATE                    (RID_SFX_DOC_START+2)
-#define DLG_ORGANIZE                        (RID_SFX_DOC_START+3)
+
 #define DLG_TEMPLATE_MANAGER                (RID_SFX_DOC_START+4)
 
 #define BMP_STYLES_CLOSED                   (RID_SFX_DOC_START+ 0)

@@ -55,7 +55,6 @@
 #include "sfx2/sfxresid.hxx"
 #include "doc.hrc"
 #include <sfx2/sfx.hrc>
-#include "docvor.hrc"
 #include <sfx2/docfilt.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/fcontnr.hxx>
@@ -63,6 +62,21 @@
 #include <svtools/addresstemplate.hxx>
 #include "svtools/treelistentry.hxx"
 #include <comphelper/processfactory.hxx>
+
+#define ID_NEW                     1
+#define ID_DELETE                  2
+#define ID_EDIT                    3
+//seperator
+#define ID_COPY_FROM               5
+#define ID_COPY_TO                 6
+//seperator
+#define ID_PRINT                   8
+#define ID_PRINTER_SETUP           9
+//seperator
+#define ID_RESCAN                 11
+//seperator
+#define ID_DEFAULT_TEMPLATE       13
+#define ID_RESET_DEFAULT_TEMPLATE 14
 
 sal_Bool SfxOrganizeListBox_Impl::bDropMoveOk = sal_True;
 
@@ -88,6 +102,11 @@ public:
 
 //=========================================================================
 
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSfxOrganizeListBox(Window *pParent,
+    VclBuilder::stringmap &)
+{
+    return new SfxOrganizeListBox_Impl(pParent, WB_BORDER | WB_TABSTOP | WB_HSCROLL);
+}
 
 inline void SfxOrganizeListBox_Impl::SetBitmaps(
     const Image &rOFolder, const Image &rCFolder, const Image &rODoc, const Image &rCDoc )
@@ -126,17 +145,15 @@ friend class SfxOrganizeListBox_Impl;
     sal_uInt16                  m_nIndex;
     String                  m_sExtension4Save;
 
-    SfxOrganizeListBox_Impl aLeftLb;
-    ListBox                 aLeftTypLb;
+    SfxOrganizeListBox_Impl* m_pLeftLb;
+    ListBox*                m_pLeftTypLb;
 
-    SfxOrganizeListBox_Impl aRightLb;
-    ListBox                 aRightTypLb;
+    SfxOrganizeListBox_Impl* m_pRightLb;
+    ListBox*                m_pRightTypLb;
 
-    OKButton                aOkBtn;
-    MenuButton              aEditBtn;
-    HelpButton              aHelpBtn;
-    PushButton              aAddressTemplateBtn;
-    PushButton              aFilesBtn;
+    MenuButton*             m_pEditBtn;
+    PushButton*             m_pAddressTemplateBtn;
+    PushButton*             m_pFilesBtn;
 
     Accelerator             aEditAcc;
 
@@ -159,7 +176,8 @@ friend class SfxOrganizeListBox_Impl;
     DECL_LINK( MenuSelect_Impl, Menu * );
     DECL_LINK( MenuActivate_Impl, Menu * );
     DECL_LINK( AddFiles_Impl, Button * );
-    DECL_LINK( OnAddressTemplateClicked, Button * );
+    DECL_LINK( OnAddressTemplateClicked, void * );
+    DECL_LINK( Close_Impl, void * );
 
     DECL_LINK(ImportHdl, void *);
     DECL_LINK(ExportHdl, void *);
@@ -176,7 +194,6 @@ public:
 
 SfxOrganizeDlg_Impl::SfxOrganizeDlg_Impl( SfxTemplateOrganizeDlg* pParent,
                                           SfxDocumentTemplates* pTempl ) :
-
     pSuspend            ( NULL ),
     pDialog             ( pParent ),
     pFocusBox           ( NULL ),
@@ -187,23 +204,31 @@ SfxOrganizeDlg_Impl::SfxOrganizeDlg_Impl( SfxTemplateOrganizeDlg* pParent,
     nDropAction         ( NO_DROP_ACTION ),
     bExecDropFinished   ( true ),
 
-    aLeftLb     ( this, pParent, WB_BORDER | WB_TABSTOP | WB_HSCROLL, SfxOrganizeListBox_Impl::VIEW_TEMPLATES ),
-    aLeftTypLb  (  pParent, SfxResId( LB_LEFT_TYP ) ),
-
-    aRightLb    ( this, pParent, WB_BORDER | WB_TABSTOP | WB_HSCROLL, SfxOrganizeListBox_Impl::VIEW_FILES ),
-    aRightTypLb ( pParent, SfxResId( LB_RIGHT_TYP ) ),
-
-    aOkBtn              ( pParent, SfxResId( BTN_OK ) ),
-    aEditBtn            ( pParent, SfxResId( BTN_EDIT ) ),
-    aHelpBtn            ( pParent, SfxResId( BTN_HELP ) ),
-    aAddressTemplateBtn ( pParent, SfxResId( BTN_ADDRESSTEMPLATE ) ),
-    aFilesBtn           ( pParent, SfxResId( BTN_FILES ) ),
-
-    aEditAcc    ( SfxResId( ACC_EDIT ) ),
     aMgr        ( pTempl ),
     pFileDlg    ( NULL )
 
 {
+    aEditAcc.InsertItem(ID_NEW, KeyCode(KEY_INSERT));
+    aEditAcc.InsertItem(ID_DELETE, KeyCode(KEY_DELETE));
+
+    pDialog->get(m_pLeftTypLb, "lefttype");
+    pDialog->get(m_pLeftLb, "leftorganizer");
+    m_pLeftLb->Init(this, SfxOrganizeListBox_Impl::VIEW_TEMPLATES);
+
+    //20 lines
+    m_pLeftLb->set_height_request(m_pLeftLb->GetEntryHeight() * 20);
+
+    pDialog->get(m_pRightTypLb, "righttype");
+    pDialog->get(m_pRightLb, "rightorganizer");
+    m_pRightLb->Init(this, SfxOrganizeListBox_Impl::VIEW_FILES);
+
+    pDialog->get(m_pEditBtn, "commands");
+    pDialog->get(m_pAddressTemplateBtn, "addressbook");
+    pDialog->get(m_pFilesBtn, "file");
+
+    PushButton *pClose = pDialog->get<PushButton>("close");
+    pClose->SetClickHdl(LINK(this,SfxOrganizeDlg_Impl, Close_Impl));
+
     // update the SfxDocumentTemplates the manager works with
     if ( aMgr.GetTemplates() )  // should never fail, but who knows ....
     {
@@ -220,9 +245,6 @@ SfxOrganizeDlg_Impl::SfxOrganizeDlg_Impl( SfxTemplateOrganizeDlg* pParent,
             //   (knowing that they all share the same implementation class)
             // * always work with an own instance, even if we get only NULL in this ctor
     }
-
-    aLeftLb.SetHelpId( HID_CTL_ORGANIZER_LEFT );
-    aRightLb.SetHelpId( HID_CTL_ORGANIZER_RIGHT );
 
     String aWorkPath = SvtPathOptions().GetWorkPath();
     if ( aWorkPath.Len() )
@@ -243,49 +265,49 @@ SfxOrganizeDlg_Impl::SfxOrganizeDlg_Impl( SfxTemplateOrganizeDlg* pParent,
 
     InitBitmaps();
 
-    aEditBtn.GetPopupMenu()->SetSelectHdl( LINK( this, SfxOrganizeDlg_Impl, MenuSelect_Impl ) );
-    aEditBtn.GetPopupMenu()->SetActivateHdl( LINK( this, SfxOrganizeDlg_Impl, MenuActivate_Impl ) );
+    m_pEditBtn->GetPopupMenu()->SetSelectHdl( LINK( this, SfxOrganizeDlg_Impl, MenuSelect_Impl ) );
+    m_pEditBtn->GetPopupMenu()->SetActivateHdl( LINK( this, SfxOrganizeDlg_Impl, MenuActivate_Impl ) );
     aEditAcc.SetSelectHdl( LINK( this, SfxOrganizeDlg_Impl, AccelSelect_Impl ) );
     GetpApp()->InsertAccel( &aEditAcc );
 
-    aFilesBtn.SetClickHdl(
+    m_pFilesBtn->SetClickHdl(
         LINK(this,SfxOrganizeDlg_Impl, AddFiles_Impl));
-    aAddressTemplateBtn.SetClickHdl(
+    m_pAddressTemplateBtn->SetClickHdl(
         LINK(this,SfxOrganizeDlg_Impl, OnAddressTemplateClicked));
-    aLeftTypLb.SetSelectHdl(
+    m_pLeftTypLb->SetSelectHdl(
         LINK(this, SfxOrganizeDlg_Impl, LeftListBoxSelect_Impl));
-    aRightTypLb.SetSelectHdl(
+    m_pRightTypLb->SetSelectHdl(
         LINK(this, SfxOrganizeDlg_Impl, RightListBoxSelect_Impl));
-    aLeftLb.SetGetFocusHdl(
+    m_pLeftLb->SetGetFocusHdl(
         LINK(this, SfxOrganizeDlg_Impl, GetFocus_Impl));
-    aRightLb.SetGetFocusHdl(
+    m_pRightLb->SetGetFocusHdl(
         LINK(this, SfxOrganizeDlg_Impl, GetFocus_Impl));
-    aLeftLb.SetPosSizePixel(pParent->LogicToPixel(Point(3, 6), MAP_APPFONT),
+    m_pLeftLb->SetPosSizePixel(pParent->LogicToPixel(Point(3, 6), MAP_APPFONT),
                             pParent->LogicToPixel(Size(94, 132), MAP_APPFONT));
-    aRightLb.SetPosSizePixel(pParent->LogicToPixel(Point(103, 6), MAP_APPFONT),
+    m_pRightLb->SetPosSizePixel(pParent->LogicToPixel(Point(103, 6), MAP_APPFONT),
                              pParent->LogicToPixel(Size(94, 132), MAP_APPFONT));
 
     if ( !SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SDATABASE) )
-        aAddressTemplateBtn.Hide();
-    Font aFont(aLeftLb.GetFont());
+        m_pAddressTemplateBtn->Hide();
+    Font aFont(m_pLeftLb->GetFont());
     aFont.SetWeight(WEIGHT_NORMAL);
-    aLeftLb.SetFont(aFont);
-    aRightLb.SetFont(aFont);
-    const long nIndent = aLeftLb.GetIndent() / 2;
-    aLeftLb.SetIndent( (short)nIndent );
-    aRightLb.SetIndent( (short)nIndent );
+    m_pLeftLb->SetFont(aFont);
+    m_pRightLb->SetFont(aFont);
+    const long nIndent = m_pLeftLb->GetIndent() / 2;
+    m_pLeftLb->SetIndent( (short)nIndent );
+    m_pRightLb->SetIndent( (short)nIndent );
 
-    aLeftLb.SetMgr(&aMgr);
-    aRightLb.SetMgr(&aMgr);
-    aLeftLb.Reset();
-    aRightLb.Reset();//SetModel(aLeftLb.GetModel());
+    m_pLeftLb->SetMgr(&aMgr);
+    m_pRightLb->SetMgr(&aMgr);
+    m_pLeftLb->Reset();
+    m_pRightLb->Reset();//SetModel(m_pLeftLb->GetModel());
 
-    aLeftLb.Show();
-    aRightLb.Show();
+    m_pLeftLb->Show();
+    m_pRightLb->Show();
 
-    aLeftLb.SelectAll( sal_False );
-    aRightLb.SelectAll( sal_False );
-    aRightLb.GrabFocus();
+    m_pLeftLb->SelectAll( sal_False );
+    m_pRightLb->SelectAll( sal_False );
+    m_pRightLb->GrabFocus();
 }
 
 //-------------------------------------------------------------------------
@@ -299,13 +321,13 @@ SfxOrganizeDlg_Impl::~SfxOrganizeDlg_Impl()
 
 void SfxOrganizeDlg_Impl::InitBitmaps( void )
 {
-    Image   aOpenedFolderBmp( SfxResId( IMG_OPENED_FOLDER ) );
-    Image   aClosedFolderBmp( SfxResId( IMG_CLOSED_FOLDER ) );
-    Image   aOpenedDocBmp( SfxResId( IMG_OPENED_DOC ) );
-    Image   aClosedDocBmp( SfxResId( IMG_CLOSED_DOC ) );
+    const Image& rOpenedFolderBmp(pDialog->get<FixedImage>("folderop")->GetImage());
+    const Image& rClosedFolderBmp(pDialog->get<FixedImage>("foldercl")->GetImage());
+    const Image& rOpenedDocBmp(pDialog->get<FixedImage>("docop")->GetImage());
+    const Image& rClosedDocBmp(pDialog->get<FixedImage>("doccl")->GetImage());
 
-    aLeftLb.SetBitmaps( aOpenedFolderBmp, aClosedFolderBmp, aOpenedDocBmp, aClosedDocBmp );
-    aRightLb.SetBitmaps( aOpenedFolderBmp, aClosedFolderBmp, aOpenedDocBmp, aClosedDocBmp );
+    m_pLeftLb->SetBitmaps(rOpenedFolderBmp, rClosedFolderBmp, rOpenedDocBmp, rClosedDocBmp);
+    m_pRightLb->SetBitmaps(rOpenedFolderBmp, rClosedFolderBmp, rOpenedDocBmp, rClosedDocBmp);
 }
 
 //=========================================================================
@@ -1294,28 +1316,11 @@ SvTreeListEntry* SfxOrganizeListBox_Impl::InsertEntryByBmpType(
     return pEntry;
 }
 
-//-------------------------------------------------------------------------
-
-SfxOrganizeListBox_Impl::SfxOrganizeListBox_Impl
-(
-    SfxOrganizeDlg_Impl* pArgDlg,
-    Window* pParent,
-    WinBits nBits,
-    DataEnum eType
-) :
-
-    SvTreeListBox( pParent, nBits ),
-
-    pMgr        ( NULL ),
-    pDlg        ( pArgDlg ),
-    eViewType   ( eType )
-
-/*  [Description]
-
-    Constructor SfxOrganizeListBox
-
-*/
-
+SfxOrganizeListBox_Impl::SfxOrganizeListBox_Impl(Window* pParent, WinBits nBits)
+    : SvTreeListBox( pParent, nBits )
+    , pMgr( NULL )
+    , pDlg( NULL )
+    , eViewType( SfxOrganizeListBox_Impl::VIEW_TEMPLATES )
 {
     SetDragDropMode(
         SV_DRAGDROP_CTRL_MOVE | SV_DRAGDROP_CTRL_COPY |
@@ -1325,6 +1330,12 @@ SfxOrganizeListBox_Impl::SfxOrganizeListBox_Impl
     GetModel()->SetSortMode( SortNone );
 
     EnableContextMenuHandling();
+}
+
+void SfxOrganizeListBox_Impl::Init(SfxOrganizeDlg_Impl* pArgDlg, DataEnum eType)
+{
+    pDlg = pArgDlg;
+    eViewType = eType;
 }
 
 //-------------------------------------------------------------------------
@@ -1458,7 +1469,7 @@ const Image &SfxOrganizeListBox_Impl::GetOpenedBmp(sal_uInt16 nLevel) const
 
 PopupMenu* SfxOrganizeListBox_Impl::CreateContextMenu()
 {
-    return new PopupMenu( *( pDlg->aEditBtn.GetPopupMenu() ) );
+    return new PopupMenu( *( pDlg->m_pEditBtn->GetPopupMenu() ) );
 }
 
 //-------------------------------------------------------------------------
@@ -1877,10 +1888,10 @@ long SfxOrganizeDlg_Impl::Dispatch_Impl( sal_uInt16 nId, Menu* _pMenu )
         case ID_RESCAN:
             if ( !aMgr.Rescan() )
                 ErrorBox( pDialog, SfxResId( MSG_ERROR_RESCAN ) ).Execute();
-            if ( SfxOrganizeListBox_Impl::VIEW_TEMPLATES == aLeftLb.GetViewType() )
-                aLeftLb.Reset();
-            if ( SfxOrganizeListBox_Impl::VIEW_TEMPLATES == aRightLb.GetViewType() )
-                aRightLb.Reset();
+            if ( SfxOrganizeListBox_Impl::VIEW_TEMPLATES == m_pLeftLb->GetViewType() )
+                m_pLeftLb->Reset();
+            if ( SfxOrganizeListBox_Impl::VIEW_TEMPLATES == m_pRightLb->GetViewType() )
+                m_pRightLb->Reset();
             break;
 
         case ID_PRINT:
@@ -1931,9 +1942,9 @@ long SfxOrganizeDlg_Impl::Dispatch_Impl( sal_uInt16 nId, Menu* _pMenu )
             bHandled = sal_False;
     }
 
-    if ( !bHandled && ( nId > ID_RESET_DEFAULT_TEMPLATE && nId <= ID_RESET_DEFAULT_TEMPLATE_END ) )
+    if ( !bHandled && nId > ID_RESET_DEFAULT_TEMPLATE )
     {
-        Menu* pSubMenu = _pMenu ? _pMenu : aEditBtn.GetPopupMenu()->GetPopupMenu( ID_RESET_DEFAULT_TEMPLATE );
+        Menu* pSubMenu = _pMenu ? _pMenu : m_pEditBtn->GetPopupMenu()->GetPopupMenu( ID_RESET_DEFAULT_TEMPLATE );
         if ( pSubMenu )
         {
             String aServiceName = SfxObjectShell::GetServiceNameFromFactory( pSubMenu->GetItemCommand( nId ) );
@@ -2027,8 +2038,8 @@ IMPL_LINK( SfxOrganizeDlg_Impl, MenuActivate_Impl, Menu *, pMenu )
                        bEnable && eVT == SfxOrganizeListBox_Impl::VIEW_TEMPLATES &&
                        nDepth == nDocLevel );
     pMenu->EnableItem( ID_RESCAN,
-                       SfxOrganizeListBox_Impl::VIEW_TEMPLATES == aRightLb.GetViewType() ||
-                       SfxOrganizeListBox_Impl::VIEW_TEMPLATES == aLeftLb.GetViewType() );
+                       SfxOrganizeListBox_Impl::VIEW_TEMPLATES == m_pRightLb->GetViewType() ||
+                       SfxOrganizeListBox_Impl::VIEW_TEMPLATES == m_pLeftLb->GetViewType() );
     sal_Bool bPrint = bEnable && nDepth > pFocusBox->GetDocLevel();
     if ( bPrint && pPrt )
         bPrint = !pPrt->IsPrinting() && !pPrt->IsJobActive();
@@ -2062,7 +2073,6 @@ IMPL_LINK( SfxOrganizeDlg_Impl, MenuActivate_Impl, Menu *, pMenu )
             String aTitle = SvFileInformationManager::GetDescription(aObj);
             pSubMenu->InsertItem(nItemId, aTitle, SvFileInformationManager::GetImage(aObj, false));
             pSubMenu->SetItemCommand(nItemId++, *i);
-            DBG_ASSERT( nItemId <= ID_RESET_DEFAULT_TEMPLATE_END, "menu item id overflow" );
         }
         pMenu->SetPopupMenu( ID_RESET_DEFAULT_TEMPLATE, pSubMenu );
     }
@@ -2092,7 +2102,7 @@ IMPL_LINK( SfxOrganizeDlg_Impl, GetFocus_Impl, SfxOrganizeListBox_Impl *, pBox )
     if(pFocusBox && pFocusBox != pBox)
         pFocusBox->SelectAll(sal_False);
     pFocusBox = pBox;
-    aFilesBtn.Enable( SfxOrganizeListBox_Impl::VIEW_FILES ==
+    m_pFilesBtn->Enable( SfxOrganizeListBox_Impl::VIEW_FILES ==
                       pFocusBox->GetViewType() );
     return 0;
 }
@@ -2115,17 +2125,17 @@ IMPL_LINK( SfxOrganizeDlg_Impl, LeftListBoxSelect_Impl, ListBox *, pBox )
     const SfxOrganizeListBox_Impl::DataEnum
         eViewType = pBox->GetSelectEntryPos() == 0 ?
         SfxOrganizeListBox_Impl::VIEW_TEMPLATES : SfxOrganizeListBox_Impl::VIEW_FILES;
-    if(eViewType!= aLeftLb.GetViewType()) {
-        aLeftLb.SetViewType(eViewType);
-        if(aRightLb.GetViewType() == eViewType)
-            aLeftLb.SetModel(aRightLb.GetModel());
+    if(eViewType!= m_pLeftLb->GetViewType()) {
+        m_pLeftLb->SetViewType(eViewType);
+        if(m_pRightLb->GetViewType() == eViewType)
+            m_pLeftLb->SetModel(m_pRightLb->GetModel());
         else {
             // Models trennen
-            aLeftLb.DisconnectFromModel();
-            aLeftLb.Reset();
+            m_pLeftLb->DisconnectFromModel();
+            m_pLeftLb->Reset();
         }
     }
-    GetFocus_Impl(&aLeftLb);
+    GetFocus_Impl(m_pLeftLb);
     return 0;
 }
 
@@ -2147,30 +2157,35 @@ IMPL_LINK( SfxOrganizeDlg_Impl, RightListBoxSelect_Impl, ListBox *, pBox )
     const SfxOrganizeListBox_Impl::DataEnum eViewType =
         pBox->GetSelectEntryPos() == 0 ?
         SfxOrganizeListBox_Impl::VIEW_TEMPLATES : SfxOrganizeListBox_Impl::VIEW_FILES;
-    if(eViewType!= aRightLb.GetViewType())
+    if(eViewType!= m_pRightLb->GetViewType())
     {
-        aRightLb.SetViewType(eViewType);
-        if(aLeftLb.GetViewType() == eViewType)
-            aRightLb.SetModel(aLeftLb.GetModel());
+        m_pRightLb->SetViewType(eViewType);
+        if(m_pLeftLb->GetViewType() == eViewType)
+            m_pRightLb->SetModel(m_pLeftLb->GetModel());
         else
         {
             // Separate models
-            aRightLb.DisconnectFromModel();
-            aRightLb.Reset();
+            m_pRightLb->DisconnectFromModel();
+            m_pRightLb->Reset();
         }
     }
-    aRightLb.GrabFocus();
-    GetFocus_Impl(&aRightLb);
+    m_pRightLb->GrabFocus();
+    GetFocus_Impl(m_pRightLb);
     return 0;
 }
 
 //-------------------------------------------------------------------------
 
-IMPL_LINK( SfxOrganizeDlg_Impl, OnAddressTemplateClicked, Button *, pButton )
+IMPL_LINK_NOARG(SfxOrganizeDlg_Impl, OnAddressTemplateClicked)
 {
-    (void)pButton; //unused
     svt::AddressBookSourceDialog aDialog(pDialog, ::comphelper::getProcessServiceFactory());
     aDialog.Execute();
+    return 0L;
+}
+
+IMPL_LINK_NOARG(SfxOrganizeDlg_Impl, Close_Impl)
+{
+    pDialog->EndDialog( sal_True );
     return 0L;
 }
 
@@ -2357,15 +2372,10 @@ short SfxTemplateOrganizeDlg::Execute()
 
 SfxTemplateOrganizeDlg::SfxTemplateOrganizeDlg(Window * pParent,
                                                 SfxDocumentTemplates *pTempl)
-:   ModalDialog( pParent, SfxResId(DLG_ORGANIZE)),
-    pImp( new SfxOrganizeDlg_Impl(this, pTempl) )
-
-/*  [Description]
-
-    Constructor
-*/
+    : ModalDialog(pParent, "TemplateManagementDialog",
+        "sfx/ui/templatemanagementdialog.ui")
+    , pImp( new SfxOrganizeDlg_Impl(this, pTempl) )
 {
-    FreeResource();
 }
 
 //-------------------------------------------------------------------------

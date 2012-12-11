@@ -77,10 +77,12 @@ protected:
     virtual void            DragFinished( sal_Int8 nDropAction );
 
 public:
-        using SvListView::Select;
+    using SvListView::Select;
     enum DataEnum   { VIEW_TEMPLATES, VIEW_FILES } eViewType;
 
-    SfxOrganizeListBox_Impl( SfxOrganizeDlg_Impl* pDlg, Window* pParent, WinBits, DataEnum );
+    SfxOrganizeListBox_Impl(Window* pParent, WinBits nBits);
+
+    void Init(SfxOrganizeDlg_Impl* pArgDlg, DataEnum eType);
 
     DataEnum    GetViewType() const { return eViewType; }
     void        SetViewType(DataEnum eType) { eViewType = eType; }
