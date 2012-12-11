@@ -21,6 +21,8 @@
 #include "oox/drawingml/clrschemecontext.hxx"
 #include "oox/drawingml/lineproperties.hxx"
 #include "oox/drawingml/linepropertiescontext.hxx"
+#include "oox/drawingml/effectproperties.hxx"
+#include "oox/drawingml/effectpropertiescontext.hxx"
 #include "oox/drawingml/fillproperties.hxx"
 #include "oox/drawingml/fillpropertiesgroupcontext.hxx"
 #include "oox/drawingml/theme.hxx"
@@ -122,9 +124,13 @@ Reference< XFastContextHandler > EffectStyleListContext::createFastChildContext(
     switch( nElement )
     {
         case A_TOKEN( effectStyle ):
-            mrEffectStyleList.push_back( EffectStyleList::value_type( new PropertyMap ) );
-            // TODO: import effect styles
-            return 0;
+            mrEffectStyleList.push_back( EffectPropertiesPtr( new EffectProperties ) );
+            return this;
+
+        case A_TOKEN( effectLst ):  // CT_EffectList
+            if( mrEffectStyleList.back() )
+                return new EffectPropertiesContext( *this, *mrEffectStyleList.back() );
+            break;
     }
     return 0;
 }

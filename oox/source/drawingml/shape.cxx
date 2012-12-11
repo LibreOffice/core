@@ -493,6 +493,8 @@ Reference< XShape > Shape::createAndInsert(
         aFillProperties.moFillType = XML_noFill;
         sal_Int32 nFillPhClr = -1;
         EffectProperties aEffectProperties;
+        // TODO: use ph color when applying effect properties
+        //sal_Int32 nEffectPhClr = -1;
 
         if( pTheme )
         {
@@ -508,12 +510,13 @@ Reference< XShape > Shape::createAndInsert(
                     aFillProperties.assignUsed( *pFillProps );
                 nFillPhClr = pFillRef->maPhClr.getColor( rGraphicHelper );
             }
-//            if( const ShapeStyleRef* pEffectRef = getShapeStyleRef( XML_fillRef ) )
-//            {
-//                if( const EffectProperties* pEffectProps = pTheme->getEffectStyle( pEffectRef->mnThemedIdx ) )
-//                    aEffectProperties.assignUsed( *pEffectProps );
-//                nEffectPhClr = pEffectRef->maPhClr.getColor( rGraphicHelper );
-//            }
+            if( const ShapeStyleRef* pEffectRef = getShapeStyleRef( XML_effectRef ) )
+            {
+                if( const EffectProperties* pEffectProps = pTheme->getEffectStyle( pEffectRef->mnThemedIdx ) )
+                    aEffectProperties.assignUsed( *pEffectProps );
+                // TODO: use ph color when applying effect properties
+                // nEffectPhClr = pEffectRef->maPhClr.getColor( rGraphicHelper );
+            }
         }
 
         aLineProperties.assignUsed( getLineProperties() );
@@ -543,6 +546,7 @@ Reference< XShape > Shape::createAndInsert(
             mpTablePropertiesPtr->pushToPropSet( rFilterBase, xSet, mpMasterTextListStyle );
         aFillProperties.pushToPropMap( aShapeProps, rGraphicHelper, mnRotation, nFillPhClr, mbFlipH, mbFlipV );
         aLineProperties.pushToPropMap( aShapeProps, rGraphicHelper, nLinePhClr );
+        // TODO: use ph color when applying effect properties
         aEffectProperties.pushToPropMap( aShapeProps, rGraphicHelper );
 
         // applying autogrowheight property before setting shape size, because
