@@ -38,8 +38,6 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 
-using ::rtl::OUString;
-
 XMLFilterTabDialog::XMLFilterTabDialog( Window *pParent, ResMgr& rResMgr, const Reference< XMultiServiceFactory >& rxMSF, const filter_info_impl* pInfo ) :
     TabDialog( pParent, ResId( DLG_XML_FILTER_TABDIALOG, rResMgr ) ),
     mxMSF( rxMSF ),
@@ -56,8 +54,8 @@ XMLFilterTabDialog::XMLFilterTabDialog( Window *pParent, ResMgr& rResMgr, const 
     mpOldInfo = pInfo;
     mpNewInfo = new filter_info_impl( *mpOldInfo );
 
-    String aTitle( GetText() );
-    aTitle.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM("%s") ), mpNewInfo->maFilterName );
+    OUString aTitle( GetText() );
+    aTitle.replaceAll("%s", mpNewInfo->maFilterName);
     SetText( aTitle );
 
     maTabCtrl.Show();
@@ -120,8 +118,8 @@ bool XMLFilterTabDialog::onOk()
     sal_uInt16 nErrorPage = 0;
     sal_uInt16 nErrorId = 0;
     Window* pFocusWindow = NULL;
-    String aReplace1;
-    String aReplace2;
+    OUString aReplace1;
+    OUString aReplace2;
 
     // 1. see if the filter name is ok
     if( (mpNewInfo->maFilterName.isEmpty()) || (mpNewInfo->maFilterName != mpOldInfo->maFilterName) )
@@ -135,7 +133,7 @@ bool XMLFilterTabDialog::onOk()
         {
             try
             {
-                Reference< XNameAccess > xFilterContainer( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.FilterFactory" )) ), UNO_QUERY );
+                Reference< XNameAccess > xFilterContainer( mxMSF->createInstance( "com.sun.star.document.FilterFactory" ), UNO_QUERY );
                 if( xFilterContainer.is() )
                 {
                     if( xFilterContainer->hasByName( mpNewInfo->maFilterName ) )
@@ -167,7 +165,7 @@ bool XMLFilterTabDialog::onOk()
         {
             try
             {
-                Reference< XNameAccess > xFilterContainer( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.FilterFactory" )) ), UNO_QUERY );
+                Reference< XNameAccess > xFilterContainer( mxMSF->createInstance( "com.sun.star.document.FilterFactory" ), UNO_QUERY );
                 if( xFilterContainer.is() )
                 {
                     Sequence< OUString > aFilterNames( xFilterContainer->getElementNames() );
@@ -275,16 +273,16 @@ bool XMLFilterTabDialog::onOk()
         ActivatePageHdl( &maTabCtrl );
 
         ResId aResId( nErrorId, mrResMgr );
-        String aMessage( aResId );
+        OUString aMessage( aResId );
 
-        if( aReplace2.Len() )
+        if( aReplace2.getLength() )
         {
-            aMessage.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM("%s1") ), aReplace1 );
-            aMessage.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM("%s2") ), aReplace2 );
+            aMessage.replaceAll( "%s1", aReplace1 );
+            aMessage.replaceAll( "%s2", aReplace2 );
         }
-        else if( aReplace1.Len() )
+        else if( aReplace1.getLength() )
         {
-            aMessage.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM("%s") ), aReplace1 );
+            aMessage.replaceAll( "%s", aReplace1 );
         }
 
         ErrorBox aBox(this, (WinBits)(WB_OK), aMessage );
