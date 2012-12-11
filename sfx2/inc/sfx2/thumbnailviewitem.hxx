@@ -53,6 +53,7 @@ struct ThumbnailItemAttributes
 {
     sal_uInt32 nMaxTextLenght;
     basegfx::BColor aFillColor;
+    double nFillTransparence;
     basegfx::BColor aHighlightColor;
     basegfx::B2DVector aFontSize;
     drawinglayer::attribute::FontAttribute aFontAttr;

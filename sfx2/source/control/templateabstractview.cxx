@@ -268,19 +268,11 @@ BitmapEx TemplateAbstractView::fetchThumbnail (const OUString &msURL, long width
 
 void TemplateAbstractView::Resize()
 {
-    mpItemView->SetSizePixel(GetSizePixel());
-}
-
-void TemplateAbstractView::Paint(const Rectangle &rRect)
-{
-    if (!mpItemView->IsVisible())
-        ThumbnailView::Paint(rRect);
-}
-
-void TemplateAbstractView::DrawItem(ThumbnailViewItem *pItem)
-{
-    if (!mpItemView->IsVisible())
-        ThumbnailView::DrawItem(pItem);
+    Size aSize = GetSizePixel();
+    aSize.setHeight(aSize.getHeight() * 0.5);
+    aSize.setWidth(aSize.getWidth() - 20);
+    Point aPos(10, 10);
+    mpItemView->SetPosSizePixel(aPos, aSize);
 }
 
 IMPL_LINK(TemplateAbstractView, OverlayItemStateHdl, const ThumbnailViewItem*, pItem)

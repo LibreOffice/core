@@ -11,6 +11,8 @@
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <drawinglayer/attribute/fillbitmapattribute.hxx>
@@ -18,9 +20,11 @@
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
+#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/templateviewitem.hxx>
 #include <vcl/edit.hxx>
+#include <vcl/scrbar.hxx>
 
 #include "templateview.hrc"
 
@@ -39,6 +43,7 @@ TemplateView::TemplateView (Window *pParent)
       mpEditName(new Edit(this, WB_BORDER | WB_HIDE))
 {
     mnHeaderHeight = 30;
+    mnFooterHeight = 5;
 }
 
 TemplateView::~TemplateView ()
@@ -57,7 +62,7 @@ void TemplateView::Paint (const Rectangle &rRect)
     ThumbnailView::Paint(rRect);
 
     int nCount = 0;
-    int nMaxCount = 1;
+    int nMaxCount = 2;
 
     if (mbRenderTitle)
         ++nMaxCount;
@@ -78,11 +83,14 @@ void TemplateView::Paint (const Rectangle &rRect)
                     mpItemAttrs->aFontSize.getX(), mpItemAttrs->aFontSize.getY(),
                     double( aPos.X() ), double( aPos.Y() ) ) );
 
+        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+        B2DVector aFontSize;
+        FontAttribute aFontAttr = getFontAttributeFromVclFont(aFontSize, rStyleSettings.GetTitleFont(), false, false);
         aSeq[nCount++] = Primitive2DReference(
                     new TextSimplePortionPrimitive2D(aTextMatrix,
                                                      maName,0,maName.getLength(),
                                                      std::vector< double >( ),
-                                                     mpItemAttrs->aFontAttr,
+                                                     aFontAttr,
                                                      com::sun::star::lang::Locale(),
                                                      Color(COL_BLACK).getBColor() ) );
     }
@@ -93,7 +101,7 @@ void TemplateView::Paint (const Rectangle &rRect)
     aPos.Y() = (mnHeaderHeight - aImageSize.Height())/2;
     aPos.X() = aWinSize.Width() - aImageSize.Width() - aPos.Y();
 
-    aSeq[nCount] = Primitive2DReference( new FillBitmapPrimitive2D(
+    aSeq[nCount++] = Primitive2DReference( new FillBitmapPrimitive2D(
                                         createTranslateB2DHomMatrix(aPos.X(),aPos.Y()),
                                         FillBitmapAttribute(maCloseImg.GetBitmapEx(),
                                                             B2DPoint(0,0),
@@ -101,6 +109,10 @@ void TemplateView::Paint (const Rectangle &rRect)
                                                             false)
                                         ));
 
+    // TODO Draw some shadow
+    Rectangle aBounds(Point(0, 0), Size(aWinSize.getWidth() - 1, aWinSize.getHeight() - 1));
+    B2DPolygon aBoundsPolygon(Polygon(aBounds, 5, 5).getB2DPolygon());
+    aSeq[nCount] = Primitive2DReference( new PolyPolygonHairlinePrimitive2D(B2DPolyPolygon(aBoundsPolygon), Color(0,0,0).getBColor()));
     mpProcessor->process(aSeq);
 }
 
