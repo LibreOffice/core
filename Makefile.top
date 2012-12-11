@@ -14,7 +14,7 @@ ifeq ($(gb_Side),)
 gb_Side:=host
 endif
 
-include $(BUILD_DIR)/config_$(gb_Side).mk
+include $(BUILDDIR)/config_$(gb_Side).mk
 SRCDIR:=$(SRC_ROOT)
 
 ifeq ($(GMAKE_OPTIONS),)
@@ -27,7 +27,7 @@ endif
 
 # This list tells which modules are gbuild ones. It does *not* tell which modules to build. That is directed
 # by the module being mentioned in packimages/prj/build.lst, etc, recursively.
-$(WORKDIR)/modules.mk: $(wildcard */Module_*.mk) $(wildcard */prj/dmake) $(BUILD_DIR)/config_host.mk
+$(WORKDIR)/modules.mk: $(wildcard */Module_*.mk) $(wildcard */prj/dmake) $(BUILDDIR)/config_host.mk
 	mkdir -p $(dir $@)
 	echo -n "gbuild_modules:= tail_build \\" > $@
 	for m in */Module_*.mk; do echo $$m | sed -e 's/\/.*$$/ \\/'; done >> $@
@@ -143,9 +143,9 @@ ifeq ($(BUILD_DMAKE),YES)
 	(if [ -f dmake/Makefile ] ; then $(GNUMAKE) -j $(PARALLELISM) -C dmake distclean; fi) && \
 	rm -f solenv/*/bin/dmake*
 endif
-	rm -fr $(BUILD_DIR)/config_host.mk $(BUILD_DIR)/config_build.mk $(BUILD_DIR)/aclocal.m4 $(BUILD_DIR)/autom4te.cache \
-	$(BUILD_DIR)/config.log $(BUILD_DIR)/config.status $(BUILD_DIR)/configure \
-	$(BUILD_DIR)/config_host.mk.last $(BUILD_DIR)/config_host.mk.stamp $(BUILD_DIR)/warn $(BUILD_DIR)/config/*.h
+	rm -fr $(BUILDDIR)/config_host.mk $(BUILDDIR)/config_build.mk $(BUILDDIR)/aclocal.m4 $(BUILDDIR)/autom4te.cache \
+	$(BUILDDIR)/config.log $(BUILDDIR)/config.status $(BUILDDIR)/configure \
+	$(BUILDDIR)/config_host.mk.last $(BUILDDIR)/config_host.mk.stamp $(BUILDDIR)/warn $(BUILDDIR)/config/*.h
 	find $(SOLARENV)/gdb -name "*.pyc" -exec rm {} \;
 
 #

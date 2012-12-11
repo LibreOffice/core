@@ -70,7 +70,7 @@ endef
 
 download: $(WORKDIR)/download
 
-$(WORKDIR)/download: $(BUILD_DIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)/Makefile.fetch
+$(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)/Makefile.fetch
 	@mkdir -p $(TARFILE_LOCATION)/tmp
 	@date >> $(fetch_LOGFILE)
 	$(foreach item, \

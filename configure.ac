@@ -86,10 +86,10 @@ AC_PROG_EGREP
 # AC_PROG_EGREP doesn't set GREP on all systems as well
 AC_PATH_PROG(GREP, grep)
 
-BUILD_DIR=`pwd`
+BUILDDIR=`pwd`
 cd $srcdir
 SRC_ROOT=`pwd`
-cd $BUILD_DIR
+cd $BUILDDIR
 EXEEXT_FOR_BUILD=
 x_Cygwin=[\#]
 
@@ -97,8 +97,8 @@ if test "$build_os" = "cygwin"; then
     EXEEXT_FOR_BUILD=.exe
     PathFormat "$SRC_ROOT"
     SRC_ROOT="$formatted_path"
-    PathFormat "$BUILD_DIR"
-    BUILD_DIR="$formatted_path"
+    PathFormat "$BUILDDIR"
+    BUILDDIR="$formatted_path"
     x_Cygwin=
 fi
 
@@ -2409,7 +2409,7 @@ if test -n "${with_solver_and_workdir_root}"; then
         SOLARVER=${formatted_path}/solver
     fi
 else
-    SOLARVER=${BUILD_DIR}/solver
+    SOLARVER=${BUILDDIR}/solver
 fi
 
 dnl ===================================================================
@@ -4034,7 +4034,7 @@ if test -n "${with_solver_and_workdir_root}"; then
         WORKDIR=${formatted_path}/workdir/${INPATH}
     fi
 else
-    WORKDIR=${BUILD_DIR}/workdir/${INPATH}
+    WORKDIR=${BUILDDIR}/workdir/${INPATH}
 fi
 OUTDIR="${SOLARVER}/${INPATH}"
 SOLARINC="-I. -I${SOLARVER}/$INPATH/inc/external -I${SOLARVER}/$INPATH/inc -I$SRC_ROOT/solenv/inc $SOLARINC"

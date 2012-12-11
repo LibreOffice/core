@@ -11,8 +11,8 @@ SUBMODULES_ALL="dictionaries helpcontent2 translations"
 
 pushd $(dirname $0) > /dev/null
 if [ -f config_host.mk ] ; then
-    # we are in the BUILD_DIR
-    SRC_ROOT=$(cat ${BUILD_DIR}/config_host.mk | grep SRC_ROOT | sed -e "s/.*=//")
+    # we are in the BUILDDIR
+    SRC_ROOT=$(cat ${BUILDDIR}/config_host.mk | grep SRC_ROOT | sed -e "s/.*=//")
 else
     SRC_ROOT=$(pwd)
 fi
@@ -121,8 +121,8 @@ local repo
 get_configured_submodules()
 {
     SUBMODULES_CONFIGURED=""
-    if [ -f "${BUILD_DIR}/config_host.mk" ] ; then
-	SUBMODULES_CONFIGURED=$(cat ${BUILD_DIR}/config_host.mk | grep GIT_NEEDED_SUBMODULES | sed -e "s/.*=//")
+    if [ -f "${BUILDDIR}/config_host.mk" ] ; then
+	SUBMODULES_CONFIGURED=$(cat ${BUILDDIR}/config_host.mk | grep GIT_NEEDED_SUBMODULES | sed -e "s/.*=//")
     else
 	# if we need the configured submoduel before the configuration is done. we assumed you want them all
 	SUBMODULES_CONFIGURED=${SUBMODULES_ALL?}

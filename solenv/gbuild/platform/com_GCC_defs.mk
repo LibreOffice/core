@@ -157,7 +157,7 @@ gb_DEBUG_CXXFLAGS := $(FNO_DEFAULT_INLINE)
 
 gb_LinkTarget_INCLUDE :=\
     $(subst -I. , ,$(SOLARINC)) \
-    -I$(BUILD_DIR)/config \
+    -I$(BUILDDIR)/config \
 
 ifeq ($(COM_GCC_IS_CLANG),TRUE)
 ifeq ($(COMPILER_PLUGIN_TOOL),)
