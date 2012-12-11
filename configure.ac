@@ -103,6 +103,7 @@ if test "$build_os" = "cygwin"; then
 fi
 
 AC_SUBST(SRC_ROOT)
+AC_SUBST(BUILDDIR)
 AC_SUBST(EXEEXT_FOR_BUILD)
 AC_SUBST(x_Cygwin)
 

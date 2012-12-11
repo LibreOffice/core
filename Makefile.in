@@ -14,7 +14,7 @@ endif
 
 SHELL=/usr/bin/env bash
 export SRCDIR:=@SRC_ROOT@
-export BUILDDIR:=$(patsubst %/,%,$(dir $(realpath $(firstword $(MAKEFILE_LIST)))))
+export BUILDDIR:=@BUILDDIR@
 
 .PHONY : $(filter-out $(BUILDDIR)/config_host.mk,$(MAKECMDGOALS))
 
