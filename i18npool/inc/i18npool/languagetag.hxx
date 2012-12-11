@@ -229,6 +229,7 @@ private:
     mutable Decision                        meIsValid;
     mutable Decision                        meIsIsoLocale;
     mutable Decision                        meIsIsoODF;
+    mutable Decision                        meIsLiblangtagNeeded;   ///< whether processing with liblangtag needed
             bool                            mbSystemLocale      : 1;
     mutable bool                            mbInitializedBcp47  : 1;
     mutable bool                            mbInitializedLocale : 1;
@@ -245,17 +246,36 @@ private:
     void    convertLangToLocale();
     void    convertLangToBcp47();
 
-    bool    canonicalize() const;
+    bool    canonicalize();
 
-    rtl::OUString   getLanguageFromLangtag() const;
-    rtl::OUString   getScriptFromLangtag() const;
-    rtl::OUString   getRegionFromLangtag() const;
+    rtl::OUString   getLanguageFromLangtag();
+    rtl::OUString   getScriptFromLangtag();
+    rtl::OUString   getRegionFromLangtag();
 
     void            resetVars();
+
+    /** Obtain Language, Script and Country via simpleExtract() and assign them
+        to the cached variables if successful.
+
+        @return return of simpleExtract()
+     */
+    bool            cacheSimpleLSC();
 
     static bool     isIsoLanguage( const rtl::OUString& rLanguage );
     static bool     isIsoScript( const rtl::OUString& rScript );
     static bool     isIsoCountry( const rtl::OUString& rRegion );
+
+    /** Of a simple language tag of the form lll[-Ssss][-CC] (i.e. one that
+        would fulfill the isIsoODF() condition) extract the portions.
+
+        Does not check case or content!
+
+        @return TRUE if it detected a simple tag, else FALSE.
+     */
+    static bool     simpleExtract( const rtl::OUString& rBcp47,
+                                   rtl::OUString& rLanguage,
+                                   rtl::OUString& rScript,
+                                   rtl::OUString& rCountry );
 };
 
 #endif  // INCLUDED_I18NPOOL_LANGUAGETAG_HXX

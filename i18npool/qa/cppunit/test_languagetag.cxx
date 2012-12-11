@@ -61,13 +61,21 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( aLocale.Country == "DE" );
         CPPUNIT_ASSERT( aLocale.Variant == "" );
         CPPUNIT_ASSERT( nLanguageType == LANGUAGE_GERMAN );
+        CPPUNIT_ASSERT( de_DE.getLanguage() == "de" );
+        CPPUNIT_ASSERT( de_DE.getCountry() == "DE" );
+        CPPUNIT_ASSERT( de_DE.getScript() == "" );
+        CPPUNIT_ASSERT( de_DE.getLanguageAndScript() == "de" );
 #else
         // The simple replacement code doesn't do any fancy stuff.
         CPPUNIT_ASSERT_MESSAGE("Default script was stripped after canonicalize!?!", aBcp47 == s_de_Latn_DE );
         CPPUNIT_ASSERT( aLocale.Language == "qlt" );
         CPPUNIT_ASSERT( aLocale.Country == "DE" );
         CPPUNIT_ASSERT( aLocale.Variant == "de-Latn-DE" );
-        (void)nLanguageType; //XXX CPPUNIT_ASSERT( nLanguageType == LANGUAGE_GERMAN );
+        CPPUNIT_ASSERT( nLanguageType == LANGUAGE_SYSTEM );     // XXX not resolved!
+        CPPUNIT_ASSERT( de_DE.getLanguage() == "de" );
+        CPPUNIT_ASSERT( de_DE.getCountry() == "DE" );
+        CPPUNIT_ASSERT( de_DE.getScript() == "Latn" );
+        CPPUNIT_ASSERT( de_DE.getLanguageAndScript() == "de-Latn" );
 #endif
     }
 
@@ -127,6 +135,10 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( sr_RS.isValidBcp47() == true );
         CPPUNIT_ASSERT( sr_RS.isIsoLocale() == false );
         CPPUNIT_ASSERT( sr_RS.isIsoODF() == true );
+        CPPUNIT_ASSERT( sr_RS.getLanguage() == "sr" );
+        CPPUNIT_ASSERT( sr_RS.getCountry() == "RS" );
+        CPPUNIT_ASSERT( sr_RS.getScript() == "Latn" );
+        CPPUNIT_ASSERT( sr_RS.getLanguageAndScript() == "sr-Latn" );
     }
 
     {
@@ -141,6 +153,10 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( de_DE.isValidBcp47() == true );
         CPPUNIT_ASSERT( de_DE.isIsoLocale() == true );
         CPPUNIT_ASSERT( de_DE.isIsoODF() == true );
+        CPPUNIT_ASSERT( de_DE.getLanguage() == "de" );
+        CPPUNIT_ASSERT( de_DE.getCountry() == "DE" );
+        CPPUNIT_ASSERT( de_DE.getScript() == "" );
+        CPPUNIT_ASSERT( de_DE.getLanguageAndScript() == "de" );
     }
 
     {
@@ -163,6 +179,30 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( aLocale.Country == "DE" );
         CPPUNIT_ASSERT( aLocale.Variant == "" );
         CPPUNIT_ASSERT( de_DE.getLanguageType() == LANGUAGE_GERMAN );
+    }
+
+    // 'qtz' is a local use known pseudolocale for key ID resource
+    {
+        OUString s_qtz( "qtz" );
+        LanguageTag qtz( s_qtz );
+        lang::Locale aLocale = qtz.getLocale();
+        CPPUNIT_ASSERT( qtz.getBcp47() == s_qtz );
+        CPPUNIT_ASSERT( aLocale.Language == "qtz" );
+        CPPUNIT_ASSERT( aLocale.Country == "" );
+        CPPUNIT_ASSERT( aLocale.Variant == "" );
+        CPPUNIT_ASSERT( qtz.getLanguageType() == LANGUAGE_USER_KEYID );
+    }
+
+    // 'qty' is a local use unknown locale
+    {
+        OUString s_qty( "qty" );
+        LanguageTag qty( s_qty );
+        lang::Locale aLocale = qty.getLocale();
+        CPPUNIT_ASSERT( qty.getBcp47() == s_qty );
+        CPPUNIT_ASSERT( aLocale.Language == "qty" );
+        CPPUNIT_ASSERT( aLocale.Country == "" );
+        CPPUNIT_ASSERT( aLocale.Variant == "" );
+        CPPUNIT_ASSERT( qty.getLanguageType() == LANGUAGE_SYSTEM );
     }
 
     // test reset() methods
