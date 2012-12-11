@@ -85,7 +85,7 @@ getResourceNameRequestArgument(uno::Sequence< uno::Any > const & rArguments,
     // Use the resource name only for file URLs, to avoid confusion:
     //TODO! work with ucp locality concept instead of hardcoded "file"?
     if (pValue
-        && pValue->matchIgnoreAsciiCaseAsciiL("file:", pValue->getLength()))
+        && pValue->matchIgnoreAsciiCase("file:"))
         getStringRequestArgument(rArguments, "ResourceName", pValue);
     return true;
 }
