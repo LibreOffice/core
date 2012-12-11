@@ -329,22 +329,20 @@ PasswordContainerInteractionHandler::getSupportedServiceNames()
 
 //=========================================================================
 // static
-rtl::OUString
+OUString
 PasswordContainerInteractionHandler::getImplementationName_Static()
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.comp.uui.PasswordContainerInteractionHandler" ) );
+    return OUString( "com.sun.star.comp.uui.PasswordContainerInteractionHandler" );
 }
 
 //=========================================================================
 // static
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 PasswordContainerInteractionHandler::getSupportedServiceNames_Static()
 {
-    uno::Sequence< rtl::OUString > aSNS( 1 );
-    aSNS.getArray()[ 0 ]
-        = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.task.PasswordContainerInteractionHandler" ) );
+    uno::Sequence< OUString > aSNS( 1 );
+    aSNS.getArray()[ 0 ] = OUString(
+                          "com.sun.star.task.PasswordContainerInteractionHandler" );
     return aSNS;
 }
 

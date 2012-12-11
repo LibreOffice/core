@@ -46,8 +46,6 @@ namespace container = ::com::sun::star::container;
 
 using namespace com::sun::star::system;
 
-#define DEFINE_CONST_UNICODE( CONSTASCII )  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CONSTASCII ) )
-
 namespace uui
 {
 
@@ -78,18 +76,18 @@ NewerVersionWarningDialog::~NewerVersionWarningDialog()
 IMPL_LINK_NOARG(NewerVersionWarningDialog, UpdateHdl)
 {
     // detect execute path
-    ::rtl::OUString sProgramPath;
+    OUString sProgramPath;
     osl_getExecutableFile( &sProgramPath.pData );
     sal_uInt32 nLastIndex = sProgramPath.lastIndexOf( '/' );
     if ( nLastIndex > 0 )
         sProgramPath = sProgramPath.copy( 0, nLastIndex + 1 );
 
     // read keys from soffice.ini (sofficerc)
-    ::rtl::OUString sIniFileName = sProgramPath;
-    sIniFileName += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SAL_CONFIGFILE( "version" ) ) );
+    OUString sIniFileName = sProgramPath;
+    sIniFileName += OUString( SAL_CONFIGFILE( "version" ) );
     ::rtl::Bootstrap aIniFile( sIniFileName );
-    ::rtl::OUString sNotifyURL;
-    aIniFile.getFrom( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ODFNotifyURL" ) ), sNotifyURL );
+    OUString sNotifyURL;
+    aIniFile.getFrom( OUString(  "ODFNotifyURL" ), sNotifyURL );
 
     try
     {
@@ -112,16 +110,16 @@ IMPL_LINK_NOARG(NewerVersionWarningDialog, UpdateHdl)
                 aContext.createComponent( "com.sun.star.setup.UpdateCheckConfig" ), uno::UNO_QUERY_THROW );
 
             sal_Bool bUpdateCheckEnabled = sal_False;
-            OSL_VERIFY( xUpdateConfig->getByName( DEFINE_CONST_UNICODE( "AutoCheckEnabled" ) ) >>= bUpdateCheckEnabled );
+            OSL_VERIFY( xUpdateConfig->getByName( OUString( "AutoCheckEnabled" ) ) >>= bUpdateCheckEnabled );
 
             // TODO: do we need to respect the bUpdateCheckEnabled flag? Finally, its meaning is "are automatic
             // updates enabled", but this here is not an automatic update, but one triggered explicitly by the user.
 
             uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
                                     aContext.getUNOContext(),
-                                    DEFINE_CONST_UNICODE("org.openoffice.Office.Addons/"),
-                                    DEFINE_CONST_UNICODE("AddonUI/OfficeHelp/UpdateCheckJob"),
-                                    DEFINE_CONST_UNICODE("URL"),
+                                    "org.openoffice.Office.Addons/",
+                                    "AddonUI/OfficeHelp/UpdateCheckJob",
+                                    "URL",
                                     ::comphelper::ConfigurationHelper::E_READONLY );
             util::URL aURL;
             if ( aVal >>= aURL.Complete )

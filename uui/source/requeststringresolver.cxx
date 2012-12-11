@@ -82,12 +82,11 @@ UUIInteractionRequestStringResolver::getStringFromInformationalRequest(
 char const UUIInteractionRequestStringResolver::m_aImplementationName[]
     = "com.sun.star.comp.uui.UUIInteractionRequestStringResolver";
 
-star::uno::Sequence< rtl::OUString >
+star::uno::Sequence< OUString >
 UUIInteractionRequestStringResolver::getSupportedServiceNames_static()
 {
-    star::uno::Sequence< rtl::OUString > aNames(1);
-    aNames[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.task.InteractionRequestStringResolver"));
+    star::uno::Sequence< OUString > aNames(1);
+    aNames[0] = "com.sun.star.task.InteractionRequestStringResolver";
     return aNames;
 }
 
@@ -103,9 +102,7 @@ UUIInteractionRequestStringResolver::createInstance(
     }
     catch (std::bad_alloc const &)
     {
-        throw star::uno::RuntimeException(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
-        0);
+        throw star::uno::RuntimeException(OUString("out of memory"), 0);
     }
 }
 
