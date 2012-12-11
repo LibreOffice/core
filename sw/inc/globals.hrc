@@ -222,6 +222,4 @@
 #define SID_FAX_LIST                (RC_GLOBALS_BEGIN +  116)
 #define SID_WRT_SHELL               (RC_GLOBALS_BEGIN +  117)
 
-#define DLG_LINE_NUMBERING          (RC_GLOBALS_BEGIN +  118)
-#define DLG_TITLEPAGE               (RC_GLOBALS_BEGIN +  119)
 #endif // _GLOBALS_HRC

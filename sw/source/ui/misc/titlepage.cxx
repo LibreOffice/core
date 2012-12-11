@@ -40,7 +40,6 @@
 #include "fldbas.hxx"
 #include "lineinfo.hxx"
 #include "globals.hrc"
-#include "titlepage.hrc"
 #include "titlepage.hxx"
 #include "uitool.hxx"
 #include "fmtpdsc.hxx"

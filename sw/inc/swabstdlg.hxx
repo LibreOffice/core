@@ -433,8 +433,7 @@ public:
     virtual AbstractInsFootNoteDlg*     CreateInsFootNoteDlg(Window * pParent,
         SwWrtShell &rSh, sal_Bool bEd = sal_False) = 0; //add for SwInsFootNoteDlg
     virtual VclAbstractDialog*          CreateTitlePageDlg ( Window * pParent ) = 0;
-    virtual VclAbstractDialog *         CreateVclSwViewDialog( int nResId,
-                                                SwView& rView, sal_Bool bCol = sal_False ) = 0; //add for SwInsRowColDlg, SwLineNumberingDlg
+    virtual VclAbstractDialog *         CreateVclSwViewDialog(SwView& rView) = 0; //add for SwInsRowColDlg, SwLineNumberingDlg
     virtual AbstractInsTableDlg*        CreateInsTableDlg(SwView& rView) = 0; //add for SwInsTableDlg
     virtual AbstractJavaEditDialog*     CreateJavaEditDialog(Window* pParent,
         SwWrtShell* pWrtSh) = 0; //add for SwJavaEditDialog

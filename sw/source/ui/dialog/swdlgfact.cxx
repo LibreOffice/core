@@ -1178,22 +1178,10 @@ VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateTitlePageDlg ( Window *p
     return 0;
 }
 
-VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateVclSwViewDialog( int nResId,
-                                            SwView& rView, sal_Bool /*bCol*/ ) //add for SwInsRowColDlg, SwLineNumberingDlg
+VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateVclSwViewDialog(SwView& rView)
 {
-    Dialog* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_LINE_NUMBERING :
-            pDlg = new SwLineNumberingDlg( &rView );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new VclAbstractDialog_Impl( pDlg );
-    return 0;
+    Dialog* pDlg = new SwLineNumberingDlg( &rView );
+    return new VclAbstractDialog_Impl( pDlg );
 }
 
 AbstractInsTableDlg * SwAbstractDialogFactory_Impl::CreateInsTableDlg(SwView& rView) //add for SwInsTableDlg

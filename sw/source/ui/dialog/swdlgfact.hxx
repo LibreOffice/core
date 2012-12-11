@@ -500,9 +500,8 @@ public:
                                                 SwField* pField, sal_Bool bNextButton = sal_False ); //add for SwFldInputDlg
     virtual AbstractInsFootNoteDlg*     CreateInsFootNoteDlg(
         Window * pParent, SwWrtShell &rSh, sal_Bool bEd = sal_False); //add for SwInsFootNoteDlg
-   virtual VclAbstractDialog *         CreateTitlePageDlg ( Window * pParent );
-    virtual VclAbstractDialog *         CreateVclSwViewDialog( int nResId,
-                                                SwView& rView, sal_Bool bCol = sal_False ); //add for SwInsRowColDlg, SwLineNumberingDlg
+    virtual VclAbstractDialog *         CreateTitlePageDlg ( Window * pParent );
+    virtual VclAbstractDialog *         CreateVclSwViewDialog(SwView& rView); //add for SwInsRowColDlg, SwLineNumberingDlg
     virtual AbstractInsTableDlg*        CreateInsTableDlg(SwView& rView); //add for SwInsTableDlg
     virtual AbstractJavaEditDialog*     CreateJavaEditDialog(Window* pParent,
         SwWrtShell* pWrtSh); //add for SwJavaEditDialog
