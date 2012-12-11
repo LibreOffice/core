@@ -38,7 +38,7 @@
 #include "calcconfig.hxx"
 
 // have to match the registry values
-enum SC_DLLPUBLIC ScRecalcOptions
+enum ScRecalcOptions
 {
     RECALC_ALWAYS = 0,
     RECALC_ASK = 1,
