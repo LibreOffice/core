@@ -118,10 +118,6 @@ protected:
 
     virtual void Resize();
 
-    virtual void Paint( const Rectangle& rRect );
-
-    virtual void DrawItem (ThumbnailViewItem *pItem);
-
     DECL_LINK(OverlayItemStateHdl, const ThumbnailViewItem*);
 
 protected:

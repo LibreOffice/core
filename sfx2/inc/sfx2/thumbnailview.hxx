@@ -225,6 +225,8 @@ public:
 
     Color GetColor() const { return maColor; }
 
+    void SetTransparence( double nTransparence );
+
     bool IsColor() const { return maColor.GetTransparency() == 0; }
 
     Size CalcWindowSizePixel(sal_uInt16 nCalcCols, sal_uInt16 nCalcLines,
@@ -304,6 +306,7 @@ protected:
     ScrollBar* mpScrBar;
     Rectangle maItemListRect;
     long mnHeaderHeight;
+    long mnFooterHeight;
     long mnItemWidth;
     long mnItemHeight;
     long mnItemPadding;
@@ -321,6 +324,7 @@ protected:
     bool mbIsTransientChildrenDisabled : 1;
     bool mbHasVisibleItems : 1;
     Color maColor;
+    double mnTransparence;
 
     Link maItemStateHdl;
     ThumbnailItemAttributes *mpItemAttrs;
