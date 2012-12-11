@@ -117,6 +117,23 @@ void VclBuilder::loadTranslations(const com::sun::star::lang::Locale &rLocale, c
     }
 }
 
+#if defined SAL_LOG_WARN
+namespace
+{
+    bool isButtonType(WindowType nType)
+    {
+        return nType == WINDOW_PUSHBUTTON ||
+               nType == WINDOW_OKBUTTON ||
+               nType == WINDOW_CANCELBUTTON ||
+               nType == WINDOW_HELPBUTTON ||
+               nType == WINDOW_IMAGEBUTTON ||
+               nType == WINDOW_MENUBUTTON ||
+               nType == WINDOW_MOREBUTTON ||
+               nType == WINDOW_SPINBUTTON;
+    }
+}
+#endif
+
 VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OString sID)
     : m_sID(sID)
     , m_sHelpRoot(OUStringToOString(sUIFile, RTL_TEXTENCODING_UTF8))
@@ -262,6 +279,28 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
     SAL_WARN_IF(!m_sID.isEmpty() && (!m_bToplevelParentFound && !get_by_name(m_sID)), "vcl.layout",
         "Requested top level widget \"" << m_sID.getStr() <<
         "\" not found in " << sUIFile);
+
+#if defined SAL_LOG_WARN
+    if (m_bToplevelParentFound && m_pParent->IsDialog())
+    {
+        int nButtons = 0;
+        bool bHasDefButton = false;
+        for (std::vector<WinAndId>::iterator aI = m_aChildren.begin(),
+             aEnd = m_aChildren.end(); aI != aEnd; ++aI)
+        {
+            if (isButtonType(aI->m_pWindow->GetType()))
+            {
+                ++nButtons;
+                if (aI->m_pWindow->GetStyle() & WB_DEFBUTTON)
+                {
+                    bHasDefButton = true;
+                    break;
+                }
+            }
+        }
+        SAL_WARN_IF(nButtons && !bHasDefButton, "vcl.layout", "No default button defined");
+    }
+#endif
 }
 
 VclBuilder::~VclBuilder()
