@@ -24,8 +24,6 @@
 #include <editeng/TreeHead.hxx>
 #include <editeng/editengdllapi.h>
 
-using namespace rtl;
-
 /**
  * LatinLookupTree implements a tree that is optimized for storing and looking
  * up words that mainly consist of roman characters, although any other
