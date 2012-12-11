@@ -78,16 +78,20 @@ bool HelpParser::CreateSDF(
     const rtl::OString &rSDFFile_in, const rtl::OString &rPrj_in,const rtl::OString &rRoot_in,
     const rtl::OString &sHelpFile, XMLFile *pXmlFile, const rtl::OString &rGsi1){
     SimpleXMLParser aParser;
+    rtl::OUString sXmlFile(
+        rtl::OStringToOUString(sHelpFile, RTL_TEXTENCODING_ASCII_US));
     //TODO: explicit BOM handling?
 
-    std::auto_ptr <XMLFile> file ( aParser.Execute( sHelpFile, pXmlFile ) );
+    std::auto_ptr <XMLFile> file ( aParser.Execute( sXmlFile, pXmlFile ) );
 
     if(file.get() == NULL)
     {
         printf(
             "%s: %s\n",
             sHelpFile.getStr(),
-            aParser.GetError().sMessage.getStr());
+            (rtl::OUStringToOString(
+                aParser.GetError().sMessage, RTL_TEXTENCODING_ASCII_US).
+             getStr()));
         exit(-1);
     }
     file->Extract();
@@ -109,7 +113,10 @@ bool HelpParser::CreateSDF(
     LangHashMap* pElem;
     XMLElement*  pXMLElement  = NULL;
 
-    OStringBuffer sBuffer;
+    OUStringBuffer sBuffer;
+    const OUString sOUPrj( rPrj_in.getStr() , rPrj_in.getLength() , RTL_TEXTENCODING_ASCII_US );
+    const OUString sOUActFileName(sActFileName.getStr() , sActFileName.getLength() , RTL_TEXTENCODING_ASCII_US );
+    const OUString sOUGsi1( rGsi1.getStr() , rGsi1.getLength() , RTL_TEXTENCODING_ASCII_US );
 
     Export::InitLanguages( false );
     std::vector<rtl::OString> aLanguages = Export::GetLanguages();
@@ -131,33 +138,34 @@ bool HelpParser::CreateSDF(
 
             if( pXMLElement != NULL )
             {
-                OString data(
-                    pXMLElement->ToOString().
+                OUString data(
+                    pXMLElement->ToOUString().
                     replaceAll(
-                        rtl::OString("\n"),
-                        rtl::OString()).
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\n")),
+                        rtl::OUString()).
                     replaceAll(
-                        rtl::OString("\t"),
-                        rtl::OString()).trim());
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\t")),
+                        rtl::OUString()).trim());
+                sBuffer.append( sOUPrj );
+                sBuffer.append('\t');
+                if ( !rRoot_in.isEmpty())
+                    sBuffer.append( sOUActFileName );
+                   sBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("\t0\t"));
+                   sBuffer.append( sOUGsi1 );               //"help";
+                   sBuffer.append('\t');
+                   rtl::OString sID = posm->first;           // ID
+                   sBuffer.append( rtl::OStringToOUString( sID, RTL_TEXTENCODING_UTF8 ) );
+                   sBuffer.append('\t');
+                rtl::OString sOldRef = pXMLElement->GetOldref(); // oldref
+                sBuffer.append( rtl::OStringToOUString(sOldRef, RTL_TEXTENCODING_UTF8 ) );
+                sBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("\t\t\t0\t"));
+                   sBuffer.append( rtl::OStringToOUString( sCur, RTL_TEXTENCODING_UTF8 ) );
+                   sBuffer.append('\t');
+                sBuffer.append( data );
+                sBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("\t\t\t\t"));
+                rtl::OString sOut(rtl::OUStringToOString(sBuffer.makeStringAndClear().getStr() , RTL_TEXTENCODING_UTF8));
                 if( !data.isEmpty() )
-                {
-                    sBuffer.append( rPrj_in );
-                    sBuffer.append("\t");
-                    if ( !rRoot_in.isEmpty())
-                        sBuffer.append( sActFileName );
-                    sBuffer.append( "\t0\t");
-                    sBuffer.append( rGsi1 );               //"help";
-                    sBuffer.append( "\t");
-                    sBuffer.append( posm->first );
-                    sBuffer.append( "\t");
-                    sBuffer.append( pXMLElement->GetOldref());
-                    sBuffer.append( "\t\t\t0\t");
-                    sBuffer.append( sCur);
-                    sBuffer.append('\t');
-                    sBuffer.append( data );
-                    sBuffer.append( "\t\t\t\t");
-                    aSDFStream << sBuffer.makeStringAndClear().getStr() << '\n';
-                }
+                    aSDFStream << sOut.getStr() << '\n';
                 pXMLElement=NULL;
             }
             else
@@ -180,9 +188,11 @@ bool HelpParser::Merge( const rtl::OString &rSDFFile, const rtl::OString &rDesti
 
     SimpleXMLParser aParser;
 
+    rtl::OUString sXmlFile(
+        rtl::OStringToOUString(sHelpFile, RTL_TEXTENCODING_ASCII_US));
     //TODO: explicit BOM handling?
 
-    XMLFile* xmlfile = ( aParser.Execute( sHelpFile, new XMLFile( rtl::OString('0') ) ) );
+    XMLFile* xmlfile = ( aParser.Execute( sXmlFile, new XMLFile( rtl::OUString('0') ) ) );
     hasNoError = MergeSingleFile( xmlfile , aMergeDataFile , rLanguage , rDestinationFile );
     delete xmlfile;
     return hasNoError;
@@ -193,7 +203,7 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile 
 {
     file->Extract();
 
-    XMLHashMap*   aXMLStrHM     = file->GetStrings();
+       XMLHashMap*   aXMLStrHM     = file->GetStrings();
     LangHashMap*  aLangHM;
     static  ResData pResData( "","","");
     pResData.sResTyp   = "help";
@@ -245,14 +255,14 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const rtl::OString& sCur , 
             if( pEntrys != NULL)
             {
                 rtl::OString sNewText;
-                rtl::OString sSourceText(
-                    pXMLElement->ToOString().
+                rtl::OUString sSourceText(
+                    pXMLElement->ToOUString().
                     replaceAll(
-                        rtl::OString("\n"),
-                        rtl::OString()).
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\n")),
+                        rtl::OUString()).
                     replaceAll(
-                        rtl::OString("\t"),
-                        rtl::OString()));
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\t")),
+                        rtl::OUString()));
                 // re-add spaces to the beginning of translated string,
                 // important for indentation of Basic code examples
                 sal_Int32 nPreSpaces = 0;
@@ -260,11 +270,11 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const rtl::OString& sCur , 
                 while ( (nPreSpaces < nLen) && (*(sSourceText.getStr()+nPreSpaces) == ' ') )
                     nPreSpaces++;
                 pEntrys->GetText( sNewText, STRING_TYP_TEXT, sCur , true );
-                OString sNewdata;
+                OUString sNewdata;
                 if (helper::isWellFormedXML(helper::QuotHTML(sNewText)))
                 {
                     sNewdata = sSourceText.copy(0,nPreSpaces) +
-                        sNewText;
+                        rtl::OStringToOUString(sNewText, RTL_TEXTENCODING_UTF8);
                 }
                 else
                 {
@@ -287,7 +297,8 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const rtl::OString& sCur , 
                     pResData->sGId.getStr(), pResData->sId.getStr(),
                     pResData->sResTyp.getStr());
             }
-            pXMLElement->ChangeLanguageTag(sCur);
+            pXMLElement->ChangeLanguageTag(
+                rtl::OStringToOUString(sCur, RTL_TEXTENCODING_ASCII_US));
         }
 
     }

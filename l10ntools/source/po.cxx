@@ -8,7 +8,6 @@
  */
 
 #include <rtl/ustring.hxx>
-#include <rtl/strbuf.hxx>
 
 #include <cstring>
 #include <ctime>
@@ -108,217 +107,21 @@ namespace
     }
 
     //Unescape text
-    static OString lcl_UnEscapeText(const OString& rText)
+    static OString lcl_UnEscapeText(const OString& rText,
+                             const OString& rEscaped = POESCAPED,
+                             const OString& rUnEscaped = POUNESCAPED)
     {
-        sal_Int32 index;
-        for(index = 0 ; index < rText.getLength() - 1; ++index)
+        assert( rEscaped.getLength() == 2*rUnEscaped.getLength() );
+        OString sResult = rText;
+        int nCount = 0;
+        for(sal_Int32 nIndex=0; nIndex<rText.getLength()-1; ++nIndex)
         {
-            if(rText[index] == '\\')
-            {
-                switch(rText[index + 1])
-                {
-                case '\\':
-                case 'n':
-                case 'r':
-                case 't':
-                case '"':
-                    OStringBuffer sBuff(rText);
-                    const sal_Char* in = sBuff.getStr() + index;
-                    sal_Char* out = &sBuff[index];
-                    while(*in)
-                    {
-                        if(*in == '\\')
-                        {
-                            switch(in[1])
-                            {
-                            case '\\':
-                                *out++ = '\\';
-                                in += 2;
-                                break;
-                            case 'n':
-                                *out++ = '\n';
-                                in += 2;
-                                break;
-                            case 'r':
-                                *out++ = '\r';
-                                in += 2;
-                                break;
-                            case 't':
-                                *out++ = '\t';
-                                in += 2;
-                                break;
-                            case '"':
-                                *out++ = '"';
-                                in += 2;
-                                break;
-                            default:
-                                *out++ = *in++;
-                                break;
-                            }
-                        }
-                        else
-                        {
-                            *out++ = *in++;
-                        }
-                    }
-                    *out = 0;
-                    sBuff.setLength((out - sBuff.getStr()));
-                    return sBuff.makeStringAndClear();
-                }
-            }
+            sal_Int32 nActChar = rEscaped.indexOf(rText.copy(nIndex,2));
+            if(nActChar % 2 == 0)
+                sResult = sResult.replaceAt((nIndex++)-(nCount++),2,
+                                            rUnEscaped.copy(nActChar/2,1));
         }
-        return rText;
-    }
-
-    static OString lcl_UnEscapeTextBlanks(const OString& rText)
-    {
-        sal_Int32 index;
-        for(index = 0 ; index < rText.getLength() - 1; ++index)
-        {
-            if(rText[index] == '\\')
-            {
-                switch(rText[index + 1])
-                {
-                case 'n':
-                case 'r':
-                case 't':
-                    OStringBuffer sBuff(rText);
-                    const sal_Char* in = sBuff.getStr() + index;
-                    sal_Char* out = &sBuff[index];
-                    while(*in)
-                    {
-                        if(*in == '\\')
-                        {
-                            switch(in[1])
-                            {
-                            case 'n':
-                                *out++ = '\n';
-                                in += 2;
-                                break;
-                            case 'r':
-                                *out++ = '\r';
-                                in += 2;
-                                break;
-                            case 't':
-                                *out++ = '\t';
-                                in += 2;
-                                break;
-                            default:
-                                *out++ = *in++;
-                                break;
-                            }
-                        }
-                        else
-                        {
-                            *out++ = *in++;
-                        }
-                    }
-                    *out = 0;
-                    sBuff.setLength((out - sBuff.getStr()));
-                    return sBuff.makeStringAndClear();
-                }
-            }
-        }
-        return rText;
-    }
-
-    static OString lcl_EscapeTextBlanks(const OString& rText)
-    {
-        sal_Int32 index;
-        for(index = 0 ; index < rText.getLength() - 1; ++index)
-        {
-            switch(rText[index])
-            {
-            case '\n':
-            case '\r':
-            case '\t':
-                OStringBuffer sBuff(rText);
-                const sal_Char* in = rText.getStr() + index;
-                sal_Char* out = &sBuff[index];
-                while(*in)
-                {
-                    switch(in[1])
-                    {
-                    case '\n':
-                        *out++ = '\\';
-                        *out++ = 'n';
-                        break;
-                    case '\r':
-                        *out++ = '\\';
-                        *out++ = 'r';
-                        break;
-                    case 't':
-                        *out++ = '\\';
-                        *out++ = 'r';
-                        break;
-                    default:
-                        *out++ = *in++;
-                        break;
-                    }
-                }
-                *out = 0;
-                sBuff.setLength((out - sBuff.getStr()));
-                return sBuff.makeStringAndClear();
-            }
-        }
-        return rText;
-    }
-
-    static OString lcl_UnEscapeTextHelp(const OString& rText)
-    {
-        sal_Int32 index;
-        for(index = 0 ; index < rText.getLength() - 1; ++index)
-        {
-            if(rText[index] == '\\')
-            {
-                switch(rText[index + 1])
-                {
-                case '<':
-                case '>':
-                case '"':
-                case '\\':
-                    OStringBuffer sBuff(rText);
-                    const sal_Char* in = sBuff.getStr() + index;
-                    sal_Char* out = &sBuff[index];
-                    while(*in)
-                    {
-                        if(*in == '\\')
-                        {
-                            switch(in[1])
-                            {
-                            case '<':
-                                *out++ = '<';
-                                in += 2;
-                                break;
-                            case '>':
-                                *out++ = '>';
-                                in += 2;
-                                break;
-                            case '"':
-                                *out++ = '"';
-                                in += 2;
-                                break;
-                            case '\\':
-                                *out++ = '\\';
-                                in += 2;
-                                break;
-                            default:
-                                *out++ = *in++;
-                                break;
-                            }
-                        }
-                        else
-                        {
-                            *out++ = *in++;
-                        }
-                    }
-                    *out = 0;
-                    sBuff.setLength((out - sBuff.getStr()));
-                    return sBuff.makeStringAndClear();
-                }
-            }
-        }
-        return rText;
+        return sResult;
     }
 
     //Convert a normal string to msg/po output string
@@ -498,9 +301,9 @@ namespace
         const OString& rText,const bool bHelpText = false )
     {
         if ( bHelpText )
-            return lcl_UnEscapeTextHelp(rText);
+            return lcl_UnEscapeText(rText,"\\<\\>\\\"\\\\","<>\"\\");
         else
-            return lcl_UnEscapeTextBlanks(rText);
+            return lcl_UnEscapeText(rText,"\\n\\t\\r","\n\t\r");
     }
 
     //Find all special tag in a string using a regular expression
@@ -508,18 +311,18 @@ namespace
         const OString& rText,std::vector<OString>& o_vFoundTags )
     {
 
-        static UErrorCode nIcuErr = U_ZERO_ERROR;
-        static sal_uInt32 nSearchFlags = UREGEX_DOTALL | UREGEX_CASE_INSENSITIVE;
+        UErrorCode nIcuErr = U_ZERO_ERROR;
+        sal_uInt32 nSearchFlags = UREGEX_DOTALL | UREGEX_CASE_INSENSITIVE;
         OUString sLocaleText( OStringToOUString(rText,RTL_TEXTENCODING_UTF8) );
-        static OUString sPattern("<[/]\?\?[a-z_-]+?(?:| +[a-z]+?=\".*?\") *[/]\?\?>");
-        static UnicodeString sSearchPat(
+        OUString sPattern("<[/]\?\?[a-z_-]+?(?:| +[a-z]+?=\".*?\") *[/]\?\?>");
+        UnicodeString sSearchPat(
             reinterpret_cast<const UChar*>(
                 sPattern.getStr()), sPattern.getLength() );
         UnicodeString sSource(
             reinterpret_cast<const UChar*>(
                 sLocaleText.getStr()), sLocaleText.getLength() );
 
-        static RegexMatcher aRegexMatcher( sSearchPat, nSearchFlags, nIcuErr );
+        RegexMatcher aRegexMatcher( sSearchPat, nSearchFlags, nIcuErr );
         aRegexMatcher.reset( sSource );
         int64_t nStartPos = 0;
         while( aRegexMatcher.find(nStartPos, nIcuErr) &&
@@ -583,7 +386,7 @@ namespace
         if ( bHelpText )
             return lcl_EscapeTags(rText.replaceAll("\\","\\\\"));
         else
-            return lcl_EscapeTextBlanks(rText);
+            return lcl_EscapeText(rText,"\n\t\r","\\n\\t\\r");
     }
 }
 

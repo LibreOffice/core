@@ -118,7 +118,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
         hasNoError =
             aParser.CreateSDF(
                 aArgs.m_sOutputFile, aArgs.m_sPrj, aArgs.m_sPrjRoot,
-                aArgs.m_sInputFile, new XMLFile( OString('0') ), "help" );
+                aArgs.m_sInputFile, new XMLFile( OUString('0') ), "help" );
     }
 
     if( hasNoError )
