@@ -1644,62 +1644,48 @@ void SdrObjCustomShape::NbcRotate( const Point& rRef, long nWink, double sn, dou
 
 void SdrObjCustomShape::NbcMirror( const Point& rRef1, const Point& rRef2 )
 {
+    // TTTT: Fix for old mirroring, can be removed again in aw080
     // storing horizontal and vertical flipping without modifying the rotate angle
-    sal_Bool bHorz = sal_False;
-    sal_Bool bVert = sal_False;
-    if ( rRef1.X() == rRef2.X() )
-        bHorz = sal_True;
-    if ( rRef1.Y() == rRef2.Y() )
-        bVert = sal_True;
-    if ( !bHorz && !bVert )
-        bHorz = bVert = sal_True;
+    // decompose other flipping to rotation and MirrorX.
+    long ndx = rRef2.X()-rRef1.X();
+    long ndy = rRef2.Y()-rRef1.Y();
 
-    if ( bHorz || bVert )
+    if(!ndx) // MirroredX
     {
-        SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
-
-        // "MirroredX" //
-        if ( bHorz )
-        {
-            const OUString sMirroredX( "MirroredX" );
-            com::sun::star::uno::Any* pAny = aGeometryItem.GetPropertyValueByName( sMirroredX );
-            if ( pAny )
-            {
-                sal_Bool bFlip = sal_Bool();
-                if ( *pAny >>= bFlip )
-                {
-                    if ( bFlip )
-                        bHorz = sal_False;
-                }
-            }
-            PropertyValue aPropVal;
-            aPropVal.Name = sMirroredX;
-            aPropVal.Value <<= bHorz;
-            aGeometryItem.SetPropertyValue( aPropVal );
-        }
-
-        // "MirroredY" //
-        if ( bVert )
-        {
-            const OUString sMirroredY( "MirroredY" );
-            com::sun::star::uno::Any* pAny = aGeometryItem.GetPropertyValueByName( sMirroredY );
-            if ( pAny )
-            {
-                sal_Bool bFlip = sal_Bool();
-                if ( *pAny >>= bFlip )
-                {
-                    if ( bFlip )
-                        bVert = sal_False;
-                }
-            }
-            PropertyValue aPropVal;
-            aPropVal.Name = sMirroredY;
-            aPropVal.Value <<= bVert;
-            aGeometryItem.SetPropertyValue( aPropVal );
-        }
-        SetMergedItem( aGeometryItem );
+         SetMirroredX(!IsMirroredX());
+         SdrTextObj::NbcMirror( rRef1, rRef2 );
     }
-    SdrTextObj::NbcMirror( rRef1, rRef2 );
+    else
+    {
+        if(!ndy)  // MirroredY
+        {
+            SetMirroredY(!IsMirroredY());
+            SdrTextObj::NbcMirror( rRef1, rRef2 );
+        }
+        else // neither horizontal nor vertical
+        {
+            SetMirroredX(!IsMirroredX());
+
+            // call parent
+            SdrTextObj::NbcMirror( rRef1, rRef2 );
+
+            // update fObjectRotation
+            long nTextObjRotation = aGeo.nDrehWink;
+            double fWink = nTextObjRotation;
+
+            fWink /= 100.0;
+
+            bool bSingleFlip = (IsMirroredX()!= IsMirroredY());
+
+            fObjectRotation = fmod( bSingleFlip ? -fWink : fWink, 360.0 );
+
+            if ( fObjectRotation < 0 )
+            {
+                fObjectRotation = 360.0 + fObjectRotation;
+            }
+         }
+    }
+
     InvalidateRenderGeometry();
 }
 
@@ -1710,20 +1696,24 @@ void SdrObjCustomShape::Shear( const Point& rRef, long nWink, double tn, bool bV
 }
 void SdrObjCustomShape::NbcShear( const Point& rRef, long nWink, double tn, bool bVShear )
 {
-    long nDrehWink = aGeo.nDrehWink;
-    if ( nDrehWink )
-    {
-        aGeo.nDrehWink = -nDrehWink;
-        aGeo.RecalcSinCos();
-        NbcRotate( rRef, aGeo.nDrehWink, aGeo.nSin, aGeo.nCos );
-    }
+    // TTTT: Fix for old mirroring, can be removed again in aw080
     SdrTextObj::NbcShear(rRef,nWink,tn,bVShear);
-    if ( nDrehWink )
+
+    // updating fObjectRotation
+    long nTextObjRotation = aGeo.nDrehWink;
+    double fWink = nTextObjRotation;
+
+    fWink /= 100.0;
+
+    bool bSingleFlip = (IsMirroredX()!= IsMirroredY());
+
+    fObjectRotation = fmod( bSingleFlip ? -fWink : fWink, 360.0 );
+
+    if ( fObjectRotation < 0 )
     {
-        aGeo.nDrehWink = nDrehWink;
-        aGeo.RecalcSinCos();
-        Rotate( rRef, aGeo.nDrehWink, aGeo.nSin, aGeo.nCos );
+        fObjectRotation = 360.0 + fObjectRotation;
     }
+
     InvalidateRenderGeometry();
 }
 
