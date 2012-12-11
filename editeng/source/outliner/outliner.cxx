@@ -556,10 +556,6 @@ void Outliner::SetText( const OutlinerParaObject& rPObj )
 
     ImplBlockInsertionCallbacks( sal_True );
     pEditEngine->SetText(rPObj.GetTextObject());
-    if( rPObj.Count() != pEditEngine->GetParagraphCount() )
-    {
-        int nop=0;nop++;
-    }
 
     bFirstParaIsEmpty = sal_False;
 
