@@ -1614,7 +1614,9 @@ public:
 
       @since LibreOffice 4.0
     */
-    OUString replaceAll(OUString const & from, OUString const & to, sal_Int32 fromIndex = 0) const {
+    SAL_WARN_UNUSED_RESULT OUString replaceAll(
+        OUString const & from, OUString const & to, sal_Int32 fromIndex = 0) const
+    {
         rtl_uString * s = 0;
         rtl_uString_newReplaceAllFromIndex(&s, pData, from.pData, to.pData, fromIndex);
         return OUString(s, SAL_NO_ACQUIRE);
@@ -1634,7 +1636,7 @@ public:
       @since LibreOffice 3.6
     */
     template< typename T >
-    typename internal::ConstCharArrayDetector< T, OUString >::Type replaceAll( T& from, OUString const & to) const
+    SAL_WARN_UNUSED_RESULT typename internal::ConstCharArrayDetector< T, OUString >::Type replaceAll( T& from, OUString const & to) const
     {
         rtl_uString * s = 0;
         assert( strlen( from ) == internal::ConstCharArrayDetector< T >::size - 1 );
@@ -1656,7 +1658,7 @@ public:
       @since LibreOffice 3.6
     */
     template< typename T1, typename T2 >
-    typename internal::ConstCharArrayDetector< T1, typename internal::ConstCharArrayDetector< T2, OUString >::Type >::Type
+    SAL_WARN_UNUSED_RESULT typename internal::ConstCharArrayDetector< T1, typename internal::ConstCharArrayDetector< T2, OUString >::Type >::Type
         replaceAll( T1& from, T2& to ) const
     {
         rtl_uString * s = 0;
