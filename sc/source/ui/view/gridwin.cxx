@@ -2386,7 +2386,20 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         if ( GetEditUrl( rMEvt.GetPosPixel(), &aName, &aUrl, &aTarget ) )
         {
             nMouseStatus = SC_GM_NONE;              // keinen Doppelklick anfangen
-            ScGlobal::OpenURL( aUrl, aTarget );
+            ScAddress aTempAddr;
+            if (pDoc->GetAddressConvention() == formula::FormulaGrammar::CONV_OOO)
+                ScGlobal::OpenURL(aUrl, aTarget);
+            else
+            {
+                // Formula syntax is not Calc A1. Convert it to Calc A1 before calling OpenURL().
+                aTempAddr.Parse(aUrl, pDoc, pDoc->GetAddressConvention());
+                rtl::OUString aUrlCalcA1;
+                aTempAddr.Format(aUrlCalcA1, SCA_ABS_3D, pDoc, formula::FormulaGrammar::CONV_OOO);
+                rtl::OUStringBuffer aBuf;
+                aBuf.append('#').append(aUrlCalcA1);
+                aUrlCalcA1 = aBuf.makeStringAndClear();
+                ScGlobal::OpenURL(aUrlCalcA1, aTarget);
+            }
 
             // fire worksheet_followhyperlink event
             uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents = pDoc->GetVbaEventProcessor();
