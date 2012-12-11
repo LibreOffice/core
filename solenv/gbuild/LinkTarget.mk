@@ -432,7 +432,8 @@ TEMPFILE=$(call var2file,$(shell $(gb_MKTEMP)),200,\
 	$(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_target,$(object))) \
 	$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
 	$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_target,$(object))) \
-	$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object)))) && \
+	$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
+	$(PCHOBJS)) && \
 $(if $(EXTRAOBJECTLISTS),cat $(EXTRAOBJECTLISTS) >> $${TEMPFILE} && ) \
 mv $${TEMPFILE} $(call gb_LinkTarget_get_objects_list,$(2))
 
@@ -1206,8 +1207,8 @@ $(call gb_PrecompiledHeader_get_target,$(3)) : $(call gb_LinkTarget_get_headers_
 $(call gb_NoexPrecompiledHeader_get_target,$(3)) : $(call gb_LinkTarget_get_headers_target,$(1))
 
 $(call gb_LinkTarget_get_target,$(1)) : PCH_NAME := $(3)
-$(call gb_LinkTarget_get_target,$(1)) : PCHOBJEX = $(call gb_PrecompiledHeader_get_target,$(3)).obj
-$(call gb_LinkTarget_get_target,$(1)) : PCHOBJNOEX = $(call gb_NoexPrecompiledHeader_get_target,$(3)).obj
+$(call gb_LinkTarget_get_target,$(1)) : PCHOBJEX = $(call gb_PrecompiledHeader_get_objectfile, $(call gb_PrecompiledHeader_get_target,$(3)))
+$(call gb_LinkTarget_get_target,$(1)) : PCHOBJNOEX = $(call gb_NoexPrecompiledHeader_get_objectfile, $(call gb_NoexPrecompiledHeader_get_target,$(3)))
 $(call gb_LinkTarget_get_target,$(1)) : PCHOBJS = $$(PCHOBJEX)
 
 $(call gb_LinkTarget_get_headers_target,$(1)) \

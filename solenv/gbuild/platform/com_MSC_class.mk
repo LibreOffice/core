@@ -101,6 +101,9 @@ gb_PrecompiledHeader_get_enableflags = -Yu$(1).hxx \
 	-Fp$(call gb_PrecompiledHeader_get_target,$(1)) \
 	$(gb_PCHWARNINGS)
 
+# MSVC PCH needs extra .obj created during the creation of the PCH file
+gb_PrecompiledHeader_get_objectfile = $(1).obj
+
 define gb_PrecompiledHeader__command
 $(call gb_Output_announce,$(2),$(true),PCH,1)
 $(call gb_Helper_abbreviate_dirs,\
@@ -121,6 +124,8 @@ gb_NoexPrecompiledHeader_get_enableflags = -Yu$(1).hxx \
 	-FI$(1).hxx \
 	-Fp$(call gb_NoexPrecompiledHeader_get_target,$(1)) \
 	$(gb_PCHWARNINGS)
+
+gb_NoexPrecompiledHeader_get_objectfile = $(1).obj
 
 define gb_NoexPrecompiledHeader__command
 $(call gb_Output_announce,$(2),$(true),PCH,1)

@@ -148,6 +148,9 @@ ifeq ($(COM_GCC_IS_CLANG),TRUE)
 
 gb_PrecompiledHeader_get_enableflags = -include-pch $(call gb_PrecompiledHeader_get_target,$(1))
 
+# Clang does not need any extra .o file for PCH
+gb_PrecompiledHeader_get_objectfile =
+
 define gb_PrecompiledHeader__command
 $(call gb_Output_announce,$(2),$(true),PCH,1)
 $(call gb_Helper_abbreviate_dirs,\
@@ -168,6 +171,8 @@ endef
 # NoexPrecompiledHeader class
 
 gb_NoexPrecompiledHeader_get_enableflags = -include-pch $(call gb_NoexPrecompiledHeader_get_target,$(1))
+
+gb_NoexPrecompiledHeader_get_objectfile =
 
 define gb_NoexPrecompiledHeader__command
 $(call gb_Output_announce,$(2),$(true),PCH,1)
