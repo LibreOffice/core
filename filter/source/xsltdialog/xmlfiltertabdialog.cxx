@@ -55,7 +55,7 @@ XMLFilterTabDialog::XMLFilterTabDialog( Window *pParent, ResMgr& rResMgr, const 
     mpNewInfo = new filter_info_impl( *mpOldInfo );
 
     OUString aTitle( GetText() );
-    aTitle.replaceAll("%s", mpNewInfo->maFilterName);
+    aTitle = aTitle.replaceAll("%s", mpNewInfo->maFilterName);
     SetText( aTitle );
 
     maTabCtrl.Show();
@@ -277,12 +277,12 @@ bool XMLFilterTabDialog::onOk()
 
         if( aReplace2.getLength() )
         {
-            aMessage.replaceAll( "%s1", aReplace1 );
-            aMessage.replaceAll( "%s2", aReplace2 );
+            aMessage = aMessage.replaceAll( "%s1", aReplace1 );
+            aMessage = aMessage.replaceAll( "%s2", aReplace2 );
         }
         else if( aReplace1.getLength() )
         {
-            aMessage.replaceAll( "%s", aReplace1 );
+            aMessage = aMessage.replaceAll( "%s", aReplace1 );
         }
 
         ErrorBox aBox(this, (WinBits)(WB_OK), aMessage );
