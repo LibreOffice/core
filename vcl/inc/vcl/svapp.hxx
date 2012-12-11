@@ -282,18 +282,20 @@ public:
     //               (e.g. Xserver with Xinerama, Windows)
     //        false: different screens are separate and windows cannot be moved
     //               between them (e.g. Xserver with multiple screens)
-    SAL_DLLPRIVATE static bool          IsUnifiedDisplay();
+    static bool          IsUnifiedDisplay();
     // if IsUnifiedDisplay() == true the return value will be
     // nearest screen of the target rectangle
     // in case of IsUnifiedDisplay() == false the return value
     // will always be GetDisplayDefaultScreen()
     SAL_DLLPRIVATE static unsigned int  GetBestScreen( const Rectangle& );
-    SAL_DLLPRIVATE static Rectangle     GetWorkAreaPosSizePixel( unsigned int nScreen );
+    static Rectangle     GetWorkAreaPosSizePixel( unsigned int nScreen );
     // This returns the LCD screen number for a laptop, or the primary
     // external VGA display for a desktop machine - it is where a presenter
     // console should be rendered if there are other (non-built-in) screens
     // present.
-    SAL_DLLPRIVATE static unsigned int  GetDisplayBuiltInScreen();
+    static unsigned int  GetDisplayBuiltInScreen();
+    // Practically, this means - Get the screen we should run a presentation on.
+    static unsigned int  GetDisplayExternalScreen();
     SAL_DLLPRIVATE static rtl::OUString GetDisplayScreenName( unsigned int nScreen );
 
     static const LocaleDataWrapper& GetAppLocaleDataWrapper();

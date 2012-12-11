@@ -39,6 +39,7 @@
 #include <boost/bind.hpp>
 
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -409,13 +410,6 @@ void PresenterScreen::InitializePresenterScreen (void)
     }
 }
 
-css::uno::Reference<css::beans::XPropertySet> PresenterScreen::GetDisplayAccess() const
-{
-    Reference<XComponentContext> xContext (mxContextWeak);
-    Reference<lang::XMultiComponentFactory> xFactory (xContext->getServiceManager(), UNO_QUERY_THROW);
-    return Reference<beans::XPropertySet>( xFactory->createInstanceWithContext(A2S("com.sun.star.awt.DisplayAccess"), xContext), UNO_QUERY_THROW);
-}
-
 void PresenterScreen::SwitchMonitors()
 {
     try {
@@ -429,9 +423,8 @@ void PresenterScreen::SwitchMonitors()
             return;
 
         // Adapt that display number to be the 'default' setting of 0 if it matches
-        sal_Int32 nExternalDisplay = 0;
-        Reference<beans::XPropertySet> xDisplayProperties = GetDisplayAccess();
-        xDisplayProperties->getPropertyValue(A2S("ExternalDisplay")) >>= nExternalDisplay;
+        sal_Int32 nExternalDisplay = Application::GetDisplayExternalScreen();
+
         if (nNewScreen == nExternalDisplay)
             nNewScreen = 0; // screen zero is best == the primary display
         else
@@ -473,7 +466,6 @@ sal_Int32 PresenterScreen::GetPresenterScreenNumber (
             return -1;
         }
 
-        Reference<beans::XPropertySet> xDisplayProperties = GetDisplayAccess();
         if (nDisplayNumber > 0)
         {
             nScreenNumber = nDisplayNumber - 1;
@@ -481,18 +473,14 @@ sal_Int32 PresenterScreen::GetPresenterScreenNumber (
         else if (nDisplayNumber == 0)
         {
             // A display number value of 0 indicates the primary screen.
-            // Instantiate the DisplayAccess service to find out which
-            // screen number that is.
-            if (nDisplayNumber <= 0 && xDisplayProperties.is())
-                xDisplayProperties->getPropertyValue(A2S("ExternalDisplay")) >>= nScreenNumber;
+            // Find out which screen number that is.
+            if (nDisplayNumber <= 0)
+                nScreenNumber = Application::GetDisplayExternalScreen();
         }
 
         // We still have to determine the number of screens to decide
         // whether the presenter screen may be shown at all.
-        Reference<container::XIndexAccess> xIndexAccess (xDisplayProperties, UNO_QUERY);
-        if ( ! xIndexAccess.is())
-            return -1;
-        nScreenCount = xIndexAccess->getCount();
+        nScreenCount = Application::GetScreenCount();
 
         if (nScreenCount < 2 || nDisplayNumber > nScreenCount)
         {

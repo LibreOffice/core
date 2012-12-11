@@ -31,9 +31,6 @@
   <implementation name="com.sun.star.frame.VCLSessionManagerClient">
     <service name="com.sun.star.frame.SessionManagerClient"/>
   </implementation>
-  <implementation name="vcl::DisplayAccess">
-    <service name="com.sun.star.awt.DisplayAccess"/>
-  </implementation>
   <implementation name="vcl::FontIdentificator">
     <service name="com.sun.star.awt.FontIdentificator"/>
   </implementation>

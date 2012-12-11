@@ -26,6 +26,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <comphelper/processfactory.hxx>
 #include <svl/itemset.hxx>
+#include <vcl/svapp.hxx>
 
 #include "sdattr.hxx"
 #include "present.hxx"
@@ -176,13 +177,11 @@ void SdStartPresentationDlg::InitMonitorSettings()
 {
     try
     {
-        Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
-        Reference< XIndexAccess > xMultiMon( xFactory->createInstance("com.sun.star.awt.DisplayAccess" ), UNO_QUERY_THROW );
         maGrpMonitor.Show( true );
         maFtMonitor.Show( true );
         maLBMonitor.Show( true );
 
-        mnMonitors = xMultiMon->getCount();
+        mnMonitors = Application::GetScreenCount();
 
         if( mnMonitors <= 1 )
         {
@@ -191,19 +190,8 @@ void SdStartPresentationDlg::InitMonitorSettings()
         }
         else
         {
-            sal_Bool bUnifiedDisplay = false;
-            sal_Int32 nExternalIndex = 0;
-            Reference< XPropertySet > xMonProps( xMultiMon, UNO_QUERY );
-            if( xMonProps.is() ) try
-            {
-                const OUString sPropName1( "IsUnifiedDisplay" );
-                xMonProps->getPropertyValue( sPropName1 ) >>= bUnifiedDisplay;
-                const OUString sPropName2( "ExternalDisplay" );
-                xMonProps->getPropertyValue( sPropName2 ) >>= nExternalIndex;
-            }
-            catch( Exception& )
-            {
-            }
+            sal_Bool bUnifiedDisplay = Application::IsUnifiedDisplay();
+            sal_Int32 nExternalIndex = Application::GetDisplayExternalScreen();
 
             sal_Int32 nSelectedIndex (-1);
             sal_Int32 nDefaultExternalIndex (-1);

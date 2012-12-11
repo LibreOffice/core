@@ -42,7 +42,7 @@ SlideShowRestarter::SlideShowRestarter (
     : mnEventId(0),
       mpSlideShow(rpSlideShow),
       mpViewShellBase(pViewShellBase),
-      mnDisplayCount(GetDisplayCount()),
+      mnDisplayCount(Application::GetScreenCount()),
       mpDispatcher(pViewShellBase->GetViewFrame()->GetDispatcher()),
       mnCurrentSlideNumber(0)
 {
@@ -77,30 +77,12 @@ void SlideShowRestarter::Restart (bool bForce)
         LINK(this, SlideShowRestarter, EndPresentation));
 }
 
-sal_Int32 SlideShowRestarter::GetDisplayCount (void)
-{
-    const Reference<XComponentContext> xContext (
-        ::comphelper::getProcessComponentContext() );
-    Reference<XMultiComponentFactory> xFactory (
-        xContext->getServiceManager(), UNO_QUERY);
-    if ( ! xFactory.is())
-        return 0;
-
-    Reference<com::sun::star::container::XIndexAccess> xIndexAccess (
-        xFactory->createInstanceWithContext("com.sun.star.awt.DisplayAccess",xContext),
-        UNO_QUERY);
-    if ( ! xIndexAccess.is())
-        return 0;
-
-    return xIndexAccess->getCount();
-}
-
 IMPL_LINK_NOARG(SlideShowRestarter, EndPresentation)
 {
     mnEventId = 0;
     if (mpSlideShow.is())
     {
-        if (mnDisplayCount!=GetDisplayCount())
+        if (mnDisplayCount != (sal_Int32)Application::GetScreenCount())
         {
             mpSlideShow->end();
 

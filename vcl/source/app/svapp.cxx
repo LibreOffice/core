@@ -1238,6 +1238,29 @@ unsigned int Application::GetDisplayBuiltInScreen()
     return pSys ? pSys->GetDisplayBuiltInScreen() : 0;
 }
 
+unsigned int Application::GetDisplayExternalScreen()
+{
+    // This is really unpleasant, in theory we could have multiple
+    // external displays etc.
+    int nExternal(0);
+    switch (GetDisplayBuiltInScreen())
+    {
+    case 0:
+        nExternal = 1;
+        break;
+    case 1:
+        nExternal = 0;
+        break;
+    default:
+        // When the built-in display is neither 0 nor 1
+        // then place the full-screen presentation on the
+        // first available screen.
+        nExternal = 0;
+        break;
+    }
+    return nExternal;
+}
+
 Rectangle Application::GetScreenPosSizePixel( unsigned int nScreen )
 {
     SalSystem* pSys = ImplGetSalSystem();

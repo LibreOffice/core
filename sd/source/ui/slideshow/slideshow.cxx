@@ -101,25 +101,6 @@ namespace {
     private:
         ::boost::shared_ptr<SlideShowRestarter> mpRestarter;
     };
-
-    /** Return the default display id (or -1 when that can not be
-        determined.)
-    */
-    sal_Int32 GetExternalDisplay (void)
-    {
-        try
-        {
-            Reference< XMultiServiceFactory > xFactory(::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
-            Reference< XPropertySet > xMonProps(xFactory->createInstance( "com.sun.star.awt.DisplayAccess" ), UNO_QUERY_THROW );
-            sal_Int32 nPrimaryIndex (-1);
-            if (xMonProps->getPropertyValue( "ExternalDisplay" ) >>= nPrimaryIndex)
-                return nPrimaryIndex;
-        }
-        catch( Exception& )
-        {
-        }
-        return -1;
-    }
 }
 
 
@@ -573,7 +554,7 @@ void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const 
         {
             // Convert value to true display id.
             if (nDisplay == 0)
-                nDisplay = GetExternalDisplay();
+                nDisplay = Application::GetDisplayExternalScreen();
             else if (nDisplay < 0)
                 nDisplay = -1;
             else
@@ -665,7 +646,7 @@ Any SAL_CALL SlideShow::getPropertyValue( const OUString& PropertyName ) throw(U
         SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
         const sal_Int32 nDisplay (pOptions->GetDisplay());
         // Convert true display id to the previously used schema.
-        if (nDisplay == GetExternalDisplay())
+        if (nDisplay == (sal_Int32)Application::GetDisplayExternalScreen())
             return Any(sal_Int32(0));
         else if (nDisplay < 0)
             return Any(sal_Int32(-1));

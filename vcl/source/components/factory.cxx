@@ -37,10 +37,6 @@ extern Reference< XInterface > SAL_CALL vcl_session_createInstance( const Refere
 
 namespace vcl
 {
-extern Sequence< OUString > SAL_CALL DisplayAccess_getSupportedServiceNames();
-extern OUString SAL_CALL DisplayAccess_getImplementationName();
-extern Reference< XInterface > SAL_CALL DisplayAccess_createInstance( const Reference< XMultiServiceFactory > & );
-
 extern Sequence< OUString > SAL_CALL FontIdentificator_getSupportedServiceNames();
 extern OUString SAL_CALL FontIdentificator_getImplementationName();
 extern Reference< XInterface > SAL_CALL FontIdentificator_createInstance( const Reference< XMultiServiceFactory > & );
@@ -83,12 +79,6 @@ extern "C" {
                 xFactory = ::cppu::createOneInstanceFactory(
                     xMgr, vcl_session_getImplementationName(), vcl_session_createInstance,
                     vcl_session_getSupportedServiceNames() );
-            }
-            else if( vcl::DisplayAccess_getImplementationName().equalsAscii( pImplementationName ) )
-            {
-                xFactory = ::cppu::createSingleFactory(
-                    xMgr, vcl::DisplayAccess_getImplementationName(), vcl::DisplayAccess_createInstance,
-                    vcl::DisplayAccess_getSupportedServiceNames() );
             }
             else if( vcl::FontIdentificator_getImplementationName().equalsAscii( pImplementationName ) )
             {

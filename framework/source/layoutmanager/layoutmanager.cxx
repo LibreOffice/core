@@ -113,7 +113,6 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
         , LayoutManager_PBase( *(static_cast< ::cppu::OBroadcastHelper* >(this)) )
         , m_xSMGR( xServiceManager )
         , m_xURLTransformer( URLTransformer::create(::comphelper::getComponentContext(xServiceManager)) )
-        , m_xDisplayAccess( xServiceManager->createInstance( SERVICENAME_DISPLAYACCESS ), UNO_QUERY )
         , m_nLockCount( 0 )
         , m_bActive( false )
         , m_bInplaceMenuSet( false )
@@ -2472,25 +2471,15 @@ sal_Bool LayoutManager::implts_resizeContainerWindow( const awt::Size& rContaine
     Reference< awt::XWindow >               xContainerWindow    = m_xContainerWindow;
     Reference< awt::XTopWindow2 >           xContainerTopWindow = m_xContainerTopWindow;
     Reference< awt::XWindow >               xComponentWindow    = m_xFrame->getComponentWindow();
-    Reference< container::XIndexAccess >    xDisplayAccess      = m_xDisplayAccess;
     aReadLock.unlock();
 
     // calculate the maximum size we have for the container window
-    awt::Rectangle aWorkArea;
-    try
-    {
-        sal_Int32 nDisplay = xContainerTopWindow->getDisplay();
-        Reference< beans::XPropertySet > xDisplayInfo( xDisplayAccess->getByIndex( nDisplay ), UNO_QUERY_THROW );
-        OSL_VERIFY( xDisplayInfo->getPropertyValue( ::rtl::OUString( "WorkArea"  ) ) >>= aWorkArea );
-    }
-    catch( const Exception& )
-    {
-        DBG_UNHANDLED_EXCEPTION();
-    }
+    sal_Int32 nDisplay = xContainerTopWindow->getDisplay();
+    Rectangle aWorkArea = Application::GetWorkAreaPosSizePixel( nDisplay );
 
-    if (( aWorkArea.Width > 0 ) && ( aWorkArea.Height > 0 ))
+    if (( aWorkArea.GetWidth() > 0 ) && ( aWorkArea.GetHeight() > 0 ))
     {
-        if (( rContainerSize.Width > aWorkArea.Width ) || ( rContainerSize.Height > aWorkArea.Height ))
+        if (( rContainerSize.Width > aWorkArea.GetWidth() ) || ( rContainerSize.Height > aWorkArea.GetHeight() ))
             return sal_False;
         // Strictly, this is not correct. If we have a multi-screen display (css.awt.DisplayAccess.MultiDisplay == true),
         // the the "effective work area" would be much larger than the work area of a single display, since we could in theory

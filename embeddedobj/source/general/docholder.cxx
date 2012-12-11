@@ -64,6 +64,7 @@
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <osl/diagnose.h>
 #include <rtl/process.h>
+#include <vcl/svapp.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/namedvaluecollection.hxx>
@@ -910,26 +911,20 @@ uno::Reference< frame::XFrame > DocumentHolder::GetDocFrame()
 
         if( xHWindow.is() )
         {
-            uno::Reference< beans::XPropertySet > xMonProps( m_xFactory->createInstance(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.DisplayAccess" ) ) ), uno::UNO_QUERY_THROW );
-            const rtl::OUString sPropName( RTL_CONSTASCII_USTRINGPARAM( "DefaultDisplay" ) );
-            sal_Int32 nDisplay = 0;
-            xMonProps->getPropertyValue( sPropName ) >>= nDisplay;
+            sal_Int32 nDisplay = Application::GetDisplayBuiltInScreen();
 
-            uno::Reference< container::XIndexAccess > xMultiMon( xMonProps, uno::UNO_QUERY_THROW );
-            uno::Reference< beans::XPropertySet > xMonitor( xMultiMon->getByIndex( nDisplay ), uno::UNO_QUERY_THROW );
-            awt::Rectangle aWorkRect;
-            xMonitor->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "WorkArea" ) ) ) >>= aWorkRect;
+            Rectangle aWorkRect = Application::GetWorkAreaPosSizePixel( nDisplay );
             awt::Rectangle aWindowRect = xHWindow->getPosSize();
 
-            if (( aWindowRect.Width < aWorkRect.Width) && ( aWindowRect.Height < aWorkRect.Height ))
+            if (( aWindowRect.Width < aWorkRect.GetWidth()) && ( aWindowRect.Height < aWorkRect.GetHeight() ))
             {
-                int OffsetX = ( aWorkRect.Width - aWindowRect.Width ) / 2 + aWorkRect.X;
-                int OffsetY = ( aWorkRect.Height - aWindowRect.Height ) /2 + aWorkRect.Y;
+                int OffsetX = ( aWorkRect.GetWidth() - aWindowRect.Width ) / 2 + aWorkRect.Left();
+                int OffsetY = ( aWorkRect.GetHeight() - aWindowRect.Height ) /2 + aWorkRect.Top();
                 xHWindow->setPosSize( OffsetX, OffsetY, aWindowRect.Width, aWindowRect.Height, awt::PosSize::POS );
             }
             else
             {
-                xHWindow->setPosSize( aWorkRect.X, aWorkRect.Y, aWorkRect.Width, aWorkRect.Height, awt::PosSize::POSSIZE );
+                xHWindow->setPosSize( aWorkRect.Left(), aWorkRect.Top(), aWorkRect.GetWidth(), aWorkRect.GetHeight(), awt::PosSize::POSSIZE );
             }
 
             xHWindow->setVisible( sal_True );

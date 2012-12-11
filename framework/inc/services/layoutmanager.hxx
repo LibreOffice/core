@@ -286,7 +286,6 @@ namespace framework
 
             css::uno::Reference< css::lang::XMultiServiceFactory >                      m_xSMGR; /** reference to factory, which has created this instance. */
             css::uno::Reference< css::util::XURLTransformer >                           m_xURLTransformer;
-            css::uno::Reference< css::container::XIndexAccess >                         m_xDisplayAccess;
             css::uno::Reference< css::frame::XFrame >                                   m_xFrame;
             css::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager >        m_xModuleCfgMgr;
             css::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager >        m_xDocCfgMgr;

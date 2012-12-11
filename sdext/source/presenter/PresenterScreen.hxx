@@ -228,10 +228,6 @@ private:
     */
     css::uno::Reference<css::drawing::framework::XResourceId> GetMainPaneId (
         const css::uno::Reference<css::presentation::XPresentation2>& rxPresentation) const;
-
-    /** Gets the display access property bag
-     */
-    css::uno::Reference<css::beans::XPropertySet> GetDisplayAccess () const;
 };
 
 } }
