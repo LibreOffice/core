@@ -162,7 +162,7 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
         const ListStore *pStore = get_model_by_name(aI->m_sValue);
         SAL_WARN_IF(!pTarget || !pStore, "vcl", "missing elements of combobox/liststore");
         if (pTarget && pStore)
-            mungeModel(*pTarget, *pStore);
+            mungeModel(*pTarget, *pStore, aI->m_nActiveId);
     }
 
     //Set TextView buffers when everything has been imported
@@ -575,12 +575,28 @@ bool VclBuilder::extractScrollAdjustment(const OString &id, stringmap &rMap)
     return false;
 }
 
+namespace
+{
+    sal_Int32 extractActive(VclBuilder::stringmap &rMap)
+    {
+        sal_Int32 nActiveId = 0;
+        VclBuilder::stringmap::iterator aFind = rMap.find(OString("active"));
+        if (aFind != rMap.end())
+        {
+            nActiveId = aFind->second.toInt32();
+            rMap.erase(aFind);
+        }
+        return nActiveId;
+    }
+}
+
 bool VclBuilder::extractModel(const OString &id, stringmap &rMap)
 {
     VclBuilder::stringmap::iterator aFind = rMap.find(OString("model"));
     if (aFind != rMap.end())
     {
-        m_pParserState->m_aModelMaps.push_back(ComboBoxModelMap(id, aFind->second));
+        m_pParserState->m_aModelMaps.push_back(ComboBoxModelMap(id, aFind->second,
+            extractActive(rMap)));
         rMap.erase(aFind);
         return true;
     }
@@ -1994,7 +2010,7 @@ const VclBuilder::Adjustment *VclBuilder::get_adjustment_by_name(OString sID) co
     return NULL;
 }
 
-void VclBuilder::mungeModel(ListBox &rTarget, const ListStore &rStore)
+void VclBuilder::mungeModel(ListBox &rTarget, const ListStore &rStore, sal_uInt16 nActiveId)
 {
     for (std::vector<ListStore::row>::const_iterator aI = rStore.m_aEntries.begin(), aEnd = rStore.m_aEntries.end();
         aI != aEnd; ++aI)
@@ -2007,8 +2023,8 @@ void VclBuilder::mungeModel(ListBox &rTarget, const ListStore &rStore)
             rTarget.SetEntryData(nEntry, (void*)nValue);
         }
     }
-    if (!rStore.m_aEntries.empty())
-        rTarget.SelectEntryPos(0);
+    if (nActiveId < rStore.m_aEntries.size())
+        rTarget.SelectEntryPos(nActiveId);
 }
 
 void VclBuilder::mungeSpinAdjustment(NumericFormatter &rTarget, const Adjustment &rAdjustment)

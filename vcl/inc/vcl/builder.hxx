@@ -81,11 +81,23 @@ private:
     };
 
     typedef StringPair RadioButtonGroupMap;
-    typedef StringPair ComboBoxModelMap;
     typedef StringPair ButtonImageWidgetMap;
     typedef StringPair TextBufferMap;
     typedef StringPair WidgetAdjustmentMap;
     typedef StringPair ButtonMenuMap;
+
+    struct ComboBoxModelMap
+    {
+        OString m_sID;
+        OString m_sValue;
+        sal_Int32 m_nActiveId;
+        ComboBoxModelMap(const OString &rId, const OString &rValue, sal_Int32 nActiveId)
+            : m_sID(rId)
+            , m_sValue(rValue)
+            , m_nActiveId(nActiveId)
+        {
+        }
+    };
 
     struct ListStore
     {
@@ -93,7 +105,7 @@ private:
         std::vector<row> m_aEntries;
     };
     const ListStore* get_model_by_name(OString sID) const;
-    static void mungeModel(ListBox &rTarget, const ListStore &rStore);
+    static void mungeModel(ListBox &rTarget, const ListStore &rStore, sal_uInt16 nActiveId);
 
     typedef stringmap TextBuffer;
     const TextBuffer* get_buffer_by_name(OString sID) const;

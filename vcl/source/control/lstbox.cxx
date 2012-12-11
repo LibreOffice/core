@@ -1540,6 +1540,15 @@ const Wallpaper& ListBox::GetDisplayBackground() const
     return mpImplLB->GetDisplayBackground();
 }
 
+bool ListBox::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+{
+    if (rKey == "active")
+        SelectEntryPos(rValue.toInt32());
+    else
+        return Control::set_property(rKey, rValue);
+    return true;
+}
+
 // =======================================================================
 MultiListBox::MultiListBox( Window* pParent, WinBits nStyle ) :
     ListBox( WINDOW_MULTILISTBOX )
