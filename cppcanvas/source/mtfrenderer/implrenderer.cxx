@@ -696,10 +696,23 @@ namespace cppcanvas
 
                         case GradientStyle_AXIAL:
                         {
-                            basegfx::tools::createLinearODFGradientInfo(aGradInfo,
+                            // Adapt the border so that it is suitable
+                            // for the axial gradient.  An axial
+                            // gradient consists of two linear
+                            // gradients.  Each of those covers half
+                            // of the total size.  In order to
+                            // compensate for the condensed display of
+                            // the linear gradients, we have to
+                            // enlarge the area taken up by the actual
+                            // gradient (1-fBorder).  After that we
+                            // have to turn the result back into a
+                            // border value, hence the second (left
+                            // most 1-...
+                            const double fAxialBorder (1-2*(1-fBorder));
+                            basegfx::tools::createAxialODFGradientInfo(aGradInfo,
                                                                         aBounds,
                                                                         nSteps,
-                                                                        fBorder,
+                                                                        fAxialBorder,
                                                                         fRotation);
                             // map odf to svg gradient orientation - x
                             // instead of y direction
@@ -760,15 +773,6 @@ namespace cppcanvas
                             break;
                     }
 
-                    // As the texture coordinate space is relative to
-                    // the polygon coordinate space (NOT to the
-                    // polygon itself), move gradient to the start of
-                    // the actual polygon. If we skip this, the
-                    // gradient will always display at the origin, and
-                    // not within the polygon bound (which might be
-                    // miles away from the origin).
-                    aGradInfo.maTextureTransform.translate( aBounds.getMinX(),
-                                                            aBounds.getMinY() );
                     ::basegfx::unotools::affineMatrixFromHomMatrix( aTexture.AffineTransform,
                                                                     aGradInfo.maTextureTransform );
 
