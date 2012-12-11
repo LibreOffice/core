@@ -1344,6 +1344,7 @@ HTMLOnOffState HTMLEndPosLst::GetHTMLItemState( const SfxPoolItem& rItem )
         break;
 
     case RES_CHRATR_OVERLINE:
+    case RES_CHRATR_HIDDEN:
         if( IsHTMLMode(HTMLMODE_SOME_STYLES) )
             eState = HTML_STYLE_VALUE;
         break;
@@ -3235,7 +3236,7 @@ SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_CHRATR_TWO_LINES */          0,
 /* RES_CHRATR_SCALEW */             0,
 /* RES_CHRATR_RELIEF */             0,
-/* RES_CHRATR_HIDDEN */             0,
+/* RES_CHRATR_HIDDEN */             OutHTML_CSS1Attr,
 /* RES_CHRATR_OVERLINE */           OutHTML_CSS1Attr,
 /* RES_CHRATR_RSID */               0,
 /* RES_CHRATR_DUMMY1 */             0,

@@ -43,6 +43,7 @@
 #include <editeng/widwitem.hxx>
 #include <editeng/spltitem.hxx>
 #include <editeng/orphitem.hxx>
+#include <editeng/charhiddenitem.hxx>
 #include <svx/xoutbmp.hxx>
 #include <svx/svdobj.hxx>
 #include <editeng/langitem.hxx>
@@ -2822,6 +2823,15 @@ static Writer& OutCSS1_SvxOverline( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
+static Writer& OutCSS1_SvxHidden( Writer& rWrt, const SfxPoolItem& rHt )
+{
+    SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
+
+    if ( ((const SvxCharHiddenItem&)rHt).GetValue() )
+        rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_display, sCSS1_PV_none );
+
+    return rWrt;
+}
 
 static Writer& OutCSS1_SvxFontWeight( Writer& rWrt, const SfxPoolItem& rHt )
 {
@@ -3751,7 +3761,7 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /* RES_CHRATR_TWO_LINES */          0,
 /* RES_CHRATR_SCALEW */             0,
 /* RES_CHRATR_RELIEF */             0,
-/* RES_CHRATR_HIDDEN */             0,
+/* RES_CHRATR_HIDDEN */             OutCSS1_SvxHidden,
 /* RES_CHRATR_OVERLINE */           OutCSS1_SvxOverline,
 /* RES_CHRATR_RSID */               0,
 /* RES_CHRATR_DUMMY1 */             0,
