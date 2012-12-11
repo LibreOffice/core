@@ -52,6 +52,7 @@
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/ui/XUIElementFactory.hpp>
+#include <com/sun/star/ui/XUIElementFactoryManager.hpp>
 #include <com/sun/star/ui/DockingArea.hpp>
 #include <com/sun/star/awt/XTopWindow2.hpp>
 #include <com/sun/star/awt/XDockableWindow.hpp>
@@ -317,7 +318,7 @@ namespace framework
             UIElement                                                                   m_aProgressBarElement;
             com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement >          m_xProgressBarBackup;
             css::uno::Reference< ::com::sun::star::frame::XModuleManager2 >             m_xModuleManager;
-            css::uno::Reference< ::com::sun::star::ui::XUIElementFactory >              m_xUIElementFactoryManager;
+            css::uno::Reference< ::com::sun::star::ui::XUIElementFactoryManager >       m_xUIElementFactoryManager;
             css::uno::Reference< ::com::sun::star::container::XNameAccess >             m_xPersistentWindowState;
             css::uno::Reference< ::com::sun::star::container::XNameAccess >             m_xPersistentWindowStateSupplier;
             GlobalSettings*                                                             m_pGlobalSettings;

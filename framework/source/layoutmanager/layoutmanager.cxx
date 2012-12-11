@@ -51,6 +51,7 @@
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/ui/WindowStateConfiguration.hpp>
+#include <com/sun/star/ui/UIElementFactoryManager.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/frame/LayoutManagerEvents.hpp>
@@ -131,8 +132,7 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
         , m_bMenuBarCloser( false )
         , m_pInplaceMenuBar( NULL )
         , m_xModuleManager( ModuleManager::create( comphelper::getComponentContext(xServiceManager) ))
-        , m_xUIElementFactoryManager( Reference< ui::XUIElementFactory >(
-                xServiceManager->createInstance( SERVICENAME_UIELEMENTFACTORYMANAGER ), UNO_QUERY ))
+        , m_xUIElementFactoryManager( ui::UIElementFactoryManager::create(comphelper::getComponentContext(xServiceManager)) )
         , m_xPersistentWindowStateSupplier( ui::WindowStateConfiguration::create( comphelper::getComponentContext(xServiceManager) ) )
         , m_pGlobalSettings( 0 )
         , m_aStatusBarAlias( "private:resource/statusbar/statusbar" )
@@ -155,7 +155,7 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
     m_aStatusBarElement.m_aType = rtl::OUString( "statusbar" );
     m_aStatusBarElement.m_aName = m_aStatusBarAlias;
 
-    m_pToolbarManager = new ToolbarLayoutManager( comphelper::getComponentContext(xServiceManager), m_xUIElementFactoryManager, this );
+    m_pToolbarManager = new ToolbarLayoutManager( comphelper::getComponentContext(xServiceManager), Reference<XUIElementFactory>(m_xUIElementFactoryManager, UNO_QUERY_THROW), this );
     m_xToolbarManager = uno::Reference< ui::XUIConfigurationListener >( static_cast< OWeakObject* >( m_pToolbarManager ), uno::UNO_QUERY );
 
     Application::AddEventListener( LINK( this, LayoutManager, SettingsChanged ) );

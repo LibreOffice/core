@@ -304,6 +304,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/ucb,\
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/ui,\
 	GlobalAcceleratorConfiguration \
     ModuleUIConfigurationManagerSupplier \
+    UIElementFactoryManager \
 	WindowContentFactory \
     WindowContentFactoryManager \
 	WindowStateConfiguration \
@@ -1448,7 +1449,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/ui,\
 	UIConfigurationManager \
 	UIElement \
 	UIElementFactory \
-	UIElementFactoryManager \
 	UIElementSettings \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/ui/dialogs,\
@@ -3870,6 +3870,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/ui,\
 	XUIConfigurationStorage \
 	XUIElement \
 	XUIElementFactory \
+    XUIElementFactoryManager \
 	XUIElementFactoryRegistration \
 	XUIElementSettings \
 	XUIFunctionListener \

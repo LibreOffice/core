@@ -34,14 +34,13 @@
 #include <stdtypes.h>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/ui/XUIElementFactory.hpp>
-#include <com/sun/star/ui/XUIElementFactoryRegistration.hpp>
+#include <com/sun/star/ui/XUIElementFactoryManager.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include "com/sun/star/frame/XModuleManager2.hpp"
 
 #include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <rtl/ustring.hxx>
 
 namespace framework
@@ -100,9 +99,8 @@ namespace framework
 
 
 class UIElementFactoryManager :  private ThreadHelpBase                                             ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
-                                 public ::cppu::WeakImplHelper3< ::com::sun::star::lang::XServiceInfo,
-                                                                 ::com::sun::star::ui::XUIElementFactory,
-                                                                 ::com::sun::star::ui::XUIElementFactoryRegistration>
+                                 public ::cppu::WeakImplHelper2< ::com::sun::star::lang::XServiceInfo,
+                                                                 ::com::sun::star::ui::XUIElementFactoryManager>
 {
     public:
         UIElementFactoryManager( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );

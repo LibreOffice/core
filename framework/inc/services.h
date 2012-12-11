@@ -57,7 +57,6 @@ namespace framework{
 #define SERVICENAME_POPUPMENUCONTROLLERFACTORY                  DECLARE_ASCII("com.sun.star.frame.PopupMenuControllerFactory" )
 #define SERVICENAME_POPUPMENUCONTROLLER                         DECLARE_ASCII("com.sun.star.frame.PopupMenuController"       )
 #define SERVICENAME_UICOMMANDDESCRIPTION                        DECLARE_ASCII("com.sun.star.frame.UICommandDescription"      )
-#define SERVICENAME_UIELEMENTFACTORYMANAGER                     DECLARE_ASCII("com.sun.star.ui.UIElementFactoryManager"      )
 #define SERVICENAME_UICONFIGURATIONMANAGER                      DECLARE_ASCII("com.sun.star.ui.UIConfigurationManager"       )
 #define SERVICENAME_MODULEUICONFIGURATIONMANAGER                DECLARE_ASCII("com.sun.star.ui.ModuleUIConfigurationManager" )
 #define SERVICENAME_MENUBARFACTORY                              DECLARE_ASCII("com.sun.star.ui.UIElementFactory"             )

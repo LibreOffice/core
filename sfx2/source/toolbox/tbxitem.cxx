@@ -43,6 +43,7 @@
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/ui/XUIFunctionListener.hpp>
+#include <com/sun/star/ui/UIElementFactoryManager.hpp>
 #include <com/sun/star/frame/status/Visibility.hpp>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
@@ -774,7 +775,7 @@ void SfxToolBoxControl::createAndPositionSubToolBar( const ::rtl::OUString& rSub
 
     if ( pImpl->pBox )
     {
-        static WeakReference< XUIElementFactory > xWeakUIElementFactory;
+        static WeakReference< XUIElementFactoryManager > xWeakUIElementFactory;
 
         sal_uInt16 nItemId = pImpl->pBox->GetDownItemId();
 
@@ -785,16 +786,13 @@ void SfxToolBoxControl::createAndPositionSubToolBar( const ::rtl::OUString& rSub
         Reference< XMultiServiceFactory >   xServiceManager = getServiceManager();
         Reference< XFrame >                 xFrame          = getFrameInterface();
         Reference< XUIElement >             xUIElement;
-        Reference< XUIElementFactory >      xUIEementFactory;
+        Reference< XUIElementFactoryManager >  xUIElementFactory;
 
-        xUIEementFactory = xWeakUIElementFactory;
-        if ( !xUIEementFactory.is() )
+        xUIElementFactory = xWeakUIElementFactory;
+        if ( !xUIElementFactory.is() )
         {
-            xUIEementFactory = Reference< XUIElementFactory >(
-                xServiceManager->createInstance(
-                    rtl::OUString( "com.sun.star.ui.UIElementFactoryManager" )),
-                UNO_QUERY );
-            xWeakUIElementFactory = xUIEementFactory;
+            xUIElementFactory = UIElementFactoryManager::create( comphelper::getComponentContext(xServiceManager) );
+            xWeakUIElementFactory = xUIElementFactory;
         }
 
         Sequence< PropertyValue > aPropSeq( 3 );
@@ -807,7 +805,7 @@ void SfxToolBoxControl::createAndPositionSubToolBar( const ::rtl::OUString& rSub
 
         try
         {
-            xUIElement = xUIEementFactory->createUIElement( rSubToolBarResName, aPropSeq );
+            xUIElement = xUIElementFactory->createUIElement( rSubToolBarResName, aPropSeq );
         }
         catch ( ::com::sun::star::container::NoSuchElementException& )
         {

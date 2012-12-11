@@ -37,6 +37,7 @@
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/awt/XControl.hpp>
+#include <com/sun/star/ui/UIElementFactoryManager.hpp>
 
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/namedvaluecollection.hxx>
@@ -76,6 +77,8 @@ namespace sfx2
     using ::com::sun::star::container::XNameAccess;
     using ::com::sun::star::ui::XToolPanel;
     using ::com::sun::star::ui::XUIElementFactory;
+    using ::com::sun::star::ui::XUIElementFactoryManager;
+    using ::com::sun::star::ui::UIElementFactoryManager;
     using ::com::sun::star::ui::XUIElement;
     using ::com::sun::star::awt::XWindow;
     using ::com::sun::star::frame::XFrame;
@@ -357,8 +360,7 @@ namespace sfx2
         m_bAttemptedCreation = true;
         try
         {
-            const ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-            const Reference< XUIElementFactory > xFactory( aContext.createComponent( "com.sun.star.ui.UIElementFactoryManager" ), UNO_QUERY_THROW );
+            const Reference< XUIElementFactoryManager > xFactory = UIElementFactoryManager::create( ::comphelper::getProcessComponentContext() );
 
             ::comphelper::NamedValueCollection aCreationArgs;
             aCreationArgs.put( "Frame", makeAny( m_xFrame ) );

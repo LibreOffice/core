@@ -17,26 +17,38 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_ui_UIElementFactoryManager_idl__
-#define __com_sun_star_ui_UIElementFactoryManager_idl__
+#ifndef __com_sun_star_ui_XUIElementFactoryManager_idl__
+#define __com_sun_star_ui_XUIElementFactoryManager_idl__
 
-#include <com/sun/star/ui/XUIElementFactoryManager.idl>
+#include <com/sun/star/lang/XMultiComponentFactory.idl>
+#include <com/sun/star/ui/XUIElementFactoryRegistration.idl>
 
 
 module com { module sun { module star { module ui {
 
 
-/** specifies a user interface factory manager that controls all registered user
-    interface element factories.
+/** Provides a unified interface for the new-style service XUIElementFactoryManager.
 
-    <p>An implementation is usually obtained from a
-    <type scope="com::sun::star::lang">ServiceManager</type>.
-    </p>
-
-    @since OOo 2.0
+    @since LibreOffice 4.1
 */
+interface XUIElementFactoryManager
+{
+    /** provides a function to create new instances of user interface elements.
 
-service UIElementFactoryManager : XUIElementFactoryManager;
+        <p>
+        A user interface element factory manager is also a user interface element factory. It
+        retrieves the responsible user interface element factory from the provided arguments and passes
+        the arguments to it.
+
+        see @XUIElementFactory
+        </p>
+     */
+    interface XUIElementFactory;
+
+    /** provides functions to query, retrieve, register and deregister user interface element factories.
+    */
+    interface XUIElementFactoryRegistration;
+};
 
 }; }; }; };
 

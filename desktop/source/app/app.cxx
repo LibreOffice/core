@@ -62,7 +62,7 @@
 #include <com/sun/star/task/XRestartManager.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/frame/UICommandDescription.hpp>
-#include <com/sun/star/ui/XUIElementFactoryRegistration.hpp>
+#include <com/sun/star/ui/UIElementFactoryManager.hpp>
 #include <com/sun/star/ui/WindowStateConfiguration.hpp>
 #include <com/sun/star/frame/XUIControllerRegistration.hpp>
 
@@ -2137,19 +2137,13 @@ void Desktop::PreloadConfigurationData()
 
     // preload user interface element factories
     Sequence< Sequence< css::beans::PropertyValue > > aSeqSeqPropValue;
-    Reference< ::com::sun::star::ui::XUIElementFactoryRegistration > xUIElementFactory(
-        rFactory->createInstance(
-            rtl::OUString( "com.sun.star.ui.UIElementFactoryManager" )),
-            UNO_QUERY );
-    if ( xUIElementFactory.is() )
+    Reference< XUIElementFactoryManager > xUIElementFactory = UIElementFactoryManager::create( xContext );
+    try
     {
-        try
-        {
-            aSeqSeqPropValue = xUIElementFactory->getRegisteredFactories();
-        }
-        catch ( const ::com::sun::star::uno::Exception& )
-        {
-        }
+        aSeqSeqPropValue = xUIElementFactory->getRegisteredFactories();
+    }
+    catch ( const ::com::sun::star::uno::Exception& )
+    {
     }
 
     // preload popup menu controller factories. As all controllers are in the same
