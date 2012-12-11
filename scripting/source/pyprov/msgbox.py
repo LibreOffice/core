@@ -250,11 +250,11 @@ if __name__ == '__main__':
     myBox.renderFromBoxSize(150)
     myBox.numberOflines = 2
 
-    print myBox.show("A very long message A very long message A very long message A very long message A very long message A very long message A very long message A very long message A very long message A very long message " + chr(10)+chr(10)+"Do you agree ?",0,"Dialog title")
+    print(myBox.show("A very long message A very long message A very long message A very long message A very long message A very long message A very long message A very long message A very long message A very long message " + chr(10)+chr(10)+"Do you agree ?",0,"Dialog title"))
 
     myBox = MsgBox(ctx)
     myBox.addButton("oK")
     myBox.renderFromButtonSize()
     myBox.numberOflines = 2
 
-    print myBox.show("A small message",0,"Dialog title")
+    print(myBox.show("A small message",0,"Dialog title"))
