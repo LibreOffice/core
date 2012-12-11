@@ -21,6 +21,7 @@
 
 class ListBox;
 class NumericFormatter;
+class PopupMenu;
 class ScrollBar;
 class VclMultiLineEdit;
 
@@ -56,6 +57,18 @@ private:
     };
     std::vector<WinAndId> m_aChildren;
 
+    struct MenuAndId
+    {
+        OString m_sID;
+        PopupMenu *m_pMenu;
+        MenuAndId(const OString &rId, PopupMenu *pMenu)
+            : m_sID(rId)
+            , m_pMenu(pMenu)
+        {
+        }
+    };
+    std::vector<MenuAndId> m_aMenus;
+
     struct StringPair
     {
         OString m_sID;
@@ -72,6 +85,7 @@ private:
     typedef StringPair ButtonImageWidgetMap;
     typedef StringPair TextBufferMap;
     typedef StringPair WidgetAdjustmentMap;
+    typedef StringPair ButtonMenuMap;
 
     struct ListStore
     {
@@ -112,6 +126,8 @@ private:
         std::vector<ButtonImageWidgetMap> m_aButtonImageWidgetMaps;
         StockMap m_aStockMap;
 
+        std::vector<ButtonMenuMap> m_aButtonMenuMaps;
+
         Translations m_aTranslations;
 
         std::map<Window*, Window*> m_aRedundantParentWidgets;
@@ -130,6 +146,8 @@ private:
 
     Window *get_by_name(OString sID);
     void delete_by_name(OString sID);
+
+    PopupMenu *get_menu_by_name(OString sID);
 
     class sortIntoBestTabTraversalOrder
         : public std::binary_function<const Window*, const Window*, bool>
@@ -168,6 +186,10 @@ public:
     }
     OString get_by_window(const Window *pWindow) const;
     void delete_by_window(const Window *pWindow);
+
+    //Convert _ gtk markup to ~ vcl markup
+    static OString convertMnemonicMarkup(const OString &rIn);
+
 private:
     Window *insertObject(Window *pParent, const OString &rClass, const OString &rID,
         stringmap &rProps, stringmap &rPangoAttributes);
@@ -189,12 +211,19 @@ private:
     void applyPackingProperty(Window *pCurrent, xmlreader::XmlReader &reader);
     void collectProperty(xmlreader::XmlReader &reader, const OString &rID, stringmap &rVec);
     void collectPangoAttribute(xmlreader::XmlReader &reader, stringmap &rMap);
+    void collectAccelerator(xmlreader::XmlReader &reader, stringmap &rMap);
+
+    void insertMenuObject(PopupMenu *pParent, const OString &rClass, const OString &rID,
+        stringmap &rProps, stringmap &rAccels);
+    void handleMenuChild(PopupMenu *pParent, xmlreader::XmlReader &reader);
+    void handleMenuObject(PopupMenu *pParent, xmlreader::XmlReader &reader);
 
     void handleListStore(xmlreader::XmlReader &reader, const OString &rID);
     void handleRow(xmlreader::XmlReader &reader, const OString &rID, sal_Int32 nRowIndex);
     void handleAdjustment(const OString &rID, stringmap &rProperties);
     void handleTextBuffer(const OString &rID, stringmap &rProperties);
     void handleTabChild(Window *pParent, xmlreader::XmlReader &reader);
+    void handleMenu(xmlreader::XmlReader &reader, const OString &rID);
 
     PackingData get_window_packing_data(const Window *pWindow) const;
     void set_window_packing_position(const Window *pWindow, sal_Int32 nPosition);

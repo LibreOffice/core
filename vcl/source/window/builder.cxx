@@ -20,6 +20,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/menubtn.hxx>
+#include <vcl/mnemonic.hxx>
 #include <vcl/prgsbar.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/svapp.hxx>
@@ -234,6 +235,19 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
         delete_by_name(*aI);
     }
 
+    //Set button menus when everything has been imported
+    for (std::vector<ButtonMenuMap>::iterator aI = m_pParserState->m_aButtonMenuMaps.begin(),
+         aEnd = m_pParserState->m_aButtonMenuMaps.end(); aI != aEnd; ++aI)
+    {
+        MenuButton *pTarget = get<MenuButton>(aI->m_sID);
+        PopupMenu *pMenu = get_menu_by_name(aI->m_sValue);
+        SAL_WARN_IF(!pTarget || !pMenu,
+            "vcl", "missing elements of button/menu");
+        if (!pTarget || !pMenu)
+            continue;
+        pTarget->SetPopupMenu(pMenu);
+    }
+
     //Remove ScrollWindow parent widgets whose children in vcl implement scrolling
     //internally.
     for (std::map<Window*, Window*>::iterator aI = m_pParserState->m_aRedundantParentWidgets.begin(),
@@ -256,6 +270,12 @@ VclBuilder::~VclBuilder()
          aEnd = m_aChildren.rend(); aI != aEnd; ++aI)
     {
         delete aI->m_pWindow;
+    }
+
+    for (std::vector<MenuAndId>::reverse_iterator aI = m_aMenus.rbegin(),
+         aEnd = m_aMenus.rend(); aI != aEnd; ++aI)
+    {
+        delete aI->m_pMenu;
     }
 }
 
@@ -311,16 +331,16 @@ void VclBuilder::handleTranslations(xmlreader::XmlReader &reader)
 
 namespace
 {
-    OString extractPattern(VclBuilder::stringmap &rMap)
+    OString extractCustomProperty(VclBuilder::stringmap &rMap)
     {
-        OString sPattern;
-        VclBuilder::stringmap::iterator aFind = rMap.find(OString("pattern"));
+        OString sCustomProperty;
+        VclBuilder::stringmap::iterator aFind = rMap.find(OString("customproperty"));
         if (aFind != rMap.end())
         {
-            sPattern = aFind->second;
+            sCustomProperty = aFind->second;
             rMap.erase(aFind);
         }
-        return sPattern;
+        return sCustomProperty;
     }
 
     bool extractResizable(VclBuilder::stringmap &rMap)
@@ -397,10 +417,8 @@ namespace
         return OUString();
     }
 
-    Window * extractStockAndBuildButton(Window *pParent, VclBuilder::stringmap &rMap)
+    bool extractStock(VclBuilder::stringmap &rMap)
     {
-        WinBits nBits = WB_CENTER|WB_VCENTER|WB_3DLOOK;
-
         bool bIsStock = false;
         VclBuilder::stringmap::iterator aFind = rMap.find(OString("use-stock"));
         if (aFind != rMap.end())
@@ -408,19 +426,32 @@ namespace
             bIsStock = toBool(aFind->second);
             rMap.erase(aFind);
         }
+        return bIsStock;
+    }
+
+    OString extractLabel(VclBuilder::stringmap &rMap)
+    {
+        OString sType;
+        VclBuilder::stringmap::iterator aFind = rMap.find(OString("label"));
+        if (aFind != rMap.end())
+        {
+            sType = aFind->second;
+            rMap.erase(aFind);
+        }
+        return sType;
+    }
+
+    Window * extractStockAndBuildPushButton(Window *pParent, VclBuilder::stringmap &rMap)
+    {
+        WinBits nBits = WB_CENTER|WB_VCENTER|WB_3DLOOK;
+
+        bool bIsStock = extractStock(rMap);
 
         Window *pWindow = NULL;
 
         if (bIsStock)
         {
-            OString sType;
-            aFind = rMap.find(OString("label"));
-            if (aFind != rMap.end())
-            {
-                sType = aFind->second;
-                rMap.erase(aFind);
-            }
-
+            OString sType = extractLabel(rMap);
             if (sType == "gtk-ok")
                 pWindow = new OKButton(pParent, nBits);
             else if (sType == "gtk-cancel")
@@ -448,6 +479,20 @@ namespace
 
         if (!pWindow)
             pWindow = new PushButton(pParent, nBits);
+        return pWindow;
+    }
+
+    Window * extractStockAndBuildMenuButton(Window *pParent, VclBuilder::stringmap &rMap)
+    {
+        WinBits nBits = WB_CENTER|WB_VCENTER|WB_3DLOOK;
+
+        Window *pWindow = new MenuButton(pParent, nBits);
+
+        if (extractStock(rMap))
+        {
+            pWindow->SetText(getStockText(extractLabel(rMap)));
+        }
+
         return pWindow;
     }
 
@@ -668,7 +713,14 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     else if (name == "GtkButton")
     {
         extractImage(id, rMap);
-        pWindow = extractStockAndBuildButton(pParent, rMap);
+        OString sMenu = extractCustomProperty(rMap);
+        if (sMenu.isEmpty())
+            pWindow = extractStockAndBuildPushButton(pParent, rMap);
+        else
+        {
+            pWindow = extractStockAndBuildMenuButton(pParent, rMap);
+            m_pParserState->m_aButtonMenuMaps.push_back(ButtonMenuMap(id, sMenu));
+        }
     }
     else if (name == "GtkRadioButton")
     {
@@ -689,7 +741,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     else if (name == "GtkSpinButton")
     {
         extractSpinAdjustment(id, rMap);
-        OString sPattern = extractPattern(rMap);
+        OString sPattern = extractCustomProperty(rMap);
         OString sUnit = sPattern;
 
         for (sal_Int32 i = 0; i < sPattern.getLength(); ++i)
@@ -988,7 +1040,7 @@ void VclBuilder::handleTabChild(Window *pParent, xmlreader::XmlReader &reader)
                         if (nDelim != -1)
                         {
                             OString sPattern = sID.copy(nDelim+1);
-                            aProperties[OString("pattern")] = sPattern;
+                            aProperties[OString("customproperty")] = sPattern;
                             sID = sID.copy(0, nDelim);
                         }
                     }
@@ -1295,11 +1347,89 @@ void VclBuilder::handleListStore(xmlreader::XmlReader &reader, const OString &rI
     }
 }
 
-Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
+void VclBuilder::handleMenu(xmlreader::XmlReader &reader, const OString &rID)
+{
+    PopupMenu *pCurrentMenu = new PopupMenu;
+
+    int nLevel = 1;
+
+    stringmap aProperties;
+
+    while(1)
+    {
+        xmlreader::Span name;
+        int nsId;
+
+        xmlreader::XmlReader::Result res = reader.nextItem(
+            xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+
+        if (res == xmlreader::XmlReader::RESULT_DONE)
+            break;
+
+        if (res == xmlreader::XmlReader::RESULT_BEGIN)
+        {
+            if (name.equals(RTL_CONSTASCII_STRINGPARAM("child")))
+            {
+                handleMenuChild(pCurrentMenu, reader);
+            }
+            else
+            {
+                ++nLevel;
+                if (name.equals(RTL_CONSTASCII_STRINGPARAM("property")))
+                    collectProperty(reader, rID, aProperties);
+            }
+        }
+
+        if (res == xmlreader::XmlReader::RESULT_END)
+        {
+            --nLevel;
+        }
+
+        if (!nLevel)
+            break;
+    }
+
+    m_aMenus.push_back(MenuAndId(rID, pCurrentMenu));
+}
+
+void VclBuilder::handleMenuChild(PopupMenu *pParent, xmlreader::XmlReader &reader)
+{
+    xmlreader::Span name;
+    int nsId;
+    OString sType;
+
+    int nLevel = 1;
+    while(1)
+    {
+        xmlreader::XmlReader::Result res = reader.nextItem(
+            xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+
+        if (res == xmlreader::XmlReader::RESULT_BEGIN)
+        {
+            if (name.equals(RTL_CONSTASCII_STRINGPARAM("object")) || name.equals(RTL_CONSTASCII_STRINGPARAM("placeholder")))
+            {
+                handleMenuObject(pParent, reader);
+            }
+            else
+                ++nLevel;
+        }
+
+        if (res == xmlreader::XmlReader::RESULT_END)
+            --nLevel;
+
+        if (!nLevel)
+            break;
+
+        if (res == xmlreader::XmlReader::RESULT_DONE)
+            break;
+    }
+}
+
+void VclBuilder::handleMenuObject(PopupMenu *pParent, xmlreader::XmlReader &reader)
 {
     OString sClass;
     OString sID;
-    OString sPattern;
+    OString sCustomProperty;
 
     xmlreader::Span name;
     int nsId;
@@ -1318,7 +1448,164 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
             sal_Int32 nDelim = sID.indexOf(':');
             if (nDelim != -1)
             {
-                sPattern = sID.copy(nDelim+1);
+                sCustomProperty = sID.copy(nDelim+1);
+                sID = sID.copy(0, nDelim);
+            }
+        }
+    }
+
+    int nLevel = 1;
+
+    stringmap aProperties, aAccelerators;
+
+    if (!sCustomProperty.isEmpty())
+        aProperties[OString("customproperty")] = sCustomProperty;
+
+    while(1)
+    {
+        xmlreader::XmlReader::Result res = reader.nextItem(
+            xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+
+        if (res == xmlreader::XmlReader::RESULT_DONE)
+            break;
+
+        if (res == xmlreader::XmlReader::RESULT_BEGIN)
+        {
+            ++nLevel;
+            if (name.equals(RTL_CONSTASCII_STRINGPARAM("property")))
+                collectProperty(reader, sID, aProperties);
+            else if (name.equals(RTL_CONSTASCII_STRINGPARAM("accelerator")))
+                collectAccelerator(reader, aAccelerators);
+        }
+
+        if (res == xmlreader::XmlReader::RESULT_END)
+        {
+            --nLevel;
+        }
+
+        if (!nLevel)
+            break;
+    }
+
+    insertMenuObject(pParent, sClass, sID, aProperties, aAccelerators);
+}
+
+OString VclBuilder::convertMnemonicMarkup(const OString &rIn)
+{
+    OStringBuffer aRet(rIn);
+    for (sal_Int32 nI = 0; nI < aRet.getLength(); ++nI)
+    {
+        if (aRet[nI] == '_')
+        {
+            if (aRet[nI+1] != '_')
+                aRet[nI] = MNEMONIC_CHAR;
+            else
+                aRet.remove(nI, 1);
+            ++nI;
+        }
+    }
+    return aRet.makeStringAndClear();
+}
+
+namespace
+{
+    KeyCode makeKeyCode(const OString &rKey)
+    {
+        if (rKey == "Insert")
+            return KeyCode(KEY_INSERT);
+        else if (rKey == "Delete")
+            return KeyCode(KEY_DELETE);
+
+        assert (rKey.getLength() == 1);
+        sal_Char cChar = rKey.toChar();
+
+        if (cChar >= 'a' && cChar <= 'z')
+            return KeyCode(KEY_A + (cChar - 'a'));
+        else if (cChar >= 'A' && cChar <= 'Z')
+            return KeyCode(KEY_A + (cChar - 'A'));
+        else if (cChar >= '0' && cChar <= '9')
+            return KeyCode(KEY_0 + (cChar - 'A'));
+
+        return KeyCode(cChar);
+    }
+}
+
+void VclBuilder::insertMenuObject(PopupMenu *pParent, const OString &rClass, const OString &rID,
+    stringmap &rProps, stringmap &rAccels)
+{
+    sal_uInt16 nOldCount = pParent->GetItemCount();
+    sal_uInt16 nNewId = nOldCount + 1;
+
+    if (rClass == "GtkMenuItem")
+    {
+        OUString sLabel(OStringToOUString(convertMnemonicMarkup(extractLabel(rProps)), RTL_TEXTENCODING_UTF8));
+        pParent->InsertItem(nNewId, sLabel, MIB_TEXT);
+    }
+    else if (rClass == "GtkSeparatorMenuItem")
+    {
+        pParent->InsertSeparator();
+    }
+
+    SAL_WARN_IF(nOldCount == pParent->GetItemCount(), "vcl.layout", "probably need to implement " << rClass.getStr());
+
+    if (nOldCount != pParent->GetItemCount())
+    {
+        pParent->SetHelpId(nNewId, m_sHelpRoot + rID);
+
+        for (stringmap::iterator aI = rProps.begin(), aEnd = rProps.end(); aI != aEnd; ++aI)
+        {
+            const OString &rKey = aI->first;
+            const OString &rValue = aI->second;
+
+            if (rKey == "tooltip-markup")
+                pParent->SetTipHelpText(nNewId, OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
+            else if (rKey == "tooltip-text")
+                pParent->SetTipHelpText(nNewId, OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
+            else if (rKey == "visible")
+                pParent->ShowItem(nNewId, toBool(rValue));
+            else
+                SAL_INFO("vcl.layout", "unhandled property: " << rKey.getStr());
+        }
+
+        for (stringmap::iterator aI = rAccels.begin(), aEnd = rAccels.end(); aI != aEnd; ++aI)
+        {
+            const OString &rSignal = aI->first;
+            const OString &rValue = aI->second;
+
+            if (rSignal == "activate")
+                pParent->SetAccelKey(nNewId, makeKeyCode(rValue));
+            else
+                SAL_INFO("vcl.layout", "unhandled accelerator for: " << rSignal.getStr());
+        }
+    }
+
+    rProps.clear();
+}
+
+Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
+{
+    OString sClass;
+    OString sID;
+    OString sCustomProperty;
+
+    xmlreader::Span name;
+    int nsId;
+
+    while (reader.nextAttribute(&nsId, &name))
+    {
+        if (name.equals(RTL_CONSTASCII_STRINGPARAM("class")))
+        {
+            name = reader.getAttributeValue(false);
+            sClass = OString(name.begin, name.length);
+        }
+        else if (name.equals(RTL_CONSTASCII_STRINGPARAM("id")))
+        {
+            name = reader.getAttributeValue(false);
+            sID = OString(name.begin, name.length);
+            sal_Int32 nDelim = sID.indexOf(':');
+            if (nDelim != -1)
+            {
+                sCustomProperty = sID.copy(nDelim+1);
                 sID = sID.copy(0, nDelim);
             }
         }
@@ -1329,13 +1616,18 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
         handleListStore(reader, sID);
         return NULL;
     }
+    else if (sClass == "GtkMenu")
+    {
+        handleMenu(reader, sID);
+        return NULL;
+    }
 
     int nLevel = 1;
 
     stringmap aProperties, aPangoAttributes;
 
-    if (!sPattern.isEmpty())
-        aProperties[OString("pattern")] = sPattern;
+    if (!sCustomProperty.isEmpty())
+        aProperties[OString("customproperty")] = sCustomProperty;
 
     Window *pCurrentChild = NULL;
     while(1)
@@ -1551,6 +1843,35 @@ void VclBuilder::collectProperty(xmlreader::XmlReader &reader, const OString &rI
     }
 }
 
+void VclBuilder::collectAccelerator(xmlreader::XmlReader &reader, stringmap &rMap)
+{
+    xmlreader::Span name;
+    int nsId;
+
+    OString sProperty;
+    OString sValue;
+
+    while (reader.nextAttribute(&nsId, &name))
+    {
+        if (name.equals(RTL_CONSTASCII_STRINGPARAM("key")))
+        {
+            name = reader.getAttributeValue(false);
+            sValue = OString(name.begin, name.length);
+        }
+        else if (name.equals(RTL_CONSTASCII_STRINGPARAM("signal")))
+        {
+            name = reader.getAttributeValue(false);
+            sProperty = OString(name.begin, name.length);
+        }
+
+    }
+
+    if (!sProperty.isEmpty() && !sValue.isEmpty())
+    {
+        rMap[sProperty] = sValue;
+    }
+}
+
 Window *VclBuilder::get_widget_root()
 {
     return m_aChildren.empty() ? NULL : m_aChildren[0].m_pWindow;
@@ -1563,6 +1884,18 @@ Window *VclBuilder::get_by_name(OString sID)
     {
         if (aI->m_sID.equals(sID))
             return aI->m_pWindow;
+    }
+
+    return NULL;
+}
+
+PopupMenu *VclBuilder::get_menu_by_name(OString sID)
+{
+    for (std::vector<MenuAndId>::iterator aI = m_aMenus.begin(),
+         aEnd = m_aMenus.end(); aI != aEnd; ++aI)
+    {
+        if (aI->m_sID.equals(sID))
+            return aI->m_pMenu;
     }
 
     return NULL;

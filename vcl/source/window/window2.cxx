@@ -28,7 +28,6 @@
 #include <vcl/layout.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/metric.hxx>
-#include <vcl/mnemonic.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 #include <vcl/scrbar.hxx>
@@ -1797,26 +1796,6 @@ namespace
     }
 }
 
-namespace
-{
-    OString convertMnemonicMarkup(const OString &rIn)
-    {
-        OStringBuffer aRet(rIn);
-        for (sal_Int32 nI = 0; nI < aRet.getLength(); ++nI)
-        {
-            if (aRet[nI] == '_')
-            {
-                if (aRet[nI+1] != '_')
-                    aRet[nI] = MNEMONIC_CHAR;
-                else
-                    aRet.remove(nI, 1);
-                ++nI;
-            }
-        }
-        return aRet.makeStringAndClear();
-    }
-}
-
 bool Window::set_font_attribute(const OString &rKey, const OString &rValue)
 {
     if (rKey == "weight")
@@ -1872,7 +1851,7 @@ bool Window::set_property(const OString &rKey, const OString &rValue)
          (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("text")))
        )
     {
-        SetText(OStringToOUString(convertMnemonicMarkup(rValue), RTL_TEXTENCODING_UTF8));
+        SetText(OStringToOUString(VclBuilder::convertMnemonicMarkup(rValue), RTL_TEXTENCODING_UTF8));
     }
     else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("visible")))
         Show(toBool(rValue));
