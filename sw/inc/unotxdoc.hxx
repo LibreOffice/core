@@ -542,7 +542,6 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( css::uno::RuntimeException );
     virtual css::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( css::uno::RuntimeException );
 };
-#endif
 
 class SwXDocumentPropertyHelper : public SvxUnoForbiddenCharsTable
 {
@@ -585,5 +584,6 @@ public:
     void DontTouchThatViewShellItSmellsFunny() { m_pShell = 0; }
 };
 
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
