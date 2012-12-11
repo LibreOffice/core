@@ -63,44 +63,44 @@ CompressGraphicsDialog::CompressGraphicsDialog( Window* pParent, const Graphic& 
 
 void CompressGraphicsDialog::Initialize()
 {
-    get(m_aFixedText2,          "label-original-size");
-    get(m_aFixedText3,          "label-view-size");
-    get(m_aFixedText5,          "label-image-capacity");
-    get(m_aFixedText6,          "label-new-capacity");
-    get(m_aJpegCompRB,          "radio-jpeg");
-    get(m_aCompressionMF,       "spin-compression");
-    get(m_aLosslessRB,          "radio-lossless");
-    get(m_aQualityMF,           "spin-quality");
-    get(m_aReduceResolutionCB,  "checkbox-reduce-resolution");
-    get(m_aMFNewWidth,          "spin-new-width");
-    get(m_aMFNewHeight,         "spin-new-height");
-    get(m_aResolutionLB,        "combo-resolution");
-    get(m_aBtnCalculate,        "calculate");
-    get(m_aInterpolationCombo,  "interpolation-method-combo");
+    get(m_pFixedText2,          "label-original-size");
+    get(m_pFixedText3,          "label-view-size");
+    get(m_pFixedText5,          "label-image-capacity");
+    get(m_pFixedText6,          "label-new-capacity");
+    get(m_pJpegCompRB,          "radio-jpeg");
+    get(m_pCompressionMF,       "spin-compression");
+    get(m_pLosslessRB,          "radio-lossless");
+    get(m_pQualityMF,           "spin-quality");
+    get(m_pReduceResolutionCB,  "checkbox-reduce-resolution");
+    get(m_pMFNewWidth,          "spin-new-width");
+    get(m_pMFNewHeight,         "spin-new-height");
+    get(m_pResolutionLB,        "combo-resolution");
+    get(m_pBtnCalculate,        "calculate");
+    get(m_pInterpolationCombo,  "interpolation-method-combo");
 
-    m_aResolutionLB->InsertEntry(OUString("50"));
-    m_aResolutionLB->InsertEntry(OUString("75"));
-    m_aResolutionLB->InsertEntry(OUString("96"));
-    m_aResolutionLB->InsertEntry(OUString("150"));
-    m_aResolutionLB->InsertEntry(OUString("200"));
-    m_aResolutionLB->InsertEntry(OUString("300"));
-    m_aResolutionLB->InsertEntry(OUString("600"));
+    m_pResolutionLB->InsertEntry(OUString("50"));
+    m_pResolutionLB->InsertEntry(OUString("75"));
+    m_pResolutionLB->InsertEntry(OUString("96"));
+    m_pResolutionLB->InsertEntry(OUString("150"));
+    m_pResolutionLB->InsertEntry(OUString("200"));
+    m_pResolutionLB->InsertEntry(OUString("300"));
+    m_pResolutionLB->InsertEntry(OUString("600"));
 
-    m_aInterpolationCombo->SelectEntry( OUString("Lanczos") );
+    m_pInterpolationCombo->SelectEntry( OUString("Lanczos") );
 
-    m_aMFNewWidth->SetModifyHdl( LINK( this, CompressGraphicsDialog, NewWidthModifiedHdl ));
-    m_aMFNewHeight->SetModifyHdl( LINK( this, CompressGraphicsDialog, NewHeightModifiedHdl ));
+    m_pMFNewWidth->SetModifyHdl( LINK( this, CompressGraphicsDialog, NewWidthModifiedHdl ));
+    m_pMFNewHeight->SetModifyHdl( LINK( this, CompressGraphicsDialog, NewHeightModifiedHdl ));
 
-    m_aResolutionLB->SetModifyHdl( LINK( this, CompressGraphicsDialog, ResolutionModifiedHdl ));
-    m_aBtnCalculate->SetClickHdl(  LINK( this, CompressGraphicsDialog, CalculateClickHdl ) );
+    m_pResolutionLB->SetModifyHdl( LINK( this, CompressGraphicsDialog, ResolutionModifiedHdl ));
+    m_pBtnCalculate->SetClickHdl(  LINK( this, CompressGraphicsDialog, CalculateClickHdl ) );
 
-    m_aLosslessRB->SetToggleHdl( LINK( this, CompressGraphicsDialog, ToggleCompressionRB ) );
-    m_aJpegCompRB->SetToggleHdl( LINK( this, CompressGraphicsDialog, ToggleCompressionRB ) );
+    m_pLosslessRB->SetToggleHdl( LINK( this, CompressGraphicsDialog, ToggleCompressionRB ) );
+    m_pJpegCompRB->SetToggleHdl( LINK( this, CompressGraphicsDialog, ToggleCompressionRB ) );
 
-    m_aReduceResolutionCB->SetToggleHdl( LINK( this, CompressGraphicsDialog, ToggleReduceResolutionRB ) );
+    m_pReduceResolutionCB->SetToggleHdl( LINK( this, CompressGraphicsDialog, ToggleReduceResolutionRB ) );
 
-    m_aJpegCompRB->Check();
-    m_aReduceResolutionCB->Check();
+    m_pJpegCompRB->Check();
+    m_pReduceResolutionCB->Check();
 
     UpdateNewWidthMF();
     UpdateNewHeightMF();
@@ -134,7 +134,7 @@ void CompressGraphicsDialog::Update()
     aBitmapSizeString += String( " x " ) ;
     aBitmapSizeString += UniString::CreateFromInt32(aPixelSize.Height());
     aBitmapSizeString += String( " px )" ) ;
-    m_aFixedText2->SetText(aBitmapSizeString);
+    m_pFixedText2->SetText(aBitmapSizeString);
 
     String aViewSizeString;
 
@@ -146,7 +146,7 @@ void CompressGraphicsDialog::Update()
     aViewSizeString += ( " at " ) ;
     aViewSizeString += UniString::CreateFromInt32(aValX);
     aViewSizeString += ( " DPI" ) ;
-    m_aFixedText3->SetText(aViewSizeString);
+    m_pFixedText3->SetText(aViewSizeString);
 
     SvMemoryStream aMemStream;
     aMemStream.SetVersion( SOFFICE_FILEFORMAT_CURRENT );
@@ -158,25 +158,25 @@ void CompressGraphicsDialog::Update()
     aNativeSizeString += UniString::CreateFromInt32(aNativeSize / 1024);
     aNativeSizeString += String( " kiB" ) ;
 
-    m_aFixedText5->SetText(aNativeSizeString);
-    m_aFixedText6->SetText(String("??"));
+    m_pFixedText5->SetText(aNativeSizeString);
+    m_pFixedText6->SetText(String("??"));
 }
 
 void CompressGraphicsDialog::UpdateNewWidthMF()
 {
     int nPixelX = (sal_Int32)( GetViewWidthInch() * m_dResolution );
-    m_aMFNewWidth->SetText( UniString::CreateFromInt32( nPixelX ) );
+    m_pMFNewWidth->SetText( UniString::CreateFromInt32( nPixelX ) );
 }
 
 void CompressGraphicsDialog::UpdateNewHeightMF()
 {
     int nPixelY = (sal_Int32)( GetViewHeightInch() * m_dResolution );
-    m_aMFNewHeight->SetText( UniString::CreateFromInt32( nPixelY ) );
+    m_pMFNewHeight->SetText( UniString::CreateFromInt32( nPixelY ) );
 }
 
 void CompressGraphicsDialog::UpdateResolutionLB()
 {
-    m_aResolutionLB->SetText( UniString::CreateFromInt32( (sal_Int32) m_dResolution ) );
+    m_pResolutionLB->SetText( UniString::CreateFromInt32( (sal_Int32) m_dResolution ) );
 }
 
 double CompressGraphicsDialog::GetViewWidthInch()
@@ -191,7 +191,7 @@ double CompressGraphicsDialog::GetViewHeightInch()
 
 sal_uLong CompressGraphicsDialog::GetSelectedInterpolationType()
 {
-    OUString aSelectionText = OUString( m_aInterpolationCombo->GetSelectEntry() );
+    OUString aSelectionText = OUString( m_pInterpolationCombo->GetSelectEntry() );
 
     if( aSelectionText == "Lanczos" ) {
         return BMP_SCALE_LANCZOS;
@@ -208,7 +208,7 @@ sal_uLong CompressGraphicsDialog::GetSelectedInterpolationType()
 void CompressGraphicsDialog::Compress(SvStream& aStream)
 {
     BitmapEx bitmap = m_aGraphic.GetBitmapEx();
-    if ( m_aReduceResolutionCB->IsChecked() )
+    if ( m_pReduceResolutionCB->IsChecked() )
     {
         long nPixelX = (long)( GetViewWidthInch() * m_dResolution );
         long nPixelY = (long)( GetViewHeightInch() * m_dResolution );
@@ -222,11 +222,11 @@ void CompressGraphicsDialog::Compress(SvStream& aStream)
     aFilterData[ 0 ].Name = "Interlaced";
     aFilterData[ 0 ].Value <<= (sal_Int32) 0;
     aFilterData[ 1 ].Name = "Compression";
-    aFilterData[ 1 ].Value <<= (sal_Int32) m_aCompressionMF->GetValue();
+    aFilterData[ 1 ].Value <<= (sal_Int32) m_pCompressionMF->GetValue();
     aFilterData[ 2 ].Name = "Quality";
-    aFilterData[ 2 ].Value <<= (sal_Int32) m_aQualityMF->GetValue();
+    aFilterData[ 2 ].Value <<= (sal_Int32) m_pQualityMF->GetValue();
 
-    String aGraphicFormatName = m_aLosslessRB->IsChecked() ? String( "png" ) : String( "jpg" );
+    String aGraphicFormatName = m_pLosslessRB->IsChecked() ? String( "png" ) : String( "jpg" );
 
     sal_uInt16 nFilterFormat = rFilter.GetExportFormatNumberForShortName( aGraphicFormatName );
     rFilter.ExportGraphic( aScaledGraphic, String( "test" ), aStream, nFilterFormat, &aFilterData );
@@ -234,7 +234,7 @@ void CompressGraphicsDialog::Compress(SvStream& aStream)
 
 IMPL_LINK_NOARG( CompressGraphicsDialog, NewWidthModifiedHdl )
 {
-    m_dResolution =  m_aMFNewWidth->GetValue() / GetViewWidthInch();
+    m_dResolution =  m_pMFNewWidth->GetValue() / GetViewWidthInch();
 
     UpdateNewHeightMF();
     UpdateResolutionLB();
@@ -245,7 +245,7 @@ IMPL_LINK_NOARG( CompressGraphicsDialog, NewWidthModifiedHdl )
 
 IMPL_LINK_NOARG( CompressGraphicsDialog, NewHeightModifiedHdl )
 {
-    m_dResolution =  m_aMFNewHeight->GetValue() / GetViewHeightInch();
+    m_dResolution =  m_pMFNewHeight->GetValue() / GetViewHeightInch();
 
     UpdateNewWidthMF();
     UpdateResolutionLB();
@@ -256,7 +256,7 @@ IMPL_LINK_NOARG( CompressGraphicsDialog, NewHeightModifiedHdl )
 
 IMPL_LINK_NOARG( CompressGraphicsDialog, ResolutionModifiedHdl )
 {
-    m_dResolution = (double) m_aResolutionLB->GetText().ToInt32();
+    m_dResolution = (double) m_pResolutionLB->GetText().ToInt32();
 
     UpdateNewWidthMF();
     UpdateNewHeightMF();
@@ -267,20 +267,20 @@ IMPL_LINK_NOARG( CompressGraphicsDialog, ResolutionModifiedHdl )
 
 IMPL_LINK_NOARG( CompressGraphicsDialog, ToggleCompressionRB )
 {
-    bool choice = m_aLosslessRB->IsChecked();
-    m_aCompressionMF->Enable(choice);
-    m_aQualityMF->Enable(!choice);
+    bool choice = m_pLosslessRB->IsChecked();
+    m_pCompressionMF->Enable(choice);
+    m_pQualityMF->Enable(!choice);
 
     return 0L;
 }
 
 IMPL_LINK_NOARG( CompressGraphicsDialog, ToggleReduceResolutionRB )
 {
-    bool choice = m_aReduceResolutionCB->IsChecked();
-    m_aMFNewWidth->Enable(choice);
-    m_aMFNewHeight->Enable(choice);
-    m_aResolutionLB->Enable(choice);
-    m_aInterpolationCombo->Enable(choice);
+    bool choice = m_pReduceResolutionCB->IsChecked();
+    m_pMFNewWidth->Enable(choice);
+    m_pMFNewHeight->Enable(choice);
+    m_pResolutionLB->Enable(choice);
+    m_pInterpolationCombo->Enable(choice);
 
     return 0L;
 }
@@ -303,7 +303,7 @@ IMPL_LINK_NOARG( CompressGraphicsDialog, CalculateClickHdl )
         String aNewSizeString;
         aNewSizeString += UniString::CreateFromInt32(aSize / 1024);
         aNewSizeString += String( " kiB" ) ;
-        m_aFixedText6->SetText(aNewSizeString);
+        m_pFixedText6->SetText(aNewSizeString);
     }
     return 0L;
 }
@@ -314,7 +314,7 @@ SdrGrafObj* CompressGraphicsDialog::GetCompressedSdrGrafObj()
     {
         SdrGrafObj* pNewObject = (SdrGrafObj*) m_pGraphicObj->Clone();
 
-        if ( m_aReduceResolutionCB->IsChecked() )
+        if ( m_pReduceResolutionCB->IsChecked() )
         {
             const SdrGrafCropItem& rCrop = (const SdrGrafCropItem&) m_pGraphicObj->GetMergedItem(SDRATTR_GRAFCROP);
             long nPixelX = (long)( GetViewWidthInch()  * m_dResolution );
