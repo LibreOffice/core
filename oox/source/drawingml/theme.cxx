@@ -46,10 +46,10 @@ Theme::~Theme()
 namespace {
 
 template< typename Type >
-const Type* lclGetStyleElement( const RefVector< Type >& rVector, sal_Int32 nIndex, sal_Int32 nLowerLimit = 1 )
+const Type* lclGetStyleElement( const RefVector< Type >& rVector, sal_Int32 nIndex )
 {
-    return (rVector.empty() || (nIndex < nLowerLimit)) ? 0 :
-        rVector.get( ::std::min( static_cast< sal_Int32 >( nIndex - nLowerLimit ), static_cast< sal_Int32 >( rVector.size() - 1 ) ) ).get();
+    return (rVector.empty() || (nIndex < 1)) ? 0 :
+        rVector.get( ::std::min( static_cast< sal_Int32 >( nIndex - 1 ), static_cast< sal_Int32 >( rVector.size() - 1 ) ) ).get();
 }
 
 } // namespace
@@ -63,7 +63,7 @@ const FillProperties* Theme::getFillStyle( sal_Int32 nIndex ) const
 
 const LineProperties* Theme::getLineStyle( sal_Int32 nIndex ) const
 {
-    return lclGetStyleElement( maLineStyleList, nIndex, 0 );
+     return lclGetStyleElement( maLineStyleList, nIndex );
 }
 
 const TextCharacterProperties* Theme::getFontStyle( sal_Int32 nSchemeType ) const
