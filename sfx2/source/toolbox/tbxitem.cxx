@@ -1159,8 +1159,6 @@ SfxPopupWindow::SfxPopupWindow(
     , m_xFrame( rFrame )
     , m_pStatusListener( 0 )
 {
-    m_xServiceManager = ::comphelper::getProcessServiceFactory();
-
     Window* pWindow = GetTopMostParentSystemWindow( this );
     if ( pWindow )
         ((SystemWindow *)pWindow)->GetTaskPaneList()->AddWindow( this );
@@ -1179,8 +1177,6 @@ SfxPopupWindow::SfxPopupWindow(
     , m_xFrame( rFrame )
     , m_pStatusListener( 0 )
 {
-    m_xServiceManager = ::comphelper::getProcessServiceFactory();
-
     Window* pWindow = GetTopMostParentSystemWindow( this );
     if ( pWindow )
         ((SystemWindow *)pWindow)->GetTaskPaneList()->AddWindow( this );
@@ -1200,8 +1196,6 @@ SfxPopupWindow::SfxPopupWindow(
     , m_xFrame( rFrame )
     , m_pStatusListener( 0 )
 {
-    m_xServiceManager = ::comphelper::getProcessServiceFactory();
-
     Window* pWindow = GetTopMostParentSystemWindow( this );
     if ( pWindow )
         ((SystemWindow *)pWindow)->GetTaskPaneList()->AddWindow( this );
@@ -1229,7 +1223,7 @@ SfxFrameStatusListener* SfxPopupWindow::GetOrCreateStatusListener()
     if ( !m_xStatusListener.is() )
     {
         m_pStatusListener = new SfxFrameStatusListener(
-                                    m_xServiceManager,
+                                    ::comphelper::getProcessServiceFactory(),
                                     m_xFrame,
                                     this );
         m_xStatusListener = Reference< XComponent >( static_cast< cppu::OWeakObject* >(

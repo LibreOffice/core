@@ -26,6 +26,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/floatwin.hxx>
+#include <comphelper/processfactory.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/sfxstatuslistener.hxx>
 #include <svtools/toolboxcontroller.hxx>
@@ -109,7 +110,6 @@ class SFX2_DLLPUBLIC SfxPopupWindow: public FloatingWindow, public SfxStatusList
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >              m_xFrame;
     SfxFrameStatusListener*                                                          m_pStatusListener;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >           m_xStatusListener;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
 
 private:
     SfxFrameStatusListener* GetOrCreateStatusListener();
@@ -125,7 +125,7 @@ protected:
 
     sal_uInt16                  GetId() const { return m_nId; }
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& GetFrame() const { return m_xFrame; }
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& GetServiceManager() const { return m_xServiceManager; }
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > GetServiceManager() const { return ::comphelper::getProcessServiceFactory(); }
 
     void                    BindListener();
     void                    UnbindListener();
