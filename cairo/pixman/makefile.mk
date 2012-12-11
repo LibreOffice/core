@@ -77,8 +77,8 @@ BUILD_DIR=pixman
 BUILD_ACTION=$(GNUMAKE) -f Makefile.win32 MMX=on SSE2=on CFG=release
 .ENDIF
 
-.ELIF "$(GUIBASE)"=="aqua"
-# ----------- Native Mac OS X (Aqua/Quartz) --------------------------------
+.ELIF "$(OS)"=="MACOSX"
+# ----------- Mac OS X --------------------------------
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
 CONFIGURE_FLAGS=--enable-static=yes --enable-shared=no CPPFLAGS="$(EXTRA_CDEFS)"

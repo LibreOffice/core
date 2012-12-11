@@ -40,7 +40,7 @@ $(eval $(call gb_Library_add_defs,sofficeapp,\
     -DDESKTOP_DLLIMPLEMENTATION \
     $(if $(filter TRUE,$(ENABLE_GNOMEVFS)),-DGNOME_VFS_ENABLED) \
     $(if $(filter WNT,$(GUI)),-DENABLE_QUICKSTART_APPLET) \
-    $(if $(filter aqua,$(GUIBASE)),-DENABLE_QUICKSTART_APPLET) \
+    $(if $(filter MACOSX,$(OS)),-DENABLE_QUICKSTART_APPLET) \
     $(if $(filter TRUE,$(ENABLE_SYSTRAY_GTK)),-DENABLE_QUICKSTART_APPLET) \
 ))
 
@@ -63,7 +63,7 @@ $(eval $(call gb_Library_use_libraries,sofficeapp,\
 	$(gb_UWINAPI) \
 ))
 
-ifeq ($(GUIBASE),cocoatouch)
+ifeq ($(OS),IOS)
 $(eval $(call gb_Library_add_cflags,sofficeapp,\
     $(gb_OBJCFLAGS) \
 ))

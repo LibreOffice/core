@@ -77,7 +77,7 @@ endif # GUI=WNT
 
 ifeq ($(GUI),UNX)
 
-ifeq ($(GUIBASE),aqua)
+ifeq ($(OS),MACOSX)
 
 $(eval $(call gb_Library_add_objcxxobjects,pl,\
 	extensions/source/plugin/aqua/macmgr \
@@ -90,7 +90,7 @@ $(eval $(call gb_Library_use_system_darwin_frameworks,pl,\
     CoreFoundation \
 ))
 
-else # GUIBASE!=aqua
+else # OS!=MACOSX
 
 ifeq ($(ENABLE_GTK),TRUE)
 $(eval $(call gb_Library_add_defs,pl,\
@@ -114,7 +114,7 @@ $(eval $(call gb_Library_add_libs,pl,\
 	-lX11 \
 ))
 
-endif # GUIBASE=aqua
+endif # OS=MACOSX
 
 endif # GUI=UNX
 

@@ -33,7 +33,7 @@ $(eval $(call gb_Module_add_targets,fpicker,\
 	Library_fps_office \
 ))
 
-ifeq ($(GUIBASE),aqua)
+ifeq ($(OS),MACOSX)
 $(eval $(call gb_Module_add_targets,fpicker,\
 	Library_fps_aqua \
 ))
