@@ -7904,10 +7904,10 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
         )
     {
         sal_Bool bUnderlineAbove = OutputDevice::ImplIsUnderlineAbove( m_aCurrentPDFState.m_aFont );
-        if( m_aCurrentPDFState.m_aFont.IsWordLineMode() )
+        Point aPos, aStartPt;
+        sal_Int32 nWidth = 0, nAdvance = 0;
+        if ( m_aCurrentPDFState.m_aFont.IsWordLineMode() )
         {
-            Point aPos, aStartPt;
-            sal_Int32 nWidth = 0, nAdvance=0;
             for( int nStart = 0;;)
             {
                 sal_GlyphId nGlyphIndex;
@@ -7929,18 +7929,30 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
                     nWidth = 0;
                 }
             }
-
-            if( nWidth > 0 )
-            {
-                drawTextLine( m_pReferenceDevice->PixelToLogic( aStartPt ),
-                              m_pReferenceDevice->ImplDevicePixelToLogicWidth( nWidth ),
-                              eStrikeout, eUnderline, eOverline, bUnderlineAbove );
-            }
         }
         else
         {
-            Point aStartPt = rLayout.GetDrawPosition();
-            int nWidth = rLayout.GetTextWidth() / rLayout.GetUnitsPerPixel();
+            sal_Int32 nLast = 0;
+            for( int nStart = 0;;)
+            {
+                sal_GlyphId nGlyphIndex;
+                if( !rLayout.GetNextGlyphs( 1, &nGlyphIndex, aPos, nStart, &nAdvance ) )
+                {
+                    // fdo#32181 do not underline trailing whitespace
+                    nWidth -= nLast;
+                    break;
+                }
+
+                if( !nWidth )
+                    aStartPt = aPos;
+
+                nWidth += nAdvance;
+                nLast = ( rLayout.IsSpacingGlyph( nGlyphIndex ) ? nAdvance : 0 );
+            }
+        }
+
+        if( nWidth > 0 )
+        {
             drawTextLine( m_pReferenceDevice->PixelToLogic( aStartPt ),
                           m_pReferenceDevice->ImplDevicePixelToLogicWidth( nWidth ),
                           eStrikeout, eUnderline, eOverline, bUnderlineAbove );

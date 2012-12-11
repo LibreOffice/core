@@ -4277,13 +4277,14 @@ void OutputDevice::ImplDrawTextLine( long nX, long nY,
 void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout,
     FontStrikeout eStrikeout, FontUnderline eUnderline, FontUnderline eOverline, sal_Bool bWordLine, sal_Bool bUnderlineAbove )
 {
+    // draw everything relative to the layout base point
+    const Point aStartPt = rSalLayout.DrawBase();
+    // calculate distance of each word from the base point
+    Point aPos;
+    sal_Int32 nDist = 0, nWidth = 0, nAdvance = 0;
+
     if( bWordLine )
     {
-        // draw everything relative to the layout base point
-     const Point aStartPt = rSalLayout.DrawBase();
-     // calculate distance of each word from the base point
-        Point aPos;
-        sal_Int32 nDist = 0, nWidth = 0, nAdvance=0;
         for( int nStart = 0;;)
         {
             // iterate through the layouted glyphs
@@ -4317,19 +4318,43 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout,
                 nWidth = 0;
             }
         }
-
-        // draw textline for the last word
-        if( nWidth > 0 )
-        {
-            ImplDrawTextLine( aStartPt.X(), aStartPt.Y(), nDist, nWidth,
-                eStrikeout, eUnderline, eOverline, bUnderlineAbove );
-        }
     }
     else
     {
-        Point aStartPt = rSalLayout.GetDrawPosition();
-        int nWidth = rSalLayout.GetTextWidth() / rSalLayout.GetUnitsPerPixel();
-        ImplDrawTextLine( aStartPt.X(), aStartPt.Y(), 0, nWidth,
+        sal_Int32 nLast = 0;
+        for( int nStart = 0;;)
+        {
+            sal_GlyphId nGlyphIndex;
+            if( !rSalLayout.GetNextGlyphs( 1, &nGlyphIndex, aPos, nStart, &nAdvance ) )
+            {
+                // fdo#32181 do not underline trailing whitespace
+                nWidth -= nLast;
+                break;
+            }
+
+            if( !nWidth )
+            {
+                nDist = aPos.X() - aStartPt.X();
+                if( mpFontEntry->mnOrientation )
+                {
+                    const long nDY = aPos.Y() - aStartPt.Y();
+                    const double fRad = mpFontEntry->mnOrientation * F_PI1800;
+                    nDist = FRound( nDist*cos(fRad) - nDY*sin(fRad) );
+                }
+            }
+
+            nWidth += nAdvance;
+            if ( rSalLayout.IsSpacingGlyph( nGlyphIndex ) )
+                nLast = nAdvance;
+            else
+                nLast = 0;
+        }
+    }
+
+    // draw textline for the last word
+    if( nWidth > 0 )
+    {
+        ImplDrawTextLine( aStartPt.X(), aStartPt.Y(), nDist, nWidth,
             eStrikeout, eUnderline, eOverline, bUnderlineAbove );
     }
 }
