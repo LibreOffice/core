@@ -242,11 +242,11 @@ String SW_STR_NONE
 
 String STR_CAPTION_BEGINNING
 {
-    Text [ en-US ] = "Above" ;
+    Text [ en-US ] = "Start" ;
 };
 String STR_CAPTION_END
 {
-    Text [ en-US ] = "Below" ;
+    Text [ en-US ] = "End" ;
 };
 String STR_CAPTION_ABOVE
 {
