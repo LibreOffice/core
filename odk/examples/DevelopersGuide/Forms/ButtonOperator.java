@@ -167,16 +167,10 @@ public class ButtonOperator implements XActionListener, XFeatureInvalidation
     */
     public void onFormsAlive()
     {
-        try
-        {
-            m_formOperations = FormOperations.createWithFormController(
-                m_componentContext, m_aDocument.getCurrentView().getFormController( m_form ) );
-            m_formOperations.setFeatureInvalidation( this );
-            invalidateAllFeatures();
-        }
-        catch( final com.sun.star.uno.Exception e )
-        {
-        }
+        m_formOperations = FormOperations.createWithFormController(
+            m_componentContext, m_aDocument.getCurrentView().getFormController( m_form ) );
+        m_formOperations.setFeatureInvalidation( this );
+        invalidateAllFeatures();
     }
 
     /* ==================================================================

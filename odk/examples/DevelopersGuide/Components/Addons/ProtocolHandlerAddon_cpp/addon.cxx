@@ -36,8 +36,6 @@
 #include <addon.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
-#include <comphelper/componentcontext.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XController.hpp>
@@ -45,12 +43,12 @@
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/XMessageBox.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 using rtl::OUString;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::awt;
-using com::sun::star::lang::XMultiServiceFactory;
 using com::sun::star::beans::PropertyValue;
 using com::sun::star::util::URL;
 
@@ -105,7 +103,7 @@ void SAL_CALL Addon::initialize( const Sequence< Any >& aArguments ) throw ( Exc
     }
 
     // Create the toolkit to have access to it later
-    mxToolkit = Reference< XToolkit >( Toolkit::create(comphelper::getComponentContext(mxMSF)), UNO_QUERY_THROW );
+    mxToolkit = Reference< XToolkit >( Toolkit::create(mxContext), UNO_QUERY_THROW );
 }
 
 /**
@@ -220,10 +218,10 @@ throw (RuntimeException)
     return aRet;
 }
 
-Reference< XInterface > SAL_CALL Addon_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
+Reference< XInterface > SAL_CALL Addon_createInstance( const Reference< XComponentContext > & rContext)
     throw( Exception )
 {
-    return (cppu::OWeakObject*) new Addon( rSMgr );
+    return (cppu::OWeakObject*) new Addon( rContext );
 }
 
 //##################################################################################################

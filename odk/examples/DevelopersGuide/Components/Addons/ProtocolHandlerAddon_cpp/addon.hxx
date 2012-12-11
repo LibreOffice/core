@@ -57,6 +57,10 @@ namespace com
             {
                 class XToolkit;
             }
+            namespace uno
+            {
+                class XComponentContext;
+            }
         }
     }
 }
@@ -70,13 +74,13 @@ class Addon : public cppu::WeakImplHelper4
 >
 {
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMSF;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > mxToolkit;
 
 public:
-    Addon( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > &rxMSF)
-        : mxMSF( rxMSF ) {}
+    Addon( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
+        : mxContext( rxContext ) {}
 
     // XDispatchProvider
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >
@@ -120,7 +124,7 @@ sal_Bool SAL_CALL Addon_supportsService( const ::rtl::OUString& ServiceName )
     throw ( ::com::sun::star::uno::RuntimeException );
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-SAL_CALL Addon_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr)
+SAL_CALL Addon_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rContext)
     throw ( ::com::sun::star::uno::Exception );
 
 #endif // _Addon_HXX

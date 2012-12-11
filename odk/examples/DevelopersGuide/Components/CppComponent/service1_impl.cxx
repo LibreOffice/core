@@ -36,7 +36,7 @@
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
 #include <rtl/uuid.h>
-#include <rtl/instance.hpp>
+#include <rtl/instance.hxx>
 #include <cppuhelper/factory.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -181,15 +181,15 @@ namespace
     private:
         ::com::sun::star::uno::Sequence< sal_Int8 > m_aSeq;
     public:
-        UniqueIdInitIdInit() : m_aSeq(16)
+        UniqueIdInit() : m_aSeq(16)
         {
             rtl_createUuid( (sal_uInt8*)m_aSeq.getArray(), 0, sal_True );
         }
         const ::com::sun::star::uno::Sequence< sal_Int8 >& getSeq() const { return m_aSeq; }
     };
-    //A multi-thread safe UniqueIdInitIdInit singleton wrapper
+    //A multi-thread safe UniqueIdInit singleton wrapper
     class theService1ImplImplementationId
-        : public rtl::Static< UniqueIdInitIdInit,
+        : public rtl::Static< UniqueIdInit,
           theService1ImplImplementationId >
     {
     };
