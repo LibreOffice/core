@@ -53,7 +53,6 @@ class SwCrsrShell;
 class SwDoc;
 class SwPaM;
 class SwTextBlocks;
-class vector;
 struct SwPosition;
 struct Writer_Impl;
 

@@ -22,8 +22,6 @@
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
 
-class vector;
-
 class SwXMLSectionList : public SvXMLImport
 {
 protected:
