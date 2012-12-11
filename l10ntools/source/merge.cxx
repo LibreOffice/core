@@ -175,21 +175,6 @@ MergeDataFile::MergeDataFile(
             printf( "Warning : Can't open %s\n", sPoFileName.getStr() );
             return;
         }
-        PoHeader aPoHeader;
-        try
-        {
-            aPoInput.readHeader( aPoHeader );
-        }
-        catch( PoIfstream::Exception& aException )
-        {
-            if( aException == PoIfstream::INVALIDHEADER )
-            {
-                printf(
-                    "Warning : %s has invalid header\n",
-                    sPoFileName.getStr() );
-                return;
-            }
-        }
 
         OString sLang;
         //Get language id from path

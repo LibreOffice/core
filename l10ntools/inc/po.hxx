@@ -122,12 +122,11 @@ class PoIfstream: private boost::noncopyable
 private:
 
     std::ifstream   m_aInPut;
-    bool            m_bIsAfterHeader;
     bool            m_bEof;
 
 public:
 
-    enum Exception { INVALIDENTRY, INVALIDHEADER };
+    enum Exception { INVALIDENTRY };
 
             PoIfstream();
             ~PoIfstream();
@@ -136,7 +135,6 @@ public:
 
     void    open(const OString& rFileName);
     void    close();
-    void    readHeader(PoHeader& rHeader);
     void    readEntry(PoEntry& rPo);
 };
 
