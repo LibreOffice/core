@@ -341,20 +341,15 @@ IMPL_LINK( SvxThesaurusDialog, LeftBtnHdl_Impl, Button *, pBtn )
     return 0;
 }
 
-IMPL_LINK( SvxThesaurusDialog, LanguageHdl_Impl, MenuButton*, pBtn )
+IMPL_LINK( SvxThesaurusDialog, LanguageHdl_Impl, ListBox*, pLB )
 {
-    PopupMenu *pMenu = m_pLangMBtn->GetPopupMenu();
-    if (pMenu && pBtn)
-    {
-        sal_uInt16 nItem = pBtn->GetCurItemId();
-        String aLangText( pMenu->GetItemText( nItem ) );
-        LanguageType nLang = SvtLanguageTable().GetType( aLangText );
-        DBG_ASSERT( nLang != LANGUAGE_NONE && nLang != LANGUAGE_DONTKNOW, "failed to get language" );
-        if (xThesaurus->hasLocale( LanguageTag( nLang ).getLocale() ))
-            nLookUpLanguage = nLang;
-        SetWindowTitle( nLang );
-        LookUp_Impl();
-    }
+    String aLangText( pLB->GetSelectEntry() );
+    LanguageType nLang = SvtLanguageTable().GetType( aLangText );
+    DBG_ASSERT( nLang != LANGUAGE_NONE && nLang != LANGUAGE_DONTKNOW, "failed to get language" );
+    if (xThesaurus->hasLocale( LanguageTag( nLang ).getLocale() ))
+        nLookUpLanguage = nLang;
+    SetWindowTitle( nLang );
+    LookUp_Impl();
     return 0;
 }
 
@@ -466,12 +461,12 @@ SvxThesaurusDialog::SvxThesaurusDialog(
     PushButton *pReplaceBtn = get<PushButton>("replace");
     m_pReplaceEdit->init(pReplaceBtn);
 
-    get(m_pLangMBtn, "langcb");
+    get(m_pLangLB, "langcb");
 
     pReplaceBtn->SetClickHdl( LINK( this, SvxThesaurusDialog, ReplaceBtnHdl_Impl ) );
     m_pLeftBtn->SetClickHdl( LINK( this, SvxThesaurusDialog, LeftBtnHdl_Impl ) );
     m_pWordCB->SetSelectHdl( LINK( this, SvxThesaurusDialog, WordSelectHdl_Impl ) );
-    m_pLangMBtn->SetSelectHdl( LINK( this, SvxThesaurusDialog, LanguageHdl_Impl ) );
+    m_pLangLB->SetSelectHdl( LINK( this, SvxThesaurusDialog, LanguageHdl_Impl ) );
     m_pAlternativesCT->SetSelectHdl( LINK( this, SvxThesaurusDialog, AlternativesSelectHdl_Impl ));
     m_pAlternativesCT->SetDoubleClickHdl( LINK( this, SvxThesaurusDialog, AlternativesDoubleClickHdl_Impl ));
 
@@ -499,9 +494,7 @@ SvxThesaurusDialog::SvxThesaurusDialog(
         aLocales = xThesaurus->getLocales();
     const sal_Int32 nLocales = aLocales.getLength();
     const lang::Locale *pLocales = aLocales.getConstArray();
-    PopupMenu* pMenu = m_pLangMBtn->GetPopupMenu();
-    pMenu->Clear();
-    pMenu->SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);
+    m_pLangLB->Clear();
     std::vector< OUString > aLangVec;
     for (sal_Int32 i = 0;  i < nLocales; ++i)
     {
@@ -511,13 +504,12 @@ SvxThesaurusDialog::SvxThesaurusDialog(
     }
     std::sort( aLangVec.begin(), aLangVec.end() );
     for (size_t i = 0;  i < aLangVec.size();  ++i)
-        pMenu->InsertItem( (sal_uInt16)i+1, aLangVec[i] );  // menu items should be enumerated from 1 and not 0
+        m_pLangLB->InsertEntry( aLangVec[i] );
 
     std::vector< OUString >::iterator aI = std::find(aLangVec.begin(), aLangVec.end(), aLangTab.GetString(nLanguage));
     if (aI != aLangVec.end())
     {
-        pMenu->SetSelectedEntry(std::distance(aLangVec.begin(), aI) + 1);
-        pMenu->Select();
+        m_pLangLB->SelectEntry(*aI);
     }
 
     SetWindowTitle(nLanguage);

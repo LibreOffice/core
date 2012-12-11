@@ -740,11 +740,9 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         }
         else
         {
-            MenuButton *pMenuButton = new MenuButton(pParent, WB_LEFT|WB_VCENTER|WB_3DLOOK);
-            pMenuButton->mpOwnMenu = new PopupMenu; //this now belongs to the menubutton
-            pMenuButton->SetPopupMenu(pMenuButton->mpOwnMenu);
-            pMenuButton->SetShowDisplaySelectedItem(true);
-            pWindow = pMenuButton;
+            ListBox *pListBox = new ListBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK);
+            pListBox->EnableAutoSize(true);
+            pWindow = pListBox;
         }
     }
     else if (name == "GtkTreeView")

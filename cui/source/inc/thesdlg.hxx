@@ -23,11 +23,10 @@
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 
 #include <svx/checklbx.hxx>
-#include <svx/stddlg.hxx>
 #include <vcl/button.hxx>
 #include <vcl/combobox.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/menubtn.hxx>
+#include <vcl/lstbox.hxx>
+#include <svx/stddlg.hxx>
 
 #include <memory>
 
@@ -129,7 +128,7 @@ class SvxThesaurusDialog : public SvxStandardDialog
     LookUpComboBox*         m_pWordCB;
     ThesaurusAlternativesCtrl* m_pAlternativesCT;
     ReplaceEdit*            m_pReplaceEdit;
-    MenuButton*             m_pLangMBtn;
+    ListBox*                m_pLangLB;
 
     OUString                m_aErrStr;
 
@@ -146,7 +145,7 @@ public:
     // Handler
     DECL_LINK( ReplaceBtnHdl_Impl, Button * );
     DECL_LINK( LeftBtnHdl_Impl, Button * );
-    DECL_LINK( LanguageHdl_Impl, MenuButton * );
+    DECL_LINK( LanguageHdl_Impl, ListBox * );
     DECL_LINK( LookUpHdl_Impl, Button * );
     DECL_LINK( WordSelectHdl_Impl, ComboBox * );
     DECL_LINK( AlternativesSelectHdl_Impl, SvxCheckListBox * );
