@@ -273,7 +273,7 @@ LoginDialog::LoginDialog
     if ((nFlags & LF_NO_ACCOUNT) != 0 && !rRealm.isEmpty())
     {
         aRequest = OUString(ResId(STR_LOGIN_REALM, *pResMgr));
-        aRequest.replaceAll("%2", rRealm);
+        aRequest = aRequest.replaceAll("%2", rRealm);
     }
     else
         aRequest = aRequestInfo.GetText();
@@ -281,7 +281,7 @@ LoginDialog::LoginDialog
     if ( !( ( nFlags & LF_NO_USESYSCREDS ) == LF_NO_USESYSCREDS ) )
       EnableUseSysCredsControls_Impl( aUseSysCredsCB.IsChecked() );
 
-    aRequest.replaceAll("%1", rServer);
+    aRequest = aRequest.replaceAll("%1", rServer);
     aRequestInfo.SetText(aRequest);
 
     FreeResource();
