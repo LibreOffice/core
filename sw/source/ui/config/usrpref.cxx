@@ -261,9 +261,10 @@ Sequence<OUString> SwLayoutViewConfig::GetPropertyNames()
         "Window/IsVerticalRulerRight",          //16
         "ViewLayout/Columns",                   //17
         "ViewLayout/BookMode",                  //18
-        "Other/IsSquaredPageMode"               //19
+        "Other/IsSquaredPageMode",              //19
+        "Window/ShowScrollBarTips"              //20
     };
-    const int nCount = bWeb ? 15 : 20;
+    const int nCount = bWeb ? 15 : 21;
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
@@ -331,6 +332,7 @@ void SwLayoutViewConfig::Commit()
             case 17: rVal <<= (sal_Int32)rParent.GetViewLayoutColumns(); break;     // "ViewLayout/Columns",
             case 18: rVal <<= (sal_Bool) rParent.IsViewLayoutBookMode(); break;     // "ViewLayout/BookMode",
             case 19: rVal <<= (sal_Bool) rParent.IsSquaredPageMode(); break;        // "Other/IsSquaredPageMode",
+            case 20: rVal <<= (sal_Bool) rParent.IsShowScrollBarTips(); break;      // "Window/ShowScrollBarTips",
         }
     }
     PutProperties(aNames, aValues);
@@ -387,6 +389,7 @@ void SwLayoutViewConfig::Load()
                     case 17: rParent.SetViewLayoutColumns( static_cast<sal_uInt16>(nInt32Val) ); break;// "ViewLayout/Columns",
                     case 18: rParent.SetViewLayoutBookMode(bSet); break;// "ViewLayout/BookMode",
                     case 19: rParent.SetDefaultPageMode(bSet,sal_True); break;// "Other/IsSquaredPageMode",
+                    case 20: rParent.SetShowScrollBarTips(bSet); break;// "Window/ShowScrollBarTips",
                 }
             }
         }
