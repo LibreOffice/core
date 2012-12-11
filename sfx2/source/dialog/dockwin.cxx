@@ -46,6 +46,7 @@
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/ui/WindowStateConfiguration.hpp>
+#include <com/sun/star/ui/WindowContentFactoryManager.hpp>
 
 #define MAX_TOGGLEAREA_WIDTH        20
 #define MAX_TOGGLEAREA_HEIGHT       20
@@ -128,7 +129,7 @@ SfxDockingWrapper::SfxDockingWrapper( Window* pParentWnd ,
                                       SfxChildWinInfo* pInfo )
                     : SfxChildWindow( pParentWnd , nId )
 {
-    uno::Reference< lang::XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
+    uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     const rtl::OUString aDockWindowResourceURL( RTL_CONSTASCII_USTRINGPARAM( "private:resource/dockingwindow/" ));
 
     SfxTitleDockingWindow* pTitleDockWindow = new SfxTitleDockingWindow( pBindings, this, pParentWnd,
@@ -136,86 +137,76 @@ SfxDockingWrapper::SfxDockingWrapper( Window* pParentWnd ,
     pWindow = pTitleDockWindow;
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
 
-    // Use factory manager to retrieve XWindow factory. That can be used to instanciate
+    // Use factory manager to retrieve XWindow factory. That can be used to instantiate
     // the real window factory.
-    uno::Reference< lang::XSingleComponentFactory > xFactoryMgr(
-            xServiceManager->createInstance(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.ui.WindowContentFactoryManager"))),
-                uno::UNO_QUERY );
+    uno::Reference< lang::XSingleComponentFactory > xFactoryMgr = ui::WindowContentFactoryManager::create(xContext);
 
-    if (xFactoryMgr.is())
+    SfxDispatcher* pDispatcher = pBindings->GetDispatcher();
+    uno::Reference< frame::XFrame > xFrame( pDispatcher->GetFrame()->GetFrame().GetFrameInterface(), uno::UNO_QUERY );
+    uno::Sequence< uno::Any > aArgs(2);
+    beans::PropertyValue      aPropValue;
+    aPropValue.Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
+    aPropValue.Value = uno::makeAny( xFrame );
+    aArgs[0] <<= aPropValue;
+    aPropValue.Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ResourceURL" ));
+
+    // create a resource URL from the nId provided by the sfx2
+    ::rtl::OUString aResourceURL( aDockWindowResourceURL );
+    aResourceURL += ::rtl::OUString::valueOf(sal_Int32(nId));
+    aPropValue.Value = uno::makeAny( aResourceURL );
+    aArgs[1] <<= aPropValue;
+
+    uno::Reference< awt::XWindow > xWindow;
+    try
     {
-        SfxDispatcher* pDispatcher = pBindings->GetDispatcher();
-        uno::Reference< frame::XFrame > xFrame( pDispatcher->GetFrame()->GetFrame().GetFrameInterface(), uno::UNO_QUERY );
-        uno::Sequence< uno::Any > aArgs(2);
-        beans::PropertyValue      aPropValue;
-        aPropValue.Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
-        aPropValue.Value = uno::makeAny( xFrame );
-        aArgs[0] <<= aPropValue;
-        aPropValue.Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ResourceURL" ));
+        xWindow = uno::Reference< awt::XWindow>(
+            xFactoryMgr->createInstanceWithArgumentsAndContext( aArgs, xContext ),
+            uno::UNO_QUERY );
 
-        // create a resource URL from the nId provided by the sfx2
-        ::rtl::OUString aResourceURL( aDockWindowResourceURL );
-        aResourceURL += ::rtl::OUString::valueOf(sal_Int32(nId));
-        aPropValue.Value = uno::makeAny( aResourceURL );
-        aArgs[1] <<= aPropValue;
+        static uno::WeakReference< frame::XModuleManager2 >  m_xModuleManager;
 
-        uno::Reference< awt::XWindow > xWindow;
-        try
+        uno::Reference< frame::XModuleManager2 > xModuleManager( m_xModuleManager );
+        if ( !xModuleManager.is() )
         {
-            uno::Reference< uno::XComponentContext > xContext(
-                comphelper::getComponentContext( xServiceManager ) );
-
-            xWindow = uno::Reference< awt::XWindow>(
-                xFactoryMgr->createInstanceWithArgumentsAndContext( aArgs, xContext ),
-                uno::UNO_QUERY );
-
-            static uno::WeakReference< frame::XModuleManager2 >  m_xModuleManager;
-
-            uno::Reference< frame::XModuleManager2 > xModuleManager( m_xModuleManager );
-            if ( !xModuleManager.is() )
-            {
-                xModuleManager = frame::ModuleManager::create(comphelper::getComponentContext(xServiceManager));
-                m_xModuleManager = xModuleManager;
-            }
-
-            static uno::WeakReference< container::XNameAccess > m_xWindowStateConfiguration;
-
-            uno::Reference< container::XNameAccess > xWindowStateConfiguration( m_xWindowStateConfiguration );
-            if ( !xWindowStateConfiguration.is() )
-            {
-                xWindowStateConfiguration = ui::WindowStateConfiguration::create( comphelper::getComponentContext(xServiceManager) );
-                m_xWindowStateConfiguration = xWindowStateConfiguration;
-            }
-
-            ::rtl::OUString sModuleIdentifier = xModuleManager->identify( xFrame );
-
-            uno::Reference< container::XNameAccess > xModuleWindowState(
-                                                        xWindowStateConfiguration->getByName( sModuleIdentifier ),
-                                                        uno::UNO_QUERY );
-            if ( xModuleWindowState.is() )
-            {
-                WindowState aDockWinState;
-                if ( lcl_getWindowState( xModuleWindowState, aResourceURL, aDockWinState ))
-                    pTitleDockWindow->SetText( aDockWinState.sTitle );
-            }
-        }
-        catch ( beans::UnknownPropertyException& )
-        {
-        }
-        catch ( uno::RuntimeException& )
-        {
-        }
-        catch ( uno::Exception& )
-        {
+            xModuleManager = frame::ModuleManager::create(xContext);
+            m_xModuleManager = xModuleManager;
         }
 
-        Window* pContentWindow = VCLUnoHelper::GetWindow(xWindow);
-        if ( pContentWindow )
-            pContentWindow->SetStyle( pContentWindow->GetStyle() | WB_DIALOGCONTROL | WB_CHILDDLGCTRL );
-        pTitleDockWindow->SetWrappedWindow(pContentWindow);
+        static uno::WeakReference< container::XNameAccess > m_xWindowStateConfiguration;
+
+        uno::Reference< container::XNameAccess > xWindowStateConfiguration( m_xWindowStateConfiguration );
+        if ( !xWindowStateConfiguration.is() )
+        {
+            xWindowStateConfiguration = ui::WindowStateConfiguration::create( xContext );
+            m_xWindowStateConfiguration = xWindowStateConfiguration;
+        }
+
+        ::rtl::OUString sModuleIdentifier = xModuleManager->identify( xFrame );
+
+        uno::Reference< container::XNameAccess > xModuleWindowState(
+                                                    xWindowStateConfiguration->getByName( sModuleIdentifier ),
+                                                    uno::UNO_QUERY );
+        if ( xModuleWindowState.is() )
+        {
+            WindowState aDockWinState;
+            if ( lcl_getWindowState( xModuleWindowState, aResourceURL, aDockWinState ))
+                pTitleDockWindow->SetText( aDockWinState.sTitle );
+        }
     }
+    catch ( beans::UnknownPropertyException& )
+    {
+    }
+    catch ( uno::RuntimeException& )
+    {
+    }
+    catch ( uno::Exception& )
+    {
+    }
+
+    Window* pContentWindow = VCLUnoHelper::GetWindow(xWindow);
+    if ( pContentWindow )
+        pContentWindow->SetStyle( pContentWindow->GetStyle() | WB_DIALOGCONTROL | WB_CHILDDLGCTRL );
+    pTitleDockWindow->SetWrappedWindow(pContentWindow);
 
     pWindow->SetOutputSizePixel( Size( 270, 240 ) );
 

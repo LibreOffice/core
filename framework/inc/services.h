@@ -81,7 +81,6 @@ namespace framework{
 #define SERVICENAME_STRINGABBREVIATION                          DECLARE_ASCII("com.sun.star.util.UriAbbreviation"                   )
 #define SERVICENAME_IMAGEMANAGER                                DECLARE_ASCII("com.sun.star.ui.ImageManager"                        )
 #define SERVICENAME_TABWINDOWSERVICE                            DECLARE_ASCII("com.sun.star.ui.dialogs.TabContainerWindow"          )
-#define SERVICENAME_WINDOWCONTENTFACTORYMANAGER                 DECLARE_ASCII("com.sun.star.ui.WindowContentFactoryManager"         )
 #define SERVICENAME_DISPLAYACCESS                               DECLARE_ASCII("com.sun.star.awt.DisplayAccess"                      )
 #define SERVICENAME_PANELFACTORY                                DECLARE_ASCII("com.sun.star.ui.PanelFactory"                        )
 #define SERVICENAME_MODELWINSERVICE                             DECLARE_ASCII("com.sun.star.ui.ModelWinService"                     )

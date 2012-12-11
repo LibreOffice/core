@@ -56,7 +56,7 @@ namespace framework
 //*****************************************************************************************************************
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2  (   WindowContentFactoryManager                     ,
                                             ::cppu::OWeakObject                             ,
-                                            SERVICENAME_WINDOWCONTENTFACTORYMANAGER         ,
+                                            DECLARE_ASCII("com.sun.star.ui.WindowContentFactoryManager"),
                                             IMPLEMENTATIONNAME_WINDOWCONTENTFACTORYMANAGER
                                         )
 
