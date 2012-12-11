@@ -58,7 +58,7 @@ sal_uLong SwRTFReader::Read( SwDoc &rDoc, const String& /*rBaseURL*/, SwPaM& rPa
     SwNodeIndex *pSttNdIdx = new SwNodeIndex(rDoc.GetNodes());
     const SwPosition* pPos = rPam.GetPoint();
 
-    // Step 2: Split once and remember the node that has been splitted.
+    // Step 2: Split once and remember the node that has been split.
     rDoc.SplitNode( *pPos, false );
     *pSttNdIdx = pPos->nNode.GetIndex()-1;
 
@@ -106,7 +106,7 @@ sal_uLong SwRTFReader::Read( SwDoc &rDoc, const String& /*rBaseURL*/, SwPaM& rPa
     ::sw::XTextRangeToSwPaM(aPam, xInsertPosition);
     if (pSttNdIdx->GetIndex())
     {
-        // If we are in insert mode, join the splitted node that is in front
+        // If we are in insert mode, join the split node that is in front
         // of the new content with the first new node. Or in other words:
         // Revert the first split node.
         SwTxtNode* pTxtNode = pSttNdIdx->GetNode().GetTxtNode();
