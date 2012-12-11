@@ -36,7 +36,7 @@ $(eval $(call gb_StaticLibrary_use_externals,nputils,\
 	npapi_headers \
 ))
 
-ifeq ($(GUIBASE),aqua)
+ifeq ($(OS),MACOSX)
 $(eval $(call gb_StaticLibrary_add_defs,nputils,\
 	-DNO_X11 \
 ))

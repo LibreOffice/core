@@ -321,7 +321,7 @@ my_components += \
     component/vcl/vcl.macosx
 .END
 
-.IF "$(GUIBASE)" == "aqua"
+.IF "$(OS)" == "MACOSX"
 .IF "$(CPUNAME)" != "X86_64"
 my_components += \
     component/avmedia/source/quicktime/avmediaQuickTime

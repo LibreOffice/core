@@ -17,7 +17,7 @@
 #
 
 
-#.IF "$(GUI)"=="UNX" || "$(GUIBASE)"=="WIN"
+#.IF "$(GUI)"=="UNX" || "$(OS)"=="WNT"
 #LANG_GUI=WIN
 #.ELSE
 LANG_GUI=$(GUI)

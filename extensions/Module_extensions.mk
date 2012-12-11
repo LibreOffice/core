@@ -110,7 +110,7 @@ $(eval $(call gb_Module_add_targets,extensions,\
 ))
 
 ifeq ($(GUI),UNX)
-ifneq ($(GUIBASE),aqua)
+ifneq ($(OS),MACOSX)
 $(eval $(call gb_Module_add_targets,extensions,\
 	StaticLibrary_plugcon \
 	Executable_pluginapp.bin \

@@ -292,7 +292,7 @@ MY_FILES_main += \
     $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-odbc.xcu
 MY_DRIVERS += dbase flat mysql odbc
 .ENDIF
-.IF "$(GUIBASE)" == "aqua"
+.IF "$(OS)" == "MACOSX"
 MY_FILES_main += \
     $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-macab.xcu \
     $(MY_MOD)/org/openoffice/Inet-macosx.xcu \
@@ -314,7 +314,7 @@ MY_FILES_main += \
     $(MY_MOD)/org/openoffice/VCL-unixdesktop.xcu
         # Inet-unixdesktop.xcu must come after Inet.xcu
         # VCL-unixdesktop.xcu must come after VCL.xcu
-.ELIF "$(GUIBASE)" == "WIN"
+.ELIF "$(OS)" == "WNT"
 MY_FILES_main += \
     $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-ado.xcu \
     $(MY_MOD)/org/openoffice/Inet-wnt.xcu \
@@ -324,9 +324,9 @@ MY_FILES_main += \
     $(MY_MOD)/org/openoffice/ucb/Configuration-win.xcu
         # Inet-wnt.xcu must come after Inet.xcu
 MY_DRIVERS += ado
-.ELIF "$(GUIBASE)" == "cocoatouch"
+.ELIF "$(OS)" == "IOS"
 # ?
-.ELIF "$(GUIBASE)" == "android"
+.ELIF "$(OS)" == "ANDROID"
 # ?
 .ELIF "$(GUIBASE)" == "headless"
 # ?
@@ -482,7 +482,7 @@ MY_OPTDEPS_pdfimport = calc draw impress math writer
 MY_FILES_pdfimport = pdfimport/pdf_import_filter.xcu pdfimport/pdf_types.xcu
 .END
 
-.IF "$(GUIBASE)" == "WIN"
+.IF "$(OS)" == "WNT"
 MY_XCDS += $(MISC)/forcedefault.xcd
 MY_DEPS_forcedefault = main
 MY_FILES_forcedefault = \

@@ -109,8 +109,8 @@ BUILD_DIR=
 
 OUT2INC+=src$/cairo-win32.h
 
-.ELIF "$(GUIBASE)"=="aqua"
-# ----------- Native Mac OS X (Aqua/Quartz) --------------------------------
+.ELIF "$(OS)"=="MACOSX"
+# ----------- Mac OS X --------------------------------
 .IF "$(SYSBASE)"!=""
 .IF "$(EXTRA_CFLAGS)" != ""
 cairo_CFLAGS+=$(EXTRA_CFLAGS) $(EXTRA_CDEFS)
