@@ -1441,7 +1441,7 @@ void OSQLParseTreeIterator::traverseANDCriteria(OSQLParseNode * pSearchCondition
 void OSQLParseTreeIterator::traverseParameter(const OSQLParseNode* _pParseNode
                                               ,const OSQLParseNode* _pParentNode
                                               ,const ::rtl::OUString& _aColumnName
-                                              ,const ::rtl::OUString& _aTableRange
+                                              ,::rtl::OUString& _aTableRange
                                               ,const ::rtl::OUString& _rColumnAlias)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseTreeIterator::traverseParameter" );
@@ -1908,7 +1908,7 @@ void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns>& _
     return aAlias;
 }
 //-----------------------------------------------------------------------------
-void OSQLParseTreeIterator::setOrderByColumnName(const ::rtl::OUString & rColumnName, const ::rtl::OUString & rTableRange,sal_Bool bAscending)
+void OSQLParseTreeIterator::setOrderByColumnName(const ::rtl::OUString & rColumnName, ::rtl::OUString & rTableRange, sal_Bool bAscending)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseTreeIterator::setOrderByColumnName" );
     Reference<XPropertySet> xColumn = findColumn( rColumnName, rTableRange, false );
@@ -1930,7 +1930,7 @@ void OSQLParseTreeIterator::setOrderByColumnName(const ::rtl::OUString & rColumn
 #endif
 }
 //-----------------------------------------------------------------------------
-void OSQLParseTreeIterator::setGroupByColumnName(const ::rtl::OUString & rColumnName, const ::rtl::OUString & rTableRange)
+void OSQLParseTreeIterator::setGroupByColumnName(const ::rtl::OUString & rColumnName, ::rtl::OUString & rTableRange)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseTreeIterator::setGroupByColumnName" );
     Reference<XPropertySet> xColumn = findColumn( rColumnName, rTableRange, false );
@@ -2089,7 +2089,7 @@ const OSQLParseNode* OSQLParseTreeIterator::getSimpleHavingTree() const
 }
 
 // -----------------------------------------------------------------------------
-Reference< XPropertySet > OSQLParseTreeIterator::findColumn( const ::rtl::OUString & rColumnName, const ::rtl::OUString & rTableRange, bool _bLookInSubTables )
+Reference< XPropertySet > OSQLParseTreeIterator::findColumn( const ::rtl::OUString & rColumnName, ::rtl::OUString & rTableRange, bool _bLookInSubTables )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseTreeIterator::findColumn" );
     Reference< XPropertySet > xColumn = findColumn( *m_pImpl->m_pTables, rColumnName, rTableRange );
@@ -2099,7 +2099,7 @@ Reference< XPropertySet > OSQLParseTreeIterator::findColumn( const ::rtl::OUStri
 }
 
 // -----------------------------------------------------------------------------
-Reference< XPropertySet > OSQLParseTreeIterator::findColumn(const OSQLTables& _rTables,const ::rtl::OUString & rColumnName, const ::rtl::OUString & rTableRange)
+Reference< XPropertySet > OSQLParseTreeIterator::findColumn(const OSQLTables& _rTables, const ::rtl::OUString & rColumnName, ::rtl::OUString & rTableRange)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseTreeIterator::findColumn" );
     Reference< XPropertySet > xColumn;
@@ -2115,7 +2115,7 @@ Reference< XPropertySet > OSQLParseTreeIterator::findColumn(const OSQLTables& _r
     }
     if ( !xColumn.is() )
     {
-        OSQLTables::const_iterator aEnd = _rTables.end();
+        const OSQLTables::const_iterator aEnd = _rTables.end();
         for(OSQLTables::const_iterator aIter = _rTables.begin(); aIter != aEnd; ++aIter)
         {
             if ( aIter->second.is() )
@@ -2124,6 +2124,9 @@ Reference< XPropertySet > OSQLParseTreeIterator::findColumn(const OSQLTables& _r
                 if( xColumns.is() && xColumns->hasByName(rColumnName) && (xColumns->getByName(rColumnName) >>= xColumn) )
                 {
                     OSL_ENSURE(xColumn.is(),"Column isn't a propertyset!");
+                    // Cannot take "rTableRange = aIter->first" because that is the fully composed name
+                    // that is, catalogName.schemaName.tableName
+                    rTableRange = getString(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TABLENAME)));
                     break; // This column must only exits once
                 }
             }
