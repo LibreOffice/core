@@ -21,8 +21,6 @@
 #include <svl/listener.hxx>
 #include <svl/listeneriter.hxx>
 
-#include <boost/mem_fn.hpp>
-
 #include "document.hxx"
 #include "brdcst.hxx"
 #include "bcaslot.hxx"
@@ -114,7 +112,8 @@ ScBroadcastAreaSlot::ScBroadcastAreaSlot( ScDocument* pDocument,
         ScBroadcastAreaSlotMachine* pBASMa ) :
     aTmpSeekBroadcastArea( ScRange()),
     pDoc( pDocument ),
-    pBASM( pBASMa )
+    pBASM( pBASMa ),
+    mbInBroadcastIteration( false)
 {
 }
 
@@ -126,7 +125,7 @@ ScBroadcastAreaSlot::~ScBroadcastAreaSlot()
     {
         // Prevent hash from accessing dangling pointer in case area is
         // deleted.
-        ScBroadcastArea* pArea = *aIter;
+        ScBroadcastArea* pArea = (*aIter).mpArea;
         // Erase all so no hash will be accessed upon destruction of the
         // boost::unordered_map.
         aBroadcastAreaTbl.erase( aIter++);
@@ -174,7 +173,7 @@ bool ScBroadcastAreaSlot::StartListeningArea( const ScRange& rRange,
         // would add quite some penalty for all but the first formula cell.
         ScBroadcastAreas::const_iterator aIter( FindBroadcastArea( rRange));
         if (aIter != aBroadcastAreaTbl.end())
-            rpArea = *aIter;
+            rpArea = (*aIter).mpArea;
         else
         {
             rpArea = new ScBroadcastArea( rRange);
@@ -221,18 +220,15 @@ void ScBroadcastAreaSlot::EndListeningArea( const ScRange& rRange,
     if ( !rpArea )
     {
         ScBroadcastAreas::iterator aIter( FindBroadcastArea( rRange));
-        if (aIter == aBroadcastAreaTbl.end())
+        if (aIter == aBroadcastAreaTbl.end() || isMarkedErased( aIter))
             return;
-        rpArea = *aIter;
+        rpArea = (*aIter).mpArea;
         pListener->EndListening( rpArea->GetBroadcaster() );
         if ( !rpArea->GetBroadcaster().HasListeners() )
         {   // if nobody is listening we can dispose it
-            aBroadcastAreaTbl.erase( aIter);
-            if ( !rpArea->DecRef() )
-            {
-                delete rpArea;
-                rpArea = NULL;
-            }
+            if (rpArea->GetRef() == 1)
+                rpArea = NULL;      // will be deleted by erase
+            EraseArea( aIter);
         }
     }
     else
@@ -240,15 +236,12 @@ void ScBroadcastAreaSlot::EndListeningArea( const ScRange& rRange,
         if ( !rpArea->GetBroadcaster().HasListeners() )
         {
             ScBroadcastAreas::iterator aIter( FindBroadcastArea( rRange));
-            if (aIter == aBroadcastAreaTbl.end())
+            if (aIter == aBroadcastAreaTbl.end() || isMarkedErased( aIter))
                 return;
-            OSL_ENSURE( *aIter == rpArea, "EndListeningArea: area pointer mismatch");
-            aBroadcastAreaTbl.erase( aIter);
-            if ( !rpArea->DecRef() )
-            {
-                delete rpArea;
-                rpArea = NULL;
-            }
+            OSL_ENSURE( (*aIter).mpArea == rpArea, "EndListeningArea: area pointer mismatch");
+            if (rpArea->GetRef() == 1)
+                rpArea = NULL;      // will be deleted by erase
+            EraseArea( aIter);
         }
     }
 }
@@ -262,30 +255,20 @@ ScBroadcastAreas::iterator ScBroadcastAreaSlot::FindBroadcastArea(
 }
 
 
-sal_Bool ScBroadcastAreaSlot::AreaBroadcast( const ScHint& rHint) const
+sal_Bool ScBroadcastAreaSlot::AreaBroadcast( const ScHint& rHint)
 {
     if (aBroadcastAreaTbl.empty())
         return false;
+    bool bInBroadcast = mbInBroadcastIteration;
+    mbInBroadcastIteration = true;
     sal_Bool bIsBroadcasted = false;
-
-    // issue 118012
-    // do not iterate on <aBoardcastAreaTbl> as its reveals that its iterators
-    // are destroyed during notification.
-    std::vector< ScBroadcastArea* > aCopyForIteration( aBroadcastAreaTbl.begin(), aBroadcastAreaTbl.end() );
-    std::for_each( aCopyForIteration.begin(), aCopyForIteration.end(), boost::mem_fn( &ScBroadcastArea::IncRef ) );
-
     const ScAddress& rAddress = rHint.GetAddress();
-    const std::vector< ScBroadcastArea* >::const_iterator aEnd( aCopyForIteration.end() );
-    std::vector< ScBroadcastArea* >::const_iterator aIter;
-    for ( aIter = aCopyForIteration.begin(); aIter != aEnd; ++aIter )
+    for (ScBroadcastAreas::const_iterator aIter( aBroadcastAreaTbl.begin()),
+            aIterEnd( aBroadcastAreaTbl.end()); aIter != aIterEnd; ++aIter )
     {
-        ScBroadcastArea* pArea = *aIter;
-        // check, if copied item has been already removed from <aBroadcastAreaTbl>
-        if ( aBroadcastAreaTbl.find( pArea ) == aBroadcastAreaTbl.end() )
-        {
+        if (isMarkedErased( aIter))
             continue;
-        }
-
+        ScBroadcastArea* pArea = (*aIter).mpArea;
         const ScRange& rAreaRange = pArea->GetRange();
         if (rAreaRange.In( rAddress))
         {
@@ -296,45 +279,29 @@ sal_Bool ScBroadcastAreaSlot::AreaBroadcast( const ScHint& rHint) const
             }
         }
     }
-
-    // delete no longer referenced <ScBroadcastArea> instances
-    for ( aIter = aCopyForIteration.begin(); aIter != aEnd; ++aIter )
-    {
-        ScBroadcastArea* pArea = *aIter;
-        if ( !pArea->DecRef() )
-        {
-            delete pArea;
-        }
-    }
-
+    mbInBroadcastIteration = bInBroadcast;
+    // A Notify() during broadcast may call EndListeningArea() and thus dispose
+    // an area if it was the last listener, which would invalidate an iterator
+    // pointing to it, hence the real erase is done afterwards.
+    FinallyEraseAreas();
     return bIsBroadcasted;
 }
 
 
 sal_Bool ScBroadcastAreaSlot::AreaBroadcastInRange( const ScRange& rRange,
-        const ScHint& rHint) const
+        const ScHint& rHint)
 {
     if (aBroadcastAreaTbl.empty())
         return false;
+    bool bInBroadcast = mbInBroadcastIteration;
+    mbInBroadcastIteration = true;
     sal_Bool bIsBroadcasted = false;
-
-    // issue 118012
-    // do not iterate on <aBoardcastAreaTbl> as its reveals that its iterators
-    // are destroyed during notification.
-    std::vector< ScBroadcastArea* > aCopyForIteration( aBroadcastAreaTbl.begin(), aBroadcastAreaTbl.end() );
-    std::for_each( aCopyForIteration.begin(), aCopyForIteration.end(), boost::mem_fn( &ScBroadcastArea::IncRef ) );
-
-    const std::vector< ScBroadcastArea* >::const_iterator aEnd( aCopyForIteration.end() );
-    std::vector< ScBroadcastArea* >::const_iterator aIter;
-    for ( aIter = aCopyForIteration.begin(); aIter != aEnd; ++aIter )
+    for (ScBroadcastAreas::const_iterator aIter( aBroadcastAreaTbl.begin()),
+            aIterEnd( aBroadcastAreaTbl.end()); aIter != aIterEnd; ++aIter )
     {
-        ScBroadcastArea* pArea = *aIter;
-        // check, if copied item has been already removed from <aBroadcastAreaTbl>
-        if ( aBroadcastAreaTbl.find( pArea ) == aBroadcastAreaTbl.end() )
-        {
+        if (isMarkedErased( aIter))
             continue;
-        }
-
+        ScBroadcastArea* pArea = (*aIter).mpArea;
         const ScRange& rAreaRange = pArea->GetRange();
         if (rAreaRange.Intersects( rRange ))
         {
@@ -345,17 +312,11 @@ sal_Bool ScBroadcastAreaSlot::AreaBroadcastInRange( const ScRange& rRange,
             }
         }
     }
-
-    // delete no longer referenced <ScBroadcastArea> instances
-    for ( aIter = aCopyForIteration.begin(); aIter != aEnd; ++aIter )
-    {
-        ScBroadcastArea* pArea = *aIter;
-        if ( !pArea->DecRef() )
-        {
-            delete pArea;
-        }
-    }
-
+    mbInBroadcastIteration = bInBroadcast;
+    // A Notify() during broadcast may call EndListeningArea() and thus dispose
+    // an area if it was the last listener, which would invalidate an iterator
+    // pointing to it, hence the real erase is done afterwards.
+    FinallyEraseAreas();
     return bIsBroadcasted;
 }
 
@@ -367,10 +328,10 @@ void ScBroadcastAreaSlot::DelBroadcastAreasInRange( const ScRange& rRange )
     for (ScBroadcastAreas::iterator aIter( aBroadcastAreaTbl.begin());
             aIter != aBroadcastAreaTbl.end(); /* increment in body */ )
     {
-        const ScRange& rAreaRange = (*aIter)->GetRange();
+        const ScRange& rAreaRange = (*aIter).mpArea->GetRange();
         if (rRange.In( rAreaRange))
         {
-            ScBroadcastArea* pArea = *aIter;
+            ScBroadcastArea* pArea = (*aIter).mpArea;
             aBroadcastAreaTbl.erase( aIter++);  // erase before modifying
             if (!pArea->DecRef())
             {
@@ -398,7 +359,7 @@ void ScBroadcastAreaSlot::UpdateRemove( UpdateRefMode eUpdateRefMode,
     for ( ScBroadcastAreas::iterator aIter( aBroadcastAreaTbl.begin());
             aIter != aBroadcastAreaTbl.end(); /* increment in body */ )
     {
-        ScBroadcastArea* pArea = *aIter;
+        ScBroadcastArea* pArea = (*aIter).mpArea;
         if ( pArea->IsInUpdateChain() )
         {
             aBroadcastAreaTbl.erase( aIter++);
@@ -435,7 +396,7 @@ void ScBroadcastAreaSlot::UpdateRemoveArea( ScBroadcastArea* pArea )
     ScBroadcastAreas::iterator aIter( aBroadcastAreaTbl.find( pArea));
     if (aIter == aBroadcastAreaTbl.end())
         return;
-    if (*aIter != pArea)
+    if ((*aIter).mpArea != pArea)
         OSL_FAIL( "UpdateRemoveArea: area pointer mismatch");
     else
     {
@@ -448,13 +409,13 @@ void ScBroadcastAreaSlot::UpdateRemoveArea( ScBroadcastArea* pArea )
 void ScBroadcastAreaSlot::UpdateInsert( ScBroadcastArea* pArea )
 {
     ::std::pair< ScBroadcastAreas::iterator, bool > aPair =
-        aBroadcastAreaTbl.insert( pArea );
+        aBroadcastAreaTbl.insert( pArea);
     if (aPair.second)
         pArea->IncRef();
     else
     {
         // Identical area already exists, add listeners.
-        ScBroadcastArea* pTarget = *(aPair.first);
+        ScBroadcastArea* pTarget = (*(aPair.first)).mpArea;
         if (pArea != pTarget)
         {
             SvtBroadcaster& rTarget = pTarget->GetBroadcaster();
@@ -466,6 +427,29 @@ void ScBroadcastAreaSlot::UpdateInsert( ScBroadcastArea* pArea )
             }
         }
     }
+}
+
+
+void ScBroadcastAreaSlot::EraseArea( ScBroadcastAreas::iterator& rIter )
+{
+    if (mbInBroadcastIteration)
+    {
+        (*rIter).mbErasure = true;      // mark for erasure
+        pBASM->PushAreaToBeErased( this, rIter);
+    }
+    else
+    {
+        ScBroadcastArea* pArea = (*rIter).mpArea;
+        aBroadcastAreaTbl.erase( rIter);
+        if (!pArea->DecRef())
+            delete pArea;
+    }
+}
+
+
+void ScBroadcastAreaSlot::FinallyEraseAreas()
+{
+    pBASM->FinallyEraseAreas( this);
 }
 
 
@@ -508,6 +492,9 @@ ScBroadcastAreaSlotMachine::~ScBroadcastAreaSlotMachine()
         delete (*iTab).second;
     }
     delete pBCAlways;
+    // Areas to-be-erased still present is a serious error in handling, but at
+    // this stage there's nothing we can do anymore.
+    SAL_WARN_IF( !maAreasToBeErased.empty(), "sc", "ScBroadcastAreaSlotMachine::dtor: maAreasToBeErased not empty");
 }
 
 
@@ -957,6 +944,36 @@ bool ScBroadcastAreaSlotMachine::InsertBulkArea( const ScBroadcastArea* pArea )
 size_t ScBroadcastAreaSlotMachine::RemoveBulkArea( const ScBroadcastArea* pArea )
 {
     return aBulkBroadcastAreas.erase( pArea );
+}
+
+
+void ScBroadcastAreaSlotMachine::PushAreaToBeErased( ScBroadcastAreaSlot* pSlot,
+        ScBroadcastAreas::iterator& rIter )
+{
+    maAreasToBeErased.push_back( ::std::make_pair( pSlot, rIter));
+}
+
+
+void ScBroadcastAreaSlotMachine::FinallyEraseAreas( ScBroadcastAreaSlot* pSlot )
+{
+    SAL_WARN_IF( pSlot->IsInBroadcastIteration(), "sc",
+            "ScBroadcastAreaSlotMachine::FinallyEraseAreas: during iteration? NO!");
+    if (pSlot->IsInBroadcastIteration())
+        return;
+
+    // maAreasToBeErased is a simple vector so erasing an element may
+    // invalidate iterators and would be inefficient anyway. Instead, copy
+    // elements to be preserved (usually none!) to temporary vector and swap.
+    AreasToBeErased aCopy;
+    for (AreasToBeErased::iterator aIt( maAreasToBeErased.begin());
+            aIt != maAreasToBeErased.end(); ++aIt)
+    {
+        if ((*aIt).first == pSlot)
+            pSlot->EraseArea( (*aIt).second);
+        else
+            aCopy.push_back( *aIt);
+    }
+    maAreasToBeErased.swap( aCopy);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
