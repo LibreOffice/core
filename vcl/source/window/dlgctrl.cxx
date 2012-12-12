@@ -78,7 +78,7 @@ static Window* ImplGetSubChildWindow( Window* pParent, sal_uInt16 n, sal_uInt16&
     Window*     pTabPage = NULL;
     Window*     pFoundWindow = NULL;
 
-    Window*     pWindow = pParent->GetWindow( WINDOW_FIRSTCHILD );
+    Window*     pWindow = firstLogicalChildOfParent(pParent);
     Window*     pNextWindow = pWindow;
     while ( pWindow )
     {

@@ -229,7 +229,19 @@ bool Edit::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
         SetMaxTextLen(nTextLen == 0 ? EDIT_NOLIMIT : nTextLen);
     }
     else if (rKey == "editable")
-        SetReadOnly(!toBool(rValue));
+    {
+        bool bReadOnly = !toBool(rValue);
+        SetReadOnly(bReadOnly);
+        //disable tab to traverse into readonly editables
+        WinBits nBits = GetStyle();
+        nBits &= ~(WB_TABSTOP|WB_NOTABSTOP);
+        if (!bReadOnly)
+            nBits |= WB_TABSTOP;
+        else
+            nBits |= WB_NOTABSTOP;
+        fprintf(stderr, "tabstop is %ld\n", nBits & WB_TABSTOP);
+        SetStyle(nBits);
+    }
     else if (rKey == "visibility")
     {
         WinBits nBits = GetStyle();

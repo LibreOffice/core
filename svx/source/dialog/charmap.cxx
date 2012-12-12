@@ -66,7 +66,7 @@ SvxShowCharSet::SvxShowCharSet(Window* pParent, const ResId& rResId)
 }
 
 SvxShowCharSet::SvxShowCharSet(Window* pParent)
-    : Control(pParent)
+    : Control(pParent, WB_TABSTOP)
     , m_pAccessible(NULL)
     , aVscrollSB( this, WB_VERT)
 {

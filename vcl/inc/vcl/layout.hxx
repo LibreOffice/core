@@ -547,12 +547,25 @@ bool isVisibleInLayout(const Window *pWindow);
 //return true if this window and its stack of containers are all enabled
 bool isEnabledInLayout(const Window *pWindow);
 
+//Get first window of a pTopLevel window as
+//if any intermediate layout widgets didn't exist
+//i.e. acts like pChild = pChild->GetWindow(WINDOW_FIRSTCHILD);
+//in a flat hierarchy where dialogs only have one layer
+//of children
+Window* firstLogicalChildOfParent(Window *pTopLevel);
+
 //Get next window after pChild of a pTopLevel window as
 //if any intermediate layout widgets didn't exist
 //i.e. acts like pChild = pChild->GetWindow(WINDOW_NEXT);
 //in a flat hierarchy where dialogs only have one layer
 //of children
 Window* nextLogicalChildOfParent(Window *pTopLevel, Window *pChild);
+
+//Get previous window before pChild of a pTopLevel window as
+//if any intermediate layout widgets didn't exist
+//i.e. acts like pChild = pChild->GetWindow(WINDOW_PREV);
+//in a flat hierarchy where dialogs only have one layer
+//of children
 Window* prevLogicalChildOfParent(Window *pTopLevel, Window *pChild);
 
 inline bool isContainerWindow(const Window &rWindow)

@@ -194,7 +194,7 @@ TreeListBox::TreeListBox (Window* pParent, ResId const& rRes)
 }
 
 TreeListBox::TreeListBox (Window* pParent)
-    : SvTreeListBox(pParent)
+    : SvTreeListBox(pParent, WB_TABSTOP)
     , m_aNotifier( *this )
 {
     Init();

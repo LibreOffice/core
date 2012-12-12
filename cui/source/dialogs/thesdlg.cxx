@@ -58,7 +58,7 @@ using ::rtl::OUString;
 // class LookUpComboBox --------------------------------------------------
 
 LookUpComboBox::LookUpComboBox(Window *pParent)
-    : ComboBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK)
+    : ComboBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK|WB_TABSTOP)
 {
     EnableAutoSize(true);
 
@@ -97,7 +97,7 @@ IMPL_LINK( LookUpComboBox, ModifyTimer_Hdl, Timer *, EMPTYARG /*pTimer*/ )
 // class ReplaceEdit --------------------------------------------------
 
 ReplaceEdit::ReplaceEdit(Window *pParent)
-    : Edit(pParent)
+    : Edit(pParent, WB_BORDER | WB_TABSTOP)
 {
 }
 

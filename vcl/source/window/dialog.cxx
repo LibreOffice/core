@@ -171,6 +171,16 @@ Window * prevLogicalChildOfParent(Window *pTopLevel, Window *pChild)
     return pChild;
 }
 
+//Get first window of a pTopLevel window as
+//if any intermediate layout widgets didn't exist
+Window * firstLogicalChildOfParent(Window *pTopLevel)
+{
+    Window *pChild = pTopLevel->GetWindow(WINDOW_FIRSTCHILD);
+    if (pChild && isContainerWindow(*pChild))
+        pChild = nextLogicalChildOfParent(pTopLevel, pChild);
+    return pChild;
+}
+
 // -----------------------------------------------------------------------
 
 void ImplWindowAutoMnemonic( Window* pWindow )

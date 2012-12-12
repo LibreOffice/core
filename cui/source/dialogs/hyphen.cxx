@@ -36,7 +36,7 @@
 #define CUR_HYPH_POS_CHAR   '-'
 
 HyphenEdit::HyphenEdit(Window* pParent)
-    : Edit(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK)
+    : Edit(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK|WB_TABSTOP)
 {
 }
 
