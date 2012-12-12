@@ -4414,6 +4414,7 @@ void Test::testCopyPasteFormulasExternalDoc()
     SfxMedium* pMedium = new SfxMedium(aDocName, STREAM_STD_READWRITE);
     m_xDocShRef->DoInitNew(pMedium);
     m_pDoc = m_xDocShRef->GetDocument();
+    m_pDoc->SetGrammar(formula::FormulaGrammar::GRAM_NATIVE);
 
     ScDocShellRef xExtDocSh = new ScDocShell;
     OUString aExtDocName("file:///extdata.fake");
@@ -4425,6 +4426,7 @@ void Test::testCopyPasteFormulasExternalDoc()
                            findLoadedDocShellByName(aExtDocName) != NULL);
 
     ScDocument* pExtDoc = xExtDocSh->GetDocument();
+    pExtDoc->SetGrammar(formula::FormulaGrammar::GRAM_NATIVE);
     pExtDoc->InsertTab(0, aExtSh1Name);
     pExtDoc->InsertTab(1, aExtSh2Name);
 
