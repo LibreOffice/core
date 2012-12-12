@@ -12,6 +12,7 @@
 #include <comphelper/processfactory.hxx>
 #include <sfx2/templateview.hxx>
 #include <sfx2/templateviewitem.hxx>
+#include <tools/urlobj.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/pngread.hxx>
 
@@ -22,32 +23,37 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
+bool ViewFilter_Application::isValid (const OUString &rPath) const
+{
+    bool bRet = true;
+
+    INetURLObject aUrl(rPath);
+    OUString aExt = aUrl.getExtension();
+    if (mApp == FILTER_APP_WRITER)
+    {
+        bRet = aExt == "ott" || aExt == "stw" || aExt == "oth" || aExt == "dot" || aExt == "dotx";
+    }
+    else if (mApp == FILTER_APP_CALC)
+    {
+        bRet = aExt == "ots" || aExt == "stc" || aExt == "xlt" || aExt == "xltm" || aExt == "xltx";
+    }
+    else if (mApp == FILTER_APP_IMPRESS)
+    {
+        bRet = aExt == "otp" || aExt == "sti" || aExt == "pot" || aExt == "potm" || aExt == "potx";
+    }
+    else if (mApp == FILTER_APP_DRAW)
+    {
+        bRet = aExt == "otg" || aExt == "std";
+    }
+
+    return bRet;
+}
+
 bool ViewFilter_Application::operator () (const ThumbnailViewItem *pItem)
 {
     const TemplateViewItem *pTempItem = static_cast<const TemplateViewItem*>(pItem);
 
-    if (mApp == FILTER_APP_WRITER)
-    {
-        return pTempItem->getFileType() == "OpenDocument Text" ||
-                pTempItem->getFileType() == "OpenDocument Text Template";
-    }
-    else if (mApp == FILTER_APP_CALC)
-    {
-        return pTempItem->getFileType() == "OpenDocument Spreadsheet" ||
-                pTempItem->getFileType() == "OpenDocument Spreadsheet Template";
-    }
-    else if (mApp == FILTER_APP_IMPRESS)
-    {
-        return pTempItem->getFileType() == "OpenDocument Presentation" ||
-                pTempItem->getFileType() == "OpenDocument Presentation Template";
-    }
-    else if (mApp == FILTER_APP_DRAW)
-    {
-        return pTempItem->getFileType() == "OpenDocument Drawing" ||
-                pTempItem->getFileType() == "OpenDocument Drawing Template";
-    }
-
-    return true;
+    return isValid(pTempItem->getPath());
 }
 
 bool ViewFilter_Keyword::operator ()(const ThumbnailViewItem *pItem)

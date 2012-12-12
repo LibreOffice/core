@@ -45,9 +45,13 @@ public:
         : mApp(App)
     {}
 
-    bool operator () (const ThumbnailViewItem *pItem);
+    virtual ~ViewFilter_Application () {}
 
-private:
+    virtual bool operator () (const ThumbnailViewItem *pItem);
+
+    bool isValid (const rtl::OUString& rPath) const;
+
+protected:
 
     FILTER_APPLICATION mApp;
 };
