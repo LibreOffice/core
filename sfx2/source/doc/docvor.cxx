@@ -1598,7 +1598,7 @@ String SfxOrganizeDlg_Impl::GetPath_Impl( sal_Bool bOpen, const String& rFileNam
     {
         if ( sFilterExt.Len() > 0 )
             sFilterExt += ';';
-        sFilterExt += DEFINE_CONST_UNICODE( "*.ots;*.stci;*.xlt;*.xltm;*.xltm" );
+        sFilterExt += DEFINE_CONST_UNICODE( "*.ots;*.stc;*.xlt;*.xltm;*.xltx" );
     }
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
     {
