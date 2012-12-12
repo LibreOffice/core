@@ -44,7 +44,6 @@
 #include <comphelper/string.hxx>
 #include <frmui.hrc>
 #include <globals.hrc>
-#include <cption.hrc>
 #include <SwStyleNameMapper.hxx>
 
 using namespace ::com::sun::star;
@@ -56,25 +55,14 @@ extern String* GetOldDrwCat();
 
 class SwSequenceOptionDialog : public SvxStandardDialog
 {
-    FixedLine       aFlHeader;
-    FixedText       aFtLevel;
-    ListBox         aLbLevel;
-    FixedText       aFtDelim;
-    Edit            aEdDelim;
+    ListBox*        m_pLbLevel;
+    Edit*           m_pEdDelim;
 
-    FixedLine       aFlCatAndFrame;
-    FixedText       aFtCharStyle;
-    ListBox         aLbCharStyle;
-    CheckBox        aApplyBorderAndShadowCB;
+    ListBox*        m_pLbCharStyle;
+    CheckBox*       m_pApplyBorderAndShadowCB;
 
     //#i61007# order of captions
-    FixedLine       aFlCaptionOrder;
-    FixedText       aFtCaptionOrder;
-    ListBox         aLbCaptionOrder;
-
-    OKButton        aOKButton;
-    CancelButton    aCancelButton;
-    HelpButton      aHelpButton;
+    ListBox*        m_pLbCaptionOrder;
 
     SwView&         rView;
     String          aFldTypeName;
@@ -85,12 +73,12 @@ public:
     virtual ~SwSequenceOptionDialog();
     virtual void Apply();
 
-    bool IsApplyBorderAndShadow( void ) { return aApplyBorderAndShadowCB.IsChecked(); }
-    void SetApplyBorderAndShadow( bool bSet )  { aApplyBorderAndShadowCB.Check(bSet); }
+    bool IsApplyBorderAndShadow( void ) { return m_pApplyBorderAndShadowCB->IsChecked(); }
+    void SetApplyBorderAndShadow( bool bSet )  { m_pApplyBorderAndShadowCB->Check(bSet); }
 
     //#i61007# order of captions
-    bool IsOrderNumberingFirst() const {return aLbCaptionOrder.GetSelectEntryPos() == 1;}
-    void SetOrderNumberingFirst(bool bSet) { aLbCaptionOrder.SelectEntryPos( bSet ? 1 : 0 ); }
+    bool IsOrderNumberingFirst() const {return m_pLbCaptionOrder->GetSelectEntryPos() == 1;}
+    void SetOrderNumberingFirst(bool bSet) { m_pLbCaptionOrder->SelectEntryPos( bSet ? 1 : 0 ); }
 
     void    SetCharacterStyle(const String& rStyle);
     String  GetCharacterStyle() const;
@@ -100,7 +88,7 @@ String SwCaptionDialog::our_aSepTextSave = rtl::OUString(": "); // Caption separ
 
 SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     SvxStandardDialog( pParent, "InsertCaptionDialog", "modules/swriter/ui/insertcaption.ui" ),
-    sNone( SW_RES( STR_CAPTION_CATEGORY_NONE )),
+    sNone( SW_RES( STR_CAPTION_NONE )),
     rView( rV ),
     pMgr( new SwFldMgr(rView.GetWrtShellPtr()) ),
     bCopyAttributes( sal_False ),
@@ -428,31 +416,23 @@ SwCaptionDialog::~SwCaptionDialog()
 
 SwSequenceOptionDialog::SwSequenceOptionDialog( Window *pParent, SwView &rV,
                                             const String& rSeqFldType )
-    : SvxStandardDialog( pParent, SW_RES(DLG_SEQUENCE_OPTION) ),
-    aFlHeader       (this, SW_RES(FL_HEADER    )),
-    aFtLevel        (this, SW_RES(FT_LEVEL     )),
-    aLbLevel        (this, SW_RES(LB_LEVEL     )),
-    aFtDelim        (this, SW_RES(FT_SEPARATOR )),
-    aEdDelim        (this, SW_RES(ED_SEPARATOR )),
-    aFlCatAndFrame  (this, SW_RES(FL_CATANDFRAME)),
-    aFtCharStyle    (this, SW_RES(FT_CHARSTYLE )),
-    aLbCharStyle    (this, SW_RES(LB_CHARSTYLE )),
-    aApplyBorderAndShadowCB(this, SW_RES(CB_APPLYBAS)),
-    aFlCaptionOrder(this, SW_RES( FL_ORDER )), //#i61007# order of captions
-    aFtCaptionOrder(this, SW_RES( FT_ORDER )),
-    aLbCaptionOrder(this, SW_RES( LB_ORDER )),
-    aOKButton       (this, SW_RES(BTN_OK       )),
-    aCancelButton   (this, SW_RES(BTN_CANCEL   )),
-    aHelpButton     (this, SW_RES(BTN_HELP     )),
-
+    : SvxStandardDialog( pParent, "CaptionOptionsDialog", "modules/swriter/ui/captionoptions.ui" ),
     rView( rV ),
     aFldTypeName( rSeqFldType )
 {
-    FreeResource();
+    get(m_pLbLevel, "level");
+    get(m_pEdDelim, "separator");
+    get(m_pLbCharStyle, "style");
+    get(m_pApplyBorderAndShadowCB, "border_and_shadow");
+    get(m_pLbCaptionOrder, "caption_order");
+
     SwWrtShell &rSh = rView.GetWrtShell();
 
+    String sNone(SW_RES(STR_CAPTION_NONE));
+
+    m_pLbLevel->InsertEntry(sNone);
     for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
-        aLbLevel.InsertEntry( String::CreateFromInt32(n+1) );
+        m_pLbLevel->InsertEntry( String::CreateFromInt32(n+1) );
 
     SwSetExpFieldType* pFldType = (SwSetExpFieldType*)rSh.GetFldType(
                                         RES_SETEXPFLD, aFldTypeName );
@@ -465,11 +445,12 @@ SwSequenceOptionDialog::SwSequenceOptionDialog( Window *pParent, SwView &rV,
         nLvl = pFldType->GetOutlineLvl();
     }
 
-    aLbLevel.SelectEntryPos( nLvl < MAXLEVEL ? nLvl + 1 : 0 );
-    aEdDelim.SetText(sDelim);
+    m_pLbLevel->SelectEntryPos( nLvl < MAXLEVEL ? nLvl + 1 : 0 );
+    m_pEdDelim->SetText(sDelim);
 
-    ::FillCharStyleListBox( aLbCharStyle, rView.GetDocShell(), sal_True, sal_True );
-    aLbCharStyle.SelectEntryPos( 0 );
+    m_pLbCharStyle->InsertEntry(sNone);
+    ::FillCharStyleListBox( *m_pLbCharStyle, rView.GetDocShell(), sal_True, sal_True );
+    m_pLbCharStyle->SelectEntryPos( 0 );
 }
 
 SwSequenceOptionDialog::~SwSequenceOptionDialog()
@@ -482,8 +463,8 @@ void SwSequenceOptionDialog::Apply()
     SwSetExpFieldType* pFldType = (SwSetExpFieldType*)rSh.GetFldType(
                                         RES_SETEXPFLD, aFldTypeName );
 
-    sal_Int8 nLvl = (sal_Int8)( aLbLevel.GetSelectEntryPos() - 1);
-    sal_Unicode cDelim = aEdDelim.GetText().GetChar(0);
+    sal_Int8 nLvl = (sal_Int8)( m_pLbLevel->GetSelectEntryPos() - 1);
+    sal_Unicode cDelim = m_pEdDelim->GetText().GetChar(0);
 
     sal_Bool bUpdate = sal_True;
     if( pFldType )
@@ -509,15 +490,15 @@ void SwSequenceOptionDialog::Apply()
 String  SwSequenceOptionDialog::GetCharacterStyle() const
 {
     String sRet;
-    if(aLbCharStyle.GetSelectEntryPos())
-        sRet = aLbCharStyle.GetSelectEntry();
+    if(m_pLbCharStyle->GetSelectEntryPos())
+        sRet = m_pLbCharStyle->GetSelectEntry();
     return sRet;
 }
 
 void    SwSequenceOptionDialog::SetCharacterStyle(const String& rStyle)
 {
-    aLbCharStyle.SelectEntryPos(0);
-    aLbCharStyle.SelectEntry(rStyle);
+    m_pLbCharStyle->SelectEntryPos(0);
+    m_pLbCharStyle->SelectEntry(rStyle);
 }
 
 long CategoryBox::PreNotify( NotifyEvent& rNEvt )
