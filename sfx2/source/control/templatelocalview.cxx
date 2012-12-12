@@ -33,12 +33,12 @@ using namespace ::com::sun::star::frame;
 
 static void lcl_updateThumbnails (TemplateLocalViewItem *pItem);
 
-class FolderFilter_Application
+class FolderFilter_Application : public ViewFilter_Application
 {
 public:
 
     FolderFilter_Application (FILTER_APPLICATION eApp)
-        : meApp(eApp)
+        : ViewFilter_Application(eApp)
     {
     }
 
@@ -56,7 +56,7 @@ public:
 
         for (size_t i = 0, n = rTemplates.size(); i < n; ++i)
         {
-            if (isValid(rTemplates[i].aType))
+            if (isValid(rTemplates[i].aPath))
             {
                 ++nVisCount;
                 if ( pFolderItem->maPreview1.IsEmpty( ) )
@@ -77,29 +77,6 @@ public:
         return meApp != FILTER_APP_NONE ? nVisCount : true ;
     }
 
-    bool isValid (const OUString &rType) const
-    {
-        bool bRet = true;
-
-        if (meApp == FILTER_APP_WRITER)
-        {
-            bRet = rType == "OpenDocument Text" || rType == "OpenDocument Text Template";
-        }
-        else if (meApp == FILTER_APP_CALC)
-        {
-            bRet = rType == "OpenDocument Spreadsheet" || rType == "OpenDocument Spreadsheet Template";
-        }
-        else if (meApp == FILTER_APP_IMPRESS)
-        {
-            bRet = rType == "OpenDocument Presentation" || rType == "OpenDocument Presentation Template";
-        }
-        else if (meApp == FILTER_APP_DRAW)
-        {
-            bRet = rType == "OpenDocument Drawing" || rType == "OpenDocument Drawing Template";
-        }
-
-        return bRet;
-    }
 
 private:
 
