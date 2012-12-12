@@ -516,27 +516,18 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
                 // Pipe connected to first office
                 nPipeMode = PIPEMODE_CONNECTED;
             }
-            else
-            {
-                // Pipe connection failed (other office exited or crashed)
-                TimeValue tval;
-                tval.Seconds = 0;
-                tval.Nanosec = 500000000;
-                salhelper::Thread::wait( tval );
-            }
         }
         else
         {
             oslPipeError eReason = pThread->maPipe.getError();
             if ((eReason == osl_Pipe_E_ConnectionRefused) || (eReason == osl_Pipe_E_invalidError))
                 return IPC_STATUS_BOOTSTRAP_ERROR;
-
-            // Wait for second office to be ready
-            TimeValue aTimeValue;
-            aTimeValue.Seconds = 0;
-            aTimeValue.Nanosec = 10000000; // 10ms
-            salhelper::Thread::wait( aTimeValue );
         }
+        // Pipe connection failed (other office not ready, exited or crashed)
+        TimeValue aTimeValue;
+        aTimeValue.Seconds = 0;
+        aTimeValue.Nanosec = 10000000; // 10ms
+        salhelper::Thread::wait( aTimeValue );
 
     } while ( nPipeMode == PIPEMODE_DONTKNOW );
 
@@ -599,12 +590,11 @@ void OfficeIPCThread::DisableOfficeIPCThread(bool join)
     {
         rtl::Reference< OfficeIPCThread > pOfficeIPCThread(
             pGlobalOfficeIPCThread);
-        pGlobalOfficeIPCThread.clear();
 
         // send thread a termination message
-        // this is done so the subsequent join will not hang
-        // because the thread hangs in accept of pipe
-        osl::StreamPipe aPipe ( pOfficeIPCThread->maPipeIdent, osl_Pipe_OPEN, Security::get() );
+        // we use a timeout to avoid a potential deadlock - if another client manage to connect
+        // between this function taking the lock and connecting to pipe, everyone will get stuck forever
+        osl::StreamPipe aPipe ( pOfficeIPCThread->maPipeIdent, osl_Pipe_OPEN, Security::get(), 100 );
         if (aPipe.is())
         {
             aPipe.send( sc_aTerminationSequence, sc_nTSeqLength+1 ); // also send 0-byte
@@ -613,7 +603,21 @@ void OfficeIPCThread::DisableOfficeIPCThread(bool join)
             // side produces EOF
             aPipe.close();
         }
+        else
+        {
+            pOfficeIPCThread.clear();
+            aMutex.clear();
+            // short pause
+            TimeValue tval;
+            tval.Seconds = 0;
+            tval.Nanosec = 10000000; // 10ms
+            salhelper::Thread::wait( tval );
+            DisableOfficeIPCThread(join);
+            return;
 
+        }
+
+        pGlobalOfficeIPCThread.clear();
         // release mutex to avoid deadlocks
         aMutex.clear();
 
