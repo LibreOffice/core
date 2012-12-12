@@ -10,7 +10,7 @@
 # to get them into invoked external configures and override pkg-config there.
 gb_SPACE:=$(gb_SPACE) $(gb_SPACE)
 export SRC_ROOT=@SRC_ROOT@
-export BUILDDIR=@SRC_ROOT@
+export BUILDDIR=@BUILDDIR@
 
 export ABOUT_BACKGROUND_SVG=@ABOUT_BACKGROUND_SVG@
 export ALIGNOF_DOUBLE=@ALIGNOF_DOUBLE@
