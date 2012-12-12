@@ -91,19 +91,8 @@ $ENV{LOCAL_COMMON_OUT} = $ENV{OUT};
 $ENV{DEFAULT_TO_ENGLISH_FOR_PACKING} = 1;
 
 my @larr;
-$langs=$ENV{WITH_LANG};
-$langs='en-US' if $langs eq '';
-if ($langs eq 'ALL') {
-    opendir(DIR,$ENV{L10N_MODULE} . "/source");
-    @larr = readdir(DIR);
-    @larr = grep { $_ ne '.' } @larr;
-    @larr = grep { $_ ne '..' } @larr;
-    @larr = (@larr,"en-US");
-    closedir(DIR);
-}
-else {
-    @larr = grep { $_ ne '' } split(/ /, $langs);
-}
+$langs=$ENV{WITH_LANG_LIST};
+@larr = grep { $_ ne '' } split(/ /, $langs);
 $langs = join (",", @larr);
 
 $destdir='';
