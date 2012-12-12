@@ -38,12 +38,22 @@ gb_Helper_MISCDUMMY := $(gb_Helper_MISC)/DUMMY
 $(gb_Helper_MISCDUMMY) :
 	@mkdir -p $(dir $@) && touch $@
 
+ifeq ($(SRCDIR),$(BUILDDIR))
 define gb_Helper_abbreviate_dirs
 S=$(SRCDIR) && \
 $(subst $(SRCDIR)/,$$S/,O=$(OUTDIR)) && \
 $(subst $(SRCDIR)/,$$S/,W=$(WORKDIR)) && \
 $(subst $(SRCDIR)/,$$S/,$(subst $(OUTDIR)/,$$O/,$(subst $(WORKDIR)/,$$W/,$(1))))
 endef
+else
+define gb_Helper_abbreviate_dirs
+S=$(SRCDIR) && \
+$(subst $(SRCDIR)/,$$S/,B=$(BUILDDIR)) && \
+$(subst $(SRCDIR)/,$$S/,$(subst $(BUILDDIR)/,$$B/,O=$(OUTDIR))) && \
+$(subst $(SRCDIR)/,$$S/,$(subst $(BUILDDIR)/,$$B/,W=$(WORKDIR))) && \
+$(subst $(SRCDIR)/,$$S/,$(subst $(BUILDDIR)/,$$B/,$(subst $(OUTDIR)/,$$O/,$(subst $(WORKDIR)/,$$W/,$(1)))))
+endef
+endif
 
 define gb_Helper_abbreviate_dirs_native
 $(call gb_Output_error,gb_Helper_abbreviate_dirs_native: use gb_Helper_abbreviate_dirs instead.)
