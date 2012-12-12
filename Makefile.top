@@ -144,6 +144,7 @@ ifeq ($(BUILD_DMAKE),YES)
 	rm -f solenv/*/bin/dmake*
 endif
 	rm -fr \
+        $(BUILDDIR)/Makefile \
         $(BUILDDIR)/aclocal.m4 \
         $(BUILDDIR)/autom4te.cache \
         $(BUILDDIR)/config.log \
