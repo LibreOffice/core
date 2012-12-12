@@ -121,8 +121,8 @@ namespace
         CompareDrawObjs(const WW8Export& rWrt) : wrt(rWrt) {};
         bool operator()(DrawObj *a, DrawObj *b) const
         {
-            sal_uLong aSort = ::lcl_getSdrOrderNumber(wrt, a);
-            sal_uLong bSort = ::lcl_getSdrOrderNumber(wrt, b);
+            sal_uLong aSort = lcl_getSdrOrderNumber(wrt, a);
+            sal_uLong bSort = lcl_getSdrOrderNumber(wrt, b);
             return aSort < bSort;
         }
     };
@@ -141,7 +141,7 @@ namespace
         {
             rDstArr.push_back( &rSrcArr[i] );
         }
-        std::sort(rDstArr.begin(), rDstArr.end(), ::CompareDrawObjs(rWrt));
+        std::sort(rDstArr.begin(), rDstArr.end(), CompareDrawObjs(rWrt));
     }
 
 }

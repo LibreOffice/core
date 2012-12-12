@@ -23,6 +23,8 @@ $(eval $(call gb_Library_set_componentfile,msword,sw/util/msword))
 
 $(eval $(call gb_Library_use_package,msword,writerfilter_sprmids))
 
+$(eval $(call gb_Library_set_precompiled_header,msword,$(SRCDIR)/sw/inc/pch/precompiled_msword))
+
 $(eval $(call gb_Library_set_include,msword,\
     -I$(SRCDIR)/sw/source/core/inc \
     -I$(SRCDIR)/sw/source/ui/inc \

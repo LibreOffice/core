@@ -23,6 +23,7 @@
 #include <oox/dllapi.h>
 #include <com/sun/star/uno/XReference.hpp>
 #include <oox/export/drawingml.hxx>
+#include <oox/token/tokens.hxx>
 #include <sax/fshelper.hxx>
 #include <vcl/mapmod.hxx>
 #include <boost/unordered_map.hpp>
