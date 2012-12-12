@@ -74,8 +74,6 @@ gb_AFLAGS := /c /Cp
 # cleaning away from the code, to avoid warnings when building with
 # gcc or Clang and -Wall -Werror.
 
-# C4005: 'identifier' : macro redefinition
-
 # C4127: conditional expression is constant
 
 # C4180: qualifier applied to function type has no meaning; ignored
@@ -149,7 +147,6 @@ gb_CFLAGS := \
 	-MD \
 	-nologo \
 	-W4 \
-	-wd4005 \
 	-wd4127 \
 	-wd4180 \
 	-wd4189 \
@@ -183,7 +180,6 @@ gb_CXXFLAGS := \
 	-MD \
 	-nologo \
 	-W4 \
-	-wd4005 \
 	-wd4127 \
 	-wd4180 \
 	-wd4189 \
@@ -220,11 +216,14 @@ ifeq ($(VCVER),100)
 
 endif
 
+# C4005: 'identifier' : macro redefinition
+
 gb_PCHWARNINGS = \
 	-we4650 \
 	-we4651 \
 	-we4652 \
 	-we4653 \
+	-we4005 \
 
 gb_STDLIBS := \
 	advapi32.lib \
