@@ -471,8 +471,11 @@ void OSQLParseNode::impl_parseNodeToString_throw(OUStringBuffer& rString, const 
             if (rParam.xField.is() && SQL_ISRULE(pSubTree,subquery))
                 aNewParam.xField = NULL;
 
-            // if there is a field given we don't display the fieldname, if there is any
-            if (rParam.xField.is() && SQL_ISRULE(pSubTree,column_ref))
+            // Special case: if there is a field given we are building
+            // a criterion inside a query view (and rString is supposed
+            // to be initially empty). In order to simplify criterion text
+            // inside view, omit fieldname if it appears as 1st token.
+            if ((rString.getLength() == 0) && rParam.xField.is() && SQL_ISRULE(pSubTree,column_ref))
             {
                 sal_Bool bFilter = sal_False;
                 // retrieve the fields name
