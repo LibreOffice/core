@@ -72,7 +72,7 @@ using namespace ::com::sun::star::container;
  * SvxConfigGroupListBox are copied from sfx2/source/dialog/cfg.cxx
  */
 SvxConfigFunctionListBox::SvxConfigFunctionListBox(Window* pParent)
-    : SvTreeListBox(pParent, WB_CLIPCHILDREN | WB_HSCROLL | WB_SORT)
+    : SvTreeListBox(pParent, WB_CLIPCHILDREN | WB_HSCROLL | WB_SORT | WB_TABSTOP)
     , pCurEntry(0)
     , m_pDraggingEntry(0)
 {
@@ -187,7 +187,7 @@ SvxConfigFunctionListBox::AcceptDrop( const AcceptDropEvent& /*rEvt*/ )
 
 SvxConfigGroupListBox::SvxConfigGroupListBox(Window* pParent)
     : SvTreeListBox(pParent,
-            WB_CLIPCHILDREN | WB_HSCROLL | WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT)
+            WB_CLIPCHILDREN | WB_HSCROLL | WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT | WB_TABSTOP)
     , m_bShowSlots(false)
     , m_hdImage(CUI_RES(RID_CUIIMG_HARDDISK))
     , m_libImage(CUI_RES(RID_CUIIMG_LIB))

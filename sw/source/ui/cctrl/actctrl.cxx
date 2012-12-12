@@ -51,14 +51,14 @@ long NumEditAction::Notify( NotifyEvent& rNEvt )
 }
 
 NoSpaceEdit::NoSpaceEdit( Window* pParent, const ResId& rResId)
-    : Edit(pParent, rResId),
-    sForbiddenChars(rtl::OUString(" "))
+    : Edit(pParent, rResId)
+    , sForbiddenChars(rtl::OUString(" "))
 {
 }
 
 NoSpaceEdit::NoSpaceEdit(Window* pParent)
-    : Edit(pParent),
-    sForbiddenChars(rtl::OUString(" "))
+    : Edit(pParent, WB_BORDER|WB_TABSTOP)
+    , sForbiddenChars(rtl::OUString(" "))
 {
 }
 

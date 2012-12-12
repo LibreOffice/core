@@ -133,7 +133,7 @@ namespace
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeColorListBox(Window *pParent, VclBuilder::stringmap &rMap)
 {
     bool bDropdown = extractDropdown(rMap);
-    WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK;
+    WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
     if (bDropdown)
         nWinBits |= WB_DROPDOWN;
     ColorListBox *pListBox = new ColorListBox(pParent, nWinBits);
@@ -1042,7 +1042,7 @@ FontNameBox::FontNameBox( Window* pParent, const ResId& rResId ) :
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeFontNameBox(Window *pParent, VclBuilder::stringmap &rMap)
 {
     bool bDropdown = extractDropdown(rMap);
-    WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK;
+    WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
     if (bDropdown)
         nWinBits |= WB_DROPDOWN;
     FontNameBox *pListBox = new FontNameBox(pParent, nWinBits);
@@ -1431,7 +1431,7 @@ FontStyleBox::FontStyleBox( Window* pParent, WinBits nBits ) :
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeFontStyleBox(Window *pParent, VclBuilder::stringmap &rMap)
 {
     bool bDropdown = extractDropdown(rMap);
-    WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK;
+    WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
     if (bDropdown)
         nWinBits |= WB_DROPDOWN;
     FontStyleBox *pListBox = new FontStyleBox(pParent, nWinBits);
@@ -1651,7 +1651,7 @@ FontSizeBox::FontSizeBox( Window* pParent, const ResId& rResId ) :
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeFontSizeBox(Window *pParent, VclBuilder::stringmap &rMap)
 {
     bool bDropdown = extractDropdown(rMap);
-    WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK;
+    WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
     if (bDropdown)
         nWinBits |= WB_DROPDOWN;
     FontSizeBox* pListBox = new FontSizeBox(pParent, nWinBits);

@@ -99,7 +99,7 @@ SvxFontListBox::SvxFontListBox(Window* pParent, WinBits nStyle)
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxFontListBox(Window *pParent, VclBuilder::stringmap &)
 {
-    return new SvxFontListBox(pParent, 0);
+    return new SvxFontListBox(pParent, WB_TABSTOP);
 }
 
 void SvxFontListBox::InsertFontEntry( const String& rString, const Font& rFont, const Color* pColor )

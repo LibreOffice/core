@@ -454,7 +454,7 @@ SvTreeListBox::SvTreeListBox(Window* pParent, const ResId& rResId) :
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvTreeListBox(Window *pParent, VclBuilder::stringmap &)
 {
-    return new SvTreeListBox(pParent);
+    return new SvTreeListBox(pParent, WB_TABSTOP);
 }
 
 void SvTreeListBox::Clear()
