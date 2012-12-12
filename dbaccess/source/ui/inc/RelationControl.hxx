@@ -67,7 +67,7 @@ namespace dbaui
         */
         void enableRelation(bool _bEnable);
 
-        /** NotifyCellChange notifies the browse control that the conenction data has changed
+        /** NotifyCellChange notifies the browse control that the connection data has changed
         */
         void NotifyCellChange();
 
