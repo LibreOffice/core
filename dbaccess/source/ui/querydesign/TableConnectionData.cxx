@@ -51,7 +51,7 @@ void OTableConnectionData::Init()
     //////////////////////////////////////////////////////////////////////
     // LineDataList mit Defaults initialisieren
     OSL_ENSURE(m_vConnLineData.empty(), "OTableConnectionData::Init() : nur mit leere Linienliste aufzurufen !");
-    ResetConnLines(sal_True);
+    ResetConnLines();
         // das legt Defaults an
 }
 //------------------------------------------------------------------------
@@ -86,7 +86,7 @@ OTableConnectionData& OTableConnectionData::operator=( const OTableConnectionDat
     m_aConnName = rConnData.GetConnName();
 
     // clear line list
-    ResetConnLines(sal_False);
+    ResetConnLines();
 
     // und kopieren
     OConnectionLineDataVec* pLineData = const_cast<OTableConnectionData*>(&rConnData)->GetConnLineDataList();
@@ -140,7 +140,7 @@ sal_Bool OTableConnectionData::AppendConnLine( const ::rtl::OUString& rSourceFie
 }
 
 //------------------------------------------------------------------------
-void OTableConnectionData::ResetConnLines( sal_Bool /*bUseDefaults*/ )
+void OTableConnectionData::ResetConnLines()
 {
     OConnectionLineDataVec().swap(m_vConnLineData);
 }

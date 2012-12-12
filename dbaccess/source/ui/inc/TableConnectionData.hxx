@@ -72,10 +72,9 @@ namespace dbaui
 
         sal_Bool SetConnLine( sal_uInt16 nIndex, const String& rSourceFieldName, const String& rDestFieldName );
         sal_Bool AppendConnLine( const ::rtl::OUString& rSourceFieldName, const ::rtl::OUString& rDestFieldName );
-        /** Deletes list of ConnLines; if bUseDefaults == true
-            MAX_CONN_COUNT new dummy lines will be inserted.
+        /** Deletes list of ConnLines
         */
-        void ResetConnLines( sal_Bool bUseDefaults = sal_True );
+        void ResetConnLines();
 
         /** moves the empty lines to the back
          */
