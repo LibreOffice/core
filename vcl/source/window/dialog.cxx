@@ -560,6 +560,16 @@ WinBits Dialog::init(Window *pParent, const ResId& rResId)
     return nStyle;
 }
 
+VclButtonBox* Dialog::get_action_area()
+{
+    return m_pUIBuilder ? m_pUIBuilder->get<VclButtonBox>("dialog-action_area1") : NULL;
+}
+
+VclBox* Dialog::get_content_area()
+{
+    return m_pUIBuilder ? m_pUIBuilder->get<VclBox>("dialog-vbox1") : NULL;
+}
+
 // -----------------------------------------------------------------------
 
 Dialog::~Dialog()

@@ -34,6 +34,8 @@
 // - Dialog -
 // ----------
 struct DialogImpl;
+class VclBox;
+class VclButtonBox;
 class VclContainer;
 
 class VCL_DLLPUBLIC Dialog
@@ -95,6 +97,8 @@ public:
     void            setInitialLayoutSize();
     void            queue_layout();
     virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
+    VclButtonBox* get_action_area();
+    VclBox* get_content_area();
 
     virtual sal_Bool    Close();
 

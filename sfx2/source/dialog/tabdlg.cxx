@@ -513,7 +513,7 @@ SfxTabDialog::~SfxTabDialog()
     if (m_bOwnsTabCtrl)
         delete m_pTabCtrl;
     if (m_bOwnsVBox)
-        delete m_pVBox;
+        delete m_pBox;
 }
 
 // -----------------------------------------------------------------------
@@ -526,26 +526,26 @@ void SfxTabDialog::Init_Impl( sal_Bool bFmtFlag, const String* pUserButtonText, 
 */
 
 {
-    m_pVBox = m_pUIBuilder ? m_pUIBuilder->get<VclVBox>("dialog-vbox1") : NULL;
-    m_bOwnsVBox = m_pVBox == NULL;
+    m_pBox = get_content_area();
+    m_bOwnsVBox = m_pBox == NULL;
     if (m_bOwnsVBox)
     {
-        m_pVBox = new VclVBox(this, false, 7);
-        m_pVBox->set_expand(true);
+        m_pBox = new VclVBox(this, false, 7);
+        m_pBox->set_expand(true);
     }
 
     m_pTabCtrl = m_pUIBuilder ? m_pUIBuilder->get<TabControl>(SAL_STRINGIFY(ID_TABCONTROL)) : NULL;
     m_bOwnsTabCtrl = m_pTabCtrl == NULL;
     if (m_bOwnsTabCtrl)
     {
-        m_pTabCtrl = new TabControl(m_pVBox, ResId(ID_TABCONTROL, *rResId.GetResMgr()));
+        m_pTabCtrl = new TabControl(m_pBox, ResId(ID_TABCONTROL, *rResId.GetResMgr()));
         m_pTabCtrl->set_expand(true);
     }
 
-    m_pActionArea = m_pUIBuilder ? m_pUIBuilder->get<VclHButtonBox>("dialog-action_area1") : NULL;
+    m_pActionArea = get_action_area();
     m_bOwnsActionArea = m_pActionArea == NULL;
     if (m_bOwnsActionArea)
-        m_pActionArea = new VclHButtonBox(m_pVBox);
+        m_pActionArea = new VclHButtonBox(m_pBox);
 
     m_pOKBtn = m_pUIBuilder ? m_pUIBuilder->get<OKButton>("ok") : NULL;
     m_bOwnsOKBtn = m_pOKBtn == NULL;
@@ -593,7 +593,7 @@ void SfxTabDialog::Init_Impl( sal_Bool bFmtFlag, const String* pUserButtonText, 
     m_pTabCtrl->SetDeactivatePageHdl(
             LINK( this, SfxTabDialog, DeactivatePageHdl ) );
     m_pActionArea->Show();
-    m_pVBox->Show();
+    m_pBox->Show();
     m_pTabCtrl->Show();
     m_pOKBtn->Show();
     m_pCancelBtn->Show();
@@ -1084,7 +1084,7 @@ IMPL_LINK_NOARG(SfxTabDialog, OkHdl)
     Handler of the Ok-Buttons
     This calls the current page <SfxTabPage::DeactivatePage(SfxItemSet *)>.
     Returns <SfxTabPage::LEAVE_PAGE>, <SfxTabDialog::Ok()> is called
-    anf the Dialog is ended.
+    and the Dialog is ended.
 */
 
 {

@@ -208,7 +208,7 @@ SfxPrintOptionsDialog::SfxPrintOptionsDialog(Window *pParent,
     , pViewSh(pViewShell)
     , pOptions(pSet->Clone())
 {
-    VclContainer *pVBox = m_pUIBuilder->get<VclVBox>("dialog-vbox1");
+    VclContainer *pVBox = get_content_area();
 
     // Insert TabPage
     pPage = pViewSh->CreatePrintOptionsPage(pVBox, *pOptions);
