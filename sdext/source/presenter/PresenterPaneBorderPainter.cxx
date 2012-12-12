@@ -538,148 +538,72 @@ void PresenterPaneBorderPainter::Renderer::PaintTitle (
         return;
 
     /// this is responsible of the texts above the slide windows
-    /// check whether RTL interface or not
-    if(!Application::GetSettings().GetLayoutRTL()){
-        geometry::RealRectangle2D aBox (xLayout->queryTextBounds());
-        const double nTextHeight = aBox.Y2 - aBox.Y1;
-        const double nTextWidth = aBox.X1 + aBox.X2;
-        double nX = rInnerBox.X + (rInnerBox.Width - nTextWidth)/2;
-        const sal_Int32 nTitleBarHeight = rInnerBox.Y - rOuterBox.Y - 1;
-        double nY = rOuterBox.Y + (nTitleBarHeight - nTextHeight) / 2 - aBox.Y1;
-        if (nY >= rInnerBox.Y)
-            nY = rInnerBox.Y - 1;
-        switch (rpStyle->meFontAnchor)
-        {
-            default:
-            case RendererPaneStyle::AnchorLeft:
-                nX = rInnerBox.X;
-                break;
-            case RendererPaneStyle::AnchorRight:
-                nX = rInnerBox.X + rInnerBox.Width - nTextWidth;
-                break;
-            case RendererPaneStyle::AnchorCenter:
-                nX = rInnerBox.X + (rInnerBox.Width - nTextWidth)/2;
-                break;
-        }
-        nX += rpStyle->mnFontXOffset;
-        nY += rpStyle->mnFontYOffset;
-
-        if (rUpdateBox.X >= nX+nTextWidth
-            || rUpdateBox.Y >= nY+nTextHeight
-            || rUpdateBox.X+rUpdateBox.Width <= nX
-            || rUpdateBox.Y+rUpdateBox.Height <= nY)
-        {
-            return;
-        }
-
-        rendering::RenderState aRenderState(
-            geometry::AffineMatrix2D(1,0,nX, 0,1,nY),
-            NULL,
-            Sequence<double>(4),
-            rendering::CompositeOperation::SOURCE);
-
-        if (bPaintBackground)
-        {
-            PresenterCanvasHelper::SetDeviceColor(aRenderState, util::Color(0x00ffffff));
-            Sequence<Sequence<geometry::RealPoint2D> > aPolygons(1);
-            aPolygons[0] = Sequence<geometry::RealPoint2D>(4);
-            aPolygons[0][0] = geometry::RealPoint2D(0, -nTextHeight);
-            aPolygons[0][1] = geometry::RealPoint2D(0, 0);
-            aPolygons[0][2] = geometry::RealPoint2D(nTextWidth, 0);
-            aPolygons[0][3] = geometry::RealPoint2D(nTextWidth, -nTextHeight);
-            Reference<rendering::XPolyPolygon2D> xPolygon (
-                mxCanvas->getDevice()->createCompatibleLinePolyPolygon(aPolygons), UNO_QUERY);
-            if (xPolygon.is())
-                xPolygon->setClosed(0, sal_True);
-            mxCanvas->fillPolyPolygon(
-                xPolygon,
-                maViewState,
-                aRenderState);
-        }
-        else
-        {
-            PresenterCanvasHelper::SetDeviceColor(
-                aRenderState,
-                rpStyle->mpFont->mnColor);
-
-            mxCanvas->drawText(
-                aContext,
-                xFont,
-                maViewState,
-                aRenderState,
-                rendering::TextDirection::WEAK_LEFT_TO_RIGHT);
-        }
+    geometry::RealRectangle2D aBox (xLayout->queryTextBounds());
+    const double nTextHeight = aBox.Y2 - aBox.Y1;
+    const double nTextWidth = aBox.X1 + aBox.X2;
+    double nX = rInnerBox.X + (rInnerBox.Width - nTextWidth)/2;
+    const sal_Int32 nTitleBarHeight = rInnerBox.Y - rOuterBox.Y - 1;
+    double nY = rOuterBox.Y + (nTitleBarHeight - nTextHeight) / 2 - aBox.Y1;
+    if (nY >= rInnerBox.Y)
+        nY = rInnerBox.Y - 1;
+    switch (rpStyle->meFontAnchor)
+    {
+        default:
+        case RendererPaneStyle::AnchorLeft:
+        nX = rInnerBox.X;
+        break;
+        case RendererPaneStyle::AnchorRight:
+        nX = rInnerBox.X + rInnerBox.Width - nTextWidth;
+        break;
+        case RendererPaneStyle::AnchorCenter:
+        nX = rInnerBox.X + (rInnerBox.Width - nTextWidth)/2;
+        break;
     }
-    else{
-            geometry::RealRectangle2D aBox (xLayout->queryTextBounds());
-            const double nTextHeight = aBox.Y2 - aBox.Y1;
-            const double nTextWidth = aBox.X1 - aBox.X2;
-            double nX = rInnerBox.X + (rInnerBox.Width - nTextWidth)/2;
-            const sal_Int32 nTitleBarHeight = rInnerBox.Y - rOuterBox.Y - 1;
-            double nY = rOuterBox.Y + (nTitleBarHeight - nTextHeight) / 2 - aBox.Y1;
-            if (nY >= rInnerBox.Y)
-                nY = rInnerBox.Y - 1;
-            switch (rpStyle->meFontAnchor)
-            {
-                default:
-                case RendererPaneStyle::AnchorLeft:
-                    nX = rInnerBox.X;
-                    break;
-                case RendererPaneStyle::AnchorRight:
-                    nX = rInnerBox.X + rInnerBox.Width - nTextWidth;
-                    break;
-                case RendererPaneStyle::AnchorCenter:
-                    nX = rInnerBox.X + (rInnerBox.Width - nTextWidth)/2;
-                    break;
-            }
-            nX += rpStyle->mnFontXOffset;
-            nY += rpStyle->mnFontYOffset;
+    nX += rpStyle->mnFontXOffset;
+    nY += rpStyle->mnFontYOffset;
 
-            if (rUpdateBox.X >= nX+nTextWidth
-                || rUpdateBox.Y >= nY+nTextHeight
-                || rUpdateBox.X+rUpdateBox.Width <= nX
-                || rUpdateBox.Y+rUpdateBox.Height <= nY)
-            {
-                return;
-            }
+    if (rUpdateBox.X >= nX+nTextWidth
+        || rUpdateBox.Y >= nY+nTextHeight
+        || rUpdateBox.X+rUpdateBox.Width <= nX
+        || rUpdateBox.Y+rUpdateBox.Height <= nY)
+    {
+        return;
+    }
 
-            rendering::RenderState aRenderState(
-                geometry::AffineMatrix2D(1,0,nX, 0,1,nY),
-                NULL,
-                Sequence<double>(4),
-                rendering::CompositeOperation::SOURCE);
+    rendering::RenderState aRenderState(
+        geometry::AffineMatrix2D(1,0,nX, 0,1,nY),
+        NULL,
+        Sequence<double>(4),
+        rendering::CompositeOperation::SOURCE);
 
-            if (bPaintBackground)
-            {
-                PresenterCanvasHelper::SetDeviceColor(aRenderState, util::Color(0x00ffffff));
-                Sequence<Sequence<geometry::RealPoint2D> > aPolygons(1);
-                aPolygons[0] = Sequence<geometry::RealPoint2D>(4);
-                aPolygons[0][0] = geometry::RealPoint2D(0, -nTextHeight);
-                aPolygons[0][1] = geometry::RealPoint2D(0, 0);
-                aPolygons[0][2] = geometry::RealPoint2D(nTextWidth, 0);
-                aPolygons[0][3] = geometry::RealPoint2D(nTextWidth, -nTextHeight);
-                Reference<rendering::XPolyPolygon2D> xPolygon (
-                    mxCanvas->getDevice()->createCompatibleLinePolyPolygon(aPolygons), UNO_QUERY);
-                if (xPolygon.is())
-                    xPolygon->setClosed(0, sal_True);
-                mxCanvas->fillPolyPolygon(
-                    xPolygon,
-                    maViewState,
-                    aRenderState);
-            }
-            else
-            {
-                PresenterCanvasHelper::SetDeviceColor(
-                    aRenderState,
-                    rpStyle->mpFont->mnColor);
+    if (bPaintBackground)
+    {
+        PresenterCanvasHelper::SetDeviceColor(aRenderState, util::Color(0x00ffffff));
+        Sequence<Sequence<geometry::RealPoint2D> > aPolygons(1);
+        aPolygons[0] = Sequence<geometry::RealPoint2D>(4);
+        aPolygons[0][0] = geometry::RealPoint2D(0, -nTextHeight);
+        aPolygons[0][1] = geometry::RealPoint2D(0, 0);
+        aPolygons[0][2] = geometry::RealPoint2D(nTextWidth, 0);
+        aPolygons[0][3] = geometry::RealPoint2D(nTextWidth, -nTextHeight);
+        Reference<rendering::XPolyPolygon2D> xPolygon (
+        mxCanvas->getDevice()->createCompatibleLinePolyPolygon(aPolygons), UNO_QUERY);
+        if (xPolygon.is())
+            xPolygon->setClosed(0, sal_True);
+        mxCanvas->fillPolyPolygon(
+            xPolygon,
+            maViewState,
+            aRenderState);
+    }
+    else
+    {
+        PresenterCanvasHelper::SetDeviceColor(
+            aRenderState,
+            rpStyle->mpFont->mnColor);
 
-                mxCanvas->drawText(
-                    aContext,
-                    xFont,
-                    maViewState,
-                    aRenderState,
-                    rendering::TextDirection::WEAK_RIGHT_TO_LEFT);
-            }
+        mxCanvas->drawTextLayout (
+            xLayout,
+            maViewState,
+            aRenderState);
     }
 }
 
