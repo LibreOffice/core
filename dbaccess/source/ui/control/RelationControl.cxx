@@ -624,7 +624,17 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
         // Enable/disable the OK button, depending on having a valid situation
         TTableConnectionData::value_type pConnData = m_pRC_Tables->getData();
         const OConnectionLineDataVec* pLines = pConnData->GetConnLineDataList();
-        m_pParentDialog->setValid(!pLines->empty());
+        bool bValid = !pLines->empty();
+        if (bValid)
+        {
+            OConnectionLineDataVec::const_iterator l(pLines->begin());
+            const OConnectionLineDataVec::const_iterator le(pLines->end());
+            for (; bValid && l!=le; ++l)
+            {
+                bValid = ! ((*l)->GetSourceFieldName().isEmpty() || (*l)->GetDestFieldName().isEmpty());
+            }
+        }
+        m_pParentDialog->setValid(bValid);
 
         if ( pLines->size() >= static_cast<sal_uInt32>(m_pRC_Tables->GetRowCount()) )
         {
