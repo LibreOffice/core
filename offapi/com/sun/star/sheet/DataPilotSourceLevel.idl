@@ -35,7 +35,7 @@
     @see com::sun::star::sheet::DataPilotSourceHierarchy
     @see com::sun::star::sheet::DataPilotSource
  */
-published service DataPilotSourceLevel
+service DataPilotSourceLevel
 {
 
     /** provides access to the name of the level, i.e. used in collections.

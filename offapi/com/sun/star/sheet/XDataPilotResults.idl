@@ -34,7 +34,7 @@ module com {  module sun {  module star {  module sheet {
     @see com::sun::star::sheet::DataPilotSource
     @see com::sun::star::sheet::XDataPilotMemberResults
  */
-published interface XDataPilotResults: com::sun::star::uno::XInterface
+interface XDataPilotResults: com::sun::star::uno::XInterface
 {
 
     /** returns the result array.

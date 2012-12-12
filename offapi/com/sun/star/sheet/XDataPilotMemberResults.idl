@@ -36,7 +36,7 @@ module com {  module sun {  module star {  module sheet {
     @see com::sun::star::sheet::DataPilotSource
     @see com::sun::star::sheet::XDataPilotResults
  */
-published interface XDataPilotMemberResults: com::sun::star::uno::XInterface
+interface XDataPilotMemberResults: com::sun::star::uno::XInterface
 {
 
     /** returns the sequence of results for the regarding data pilot

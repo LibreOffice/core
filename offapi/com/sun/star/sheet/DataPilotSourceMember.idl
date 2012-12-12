@@ -37,7 +37,7 @@ module com {  module sun {  module star {  module sheet {
     @see com::sun::star::sheet::DataPilotSourceLevel
     @see com::sun::star::sheet::DataPilotSource
  */
-published service DataPilotSourceMember
+service DataPilotSourceMember
 {
 
     /** provides access to the name of the member.

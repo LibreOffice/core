@@ -32,7 +32,7 @@ module com {  module sun {  module star {  module sheet {
     @see com::sun::star::sheet::DataPilotSourceDimension
     @see com::sun::star::sheet::DataPilotSource
  */
-published service DataPilotSourceHierarchy
+service DataPilotSourceHierarchy
 {
 
     /** provides access to the name of the hierarchy, i.e. used in

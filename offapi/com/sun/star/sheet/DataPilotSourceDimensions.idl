@@ -30,7 +30,7 @@ module com {  module sun {  module star {  module sheet {
 
     @see com::sun::star::sheet::DataPilotSource
  */
-published service DataPilotSourceDimensions
+service DataPilotSourceDimensions
 {
 
     /** provides access by name to the dimensions in the collection.
