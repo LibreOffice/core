@@ -126,7 +126,6 @@ void TemplateView::InsertItems (const std::vector<TemplateItemProperties> &rTemp
         pItem->mnId = pCur->nId;
         pItem->maTitle = pCur->aName;
         pItem->setPath(pCur->aPath);
-        pItem->setFileType(pCur->aType);
         pItem->maPreview1 = pCur->aThumbnail;
         pItem->setSelectClickHdl(LINK(this,ThumbnailView,OnItemSelected));
 
