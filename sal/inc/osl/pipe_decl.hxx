@@ -45,14 +45,14 @@ public:
         @param strName
         @param Options
     */
-    inline Pipe(const ::rtl::OUString& strName, oslPipeOptions Options);
+    inline Pipe(const ::rtl::OUString& strName, oslPipeOptions Options, int timeoutMs = -1);
 
     /** Creates a secure pipe that access depends on the umask settings.
         @param strName
         @param Options
         @param rSecurity
     */
-    inline Pipe(const ::rtl::OUString& strName, oslPipeOptions Options,const Security & rSecurity);
+    inline Pipe(const ::rtl::OUString& strName, oslPipeOptions Options,const Security & rSecurity, int timeoutMs = -1);
 
     /** Copy constructor.
     */
@@ -160,14 +160,14 @@ public:
         @param strName
         @param Options
     */
-    inline StreamPipe(const ::rtl::OUString& strName, oslPipeOptions Options = osl_Pipe_OPEN);
+    inline StreamPipe(const ::rtl::OUString& strName, oslPipeOptions Options = osl_Pipe_OPEN, int timeoutMs = -1);
 
     /** Creates a pipe.
         @param strName
         @param Options
         @param rSec
     */
-    inline StreamPipe(const ::rtl::OUString& strName, oslPipeOptions Options, const Security &rSec );
+    inline StreamPipe(const ::rtl::OUString& strName, oslPipeOptions Options, const Security &rSec, int timeoutMs = -1 );
 
     /** Constructs a Pipe reference without acquiring the handle
     */

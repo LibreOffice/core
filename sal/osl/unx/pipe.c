@@ -36,7 +36,7 @@
 #define SECPIPENAMEMASK "OSL_PIPE_%s_%s"
 
 sal_Bool SAL_CALL osl_psz_getUserIdent(oslSecurity Security, sal_Char *pszIdent, sal_uInt32 nMax);
-oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions Options, oslSecurity Security);
+oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions Options, oslSecurity Security, int timeoutMs);
 
 
 /*****************************************************************************/
@@ -126,7 +126,7 @@ void __osl_destroyPipeImpl(oslPipe pImpl)
 /*****************************************************************************/
 /* osl_createPipe  */
 /*****************************************************************************/
-oslPipe SAL_CALL osl_createPipe(rtl_uString *ustrPipeName, oslPipeOptions Options, oslSecurity Security)
+oslPipe SAL_CALL osl_createPipe(rtl_uString *ustrPipeName, oslPipeOptions Options, oslSecurity Security, int timeoutMs)
 {
     oslPipe pPipe=0;
     rtl_String* strPipeName=0;
@@ -140,7 +140,7 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *ustrPipeName, oslPipeOptions Option
                             osl_getThreadTextEncoding(),
                             OUSTRING_TO_OSTRING_CVTFLAGS );
         pszPipeName = rtl_string_getStr(strPipeName);
-        pPipe = osl_psz_createPipe(pszPipeName, Options, Security);
+        pPipe = osl_psz_createPipe(pszPipeName, Options, Security, timeoutMs);
 
         if ( strPipeName != 0 )
         {
@@ -183,7 +183,7 @@ cpyBootstrapSocketPath(sal_Char *name, size_t len)
 }
 
 oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions Options,
-                                    oslSecurity Security)
+                                    oslSecurity Security, int timeoutMs)
 {
     int    Flags;
     size_t     len;

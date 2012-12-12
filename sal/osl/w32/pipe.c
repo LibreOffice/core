@@ -114,7 +114,7 @@ void __osl_destroyPipeImpl(oslPipe pPipe)
 /* osl_createPipe  */
 /*****************************************************************************/
 oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options,
-                       oslSecurity Security)
+                       oslSecurity Security, int timeoutMs)
 {
     rtl_uString* name = NULL;
     rtl_uString* path = NULL;
@@ -217,7 +217,7 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
         do
         {
             /* free instance should be available first */
-            fPipeAvailable = WaitNamedPipeW(path->buffer, NMPWAIT_WAIT_FOREVER);
+            fPipeAvailable = WaitNamedPipeW(path->buffer, ((timeoutMs < 0) ? NMPWAIT_WAIT_FOREVER : timeoutMs));
 
             /* first try to open system pipe */
             if ( fPipeAvailable )

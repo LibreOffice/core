@@ -55,7 +55,7 @@ typedef struct oslPipeImpl * oslPipe;
 /**
  */
 SAL_DLLPUBLIC oslPipe SAL_CALL osl_createPipe(
-        rtl_uString *strPipeName, oslPipeOptions Options, oslSecurity Security);
+        rtl_uString *strPipeName, oslPipeOptions Options, oslSecurity Security, int timeoutMs);
 
 /** decreases the refcount of the pipe.
     If the refcount drops to zero, the handle is destroyed.

@@ -29,13 +29,13 @@ namespace osl
     {}
 
     //______________________________________________________________________________
-    inline Pipe::Pipe(const ::rtl::OUString& strName, oslPipeOptions Options )
-        : m_handle( osl_createPipe( strName.pData, Options , 0 ) )
+    inline Pipe::Pipe(const ::rtl::OUString& strName, oslPipeOptions Options, int timeoutMs )
+        : m_handle( osl_createPipe( strName.pData, Options , 0, timeoutMs ) )
     {}
 
     //______________________________________________________________________________
-    inline Pipe::Pipe(const ::rtl::OUString& strName, oslPipeOptions Options,const Security & rSecurity)
-        : m_handle( osl_createPipe( strName.pData, Options , rSecurity.getHandle() ) )
+    inline Pipe::Pipe(const ::rtl::OUString& strName, oslPipeOptions Options,const Security & rSecurity, int timeoutMs)
+        : m_handle( osl_createPipe( strName.pData, Options , rSecurity.getHandle(), timeoutMs ) )
     {}
 
     //______________________________________________________________________________
@@ -158,13 +158,13 @@ namespace osl
     }
 
     //______________________________________________________________________________
-    inline StreamPipe::StreamPipe(const ::rtl::OUString& strName, oslPipeOptions Options, const Security &rSec )
-        : Pipe( strName, Options , rSec )
+    inline StreamPipe::StreamPipe(const ::rtl::OUString& strName, oslPipeOptions Options, const Security &rSec, int timeoutMs )
+        : Pipe( strName, Options , rSec, timeoutMs )
     {}
 
     //______________________________________________________________________________
-    inline StreamPipe::StreamPipe(const ::rtl::OUString& strName, oslPipeOptions Options  )
-        : Pipe( strName, Options )
+    inline StreamPipe::StreamPipe(const ::rtl::OUString& strName, oslPipeOptions Options, int timeoutMs )
+        : Pipe( strName, Options, timeoutMs)
     {}
 
     //______________________________________________________________________________
