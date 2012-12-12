@@ -1,5 +1,8 @@
+CompressGraphicsDialog::CompressGraphicsDialog(Window*, Graphic const&, Size&, Rectangle&, SfxBindings&)
+CompressGraphicsDialog::GetCompressedGraphic()
 FontSelectPattern::FontSelectPattern(PhysicalFontFace const&, Size const&, float, int, bool)
 Line::Intersection(Rectangle const&, Line&) const
+PoHeader::PoHeader()
 SanExtensionImpl::setCertExtn(unsigned char*, unsigned int, unsigned char*, unsigned int, unsigned char)
 ScFiltersTest::testColorScaleODS()
 ScFiltersTest::testColorScaleXLSX()
@@ -12,8 +15,8 @@ String::String(unsigned short)
 SvListView::HasEntryFocus(SvTreeListEntry*) const
 SvTreeList::GetChildIterators(SvTreeListEntry const*) const
 SvViewDataEntry::SetCursored(bool)
-SvtGraphicStroke::toString() const
 TextEngine::GetLeftMargin() const
+ThumbnailView::CalcWindowSizePixel(unsigned short, unsigned short, unsigned short, unsigned short, unsigned short)
 ThumbnailViewItemAcc::FireAccessibleEvent(short, com::sun::star::uno::Any const&, com::sun::star::uno::Any const&)
 TransitionScene::clear()
 UnoControl::UnoControl()
@@ -51,7 +54,6 @@ framework::OReadMenuDocumentHandler::getServiceFactory()
 jfw_plugin::VendorBase::createInstance()
 oox::drawingml::TextListStyle::dump() const
 oox::xls::BiffDrawingObjectBase::BiffDrawingObjectBase(oox::xls::WorksheetHelper const&)
-oox::xls::FormulaProcessorBase::generateRangeList2dString(oox::xls::ApiCellRangeList const&, bool, unsigned short, bool)
 sc_apitest::main()
 sd::LeftDrawPaneShell::RegisterInterface(SfxModule*)
 sd::LeftImpressPaneShell::RegisterInterface(SfxModule*)

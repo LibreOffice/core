@@ -50,7 +50,6 @@ private:
     PopupMenu*      mpMenu;
     sal_uInt16      mnCurItemId;
     sal_uInt16      mnMenuMode;
-    bool            mbDisplaySelectedItem;
     Link            maActivateHdl;
     Link            maSelectHdl;
 
@@ -58,13 +57,9 @@ private:
     SAL_DLLPRIVATE void    ImplExecuteMenu();
     DECL_DLLPRIVATE_LINK(  ImplMenuTimeoutHdl, void* );
 
-    SAL_DLLPRIVATE void    updateText();
-
     // Copy assignment is forbidden and not implemented.
     SAL_DLLPRIVATE         MenuButton( const MenuButton & );
     SAL_DLLPRIVATE         MenuButton& operator=( const MenuButton & );
-
-    DECL_LINK(MenuEventListener, VclSimpleEvent*);
 
 protected:
     using Window::ImplInit;
@@ -83,7 +78,7 @@ public:
     virtual void    Select();
 
     void            SetMenuMode( sal_uInt16 nMode );
-    sal_uInt16          GetMenuMode() const { return mnMenuMode; }
+    sal_uInt16      GetMenuMode() const { return mnMenuMode; }
 
     void            SetPopupMenu( PopupMenu* pNewMenu );
     PopupMenu*      GetPopupMenu() const { return mpMenu; }
@@ -95,10 +90,6 @@ public:
     const Link&     GetActivateHdl() const              { return maActivateHdl; }
     void            SetSelectHdl( const Link& rLink )   { maSelectHdl = rLink; }
     const Link&     GetSelectHdl() const                { return maSelectHdl; }
-
-    void            SetShowDisplaySelectedItem(bool bShow);
-
-    virtual Size    GetOptimalSize(WindowSizeType eType) const;
 };
 
 #endif  // _SV_MENUBTN_HXX

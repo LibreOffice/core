@@ -1446,21 +1446,6 @@ OUString FormulaProcessorBase::generateRange2dString( const BinRange& rRange, bo
     return aBuffer.makeStringAndClear();
 }
 
-OUString FormulaProcessorBase::generateRangeList2dString( const ApiCellRangeList& rRanges,
-        bool bAbsolute, sal_Unicode cSeparator, bool bEncloseMultiple )
-{
-    OUStringBuffer aBuffer;
-    for( ApiCellRangeList::const_iterator aIt = rRanges.begin(), aEnd = rRanges.end(); aIt != aEnd; ++aIt )
-    {
-        if( aBuffer.getLength() > 0 )
-            aBuffer.append( cSeparator );
-        aBuffer.append( generateRange2dString( *aIt, bAbsolute ) );
-    }
-    if( bEncloseMultiple && (rRanges.size() > 1) )
-        aBuffer.insert( 0, sal_Unicode( '(' ) ).append( sal_Unicode( ')' ) );
-    return aBuffer.makeStringAndClear();
-}
-
 // ----------------------------------------------------------------------------
 
 OUString FormulaProcessorBase::generateApiString( const OUString& rString )

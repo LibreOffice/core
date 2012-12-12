@@ -673,20 +673,6 @@ public:
                             const BinRange& rRange,
                             bool bAbsolute );
 
-    /** Generates a cell range list string in A1:A1 notation from the passed
-        cell range addresses. May enclose multiple ranges into parentheses.
-
-        @param rRanges  The list of cell range addresses.
-        @param bAbsolute  True = adds dollar signs before columns and rows.
-        @param cSeparator  Separator character between ranges.
-        @param bEncloseMultiple  True = enclose multiple ranges in parentheses.
-     */
-    static ::rtl::OUString generateRangeList2dString(
-                            const ApiCellRangeList& rRanges,
-                            bool bAbsolute,
-                            sal_Unicode cSeparator,
-                            bool bEncloseMultiple );
-
     // ------------------------------------------------------------------------
 
     /** Generates a string in Calc formula notation from the passed string.

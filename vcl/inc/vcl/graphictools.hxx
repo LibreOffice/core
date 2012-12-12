@@ -138,8 +138,6 @@ public:
     double          getMiterLimit       () const;
     /// Get an array of "on" and "off" lengths for stroke dashing
     void            getDashArray        ( DashArray& ) const;
-    /// Query a textual representation of the object's content
-    ::rtl::OString  toString            () const;
 
     // mutators
     /// Set path to stroke
