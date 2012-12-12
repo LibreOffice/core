@@ -2672,10 +2672,7 @@ bool SvxAutocorrWordList::Insert(SvxAutocorrWord *pWord)
     if ( maSet.empty() ) // use the hash
     {
         rtl::OUString aShort( pWord->GetShort() );
-        bool bThere = maHash.find( aShort ) != maHash.end();
-        if (!bThere)
-            maHash.insert( std::pair<rtl::OUString, SvxAutocorrWord *>( aShort, pWord ) );
-        return !bThere;
+        return maHash.insert( std::pair<rtl::OUString, SvxAutocorrWord *>( aShort, pWord ) ).second;
     }
     else
         return maSet.insert( pWord ).second;
