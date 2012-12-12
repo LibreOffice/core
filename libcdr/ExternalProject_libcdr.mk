@@ -48,7 +48,7 @@ $(call gb_ExternalProject_get_state_target,libcdr,build) :
 	&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LCMS2_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,lcms2/include) \
 	&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
-	&& msbuild.exe libcdr.vcxproj /p:PlatformToolset=v110 /p:Configuration=Release \
+	&& msbuild.exe libcdr.vcxproj /p:PlatformToolset=v110 /p:VisualStudioVersion=11.0 /p:Configuration=Release \
 	&& touch $@
 endif
 
