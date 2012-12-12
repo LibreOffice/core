@@ -149,6 +149,25 @@ namespace dbaui
         return new DlgFilterCrit( _pParent, m_aContext.getUNOContext(), _rxConnection, m_xComposer, _rxColumns );
     }
 
+    void RowsetFilterDialog::initialize( const Sequence< Any >& aArguments )
+            throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException)
+    {
+        if( aArguments.getLength() == 3 )
+        {
+            Reference<com::sun::star::sdb::XSingleSelectQueryComposer> xQueryComposer;
+            aArguments[0] >>= xQueryComposer;
+            Reference<com::sun::star::sdbc::XRowSet> xRowSet;
+            aArguments[1] >>= xRowSet;
+            Reference<com::sun::star::awt::XWindow> xParentWindow;
+            aArguments[2] >>= xParentWindow;
+            setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "QueryComposer" ) ), makeAny( xQueryComposer ) );
+            setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RowSet" ) ),        makeAny( xRowSet ) );
+            setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ) ),  makeAny( xParentWindow ) );
+        }
+        else
+            ComposerDialog::initialize(aArguments);
+    }
+
     //---------------------------------------------------------------------
     void RowsetFilterDialog::executedDialog( sal_Int16 _nExecutionResult )
     {

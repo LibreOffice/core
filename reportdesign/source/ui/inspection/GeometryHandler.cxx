@@ -47,6 +47,7 @@
 #include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
+#include <com/sun/star/sdb/FilterDialog.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/util/SearchOptions.hpp>
@@ -1594,22 +1595,12 @@ bool GeometryHandler::impl_dialogFilter_nothrow( ::rtl::OUString& _out_rSelected
             return false;
 
         // create the dialog
-        uno::Reference< ui::dialogs::XExecutableDialog > xDialog(xFactory->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.FilterDialog")),m_xContext),uno::UNO_QUERY);
-        if ( !xDialog.is() )
-        {
-            Window* pInspectorWindow = VCLUnoHelper::GetWindow( xInspectorWindow );
-            ShowServiceNotAvailableError( pInspectorWindow, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.FilterDialog")), sal_True );
-            return false;
-        }
+        uno::Reference< ui::dialogs::XExecutableDialog > xDialog = sdb::FilterDialog::createWithQuery(m_xContext, xComposer, m_xRowSet, xInspectorWindow);
 
         const String aGcc3WorkaroundTemporary( ModuleRes(RID_STR_FILTER));
         const ::rtl::OUString sPropertyUIName( aGcc3WorkaroundTemporary );
         // initialize the dialog
-        uno::Reference< beans::XPropertySet > xDialogProps( xDialog, uno::UNO_QUERY_THROW );
-        xDialogProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "QueryComposer" ) ), uno::makeAny( xComposer ) );
-        xDialogProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RowSet" ) ),        uno::makeAny( m_xRowSet ) );
-        xDialogProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ) ),  uno::makeAny( xInspectorWindow ) );
-        xDialogProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ),         uno::makeAny( sPropertyUIName ) );
+        xDialog->setTitle( sPropertyUIName );
 
         _rClearBeforeDialog.clear();
         bSuccess = ( xDialog->execute() != 0 );

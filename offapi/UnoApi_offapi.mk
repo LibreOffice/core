@@ -246,6 +246,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/sdb,\
 	DatabaseInteractionHandler \
 	ErrorMessageDialog \
 	InteractionHandler \
+    FilterDialog \
 	ReportDesign \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/sdb/application,\

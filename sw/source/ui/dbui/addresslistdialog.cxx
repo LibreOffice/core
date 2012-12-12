@@ -40,6 +40,7 @@
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
+#include <com/sun/star/sdb/FilterDialog.hpp>
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
@@ -290,8 +291,6 @@ IMPL_LINK_NOARG(SwAddressListDialog, FilterHdl_Impl)
                 uno::Reference<XSingleSelectQueryComposer> xComposer(
                         xConnectFactory->createInstance(C2U("com.sun.star.sdb.SingleSelectQueryComposer")), UNO_QUERY_THROW);
 
-                PropertyValue aSecond;
-                aSecond.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RowSet" ) );
                 uno::Reference<XRowSet> xRowSet(
                         xMgr->createInstance(C2U("com.sun.star.sdb.RowSet")), UNO_QUERY);
                 uno::Reference<XPropertySet> xRowProperties(xRowSet, UNO_QUERY);
@@ -302,24 +301,15 @@ IMPL_LINK_NOARG(SwAddressListDialog, FilterHdl_Impl)
                 xRowProperties->setPropertyValue(C2U("CommandType"), makeAny(pUserData->nCommandType));
                 xRowProperties->setPropertyValue(C2U("ActiveConnection"), makeAny(pUserData->xConnection.getTyped()));
                 xRowSet->execute();
-                aSecond.Value <<= xRowSet;
 
-                PropertyValue aFirst;
-                aFirst.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "QueryComposer" ) );
                 ::rtl::OUString sQuery;
                 xRowProperties->getPropertyValue(C2U("ActiveCommand"))>>= sQuery;
                 xComposer->setQuery(sQuery);
                 if(!pUserData->sFilter.isEmpty())
                     xComposer->setFilter(pUserData->sFilter);
-                aFirst.Value <<= xComposer;
 
-                uno::Sequence<Any> aInit(2);
-                aInit[0] <<= aFirst;
-                aInit[1] <<= aSecond;
-
-                ::rtl::OUString sDialogServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.FilterDialog" ) );
-                uno::Reference< XExecutableDialog> xDialog(
-                        xMgr->createInstanceWithArguments( sDialogServiceName, aInit ), UNO_QUERY);
+                uno::Reference< XExecutableDialog> xDialog = sdb::FilterDialog::createWithQuery( comphelper::getComponentContext(xMgr),
+                   xComposer,xRowSet, uno::Reference<awt::XWindow>() );
 
                 if ( RET_OK == xDialog->execute() )
                 {

@@ -42,6 +42,7 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/sdbcx/Privilege.hpp>
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
+#include <com/sun/star/sdb/FilterDialog.hpp>
 #include <com/sun/star/sdb/RowChangeAction.hpp>
 #include <com/sun/star/frame/CommandGroup.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
@@ -486,54 +487,18 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
         {
             try
             {
-                uno::Reference< lang::XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();
-
-                // build the arguments for the filter dialog to be created
-                Sequence< Any > aDialogCreationArgs( 3 );
-                Any* pDialogCreationArgs = aDialogCreationArgs.getArray();
-                // the query composer
-                *pDialogCreationArgs++ <<= beans::PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "QueryComposer" )),
-                                                        -1,
-                                                        makeAny( pDatMan->getParser() ),
-                                                        beans::PropertyState_DIRECT_VALUE
-                                                      );
-
-                // the rowset
-                *pDialogCreationArgs++ <<= beans::PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "RowSet" )),
-                                                        -1,
-                                                        makeAny( pDatMan->getForm() ),
-                                                        beans::PropertyState_DIRECT_VALUE
-                                                      );
-                // the parent window for the dialog
-                *pDialogCreationArgs++ <<= beans::PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" )),
-                                                        -1,
-                                                        makeAny( xWindow ),
-                                                        beans::PropertyState_DIRECT_VALUE
-                                                      );
+                uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 
                 // create the dialog object
-                const ::rtl::OUString sDialogServiceName(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.FilterDialog" ));
-                uno::Reference< uno::XInterface > xDialog = xORB->createInstanceWithArguments(
-                    sDialogServiceName,
-                    aDialogCreationArgs
-                );
-                if ( !xDialog.is() )
+                uno::Reference< ui::dialogs::XExecutableDialog > xDialog = sdb::FilterDialog::createWithQuery(xContext, pDatMan->getParser(),
+                           Reference<sdbc::XRowSet>(pDatMan->getForm(), uno::UNO_QUERY_THROW), xWindow);
+                // execute it
+                if ( xDialog->execute( ) )
                 {
-                    ShowServiceNotAvailableError( VCLUnoHelper::GetWindow( xWindow ), sDialogServiceName, sal_True );
-                }
-                else
-                {
-                    // execute it
-                    uno::Reference< ui::dialogs::XExecutableDialog > xExec( xDialog, UNO_QUERY );
-                    DBG_ASSERT( xExec.is(), "BibFrameController_Impl::dispatch: missing an interface on the dialog!" );
-                    if ( xExec.is() )
-                        if ( xExec->execute( ) )
-                        {
-                            // the dialog has been executed successfully, and the filter on the query composer
-                            // has been changed
-                            ::rtl::OUString sNewFilter = pDatMan->getParser()->getFilter();
-                            pDatMan->setFilter( sNewFilter );
-                        }
+                    // the dialog has been executed successfully, and the filter on the query composer
+                    // has been changed
+                    ::rtl::OUString sNewFilter = pDatMan->getParser()->getFilter();
+                    pDatMan->setFilter( sNewFilter );
                 }
             }
             catch( const uno::Exception& )
