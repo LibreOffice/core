@@ -111,50 +111,43 @@ ModelessDialog DLG_TEMPLATE_MANAGER
     Size = MAP_APPFONT ( 290 , 250 );
     Text [en-US] = "Template Manager";
 
-    PushButton BTN_SELECT_ALL
+    TabControl TAB_CONTROL
     {
-        Pos = MAP_APPFONT(10,5);
-        Size = MAP_APPFONT(50,14);
-        TabStop = TRUE;
-        DefButton = TRUE;
-        Text [en-US] = "All";
-    };
-
-    PushButton BTN_SELECT_DOCS
-    {
-        Pos = MAP_APPFONT(60,5);
-        Size = MAP_APPFONT(50,14);
-        TabStop = TRUE;
-        Text [en-US] = "Documents";
-    };
-
-    PushButton BTN_SELECT_PRESENTATIONS
-    {
-        Pos = MAP_APPFONT(110,5);
-        Size = MAP_APPFONT(50,14);
-        TabStop = TRUE;
-        Text [en-US] = "Presentations";
-    };
-
-    PushButton BTN_SELECT_SHEETS
-    {
-        Pos = MAP_APPFONT(160,5);
-        Size = MAP_APPFONT(50,14);
-        TabStop = TRUE;
-        Text [en-US] = "Spreadsheets";
-    };
-
-    PushButton BTN_SELECT_DRAWS
-    {
-        Pos = MAP_APPFONT(210,5);
-        Size = MAP_APPFONT(50,14);
-        TabStop = TRUE;
-        Text [en-US] = "Drawings";
+        OutputSize = TRUE;
+        Size = MAP_APPFONT( 290, 22 );
+        Pos = MAP_APPFONT( 0, 0 );
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = FILTER_ALL;
+                Text [ en-US ] = "All";
+            };
+            PageItem
+            {
+                Identifier = FILTER_DOCS;
+                Text [ en-US ] = "Documents";
+            };
+            PageItem
+            {
+                Identifier = FILTER_SHEETS;
+                Text [ en-US ] = "Spreadsheets";
+            };
+            PageItem
+            {
+                Identifier = FILTER_PRESENTATIONS;
+                Text [ en-US ] = "Presentations";
+            };
+            PageItem
+            {
+                Identifier = FILTER_DRAWS;
+                Text [ en-US ] = "Drawings";
+            };
+        };
     };
 
     Control TEMPLATE_VIEW
     {
-        Pos = MAP_APPFONT(5,30);
         Size = MAP_APPFONT(280,220);
         TabStop = TRUE;
     };
@@ -177,8 +170,7 @@ ModelessDialog DLG_TEMPLATE_MANAGER
 
     Control TOOLBARS
     {
-        Pos = MAP_APPFONT( 0 , 22 );
-        Size = MAP_APPFONT( 290 , 20 );
+        Size = MAP_APPFONT( 290 , 16 );
         TabStop = False;
     };
 
@@ -242,7 +234,6 @@ ModelessDialog DLG_TEMPLATE_MANAGER
     ToolBox TBX_ACTION_ACTION
     {
         SVLook = TRUE ;
-        TabStop = TRUE ;
         Pos = MAP_APPFONT ( 4 , 0 ) ;
 
         ItemList =
@@ -254,7 +245,7 @@ ModelessDialog DLG_TEMPLATE_MANAGER
 
                 ItemImage = Image
                 {
-                    ImageBitmap = Bitmap { File = "search.png" ; };
+                    ImageBitmap = Bitmap { File = "actionaction012.png" ; };
                 };
             };
 
@@ -265,7 +256,7 @@ ModelessDialog DLG_TEMPLATE_MANAGER
 
                 ItemImage = Image
                 {
-                    ImageBitmap = Bitmap { File = "exec_action.png" ; };
+                    ImageBitmap = Bitmap { File = "actionaction013.png" ; };
                 };
             };
         };

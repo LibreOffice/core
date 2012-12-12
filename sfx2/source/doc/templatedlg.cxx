@@ -99,12 +99,8 @@ private:
 
 SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     : ModelessDialog(parent, SfxResId(DLG_TEMPLATE_MANAGER)),
-      aButtonAll(this,SfxResId(BTN_SELECT_ALL)),
-      aButtonDocs(this,SfxResId(BTN_SELECT_DOCS)),
-      aButtonPresents(this,SfxResId(BTN_SELECT_PRESENTATIONS)),
-      aButtonSheets(this,SfxResId(BTN_SELECT_SHEETS)),
-      aButtonDraws(this,SfxResId(BTN_SELECT_DRAWS)),
-      mpToolbars( new Control(this,SfxResId(TOOLBARS))),
+      maTabControl(this,SfxResId(TAB_CONTROL)),
+      mpToolbars( new Control(&maTabControl,SfxResId(TOOLBARS))),
       mpSearchEdit(new Edit(this,WB_HIDE | WB_BORDER)),
       mpViewBar( new ToolBox(mpToolbars, SfxResId(TBX_ACTION_VIEW))),
       mpActionBar( new ToolBox(mpToolbars, SfxResId(TBX_ACTION_ACTION))),
@@ -130,6 +126,14 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     mpActionMenu->SetPopupMenu(MNI_ACTION_DEFAULT,mpTemplateDefaultMenu);
 
     Size aWinSize = GetOutputSize();
+
+    // Fit the tab page control and the toolbars
+    Size aTabSize = maTabControl.GetSizePixel();
+    Size aTabPageSize = maTabControl.GetTabPageSizePixel();
+    Point aToolbarsPos(0, aTabSize.getHeight() - aTabPageSize.getHeight());
+    mpToolbars->SetPosPixel(aToolbarsPos);
+    aTabPageSize.setHeight(mpToolbars->GetSizePixel().getHeight() + 3);
+    maTabControl.SetTabPageSizePixel(aTabPageSize);
 
     // Calculate toolboxs size and positions
     Size aViewSize = mpViewBar->CalcMinimumWindowSizePixel();
@@ -166,7 +170,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
 
     // Set view position below toolbox
     Point aViewPos = maView->GetPosPixel();
-    aViewPos.setY(mpToolbars->GetPosPixel().Y() + mpToolbars->GetSizePixel().getHeight());
+    aViewPos.setY(maTabControl.GetPosPixel().Y() + maTabControl.GetSizePixel().getHeight());
     aViewPos.setX(0);
     Size aThumbSize(aWinSize.getWidth(), aWinSize.getHeight() - aViewPos.getY());
     maView->SetPosSizePixel(aViewPos, aThumbSize);
@@ -179,7 +183,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     aSearchSize.setWidth(aWinSize.getWidth() - 2*PADDING_DLG_BORDER);
 
     mpSearchEdit->SetSizePixel(aSearchSize);
-    mpSearchEdit->SetPosPixel(Point(PADDING_DLG_BORDER,aActionPos.Y()+aActionSize.getHeight()));
+    mpSearchEdit->SetPosPixel(Point(PADDING_DLG_BORDER,aViewPos.Y()));
     mpSearchEdit->SetUpdateDataHdl(LINK(this,SfxTemplateManagerDlg,SearchUpdateHdl));
     mpSearchEdit->EnableUpdateData();
 
@@ -218,16 +222,10 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
 
     mpSearchView->setItemStateHdl(LINK(this,SfxTemplateManagerDlg,TVTemplateStateHdl));
 
-    aButtonAll.SetClickHdl(LINK(this,SfxTemplateManagerDlg,ViewAllHdl));
-    aButtonDocs.SetClickHdl(LINK(this,SfxTemplateManagerDlg,ViewDocsHdl));
-    aButtonPresents.SetClickHdl(LINK(this,SfxTemplateManagerDlg,ViewPresentsHdl));
-    aButtonSheets.SetClickHdl(LINK(this,SfxTemplateManagerDlg,ViewSheetsHdl));
-    aButtonDraws.SetClickHdl(LINK(this,SfxTemplateManagerDlg,ViewDrawsHdl));
+    maTabControl.SetActivatePageHdl(LINK(this,SfxTemplateManagerDlg,ActivatePageHdl));
 
     // Set dialog to correct dimensions
     SetSizePixel(aWinSize);
-
-    centerTopButtons();
 
     mpViewBar->Show();
     mpActionBar->Show();
@@ -285,33 +283,28 @@ void SfxTemplateManagerDlg::setDocumentModel(const uno::Reference<frame::XModel>
     m_xModel = rModel;
 }
 
-IMPL_LINK_NOARG(SfxTemplateManagerDlg,ViewAllHdl)
+IMPL_LINK_NOARG(SfxTemplateManagerDlg,ActivatePageHdl)
 {
-    mpCurView->filterTemplatesByApp(FILTER_APP_NONE);
-    return 0;
-}
-
-IMPL_LINK_NOARG(SfxTemplateManagerDlg,ViewDocsHdl)
-{
-    mpCurView->filterTemplatesByApp(FILTER_APP_WRITER);
-    return 0;
-}
-
-IMPL_LINK_NOARG(SfxTemplateManagerDlg,ViewPresentsHdl)
-{
-    mpCurView->filterTemplatesByApp(FILTER_APP_IMPRESS);
-    return 0;
-}
-
-IMPL_LINK_NOARG(SfxTemplateManagerDlg,ViewSheetsHdl)
-{
-    mpCurView->filterTemplatesByApp(FILTER_APP_CALC);
-    return 0;
-}
-
-IMPL_LINK_NOARG(SfxTemplateManagerDlg,ViewDrawsHdl)
-{
-    mpCurView->filterTemplatesByApp(FILTER_APP_DRAW);
+    FILTER_APPLICATION eFilter = FILTER_APP_NONE;
+    switch (maTabControl.GetCurPageId())
+    {
+        case FILTER_DOCS:
+            eFilter = FILTER_APP_WRITER;
+            break;
+        case FILTER_PRESENTATIONS:
+            eFilter = FILTER_APP_IMPRESS;
+            break;
+        case FILTER_SHEETS:
+            eFilter = FILTER_APP_CALC;
+            break;
+        case FILTER_DRAWS:
+            eFilter = FILTER_APP_DRAW;
+            break;
+        default:
+        case FILTER_ALL:
+            ;
+    }
+    mpCurView->filterTemplatesByApp(eFilter);
     return 0;
 }
 
@@ -927,7 +920,7 @@ void SfxTemplateManagerDlg::OnTemplateSearch ()
         mpActionBar->SetItemState(TBI_TEMPLATE_SEARCH,STATE_CHECK);
     }
 
-    SetSizePixel(aWinSize);
+//    SetSizePixel(aWinSize);
     maView->SetPosPixel(aPos);
     mpOnlineView->SetPosPixel(aPos);
     mpSearchView->SetPosPixel(aPos);
@@ -1192,32 +1185,6 @@ void SfxTemplateManagerDlg::OnTemplateSaveAs()
             }
         }
     }
-}
-
-void SfxTemplateManagerDlg::centerTopButtons()
-{
-    Point aFirstBtnPos = aButtonAll.GetPosPixel();
-
-    Size aBtnSize = aButtonAll.GetOutputSize();
-    Size aWinSize = GetOutputSize();
-
-    long nTotalWidth = aBtnSize.getWidth()*5;
-    long nSpace = (aWinSize.getWidth() - nTotalWidth)/2;
-
-    Point aBtnPos(nSpace,aFirstBtnPos.getY());
-    aButtonAll.SetPosPixel(aBtnPos);
-
-    aBtnPos.setX(aBtnPos.getX() + aBtnSize.getWidth());
-    aButtonDocs.SetPosPixel(aBtnPos);
-
-    aBtnPos.setX(aBtnPos.getX() + aBtnSize.getWidth());
-    aButtonPresents.SetPosPixel(aBtnPos);
-
-    aBtnPos.setX(aBtnPos.getX() + aBtnSize.getWidth());
-    aButtonSheets.SetPosPixel(aBtnPos);
-
-    aBtnPos.setX(aBtnPos.getX() + aBtnSize.getWidth());
-    aButtonDraws.SetPosPixel(aBtnPos);
 }
 
 void SfxTemplateManagerDlg::createRepositoryMenu()

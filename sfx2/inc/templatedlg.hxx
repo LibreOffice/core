@@ -14,6 +14,7 @@
 
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
+#include <vcl/tabctrl.hxx>
 
 class Edit;
 class PopupMenu;
@@ -45,11 +46,7 @@ public:
 
     void setDocumentModel (const com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rModel);
 
-    DECL_LINK(ViewAllHdl, void*);
-    DECL_LINK(ViewDocsHdl, void*);
-    DECL_LINK(ViewPresentsHdl, void*);
-    DECL_LINK(ViewSheetsHdl, void*);
-    DECL_LINK(ViewDrawsHdl, void*);
+    DECL_LINK(ActivatePageHdl, void*);
 
 private:
 
@@ -87,8 +84,6 @@ private:
     void OnRepositoryDelete ();
     void OnTemplateSaveAs ();
 
-    void centerTopButtons ();
-
     void createRepositoryMenu ();
 
     void createDefaultTemplateMenu ();
@@ -116,11 +111,7 @@ private:
 
 private:
 
-    PushButton aButtonAll;
-    PushButton aButtonDocs;
-    PushButton aButtonPresents;
-    PushButton aButtonSheets;
-    PushButton aButtonDraws;
+    TabControl maTabControl;
     Control *mpToolbars;
 
     Edit *mpSearchEdit;
