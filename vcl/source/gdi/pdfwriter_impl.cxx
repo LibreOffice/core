@@ -3376,7 +3376,9 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
                         pFontData[nIndex+4] != 'c'
                         )
                     )
-                nIndex++;
+                {
+                    ++nIndex;
+                }
                 // check whether we are in a excluded section
                 for( it = aSections.begin(); it != aSections.end() && (nIndex < *it || nIndex > ((*it) + 5) ); ++it )
                     ;
@@ -3705,8 +3707,10 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
         }
 
         if( nStreamObject )
+        {
             // write font descriptor
-        nFontDescriptor = emitFontDescriptor( pFont, aInfo, 0, nStreamObject );
+            nFontDescriptor = emitFontDescriptor( pFont, aInfo, 0, nStreamObject );
+        }
 
         if( nFontDescriptor )
         {
@@ -6797,7 +6801,6 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
 bool PDFWriterImpl::emitTrailer()
 {
     // emit doc info
-    OString aInfoValuesOut;
     sal_Int32 nDocInfoObject = emitInfoDict( );
 
     sal_Int32 nSecObject = 0;
