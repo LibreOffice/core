@@ -19,9 +19,7 @@
 #ifndef __com_sun_star_rendering_ARGBColor_idl__
 #define __com_sun_star_rendering_ARGBColor_idl__
 
-#ifndef __com_sun_star_rendering_ColorComponent_idl__
 #include <com/sun/star/rendering/ColorComponent.idl>
-#endif
 
 module com { module sun { module star { module rendering {
 

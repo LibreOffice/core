@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_com_sun_star_security_XCertificateContainer_idl
-#define INCLUDED_com_sun_star_security_XCertificateContainer_idl
+#ifndef __com_sun_star_security_XCertificateContainer_idl__
+#define __com_sun_star_security_XCertificateContainer_idl__
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/security/CertificateContainerStatus.idl>

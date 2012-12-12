@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_com_sun_star_deployment_LicenseException_idl
-#define INCLUDED_com_sun_star_deployment_LicenseException_idl
+#ifndef _com_sun_star_deployment_LicenseException_idl
+#define _com_sun_star_deployment_LicenseException_idl
 
 #include <com/sun/star/uno/Exception.idl>
 

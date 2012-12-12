@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_form_EventHandler_idl__
-#define __com_sun_star_form_EventHandler_idl__
+#ifndef __com_sun_star_form_inspection_EventHandler_idl__
+#define __com_sun_star_form_inspection_EventHandler_idl__
 
 #include <com/sun/star/inspection/XPropertyHandler.idl>
 

@@ -20,9 +20,7 @@
 #ifndef __com_sun_star_rendering_Canvas_idl__
 #define __com_sun_star_rendering_Canvas_idl__
 
-#ifndef __com_sun_star_rendering_XCanvas_idl__
 #include <com/sun/star/rendering/XCanvas.idl>
-#endif
 
 
 module com { module sun { module star { module rendering {

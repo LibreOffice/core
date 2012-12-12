@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_com_sun_star_deployment_PackageRegistryBackend_idl
-#define INCLUDED_com_sun_star_deployment_PackageRegistryBackend_idl
+#ifndef _com_sun_star_deployment_PackageRegistryBackend_idl
+#define _com_sun_star_deployment_PackageRegistryBackend_idl
 
 #include <com/sun/star/deployment/XPackageRegistry.idl>
 

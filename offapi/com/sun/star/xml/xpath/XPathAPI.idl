@@ -19,13 +19,16 @@
 
 #ifndef __com_sun_star_xml_xpath_XPathExtension_idl__
 #define __com_sun_star_xml_xpath_XPathExtension_idl__
+
 #include <com/sun/star/xml/xpath/XXPathAPI.idl>
+
 module com {  module sun {  module star {  module xml { module xpath {
 
     service XPathExtension
     {
         interface XXPathAPI;
     };
+
 };};};};};
 #endif
 

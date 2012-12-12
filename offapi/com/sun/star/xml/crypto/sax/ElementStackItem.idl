@@ -21,8 +21,8 @@
 
 /** -- idl definition -- **/
 
-#ifndef __com_sun_star_xml_crypto_sax_xelementstackitem_idl_
-#define __com_sun_star_xml_crypto_sax_xelementstackitem_idl_
+#ifndef __com_sun_star_xml_crypto_sax_ElementStackItem_idl_
+#define __com_sun_star_xml_crypto_sax_ElementStackItem_idl_
 
 #include <com/sun/star/xml/sax/XDocumentHandler.idl>
 

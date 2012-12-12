@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_drawing_AccessibleGraphicShape_idl__
-#define __com_sun_star_drawing_AccessibleGraphicShape_idl__
+#ifndef __com_sun_star_drawing_AccessibleSlideViewObject_idl__
+#define __com_sun_star_drawing_AccessibleSlideViewObject_idl__
 
 #include <com/sun/star/accessibility/XAccessible.idl>
 #include <com/sun/star/accessibility/XAccessibleContext.idl>

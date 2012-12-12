@@ -21,8 +21,8 @@
 
 /** -- idl definition -- **/
 
-#ifndef __com_sun_star_xml_crypto_sax_xsignaturecollector_idl_
-#define __com_sun_star_xml_crypto_sax_xsignaturecollector_idl_
+#ifndef __com_sun_star_xml_crypto_sax_XReferenceCollector_idl_
+#define __com_sun_star_xml_crypto_sax_XReferenceCollector_idl_
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/uno/Exception.idl>

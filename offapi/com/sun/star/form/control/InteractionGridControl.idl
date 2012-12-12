@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_form_component_InteractionGridControl_idl__
-#define __com_sun_star_form_component_InteractionGridControl_idl__
+#ifndef __com_sun_star_form_control_InteractionGridControl_idl__
+#define __com_sun_star_form_control_InteractionGridControl_idl__
 
 #include <com/sun/star/form/control/GridControl.idl>
 #include <com/sun/star/frame/XDispatch.idl>

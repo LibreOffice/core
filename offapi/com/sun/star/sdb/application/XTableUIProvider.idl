@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_sdb_ui_XTableUIProvider_idl__
-#define __com_sun_star_sdb_ui_XTableUIProvider_idl__
+#ifndef __com_sun_star_sdb_application_XTableUIProvider_idl__
+#define __com_sun_star_sdb_application_XTableUIProvider_idl__
 
 #include <com/sun/star/graphic/XGraphic.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>

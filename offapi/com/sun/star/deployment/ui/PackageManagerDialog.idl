@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_com_sun_star_deployment_ui_PackageManagerDialog_idl
-#define INCLUDED_com_sun_star_deployment_ui_PackageManagerDialog_idl
+#ifndef _com_sun_star_deployment_ui_PackageManagerDialog_idl
+#define _com_sun_star_deployment_ui_PackageManagerDialog_idl
 
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.idl>
 #include <com/sun/star/awt/XWindow.idl>

@@ -21,8 +21,8 @@
 
 /** -- idl definition -- **/
 
-#ifndef __com_sun_star_xml_crypto_sax_xbuffercontroller_idl_
-#define __com_sun_star_xml_crypto_sax_xbuffercontroller_idl_
+#ifndef __com_sun_star_xml_crypto_sax_XSecurityController_idl_
+#define __com_sun_star_xml_crypto_sax_XSecurityController_idl_
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/uno/Exception.idl>

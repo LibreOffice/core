@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_com_sun_star_task_XAbortChannel_idl
-#define INCLUDED_com_sun_star_task_XAbortChannel_idl
+#ifndef __com_sun_star_task_XAbortChannel_idl__
+#define __com_sun_star_task_XAbortChannel_idl__
 
 #include <com/sun/star/uno/XInterface.idl>
 

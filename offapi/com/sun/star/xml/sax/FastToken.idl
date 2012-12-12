@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_xml_sax_XFastToken_idl__
-#define __com_sun_star_xml_sax_XFastToken_idl__
+#ifndef __com_sun_star_xml_sax_FastToken_idl__
+#define __com_sun_star_xml_sax_FastToken_idl__
 
 #include <com/sun/star/uno/XInterface.idl>
 

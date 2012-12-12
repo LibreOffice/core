@@ -20,12 +20,8 @@
 #ifndef __com_sun_star_rendering_BitmapCanvas_idl__
 #define __com_sun_star_rendering_BitmapCanvas_idl__
 
-#ifndef __com_sun_star_rendering_XBitmap_idl__
 #include <com/sun/star/rendering/XBitmap.idl>
-#endif
-#ifndef __com_sun_star_rendering_XBitmapCanvas_idl__
 #include <com/sun/star/rendering/XBitmapCanvas.idl>
-#endif
 
 
 module com { module sun { module star { module rendering {

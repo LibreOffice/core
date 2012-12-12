@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_text_textfield_CreateDateTime_idl__
-#define __com_sun_star_text_textfield_CreateDateTime_idl_
+#ifndef __com_sun_star_text_textfield_docinfo_CreateDateTime_idl__
+#define __com_sun_star_text_textfield_docinfo_CreateDateTime_idl_
 
 #include <com/sun/star/text/TextField.idl>
 
