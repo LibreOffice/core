@@ -200,7 +200,6 @@
 #include <svl/lngmisc.hxx>
 #include <svtools/grfmgr.hxx>
 #include <svtools/wmf.hxx>
-#include <svx/dialogs.hrc>
 #include <tools/color.hxx>
 #include <tools/globname.hxx>
 #include <tools/resmgr.hxx>

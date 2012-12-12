@@ -34,7 +34,6 @@
 #include <boost/bind.hpp>
 #include <boost/foreach.hpp>
 #include <boost/ptr_container/ptr_set.hpp>
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
@@ -58,7 +57,6 @@
 #include <comphelper/MasterPropertySetInfo.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/property.hxx>
 #include <comphelper/scoped_disposing_ptr.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/sequenceasvector.hxx>
@@ -113,7 +111,6 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XPropertyStateChangeListener.hpp>
 #include <com/sun/star/container/XContainer.hpp>
-#include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
@@ -244,10 +241,6 @@
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
-#include <com/sun/star/mail/MailAttachment.hpp>
-#include "com/sun/star/mail/MailServiceProvider.hpp"
-#include "com/sun/star/mail/MailServiceType.hpp"
-#include "com/sun/star/mail/XMailService.hpp"
 #include "com/sun/star/mail/XSmtpService.hpp"
 #include <com/sun/star/packages/WrongPasswordException.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
@@ -272,7 +265,6 @@
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
-#include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
@@ -282,12 +274,7 @@
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
-#include <com/sun/star/sdb/SQLContext.hpp>
-#include <com/sun/star/sdb/XColumn.hpp>
-#include <com/sun/star/sdb/XCompletedConnection.hpp>
-#include <com/sun/star/sdb/XCompletedExecution.hpp>
 #include <com/sun/star/sdb/XDatabaseAccess.hpp>
-#include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/style/DropCapFormat.hpp>
@@ -313,7 +300,6 @@
 #include <com/sun/star/table/TableBorder2.hpp>
 #include <com/sun/star/table/TableSortField.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
-#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <com/sun/star/text/BibliographyDataField.hpp>
@@ -410,7 +396,6 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
@@ -419,7 +404,6 @@
 #include <com/sun/star/util/DateTimeRange.hpp>
 #include <com/sun/star/util/Duration.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
-#include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/util/Time.hpp>
@@ -431,7 +415,6 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/util/XRefreshListener.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/view/DocumentZoomType.hpp>
@@ -524,7 +507,6 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/measfld.hxx>
-#include <editeng/memberids.hrc>
 #include <editeng/nhypitem.hxx>
 #include <editeng/nlbkitem.hxx>
 #include <editeng/numitem.hxx>
@@ -613,7 +595,6 @@
 #include <rtl/string.h>
 #include <rtl/string.hxx>
 #include <rtl/tencinfo.h>
-#include <rtl/textenc.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
@@ -630,7 +611,6 @@
 #include <sfx2/appuno.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/bindings.hxx>
-#include <sfx2/dialogs.hrc>
 #include <sfx2/dinfdlg.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfac.hxx>
@@ -673,10 +653,8 @@
 #include <sfx2/sfxbasecontroller.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <sfx2/sfxhelp.hxx>
-#include <sfx2/sfx.hrc>
 #include <sfx2/sfxhtml.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
-#include <sfx2/sfxsids.hrc>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/styfitem.hxx>
 #include <sfx2/tabdlg.hxx>
@@ -764,10 +742,8 @@
 #include <svtools/ruler.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/soerr.hxx>
-#include <svtools/stdctrl.hxx>
 #include <svtools/svmedit.hxx>
 #include <svtools/svparser.hxx>
-#include <svtools/svtools.hrc>
 #include <svtools/svtresid.hxx>
 #include <svtools/templdlg.hxx>
 #include <svtools/transfer.hxx>
@@ -786,7 +762,6 @@
 #include <svx/dataaccessdescriptor.hxx>
 #include <svx/dbaexchange.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/dlgutil.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/extedit.hxx>
@@ -899,8 +874,6 @@
 #include <svx/svdviter.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/svxerr.hxx>
-#include "svx/svxids.hrc"
-#include <svx/svxids.hrc>
 #include <svx/swframevalidation.hxx>
 #include <svx/sxciaitm.hxx>
 #include <svx/sxenditm.hxx>

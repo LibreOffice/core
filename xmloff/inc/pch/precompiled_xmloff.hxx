@@ -546,7 +546,6 @@
 #include <unotools/streamwrap.hxx>
 #include <unotools/syslocale.hxx>
 #include <utility>
-#include "vector"
 #include <vector>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
