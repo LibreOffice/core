@@ -239,7 +239,6 @@ bool Edit::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
             nBits |= WB_TABSTOP;
         else
             nBits |= WB_NOTABSTOP;
-        fprintf(stderr, "tabstop is %ld\n", nBits & WB_TABSTOP);
         SetStyle(nBits);
     }
     else if (rKey == "visibility")
