@@ -1870,6 +1870,10 @@ String SvxAutoCorrect::GetAutoCorrFileName( LanguageType eLang,
                                             sal_Bool bNewFile, sal_Bool bTst ) const
 {
     String sRet, sExt( LanguageTag( eLang ).getBcp47() );
+
+    // fdo#58060 user added dictionary - saved as acorr_.dat
+    if (eLang == LANGUAGE_DONTKNOW)
+        sExt = String();
     sExt.Insert('_', 0);
     sExt.AppendAscii( ".dat" );
     if( bNewFile )
