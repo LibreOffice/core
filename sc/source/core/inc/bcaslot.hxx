@@ -71,23 +71,31 @@ inline bool ScBroadcastArea::operator==( const ScBroadcastArea & rArea ) const
 
 //=============================================================================
 
+struct ScBroadcastAreaEntry
+{
+    ScBroadcastArea* mpArea;
+    mutable bool     mbErasure;     ///< TRUE if marked for erasure in this set
+
+    ScBroadcastAreaEntry( ScBroadcastArea* p ) : mpArea( p), mbErasure( false) {}
+};
+
 struct ScBroadcastAreaHash
 {
-    size_t operator()( const ScBroadcastArea* p ) const
+    size_t operator()( const ScBroadcastAreaEntry& rEntry ) const
     {
-        return p->GetRange().hashArea();
+        return rEntry.mpArea->GetRange().hashArea();
     }
 };
 
 struct ScBroadcastAreaEqual
 {
-    bool operator()( const ScBroadcastArea* p1, const ScBroadcastArea* p2) const
+    bool operator()( const ScBroadcastAreaEntry& rEntry1, const ScBroadcastAreaEntry& rEntry2) const
     {
-        return *p1 == *p2;
+        return *rEntry1.mpArea == *rEntry2.mpArea;
     }
 };
 
-typedef ::boost::unordered_set< ScBroadcastArea*, ScBroadcastAreaHash, ScBroadcastAreaEqual > ScBroadcastAreas;
+typedef ::boost::unordered_set< ScBroadcastAreaEntry, ScBroadcastAreaHash, ScBroadcastAreaEqual > ScBroadcastAreas;
 
 //=============================================================================
 
@@ -122,6 +130,7 @@ private:
     mutable ScBroadcastArea aTmpSeekBroadcastArea;      // for FindBroadcastArea()
     ScDocument*         pDoc;
     ScBroadcastAreaSlotMachine* pBASM;
+    bool                mbInBroadcastIteration;
 
     ScBroadcastAreas::iterator  FindBroadcastArea( const ScRange& rRange ) const;
 
@@ -134,6 +143,14 @@ private:
         added.
       */
     bool                CheckHardRecalcStateCondition() const;
+
+    /** Finally erase all areas pushed as to-be-erased. */
+    void                FinallyEraseAreas();
+
+    bool                isMarkedErased( const ScBroadcastAreas::iterator& rIter )
+                            {
+                                return (*rIter).mbErasure;
+                            }
 
 public:
                         ScBroadcastAreaSlot( ScDocument* pDoc,
@@ -172,16 +189,27 @@ public:
     void                EndListeningArea( const ScRange& rRange,
                                             SvtListener* pListener,
                                             ScBroadcastArea*& rpArea );
-    sal_Bool                AreaBroadcast( const ScHint& rHint ) const;
+    sal_Bool                AreaBroadcast( const ScHint& rHint );
     /// @return sal_True if at least one broadcast occurred.
     sal_Bool                AreaBroadcastInRange( const ScRange& rRange,
-                                              const ScHint& rHint ) const;
+                                              const ScHint& rHint );
     void                DelBroadcastAreasInRange( const ScRange& rRange );
     void                UpdateRemove( UpdateRefMode eUpdateRefMode,
                                         const ScRange& rRange,
                                         SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
     void                UpdateRemoveArea( ScBroadcastArea* pArea );
     void                UpdateInsert( ScBroadcastArea* pArea );
+
+
+    bool                IsInBroadcastIteration() const { return mbInBroadcastIteration; }
+
+    /** Erase an area from set and delete it if last reference, or if
+        mbInBroadcastIteration is set push it to the vector of to-be-erased
+        areas instead.
+
+        Meant to be used internally and from ScBroadcastAreaSlotMachine only.
+     */
+    void                EraseArea( ScBroadcastAreas::iterator& rIter );
 };
 
 
@@ -229,14 +257,17 @@ private:
 
     typedef ::std::map< SCTAB, TableSlots* > TableSlotsMap;
 
+    typedef ::std::vector< ::std::pair< ScBroadcastAreaSlot*, ScBroadcastAreas::iterator > > AreasToBeErased;
+
 private:
     ScBroadcastAreasBulk  aBulkBroadcastAreas;
     TableSlotsMap         aTableSlotsMap;
+    AreasToBeErased       maAreasToBeErased;
     SvtBroadcaster       *pBCAlways;             // for the RC_ALWAYS special range
     ScDocument           *pDoc;
     ScBroadcastArea      *pUpdateChain;
     ScBroadcastArea      *pEOUpdateChain;
-    sal_uLong                 nInBulkBroadcast;
+    sal_uLong             nInBulkBroadcast;
 
     inline SCSIZE       ComputeSlotOffset( const ScAddress& rAddress ) const;
     void                ComputeAreaPoints( const ScRange& rRange,
@@ -267,6 +298,12 @@ public:
     inline ScBroadcastArea* GetEOUpdateChain() const { return pEOUpdateChain; }
     inline void SetEOUpdateChain( ScBroadcastArea* p ) { pEOUpdateChain = p; }
     inline bool IsInBulkBroadcast() const { return nInBulkBroadcast > 0; }
+
+    // only for ScBroadcastAreaSlot
+    void                PushAreaToBeErased( ScBroadcastAreaSlot* pSlot,
+                                            ScBroadcastAreas::iterator& rIter );
+    // only for ScBroadcastAreaSlot
+    void                FinallyEraseAreas( ScBroadcastAreaSlot* pSlot );
 };
 
 
