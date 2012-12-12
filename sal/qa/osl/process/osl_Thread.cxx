@@ -18,9 +18,6 @@
  */
 
 #ifdef WNT
-#if defined _MSC_VER
-#define NOMINMAX
-#endif
 #include <windows.h>
 #else
 #include <unistd.h>
