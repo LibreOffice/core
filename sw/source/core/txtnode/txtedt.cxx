@@ -346,10 +346,6 @@ static bool lcl_HaveCommonAttributes( IStyleAccess& rStyleAccess,
     return bRet;
 }
 
-inline sal_Bool InRange(xub_StrLen nIdx, xub_StrLen nStart, xub_StrLen nEnd) {
-    return ((nIdx >=nStart) && (nIdx <= nEnd));
-}
-
 /*
  * void SwTxtNode::RstAttr(const SwIndex &rIdx, sal_uInt16 nLen)
  *
