@@ -23,11 +23,7 @@
 
 module com {  module sun {  module star {  module ui {
 
-/** provides access to the global shortcut configuration set.
-
-    <p> The GlobalAcceleratorConfiguration service can be created
-    by using an UNO service manager. It provides then access to
-    the global accelerator configuration.</p>
+/** provides access to the global accelerator (aka shortcut) configuration set.
 
     @since OOo 2.0
 */
