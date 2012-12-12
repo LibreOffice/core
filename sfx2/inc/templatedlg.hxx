@@ -37,7 +37,7 @@ class SfxTemplateManagerDlg : public ModelessDialog
 {
 public:
 
-    SfxTemplateManagerDlg (Window *parent = NULL);
+    SfxTemplateManagerDlg (Window *parent = DIALOG_NO_PARENT);
 
     ~SfxTemplateManagerDlg ();
 
