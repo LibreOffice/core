@@ -143,9 +143,18 @@ ifeq ($(BUILD_DMAKE),YES)
 	(if [ -f dmake/Makefile ] ; then $(GNUMAKE) -j $(PARALLELISM) -C dmake distclean; fi) && \
 	rm -f solenv/*/bin/dmake*
 endif
-	rm -fr $(BUILDDIR)/config_host.mk $(BUILDDIR)/config_build.mk $(BUILDDIR)/aclocal.m4 $(BUILDDIR)/autom4te.cache \
-	$(BUILDDIR)/config.log $(BUILDDIR)/config.status $(BUILDDIR)/configure \
-	$(BUILDDIR)/config_host.mk.last $(BUILDDIR)/config_host.mk.stamp $(BUILDDIR)/warn $(BUILDDIR)/config/*.h
+	rm -fr \
+        $(BUILDDIR)/aclocal.m4 \
+        $(BUILDDIR)/autom4te.cache \
+        $(BUILDDIR)/config.log \
+        $(BUILDDIR)/config.status \
+        $(BUILDDIR)/config/*.h \
+        $(BUILDDIR)/config_build.mk \
+        $(BUILDDIR)/config_host.mk \
+        $(BUILDDIR)/config_host.mk.last \
+        $(BUILDDIR)/config_host.mk.stamp \
+        $(BUILDDIR)/configure \
+        $(BUILDDIR)/warn
 	find $(SOLARENV)/gdb -name "*.pyc" -exec rm {} \;
 
 #
