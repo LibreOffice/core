@@ -34,7 +34,7 @@ module com {  module sun {  module star {  module sheet {
     <p>A component that implements this service can be used as data source
     for a data pilot table in a spreadsheet document.</p>
  */
-published service DataPilotSource
+service DataPilotSource
 {
 
     /** provides access to the collection of the dimensions of the data

@@ -31,7 +31,7 @@ module com {  module sun {  module star {  module sheet {
     @see com::sun::star::sheet::DataPilotSourceHierarchy
     @see com::sun::star::sheet::DataPilotSource
  */
-published service DataPilotSourceLevels
+service DataPilotSourceLevels
 {
 
     /** provides access by name to the levels in the collection.

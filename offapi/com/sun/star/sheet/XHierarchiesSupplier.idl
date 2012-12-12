@@ -33,7 +33,7 @@ module com {  module sun {  module star {  module sheet {
     @see com::sun::star::sheet::DataPilotSourceDimension
     @see com::sun::star::sheet::DataPilotSource
  */
-published interface XHierarchiesSupplier: com::sun::star::uno::XInterface
+interface XHierarchiesSupplier: com::sun::star::uno::XInterface
 {
 
     /** returns the collection of hierarchies.

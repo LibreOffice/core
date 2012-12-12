@@ -31,7 +31,7 @@ module com {  module sun {  module star {  module sheet {
 
     @see com::sun::star::sheet::DataPilotSource
  */
-published interface XDimensionsSupplier: com::sun::star::uno::XInterface
+interface XDimensionsSupplier: com::sun::star::uno::XInterface
 {
 
     /** returns the collection of dimensions.
