@@ -107,7 +107,8 @@ const LocaleDataWrapper*    SdrGlobalData::GetLocaleData()
 OLEObjCache::OLEObjCache()
 :   Container( 0 )
 {
-    nSize = officecfg::Office::Common::Cache::DrawingEngine::OLE_Objects::get();
+    // add fudge factor to avoid core ( not meant for comitting to any real branch )
+    nSize = officecfg::Office::Common::Cache::DrawingEngine::OLE_Objects::get() + 10;
     pTimer = new AutoTimer();
     Link aLink = LINK(this, OLEObjCache, UnloadCheckHdl);
 
