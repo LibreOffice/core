@@ -17,6 +17,10 @@
 #include "DiscoveryService.hxx"
 
 #ifdef WIN32
+  // LO vs WinAPI conflict
+  #undef WB_LEFT
+  #undef WB_RIGHT
+
   #include <winsock2.h>
   #include <ws2tcpip.h>
   typedef int socklen_t;
@@ -30,7 +34,6 @@
 using namespace osl;
 using namespace rtl;
 using namespace sd;
-using namespace std;
 
 DiscoveryService::DiscoveryService() :
     mSocket(0)

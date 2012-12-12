@@ -29,6 +29,10 @@
 #endif
 
 #ifdef WIN32
+  // LO vs WinAPI conflict
+  #undef WB_LEFT
+  #undef WB_RIGHT
+
   #include <winsock2.h>
   #include <ws2bth.h>
 #endif

@@ -27,6 +27,8 @@
 
 $(eval $(call gb_Library_Library,sd))
 
+$(eval $(call gb_Library_set_precompiled_header,sd,$(SRCDIR)/sd/inc/pch/precompiled_sd))
+
 $(eval $(call gb_SdiTarget_SdiTarget,sd/sdi/sdslots,sd/sdi/sdslots))
 
 $(eval $(call gb_SdiTarget_set_include,sd/sdi/sdslots,\

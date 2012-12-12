@@ -134,7 +134,7 @@ void SAL_CALL Pane::setVisible (sal_Bool bIsVisible)
 
 
 
-Reference<accessibility::XAccessible> SAL_CALL Pane::getAccessible (void)
+Reference<css::accessibility::XAccessible> SAL_CALL Pane::getAccessible (void)
     throw (RuntimeException)
 {
     ThrowIfDisposed();
@@ -149,7 +149,7 @@ Reference<accessibility::XAccessible> SAL_CALL Pane::getAccessible (void)
 
 
 void SAL_CALL Pane::setAccessible (
-    const Reference<accessibility::XAccessible>& rxAccessible)
+    const Reference<css::accessibility::XAccessible>& rxAccessible)
     throw (RuntimeException)
 {
     ThrowIfDisposed();

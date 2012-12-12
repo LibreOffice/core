@@ -162,7 +162,7 @@ void SAL_CALL FullScreenPane::setVisible (const sal_Bool bIsVisible)
 
 
 
-Reference<accessibility::XAccessible> SAL_CALL FullScreenPane::getAccessible (void)
+Reference<css::accessibility::XAccessible> SAL_CALL FullScreenPane::getAccessible (void)
     throw (RuntimeException)
 {
     ThrowIfDisposed();
@@ -177,7 +177,7 @@ Reference<accessibility::XAccessible> SAL_CALL FullScreenPane::getAccessible (vo
 
 
 void SAL_CALL FullScreenPane::setAccessible (
-    const Reference<accessibility::XAccessible>& rxAccessible)
+    const Reference<css::accessibility::XAccessible>& rxAccessible)
     throw (RuntimeException)
 {
     ThrowIfDisposed();
@@ -188,7 +188,7 @@ void SAL_CALL FullScreenPane::setAccessible (
         if (xInitializable.is())
         {
             ::Window* pParentWindow = mpWindow->GetParent();
-            Reference<accessibility::XAccessible> xAccessibleParent;
+            Reference<css::accessibility::XAccessible> xAccessibleParent;
             if (pParentWindow != NULL)
                 xAccessibleParent = pParentWindow->GetAccessible();
             Sequence<Any> aArguments (1);

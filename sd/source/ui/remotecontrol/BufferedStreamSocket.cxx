@@ -12,6 +12,10 @@
 #include <algorithm>
 
 #ifdef WIN32
+  // LO vs WinAPI conflict
+  #undef WB_LEFT
+  #undef WB_RIGHT
+
   #include <winsock2.h>
 #else
  #include <sys/socket.h>

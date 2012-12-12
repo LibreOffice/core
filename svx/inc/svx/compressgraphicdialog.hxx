@@ -27,6 +27,8 @@
 #include <sfx2/bindings.hxx>
 #include "svx/svxdllapi.h"
 
+class SdrGrafObj;
+
 class SVX_DLLPUBLIC CompressGraphicsDialog : public ModalDialog
 {
 private:
