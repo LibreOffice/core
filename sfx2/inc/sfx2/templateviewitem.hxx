@@ -32,10 +32,6 @@ public:
 
     const rtl::OUString& getKeywords () const { return maKeywords; }
 
-    void setFileType (const rtl::OUString &rType) { maFileType = rType; }
-
-    const rtl::OUString& getFileType () const { return maFileType; }
-
     void setSubTitle (const rtl::OUString &rTitle) { maSubTitle = rTitle; }
 
     const rtl::OUString& getSubTitle () const { return maSubTitle; }
@@ -51,7 +47,6 @@ private:
     rtl::OUString maPath;
     rtl::OUString maAuthor;
     rtl::OUString maKeywords;
-    rtl::OUString maFileType;
     rtl::OUString maSubTitle;
 
     Point maSubTitlePos;

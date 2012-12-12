@@ -20,7 +20,6 @@ struct TemplateItemProperties
     sal_uInt16 nRegionId;
     rtl::OUString aName;
     rtl::OUString aPath;
-    rtl::OUString aType;
     BitmapEx aThumbnail;
 };
 

@@ -227,8 +227,6 @@ bool TemplateRemoteView::loadRepository (const sal_uInt16 nRepositoryId, bool bR
                         {}
                     }
 
-                    aTemplateItem.aType = SvFileInformationManager::GetFileDescription(INetURLObject(sRealURL));
-
                     pItem->insertTemplate(aTemplateItem);
                     aItems.push_back(aTemplateItem);
                     ++nIdx;

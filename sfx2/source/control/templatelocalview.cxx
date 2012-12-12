@@ -15,7 +15,6 @@
 #include <sfx2/templateview.hxx>
 #include <sfx2/templateviewitem.hxx>
 #include <svl/inettype.hxx>
-#include <svtools/imagemgr.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/pngread.hxx>
@@ -122,7 +121,6 @@ void TemplateLocalView::Populate ()
         {
             OUString aName = mpDocTemplates->GetName(i,j);
             OUString aURL = mpDocTemplates->GetPath(i,j);
-            OUString aType = SvFileInformationManager::GetDescription(INetURLObject(aURL));
 
             if ((sal_uInt32)aName.getLength() > mpItemAttrs->nMaxTextLenght)
             {
@@ -136,7 +134,6 @@ void TemplateLocalView::Populate ()
             aProperties.nRegionId = i;
             aProperties.aName = aName;
             aProperties.aPath = aURL;
-            aProperties.aType = aType;
             aProperties.aThumbnail = TemplateAbstractView::fetchThumbnail(aURL,
                                                                           TEMPLATE_THUMBNAIL_MAX_WIDTH,
                                                                           TEMPLATE_THUMBNAIL_MAX_HEIGHT);
@@ -372,7 +369,6 @@ bool TemplateLocalView::moveTemplate (const ThumbnailViewItem *pItem, const sal_
         aTemplateItem.nRegionId = nTargetRegion;
         aTemplateItem.aName = pViewItem->maTitle;
         aTemplateItem.aPath = pViewItem->getPath();
-        aTemplateItem.aType = pViewItem->getFileType();
         aTemplateItem.aThumbnail = pViewItem->maPreview1;
 
         pTarget->maTemplates.push_back(aTemplateItem);
@@ -467,7 +463,6 @@ bool TemplateLocalView::moveTemplates(std::set<const ThumbnailViewItem *> &rItem
             aTemplateItem.nRegionId = nTargetRegion;
             aTemplateItem.aName = pViewItem->maTitle;
             aTemplateItem.aPath = pViewItem->getPath();
-            aTemplateItem.aType = pViewItem->getFileType();
             aTemplateItem.aThumbnail = pViewItem->maPreview1;
 
             pTarget->maTemplates.push_back(aTemplateItem);
@@ -541,7 +536,6 @@ bool TemplateLocalView::copyFrom(const sal_uInt16 nRegionItemId, const BitmapEx 
                 aTemplate.aName = aPath;
                 aTemplate.aThumbnail = rThumbnail;
                 aTemplate.aPath = mpDocTemplates->GetPath(nRegionId,nDocId);
-                aTemplate.aType = SvFileInformationManager::GetDescription(INetURLObject(aTemplate.aPath));
 
                 TemplateLocalViewItem *pItem =
                         static_cast<TemplateLocalViewItem*>(mItemList[i]);
@@ -584,7 +578,6 @@ bool TemplateLocalView::copyFrom (TemplateLocalViewItem *pItem, const OUString &
                                                                     TEMPLATE_THUMBNAIL_MAX_WIDTH,
                                                                     TEMPLATE_THUMBNAIL_MAX_HEIGHT);
         aTemplate.aPath = rPath;
-        aTemplate.aType = SvFileInformationManager::GetDescription(INetURLObject(rPath));
 
         pItem->maTemplates.push_back(aTemplate);
 
