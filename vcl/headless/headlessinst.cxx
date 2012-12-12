@@ -121,6 +121,7 @@ SalInstance *CreateSalInstance()
 {
     HeadlessSalInstance* pInstance = new HeadlessSalInstance( new SalYieldMutex() );
     new HeadlessSalData( pInstance );
+    pInstance->AcquireYieldMutex(1);
     return pInstance;
 }
 

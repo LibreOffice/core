@@ -151,6 +151,7 @@ SalInstance *CreateSalInstance()
     fprintf (stderr, "Android: CreateSalInstance!\n");
     AndroidSalInstance* pInstance = new AndroidSalInstance( new SalYieldMutex() );
     new AndroidSalData( pInstance );
+    pInstance->AcquireYieldMutex(1);
     return pInstance;
 }
 
