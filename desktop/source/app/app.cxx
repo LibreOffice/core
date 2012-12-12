@@ -66,10 +66,11 @@
 #include <com/sun/star/frame/XUIControllerRegistration.hpp>
 
 #include <toolkit/unohlp.hxx>
+#include <comphelper/configuration.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/configmgr.hxx>
-#include <unotools/confignode.hxx>
 #include <unotools/moduleoptions.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Recovery.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
@@ -2912,70 +2913,45 @@ void Desktop::ShowBackingComponent(Desktop * progress)
 // ========================================================================
 void Desktop::CheckFirstRun( )
 {
-    const ::rtl::OUString sCommonMiscNodeName("/org.openoffice.Office.Common/Misc");
-    const ::rtl::OUString sFirstRunNodeName("FirstRun");
-
-    // --------------------------------------------------------------------
-    // check if this is the first office start
-
-    // for this, open the Common/Misc node where this info is stored
-    ::utl::OConfigurationTreeRoot aCommonMisc = ::utl::OConfigurationTreeRoot::createWithServiceFactory(
-        ::comphelper::getProcessServiceFactory( ),
-        sCommonMiscNodeName,
-        2,
-        ::utl::OConfigurationTreeRoot::CM_UPDATABLE
-    );
-
-    // read the flag
-    OSL_ENSURE( aCommonMisc.isValid(), "Desktop::CheckFirstRun: could not open the config node needed!" );
-    sal_Bool bIsFirstRun = sal_False;
-    aCommonMisc.getNodeValue( sFirstRunNodeName ) >>= bIsFirstRun;
-
-    if ( !bIsFirstRun )
-        // nothing to do ....
-        return;
-
-    // --------------------------------------------------------------------
-    // it is the first run
-    // this has once been done using a vos timer. this could lead to problems when
-    // the timer would trigger when the app is already going down again, since VCL would
-    // no longer be available. Since the old handler would do a postUserEvent to the main
-    // thread anyway, we can use a vcl timer here to prevent the race contition (#107197#)
-    m_firstRunTimer.SetTimeout(3000); // 3 sec.
-    m_firstRunTimer.SetTimeoutHdl(LINK(this, Desktop, AsyncInitFirstRun));
-    m_firstRunTimer.Start();
+    if (officecfg::Office::Common::Misc::FirstRun::get())
+    {
+        // this has once been done using a vos timer. this could lead to problems when
+        // the timer would trigger when the app is already going down again, since VCL would
+        // no longer be available. Since the old handler would do a postUserEvent to the main
+        // thread anyway, we can use a vcl timer here to prevent the race contition (#107197#)
+        m_firstRunTimer.SetTimeout(3000); // 3 sec.
+        m_firstRunTimer.SetTimeoutHdl(LINK(this, Desktop, AsyncInitFirstRun));
+        m_firstRunTimer.Start();
 
 #ifdef WNT
-    // Check if Quckstarter should be started (on Windows only)
-    TCHAR szValue[8192];
-    DWORD nValueSize = sizeof(szValue);
-    HKEY hKey;
-    if ( ERROR_SUCCESS == RegOpenKey( HKEY_LOCAL_MACHINE,  "Software\\LibreOffice", &hKey ) )
-    {
-        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("RunQuickstartAtFirstStart"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
+        // Check if Quckstarter should be started (on Windows only)
+        TCHAR szValue[8192];
+        DWORD nValueSize = sizeof(szValue);
+        HKEY hKey;
+        if ( ERROR_SUCCESS == RegOpenKey( HKEY_LOCAL_MACHINE,  "Software\\LibreOffice", &hKey ) )
         {
-            sal_Bool bQuickstart( sal_True );
-            sal_Bool bAutostart( sal_True );
-            Sequence< Any > aSeq( 2 );
-            aSeq[0] <<= bQuickstart;
-            aSeq[1] <<= bAutostart;
+            if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("RunQuickstartAtFirstStart"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
+            {
+                sal_Bool bQuickstart( sal_True );
+                sal_Bool bAutostart( sal_True );
+                Sequence< Any > aSeq( 2 );
+                aSeq[0] <<= bQuickstart;
+                aSeq[1] <<= bAutostart;
 
-            Reference < XInitialization > xQuickstart( ::comphelper::getProcessServiceFactory()->createInstance(
-                OUString::createFromAscii( "com.sun.star.office.Quickstart" )),UNO_QUERY );
-            if ( xQuickstart.is() )
-                xQuickstart->initialize( aSeq );
-            RegCloseKey( hKey );
+                Reference < XInitialization > xQuickstart( ::comphelper::getProcessServiceFactory()->createInstance(
+                                                               OUString::createFromAscii( "com.sun.star.office.Quickstart" )),UNO_QUERY );
+                if ( xQuickstart.is() )
+                    xQuickstart->initialize( aSeq );
+                RegCloseKey( hKey );
+            }
         }
-    }
 #endif
 
-    // --------------------------------------------------------------------
-    // reset the config flag
-
-    // set the value
-    aCommonMisc.setNodeValue( sFirstRunNodeName, makeAny( (sal_Bool)sal_False ) );
-    // commit the changes
-    aCommonMisc.commit();
+        boost::shared_ptr< comphelper::ConfigurationChanges > batch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Misc::FirstRun::set(false, batch);
+        batch->commit();
+    }
 }
 
 }
