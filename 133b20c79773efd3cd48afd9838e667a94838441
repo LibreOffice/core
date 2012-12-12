@@ -104,6 +104,24 @@
       "revId": "133b20c79773efd3cd48afd9838e667a94838441",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAARn///9A\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 3498,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-12-12T19:48:07Z",
+      "side": 1,
+      "message": "ah... makes sense....\n... though ENABLE_HEADLESS is a bit of a milsleading name, since ordinarily soffice already supports --headless... should probably be called WITHOUT_X11 or _GUI, something like that.",
+      "parentUuid": "AAAARn///9o\u003d",
+      "revId": "133b20c79773efd3cd48afd9838e667a94838441",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
