@@ -58,8 +58,8 @@ public:
     /** Enumerates codec types supported by this XOR codec implementation. */
     enum CodecType
     {
-        CODEC_WORD,     /// MS Word XOR codec.
-        CODEC_EXCEL     /// MS Excel XOR codec.
+        CODEC_WORD,     ///< MS Word XOR codec.
+        CODEC_EXCEL     ///< MS Excel XOR codec.
     };
 
 public:
@@ -163,11 +163,11 @@ public:
     bool                skip( sal_Int32 nBytes );
 
 private:
-    CodecType           meCodecType;        /// Codec type.
-    sal_uInt8           mpnKey[ 16 ];       /// Encryption key.
-    sal_Int32           mnOffset;           /// Key offset.
-    sal_uInt16          mnBaseKey;          /// Base key from password.
-    sal_uInt16          mnHash;             /// Hash value from password.
+    CodecType           meCodecType;        ///< Codec type.
+    sal_uInt8           mpnKey[ 16 ];       ///< Encryption key.
+    sal_Int32           mnOffset;           ///< Key offset.
+    sal_uInt16          mnBaseKey;          ///< Base key from password.
+    sal_uInt16          mnHash;             ///< Hash value from password.
 };
 
 // ============================================================================

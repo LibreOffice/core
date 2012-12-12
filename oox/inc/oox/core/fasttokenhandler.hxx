@@ -54,7 +54,7 @@ public:
     virtual sal_Int32 SAL_CALL getTokenFromUTF8( const ::com::sun::star::uno::Sequence< sal_Int8 >& Identifier ) throw (::com::sun::star::uno::RuntimeException);
 
 private:
-    const TokenMap&     mrTokenMap;     /// Reference to global token map singleton.
+    const TokenMap&     mrTokenMap;     ///< Reference to global token map singleton.
 };
 
 // ============================================================================

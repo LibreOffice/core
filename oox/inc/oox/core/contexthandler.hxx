@@ -104,7 +104,7 @@ private:
     ContextHandler&     operator=( const ContextHandler& );
 
 private:
-    FragmentBaseDataRef mxBaseData;         /// Base data of the fragment.
+    FragmentBaseDataRef mxBaseData;         ///< Base data of the fragment.
 };
 
 // ============================================================================

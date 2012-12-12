@@ -68,8 +68,8 @@ struct FragmentBaseData
  */
 struct RecordInfo
 {
-    sal_Int32           mnStartRecId;       /// Record identifier for context start.
-    sal_Int32           mnEndRecId;         /// Record identifier for context end, -1 = no record.
+    sal_Int32           mnStartRecId;       ///< Record identifier for context start.
+    sal_Int32           mnEndRecId;         ///< Record identifier for context end, -1 = no record.
 };
 
 // ============================================================================

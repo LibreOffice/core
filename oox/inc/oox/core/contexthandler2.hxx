@@ -204,9 +204,9 @@ private:
     typedef ::std::vector< ElementInfo >        ContextStack;
     typedef ::boost::shared_ptr< ContextStack > ContextStackRef;
 
-    ContextStackRef     mxContextStack;     /// Stack of all processed elements.
-    size_t              mnRootStackSize;    /// Stack size on construction time.
-    bool                mbEnableTrimSpace;  /// True = trim whitespace in characters().
+    ContextStackRef     mxContextStack;     ///< Stack of all processed elements.
+    size_t              mnRootStackSize;    ///< Stack size on construction time.
+    bool                mbEnableTrimSpace;  ///< True = trim whitespace in characters().
 };
 
 // ============================================================================
