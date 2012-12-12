@@ -25,7 +25,7 @@
 
 // OOo improvement module
 
-#if defined(BUILD_SPECIAL)
+#if defined(ENABLE_OOOIMPROVEMENT)
 Module gid_Module_Oooimprovement
     PackageInfo = "packinfo_office.txt";
     Name = "gid_Module_Oooimprovement";

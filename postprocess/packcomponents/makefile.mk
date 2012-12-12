@@ -190,7 +190,7 @@ my_components += component/vcl/vcl.unx
 my_components += updchk.uno
 .END
 
-.IF "$(BUILD_SPECIAL)" != ""
+.IF "$(ENABLE_OOOIMPROVEMENT)" != ""
 my_components += oooimprovement
 .END
 

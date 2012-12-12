@@ -1,0 +1,10 @@
+Some documentation for the variables specified in file openoffice.lst.
+
+VARIABLE NAME                   USAGE
+-------------------------------------------------------------------------------
+SERVICETAG_PRODUCTNAME          only for 'OOo improvement via usage tracking'
+SERVICETAG_PRODUCTVERSION       only for 'OOo improvement via usage tracking'
+SERVICETAG_PARENTNAME           only for 'OOo improvement via usage tracking'
+SERVICETAG_SOURCE               only for 'OOo improvement via usage tracking'
+SERVICETAG_URN                  only for 'OOo improvement via usage tracking'
+

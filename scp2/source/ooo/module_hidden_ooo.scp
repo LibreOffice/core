@@ -813,7 +813,7 @@ Module gid_Module_Root_Userland
 End
 #endif
 
-// #ifdef BUILD_SPECIAL
+// #ifdef ENABLE_OOOIMPROVEMENT
 // Module gid_Module_Root_Extension_Oooimprovement
 //    Name = "gid_Module_Root_Extension_Oooimprovement";
 //    Description = "gid_Module_Root_Extension_Oooimprovement";

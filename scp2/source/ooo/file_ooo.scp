@@ -1780,7 +1780,7 @@ File gid_File_Share_Registry_Lingucomponent_Xcd
     Name = "lingucomponent.xcd";
 End
 
-// #ifdef BUILD_SPECIAL
+// #ifdef ENABLE_OOOIMPROVEMENT
 // File gid_File_Extension_Oxt_Oooimprovement
 //    Name = "OOoImprovement.oxt";
 //    Dir = gid_Brand_Dir_Share_Extensions_Oooimprovement;
