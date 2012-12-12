@@ -6,12 +6,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#define BTN_SELECT_ALL              1
-#define BTN_SELECT_DOCS             2
-#define BTN_SELECT_PRESENTATIONS    3
-#define BTN_SELECT_SHEETS           4
-#define BTN_SELECT_DRAWS            5
-#define BTN_SELECTION_MODE          6
+#define TAB_CONTROL                 1
+#define FILTER_ALL                  2
+#define FILTER_DOCS                 3
+#define FILTER_PRESENTATIONS        4
+#define FILTER_SHEETS               5
+#define FILTER_DRAWS                6
 
 #define TEMPLATE_VIEW               7
 
