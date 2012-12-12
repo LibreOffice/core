@@ -1583,12 +1583,10 @@ Reference<rendering::XBitmap> PresenterSlideSorter::MouseOverManager::CreateBitm
             rendering::CompositeOperation::SOURCE);
         PresenterCanvasHelper::SetDeviceColor(aRenderState, mpFont->mnColor);
 
-        xBitmapCanvas->drawText(
-            aContext,
-            mpFont->mxFont,
+        xBitmapCanvas->drawTextLayout (
+            xLayout,
             aViewState,
-            aRenderState,
-            rendering::TextDirection::WEAK_LEFT_TO_RIGHT);
+            aRenderState);
     }
 
     return xBitmap;
