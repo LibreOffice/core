@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "AAAARn///9M\u003d",
+        "filename": "config_host.mk.in",
+        "patchSetId": 1
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2012-12-12T19:08:59Z",
+      "side": 1,
+      "message": "GUIBASE is still used in some cases to distinguish at least between \"normal\" Unix and \"headless\". (Maybe more, don\u0027t recall right now.) Doing things one step at a time, in this commit first removing the cases of GUIBASE use that are equivalent to using OS.",
+      "parentUuid": "AAAARn///9g\u003d",
+      "revId": "133b20c79773efd3cd48afd9838e667a94838441",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAARn///98\u003d",
         "filename": "configure.ac",
         "patchSetId": 1
