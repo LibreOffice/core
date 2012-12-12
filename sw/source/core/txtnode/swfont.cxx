@@ -750,7 +750,7 @@ Size SwSubFont::_GetTxtSize( SwDrawTextInfo& rInf )
         {
             String aTmp = CalcCaseMap( rInf.GetText() );
             const XubString &rOldStr = rInf.GetText();
-            sal_Bool bCaseMapLengthDiffers(aTmp.Len() != rOldStr.Len());
+            bool bCaseMapLengthDiffers(aTmp.Len() != rOldStr.Len());
 
             if(bCaseMapLengthDiffers && rInf.GetLen())
             {
@@ -869,7 +869,7 @@ void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const sal_Bool bGrey )
         {
             const XubString &rOldStr = rInf.GetText();
             XubString aString( CalcCaseMap( rOldStr ) );
-            sal_Bool bCaseMapLengthDiffers(aString.Len() != rOldStr.Len());
+            bool bCaseMapLengthDiffers(aString.Len() != rOldStr.Len());
 
             if(bCaseMapLengthDiffers && rInf.GetLen())
             {
@@ -919,7 +919,7 @@ static sal_Char const sDoubleSpace[] = "  ";
 
             const SwScriptInfo* pSI = rInf.GetScriptInfo();
 
-            const sal_Bool bAsianFont =
+            const bool bAsianFont =
                 ( rInf.GetFont() && SW_CJK == rInf.GetFont()->GetActual() );
             for( xub_StrLen nTmp = nOldIdx; nTmp < nTmpEnd; ++nTmp )
             {
@@ -1153,7 +1153,7 @@ void SwDrawTextInfo::Shift( sal_uInt16 nDir )
     OSL_ENSURE( m_bSize, "DrawTextInfo: Undefined Width" );
 #endif
 
-    const sal_Bool bBidiPor = ( GetFrm() && GetFrm()->IsRightToLeft() ) !=
+    const bool bBidiPor = ( GetFrm() && GetFrm()->IsRightToLeft() ) !=
                           ( 0 != ( TEXT_LAYOUT_BIDI_RTL & GetpOut()->GetLayoutMode() ) );
 
     nDir = bBidiPor ?

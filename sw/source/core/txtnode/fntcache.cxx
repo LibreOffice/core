@@ -644,7 +644,7 @@ static sal_uInt8 lcl_WhichPunctuation( sal_Unicode cChar )
     return SwScriptInfo::SPECIAL_LEFT;
 }
 
-static sal_Bool lcl_IsMonoSpaceFont( const OutputDevice& rOut )
+static bool lcl_IsMonoSpaceFont( const OutputDevice& rOut )
 {
     const rtl::OUString aStr1( sal_Unicode( 0x3008 ) );
     const rtl::OUString aStr2( sal_Unicode( 0x307C ) );
@@ -703,7 +703,7 @@ static void lcl_DrawLineForWrongListData(
                 rInf.GetOut().Push();
 
             const Color aCol( rInf.GetOut().GetLineColor() );
-            const sal_Bool bColSave = aCol != aLineColor;
+            const bool bColSave = aCol != aLineColor;
             if (bColSave)
                 rInf.GetOut().SetLineColor( aLineColor );
 
@@ -793,9 +793,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     OutputDevice* pWin = rInf.GetShell()->GetWin();
 
     // true if pOut is the printer and the printer has been used for formatting
-    const sal_Bool bPrt = OUTDEV_PRINTER == rInf.GetOut().GetOutDevType() &&
+    const bool bPrt = OUTDEV_PRINTER == rInf.GetOut().GetOutDevType() &&
                       OUTDEV_PRINTER == rRefDev.GetOutDevType();
-    const sal_Bool bBrowse = ( pWin &&
+    const bool bBrowse = ( pWin &&
                            rInf.GetShell()->GetViewOptions()->getBrowseMode() &&
                           !rInf.GetShell()->GetViewOptions()->IsPrtFormat() &&
                           !rInf.GetBullet() &&
@@ -807,10 +807,10 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
     // bDirectPrint indicates that we can enter the branch which calls
     // the DrawText functions instead of calling the DrawTextArray functions
-    const sal_Bool bDirectPrint = bPrt || bBrowse;
+    const bool bDirectPrint = bPrt || bBrowse;
 
     // Condition for output font / refdev font adjustment
-    const sal_Bool bUseScrFont =
+    const bool bUseScrFont =
         lcl_IsFontAdjustNecessary( rInf.GetOut(), rRefDev );
 
     Font* pTmpFont = bUseScrFont ? pScrFont : pPrtFont;
@@ -832,7 +832,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
 #if OSL_DEBUG_LEVEL > 0
 
-    const sal_Bool bNoAdjust = bPrt ||
+    const bool bNoAdjust = bPrt ||
             (  pWin &&
                rInf.GetShell()->GetViewOptions()->getBrowseMode() &&
               !rInf.GetShell()->GetViewOptions()->IsPrtFormat() );
@@ -842,11 +842,11 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         // Printer output
         if ( OUTDEV_PRINTER == rRefDev.GetOutDevType() )
         {
-            OSL_ENSURE( bNoAdjust == 1 && bUseScrFont == 0, "Outdev Check failed" );
+            OSL_ENSURE( bNoAdjust && !bUseScrFont, "Outdev Check failed" );
         }
         else if ( OUTDEV_VIRDEV == rRefDev.GetOutDevType() )
         {
-            OSL_ENSURE( bNoAdjust == 0 && bUseScrFont == 1, "Outdev Check failed" );
+            OSL_ENSURE( !bNoAdjust && bUseScrFont, "Outdev Check failed" );
         }
         else
         {
@@ -858,11 +858,11 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         // PDF export
         if ( OUTDEV_PRINTER == rRefDev.GetOutDevType() )
         {
-            OSL_ENSURE( bNoAdjust == 0 && bUseScrFont == 1, "Outdev Check failed" );
+            OSL_ENSURE( !bNoAdjust && bUseScrFont, "Outdev Check failed" );
         }
         else if ( OUTDEV_VIRDEV == rRefDev.GetOutDevType() )
         {
-            OSL_ENSURE( bNoAdjust == 0 && bUseScrFont == 1, "Outdev Check failed" );
+            OSL_ENSURE( !bNoAdjust && bUseScrFont, "Outdev Check failed" );
         }
         else
         {
@@ -875,15 +875,15 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         // Window or virtual window
         if ( OUTDEV_PRINTER == rRefDev.GetOutDevType() )
         {
-            OSL_ENSURE( bNoAdjust == 0 && bUseScrFont == 1, "Outdev Check failed" );
+            OSL_ENSURE( !bNoAdjust && bUseScrFont, "Outdev Check failed" );
         }
         else if ( OUTDEV_VIRDEV == rRefDev.GetOutDevType() )
         {
-            OSL_ENSURE( bNoAdjust == 0 && bUseScrFont == 1, "Outdev Check failed" );
+            OSL_ENSURE( !bNoAdjust && bUseScrFont, "Outdev Check failed" );
         }
         else if ( OUTDEV_WINDOW == rRefDev.GetOutDevType() )
         {
-            OSL_ENSURE( bNoAdjust == 1 && bUseScrFont == 0, "Outdev Check failed" );
+            OSL_ENSURE( bNoAdjust && !bUseScrFont, "Outdev Check failed" );
         }
         else
         {
@@ -1067,7 +1067,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             if ( rInf.GetSpace() || rInf.GetKanaComp())
             {
                 long nSpaceAdd = rInf.GetSpace() / SPACING_PRECISION_FACTOR;
-                sal_Bool bSpecialJust = sal_False;
+                bool bSpecialJust = false;
                 if ( rInf.GetFont() && rInf.GetLen() )
                 {
                     const SwScriptInfo* pSI = rInf.GetScriptInfo();
@@ -1079,7 +1079,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     {
                         pSI->Compress( pKernArray,rInf.GetIdx(), rInf.GetLen(),
                             rInf.GetKanaComp(), (sal_uInt16)aFont.GetSize().Height(),&aPos );
-                        bSpecialJust = sal_True;
+                        bSpecialJust = true;
                     }
                     ///Asian Justification
                     if ( ( SW_CJK == nActual || SW_LATIN == nActual ) && nSpaceAdd )
@@ -1093,7 +1093,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                                 pKernArray[ nI ] += nSpaceSum;
                                 nSpaceSum += nSpaceAdd;
                             }
-                            bSpecialJust = sal_True;
+                            bSpecialJust = true;
                             nSpaceAdd = 0;
                         }
                     }
@@ -1186,7 +1186,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     if ( bDirectPrint )
     {
         const Fraction aTmp( 1, 1 );
-        sal_Bool bStretch = rInf.GetWidth() && ( rInf.GetLen() > 1 ) && bPrt
+        bool bStretch = rInf.GetWidth() && ( rInf.GetLen() > 1 ) && bPrt
                         && ( aTmp != rInf.GetOut().GetMapMode().GetScaleX() );
 
         if ( bSwitchL2R )
@@ -1238,7 +1238,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             // Modify Array for special justifications
             //
             long nSpaceAdd = rInf.GetSpace() / SPACING_PRECISION_FACTOR;
-            sal_Bool bSpecialJust = sal_False;
+            bool bSpecialJust = false;
 
             if ( rInf.GetFont() && rInf.GetLen() )
             {
@@ -1253,7 +1253,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     pSI->Compress( pKernArray, rInf.GetIdx(), rInf.GetLen(),
                                    rInf.GetKanaComp(),
                                    (sal_uInt16)aFont.GetSize().Height(), &aPos );
-                    bSpecialJust = sal_True;
+                    bSpecialJust = true;
                 }
 
                 // Asian Justification
@@ -1270,7 +1270,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                             nSpaceSum += nSpaceAdd;
                         }
 
-                        bSpecialJust = sal_True;
+                        bSpecialJust = true;
                         nSpaceAdd = 0;
                     }
                 }
@@ -1284,7 +1284,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                             pSI->KashidaJustify( pKernArray, 0, rInf.GetIdx(),
                                                  rInf.GetLen(), nSpaceAdd ) != STRING_LEN )
                         {
-                            bSpecialJust = sal_True;
+                            bSpecialJust = true;
                             nSpaceAdd = 0;
                         }
                     }
@@ -1305,7 +1305,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                                                    rInf.GetSpace() );
 
                         // adding space to blanks is already done
-                        bSpecialJust = sal_True;
+                        bSpecialJust = true;
                         nSpaceAdd = 0;
                     }
                 }
@@ -1668,7 +1668,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                             ( WRONG_SHOW_SMALL < nHght ? WAVE_SMALL :
                             WAVE_FLAT );
                         Color aCol( rInf.GetOut().GetLineColor() );
-                        sal_Bool bColSave = aCol != *pWaveCol;
+                        bool bColSave = aCol != *pWaveCol;
                         if ( bColSave )
                             rInf.GetOut().SetLineColor( *pWaveCol );
 
@@ -1880,7 +1880,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
         }
     }
 
-    const sal_Bool bCompress = rInf.GetKanaComp() && nLn &&
+    const bool bCompress = rInf.GetKanaComp() && nLn &&
                            rInf.GetFont() &&
                            SW_CJK == rInf.GetFont()->GetActual() &&
                            rInf.GetScriptInfo() &&
@@ -2334,7 +2334,7 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
 {
     ChgFnt( rInf.GetShell(), rInf.GetOut() );
 
-    const sal_Bool bCompress = rInf.GetKanaComp() && rInf.GetLen() &&
+    const bool bCompress = rInf.GetKanaComp() && rInf.GetLen() &&
                            SW_CJK == GetActual() &&
                            rInf.GetScriptInfo() &&
                            rInf.GetScriptInfo()->CountCompChg() &&
@@ -2520,19 +2520,19 @@ extern Color aGlobalRetoucheColor;
 sal_Bool SwDrawTextInfo::ApplyAutoColor( Font* pFont )
 {
     const Font& rFnt = pFont ? *pFont : GetOut().GetFont();
-    sal_Bool bPrt = GetShell() && ! GetShell()->GetWin();
+    bool bPrt = GetShell() && ! GetShell()->GetWin();
     ColorData nNewColor = COL_BLACK;
-    sal_Bool bChgFntColor = sal_False;
-    sal_Bool bChgLineColor = sal_False;
+    bool bChgFntColor = false;
+    bool bChgLineColor = false;
 
     if( bPrt && GetShell() && GetShell()->GetViewOptions()->IsBlackFont() )
     {
         if ( COL_BLACK != rFnt.GetColor().GetColor() )
-            bChgFntColor = sal_True;
+            bChgFntColor = true;
 
         if ( (COL_BLACK != GetOut().GetLineColor().GetColor()) ||
              (COL_BLACK != GetOut().GetOverlineColor().GetColor()) )
-            bChgLineColor = sal_True;
+            bChgLineColor = true;
     }
     else
     {

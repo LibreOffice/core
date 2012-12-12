@@ -759,7 +759,7 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
                         aCharAutoFmtSetRange);
                     SfxItemIter aItemIter( *pOldStyle );
                     const SfxPoolItem* pItem = aItemIter.GetCurItem();
-                    while( sal_True )
+                    while( true )
                     {
                         if ( !CharFmt::IsItemIncluded( pItem->Which(), &rNewHint ) )
                         {
@@ -1214,7 +1214,7 @@ SwTxtNode::InsertItem( SfxPoolItem& rAttr,
 // take ownership of pAttr; if insertion fails, delete pAttr
 bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
 {
-    sal_Bool bHiddenPara = sal_False;
+    bool bHiddenPara = false;
 
     OSL_ENSURE( pAttr && *pAttr->GetStart() <= Len(), "StartIdx out of bounds!" );
     OSL_ENSURE( !pAttr->GetEnd() || (*pAttr->GetEnd() <= Len()),
@@ -1343,7 +1343,7 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                 }
 
                 // wird eine neue Fussnote eingefuegt ??
-                sal_Bool bNewFtn = 0 == ((SwTxtFtn*)pAttr)->GetStartNode();
+                bool bNewFtn = 0 == ((SwTxtFtn*)pAttr)->GetStartNode();
                 if( bNewFtn )
                 {
                     ((SwTxtFtn*)pAttr)->MakeNewTextSection( GetNodes() );
@@ -1418,7 +1418,7 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                     // anwerfen
                     if( RES_HIDDENPARAFLD ==
                         pAttr->GetFld().GetFld()->GetTyp()->Which() )
-                    bHiddenPara = sal_True;
+                    bHiddenPara = true;
                 }
                 break;
 
@@ -1606,14 +1606,14 @@ sal_Bool SwTxtNode::SetAttr( const SfxItemSet& rSet, xub_StrLen nStt,
     {
         // sind am Node schon Zeichenvorlagen gesetzt, muss man diese Attribute
         // (rSet) immer als TextAttribute setzen, damit sie angezeigt werden.
-        int bHasCharFmts = sal_False;
+        bool bHasCharFmts = false;
         if ( HasHints() )
         {
             for ( sal_uInt16 n = 0; n < m_pSwpHints->Count(); ++n )
             {
                 if ( (*m_pSwpHints)[ n ]->IsCharFmtAttr() )
                 {
-                    bHasCharFmts = sal_True;
+                    bHasCharFmts = true;
                     break;
                 }
             }
@@ -1882,7 +1882,7 @@ sal_Bool SwTxtNode::GetAttr( SfxItemSet& rSet, xub_StrLen nStt, xub_StrLen nEnd,
                 if ( ! pAttrEnd ) // no attributes without end
                     continue;
 
-                sal_Bool bChkInvalid = sal_False;
+                bool bChkInvalid = false;
                 if( nAttrStart <= nStt )       // vor oder genau Start
                 {
                     if( *pAttrEnd <= nStt )    // liegt davor
@@ -1893,11 +1893,11 @@ sal_Bool SwTxtNode::GetAttr( SfxItemSet& rSet, xub_StrLen nStt, xub_StrLen nEnd,
                     else
 //                  else if( pHt->GetAttr() != aFmtSet.Get( pHt->Which() ) )
                         // uneindeutig
-                        bChkInvalid = sal_True;
+                        bChkInvalid = true;
                 }
                 else if( nAttrStart < nEnd      // reicht in den Bereich
 )//                      && pHt->GetAttr() != aFmtSet.Get( pHt->Which() ) )
-                    bChkInvalid = sal_True;
+                    bChkInvalid = true;
 
                 if( bChkInvalid )
                 {
@@ -2599,7 +2599,7 @@ bool SwpHints::TryInsertHint( SwTxtAttr* const pHint, SwTxtNode &rNode,
         break;
     case RES_TXTATR_FIELD:
         {
-            sal_Bool bDelFirst = 0 != ((SwTxtFld*)pHint)->GetpTxtNode();
+            bool bDelFirst = 0 != ((SwTxtFld*)pHint)->GetpTxtNode();
             ((SwTxtFld*)pHint)->ChgTxtNode( &rNode );
             SwDoc* pDoc = rNode.GetDoc();
             const SwField* pFld = ((SwTxtFld*)pHint)->GetFld().GetFld();
@@ -2694,18 +2694,18 @@ bool SwpHints::TryInsertHint( SwTxtAttr* const pHint, SwTxtNode &rNode,
                     SwComparePosition eCmp = ::ComparePosition(
                             *pTmpHt->GetStart(), *pTmpHtEnd,
                             *pHint->GetStart(), *pTmpHintEnd );
-                    sal_Bool bDelOld = sal_True, bChgStart = sal_False, bChgEnd = sal_False;
+                    bool bDelOld = true, bChgStart = false, bChgEnd = false;
                     switch( eCmp )
                     {
                     case POS_BEFORE:
-                    case POS_BEHIND:    bDelOld = sal_False; break;
+                    case POS_BEHIND:    bDelOld = false; break;
 
-                    case POS_OUTSIDE:   bChgStart = bChgEnd = sal_True; break;
+                    case POS_OUTSIDE:   bChgStart = bChgEnd = true; break;
 
                     case POS_COLLIDE_END:
-                    case POS_OVERLAP_BEFORE:    bChgStart = sal_True; break;
+                    case POS_OVERLAP_BEFORE:    bChgStart = true; break;
                     case POS_COLLIDE_START:
-                    case POS_OVERLAP_BEHIND:    bChgEnd = sal_True; break;
+                    case POS_OVERLAP_BEHIND:    bChgEnd = true; break;
                     default: break;
                     }
 

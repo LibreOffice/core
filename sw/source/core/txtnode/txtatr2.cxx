@@ -148,7 +148,7 @@ SwCharFmt* SwTxtINetFmt::GetCharFmt()
 
         // JP 10.02.2000, Bug 72806: dont modify the doc for getting the
         //      correct charstyle.
-        sal_Bool bResetMod = !pDoc->IsModified();
+        bool bResetMod = !pDoc->IsModified();
         Link aOle2Lnk;
         if( bResetMod )
         {
@@ -265,7 +265,7 @@ SwCharFmt* SwTxtRuby::GetCharFmt()
 
         // JP 10.02.2000, Bug 72806: dont modify the doc for getting the
         //              correct charstyle.
-        sal_Bool bResetMod = !pDoc->IsModified();
+        bool bResetMod = !pDoc->IsModified();
         Link aOle2Lnk;
         if( bResetMod )
         {

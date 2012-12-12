@@ -241,13 +241,13 @@ static SwRect lcl_CalculateRepaintRect( SwTxtFrm& rTxtFrm, xub_StrLen nChgStart,
         delete pSt2Pos;
     }
 
-    sal_Bool bSameFrame = sal_True;
+    bool bSameFrame = true;
 
     if( rTxtFrm.HasFollow() )
     {
         if( pEndFrm != pStartFrm )
         {
-            bSameFrame = sal_False;
+            bSameFrame = false;
             SwRect aStFrm( pStartFrm->PaintArea() );
             {
                 SWRECTFN( pStartFrm )
@@ -263,7 +263,7 @@ static SwRect lcl_CalculateRepaintRect( SwTxtFrm& rTxtFrm, xub_StrLen nChgStart,
                 (aRect.*fnRect->fnSetRight)( (aStFrm.*fnRect->fnGetRight)() );
             }
             aRect.Union( aTmp );
-            while( sal_True )
+            while( true )
             {
                 pStartFrm = pStartFrm->GetFollow();
                 if( pStartFrm == pEndFrm )
@@ -319,7 +319,7 @@ static bool lcl_HaveCommonAttributes( IStyleAccess& rStyleAccess,
     {
         SfxItemIter aIter( *pSet1 );
         const SfxPoolItem* pItem = aIter.GetCurItem();
-        while( sal_True )
+        while( true )
         {
             if ( SFX_ITEM_SET == rSet2.GetItemState( pItem->Which(), sal_False ) )
             {
@@ -384,13 +384,13 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, sal_uInt16 nWhich,
     xub_StrLen nAttrStart;
     SwTxtAttr *pHt;
 
-    sal_Bool    bChanged = sal_False;
+    bool bChanged = false;
 
     // nMin and nMax initialized to maximum / minimum (inverse)
     xub_StrLen nMin = m_Text.Len();
     xub_StrLen nMax = nStt;
 
-    const sal_Bool bNoLen = !nMin;
+    const bool bNoLen = !nMin;
 
     // We have to remember the "new" attributes, which have
     // been introduced by splitting surrounding attributes (case 4).
@@ -509,7 +509,7 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, sal_uInt16 nWhich,
                         InsertHint( pNew, nsSetAttrMode::SETATTR_NOHINTADJUST );
                     }
 
-                    bChanged = sal_True;
+                    bChanged = true;
                 }
             }
         }
@@ -522,7 +522,7 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, sal_uInt16 nWhich,
                         nMin = nAttrStart;
                     if ( nMax < *pAttrEnd )
                         nMax = *pAttrEnd;
-                    bChanged = sal_True;
+                    bChanged = true;
 
                     const xub_StrLen nAttrEnd = *pAttrEnd;
 
@@ -544,7 +544,7 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, sal_uInt16 nWhich,
                         nMin = nAttrStart;
                     if ( nMax < *pAttrEnd )
                         nMax = *pAttrEnd;
-                    bChanged = sal_True;
+                    bChanged = true;
                     xub_StrLen nTmpEnd = *pAttrEnd;
                     m_pSwpHints->NoteInHistory( pHt );
                     *pAttrEnd = nStt;
@@ -1056,7 +1056,7 @@ sal_uInt16 SwTxtNode::Convert( SwConversionArgs &rArgs )
     const bool bRestoreString =
         lcl_MaskRedlinesAndHiddenText( *this, m_Text, 0, m_Text.Len() ) > 0;
 
-    sal_Bool    bFound  = sal_False;
+    bool    bFound  = false;
     xub_StrLen  nBegin  = nTextBegin;
     xub_StrLen  nLen = 0;
     LanguageType nLangFound = LANGUAGE_NONE;
@@ -1080,7 +1080,7 @@ sal_uInt16 SwTxtNode::Convert( SwConversionArgs &rArgs )
         // find non zero length text portion of appropriate language
         do {
             nLangFound = aIter.GetLanguage();
-            sal_Bool bLangOk =  (nLangFound == rArgs.nConvSrcLang) ||
+            bool bLangOk =  (nLangFound == rArgs.nConvSrcLang) ||
                                 (editeng::HangulHanjaConversion::IsChinese( nLangFound ) &&
                                  editeng::HangulHanjaConversion::IsChinese( rArgs.nConvSrcLang ));
 
@@ -1107,7 +1107,7 @@ sal_uInt16 SwTxtNode::Convert( SwConversionArgs &rArgs )
                 SwEditShell *pEditShell = GetDoc()->GetEditShell();
                 pEditShell->Push();             // save current cursor on stack
                 pEditShell->SetSelection( aCurPaM );
-                sal_Bool bIsAsianScript = (SCRIPTTYPE_ASIAN == pEditShell->GetScriptType());
+                bool bIsAsianScript = (SCRIPTTYPE_ASIAN == pEditShell->GetScriptType());
                 pEditShell->Pop( sal_False );   // restore cursor from stack
 
                 if (!bIsAsianScript && rArgs.bAllowImplicitChangesForNotConvertibleText)
@@ -1126,7 +1126,7 @@ sal_uInt16 SwTxtNode::Convert( SwConversionArgs &rArgs )
         nBegin = nTextBegin;
     if (nBegin + nLen > nTextEnd)
         nLen = nTextEnd - nBegin;
-    sal_Bool bInSelection = nBegin < nTextEnd;
+    bool bInSelection = nBegin < nTextEnd;
 
     if (bFound && bInSelection)     // convertible text found within selection/range?
     {
@@ -1157,7 +1157,7 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
 {
     SwRect aRect;
 #if OSL_DEBUG_LEVEL > 1
-    static sal_Bool bStop = sal_False;
+    static bool bStop = false;
     if ( bStop )
         return aRect;
 #endif
@@ -1176,7 +1176,7 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
                 0, pNode->GetTxt().Len() )     > 0;
 
     // a change of data indicates that at least one word has been modified
-    const sal_Bool bRedlineChg =
+    const bool bRedlineChg =
         ( pNode->GetTxt().GetBuffer() != aOldTxt.GetBuffer() );
 
     xub_StrLen nBegin = 0;
@@ -1187,7 +1187,7 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
     xub_StrLen nInvStart = STRING_LEN;
     xub_StrLen nInvEnd = 0;
 
-    const sal_Bool bAddAutoCmpl = pNode->IsAutoCompleteWordDirty() &&
+    const bool bAddAutoCmpl = pNode->IsAutoCompleteWordDirty() &&
                                   rViewOpt.IsAutoCompleteWords();
 
     if( pNode->GetWrong() )
@@ -1226,7 +1226,7 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
                 nInsertPos++;
     }
 
-    sal_Bool bFresh = nBegin < nEnd;
+    bool bFresh = nBegin < nEnd;
 
     if( nBegin < nEnd )
     {
@@ -1468,7 +1468,7 @@ void SwTxtFrm::CollectAutoCmplWrds( SwCntntNode* pActNode, xub_StrLen nActPos )
     xub_StrLen nBegin = 0;
     xub_StrLen nEnd = pNode->GetTxt().Len();
     xub_StrLen nLen;
-    sal_Bool bACWDirty = sal_False, bAnyWrd = sal_False;
+    bool bACWDirty = false, bAnyWrd = false;
 
     if( nBegin < nEnd )
     {
@@ -1487,10 +1487,10 @@ void SwTxtFrm::CollectAutoCmplWrds( SwCntntNode* pActNode, xub_StrLen nActPos )
                 {
                     if( rACW.GetMinWordLen() <= rWord.Len() )
                         rACW.InsertWord( rWord, *pDoc );
-                    bAnyWrd = sal_True;
+                    bAnyWrd = true;
                 }
                 else
-                    bACWDirty = sal_True;
+                    bACWDirty = true;
             }
             if( !--nCnt )
             {

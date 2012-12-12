@@ -36,7 +36,7 @@ inline void DumpHints(const SwpHtStart &, const SwpHtEnd &) { }
 // Sortierreihenfolge: Start, Ende (umgekehrt!), Which-Wert (umgekehrt!),
 //                     als letztes die Adresse selbst
 
-static sal_Bool lcl_IsLessStart( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
+static bool lcl_IsLessStart( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
 {
     if ( *rHt1.GetStart() == *rHt2.GetStart() )
     {
@@ -71,7 +71,7 @@ static sal_Bool lcl_IsLessStart( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
  *************************************************************************/
 
 // Zuerst nach Ende danach nach Ptr
-static sal_Bool lcl_IsLessEnd( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
+static bool lcl_IsLessEnd( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
 {
     const xub_StrLen nHt1 = *rHt1.GetAnyEnd();
     const xub_StrLen nHt2 = *rHt2.GetAnyEnd();

@@ -223,7 +223,7 @@ SwFmtINetFmt::~SwFmtINetFmt()
 int SwFmtINetFmt::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
-    sal_Bool bRet = SfxPoolItem::operator==( (SfxPoolItem&) rAttr )
+    bool bRet = SfxPoolItem::operator==( (SfxPoolItem&) rAttr )
                 && aURL == ((SwFmtINetFmt&)rAttr).aURL
                 && aName == ((SwFmtINetFmt&)rAttr).aName
                 && aTargetFrame == ((SwFmtINetFmt&)rAttr).aTargetFrame

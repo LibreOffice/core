@@ -186,7 +186,7 @@ SwTxtNode *SwNodes::MakeTxtNode( const SwNodeIndex & rWhere,
                 return pNode;
             break;
         }
-    } while( sal_True );
+    } while( true );
 }
 
 // --------------------
@@ -2272,7 +2272,7 @@ void SwTxtNode::GCAttr()
     bool   bChanged = false;
     sal_uInt16 nMin = m_Text.Len(),
            nMax = 0;
-    sal_Bool bAll = nMin != 0; // Bei leeren Absaetzen werden nur die
+    bool bAll = nMin != 0; // Bei leeren Absaetzen werden nur die
                            // INet-Formate entfernt.
 
     for ( sal_uInt16 i = 0; m_pSwpHints && i < m_pSwpHints->Count(); ++i )
@@ -2426,7 +2426,7 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, sal_Bool bNext,
             pTmpSet = pNewAttrSet;
 
         // PageBreaks/PageDesc/ColBreak rausschmeissen.
-        sal_Bool bRemoveFromCache = sal_False;
+        bool bRemoveFromCache = false;
         std::vector<sal_uInt16> aClearWhichIds;
         if ( bNext )
             bRemoveFromCache = ( 0 != pNewAttrSet->ClearItem( RES_PAGEDESC ) );
@@ -2439,7 +2439,7 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, sal_Bool bNext,
                 pNewAttrSet->ClearItem( RES_BREAK );
             else
                 aClearWhichIds.push_back( RES_BREAK );
-            bRemoveFromCache = sal_True;
+            bRemoveFromCache = true;
         }
         if( SFX_ITEM_SET == pTmpSet->GetItemState( RES_KEEP, sal_False ) )
         {
@@ -2447,7 +2447,7 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, sal_Bool bNext,
                 pNewAttrSet->ClearItem( RES_KEEP );
             else
                 aClearWhichIds.push_back( RES_KEEP );
-            bRemoveFromCache = sal_True;
+            bRemoveFromCache = true;
         }
         if( SFX_ITEM_SET == pTmpSet->GetItemState( RES_PARATR_SPLIT, sal_False ) )
         {
@@ -2455,7 +2455,7 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, sal_Bool bNext,
                 pNewAttrSet->ClearItem( RES_PARATR_SPLIT );
             else
                 aClearWhichIds.push_back( RES_PARATR_SPLIT );
-            bRemoveFromCache = sal_True;
+            bRemoveFromCache = true;
         }
         if(SFX_ITEM_SET == pTmpSet->GetItemState(RES_PARATR_NUMRULE, sal_False))
         {
@@ -2472,7 +2472,7 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, sal_Bool bNext,
                     // Only if the paragraph style changes - see below.
                     bClearHardSetNumRuleWhenFmtCollChanges = true;
                 }
-                bRemoveFromCache = sal_True;
+                bRemoveFromCache = true;
             }
         }
 
