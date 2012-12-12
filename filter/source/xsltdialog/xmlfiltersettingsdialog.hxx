@@ -67,7 +67,7 @@ private:
     DECL_LINK( TabBoxScrollHdl_Impl, SvTabListBox* );
     DECL_LINK( HeaderEndDrag_Impl, HeaderBar* );
 
-    String getEntryString( const filter_info_impl* pInfo ) const;
+    OUString getEntryString( const filter_info_impl* pInfo ) const;
 
 public:
     XMLFilterListBox(SvxPathControl* pParent);

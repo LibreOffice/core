@@ -52,7 +52,6 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
 
-using ::rtl::OUString;
 using ::rtl::Uri;
 
 XMLFilterSettingsDialog::XMLFilterSettingsDialog(Window* pParent,
@@ -90,11 +89,11 @@ XMLFilterSettingsDialog::XMLFilterSettingsDialog(Window* pParent,
 
     try
     {
-        mxFilterContainer = Reference< XNameContainer >::query( rxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.FilterFactory" )) ) );
-        mxTypeDetection = Reference< XNameContainer >::query( rxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.TypeDetection" )) ));
-        mxExtendedTypeDetection = Reference< XNameContainer >::query( rxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.ExtendedTypeDetectionFactory" )) ) );
+        mxFilterContainer = Reference< XNameContainer >::query( rxMSF->createInstance( "com.sun.star.document.FilterFactory" ) );
+        mxTypeDetection = Reference< XNameContainer >::query( rxMSF->createInstance( "com.sun.star.document.TypeDetection" ) );
+        mxExtendedTypeDetection = Reference< XNameContainer >::query( rxMSF->createInstance( "com.sun.star.document.ExtendedTypeDetectionFactory" ) );
 
-        Reference< XConfigManager > xCfgMgr( mxMSF->createInstance(OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.config.SpecialConfigManager" )) ), UNO_QUERY );
+        Reference< XConfigManager > xCfgMgr( mxMSF->createInstance( "com.sun.star.config.SpecialConfigManager" ), UNO_QUERY );
         if( xCfgMgr.is() )
         {
             m_sTemplatePath = xCfgMgr->substituteVariables( m_sTemplatePath );
@@ -198,7 +197,7 @@ void XMLFilterSettingsDialog::updateStates()
         sal_Int32 nFact = SvtModuleOptions::E_WRITER;
         while(nFact <= SvtModuleOptions::E_BASIC)
         {
-            ::rtl::OUString sDefault = maModuleOpt.GetFactoryDefaultFilter((SvtModuleOptions::EFactory)nFact);
+            OUString sDefault = maModuleOpt.GetFactoryDefaultFilter((SvtModuleOptions::EFactory)nFact);
             if( sDefault == pInfo->maFilterName )
             {
                 bIsDefault = true;
@@ -224,14 +223,14 @@ void XMLFilterSettingsDialog::onNew()
     aTempInfo.maFilterName = createUniqueFilterName(RESIDSTR(STR_DEFAULT_FILTER_NAME));
 
     // init default extension
-    String aDefaultExtension(RESIDSTR(STR_DEFAULT_EXTENSION));
+    OUString aDefaultExtension(RESIDSTR(STR_DEFAULT_EXTENSION));
     aTempInfo.maExtension = aDefaultExtension;
 
     // set default ui name
     aTempInfo.maInterfaceName = createUniqueInterfaceName(RESIDSTR(STR_DEFAULT_UI_NAME));
 
     // set default application
-    aTempInfo.maDocumentService = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" ));
+    aTempInfo.maDocumentService = "com.sun.star.text.TextDocument";
 
     // execute XML Filter Dialog
     XMLFilterTabDialog aDlg( this, *getXSLTDialogResMgr(), mxMSF, &aTempInfo );
@@ -273,7 +272,7 @@ void XMLFilterSettingsDialog::onEdit()
 
 /** helper to create a sequence of strings from an extensions strings
     "ext1;ext2;ext3" will become { "ext1", "ext2", "ext3" } */
-static Sequence< OUString > createExtensionsSequence( const rtl::OUString& rExtensions )
+static Sequence< OUString > createExtensionsSequence( const OUString& rExtensions )
 {
     // first count how many extensions we have inside the string
     int nExtensions = 0;
@@ -419,7 +418,7 @@ OUString XMLFilterSettingsDialog::createUniqueInterfaceName( const OUString& rIn
     if( nDefaultNumber )
     {
         aInterfaceName += OUString( sal_Unicode( ' ' ) );
-        aInterfaceName += String::CreateFromInt32( nDefaultNumber );
+        aInterfaceName += OUString::valueOf( static_cast<sal_Int32>(nDefaultNumber) );
     }
 
     return aInterfaceName;
@@ -540,28 +539,28 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
         // 3. create property values for filter entry
         Sequence< PropertyValue > aFilterData( 8 );
 
-        aFilterData[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Type" ) );
+        aFilterData[0].Name = "Type";
         aFilterData[0].Value <<= pFilterEntry->maType;
 
-        aFilterData[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "UIName" ) );
+        aFilterData[1].Name = "UIName";
         aFilterData[1].Value <<= pFilterEntry->maInterfaceName;
 
-        aFilterData[2].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "DocumentService" ) );
+        aFilterData[2].Name = "DocumentService";
         aFilterData[2].Value <<= pFilterEntry->maDocumentService;
 
-        aFilterData[3].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterService" ) );
-        aFilterData[3].Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Writer.XmlFilterAdaptor" ) );
+        aFilterData[3].Name = "FilterService";
+        aFilterData[3].Value <<= OUString( "com.sun.star.comp.Writer.XmlFilterAdaptor" );
 
-        aFilterData[4].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Flags" ) );
+        aFilterData[4].Name = "Flags";
         aFilterData[4].Value <<= pFilterEntry->maFlags;
 
-        aFilterData[5].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "UserData" ) );
+        aFilterData[5].Name = "UserData";
         aFilterData[5].Value <<= aUserData;
 
-        aFilterData[6].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "FileFormatVersion" ) );
+        aFilterData[6].Name = "FileFormatVersion";
         aFilterData[6].Value <<= pFilterEntry->maFileFormatVersion;
 
-        aFilterData[7].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "TemplateName" ) );
+        aFilterData[7].Name = "TemplateName";
         aFilterData[7].Value <<= pFilterEntry->maImportTemplate;
 
         // 4. insert new or replace existing filter
@@ -589,9 +588,9 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
     {
         Sequence< PropertyValue > aValues(4);
 
-        aValues[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "UIName" ) );
+        aValues[0].Name = "UIName";
         aValues[0].Value <<= pFilterEntry->maInterfaceName;
-        aValues[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "ClipboardFormat" ) );
+        aValues[1].Name = "ClipboardFormat";
         OUString aDocType;
         if( !pFilterEntry->maDocType.match( m_sDocTypePrefix ) )
         {
@@ -607,18 +606,18 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
         else
             aValues[1].Value <<= aDocType;
 
-        aValues[2].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "DocumentIconID" ) );
+        aValues[2].Name = "DocumentIconID";
         aValues[2].Value <<= pFilterEntry->mnDocumentIconID;
 
-        aValues[3].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Extensions" ) );
+        aValues[3].Name = "Extensions";
         aValues[3].Value <<= createExtensionsSequence( pFilterEntry->maExtension );
 
         // the detect service will only be registered, if a doctype/search token was specified
         if (aDocType.getLength() > m_sDocTypePrefix.getLength())
         {
             aValues.realloc(5);
-            aValues[4].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "DetectService" ) );
-            aValues[4].Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.filters.XMLFilterDetect" ) );
+            aValues[4].Name = "DetectService";
+            aValues[4].Value <<= OUString( "com.sun.star.comp.filters.XMLFilterDetect" );
         }
 
         // 6. insert new or replace existing type information
@@ -708,7 +707,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
     {
         if( mxExtendedTypeDetection.is() )
         {
-            OUString sFilterDetectService( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.filters.XMLFilterDetect") );
+            OUString sFilterDetectService( "com.sun.star.comp.filters.XMLFilterDetect" );
             if( mxExtendedTypeDetection->hasByName( sFilterDetectService ) )
             {
                 Sequence< PropertyValue > aSequence;
@@ -797,9 +796,9 @@ void XMLFilterSettingsDialog::onDelete()
     {
         filter_info_impl* pInfo = (filter_info_impl*)pEntry->GetUserData();
 
-        String aPlaceHolder( RTL_CONSTASCII_USTRINGPARAM("%s") );
-        String aMessage(RESIDSTR(STR_WARN_DELETE));
-        aMessage.SearchAndReplace( aPlaceHolder, pInfo->maFilterName );
+        OUString aPlaceHolder( "%s" );
+        OUString aMessage(RESIDSTR(STR_WARN_DELETE));
+        aMessage.replaceAll( aPlaceHolder, pInfo->maFilterName );
 
         WarningBox aWarnBox(this, (WinBits)(WB_YES_NO | WB_DEF_YES),    aMessage );
         if( aWarnBox.Execute() == RET_YES )
@@ -902,11 +901,11 @@ void XMLFilterSettingsDialog::onSave()
         com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
         0 );
 
-    String aExtensions( RTL_CONSTASCII_USTRINGPARAM("*.jar") );
-    String aFilterName(RESIDSTR(STR_FILTER_PACKAGE));
-    aFilterName += String( RTL_CONSTASCII_USTRINGPARAM(" (") );
+    OUString aExtensions( "*.jar" );
+    OUString aFilterName(RESIDSTR(STR_FILTER_PACKAGE));
+    aFilterName += " (";
     aFilterName += aExtensions;
-    aFilterName += sal_Unicode(')');
+    aFilterName += OUString( sal_Unicode( ')' ) );
 
     aDlg.AddFilter( aFilterName, aExtensions );
 
@@ -917,20 +916,20 @@ void XMLFilterSettingsDialog::onSave()
 
         INetURLObject aURL( aDlg.GetPath() );
 
-        String sPlaceholder( RTL_CONSTASCII_USTRINGPARAM( "%s" ) );
+        OUString sPlaceholder( "%s" );
 
-        String aMsg;
+        OUString aMsg;
         if( nFilters > 0 )
         {
             aMsg = RESIDSTR(STR_FILTERS_HAVE_BEEN_SAVED);
-            aMsg.SearchAndReplace( sPlaceholder, String::CreateFromInt32(nFilters) );
-            aMsg.SearchAndReplace( sPlaceholder, aURL.GetName() );
+            aMsg.replaceAll( sPlaceholder, OUString::valueOf( static_cast<sal_Int32>(nFilters) ) );
+            aMsg.replaceAll( sPlaceholder, aURL.GetName() );
         }
         else
         {
             aMsg = RESIDSTR(STR_FILTER_HAS_BEEN_SAVED);
-            aMsg.SearchAndReplace( sPlaceholder, (*aFilters.begin())->maFilterName );
-            aMsg.SearchAndReplace( sPlaceholder, aURL.GetName() );
+            aMsg.replaceAll( sPlaceholder, (*aFilters.begin())->maFilterName );
+            aMsg.replaceAll( sPlaceholder, aURL.GetName() );
         }
 
         InfoBox aBox(this, aMsg );
@@ -948,11 +947,11 @@ void XMLFilterSettingsDialog::onOpen()
        ::sfx2::FileDialogHelper aDlg(
         com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
 
-    String aExtensions( RTL_CONSTASCII_USTRINGPARAM("*.jar") );
-    String aFilterName(RESIDSTR(STR_FILTER_PACKAGE));
-    aFilterName += String( RTL_CONSTASCII_USTRINGPARAM(" (") );
+    OUString aExtensions( "*.jar" );
+    OUString aFilterName(RESIDSTR(STR_FILTER_PACKAGE));
+    aFilterName += " (";
     aFilterName += aExtensions;
-    aFilterName += sal_Unicode(')');
+    aFilterName += OUString( sal_Unicode( ')' ) );
 
     aDlg.AddFilter( aFilterName, aExtensions );
 
@@ -981,24 +980,24 @@ void XMLFilterSettingsDialog::onOpen()
         disposeFilterList();
         initFilterList();
 
-        String sPlaceholder( RTL_CONSTASCII_USTRINGPARAM( "%s" ) );
-        String aMsg;
+        OUString sPlaceholder( "%s" );
+        OUString aMsg;
         if( nFilters == 0 )
         {
             INetURLObject aURLObj( aURL );
             aMsg = RESIDSTR(STR_NO_FILTERS_FOUND);
-            aMsg.SearchAndReplace( sPlaceholder, aURLObj.GetName() );
+            aMsg.replaceAll( sPlaceholder, aURLObj.GetName() );
         }
         else if( nFilters == 1 )
         {
             aMsg = RESIDSTR(STR_FILTER_INSTALLED);
-            aMsg.SearchAndReplace( sPlaceholder, aFilterName );
+            aMsg.replaceAll( sPlaceholder, aFilterName );
 
         }
         else
         {
             aMsg = RESIDSTR(STR_FILTERS_INSTALLED);
-            aMsg.SearchAndReplace( sPlaceholder, String::CreateFromInt32(nFilters) );
+            aMsg.replaceAll( sPlaceholder, OUString::valueOf( static_cast<sal_Int32>(nFilters) ) );
         }
 
         InfoBox aBox(this, aMsg );
@@ -1518,17 +1517,17 @@ void XMLFilterListBox::changeEntry( const filter_info_impl* pInfo )
 
 // -----------------------------------------------------------------------
 
-String XMLFilterListBox::getEntryString( const filter_info_impl* pInfo ) const
+OUString XMLFilterListBox::getEntryString( const filter_info_impl* pInfo ) const
 {
-    String aEntryStr( pInfo->maFilterName );
-    aEntryStr += '\t';
+    OUString aEntryStr( pInfo->maFilterName );
+    aEntryStr += OUString( sal_Unicode( '\t' ) );
     if ( !pInfo->maExportService.isEmpty() )
-        aEntryStr += String( getApplicationUIName( pInfo->maExportService ) );
+        aEntryStr += OUString( getApplicationUIName( pInfo->maExportService ) );
     else
-        aEntryStr += String( getApplicationUIName( pInfo->maImportService ) );
-    aEntryStr += ' ';
-    aEntryStr += '-';
-    aEntryStr += ' ';
+        aEntryStr += OUString( getApplicationUIName( pInfo->maImportService ) );
+    aEntryStr += OUString( sal_Unicode( ' ' ) );
+    aEntryStr += OUString( sal_Unicode( '-' ) );
+    aEntryStr += OUString( sal_Unicode( ' ' ) );
 
     if( pInfo->maFlags & 1 )
     {
