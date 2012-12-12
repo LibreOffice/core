@@ -28,10 +28,10 @@ else
 $(call gb_ExternalProject_get_state_target,cppunit,build) :
 	cd $(EXTERNAL_WORKDIR)/src/cppunit \
 	&& msbuild.exe cppunit_dll.vcxproj /p:Configuration=Release \
-	$(if $(filter 110,$(VCVER)),/p:PlatformToolset=v110) \
+	$(if $(filter 110,$(VCVER)),/p:PlatformToolset=v110 /p:VisualStudioVersion=11.0) \
 	&& cd ../DllPlugInTester \
 	&& msbuild.exe DllPlugInTester.vcxproj /p:Configuration=Release \
-	$(if $(filter 110,$(VCVER)),/p:PlatformToolset=v110) \
+	$(if $(filter 110,$(VCVER)),/p:PlatformToolset=v110 /p:VisualStudioVersion=11.0) \
 	&& touch $@
 endif
 else
