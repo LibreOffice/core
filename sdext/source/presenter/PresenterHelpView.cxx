@@ -16,7 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
+#include "vcl/svapp.hxx"
 #include "PresenterHelpView.hxx"
 #include "PresenterButton.hxx"
 #include "PresenterCanvasHelper.hxx"
@@ -311,29 +311,59 @@ void PresenterHelpView::Paint (const awt::Rectangle& rUpdateBox)
     TextContainer::const_iterator iBlockEnd (mpTextContainer->end());
     for ( ; iBlock!=iBlockEnd; ++iBlock)
     {
-        const double nLeftHeight (
-            (*iBlock)->maLeft.Paint(mxCanvas,
-                geometry::RealRectangle2D(
-                    gnHorizontalGap,
-                    nY,
-                    aWindowBox.Width/2 - gnHorizontalGap,
-                    aWindowBox.Height - gnVerticalBorder),
-                false,
-                aViewState,
-                aRenderState,
-                mpFont->mxFont));
-        const double nRightHeight (
-            (*iBlock)->maRight.Paint(mxCanvas,
-                geometry::RealRectangle2D(
-                    aWindowBox.Width/2 + gnHorizontalGap,
-                    nY,
-                    aWindowBox.Width - gnHorizontalGap,
-                    aWindowBox.Height - gnVerticalBorder),
-                true,
-                aViewState,
-                aRenderState,
-                mpFont->mxFont));
-        nY += ::std::max(nLeftHeight,nRightHeight);
+        /// check whether RTL interface or not
+        if(!Application::GetSettings().GetLayoutRTL())
+        {
+            const double nLeftHeight (
+                (*iBlock)->maLeft.Paint(mxCanvas,
+                    geometry::RealRectangle2D(
+                        gnHorizontalGap,
+                        nY,
+                        aWindowBox.Width/2 - gnHorizontalGap,
+                        aWindowBox.Height - gnVerticalBorder),
+                    false,
+                    aViewState,
+                    aRenderState,
+                    mpFont->mxFont));
+            const double nRightHeight (
+                (*iBlock)->maRight.Paint(mxCanvas,
+                    geometry::RealRectangle2D(
+                        aWindowBox.Width/2 + gnHorizontalGap,
+                        nY,
+                        aWindowBox.Width - gnHorizontalGap,
+                        aWindowBox.Height - gnVerticalBorder),
+                    true,
+                    aViewState,
+                    aRenderState,
+                    mpFont->mxFont));
+            nY += ::std::max(nLeftHeight,nRightHeight);
+        }
+        else
+        {
+            const double nLeftHeight (
+                (*iBlock)->maLeft.Paint(mxCanvas,
+                    geometry::RealRectangle2D(
+                        aWindowBox.Width/2 + gnHorizontalGap,
+                        nY,
+                        aWindowBox.Width - gnHorizontalGap,
+                        aWindowBox.Height - gnVerticalBorder),
+                    false,
+                    aViewState,
+                    aRenderState,
+                    mpFont->mxFont));
+            const double nRightHeight (
+                (*iBlock)->maRight.Paint(mxCanvas,
+                    geometry::RealRectangle2D(
+                        gnHorizontalGap,
+                        nY,
+                        aWindowBox.Width/2 - gnHorizontalGap,
+                        aWindowBox.Height - gnVerticalBorder),
+                    true,
+                    aViewState,
+                    aRenderState,
+                    mpFont->mxFont));
+            nY += ::std::max(nLeftHeight,nRightHeight);
+        }
     }
 
     Reference<rendering::XSpriteCanvas> xSpriteCanvas (mxCanvas, UNO_QUERY);
@@ -567,20 +597,30 @@ double LineDescriptorList::Paint(
     vector<LineDescriptor>::const_iterator iEnd (mpLineDescriptors->end());
     for ( ; iLine!=iEnd; ++iLine)
     {
-        double nX (rBBox.X1);
-        if ( ! bFlushLeft)
-            nX = rBBox.X2 - iLine->maSize.Width;
+        double nX;
+        /// check whether RTL interface or not
+        if(!Application::GetSettings().GetLayoutRTL())
+        {
+            nX = rBBox.X1;
+            if ( ! bFlushLeft)
+                nX = rBBox.X2 - iLine->maSize.Width;
+        }
+        else
+        {
+            nX=rBBox.X2 - iLine->maSize.Width;
+            if ( ! bFlushLeft)
+                nX = rBBox.X1;
+        }
         rRenderState.AffineTransform.m02 = nX;
         rRenderState.AffineTransform.m12 = nY + iLine->maSize.Height - iLine->mnVerticalOffset;
 
         const rendering::StringContext aContext (iLine->msLine, 0, iLine->msLine.getLength());
-
-        rxCanvas->drawText (
-            aContext,
-            rxFont,
+        Reference<rendering::XTextLayout> xLayout (
+        rxFont->createTextLayout(aContext, rendering::TextDirection::WEAK_LEFT_TO_RIGHT, 0));
+        rxCanvas->drawTextLayout (
+            xLayout,
             rViewState,
-            rRenderState,
-            rendering::TextDirection::WEAK_LEFT_TO_RIGHT);
+            rRenderState);
 
         nY += iLine->maSize.Height * 1.2;
     }
