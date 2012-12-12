@@ -113,6 +113,7 @@ using namespace ::com::sun::star::beans;
 namespace
 {
     class theSfxFilterListener : public rtl::Static<SfxFilterListener, theSfxFilterListener> {};
+    class theSfxFilterArray : public rtl::Static<SfxFilterList_Impl, theSfxFilterArray > {};
 }
 
 static SfxFilterList_Impl* pFilterArr = 0;
@@ -120,7 +121,7 @@ static sal_Bool bFirstRead = sal_True;
 
 static void CreateFilterArr()
 {
-    pFilterArr = new SfxFilterList_Impl;
+    pFilterArr = &theSfxFilterArray::get();
     theSfxFilterListener::get();
 }
 
@@ -224,7 +225,7 @@ const SfxFilter* SfxFilterContainer::GetDefaultFilter_Impl( const String& rName 
 
         for ( size_t i = 0, n = pFilterArr->size(); i < n; ++i )
         {
-            const SfxFilter* pCheckFilter = pFilterArr->at( i );
+            const SfxFilter* pCheckFilter = (*pFilterArr)[i];
             if ( pCheckFilter->GetServiceName().equalsIgnoreAsciiCase(sServiceName) )
             {
                 pFilter = pCheckFilter;
@@ -325,7 +326,7 @@ void SfxFilterMatcher_Impl::Update()
         pList->clear();
         for ( size_t i = 0, n = pFilterArr->size(); i < n; ++i )
         {
-            SfxFilter* pFilter = pFilterArr->at( i );
+            SfxFilter* pFilter = (*pFilterArr)[i];
             if ( pFilter->GetServiceName() == aName )
                 pList->push_back( pFilter );
         }
@@ -359,7 +360,7 @@ const SfxFilter* SfxFilterMatcher::GetAnyFilter( SfxFilterFlags nMust, SfxFilter
     m_rImpl.InitForIterating();
     for ( size_t i = 0, n = m_rImpl.pList->size(); i < n; ++i )
     {
-        const SfxFilter* pFilter = m_rImpl.pList->at( i );
+        const SfxFilter* pFilter = (*m_rImpl.pList)[i];
         SfxFilterFlags nFlags = pFilter->GetFilterFlags();
         if ( (nFlags & nMust) == nMust && !(nFlags & nDont ) )
             return pFilter;
@@ -655,7 +656,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4Mime( const ::rtl::OUString& rMedia
     {
         for ( size_t i = 0, n = m_rImpl.pList->size(); i < n; ++i )
         {
-            const SfxFilter* pFilter = m_rImpl.pList->at( i );
+            const SfxFilter* pFilter = (*m_rImpl.pList)[i];
             SfxFilterFlags nFlags = pFilter->GetFilterFlags();
             if ( (nFlags & nMust) == nMust && !(nFlags & nDont ) && pFilter->GetMimeType() == rMediaType )
                 return pFilter;
@@ -677,7 +678,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4EA( const String& rType,SfxFilterFl
         const SfxFilter* pFirst = 0;
         for ( size_t i = 0, n = m_rImpl.pList->size(); i < n; ++i )
         {
-            const SfxFilter* pFilter = m_rImpl.pList->at( i );
+            const SfxFilter* pFilter = (*m_rImpl.pList)[i];
             SfxFilterFlags nFlags = pFilter->GetFilterFlags();
             if ( (nFlags & nMust) == nMust && !(nFlags & nDont ) && pFilter->GetTypeName() == rType )
             {
@@ -705,7 +706,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4Extension( const String& rExt, SfxF
     {
         for ( size_t i = 0, n = m_rImpl.pList->size(); i < n; ++i )
         {
-            const SfxFilter* pFilter = m_rImpl.pList->at( i );
+            const SfxFilter* pFilter = (*m_rImpl.pList)[i];
             SfxFilterFlags nFlags = pFilter->GetFilterFlags();
             if ( (nFlags & nMust) == nMust && !(nFlags & nDont ) )
             {
@@ -758,7 +759,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4UIName( const String& rName, SfxFil
     const SfxFilter* pFirstFilter=0;
     for ( size_t i = 0, n = m_rImpl.pList->size(); i < n; ++i )
     {
-        const SfxFilter* pFilter = m_rImpl.pList->at( i );
+        const SfxFilter* pFilter = (*m_rImpl.pList)[i];
         SfxFilterFlags nFlags = pFilter->GetFilterFlags();
         if ( (nFlags & nMust) == nMust &&
              !(nFlags & nDont ) && pFilter->GetUIName() == rName )
@@ -801,7 +802,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4FilterName( const String& rName, Sf
             {
                 for ( size_t i = 0, n = pFilterArr->size(); i < n; ++i )
                 {
-                    const SfxFilter* pFilter = pFilterArr->at( i );
+                    const SfxFilter* pFilter = (*pFilterArr)[i];
                     SfxFilterFlags nFlags = pFilter->GetFilterFlags();
                     if ( (nFlags & nMust) == nMust && !(nFlags & nDont ) && pFilter->GetFilterName().CompareIgnoreCaseToAscii( aName ) == COMPARE_EQUAL )
                         return pFilter;
@@ -818,7 +819,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4FilterName( const String& rName, Sf
 
     for ( size_t i = 0, n = pList->size(); i < n; ++i )
     {
-        const SfxFilter* pFilter = pList->at( i );
+        const SfxFilter* pFilter = (*pList)[i];
         SfxFilterFlags nFlags = pFilter->GetFilterFlags();
         if ( (nFlags & nMust) == nMust && !(nFlags & nDont ) && pFilter->GetFilterName().CompareIgnoreCaseToAscii( aName ) == COMPARE_EQUAL )
             return pFilter;
@@ -860,7 +861,7 @@ const SfxFilter* SfxFilterMatcherIter::Find_Impl()
     const SfxFilter* pFilter = 0;
     while( nCurrent < m_rMatch.pList->size() )
     {
-        pFilter = m_rMatch.pList->at( nCurrent++ );
+        pFilter = (*m_rMatch.pList)[nCurrent++];
         SfxFilterFlags nFlags = pFilter->GetFilterFlags();
         if( ((nFlags & nOrMask) == nOrMask ) && !(nFlags & nAndMask ) )
             break;
@@ -919,7 +920,7 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
 {
     ::rtl::OUString sFilterName( rName );
     SfxFilterList_Impl& rList = *pFilterArr;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > lFilterProperties                           ;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > lFilterProperties;
     ::com::sun::star::uno::Any aResult;
     try
     {
