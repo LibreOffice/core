@@ -11565,7 +11565,11 @@ AC_MSG_CHECKING([which languages to be built])
 #   + removes en-US; we want to put it on the beginning
 #   + prints just the section starting with 'completelangiso=' and ending with the " at the end of line
 [eval $(sed -e :a -e '/\\$/N; s/\\\n//; ta' -n -e 's/=/="/;s/\([^\\]\)$/\1"/;s/en-US//;/^completelangiso/p' solenv/inc/langlist.mk)]
-ALL_LANGS="en-US $completelangiso"
+if test "$enable_release_build" = "" -o "$enable_release_build" = "no"; then
+    ALL_LANGS="en-US $completelangiso qtz"
+else
+    ALL_LANGS="en-US $completelangiso"
+fi
 # check the configured localizations
 WITH_LANG="$with_lang"
 if test -z "$WITH_LANG" -o "$WITH_LANG" = "en-US"; then
@@ -11589,10 +11593,11 @@ for lang in $WITH_LANG; do
 done
 # list with substituted ALL
 WITH_LANG_LIST=`echo $WITH_LANG | sed "s/ALL/$ALL_LANGS/"`
-# this variable is used only by bin/distro-install-* helper scripts
-# they need a real list of languages
 test -z "$WITH_LANG_LIST" && WITH_LANG_LIST="en-US"
 test "$WITH_LANG" = "en-US" && WITH_LANG=
+if test "$enable_release_build" = "" -o "$enable_releasbie_build" = "no"; then
+    test "$WITH_LANG_LIST" = "en-US" || WITH_LANG_LIST=`echo $WITH_LANG_LIST qtz`
+fi
 AC_SUBST(ALL_LANGS)
 AC_SUBST(WITH_LANG)
 AC_SUBST(WITH_LANG_LIST)

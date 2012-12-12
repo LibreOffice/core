@@ -184,7 +184,7 @@ sal_Bool LngParser::Merge(
     }
     nError = LNG_OK;
 
-    MergeDataFile aMergeDataFile( rSDFFile, sSource, false, false );
+    MergeDataFile aMergeDataFile( rSDFFile, sSource, false, true );
     rtl::OString sTmp( Export::sLanguages );
     if( sTmp.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("ALL")) )
         Export::SetLanguages( aMergeDataFile.GetLanguages() );
@@ -260,6 +260,8 @@ sal_Bool LngParser::Merge(
                         {
                             rtl::OString sNewText;
                             pEntrys->GetText( sNewText, STRING_TYP_TEXT, sLang, sal_True );
+                            if( sLang == "qtz" )
+                                sNewText = sNewText.copy(6);
 
                             if ( !sNewText.isEmpty()) {
                                 rtl::OString *pLine = (*pLines)[ nPos ];
@@ -296,6 +298,8 @@ sal_Bool LngParser::Merge(
 
                     rtl::OString sNewText;
                     pEntrys->GetText( sNewText, STRING_TYP_TEXT, sCur, sal_True );
+                    if( sCur == "qtz" )
+                                sNewText = sNewText.copy(6);
                     if (( !sNewText.isEmpty()) &&
                         !(( sCur.equalsL(RTL_CONSTASCII_STRINGPARAM("x-comment"))) && ( sNewText == "-" )))
                     {

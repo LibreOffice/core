@@ -517,6 +517,7 @@ $(MISC)/lang/Langpack-{$(alllangiso)}.xcd : $(SOLARXMLDIR)/$(MY_MOD)/$$(@:b).xcu
 
 $(MISC)/lang/Langpack-%.xcd .ERRREMOVE :
     $(MKDIRHIER) $(@:d)
+    echo '************ $(alllangiso) ***************'
     - $(RM) $(MISC)/$(@:b).list
     echo '<list><dependency file="main"/>' \
         '<filename>$(MY_MOD)/$(@:b).xcu</filename></list>' > $(MISC)/$(@:b).list

@@ -23,4 +23,4 @@ defaultlangiso=en-US
 # Complete list of all supported localizations (ISO codes)
 .INCLUDE : langlist.mk
 
-alllangiso=$(strip $(defaultlangiso) $(subst,$(defaultlangiso), $(uniq $(subst,ALL,$(completelangiso) $(WITH_LANG)))))
+alllangiso=$(strip $(defaultlangiso) $(subst,$(defaultlangiso), $(WITH_LANG_LIST)))
