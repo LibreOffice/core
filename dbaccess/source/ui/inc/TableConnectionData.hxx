@@ -77,8 +77,13 @@ namespace dbaui
         void ResetConnLines();
 
         /** moves the empty lines to the back
+            removes duplicated empty lines
+
+            caller is responsible for repainting them
+
+            @return infex of first changed line, or one-past-the-end if no change
          */
-        void normalizeLines();
+        OConnectionLineDataVec::size_type normalizeLines();
 
         const OConnectionLineDataVec* GetConnLineDataList() const { return &m_vConnLineData; }
         OConnectionLineDataVec* GetConnLineDataList() { return &m_vConnLineData; }

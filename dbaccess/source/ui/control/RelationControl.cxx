@@ -36,6 +36,11 @@
 #include <osl/diagnose.h>
 
 #include <algorithm>
+#include <list>
+using std::list;
+#include <utility>
+using std::pair;
+using std::make_pair;
 
 #define SOURCE_COLUMN   1
 #define DEST_COLUMN     2
@@ -60,6 +65,9 @@ namespace dbaui
         long                                    m_nDataPos;
         Reference< XPropertySet>                m_xSourceDef;
         Reference< XPropertySet>                m_xDestDef;
+        enum opcode { DELETE, INSERT, MODIFY };
+        typedef list< pair < opcode, pair < OConnectionLineDataVec::size_type, OConnectionLineDataVec::size_type> > > ops_type;
+        ops_type                                m_ops;
 
 
         void fillListBox(const Reference< XPropertySet>& _xDest,long nRow,sal_uInt16 nColumnId);
@@ -230,15 +238,17 @@ namespace dbaui
     sal_Bool ORelationControl::SaveModified()
     {
         DBG_CHKTHIS(ORelationControl,NULL);
-        sal_Int32 nRow = GetCurRow();
+        long nRow = GetCurRow();
         if ( nRow != BROWSER_ENDOFSELECTION )
         {
             String sFieldName(m_pListCell->GetSelectEntry());
             OConnectionLineDataVec* pLines = m_pConnData->GetConnLineDataList();
-            if ( pLines->size() <= static_cast<sal_uInt32>(nRow) )
+            if ( pLines->size() <= static_cast<OConnectionLineDataVec::size_type>(nRow) )
             {
                 pLines->push_back(new OConnectionLineData());
                 nRow = pLines->size() - 1;
+                // add new past-pLines row
+                m_ops.push_back(make_pair(INSERT, make_pair(nRow+1, nRow+2)));
             }
 
             OConnectionLineDataRef pConnLineData = (*pLines)[nRow];
@@ -252,7 +262,17 @@ namespace dbaui
                 pConnLineData->SetDestFieldName( sFieldName );
                 break;
             }
+            // the modification we just did does *not* need to be registered in m_ops;
+            // it is already taken into account (by the codepath that called us)
+            //m_ops.push_back(make_pair(MODIFY, make_pair(nRow, nRow+1)));
         }
+
+        const OConnectionLineDataVec::size_type oldSize = m_pConnData->GetConnLineDataList()->size();
+        OConnectionLineDataVec::size_type line = m_pConnData->normalizeLines();
+        const OConnectionLineDataVec::size_type newSize = m_pConnData->GetConnLineDataList()->size();
+        assert(newSize <= oldSize);
+        m_ops.push_back(make_pair(MODIFY, make_pair(line, newSize)));
+        m_ops.push_back(make_pair(DELETE, make_pair(newSize, oldSize)));
 
         return sal_True;
     }
@@ -636,12 +656,27 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
         }
         m_pParentDialog->setValid(bValid);
 
-        if ( pLines->size() >= static_cast<sal_uInt32>(m_pRC_Tables->GetRowCount()) )
+        ORelationControl::ops_type::iterator i (m_pRC_Tables->m_ops.begin());
+        const ORelationControl::ops_type::const_iterator e (m_pRC_Tables->m_ops.end());
+        m_pRC_Tables->DeactivateCell();
+        for(; i != e; ++i)
         {
-            m_pRC_Tables->DeactivateCell();
-            m_pRC_Tables->RowInserted(m_pRC_Tables->GetRowCount(), pLines->size() - static_cast<sal_uInt32>(m_pRC_Tables->GetRowCount()) + 1, sal_True);
-            m_pRC_Tables->ActivateCell();
+            switch(i->first)
+            {
+            case ORelationControl::DELETE:
+                m_pRC_Tables->RowRemoved(i->second.first, i->second.second - i->second.first);
+                break;
+            case ORelationControl::INSERT:
+                m_pRC_Tables->RowInserted(i->second.first, i->second.second - i->second.first);
+                break;
+            case ORelationControl::MODIFY:
+                for(OConnectionLineDataVec::size_type j = i->second.first; j < i->second.second; ++j)
+                    m_pRC_Tables->RowModified(j);
+                break;
+            }
         }
+        m_pRC_Tables->ActivateCell();
+        m_pRC_Tables->m_ops.clear();
     }
     // -----------------------------------------------------------------------------
     void fillEntryAndDisable(ListBox& _rListBox,const String& _sEntry)
@@ -696,9 +731,7 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
     // -----------------------------------------------------------------------------
     sal_Bool OTableListBoxControl::SaveModified()
     {
-        sal_Bool bRet = m_pRC_Tables->SaveModified();
-        m_pRC_Tables->getData()->normalizeLines();
-        return bRet;
+        return m_pRC_Tables->SaveModified();
     }
     // -----------------------------------------------------------------------------
     TTableWindowData::value_type OTableListBoxControl::getReferencingTable()    const

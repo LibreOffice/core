@@ -162,22 +162,25 @@ OTableConnectionData* OTableConnectionData::NewInstance() const
     return new OTableConnectionData();
 }
 // -----------------------------------------------------------------------------
-void OTableConnectionData::normalizeLines()
+OConnectionLineDataVec::size_type OTableConnectionData::normalizeLines()
 {
-    // noch ein wenig Normalisierung auf den LineDatas : leere Lines vom Anfang an das Ende verschieben
-    sal_Int32 nCount = m_vConnLineData.size();
-    for(sal_Int32 i=0;i<nCount;)
+    // remove empty lines
+    OConnectionLineDataVec::size_type nCount = m_vConnLineData.size();
+    OConnectionLineDataVec::size_type nRet = nCount;
+    for(OConnectionLineDataVec::size_type i = 0; i < nCount;)
     {
-        if(m_vConnLineData[i]->GetSourceFieldName().isEmpty() || m_vConnLineData[i]->GetDestFieldName().isEmpty())
+        if(m_vConnLineData[i]->GetSourceFieldName().isEmpty() && m_vConnLineData[i]->GetDestFieldName().isEmpty())
         {
             OConnectionLineDataRef pData = m_vConnLineData[i];
             m_vConnLineData.erase(m_vConnLineData.begin()+i);
-            m_vConnLineData.push_back(pData);
             --nCount;
+            if (i < nRet)
+                nRet=i;
         }
         else
             ++i;
     }
+    return nRet;
 }
 // -----------------------------------------------------------------------------
 
