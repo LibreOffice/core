@@ -437,7 +437,13 @@ namespace dbaui
         DBG_CHKTHIS(ORelationControl,NULL);
         EditBrowseBox::CellModified();
         SaveModified();
-        static_cast<OTableListBoxControl*>(GetParent())->NotifyCellChange();
+#if OSL_DEBUG_LEVEL > 0
+        OTableListBoxControl *parent = dynamic_cast<OTableListBoxControl*>(GetParent());
+#else
+        OTableListBoxControl *parent = static_cast<OTableListBoxControl*>(GetParent());
+#endif
+        assert(parent);
+        parent->NotifyCellChange();
     }
     //========================================================================
     // class OTableListBoxControl
