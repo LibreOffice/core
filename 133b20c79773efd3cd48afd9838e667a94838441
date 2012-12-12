@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAARn///94\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-12-12T13:41:52Z",
+      "side": 1,
+      "message": "\"Replase\" is not a word and should be replaced with \"Replace\"",
+      "revId": "133b20c79773efd3cd48afd9838e667a94838441",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAARn///98\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 3498,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-12-12T13:41:52Z",
+      "side": 1,
+      "message": "why \"not-used\"? why not remove GUIBASE?",
+      "revId": "133b20c79773efd3cd48afd9838e667a94838441",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
