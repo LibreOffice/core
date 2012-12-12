@@ -40,28 +40,28 @@ def bootstrap():
 	get the ServiceManager by calling getServiceManager() on the returned object.
 	"""
     try:
-	# soffice script used on *ix, Mac; soffice.exe used on Windoof
+       # soffice script used on *ix, Mac; soffice.exe used on Win
         if "UNO_PATH" in os.environ:
             sOffice = os.environ["UNO_PATH"]
         else:
             sOffice = "" # lets hope for the best
         sOffice = os.path.join(sOffice, "soffice")
-        if platform.startswith("win"): 
+        if platform.startswith("win"):
             sOffice += ".exe"
-		
+
         # Generate a random pipe name.
         random.seed()
         sPipeName = "uno" + str(random.random())[2:]
-        
+
         # Start the office process, don't check for exit status since an exception is caught anyway if the office terminates unexpectedly.
         cmdArray = (sOffice, "--nologo", "--nodefault", "".join(["--accept=pipe,name=", sPipeName, ";urp;"]))
         os.spawnv(os.P_NOWAIT, sOffice, cmdArray)
-			
+
         # ---------
 
         xLocalContext = uno.getComponentContext()
         resolver = xLocalContext.ServiceManager.createInstanceWithContext(
-			"com.sun.star.bridge.UnoUrlResolver", xLocalContext)
+            "com.sun.star.bridge.UnoUrlResolver", xLocalContext)
         sConnect = "".join(["uno:pipe,name=", sPipeName, ";urp;StarOffice.ComponentContext"])
 
         # Wait until an office is started, but loop only nLoop times (can we do this better???)
@@ -77,8 +77,8 @@ def bootstrap():
                 sleep(0.5)  # Sleep 1/2 second.
 
     except BootstrapException:
-        raise     
-    except Exception, e:  # Any other exception
+        raise
+    except Exception as e:  # Any other exception
         raise BootstrapException("Caught exception " + str(e), None)
 
     return xContext

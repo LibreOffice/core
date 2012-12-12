@@ -80,10 +80,10 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 			print("PyMailSMPTService connect", file=dbgout)
 		server = xConnectionContext.getValueByName("ServerName")
 		if dbg:
-			print >> dbgout, server
+			print(server, file=dbgout)
 		port = int(xConnectionContext.getValueByName("Port"))
 		if dbg:
-			print >> dbgout, port
+			print(port, file=dbgout)
 		self.server = smtplib.SMTP(server, port)
 		#stderr not available for us under windows, but
 		#set_debuglevel outputs there, and so throw
@@ -93,7 +93,7 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 			self.server.set_debuglevel(1)
 		connectiontype = xConnectionContext.getValueByName("ConnectionType")
 		if dbg:
-			print >> dbgout, connectiontype
+			print(connectiontype, file=dbgout)
 		if connectiontype == 'Ssl':
 			self.server.ehlo()
 			self.server.starttls()
@@ -103,7 +103,7 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 		password = xAuthenticator.getPassword().encode('ascii')
 		if user != '':
 			if dbg:
-				print >> dbgout, 'Logging in, username of', user
+				print("Logging in, username of" + user, file=dbgout)
 			self.server.login(user, password)
 
 		for listener in self.listeners:
@@ -265,13 +265,13 @@ class PyMailIMAPService(unohelper.Base, XMailService):
 		self.connectioncontext = xConnectionContext
 		server = xConnectionContext.getValueByName("ServerName")
 		if dbg:
-			print >> dbgout, server
+			print(server, file=dbgout)
 		port = int(xConnectionContext.getValueByName("Port"))
 		if dbg:
-			print >> dbgout, port
+			print(port, file=dbgout)
 		connectiontype = xConnectionContext.getValueByName("ConnectionType")
 		if dbg:
-			print >> dbgout, connectiontype
+			print(connectiontype, file=dbgout)
 		print("BEFORE", file=dbgout)
 		if connectiontype == 'Ssl':
 			self.server = imaplib.IMAP4_SSL(server, port)
@@ -283,7 +283,7 @@ class PyMailIMAPService(unohelper.Base, XMailService):
 		password = xAuthenticator.getPassword().encode('ascii')
 		if user != '':
 			if dbg:
-				print >> dbgout, 'Logging in, username of', user
+				print("Logging in, username of" + user, file=dbgout)
 			self.server.login(user, password)
 
 		for listener in self.listeners:
@@ -334,13 +334,13 @@ class PyMailPOP3Service(unohelper.Base, XMailService):
 		self.connectioncontext = xConnectionContext
 		server = xConnectionContext.getValueByName("ServerName")
 		if dbg:
-			print >> dbgout, server
+			print(server, file=dbgout)
 		port = int(xConnectionContext.getValueByName("Port"))
 		if dbg:
-			print >> dbgout, port
+			print(port, file=dbgout)
 		connectiontype = xConnectionContext.getValueByName("ConnectionType")
 		if dbg:
-			print >> dbgout, connectiontype
+			print(connectiontype, file=dbgout)
 		print("BEFORE", file=dbgout)
 		if connectiontype == 'Ssl':
 			self.server = poplib.POP3_SSL(server, port)
@@ -351,7 +351,7 @@ class PyMailPOP3Service(unohelper.Base, XMailService):
 		user = xAuthenticator.getUserName().encode('ascii')
 		password = xAuthenticator.getPassword().encode('ascii')
 		if dbg:
-			print >> dbgout, 'Logging in, username of', user
+			print("Logging in, username of" + user, file=dbgout)
 		self.server.user(user)
 		self.server.pass_(user, password)
 
