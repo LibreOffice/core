@@ -256,7 +256,7 @@ String STR_CAPTION_BELOW
 {
     Text [ en-US ] = "Below" ;
 };
-String STR_CAPTION_CATEGORY_NONE
+String STR_CAPTION_NONE
 {
     Text [ en-US ] = "<None>" ;
 };

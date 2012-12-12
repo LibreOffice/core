@@ -132,7 +132,6 @@
 #define HID_SW_SORT_POSITION                                    "SW_HID_SW_SORT_POSITION"
 #define HID_SYNC_BTN                                            "SW_HID_SYNC_BTN"
 #define HID_EDIT_COMMENT                                        "SW_HID_EDIT_COMMENT"
-#define HID_DLG_SEQUENCE_OPTION                                 "SW_HID_DLG_SEQUENCE_OPTION"
 #define HID_DLG_FLDEDT_NEXT                                     "SW_HID_DLG_FLDEDT_NEXT"
 #define HID_DLG_FLDEDT_PREV                                     "SW_HID_DLG_FLDEDT_PREV"
 #define HID_DLG_FLDEDT_ADDRESS                                  "SW_HID_DLG_FLDEDT_ADDRESS"
