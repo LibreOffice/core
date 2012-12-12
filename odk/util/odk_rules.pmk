@@ -81,13 +81,6 @@ $(DESTDIRSETTINGS)/%.mk : $(PRJ)/settings/%.mk
     @@-rm -f $@
     $(MY_TEXTCOPY) $< $@
 
-$(DESTDIRXML)/module-description.dtd : $(XMLOUT)/module-description.dtd
-    @@-rm -f $@
-    $(MY_TEXTCOPY) $(XMLOUT)/module-description.dtd $@
-$(DESTDIRXML)/%.xml : $(XMLOUT)/%.xml
-    @@-rm -f $@
-    $(MY_TEXTCOPY) $< $@
-
 $(DESTDIRBIN)/%$(EXEPOSTFIX) : $(BINOUT)/%$(EXEPOSTFIX)
     @@-rm -f $@
     $(GNUCOPY) $(BINOUT)/$(@:f) $@
