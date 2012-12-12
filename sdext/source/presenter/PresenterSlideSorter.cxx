@@ -1567,8 +1567,14 @@ Reference<rendering::XBitmap> PresenterSlideSorter::MouseOverManager::CreateBitm
         const Reference<rendering::XTextLayout> xLayout (mpFont->mxFont->createTextLayout(
             aContext, rendering::TextDirection::WEAK_LEFT_TO_RIGHT,0));
         const geometry::RealRectangle2D aTextBBox (xLayout->queryTextBounds());
+        double tempXOffset;
+        /// check whether RTL interface or not
+        if(Application::GetSettings().GetLayoutRTL())
+            tempXOffset = (aLabelSize.Width + aTextBBox.X2 - aTextBBox.X1) / 2;
+        else
+            tempXOffset = (aLabelSize.Width - aTextBBox.X2 + aTextBBox.X1) / 2;
 
-        const double nXOffset = (aLabelSize.Width - aTextBBox.X2 + aTextBBox.X1) / 2;
+        const double nXOffset = tempXOffset;
         const double nYOffset = aLabelSize.Height
             - (aLabelSize.Height - aTextBBox.Y2 + aTextBBox.Y1)/2 - aTextBBox.Y2;
 
@@ -1582,15 +1588,22 @@ Reference<rendering::XBitmap> PresenterSlideSorter::MouseOverManager::CreateBitm
             Sequence<double>(4),
             rendering::CompositeOperation::SOURCE);
         PresenterCanvasHelper::SetDeviceColor(aRenderState, mpFont->mnColor);
-
-        xBitmapCanvas->drawText(
-            aContext,
-            mpFont->mxFont,
-            aViewState,
-            aRenderState,
-            rendering::TextDirection::WEAK_LEFT_TO_RIGHT);
+        /// check whether RTL interface or not
+        if(Application::GetSettings().GetLayoutRTL())
+            xBitmapCanvas->drawText(
+                aContext,
+                mpFont->mxFont,
+                aViewState,
+                aRenderState,
+                rendering::TextDirection::WEAK_RIGHT_TO_LEFT);
+        else
+            xBitmapCanvas->drawText(
+                aContext,
+                mpFont->mxFont,
+                aViewState,
+                aRenderState,
+                rendering::TextDirection::WEAK_LEFT_TO_RIGHT);
     }
-
     return xBitmap;
 }
 
