@@ -72,13 +72,13 @@ namespace dbaui
 
         sal_Bool SetConnLine( sal_uInt16 nIndex, const String& rSourceFieldName, const String& rDestFieldName );
         sal_Bool AppendConnLine( const ::rtl::OUString& rSourceFieldName, const ::rtl::OUString& rDestFieldName );
+        /** Deletes list of ConnLines; if bUseDefaults == true
+            MAX_CONN_COUNT new dummy lines will be inserted.
+        */
         void ResetConnLines( sal_Bool bUseDefaults = sal_True );
 
         /** moves the empty lines to the back
-
-            Deletes list of ConnLines; if bUseDefaults == true
-            MAX_CONN_COUNT new dummy lines will be inserted.
-        */
+         */
         void normalizeLines();
 
         const OConnectionLineDataVec* GetConnLineDataList() const { return &m_vConnLineData; }
