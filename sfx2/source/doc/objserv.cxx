@@ -863,7 +863,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         case SID_DOCTEMPLATE:
         {
             // save as document templates
-            SfxTemplateManagerDlg aDlg(NULL);
+            SfxTemplateManagerDlg aDlg;
             aDlg.setDocumentModel(GetModel());
             aDlg.setSaveMode(true);
             aDlg.Execute();

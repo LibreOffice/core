@@ -566,7 +566,7 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
         sal_Bool bNewWin = sal_False;
         Window* pTopWin = GetTopWindow();
 
-        SfxTemplateManagerDlg aTemplDlg(NULL);
+        SfxTemplateManagerDlg aTemplDlg;
         int nRet = aTemplDlg.Execute();
         if ( nRet == RET_OK )
         {
