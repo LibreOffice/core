@@ -146,8 +146,8 @@ void ScViewOptions::SetDefaults()
 {
     aOptArr[ VOPT_FORMULAS    ] =
     aOptArr[ VOPT_SYNTAX      ] =
-    aOptArr[ VOPT_HELPLINES   ] =
-    aOptArr[ VOPT_BIGHANDLES  ] = sal_False;
+    aOptArr[ VOPT_HELPLINES   ] = sal_False;
+
     aOptArr[ VOPT_NOTES       ] =
     aOptArr[ VOPT_NULLVALS    ] =
     aOptArr[ VOPT_VSCROLL     ] =
@@ -158,7 +158,8 @@ void ScViewOptions::SetDefaults()
     aOptArr[ VOPT_GRID        ] =
     aOptArr[ VOPT_ANCHOR      ] =
     aOptArr[ VOPT_PAGEBREAKS  ] =
-    aOptArr[ VOPT_SOLIDHANDLES] =
+    aOptArr[ VOPT_SOLIDHANDLES] =   // default is enhanced handles
+    aOptArr[ VOPT_BIGHANDLES  ] =   // default is big handles
     aOptArr[ VOPT_CLIPMARKS   ] = sal_True;
 
     aModeArr[VOBJ_TYPE_OLE ]  =

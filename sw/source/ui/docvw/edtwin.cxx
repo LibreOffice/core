@@ -206,6 +206,7 @@ public:
     void SetPos( const Point& rNew ) { pHdl->SetPos( rNew ); }
     const Point& GetPos() { return pHdl->GetPos(); }
     const Point& GetHdlPos() { return aHdlPos; }
+    SdrHdl* GetHdl() const { return pHdl; }
     void ChgHdl( SdrHdl* pNew )
     {
         pHdl = pNew;
@@ -2881,6 +2882,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             ( pHdl->GetKind() == HDL_ANCHOR ||
                               pHdl->GetKind() == HDL_ANCHOR_TR ) )
                     {
+                        // #121463# Set selected during drag
+                        pHdl->SetSelected(true);
                         pAnchorMarker = new SwAnchorMarker( pHdl );
                         UpdatePointer( aDocPos, rMEvt.GetModifier() );
                         return;
@@ -4069,6 +4072,12 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
 
     if( pAnchorMarker )
     {
+        if(pAnchorMarker->GetHdl())
+        {
+            // #121463# delete selected after drag
+            pAnchorMarker->GetHdl()->SetSelected(false);
+        }
+
         Point aPnt( pAnchorMarker->GetLastPos() );
         //OLMpSdrView->RefreshAllIAOManagers();
         DELETEZ( pAnchorMarker );

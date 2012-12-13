@@ -96,18 +96,10 @@ public:
 #define INDIVIDUAL_COUNT    (4)
 
 SdrHdlBitmapSet::SdrHdlBitmapSet(sal_uInt16 nResId)
-:   maMarkersBitmap(),
+:   maMarkersBitmap(ResId(nResId, *ImpGetResMgr())), // just use ressource with alpha channel
     // 14 kinds (BitmapMarkerKind) use index [0..5], 4 extra
     maRealMarkers((KIND_COUNT * INDEX_COUNT) + INDIVIDUAL_COUNT)
 {
-    // #101928# change color used for transparent parts to 0x00ff00ff (ImageList standard)
-    const Color aColTransparent(0x00ff00ff);
-    const Bitmap aBitmap(ResId(nResId, *ImpGetResMgr()));
-    const Bitmap aMask(aBitmap.CreateMask(aColTransparent));
-
-    // create a real BitmapEx with an AlphaMask
-    maMarkersBitmap = BitmapEx(aBitmap, aMask);
-    // maMarkersBitmap = BitmapEx(aBitmap, aColTransparent);
 }
 
 SdrHdlBitmapSet::~SdrHdlBitmapSet()
@@ -171,15 +163,15 @@ const BitmapEx& SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, sal
                 }
                 case 2:
                 {
-                    return impGetOrCreateTargetBitmap(nIndex, Rectangle(Point(72, 78), Size(13, 13)));
+                    return impGetOrCreateTargetBitmap(nIndex, Rectangle(Point(72, 79), Size(13, 13)));
                 }
                 case 3:
                 {
-                    return impGetOrCreateTargetBitmap(nIndex, Rectangle(Point(85, 78), Size(13, 13)));
+                    return impGetOrCreateTargetBitmap(nIndex, Rectangle(Point(85, 79), Size(13, 13)));
                 }
                 case 4:
                 {
-                    return impGetOrCreateTargetBitmap(nIndex, Rectangle(Point(98, 78), Size(13, 13)));
+                    return impGetOrCreateTargetBitmap(nIndex, Rectangle(Point(98, 79), Size(13, 13)));
                 }
                 default: // case 5:
                 {
@@ -189,17 +181,19 @@ const BitmapEx& SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, sal
         }
 
         case Circ_7x7:
+        case Customshape_7x7:
         {
             return impGetOrCreateTargetBitmap((4 * INDEX_COUNT) + nInd, Rectangle(Point(27, nYPos), Size(7, 7)));
         }
 
         case Circ_9x9:
-        case Customshape1:
+        case Customshape_9x9:
         {
             return impGetOrCreateTargetBitmap((5 * INDEX_COUNT) + nInd, Rectangle(Point(34, nYPos), Size(9, 9)));
         }
 
         case Circ_11x11:
+        case Customshape_11x11:
         {
             return impGetOrCreateTargetBitmap((6 * INDEX_COUNT) + nInd, Rectangle(Point(43, nYPos), Size(11, 11)));
         }
@@ -252,14 +246,14 @@ const BitmapEx& SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, sal
         case Anchor: // #101688# AnchorTR for SW
         case AnchorTR:
         {
-            return impGetOrCreateTargetBitmap((KIND_COUNT * INDEX_COUNT) + 2, Rectangle(Point(24, 68), Size(24, 23)));
+            return impGetOrCreateTargetBitmap((KIND_COUNT * INDEX_COUNT) + 2, Rectangle(Point(24, 68), Size(24, 24)));
         }
 
         // #98388# add AnchorPressed to be able to aninate anchor control
         case AnchorPressed:
         case AnchorPressedTR:
         {
-            return impGetOrCreateTargetBitmap((KIND_COUNT * INDEX_COUNT) + 3, Rectangle(Point(48, 68), Size(24, 23)));
+            return impGetOrCreateTargetBitmap((KIND_COUNT * INDEX_COUNT) + 3, Rectangle(Point(48, 68), Size(24, 24)));
         }
     }
 
@@ -551,7 +545,7 @@ void SdrHdl::CreateB2dIAObject()
             // for SJ and the CustomShapeHandles:
             case HDL_CUSTOMSHAPE1:
             {
-                eKindOfMarker = Customshape1;
+                eKindOfMarker = (b1PixMore) ? Customshape_7x7 : Customshape_9x9;
                 eColIndex = Yellow;
                 break;
             }
@@ -626,6 +620,10 @@ BitmapMarkerKind SdrHdl::GetNextBigger(BitmapMarkerKind eKnd) const
         case Circ_9x9:          eRetval = Circ_11x11;       break;
         //case Circ_11x11:      eRetval = ; break;
 
+        case Customshape_7x7:       eRetval = Customshape_9x9;      break;
+        case Customshape_9x9:       eRetval = Customshape_11x11;    break;
+        //case Customshape_11x11:   eRetval = ; break;
+
         case Elli_7x9:          eRetval = Elli_9x11;        break;
         //case Elli_9x11:           eRetval = ; break;
 
@@ -685,7 +683,27 @@ BitmapEx SdrHdl::ImpGetBitmapEx(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd,
 
     if(pHdlList->GetHdlSize() > 3)
     {
-        bForceBiggerSize = sal_True;
+        switch(eKindOfMarker)
+        {
+            case Anchor:
+            case AnchorPressed:
+            case AnchorTR:
+            case AnchorPressedTR:
+            {
+                // #121463# For anchor, do not simply make bigger because of HdlSize,
+                // do it dependent of IsSelected() which Writer can set in drag mode
+                if(IsSelected())
+                {
+                    bForceBiggerSize = sal_True;
+                }
+                break;
+            }
+            default:
+            {
+                bForceBiggerSize = sal_True;
+                break;
+            }
+        }
     }
 
     // #101928# ...for high contrast, too.
@@ -2084,7 +2102,7 @@ SdrHdlList::SdrHdlList(SdrMarkView* pV)
     bRotateShear = sal_False;
     bMoveOutside = sal_False;
     bDistortShear = sal_False;
-    bFineHandles = sal_False;
+    bFineHandles = sal_True;    // new default: Handles are fine handles
 }
 
 SdrHdlList::~SdrHdlList()

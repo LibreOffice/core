@@ -223,14 +223,27 @@ SwViewOption::SwViewOption() :
 {
     // Initialisierung ist jetzt etwas einfacher
     // alle Bits auf 0
-    nCoreOptions =  VIEWOPT_1_HARDBLANK | VIEWOPT_1_SOFTHYPH |
-                    VIEWOPT_1_REF |
-                    VIEWOPT_1_GRAPHIC |
-                    VIEWOPT_1_TABLE    | VIEWOPT_1_DRAW | VIEWOPT_1_CONTROL |
-                    VIEWOPT_1_PAGEBACK |
-                    VIEWOPT_1_SOLIDMARKHDL | VIEWOPT_1_POSTITS;
-    nCore2Options = VIEWOPT_CORE2_BLACKFONT | VIEWOPT_CORE2_HIDDENPARA;
-    nUIOptions    = VIEWOPT_2_MODIFIED | VIEWOPT_2_GRFKEEPZOOM |VIEWOPT_2_ANY_RULER;
+    nCoreOptions =
+        VIEWOPT_1_HARDBLANK |
+        VIEWOPT_1_SOFTHYPH |
+        VIEWOPT_1_REF |
+        VIEWOPT_1_GRAPHIC |
+        VIEWOPT_1_TABLE |
+        VIEWOPT_1_DRAW |
+        VIEWOPT_1_CONTROL |
+        VIEWOPT_1_PAGEBACK |
+        VIEWOPT_1_SOLIDMARKHDL | // default is enhanced handles
+        VIEWOPT_1_POSTITS;
+
+    nCore2Options =
+        VIEWOPT_CORE2_BLACKFONT |
+        VIEWOPT_CORE2_HIDDENPARA |
+        VIEWOPT_CORE2_BIGMARKHDL; // default is big handles
+
+    nUIOptions =
+        VIEWOPT_2_MODIFIED |
+        VIEWOPT_2_GRFKEEPZOOM |
+        VIEWOPT_2_ANY_RULER;
 
     if(MEASURE_METRIC != SvtSysLocale().GetLocaleData().getMeasurementSystemEnum())
         aSnapSize.Width() = aSnapSize.Height() = 720;   // 1/2"

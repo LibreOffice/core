@@ -409,10 +409,10 @@
         <!-- OldLocation: soffice.cfg -->
         <!-- UIHints: Optionbar -->
         <info>
-          <desc>Indicates whether to show simple (true) or 3D-handles (false).</desc>
+          <desc>Indicates whether to show simple (true) or enhanced  handles (false).</desc>
           <label>Simple Handles</label>
         </info>
-        <value>false</value>
+        <value>true</value>
       </prop>
       <prop oor:name="BigHandles" oor:type="xs:boolean">
         <!-- OldPath: Impress/Other -->

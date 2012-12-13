@@ -180,6 +180,9 @@ DrawViewWrapper::DrawViewWrapper( SdrModel* pSdrModel, OutputDevice* pOut, bool 
         pOutlinerPool->SetPoolDefaultItem( SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT ) );  // 12pt
     }
 
+    // #121463# Use big handles by default
+    SetMarkHdlSizePixel(9);
+
     ReInit();
 }
 

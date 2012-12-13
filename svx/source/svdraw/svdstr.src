@@ -2763,12 +2763,12 @@ Bitmap SIP_SA_PAGESHADOW35X35
 
 Bitmap SIP_SA_MARKERS
 {
-    File = "markers.bmp";
+    File = "markers.png";
 };
 
 Bitmap SIP_SA_FINE_MARKERS
 {
-    File = "markers2.bmp";
+    File = "markers2.png";
 };
 
 // #100499#
@@ -2780,7 +2780,7 @@ Bitmap BMP_SVXOLEOBJ
 // #101928#
 Bitmap SIP_SA_ACCESSIBILITY_MARKERS
 {
-    File = "markersACC.bmp";
+    File = "markersACC.png";
 };
 
 String STR_ObjNameSingulMEDIA
