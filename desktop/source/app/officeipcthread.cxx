@@ -643,7 +643,6 @@ OfficeIPCThread::~OfficeIPCThread()
     if ( mpDispatchWatcher )
         mpDispatchWatcher->release();
     maPipe.close();
-    maStreamPipe.close();
     pGlobalOfficeIPCThread.clear();
 }
 
@@ -662,7 +661,8 @@ void OfficeIPCThread::execute()
 {
     do
     {
-        oslPipeError nError = maPipe.accept( maStreamPipe );
+        osl::StreamPipe aStreamPipe;
+        oslPipeError nError = maPipe.accept( aStreamPipe );
 
 
         if( nError == osl_Pipe_E_None )
@@ -686,10 +686,10 @@ void OfficeIPCThread::execute()
                 int nBytes = 0;
                 int nResult = 0;
                 while (
-                    (nResult = maStreamPipe.send(sc_aSendArgumentsSequence+nBytes, sc_nCSASeqLength-nBytes))>0 &&
+                    (nResult = aStreamPipe.send(sc_aSendArgumentsSequence+nBytes, sc_nCSASeqLength-nBytes))>0 &&
                     ((nBytes += nResult) < sc_nCSASeqLength) ) ;
             }
-            maStreamPipe.write("\0", 1);
+            aStreamPipe.write("\0", 1);
 
             // test byte by byte
             const int nBufSz = 2048;
@@ -698,7 +698,7 @@ void OfficeIPCThread::execute()
             int nResult = 0;
             rtl::OStringBuffer aBuf;
             // read into pBuf until '\0' is read or read-error
-            while ((nResult=maStreamPipe.recv( pBuf+nBytes, nBufSz-nBytes))>0) {
+            while ((nResult=aStreamPipe.recv( pBuf+nBytes, nBufSz-nBytes))>0) {
                 nBytes += nResult;
                 if (pBuf[nBytes-1]=='\0') {
                     aBuf.append(pBuf);
@@ -927,7 +927,7 @@ void OfficeIPCThread::execute()
             // processing finished, inform the requesting end
             nBytes = 0;
             while (
-                   (nResult = maStreamPipe.send(sc_aConfirmationSequence+nBytes, sc_nCSeqLength-nBytes))>0 &&
+                   (nResult = aStreamPipe.send(sc_aConfirmationSequence+nBytes, sc_nCSeqLength-nBytes))>0 &&
                    ((nBytes += nResult) < sc_nCSeqLength) ) ;
         }
         else

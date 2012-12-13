@@ -72,7 +72,6 @@ class OfficeIPCThread : public salhelper::Thread
     static rtl::Reference< OfficeIPCThread > pGlobalOfficeIPCThread;
 
     osl::Pipe                   maPipe;
-    osl::StreamPipe             maStreamPipe;
     rtl::OUString               maPipeIdent;
     bool                        mbDowning;
     bool                        mbRequestsEnabled;
