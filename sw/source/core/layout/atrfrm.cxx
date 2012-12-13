@@ -98,6 +98,9 @@
 #include <svl/cjkoptions.hxx>
 #include <switerator.hxx>
 #include <pagedeschint.hxx>
+#ifndef NDEBUG
+#include <ndtxt.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
@@ -1511,6 +1514,8 @@ SwFmtAnchor::~SwFmtAnchor()
 
 void SwFmtAnchor::SetAnchor( const SwPosition *pPos )
 {
+    // anchor only to paragraphs
+    assert(!pPos || dynamic_cast<SwTxtNode*>(&pPos->nNode.GetNode()));
     m_pCntntAnchor .reset( (pPos) ? new SwPosition( *pPos ) : 0 );
     // Flys anchored AT paragraph should not point into the paragraph content
     if (m_pCntntAnchor &&
