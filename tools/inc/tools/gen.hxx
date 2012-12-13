@@ -374,44 +374,44 @@ public:
     long&               Top()           { return nTop;    }
     long&               Bottom()        { return nBottom; }
 
-    inline Point                TopLeft() const;
-    Point               TopRight() const;
-    Point               TopCenter() const;
-    Point               BottomLeft() const;
-    Point               BottomRight() const;
-    Point               BottomCenter() const;
-    Point               LeftCenter() const;
-    Point               RightCenter() const;
-    Point               Center() const;
+    inline Point        TopLeft() const;
+    inline Point        TopRight() const;
+    inline Point        TopCenter() const;
+    inline Point        BottomLeft() const;
+    inline Point        BottomRight() const;
+    inline Point        BottomCenter() const;
+    inline Point        LeftCenter() const;
+    inline Point        RightCenter() const;
+    inline Point        Center() const;
 
-    void                Move( long nHorzMove, long nVertMove );
+    inline void         Move( long nHorzMove, long nVertMove );
     inline void         Transpose();
     inline void         SetPos( const Point& rPoint );
     void                SetSize( const Size& rSize );
     inline Size         GetSize() const;
 
-    long                GetWidth() const;
-    long                GetHeight() const;
+    inline long         GetWidth() const;
+    inline long         GetHeight() const;
 
     Rectangle&          Union( const Rectangle& rRect );
     Rectangle&          Intersection( const Rectangle& rRect );
-    Rectangle           GetUnion( const Rectangle& rRect ) const;
-    Rectangle           GetIntersection( const Rectangle& rRect ) const;
+    inline Rectangle    GetUnion( const Rectangle& rRect ) const;
+    inline Rectangle    GetIntersection( const Rectangle& rRect ) const;
 
     void                Justify();
 
-    sal_Bool                IsInside( const Point& rPOINT ) const;
-    sal_Bool                IsInside( const Rectangle& rRect ) const;
-    sal_Bool                IsOver( const Rectangle& rRect ) const;
+    sal_Bool            IsInside( const Point& rPOINT ) const;
+    sal_Bool            IsInside( const Rectangle& rRect ) const;
+    sal_Bool            IsOver( const Rectangle& rRect ) const;
 
     void                SetEmpty() { nRight = nBottom = RECT_EMPTY; }
-    sal_Bool                IsEmpty() const;
+    inline sal_Bool     IsEmpty() const;
 
-    sal_Bool                operator == ( const Rectangle& rRect ) const;
-    sal_Bool                operator != ( const Rectangle& rRect ) const;
+    inline sal_Bool     operator == ( const Rectangle& rRect ) const;
+    inline sal_Bool     operator != ( const Rectangle& rRect ) const;
 
-    Rectangle&          operator += ( const Point& rPt );
-    Rectangle&          operator -= ( const Point& rPt );
+    inline Rectangle&   operator += ( const Point& rPt );
+    inline Rectangle&   operator -= ( const Point& rPt );
 
     friend inline Rectangle operator + ( const Rectangle& rRect, const Point& rPt );
     friend inline Rectangle operator - ( const Rectangle& rRect, const Point& rPt );
