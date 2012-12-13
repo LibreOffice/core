@@ -26,9 +26,6 @@
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <rtl/strbuf.hxx>
-#include <svx/svdobj.hxx>
-#include "drwlayer.hxx"
-#include "userdat.hxx"
 #include "oox/drawingml/connectorshapecontext.hxx"
 #include "oox/drawingml/graphicshapecontext.hxx"
 #include "oox/helper/attributelist.hxx"
@@ -39,10 +36,11 @@
 #include "stylesbuffer.hxx"
 #include "themebuffer.hxx"
 #include "unitconverter.hxx"
-#include "worksheetbuffer.hxx"
+
 namespace oox {
 namespace xls {
 
+using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::document;
@@ -55,10 +53,6 @@ using namespace ::oox::core;
 using namespace ::oox::drawingml;
 using namespace ::oox::ole;
 
-using ::com::sun::star::awt::Size;
-using ::com::sun::star::awt::Point;
-using ::com::sun::star::awt::Rectangle;
-using ::com::sun::star::awt::XControlModel;
 using ::rtl::OStringBuffer;
 using ::rtl::OUString;
 using ::rtl::OUStringToOString;
@@ -103,24 +97,12 @@ Shape::Shape( const WorksheetHelper& rHelper, const AttributeList& rAttribs, con
 
 void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& rxShapes )
 {
-    rtl::OUString sURL;
-    getShapeProperties()[ PROP_URL ] >>= sURL;
-    getWorksheets().convertSheetNameRef( sURL );
     if( !maMacroName.isEmpty() && mxShape.is() )
     {
         VbaMacroAttacherRef xAttacher( new ShapeMacroAttacher( maMacroName, mxShape ) );
         getBaseFilter().getVbaProject().registerMacroAttacher( xAttacher );
     }
     ::oox::drawingml::Shape::finalizeXShape( rFilter, rxShapes );
-    if ( !sURL.isEmpty() )
-    {
-        SdrObject* pObj = SdrObject::getSdrObjectFromXShape( mxShape );
-        if ( pObj )
-        {
-            if ( ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj, sal_True ) )
-                pInfo->SetHlink( sURL );
-        }
-    }
 }
 
 // ============================================================================
