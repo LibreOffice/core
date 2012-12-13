@@ -643,19 +643,14 @@ MediaTypeEntry const * seekEntry(OUString const & rTypeName,
     {
         sal_Size nMiddle = (nLow + nHigh) / 2;
         MediaTypeEntry const * pEntry = pMap + nMiddle;
-        switch (rTypeName.compareToIgnoreAsciiCaseAscii(pEntry->m_pTypeName))
-        {
-            case COMPARE_LESS:
-                nHigh = nMiddle;
-                break;
+        sal_Int32 nCmp = rTypeName.compareToIgnoreAsciiCaseAscii(pEntry->m_pTypeName);
+        if (nCmp < 0)
+            nHigh = nMiddle;
+        else if (nCmp == 0)
+            return pEntry;
 
-            case COMPARE_EQUAL:
-                return pEntry;
-
-            case COMPARE_GREATER:
-                nLow = nMiddle + 1;
-                break;
-        }
+        else
+            nLow = nMiddle + 1;
     }
     return 0;
 }
