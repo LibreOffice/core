@@ -21,12 +21,10 @@
 
 # The following variables can be set, if necessary (see README):
 #URE_HOME := /opt/openoffice.org/ure
-#GXX_INCLUDE_PATH := /usr/include/g++
 #GCCS_COMPAT := LD_PRELOAD=/lib/libgcc_s.so.1
 
 
 URE_HOME ?= /opt/openoffice.org/ure
-GXX_INCLUDE_PATH ?= /usr/include/g++
 
 .DELETE_ON_ERROR:
 
@@ -90,8 +88,7 @@ out.pln/cppmain.o: cppmain.cc out.pln/cpputypes.cppumaker.flag \
 	g++ -c -o $@ -fpic -fvisibility=hidden -Wall -Wno-ctor-dtor-privacy \
             -I $(SDK_HOME)/include/stl -I $(SDK_HOME)/include \
             -I out.pln/include/cpputypes -I out.pln/include/types \
-            -DCPPU_ENV=gcc3 -DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH) -DLINUX \
-            -DUNX $<
+            -DCPPU_ENV=gcc3 -DLINUX -DUNX $<
 
 
 out.pln/cpptest.uno.so: out.pln/cpptest.o | out.pln out.pln/lib/libuno_cppu.so \
@@ -104,8 +101,7 @@ out.pln/cpptest.o: cpptest.cc out.pln/cpputypes.cppumaker.flag \
 	g++ -c -o $@ -fpic -fvisibility=hidden -Wall -Wno-ctor-dtor-privacy \
             -I $(SDK_HOME)/include/stl -I $(SDK_HOME)/include \
             -I out.pln/include/cpputypes -I out.pln/include/types \
-            -DCPPU_ENV=gcc3 -DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH) -DLINUX \
-            -DUNX $<
+            -DCPPU_ENV=gcc3 -DLINUX -DUNX $<
 
 
 out.pln/cppserver.uno.so: out.pln/cppserver.o | out.pln \
@@ -119,8 +115,7 @@ out.pln/cppserver.o: cppserver.cc out.pln/cpputypes.cppumaker.flag \
 	g++ -c -o $@ -fpic -fvisibility=hidden -Wall -Wno-ctor-dtor-privacy \
             -I $(SDK_HOME)/include/stl -I $(SDK_HOME)/include \
             -I out.pln/include/cpputypes -I out.pln/include/types \
-            -DCPPU_ENV=gcc3 -DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH) -DLINUX \
-            -DUNX $<
+            -DCPPU_ENV=gcc3 -DLINUX -DUNX $<
 
 
 out.pln/cpputypes.cppumaker.flag: | out.pln

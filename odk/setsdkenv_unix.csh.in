@@ -129,11 +129,6 @@ switch (`${OO_SDK_HOME}/config.guess | cut -d"-" -f3,4`)
   breaksw
 
   case "linux-gnu":
-    if ( $?OO_SDK_CPP_HOME == 0) then
-	set sdk_gxx_include_path=`echo "#include <cstring>" | ${OO_SDK_CPP_HOME}/g++ -E -xc++ - | sed -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
-	setenv SDK_GXX_INCLUDE_PATH ${sdk_gxx_include_path}
-    endif
-
     set directoryname=linux
     set comid=gcc3
     set pltfrm=gcc
@@ -150,11 +145,6 @@ switch (`${OO_SDK_HOME}/config.guess | cut -d"-" -f3,4`)
   breaksw
 
   case "darwin*":
-    if ( $?OO_SDK_CPP_HOME == 0) then
-	set sdk_gxx_include_path=`echo "#include <cstring>" | ${OO_SDK_CPP_HOME}/g++ -E -xc++ - | sed -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
-	setenv SDK_GXX_INCLUDE_PATH ${sdk_gxx_include_path}
-    endif
-
     set directoryname=macosx
     set comid=gcc3
     set pltfrm=gcc
@@ -171,11 +161,6 @@ switch (`${OO_SDK_HOME}/config.guess | cut -d"-" -f3,4`)
   breaksw
 
   case "freebsd*":
-    if ( $?OO_SDK_CPP_HOME == 0) then
-	set sdk_gxx_include_path=`echo "#include <cstring>" | ${OO_SDK_CPP_HOME}/g++ -E -xc++ - | sed -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
-	setenv SDK_GXX_INCLUDE_PATH ${sdk_gxx_include_path}
-    endif
-
     set directoryname=freebsd
     set comid=gcc3
     set pltfrm=gcc

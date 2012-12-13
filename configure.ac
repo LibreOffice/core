@@ -1676,13 +1676,6 @@ AC_ARG_WITH(linker-hash-style,
          Possible values: "sysv", "gnu", "both". The default value is "gnu"
          if supported on the build system, and "sysv" otherwise.]))
 
-AC_ARG_WITH(stlport,
-    AS_HELP_STRING([--with-stlport],
-        [Build the STLPort library for compatibility with old extensions for
-         architectures where STLPort used to be used.]),
-    with_stlport=$withval ,
-with_stlport=auto)
-
 AC_ARG_WITH(jdk-home,
     AS_HELP_STRING([--with-jdk-home],
         [If you have installed JDK 1.3 or later on your system please supply the
@@ -1690,15 +1683,6 @@ AC_ARG_WITH(jdk-home,
          location of the entire distribution.])
     [
                           Usage:     --with-jdk-home=<absolute path to JDK home>
-    ],
-,)
-
-AC_ARG_WITH(gxx_include_path,
-    AS_HELP_STRING([--with-gxx-include-path],
-        [If you want to override the autodetected g++ include path.])
-    [
-                          Usage:     --with-gxx-include-path=<absolute path to
-                                                                g++ include dir>
     ],
 ,)
 
@@ -4169,9 +4153,9 @@ if test "$cross_compiling" = "yes"; then
     test -f ./config_host.mk 2>/dev/null || exit
     cp config_host.mk ../config_build.mk
     cp config.log ../config.Build.log
-    . ./bin/get_config_variables COM GUI GUIBASE OS PATH CPU CPUNAME CC CXX DISABLE_PYTHON GXX_INCLUDE_PATH MACOSX_DEPLOYMENT_TARGET INPATH OUTPATH PYTHON SYSTEM_LIBXSLT OUTDIR SOLARINC SOLARLIB WORKDIR
+    . ./bin/get_config_variables COM GUI GUIBASE OS PATH CPU CPUNAME CC CXX DISABLE_PYTHON MACOSX_DEPLOYMENT_TARGET INPATH OUTPATH PYTHON SYSTEM_LIBXSLT OUTDIR SOLARINC SOLARLIB WORKDIR
 
-    for V in COM GUI GUIBASE OS CPU CPUNAME CC CXX DISABLE_PYTHON GXX_INCLUDE_PATH MACOSX_DEPLOYMENT_TARGET INPATH OUTPATH \
+    for V in COM GUI GUIBASE OS CPU CPUNAME CC CXX DISABLE_PYTHON MACOSX_DEPLOYMENT_TARGET INPATH OUTPATH \
              PYTHON SYSTEM_LIBXSLT; do
         VV='$'$V
         VV=`eval "echo $VV"`
@@ -5259,89 +5243,6 @@ fi
 
 EXCEPTIONS="$exceptions_type"
 AC_SUBST(EXCEPTIONS)
-
-dnl ===================================================================
-dnl Checks for what the default STL should be
-dnl ===================================================================
-AC_MSG_CHECKING([Whether building STLPort library makes sense])
-BUILD_STLPORT="no"
-if test "$_os" = "Linux"; then
-    case "$host_cpu" in
-    i?86)
-        case "$host_os" in
-        k*bsd*-gnu*)
-            BUILD_STLPORT="no"
-            ;;
-        *)
-            BUILD_STLPORT="yes"
-            ;;
-        esac
-        ;;
-    *)
-        BUILD_STLPORT="no"
-        ;;
-    esac
-elif test "$_os" = "SunOS" -a "$COM" = "C52"; then
-    BUILD_STLPORT="yes"
-elif test "$_os" = "WINNT" -a "$CPUNAME" != X86_64 -a "$WITH_MINGW" != "yes"; then
-    BUILD_STLPORT="yes"
-elif test "$_os" = "FreeBSD"; then
-    BUILD_STLPORT="yes"
-fi
-if test "$BUILD_STLPORT" = "yes"; then
-    AC_MSG_RESULT([yes])
-else
-    AC_MSG_RESULT([no])
-fi
-
-AC_MSG_CHECKING([Whether STLPort library will be actually built])
-if test "$with_stlport" = "auto" -o "$BUILD_STLPORT" = "no"; then
-    with_stlport=$BUILD_STLPORT
-fi
-if test "$with_stlport" = "yes"; then
-    AC_MSG_RESULT([yes])
-    WITH_STLPORT=YES
-    SCPDEFS="$SCPDEFS -DWITH_STLPORT"
-    BUILD_TYPE="$BUILD_TYPE STLPORT"
-else
-    WITH_STLPORT=NO
-    AC_MSG_RESULT([no])
-fi
-
-AC_SUBST(WITH_STLPORT)
-
-dnl ===================================================================
-dnl gxx include directories needed by STLPort
-dnl ===================================================================
-# Removed the special FreeBSD treatment. The problem was that with_gxx_include_path
-# often contains an i386 which is expanded as a macro.
-if test "$GXX" = "yes"; then
-    AC_MSG_CHECKING([for g++ include path])
-    if test -z "$with_gxx_include_path"; then
-        with_gxx_include_path=`echo "#include <cstring>" | $CXX -E -xc++ - 2>/dev/null | $SED -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
-        if test "$with_gxx_include_path" = "/usr/libexec/(null)/include"; then
-            with_gxx_include_path="/usr/include"
-        fi
-        if echo $with_gxx_include_path | $GREP -q linux; then
-            # workaround for Mandriva - issue 100049
-            with_gxx_include_path=`cd -P $with_gxx_include_path && pwd`
-        fi
-    fi
-    dnl This is the original code...
-    dnl with_gxx_include_path=`$CXX -print-search-dirs | grep instal |$AWK '{ print \$2 }'`/include
-    if test -z "$with_gxx_include_path"; then
-        with_gxx_include_path="NO_GXX_INCLUDE"
-        AC_MSG_RESULT([none])
-    else
-        PathFormat "$with_gxx_include_path"
-        with_gxx_include_path="$formatted_path"
-        AC_MSG_RESULT([$with_gxx_include_path])
-    fi
-else
-    with_gxx_include_path="NO_GXX_INCLUDE"
-fi
-GXX_INCLUDE_PATH="$with_gxx_include_path"
-AC_SUBST(GXX_INCLUDE_PATH)
 
 dnl ===================================================================
 dnl thread-safe statics

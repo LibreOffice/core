@@ -79,9 +79,6 @@ $(WORKDIR)/download: $(SRCDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)/M
 		$(call fetch_Optional,VISIO,VISIO_TARBALL) \
 	,$(call fetch_Download_item_special,http://dev-www.libreoffice.org/src,$(item)))
 	$(foreach item, \
-		18f577b374d60b3c760a3a3350407632-STLport-4.5.tar.gz \
-		7376930b0d3f3d77a685d94c4a3acda8-STLport-4.5-0119.tar.gz \
-		c441926f3a552ed3e5b274b62e86af16-STLport-4.0.tar.gz \
 		4a660ce8466c9df01f19036435425c3a-glibc-2.1.3-stub.tar.gz \
 		$(call fetch_Optional,AFMS,$(AFMS_TARBALL)) \
 		$(call fetch_Optional,APACHE_COMMONS,$(APACHE_COMMONS_CODEC_TARBALL)) \

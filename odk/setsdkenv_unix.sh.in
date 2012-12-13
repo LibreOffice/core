@@ -156,12 +156,6 @@ case ${sdk_platform} in
     ;;
 
   darwin*)
-    if [ -n "$OO_SDK_CPP_HOME" ]
-    then
-	SDK_GXX_INCLUDE_PATH=`echo "#include <cstring>" | ${OO_SDK_CPP_HOME}/g++ -E -xc++ - | sed -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
-	export SDK_GXX_INCLUDE_PATH
-    fi	
-
     directoryname=macosx
     comid=gcc3
     pltfrm=gcc
@@ -173,12 +167,6 @@ case ${sdk_platform} in
     ;;
 
   linux-gnu)
-    if [ -n "$OO_SDK_CPP_HOME" ]
-    then
-	SDK_GXX_INCLUDE_PATH=`echo "#include <cstring>" | ${OO_SDK_CPP_HOME}/g++ -E -xc++ - | sed -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
-	export SDK_GXX_INCLUDE_PATH
-    fi
-
     directoryname=linux
     comid=gcc3
     pltfrm=gcc
@@ -190,12 +178,6 @@ case ${sdk_platform} in
     ;;
 
   freebsd*)
-    if [ -n "$OO_SDK_CPP_HOME" ]
-    then
-	SDK_GXX_INCLUDE_PATH=`echo "#include <cstring>" | ${OO_SDK_CPP_HOME}/g++ -E -xc++ - | sed -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
-	export SDK_GXX_INCLUDE_PATH
-    fi
-
     directoryname=freebsd
     comid=gcc3
     pltfrm=gcc

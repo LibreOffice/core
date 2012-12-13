@@ -40,10 +40,6 @@ gb_GccLess470 := $(shell expr $(gb_CCVER) \< 40700)
 
 gb_RC := $(WINDRES)
 
-ifeq ($(GXX_INCLUDE_PATH),)
-GXX_INCLUDE_PATH=$(COMPATH)/include/c++/$(shell gcc -dumpversion)
-endif
-
 gb_COMPILERDEFS += \
 	-D_MT \
 	-D_NATIVE_WCHAR_T_DEFINED \

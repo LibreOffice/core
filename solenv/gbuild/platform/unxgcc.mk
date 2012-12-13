@@ -44,10 +44,6 @@ gb_OSDEFS := \
 	-DUNX \
 	$(PTHREAD_CFLAGS) \
 
-ifeq ($(GXX_INCLUDE_PATH),)
-GXX_INCLUDE_PATH=$(COMPATH)/include/c++/$(shell gcc -dumpversion)
-endif
-
 gb_CFLAGS := \
 	$(gb_CFLAGS_COMMON) \
 	-fPIC \

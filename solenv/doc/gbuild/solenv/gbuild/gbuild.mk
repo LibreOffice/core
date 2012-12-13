@@ -21,7 +21,6 @@ static const Path JAVA_HOME;
 static const Path UPD;
 static const String LIBXML_CFLAGS;
 static const String OS;
-static const String STLPORT_VER;
 static const Bool DEBUG;
 static const Bool PRODUCT;
 
@@ -70,7 +69,6 @@ namespace gb
     static const Path SDKDIR;
 };
 
-// GXX_INCLUDE_PATH (Linux)
 // PTHREAD_CFLAGS (Linux)
 // SYSTEM_ICU (Linux)
 // SYSTEM_JPEG (Linux)

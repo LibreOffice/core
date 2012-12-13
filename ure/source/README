@@ -37,8 +37,6 @@ Linux x86, Solaris x86, and Solaris SPARC:
 /opt/openoffice.org/ure/lib/libuno_sal.so.3
 /opt/openoffice.org/ure/lib/libuno_salhelpergcc3.so.3  [Linux x86 only]
 /opt/openoffice.org/ure/lib/libuno_salhelperC52.so.3  [Solaris only]
-/opt/openoffice.org/ure/lib/libstlport_gcc.so  [Linux x86 only]
-/opt/openoffice.org/ure/lib/libstlport_sunpro.so  [Solaris only]
 /opt/openoffice.org/ure/share/java/unoloader.jar
 /opt/openoffice.org/ure/share/java/juh.jar
 /opt/openoffice.org/ure/share/java/jurt.jar
@@ -105,7 +103,6 @@ Program Files\URE\bin\cppuhelper3MSC.dll
 Program Files\URE\bin\purpenvhelper3MSC.dll
 Program Files\URE\bin\sal3.dll
 Program Files\URE\bin\salhelper3MSC.dll
-Program Files\URE\bin\stlport_vc7145.dll
 Program Files\URE\java\unoloader.jar
 Program Files\URE\java\juh.jar
 Program Files\URE\java\jurt.jar
@@ -199,11 +196,6 @@ runtime dynamic libraries that client code can call.  For details on the
 functionality that these libraries offer, see the "C++ Reference" section of the
 SDK HTML documentation.  The corresponding C++ header files are not in the URE,
 but rather in the SDK.
-
--  stlport is the dynamic library of STLport 4.5, which is used in the public
-interface of cppuhelper and salhelper, and thus also has to be part of the
-public interface of the URE.  The corresponding C++ header files are not in the
-URE, but rather in the SDK.
 
 - unoloader.jar, juh.jar, jurt.jar, and ridl.jar are the public Java UNO runtime
 Java[tm] Archives (JARs) that client code can call.  For details on the
@@ -334,10 +326,10 @@ C++ and Java UNO Components
 
 C++ UNO components run from within the uno executable can depend on an
 environment in which the public C++ UNO runtime dynamic libraries (cppu,
-cppuhelper, purpenvhelper, sal, salhelper, stlport) and the external dynamic
-libraries (libxml2 etc.) are already available (that is, on Linux x86, Solaris
-x86, and Solaris SPARC, a component dynamic library need not make sure that the
-UNO runtime dynamic libraries it needs can be found on its RPATH).
+cppuhelper, purpenvhelper, sal, salhelper) and the external dynamic libraries
+(libxml2 etc.) are already available (that is, on Linux x86, Solaris x86, and
+Solaris SPARC, a component dynamic library need not make sure that the UNO
+runtime dynamic libraries it needs can be found on its RPATH).
 
 Similarly, Java UNO components can depend on an environment in which the public
 Java UNO runtime JARs are already available (that is, a component JAR need not

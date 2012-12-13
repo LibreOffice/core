@@ -1,4 +1,0 @@
-The STLPort library
-
-This is used for compatibility for old extensions for architectures
-where STLPort used to be used. Noawadays we use platform native STL.
