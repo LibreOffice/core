@@ -52,6 +52,8 @@ private:
 
     virtual void MouseButtonDown( const MouseEvent& rMEvt );
 
+    virtual void Resize ();
+
     DECL_LINK(CloseOverlayHdl, void*);
 
     DECL_LINK(TBXViewHdl, void*);

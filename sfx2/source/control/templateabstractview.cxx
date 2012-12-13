@@ -275,6 +275,7 @@ BitmapEx TemplateAbstractView::fetchThumbnail (const OUString &msURL, long width
 void TemplateAbstractView::Resize()
 {
     mpItemView->SetSizePixel(GetSizePixel());
+    ThumbnailView::Resize();
 }
 
 void TemplateAbstractView::Paint(const Rectangle &rRect)

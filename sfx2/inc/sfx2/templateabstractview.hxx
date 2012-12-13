@@ -117,9 +117,9 @@ public:
 
     static BitmapEx fetchThumbnail (const OUString &msURL, long width, long height);
 
-protected:
-
     virtual void Resize();
+
+protected:
 
     virtual void Paint( const Rectangle& rRect );
 

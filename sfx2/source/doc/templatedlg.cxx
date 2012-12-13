@@ -122,32 +122,6 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     mpTemplateDefaultMenu->SetSelectHdl(LINK(this,SfxTemplateManagerDlg,DefaultTemplateMenuSelectHdl));
     mpActionMenu->SetPopupMenu(MNI_ACTION_DEFAULT,mpTemplateDefaultMenu);
 
-    Size aWinSize = GetOutputSize();
-
-    // Fit the tab page control and the toolbars
-    Size aTabSize = maTabControl.GetSizePixel();
-    Size aTabPageSize = maTabControl.GetTabPageSizePixel();
-    Point aToolbarsPos(0, aTabSize.getHeight() - aTabPageSize.getHeight());
-    mpToolbars->SetPosPixel(aToolbarsPos);
-    aTabPageSize.setHeight(mpToolbars->GetSizePixel().getHeight() + 3);
-    maTabControl.SetTabPageSizePixel(aTabPageSize);
-
-    // Calculate toolboxs size and positions
-    Size aViewSize = mpViewBar->CalcMinimumWindowSizePixel();
-    Size aActionSize = mpActionBar->CalcMinimumWindowSizePixel();
-    Size aTemplateSize = mpTemplateBar->CalcMinimumWindowSizePixel();
-
-    aActionSize.setWidth(3*aActionSize.getWidth());
-    aViewSize.setWidth(aWinSize.getWidth()-aActionSize.getWidth()-mpViewBar->GetPosPixel().X());
-    aTemplateSize.setWidth(aWinSize.getWidth());
-
-    Point aActionPos = mpActionBar->GetPosPixel();
-    aActionPos.setX(aWinSize.getWidth() - aActionSize.getWidth());
-
-    mpViewBar->SetSizePixel(aViewSize);
-    mpActionBar->SetPosSizePixel(aActionPos,aActionSize);
-    mpTemplateBar->SetSizePixel(aTemplateSize);
-
     // Set toolbox styles
     mpViewBar->SetButtonType(BUTTON_SYMBOLTEXT);
     mpTemplateBar->SetButtonType(BUTTON_SYMBOLTEXT);
@@ -164,28 +138,10 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     mpActionBar->SetDropdownClickHdl(LINK(this,SfxTemplateManagerDlg,TBXDropdownHdl));
     mpTemplateBar->SetClickHdl(LINK(this,SfxTemplateManagerDlg,TBXTemplateHdl));
     mpTemplateBar->SetDropdownClickHdl(LINK(this,SfxTemplateManagerDlg,TBXDropdownHdl));
-
-    // Set view position below toolbox
-    Point aViewPos = maView->GetPosPixel();
-    aViewPos.setY(maTabControl.GetPosPixel().Y() + maTabControl.GetSizePixel().getHeight());
-    aViewPos.setX(0);
-    Size aThumbSize(aWinSize.getWidth(), aWinSize.getHeight() - aViewPos.getY());
-    maView->SetPosSizePixel(aViewPos, aThumbSize);
-
-    if (aWinSize.getHeight() < aViewPos.getY() + aThumbSize.getHeight() + PADDING_DLG_BORDER)
-        aWinSize.setHeight(aViewPos.getY() + aThumbSize.getHeight() + PADDING_DLG_BORDER);
-
-    // Set search box position and size
-    Size aSearchSize = mpSearchEdit->CalcMinimumSize();
-    aSearchSize.setWidth(aWinSize.getWidth() - 2*PADDING_DLG_BORDER);
-
-    mpSearchEdit->SetSizePixel(aSearchSize);
-    mpSearchEdit->SetPosPixel(Point(PADDING_DLG_BORDER,aViewPos.Y()));
     mpSearchEdit->SetUpdateDataHdl(LINK(this,SfxTemplateManagerDlg,SearchUpdateHdl));
     mpSearchEdit->EnableUpdateData();
 
     maView->SetStyle(WB_VSCROLL);
-    maView->SetSizePixel(aThumbSize);
     maView->setItemMaxTextLength(TEMPLATE_ITEM_MAX_TEXT_LENGTH);
 
     maView->setItemDimensions(TEMPLATE_ITEM_MAX_WIDTH,TEMPLATE_ITEM_THUMBNAIL_MAX_HEIGHT,
@@ -198,7 +154,6 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     maView->setOverlayCloseHdl(LINK(this,SfxTemplateManagerDlg,CloseOverlayHdl));
 
     // Set online view position and dimensions
-    mpOnlineView->SetPosSizePixel(aViewPos,aThumbSize);
     mpOnlineView->setItemMaxTextLength(TEMPLATE_ITEM_MAX_TEXT_LENGTH);
 
     mpOnlineView->setItemDimensions(TEMPLATE_ITEM_MAX_WIDTH,TEMPLATE_ITEM_THUMBNAIL_MAX_HEIGHT,
@@ -209,7 +164,6 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     mpOnlineView->setOverlayDblClickHdl(LINK(this,SfxTemplateManagerDlg,OpenTemplateHdl));
     mpOnlineView->setOverlayCloseHdl(LINK(this,SfxTemplateManagerDlg,CloseOverlayHdl));
 
-    mpSearchView->SetSizePixel(aThumbSize);
     mpSearchView->setItemMaxTextLength(TEMPLATE_ITEM_MAX_TEXT_LENGTH);
 
     mpSearchView->setItemDimensions(TEMPLATE_ITEM_MAX_WIDTH,TEMPLATE_ITEM_THUMBNAIL_MAX_HEIGHT,
@@ -219,9 +173,6 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     mpSearchView->setItemStateHdl(LINK(this,SfxTemplateManagerDlg,TVTemplateStateHdl));
 
     maTabControl.SetActivatePageHdl(LINK(this,SfxTemplateManagerDlg,ActivatePageHdl));
-
-    // Set dialog to correct dimensions
-    SetSizePixel(aWinSize);
 
     mpViewBar->Show();
     mpActionBar->Show();
@@ -314,6 +265,66 @@ void SfxTemplateManagerDlg::MouseButtonDown( const MouseEvent& rMEvt )
 
         maView->showOverlay(false);
     }
+}
+
+void SfxTemplateManagerDlg::Resize()
+{
+    Size aWinSize = GetSizePixel();
+
+    // Fit the tab page control and the toolbars
+    Size aTabSize = maTabControl.GetSizePixel();
+    aTabSize.setWidth(aWinSize.getWidth());
+    maTabControl.SetSizePixel(aTabSize);
+    Size aTabPageSize = maTabControl.GetTabPageSizePixel();
+    Point aToolbarsPos(0, aTabSize.getHeight() - aTabPageSize.getHeight());
+    mpToolbars->SetPosPixel(aToolbarsPos);
+    aTabPageSize.setHeight(mpToolbars->GetSizePixel().getHeight() + 3);
+    maTabControl.SetTabPageSizePixel(aTabPageSize);
+
+    Size aToolbarsSize = mpToolbars->GetSizePixel();
+    aToolbarsSize.setWidth(aWinSize.getWidth());
+    mpToolbars->SetSizePixel(aToolbarsSize);
+
+    // Calculate toolboxes size and positions
+    Size aViewSize = mpViewBar->CalcMinimumWindowSizePixel();
+    Size aActionSize = mpActionBar->CalcMinimumWindowSizePixel();
+    Size aTemplateSize = mpTemplateBar->CalcMinimumWindowSizePixel();
+
+    aActionSize.setWidth(3*aActionSize.getWidth());
+    aViewSize.setWidth(aWinSize.getWidth()-aActionSize.getWidth()-mpViewBar->GetPosPixel().X());
+    aTemplateSize.setWidth(aWinSize.getWidth());
+
+    Point aActionPos = mpActionBar->GetPosPixel();
+    aActionPos.setX(aWinSize.getWidth() - aActionSize.getWidth());
+
+    mpViewBar->SetSizePixel(aViewSize);
+    mpActionBar->SetPosSizePixel(aActionPos,aActionSize);
+    mpTemplateBar->SetSizePixel(aTemplateSize);
+
+    // Set view position below toolbox
+    Point aViewPos = maView->GetPosPixel();
+    aViewPos.setY(maTabControl.GetPosPixel().Y() + maTabControl.GetSizePixel().getHeight());
+    aViewPos.setX(0);
+    Size aThumbSize(aWinSize.getWidth(), aWinSize.getHeight() - aViewPos.getY());
+    maView->SetPosSizePixel(aViewPos, aThumbSize);
+
+    if (aWinSize.getHeight() < aViewPos.getY() + aThumbSize.getHeight() + PADDING_DLG_BORDER)
+        aWinSize.setHeight(aViewPos.getY() + aThumbSize.getHeight() + PADDING_DLG_BORDER);
+
+    // Set search box position and size
+    Size aSearchSize = mpSearchEdit->CalcMinimumSize();
+    aSearchSize.setWidth(aWinSize.getWidth() - 2*PADDING_DLG_BORDER);
+
+    mpSearchEdit->SetSizePixel(aSearchSize);
+    mpSearchEdit->SetPosPixel(Point(PADDING_DLG_BORDER,aViewPos.Y()));
+
+    maView->SetSizePixel(aThumbSize);
+    mpOnlineView->SetPosSizePixel(aViewPos,aThumbSize);
+    mpSearchView->SetSizePixel(aThumbSize);
+
+    mpCurView->Resize();
+
+    ModelessDialog::Resize();
 }
 
 IMPL_LINK_NOARG(SfxTemplateManagerDlg, CloseOverlayHdl)
