@@ -24,7 +24,7 @@
 
 #include "templateview.hrc"
 
-#define EDIT_HEIGHT 20
+#define EDIT_HEIGHT 30
 
 using namespace basegfx;
 using namespace basegfx::tools;
@@ -33,75 +33,23 @@ using namespace drawinglayer::primitive2d;
 
 TemplateView::TemplateView (Window *pParent)
     : ThumbnailView(pParent,WB_VSCROLL),
-      maCloseImg(SfxResId(IMG_TEMPLATE_VIEW_CLOSE)),
-      mbRenderTitle(true),
-      mnId(0),
-      mpEditName(new Edit(this, WB_BORDER | WB_HIDE))
+      maButtons(this, SfxResId(CONTROL_BUTTONS)),
+      maAllButton(&maButtons, SfxResId(BTN_ALL_TEMPLATES)),
+      maFTName(&maButtons, SfxResId(FT_NAME)),
+      mnId(0)
 {
-    mnHeaderHeight = 30;
+    mnHeaderHeight = maButtons.GetSizePixel().getHeight();
+    maAllButton.SetStyle(maAllButton.GetStyle() | WB_FLATBUTTON);
 }
 
 TemplateView::~TemplateView ()
 {
-    delete mpEditName;
 }
 
 void TemplateView::setName (const OUString &rName)
 {
     maName = rName;
-    mpEditName->SetText(OUString());
-}
-
-void TemplateView::Paint (const Rectangle &rRect)
-{
-    ThumbnailView::Paint(rRect);
-
-    int nCount = 0;
-    int nMaxCount = 1;
-
-    if (mbRenderTitle)
-        ++nMaxCount;
-
-    Primitive2DSequence aSeq(nMaxCount);
-    TextLayouterDevice aTextDev;
-
-    // Draw centered region name
-    Point aPos;
-    Size aWinSize = GetOutputSizePixel();
-
-    if (mbRenderTitle)
-    {
-        aPos.X() = (aWinSize.getWidth() - aTextDev.getTextWidth(maName,0,maName.getLength()))/2;
-        aPos.Y() = aTextDev.getTextHeight() + (mnHeaderHeight - aTextDev.getTextHeight())/2;
-
-        basegfx::B2DHomMatrix aTextMatrix( createScaleTranslateB2DHomMatrix(
-                    mpItemAttrs->aFontSize.getX(), mpItemAttrs->aFontSize.getY(),
-                    double( aPos.X() ), double( aPos.Y() ) ) );
-
-        aSeq[nCount++] = Primitive2DReference(
-                    new TextSimplePortionPrimitive2D(aTextMatrix,
-                                                     maName,0,maName.getLength(),
-                                                     std::vector< double >( ),
-                                                     mpItemAttrs->aFontAttr,
-                                                     com::sun::star::lang::Locale(),
-                                                     Color(COL_BLACK).getBColor() ) );
-    }
-
-    // Draw close icon
-    Size aImageSize = maCloseImg.GetSizePixel();
-
-    aPos.Y() = (mnHeaderHeight - aImageSize.Height())/2;
-    aPos.X() = aWinSize.Width() - aImageSize.Width() - aPos.Y();
-
-    aSeq[nCount] = Primitive2DReference( new FillBitmapPrimitive2D(
-                                        createTranslateB2DHomMatrix(aPos.X(),aPos.Y()),
-                                        FillBitmapAttribute(maCloseImg.GetBitmapEx(),
-                                                            B2DPoint(0,0),
-                                                            B2DVector(aImageSize.Width(),aImageSize.Height()),
-                                                            false)
-                                        ));
-
-    mpProcessor->process(aSeq);
+    maFTName.SetText(maName);
 }
 
 void TemplateView::InsertItems (const std::vector<TemplateItemProperties> &rTemplates)
@@ -127,103 +75,24 @@ void TemplateView::InsertItems (const std::vector<TemplateItemProperties> &rTemp
 
 void TemplateView::Resize()
 {
-    // Set editbox size and position
     Size aWinSize = GetOutputSize();
 
-    Size aEditSize(aWinSize.getWidth()/2,EDIT_HEIGHT);
+    // Set the buttons panel and buttons size
+    Size aPanelSize = maButtons.GetSizePixel();
+    int nDeltaW = aWinSize.getWidth() - aPanelSize.getWidth();
+    aPanelSize.setWidth(aWinSize.getWidth());
+    maButtons.SetSizePixel(aPanelSize);
 
-    Point aPos;
-    aPos.X() = (aWinSize.getWidth() - aEditSize.getWidth())/2;
-    aPos.Y() = (mnHeaderHeight - aEditSize.getHeight())/2;
-
-    mpEditName->SetPosSizePixel(aPos,aEditSize);
+    Size aNameSize = maFTName.GetSizePixel();
+    aNameSize.setWidth(aNameSize.getWidth() + nDeltaW);
+    maFTName.SetSizePixel(aNameSize);
 
     ThumbnailView::Resize();
-}
-
-void TemplateView::MouseButtonDown (const MouseEvent &rMEvt)
-{
-    if (rMEvt.IsLeft())
-    {
-        // Check if we are editing title
-        if (mpEditName->IsVisible())
-        {
-            mpEditName->Show(false);
-            mbRenderTitle = true;
-
-            // Update name if its not empty
-            OUString aTmp = mpEditName->GetText();
-
-            if (!aTmp.isEmpty())
-            {
-                PostUserEvent(LINK(this,TemplateView,ChangeNameHdl));
-            }
-            else
-            {
-                mpEditName->SetText(OUString());
-                Invalidate();
-            }
-
-            return;
-        }
-
-        Size aWinSize = GetOutputSizePixel();
-        Size aImageSize = maCloseImg.GetSizePixel();
-
-        Point aPos;
-        aPos.Y() = (mnHeaderHeight - aImageSize.Height())/2;
-        aPos.X() = aWinSize.Width() - aImageSize.Width() - aPos.Y();
-
-        Rectangle aImgRect(aPos,aImageSize);
-
-        if (aImgRect.IsInside(rMEvt.GetPosPixel()))
-        {
-            maCloseHdl.Call(this);
-        }
-        else
-        {
-            drawinglayer::primitive2d::TextLayouterDevice aTextDev;
-            aTextDev.setFontAttribute(mpItemAttrs->aFontAttr,
-                                      mpItemAttrs->aFontSize.getX(), mpItemAttrs->aFontSize.getY(),
-                                      com::sun::star::lang::Locale() );
-
-            float fTextWidth = aTextDev.getTextWidth(maName,0,maName.getLength());
-
-            aPos.X() = (aWinSize.getWidth() - fTextWidth)/2;
-            aPos.Y() = (mnHeaderHeight - aTextDev.getTextHeight())/2;
-
-            Rectangle aTitleRect(aPos,Size(fTextWidth,aTextDev.getTextHeight()));
-
-            if (aTitleRect.IsInside(rMEvt.GetPosPixel()))
-            {
-                mbRenderTitle = false;
-
-                Invalidate();
-                mpEditName->Show();
-            }
-        }
-    }
-
-    ThumbnailView::MouseButtonDown(rMEvt);
 }
 
 void TemplateView::OnItemDblClicked(ThumbnailViewItem *pItem)
 {
     maDblClickHdl.Call(pItem);
-}
-
-IMPL_LINK_NOARG(TemplateView, ChangeNameHdl)
-{
-    OUString aTmp = maName;
-    maName = mpEditName->GetText();
-
-    if (!maChangeNameHdl.Call(this))
-        maName = aTmp;
-
-    mpEditName->SetText(OUString());
-
-    Invalidate();
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

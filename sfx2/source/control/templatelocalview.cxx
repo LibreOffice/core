@@ -89,7 +89,6 @@ TemplateLocalView::TemplateLocalView ( Window* pParent, const ResId& rResId, boo
       mpDocTemplates(new SfxDocumentTemplates)
 {
     mpItemView->SetColor(GetSettings().GetStyleSettings().GetFieldColor());
-    mpItemView->setChangeNameHdl(LINK(this,TemplateLocalView,ChangeNameHdl));
 }
 
 TemplateLocalView::~TemplateLocalView()
@@ -688,29 +687,6 @@ void TemplateLocalView::OnItemDblClicked (ThumbnailViewItem *pRegionItem)
     mpItemView->filterItems(ViewFilter_Application(meFilterOption));
 
     showOverlay(true);
-}
-
-IMPL_LINK(TemplateLocalView, ChangeNameHdl, TemplateView*, pView)
-{
-    sal_uInt16 nRegionId = pView->getId();
-    sal_uInt16 nItemId = nRegionId + 1;
-
-    if (!mpDocTemplates->SetName(pView->getName(),nRegionId,USHRT_MAX))
-        return false;
-
-    for (size_t i = 0; i < mItemList.size(); ++i)
-    {
-        if (mItemList[i]->mnId == nItemId)
-        {
-            mItemList[i]->maTitle = pView->getName();
-            mItemList[i]->calculateItemsPosition(mnThumbnailHeight,mnDisplayHeight,
-                                                 mnItemPadding,mpItemAttrs->nMaxTextLenght,mpItemAttrs);
-            Invalidate();
-            break;
-        }
-    }
-
-    return true;
 }
 
 static void lcl_updateThumbnails (TemplateLocalViewItem *pItem)

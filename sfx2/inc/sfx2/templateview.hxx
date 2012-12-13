@@ -12,7 +12,8 @@
 
 #include <sfx2/templateproperties.hxx>
 #include <sfx2/thumbnailview.hxx>
-#include <vcl/image.hxx>
+#include <vcl/button.hxx>
+#include <vcl/fixed.hxx>
 
 class Edit;
 class TemplateViewItem;
@@ -33,37 +34,26 @@ public:
 
     const OUString& getName () const { return maName; }
 
-    virtual void Paint (const Rectangle &rRect);
-
     void InsertItems (const std::vector<TemplateItemProperties> &rTemplates);
 
     void setDblClickHdl (const Link &rLink) { maDblClickHdl = rLink; }
 
-    void setChangeNameHdl (const Link &rLink) { maChangeNameHdl = rLink; }
-
-    void setCloseHdl (const Link &rLink) { maCloseHdl = rLink; }
+    void setCloseHdl (const Link &rLink) { maAllButton.SetClickHdl(rLink); }
 
 protected:
 
     virtual void Resize ();
 
-    virtual void MouseButtonDown (const MouseEvent &rMEvt);
-
     virtual void OnItemDblClicked (ThumbnailViewItem *pItem);
-
-    DECL_LINK (ChangeNameHdl, void*);
 
 private:
 
-    Image maCloseImg;
-    bool mbRenderTitle;
+    Control    maButtons;
+    PushButton maAllButton;
+    FixedText  maFTName;
     sal_uInt16 mnId;
     OUString maName;
     Link maDblClickHdl;
-    Link maChangeNameHdl;
-    Link maCloseHdl;
-
-    Edit *mpEditName;
 };
 
 #endif // TEMPLATEVIEW_HXX
