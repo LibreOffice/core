@@ -114,6 +114,7 @@ class ScXMLDataPilotTableContext : public SvXMLImportContext
     sal_uInt32      mnColFieldCount;
     sal_uInt32      mnPageFieldCount;
     sal_uInt32      mnDataFieldCount;
+    sal_uInt16 mnDataLayoutType;
     bool            bIsNative:1;
     bool            bIgnoreEmptyRows:1;
     bool            bIdentifyCategories:1;

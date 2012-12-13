@@ -197,6 +197,16 @@ ScMergeFlagAttr::~ScMergeFlagAttr()
 {
 }
 
+bool ScMergeFlagAttr::HasPivotButton() const
+{
+    return (GetValue() & SC_MF_BUTTON) != 0;
+}
+
+bool ScMergeFlagAttr::HasPivotPopupButton() const
+{
+    return (GetValue() & SC_MF_BUTTON_POPUP) != 0;
+}
+
 //------------------------------------------------------------------------
 // Protection
 //------------------------------------------------------------------------

@@ -870,7 +870,7 @@ void ScMenuFloatingWindow::terminateAllPopupMenus()
 // ============================================================================
 
 ScCheckListMenuWindow::Config::Config() :
-    mbAllowEmptySet(true)
+    mbAllowEmptySet(true), mbRTL(false)
 {
 }
 
@@ -1355,7 +1355,24 @@ void ScCheckListMenuWindow::launch(const Rectangle& rRect)
         // We need to have at least one member selected.
         maBtnOk.Enable(maChecks.GetCheckedEntryCount() != 0);
 
-    StartPopupMode(rRect, (FLOATWIN_POPUPMODE_DOWN | FLOATWIN_POPUPMODE_GRABFOCUS));
+    Rectangle aRect(rRect);
+    if (maConfig.mbRTL)
+    {
+        // In RTL mode, the logical "left" is visual "right".
+        long nLeft = aRect.Left() - aRect.GetWidth();
+        aRect.Left() = nLeft;
+    }
+    else if (maWndSize.Width() < aRect.GetWidth())
+    {
+        // Target rectangle (i.e. cell width) is wider than the window.
+        // Simulate right-aligned launch by modifying the target rectangle
+        // size.
+        long nDiff = aRect.GetWidth() - maWndSize.Width();
+        aRect.Left() += nDiff;
+    }
+
+    StartPopupMode(aRect, (FLOATWIN_POPUPMODE_DOWN | FLOATWIN_POPUPMODE_GRABFOCUS));
+    cycleFocus(); // Set initial focus to the check list box.
 }
 
 void ScCheckListMenuWindow::close(bool bOK)

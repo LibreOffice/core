@@ -1146,12 +1146,7 @@ void XclExpPTField::SetPropertiesFromDim( const ScDPSaveDimension& rSaveDim )
     if( eOrient == DataPilotFieldOrientation_PAGE )
     {
         maPageInfo.mnField = GetFieldIndex();
-
-        // selected item
-        if( rSaveDim.HasCurrentPage() )
-            maPageInfo.mnSelItem = GetItemIndex( rSaveDim.GetCurrentPage(), EXC_SXPI_ALLITEMS );
-        else
-            maPageInfo.mnSelItem = EXC_SXPI_ALLITEMS;
+        maPageInfo.mnSelItem = EXC_SXPI_ALLITEMS;
     }
 
     // item properties

@@ -703,9 +703,6 @@ void ScXMLExportDataPilot::WriteDimension(ScDPSaveDimension* pDim, const ScDPDim
         (sheet::DataPilotFieldOrientation) pDim->GetOrientation() );
     if( !sValueStr.isEmpty() )
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ORIENTATION, sValueStr );
-    if (pDim->GetOrientation() == sheet::DataPilotFieldOrientation_PAGE)
-        if (pDim->HasCurrentPage())
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SELECTED_PAGE, pDim->GetCurrentPage());
     if (pDim->GetUsedHierarchy() != 1)
     {
         rtl::OUStringBuffer sBuffer;
@@ -776,7 +773,7 @@ void ScXMLExportDataPilot::WriteDataPilots(const uno::Reference <sheet::XSpreads
         while (pAttr)
         {
             ScMergeFlagAttr& rItem = (ScMergeFlagAttr&)pAttr->GetItem(ATTR_MERGE_FLAG);
-            if (rItem.HasButton())
+            if (rItem.HasPivotButton())
             {
                 for (SCROW nButtonRow = nRow1; nButtonRow <= nRow2; ++nButtonRow)
                 {

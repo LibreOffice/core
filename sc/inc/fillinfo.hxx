@@ -124,8 +124,8 @@ struct CellInfo
     sal_Bool                        bHOverlapped : 1;
     sal_Bool                        bVOverlapped : 1;
     sal_Bool                        bAutoFilter : 1;
-    sal_Bool                        bPushButton : 1;
-    bool                        bPopupButton: 1;
+    bool                        bPivotButton:1;
+    bool                        bPivotPopupButton:1;
     bool                        bFilterActive:1;
 
     sal_Bool                        bPrinted : 1;               // when required (pagebreak mode)
@@ -154,11 +154,11 @@ struct RowInfo
     SCROW               nRowNo;
     SCCOL               nRotMaxCol;         // SC_ROTMAX_NONE, if nothing
 
-    sal_Bool                bEmptyBack;
-    sal_Bool                bEmptyText;
-    sal_Bool                bAutoFilter;
-    sal_Bool                bPushButton;
-    sal_Bool                bChanged;           // TRUE, if not tested
+    bool                bEmptyBack:1;
+    bool                bEmptyText:1;
+    bool                bAutoFilter:1;
+    bool                bPivotButton:1;
+    bool                bChanged:1;           // TRUE, if not tested
 
     inline explicit     RowInfo() : pCellInfo( 0 ) {}
 

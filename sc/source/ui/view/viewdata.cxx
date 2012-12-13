@@ -1699,7 +1699,7 @@ SCROW ScViewData::PrevCellsY( ScVSplitPos eWhichY ) const
 }
 
 
-sal_Bool ScViewData::GetMergeSizePixel( SCCOL nX, SCROW nY, long& rSizeXPix, long& rSizeYPix )
+bool ScViewData::GetMergeSizePixel( SCCOL nX, SCROW nY, long& rSizeXPix, long& rSizeYPix ) const
 {
     const ScMergeAttr* pMerge = (const ScMergeAttr*) pDoc->GetAttr( nX,nY,nTabNo, ATTR_MERGE );
     if ( pMerge->GetColMerge() > 1 || pMerge->GetRowMerge() > 1 )
@@ -1726,7 +1726,7 @@ sal_Bool ScViewData::GetMergeSizePixel( SCCOL nX, SCROW nY, long& rSizeXPix, lon
 
         rSizeXPix = nOutWidth;
         rSizeYPix = nOutHeight;
-        return sal_True;
+        return true;
     }
     else
     {

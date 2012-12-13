@@ -1883,6 +1883,7 @@ void Test::testPivotTableFilters()
     CPPUNIT_ASSERT_MESSAGE("Incorrect formula value that references a cell in the pivot table output.", fTest == 80.0);
 
     // Set current page of 'Group2' to 'A'.
+    pDPObj->BuildAllDimensionMembers();
     ScDPSaveData aSaveData(*pDPObj->GetSaveData());
     ScDPSaveDimension* pDim = aSaveData.GetDimensionByName(
         OUString("Group2"));

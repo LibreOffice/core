@@ -212,7 +212,7 @@ private:
 
     bool            DoPageFieldSelection( SCCOL nCol, SCROW nRow );
     bool            DoAutoFilterButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt );
-    void            DoPushButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt );
+    void DoPushPivotButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt, bool bButton, bool bPopup );
 
     void            DPMouseMove( const MouseEvent& rMEvt );
     void            DPMouseButtonUp( const MouseEvent& rMEvt );
@@ -221,10 +221,10 @@ private:
     /**
      * Check if the mouse click is on a field popup button.
      *
-     * @return bool true if the field popup menu has been launched and no
-     *         further mouse event handling is necessary, false otherwise.
+     * @return true if the field popup menu has been launched and no further
+     *         mouse event handling is necessary, false otherwise.
      */
-    bool            DPTestFieldPopupArrow(const MouseEvent& rMEvt, const ScAddress& rPos, ScDPObject* pDPObj);
+    bool DPTestFieldPopupArrow(const MouseEvent& rMEvt, const ScAddress& rPos, const ScAddress& rDimPos, ScDPObject* pDPObj);
     void            DPLaunchFieldPopupMenu(
         const Point& rScrPos, const Size& rScrSize, const ScAddress& rPos, ScDPObject* pDPObj);
 
@@ -353,8 +353,7 @@ public:
 
     ::com::sun::star::sheet::DataPilotFieldOrientation GetDPFieldOrientation( SCCOL nCol, SCROW nRow ) const;
 
-    void            DrawButtons( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
-                                 ScTableInfo& rTabInfo, OutputDevice* pContentDev );
+    void DrawButtons( SCCOL nX1, SCCOL nX2, ScTableInfo& rTabInfo, OutputDevice* pContentDev);
 
     using Window::Draw;
     void            Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,

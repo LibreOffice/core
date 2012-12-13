@@ -98,9 +98,10 @@ struct ScDPOutLevelData
     rtl::OUString                       maCaption; /// Caption is the name visible in the output table.
     bool                                mbHasHiddenMember:1;
     bool                                mbDataLayout:1;
+    bool                                mbPageDim:1;
 
     ScDPOutLevelData() :
-        nDim(-1), nHier(-1), nLevel(-1), nDimPos(-1), mbHasHiddenMember(false), mbDataLayout(false)
+        nDim(-1), nHier(-1), nLevel(-1), nDimPos(-1), mbHasHiddenMember(false), mbDataLayout(false), mbPageDim(false)
     {}
 
     bool operator<(const ScDPOutLevelData& r) const
@@ -485,40 +486,49 @@ bool lcl_MemberEmpty( const uno::Sequence<sheet::MemberResult>& rSeq )
     return true;    // no member data -> empty
 }
 
-uno::Sequence<sheet::MemberResult> lcl_GetSelectedPageAsResult( const uno::Reference<beans::XPropertySet>& xDimProp )
+/**
+ * Get visible page dimension members as results, except that, if all
+ * members are visible, then this function returns empty result.
+ */
+uno::Sequence<sheet::MemberResult> getVisiblePageMembersAsResults( const uno::Reference<uno::XInterface>& xLevel )
 {
-    uno::Sequence<sheet::MemberResult> aRet;
-    if ( xDimProp.is() )
+    if (!xLevel.is())
+        return uno::Sequence<sheet::MemberResult>();
+
+    uno::Reference<sheet::XMembersSupplier> xMSupplier(xLevel, UNO_QUERY);
+    if (!xMSupplier.is())
+        return uno::Sequence<sheet::MemberResult>();
+
+    uno::Reference<container::XNameAccess> xNA = xMSupplier->getMembers();
+    if (!xNA.is())
+        return uno::Sequence<sheet::MemberResult>();
+
+    std::vector<sheet::MemberResult> aRes;
+    uno::Sequence<OUString> aNames = xNA->getElementNames();
+    for (sal_Int32 i = 0; i < aNames.getLength(); ++i)
     {
-        try
-        {
-            //! merge with ScDPDimension::setPropertyValue?
+        const OUString& rName = aNames[i];
+        xNA->getByName(rName);
 
-            uno::Any aValue = xDimProp->getPropertyValue( rtl::OUString(SC_UNO_DP_FILTER) );
+        uno::Reference<beans::XPropertySet> xMemPS(xNA->getByName(rName), UNO_QUERY);
+        if (!xMemPS.is())
+            continue;
 
-            uno::Sequence<sheet::TableFilterField> aSeq;
-            if (aValue >>= aSeq)
-            {
-                if ( aSeq.getLength() == 1 )
-                {
-                    const sheet::TableFilterField& rField = aSeq[0];
-                    if ( rField.Field == 0 && rField.Operator == sheet::FilterOperator_EQUAL && !rField.IsNumeric )
-                    {
-                        rtl::OUString aSelectedPage( rField.StringValue );
-                        //! different name/caption string?
-                        sheet::MemberResult aResult( aSelectedPage, aSelectedPage, 0 );
-                        aRet = uno::Sequence<sheet::MemberResult>( &aResult, 1 );
-                    }
-                }
-                // else return empty sequence
-            }
-        }
-        catch ( uno::Exception& )
-        {
-            // recent addition - allow source to not handle it (no error)
-        }
+        OUString aCaption = ScUnoHelpFunctions::GetStringProperty(xMemPS, SC_UNO_DP_LAYOUTNAME, OUString());
+        if (aCaption.isEmpty())
+            aCaption = rName;
+
+        bool bVisible = ScUnoHelpFunctions::GetBoolProperty(xMemPS, SC_UNO_DP_ISVISIBLE, false);
+
+        if (bVisible)
+            aRes.push_back(sheet::MemberResult(rName, aCaption, 0));
     }
-    return aRet;
+
+    if (aNames.getLength() == static_cast<sal_Int32>(aRes.size()))
+        // All members are visible.  Return empty result.
+        return uno::Sequence<sheet::MemberResult>();
+
+    return ScUnoHelpFunctions::VectorToSequence(aRes);
 }
 
 }
@@ -651,10 +661,11 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                                         pPageFields[nPageFieldCount].nHier   = nHierarchy;
                                         pPageFields[nPageFieldCount].nLevel  = nLev;
                                         pPageFields[nPageFieldCount].nDimPos = nDimPos;
-                                        pPageFields[nPageFieldCount].aResult = lcl_GetSelectedPageAsResult(xDimProp);
+                                        pPageFields[nPageFieldCount].aResult = getVisiblePageMembersAsResults(xLevel);
                                         pPageFields[nPageFieldCount].maName  = aName;
                                         pPageFields[nPageFieldCount].maCaption= aCaption;
                                         pPageFields[nPageFieldCount].mbHasHiddenMember = bHasHiddenMember;
+                                        pPageFields[nPageFieldCount].mbPageDim = true;
                                         // no check on results for page fields
                                         ++nPageFieldCount;
                                         break;
@@ -844,13 +855,25 @@ void ScDPOutput::FieldCell(
     if (bInTable)
         lcl_SetFrame( pDoc,nTab, nCol,nRow, nCol,nRow, 20 );
 
-    //  Button
-    sal_uInt16 nMergeFlag = SC_MF_BUTTON;
-    if (!rData.mbDataLayout)
-        nMergeFlag |= SC_MF_BUTTON_POPUP;
+    // For field button drawing
+    sal_uInt16 nMergeFlag = 0;
     if (rData.mbHasHiddenMember)
         nMergeFlag |= SC_MF_HIDDEN_MEMBER;
-    pDoc->ApplyFlagsTab(nCol, nRow, nCol, nRow, nTab, nMergeFlag);
+
+    if (rData.mbPageDim)
+    {
+        nMergeFlag |= SC_MF_BUTTON_POPUP;
+        pDoc->ApplyFlagsTab(nCol, nRow, nCol, nRow, nTab, SC_MF_BUTTON);
+        pDoc->ApplyFlagsTab(nCol+1, nRow, nCol+1, nRow, nTab, nMergeFlag);
+    }
+    else
+    {
+        nMergeFlag |= SC_MF_BUTTON;
+        if (!rData.mbDataLayout)
+            nMergeFlag |= SC_MF_BUTTON_POPUP;
+        pDoc->ApplyFlagsTab(nCol, nRow, nCol, nRow, nTab, nMergeFlag);
+    }
+
 
     lcl_SetStyleById( pDoc,nTab, nCol,nRow, nCol,nRow, STR_PIVOT_STYLE_FIELDNAME );
 }
@@ -1001,17 +1024,17 @@ void ScDPOutput::Output()
         FieldCell(nHdrCol, nHdrRow, nTab, pPageFields[nField], false);
         SCCOL nFldCol = nHdrCol + 1;
 
-        rtl::OUString aPageValue;
-        if ( pPageFields[nField].aResult.getLength() == 1 )
-            aPageValue = pPageFields[nField].aResult[0].Caption;
-        else
-            aPageValue = SC_RESSTR(SCSTR_ALL);        //! separate string?
+        OUString aPageValue = ScResId(SCSTR_ALL).toString();
+        const uno::Sequence<sheet::MemberResult>& rRes = pPageFields[nField].aResult;
+        sal_Int32 n = rRes.getLength();
+        if (n == 1)
+            aPageValue = rRes[0].Caption;
+        else if (n > 1)
+            aPageValue = ScResId(SCSTR_MULTIPLE).toString();
 
         pDoc->SetString( nFldCol, nHdrRow, nTab, aPageValue );
 
         lcl_SetFrame( pDoc,nTab, nFldCol,nHdrRow, nFldCol,nHdrRow, 20 );
-        pDoc->ApplyAttr( nFldCol, nHdrRow, nTab, ScMergeFlagAttr(SC_MF_AUTO) );
-        //! which style?
     }
 
     //  data description

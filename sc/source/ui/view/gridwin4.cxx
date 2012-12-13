@@ -730,7 +730,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 
         // Autofilter- und Pivot-Buttons
 
-    DrawButtons( nX1, nY1, nX2, nY2, aTabInfo, pContentDev );          // Pixel
+    DrawButtons( nX1, nX2, aTabInfo, pContentDev );          // Pixel
 
         // Notiz-Anzeiger
 
@@ -1121,7 +1121,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
     }
 }
 
-void ScGridWindow::DrawButtons( SCCOL nX1, SCROW /*nY1*/, SCCOL nX2, SCROW /*nY2*/, ScTableInfo& rTabInfo, OutputDevice* pContentDev )
+void ScGridWindow::DrawButtons( SCCOL nX1, SCCOL nX2, ScTableInfo& rTabInfo, OutputDevice* pContentDev)
 {
     aComboButton.SetOutputDevice( pContentDev );
 
@@ -1222,33 +1222,33 @@ void ScGridWindow::DrawButtons( SCCOL nX1, SCROW /*nY1*/, SCCOL nX2, SCROW /*nY2
             }
         }
 
-        if ( pRowInfo[nArrY].bPushButton && pRowInfo[nArrY].bChanged )
+        if ( pRowInfo[nArrY].bPivotButton && pRowInfo[nArrY].bChanged )
         {
             RowInfo* pThisRowInfo = &pRowInfo[nArrY];
             nRow = pThisRowInfo->nRowNo;
             for (nCol=nX1; nCol<=nX2; nCol++)
             {
                 CellInfo* pInfo = &pThisRowInfo->pCellInfo[nCol+1];
-                if ( pInfo->bPushButton && !pInfo->bHOverlapped && !pInfo->bVOverlapped )
-                {
-                    Point aScrPos = pViewData->GetScrPos( nCol, nRow, eWhich );
-                    long nSizeX;
-                    long nSizeY;
-                    pViewData->GetMergeSizePixel( nCol, nRow, nSizeX, nSizeY );
-                    long nPosX = aScrPos.X();
-                    long nPosY = aScrPos.Y();
-                    // bLayoutRTL is handled in setBoundingBox
+                if (pInfo->bHOverlapped || pInfo->bVOverlapped)
+                    continue;
 
-                    String aStr;
-                    pDoc->GetString(nCol, nRow, nTab, aStr);
-                    aCellBtn.setText(aStr);
-                    aCellBtn.setBoundingBox(Point(nPosX, nPosY), Size(nSizeX-1, nSizeY-1), bLayoutRTL);
-                    aCellBtn.setPopupLeft(false);   // DataPilot popup is always right-aligned for now
-                    aCellBtn.setDrawBaseButton(true);
-                    aCellBtn.setDrawPopupButton(pInfo->bPopupButton);
-                    aCellBtn.setHasHiddenMember(pInfo->bFilterActive);
-                    aCellBtn.draw();
-                }
+                Point aScrPos = pViewData->GetScrPos( nCol, nRow, eWhich );
+                long nSizeX;
+                long nSizeY;
+                pViewData->GetMergeSizePixel( nCol, nRow, nSizeX, nSizeY );
+                long nPosX = aScrPos.X();
+                long nPosY = aScrPos.Y();
+                // bLayoutRTL is handled in setBoundingBox
+
+                String aStr;
+                pDoc->GetString(nCol, nRow, nTab, aStr);
+                aCellBtn.setText(aStr);
+                aCellBtn.setBoundingBox(Point(nPosX, nPosY), Size(nSizeX-1, nSizeY-1), bLayoutRTL);
+                aCellBtn.setPopupLeft(false);   // DataPilot popup is always right-aligned for now
+                aCellBtn.setDrawBaseButton(pInfo->bPivotButton);
+                aCellBtn.setDrawPopupButton(pInfo->bPivotPopupButton);
+                aCellBtn.setHasHiddenMember(pInfo->bFilterActive);
+                aCellBtn.draw();
             }
         }
 

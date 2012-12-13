@@ -176,6 +176,11 @@ String SCSTR_ALL
     Text [ en-US ] = "- all -" ;
 };
 
+String SCSTR_MULTIPLE
+{
+    Text [ en-US ] = "- multiple -" ;
+};
+
 String SCSTR_STDFILTER
 {
     Text [ en-US ] = "Standard Filter..." ;

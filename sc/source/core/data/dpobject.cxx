@@ -667,7 +667,7 @@ const ScRange ScDPObject::GetOutputRangeByType( sal_Int32 nType )
 
 sal_Bool lcl_HasButton( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
-    return ((const ScMergeFlagAttr*)pDoc->GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG ))->HasButton();
+    return ((const ScMergeFlagAttr*)pDoc->GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG ))->HasPivotButton();
 }
 
 void ScDPObject::RefreshAfterLoad()
@@ -690,12 +690,6 @@ void ScDPObject::RefreshAfterLoad()
         pDoc->IsBlockEmpty( nTab, nFirstCol, nFirstRow + nInitial, nFirstCol, nFirstRow + nInitial ) &&
         aOutRange.aEnd.Col() > nFirstCol )
     {
-        sal_Bool bFilterButton = IsSheetData();         // when available, filter button setting must be checked here
-
-        SCROW nSkip = bFilterButton ? 1 : 0;
-        for (SCROW nPos=nSkip; nPos<nInitial; nPos++)
-            pDoc->ApplyAttr( nFirstCol + 1, nFirstRow + nPos, nTab, ScMergeFlagAttr(SC_MF_AUTO) );
-
         nHeaderRows = nInitial;
     }
     else

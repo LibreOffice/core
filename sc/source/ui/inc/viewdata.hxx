@@ -367,8 +367,8 @@ public:
     sal_Bool            IsFillMode()                { return nFillMode == SC_FILL_FILL; }
     sal_uInt8           GetFillMode()               { return nFillMode; }
 
-                    // TRUE: Zelle ist zusammengefasst
-    sal_Bool            GetMergeSizePixel( SCCOL nX, SCROW nY, long& rSizeXPix, long& rSizeYPix );
+                    // TRUE: Cell is merged
+    bool GetMergeSizePixel( SCCOL nX, SCROW nY, long& rSizeXPix, long& rSizeYPix ) const;
     sal_Bool            GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
                                         SCsCOL& rPosX, SCsROW& rPosY,
                                         sal_Bool bTestMerge = sal_True, sal_Bool bRepair = false,

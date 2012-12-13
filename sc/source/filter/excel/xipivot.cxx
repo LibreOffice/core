@@ -1486,14 +1486,15 @@ void XclImpPivotTable::ApplyMergeFlags(const ScRange& rOutRange, const ScDPSaveD
     vector<ScAddress>::const_iterator itr = aFieldBtns.begin(), itrEnd = aFieldBtns.end();
     for (; itr != itrEnd; ++itr)
     {
-        sal_uInt16 nMFlag = SC_MF_BUTTON;
+        rDoc.ApplyFlagsTab(itr->Col(), itr->Row(), itr->Col(), itr->Row(), itr->Tab(), SC_MF_BUTTON);
+
+        sal_uInt16 nMFlag = SC_MF_BUTTON_POPUP;
         rtl::OUString aName;
         rDoc.GetString(itr->Col(), itr->Row(), itr->Tab(), aName);
         if (rSaveData.HasInvisibleMember(aName))
             nMFlag |= SC_MF_HIDDEN_MEMBER;
 
-        rDoc.ApplyFlagsTab(itr->Col(), itr->Row(), itr->Col(), itr->Row(), itr->Tab(), nMFlag);
-        rDoc.ApplyFlagsTab(itr->Col()+1, itr->Row(), itr->Col()+1, itr->Row(), itr->Tab(), SC_MF_AUTO);
+        rDoc.ApplyFlagsTab(itr->Col()+1, itr->Row(), itr->Col()+1, itr->Row(), itr->Tab(), nMFlag);
     }
 
     aGeometry.getColumnFieldPositions(aFieldBtns);

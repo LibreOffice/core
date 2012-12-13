@@ -227,6 +227,7 @@ public:
     struct Config
     {
         bool mbAllowEmptySet;
+        bool mbRTL;
         Config();
     };
 
