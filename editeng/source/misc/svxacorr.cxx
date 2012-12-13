@@ -1481,11 +1481,11 @@ sal_Bool SvxAutoCorrect::AddCplSttException( const String& rNew,
         pLists = nTmpVal->second;
     else
     {
-        nTmpVal = pLangTable->find(LANGUAGE_DONTKNOW);
+        nTmpVal = pLangTable->find(LANGUAGE_UNDETERMINED);
         if(nTmpVal != pLangTable->end())
             pLists = nTmpVal->second;
-        else if(CreateLanguageFile(LANGUAGE_DONTKNOW, sal_True))
-            pLists = pLangTable->find(LANGUAGE_DONTKNOW)->second;
+        else if(CreateLanguageFile(LANGUAGE_UNDETERMINED, sal_True))
+            pLists = pLangTable->find(LANGUAGE_UNDETERMINED)->second;
     }
     OSL_ENSURE(pLists, "No auto correction data");
     return pLists->AddToCplSttExceptList(rNew);
@@ -1502,11 +1502,11 @@ sal_Bool SvxAutoCorrect::AddWrtSttException( const String& rNew,
         pLists = nTmpVal->second;
     else
     {
-        nTmpVal = pLangTable->find(LANGUAGE_DONTKNOW);
+        nTmpVal = pLangTable->find(LANGUAGE_UNDETERMINED);
         if(nTmpVal != pLangTable->end())
             pLists = nTmpVal->second;
-        else if(CreateLanguageFile(LANGUAGE_DONTKNOW, sal_True))
-            pLists = pLangTable->find(LANGUAGE_DONTKNOW)->second;
+        else if(CreateLanguageFile(LANGUAGE_UNDETERMINED, sal_True))
+            pLists = pLangTable->find(LANGUAGE_UNDETERMINED)->second;
     }
     OSL_ENSURE(pLists, "No auto correction file!");
     return pLists->AddToWrdSttExceptList(rNew);
@@ -1689,7 +1689,7 @@ const SvxAutocorrWord* SvxAutoCorrect::SearchWordsInList(
         eLang = MsLangId::getSystemLanguage();
 
     // First search for eLang, then US-English -> English
-    // and last in LANGUAGE_DONTKNOW
+    // and last in LANGUAGE_UNDETERMINED
     if(pLangTable->find(eLang) != pLangTable->end() || CreateLanguageFile(eLang, sal_False))
     {
         //the language is available - so bring it on
@@ -1730,14 +1730,14 @@ const SvxAutocorrWord* SvxAutoCorrect::SearchWordsInList(
         }
     }
 
-    if(pLangTable->find(LANGUAGE_DONTKNOW) != pLangTable->end() || CreateLanguageFile(LANGUAGE_DONTKNOW, sal_False))
+    if(pLangTable->find(LANGUAGE_UNDETERMINED) != pLangTable->end() || CreateLanguageFile(LANGUAGE_UNDETERMINED, sal_False))
     {
         //the language is available - so bring it on
-        SvxAutoCorrectLanguageLists* pList = pLangTable->find(LANGUAGE_DONTKNOW)->second;
+        SvxAutoCorrectLanguageLists* pList = pLangTable->find(LANGUAGE_UNDETERMINED)->second;
         pRet = lcl_SearchWordsInList( pList, rTxt, rStt, nEndPos );
         if( pRet )
         {
-            rLang = LANGUAGE_DONTKNOW;
+            rLang = LANGUAGE_UNDETERMINED;
             return pRet;
         }
     }
@@ -1748,7 +1748,7 @@ sal_Bool SvxAutoCorrect::FindInWrdSttExceptList( LanguageType eLang,
                                              const String& sWord )
 {
     // First search for eLang, then US-English -> English
-    // and last in LANGUAGE_DONTKNOW
+    // and last in LANGUAGE_UNDETERMINED
     LanguageType nTmpKey1 = eLang & 0x7ff, // the main language in many cases DE
                  nTmpKey2 = eLang & 0x3ff; // otherwise for example EN
     String sTemp(sWord);
@@ -1779,10 +1779,10 @@ sal_Bool SvxAutoCorrect::FindInWrdSttExceptList( LanguageType eLang,
             return sal_True;
     }
 
-    if(pLangTable->find(LANGUAGE_DONTKNOW) != pLangTable->end() || CreateLanguageFile(LANGUAGE_DONTKNOW, sal_False))
+    if(pLangTable->find(LANGUAGE_UNDETERMINED) != pLangTable->end() || CreateLanguageFile(LANGUAGE_UNDETERMINED, sal_False))
     {
         //the language is available - so bring it on
-        SvxAutoCorrectLanguageLists* pList = pLangTable->find(LANGUAGE_DONTKNOW)->second;
+        SvxAutoCorrectLanguageLists* pList = pLangTable->find(LANGUAGE_UNDETERMINED)->second;
         if(pList->GetWrdSttExceptList()->find(&sTemp) != pList->GetWrdSttExceptList()->end() )
             return sal_True;
     }
@@ -1827,7 +1827,7 @@ sal_Bool SvxAutoCorrect::FindInCplSttExceptList(LanguageType eLang,
                                 const String& sWord, sal_Bool bAbbreviation)
 {
     // First search for eLang, then US-English -> English
-    // and last in LANGUAGE_DONTKNOW
+    // and last in LANGUAGE_UNDETERMINED
     LanguageType nTmpKey1 = eLang & 0x7ff, // the main language in many cases DE
                  nTmpKey2 = eLang & 0x3ff; // otherwise for example EN
     String sTemp( sWord );
@@ -1856,10 +1856,10 @@ sal_Bool SvxAutoCorrect::FindInCplSttExceptList(LanguageType eLang,
             return sal_True;
     }
 
-    if(pLangTable->find(LANGUAGE_DONTKNOW) != pLangTable->end() || CreateLanguageFile(LANGUAGE_DONTKNOW, sal_False))
+    if(pLangTable->find(LANGUAGE_UNDETERMINED) != pLangTable->end() || CreateLanguageFile(LANGUAGE_UNDETERMINED, sal_False))
     {
         //the language is available - so bring it on
-        const SvStringsISortDtor* pList = pLangTable->find(LANGUAGE_DONTKNOW)->second->GetCplSttExceptList();
+        const SvStringsISortDtor* pList = pLangTable->find(LANGUAGE_UNDETERMINED)->second->GetCplSttExceptList();
         if(bAbbreviation ? lcl_FindAbbreviation(pList, sWord) : pList->find(&sTemp) != pList->end() )
             return sal_True;
     }
@@ -1871,9 +1871,6 @@ String SvxAutoCorrect::GetAutoCorrFileName( LanguageType eLang,
 {
     String sRet, sExt( LanguageTag( eLang ).getBcp47() );
 
-    // fdo#58060 user added dictionary - saved as acorr_.dat
-    if (eLang == LANGUAGE_DONTKNOW)
-        sExt = String();
     sExt.Insert('_', 0);
     sExt.AppendAscii( ".dat" );
     if( bNewFile )

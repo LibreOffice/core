@@ -922,6 +922,14 @@ void MigrationImpl::copyFiles()
         {
             // remove installation prefix from file
             localName = i_file->copy(m_aInfo.userdata.getLength());
+            if (localName.endsWith( "/autocorr/acor_.dat"))
+            {
+                // Previous versions used an empty language tag for
+                // LANGUAGE_DONTKNOW with the "[All]" autocorrection entry.
+                // As of LibreOffice 4.0 it is 'und' for LANGUAGE_UNDETERMINED
+                // so the file name is "acor_und.dat".
+                localName = localName.copy( 0, localName.getLength() - 4) + "und.dat";
+            }
             destName = userInstall + localName;
             INetURLObject aURL(destName);
             // check whether destination directory exists

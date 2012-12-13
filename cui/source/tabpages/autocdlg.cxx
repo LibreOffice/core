@@ -111,7 +111,7 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(Window* pParent, const SfxItemSet* _pSet ) :
 
     // initialize languages
     //! LANGUAGE_NONE is displayed as '[All]' and the LanguageType
-    //! will be set to LANGUAGE_DONTKNOW
+    //! will be set to LANGUAGE_UNDETERMINED
     sal_Int16 nLangList = LANG_LIST_WESTERN;
 
     if( SvtLanguageOptions().IsCTLFontEnabled() )
@@ -120,13 +120,13 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(Window* pParent, const SfxItemSet* _pSet ) :
     aLanguageLB.SelectLanguage( LANGUAGE_NONE );
     sal_uInt16 nPos = aLanguageLB.GetSelectEntryPos();
     DBG_ASSERT( LISTBOX_ENTRY_NOTFOUND != nPos, "listbox entry missing" );
-    aLanguageLB.SetEntryData( nPos, (void*)(long) LANGUAGE_DONTKNOW );
+    aLanguageLB.SetEntryData( nPos, (void*)(long) LANGUAGE_UNDETERMINED );
 
     // Initializing doesn't work for static on linux - therefore here
     if( LANGUAGE_SYSTEM == eLastDialogLanguage )
         eLastDialogLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
 
-    LanguageType nSelectLang = LANGUAGE_DONTKNOW;
+    LanguageType nSelectLang = LANGUAGE_UNDETERMINED;
     nPos = aLanguageLB.GetEntryPos( (void*)(long) eLastDialogLanguage );
     if (LISTBOX_ENTRY_NOTFOUND != nPos)
         nSelectLang = eLastDialogLanguage;
