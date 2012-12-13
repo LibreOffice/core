@@ -59,7 +59,7 @@ class DateTime;
 #define XMULTISERVICEFACTORY        ::com::sun::star::lang::XMultiServiceFactory
 #define XSERVICEINFO                ::com::sun::star::lang::XServiceInfo
 #define OWEAKOBJECT                 ::cppu::OWeakObject
-#define REFERENCE                   ::com::sun::star::uno::Reference
+#define UNOREFERENCE                   ::com::sun::star::uno::Reference
 #define XINTERFACE                  ::com::sun::star::uno::XInterface
 #define EXCEPTION                   ::com::sun::star::uno::Exception
 #define RUNTIMEEXCEPTION            ::com::sun::star::uno::RuntimeException

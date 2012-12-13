@@ -245,15 +245,15 @@ Any SAL_CALL TableColumn::getFastPropertyValue( sal_Int32 nHandle ) throw (Unkno
 
 // -----------------------------------------------------------------------------
 
-rtl::Reference< ::comphelper::FastPropertySetInfo > TableColumn::getStaticPropertySetInfo()
+rtl::Reference< FastPropertySetInfo > TableColumn::getStaticPropertySetInfo()
 {
-    static rtl::Reference< ::comphelper::FastPropertySetInfo > xInfo;
+    static rtl::Reference< FastPropertySetInfo > xInfo;
     if( !xInfo.is() )
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         if( !xInfo.is() )
         {
-            comphelper::PropertyVector aProperties(6);
+            PropertyVector aProperties(6);
 
             aProperties[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Width" ) );
             aProperties[0].Handle = Property_Width;
@@ -285,7 +285,7 @@ rtl::Reference< ::comphelper::FastPropertySetInfo > TableColumn::getStaticProper
             aProperties[5].Type = ::getBooleanCppuType();
             aProperties[5].Attributes = 0;
 
-            xInfo.set( new ::comphelper::FastPropertySetInfo(aProperties) );
+            xInfo.set( new FastPropertySetInfo(aProperties) );
         }
     }
 

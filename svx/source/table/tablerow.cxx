@@ -319,15 +319,15 @@ Any SAL_CALL TableRow::getFastPropertyValue( sal_Int32 nHandle ) throw (UnknownP
 
 // -----------------------------------------------------------------------------
 
-rtl::Reference< ::comphelper::FastPropertySetInfo > TableRow::getStaticPropertySetInfo()
+rtl::Reference< FastPropertySetInfo > TableRow::getStaticPropertySetInfo()
 {
-    static rtl::Reference< ::comphelper::FastPropertySetInfo > xInfo;
+    static rtl::Reference< FastPropertySetInfo > xInfo;
     if( !xInfo.is() )
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         if( !xInfo.is() )
         {
-            comphelper::PropertyVector aProperties(6);
+            PropertyVector aProperties(6);
 
             aProperties[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Height" ) );
             aProperties[0].Handle = Property_Height;
@@ -359,7 +359,7 @@ rtl::Reference< ::comphelper::FastPropertySetInfo > TableRow::getStaticPropertyS
             aProperties[5].Type = ::getBooleanCppuType();
             aProperties[5].Attributes = 0;
 
-            xInfo.set( new ::comphelper::FastPropertySetInfo(aProperties) );
+            xInfo.set( new FastPropertySetInfo(aProperties) );
         }
     }
 

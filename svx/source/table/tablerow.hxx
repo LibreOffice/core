@@ -35,7 +35,7 @@ namespace sdr { namespace table {
 // TableRow
 // -----------------------------------------------------------------------------
 
-typedef ::cppu::ImplInheritanceHelper2< ::comphelper::FastPropertySet, ::com::sun::star::table::XCellRange, ::com::sun::star::container::XNamed > TableRowBase;
+typedef ::cppu::ImplInheritanceHelper2< FastPropertySet, ::com::sun::star::table::XCellRange, ::com::sun::star::container::XNamed > TableRowBase;
 
 class TableRow : public TableRowBase
 {
@@ -67,7 +67,7 @@ public:
     virtual ::com::sun::star::uno::Any SAL_CALL getFastPropertyValue( ::sal_Int32 nHandle ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
 private:
-    static rtl::Reference< ::comphelper::FastPropertySetInfo > getStaticPropertySetInfo();
+    static rtl::Reference< FastPropertySetInfo > getStaticPropertySetInfo();
 
     TableModelRef mxTableModel;
     CellVector  maCells;

@@ -31,7 +31,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase3.hxx>
 
-namespace comphelper {
+namespace sdr { namespace table {
 
 // -----------------------------------------------------------------------------
 
@@ -94,7 +94,7 @@ private:
     rtl::Reference< FastPropertySetInfo > mxInfo;
 };
 
-}
+}}
 
 #endif
 

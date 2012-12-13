@@ -37,6 +37,8 @@ $(eval $(call gb_Library_set_include,svxcore,\
     -I$(WORKDIR)/SdiTarget/svx/sdi \
 ))
 
+$(eval $(call gb_Library_set_precompiled_header,svxcore,$(SRCDIR)/svx/inc/pch/precompiled_svxcore))
+
 #BOOST switch in customshapes
 #dialog:
 #.IF "$(GUI)"=="WNT"

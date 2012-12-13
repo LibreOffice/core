@@ -25,7 +25,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 
-namespace comphelper {
+namespace sdr { namespace table {
 
 // -----------------------------------------------------------------------------
 // FastPropertySetInfo
@@ -232,6 +232,6 @@ void SAL_CALL FastPropertySet::firePropertiesChangeEvent( const Sequence< OUStri
 {
 }
 
-}
+}}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

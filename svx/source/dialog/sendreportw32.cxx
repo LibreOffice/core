@@ -18,6 +18,10 @@
  */
 
 
+#include "docrecovery.hxx"
+
+#undef WB_LEFT
+#undef WB_RIGHT
 
 #define UNICODE
 #define _UNICODE
@@ -36,8 +40,6 @@
 #ifdef max
 #undef max
 #endif
-
-#include "docrecovery.hxx"
 
 //***************************************************************************
 

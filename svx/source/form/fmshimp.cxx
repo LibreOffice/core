@@ -510,7 +510,7 @@ sal_Bool IsSearchableControl( const ::com::sun::star::uno::Reference< ::com::sun
     {
         if ( _pCurrentText )
         {
-            switch ( (TriState)xCheckBox->getState() )
+            switch ( (::TriState)xCheckBox->getState() )
             {
                 case STATE_NOCHECK: *_pCurrentText = ::rtl::OUString("0" ); break;
                 case STATE_CHECK: *_pCurrentText = ::rtl::OUString("1" ); break;
