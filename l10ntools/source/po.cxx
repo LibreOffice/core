@@ -813,14 +813,7 @@ void PoIfstream::readEntry( PoEntry& rPoEntry )
             (sType == "text" || sType == "quickhelptext" || sType == "title")&&
             !aGenPo.getMsgId().isEmpty() )
         {
-            if( rPoEntry.m_pGenPo )
-            {
-                *(rPoEntry.m_pGenPo) = aGenPo;
-            }
-            else
-            {
-                rPoEntry.m_pGenPo = new GenPoEntry( aGenPo );
-            }
+            //Generate keyid if po file not includes it
             const OString sExtractCom = aGenPo.getExtractCom();
             if( sExtractCom.isEmpty() ||
                 ( sExtractCom.getLength() != 4 &&
@@ -831,6 +824,14 @@ void PoIfstream::readEntry( PoEntry& rPoEntry )
                     lcl_GenKeyId(
                         aGenPo.getReference() + sMsgCtxt +
                         aGenPo.getMsgId() ) );
+            }
+            if( rPoEntry.m_pGenPo )
+            {
+                *(rPoEntry.m_pGenPo) = aGenPo;
+            }
+            else
+            {
+                rPoEntry.m_pGenPo = new GenPoEntry( aGenPo );
             }
             rPoEntry.m_bIsInitialized = true;
         }
