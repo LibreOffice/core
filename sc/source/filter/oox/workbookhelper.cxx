@@ -591,11 +591,6 @@ void WorkbookGlobals::finalize()
         // #i79826# enable updating automatic row height after loading the document
         aPropSet.setProperty( PROP_IsAdjustHeightEnabled, true );
 
-        getFormulaBuffer().finalizeImport();
-
-        // hack, setting it true the second time will delete the cache
-        aPropSet.setProperty( PROP_IsAdjustHeightEnabled, true );
-
         // Insert all pivot tables. Must be done after loading all sheets and
         // formulas, because data pilots expect existing source data on
         // creation.
@@ -667,6 +662,8 @@ void WorkbookHelper::finalizeWorkbookImport()
     mrBookGlob.getWorkbookSettings().finalizeImport();
     mrBookGlob.getViewSettings().finalizeImport();
 
+    // need to import formulas before scenarios
+    mrBookGlob.getFormulaBuffer().finalizeImport();
     /*  Insert scenarios after all sheet processing is done, because new hidden
         sheets are created for scenarios which would confuse code that relies
         on certain sheet indexes. Must be done after pivot tables too. */
