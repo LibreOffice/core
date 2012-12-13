@@ -285,6 +285,7 @@ void LocaleDataWrapper::invalidateData()
         String aDebugLocale;
         if (areChecksEnabled())
         {
+            /* FIXME-BCP47: handle language tags! */
             aDebugLocale = xLoc[i].Language;
             if ( !xLoc[i].Country.isEmpty() )
             {
@@ -333,10 +334,10 @@ void LocaleDataWrapper::invalidateData()
                 // In checks, exclude known problems because no MS-LCID defined
                 // and default for Language found.
                 if ( areChecksEnabled()
-                        && !aDebugLocale.EqualsAscii( "ar_SD" ) // Sudan/ar
-                        && !aDebugLocale.EqualsAscii( "en_CB" ) // Carribean is not a country
-//                      && !aDebugLocale.EqualsAscii( "en_BG" ) // ?!? Bulgaria/en
-//                      && !aDebugLocale.EqualsAscii( "es_BR" ) // ?!? Brazil/es
+                        && !aDebugLocale.EqualsAscii( "ar-SD" ) // Sudan/ar
+                        && !aDebugLocale.EqualsAscii( "en-CB" ) // Carribean is not a country
+//                      && !aDebugLocale.EqualsAscii( "en-BG" ) // ?!? Bulgaria/en
+//                      && !aDebugLocale.EqualsAscii( "es-BR" ) // ?!? Brazil/es
                     )
                 {
                     rtl::OUStringBuffer aMsg;
