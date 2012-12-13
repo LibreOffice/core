@@ -90,6 +90,10 @@ public:
     sal_Int16           getCalcSheetIndex( const ::rtl::OUString& rWorksheetName ) const;
     /** Returns the finalized name of the sheet with the passed worksheet name. */
     ::rtl::OUString     getCalcSheetName( const ::rtl::OUString& rWorksheetName ) const;
+    /** Converts sSheetNameRef (e.g. '#SheetName!A1' to '#SheetName.A1' )
+        if sSheetNameRef doesn't start with '#' it is ignored and not modified
+    */
+    void                convertSheetNameRef( ::rtl::OUString& sSheetNameRef ) const;
 
 private:
     struct SheetInfo : public SheetInfoModel
