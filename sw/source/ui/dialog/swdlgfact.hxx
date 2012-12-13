@@ -46,6 +46,7 @@ class DropDownFieldDialog;
 }
 
 #define DECL_ABSTDLG_BASE(Class,DialogClass)        \
+protected:                                          \
     DialogClass*        pDlg;                       \
 public:                                             \
                     Class( DialogClass* p)          \
@@ -53,7 +54,6 @@ public:                                             \
                      {}                             \
     virtual         ~Class();                       \
     virtual short   Execute() ;
-//  virtual void    Show( sal_Bool bVisible = sal_True, sal_uInt16 nFlags = 0 )
 
 #define IMPL_ABSTDLG_BASE(Class)                    \
 Class::~Class()                                     \
@@ -129,7 +129,7 @@ class AbstractSplitTableDialog_Impl : public AbstractSplitTableDialog // add for
 // add for SwBreakDlg end
 
 //add for SwCharDlg , SwEnvDlg , SwFootNoteOptionDlg SwParaDlg  SwTableTabDlg begin
-class AbstractTabDialog_Impl : public SfxAbstractTabDialog
+class AbstractTabDialog_Impl : virtual public SfxAbstractTabDialog
 {
     DECL_ABSTDLG_BASE( AbstractTabDialog_Impl,SfxTabDialog )
     virtual void                SetCurPageId( sal_uInt16 nId );
@@ -141,6 +141,19 @@ class AbstractTabDialog_Impl : public SfxAbstractTabDialog
     virtual String      GetText() const;
 };
 //add for SwCharDlg, SwEnvDlg ,SwFootNoteOptionDlg SwParaDlg  SwTableTabDlg end
+
+class AbstractApplyTabDialog_Impl : public AbstractTabDialog_Impl, virtual public SfxAbstractApplyTabDialog
+{
+public:
+    AbstractApplyTabDialog_Impl( SfxTabDialog* p)
+        : AbstractTabDialog_Impl(p)
+    {
+    }
+    DECL_LINK(ApplyHdl, void*);
+private:
+    Link m_aHandler;
+    virtual void                SetApplyHdl( const Link& rLink );
+};
 
 //add for SwConvertTableDlg begin
 class AbstractSwConvertTableDlg_Impl :  public AbstractSwConvertTableDlg // add for SwConvertTableDlg
@@ -484,7 +497,7 @@ public:
                                                 sal_Bool            bFmt     = sal_False,
                                                 sal_uInt16          nDefPage = 0,
                                                 const String*   pFmtStr  = 0); //add for SwFrmDlg
-    virtual SfxAbstractTabDialog*       CreateTemplateDialog( int nResId,
+    virtual SfxAbstractApplyTabDialog*  CreateTemplateDialog(
                                                 Window*             pParent,
                                                 SfxStyleSheetBase&  rBase,
                                                 sal_uInt16              nRegion,

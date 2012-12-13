@@ -497,6 +497,118 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
 
 }
 
+class ApplyStyle
+{
+public:
+    ApplyStyle(SwDocShell &rDocSh, bool bNew, SfxStyleSheetBase* pStyle,
+        sal_uInt16 nRet, rtl::Reference< SwDocStyleSheet > xTmp,
+        sal_uInt16 nFamily, SfxAbstractApplyTabDialog *pDlg,
+        rtl::Reference< SfxStyleSheetBasePool > xBasePool,
+        bool bModified)
+        : m_rDocSh(rDocSh)
+        , m_bNew(bNew)
+        , m_pStyle(pStyle)
+        , m_nRet(nRet)
+        , m_xTmp(xTmp)
+        , m_nFamily(nFamily)
+        , m_pDlg(pDlg)
+        , m_xBasePool(xBasePool)
+        , m_bModified(bModified)
+    {
+    }
+    DECL_LINK( ApplyHdl, void* );
+    void apply()
+    {
+        ApplyHdl(NULL);
+    }
+    sal_uInt16 getRet() const { return m_nRet; }
+private:
+    SwDocShell &m_rDocSh;
+    bool m_bNew;
+    SfxStyleSheetBase* m_pStyle;
+    sal_uInt16 m_nRet;
+    rtl::Reference< SwDocStyleSheet > m_xTmp;
+    sal_uInt16 m_nFamily;
+    SfxAbstractApplyTabDialog *m_pDlg;
+    rtl::Reference< SfxStyleSheetBasePool > m_xBasePool;
+    bool m_bModified;
+};
+
+IMPL_LINK_NOARG(ApplyStyle, ApplyHdl)
+{
+    SwWrtShell* pWrtShell = m_rDocSh.GetWrtShell();
+    SwDoc* pDoc = m_rDocSh.GetDoc();
+    SwView* pView = m_rDocSh.GetView();
+
+    pWrtShell->StartAllAction();
+
+    // newly set the mask only with paragraph-templates
+    if( m_bNew )
+    {
+        m_nRet = SFX_STYLE_FAMILY_PARA == m_pStyle->GetFamily()
+                ? m_xTmp->GetMask()
+                : SFXSTYLEBIT_USERDEF;
+    }
+    else if( m_pStyle->GetMask() != m_xTmp->GetMask() )
+        m_nRet = m_xTmp->GetMask();
+
+    if( SFX_STYLE_FAMILY_PARA == m_nFamily )
+    {
+        SfxItemSet aSet( *m_pDlg->GetOutputItemSet() );
+        ::SfxToSwPageDescAttr( *pWrtShell, aSet  );
+        // reset indent attributes at paragraph style, if a list style
+        // will be applied and no indent attributes will be applied.
+        m_xTmp->SetItemSet( aSet, true );
+    }
+    else
+    {
+        if(SFX_STYLE_FAMILY_PAGE == m_nFamily)
+        {
+            static const sal_uInt16 aInval[] = {
+                SID_IMAGE_ORIENTATION,
+                SID_ATTR_CHAR_FONT,
+                FN_INSERT_CTRL, FN_INSERT_OBJ_CTRL, 0};
+            pView->GetViewFrame()->GetBindings().Invalidate(aInval);
+        }
+        SfxItemSet aTmpSet( *m_pDlg->GetOutputItemSet() );
+        if( SFX_STYLE_FAMILY_CHAR == m_nFamily )
+        {
+            const SfxPoolItem *pTmpBrush;
+            if( SFX_ITEM_SET == aTmpSet.GetItemState( RES_BACKGROUND,
+                sal_False, &pTmpBrush ) )
+            {
+                SvxBrushItem aTmpBrush( *((SvxBrushItem*)pTmpBrush) );
+                aTmpBrush.SetWhich( RES_CHRATR_BACKGROUND );
+                aTmpSet.Put( aTmpBrush );
+            }
+            aTmpSet.ClearItem( RES_BACKGROUND );
+        }
+        m_xTmp->SetItemSet( aTmpSet );
+
+        if( SFX_STYLE_FAMILY_PAGE == m_nFamily && SvtLanguageOptions().IsCTLFontEnabled() )
+        {
+            const SfxPoolItem *pItem = NULL;
+            if( aTmpSet.GetItemState( m_rDocSh.GetPool().GetTrueWhich( SID_ATTR_FRAMEDIRECTION, sal_False ) , sal_True, &pItem ) == SFX_ITEM_SET )
+                SwChartHelper::DoUpdateAllCharts( pDoc );
+        }
+    }
+    if(SFX_STYLE_FAMILY_PAGE == m_nFamily)
+        pView->InvalidateRulerPos();
+
+    if( m_bNew )
+        m_xBasePool->Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_CREATED, *m_xTmp.get() ) );
+
+    pDoc->SetModified();
+    if( !m_bModified )    // Bug 57028
+    {
+        pDoc->GetIDocumentUndoRedo().SetUndoNoResetModified();
+    }
+
+    pWrtShell->EndAllAction();
+
+    return m_nRet;
+}
+
 /*--------------------------------------------------------------------
     Description:    Edit
  --------------------------------------------------------------------*/
@@ -654,86 +766,16 @@ sal_uInt16 SwDocShell::Edit( const String &rName, const String &rParent, sal_uIn
         SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "Dialogdiet fail!");
-        SfxAbstractTabDialog* pDlg = pFact->CreateTemplateDialog( DLG_TEMPLATE_BASE,
+        SfxAbstractApplyTabDialog* pDlg = pFact->CreateTemplateDialog(
                                                     0, *(xTmp.get()), nFamily, nPageId,
                                                     pActShell ? pActShell : pWrtShell, bNew);
         OSL_ENSURE(pDlg, "Dialogdiet fail!");
-        while (true)
+        ApplyStyle aApplyStyleHelper(*this, bNew, pStyle, nRet, xTmp, nFamily, pDlg, mxBasePool, bModified);
+        pDlg->SetApplyHdl(LINK(&aApplyStyleHelper, ApplyStyle, ApplyHdl));
+
+        if (RET_OK == pDlg->Execute())
         {
-            short nButton = pDlg->Execute();
-            if(RET_OK == nButton || RET_APPLY_TEMPLATE == nButton)
-        {
-            GetWrtShell()->StartAllAction();
-
-            // newly set the mask only with paragraph-templates
-            if( bNew )
-            {
-                nRet = SFX_STYLE_FAMILY_PARA == pStyle->GetFamily()
-                        ? xTmp->GetMask()
-                        : SFXSTYLEBIT_USERDEF;
-            }
-            else if( pStyle->GetMask() != xTmp->GetMask() )
-                nRet = xTmp->GetMask();
-
-            if( SFX_STYLE_FAMILY_PARA == nFamily )
-            {
-                SfxItemSet aSet( *pDlg->GetOutputItemSet() );
-                ::SfxToSwPageDescAttr( *GetWrtShell(), aSet  );
-                // reset indent attributes at paragraph style, if a list style
-                // will be applied and no indent attributes will be applied.
-                xTmp->SetItemSet( aSet, true );
-            }
-            else
-            {
-                if(SFX_STYLE_FAMILY_PAGE == nFamily)
-                {
-                    static const sal_uInt16 aInval[] = {
-                        SID_IMAGE_ORIENTATION,
-                        SID_ATTR_CHAR_FONT,
-                        FN_INSERT_CTRL, FN_INSERT_OBJ_CTRL, 0};
-                    pView->GetViewFrame()->GetBindings().Invalidate(aInval);
-                }
-                SfxItemSet aTmpSet( *pDlg->GetOutputItemSet() );
-                if( SFX_STYLE_FAMILY_CHAR == nFamily )
-                {
-                    const SfxPoolItem *pTmpBrush;
-                    if( SFX_ITEM_SET == aTmpSet.GetItemState( RES_BACKGROUND,
-                        sal_False, &pTmpBrush ) )
-                    {
-                        SvxBrushItem aTmpBrush( *((SvxBrushItem*)pTmpBrush) );
-                        aTmpBrush.SetWhich( RES_CHRATR_BACKGROUND );
-                        aTmpSet.Put( aTmpBrush );
-                    }
-                    aTmpSet.ClearItem( RES_BACKGROUND );
-                }
-                xTmp->SetItemSet( aTmpSet );
-
-                if( SFX_STYLE_FAMILY_PAGE == nFamily && SvtLanguageOptions().IsCTLFontEnabled() )
-                {
-                    const SfxPoolItem *pItem = NULL;
-                    if( aTmpSet.GetItemState( GetPool().GetTrueWhich( SID_ATTR_FRAMEDIRECTION, sal_False ) , sal_True, &pItem ) == SFX_ITEM_SET )
-                        SwChartHelper::DoUpdateAllCharts( pDoc );
-                }
-            }
-            if(SFX_STYLE_FAMILY_PAGE == nFamily)
-                pView->InvalidateRulerPos();
-
-            if( bNew )
-                mxBasePool->Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_CREATED, *xTmp.get() ) );
-
-            // Destroy dialog before EndAction - with page-templates the
-            // ItemSet must be destroyed, so that the cursors get removed
-            // from Headers/Footers. Otherwise "GPF" happen!!!
-            if(RET_OK == nButton)
-                delete pDlg;
-
-            pDoc->SetModified();
-            if( !bModified )    // Bug 57028
-            {
-                pDoc->GetIDocumentUndoRedo().SetUndoNoResetModified();
-            }
-
-            GetWrtShell()->EndAllAction();
+            aApplyStyleHelper.apply();
         }
         else
         {
@@ -745,11 +787,11 @@ sal_uInt16 SwDocShell::Edit( const String &rName, const String &rParent, sal_uIn
 
             if( !bModified )
                 pDoc->ResetModified();
-            delete pDlg;
         }
-            if(RET_APPLY_TEMPLATE != nButton)
-                break;
-        }
+
+        nRet = aApplyStyleHelper.getRet();
+
+        delete pDlg;
     }
     else
     {

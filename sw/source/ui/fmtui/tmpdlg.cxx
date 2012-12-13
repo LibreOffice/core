@@ -293,22 +293,10 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
 
     }
     EnableApplyButton( true );
-    SetApplyHandler( LINK(this, SwTemplateDlg, ApplyHdl ) );
 }
 
 SwTemplateDlg::~SwTemplateDlg()
 {
-}
-
-IMPL_LINK( SwTemplateDlg, ApplyHdl, void*, pVoid )
-{
-    (void)pVoid; //unused
-    if ( OK_Impl() )
-    {
-        Ok();
-        EndDialog( RET_APPLY_TEMPLATE );
-    }
-    return 0;
 }
 
 short SwTemplateDlg::Ok()

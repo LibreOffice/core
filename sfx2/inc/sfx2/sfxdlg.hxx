@@ -55,7 +55,7 @@ namespace com { namespace sun { namespace star { namespace frame {
     class XModel;
 } } } }
 
-class SfxAbstractDialog : public VclAbstractDialog
+class SfxAbstractDialog : virtual public VclAbstractDialog
 {
 public:
     virtual const SfxItemSet*   GetOutputItemSet() const = 0;
@@ -63,15 +63,21 @@ public:
     virtual String              GetText() const = 0;
 };
 
-class SfxAbstractTabDialog : public SfxAbstractDialog
+class SfxAbstractTabDialog : virtual public SfxAbstractDialog
 {
 public:
     virtual void                SetCurPageId( sal_uInt16 nId ) = 0;
-    virtual const sal_uInt16*       GetInputRanges( const SfxItemPool& ) = 0;
+    virtual const sal_uInt16*   GetInputRanges( const SfxItemPool& ) = 0;
     virtual void                SetInputSet( const SfxItemSet* pInSet ) = 0;
 };
 
-class SfxAbstractInsertObjectDialog : public VclAbstractDialog
+class SfxAbstractApplyTabDialog : virtual public SfxAbstractTabDialog
+{
+public:
+    virtual void                SetApplyHdl( const Link& rLink ) = 0;
+};
+
+class SfxAbstractInsertObjectDialog : virtual public VclAbstractDialog
 {
 public:
     virtual com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetObject()=0;
@@ -79,7 +85,7 @@ public:
     virtual sal_Bool IsCreateNew()=0;
 };
 
-class SfxAbstractPasteDialog : public VclAbstractDialog
+class SfxAbstractPasteDialog : virtual public VclAbstractDialog
 {
 public:
     virtual void Insert( SotFormatStringId nFormat, const String & rFormatName ) = 0;
@@ -89,11 +95,11 @@ public:
                         const TransferableObjectDescriptor* pDesc=0 ) = 0;
 };
 
-class SfxAbstractLinksDialog : public VclAbstractDialog
+class SfxAbstractLinksDialog : virtual public VclAbstractDialog
 {
 };
 
-class AbstractScriptSelectorDialog : public VclAbstractDialog
+class AbstractScriptSelectorDialog : virtual public VclAbstractDialog
 {
 public:
     virtual String              GetScriptURL() const = 0;

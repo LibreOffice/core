@@ -416,7 +416,7 @@ public:
                                                 sal_Bool            bFmt     = sal_False,
                                                 sal_uInt16          nDefPage = 0,
                                                 const String*   pFmtStr  = 0) = 0;  //add for SwFrmDlg
-    virtual SfxAbstractTabDialog*       CreateTemplateDialog( int nResId,
+    virtual SfxAbstractApplyTabDialog*  CreateTemplateDialog(
                                                 Window*             pParent,
                                                 SfxStyleSheetBase&  rBase,
                                                 sal_uInt16              nRegion,
