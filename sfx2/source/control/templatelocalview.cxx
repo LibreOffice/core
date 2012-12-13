@@ -204,10 +204,7 @@ void TemplateLocalView::showOverlay (bool bVisible)
         }
 
         mpItemView->Clear();
-        SetTransparence(0.0);
     }
-    else
-        SetTransparence(0.5);
 }
 
 void TemplateLocalView::filterTemplatesByApp (const FILTER_APPLICATION &eApp)

@@ -17,7 +17,6 @@
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
-#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <vcl/button.hxx>
 
@@ -139,10 +138,7 @@ void TemplateViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProces
                                                      Color(COL_BLACK).getBColor() ) );
     }
 
-    Primitive2DSequence aTranspSeq(1);
-    aTranspSeq[0] = Primitive2DReference( new UnifiedTransparencePrimitive2D(aSeq, pAttrs->nFillTransparence));
-
-    pProcessor->process(aTranspSeq);
+    pProcessor->process(aSeq);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

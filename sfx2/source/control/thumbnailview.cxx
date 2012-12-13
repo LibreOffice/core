@@ -24,7 +24,6 @@
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
-#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <rtl/ustring.hxx>
@@ -86,7 +85,6 @@ void ThumbnailView::ImplInit()
 {
     mpScrBar            = NULL;
     mnHeaderHeight      = 0;
-    mnFooterHeight      = 0;
     mnItemWidth         = 0;
     mnItemHeight        = 0;
     mnItemPadding = 0;
@@ -102,7 +100,6 @@ void ThumbnailView::ImplInit()
     mbHasVisibleItems   = false;
     maFilterFunc = ViewFilterAll();
     maColor = GetSettings().GetStyleSettings().GetFieldColor();
-    mnTransparence = 0.0;
 
     // Create the processor and process the primitives
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
@@ -165,7 +162,6 @@ void ThumbnailView::ImplInitSettings( bool bFont, bool bForeground, bool bBackgr
 
     mpItemAttrs = new ThumbnailItemAttributes;
     mpItemAttrs->aFillColor = maColor.getBColor();
-    mpItemAttrs->nFillTransparence = mnTransparence;
     mpItemAttrs->aHighlightColor = rStyleSettings.GetHighlightColor().getBColor();
     mpItemAttrs->aFontAttr = getFontAttributeFromVclFont(mpItemAttrs->aFontSize,GetFont(),false,true);
     mpItemAttrs->nMaxTextLenght = -1;
@@ -377,7 +373,7 @@ void ThumbnailView::CalculateItemPositions ()
         long nLines = (nCurCount+mnCols-1)/mnCols;
 
         Point aPos( aWinSize.Width() - nScrBarWidth - mnScrBarOffset, mnHeaderHeight );
-        Size aSize( nScrBarWidth - mnScrBarOffset, aWinSize.Height() - mnHeaderHeight - mnFooterHeight );
+        Size aSize( nScrBarWidth - mnScrBarOffset, aWinSize.Height() - mnHeaderHeight );
 
         mpScrBar->SetPosSizePixel( aPos, aSize );
         mpScrBar->SetRangeMax( (nCurCount+mnCols-1)/mnCols);
@@ -562,10 +558,7 @@ void ThumbnailView::Paint( const Rectangle &aRect)
                                         B2DPolyPolygon(Polygon(aRect,5,5).getB2DPolygon()),
                                         maColor.getBColor()));
 
-    Primitive2DSequence aTranspSeq(1);
-    aTranspSeq[0] = Primitive2DReference( new UnifiedTransparencePrimitive2D(aSeq, mnTransparence));
-
-    mpProcessor->process(aTranspSeq);
+    mpProcessor->process(aSeq);
 
     // draw items
     for ( size_t i = 0; i < nItemCount; i++ )
@@ -911,15 +904,6 @@ void ThumbnailView::SetColor( const Color& rColor )
 {
     maColor = rColor;
     mpItemAttrs->aFillColor = rColor.getBColor();
-
-    if ( IsReallyVisible() && IsUpdateMode() )
-        Invalidate();
-}
-
-void ThumbnailView::SetTransparence( double nTransparence )
-{
-    mnTransparence = nTransparence;
-    mpItemAttrs->nFillTransparence = nTransparence;
 
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
