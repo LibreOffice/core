@@ -27,8 +27,8 @@ namespace oox {
 
 // ============================================================================
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::xml::sax;
 
 using ::rtl::OUString;
@@ -201,10 +201,10 @@ OptValue< bool > AttributeList::getBool( sal_Int32 nAttrToken ) const
     return OptValue< bool >( onValue.has(), onValue.get() != 0 );
 }
 
-OptValue< DateTime > AttributeList::getDateTime( sal_Int32 nAttrToken ) const
+OptValue< util::DateTime > AttributeList::getDateTime( sal_Int32 nAttrToken ) const
 {
     OUString aValue = mxAttribs->getOptionalValue( nAttrToken );
-    DateTime aDateTime;
+    util::DateTime aDateTime;
     bool bValid = (aValue.getLength() == 19) && (aValue[ 4 ] == '-') && (aValue[ 7 ] == '-') &&
         (aValue[ 10 ] == 'T') && (aValue[ 13 ] == ':') && (aValue[ 16 ] == ':');
     if( bValid )
@@ -216,7 +216,7 @@ OptValue< DateTime > AttributeList::getDateTime( sal_Int32 nAttrToken ) const
         aDateTime.Minutes = static_cast< sal_uInt16 >( aValue.copy( 14, 2 ).toInt32() );
         aDateTime.Seconds = static_cast< sal_uInt16 >( aValue.copy( 17, 2 ).toInt32() );
     }
-    return OptValue< DateTime >( bValid, aDateTime );
+    return OptValue< util::DateTime >( bValid, aDateTime );
 }
 
 // defaulted return values ----------------------------------------------------
@@ -277,7 +277,7 @@ bool AttributeList::getBool( sal_Int32 nAttrToken, bool bDefault ) const
     return getBool( nAttrToken ).get( bDefault );
 }
 
-DateTime AttributeList::getDateTime( sal_Int32 nAttrToken, const DateTime& rDefault ) const
+util::DateTime AttributeList::getDateTime( sal_Int32 nAttrToken, const util::DateTime& rDefault ) const
 {
     return getDateTime( nAttrToken ).get( rDefault );
 }

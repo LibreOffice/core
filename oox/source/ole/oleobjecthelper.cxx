@@ -34,7 +34,7 @@ namespace ole {
 
 // ============================================================================
 
-using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::embed;
 using namespace ::com::sun::star::io;
@@ -79,7 +79,7 @@ OleObjectHelper::~OleObjectHelper()
     }
 }
 
-bool OleObjectHelper::importOleObject( PropertyMap& rPropMap, const OleObjectInfo& rOleObject, const Size& rObjSize )
+bool OleObjectHelper::importOleObject( PropertyMap& rPropMap, const OleObjectInfo& rOleObject, const awt::Size& rObjSize )
 {
     bool bRet = false;
 
@@ -121,7 +121,7 @@ bool OleObjectHelper::importOleObject( PropertyMap& rPropMap, const OleObjectInf
     if( bRet )
     {
         rPropMap[ PROP_Aspect ] <<= (rOleObject.mbShowAsIcon ? Aspects::MSOLE_ICON : Aspects::MSOLE_CONTENT);
-        rPropMap[ PROP_VisualArea ] <<= Rectangle( 0, 0, rObjSize.Width, rObjSize.Height );
+        rPropMap[ PROP_VisualArea ] <<= awt::Rectangle( 0, 0, rObjSize.Width, rObjSize.Height );
     }
     return bRet;
 }

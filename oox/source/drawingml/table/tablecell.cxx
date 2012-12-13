@@ -38,7 +38,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using ::com::sun::star::table::BorderLine2;
-using ::com::sun::star::drawing::LineStyle;
 
 namespace oox { namespace drawingml { namespace table {
 

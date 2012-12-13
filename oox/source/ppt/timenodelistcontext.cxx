@@ -53,12 +53,12 @@
 
 using namespace ::oox::core;
 using namespace ::oox::drawingml;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::xml::sax;
-using namespace ::com::sun::star::awt;
 using ::com::sun::star::beans::NamedValue;
 
 using ::rtl::OUString;
@@ -674,7 +674,7 @@ namespace oox { namespace ppt {
                 case PPT_TOKEN( to ):
                 {
                     // CT_TLPoint
-                    Point p = GetPointPercent( rAttribs.getFastAttributeList() );
+                    awt::Point p = GetPointPercent( rAttribs.getFastAttributeList() );
                     maTo <<= p.X;
                     maTo <<= p.Y;
                     return this;
@@ -682,7 +682,7 @@ namespace oox { namespace ppt {
                 case PPT_TOKEN( from ):
                 {
                     // CT_TLPoint
-                    Point p = GetPointPercent( rAttribs.getFastAttributeList() );
+                    awt::Point p = GetPointPercent( rAttribs.getFastAttributeList() );
                     maFrom <<= p.X;
                     maFrom <<= p.Y;
                     return this;
@@ -690,7 +690,7 @@ namespace oox { namespace ppt {
                 case PPT_TOKEN( by ):
                 {
                     // CT_TLPoint
-                    Point p = GetPointPercent( rAttribs.getFastAttributeList() );
+                    awt::Point p = GetPointPercent( rAttribs.getFastAttributeList() );
                     maBy <<= p.X;
                     maBy <<= p.Y;
                     return this;
@@ -814,7 +814,7 @@ namespace oox { namespace ppt {
                 case PPT_TOKEN( to ):
                 {
                     // CT_TLPoint
-                    Point p = GetPointPercent( rAttribs.getFastAttributeList() );
+                    awt::Point p = GetPointPercent( rAttribs.getFastAttributeList() );
                     Any rAny;
                     rAny <<= p.X;
                     rAny <<= p.Y;
@@ -824,7 +824,7 @@ namespace oox { namespace ppt {
                 case PPT_TOKEN( from ):
                 {
                     // CT_TLPoint
-                    Point p = GetPointPercent( rAttribs.getFastAttributeList() );
+                    awt::Point p = GetPointPercent( rAttribs.getFastAttributeList() );
                     Any rAny;
                     rAny <<= p.X;
                     rAny <<= p.Y;
@@ -834,7 +834,7 @@ namespace oox { namespace ppt {
                 case PPT_TOKEN( by ):
                 {
                     // CT_TLPoint
-                    Point p = GetPointPercent( rAttribs.getFastAttributeList() );
+                    awt::Point p = GetPointPercent( rAttribs.getFastAttributeList() );
                     Any rAny;
                     rAny <<= p.X;
                     rAny <<= p.Y;
@@ -844,7 +844,7 @@ namespace oox { namespace ppt {
                 case PPT_TOKEN( rCtr ):
                 {
                     // CT_TLPoint
-                    Point p = GetPointPercent( rAttribs.getFastAttributeList() );
+                    awt::Point p = GetPointPercent( rAttribs.getFastAttributeList() );
                     // TODO push
                     (void)p;
                     return this;

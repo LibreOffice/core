@@ -38,6 +38,7 @@ namespace vml {
 
 // ============================================================================
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::drawing;
@@ -205,7 +206,7 @@ const ControlInfo* Drawing::getControlInfo( const OUString& rShapeId ) const
 }
 
 Reference< XShape > Drawing::createAndInsertXShape( const OUString& rService,
-        const Reference< XShapes >& rxShapes, const Rectangle& rShapeRect ) const
+        const Reference< XShapes >& rxShapes, const awt::Rectangle& rShapeRect ) const
 {
     OSL_ENSURE( !rService.isEmpty(), "Drawing::createAndInsertXShape - missing UNO shape service name" );
     OSL_ENSURE( rxShapes.is(), "Drawing::createAndInsertXShape - missing XShapes container" );
@@ -218,7 +219,7 @@ Reference< XShape > Drawing::createAndInsertXShape( const OUString& rService,
         {
             // insert shape into passed shape collection (maybe drawpage or group shape)
             rxShapes->add( xShape );
-            xShape->setPosition( Point( rShapeRect.X, rShapeRect.Y ) );
+            xShape->setPosition( awt::Point( rShapeRect.X, rShapeRect.Y ) );
         }
         else
         {
@@ -228,7 +229,7 @@ Reference< XShape > Drawing::createAndInsertXShape( const OUString& rService,
             xPropSet->setPropertyValue( OUString::createFromAscii( "HoriOrientPosition" ), makeAny( rShapeRect.X ) );
             xPropSet->setPropertyValue( OUString::createFromAscii( "VertOrientPosition" ), makeAny( rShapeRect.Y ) );
         }
-        xShape->setSize( Size( rShapeRect.Width, rShapeRect.Height ) );
+        xShape->setSize( awt::Size( rShapeRect.Width, rShapeRect.Height ) );
     }
     catch( Exception& e )
     {
@@ -239,7 +240,7 @@ Reference< XShape > Drawing::createAndInsertXShape( const OUString& rService,
 }
 
 Reference< XShape > Drawing::createAndInsertXControlShape( const ::oox::ole::EmbeddedControl& rControl,
-        const Reference< XShapes >& rxShapes, const Rectangle& rShapeRect, sal_Int32& rnCtrlIndex ) const
+        const Reference< XShapes >& rxShapes, const awt::Rectangle& rShapeRect, sal_Int32& rnCtrlIndex ) const
 {
     Reference< XShape > xShape;
     try
@@ -270,19 +271,19 @@ OUString Drawing::getShapeBaseName( const ShapeBase& /*rShape*/ ) const
     return OUString();
 }
 
-bool Drawing::convertClientAnchor( Rectangle& /*orShapeRect*/, const OUString& /*rShapeAnchor*/ ) const
+bool Drawing::convertClientAnchor( awt::Rectangle& /*orShapeRect*/, const OUString& /*rShapeAnchor*/ ) const
 {
     return false;
 }
 
 Reference< XShape > Drawing::createAndInsertClientXShape( const ShapeBase& /*rShape*/,
-        const Reference< XShapes >& /*rxShapes*/, const Rectangle& /*rShapeRect*/ ) const
+        const Reference< XShapes >& /*rxShapes*/, const awt::Rectangle& /*rShapeRect*/ ) const
 {
     return Reference< XShape >();
 }
 
 void Drawing::notifyXShapeInserted( const Reference< XShape >& /*rxShape*/,
-        const Rectangle& /*rShapeRect*/, const ShapeBase& /*rShape*/, bool /*bGroupChild*/ )
+        const awt::Rectangle& /*rShapeRect*/, const ShapeBase& /*rShape*/, bool /*bGroupChild*/ )
 {
 }
 

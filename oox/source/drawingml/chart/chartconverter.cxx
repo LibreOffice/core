@@ -33,7 +33,7 @@ namespace chart {
 
 // ============================================================================
 
-using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using namespace ::com::sun::star::chart2::data;
 using namespace ::com::sun::star::drawing;
@@ -97,7 +97,7 @@ ChartConverter::~ChartConverter()
 
 void ChartConverter::convertFromModel( XmlFilterBase& rFilter,
         ChartSpaceModel& rChartModel, const Reference< XChartDocument >& rxChartDoc,
-        const Reference< XShapes >& rxExternalPage, const Point& rChartPos, const Size& rChartSize )
+        const Reference< XShapes >& rxExternalPage, const awt::Point& rChartPos, const awt::Size& rChartSize )
 {
     OSL_ENSURE( rxChartDoc.is(), "ChartConverter::convertFromModel - missing chart document" );
     if( rxChartDoc.is() )

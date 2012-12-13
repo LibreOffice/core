@@ -22,8 +22,7 @@
 #include "oox/drawingml/shape.hxx"
 #include "oox/drawingml/textbody.hxx"
 
-using ::com::sun::star::awt::Point;
-using ::com::sun::star::awt::Size;
+using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::xml::sax::SAXException;
@@ -79,16 +78,16 @@ Reference< XFastContextHandler > Transform2DContext::createFastChildContext( sal
     switch( aElementToken )
     {
     case A_TOKEN( off ):        // horz/vert translation
-        mrShape.setPosition( Point( xAttribs->getOptionalValue( XML_x ).toInt32(), xAttribs->getOptionalValue( XML_y ).toInt32() ) );
+        mrShape.setPosition( awt::Point( xAttribs->getOptionalValue( XML_x ).toInt32(), xAttribs->getOptionalValue( XML_y ).toInt32() ) );
         break;
     case A_TOKEN( ext ):        // horz/vert size
-        mrShape.setSize( Size( xAttribs->getOptionalValue( XML_cx ).toInt32(), xAttribs->getOptionalValue( XML_cy ).toInt32() ) );
+        mrShape.setSize( awt::Size( xAttribs->getOptionalValue( XML_cx ).toInt32(), xAttribs->getOptionalValue( XML_cy ).toInt32() ) );
         break;
     case A_TOKEN( chOff ):  // horz/vert translation of children
-        mrShape.setChildPosition( Point( xAttribs->getOptionalValue( XML_x ).toInt32(), xAttribs->getOptionalValue( XML_y ).toInt32() ) );
+        mrShape.setChildPosition( awt::Point( xAttribs->getOptionalValue( XML_x ).toInt32(), xAttribs->getOptionalValue( XML_y ).toInt32() ) );
         break;
     case A_TOKEN( chExt ):  // horz/vert size of children
-        mrShape.setChildSize( Size( xAttribs->getOptionalValue( XML_cx ).toInt32(), xAttribs->getOptionalValue( XML_cy ).toInt32() ) );
+        mrShape.setChildSize( awt::Size( xAttribs->getOptionalValue( XML_cx ).toInt32(), xAttribs->getOptionalValue( XML_cy ).toInt32() ) );
         break;
     }
 

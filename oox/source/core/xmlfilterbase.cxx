@@ -62,6 +62,7 @@ namespace core {
 
 // ============================================================================
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::document;
@@ -69,7 +70,6 @@ using namespace ::com::sun::star::embed;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::xml::sax;
 
 using ::comphelper::MediaDescriptor;
@@ -115,10 +115,10 @@ struct XmlFilterBaseImpl
 namespace
 {
     struct NamespaceIds: public rtl::StaticWithInit<
-        Sequence< Pair< OUString, sal_Int32 > >,
+        Sequence< beans::Pair< OUString, sal_Int32 > >,
         NamespaceIds>
     {
-        Sequence< Pair< OUString, sal_Int32 > > operator()()
+        Sequence< beans::Pair< OUString, sal_Int32 > > operator()()
         {
             static const char* const namespaceURIs[] = {
                 "http://www.w3.org/XML/1998/namespace",
@@ -168,7 +168,7 @@ namespace
                 NMSP_xlsExtLst
             };
 
-            Sequence< Pair< OUString, sal_Int32 > > aRet(STATIC_ARRAY_SIZE(namespaceIds));
+            Sequence< beans::Pair< OUString, sal_Int32 > > aRet(STATIC_ARRAY_SIZE(namespaceIds));
             for( sal_Int32 i=0; i<aRet.getLength(); ++i )
                 aRet[i] = make_Pair(
                     OUString::createFromAscii(namespaceURIs[i]),
@@ -186,7 +186,7 @@ XmlFilterBaseImpl::XmlFilterBaseImpl( const Reference< XComponentContext >& rxCo
     maVmlSuffix( CREATE_OUSTRING( ".vml" ) )
 {
     // register XML namespaces
-    const Sequence< Pair< OUString, sal_Int32 > > ids=
+    const Sequence< beans::Pair< OUString, sal_Int32 > > ids=
         NamespaceIds::get();
     for( sal_Int32 i=0; i<ids.getLength(); ++i )
         maFastParser.registerNamespace( ids[i].Second );
@@ -473,7 +473,7 @@ writeElement( FSHelperPtr pDoc, sal_Int32 nXmlElement, const sal_Int32 nValue )
 }
 
 static void
-writeElement( FSHelperPtr pDoc, sal_Int32 nXmlElement, const DateTime& rTime )
+writeElement( FSHelperPtr pDoc, sal_Int32 nXmlElement, const util::DateTime& rTime )
 {
     if( rTime.Year == 0 )
         return;

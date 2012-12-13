@@ -30,7 +30,7 @@ namespace drawingml {
 
 // ============================================================================
 
-using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::uno;
@@ -156,9 +156,9 @@ bool ShapePropertyMap::setFillGradient( sal_Int32 nPropId, const Any& rValue )
         return setAnyProperty( nPropId, rValue );
 
     // create named gradient and push its name
-    if( rValue.has< Gradient >() )
+    if( rValue.has< awt::Gradient >() )
     {
-        OUString aGradientName = mrModelObjHelper.insertFillGradient( rValue.get< Gradient >() );
+        OUString aGradientName = mrModelObjHelper.insertFillGradient( rValue.get< awt::Gradient >() );
         return !aGradientName.isEmpty() && setProperty( nPropId, aGradientName );
     }
 
@@ -168,9 +168,9 @@ bool ShapePropertyMap::setFillGradient( sal_Int32 nPropId, const Any& rValue )
 bool ShapePropertyMap::setGradientTrans( sal_Int32 nPropId, const Any& rValue )
 {
     // create named gradient and push its name
-    if( rValue.has< Gradient >() )
+    if( rValue.has< awt::Gradient >() )
     {
-        OUString aGradientName = mrModelObjHelper.insertTransGrandient( rValue.get< Gradient >() );
+        OUString aGradientName = mrModelObjHelper.insertTransGrandient( rValue.get< awt::Gradient >() );
         return !aGradientName.isEmpty()  && setProperty( nPropId, aGradientName );
     }
 

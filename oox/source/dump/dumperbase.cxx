@@ -39,12 +39,12 @@ namespace dump {
 
 // ============================================================================
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::util;
 
 using ::comphelper::MediaDescriptor;
 using ::oox::core::FilterBase;
@@ -1736,7 +1736,7 @@ void Output::writeBool( bool bData )
     StringHelper::appendBool( maLine, bData );
 }
 
-void Output::writeDateTime( const DateTime& rDateTime )
+void Output::writeDateTime( const util::DateTime& rDateTime )
 {
     writeDec( rDateTime.Year, 4, '0' );
     writeChar( '-' );
@@ -2065,7 +2065,7 @@ void OutputObjectBase::writeArrayItem( const String& rName, const sal_uInt8* pnD
     mxOut->writeArray( pnData, nSize, cSep );
 }
 
-void OutputObjectBase::writeDateTimeItem( const String& rName, const DateTime& rDateTime )
+void OutputObjectBase::writeDateTimeItem( const String& rName, const util::DateTime& rDateTime )
 {
     ItemGuard aItem( mxOut, rName );
     mxOut->writeDateTime( rDateTime );
@@ -2264,9 +2264,9 @@ OUString InputObjectBase::dumpUnicodeArray( const String& rName, sal_Int32 nLen,
     return aString;
 }
 
-DateTime InputObjectBase::dumpFileTime( const String& rName )
+util::DateTime InputObjectBase::dumpFileTime( const String& rName )
 {
-    DateTime aDateTime;
+    util::DateTime aDateTime;
 
     ItemGuard aItem( mxOut, rName( "file-time" ) );
     sal_Int64 nFileTime = dumpDec< sal_Int64 >( EMPTY_STRING );

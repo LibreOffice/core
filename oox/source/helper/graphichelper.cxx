@@ -302,7 +302,7 @@ OUString GraphicHelper::createGraphicObject( const Reference< XGraphic >& rxGrap
     OUString aGraphicObjUrl;
     if( mxContext.is() && rxGraphic.is() ) try
     {
-        Reference< XGraphicObject > xGraphicObj( GraphicObject::create( mxContext ), UNO_SET_THROW );
+        Reference< XGraphicObject > xGraphicObj( graphic::GraphicObject::create( mxContext ), UNO_SET_THROW );
         xGraphicObj->setGraphic( rxGraphic );
         maGraphicObjects.push_back( xGraphicObj );
         aGraphicObjUrl = maGraphicObjScheme + xGraphicObj->getUniqueID();

@@ -31,7 +31,7 @@ namespace oox {
 
 // ============================================================================
 
-using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
@@ -117,12 +117,12 @@ OUString ModelObjectHelper::insertLineDash( const LineDash& rDash )
     return maDashContainer.insertObject( maDashNameBase, Any( rDash ), true );
 }
 
-OUString ModelObjectHelper::insertFillGradient( const Gradient& rGradient )
+OUString ModelObjectHelper::insertFillGradient( const awt::Gradient& rGradient )
 {
     return maGradientContainer.insertObject( maGradientNameBase, Any( rGradient ), true );
 }
 
-OUString ModelObjectHelper::insertTransGrandient( const Gradient& rGradient )
+OUString ModelObjectHelper::insertTransGrandient( const awt::Gradient& rGradient )
 {
     return maTransGradContainer.insertObject( maTransGradNameBase, Any( rGradient ), true );
 }

@@ -37,7 +37,7 @@ namespace chart {
 
 // ============================================================================
 
-using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using namespace ::com::sun::star::uno;
 
@@ -410,7 +410,7 @@ void PlotAreaConverter::convertPositionFromModel()
 {
     LayoutModel& rLayout = mrModel.mxLayout.getOrCreate();
     LayoutConverter aLayoutConv( *this, rLayout );
-    Rectangle aDiagramRect;
+    awt::Rectangle aDiagramRect;
     if( aLayoutConv.calcAbsRectangle( aDiagramRect ) ) try
     {
         namespace cssc = ::com::sun::star::chart;

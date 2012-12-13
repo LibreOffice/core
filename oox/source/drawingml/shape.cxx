@@ -55,7 +55,6 @@
 
 using namespace ::oox::core;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
@@ -613,9 +612,9 @@ TextBodyPtr Shape::getTextBody()
     return mpTextBody;
 }
 
-void Shape::moveAllToPosition( const Point &rPoint )
+void Shape::moveAllToPosition( const awt::Point &rPoint )
 {
-    setPosition( Point( rPoint.X + maPosition.X, rPoint.Y + maPosition.Y ) );
+    setPosition( awt::Point( rPoint.X + maPosition.X, rPoint.Y + maPosition.Y ) );
     for( ::std::vector<ShapePtr>::const_iterator aIt = maChildren.begin(), aEnd = maChildren.end();aIt != aEnd; ++aIt )
         (*aIt)->moveAllToPosition( rPoint );
 }
@@ -627,14 +626,14 @@ void Shape::setMasterTextListStyle( const TextListStylePtr& pMasterTextListStyle
     mpMasterTextListStyle = pMasterTextListStyle;
 }
 
-OUString Shape::finalizeServiceName( XmlFilterBase& rFilter, const OUString& rServiceName, const Rectangle& rShapeRect )
+OUString Shape::finalizeServiceName( XmlFilterBase& rFilter, const OUString& rServiceName, const awt::Rectangle& rShapeRect )
 {
     OUString aServiceName = rServiceName;
     switch( meFrameType )
     {
         case FRAMETYPE_OLEOBJECT:
         {
-            Size aOleSize( rShapeRect.Width, rShapeRect.Height );
+            awt::Size aOleSize( rShapeRect.Width, rShapeRect.Height );
             if( rFilter.getOleObjectHelper().importOleObject( maShapeProperties, *mxOleObjectInfo, aOleSize ) )
                 aServiceName = CREATE_OUSTRING( "com.sun.star.drawing.OLE2Shape" );
 

@@ -27,7 +27,7 @@
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::xml::sax::XFastAttributeList;
-using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::geometry;
 using namespace ::com::sun::star::style;
@@ -71,9 +71,9 @@ double GetPositiveFixedPercentage( const OUString& sValue )
 // --------------------------------------------------------------------
 
 /** converts the attributes from an CT_TLPoint into an awt Point with 1/1000% */
-Point GetPointPercent( const Reference< XFastAttributeList >& xAttribs )
+awt::Point GetPointPercent( const Reference< XFastAttributeList >& xAttribs )
 {
-    return Point( GetPercent( xAttribs->getOptionalValue( XML_x ) ), GetCoordinate( xAttribs->getOptionalValue( XML_y ) ) );
+    return awt::Point( GetPercent( xAttribs->getOptionalValue( XML_x ) ), GetCoordinate( xAttribs->getOptionalValue( XML_y ) ) );
 }
 
 // --------------------------------------------------------------------
@@ -114,26 +114,26 @@ sal_Int16 GetFontUnderline( sal_Int32 nToken )
     OSL_ASSERT((nToken & sal_Int32(0xFFFF0000))==0);
     switch( nToken )
     {
-        case XML_none:              return FontUnderline::NONE;
-        case XML_dash:              return FontUnderline::DASH;
-        case XML_dashHeavy:         return FontUnderline::BOLDDASH;
-        case XML_dashLong:          return FontUnderline::LONGDASH;
-        case XML_dashLongHeavy:     return FontUnderline::BOLDLONGDASH;
-        case XML_dbl:               return FontUnderline::DOUBLE;
-        case XML_dotDash:           return FontUnderline::DASHDOT;
-        case XML_dotDashHeavy:      return FontUnderline::BOLDDASHDOT;
-        case XML_dotDotDash:        return FontUnderline::DASHDOTDOT;
-        case XML_dotDotDashHeavy:   return FontUnderline::BOLDDASHDOTDOT;
-        case XML_dotted:            return FontUnderline::DOTTED;
-        case XML_dottedHeavy:       return FontUnderline::BOLDDOTTED;
-        case XML_heavy:             return FontUnderline::BOLD;
-        case XML_sng:               return FontUnderline::SINGLE;
-        case XML_wavy:              return FontUnderline::WAVE;
-        case XML_wavyDbl:           return FontUnderline::DOUBLEWAVE;
-        case XML_wavyHeavy:         return FontUnderline::BOLDWAVE;
+        case XML_none:              return awt::FontUnderline::NONE;
+        case XML_dash:              return awt::FontUnderline::DASH;
+        case XML_dashHeavy:         return awt::FontUnderline::BOLDDASH;
+        case XML_dashLong:          return awt::FontUnderline::LONGDASH;
+        case XML_dashLongHeavy:     return awt::FontUnderline::BOLDLONGDASH;
+        case XML_dbl:               return awt::FontUnderline::DOUBLE;
+        case XML_dotDash:           return awt::FontUnderline::DASHDOT;
+        case XML_dotDashHeavy:      return awt::FontUnderline::BOLDDASHDOT;
+        case XML_dotDotDash:        return awt::FontUnderline::DASHDOTDOT;
+        case XML_dotDotDashHeavy:   return awt::FontUnderline::BOLDDASHDOTDOT;
+        case XML_dotted:            return awt::FontUnderline::DOTTED;
+        case XML_dottedHeavy:       return awt::FontUnderline::BOLDDOTTED;
+        case XML_heavy:             return awt::FontUnderline::BOLD;
+        case XML_sng:               return awt::FontUnderline::SINGLE;
+        case XML_wavy:              return awt::FontUnderline::WAVE;
+        case XML_wavyDbl:           return awt::FontUnderline::DOUBLEWAVE;
+        case XML_wavyHeavy:         return awt::FontUnderline::BOLDWAVE;
 //        case XML_words:             // TODO
     }
-    return FontUnderline::DONTKNOW;
+    return awt::FontUnderline::DONTKNOW;
 }
 
 sal_Int16 GetFontStrikeout( sal_Int32 nToken )
@@ -141,11 +141,11 @@ sal_Int16 GetFontStrikeout( sal_Int32 nToken )
     OSL_ASSERT((nToken & sal_Int32(0xFFFF0000))==0);
     switch( nToken )
     {
-        case XML_dblStrike: return FontStrikeout::DOUBLE;
-        case XML_noStrike:  return FontStrikeout::NONE;
-        case XML_sngStrike: return FontStrikeout::SINGLE;
+        case XML_dblStrike: return awt::FontStrikeout::DOUBLE;
+        case XML_noStrike:  return awt::FontStrikeout::NONE;
+        case XML_sngStrike: return awt::FontStrikeout::SINGLE;
     }
-    return FontStrikeout::DONTKNOW;
+    return awt::FontStrikeout::DONTKNOW;
 }
 
 sal_Int16 GetCaseMap( sal_Int32 nToken )
@@ -231,9 +231,9 @@ IntegerRectangle2D GetRelativeRect( const Reference< XFastAttributeList >& xAttr
 // ============================================================================
 
 /** converts the attributes from an CT_Size2D into an awt Size with 1/100thmm */
-Size GetSize2D( const Reference< XFastAttributeList >& xAttribs )
+awt::Size GetSize2D( const Reference< XFastAttributeList >& xAttribs )
 {
-    return Size( GetCoordinate( xAttribs->getOptionalValue( XML_cx ) ), GetCoordinate( xAttribs->getOptionalValue( XML_cy ) ) );
+    return awt::Size( GetCoordinate( xAttribs->getOptionalValue( XML_cx ) ), GetCoordinate( xAttribs->getOptionalValue( XML_cy ) ) );
 }
 
 IndexRange GetIndexRange( const Reference< XFastAttributeList >& xAttributes )

@@ -58,6 +58,7 @@
 namespace oox {
 namespace ole {
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -251,7 +252,7 @@ ControlConverter::~ControlConverter()
 void ControlConverter::convertPosition( PropertyMap& rPropMap, const AxPairData& rPos ) const
 {
     // position is given in 1/100 mm, UNO needs AppFont units
-    Point aAppFontPos = mrGraphicHelper.convertHmmToAppFont( Point( rPos.first, rPos.second ) );
+    awt::Point aAppFontPos = mrGraphicHelper.convertHmmToAppFont( awt::Point( rPos.first, rPos.second ) );
     rPropMap.setProperty( PROP_PositionX, aAppFontPos.X );
     rPropMap.setProperty( PROP_PositionY, aAppFontPos.Y );
 }
@@ -259,7 +260,7 @@ void ControlConverter::convertPosition( PropertyMap& rPropMap, const AxPairData&
 void ControlConverter::convertSize( PropertyMap& rPropMap, const AxPairData& rSize ) const
 {
     // size is given in 1/100 mm, UNO needs AppFont units
-    Size aAppFontSize = mrGraphicHelper.convertHmmToAppFont( Size( rSize.first, rSize.second ) );
+    awt::Size aAppFontSize = mrGraphicHelper.convertHmmToAppFont( awt::Size( rSize.first, rSize.second ) );
     rPropMap.setProperty( PROP_Width, aAppFontSize.Width );
     rPropMap.setProperty( PROP_Height, aAppFontSize.Height );
 }
@@ -316,8 +317,8 @@ void ControlConverter::convertScrollabilitySettings( PropertyMap& rPropMap,
                                          const AxPairData& rScrollPos, const AxPairData& rScrollArea,
                                          sal_Int32 nScrollBars ) const
 {
-    Size tmpSize = mrGraphicHelper.convertHmmToAppFont( Size( rScrollArea.first, rScrollArea.second ) );
-    Point tmpPos = mrGraphicHelper.convertHmmToAppFont( Point( rScrollPos.first, rScrollPos.second ) );
+    awt::Size tmpSize = mrGraphicHelper.convertHmmToAppFont( awt::Size( rScrollArea.first, rScrollArea.second ) );
+    awt::Point tmpPos = mrGraphicHelper.convertHmmToAppFont( awt::Point( rScrollPos.first, rScrollPos.second ) );
     rPropMap.setProperty( PROP_ScrollHeight, tmpSize.Height );
     rPropMap.setProperty( PROP_ScrollWidth, tmpSize.Width );
     rPropMap.setProperty( PROP_ScrollTop, tmpPos.Y );
@@ -909,10 +910,10 @@ void AxFontDataModel::convertProperties( PropertyMap& rPropMap, const ControlCon
         rPropMap.setProperty( PROP_FontName, maFontData.maFontName );
 
     // font effects
-    rPropMap.setProperty( PROP_FontWeight, getFlagValue( maFontData.mnFontEffects, AX_FONTDATA_BOLD, FontWeight::BOLD, FontWeight::NORMAL ) );
+    rPropMap.setProperty( PROP_FontWeight, getFlagValue( maFontData.mnFontEffects, AX_FONTDATA_BOLD, awt::FontWeight::BOLD, awt::FontWeight::NORMAL ) );
     rPropMap.setProperty( PROP_FontSlant, getFlagValue< sal_Int16 >( maFontData.mnFontEffects, AX_FONTDATA_ITALIC, FontSlant_ITALIC, FontSlant_NONE ) );
-    rPropMap.setProperty( PROP_FontUnderline, getFlagValue( maFontData.mnFontEffects, AX_FONTDATA_UNDERLINE, maFontData.mbDblUnderline ? FontUnderline::DOUBLE : FontUnderline::SINGLE, FontUnderline::NONE ) );
-    rPropMap.setProperty( PROP_FontStrikeout, getFlagValue( maFontData.mnFontEffects, AX_FONTDATA_STRIKEOUT, FontStrikeout::SINGLE, FontStrikeout::NONE ) );
+    rPropMap.setProperty( PROP_FontUnderline, getFlagValue( maFontData.mnFontEffects, AX_FONTDATA_UNDERLINE, maFontData.mbDblUnderline ? awt::FontUnderline::DOUBLE : awt::FontUnderline::SINGLE, awt::FontUnderline::NONE ) );
+    rPropMap.setProperty( PROP_FontStrikeout, getFlagValue( maFontData.mnFontEffects, AX_FONTDATA_STRIKEOUT, awt::FontStrikeout::SINGLE, awt::FontStrikeout::NONE ) );
     rPropMap.setProperty( PROP_FontHeight, maFontData.getHeightPoints() );
 
     // font character set
@@ -925,12 +926,12 @@ void AxFontDataModel::convertProperties( PropertyMap& rPropMap, const ControlCon
     // text alignment
     if( mbSupportsAlign )
     {
-        sal_Int32 nAlign = TextAlign::LEFT;
+        sal_Int32 nAlign = awt::TextAlign::LEFT;
         switch( maFontData.mnHorAlign )
         {
-            case AX_FONTDATA_LEFT:      nAlign = TextAlign::LEFT;   break;
-            case AX_FONTDATA_RIGHT:     nAlign = TextAlign::RIGHT;  break;
-            case AX_FONTDATA_CENTER:    nAlign = TextAlign::CENTER; break;
+            case AX_FONTDATA_LEFT:      nAlign = awt::TextAlign::LEFT;   break;
+            case AX_FONTDATA_RIGHT:     nAlign = awt::TextAlign::RIGHT;  break;
+            case AX_FONTDATA_CENTER:    nAlign = awt::TextAlign::CENTER; break;
             default:    OSL_FAIL( "AxFontDataModel::convertProperties - unknown text alignment" );
         }
         // form controls expect short value
@@ -946,17 +947,17 @@ void AxFontDataModel::convertFromProperties( PropertySet& rPropSet, const Contro
     rPropSet.getProperty( maFontData.maFontName, PROP_FontName );
     float fontWeight = (float)0;
     if ( rPropSet.getProperty(fontWeight, PROP_FontWeight ) )
-        setFlag( maFontData.mnFontEffects, AX_FONTDATA_BOLD, ( fontWeight == FontWeight::BOLD ) );
+        setFlag( maFontData.mnFontEffects, AX_FONTDATA_BOLD, ( fontWeight == awt::FontWeight::BOLD ) );
     sal_Int16 nSlant = FontSlant_NONE;
     if ( rPropSet.getProperty( nSlant, PROP_FontSlant ) )
         setFlag( maFontData.mnFontEffects, AX_FONTDATA_ITALIC, ( nSlant == FontSlant_ITALIC ) );
 
-    sal_Int16 nUnderLine = FontUnderline::NONE;
+    sal_Int16 nUnderLine = awt::FontUnderline::NONE;
     if ( rPropSet.getProperty( nUnderLine, PROP_FontUnderline ) )
-        setFlag( maFontData.mnFontEffects, AX_FONTDATA_UNDERLINE, nUnderLine != FontUnderline::NONE );
-    sal_Int16 nStrikeout = FontStrikeout::NONE ;
+        setFlag( maFontData.mnFontEffects, AX_FONTDATA_UNDERLINE, nUnderLine != awt::FontUnderline::NONE );
+    sal_Int16 nStrikeout = awt::FontStrikeout::NONE ;
     if ( rPropSet.getProperty( nStrikeout, PROP_FontStrikeout ) )
-        setFlag( maFontData.mnFontEffects, AX_FONTDATA_STRIKEOUT, nStrikeout !=  FontStrikeout::NONE );
+        setFlag( maFontData.mnFontEffects, AX_FONTDATA_STRIKEOUT, nStrikeout != awt::FontStrikeout::NONE );
 
     float fontHeight = 0.0;
     if ( rPropSet.getProperty( fontHeight, PROP_FontHeight ) )
@@ -968,9 +969,9 @@ void AxFontDataModel::convertFromProperties( PropertySet& rPropSet, const Contro
     {
         switch ( nAlign )
         {
-            case TextAlign::LEFT: maFontData.mnHorAlign = AX_FONTDATA_LEFT;   break;
-            case TextAlign::RIGHT: maFontData.mnHorAlign = AX_FONTDATA_RIGHT;  break;
-            case TextAlign::CENTER: maFontData.mnHorAlign = AX_FONTDATA_CENTER; break;
+            case awt::TextAlign::LEFT: maFontData.mnHorAlign = AX_FONTDATA_LEFT;   break;
+            case awt::TextAlign::RIGHT: maFontData.mnHorAlign = AX_FONTDATA_RIGHT;  break;
+            case awt::TextAlign::CENTER: maFontData.mnHorAlign = AX_FONTDATA_CENTER; break;
             default:    OSL_FAIL( "AxFontDataModel::convertFromProperties - unknown text alignment" );
         }
     }

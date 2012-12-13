@@ -34,12 +34,12 @@
 #include "oox/helper/graphichelper.hxx"
 #include "oox/token/tokens.hxx"
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::drawing;
 
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::awt::Point;
 using ::com::sun::star::container::XNameContainer;
 
 namespace oox {
@@ -238,9 +238,9 @@ void lclPushMarkerProperties( ShapePropertyMap& rPropMap,
         if( !rPropMap.hasNamedLineMarkerInTable( aMarkerName ) )
         {
 // pass X and Y as percentage to OOX_ARROW_POINT
-#define OOX_ARROW_POINT( x, y ) Point( static_cast< sal_Int32 >( fArrowWidth * x ), static_cast< sal_Int32 >( fArrowLength * y ) )
+#define OOX_ARROW_POINT( x, y ) awt::Point( static_cast< sal_Int32 >( fArrowWidth * x ), static_cast< sal_Int32 >( fArrowLength * y ) )
 
-            ::std::vector< Point > aPoints;
+            ::std::vector< awt::Point > aPoints;
             OSL_ASSERT((rArrowProps.moArrowType.get() & sal_Int32(0xFFFF0000))==0);
             switch( rArrowProps.moArrowType.get() )
             {
@@ -367,13 +367,13 @@ void LineProperties::pushToPropMap( ShapePropertyMap& rPropMap,
     if( maLineFill.moFillType.has() )
     {
         // line style (our core only supports none and solid)
-        LineStyle eLineStyle = (maLineFill.moFillType.get() == XML_noFill) ? LineStyle_NONE : LineStyle_SOLID;
+        drawing::LineStyle eLineStyle = (maLineFill.moFillType.get() == XML_noFill) ? drawing::LineStyle_NONE : drawing::LineStyle_SOLID;
 
         // convert line width from EMUs to 1/100mm
         sal_Int32 nLineWidth = convertEmuToHmm( moLineWidth.get( 0 ) );
 
         // create line dash from preset dash token (not for invisible line)
-        if( (eLineStyle != LineStyle_NONE) && (moPresetDash.differsFrom( XML_solid ) || (!moPresetDash && !maCustomDash.empty())) )
+        if( (eLineStyle != drawing::LineStyle_NONE) && (moPresetDash.differsFrom( XML_solid ) || (!moPresetDash && !maCustomDash.empty())) )
         {
             LineDash aLineDash;
             aLineDash.Style = lclGetDashStyle( moLineCap.get( XML_rnd ) );
@@ -391,7 +391,7 @@ void LineProperties::pushToPropMap( ShapePropertyMap& rPropMap,
             aLineDash.Distance *= nBaseLineWidth;
 
             if( rPropMap.setProperty( SHAPEPROP_LineDash, aLineDash ) )
-                eLineStyle = LineStyle_DASH;
+                eLineStyle = drawing::LineStyle_DASH;
         }
 
         // set final line style property

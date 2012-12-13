@@ -42,7 +42,7 @@ namespace chart {
 
 namespace cssc = ::com::sun::star::chart;
 
-using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::frame;
@@ -152,14 +152,14 @@ struct ConverterData
     XmlFilterBase&      mrFilter;
     ChartConverter&     mrConverter;
     Reference< XChartDocument > mxDoc;
-    Size                maSize;
+    awt::Size                maSize;
 
     explicit            ConverterData(
                             XmlFilterBase& rFilter,
                             ChartConverter& rChartConverter,
                             const ChartSpaceModel& rChartModel,
                             const Reference< XChartDocument >& rxChartDoc,
-                            const Size& rChartSize );
+                            const awt::Size& rChartSize );
                         ~ConverterData();
 };
 
@@ -170,7 +170,7 @@ ConverterData::ConverterData(
         ChartConverter& rChartConverter,
         const ChartSpaceModel& rChartModel,
         const Reference< XChartDocument >& rxChartDoc,
-        const Size& rChartSize ) :
+        const awt::Size& rChartSize ) :
     maFormatter( rFilter, rxChartDoc, rChartModel ),
     mrFilter( rFilter ),
     mrConverter( rChartConverter ),
@@ -217,7 +217,7 @@ ConverterRoot::ConverterRoot(
         ChartConverter& rChartConverter,
         const ChartSpaceModel& rChartModel,
         const Reference< XChartDocument >& rxChartDoc,
-        const Size& rChartSize ) :
+        const awt::Size& rChartSize ) :
     mxData( new ConverterData( rFilter, rChartConverter, rChartModel, rxChartDoc, rChartSize ) )
 {
 }
@@ -255,7 +255,7 @@ Reference< XChartDocument > ConverterRoot::getChartDocument() const
     return mxData->mxDoc;
 }
 
-const Size& ConverterRoot::getChartSize() const
+const awt::Size& ConverterRoot::getChartSize() const
 {
     return mxData->maSize;
 }
@@ -354,11 +354,11 @@ LayoutConverter::~LayoutConverter()
 {
 }
 
-bool LayoutConverter::calcAbsRectangle( Rectangle& orRect ) const
+bool LayoutConverter::calcAbsRectangle( awt::Rectangle& orRect ) const
 {
     if( !mrModel.mbAutoLayout )
     {
-        const Size& rChartSize = getChartSize();
+        const awt::Size& rChartSize = getChartSize();
         orRect.X = lclCalcPosition( rChartSize.Width,  mrModel.mfX, mrModel.mnXMode );
         orRect.Y = lclCalcPosition( rChartSize.Height, mrModel.mfY, mrModel.mnYMode );
         if( (orRect.X >= 0) && (orRect.Y >= 0) )
@@ -399,14 +399,14 @@ bool LayoutConverter::convertFromModel( const Reference< XShape >& rxShape, doub
 {
     if( !mrModel.mbAutoLayout )
     {
-        const Size& rChartSize = getChartSize();
-        Point aShapePos(
+        const awt::Size& rChartSize = getChartSize();
+        awt::Point aShapePos(
             lclCalcPosition( rChartSize.Width,  mrModel.mfX, mrModel.mnXMode ),
             lclCalcPosition( rChartSize.Height, mrModel.mfY, mrModel.mnYMode ) );
         if( (aShapePos.X >= 0) && (aShapePos.Y >= 0) )
         {
             // the call to XShape.getSize() may recalc the chart view
-            Size aShapeSize = rxShape->getSize();
+            awt::Size aShapeSize = rxShape->getSize();
             // rotated shapes need special handling...
             double fSin = fabs( sin( fRotationAngle * F_PI180 ) );
             // add part of height to X direction, if title is rotated down

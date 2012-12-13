@@ -31,7 +31,7 @@ namespace chart {
 
 // ============================================================================
 
-using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::uno;
 using namespace ::oox::core;
@@ -113,7 +113,7 @@ EmuRectangle ShapeAnchor::calcAnchorRectEmu( const EmuRectangle& rChartRect ) co
 
 ChartDrawingFragment::ChartDrawingFragment( XmlFilterBase& rFilter,
         const OUString& rFragmentPath, const Reference< XShapes >& rxDrawPage,
-        const Size& rChartSize, const Point& rShapesOffset, bool bOleSupport ) :
+        const awt::Size& rChartSize, const awt::Point& rShapesOffset, bool bOleSupport ) :
     FragmentHandler2( rFilter, rFragmentPath ),
     mxDrawPage( rxDrawPage ),
     mbOleSupport( bOleSupport )
@@ -209,7 +209,7 @@ void ChartDrawingFragment::onEndElement()
             if( (aShapeRectEmu.X >= 0) && (aShapeRectEmu.Y >= 0) && (aShapeRectEmu.Width >= 0) && (aShapeRectEmu.Height >= 0) )
             {
                 // TODO: DrawingML implementation expects 32-bit coordinates for EMU rectangles (change that to EmuRectangle)
-                Rectangle aShapeRectEmu32(
+                awt::Rectangle aShapeRectEmu32(
                     getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.X, 0, SAL_MAX_INT32 ),
                     getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.Y, 0, SAL_MAX_INT32 ),
                     getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.Width, 0, SAL_MAX_INT32 ),

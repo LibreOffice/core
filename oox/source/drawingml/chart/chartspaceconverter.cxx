@@ -32,7 +32,7 @@
 #include "oox/drawingml/chart/plotareaconverter.hxx"
 #include "oox/drawingml/chart/titleconverter.hxx"
 
-using ::com::sun::star::awt::Point;
+using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::UNO_QUERY;
@@ -70,7 +70,7 @@ ChartSpaceConverter::~ChartSpaceConverter()
 {
 }
 
-void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExternalPage, const Point& rChartPos )
+void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExternalPage, const awt::Point& rChartPos )
 {
     if( !getChartConverter() )
         return;
@@ -177,7 +177,7 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
         /*  Get the internal draw page of the chart document, if no external
             drawing page has been passed. */
         Reference< XShapes > xShapes;
-        Point aShapesOffset( 0, 0 );
+        awt::Point aShapesOffset( 0, 0 );
         if( rxExternalPage.is() )
         {
             xShapes = rxExternalPage;
