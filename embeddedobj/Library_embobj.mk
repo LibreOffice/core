@@ -46,6 +46,7 @@ $(eval $(call gb_Library_use_libraries,embobj,\
 	cppuhelper \
 	sal \
 	vcl \
+	tl \
 	$(gb_UWINAPI) \
 ))
 
