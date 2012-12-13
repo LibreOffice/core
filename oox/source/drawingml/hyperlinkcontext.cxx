@@ -44,10 +44,12 @@ HyperLinkContext::HyperLinkContext( ContextHandler& rParent,
     {
         OSL_TRACE("OOX: URI rId %s", OUStringToOString (aRelId, RTL_TEXTENCODING_UTF8).pData->buffer);
         sHref = getRelations().getExternalTargetFromRelId( aRelId );
+        OUString sExtHref = getRelations().getExternalTargetFromRelId( aRelId );
+        sURL = getRelations().getInternalTargetFromRelId( aRelId );
         if( !sHref.isEmpty() )
         {
             OSL_TRACE("OOX: URI href %s", OUStringToOString (sHref, RTL_TEXTENCODING_UTF8).pData->buffer);
-            sURL = getFilter().getAbsoluteUrl( sHref );
+            sURL = getFilter().getAbsoluteUrl( sExtHref );
         }
     }
     OUString sTooltip = xAttributes->getOptionalValue( R_TOKEN( tooltip ) );
