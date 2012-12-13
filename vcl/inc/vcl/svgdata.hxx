@@ -57,6 +57,7 @@ private:
 
 public:
     SvgData(const SvgDataArray& rSvgDataArray, sal_uInt32 nSvgDataArrayLength, const rtl::OUString& rPath);
+    SvgData(const rtl::OUString& rPath);
 
     /// data read
     const SvgDataArray& getSvgDataArray() const { return maSvgDataArray; }

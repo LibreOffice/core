@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <tools/stream.hxx>
 #include <vcl/svgdata.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -161,6 +162,34 @@ SvgData::SvgData(const SvgDataArray& rSvgDataArray, sal_uInt32 nSvgDataArrayLeng
     maSequence(),
     maReplacement()
 {
+}
+
+//////////////////////////////////////////////////////////////////////////////
+SvgData::SvgData(const OUString& rPath):
+    maSvgDataArray(NULL),
+    mnSvgDataArrayLength(0),
+    maPath(rPath),
+    maRange(),
+    maSequence(),
+    maReplacement()
+{
+    SvFileStream rIStm(rPath, STREAM_STD_READ);
+    if(rIStm.GetError())
+        return;
+    const sal_uInt32 nStmPos(rIStm.Tell());
+    const sal_uInt32 nStmLen(rIStm.Seek(STREAM_SEEK_TO_END) - nStmPos);
+    if(nStmLen)
+    {
+        SvgDataArray aNewData(new sal_uInt8[nStmLen]);
+        rIStm.Seek(nStmPos);
+        rIStm.Read(aNewData.get(), nStmLen);
+
+        if(!rIStm.GetError())
+        {
+            maSvgDataArray = aNewData;
+            mnSvgDataArrayLength = nStmLen;
+        }
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////////

@@ -207,22 +207,19 @@ void AboutDialog::LayoutControls()
     Size aLogoSize( aIdealTextWidth, aIdealTextWidth / 20 );
     Point aLogoPos( 0, 0 );
 
-#ifdef FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
-    vcl::RenderGraphicRasterizer aRasterizerLogo = Application::LoadBrandSVG("flat_logo");
-    if ( !aRasterizerLogo.GetRenderGraphic().IsEmpty() &&
-         aRasterizerLogo.GetDefaultSizePixel().Width() > 0 && aRasterizerLogo.GetDefaultSizePixel().Height() > 0 )
+    if( Application::LoadBrandSVG("flat_logo", aLogoBitmap) &&
+        !aLogoBitmap.IsEmpty() )
     {
-        const float aLogoWidthHeightRatio = (float)aRasterizerLogo.GetDefaultSizePixel().Width() / (float)aRasterizerLogo.GetDefaultSizePixel().Height();
+        const float aLogoWidthHeightRatio = (float)aLogoBitmap.GetSizePixel().Width() / (float)aLogoBitmap.GetSizePixel().Height();
         aLogoSize.Width() = aDialogSize.Width() ;
         aLogoSize.Height() = aLogoSize.Width() / aLogoWidthHeightRatio ;
+        aLogoBitmap.Scale(aLogoSize);
 
-        aLogoBitmap = aRasterizerLogo.Rasterize( aLogoSize );
         aLogoImage.SetImage( Image( aLogoBitmap ) );
         aLogoImage.SetPosSizePixel( aLogoPos, aLogoSize );
         aLogoImage.Show();
     }
     else
-#endif
     {
         aLogoPos.X() = aDialogBorder;
         aLogoPos.Y() = aDialogBorder;
@@ -277,27 +274,21 @@ void AboutDialog::LayoutControls()
 
 
     // Layout background image
-#ifdef FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
-    if ( !(Application::GetSettings().GetStyleSettings().GetHighContrastMode()) )   {
-        vcl::RenderGraphicRasterizer aRasterizerBackground = Application::LoadBrandSVG("shell/about");
+    if ( !(Application::GetSettings().GetStyleSettings().GetHighContrastMode()) &&
+          Application::LoadBrandSVG("shell/about", aBackgroundBitmap) &&
+          !aBackgroundBitmap.IsEmpty() )
+    {
+        const float aBackgroundWidthHeightRatio = (float)aBackgroundBitmap.GetSizePixel().Width() /
+            (float)aBackgroundBitmap.GetSizePixel().Height();
+        Size aBackgroundSize (aDialogSize.Width(), aDialogSize.Width() / aBackgroundWidthHeightRatio );
 
-        if ( !aRasterizerBackground.GetRenderGraphic().IsEmpty() &&
-            aRasterizerBackground.GetDefaultSizePixel().Width() > 0 && aRasterizerBackground.GetDefaultSizePixel().Height() > 0 )
+        if ( aBackgroundSize.Height() < aDialogSize.Height())
         {
-            const float aBackgroundWidthHeightRatio = (float)aRasterizerBackground.GetDefaultSizePixel().Width() /
-                                       (float)aRasterizerBackground.GetDefaultSizePixel().Height();
-            Size aBackgroundSize (aDialogSize.Width(), aDialogSize.Width() / aBackgroundWidthHeightRatio );
-
-            if ( aBackgroundSize.Height() < aDialogSize.Height())
-            {
-                aBackgroundSize.Width() = aDialogSize.Height() * aBackgroundWidthHeightRatio ;
-                aBackgroundSize.Height() = aDialogSize.Height();
-            }
-
-            aBackgroundBitmap = aRasterizerBackground.Rasterize( aBackgroundSize );
+            aBackgroundSize.Width() = aDialogSize.Height() * aBackgroundWidthHeightRatio ;
+            aBackgroundSize.Height() = aDialogSize.Height();
         }
+        aBackgroundBitmap.Scale(aBackgroundSize);
     }
-#endif
 
     SetOutputSizePixel( aDialogSize );
 
