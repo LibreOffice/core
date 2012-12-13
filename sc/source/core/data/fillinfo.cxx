@@ -241,7 +241,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
             pThisRowInfo->bEmptyText    = true;
             pThisRowInfo->bChanged      = true;
             pThisRowInfo->bAutoFilter   = false;
-            pThisRowInfo->bPushButton   = false;
+            pThisRowInfo->bPivotButton  = false;
             pThisRowInfo->nRotMaxCol    = SC_ROTMAX_NONE;
 
             ++nArrY;
@@ -317,8 +317,8 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
             pInfo->bHOverlapped = false;
             pInfo->bVOverlapped = false;
             pInfo->bAutoFilter  = false;
-            pInfo->bPushButton  = false;
-            pInfo->bPopupButton = false;
+            pInfo->bPivotButton  = false;
+            pInfo->bPivotPopupButton = false;
             pInfo->bFilterActive = false;
             pInfo->nRotateDir   = SC_ROTDIR_NONE;
 
@@ -453,9 +453,9 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                         bool bHOverlapped = ((nOverlap & SC_MF_HOR) != 0);
                         bool bVOverlapped = ((nOverlap & SC_MF_VER) != 0);
                         bool bAutoFilter  = ((nOverlap & SC_MF_AUTO) != 0);
-                        bool bPushButton  = ((nOverlap & SC_MF_BUTTON) != 0);
+                        bool bPivotButton  = ((nOverlap & SC_MF_BUTTON) != 0);
                         bool bScenario    = ((nOverlap & SC_MF_SCENARIO) != 0);
-                        bool bPopupButton = ((nOverlap & SC_MF_BUTTON_POPUP) != 0);
+                        bool bPivotPopupButton = ((nOverlap & SC_MF_BUTTON_POPUP) != 0);
                         bool bFilterActive = ((nOverlap & SC_MF_HIDDEN_MEMBER) != 0);
                         if (bMerged||bHOverlapped||bVOverlapped)
                             bAnyMerged = true;                              // intern
@@ -487,8 +487,8 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                                     pThisRowInfo->bEmptyBack = false;
                                 if (bAutoFilter)
                                     pThisRowInfo->bAutoFilter = true;
-                                if (bPushButton)
-                                    pThisRowInfo->bPushButton = true;
+                                if (bPivotButton || bPivotPopupButton)
+                                    pThisRowInfo->bPivotButton = true;
 
                                 CellInfo* pInfo = &pThisRowInfo->pCellInfo[nArrX];
                                 pInfo->pBackground  = pBackground;
@@ -497,8 +497,8 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                                 pInfo->bHOverlapped = bHOverlapped;
                                 pInfo->bVOverlapped = bVOverlapped;
                                 pInfo->bAutoFilter  = bAutoFilter;
-                                pInfo->bPushButton  = bPushButton;
-                                pInfo->bPopupButton = bPopupButton;
+                                pInfo->bPivotButton  = bPivotButton;
+                                pInfo->bPivotPopupButton = bPivotPopupButton;
                                 pInfo->bFilterActive = bFilterActive;
                                 pInfo->pLinesAttr   = pLinesAttr;
                                 pInfo->mpTLBRLine   = pTLBRLine;

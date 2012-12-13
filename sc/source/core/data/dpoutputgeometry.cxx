@@ -30,6 +30,7 @@ ScDPOutputGeometry::ScDPOutputGeometry(const ScRange& rOutRange, bool bShowFilte
     mnColumnFields(0),
     mnPageFields(0),
     mnDataFields(0),
+    meDataLayoutType(None),
     mbShowFilter(bShowFilter)
 {
 }
@@ -58,10 +59,18 @@ void ScDPOutputGeometry::setDataFieldCount(sal_uInt32 nCount)
     mnDataFields = nCount;
 }
 
+void ScDPOutputGeometry::setDataLayoutType(FieldType eType)
+{
+    meDataLayoutType = eType;
+}
+
 void ScDPOutputGeometry::getColumnFieldPositions(vector<ScAddress>& rAddrs) const
 {
+    sal_uInt32 nColumnFields, nRowFields;
+    adjustFieldsForDataLayout(nColumnFields, nRowFields);
+
     vector<ScAddress> aAddrs;
-    if (!mnColumnFields)
+    if (!nColumnFields)
     {
         rAddrs.swap(aAddrs);
         return;
@@ -80,8 +89,8 @@ void ScDPOutputGeometry::getColumnFieldPositions(vector<ScAddress>& rAddrs) cons
 
     SCROW nRow = nCurRow;
     SCTAB nTab = maOutRange.aStart.Tab();
-    SCCOL nColStart = static_cast<SCCOL>(maOutRange.aStart.Col() + mnRowFields);
-    SCCOL nColEnd = nColStart + static_cast<SCCOL>(mnColumnFields-1);
+    SCCOL nColStart = static_cast<SCCOL>(maOutRange.aStart.Col() + nRowFields);
+    SCCOL nColEnd = nColStart + static_cast<SCCOL>(nColumnFields-1);
 
     for (SCCOL nCol = nColStart; nCol <= nColEnd; ++nCol)
         aAddrs.push_back(ScAddress(nCol, nRow, nTab));
@@ -90,8 +99,11 @@ void ScDPOutputGeometry::getColumnFieldPositions(vector<ScAddress>& rAddrs) cons
 
 void ScDPOutputGeometry::getRowFieldPositions(vector<ScAddress>& rAddrs) const
 {
+    sal_uInt32 nColumnFields, nRowFields;
+    adjustFieldsForDataLayout(nColumnFields, nRowFields);
+
     vector<ScAddress> aAddrs;
-    if (!mnRowFields)
+    if (!nRowFields)
     {
         rAddrs.swap(aAddrs);
         return;
@@ -100,7 +112,7 @@ void ScDPOutputGeometry::getRowFieldPositions(vector<ScAddress>& rAddrs) const
     SCROW nRow = getRowFieldHeaderRow();
     SCTAB nTab = maOutRange.aStart.Tab();
     SCCOL nColStart = maOutRange.aStart.Col();
-    SCCOL nColEnd = nColStart + static_cast<SCCOL>(mnRowFields-1);
+    SCCOL nColEnd = nColStart + static_cast<SCCOL>(nRowFields-1);
 
     for (SCCOL nCol = nColStart; nCol <= nColEnd; ++nCol)
         aAddrs.push_back(ScAddress(nCol, nRow, nTab));
@@ -130,6 +142,8 @@ void ScDPOutputGeometry::getPageFieldPositions(vector<ScAddress>& rAddrs) const
 SCROW ScDPOutputGeometry::getRowFieldHeaderRow() const
 {
     SCROW nCurRow = maOutRange.aStart.Row();
+    sal_uInt32 nColumnFields, nRowFields;
+    adjustFieldsForDataLayout(nColumnFields, nRowFields);
 
     if (mnPageFields)
     {
@@ -140,20 +154,43 @@ SCROW ScDPOutputGeometry::getRowFieldHeaderRow() const
     else if (mbShowFilter)
         nCurRow += 2;
 
-    if (mnColumnFields)
-        nCurRow += static_cast<SCROW>(mnColumnFields);
-    else if (mnRowFields)
+    if (nColumnFields)
+        nCurRow += static_cast<SCROW>(nColumnFields);
+    else if (nRowFields)
         ++nCurRow;
 
     return nCurRow;
 }
 
+void ScDPOutputGeometry::adjustFieldsForDataLayout(sal_uInt32& rColumnFields, sal_uInt32& rRowFields) const
+{
+    rRowFields = mnRowFields;
+    rColumnFields = mnColumnFields;
+
+    if (mnDataFields < 2)
+    {
+        // Data layout field can be either row or column field, never page field.
+        switch (meDataLayoutType)
+        {
+            case Column:
+                if (rColumnFields > 0)
+                    rColumnFields -= 1;
+            break;
+            case Row:
+                if (rRowFields > 0)
+                    rRowFields -= 1;
+            default:
+                ;
+        }
+    }
+}
+
 std::pair<ScDPOutputGeometry::FieldType, size_t>
 ScDPOutputGeometry::getFieldButtonType(const ScAddress& rPos) const
 {
-    // We will ignore the table position for now.
-
     SCROW nCurRow = maOutRange.aStart.Row();
+    sal_uInt32 nColumnFields, nRowFields;
+    adjustFieldsForDataLayout(nColumnFields, nRowFields);
 
     if (mnPageFields)
     {
@@ -171,26 +208,26 @@ ScDPOutputGeometry::getFieldButtonType(const ScAddress& rPos) const
     else if (mbShowFilter)
         nCurRow += 2;
 
-    if (mnColumnFields)
+    if (nColumnFields)
     {
         SCROW nRow = nCurRow;
-        SCCOL nColStart = static_cast<SCCOL>(maOutRange.aStart.Col() + mnRowFields);
-        SCCOL nColEnd = nColStart + static_cast<SCCOL>(mnColumnFields-1);
+        SCCOL nColStart = static_cast<SCCOL>(maOutRange.aStart.Col() + nRowFields);
+        SCCOL nColEnd = nColStart + static_cast<SCCOL>(nColumnFields-1);
         if (rPos.Row() == nRow && nColStart <= rPos.Col() && rPos.Col() <= nColEnd)
         {
             size_t nPos = static_cast<size_t>(rPos.Col() - nColStart);
             return std::pair<FieldType, size_t>(Column, nPos);
         }
 
-        nCurRow += static_cast<SCROW>(mnColumnFields);
+        nCurRow += static_cast<SCROW>(nColumnFields);
     }
     else
         ++nCurRow;
 
-    if (mnRowFields)
+    if (nRowFields)
     {
         SCCOL nColStart = maOutRange.aStart.Col();
-        SCCOL nColEnd = nColStart + static_cast<SCCOL>(mnRowFields-1);
+        SCCOL nColEnd = nColStart + static_cast<SCCOL>(nRowFields-1);
         if (rPos.Row() == nCurRow && nColStart <= rPos.Col() && rPos.Col() <= nColEnd)
         {
             size_t nPos = static_cast<size_t>(rPos.Col() - nColStart);

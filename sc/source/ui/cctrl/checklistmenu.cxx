@@ -860,7 +860,7 @@ void ScMenuFloatingWindow::terminateAllPopupMenus()
 // ============================================================================
 
 ScCheckListMenuWindow::Config::Config() :
-    mbAllowEmptySet(true)
+    mbAllowEmptySet(true), mbRTL(false)
 {
 }
 
@@ -1349,7 +1349,13 @@ void ScCheckListMenuWindow::launch(const Rectangle& rRect)
         maBtnOk.Enable(maChecks.GetCheckedEntryCount() != 0);
 
     Rectangle aRect(rRect);
-    if (maWndSize.Width() < aRect.GetWidth())
+    if (maConfig.mbRTL)
+    {
+        // In RTL mode, the logical "left" is visual "right".
+        long nLeft = aRect.Left() - aRect.GetWidth();
+        aRect.Left() = nLeft;
+    }
+    else if (maWndSize.Width() < aRect.GetWidth())
     {
         // Target rectangle (i.e. cell width) is wider than the window.
         // Simulate right-aligned launch by modifying the target rectangle

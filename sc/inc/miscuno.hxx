@@ -188,6 +188,15 @@ public:
         any <<= rVal;
         SetOptionalPropertyValue(rPropSet, pPropName, any);
     }
+
+    template<typename ValueType>
+    static com::sun::star::uno::Sequence<ValueType> VectorToSequence( const std::vector<ValueType>& rVector )
+    {
+        if (rVector.empty())
+            return com::sun::star::uno::Sequence<ValueType>();
+
+        return com::sun::star::uno::Sequence<ValueType>(&rVector[0], static_cast<sal_Int32>(rVector.size()));
+    }
 };
 
 

@@ -28,7 +28,7 @@ class ScAddress;
 class SC_DLLPUBLIC ScDPOutputGeometry
 {
 public:
-    enum FieldType { Column, Row, Page, Data, None };
+    enum FieldType { Column = 0, Row, Page, Data, None };
 
     ScDPOutputGeometry(const ScRange& rOutRange, bool bShowFilter);
     ~ScDPOutputGeometry();
@@ -40,6 +40,7 @@ public:
     void setColumnFieldCount(sal_uInt32 nCount);
     void setPageFieldCount(sal_uInt32 nCount);
     void setDataFieldCount(sal_uInt32 nCount);
+    void setDataLayoutType(FieldType eType);
 
     void getColumnFieldPositions(::std::vector<ScAddress>& rAddrs) const;
     void getRowFieldPositions(::std::vector<ScAddress>& rAddrs) const;
@@ -52,13 +53,15 @@ public:
 private:
     ScDPOutputGeometry(); // disabled
 
+    void adjustFieldsForDataLayout(sal_uInt32& rColumnFields, sal_uInt32& rRowFields) const;
+
 private:
     ScRange     maOutRange;
     sal_uInt32  mnRowFields;    /// number of row fields
     sal_uInt32  mnColumnFields;
     sal_uInt32  mnPageFields;
     sal_uInt32  mnDataFields;
-
+    FieldType   meDataLayoutType;
     bool        mbShowFilter;
 };
 

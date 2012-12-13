@@ -94,10 +94,12 @@ public:
     bool    IsOverlapped() const        { return ( GetValue() & ( SC_MF_HOR | SC_MF_VER ) ) != 0; }
 
     bool    HasAutoFilter() const       { return ( GetValue() & SC_MF_AUTO ) != 0; }
-    bool    HasButton() const           { return ( GetValue() & SC_MF_BUTTON ) != 0; }
     bool    HasDPTable() const          { return ( GetValue() & SC_MF_DP_TABLE ) != 0; }
 
     bool    IsScenario() const          { return ( GetValue() & SC_MF_SCENARIO ) != 0; }
+
+    bool HasPivotButton() const;
+    bool HasPivotPopupButton() const;
 };
 
 //------------------------------------------------------------------------

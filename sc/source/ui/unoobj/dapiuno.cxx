@@ -2235,10 +2235,6 @@ void ScDataPilotFieldObj::setSubtotals( const Sequence< GeneralFunction >& rSubt
 
 OUString ScDataPilotFieldObj::getCurrentPage() const
 {
-    SolarMutexGuard aGuard;
-    ScDPSaveDimension* pDim = GetDPDimension();
-    if( pDim && pDim->HasCurrentPage() )
-        return pDim->GetCurrentPage();
     return OUString();
 }
 
@@ -2255,9 +2251,7 @@ void ScDataPilotFieldObj::setCurrentPage( const OUString& rPage )
 
 sal_Bool ScDataPilotFieldObj::getUseCurrentPage() const
 {
-    SolarMutexGuard aGuard;
-    ScDPSaveDimension* pDim = GetDPDimension();
-    return pDim && pDim->HasCurrentPage();
+    return false;
 }
 
 void ScDataPilotFieldObj::setUseCurrentPage( sal_Bool bUse )
@@ -2270,11 +2264,8 @@ void ScDataPilotFieldObj::setUseCurrentPage( sal_Bool bUse )
         {
             /*  It is somehow useless to set the property "HasSelectedPage" to
                 true, because it is still needed to set an explicit page name. */
-            if( !pDim->HasCurrentPage() )
-            {
-                const ::rtl::OUString aPage;
-                pDim->SetCurrentPage( &aPage );
-            }
+            const ::rtl::OUString aPage;
+            pDim->SetCurrentPage( &aPage );
         }
         else
             pDim->SetCurrentPage( 0 );
