@@ -41,8 +41,8 @@ public:
     long&               A() { return nA; }
     long&               B() { return nB; }
 
-    sal_Bool                operator == ( const Pair& rPair ) const;
-    sal_Bool                operator != ( const Pair& rPair ) const;
+    sal_Bool            operator == ( const Pair& rPair ) const;
+    sal_Bool            operator != ( const Pair& rPair ) const;
 
     TOOLS_DLLPUBLIC friend SvStream&    operator>>( SvStream& rIStream, Pair& rPair );
     TOOLS_DLLPUBLIC friend SvStream&    operator<<( SvStream& rOStream, const Pair& rPair );
@@ -88,10 +88,10 @@ public:
     long&               Y() { return nB; }
 
     void                Move( long nHorzMove, long nVertMove );
-    sal_Bool                IsAbove( const Point& rPoint ) const;
-    sal_Bool                IsBelow( const Point& rPoint ) const;
-    sal_Bool                IsLeft( const Point& rPoint ) const;
-    sal_Bool                IsRight( const Point& rPoint ) const;
+    sal_Bool            IsAbove( const Point& rPoint ) const;
+    sal_Bool            IsBelow( const Point& rPoint ) const;
+    sal_Bool            IsLeft( const Point& rPoint ) const;
+    sal_Bool            IsRight( const Point& rPoint ) const;
 
     Point&              operator += ( const Point& rPoint );
     Point&              operator -= ( const Point& rPoint );
@@ -212,10 +212,10 @@ public:
     long&           Width()  { return nA; }
     long&           Height() { return nB; }
 
-    long                getWidth() const { return Width(); }
-    long                getHeight() const { return Height(); }
-    void                setWidth(long nWidth)  { Width() = nWidth; }
-    void                setHeight(long nHeight)  { Height() = nHeight; }
+    long            getWidth() const { return Width(); }
+    long            getHeight() const { return Height(); }
+    void            setWidth(long nWidth)  { Width() = nWidth; }
+    void            setHeight(long nHeight)  { Height() = nHeight; }
 };
 
 inline Size::Size()
@@ -251,7 +251,7 @@ public:
     long&           Min() { return nA; }
     long&           Max() { return nB; }
 
-    sal_Bool            IsInside( long nIs ) const;
+    sal_Bool        IsInside( long nIs ) const;
 
     void            Justify();
 };
@@ -305,16 +305,16 @@ public:
     long&           Min() { return nA; }
     long&           Max() { return nB; }
 
-    sal_Bool            IsInside( long nIs ) const;
+    sal_Bool        IsInside( long nIs ) const;
 
     void            Justify();
 
-    sal_Bool            operator !() const { return !Len(); }
+    sal_Bool        operator !() const { return !Len(); }
 
-    long                getMin() const { return Min(); }
-    long                getMax() const { return Max(); }
-    void                setMin(long nMin)  { Min() = nMin; }
-    void                setMax(long nMax)  { Max() = nMax; }
+    long            getMin() const { return Min(); }
+    long            getMax() const { return Max(); }
+    void            setMin(long nMin)  { Min() = nMin; }
+    void            setMax(long nMax)  { Max() = nMax; }
 };
 
 inline Selection::Selection()
