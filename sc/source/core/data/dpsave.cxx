@@ -171,7 +171,6 @@ void ScDPSaveMember::WriteToSource( const uno::Reference<uno::XInterface>& xMemb
 
 ScDPSaveDimension::ScDPSaveDimension(const ::rtl::OUString& rName, bool bDataLayout) :
     aName( rName ),
-    pSelectedPage( NULL ),
     mpLayoutName(NULL),
     mpSubtotalName(NULL),
     bIsDataLayout( bDataLayout ),
@@ -234,10 +233,6 @@ ScDPSaveDimension::ScDPSaveDimension(const ScDPSaveDimension& r) :
         pLayoutInfo = new sheet::DataPilotFieldLayoutInfo( *(r.pLayoutInfo) );
     else
         pLayoutInfo = NULL;
-    if (r.pSelectedPage)
-        pSelectedPage = new ::rtl::OUString( *(r.pSelectedPage) );
-    else
-        pSelectedPage = NULL;
     if (r.mpLayoutName)
         mpLayoutName.reset(new OUString(*r.mpLayoutName));
     if (r.mpSubtotalName)
@@ -252,7 +247,6 @@ ScDPSaveDimension::~ScDPSaveDimension()
     delete pSortInfo;
     delete pAutoShowInfo;
     delete pLayoutInfo;
-    delete pSelectedPage;
     delete [] pSubTotalFuncs;
 }
 
@@ -286,17 +280,6 @@ bool ScDPSaveDimension::operator== ( const ScDPSaveDimension& r ) const
         if (!(**a == **b))
             return false;
 
-    if ( this->HasCurrentPage() && r.HasCurrentPage() )
-    {
-        if ( this->GetCurrentPage() != r.GetCurrentPage() )
-        {
-            return false;
-        }
-    }
-    else if ( this->HasCurrentPage() || r.HasCurrentPage() )
-    {
-        return false;
-    }
     if( pReferenceValue && r.pReferenceValue )
     {
         if ( !(*pReferenceValue == *r.pReferenceValue) )
@@ -486,24 +469,16 @@ void ScDPSaveDimension::SetLayoutInfo(const sheet::DataPilotFieldLayoutInfo* pNe
 
 void ScDPSaveDimension::SetCurrentPage( const ::rtl::OUString* pPage )
 {
-    delete pSelectedPage;
-    if (pPage)
-        pSelectedPage = new ::rtl::OUString( *pPage );
-    else
-        pSelectedPage = NULL;
-}
+    // We use member's visibility attribute to filter by page dimension.
 
-bool ScDPSaveDimension::HasCurrentPage() const
-{
-    return ( pSelectedPage != NULL );
-}
-
-const ::rtl::OUString& ScDPSaveDimension::GetCurrentPage() const
-{
-    static const ::rtl::OUString emptyOUString = ::rtl::OUString();
-    if (pSelectedPage)
-        return *pSelectedPage;
-    return emptyOUString;
+    // pPage == NULL -> all members visible.
+    MemberList::iterator it = maMemberList.begin(), itEnd = maMemberList.end();
+    for (; it != itEnd; ++it)
+    {
+        ScDPSaveMember* pMem = *it;
+        bool bVisible = !pPage || pMem->GetName() == *pPage;
+        pMem->SetIsVisible(bVisible);
+    }
 }
 
 ScDPSaveMember* ScDPSaveDimension::GetExistingMemberByName(const ::rtl::OUString& rName)
@@ -567,18 +542,6 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
             xDimProp->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_REFVALUE)), aAny );
         }
 
-        uno::Sequence<sheet::TableFilterField> aFilter;
-        // set the selected page field only if the dimension is used as page dimension
-        if ( pSelectedPage && nOrientation == sheet::DataPilotFieldOrientation_PAGE )
-        {
-            // single filter field: first field equal to selected string
-            sheet::TableFilterField aField( sheet::FilterConnection_AND, 0,
-                    sheet::FilterOperator_EQUAL, false, 0.0, *pSelectedPage );
-            aFilter = uno::Sequence<sheet::TableFilterField>( &aField, 1 );
-        }
-        // else keep empty sequence
-
-        ScUnoHelpFunctions::SetOptionalPropertyValue(xDimProp, SC_UNO_DP_FILTER, aFilter);
         if (mpLayoutName)
             ScUnoHelpFunctions::SetOptionalPropertyValue(xDimProp, SC_UNO_DP_LAYOUTNAME, *mpLayoutName);
 

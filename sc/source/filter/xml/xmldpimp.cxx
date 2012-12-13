@@ -45,6 +45,7 @@
 #include <com/sun/star/sheet/DataPilotFieldSortMode.hpp>
 #include <com/sun/star/sheet/DataPilotFieldLayoutMode.hpp>
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
+#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 
 using namespace com::sun::star;
 using namespace xmloff::token;
@@ -119,6 +120,7 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
     mnColFieldCount(0),
     mnPageFieldCount(0),
     mnDataFieldCount(0),
+    mnDataLayoutType(sheet::DataPilotFieldOrientation_HIDDEN),
     bIsNative(true),
     bIgnoreEmptyRows(false),
     bIdentifyCategories(false),
@@ -284,6 +286,7 @@ namespace {
 const ScDPSaveDimension* getDimension(
     const std::vector<const ScDPSaveDimension*>& rRowDims,
     const std::vector<const ScDPSaveDimension*>& rColDims,
+    const std::vector<const ScDPSaveDimension*>& rPageDims,
     ScDPOutputGeometry::FieldType eType, size_t nPos)
 {
     switch (eType)
@@ -302,10 +305,41 @@ const ScDPSaveDimension* getDimension(
 
             return rRowDims[nPos];
         }
+        case ScDPOutputGeometry::Page:
+        {
+            if (rPageDims.size() <= nPos)
+                return NULL;
+
+            return rPageDims[nPos];
+        }
+        break;
+        case ScDPOutputGeometry::Data:
+        break;
+        case ScDPOutputGeometry::None:
+        break;
         default:
             ;
     }
     return NULL;
+}
+
+ScDPOutputGeometry::FieldType toFieldType(sal_uInt16 nOrient)
+{
+    switch (nOrient)
+    {
+        case sheet::DataPilotFieldOrientation_COLUMN:
+            return ScDPOutputGeometry::Column;
+        case sheet::DataPilotFieldOrientation_DATA:
+            return ScDPOutputGeometry::Data;
+        case sheet::DataPilotFieldOrientation_PAGE:
+            return ScDPOutputGeometry::Page;
+        case sheet::DataPilotFieldOrientation_ROW:
+            return ScDPOutputGeometry::Row;
+        case sheet::DataPilotFieldOrientation_HIDDEN:
+        default:
+            ;
+    }
+    return ScDPOutputGeometry::None;
 }
 
 }
@@ -317,10 +351,12 @@ void ScXMLDataPilotTableContext::SetButtons()
     aGeometry.setRowFieldCount(mnRowFieldCount);
     aGeometry.setPageFieldCount(mnPageFieldCount);
     aGeometry.setDataFieldCount(mnDataFieldCount);
+    aGeometry.setDataLayoutType(toFieldType(mnDataLayoutType));
 
-    std::vector<const ScDPSaveDimension*> aRowDims, aColDims;
+    std::vector<const ScDPSaveDimension*> aRowDims, aColDims, aPageDims;
     pDPSave->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_ROW, aRowDims);
     pDPSave->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_COLUMN, aColDims);
+    pDPSave->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_PAGE, aPageDims);
 
     OUString sAddress;
     sal_Int32 nOffset = 0;
@@ -335,19 +371,42 @@ void ScXMLDataPilotTableContext::SetButtons()
             {
                 std::pair<ScDPOutputGeometry::FieldType, size_t> aBtnType = aGeometry.getFieldButtonType(aScAddress);
                 const ScDPSaveDimension* pDim = getDimension(
-                    aRowDims, aColDims, aBtnType.first, aBtnType.second);
+                    aRowDims, aColDims, aPageDims, aBtnType.first, aBtnType.second);
 
+                bool bDimension = pDim != NULL;
                 bool bDataLayout = pDim && pDim->IsDataLayout();
                 bool bHasHidden = pDim && pDim->HasInvisibleMember();
+                bool bPageDim = pDim && pDim->GetOrientation() == sheet::DataPilotFieldOrientation_PAGE;
 
-                sal_Int16 nMFlag = SC_MF_BUTTON;
-                if (bHasHidden)
-                    nMFlag |= SC_MF_HIDDEN_MEMBER;
+                if (bPageDim)
+                {
+                    // Page dimension needs 2 buttons.
 
-                if (!bDataLayout)
-                    nMFlag |= SC_MF_BUTTON_POPUP;
+                    pDoc->ApplyFlagsTab(aScAddress.Col(), aScAddress.Row(), aScAddress.Col(), aScAddress.Row(), aScAddress.Tab(), SC_MF_BUTTON);
 
-                pDoc->ApplyFlagsTab(aScAddress.Col(), aScAddress.Row(), aScAddress.Col(), aScAddress.Row(), aScAddress.Tab(), nMFlag);
+                    sal_Int16 nMFlag = SC_MF_BUTTON_POPUP;
+                    if (bHasHidden)
+                        nMFlag |= SC_MF_HIDDEN_MEMBER;
+                    pDoc->ApplyFlagsTab(aScAddress.Col()+1, aScAddress.Row(), aScAddress.Col()+1, aScAddress.Row(), aScAddress.Tab(), nMFlag);
+                }
+                else
+                {
+                    sal_Int16 nMFlag = SC_MF_BUTTON;
+                    if (bDataLayout)
+                    {
+                        // Data layout dimension only has a plain button with no popup.
+                    }
+                    else if (bDimension)
+                    {
+                        // Normal dimension has a popup arrow button.
+                        if (bHasHidden)
+                            nMFlag |= SC_MF_HIDDEN_MEMBER;
+
+                        nMFlag |= SC_MF_BUTTON_POPUP;
+                    }
+
+                    pDoc->ApplyFlagsTab(aScAddress.Col(), aScAddress.Row(), aScAddress.Col(), aScAddress.Row(), aScAddress.Tab(), nMFlag);
+                }
             }
         }
     }
@@ -360,6 +419,9 @@ void ScXMLDataPilotTableContext::AddDimension(ScDPSaveDimension* pDim)
 {
     if (pDPSave)
     {
+        if (pDim->IsDataLayout())
+            mnDataLayoutType = pDim->GetOrientation();
+
         //  if a dimension with that name has already been inserted,
         //  mark the new one as duplicate
         if ( !pDim->IsDataLayout() &&

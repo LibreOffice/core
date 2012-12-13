@@ -755,6 +755,7 @@
 #define SCSTR_COLUMN_USER       (STR_START + 60)
 #define SCSTR_FIELDSEP          (STR_START + 61)
 #define SCSTR_TEXTSEP           (STR_START + 62)
+#define SCSTR_MULTIPLE          (STR_START + 63)
 
 #define SCSTR_CFG_INPUT         (STR_START + 65)
 
