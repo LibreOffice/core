@@ -566,6 +566,8 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_YOMBE                 0x0684
 #define LANGUAGE_USER_YOMBE_CONGO           0x8284  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_USER_YOMBE)) */
 #define LANGUAGE_USER_SIDAMA                0x0685
+#define LANGUAGE_MULTIPLE                   0xFFEF  /* multiple languages, primary 0x3ef, sub 0x3f */
+#define LANGUAGE_UNDETERMINED               0xFFF0  /* undetermined language, primary 0x3f0, sub 0x3f */
 #define LANGUAGE_USER_SYSTEM_CONFIG         0xFFFE  /* not a locale, to be used only in configuration context to obtain system default, primary 0x3fe, sub 0x3f */
 
 #endif /* INCLUDED_I18NPOOL_LANG_H */
