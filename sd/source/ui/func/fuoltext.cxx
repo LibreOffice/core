@@ -106,11 +106,9 @@ FunctionReference FuOutlineText::Create( ViewShell* pViewSh, ::sd::Window* pWin,
 
 sal_Bool FuOutlineText::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn = sal_False;
-
     mpWindow->GrabFocus();
 
-    bReturn = pOutlineView->GetViewByWindow(mpWindow)->MouseButtonDown(rMEvt);
+    sal_Bool bReturn = pOutlineView->GetViewByWindow(mpWindow)->MouseButtonDown(rMEvt);
 
     if (bReturn)
     {
@@ -133,9 +131,7 @@ sal_Bool FuOutlineText::MouseButtonDown(const MouseEvent& rMEvt)
 
 sal_Bool FuOutlineText::MouseMove(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn = sal_False;
-
-    bReturn = pOutlineView->GetViewByWindow(mpWindow)->MouseMove(rMEvt);
+    sal_Bool bReturn = pOutlineView->GetViewByWindow(mpWindow)->MouseMove(rMEvt);
 
     if (!bReturn)
     {
@@ -153,9 +149,7 @@ sal_Bool FuOutlineText::MouseMove(const MouseEvent& rMEvt)
 
 sal_Bool FuOutlineText::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn = sal_False;
-
-    bReturn = pOutlineView->GetViewByWindow(mpWindow)->MouseButtonUp(rMEvt);
+    sal_Bool bReturn = pOutlineView->GetViewByWindow(mpWindow)->MouseButtonUp(rMEvt);
 
     if (bReturn)
     {
