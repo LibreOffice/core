@@ -27,4 +27,8 @@ $(eval $(call gb_UnpackedTarball_add_patches,orcus,\
 	$(foreach patch,$(orcus_patches),liborcus/$(patch)) \
 ))
 
+$(eval $(call gb_UnpackedTarball_add_file,orcus,vsprojects/liborcus-static-nozip/liborcus-static-nozip.vcxproj,liborcus/vsprojects/liborcus-static-nozip/liborcus-static-nozip.vcxproj))
+$(eval $(call gb_UnpackedTarball_add_file,orcus,vsprojects/liborcus/DefaultConfig.props,liborcus/vsprojects/liborcus/DefaultConfig.props))
+$(eval $(call gb_UnpackedTarball_add_file,orcus,vsprojects/liborcus/zLib.props,liborcus/vsprojects/liborcus/zLib.props))
+
 # vim: set noet sw=4 ts=4:
