@@ -1928,8 +1928,7 @@ uno::Sequence< OUString > SAL_CALL
 
     uno::Sequence< OUString > aSvcImplNames;
 
-    LanguageType nLanguage = LanguageTag( rLocale ).getLanguageType();
-    OUString aCfgLocale( LanguageTag( nLanguage ).getBcp47() );
+    OUString aCfgLocale( LanguageTag( rLocale).getBcp47() );
 
     uno::Sequence< uno::Any > aValues;
     uno::Sequence< OUString > aNames( 1 );
