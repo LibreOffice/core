@@ -163,7 +163,7 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
         pDoc->DeleteRedline( *pPam, true, USHRT_MAX );
 
     // if Point and Mark are different text nodes so a JoinNext has to be done
-    sal_Bool bJoinNext = nSttNode != nEndNode &&
+    bool bJoinNext = nSttNode != nEndNode &&
                 pPam->GetMark()->nNode.GetNode().GetTxtNode() &&
                 pPam->GetPoint()->nNode.GetNode().GetTxtNode();
 

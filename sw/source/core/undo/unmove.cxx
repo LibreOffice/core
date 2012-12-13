@@ -245,7 +245,7 @@ void SwUndoMove::UndoImpl(::sw::UndoRedoContext & rContext)
             pTxtNd->JoinNext();
         }
 
-    } while( sal_False );
+    } while( false );
 
     if( pHistory )
     {

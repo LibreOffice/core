@@ -604,7 +604,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
         const SwFrmFmts& rSpzArr = *pDoc->GetSpzFrmFmts();
         if( !rSpzArr.empty() )
         {
-            const sal_Bool bDelFwrd = rMark.nNode.GetIndex() <= rPoint.nNode.GetIndex();
+            const bool bDelFwrd = rMark.nNode.GetIndex() <= rPoint.nNode.GetIndex();
             SwFlyFrmFmt* pFmt;
             const SwFmtAnchor* pAnchor;
             sal_uInt16 n = rSpzArr.size();

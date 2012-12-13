@@ -65,7 +65,7 @@ sal_Bool UCB_DeleteFile( const String& rURL )
                                 comphelper::getProcessComponentContext() );
         aTempContent.executeCommand(
                         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")),
-                        ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
+                        ::com::sun::star::uno::makeAny( sal_True ) );
         bRemoved = sal_True;
     }
     catch( ::com::sun::star::uno::Exception& )
@@ -193,7 +193,7 @@ bool UCB_GetFileListOfFolder( const String& rURL,
                                 const String* pExtension,
                                 std::vector< ::DateTime* >* pDateTimeList )
 {
-    sal_Bool bOk = sal_False;
+    bool bOk = false;
     try
     {
         ucbhelper::Content aCnt( rURL, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
@@ -249,7 +249,7 @@ bool UCB_GetFileListOfFolder( const String& rURL,
 
                     } while( xResultSet->next() );
                 }
-                bOk = sal_True;
+                bOk = true;
             }
             catch( ::com::sun::star::uno::Exception& )
             {
@@ -260,7 +260,7 @@ bool UCB_GetFileListOfFolder( const String& rURL,
     catch( ::com::sun::star::uno::Exception& )
     {
         OSL_FAIL( "Exception caught!" );
-        bOk = sal_False;
+        bOk = false;
     }
     return bOk;
 }

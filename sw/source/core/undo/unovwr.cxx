@@ -128,7 +128,7 @@ sal_Bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
         if( !FillSaveData( aPam, *pTmpSav, sal_False ))
             delete pTmpSav, pTmpSav = 0;
 
-        sal_Bool bOk = ( !pRedlSaveData && !pTmpSav ) ||
+        bool bOk = ( !pRedlSaveData && !pTmpSav ) ||
                    ( pRedlSaveData && pTmpSav &&
                         SwUndo::CanRedlineGroup( *pRedlSaveData, *pTmpSav,
                             nSttCntnt > rPos.nContent.GetIndex() ));

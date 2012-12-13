@@ -206,7 +206,7 @@ static void LaunchModifiedEvent(
 // rCellRangeName needs to be of one of the following formats:
 // - e.g. "A2:E5" or
 // - e.g. "Table1.A2:E5"
-sal_Bool FillRangeDescriptor(
+bool FillRangeDescriptor(
         SwRangeDescriptor &rDesc,
         const String &rCellRangeName )
 {
@@ -215,7 +215,7 @@ sal_Bool FillRangeDescriptor(
     String aTLName( aCellRangeNoTableName.GetToken(0, ':') );  // name of top left cell
     String aBRName( aCellRangeNoTableName.GetToken(1, ':') );  // name of bottom right cell
     if(!aTLName.Len() || !aBRName.Len())
-        return sal_False;
+        return false;
 
     rDesc.nTop = rDesc.nLeft = rDesc.nBottom = rDesc.nRight = -1;
     sw_GetCellPosition( aTLName, rDesc.nLeft,  rDesc.nTop );
@@ -228,7 +228,7 @@ sal_Bool FillRangeDescriptor(
             "failed to get range descriptor" );
     OSL_ENSURE( rDesc.nTop <= rDesc.nBottom  &&  rDesc.nLeft <= rDesc.nRight,
             "invalid range descriptor");
-    return sal_True;
+    return true;
 }
 
 static String GetCellRangeName( SwFrmFmt &rTblFmt, SwUnoCrsr &rTblCrsr )
@@ -303,12 +303,12 @@ static String GetRangeRepFromTableAndCells( const String &rTableName,
     return aRes;
 }
 
-static sal_Bool GetTableAndCellsFromRangeRep(
+static bool GetTableAndCellsFromRangeRep(
         const OUString &rRangeRepresentation,
         String &rTblName,
         String &rStartCell,
         String &rEndCell,
-        sal_Bool bSortStartEndCells = sal_True )
+        bool bSortStartEndCells = true )
 {
     // parse range representation for table name and cell/range names
     // accepted format sth like: "Table1.A2:C5" , "Table2.A2.1:B3.2"
@@ -342,7 +342,7 @@ static sal_Bool GetTableAndCellsFromRangeRep(
         }
     }
 
-    sal_Bool bSuccess = aTblName.Len() != 0 &&
+    bool bSuccess = aTblName.Len() != 0 &&
                         aStartCell.Len() != 0 && aEndCell.Len() != 0;
     if (bSuccess)
     {
@@ -385,7 +385,7 @@ static void GetFormatAndCreateCursorFromRangeRep(
     String aTblName;    // table name
     String aStartCell;  // name of top left cell
     String aEndCell;    // name of bottom right cell
-    sal_Bool bNamesFound = GetTableAndCellsFromRangeRep( rRangeRepresentation,
+    bool bNamesFound = GetTableAndCellsFromRangeRep( rRangeRepresentation,
                                   aTblName, aStartCell, aEndCell );
 
     if (!bNamesFound)
@@ -453,10 +453,10 @@ static void GetFormatAndCreateCursorFromRangeRep(
     }
 }
 
-static sal_Bool GetSubranges( const OUString &rRangeRepresentation,
-        uno::Sequence< OUString > &rSubRanges, sal_Bool bNormalize )
+static bool GetSubranges( const OUString &rRangeRepresentation,
+        uno::Sequence< OUString > &rSubRanges, bool bNormalize )
 {
-    sal_Bool bRes = sal_True;
+    bool bRes = true;
     String aRangesStr( rRangeRepresentation );
     xub_StrLen nLen = comphelper::string::getTokenCount(aRangesStr, ';');
     uno::Sequence< OUString > aRanges( nLen );
@@ -474,8 +474,9 @@ static sal_Bool GetSubranges( const OUString &rRangeRepresentation,
                 pRanges[nCnt] = aRange;
 
                 String aTableName, aStartCell, aEndCell;
-                bRes &= GetTableAndCellsFromRangeRep( aRange,
-                                aTableName, aStartCell, aEndCell );
+                if (!GetTableAndCellsFromRangeRep( aRange,
+                                                   aTableName, aStartCell, aEndCell ))
+                    bRes = false;
 
                 if (bNormalize)
                 {
@@ -488,7 +489,7 @@ static sal_Bool GetSubranges( const OUString &rRangeRepresentation,
                 if (nCnt == 0)
                     aFirstTable = aTableName;
                 else
-                    bRes &= aFirstTable == aTableName;
+                    if (aFirstTable != aTableName) bRes = false;
 
                 ++nCnt;
             }
@@ -717,7 +718,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
             for (sal_Int32 i = 0;  i < nSubRanges;  ++i)
             {
                 String aTblName, aStartCell, aEndCell;
-                sal_Bool bOk2 = GetTableAndCellsFromRangeRep(
+                bool bOk2 = GetTableAndCellsFromRangeRep(
                                     pSubRanges[i], aTblName, aStartCell, aEndCell );
                 (void) bOk2;
                 OSL_ENSURE( bOk2, "failed to get table and start/end cells" );
@@ -813,7 +814,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
                 sal_Int32 nFirstSeqLabelIdx = -1;
                 for (oi = 0;  oi < oiEnd;  ++oi)
                 {
-                    sal_Bool bFirstFound = sal_False;
+                    bool bFirstFound = false;
                     // row/col used at all?
                     if (aDataStartIdx[oi] != -1 &&
                         (!bFirstIsLabel || aLabelIdx[oi] != -1))
@@ -823,7 +824,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
                         {
                             nFirstSeqLen        = aDataLen[oi];
                             nFirstSeqLabelIdx   = aLabelIdx[oi];
-                            bFirstFound = sal_True;
+                            bFirstFound = true;
                         }
                         else
                         {
@@ -1023,7 +1024,7 @@ OUString SwChartDataProvider::GetBrokenCellRangeForExport(
         // get current cell and table names
         String aTblName, aStartCell, aEndCell;
         GetTableAndCellsFromRangeRep( rCellRangeRepresentation,
-            aTblName, aStartCell, aEndCell, sal_False );
+            aTblName, aStartCell, aEndCell, false );
         sal_Int32 nStartCol = -1, nStartRow = -1, nEndCol = -1, nEndRow = -1;
         sw_GetCellPosition( aStartCell, nStartCol, nStartRow );
         sw_GetCellPosition( aEndCell, nEndCol, nEndRow );
@@ -1332,7 +1333,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
     sal_Int32 *pSortedMapping = aSortedMapping.getArray();
     std::sort( pSortedMapping, pSortedMapping + aSortedMapping.getLength() );
     OSL_ENSURE( aSortedMapping.getLength() == nNumDS_LDS, "unexpected size of sequence" );
-    sal_Bool bNeedSequenceMapping = sal_False;
+    bool bNeedSequenceMapping = false;
     for (sal_Int32 i = 0;  i < nNumDS_LDS;  ++i)
     {
         sal_Int32 *pIt = std::find( pSortedMapping, pSortedMapping + nNumDS_LDS,
@@ -1343,7 +1344,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
         pSequenceMapping[i] = pIt - pSortedMapping;
 
         if (i != pSequenceMapping[i])
-            bNeedSequenceMapping = sal_True;
+            bNeedSequenceMapping = true;
     }
 
     // check if 'SequenceMapping' is actually not required...
@@ -1458,7 +1459,7 @@ uno::Reference< sheet::XRangeSelection > SAL_CALL SwChartDataProvider::getRangeS
 void SAL_CALL SwChartDataProvider::dispose(  )
     throw (uno::RuntimeException)
 {
-    sal_Bool bMustDispose( sal_False );
+    bool bMustDispose( false );
     {
         osl::MutexGuard  aGuard( GetChartMutex() );
         bMustDispose = !bDisposed;
@@ -2095,7 +2096,7 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::generateLabel(
 
     {
         SwRangeDescriptor aDesc;
-        sal_Bool bOk sal_False;
+        bool bOk = false;
         SwFrmFmt* pTblFmt = GetFrmFmt();
         SwTable* pTable = pTblFmt ? SwTable::FindTable( pTblFmt ) : 0;
         if (!pTblFmt || !pTable || pTable->IsTblComplex())
@@ -2116,12 +2117,12 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::generateLabel(
                     "unexpected range of selected cells" );
 
             String aTxt;    // label text to be returned
-            sal_Bool bReturnEmptyTxt = sal_False;
-            sal_Bool bUseCol = sal_True;
+            bool bReturnEmptyTxt = false;
+            bool bUseCol = true;
             if (eLabelOrigin == chart2::data::LabelOrigin_COLUMN)
-                bUseCol = sal_True;
+                bUseCol = true;
             else if (eLabelOrigin == chart2::data::LabelOrigin_ROW)
-                bUseCol = sal_False;
+                bUseCol = false;
             else if (eLabelOrigin == chart2::data::LabelOrigin_SHORT_SIDE)
             {
                 bUseCol = nColSpan < nRowSpan;
@@ -2439,7 +2440,7 @@ void SAL_CALL SwChartDataSequence::disposing( const lang::EventObject& rSource )
 void SAL_CALL SwChartDataSequence::dispose(  )
     throw (uno::RuntimeException)
 {
-    sal_Bool bMustDispose( sal_False );
+    bool bMustDispose( false );
     {
         osl::MutexGuard  aGuard( GetChartMutex() );
         bMustDispose = !bDisposed;
@@ -2524,12 +2525,12 @@ sal_Bool SwChartDataSequence::DeleteBox( const SwTableBox &rBox )
                 "row/col indices not matching" );
         OSL_ENSURE( nPointRow != nMarkRow || nPointCol != nMarkCol,
                 "point and mark are identical" );
-        sal_Bool bMoveVertical      = (nPointCol == nMarkCol);
-        sal_Bool bMoveHorizontal    = (nPointRow == nMarkRow);
+        bool bMoveVertical      = (nPointCol == nMarkCol);
+        bool bMoveHorizontal    = (nPointRow == nMarkRow);
 
         // get movement direction
-        sal_Bool bMoveLeft  = sal_False;    // move left or right?
-        sal_Bool bMoveUp    = sal_False;    // move up or down?
+        bool bMoveLeft  = false;    // move left or right?
+        bool bMoveUp    = false;    // move up or down?
         if (bMoveVertical)
         {
             if (pPointStartNode == rBox.GetSttNd()) // move point?
@@ -2896,7 +2897,7 @@ void SAL_CALL SwChartLabeledDataSequence::removeModifyListener(
 void SAL_CALL SwChartLabeledDataSequence::dispose(  )
     throw (uno::RuntimeException)
 {
-    sal_Bool bMustDispose( sal_False );
+    bool bMustDispose( false );
     {
         osl::MutexGuard  aGuard( GetChartMutex() );
         bMustDispose = !bDisposed;

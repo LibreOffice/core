@@ -66,7 +66,7 @@ class SwFrmFmt;
 
 //////////////////////////////////////////////////////////////////////
 
-sal_Bool FillRangeDescriptor( SwRangeDescriptor &rDesc, const String &rCellRangeName );
+bool FillRangeDescriptor( SwRangeDescriptor &rDesc, const String &rCellRangeName );
 
 //////////////////////////////////////////////////////////////////////
 

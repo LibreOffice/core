@@ -154,8 +154,8 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, sal_Bool bFullPara, sal_Bool bCalledByT
                     : pEnd->nNode.GetNode().GetTxtNode();
     }
 
-    sal_Bool bMoveNds = *pStt == *pEnd      // any area still existent?
-                ? sal_False
+    bool bMoveNds = *pStt == *pEnd      // any area still existent?
+                ? false
                 : ( SaveCntnt( pStt, pEnd, pSttTxtNd, pEndTxtNd ) || bFromTableCopy );
 
     if( pSttTxtNd && pEndTxtNd && pSttTxtNd != pEndTxtNd )
@@ -342,7 +342,7 @@ sal_Bool SwUndoDelete::SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd
     // 1 - copy start in Start-String
     if( pSttTxtNd )
     {
-        sal_Bool bOneNode = nSttNode == nEndNode;
+        bool bOneNode = nSttNode == nEndNode;
         xub_StrLen nLen = bOneNode ? nEndCntnt - nSttCntnt
                                 : pSttTxtNd->GetTxt().Len() - nSttCntnt;
         SwRegHistory aRHst( *pSttTxtNd, pHistory );
@@ -467,7 +467,7 @@ sal_Bool SwUndoDelete::CanGrouping( SwDoc* pDoc, const SwPaM& rDelPam )
         if( !FillSaveData( rDelPam, *pTmpSav, sal_False ))
             delete pTmpSav, pTmpSav = 0;
 
-        sal_Bool bOk = ( !pRedlSaveData && !pTmpSav ) ||
+        bool bOk = ( !pRedlSaveData && !pTmpSav ) ||
                    ( pRedlSaveData && pTmpSav &&
                 SwUndo::CanRedlineGroup( *pRedlSaveData, *pTmpSav, bBackSp ));
         delete pTmpSav;
@@ -762,7 +762,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         else
             pInsNd = 0;         // do not delete Node!
 
-        sal_Bool bNodeMove = 0 != nNode;
+        bool bNodeMove = 0 != nNode;
 
         if( pEndStr )
         {

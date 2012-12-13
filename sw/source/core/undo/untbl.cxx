@@ -119,24 +119,24 @@ class _SaveTable
     SfxItemSets aSets;
     SwFrmFmts aFrmFmts;
     sal_uInt16 nLineCount;
-    sal_Bool bModifyBox : 1;
-    sal_Bool bSaveFormula : 1;
-    sal_Bool bNewModel : 1;
+    bool bModifyBox : 1;
+    bool bSaveFormula : 1;
+    bool bNewModel : 1;
 
 public:
     _SaveTable( const SwTable& rTbl, sal_uInt16 nLnCnt = USHRT_MAX,
-                sal_Bool bSaveFml = sal_True );
+                bool bSaveFml = true );
     ~_SaveTable();
 
     sal_uInt16 AddFmt( SwFrmFmt* pFmt, bool bIsLine );
     void NewFrmFmt( const SwTableLine* , const SwTableBox*, sal_uInt16 nFmtPos,
                     SwFrmFmt* pOldFmt );
 
-    void RestoreAttr( SwTable& rTbl, sal_Bool bModifyBox = sal_False );
+    void RestoreAttr( SwTable& rTbl, bool bModifyBox = false );
     void SaveCntntAttrs( SwDoc* pDoc );
-    void CreateNew( SwTable& rTbl, sal_Bool bCreateFrms = sal_True,
-                    sal_Bool bRestoreChart = sal_True );
-    sal_Bool IsNewModel() const { return bNewModel; }
+    void CreateNew( SwTable& rTbl, bool bCreateFrms = true,
+                    bool bRestoreChart = true );
+    bool IsNewModel() const { return bNewModel; }
 };
 
 class _SaveLine
@@ -867,11 +867,11 @@ void SwUndoTblHeadline::RepeatImpl(::sw::RepeatContext & rContext)
     }
 }
 
-_SaveTable::_SaveTable( const SwTable& rTbl, sal_uInt16 nLnCnt, sal_Bool bSaveFml )
+_SaveTable::_SaveTable( const SwTable& rTbl, sal_uInt16 nLnCnt, bool bSaveFml )
     : aTblSet( *rTbl.GetFrmFmt()->GetAttrSet().GetPool(), aTableSetRange ),
     pSwTable( &rTbl ), nLineCount( nLnCnt ), bSaveFormula( bSaveFml )
 {
-    bModifyBox = sal_False;
+    bModifyBox = false;
     bNewModel = rTbl.IsNewModel();
     aTblSet.Put( rTbl.GetFrmFmt()->GetAttrSet() );
     pLine = new _SaveLine( 0, *rTbl.GetTabLines()[ 0 ], *this );
@@ -923,7 +923,7 @@ sal_uInt16 _SaveTable::AddFmt( SwFrmFmt* pFmt, bool bIsLine )
     return nRet;
 }
 
-void _SaveTable::RestoreAttr( SwTable& rTbl, sal_Bool bMdfyBox )
+void _SaveTable::RestoreAttr( SwTable& rTbl, bool bMdfyBox )
 {
     sal_uInt16 n;
 
@@ -972,7 +972,7 @@ void _SaveTable::RestoreAttr( SwTable& rTbl, sal_Bool bMdfyBox )
     }
 
     aFrmFmts.clear();
-    bModifyBox = sal_False;
+    bModifyBox = false;
 }
 
 void _SaveTable::SaveCntntAttrs( SwDoc* pDoc )
@@ -980,8 +980,8 @@ void _SaveTable::SaveCntntAttrs( SwDoc* pDoc )
     pLine->SaveCntntAttrs( pDoc );
 }
 
-void _SaveTable::CreateNew( SwTable& rTbl, sal_Bool bCreateFrms,
-                            sal_Bool bRestoreChart )
+void _SaveTable::CreateNew( SwTable& rTbl, bool bCreateFrms,
+                            bool bRestoreChart )
 {
     sal_uInt16 n;
 
@@ -1787,7 +1787,7 @@ void SwUndoTblNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
         delete pCurrBox;
     }
 
-    pSaveTbl->CreateNew( pTblNd->GetTable(), sal_True, sal_False );
+    pSaveTbl->CreateNew( pTblNd->GetTable(), true, false );
 
     // TL_CHART2: need to inform chart of probably changed cell names
     rDoc.UpdateCharts( pTblNd->GetTable().GetFrmFmt()->GetName() );
@@ -2052,7 +2052,7 @@ CHECKTABLE(pTblNd->GetTable())
     }
 CHECKTABLE(pTblNd->GetTable())
 
-    pSaveTbl->CreateNew( pTblNd->GetTable(), sal_True, sal_False );
+    pSaveTbl->CreateNew( pTblNd->GetTable(), true, false );
 
     // TL_CHART2: need to inform chart of probably changed cell names
     rDoc.UpdateCharts( pTblNd->GetTable().GetFrmFmt()->GetName() );
@@ -2845,7 +2845,7 @@ SwUndoSplitTbl::SwUndoSplitTbl( const SwTableNode& rTblNd,
             // no break
     case HEADLINE_BORDERCOPY:
     case HEADLINE_BOXATTRCOPY:
-        pSavTbl = new _SaveTable( rTblNd.GetTable(), 1, sal_False );
+        pSavTbl = new _SaveTable( rTblNd.GetTable(), 1, false );
         break;
     }
 }
@@ -2886,7 +2886,7 @@ void SwUndoSplitTbl::UndoImpl(::sw::UndoRedoContext & rContext)
     case HEADLINE_BOXATTRCOPY:
     case HEADLINE_BORDERCOPY:
         {
-            pSavTbl->CreateNew( rTbl, sal_False );
+            pSavTbl->CreateNew( rTbl, false );
             pSavTbl->RestoreAttr( rTbl );
         }
         break;

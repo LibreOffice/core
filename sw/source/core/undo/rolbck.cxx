@@ -738,7 +738,7 @@ SwHistorySetAttrSet::SwHistorySetAttrSet( const SfxItemSet& rSet,
             break;
         pItem = aIter.NextItem();
         pOrigItem = aOrigIter.NextItem();
-    } while( sal_True );
+    } while( true );
 }
 
 void SwHistorySetAttrSet::SetInDoc( SwDoc* pDoc, bool )
@@ -775,7 +775,7 @@ SwHistoryResetAttrSet::SwHistoryResetAttrSet( const SfxItemSet& rSet,
     SfxItemIter aIter( rSet );
     bool bAutoStyle = false;
 
-    while( sal_True )
+    while( true )
     {
         const sal_uInt16 nWhich = aIter.GetCurItem()->Which();
 
@@ -1195,7 +1195,7 @@ void SwHistory::CopyFmtAttr( const SfxItemSet& rSet, sal_uLong nNodeIdx )
             if( aIter.IsAtEnd() )
                 break;
             aIter.NextItem();
-        } while( sal_True );
+        } while( true );
     }
 }
 
@@ -1218,17 +1218,17 @@ void SwHistory::CopyAttr( SwpHints* pHts, sal_uLong nNodeIdx,
             break;
 
         // never copy Flys and Ftn !!
-        sal_Bool bNextAttr = sal_False;
+        bool bNextAttr = false;
         switch( pHt->Which() )
         {
         case RES_TXTATR_FIELD:
             // no fields, ... copy ??
             if( !bFields )
-                bNextAttr = sal_True;
+                bNextAttr = true;
             break;
         case RES_TXTATR_FLYCNT:
         case RES_TXTATR_FTN:
-            bNextAttr = sal_True;
+            bNextAttr = true;
             break;
         }
 
@@ -1400,7 +1400,7 @@ void SwRegHistory::_MakeSetWhichIds()
         {
             SfxItemIter aIter( *pSet );
             sal_uInt16 nW = aIter.FirstItem()->Which();
-            while( sal_True )
+            while( true )
             {
                 m_WhichIdSet.insert( nW );
                 if( aIter.IsAtEnd() )
