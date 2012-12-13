@@ -361,7 +361,7 @@ static RegError REGISTRY_CALLTYPE mergeKey(RegHandle hReg,
             return _ret;
 
         _ret = pReg->loadKey(pNewKey, regFileName, bWarnings, bReport);
-        if (_ret == REG_MERGE_ERROR || (_ret == REG_MERGE_CONFLICT && bWarnings))
+        if (_ret != REG_NO_ERROR && (_ret != REG_MERGE_CONFLICT || bWarnings))
         {
             if (pNewKey != pKey)
                 (void) pKey->closeKey(pNewKey);
