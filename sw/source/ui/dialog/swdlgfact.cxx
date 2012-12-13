@@ -157,6 +157,19 @@ String AbstractTabDialog_Impl::GetText() const
     return pDlg->GetText();
 }
 
+IMPL_LINK_NOARG(AbstractApplyTabDialog_Impl, ApplyHdl)
+{
+    if (pDlg->OK_Impl())
+        m_aHandler.Call(NULL);
+    return 0;
+}
+
+void AbstractApplyTabDialog_Impl::SetApplyHdl( const Link& rLink )
+{
+    m_aHandler = rLink;
+    pDlg->SetApplyHandler(LINK(this, AbstractApplyTabDialog_Impl, ApplyHdl));
+}
+
 sal_uInt8 AbstractSwInsertAbstractDlg_Impl::GetLevel() const
 {
     return pDlg->GetLevel();
@@ -1103,7 +1116,7 @@ SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateFrmTabDialog( int nRes
     return 0;
 }
 
-SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateTemplateDialog( int nResId,
+SfxAbstractApplyTabDialog* SwAbstractDialogFactory_Impl::CreateTemplateDialog(
                                                 Window*             pParent,
                                                 SfxStyleSheetBase&  rBase,
                                                 sal_uInt16              nRegion,
@@ -1111,19 +1124,8 @@ SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateTemplateDialog( int nR
                                                 SwWrtShell*         pActShell,
                                                 sal_Bool                bNew ) //add for SwTemplateDlg
 {
-    SfxTabDialog* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_TEMPLATE_BASE :
-            pDlg = new SwTemplateDlg( pParent, rBase, nRegion, nPageId, pActShell, bNew );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractTabDialog_Impl( pDlg );
-    return 0;
+    SfxTabDialog* pDlg = new SwTemplateDlg( pParent, rBase, nRegion, nPageId, pActShell, bNew );
+    return new AbstractApplyTabDialog_Impl( pDlg );
 }
 
 AbstractGlossaryDlg* SwAbstractDialogFactory_Impl::CreateGlossaryDlg( int nResId,
