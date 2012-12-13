@@ -37,7 +37,6 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 
 using ::oox::core::FilterBase;
-using ::rtl::OUString;
 
 // ============================================================================
 
@@ -49,42 +48,42 @@ RootStorageObject::RootStorageObject( const DumperBase& rParent )
 void RootStorageObject::implDumpStream( const Reference< XInputStream >& rxStrm, const OUString& rStrgPath, const OUString& rStrmName, const OUString& rSysFileName )
 {
     OUString aExt = InputOutputHelper::getFileNameExtension( rStrmName );
-    if( aExt.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("pptx")) ||
-        aExt.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("potx")) )
+    if( aExt.equalsIgnoreAsciiCaseAscii("pptx") ||
+        aExt.equalsIgnoreAsciiCaseAscii("potx") )
     {
         Dumper( getContext(), rxStrm, rSysFileName ).dump();
     }
 #if FIXME
     else if(
-        aExt.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("xlsb")) ||
-        aExt.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("xlsm")) ||
-        aExt.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("xlsx")) ||
-        aExt.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("xltm")) ||
-        aExt.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("xltx")) )
+        aExt.equalsIgnoreAsciiCaseAscii("xlsb") ||
+        aExt.equalsIgnoreAsciiCaseAscii("xlsm") ||
+        aExt.equalsIgnoreAsciiCaseAscii("xlsx") ||
+        aExt.equalsIgnoreAsciiCaseAscii("xltm") ||
+        aExt.equalsIgnoreAsciiCaseAscii("xltx") )
     {
         ::oox::dump::xlsb::Dumper( getContext(), rxStrm, rSysFileName ).dump();
     }
     else if(
-        aExt.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("xla")) ||
-        aExt.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("xlc")) ||
-        aExt.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("xlm")) ||
-        aExt.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("xls")) ||
-        aExt.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("xlt")) ||
-        aExt.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("xlw")) )
+        aExt.equalsIgnoreAsciiCaseAscii("xla") ||
+        aExt.equalsIgnoreAsciiCaseAscii("xlc") ||
+        aExt.equalsIgnoreAsciiCaseAscii("xlm") ||
+        aExt.equalsIgnoreAsciiCaseAscii("xls") ||
+        aExt.equalsIgnoreAsciiCaseAscii("xlt") ||
+        aExt.equalsIgnoreAsciiCaseAscii("xlw") )
     {
         ::oox::dump::biff::Dumper( getContext(), rxStrm, rSysFileName ).dump();
     }
 #endif
     else if(
-        aExt.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("xml")) ||
-        aExt.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("vml")) ||
-        aExt.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("rels")) )
+        aExt.equalsIgnoreAsciiCaseAscii("xml") ||
+        aExt.equalsIgnoreAsciiCaseAscii("vml") ||
+        aExt.equalsIgnoreAsciiCaseAscii("rels") )
     {
         XmlStreamObject( *this, rxStrm, rSysFileName ).dump();
     }
-    else if( aExt.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("bin")) )
+    else if( aExt.equalsIgnoreAsciiCaseAscii("bin") )
     {
-        if( rStrgPath.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ppt" ) ) && rStrmName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "vbaProject.bin" ) ) )
+        if( rStrgPath.equalsAscii( "ppt" ) && rStrmName.equalsAscii( "vbaProject.bin" ) )
         {
             StorageRef xStrg( new ::oox::ole::OleStorage( getContext(), rxStrm, false ) );
             VbaProjectStorageObject( *this, xStrg, rSysFileName ).dump();
