@@ -275,8 +275,12 @@ sal_Bool SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
         if ( ( bTestBackground && bBackRet ) || !bTextRet )
         {
             bRet = bBackRet;
-            pPos->nNode = aBackPos.nNode;
-            pPos->nContent = aBackPos.nContent;
+            (*pPos) = aBackPos;
+        }
+        else if (bTextRet && !bBackRet)
+        {
+            bRet = bTextRet;
+            (*pPos) = aTextPos;
         }
         else
         {
@@ -314,14 +318,12 @@ sal_Bool SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
             if ( bValidTextDistance && bValidBackDistance && basegfx::fTools::more( nTextDistance, nBackDistance ) )
             {
                 bRet = bBackRet;
-                pPos->nNode = aBackPos.nNode;
-                pPos->nContent = aBackPos.nContent;
+                (*pPos) = aBackPos;
             }
             else
             {
                 bRet = bTextRet;
-                pPos->nNode = aTextPos.nNode;
-                pPos->nContent = aTextPos.nContent;
+                (*pPos) = aTextPos;
             }
         }
     }
