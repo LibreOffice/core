@@ -786,24 +786,18 @@ static void ImplSalCalcFullScreenSize( const WinSalFrame* pFrame,
         sal_Int32 nMonitors = Application::GetScreenCount();
         if( (pFrame->mnDisplay >= 0) && (pFrame->mnDisplay < nMonitors) )
         {
-            com::sun::star::awt::Rectangle aRect = Application::GetScreenPosSizePixel( pFrame->mnDisplay );
-            nScreenX = aRect.X;
-            nScreenY = aRect.Y;
-            nScreenDX = aRect.Width+1;  // difference between java/awt convention and vcl
-            nScreenDY = aRect.Height+1; // difference between java/awt convention and vcl
+            Rectangle aRect = Application::GetScreenPosSizePixel( pFrame->mnDisplay );
+            nScreenX = aRect.Left();
+            nScreenY = aRect.Top();
+            nScreenDX = aRect.GetWidth()+1;  // difference between java/awt convention and vcl
+            nScreenDY = aRect.GetHeight()+1; // difference between java/awt convention and vcl
         }
         else
         {
-            Rectangle aCombined;
-            com::sun::star::awt::Rectangle aRect = Application::GetScreenPosSizePixel( 0 );
-            aCombined.Left()   = aRect.X;
-            aCombined.Top()    = aRect.Y;
-            aCombined.Right()  = aRect.X + aRect.Width;
-            aCombined.Bottom() = aRect.Y + aRect.Height;
+            Rectangle aCombined = Application::GetScreenPosSizePixel( 0 );
             for( sal_Int32 i = 1 ; i < nMonitors ; i++ )
             {
-                aRect = Application::GetScreenPosSizePixel( i );
-                aCombined.Union( Rectangle( aRect.X, aRect.Y, aRect.X+aRect.Width, aRect.Y+aRect.Height ) );
+                aCombined.Union( Application::GetScreenPosSizePixel( i ) );
             }
             nScreenX  = aCombined.Left();
             nScreenY  = aCombined.Top();
