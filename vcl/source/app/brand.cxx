@@ -24,6 +24,7 @@
 #include <tools/stream.hxx>
 #include <vcl/pngread.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/svgdata.hxx>
 
 namespace {
     static bool loadPng(const char *pPath, const rtl::OUString &rName, BitmapEx &rBitmap)
@@ -40,27 +41,6 @@ namespace {
         else
             return false;
     }
-
-#ifdef FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
-    static vcl::RenderGraphicRasterizer loadSvg(const char *pPath, const rtl::OUString &rName)
-    {
-        rtl::OUString uri = rtl::OUString::createFromAscii( pPath ) + rName;
-        rtl::Bootstrap::expandMacros( uri );
-        INetURLObject aObj( uri );
-        SvFileStream aStrm( aObj.PathToFileName(), STREAM_STD_READ );
-
-        vcl::RenderGraphic aRenderGraphic;
-        vcl::RenderGraphic aRasterizer ( aRenderGraphic );
-
-        if ( !aStrm.GetError() ) {
-            vcl::SVGReader aSVGReader( aStrm );
-            aRenderGraphic = aSVGReader.GetRenderGraphic();
-            vcl::RenderGraphic aNewRasterizer ( aRenderGraphic );
-            aRasterizer = aNewRasterizer;
-        }
-        return aRasterizer;
-    }
-#endif
 }
 
 bool Application::LoadBrandBitmap (const char* pName, BitmapEx &rBitmap)
@@ -86,8 +66,7 @@ bool Application::LoadBrandBitmap (const char* pName, BitmapEx &rBitmap)
              loadPng ("$BRAND_BASE_DIR/program", aName, rBitmap) );
 }
 
-#ifdef FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
-vcl::RenderGraphicRasterizer Application::LoadBrandSVG (const char* pName)
+bool Application::LoadBrandSVG (const char *pName, BitmapEx &rBitmap)
 {
     rtl::OUString aBaseName = ( rtl::OUString("/") +
                                 rtl::OUString::createFromAscii( pName ) );
@@ -101,20 +80,13 @@ vcl::RenderGraphicRasterizer Application::LoadBrandSVG (const char* pName)
     rtl::OUString aLocaleName = ( aBaseName + rtl::OUString("-") +
                                   aLanguageTag.getBcp47() +
                                   aSvg );
-
-    vcl::RenderGraphicRasterizer aRasterizer = loadSvg ("$BRAND_BASE_DIR/program/edition", aLocaleName);
-    if (!aRasterizer.GetRenderGraphic().IsEmpty())
-        return aRasterizer;
-    aRasterizer = loadSvg ("$BRAND_BASE_DIR/program", aLocaleName);
-    if (!aRasterizer.GetRenderGraphic().IsEmpty())
-        return aRasterizer;
-    aRasterizer = loadSvg ("$BRAND_BASE_DIR/program/edition", aName);
-    if (!aRasterizer.GetRenderGraphic().IsEmpty())
-        return aRasterizer;
-
-    aRasterizer = loadSvg ("$BRAND_BASE_DIR/program", aName);
-    return aRasterizer;
+    //rtl::OUString uri = rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program/edition" ) + aLocaleName;
+    rtl::OUString uri = rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program" ) + aBaseName+aSvg;
+    rtl::Bootstrap::expandMacros( uri );
+    INetURLObject aObj( uri );
+    SvgData aSvgData(aObj.PathToFileName());
+    rBitmap = aSvgData.getReplacement();
+    return true;
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
