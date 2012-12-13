@@ -128,7 +128,9 @@ enum BitmapMarkerKind
     AnchorPressedTR,
 
     // for SJ and the CustomShapeHandles:
-    Customshape1
+    Customshape_7x7,
+    Customshape_9x9,
+    Customshape_11x11
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -320,7 +320,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Lines -->
           <info>
-            <desc>Specifies whether control points are displayed as simple squares without 3D effect.</desc>
+            <desc>Specifies whether control points are displayed simple or enhanced.</desc>
             <label>Simple control points</label>
           </info>
           <value>false</value>
@@ -333,7 +333,7 @@
             <desc>Specifies whether control points are displayed as larger than the default size.</desc>
             <label>Large control points</label>
           </info>
-          <value>false</value>
+          <value>true</value>
         </prop>
       </group>
       <group oor:name="Window">

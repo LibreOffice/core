@@ -175,17 +175,19 @@ const BitmapEx& SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, sal
         }
 
         case Circ_7x7:
+        case Customshape_7x7:
         {
             return impGetOrCreateTargetBitmap((4 * INDEX_COUNT) + nInd, Rectangle(Point(27, nYPos), Size(7, 7)));
         }
 
         case Circ_9x9:
-        case Customshape1:
+        case Customshape_9x9:
         {
             return impGetOrCreateTargetBitmap((5 * INDEX_COUNT) + nInd, Rectangle(Point(34, nYPos), Size(9, 9)));
         }
 
         case Circ_11x11:
+        case Customshape_11x11:
         {
             return impGetOrCreateTargetBitmap((6 * INDEX_COUNT) + nInd, Rectangle(Point(43, nYPos), Size(11, 11)));
         }
@@ -523,7 +525,7 @@ void SdrHdl::CreateB2dIAObject()
             // for SJ and the CustomShapeHandles:
             case HDL_CUSTOMSHAPE1:
             {
-                eKindOfMarker = Customshape1;
+                eKindOfMarker = (b1PixMore) ? Customshape_7x7 : Customshape_9x9;
                 eColIndex = Yellow;
                 break;
             }
@@ -597,6 +599,10 @@ BitmapMarkerKind SdrHdl::GetNextBigger(BitmapMarkerKind eKnd) const
         case Circ_7x7:          eRetval = Circ_9x9;         break;
         case Circ_9x9:          eRetval = Circ_11x11;       break;
 
+        case Customshape_7x7:       eRetval = Customshape_9x9;      break;
+        case Customshape_9x9:       eRetval = Customshape_11x11;    break;
+        //case Customshape_11x11:   eRetval = ; break;
+
         case Elli_7x9:          eRetval = Elli_9x11;        break;
 
         case Elli_9x7:          eRetval = Elli_11x9;        break;
@@ -633,7 +639,27 @@ BitmapEx SdrHdl::ImpGetBitmapEx( BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd
 
     if(pHdlList->GetHdlSize() > 3)
     {
-        bForceBiggerSize = true;
+        switch(eKindOfMarker)
+        {
+            case Anchor:
+            case AnchorPressed:
+            case AnchorTR:
+            case AnchorPressedTR:
+            {
+                // #i121463# For anchor, do not simply make bigger because of HdlSize,
+                // do it dependent of IsSelected() which Writer can set in drag mode
+                if(IsSelected())
+                {
+                    bForceBiggerSize = true;
+                }
+                break;
+            }
+            default:
+            {
+                bForceBiggerSize = true;
+                break;
+            }
+        }
     }
 
     if(bForceBiggerSize)

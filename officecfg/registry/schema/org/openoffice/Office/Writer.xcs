@@ -1233,20 +1233,20 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Layout - [Section] Lines -->
           <info>
-            <desc>Displays the control points as simple squares without a 3D effect.</desc>
+            <desc>Specifies whether control points are displayed simple or enhanced.</desc>
             <label>Simple control points</label>
           </info>
-          <value>false</value>
+          <value>true</value>
         </prop>
         <prop oor:name="LargeControlPoint" oor:type="xs:boolean">
           <!-- OldPath: Writer/Layout/Lines -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Layout - [Section] Lines -->
           <info>
-            <desc>Displays larger control points.</desc>
+            <desc>Specifies whether control points are displayed as larger than the default size.</desc>
             <label>Large control points</label>
           </info>
-          <value>false</value>
+          <value>true</value>
         </prop>
       </group>
       <group oor:name="Window">
