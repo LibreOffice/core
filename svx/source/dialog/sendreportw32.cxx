@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#define UNICODE
+#define _UNICODE
 
 #include "docrecovery.hxx"
 
 #undef WB_LEFT
 #undef WB_RIGHT
 
-#define UNICODE
-#define _UNICODE
 #include <prewin.h>
 #include <postwin.h>
 #include <tchar.h>
