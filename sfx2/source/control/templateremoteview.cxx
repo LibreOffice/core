@@ -50,7 +50,6 @@ TemplateRemoteView::TemplateRemoteView (Window *pParent, WinBits nWinStyle, bool
     , mbIsSynced(true)
 {
     mpItemView->SetColor(Color(COL_WHITE));
-    mpItemView->setChangeNameHdl(LINK(this,TemplateRemoteView,ChangeNameHdl));
 
     Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
     Reference< XInteractionHandler > xGlobalInteractionHandler(
@@ -108,11 +107,6 @@ void TemplateRemoteView::showOverlay (bool bVisible)
     {
         mpItemView->Clear();
     }
-}
-
-void TemplateRemoteView::setOverlayChangeNameHdl(const Link &rLink)
-{
-    maChangeNameHdl = rLink;
 }
 
 bool TemplateRemoteView::loadRepository (const sal_uInt16 nRepositoryId, bool bRefresh)
@@ -310,27 +304,6 @@ void TemplateRemoteView::syncRepositories() const
         officecfg::Office::Common::Misc::TemplateRepositoryNames::set(aNames, batch, pContext);
         batch->commit();
     }
-}
-
-IMPL_LINK (TemplateRemoteView, ChangeNameHdl, TemplateView*, pView)
-{
-    bool bRet = false;
-
-    // check if there isnt another repository with the same name.
-    for (size_t i = 0, n = maRepositories.size(); i < n; ++i)
-    {
-        if (maRepositories[i]->mnId == pView->getId())
-        {
-            maRepositories[i]->maTitle = pView->getName();
-
-            bRet = true;
-            mbIsSynced = false;
-            maChangeNameHdl.Call(this);
-            break;
-        }
-    }
-
-    return bRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

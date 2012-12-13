@@ -8,10 +8,22 @@
 
 #include "templateview.hrc"
 
-Image IMG_TEMPLATE_VIEW_CLOSE
+Control CONTROL_BUTTONS
 {
-    ImageBitmap = Bitmap
-    {
-        File = "closedoc.png";
-    };
+    Size = MAP_APPFONT( 290, 17 );
+    Border = True;
+    TabStop = False;
+};
+
+PushButton BTN_ALL_TEMPLATES
+{
+    Pos = MAP_APPFONT( 1, 1 );
+    Size = MAP_APPFONT( 50, 14 );
+    Text [ en-US ] = "All Templates";
+};
+
+FixedText FT_NAME
+{
+    Pos = MAP_APPFONT( 52, 3 );
+    Size = MAP_APPFONT( 238, 12 );
 };

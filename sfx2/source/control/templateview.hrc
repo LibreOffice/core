@@ -6,4 +6,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#define IMG_TEMPLATE_VIEW_CLOSE 256
+#define BTN_ALL_TEMPLATES       256
+#define CONTROL_BUTTONS         257
+#define FT_NAME                 258
