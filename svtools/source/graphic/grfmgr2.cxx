@@ -436,7 +436,7 @@ sal_Bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAt
                     }
                 }
             }
-            else
+            else // scaleByAveraging
             {
                 double aSumRed, aSumGreen, aSumBlue, aCount;
                 BitmapColor aColor;
@@ -451,6 +451,11 @@ sal_Bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAt
                     {
                         double aUnrotatedX = ( pCosX[ x ] - nSinY ) / 256.0;
                         double aUnrotatedY = ( pSinX[ x ] + nCosY ) / 256.0;
+
+                        if ( bHMirr )
+                            aUnrotatedX = aUnrotatedWidth - aUnrotatedX - 1;
+                        if ( bVMirr )
+                            aUnrotatedY = aUnrotatedHeight - aUnrotatedY - 1;
 
                         if( ( aUnrotatedX >= 0 ) && ( aUnrotatedX < aUnrotatedWidth ) &&
                             ( aUnrotatedY >= 0 ) && ( aUnrotatedY < aUnrotatedHeight ) )
@@ -563,7 +568,7 @@ sal_Bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAt
                                 }
                             }
                         }
-                        else
+                        else // scaleByAveraging
                         {
                             const BitmapColor   aTrans( pWriteAccess->GetBestMatchingColor( Color( COL_WHITE ) ) );
                             BitmapColor         aResultColor( 0 );
@@ -579,6 +584,11 @@ sal_Bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAt
 
                                     double aUnrotatedX = ( pCosX[ x ] - nSinY ) / 256.0;
                                     double aUnrotatedY = ( pSinX[ x ] + nCosY ) / 256.0;
+
+                                    if ( bHMirr )
+                                        aUnrotatedX = aUnrotatedWidth - aUnrotatedX - 1;
+                                    if ( bVMirr )
+                                        aUnrotatedY = aUnrotatedHeight - aUnrotatedY - 1;
 
                                     if( ( aUnrotatedX >= 0 ) && ( aUnrotatedX < aUnrotatedWidth ) &&
                                         ( aUnrotatedY >= 0 ) && ( aUnrotatedY < aUnrotatedHeight ) )
