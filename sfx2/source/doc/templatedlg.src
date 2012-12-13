@@ -107,6 +107,7 @@ ModelessDialog DLG_TEMPLATE_MANAGER
     SVLook = TRUE;
     Moveable = TRUE;
     Closeable = TRUE;
+    Resizeable = TRUE;
     Hide = TRUE;
     Size = MAP_APPFONT ( 290 , 250 );
     Text [en-US] = "Template Manager";

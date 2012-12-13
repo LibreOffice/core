@@ -236,6 +236,8 @@ public:
 
     void setItemStateHdl (const Link &aLink) { maItemStateHdl = aLink; }
 
+    virtual void Resize();
+
 protected:
 
     virtual void MouseButtonDown( const MouseEvent& rMEvt );
@@ -249,8 +251,6 @@ protected:
     virtual void GetFocus();
 
     virtual void LoseFocus();
-
-    virtual void Resize();
 
     virtual void StateChanged( StateChangedType nStateChange );
 
