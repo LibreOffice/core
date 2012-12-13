@@ -119,6 +119,25 @@ OUString WorksheetBuffer::getCalcSheetName( sal_Int32 nWorksheet ) const
     return pSheetInfo ? pSheetInfo->maCalcName : OUString();
 }
 
+void WorksheetBuffer::convertSheetNameRef( ::rtl::OUString& sSheetNameRef ) const
+{
+    // convert '#SheetName!A1' to '#SheetName.A1'
+    if( !sSheetNameRef.isEmpty() && (sSheetNameRef[ 0 ] == '#') )
+    {
+        sal_Int32 nSepPos = sSheetNameRef.lastIndexOf( '!' );
+        if( nSepPos > 0 )
+        {
+            // replace the exclamation mark with a period
+            sSheetNameRef = sSheetNameRef.replaceAt( nSepPos, 1, OUString( sal_Unicode( '.' ) ) );
+            // #i66592# convert sheet names that have been renamed on import
+            OUString aSheetName = sSheetNameRef.copy( 1, nSepPos - 1 );
+            OUString aCalcName = getCalcSheetName( aSheetName );
+            if( !aCalcName.isEmpty() )
+                sSheetNameRef = sSheetNameRef.replaceAt( 1, nSepPos - 1, aCalcName );
+        }
+    }
+}
+
 sal_Int16 WorksheetBuffer::getCalcSheetIndex( const OUString& rWorksheetName ) const
 {
     const SheetInfo* pSheetInfo = maSheetInfosByName.get( rWorksheetName ).get();

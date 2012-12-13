@@ -88,6 +88,8 @@ public:
 
     /** Returns the external target of the relation with the passed relation identifier. */
     ::rtl::OUString     getExternalTargetFromRelId( const ::rtl::OUString& rRelId ) const;
+    /** Returns the internal target of the relation with the passed relation identifier. */
+    ::rtl::OUString     getInternalTargetFromRelId( const ::rtl::OUString& rRelId ) const;
 
     /** Returns the full fragment path for the target of the passed relation. */
     ::rtl::OUString     getFragmentPathFromRelation( const Relation& rRelation ) const;
