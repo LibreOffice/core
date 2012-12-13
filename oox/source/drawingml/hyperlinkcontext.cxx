@@ -59,6 +59,11 @@ HyperLinkContext::HyperLinkContext( ContextHandler& rParent,
             OSL_TRACE("OOX: URI href %s", ::rtl::OUStringToOString (sHref, RTL_TEXTENCODING_UTF8).pData->buffer);
             sURL = getFilter().getAbsoluteUrl( sHref );
         }
+        else
+        {
+            // not sure if we also need to set sHref to the internal target
+            sURL = getRelations().getInternalTargetFromRelId( aRelId );
+        }
     }
     OUString sTooltip = xAttributes->getOptionalValue( R_TOKEN( tooltip ) );
     if ( !sTooltip.isEmpty() )
