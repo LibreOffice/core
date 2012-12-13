@@ -114,7 +114,7 @@ MY_FILES_impress = \
     $(MY_MOD)/org/openoffice/Office/ProtocolHandler-impress.xcu \
     $(MY_MOD)/org/openoffice/Setup-impress.xcu
 
-MY_DEPS_librelogo = main
+MY_DEPS_librelogo = main writer
 MY_FILES_librelogo = \
     $(MY_MOD)/org/openoffice/Office/Addons-librelogo.xcu \
     $(MY_MOD)/org/openoffice/Office/UI/WriterWindowState-librelogo.xcu
