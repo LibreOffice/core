@@ -62,7 +62,6 @@
 /desktop/scripts/soffice.sh
 /makefile.mk
 /Makefile
-/src.downloaded
 /intltool-extract.in
 /intltool-merge.in
 /intltool-update.in

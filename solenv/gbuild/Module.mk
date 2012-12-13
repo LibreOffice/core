@@ -143,7 +143,7 @@ all : build unitcheck
 	$(info $(gb_Module_BUILDHINT))
 
 build : 
-	$(call gb_Output_announce,top level modules: $(foreach module,$(filter-out deliverlog $(WORKDIR)/bootstrap $(SRCDIR)/src.downloaded,$^),$(notdir $(module))),$(true),ALL,6)
+	$(call gb_Output_announce,top level modules: $(foreach module,$(filter-out deliverlog $(WORKDIR)/bootstrap,$^),$(notdir $(module))),$(true),ALL,6)
 	$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),ALL,6)
 	$(call gb_Output_announce_title,build done.)
 	$(call gb_Output_announce_bell)
