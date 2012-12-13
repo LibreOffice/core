@@ -94,4 +94,13 @@ ifeq ($(ENABLE_TELEPATHY),TRUE)
 $(eval $(call gb_Library_use_libraries,sofficeapp,tubes))
 endif
 
+#
+# We need the lo_main symbol for our boostrap loader
+#
+ifeq ($(OS),ANDROID)
+$(eval $(call gb_Library_add_cobjects,sofficeapp,\
+    desktop/source/app/main \
+))
+endif
+
 # vim: set ts=4 sw=4 et:

@@ -62,6 +62,8 @@ JavaVM *lo_get_javavm(void);
 
 const char *lo_get_app_data_dir(void);
 
+struct android_app *lo_get_app(void);
+
 #ifdef __cplusplus
 }
 #endif

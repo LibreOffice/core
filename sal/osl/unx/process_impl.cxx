@@ -104,10 +104,26 @@ oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
 {
     oslProcessError result = osl_Process_E_NotFound;
 
-#ifdef ANDROID
-    /* Now with just a single DSO, this one from lo-bootstrap.c is as good as
-     * any */
-    void * addr = dlsym (RTLD_DEFAULT, "JNI_OnLoad");
+#if defined(ANDROID) && !defined(DISABLE_DYNLOADING)
+    /* On Android we in theory want the address of the "lo_main()"
+     * function, as that is what corresponds to "main()" in
+     * LibreOffice programs on normal desktop OSes.
+     *
+     * But that is true only for apps with a "native activity", using
+     * <sal/main.h> and the org.libreoffice.android.Bootstrap
+     * mechanism. For more normal (?) Android apps that just use
+     * LibreOffice libraries (components) where the main program is in
+     * Java, that just use LibreOffice libraries, there is no
+     * lo_main(). (Note that we don't know for sure yet how
+     * complicated it might be to write such Android apps...)
+     *
+     * Maybe best to just pick some function in liblo-bootstrap.so
+     * which also such Java apps *must* load as the very first
+     * LibreOffice native library. We store all LibreOffice native
+     * shared libraries an app uses in the same folder anyway, so it
+     * doesn't really matter.
+     */
+    void * addr = (void *) &lo_dlopen;
 #else
     /* Determine address of "main()" function. */
     void * addr = dlsym (RTLD_DEFAULT, "main");

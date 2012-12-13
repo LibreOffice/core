@@ -38,7 +38,25 @@ SAL_DLLPUBLIC void SAL_CALL sal_detail_deinitialize();
 
 #if defined IOS || defined ANDROID
 
-#error No code that includes this should be built for iOS or Android
+#ifdef __cplusplus
+extern "C" SAL_DLLPUBLIC_EXPORT void lo_main(int argc, char **argv);
+#endif
+
+#define SAL_MAIN_WITH_ARGS_IMPL \
+SAL_DLLPUBLIC_EXPORT void lo_main(int argc, char **argv) \
+{ \
+    sal_detail_initialize(argc, argv); \
+    sal_main_with_args(argc, argv); \
+    sal_detail_deinitialize(); \
+}
+
+#define SAL_MAIN_IMPL \
+SAL_DLLPUBLIC_EXPORT void lo_main(int argc, char **argv) \
+{ \
+    sal_detail_initialize(argc, argv); \
+    sal_main(); \
+    sal_detail_deinitialize(); \
+}
 
 #else
 
