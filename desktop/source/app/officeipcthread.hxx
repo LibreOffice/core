@@ -82,7 +82,6 @@ class OfficeIPCThread : public salhelper::Thread
 
     osl::Pipe                   maPipe;
     osl::StreamPipe             maStreamPipe;
-    rtl::OUString               maPipeIdent;
     bool                        mbDowning;
     bool                        mbRequestsEnabled;
     int                         mnPendingRequests;

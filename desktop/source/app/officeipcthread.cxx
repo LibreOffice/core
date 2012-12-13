@@ -60,8 +60,6 @@ using ::rtl::OString;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 
-const char  *OfficeIPCThread::sc_aTerminationSequence = "InternalIPC::TerminateThread";
-const int OfficeIPCThread::sc_nTSeqLength = 28;
 const char  *OfficeIPCThread::sc_aShowSequence = "-tofront";
 const int OfficeIPCThread::sc_nShSeqLength = 5;
 const char  *OfficeIPCThread::sc_aConfirmationSequence = "InternalIPC::ProcessingDone";
@@ -436,8 +434,6 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
 
     rtl::Reference< OfficeIPCThread > pThread(new OfficeIPCThread);
 
-    pThread->maPipeIdent = OUString( "SingleOfficeIPC_"  );
-
     // The name of the named pipe is created with the hashcode of the user installation directory (without /user). We have to retrieve
     // this information from a unotools implementation.
     ::utl::Bootstrap::PathStatus aLocateResult = ::utl::Bootstrap::locateUserInstallation( aUserInstallPath );
@@ -494,19 +490,19 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
     if ( aUserInstallPathHashCode.isEmpty() )
         return IPC_STATUS_BOOTSTRAP_ERROR; // Something completely broken, we cannot create a valid hash code!
 
-    pThread->maPipeIdent = pThread->maPipeIdent + aUserInstallPathHashCode;
+    OUString aPipeIdent( "SingleOfficeIPC_" + aUserInstallPathHashCode );
 
     PipeMode nPipeMode = PIPEMODE_DONTKNOW;
     do
     {
         osl::Security &rSecurity = Security::get();
         // Try to create pipe
-        if ( pThread->maPipe.create( pThread->maPipeIdent.getStr(), osl_Pipe_CREATE, rSecurity ))
+        if ( pThread->maPipe.create( aPipeIdent.getStr(), osl_Pipe_CREATE, rSecurity ))
         {
             // Pipe created
             nPipeMode = PIPEMODE_CREATED;
         }
-        else if( pThread->maPipe.create( pThread->maPipeIdent.getStr(), osl_Pipe_OPEN, rSecurity )) // Creation not successfull, now we try to connect
+        else if( pThread->maPipe.create( aPipeIdent.getStr(), osl_Pipe_OPEN, rSecurity )) // Creation not successfull, now we try to connect
         {
             osl::StreamPipe aStreamPipe(pThread->maPipe.getHandle());
             char pReceiveBuffer[sc_nCSASeqLength + 1];
@@ -610,18 +606,8 @@ void OfficeIPCThread::DisableOfficeIPCThread()
             pGlobalOfficeIPCThread);
         pGlobalOfficeIPCThread.clear();
 
-        // send thread a termination message
-        // this is done so the subsequent join will not hang
-        // because the thread hangs in accept of pipe
-        osl::StreamPipe aPipe ( pOfficeIPCThread->maPipeIdent, osl_Pipe_OPEN, Security::get() );
-        if (aPipe.is())
-        {
-            aPipe.send( sc_aTerminationSequence, sc_nTSeqLength+1 ); // also send 0-byte
-
-            // close the pipe so that the streampipe on the other
-            // side produces EOF
-            aPipe.close();
-        }
+        pOfficeIPCThread->mbDowning = true;
+        pOfficeIPCThread->maPipe.close();
 
         // release mutex to avoid deadlocks
         aMutex.clear();
@@ -686,22 +672,23 @@ void OfficeIPCThread::execute()
             // down during wait
             osl::ClearableMutexGuard aGuard( GetMutex() );
 
-            if (!mbDowning)
+            if ( mbDowning )
             {
-                // notify client we're ready to process its args
-                int nBytes = 0;
-                int nResult = 0;
-                while (
-                    (nResult = maStreamPipe.send(sc_aSendArgumentsSequence+nBytes, sc_nCSASeqLength-nBytes))>0 &&
-                    ((nBytes += nResult) < sc_nCSASeqLength) ) ;
+                break;
             }
+
+            // notify client we're ready to process its args
+            int nBytes = 0;
+            int nResult;
+            while (
+                (nResult = maStreamPipe.send(sc_aSendArgumentsSequence+nBytes, sc_nCSASeqLength-nBytes))>0 &&
+                ((nBytes += nResult) < sc_nCSASeqLength) ) ;
             maStreamPipe.write("\0", 1);
 
             // test byte by byte
             const int nBufSz = 2048;
             char pBuf[nBufSz];
-            int nBytes = 0;
-            int nResult = 0;
+            nBytes = 0;
             rtl::OStringBuffer aBuf;
             // read into pBuf until '\0' is read or read-error
             while ((nResult=maStreamPipe.recv( pBuf+nBytes, nBufSz-nBytes))>0) {
@@ -719,9 +706,6 @@ void OfficeIPCThread::execute()
             if (aArguments.isEmpty())
                 continue;
 
-            // is this a termination message ? if so, terminate
-            if (aArguments.equalsL(sc_aTerminationSequence, sc_nTSeqLength) || mbDowning)
-                return;
             std::auto_ptr< CommandLineArgs > aCmdLineArgs;
             try
             {
@@ -938,6 +922,14 @@ void OfficeIPCThread::execute()
         }
         else
         {
+            {
+                osl::MutexGuard aGuard( GetMutex() );
+                if ( mbDowning )
+                {
+                    break;
+                }
+            }
+
 #if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
             fprintf( stderr, "Error on accept: %d\n", (int)nError );
 #endif
