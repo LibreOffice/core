@@ -175,6 +175,7 @@ sal_Bool ScUnoAddInFuncData::GetExcelName( LanguageType eDestLang, ::rtl::OUStri
         const sheet::LocalizedName* pArray = rSequence.getConstArray();
         long i;
 
+        /* FIXME-BCP47: we may want to handle language tags here as well. */
         rtl::OUString aLangStr, aCountryStr;
         LanguageTag( eDestLang ).getIsoLanguageCountry( aLangStr, aCountryStr );
         rtl::OUString aUserLang = aLangStr.toAsciiLowerCase();
