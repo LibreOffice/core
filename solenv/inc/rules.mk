@@ -88,7 +88,6 @@ $(OBJ)/%.obj : %.cc
 .ENDIF
 
 .IF "$(ENABLE_PCH)"!=""
-# workaround for file locking problems on network volumes
 PCHOUTDIR=$(SLO)/pch
 PCHEXOUTDIR=$(SLO)/pch_ex
 $(SLO)/precompiled.% .PHONY:
