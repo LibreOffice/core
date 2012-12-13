@@ -48,7 +48,7 @@ $(call gb_ExternalProject_get_state_target,libvisio,build) :
 	&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LIBXML_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
-	&& msbuild.exe libvisio.vcxproj /p:PlatformToolset=v110 /p:Configuration=Release \
+	&& msbuild.exe libvisio.vcxproj /p:PlatformToolset=v110 /p:VisualStudioVersion=11.0 /p:Configuration=Release \
 	&& touch $@
 endif
 
