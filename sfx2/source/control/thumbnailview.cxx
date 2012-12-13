@@ -945,23 +945,6 @@ bool ThumbnailView::StartDrag( const CommandEvent& rCEvt, Region& rRegion )
     return true;
 }
 
-Size ThumbnailView::CalcWindowSizePixel (sal_uInt16 nCols, sal_uInt16 nLines,
-                                         sal_uInt16 nItemWidth, sal_uInt16 nItemHeight,
-                                         sal_uInt16 nItemSpace)
-{
-    Size aSize(nItemWidth*nCols, nItemHeight*nLines);
-
-    aSize.Width()  += nItemSpace*(nCols+1);
-    aSize.Height() += nItemSpace*(nLines+1);
-
-    aSize.Height() += mnHeaderHeight;
-
-    // sum possible ScrollBar width
-    aSize.Width() += GetScrollWidth();
-
-    return aSize;
-}
-
 long ThumbnailView::GetScrollWidth() const
 {
     if ( GetStyle() & WB_VSCROLL )

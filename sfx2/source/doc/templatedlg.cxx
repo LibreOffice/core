@@ -51,9 +51,6 @@
 #include "doc.hrc"
 #include "templatedlg.hrc"
 
-#define INIT_FOLDER_COLS 3
-#define INIT_FOLDER_LINES 2
-
 #define PADDING_DLG_BORDER      10
 
 using namespace ::com::sun::star;
