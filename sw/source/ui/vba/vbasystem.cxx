@@ -25,7 +25,14 @@
 #include <tools/urlobj.hxx>
 
 #ifdef WNT
+#if defined _MSC_VER
+#pragma warning (push, 1)
+#pragma warning (disable: 4005)
+#endif
 #include <windows.h>
+#if defined _MSC_VER
+#pragma warning (pop)
+#endif
 #include <tchar.h>
 #endif
 

@@ -24,8 +24,6 @@
 #include <rtl/strbuf.hxx>
 #include <memory> /* auto_ptr */
 
-#define MOVEFILE_REPLACE_EXISTING 0x01
-
 /// This Class is responsible for extracting/merging OpenOffice XML Helpfiles
 class HelpParser
 {

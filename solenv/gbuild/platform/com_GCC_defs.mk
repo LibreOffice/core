@@ -57,7 +57,6 @@ gb_CPPU_ENV := gcc3
 gb_COMPILERDEFS := \
 	-D$(COM) \
 	-DCPPU_ENV=$(gb_CPPU_ENV) \
-	-DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH) \
 
 gb_CFLAGS_COMMON := \
 	-Wall \

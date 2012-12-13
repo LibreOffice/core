@@ -466,7 +466,7 @@ protected:
         {
             // this looks funny, since ::std::map does
             // provide an erase( iterator )
-            // method. Unfortunately, stlport does not
+            // method. Unfortunately, C++ does not
             // declare the obvious erase(
             // reverse_iterator ) needed here (missing
             // orthogonality, eh?)

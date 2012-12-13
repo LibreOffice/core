@@ -54,10 +54,6 @@ requirements, see the SDK Installation Guide ($SDK_HOME/docs/install.html).
 - URE_HOME (optional)
 Overwrites the default URE location, that is, /opt/openoffice.org/ure.
 
-- GXX_INCLUDE_PATH (optional)
-Overwrites the default location of the GCC C++ headers (/usr/include/g++).  This
-information is needed by the STLport included in the URE.
-
 - GCCS_COMPAT (optional)
 Fixes incompatibility issues between the GCC that was used to build the URE and
 the GCC that Makefile.pln accesses.  For more details, see the UDK README file.

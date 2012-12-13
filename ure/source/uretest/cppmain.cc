@@ -20,10 +20,8 @@
 #include "sal/macros.h"
 
 #include <cstddef>
-#include <functional>
 #include <memory>
 #include <new>
-#include <boost/unordered_map.hpp>
 
 #include "com/sun/star/lang/XMain.hpp"
 #include "com/sun/star/uno/Exception.hpp"
@@ -38,7 +36,6 @@
 #include "cppuhelper/interfacecontainer.hxx"
 #include "cppuhelper/unourl.hxx"
 #include "cppuhelper/weak.hxx"
-#include "osl/mutex.hxx"
 #include "osl/thread.h"
 #include "rtl/malformeduriexception.hxx"
 #include "rtl/string.h"
@@ -90,13 +87,6 @@ private:
     try { // check for cppuhelper
         std::auto_ptr< cppu::UnoUrl > dummy(new cppu::UnoUrl(rtl::OUString()));
     } catch (rtl::MalformedUriException &) {}
-    { // check for stlport
-        osl::Mutex m;
-        std::auto_ptr< cppu::OMultiTypeInterfaceContainerHelperVar<
-            int, boost::hash< int >, std::equal_to< int > > > dummy(
-                new cppu::OMultiTypeInterfaceContainerHelperVar<
-                int, boost::hash< int >, std::equal_to< int > >(m));
-    }
     static char const * const services[] = {
         "com.sun.star.beans.Introspection",
         "com.sun.star.bridge.BridgeFactory",

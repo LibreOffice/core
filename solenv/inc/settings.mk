@@ -1030,12 +1030,6 @@ COMID=$(COM)
 .ENDIF "$(USE_JAVAVER)"!=""
 .ENDIF			# "$(SOLAR_JAVA)"=="TRUE"
 
-.IF "$(COM)"=="GCC"
-GXX_INCLUDE_PATH*:=$(COMPATH)/include/c++/$(CCVER)
-.EXPORT : GXX_INCLUDE_PATH
-CDEFS+= -DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH)
-.ENDIF
-
 # --- extend new environment ----------------------------------
 CDEFS+= -DSUPD=$(UPD)
 
