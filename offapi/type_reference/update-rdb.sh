@@ -24,10 +24,10 @@ fi
 
 mkdir tmp
 for i in "$@"; do
-  "${OUTDIR_FOR_BUILD?}"/bin/regmerge tmp/out1.rdb /UCR \
+  "${OUTDIR_FOR_BUILD?}"/bin/regmerge -v tmp/out1.rdb /UCR \
     "${WORKDIR_FOR_BUILD?}"/UnoApiPartTarget/"${i%.idl}".urd
 done
-"${OUTDIR_FOR_BUILD?}"/bin/regmerge tmp/out2.rdb / \
+"${OUTDIR_FOR_BUILD?}"/bin/regmerge -v tmp/out2.rdb / \
   "${SRC_ROOT?}"/offapi/type_reference/types.rdb tmp/out1.rdb
 echo "sanity check diff:"
 diff <("${OUTDIR_FOR_BUILD?}"/bin/regview \
