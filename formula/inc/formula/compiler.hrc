@@ -392,8 +392,9 @@
 #define SC_OPCODE_BITLSHIFT         399
 #define SC_OPCODE_GET_DATEDIF       400
 #define SC_OPCODE_XOR               401
-#define SC_OPCODE_STOP_2_PAR        402
-#define SC_OPCODE_LAST_OPCODE_ID    402     /* last OpCode */
+#define SC_OPCODE_AVERAGE_IF        402
+#define SC_OPCODE_STOP_2_PAR        403
+#define SC_OPCODE_LAST_OPCODE_ID    403     /* last OpCode */
 
 /*** Internal ***/
 #define SC_OPCODE_INTERNAL_BEGIN   9999

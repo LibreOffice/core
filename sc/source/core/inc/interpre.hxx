@@ -68,6 +68,12 @@ enum ScIterFunc {
     ifMAX                               // Maximum
 };
 
+enum ScIterFuncIf
+{
+    ifSUMIF,                            // Conditional sum
+    ifAVERAGEIF                         // Conditional average
+};
+
 struct FormulaTokenRef_less
 {
     bool operator () ( const formula::FormulaConstTokenRef& r1, const formula::FormulaConstTokenRef& r2 ) const
@@ -473,8 +479,10 @@ void ScColumn();
 void ScRow();
 void ScTable();
 void ScMatch();
+double IterateParametersIf( ScIterFuncIf );
 void ScCountIf();
 void ScSumIf();
+void ScAverageIf();
 void ScCountEmptyCells();
 void ScLookup();
 void ScHLookup();
