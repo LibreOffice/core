@@ -637,7 +637,7 @@ void ScDPObject::Output( const ScAddress& rPos )
     //  clear old output area
     pDoc->DeleteAreaTab( aOutRange.aStart.Col(), aOutRange.aStart.Row(),
                          aOutRange.aEnd.Col(),   aOutRange.aEnd.Row(),
-                         aOutRange.aStart.Tab(), IDF_CONTENTS | IDF_OBJECTS );
+                         aOutRange.aStart.Tab(), IDF_ALL );
     pDoc->RemoveFlagsTab( aOutRange.aStart.Col(), aOutRange.aStart.Row(),
                           aOutRange.aEnd.Col(),   aOutRange.aEnd.Row(),
                           aOutRange.aStart.Tab(), SC_MF_AUTO );
