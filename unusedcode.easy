@@ -1,6 +1,4 @@
 Application::GetDisplayScreenName(unsigned int)
-CompressGraphicsDialog::CompressGraphicsDialog(Window*, Graphic const&, Size&, Rectangle&, SfxBindings&)
-CompressGraphicsDialog::GetCompressedGraphic()
 FontSelectPattern::FontSelectPattern(PhysicalFontFace const&, Size const&, float, int, bool)
 Line::Intersection(Rectangle const&, Line&) const
 PoHeader::PoHeader()

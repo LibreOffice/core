@@ -48,19 +48,6 @@ CompressGraphicsDialog::CompressGraphicsDialog( Window* pParent, SdrGrafObj* pGr
     Initialize();
 }
 
-CompressGraphicsDialog::CompressGraphicsDialog( Window* pParent, const Graphic& rGraphic, Size& rViewSize100mm, Rectangle& rCropRectangle, SfxBindings& rBindings ) :
-    ModalDialog       ( pParent, "CompressGraphicDialog", "svx/ui/compressgraphicdialog.ui" ),
-    m_pGraphicObj     ( NULL ),
-    m_aGraphic        ( rGraphic ),
-    m_aViewSize100mm  ( rViewSize100mm ),
-    m_aCropRectangle  ( rCropRectangle ),
-    m_rBindings       ( rBindings ),
-    m_dResolution     ( 96.0 )
-{
-    Initialize();
-}
-
-
 void CompressGraphicsDialog::Initialize()
 {
     get(m_pFixedText2,          "label-original-size");
@@ -344,22 +331,6 @@ SdrGrafObj* CompressGraphicsDialog::GetCompressedSdrGrafObj()
         return pNewObject;
     }
     return NULL;
-}
-
-Graphic CompressGraphicsDialog::GetCompressedGraphic()
-{
-    if ( m_dResolution > 0  )
-    {
-        SvMemoryStream aMemStream;
-        aMemStream.SetVersion( SOFFICE_FILEFORMAT_CURRENT );
-        Compress( aMemStream );
-        aMemStream.Seek( STREAM_SEEK_TO_BEGIN );
-        Graphic aResultGraphic;
-        GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
-        rFilter.ImportGraphic( aResultGraphic, String("import"), aMemStream );
-        return aResultGraphic;
-    }
-    return m_aGraphic;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
