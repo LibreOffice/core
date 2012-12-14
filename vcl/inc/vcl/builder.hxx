@@ -204,9 +204,11 @@ public:
 
 private:
     Window *insertObject(Window *pParent, const OString &rClass, const OString &rID,
-        stringmap &rProps, stringmap &rPangoAttributes);
+        stringmap &rProps, stringmap &rPangoAttributes, std::vector<OString> &rItems);
 
-    Window *makeObject(Window *pParent, const OString &rClass, const OString &rID, stringmap &rVec);
+    Window *makeObject(Window *pParent, const OString &rClass, const OString &rID,
+        stringmap &rVec, const std::vector<OString> &rItems);
+
     bool extractGroup(const OString &id, stringmap &rVec);
     bool extractModel(const OString &id, stringmap &rVec);
     bool extractBuffer(const OString &id, stringmap &rVec);
@@ -236,6 +238,7 @@ private:
     void handleTextBuffer(const OString &rID, stringmap &rProperties);
     void handleTabChild(Window *pParent, xmlreader::XmlReader &reader);
     void handleMenu(xmlreader::XmlReader &reader, const OString &rID);
+    std::vector<OString> handleItems(xmlreader::XmlReader &reader, const OString &rID);
 
     PackingData get_window_packing_data(const Window *pWindow) const;
     void set_window_packing_position(const Window *pWindow, sal_Int32 nPosition);

@@ -682,7 +682,8 @@ bool VclBuilder::extractImage(const OString &id, stringmap &rMap)
 extern "C" { static void SAL_CALL thisModule() {} }
 #endif
 
-Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OString &id, stringmap &rMap)
+Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OString &id,
+    stringmap &rMap, const std::vector<OString> &rItems)
 {
     bool bIsPlaceHolder = name.isEmpty();
     bool bVertical = false;
@@ -843,12 +844,28 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         {
             ComboBox* pComboBox = new ComboBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK);
             pComboBox->EnableAutoSize(true);
+            if (!rItems.empty())
+            {
+                sal_uInt16 nActiveId = extractActive(rMap);
+                for (std::vector<OString>::const_iterator aI = rItems.begin(), aEnd = rItems.end(); aI != aEnd; ++aI)
+                    pComboBox->InsertEntry(OStringToOUString(*aI, RTL_TEXTENCODING_UTF8));
+                if (nActiveId < rItems.size())
+                    pComboBox->SelectEntryPos(nActiveId);
+            }
             pWindow = pComboBox;
         }
         else
         {
             ListBox *pListBox = new ListBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK);
             pListBox->EnableAutoSize(true);
+            if (!rItems.empty())
+            {
+                sal_uInt16 nActiveId = extractActive(rMap);
+                for (std::vector<OString>::const_iterator aI = rItems.begin(), aEnd = rItems.end(); aI != aEnd; ++aI)
+                    pListBox->InsertEntry(OStringToOUString(*aI, RTL_TEXTENCODING_UTF8));
+                if (nActiveId < rItems.size())
+                    pListBox->SelectEntryPos(nActiveId);
+            }
             pWindow = pListBox;
         }
     }
@@ -994,7 +1011,7 @@ namespace
 }
 
 Window *VclBuilder::insertObject(Window *pParent, const OString &rClass,
-    const OString &rID, stringmap &rProps, stringmap &rPango)
+    const OString &rID, stringmap &rProps, stringmap &rPango, std::vector<OString> &rItems)
 {
     Window *pCurrentChild = NULL;
 
@@ -1024,7 +1041,7 @@ Window *VclBuilder::insertObject(Window *pParent, const OString &rClass,
         //been seen yet, then make unattached widgets parent-less toplevels
         if (pParent == m_pParent && m_bToplevelHasDeferredInit)
             pParent = NULL;
-        pCurrentChild = makeObject(pParent, rClass, rID, rProps);
+        pCurrentChild = makeObject(pParent, rClass, rID, rProps, rItems);
     }
 
     if (pCurrentChild)
@@ -1046,6 +1063,7 @@ Window *VclBuilder::insertObject(Window *pParent, const OString &rClass,
 
     rProps.clear();
     rPango.clear();
+    rItems.clear();
 
     if (!pCurrentChild)
         pCurrentChild = m_aChildren.empty() ? pParent : m_aChildren.back().m_pWindow;
@@ -1402,6 +1420,64 @@ void VclBuilder::handleListStore(xmlreader::XmlReader &reader, const OString &rI
     }
 }
 
+std::vector<OString> VclBuilder::handleItems(xmlreader::XmlReader &reader, const OString &rID)
+{
+    int nLevel = 1;
+
+    std::vector<OString> aItems;
+    sal_Int32 nItemIndex = 0;
+
+    while(1)
+    {
+        xmlreader::Span name;
+        int nsId;
+
+        xmlreader::XmlReader::Result res = reader.nextItem(
+            xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+
+        if (res == xmlreader::XmlReader::RESULT_DONE)
+            break;
+
+        if (res == xmlreader::XmlReader::RESULT_BEGIN)
+        {
+            ++nLevel;
+            if (name.equals(RTL_CONSTASCII_STRINGPARAM("item")))
+            {
+                bool bTranslated = false;
+                OString sValue;
+
+                while (reader.nextAttribute(&nsId, &name))
+                {
+                    if (name.equals(RTL_CONSTASCII_STRINGPARAM("translatable")) && reader.getAttributeValue(false).equals(RTL_CONSTASCII_STRINGPARAM("yes")))
+                    {
+                        sValue = getTranslation(rID, OString::valueOf(nItemIndex));
+                        bTranslated = !sValue.isEmpty();
+                    }
+                }
+
+                reader.nextItem(
+                    xmlreader::XmlReader::TEXT_RAW, &name, &nsId);
+
+                if (!bTranslated)
+                    sValue = OString(name.begin, name.length);
+
+                aItems.push_back(sValue);
+                ++nItemIndex;
+            }
+        }
+
+        if (res == xmlreader::XmlReader::RESULT_END)
+        {
+            --nLevel;
+        }
+
+        if (!nLevel)
+            break;
+    }
+
+    return aItems;
+}
+
 void VclBuilder::handleMenu(xmlreader::XmlReader &reader, const OString &rID)
 {
     PopupMenu *pCurrentMenu = new PopupMenu;
@@ -1682,6 +1758,7 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
     int nLevel = 1;
 
     stringmap aProperties, aPangoAttributes;
+    std::vector<OString> aItems;
 
     if (!sCustomProperty.isEmpty())
         aProperties[OString("customproperty")] = sCustomProperty;
@@ -1702,10 +1779,12 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
                 if (!pCurrentChild)
                 {
                     pCurrentChild = insertObject(pParent, sClass, sID,
-                        aProperties, aPangoAttributes);
+                        aProperties, aPangoAttributes, aItems);
                 }
                 handleChild(pCurrentChild, reader);
             }
+            else if (name.equals(RTL_CONSTASCII_STRINGPARAM("items")))
+                aItems = handleItems(reader, sID);
             else
             {
                 ++nLevel;
@@ -1737,7 +1816,7 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
     }
 
     if (!pCurrentChild)
-        pCurrentChild = insertObject(pParent, sClass, sID, aProperties, aPangoAttributes);
+        pCurrentChild = insertObject(pParent, sClass, sID, aProperties, aPangoAttributes, aItems);
 
     return pCurrentChild;
 }

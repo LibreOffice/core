@@ -20,7 +20,7 @@
   <xsl:apply-templates select="//*[not(self::col)][@translatable='yes']" />
   <!--
       What I want to do here is to extract just the list and tree store
-      columns that that are translatable
+      columns that that are translatable (the first one only)
   -->
   <xsl:apply-templates select="interface/object[data/row/col[@id='0'][@translatable='yes']]" />
   </l>
@@ -29,9 +29,20 @@
 <!--
     Normal nodes
 -->
-<xsl:template match="*/*[not(self::col)][@translatable='yes']">
+<xsl:template match="*/*[not(self::col|self::item)][@translatable='yes']">
   <xsl:text> </xsl:text>
   <t r="string" g="{str:tokenize(../@id,':')[1]}" l="{@name}">
+  <xsl:copy-of select="text()" />
+  </t><xsl:text>&#10;</xsl:text>
+</xsl:template>
+
+<!--
+    Item nodes
+-->
+<xsl:template match="*/*[self::item][@translatable='yes']">
+  <xsl:text> </xsl:text>
+  <xsl:variable name="groupid" select="../../@id"/>
+  <t r="stringlist" g="{str:tokenize(../../@id,':')[1]}" l="{count(preceding::item[../../@id=$groupid])}">
   <xsl:copy-of select="text()" />
   </t><xsl:text>&#10;</xsl:text>
 </xsl:template>
