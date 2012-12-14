@@ -155,7 +155,7 @@ bool BluetoothServer::isDiscoverable()
 void BluetoothServer::setDiscoverable( bool aDiscoverable )
 {
 #if (defined(LINUX) && !defined(__FreeBSD_kernel__)) && defined(ENABLE_DBUS)
-    SAL_INFO( "sdremote.bluetooth", "BluetoothServer::isDiscoverable called" );
+    SAL_INFO( "sdremote.bluetooth", "BluetoothServer::setDiscoverable called" );
     g_type_init();
     gboolean aResult;
 
@@ -249,7 +249,7 @@ void BluetoothServer::setDiscoverable( bool aDiscoverable )
 
 void SAL_CALL BluetoothServer::run()
 {
-    SAL_INFO( "sdremote.bluetooth", "BluetoothServer::execute called" );
+    SAL_INFO( "sdremote.bluetooth", "BluetoothServer::run called" );
 #if (defined(LINUX) && !defined(__FreeBSD_kernel__)) && defined(ENABLE_DBUS)
     g_type_init();
 
