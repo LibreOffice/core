@@ -5753,6 +5753,8 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
         double fCount = 0.0;
         short nParam = 1;
         size_t nRefInList = 0;
+        SCCOL nDimensionCols = 0;
+        SCROW nDimensionRows = 0;
 
         while (nParamCount > 1 && !nGlobalError)
         {
@@ -5811,6 +5813,9 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
                     }
             }
 
+            if (nGlobalError)
+                continue;   // and bail out, no need to evaluate other arguments
+
             // take range
             nParam = 1;
             nRefInList = 0;
@@ -5860,28 +5865,32 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
                     SetError( errIllegalParameter);
             }
             if ( nTab1 != nTab2 )
-            {
-                SetError( errIllegalParameter);
-            }
-            // initialize temporary result matrix
-            if (!pResMat)
-            {
-                SCSIZE nResC, nResR;
-                nResC = nCol2 - nCol1 + 1;
-                nResR = nRow2 - nRow1 + 1;
-                pResMat = GetNewMat(nResC, nResR);
-                if (!pResMat)
-                {
-                    SetError( errIllegalParameter);
-                }
-                else
-                {
-                    pResMat->FillDouble( 0.0, 0, 0, nResC-1, nResR-1);
-                }
-            }
+                SetError( errIllegalArgument);
+
+            // All reference ranges must be of same dimension and size.
+            if (!nDimensionCols)
+                nDimensionCols = nCol2 - nCol1 + 1;
+            if (!nDimensionRows)
+                nDimensionRows = nRow2 - nRow1 + 1;
+            if ((nDimensionCols != (nCol2 - nCol1 + 1)) || (nDimensionRows != (nRow2 - nRow1 + 1)))
+                SetError ( errIllegalArgument);
+
             // recalculate matrix values
             if (nGlobalError == 0)
             {
+                // initialize temporary result matrix
+                if (!pResMat)
+                {
+                    SCSIZE nResC, nResR;
+                    nResC = nCol2 - nCol1 + 1;
+                    nResR = nRow2 - nRow1 + 1;
+                    pResMat = GetNewMat(nResC, nResR);
+                    if (!pResMat)
+                        SetError( errIllegalParameter);
+                    else
+                        pResMat->FillDouble( 0.0, 0, 0, nResC-1, nResR-1);
+                }
+
                 ScQueryParam rParam;
                 rParam.nRow1       = nRow1;
                 rParam.nRow2       = nRow2;
@@ -5952,12 +5961,11 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
                     }
                 }
             }
-            else
-            {
-                SetError( errIllegalParameter);
-            }
             nParamCount -= 2;
         }
+
+        if (nGlobalError)
+            return 0;   // bail out
 
         // main range - only for AVERAGEIFS and SUMIFS
         if (nParamCount == 1)
@@ -6011,9 +6019,15 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
                     SetError( errIllegalParameter);
             }
             if ( nMainTab1 != nMainTab2 )
-            {
-                SetError( errIllegalParameter);
-            }
+                SetError( errIllegalArgument);
+
+            // All reference ranges must be of same dimension and size.
+            if ((nDimensionCols != (nMainCol2 - nMainCol1 + 1)) || (nDimensionRows != (nMainRow2 - nMainRow1 + 1)))
+                SetError ( errIllegalArgument);
+
+            if (nGlobalError)
+                return 0;   // bail out
+
             // end-result calculation
             ScAddress aAdr;
             aAdr.SetTab( nMainTab1 );
@@ -6084,7 +6098,7 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
                         ++fCount;
             }
         }
-        //
+
         switch( eFunc )
         {
             case ifSUMIFS:     fRes = ::rtl::math::approxAdd( fSum, fMem ); break;
