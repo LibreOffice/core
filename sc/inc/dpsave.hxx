@@ -96,7 +96,6 @@ class SC_DLLPUBLIC ScDPSaveDimension
 {
 private:
     ::rtl::OUString aName;
-    ::rtl::OUString* pSelectedPage;
     boost::scoped_ptr<rtl::OUString> mpLayoutName;
     boost::scoped_ptr<rtl::OUString> mpSubtotalName;
     bool bIsDataLayout;
