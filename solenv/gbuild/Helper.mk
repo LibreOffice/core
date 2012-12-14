@@ -107,7 +107,7 @@ endef
 
 # e.g. 'make CppunitTest_sw_macros_test'
 define gb_Helper_make_userfriendly_targets
-.PHONY: $(2)_$(1) $(2)_$(1)_clean
+.PHONY: $(2)_$(1) $(2)_$(1).clean
 $(2)_$(1) : $(call gb_$(2)_get_target,$(1))
 $(2)_$(1).clean :  $(call gb_$(2)_get_clean_target,$(1))
 endef
