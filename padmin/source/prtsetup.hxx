@@ -85,17 +85,16 @@ class RTSPaperPage : public TabPage
 {
     RTSDialog*          m_pParent;
 
-    FixedText           m_aPaperText;
-    ListBox             m_aPaperBox;
+    FixedText*          m_pPaperText;
+    ListBox*            m_pPaperBox;
 
-    FixedText           m_aOrientText;
-    ListBox             m_aOrientBox;
+    ListBox*            m_pOrientBox;
 
-    FixedText           m_aDuplexText;
-    ListBox             m_aDuplexBox;
+    FixedText*          m_pDuplexText;
+    ListBox*            m_pDuplexBox;
 
-    FixedText           m_aSlotText;
-    ListBox             m_aSlotBox;
+    FixedText*          m_pSlotText;
+    ListBox*            m_pSlotBox;
 
     DECL_LINK( SelectHdl, ListBox* );
 public:
@@ -104,7 +103,7 @@ public:
 
     void update();
 
-    String getOrientation() { return m_aOrientBox.GetSelectEntry(); }
+    sal_uInt16 getOrientation() { return m_pOrientBox->GetSelectEntryPos(); }
 };
 
 class RTSDevicePage : public TabPage

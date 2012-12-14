@@ -21,6 +21,7 @@
 TabDialog RID_RTS_RTSDIALOG
 {
     Moveable = TRUE;
+    Sizeable = TRUE;
     Closeable = TRUE;
     SVLook = TRUE;
 
@@ -61,69 +62,6 @@ TabDialog RID_RTS_RTSDIALOG
         Text [ en-US ] = "<ignore>";
     };
     Text [ en-US ] = "Properties of %s";
-};
-
-TabPage RID_RTS_PAPERPAGE
-{
-    HelpID = "padmin:TabPage:RID_RTS_PAPERPAGE";
-    Hide = TRUE;
-    Size = MAP_APPFONT( 230, 175 );
-    FixedText RID_RTS_PAPER_PAPER_TXT
-    {
-        Pos = MAP_APPFONT( 5, 5 );
-        Size = MAP_APPFONT( 80, 8 );
-        Text [ en-US ] = "~Paper size";
-    };
-    ListBox RID_RTS_PAPER_PAPER_BOX
-    {
-        HelpID = "padmin:ListBox:RID_RTS_PAPERPAGE:RID_RTS_PAPER_PAPER_BOX";
-        Border = TRUE;
-        DropDown = TRUE;
-        Pos = MAP_APPFONT( 115, 5 );
-        Size = MAP_APPFONT( 110, 120 );
-    };
-    FixedText RID_RTS_PAPER_ORIENTATION_TXT
-    {
-        Pos = MAP_APPFONT( 5, 20 );
-        Size = MAP_APPFONT( 80, 8 );
-        Text [ en-US ] = "~Orientation";
-    };
-    ListBox RID_RTS_PAPER_ORIENTATION_BOX
-    {
-        HelpID = "padmin:ListBox:RID_RTS_PAPERPAGE:RID_RTS_PAPER_ORIENTATION_BOX";
-        Border = TRUE;
-        DropDown = TRUE;
-        Pos = MAP_APPFONT( 115, 20 );
-        Size = MAP_APPFONT( 110, 120 );
-    };
-    FixedText RID_RTS_PAPER_DUPLEX_TXT
-    {
-        Pos = MAP_APPFONT( 5, 35 );
-        Size = MAP_APPFONT( 80, 8 );
-        Text [ en-US ] = "~Duplex";
-    };
-    ListBox RID_RTS_PAPER_DUPLEX_BOX
-    {
-        HelpID = "padmin:ListBox:RID_RTS_PAPERPAGE:RID_RTS_PAPER_DUPLEX_BOX";
-        Border = TRUE;
-        DropDown = TRUE;
-        Pos = MAP_APPFONT( 115, 35 );
-        Size = MAP_APPFONT( 110, 120 );
-    };
-    FixedText RID_RTS_PAPER_SLOT_TXT
-    {
-        Pos = MAP_APPFONT( 5, 50 );
-        Size = MAP_APPFONT( 80, 8 );
-        Text [ en-US ] = "Paper tray";
-    };
-    ListBox RID_RTS_PAPER_SLOT_BOX
-    {
-        HelpID = "padmin:ListBox:RID_RTS_PAPERPAGE:RID_RTS_PAPER_SLOT_BOX";
-        Border = TRUE;
-        DropDown = TRUE;
-        Pos = MAP_APPFONT( 115, 50 );
-        Size = MAP_APPFONT( 110, 120 );
-    };
 };
 
 TabPage RID_RTS_FONTSUBSTPAGE

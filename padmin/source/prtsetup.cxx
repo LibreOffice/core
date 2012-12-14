@@ -28,9 +28,6 @@
 
 #include <officecfg/Office/Common.hxx>
 
-#define LSCAPE_STRING String( RTL_CONSTASCII_USTRINGPARAM( "Landscape" ) )
-#define PORTRAIT_STRING String( RTL_CONSTASCII_USTRINGPARAM( "Portrait" ) )
-
 using namespace psp;
 using namespace padmin;
 
@@ -187,7 +184,8 @@ IMPL_LINK( RTSDialog, ClickButton, Button*, pButton )
         if( m_pPaperPage )
         {
             // orientation
-            m_aJobData.m_eOrientation = m_pPaperPage->getOrientation().Equals( LSCAPE_STRING ) ? orientation::Landscape : orientation::Portrait;
+            m_aJobData.m_eOrientation = m_pPaperPage->getOrientation() == 0 ?
+                orientation::Portrait : orientation::Landscape;
         }
         if( m_pDevicePage )
         {
@@ -217,40 +215,34 @@ IMPL_LINK( RTSDialog, ClickButton, Button*, pButton )
  * RTSPaperPage
  */
 
-RTSPaperPage::RTSPaperPage( RTSDialog* pParent ) :
-        TabPage( & pParent->m_aTabControl, PaResId( RID_RTS_PAPERPAGE ) ),
-
-        m_pParent( pParent ),
-
-        m_aPaperText( this, PaResId( RID_RTS_PAPER_PAPER_TXT ) ),
-        m_aPaperBox( this, PaResId( RID_RTS_PAPER_PAPER_BOX ) ),
-        m_aOrientText( this, PaResId( RID_RTS_PAPER_ORIENTATION_TXT ) ),
-        m_aOrientBox( this, PaResId( RID_RTS_PAPER_ORIENTATION_BOX ) ),
-        m_aDuplexText( this, PaResId( RID_RTS_PAPER_DUPLEX_TXT ) ),
-        m_aDuplexBox( this, PaResId( RID_RTS_PAPER_DUPLEX_BOX ) ),
-        m_aSlotText( this, PaResId( RID_RTS_PAPER_SLOT_TXT ) ),
-        m_aSlotBox( this, PaResId( RID_RTS_PAPER_SLOT_BOX ) )
+RTSPaperPage::RTSPaperPage(RTSDialog* pParent)
+    : TabPage(&pParent->m_aTabControl, "PrinterPaperPage", "spa/ui/printerpaperpage.ui" )
+    , m_pParent( pParent )
 {
-    m_aPaperBox.SetSelectHdl( LINK( this, RTSPaperPage, SelectHdl ) );
-    m_aOrientBox.SetSelectHdl( LINK( this, RTSPaperPage, SelectHdl ) );
-    m_aDuplexBox.SetSelectHdl( LINK( this, RTSPaperPage, SelectHdl ) );
-    m_aSlotBox.SetSelectHdl( LINK( this, RTSPaperPage, SelectHdl ) );
+    get(m_pPaperText, "paperft");
+    get(m_pPaperBox, "paperlb");
+    get(m_pOrientBox, "orientlb");
+    get(m_pDuplexText, "duplexft");
+    get(m_pDuplexBox, "duplexlb");
+    get(m_pSlotText, "slotft");
+    get(m_pSlotBox, "slotlb");
 
-    FreeResource();
+    m_pPaperBox->SetSelectHdl( LINK( this, RTSPaperPage, SelectHdl ) );
+    m_pOrientBox->SetSelectHdl( LINK( this, RTSPaperPage, SelectHdl ) );
+    m_pDuplexBox->SetSelectHdl( LINK( this, RTSPaperPage, SelectHdl ) );
+    m_pSlotBox->SetSelectHdl( LINK( this, RTSPaperPage, SelectHdl ) );
 
     sal_uInt16 nPos = 0;
 
-    m_aOrientBox.InsertEntry( PORTRAIT_STRING );
-    m_aOrientBox.InsertEntry( LSCAPE_STRING );
     // duplex
-    nPos = m_aDuplexBox.InsertEntry( m_pParent->m_aInvalidString );
-    m_aDuplexBox.SetEntryData( nPos, NULL );
+    nPos = m_pDuplexBox->InsertEntry( m_pParent->m_aInvalidString );
+    m_pDuplexBox->SetEntryData( nPos, NULL );
 
     // paper does not have an invalid entry
 
     // input slots
-    nPos = m_aSlotBox.InsertEntry( m_pParent->m_aInvalidString );
-    m_aSlotBox.SetEntryData( nPos, NULL );
+    nPos = m_pSlotBox->InsertEntry( m_pParent->m_aInvalidString );
+    m_pSlotBox->SetEntryData( nPos, NULL );
 
     update();
 }
@@ -268,44 +260,43 @@ void RTSPaperPage::update()
     const PPDKey* pKey      = NULL;
 
     // orientation
-    m_aOrientBox.SelectEntry(
-        m_pParent->m_aJobData.m_eOrientation == orientation::Landscape
-        ? LSCAPE_STRING : PORTRAIT_STRING );
+    m_pOrientBox->SelectEntryPos(
+        m_pParent->m_aJobData.m_eOrientation == orientation::Portrait ? 0 : 1);
 
     // duplex
     if( m_pParent->m_aJobData.m_pParser &&
         (pKey = m_pParent->m_aJobData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "Duplex" ) ) )) )
     {
-        m_pParent->insertAllPPDValues( m_aDuplexBox, m_pParent->m_aJobData.m_pParser, pKey );
+        m_pParent->insertAllPPDValues( *m_pDuplexBox, m_pParent->m_aJobData.m_pParser, pKey );
     }
     else
     {
-        m_aDuplexText.Enable( sal_False );
-        m_aDuplexBox.Enable( sal_False );
+        m_pDuplexText->Enable( sal_False );
+        m_pDuplexBox->Enable( sal_False );
     }
 
     // paper
     if( m_pParent->m_aJobData.m_pParser &&
         (pKey = m_pParent->m_aJobData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) )) )
     {
-        m_pParent->insertAllPPDValues( m_aPaperBox, m_pParent->m_aJobData.m_pParser, pKey );
+        m_pParent->insertAllPPDValues( *m_pPaperBox, m_pParent->m_aJobData.m_pParser, pKey );
     }
     else
     {
-        m_aPaperText.Enable( sal_False );
-        m_aPaperBox.Enable( sal_False );
+        m_pPaperText->Enable( sal_False );
+        m_pPaperBox->Enable( sal_False );
     }
 
     // input slots
     if( m_pParent->m_aJobData.m_pParser &&
         (pKey = m_pParent->m_aJobData.m_pParser->getKey( rtl::OUString("InputSlot") )) )
     {
-        m_pParent->insertAllPPDValues( m_aSlotBox, m_pParent->m_aJobData.m_pParser, pKey );
+        m_pParent->insertAllPPDValues( *m_pSlotBox, m_pParent->m_aJobData.m_pParser, pKey );
     }
     else
     {
-        m_aSlotText.Enable( sal_False );
-        m_aSlotBox.Enable( sal_False );
+        m_pSlotText->Enable( sal_False );
+        m_pSlotBox->Enable( sal_False );
     }
 }
 
@@ -314,24 +305,24 @@ void RTSPaperPage::update()
 IMPL_LINK( RTSPaperPage, SelectHdl, ListBox*, pBox )
 {
     const PPDKey* pKey = NULL;
-    if( pBox == &m_aPaperBox )
+    if( pBox == m_pPaperBox )
     {
         if( m_pParent->m_aJobData.m_pParser )
             pKey = m_pParent->m_aJobData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) );
     }
-    else if( pBox == &m_aDuplexBox )
+    else if( pBox == m_pDuplexBox )
     {
         if( m_pParent->m_aJobData.m_pParser )
             pKey = m_pParent->m_aJobData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "Duplex" ) ) );
     }
-    else if( pBox == &m_aSlotBox )
+    else if( pBox == m_pSlotBox )
     {
         if( m_pParent->m_aJobData.m_pParser )
             pKey = m_pParent->m_aJobData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "InputSlot" ) ) );
     }
-    else if( pBox == &m_aOrientBox )
+    else if( pBox == m_pOrientBox )
     {
-        m_pParent->m_aJobData.m_eOrientation = m_aOrientBox.GetSelectEntry().Equals( LSCAPE_STRING ) ? orientation::Landscape : orientation::Portrait;
+        m_pParent->m_aJobData.m_eOrientation = m_pOrientBox->GetSelectEntryPos() == 0 ? orientation::Portrait : orientation::Landscape;
     }
     if( pKey )
     {
