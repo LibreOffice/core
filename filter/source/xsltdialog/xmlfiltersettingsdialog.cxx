@@ -798,7 +798,7 @@ void XMLFilterSettingsDialog::onDelete()
 
         OUString aPlaceHolder( "%s" );
         OUString aMessage(RESIDSTR(STR_WARN_DELETE));
-        aMessage = aMessage.replaceAll( aPlaceHolder, pInfo->maFilterName );
+        aMessage = aMessage.replaceFirst( aPlaceHolder, pInfo->maFilterName );
 
         WarningBox aWarnBox(this, (WinBits)(WB_YES_NO | WB_DEF_YES),    aMessage );
         if( aWarnBox.Execute() == RET_YES )
@@ -922,14 +922,14 @@ void XMLFilterSettingsDialog::onSave()
         if( nFilters > 0 )
         {
             aMsg = RESIDSTR(STR_FILTERS_HAVE_BEEN_SAVED);
-            aMsg = aMsg.replaceAll( sPlaceholder, OUString::valueOf( static_cast<sal_Int32>(nFilters) ) );
-            aMsg = aMsg.replaceAll( sPlaceholder, aURL.GetName() );
+            aMsg = aMsg.replaceFirst( sPlaceholder, OUString::valueOf( static_cast<sal_Int32>(nFilters) ) );
+            aMsg = aMsg.replaceFirst( sPlaceholder, aURL.GetName() );
         }
         else
         {
             aMsg = RESIDSTR(STR_FILTER_HAS_BEEN_SAVED);
-            aMsg = aMsg.replaceAll( sPlaceholder, (*aFilters.begin())->maFilterName );
-            aMsg = aMsg.replaceAll( sPlaceholder, aURL.GetName() );
+            aMsg = aMsg.replaceFirst( sPlaceholder, (*aFilters.begin())->maFilterName );
+            aMsg = aMsg.replaceFirst( sPlaceholder, aURL.GetName() );
         }
 
         InfoBox aBox(this, aMsg );
@@ -986,18 +986,18 @@ void XMLFilterSettingsDialog::onOpen()
         {
             INetURLObject aURLObj( aURL );
             aMsg = RESIDSTR(STR_NO_FILTERS_FOUND);
-            aMsg = aMsg.replaceAll( sPlaceholder, aURLObj.GetName() );
+            aMsg = aMsg.replaceFirst( sPlaceholder, aURLObj.GetName() );
         }
         else if( nFilters == 1 )
         {
             aMsg = RESIDSTR(STR_FILTER_INSTALLED);
-            aMsg = aMsg.replaceAll( sPlaceholder, aFilterName );
+            aMsg = aMsg.replaceFirst( sPlaceholder, aFilterName );
 
         }
         else
         {
             aMsg = RESIDSTR(STR_FILTERS_INSTALLED);
-            aMsg = aMsg.replaceAll( sPlaceholder, OUString::valueOf( static_cast<sal_Int32>(nFilters) ) );
+            aMsg = aMsg.replaceFirst( sPlaceholder, OUString::valueOf( static_cast<sal_Int32>(nFilters) ) );
         }
 
         InfoBox aBox(this, aMsg );
