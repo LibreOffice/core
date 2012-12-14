@@ -958,16 +958,6 @@ void SwXMLTextImportHelper::endAppletOrPlugin(
     }
 }
 
-XMLTextImportHelper* SwXMLImport::CreateTextImport()
-{
-    return new SwXMLTextImportHelper( GetModel(), *this, getImportInfo(),
-                                      IsInsertMode(),
-                                      IsStylesOnlyMode(), bShowProgress,
-                                      IsBlockMode(), IsOrganizerMode(),
-                                      bPreserveRedlineMode );
-}
-
-
 // redlining helper methods
 // (override to provide the real implementation)
 

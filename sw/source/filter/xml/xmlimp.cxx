@@ -43,6 +43,7 @@
 #include <ndtxt.hxx>
 #include <editsh.hxx>
 #include "xmlimp.hxx"
+#include "xmltexti.hxx"
 #include <xmloff/DocumentSettingsContext.hxx>
 #include <docsh.hxx>
 #include <editeng/unolingu.hxx>
@@ -989,6 +990,15 @@ SvTextShapeImportHelper::~SvTextShapeImportHelper()
     }
 }
 
+
+XMLTextImportHelper* SwXMLImport::CreateTextImport()
+{
+    return new SwXMLTextImportHelper( GetModel(), *this, getImportInfo(),
+                                      IsInsertMode(),
+                                      IsStylesOnlyMode(), bShowProgress,
+                                      IsBlockMode(), IsOrganizerMode(),
+                                      bPreserveRedlineMode );
+}
 
 XMLShapeImportHelper* SwXMLImport::CreateShapeImport()
 {
