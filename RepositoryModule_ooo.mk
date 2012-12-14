@@ -105,25 +105,25 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 	$(call gb_Helper_optional,DESKTOP,l10ntools) \
 	$(call gb_Helper_optional,LANGUAGETOOL,languagetool) \
 	$(call gb_Helper_optional,LCMS2,lcms2) \
-	libcdr \
-	libcmis \
+	$(call gb_Helper_optional,CDR,libcdr) \
+	$(call gb_Helper_optional,CMIS,libcmis) \
 	$(call gb_Helper_optional,LIBEXTTEXTCAT,libexttextcat) \
 	$(call gb_Helper_optional,LIBLANGTAG,liblangtag) \
-	libmspub \
-	liborcus \
+	$(call gb_Helper_optional,MSPUB,libmspub) \
+	$(call gb_Helper_optional,ORCUS,liborcus) \
 	$(call gb_Helper_optional,LIBPNG,libpng) \
 	librelogo \
-	libvisio \
-	libwpd \
-	libwpg \
-	libwps \
+	$(call gb_Helper_optional,VISIO,libvisio) \
+	$(call gb_Helper_optional,WPD,libwpd) \
+	$(call gb_Helper_optional,WPG,libwpg) \
+	$(call gb_Helper_optional,WPS,libwps) \
 	libxmlsec \
 	lingucomponent \
 	linguistic \
 	lotuswordpro \
 	$(call gb_Helper_optional,LPSOLVE,lpsolve) \
 	MathMLDTD \
-	mdds \
+	$(call gb_Helper_optional,MDDS,mdds) \
 	Mesa \
 	$(call gb_Helper_optional,MORE_FONTS,more_fonts) \
 	$(call gb_Helper_optional,MYTHES,mythes) \
@@ -203,7 +203,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 	uui \
 	vbahelper \
 	vcl \
-	vigra \
+	$(call gb_Helper_optional,VIGRA,vigra) \
 	wizards \
 	writerfilter \
 	writerperfect \
@@ -214,7 +214,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 	xmlreader \
 	xmlscript \
 	xmlsecurity \
-	xsltml \
+	$(call gb_Helper_optional,XSLTML,xsltml) \
 	$(call gb_Helper_optional,ZLIB,zlib) \
 ))
 
