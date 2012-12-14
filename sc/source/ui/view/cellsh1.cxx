@@ -75,6 +75,7 @@
 #include "markdata.hxx"
 #include "docpool.hxx"
 #include "condformatdlg.hxx"
+#include "attrib.hxx"
 
 #include "globstr.hrc"
 #include "scui_def.hxx"
@@ -1761,8 +1762,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case SID_OPENDLG_COLORSCALE:
         case SID_OPENDLG_DATABAR:
             {
-                sal_uInt16 nId = 1;
-                pScMod->SetRefDialog( nId, true );
 
                 ScRangeList aRangeList;
                 ScViewData* pData = GetViewData();
@@ -1783,15 +1782,67 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 }
 
                 sal_Int32 nKey = 0;
-                const ScConditionalFormat* pCondFormat = pDoc->GetCondFormat(aPos.Col(), aPos.Row(), aPos.Tab());
+                const ScPatternAttr* pPattern = pDoc->GetPattern(aPos.Col(), aPos.Row(), aPos.Tab());
+                const std::vector<sal_uInt32>& rCondFormats = static_cast<const ScCondFormatItem&>(pPattern->GetItem(ATTR_CONDITIONAL)).GetCondFormatData();
+                bool bContainsCondFormat = !rCondFormats.empty();
                 boost::scoped_ptr<ScCondFormatDlg> pCondFormatDlg;
-                if(pCondFormat)
+                if(bContainsCondFormat)
                 {
-                    const ScRangeList& rCondFormatRange = pCondFormat->GetRange();
-                    if(rCondFormatRange == aRangeList)
+                    ScConditionalFormatList* pList = pDoc->GetCondFormList(aPos.Tab());
+                    for (std::vector<sal_uInt32>::const_iterator itr = rCondFormats.begin(), itrEnd = rCondFormats.end();
+                                            itr != itrEnd; ++itr)
                     {
-                        nKey = pCondFormat->GetKey();
-                        pCondFormatDlg.reset( new ScCondFormatDlg( pTabViewShell->GetDialogParent(), pDoc, pCondFormat, rCondFormatRange, aPos, condformat::dialog::NONE ) );
+                        // check if at least one existing conditional format has the same range
+                        const ScConditionalFormat* pCondFormat = pList->GetFormat(*itr);
+                        const ScRangeList& rCondFormatRange = pCondFormat->GetRange();
+                        if(rCondFormatRange == aRangeList)
+                        {
+                            // found a matching range, edit this conditional format
+                            nKey = pCondFormat->GetKey();
+                            pCondFormatDlg.reset( new ScCondFormatDlg( pTabViewShell->GetDialogParent(), pDoc, pCondFormat, rCondFormatRange, aPos, condformat::dialog::NONE ) );
+                        }
+                    }
+
+                    // if not found a conditional format ask whether we should edit one of the existing
+                    // or should create a new overlapping conditional format
+
+                    if(!pCondFormatDlg)
+                    {
+                        QueryBox aBox( pTabViewShell->GetDialogParent(), WinBits( WB_YES_NO | WB_DEF_YES ),
+                               ScGlobal::GetRscString(STR_EDIT_EXISTING_COND_FORMATS) );
+                        bool bEditExisting = aBox.Execute() == RET_YES;
+                        if(bEditExisting)
+                        {
+                            // differentiate between ranges where one conditional format is defined
+                            // and several formats are defined
+                            // if we have only one => open the cond format dlg to edit it
+                            // otherwise open the manage cond format dlg
+                            if(rCondFormats.size() == 1)
+                            {
+                                const ScConditionalFormat* pCondFormat = pList->GetFormat(rCondFormats[0]);
+                                assert(pCondFormat);
+                                const ScRangeList& rCondFormatRange = pCondFormat->GetRange();
+                                pCondFormatDlg.reset( new ScCondFormatDlg( pTabViewShell->GetDialogParent(), pDoc, pCondFormat, rCondFormatRange, aPos, condformat::dialog::NONE ) );
+                            }
+                            else
+                            {
+                                ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                                boost::scoped_ptr<AbstractScCondFormatManagerDlg> pDlg(pFact->CreateScCondFormatMgrDlg( pTabViewShell->GetDialogParent(), pDoc, pList, aPos, RID_SCDLG_COND_FORMAT_MANAGER));
+                                if(pDlg->Execute() == RET_OK && pDlg->CondFormatsChanged())
+                                {
+                                    ScConditionalFormatList* pCondFormatList = pDlg->GetConditionalFormatList();
+                                    pData->GetDocShell()->GetDocFunc().SetConditionalFormatList(pCondFormatList, aPos.Tab());
+                                }
+                                // we need step out here because we don't want to open the normal dialog
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            // define an overlapping conditional format
+                            // does not need to be handled here
+                        }
+
                     }
                 }
 
@@ -1814,6 +1865,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     }
                     pCondFormatDlg.reset( new ScCondFormatDlg( pTabViewShell->GetDialogParent(), pDoc, NULL, aRangeList, aRangeList.GetTopLeftCorner(), eType ) );
                 }
+
+                sal_uInt16 nId = 1;
+                pScMod->SetRefDialog( nId, true );
+
                 if( pCondFormatDlg->Execute() == RET_OK )
                 {
                     ScConditionalFormat* pFormat = pCondFormatDlg->GetConditionalFormat();
