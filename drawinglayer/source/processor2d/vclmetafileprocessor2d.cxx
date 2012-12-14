@@ -1631,8 +1631,9 @@ namespace drawinglayer
                 case PRIMITIVE2D_ID_METAFILEPRIMITIVE2D :
                 {
                     static bool bUseMetaFilePrimitiveDecomposition(true);
+                    const primitive2d::MetafilePrimitive2D& aMetafile = static_cast< const primitive2d::MetafilePrimitive2D& >(rCandidate);
 
-                    if(bUseMetaFilePrimitiveDecomposition)
+                    if(bUseMetaFilePrimitiveDecomposition && !aMetafile.getMetaFile().GetUseCanvas())
                     {
                         // use new Metafile decomposition
                         process(rCandidate.get2DDecomposition(getViewInformation2D()));
@@ -1640,7 +1641,7 @@ namespace drawinglayer
                     else
                     {
                         // direct draw of MetaFile, use default pocessing
-                        RenderMetafilePrimitive2D(static_cast< const primitive2d::MetafilePrimitive2D& >(rCandidate));
+                        RenderMetafilePrimitive2D(aMetafile);
                     }
 
                     break;
