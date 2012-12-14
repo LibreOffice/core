@@ -1,14 +1,13 @@
 include ../../../config_host.mk
 
+# The default target just builds.
+all: build-ant
+
 # The package of this app
 APP_PACKAGE=org.libreoffice.android.examples
 
 BOOTSTRAPDIR=../../Bootstrap
 include $(BOOTSTRAPDIR)/Makefile.shared
-
-# The default target just builds.
-
-all: build-ant
 
 copy-stuff:
 # Then "assets". Let the directory structure under assets mimic

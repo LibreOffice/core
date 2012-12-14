@@ -1,23 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="org.libreoffice.android.libo"
+      package="org.libreoffice.android.examples"
       android:versionCode="1"
       android:versionName="1.0">
-    <uses-sdk android:minSdkVersion="9" />
-
-    <application android:label="@string/app_name"
-                 android:debuggable="true">
-        <!-- Bootstrap is the subclass of  android.app.NativeActivity -->
-        <activity android:name="org.libreoffice.android.Bootstrap"
-                  android:label="LibreOffice Viewer test"
-                  android:configChanges="orientation|keyboardHidden">
-            <!-- Tell NativeActivity the name of our .so -->
-            <meta-data android:name="android.app.lib_name"
-                    android:value="lo-bootstrap" />
+    <uses-sdk android:minSdkVersion="9"
+              android:targetSdkVersion="14"/>
+    <application android:label="LO Desktop App"
+                 android:debuggable="true"
+                 android:largeHeap="true"
+                 android:hardwareAccelerated="true">
+        <activity android:name=".LODesktop"
+                  android:label="LO Desktop App"
+                  android:configChanges="keyboardHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-		<extra android:name="lo-main-library" android:value="libmergedlo" />
             </intent-filter>
         </activity>
     </application>

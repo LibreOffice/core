@@ -3,178 +3,127 @@
 
 include ../../../config_host.mk
 
-BOOTSTRAPDIR=../../Bootstrap
-include $(BOOTSTRAPDIR)/Makefile.shared
+# The default target just builds.
+all: build-ant
 
 # The package of this app
-APP_PACKAGE=org.libreoffice.android.libo
+APP_PACKAGE=org.libreoffice.android.examples
+
+BOOTSTRAPDIR=../../Bootstrap
+include $(BOOTSTRAPDIR)/Makefile.shared
 
 # The name of the Bootstrap activity class
 BOOTSTRAP=org.libreoffice.android.Bootstrap
 
 # The default target just builds.
 
-all: build-ant
-
-buildrcs:
-# main sofficerc ini ...
-	mkdir -p assets/program/
-	echo "[Bootstrap]" > assets/program/lofficerc
-	echo "Logo=1" >> assets/program/lofficerc
-	echo "NativeProgress=1" >> assets/program/lofficerc
-	echo "URE_BOOTSTRAP=file:///assets/program/fundamentalrc" >> assets/program/lofficerc
-#	echo "RTL_LOGFILE=file:///dev/log/main" >> assets/program/lofficerc
-	echo "HOME=$(APP_DATA_PATH)/files" >> assets/program/lofficerc
-	echo "OSL_SOCKET_PATH=$(APP_DATA_PATH)/files" >> assets/program/lofficerc
-# - this looks useful but breaks more than it fixes ...
-#	echo "DISABLE_EXTENSION_SYNCHRONIZATION=1" >> assets/program/lofficerc
-
-# fundamentalrc ini ...
-	echo "[Bootstrap]" > assets/program/fundamentalrc
-	echo "LO_LIB_DIR=file://$(APP_DATA_PATH)/lib/" >> assets/program/fundamentalrc
+copy-stuff:
+# Then "assets". Let the directory structure under assets mimic
+# that under solver for now.
+#
+# Please note that I have no idea what all of this is really necessary and for
+# much of this stuff being copied, no idea whether it makes any sense at all.
+# Much of this is copy-pasted from android/qa/sc/Makefile (where a couple of
+# unit tests for sc are built, and those do seem to mostly work) and
+# android/qa/desktop/Makefile (mmeeks's desktop demo, also works to some
+# extent).
+#
+	mkdir -p assets/gz.unpack/program/ure assets/lib assets/program assets/xml/ure assets/ComponentTarget/i18npool/util
+	gzip -9 <$(OUTDIR)/bin/offapi.rdb >assets/gz.unpack/program/offapi.rdb
+	gzip -9 <$(OUTDIR)/bin/oovbaapi.rdb >assets/gz.unpack/program/oovbaapi.rdb
+	gzip -9 <$(OUTDIR)/bin/types.rdb >assets/gz.unpack/program/types.rdb
+	gzip -9 <$(OUTDIR)/bin/ure/types.rdb >assets/gz.unpack/program/ure/types.rdb
+# For some reason the vnd.sun.star.expand:$LO_LIB_DIR doesn't seem to work, it expands to empty!?
+# So just hardcode the known APP_DATA_PATH for now...
+	for F in xml/services xml/ure/services; do \
+		sed -e 's!uri="vnd.sun.star.expand:$$LO_LIB_DIR/!uri="file://$(APP_DATA_PATH)/lib/!g' <$(OUTDIR)/$$F.rdb >assets/$$F.rdb; \
+	done
+	cp $(SRC_ROOT)/odk/examples/java/DocumentHandling/test/test1.odt \
+	   $(SRC_ROOT)/sc/qa/unit/data/xls/border.xls \
+	   $(SRC_ROOT)/sw/qa/core/data/odt/test.odt \
+	   $(SRC_ROOT)/sw/qa/core/data/doc/testVba.doc \
+		assets
+	cp $(WORKDIR)/ComponentTarget/i18npool/util/i18npool.component assets/ComponentTarget/i18npool/util
+#
+	mkdir -p assets/ure/share/misc assets/share/registry/res assets/share/config/soffice.cfg
+	cp -R $(OUTDIR)/xml/*.xcd assets/share/registry
+	mv assets/share/registry/fcfg_langpack_en-US.xcd assets/share/registry/res
+	cp -R $(OUTDIR)/xml/uiconfig/* assets/share/config/soffice.cfg
+	cp -R $(OUTDIR)/xml/registry/* assets/share/registry
+#
+# Set up rc, the "inifile". See BootstrapMap::getBaseIni(). As this app
+# doesn't use soffice_main() (at least I think it shouldn't), the
+# rtl::Bootstrap::setIniFilename() call there that hardcodes
+# /assets/program/lofficerc isn't executed. Instead the hardcoding of
+# /assets/rc in BootstrapMap::getBaseIni() gets used.
+	echo '[Bootstrap]' > assets/rc
+	echo 'Logo=1' >> assets/rc
+	echo 'NativeProgress=1' >> assets/rc
+	echo 'URE_BOOTSTRAP=file:///assets/program/fundamentalrc' >> assets/rc
+#	echo 'RTL_LOGFILE=file:///dev/log/main' >> assets/rc
+	echo "HOME=$(APP_DATA_PATH)/cache" >> assets/rc
+	echo "OSL_SOCKET_PATH=$(APP_DATA_PATH)/cache" >> assets/rc
+#
+# Set up fundamentalrc
+	echo '[Bootstrap]' > assets/program/fundamentalrc
+	echo "LO_LIB_DIR=file:$(APP_DATA_PATH)/lib/" >> assets/program/fundamentalrc
 	echo "URE_LIB_DIR=file://$(APP_DATA_PATH)/lib/" >> assets/program/fundamentalrc # checkme - is this used to find configs ?
-	echo "BRAND_BASE_DIR=file:///assets" >> assets/program/fundamentalrc
+	echo 'BRAND_BASE_DIR=file:///assets' >> assets/program/fundamentalrc
 	echo 'CONFIGURATION_LAYERS=xcsxcu:$${BRAND_BASE_DIR}/share/registry module:$${BRAND_BASE_DIR}/share/registry/modules res:$${BRAND_BASE_DIR}/share/registry' >> assets/program/fundamentalrc
 	echo 'URE_BIN_DIR=file:///assets/ure/bin/dir/not-here/can-we/exec-anyway' >> assets/program/fundamentalrc
-	echo 'URE_MORE_TYPES=file:///assets/ure/share/misc/types.rdb file:///assets/program/types/types.rdb' >> assets/program/fundamentalrc
-	echo 'URE_MORE_SERVICES= <$$BRAND_BASE_DIR/program/services>*' >> assets/program/fundamentalrc
-	echo 'BUNDLED_EXTENSIONS=$$BRAND_BASE_DIR/share/extensions' >> assets/program/fundamentalrc
-	echo 'BUNDLED_EXTENSIONS_USER=$${$$BRAND_BASE_DIR/program/bootstraprc:UserInstallation}/user/extensions/bundled' >> assets/program/fundamentalrc
-	echo 'TMP_EXTENSIONS=$${$$BRAND_BASE_DIR/program/bootstraprc:UserInstallation}/user/extensions/tmp' >> assets/program/fundamentalrc
-	echo 'SHARED_EXTENSIONS_USER=$${$$BRAND_BASE_DIR/program/bootstraprc:UserInstallation}/user/extensions/shared' >> assets/program/fundamentalrc
-	echo 'UNO_SHARED_PACKAGES=$$BRAND_BASE_DIR/share/uno_packages' >> assets/program/fundamentalrc
-	echo 'UNO_SHARED_PACKAGES_CACHE=$$UNO_SHARED_PACKAGES/cache' >> assets/program/fundamentalrc
-	echo 'UNO_USER_PACKAGES=$${$$BRAND_BASE_DIR/program/bootstraprc:UserInstallation}/user/uno_packages' >> assets/program/fundamentalrc
-	echo 'UNO_USER_PACKAGES_CACHE=$$UNO_USER_PACKAGES/cache' >> assets/program/fundamentalrc
-	echo 'PKG_BundledUnoFile=$$BUNDLED_EXTENSIONS_USER/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc' >> assets/program/fundamentalrc
-	echo 'PKG_SharedUnoFile=$$SHARED_EXTENSIONS_USER/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc' >> assets/program/fundamentalrc
-	echo 'PKG_UserUnoFile=$$UNO_USER_PACKAGES_CACHE/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc' >> assets/program/fundamentalrc
-
-# unorc ini ...
-	echo "[Bootstrap]" > assets/program/unorc
+	echo 'URE_MORE_TYPES=$(APP_DATA_PATH)/program/offapi.rdb $(APP_DATA_PATH)/program/oovbaapi.rdb' >> assets/program/fundamentalrc
+	echo 'URE_MORE_SERVICES=file:///assets/xml/services.rdb <$$BRAND_BASE_DIR/program/services>*' >> assets/program/fundamentalrc
+#
+# Set up unorc
+	echo '[Bootstrap]' > assets/program/unorc
 	echo "URE_INTERNAL_LIB_DIR=file://$(APP_DATA_PATH)/lib/" >> assets/program/unorc
-	echo 'UNO_TYPES=file:///assets/ure/share/misc/types.rdb file:///assets/program/types/types.rdb $${URE_MORE_TYPES}' >> assets/program/unorc
-	echo 'UNO_SERVICES=file:///assets/ure/share/misc/services.rdb $${URE_MORE_SERVICES}' >> assets/program/unorc
-# bootstraprc ini ...
-	echo "[Bootstrap]" > assets/program/bootstraprc
-	echo "InstallMode=<installmode>" >> assets/program/bootstraprc
-	echo "ProductKey=LibreOffice 3.5" >> assets/program/bootstraprc
-	echo "UserInstallation=file://$(APP_DATA_PATH)/files/.libreoffice" >> assets/program/bootstraprc
-
-# versionrc ini ...
-	echo "[Version]" > assets/program/versionrc
-	echo "AllLanguages=en-US" >> assets/program/versionrc
-	echo "BuildVersion=" >> assets/program/versionrc
-	echo "buildid=dead-beef" >> assets/program/versionrc
-	echo "ExtensionUpdateURL=http://updateexte.libreoffice.org/ExtensionUpdateService/check.Update" >> assets/program/versionrc
-	echo "ProductMajor=360" >> assets/program/versionrc
-	echo "ProductMinor=1" >> assets/program/versionrc
-	echo "ReferenceOOoMajorMinor=3.6" >> assets/program/versionrc
-	echo "UpdateID=LibreOffice_3_en-US" >> assets/program/versionrc
-	echo "UpdateURL=" >> assets/program/versionrc
-	echo "UpdateUserAgent=<PRODUCT> (${buildid}; ${_OS}; ${_ARCH}; BundledLanguages=${AllLanguages})" >> assets/program/versionrc
-	echo "Vendor=SelfCompiledGit" >> assets/program/versionrc
-
-copy-stuff: buildrcs
+	echo 'UNO_TYPES=$(APP_DATA_PATH)/program/ure/types.rdb $(APP_DATA_PATH)/program/types.rdb $${URE_MORE_TYPES}' >> assets/program/unorc
+	echo 'UNO_SERVICES=file:///assets/xml/ure/services.rdb $${URE_MORE_SERVICES}' >> assets/program/unorc
 #
-# Copy shared libraries we need to libs/$(ANDROID_APP_ABI) so that ant will
-# include them in the .apk.
+# Set up bootstraprc
+	echo '[Bootstrap]' > assets/program/bootstraprc
+	echo 'InstallMode=<installmode>' >> assets/program/bootstraprc
+	echo 'ProductKey=LibreOffice 3.6' >> assets/program/bootstraprc
+	echo "UserInstallation=file://$(APP_DATA_PATH)" >> assets/program/bootstraprc
 #
-# Copy them to obj/local/$(ANDROID_APP_ABI), too, where gdb will look for
-# them.
+# Set up versionrc
+	echo '[Version]' > assets/program/versionrc
+	echo 'AllLanguages=en-US' >> assets/program/versionrc
+	echo 'BuildVersion=' >> assets/program/versionrc
+	echo 'buildid=dead-beef' >> assets/program/versionrc
+	echo 'ProductMajor=360' >> assets/program/versionrc
+	echo 'ProductMinor=1' >> assets/program/versionrc
+	echo 'ReferenceOOoMajorMinor=3.6' >> assets/program/versionrc
 #
-	mkdir -p $(SODEST) $(OBJLOCAL)
-#
-# First the most important one, liblo-bootstrap.so
-	$(call COPY,$(OUTDIR)/lib/liblo-bootstrap.so)
-#
-# Libs and UNO components that we need.
-#
-	for F in $(strip \
-		  analysislo \
-		  basegfxlo \
-		  bootstrap.uno \
-		  comphelpgcc3 \
-		  cppcanvaslo \
-		  embobj \
-		  expwrap.uno \
-		  gcc3_uno \
-		  i18nisolang1gcc3 \
-		  icudatalo \
-		  icui18nlo \
-		  iculelo \
-		  icuuclo \
-		  jvmaccessgcc3 \
-		  jvmfwk \
-		  libotouchlo \
-		  introspection.uno \
-		  localedata_en \
-		  localedata_es \
-		  localedata_euro \
-		  localedata_others \
-		  mergedlo \
-		  msfilterlo \
-		  ooxlo \
-		  reflection.uno \
-		  reg \
-		  stocservices.uno \
-		  store \
-		  test \
-		  tllo \
-		  ucbhelper4gcc3 \
-		  uno_cppu \
-		  uno_cppuhelpergcc3 \
-		  uno_sal \
-		  uno_salhelpergcc3 \
-		  unordflo \
-		  unotest \
-		  unoxmllo \
-		  vbahelperlo \
-		  xml2 \
-		  xmlreader \
-		  xmlsecurity \
-		  xslt \
-		  \
-		  swlo \
-		  swuilo \
-		  swdlo \
-		  \
-		  sclo \
-		  scdlo \
-		  scnlo \
-		  scuilo \
-		  scfiltlo \
-		  \
-		  chartcontrollerlo \
-		  chartcorelo \
-		  ); do \
-	    $(call COPYSO,$(OUTDIR)/lib/lib$${F}.so); \
-	done
-
-#
-# Then the shared GNU C++ library
-	$(call COPYSO,$(ANDROID_NDK_HOME)/sources/cxx-stl/gnu-libstdc++/$(ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR)libs/$(ANDROID_APP_ABI)/libgnustl_shared.so)
-#
-# Then other "assets" that can be left in the .apk. Let the directory
-# structure under assets mimic the install set - except for the fact
-# that program/ is renamed to lib/ and we put the ure/lib .so's into
-# the assets/lib directory too.
-	mkdir -p assets/program/types assets/program/services
-	mkdir -p assets/program/resource
-	mkdir -p assets/ure/share/misc assets/share/registry/res
-	mkdir -p assets/share/config/soffice.cfg
-# uno types & services
-	cp $(OUTDIR)/bin/types.rdb assets/program/types/
-	cp $(OUTDIR)/bin/ure/types.rdb assets/ure/share/misc/
-	cp $(OUTDIR)/xml/services.rdb assets/program/services
-	cp $(OUTDIR)/xml/ure/services.rdb assets/ure/share/misc/
-# config
-	cp -R $(OUTDIR)/xml/*.xcd assets/share/registry/
-	mv assets/share/registry/fcfg_langpack_en-US.xcd assets/share/registry/res/
-	cp -R $(OUTDIR)/xml/uiconfig/* assets/share/config/soffice.cfg
-	cp -R $(OUTDIR)/bin/images_tango.zip assets/share/config/images.zip
 # .res files
-	cp $(OUTDIR)/bin/*en-US.res assets/program/resource/
+	mkdir -p assets/program/resource
+	cp $(OUTDIR)/bin/*en-US.res assets/program/resource
+#
+# Assets that are unpacked at run-time into the app's data directory. These
+# are files read by non-LO code, fontconfig and freetype for now, that doesn't
+# understand "/assets" paths.
+	mkdir -p assets/unpack/etc/fonts
+	cp fonts.conf assets/unpack/etc/fonts
+# $UserInstallation/user/fonts is added to the fontconfig path in
+# vcl/generic/fontmanager/helper.cxx: psp::getFontPath(). UserInstallation is
+# set to the app's data dir above.
+	mkdir -p assets/gz.unpack/user/fonts
+	for F in $(OUTDIR)/pck/Liberation*.ttf $(OUTDIR)/pck/Gen*.ttf $(OUTDIR)/pck/opens___.ttf; do \
+		gzip -9 <$$F >assets/gz.unpack/user/fonts/`basename $$F`; \
+	done
+#
+# Then gdbserver and gdb.setup so that we can debug with ndk-gdb.
+#
+	mkdir -p $(SODEST)
+	cp $(ANDROID_NDK_GDBSERVER) $(SODEST)
+	echo set solib-search-path ./obj/local/$(ANDROID_APP_ABI) >$(SODEST)/gdb.setup
+# ------------ Pieces not from DocumentLoader ------------
+# tango artwork / icons
+	mkdir -p assets/share/config
+	cp -R $(OUTDIR)/bin/images_tango.zip assets/share/config/images.zip
+# shell / splash images
+	mkdir -p assets/program
+	cp -r $(SRC_ROOT)/icon-themes/galaxy/brand/* assets/program
 # presets - becomes the users home directory, .stamp forces .zip dir creation
 	for D in $(strip autocorr autotext backup basic config gallery \
 	         psprint/driver psprint/fontmetric template \
@@ -182,26 +131,28 @@ copy-stuff: buildrcs
 		mkdir -p assets/presets/$$D ; \
 		echo "content" > assets/presets/$$D/stamp; \
 	done
-# shell / splash images
-	cp -r $(SRC_ROOT)/icon-themes/galaxy/brand/* assets/program
-# Then assets that are unpacked at run-time into the app's data directory.
-	mkdir -p assets/unpack/etc/fonts
-	cp fonts.conf assets/unpack/etc/fonts
-# A sample file for fun ...
-	mkdir -p assets/demo
-	if test -f /opt/libreoffice/tmp/writer.odt; then cp /opt/libreoffice/tmp/writer.odt assets/demo; fi
-#
-# Then gdbserver and gdb.setup so that we can debug with ndk-gdb.
-#
-	cp $(ANDROID_NDK_GDBSERVER) $(SODEST)
-	echo set solib-search-path ./obj/local/$(ANDROID_APP_ABI) >$(SODEST)/gdb.setup
 
-build-ant: android_version_setup copy-stuff link-so properties
+setup-jars:
+#
+# Copy jar files we need
+#
+	for F in $(strip \
+		   java_uno \
+		   juh \
+		   jurt \
+		   ridl \
+		   unoil \
+		   unoloader \
+		  ); do \
+	    $(call COPYJAR,$(OUTDIR)/bin/$${F}.jar); \
+	done
+
+build-ant: android_version_setup copy-stuff link-so properties setup-jars
 	unset JAVA_HOME && $(ANT) debug
 
 run:
 	echo "-env:INIFILENAME=file:///assets/program/sofficerc" > cmdline
 #	echo "file:///assets/demo/writer.odt" > cmdline
 	$(ANDROID_SDK_HOME)/platform-tools/adb push cmdline $(APP_DATA_PATH)/cmdline
-	$(ANDROID_SDK_HOME)/platform-tools/adb shell am start -n $(APP_PACKAGE)/$(BOOTSTRAP) -e lo-main-delay 20 -e lo-main-indirect-cmdline "$(APP_DATA_PATH)/cmdline"
+	$(ANDROID_SDK_HOME)/platform-tools/adb shell am start -n org.libreoffice.android.exampless/LODesktop -e lo-main-delay 20 -e lo-main-indirect-cmdline "$(APP_DATA_PATH)/cmdline"
 # add -e lo-strace yes # if you want that
