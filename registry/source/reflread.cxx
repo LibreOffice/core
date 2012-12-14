@@ -1179,7 +1179,7 @@ REG_DLLPUBLIC sal_Bool TYPEREG_CALLTYPE typereg_reader_create(
 static TypeReaderImpl TYPEREG_CALLTYPE createEntry(const sal_uInt8* buffer, sal_uInt32 len, sal_Bool copyBuffer)
 {
     void * handle;
-    typereg_reader_create(buffer, len, copyBuffer, TYPEREG_VERSION_0, &handle);
+    typereg_reader_create(buffer, len, copyBuffer, TYPEREG_VERSION_1, &handle);
     return handle;
 }
 
