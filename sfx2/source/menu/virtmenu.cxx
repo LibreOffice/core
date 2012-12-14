@@ -23,7 +23,7 @@
 #include <svtools/imagemgr.hxx>
 #include <svl/imageitm.hxx>
 #include <com/sun/star/container/XEnumeration.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <comphelper/processfactory.hxx>
 #include <toolkit/unohlp.hxx>
@@ -842,34 +842,29 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
         {
             // update window list
             ::std::vector< ::rtl::OUString > aNewWindowListVector;
-            Reference< XDesktop > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
-                                            DEFINE_CONST_OUSTRING( "com.sun.star.frame.Desktop" ) ), UNO_QUERY );
+            Reference< XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );;
 
             sal_uInt16  nActiveItemId = 0;
             sal_uInt16  nItemId = START_ITEMID_WINDOWLIST;
 
-            if ( xDesktop.is() )
+            Reference< XFrame > xCurrentFrame = xDesktop->getCurrentFrame();
+            Reference< XIndexAccess > xList ( xDesktop->getFrames(), UNO_QUERY );
+            sal_Int32 nFrameCount = xList->getCount();
+            for( sal_Int32 i=0; i<nFrameCount; ++i )
             {
-                Reference< XFramesSupplier > xTasksSupplier( xDesktop, UNO_QUERY );
-                Reference< XFrame > xCurrentFrame = xDesktop->getCurrentFrame();
-                Reference< XIndexAccess > xList ( xTasksSupplier->getFrames(), UNO_QUERY );
-                sal_Int32 nFrameCount = xList->getCount();
-                for( sal_Int32 i=0; i<nFrameCount; ++i )
+                Reference< XFrame > xFrame;
+                Any aVal = xList->getByIndex(i);
+                if (!(aVal>>=xFrame) || !xFrame.is() )
+                    continue;
+
+                if ( xFrame == xCurrentFrame )
+                    nActiveItemId = nItemId;
+
+                Window* pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
+                if ( pWin && pWin->IsVisible() )
                 {
-                    Reference< XFrame > xFrame;
-                    Any aVal = xList->getByIndex(i);
-                    if (!(aVal>>=xFrame) || !xFrame.is() )
-                        continue;
-
-                    if ( xFrame == xCurrentFrame )
-                        nActiveItemId = nItemId;
-
-                    Window* pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
-                    if ( pWin && pWin->IsVisible() )
-                    {
-                        aNewWindowListVector.push_back( pWin->GetText() );
-                        ++nItemId;
-                    }
+                    aNewWindowListVector.push_back( pWin->GetText() );
+                    ++nItemId;
                 }
             }
 
@@ -974,27 +969,23 @@ IMPL_LINK( SfxVirtualMenu, Select, Menu *, pMenu )
     if ( nSlotId >= START_ITEMID_WINDOWLIST && nSlotId <= END_ITEMID_WINDOWLIST )
     {
         // window list menu item selected
-        Reference< XFramesSupplier > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
-                                        DEFINE_CONST_OUSTRING( "com.sun.star.frame.Desktop" ) ), UNO_QUERY );
-        if ( xDesktop.is() )
+        Reference< XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
+        sal_uInt16 nTaskId = START_ITEMID_WINDOWLIST;
+        Reference< XIndexAccess > xList( xDesktop->getFrames(), UNO_QUERY );
+        sal_Int32 nFrameCount = xList->getCount();
+        for ( sal_Int32 i=0; i<nFrameCount; ++i )
         {
-            sal_uInt16 nTaskId = START_ITEMID_WINDOWLIST;
-            Reference< XIndexAccess > xList( xDesktop->getFrames(), UNO_QUERY );
-            sal_Int32 nFrameCount = xList->getCount();
-            for ( sal_Int32 i=0; i<nFrameCount; ++i )
+            Any aItem = xList->getByIndex(i);
+            Reference< XFrame > xFrame;
+            if (( aItem >>= xFrame ) && xFrame.is() && nTaskId == nSlotId )
             {
-                Any aItem = xList->getByIndex(i);
-                Reference< XFrame > xFrame;
-                if (( aItem >>= xFrame ) && xFrame.is() && nTaskId == nSlotId )
-                {
-                    Window* pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
-                    pWin->GrabFocus();
-                    pWin->ToTop( TOTOP_RESTOREWHENMIN );
-                    break;
-                }
-
-                nTaskId++;
+                Window* pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
+                pWin->GrabFocus();
+                pWin->ToTop( TOTOP_RESTOREWHENMIN );
+                break;
             }
+
+            nTaskId++;
         }
 
         return sal_True;

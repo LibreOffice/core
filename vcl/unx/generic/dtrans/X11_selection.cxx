@@ -59,6 +59,7 @@
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <com/sun/star/awt/MouseEvent.hpp>
 #include <com/sun/star/awt/MouseButton.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <rtl/tencinfo.h>
 #include <osl/process.h>
 
@@ -3746,13 +3747,9 @@ void SelectionManager::run( void* pThis )
     timeval aLast;
     gettimeofday( &aLast, 0 );
 
-    css::uno::Reference< XMultiServiceFactory > xFact( ::comphelper::getProcessServiceFactory() );
-    if( xFact.is() )
-    {
-        This->m_xDesktop.set(xFact->createInstance( ::rtl::OUString("com.sun.star.frame.Desktop") ), UNO_QUERY);
-        if (This->m_xDesktop.is())
-            This->m_xDesktop->addTerminateListener(This);
-    }
+    css::uno::Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+    This->m_xDesktop.set( Desktop::create(xContext) );
+    This->m_xDesktop->addTerminateListener(This);
 
     while( osl_scheduleThread(This->m_aThread) )
     {

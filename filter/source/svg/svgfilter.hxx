@@ -277,7 +277,7 @@ public:
 
 private:
 
-    Reference< XMultiServiceFactory >   mxMSF;
+    Reference< XComponentContext >      mxContext;
     SvXMLElementExport*                 mpSVGDoc;
     SVGExport*                          mpSVGExport;
     SVGFontExport*                      mpSVGFontExport;

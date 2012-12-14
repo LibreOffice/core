@@ -28,6 +28,7 @@
 #include <comphelper/string.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
@@ -293,10 +294,7 @@ uno::Reference< frame::XModel > SAL_CALL OReportEngineJFree::createDocumentAlive
         if ( !xFrameLoad.is() )
         {
             // if there is no frame given, find the right
-            xFrameLoad.set( m_xContext->getServiceManager()->createInstanceWithContext(
-                                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))
-                                                    ,m_xContext)
-                                                    ,uno::UNO_QUERY);
+            xFrameLoad.set( frame::Desktop::create(m_xContext), uno::UNO_QUERY);
             ::rtl::OUString sTarget(RTL_CONSTASCII_USTRINGPARAM("_blank"));
             sal_Int32 nFrameSearchFlag = frame::FrameSearchFlag::TASKS | frame::FrameSearchFlag::CREATE;
             uno::Reference< frame::XFrame> xFrame = uno::Reference< frame::XFrame>(xFrameLoad,uno::UNO_QUERY)->findFrame(sTarget,nFrameSearchFlag);

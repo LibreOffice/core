@@ -21,7 +21,7 @@
 #include <boost/unordered_map.hpp>
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <cppuhelper/implbase3.hxx>
 
 #include "vbawindow.hxx"
@@ -66,11 +66,7 @@ public:
 
     WindowComponentEnumImpl( const uno::Reference< uno::XComponentContext >& xContext ) throw ( uno::RuntimeException ) :  m_xContext( xContext )
     {
-        uno::Reference< lang::XMultiComponentFactory > xSMgr(
-            m_xContext->getServiceManager(), uno::UNO_QUERY_THROW );
-
-        uno::Reference< frame::XDesktop > xDesktop
-            (xSMgr->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")), m_xContext), uno::UNO_QUERY_THROW );
+        uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(m_xContext);
         uno::Reference< container::XEnumeration > mxComponents = xDesktop->getComponents()->createEnumeration();
         while( mxComponents->hasMoreElements() )
         {

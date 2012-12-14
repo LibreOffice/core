@@ -33,6 +33,7 @@
 #include <unotest/macros_test.hxx>
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
+#include <com/sun/star/frame/Desktop.hpp>
 
 #include <sfx2/app.hxx>
 #include <sfx2/docfilt.hxx>
@@ -99,9 +100,7 @@ void DBAccessTest::setUp()
 
     // This is a bit of a fudge, we do this to ensure that ScGlobals::ensure,
     // which is a private symbol to us, gets called
-    mxDesktop = Reference<com::sun::star::frame::XDesktop>( getMultiServiceFactory()->createInstance(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ))), UNO_QUERY );
-    CPPUNIT_ASSERT(mxDesktop.is());
+    mxDesktop = com::sun::star::frame::Desktop::create( comphelper::getComponentContext(getMultiServiceFactory()) );
 }
 
 void DBAccessTest::tearDown()

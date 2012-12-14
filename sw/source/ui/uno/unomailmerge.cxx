@@ -40,6 +40,7 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
@@ -153,8 +154,7 @@ static sal_Bool LoadFromURL_impl(
     aArgs[0].Value <<= bVal;
     try
     {
-        Reference < XComponentLoader > xDesktop( ::comphelper::getProcessServiceFactory()->
-                createInstance( C2U("com.sun.star.frame.Desktop") ), UNO_QUERY );
+        Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
         xTmpModel = Reference < XModel >( xDesktop->loadComponentFromURL(
                 rURL, C2U("_blank"), 0, aArgs ), UNO_QUERY );
     }

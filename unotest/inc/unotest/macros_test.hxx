@@ -33,7 +33,7 @@
 #include "unotest/detail/unotestdllapi.hxx"
 
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/XDesktop2.hpp>
 
 struct TestMacroInfo
 {
@@ -49,7 +49,7 @@ public:
     com::sun::star::uno::Reference< com::sun::star::lang::XComponent > loadFromDesktop(const rtl::OUString& rURL);
 
 protected:
-    com::sun::star::uno::Reference< com::sun::star::frame::XDesktop> mxDesktop;
+    com::sun::star::uno::Reference< com::sun::star::frame::XDesktop2> mxDesktop;
 };
 
 }

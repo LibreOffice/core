@@ -32,6 +32,7 @@
 #include <svl/stritem.hxx>
 #include "svtools/treelistentry.hxx"
 #include <com/sun/star/embed/StorageFactory.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/ui/GlobalAcceleratorConfiguration.hpp>
 
 #include <sal/macros.h>
@@ -77,7 +78,6 @@ using namespace com::sun::star;
 
 //-----------------------------------------------
 static ::rtl::OUString SERVICE_UICONFIGMGR              (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.UIConfigurationManager"              ));
-static ::rtl::OUString SERVICE_DESKTOP                  (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"                               ));
 
 static ::rtl::OUString MODULEPROP_SHORTNAME             (RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryShortName"                                  ));
 static ::rtl::OUString MODULEPROP_UINAME                (RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryUIName"                                     ));
@@ -839,7 +839,7 @@ void SfxAcceleratorConfigPage::InitAccCfg()
         m_xFrame = GetFrame();
         if ( !m_xFrame.is() )
         {
-            css::uno::Reference< css::frame::XFramesSupplier > xDesktop(m_xSMGR->createInstance(SERVICE_DESKTOP), css::uno::UNO_QUERY_THROW);
+            css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create( comphelper::getComponentContext(m_xSMGR) );
             m_xFrame = xDesktop->getActiveFrame();
         }
 

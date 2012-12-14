@@ -46,7 +46,7 @@ namespace com { namespace sun { namespace star { namespace beans {
 }}}}
 
 namespace com { namespace sun { namespace star { namespace frame {
-    class XDesktop;
+    class XDesktop2;
 }}}}
 
 class LocaleDataWrapper;
@@ -59,7 +59,6 @@ class LocaleDataWrapper;
 #define SN_THESAURUS                "com.sun.star.linguistic2.Thesaurus"
 #define SN_LINGU_PROPERTIES         "com.sun.star.linguistic2.LinguProperties"
 #define SN_DICTIONARY_LIST          "com.sun.star.linguistic2.DictionaryList"
-#define SN_DESKTOP                  "com.sun.star.frame.Desktop"
 
 
 namespace linguistic
@@ -168,7 +167,7 @@ class AppExitListener :
     >
 {
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::frame::XDesktop >     xDesktop;
+        ::com::sun::star::frame::XDesktop2 >     xDesktop;
 
 public:
     AppExitListener();

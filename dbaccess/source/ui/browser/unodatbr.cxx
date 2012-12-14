@@ -56,6 +56,7 @@
 #include <com/sun/star/form/XGridColumnFactory.hpp>
 #include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/form/XReset.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -3515,41 +3516,38 @@ void SbaTableQueryBrowser::implAdministrate( SvTreeListEntry* _pApplyTo )
     {
         // get the desktop object
         sal_Int32 nFrameSearchFlag = FrameSearchFlag::ALL | FrameSearchFlag::GLOBAL ;
-        Reference< XComponentLoader > xFrameLoader(getORB()->createInstance(SERVICE_FRAME_DESKTOP),UNO_QUERY);
+        Reference< XDesktop2 > xFrameLoader = Desktop::create( comphelper::getComponentContext(getORB()) );
 
-        if ( xFrameLoader.is() )
+        // the initial selection
+        SvTreeListEntry* pTopLevelSelected = _pApplyTo;
+        while (pTopLevelSelected && m_pTreeView->getListBox().GetParent(pTopLevelSelected))
+            pTopLevelSelected = m_pTreeView->getListBox().GetParent(pTopLevelSelected);
+        ::rtl::OUString sInitialSelection;
+        if (pTopLevelSelected)
+            sInitialSelection = getDataSourceAcessor( pTopLevelSelected );
+
+        Reference< XDataSource > xDataSource( getDataSourceByName( sInitialSelection, getView(), comphelper::getComponentContext(getORB()), NULL ) );
+        Reference< XModel > xDocumentModel( getDataSourceOrModel( xDataSource ), UNO_QUERY );
+
+        if ( xDocumentModel.is() )
         {
-            // the initial selection
-            SvTreeListEntry* pTopLevelSelected = _pApplyTo;
-            while (pTopLevelSelected && m_pTreeView->getListBox().GetParent(pTopLevelSelected))
-                pTopLevelSelected = m_pTreeView->getListBox().GetParent(pTopLevelSelected);
-            ::rtl::OUString sInitialSelection;
-            if (pTopLevelSelected)
-                sInitialSelection = getDataSourceAcessor( pTopLevelSelected );
+            Reference< XInteractionHandler2 > xInteractionHandler(
+                InteractionHandler::createWithParent(comphelper::getComponentContext(getORB()), 0) );
 
-            Reference< XDataSource > xDataSource( getDataSourceByName( sInitialSelection, getView(), comphelper::getComponentContext(getORB()), NULL ) );
-            Reference< XModel > xDocumentModel( getDataSourceOrModel( xDataSource ), UNO_QUERY );
+            ::comphelper::NamedValueCollection aLoadArgs;
+            aLoadArgs.put( "Model", xDocumentModel );
+            aLoadArgs.put( "InteractionHandler", xInteractionHandler );
+            aLoadArgs.put( "MacroExecutionMode", MacroExecMode::USE_CONFIG );
 
-            if ( xDocumentModel.is() )
-            {
-                Reference< XInteractionHandler2 > xInteractionHandler(
-                    InteractionHandler::createWithParent(comphelper::getComponentContext(getORB()), 0) );
+            Sequence< PropertyValue > aLoadArgPV;
+            aLoadArgs >>= aLoadArgPV;
 
-                ::comphelper::NamedValueCollection aLoadArgs;
-                aLoadArgs.put( "Model", xDocumentModel );
-                aLoadArgs.put( "InteractionHandler", xInteractionHandler );
-                aLoadArgs.put( "MacroExecutionMode", MacroExecMode::USE_CONFIG );
-
-                Sequence< PropertyValue > aLoadArgPV;
-                aLoadArgs >>= aLoadArgPV;
-
-                xFrameLoader->loadComponentFromURL(
-                    xDocumentModel->getURL(),
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_default")),
-                    nFrameSearchFlag,
-                    aLoadArgPV
-                );
-            }
+            xFrameLoader->loadComponentFromURL(
+                xDocumentModel->getURL(),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_default")),
+                nFrameSearchFlag,
+                aLoadArgPV
+            );
         }
     }
     catch( const Exception& )

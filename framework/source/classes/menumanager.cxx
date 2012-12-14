@@ -35,7 +35,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/util/XStringWidth.hpp>
 
@@ -622,39 +622,35 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
     }
 }
 
-void MenuManager::UpdateSpecialWindowMenu( Menu* pMenu,const Reference< XMultiServiceFactory >& xServiceFactory,framework::IMutex& _rMutex )
+void MenuManager::UpdateSpecialWindowMenu( Menu* pMenu,const Reference< XComponentContext >& xContext,framework::IMutex& _rMutex )
 {
     // update window list
     ::std::vector< ::rtl::OUString > aNewWindowListVector;
 
-    Reference< XDesktop > xDesktop( xServiceFactory->createInstance( SERVICENAME_DESKTOP ), UNO_QUERY );
+    Reference< XDesktop2 > xDesktop = Desktop::create( xContext );
 
     sal_uInt16  nActiveItemId = 0;
     sal_uInt16  nItemId = START_ITEMID_WINDOWLIST;
 
-    if ( xDesktop.is() )
+    Reference< XFrame > xCurrentFrame = xDesktop->getCurrentFrame();
+    Reference< XIndexAccess > xList( xDesktop->getFrames(), UNO_QUERY );
+    sal_Int32 nFrameCount = xList->getCount();
+    aNewWindowListVector.reserve(nFrameCount);
+    for (sal_Int32 i=0; i<nFrameCount; ++i )
     {
-        Reference< XFramesSupplier > xTasksSupplier( xDesktop, UNO_QUERY );
-        Reference< XFrame > xCurrentFrame = xDesktop->getCurrentFrame();
-        Reference< XIndexAccess > xList( xTasksSupplier->getFrames(), UNO_QUERY );
-        sal_Int32 nCount = xList->getCount();
-        aNewWindowListVector.reserve(nCount);
-        for (sal_Int32 i=0; i<nCount; ++i )
+        Reference< XFrame > xFrame;
+        xList->getByIndex(i) >>= xFrame;
+
+        if (xFrame.is())
         {
-            Reference< XFrame > xFrame;
-            xList->getByIndex(i) >>= xFrame;
+            if ( xFrame == xCurrentFrame )
+                nActiveItemId = nItemId;
 
-            if (xFrame.is())
+            Window* pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
+            if ( pWin && pWin->IsVisible() )
             {
-                if ( xFrame == xCurrentFrame )
-                    nActiveItemId = nItemId;
-
-                Window* pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
-                if ( pWin && pWin->IsVisible() )
-                {
-                    aNewWindowListVector.push_back( pWin->GetText() );
-                    ++nItemId;
-                }
+                aNewWindowListVector.push_back( pWin->GetText() );
+                ++nItemId;
             }
         }
     }
@@ -767,7 +763,7 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
         if ( m_aMenuItemCommand == aSpecialFileMenu || m_aMenuItemCommand == aSlotSpecialFileMenu || aCommand == aSpecialFileCommand )
             UpdateSpecialFileMenu( pMenu );
         else if ( m_aMenuItemCommand == aSpecialWindowMenu || m_aMenuItemCommand == aSlotSpecialWindowMenu || aCommand == aSpecialWindowCommand )
-            UpdateSpecialWindowMenu( pMenu, getServiceFactory(), m_aLock );
+            UpdateSpecialWindowMenu( pMenu, comphelper::getComponentContext(getServiceFactory()), m_aLock );
 
         // Check if some modes have changed so we have to update our menu images
         if ( bShowMenuImages != m_bShowMenuImages )
@@ -866,28 +862,25 @@ IMPL_LINK( MenuManager, Select, Menu *, pMenu )
             {
                 // window list menu item selected
 
-                Reference< XFramesSupplier > xDesktop( getServiceFactory()->createInstance( SERVICENAME_DESKTOP ), UNO_QUERY );
+                Reference< XDesktop2 > xDesktop = Desktop::create( comphelper::getComponentContext(getServiceFactory()) );
 
-                if ( xDesktop.is() )
+                sal_uInt16 nTaskId = START_ITEMID_WINDOWLIST;
+                Reference< XIndexAccess > xList( xDesktop->getFrames(), UNO_QUERY );
+                sal_Int32 nCount = xList->getCount();
+                for ( sal_Int32 i=0; i<nCount; ++i )
                 {
-                    sal_uInt16 nTaskId = START_ITEMID_WINDOWLIST;
-                    Reference< XIndexAccess > xList( xDesktop->getFrames(), UNO_QUERY );
-                    sal_Int32 nCount = xList->getCount();
-                    for ( sal_Int32 i=0; i<nCount; ++i )
+                    Reference< XFrame > xFrame;
+                    xList->getByIndex(i) >>= xFrame;
+
+                    if ( xFrame.is() && nTaskId == nCurItemId )
                     {
-                        Reference< XFrame > xFrame;
-                        xList->getByIndex(i) >>= xFrame;
-
-                        if ( xFrame.is() && nTaskId == nCurItemId )
-                        {
-                            Window* pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
-                            pWin->GrabFocus();
-                            pWin->ToTop( TOTOP_RESTOREWHENMIN );
-                            break;
-                        }
-
-                        nTaskId++;
+                        Window* pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
+                        pWin->GrabFocus();
+                        pWin->ToTop( TOTOP_RESTOREWHENMIN );
+                        break;
                     }
+
+                    nTaskId++;
                 }
             }
             else

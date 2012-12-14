@@ -79,10 +79,11 @@ namespace framework{
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XINTERFACE_15                    (   Desktop                                                  ,
+DEFINE_XINTERFACE_16                    (   Desktop                                                  ,
                                             OWeakObject                                              ,
                                             DIRECT_INTERFACE( css::lang::XTypeProvider              ),
                                             DIRECT_INTERFACE( css::lang::XServiceInfo               ),
+                                            DIRECT_INTERFACE( css::frame::XDesktop2                 ),
                                             DIRECT_INTERFACE( css::frame::XDesktop                  ),
                                             DIRECT_INTERFACE( css::frame::XComponentLoader          ),
                                             DIRECT_INTERFACE( css::frame::XTasksSupplier            ),
@@ -98,9 +99,10 @@ DEFINE_XINTERFACE_15                    (   Desktop                             
                                             DIRECT_INTERFACE( css::frame::XUntitledNumbers          )
                                         )
 
-DEFINE_XTYPEPROVIDER_15                 (   Desktop                                                 ,
+DEFINE_XTYPEPROVIDER_16                 (   Desktop                                                 ,
                                             css::lang::XTypeProvider                                ,
                                             css::lang::XServiceInfo                                 ,
+                                            css::frame::XDesktop2                                   ,
                                             css::frame::XDesktop                                    ,
                                             css::frame::XComponentLoader                            ,
                                             css::frame::XTasksSupplier                              ,
@@ -118,7 +120,7 @@ DEFINE_XTYPEPROVIDER_15                 (   Desktop                             
 
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   Desktop                                                 ,
                                             ::cppu::OWeakObject                                     ,
-                                            SERVICENAME_DESKTOP                                     ,
+                                            DECLARE_ASCII("com.sun.star.frame.Desktop"             ),
                                             IMPLEMENTATIONNAME_DESKTOP
                                         )
 
@@ -198,7 +200,7 @@ Desktop::Desktop( const css::uno::Reference< css::lang::XMultiServiceFactory >& 
         //  Init baseclasses first
         //  Attention: Don't change order of initialization!
         //      ThreadHelpBase is a struct with a lock as member. We can't use a lock as direct member!
-        //      We must garant right initialization and a valid value of this to initialize other baseclasses!
+        //      We must guarantee right initialization and a valid value of this to initialize other baseclasses!
         :   ThreadHelpBase          ( &Application::GetSolarMutex()                 )
         ,   TransactionBase         (                                               )
         ,   ::cppu::OBroadcastHelperVar< ::cppu::OMultiTypeInterfaceContainerHelper, ::cppu::OMultiTypeInterfaceContainerHelper::keyType >           ( m_aLock.getShareableOslMutex()         )

@@ -23,7 +23,6 @@
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/compbase3.hxx>
 #include <osl/module.h>
 
@@ -49,16 +48,13 @@ namespace connectivity
         class MacabImplModule
         {
         private:
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                                        m_xORB;
-
             /// Did we already attempt to load the module and to retrieve the symbols?
             bool    m_bAttemptedLoadModule;
             oslModule                   m_hConnectorModule;
             ConnectionFactoryFunction   m_pConnectionFactoryFunc;
 
         public:
-            MacabImplModule( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory );
+            MacabImplModule();
 
             /** determines whether there is a mac OS present in the environment
             */
@@ -124,8 +120,8 @@ namespace connectivity
             ::osl::Mutex                m_aMutex;           // mutex is need to control member access
             OWeakRefArray               m_xConnections;     // vector containing a list of all the
                                                             //  MacabConnection objects for this Driver
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                                        m_xMSFactory;       // the multi-service factory
+            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+                                        m_xContext;       // the multi-service factory
             MacabImplModule               m_aImplModule;
 
         public:
@@ -136,7 +132,7 @@ namespace connectivity
             static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(  ) throw (::com::sun::star::uno::RuntimeException);
 
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
-            getComponentContext() const { return comphelper::getComponentContext(m_xMSFactory); }
+            getComponentContext() const { return m_xContext; }
 
             /** returns the driver's implementation name (being pure ASCII) for reference in various places
             */
@@ -147,7 +143,7 @@ namespace connectivity
             static ::rtl::OUString  impl_getConfigurationSettingsPath();
 
         protected:
-            MacabDriver(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
+            MacabDriver(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);
 
             // OComponentHelper
             virtual void SAL_CALL disposing(void);

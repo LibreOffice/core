@@ -45,8 +45,8 @@ using namespace connectivity::kab;
 // = KabImplModule
 // =======================================================================
 // --------------------------------------------------------------------------------
-KabImplModule::KabImplModule( const Reference< XMultiServiceFactory >& _rxFactory )
-    :m_xORB(_rxFactory)
+KabImplModule::KabImplModule( const Reference< XComponentContext >& _rxContext )
+    :m_xContext(_rxContext)
     ,m_bAttemptedLoadModule(false)
     ,m_bAttemptedInitialize(false)
     ,m_hConnectorModule(NULL)
@@ -55,7 +55,7 @@ KabImplModule::KabImplModule( const Reference< XMultiServiceFactory >& _rxFactor
     ,m_pApplicationShutdownFunc(NULL)
     ,m_pKDEVersionCheckFunc(NULL)
 {
-    if ( !m_xORB.is() )
+    if ( !m_xContext.is() )
         throw NullPointerException();
 }
 
@@ -181,8 +181,7 @@ bool KabImplModule::impl_doAllowNewKDEVersion()
     try
     {
         Reference< XMultiServiceFactory > xConfigProvider(
-            com::sun::star::configuration::theDefaultProvider::get(
-                comphelper::getComponentContext( m_xORB ) ) );
+            com::sun::star::configuration::theDefaultProvider::get( m_xContext ) );
         Sequence< Any > aCreationArgs(1);
         aCreationArgs[0] <<= PropertyValue(
                                 ::rtl::OUString(  "nodepath"  ),
@@ -303,20 +302,18 @@ void KabImplModule::shutdown()
 // = KabDriver
 // =======================================================================
 KabDriver::KabDriver(
-    const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory)
+    const Reference< ::com::sun::star::uno::XComponentContext >& _rxContext)
     : KDriver_BASE(m_aMutex),
-      m_xMSFactory(_rxFactory),
-      m_aImplModule(_rxFactory)
+      m_xContext(_rxContext),
+      m_aImplModule(_rxContext)
 {
-    if ( !m_xMSFactory.is() )
+    if ( !m_xContext.is() )
         throw NullPointerException();
 
     osl_atomic_increment( &m_refCount );
     try
     {
-        Reference< XDesktop > xDesktop(
-            m_xMSFactory->createInstance( ::rtl::OUString(  "com.sun.star.frame.Desktop"  ) ),
-            UNO_QUERY_THROW );
+        Reference< XDesktop2 > xDesktop = css::frame::Desktop::create( m_xContext);
         xDesktop->addTerminateListener( this );
     }
     catch( const Exception& )
@@ -462,7 +459,7 @@ const sal_Char* KabDriver::impl_getAsciiImplementationName()
 // --------------------------------------------------------------------------------
 Reference< XInterface >  SAL_CALL KabDriver::Create( const Reference< XMultiServiceFactory >& _rxFactory ) throw( Exception )
 {
-    return *(new KabDriver(_rxFactory));
+    return *(new KabDriver( comphelper::getComponentContext(_rxFactory)));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1107,7 +1107,7 @@ sal_Bool OQueryController::Construct(Window* pParent)
 {
     // TODO: we have to check if we should create the text- or the design- view
 
-    setView( * new OQueryContainerWindow( pParent, *this, getORB() ) );
+    setView( * new OQueryContainerWindow( pParent, *this, comphelper::getComponentContext(getORB()) ) );
 
     return OJoinController::Construct(pParent);
 }

@@ -34,7 +34,7 @@
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
@@ -97,11 +97,11 @@ namespace dbaccess
         class DatabaseDocumentLoader : public DatabaseDocumentLoader_Base
         {
         private:
-            Reference< XDesktop >               m_xDesktop;
+            Reference< XDesktop2 >               m_xDesktop;
             ::std::list< const ODatabaseModelImpl* >  m_aDatabaseDocuments;
 
         public:
-            DatabaseDocumentLoader( const comphelper::ComponentContext& _aContext);
+            DatabaseDocumentLoader( const Reference<XComponentContext> & rxContext);
 
             inline void append(const ODatabaseModelImpl& _rModelImpl )
             {
@@ -117,12 +117,12 @@ namespace dbaccess
             virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
         };
 
-        DatabaseDocumentLoader::DatabaseDocumentLoader( const comphelper::ComponentContext& _aContext )
+        DatabaseDocumentLoader::DatabaseDocumentLoader( const Reference<XComponentContext> & rxContext )
         {
             acquire();
             try
             {
-                m_xDesktop.set( _aContext.createComponent( (rtl::OUString)SERVICE_FRAME_DESKTOP ), UNO_QUERY_THROW );
+                m_xDesktop.set( Desktop::create(rxContext) );
                 m_xDesktop->addTerminateListener( this );
             }
             catch( const Exception& )
@@ -173,7 +173,7 @@ ODatabaseContext::ODatabaseContext( const Reference< XComponentContext >& _rxCon
     ,m_aContext( _rxContext )
     ,m_aContainerListeners(m_aMutex)
 {
-    m_pDatabaseDocumentLoader = new DatabaseDocumentLoader( m_aContext );
+    m_pDatabaseDocumentLoader = new DatabaseDocumentLoader( _rxContext );
 
 #ifndef DISABLE_SCRIPTING
     ::basic::BasicManagerRepository::registerCreationListener( *this );

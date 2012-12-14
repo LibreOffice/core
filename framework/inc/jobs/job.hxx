@@ -32,7 +32,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/XDesktop2.hpp>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
 #include <com/sun/star/task/XJobListener.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
@@ -128,7 +128,7 @@ class Job : public  css::lang::XTypeProvider
             We are registered at this instance to listen for office shutdown events.
             It's neccessary supress it (if possible) or to react in the right way.
          */
-        css::uno::Reference< css::frame::XDesktop > m_xDesktop;
+        css::uno::Reference< css::frame::XDesktop2 > m_xDesktop;
 
         /**
             A job can return a dispatch result event after finishing its work.

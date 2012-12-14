@@ -47,27 +47,29 @@
 #include <sal/log.hxx>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <tools/fsys.hxx>
 #include <tools/urlobj.hxx>
 
 #include <cppuhelper/implbase1.hxx>
 
 using namespace com::sun::star::io;
+using namespace com::sun::star::frame;
 
 namespace ext_plug {
 
 class FileSink : public ::cppu::WeakAggImplHelper1< ::com::sun::star::io::XOutputStream >
 {
 private:
-    Reference< ::com::sun::star::lang::XMultiServiceFactory >   m_xSMgr;
+    Reference< ::com::sun::star::uno::XComponentContext >   m_xContext;
     FILE*                   fp;
-    Reference< ::com::sun::star::plugin::XPlugin >              m_xPlugin;
+    Reference< ::com::sun::star::plugin::XPlugin >          m_xPlugin;
     ::rtl::OUString                 m_aMIMEType;
     ::rtl::OUString                 m_aTarget;
     ::rtl::OUString                 m_aFileName;
 
 public:
-    FileSink( const Reference< ::com::sun::star::lang::XMultiServiceFactory >   &,
+    FileSink( const Reference< ::com::sun::star::uno::XComponentContext > &,
               const Reference< ::com::sun::star::plugin::XPlugin > & plugin,
               const ::rtl::OUString& mimetype,
               const ::rtl::OUString& target,
@@ -85,11 +87,11 @@ using namespace ext_plug;
 
 class XPluginContext_Impl : public ::cppu::WeakAggImplHelper1< ::com::sun::star::plugin::XPluginContext >
 {
-    Reference< ::com::sun::star::lang::XMultiServiceFactory >   m_xSMgr;
+    Reference< ::com::sun::star::uno::XComponentContext >   m_xContext;
     rtl_TextEncoding                                        m_aEncoding;
 public:
 
-    XPluginContext_Impl( const Reference< ::com::sun::star::lang::XMultiServiceFactory >  & );
+    XPluginContext_Impl( const Reference< ::com::sun::star::uno::XComponentContext >  & );
     virtual ~XPluginContext_Impl();
 
 
@@ -105,11 +107,11 @@ public:
 
 Reference< ::com::sun::star::plugin::XPluginContext >  XPluginManager_Impl::createPluginContext() throw()
 {
-    return new XPluginContext_Impl( m_xSMgr );
+    return new XPluginContext_Impl( m_xContext );
 }
 
-XPluginContext_Impl::XPluginContext_Impl( const Reference< ::com::sun::star::lang::XMultiServiceFactory >  & rSMgr )
-    : m_xSMgr( rSMgr ),
+XPluginContext_Impl::XPluginContext_Impl( const Reference< ::com::sun::star::uno::XComponentContext >  & rxContext )
+    : m_xContext( rxContext ),
       m_aEncoding( osl_getThreadTextEncoding() )
 {
 }
@@ -127,9 +129,7 @@ XPluginContext_Impl::~XPluginContext_Impl()
 
 void XPluginContext_Impl::getURL(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const ::rtl::OUString& url, const ::rtl::OUString& target) throw( ::com::sun::star::plugin::PluginException, RuntimeException )
 {
-    Reference< XInterface >  xInst = m_xSMgr->createInstance( ::rtl::OUString("com.sun.star.frame.Desktop") );
-    if( ! xInst.is() )
-        return;
+    Reference< XDesktop2 > xDesktop = Desktop::create(m_xContext);
 
     if(  target.isEmpty() )
     {
@@ -146,10 +146,9 @@ void XPluginContext_Impl::getURL(const Reference< ::com::sun::star::plugin::XPlu
         return;
     }
 
-    Reference< ::com::sun::star::frame::XComponentLoader >  xLoader( xInst, UNO_QUERY );
     XPlugin_Impl* pPlugin = XPluginManager_Impl::getPluginImplementation( plugin );
 
-    if( xLoader.is() && pPlugin )
+    if( pPlugin )
     {
         try
         {
@@ -159,7 +158,7 @@ void XPluginContext_Impl::getURL(const Reference< ::com::sun::star::plugin::XPlu
 
             Sequence< ::com::sun::star::beans::PropertyValue > aArgs( &aValue, 1 );
             Reference< ::com::sun::star::lang::XComponent >  xComp =
-                xLoader->loadComponentFromURL(
+                xDesktop->loadComponentFromURL(
                                               url,
                                               target,
                                               ::com::sun::star::frame::FrameSearchFlag::PARENT          |
@@ -220,13 +219,10 @@ void XPluginContext_Impl::postURL(const Reference< ::com::sun::star::plugin::XPl
         }
     }
 
-    Reference< XInterface > xInst = m_xSMgr->createInstance( ::rtl::OUString("com.sun.star.frame.Desktop") );
-    if( ! xInst.is() )
-        return ;
+    Reference< XDesktop2 > xDesktop = Desktop::create(m_xContext);
 
-    Reference< ::com::sun::star::frame::XComponentLoader >  xLoader( xInst, UNO_QUERY );
     XPlugin_Impl* pPlugin = XPluginManager_Impl::getPluginImplementation( plugin );
-    if( xLoader.is() && pPlugin )
+    if( pPlugin )
     {
         try
         {
@@ -238,7 +234,7 @@ void XPluginContext_Impl::postURL(const Reference< ::com::sun::star::plugin::XPl
             aValues[1].Value <<= ::rtl::OStringToOUString( (char*)( file ? aBuf : buf ).getConstArray(), m_aEncoding );
             Sequence< ::com::sun::star::beans::PropertyValue > aArgs( aValues, 2 );
             Reference< ::com::sun::star::lang::XComponent >  xComp =
-                xLoader->loadComponentFromURL(
+                xDesktop->loadComponentFromURL(
                                               url,
                                               target,
                                               ::com::sun::star::frame::FrameSearchFlag::PARENT          |
@@ -268,16 +264,16 @@ void XPluginContext_Impl::postURLNotify(const Reference< ::com::sun::star::plugi
 void XPluginContext_Impl::newStream( const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const ::rtl::OUString& mimetype, const ::rtl::OUString& target, const Reference< ::com::sun::star::io::XActiveDataSource > & source )
     throw( ::com::sun::star::plugin::PluginException, RuntimeException )
 {
-    FileSink*  pNewSink = new FileSink( m_xSMgr, plugin, mimetype, target, source );
+    FileSink*  pNewSink = new FileSink( m_xContext, plugin, mimetype, target, source );
     pNewSink->acquire();
 }
 
 
 
-FileSink::FileSink( const Reference< ::com::sun::star::lang::XMultiServiceFactory >  & rSMgr, const Reference< ::com::sun::star::plugin::XPlugin > & plugin,
+FileSink::FileSink( const Reference< ::com::sun::star::uno::XComponentContext >  & rxContext, const Reference< ::com::sun::star::plugin::XPlugin > & plugin,
                     const ::rtl::OUString& mimetype,
                     const ::rtl::OUString& target, const Reference< ::com::sun::star::io::XActiveDataSource > & source ) :
-        m_xSMgr( rSMgr ),
+        m_xContext( rxContext ),
         m_xPlugin( plugin ),
         m_aMIMEType( mimetype ),
         m_aTarget( target )
@@ -305,11 +301,10 @@ void FileSink::closeOutput() throw()
     if( fp )
         fclose( fp );
 
-    Reference< XInterface >  xInst = m_xSMgr->createInstance( ::rtl::OUString("com.sun.star.frame.Desktop") );
-    Reference< ::com::sun::star::frame::XComponentLoader >  xLoader( xInst, UNO_QUERY );
+    Reference< XDesktop2 > xDesktop = Desktop::create(m_xContext);
     XPlugin_Impl* pPlugin = XPluginManager_Impl::getPluginImplementation( m_xPlugin );
 
-    if( xLoader.is() && pPlugin )
+    if( pPlugin )
     {
         try
         {
@@ -319,7 +314,7 @@ void FileSink::closeOutput() throw()
 
             Sequence< ::com::sun::star::beans::PropertyValue > aArgs( &aValue, 1 );
             Reference< ::com::sun::star::lang::XComponent >  xComp =
-                xLoader->loadComponentFromURL(
+                xDesktop->loadComponentFromURL(
                                               m_aFileName,
                                               m_aTarget,
                                               ::com::sun::star::frame::FrameSearchFlag::PARENT          |

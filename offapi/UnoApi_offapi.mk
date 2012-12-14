@@ -123,6 +123,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/form/runti
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/frame,\
 	AutoRecovery \
+	Desktop \
 	DispatchHelper \
 	DispatchRecorderSupplier \
 	DocumentTemplates \
@@ -829,7 +830,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/frame,\
 	ContentHandler \
 	ContentHandlerFactory \
 	Controller \
-	Desktop \
 	DesktopTask \
 	DesktopTasks \
 	DispatchProvider \
@@ -2480,6 +2480,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/frame,\
 	XController2 \
 	XControllerBorder \
 	XDesktop \
+	XDesktop2 \
 	XDesktopTask \
 	XDispatch \
 	XDispatchHelper \

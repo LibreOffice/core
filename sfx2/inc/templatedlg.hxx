@@ -15,6 +15,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/tabctrl.hxx>
+#include <com/sun/star/frame/XDesktop2.hpp>
 
 class Edit;
 class PopupMenu;
@@ -143,7 +144,7 @@ private:
 
     bool mbIsSaveMode;  ///< Flag that indicates if we are in save mode or not.
     com::sun::star::uno::Reference< com::sun::star::frame::XModel > m_xModel;
-    com::sun::star::uno::Reference< com::sun::star::frame::XComponentLoader > mxDesktop;
+    com::sun::star::uno::Reference< com::sun::star::frame::XDesktop2 > mxDesktop;
 
     bool mbIsSynced; ///< Tells whether maRepositories is synchronized with the user config
     std::vector<TemplateRepository*> maRepositories; ///< Stores the remote repositories for templates

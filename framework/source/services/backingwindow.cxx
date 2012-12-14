@@ -51,6 +51,7 @@
 #include "rtl/ustrbuf.hxx"
 #include "osl/file.h"
 
+#include "com/sun/star/frame/Desktop.hpp"
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/container/XNameAccess.hpp"
 #include "com/sun/star/configuration/theDefaultProvider.hpp"
@@ -213,9 +214,8 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     maToolbox.ShowItem( nItemId_Info );
 
     // get dispatch provider
-    mxDesktop = Reference<XDesktop>( comphelper::getProcessServiceFactory()->createInstance(SERVICENAME_DESKTOP ),UNO_QUERY );
-    if( mxDesktop.is() )
-        mxDesktopDispatchProvider = Reference< XDispatchProvider >( mxDesktop, UNO_QUERY );
+    Reference<XDesktop2> xDesktop = Desktop::create( comphelper::getProcessComponentContext() );
+    mxDesktopDispatchProvider = Reference< XDispatchProvider >( xDesktop, UNO_QUERY );
 
     maWriterButton.SetHelpId( ".HelpId:StartCenter:WriterButton" );
     maCalcButton.SetHelpId( ".HelpId:StartCenter:CalcButton" );
@@ -702,7 +702,7 @@ long BackingWindow::Notify( NotifyEvent& rNEvt )
         if( ! mpAccExec )
         {
             mpAccExec = svt::AcceleratorExecute::createAcceleratorHelper();
-            mpAccExec->init( comphelper::getProcessServiceFactory(), mxFrame);
+            mpAccExec->init( comphelper::getProcessComponentContext(), mxFrame);
         }
 
         const KeyEvent* pEvt = rNEvt.GetKeyEvent();

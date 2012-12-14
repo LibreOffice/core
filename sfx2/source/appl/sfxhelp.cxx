@@ -22,6 +22,7 @@
 #include <set>
 #include <algorithm>
 #include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -414,12 +415,10 @@ OUString getDefaultModule_Impl()
 OUString getCurrentModuleIdentifier_Impl()
 {
     OUString sIdentifier;
-    Reference < XFrame > xCurrentFrame;
-    Reference < XModuleManager2 > xModuleManager( ModuleManager::create(::comphelper::getProcessComponentContext()) );
-    Reference < XDesktop > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
-        DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
-    if ( xDesktop.is() )
-        xCurrentFrame = xDesktop->getCurrentFrame();
+    Reference < XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    Reference < XModuleManager2 > xModuleManager = ModuleManager::create(xContext);
+    Reference < XDesktop2 > xDesktop = Desktop::create(xContext);
+    Reference < XFrame > xCurrentFrame = xDesktop->getCurrentFrame();
 
     if ( xCurrentFrame.is() )
     {
@@ -542,8 +541,7 @@ OUString SfxHelp::CreateHelpURL_Impl( const OUString& aCommandURL, const OUStrin
 SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame >& rHelpTask   ,
                                     Reference< XFrame >& rHelpContent)
 {
-    Reference < XFrame > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
-        DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
+    Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
 
     // otherwhise - create new help task
     Reference< XFrame > xHelpTask = xDesktop->findFrame(
@@ -746,8 +744,7 @@ sal_Bool SfxHelp::Start_Impl(const OUString& rURL, const Window* pWindow, const 
         }
     }
 
-    Reference < XFrame > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
-        DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
+    Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
 
     // check if help window is still open
     // If not, create a new one and return access directly to the internal sub frame showing the help content
@@ -813,11 +810,8 @@ void SfxHelp::OpenHelpAgent( const OString& sHelpId )
                 Reference< XURLTransformer > xTrans( URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
                 xTrans->parseStrict(aURL);
 
-                Reference < XFrame > xCurrentFrame;
-                Reference < XDesktop > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
-                    DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
-                if ( xDesktop.is() )
-                    xCurrentFrame = xDesktop->getCurrentFrame();
+                Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
+                Reference < XFrame > xCurrentFrame = xDesktop->getCurrentFrame();
 
                 Reference< XDispatchProvider > xDispProv( xCurrentFrame, UNO_QUERY );
                 Reference< XDispatch > xHelpDispatch;

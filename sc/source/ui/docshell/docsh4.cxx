@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 
 using namespace ::com::sun::star;
@@ -2254,11 +2255,7 @@ uno::Reference< frame::XModel > ScDocShell::LoadSharedDocument()
     try
     {
         SC_MOD()->SetInSharedDocLoading( true );
-        uno::Reference< lang::XMultiServiceFactory > xFactory(
-            ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-        uno::Reference< frame::XComponentLoader > xLoader(
-            xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ) ) ),
-            uno::UNO_QUERY_THROW );
+        uno::Reference< frame::XDesktop2 > xLoader = frame::Desktop::create( ::comphelper::getProcessComponentContext() );
         uno::Sequence < beans::PropertyValue > aArgs( 1 );
         aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Hidden" ));
         aArgs[0].Value <<= sal_True;

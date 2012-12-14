@@ -24,6 +24,7 @@
 #include "resource/calc_res.hrc"
 #include "resource/sharedresources.hxx"
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <tools/urlobj.hxx>
@@ -32,6 +33,7 @@
 #include <unotools/pathoptions.hxx>
 #include <connectivity/dbexception.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <comphelper/processfactory.hxx>
 #include <rtl/logfile.hxx>
 
 using namespace connectivity::calc;
@@ -126,13 +128,7 @@ Reference< XSpreadsheetDocument> OCalcConnection::acquireDoc()
         aArgs[nPos].Value <<= m_sPassword;
     }
 
-    Reference< XComponentLoader > xDesktop( getDriver()->getFactory()->createInstance(
-                    ::rtl::OUString("com.sun.star.frame.Desktop")), UNO_QUERY );
-    if (!xDesktop.is())
-    {
-        OSL_FAIL("no desktop");
-        throw SQLException();
-    }
+    Reference< XDesktop2 > xDesktop = Desktop::create( comphelper::getComponentContext(getDriver()->getFactory()) );
     Reference< XComponent > xComponent;
     Any aLoaderException;
     try

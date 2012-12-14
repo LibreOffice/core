@@ -38,6 +38,7 @@
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/XTransactionBroadcaster.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
@@ -2061,10 +2062,8 @@ Reference< XTitle > ODatabaseDocument::impl_getTitleHelper_throw()
 {
     if ( ! m_xTitleHelper.is ())
     {
-        Reference< XUntitledNumbers > xDesktop(
-            m_pImpl->m_aContext.createComponent( "com.sun.star.frame.Desktop" ),
-            UNO_QUERY_THROW );
-        uno::Reference< frame::XModel > xThis   (getThis(), uno::UNO_QUERY_THROW);
+        Reference< XUntitledNumbers >  xDesktop(Desktop::create(m_pImpl->m_aContext.getUNOContext()), uno::UNO_QUERY_THROW);
+        Reference< frame::XModel >     xThis   (getThis(), uno::UNO_QUERY_THROW);
 
         ::framework::TitleHelper* pHelper = new ::framework::TitleHelper(m_pImpl->m_aContext.getUNOContext());
         m_xTitleHelper.set(static_cast< ::cppu::OWeakObject* >(pHelper), uno::UNO_QUERY_THROW);

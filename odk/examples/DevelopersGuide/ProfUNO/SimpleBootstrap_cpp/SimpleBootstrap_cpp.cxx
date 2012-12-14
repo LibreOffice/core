@@ -38,6 +38,7 @@
 #include <sal/main.h>
 #include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/bridge/XUnoUrlResolver.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 
@@ -71,10 +72,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
         // get an instance of the remote office desktop UNO service
         // and query the XComponentLoader interface
-        Reference < XComponentLoader > xComponentLoader(
-            xServiceManager->createInstanceWithContext(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ) ),
-            xContext ), UNO_QUERY_THROW );
+        Reference < XDesktop2 > xComponentLoader = Desktop::create(xContext);
 
         // open a spreadsheet document
         Reference< XComponent > xComponent( xComponentLoader->loadComponentFromURL(

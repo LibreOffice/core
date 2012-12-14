@@ -24,7 +24,7 @@
 
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <comphelper/processfactory.hxx>
@@ -721,16 +721,10 @@ void SdTpOptionsMisc::UpdateCompatibilityControls (void)
     try
     {
         // Get a component enumeration from the desktop and search it for documents.
-        Reference<lang::XMultiServiceFactory> xFactory (
-            ::comphelper::getProcessServiceFactory ());
+        Reference<uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext());
         do
         {
-            if ( ! xFactory.is())
-                break;
-
-            Reference<frame::XDesktop> xDesktop (xFactory->createInstance ("com.sun.star.frame.Desktop"), UNO_QUERY);
-            if ( ! xDesktop.is())
-                break;
+            Reference<frame::XDesktop2> xDesktop = frame::Desktop::create(xContext);
 
             Reference<container::XEnumerationAccess> xComponents (
                 xDesktop->getComponents(), UNO_QUERY);

@@ -87,6 +87,7 @@
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/TextAlign.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/status/FontHeight.hpp>
 #include <com/sun/star/report/XFormattedField.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
@@ -1692,7 +1693,7 @@ void OReportController::impl_initialize( )
 
             listen(true);
             setEditable( !m_aReportModel->IsReadOnly() );
-            m_xFormatter.set(util::NumberFormatter::create(comphelper::getComponentContext(getORB())), UNO_QUERY_THROW);
+            m_xFormatter.set(util::NumberFormatter::create(m_xContext), UNO_QUERY_THROW);
             m_xFormatter->attachNumberFormatsSupplier(Reference< XNumberFormatsSupplier>(m_xReportDefinition,uno::UNO_QUERY));
 
             ::comphelper::MediaDescriptor aDescriptor( m_xReportDefinition->getArgs() );
@@ -1801,7 +1802,7 @@ void OReportController::doOpenHelpAgent()
 // -----------------------------------------------------------------------------
 sal_Bool OReportController::Construct(Window* pParent)
 {
-    ODesignView* pMyOwnView = new ODesignView( pParent, getORB(), *this );
+    ODesignView* pMyOwnView = new ODesignView( pParent, m_xContext, *this );
     StartListening( *pMyOwnView );
     setView( *pMyOwnView );
 
@@ -2844,11 +2845,11 @@ Reference<XFrame> OReportController::getXFrame()
 {
     if ( !m_xFrameLoader.is() )
     {
-        m_xFrameLoader.set(getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))),uno::UNO_QUERY_THROW);
+        m_xFrameLoader.set( frame::Desktop::create(m_xContext) );
     }
     const sal_Int32 nFrameSearchFlag = frame::FrameSearchFlag::TASKS | frame::FrameSearchFlag::CREATE;
     const ::rtl::OUString sTarget(RTL_CONSTASCII_USTRINGPARAM("_blank"));
-    Reference<XFrame> xFrame = Reference<XFrame>(m_xFrameLoader,uno::UNO_QUERY_THROW)->findFrame(sTarget,nFrameSearchFlag);
+    Reference<XFrame> xFrame = m_xFrameLoader->findFrame(sTarget,nFrameSearchFlag);
     return xFrame;
 }
 

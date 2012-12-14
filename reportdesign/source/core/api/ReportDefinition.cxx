@@ -52,6 +52,7 @@
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/StorageFactory.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
@@ -501,14 +502,12 @@ namespace
     {
         try
         {
-            uno::Reference<frame::XComponentLoader> xFrameLoad( m_xContext->getServiceManager()->createInstanceWithContext(
-                                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))
-                                                        ,m_xContext)
-                                                        ,uno::UNO_QUERY);
+            uno::Reference<frame::XDesktop2> xDesktop = frame::Desktop::create(m_xContext);
+            uno::Reference<frame::XComponentLoader> xFrameLoad(xDesktop,uno::UNO_QUERY);
             ::rtl::OUString sTarget(RTL_CONSTASCII_USTRINGPARAM("_blank"));
             sal_Int32 nFrameSearchFlag = frame::FrameSearchFlag::TASKS | frame::FrameSearchFlag::CREATE;
-            uno::Reference< frame::XFrame> xFrame = uno::Reference< frame::XFrame>(xFrameLoad,uno::UNO_QUERY)->findFrame(sTarget,nFrameSearchFlag);
-            xFrameLoad.set( xFrame,uno::UNO_QUERY);
+            uno::Reference< frame::XFrame> xFrame = xDesktop->findFrame(sTarget,nFrameSearchFlag);
+            xFrameLoad.set(xFrame,uno::UNO_QUERY);
 
             if ( xFrameLoad.is() )
             {
@@ -2673,14 +2672,13 @@ uno::Reference< frame::XTitle > OReportDefinition::impl_getTitleHelper_throw()
 
     if ( ! m_pImpl->m_xTitleHelper.is ())
     {
-        uno::Reference< frame::XUntitledNumbers >    xDesktop(m_aProps->m_xContext->getServiceManager()->createInstanceWithContext(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop")) ,m_aProps->m_xContext),uno::UNO_QUERY_THROW);
-        uno::Reference< frame::XModel >              xThis   (static_cast< frame::XModel* >(this), uno::UNO_QUERY_THROW);
+        uno::Reference< frame::XDesktop2 >    xDesktop = frame::Desktop::create(m_aProps->m_xContext);
+        uno::Reference< frame::XModel >       xThis(static_cast< frame::XModel* >(this), uno::UNO_QUERY_THROW);
 
         ::framework::TitleHelper* pHelper = new ::framework::TitleHelper( m_aProps->m_xContext );
         m_pImpl->m_xTitleHelper = uno::Reference< frame::XTitle >(static_cast< ::cppu::OWeakObject* >(pHelper), uno::UNO_QUERY_THROW);
         pHelper->setOwner                   (xThis   );
-        pHelper->connectWithUntitledNumbers (xDesktop);
+        pHelper->connectWithUntitledNumbers (uno::Reference<frame::XUntitledNumbers>(xDesktop, uno::UNO_QUERY_THROW));
     }
 
     return m_pImpl->m_xTitleHelper;

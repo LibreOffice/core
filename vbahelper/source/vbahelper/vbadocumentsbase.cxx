@@ -27,6 +27,7 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
@@ -80,11 +81,7 @@ public:
     }
     DocumentsEnumImpl( const uno::Reference< uno::XComponentContext >& xContext ) throw ( uno::RuntimeException ) :  m_xContext( xContext )
     {
-        uno::Reference< lang::XMultiComponentFactory > xSMgr(
-            m_xContext->getServiceManager(), uno::UNO_QUERY_THROW );
-
-        uno::Reference< frame::XDesktop > xDesktop
-            (xSMgr->createInstanceWithContext( "com.sun.star.frame.Desktop" , m_xContext), uno::UNO_QUERY_THROW );
+        uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create( m_xContext );
         uno::Reference< container::XEnumeration > mxComponents = xDesktop->getComponents()->createEnumeration();
         while( mxComponents->hasMoreElements() )
         {
@@ -243,11 +240,7 @@ uno::Any VbaDocumentsBase::createDocument() throw (uno::RuntimeException)
     sal_Bool bScreenUpdating = !xApplication.is() || xApplication->getScreenUpdating();
     sal_Bool bInteractive = !xApplication.is() || xApplication->getInteractive();
 
-     uno::Reference< lang::XMultiComponentFactory > xSMgr(
-        mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
-
-     uno::Reference< frame::XComponentLoader > xLoader(
-        xSMgr->createInstanceWithContext("com.sun.star.frame.Desktop" , mxContext), uno::UNO_QUERY_THROW );
+    uno::Reference< frame::XDesktop2 > xLoader = frame::Desktop::create(mxContext);
     OUString sURL;
     if( meDocType == WORD_DOCUMENT )
         sURL = "private:factory/swriter";
@@ -302,11 +295,7 @@ uno::Any VbaDocumentsBase::openDocument( const OUString& rFileName, const uno::A
         aURL = rFileName;
     else
         osl::FileBase::getFileURLFromSystemPath( rFileName, aURL );
-    uno::Reference< lang::XMultiComponentFactory > xSMgr(
-        mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
-    uno::Reference< frame::XDesktop > xDesktop(xSMgr->createInstanceWithContext( "com.sun.star.frame.Desktop" , mxContext), uno::UNO_QUERY_THROW );
-    uno::Reference< frame::XComponentLoader > xLoader(
-        xSMgr->createInstanceWithContext( "com.sun.star.frame.Desktop" , mxContext), uno::UNO_QUERY_THROW );
+    uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create( mxContext );
 
     uno::Sequence< beans::PropertyValue > sProps( rProps );
     sProps.realloc( sProps.getLength() + 1 );
@@ -324,7 +313,7 @@ uno::Any VbaDocumentsBase::openDocument( const OUString& rFileName, const uno::A
         }
     }
 
-    uno::Reference< lang::XComponent > xComponent = xLoader->loadComponentFromURL( aURL,
+    uno::Reference< lang::XComponent > xComponent = xDesktop->loadComponentFromURL( aURL,
         "_default" ,
         frame::FrameSearchFlag::CREATE,
         sProps);

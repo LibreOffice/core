@@ -24,6 +24,7 @@
 #include "com/sun/star/beans/PropertyState.hpp"
 #include "com/sun/star/beans/PropertyValue.hpp"
 #include "com/sun/star/document/MacroExecMode.hpp"
+#include "com/sun/star/frame/Desktop.hpp"
 #include "com/sun/star/frame/DispatchResultEvent.hpp"
 #include "com/sun/star/frame/DispatchResultState.hpp"
 #include "com/sun/star/frame/XComponentLoader.hpp"
@@ -155,21 +156,16 @@ void Test::test() {
         RTL_CONSTASCII_USTRINGPARAM(
             "vnd.sun.star.script:Standard.Global.StartTestWithDefaultOptions?"
             "language=Basic&location=document"));
+
+    css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create(connection_.getComponentContext());
+
     css::uno::Reference< css::frame::XNotifyingDispatch > disp(
         css::uno::Reference< css::frame::XDispatchProvider >(
             css::uno::Reference< css::frame::XController >(
                 css::uno::Reference< css::frame::XModel >(
-                    css::uno::Reference< css::frame::XComponentLoader >(
-                        (connection_.getComponentContext()->
-                         getServiceManager()->createInstanceWithContext(
-                             rtl::OUString(
-                                 RTL_CONSTASCII_USTRINGPARAM(
-                                     "com.sun.star.frame.Desktop")),
-                             connection_.getComponentContext())),
-                        css::uno::UNO_QUERY_THROW)->loadComponentFromURL(
+                    xDesktop->loadComponentFromURL(
                             test::toAbsoluteFileUrl(doc),
-                            rtl::OUString(
-                                RTL_CONSTASCII_USTRINGPARAM("_default")),
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_default")),
                             0, args),
                     css::uno::UNO_QUERY_THROW)->getCurrentController(),
                 css::uno::UNO_SET_THROW)->getFrame(),

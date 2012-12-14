@@ -28,6 +28,7 @@
 
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #include <com/sun/star/lang/SystemDependent.hpp>
@@ -199,17 +200,10 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         {}
 
         // get frames supplier
-        Reference< frame::XFramesSupplier > m_xFramesSupplier(
-            mxRemoteMSF->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
-            uno::UNO_QUERY );
-        if ( !m_xFramesSupplier.is() )
-        {
-            debug_fprintf(NSP_LOG_APPEND, "can not get desktop\n");
-            return sal_False;
-        }
+        Reference< frame::XDesktop2 > xFramesSupplier = frame::Desktop::create( xContext );
 
         // get frames
-        m_xFrames = m_xFramesSupplier->getFrames();
+        m_xFrames = xFramesSupplier->getFrames();
         if ( !m_xFrames.is() )
         {
             debug_fprintf(NSP_LOG_APPEND, "can not get frames from FramesSupplier\n");

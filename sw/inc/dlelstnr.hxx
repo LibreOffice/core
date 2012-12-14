@@ -24,7 +24,7 @@
 #include <com/sun/star/linguistic2/XDictionaryListEventListener.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceEventListener.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/XDesktop2.hpp>
 #include <cppuhelper/implbase2.hxx> // helper for implementations
 
 
@@ -54,7 +54,7 @@ class SwLinguServiceEventListener :
     >
 {
     com::sun::star::uno::Reference<
-        com::sun::star::frame::XDesktop >                       xDesktop;
+        com::sun::star::frame::XDesktop2 >                      xDesktop;
     com::sun::star::uno::Reference<
         com::sun::star::linguistic2::XLinguServiceManager2 >    xLngSvcMgr;
     com::sun::star::uno::Reference<

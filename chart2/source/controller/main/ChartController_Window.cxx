@@ -1323,13 +1323,12 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
         return bReturn;
 
     // handle accelerators
-    if( ! m_apAccelExecute.get() && m_xFrame.is() && m_xCC.is() && m_xCC->getServiceManager().is() )
+    if( ! m_apAccelExecute.get() && m_xFrame.is() && m_xCC.is() )
     {
         m_apAccelExecute.reset( ::svt::AcceleratorExecute::createAcceleratorHelper());
         OSL_ASSERT( m_apAccelExecute.get());
         if( m_apAccelExecute.get() )
-            m_apAccelExecute->init(
-                uno::Reference< lang::XMultiServiceFactory >( m_xCC->getServiceManager(), uno::UNO_QUERY ), m_xFrame );
+            m_apAccelExecute->init( m_xCC, m_xFrame );
     }
 
     KeyCode aKeyCode( rKEvt.GetKeyCode());

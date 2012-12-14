@@ -31,6 +31,7 @@
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/frame/XDesktop2.hpp>
 #include <com/sun/star/frame/XModuleManager2.hpp>
 
 
@@ -53,7 +54,7 @@ class HelpOnStartup : private ThreadHelpBase
 
         //.......................................
         /** @short  reference to an uno service manager. */
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
         //.......................................
         /** @short  such module manager is used to classify new opened documents. */
@@ -61,7 +62,7 @@ class HelpOnStartup : private ThreadHelpBase
 
         //.......................................
         /** @short  is needed to locate a might open help frame. */
-        css::uno::Reference< css::frame::XFrame > m_xDesktop;
+        css::uno::Reference< css::frame::XDesktop2 > m_xDesktop;
 
         //.......................................
         /** @short  provides read access to the underlying configuration. */
@@ -86,11 +87,11 @@ class HelpOnStartup : private ThreadHelpBase
         //---------------------------------------
         /** @short  create new instance of this class.
 
-            @param  xSMGR
+            @param  xContext
                     reference to the uno service manager, which created this instance.
                     Can be used later to create own needed uno resources on demand.
          */
-        HelpOnStartup(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
+        HelpOnStartup(const css::uno::Reference< css::uno::XComponentContext >& xContext);
 
         //---------------------------------------
         /** @short  does nothing real ...

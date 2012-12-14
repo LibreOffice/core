@@ -53,8 +53,8 @@ namespace dbaui
 // = OJoinDesignView
 // =============================================================================
 // -----------------------------------------------------------------------------
-OJoinDesignView::OJoinDesignView(Window* _pParent, OJoinController& _rController,const Reference< XMultiServiceFactory >& _rFactory)
-    :ODataView( _pParent, _rController, _rFactory )
+OJoinDesignView::OJoinDesignView(Window* _pParent, OJoinController& _rController,const Reference< XComponentContext >& _rxContext)
+    :ODataView( _pParent, _rController, _rxContext )
     ,m_pTableView(NULL)
     ,m_rController( _rController )
 {

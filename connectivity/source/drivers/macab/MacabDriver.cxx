@@ -27,6 +27,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
 #include "resource/macab_res.hrc"
+#include <comphelper/processfactory.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -40,14 +41,11 @@ using namespace connectivity::macab;
 // = MacabImplModule
 // =======================================================================
 // --------------------------------------------------------------------------------
-MacabImplModule::MacabImplModule( const Reference< XMultiServiceFactory >& _rxFactory )
-    :m_xORB(_rxFactory)
-    ,m_bAttemptedLoadModule(false)
+MacabImplModule::MacabImplModule( const Reference< XMultiServiceFactory >& _rxContext )
+    :m_bAttemptedLoadModule(false)
     ,m_hConnectorModule(NULL)
     ,m_pConnectionFactoryFunc(NULL)
 {
-    if ( !m_xORB.is() )
-        throw NullPointerException();
 }
 
 // --------------------------------------------------------------------------------
@@ -172,20 +170,18 @@ void MacabImplModule::shutdown()
 // = MacabDriver
 // =======================================================================
 MacabDriver::MacabDriver(
-    const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory)
+    const Reference< ::com::sun::star::uno::XComponentContext >& _rxContext)
     : MacabDriver_BASE(m_aMutex),
-      m_xMSFactory(_rxFactory),
+      m_xContext(_rxContext),
       m_aImplModule(_rxFactory)
 {
-    if ( !m_xMSFactory.is() )
+    if ( !m_xContext.is() )
         throw NullPointerException();
 
     osl_atomic_increment( &m_refCount );
     try
     {
-        Reference< XDesktop > xDesktop(
-            m_xMSFactory->createInstance( ::rtl::OUString(  "com.sun.star.frame.Desktop"  ) ),
-            UNO_QUERY_THROW );
+        Reference< XDesktop2 > xDesktop = frame::Desktop::create( m_xContext );
         xDesktop->addTerminateListener( this );
     }
     catch( const Exception& )
@@ -331,7 +327,7 @@ const sal_Char* MacabDriver::impl_getAsciiImplementationName()
 // --------------------------------------------------------------------------------
 Reference< XInterface >  SAL_CALL MacabDriver::Create( const Reference< XMultiServiceFactory >& _rxFactory ) throw( Exception )
 {
-    return *(new MacabDriver(_rxFactory));
+    return *(new MacabDriver(comphelper::getComponentContext(_rxFactory)));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

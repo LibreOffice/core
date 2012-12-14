@@ -25,7 +25,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/component.hxx>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <cppuhelper/implbase4.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -36,6 +36,7 @@
 #include <tools/resmgr.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/instance.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <svl/solar.hrc>
 
@@ -125,12 +126,9 @@ XMLFilterDialogComponent::XMLFilterDialogComponent( const com::sun::star::uno::R
     mxMSF( rxMSF ),
     mpDialog( NULL )
 {
-    Reference< XDesktop > xDesktop( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" )) ), UNO_QUERY );
-    if( xDesktop.is() )
-    {
-        Reference< XTerminateListener > xListener( this );
-        xDesktop->addTerminateListener( xListener );
-    }
+    Reference< XDesktop2 > xDesktop = Desktop::create( comphelper::getComponentContext(mxMSF) );
+    Reference< XTerminateListener > xListener( this );
+    xDesktop->addTerminateListener( xListener );
 }
 
 //-------------------------------------------------------------------------

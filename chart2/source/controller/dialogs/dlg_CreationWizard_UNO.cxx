@@ -36,7 +36,7 @@
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 
 //.............................................................................
 namespace chart
@@ -52,14 +52,9 @@ CreationWizardUnoDlg::CreationWizardUnoDlg( const uno::Reference< uno::XComponen
                     , m_pDialog( 0 )
                     , m_bUnlockControllersOnExecute(false)
 {
-    uno::Reference< frame::XDesktop > xDesktop(
-        m_xCC->getServiceManager()->createInstanceWithContext(
-            "com.sun.star.frame.Desktop" , m_xCC ), uno::UNO_QUERY );
-    if( xDesktop.is() )
-    {
-        uno::Reference< frame::XTerminateListener > xListener( this );
-        xDesktop->addTerminateListener( xListener );
-    }
+    uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(m_xCC);
+    uno::Reference< frame::XTerminateListener > xListener( this );
+    xDesktop->addTerminateListener( xListener );
 }
 CreationWizardUnoDlg::~CreationWizardUnoDlg()
 {
@@ -290,14 +285,9 @@ void SAL_CALL CreationWizardUnoDlg::disposing()
 
     try
     {
-        uno::Reference< frame::XDesktop > xDesktop(
-            m_xCC->getServiceManager()->createInstanceWithContext(
-                "com.sun.star.frame.Desktop" , m_xCC ), uno::UNO_QUERY );
-        if( xDesktop.is() )
-        {
-            uno::Reference< frame::XTerminateListener > xListener( this );
-            xDesktop->removeTerminateListener( xListener );
-        }
+        uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(m_xCC);
+        uno::Reference< frame::XTerminateListener > xListener( this );
+        xDesktop->removeTerminateListener( xListener );
     }
     catch( const uno::Exception & ex )
     {

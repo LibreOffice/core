@@ -20,7 +20,7 @@
 #include <unotools/desktopterminationobserver.hxx>
 
 #include <com/sun/star/frame/XTerminateListener.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/processfactory.hxx>
 
@@ -102,11 +102,8 @@ namespace utl
 
             try
             {
-                Reference< XDesktop > xDesktop;
-                xDesktop = xDesktop.query( ::comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ) ) ) );
-                OSL_ENSURE( xDesktop.is(), "OObserverImpl::ensureObservation: could not ensureObservation the desktop!" );
-                if ( xDesktop.is() )
-                    xDesktop->addTerminateListener( new OObserverImpl );
+                Reference< XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
+                xDesktop->addTerminateListener( new OObserverImpl );
             }
             catch( const Exception& )
             {

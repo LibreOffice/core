@@ -26,6 +26,7 @@
  */
 
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
@@ -33,6 +34,7 @@
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
@@ -65,8 +67,7 @@ public:
     {
         test::BootstrapFixture::setUp();
 
-        mxDesktop.set(getMultiServiceFactory()->createInstance("com.sun.star.frame.Desktop"), uno::UNO_QUERY);
-        CPPUNIT_ASSERT(mxDesktop.is());
+        mxDesktop.set( com::sun::star::frame::Desktop::create(comphelper::getComponentContext(getMultiServiceFactory())) );
     }
 
     virtual void tearDown()

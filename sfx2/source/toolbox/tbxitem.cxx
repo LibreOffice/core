@@ -33,6 +33,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -1623,33 +1624,27 @@ long Select_Impl( void* /*pHdl*/, void* pVoid )
     if( !aURL.Len() )
         return 0;
 
-    Reference < ::com::sun::star::frame::XFramesSupplier > xDesktop =
-            Reference < ::com::sun::star::frame::XFramesSupplier >( ::comphelper::getProcessServiceFactory()->createInstance(
-                                                                        DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
-    Reference < ::com::sun::star::frame::XFrame > xFrame( xDesktop, UNO_QUERY );
+    Reference < ::com::sun::star::frame::XDesktop2 > xDesktop =
+            ::com::sun::star::frame::Desktop::create( ::comphelper::getProcessComponentContext() );
 
     URL aTargetURL;
     aTargetURL.Complete = aURL;
     Reference < XURLTransformer > xTrans( URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
     xTrans->parseStrict( aTargetURL );
 
-    Reference < XDispatchProvider > xProv( xFrame, UNO_QUERY );
     Reference < XDispatch > xDisp;
-    if ( xProv.is() )
+    if ( aTargetURL.Protocol.compareToAscii("slot:") == COMPARE_EQUAL )
+        xDisp = xDesktop->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
+    else
     {
-        if ( aTargetURL.Protocol.compareToAscii("slot:") == COMPARE_EQUAL )
-            xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
-        else
-        {
-            ::rtl::OUString aTargetFrame( ::rtl::OUString("_blank") );
-            ::framework::MenuConfiguration::Attributes* pMenuAttributes =
-                (::framework::MenuConfiguration::Attributes*)pMenu->GetUserValue( pMenu->GetCurItemId() );
+        ::rtl::OUString aTargetFrame( ::rtl::OUString("_blank") );
+        ::framework::MenuConfiguration::Attributes* pMenuAttributes =
+            (::framework::MenuConfiguration::Attributes*)pMenu->GetUserValue( pMenu->GetCurItemId() );
 
-            if ( pMenuAttributes )
-                aTargetFrame = pMenuAttributes->aTargetFrame;
+        if ( pMenuAttributes )
+            aTargetFrame = pMenuAttributes->aTargetFrame;
 
-            xDisp = xProv->queryDispatch( aTargetURL, aTargetFrame , 0 );
-        }
+        xDisp = xDesktop->queryDispatch( aTargetURL, aTargetFrame , 0 );
     }
 
     if ( xDisp.is() )

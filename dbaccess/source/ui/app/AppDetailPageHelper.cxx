@@ -604,7 +604,7 @@ void OAppDetailPageHelper::createTablesPage(const Reference< XConnection>& _xCon
     if ( !m_pLists[E_TABLE] )
     {
         OTableTreeListBox* pTreeView = new OTableTreeListBox(this
-                                                            ,getBorderWin().getView()->getORB()
+                                                            ,uno::Reference<lang::XMultiServiceFactory>(getBorderWin().getView()->getORB()->getServiceManager(), uno::UNO_QUERY_THROW)
                                                             ,WB_HASLINES | WB_SORT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT | WB_TABSTOP
                                                             ,sal_False);
         pTreeView->SetHelpId(HID_APP_TABLE_TREE);
@@ -776,7 +776,9 @@ void OAppDetailPageHelper::fillNames( const Reference< XNameAccess >& _xContaine
 // -----------------------------------------------------------------------------
 DBTreeListBox* OAppDetailPageHelper::createSimpleTree( const rtl::OString& _sHelpId, const Image& _rImage)
 {
-    DBTreeListBox* pTreeView = new DBTreeListBox(this,getBorderWin().getView()->getORB(),WB_HASLINES | WB_SORT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT | WB_TABSTOP);
+    DBTreeListBox* pTreeView = new DBTreeListBox(this,
+                       uno::Reference<lang::XMultiServiceFactory>(getBorderWin().getView()->getORB()->getServiceManager(), uno::UNO_QUERY_THROW),
+                       WB_HASLINES | WB_SORT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT | WB_TABSTOP);
     pTreeView->SetHelpId( _sHelpId );
     return createTree( pTreeView, _rImage );
 }
@@ -1142,7 +1144,7 @@ void OAppDetailPageHelper::showPreview( const ::rtl::OUString& _sDataSourceName,
         {
             try
             {
-                m_xFrame = Reference < XFrame > ( getBorderWin().getView()->getORB()->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Frame")) ), UNO_QUERY );
+                m_xFrame = Reference < XFrame > ( getBorderWin().getView()->getORB()->getServiceManager()->createInstanceWithContext( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Frame")), getBorderWin().getView()->getORB() ), UNO_QUERY );
                 m_xFrame->initialize( m_xWindow );
 
                 // no layout manager (and thus no toolbars) in the preview
@@ -1166,7 +1168,8 @@ void OAppDetailPageHelper::showPreview( const ::rtl::OUString& _sDataSourceName,
         Reference< XDatabaseDocumentUI > xApplication( getBorderWin().getView()->getAppController().getXController(), UNO_QUERY );
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr< DatabaseObjectView > pDispatcher( new ResultSetBrowser(
-            getBorderWin().getView()->getORB(), xApplication, NULL, _bTable
+            uno::Reference<lang::XMultiServiceFactory>(getBorderWin().getView()->getORB()->getServiceManager(), uno::UNO_QUERY_THROW),
+            xApplication, NULL, _bTable
         ) );
         SAL_WNODEPRECATED_DECLARATIONS_POP
         pDispatcher->setTargetFrame( m_xFrame );

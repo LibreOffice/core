@@ -39,7 +39,7 @@
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 
 
 namespace framework{
@@ -69,7 +69,7 @@ static ::rtl::OUString ENVTYPE_DOCUMENTEVENT   ("DOCUMENTEVENT");
 
 //-----------------------------------------------
 
-DEFINE_XSERVICEINFO_MULTISERVICE(HelpOnStartup                   ,
+DEFINE_XSERVICEINFO_MULTISERVICE_2(HelpOnStartup                   ,
                                       ::cppu::OWeakObject             ,
                                       SERVICENAME_JOB                 ,
                                       IMPLEMENTATIONNAME_HELPONSTARTUP)
@@ -82,23 +82,20 @@ DEFINE_INIT_SERVICE(HelpOnStartup,
                             see macro DEFINE_XSERVICEINFO_MULTISERVICE and "impl_initService()" for further informations!
                         */
                         // create some needed uno services and cache it
-                        css::uno::Reference<css::uno::XComponentContext> xContext = comphelper::getComponentContext(m_xSMGR);
-                        m_xModuleManager = css::frame::ModuleManager::create( xContext );
+                        m_xModuleManager = css::frame::ModuleManager::create( m_xContext );
 
-                        m_xDesktop = css::uno::Reference< css::frame::XFrame >(
-                            m_xSMGR->createInstance(SERVICENAME_DESKTOP),
-                            css::uno::UNO_QUERY_THROW);
+                        m_xDesktop = css::frame::Desktop::create(m_xContext);
 
                         m_xConfig = css::uno::Reference< css::container::XNameAccess >(
                             ::comphelper::ConfigurationHelper::openConfig(
-                                xContext,
+                                m_xContext,
                                 CFG_PACKAGE_MODULES,
                                 ::comphelper::ConfigurationHelper::E_READONLY),
                             css::uno::UNO_QUERY_THROW);
 
                         // ask for office locale
                         ::comphelper::ConfigurationHelper::readDirectKey(
-                            xContext,
+                            m_xContext,
                             CFG_PACKAGE_SETUP,
                             CFG_PATH_L10N,
                             CFG_KEY_LOCALE,
@@ -106,7 +103,7 @@ DEFINE_INIT_SERVICE(HelpOnStartup,
 
                         // detect system
                         ::comphelper::ConfigurationHelper::readDirectKey(
-                            xContext,
+                            m_xContext,
                             CFG_PACKAGE_COMMON,
                             CFG_PATH_HELP,
                             CFG_KEY_HELPSYSTEM,
@@ -128,9 +125,9 @@ DEFINE_INIT_SERVICE(HelpOnStartup,
                    )
 
 //-----------------------------------------------
-HelpOnStartup::HelpOnStartup(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
+HelpOnStartup::HelpOnStartup(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : ThreadHelpBase(     )
-    , m_xSMGR       (xSMGR)
+    , m_xContext    (xContext)
 {
 }
 
@@ -265,7 +262,7 @@ void SAL_CALL HelpOnStartup::disposing(const css::lang::EventObject& aEvent)
 {
     // SAFE ->
     ResetableGuard aLock(m_aLock);
-    css::uno::Reference< css::frame::XFrame > xDesktop = m_xDesktop;
+    css::uno::Reference< css::frame::XDesktop2 > xDesktop = m_xDesktop;
     aLock.unlock();
     // <- SAFE
 
@@ -310,7 +307,6 @@ void SAL_CALL HelpOnStartup::disposing(const css::lang::EventObject& aEvent)
 
     // SAFE ->
     ResetableGuard aLock(m_aLock);
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR   (m_xSMGR, css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::container::XNameAccess >     xConfig = m_xConfig;
     ::rtl::OUString                                        sLocale = m_sLocale;
     ::rtl::OUString                                        sSystem = m_sSystem;

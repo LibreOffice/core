@@ -32,7 +32,7 @@
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
 
 #include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/XDesktop2.hpp>
 #include <com/sun/star/frame/WindowArrange.hpp>
 #include <com/sun/star/frame/TerminationVetoException.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
@@ -47,7 +47,6 @@
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/FrameAction.hpp>
-#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <com/sun/star/frame/XTasksSupplier.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/lang/Locale.hpp>
@@ -107,12 +106,8 @@ enum ELoadState
 class Desktop   :   // interfaces
                     public  css::lang::XTypeProvider             ,
                     public  css::lang::XServiceInfo              ,
-                    public  css::frame::XDesktop                 ,
-                    public  css::frame::XComponentLoader         ,
+                    public  css::frame::XDesktop2                ,
                     public  css::frame::XTasksSupplier           ,
-                    public  css::frame::XDispatchProvider        ,
-                    public  css::frame::XDispatchProviderInterception,
-                    public  css::frame::XFramesSupplier          ,   // => XFrame => XComponent
                     public  css::frame::XDispatchResultListener  ,   // => XEventListener
                     public  css::task::XInteractionHandler       ,
                     public  css::frame::XUntitledNumbers         ,

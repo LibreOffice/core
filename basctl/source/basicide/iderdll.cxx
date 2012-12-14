@@ -39,6 +39,7 @@
 #include <propbrw.hxx>
 
 #include <svl/srchitem.hxx>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 
 #include <boost/scoped_ptr.hpp>
@@ -70,7 +71,7 @@ public:
 class DllInstance : public comphelper::scoped_disposing_solar_mutex_reset_ptr<Dll>
 {
 public:
-    DllInstance() : comphelper::scoped_disposing_solar_mutex_reset_ptr<Dll>(::com::sun::star::uno::Reference<com::sun::star::lang::XComponent>(comphelper::getProcessServiceFactory()->createInstance(OUString("com.sun.star.frame.Desktop")), ::com::sun::star::uno::UNO_QUERY_THROW), new Dll)
+    DllInstance() : comphelper::scoped_disposing_solar_mutex_reset_ptr<Dll>(Reference<lang::XComponent>( frame::Desktop::create(comphelper::getProcessComponentContext()), UNO_QUERY_THROW), new Dll)
     { }
 };
 

@@ -23,6 +23,7 @@
 #include <general.h>
 #include <services.h>
 
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/task/XAsyncJob.hpp>
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
@@ -337,7 +338,7 @@ void Job::die()
     m_xJob               = css::uno::Reference< css::uno::XInterface >();
     m_xFrame             = css::uno::Reference< css::frame::XFrame >();
     m_xModel             = css::uno::Reference< css::frame::XModel >();
-    m_xDesktop           = css::uno::Reference< css::frame::XDesktop >();
+    m_xDesktop           = css::uno::Reference< css::frame::XDesktop2 >();
     m_xResultListener    = css::uno::Reference< css::frame::XDispatchResultListener >();
     m_xResultSourceFake  = css::uno::Reference< css::uno::XInterface >();
     m_bPendingCloseFrame = sal_False;
@@ -541,17 +542,14 @@ void Job::impl_startListening()
     {
         try
         {
-            m_xDesktop = css::uno::Reference< css::frame::XDesktop >(m_xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY);
+            m_xDesktop = css::frame::Desktop::create( comphelper::getComponentContext(m_xSMGR) );
             css::uno::Reference< css::frame::XTerminateListener > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
-            if (m_xDesktop.is())
-            {
-                m_xDesktop->addTerminateListener(xThis);
-                m_bListenOnDesktop = sal_True;
-            }
+            m_xDesktop->addTerminateListener(xThis);
+            m_bListenOnDesktop = sal_True;
         }
         catch(const css::uno::Exception&)
         {
-            m_xDesktop = css::uno::Reference< css::frame::XDesktop >();
+            m_xDesktop.clear();
         }
     }
 
@@ -614,7 +612,7 @@ void Job::impl_stopListening()
         {
             css::uno::Reference< css::frame::XTerminateListener > xThis(static_cast< ::cppu::OWeakObject* >(this)   , css::uno::UNO_QUERY);
             m_xDesktop->removeTerminateListener(xThis);
-            m_xDesktop = css::uno::Reference< css::frame::XDesktop >();
+            m_xDesktop.clear();
             m_bListenOnDesktop = sal_False;
         }
         catch(const css::uno::Exception&)
@@ -887,7 +885,7 @@ void SAL_CALL Job::disposing( const css::lang::EventObject& aEvent ) throw(css::
 
     if (m_xDesktop.is() && aEvent.Source == m_xDesktop)
     {
-        m_xDesktop = css::uno::Reference< css::frame::XDesktop >();
+        m_xDesktop.clear();
         m_bListenOnDesktop = sal_False;
     }
     else if (m_xFrame.is() && aEvent.Source == m_xFrame)

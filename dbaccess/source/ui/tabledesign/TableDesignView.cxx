@@ -187,7 +187,7 @@ void OTableBorderWindow::GetFocus()
 DBG_NAME(OTableDesignView);
 //------------------------------------------------------------------------------
 OTableDesignView::OTableDesignView( Window* pParent,
-                                    const Reference< XMultiServiceFactory >& _rxOrb,
+                                    const Reference< XComponentContext >& _rxOrb,
                                     OTableController& _rController
                                    ) :
     ODataView( pParent, _rController,_rxOrb )

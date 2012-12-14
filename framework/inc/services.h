@@ -29,7 +29,6 @@ namespace framework{
 //_________________________________________________________________________________________________________________
 
 #define SERVICENAME_FRAME                                       DECLARE_ASCII("com.sun.star.frame.Frame"                            )
-#define SERVICENAME_DESKTOP                                     DECLARE_ASCII("com.sun.star.frame.Desktop"                          )
 #define SERVICENAME_TASK                                        DECLARE_ASCII("com.sun.star.frame.Task"                             )
 #define SERVICENAME_FRAMELOADERFACTORY                          DECLARE_ASCII("com.sun.star.frame.FrameLoaderFactory"               )
 #define SERVICENAME_FILTERFACTORY                               DECLARE_ASCII("com.sun.star.document.FilterFactory"                 )

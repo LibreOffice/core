@@ -41,6 +41,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -107,7 +108,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
       maView(new TemplateLocalView(this,SfxResId(TEMPLATE_VIEW))),
       mpOnlineView(new TemplateRemoteView(this, WB_VSCROLL,false)),
       mbIsSaveMode(false),
-      mxDesktop(comphelper::getProcessServiceFactory()->createInstance( "com.sun.star.frame.Desktop" ),uno::UNO_QUERY ),
+      mxDesktop( Desktop::create(comphelper::getProcessComponentContext()) ),
       mbIsSynced(false),
       maRepositories()
 {

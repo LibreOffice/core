@@ -2018,7 +2018,7 @@ sal_Bool SVGFilter::implCreateObjectsFromShape( const Reference< XDrawPage > & r
 
 sal_Bool SVGFilter::implCreateObjectsFromBackground( const Reference< XDrawPage >& rxDrawPage )
 {
-    Reference< XExporter >    xExporter( mxMSF->createInstance( B2UCONST( "com.sun.star.drawing.GraphicExportFilter" ) ), UNO_QUERY );
+    Reference< XExporter >    xExporter( mxContext->getServiceManager()->createInstanceWithContext( B2UCONST( "com.sun.star.drawing.GraphicExportFilter" ), mxContext ), UNO_QUERY );
     sal_Bool                bRet = sal_False;
 
     if( xExporter.is() )

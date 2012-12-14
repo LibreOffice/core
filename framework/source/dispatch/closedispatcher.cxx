@@ -25,7 +25,7 @@
 #include <services.h>
 #include <general.h>
 
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/CommandGroup.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -39,6 +39,7 @@
 #include "vcl/syswin.hxx"
 #include <osl/mutex.hxx>
 #include <unotools/moduleoptions.hxx>
+#include <comphelper/processfactory.hxx>
 
 
 using namespace com::sun::star;
@@ -299,7 +300,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback)
     // Analyze the environment a first time.
     // If we found some special cases, we can
     // make some decisions erliar!
-    css::uno::Reference< css::frame::XFramesSupplier > xDesktop(xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::frame::XFramesSupplier > xDesktop( css::frame::Desktop::create(comphelper::getComponentContext(xSMGR)), css::uno::UNO_QUERY_THROW);
     FrameListAnalyzer aCheck1(xDesktop, xCloseFrame, FrameListAnalyzer::E_HELP | FrameListAnalyzer::E_BACKINGCOMPONENT);
 
     // a) If the curent frame (where the close dispatch was requested for) does not have
@@ -471,7 +472,7 @@ sal_Bool CloseDispatcher::implts_prepareFrameForClosing(const css::uno::Referenc
         aReadLock.unlock();
         // <- SAFE ----------------------------------
 
-        css::uno::Reference< css::frame::XFramesSupplier > xDesktop(xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::frame::XFramesSupplier > xDesktop( css::frame::Desktop::create( comphelper::getComponentContext(xSMGR) ), css::uno::UNO_QUERY_THROW);
         FrameListAnalyzer aCheck(xDesktop, xFrame, FrameListAnalyzer::E_ALL);
 
         sal_Int32 c = aCheck.m_lModelFrames.getLength();
@@ -573,8 +574,7 @@ sal_Bool CloseDispatcher::implts_terminateApplication()
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
-    css::uno::Reference< css::frame::XDesktop > xDesktop(
-        xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create( comphelper::getComponentContext(xSMGR) );
 
     return xDesktop->terminate();
 }

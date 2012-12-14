@@ -26,6 +26,7 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XController.hpp>
@@ -79,6 +80,8 @@ namespace pcr
     using ::com::sun::star::lang::XMultiServiceFactory;
     using ::com::sun::star::frame::XDispatchProvider;
     using ::com::sun::star::frame::XDispatch;
+    using ::com::sun::star::frame::Desktop;
+    using ::com::sun::star::frame::XDesktop2;
     using ::com::sun::star::uno::Any;
     /** === end UNO using === **/
     namespace FrameSearchFlag = ::com::sun::star::frame::FrameSearchFlag;
@@ -290,12 +293,10 @@ namespace pcr
         Reference< XFrame > xFrame;
         try
         {
-            Reference< XInterface      > xDesktop          ( m_xORB->createInstanceWithContext( SERVICE_DESKTOP, m_xContext ) );
-            Reference< XFrame          > xDesktopFrame     ( xDesktop,      UNO_QUERY_THROW );
-            Reference< XFramesSupplier > xSuppDesktopFrames( xDesktopFrame, UNO_QUERY_THROW );
+            Reference< XDesktop2 > xDesktop = Desktop::create(m_xContext);
 
-            Reference< XFrames > xDesktopFramesCollection( xSuppDesktopFrames->getFrames(), UNO_QUERY_THROW );
-            xFrame = xDesktopFrame->findFrame( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_blank" ) ), FrameSearchFlag::CREATE );
+            Reference< XFrames > xDesktopFramesCollection( xDesktop->getFrames(), UNO_QUERY_THROW );
+            xFrame = xDesktop->findFrame( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_blank" ) ), FrameSearchFlag::CREATE );
             OSL_ENSURE( xFrame.is(), "SQLCommandDesigner::impl_createEmptyParentlessTask_nothrow: could not create an empty frame!" );
             xDesktopFramesCollection->remove( xFrame );
         }

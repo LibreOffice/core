@@ -25,6 +25,7 @@
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/awt/XUnitConversion.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/graphic/GraphicObject.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
@@ -69,9 +70,7 @@ GraphicHelper::GraphicHelper( const Reference< XComponentContext >& rxContext, c
     maGraphicObjScheme( CREATE_OUSTRING( "vnd.sun.star.GraphicObject:" ) )
 {
     OSL_ENSURE( mxContext.is(), "GraphicHelper::GraphicHelper - missing component context" );
-    Reference< XMultiServiceFactory > xFactory( mxContext->getServiceManager(), UNO_QUERY );
-    OSL_ENSURE( xFactory.is(), "GraphicHelper::GraphicHelper - missing service factory" );
-    if( xFactory.is() )
+    if( mxContext.is() )
         mxGraphicProvider.set( graphic::GraphicProvider::create( mxContext ) );
 
     //! TODO: get colors from system
@@ -109,9 +108,9 @@ GraphicHelper::GraphicHelper( const Reference< XComponentContext >& rxContext, c
     // if no target frame has been passed (e.g. OLE objects), try to fallback to the active frame
     // TODO: we need some mechanism to keep and pass the parent frame
     Reference< XFrame > xFrame = rxTargetFrame;
-    if( !xFrame.is() && xFactory.is() ) try
+    if( !xFrame.is() && mxContext.is() ) try
     {
-        Reference< XFramesSupplier > xFramesSupp( xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.frame.Desktop" ) ), UNO_QUERY_THROW );
+        Reference< XDesktop2 > xFramesSupp = Desktop::create( mxContext );
         xFrame = xFramesSupp->getActiveFrame();
     }
     catch( Exception& )

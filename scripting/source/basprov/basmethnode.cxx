@@ -20,7 +20,7 @@
 #include "basmethnode.hxx"
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
@@ -250,35 +250,26 @@ namespace basprov
 
             if ( m_xContext.is() )
             {
-                Reference< XMultiComponentFactory > xSMgr( m_xContext->getServiceManager() );
+                Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create( m_xContext );
 
-                if ( xSMgr.is() )
+                Reference < frame::XDispatchProvider > xProv( xDesktop->getCurrentFrame(), UNO_QUERY );
+
+                if ( xProv.is() )
                 {
-                    Reference< frame::XDesktop > xDesktop( xSMgr->createInstanceWithContext(
-                        ::rtl::OUString( "com.sun.star.frame.Desktop"  ), m_xContext ), UNO_QUERY );
+                    Reference< frame::XDispatchHelper > xHelper( frame::DispatchHelper::create( m_xContext ) );
 
-                    if ( xDesktop.is() )
-                    {
-                        Reference < frame::XDispatchProvider > xProv( xDesktop->getCurrentFrame(), UNO_QUERY );
-
-                        if ( xProv.is() )
-                        {
-                            Reference< frame::XDispatchHelper > xHelper( frame::DispatchHelper::create( m_xContext ) );
-
-                            Sequence < PropertyValue > aArgs(7);
-                            aArgs[0].Name = ::rtl::OUString("Document");
-                            aArgs[0].Value <<= sDocURL;
-                            aArgs[1].Name = ::rtl::OUString("LibName");
-                            aArgs[1].Value <<= sLibName;
-                            aArgs[2].Name = ::rtl::OUString("Name");
-                            aArgs[2].Value <<= sModName;
-                            aArgs[3].Name = ::rtl::OUString("Type");
-                            aArgs[3].Value <<= ::rtl::OUString("Module");
-                            aArgs[4].Name = ::rtl::OUString("Line");
-                            aArgs[4].Value <<= static_cast< sal_uInt32 >( nLine1 );
-                            xHelper->executeDispatch( xProv, ::rtl::OUString(".uno:BasicIDEAppear"), ::rtl::OUString(), 0, aArgs );
-                        }
-                    }
+                    Sequence < PropertyValue > aArgs(7);
+                    aArgs[0].Name = ::rtl::OUString("Document");
+                    aArgs[0].Value <<= sDocURL;
+                    aArgs[1].Name = ::rtl::OUString("LibName");
+                    aArgs[1].Value <<= sLibName;
+                    aArgs[2].Name = ::rtl::OUString("Name");
+                    aArgs[2].Value <<= sModName;
+                    aArgs[3].Name = ::rtl::OUString("Type");
+                    aArgs[3].Value <<= ::rtl::OUString("Module");
+                    aArgs[4].Name = ::rtl::OUString("Line");
+                    aArgs[4].Value <<= static_cast< sal_uInt32 >( nLine1 );
+                    xHelper->executeDispatch( xProv, ::rtl::OUString(".uno:BasicIDEAppear"), ::rtl::OUString(), 0, aArgs );
                 }
             }
         }

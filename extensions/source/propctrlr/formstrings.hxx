@@ -293,8 +293,6 @@ namespace pcr
     PCR_CONSTASCII_STRING( SERVICE_ADDRESS_CONVERSION,      "com.sun.star.table.CellAddressConversion" );
     PCR_CONSTASCII_STRING( SERVICE_RANGEADDRESS_CONVERSION, "com.sun.star.table.CellRangeAddressConversion" );
 
-    PCR_CONSTASCII_STRING( SERVICE_DESKTOP,                 "com.sun.star.frame.Desktop" );
-
 //............................................................................
 } // namespace pcr
 //............................................................................

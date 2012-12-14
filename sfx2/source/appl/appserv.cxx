@@ -20,6 +20,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/DispatchResultEvent.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
@@ -205,7 +206,7 @@ static sal_Bool checkURL( const char *pName, const char *pExt, rtl::OUString &rU
 static void showDocument( const char* pBaseName )
 {
     try {
-        Reference < XComponentLoader > xLoader( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString("com.sun.star.frame.Desktop") ), UNO_QUERY );
+        Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
         Sequence < com::sun::star::beans::PropertyValue > args(2);
         args[0].Name = ::rtl::OUString("ViewOnly");
         args[0].Value <<= sal_True;
@@ -216,7 +217,7 @@ static void showDocument( const char* pBaseName )
         if ( checkURL ( pBaseName, ".odt", aURL ) ||
                 checkURL ( pBaseName, ".html", aURL ) ||
                 checkURL ( pBaseName, "", aURL ) ) {
-            xLoader->loadComponentFromURL( aURL, ::rtl::OUString("_blank"), 0, args );
+            xDesktop->loadComponentFromURL( aURL, ::rtl::OUString("_blank"), 0, args );
         }
     } catch (const ::com::sun::star::uno::Exception &) {
     }
@@ -353,7 +354,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
             // block reentrant calls
             pAppData_Impl->bInQuit = sal_True;
-            Reference < XDesktop > xDesktop ( ::comphelper::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
+            Reference < XDesktop2 > xDesktop = Desktop::create ( ::comphelper::getProcessComponentContext() );
 
             rReq.ForgetAllArgs();
 
@@ -419,7 +420,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_CLOSEWINS:
         {
 
-            Reference < XFramesSupplier > xDesktop ( ::comphelper::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
+            Reference < XDesktop2 > xDesktop  = Desktop::create( ::comphelper::getProcessComponentContext() );
             Reference< XIndexAccess > xTasks( xDesktop->getFrames(), UNO_QUERY );
             if ( !xTasks.is() )
                 break;
@@ -695,10 +696,8 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
             if ( pToolbarName )
             {
-                com::sun::star::uno::Reference< com::sun::star::frame::XFrame > xFrame;
-                Reference < XFramesSupplier > xDesktop ( ::comphelper::getProcessServiceFactory()->createInstance(
-                                                            DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
-                xFrame = xDesktop->getActiveFrame();
+                Reference < XDesktop2 > xDesktop = Desktop::create ( ::comphelper::getProcessComponentContext() );
+                Reference< XFrame > xFrame = xDesktop->getActiveFrame();
 
                 Reference< com::sun::star::beans::XPropertySet > xPropSet( xFrame, UNO_QUERY );
                 Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
@@ -819,7 +818,7 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                 case SID_CLOSEDOCS:
                 case SID_CLOSEWINS:
                 {
-                    Reference < XFramesSupplier > xDesktop ( ::comphelper::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
+                    Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
                     Reference< XIndexAccess > xTasks( xDesktop->getFrames(), UNO_QUERY );
                     if ( !xTasks.is() || !xTasks->getCount() )
                         rSet.DisableItem(nWhich);
@@ -993,14 +992,14 @@ namespace
         }
         return pView;
     }
-    Reference< XFrame > lcl_findStartModuleFrame( const ::comphelper::ComponentContext& i_rContext )
+    Reference< XFrame > lcl_findStartModuleFrame( const Reference<XComponentContext> & rxContext )
     {
         try
         {
-            Reference < XFramesSupplier > xSupplier( i_rContext.createComponent( "com.sun.star.frame.Desktop" ), UNO_QUERY_THROW );
-            Reference < XIndexAccess > xContainer( xSupplier->getFrames(), UNO_QUERY_THROW );
+            Reference < XDesktop2 > xDesktop = Desktop::create( rxContext );
+            Reference < XIndexAccess > xContainer( xDesktop->getFrames(), UNO_QUERY_THROW );
 
-            Reference< XModuleManager2 > xCheck( ModuleManager::create(i_rContext.getUNOContext()) );
+            Reference< XModuleManager2 > xCheck = ModuleManager::create(rxContext);
 
             sal_Int32 nCount = xContainer->getCount();
             for ( sal_Int32 i=0; i<nCount; ++i )
@@ -1166,7 +1165,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                     aLoadArgs.put( "Model", pBasicIDE->GetModel() );
                     aLoadArgs.put( "URL", ::rtl::OUString( "private:factory/sbasic"  ) );
 
-                    Reference< XFrame > xTargetFrame( lcl_findStartModuleFrame( aContext ) );
+                    Reference< XFrame > xTargetFrame( lcl_findStartModuleFrame( aContext.getUNOContext() ) );
                     if ( !xTargetFrame.is() )
                         xTargetFrame = SfxFrame::CreateBlankFrame();
                     ENSURE_OR_THROW( xTargetFrame.is(), "could not obtain a frameto load the Basic IDE into!" );

@@ -25,6 +25,7 @@
 
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
@@ -1100,8 +1101,7 @@ Reference<lang::XComponent> SfxObjectShell::CreateAndLoadComponent( const SfxIte
         xLoader = uno::Reference < frame::XComponentLoader >( pFrame->GetFrameInterface(), uno::UNO_QUERY );
     }
     else
-        xLoader = uno::Reference < frame::XComponentLoader >( comphelper::getProcessServiceFactory()->createInstance(
-            ::rtl::OUString("com.sun.star.frame.Desktop") ), uno::UNO_QUERY );
+        xLoader = uno::Reference < frame::XComponentLoader >( frame::Desktop::create(comphelper::getProcessComponentContext()), uno::UNO_QUERY );
 
     Reference <lang::XComponent> xComp;
     try

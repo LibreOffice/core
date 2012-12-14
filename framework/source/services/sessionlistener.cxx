@@ -41,7 +41,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
@@ -301,7 +301,7 @@ void SAL_CALL SessionListener::approveInteraction( sal_Bool bInteractionGranted 
             // first of all let the session be stored to be sure that we lose no information
             StoreSession( sal_False );
 
-            css::uno::Reference< css::frame::XDesktop > xDesktop( m_xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY_THROW);
+            css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create( comphelper::getComponentContext(m_xSMGR) );
             // honestly: how many implementations of XDesktop will we ever have?
             // so casting this directly to the implementation
             Desktop* pDesktop(dynamic_cast<Desktop*>(xDesktop.get()));

@@ -20,6 +20,7 @@
 
 #include "graphiccollector.hxx"
 #include <com/sun/star/awt/XDevice.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
@@ -46,8 +47,7 @@ const DeviceInfo& GraphicCollector::GetDeviceInfo( const Reference< XComponentCo
     {
         try
         {
-            Reference< XFramesSupplier > xDesktop( rxFact->getServiceManager()->createInstanceWithContext(
-                    OUString( "com.sun.star.frame.Desktop"  ), rxFact ), UNO_QUERY_THROW );
+            Reference< XDesktop2 > xDesktop = Desktop::create( rxFact );
             Reference< XFrame > xFrame( xDesktop->getActiveFrame() );
             Reference< XWindow > xWindow( xFrame->getContainerWindow() );
             Reference< XDevice > xDevice( xWindow, UNO_QUERY_THROW );

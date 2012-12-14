@@ -64,13 +64,13 @@ sal_Bool SVGFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         return sal_False;
 
     rtl::OUString sXMLImportService ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Draw.XMLOasisImporter" ) );
-    Reference < XDocumentHandler > xInternalHandler( mxMSF->createInstance( sXMLImportService ), UNO_QUERY );
+    Reference < XDocumentHandler > xInternalHandler( mxContext->getServiceManager()->createInstanceWithContext( sXMLImportService, mxContext ), UNO_QUERY );
 
     // The XImporter sets up an empty target document for XDocumentHandler to write to..
     uno::Reference < XImporter > xImporter(xInternalHandler, UNO_QUERY);
     xImporter->setTargetDocument(mxDstDoc);
 
-    SVGReader aReader(mxMSF, xInputStream, xInternalHandler);
+    SVGReader aReader(uno::Reference<lang::XMultiServiceFactory>(mxContext->getServiceManager(), uno::UNO_QUERY_THROW), xInputStream, xInternalHandler);
     return aReader.parseAndConvert();
 }
 

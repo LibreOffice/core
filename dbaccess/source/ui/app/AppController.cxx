@@ -444,7 +444,7 @@ void SAL_CALL OApplicationController::disposing()
 //--------------------------------------------------------------------
 sal_Bool OApplicationController::Construct(Window* _pParent)
 {
-    setView( * new OApplicationView( _pParent, getORB(), *this, m_ePreviewMode ) );
+    setView( * new OApplicationView( _pParent, comphelper::getComponentContext(getORB()), *this, m_ePreviewMode ) );
     getView()->SetUniqueId(UID_APP_VIEW);
 
     // late construction

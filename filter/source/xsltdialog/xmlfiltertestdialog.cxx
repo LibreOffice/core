@@ -26,7 +26,7 @@
 #include <com/sun/star/document/XEmbeddedObjectResolver.hpp>
 #include <com/sun/star/frame/GlobalEventBroadcaster.hpp>
 #include <com/sun/star/frame/XConfigManager.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
@@ -415,19 +415,16 @@ void XMLFilterTestDialog::onExportBrowse()
         {
             m_sExportRecentFile = aDlg.GetPath();
 
-            Reference< XComponentLoader > xLoader( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" )) ), UNO_QUERY );
+            Reference< XDesktop2 > xLoader = Desktop::create( comphelper::getComponentContext(mxMSF) );
             Reference< XInteractionHandler2 > xInter( InteractionHandler::createWithParent(comphelper::getComponentContext(mxMSF), 0) );
-            if( xLoader.is() )
+            OUString aFrame( RTL_CONSTASCII_USTRINGPARAM( "_default" ) );
+            Sequence< PropertyValue > aArguments(1);
+            aArguments[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "InteractionHandler" ));
+            aArguments[0].Value <<= xInter;
+            Reference< XComponent > xComp( xLoader->loadComponentFromURL( m_sExportRecentFile, aFrame, 0, aArguments ) );
+            if( xComp.is() )
             {
-                OUString aFrame( RTL_CONSTASCII_USTRINGPARAM( "_default" ) );
-                Sequence< PropertyValue > aArguments(1);
-                aArguments[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "InteractionHandler" ));
-                aArguments[0].Value <<= xInter;
-                Reference< XComponent > xComp( xLoader->loadComponentFromURL( m_sExportRecentFile, aFrame, 0, aArguments ) );
-                if( xComp.is() )
-                {
-                    doExport( xComp );
-                }
+                doExport( xComp );
             }
         }
     }
@@ -603,20 +600,17 @@ void XMLFilterTestDialog::import( const OUString& rURL )
 {
     try
     {
-        Reference< XComponentLoader > xLoader( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" )) ), UNO_QUERY );
+        Reference< XDesktop2 > xLoader = Desktop::create( comphelper::getComponentContext(mxMSF) );
         Reference< XInteractionHandler2 > xInter( InteractionHandler::createWithParent(comphelper::getComponentContext(mxMSF), 0) );
-        if( xLoader.is() )
-        {
 
-            OUString aFrame( RTL_CONSTASCII_USTRINGPARAM( "_default" ) );
-            Sequence< PropertyValue > aArguments(2);
-            aArguments[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ));
-            aArguments[0].Value <<= m_pFilterInfo->maFilterName;
-            aArguments[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "InteractionHandler" ));
-            aArguments[1].Value <<= xInter;
+        OUString aFrame( RTL_CONSTASCII_USTRINGPARAM( "_default" ) );
+        Sequence< PropertyValue > aArguments(2);
+        aArguments[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ));
+        aArguments[0].Value <<= m_pFilterInfo->maFilterName;
+        aArguments[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "InteractionHandler" ));
+        aArguments[1].Value <<= xInter;
 
-            xLoader->loadComponentFromURL( rURL, aFrame, 0, aArguments );
-        }
+        xLoader->loadComponentFromURL( rURL, aFrame, 0, aArguments );
 
         if( m_pCBXDisplaySource->IsChecked() )
         {
@@ -700,39 +694,36 @@ Reference< XComponent > XMLFilterTestDialog::getFrontMostDocument( const OUStrin
 
     try
     {
-        Reference< XDesktop > xDesktop( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" )) ), UNO_QUERY );
-        if( xDesktop.is() )
+        Reference< XDesktop2 > xDesktop = Desktop::create( comphelper::getComponentContext(mxMSF) );
+        Reference< XComponent > xTest( mxLastFocusModel );
+        if( checkComponent( xTest, rServiceName ) )
         {
-            Reference< XComponent > xTest( mxLastFocusModel );
+            xRet = xTest;
+        }
+        else
+        {
+            xTest = (Reference< XComponent >)xDesktop->getCurrentComponent();
+
             if( checkComponent( xTest, rServiceName ) )
             {
                 xRet = xTest;
             }
             else
             {
-                xTest = (Reference< XComponent >)xDesktop->getCurrentComponent();
-
-                if( checkComponent( xTest, rServiceName ) )
+                Reference< XEnumerationAccess > xAccess( xDesktop->getComponents() );
+                if( xAccess.is() )
                 {
-                    xRet = xTest;
-                }
-                else
-                {
-                    Reference< XEnumerationAccess > xAccess( xDesktop->getComponents() );
-                    if( xAccess.is() )
+                    Reference< XEnumeration > xEnum( xAccess->createEnumeration() );
+                    if( xEnum.is() )
                     {
-                        Reference< XEnumeration > xEnum( xAccess->createEnumeration() );
-                        if( xEnum.is() )
+                        while( xEnum->hasMoreElements() )
                         {
-                            while( xEnum->hasMoreElements() )
+                            if( (xEnum->nextElement() >>= xTest) && xTest.is() )
                             {
-                                if( (xEnum->nextElement() >>= xTest) && xTest.is() )
+                                if( checkComponent( xTest, rServiceName ) )
                                 {
-                                    if( checkComponent( xTest, rServiceName ) )
-                                    {
-                                        xRet = xTest;
-                                        break;
-                                    }
+                                    xRet = xTest;
+                                    break;
                                 }
                             }
                         }

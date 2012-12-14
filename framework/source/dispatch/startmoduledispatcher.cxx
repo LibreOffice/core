@@ -29,7 +29,7 @@
 #include <services.h>
 #include <general.h>
 
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/CommandGroup.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
@@ -41,6 +41,7 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <unotools/moduleoptions.hxx>
+#include <comphelper/processfactory.hxx>
 
 
 namespace framework{
@@ -152,7 +153,7 @@ void SAL_CALL StartModuleDispatcher::removeStatusListener(const css::uno::Refere
     // <- SAFE ----------------------------------
 
     css::uno::Reference< css::frame::XFramesSupplier > xDesktop(
-        xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY);
+        css::frame::Desktop::create( comphelper::getComponentContext(xSMGR) ), css::uno::UNO_QUERY);
 
     FrameListAnalyzer aCheck(
         xDesktop,
@@ -182,7 +183,7 @@ void SAL_CALL StartModuleDispatcher::removeStatusListener(const css::uno::Refere
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
-    css::uno::Reference< css::frame::XFrame > xDesktop         (xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY);
+    css::uno::Reference< css::frame::XDesktop2> xDesktop       = css::frame::Desktop::create( comphelper::getComponentContext(xSMGR) );
     css::uno::Reference< css::frame::XFrame > xFrame           = xDesktop->findFrame (SPECIALTARGET_BLANK, 0);
     css::uno::Reference< css::awt::XWindow  > xContainerWindow = xFrame->getContainerWindow ();
 

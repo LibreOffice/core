@@ -44,6 +44,7 @@
 #include <basic/vbahelper.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <unotools/eventcfg.hxx>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
@@ -477,13 +478,8 @@ public:
 
     void QuitApplication()
     {
-        uno::Reference< lang::XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
-        if ( xFactory.is() )
-    {
-            uno::Reference< frame::XDesktop > xDeskTop( xFactory->createInstance( OUString( "com.sun.star.frame.Desktop" ) ), uno::UNO_QUERY );
-           if ( xDeskTop.is() )
-               xDeskTop->terminate();
-        }
+        uno::Reference< frame::XDesktop2 > xDeskTop = frame::Desktop::create( comphelper::getProcessComponentContext() );
+        xDeskTop->terminate();
     }
     DECL_LINK( OnAsyncQuit, void* );
 };

@@ -30,7 +30,7 @@
 #include <com/sun/star/script/browse/XBrowseNodeFactory.hpp>
 #include <com/sun/star/script/browse/BrowseNodeFactoryViewTypes.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
@@ -802,12 +802,7 @@ Reference< XInterface  >
 SfxConfigGroupListBox_Impl::getDocumentModel( Reference< XComponentContext >& xCtx, ::rtl::OUString& docName )
 {
     Reference< XInterface > xModel;
-    Reference< lang::XMultiComponentFactory > mcf =
-            xCtx->getServiceManager();
-    Reference< frame::XDesktop > desktop (
-        mcf->createInstanceWithContext(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop") ),                 xCtx ),
-            UNO_QUERY );
+    Reference< frame::XDesktop2 > desktop = frame::Desktop::create( xCtx );
 
     Reference< container::XEnumerationAccess > componentsAccess =
         desktop->getComponents();

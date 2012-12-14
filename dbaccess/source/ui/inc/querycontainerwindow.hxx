@@ -54,7 +54,7 @@ namespace dbaui
 
         DECL_LINK( SplitHdl, void* );
     public:
-        OQueryContainerWindow(Window* pParent, OQueryController& _rController,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
+        OQueryContainerWindow(Window* pParent, OQueryController& _rController,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
         ~OQueryContainerWindow();
 
         virtual void Construct();

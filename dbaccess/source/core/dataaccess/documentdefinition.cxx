@@ -34,6 +34,7 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/frame/XController.hpp>
@@ -603,9 +604,9 @@ namespace
     }
 }
 
-void ODocumentDefinition::impl_removeFrameFromDesktop_throw( const ::comphelper::ComponentContext& _rContxt, const Reference< XFrame >& _rxFrame )
+void ODocumentDefinition::impl_removeFrameFromDesktop_throw( const Reference<XComponentContext> & _rxContext, const Reference< XFrame >& _rxFrame )
 {
-    Reference< XFramesSupplier > xDesktop( _rContxt.createComponent( (::rtl::OUString)SERVICE_FRAME_DESKTOP ), UNO_QUERY_THROW );
+    Reference< XDesktop2 > xDesktop = Desktop::create( _rxContext );
     Reference< XFrames > xFrames( xDesktop->getFrames(), UNO_QUERY_THROW );
     xFrames->remove( _rxFrame );
 }
@@ -630,7 +631,7 @@ void ODocumentDefinition::impl_onActivateEmbeddedObject_nothrow( const bool i_bR
         xTopWindow->toFront();
 
         // remove the frame from the desktop's frame collection because we need full control of it.
-        impl_removeFrameFromDesktop_throw( m_aContext, xFrame );
+        impl_removeFrameFromDesktop_throw( m_aContext.getUNOContext(), xFrame );
 
         // ensure that we ourself are kept alive as long as the embedded object's frame is
         // opened
@@ -1560,16 +1561,13 @@ Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XC
         xParentFrame = lcl_getDatabaseDocumentFrame( *m_pImpl->m_pDataSource );
     if ( !xParentFrame.is() )
     { // i87957 we need a parent frame
-        Reference< XComponentLoader > xDesktop( m_aContext.createComponent( (::rtl::OUString)SERVICE_FRAME_DESKTOP ), UNO_QUERY_THROW );
-        xParentFrame.set( xDesktop, UNO_QUERY );
-        if ( xParentFrame.is() )
+        Reference< XDesktop2 > xDesktop = Desktop::create( m_aContext.getUNOContext() );
+        xParentFrame.set( xDesktop, UNO_QUERY_THROW );
+        Reference<util::XCloseable> xCloseable(m_pImpl->m_pDataSource->getModel_noCreate(),UNO_QUERY);
+        if ( xCloseable.is() )
         {
-            Reference<util::XCloseable> xCloseable(m_pImpl->m_pDataSource->getModel_noCreate(),UNO_QUERY);
-            if ( xCloseable.is() )
-            {
-                xCloseable->addCloseListener(this);
-                m_bRemoveListener = sal_True;
-            }
+            xCloseable->addCloseListener(this);
+            m_bRemoveListener = sal_True;
         }
     }
     OSL_ENSURE( xParentFrame.is(), "ODocumentDefinition::fillLoadArgs: no parent frame!" );

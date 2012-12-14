@@ -67,10 +67,10 @@ namespace dbaui
     // -------------------------------------------------------------------------
     ODataView::ODataView(   Window* pParent,
                             IController& _rController,
-                            const Reference< XMultiServiceFactory >& _rFactory,
+                            const Reference< XComponentContext >& _rxContext,
                             WinBits nStyle)
         :Window(pParent,nStyle)
-        ,m_xServiceFactory(_rFactory)
+        ,m_xContext(_rxContext)
         ,m_rController( _rController )
         ,m_aSeparator( this )
     {
@@ -205,7 +205,7 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     void ODataView::attachFrame(const Reference< XFrame >& _xFrame)
     {
-        m_pAccel->init(m_xServiceFactory,_xFrame);
+        m_pAccel->init(m_xContext, _xFrame);
     }
 //.........................................................................
 }

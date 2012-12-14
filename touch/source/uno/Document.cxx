@@ -15,7 +15,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/view/XRenderable.hpp>
 
@@ -147,10 +147,7 @@ public:
         if ( arguments[0] >>= m_sURI )
         {
             // create( [in] string uri );
-            uno::Reference< frame::XDesktop > desktop( m_rContext->getServiceManager()->createInstanceWithContext( "com.sun.star.frame.Desktop", m_rContext ), uno::UNO_QUERY_THROW );
-            uno::Reference< frame::XComponentLoader > componentLoader( desktop, uno::UNO_QUERY_THROW );
-
-            (void) componentLoader;
+            uno::Reference< frame::XDesktop2 > desktop = frame::Desktop::Create( m_rContext );
 
             beans::PropertyValues loadProps(3);
             loadProps[0].Name = "Hidden";
@@ -160,7 +157,7 @@ public:
             loadProps[2].Name = "Preview";
             loadProps[2].Value <<= sal_Bool(true);
 
-            m_xComponent = componentLoader->loadComponentFromURL( m_sURI, "_blank", 0, loadProps );
+            m_xComponent = desktop->loadComponentFromURL( m_sURI, "_blank", 0, loadProps );
 
             m_xToolkit = uno::Reference< awt::XToolkitExperimental >(  m_rContext->getServiceManager()->createInstanceWithContext( "com.sun.star.awt.ToolkitExperimental", m_rContext ), uno::UNO_QUERY_THROW );
 

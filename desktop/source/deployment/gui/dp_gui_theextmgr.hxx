@@ -27,7 +27,7 @@
 #include "com/sun/star/container/XNameAccess.hpp"
 #include "com/sun/star/deployment/XExtensionManager.hpp"
 #include "com/sun/star/deployment/ExtensionManager.hpp"
-#include "com/sun/star/frame/XDesktop.hpp"
+#include "com/sun/star/frame/XDesktop2.hpp"
 #include "com/sun/star/frame/XTerminateListener.hpp"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/util/XModifyListener.hpp"
@@ -49,7 +49,7 @@ class TheExtensionManager :
 {
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop >           m_xDesktop;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop2 >          m_xDesktop;
     ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XExtensionManager > m_xExtensionManager;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xNameAccessNodes;
 

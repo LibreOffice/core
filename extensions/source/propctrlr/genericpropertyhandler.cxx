@@ -30,6 +30,7 @@
 #include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <tools/debug.hxx>
 #include <comphelper/extract.hxx>
@@ -285,7 +286,7 @@ namespace pcr
         URL aURL; aURL.Complete = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:OpenHyperlink" ) );
         xTransformer->parseStrict( aURL );
 
-        Reference< XDispatchProvider > xDispProv( m_aContext.createComponent( "com.sun.star.frame.Desktop" ), UNO_QUERY_THROW );
+        Reference< XDesktop2 > xDispProv = Desktop::create( m_aContext.getUNOContext() );
         Reference< XDispatch > xDispatch( xDispProv->queryDispatch( aURL, ::rtl::OUString(), 0 ), UNO_QUERY_THROW );
 
         Sequence< PropertyValue > aDispatchArgs(1);

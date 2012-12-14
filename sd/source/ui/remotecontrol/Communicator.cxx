@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <vector>
 
+#include <com/sun/star/frame/Desktop.hpp>
 #include <comphelper/processfactory.hxx>
 
 #include "Communicator.hxx"
@@ -43,10 +44,7 @@ void Communicator::execute()
                               Transmitter::PRIORITY_HIGH );
     Receiver aReceiver( pTransmitter );
     try {
-        uno::Reference< lang::XMultiServiceFactory > xServiceManager(
-            ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-        uno::Reference< frame::XFramesSupplier > xFramesSupplier( xServiceManager->createInstance(
-        "com.sun.star.frame.Desktop" ) , uno::UNO_QUERY_THROW );
+        uno::Reference< frame::XDesktop2 > xFramesSupplier = frame::Desktop::create( ::comphelper::getProcessComponentContext() );
         uno::Reference< frame::XFrame > xFrame ( xFramesSupplier->getActiveFrame(), uno::UNO_QUERY_THROW );
         uno::Reference<presentation::XPresentationSupplier> xPS ( xFrame->getController()->getModel(), uno::UNO_QUERY_THROW);
         uno::Reference<presentation::XPresentation2> xPresentation(

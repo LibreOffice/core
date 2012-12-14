@@ -20,6 +20,7 @@
 #include "recoveryui.hxx"
 #include "docrecovery.hxx"
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <osl/file.hxx>
@@ -45,8 +46,8 @@ using namespace ::rtl;
 using namespace ::osl;
 
 //===============================================
-RecoveryUI::RecoveryUI(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
-    : m_xSMGR        (xSMGR                    )
+RecoveryUI::RecoveryUI(const css::uno::Reference< css::uno::XComponentContext >& xContext)
+    : m_xContext     (xContext                 )
     , m_pParentWindow(0                        )
     , m_eJob         (RecoveryUI::E_JOB_UNKNOWN)
 {
@@ -164,7 +165,7 @@ css::uno::Sequence< ::rtl::OUString > RecoveryUI::st_getSupportedServiceNames()
 //===============================================
 css::uno::Reference< css::uno::XInterface > SAL_CALL RecoveryUI::st_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
 {
-    RecoveryUI* pNew = new RecoveryUI(xSMGR);
+    RecoveryUI* pNew = new RecoveryUI(comphelper::getComponentContext(xSMGR));
     return css::uno::Reference< css::uno::XInterface >(static_cast< css::lang::XServiceInfo* >(pNew));
 }
 
@@ -252,7 +253,7 @@ RecoveryUI::EJob RecoveryUI::impl_classifyJob(const css::util::URL& aURL)
 sal_Bool RecoveryUI::impl_doEmergencySave()
 {
     // create core service, which implements the real "emergency save" algorithm.
-    svxdr::RecoveryCore* pCore = new svxdr::RecoveryCore(comphelper::getComponentContext(m_xSMGR), sal_True);
+    svxdr::RecoveryCore* pCore = new svxdr::RecoveryCore(m_xContext, sal_True);
     css::uno::Reference< css::frame::XStatusListener > xCore(pCore);
 
     // create all needed dialogs for this operation
@@ -281,7 +282,7 @@ void RecoveryUI::impl_doRecovery()
 
     sal_Bool bCrashRepEnabled(sal_False);
     css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
-                                comphelper::getComponentContext(m_xSMGR),
+                                m_xContext,
                                 CFG_PACKAGE_RECOVERY,
                                 CFG_PATH_CRASHREPORTER,
                                 CFG_ENTRY_ENABLED,
@@ -290,7 +291,7 @@ void RecoveryUI::impl_doRecovery()
     bRecoveryOnly = !bCrashRepEnabled;
 
     // create core service, which implements the real "emergency save" algorithm.
-    svxdr::RecoveryCore* pCore = new svxdr::RecoveryCore(comphelper::getComponentContext(m_xSMGR), sal_False);
+    svxdr::RecoveryCore* pCore = new svxdr::RecoveryCore(m_xContext, sal_False);
     css::uno::Reference< css::frame::XStatusListener > xCore(pCore);
 
     // create all needed dialogs for this operation
@@ -347,9 +348,7 @@ void RecoveryUI::impl_doCrashReport()
 //===============================================
 void RecoveryUI::impl_showAllRecoveredDocs()
 {
-    css::uno::Reference< css::frame::XFramesSupplier > xDesktop(
-        m_xSMGR->createInstance(SERVICENAME_DESKTOP),
-        css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create( m_xContext );
 
     css::uno::Reference< css::container::XIndexAccess > xTaskContainer(
         xDesktop->getFrames(),

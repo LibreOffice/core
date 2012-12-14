@@ -29,6 +29,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -49,7 +50,6 @@ CSubmission::SubmissionResult CSubmission::replace(const ::rtl::OUString& aRepla
         return CSubmission::UNKNOWN_ERROR;
 
     try {
-        Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
         Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
         if (aReplace.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("all"))
          || aReplace.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("document"))) {
@@ -58,8 +58,7 @@ CSubmission::SubmissionResult CSubmission::replace(const ::rtl::OUString& aRepla
                 xLoader = Reference< XComponentLoader >(aFrame, UNO_QUERY);
 
             if (!xLoader.is())
-                xLoader = Reference< XComponentLoader >(xFactory->createInstance(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop") ) ), UNO_QUERY_THROW);
+                xLoader = Reference< XComponentLoader >( Desktop::create(xContext), UNO_QUERY_THROW);
 
             // open the stream from the result...
             // build media descriptor

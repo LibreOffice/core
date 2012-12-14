@@ -72,8 +72,8 @@ DBG_NAME(UnoDataBrowserView)
 // -------------------------------------------------------------------------
 UnoDataBrowserView::UnoDataBrowserView( Window* pParent,
                                         IController& _rController,
-                                        const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rFactory)
-    :ODataView(pParent,_rController,_rFactory)
+                                        const Reference< ::com::sun::star::uno::XComponentContext >& _rxContext)
+    :ODataView(pParent,_rController,_rxContext)
     ,m_pTreeView(NULL)
     ,m_pSplitter(NULL)
     ,m_pVclControl(NULL)
@@ -93,7 +93,7 @@ void UnoDataBrowserView::Construct(const Reference< ::com::sun::star::awt::XCont
         m_xMe = VCLUnoHelper::CreateControlContainer(this);
 
         // create the (UNO-) control
-        m_xGrid = new SbaXGridControl(getORB());
+        m_xGrid = new SbaXGridControl(Reference<XMultiServiceFactory>(getORB()->getServiceManager(), UNO_QUERY_THROW) );
         OSL_ENSURE(m_xGrid.is(), "UnoDataBrowserView::Construct : could not create a grid control !");
         // in design mode (for the moment)
         m_xGrid->setDesignMode(sal_True);

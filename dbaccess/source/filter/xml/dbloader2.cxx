@@ -28,6 +28,7 @@
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XFrameLoader.hpp>
@@ -343,24 +344,21 @@ namespace
     }
 
     // ...................................................................
-    Reference< XWindow > lcl_getTopMostWindow( const ::comphelper::ComponentContext& _rContext )
+    Reference< XWindow > lcl_getTopMostWindow( const Reference<XComponentContext> & _rxContext )
     {
         Reference< XWindow > xWindow;
         // get the top most window
-        Reference < XFramesSupplier > xDesktop;
-        if ( _rContext.createComponent( "com.sun.star.frame.Desktop", xDesktop ) )
+        Reference < XDesktop2 > xDesktop = Desktop::create(_rxContext);
+        Reference < XFrame > xActiveFrame = xDesktop->getActiveFrame();
+        if ( xActiveFrame.is() )
         {
-            Reference < XFrame > xActiveFrame = xDesktop->getActiveFrame();
-            if ( xActiveFrame.is() )
-            {
-                xWindow = xActiveFrame->getContainerWindow();
-                Reference<XFrame> xFrame = xActiveFrame;
-                while ( xFrame.is() && !xFrame->isTop() )
-                    xFrame.set(xFrame->getCreator(),UNO_QUERY);
+            xWindow = xActiveFrame->getContainerWindow();
+            Reference<XFrame> xFrame = xActiveFrame;
+            while ( xFrame.is() && !xFrame->isTop() )
+                xFrame.set(xFrame->getCreator(),UNO_QUERY);
 
-                if ( xFrame.is() )
-                    xWindow = xFrame->getContainerWindow();
-            }
+            if ( xFrame.is() )
+                xWindow = xFrame->getContainerWindow();
         }
         return xWindow;
     }
@@ -373,7 +371,7 @@ sal_Bool DBContentLoader::impl_executeNewDatabaseWizard( Reference< XModel >& _r
     aWizardArgs[0] <<= PropertyValue(
                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow")),
                     0,
-                    makeAny( lcl_getTopMostWindow( m_aContext ) ),
+                    makeAny( lcl_getTopMostWindow( m_aContext.getUNOContext() ) ),
                     PropertyState_DIRECT_VALUE);
 
     aWizardArgs[1] <<= PropertyValue(

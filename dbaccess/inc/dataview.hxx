@@ -21,7 +21,7 @@
 
 #include "dbaccessdllapi.h"
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <svtools/acceleratorexecute.hxx>
 #include <sal/macros.h>
 #include <vcl/fixed.hxx>
@@ -34,7 +34,7 @@ namespace dbaui
     class IController;
     class DBACCESS_DLLPUBLIC ODataView :    public Window
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceFactory;  // the service factory to work with
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;  // the service factory to work with
 
     protected:
         IController&        m_rController;  // the controller in where we resides in
@@ -44,7 +44,7 @@ namespace dbaui
     public:
         ODataView(  Window* pParent,
                     IController& _rController,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& ,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& ,
                     WinBits nStyle = 0 );
         virtual ~ODataView();
 
@@ -63,7 +63,7 @@ namespace dbaui
         */
         virtual void resizeControls(const Size& /*_rDiff*/) { Resize(); }
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() { return m_xServiceFactory;}
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getORB() { return m_xContext;}
 
         // the default implementation simply calls resizeAll( GetSizePixel() )
         virtual void Resize();

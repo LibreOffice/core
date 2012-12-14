@@ -29,6 +29,8 @@
 #include "test/unoapi_test.hxx"
 
 #include <com/sun/star/util/XCloseable.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
+#include <comphelper/processfactory.hxx>
 
 UnoApiTest::UnoApiTest()
       : m_aBaseString(RTL_CONSTASCII_USTRINGPARAM("/sc/qa/extras/testdocuments"))
@@ -45,9 +47,7 @@ void UnoApiTest::setUp()
         getMultiServiceFactory()->createInstance(rtl::OUString(
         RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.SpreadsheetDocument")));
     CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xCalcComponent.is());
-    mxDesktop = Reference<com::sun::star::frame::XDesktop>( getMultiServiceFactory()->createInstance(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ))), UNO_QUERY );
-    CPPUNIT_ASSERT_MESSAGE("", mxDesktop.is());
+    mxDesktop = com::sun::star::frame::Desktop::create( comphelper::getComponentContext(getMultiServiceFactory()) );
 }
 
 void UnoApiTest::tearDown()

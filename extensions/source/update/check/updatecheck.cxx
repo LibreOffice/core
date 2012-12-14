@@ -23,7 +23,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/DispatchResultEvent.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
@@ -724,12 +724,9 @@ ShutdownThread::run()
         xQuickStarter->setFastPropertyValue(0, uno::makeAny(false));
 
     // Shutdown the office
-    uno::Reference< frame::XDesktop > xDesktop(
-        UpdateCheck::createService(UNISTRING("com.sun.star.frame.Desktop"), m_xContext),
-        uno::UNO_QUERY);
+    uno::Reference< frame::XDesktop2 > xDesktop = Desktop::create(m_xContext);
 
-    if( xDesktop.is() )
-        xDesktop->terminate();
+    xDesktop->terminate();
 }
 
 //------------------------------------------------------------------------------

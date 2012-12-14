@@ -28,7 +28,7 @@
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
+#include <com/sun/star/frame/XDesktop2.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/io/XObjectInputStream.hpp>
 #include <com/sun/star/io/XObjectOutputStream.hpp>
@@ -102,7 +102,7 @@ namespace rptui
 
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition >         m_xReportDefinition;
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportEngine >             m_xReportEngine;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XComponentLoader >           m_xFrameLoader;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop2 >                  m_xFrameLoader;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >            m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >                     m_xRowSet;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >    m_xRowSetMediator;

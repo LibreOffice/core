@@ -32,7 +32,7 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
@@ -681,10 +681,8 @@ sal_Bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
                 SetStatusValue( TK_Status, Any( TKGet( STR_DUPLICATING_PRESENTATION ) ) );
                 DispatchStatus();
 
-                Reference< XDesktop > xDesktop( mxMSF->getServiceManager()->createInstanceWithContext(
-                        OUString( "com.sun.star.frame.Desktop"  ), mxMSF ), UNO_QUERY );
-                Reference< XFrame > xFrame( xDesktop, UNO_QUERY );
-                xSelf = xFrame->findFrame( TKGet( TK__blank ), FrameSearchFlag::CREATE );
+                Reference< XDesktop2 > xDesktop = Desktop::create( mxMSF );
+                xSelf = xDesktop->findFrame( TKGet( TK__blank ), FrameSearchFlag::CREATE );
                 Reference< XComponentLoader > xComponentLoader( xSelf, UNO_QUERY );
 
                 Sequence< PropertyValue > aLoadProps( 1 );

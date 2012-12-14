@@ -29,7 +29,7 @@
 #include "com/sun/star/awt/XWindowPeer.hpp"
 #include "com/sun/star/beans/PropertyValue.hpp"
 #include "com/sun/star/frame/DispatchDescriptor.hpp"
-#include "com/sun/star/frame/XDesktop.hpp"
+#include "com/sun/star/frame/Desktop.hpp"
 #include "com/sun/star/frame/XDispatch.hpp"
 #include "com/sun/star/frame/XDispatchProvider.hpp"
 #include "com/sun/star/frame/XFrame.hpp"
@@ -216,23 +216,21 @@ void Dispatch::dispatch(
     css::uno::Sequence< css::beans::PropertyValue > const &)
     throw (css::uno::RuntimeException)
 {
+    css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create(context_);
+    css::uno::Reference< css::frame::XFrame >    xFrame = xDesktop->getCurrentFrame();
+    css::uno::Reference< css::awt::XWindowPeer > xWindowPeer( xFrame->getComponentWindow(), css::uno::UNO_QUERY_THROW );
+    css::uno::Reference< css::awt::XToolkit2 >   xToolkit = css::awt::Toolkit::create(context_);
     css::uno::Reference< css::awt::XMessageBox > box(
-        css::awt::Toolkit::create(context_)->createMessageBox(
-            css::uno::Reference< css::awt::XWindowPeer >(
-                css::uno::Reference< css::frame::XFrame >(
-                    css::uno::Reference< css::frame::XDesktop >(
-                        (context_->getServiceManager()->
-                         createInstanceWithContext(
-                             "com.sun.star.frame.Desktop", context_)),
-                        css::uno::UNO_QUERY_THROW)->getCurrentFrame(),
-                    css::uno::UNO_SET_THROW)->getComponentWindow(),
-                css::uno::UNO_QUERY_THROW),
+        xToolkit->createMessageBox(
+            xWindowPeer,
             css::awt::Rectangle(), "infobox",
             css::awt::MessageBoxButtons::BUTTONS_OK, "active", "native"),
         css::uno::UNO_SET_THROW);
+
     box->execute();
-    css::uno::Reference< css::lang::XComponent >(
-        box, css::uno::UNO_QUERY_THROW)->dispose();
+
+    css::uno::Reference< css::lang::XComponent > xComponent(box, css::uno::UNO_QUERY_THROW);
+    xComponent->dispose();
 }
 
 static cppu::ImplementationEntry const services[] = {

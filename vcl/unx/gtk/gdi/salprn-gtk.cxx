@@ -938,10 +938,7 @@ GtkPrintDialog::run()
 #if 0
 void GtkPrintDialog::ExportAsPDF(const rtl::OUString &rFileURL, GtkPrintSettings *pSettings) const
 {
-    uno::Reference < XFramesSupplier > xDesktop =
-            uno::Reference < XFramesSupplier >(
-    ::comphelper::getProcessServiceFactory()->
-        createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))), UNO_QUERY);
+    uno::Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
     uno::Reference < XFrame > xFrame(xDesktop->getActiveFrame());
     if (!xFrame.is())
         xFrame = uno::Reference < XFrame >(xDesktop, UNO_QUERY);

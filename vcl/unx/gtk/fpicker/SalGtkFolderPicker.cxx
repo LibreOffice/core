@@ -24,6 +24,7 @@
 #endif
 
 #include <com/sun/star/awt/Toolkit.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
@@ -140,9 +141,7 @@ sal_Int16 SAL_CALL SalGtkFolderPicker::execute() throw( uno::RuntimeException )
         awt::Toolkit::create(m_xContext),
         uno::UNO_QUERY);
 
-    uno::Reference< frame::XDesktop > xDesktop(
-        createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
-        uno::UNO_QUERY);
+    uno::Reference< frame::XDesktop > xDesktop( frame::Desktop::create(m_xContext), uno::UNO_QUERY);
 
     RunDialog* pRunDialog = new RunDialog(m_pDialog, xToolkit, xDesktop);
     uno::Reference < awt::XTopWindowListener > xLifeCycle(pRunDialog);

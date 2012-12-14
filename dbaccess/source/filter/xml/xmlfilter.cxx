@@ -46,6 +46,7 @@
 #include <xmloff/xmluconv.hxx>
 #include "xmlHelper.hxx"
 #include <com/sun/star/util/XModifiable.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
@@ -124,13 +125,11 @@ namespace dbaxml
                     s_bFirstTime = false;
                     try
                     {
-                        uno::Reference<frame::XComponentLoader> xFrameLoad( m_xFactory->createInstance(
-                                                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")))
-                                                                    ,uno::UNO_QUERY);
+                        uno::Reference<frame::XDesktop2> xDesktop = frame::Desktop::create( comphelper::getComponentContext(m_xFactory) );
                         const ::rtl::OUString sTarget(RTL_CONSTASCII_USTRINGPARAM("_blank"));
                         sal_Int32 nFrameSearchFlag = frame::FrameSearchFlag::TASKS | frame::FrameSearchFlag::CREATE;
-                        uno::Reference< frame::XFrame> xFrame = uno::Reference< frame::XFrame>(xFrameLoad,uno::UNO_QUERY_THROW)->findFrame(sTarget,nFrameSearchFlag);
-                        xFrameLoad.set( xFrame,uno::UNO_QUERY);
+                        uno::Reference< frame::XFrame> xFrame = xDesktop->findFrame(sTarget,nFrameSearchFlag);
+                        uno::Reference<frame::XComponentLoader> xFrameLoad(xFrame,uno::UNO_QUERY);
 
                         if ( xFrameLoad.is() )
                         {

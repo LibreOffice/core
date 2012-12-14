@@ -21,7 +21,7 @@
 #define __SHUTDOWNICON_HXX__
 
 #include <com/sun/star/frame/XTerminateListener.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/XDesktop2.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -68,7 +68,7 @@ class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
         bool                    m_bSystemDialogs;
         ResMgr*                 m_pResMgr;
         sfx2::FileDialogHelper* m_pFileDlg;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
 
         static ShutdownIcon *pShutdownIcon; // one instance
 
@@ -90,7 +90,7 @@ class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
         friend class SfxNotificationListener_Impl;
 
     public:
-        ShutdownIcon( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > aSMgr );
+        ShutdownIcon( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rxContext );
 
         virtual ~ShutdownIcon();
 
@@ -159,7 +159,7 @@ class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
                     ::com::sun::star::lang::WrappedTargetException,
                     ::com::sun::star::uno::RuntimeException);
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop > m_xDesktop;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop2 > m_xDesktop;
 
 #ifdef WNT
         static void EnableAutostartW32( const rtl::OUString &aShortcutName );

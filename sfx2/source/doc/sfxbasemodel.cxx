@@ -26,6 +26,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/IllegalArgumentIOException.hpp>
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
 #include <com/sun/star/frame/UntitledNumbersConst.hpp>
@@ -3904,8 +3905,7 @@ css::uno::Reference< css::frame::XTitle > SfxBaseModel::impl_getTitleHelper ()
     {
         css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR    = ::comphelper::getProcessServiceFactory();
         css::uno::Reference< css::uno::XComponentContext >     xContext = ::comphelper::getProcessComponentContext();
-        const ::rtl::OUString SERVICENAME_DESKTOP("com.sun.star.frame.Desktop");
-        css::uno::Reference< css::frame::XUntitledNumbers >    xDesktop(xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::frame::XUntitledNumbers >    xDesktop( css::frame::Desktop::create(xContext), css::uno::UNO_QUERY_THROW);
         css::uno::Reference< css::frame::XModel >              xThis   (static_cast< css::frame::XModel* >(this), css::uno::UNO_QUERY_THROW);
 
         ::framework::TitleHelper* pHelper = new ::framework::TitleHelper(xContext);

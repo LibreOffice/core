@@ -24,6 +24,7 @@
 #include <svtools/imagemgr.hxx>
 #include <svtools/miscopt.hxx>
 #include <com/sun/star/task/InteractionHandler.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
@@ -100,7 +101,7 @@ void SAL_CALL SfxNotificationListener_Impl::disposing( const EventObject& ) thro
 {
 }
 
-SFX_IMPL_XSERVICEINFO( ShutdownIcon, "com.sun.star.office.Quickstart", "com.sun.star.comp.desktop.QuickstartWrapper" )  \
+SFX_IMPL_XSERVICEINFO_CTX( ShutdownIcon, "com.sun.star.office.Quickstart", "com.sun.star.comp.desktop.QuickstartWrapper" )  \
 SFX_IMPL_ONEINSTANCEFACTORY( ShutdownIcon );
 
 bool ShutdownIcon::bModalMode = false;
@@ -210,9 +211,9 @@ public:
 
 class IdleTerminate : Timer
 {
-    Reference< XDesktop > m_xDesktop;
+    Reference< XDesktop2 > m_xDesktop;
 public:
-    IdleTerminate (Reference< XDesktop > xDesktop)
+    IdleTerminate (Reference< XDesktop2 > xDesktop)
     {
         m_xDesktop = xDesktop;
         Start();
@@ -254,14 +255,14 @@ void ShutdownIcon::deInitSystray()
 }
 
 
-ShutdownIcon::ShutdownIcon( Reference< XMultiServiceFactory > aSMgr ) :
+ShutdownIcon::ShutdownIcon( const Reference< XComponentContext > & rxContext ) :
     ShutdownIconServiceBase( m_aMutex ),
     m_bVeto ( false ),
     m_bListenForTermination ( false ),
     m_bSystemDialogs( false ),
     m_pResMgr( NULL ),
     m_pFileDlg( NULL ),
-    m_xServiceManager( aSMgr ),
+    m_xContext( rxContext ),
     m_pInitSystray( 0 ),
     m_pDeInitSystray( 0 ),
     m_pPlugin( 0 ),
@@ -567,7 +568,7 @@ void ShutdownIcon::addTerminateListener()
     if (pInst->m_bListenForTermination)
         return;
 
-    Reference< XDesktop > xDesktop = pInst->m_xDesktop;
+    Reference< XDesktop2 > xDesktop = pInst->m_xDesktop;
     if ( ! xDesktop.is())
         return;
 
@@ -583,7 +584,7 @@ void ShutdownIcon::terminateDesktop()
     if ( ! pInst)
         return;
 
-    Reference< XDesktop > xDesktop = pInst->m_xDesktop;
+    Reference< XDesktop2 > xDesktop = pInst->m_xDesktop;
     if ( ! xDesktop.is())
         return;
 
@@ -592,13 +593,9 @@ void ShutdownIcon::terminateDesktop()
     xDesktop->removeTerminateListener( pInst );
 
     // terminate desktop only if no tasks exist
-    Reference< XFramesSupplier > xSupplier( xDesktop, UNO_QUERY );
-    if ( xSupplier.is() )
-    {
-        Reference< XIndexAccess > xTasks ( xSupplier->getFrames(), UNO_QUERY );
-        if( xTasks.is() && xTasks->getCount() < 1 )
-            new IdleTerminate( xDesktop );
-    }
+    Reference< XIndexAccess > xTasks ( xDesktop->getFrames(), UNO_QUERY );
+    if( xTasks.is() && xTasks->getCount() < 1 )
+        new IdleTerminate( xDesktop );
 
     // remove the instance pointer
     ShutdownIcon::pShutdownIcon = 0;
@@ -621,8 +618,7 @@ ShutdownIcon* ShutdownIcon::createInstance()
 
     ShutdownIcon *pIcon = NULL;
     try {
-        Reference< XMultiServiceFactory > xSMgr( comphelper::getProcessServiceFactory() );
-        pIcon = new ShutdownIcon( xSMgr );
+        pIcon = new ShutdownIcon( comphelper::getProcessComponentContext() );
         pIcon->init ();
         pShutdownIcon = pIcon;
     } catch (...) {
@@ -641,9 +637,7 @@ void ShutdownIcon::init() throw( ::com::sun::star::uno::Exception )
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
     m_pResMgr = pResMgr;
     aGuard.clear();
-    Reference < XDesktop > xDesktop( m_xServiceManager->createInstance(
-                                             DEFINE_CONST_UNICODE( "com.sun.star.frame.Desktop" )),
-                                     UNO_QUERY );
+    Reference < XDesktop2 > xDesktop = Desktop::create( m_xContext );
     aGuard.reset();
     m_xDesktop = xDesktop;
 }
@@ -652,8 +646,8 @@ void ShutdownIcon::init() throw( ::com::sun::star::uno::Exception )
 
 void SAL_CALL ShutdownIcon::disposing()
 {
-    m_xServiceManager = Reference< XMultiServiceFactory >();
-    m_xDesktop = Reference< XDesktop >();
+    m_xContext.clear();
+    m_xDesktop.clear();
 }
 
 // ---------------------------------------------------------------------------

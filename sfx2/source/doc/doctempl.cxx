@@ -41,6 +41,7 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/DocumentTemplates.hpp>
 #include <com/sun/star/frame/XDocumentTemplates.hpp>
@@ -105,7 +106,6 @@ using ::std::advance;
 #define COMMAND_TRANSFER        "transfer"
 
 #define SERVICENAME_DOCINFO             "com.sun.star.document.DocumentProperties"
-#define SERVICENAME_DESKTOP             "com.sun.star.frame.Desktop"
 
 //========================================================================
 
@@ -889,9 +889,7 @@ sal_Bool SfxDocumentTemplates::CopyFrom
     }
     else
     {
-        OUString aService( SERVICENAME_DESKTOP  );
-        uno::Reference< XComponentLoader > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance( aService ),
-                                                UNO_QUERY );
+        uno::Reference< XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );;
 
         Sequence< PropertyValue > aArgs( 1 );
         aArgs[0].Name = ::rtl::OUString("Hidden");

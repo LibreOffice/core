@@ -1648,7 +1648,7 @@ sal_Bool SfxViewShell::ExecKey_Impl(const KeyEvent& aKey)
     {
         pImp->m_pAccExec.reset(
             ::svt::AcceleratorExecute::createAcceleratorHelper() );
-        pImp->m_pAccExec->init(::comphelper::getProcessServiceFactory(),
+        pImp->m_pAccExec->init(::comphelper::getProcessComponentContext(),
             pFrame->GetFrame().GetFrameInterface());
     }
 

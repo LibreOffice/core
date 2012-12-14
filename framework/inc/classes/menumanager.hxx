@@ -83,7 +83,7 @@ class MenuManager : public ThreadHelpBase           ,
 
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& getServiceFactory();
 
-        static void UpdateSpecialWindowMenu( Menu* pMenu ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,IMutex& _rMutex);
+        static void UpdateSpecialWindowMenu( Menu* pMenu ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,IMutex& _rMutex);
         static void FillMenuImages(
             ::com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& xFrame,
             Menu* _pMenu,

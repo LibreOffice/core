@@ -849,7 +849,7 @@ sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
 
     // ---------------
     // create the view
-    setView( * new UnoDataBrowserView( pParent, *this, getORB() ) );
+    setView( * new UnoDataBrowserView( pParent, *this, comphelper::getComponentContext(getORB()) ) );
     if (!getBrowserView())
         return sal_False;
 

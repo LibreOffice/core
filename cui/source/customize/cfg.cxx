@@ -67,7 +67,7 @@
 #include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/UICommandDescription.hpp>
 #include <com/sun/star/ui/XUIConfiguration.hpp>
 #include <com/sun/star/ui/XUIConfigurationListener.hpp>
@@ -760,15 +760,13 @@ SfxTabPage *CreateSvxEventConfigPage( Window *pParent, const SfxItemSet& rSet )
 
 sal_Bool impl_showKeyConfigTabPage( const css::uno::Reference< css::frame::XFrame >& xFrame )
 {
-    static ::rtl::OUString SERVICENAME_DESKTOP       ("com.sun.star.frame.Desktop"            );
     static ::rtl::OUString MODULEID_STARTMODULE      ("com.sun.star.frame.StartModule"        );
 
     try
     {
-        css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR   = ::comphelper::getProcessServiceFactory();
-        css::uno::Reference< css::uno::XComponentContext > xContext   = ::comphelper::getProcessComponentContext();
-        css::uno::Reference< css::frame::XFramesSupplier >     xDesktop(xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY_THROW);
-        css::uno::Reference< css::frame::XModuleManager2 >      xMM     (css::frame::ModuleManager::create(xContext));
+        css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        css::uno::Reference< css::frame::XDesktop2 >       xDesktop = css::frame::Desktop::create( xContext );
+        css::uno::Reference< css::frame::XModuleManager2 >      xMM = css::frame::ModuleManager::create(xContext);
 
         if (xFrame.is())
         {
@@ -1650,8 +1648,6 @@ void SvxConfigPage::Reset( const SfxItemSet& )
         uno::Reference < css::ui::XUIConfigurationManager > xCfgMgr;
         uno::Reference < css::ui::XUIConfigurationManager > xDocCfgMgr;
 
-        uno::Reference< lang::XMultiServiceFactory > xServiceManager(
-            ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
         uno::Reference< uno::XComponentContext > xContext(
             ::comphelper::getProcessComponentContext(), uno::UNO_QUERY_THROW );
 
@@ -1780,10 +1776,8 @@ void SvxConfigPage::Reset( const SfxItemSet& )
             uno::Sequence< uno::Reference< frame::XFrame > > aFrameList;
             try
             {
-                uno::Reference< frame::XFramesSupplier > xFramesSupplier(
-                    xServiceManager->createInstance(
-                        OUString( "com.sun.star.frame.Desktop"  ) ),
-                    uno::UNO_QUERY_THROW );
+                uno::Reference< frame::XDesktop2 > xFramesSupplier = frame::Desktop::create(
+                    xContext );
 
                 uno::Reference< frame::XFrames > xFrames =
                     xFramesSupplier->getFrames();
@@ -1876,20 +1870,17 @@ void SvxConfigPage::Reset( const SfxItemSet& )
     ::rtl::OUString sModuleID;
     try
     {
-        uno::Reference< lang::XMultiServiceFactory > xServiceManager(
-            ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
+        uno::Reference< uno::XComponentContext > xContext(
+            ::comphelper::getProcessComponentContext() );
 
-        uno::Reference< frame::XFramesSupplier > xFramesSupplier(
-            xServiceManager->createInstance(
-                OUString( "com.sun.star.frame.Desktop"  ) ),
-            uno::UNO_QUERY_THROW );
+        uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(
+            xContext );
 
         if ( !_inout_rxFrame.is() )
-            _inout_rxFrame = xFramesSupplier->getActiveFrame();
+            _inout_rxFrame = xDesktop->getActiveFrame();
 
         if ( !_inout_rxFrame.is() )
         {
-            uno::Reference< frame::XDesktop > xDesktop( xFramesSupplier, uno::UNO_QUERY_THROW );
             _inout_rxFrame = xDesktop->getCurrentFrame();
         }
 
@@ -1903,7 +1894,7 @@ void SvxConfigPage::Reset( const SfxItemSet& )
         }
 
         uno::Reference< css::frame::XModuleManager2 > xModuleManager(
-                css::frame::ModuleManager::create( comphelper::getComponentContext(xServiceManager) ) );
+                css::frame::ModuleManager::create( xContext ) );
 
         try
         {

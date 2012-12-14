@@ -20,6 +20,7 @@
 #include <svtools/svmedit.hxx>
 #include <tools/diagnose_ex.h>
 #include <com/sun/star/document/XEventsSupplier.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/GlobalEventBroadcaster.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 
@@ -179,10 +180,8 @@ IMPL_LINK( SvxEventConfigPage, SelectHdl_Impl, ListBox *, pBox )
     {
         bool isReadonly = sal_False;
 
-        uno::Reference< frame::XFramesSupplier > xFramesSupplier(
-            ::comphelper::getProcessServiceFactory()->createInstance(
-                OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" )) ),
-            uno::UNO_QUERY );
+        uno::Reference< frame::XDesktop2 > xFramesSupplier = frame::Desktop::create(
+            ::comphelper::getProcessComponentContext() );
 
         uno::Reference< frame::XFrame > xFrame =
             xFramesSupplier->getActiveFrame();

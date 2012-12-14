@@ -20,7 +20,7 @@
 #include <svtools/acceleratorexecute.hxx>
 
 #include <com/sun/star/frame/ModuleManager.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/ui/GlobalAcceleratorConfiguration.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
@@ -105,27 +105,25 @@ AcceleratorExecute* AcceleratorExecute::createAcceleratorHelper()
 }
 
 //-----------------------------------------------
-void AcceleratorExecute::init(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR,
+void AcceleratorExecute::init(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                               const css::uno::Reference< css::frame::XFrame >&              xEnv )
 {
     // SAFE -> ----------------------------------
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     // take over the uno service manager
-    m_xSMGR = xSMGR;
+    m_xContext = rxContext;
 
     // specify our internal dispatch provider
     // frame or desktop?! => document or global config.
     sal_Bool bDesktopIsUsed = sal_False;
-             m_xDispatcher  = css::uno::Reference< css::frame::XDispatchProvider >(xEnv, css::uno::UNO_QUERY);
+    m_xDispatcher  = css::uno::Reference< css::frame::XDispatchProvider >(xEnv, css::uno::UNO_QUERY);
     if (!m_xDispatcher.is())
     {
         aLock.clear();
         // <- SAFE ------------------------------
 
-        css::uno::Reference< css::frame::XDispatchProvider > xDispatcher(
-                            xSMGR->createInstance(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ))),
-                            css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::frame::XDispatchProvider > xDispatcher(css::frame::Desktop::create(rxContext), css::uno::UNO_QUERY_THROW);
 
         // SAFE -> ------------------------------
         aLock.reset();
@@ -143,11 +141,11 @@ void AcceleratorExecute::init(const css::uno::Reference< css::lang::XMultiServic
     css::uno::Reference< css::ui::XAcceleratorConfiguration > xDocCfg   ;
 
     // global cfg
-    xGlobalCfg = css::ui::GlobalAcceleratorConfiguration::create(comphelper::getComponentContext(xSMGR));
+    xGlobalCfg = css::ui::GlobalAcceleratorConfiguration::create(rxContext);
     if (!bDesktopIsUsed)
     {
         // module cfg
-        xModuleCfg = AcceleratorExecute::st_openModuleConfig(comphelper::getComponentContext(xSMGR), xEnv);
+        xModuleCfg = AcceleratorExecute::st_openModuleConfig(rxContext, xEnv);
 
         // doc cfg
         css::uno::Reference< css::frame::XController > xController;
@@ -417,13 +415,12 @@ css::uno::Reference< css::util::XURLTransformer > AcceleratorExecute::impl_ts_ge
 
     if (m_xURLParser.is())
         return m_xURLParser;
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
 
     aLock.clear();
     // <- SAFE ----------------------------------
 
-    css::uno::Reference< css::util::XURLTransformer > xParser(
-                css::util::URLTransformer::create( ::comphelper::getComponentContext(xSMGR) ) );
+    css::uno::Reference< css::util::XURLTransformer > xParser =  css::util::URLTransformer::create( xContext );
 
     // SAFE -> ----------------------------------
     aLock.reset();

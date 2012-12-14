@@ -97,7 +97,7 @@ namespace rptui
 
     public:
         ODesignView(Window* pParent,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&,
                     OReportController& _rController);
         virtual ~ODesignView();
 

@@ -75,7 +75,6 @@ namespace framework
             com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >     aArgSeq;
         };
 
-        com::sun::star::uno::Reference<com::sun::star::frame::XDesktop>                  mxDesktop;
         com::sun::star::uno::Reference<com::sun::star::frame::XDispatchProvider >        mxDesktopDispatchProvider;
         com::sun::star::uno::Reference<com::sun::star::frame::XFrame>                    mxFrame;
         com::sun::star::uno::Reference<com::sun::star::document::XEventBroadcaster>      mxBroadcaster;

@@ -34,6 +34,7 @@
 #include <tubes/file-transfer-helper.h>
 
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -269,13 +270,8 @@ void TeleManager_fileReceived( const OUString& rStr, const OString& rUuid )
 
     try
     {
-        css::uno::Reference< css::lang::XMultiServiceFactory > rFactory =
-            comphelper::getProcessServiceFactory();
-
-        css::uno::Reference < css::frame::XComponentLoader > xLoader(
-                ::comphelper::getProcessServiceFactory()->createInstance(
-                        "com.sun.star.frame.Desktop" ),
-                        css::uno::UNO_QUERY_THROW );
+        css::uno::Reference < css::frame::XDesktop2 > xLoader = css::frame::Desktop::create(
+                ::comphelper::getProcessComponentContext() );
         css::uno::Sequence < css::beans::PropertyValue > args(0);
         css::uno::Reference < css::util::XCloseable > xDoc(
                 xLoader->loadComponentFromURL( rStr, "_blank", 0, args ),

@@ -40,6 +40,7 @@
 #include <com/sun/star/script/provider/ScriptErrorRaisedException.hpp>
 #include <com/sun/star/script/provider/ScriptExceptionRaisedException.hpp>
 #include <com/sun/star/script/provider/ScriptFrameworkErrorType.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
@@ -252,12 +253,7 @@ Reference< XInterface  >
 SFTreeListBox::getDocumentModel( Reference< XComponentContext >& xCtx, ::rtl::OUString& docName )
 {
     Reference< XInterface > xModel;
-    Reference< lang::XMultiComponentFactory > mcf =
-            xCtx->getServiceManager();
-    Reference< frame::XDesktop > desktop (
-        mcf->createInstanceWithContext(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop") ),                 xCtx ),
-            UNO_QUERY );
+    Reference< frame::XDesktop2 > desktop  = frame::Desktop::create(xCtx);
 
     Reference< container::XEnumerationAccess > componentsAccess =
         desktop->getComponents();

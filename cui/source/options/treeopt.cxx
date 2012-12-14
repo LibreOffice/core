@@ -55,7 +55,7 @@
 #include <com/sun/star/awt/XContainerWindowProvider.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/loader/CannotActivateFactoryException.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
@@ -1490,13 +1490,11 @@ rtl::OUString getCurrentFactory_Impl( const Reference< XFrame >& _xFrame )
 {
     rtl::OUString sIdentifier;
     Reference < XFrame > xCurrentFrame( _xFrame );
-    Reference < XModuleManager2 > xModuleManager( ModuleManager::create(::comphelper::getProcessComponentContext()) );
+    Reference < XModuleManager2 > xModuleManager = ModuleManager::create(::comphelper::getProcessComponentContext());
     if ( !xCurrentFrame.is() )
     {
-        Reference< XDesktop > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
-            DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
-        if ( xDesktop.is() )
-            xCurrentFrame = xDesktop->getCurrentFrame();
+        Reference< XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
+        xCurrentFrame = xDesktop->getCurrentFrame();
     }
 
     if ( xCurrentFrame.is() )
@@ -1599,7 +1597,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
 
 
     rtl::OUString aFactory = getCurrentFactory_Impl( _xFrame );
-    rtl::OUString sTemp = GetModuleIdentifier( comphelper::getProcessServiceFactory(), _xFrame );
+    rtl::OUString sTemp = GetModuleIdentifier( _xFrame );
     DBG_ASSERT( sTemp == aFactory, "S H I T!!!" );
 
     // Writer and Writer/Web options
@@ -1927,8 +1925,7 @@ void OfaTreeOptionsDialog::LoadExtensionOptions( const rtl::OUString& rExtension
     // when called by Tools - Options then load nodes of active module
     if ( rExtensionId.isEmpty() )
     {
-        Reference< XMultiServiceFactory > xMSFac = comphelper::getProcessServiceFactory();
-        pModule = LoadModule( GetModuleIdentifier( xMSFac, Reference< XFrame >() ) );
+        pModule = LoadModule( GetModuleIdentifier( Reference< XFrame >() ) );
     }
 
     VectorOfNodes aNodeList = LoadNodes( pModule, rExtensionId );
@@ -1937,19 +1934,17 @@ void OfaTreeOptionsDialog::LoadExtensionOptions( const rtl::OUString& rExtension
     delete pModule;
 }
 
-rtl::OUString OfaTreeOptionsDialog::GetModuleIdentifier(
-    const Reference< XMultiServiceFactory >& xMFac, const Reference< XFrame >& rFrame )
+rtl::OUString OfaTreeOptionsDialog::GetModuleIdentifier( const Reference< XFrame >& rFrame )
 {
     rtl::OUString sModule;
     Reference < XFrame > xCurrentFrame( rFrame );
-    Reference < XModuleManager2 > xModuleManager( ModuleManager::create(comphelper::getComponentContext(xMFac)) );
+    Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
+    Reference < XModuleManager2 > xModuleManager = ModuleManager::create(xContext);
 
     if ( !xCurrentFrame.is() )
     {
-        Reference < XDesktop > xDesktop( xMFac->createInstance(
-            "com.sun.star.frame.Desktop" ), UNO_QUERY );
-        if ( xDesktop.is() )
-            xCurrentFrame = xDesktop->getCurrentFrame();
+        Reference < XDesktop2 > xDesktop = Desktop::create( xContext );
+        xCurrentFrame = xDesktop->getCurrentFrame();
     }
 
     if ( xCurrentFrame.is() )

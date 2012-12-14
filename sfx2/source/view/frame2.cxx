@@ -34,6 +34,7 @@
 
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
@@ -227,8 +228,7 @@ Reference < XFrame > SfxFrame::CreateBlankFrame()
     Reference < XFrame > xFrame;
     try
     {
-        ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-        Reference < XFrame > xDesktop( aContext.createComponent( "com.sun.star.frame.Desktop" ), UNO_QUERY_THROW );
+        Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
         xFrame.set( xDesktop->findFrame( DEFINE_CONST_UNICODE("_blank"), 0 ), UNO_SET_THROW );
     }
     catch( const Exception& )
@@ -245,7 +245,7 @@ SfxFrame* SfxFrame::Create( SfxObjectShell& rDoc, Window& rWindow, sal_uInt16 nV
     {
         // create and initialize new top level frame for this window
         ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-        Reference < XFramesSupplier > xDesktop( aContext.createComponent( "com.sun.star.frame.Desktop" ), UNO_QUERY_THROW );
+        Reference < XDesktop2 > xDesktop = Desktop::create( aContext.getUNOContext() );
         Reference < XFrame > xFrame( aContext.createComponent( "com.sun.star.frame.Frame"), UNO_QUERY_THROW );
 
         Reference< awt::XWindow2 > xWin( VCLUnoHelper::GetInterface ( &rWindow ), uno::UNO_QUERY_THROW );

@@ -55,6 +55,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -65,7 +66,6 @@
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/ucb/IOErrorCode.hpp>
@@ -963,7 +963,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         {
         private:
             Reference< XComponentLoader >       m_xFrameLoader;
-            Reference< XDesktop >               m_xDesktop;
+            Reference< XDesktop2 >              m_xDesktop;
             Reference< XInteractionHandler2 >   m_xInteractionHandler;
             ::rtl::OUString                     m_sURL;
             OAsyncronousLink                    m_aAsyncCaller;
@@ -990,7 +990,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         {
             try
             {
-                m_xDesktop.set( _rxORB->createInstance( SERVICE_FRAME_DESKTOP ), UNO_QUERY_THROW );
+                m_xDesktop.set( Desktop::create(comphelper::getComponentContext(_rxORB)) );
                 m_xFrameLoader.set( m_xDesktop, UNO_QUERY_THROW );
                 m_xInteractionHandler =
                     InteractionHandler::createWithParent(comphelper::getComponentContext(_rxORB), 0);

@@ -42,6 +42,7 @@
 #include <cstdarg>
 
 #include <comphelper/string.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include "plugin/impl.hxx"
 
@@ -99,7 +100,7 @@ const Sequence< ::rtl::OUString >& PluginManager::getAdditionalSearchPaths()
 //==================================================================================================
 Reference< XInterface > SAL_CALL PluginManager_CreateInstance( const Reference< ::com::sun::star::lang::XMultiServiceFactory >  & rSMgr ) throw( Exception )
 {
-    Reference< XInterface >  xService = *new XPluginManager_Impl( rSMgr );
+    Reference< XInterface >  xService = *new XPluginManager_Impl( comphelper::getComponentContext(rSMgr) );
     return xService;
 }
 
@@ -136,10 +137,10 @@ Sequence< ::rtl::OUString > XPluginManager_Impl::getSupportedServiceNames_Static
     return aSNS;
 }
 
-XPluginManager_Impl::XPluginManager_Impl( const Reference< ::com::sun::star::lang::XMultiServiceFactory >  & rSMgr )
-: m_xSMgr( rSMgr )
+XPluginManager_Impl::XPluginManager_Impl( const Reference< ::com::sun::star::uno::XComponentContext >  & rxContext )
+: m_xContext( rxContext )
 {
-    PluginManager::setServiceFactory( rSMgr );
+    PluginManager::setServiceFactory( Reference< ::com::sun::star::lang::XMultiServiceFactory>(rxContext->getServiceManager(), UNO_QUERY_THROW) );
 }
 
 XPluginManager_Impl::~XPluginManager_Impl()
@@ -189,7 +190,7 @@ Sequence<com::sun::star::plugin::PluginDescription> XPluginManager_Impl::getPlug
 Reference< ::com::sun::star::plugin::XPlugin > XPluginManager_Impl::createPlugin( const Reference< ::com::sun::star::plugin::XPluginContext >& acontext, sal_Int16 mode, const Sequence< ::rtl::OUString >& argn, const Sequence< ::rtl::OUString >& argv, const ::com::sun::star::plugin::PluginDescription& plugintype)
     throw( RuntimeException,::com::sun::star::plugin::PluginException )
 {
-    XPlugin_Impl* pImpl = new XPlugin_Impl( m_xSMgr );
+    XPlugin_Impl* pImpl = new XPlugin_Impl( Reference< ::com::sun::star::lang::XMultiServiceFactory>(m_xContext->getServiceManager(), UNO_QUERY_THROW) );
     pImpl->setPluginContext( acontext );
 
     PluginManager::get().getPlugins().push_back( pImpl );
@@ -204,7 +205,7 @@ Reference< ::com::sun::star::plugin::XPlugin > XPluginManager_Impl::createPlugin
 
 Reference< ::com::sun::star::plugin::XPlugin >  XPluginManager_Impl::createPluginFromURL( const Reference< ::com::sun::star::plugin::XPluginContext > & acontext, sal_Int16 mode, const Sequence< ::rtl::OUString >& argn, const Sequence< ::rtl::OUString >& argv, const Reference< ::com::sun::star::awt::XToolkit > & toolkit, const Reference< ::com::sun::star::awt::XWindowPeer > & parent, const ::rtl::OUString& url ) throw()
 {
-    XPlugin_Impl* pImpl = new XPlugin_Impl( m_xSMgr );
+    XPlugin_Impl* pImpl = new XPlugin_Impl( Reference< ::com::sun::star::lang::XMultiServiceFactory>(m_xContext->getServiceManager(), UNO_QUERY_THROW) );
     Reference< ::com::sun::star::plugin::XPlugin >  xRef = pImpl;
 
     pImpl->setPluginContext( acontext );

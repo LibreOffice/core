@@ -45,7 +45,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
@@ -91,13 +91,8 @@ DocumentHolder::DocumentHolder(
     m_nMacroExecMode( document::MacroExecMode::USE_CONFIG ),
     m_bLink( sal_False )
 {
-    static const ::rtl::OUString aServiceName (
-        RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.frame.Desktop" ) );
-    uno::Reference< frame::XDesktop > xDesktop(
-        m_xFactory->createInstance( aServiceName ),
-        uno::UNO_QUERY );
-    if ( xDesktop.is() )
-        xDesktop->addTerminateListener( (frame::XTerminateListener*)this );
+    uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(comphelper::getComponentContext(m_xFactory));
+    xDesktop->addTerminateListener( (frame::XTerminateListener*)this );
 }
 
 
@@ -390,13 +385,8 @@ HRESULT DocumentHolder::InPlaceActivate(
             // load the model into the frame
             LoadDocInFrame( sal_True );
 
-            static const ::rtl::OUString aDesktopServiceName (
-                RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.frame.Desktop" ) );
-            uno::Reference< frame::XFramesSupplier > xDesktop(
-                m_xFactory->createInstance( aDesktopServiceName ),
-                uno::UNO_QUERY );
-            if(xDesktop.is())
-                xDesktop->getFrames()->append(m_xFrame);
+            uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(comphelper::getComponentContext(m_xFactory));
+            xDesktop->getFrames()->append(m_xFrame);
 
             // determine the menuhandle to get menutitems.
             if(m_xLayoutManager.is()) {
@@ -645,15 +635,9 @@ BOOL DocumentHolder::Undo(void)
 
 void DocumentHolder::FreeOffice()
 {
-    const ::rtl::OUString aServiceName(
-        RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.frame.Desktop" ) );
-    uno::Reference< frame::XDesktop > xDesktop(
-        m_xFactory->createInstance( aServiceName ), uno::UNO_QUERY );
-    if ( xDesktop.is() )
-    {
-        xDesktop->removeTerminateListener(
-            (frame::XTerminateListener*)this );
-    }
+    uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(comphelper::getComponentContext(m_xFactory));
+    xDesktop->removeTerminateListener(
+        (frame::XTerminateListener*)this );
 }
 
 void DocumentHolder::DisconnectFrameDocument( sal_Bool bComplete )
@@ -812,15 +796,9 @@ uno::Reference< frame::XFrame > DocumentHolder::DocumentFrame()
 {
     if(! m_xFrame.is() )
     {
-        rtl::OUString aDesktopSrvNm(
-            RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"));
+        uno::Reference<frame::XDesktop2> xDesktop = frame::Desktop::create(comphelper::getComponentContext(m_xFactory));
 
-        uno::Reference<frame::XDesktop> xDesktop(
-            m_xFactory->createInstance(aDesktopSrvNm),
-            uno::UNO_QUERY);
-
-        uno::Reference<frame::XFrame> xFrame(
-            xDesktop,uno::UNO_QUERY);
+        uno::Reference<frame::XFrame> xFrame(xDesktop,uno::UNO_QUERY);
 
         // the frame will be registered on desktop here, later when the document
         // is loaded into the frame in ::show() method the terminate listener will be removed

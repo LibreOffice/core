@@ -47,7 +47,7 @@
 #include "ViewShellBase.hxx"
 
 #include <com/sun/star/embed/XEmbedPersist.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <svtools/embedtransfer.hxx>
 #include "svtools/treelistentry.hxx"
@@ -1383,15 +1383,9 @@ void SdPageObjsTLB::AddShapeToTransferable (
     try
     {
         // Get a component enumeration from the desktop and search it for documents.
-        uno::Reference<lang::XMultiServiceFactory> xFactory (
-            ::comphelper::getProcessServiceFactory ());
-        if ( ! xFactory.is())
-            return NULL;
+        uno::Reference<uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext());
 
-        uno::Reference<frame::XDesktop> xDesktop (xFactory->createInstance (
-                ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")), uno::UNO_QUERY);
-        if ( ! xDesktop.is())
-            return NULL;
+        uno::Reference<frame::XDesktop2> xDesktop = frame::Desktop::create(xContext);
 
         uno::Reference<frame::XFramesSupplier> xFrameSupplier (xDesktop, uno::UNO_QUERY);
         if ( ! xFrameSupplier.is())

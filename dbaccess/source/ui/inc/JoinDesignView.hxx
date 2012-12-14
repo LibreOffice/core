@@ -45,7 +45,7 @@ namespace dbaui
     public:
         OJoinDesignView(Window* pParent,
                         OJoinController& _rController,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& );
         virtual ~OJoinDesignView();
 
         // set the view readonly or not

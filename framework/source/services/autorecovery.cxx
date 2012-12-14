@@ -36,6 +36,7 @@
 
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/GlobalEventBroadcaster.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
@@ -1988,7 +1989,7 @@ void AutoRecovery::implts_changeAllDocVisibility(sal_Bool bVisible)
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
-    css::uno::Reference< css::frame::XFramesSupplier > xDesktop(xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY);
+    css::uno::Reference< css::frame::XFramesSupplier > xDesktop( css::frame::Desktop::create( comphelper::getComponentContext(xSMGR) ), css::uno::UNO_QUERY);
     lcl_changeVisibility( xDesktop, bVisible );
 
     aReadLock.unlock();
@@ -2128,8 +2129,8 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(      sal_Bool        bAl
     if (pParams)
         xExternalProgress = pParams->m_xProgress;
 
-    css::uno::Reference< css::frame::XFramesSupplier > xDesktop      (xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY);
-    ::rtl::OUString                                    sBackupPath   (SvtPathOptions().GetBackupPath());
+    css::uno::Reference< css::frame::XDesktop2 > xDesktop   = css::frame::Desktop::create( comphelper::getComponentContext(xSMGR));
+    ::rtl::OUString                              sBackupPath(SvtPathOptions().GetBackupPath());
 
     css::uno::Reference< css::frame::XController > xActiveController;
     css::uno::Reference< css::frame::XModel >      xActiveModel     ;
@@ -2625,7 +2626,7 @@ void AutoRecovery::implts_openOneDoc(const ::rtl::OUString&               sURL  
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
-    css::uno::Reference< css::frame::XFrame > xDesktop( xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY_THROW );
+    css::uno::Reference< css::frame::XDesktop2 > xDesktop   = css::frame::Desktop::create( comphelper::getComponentContext(xSMGR));
 
     ::std::vector< Reference< XComponent > > aCleanup;
     try
@@ -3361,9 +3362,7 @@ void AutoRecovery::implts_verifyCacheAgainstDesktopDocumentList()
 
     try
     {
-        css::uno::Reference< css::frame::XFramesSupplier > xDesktop(
-            xSMGR->createInstance(SERVICENAME_DESKTOP),
-            css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::frame::XDesktop2 > xDesktop   = css::frame::Desktop::create( comphelper::getComponentContext(xSMGR));
 
         css::uno::Reference< css::container::XIndexAccess > xContainer(
             xDesktop->getFrames(),

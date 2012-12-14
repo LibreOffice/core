@@ -38,7 +38,7 @@ namespace dbaui
         OQueryTextView*     m_pTextView;
         sal_Bool            m_bAddTableDialogWasVisible; // true if so
     public:
-        OQueryViewSwitch(OQueryContainerWindow* pParent, OQueryController& _rController,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
+        OQueryViewSwitch(OQueryContainerWindow* pParent, OQueryController& _rController,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& );
         virtual ~OQueryViewSwitch();
 
         virtual sal_Bool isCutAllowed();
@@ -82,7 +82,7 @@ namespace dbaui
         OQueryContainerWindow*  getContainer() const;
 
         void SetPosSizePixel( Point _rPt,Size _rSize);
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() const;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getORB() const;
     protected:
         // return the Rectangle where I can paint myself
         virtual void resizeDocumentView(Rectangle& rRect);

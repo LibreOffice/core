@@ -24,7 +24,6 @@
 
 #include <vector>
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -86,7 +85,7 @@ class SVT_DLLPUBLIC AcceleratorExecute : private TMutexInit
     private:
 
         /** TODO document me */
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
         /** TODO document me */
         css::uno::Reference< css::util::XURLTransformer > m_xURLParser;
@@ -153,7 +152,7 @@ class SVT_DLLPUBLIC AcceleratorExecute : private TMutexInit
                     executions will be used inside the old and which one
                     will be used inside the new environment.
 
-            @param  xSMGR
+            @param  rxContext
                     reference to an uno service manager.
 
             @param  xEnv
@@ -167,7 +166,7 @@ class SVT_DLLPUBLIC AcceleratorExecute : private TMutexInit
                     is used only. Further the global Desktop instance is
                     used for dispatch.
          */
-        virtual void init(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR,
+        virtual void init(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                           const css::uno::Reference< css::frame::XFrame >&              xEnv );
 
         //---------------------------------------

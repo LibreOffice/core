@@ -50,6 +50,7 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XFrameLoader.hpp>
 #include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
@@ -972,7 +973,7 @@ sal_Bool LoadEnv::impl_furtherDocsAllowed()
             aVal >>= nMaxOpenDocuments;
 
             css::uno::Reference< css::frame::XFramesSupplier > xDesktop(
-                xSMGR->createInstance(SERVICENAME_DESKTOP),
+                css::frame::Desktop::create( comphelper::getComponentContext(xSMGR)),
                 css::uno::UNO_QUERY_THROW);
 
             FrameListAnalyzer aAnalyzer(xDesktop,
@@ -1295,7 +1296,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
 
     // otherwhise - iterate through the tasks of the desktop container
     // to find out, which of them might contains the requested document
-    css::uno::Reference< css::frame::XFramesSupplier >  xSupplier(m_xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY);
+    css::uno::Reference< css::frame::XDesktop2 >  xSupplier = css::frame::Desktop::create( comphelper::getComponentContext(m_xSMGR) );
     css::uno::Reference< css::container::XIndexAccess > xTaskList(xSupplier->getFrames()                      , css::uno::UNO_QUERY);
 
     if (!xTaskList.is())
@@ -1436,7 +1437,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     if (m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_HIDDEN(), sal_False) == sal_True)
         return css::uno::Reference< css::frame::XFrame >();
 
-    css::uno::Reference< css::frame::XFramesSupplier > xSupplier(m_xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY);
+    css::uno::Reference< css::frame::XFramesSupplier > xSupplier( css::frame::Desktop::create( comphelper::getComponentContext(m_xSMGR) ), css::uno::UNO_QUERY);
     FrameListAnalyzer aTasksAnalyzer(xSupplier, css::uno::Reference< css::frame::XFrame >(), FrameListAnalyzer::E_BACKINGCOMPONENT);
     if (aTasksAnalyzer.m_xBackingComponent.is())
     {

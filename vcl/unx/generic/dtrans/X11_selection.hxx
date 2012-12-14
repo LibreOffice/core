@@ -29,7 +29,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/XDesktop2.hpp>
 #include <osl/thread.h>
 
 #include <osl/conditn.hxx>
@@ -253,7 +253,7 @@ namespace x11 {
         oslThread                   m_aDragExecuteThread;
         ::osl::Condition            m_aDragRunning;
         XLIB_Window                 m_aWindow;
-        com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop > m_xDesktop;
+        com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop2 > m_xDesktop;
         com::sun::star::uno::Reference< ::com::sun::star::awt::XDisplayConnection >
                                     m_xDisplayConnection;
         com::sun::star::uno::Reference< com::sun::star::script::XInvocation >

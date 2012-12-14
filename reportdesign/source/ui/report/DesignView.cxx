@@ -87,7 +87,7 @@ public:
 DBG_NAME( rpt_ODesignView )
 //------------------------------------------------------------------------------
 ODesignView::ODesignView(   Window* pParent,
-                            const Reference< XMultiServiceFactory >& _rxOrb,
+                            const Reference< XComponentContext >& _rxOrb,
                             OReportController& _rController) :
     ODataView( pParent, _rController, _rxOrb, WB_DIALOGCONTROL )
     ,m_aSplitWin(this)

@@ -23,6 +23,7 @@
 #include <sfx2/infobar.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <com/sun/star/document/MacroExecMode.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/DispatchRecorderSupplier.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
@@ -1869,8 +1870,7 @@ SfxViewFrame* SfxViewFrame::LoadViewIntoFrame_Impl_NoThrow( const SfxObjectShell
     {
         if ( !xFrame.is() )
         {
-            ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-            Reference < XFrame > xDesktop( aContext.createComponent( "com.sun.star.frame.Desktop" ), UNO_QUERY_THROW );
+            Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
 
             if ( !i_bHidden )
             {
@@ -2321,13 +2321,11 @@ void SfxViewFrame::ExecView_Impl
 */
 sal_Bool impl_maxOpenDocCountReached()
 {
-    static ::rtl::OUString SERVICE_DESKTOP("com.sun.star.frame.Desktop");
-
     try
     {
-        css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
+        css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
         css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
-                                ::comphelper::getProcessComponentContext(),
+                                xContext,
                                 ::rtl::OUString("org.openoffice.Office.Common/"),
                                 ::rtl::OUString("Misc"),
                                 ::rtl::OUString("MaxOpenDocuments"),
@@ -2341,7 +2339,7 @@ sal_Bool impl_maxOpenDocCountReached()
         sal_Int32 nMaxDocs  = 0;
         aVal >>= nMaxDocs;
 
-        css::uno::Reference< css::frame::XFramesSupplier >  xDesktop(xSMGR->createInstance(SERVICE_DESKTOP), css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::frame::XDesktop2 >  xDesktop = css::frame::Desktop::create(xContext);
         css::uno::Reference< css::container::XIndexAccess > xCont   (xDesktop->getFrames()                 , css::uno::UNO_QUERY_THROW);
 
         sal_Int32 c = xCont->getCount();

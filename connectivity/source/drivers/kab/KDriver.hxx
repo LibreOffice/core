@@ -47,8 +47,8 @@ namespace connectivity
         class KabImplModule
         {
         private:
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                                        m_xORB;
+            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+                                        m_xContext;
 
             /// Did we already attempt to load the module and to retrieve the symbols?
             bool    m_bAttemptedLoadModule;
@@ -62,7 +62,7 @@ namespace connectivity
             KDEVersionCheckFunction     m_pKDEVersionCheckFunc;
 
         public:
-            KabImplModule( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory );
+            KabImplModule( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext );
 
             /** determines whether there is a KDE present in the environment
             */
@@ -151,8 +151,8 @@ namespace connectivity
             ::osl::Mutex                m_aMutex;           // mutex is need to control member access
             OWeakRefArray               m_xConnections;     // vector containing a list of all the
                                                             //  KabConnection objects for this Driver
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                                        m_xMSFactory;       // the multi-service factory
+            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+                                        m_xContext;       // the multi-service factory
             KabImplModule               m_aImplModule;
 
         public:
@@ -163,7 +163,7 @@ namespace connectivity
             static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(  ) throw (::com::sun::star::uno::RuntimeException);
 
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
-            getComponentContext() const { return comphelper::getComponentContext(m_xMSFactory); }
+            getComponentContext() const { return m_xContext; }
 
             /** returns the driver's implementation name (being pure ASCII) for reference in various places
             */
@@ -174,7 +174,7 @@ namespace connectivity
             static ::rtl::OUString  impl_getConfigurationSettingsPath();
 
         protected:
-            KabDriver(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
+            KabDriver(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);
 
             // OComponentHelper
             virtual void SAL_CALL disposing(void);

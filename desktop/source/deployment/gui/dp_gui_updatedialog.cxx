@@ -49,7 +49,7 @@
 #include "com/sun/star/deployment/XExtensionManager.hpp"
 #include "com/sun/star/deployment/ExtensionManager.hpp"
 #include "com/sun/star/deployment/XUpdateInformationProvider.hpp"
-#include "com/sun/star/frame/XDesktop.hpp"
+#include "com/sun/star/frame/Desktop.hpp"
 #include "com/sun/star/frame/XDispatch.hpp"
 #include "com/sun/star/frame/XDispatchProvider.hpp"
 #include "com/sun/star/lang/IllegalArgumentException.hpp"
@@ -837,13 +837,12 @@ void UpdateDialog::createNotifyJob( bool bPrepareOnly,
         util::URL aURL;
         xNameAccess->getByName(OUSTR("URL")) >>= aURL.Complete;
 
-        uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-        uno::Reference < util::XURLTransformer > xTransformer( util::URLTransformer::create(::comphelper::getProcessComponentContext()) );
+        uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+        uno::Reference < util::XURLTransformer > xTransformer = util::URLTransformer::create(xContext);
 
         xTransformer->parseStrict(aURL);
 
-        uno::Reference < frame::XDesktop > xDesktop( xFactory->createInstance( OUSTR( "com.sun.star.frame.Desktop" ) ),
-            uno::UNO_QUERY_THROW );
+        uno::Reference < frame::XDesktop2 > xDesktop = frame::Desktop::create( xContext );
         uno::Reference< frame::XDispatchProvider > xDispatchProvider( xDesktop->getCurrentFrame(),
             uno::UNO_QUERY_THROW );
         uno::Reference< frame::XDispatch > xDispatch = xDispatchProvider->queryDispatch(aURL, rtl::OUString(), 0);

@@ -29,7 +29,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/frame/XDesktop2.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/reflection/XProxyFactory.hpp>
 #include <comphelper/stl_types.hxx>
@@ -65,11 +66,11 @@ namespace connectivity
         MapDriver2DriverRef                                                                 m_aDriverProxies;
         ::osl::Mutex                                                                        m_aMutex;
         OConnectionPools                                                                    m_aPools;          // the driver pools
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceFactory;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriverManager2 >         m_xManager;
         ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XProxyFactory >     m_xProxyFactory;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >               m_xConfigNode;      // config node for generel connection pooling
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop>                m_xDesktop;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop2>               m_xDesktop;
 
     private:
         OPoolCollection();                          // never implemented
@@ -77,7 +78,7 @@ namespace connectivity
         int operator= (const OPoolCollection&);         // never implemented
 
         OPoolCollection(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);
 
         // some configuration helper methods
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createWithServiceFactory(const ::rtl::OUString& _rPath) const;

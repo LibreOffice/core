@@ -77,7 +77,7 @@ namespace dbaui
 
     public:
         OTableDesignView(   Window* pParent,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&,
                             OTableController& _rController);
         virtual ~OTableDesignView();
 

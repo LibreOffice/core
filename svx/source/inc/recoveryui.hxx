@@ -20,7 +20,6 @@
 #ifndef _RECOVERYUI_HXX
 #define _RECOVERYUI_HXX
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/frame/XSynchronousDispatch.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
@@ -56,7 +55,7 @@ class RecoveryUI : public ::cppu::WeakImplHelper2< css::lang::XServiceInfo      
     private:
 
         /** @short TODO */
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
         /** @short TODO */
         Window* m_pParentWindow;
@@ -73,7 +72,7 @@ class RecoveryUI : public ::cppu::WeakImplHelper2< css::lang::XServiceInfo      
 
         //---------------------------------------
         /** @short  TODO */
-        RecoveryUI(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
+        RecoveryUI(const css::uno::Reference< css::uno::XComponentContext >& xContext);
 
         //---------------------------------------
         /** @short  TODO */

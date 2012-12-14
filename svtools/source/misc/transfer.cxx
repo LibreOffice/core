@@ -45,7 +45,7 @@
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
 #include <com/sun/star/datatransfer/XMimeContentTypeFactory.hpp>
 #include <com/sun/star/datatransfer/XMimeContentType.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 
 #include "svl/urlbmk.hxx"
@@ -527,15 +527,8 @@ void SAL_CALL TransferableHelper::lostOwnership( const Reference< XClipboard >&,
     {
         if( mxTerminateListener.is() )
         {
-            Reference< XMultiServiceFactory > xFact( ::comphelper::getProcessServiceFactory() );
-
-            if( xFact.is() )
-            {
-                Reference< XDesktop > xDesktop( xFact->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" )) ), UNO_QUERY );
-
-                if( xDesktop.is() )
-                    xDesktop->removeTerminateListener( mxTerminateListener );
-            }
+            Reference< XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
+            xDesktop->removeTerminateListener( mxTerminateListener );
 
             mxTerminateListener = Reference< XTerminateListener >();
         }
@@ -1053,15 +1046,8 @@ void TransferableHelper::CopyToClipboard( Window *pWindow ) const
         try
         {
             TransferableHelper*                 pThis = const_cast< TransferableHelper* >( this );
-            Reference< XMultiServiceFactory >   xFact( ::comphelper::getProcessServiceFactory() );
-
-            if( xFact.is() )
-            {
-                Reference< XDesktop > xDesktop( xFact->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" )) ), UNO_QUERY );
-
-                if( xDesktop.is() )
-                    xDesktop->addTerminateListener( pThis->mxTerminateListener = new TerminateListener( *pThis ) );
-            }
+            Reference< XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
+            xDesktop->addTerminateListener( pThis->mxTerminateListener = new TerminateListener( *pThis ) );
 
             mxClipboard->setContents( pThis, pThis );
         }
@@ -1090,15 +1076,8 @@ void TransferableHelper::CopyToSelection( Window *pWindow ) const
         try
         {
             TransferableHelper*                 pThis = const_cast< TransferableHelper* >( this );
-            Reference< XMultiServiceFactory >   xFact( ::comphelper::getProcessServiceFactory() );
-
-            if( xFact.is() )
-            {
-                Reference< XDesktop > xDesktop( xFact->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" )) ), UNO_QUERY );
-
-                if( xDesktop.is() )
-                    xDesktop->addTerminateListener( pThis->mxTerminateListener = new TerminateListener( *pThis ) );
-            }
+            Reference< XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
+            xDesktop->addTerminateListener( pThis->mxTerminateListener = new TerminateListener( *pThis ) );
 
             xSelection->setContents( pThis, pThis );
         }

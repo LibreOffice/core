@@ -2520,8 +2520,8 @@ DBG_NAME(OQueryDesignView)
 
 OQueryDesignView::OQueryDesignView( OQueryContainerWindow* _pParent,
                                     OQueryController& _rController,
-                                    const Reference< XMultiServiceFactory >& _rFactory)
-    :OQueryView( _pParent, _rController, _rFactory )
+                                    const Reference< XComponentContext >& _rxContext)
+    :OQueryView( _pParent, _rController, _rxContext )
     ,m_aSplitter( this )
     ,m_eChildFocus(NONE)
     ,m_bInSplitHandler( sal_False )

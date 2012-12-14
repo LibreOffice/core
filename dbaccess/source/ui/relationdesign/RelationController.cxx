@@ -249,7 +249,7 @@ void ORelationController::impl_initialize()
 // -----------------------------------------------------------------------------
 sal_Bool ORelationController::Construct(Window* pParent)
 {
-    setView( * new ORelationDesignView( pParent, *this, getORB() ) );
+    setView( * new ORelationDesignView( pParent, *this, comphelper::getComponentContext(getORB()) ) );
     OJoinController::Construct(pParent);
     return sal_True;
 }

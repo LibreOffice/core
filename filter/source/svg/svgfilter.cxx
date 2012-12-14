@@ -24,7 +24,7 @@
 #include <uno/environment.h>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/drawing/XDrawSubController.hpp>
@@ -52,8 +52,7 @@ using namespace ::com::sun::star;
 // -------------
 
 SVGFilter::SVGFilter( const Reference< XComponentContext >& rxCtx ) :
-    mxMSF( rxCtx->getServiceManager(),
-           uno::UNO_QUERY_THROW ),
+    mxContext( rxCtx ),
     mpSVGDoc( NULL ),
     mpSVGExport( NULL ),
     mpSVGFontExport( NULL ),
@@ -97,8 +96,7 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
     {
         if( !mbExportAll && !mSelectedPages.hasElements() )
         {
-            uno::Reference< frame::XDesktop >                            xDesktop(mxMSF->createInstance( "com.sun.star.frame.Desktop" ),
-                                                                                  uno::UNO_QUERY_THROW);
+            uno::Reference< frame::XDesktop2 >                           xDesktop(frame::Desktop::create(mxContext));
             uno::Reference< frame::XFrame >                              xFrame(xDesktop->getCurrentFrame(),
                                                                                 uno::UNO_QUERY_THROW);
             uno::Reference<frame::XController >                          xController(xFrame->getController(),

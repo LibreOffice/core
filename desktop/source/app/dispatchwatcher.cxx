@@ -34,7 +34,7 @@
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/util/URL.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
@@ -165,9 +165,7 @@ DispatchWatcher::~DispatchWatcher()
 
 sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequestsList, bool bNoTerminate )
 {
-    Reference< XComponentLoader > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
-                                                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
-                                            UNO_QUERY );
+    Reference< XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
 
     DispatchList::const_iterator    p;
     std::vector< DispatchHolder >   aDispatches;
@@ -279,14 +277,12 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
             aURL.Complete = aName;
 
             Reference < XDispatch >         xDispatcher ;
-            Reference < XDispatchProvider > xProvider   ( xDesktop, UNO_QUERY );
             Reference < XURLTransformer >   xParser     ( URLTransformer::create(::comphelper::getProcessComponentContext()) );
 
             if( xParser.is() == sal_True )
                 xParser->parseStrict( aURL );
 
-            if( xProvider.is() == sal_True )
-                xDispatcher = xProvider->queryDispatch( aURL, ::rtl::OUString(), 0 );
+            xDispatcher = xDesktop->queryDispatch( aURL, ::rtl::OUString(), 0 );
 
             if( xDispatcher.is() == sal_True )
             {
@@ -309,14 +305,12 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
             aURL.Complete = aName;
 
             Reference < XDispatch >         xDispatcher ;
-            Reference < XDispatchProvider > xProvider   ( xDesktop, UNO_QUERY );
             Reference < XURLTransformer >   xParser     ( URLTransformer::create(::comphelper::getProcessComponentContext()) );
 
             if( xParser.is() == sal_True )
                 xParser->parseStrict( aURL );
 
-            if( xProvider.is() == sal_True )
-                xDispatcher = xProvider->queryDispatch( aURL, ::rtl::OUString(), 0 );
+            xDispatcher = xDesktop->queryDispatch( aURL, ::rtl::OUString(), 0 );
 
             if( xDispatcher.is() == sal_True )
             {
@@ -605,16 +599,13 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
     if ( bEmpty && !bNoTerminate /*m_aRequestContainer.empty()*/ )
     {
         // We have to check if we have an open task otherwise we have to shutdown the office.
-        Reference< XFramesSupplier > xTasksSupplier( xDesktop, UNO_QUERY );
         aGuard.clear();
-        Reference< XElementAccess > xList( xTasksSupplier->getFrames(), UNO_QUERY );
+        Reference< XElementAccess > xList( xDesktop->getFrames(), UNO_QUERY );
 
         if ( !xList->hasElements() )
         {
             // We don't have any task open so we have to shutdown ourself!!
-            Reference< XDesktop > xDesktop2( xTasksSupplier, UNO_QUERY );
-            if ( xDesktop2.is() )
-                return xDesktop2->terminate();
+            return xDesktop->terminate();
         }
     }
 
@@ -637,17 +628,13 @@ void SAL_CALL DispatchWatcher::dispatchFinished( const DispatchResultEvent& ) th
     if ( !nCount && !OfficeIPCThread::AreRequestsPending() )
     {
         // We have to check if we have an open task otherwise we have to shutdown the office.
-        Reference< XFramesSupplier > xTasksSupplier( ::comphelper::getProcessServiceFactory()->createInstance(
-                                                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
-                                                UNO_QUERY );
-        Reference< XElementAccess > xList( xTasksSupplier->getFrames(), UNO_QUERY );
+        Reference< XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
+        Reference< XElementAccess > xList( xDesktop->getFrames(), UNO_QUERY );
 
         if ( !xList->hasElements() )
         {
             // We don't have any task open so we have to shutdown ourself!!
-            Reference< XDesktop > xDesktop( xTasksSupplier, UNO_QUERY );
-            if ( xDesktop.is() )
-                xDesktop->terminate();
+            xDesktop->terminate();
         }
     }
 }

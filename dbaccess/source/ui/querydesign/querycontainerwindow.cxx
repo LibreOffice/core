@@ -45,13 +45,13 @@ namespace dbaui
     //= OQueryContainerWindow
     //=====================================================================
     DBG_NAME(OQueryContainerWindow)
-    OQueryContainerWindow::OQueryContainerWindow(Window* pParent, OQueryController& _rController,const Reference< XMultiServiceFactory >& _rFactory)
-        :ODataView( pParent, _rController, _rFactory )
+    OQueryContainerWindow::OQueryContainerWindow(Window* pParent, OQueryController& _rController,const Reference< XComponentContext >& _rxContext)
+        :ODataView( pParent, _rController, _rxContext )
         ,m_pViewSwitch(NULL)
         ,m_pBeamer(NULL)
     {
         DBG_CTOR(OQueryContainerWindow,NULL);
-        m_pViewSwitch = new OQueryViewSwitch( this, _rController, _rFactory );
+        m_pViewSwitch = new OQueryViewSwitch( this, _rController, _rxContext );
 
         m_pSplitter = new Splitter(this,WB_VSCROLL);
         m_pSplitter->Hide();
@@ -195,7 +195,7 @@ namespace dbaui
 
             ::dbaui::notifySystemWindow(this,m_pBeamer,::comphelper::mem_fun(&TaskPaneList::AddWindow));
 
-            Reference < XFrame > xBeamerFrame( m_pViewSwitch->getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Frame"))),UNO_QUERY );
+            Reference < XFrame > xBeamerFrame( m_pViewSwitch->getORB()->getServiceManager()->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Frame")), m_pViewSwitch->getORB()),UNO_QUERY );
             m_xBeamer.set( xBeamerFrame );
             OSL_ENSURE(m_xBeamer.is(),"No frame created!");
             m_xBeamer->initialize( VCLUnoHelper::GetInterface ( m_pBeamer ) );

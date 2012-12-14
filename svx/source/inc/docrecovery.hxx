@@ -51,7 +51,6 @@
 #define RECOVERY_CMD_DO_ENTRY_CLEANUP               rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.autorecovery:/doEntryCleanUp"        ))
 
 #define SERVICENAME_PROGRESSFACTORY                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.StatusIndicatorFactory"))
-#define SERVICENAME_DESKTOP                         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop"              ))
 
 #define PROP_PARENTWINDOW                           rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Window"           ))
 #define PROP_STATUSINDICATOR                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "StatusIndicator"  ))

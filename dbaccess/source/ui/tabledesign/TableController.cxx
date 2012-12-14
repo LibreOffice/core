@@ -565,7 +565,7 @@ void OTableController::impl_initialize()
 // -----------------------------------------------------------------------------
 sal_Bool OTableController::Construct(Window* pParent)
 {
-    setView( * new OTableDesignView( pParent, getORB(), *this ) );
+    setView( * new OTableDesignView( pParent, comphelper::getComponentContext(getORB()), *this ) );
     OTableController_BASE::Construct(pParent);
     return sal_True;
 }

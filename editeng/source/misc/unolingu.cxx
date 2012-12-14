@@ -25,6 +25,7 @@
 #include <editeng/unolingu.hxx>
 #include <rtl/logfile.hxx>
 #include <unotools/pathoptions.hxx>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
@@ -441,7 +442,7 @@ typedef cppu::WeakImplHelper1 < XEventListener > LinguMgrAppExitLstnrBaseClass;
 
 class LinguMgrAppExitLstnr : public LinguMgrAppExitLstnrBaseClass
 {
-    uno::Reference< XComponent >        xDesktop;
+    uno::Reference< XDesktop2 >        xDesktop;
 
 public:
     LinguMgrAppExitLstnr();
@@ -460,14 +461,9 @@ LinguMgrAppExitLstnr::LinguMgrAppExitLstnr()
     // add object to frame::Desktop EventListeners in order to properly call
     // the AtExit function at appliction exit.
 
-    uno::Reference< XMultiServiceFactory >  xMgr = getProcessServiceFactory();
-    if ( xMgr.is() )
-    {
-        xDesktop = uno::Reference< XComponent > ( xMgr->createInstance(
-                OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.frame.Desktop" ) ) ), UNO_QUERY ) ;
-        if (xDesktop.is())
-            xDesktop->addEventListener( this );
-    }
+    uno::Reference< XComponentContext >  xContext = getProcessComponentContext();
+    xDesktop = Desktop::create( xContext );
+    xDesktop->addEventListener( this );
 }
 
 LinguMgrAppExitLstnr::~LinguMgrAppExitLstnr()
@@ -637,11 +633,8 @@ uno::Reference< XDictionaryList > LinguMgr::GetDicList()
         pExitLstnr = new LinguMgrExitLstnr;
 
     uno::Reference< XMultiServiceFactory >  xMgr( getProcessServiceFactory() );
-    if (xMgr.is())
-    {
-        xDicList = uno::Reference< XDictionaryList > ( xMgr->createInstance(
-                    A2OU("com.sun.star.linguistic2.DictionaryList") ), UNO_QUERY );
-    }
+    xDicList = uno::Reference< XDictionaryList > ( xMgr->createInstance(
+                A2OU("com.sun.star.linguistic2.DictionaryList") ), UNO_QUERY );
     return xDicList;
 }
 
@@ -654,11 +647,8 @@ uno::Reference< XPropertySet > LinguMgr::GetProp()
         pExitLstnr = new LinguMgrExitLstnr;
 
     uno::Reference< XMultiServiceFactory >  xMgr( getProcessServiceFactory() );
-    if (xMgr.is())
-    {
-        xProp = uno::Reference< XPropertySet > ( xMgr->createInstance(
-                    A2OU("com.sun.star.linguistic2.LinguProperties") ), UNO_QUERY );
-    }
+    xProp = uno::Reference< XPropertySet > ( xMgr->createInstance(
+                A2OU("com.sun.star.linguistic2.LinguProperties") ), UNO_QUERY );
     return xProp;
 }
 

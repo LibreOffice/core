@@ -47,7 +47,7 @@
 #include <com/sun/star/sheet/XNamedRanges.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/table/XTableChartsSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
@@ -160,13 +160,8 @@ openNewDoc(rtl::OUString aSheetName )
     {
         uno::Reference< uno::XComponentContext > xContext(
             comphelper::getProcessComponentContext() );
-        uno::Reference<lang::XMultiComponentFactory > xServiceManager(
-            xContext->getServiceManager() );
 
-        uno::Reference <frame::XComponentLoader > xComponentLoader(
-                        xServiceManager->createInstanceWithContext(
-                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ) ),
-                        xContext ), uno::UNO_QUERY_THROW );
+        uno::Reference <frame::XDesktop2 > xComponentLoader = frame::Desktop::create(xContext);
 
         uno::Reference<lang::XComponent > xComponent( xComponentLoader->loadComponentFromURL(
                 rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:factory/scalc" ) ),

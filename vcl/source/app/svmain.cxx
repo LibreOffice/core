@@ -71,6 +71,7 @@
 #include "osl/process.h"
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/lang/XComponent.hpp"
+#include "com/sun/star/frame/Desktop.hpp"
 
 #include "cppuhelper/implbase1.hxx"
 #include "uno/current_context.hxx"
@@ -472,11 +473,8 @@ void DeInitVCL()
     {
         try
         {
-            uno::Reference<lang::XComponent> const xDesktop(
-                    comphelper::getProcessServiceFactory()->createInstance(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))),
-                    uno::UNO_QUERY_THROW)
-                ;
+            uno::Reference<frame::XDesktop2> const xDesktop = frame::Desktop::create(
+                    comphelper::getProcessComponentContext() );
             xDesktop->addEventListener(new VCLUnoWrapperDeleter());
         }
         catch (uno::Exception const&)

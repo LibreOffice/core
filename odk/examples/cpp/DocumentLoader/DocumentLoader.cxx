@@ -53,6 +53,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/bridge/XUnoUrlResolver.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
@@ -131,10 +132,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     /* Creates an instance of a component which supports the services specified
        by the factory. Important: using the office component context.
     */
-    Reference < XComponentLoader > xComponentLoader(
-        xMultiComponentFactoryServer->createInstanceWithContext(
-            OUString( "com.sun.star.frame.Desktop"  ),
-            xComponentContext ), UNO_QUERY );
+    Reference < XDesktop2 > xComponentLoader = Desktop::create(xComponentContext);
 
     /* Loads a component specified by an URL into the specified new or existing
        frame.

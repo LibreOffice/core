@@ -62,7 +62,7 @@ namespace dbaui
     public:
         UnoDataBrowserView( Window* pParent,
                             IController& _rController,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& );
         virtual ~UnoDataBrowserView();
 
         /// late construction

@@ -18,6 +18,7 @@
  */
 
 
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/linguistic2/DictionaryListEventFlags.hpp>
 #include <com/sun/star/linguistic2/XDictionaryList.hpp>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
@@ -51,18 +52,15 @@ SwLinguServiceEventListener::SwLinguServiceEventListener()
     Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
     try
     {
-        OUString aSvcName( OUString( "com.sun.star.frame.Desktop" ) );
-        xDesktop = Reference< frame::XDesktop >(
-                xMgr->createInstance( aSvcName ), UNO_QUERY );
-        if (xDesktop.is())
-            xDesktop->addTerminateListener( this );
+        xDesktop = frame::Desktop::create(xContext);
+        xDesktop->addTerminateListener( this );
 
         xLngSvcMgr = LinguServiceManager::create(xContext);
         xLngSvcMgr->addLinguServiceManagerListener( (XLinguServiceEventListener *) this );
 
         if (SvtLinguConfig().HasGrammarChecker())
         {
-            aSvcName = OUString( "com.sun.star.linguistic2.ProofreadingIterator" );
+            OUString aSvcName( "com.sun.star.linguistic2.ProofreadingIterator" );
             xGCIterator = Reference< XProofreadingIterator >( xMgr->createInstance( aSvcName ), UNO_QUERY );
             Reference< XLinguServiceEventBroadcaster > xBC( xGCIterator, UNO_QUERY );
             if (xBC.is())

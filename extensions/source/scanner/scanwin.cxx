@@ -23,7 +23,7 @@
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/processfactory.hxx>
@@ -565,44 +565,14 @@ uno::Reference< frame::XFrame > ImpTwain::ImplGetActiveFrame()
 {
     try
     {
-        uno::Reference< lang::XMultiServiceFactory >  xMgr( ::comphelper::getProcessServiceFactory() );
+        // query desktop instance
+        uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create( ::comphelper::getProcessComponentContext() );
 
-        if( xMgr.is() )
+        uno::Reference< frame::XFrame > xActiveFrame = xDesktop->getActiveFrame();
+
+        if( xActiveFrame.is() )
         {
-            // query desktop instance
-            uno::Reference< frame::XDesktop > xDesktop( xMgr->createInstance(
-                                                            OUString("com.sun.star.frame.Desktop") ), uno::UNO_QUERY );
-
-            if( xDesktop.is() )
-            {
-                // query property set from desktop, which contains the currently active frame
-                uno::Reference< beans::XPropertySet > xDesktopProps( xDesktop, uno::UNO_QUERY );
-
-                if( xDesktopProps.is() )
-                {
-                    uno::Any aActiveFrame;
-
-                    try
-                    {
-                        aActiveFrame = xDesktopProps->getPropertyValue(
-                            OUString("ActiveFrame") );
-                    }
-                    catch( const beans::UnknownPropertyException& )
-                    {
-                        // property unknown.
-                        OSL_FAIL("ImpTwain::ImplGetActiveFrame: ActiveFrame property unknown, cannot determine active frame!");
-                        return uno::Reference< frame::XFrame >();
-                    }
-
-                    uno::Reference< frame::XFrame > xActiveFrame;
-
-                    if( (aActiveFrame >>= xActiveFrame) &&
-                        xActiveFrame.is() )
-                    {
-                        return xActiveFrame;
-                    }
-                }
-            }
+            return xActiveFrame;
         }
     }
     catch( const uno::Exception& )

@@ -45,6 +45,7 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/XOfficeInstallationDirectories.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/DocumentTemplates.hpp>
 #include <com/sun/star/frame/XDocumentTemplates.hpp>
@@ -717,8 +718,8 @@ void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview, sal_B
             if ( rURL.Match( sServiceScheme ) != sServiceScheme.Len() )
                 // service URL has no default target
                 aTarget = ASCII_STR("_default");
-            xProv = Reference < XDispatchProvider >( ::comphelper::getProcessServiceFactory()->
-                createInstance( ASCII_STR("com.sun.star.frame.Desktop") ), UNO_QUERY );
+            xProv = Reference < XDispatchProvider >( Desktop::create(::comphelper::getProcessComponentContext() ),
+                UNO_QUERY_THROW );
         }
 
         Reference < XDispatch > xDisp = xProv.is() ?
@@ -979,8 +980,7 @@ void SvtTemplateWindow::PrintFile( const String& rURL )
     aArgs[1].Name = ASCII_STR("Hidden");
     aArgs[1].Value <<= sal_True;
 
-    Reference < XComponentLoader > xDesktop( ::comphelper::getProcessServiceFactory()->
-        createInstance( ASCII_STR("com.sun.star.frame.Desktop") ), UNO_QUERY );
+    Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
     Reference < XModel > xModel( xDesktop->loadComponentFromURL(
         rURL, ASCII_STR("_blank"), 0, aArgs ), UNO_QUERY );
     if ( xModel.is() )
@@ -1617,9 +1617,7 @@ IMPL_LINK_NOARG(SvtDocumentTemplateDialog , OrganizerHdl_Impl)
 {
     Window* pOldDefWin = Application::GetDefDialogParent();
     Application::SetDefDialogParent( this );
-    Reference < XFramesSupplier > xDesktop = Reference < XFramesSupplier >(
-        ::comphelper::getProcessServiceFactory()->
-        createInstance( ASCII_STR("com.sun.star.frame.Desktop") ), UNO_QUERY );
+    Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
     Reference < XFrame > xFrame( xDesktop->getActiveFrame() );
     if ( !xFrame.is() )
         xFrame = Reference < XFrame >( xDesktop, UNO_QUERY );

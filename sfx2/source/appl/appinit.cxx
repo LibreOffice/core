@@ -22,7 +22,7 @@
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/frame/GlobalEventBroadcaster.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <svtools/soerr.hxx>
@@ -215,9 +215,7 @@ bool SfxApplication::Initialize_Impl()
     StgIo::SetErrorLink( LINK( this, SfxStorageErrHdl, Error ) );
 #endif
 
-    Reference < XDesktop > xDesktop ( ::comphelper::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
-    if (!xDesktop.is())
-         throw RuntimeException( rtl::OUString( "Couldn't create mandatory desktop service!" ), xDesktop );
+    Reference < XDesktop2 > xDesktop = Desktop::create ( ::comphelper::getProcessComponentContext() );
     xDesktop->addTerminateListener( new SfxTerminateListener_Impl() );
 
     Application::EnableAutoHelpId();

@@ -31,7 +31,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/frame/XDispatchHelper.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
@@ -173,26 +173,20 @@ DocumentHolder::DocumentHolder( const uno::Reference< lang::XMultiServiceFactory
     aArg.Value <<= sal_False;
     m_aOutplaceFrameProps[1] <<= aArg;
 
-    const ::rtl::OUString aServiceName ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.frame.Desktop" ) );
-    uno::Reference< frame::XDesktop > xDesktop( m_xFactory->createInstance( aServiceName ), uno::UNO_QUERY );
-    if ( xDesktop.is() )
+    uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create( comphelper::getComponentContext(m_xFactory) );
+    m_refCount++;
+    try
     {
-        m_refCount++;
-        try
-        {
-            xDesktop->addTerminateListener( this );
-        }
-        catch ( const uno::Exception& )
-        {
-        }
-        m_refCount--;
-
-        aArg.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentFrame"));
-        aArg.Value <<= xDesktop; //TODO/LATER: should use parent document frame
-        m_aOutplaceFrameProps[2] <<= aArg;
+        xDesktop->addTerminateListener( this );
     }
-    else
-        m_aOutplaceFrameProps.realloc( 2 );
+    catch ( const uno::Exception& )
+    {
+    }
+    m_refCount--;
+
+    aArg.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentFrame"));
+    aArg.Value <<= xDesktop; //TODO/LATER: should use parent document frame
+    m_aOutplaceFrameProps[2] <<= aArg;
 }
 
 //---------------------------------------------------------------------------
@@ -253,15 +247,12 @@ void DocumentHolder::CloseFrame()
 //---------------------------------------------------------------------------
 void DocumentHolder::FreeOffice()
 {
-    const ::rtl::OUString aServiceName ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.frame.Desktop" ) );
-    uno::Reference< frame::XDesktop > xDesktop( m_xFactory->createInstance( aServiceName ), uno::UNO_QUERY );
-    if ( xDesktop.is() )
-    {
-        xDesktop->removeTerminateListener( this );
+    uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create( comphelper::getComponentContext(m_xFactory) );
+    xDesktop->removeTerminateListener( this );
 
-        // the following code is commented out since for now there is still no completely correct way to detect
-        // whether the office can be terminated, so it is better to have unnecessary process running than
-        // to loose any data
+    // the following code is commented out since for now there is still no completely correct way to detect
+    // whether the office can be terminated, so it is better to have unnecessary process running than
+    // to loose any data
 
 //      uno::Reference< frame::XFramesSupplier > xFramesSupplier( xDesktop, uno::UNO_QUERY );
 //      if ( xFramesSupplier.is() )
@@ -277,7 +268,6 @@ void DocumentHolder::FreeOffice()
 //              {}
 //          }
 //      }
-    }
 }
 
 //---------------------------------------------------------------------------

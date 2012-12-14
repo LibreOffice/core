@@ -33,6 +33,7 @@
 #include <com/sun/star/lang/XMain.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 
 #include <com/sun/star/text/XTextDocument.hpp>
@@ -157,47 +158,41 @@ sal_Int32 OfficeClientMain::run( const Sequence< OUString > & aArguments ) throw
 
                 Reference< XMultiServiceFactory > rRemoteSMgr( r , UNO_QUERY );
 
-                Reference < XComponentLoader > rLoader(
-                    rRemoteSMgr->createInstance( OUString( "com.sun.star.frame.Desktop" )),
-                    UNO_QUERY );
+                Reference < XDesktop2 > rLoader = Desktop::create( comphelper::getComponentContext(r) );
 
-                if( rLoader.is() )
+                sal_Char *urls[] = {
+                    "private:factory/swriter",
+                    "private:factory/sdraw",
+                    "private:factory/simpress",
+                    "private:factory/scalc"
+                };
+
+                sal_Char *docu[]= {
+                    "a new writer document ...\n",
+                    "a new draw document ...\n",
+                    "a new schedule document ...\n" ,
+                    "a new calc document ...\n"
+                };
+                sal_Int32 i;
+                for( i = 0 ; i < 4 ; i ++ )
                 {
+                    printf( "press any key to open %s\n" , docu[i] );
+                    getchar();
 
-                    sal_Char *urls[] = {
-                        "private:factory/swriter",
-                        "private:factory/sdraw",
-                        "private:factory/simpress",
-                        "private:factory/scalc"
-                    };
+                    Reference< XComponent > rComponent =
+                        rLoader->loadComponentFromURL(
+                            OUString::createFromAscii( urls[i] ) ,
+                            OUString( "_blank"),
+                            0 ,
+                            Sequence < ::com::sun::star::beans::PropertyValue >() );
 
-                    sal_Char *docu[]= {
-                        "a new writer document ...\n",
-                        "a new draw document ...\n",
-                        "a new schedule document ...\n" ,
-                        "a new calc document ...\n"
-                    };
-                    sal_Int32 i;
-                    for( i = 0 ; i < 4 ; i ++ )
+                    if( 0 == i )
                     {
-                        printf( "press any key to open %s\n" , docu[i] );
-                        getchar();
-
-                        Reference< XComponent > rComponent =
-                            rLoader->loadComponentFromURL(
-                                OUString::createFromAscii( urls[i] ) ,
-                                OUString( "_blank"),
-                                0 ,
-                                Sequence < ::com::sun::star::beans::PropertyValue >() );
-
-                        if( 0 == i )
-                        {
-                            testWriter( rComponent );
-                        }
-                        printf( "press any key to close the document\n" );
-                        getchar();
-                        rComponent->dispose();
+                        testWriter( rComponent );
                     }
+                    printf( "press any key to close the document\n" );
+                    getchar();
+                    rComponent->dispose();
                 }
             }
 

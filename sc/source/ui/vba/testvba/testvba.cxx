@@ -24,6 +24,7 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
@@ -293,8 +294,7 @@ int main( int argv, char** argc )
         Reference<XMultiComponentFactory> xFactory = xCC->getServiceManager();
         OSL_TRACE("got servicemanager");
         std::cout << "got servicemanager" << std::endl;
-        Reference<XInterface> desktop = xFactory->createInstanceWithContext(
-        ascii("com.sun.star.frame.Desktop"), xCC);
+        Reference<XDesktop2> desktop = Desktop::create(xCC);
         OSL_TRACE("got desktop");
         std::cout << "got desktop" << std::endl;
         Reference<frame::XComponentLoader> xLoader(desktop, UNO_QUERY_THROW);

@@ -25,7 +25,7 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
 #include <com/sun/star/util/URL.hpp>
@@ -1147,7 +1147,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             }
             else
             {
-                xTargetFrame.set( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString("com.sun.star.frame.Desktop")), UNO_QUERY );
+                xTargetFrame.set( Desktop::create(::comphelper::getProcessComponentContext()), UNO_QUERY );
             }
         }
 

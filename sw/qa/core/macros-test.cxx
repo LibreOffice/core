@@ -39,6 +39,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
@@ -52,6 +53,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 #include <svl/intitem.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <basic/sbxdef.hxx>
 
@@ -220,9 +222,7 @@ void SwMacrosTest::setUp()
         getMultiServiceFactory()->createInstance(rtl::OUString(
         RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Writer.TextDocument")));
     CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xWriterComponent.is());
-    mxDesktop = Reference<com::sun::star::frame::XDesktop>( getMultiServiceFactory()->createInstance(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ))), UNO_QUERY );
-    CPPUNIT_ASSERT_MESSAGE("", mxDesktop.is());
+    mxDesktop = com::sun::star::frame::Desktop::create( comphelper::getComponentContext(getMultiServiceFactory()) );
 }
 
 void SwMacrosTest::tearDown()

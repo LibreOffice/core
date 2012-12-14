@@ -26,7 +26,7 @@
 // UNO-Stuff
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/awt/XBitmap.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/document/XLinkTargetSupplier.hpp>
@@ -244,65 +244,57 @@ sal_Bool SvxHlinkDlgMarkWnd::RefreshFromDoc( OUString aURL )
 {
     mnError = LERR_NOERROR;
 
-    uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-    if( xFactory.is() )
+    uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create( ::comphelper::getProcessComponentContext() );
+    uno::Reference< lang::XComponent > xComp;
+
+    if( !aURL.isEmpty() )
     {
-        uno::Reference< frame::XDesktop > xDesktop( xFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" )) ),
-                    uno::UNO_QUERY );
-        if( xDesktop.is() )
+        // load from url
+        uno::Reference< frame::XComponentLoader > xLoader( xDesktop, uno::UNO_QUERY );
+        if( xLoader.is() )
         {
-            uno::Reference< lang::XComponent > xComp;
-
-            if( !aURL.isEmpty() )
+            try
             {
-                // load from url
-                uno::Reference< frame::XComponentLoader > xLoader( xDesktop, uno::UNO_QUERY );
-                if( xLoader.is() )
-                {
-                    try
-                    {
-                        uno::Sequence< beans::PropertyValue > aArg(1);
-                        aArg.getArray()[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( "Hidden" ));
-                        aArg.getArray()[0].Value <<= (sal_Bool) sal_True;
-                        xComp = xLoader->loadComponentFromURL( aURL, OUString(RTL_CONSTASCII_USTRINGPARAM( "_blank" )), 0, aArg );
-                    }
-                    catch( const io::IOException& )
-                    {
-
-                    }
-                    catch( const lang::IllegalArgumentException& )
-                    {
-
-                    }
-                }
+                uno::Sequence< beans::PropertyValue > aArg(1);
+                aArg.getArray()[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( "Hidden" ));
+                aArg.getArray()[0].Value <<= (sal_Bool) sal_True;
+                xComp = xLoader->loadComponentFromURL( aURL, OUString(RTL_CONSTASCII_USTRINGPARAM( "_blank" )), 0, aArg );
             }
-            else
+            catch( const io::IOException& )
             {
-                // the component with user focus ( current document )
-                xComp = xDesktop->getCurrentComponent();
+
             }
-
-            if( xComp.is() )
+            catch( const lang::IllegalArgumentException& )
             {
-                uno::Reference< document::XLinkTargetSupplier > xLTS( xComp, uno::UNO_QUERY );
 
-                if( xLTS.is() )
-                {
-                    if( FillTree( xLTS->getLinks() ) == 0 )
-                        mnError = LERR_NOENTRIES;
-                }
-                else
-                    mnError = LERR_DOCNOTOPEN;
-
-                if ( !aURL.isEmpty() )
-                    xComp->dispose();
-            }
-            else
-            {
-                if( !aURL.isEmpty() )
-                    mnError=LERR_DOCNOTOPEN;
             }
         }
+    }
+    else
+    {
+        // the component with user focus ( current document )
+        xComp = xDesktop->getCurrentComponent();
+    }
+
+    if( xComp.is() )
+    {
+        uno::Reference< document::XLinkTargetSupplier > xLTS( xComp, uno::UNO_QUERY );
+
+        if( xLTS.is() )
+        {
+            if( FillTree( xLTS->getLinks() ) == 0 )
+                mnError = LERR_NOENTRIES;
+        }
+        else
+            mnError = LERR_DOCNOTOPEN;
+
+        if ( !aURL.isEmpty() )
+            xComp->dispose();
+    }
+    else
+    {
+        if( !aURL.isEmpty() )
+            mnError=LERR_DOCNOTOPEN;
     }
     return (mnError==0);
 }

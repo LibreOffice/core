@@ -214,7 +214,7 @@ private:
         @raises ::com::sun::star::uno::RuntimeException
     */
     static void impl_removeFrameFromDesktop_throw(
-                    const ::comphelper::ComponentContext& _rContxt,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rContxt,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame
                 );
 

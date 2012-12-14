@@ -28,7 +28,7 @@
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implementationentry.hxx>
 
-#include "com/sun/star/frame/XDesktop.hpp"
+#include "com/sun/star/frame/Desktop.hpp"
 #include "com/sun/star/frame/XTerminateListener.hpp"
 #include <com/sun/star/task/XJob.hpp>
 
@@ -102,7 +102,7 @@ public:
 
 private:
     uno::Reference<uno::XComponentContext>  m_xContext;
-    uno::Reference< frame::XDesktop >       m_xDesktop;
+    uno::Reference< frame::XDesktop2 >      m_xDesktop;
     std::auto_ptr< InitUpdateCheckJobThread > m_pInitThread;
 
     void handleExtensionUpdates( const uno::Sequence< beans::NamedValue > &rListProp );
@@ -152,9 +152,8 @@ void InitUpdateCheckJobThread::setTerminating() {
 UpdateCheckJob::UpdateCheckJob( const uno::Reference<uno::XComponentContext>& xContext ) :
     m_xContext(xContext)
 {
-    m_xDesktop.set( xContext->getServiceManager()->createInstanceWithContext( UNISTRING("com.sun.star.frame.Desktop"), xContext ), uno::UNO_QUERY );
-    if ( m_xDesktop.is() )
-        m_xDesktop->addTerminateListener( this );
+    m_xDesktop.set( Desktop::create(xContext) );
+    m_xDesktop->addTerminateListener( this );
 }
 
 //------------------------------------------------------------------------------

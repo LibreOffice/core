@@ -44,7 +44,7 @@
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/view/XPrintable.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
@@ -632,7 +632,7 @@ void Desktop::DeInit()
         Reference< XComponent >(
             comphelper::getProcessComponentContext(), UNO_QUERY_THROW )->
             dispose();
-        // nobody should get a destroyd service factory...
+        // nobody should get a destroyed service factory...
         ::comphelper::setProcessServiceFactory( NULL );
 
         // clear lockfile
@@ -663,26 +663,15 @@ sal_Bool Desktop::QueryExit()
 
     const sal_Char SUSPEND_QUICKSTARTVETO[] = "SuspendQuickstartVeto";
 
-    Reference< ::com::sun::star::frame::XDesktop >
-            xDesktop( ::comphelper::getProcessServiceFactory()->createInstance( OUString("com.sun.star.frame.Desktop") ),
-                UNO_QUERY );
+    Reference< XDesktop2 > xDesktop = css::frame::Desktop::create( ::comphelper::getProcessComponentContext() );
+    Reference< XPropertySet > xPropertySet(xDesktop, UNO_QUERY_THROW);
+    xPropertySet->setPropertyValue( OUString(SUSPEND_QUICKSTARTVETO ), Any((sal_Bool)sal_True) );
 
-    Reference < ::com::sun::star::beans::XPropertySet > xPropertySet( xDesktop, UNO_QUERY );
-    if ( xPropertySet.is() )
+    sal_Bool bExit = xDesktop->terminate();
+
+    if ( !bExit )
     {
-        Any a;
-        a <<= (sal_Bool)sal_True;
-        xPropertySet->setPropertyValue( OUString(SUSPEND_QUICKSTARTVETO ), a );
-    }
-
-    sal_Bool bExit = ( !xDesktop.is() || xDesktop->terminate() );
-
-
-    if ( !bExit && xPropertySet.is() )
-    {
-        Any a;
-        a <<= (sal_Bool)sal_False;
-        xPropertySet->setPropertyValue( OUString(SUSPEND_QUICKSTARTVETO ), a );
+        xPropertySet->setPropertyValue( OUString(SUSPEND_QUICKSTARTVETO ), Any((sal_Bool)sal_False) );
     }
     else
     {
@@ -1104,8 +1093,8 @@ sal_Bool impl_callRecoveryUI(sal_Bool bEmergencySave     ,
         xSMGR->createInstance(SERVICENAME_RECOVERYUI),
         css::uno::UNO_QUERY_THROW);
 
-    Reference< css::util::XURLTransformer > xURLParser(
-        css::util::URLTransformer::create(::comphelper::getProcessComponentContext()) );
+    Reference< css::util::XURLTransformer > xURLParser =
+        css::util::URLTransformer::create(::comphelper::getProcessComponentContext());
 
     css::util::URL aURL;
     if (bEmergencySave)
@@ -1404,16 +1393,15 @@ int Desktop::Main()
     utl::Bootstrap::reloadData();
     SetSplashScreenProgress(20);
 
-    Reference< XMultiServiceFactory > xSMgr =
-        ::comphelper::getProcessServiceFactory();
+    Reference< XMultiServiceFactory > xSMgr = ::comphelper::getProcessServiceFactory();
+    Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 
-    Reference< XRestartManager > xRestartManager(
-        OfficeRestartManager::get(comphelper::getProcessComponentContext()));
+    Reference< XRestartManager > xRestartManager( OfficeRestartManager::get(xContext) );
 
-    Reference< XDesktop > xDesktop;
+    Reference< XDesktop2 > xDesktop;
     try
     {
-        RegisterServices(comphelper::getProcessComponentContext());
+        RegisterServices(xContext);
 
         SetSplashScreenProgress(25);
 
@@ -1495,12 +1483,11 @@ int Desktop::Main()
             SvtPathOptions().SetWorkPath( aWorkPath );
         }
 
-        xDesktop = Reference<XDesktop>( xSMgr->createInstance(
-            OUString( "com.sun.star.frame.Desktop" )), UNO_QUERY );
+        xDesktop = css::frame::Desktop::create( xContext );
 
         // create service for loadin SFX (still needed in startup)
         pExecGlobals->xGlobalBroadcaster = Reference < css::document::XEventListener >
-            ( css::frame::GlobalEventBroadcaster::create(comphelper::getComponentContext(xSMgr)), UNO_QUERY_THROW );
+            ( css::frame::GlobalEventBroadcaster::create(xContext), UNO_QUERY_THROW );
 
         /* ensure existance of a default window that messages can be dispatched to
            This is for the benefit of testtool which uses PostUserEvent extensively
@@ -1848,7 +1835,7 @@ sal_Bool Desktop::InitializeQuickstartMode( Reference< XMultiServiceFactory >& r
 
         sal_Bool bQuickstart = shouldLaunchQuickstart();
 
-        // Try to instanciate quickstart service. This service is not mandatory, so
+        // Try to instantiate quickstart service. This service is not mandatory, so
         // do nothing if service is not available
 
         // #i105753# the following if was invented for performance
@@ -1984,17 +1971,13 @@ void Desktop::PreloadModuleData( const CommandLineArgs& rArgs )
     Sequence < com::sun::star::beans::PropertyValue > args(1);
     args[0].Name = ::rtl::OUString("Hidden");
     args[0].Value <<= sal_True;
-    Reference < XComponentLoader > xLoader( ::comphelper::getProcessServiceFactory()->createInstance(
-        ::rtl::OUString("com.sun.star.frame.Desktop") ), UNO_QUERY );
-
-    if ( !xLoader.is() )
-        return;
+    Reference < XDesktop2 > xDesktop = css::frame::Desktop::create( ::comphelper::getProcessComponentContext() );
 
     if ( rArgs.IsWriter() )
     {
         try
         {
-            Reference < ::com::sun::star::util::XCloseable > xDoc( xLoader->loadComponentFromURL( rtl::OUString("private:factory/swriter"),
+            Reference < ::com::sun::star::util::XCloseable > xDoc( xDesktop->loadComponentFromURL( rtl::OUString("private:factory/swriter"),
                 ::rtl::OUString("_blank"), 0, args ), UNO_QUERY_THROW );
             xDoc->close( sal_False );
         }
@@ -2006,7 +1989,7 @@ void Desktop::PreloadModuleData( const CommandLineArgs& rArgs )
     {
         try
         {
-            Reference < ::com::sun::star::util::XCloseable > xDoc( xLoader->loadComponentFromURL( rtl::OUString("private:factory/scalc"),
+            Reference < ::com::sun::star::util::XCloseable > xDoc( xDesktop->loadComponentFromURL( rtl::OUString("private:factory/scalc"),
                 ::rtl::OUString("_blank"), 0, args ), UNO_QUERY_THROW );
             xDoc->close( sal_False );
         }
@@ -2018,7 +2001,7 @@ void Desktop::PreloadModuleData( const CommandLineArgs& rArgs )
     {
         try
         {
-            Reference < ::com::sun::star::util::XCloseable > xDoc( xLoader->loadComponentFromURL( rtl::OUString("private:factory/sdraw"),
+            Reference < ::com::sun::star::util::XCloseable > xDoc( xDesktop->loadComponentFromURL( rtl::OUString("private:factory/sdraw"),
                 ::rtl::OUString("_blank"), 0, args ), UNO_QUERY_THROW );
             xDoc->close( sal_False );
         }
@@ -2030,7 +2013,7 @@ void Desktop::PreloadModuleData( const CommandLineArgs& rArgs )
     {
         try
         {
-            Reference < ::com::sun::star::util::XCloseable > xDoc( xLoader->loadComponentFromURL( rtl::OUString("private:factory/simpress"),
+            Reference < ::com::sun::star::util::XCloseable > xDoc( xDesktop->loadComponentFromURL( rtl::OUString("private:factory/simpress"),
                 ::rtl::OUString("_blank"), 0, args ), UNO_QUERY_THROW );
             xDoc->close( sal_False );
         }
@@ -2044,8 +2027,7 @@ void Desktop::PreloadConfigurationData()
 {
     Reference< XMultiServiceFactory > rFactory = ::comphelper::getProcessServiceFactory();
     Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-    Reference< XNameAccess > xNameAccess(
-            css::frame::UICommandDescription::create(xContext) );
+    Reference< XNameAccess > xNameAccess = css::frame::UICommandDescription::create(xContext);
 
     rtl::OUString aWriterDoc( "com.sun.star.text.TextDocument" );
     rtl::OUString aCalcDoc( "com.sun.star.sheet.SpreadsheetDocument" );
@@ -2445,10 +2427,8 @@ void Desktop::OpenClients()
     }
 
     // no default document if a document was loaded by recovery or by command line or if soffice is used as server
-    Reference< XFramesSupplier > xTasksSupplier(
-            ::comphelper::getProcessServiceFactory()->createInstance( OUString("com.sun.star.frame.Desktop") ),
-            ::com::sun::star::uno::UNO_QUERY_THROW );
-    Reference< XElementAccess > xList( xTasksSupplier->getFrames(), UNO_QUERY_THROW );
+    Reference< XDesktop2 > xDesktop = css::frame::Desktop::create( ::comphelper::getProcessComponentContext() );
+    Reference< XElementAccess > xList( xDesktop->getFrames(), UNO_QUERY_THROW );
     if ( xList->hasElements() )
         return;
 
@@ -2582,18 +2562,17 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
     case ApplicationEvent::TYPE_APPEAR:
         if ( !GetCommandLineArgs().IsInvisible() )
         {
-            css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
+            Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
+            Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 
             // find active task - the active task is always a visible task
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFramesSupplier >
-                  xDesktop( xSMGR->createInstance( OUString("com.sun.star.frame.Desktop") ),
-                            ::com::sun::star::uno::UNO_QUERY );
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xTask = xDesktop->getActiveFrame();
+            Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create( xContext );
+            Reference< css::frame::XFrame > xTask = xDesktop->getActiveFrame();
             if ( !xTask.is() )
             {
                 // get any task if there is no active one
-                ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > xList( xDesktop->getFrames(), ::com::sun::star::uno::UNO_QUERY );
-                if ( xList->getCount()>0 )
+                Reference< css::container::XIndexAccess > xList( xDesktop->getFrames(), ::com::sun::star::uno::UNO_QUERY );
+                if ( xList->getCount() > 0 )
                     xList->getByIndex(0) >>= xTask;
             }
 
@@ -2605,11 +2584,8 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
             else
             {
                 // no visible task that could be activated found
-                Reference< XFrame > xBackingFrame;
                 Reference< ::com::sun::star::awt::XWindow > xContainerWindow;
-                ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xDesktopFrame( xDesktop, UNO_QUERY );
-
-                xBackingFrame = xDesktopFrame->findFrame(OUString( "_blank" ), 0);
+                Reference< XFrame > xBackingFrame = xDesktop->findFrame(OUString( "_blank" ), 0);
                 if (xBackingFrame.is())
                     xContainerWindow = xBackingFrame->getContainerWindow();
                 if (xContainerWindow.is())
@@ -2709,17 +2685,11 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
         // The user will try it again, in case nothing happens .-)
         try
         {
-            Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
+            Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 
-            Reference< css::frame::XDispatchProvider >
-                xDesktop( xSMGR->createInstance( OUString("com.sun.star.frame.Desktop") ),
-                ::com::sun::star::uno::UNO_QUERY );
+            Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create( xContext );
 
-            // check provider ... we know it's weak reference only
-            if ( ! xDesktop.is())
-                return;
-
-            Reference< css::util::XURLTransformer > xParser( css::util::URLTransformer::create(::comphelper::getProcessComponentContext()) );
+            Reference< css::util::XURLTransformer > xParser = css::util::URLTransformer::create(xContext);
             css::util::URL aCommand;
             if( rAppEvent.GetData() == ::rtl::OUString("PREFERENCES") )
                 aCommand.Complete = rtl::OUString( ".uno:OptionsTreeDialog"  );
@@ -2845,52 +2815,47 @@ void Desktop::ShowBackingComponent(Desktop * progress)
     {
         return;
     }
-    Reference< XMultiServiceFactory > xSMgr(
-        comphelper::getProcessServiceFactory(), UNO_SET_THROW);
-    Reference< XFrame > xDesktopFrame(
-        xSMgr->createInstance("com.sun.star.frame.Desktop"), UNO_QUERY);
-    if (xDesktopFrame.is())
+    Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
+    Reference< css::lang::XMultiServiceFactory > xSMgr = ::comphelper::getProcessServiceFactory();
+    Reference< XDesktop2 > xDesktop = css::frame::Desktop::create(xContext);
+    if (progress != 0)
     {
+        progress->SetSplashScreenProgress(60);
+    }
+    Reference< XFrame > xBackingFrame = xDesktop->findFrame(OUString( "_blank" ), 0);
+    Reference< ::com::sun::star::awt::XWindow > xContainerWindow;
+
+    if (xBackingFrame.is())
+        xContainerWindow = xBackingFrame->getContainerWindow();
+    if (xContainerWindow.is())
+    {
+        SetDocumentExtendedStyle(xContainerWindow);
         if (progress != 0)
         {
-            progress->SetSplashScreenProgress(60);
+            progress->SetSplashScreenProgress(75);
         }
-        Reference< XFrame > xBackingFrame;
-        Reference< ::com::sun::star::awt::XWindow > xContainerWindow;
+        Sequence< Any > lArgs(1);
+        lArgs[0] <<= xContainerWindow;
 
-        xBackingFrame = xDesktopFrame->findFrame(OUString( "_blank" ), 0);
-        if (xBackingFrame.is())
-            xContainerWindow = xBackingFrame->getContainerWindow();
-        if (xContainerWindow.is())
+        Reference< XController > xBackingComp(
+            xSMgr->createInstanceWithArguments(OUString( "com.sun.star.frame.StartModule" ), lArgs), UNO_QUERY);
+        if (xBackingComp.is())
         {
-            SetDocumentExtendedStyle(xContainerWindow);
+            Reference< ::com::sun::star::awt::XWindow > xBackingWin(xBackingComp, UNO_QUERY);
+            // Attention: You MUST(!) call setComponent() before you call attachFrame().
+            // Because the backing component set the property "IsBackingMode" of the frame
+            // to true inside attachFrame(). But setComponent() reset this state everytimes ...
+            xBackingFrame->setComponent(xBackingWin, xBackingComp);
             if (progress != 0)
             {
-                progress->SetSplashScreenProgress(75);
+                progress->SetSplashScreenProgress(100);
             }
-            Sequence< Any > lArgs(1);
-            lArgs[0] <<= xContainerWindow;
-
-            Reference< XController > xBackingComp(
-                xSMgr->createInstanceWithArguments(OUString( "com.sun.star.frame.StartModule" ), lArgs), UNO_QUERY);
-            if (xBackingComp.is())
+            xBackingComp->attachFrame(xBackingFrame);
+            if (progress != 0)
             {
-                Reference< ::com::sun::star::awt::XWindow > xBackingWin(xBackingComp, UNO_QUERY);
-                // Attention: You MUST(!) call setComponent() before you call attachFrame().
-                // Because the backing component set the property "IsBackingMode" of the frame
-                // to true inside attachFrame(). But setComponent() reset this state everytimes ...
-                xBackingFrame->setComponent(xBackingWin, xBackingComp);
-                if (progress != 0)
-                {
-                    progress->SetSplashScreenProgress(100);
-                }
-                xBackingComp->attachFrame(xBackingFrame);
-                if (progress != 0)
-                {
-                    progress->CloseSplashScreen();
-                }
-                xContainerWindow->setVisible(sal_True);
+                progress->CloseSplashScreen();
             }
+            xContainerWindow->setVisible(sal_True);
         }
     }
 }

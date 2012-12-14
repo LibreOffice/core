@@ -200,7 +200,7 @@ OApplicationDetailView* OAppBorderWindow::getDetailView() const
 DBG_NAME(OApplicationView);
 //------------------------------------------------------------------------------
 OApplicationView::OApplicationView( Window* pParent
-                                    ,const Reference< XMultiServiceFactory >& _rxOrb
+                                    ,const Reference< XComponentContext >& _rxOrb
                                     ,IApplicationController& _rAppController
                                     ,PreviewMode _ePreviewMode
                                    ) :

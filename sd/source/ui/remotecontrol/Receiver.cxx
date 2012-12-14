@@ -11,6 +11,7 @@
 #include <com/sun/star/presentation/XSlideShowController.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <com/sun/star/presentation/XPresentation2.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 
@@ -41,10 +42,7 @@ void Receiver::parseCommand( std::vector<OString> aCommand )
     uno::Reference<presentation::XSlideShowController> xSlideShowController;
     uno::Reference<presentation::XPresentation2> xPresentation;
     try {
-        uno::Reference< lang::XMultiServiceFactory > xServiceManager(
-            ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-        uno::Reference< frame::XFramesSupplier > xFramesSupplier( xServiceManager->createInstance(
-        "com.sun.star.frame.Desktop" ) , uno::UNO_QUERY_THROW );
+        uno::Reference< frame::XDesktop2 > xFramesSupplier = frame::Desktop::create( ::comphelper::getProcessComponentContext() );
         uno::Reference< frame::XFrame > xFrame ( xFramesSupplier->getActiveFrame(), uno::UNO_QUERY_THROW );
         uno::Reference<presentation::XPresentationSupplier> xPS ( xFrame->getController()->getModel(), uno::UNO_QUERY_THROW);
         xPresentation = uno::Reference<presentation::XPresentation2>(

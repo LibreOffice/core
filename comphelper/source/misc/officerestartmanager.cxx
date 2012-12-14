@@ -20,7 +20,7 @@
 
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/awt/XRequestCallback.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <comphelper_module.hxx>
@@ -129,11 +129,7 @@ void SAL_CALL OOfficeRestartManager::notify( const uno::Any& /* aData */ )
 
         if ( m_xContext.is() )
         {
-            uno::Reference< lang::XMultiComponentFactory > xFactory( m_xContext->getServiceManager(), uno::UNO_SET_THROW );
-            uno::Reference< frame::XDesktop > xDesktop(
-                xFactory->createInstanceWithContext(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ) ), m_xContext ),
-                uno::UNO_QUERY_THROW );
+            uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(m_xContext);
 
             // Turn Quickstarter veto off
             uno::Reference< beans::XPropertySet > xPropertySet( xDesktop, uno::UNO_QUERY_THROW );

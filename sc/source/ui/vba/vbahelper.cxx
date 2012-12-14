@@ -21,7 +21,7 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -270,9 +270,7 @@ getCurrentDocument() throw (uno::RuntimeException)
         {
             uno::Reference< uno::XComponentContext > xCtx(
                 comphelper::getProcessComponentContext() );
-            uno::Reference<lang::XMultiComponentFactory > xSMgr(
-                xCtx->getServiceManager() );
-            uno::Reference< frame::XDesktop > xDesktop (xSMgr->createInstanceWithContext(::rtl::OUString("com.sun.star.frame.Desktop"), xCtx), uno::UNO_QUERY_THROW );
+            uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(xCtx);
             xModel.set( xDesktop->getCurrentComponent(), uno::UNO_QUERY );
             if ( !xModel.is() )
             {

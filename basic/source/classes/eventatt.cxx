@@ -44,7 +44,7 @@
 #include <com/sun/star/awt/XDialogProvider.hpp>
 
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <basic/basicmanagerrepository.hxx>
 #include <basic/basmgr.hxx>
@@ -433,8 +433,6 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
     (void)bWrite;
 
     Reference< XMultiServiceFactory > xMSF( comphelper::getProcessServiceFactory() );
-    if( !xMSF.is() )
-        return;
 
     // We need at least 1 parameter
     if ( rPar.Count() < 2 )
@@ -473,8 +471,7 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
     {
         return;
     }
-    Reference< XComponentContext > xContext(
-        comphelper::getComponentContext( xMSF ) );
+    Reference< XComponentContext > xContext( comphelper::getComponentContext( xMSF ) );
 
     // Import the DialogModel
     Reference< XInputStream > xInput( xISP->createInputStream() );
@@ -510,33 +507,30 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
     // If we found the dialog then it belongs to the Search basic
     if ( !pFoundBasic )
     {
-        Reference< frame::XDesktop > xDesktop( xMSF->createInstance(OUString("com.sun.star.frame.Desktop")), UNO_QUERY);
+        Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create( xContext );
         Reference< container::XEnumeration > xModels;
-        if ( xDesktop.is() )
+        Reference< container::XEnumerationAccess > xComponents( xDesktop->getComponents(), UNO_QUERY );
+        if ( xComponents.is() )
         {
-            Reference< container::XEnumerationAccess > xComponents( xDesktop->getComponents(), UNO_QUERY );
-            if ( xComponents.is() )
+            xModels.set( xComponents->createEnumeration(), UNO_QUERY );
+        }
+        if ( xModels.is() )
+        {
+            while ( xModels->hasMoreElements() )
             {
-                xModels.set( xComponents->createEnumeration(), UNO_QUERY );
-            }
-            if ( xModels.is() )
-            {
-                while ( xModels->hasMoreElements() )
+                Reference< frame::XModel > xNextModel( xModels->nextElement(), UNO_QUERY );
+                if ( xNextModel.is() )
                 {
-                    Reference< frame::XModel > xNextModel( xModels->nextElement(), UNO_QUERY );
-                    if ( xNextModel.is() )
+                    BasicManager* pMgr = basic::BasicManagerRepository::getDocumentBasicManager( xNextModel );
+                    if ( pMgr )
                     {
-                        BasicManager* pMgr = basic::BasicManagerRepository::getDocumentBasicManager( xNextModel );
-                        if ( pMgr )
-                        {
-                            aDlgLibAny = implFindDialogLibForDialogBasic( aAnyISP, pMgr->GetLib(0), pFoundBasic );
-                        }
-                        if ( aDlgLibAny.hasValue() )
-                        {
-                            bDocDialog = true;
-                            xModel = xNextModel;
-                            break;
-                        }
+                        aDlgLibAny = implFindDialogLibForDialogBasic( aAnyISP, pMgr->GetLib(0), pFoundBasic );
+                    }
+                    if ( aDlgLibAny.hasValue() )
+                    {
+                        bDocDialog = true;
+                        xModel = xNextModel;
+                        break;
                     }
                 }
             }

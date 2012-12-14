@@ -19,7 +19,7 @@
 
 #include "MNSTerminateListener.hxx"
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include "bootstrap/MNSInit.hxx"
 
 
@@ -63,15 +63,8 @@ void SAL_CALL MNSTerminateListener::notifyTermination( const EventObject& /*aEve
 
 void MNSTerminateListener::addTerminateListener()
 {
-    Reference< XMultiServiceFactory >   xFact( ::comphelper::getProcessServiceFactory() );
-
-    if( xFact.is() )
-    {
-        Reference< XDesktop > xDesktop( xFact->createInstance( ::rtl::OUString("com.sun.star.frame.Desktop") ), UNO_QUERY );
-
-        if( xDesktop.is() )
-            xDesktop->addTerminateListener(mxTerminateListener);
-    }
+    Reference< XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
+    xDesktop->addTerminateListener(mxTerminateListener);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

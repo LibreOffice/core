@@ -20,6 +20,7 @@
 #include "xlroot.hxx"
 #include <rtl/strbuf.hxx>
 #include <com/sun/star/awt/XDevice.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
@@ -141,8 +142,7 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
     // screen pixel size
     try
     {
-        Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory(), UNO_SET_THROW );
-        Reference< XFramesSupplier > xFramesSupp( xFactory->createInstance( "com.sun.star.frame.Desktop" ), UNO_QUERY_THROW );
+        Reference< frame::XDesktop2 > xFramesSupp = frame::Desktop::create( ::comphelper::getProcessComponentContext() );
         Reference< XFrame > xFrame( xFramesSupp->getActiveFrame(), UNO_SET_THROW );
         Reference< XDevice > xDevice( xFrame->getContainerWindow(), UNO_QUERY_THROW );
         DeviceInfo aDeviceInfo = xDevice->getInfo();

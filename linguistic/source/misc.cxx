@@ -12,7 +12,7 @@
  *   contributor license agreements. See the NOTICE file distributed
  *   with this work for additional information regarding copyright
  *   ownership. The ASF licenses this file to you under the Apache
- *   License, Version 2.0 (the "License"); you may not use this file
+ *   License, Version 2.0 (the "License"); you may not use this file754
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
@@ -30,7 +30,7 @@
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 
 #include <com/sun/star/beans/PropertyValues.hpp>
@@ -743,20 +743,15 @@ AppExitListener::AppExitListener()
 {
     // add object to Desktop EventListeners in order to properly call
     // the AtExit function at appliction exit.
-    uno::Reference< XMultiServiceFactory > xMgr(
-        comphelper::getProcessServiceFactory() );
+    uno::Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
-    if (xMgr.is())
+    try
     {
-        try
-        {
-            xDesktop = uno::Reference< frame::XDesktop >(
-                    xMgr->createInstance( A2OU( SN_DESKTOP ) ), UNO_QUERY );
-        }
-        catch (uno::Exception &)
-        {
-            DBG_ASSERT( 0, "createInstance failed" );
-        }
+        xDesktop = frame::Desktop::create(xContext);
+    }
+    catch (const uno::Exception &)
+    {
+        DBG_ASSERT( 0, "createInstance failed" );
     }
 }
 

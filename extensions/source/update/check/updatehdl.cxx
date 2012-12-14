@@ -53,7 +53,7 @@
 
 #include "com/sun/star/container/XNameContainer.hpp"
 
-#include "com/sun/star/frame/XDesktop.hpp"
+#include "com/sun/star/frame/Desktop.hpp"
 
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/task/InteractionHandler.hpp"
@@ -1085,15 +1085,10 @@ void UpdateHandler::createDialog()
         return;
     }
 
-    uno::Reference< lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager() );
-
-    if( xServiceManager.is() )
+    if( mxContext.is() )
     {
-        uno::Reference< frame::XDesktop > xDesktop(
-                xServiceManager->createInstanceWithContext( UNISTRING( "com.sun.star.frame.Desktop"), mxContext ),
-                uno::UNO_QUERY );
-        if ( xDesktop.is() )
-            xDesktop->addTerminateListener( this );
+        uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create( mxContext );
+        xDesktop->addTerminateListener( this );
     }
 
     loadStrings();

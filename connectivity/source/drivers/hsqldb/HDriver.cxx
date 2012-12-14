@@ -33,7 +33,7 @@
 #include <jvmfwk/framework.h>
 #include <com/sun/star/reflection/XProxyFactory.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 #include "HTerminateListener.hxx"
@@ -372,13 +372,10 @@ namespace connectivity
                     static Reference< XTerminateListener> s_xTerminateListener;
                     if( !s_xTerminateListener.is() )
                     {
-                        Reference< XDesktop > xDesktop( m_xFactory->createInstance( ::rtl::OUString("com.sun.star.frame.Desktop") ), UNO_QUERY );
+                        Reference< XDesktop2 > xDesktop = Desktop::create( comphelper::getComponentContext(m_xFactory) );
 
-                        if( xDesktop.is() )
-                        {
-                            s_xTerminateListener = new OConnectionController(this);
-                            xDesktop->addTerminateListener(s_xTerminateListener);
-                        }
+                        s_xTerminateListener = new OConnectionController(this);
+                        xDesktop->addTerminateListener(s_xTerminateListener);
                     }
                     Reference< XComponent> xIfc = new OHsqlConnection( this, xOrig, comphelper::getComponentContext(m_xFactory) );
                     xConnection.set(xIfc,UNO_QUERY);

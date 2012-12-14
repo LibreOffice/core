@@ -23,7 +23,7 @@
 #include <map>
 #include <vector>
 #include <com/sun/star/container/XEnumeration.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -70,8 +70,7 @@ DocumentsEnumeration::DocumentsEnumeration( const uno::Reference< frame::XModel 
     {
         uno::Reference< frame::XModuleManager2 > xModuleManager( lclCreateModuleManager() );
         ::rtl::OUString aIdentifier = xModuleManager->identify( rxModel );
-        uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-        uno::Reference< frame::XDesktop > xDesktop( xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ) ) ), uno::UNO_QUERY_THROW );
+        uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create( ::comphelper::getProcessComponentContext() );
         uno::Reference< container::XEnumerationAccess > xComponentsEA( xDesktop->getComponents(), uno::UNO_SET_THROW );
         uno::Reference< container::XEnumeration > xEnumeration( xComponentsEA->createEnumeration(), uno::UNO_SET_THROW );
         while( xEnumeration->hasMoreElements() )

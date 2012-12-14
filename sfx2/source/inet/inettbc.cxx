@@ -21,6 +21,7 @@
 #include "inettbc.hxx"
 
 #include <com/sun/star/uno/Any.h>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <svl/eitem.hxx>
@@ -182,9 +183,7 @@ IMPL_LINK_NOARG(SfxURLToolBoxControl_Impl, OpenHdl)
 
     if ( m_xServiceManager.is() )
     {
-        Reference< XFramesSupplier > xDesktop( m_xServiceManager->createInstance(
-                                                ::rtl::OUString("com.sun.star.frame.Desktop")),
-                                             UNO_QUERY );
+        Reference< XDesktop2 > xDesktop = Desktop::create( comphelper::getComponentContext(m_xServiceManager) );
         Reference< XFrame > xFrame( xDesktop->getActiveFrame(), UNO_QUERY );
         if ( xFrame.is() )
         {

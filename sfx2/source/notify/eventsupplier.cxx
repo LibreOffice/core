@@ -21,6 +21,7 @@
 
 #include <com/sun/star/util/URL.hpp>
 
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/task/JobExecutor.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
@@ -247,12 +248,9 @@ static void Execute( ANY& aEventData, const css::document::DocumentEvent& aTrigg
                 }
                 else
                 {
-                    xProv = ::com::sun::star::uno::Reference
-                        < ::com::sun::star::frame::XDispatchProvider > (
-                            ::comphelper::getProcessServiceFactory()->createInstance(
-                                rtl::OUString(
-                                    "com.sun.star.frame.Desktop" ) ),
-                            UNO_QUERY );
+                    xProv = css::uno::Reference< css::frame::XDispatchProvider > (
+                                css::frame::Desktop::create( ::comphelper::getProcessComponentContext() ),
+                                UNO_QUERY );
                 }
 
                 ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatch > xDisp;

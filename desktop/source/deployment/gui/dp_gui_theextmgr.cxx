@@ -26,6 +26,7 @@
 
 #include "com/sun/star/beans/XPropertySet.hpp"
 #include "com/sun/star/configuration/theDefaultProvider.hpp"
+#include "com/sun/star/frame/Desktop.hpp"
 
 #include "dp_gui_dialog2.hxx"
 #include "dp_gui_extensioncmdqueue.hxx"
@@ -91,10 +92,8 @@ TheExtensionManager::TheExtensionManager( Window *pParent,
     {
         // the registration should be done after the construction has been ended
         // otherwise an exception prevents object creation, but it is registered as a listener
-        m_xDesktop.set( xContext->getServiceManager()->createInstanceWithContext(
-                            OUString("com.sun.star.frame.Desktop"), xContext ), uno::UNO_QUERY );
-        if ( m_xDesktop.is() )
-            m_xDesktop->addTerminateListener( this );
+        m_xDesktop.set( frame::Desktop::create(xContext), uno::UNO_QUERY_THROW );
+        m_xDesktop->addTerminateListener( this );
     }
 }
 

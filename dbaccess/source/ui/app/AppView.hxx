@@ -101,7 +101,7 @@ namespace dbaui
         virtual void DataChanged( const DataChangedEvent& rDCEvt );
     public:
         OApplicationView(   Window* pParent
-                            ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&
+                            ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
                             ,IApplicationController&            _rAppController
                             ,PreviewMode _ePreviewMode
                             );

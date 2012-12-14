@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -115,64 +116,58 @@ sal_Bool OwnView_Impl::CreateModelFromURL( const ::rtl::OUString& aFileURL )
     if ( !aFileURL.isEmpty() )
     {
         try {
-            uno::Reference < frame::XComponentLoader > xDocumentLoader(
-                            m_xFactory->createInstance (
-                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ) )),
-                            uno::UNO_QUERY );
+            uno::Reference < frame::XDesktop2 > xDocumentLoader = frame::Desktop::create(comphelper::getComponentContext(m_xFactory));
 
-            if ( xDocumentLoader.is() )
+            uno::Sequence< beans::PropertyValue > aArgs( m_aFilterName.isEmpty() ? 4 : 5 );
+
+            aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "URL" ));
+            aArgs[0].Value <<= aFileURL;
+
+            aArgs[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ReadOnly" ));
+            aArgs[1].Value <<= sal_True;
+
+            aArgs[2].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "InteractionHandler" ));
+            aArgs[2].Value <<= uno::Reference< task::XInteractionHandler >(
+                                static_cast< ::cppu::OWeakObject* >( new DummyHandler_Impl() ), uno::UNO_QUERY );
+
+            aArgs[3].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "DontEdit" ));
+            aArgs[3].Value <<= sal_True;
+
+            if ( !m_aFilterName.isEmpty() )
             {
-                uno::Sequence< beans::PropertyValue > aArgs( m_aFilterName.isEmpty() ? 4 : 5 );
+                aArgs[4].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FilterName" ));
+                aArgs[4].Value <<= m_aFilterName;
+            }
 
-                aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "URL" ));
-                aArgs[0].Value <<= aFileURL;
+            uno::Reference< frame::XModel > xModel( xDocumentLoader->loadComponentFromURL(
+                                                            aFileURL,
+                                                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "_blank" )),
+                                                            0,
+                                                            aArgs ),
+                                                        uno::UNO_QUERY );
 
-                aArgs[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ReadOnly" ));
-                aArgs[1].Value <<= sal_True;
+            if ( xModel.is() )
+            {
+                uno::Reference< document::XEventBroadcaster > xBroadCaster( xModel, uno::UNO_QUERY );
+                if ( xBroadCaster.is() )
+                    xBroadCaster->addEventListener( uno::Reference< document::XEventListener >(
+                                                            static_cast< ::cppu::OWeakObject* >( this ),
+                                                             uno::UNO_QUERY ) );
 
-                aArgs[2].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "InteractionHandler" ));
-                aArgs[2].Value <<= uno::Reference< task::XInteractionHandler >(
-                                    static_cast< ::cppu::OWeakObject* >( new DummyHandler_Impl() ), uno::UNO_QUERY );
-
-                aArgs[3].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "DontEdit" ));
-                aArgs[3].Value <<= sal_True;
-
-                if ( !m_aFilterName.isEmpty() )
+                uno::Reference< util::XCloseable > xCloseable( xModel, uno::UNO_QUERY );
+                if ( xCloseable.is() )
                 {
-                    aArgs[4].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FilterName" ));
-                    aArgs[4].Value <<= m_aFilterName;
-                }
+                    xCloseable->addCloseListener( uno::Reference< util::XCloseListener >(
+                                                                    static_cast< ::cppu::OWeakObject* >( this ),
+                                                                      uno::UNO_QUERY ) );
 
-                uno::Reference< frame::XModel > xModel( xDocumentLoader->loadComponentFromURL(
-                                                                aFileURL,
-                                                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "_blank" )),
-                                                                0,
-                                                                aArgs ),
-                                                            uno::UNO_QUERY );
-
-                if ( xModel.is() )
-                {
-                    uno::Reference< document::XEventBroadcaster > xBroadCaster( xModel, uno::UNO_QUERY );
-                    if ( xBroadCaster.is() )
-                        xBroadCaster->addEventListener( uno::Reference< document::XEventListener >(
-                                                                static_cast< ::cppu::OWeakObject* >( this ),
-                                                                 uno::UNO_QUERY ) );
-
-                    uno::Reference< util::XCloseable > xCloseable( xModel, uno::UNO_QUERY );
-                    if ( xCloseable.is() )
-                    {
-                        xCloseable->addCloseListener( uno::Reference< util::XCloseListener >(
-                                                                        static_cast< ::cppu::OWeakObject* >( this ),
-                                                                          uno::UNO_QUERY ) );
-
-                        ::osl::MutexGuard aGuard( m_aMutex );
-                        m_xModel = xModel;
-                        bResult = sal_True;
-                    }
+                    ::osl::MutexGuard aGuard( m_aMutex );
+                    m_xModel = xModel;
+                    bResult = sal_True;
                 }
             }
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
         }
     }

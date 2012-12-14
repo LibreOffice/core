@@ -20,7 +20,7 @@
 #include "com/sun/star/bridge/UnoUrlResolver.hpp"
 #include "com/sun/star/bridge/XUnoUrlResolver.hpp"
 #include "com/sun/star/connection/NoConnectException.hpp"
-#include "com/sun/star/frame/XDesktop.hpp"
+#include "com/sun/star/frame/Desktop.hpp"
 #include "com/sun/star/lang/DisposedException.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
@@ -131,13 +131,7 @@ void OfficeConnection::setUp() {
 void OfficeConnection::tearDown() {
     if (process_ != 0) {
         if (context_.is()) {
-            css::uno::Reference< css::frame::XDesktop > desktop(
-                context_->getServiceManager()->createInstanceWithContext(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "com.sun.star.frame.Desktop")),
-                    context_),
-                css::uno::UNO_QUERY_THROW);
+            css::uno::Reference< css::frame::XDesktop2 > desktop = css::frame::Desktop::create( context_ );
             context_.clear();
             try {
                 CPPUNIT_ASSERT(desktop->terminate());

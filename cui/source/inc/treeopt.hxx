@@ -129,7 +129,6 @@ struct LastPageSaver
 // class OfaTreeOptionsDialog --------------------------------------------
 
 namespace com { namespace sun { namespace star { namespace frame { class XFrame; } } } }
-namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
 namespace com { namespace sun { namespace star { namespace awt { class XContainerWindowProvider; } } } }
 
 struct OptionsPageInfo;
@@ -179,8 +178,6 @@ private:
 
     void            LoadExtensionOptions( const rtl::OUString& rExtensionId );
     rtl::OUString   GetModuleIdentifier( const com::sun::star::uno::Reference<
-                                            com::sun::star::lang::XMultiServiceFactory >& xMFac,
-                                         const com::sun::star::uno::Reference<
                                             com::sun::star::frame::XFrame >& xFrame );
     Module*         LoadModule( const rtl::OUString& rModuleIdentifier );
     VectorOfNodes   LoadNodes( Module* pModule, const rtl::OUString& rExtensionId );

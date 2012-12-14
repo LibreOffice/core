@@ -21,7 +21,7 @@
 #include "newerverwarn.hrc"
 #include "ids.hrc"
 
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
@@ -127,8 +127,7 @@ IMPL_LINK_NOARG(NewerVersionWarningDialog, UpdateHdl)
                 uno::Reference< util::XURLTransformer > xTransformer( util::URLTransformer::create(aContext.getUNOContext()) );
                 xTransformer->parseStrict( aURL );
 
-                uno::Reference < frame::XDesktop > xDesktop(
-                    aContext.createComponent( "com.sun.star.frame.Desktop" ), uno::UNO_QUERY_THROW );
+                uno::Reference < frame::XDesktop2 > xDesktop = frame::Desktop::create(aContext.getUNOContext());
 
                 uno::Reference< frame::XDispatchProvider > xDispatchProvider(
                     xDesktop->getCurrentFrame(), uno::UNO_QUERY );

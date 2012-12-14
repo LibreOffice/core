@@ -27,8 +27,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 DBG_NAME(OQueryView)
 // -------------------------------------------------------------------------
-OQueryView::OQueryView(Window* _pParent, OQueryController& _rController,const Reference< XMultiServiceFactory >& _rFactory)
-    :OJoinDesignView( _pParent, _rController, _rFactory )
+OQueryView::OQueryView(Window* _pParent, OQueryController& _rController,const Reference< XComponentContext >& _rxContext)
+    :OJoinDesignView( _pParent, _rController, _rxContext )
 {
     DBG_CTOR(OQueryView,NULL);
 

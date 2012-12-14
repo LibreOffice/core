@@ -287,9 +287,9 @@ public:
 class XPluginManager_Impl :
     public cppu::WeakAggImplHelper1< com::sun::star::plugin::XPluginManager >
 {
-    Reference< com::sun::star::lang::XMultiServiceFactory >     m_xSMgr;
+    Reference< com::sun::star::uno::XComponentContext >     m_xContext;
 public:
-    XPluginManager_Impl( const Reference< com::sun::star::lang::XMultiServiceFactory >  & );
+    XPluginManager_Impl( const Reference< com::sun::star::uno::XComponentContext >  & );
     virtual ~XPluginManager_Impl();
 
     static XPlugin_Impl* getXPluginFromNPP( NPP );

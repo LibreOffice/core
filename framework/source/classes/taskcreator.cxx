@@ -23,6 +23,7 @@
 #include <loadenv/targethelper.hxx>
 #include <services.h>
 
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 
@@ -102,7 +103,7 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const ::rtl::
     css::beans::NamedValue              aArg    ;
 
     aArg.Name    = rtl::OUString(ARGUMENT_PARENTFRAME);
-    aArg.Value <<= css::uno::Reference< css::frame::XFrame >(xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY_THROW);
+    aArg.Value <<= css::uno::Reference< css::frame::XFrame >( css::frame::Desktop::create( comphelper::getComponentContext(xSMGR) ), css::uno::UNO_QUERY_THROW);
     lArgs[0]   <<= aArg;
 
     aArg.Name    = rtl::OUString(ARGUMENT_CREATETOPWINDOW);

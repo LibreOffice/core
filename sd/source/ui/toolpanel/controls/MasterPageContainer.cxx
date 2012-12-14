@@ -31,6 +31,7 @@
 #include <set>
 
 #include "unomodel.hxx"
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -990,11 +991,8 @@ Reference<frame::XModel> MasterPageContainer::Implementation::GetModel (void)
     if ( ! mxModel.is())
     {
         // Get the desktop a s service factory.
-        ::rtl::OUString sDesktopServiceName ( "com.sun.star.frame.Desktop");
-        uno::Reference<frame::XComponentLoader> xDesktop (
-            ::comphelper::getProcessServiceFactory()->createInstance(
-                sDesktopServiceName),
-            uno::UNO_QUERY);
+        uno::Reference<frame::XDesktop2> xDesktop  = frame::Desktop::create(
+            ::comphelper::getProcessComponentContext() );
 
         // Create a new model.
         ::rtl::OUString sModelServiceName ( "com.sun.star.presentation.PresentationDocument");

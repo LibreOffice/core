@@ -27,6 +27,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
 #include <unotools/pathoptions.hxx>
@@ -52,7 +53,9 @@ namespace basic
 
     /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
+    using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::frame::XModel;
+    using ::com::sun::star::frame::Desktop;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::embed::XStorage;
@@ -328,9 +331,8 @@ namespace basic
         // global constants
 
         // StarDesktop
-        Reference< XMultiServiceFactory > xSMgr = ::comphelper::getProcessServiceFactory();
-        pBasicManager->SetGlobalUNOConstant( "StarDesktop",
-                                             makeAny( xSMgr->createInstance("com.sun.star.frame.Desktop")));
+        Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        pBasicManager->SetGlobalUNOConstant( "StarDesktop", makeAny( Desktop::create(xContext)));
 
         // (BasicLibraries and DialogLibraries have automatically been added in SetLibraryContainerInfo)
 

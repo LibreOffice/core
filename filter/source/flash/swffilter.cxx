@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XExporter.hpp>
@@ -31,6 +31,7 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase4.hxx>
+#include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>
 
 #include "swfexporter.hxx"
@@ -263,9 +264,7 @@ sal_Bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue 
     if(!xDrawPages.is())
         return sal_False;
 
-    Reference< XDesktop > rDesktop( mxMSF->createInstance(OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ))), UNO_QUERY);
-    if (!rDesktop.is())
-        return sal_False;
+    Reference< XDesktop2 > rDesktop = Desktop::create( comphelper::getComponentContext(mxMSF) );
 
     Reference< XStorable > xStorable(rDesktop->getCurrentComponent(), UNO_QUERY);
     if (!xStorable.is())

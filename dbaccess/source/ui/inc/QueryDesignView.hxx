@@ -75,7 +75,7 @@ namespace dbaui
         sal_Bool                            m_bInSplitHandler;
 
     public:
-        OQueryDesignView(OQueryContainerWindow* pParent, OQueryController& _rController,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
+        OQueryDesignView(OQueryContainerWindow* pParent, OQueryController& _rController,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& );
         virtual ~OQueryDesignView();
 
         virtual sal_Bool isCutAllowed();

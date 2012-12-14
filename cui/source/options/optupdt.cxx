@@ -30,7 +30,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
@@ -324,13 +324,12 @@ IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, FileDialogHdl_Impl)
 
 IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, CheckNowHdl_Impl)
 {
-    uno::Reference < lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
+    uno::Reference < uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
 
     try
     {
         uno::Reference< lang::XMultiServiceFactory > xConfigProvider(
-            com::sun::star::configuration::theDefaultProvider::get(
-                comphelper::getProcessComponentContext() ) );
+            com::sun::star::configuration::theDefaultProvider::get( xContext ) );
 
         beans::NamedValue aProperty;
         aProperty.Name  = "nodepath";
@@ -347,14 +346,11 @@ IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, CheckNowHdl_Impl)
         util::URL aURL;
         xNameAccess->getByName("URL") >>= aURL.Complete;
 
-        uno::Reference < util::XURLTransformer > xTransformer(
-            util::URLTransformer::create( comphelper::getProcessComponentContext() ) );
+        uno::Reference < util::XURLTransformer > xTransformer( util::URLTransformer::create( xContext ) );
 
         xTransformer->parseStrict(aURL);
 
-        uno::Reference < frame::XDesktop > xDesktop(
-            xFactory->createInstance( "com.sun.star.frame.Desktop" ),
-            uno::UNO_QUERY_THROW );
+        uno::Reference < frame::XDesktop2 > xDesktop = frame::Desktop::create( xContext );
 
         uno::Reference< frame::XDispatchProvider > xDispatchProvider(
             xDesktop->getCurrentFrame(), uno::UNO_QUERY );

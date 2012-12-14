@@ -20,7 +20,7 @@
 
 #include "documentenumeration.hxx"
 
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -40,7 +40,8 @@ namespace basctl { namespace docs {
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::UNO_SET_THROW;
-    using ::com::sun::star::frame::XDesktop;
+    using ::com::sun::star::frame::Desktop;
+    using ::com::sun::star::frame::XDesktop2;
     using ::com::sun::star::container::XEnumerationAccess;
     using ::com::sun::star::container::XEnumeration;
     using ::com::sun::star::uno::Any;
@@ -174,9 +175,8 @@ namespace basctl { namespace docs {
 
         try
         {
-            const Reference< XDesktop > xDesktop( m_pData->aContext->getServiceManager()->createInstanceWithContext( "com.sun.star.frame.Desktop", m_pData->aContext ), UNO_QUERY_THROW );
-            const Reference< XFramesSupplier > xSuppFrames( xDesktop, UNO_QUERY_THROW );
-            const Reference< XFrames > xFrames( xSuppFrames->getFrames(), UNO_SET_THROW );
+            const Reference< XDesktop2 > xDesktop = Desktop::create( m_pData->aContext );
+            const Reference< XFrames > xFrames( xDesktop->getFrames(), UNO_SET_THROW );
             const Sequence< Reference< XFrame > > aFrames( xFrames->queryFrames( FrameSearchFlag::ALL ) );
 
             lcl_getDocuments_nothrow( aFrames, _out_rDocuments, m_pData->pFilter );

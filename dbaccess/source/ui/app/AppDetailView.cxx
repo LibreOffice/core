@@ -477,8 +477,8 @@ void OTasksWindow::fillTaskEntryList( const TaskEntryList& _rList )
 
     try
     {
-        Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier(
-            ModuleUIConfigurationManagerSupplier::create(comphelper::getComponentContext(getDetailView()->getBorderWin().getView()->getORB())) );
+        Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier =
+            ModuleUIConfigurationManagerSupplier::create( getDetailView()->getBorderWin().getView()->getORB() );
         Reference< XUIConfigurationManager > xUIConfigMgr = xModuleCfgMgrSupplier->getUIConfigurationManager(
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.OfficeDatabaseDocument" ) )
         );

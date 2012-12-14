@@ -37,6 +37,7 @@
 
 #include <com/sun/star/lang/XComponent.hpp>
 
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 
 #include <cppuhelper/weak.hxx>
@@ -128,11 +129,7 @@ void testWriter(  const Reference < XComponent > & rCmp )
 
 void testDocument( const Reference < XMultiServiceFactory > & rSmgr )
 {
-    Reference < XComponentLoader > rLoader(
-        rSmgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop" ))),
-        UNO_QUERY );
-
-    OSL_ASSERT( rLoader.is() );
+    Reference < XDesktop2 > rLoader = Desktop::create( comphelper::getComponentContext(rSmgr) );
 
     sal_Char *urls[] = {
         "private:factory/swriter",

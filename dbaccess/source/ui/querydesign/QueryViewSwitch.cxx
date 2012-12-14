@@ -32,13 +32,13 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
 DBG_NAME(OQueryViewSwitch)
-OQueryViewSwitch::OQueryViewSwitch(OQueryContainerWindow* _pParent, OQueryController& _rController,const Reference< XMultiServiceFactory >& _rFactory)
+OQueryViewSwitch::OQueryViewSwitch(OQueryContainerWindow* _pParent, OQueryController& _rController,const Reference< XComponentContext >& _rxContext)
 : m_bAddTableDialogWasVisible(sal_False)
 {
     DBG_CTOR(OQueryViewSwitch,NULL);
 
     m_pTextView     = new OQueryTextView(_pParent);
-    m_pDesignView   = new OQueryDesignView( _pParent, _rController, _rFactory );
+    m_pDesignView   = new OQueryDesignView( _pParent, _rController, _rxContext );
 }
 // -----------------------------------------------------------------------------
 OQueryViewSwitch::~OQueryViewSwitch()
@@ -309,7 +309,7 @@ void OQueryViewSwitch::SetPosSizePixel( Point _rPt,Size _rSize)
     m_pTextView->SetPosSizePixel( _rPt,_rSize);
 }
 // -----------------------------------------------------------------------------
-Reference< XMultiServiceFactory > OQueryViewSwitch::getORB() const
+Reference< XComponentContext > OQueryViewSwitch::getORB() const
 {
     return m_pDesignView->getORB();
 }

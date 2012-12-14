@@ -24,6 +24,7 @@
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/reflection/ProxyFactory.hpp>
 #include <com/sun/star/sdbc/DriverManager.hpp>
 #include <comphelper/extract.hxx>
@@ -72,13 +73,13 @@ static const ::rtl::OUString& getEnableNodeName()
 }
 
 //--------------------------------------------------------------------
-OPoolCollection::OPoolCollection(const Reference< XMultiServiceFactory >&   _rxFactory)
-    :m_xServiceFactory(_rxFactory)
+OPoolCollection::OPoolCollection(const Reference< XComponentContext >& _rxContext)
+    :m_xContext(_rxContext)
 {
     // bootstrap all objects supporting the .sdb.Driver service
-    m_xManager = DriverManager::create( comphelper::getComponentContext(m_xServiceFactory) );
+    m_xManager = DriverManager::create( m_xContext );
 
-    m_xProxyFactory = ProxyFactory::create( comphelper::getComponentContext(m_xServiceFactory) );
+    m_xProxyFactory = ProxyFactory::create( m_xContext );
 
     Reference<XPropertySet> xProp(getConfigPoolRoot(),UNO_QUERY);
     if ( xProp.is() )
@@ -87,9 +88,8 @@ OPoolCollection::OPoolCollection(const Reference< XMultiServiceFactory >&   _rxF
     osl_atomic_increment( &m_refCount );
     {
 
-        m_xDesktop = Reference< ::com::sun::star::frame::XDesktop>( m_xServiceFactory->createInstance(::rtl::OUString("com.sun.star.frame.Desktop") ), UNO_QUERY);
-        if ( m_xDesktop.is() )
-            m_xDesktop->addTerminateListener(this);
+        m_xDesktop = ::com::sun::star::frame::Desktop::create( m_xContext );
+        m_xDesktop->addTerminateListener(this);
 
     }
     osl_atomic_decrement( &m_refCount );
@@ -164,7 +164,7 @@ Sequence< ::rtl::OUString > SAL_CALL OPoolCollection::getSupportedServiceNames( 
 //---------------------------------------OPoolCollection----------------------------------
 Reference< XInterface > SAL_CALL OPoolCollection::CreateInstance(const Reference< XMultiServiceFactory >& _rxFactory)
 {
-    return static_cast<XDriverManager*>(new OPoolCollection(_rxFactory));
+    return static_cast<XDriverManager*>(new OPoolCollection(comphelper::getComponentContext(_rxFactory)));
 }
 
 //--------------------------------------------------------------------------
@@ -332,8 +332,7 @@ OConnectionPool* OPoolCollection::getConnectionPool(const ::rtl::OUString& _sImp
 Reference< XInterface > OPoolCollection::createWithServiceFactory(const ::rtl::OUString& _rPath) const
 {
     return createWithProvider(
-        com::sun::star::configuration::theDefaultProvider::get(
-            comphelper::getComponentContext(m_xServiceFactory)),
+        com::sun::star::configuration::theDefaultProvider::get(m_xContext),
         _rPath);
 }
 //------------------------------------------------------------------------

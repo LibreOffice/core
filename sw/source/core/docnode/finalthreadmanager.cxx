@@ -22,7 +22,7 @@
 #include <pausethreadstarting.hxx>
 #include <swthreadjoiner.hxx>
 
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 
@@ -205,18 +205,9 @@ void SAL_CALL TerminateOfficeThread::run()
 
 void TerminateOfficeThread::PerformOfficeTermination()
 {
-    css::uno::Reference< css::frame::XFramesSupplier > xTasksSupplier(
-        mxContext->getServiceManager()->createInstanceWithContext(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop") ),
-            mxContext ),
-        css::uno::UNO_QUERY );
-    if ( !xTasksSupplier.is() )
-    {
-        OSL_FAIL( "<TerminateOfficeThread::PerformOfficeTermination()> - no XFramesSupplier!" );
-        return;
-    }
+    css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create(mxContext);
 
-    css::uno::Reference< css::container::XElementAccess > xList( xTasksSupplier->getFrames(), css::uno::UNO_QUERY );
+    css::uno::Reference< css::container::XElementAccess > xList( xDesktop->getFrames(), css::uno::UNO_QUERY );
     if ( !xList.is() )
     {
         OSL_FAIL( "<TerminateOfficeThread::PerformOfficeTermination()> - no XElementAccess!" );
@@ -225,8 +216,7 @@ void TerminateOfficeThread::PerformOfficeTermination()
 
     if ( !xList->hasElements() )
     {
-        css::uno::Reference< css::frame::XDesktop > xDesktop( xTasksSupplier, css::uno::UNO_QUERY );
-        if ( xDesktop.is() && !OfficeTerminationStopped() )
+        if ( !OfficeTerminationStopped() )
             xDesktop->terminate();
     }
 }
@@ -256,14 +246,8 @@ FinalThreadManager::FinalThreadManager(css::uno::Reference< css::uno::XComponent
 
 void FinalThreadManager::registerAsListenerAtDesktop()
 {
-    css::uno::Reference< css::frame::XDesktop > xDesktop(
-        m_xContext->getServiceManager()->createInstanceWithContext(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop") ),
-            m_xContext ),
-        css::uno::UNO_QUERY );
-
-    if ( xDesktop.is() )
-        xDesktop->addTerminateListener( css::uno::Reference< css::frame::XTerminateListener >( static_cast< cppu::OWeakObject* >( this ), css::uno::UNO_QUERY ) );
+    css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create(m_xContext);
+    xDesktop->addTerminateListener( css::uno::Reference< css::frame::XTerminateListener >( static_cast< cppu::OWeakObject* >( this ), css::uno::UNO_QUERY ) );
 }
 
 FinalThreadManager::~FinalThreadManager()
