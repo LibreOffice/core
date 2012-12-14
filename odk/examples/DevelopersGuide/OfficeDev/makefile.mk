@@ -92,7 +92,6 @@ FILTERDETECTION_FILES=\
 DESTFLATXMLCPP=$(DESTDIRDEVGUIDEEXAMPLES)$/OfficeDev$/FilterDevelopment$/FlatXmlFilter_cpp
 FLATXMLCPP_FILES=\
     $(DESTFLATXMLCPP)$/FlatXml.cxx \
-    $(DESTFLATXMLCPP)$/FlatXmlFilter_cpp.uno.xml \
     $(DESTFLATXMLCPP)$/Makefile \
     $(DESTFLATXMLCPP)$/FlatXmlFilter_cpp.xcu
 
