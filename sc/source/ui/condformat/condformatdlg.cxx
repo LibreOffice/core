@@ -84,7 +84,13 @@ ScCondFormatList::ScCondFormatList(Window* pParent, const ResId& rResId, ScDocum
                     }
                     break;
                 case condformat::COLORSCALE:
-                    maEntries.push_back(new ScColorScale3FrmtEntry( this, mpDoc, maPos, static_cast<const ScColorScaleFormat*>( pEntry ) ) );
+                    {
+                        const ScColorScaleFormat* pColorScale = static_cast<const ScColorScaleFormat*>( pEntry );
+                        if( pColorScale->size() == 2 )
+                            maEntries.push_back(new ScColorScale2FrmtEntry( this, mpDoc, maPos, pColorScale ) );
+                        else
+                            maEntries.push_back(new ScColorScale3FrmtEntry( this, mpDoc, maPos, pColorScale ) );
+                    }
                     break;
                 case condformat::DATABAR:
                     maEntries.push_back(new ScDataBarFrmtEntry( this, mpDoc, maPos, static_cast<const ScDataBarFormat*>( pEntry ) ) );
