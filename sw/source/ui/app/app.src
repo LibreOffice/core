@@ -244,21 +244,20 @@ String STR_CAPTION_BEGINNING
 {
     Text [ en-US ] = "Start" ;
 };
+
 String STR_CAPTION_END
 {
     Text [ en-US ] = "End" ;
 };
+
 String STR_CAPTION_ABOVE
 {
     Text [ en-US ] = "Above" ;
 };
+
 String STR_CAPTION_BELOW
 {
     Text [ en-US ] = "Below" ;
-};
-String STR_CAPTION_NONE
-{
-    Text [ en-US ] = "<None>" ;
 };
 
 InfoBox MSG_ERROR_SEND_MAIL

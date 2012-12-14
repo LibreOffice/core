@@ -88,7 +88,7 @@ String SwCaptionDialog::our_aSepTextSave = rtl::OUString(": "); // Caption separ
 
 SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     SvxStandardDialog( pParent, "InsertCaptionDialog", "modules/swriter/ui/insertcaption.ui" ),
-    sNone( SW_RES( STR_CAPTION_NONE )),
+    m_sNone( SW_RESSTR(SW_STR_NONE) ),
     rView( rV ),
     pMgr( new SwFldMgr(rView.GetWrtShellPtr()) ),
     bCopyAttributes( sal_False ),
@@ -134,7 +134,7 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     m_pOptionButton->SetClickHdl( LINK( this, SwCaptionDialog, OptionHdl ) );
     m_pAutoCaptionButton->SetClickHdl(LINK(this, SwCaptionDialog, CaptionHdl));
 
-    m_pCategoryBox->InsertEntry( sNone );
+    m_pCategoryBox->InsertEntry( m_sNone );
     sal_uInt16 i, nCount = pMgr->GetFldTypeCount();
     for (i = 0; i < nCount; i++)
     {
@@ -256,8 +256,8 @@ void SwCaptionDialog::Apply()
 {
     InsCaptionOpt aOpt;
     aOpt.UseCaption() = sal_True;
-    String aName( m_pCategoryBox->GetText() );
-    if ( aName == sNone )
+    OUString aName( m_pCategoryBox->GetText() );
+    if ( aName == m_sNone )
     {
         aOpt.SetCategory( aEmptyStr );
         aOpt.SetNumSeparator( aEmptyStr );
@@ -280,8 +280,8 @@ void SwCaptionDialog::Apply()
 
 IMPL_LINK_INLINE_START( SwCaptionDialog, OptionHdl, Button*, pButton )
 {
-    String sFldTypeName = m_pCategoryBox->GetText();
-    if(sFldTypeName == sNone)
+    OUString sFldTypeName = m_pCategoryBox->GetText();
+    if(sFldTypeName == m_sNone)
         sFldTypeName = aEmptyStr;
     SwSequenceOptionDialog  aDlg( pButton, rView, sFldTypeName );
     aDlg.SetApplyBorderAndShadow(bCopyAttributes);
@@ -312,16 +312,15 @@ IMPL_LINK_NOARG_INLINE_END(SwCaptionDialog, SelectHdl)
 IMPL_LINK_NOARG(SwCaptionDialog, ModifyHdl)
 {
     SwWrtShell &rSh = rView.GetWrtShell();
-    String sFldTypeName = m_pCategoryBox->GetText();
-    sal_Bool bCorrectFldName = sFldTypeName.Len() > 0;
-    sal_Bool bNone = sFldTypeName == sNone;
+    OUString sFldTypeName = m_pCategoryBox->GetText();
+    bool bCorrectFldName = !sFldTypeName.isEmpty();
+    bool bNone = sFldTypeName == m_sNone;
     SwFieldType* pType = (bCorrectFldName && !bNone)
                     ? rSh.GetFldType( RES_SETEXPFLD, sFldTypeName )
                     : 0;
     m_pOKButton->Enable( bCorrectFldName &&
                         (!pType ||
-                            ((SwSetExpFieldType*)pType)->GetType() == nsSwGetSetExpType::GSE_SEQ)
-                                && 0 != sFldTypeName.Len() );
+                            ((SwSetExpFieldType*)pType)->GetType() == nsSwGetSetExpType::GSE_SEQ) );
     m_pOptionButton->Enable( m_pOKButton->IsEnabled() && !bNone );
     m_pNumberingSeparatorFT->Enable( bOrderNumberingFirst && !bNone );
     m_pNumberingSeparatorED->Enable( bOrderNumberingFirst && !bNone );
@@ -348,8 +347,8 @@ void SwCaptionDialog::DrawSample()
     String sCaption = m_pTextEdit->GetText();
 
     // number
-    String sFldTypeName = m_pCategoryBox->GetText();
-    sal_Bool bNone = sFldTypeName == sNone;
+    OUString sFldTypeName = m_pCategoryBox->GetText();
+    bool bNone = sFldTypeName == m_sNone;
     if( !bNone )
     {
         sal_uInt16 nNumFmt = (sal_uInt16)(sal_uIntPtr)m_pFormatBox->GetEntryData(
@@ -428,7 +427,7 @@ SwSequenceOptionDialog::SwSequenceOptionDialog( Window *pParent, SwView &rV,
 
     SwWrtShell &rSh = rView.GetWrtShell();
 
-    String sNone(SW_RES(STR_CAPTION_NONE));
+    OUString sNone(SW_RESSTR(SW_STR_NONE));
 
     m_pLbLevel->InsertEntry(sNone);
     for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )

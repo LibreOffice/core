@@ -79,7 +79,7 @@ class SwCaptionDialog : public SvxStandardDialog
 
     SwCaptionPreview* m_pPreview;
 
-    String       sNone;
+    OUString     m_sNone;
 
     SwView       &rView; // search per active, avoid ::com::sun::star::sdbcx::View
     SwFldMgr     *pMgr;      // pointer to save the include
