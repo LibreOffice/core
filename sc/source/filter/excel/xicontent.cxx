@@ -744,7 +744,7 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
     {
         const ScTokenArray* pTokArr = 0;
         rFmlaConv.Reset();
-        rFmlaConv.Convert( pTokArr, rStrm, nLen, false, FT_RangeName );
+            rFmlaConv.Convert( pTokArr, rStrm, nLen, false, FT_CondFormat );
         // formula converter owns pTokArr -> create a copy of the token array
         if( pTokArr )
             xTokArr1.reset( pTokArr->Clone() );
@@ -763,7 +763,7 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
     {
         const ScTokenArray* pTokArr = 0;
         rFmlaConv.Reset();
-        rFmlaConv.Convert( pTokArr, rStrm, nLen, false, FT_RangeName );
+            rFmlaConv.Convert( pTokArr, rStrm, nLen, false, FT_CondFormat );
         // formula converter owns pTokArr -> create a copy of the token array
         if( pTokArr )
             xTokArr2.reset( pTokArr->Clone() );
