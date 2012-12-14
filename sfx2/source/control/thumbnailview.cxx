@@ -945,17 +945,6 @@ bool ThumbnailView::StartDrag( const CommandEvent& rCEvt, Region& rRegion )
     return true;
 }
 
-long ThumbnailView::GetScrollWidth() const
-{
-    if ( GetStyle() & WB_VSCROLL )
-    {
-        ((ThumbnailView*)this)->ImplInitScrollBar();
-        return mpScrBar->GetSizePixel().Width()+mnScrBarOffset;
-    }
-    else
-        return 0;
-}
-
 void ThumbnailView::filterItems (const boost::function<bool (const ThumbnailViewItem*) > &func)
 {
     mnFirstLine = 0;        // start at the top of the list instead of the current position

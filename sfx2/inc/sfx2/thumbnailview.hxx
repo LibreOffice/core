@@ -227,8 +227,6 @@ public:
 
     bool IsColor() const { return maColor.GetTransparency() == 0; }
 
-    long            GetScrollWidth() const;
-
     void filterItems (const boost::function<bool (const ThumbnailViewItem*) > &func);
 
     void sortItems (const boost::function<bool (const ThumbnailViewItem*,
