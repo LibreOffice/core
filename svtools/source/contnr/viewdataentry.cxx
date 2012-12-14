@@ -97,11 +97,6 @@ void SvViewDataEntry::SetFocus( bool bFocus )
     mbFocused = bFocus;
 }
 
-void SvViewDataEntry::SetCursored( bool bCursored )
-{
-    mbCursored = bCursored;
-}
-
 void SvViewDataEntry::SetSelected( bool bSelected )
 {
     mbSelected = bSelected;

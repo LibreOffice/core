@@ -11,9 +11,6 @@ ScMenuFloatingWindow::getDoc()
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
 ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any const&)
 SfxDocumentTemplateDlg::SfxDocumentTemplateDlg(Window*, SfxDocumentTemplates*)
-SvListView::HasEntryFocus(SvTreeListEntry*) const
-SvTreeList::GetChildIterators(SvTreeListEntry const*) const
-SvViewDataEntry::SetCursored(bool)
 TextEngine::GetLeftMargin() const
 ThumbnailView::GetScrollWidth() const
 ThumbnailViewItemAcc::FireAccessibleEvent(short, com::sun::star::uno::Any const&, com::sun::star::uno::Any const&)

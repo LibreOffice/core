@@ -1118,27 +1118,6 @@ SvTreeListEntry* SvTreeList::GetRootLevelParent( SvTreeListEntry* pEntry ) const
     return pCurParent;
 }
 
-std::pair<SvTreeListEntries::const_iterator, SvTreeListEntries::const_iterator>
-SvTreeList::GetChildIterators(const SvTreeListEntry* pParent) const
-{
-    typedef std::pair<SvTreeListEntries::const_iterator, SvTreeListEntries::const_iterator> IteratorPair;
-
-    static const SvTreeListEntries dummy; // prevent singular iterator asserts
-    IteratorPair aRet(dummy.begin(), dummy.end());
-
-    if (!pParent)
-        pParent = pRootItem;
-
-    if (pParent->maChildren.empty())
-        // This entry has no children.
-        return aRet;
-
-    aRet.first = pParent->maChildren.begin();
-    aRet.second = pParent->maChildren.end();
-
-    return aRet;
-}
-
 std::pair<SvTreeListEntries::iterator, SvTreeListEntries::iterator>
     SvTreeList::GetChildIterators(SvTreeListEntry* pParent)
 {
@@ -1492,14 +1471,6 @@ sal_Bool SvListView::IsSelected( SvTreeListEntry* pEntry ) const
     SvDataTable::const_iterator itr = maDataTable.find(pEntry );
     DBG_ASSERT(itr != maDataTable.end(),"Entry not in Table");
     return itr->second->IsSelected();
-}
-
-sal_Bool SvListView::HasEntryFocus( SvTreeListEntry* pEntry ) const
-{
-    DBG_ASSERT(pEntry,"IsExpanded:No Entry");
-    SvDataTable::const_iterator itr = maDataTable.find(pEntry );
-    DBG_ASSERT(itr != maDataTable.end(),"Entry not in Table");
-    return itr->second->HasFocus();
 }
 
 void SvListView::SetEntryFocus( SvTreeListEntry* pEntry, sal_Bool bFocus )

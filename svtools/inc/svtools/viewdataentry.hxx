@@ -65,7 +65,6 @@ public:
     bool IsCursored() const;
     bool IsSelectable() const;
     void SetFocus( bool bFocus );
-    void SetCursored( bool bCursored );
     void SetSelected( bool bSelected );
     void SetHighlighted( bool bHighlighted );
     void SetExpanded( bool bExpanded );

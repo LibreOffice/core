@@ -193,9 +193,6 @@ public:
     const SvTreeListEntries& GetChildList( SvTreeListEntry* pParent ) const;
     SvTreeListEntries& GetChildList( SvTreeListEntry* pParent );
 
-    std::pair<SvTreeListEntries::const_iterator, SvTreeListEntries::const_iterator>
-        GetChildIterators(const SvTreeListEntry* pParent) const;
-
     std::pair<SvTreeListEntries::iterator, SvTreeListEntries::iterator>
         GetChildIterators(SvTreeListEntry* pParent);
 
@@ -341,7 +338,6 @@ public:
 
     sal_Bool            IsExpanded( SvTreeListEntry* pEntry ) const;
     sal_Bool            IsSelected( SvTreeListEntry* pEntry ) const;
-    sal_Bool            HasEntryFocus( SvTreeListEntry* pEntry ) const;
     void                SetEntryFocus( SvTreeListEntry* pEntry, sal_Bool bFocus );
     const SvViewDataEntry*         GetViewData( const SvTreeListEntry* pEntry ) const;
     SvViewDataEntry*         GetViewData( SvTreeListEntry* pEntry );
