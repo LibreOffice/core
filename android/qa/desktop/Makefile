@@ -196,8 +196,7 @@ copy-stuff: buildrcs
 	cp $(ANDROID_NDK_GDBSERVER) $(SODEST)
 	echo set solib-search-path ./obj/local/$(ANDROID_APP_ABI) >$(SODEST)/gdb.setup
 
-
-build-ant: copy-stuff properties
+build-ant: android_version_setup copy-stuff link-so properties
 	unset JAVA_HOME && $(ANT) debug
 
 run:

@@ -1,33 +1,14 @@
 include ../../../config_host.mk
 
-LIBS = \
-  -Wl,--start-group \
-  $(wildcard $(OUTDIR)/lib/lib*.a) \
-  -Wl,--end-group
-
-WHOLELIBS = \
-  -Wl,--whole-archive \
-  $(addprefix -l,$(strip \
-	juh \
-  )) \
-  -Wl,--no-whole-archive
-
 # The default target just builds.
 
 all: build-ant
 
-BOOTSTRAPDIR=../../Bootstrap
-include $(BOOTSTRAPDIR)/Makefile.shared
-
 # The package of this app
 APP_PACKAGE=org.libreoffice
 
-link-so:
-# Build the single .so for this app
-	mkdir -p $(OBJLOCAL)
-	$(CXX) -Wl,-Map,liblo-native-code.map -Wl,--gc-sections -Wl,--version-script=../../Bootstrap/version.map -Wl,--no-keep-files-mapped -Wl,--no-undefined -DANDROID -DDISABLE_DYNLOADING -shared -o $(OBJLOCAL)/liblo-native-code.so -I$(OUTDIR)/inc native-code.cxx -L$(OUTDIR)/lib $(WHOLELIBS) $(LIBS) -lgnustl_static -landroid -llog -lz
-	mkdir -p $(SODEST)
-	$(STRIP) -o $(SODEST)/liblo-native-code.so $(OBJLOCAL)/liblo-native-code.so
+BOOTSTRAPDIR=../../Bootstrap
+include $(BOOTSTRAPDIR)/Makefile.shared
 
 copy-stuff:
 # Then "assets". Let the directory structure under assets mimic

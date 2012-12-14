@@ -1,53 +1,14 @@
 include ../../../config_host.mk
 
-BOOTSTRAPDIR=../../Bootstrap
-include $(BOOTSTRAPDIR)/Makefile.shared
-
 # The package of this app
 APP_PACKAGE=org.libreoffice.android.examples
 
-# We can't keep assuming APP_DATA_PATH like this, surely this can vary with
-# Android versions and whatnot, this is temporary and works at least with the
-# SDK 16 emulator...
-
-# Probably would be best to just stop fooling around with the possibilities to
-# set various stuff with the -env command line parameters (and environment
-# variables?) and in a plethora of rc files, and hardcode construction of
-# *all* required pathnames based on the app installation location for Android
-# (and iOS), etc. We don't really win anything by having so many layers of
-# configurability on platforms like Android and iOS where apps based on LO
-# code are very much self-contained pre-packaged thingies.
-APP_DATA_PATH=/data/data/$(APP_PACKAGE)
-
-SODEST=libs/$(ANDROID_APP_ABI)
-OBJLOCAL=obj/local/$(ANDROID_APP_ABI)
-
-define COPYJAR
-cp $(1) libs
-endef
-
-LIBS = \
-  -Wl,--start-group \
-  $(wildcard $(OUTDIR)/lib/lib*.a) \
-  -Wl,--end-group
-
-WHOLELIBS = \
-  -Wl,--whole-archive \
-  $(addprefix -l,$(strip \
-	juh \
-  )) \
-  -Wl,--no-whole-archive
+BOOTSTRAPDIR=../../Bootstrap
+include $(BOOTSTRAPDIR)/Makefile.shared
 
 # The default target just builds.
 
 all: build-ant
-
-link-so:
-# Build the single .so for this app
-	mkdir -p $(OBJLOCAL)
-	$(CXX) -Wl,-Map,liblo-native-code.map -Wl,--gc-sections -Wl,--version-script=../../Bootstrap/version.map -Wl,--no-keep-files-mapped -Wl,--no-undefined -DANDROID -DDISABLE_DYNLOADING -shared -o $(OBJLOCAL)/liblo-native-code.so -I$(OUTDIR)/inc native-code.cxx -L$(OUTDIR)/lib $(WHOLELIBS) $(LIBS) -lgnustl_static -landroid -llog -lz
-	mkdir -p $(SODEST)
-	$(STRIP) -o $(SODEST)/liblo-native-code.so $(OBJLOCAL)/liblo-native-code.so
 
 copy-stuff:
 # Then "assets". Let the directory structure under assets mimic
