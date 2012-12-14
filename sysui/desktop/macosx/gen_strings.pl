@@ -94,7 +94,6 @@ sub print_lang
       if ( $lang ne $_ && $lang eq $this_lang && exists $documents{$last_section} ) {
         # replacing product variable doesn't work inside zip files and also not for UTF-16
         next if /%PRODUCTNAME/;
-#        s/%PRODUCTNAME/\${FILEFORMATNAME} \${FILEFORMATVERSION}/g;
         s/$lang/"$documents{$last_section}"/;
         s/\n/;\n/;
         print;
