@@ -85,12 +85,16 @@ WHOLELIBS = \
   )) \
   -Wl,--no-whole-archive
 
-link-so:
+
+$(OBJLOCAL)/liblo-native-code.so : $(wildcard $(OUTDIR)/lib/lib*.a) native-code.cxx
 	mkdir -p $(OBJLOCAL)
 	$(CXX) -Wl,-Map,liblo-native-code.map -Wl,--gc-sections -Wl,--version-script=../../Bootstrap/version.map -Wl,--no-keep-files-mapped -Wl,--no-undefined -DANDROID -DDISABLE_DYNLOADING -shared -o $(OBJLOCAL)/liblo-native-code.so -I$(OUTDIR)/inc native-code.cxx -L$(OUTDIR)/lib $(WHOLELIBS) $(LIBS) -lgnustl_static -landroid -llog -lz
+
+$(SODEST)/liblo-native-code.so : $(OBJLOCAL)/liblo-native-code.so
 	mkdir -p $(SODEST)
 	$(STRIP) -o $(SODEST)/liblo-native-code.so $(OBJLOCAL)/liblo-native-code.so
 
+link-so: $(SODEST)/liblo-native-code.so
 
 # If you reinstall an app several times *on the emulator*, even if you
 # uninstall it between, disk space seems to leak that won't get recycled until
