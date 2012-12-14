@@ -2869,6 +2869,22 @@ void ScInterpreter::ScIsError()
 }
 
 
+void ScInterpreter::ScIfError()
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScIfError" );
+    // redirect to ScIfJump as we want the same behaviour
+    ScIfJump();
+}
+
+
+void ScInterpreter::ScIfNA()
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScIfNA" );
+    // this function is still meaningless
+    PushIllegalParameter();
+}
+
+
 short ScInterpreter::IsEven()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::IsEven" );

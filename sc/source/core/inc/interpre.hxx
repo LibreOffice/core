@@ -434,6 +434,8 @@ void ScArabic();
 void ScIsNV();
 void ScIsErr();
 void ScIsError();
+void ScIfError();
+void ScIfNA();
 short IsEven();
 void ScIsEven();
 void ScIsOdd();

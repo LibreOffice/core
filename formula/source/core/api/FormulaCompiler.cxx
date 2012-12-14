@@ -824,7 +824,7 @@ sal_uInt16 FormulaCompiler::GetErrorConstant( const String& rName )
     {
         switch ((*iLook).second)
         {
-            // Not all may make sense in a formula, but these we know as 
+            // Not all may make sense in a formula, but these we know as
             // opcodes.
             case ocErrNull:
                 nError = errNoCode;
@@ -1122,7 +1122,8 @@ void FormulaCompiler::Factor()
                 || eOp == ocOr
                 || eOp == ocBad
                 || ( eOp >= ocInternalBegin && eOp <= ocInternalEnd )
-                || (bCompileForFAP && ((eOp == ocIf) || (eOp == ocChose)))
+                || ( bCompileForFAP
+                     && ( eOp == ocIf || eOp == ocIfError || eOp == ocIfNA || eOp == ocChose ) )
             )
         {
             pFacToken = mpToken;
@@ -1171,11 +1172,11 @@ void FormulaCompiler::Factor()
                 pFacToken->SetByte( nSepCount );
             PutCode( pFacToken );
         }
-        else if (eOp == ocIf || eOp == ocChose)
+        else if (eOp == ocIf || eOp == ocIfError || eOp == ocIfNA || eOp == ocChose)
         {
             // the PC counters are -1
             pFacToken = mpToken;
-            if ( eOp == ocIf )
+            if ( eOp == ocIf || eOp == ocIfError || eOp == ocIfNA )
                 pFacToken->GetJump()[ 0 ] = 3;  // if, else, behind
             else
                 pFacToken->GetJump()[ 0 ] = MAXJUMPCOUNT+1;
@@ -1192,9 +1193,10 @@ void FormulaCompiler::Factor()
             // during AutoCorrect (since pArr->GetCodeError() is
             // ignored) an unlimited ocIf would crash because
             // ScRawToken::Clone() allocates the JumpBuffer according to
-            // nJump[0]*2+2, which is 3*2+2 on ocIf.
+            // nJump[0]*2+2, which is 3*2+2 on ocIf, ocIfError and ocIfNA.
+            short nOpCode = pFacToken->GetOpCode();
             const short nJumpMax =
-                (pFacToken->GetOpCode() == ocIf ? 3 : MAXJUMPCOUNT);
+                ( ( nOpCode == ocIf || nOpCode == ocIfError || nOpCode == ocIfNA ) ? 3 : MAXJUMPCOUNT  );
             while ( (nJumpCount < (MAXJUMPCOUNT - 1)) && (eOp == ocSep)
                     && (!pArr->GetCodeError() || bIgnoreErrors) )
             {
@@ -1213,7 +1215,8 @@ void FormulaCompiler::Factor()
                 // always limit to nJumpMax, no arbitrary overwrites
                 if ( ++nJumpCount <= nJumpMax )
                     pFacToken->GetJump()[ nJumpCount ] = pc-1;
-                if ((pFacToken->GetOpCode() == ocIf && (nJumpCount > 3)) ||
+                short nOpCode = pFacToken->GetOpCode();
+                if ( ( ( nOpCode == ocIf || nOpCode == ocIfError || nOpCode == ocIfNA ) && (nJumpCount > 3)) ||
                                  (nJumpCount >= MAXJUMPCOUNT))
                     SetError(errIllegalParameter);
                 else

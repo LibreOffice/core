@@ -2712,7 +2712,7 @@ void ScInterpreter::ScExternal()
     }
     else if ( ( aUnoName = ScGlobal::GetAddInCollection()->FindFunction(aFuncName, false) ).Len()  )
     {
-        //  bLocalFirst=false in FindFunction, cFunc should be the stored 
+        //  bLocalFirst=false in FindFunction, cFunc should be the stored
         //  internal name
 
         ScUnoAddInCall aCall( *ScGlobal::GetAddInCollection(), aUnoName, nParamCount );
@@ -3815,9 +3815,10 @@ StackVar ScInterpreter::Interpret()
             // RPN code push without error
             PushWithoutError( (FormulaToken&) *pCur );
         }
-        else if (pTokenMatrixMap && !(eOp == ocIf || eOp == ocChose) &&
-                ((aTokenMatrixMapIter = pTokenMatrixMap->find( pCur)) !=
-                 pTokenMatrixMap->end()) &&
+        else if (pTokenMatrixMap &&
+                 !(eOp == ocIf || eOp == ocIfError || eOp == ocIfNA || eOp == ocChose) &&
+                 ((aTokenMatrixMapIter = pTokenMatrixMap->find( pCur)) !=
+                  pTokenMatrixMap->end()) &&
                 (*aTokenMatrixMapIter).second->GetType() != svJumpMatrix)
         {
             // Path already calculated, reuse result.
@@ -3836,7 +3837,7 @@ StackVar ScInterpreter::Interpret()
             nFuncFmtType = NUMBERFORMAT_NUMBER;
             nFuncFmtIndex = 0;
 
-            if ( eOp == ocIf || eOp == ocChose )
+            if ( eOp == ocIf || eOp == ocChose || eOp == ocIfError || eOp == ocIfNA )
                 nStackBase = sp;        // don't mess around with the jumps
             else
             {
@@ -3952,6 +3953,8 @@ StackVar ScInterpreter::Interpret()
                 case ocIsNA             : ScIsNV();                     break;
                 case ocIsErr            : ScIsErr();                    break;
                 case ocIsError          : ScIsError();                  break;
+                case ocIfError          : ScIfError();                  break;
+                case ocIfNA             : ScIfNA();                     break;
                 case ocIsEven           : ScIsEven();                   break;
                 case ocIsOdd            : ScIsOdd();                    break;
                 case ocN                : ScN();                        break;
@@ -4246,6 +4249,8 @@ StackVar ScInterpreter::Interpret()
     case ocIsEmpty : \
     case ocIsErr : \
     case ocIsError : \
+    case ocIfError : \
+    case ocIfNA : \
     case ocIsFormula : \
     case ocIsLogical : \
     case ocIsNA : \

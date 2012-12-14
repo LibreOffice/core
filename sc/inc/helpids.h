@@ -414,6 +414,8 @@
 #define HID_FUNC_ISTBEZUG                                       "SC_HID_FUNC_ISTBEZUG"
 #define HID_FUNC_ISTFEHL                                        "SC_HID_FUNC_ISTFEHL"
 #define HID_FUNC_ISTFEHLER                                      "SC_HID_FUNC_ISTFEHLER"
+#define HID_FUNC_IFERROR                                        "SC_HID_FUNC_IFERROR"
+#define HID_FUNC_IFNA                                           "SC_HID_FUNC_IFNA"
 #define HID_FUNC_ISTLEER                                        "SC_HID_FUNC_ISTLEER"
 #define HID_FUNC_ISTLOG                                         "SC_HID_FUNC_ISTLOG"
 #define HID_FUNC_ISTNV                                          "SC_HID_FUNC_ISTNV"
