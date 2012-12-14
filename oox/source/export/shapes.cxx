@@ -106,10 +106,6 @@ using ::com::sun::star::frame::XModel;
 using ::com::sun::star::sheet::XSpreadsheetDocument;
 using ::comphelper::MediaDescriptor;
 using ::oox::core::XmlFilterBase;
-using ::rtl::OString;
-using ::rtl::OStringBuffer;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using ::sax_fastparser::FSHelperPtr;
 
 #define IDS(x) OString(OStringLiteral(#x " ") + OString::valueOf( mnShapeIdMax++ )).getStr()
@@ -557,10 +553,10 @@ static const char* lcl_GetPresetGeometry( const char* sShapeType )
 namespace oox { namespace drawingml {
 
 #define GETA(propName) \
-    GetProperty( rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( #propName ) ) )
+    GetProperty( rXPropSet, OUString(#propName))
 
 #define GETAD(propName) \
-    ( GetPropertyAndState( rXPropSet, rXPropState, String( RTL_CONSTASCII_USTRINGPARAM( #propName ) ), eState ) && eState == beans::PropertyState_DIRECT_VALUE )
+    ( GetPropertyAndState( rXPropSet, rXPropState, OUString(#propName), eState ) && eState == beans::PropertyState_DIRECT_VALUE )
 
 #define GET(variable, propName) \
     if ( GETA(propName) ) \

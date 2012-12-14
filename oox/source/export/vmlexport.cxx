@@ -30,10 +30,6 @@
 
 #include <cstdio>
 
-using rtl::OString;
-using rtl::OStringBuffer;
-using rtl::OUString;
-using rtl::OUStringBuffer;
 
 using namespace sax_fastparser;
 using namespace oox::vml;
@@ -759,7 +755,7 @@ void VMLExport::AddLineDimensions( const Rectangle& rRectangle )
             .makeStringAndClear() );
 }
 
-void VMLExport::AddRectangleDimensions( rtl::OStringBuffer& rBuffer, const Rectangle& rRectangle )
+void VMLExport::AddRectangleDimensions( OStringBuffer& rBuffer, const Rectangle& rRectangle )
 {
     if ( rBuffer.getLength() )
         rBuffer.append( ";" );
@@ -783,7 +779,7 @@ void VMLExport::AddRectangleDimensions( rtl::OStringBuffer& rBuffer, const Recta
     }
 }
 
-void VMLExport::AddShapeAttribute( sal_Int32 nAttribute, const rtl::OString& rValue )
+void VMLExport::AddShapeAttribute( sal_Int32 nAttribute, const OString& rValue )
 {
     m_pShapeAttrList->add( nAttribute, rValue );
 }
