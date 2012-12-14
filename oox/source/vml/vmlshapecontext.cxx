@@ -404,10 +404,13 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 nElement, const Attri
     if( isRootElement() ) switch( nElement )
     {
         case VML_TOKEN( textbox ):
-            // Custom shape in Writer with a textbox are transformed into a frame
-            dynamic_cast<SimpleShape&>( mrShape ).setService(
-                    "com.sun.star.text.TextFrame");
-            return new TextBoxContext( *this, mrShapeModel.createTextBox(), rAttribs,
+            if (getParentElement() != VML_TOKEN( group ))
+            {
+                // Custom shape in Writer with a textbox are transformed into a frame
+                dynamic_cast<SimpleShape&>( mrShape ).setService(
+                        "com.sun.star.text.TextFrame");
+            }
+            return new TextBoxContext( *this, mrShapeModel.createTextBox(mrShape.getTypeModel()), rAttribs,
                 mrShape.getDrawing().getFilter().getGraphicHelper());
         case VMLX_TOKEN( ClientData ):
             return new ClientDataContext( *this, mrShapeModel.createClientData(), rAttribs );

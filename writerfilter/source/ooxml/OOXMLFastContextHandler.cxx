@@ -2073,6 +2073,7 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
 {
     uno::Reference< xml::sax::XFastContextHandler > xContextHandler;
 
+    bool bGroupShape = Element == Token_t(NS_vml | OOXML_group);
     sal_uInt32 nNamespace = Element & 0xffff0000;
 
     switch (nNamespace)
@@ -2080,26 +2081,33 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
         case NS_wordprocessingml:
         case NS_vml_wordprocessingDrawing:
         case NS_office:
-            xContextHandler.set(OOXMLFactory::getInstance()->createFastChildContextFromStart(this, Element));
-            break;
+            if (!bGroupShape)
+                xContextHandler.set(OOXMLFactory::getInstance()->createFastChildContextFromStart(this, Element));
+        // no break;
         default:
-            if (mrShapeContext.is())
+            if (!xContextHandler.is())
             {
-                uno::Reference<XFastContextHandler> pChildContext =
-                mrShapeContext->createFastChildContext(Element, Attribs);
+                if (mrShapeContext.is())
+                {
+                    uno::Reference<XFastContextHandler> pChildContext =
+                        mrShapeContext->createFastChildContext(Element, Attribs);
 
-                OOXMLFastContextHandlerWrapper * pWrapper =
-                new OOXMLFastContextHandlerWrapper(this, pChildContext);
+                    OOXMLFastContextHandlerWrapper * pWrapper =
+                        new OOXMLFastContextHandlerWrapper(this, pChildContext);
 
-                pWrapper->addNamespace(NS_wordprocessingml);
-                pWrapper->addNamespace(NS_vml_wordprocessingDrawing);
-                pWrapper->addNamespace(NS_office);
-                pWrapper->addToken( NS_vml|OOXML_textbox );
+                    if (!bGroupShape)
+                    {
+                        pWrapper->addNamespace(NS_wordprocessingml);
+                        pWrapper->addNamespace(NS_vml_wordprocessingDrawing);
+                        pWrapper->addNamespace(NS_office);
+                        pWrapper->addToken( NS_vml|OOXML_textbox );
+                    }
 
-                xContextHandler.set(pWrapper);
+                    xContextHandler.set(pWrapper);
+                }
+                else
+                    xContextHandler.set(this);
             }
-            else
-                xContextHandler.set(this);
             break;
     }
 

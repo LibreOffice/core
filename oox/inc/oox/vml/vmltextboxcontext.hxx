@@ -41,6 +41,7 @@ public:
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual void        onCharacters( const ::rtl::OUString& rChars );
+    virtual void        onStartElement(const AttributeList& rAttribs);
     virtual void        onEndElement();
 
 private:

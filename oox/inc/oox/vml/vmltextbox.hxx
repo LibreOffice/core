@@ -24,9 +24,16 @@
 #include <rtl/ustring.hxx>
 #include "oox/helper/helper.hxx"
 #include "oox/dllapi.h"
+#include <com/sun/star/uno/Reference.h>
+
+namespace com { namespace sun { namespace star {
+    namespace drawing { class XShape; }
+} } }
 
 namespace oox {
 namespace vml {
+
+class ShapeTypeModel;
 
 // ============================================================================
 
@@ -62,7 +69,7 @@ struct TextPortionModel
 class OOX_DLLPUBLIC TextBox
 {
 public:
-    explicit            TextBox();
+    explicit            TextBox(ShapeTypeModel& rTypeModel);
 
     /** Appends a new text portion to the textbox. */
     void                appendPortion( const TextFontModel& rFont, const ::rtl::OUString& rText );
@@ -73,7 +80,9 @@ public:
     const TextFontModel* getFirstFont() const;
     /** Returns the entire text of all text portions. */
     ::rtl::OUString     getText() const;
+    void convert(com::sun::star::uno::Reference<com::sun::star::drawing::XShape> xShape) const;
 
+    ShapeTypeModel&     mrTypeModel;
     /// Text distance from the border (inset attribute of v:textbox), valid only if set.
     bool borderDistanceSet;
     int borderDistanceLeft, borderDistanceTop, borderDistanceRight, borderDistanceBottom;
