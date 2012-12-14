@@ -312,7 +312,6 @@ void StgReader::SetFltName( const String& rFltNm )
 
 
 SwRelNumRuleSpaces::SwRelNumRuleSpaces( SwDoc& rDoc, sal_Bool bNDoc )
-        : bNewDoc( bNDoc )
 {
         pNumRuleTbl = new SwNumRuleTbl();
         pNumRuleTbl->reserve(8);

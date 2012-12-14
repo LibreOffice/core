@@ -71,7 +71,6 @@ void GetWW8Writer( const String&, const String&, WriterRef& );
 class SW_DLLPUBLIC SwRelNumRuleSpaces
 {
     SwNumRuleTbl* pNumRuleTbl;  // Liste aller benannten NumRules
-    sal_Bool bNewDoc;
 
 public:
     SwRelNumRuleSpaces( SwDoc& rDoc, sal_Bool bNewDoc );
