@@ -345,8 +345,17 @@ inline void checkUnoStructCopy( SbxVariableRef& refVal, SbxVariableRef& refVar )
     // #115826: Exclude ProcedureProperties to avoid call to Property Get procedure
     if( refVar->ISA(SbProcedureProperty) )
         return;
-
+    SbxError eOldErr = refVar->GetError();
+    // There are some circumstances when calling GetObject
+    // will trigger an error, we need to squash those here.
+    // Alternatively it is possible that the same scenario
+    // could overwrite and existing error. Lets prevent that
     SbxObjectRef xVarObj = (SbxObject*)refVar->GetObject();
+    if ( eOldErr != SbxERR_OK )
+        refVar->SetError( eOldErr );
+    else
+        refVar->ResetError();
+
     SbxDataType eValType = refVal->GetType();
     if( eValType == SbxOBJECT && xVarObj == xValObj )
     {
