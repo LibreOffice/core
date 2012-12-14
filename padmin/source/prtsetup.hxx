@@ -68,7 +68,6 @@ class RTSDialog : public TabDialog
 
     // some resources
     String                  m_aInvalidString;
-    String                  m_aFromDriverString;
 
     DECL_LINK( ActivatePage, TabControl* );
     DECL_LINK( ClickButton, Button* );
@@ -115,20 +114,12 @@ class RTSDevicePage : public TabPage
     String              m_aSpaceColor;
     String              m_aSpaceGray;
 
-    FixedText           m_aPPDKeyText;
-    ListBox             m_aPPDKeyBox;
+    ListBox*            m_pPPDKeyBox;
+    ListBox*            m_pPPDValueBox;
 
-    FixedText           m_aPPDValueText;
-    ListBox             m_aPPDValueBox;
-
-    FixedText           m_aLevelText;
-    ListBox             m_aLevelBox;
-
-    FixedText           m_aSpaceText;
-    ListBox             m_aSpaceBox;
-
-    FixedText           m_aDepthText;
-    ListBox             m_aDepthBox;
+    ListBox*            m_pLevelBox;
+    ListBox*            m_pSpaceBox;
+    ListBox*            m_pDepthBox;
 
     void FillValueBox( const ::psp::PPDKey* );
 
@@ -141,12 +132,8 @@ public:
 
     sal_uLong getLevel();
     sal_uLong getPDFDevice();
-    sal_uLong getDepth() { return m_aDepthBox.GetSelectEntry().ToInt32(); }
-    sal_uLong getColorDevice()
-    {
-        String aSpace( m_aSpaceBox.GetSelectEntry() );
-        return aSpace == m_aSpaceColor ? 1 : ( aSpace == m_aSpaceGray ? -1 : 0 );
-    }
+    sal_uLong getDepth();
+    sal_uLong getColorDevice();
 };
 
 class RTSOtherPage : public TabPage

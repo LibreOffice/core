@@ -94,8 +94,7 @@ RTSDialog::RTSDialog( const PrinterInfo& rJobData, const String& rPrinter, bool 
         m_pOtherPage( NULL ),
         m_pFontSubstPage( NULL ),
         m_pCommandPage( NULL ),
-        m_aInvalidString( PaResId( RID_RTS_RTSDIALOG_INVALID_TXT ) ),
-        m_aFromDriverString( PaResId( RID_RTS_RTSDIALOG_FROMDRIVER_TXT ) )
+        m_aInvalidString( PaResId( RID_RTS_RTSDIALOG_INVALID_TXT ) )
 {
     FreeResource();
 
@@ -350,37 +349,28 @@ IMPL_LINK( RTSPaperPage, SelectHdl, ListBox*, pBox )
  * RTSDevicePage
  */
 
-RTSDevicePage::RTSDevicePage( RTSDialog* pParent ) :
-        TabPage( & pParent->m_aTabControl, PaResId( RID_RTS_DEVICEPAGE ) ),
-
-        m_pParent( pParent ),
-
-        m_aSpaceColor( PaResId( RID_RTS_DEVICE_COLOR_TXT ) ),
-        m_aSpaceGray( PaResId( RID_RTS_DEVICE_GRAY_TXT ) ),
-        m_aPPDKeyText( this, PaResId( RID_RTS_DEVICE_PPDKEY_TXT ) ),
-        m_aPPDKeyBox( this, PaResId( RID_RTS_DEVICE_PPDKEY_BOX ) ),
-        m_aPPDValueText( this, PaResId( RID_RTS_DEVICE_PPDVALUE_TXT ) ),
-        m_aPPDValueBox( this, PaResId( RID_RTS_DEVICE_PPDVALUE_BOX ) ),
-        m_aLevelText( this, PaResId( RID_RTS_DEVICE_PRINTLANG_TXT ) ),
-        m_aLevelBox( this, PaResId( RID_RTS_DEVICE_PRINTLANG_BOX ) ),
-        m_aSpaceText( this, PaResId( RID_RTS_DEVICE_SPACE_TXT ) ),
-        m_aSpaceBox( this, PaResId( RID_RTS_DEVICE_SPACE_BOX ) ),
-        m_aDepthText( this, PaResId( RID_RTS_DEVICE_DEPTH_TXT ) ),
-        m_aDepthBox( this, PaResId( RID_RTS_DEVICE_DEPTH_BOX ) )
+RTSDevicePage::RTSDevicePage( RTSDialog* pParent )
+    : TabPage(&pParent->m_aTabControl, "PrinterDevicePage", "spa/ui/printerdevicepage.ui" )
+    , m_pParent( pParent )
 {
-    FreeResource();
+    get(m_pPPDKeyBox, "options");
+    get(m_pPPDValueBox, "values");
 
-    m_aPPDKeyBox.SetSelectHdl( LINK( this, RTSDevicePage, SelectHdl ) );
-    m_aPPDValueBox.SetSelectHdl( LINK( this, RTSDevicePage, SelectHdl ) );
+    m_pPPDKeyBox->SetDropDownLineCount(12);
+    m_pPPDValueBox->SetDropDownLineCount(12);
 
-    m_aSpaceBox.InsertEntry( m_pParent->m_aFromDriverString );
-    m_aSpaceBox.InsertEntry( m_aSpaceColor );
-    m_aSpaceBox.InsertEntry( m_aSpaceGray );
+    get(m_pLevelBox, "level");
+    get(m_pSpaceBox, "colorspace");
+    get(m_pDepthBox, "colordepth");
+
+    m_pPPDKeyBox->SetSelectHdl( LINK( this, RTSDevicePage, SelectHdl ) );
+    m_pPPDValueBox->SetSelectHdl( LINK( this, RTSDevicePage, SelectHdl ) );
+
     switch( m_pParent->m_aJobData.m_nColorDevice )
     {
-        case -1: m_aSpaceBox.SelectEntry( m_aSpaceGray );break;
-        case  0: m_aSpaceBox.SelectEntry( m_pParent->m_aFromDriverString );break;
-        case  1: m_aSpaceBox.SelectEntry( m_aSpaceColor );break;
+        case  0: m_pSpaceBox->SelectEntryPos(0);break;
+        case  1: m_pSpaceBox->SelectEntryPos(1);break;
+        case -1: m_pSpaceBox->SelectEntryPos(2);break;
     }
 
     sal_uLong nLevelEntryData = 0; //automatic
@@ -397,21 +387,24 @@ RTSDevicePage::RTSDevicePage( RTSDialog* pParent ) :
 
     assert(nLevelEntryData != 0 || bAutoIsPDF == m_pParent->m_aJobData.m_nPDFDevice);
 
-    OUString sStr = m_aLevelBox.GetEntry(0);
-    m_aLevelBox.InsertEntry(sStr.replaceAll("%s", bAutoIsPDF ? m_aLevelBox.GetEntry(5) : m_aLevelBox.GetEntry(1)), 0);
-    m_aLevelBox.SetEntryData(0, m_aLevelBox.GetEntryData(1));
-    m_aLevelBox.RemoveEntry(1);
+    OUString sStr = m_pLevelBox->GetEntry(0);
+    m_pLevelBox->InsertEntry(sStr.replaceAll("%s", bAutoIsPDF ? m_pLevelBox->GetEntry(5) : m_pLevelBox->GetEntry(1)), 0);
+    m_pLevelBox->SetEntryData(0, m_pLevelBox->GetEntryData(1));
+    m_pLevelBox->RemoveEntry(1);
 
-    for( sal_uInt16 i = 0; i < m_aLevelBox.GetEntryCount(); i++ )
+    for( sal_uInt16 i = 0; i < m_pLevelBox->GetEntryCount(); i++ )
     {
-        if( (sal_uLong)m_aLevelBox.GetEntryData( i ) == nLevelEntryData )
+        if( (sal_uLong)m_pLevelBox->GetEntryData( i ) == nLevelEntryData )
         {
-            m_aLevelBox.SelectEntryPos( i );
+            m_pLevelBox->SelectEntryPos( i );
             break;
         }
     }
 
-    m_aDepthBox.SelectEntry( String::CreateFromInt32( m_pParent->m_aJobData.m_nColorDepth ).AppendAscii( " Bit" ) );
+    if (m_pParent->m_aJobData.m_nColorDepth == 8)
+        m_pDepthBox->SelectEntryPos(0);
+    else if (m_pParent->m_aJobData.m_nColorDepth == 24)
+        m_pDepthBox->SelectEntryPos(1);
 
     // fill ppd boxes
     if( m_pParent->m_aJobData.m_pParser )
@@ -427,8 +420,8 @@ RTSDevicePage::RTSDevicePage( RTSDialog* pParent ) :
                 )
             {
                 String aEntry( m_pParent->m_aJobData.m_pParser->translateKey( pKey->getKey() ) );
-                sal_uInt16 nPos = m_aPPDKeyBox.InsertEntry( aEntry );
-                m_aPPDKeyBox.SetEntryData( nPos, (void*)pKey );
+                sal_uInt16 nPos = m_pPPDKeyBox->InsertEntry( aEntry );
+                m_pPPDKeyBox->SetEntryData( nPos, (void*)pKey );
             }
         }
     }
@@ -446,11 +439,35 @@ void RTSDevicePage::update()
 {
 }
 
+sal_uLong RTSDevicePage::getDepth()
+{
+    sal_uInt16 nSelectPos = m_pDepthBox->GetSelectEntryPos();
+    if (nSelectPos == 0)
+        return 8;
+    else
+        return 24;
+}
+
+sal_uLong RTSDevicePage::getColorDevice()
+{
+    sal_uInt16 nSelectPos = m_pSpaceBox->GetSelectEntryPos();
+    switch (nSelectPos)
+    {
+        case 0:
+            return 0;
+        case 1:
+            return 1;
+        case 2:
+            return -1;
+    }
+    return 0;
+}
+
 // ------------------------------------------------------------------
 
 sal_uLong RTSDevicePage::getLevel()
 {
-    sal_uLong nLevel = (sal_uLong)m_aLevelBox.GetEntryData( m_aLevelBox.GetSelectEntryPos() );
+    sal_uLong nLevel = (sal_uLong)m_pLevelBox->GetEntryData( m_pLevelBox->GetSelectEntryPos() );
     if (nLevel == 0)
         return 0;   //automatic
     return nLevel < 10 ? nLevel-1 : 0;
@@ -460,7 +477,7 @@ sal_uLong RTSDevicePage::getLevel()
 
 sal_uLong RTSDevicePage::getPDFDevice()
 {
-    sal_uLong nLevel = (sal_uLong)m_aLevelBox.GetEntryData( m_aLevelBox.GetSelectEntryPos() );
+    sal_uLong nLevel = (sal_uLong)m_pLevelBox->GetEntryData( m_pLevelBox->GetSelectEntryPos() );
     if (nLevel > 9)
         return 2;   //explictly PDF
     else if (nLevel == 0)
@@ -472,15 +489,15 @@ sal_uLong RTSDevicePage::getPDFDevice()
 
 IMPL_LINK( RTSDevicePage, SelectHdl, ListBox*, pBox )
 {
-    if( pBox == &m_aPPDKeyBox )
+    if( pBox == m_pPPDKeyBox )
     {
-        const PPDKey* pKey = (PPDKey*)m_aPPDKeyBox.GetEntryData( m_aPPDKeyBox.GetSelectEntryPos() );
+        const PPDKey* pKey = (PPDKey*)m_pPPDKeyBox->GetEntryData( m_pPPDKeyBox->GetSelectEntryPos() );
         FillValueBox( pKey );
     }
-    else if( pBox == &m_aPPDValueBox )
+    else if( pBox == m_pPPDValueBox )
     {
-        const PPDKey* pKey = (PPDKey*)m_aPPDKeyBox.GetEntryData( m_aPPDKeyBox.GetSelectEntryPos() );
-        const PPDValue* pValue = (PPDValue*)m_aPPDValueBox.GetEntryData( m_aPPDValueBox.GetSelectEntryPos() );
+        const PPDKey* pKey = (PPDKey*)m_pPPDKeyBox->GetEntryData( m_pPPDKeyBox->GetSelectEntryPos() );
+        const PPDValue* pValue = (PPDValue*)m_pPPDValueBox->GetEntryData( m_pPPDValueBox->GetSelectEntryPos() );
         if( pKey && pValue )
         {
             m_pParent->m_aJobData.m_aContext.setValue( pKey, pValue );
@@ -494,7 +511,7 @@ IMPL_LINK( RTSDevicePage, SelectHdl, ListBox*, pBox )
 
 void RTSDevicePage::FillValueBox( const PPDKey* pKey )
 {
-    m_aPPDValueBox.Clear();
+    m_pPPDValueBox->Clear();
 
     if( ! pKey )
         return;
@@ -507,12 +524,12 @@ void RTSDevicePage::FillValueBox( const PPDKey* pKey )
             m_pParent->m_aJobData.m_pParser )
         {
             String aEntry( m_pParent->m_aJobData.m_pParser->translateOption( pKey->getKey(), pValue->m_aOption ) );
-            sal_uInt16 nPos = m_aPPDValueBox.InsertEntry( aEntry );
-            m_aPPDValueBox.SetEntryData( nPos, (void*)pValue );
+            sal_uInt16 nPos = m_pPPDValueBox->InsertEntry( aEntry );
+            m_pPPDValueBox->SetEntryData( nPos, (void*)pValue );
         }
     }
     pValue = m_pParent->m_aJobData.m_aContext.getValue( pKey );
-    m_aPPDValueBox.SelectEntryPos( m_aPPDValueBox.GetEntryPos( (void*)pValue ) );
+    m_pPPDValueBox->SelectEntryPos( m_pPPDValueBox->GetEntryPos( (void*)pValue ) );
 }
 
 // --------------------------------------------------------------------------
