@@ -2077,8 +2077,38 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
                 break;
             case FLY_AT_CHAR:
             default:
-                relativeFromH = "character";
-                relativeFromV = "line";
+                // We apply the same conversion that we do in import
+                // (see writerfilter/source/dmapper/GraphicHelper.cxx)
+                switch (pFrmFmt->GetVertOrient().GetRelationOrient() )
+                {
+                    case text::RelOrientation::PAGE_PRINT_AREA:
+                        relativeFromV = "margin";
+                        break;
+                    case text::RelOrientation::PAGE_FRAME:
+                        relativeFromV = "page";
+                        break;
+                    case text::RelOrientation::FRAME:
+                        relativeFromV = "paragraph";
+                        break;
+                    case text::RelOrientation::TEXT_LINE:
+                    default:
+                        relativeFromV = "line";
+                }
+                switch (pFrmFmt->GetHoriOrient().GetRelationOrient() )
+                {
+                    case text::RelOrientation::PAGE_PRINT_AREA:
+                        relativeFromH = "margin";
+                        break;
+                    case text::RelOrientation::PAGE_FRAME:
+                        relativeFromH = "page";
+                        break;
+                    case text::RelOrientation::CHAR:
+                        relativeFromH = "character";
+                        break;
+                    case text::RelOrientation::FRAME:
+                    default:
+                        relativeFromH = "column";
+                }
                 break;
         };
         Point pos( 0, 0 );
