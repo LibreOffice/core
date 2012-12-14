@@ -1830,7 +1830,10 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
-        throw RuntimeException();
+        throw RuntimeException(
+            "invalid SwXTextDocument",
+            static_cast< cppu::OWeakObject * >(
+                static_cast< SwXTextDocumentBaseClass * >(this)));
     const SfxItemPropertySimpleEntry*  pEntry = pPropSet->getPropertyMap().getByName( rPropertyName);
 
     if(!pEntry)
@@ -1842,7 +1845,10 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
         case  WID_DOC_CHAR_COUNT     :
         case  WID_DOC_PARA_COUNT     :
         case  WID_DOC_WORD_COUNT     :
-            throw RuntimeException();
+            throw RuntimeException(
+                "bad WID",
+                static_cast< cppu::OWeakObject * >(
+                    static_cast< SwXTextDocumentBaseClass * >(this)));
         case  WID_DOC_WORD_SEPARATOR :
         {
             OUString sDelim;
