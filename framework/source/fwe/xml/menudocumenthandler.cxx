@@ -228,19 +228,12 @@ void ReadMenuDocumentHandlerBase::initPropertyCommon(
 // -----------------------------------------------------------------------------
 
 OReadMenuDocumentHandler::OReadMenuDocumentHandler(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     const Reference< XIndexContainer >& rMenuBarContainer )
 :   m_nElementDepth( 0 ),
     m_bMenuBarMode( sal_False ),
     m_xMenuBarContainer( rMenuBarContainer ),
-      m_xContainerFactory( rMenuBarContainer, UNO_QUERY ),
-    mxServiceFactory(xServiceFactory)
+    m_xContainerFactory( rMenuBarContainer, UNO_QUERY )
 {
-}
-
-const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& OReadMenuDocumentHandler::getServiceFactory()
-{
-    return mxServiceFactory;
 }
 
 OReadMenuDocumentHandler::~OReadMenuDocumentHandler()

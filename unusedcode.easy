@@ -1,3 +1,4 @@
+Application::GetDisplayScreenName(unsigned int)
 CompressGraphicsDialog::CompressGraphicsDialog(Window*, Graphic const&, Size&, Rectangle&, SfxBindings&)
 CompressGraphicsDialog::GetCompressedGraphic()
 FontSelectPattern::FontSelectPattern(PhysicalFontFace const&, Size const&, float, int, bool)
@@ -10,13 +11,11 @@ ScMenuFloatingWindow::getDoc()
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
 ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any const&)
 SfxDocumentTemplateDlg::SfxDocumentTemplateDlg(Window*, SfxDocumentTemplates*)
-String::Assign(unsigned short const*, unsigned short)
-String::String(unsigned short)
 SvListView::HasEntryFocus(SvTreeListEntry*) const
 SvTreeList::GetChildIterators(SvTreeListEntry const*) const
 SvViewDataEntry::SetCursored(bool)
 TextEngine::GetLeftMargin() const
-ThumbnailView::CalcWindowSizePixel(unsigned short, unsigned short, unsigned short, unsigned short, unsigned short)
+ThumbnailView::GetScrollWidth() const
 ThumbnailViewItemAcc::FireAccessibleEvent(short, com::sun::star::uno::Any const&, com::sun::star::uno::Any const&)
 TransitionScene::clear()
 UnoControl::UnoControl()
@@ -47,10 +46,8 @@ comphelper::detail::ConfigurationWrapper::getGroupReadWrite(boost::shared_ptr<co
 comphelper::detail::ConfigurationWrapper::getLocalizedPropertyValue(rtl::OUString const&) const
 comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&, com::sun::star::uno::Any const&) const
 connectivity::file::OStatement_Base::reset()
-connectivity::mork::OColumnAlias::OColumnAlias()
 connectivity::sdbcx::OGroup::OGroup(rtl::OUString const&, unsigned char)
 connectivity::sdbcx::OGroup::OGroup(unsigned char)
-framework::OReadMenuDocumentHandler::getServiceFactory()
 jfw_plugin::VendorBase::createInstance()
 oox::drawingml::TextListStyle::dump() const
 oox::xls::BiffDrawingObjectBase::BiffDrawingObjectBase(oox::xls::WorksheetHelper const&)

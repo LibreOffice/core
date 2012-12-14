@@ -320,16 +320,6 @@ STRCODE* STRING::AllocBuffer( xub_StrLen nLen )
     return mpData->maStr;
 }
 
-STRING::STRING( STRCODE c )
-{
-    DBG_CTOR( STRING, DBGCHECKSTRING );
-    DBG_ASSERT( c, "String::String() - c is 0" );
-
-    // Initalize maintenance data
-    mpData = ImplAllocData( 1 );
-    mpData->maStr[0] = c;
-}
-
 STRING& STRING::Insert( STRCODE c, xub_StrLen nIndex )
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
@@ -672,50 +662,6 @@ STRING& STRING::Append( STRCODE c )
         // free old string
         STRING_RELEASE((STRING_TYPE *)mpData);
         mpData = pNewData;
-    }
-
-    return *this;
-}
-
-STRING& STRING::Assign( const STRCODE* pCharStr, xub_StrLen nLen )
-{
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-    DBG_ASSERT( pCharStr, "String::Assign() - pCharStr is NULL" );
-
-    if ( nLen == STRING_LEN )
-        nLen = ImplStringLen( pCharStr );
-
-#ifdef DBG_UTIL
-    if ( DbgIsAssert() )
-    {
-        for ( xub_StrLen i = 0; i < nLen; i++ )
-        {
-            if ( !pCharStr[i] )
-            {
-                OSL_FAIL( "String::Assign() : nLen is wrong" );
-            }
-        }
-    }
-#endif
-
-    if ( !nLen )
-    {
-        STRING_NEW((STRING_TYPE **)&mpData);
-    }
-    else
-    {
-        // copy without allocation if string length is identical
-        if ( (nLen == mpData->mnLen) && (mpData->mnRefCount == 1) )
-            memcpy( mpData->maStr, pCharStr, nLen*sizeof( STRCODE ) );
-        else
-        {
-            // free old string
-            STRING_RELEASE((STRING_TYPE *)mpData);
-
-            // allocate string of new size and copy
-            mpData = ImplAllocData( nLen );
-            memcpy( mpData->maStr, pCharStr, nLen*sizeof( STRCODE ) );
-        }
     }
 
     return *this;

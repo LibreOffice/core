@@ -653,16 +653,6 @@ public:
                             const BinAddress& rAddress,
                             bool bAbsolute );
 
-    /** Generates a cell range string in A1:A1 notation from the passed cell
-        range address.
-
-        @param rRange  The cell range address containing column and row indexes.
-        @param bAbsolute  True = adds dollar signs before columns and rows.
-     */
-    static ::rtl::OUString generateRange2dString(
-                            const ::com::sun::star::table::CellRangeAddress& rRange,
-                            bool bAbsolute );
-
     /** Generates a cell range string in A1:A1 notation from the passed binary
         cell range address.
 

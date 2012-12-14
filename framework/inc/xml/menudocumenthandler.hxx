@@ -102,11 +102,8 @@ class FWE_DLLPUBLIC OReadMenuDocumentHandler : public ReadMenuDocumentHandlerBas
 {
     public:
         OReadMenuDocumentHandler(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
             const com::sun::star::uno::Reference< com::sun::star::container::XIndexContainer >& rItemContainer );
         virtual ~OReadMenuDocumentHandler();
-
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& getServiceFactory();
 
         // XDocumentHandler
         virtual void SAL_CALL startDocument(void)
@@ -136,7 +133,6 @@ class FWE_DLLPUBLIC OReadMenuDocumentHandler : public ReadMenuDocumentHandlerBas
           sal_Bool  m_bMenuBarMode;
           com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > m_xMenuBarContainer;
           com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory > m_xContainerFactory;
-          const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& mxServiceFactory;
 };  // OReadMenuDocumentHandler
 
 

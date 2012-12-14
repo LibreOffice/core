@@ -1618,6 +1618,8 @@ void VclBuilder::insertMenuObject(PopupMenu *pParent, const OString &rClass, con
                 pParent->SetTipHelpText(nNewId, OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
             else if (rKey == "visible")
                 pParent->ShowItem(nNewId, toBool(rValue));
+            else if (rKey == "has-default" && toBool(rValue))
+                pParent->SetSelectedEntry(nNewId);
             else
                 SAL_INFO("vcl.layout", "unhandled property: " << rKey.getStr());
         }

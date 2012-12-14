@@ -57,7 +57,6 @@ namespace connectivity
 
         public:
             OColumnAlias( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & );
-            OColumnAlias();
 
             inline bool hasAlias( const ::rtl::OUString& _rAlias ) const
             {

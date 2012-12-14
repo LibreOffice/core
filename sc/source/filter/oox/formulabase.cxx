@@ -1433,11 +1433,6 @@ OUString FormulaProcessorBase::generateAddress2dString( const BinAddress& rAddre
     return aBuffer.makeStringAndClear();
 }
 
-OUString FormulaProcessorBase::generateRange2dString( const CellRangeAddress& rRange, bool bAbsolute )
-{
-    return generateRange2dString( BinRange( rRange ), bAbsolute );
-}
-
 OUString FormulaProcessorBase::generateRange2dString( const BinRange& rRange, bool bAbsolute )
 {
     OUStringBuffer aBuffer( generateAddress2dString( rRange.maFirst, bAbsolute ) );
