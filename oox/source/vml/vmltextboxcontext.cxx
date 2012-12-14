@@ -19,6 +19,8 @@
 
 #include "oox/vml/vmlformatting.hxx"
 #include "oox/vml/vmltextboxcontext.hxx"
+#include "oox/vml/vmlshape.hxx"
+#include <com/sun/star/drawing/XShape.hpp>
 
 namespace oox {
 namespace vml {
@@ -68,7 +70,22 @@ TextPortionContext::TextPortionContext( ContextHandler2Helper& rParent,
             OSL_ENSURE( !maFont.mobStrikeout, "TextPortionContext::TextPortionContext - nested <s> elements" );
             maFont.mobStrikeout = true;
         break;
+        case OOX_TOKEN(dml, blip):
+            {
+                OptValue<OUString> oRelId = rAttribs.getString(R_TOKEN(embed));
+                if (oRelId.has())
+                    mrTextBox.mrTypeModel.moGraphicPath = getFragmentPathFromRelId(oRelId.get());
+            }
+        break;
+        case VML_TOKEN(imagedata):
+            {
+                OptValue<OUString> oRelId = rAttribs.getString(R_TOKEN(id));
+                if (oRelId.has())
+                    mrTextBox.mrTypeModel.moGraphicPath = getFragmentPathFromRelId(oRelId.get());
+            }
+        break;
         case XML_span:
+        case OOX_TOKEN(doc, r):
         break;
         default:
             OSL_ENSURE( false, "TextPortionContext::TextPortionContext - unknown element" );
@@ -78,11 +95,16 @@ TextPortionContext::TextPortionContext( ContextHandler2Helper& rParent,
 ContextHandlerRef TextPortionContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     OSL_ENSURE( nElement != XML_font, "TextPortionContext::onCreateContext - nested <font> elements" );
+    if (getNamespace(getCurrentElement()) == NMSP_doc)
+        return this;
     return new TextPortionContext( *this, mrTextBox, maFont, nElement, rAttribs );
 }
 
 void TextPortionContext::onCharacters( const OUString& rChars )
 {
+    if (getNamespace(getCurrentElement()) == NMSP_doc && getCurrentElement() != OOX_TOKEN(doc, t))
+        return;
+
     switch( getCurrentElement() )
     {
         case XML_span:
@@ -94,8 +116,24 @@ void TextPortionContext::onCharacters( const OUString& rChars )
     }
 }
 
+void TextPortionContext::onStartElement(const AttributeList& rAttribs)
+{
+    switch (getCurrentElement())
+    {
+        case OOX_TOKEN(doc, b):
+            maFont.mobBold = true;
+        break;
+        case OOX_TOKEN(doc, sz):
+            maFont.monSize = rAttribs.getInteger( OOX_TOKEN(doc, val) );
+        break;
+    }
+}
+
 void TextPortionContext::onEndElement()
 {
+    if (getNamespace(getCurrentElement()) == NMSP_doc && getCurrentElement() != OOX_TOKEN(doc, t))
+        return;
+
     /*  A child element without own child elements may contain a single space
         character, for example:
 
@@ -149,9 +187,16 @@ ContextHandlerRef TextBoxContext::onCreateContext( sal_Int32 nElement, const Att
     {
         case VML_TOKEN( textbox ):
             if( nElement == XML_div ) return this;
+            else if (nElement == OOX_TOKEN(doc, txbxContent)) return this;
         break;
         case XML_div:
             if( nElement == XML_font ) return new TextPortionContext( *this, mrTextBox, TextFontModel(), nElement, rAttribs );
+        break;
+        case OOX_TOKEN(doc, txbxContent):
+            if (nElement == OOX_TOKEN(doc, p)) return this;
+        break;
+        case OOX_TOKEN(doc, p):
+            if (nElement == OOX_TOKEN(doc, r)) return new TextPortionContext( *this, mrTextBox, TextFontModel(), nElement, rAttribs );
         break;
     }
     return 0;

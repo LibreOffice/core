@@ -317,26 +317,28 @@ void Test::testFdo49940()
 void Test::testN751077()
 {
 /*
-enum = ThisComponent.Text.createEnumeration
-enum.NextElement
-para = enum.NextElement
-xray para.String
-xray para.PageStyleName
+xray ThisComponent.DrawPage(1).getByIndex(0).String
+xray ThisComponent.DrawPage(1).getByIndex(0).Anchor.PageStyleName
 */
-    uno::Reference<uno::XInterface> paragraph(getParagraph( 2, "TEXT1" ));
-    // we want to test the paragraph is on the first page (it was put onto another page without the fix),
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xTextDocument, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    uno::Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xShapes->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("TEXT1"), xShape->getString());
+    // we want to test the textbox is on the first page (it was put onto another page without the fix),
     // use a small trick and instead of checking the page layout, check the page style
-    OUString pageStyle = getProperty< OUString >( paragraph, "PageStyleName" );
-    CPPUNIT_ASSERT_EQUAL( OUString( "First Page" ), pageStyle );
+    uno::Reference<text::XTextContent> xTextContent(xShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("First Page"), getProperty<OUString>(xTextContent->getAnchor(), "PageStyleName"));
 }
 
 void Test::testN705956_1()
 {
 /*
 Get the first image in the document and check it's the one image in the document.
-It should be also anchored inline (as character).
+It should be also anchored inline (as character) and be inside a groupshape.
 image = ThisComponent.DrawPage.getByIndex(0)
-graphic = image.Graphic
+graphic = image(0).Graphic
 xray graphic.Size
 xray image.AnchorType
 */
@@ -344,8 +346,9 @@ xray image.AnchorType
     uno::Reference<drawing::XDrawPageSupplier> drawPageSupplier(textDocument, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> drawPage = drawPageSupplier->getDrawPage();
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 1 ), drawPage->getCount());
+    uno::Reference<drawing::XShapes> shapes(drawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> image;
-    drawPage->getByIndex(0) >>= image;
+    shapes->getByIndex(0) >>= image;
     uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
     uno::Reference<graphic::XGraphic> graphic;
     imageProperties->getPropertyValue( "Graphic" ) >>= graphic;

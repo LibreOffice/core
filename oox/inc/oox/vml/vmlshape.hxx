@@ -202,7 +202,7 @@ struct ShapeModel
                         ~ShapeModel();
 
     /** Creates and returns a new shape textbox structure. */
-    TextBox&            createTextBox();
+    TextBox&            createTextBox(ShapeTypeModel& rModel);
     /** Creates and returns a new shape client data structure. */
     ClientData&         createClientData();
 };

@@ -233,9 +233,9 @@ ShapeModel::~ShapeModel()
 {
 }
 
-TextBox& ShapeModel::createTextBox()
+TextBox& ShapeModel::createTextBox(ShapeTypeModel& rModel)
 {
-    mxTextBox.reset( new TextBox );
+    mxTextBox.reset( new TextBox(rModel) );
     return *mxTextBox;
 }
 
@@ -486,6 +486,9 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
                     PropertySet( xShape ).setAnyProperty(PROP_RelativeHeight, makeAny( nHeight ) );
             }
         }
+
+        if (getTextBox())
+            getTextBox()->convert(xShape);
     }
 
     // Import Legacy Fragments (if any)
@@ -522,8 +525,9 @@ Reference< XShape > SimpleShape::createPictureObject( const Reference< XShapes >
         {
             aPropSet.setProperty( PROP_GraphicURL, aGraphicUrl );
         }
-        // If the shape has an absolute position, set the properties accordingly.
-        if ( maTypeModel.maPosition == "absolute" )
+        uno::Reference< lang::XServiceInfo > xServiceInfo(rxShapes, uno::UNO_QUERY);
+        // If the shape has an absolute position, set the properties accordingly, unless we're inside a group shape.
+        if ( maTypeModel.maPosition == "absolute" && !xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"))
         {
             aPropSet.setProperty(PROP_HoriOrientPosition, rShapeRect.X);
             aPropSet.setProperty(PROP_VertOrientPosition, rShapeRect.Y);
@@ -866,6 +870,9 @@ Reference< XShape > GroupShape::implConvertAndInsert( const Reference< XShapes >
     catch( Exception& )
     {
     }
+    // Make sure group shapes are inline as well, unless there is an explicit different style.
+    PropertySet aPropertySet(xGroupShape);
+    lcl_SetAnchorType(aPropertySet, maTypeModel);
     return xGroupShape;
 }
 
