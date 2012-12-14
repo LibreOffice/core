@@ -1946,6 +1946,10 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Conditional Formats can not be created, deleted or changed in protected sheets!";
     };
+    String STR_EDIT_EXISTING_COND_FORMATS
+    {
+        Text [ en-US ] = "The selected cell already contains conditional formatting. You can either edit the existing conditional format or you define a new overlapping conditional format.\n\n Do you want to edit the existing conditional format?";
+    };
 
     String STR_QUERY_FORMULA_RECALC_ONLOAD_ODS
     {
