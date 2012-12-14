@@ -3971,6 +3971,7 @@ void Test::testFunctionLists()
         "ATAN",
         "ATAN2",
         "ATANH",
+        "AVERAGEIF",
         "BITAND",
         "BITLSHIFT",
         "BITOR",
