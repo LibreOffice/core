@@ -11859,7 +11859,7 @@ done
 WITH_LANG_LIST=`echo $WITH_LANG | sed "s/ALL/$ALL_LANGS/"`
 test -z "$WITH_LANG_LIST" && WITH_LANG_LIST="en-US"
 test "$WITH_LANG" = "en-US" && WITH_LANG=
-if test "$enable_release_build" = "" -o "$enable_releasbie_build" = "no"; then
+if test "$enable_release_build" = "" -o "$enable_release_build" = "no"; then
     test "$WITH_LANG_LIST" = "en-US" || WITH_LANG_LIST=`echo $WITH_LANG_LIST qtz`
 fi
 AC_SUBST(ALL_LANGS)
