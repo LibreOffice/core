@@ -1,6 +1,3 @@
-# lo-main-library - parameter denoting which shlib to load and execute
-# 'lo_main' from
-
 include ../../../config_host.mk
 
 # The default target just builds.
@@ -151,8 +148,5 @@ build-ant: android_version_setup copy-stuff link-so properties setup-jars
 	unset JAVA_HOME && $(ANT) debug
 
 run:
-	echo "-env:INIFILENAME=file:///assets/program/sofficerc" > cmdline
-#	echo "file:///assets/demo/writer.odt" > cmdline
-	$(ANDROID_SDK_HOME)/platform-tools/adb push cmdline $(APP_DATA_PATH)/cmdline
-	$(ANDROID_SDK_HOME)/platform-tools/adb shell am start -n org.libreoffice.android.exampless/LODesktop -e lo-main-delay 20 -e lo-main-indirect-cmdline "$(APP_DATA_PATH)/cmdline"
-# add -e lo-strace yes # if you want that
+	$(ANDROID_SDK_HOME)/platform-tools/adb shell am start -n org.libreoffice.android.examples/.LODesktop -e input /asset/test1.odt
+# -e lo-main-delay 20  -e lo-strace yes

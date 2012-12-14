@@ -257,6 +257,8 @@ public class LODesktop
     {
         super.onCreate(savedInstanceState);
 
+        Log.i(TAG, "onCreate - added here\n");
+
         try {
             String input = getIntent().getStringExtra("input");
             if (input == null)
