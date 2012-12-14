@@ -582,7 +582,10 @@ namespace {
 
 void SetColorScaleEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType, Edit& rEdit, ColorListBox& rLbCol )
 {
-    rLbType.SelectEntryPos(rEntry.GetType());
+    // entry Automatic is not available for color scales
+    sal_Int32 nIndex = static_cast<sal_Int32>(rEntry.GetType());
+    assert(nIndex > 0);
+    rLbType.SelectEntryPos(nIndex - 1);
     switch(rEntry.GetType())
     {
         case COLORSCALE_MIN:
@@ -818,17 +821,11 @@ ScColorScale3FrmtEntry::ScColorScale3FrmtEntry( Window* pParent, ScDocument* pDo
     maLbType.SelectEntryPos(0);
     if(pFormat)
     {
-        if(pFormat->size() == 2)
-            maLbColorFormat.SelectEntryPos(0);
-        else
-            maLbColorFormat.SelectEntryPos(1);
         ScColorScaleFormat::const_iterator itr = pFormat->begin();
         SetColorScaleEntryTypes(*itr, maLbEntryTypeMin, maEdMin, maLbColMin);
-        if(pFormat->size() == 3)
-        {
-            ++itr;
-            SetColorScaleEntryTypes(*itr, maLbEntryTypeMiddle, maEdMiddle, maLbColMiddle);
-        }
+        assert(pFormat->size() == 3);
+        ++itr;
+        SetColorScaleEntryTypes(*itr, maLbEntryTypeMiddle, maEdMiddle, maLbColMiddle);
         ++itr;
         SetColorScaleEntryTypes(*itr, maLbEntryTypeMax, maEdMax, maLbColMax);
     }
