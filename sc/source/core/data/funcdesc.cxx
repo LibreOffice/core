@@ -84,7 +84,10 @@ ScFuncDesc::~ScFuncDesc()
 void ScFuncDesc::Clear()
 {
     sal_uInt16 nArgs = nArgCount;
-    if (nArgs >= VAR_ARGS) nArgs -= VAR_ARGS-1;
+    if (nArgs >= PAIRED_VAR_ARGS)
+        nArgs -= PAIRED_VAR_ARGS - 2;
+    else if (nArgs >= VAR_ARGS)
+        nArgs -= VAR_ARGS - 1;
     if (nArgs)
     {
         for (sal_uInt16 i=0; i<nArgs; i++ )
@@ -147,7 +150,7 @@ void ScFuncDesc::Clear()
                     aSig.getLength() >= 2)
                 aSig.setLength(aSig.getLength() - 2);
         }
-        else
+        else if ( nArgCount < PAIRED_VAR_ARGS)
         {
             sal_uInt16 nFix = nArgCount - VAR_ARGS;
             for ( sal_uInt16 nArg = 0; nArg < nFix; nArg++ )
@@ -171,6 +174,34 @@ void ScFuncDesc::Clear()
             aSig.append(sal_Unicode('2'));
             aSig.append(sep);
             aSig.appendAscii(" ... ");
+        }
+        else
+        {
+            sal_uInt16 nFix = nArgCount - PAIRED_VAR_ARGS;
+            for ( sal_uInt16 nArg = 0; nArg < nFix; nArg++ )
+            {
+                if (!pDefArgFlags[nArg].bSuppress)
+                {
+                    aSig.append(*(ppDefArgNames[nArg]));
+                    aSig.append(sep);
+                    aSig.appendAscii( " " );
+                }
+            }
+
+            aSig.append(*(ppDefArgNames[nFix]));
+            aSig.append(sal_Unicode('1'));
+            aSig.appendAscii( ", " );
+            aSig.append(*(ppDefArgNames[nFix+1]));
+            aSig.append(sal_Unicode('1'));
+            aSig.append(sep);
+            aSig.appendAscii( " " );
+            aSig.append(*(ppDefArgNames[nFix]));
+            aSig.append(sal_Unicode('2'));
+            aSig.appendAscii( ", " );
+            aSig.append(*(ppDefArgNames[nFix+1]));
+            aSig.append(sal_Unicode('2'));
+            aSig.append(sep);
+            aSig.appendAscii( " ... " );
         }
     }
 
@@ -243,7 +274,9 @@ sal_uInt16 ScFuncDesc::GetSuppressedArgCount() const
         return nArgCount;
 
     sal_uInt16 nArgs = nArgCount;
-    if (nArgs >= VAR_ARGS)
+    if (nArgs >= PAIRED_VAR_ARGS)
+        nArgs -= PAIRED_VAR_ARGS - 2;
+    else if (nArgs >= VAR_ARGS)
         nArgs -= VAR_ARGS - 1;
     sal_uInt16 nCount = nArgs;
     for (sal_uInt16 i=0; i < nArgs; ++i)
@@ -251,7 +284,9 @@ sal_uInt16 ScFuncDesc::GetSuppressedArgCount() const
         if (pDefArgFlags[i].bSuppress)
             --nCount;
     }
-    if (nArgCount >= VAR_ARGS)
+    if (nArgCount >= PAIRED_VAR_ARGS)
+        nCount += PAIRED_VAR_ARGS - 2;
+    else if (nArgCount >= VAR_ARGS)
         nCount += VAR_ARGS - 1;
     return nCount;
 }
@@ -295,7 +330,9 @@ void ScFuncDesc::fillVisibleArgumentMapping(::std::vector<sal_uInt16>& _rArgumen
 
     _rArguments.reserve( nArgCount);
     sal_uInt16 nArgs = nArgCount;
-    if (nArgs >= VAR_ARGS)
+    if (nArgs >= PAIRED_VAR_ARGS)
+        nArgs -= PAIRED_VAR_ARGS - 2;
+    else if (nArgs >= VAR_ARGS)
         nArgs -= VAR_ARGS - 1;
     for (sal_uInt16 i=0; i < nArgs; ++i)
     {
@@ -809,7 +846,9 @@ ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc, bool & rbSuppressed )
     pDesc->sHelpId = ReadByteStringRes();
     pDesc->nArgCount = GetNum();
     sal_uInt16 nArgs = pDesc->nArgCount;
-    if (nArgs >= VAR_ARGS)
+    if (nArgs >= PAIRED_VAR_ARGS)
+        nArgs -= PAIRED_VAR_ARGS - 2;
+    else if (nArgs >= VAR_ARGS)
         nArgs -= VAR_ARGS - 1;
     if (nArgs)
     {
@@ -835,7 +874,12 @@ ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc, bool & rbSuppressed )
             sal_uInt16 nParam = GetNum();
             if (nParam < nArgs)
             {
-                if (pDesc->nArgCount >= VAR_ARGS && nParam == nArgs-1)
+                if (pDesc->nArgCount >= PAIRED_VAR_ARGS && nParam >= nArgs-2)
+                {
+                    OSL_TRACE( "ScFuncRes: PAIRED_VAR_ARGS parameters can't be suppressed, on OpCode %u: param %d >= arg %d-2",
+                            aRes.GetId(), (int)nParam, (int)nArgs);
+                }
+                else if (pDesc->nArgCount >= VAR_ARGS && nParam == nArgs-1)
                 {
                     OSL_TRACE( "ScFuncRes: VAR_ARGS parameters can't be suppressed, on OpCode %u: param %d == arg %d-1",
                             aRes.GetId(), (int)nParam, (int)nArgs);
