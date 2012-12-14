@@ -936,6 +936,7 @@ void SwXMLImport::endDocument( void )
 
     // delegate to parent: takes care of error handling
     SvXMLImport::endDocument();
+    ClearTextImport();
 }
 
 

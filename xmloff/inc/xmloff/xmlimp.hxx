@@ -155,6 +155,7 @@ protected:
                                                const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     virtual XMLTextImportHelper* CreateTextImport();
+    inline void ClearTextImport() { mxTextImport = 0; }
     virtual XMLShapeImportHelper* CreateShapeImport();
     inline sal_Bool HasShapeImport() const { return mxShapeImport.is(); }
     inline void ClearShapeImport() { mxShapeImport = 0; }
