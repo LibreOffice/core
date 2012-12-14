@@ -1354,7 +1354,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
 
     const SwNumFmt& rFmt = rNumRule.Get( (sal_uInt16)nIndex );
 
-    sal_Bool bChapterNum = pDocShell != 0;
+    bool bChapterNum = pDocShell != 0;
 
     PropValDataArr  aPropertyValues;
     //fill all properties into the array
@@ -1665,11 +1665,11 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
 
     const beans::PropertyValue* pPropArray = rProperties.getConstArray();
     PropValDataArr aPropertyValues;
-    sal_Bool bExcept = sal_False;
+    bool bExcept = false;
     for(int i = 0; i < rProperties.getLength() && !bExcept; i++)
     {
         const beans::PropertyValue& rProp = pPropArray[i];
-        bExcept = sal_True;
+        bExcept = true;
         for(sal_uInt16 j = 0; j < SAL_N_ELEMENTS( aNumPropertyNames ); j++)
         {
             if( j >= IgnoredFirst && j <= IgnoredLast )
@@ -1680,7 +1680,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                 continue;
             if(COMPARE_EQUAL == rProp.Name.compareToAscii(aNumPropertyNames[j]))
             {
-                bExcept = sal_False;
+                bExcept = false;
                 break;
             }
         }
@@ -1690,13 +1690,13 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
     }
 
     SwNumFmt aFmt(rNumRule.Get( (sal_uInt16)nIndex ));
-    sal_Bool bWrongArg = sal_False;
+    bool bWrongArg = false;
     if(!bExcept)
        {
         SvxBrushItem* pSetBrush = 0;
         Size* pSetSize = 0;
         SwFmtVertOrient* pSetVOrient = 0;
-        sal_Bool bCharStyleNameSet = sal_False;
+        bool bCharStyleNameSet = false;
 
         for(sal_uInt16 i = 0; i < SAL_N_ELEMENTS( aNumPropertyNames ) && !bExcept && !bWrongArg; i++)
         {
@@ -1716,7 +1716,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                         aFmt.SetNumAdjust((SvxAdjust)aUnoToSvxAdjust[nValue]);
                     }
                     else
-                        bWrongArg = sal_True;
+                        bWrongArg = true;
                 }
                 break;
                 case 1: //"ParentNumbering",
@@ -1743,7 +1743,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                 break;
                 case 4: //"CharStyleName",
                 {
-                    bCharStyleNameSet = sal_True;
+                    bCharStyleNameSet = true;
                     OUString uTmp;
                     pData->aVal >>= uTmp;
                     String sCharFmtName;
@@ -1814,7 +1814,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                     if(nValue >= 0)
                         aFmt.SetCharTextDistance((sal_uInt16) MM100_TO_TWIP(nValue));
                     else
-                        bWrongArg = sal_True;
+                        bWrongArg = true;
                 }
                 break;
                 case 8: //UNO_NAME_FIRST_LINE_OFFSET,
@@ -1840,7 +1840,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                     }
                     else
                     {
-                        bWrongArg = sal_True;
+                        bWrongArg = true;
                     }
                 }
                 break;
@@ -1862,7 +1862,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                     }
                     else
                     {
-                        bWrongArg = sal_True;
+                        bWrongArg = true;
                     }
                 }
                 break;
@@ -1877,7 +1877,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                     }
                     else
                     {
-                        bWrongArg = sal_True;
+                        bWrongArg = true;
                     }
                 }
                 break;
@@ -1904,7 +1904,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                     if(nSet >= 0)
                         aFmt.SetNumberingType(nSet);
                     else
-                        bWrongArg = sal_True;
+                        bWrongArg = true;
                 }
                 break;
                 case 15: //"ParagraphStyleName"
@@ -1933,7 +1933,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                     if( pData->aVal >>= nSet )
                         aFmt.SetBulletChar(nSet);
                     else
-                        bWrongArg = sal_True;
+                        bWrongArg = true;
                 }
                 break;
                 case 17: //UNO_NAME_BULLET_FONT,
@@ -1952,7 +1952,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                         }
                     }
                     else
-                        bWrongArg = sal_True;
+                        bWrongArg = true;
                 }
                 break;
                 case 18: //"BulletFontName",
@@ -1987,7 +1987,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                         aFmt.SetBulletChar(aChar.toChar());
                     }
                     else
-                        bWrongArg = sal_True;
+                        bWrongArg = true;
                 }
                 break;
                 case 20: //UNO_NAME_GRAPHIC_URL,
@@ -2030,7 +2030,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                         pSetBrush->SetGraphic( aNewGr );
                     }
                     else
-                        bWrongArg = sal_True;
+                        bWrongArg = true;
                 }
                 break;
                 case 22: //UNO_NAME_GRAPHIC_SIZE,
@@ -2047,7 +2047,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                         pSetSize->Height() = pSize->Height;
                     }
                     else
-                        bWrongArg = sal_True;
+                        bWrongArg = true;
                 }
                 break;
                 case 23: //VertOrient

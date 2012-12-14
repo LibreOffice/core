@@ -326,7 +326,7 @@ SwUnoCursorHelper::SetPageDesc(
     if (!pNewDesc->GetPageDesc() ||
         (pNewDesc->GetPageDesc()->GetName() != sDescName))
     {
-        sal_Bool bPut = sal_False;
+        bool bPut = false;
         if(sDescName.Len())
         {
             SwPageDesc *const pPageDesc =
@@ -336,7 +336,7 @@ SwUnoCursorHelper::SetPageDesc(
                 throw lang::IllegalArgumentException();
             }
             pNewDesc.get()->RegisterToPageDesc( *pPageDesc );
-            bPut = sal_True;
+            bPut = true;
         }
         if(!bPut)
         {
@@ -1834,7 +1834,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     }
 
     beans::PropertyState eTemp;
-    const sal_Bool bDone = SwUnoCursorHelper::getCrsrPropertyValue(
+    const bool bDone = SwUnoCursorHelper::getCrsrPropertyValue(
             *pEntry, rPaM, &aAny, eTemp );
 
     if (!bDone)

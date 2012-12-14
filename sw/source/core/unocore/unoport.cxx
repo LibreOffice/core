@@ -370,7 +370,7 @@ void SwXTextPortion::GetPropertyValue(
             break;
             default:
                 beans::PropertyState eTemp;
-                sal_Bool bDone = SwUnoCursorHelper::getCrsrPropertyValue(
+                bool bDone = SwUnoCursorHelper::getCrsrPropertyValue(
                                     rEntry, *pUnoCrsr, &(rVal), eTemp );
                 if(!bDone)
                 {

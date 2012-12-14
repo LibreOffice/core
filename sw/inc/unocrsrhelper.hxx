@@ -77,7 +77,7 @@ namespace SwUnoCursorHelper
         GetNestedTextContent(SwTxtNode & rTextNode, xub_StrLen const nIndex,
             bool const bParent);
 
-    sal_Bool                    getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
+    bool                    getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                                         , SwPaM& rPam
                                         , com::sun::star::uno::Any *pAny
                                         , com::sun::star::beans::PropertyState& eState
@@ -110,7 +110,7 @@ namespace SwUnoCursorHelper
                                     SwPaM& rPam,
                                     com::sun::star::beans::PropertyState& eState);
 
-    sal_Bool    DocInsertStringSplitCR(  SwDoc &rDoc,
+    bool    DocInsertStringSplitCR(  SwDoc &rDoc,
                     const SwPaM &rNewCursor, const String &rText,
                     const bool bForceExpandHints );
     void    makeRedline( SwPaM& rPaM, const ::rtl::OUString& RedlineType,

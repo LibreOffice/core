@@ -284,7 +284,7 @@ void SwXRedlinePortion::Validate() throw( uno::RuntimeException )
     //search for the redline
     SwDoc* pDoc = pUnoCrsr->GetDoc();
     const SwRedlineTbl& rRedTbl = pDoc->GetRedlineTbl();
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
     for(sal_uInt16 nRed = 0; nRed < rRedTbl.size() && !bFound; nRed++)
         bFound = pRedline == rRedTbl[nRed];
     if(!bFound)

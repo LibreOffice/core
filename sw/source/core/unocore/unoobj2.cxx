@@ -646,7 +646,7 @@ throw (container::NoSuchElementException, lang::WrappedTargetException,
         }
     }
 
-    sal_Bool bInTable = sal_False;
+    bool bInTable = false;
     if (!m_bFirstParagraph)
     {
         pUnoCrsr->SetRemainInSection( sal_False );
@@ -661,7 +661,7 @@ throw (container::NoSuchElementException, lang::WrappedTargetException,
             {
                 return 0;
             }
-            bInTable = sal_True;
+            bInTable = true;
         }
     }
 

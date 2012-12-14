@@ -120,7 +120,7 @@ GetNestedTextContent(SwTxtNode & rTextNode, xub_StrLen const nIndex,
 /* --------------------------------------------------
  *  Read the special properties of the cursor
  * --------------------------------------------------*/
-sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
+bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                                         , SwPaM& rPam
                                         , Any *pAny
                                         , PropertyState& eState
@@ -129,7 +129,7 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
     PropertyState eNewState = PropertyState_DIRECT_VALUE;
 //    PropertyState_DEFAULT_VALUE
 //    PropertyState_AMBIGUOUS_VALUE
-    sal_Bool bDone = sal_True;
+    bool bDone = true;
     switch(rEntry.nWID)
     {
         case FN_UNO_PARA_CONT_PREV_SUBTREE:
@@ -540,7 +540,7 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         break;
         case RES_TXTATR_CHARFMT:
         // no break here!
-        default: bDone = sal_False;
+        default: bDone = false;
     }
     if( bDone )
         eState = eNewState;
@@ -910,12 +910,12 @@ void InsertFile(SwUnoCrsr* pUnoCrsr,
 
 // insert text and scan for CR characters in order to insert
 // paragraph breaks at those positions by calling SplitNode
-sal_Bool DocInsertStringSplitCR(
+bool DocInsertStringSplitCR(
         SwDoc &rDoc,
         const SwPaM &rNewCursor, const String &rText,
         const bool bForceExpandHints )
 {
-    sal_Bool bOK = sal_True;
+    bool bOK = true;
 
         const enum IDocumentContentOperations::InsertFlags nInsertFlags =
             (bForceExpandHints)
@@ -947,12 +947,12 @@ sal_Bool DocInsertStringSplitCR(
             !rDoc.InsertString( rNewCursor, aTxt, nInsertFlags ))
         {
             OSL_FAIL( "Doc->Insert(Str) failed." );
-            bOK = sal_False;
+            bOK = false;
         }
         if (!rDoc.SplitNode( *rNewCursor.GetPoint(), false ) )
         {
             OSL_FAIL( "SplitNode failed" );
-            bOK = sal_False;
+            bOK = false;
         }
         nStartIdx = nIdx + 1;
         nIdx = rText.Search( '\r', nStartIdx );
@@ -962,7 +962,7 @@ sal_Bool DocInsertStringSplitCR(
         !rDoc.InsertString( rNewCursor, aTxt, nInsertFlags ))
     {
         OSL_FAIL( "Doc->Insert(Str) failed." );
-        bOK = sal_False;
+        bOK = false;
     }
 
     return bOK;

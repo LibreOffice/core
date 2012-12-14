@@ -518,7 +518,7 @@ void SwXFieldMaster::setPropertyValue( const OUString& rPropertyName,
     SwFieldType* pType = GetFldType(sal_True);
     if(pType)
     {
-        sal_Bool bSetValue = sal_True;
+        bool bSetValue = true;
         if( rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_SUB_TYPE)))
         {
             const boost::ptr_vector<String>& rExtraArr(SwStyleNameMapper::GetExtraUINameArray());
@@ -535,7 +535,7 @@ void SwXFieldMaster::setPropertyValue( const OUString& rPropertyName,
             {
                 if(sTypeName == rExtraArr[ *pIds ] )
                 {
-                    bSetValue = sal_False;
+                    bSetValue = false;
                     break;
                 }
             }
@@ -783,7 +783,7 @@ uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
                                             // a non-empty string.
                     INetURLObject aObj;
                     aObj.SetURL( aDataSource );
-                    sal_Bool bIsURL = aObj.GetProtocol() != INET_PROT_NOT_VALID;
+                    bool bIsURL = aObj.GetProtocol() != INET_PROT_NOT_VALID;
                     if (bIsURL && rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_URL)))
                         pStr = &aDataSource;        // DataBaseURL
                     else if (!bIsURL && rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME)))
@@ -833,7 +833,7 @@ uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
                                 // a non-empty string.
                     INetURLObject aObj;
                     aObj.SetURL( sParam5 );  // SetSmartURL
-                    sal_Bool bIsURL = aObj.GetProtocol() != INET_PROT_NOT_VALID;
+                    bool bIsURL = aObj.GetProtocol() != INET_PROT_NOT_VALID;
                     if (bIsURL && rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_URL)))
                         pStr = &sParam5;        // DataBaseURL
                     else if ( rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME)))
@@ -1036,7 +1036,7 @@ struct SwFieldProperties_Impl
     sal_uInt16      nUSHORT2;
     sal_Int16       nSHORT1;
     sal_Int8        nByte1;
-    sal_Bool        bFormatIsDefault;
+    bool            bFormatIsDefault;
     sal_Bool        bBool1;
     sal_Bool        bBool2;
     sal_Bool        bBool3;
@@ -1052,7 +1052,7 @@ struct SwFieldProperties_Impl
         nUSHORT2(0),
         nSHORT1(0),
         nByte1(0),
-        bFormatIsDefault(sal_True),
+        bFormatIsDefault(true),
         bBool1(sal_False),
         bBool2(sal_False),
         bBool3(sal_False),
@@ -1957,7 +1957,7 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
             break;
         case FIELD_PROP_FORMAT:
             rValue >>= m_pProps->nFormat;
-            m_pProps->bFormatIsDefault = sal_False;
+            m_pProps->bFormatIsDefault = false;
             break;
         case FIELD_PROP_SUBTYPE:
             m_pProps->nSubType = SWUnoHelper::GetEnumAsInt32( rValue );
@@ -2740,7 +2740,7 @@ SwXFieldEnumeration::SwXFieldEnumeration(SwDoc* pDc) :
             const SwTxtFld *pTxtFld = pCurFldFmt->GetTxtFld();
             // skip fields that are currently not in the document
             // e.g. fields in undo or redo array
-            sal_Bool bSkip = !pTxtFld ||
+            bool bSkip = !pTxtFld ||
                          !pTxtFld->GetpTxtNode()->GetNodes().IsDocNodes();
             if (!bSkip)
                 pItems[ nFillPos++ ] = new SwXTextField(*pCurFldFmt, pDoc);

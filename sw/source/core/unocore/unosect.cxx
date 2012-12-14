@@ -317,11 +317,11 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 
             // and search for current header section
             const sal_uInt16 nCount = aSectionsArr.size();
-            sal_Bool bHeaderPresent = sal_False;
+            bool bHeaderPresent = false;
             for(sal_uInt16 i = 0; i < nCount; i++)
             {
-                bHeaderPresent |=
-                    (aSectionsArr[i]->GetType() == TOX_HEADER_SECTION);
+                if (aSectionsArr[i]->GetType() == TOX_HEADER_SECTION)
+                    bHeaderPresent = true;
             }
             if (! bHeaderPresent)
             {
@@ -580,7 +580,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<SfxItemSet> pItemSet;
     SAL_WNODEPRECATED_DECLARATIONS_POP
-    sal_Bool bLinkModeChanged = sal_False;
+    bool bLinkModeChanged = false;
     sal_Bool bLinkMode = sal_False;
 
     for (sal_Int32 nProperty = 0; nProperty < rPropertyNames.getLength();
@@ -668,7 +668,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 }
                 else
                 {
-                    bLinkModeChanged = sal_True;
+                    bLinkModeChanged = true;
                     bLinkMode = bVal;
                 }
             }

@@ -587,7 +587,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         nTOIOptions = rTOXBase.GetOptions();
     }
     SwForm  aForm(rTOXBase.GetTOXForm());
-    sal_Bool bForm = sal_False;
+    bool bForm = false;
     switch (pEntry->nWID)
     {
         case WID_IDX_TITLE:
@@ -711,7 +711,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                     nsSwTOIOptions::TOI_INITIAL_CAPS);
         break;
         case WID_IS_COMMA_SEPARATED:
-            bForm = sal_True;
+            bForm = true;
             aForm.SetCommaSeparated(lcl_AnyToBool(rValue));
         break;
         case WID_LABEL_CATEGORY:
@@ -788,19 +788,19 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
             String aString;
             SwStyleNameMapper::FillUIName( lcl_AnyToString(rValue),
                 aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true);
-            bForm = sal_True;
+            bForm = true;
             // Header is on Pos 0
             aForm.SetTemplate( 0, aString );
         }
         break;
         case WID_IS_RELATIVE_TABSTOPS:
-            bForm = sal_True;
+            bForm = true;
             aForm.SetRelTabPos(lcl_AnyToBool(rValue));
         break;
         case WID_PARA_SEP:
         {
             String aString;
-            bForm = sal_True;
+            bForm = true;
             SwStyleNameMapper::FillUIName( lcl_AnyToString(rValue),
                 aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true);
             aForm.SetTemplate( 1, aString );
@@ -821,7 +821,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         case WID_PARA_LEV9:
         case WID_PARA_LEV10:
         {
-            bForm = sal_True;
+            bForm = true;
             // in sdbcx::Index Label 1 begins at Pos 2 otherwise at Pos 1
             const sal_uInt16 nLPos = rTOXBase.GetType() == TOX_INDEX ? 2 : 1;
             String aString;

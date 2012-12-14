@@ -212,7 +212,7 @@ void SwXReferenceMark::Impl::InsertRefMark(SwPaM& rPam,
 
     UnoActionContext aCont(pDoc2);
     SwFmtRefMark aRefMark(m_sMarkName);
-    sal_Bool bMark = *rPam.GetPoint() != *rPam.GetMark();
+    bool bMark = *rPam.GetPoint() != *rPam.GetMark();
 
     const bool bForceExpandHints( (!bMark && pCursor)
             ? pCursor->IsAtEndOfMeta() : false );

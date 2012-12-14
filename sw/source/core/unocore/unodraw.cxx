@@ -122,7 +122,7 @@ public:
         // #i28701#
         delete pWrapInfluenceOnObjPos;
     }
-    SwFmtAnchor*    GetAnchor(sal_Bool bCreate = sal_False)
+    SwFmtAnchor*    GetAnchor(bool bCreate = false)
         {
             if(bCreate && !pAnchor)
             {
@@ -130,7 +130,7 @@ public:
             }
             return pAnchor;
         }
-    SwFmtHoriOrient* GetHOrient(sal_Bool bCreate = sal_False)
+    SwFmtHoriOrient* GetHOrient(bool bCreate = false)
         {
             if (bCreate && !pHOrient)
             {
@@ -139,7 +139,7 @@ public:
             }
             return pHOrient;
         }
-    SwFmtVertOrient* GetVOrient(sal_Bool bCreate = sal_False)
+    SwFmtVertOrient* GetVOrient(bool bCreate = false)
         {
             if(bCreate && !pVOrient)
             {
@@ -149,19 +149,19 @@ public:
             return pVOrient;
         }
 
-    SwFmtSurround*  GetSurround(sal_Bool bCreate = sal_False)
+    SwFmtSurround*  GetSurround(bool bCreate = false)
         {
             if(bCreate && !pSurround)
                 pSurround = new SwFmtSurround();
             return pSurround;
         }
-    SvxLRSpaceItem* GetLRSpace(sal_Bool bCreate = sal_False)
+    SvxLRSpaceItem* GetLRSpace(bool bCreate = false)
         {
             if(bCreate && !pLRSpace)
                 pLRSpace = new SvxLRSpaceItem(RES_LR_SPACE);
             return pLRSpace;
         }
-    SvxULSpaceItem* GetULSpace(sal_Bool bCreate = sal_False)
+    SvxULSpaceItem* GetULSpace(bool bCreate = false)
         {
             if(bCreate && !pULSpace)
                 pULSpace = new SvxULSpaceItem(RES_UL_SPACE);
@@ -188,7 +188,7 @@ public:
     void SetOpaque(sal_Bool bSet){bOpaque = bSet;}
 
     // #i26791#
-    SwFmtFollowTextFlow* GetFollowTextFlow( sal_Bool _bCreate = sal_False )
+    SwFmtFollowTextFlow* GetFollowTextFlow( bool _bCreate = false )
     {
         if ( _bCreate && !mpFollowTextFlow )
             mpFollowTextFlow = new SwFmtFollowTextFlow( sal_False );
@@ -227,7 +227,7 @@ public:
 
     // #i28701#
     inline SwFmtWrapInfluenceOnObjPos* GetWrapInfluenceOnObjPos(
-                                        const sal_Bool _bCreate = sal_False )
+                                        const bool _bCreate = false )
     {
         if ( _bCreate && !pWrapInfluenceOnObjPos )
         {
@@ -634,7 +634,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
         // #i32349# - if no horizontal position exists, create one
         if ( !pDesc->GetHOrient() )
         {
-            SwFmtHoriOrient* pHori = pDesc->GetHOrient( sal_True );
+            SwFmtHoriOrient* pHori = pDesc->GetHOrient( true );
             SwTwips nHoriPos = MM100_TO_TWIP(aMM100Pos.X);
             pHori->SetPos( nHoriPos );
         }
@@ -646,7 +646,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
         // #i32349# - if no vertical position exists, create one
         if ( !pDesc->GetVOrient() )
         {
-            SwFmtVertOrient* pVert = pDesc->GetVOrient( sal_True );
+            SwFmtVertOrient* pVert = pDesc->GetVOrient( true );
             SwTwips nVertPos = MM100_TO_TWIP(aMM100Pos.Y);
             pVert->SetPos( nVertPos );
         }
@@ -760,14 +760,14 @@ uno::Reference< drawing::XShapeGroup >  SwXDrawPage::group(const uno::Reference<
             const SdrMarkList& rMarkList = pPage->PreGroup(xShapes);
             if ( rMarkList.GetMarkCount() > 1 )
             {
-                sal_Bool bFlyInCnt = sal_False;
+                bool bFlyInCnt = false;
                 for ( sal_uInt16 i = 0; !bFlyInCnt && i < rMarkList.GetMarkCount(); ++i )
                 {
                     const SdrObject *pObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
                     if (FLY_AS_CHAR == ::FindFrmFmt(const_cast<SdrObject*>(
                                             pObj))->GetAnchor().GetAnchorId())
                     {
-                        bFlyInCnt = sal_True;
+                        bFlyInCnt = true;
                     }
                 }
                 if( bFlyInCnt )
@@ -1116,7 +1116,7 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                 SwDoc* pDoc = pFmt->GetDoc();
                 if(RES_ANCHOR == pEntry->nWID && MID_ANCHOR_ANCHORFRAME == pEntry->nMemberId)
                 {
-                    sal_Bool bDone = sal_True;
+                    bool bDone = true;
                     uno::Reference<text::XTextFrame> xFrame;
                     if(aValue >>= xFrame)
                     {
@@ -1138,7 +1138,7 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                             aAnchor.SetType(FLY_AT_FLY);
                             aItemSet.Put(aAnchor);
                             pFmt->SetFmtAttr(aItemSet);
-                            bDone = sal_True;
+                            bDone = true;
                         }
                     }
                     if(!bDone)
@@ -1375,22 +1375,22 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                 switch(pEntry->nWID)
                 {
                     case RES_ANCHOR:
-                        pItem = pImpl->GetAnchor(sal_True);
+                        pItem = pImpl->GetAnchor(true);
                     break;
                     case RES_HORI_ORIENT:
-                        pItem = pImpl->GetHOrient(sal_True);
+                        pItem = pImpl->GetHOrient(true);
                     break;
                     case RES_VERT_ORIENT:
-                        pItem = pImpl->GetVOrient(sal_True);
+                        pItem = pImpl->GetVOrient(true);
                     break;
                     case  RES_LR_SPACE:
-                        pItem = pImpl->GetLRSpace(sal_True);
+                        pItem = pImpl->GetLRSpace(true);
                     break;
                     case  RES_UL_SPACE:
-                        pItem = pImpl->GetULSpace(sal_True);
+                        pItem = pImpl->GetULSpace(true);
                     break;
                     case  RES_SURROUND:
-                        pItem = pImpl->GetSurround(sal_True);
+                        pItem = pImpl->GetSurround(true);
                     break;
                     case  FN_TEXT_RANGE:
                     {
@@ -1409,13 +1409,13 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                     // #i26791#
                     case RES_FOLLOW_TEXT_FLOW:
                     {
-                        pItem = pImpl->GetFollowTextFlow( sal_True );
+                        pItem = pImpl->GetFollowTextFlow( true );
                     }
                     break;
                     // #i28701#
                     case RES_WRAP_INFLUENCE_ON_OBJPOS:
                     {
-                        pItem = pImpl->GetWrapInfluenceOnObjPos( sal_True );
+                        pItem = pImpl->GetWrapInfluenceOnObjPos( true );
                     }
                     break;
                     // #i28749#
@@ -1726,8 +1726,8 @@ uno::Sequence< beans::PropertyState > SwXShape::getPropertyStates(
     if(xShapeAgg.is())
     {
         SvxShape* pSvxShape = GetSvxShape();
-        sal_Bool bGroupMember = sal_False;
-        sal_Bool bFormControl = sal_False;
+        bool bGroupMember = false;
+        bool bFormControl = false;
         SdrObject* pObject = pSvxShape->GetSdrObject();
         if(pObject)
         {
