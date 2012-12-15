@@ -638,7 +638,7 @@ $(COMMONMISC)/$(TARGET)/%.ulf : %.ulf
     @echo "Making:   " $(@:f)
     $(COMMAND_ECHO)-$(MKDIRHIER) $(@:d)
     $(COMMAND_ECHO)-$(RM) $@
-    $(COMMAND_ECHO)$(ULFEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
+    $(COMMAND_ECHO)$(ULFEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(mktmp $(foreach,lang,$(subst,en-US, $(WITH_LANG_LIST)) $(SRCDIR)/translations/source/$(lang)/$(PRJNAME)$/$(PATH_IN_MODULE).po)) -l all
     $(COMMAND_ECHO)$(RENAME) $@.$(INPATH) $@
     $(COMMAND_ECHO)-$(RM) $@.$(INPATH)
 
