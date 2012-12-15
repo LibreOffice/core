@@ -33,7 +33,8 @@ sal_Int32 ScDPItemData::Compare(const ScDPItemData& rA, const ScDPItemData& rB)
 {
     if (rA.meType != rB.meType)
     {
-        // group value, value and string in this order.
+        // group value, value and string in this order. Ensure that the empty
+        // type comes last.
         return rA.meType < rB.meType ? -1 : 1;
     }
 

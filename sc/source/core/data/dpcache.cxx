@@ -56,6 +56,7 @@ ScDPCache::ScDPCache(ScDocument* pDoc) :
     mnColumnCount ( 0 ),
     maEmptyRows(0, MAXROW, true),
     mnDataSize(-1),
+    mnRowCount(0),
     mbDisposing(false)
 {
 }
@@ -311,6 +312,16 @@ bool ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
 
     mnColumnCount = nEndCol - nStartCol + 1;
 
+    // this row count must include the trailing empty rows.
+    mnRowCount = nEndRow - nStartRow; // skip the topmost label row.
+
+    // Skip trailing empty rows if exists.
+    SCCOL nCol1 = nStartCol, nCol2 = nEndCol;
+    SCROW nRow1 = nStartRow, nRow2 = nEndRow;
+    pDoc->ShrinkToDataArea(nDocTab, nCol1, nRow1, nCol2, nRow2);
+    bool bTailEmptyRows = nEndRow > nRow2; // Trailing empty rows exist.
+    nEndRow = nRow2;
+
     maFields.reserve(mnColumnCount);
     for (size_t i = 0; i < static_cast<size_t>(mnColumnCount); ++i)
         maFields.push_back(new Field);
@@ -342,6 +353,17 @@ bool ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
         }
 
         processBuckets(aBuckets, rField);
+
+        if (bTailEmptyRows)
+        {
+            // If the last item is not empty, append one. Note that the items
+            // are sorted, and empty item should come last when sorted.
+            if (rField.maItems.empty() || !rField.maItems.back().IsEmpty())
+            {
+                aData.SetEmpty();
+                rField.maItems.push_back(aData);
+            }
+        }
     }
 
     PostInit();
@@ -403,6 +425,9 @@ bool ScDPCache::InitFromDataBase(DBConnector& rDB)
         }
 
         rDB.finish();
+
+        if (!maFields.empty())
+            mnRowCount = maFields[0].maData.size();
 
         PostInit();
         return true;
@@ -684,6 +709,8 @@ void ScDPCache::PostInit()
 
 void ScDPCache::Clear()
 {
+    mnColumnCount = 0;
+    mnRowCount = 0;
     maFields.clear();
     maLabelNames.clear();
     maGroupFields.clear();
@@ -723,7 +750,18 @@ SCROW ScDPCache::GetItemDataId(sal_uInt16 nDim, SCROW nRow, bool bRepeatIfEmpty)
     OSL_ENSURE(nDim < mnColumnCount, "ScDPTableDataCache::GetItemDataId ");
 
     const Field& rField = maFields[nDim];
-    if (bRepeatIfEmpty)
+    if (static_cast<size_t>(nRow) >= rField.maData.size())
+    {
+        // nRow is in the trailing empty rows area.
+        if (bRepeatIfEmpty)
+            nRow = rField.maData.size()-1; // Move to the last non-empty row.
+        else
+            // Return the last item, which should always be empty if the
+            // initialization has skipped trailing empty rows.
+            return rField.maItems.size()-1;
+
+    }
+    else if (bRepeatIfEmpty)
     {
         while (nRow > 0 && rField.maItems[rField.maData[nRow]].IsEmpty())
             --nRow;
@@ -772,10 +810,7 @@ const ScDPItemData* ScDPCache::GetItemDataById(long nDim, SCROW nId) const
 
 SCROW ScDPCache::GetRowCount() const
 {
-    if (maFields.empty() || maFields[0].maData.empty())
-        return 0;
-
-    return maFields[0].maData.size();
+    return mnRowCount;
 }
 
 SCROW ScDPCache::GetDataSize() const
