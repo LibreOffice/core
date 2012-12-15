@@ -21,11 +21,7 @@
 import sys
 
 import pyuno
-
-try:
-    import __builtin__ as builtin
-except ImportError:
-    import builtins
+import __builtin__
 
 try:
     unicode
@@ -37,7 +33,7 @@ import socket # since on Windows sal3.dll no longer calls WSAStartup
 # all functions and variables starting with a underscore (_) must be considered private
 # and can be changed at any time. Don't use them
 _g_ctx = pyuno.getComponentContext( )
-_g_delegatee = builtin.__dict__["__import__"]
+_g_delegatee = __builtin__.__dict__["__import__"]
 
 def getComponentContext():
     """ returns the UNO component context, that was used to initialize the python runtime.
@@ -282,7 +278,7 @@ def _uno_import( name, *optargs, **kwargs ):
     return mod
 
 # hook into the __import__ chain
-builtin.__dict__["__import__"] = _uno_import
+__builtin__.__dict__["__import__"] = _uno_import
 
 # private, referenced from the pyuno shared library
 def _uno_struct__init__(self,*args):
@@ -293,11 +289,11 @@ def _uno_struct__init__(self,*args):
 
 # private, referenced from the pyuno shared library
 def _uno_struct__getattr__(self,name):
-    return builtin.getattr(self.__dict__["value"],name)
+    return __builtin__.getattr(self.__dict__["value"],name)
 
 # private, referenced from the pyuno shared library
 def _uno_struct__setattr__(self,name,value):
-    return builtin.setattr(self.__dict__["value"],name,value)
+    return __builtin__.setattr(self.__dict__["value"],name,value)
 
 # private, referenced from the pyuno shared library
 def _uno_struct__repr__(self):
