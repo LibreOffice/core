@@ -933,8 +933,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
 
                 aSet.Put( SvxAdjustItem( SVX_ADJUST_CENTER, RES_PARATR_ADJUST ) );
 
-                pNewColl->SetNextTxtFmtColl( *GetTxtCollFromPool(
-                                                    RES_POOLCOLL_DOC_SUBTITEL ));
+                pNewColl->SetNextTxtFmtColl( *GetTxtCollFromPool( RES_POOLCOLL_TEXT ));
             }
             break;
 
@@ -960,6 +959,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
                 aUL = pNewColl->GetULSpace();
                 aUL.SetLower( HTML_PARSPACE );
                 aSet.Put( aUL);
+                pNewColl->SetNextTxtFmtColl( *GetTxtCollFromPool( RES_POOLCOLL_TEXT ));
             }
             break;
 
@@ -967,9 +967,8 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
             {
                 ::lcl_SetDfltFont( DEFAULTFONT_FIXED, aSet );
 
-    // WORKAROUND: Set PRE to 10pt
+                // WORKAROUND: Set PRE to 10pt
                 SetAllScriptItem( aSet, SvxFontHeightItem(PT_10, 100, RES_CHRATR_FONTSIZE) );
-    // WORKAROUND: Set PRE to 10pt
 
                 // The lower paragraph distance is set explicitly (makes
                 // assigning hard attributes easier)
