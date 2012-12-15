@@ -122,7 +122,7 @@ ps       0  2171
 pt       0  2070
 pt-BR    0  1046
 pt-PT    0  2070
-qtz      0  1033   # key id pseudo language
+qtz      0  1638   # key id pseudo language
 rm       0  1047   # Raeto-Romance
 ro       0  1048   # Romanian
 ru       0  1049
