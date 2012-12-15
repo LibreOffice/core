@@ -32,7 +32,7 @@
   // LO vs WinAPI conflict
   #undef WB_LEFT
   #undef WB_RIGHT
-
+  #undef MSC // Unset a legacy define, as otherwise ws2bth.h breaks
   #include <winsock2.h>
   #include <ws2bth.h>
 #endif
