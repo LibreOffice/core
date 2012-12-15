@@ -296,6 +296,7 @@ void compareMatrix(MatrixImplType& rMat)
 
             double fVal = rMat.get_numeric(i, j);
             if (!::rtl::math::isFinite(fVal))
+                /* FIXME: this silently skips an error instead of propagating it! */
                 continue;
 
             bool b = aComp(fVal);
@@ -897,20 +898,24 @@ namespace {
 
 struct AndEvaluator
 {
-    bool isBadElem(double fVal) const { return fVal == 0; }
-    bool returnOnElem() const { return false; }
-    bool returnOnAllElems() const { return true; }
+    bool mbResult;
+    void operate(double fVal) { mbResult &= (fVal != 0.0); }
+    bool result() const { return mbResult; }
+    AndEvaluator() : mbResult(true) {}
 };
 
 struct OrEvaluator
 {
-    bool isBadElem(double fVal) const { return fVal != 0; }
-    bool returnOnElem() const { return true; }
-    bool returnOnAllElems() const { return false; }
+    bool mbResult;
+    void operate(double fVal) { mbResult |= (fVal != 0.0); }
+    bool result() const { return mbResult; }
+    OrEvaluator() : mbResult(false) {}
 };
 
+// Do not short circuit logical operations, in case there are error values
+// these need to be propagated even if the result was determined earlier.
 template <typename _Evaluator>
-bool EvalMatrix(const MatrixImplType& rMat)
+double EvalMatrix(const MatrixImplType& rMat)
 {
     _Evaluator aEval;
     size_t nRows = rMat.size().row, nCols = rMat.size().column;
@@ -928,11 +933,10 @@ bool EvalMatrix(const MatrixImplType& rMat)
                 // DoubleError
                 return fVal;
 
-            if (aEval.isBadElem(fVal))
-                return aEval.returnOnElem();
+            aEval.operate(fVal);
         }
     }
-    return aEval.returnOnAllElems();
+    return aEval.result();
 }
 
 }
