@@ -3515,19 +3515,18 @@ void ScCompiler::AutoCorrectParsedSymbol()
     }
 }
 
-static inline bool lcl_UpperAsciiOrI18n( String& rUpper, const String& rOrg, FormulaGrammar::Grammar eGrammar )
+static inline bool lcl_UpperAsciiOrI18n( String& rUpper, const OUString& rOrg, FormulaGrammar::Grammar eGrammar )
 {
     if (FormulaGrammar::isODFF( eGrammar ))
     {
         // ODFF has a defined set of English function names, avoid i18n
         // overhead.
-        rUpper = rOrg;
-        rUpper.ToUpperAscii();
+        rUpper = rOrg.toAsciiUpperCase();
         return true;
     }
     else
     {
-        rUpper = ScGlobal::pCharClass->uppercase( rOrg );
+        rUpper = ScGlobal::pCharClass->uppercase(rOrg);
         return false;
     }
 }

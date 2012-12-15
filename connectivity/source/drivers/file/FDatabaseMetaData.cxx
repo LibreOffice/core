@@ -105,16 +105,17 @@ namespace
             }
 
             // get two extensions which differ by case only
-            String sExtension1 = aContentURL.getExtension();
-            String sExtension2( sExtension1 );
-            sExtension2.ToLowerAscii();
-            if ( sExtension2 == sExtension1 )
+            OUString sExtension1(aContentURL.getExtension());
+            OUString sExtension2(sExtension1.toAsciiLowerCase());
+            if (sExtension2 == sExtension1)
+            {
                 // the extension was already in lower case
-                sExtension2.ToUpperAscii();
+                sExtension2 = sExtension2.toAsciiUpperCase();
+            }
 
             // the complete URL for the second extension
             INetURLObject aURL2( aContentURL );
-            if ( sExtension2.Len() )
+            if (!sExtension2.isEmpty())
                 aURL2.SetExtension( sExtension2 );
             if ( aURL2.GetMainURL(INetURLObject::NO_DECODE) == aContentURL.GetMainURL(INetURLObject::NO_DECODE) )
                 return -1;

@@ -2383,12 +2383,10 @@ static sal_Bool ImplTimeGetValue( const XubString& rStr, Time& rTime,
             return sal_False;
 
         aStr.ToUpperAscii();
-        XubString aAM( rLocaleDataWrapper.getTimeAM() );
-        XubString aPM( rLocaleDataWrapper.getTimePM() );
-        aAM.ToUpperAscii();
-        aPM.ToUpperAscii();
-        rtl::OUString aAM2("AM");  // aAM is localized
-        rtl::OUString aPM2("PM");  // aPM is localized
+        OUString aAM(rLocaleDataWrapper.getTimeAM().toAsciiUpperCase());
+        OUString aPM(rLocaleDataWrapper.getTimePM().toAsciiUpperCase());
+        OUString aAM2("AM");  // aAM is localized
+        OUString aPM2("PM");  // aPM is localized
 
         if ( (nHour < 12) && ( ( aStr.Search( aPM ) != STRING_NOTFOUND ) || ( aStr.Search( aPM2 ) != STRING_NOTFOUND ) ) )
             nHour += 12;

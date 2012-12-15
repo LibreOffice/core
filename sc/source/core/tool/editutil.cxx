@@ -580,9 +580,9 @@ static String lcl_GetCharStr( sal_Int32 nNo )
     return aStr;
 }
 
-static String lcl_GetNumStr( sal_Int32 nNo, SvxNumType eType )
+static OUString lcl_GetNumStr(sal_Int32 nNo, SvxNumType eType)
 {
-    String aTmpStr(rtl::OUString('0'));
+    OUString aTmpStr('0');
     if( nNo )
     {
         switch( eType )
@@ -597,11 +597,11 @@ static String lcl_GetNumStr( sal_Int32 nNo, SvxNumType eType )
             if( nNo < 4000 )
                 aTmpStr = SvxNumberFormat::CreateRomanString( nNo, ( eType == SVX_ROMAN_UPPER ) );
             else
-                aTmpStr.Erase();
+                aTmpStr = OUString();
             break;
 
         case SVX_NUMBER_NONE:
-            aTmpStr.Erase();
+            aTmpStr = OUString();
             break;
 
 //      CHAR_SPECIAL:
@@ -609,12 +609,12 @@ static String lcl_GetNumStr( sal_Int32 nNo, SvxNumType eType )
 
 //      case ARABIC:    ist jetzt default
         default:
-            aTmpStr = String::CreateFromInt32( nNo );
+            aTmpStr = OUString::valueOf(nNo);
             break;
         }
 
         if( SVX_CHARS_UPPER_LETTER == eType )
-            aTmpStr.ToUpperAscii();
+            aTmpStr = aTmpStr.toAsciiUpperCase();
     }
     return aTmpStr;
 }
@@ -641,7 +641,7 @@ String ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
     if (!pFieldData)
         return rtl::OUString("?");
 
-    rtl::OUString aRet;
+    OUString aRet;
     sal_Int32 nClsId = pFieldData->GetClassId();
     switch (nClsId)
     {

@@ -139,8 +139,8 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
                 if(nSrchPos > nActPos + 1)
                 {
                     // some string was found
-                    String sToken = rSource.Copy(nActPos + 1, nSrchPos - nActPos - 1 );
-                    sToken.ToUpperAscii();
+                    OUString sToken = rSource.Copy(nActPos + 1, nSrchPos - nActPos - 1 );
+                    sToken = sToken.toAsciiUpperCase();
                     int nToken = ::GetHTMLToken(sToken);
                     if(nToken)
                     {
@@ -154,7 +154,7 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
                         // what was that?
                         SAL_WARN(
                             "sw.level2",
-                            "Token " << rtl::OUString(sToken)
+                            "Token " << sToken
                                 << " not recognised!");
                     }
 

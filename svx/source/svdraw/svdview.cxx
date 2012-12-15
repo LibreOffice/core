@@ -1284,9 +1284,8 @@ XubString SdrView::GetStatusText()
     if(aStr.Len())
     {
         // capitalize first letter
-        String aTmpStr(aStr.Copy(0, 1));
-        aTmpStr.ToUpperAscii();
-        aStr.Replace(0, 1, aTmpStr);
+        OUString aTmpStr(aStr.Copy(0, 1));
+        aStr.Replace(0, 1, aTmpStr.toAsciiUpperCase());
     }
     return aStr;
 }

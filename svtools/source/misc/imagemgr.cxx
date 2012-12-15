@@ -529,8 +529,8 @@ String SvFileInformationManager::GetDescription_Impl( const INetURLObject& rObje
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aTimeLog, "svtools", "hb93813", "SvFileInformationManager::GetDescription_Impl()" );
 
-    String sDescription;
-    String sExtension( rObject.getExtension() ), sURL( rObject.GetMainURL( INetURLObject::NO_DECODE ) );
+    OUString sExtension(rObject.getExtension());
+    String sDescription, sURL( rObject.GetMainURL( INetURLObject::NO_DECODE ) );
     sal_uInt16 nResId = 0;
     sal_Bool bShowExt = sal_False, bDetected = sal_False, bOnlyFile = sal_False;
     sal_Bool bFolder = bDetectFolder ? CONTENT_HELPER::IsFolder( sURL ) : sal_False;
@@ -552,10 +552,10 @@ String SvFileInformationManager::GetDescription_Impl( const INetURLObject& rObje
             if ( !bDetected )
             {
                 // search a description by extension
-                sal_Bool bExt = ( sExtension.Len() > 0 );
+                bool bExt = !sExtension.isEmpty();
                 if ( bExt )
                 {
-                    sExtension.ToLowerAscii();
+                    sExtension = sExtension.toAsciiLowerCase();
                     nResId = GetDescriptionId_Impl( sExtension, bShowExt );
                 }
                 if ( !nResId )
@@ -574,7 +574,7 @@ String SvFileInformationManager::GetDescription_Impl( const INetURLObject& rObje
         if ( bOnlyFile )
         {
             bShowExt = sal_False;
-            sExtension.ToUpperAscii();
+            sExtension = sExtension.toAsciiUpperCase();
             sDescription = sExtension;
             sDescription += '-';
         }
