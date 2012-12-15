@@ -376,6 +376,7 @@ public:
     void CompareGreaterEqual();
     double And() const;
     double Or() const;
+    double Xor() const;
 
     ScMatrix::IterateResult Sum(bool bTextAsZero) const;
     ScMatrix::IterateResult SumSquare(bool bTextAsZero) const;
@@ -950,6 +951,32 @@ double ScMatrixImpl::Or() const
     return EvalMatrix<OrEvaluator>(maMat);
 }
 
+double ScMatrixImpl::Xor() const
+{
+    // All elements must be of value type.
+    // True if an odd number of elements have a non-zero value.
+    bool bXor = false;
+    size_t nRows = maMat.size().row, nCols = maMat.size().column;
+    for (size_t i = 0; i < nRows; ++i)
+    {
+        for (size_t j = 0; j < nCols; ++j)
+        {
+            mdds::mtm::element_t eType = maMat.get_type(i, j);
+            if (eType != mdds::mtm::element_numeric && eType != mdds::mtm::element_boolean)
+                // assuming a CompareMat this is an error
+                return CreateDoubleError(errIllegalArgument);
+
+            double fVal = maMat.get_numeric(i, j);
+            if (!::rtl::math::isFinite(fVal))
+                // DoubleError
+                return fVal;
+
+            bXor ^= (fVal != 0.0);
+        }
+    }
+    return bXor;
+}
+
 namespace {
 
 struct SumOp
@@ -1374,6 +1401,11 @@ double ScMatrix::And() const
 double ScMatrix::Or() const
 {
     return pImpl->Or();
+}
+
+double ScMatrix::Xor() const
+{
+    return pImpl->Xor();
 }
 
 ScMatrix::IterateResult ScMatrix::Sum(bool bTextAsZero) const

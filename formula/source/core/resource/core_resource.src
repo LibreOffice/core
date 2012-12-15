@@ -385,6 +385,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_GREATER_EQUAL { Text = ">=" ; };
     String SC_OPCODE_AND { Text = "AND" ; };
     String SC_OPCODE_OR { Text = "OR" ; };
+    String SC_OPCODE_XOR { Text = "XOR" ; };
     String SC_OPCODE_INTERSECT { Text = "!" ; };
     String SC_OPCODE_UNION { Text = "~" ; };
     String SC_OPCODE_RANGE { Text = ":" ; };
