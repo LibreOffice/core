@@ -171,9 +171,8 @@ IMPL_LINK( TrendlineResources, SelectTrendLine, RadioButton *, pRadioButton )
 void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
 {
     const SfxPoolItem *pPoolItem = NULL;
-    SfxItemState aState = SFX_ITEM_UNKNOWN;
 
-    aState = rInAttrs.GetItemState( SCHATTR_REGRESSION_TYPE, sal_True, &pPoolItem );
+    SfxItemState aState = rInAttrs.GetItemState( SCHATTR_REGRESSION_TYPE, sal_True, &pPoolItem );
     m_bTrendLineUnique = ( aState != SFX_ITEM_DONTCARE );
     if( aState == SFX_ITEM_SET )
     {

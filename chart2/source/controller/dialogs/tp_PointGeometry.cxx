@@ -60,10 +60,9 @@ sal_Bool SchLayoutTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 
     if(m_pGeometryResources && m_pGeometryResources->GetSelectEntryCount())
     {
-        long nShape=CHART_SHAPE3D_SQUARE;
         long nSegs=32;
 
-        nShape = m_pGeometryResources->GetSelectEntryPos();
+        long nShape = m_pGeometryResources->GetSelectEntryPos();
         if(nShape==CHART_SHAPE3D_PYRAMID)
             nSegs=4;
 

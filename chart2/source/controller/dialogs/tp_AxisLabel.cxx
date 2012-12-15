@@ -151,10 +151,9 @@ sal_Bool SchAxisLabelTabPage::FillItemSet( SfxItemSet& rOutAttrs )
 void SchAxisLabelTabPage::Reset( const SfxItemSet& rInAttrs )
 {
     const SfxPoolItem* pPoolItem = NULL;
-    SfxItemState aState = SFX_ITEM_UNKNOWN;
 
-    // show description ----------
-    aState = rInAttrs.GetItemState( SCHATTR_AXIS_SHOWDESCR, sal_False, &pPoolItem );
+    // show description
+    SfxItemState aState = rInAttrs.GetItemState( SCHATTR_AXIS_SHOWDESCR, sal_False, &pPoolItem );
     if( aState == SFX_ITEM_DONTCARE )
     {
         aCbShowDescription.EnableTriState( sal_True );
