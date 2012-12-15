@@ -562,6 +562,8 @@ Desktop::~Desktop()
 
 void Desktop::Init()
 {
+    fprintf (stderr, "Desktop::Init()\n");
+
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::Desktop::Init" );
     SetBootstrapStatus(BS_OK);
 
@@ -593,9 +595,12 @@ void Desktop::Init()
         }
     }
 
-    if ( m_aBootstrapError == BE_OK )
+    fprintf( stderr, "OfficeIPCThread %d ...\n", m_aBootstrapError == BE_OK );
+
+    if ( 1 )
     {
         const CommandLineArgs& rCmdLineArgs = GetCommandLineArgs();
+
         // start ipc thread only for non-remote offices
         RTL_LOGFILE_CONTEXT( aLog2, "desktop (cd100003) ::OfficeIPCThread::EnableOfficeIPCThread" );
         OfficeIPCThread::Status aStatus = OfficeIPCThread::EnableOfficeIPCThread();

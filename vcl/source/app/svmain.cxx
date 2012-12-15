@@ -156,10 +156,13 @@ int ImplSVMain()
 
     sal_Bool bInit = InitVCL();
 
+    fprintf (stderr, "init vcl %d\n", bInit);
+
     if( bInit )
     {
         // call application main
         pSVData->maAppData.mbInAppMain = sal_True;
+        fprintf(stderr, "call app  main from vcl!\n");
         nReturn = pSVData->mpApp->Main();
         pSVData->maAppData.mbInAppMain = sal_False;
     }

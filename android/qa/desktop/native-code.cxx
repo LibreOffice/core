@@ -13,6 +13,7 @@ extern "C"
 {
     extern void * animcore_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * avmedia_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * cui_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * dba_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * dbaxml_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * evtatt_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
@@ -27,6 +28,7 @@ extern "C"
     extern void * lng_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * lnth_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * lotuswordpro_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * protocolhandler_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * oox_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * sb_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * sc_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
@@ -36,14 +38,17 @@ extern "C"
     extern void * sdd_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * sm_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * smd_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * spl_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * spell_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * svgfilter_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * sw_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * svx_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * swd_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * t602filter_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * textfd_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * unoxml_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * unordf_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * uui_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * wpftdraw_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * wpftwriter_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * xmlfd_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
@@ -62,6 +67,7 @@ lo_get_libmap(void)
         { "libavmedialo.a", avmedia_component_getFactory },
         { "libdbalo.a", dba_component_getFactory },
         { "libdbaxmllo.a", dbaxml_component_getFactory },
+        { "libcuilo.a", cui_component_getFactory },
         { "libevtattlo.a", evtatt_component_getFactory },
         { "libfileacc.a", fileacc_component_getFactory },
         { "libfrmlo.a", frm_component_getFactory },
@@ -75,6 +81,7 @@ lo_get_libmap(void)
         { "liblnthlo.a", lnth_component_getFactory },
         { "liblwpftlo.a", lotuswordpro_component_getFactory },
         { "libooxlo.a", oox_component_getFactory },
+        { "libprotocolhandlerlo.a", protocolhandler_component_getFactory },
         { "libscdlo.a", scd_component_getFactory },
         { "libscfiltlo.a", scfilt_component_getFactory },
         { "libsblo.a", sb_component_getFactory },
@@ -83,13 +90,16 @@ lo_get_libmap(void)
         { "libsdlo.a", sd_component_getFactory },
         { "libsmdlo.a", smd_component_getFactory },
         { "libsmlo.a", sm_component_getFactory },
+        { "libspllo.a", spl_component_getFactory },
         { "libsvgfilterlo.a", svgfilter_component_getFactory },
+        { "libsvxlo.a", svx_component_getFactory },
         { "libswdlo.a", swd_component_getFactory },
         { "libswlo.a", sw_component_getFactory },
         { "libt602filterlo.a", t602filter_component_getFactory },
         { "libtextfdlo.a", textfd_component_getFactory },
         { "libunordflo.a", unordf_component_getFactory },
         { "libunoxmllo.a", unoxml_component_getFactory },
+        { "libuuilo.a", uui_component_getFactory },
         { "libwpftdrawlo.a", wpftdraw_component_getFactory },
         { "libwpftwriterlo.a", wpftwriter_component_getFactory },
         { "libxmlfdlo.a", xmlfd_component_getFactory },
@@ -98,6 +108,14 @@ lo_get_libmap(void)
         { "libxolo.a", xo_component_getFactory },
         { NULL, NULL }
     };
+
+    // We need to pull this in, too, as it isn't in any of the libs we
+    // link with -Wl,--whole-archive.
+    extern void Java_org_libreoffice_android_examples_LODesktop_spawnMain();
+    volatile void *p = (void *) Java_org_libreoffice_android_examples_LODesktop_spawnMain;
+
+    extern void Java_org_libreoffice_android_examples_LODesktop_renderVCL();
+    volatile void *q = (void *) Java_org_libreoffice_android_examples_LODesktop_renderVCL;
 
     return map;
 }

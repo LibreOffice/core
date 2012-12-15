@@ -440,6 +440,7 @@ static void onInputQueueDestroyed(ANativeActivity* activity, AInputQueue* queue)
 __attribute__ ((visibility("default"))) void ANativeActivity_onCreate(ANativeActivity* activity,
         void* savedState, size_t savedStateSize) {
     LOGI("Creating: %p\n", activity);
+    fprintf (stderr, "ANativeActivity_onCreate - Meeks !\n");
     activity->callbacks->onDestroy = onDestroy;
     activity->callbacks->onStart = onStart;
     activity->callbacks->onResume = onResume;

@@ -29,6 +29,12 @@
 #include <rtl/bootstrap.hxx>
 #include <tools/extendapplicationenvironment.hxx>
 
+
+#ifdef ANDROID
+#  include <jni.h>
+#  include <salhelper/thread.hxx>
+#endif
+
 int SVMain();
 
 // -=-= main() -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -70,6 +76,7 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
         return EXIT_SUCCESS;
     }
 #endif
+    fprintf (stderr, "enter svmain()\n");
     return SVMain();
 #if defined ANDROID
     } catch (const ::com::sun::star::uno::Exception &e) {
@@ -79,5 +86,30 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
     }
 #endif
 }
+
+#ifdef ANDROID
+class MainThread : public salhelper::Thread
+{
+public:
+    MainThread() : salhelper::Thread("vcl-mainloop") { launch(); }
+    virtual void execute()
+    {
+        int nRet;
+        do {
+            nRet = soffice_main();
+            fprintf( stderr, "nRet %d\n", nRet );
+        } while (nRet == 81 || nRet == 79); // pretend to re-start.
+        exit (nRet);
+    }
+};
+
+extern "C" SAL_JNI_EXPORT void JNICALL
+Java_org_libreoffice_android_examples_LODesktop_spawnMain(JNIEnv* /* env */,
+                                                          jobject /* dummy */)
+{
+    fprintf(stderr, "Spawn main!\n");
+    new MainThread();
+}
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

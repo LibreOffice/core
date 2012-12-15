@@ -58,6 +58,7 @@ package org.libreoffice.android.examples;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -120,6 +121,12 @@ public class LODesktop
     extends Activity
 {
     private static final String TAG = "LODesktop";
+
+    /* implementend by desktop */
+    private static native void spawnMain();
+
+    /* implementend by vcl */
+    public static native void renderVCL(Bitmap bitmap);
 
     /**
      * This class contains the state that is initialized once and never changes
@@ -233,17 +240,6 @@ public class LODesktop
             bootstrapContext.mcf = bootstrapContext.componentContext.getServiceManager();
 
             Log.i(TAG, "mcf is" + (bootstrapContext.mcf!=null ? " not" : "") + " null");
-
-            Bootstrap.initVCL();
-
-            Object desktop = bootstrapContext.mcf.createInstanceWithContext
-                ("com.sun.star.frame.Desktop", bootstrapContext.componentContext);
-
-            Log.i(TAG, "desktop is" + (desktop!=null ? " not" : "") + " null");
-
-            bootstrapContext.componentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, desktop);
-
-            Log.i(TAG, "componentLoader is" + (bootstrapContext.componentLoader!=null ? " not" : "") + " null");
         }
         catch (Exception e)
         {
@@ -260,9 +256,11 @@ public class LODesktop
         Log.i(TAG, "onCreate - added here\n");
 
         try {
-            String input = getIntent().getStringExtra("input");
-            if (input == null)
-                input = "/assets/test1.odt";
+            String input;
+//            input = getIntent().getStringExtra("input");
+//            if (input == null)
+//            input = "/assets/test1.odt";
+            input = "-writer";
 
             // We need to fake up an argv, and the argv[0] even needs to
             // point to some file name that we can pretend is the "program".
@@ -276,12 +274,39 @@ public class LODesktop
             if (bootstrapContext == null)
                 initBootstrapContext();
 
+            spawnMain();
         }
         catch (Exception e) {
             e.printStackTrace(System.err);
             finish();
         }
+
+        Log.i(TAG, "onCreate - set content view\n");
+        setContentView(new BitmapView(this, this));
     }
 }
+
+    class BitmapView extends android.view.View
+    {
+        LODesktop mDesktop;
+        Bitmap mBitmap;
+
+        public BitmapView(Context context, LODesktop desktop)
+        {
+            super(context);
+            mDesktop = desktop;
+            mBitmap = Bitmap.createBitmap(1000, 600, Bitmap.Config.ARGB_8888);
+        }
+
+        @Override protected void onDraw(Canvas canvas) {
+//            canvas.drawColor(0xFF1ABCDD);
+
+            mDesktop.renderVCL(mBitmap);
+            canvas.drawBitmap(mBitmap, 0, 0, null);
+
+            // re-call ourselves a bit later ...
+            invalidate();
+        }
+    }
 
 // vim:set shiftwidth=4 softtabstop=4 expandtab:

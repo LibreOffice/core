@@ -32,10 +32,13 @@
 #include <jni.h>
 #include <android/log.h>
 #include <android/looper.h>
+#include <android/bitmap.h>
 #include <osl/detail/android-bootstrap.h>
 #include <osl/detail/android_native_app_glue.h>
 #include <rtl/strbuf.hxx>
 #include <basebmp/scanlineformats.hxx>
+
+static bool bHitIdle = false;
 
 class AndroidSalData : public SalGenericData
 {
@@ -260,26 +263,35 @@ void AndroidSalInstance::BlitFrameToWindow(ANativeWindow_Buffer *pOutBuffer,
     BlitFrameRegionToWindow(pOutBuffer, aDev, aWhole, 0, 0);
 }
 
-void AndroidSalInstance::RedrawWindows(ANativeWindow *pWindow)
+void AndroidSalInstance::RedrawWindows(ANativeWindow *pWindow, ANativeWindow_Buffer *pBuffer)
 {
-    if (!pWindow)
-        return;
-
     ANativeWindow_Buffer aOutBuffer;
     memset ((void *)&aOutBuffer, 0, sizeof (aOutBuffer));
 
-//    ARect aRect;
-    fprintf (stderr, "pre lock #3\n");
-    int32_t nRet = ANativeWindow_lock(pWindow, &aOutBuffer, NULL);
-    fprintf (stderr, "locked window %d returned " // rect:  %d,%d->%d,%d "
+    fprintf (stderr, "RedrawWindows\n");
+
+    int32_t nRet = 0;
+    if (pBuffer != NULL)
+        aOutBuffer = *pBuffer;
+    else
+    {
+        if (!pWindow)
+            return;
+
+        //    ARect aRect;
+        fprintf (stderr, "pre lock #3\n");
+        nRet = ANativeWindow_lock(pWindow, &aOutBuffer, NULL);
+    }
+    fprintf (stderr, "Frame count: %d locked window %d returned " // rect:  %d,%d->%d,%d "
              "buffer: %dx%d stride %d, format %d, bits %p\n",
+             (int)getFrames().size(),
              nRet, // aRect.left, aRect.top, aRect.right, aRect.bottom,
              aOutBuffer.width, aOutBuffer.height, aOutBuffer.stride,
              aOutBuffer.format, aOutBuffer.bits);
     if (aOutBuffer.bits != NULL)
     {
 
-#if 0   // pre-'clean' the buffer with cruft:
+#if 1   // pre-'clean' the buffer with cruft:
         // hard-code / guess at a format ...
         int32_t *p = (int32_t *)aOutBuffer.bits;
         for (int32_t y = 0; y < aOutBuffer.height; y++)
@@ -287,7 +299,6 @@ void AndroidSalInstance::RedrawWindows(ANativeWindow *pWindow)
             for (int32_t x = 0; x < aOutBuffer.stride; x++)
                 *p++ = (y << 24) + (x << 10) + 0xff ;
         }
-
 #endif
         int i = 0;
         std::list< SalFrame* >::const_iterator it;
@@ -328,7 +339,9 @@ void AndroidSalInstance::RedrawWindows(ANativeWindow *pWindow)
     }
     else
         fprintf (stderr, "no buffer for locked window\n");
-    ANativeWindow_unlockAndPost(pWindow);
+
+    if (pBuffer && pWindow)
+        ANativeWindow_unlockAndPost(pWindow);
 
     fprintf (stderr, "done render!\n");
     maRedrawRegion.SetEmpty();
@@ -372,7 +385,7 @@ void AndroidSalInstance::GetWorkArea( Rectangle& rRect )
 {
     if (!mpApp || !mpApp->window)
         rRect = Rectangle( Point( 0, 0 ),
-                           Size( 800, 600 ) );
+                           Size( 1280, 750 ) );
     else
         rRect = Rectangle( Point( 0, 0 ),
                            Size( ANativeWindow_getWidth( mpApp->window ),
@@ -627,6 +640,10 @@ void AndroidSalInstance::Wakeup()
 
 void AndroidSalInstance::DoReleaseYield (int nTimeoutMS)
 {
+    if (!bHitIdle)
+        fprintf( stderr, "hit idle !\n" );
+    bHitIdle = true;
+
     // Presumably this should never be called at all except in
     // NativeActivity-based apps with a GUI, like android/qa/desktop, where
     // the message pump is run here in vcl?
@@ -825,13 +842,14 @@ SalInstance *CreateSalInstance()
     fprintf (stderr, "Android: CreateSalInstance!\n");
     AndroidSalInstance* pInstance = new AndroidSalInstance( new SalYieldMutex() );
     new AndroidSalData( pInstance );
-    pInstance->AcquireYieldMutex(1);
+// FIXME: we init VCL in a different thread from where we run the mainloop [!] ...
+//    pInstance->AcquireYieldMutex(1);
     return pInstance;
 }
 
 void DestroySalInstance( SalInstance *pInst )
 {
-    pInst->ReleaseYieldMutex();
+//    pInst->ReleaseYieldMutex();
     delete pInst;
 }
 
@@ -869,5 +887,67 @@ int AndroidSalSystem::ShowNativeDialog( const rtl::OUString& rTitle,
     return 0;
 }
 
+// Render everything
+extern "C" SAL_JNI_EXPORT void JNICALL
+Java_org_libreoffice_android_examples_LODesktop_renderVCL(JNIEnv *env,
+                                                          jobject /* dummy */,
+                                                          jobject bitmap)
+{
+    if (!bHitIdle)
+        return;
+
+    AndroidBitmapInfo  info;
+    void*              pixels;
+    int                ret;
+
+    if ((ret = AndroidBitmap_getInfo(env, bitmap, &info)) < 0) {
+        fprintf(stderr, "AndroidBitmap_getInfo() failed ! error=%d", ret);
+        return;
+    }
+
+#if 0
+    if (info.format != ANDROID_BITMAP_FORMAT_RGB_565) {
+        fprintf(stderr, "Bitmap format is not RGB_565 !");
+        return;
+    }
+#endif
+
+    if ((ret = AndroidBitmap_lockPixels(env, bitmap, &pixels)) < 0) {
+        fprintf(stderr, "AndroidBitmap_lockPixels() failed ! error=%d", ret);
+    }
+
+/*
+typedef struct ANativeWindow_Buffer {
+    // The number of pixels that are show horizontally.
+    int32_t width;
+
+    // The number of pixels that are shown vertically.
+    int32_t height;
+
+    // The number of *pixels* that a line in the buffer takes in
+    // memory.  This may be >= width.
+    int32_t stride;
+
+    // The format of the buffer.  One of WINDOW_FORMAT_*
+    int32_t format;
+
+    // The actual bits.
+    void* bits;
+
+    // Do not touch.
+    uint32_t reserved[6];
+} ANativeWindow_Buffer;
+*/
+
+    ANativeWindow_Buffer dummyOut; // look like a window for now ...
+    dummyOut.width = info.width;
+    dummyOut.height = info.height;
+    dummyOut.stride = info.stride / 4; // sigh !
+    dummyOut.format = info.format;
+    dummyOut.bits = pixels;
+    AndroidSalInstance::getInstance()->RedrawWindows (NULL, &dummyOut);
+
+    AndroidBitmap_unlockPixels(env, bitmap);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

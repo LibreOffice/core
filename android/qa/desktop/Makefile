@@ -128,6 +128,18 @@ copy-stuff:
 		mkdir -p assets/presets/$$D ; \
 		echo "content" > assets/presets/$$D/stamp; \
 	done
+# lofficerc
+	mkdir -p assets/program/
+	echo "[Bootstrap]" > assets/program/lofficerc
+	echo "Logo=1" >> assets/program/lofficerc
+	echo "NativeProgress=1" >> assets/program/lofficerc
+	echo "URE_BOOTSTRAP=file:///assets/program/fundamentalrc" >> assets/program/lofficerc
+#	echo "RTL_LOGFILE=file:///dev/log/main" >> assets/program/lofficerc
+	echo "HOME=$(APP_DATA_PATH)/files" >> assets/program/lofficerc
+	echo "OSL_SOCKET_PATH=$(APP_DATA_PATH)/files" >> assets/program/lofficerc
+# - this looks useful but breaks more than it fixes ...
+#	echo "DISABLE_EXTENSION_SYNCHRONIZATION=1" >> assets/program/lofficerc
+
 
 setup-jars:
 #
