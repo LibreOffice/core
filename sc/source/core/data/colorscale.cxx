@@ -636,10 +636,8 @@ bool NeedUpdate(ScColorScaleEntry* pEntry)
 
 void ScDataBarFormat::DataChanged(const ScRange& rRange)
 {
-    bool bNeedUpdate = false;
-
-    bNeedUpdate = NeedUpdate(mpFormatData->mpUpperLimit.get());
-    bNeedUpdate &= NeedUpdate(mpFormatData->mpLowerLimit.get());
+    bool bNeedUpdate = NeedUpdate(mpFormatData->mpUpperLimit.get());
+    bNeedUpdate |= NeedUpdate(mpFormatData->mpLowerLimit.get());
 
     bNeedUpdate &= GetRange().Intersects(rRange);
 
