@@ -23,6 +23,18 @@
      id="defs4">
     <linearGradient
        inkscape:collect="always"
+       id="linearGradient3791">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop3793" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0;"
+         offset="1"
+         id="stop3795" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
        id="linearGradient10885">
       <stop
          style="stop-color:#ffffff;stop-opacity:1;"
@@ -85,6 +97,15 @@
          offset="1"
          id="stop3768" />
     </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3791"
+       id="linearGradient3797"
+       x1="3.9999659"
+       y1="1039.427"
+       x2="17.999966"
+       y2="1039.4247"
+       gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -93,18 +114,18 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="11.313708"
-     inkscape:cx="18.638594"
-     inkscape:cy="13.635041"
+     inkscape:zoom="1"
+     inkscape:cx="11.844935"
+     inkscape:cy="21.65958"
      inkscape:document-units="px"
      inkscape:current-layer="g10867"
      showgrid="false"
      inkscape:snap-global="true"
-     inkscape:window-width="1366"
-     inkscape:window-height="718"
-     inkscape:window-x="0"
+     inkscape:window-width="681"
+     inkscape:window-height="716"
+     inkscape:window-x="683"
      inkscape:window-y="28"
-     inkscape:window-maximized="1"
+     inkscape:window-maximized="0"
      showborder="false"
      inkscape:showpageshadow="true"
      borderlayer="false"
@@ -130,7 +151,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -162,7 +183,9 @@
              height="23.999983"
              width="16"
              id="rect7797"
-             style="fill:url(#linearGradient6002);fill-opacity:1;stroke:none" />
+             style="fill:url(#linearGradient6002);fill-opacity:1;stroke:none"
+             rx="1.0000174"
+             ry="1.0000174" />
           <rect
              y="-18.999966"
              x="-1043.4247"
@@ -171,13 +194,6 @@
              id="rect14773"
              style="font-size:13.20734406000000050px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ef2929;fill-opacity:1;stroke:none;font-family:Open Sans;-inkscape-font-specification:Open Sans"
              transform="matrix(0,-1,-1,0,0,0)" />
-          <path
-             sodipodi:nodetypes="cccccccccc"
-             inkscape:connector-curvature="0"
-             id="rect7799"
-             d="m 3.0045841,-0.9732999 -3.4e-5,23.9999999 15.9999999,0 1.8e-5,-24 z m 1,1 13.9999999,-10e-8 -5e-5,22 -14.000018,3.4e-5 z"
-             style="opacity:0.4;fill:#000000;fill-opacity:1;stroke:none"
-             transform="translate(-0.00458413,1028.398)" />
           <rect
              y="1028.4247"
              x="7.9999657"
@@ -225,8 +241,8 @@
                d="m 4.00455,1050.4293 4,0 -0.00458,-7.0046 -4,0 z m 1,-1 -0.00458,-5.0046 2,0 0.00458,5.0046 z"
                style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none" />
             <path
-               style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none"
-               d="m 4.0045459,1042.4293 4,0 -0.00458,-6.0046 -4,0 z m 1,-0.8335 -0.00458,-4.1711 2,0 0.00458,4.1711 z"
+               style="fill:url(#linearGradient3797);fill-opacity:1;stroke:none"
+               d="m 4.0045459,1042.4293 14.0000001,0 -0.0046,-6.0046 -14.0000001,0 z m 1,-0.8335 -0.00458,-4.1711 12.0000001,0 0.0046,4.1711 z"
                id="path4880"
                inkscape:connector-curvature="0"
                sodipodi:nodetypes="cccccccccc" />
@@ -248,12 +264,6 @@
                inkscape:connector-curvature="0"
                sodipodi:nodetypes="cccccccccc" />
             <path
-               sodipodi:nodetypes="cccccccccc"
-               inkscape:connector-curvature="0"
-               id="path4893"
-               d="m 4.0045459,1042.4293 4,0 -0.00458,-6.0046 -4,0 z m 1,-0.8335 -0.00458,-4.1711 2,0 0.00458,4.1711 z"
-               style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none" />
-            <path
                style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none"
                d="m 4.0045459,1035.4293 4,0 -0.00458,-7.0046 -4,0 z m 1,-1 -0.00458,-5.0046 2,0 0.00458,5.0046 z"
                id="path4895"
@@ -271,18 +281,17 @@
                d="m 4.00455,1050.4293 4,0 -0.00458,-7.0046 -4,0 z m 1,-1 -0.00458,-5.0046 2,0 0.00458,5.0046 z"
                style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none" />
             <path
-               style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none"
-               d="m 4.0045459,1042.4293 4,0 -0.00458,-6.0046 -4,0 z m 1,-1 -0.00458,-4.0046 2,0 0.00458,4.0046 z"
-               id="path4901"
-               inkscape:connector-curvature="0"
-               sodipodi:nodetypes="cccccccccc" />
-            <path
                sodipodi:nodetypes="cccccccccc"
                inkscape:connector-curvature="0"
                id="path4903"
                d="m 4.0045459,1035.4293 4,0 -0.00458,-7.0046 -4,0 z m 1,-1 -0.00458,-5.0046 2,0 0.00458,5.0046 z"
                style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none" />
           </g>
+          <path
+             inkscape:connector-curvature="0"
+             style="font-size:13.20734406px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;opacity:0.4;fill:#000000;fill-opacity:1;stroke:none;font-family:Open Sans;-inkscape-font-specification:Open Sans"
+             d="m 2.9999658,1050.4247 c 0,0.554 0.44599,1 1,1 l 14.0000002,0 c 0.55401,0 1,-0.446 1,-1 l 0,-22 c 0,-0.554 -0.44599,-1 -1,-1 l -14.0000002,0 c -0.55401,0 -1,0.446 -1,1 l 0,22 z m 1,0 0,-22 14.0000002,0 0,22 -14.0000002,0 z"
+             id="rect3799" />
         </g>
       </g>
     </g>

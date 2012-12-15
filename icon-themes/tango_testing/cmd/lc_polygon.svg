@@ -27,7 +27,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -45,16 +45,6 @@
          id="stop3786" />
     </linearGradient>
     <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient3764"
-       id="linearGradient3774"
-       x1="8"
-       y1="0"
-       x2="8"
-       y2="11"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(-2,4)" />
-    <linearGradient
        id="linearGradient3764">
       <stop
          id="stop3766"
@@ -65,43 +55,6 @@
          offset="1"
          style="stop-color:#ededed;stop-opacity:1;" />
     </linearGradient>
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient3764"
-       id="linearGradient3875"
-       gradientUnits="userSpaceOnUse"
-       x1="8"
-       y1="0"
-       x2="8"
-       y2="11" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient3764"
-       id="linearGradient3885"
-       gradientUnits="userSpaceOnUse"
-       x1="8"
-       y1="0"
-       x2="8"
-       y2="11" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient3764"
-       id="linearGradient3895"
-       gradientUnits="userSpaceOnUse"
-       x1="8"
-       y1="0"
-       x2="8"
-       y2="11" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient3782"
-       id="linearGradient3788"
-       x1="8.3125"
-       y1="10.9375"
-       x2="8.875"
-       y2="5.1875"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(0,1031.3622)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient3764"

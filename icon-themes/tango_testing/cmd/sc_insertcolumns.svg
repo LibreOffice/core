@@ -15,219 +15,34 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="sc_deletecolumns.svg"
-   inkscape:export-filename="/home/alexander/libo/icon-themes/tango_testing/cmd/sc_deletecolumns.png"
+   sodipodi:docname="sc_insertcolumns.svg"
+   inkscape:export-filename="/home/alexander/libo/icon-themes/tango_testing/cmd/sc_insertcolumns.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
-     id="defs4"><linearGradient
-   gradientUnits="userSpaceOnUse"
-   y2="21.089184"
-   x2="19.567051"
-   y1="0.52668285"
-   x1="2.50455"
-   id="linearGradient10891"
-   xlink:href="#linearGradient10885"
-   inkscape:collect="always"
-   gradientTransform="translate(-0.00916403,1025.2269)" />
-<linearGradient
-   id="linearGradient10885"
-   inkscape:collect="always">
-  <stop
-     id="stop10887"
-     offset="0"
-     style="stop-color:#ffffff;stop-opacity:1;" />
-  <stop
-     id="stop10889"
-     offset="1"
-     style="stop-color:#ffffff;stop-opacity:0;" />
-</linearGradient>
-<linearGradient
-   id="linearGradient3764">
-  <stop
-     id="stop3766"
-     offset="0"
-     style="stop-color:#ffffff;stop-opacity:1;" />
-  <stop
-     id="stop3768"
-     offset="1"
-     style="stop-color:#ededed;stop-opacity:1;" />
-</linearGradient>
-<linearGradient
-   inkscape:collect="always"
-   xlink:href="#linearGradient3764"
-   id="linearGradient10198"
-   gradientUnits="userSpaceOnUse"
-   gradientTransform="translate(-1048.4872,19.312474)"
-   x1="-0.125"
-   y1="7.8125"
-   x2="15.875"
-   y2="7.8125" />
-
-	
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-	
-  
-
-
-  
-
-
-  
-
-
-  
-
-
-  
-
-
-  
-
-
-  
-
-
-  
-
-
-  
-
-
-  
-
-
-  
-
-
-  
-
-
-  
-
-
-  
-
-
-  
-
-
-  
-
-
-  
-
-
-  
-
-
-  
-
-
-  
-
-
-  
-
-
-  
-
-
-  
-
-
-  
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-  
-
-
-  
-
-
-</defs>
+     id="defs4">
+    <linearGradient
+       id="linearGradient3764">
+      <stop
+         id="stop3766"
+         offset="0"
+         style="stop-color:#ffffff;stop-opacity:1;" />
+      <stop
+         id="stop3768"
+         offset="1"
+         style="stop-color:#ededed;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3764"
+       id="linearGradient10198"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-1048.4872,19.312474)"
+       x1="-0.125"
+       y1="7.8125"
+       x2="15.875"
+       y2="7.8125" />
+  </defs>
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -236,17 +51,17 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="-19.606698"
-     inkscape:cy="16.52852"
+     inkscape:cx="10.993881"
+     inkscape:cy="6.9797317"
      inkscape:document-units="px"
      inkscape:current-layer="g10177"
      showgrid="false"
      inkscape:snap-global="true"
-     inkscape:window-width="681"
+     inkscape:window-width="1366"
      inkscape:window-height="717"
      inkscape:window-x="0"
      inkscape:window-y="28"
-     inkscape:window-maximized="0">
+     inkscape:window-maximized="1">
     <inkscape:grid
        type="xygrid"
        id="grid2996"
@@ -263,7 +78,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -295,7 +110,9 @@
                  width="16"
                  id="rect8875"
                  style="fill:url(#linearGradient10198);fill-opacity:1;stroke:none"
-                 transform="matrix(0,-1,1,0,0,0)" />
+                 transform="matrix(0,-1,1,0,0,0)"
+                 rx="1.000042"
+                 ry="1.000042" />
               <rect
                  y="1032.4247"
                  x="-29.999966"
@@ -304,12 +121,6 @@
                  id="rect7797"
                  style="fill:#73d216;fill-opacity:1;stroke:none"
                  transform="scale(-1,1)" />
-              <path
-                 sodipodi:nodetypes="cccccccccc"
-                 inkscape:connector-curvature="0"
-                 id="rect7799"
-                 d="m 19.000016,1032.4247 -3.4e-5,16 16,0 1.8e-5,-16 z m 1,1 14,0 -5e-5,14 -14.000018,0 z"
-                 style="opacity:0.4;fill:#000000;fill-opacity:1;stroke:none" />
               <rect
                  style="opacity:0.4;fill:#000000;fill-opacity:1;stroke:none"
                  id="rect4870"
@@ -409,6 +220,11 @@
                  width="1"
                  id="rect8764"
                  style="opacity:0.4;fill:#000000;fill-opacity:1;stroke:none" />
+              <path
+                 style="fill:#000000;fill-opacity:1;stroke:none;opacity:0.4"
+                 d="M 1 0 C 0.44597675 0 0 0.44597675 0 1 L 0 15 C 0 15.554023 0.44597675 16 1 16 L 15 16 C 15.554023 16 16 15.554023 16 15 L 16 1 C 16 0.44597675 15.554023 0 15 0 L 1 0 z M 1 1 L 15 1 L 15 15 L 1 15 L 1 1 z "
+                 transform="matrix(-1,0,0,-1,35,1048.4247)"
+                 id="rect3018" />
             </g>
           </g>
         </g>

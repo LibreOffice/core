@@ -22,28 +22,6 @@
   <defs
      id="defs4">
     <linearGradient
-       gradientUnits="userSpaceOnUse"
-       y2="21.089184"
-       x2="19.567051"
-       y1="0.52668285"
-       x1="2.50455"
-       id="linearGradient10891"
-       xlink:href="#linearGradient10885"
-       inkscape:collect="always"
-       gradientTransform="translate(-0.00916403,1025.2269)" />
-    <linearGradient
-       id="linearGradient10885"
-       inkscape:collect="always">
-      <stop
-         id="stop10887"
-         offset="0"
-         style="stop-color:#ffffff;stop-opacity:1;" />
-      <stop
-         id="stop10889"
-         offset="1"
-         style="stop-color:#ffffff;stop-opacity:0;" />
-    </linearGradient>
-    <linearGradient
        id="linearGradient3764">
       <stop
          id="stop3766"
@@ -72,18 +50,18 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="8"
-     inkscape:cx="2.3717332"
-     inkscape:cy="6.6384865"
+     inkscape:zoom="1"
+     inkscape:cx="0.47599543"
+     inkscape:cy="13.919548"
      inkscape:document-units="px"
      inkscape:current-layer="g10867"
      showgrid="false"
      inkscape:snap-global="true"
-     inkscape:window-width="681"
+     inkscape:window-width="1366"
      inkscape:window-height="717"
      inkscape:window-x="0"
      inkscape:window-y="28"
-     inkscape:window-maximized="0">
+     inkscape:window-maximized="1">
     <inkscape:grid
        type="xygrid"
        id="grid2996"
@@ -100,7 +78,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -128,7 +106,9 @@
                width="16"
                height="16.000017"
                x="18.999966"
-               y="1032.4247" />
+               y="1032.4247"
+               rx="1.0000174"
+               ry="1.0000174" />
             <rect
                transform="scale(-1,1)"
                style="fill:#ef2929;fill-opacity:1;stroke:none"
@@ -137,12 +117,6 @@
                height="15.999971"
                x="-29.999966"
                y="1032.4247" />
-            <path
-               style="opacity:0.4;fill:#000000;fill-opacity:1;stroke:none"
-               d="m 19.000016,1032.4247 -3.4e-5,16 16,0 1.8e-5,-16 z m 1,1 14,0 -5e-5,14 -14.000018,0 z"
-               id="rect7799"
-               inkscape:connector-curvature="0"
-               sodipodi:nodetypes="cccccccccc" />
             <rect
                transform="matrix(0,1,-1,0,0,0)"
                y="-33.999966"
@@ -242,6 +216,11 @@
                x="-29.999966"
                y="-1047.4247"
                transform="scale(-1,-1)" />
+            <path
+               style="fill:#000000;fill-opacity:1;stroke:none;opacity:0.4"
+               d="M 1 0 C 0.44599036 0 0 0.44599036 0 1 L 0 15 C 0 15.55401 0.44599036 16 1 16 L 15 16 C 15.55401 16 16 15.55401 16 15 L 16 1 C 16 0.44599036 15.55401 0 15 0 L 1 0 z M 1 1 L 15 1 L 15 15 L 1 15 L 1 1 z "
+               transform="matrix(0,-1,1,0,18.999966,1048.4247)"
+               id="rect3016" />
           </g>
         </g>
       </g>

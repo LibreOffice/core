@@ -22,28 +22,6 @@
   <defs
      id="defs4">
     <linearGradient
-       id="linearGradient4084">
-      <stop
-         style="stop-color:#000000;stop-opacity:1;"
-         offset="0"
-         id="stop4086" />
-      <stop
-         style="stop-color:#262626;stop-opacity:1;"
-         offset="1"
-         id="stop4088" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient3942">
-      <stop
-         style="stop-color:#703600;stop-opacity:1;"
-         offset="0"
-         id="stop3944" />
-      <stop
-         style="stop-color:#703600;stop-opacity:0;"
-         offset="1"
-         id="stop3946" />
-    </linearGradient>
-    <linearGradient
        id="linearGradient3891">
       <stop
          id="stop3893"
@@ -55,118 +33,6 @@
          id="stop3895" />
     </linearGradient>
     <linearGradient
-       id="linearGradient3881">
-      <stop
-         id="stop3883"
-         offset="0"
-         style="stop-color:#626262;stop-opacity:1;" />
-      <stop
-         id="stop3885"
-         offset="1"
-         style="stop-color:#b3b3b3;stop-opacity:1;" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient3863">
-      <stop
-         style="stop-color:#e7e7e7;stop-opacity:1;"
-         offset="0"
-         id="stop3865" />
-      <stop
-         style="stop-color:#ffffff;stop-opacity:0.22745098;"
-         offset="1"
-         id="stop3867" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient3855">
-      <stop
-         style="stop-color:#000000;stop-opacity:0"
-         offset="0"
-         id="stop3857" />
-      <stop
-         style="stop-color:#686868;stop-opacity:0"
-         offset="1"
-         id="stop3859" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient3832">
-      <stop
-         style="stop-color:#0023ab;stop-opacity:1;"
-         offset="0"
-         id="stop3834" />
-      <stop
-         style="stop-color:#00096b;stop-opacity:0;"
-         offset="1"
-         id="stop3836" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient3787">
-      <stop
-         style="stop-color:#e2ab00;stop-opacity:1;"
-         offset="0"
-         id="stop3789" />
-      <stop
-         id="stop3795"
-         offset="0.5625"
-         style="stop-color:#ffeea7;stop-opacity:1;" />
-      <stop
-         style="stop-color:#f0bc00;stop-opacity:1;"
-         offset="0.5625"
-         id="stop3797" />
-      <stop
-         id="stop3799"
-         offset="1"
-         style="stop-color:#fffc95;stop-opacity:1;" />
-    </linearGradient>
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient3787-8"
-       id="linearGradient3852-7"
-       gradientUnits="userSpaceOnUse"
-       x1="8"
-       y1="8"
-       x2="15.5"
-       y2="8"
-       gradientTransform="matrix(1.6854597,-0.0366129,-0.0366129,1.6431828,-20.470604,1030.2751)" />
-    <linearGradient
-       id="linearGradient3787-8">
-      <stop
-         style="stop-color:#e2ab00;stop-opacity:1;"
-         offset="0"
-         id="stop3789-7" />
-      <stop
-         id="stop3795-2"
-         offset="0.5625"
-         style="stop-color:#ffeea7;stop-opacity:1;" />
-      <stop
-         style="stop-color:#f0bc00;stop-opacity:1;"
-         offset="0.5625"
-         id="stop3797-2" />
-      <stop
-         id="stop3799-4"
-         offset="1"
-         style="stop-color:#fffc95;stop-opacity:1;" />
-    </linearGradient>
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient4084"
-       id="linearGradient4096"
-       gradientUnits="userSpaceOnUse"
-       x1="11"
-       y1="12"
-       x2="13"
-       y2="12"
-       gradientTransform="matrix(-1.3618991,0.78629284,-0.78629284,-1.3618991,22.427433,1055.0702)" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient4084"
-       id="linearGradient4149"
-       gradientUnits="userSpaceOnUse"
-       x1="11"
-       y1="12"
-       x2="13"
-       y2="12"
-       gradientTransform="matrix(-3.9980929e-5,2.3094733e-5,-0.62075546,-1.07518,22.41103,1053.8612)" />
-    <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient3891"
        id="linearGradient4191"
@@ -176,64 +42,6 @@
        y1="11.999981"
        x2="20.000011"
        y2="7.9999814" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient3891"
-       id="linearGradient4193"
-       gradientUnits="userSpaceOnUse"
-       x1="10.000011"
-       y1="11.999981"
-       x2="20.000011"
-       y2="7.9999814" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient3891"
-       id="linearGradient4195"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(-1.3618991,0.78629284,-0.78629284,-1.3618991,36.915508,1061.6864)"
-       x1="10.000011"
-       y1="11.999981"
-       x2="20.000011"
-       y2="7.9999814" />
-    <linearGradient
-       gradientUnits="userSpaceOnUse"
-       y2="16"
-       x2="11"
-       y1="6"
-       x1="11"
-       id="linearGradient4168"
-       xlink:href="#linearGradient4162"
-       inkscape:collect="always" />
-    <linearGradient
-       gradientUnits="userSpaceOnUse"
-       y2="20"
-       x2="13"
-       y1="6"
-       x1="13"
-       id="linearGradient4351"
-       xlink:href="#linearGradient4345"
-       inkscape:collect="always" />
-    <linearGradient
-       id="linearGradient3764-2">
-      <stop
-         style="stop-color:#8ae234;stop-opacity:1;"
-         offset="0"
-         id="stop3766-7" />
-      <stop
-         style="stop-color:#73d216;stop-opacity:1;"
-         offset="1"
-         id="stop3768-3" />
-    </linearGradient>
-    <linearGradient
-       y2="16"
-       x2="17"
-       y1="2"
-       x1="17"
-       gradientTransform="translate(-2,4)"
-       gradientUnits="userSpaceOnUse"
-       id="linearGradient3501-6"
-       xlink:href="#linearGradient3764-2"
-       inkscape:collect="always" />
     <linearGradient
        id="linearGradient3782-3">
       <stop
@@ -246,53 +54,6 @@
          style="stop-color:#646464;stop-opacity:1;" />
     </linearGradient>
     <linearGradient
-       y2="11"
-       x2="8"
-       y1="0"
-       x1="8"
-       gradientTransform="translate(-2,4)"
-       gradientUnits="userSpaceOnUse"
-       id="linearGradient3511"
-       xlink:href="#linearGradient3764"
-       inkscape:collect="always" />
-    <linearGradient
-       y2="11"
-       x2="8"
-       y1="0"
-       x1="8"
-       gradientTransform="translate(-2,4)"
-       gradientUnits="userSpaceOnUse"
-       id="linearGradient3501"
-       xlink:href="#linearGradient3764"
-       inkscape:collect="always" />
-    <linearGradient
-       y2="11"
-       x2="8"
-       y1="0"
-       x1="8"
-       gradientUnits="userSpaceOnUse"
-       id="linearGradient3895"
-       xlink:href="#linearGradient3764"
-       inkscape:collect="always" />
-    <linearGradient
-       y2="11"
-       x2="8"
-       y1="0"
-       x1="8"
-       gradientUnits="userSpaceOnUse"
-       id="linearGradient3885"
-       xlink:href="#linearGradient3764"
-       inkscape:collect="always" />
-    <linearGradient
-       y2="11"
-       x2="8"
-       y1="0"
-       x1="8"
-       gradientUnits="userSpaceOnUse"
-       id="linearGradient3875"
-       xlink:href="#linearGradient3764"
-       inkscape:collect="always" />
-    <linearGradient
        id="linearGradient3764">
       <stop
          style="stop-color:#729fcf;stop-opacity:1;"
@@ -302,52 +63,6 @@
          style="stop-color:#3465a4;stop-opacity:1;"
          offset="1"
          id="stop3768" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient3782">
-      <stop
-         id="stop3784"
-         offset="0"
-         style="stop-color:#393939;stop-opacity:1;" />
-      <stop
-         id="stop3786"
-         offset="1"
-         style="stop-color:#848484;stop-opacity:1;" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient4339">
-      <stop
-         id="stop4341"
-         offset="0"
-         style="stop-color:#729fcf;stop-opacity:1;" />
-      <stop
-         id="stop4343"
-         offset="1"
-         style="stop-color:#3465a4;stop-opacity:1;" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient4345"
-       inkscape:collect="always">
-      <stop
-         id="stop4347"
-         offset="0"
-         style="stop-color:#ffffff;stop-opacity:1;" />
-      <stop
-         id="stop4349"
-         offset="1"
-         style="stop-color:#ffffff;stop-opacity:0;" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient4162"
-       inkscape:collect="always">
-      <stop
-         id="stop4164"
-         offset="0"
-         style="stop-color:#ffffff;stop-opacity:1;" />
-      <stop
-         id="stop4166"
-         offset="1"
-         style="stop-color:#ffffff;stop-opacity:0;" />
     </linearGradient>
     <linearGradient
        inkscape:collect="always"
