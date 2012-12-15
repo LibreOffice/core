@@ -709,7 +709,6 @@ sal_Bool ImpVclMEdit::HandleCommand( const CommandEvent& rCEvt )
 TextWindow::TextWindow( Window* pParent ) : Window( pParent )
 {
     mbInMBDown = sal_False;
-    mbSelectOnTab = sal_True;
     mbFocusSelectionHide = sal_False;
     mbIgnoreTab = sal_False;
     mbActivePopup = sal_False;

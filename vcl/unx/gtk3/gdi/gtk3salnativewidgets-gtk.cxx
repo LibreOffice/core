@@ -966,7 +966,6 @@ void GtkSalGraphics::renderAreaToPix( cairo_t *cr,
     long ax = region->x;
     long ay = region->y;
     long awidth = region->width;
-    long aheight = region->height;
 
     /* Get tje cairo surface and the data */
     cairo_surface_t* surface = cairo_get_target(cr);
@@ -979,7 +978,7 @@ void GtkSalGraphics::renderAreaToPix( cairo_t *cr,
     unsigned char *src = data.get();
     src += (int)ay * nStride + (int)ax * 3;
     awidth = MIN (region->width, size.getX() - ax);
-    aheight = MIN (region->height, size.getY() - ay);
+    long aheight = MIN (region->height, size.getY() - ay);
 
     for (int y = 0; y < aheight; ++y)
     {

@@ -172,11 +172,10 @@ void WinSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
     DWORD           i;
     DWORD           nBytes = 0;
     DWORD           nInfoPrn4 = 0;
-    PRINTER_INFO_4W* pWinInfo4 = NULL;
     EnumPrintersW( PRINTER_ENUM_LOCAL | PRINTER_ENUM_CONNECTIONS, NULL, 4, NULL, 0, &nBytes, &nInfoPrn4 );
     if ( nBytes )
     {
-        pWinInfo4 = (PRINTER_INFO_4W*) rtl_allocateMemory( nBytes );
+        PRINTER_INFO_4W* pWinInfo4 = (PRINTER_INFO_4W*) rtl_allocateMemory( nBytes );
         if ( EnumPrintersW( PRINTER_ENUM_LOCAL | PRINTER_ENUM_CONNECTIONS, NULL, 4, (LPBYTE)pWinInfo4, nBytes, &nBytes, &nInfoPrn4 ) )
         {
             for ( i = 0; i < nInfoPrn4; i++ )
@@ -335,8 +334,7 @@ static sal_Bool ImplTestSalJobSetup( WinSalInfoPrinter* pPrinter,
                 return FALSE;
             }
             BYTE *pBuffer = (BYTE*)_alloca( nSysJobSize );
-            LONG nRet = -1;
-            nRet = DocumentPropertiesW( 0, hPrn,
+            LONG nRet = DocumentPropertiesW( 0, hPrn,
                                         pPrinterNameW,
                                         (LPDEVMODEW)pBuffer, NULL, DM_OUT_BUFFER );
             if( nRet < 0 )
@@ -390,14 +388,13 @@ static sal_Bool ImplUpdateSalJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup
         return FALSE;
 
     LONG            nRet;
-    LONG            nSysJobSize = -1;
     HWND            hWnd = 0;
     DWORD           nMode = DM_OUT_BUFFER;
     sal_uLong           nDriverDataLen = 0;
     SalDriverData*  pOutBuffer = NULL;
     BYTE*           pInBuffer = NULL;
 
-    nSysJobSize = DocumentPropertiesW( hWnd, hPrn,
+    LONG nSysJobSize = DocumentPropertiesW( hWnd, hPrn,
                                        pPrinterNameW,
                                        NULL, NULL, 0 );
     if ( nSysJobSize < 0 )
@@ -1182,10 +1179,9 @@ void WinSalInfoPrinter::InitPaperFormats( const ImplJobSetup* pSetupData )
     if( nCount == GDI_ERROR )
         nCount = 0;
 
-    POINT* pPaperSizes = NULL;
     if( nCount )
     {
-        pPaperSizes = (POINT*)rtl_allocateZeroMemory(nCount*sizeof(POINT));
+        POINT* pPaperSizes = (POINT*)rtl_allocateZeroMemory(nCount*sizeof(POINT));
         ImplDeviceCaps( this, DC_PAPERSIZE, (BYTE*)pPaperSizes, pSetupData );
 
         sal_Unicode* pNamesBuffer = (sal_Unicode*)rtl_allocateMemory(nCount*64*sizeof(sal_Unicode));

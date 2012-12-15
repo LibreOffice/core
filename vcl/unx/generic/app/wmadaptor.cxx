@@ -349,12 +349,11 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
     unsigned long       nItems      = 0;
     unsigned long       nBytesLeft  = 0;
     unsigned char*  pProperty   = NULL;
-    bool                bNetWM      = false;
 
     initAtoms();
 
     // check for NetWM
-    bNetWM = getNetWmName();
+    bool bNetWM = getNetWmName();
     if( bNetWM
         && XGetWindowProperty( m_pDisplay,
                                m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultXScreen() ),
