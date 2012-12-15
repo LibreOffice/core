@@ -666,6 +666,7 @@ ScColorScale2FrmtEntry::ScColorScale2FrmtEntry( Window* pParent, ScDocument* pDo
 
     maLbType.SelectEntryPos(0);
     maLbColorFormat.SelectEntryPos(0);
+    Init();
     if(pFormat)
     {
         ScColorScaleFormat::const_iterator itr = pFormat->begin();
@@ -682,7 +683,8 @@ ScColorScale2FrmtEntry::ScColorScale2FrmtEntry( Window* pParent, ScDocument* pDo
 
     maLbColorFormat.SetSelectHdl( LINK( pParent, ScCondFormatList, ColFormatTypeHdl ) );
 
-    Init();
+    EntryTypeHdl(&maLbEntryTypeMin);
+    EntryTypeHdl(&maLbEntryTypeMax);
 }
 
 void ScColorScale2FrmtEntry::Init()
@@ -722,9 +724,6 @@ void ScColorScale2FrmtEntry::Init()
         maLbColMin.SetUpdateMode( sal_True );
         maLbColMax.SetUpdateMode( sal_True );
     }
-
-    EntryTypeHdl(&maLbEntryTypeMin);
-    EntryTypeHdl(&maLbEntryTypeMax);
 }
 
 ScFormatEntry* ScColorScale2FrmtEntry::createColorscaleEntry() const
@@ -818,6 +817,7 @@ ScColorScale3FrmtEntry::ScColorScale3FrmtEntry( Window* pParent, ScDocument* pDo
     maLbEntryTypeMiddle.RemoveEntry(0);
     maLbEntryTypeMax.RemoveEntry(0);
 
+    Init();
     maLbType.SelectEntryPos(0);
     if(pFormat)
     {
@@ -840,8 +840,9 @@ ScColorScale3FrmtEntry::ScColorScale3FrmtEntry( Window* pParent, ScDocument* pDo
     FreeResource();
 
     maLbColorFormat.SetSelectHdl( LINK( pParent, ScCondFormatList, ColFormatTypeHdl ) );
-
-    Init();
+    EntryTypeHdl(&maLbEntryTypeMin);
+    EntryTypeHdl(&maLbEntryTypeMiddle);
+    EntryTypeHdl(&maLbEntryTypeMax);
 }
 
 void ScColorScale3FrmtEntry::Init()
@@ -887,10 +888,6 @@ void ScColorScale3FrmtEntry::Init()
         maLbColMiddle.SetUpdateMode( sal_True );
         maLbColMax.SetUpdateMode( sal_True );
     }
-
-    EntryTypeHdl(&maLbEntryTypeMin);
-    EntryTypeHdl(&maLbEntryTypeMiddle);
-    EntryTypeHdl(&maLbEntryTypeMax);
 }
 
 ScFormatEntry* ScColorScale3FrmtEntry::createColorscaleEntry() const
