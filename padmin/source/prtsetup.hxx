@@ -55,9 +55,9 @@ class RTSDialog : public TabDialog
     String                  m_aPrinter;
 
     // controls
-    TabControl              m_aTabControl;
-    OKButton                m_aOKButton;
-    CancelButton            m_aCancelButton;
+    TabControl*             m_pTabControl;
+    OKButton*               m_pOKButton;
+    CancelButton*           m_pCancelButton;
 
     // pages
     RTSPaperPage*           m_pPaperPage;
@@ -67,7 +67,7 @@ class RTSDialog : public TabDialog
     RTSCommandPage*         m_pCommandPage;
 
     // some resources
-    String                  m_aInvalidString;
+    OUString                m_aInvalidString;
 
     DECL_LINK( ActivatePage, TabControl* );
     DECL_LINK( ClickButton, Button* );

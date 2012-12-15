@@ -79,21 +79,20 @@ void RTSDialog::insertAllPPDValues( ListBox& rBox, const PPDParser* pParser, con
  * RTSDialog
  */
 
-RTSDialog::RTSDialog( const PrinterInfo& rJobData, const String& rPrinter, bool bAllPages, Window* pParent ) :
-        TabDialog(  pParent, PaResId( RID_RTS_RTSDIALOG ) ),
-        m_aJobData( rJobData ),
-        m_aPrinter( rPrinter ),
-        m_aTabControl( this, PaResId( RID_RTS_RTSDIALOG_TABCONTROL ) ),
-        m_aOKButton( this ),
-        m_aCancelButton( this ),
-        m_pPaperPage( NULL ),
-        m_pDevicePage( NULL ),
-        m_pOtherPage( NULL ),
-        m_pFontSubstPage( NULL ),
-        m_pCommandPage( NULL ),
-        m_aInvalidString( PaResId( RID_RTS_RTSDIALOG_INVALID_TXT ) )
+RTSDialog::RTSDialog( const PrinterInfo& rJobData, const String& rPrinter, bool bAllPages, Window* pParent )
+    : TabDialog(pParent, "PrinterPropertiesDialog", "spa/ui/printerpropertiesdialog.ui" )
+    , m_aJobData(rJobData)
+    , m_aPrinter(rPrinter)
+    , m_pPaperPage(NULL)
+    , m_pDevicePage(NULL)
+    , m_pOtherPage(NULL)
+    , m_pFontSubstPage(NULL)
+    , m_pCommandPage(NULL)
+    , m_aInvalidString(PaResId(RID_RTS_RTSDIALOG_INVALID_TXT).toString())
 {
-    FreeResource();
+    get(m_pOKButton, "ok");
+    get(m_pCancelButton, "cancel");
+    get(m_pTabControl, "notebook");
 
     String aTitle( GetText() );
     aTitle.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s" ) ), m_aJobData.m_aPrinterName );
@@ -101,23 +100,20 @@ RTSDialog::RTSDialog( const PrinterInfo& rJobData, const String& rPrinter, bool 
 
     if( ! bAllPages )
     {
-        m_aTabControl.RemovePage( RID_RTS_OTHERPAGE );
-        m_aTabControl.RemovePage( RID_RTS_FONTSUBSTPAGE );
-        m_aTabControl.RemovePage( RID_RTS_COMMANDPAGE );
+        m_pTabControl->RemovePage(m_pTabControl->GetPageId("other"));
+        m_pTabControl->RemovePage(m_pTabControl->GetPageId("font"));
+        m_pTabControl->RemovePage(m_pTabControl->GetPageId("command"));
     }
     else if( m_aJobData.m_aDriverName.compareToAscii( "CUPS:", 5 ) == 0 && ! PrinterInfoManager::get().isCUPSDisabled() )
     {
         // command page makes no sense for CUPS printers
-        m_aTabControl.RemovePage( RID_RTS_COMMANDPAGE );
+        m_pTabControl->RemovePage(m_pTabControl->GetPageId("command"));
     }
 
-    m_aTabControl.SetActivatePageHdl( LINK( this, RTSDialog, ActivatePage ) );
-    m_aOKButton.SetClickHdl( LINK( this, RTSDialog, ClickButton ) );
-    m_aCancelButton.SetClickHdl( LINK( this, RTSDialog, ClickButton ) );
-    ActivatePage( &m_aTabControl );
-
-    m_aOKButton.Show();
-    m_aCancelButton.Show();
+    m_pTabControl->SetActivatePageHdl( LINK( this, RTSDialog, ActivatePage ) );
+    m_pOKButton->SetClickHdl( LINK( this, RTSDialog, ClickButton ) );
+    m_pCancelButton->SetClickHdl( LINK( this, RTSDialog, ClickButton ) );
+    ActivatePage(m_pTabControl);
 }
 
 // --------------------------------------------------------------------------
@@ -140,35 +136,33 @@ RTSDialog::~RTSDialog()
 
 IMPL_LINK( RTSDialog, ActivatePage, TabControl*, pTabCtrl )
 {
-    if( pTabCtrl != &m_aTabControl )
+    if( pTabCtrl != m_pTabControl )
         return 0;
 
-    sal_uInt16 nId = m_aTabControl.GetCurPageId();
-
-    if ( ! m_aTabControl.GetTabPage( nId ) )
+    sal_uInt16 nId = m_pTabControl->GetCurPageId();
+    OString sPage = m_pTabControl->GetPageName(nId);
+    if ( ! m_pTabControl->GetTabPage( nId ) )
     {
         TabPage *pPage = NULL;
-        if( nId == RID_RTS_PAPERPAGE )
+        if (sPage == "paper")
             pPage = m_pPaperPage = new RTSPaperPage( this );
-        else if( nId == RID_RTS_DEVICEPAGE )
+        else if (sPage == "device")
             pPage = m_pDevicePage = new RTSDevicePage( this );
-        else if( nId == RID_RTS_OTHERPAGE )
+        else if (sPage == "other")
             pPage = m_pOtherPage = new RTSOtherPage( this );
-        else if( nId == RID_RTS_FONTSUBSTPAGE )
+        else if (sPage == "font")
             pPage = m_pFontSubstPage = new RTSFontSubstPage( this );
-        else if( nId == RID_RTS_COMMANDPAGE )
+        else if (sPage == "command")
             pPage = m_pCommandPage = new RTSCommandPage( this );
         if( pPage )
-            m_aTabControl.SetTabPage( nId, pPage );
+            m_pTabControl->SetTabPage( nId, pPage );
     }
     else
     {
-        switch( nId )
-        {
-            case RID_RTS_PAPERPAGE:     m_pPaperPage->update();break;
-            case RID_RTS_DEVICEPAGE:    m_pDevicePage->update();break;
-            default: break;
-        }
+        if (sPage == "paper")
+            m_pPaperPage->update();
+        else if (sPage == "device")
+            m_pDevicePage->update();
     }
 
     return 0;
@@ -178,7 +172,7 @@ IMPL_LINK( RTSDialog, ActivatePage, TabControl*, pTabCtrl )
 
 IMPL_LINK( RTSDialog, ClickButton, Button*, pButton )
 {
-    if( pButton == &m_aOKButton )
+    if( pButton == m_pOKButton )
     {
         // refresh the changed values
         if( m_pPaperPage )
@@ -203,7 +197,7 @@ IMPL_LINK( RTSDialog, ClickButton, Button*, pButton )
 
         EndDialog( 1 );
     }
-    else if( pButton == &m_aCancelButton )
+    else if( pButton == m_pCancelButton )
         EndDialog( 0 );
 
     return 0;
@@ -216,7 +210,7 @@ IMPL_LINK( RTSDialog, ClickButton, Button*, pButton )
  */
 
 RTSPaperPage::RTSPaperPage(RTSDialog* pParent)
-    : TabPage(&pParent->m_aTabControl, "PrinterPaperPage", "spa/ui/printerpaperpage.ui" )
+    : TabPage(pParent->m_pTabControl, "PrinterPaperPage", "spa/ui/printerpaperpage.ui" )
     , m_pParent( pParent )
 {
     get(m_pPaperText, "paperft");
@@ -341,7 +335,7 @@ IMPL_LINK( RTSPaperPage, SelectHdl, ListBox*, pBox )
  */
 
 RTSDevicePage::RTSDevicePage( RTSDialog* pParent )
-    : TabPage(&pParent->m_aTabControl, "PrinterDevicePage", "spa/ui/printerdevicepage.ui" )
+    : TabPage(pParent->m_pTabControl, "PrinterDevicePage", "spa/ui/printerdevicepage.ui" )
     , m_pParent( pParent )
 {
     get(m_pPPDKeyBox, "options");
@@ -530,7 +524,7 @@ void RTSDevicePage::FillValueBox( const PPDKey* pKey )
  */
 
 RTSOtherPage::RTSOtherPage( RTSDialog* pParent ) :
-        TabPage( &pParent->m_aTabControl, PaResId( RID_RTS_OTHERPAGE ) ),
+        TabPage( pParent->m_pTabControl, PaResId( RID_RTS_OTHERPAGE ) ),
         m_pParent( pParent ),
         m_aLeftTxt( this, PaResId( RID_RTS_OTHER_LEFTMARGIN_TXT ) ),
         m_aLeftLB( this, PaResId( RID_RTS_OTHER_LEFTMARGIN_BOX ) ),
@@ -642,7 +636,7 @@ IMPL_LINK( RTSOtherPage, ClickBtnHdl, Button*, pButton )
  */
 
 RTSFontSubstPage::RTSFontSubstPage( RTSDialog* pParent ) :
-        TabPage( &pParent->m_aTabControl, PaResId( RID_RTS_FONTSUBSTPAGE ) ),
+        TabPage( pParent->m_pTabControl, PaResId( RID_RTS_FONTSUBSTPAGE ) ),
         m_pParent( pParent ),
         m_aSubstitutionsText( this, PaResId( RID_RTS_FS_SUBST_TXT ) ),
         m_aSubstitutionsBox( this, PaResId( RID_RTS_FS_SUBST_BOX ) ),

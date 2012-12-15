@@ -19,10 +19,7 @@
 #ifndef _PAD_RTSETUP_HRC_
 #define _PAD_RTSETUP_HRC_
 
-#define RID_RTS_RTSDIALOG                   4001
-#define RID_RTS_RTSDIALOG_INVALID_TXT       1
-#define RID_RTS_RTSDIALOG_FROMDRIVER_TXT    2
-#define RID_RTS_RTSDIALOG_TABCONTROL        3
+#define RID_RTS_RTSDIALOG_INVALID_TXT       4001
 
 #define RID_RTS_OTHERPAGE                   4002
 #define RID_RTS_OTHER_LEFTMARGIN_TXT        1
@@ -36,9 +33,6 @@
 #define RID_RTS_OTHER_COMMENT_TXT           9
 #define RID_RTS_OTHER_COMMENT_EDT           10
 #define RID_RTS_OTHER_DEFAULT_BTN           11
-
-#define RID_RTS_DEVICEPAGE                  4003
-#define RID_RTS_PAPERPAGE                   4004
 
 #define RID_RTS_FONTSUBSTPAGE               4005
 #define RID_RTS_FS_SUBST_TXT                1

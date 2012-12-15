@@ -214,7 +214,7 @@ void CommandStore::setFaxCommands( const ::std::list< String >& rCommands )
 
 
 RTSCommandPage::RTSCommandPage( RTSDialog* pParent ) :
-        TabPage( &pParent->m_aTabControl, PaResId( RID_RTS_COMMANDPAGE ) ),
+        TabPage( pParent->m_pTabControl, PaResId( RID_RTS_COMMANDPAGE ) ),
         m_pParent( pParent ),
         m_aCommandsCB( this, PaResId( RID_RTS_CMD_CB_COMMANDS ) ),
         m_aExternalCB( this, PaResId( RID_RTS_CMD_CB_EXTERNAL ) ),

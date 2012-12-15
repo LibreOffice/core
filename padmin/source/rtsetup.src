@@ -18,50 +18,9 @@
 
 #include "rtsetup.hrc"
 
-TabDialog RID_RTS_RTSDIALOG
+String RID_RTS_RTSDIALOG_INVALID_TXT
 {
-    Moveable = TRUE;
-    Sizeable = TRUE;
-    Closeable = TRUE;
-    SVLook = TRUE;
-
-    TabControl RID_RTS_RTSDIALOG_TABCONTROL
-    {
-        OutputSize = TRUE;
-        PageList =
-        {
-            PageItem
-            {
-                Identifier = RID_RTS_COMMANDPAGE;
-                Text [ en-US ] = "Command";
-            };
-            PageItem
-            {
-                Identifier = RID_RTS_PAPERPAGE;
-                Text [ en-US ] = "Paper";
-            };
-            PageItem
-            {
-                Identifier = RID_RTS_DEVICEPAGE;
-                Text [ en-US ] = "Device";
-            };
-            PageItem
-            {
-                Identifier = RID_RTS_FONTSUBSTPAGE;
-                Text [ en-US ] = "Font Replacement";
-            };
-            PageItem
-            {
-                Identifier = RID_RTS_OTHERPAGE;
-                Text [ en-US ] = "Other Settings";
-            };
-        };
-    };
-    String RID_RTS_RTSDIALOG_INVALID_TXT
-    {
-        Text [ en-US ] = "<ignore>";
-    };
-    Text [ en-US ] = "Properties of %s";
+    Text [ en-US ] = "<ignore>";
 };
 
 TabPage RID_RTS_FONTSUBSTPAGE
