@@ -43,7 +43,6 @@
 struct ImplTabItem
 {
     sal_uInt16              mnId;
-    sal_uInt16              mnTabPageResId;
     TabPage*            mpTabPage;
     String              maText;
     String              maFormatText;
@@ -56,7 +55,7 @@ struct ImplTabItem
     Image               maTabImage;
 
     ImplTabItem()
-    : mnId( 0 ), mnTabPageResId( 0 ), mpTabPage( NULL ),
+    : mnId( 0 ), mpTabPage( NULL ),
       mnLine( 0 ), mbFullVisible( sal_False ), mbEnabled( true )
     {}
 };
@@ -1652,8 +1651,8 @@ void TabControl::InsertPage( const ResId& rResId, sal_uInt16 nPos )
     // PageResID
     if ( nObjMask & RSC_TABCONTROLITEM_PAGERESID )
     {
-        ImplTabItem& rItem = mpTabCtrlData->maItemList[ GetPagePos( nItemId ) ];
-        rItem.mnTabPageResId = sal::static_int_cast<sal_uInt16>(ReadLongRes());
+        //skip unused TabPageResId value
+        ReadLongRes();
     }
 }
 
@@ -1697,7 +1696,6 @@ void TabControl::InsertPage( sal_uInt16 nPageId, const XubString& rText,
     // init new page item
     pItem->mnId             = nPageId;
     pItem->mpTabPage        = NULL;
-    pItem->mnTabPageResId   = 0;
     pItem->maText           = rText;
     pItem->mbFullVisible    = sal_False;
 
