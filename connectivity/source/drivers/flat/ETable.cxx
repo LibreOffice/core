@@ -132,7 +132,7 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
             {
                 if ( bHasHeaderLine )
                 {
-                    aHeaderLine.GetTokenSpecial(aColumnName,nStartPosHeaderLine,m_cFieldDelimiter,m_cStringDelimiter);
+                    aColumnName = aHeaderLine.GetTokenSpecial(nStartPosHeaderLine,m_cFieldDelimiter,m_cStringDelimiter);
                     if ( !aColumnName.Len() )
                     {
                         aColumnName = 'C';
@@ -192,14 +192,13 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine,x
         if ( bNumeric )
         {
             // first without fielddelimiter
-            String aField;
-            aFirstLine.GetTokenSpecial(aField,nStartPosFirstLine,m_cFieldDelimiter,'\0');
+            String aField = aFirstLine.GetTokenSpecial(nStartPosFirstLine,m_cFieldDelimiter,'\0');
             if (aField.Len() == 0 ||
                 (m_cStringDelimiter && m_cStringDelimiter == aField.GetChar(0)))
             {
                 bNumeric = sal_False;
                 if ( m_cStringDelimiter != '\0' )
-                    aFirstLine.GetTokenSpecial(aField,nStartPosFirstLine2,m_cFieldDelimiter,m_cStringDelimiter);
+                    aField = aFirstLine.GetTokenSpecial(nStartPosFirstLine2,m_cFieldDelimiter,m_cStringDelimiter);
                 else
                     nStartPosFirstLine2 = nStartPosFirstLine;
             }
@@ -207,7 +206,7 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine,x
             {
                 String aField2;
                 if ( m_cStringDelimiter != '\0' )
-                    aFirstLine.GetTokenSpecial(aField2,nStartPosFirstLine2,m_cFieldDelimiter,m_cStringDelimiter);
+                    aField2 = aFirstLine.GetTokenSpecial(nStartPosFirstLine2,m_cFieldDelimiter,m_cStringDelimiter);
                 else
                     aField2 = aField;
 
@@ -284,8 +283,7 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine,x
         }
         else if ( io_nType == DataType::DATE || io_nType == DataType::TIMESTAMP || io_nType == DataType::TIME)
         {
-            String aField;
-            aFirstLine.GetTokenSpecial(aField,nStartPosFirstLine,m_cFieldDelimiter,'\0');
+            String aField = aFirstLine.GetTokenSpecial(nStartPosFirstLine,m_cFieldDelimiter,'\0');
             if (aField.Len() == 0 ||
                 (m_cStringDelimiter && m_cStringDelimiter == aField.GetChar(0)))
             {
@@ -294,7 +292,7 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine,x
             {
                 String aField2;
                 if ( m_cStringDelimiter != '\0' )
-                    aFirstLine.GetTokenSpecial(aField2,nStartPosFirstLine2,m_cFieldDelimiter,m_cStringDelimiter);
+                    aField2 = aFirstLine.GetTokenSpecial(nStartPosFirstLine2,m_cFieldDelimiter,m_cStringDelimiter);
                 else
                     aField2 = aField;
                 if (aField2.Len() )
@@ -375,21 +373,19 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine,x
     }
     else
     {
-        String aField;
-        aFirstLine.GetTokenSpecial(aField,nStartPosFirstLine,m_cFieldDelimiter,'\0');
+        String aField = aFirstLine.GetTokenSpecial(nStartPosFirstLine,m_cFieldDelimiter,'\0');
         if (aField.Len() == 0 ||
                 (m_cStringDelimiter && m_cStringDelimiter == aField.GetChar(0)))
         {
             if ( m_cStringDelimiter != '\0' )
-                aFirstLine.GetTokenSpecial(aField,nStartPosFirstLine2,m_cFieldDelimiter,m_cStringDelimiter);
+                aField = aFirstLine.GetTokenSpecial(nStartPosFirstLine2,m_cFieldDelimiter,m_cStringDelimiter);
             else
                 nStartPosFirstLine2 = nStartPosFirstLine;
         }
         else
         {
-            String aField2;
             if ( m_cStringDelimiter != '\0' )
-                aFirstLine.GetTokenSpecial(aField2,nStartPosFirstLine2,m_cFieldDelimiter,m_cStringDelimiter);
+                aFirstLine.GetTokenSpecial(nStartPosFirstLine2,m_cFieldDelimiter,m_cStringDelimiter);
         }
     }
 }
@@ -614,14 +610,13 @@ sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sal
     const sal_Unicode cThousandDelimiter = pConnection->getThousandDelimiter();
     // Fields:
     xub_StrLen nStartPos = 0;
-    String aStr;
     OSQLColumns::Vector::const_iterator aIter = _rCols.get().begin();
     OSQLColumns::Vector::const_iterator aEnd = _rCols.get().end();
     const OValueRefVector::Vector::size_type nCount = _rRow->get().size();
     for (OValueRefVector::Vector::size_type i = 1; aIter != aEnd && i < nCount;
          ++aIter, i++)
     {
-        m_aCurrentLine.GetTokenSpecial(aStr,nStartPos,m_cFieldDelimiter,m_cStringDelimiter);
+        String aStr = m_aCurrentLine.GetTokenSpecial(nStartPos,m_cFieldDelimiter,m_cStringDelimiter);
 
         if (aStr.Len() == 0)
             (_rRow->get())[i]->setNull();

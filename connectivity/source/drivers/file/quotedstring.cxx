@@ -85,10 +85,10 @@ namespace connectivity
     }
 
     //------------------------------------------------------------------
-    void QuotedTokenizedString::GetTokenSpecial( String& _rStr,xub_StrLen& nStartPos, sal_Unicode cTok, sal_Unicode cStrDel ) const
+    String QuotedTokenizedString::GetTokenSpecial(xub_StrLen& nStartPos, sal_Unicode cTok, sal_Unicode cStrDel) const
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "QuotedTokenizedString::GetTokenCount" );
-        _rStr.Erase();
+        String aStr;
         const xub_StrLen nLen = m_sString.Len();
         if ( nLen )
         {
@@ -98,9 +98,9 @@ namespace connectivity
             if (bInString )
                 ++nStartPos;            // skip this character!
             if ( nStartPos >= nLen )
-                return;
+                return aStr;
 
-            sal_Unicode* pData = _rStr.AllocBuffer( nLen - nStartPos + 1 );
+            sal_Unicode* pData = aStr.AllocBuffer( nLen - nStartPos + 1 );
             const sal_Unicode* pStart = pData;
             // Search until end of string for the first not matching character
             for( xub_StrLen i = nStartPos; i < nLen; ++i )
@@ -147,8 +147,9 @@ namespace connectivity
                 }
             } // for( xub_StrLen i = nStartPos; i < nLen; ++i )
             *pData = 0;
-            _rStr.ReleaseBufferAccess(xub_StrLen(pData - pStart));
+            aStr.ReleaseBufferAccess(xub_StrLen(pData - pStart));
         }
+        return aStr;
     }
 }
 
