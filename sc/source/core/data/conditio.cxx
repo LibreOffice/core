@@ -1684,21 +1684,21 @@ bool ScCondDateFormatEntry::IsValid( const ScAddress& rPos ) const
                 return true;
             break;
         case condformat::LASTWEEK:
-            if( rActDate.GetYear() == aCellDate.GetYear() && rActDate.GetMonth() == aCellDate.GetMonth() )
+            if( rActDate.GetYear() == aCellDate.GetYear() )
             {
                 if( rActDate.GetWeekOfYear( SUNDAY ) == aCellDate.GetWeekOfYear( SUNDAY ) + 1 )
                     return true;
             }
             break;
         case condformat::THISWEEK:
-            if( rActDate.GetYear() == aCellDate.GetYear() && rActDate.GetMonth() == aCellDate.GetMonth() )
+            if( rActDate.GetYear() == aCellDate.GetYear() )
             {
                 if( rActDate.GetWeekOfYear( SUNDAY ) == aCellDate.GetWeekOfYear( SUNDAY ) )
                     return true;
             }
             break;
         case condformat::NEXTWEEK:
-            if( rActDate.GetYear() == aCellDate.GetYear() && rActDate.GetMonth() == aCellDate.GetMonth() )
+            if( rActDate.GetYear() == aCellDate.GetYear() )
             {
                 if( rActDate.GetWeekOfYear( SUNDAY ) == aCellDate.GetWeekOfYear( SUNDAY ) - 1 )
                     return true;
