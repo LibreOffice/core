@@ -715,7 +715,7 @@ static const FunctionData saFuncTableOox[] =
     { 0,                        "COUNTIFS",             481,    NOID,   2,  MX, V, { RO, VR }, FUNCFLAG_PARAMPAIRS },
     { 0,                        "SUMIFS",               482,    NOID,   3,  MX, V, { RO, RO, VR }, FUNCFLAG_PARAMPAIRS },
     { 0,                        "AVERAGEIF",            483,    NOID,   2,  3,  V, { RO, VR, RO }, 0 },
-    { 0,                        "AVERAGEIFS",           484,    NOID,   3,  MX, V, { RO, RO, VR }, 0 }
+    { 0,                        "AVERAGEIFS",           484,    NOID,   3,  MX, V, { RO, RO, VR }, FUNCFLAG_PARAMPAIRS }
 };
 
 /** Functions defined by OpenFormula, but not supported by Calc or by Excel. */
