@@ -5540,7 +5540,7 @@ void ScInterpreter::ScCountIf()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScCountIf" );
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
-        String rString;
+        String aString;
         double fVal = 0.0;
         bool bIsString = true;
         switch ( GetStackType() )
@@ -5568,11 +5568,11 @@ void ScInterpreter::ScCountIf()
                             bIsString = false;
                         }
                         else
-                            GetCellString(rString, pCell);
+                            GetCellString(aString, pCell);
                         break;
                     case CELLTYPE_STRING :
                     case CELLTYPE_EDIT :
-                        GetCellString(rString, pCell);
+                        GetCellString(aString, pCell);
                         break;
                     default:
                         fVal = 0.0;
@@ -5585,12 +5585,12 @@ void ScInterpreter::ScCountIf()
             case svExternalDoubleRef:
             {
                 ScMatValType nType = GetDoubleOrStringFromMatrix( fVal,
-                        rString);
+                        aString);
                 bIsString = ScMatrix::IsNonValueType( nType);
             }
             break;
             case svString:
-                rString = GetString();
+                aString = GetString();
             break;
             default:
             {
@@ -5677,7 +5677,7 @@ void ScInterpreter::ScCountIf()
                 }
                 else
                 {
-                    rParam.FillInExcelSyntax(rString, 0);
+                    rParam.FillInExcelSyntax(aString, 0);
                     sal_uInt32 nIndex = 0;
                     bool bNumber = pFormatter->IsNumberFormat(
                             rItem.maString, nIndex, rItem.mfVal);
@@ -5762,7 +5762,7 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
         while (nParamCount > 1 && !nGlobalError)
         {
             // take criteria
-            String rString;
+            String aString;
             fVal = 0.0;
             bool bIsString = true;
             switch ( GetStackType() )
@@ -5788,11 +5788,11 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
                                     bIsString = false;
                                 }
                                 else
-                                    GetCellString(rString, pCell);
+                                    GetCellString(aString, pCell);
                                 break;
                             case CELLTYPE_STRING :
                             case CELLTYPE_EDIT :
-                                GetCellString(rString, pCell);
+                                GetCellString(aString, pCell);
                                 break;
                             default:
                                 fVal = 0.0;
@@ -5801,12 +5801,12 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
                     }
                     break;
                 case svString:
-                    rString = GetString();
+                    aString = GetString();
                     break;
                 case svMatrix :
                 case svExternalDoubleRef:
                     {
-                        ScMatValType nType = GetDoubleOrStringFromMatrix( fVal, rString);
+                        ScMatValType nType = GetDoubleOrStringFromMatrix( fVal, aString);
                         bIsString = ScMatrix::IsNonValueType( nType);
                     }
                     break;
@@ -5822,7 +5822,7 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
                                 bIsString = false;
                             }
                             else
-                                rString = pToken->GetString();
+                                aString = pToken->GetString();
                         }
                     }
                     break;
@@ -5928,7 +5928,7 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
                 }
                 else
                 {
-                    rParam.FillInExcelSyntax(rString, 0);
+                    rParam.FillInExcelSyntax(aString, 0);
                     sal_uInt32 nIndex = 0;
                     bool bNumber = pFormatter->IsNumberFormat(
                             rItem.maString, nIndex, rItem.mfVal);
