@@ -674,23 +674,20 @@ sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sal
                 case DataType::NUMERIC:
                 {
 
-                    String aStrConverted;
+                    OUString aStrConverted;
                     if ( DataType::INTEGER != nType )
                     {
-                        sal_Unicode* pData = aStrConverted.AllocBuffer(aStr.Len());
-                        const sal_Unicode* pStart = pData;
-
                         OSL_ENSURE((cDecimalDelimiter && nType != DataType::INTEGER) ||
                                    (!cDecimalDelimiter && nType == DataType::INTEGER),
                                    "FalscherTyp");
 
+                        OUStringBuffer aBuf(aStr.Len());
                         // convert to Standard-Notation (DecimalPOINT without thousands-comma):
                         for (xub_StrLen j = 0; j < aStr.Len(); ++j)
                         {
                             const sal_Unicode cChar = aStr.GetChar(j);
                             if (cDecimalDelimiter && cChar == cDecimalDelimiter)
-                                *pData++ = '.';
-                                //aStrConverted.Append( '.' );
+                                aBuf.append('.');
                             else if ( cChar == '.' ) // special case, if decimal seperator isn't '.' we have to put the string after it
                                 continue;
                             else if (cThousandDelimiter && cChar == cThousandDelimiter)
@@ -698,10 +695,9 @@ sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sal
                                 // leave out
                             }
                             else
-                                *pData++ = cChar;
-                                //aStrConverted.Append(cChar);
+                                aBuf.append(cChar);
                         } // for (xub_StrLen j = 0; j < aStr.Len(); ++j)
-                        aStrConverted.ReleaseBufferAccess(xub_StrLen(pData - pStart));
+                        aStrConverted = aBuf.makeStringAndClear();
                     } // if ( DataType::INTEGER != nType )
                     else
                     {
