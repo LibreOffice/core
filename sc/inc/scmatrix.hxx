@@ -340,6 +340,7 @@ public:
 
     double And() const;       // logical AND of all matrix values, or NAN
     double Or() const;        // logical OR of all matrix values, or NAN
+    double Xor() const;       // logical XOR of all matrix values, or NAN
 
     IterateResult Sum(bool bTextAsZero) const;
     IterateResult SumSquare(bool bTextAsZero) const;
