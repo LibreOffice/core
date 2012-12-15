@@ -134,24 +134,24 @@ ScViewOptions::~ScViewOptions()
 
 void ScViewOptions::SetDefaults()
 {
-    aOptArr[ VOPT_FORMULAS    ] =
-    aOptArr[ VOPT_SYNTAX      ] =
-    aOptArr[ VOPT_HELPLINES   ] =
-    aOptArr[ VOPT_GRID_ONTOP  ] =
-    aOptArr[ VOPT_NOTES       ] =
-    aOptArr[ VOPT_NULLVALS    ] =
-    aOptArr[ VOPT_VSCROLL     ] =
-    aOptArr[ VOPT_HSCROLL     ] =
-    aOptArr[ VOPT_TABCONTROLS ] =
-    aOptArr[ VOPT_OUTLINER    ] =
-    aOptArr[ VOPT_HEADER      ] =
-    aOptArr[ VOPT_GRID        ] =
-    aOptArr[ VOPT_ANCHOR      ] =
-    aOptArr[ VOPT_PAGEBREAKS  ] =
-    aOptArr[ VOPT_CLIPMARKS   ] = sal_True;
+    aOptArr[ VOPT_FORMULAS    ] = false;
+    aOptArr[ VOPT_SYNTAX      ] = false;
+    aOptArr[ VOPT_HELPLINES   ] = false;
+    aOptArr[ VOPT_GRID_ONTOP  ] = false;
+    aOptArr[ VOPT_NOTES       ] = true;
+    aOptArr[ VOPT_NULLVALS    ] = true;
+    aOptArr[ VOPT_VSCROLL     ] = true;
+    aOptArr[ VOPT_HSCROLL     ] = true;
+    aOptArr[ VOPT_TABCONTROLS ] = true;
+    aOptArr[ VOPT_OUTLINER    ] = true;
+    aOptArr[ VOPT_HEADER      ] = true;
+    aOptArr[ VOPT_GRID        ] = true;
+    aOptArr[ VOPT_ANCHOR      ] = true;
+    aOptArr[ VOPT_PAGEBREAKS  ] = true;
+    aOptArr[ VOPT_CLIPMARKS   ] = true;
 
-    aModeArr[VOBJ_TYPE_OLE ]  =
-    aModeArr[VOBJ_TYPE_CHART] =
+    aModeArr[VOBJ_TYPE_OLE ]  = VOBJ_MODE_SHOW;
+    aModeArr[VOBJ_TYPE_CHART] = VOBJ_MODE_SHOW;
     aModeArr[VOBJ_TYPE_DRAW ] = VOBJ_MODE_SHOW;
 
     aGridCol     = Color( SC_STD_GRIDCOLOR );

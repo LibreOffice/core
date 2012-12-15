@@ -86,7 +86,7 @@ public:
     void                    SetDefaults();
 
     void                    SetOption( ScViewOption eOpt, sal_Bool bNew = sal_True )    { aOptArr[eOpt] = bNew; }
-    sal_Bool                    GetOption( ScViewOption eOpt ) const                { return aOptArr[eOpt]; }
+    bool                    GetOption( ScViewOption eOpt ) const                { return aOptArr[eOpt]; }
 
     void                    SetObjMode( ScVObjType eObj, ScVObjMode eMode ) { aModeArr[eObj] = eMode; }
     ScVObjMode              GetObjMode( ScVObjType eObj ) const             { return aModeArr[eObj]; }
@@ -103,7 +103,7 @@ public:
     int                     operator!= ( const ScViewOptions& rOpt ) const { return !(operator==(rOpt)); }
 
 private:
-    sal_Bool            aOptArr     [MAX_OPT];
+    bool            aOptArr     [MAX_OPT];
     ScVObjMode      aModeArr    [MAX_TYPE];
     Color           aGridCol;
     String          aGridColName;
