@@ -175,12 +175,9 @@ void SdrPaintView::ImpClearVars()
     nGraphicManagerDrawMode = GRFMGR_DRAW_STANDARD;
     aComeBackTimer.SetTimeout(1);
     aComeBackTimer.SetTimeoutHdl(LINK(this,SdrPaintView,ImpComeBackHdl));
-    String aNam;    // System::GetUserName() just return an empty string
 
     if (pMod)
         SetDefaultStyleSheet(pMod->GetDefaultStyleSheet(), sal_True);
-
-    aNam.ToUpperAscii();
 
     maGridColor = Color( COL_BLACK );
 }
