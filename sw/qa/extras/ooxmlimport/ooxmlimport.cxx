@@ -110,6 +110,7 @@ public:
     void testN773061();
     void testN780645();
     void testFineTableDash();
+    void testN792778();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -171,7 +172,8 @@ void Test::run()
         {"n785767.docx", &Test::testN785767},
         {"n773061.docx", &Test::testN773061},
         {"n780645.docx", &Test::testN780645},
-        {"tableborder-finedash.docx", &Test::testFineTableDash}
+        {"tableborder-finedash.docx", &Test::testFineTableDash},
+        {"n792778.docx", &Test::testN792778},
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
@@ -1061,6 +1063,37 @@ void Test::testFineTableDash()
     CPPUNIT_ASSERT_EQUAL(aBorder.RightLine.LineStyle, table::BorderLineStyle::FINE_DASHED);
 }
 
+void Test::testN792778()
+{
+    /*
+     * The problem was that the importer didn't handle complex groupshapes with groupshapes, textboxes and graphics inside.
+     *
+     * xray ThisComponent.DrawPage.Count ' 1 groupshape
+     * xray ThisComponent.DrawPage(0).Count ' 2 sub-groupshapes
+     * xray ThisComponent.DrawPage(0).getByIndex(0).Count ' first sub-groupshape: 1 pic
+     * xray ThisComponent.DrawPage(0).getByIndex(1).Count ' second sub-groupshape: 1 pic
+     * xray ThisComponent.DrawPage(0).getByIndex(0).getByIndex(0).Position.Y ' 11684, the vertical position of the shapes were also wrong
+     * xray ThisComponent.DrawPage(0).getByIndex(1).getByIndex(0).Position.Y ' 11684
+     */
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDrawPage(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
+
+    uno::Reference<drawing::XShapes> xGroupShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xGroupShape->getCount());
+
+    uno::Reference<drawing::XShapes> xInnerGroupShape(xGroupShape->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xInnerGroupShape->getCount());
+
+    uno::Reference<drawing::XShape> xInnerShape(xInnerGroupShape->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(11684), xInnerShape->getPosition().Y);
+
+    xInnerGroupShape.set(xGroupShape->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xInnerGroupShape->getCount());
+
+    xInnerShape.set(xInnerGroupShape->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(11684), xInnerShape->getPosition().Y);
+}
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
