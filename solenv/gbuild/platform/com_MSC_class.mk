@@ -485,7 +485,7 @@ define gb_WinResTarget__command
 $(call gb_Output_announce,$(2),$(true),RC ,1)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
-	$(gb_RC) \
+	$(gb_RC) -nologo \
 		$(DEFS) $(FLAGS) \
 		$(INCLUDE) \
 		-Fo$(1) \
