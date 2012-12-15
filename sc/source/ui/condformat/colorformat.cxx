@@ -232,7 +232,8 @@ IMPL_LINK_NOARG( ScDataBarSettingsDlg, OkBtnHdl )
 
     if(!bWarn && maLbTypeMin.GetSelectEntryPos() == maLbTypeMax.GetSelectEntryPos())
     {
-        if(maLbTypeMax.GetSelectEntryPos() != COLORSCALE_FORMULA)
+
+        if(nSelectMax != COLORSCALE_FORMULA && nSelectMax != COLORSCALE_AUTO)
         {
             rtl::OUString aMinString = maEdMin.GetText();
             rtl::OUString aMaxString = maEdMax.GetText();
