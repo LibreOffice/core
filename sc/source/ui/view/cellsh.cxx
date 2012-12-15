@@ -150,15 +150,18 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
             case FID_FILL_TO_RIGHT:     // fill to left / right
             {
                 bDisable = !bSimpleArea || (nCol1 == 0 && nCol2 == 0);
-                bDisable = pDoc->HasSelectedBlockMatrixFragment(
-                    nCol1, nRow1, nCol1, nRow2, rMark );    // first column
+                if ( !bDisable && bEditable )
+                {   // do not damage matrix
+                    bDisable = pDoc->HasSelectedBlockMatrixFragment(
+                            nCol1, nRow1, nCol1, nRow2, rMark );    // first column
+                }
             }
             break;
             case FID_FILL_TO_LEFT:
             {
                 bDisable = (!bSimpleArea) || (nCol1 == MAXCOL && nCol2 == MAXCOL);
                 if ( !bDisable && bEditable )
-                {   // Matrix nicht zerreissen
+                {   // do not damage matrix
                     bDisable = pDoc->HasSelectedBlockMatrixFragment(
                         nCol2, nRow1, nCol2, nRow2, rMark );    // last column
                 }
