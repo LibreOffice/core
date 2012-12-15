@@ -1435,7 +1435,9 @@ void ScInterpreter::ScXor()
                                 bHaveValue = true;
                                 nRes ^= ( GetCellValue( aAdr, pCell ) != 0.0 );
                             }
-                            // else: Xcl raises no error here
+                            /* TODO: set error? Excel doesn't have XOR, but
+                             * doesn't set an error in this case for AND and
+                             * OR. */
                         }
                     }
                     break;
@@ -1471,11 +1473,12 @@ void ScInterpreter::ScXor()
                         if ( pMat )
                         {
                             bHaveValue = true;
-                            double fVal = pMat->Or();
+                            double fVal = pMat->Xor();
                             sal_uInt16 nErr = GetDoubleErrorValue( fVal );
                             if ( nErr )
                             {
                                 SetError( nErr );
+                                nRes = 0;
                             }
                             else
                                 nRes ^= ( fVal != 0.0 );
