@@ -237,10 +237,10 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_COUNT_EMPTY_CELLS { Text = "COUNTBLANK" ; };
     String SC_OPCODE_COUNT_IF { Text = "COUNTIF" ; };
     String SC_OPCODE_SUM_IF { Text = "SUMIF" ; };
-	String SC_OPCODE_AVERAGE_IF { Text = "AVERAGEIF" ; };
-	String SC_OPCODE_SUM_IFS { Text = "SUMIFS" ; };
-	String SC_OPCODE_AVERAGE_IFS { Text = "AVERAGEIFS" ; };
-	String SC_OPCODE_COUNT_IFS { Text = "COUNTIFS" ; };
+    String SC_OPCODE_AVERAGE_IF { Text = "AVERAGEIF" ; };
+    String SC_OPCODE_SUM_IFS { Text = "SUMIFS" ; };
+    String SC_OPCODE_AVERAGE_IFS { Text = "AVERAGEIFS" ; };
+    String SC_OPCODE_COUNT_IFS { Text = "COUNTIFS" ; };
     String SC_OPCODE_LOOKUP { Text = "LOOKUP" ; };
     String SC_OPCODE_V_LOOKUP { Text = "VLOOKUP" ; };
     String SC_OPCODE_H_LOOKUP { Text = "HLOOKUP" ; };
@@ -575,10 +575,10 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_COUNT_EMPTY_CELLS { Text = "COUNTBLANK" ; };
     String SC_OPCODE_COUNT_IF { Text = "COUNTIF" ; };
     String SC_OPCODE_SUM_IF { Text = "SUMIF" ; };
-	String SC_OPCODE_AVERAGE_IF { Text = "AVERAGEIF" ; };
-	String SC_OPCODE_SUM_IFS { Text = "SUMIFS" ; };
-	String SC_OPCODE_AVERAGE_IFS { Text = "AVERAGEIFS" ; };
-	String SC_OPCODE_COUNT_IFS { Text = "COUNTIFS" ; };
+    String SC_OPCODE_AVERAGE_IF { Text = "AVERAGEIF" ; };
+    String SC_OPCODE_SUM_IFS { Text = "SUMIFS" ; };
+    String SC_OPCODE_AVERAGE_IFS { Text = "AVERAGEIFS" ; };
+    String SC_OPCODE_COUNT_IFS { Text = "COUNTIFS" ; };
     String SC_OPCODE_LOOKUP { Text = "LOOKUP" ; };
     String SC_OPCODE_V_LOOKUP { Text = "VLOOKUP" ; };
     String SC_OPCODE_H_LOOKUP { Text = "HLOOKUP" ; };
@@ -1482,22 +1482,22 @@ Resource RID_STRLIST_FUNCTION_NAMES
     {
         Text [ en-US ] = "SUMIF" ;
     };
-	String SC_OPCODE_AVERAGE_IF
-	{
-		Text [ en-US ] = "AVERAGEIF" ;
-	};
-	String SC_OPCODE_SUM_IFS
-	{
-		Text [ en-US ] = "SUMIFS" ;
-	};
-	String SC_OPCODE_AVERAGE_IFS
-	{
-		Text [ en-US ] = "AVERAGEIFS" ;
-	};
-	String SC_OPCODE_COUNT_IFS
-	{
-		Text [ en-US ] = "COUNTIFS" ;
-	};
+    String SC_OPCODE_AVERAGE_IF
+    {
+        Text [ en-US ] = "AVERAGEIF" ;
+    };
+    String SC_OPCODE_SUM_IFS
+    {
+        Text [ en-US ] = "SUMIFS" ;
+    };
+    String SC_OPCODE_AVERAGE_IFS
+    {
+        Text [ en-US ] = "AVERAGEIFS" ;
+    };
+    String SC_OPCODE_COUNT_IFS
+    {
+        Text [ en-US ] = "COUNTIFS" ;
+    };
     String SC_OPCODE_LOOKUP
     {
         Text [ en-US ] = "LOOKUP" ;
