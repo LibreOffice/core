@@ -1076,12 +1076,15 @@ void ScDataBarFrmtEntry::Init()
 
     maBtOptions.SetClickHdl( LINK( this, ScDataBarFrmtEntry, OptionBtnHdl ) );
 
-    mpDataBarData.reset(new ScDataBarFormatData());
-    mpDataBarData->mpUpperLimit.reset(new ScColorScaleEntry());
-    mpDataBarData->mpLowerLimit.reset(new ScColorScaleEntry());
-    mpDataBarData->mpLowerLimit->SetType(COLORSCALE_AUTO);
-    mpDataBarData->mpUpperLimit->SetType(COLORSCALE_AUTO);
-    mpDataBarData->maPositiveColor = COL_LIGHTBLUE;
+    if(!mpDataBarData)
+    {
+        mpDataBarData.reset(new ScDataBarFormatData());
+        mpDataBarData->mpUpperLimit.reset(new ScColorScaleEntry());
+        mpDataBarData->mpLowerLimit.reset(new ScColorScaleEntry());
+        mpDataBarData->mpLowerLimit->SetType(COLORSCALE_AUTO);
+        mpDataBarData->mpUpperLimit->SetType(COLORSCALE_AUTO);
+        mpDataBarData->maPositiveColor = COL_LIGHTBLUE;
+    }
 }
 
 ScFormatEntry* ScDataBarFrmtEntry::createDatabarEntry() const
