@@ -15,6 +15,7 @@ $(eval $(call gb_UI_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/captionoptions \
 	sw/uiconfig/swriter/ui/charurlpage \
 	sw/uiconfig/swriter/ui/columnwidth \
+	sw/uiconfig/swriter/ui/columns \
 	sw/uiconfig/swriter/ui/converttexttable \
 	sw/uiconfig/swriter/ui/endnotepage \
 	sw/uiconfig/swriter/ui/footnotepage \
@@ -33,8 +34,10 @@ $(eval $(call gb_UI_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/sortdialog \
 	sw/uiconfig/swriter/ui/splittable \
 	sw/uiconfig/swriter/ui/stringinput \
-	sw/uiconfig/swriter/ui/titlepage \
+	sw/uiconfig/swriter/ui/titlepage
+	sw/uiconfig/swriter/ui/tableproperties \
 	sw/uiconfig/swriter/ui/wordcount \
+
 ))
 
 # vim: set noet sw=4 ts=4:
