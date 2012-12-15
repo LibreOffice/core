@@ -912,6 +912,14 @@ struct OrEvaluator
     OrEvaluator() : mbResult(false) {}
 };
 
+struct XorEvaluator
+{
+    bool mbResult;
+    void operate(double fVal) { mbResult ^= (fVal != 0.0); }
+    bool result() const { return mbResult; }
+    XorEvaluator() : mbResult(false) {}
+};
+
 // Do not short circuit logical operations, in case there are error values
 // these need to be propagated even if the result was determined earlier.
 template <typename _Evaluator>
@@ -959,26 +967,7 @@ double ScMatrixImpl::Xor() const
 {
     // All elements must be of value type.
     // True if an odd number of elements have a non-zero value.
-    bool bXor = false;
-    size_t nRows = maMat.size().row, nCols = maMat.size().column;
-    for (size_t i = 0; i < nRows; ++i)
-    {
-        for (size_t j = 0; j < nCols; ++j)
-        {
-            mdds::mtm::element_t eType = maMat.get_type(i, j);
-            if (eType != mdds::mtm::element_numeric && eType != mdds::mtm::element_boolean)
-                // assuming a CompareMat this is an error
-                return CreateDoubleError(errIllegalArgument);
-
-            double fVal = maMat.get_numeric(i, j);
-            if (!::rtl::math::isFinite(fVal))
-                // DoubleError
-                return fVal;
-
-            bXor ^= (fVal != 0.0);
-        }
-    }
-    return bXor;
+    return EvalMatrix<XorEvaluator>(maMat);
 }
 
 namespace {
