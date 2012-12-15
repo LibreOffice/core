@@ -243,7 +243,7 @@ sal_uInt16 ViewClipboard::InsertSlides (
             sal_False,
             sal_False,
             nInsertPosition,
-            (&rTransferable == SD_MOD()->pTransferDrag),
+            sal_False,
             pDataDocSh,
             sal_True,
             bMergeMasterPages,
