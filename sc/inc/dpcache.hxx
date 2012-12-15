@@ -121,6 +121,7 @@ private:
     LabelsType maLabelNames;    // Stores dimension names.
     mdds::flat_segment_tree<SCROW, bool> maEmptyRows;
     SCROW mnDataSize;
+    SCROW mnRowCount;
 
     bool mbDisposing;
 
