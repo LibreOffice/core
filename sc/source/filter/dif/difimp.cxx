@@ -646,7 +646,6 @@ const sal_Unicode* DifParser::ScanIntVal( const sal_Unicode* pStart, sal_uInt32&
 
 sal_Bool DifParser::ScanFloatVal( const sal_Unicode* pStart )
     {
-    double                  fNewVal = 0.0;
     sal_Bool                    bNeg = false;
     double                  fFracPos = 1.0;
     sal_Int32                   nExp = 0;
@@ -661,7 +660,7 @@ sal_Bool DifParser::ScanFloatVal( const sal_Unicode* pStart )
 
     STATE   eS = S_FIRST;
 
-    fNewVal = 0.0;
+    double fNewVal = 0.0;
 
     while( eS != S_END )
     {

@@ -345,9 +345,8 @@ SCCOL ScDBInternalRange::findFieldColumn(const OUString& rStr, sal_uInt16* pErr)
     SCCOL nDBCol2 = e.Col();
 
     SCCOL   nField = nDBCol1;
-    sal_Bool    bFound = sal_True;
+    sal_Bool bFound = sal_False;
 
-    bFound = false;
     OUString aCellStr;
     ScAddress aLook( nDBCol1, nDBRow1, nDBTab1 );
     while (!bFound && (aLook.Col() <= nDBCol2))
