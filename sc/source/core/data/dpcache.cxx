@@ -382,6 +382,11 @@ bool ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
 
     SCROW nStartRow = rRange.aStart.Row();  // start of data
     SCROW nEndRow = rRange.aEnd.Row();
+
+    // Sanity check
+    if (!ValidRow(nStartRow) || !ValidRow(nEndRow) || nEndRow-nStartRow <= 0)
+        return false;
+
     sal_uInt16 nStartCol = rRange.aStart.Col();
     sal_uInt16 nEndCol = rRange.aEnd.Col();
     sal_uInt16 nDocTab = rRange.aStart.Tab();
