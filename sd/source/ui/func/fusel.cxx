@@ -687,15 +687,14 @@ sal_Bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 Abs(aPnt.Y() - aMDPos.Y()) < nDrgLog)
             {
                 /*************************************************************
-                * If a user wants to click on an object in front of a masked
+                * If a user wants to click on an object in front of a marked
                 * one, he releases the mouse button immediately
                 **************************************************************/
                 if (mpView->PickObj(aMDPos, mpView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER | SDRSEARCH_BEFOREMARK))
                 {
-                    //not Needed in the ordinary pick routine for some reason...
                     mpView->UnmarkAllObj();
                     mpView->MarkObj(pObj,pPV,false,false);
-                    return (bReturn);
+                    return (sal_True);
                 }
                 /**************************************************************
                 * Toggle between selection and rotation
