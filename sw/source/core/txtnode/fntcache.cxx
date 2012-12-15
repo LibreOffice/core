@@ -71,9 +71,9 @@ sal_uInt16 GetDefaultFontHeight( SwDrawTextInfo &rInf )
     SwDocShell* pDocShell = rInf.GetShell()->GetDoc()->GetDocShell();
     SfxStyleSheetBasePool* pBasePool = pDocShell->GetStyleSheetPool();
 
-    String aString(SW_RES(STR_POOLCOLL_STANDARD));
+    OUString sString(SW_RESSTR(STR_POOLCOLL_STANDARD));
 
-    SfxStyleSheetBase* pStyle = pBasePool->Find( aString, (SfxStyleFamily)SFX_STYLE_FAMILY_PARA );
+    SfxStyleSheetBase* pStyle = pBasePool->Find(sString, (SfxStyleFamily)SFX_STYLE_FAMILY_PARA);
     SfxItemSet& aTmpSet = pStyle->GetItemSet();
     SvxFontHeightItem &aDefaultFontItem = (SvxFontHeightItem&)aTmpSet.Get(RES_CHRATR_CJK_FONTSIZE);
     return (sal_uInt16)aDefaultFontItem.GetHeight();
@@ -1410,7 +1410,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     else
     {
         const String* pStr = &rInf.GetText();
-        String aStr( aEmptyStr );
+        String aStr;
         sal_Bool bBullet = rInf.GetBullet();
         if( bSymbol )
             bBullet = sal_False;

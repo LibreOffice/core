@@ -188,7 +188,7 @@ static sal_uInt16 lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr
             bool bOldOnWin = rInf.OnWin();
             ((SwTxtSizeInfo &)rInf).SetOnWin( false );
 
-            XubString aStr( aEmptyStr );
+            XubString aStr;
             pPor->GetExpTxt( rInf, aStr );
             ((SwTxtSizeInfo &)rInf).SetOnWin( bOldOnWin );
 
@@ -616,7 +616,7 @@ xub_StrLen SwTxtPortion::GetSpaceCnt( const SwTxtSizeInfo &rInf,
             bool bOldOnWin = rInf.OnWin();
             ((SwTxtSizeInfo &)rInf).SetOnWin( false );
 
-            XubString aStr( aEmptyStr );
+            XubString aStr;
             GetExpTxt( rInf, aStr );
             ((SwTxtSizeInfo &)rInf).SetOnWin( bOldOnWin );
 
@@ -646,7 +646,7 @@ long SwTxtPortion::CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) cons
             bool bOldOnWin = rInf.OnWin();
             ((SwTxtSizeInfo &)rInf).SetOnWin( false );
 
-            XubString aStr( aEmptyStr );
+            XubString aStr;
             GetExpTxt( rInf, aStr );
             ((SwTxtSizeInfo &)rInf).SetOnWin( bOldOnWin );
             if( nSpaceAdd > 0 )

@@ -4560,7 +4560,7 @@ void SwHTMLParser::SetTxtCollAttrs( _HTMLAttrContext *pContext )
     SwTxtFmtColl *pCollToSet = 0;   // die zu setzende Vorlage
     SfxItemSet *pItemSet = 0;       // der Set fuer harte Attrs
     sal_uInt16 nTopColl = pContext ? pContext->GetTxtFmtColl() : 0;
-    const String& rTopClass = pContext ? pContext->GetClass() : (const String&) aEmptyStr;
+    const String& rTopClass = pContext ? pContext->GetClass() : aEmptyStr;
     sal_uInt16 nDfltColl = RES_POOLCOLL_TEXT;
 
     sal_Bool bInPRE=sal_False;                          // etwas Kontext Info

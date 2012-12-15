@@ -189,7 +189,7 @@ sal_uInt16  SwGlossaryList::GetGroupCount()
 String SwGlossaryList::GetGroupName(sal_uInt16 nPos, sal_Bool bNoPath, String* pTitle)
 {
     OSL_ENSURE(aGroupArr.size() > nPos, "group not available");
-    String sRet(aEmptyStr);
+    String sRet;
     if(nPos < aGroupArr.size())
     {
         AutoTextGroup* pGroup = aGroupArr[nPos];
