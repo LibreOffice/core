@@ -244,8 +244,6 @@ public:
     void initMembers();
     void setConfig(const Config& rConfig);
 
-    const Size& getWindowSize() const;
-
     bool isAllSelected() const;
     void getResult(ResultType& rResult);
     void launch(const Rectangle& rRect);

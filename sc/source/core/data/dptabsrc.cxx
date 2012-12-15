@@ -1433,7 +1433,7 @@ const ScDPItemData& ScDPDimension::GetSelectedData()
     {
         // find the named member to initialize pSelectedData from it, with name and value
 
-        long nLevel = 0;        // same as in ScDPObject::FillPageList
+        long nLevel = 0;
 
         long nHierarchy = getUsedHierarchy();
         if ( nHierarchy >= GetHierarchiesObject()->getCount() )

@@ -189,7 +189,6 @@ public:
 
     void    ParentDestroyed();
 
-    void    FireAccessibleEvent( short nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue );
     sal_Bool    HasAccessibleListeners() const { return( mxEventListeners.size() > 0 ); }
 
 public:

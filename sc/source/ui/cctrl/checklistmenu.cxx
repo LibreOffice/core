@@ -1319,11 +1319,6 @@ void ScCheckListMenuWindow::setConfig(const Config& rConfig)
     maConfig = rConfig;
 }
 
-const Size& ScCheckListMenuWindow::getWindowSize() const
-{
-    return maWndSize;
-}
-
 bool ScCheckListMenuWindow::isAllSelected() const
 {
     return maChkToggleAll.IsChecked();

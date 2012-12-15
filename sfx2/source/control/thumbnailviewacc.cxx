@@ -622,27 +622,6 @@ ThumbnailViewItemAcc::~ThumbnailViewItemAcc()
 {
 }
 
-void ThumbnailViewItemAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue, const uno::Any& rNewValue )
-{
-    if( nEventId )
-    {
-        ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >                  aTmpListeners( mxEventListeners );
-        ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::const_iterator  aIter( aTmpListeners.begin() );
-        accessibility::AccessibleEventObject                                                        aEvtObject;
-
-        aEvtObject.EventId = nEventId;
-        aEvtObject.Source = static_cast<uno::XWeak*>(this);
-        aEvtObject.NewValue = rNewValue;
-        aEvtObject.OldValue = rOldValue;
-
-        while( aIter != aTmpListeners.end() )
-        {
-            (*aIter)->notifyEvent( aEvtObject );
-            aIter++;
-        }
-    }
-}
-
 void ThumbnailViewItemAcc::ParentDestroyed()
 {
     const ::osl::MutexGuard aGuard( maMutex );

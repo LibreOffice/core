@@ -10,7 +10,6 @@ ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
 ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any const&)
 SfxDocumentTemplateDlg::SfxDocumentTemplateDlg(Window*, SfxDocumentTemplates*)
 TextEngine::GetLeftMargin() const
-ThumbnailViewItemAcc::FireAccessibleEvent(short, com::sun::star::uno::Any const&, com::sun::star::uno::Any const&)
 TransitionScene::clear()
 UnoControl::UnoControl()
 VirtualDevice::SetOutputSizePixelScaleOffsetAndBuffer(Size const&, Fraction const&, Point const&, boost::shared_array<unsigned char> const&)

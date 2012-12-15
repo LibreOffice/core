@@ -193,8 +193,6 @@ public:
 
     void GetMemberResultNames(ScDPUniqueStringSet& rNames, long nDimension);
 
-    void FillPageList( std::vector<rtl::OUString>& rStrings, long nField );
-
     void                ToggleDetails(const ::com::sun::star::sheet::DataPilotTableHeaderData& rElemDesc, ScDPObject* pDestObj);
 
     bool                FillOldParam(ScPivotParam& rParam) const;

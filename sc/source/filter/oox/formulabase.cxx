@@ -1430,14 +1430,6 @@ OUString FormulaProcessorBase::generateAddress2dString( const BinAddress& rAddre
     return aBuffer.makeStringAndClear();
 }
 
-OUString FormulaProcessorBase::generateRange2dString( const BinRange& rRange, bool bAbsolute )
-{
-    OUStringBuffer aBuffer( generateAddress2dString( rRange.maFirst, bAbsolute ) );
-    if( (rRange.getColCount() > 1) || (rRange.getRowCount() > 1) )
-        aBuffer.append( sal_Unicode( ':' ) ).append( generateAddress2dString( rRange.maLast, bAbsolute ) );
-    return aBuffer.makeStringAndClear();
-}
-
 // ----------------------------------------------------------------------------
 
 OUString FormulaProcessorBase::generateApiString( const OUString& rString )
