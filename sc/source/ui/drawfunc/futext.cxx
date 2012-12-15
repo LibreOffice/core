@@ -132,7 +132,12 @@ sal_Bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
     if ( pView->IsTextEdit() )
     {
         if( !IsSizingOrMovingNote(rMEvt) )
+        {
             StopEditMode();            // Danebengeklickt, Ende mit Edit
+            pView->UnmarkAll();
+            ScViewData& rViewData = *pViewShell->GetViewData();
+            rViewData.GetDispatcher().Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+        }
         pView->SetCreateMode();
     }
 
@@ -302,18 +307,15 @@ sal_Bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                 }
                 else
                 {
-                    /**********************************************************
-                    * Objekt erzeugen
-                    **********************************************************/
-                    // Hack  to align object to nearest grid position where object
-                    // would be anchored ( if it were cell anchored )
-                    // Get grid offset for current position ( note: aPnt is
-                    // also adjusted )
-                    Point aGridOff = CurrentGridSyncOffsetAndPos( aMDPos );
+                    if (pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER | SDRSEARCH_BEFOREMARK))
+                    {
+                        pView->UnmarkAllObj();
+                        pView->MarkObj(pObj,pPV,false,false);
 
-                    bool bRet = pView->BegCreateObj(aMDPos, (OutputDevice*) NULL);
-                    if ( bRet )
-                        pView->GetCreateObj()->SetGridOffset( aGridOff );
+                        pHdl=pView->PickHandle(aMDPos);
+                        pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl);
+                        return(sal_True);
+                    }
                 }
             }
         }
