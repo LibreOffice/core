@@ -42,14 +42,15 @@
 
 struct ImplTabItem
 {
-    sal_uInt16              mnId;
+    sal_uInt16          mnId;
     TabPage*            mpTabPage;
     String              maText;
     String              maFormatText;
     String              maHelpText;
-    rtl::OString        maHelpId;
+    OString             maHelpId;
+    OString             maTabName;
     Rectangle           maRect;
-    sal_uInt16              mnLine;
+    sal_uInt16          mnLine;
     bool                mbFullVisible;
     bool                mbEnabled;
     Image               maTabImage;
@@ -1855,6 +1856,18 @@ sal_uInt16 TabControl::GetPageId( const TabPage& rPage ) const
     return 0;
 }
 
+sal_uInt16 TabControl::GetPageId( const OString& rName ) const
+{
+    for( std::vector< ImplTabItem >::const_iterator it = mpTabCtrlData->maItemList.begin();
+         it != mpTabCtrlData->maItemList.end(); ++it )
+    {
+        if ( it->maTabName == rName )
+            return it->mnId;
+    }
+
+    return 0;
+}
+
 // -----------------------------------------------------------------------
 
 void TabControl::SetCurPageId( sal_uInt16 nPageId )
@@ -2036,7 +2049,7 @@ const XubString& TabControl::GetHelpText( sal_uInt16 nPageId ) const
 
 // -----------------------------------------------------------------------
 
-void TabControl::SetHelpId( sal_uInt16 nPageId, const rtl::OString& rId ) const
+void TabControl::SetHelpId( sal_uInt16 nPageId, const OString& rId ) const
 {
     ImplTabItem* pItem = ImplGetItem( nPageId );
 
@@ -2044,15 +2057,32 @@ void TabControl::SetHelpId( sal_uInt16 nPageId, const rtl::OString& rId ) const
         pItem->maHelpId = rId;
 }
 
-rtl::OString TabControl::GetHelpId( sal_uInt16 nPageId ) const
+OString TabControl::GetHelpId( sal_uInt16 nPageId ) const
 {
-    rtl::OString aRet;
+    ImplTabItem* pItem = ImplGetItem( nPageId );
+
+    if (pItem)
+        return pItem->maHelpId;
+
+    return OString();
+}
+
+void TabControl::SetPageName( sal_uInt16 nPageId, const OString& rName ) const
+{
     ImplTabItem* pItem = ImplGetItem( nPageId );
 
     if ( pItem )
-        aRet = pItem->maHelpId;
+        pItem->maTabName = rName;
+}
 
-    return aRet;
+OString TabControl::GetPageName( sal_uInt16 nPageId ) const
+{
+    ImplTabItem* pItem = ImplGetItem( nPageId );
+
+    if (pItem)
+        return pItem->maTabName;
+
+    return OString();
 }
 
 // -----------------------------------------------------------------------

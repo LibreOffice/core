@@ -1137,8 +1137,10 @@ void VclBuilder::handleTabChild(Window *pParent, xmlreader::XmlReader &reader)
     VclBuilder::stringmap::iterator aFind = aProperties.find(OString("label"));
     if (aFind != aProperties.end())
     {
-        pTabControl->SetPageText(pTabControl->GetCurPageId(),
+        sal_uInt16 nPageId = pTabControl->GetCurPageId();
+        pTabControl->SetPageText(nPageId,
             OStringToOUString(aFind->second, RTL_TEXTENCODING_UTF8));
+        pTabControl->SetPageName(nPageId, sID);
     }
     else
         pTabControl->RemovePage(pTabControl->GetCurPageId());
