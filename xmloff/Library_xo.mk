@@ -23,7 +23,7 @@ $(eval $(call gb_Library_set_componentfile,xo,xmloff/util/xo))
 
 $(eval $(call gb_Library_use_package,xo,xmloff_inc))
 
-$(eval $(call gb_Library_set_precompiled_header,xo,$(SRCDIR)/xmloff/inc/pch/precompiled_xmloff))
+$(eval $(call gb_Library_set_precompiled_header,xo,$(SRCDIR)/xmloff/inc/pch/precompiled_xo))
 
 $(eval $(call gb_Library_set_include,xo,\
     -I$(SRCDIR)/xmloff/inc \

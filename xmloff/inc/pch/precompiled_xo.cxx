@@ -7,6 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "precompiled_xmloff.hxx"
+#include "precompiled_xo.hxx"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
