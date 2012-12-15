@@ -237,7 +237,7 @@ namespace
         {
             const sal_Int32 nIndex(rSource.indexOf(sal_Unicode(':'), 0));
 
-            if(-1 != nIndex && nIndex > 0 && nIndex + 1 < nLen)
+            if(nIndex > 0 && ((nIndex + 1) < nLen))
             {
                 maNamespace = mapNamespaceToken(rSource.copy(0, nIndex));
                 maName = rSource.copy(nIndex + 1);
@@ -695,7 +695,7 @@ namespace
                                     {
                                         if(isCollectingProperties())
                                         {
-                                            if(maPropStatProperties.size())
+                                            if(!maPropStatProperties.empty())
                                             {
                                                 // append to maResponseProperties if okay
                                                 maResponseProperties.insert(maResponseProperties.end(), maPropStatProperties.begin(), maPropStatProperties.end());
@@ -703,7 +703,7 @@ namespace
                                         }
                                         else
                                         {
-                                            if(maPropStatNames.size())
+                                            if(!maPropStatNames.empty())
                                             {
                                                 // when collecting properties append to
                                                 maResponseNames.insert(maResponseNames.end(), maPropStatNames.begin(), maPropStatNames.end());
@@ -721,7 +721,7 @@ namespace
                                     if(isCollectingProperties())
                                     {
                                         // create DAVResource when we have content
-                                        if(maResponseProperties.size())
+                                        if(!maResponseProperties.empty())
                                         {
                                             http_dav_ucp::DAVResource aDAVResource;
 
@@ -733,7 +733,7 @@ namespace
                                     else
                                     {
                                         // when collecting properties add them to result when there are some
-                                        if(maResponseNames.size())
+                                        if(!maResponseNames.empty())
                                         {
                                             http_dav_ucp::DAVResourceInfo aDAVResourceInfo(maHref);
 
