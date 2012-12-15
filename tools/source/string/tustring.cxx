@@ -237,36 +237,6 @@ StringCompare STRING::CompareIgnoreCaseToAscii( const STRING& rStr,
         return COMPARE_GREATER;
 }
 
-STRING& STRING::Fill( xub_StrLen nCount, STRCODE cFillChar )
-{
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-
-    if ( !nCount )
-        return *this;
-
-    // extend string if fill length is larger
-    if ( nCount > mpData->mnLen )
-    {
-        // allocate string of new length
-        STRINGDATA* pNewData = ImplAllocData( nCount );
-        STRING_RELEASE((STRING_TYPE *)mpData);
-        mpData = pNewData;
-    }
-    else
-        ImplCopyData();
-
-    STRCODE* pStr = mpData->maStr;
-    do
-    {
-        *pStr = cFillChar;
-        ++pStr,
-        --nCount;
-    }
-    while ( nCount );
-
-    return *this;
-}
-
 STRCODE* STRING::GetBufferAccess()
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );

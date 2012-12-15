@@ -18,6 +18,7 @@
  */
 
 #include <boost/scoped_ptr.hpp>
+#include <comphelper/string.hxx>
 #include <tools/solar.h>
 #include <vcl/vclenum.hxx>
 #include <vcl/font.hxx>
@@ -687,8 +688,10 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFmt &rNum, WW8_ANLV &rAV,
             if( bListSymbol )
             {
                 //cBulletChar benutzen, damit auf dem MAC richtig gemappt wird
-                sTxt.Fill(  SVBT8ToByte( rAV.cbTextBefore )
-                          + SVBT8ToByte( rAV.cbTextAfter  ), cBulletChar );
+                OUStringBuffer aBuf;
+                comphelper::string::padToLength(aBuf, SVBT8ToByte(rAV.cbTextBefore)
+                    + SVBT8ToByte(rAV.cbTextAfter), cBulletChar);
+                sTxt = aBuf.makeStringAndClear();
             }
         }
     }

@@ -227,8 +227,6 @@ public:
     UniString&          Erase( xub_StrLen nIndex = 0, xub_StrLen nCount = STRING_LEN );
     UniString           Copy( xub_StrLen nIndex = 0, xub_StrLen nCount = STRING_LEN ) const;
 
-    UniString&          Fill( xub_StrLen nCount, sal_Unicode cFillChar = ' ' );
-
     UniString&          ToLowerAscii();
     UniString&          ToUpperAscii();
 

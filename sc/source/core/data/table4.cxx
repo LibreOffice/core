@@ -23,6 +23,7 @@
 #endif
 
 #include "scitems.hxx"
+#include <comphelper/string.hxx>
 #include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brshitem.hxx>
@@ -138,9 +139,9 @@ static String lcl_ValueString( sal_Int32 nValue, sal_uInt16 nMinDigits )
         String aStr = String::CreateFromInt32( Abs( nValue ) );
         if ( aStr.Len() < nMinDigits )
         {
-            String aZero;
-            aZero.Fill( nMinDigits - aStr.Len(), '0' );
-            aStr.Insert( aZero, 0 );
+            OUStringBuffer aZero;
+            comphelper::string::padToLength(aZero, nMinDigits - aStr.Len(), '0');
+            aStr.Insert(aZero.makeStringAndClear(), 0);
         }
         //  nMinDigits doesn't include the '-' sign -> add after inserting zeros
         if ( nValue < 0 )

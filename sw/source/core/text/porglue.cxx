@@ -71,7 +71,9 @@ sal_Bool SwGluePortion::GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) 
     if( GetLen() && rInf.OnWin() &&
         rInf.GetOpt().IsBlank() && rInf.IsNoSymbol() )
     {
-        rTxt.Fill( GetLen(), CH_BULLET );
+        OUStringBuffer aBuf;
+        comphelper::string::padToLength(aBuf, GetLen(), CH_BULLET);
+        rTxt = aBuf.makeStringAndClear();
         return sal_True;
     }
     return sal_False;
@@ -88,7 +90,7 @@ void SwGluePortion::Paint( const SwTxtPaintInfo &rInf ) const
 
     if( rInf.GetFont()->IsPaintBlank() )
     {
-        rtl::OUStringBuffer aBuf;
+        OUStringBuffer aBuf;
         comphelper::string::padToLength(aBuf, GetFixWidth() / GetLen(), ' ');
         String aTxt(aBuf.makeStringAndClear());
         SwTxtPaintInfo aInf( rInf, aTxt );
