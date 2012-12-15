@@ -5804,9 +5804,26 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
                     rString = GetString();
                     break;
                 case svMatrix :
+                case svExternalDoubleRef:
                     {
                         ScMatValType nType = GetDoubleOrStringFromMatrix( fVal, rString);
                         bIsString = ScMatrix::IsNonValueType( nType);
+                    }
+                    break;
+                case svExternalSingleRef:
+                    {
+                        ScExternalRefCache::TokenRef pToken;
+                        PopExternalSingleRef(pToken);
+                        if (pToken)
+                        {
+                            if (pToken->GetType() == svDouble)
+                            {
+                                fVal = pToken->GetDouble();
+                                bIsString = false;
+                            }
+                            else
+                                rString = pToken->GetString();
+                        }
                     }
                     break;
                 default:
@@ -5848,6 +5865,8 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
                     nTab2 = nTab1;
                     break;
                 case svMatrix:
+                case svExternalSingleRef:
+                case svExternalDoubleRef:
                     {
                         pQueryMatrix = PopMatrix();
                         if (!pQueryMatrix)
@@ -6002,6 +6021,8 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
                     nMainTab2 = nMainTab1;
                     break;
                 case svMatrix:
+                case svExternalSingleRef:
+                case svExternalDoubleRef:
                     {
                         pMainMatrix = PopMatrix();
                         if (!pMainMatrix)
