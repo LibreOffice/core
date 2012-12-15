@@ -181,9 +181,13 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/osl/unx/module \
 	sal/osl/unx/process \
 	sal/osl/unx/process_impl \
-	$(if $(filter DESKTOP,$(BUILD_TYPE)), sal/osl/unx/salinit) \
 	sal/osl/unx/uunxapi \
 ))
+ifeq ($(filter-out DESKTOP,$(BUILD_TYPE)),)
+$(eval $(call gb_Library_add_exception_objects,sal,\
+	sal/osl/unx/salinit \
+))
+endif
 $(eval $(call gb_Library_add_cobjects,sal,\
 	sal/osl/unx/mutex \
 	sal/osl/unx/nlsupport \
