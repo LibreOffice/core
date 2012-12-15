@@ -312,6 +312,14 @@ sal_uLong ScSheetSourceDesc::CheckSourceRange() const
     if (!mpDoc)
         return STR_ERR_DATAPILOTSOURCE;
 
+    // Make sure the range is valid and sane.
+    const ScRange& rSrcRange = GetSourceRange();
+    if (!rSrcRange.IsValid())
+        return STR_ERR_DATAPILOTSOURCE;
+
+    if (rSrcRange.aStart.Col() > rSrcRange.aEnd.Col() || rSrcRange.aStart.Row() > rSrcRange.aEnd.Row())
+        return STR_ERR_DATAPILOTSOURCE;
+
     return 0;
 }
 
