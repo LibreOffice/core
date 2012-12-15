@@ -103,6 +103,8 @@ ScCondFormatList::ScCondFormatList(Window* pParent, const ResId& rResId, ScDocum
                     break;
             }
         }
+        if(nCount)
+            EntrySelectHdl(&maEntries[0]);
     }
     else
     {
