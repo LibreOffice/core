@@ -272,7 +272,7 @@ SwCacheObj *SwCache::Get( const void *pOwner, const sal_uInt16 nIndex,
                           const sal_Bool bToTop )
 {
     SwCacheObj *pRet;
-    if ( 0 != (pRet = nIndex < m_aCacheObjects.size() ? m_aCacheObjects[ nIndex ] : 0) )
+    if ( 0 != (pRet = (nIndex < m_aCacheObjects.size()) ? m_aCacheObjects[ nIndex ] : 0) )
     {
         if ( !pRet->IsOwner( pOwner ) )
             pRet = 0;

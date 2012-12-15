@@ -69,9 +69,7 @@ sal_Bool ConstPolygon::MouseButtonDown(const MouseEvent& rMEvt)
 
 sal_Bool ConstPolygon::MouseMove(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn = sal_False;
-
-    bReturn = SwDrawBase::MouseMove(rMEvt);
+    sal_Bool bReturn = SwDrawBase::MouseMove(rMEvt);
 
     return bReturn;
 }

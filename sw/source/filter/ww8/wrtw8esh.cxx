@@ -742,11 +742,10 @@ void DrawObj::SetShapeDetails(sal_uInt32 nId, sal_Int32 nThick)
 
 bool WW8_WrPlcTxtBoxes::WriteTxt( WW8Export& rWrt )
 {
-    bool bRet = false;
     rWrt.bInWriteEscher = true;
     WW8_CP& rccp=TXT_TXTBOX == nTyp ? rWrt.pFib->ccpTxbx : rWrt.pFib->ccpHdrTxbx;
 
-    bRet = WriteGenericTxt( rWrt, nTyp, rccp );
+    bool bRet = WriteGenericTxt( rWrt, nTyp, rccp );
 
     WW8_CP nCP = rWrt.Fc2Cp( rWrt.Strm().Tell() );
     WW8Fib& rFib = *rWrt.pFib;

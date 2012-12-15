@@ -1126,10 +1126,9 @@ sal_Bool Ww1Pap::HasId0(sal_uInt16 nId)
 
 sal_Bool Ww1Pap::HasId(sal_uInt16 nId)
 {
-    sal_Bool bRet = sal_False;
     sal_uInt16 nPushedPlcIndex2 = nPlcIndex;
     sal_uInt16 nPushedFkpIndex2 = nFkpIndex;
-    bRet = HasId0( nId );
+    sal_Bool bRet = HasId0( nId );
     if (nPlcIndex != nPushedPlcIndex2)
     {
         delete pPap;

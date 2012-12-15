@@ -356,10 +356,7 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, ModifyHdl)
         bEnableNew = sal_False;
     else if(sEntry.Len())
     {
-        sal_uLong nPos = 0xffffffff;
-
-
-        nPos = aGroupTLB.GetEntryPos(sEntry, 0);
+        sal_uLong nPos = aGroupTLB.GetEntryPos(sEntry, 0);
         //if it's not case sensitive you have to search for yourself
         if( 0xffffffff == nPos)
         {

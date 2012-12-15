@@ -866,12 +866,11 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, sal_Bool bPu
         {
             bool bRuby = 0 !=
                     aAttrStack[ StackPos[ RES_TXTATR_CJK_RUBY ] ].Count();
-            sal_Bool bTwoLineAct = sal_False;
 
             // two line is activated, if
             // 1. no ruby attribute is set and
             // 2. attribute is active
-            bTwoLineAct = ((SvxTwoLinesItem&)rItem).GetValue();
+            sal_Bool bTwoLineAct = ((SvxTwoLinesItem&)rItem).GetValue();
 
             if ( !bRuby && bTwoLineAct )
             {

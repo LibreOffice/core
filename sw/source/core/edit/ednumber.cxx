@@ -276,12 +276,8 @@ bool SwEditShell::IsFirstOfNumRule() const
 
 bool SwEditShell::IsFirstOfNumRule(const SwPaM & rPaM) const
 {
-    bool bResult = false;
-
     SwPosition aPos(*rPaM.GetPoint());
-    bResult = GetDoc()->IsFirstOfNumRule(aPos);
-
-    return bResult;
+    return (GetDoc()->IsFirstOfNumRule(aPos));
 }
 // <- #i23726#
 
