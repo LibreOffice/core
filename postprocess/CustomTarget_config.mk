@@ -15,6 +15,11 @@ $(eval $(call gb_CustomTarget_register_targets,postprocess/config,\
 
 .PHONY: $(call gb_CustomTarget_get_workdir,postprocess/config)/uiconfig.zip
 
+# We need this dependency for delivering in package postprocess_config:
+$(call gb_CustomTarget_get_workdir,postprocess/config)/uiconfig_%.zip : \
+		$(call gb_CustomTarget_get_workdir,postprocess/config)/uiconfig.zip
+	@true
+
 $(call gb_CustomTarget_get_workdir,postprocess/config)/uiconfig.zip : $(SRCDIR)/postprocess/packconfig/packconfig.pl
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
 	cd $(SRCDIR)/postprocess/packconfig \

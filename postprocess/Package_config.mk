@@ -9,8 +9,6 @@
 
 $(eval $(call gb_Package_Package,postprocess_config,$(call gb_CustomTarget_get_workdir,postprocess/config)))
 
-$(eval $(call gb_Package_use_custom_target,postprocess_config,postprocess/config))
-
 $(eval $(call gb_Package_add_file,postprocess_config,bin/uiconfig.zip,uiconfig.zip))
 
 $(eval $(call gb_Package_add_files,postprocess_config,bin,\
