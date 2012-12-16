@@ -115,6 +115,12 @@ $(foreach file,$(3),$(call gb_Package_add_file,$(1),$(2)/$(file),$(file)))
 
 endef
 
+# Package files from custom target
+define gb_Package_use_custom_target
+$(call gb_Package_get_preparation_target,$(1)) :| $(call gb_CustomTarget_get_target,$(2))
+
+endef
+
 # Package files from unpacked tarball of an external project
 define gb_Package_use_unpacked
 $(call gb_Package_get_preparation_target,$(1)) :| $(call gb_UnpackedTarball_get_target,$(2))

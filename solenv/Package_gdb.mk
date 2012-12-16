@@ -35,6 +35,6 @@ $(eval $(call gb_Package_add_files,solenv_gdb,lib,\
 	$(call gb_Library_get_runtime_filename,tl)-gdb.py \
 ))
 
-$(call gb_Package_get_preparation_target,solenv_gdb) : $(call gb_CustomTarget_get_target,solenv/gdb)
+$(eval $(call gb_Package_use_custom_target,solenv_gdb,solenv/gdb))
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:
