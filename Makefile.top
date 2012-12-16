@@ -26,7 +26,7 @@ endif
 endif
 
 # This list tells which modules are gbuild ones. It does *not* tell which modules to build. That is directed
-# by the module being mentioned in packimages/prj/build.lst, etc, recursively.
+# by the module being mentioned in postprocess/prj/build.lst, etc, recursively.
 $(WORKDIR)/modules.mk: $(wildcard */Module_*.mk) $(wildcard */prj/dmake) $(BUILDDIR)/config_host.mk
 	mkdir -p $(dir $@)
 	echo -n "gbuild_modules:= tail_build \\" > $@
@@ -222,7 +222,7 @@ $(WORKDIR)/bootstrap:
 #
 # Build
 #
-build-packimages: bootstrap fetch $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross-toolset)
+build-postprocess: bootstrap fetch $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross-toolset)
 ifeq ($(DISABLE_SCRIPTING),TRUE)
 # We must get the headers from vbahelper "delivered" because
 # as we don't link to any libs from there they won't otherwise be, or
@@ -235,11 +235,11 @@ ifeq ($(DISABLE_DBCONNECTIVITY),TRUE)
 # Ditto for dbconnectivity in the --disable-database-connectivity case
 	cd connectivity && sed -e 's/^\(export [A-Z0-9_]*=\)\(.*\)$$/\1"\2"/' <../config_host.mk >conftmp.sh && . conftmp.sh && rm conftmp.sh && $(SOLARENV)/bin/deliver.pl
 endif
-	cd $(SRC_ROOT)/packimages && unset MAKEFLAGS && \
+	cd $(SRC_ROOT)/postprocess && unset MAKEFLAGS && \
 		$(SOLARENV)/bin/build.pl -P$(PARALLELISM) --all -- -P$(PARALLELISM) && \
 		$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS)
 
-build: build-packimages
+build: build-postprocess
 ifeq ($(OS_FOR_BUILD),WNT)
 	cd $(SRC_ROOT)/instsetoo_native && unset MAKEFLAGS && $(SOLARENV)/bin/build.pl
 else

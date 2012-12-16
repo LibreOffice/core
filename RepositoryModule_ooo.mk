@@ -137,7 +137,6 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 	oox \
 	$(call gb_Helper_optional,OPENLDAP,openldap) \
 	package \
-	packimages \
 	padmin \
 	$(call gb_Helper_optional,POSTGRESQL,postgresql) \
 	postprocess \
