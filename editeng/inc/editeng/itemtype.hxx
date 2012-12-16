@@ -34,7 +34,6 @@ class Color;
 class IntlWrapper;
 // static and prototypes -------------------------------------------------
 
-static const sal_Unicode cDelim = ',';
 static const sal_Unicode cpDelim[] = { ',' , ' ', '\0' };
 
 EDITENG_DLLPUBLIC String GetSvxString( sal_uInt16 nId );
