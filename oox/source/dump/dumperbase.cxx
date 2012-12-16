@@ -48,14 +48,6 @@ using namespace ::com::sun::star::uno;
 
 using ::comphelper::MediaDescriptor;
 using ::oox::core::FilterBase;
-using ::rtl::OString;
-using ::rtl::OStringBuffer;
-using ::rtl::OStringToOUString;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-using ::rtl::OUStringToOString;
-
-// ============================================================================
 
 namespace {
 
@@ -2465,7 +2457,7 @@ void XmlStreamObject::implDumpText( TextInputStream& rTextStrm )
         matching start/end elements and the element text on the same line. */
     OUStringBuffer aOldStartElem;
     // special handling for VML
-    bool bIsVml = InputOutputHelper::getFileNameExtension( maSysFileName ).equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("vml"));
+    bool bIsVml = InputOutputHelper::getFileNameExtension( maSysFileName ).equalsIgnoreAsciiCaseAscii("vml");
 
     while( !rTextStrm.isEof() )
     {
@@ -2622,7 +2614,7 @@ void RecordObjectBase::writeHeader()
 // ============================================================================
 
 void SequenceRecordObjectBase::construct( const ObjectBase& rParent,
-        const BinaryInputStreamRef& rxBaseStrm, const ::rtl::OUString& rSysFileName,
+        const BinaryInputStreamRef& rxBaseStrm, const OUString& rSysFileName,
         const String& rRecNames, const String& rSimpleRecs )
 {
     BinaryInputStreamRef xRecStrm( new SequenceInputStream( *mxRecData ) );
