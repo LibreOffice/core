@@ -173,7 +173,6 @@ class LetterWizardDialogImpl(LetterWizardDialog):
                 self.myPathSelection.triggerPathPicker()
                 self.sPath = self.myPathSelection.getSelectedPath()
 
-            self.sPath = fileAccess.getURL(self.sPath)
             if not self.filenameChanged:
                     answer = SystemDialog.showMessageBox(
                         self.xMSF, "MessBox", YES_NO + DEF_NO,
