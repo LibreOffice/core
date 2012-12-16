@@ -17,8 +17,10 @@ $(eval $(call gb_Module_Module,postprocess))
 
 $(eval $(call gb_Module_add_targets,postprocess,\
 	CustomTarget_config \
+	CustomTarget_images \
 	CustomTarget_registry \
 	Package_config \
+	Package_images \
 	Package_registry \
 	Rdb_services \
 ))

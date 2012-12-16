@@ -25,16 +25,16 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_CustomTarget_CustomTarget,packimages/images))
+$(eval $(call gb_CustomTarget_CustomTarget,postprocess/images))
 
-packimages_DIR := $(call gb_CustomTarget_get_workdir,packimages/images)
+packimages_DIR := $(call gb_CustomTarget_get_workdir,postprocess/images)
 
 # Custom sets, at 24x24 & 16x16 fall-back to Tango preferentially
 # (Tango fallbacks to Industrial for the missing icons)
 packimages_CUSTOM_FALLBACK_1 := -c $(SRCDIR)/icon-themes/tango
 packimages_CUSTOM_FALLBACK_2 := -c $(SRCDIR)/icon-themes/industrial
 
-$(call gb_CustomTarget_get_target,packimages/images) : \
+$(call gb_CustomTarget_get_target,postprocess/images) : \
 	$(packimages_DIR)/images_brand.zip \
 	$(if $(filter default,$(WITH_THEMES)),$(packimages_DIR)/images.zip) \
 	$(foreach theme,$(filter-out default,$(WITH_THEMES)),$(packimages_DIR)/images_$(theme).zip)
@@ -76,7 +76,7 @@ $(packimages_DIR)/commandimagelist.ilst :| $(packimages_DIR)/.dir
 			$(if $(findstring s,$(MAKEFLAGS)),2> /dev/null))
 
 $(packimages_DIR)/sorted.lst : \
-		$(SRCDIR)/packimages/pack/image-sort.lst | $(packimages_DIR)/.dir
+		$(SRCDIR)/postprocess/packimages/image-sort.lst | $(packimages_DIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,1)
 	$(call gb_Helper_abbreviate_dirs, \
 		$(PERL) $(SOLARENV)/bin/image-sort.pl $< $(OUTDIR)/xml $@)

@@ -1,2 +1,0 @@
-pim	packimages	::	postprocess NULL
-pim packimages\prj nmake          -       all     pim_prj NULL
