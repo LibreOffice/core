@@ -51,7 +51,6 @@ $(eval $(call gb_SrsTarget_add_files,svx/res,\
     svx/source/dialog/bmpmask.src \
     svx/source/dialog/contdlg.src \
     svx/source/dialog/ctredlin.src \
-    svx/source/dialog/compressgraphicdialog.src \
     svx/source/dialog/dlgctrl.src \
     svx/source/dialog/docrecovery.src \
     svx/source/dialog/fontwork.src \

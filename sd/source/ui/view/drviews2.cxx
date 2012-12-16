@@ -1017,25 +1017,20 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if( rMarkList.GetMarkCount() == 1 )
             {
                 SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+
                 if( pObj && pObj->ISA( SdrGrafObj ) && ( (SdrGrafObj*) pObj )->GetGraphicType() == GRAPHIC_BITMAP )
                 {
-                    GraphicObject aGraphicObject( ( (SdrGrafObj*) pObj )->GetGraphicObject() );
+                    SdrGrafObj* pGraphicObj = (SdrGrafObj*) pObj;
+                    CompressGraphicsDialog dialog( GetParentWindow(), pGraphicObj, GetViewFrame()->GetBindings() );
+                    if ( dialog.Execute() == RET_OK )
                     {
-                        CompressGraphicsDialog dialog( GetParentWindow(), aGraphicObject.GetGraphic(), pObj->GetLogicRect().GetSize(), GetViewFrame()->GetBindings() );
-                        if ( dialog.Execute() == RET_OK )
-                        {
-                            SdrGrafObj* pNewObject = (SdrGrafObj*) pObj->Clone();
-                            const Graphic aNewGraphic = dialog.GetCompressedGraphic();
-                            SdrPageView* pPageView = mpDrawView->GetSdrPageView();
-                            pNewObject->SetEmptyPresObj( sal_False );
-                            pNewObject->SetGraphic( aNewGraphic );
-                            String aUndoString( mpDrawView->GetDescriptionOfMarkedObjects() );
-                            aUndoString += (sal_Unicode) ( ' ' );
-                            aUndoString += String( "Compress" );
-                            mpDrawView->BegUndo( aUndoString );
-                            mpDrawView->ReplaceObjectAtView( pObj, *pPageView, pNewObject );
-                            mpDrawView->EndUndo();
-                        }
+                        SdrGrafObj* pNewObject = dialog.GetCompressedSdrGrafObj();
+                        SdrPageView* pPageView = mpDrawView->GetSdrPageView();
+                        String aUndoString( mpDrawView->GetDescriptionOfMarkedObjects() );
+                        aUndoString += String( " Compress" );
+                        mpDrawView->BegUndo( aUndoString );
+                        mpDrawView->ReplaceObjectAtView( pObj, *pPageView, pNewObject );
+                        mpDrawView->EndUndo();
                     }
                 }
             }
