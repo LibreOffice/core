@@ -39,12 +39,6 @@ namespace dump {
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 
-using ::rtl::OString;
-using ::rtl::OStringToOUString;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-
-// ============================================================================
 // ============================================================================
 
 OUString OleInputObjectBase::dumpAnsiString32( const String& rName )
@@ -552,7 +546,7 @@ void OleStorageObject::implDumpStream( const Reference< XInputStream >& rxStrm, 
 {
     if ( rStrmName == "\001CompObj" )
         OleCompObjObject( *this, rxStrm, rSysFileName ).dump();
-    else if( rStrmName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "\005SummaryInformation" ) ) || rStrmName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "\005DocumentSummaryInformation" ) ) )
+    else if( rStrmName ==  "\005SummaryInformation"  || rStrmName == "\005DocumentSummaryInformation" )
         OlePropertyStreamObject( *this, rxStrm, rSysFileName ).dump();
     else
         BinaryStreamObject( *this, rxStrm, rSysFileName ).dump();
@@ -1523,13 +1517,13 @@ void FormControlStreamObject::implDump()
     {
         if ( maProgId == "Forms.CommandButton.1" )
             AxCommandButtonObject( *this ).dump();
-        else if( maProgId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Forms.TextBox.1" ) ) ||
-                 maProgId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Forms.ListBox.1" ) ) ||
-                 maProgId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Forms.ComboBox.1" ) ) ||
-                 maProgId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Forms.CheckBox.1" ) ) ||
-                 maProgId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Forms.OptionButton.1" ) ) ||
-                 maProgId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Forms.ToggleButton.1" ) ) ||
-                 maProgId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "RefEdit.Ctrl" ) ) )
+        else if( maProgId ==  "Forms.TextBox.1" ||
+                 maProgId ==  "Forms.ListBox.1" ||
+                 maProgId ==  "Forms.ComboBox.1" ||
+                 maProgId ==  "Forms.CheckBox.1" ||
+                 maProgId ==  "Forms.OptionButton.1" ||
+                 maProgId ==  "Forms.ToggleButton.1" ||
+                 maProgId ==  "RefEdit.Ctrl" )
             AxMorphControlObject( *this ).dump();
         else if ( maProgId == "Forms.Label.1" )
             AxLabelObject( *this ).dump();
@@ -1966,7 +1960,7 @@ VbaSharedData::VbaSharedData() :
 {
 }
 
-bool VbaSharedData::isModuleStream( const ::rtl::OUString& rStrmName ) const
+bool VbaSharedData::isModuleStream( const OUString& rStrmName ) const
 {
     return maStrmOffsets.count( rStrmName ) > 0;
 }
