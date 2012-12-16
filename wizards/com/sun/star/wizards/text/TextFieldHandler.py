@@ -149,7 +149,6 @@ class TextFieldHandler(object):
                 if i.supportsService(
                     "com.sun.star.text.TextField.DateTime"):
                     i.IsFixed = _bSetFixed
-
         except Exception:
             traceback.print_exc()
 
@@ -158,8 +157,11 @@ class TextFieldHandler(object):
         try:
             xDependentTextFields = TextFieldHandler.dictTextFields.values()
             for i in xDependentTextFields:
-                if not i.TextFieldMaster.Content:
-                    i.dispose()
+                try:
+                    if not i.TextFieldMaster.Content:
+                        i.dispose()
+                except UnknownPropertyException:
+                    pass
 
         except Exception:
             traceback.print_exc()
