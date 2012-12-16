@@ -520,6 +520,15 @@ bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& aArg
         return true;
     }
 #endif
+#ifdef WIN32
+    /* fdo#57203 ignore -Embedding on Windows
+       when LibreOffice is launched by COM+
+     */
+    else if ( oArg == "Embedding" )
+    {
+        return true;
+    }
+#endif
     else if ( oArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("infilter=")))
     {
         m_infilter.push_back(oArg.copy(RTL_CONSTASCII_LENGTH("infilter=")));
