@@ -146,14 +146,6 @@ REF:
 com.sun.star.awt.UnoControlRadioButtonModel
 TOPIC:
 
-LINK:Documentation/DevGuide/Accessibility/XAccessibleExtendedComponent
-DESCR:Accessibility - XAccessibleExtendedComponent
-REF:
-com.sun.star.accessibility.XAccessibleComponent
-com.sun.star.accessibility.XAccessibleExtendedComponent
-TOPIC:
-com.sun.star.accessibility.XAccessibleExtendedComponent
-
 LINK:Documentation/DevGuide/WritingUNO/Disable_Commands#Disabling_Commands_at_Runtime
 DESCR:WritingUNO - Disable Commands - Disabling Commands at Runtime
 REF:
@@ -205,17 +197,6 @@ REF:
 com.sun.star.document.TypeDetection
 com.sun.star.container.XNameAccess
 TOPIC:
-
-LINK:Documentation/DevGuide/Accessibility/XAccessibleRelationSet
-DESCR:Accessibility - XAccessibleRelationSet
-REF:
-com.sun.star.accessibility.XAccessibleRelationSet
-com.sun.star.accessibility.AccessibleRelation
-com.sun.star.accessibility.AccessibleRelationType
-TOPIC:
-com.sun.star.accessibility.XAccessibleRelationSet
-com.sun.star.accessibility.AccessibleRelation
-com.sun.star.accessibility.AccessibleRelationType
 
 LINK:Documentation/DevGuide/OfficeDev/Java_Window_Integration#A_Hack
 DESCR:OfficeDev - Java Window Integration - Using the Window Handle - A Hack
@@ -287,12 +268,6 @@ REF:
 com.sun.star.text.TextEmbeddedObject
 com.sun.star.text.BaseFrame
 com.sun.star.document.XEmbeddedObjectSupplier
-TOPIC:
-
-LINK:Documentation/DevGuide/Accessibility/Implementing_Accessible_Objects#Implementation_Rules
-DESCR:Accessibility - Implementing Accessible Objects - Implementation Rules
-REF:
-com.sun.star.accessibility.XAccessibleTable
 TOPIC:
 
 LINK:Documentation/DevGuide/Spreadsheets/Column_and_Row_Access
@@ -704,14 +679,6 @@ com.sun.star.awt.FontEmphasisMark
 com.sun.star.awt.CharSet
 TOPIC:
 
-LINK:Documentation/DevGuide/Accessibility/Accessibility_Tree
-DESCR:Accessibility - Accessibility Tree
-REF:
-com.sun.star.accessibility.XAccessibleContext
-com.sun.star.lang.IndexOutOfBoundsException
-com.sun.star.accessibility.XAccessible
-TOPIC:
-
 LINK:Documentation/DevGuide/Text/Indexed_Cells_and_Cell_Ranges
 DESCR:Text - Indexed Cells and Cell Ranges
 REF:
@@ -1110,15 +1077,6 @@ com.sun.star.text.TextContent
 com.sun.star.text.Paragraph
 TOPIC:
 
-LINK:Documentation/DevGuide/Accessibility/XAccessibleEventBroadcaster
-DESCR:Accessibility - XAccessibleEventBroadcaster
-REF:
-com.sun.star.accessibility.XAccessibleEventBroadcaster
-com.sun.star.lang.DisposedException
-com.sun.star.lang.IndexOutOfBoundsException
-TOPIC:
-com.sun.star.accessibility.XAccessibleEventBroadcaster
-
 LINK:Documentation/DevGuide/AdvUNO/UNO_Reflection_API#Introspection
 DESCR:AdvUNO - UNO Reflection API - CoreReflection Service - Introspection
 REF:
@@ -1348,15 +1306,6 @@ TOPIC:
 com.sun.star.sdb.XCommandPreparation
 com.sun.star.sdb.CommandType
 
-LINK:Documentation/DevGuide/Accessibility/Overview
-DESCR:Accessibility - Overview
-REF:
-com.sun.star.awt.XExtendedToolkit
-com.sun.star.awt.XWindow
-com.sun.star.accessibility.XAccessibleContext
-com.sun.star.accessibility.XAccessible
-TOPIC:
-
 LINK:Documentation/DevGuide/Text/Settings#Creating_Document_Settings
 DESCR:Text - Settings - Creating Document Settings
 REF:
@@ -1585,15 +1534,6 @@ com.sun.star.sheet.XDataPilotDescriptor
 com.sun.star.sheet.DataPilotTables
 TOPIC:
 
-LINK:Documentation/DevGuide/Accessibility/XAccessibleContext
-DESCR:Accessibility - XAccessibleContext
-REF:
-com.sun.star.accessibility.XAccessibleContext
-com.sun.star.accessibility.AccessibleRole
-com.sun.star.accessibility.XAccessible
-TOPIC:
-com.sun.star.accessibility.XAccessibleContext
-
 LINK:Documentation/DevGuide/Spreadsheets/Other_Table_Operations#Scenarios
 DESCR:Spreadsheets - Other Table Operations - Scenarios
 REF:
@@ -1662,14 +1602,6 @@ DESCR:JavaBean - OfficeConnection Interface
 REF:
 com.sun.star.uno.XComponentContext
 TOPIC:
-
-LINK:Documentation/DevGuide/Accessibility/XAccessibleEditableText
-DESCR:Accessibility - XAccessibleEditableText
-REF:
-com.sun.star.accessibility.XAccessibleEditableText
-com.sun.star.accessibility.XAccessibleText
-TOPIC:
-com.sun.star.accessibility.XAccessibleEditableText
 
 LINK:Documentation/DevGuide/ProUNO/Basic/Mapping_of_Simple_Types
 DESCR:ProUNO - Basic - Mapping of Simple Types
@@ -2196,13 +2128,6 @@ com.sun.star.awt.XMessageBoxFactory
 com.sun.star.awt.MessageBoxButtons
 TOPIC:
 
-LINK:Documentation/DevGuide/Accessibility/XAccessibleText#Text_type
-DESCR:Accessibility - XAccessibleText - Text type
-REF:
-com.sun.star.accessibility.XAccessibleEditableText
-com.sun.star.accessibility.AccessibleTextType
-TOPIC:
-
 LINK:Documentation/DevGuide/OfficeDev/Integrating_Import_and_Export_Filters
 DESCR:OfficeDev - Integrating Import and Export Filters
 REF:
@@ -2590,12 +2515,6 @@ com.sun.star.util.XNumberFormatsSupplier
 TOPIC:
 com.sun.star.sdb.DataSource
 
-LINK:Documentation/DevGuide/Accessibility/Content_Information
-DESCR:Accessibility - Content Information
-REF:
-com.sun.star.accessibility.XAccessible
-TOPIC:
-
 LINK:Documentation/DevGuide/ProUNO/Java/Mapping_of_Exception_Types
 DESCR:ProUNO - Java - Mapping of Exception Types
 REF:
@@ -2685,14 +2604,6 @@ DESCR:OfficeDev - Java Window Integration - More Remote Problems - Resizing
 REF:
 com.sun.star.lang.DisposedException
 TOPIC:
-
-LINK:Documentation/DevGuide/Accessibility/XAccessibleHyperlink
-DESCR:Accessibility - XAccessibleHyperlink
-REF:
-com.sun.star.accessibility.XAccessibleHyperlink
-com.sun.star.accessibility.XAccessibleAction
-TOPIC:
-com.sun.star.accessibility.XAccessibleHyperlink
 
 LINK:Documentation/DevGuide/UCB/Setting_Content_Properties
 DESCR:UCB - Setting Content Properties
@@ -3469,16 +3380,6 @@ com.sun.star.form.component.DataForm
 TOPIC:
 com.sun.star.sdb.RowSet
 
-LINK:Documentation/DevGuide/Accessibility/XAccessibleSelection
-DESCR:Accessibility - XAccessibleSelection
-REF:
-com.sun.star.accessibility.XAccessibleTable
-com.sun.star.accessibility.XAccessibleContext
-com.sun.star.accessibility.XAccessibleText
-com.sun.star.accessibility.XAccessibleSelection
-TOPIC:
-com.sun.star.accessibility.XAccessibleSelection
-
 LINK:Documentation/DevGuide/AdvUNO/UNO_Reflection_API#XTypeDescription
 DESCR:AdvUNO - UNO Reflection API - CoreReflection Service - XTypeDescription
 REF:
@@ -3504,14 +3405,6 @@ com.sun.star.view.XSelectionSupplier
 com.sun.star.frame.XModel
 TOPIC:
 com.sun.star.view.XSelectionSupplier
-
-LINK:Documentation/DevGuide/Accessibility/XAccessibleComponent
-DESCR:Accessibility - XAccessibleComponent
-REF:
-com.sun.star.accessibility.XAccessibleComponent
-com.sun.star.accessibility.XAccessibleContext
-TOPIC:
-com.sun.star.accessibility.XAccessibleComponent
 
 LINK:Documentation/DevGuide/ProUNO/Basic/Getting_Information_about_UNO_Objects#Inspecting_properties_during_debugging
 DESCR:ProUNO - Basic - Getting Information about UNO Objects - Inspecting properties during debugging
@@ -3635,15 +3528,6 @@ REF:
 com.sun.star.sdb.RowSet
 com.sun.star.sdb.ResultSet
 TOPIC:
-
-LINK:Documentation/DevGuide/Accessibility/XAccessibleStateSet
-DESCR:Accessibility - XAccessibleStateSet
-REF:
-com.sun.star.accessibility.AccessibleStateType
-com.sun.star.accessibility.XAccessibleStateSet
-TOPIC:
-com.sun.star.accessibility.AccessibleStateType
-com.sun.star.accessibility.XAccessibleStateSet
 
 LINK:Documentation/DevGuide/Database/Database_Design#Retrieving_Information_about_a_Database
 DESCR:Database - Database Design - Retrieving Information about a Database
@@ -4180,13 +4064,6 @@ TOPIC:
 com.sun.star.util.XProtectable
 com.sun.star.document.XActionLockable
 
-LINK:Documentation/DevGuide/Accessibility/XAccessibleValue
-DESCR:Accessibility - XAccessibleValue
-REF:
-com.sun.star.accessibility.XAccessibleValue
-TOPIC:
-com.sun.star.accessibility.XAccessibleValue
-
 LINK:Documentation/DevGuide/OfficeDev/Component/Controllers#XContextMenuInterception
 DESCR:OfficeDev - Component - Controllers - XContextMenuInterception
 REF:
@@ -4560,16 +4437,6 @@ REF:
 com.sun.star.awt.XWindow
 TOPIC:
 
-LINK:Documentation/DevGuide/Accessibility/Using_the_Accessibility_API
-DESCR:Accessibility - Using the Accessibility API
-REF:
-com.sun.star.accessibility.XAccessibleEventListener
-com.sun.star.awt.XTopWindowListener
-com.sun.star.awt.XExtendedToolkit
-com.sun.star.accessibility.AccessibleEventObject
-com.sun.star.accessibility.XAccessibleContext
-TOPIC:
-
 LINK:Documentation/DevGuide/Spreadsheets/Cell_Ranges_and_Cells_Container
 DESCR:Spreadsheets - Cell Ranges and Cells Container
 REF:
@@ -4725,17 +4592,6 @@ DESCR:OfficeDev - Predefined Variables
 REF:
 com.sun.star.util.PathSubstitution
 TOPIC:
-
-LINK:Documentation/DevGuide/Accessibility/Listeners_and_Broadcasters
-DESCR:Accessibility - Listeners and Broadcasters
-REF:
-com.sun.star.accessibility.XAccessibleEventListener
-com.sun.star.accessibility.XAccessibleEventBroadcaster
-com.sun.star.accessibility.AccessibleEventObject
-com.sun.star.accessibility.AccessibleEventId
-TOPIC:
-com.sun.star.accessibility.XAccessibleEventListener
-com.sun.star.accessibility.XAccessibleEventBroadcaster
 
 LINK:Documentation/DevGuide/GUI/Label_Field
 DESCR:GUI - Label Field
@@ -4926,14 +4782,6 @@ TOPIC:
 com.sun.star.chart.XYDiagram
 com.sun.star.chart.Diagram
 
-LINK:Documentation/DevGuide/Accessibility/XAccessibleImage
-DESCR:Accessibility - XAccessibleImage
-REF:
-com.sun.star.accessibility.XAccessibleImage
-com.sun.star.accessibility.XAccessibleContext
-TOPIC:
-com.sun.star.accessibility.XAccessibleImage
-
 LINK:Documentation/DevGuide/GUI/Time_Field
 DESCR:GUI - Time Field
 REF:
@@ -5001,14 +4849,6 @@ DESCR:ProUNO - Object Identity
 REF:
 com.sun.star.lang.XComponent
 TOPIC:
-
-LINK:Documentation/DevGuide/Accessibility/XAccessibleKeyBinding
-DESCR:Accessibility - XAccessibleKeyBinding
-REF:
-com.sun.star.accessibility.XAccessibleKeyBinding
-com.sun.star.awt.KeyStroke
-TOPIC:
-com.sun.star.accessibility.XAccessibleKeyBinding
 
 LINK:Documentation/DevGuide/FirstSteps/Element_Access#Name_Access
 DESCR:FirstSteps - Element Access - Name Access
@@ -5444,18 +5284,6 @@ com.sun.star.script.XScriptListener
 com.sun.star.form.FormComponents
 com.sun.star.awt.XCheckBox
 TOPIC:
-
-LINK:Documentation/DevGuide/Accessibility/Implementing_Accessible_Objects#Services
-DESCR:Accessibility - Implementing Accessible Objects - Services
-REF:
-com.sun.star.accessibility.XAccessibleEventBroadcaster
-com.sun.star.accessibility.Accessible
-com.sun.star.accessibility.AccessibleContext
-com.sun.star.accessibility.XAccessibleContext
-com.sun.star.accessibility.XAccessible
-TOPIC:
-com.sun.star.accessibility.AccessibleContext
-com.sun.star.accessibility.XAccessible
 
 LINK:Documentation/DevGuide/Text/TextViewCursor
 DESCR:Text - TextViewCursor
@@ -6614,14 +6442,6 @@ REF:
 com.sun.star.lang.XEventListener
 TOPIC:
 
-LINK:Documentation/DevGuide/Accessibility/XAccessibleTable
-DESCR:Accessibility - XAccessibleTable
-REF:
-com.sun.star.accessibility.XAccessibleTable
-com.sun.star.accessibility.XAccessibleContext
-TOPIC:
-com.sun.star.accessibility.XAccessibleTable
-
 LINK:Documentation/DevGuide/Forms/The_Model-View_Paradigm
 DESCR:Forms - The Model-View Paradigm
 REF:
@@ -6680,15 +6500,6 @@ DESCR:AppendixA - Exceptions - Naming
 REF:
 com.sun.star.lang.IllegalArgumentException
 TOPIC:
-
-LINK:Documentation/DevGuide/Accessibility/XAccessibleHypertext
-DESCR:Accessibility - XAccessibleHypertext
-REF:
-com.sun.star.accessibility.XAccessibleHypertext
-com.sun.star.accessibility.XAccessibleHyperlink
-com.sun.star.accessibility.XAccessibleText
-TOPIC:
-com.sun.star.accessibility.XAccessibleHypertext
 
 LINK:Documentation/DevGuide/WritingUNO/Intercepting_Context_Menus#Finishing_Interception
 DESCR:WritingUNO - Intercepting Context Menus - Writing an Interceptor - Finishing Interception
@@ -7113,14 +6924,6 @@ REF:
 com.sun.star.frame.XStorable
 TOPIC:
 
-LINK:Documentation/DevGuide/Accessibility/XAccessibleAction
-DESCR:Accessibility - XAccessibleAction
-REF:
-com.sun.star.accessibility.XAccessibleKeyBinding
-com.sun.star.accessibility.XAccessibleAction
-TOPIC:
-com.sun.star.accessibility.XAccessibleAction
-
 LINK:Documentation/DevGuide/Text/Editing_Text
 DESCR:Text - Editing Text
 REF:
@@ -7373,17 +7176,6 @@ com.sun.star.lang.XMultiServiceFactory
 com.sun.star.uno.XInterface
 TOPIC:
 
-LINK:Documentation/DevGuide/Accessibility/XAccessibleEventListener
-DESCR:Accessibility - XAccessibleEventListener
-REF:
-com.sun.star.accessibility.XAccessibleEventListener
-com.sun.star.accessibility.AccessibleEventObject
-com.sun.star.accessibility.XAccessibleContext
-com.sun.star.accessibility.AccessibleEventId
-com.sun.star.accessibility.XAccessible
-TOPIC:
-com.sun.star.accessibility.XAccessibleEventListener
-
 LINK:Documentation/DevGuide/ProUNO/Java/Transparent_Use_of_Office_UNO_Components
 DESCR:ProUNO - Java - Transparent Use of Office UNO Components
 REF:
@@ -7533,13 +7325,6 @@ com.sun.star.table.CellAddress
 TOPIC:
 com.sun.star.sheet.XConsolidatable
 com.sun.star.sheet.XConsolidationDescriptor
-
-LINK:Documentation/DevGuide/Accessibility/XAccessibleText
-DESCR:Accessibility - XAccessibleText
-REF:
-com.sun.star.accessibility.XAccessibleText
-TOPIC:
-com.sun.star.accessibility.XAccessibleText
 
 LINK:Documentation/DevGuide/Scripting/Integration_with_Extension_Manager#Implementation_of_LanguageScriptProvider_with_support_for_Package_Manager
 DESCR:Scripting - Integration with Extension Manager - Overview of how ScriptingFramework integrates with the Extension Manager API - Implementation of LanguageScriptProvider with support for Package Manager
