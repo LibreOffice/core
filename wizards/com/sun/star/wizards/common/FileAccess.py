@@ -16,7 +16,6 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import traceback
-from os import path as osPath
 from .NoValidPathException import NoValidPathException
 
 from com.sun.star.ucb import CommandAbortedException
@@ -212,17 +211,6 @@ class FileAccess(object):
             traceback.print_exc()
 
         return sTitle
-
-    def getURL(self, path, childPath=None):
-        try:
-            f = open(path, 'w')
-
-            r = self.filenameConverter.getFileURLFromSystemPath(path,
-                 osPath.abspath(path))
-            return r
-        except Exception:
-            traceback.print_exc()
-            return None
 
     def getPath(self, parentURL, childURL):
         string = ""

@@ -17,7 +17,7 @@
 #
 import uno
 import traceback
-import unohelper
+from unohelper import absolutize, systemPathToFileUrl
 from ..ui.event.CommonListener import TerminateListenerProcAdapter
 from ..common.Desktop import Desktop
 
@@ -105,7 +105,7 @@ class OfficeDocument(object):
         xComponent = None
         try:
             xComponent = frame.loadComponentFromURL(
-                sURL, "_self", 0, tuple(loadValues))
+                systemPathToFileUrl(sURL), "_self", 0, tuple(loadValues))
 
         except Exception:
             traceback.print_exc()
@@ -183,6 +183,8 @@ class OfficeDocument(object):
     def load(self, xInterface, sURL, sFrame, xValues):
         xComponent = None
         try:
+            if not sURL.startswith("file://"):
+                sURL = systemPathToFileUrl(sURL)
             xComponent = xInterface.loadComponentFromURL(
                 sURL, sFrame, 0, tuple(xValues))
         except Exception:
@@ -205,21 +207,18 @@ class OfficeDocument(object):
                 oStoreProperties[1].Value = xMSF.createInstance(
                     "com.sun.star.comp.uui.UUIInteractionHandler")
             else:
-                oStoreProperties = list(range(0))
-
-            if StorePath.startswith("file://"):
-                #Unix
-                StorePath = StorePath[7:]
+                oStoreProperties = list(range(0))      
 
             sPath = StorePath[:(StorePath.rfind("/") + 1)]
             sFile = StorePath[(StorePath.rfind("/") + 1):]
             xComponent.storeToURL(
-                unohelper.absolutize(
-                    unohelper.systemPathToFileUrl(sPath),
-                    unohelper.systemPathToFileUrl(sFile)),
-                    tuple(oStoreProperties))
+                absolutize(systemPathToFileUrl(sPath), sFile),
+                tuple(oStoreProperties))
             return True
         except ErrorCodeIOException:
+            #Throw this exception when trying to save a file 
+            #which is already opened in Libreoffice
+            #TODO: handle it properly
             return True
             pass
         except Exception:
