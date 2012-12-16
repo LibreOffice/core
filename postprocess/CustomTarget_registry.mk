@@ -576,7 +576,7 @@ $(call gb_CustomTarget_get_workdir,postprocess/registry)/fcfg_langpack_%.list :
 	&& unzip $< \
 	&& cd .. \
 	&& echo '<list>' > $@ \
-	&& find fcfg_langpack_$*.unzip -name *.xcu -size +0c -printf '<filename>%p</filename>\n' >> $@ \
+	&& ( find fcfg_langpack_$*.unzip -name *.xcu -size +0c -print0 | xargs -n1 -0 -I '{}' echo '<filename>{}</filename>\n') >> $@ \
 	&& echo '</list>' >> $@ \
 	)
 
@@ -596,7 +596,7 @@ $(call gb_CustomTarget_get_workdir,postprocess/registry)/registry_%.list :
 	&& rm -rf * \
 	&& unzip $(call gb_Zip_get_target,registry_$*) \
 	&& cd .. \
-	&& find registry_$*.unzip -name *.xcu -printf '<filename>%p</filename>\n' >> $@ \
+	&& (find registry_$*.unzip -name *.xcu -print0 | xargs -n1 -0 -I '{}' echo '<filename>{}</filename>\n') >> $@ \
 	)
 ifeq (DBCONNECTIVITY,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
 	# Add fcfg_drivers_*.zip content to *.list:
@@ -607,7 +607,7 @@ ifeq (DBCONNECTIVITY,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
 		&& rm -rf * \
 		&& unzip $(call gb_Zip_get_target,$(driver)_$*) \
 		&& cd .. \
-		&& find $(driver)_$*.unzip -name *.xcu -printf '<filename>%p</filename>\n' >> $@ \
+		&& (find $(driver)_$*.unzip -name *.xcu -print0 | xargs -n1 -0 -I '{}' echo '<filename>{}</filename>\n') >> $@ \
 	) \
 	)
 endif
@@ -618,7 +618,7 @@ ifeq ($(ENABLE_ONLINE_UPDATE),TRUE)
 	&& rm -rf * \
 	&& unzip $(call gb_Zip_get_target,updchk_$*) \
 	&& cd .. \
-	&& find updchk_$*.unzip -name *.xcu -printf '<filename>%p</filename>\n' >> $@ \
+	&& (find updchk_$*.unzip -name *.xcu -print0 | xargs -n1 -0 -I '{}' echo '<filename>{}</filename>\n') >> $@ \
 	)
 endif
 	echo '</list>' >> $@
