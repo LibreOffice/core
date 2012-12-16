@@ -155,7 +155,6 @@ class FaxWizardDialogImpl(FaxWizardDialog):
                 self.myPathSelection.triggerPathPicker()
                 self.sPath = self.myPathSelection.getSelectedPath()
 
-            self.sPath = fileAccess.getURL(self.sPath)
             #first, if the filename was not changed, thus
             #it is coming from a saved session, check if the
             # file exists and warn the user.
