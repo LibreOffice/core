@@ -1961,13 +1961,9 @@ Resource RID_GLOBSTR
         Text [ en-US ] = "This document was last saved by Excel.  Some formula cells may produce different results when recalculated.\n\nDo you want to recalculate all formula cells now?";
     };
 
-    String STR_ALWAYS
+    String STR_ALWAYS_PERFORM_SELECTED
     {
-        Text [ en-US ] = "Always";
-    };
-    String STR_NEVER
-    {
-        Text [ en-US ] = "Never";
+        Text [ en-US ] = "Always perform this without prompt in the future.";
     };
 };
 

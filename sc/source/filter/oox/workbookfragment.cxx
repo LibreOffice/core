@@ -327,54 +327,30 @@ void WorkbookFragment::finalizeImport()
     {
         if (rDoc.IsUserInteractionEnabled())
         {
-
-#define RET_ALWAYS 10
-#define RET_NEVER 11
             // Ask the user if full re-calculation is desired.
             QueryBox aBox(
                 pDocSh->GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
                 ScGlobal::GetRscString(STR_QUERY_FORMULA_RECALC_ONLOAD_XLS));
-            aBox.AddButton(ScGlobal::GetRscString(STR_ALWAYS), RET_ALWAYS, 0);
-            aBox.AddButton(ScGlobal::GetRscString(STR_NEVER), RET_NEVER, 0);
+            aBox.SetCheckBoxText(ScGlobal::GetRscString(STR_ALWAYS_PERFORM_SELECTED));
 
             boost::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create() );
             sal_Int32 nRet = aBox.Execute();
-            switch (nRet)
+            bHardRecalc = nRet == RET_YES;
+
+            if (aBox.GetCheckBoxState())
             {
-                case RET_YES:
-                    bHardRecalc = true;
-                    break;
-                case RET_NO:
-                    bHardRecalc = false;
-                    break;
-                case RET_ALWAYS:
-                    {
-                        bHardRecalc = true;
-                        officecfg::Office::Calc::Formula::Load::OOXMLRecalcMode::set(sal_Int32(0), batch);
-                        ScFormulaOptions aOpt = SC_MOD()->GetFormulaOptions();
-                        aOpt.SetOOXMLRecalcOptions(RECALC_ALWAYS);
-                        SC_MOD()->SetFormulaOptions(aOpt);
-                    }
-                    break;
-                case RET_NEVER:
-                    {
-                        bHardRecalc = false;
-                        officecfg::Office::Calc::Formula::Load::OOXMLRecalcMode::set(sal_Int32(2), batch);
-                        ScFormulaOptions aOpt = SC_MOD()->GetFormulaOptions();
-                        aOpt.SetOOXMLRecalcOptions(RECALC_NEVER);
-                        SC_MOD()->SetFormulaOptions(aOpt);
-                    }
-                    break;
-                default:
-                    SAL_WARN("sc", "unknown return value!");
-                    bHardRecalc = true;
+                // Always perform selected action in the future.
+                officecfg::Office::Calc::Formula::Load::OOXMLRecalcMode::set(sal_Int32(0), batch);
+                ScFormulaOptions aOpt = SC_MOD()->GetFormulaOptions();
+                aOpt.SetOOXMLRecalcOptions(bHardRecalc ? RECALC_ALWAYS : RECALC_NEVER);
+                SC_MOD()->SetFormulaOptions(aOpt);
+
             }
             batch->commit();
         }
     }
-    else if(nRecalcMode == 0)
+    else if (nRecalcMode == 0)
         bHardRecalc = true;
-
 
     if (bHardRecalc)
         pDocSh->DoHardRecalc(false);

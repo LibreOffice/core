@@ -288,7 +288,7 @@ TabPage RID_SCPAGE_FORMULA
     {
         Pos = MAP_APPFONT ( 6, 178 );
         Size = MAP_APPFONT( 248, 8 );
-        Text [ en-US ] = "Recalculation after laod settings";
+        Text [ en-US ] = "Recalculation on file load";
     };
     ListBox LB_OOXML_RECALC
     {

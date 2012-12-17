@@ -619,9 +619,8 @@
 
 #define STR_QUERY_FORMULA_RECALC_ONLOAD_ODS 493
 #define STR_QUERY_FORMULA_RECALC_ONLOAD_XLS 494
-#define STR_ALWAYS                  495
-#define STR_NEVER                   496
+#define STR_ALWAYS_PERFORM_SELECTED 495
 
-#define STR_COUNT                   497
+#define STR_COUNT                   496
 
 #endif
