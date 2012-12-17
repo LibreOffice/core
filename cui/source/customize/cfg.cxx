@@ -3706,9 +3706,10 @@ ToolbarSaveInData::ToolbarSaveInData(
     m_aDescriptorContainer  ( ITEM_DESCRIPTOR_CONTAINER  )
 
 {
+    uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
     // Initialize the m_xPersistentWindowState variable which is used
     // to get the default properties of system toolbars such as name
-    uno::Reference< container::XNameAccess > xPWSS = css::ui::WindowStateConfiguration::create( m_xContext );
+    uno::Reference< container::XNameAccess > xPWSS = css::ui::WindowStateConfiguration::create( xContext );
 
     xPWSS->getByName( aModuleId ) >>= m_xPersistentWindowState;
 }

@@ -132,9 +132,6 @@ public:
             GetParentImageManager() { return m_xParentImgMgr; };
 
     ::com::sun::star::uno::Reference
-        < com::sun::star::uno::XComponentContext > m_xContext;
-
-    ::com::sun::star::uno::Reference
         < com::sun::star::container::XNameAccess > m_xCommandToLabelMap;
 
     com::sun::star::uno::Sequence
