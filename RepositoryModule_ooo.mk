@@ -76,6 +76,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 	eventattacher \
 	$(call gb_Helper_optional,EXPAT,expat) \
 	extensions \
+	external \
 	extras \
 	fileaccess \
 	filter \

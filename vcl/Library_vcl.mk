@@ -49,7 +49,7 @@ $(eval $(call gb_Library_use_custom_headers,vcl,vcl/generic/fontmanager))
 $(eval $(call gb_Library_set_include,vcl,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
-	$(if $(filter WNTGCC,$(OS)$(COM)),-I$(OUTDIR)/inc/external/wine) \
+	$(if $(filter WNTGCC,$(OS)$(COM)),-I$(SRCDIR)/external/wine/include) \
 ))
 
 $(eval $(call gb_Library_add_defs,vcl,\
