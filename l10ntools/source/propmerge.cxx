@@ -88,7 +88,9 @@ namespace
                 rOfstream
                     << "\\u"
                     << std::setfill('0') << std::setw(2) << std::uppercase
-                    << std::hex << (cUniCode >> 8) << (cUniCode & 0xFF);
+                    << std::hex << (cUniCode >> 8)
+                    << std::setfill('0') << std::setw(2) << std::uppercase
+                    << std::hex << (cUniCode & 0xFF);
             }
         }
     }
