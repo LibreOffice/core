@@ -77,7 +77,7 @@ void TemplateRemoteView::showOverlay (bool bVisible)
     }
 }
 
-bool TemplateRemoteView::loadRepository (TemplateRemoteViewItem* pItem, bool bRefresh)
+bool TemplateRemoteView::loadRepository (TemplateRepository* pItem, bool bRefresh)
 {
     if (!pItem)
         return false;
@@ -92,7 +92,7 @@ bool TemplateRemoteView::loadRepository (TemplateRemoteViewItem* pItem, bool bRe
     mpItemView->setId(pItem->mnId);
     mpItemView->setName(pItem->maTitle);
 
-    OUString aURL = static_cast<TemplateRemoteViewItem*>(pItem)->getURL();
+    OUString aURL = pItem->getURL();
 
     try
     {

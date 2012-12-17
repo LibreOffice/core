@@ -22,7 +22,7 @@ class SfxTemplateInfoDlg;
 class TemplateAbstractView;
 class TemplateLocalView;
 class TemplateRemoteView;
-class TemplateRemoteViewItem;
+class TemplateRepository;
 class TemplateSearchView;
 class ThumbnailView;
 class ThumbnailViewItem;
@@ -113,7 +113,7 @@ private:
     // Remote repositories handling methods
     void loadRepositories ();
 
-    const std::vector<TemplateRemoteViewItem*>& getRepositories () const { return maRepositories; }
+    const std::vector<TemplateRepository*>& getRepositories () const { return maRepositories; }
 
     bool insertRepository (const OUString &rName, const OUString &rURL);
 
@@ -146,7 +146,7 @@ private:
     com::sun::star::uno::Reference< com::sun::star::frame::XComponentLoader > mxDesktop;
 
     bool mbIsSynced; ///< Tells whether maRepositories is synchronized with the user config
-    std::vector<TemplateRemoteViewItem*> maRepositories; ///< Stores the remote repositories for templates
+    std::vector<TemplateRepository*> maRepositories; ///< Stores the remote repositories for templates
 };
 
 #endif // TEMPLATEDLG_HXX

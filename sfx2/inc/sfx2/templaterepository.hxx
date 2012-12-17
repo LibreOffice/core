@@ -12,13 +12,13 @@
 
 #include <sfx2/templateproperties.hxx>
 
-class TemplateRemoteViewItem
+class TemplateRepository
 {
 public:
 
-    TemplateRemoteViewItem () : mnId(0) { };
+    TemplateRepository () : mnId(0) { };
 
-    virtual ~TemplateRemoteViewItem () { };
+    virtual ~TemplateRepository () { };
 
     void setURL (const rtl::OUString &rURL) { maUrl = rURL; }
 
