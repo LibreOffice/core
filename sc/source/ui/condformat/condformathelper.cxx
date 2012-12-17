@@ -153,6 +153,10 @@ rtl::OUString ScCondFormatHelper::GetExpression( ScCondFormatEntryType eType, sa
     aBuffer.append(rtl::OUString(" "));
     if(eType == CONDITION)
     {
+        // workaround missing FORMULA option in the conditions case
+        // FORMULA is handled later
+        if(nIndex > 9)
+            ++nIndex;
         aBuffer.append(getExpression(nIndex));
         if(nIndex <= 7 || nIndex >= 19)
         {
