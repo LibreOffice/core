@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAR3////8\u003d",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2012-12-17T15:36:27Z",
+      "side": 1,
+      "message": "This is incorrect. The last argument to the call is length of the string literal. If the length of the other string is larger, this will mean accesses beyond the string literal, in an extreme case leading even to a crash.",
+      "revId": "7b10452d1d2cf3cfaef33f0b08d9d8772f7e03f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAR3////4\u003d",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2012-12-17T15:36:27Z",
+      "side": 1,
+      "message": "OUString has this dubious \"immutable\" feature and so replaceAll() does not modify aRange but instead returns the newly modified string, so this should be aRange \u003d ... . You should even be getting a compiler warning here.",
+      "revId": "7b10452d1d2cf3cfaef33f0b08d9d8772f7e03f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAR3////0\u003d",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2012-12-17T15:36:27Z",
+      "side": 1,
+      "message": "This removes RTL_CONSTASCII_STRINGPARAM and changes it to what the macro does, moreover there\u0027s an off-by-one error. This can be just .indexOf( aURLBegin ).",
+      "revId": "7b10452d1d2cf3cfaef33f0b08d9d8772f7e03f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAR3////w\u003d",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1455,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2012-12-17T15:36:27Z",
+      "side": 1,
+      "message": "Incorrect again.",
+      "revId": "7b10452d1d2cf3cfaef33f0b08d9d8772f7e03f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
