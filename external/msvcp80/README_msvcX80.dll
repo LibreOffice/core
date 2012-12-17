@@ -1,3 +1,0 @@
-Put the msvcp80.dll, msvcr80.dll and Microsoft.VC80.CRT.manifest in this
-directory for Windows builds using VS 2005, or using prebuilt Mozilla DLLs
-that were built using VS 2005.

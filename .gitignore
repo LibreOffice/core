@@ -98,13 +98,6 @@
 /*/*.exe
 /solenv/gdb/libreoffice/*.pyo
 /solenv/gdb/libreoffice/util/*.pyo
-
-# external dlls etc: that should be reworkded too.
-/external/*/*.dll
-/external/*/*.exe
-/external/*/*.manifest
-/external/*/*.txt
-/external/*/*.msm
 /moz/zipped/*.zip
 
 
