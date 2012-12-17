@@ -161,6 +161,7 @@
                           <object class="swlo:SwNumberingTypeListBox" id="numbering">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="type">17</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
