@@ -141,7 +141,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/control/templateview \
     sfx2/source/control/templateviewitem \
     sfx2/source/control/templatelocalview \
-    sfx2/source/control/templatelocalviewitem \
+    sfx2/source/control/templatecontaineritem \
     sfx2/source/control/templateremoteview \
     sfx2/source/control/templatesearchview \
     sfx2/source/control/thumbnailviewitem \

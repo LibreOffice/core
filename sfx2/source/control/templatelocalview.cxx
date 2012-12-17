@@ -11,7 +11,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <sfx2/doctempl.hxx>
-#include <sfx2/templatelocalviewitem.hxx>
+#include <sfx2/templatecontaineritem.hxx>
 #include <sfx2/templateview.hxx>
 #include <sfx2/templateviewitem.hxx>
 #include <svl/inettype.hxx>
