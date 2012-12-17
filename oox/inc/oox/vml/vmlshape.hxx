@@ -55,7 +55,7 @@ const sal_Int32 VML_CLIENTDATA_FORMULA          = 4;
 // ============================================================================
 
 /** The shape model structure contains all properties shared by all types of shapes. */
-struct ShapeTypeModel
+struct OOX_DLLPUBLIC ShapeTypeModel
 {
     ::rtl::OUString     maShapeId;              ///< Unique identifier of the shape.
     ::rtl::OUString     maShapeName;            ///< Name of the shape, if present.
