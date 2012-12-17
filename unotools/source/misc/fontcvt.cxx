@@ -1285,8 +1285,8 @@ sal_Unicode ConvertChar::RecodeChar( sal_Unicode cChar ) const
                 {
                     cRetVal = 0xE12C;
                     SAL_WARN( "unotools", "Forcing a bullet substition from 0x" <<
-                        OString::valueOf(cChar, 16) << " to 0x" <<
-                        OString::valueOf(cRetVal, 16));
+                        OString::valueOf((sal_Int32)cChar, 16) << " to 0x" <<
+                        OString::valueOf((sal_Int32)cRetVal, 16));
                 }
             }
         }
