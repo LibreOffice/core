@@ -427,6 +427,7 @@ SwOutlineSettingsTabPage::SwOutlineSettingsTabPage(Window* pParent,
 {
     get(m_pLevelLB, "level");
     get(m_pCollBox, "style");
+    m_pCollBox->SetStyle(m_pCollBox->GetStyle()|WB_SORT);
     get(m_pNumberBox, "numbering");
     get(m_pCharFmtLB, "charstyle");
     get(m_pAllLevelFT, "sublevelsft");
