@@ -625,7 +625,7 @@ IMPL_LINK(SfxTemplateManagerDlg, RepositoryMenuSelectHdl, Menu*, pMenu)
     {
         sal_uInt16 nRepoId = nMenuId - MNI_REPOSITORY_BASE;
 
-        TemplateRemoteViewItem *pRepository = NULL;
+        TemplateRepository *pRepository = NULL;
 
         for (size_t i = 0, n = maRepositories.size(); i < n; ++i)
         {
@@ -1211,7 +1211,7 @@ void SfxTemplateManagerDlg::createRepositoryMenu()
 
     mpRepositoryMenu->InsertItem(MNI_REPOSITORY_LOCAL,SfxResId(STR_REPOSITORY_LOCAL).toString());
 
-    const std::vector<TemplateRemoteViewItem*> &rRepos = getRepositories();
+    const std::vector<TemplateRepository*> &rRepos = getRepositories();
 
     for (size_t i = 0, n = rRepos.size(); i < n; ++i)
         mpRepositoryMenu->InsertItem(MNI_REPOSITORY_BASE+rRepos[i]->mnId,rRepos[i]->maTitle);
@@ -1449,7 +1449,7 @@ void SfxTemplateManagerDlg::loadRepositories()
 
     for (sal_Int32 i = 0; i < aUrls.getLength() && i < aNames.getLength(); ++i)
     {
-        TemplateRemoteViewItem *pItem = new TemplateRemoteViewItem();
+        TemplateRepository *pItem = new TemplateRepository();
 
         pItem->mnId = i+1;
         pItem->maTitle = aNames[i];
@@ -1467,7 +1467,7 @@ bool SfxTemplateManagerDlg::insertRepository(const OUString &rName, const OUStri
             return false;
     }
 
-    TemplateRemoteViewItem *pItem = new TemplateRemoteViewItem();
+    TemplateRepository *pItem = new TemplateRepository();
 
     pItem->mnId = maRepositories.size()+1;
     pItem->maTitle = rName;

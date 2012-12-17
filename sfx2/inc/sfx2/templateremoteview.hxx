@@ -15,7 +15,7 @@
 
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 
-class TemplateRemoteViewItem;
+class TemplateRepository;
 
 class TemplateRemoteView : public TemplateAbstractView
 {
@@ -29,7 +29,7 @@ public:
 
     virtual void showOverlay (bool bVisible);
 
-    bool loadRepository (TemplateRemoteViewItem* pRepository, bool bRefresh);
+    bool loadRepository (TemplateRepository* pRepository, bool bRefresh);
 
 private:
 
