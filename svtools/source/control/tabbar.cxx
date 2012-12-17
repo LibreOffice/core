@@ -1760,8 +1760,12 @@ Rectangle TabBar::ImplGetInsertTabRect(ImplTabBarItem* pItem) const
     if (mbHasInsertTab && pItem)
     {
         Rectangle aInsTabRect = pItem->maRect;
-        aInsTabRect.setX(
-            aInsTabRect.getX() + aInsTabRect.getWidth() - TABBAR_OFFSET_X - TABBAR_OFFSET_X2);
+        if ( !mbMirrored )
+            aInsTabRect.setX(
+                aInsTabRect.getX() + aInsTabRect.getWidth() - TABBAR_OFFSET_X - TABBAR_OFFSET_X2);
+        else
+            aInsTabRect.setX(
+                aInsTabRect.getX() - 3*TABBAR_OFFSET_X - TABBAR_OFFSET_X2);
         aInsTabRect.setWidth(32);
         return aInsTabRect;
     }
