@@ -26,16 +26,16 @@ using namespace basegfx::tools;
 using namespace drawinglayer::attribute;
 using namespace drawinglayer::primitive2d;
 
-TemplateLocalViewItem::TemplateLocalViewItem (ThumbnailView &rView)
+TemplateContainerItem::TemplateContainerItem (ThumbnailView &rView)
     : ThumbnailViewItem(rView)
 {
 }
 
-TemplateLocalViewItem::~TemplateLocalViewItem ()
+TemplateContainerItem::~TemplateContainerItem ()
 {
 }
 
-void TemplateLocalViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProcessor,
+void TemplateContainerItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProcessor,
                                     const ThumbnailItemAttributes *pAttrs)
 {
     int nCount = 0;
