@@ -131,10 +131,8 @@ public:
     Date&           operator -=( long nDays );
     Date&           operator ++();
     Date&           operator --();
-#ifndef MPW33
     Date            operator ++( int );
     Date            operator --( int );
-#endif
 
     TOOLS_DLLPUBLIC friend Date     operator +( const Date& rDate, long nDays );
     TOOLS_DLLPUBLIC friend Date     operator -( const Date& rDate, long nDays );

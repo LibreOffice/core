@@ -466,7 +466,6 @@ Date& Date::operator --()
     return *this;
 }
 
-#ifndef MPW33
 Date Date::operator ++( int )
 {
     Date aOldDate = *this;
@@ -480,7 +479,6 @@ Date Date::operator --( int )
     Date::operator--();
     return aOldDate;
 }
-#endif
 
 Date operator +( const Date& rDate, long nDays )
 {
