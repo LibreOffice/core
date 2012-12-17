@@ -754,121 +754,51 @@ namespace
     }
 }
 
-SfxDocumentPage::SfxDocumentPage( Window* pParent, const SfxItemSet& rItemSet ) :
-
-    SfxTabPage( pParent, SfxResId( TP_DOCINFODOC ), rItemSet ),
-
-    aBmp1           ( this, SfxResId( BMP_FILE_1 ) ),
-    aNameED         ( this, SfxResId( ED_FILE_NAME ) ),
-    aChangePassBtn  ( this, SfxResId( BTN_CHANGE_PASS ) ),
-
-    aLine1FL        ( this, SfxResId( FL_FILE_1 ) ),
-    aTypeFT         ( this, SfxResId( FT_FILE_TYP ) ),
-    aShowTypeFT     ( this, SfxResId( FT_FILE_SHOW_TYP ) ),
-    aReadOnlyCB     ( this, SfxResId( CB_FILE_READONLY ) ),
-    aFileFt         ( this, SfxResId( FT_FILE ) ),
-    aFileValFt      ( this, SfxResId( FT_FILE_VAL ) ),
-    aSizeFT         ( this, SfxResId( FT_FILE_SIZE ) ),
-    aShowSizeFT     ( this, SfxResId( FT_FILE_SHOW_SIZE ) ),
-
-    aLine2FL        ( this, SfxResId( FL_FILE_2 ) ),
-    aCreateFt       ( this, SfxResId( FT_CREATE ) ),
-    aCreateValFt    ( this, SfxResId( FT_CREATE_VAL ) ),
-    aChangeFt       ( this, SfxResId( FT_CHANGE ) ),
-    aChangeValFt    ( this, SfxResId( FT_CHANGE_VAL ) ),
-    aSignedFt       ( this, SfxResId( FT_SIGNED ) ),
-    aSignedValFt    ( this, SfxResId( FT_SIGNED_VAL ) ),
-    aSignatureBtn   ( this, SfxResId( BTN_SIGNATURE ) ),
-    aPrintFt        ( this, SfxResId( FT_PRINT ) ),
-    aPrintValFt     ( this, SfxResId( FT_PRINT_VAL ) ),
-    aTimeLogFt      ( this, SfxResId( FT_TIMELOG ) ),
-    aTimeLogValFt   ( this, SfxResId( FT_TIMELOG_VAL ) ),
-    aDocNoFt        ( this, SfxResId( FT_DOCNO ) ),
-    aDocNoValFt     ( this, SfxResId( FT_DOCNO_VAL ) ),
-    aUseUserDataCB  ( this, SfxResId( CB_USE_USERDATA ) ),
-    aDeleteBtn      ( this, SfxResId( BTN_DELETE ) ),
-
-    aLine3FL        ( this, SfxResId( FL_FILE_3 ) ),
-    aTemplFt        ( this, SfxResId( FT_TEMPL ) ),
-    aTemplValFt     ( this, SfxResId( FT_TEMPL_VAL ) ),
-
-    aUnknownSize    ( SfxResId( STR_UNKNOWNSIZE ).toString() ),
-    aMultiSignedStr ( SfxResId( STR_MULTSIGNED ).toString() ),
-
-    bEnableUseUserData  ( sal_False ),
-    bHandleDelete       ( sal_False )
-
+SfxDocumentPage::SfxDocumentPage(Window* pParent, const SfxItemSet& rItemSet)
+    : SfxTabPage(pParent, "DocumentInfoPage", "sfx/ui/documentinfopage.ui", rItemSet)
+    , bEnableUseUserData( sal_False )
+    , bHandleDelete( sal_False )
 {
-    aNameED.SetAccessibleName( SfxResId( EDIT_FILE_NAME ).toString() );
-    FreeResource();
+    get(m_pBmp, "icon");
+    get(m_pNameED, "nameed");
+//FIXME    m_pNameED->SetAccessibleName( SfxResId( EDIT_FILE_NAME ).toString() );
+    get(m_pChangePassBtn, "changepass");
+
+    get(m_pShowTypeFT, "showtype");
+    get(m_pReadOnlyCB, "readonlycb");
+    get(m_pFileValFt, "showlocation");
+    get(m_pShowSizeFT, "showsize");
+    m_aUnknownSize = m_pShowSizeFT->GetText();
+    m_pShowSizeFT->SetText(OUString(""));
+
+    get(m_pCreateValFt, "showcreate");
+    get(m_pChangeValFt, "showmodify");
+    get(m_pSignedValFt, "showsigned");
+    m_aMultiSignedStr = m_pSignedValFt->GetText();
+    m_pSignedValFt->SetText(OUString(""));
+    get(m_pSignatureBtn, "signature");
+    get(m_pPrintValFt, "showprint");
+    get(m_pTimeLogValFt, "showedittime");
+    get(m_pDocNoValFt, "showrevision");
+
+    get(m_pUseUserDataCB, "userdatacb");
+    get(m_pDeleteBtn, "reset");
+
+    get(m_pTemplFt, "templateft");
+    get(m_pTemplValFt, "showtemplate");
+
     ImplUpdateSignatures();
     ImplCheckPasswordState();
-    aChangePassBtn.SetClickHdl( LINK( this, SfxDocumentPage, ChangePassHdl ) );
-    aSignatureBtn.SetClickHdl( LINK( this, SfxDocumentPage, SignatureHdl ) );
-    aDeleteBtn.SetClickHdl( LINK( this, SfxDocumentPage, DeleteHdl ) );
-
-    // Get the max size needed for the 'Change Password', 'Signature' and 'Delete' buttons
-    // and set their size according to this max size to get perfect aligment
-    long nTxtW = ( aChangePassBtn.GetTextWidth( aChangePassBtn.GetText() ) + IMPL_EXTRA_BUTTON_WIDTH );
-    nTxtW = Max( ( aSignatureBtn.GetTextWidth( aSignatureBtn.GetText() ) + IMPL_EXTRA_BUTTON_WIDTH ), nTxtW);
-    nTxtW = Max( ( aDeleteBtn.GetTextWidth( aDeleteBtn.GetText() ) + IMPL_EXTRA_BUTTON_WIDTH ), nTxtW);
-
-    // New size and position for the 'Change Password' button
-    Size aNewSize = aChangePassBtn.GetSizePixel();
-    long nDelta = nTxtW - aNewSize.Width();
-    aNewSize.Width() = nTxtW;
-    aChangePassBtn.SetSizePixel( aNewSize );
-    Point aNewPos = aChangePassBtn.GetPosPixel();
-    aNewPos.X() -= nDelta;
-    aChangePassBtn.SetPosPixel( aNewPos );
-
-    // Calculate the space between the bmp image and the 'Change password' button
-    nDelta = aNewPos.X() - IMPL_EXTRA_BUTTON_WIDTH / 2 \
-             - ( aBmp1.GetPosPixel().X() + aBmp1.GetSizePixel().Width() );
-
-    // Reduces the filename field size if space size is not large enough
-    aNewSize = aNameED.GetSizePixel();
-    if ( nDelta - aNewSize.Width() < IMPL_EXTRA_BUTTON_WIDTH )
-    {
-        aNewSize.Width() -= IMPL_EXTRA_BUTTON_WIDTH - ( nDelta - aNewSize.Width() );
-        aNameED.SetSizePixel( aNewSize );
-    }
-
-    // Centers the filename field in the space
-    aNewPos = aNameED.GetPosPixel();
-    nDelta -= aNewSize.Width();
-    aNewPos.X() = aBmp1.GetPosPixel().X() + aBmp1.GetSizePixel().Width() + nDelta / 2;
-    aNameED.SetPosPixel( aNewPos );
-
-    // New size and position for the 'Signature' button
-    aNewSize = aSignatureBtn.GetSizePixel();
-    nDelta = nTxtW - aNewSize.Width();
-    aNewSize.Width() = nTxtW;
-    aSignatureBtn.SetSizePixel( aNewSize );
-    aNewPos = aSignatureBtn.GetPosPixel();
-    aNewPos.X() -= nDelta;
-    aSignatureBtn.SetPosPixel( aNewPos );
-
-    // New size for the signature field
-    aNewSize = aSignedValFt.GetSizePixel();
-    aNewSize.Width() -= nDelta;
-    aSignedValFt.SetSizePixel( aNewSize );
-
-    // New size and position for the 'Delete' button
-    aNewSize = aDeleteBtn.GetSizePixel();
-    nDelta = nTxtW - aNewSize.Width();
-    aNewSize.Width() = nTxtW;
-    aDeleteBtn.SetSizePixel( aNewSize );
-    aNewPos = aDeleteBtn.GetPosPixel();
-    aNewPos.X() -= nDelta;
-    aDeleteBtn.SetPosPixel( aNewPos );
+    m_pChangePassBtn->SetClickHdl( LINK( this, SfxDocumentPage, ChangePassHdl ) );
+    m_pSignatureBtn->SetClickHdl( LINK( this, SfxDocumentPage, SignatureHdl ) );
+    m_pDeleteBtn->SetClickHdl( LINK( this, SfxDocumentPage, DeleteHdl ) );
 
     // [i96288] Check if the document signature command is enabled
     // on the main list enable/disable the pushbutton accordingly
     SvtCommandOptions aCmdOptions;
     if ( aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED,
                              rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( DOCUMENT_SIGNATURE_MENU_CMD ) ) ) )
-        aSignatureBtn.Disable();
+        m_pSignatureBtn->Disable();
 }
 
 //------------------------------------------------------------------------
@@ -876,20 +806,20 @@ SfxDocumentPage::SfxDocumentPage( Window* pParent, const SfxItemSet& rItemSet ) 
 IMPL_LINK_NOARG(SfxDocumentPage, DeleteHdl)
 {
     String aName;
-    if ( bEnableUseUserData && aUseUserDataCB.IsChecked() )
+    if ( bEnableUseUserData && m_pUseUserDataCB->IsChecked() )
         aName = SvtUserOptions().GetFullName();
     const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
     DateTime now( DateTime::SYSTEM );
     util::DateTime uDT(
         now.Get100Sec(), now.GetSec(), now.GetMin(), now.GetHour(),
         now.GetDay(), now.GetMonth(), now.GetYear() );
-    aCreateValFt.SetText( ConvertDateTime_Impl( aName, uDT, rLocaleWrapper ) );
+    m_pCreateValFt->SetText( ConvertDateTime_Impl( aName, uDT, rLocaleWrapper ) );
     OUString aEmpty;
-    aChangeValFt.SetText( aEmpty );
-    aPrintValFt.SetText( aEmpty );
+    m_pChangeValFt->SetText( aEmpty );
+    m_pPrintValFt->SetText( aEmpty );
     const Time aTime( 0 );
-    aTimeLogValFt.SetText( rLocaleWrapper.getDuration( aTime ) );
-    aDocNoValFt.SetText(rtl::OUString('1'));
+    m_pTimeLogValFt->SetText( rLocaleWrapper.getDuration( aTime ) );
+    m_pDocNoValFt->SetText(rtl::OUString('1'));
     bHandleDelete = sal_True;
     return 0;
 }
@@ -945,7 +875,7 @@ void SfxDocumentPage::ImplUpdateSignatures()
             aInfos = xD->verifyDocumentContentSignatures( pMedium->GetZipStorageToSign_Impl(),
                                                             uno::Reference< io::XInputStream >() );
             if ( aInfos.getLength() > 1 )
-                s = aMultiSignedStr;
+                s = m_aMultiSignedStr;
             else if ( aInfos.getLength() == 1 )
             {
                 rtl::OUString aCN_Id("CN");
@@ -954,7 +884,7 @@ void SfxDocumentPage::ImplUpdateSignatures()
                 s.AppendAscii( ", " );
                 s += GetContentPart( rInfo.Signer->getSubjectName(), aCN_Id );
             }
-            aSignedValFt.SetText( s );
+            m_pSignedValFt->SetText( s );
         }
     }
 }
@@ -978,11 +908,11 @@ void SfxDocumentPage::ImplCheckPasswordState()
 
         if (!aEncryptionData.getLength())
              break;
-        aChangePassBtn.Enable();
+        m_pChangePassBtn->Enable();
         return;
     }
     while (false);
-    aChangePassBtn.Disable();
+    m_pChangePassBtn->Disable();
 }
 
 //------------------------------------------------------------------------
@@ -997,8 +927,8 @@ SfxTabPage* SfxDocumentPage::Create( Window* pParent, const SfxItemSet& rItemSet
 void SfxDocumentPage::EnableUseUserData()
 {
     bEnableUseUserData = sal_True;
-    aUseUserDataCB.Show();
-    aDeleteBtn.Show();
+    m_pUseUserDataCB->Show();
+    m_pDeleteBtn->Show();
 }
 
 //------------------------------------------------------------------------
@@ -1008,7 +938,7 @@ sal_Bool SfxDocumentPage::FillItemSet( SfxItemSet& rSet )
     sal_Bool bRet = sal_False;
 
     if ( !bHandleDelete && bEnableUseUserData &&
-         aUseUserDataCB.GetState() != aUseUserDataCB.GetSavedValue() &&
+         m_pUseUserDataCB->GetState() != m_pUseUserDataCB->GetSavedValue() &&
          GetTabDialog() && GetTabDialog()->GetExampleSet() )
     {
         const SfxItemSet* pExpSet = GetTabDialog()->GetExampleSet();
@@ -1017,7 +947,7 @@ sal_Bool SfxDocumentPage::FillItemSet( SfxItemSet& rSet )
         if ( pExpSet && SFX_ITEM_SET == pExpSet->GetItemState( SID_DOCINFO, sal_True, &pItem ) )
         {
             SfxDocumentInfoItem* pInfoItem = (SfxDocumentInfoItem*)pItem;
-            sal_Bool bUseData = ( STATE_CHECK == aUseUserDataCB.GetState() );
+            sal_Bool bUseData = ( STATE_CHECK == m_pUseUserDataCB->GetState() );
             pInfoItem->SetUseUserData( bUseData );
             rSet.Put( SfxDocumentInfoItem( *pInfoItem ) );
             bRet = sal_True;
@@ -1031,13 +961,13 @@ sal_Bool SfxDocumentPage::FillItemSet( SfxItemSet& rSet )
         if ( pExpSet && SFX_ITEM_SET == pExpSet->GetItemState( SID_DOCINFO, sal_True, &pItem ) )
         {
             SfxDocumentInfoItem* pInfoItem = (SfxDocumentInfoItem*)pItem;
-            sal_Bool bUseAuthor = bEnableUseUserData && aUseUserDataCB.IsChecked();
+            sal_Bool bUseAuthor = bEnableUseUserData && m_pUseUserDataCB->IsChecked();
             SfxDocumentInfoItem newItem( *pInfoItem );
             newItem.resetUserData( bUseAuthor
                 ? SvtUserOptions().GetFullName()
                 : ::rtl::OUString() );
-            pInfoItem->SetUseUserData( STATE_CHECK == aUseUserDataCB.GetState() );
-            newItem.SetUseUserData( STATE_CHECK == aUseUserDataCB.GetState() );
+            pInfoItem->SetUseUserData( STATE_CHECK == m_pUseUserDataCB->GetState() );
+            newItem.SetUseUserData( STATE_CHECK == m_pUseUserDataCB->GetState() );
 
             newItem.SetDeleteUserData( sal_True );
             rSet.Put( newItem );
@@ -1045,15 +975,15 @@ sal_Bool SfxDocumentPage::FillItemSet( SfxItemSet& rSet )
         }
     }
 
-    if ( aNameED.IsModified() && aNameED.GetText().Len() )
+    if ( m_pNameED->IsModified() && m_pNameED->GetText().Len() )
     {
-        rSet.Put( SfxStringItem( ID_FILETP_TITLE, aNameED.GetText() ) );
+        rSet.Put( SfxStringItem( ID_FILETP_TITLE, m_pNameED->GetText() ) );
         bRet = sal_True;
     }
 
-    if ( /* aReadOnlyCB.IsModified() */ sal_True )
+    if ( /* m_pReadOnlyCB->IsModified() */ sal_True )
     {
-        rSet.Put( SfxBoolItem( ID_FILETP_READONLY, aReadOnlyCB.IsChecked() ) );
+        rSet.Put( SfxBoolItem( ID_FILETP_READONLY, m_pReadOnlyCB->IsChecked() ) );
         bRet = sal_True;
     }
 
@@ -1070,11 +1000,11 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
 
     // template data
     if ( pInfoItem->HasTemplate() )
-        aTemplValFt.SetText( pInfoItem->getTemplateName() );
+        m_pTemplValFt->SetText( pInfoItem->getTemplateName() );
     else
     {
-        aTemplFt.Hide();
-        aTemplValFt.Hide();
+        m_pTemplFt->Hide();
+        m_pTemplValFt->Hide();
     }
 
     // determine file name
@@ -1096,40 +1026,40 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
         aName = aURL.GetName( INetURLObject::DECODE_WITH_CHARSET );
         if ( !aName.Len() || aURL.GetProtocol() == INET_PROT_PRIVATE )
             aName = SfxResId( STR_NONAME ).toString();
-        aNameED.SetReadOnly( sal_True );
+        m_pNameED->SetReadOnly( sal_True );
     }
     else
     {
         DBG_ASSERT( pItem->IsA( TYPE( SfxStringItem ) ), "SfxDocumentPage:<SfxStringItem> expected" );
         aName = ( ( SfxStringItem* ) pItem )->GetValue();
     }
-    aNameED.SetText( aName );
-    aNameED.ClearModifyFlag();
+    m_pNameED->SetText( aName );
+    m_pNameED->ClearModifyFlag();
 
     // determine RO-Flag
     if ( SFX_ITEM_UNKNOWN == rSet.GetItemState( ID_FILETP_READONLY, sal_False, &pItem )
          || !pItem )
-        aReadOnlyCB.Hide();
+        m_pReadOnlyCB->Hide();
     else
-        aReadOnlyCB.Check( ( (SfxBoolItem*)pItem )->GetValue() );
+        m_pReadOnlyCB->Check( ( (SfxBoolItem*)pItem )->GetValue() );
 
     // determine context symbol
     INetURLObject aURL;
     aURL.SetSmartProtocol( INET_PROT_FILE );
     aURL.SetSmartURL( aFactory);
     const String& rMainURL = aURL.GetMainURL( INetURLObject::NO_DECODE );
-    aBmp1.SetImage( SvFileInformationManager::GetImage( aURL, sal_True ) );
+    m_pBmp->SetImage( SvFileInformationManager::GetImage( aURL, sal_True ) );
 
     // determine size and type
-    String aSizeText( aUnknownSize );
+    String aSizeText( m_aUnknownSize );
     if ( aURL.GetProtocol() == INET_PROT_FILE )
         aSizeText = CreateSizeText( SfxContentHelper::GetSize( aURL.GetMainURL( INetURLObject::NO_DECODE ) ) );
-    aShowSizeFT.SetText( aSizeText );
+    m_pShowSizeFT->SetText( aSizeText );
 
     String aDescription = SvFileInformationManager::GetDescription( INetURLObject(rMainURL) );
     if ( aDescription.Len() == 0 )
         aDescription = SfxResId( STR_SFX_NEWOFFICEDOC ).toString();
-    aShowTypeFT.SetText( aDescription );
+    m_pShowTypeFT->SetText( aDescription );
 
     // determine location
     aURL.SetSmartURL( aFile);
@@ -1141,43 +1071,43 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
         // we know it's a folder -> don't need the final slash, but it's better for WB_PATHELLIPSIS
         aPath.removeFinalSlash();
         String aText( aPath.PathToFileName() ); //! (pb) MaxLen?
-        aFileValFt.SetText( aText );
+        m_pFileValFt->SetText( aText );
     }
     else if ( aURL.GetProtocol() != INET_PROT_PRIVATE )
-        aFileValFt.SetText( aURL.GetPartBeforeLastName() );
+        m_pFileValFt->SetText( aURL.GetPartBeforeLastName() );
 
     // handle access data
     sal_Bool m_bUseUserData = pInfoItem->IsUseUserData();
     const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
-    aCreateValFt.SetText( ConvertDateTime_Impl( pInfoItem->getAuthor(),
+    m_pCreateValFt->SetText( ConvertDateTime_Impl( pInfoItem->getAuthor(),
         pInfoItem->getCreationDate(), rLocaleWrapper ) );
     util::DateTime aTime( pInfoItem->getModificationDate() );
     if ( aTime.Month > 0 )
-        aChangeValFt.SetText( ConvertDateTime_Impl(
+        m_pChangeValFt->SetText( ConvertDateTime_Impl(
             pInfoItem->getModifiedBy(), aTime, rLocaleWrapper ) );
     aTime = pInfoItem->getPrintDate();
     if ( aTime.Month > 0 )
-        aPrintValFt.SetText( ConvertDateTime_Impl( pInfoItem->getPrintedBy(),
+        m_pPrintValFt->SetText( ConvertDateTime_Impl( pInfoItem->getPrintedBy(),
             aTime, rLocaleWrapper ) );
     const long nTime = pInfoItem->getEditingDuration();
     if ( m_bUseUserData )
     {
         const Time aT( nTime/3600, (nTime%3600)/60, nTime%60 );
-        aTimeLogValFt.SetText( rLocaleWrapper.getDuration( aT ) );
-        aDocNoValFt.SetText( String::CreateFromInt32(
+        m_pTimeLogValFt->SetText( rLocaleWrapper.getDuration( aT ) );
+        m_pDocNoValFt->SetText( String::CreateFromInt32(
             pInfoItem->getEditingCycles() ) );
     }
 
     TriState eState = (TriState)m_bUseUserData;
 
     if ( STATE_DONTKNOW == eState )
-        aUseUserDataCB.EnableTriState( sal_True );
+        m_pUseUserDataCB->EnableTriState( sal_True );
 
-    aUseUserDataCB.SetState( eState );
-    aUseUserDataCB.SaveValue();
-    aUseUserDataCB.Enable( bEnableUseUserData );
+    m_pUseUserDataCB->SetState( eState );
+    m_pUseUserDataCB->SaveValue();
+    m_pUseUserDataCB->Enable( bEnableUseUserData );
     bHandleDelete = sal_False;
-    aDeleteBtn.Enable( bEnableUseUserData );
+    m_pDeleteBtn->Enable( bEnableUseUserData );
 }
 
 //------------------------------------------------------------------------

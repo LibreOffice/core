@@ -35,45 +35,4 @@ FixedInfo::FixedInfo( Window* pParent, const ResId& rResId ) :
     SetStyle( GetStyle() | WB_INFO );
 }
 
-namespace svt
-{
-    // class svt::SelectableFixedText ----------------------------------------
-
-    SelectableFixedText::SelectableFixedText( Window* pParent, const ResId& rResId ) :
-        Edit( pParent, rResId )
-    {
-        Init();
-    }
-
-    // -----------------------------------------------------------------------
-
-    SelectableFixedText::~SelectableFixedText()
-    {
-    }
-
-    // -----------------------------------------------------------------------
-
-    void SelectableFixedText::Init()
-    {
-        // no border
-        SetBorderStyle( WINDOW_BORDER_NOBORDER );
-        // read-only
-        SetReadOnly();
-        // make it transparent
-        SetControlBackground();
-        SetBackground();
-        SetPaintTransparent( sal_True );
-    }
-
-    // -----------------------------------------------------------------------
-
-    void SelectableFixedText::LoseFocus()
-    {
-        Edit::LoseFocus();
-        // clear cursor
-        Invalidate();
-    }
-
-} // namespace svt
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

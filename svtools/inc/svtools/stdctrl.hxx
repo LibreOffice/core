@@ -36,26 +36,6 @@ public:
     FixedInfo( Window* pParent, const ResId& rResId );
 };
 
-namespace svt
-{
-    // ----------------------------
-    // - svt::SelectableFixedText -
-    // ----------------------------
-
-    class SVT_DLLPUBLIC SelectableFixedText : public Edit
-    {
-    private:
-        void    Init();
-
-    public:
-                SelectableFixedText( Window* pParent, const ResId& rResId );
-        virtual ~SelectableFixedText();
-
-        virtual void    LoseFocus();
-    };
-
-} // namespace svt
-
 #endif  // _STDCTRL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

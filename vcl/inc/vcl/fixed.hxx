@@ -23,8 +23,9 @@
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/bitmap.hxx>
-#include <vcl/image.hxx>
 #include <vcl/ctrl.hxx>
+#include <vcl/edit.hxx>
+#include <vcl/image.hxx>
 
 class UserDrawEvent;
 
@@ -74,6 +75,18 @@ public:
     Size            CalcMinimumSize(long nMaxWidth = 0x7fffffff) const;
     virtual Size    GetOptimalSize(WindowSizeType eType) const;
     virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
+};
+
+class VCL_DLLPUBLIC SelectableFixedText : public Edit
+{
+private:
+    void    Init();
+
+public:
+    SelectableFixedText( Window* pParent, WinBits nStyle = 0 );
+    SelectableFixedText( Window* pParent, const ResId& rResId );
+
+    virtual void    LoseFocus();
 };
 
 // -------------

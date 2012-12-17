@@ -484,6 +484,41 @@ bool FixedText::set_property(const rtl::OString &rKey, const rtl::OString &rValu
     return true;
 }
 
+SelectableFixedText::SelectableFixedText(Window* pParent, const ResId& rResId)
+    : Edit(pParent, rResId)
+{
+    Init();
+}
+
+SelectableFixedText::SelectableFixedText(Window* pParent, WinBits nStyle)
+    : Edit(pParent, nStyle)
+{
+    Init();
+}
+
+// -----------------------------------------------------------------------
+
+void SelectableFixedText::Init()
+{
+    // no border
+    SetBorderStyle( WINDOW_BORDER_NOBORDER );
+    // read-only
+    SetReadOnly();
+    // make it transparent
+    SetControlBackground();
+    SetBackground();
+    SetPaintTransparent( sal_True );
+}
+
+// -----------------------------------------------------------------------
+
+void SelectableFixedText::LoseFocus()
+{
+    Edit::LoseFocus();
+    // clear cursor
+    Invalidate();
+}
+
 // =======================================================================
 
 void FixedLine::ImplInit( Window* pParent, WinBits nStyle )

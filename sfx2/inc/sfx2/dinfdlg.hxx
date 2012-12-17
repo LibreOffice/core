@@ -162,42 +162,31 @@ public:
 class SfxDocumentPage : public SfxTabPage
 {
 private:
-    FixedImage                  aBmp1;
-    Edit                        aNameED;
-    PushButton                  aChangePassBtn;
+    FixedImage*                 m_pBmp;
+    Edit*                       m_pNameED;
+    PushButton*                 m_pChangePassBtn;
 
-    FixedLine                   aLine1FL;
-    FixedText                   aTypeFT;
-    svt::SelectableFixedText    aShowTypeFT;
-    CheckBox                    aReadOnlyCB;
-    FixedText                   aFileFt;
-    svt::SelectableFixedText    aFileValFt;
-    FixedText                   aSizeFT;
-    svt::SelectableFixedText    aShowSizeFT;
+    SelectableFixedText*        m_pShowTypeFT;
+    CheckBox*                   m_pReadOnlyCB;
+    SelectableFixedText*        m_pFileValFt;
+    SelectableFixedText*        m_pShowSizeFT;
 
-    FixedLine                   aLine2FL;
-    FixedText                   aCreateFt;
-    svt::SelectableFixedText    aCreateValFt;
-    FixedText                   aChangeFt;
-    svt::SelectableFixedText    aChangeValFt;
-    FixedText                   aSignedFt;
-    svt::SelectableFixedText    aSignedValFt;
-    PushButton                  aSignatureBtn;
-    FixedText                   aPrintFt;
-    svt::SelectableFixedText    aPrintValFt;
-    FixedText                   aTimeLogFt;
-    svt::SelectableFixedText    aTimeLogValFt;
-    FixedText                   aDocNoFt;
-    svt::SelectableFixedText    aDocNoValFt;
-    CheckBox                    aUseUserDataCB;
-    PushButton                  aDeleteBtn;
+    SelectableFixedText*        m_pCreateValFt;
+    SelectableFixedText*        m_pChangeValFt;
+    SelectableFixedText*        m_pSignedValFt;
+    PushButton*                 m_pSignatureBtn;
+    SelectableFixedText*        m_pPrintValFt;
+    SelectableFixedText*        m_pTimeLogValFt;
+    SelectableFixedText*        m_pDocNoValFt;
 
-    FixedLine                   aLine3FL;
-    FixedText                   aTemplFt;
-    svt::SelectableFixedText    aTemplValFt;
+    CheckBox*                   m_pUseUserDataCB;
+    PushButton*                 m_pDeleteBtn;
 
-    String                      aUnknownSize;
-    String                      aMultiSignedStr;
+    FixedText*                  m_pTemplFt;
+    SelectableFixedText*        m_pTemplValFt;
+
+    OUString                    m_aUnknownSize;
+    OUString                    m_aMultiSignedStr;
 
     sal_Bool                        bEnableUseUserData  : 1,
                                 bHandleDelete       : 1;

@@ -627,6 +627,19 @@ namespace
         }
         return nActiveId;
     }
+
+    bool extractSelectable(VclBuilder::stringmap &rMap)
+    {
+        bool bSelectable = false;
+        VclBuilder::stringmap::iterator aFind = rMap.find(OString("selectable"));
+        if (aFind != rMap.end())
+        {
+            bSelectable = toBool(aFind->second);
+            rMap.erase(aFind);
+        }
+        return bSelectable;
+    }
+
 }
 
 bool VclBuilder::extractModel(const OString &id, stringmap &rMap)
@@ -881,7 +894,12 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         pWindow = new ListBox(pParent, WB_LEFT|WB_VCENTER|WB_3DLOOK);
     }
     else if (name == "GtkLabel")
-        pWindow = new FixedText(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK);
+    {
+        if (extractSelectable(rMap))
+            pWindow = new SelectableFixedText(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK);
+        else
+            pWindow = new FixedText(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK);
+    }
     else if (name == "GtkImage")
     {
         extractStock(id, rMap);
