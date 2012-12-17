@@ -3292,9 +3292,8 @@ AC_SUBST(SHOWINCLUDES_PREFIX)
 # dbghelp.dll
 #
 if test "$_os" == "WINNT"; then
-    DBGHELP_DLL="13fbc2e8b37ddf28181dd6d8081c2b8e-dbghelp.dll"
+    BUILD_TYPE="$BUILD_TYPE DBGHELP"
 fi
-AC_SUBST(DBGHELP_DLL)
 
 #
 # unowinreg.dll
@@ -4876,8 +4875,7 @@ find_winsdk()
     done
 }
 
-#TODO: move copy_* functions to external/ module once gbuildified
-copy_msms()
+find_msms()
 {
     for ver in 9.0 10.0 11.0; do
         reg_get_value HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver/Setup/VS/MSMDir
@@ -4894,65 +4892,43 @@ copy_msms()
         AC_MSG_ERROR([Merge modules not found])
     fi
 
-    if test $VCVER -eq 90; then
-        cp $msmdir/policy_9_0_Microsoft_VC90_CRT_x86.msm ./external/msm90
-        if test $? -ne 0; then
-            AC_MSG_ERROR([Failed to copy merge modules])
-        fi
-    fi
-    cp $msmdir/Microsoft_VC${VCVER}_CRT_x86.msm ./external/msm${VCVER}
-    if test $? -ne 0; then
-        AC_MSG_ERROR([Failed to copy merge modules])
-    fi
-    cp $msmdir/Microsoft_VC${VCVER}_CRT_x64.msm ./external/msm${VCVER}
-    if test $? -ne 0; then
+    msms="Microsoft_VC${VCVER}_CRT_x86.msm"
+    if test -e $msmdir/Microsoft_VC${VCVER}_CRT_x64.msm; then
+        msms="$msms Microsoft_VC${VCVER}_CRT_x64.msm"
+    else
         AC_MSG_WARN([Failed to copy x64 merge modules, installation will lack the 64-bit Explorer extension])
+    fi
+    if test "$VCVER" = "90"; then
+        if test -e $msmdir/policy_9_0_Microsoft_VC90_CRT_x86.msm; then
+            msms="$msms policy_9_0_Microsoft_VC90_CRT_x86.msm"
+        else
+            AC_MSG_ERROR([Merge modules not found])
+        fi
     fi
 }
 
-copy_msvc_dlls()
+find_msvc_dlls()
 {
-    if test $CPUNAME == INTEL; then
+    if test "$CPUNAME" = "INTEL"; then
         vsarch=x86
     else
         vsarch=amd64
     fi
 
-    if test -f $VC_PRODUCT_DIR/redist/$vsarch/Microsoft.VC${VCVER}.CRT/msvcp${VCVER}.dll; then
-        vsdlldir=$VC_PRODUCT_DIR/redist/$vsarch/Microsoft.VC${VCVER}.CRT
-    else
-        AC_MSG_ERROR([can not find VS dll $VC_PRODUCT_DIR/redist/$vsarch/Microsoft.VC${VCVER}.CRT/msvcp${VCVER}.dll])
+    msvcdllpath="$VC_PRODUCT_DIR/redist/$vsarch/Microsoft.VC${VCVER}.CRT"
+    msvcdlls="msvcp${VCVER}.dll msvcr${VCVER}.dll"
+    if test "$VCVER" = "90"; then
+        msvcdlls="$msvcdlls msvcm90.dll Microsoft.VC90.CRT.manifest"
     fi
 
-    cp $vsdlldir/msvcp${VCVER}.dll $vsdlldir/msvcr${VCVER}.dll ./external/msvcp${VCVER}
-
-    if test $VCVER == 90; then
-        cp $vsdlldir/msvcm${VCVER}.dll $vsdlldir/Microsoft.VC90.CRT.manifest ./external/msvcp${VCVER}
-        if test $? -ne 0; then
-            AC_MSG_ERROR([Failed to copy VS dlls])
+    for dll in $msvcdlls; do
+        if ! test -f "$msvcdllpath/$dll"; then
+            AC_MSG_ERROR([can not find $dll in $msvcdllpath])
         fi
-    fi
-}
-
-copy_dbghelp_dll()
-{
-    if test ! -f ./external/dbghelp/dbghelp.dll -a -f $TARFILE_LOCATION/$DBGHELP_DLL; then
-        cp $TARFILE_LOCATION/$DBGHELP_DLL ./external/dbghelp/dbghelp.dll;
-    fi
-    if test ! -f ./external/dbghelp/dbghelp.dll; then
-        echo "dbghelp.dll is missing in external/dbghelp/."
-        echo "Get it from the Microsoft site and put it there."
-        echo "(Note: Microsoft seems to enjoy changing the exact location of this file."
-        echo "You may have to search Microsoft's website.) Last time it was seen at:"
-        echo "<http://www.microsoft.com/downloads/release.asp?releaseid=30682>."
-        exit 1
-    fi
+    done
 }
 
 if test "$build_os" = "cygwin"; then
-    copy_msvc_dlls
-    copy_dbghelp_dll
-
     dnl Check midl.exe
     AC_MSG_CHECKING([for midl.exe])
 
@@ -5967,16 +5943,20 @@ if test "$_os" = "Linux" -a "$host_cpu" = "powerpc"; then
 fi
 AC_SUBST([JITC_PROCESSOR_TYPE])
 
+# Misc Windows Stuff
 if test $_os = "WINNT" -a "$WITH_MINGW" != yes; then
-    AC_MSG_CHECKING([for Microsoft_VC${VCVER}_CRT_x86.msm])
-        copy_msms
-    if test -n $msms_copied ; then
-        AC_MSG_RESULT([yes])
-        SCPDEFS="$SCPDEFS -DWITH_VC${VCVER}_REDIST"
-    else
-        AC_MSG_RESULT([no])
-    fi
+    find_msvc_dlls
+    find_msms
+    MSVC_DLL_PATH="$msvcdllpath"
+    MSVC_DLLS="$msvcdlls"
+    MSM_PATH="$msmdir"
+    MERGE_MODULES="$msms"
+    SCPDEFS="$SCPDEFS -DWITH_VC${VCVER}_REDIST"
 fi
+AC_SUBST(MSVC_DLL_PATH)
+AC_SUBST(MSVC_DLLS)
+AC_SUBST(MSM_PATH)
+AC_SUBST(MERGE_MODULES)
 
 dnl ===================================================================
 dnl Checks for Java
@@ -8974,6 +8954,11 @@ else
     HAVE_READDIR_R=NO
     SYSTEM_LIBC=YES
 fi
+
+if test "$HAVE_GETOPT" = NO -o "$HAVE_READDIR_R" = NO; then
+    BUILD_TYPE="$BUILD_TYPE GLIBC"
+fi
+
 AC_SUBST(HAVE_GETOPT)
 AC_SUBST(HAVE_READDIR_R)
 AC_SUBST(SYSTEM_LIBC)

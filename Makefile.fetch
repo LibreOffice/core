@@ -79,7 +79,6 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,VISIO,VISIO_TARBALL) \
 	,$(call fetch_Download_item_special,http://dev-www.libreoffice.org/src,$(item)))
 	$(foreach item, \
-		4a660ce8466c9df01f19036435425c3a-glibc-2.1.3-stub.tar.gz \
 		$(call fetch_Optional,AFMS,$(AFMS_TARBALL)) \
 		$(call fetch_Optional,APACHE_COMMONS,$(APACHE_COMMONS_CODEC_TARBALL)) \
 		$(call fetch_Optional,APACHE_COMMONS,$(APACHE_COMMONS_HTTPCLIENT_TARBALL)) \
@@ -93,6 +92,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,CPPUNIT,$(CPPUNIT_TARBALL)) \
 		$(call fetch_Optional,CT2N,$(CT2N_TARBALL)) \
 		$(call fetch_Optional,CURL,$(CURL_TARBALL)) \
+		$(call fetch_Optional,DBGHELP,$(DBGHELP_DLL)) \
 		$(call fetch_Optional,EPM,$(EPM_TARBALL)) \
 		$(call fetch_Optional,EXPAT,$(EXPAT_TARBALL)) \
 		$(call fetch_Optional,MORE_FONTS,$(FONT_DEJAVU_TARBALL)) \
@@ -108,6 +108,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,FREETYPE,$(FREETYPE_TARBALL)) \
 		$(GOOGLE_DOCS_EXTENSION_PACK) \
 		$(call fetch_Optional,GRAPHITE,$(GRAPHITE_TARBALL)) \
+		$(call fetch_Optional,GLIBC,$(GLIBC_TARBALL)) \
 		$(call fetch_Optional,HSQLDB,$(HSQLDB_TARBALL)) \
 		$(call fetch_Optional,HUNSPELL,$(HUNSPELL_TARBALL)) \
 		$(call fetch_Optional,HYPHEN,$(HYPHEN_TARBALL)) \
