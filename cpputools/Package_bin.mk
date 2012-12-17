@@ -28,7 +28,6 @@
 # because the installation system is so incredibly inflexible...
 $(eval $(call gb_Package_Package,cpputools_bin,$(gb_Executable_BINDIR)))
 
-$(eval $(call gb_Package_add_file,cpputools_bin,bin/regcomp.bin,regcomp))
 $(eval $(call gb_Package_add_file,cpputools_bin,bin/uno.bin,uno))
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:

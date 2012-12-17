@@ -67,7 +67,6 @@ IDLC="$(OO_SDK_HOME)/bin/idlc"
 CPPUMAKER="$(OO_SDK_HOME)/bin/cppumaker"
 JAVAMAKER="$(OO_SDK_HOME)/bin/javamaker"
 REGMERGE="$(OO_SDK_URE_HOME)/bin/regmerge"
-REGCOMP="$(OO_SDK_URE_HOME)/bin/regcomp"
 
 SDK_JAVA_UNO_BOOTSTRAP_FILES=\
     -C $(CLASSES_DIR) $(SQM)com/sun/star/lib/loader/Loader.class$(SQM) \

@@ -25,7 +25,6 @@ Linux x86, Solaris x86, and Solaris SPARC:
 /opt/openoffice.org/ure/THIRDPARTYLICENSEREADME.html
 /opt/openoffice.org/ure/README
 /opt/openoffice.org/ure/bin/uno
-/opt/openoffice.org/ure/bin/regcomp
 /opt/openoffice.org/ure/bin/regmerge
 /opt/openoffice.org/ure/bin/regview
 /opt/openoffice.org/ure/bin/javaldx
@@ -48,7 +47,6 @@ Linux x86, Solaris x86, and Solaris SPARC:
 /opt/openoffice.org/ure/lib/libstdc++.so.6  [external; Linux x86 only]
 /opt/openoffice.org/ure/bin/startup.sh  [private]
 /opt/openoffice.org/ure/bin/uno.bin  [private]
-/opt/openoffice.org/ure/bin/regcomp.bin  [private]
 /opt/openoffice.org/ure/lib/unorc  [private]
 /opt/openoffice.org/ure/lib/libreg.so.3  [private]
 /opt/openoffice.org/ure/lib/libstore.so.3  [private]
@@ -95,7 +93,6 @@ Program Files\URE\LICENSE
 Program Files\URE\THIRDPARTYLICENSEREADME.html
 Program Files\URE\README
 Program Files\URE\bin\uno.exe
-Program Files\URE\bin\regcomp.exe
 Program Files\URE\bin\regmerge.exe
 Program Files\URE\bin\regview.exe
 Program Files\URE\bin\cppu3.dll
@@ -183,13 +180,13 @@ A URE installation contains the following public files:
 - uno is the executable file that runs UNO components.  For more details, see
 the SDK Developer's Guide.
 
-- regcomp, regmerge, and regview are tools that work with binary registries that
-contain UNO type or UNO service information.  For more details, see the SDK
-Developer's Guide.
+- regmerge and regview are tools that work with binary registries that contain
+UNO type or UNO service information.  For more details, see the SDK Developer's
+Guide.
 
 - javaldx is a helper program on Linux x86, Solaris x86, and Solaris SPARC that
 enables Java executables to use a Java VM, such as the Sun JDK/JRE.  Executables
-such as uno and regcomp run this helper automatically.
+such as uno run this helper automatically.
 
 - cppu, cppuhelper, purpenvhelper, sal, and salhelper are the public C++ UNO
 runtime dynamic libraries that client code can call.  For details on the
@@ -263,11 +260,6 @@ the public deployment variable URE_MORE_JAVA_TYPES.
 For details on how to override the UNO deployment variables, see the SDK
 Developer's Guide or go to http://udk.openoffice.org/common/man/concept/
 micro_deployment.html.
-
-If you want to deploy additional UNO types and services, use regcomp.
-
-CAUTION: Do not deploy these types and services to the types.rdb and
-services.rdb in the URE installation.
 
 
 URE Java Framework

@@ -41,7 +41,6 @@ use Text::ParseWords;
                          'MAP', 'NODEFAULTLIB', 'OPT', 'PDB', 'RELEASE',
                          'SUBSYSTEM', 'STACK', 'out:', 'map:', 'ENTRY:',
                          'implib:', 'delayload:', 'def', 'COMMENT:' ],
-               'regcomp', [ '-env:', 'vnd.sun.star.expand:' , 'vnd.openoffice.pymodule' ],
                'regmerge', [ '/UCR' ],
                'rc', [ '-D' ],
                'rsc', [ '-DOOO_' ] );

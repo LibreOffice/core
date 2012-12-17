@@ -176,7 +176,6 @@ endif
 ifneq ($(OS),IOS)
 
 $(eval $(call gb_Helper_register_executables,UREBIN,\
-	regcomp \
 	regmerge \
 	regview \
 	uno \

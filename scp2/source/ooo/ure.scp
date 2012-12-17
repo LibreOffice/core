@@ -91,25 +91,6 @@ Shortcut gid_Shortcut_Exe_Uno
 End
 #endif
 
-#if defined WNT
-File gid_File_Exe_Regcomp
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Ure_Bin;
-    Name = EXENAME(regcomp);
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "D51FA672-7C24-4E24-A282-872C4BF690A1";
-End
-#endif
-
-#ifndef WNT
-Shortcut gid_Shortcut_Exe_Regcomp
-    FileID = gid_File_Exe_StartupSh;
-    Dir = gid_Dir_Ure_Bin;
-    Name = EXENAME(regcomp);
-    Styles = (RELATIVE);
-End
-#endif
-
 File gid_File_Exe_Regmerge
     BIN_FILE_BODY;
     Dir = gid_Dir_Ure_Bin;
@@ -155,16 +136,6 @@ File gid_File_Exe_UnoBin
     Name = "uno.bin";
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "4AE33B3E-B33E-4BA4-AADC-8D7ED303FDE9";
-End
-#endif
-
-#if !defined WNT
-File gid_File_Exe_RegcompBin
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Ure_Bin;
-    Name = "regcomp.bin";
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "70FBE546-A228-455F-BCBB-716BF03AD5C6";
 End
 #endif
 
@@ -989,13 +960,11 @@ Module gid_Module_Root_Ure_Hidden
             gid_File_Readme_Ure,
             gid_File_License_Ure,
             gid_File_Exe_Uno,
-            gid_File_Exe_Regcomp,
             gid_File_Exe_Regmerge,
             gid_File_Exe_Regview,
             gid_File_Exe_Javaldx,
             gid_File_Exe_StartupSh,
             gid_File_Exe_UnoBin,
-            gid_File_Exe_RegcompBin,
             gid_File_Dl_Cli_Uno,
             gid_File_Dl_Cli_Ure_Assembly,
             gid_File_Dl_Policy_Cli_Ure_Assembly,

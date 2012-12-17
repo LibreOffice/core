@@ -33,7 +33,6 @@ $(eval $(call gb_Module_add_targets,cpputools,\
 ))
 
 $(eval $(call gb_Module_add_targets,cpputools,\
-    Executable_regcomp \
     Executable_regsingleton \
     Executable_uno \
 ))

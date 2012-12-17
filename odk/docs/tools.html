@@ -117,11 +117,6 @@
             </tr>
             <tr valign="top">
               <td class="content3"><img src="images/arrow-1.gif"></td>
-              <td><a href="#regcomp"  title="link to the regcomp tool description">regcomp</a></td>
-              <td class="content87">A simple UNO component registration tool.</td>
-            </tr>
-            <tr valign="top">
-              <td class="content3"><img src="images/arrow-1.gif"></td>
               <td><a href="#regmerge"  title="link to the regmerge tool description">regmerge</a></td>
               <td class="content87">Tool to merge several registry (e.g. type
 			  libraries) files into one file.</td>
@@ -813,69 +808,6 @@ types the specified types depend on.</p>
             <td class="cell15"><code>-h, --help</code></td>
 			<td class="cell85">print this help and exit.</td>
           </tr>
-		  </table>
-		  </p>
-		  </td>
-		</tr>
-      </table>
-    </td>
-    <td class="content1"><img class="nothing8" src="images/nada.gif"></td>
-  </tr>
-  <tr>
-    <td colspan="3"><img class="line" src="images/sdk_line-1.gif"></td>
-  </tr>
-  <tr>
-    <td class="content1"><img class="nothing8" src="images/nada.gif"></td>
-    <td>
-      <table class="table2">
-        <tr>
-		  <td colspan="2" class="head1"><a name="regcomp"/>regcomp</td>
-		  <td align="right">
-		    <a href="#tools" title="link to the tools overview"><img class="navigate" src="images/nav_up.png"></a>
-		    <a href="../index.html" title="link to the SDK start page"><img class="navigate" src="images/nav_home.png"></a>
-		  </td>
-        </tr>
-		<tr>
-		  <td colspan="3">
-		  <p>'regcomp' is a tool to register|revoke external UNO components
-		  into|from a registry which is used in a UNO environment.</p>
-		  <p class="head2">Usage:</p>
-		  <blockquote>
-		  <b><code>regcomp -revoke [-br&lt;registryfile&gt;] -r &lt;registryfile&gt; -c &lt;locationUrl&gt;[-l&lt;componentLoaderName&gt;]</code></b>
-		  </blockquote>
-		  <p class="head2">Options:</p>
-		  <p>
-		  <table class="table4">
-		  <tr>
-			<td class="cell15"><code>-register|revoke</code></td>
-			<td class="cell85">register means that the components will be
-			installed and revoke means that they will be removed.</td>
-		  </tr>
-		  <tr>
-			<td class="cell15"><code>-br&lt;registryfile&gt;</code></td>
-			<td class="cell85">the name of the registry used for bootstrapping
-			the program. If the bootstrap registry is specified and has the same
-			name as the registration registry, '-r' is optional.</td>
-		  </tr>
-		  <tr>
-			<td class="cell15"><code>-r&lt;registryfile&gt;</code></td>
-			<td class="cell85">the name of the registry (will be created if
-			it does not exist) where the component should be registered.</td>
-		  </tr>
-		  <tr>
-			<td class="cell15"><code>-c&lt;locationUrls&gt;</code></td>
-			<td class="cell85">the location of a component (DLL, Class name,
-			or an url of a jar file) or a list of urls separated by ';'s. Note
-			that, if a list of urls is specified, the components must all need
-			the same loader.</td>
-		  </tr>
-		  <tr>
-			<td class="cell15"><code>-l&lt;componentLoaderName&gt;</code></td>
-			<td class="cell85">the name of the needed loader, if no loader is
-			specified the 'com.sun.star.loader.SharedLibrary' is used. Supported
-			loaders: 'com.sun.star.loader.SharedLibrary' |
-			'com.sun.star.loader.Java'.</td>
-		  </tr>
 		  </table>
 		  </p>
 		  </td>

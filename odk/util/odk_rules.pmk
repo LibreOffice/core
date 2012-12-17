@@ -89,10 +89,6 @@ $(DESTDIRBIN)/%.bin : $(BINOUT)/%.bin
     @@-rm -f $@
     $(GNUCOPY) $(BINOUT)/$(@:f) $@
 
-$(DESTDIRBIN)/regcomp : $(BINOUT)/regcomp
-    @@-rm -f $@
-    $(MY_TEXTCOPY) $< $@
-
 $(DESTDIRBIN)/unoapploader$(EXEPOSTFIX) : $(BIN)/unoapploader$(EXEPOSTFIX)
     @@-rm -f $@
     $(GNUCOPY) $(BIN)/$(@:f) $@
