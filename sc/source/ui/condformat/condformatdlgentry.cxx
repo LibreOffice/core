@@ -1354,8 +1354,12 @@ IMPL_LINK_NOARG( ScIconSetFrmtEntry, IconSetTypeHdl )
         Point aPos = maEntries[0].GetPosPixel();
         aPos.Y() += maEntries[0].GetSizePixel().Height() * i * 1.2;
         maEntries[i].SetPosPixel( aPos );
+        maEntries[i].Show();
     }
     maEntries.back().SetLastEntry();
+
+    SetHeight();
+    static_cast<ScCondFormatList*>(GetParent())->RecalcAll();
 
     return 0;
 }
