@@ -30,7 +30,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;
 
-static void lcl_updateThumbnails (TemplateLocalViewItem *pItem);
+static void lcl_updateThumbnails (TemplateContainerItem *pItem);
 
 class FolderFilter_Application : public ViewFilter_Application
 {
@@ -43,7 +43,7 @@ public:
 
     bool operator () (const ThumbnailViewItem *pItem)
     {
-        TemplateLocalViewItem *pFolderItem = (TemplateLocalViewItem*)pItem;
+        TemplateContainerItem *pFolderItem = (TemplateContainerItem*)pItem;
 
         std::vector<TemplateItemProperties> &rTemplates = pFolderItem->maTemplates;
 
@@ -109,7 +109,7 @@ void TemplateLocalView::Populate ()
             aRegionName += "...";
         }
 
-        TemplateLocalViewItem* pItem = new TemplateLocalViewItem( *this );
+        TemplateContainerItem* pItem = new TemplateContainerItem( *this );
         pItem->mnId = i+1;
         pItem->maTitle = aRegionName;
         pItem->setSelectClickHdl(LINK(this,ThumbnailView,OnItemSelected));
@@ -168,7 +168,7 @@ void TemplateLocalView::reload ()
             if (mItemList[i]->mnId == nItemId)
             {
                 mpItemView->Clear();
-                mpItemView->InsertItems(static_cast<TemplateLocalViewItem*>(mItemList[i])->maTemplates);
+                mpItemView->InsertItems(static_cast<TemplateContainerItem*>(mItemList[i])->maTemplates);
                 break;
             }
         }
@@ -228,7 +228,7 @@ TemplateLocalView::getFilteredItems(const boost::function<bool (const TemplateIt
 
     for (size_t i = 0; i < mItemList.size(); ++i)
     {
-        TemplateLocalViewItem *pFolderItem = static_cast<TemplateLocalViewItem*>(mItemList[i]);
+        TemplateContainerItem *pFolderItem = static_cast<TemplateContainerItem*>(mItemList[i]);
 
         for (size_t j = 0; j < pFolderItem->maTemplates.size(); ++j)
         {
@@ -255,7 +255,7 @@ sal_uInt16 TemplateLocalView::createRegion(const OUString &rName)
         aRegionName += "...";
     }
 
-    TemplateLocalViewItem* pItem = new TemplateLocalViewItem( *this );
+    TemplateContainerItem* pItem = new TemplateContainerItem( *this );
     pItem->mnId = nRegionId+1;
     pItem->maTitle = aRegionName;
     pItem->setSelectClickHdl(LINK(this,ThumbnailView,OnItemSelected));
@@ -290,7 +290,7 @@ bool TemplateLocalView::removeTemplate (const sal_uInt16 nItemId, const sal_uInt
     {
         if (mItemList[i]->mnId == nSrcItemId)
         {
-            TemplateLocalViewItem *pItem = static_cast<TemplateLocalViewItem*>(mItemList[i]);
+            TemplateContainerItem *pItem = static_cast<TemplateContainerItem*>(mItemList[i]);
             std::vector<TemplateItemProperties>::iterator pIter;
             for (pIter = pItem->maTemplates.begin(); pIter != pItem->maTemplates.end(); ++pIter)
             {
@@ -328,15 +328,15 @@ bool TemplateLocalView::moveTemplate (const ThumbnailViewItem *pItem, const sal_
     bool bRet = true;
     bool bRefresh = false;
 
-    TemplateLocalViewItem *pTarget = NULL;
-    TemplateLocalViewItem *pSrc = NULL;
+    TemplateContainerItem *pTarget = NULL;
+    TemplateContainerItem *pSrc = NULL;
 
     for (size_t i = 0, n = mItemList.size(); i < n; ++i)
     {
         if (mItemList[i]->mnId == nTargetItem)
-            pTarget = static_cast<TemplateLocalViewItem*>(mItemList[i]);
+            pTarget = static_cast<TemplateContainerItem*>(mItemList[i]);
         else if (mItemList[i]->mnId == nSrcItem)
-            pSrc = static_cast<TemplateLocalViewItem*>(mItemList[i]);
+            pSrc = static_cast<TemplateContainerItem*>(mItemList[i]);
     }
 
     if (pTarget && pSrc)
@@ -417,15 +417,15 @@ bool TemplateLocalView::moveTemplates(std::set<const ThumbnailViewItem *> &rItem
     sal_uInt16 nSrcRegionId = mpItemView->getId();
     sal_uInt16 nSrcRegionItemId = nSrcRegionId + 1;
 
-    TemplateLocalViewItem *pTarget = NULL;
-    TemplateLocalViewItem *pSrc = NULL;
+    TemplateContainerItem *pTarget = NULL;
+    TemplateContainerItem *pSrc = NULL;
 
     for (size_t i = 0, n = mItemList.size(); i < n; ++i)
     {
         if (mItemList[i]->mnId == nTargetItem)
-            pTarget = static_cast<TemplateLocalViewItem*>(mItemList[i]);
+            pTarget = static_cast<TemplateContainerItem*>(mItemList[i]);
         else if (mItemList[i]->mnId == nSrcRegionItemId)
-            pSrc = static_cast<TemplateLocalViewItem*>(mItemList[i]);
+            pSrc = static_cast<TemplateContainerItem*>(mItemList[i]);
     }
 
     if (pTarget && pSrc)
@@ -512,8 +512,8 @@ bool TemplateLocalView::copyFrom(const sal_uInt16 nRegionItemId, const BitmapEx 
             sal_uInt16 nId = 0;
             sal_uInt16 nDocId = 0;
 
-            TemplateLocalViewItem *pRegionItem =
-                    static_cast<TemplateLocalViewItem*>(mItemList[i]);
+            TemplateContainerItem *pRegionItem =
+                    static_cast<TemplateContainerItem*>(mItemList[i]);
 
             if (!pRegionItem->maTemplates.empty())
             {
@@ -533,8 +533,8 @@ bool TemplateLocalView::copyFrom(const sal_uInt16 nRegionItemId, const BitmapEx 
                 aTemplate.aThumbnail = rThumbnail;
                 aTemplate.aPath = mpDocTemplates->GetPath(nRegionId,nDocId);
 
-                TemplateLocalViewItem *pItem =
-                        static_cast<TemplateLocalViewItem*>(mItemList[i]);
+                TemplateContainerItem *pItem =
+                        static_cast<TemplateContainerItem*>(mItemList[i]);
 
                 pItem->maTemplates.push_back(aTemplate);
 
@@ -550,7 +550,7 @@ bool TemplateLocalView::copyFrom(const sal_uInt16 nRegionItemId, const BitmapEx 
     return false;
 }
 
-bool TemplateLocalView::copyFrom (TemplateLocalViewItem *pItem, const OUString &rPath)
+bool TemplateLocalView::copyFrom (TemplateContainerItem *pItem, const OUString &rPath)
 {
     sal_uInt16 nId = 0;
     sal_uInt16 nDocId = 0;
@@ -595,8 +595,8 @@ bool TemplateLocalView::exportTo(const sal_uInt16 nItemId, const sal_uInt16 nReg
     {
         if (mItemList[i]->mnId == nRegionItemId)
         {
-            TemplateLocalViewItem *pRegItem =
-                    static_cast<TemplateLocalViewItem*>(mItemList[i]);
+            TemplateContainerItem *pRegItem =
+                    static_cast<TemplateContainerItem*>(mItemList[i]);
 
             std::vector<TemplateItemProperties>::iterator aIter;
             for (aIter = pRegItem->maTemplates.begin(); aIter != pRegItem->maTemplates.end(); ++aIter)
@@ -627,7 +627,7 @@ bool TemplateLocalView::saveTemplateAs (sal_uInt16 nItemId,
     {
         if (mItemList[i]->mnId == nItemId)
         {
-            bRet = saveTemplateAs((const TemplateLocalViewItem*)mItemList[i],rModel,rName);
+            bRet = saveTemplateAs((const TemplateContainerItem*)mItemList[i],rModel,rName);
             break;
         }
     }
@@ -635,7 +635,7 @@ bool TemplateLocalView::saveTemplateAs (sal_uInt16 nItemId,
     return bRet;
 }
 
-bool TemplateLocalView::saveTemplateAs(const TemplateLocalViewItem *pDstItem,
+bool TemplateLocalView::saveTemplateAs(const TemplateContainerItem *pDstItem,
                                        com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rModel,
                                        const OUString &rName)
 {
@@ -658,8 +658,8 @@ bool TemplateLocalView::isTemplateNameUnique(const sal_uInt16 nRegionItemId, con
     {
         if (mItemList[i]->mnId == nRegionItemId)
         {
-            TemplateLocalViewItem *pRegItem =
-                    static_cast<TemplateLocalViewItem*>(mItemList[i]);
+            TemplateContainerItem *pRegItem =
+                    static_cast<TemplateContainerItem*>(mItemList[i]);
 
             std::vector<TemplateItemProperties>::iterator aIter;
             for (aIter = pRegItem->maTemplates.begin(); aIter != pRegItem->maTemplates.end(); ++aIter)
@@ -682,14 +682,14 @@ void TemplateLocalView::OnItemDblClicked (ThumbnailViewItem *pRegionItem)
 
     mpItemView->setId(nRegionId);
     mpItemView->setName(mpDocTemplates->GetRegionName(nRegionId));
-    mpItemView->InsertItems(static_cast<TemplateLocalViewItem*>(pRegionItem)->maTemplates);
+    mpItemView->InsertItems(static_cast<TemplateContainerItem*>(pRegionItem)->maTemplates);
 
     mpItemView->filterItems(ViewFilter_Application(meFilterOption));
 
     showOverlay(true);
 }
 
-static void lcl_updateThumbnails (TemplateLocalViewItem *pItem)
+static void lcl_updateThumbnails (TemplateContainerItem *pItem)
 {
     pItem->maPreview1.Clear();
     pItem->maPreview2.Clear();

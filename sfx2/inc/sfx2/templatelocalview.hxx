@@ -16,7 +16,7 @@
 #include <sfx2/templateproperties.hxx>
 
 class SfxDocumentTemplates;
-class TemplateLocalViewItem;
+class TemplateContainerItem;
 
 namespace com {
     namespace sun { namespace star { namespace frame {
@@ -59,7 +59,7 @@ public:
 
     bool copyFrom (const sal_uInt16 nRegionItemId, const BitmapEx &rThumbnail, const OUString &rPath);
 
-    bool copyFrom(TemplateLocalViewItem *pItem, const OUString &rPath);
+    bool copyFrom(TemplateContainerItem *pItem, const OUString &rPath);
 
     bool exportTo (const sal_uInt16 nItemId, const sal_uInt16 nRegionItemId, const OUString &rName);
 
@@ -67,7 +67,7 @@ public:
                          com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rModel,
                          const OUString &rName);
 
-    bool saveTemplateAs (const TemplateLocalViewItem *pDstItem,
+    bool saveTemplateAs (const TemplateContainerItem *pDstItem,
                          com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rModel,
                          const OUString &rName);
 

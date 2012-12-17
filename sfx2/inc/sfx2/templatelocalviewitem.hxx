@@ -13,18 +13,16 @@
 #include <sfx2/templateproperties.hxx>
 #include <sfx2/thumbnailviewitem.hxx>
 
-class TemplateViewItem;
-
-class TemplateLocalViewItem : public ThumbnailViewItem
+class TemplateContainerItem : public ThumbnailViewItem
 {
 public:
 
     BitmapEx maPreview2;
     std::vector<TemplateItemProperties> maTemplates;
 
-    TemplateLocalViewItem (ThumbnailView &rView);
+    TemplateContainerItem (ThumbnailView &rView);
 
-    virtual ~TemplateLocalViewItem ();
+    virtual ~TemplateContainerItem ();
 
     const Point& getPrev2Pos () const { return maPrev2Pos; }
 
