@@ -943,6 +943,7 @@ void SdrObject::RecalcBoundRect()
                 aOutRect = Rectangle(
                         (sal_Int32)floor(aRange.getMinX()), (sal_Int32)floor(aRange.getMinY()),
                         (sal_Int32)ceil(aRange.getMaxX()), (sal_Int32)ceil(aRange.getMaxY()));
+                aOutRect -= GetGridOffset(); // don't include grid offset
                 return;
             }
         }
