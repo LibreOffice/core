@@ -648,6 +648,8 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     cosv \
     dtobj \
 	findsofficepath \
+	gnu_getopt \
+	gnu_readdir_r \
     headless \
     libeay32 \
     npsoenv \

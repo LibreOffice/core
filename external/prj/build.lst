@@ -1,8 +1,2 @@
 el      external :       soltools NULL
 el	external					usr1 - all el_mkout NULL
-el	external\glibc		nmake	-	all	el_glibc NULL
-el	external\gcc3_specific	nmake	-	all	el_gcc3 NULL
-el	external\mingwheaders		nmake	-	w	el_mingwheaders NULL
-el	external\mingw-dlls		nmake	-	w	el_mingwdlls NULL
-el	external\jawt		nmake	-	w	el_jawt NULL
-el	external\wine		nmake	-	w	el_wine NULL
