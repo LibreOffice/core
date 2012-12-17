@@ -143,6 +143,7 @@ class CmisDetailsContainer : public DetailsContainer
         ListBox*    m_pLBRepository;
         Button*     m_pBTRepoRefresh;
         ListBox*    m_pLBServerType;
+        Edit*       m_pEDPath;
 
     public:
         CmisDetailsContainer( VclBuilderContainer* pBuilder );
