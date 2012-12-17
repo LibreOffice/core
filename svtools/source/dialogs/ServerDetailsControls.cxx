@@ -293,6 +293,9 @@ CmisDetailsContainer::CmisDetailsContainer( VclBuilderContainer* pBuilder ) :
     pBuilder->get( m_pBTRepoRefresh, "repositoriesRefresh" );
     m_pBTRepoRefresh->SetClickHdl( LINK( this, CmisDetailsContainer, RefreshReposHdl ) );
 
+    pBuilder->get( m_pEDPath, "cmisPath" );
+    m_pEDPath->SetModifyHdl( LINK( this, DetailsContainer, ValueChangeHdl ) );
+
     show( false );
 
     // Load the ServerType entries
@@ -308,6 +311,7 @@ CmisDetailsContainer::CmisDetailsContainer( VclBuilderContainer* pBuilder ) :
 INetURLObject CmisDetailsContainer::getUrl( )
 {
     rtl::OUString sBindingUrl = rtl::OUString( m_pEDBinding->GetText() ).trim( );
+    rtl::OUString sPath = rtl::OUString( m_pEDPath->GetText() ).trim( );
 
     rtl::OUString sUrl;
     if ( !sBindingUrl.isEmpty( ) && !m_sRepoId.isEmpty() )
@@ -319,6 +323,7 @@ INetURLObject CmisDetailsContainer::getUrl( )
                 RTL_TEXTENCODING_UTF8 );
         sUrl = "vnd.libreoffice.cmis://" + sEncodedBinding;
     }
+    sUrl += sPath;
 
     return INetURLObject( sUrl );
 }
@@ -338,8 +343,8 @@ bool CmisDetailsContainer::setUrl( const INetURLObject& rUrl )
         sRepositoryId = aHostUrl.GetMark( );
 
         m_pEDBinding->SetText( sBindingUrl );
+        m_pEDPath->SetText( rUrl.GetURLPath() );
     }
-
     return bSuccess;
 }
 
