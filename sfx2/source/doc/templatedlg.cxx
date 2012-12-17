@@ -25,7 +25,7 @@
 #include <sfx2/templatelocalview.hxx>
 #include <sfx2/templatelocalviewitem.hxx>
 #include <sfx2/templateremoteview.hxx>
-#include <sfx2/templateremoteviewitem.hxx>
+#include <sfx2/templaterepository.hxx>
 #include <sfx2/templateviewitem.hxx>
 #include <sfx2/thumbnailviewitem.hxx>
 #include <sot/storage.hxx>

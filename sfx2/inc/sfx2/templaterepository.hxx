@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __SFX2_TEMPLATEREMOTEVIEWITEM_HXX__
-#define __SFX2_TEMPLATEREMOTEVIEWITEM_HXX__
+#ifndef __SFX2_TEMPLATEREPOSITORY_HXX__
+#define __SFX2_TEMPLATEREPOSITORY_HXX__
 
 #include <sfx2/templateproperties.hxx>
 
@@ -41,6 +41,6 @@ private:
     std::vector<TemplateItemProperties> maTemplates;
 };
 
-#endif // __SFX2_TEMPLATEREMOTEVIEWITEM_HXX__
+#endif // __SFX2_TEMPLATEREPOSITORY_HXX__
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
