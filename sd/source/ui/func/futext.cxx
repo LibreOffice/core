@@ -251,6 +251,7 @@ void FuText::DoExecute( SfxRequest& )
 sal_Bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
 {
     bMBDown = sal_True;
+    bJustEndedEdit = false;
 
     sal_Bool bReturn = FuDraw::MouseButtonDown(rMEvt);
 
@@ -674,14 +675,18 @@ sal_Bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
 
         sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
 
-        if ( mpView->IsRotateAllowed() && mpViewShell->GetFrameView()->IsClickChangeRotation() && (rMEvt.GetClicks() != 2) && !bJustEndedEdit &&
+        if (bJustEndedEdit)
+        {
+            bJustEndedEdit = false;
+            FuPoor::cancel();
+        }
+        if ((rMEvt.GetClicks() != 2) &&
             !rMEvt.IsShift() && !rMEvt.IsMod1() && !rMEvt.IsMod2() && !rMEvt.IsRight() &&
             Abs(aPnt.X() - aMDPos.X()) < nDrgLog &&
             Abs(aPnt.Y() - aMDPos.Y()) < nDrgLog)
         {
             /*************************************************************
-            * If a user wants to click on an object in front of a masked
-            * one, he releases the mouse button immediately
+            * From text mode, you don't want to rotate immediately.
             **************************************************************/
             if (mpView->PickObj(aMDPos, mpView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER | SDRSEARCH_BEFOREMARK))
             {
@@ -689,12 +694,7 @@ sal_Bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
                 mpView->MarkObj(pObj,pPV,false,false);
                 return (bReturn);
             }
-            // toggle to rotation mode
-            mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_OBJECT_ROTATE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
         }
-
-        if( bJustEndedEdit )
-            bJustEndedEdit = false;
     }
     else if( mpView && mpView->IsCreateObj() && rMEvt.IsLeft())
     {
@@ -914,7 +914,11 @@ sal_Bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
                                       SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
         }
     }
-
+    if (bJustEndedEdit)
+    {
+        bJustEndedEdit = false;
+        FuPoor::cancel();
+    }
     bMBDown = sal_False;
     FuConstruct::MouseButtonUp(rMEvt);
     return (bReturn);
