@@ -545,7 +545,7 @@ rtl::OString SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
                                      sal_uInt32 nFrmOpts,
                                      const rtl::OString &rEndTags )
 {
-    rtl::OString sRetEndTags;
+    rtl::OString sRetEndTags(rEndTags);
     rtl::OStringBuffer sOut;
     const SfxPoolItem* pItem;
     const SfxItemSet& rItemSet = rFrmFmt.GetAttrSet();
@@ -822,6 +822,7 @@ rtl::OString SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
             sRetEndTags = sOut.makeStringAndClear();
         }
     }
+    assert(sRetEndTags.endsWith(rEndTags)); // fdo#58286
     return sRetEndTags;
 }
 
