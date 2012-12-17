@@ -1911,7 +1911,7 @@ void VclBuilder::applyPackingProperty(Window *pCurrent,
             }
             else if (sKey == "pack-type")
             {
-                VclPackType ePackType = (sValue[0] == 'e' || sValue[0] == 'e') ? VCL_PACK_END : VCL_PACK_START;
+                VclPackType ePackType = (sValue[0] == 'e' || sValue[0] == 'E') ? VCL_PACK_END : VCL_PACK_START;
                 pCurrent->set_pack_type(ePackType);
             }
             else if (sKey == "left-attach")
