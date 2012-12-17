@@ -2205,6 +2205,17 @@ Size TabControl::calculateRequisition() const
     {
         const TabPage *pPage = it->mpTabPage;
         //it's a real nuisance if the page is not inserted yet :-(
+        //We need to force all tabs to exist to get overall optimal size for dialog
+        if (!pPage)
+        {
+            TabControl *pThis = const_cast<TabControl*>(this);
+            sal_uInt16 nLastPageId = pThis->GetCurPageId();
+            pThis->SetCurPageId(it->mnId);
+            pThis->ActivatePage();
+            pThis->SetCurPageId(nLastPageId);
+            pPage = it->mpTabPage;
+        }
+
         if (!pPage)
             continue;
 
