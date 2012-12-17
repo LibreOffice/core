@@ -22,6 +22,7 @@ class SfxTemplateInfoDlg;
 class TemplateAbstractView;
 class TemplateLocalView;
 class TemplateRemoteView;
+class TemplateRemoteViewItem;
 class TemplateSearchView;
 class ThumbnailView;
 class ThumbnailViewItem;
@@ -109,6 +110,17 @@ private:
 
     void localSearchMoveTo (sal_uInt16 nMenuId);
 
+    // Remote repositories handling methods
+    void loadRepositories ();
+
+    const std::vector<TemplateRemoteViewItem*>& getRepositories () const { return maRepositories; }
+
+    bool insertRepository (const OUString &rName, const OUString &rURL);
+
+    bool deleteRepository (const sal_uInt16 nRepositoryId);
+
+    void syncRepositories () const;
+
 private:
 
     TabControl maTabControl;
@@ -132,6 +144,9 @@ private:
     bool mbIsSaveMode;  ///< Flag that indicates if we are in save mode or not.
     com::sun::star::uno::Reference< com::sun::star::frame::XModel > m_xModel;
     com::sun::star::uno::Reference< com::sun::star::frame::XComponentLoader > mxDesktop;
+
+    bool mbIsSynced; ///< Tells whether maRepositories is synchronized with the user config
+    std::vector<TemplateRemoteViewItem*> maRepositories; ///< Stores the remote repositories for templates
 };
 
 #endif // TEMPLATEDLG_HXX

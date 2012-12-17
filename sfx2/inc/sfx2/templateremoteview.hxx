@@ -25,29 +25,14 @@ public:
 
     virtual ~TemplateRemoteView ();
 
-    // Load repositories from user settings.
-    virtual void Populate ();
-
-    virtual void reload ();
-
     virtual void filterTemplatesByApp (const FILTER_APPLICATION &eApp);
 
     virtual void showOverlay (bool bVisible);
 
-    bool loadRepository (const sal_uInt16 nRepositoryId, bool bRefresh);
-
-    const std::vector<TemplateRemoteViewItem*>& getRepositories () const { return maRepositories; }
-
-    bool insertRepository (const OUString &rName, const OUString &rURL);
-
-    bool deleteRepository (const sal_uInt16 nRepositoryId);
-
-    void syncRepositories () const;
+    bool loadRepository (TemplateRemoteViewItem* pRepository, bool bRefresh);
 
 private:
 
-    bool mbIsSynced;
-    std::vector<TemplateRemoteViewItem*> maRepositories;
     com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > m_xCmdEnv;
 };
 

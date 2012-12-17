@@ -81,9 +81,9 @@ public:
     virtual ~TemplateAbstractView ();
 
     // Fill view with template folders thumbnails
-    virtual void Populate () = 0;
+    virtual void Populate () { };
 
-    virtual void reload () = 0;
+    virtual void reload () { };
 
     virtual void filterTemplatesByApp (const FILTER_APPLICATION &eApp) = 0;
 
