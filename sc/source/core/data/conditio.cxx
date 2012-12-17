@@ -1705,7 +1705,12 @@ bool ScCondDateFormatEntry::IsValid( const ScAddress& rPos ) const
             }
             break;
         case condformat::LASTMONTH:
-            if( rActDate.GetYear() == aCellDate.GetYear() )
+            if( rActDate.GetMonth() == 1 )
+            {
+                if( aCellDate.GetMonth() == 12 && rActDate.GetYear() == aCellDate.GetYear() + 1 )
+                    return true;
+            }
+            else if( rActDate.GetYear() == aCellDate.GetYear() )
             {
                 if( rActDate.GetMonth() == aCellDate.GetMonth() + 1)
                     return true;
@@ -1719,7 +1724,12 @@ bool ScCondDateFormatEntry::IsValid( const ScAddress& rPos ) const
             }
             break;
         case condformat::NEXTMONTH:
-            if( rActDate.GetYear() == aCellDate.GetYear() )
+            if( rActDate.GetMonth() == 12 )
+            {
+                if( aCellDate.GetMonth() == 1 && rActDate.GetYear() == aCellDate.GetYear() - 1 )
+                    return true;
+            }
+            else if( rActDate.GetYear() == aCellDate.GetYear() )
             {
                 if( rActDate.GetMonth() == aCellDate.GetMonth() - 1)
                     return true;
