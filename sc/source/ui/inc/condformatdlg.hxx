@@ -78,7 +78,6 @@ private:
     ScAddress maPos;
     ScRangeList maRanges;
 
-    void RecalcAll();
     void DoScroll(long nDiff);
 
 public:
@@ -86,6 +85,7 @@ public:
             const ScRangeList& rRanges, const ScAddress& rPos, condformat::dialog::ScCondFormatDialogType eType);
 
     ScConditionalFormat* GetConditionalFormat() const;
+    void RecalcAll();
 
     DECL_LINK( AddBtnHdl, void* );
     DECL_LINK( RemoveBtnHdl, void* );
