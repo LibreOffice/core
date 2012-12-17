@@ -10,7 +10,6 @@
 #include <sfx2/templateremoteview.hxx>
 
 #include <comphelper/processfactory.hxx>
-#include <officecfg/Office/Common.hxx>
 #include <sfx2/templateremoteviewitem.hxx>
 #include <sfx2/templateview.hxx>
 #include <sfx2/templateviewitem.hxx>
@@ -47,7 +46,6 @@ enum
 
 TemplateRemoteView::TemplateRemoteView (Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren)
     : TemplateAbstractView(pParent,nWinStyle,bDisableTransientChildren)
-    , mbIsSynced(true)
 {
     mpItemView->SetColor(Color(COL_WHITE));
 
@@ -60,36 +58,6 @@ TemplateRemoteView::TemplateRemoteView (Window *pParent, WinBits nWinStyle, bool
 
 TemplateRemoteView::~TemplateRemoteView ()
 {
-    for (size_t i = 0, n = maRepositories.size(); i < n; ++i)
-        delete maRepositories[i];
-}
-
-void TemplateRemoteView::Populate()
-{
-    uno::Reference < uno::XComponentContext > m_context(comphelper::getProcessComponentContext());
-
-    // Load from user settings
-    com::sun::star::uno::Sequence<OUString>  aUrls =
-            officecfg::Office::Common::Misc::TemplateRepositoryUrls::get(m_context);
-
-    com::sun::star::uno::Sequence<OUString> aNames =
-            officecfg::Office::Common::Misc::TemplateRepositoryNames::get(m_context);
-
-    for (sal_Int32 i = 0; i < aUrls.getLength() && i < aNames.getLength(); ++i)
-    {
-        TemplateRemoteViewItem *pItem = new TemplateRemoteViewItem(*this);
-
-        pItem->mnId = i+1;
-        pItem->maTitle = aNames[i];
-        pItem->setURL(aUrls[i]);
-
-        maRepositories.push_back(pItem);
-    }
-}
-
-void TemplateRemoteView::reload ()
-{
-    loadRepository(mpItemView->getId(),true);
 }
 
 void TemplateRemoteView::filterTemplatesByApp(const FILTER_APPLICATION &eApp)
@@ -109,19 +77,8 @@ void TemplateRemoteView::showOverlay (bool bVisible)
     }
 }
 
-bool TemplateRemoteView::loadRepository (const sal_uInt16 nRepositoryId, bool bRefresh)
+bool TemplateRemoteView::loadRepository (TemplateRemoteViewItem* pItem, bool bRefresh)
 {
-    TemplateRemoteViewItem *pItem = NULL;
-
-    for (size_t i = 0, n = maRepositories.size(); i < n; ++i)
-    {
-        if (maRepositories[i]->mnId == nRepositoryId)
-        {
-            pItem = maRepositories[i];
-            break;
-        }
-    }
-
     if (!pItem)
         return false;
 
@@ -132,7 +89,7 @@ bool TemplateRemoteView::loadRepository (const sal_uInt16 nRepositoryId, bool bR
     }
 
     mpItemView->Clear();
-    mpItemView->setId(nRepositoryId);
+    mpItemView->setId(pItem->mnId);
     mpItemView->setName(pItem->maTitle);
 
     OUString aURL = static_cast<TemplateRemoteViewItem*>(pItem)->getURL();
@@ -156,7 +113,7 @@ bool TemplateRemoteView::loadRepository (const sal_uInt16 nRepositoryId, bool bR
         uno::Reference< XResultSet > xResultSet;
         uno::Reference< XDynamicResultSet > xDynResultSet;
 
-        ucbhelper::ResultSetInclude eInclude = ucbhelper::INCLUDE_DOCUMENTS_ONLY;
+        ucbhelper::ResultSetInclude eInclude = ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS;
         xDynResultSet = aContent.createDynamicCursor( aProps, eInclude );
 
         if ( xDynResultSet.is() )
@@ -241,69 +198,6 @@ bool TemplateRemoteView::loadRepository (const sal_uInt16 nRepositoryId, bool bR
     }
 
     return true;
-}
-
-bool TemplateRemoteView::insertRepository(const OUString &rName, const OUString &rURL)
-{
-    for (size_t i = 0, n = maRepositories.size(); i < n; ++i)
-    {
-        if (maRepositories[i]->maTitle == rName)
-            return false;
-    }
-
-    TemplateRemoteViewItem *pItem = new TemplateRemoteViewItem(*this);
-
-    pItem->mnId = maRepositories.size()+1;
-    pItem->maTitle = rName;
-    pItem->setURL(rURL);
-
-    maRepositories.push_back(pItem);
-
-    mbIsSynced = false;
-    return true;
-}
-
-bool TemplateRemoteView::deleteRepository(const sal_uInt16 nRepositoryId)
-{
-    bool bRet = false;
-
-    for (size_t i = 0, n = maRepositories.size(); i < n; ++i)
-    {
-        if (maRepositories[i]->mnId == nRepositoryId)
-        {
-            delete maRepositories[i];
-
-            maRepositories.erase(maRepositories.begin() + i);
-            mbIsSynced = false;
-            bRet = true;
-            break;
-        }
-    }
-
-    return bRet;
-}
-
-void TemplateRemoteView::syncRepositories() const
-{
-    if (!mbIsSynced)
-    {
-        uno::Reference < uno::XComponentContext > pContext(comphelper::getProcessComponentContext());
-        boost::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(pContext));
-
-        size_t nSize = maRepositories.size();
-        uno::Sequence<OUString> aUrls(nSize);
-        uno::Sequence<OUString> aNames(nSize);
-
-        for(size_t i = 0; i < nSize; ++i)
-        {
-            aUrls[i] = maRepositories[i]->getURL();
-            aNames[i] = maRepositories[i]->maTitle;
-        }
-
-        officecfg::Office::Common::Misc::TemplateRepositoryUrls::set(aUrls, batch, pContext);
-        officecfg::Office::Common::Misc::TemplateRepositoryNames::set(aNames, batch, pContext);
-        batch->commit();
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

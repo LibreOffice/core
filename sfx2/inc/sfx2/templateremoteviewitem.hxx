@@ -10,16 +10,15 @@
 #ifndef __SFX2_TEMPLATEREMOTEVIEWITEM_HXX__
 #define __SFX2_TEMPLATEREMOTEVIEWITEM_HXX__
 
-#include <sfx2/thumbnailviewitem.hxx>
 #include <sfx2/templateproperties.hxx>
 
-class TemplateRemoteViewItem : public ThumbnailViewItem
+class TemplateRemoteViewItem
 {
 public:
 
-    TemplateRemoteViewItem (ThumbnailView &rView);
+    TemplateRemoteViewItem () : mnId(0) { };
 
-    virtual ~TemplateRemoteViewItem ();
+    virtual ~TemplateRemoteViewItem () { };
 
     void setURL (const rtl::OUString &rURL) { maUrl = rURL; }
 
@@ -30,6 +29,11 @@ public:
     void clearTemplates () { maTemplates.clear(); }
 
     const std::vector<TemplateItemProperties>& getTemplates () const { return maTemplates; }
+
+public:
+
+    sal_uInt16 mnId;
+    rtl::OUString maTitle;
 
 private:
 

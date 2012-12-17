@@ -15,6 +15,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/fcontnr.hxx>
@@ -106,7 +107,9 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
       maView(new TemplateLocalView(this,SfxResId(TEMPLATE_VIEW))),
       mpOnlineView(new TemplateRemoteView(this, WB_VSCROLL,false)),
       mbIsSaveMode(false),
-      mxDesktop(comphelper::getProcessServiceFactory()->createInstance( "com.sun.star.frame.Desktop" ),uno::UNO_QUERY )
+      mxDesktop(comphelper::getProcessServiceFactory()->createInstance( "com.sun.star.frame.Desktop" ),uno::UNO_QUERY ),
+      mbIsSynced(false),
+      maRepositories()
 {
     // Create popup menus
     mpActionMenu = new PopupMenu;
@@ -179,7 +182,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
 
     switchMainView(true);
 
-    mpOnlineView->Populate();
+    loadRepositories();
 
     createRepositoryMenu();
     createDefaultTemplateMenu();
@@ -192,7 +195,10 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
 
 SfxTemplateManagerDlg::~SfxTemplateManagerDlg ()
 {
-    mpOnlineView->syncRepositories();
+    // Synchronize the config before deleting it
+    syncRepositories();
+    for (size_t i = 0, n = maRepositories.size(); i < n; ++i)
+        delete maRepositories[i];
 
     delete mpSearchEdit;
     delete mpViewBar;
@@ -602,7 +608,7 @@ IMPL_LINK(SfxTemplateManagerDlg, RepositoryMenuSelectHdl, Menu*, pMenu)
         {
             boost::shared_ptr<Place> pPlace = dlg.GetPlace();
 
-            if (mpOnlineView->insertRepository(pPlace->GetName(),pPlace->GetUrl()))
+            if (insertRepository(pPlace->GetName(),pPlace->GetUrl()))
             {
                 // update repository list menu.
                 createRepositoryMenu();
@@ -619,7 +625,18 @@ IMPL_LINK(SfxTemplateManagerDlg, RepositoryMenuSelectHdl, Menu*, pMenu)
     {
         sal_uInt16 nRepoId = nMenuId - MNI_REPOSITORY_BASE;
 
-        if (mpOnlineView->loadRepository(nRepoId,false))
+        TemplateRemoteViewItem *pRepository = NULL;
+
+        for (size_t i = 0, n = maRepositories.size(); i < n; ++i)
+        {
+            if (maRepositories[i]->mnId == nRepoId)
+            {
+                pRepository = maRepositories[i];
+                break;
+            }
+        }
+
+        if (mpOnlineView->loadRepository(pRepository,false))
         {
             switchMainView(false);
             mpOnlineView->showOverlay(true);
@@ -1106,7 +1123,7 @@ void SfxTemplateManagerDlg::OnFolderDelete()
 
 void SfxTemplateManagerDlg::OnRepositoryDelete()
 {
-    if(mpOnlineView->deleteRepository(mpOnlineView->getOverlayRegionId()))
+    if(deleteRepository(mpOnlineView->getOverlayRegionId()))
     {
         // close overlay and switch to local view
         switchMainView(true);
@@ -1194,7 +1211,7 @@ void SfxTemplateManagerDlg::createRepositoryMenu()
 
     mpRepositoryMenu->InsertItem(MNI_REPOSITORY_LOCAL,SfxResId(STR_REPOSITORY_LOCAL).toString());
 
-    const std::vector<TemplateRemoteViewItem*> &rRepos = mpOnlineView->getRepositories();
+    const std::vector<TemplateRemoteViewItem*> &rRepos = getRepositories();
 
     for (size_t i = 0, n = rRepos.size(); i < n; ++i)
         mpRepositoryMenu->InsertItem(MNI_REPOSITORY_BASE+rRepos[i]->mnId,rRepos[i]->maTitle);
@@ -1417,6 +1434,92 @@ void SfxTemplateManagerDlg::localSearchMoveTo(sal_uInt16 nMenuId)
     mpSearchView->deselectItems();
 
     SearchUpdateHdl(mpSearchEdit);
+}
+
+void SfxTemplateManagerDlg::loadRepositories()
+{
+    uno::Reference < uno::XComponentContext > m_context(comphelper::getProcessComponentContext());
+
+    // Load from user settings
+    com::sun::star::uno::Sequence<OUString>  aUrls =
+            officecfg::Office::Common::Misc::TemplateRepositoryUrls::get(m_context);
+
+    com::sun::star::uno::Sequence<OUString> aNames =
+            officecfg::Office::Common::Misc::TemplateRepositoryNames::get(m_context);
+
+    for (sal_Int32 i = 0; i < aUrls.getLength() && i < aNames.getLength(); ++i)
+    {
+        TemplateRemoteViewItem *pItem = new TemplateRemoteViewItem();
+
+        pItem->mnId = i+1;
+        pItem->maTitle = aNames[i];
+        pItem->setURL(aUrls[i]);
+
+        maRepositories.push_back(pItem);
+    }
+}
+
+bool SfxTemplateManagerDlg::insertRepository(const OUString &rName, const OUString &rURL)
+{
+    for (size_t i = 0, n = maRepositories.size(); i < n; ++i)
+    {
+        if (maRepositories[i]->maTitle == rName)
+            return false;
+    }
+
+    TemplateRemoteViewItem *pItem = new TemplateRemoteViewItem();
+
+    pItem->mnId = maRepositories.size()+1;
+    pItem->maTitle = rName;
+    pItem->setURL(rURL);
+
+    maRepositories.push_back(pItem);
+
+    mbIsSynced = false;
+    return true;
+}
+
+bool SfxTemplateManagerDlg::deleteRepository(const sal_uInt16 nRepositoryId)
+{
+    bool bRet = false;
+
+    for (size_t i = 0, n = maRepositories.size(); i < n; ++i)
+    {
+        if (maRepositories[i]->mnId == nRepositoryId)
+        {
+            delete maRepositories[i];
+
+            maRepositories.erase(maRepositories.begin() + i);
+            mbIsSynced = false;
+            bRet = true;
+            break;
+        }
+    }
+
+    return bRet;
+}
+
+void SfxTemplateManagerDlg::syncRepositories() const
+{
+    if (!mbIsSynced)
+    {
+        uno::Reference < uno::XComponentContext > pContext(comphelper::getProcessComponentContext());
+        boost::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(pContext));
+
+        size_t nSize = maRepositories.size();
+        uno::Sequence<OUString> aUrls(nSize);
+        uno::Sequence<OUString> aNames(nSize);
+
+        for(size_t i = 0; i < nSize; ++i)
+        {
+            aUrls[i] = maRepositories[i]->getURL();
+            aNames[i] = maRepositories[i]->maTitle;
+        }
+
+        officecfg::Office::Common::Misc::TemplateRepositoryUrls::set(aUrls, batch, pContext);
+        officecfg::Office::Common::Misc::TemplateRepositoryNames::set(aNames, batch, pContext);
+        batch->commit();
+    }
 }
 
 static bool lcl_getServiceName ( const OUString &rFileURL, OUString &rName )
