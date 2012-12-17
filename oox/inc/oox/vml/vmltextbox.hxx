@@ -42,7 +42,7 @@ namespace com { namespace sun { namespace star {
 namespace oox {
 namespace vml {
 
-class ShapeTypeModel;
+struct ShapeTypeModel;
 
 // ============================================================================
 
