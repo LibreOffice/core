@@ -367,10 +367,10 @@ ScFormulaCfg::ScFormulaCfg() :
                                 eOpt = RECALC_ALWAYS;
                                 break;
                             case 1:
-                                eOpt = RECALC_ASK;
+                                eOpt = RECALC_NEVER;
                                 break;
                             case 2:
-                                eOpt = RECALC_NEVER;
+                                eOpt = RECALC_ASK;
                                 break;
                             default:
                                 SAL_WARN("sc", "unknown ooxml recalc option!");
@@ -446,16 +446,16 @@ void ScFormulaCfg::Commit()
             break;
             case SCFORMULAOPT_OOXML_RECALC:
             {
-                sal_Int32 nVal = 1;
+                sal_Int32 nVal = 2;
                 switch (GetOOXMLRecalcOptions())
                 {
                     case RECALC_ALWAYS:
                         nVal = 0;
                         break;
-                    case RECALC_ASK:
+                    case RECALC_NEVER:
                         nVal = 1;
                         break;
-                    case RECALC_NEVER:
+                    case RECALC_ASK:
                         nVal = 2;
                         break;
                 }

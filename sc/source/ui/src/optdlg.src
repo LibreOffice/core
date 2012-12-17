@@ -294,14 +294,14 @@ TabPage RID_SCPAGE_FORMULA
     ListBox LB_OOXML_RECALC
     {
         Pos = MAP_APPFONT( 21, 147 );
-        Size = MAP_APPFONT( 100, 50 );
+        Size = MAP_APPFONT( 80, 50 );
         Border = TRUE;
         DropDown = TRUE;
         StringList [ en-US ] =
         {
-            "Recalculate always";
-            "Ask before recalculation";
-            "Recalculate never";
+            "Always recalculate";
+            "Never recalculate";
+            "Prompt user";
         };
     };
 };

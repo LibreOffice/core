@@ -32,6 +32,14 @@
 #include "scdllapi.h"
 #include "formula/grammar.hxx"
 
+// have to match the registry values
+enum ScRecalcOptions
+{
+    RECALC_ALWAYS = 0,
+    RECALC_NEVER,
+    RECALC_ASK,
+};
+
 /**
  * Configuration options for formula interpreter.
  */

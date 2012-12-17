@@ -286,10 +286,10 @@ sal_Bool ScTpFormulaOptions::FillItemSet(SfxItemSet& rCoreSet)
                 eOOXMLRecalc = RECALC_ALWAYS;
                 break;
             case 1:
-                eOOXMLRecalc = RECALC_ASK;
+                eOOXMLRecalc = RECALC_NEVER;
                 break;
             case 2:
-                eOOXMLRecalc = RECALC_NEVER;
+                eOOXMLRecalc = RECALC_ASK;
                 break;
         };
 
@@ -342,10 +342,10 @@ void ScTpFormulaOptions::Reset(const SfxItemSet& rCoreSet)
         case RECALC_ALWAYS:
             maLbOOXMLRecalcOptions.SelectEntryPos(0);
             break;
-        case RECALC_ASK:
+        case RECALC_NEVER:
             maLbOOXMLRecalcOptions.SelectEntryPos(1);
             break;
-        case RECALC_NEVER:
+        case RECALC_ASK:
             maLbOOXMLRecalcOptions.SelectEntryPos(2);
             break;
     }
