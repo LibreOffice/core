@@ -21,18 +21,16 @@
 #include <unotools/fontdefs.hxx>
 #include <sal/macros.h>
 
-#ifndef _STLP_MAP
 #include <map>
-#endif
-#ifndef _STLP_VECTOR
 #include <vector>
-#endif
-#ifndef _STLP_ALGORITHM
 #include <algorithm>
-#endif
-#ifndef _STLP_FUNCTIONAL
 #include <functional>
-#endif
+
+//These conversion tables were designed for StarSymbol. OpenSymbol
+//originally didn't have the same code points as StarSymbol, and
+//then gained some extra code points, but there are still potentially
+//various holes in OpenSymbol which were filled by StarSymbol, i.e.
+//destination mapping points which are empty in OpenSymbol
 
 //=======================================================================
 // note: the character mappings that are only approximations
@@ -307,17 +305,17 @@ static const sal_Unicode aWingDings2Tab[224] =
         0xe569,    0xe56a,    0xe56b,    0xe56c,
         0xe56d,    0xe56e,    0xe56f,    0xe570,
         0xe571,    0xe572,    0xe573,    0xe574,
-        0xe575,    0xe576,    0xe577,    0xe578,
+        0xe575,         0,         0,    0xe578,
     // F0a0
         0xe579,    0xe57a,    0xe57b,    0xe57c,
-        0xe57d,    0xe57e,    0xe57f,    0xe580,
-        0xe581,    0xe582,    0xe583,    0xe584,
-        0xe585,    0xe586,    0xe587,    0xe588,
+             0,         0,         0,         0,
+             0,         0,         0,    0xe584,
+        0xe585,         0,    0xe586,         0,
     // F0b0
-        0xe589,    0xe58a,    0xe58b,    0xe58c,
+             0,         0,         0,         0,
         0xe58d,    0xe58e,    0xe58f,    0xe590,
-        0xe591,    0xe592,    0xe593,    0xe594,
-        0xe595,    0xe596,    0xe597,    0xe598,
+             0,         0,    0xe593,    0xe594,
+             0,         0,         0,    0xe587,
     // F0c0
         0xe599,    0xe59a,    0xe59b,    0xe59c,
         0xe59d,    0xe59e,    0xe59f,    0xe5a0,
@@ -334,7 +332,7 @@ static const sal_Unicode aWingDings2Tab[224] =
         0xe5c1,    0xe5c2,    0xe5c3,    0xe5c4,
         0xe5c5,    0xe5c6,    0xe5c7,    0xe5c8,
     // F0f0
-        0xe5c9,    0,    0xe5cb,    0xe5cc,
+        0xe5c9,    0,         0xe5cb,    0xe477,
         0xe5cd,    0xe5ce,    0xe5cf,    0xe5d0,
         0x203b,    0x2042,         0,         0,
              0,         0,         0,         0
@@ -1278,7 +1276,20 @@ sal_Unicode ConvertChar::RecodeChar( sal_Unicode cChar ) const
             cIndex -= 0xF000;
         // recode the symbol
         if( cIndex>=0x0020 && cIndex<=0x00FF )
+        {
             cRetVal = mpCvtTab[ cIndex - 0x0020 ];
+
+            if (!cRetVal && mpSubsFontName)
+            {
+                if (!strcmp(mpSubsFontName, "OpenSymbol") || (!strcmp(mpSubsFontName, "StarSymbol")))
+                {
+                    cRetVal = 0xE12C;
+                    SAL_WARN( "unotools", "Forcing a bullet substition from 0x" <<
+                        OString::valueOf(cChar, 16) << " to 0x" <<
+                        OString::valueOf(cRetVal, 16));
+                }
+            }
+        }
     }
 
     return cRetVal ? cRetVal : cChar;
