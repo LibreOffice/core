@@ -50,6 +50,7 @@ __COLORS__ = ['BLACK', 0x000000], ['SILVER', 0xc0c0c0], ['GRAY', 0x808080], \
     ['ORANGE', 0xffa500], ['GOLD', 0xffd700], ['VIOLET', 0x9400d3], \
     ['SKYBLUE', 0x87ceeb], ['CHOCOLATE', 0xd2691e], ['BROWN', 0xa52a2a], \
     ['INVISIBLE', 0xff000000]
+__STRCONST__ = [i[0] for i in __COLORS__] + ['NONE', 'BEVEL', 'MITER', 'ROUNDED', 'SOLID', 'DASH', 'DOTTED', 'BOLD', 'ITALIC', 'UPRIGHT', 'NORMAL', "HOUR", "PT", "INCH", "MM", "CM"]
 __SLEEP_SLICE_IN_MILLISECONDS__ = 500
 __PT_TO_TWIP__ = 20
 __MM_TO_PT__ = 1/(25.4/72)
@@ -137,9 +138,10 @@ def __l12n__(lng):
         return __lng__[lng]
     except:
         try:
-            __lng__[lng] = dict([[i.decode("unicode-escape").split("=")[0].strip(), i.decode("unicode-escape").split("=")[1].strip()] for i in open(__lngpath__ + "LibreLogo_" + lng + ".properties", 'rb').readlines() if b"=" in i])
+            __lng__[lng] = dict([[i.decode("unicode-escape").split("=")[0].strip(), i.decode("unicode-escape").split("=")[1].strip().strip("|")] for i in open(__lngpath__ + "LibreLogo_" + lng + ".properties", 'rb').readlines() if b"=" in i])
             return __lng__[lng]
-        except:
+        except Exception:
+            __trace__()
             return None
 
 # dot for dotted line (implemented as an array of dot-headed arrows, because PostScript dot isn't supported by Writer)
@@ -220,7 +222,7 @@ def Input(s):
         # dispose the dialog
         controlContainer.dispose()
         return inputtext
-    except Exception as e:
+    except Exception:
         __trace__()
 
 def __string__(s, decimal = None): # convert decimal sign, localized BOOL and SET
@@ -337,8 +339,8 @@ def __translate__(arg = None):
     # decode strings
     quoted = u"(?ui)(?<=%s)(%%s)(?=%s)" % (__l12n__(_.lng)['LEFTSTRING'][0], __l12n__(_.lng)['RIGHTSTRING'][0])
     text = re.sub(__DECODE_STRING_REGEX__, __decodestring2__, text)
-    for i in __COLORS__ + (['NONE'], ['BEVEL'], ['MITER'], ['ROUNDED'], ['SOLID'], ['DASH'], ['DOTTED'], ['BOLD'], ['ITALIC'], ['UPRIGHT'], ['NORMAL']):
-        text = re.sub(quoted % lang[i[0]], __l12n__(_.lng)[i[0]].split("|")[0].upper(), text)
+    for i in __STRCONST__:
+        text = re.sub(quoted % lang[i], __l12n__(_.lng)[i].split("|")[0].upper(), text)
     _.doc.getText().setString(text)
     # convert to paragraphs
     __dispatcher__(".uno:ExecuteSearch", (__getprop__("SearchItem.SearchString", r"\n"), __getprop__("SearchItem.ReplaceString", r"\n"), \
@@ -986,7 +988,6 @@ def __color__(c):
         return c
     if type(c) == unicode:
         if c == u'any':
-#            return __COLORS__[int(random.random() * 24)][1]
             return int(random.random() * 2**31) # max. 50% transparency
         if c[0:1] == '~':
             c = __componentcolor__(__colors__[_.lng][c[1:].lower()])
@@ -1159,13 +1160,15 @@ def __loadlang__(lang, a):
     for i in __COLORS__:
         for j in a[i[0]].split("|"):
             __colors__[lang][j] = i[1]
-
+    for i in a:
+        if not i[0:3] in ["LIB", "ERR", "PT", "INC", "MM", "CM", "HOU", "DEG"] and not i in __STRCONST__: # uppercase native commands
+            a[i] = a[i].upper()
     repcount = a['REPCOUNT'].split('|')[0]
     loopi = itertools.count()
     loop = lambda r: "%(i)s = 1\n%(orig)s%(j)s = %(i)s\n%(i)s += 1\n" % \
         { "i": repcount + str(next(loopi)), "j": repcount, "orig": re.sub( r"(?ui)(?<!:)\b%s\b" % repcount, repcount + str(next(loopi)-1), r.group(0)) }
-
     __comp__[lang] = [
+    [r"(?i)(?<!:)(\b|(?=[-:]))(?:%s)\b" % "|".join([a[i].lower() for i in a if i[0:3] != "ERR"]), lambda s: s.group().upper()], # uppercase all native commands in the source code
     [r"(?<!:)\b(?:%s) [[]" % a['GROUP'], "\n__groupstart__()\nfor __groupindex__ in range(2):\n[\nif __groupindex__ == 1:\n[\n__groupend__()\nbreak\n]\n"],
     [r"(?<!:)\b(?:%s)\b" % a['GROUP'], "\n__removeshape__(__ACTUAL__)\n"],
     [r"(\n| )][ \n]*\[(\n| )", "\n]\nelse:\n[\n"], # if/else block
@@ -1350,8 +1353,7 @@ def __compil__(s):
 
     # compile native Logo
     for i in __comp__[_.lng]:
-        s = re.sub(u"(?iu)" + i[0], i[1], s)
-
+        s = re.sub(u"(?u)" + i[0], i[1], s)
     indent = 0
     result = ""
     func = re.compile("(?iu)(def (\w+))(\(.*\):)")
