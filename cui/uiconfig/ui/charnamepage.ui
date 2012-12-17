@@ -5,6 +5,7 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="orientation">vertical</property>
+    <property name="spacing">6</property>
     <child>
       <object class="GtkFrame" id="simple">
         <property name="can_focus">False</property>
@@ -623,6 +624,18 @@
       </packing>
     </child>
     <child>
+      <object class="GtkLabel" id="fontinfo">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="xalign">0</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">4</property>
+      </packing>
+    </child>
+    <child>
       <object class="GtkFrame" id="frame4">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -657,7 +670,7 @@
         <property name="expand">False</property>
         <property name="fill">True</property>
         <property name="pack_type">end</property>
-        <property name="position">4</property>
+        <property name="position">5</property>
       </packing>
     </child>
   </object>

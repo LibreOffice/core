@@ -365,6 +365,7 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet )
     m_pCTLFrame->Show(bShowCTL);
 
     get(m_pPreviewWin, "preview");
+    get(m_pFontTypeFT, "fontinfo");
 
     m_pWestFontLanguageLB->SetLanguageList(LANG_LIST_WESTERN, sal_True, sal_False, sal_True);
     m_pEastFontLanguageLB->SetLanguageList(LANG_LIST_CJK, sal_True, sal_False, sal_True);
@@ -537,13 +538,15 @@ void SvxCharNamePage::UpdatePreview_Impl()
     // Font
     const FontList* pFontList = GetFontList();
 
-    calcFontInfo(rFont,this,m_pWestFontNameLB,m_pWestFontStyleLB,m_pWestFontSizeLB,m_pWestFontLanguageLB,pFontList,GetWhich( SID_ATTR_CHAR_FONT ),GetWhich( SID_ATTR_CHAR_FONTHEIGHT ));
+    FontInfo aFontInfo =
+        calcFontInfo(rFont,this,m_pWestFontNameLB,m_pWestFontStyleLB,m_pWestFontSizeLB,m_pWestFontLanguageLB,pFontList,GetWhich( SID_ATTR_CHAR_FONT ),GetWhich( SID_ATTR_CHAR_FONTHEIGHT ));
 
     calcFontInfo(rCJKFont,this,m_pEastFontNameLB,m_pEastFontStyleLB,m_pEastFontSizeLB,m_pEastFontLanguageLB,pFontList,GetWhich( SID_ATTR_CHAR_CJK_FONT ),GetWhich( SID_ATTR_CHAR_CJK_FONTHEIGHT ));
 
     calcFontInfo(rCTLFont,this,m_pCTLFontNameLB,m_pCTLFontStyleLB,m_pCTLFontSizeLB,m_pCTLFontLanguageLB,pFontList,GetWhich( SID_ATTR_CHAR_CTL_FONT ),GetWhich( SID_ATTR_CHAR_CTL_FONTHEIGHT ));
 
     m_pPreviewWin->Invalidate();
+    m_pFontTypeFT->SetText( pFontList->GetFontMapText( aFontInfo ) );
 }
 
 // -----------------------------------------------------------------------
@@ -818,6 +821,10 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
             break;
         }
     }
+
+    if ( Western == eLangGrp )
+        m_pFontTypeFT->SetText( pFontList->GetFontMapText(
+            pFontList->Get( pNameBox->GetText(), pStyleBox->GetText() ) ) );
 
     // save these settings
     pNameBox->SaveValue();

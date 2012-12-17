@@ -105,12 +105,15 @@ class ImplFontListNameInfo
     friend class FontList;
 
 private:
-    XubString               maSearchName;
+    OUString                maSearchName;
     ImplFontListFontInfo*   mpFirst;
+    sal_uInt16              mnType;
 
-                            ImplFontListNameInfo( const XubString& rSearchName ) :
-                                maSearchName( rSearchName )
-                            {}
+    ImplFontListNameInfo(const OUString& rSearchName)
+        : maSearchName( rSearchName )
+        , mnType(0)
+    {
+    }
 };
 
 //sort normal to the start
@@ -252,6 +255,12 @@ void FontList::ImplInsertFonts( OutputDevice* pDevice, sal_Bool bAll,
 {
     rtl_TextEncoding eSystemEncoding = osl_getThreadTextEncoding();
 
+    sal_uInt16 nType;
+    if ( pDevice->GetOutDevType() != OUTDEV_PRINTER )
+        nType = FONTLIST_FONTNAMETYPE_SCREEN;
+    else
+        nType = FONTLIST_FONTNAMETYPE_PRINTER;
+
     // Alle Fonts vom Device abfragen
     int n = pDevice->GetDevFontCount();
     sal_uInt16  i;
@@ -330,6 +339,9 @@ void FontList::ImplInsertFonts( OutputDevice* pDevice, sal_Bool bAll,
                 }
             }
         }
+
+        if ( pData )
+            pData->mnType |= nType;
     }
 }
 
@@ -491,6 +503,83 @@ OUString FontList::GetStyleName(const FontInfo& rInfo) const
     }
 
     return aStyleName;
+}
+
+// -----------------------------------------------------------------------
+
+XubString FontList::GetFontMapText( const FontInfo& rInfo ) const
+{
+    if ( !rInfo.GetName().Len() )
+    {
+        XubString aEmptryStr;
+        return aEmptryStr;
+    }
+
+    // Search Fontname
+    ImplFontListNameInfo* pData = ImplFindByName( rInfo.GetName() );
+    if ( !pData )
+    {
+        if (maMapNotAvailable.isEmpty())
+            ((FontList*)this)->maMapNotAvailable = SVT_RESSTR(STR_SVT_FONTMAP_NOTAVAILABLE);
+        return maMapNotAvailable;
+    }
+
+    // search for synthetic style
+    sal_uInt16              nType       = pData->mnType;
+    const XubString&    rStyleName  = rInfo.GetStyleName();
+    if ( rStyleName.Len() )
+    {
+        sal_Bool                    bNotSynthetic = sal_False;
+        sal_Bool                    bNoneAvailable = sal_False;
+        FontWeight              eWeight = rInfo.GetWeight();
+        FontItalic              eItalic = rInfo.GetItalic();
+        ImplFontListFontInfo*   pFontInfo = pData->mpFirst;
+        while ( pFontInfo )
+        {
+            if ( (eWeight == pFontInfo->GetWeight()) &&
+                 (eItalic == pFontInfo->GetItalic()) )
+            {
+                bNotSynthetic = sal_True;
+                break;
+            }
+
+            pFontInfo = pFontInfo->mpNext;
+        }
+
+        if ( bNoneAvailable )
+        {
+            XubString aEmptryStr;
+            return aEmptryStr;
+        }
+        else if ( !bNotSynthetic )
+        {
+            if (maMapStyleNotAvailable.isEmpty())
+                ((FontList*)this)->maMapStyleNotAvailable = SVT_RESSTR(STR_SVT_FONTMAP_STYLENOTAVAILABLE);
+            return maMapStyleNotAvailable;
+        }
+    }
+
+    // Only Printer-Font?
+    if ( (nType & (FONTLIST_FONTNAMETYPE_PRINTER | FONTLIST_FONTNAMETYPE_SCREEN)) == FONTLIST_FONTNAMETYPE_PRINTER )
+    {
+        if (maMapPrinterOnly.isEmpty())
+            ((FontList*)this)->maMapPrinterOnly = SVT_RESSTR(STR_SVT_FONTMAP_PRINTERONLY);
+        return maMapPrinterOnly;
+    }
+    // Only Screen-Font?
+    else if ( (nType & (FONTLIST_FONTNAMETYPE_PRINTER | FONTLIST_FONTNAMETYPE_SCREEN)) == FONTLIST_FONTNAMETYPE_SCREEN
+            && rInfo.GetType() == TYPE_RASTER )
+    {
+        if (maMapScreenOnly.isEmpty())
+            ((FontList*)this)->maMapScreenOnly = SVT_RESSTR(STR_SVT_FONTMAP_SCREENONLY);
+        return maMapScreenOnly;
+    }
+    else
+    {
+        if (maMapBoth.isEmpty())
+            ((FontList*)this)->maMapBoth = SVT_RESSTR(STR_SVT_FONTMAP_BOTH);
+        return maMapBoth;
+    }
 }
 
 namespace
