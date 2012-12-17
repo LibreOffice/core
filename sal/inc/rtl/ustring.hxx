@@ -528,6 +528,19 @@ public:
     }
 
     /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 4.1
+    */
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, sal_Int32 >::Type reverseCompareTo( T& literal ) const SAL_THROW(())
+    {
+        assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
+        return rtl_ustr_asciil_reverseCompare_WithLength( pData->buffer, pData->length,
+            literal, internal::ConstCharArrayDetector< T, void >::size - 1 );
+    }
+
+    /**
       Perform a comparison of two strings.
 
       The result is true if and only if second string

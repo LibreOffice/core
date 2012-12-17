@@ -145,6 +145,7 @@ void test::oustring::StringLiterals::checkUsage()
     CPPUNIT_ASSERT( foobarfoo.replaceFirst( "foo", "test" ) == "testbarfoo" );
     CPPUNIT_ASSERT( foobarfoo.replaceAll( "foo", test ) == "testbartest" );
     CPPUNIT_ASSERT( foobarfoo.replaceAll( "foo", "test" ) == "testbartest" );
+    CPPUNIT_ASSERT( foo.reverseCompareTo( "foo" ) == 0 );
     // if this is not true, some of the calls above converted to OUString
     CPPUNIT_ASSERT( rtl_string_unittest_const_literal == false );
 }
