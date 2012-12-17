@@ -61,6 +61,11 @@ private:
     ListBox   maLbFormulaSyntax;
     CheckBox  maCbEnglishFuncName;
 
+    FixedLine  maFlCustomCalcOpt;
+    RadioButton maBtnCustomCalcDefault;
+    RadioButton maBtnCustomCalcCustom;
+    PushButton maBtnCustomCalcDetails;
+
     FixedLine  maFlFormulaSeps;
     FixedText  maFtSepFuncArg;
     Edit       maEdSepFuncArg;
@@ -69,11 +74,6 @@ private:
     FixedText  maFtSepArrayRow;
     Edit       maEdSepArrayRow;
     PushButton maBtnSepReset;
-
-    FixedLine  maFlCustomCalcOpt;
-    RadioButton maBtnCustomCalcDefault;
-    RadioButton maBtnCustomCalcCustom;
-    PushButton maBtnCustomCalcDetails;
 
     FixedLine maFlRecalcOptions;
     ListBox maLbOOXMLRecalcOptions;

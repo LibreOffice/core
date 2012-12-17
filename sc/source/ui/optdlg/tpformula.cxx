@@ -48,6 +48,12 @@ ScTpFormulaOptions::ScTpFormulaOptions(Window* pParent, const SfxItemSet& rCoreA
     maFtFormulaSyntax(this, ScResId(FT_FORMULA_SYNTAX)),
     maLbFormulaSyntax(this, ScResId(LB_FORMULA_SYNTAX)),
     maCbEnglishFuncName(this, ScResId(CB_ENGLISH_FUNC_NAME)),
+
+    maFlCustomCalcOpt(this, ScResId(FL_CUSTOM_CALC_OPTIONS)),
+    maBtnCustomCalcDefault(this, ScResId(BTN_CUSTOM_CALC_DEFAULT)),
+    maBtnCustomCalcCustom(this, ScResId(BTN_CUSTOM_CALC_CUSTOM)),
+    maBtnCustomCalcDetails(this, ScResId(BTN_CUSTOM_CALC_DETAILS)),
+
     maFlFormulaSeps(this, ScResId(FL_FORMULA_SEPS)),
     maFtSepFuncArg(this, ScResId(FT_FORMULA_SEP_ARG)),
     maEdSepFuncArg(this, ScResId(ED_FORMULA_SEP_ARG)),
@@ -56,10 +62,6 @@ ScTpFormulaOptions::ScTpFormulaOptions(Window* pParent, const SfxItemSet& rCoreA
     maFtSepArrayRow(this, ScResId(FT_FORMULA_SEP_ARRAY_R)),
     maEdSepArrayRow(this, ScResId(ED_FORMULA_SEP_ARRAY_R)),
     maBtnSepReset(this, ScResId(BTN_FORMULA_SEP_RESET)),
-    maFlCustomCalcOpt(this, ScResId(FL_CUSTOM_CALC_OPTIONS)),
-    maBtnCustomCalcDefault(this, ScResId(BTN_CUSTOM_CALC_DEFAULT)),
-    maBtnCustomCalcCustom(this, ScResId(BTN_CUSTOM_CALC_CUSTOM)),
-    maBtnCustomCalcDetails(this, ScResId(BTN_CUSTOM_CALC_DETAILS)),
     maFlRecalcOptions(this, ScResId(FL_RECALC_OPTIONS)),
     maLbOOXMLRecalcOptions( this, ScResId(LB_OOXML_RECALC)),
     mnDecSep(0)
