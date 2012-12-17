@@ -77,7 +77,7 @@ Window *ViewShell::pCareWindow = 0;
 BitmapEx* ViewShell::pErrorBmp = NULL;
 BitmapEx* ViewShell::pReplaceBmp = NULL;
 
-sal_Bool bInSizeNotify = sal_False;
+bool bInSizeNotify = false;
 
 DBG_NAME(LayoutIdle)
 
@@ -269,7 +269,7 @@ void ViewShell::ImplEndAction( const sal_Bool bIdleEnd )
             // Mitte eine Selektion und mit einem anderen Cursor an linken
             // rechten Rand springen. Ohne ShowCrsr verschwindet die
             // Selektion
-            sal_Bool bShowCrsr = pRegion && IsA( TYPE(SwCrsrShell) );
+            bool bShowCrsr = pRegion && IsA( TYPE(SwCrsrShell) );
             if( bShowCrsr )
                 ((SwCrsrShell*)this)->HideCrsrs();
 
@@ -290,7 +290,7 @@ void ViewShell::ImplEndAction( const sal_Bool bIdleEnd )
                     SwRect aRect( pRegion->back() );
                     pRegion->pop_back();
 
-                    sal_Bool bPaint = sal_True;
+                    bool bPaint = true;
                     if ( IsEndActionByVirDev() )
                     {
                         //virtuelles device erzeugen und einstellen.
@@ -321,7 +321,7 @@ void ViewShell::ImplEndAction( const sal_Bool bIdleEnd )
                         }
                         if ( bSizeOK )
                         {
-                            bPaint = sal_False;
+                            bPaint = false;
 
                             // --> OD 2007-07-26 #i79947#
                             // #i72754# start Pre/PostPaint encapsulation before pOut is changed to the buffering VDev
@@ -942,7 +942,7 @@ void ViewShell::CalcLayout()
                                   SwTxtFrm::GetTxtCache()->GetCurMax() - 50 );
 
     //Progress einschalten wenn noch keiner Lauft.
-    const sal_Bool bEndProgress = SfxProgress::GetActiveProgress( GetDoc()->GetDocShell() ) == 0;
+    const bool bEndProgress = SfxProgress::GetActiveProgress( GetDoc()->GetDocShell() ) == 0;
     if ( bEndProgress )
     {
         sal_uInt16 nEndPage = GetLayout()->GetPageNum();
@@ -1455,7 +1455,7 @@ void ViewShell::PaintDesktop( const SwRect &rRect )
     //Kann z.B. waehrend des Idle'ns zwischenzeitlich auftreten.
     //Die Rechtecke neben den Seiten muessen wir leider auf jedenfall Painten,
     //den diese werden spaeter beim VisPortChgd ausgespart.
-    sal_Bool bBorderOnly = sal_False;
+    bool bBorderOnly = false;
     const SwRootFrm *pRoot = GetLayout();//swmod 080305
     if ( rRect.Top() > pRoot->Frm().Bottom() )
     {
@@ -1463,7 +1463,7 @@ void ViewShell::PaintDesktop( const SwRect &rRect )
         while ( pPg && pPg->GetNext() )
             pPg = pPg->GetNext();
         if ( !pPg || !pPg->Frm().IsOver( VisArea() ) )
-            bBorderOnly = sal_True;
+            bBorderOnly = true;
     }
 
     const bool bBookMode = GetViewOptions()->IsViewLayoutBookMode();
@@ -2098,7 +2098,7 @@ void ViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
             pDView->SetMarkHdlSizePixel(9);
     }
 
-    sal_Bool bOnlineSpellChgd = pOpt->IsOnlineSpell() != rOpt.IsOnlineSpell();
+    bool bOnlineSpellChgd = pOpt->IsOnlineSpell() != rOpt.IsOnlineSpell();
 
     *pOpt = rOpt;   // Erst jetzt werden die Options uebernommen.
     pOpt->SetUIOptions(rOpt);
@@ -2213,8 +2213,8 @@ void ViewShell::UISizeNotify()
     if ( bDocSizeChgd )
     {
         bDocSizeChgd = sal_False;
-        sal_Bool bOld = bInSizeNotify;
-        bInSizeNotify = sal_True;
+        bool bOld = bInSizeNotify;
+        bInSizeNotify = true;
         ::SizeNotify( this, GetDocSize() );
         bInSizeNotify = bOld;
     }

@@ -200,11 +200,11 @@ void SwViewImp::NotifySizeChg( const Size &rNewSz )
     // Limitation of the work area
     const Rectangle aRect( Point( DOCUMENTBORDER, DOCUMENTBORDER ), rNewSz );
     const Rectangle &rOldWork = GetDrawView()->GetWorkArea();
-    sal_Bool bCheckDrawObjs = sal_False;
+    bool bCheckDrawObjs = false;
     if ( aRect != rOldWork )
     {
         if ( rOldWork.Bottom() > aRect.Bottom() || rOldWork.Right() > aRect.Right())
-            bCheckDrawObjs = sal_True;
+            bCheckDrawObjs = true;
         GetDrawView()->SetWorkArea( aRect );
     }
     if ( !bCheckDrawObjs )

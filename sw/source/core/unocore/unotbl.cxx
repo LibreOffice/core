@@ -106,7 +106,7 @@ extern void sw_GetTblBoxColStr( sal_uInt16 nCol, String& rNm );
 
 #define UNO_TABLE_COLUMN_SUM    10000
 
-static sal_Bool lcl_LineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSvxLine)
+static bool lcl_LineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSvxLine)
 {
     rSvxLine.SetColor(Color(rLine.Color));
 
@@ -115,7 +115,7 @@ static sal_Bool lcl_LineToSvxLine(const table::BorderLine& rLine, SvxBorderLine&
                                 MM100_TO_TWIP( rLine.InnerLineWidth ),
                                 MM100_TO_TWIP( rLine.LineDistance ) );
 
-    sal_Bool bRet = rLine.InnerLineWidth > 0 || rLine.OuterLineWidth > 0;
+    bool bRet = rLine.InnerLineWidth > 0 || rLine.OuterLineWidth > 0;
     return bRet;
 }
 
@@ -596,14 +596,14 @@ static void lcl_GetTblSeparators(uno::Any& rRet, SwTable* pTable, SwTableBox* pB
     sal_uInt16 nSepCount = aCols.Count();
     uno::Sequence< text::TableColumnSeparator> aColSeq(nSepCount);
      text::TableColumnSeparator* pArray = aColSeq.getArray();
-    sal_Bool bError = sal_False;
+    bool bError = false;
     for(sal_uInt16 i = 0; i < nSepCount; i++)
     {
         pArray[i].Position = static_cast< sal_Int16 >(aCols[i]);
         pArray[i].IsVisible = !aCols.IsHidden(i);
         if(!bRow && !pArray[i].IsVisible)
         {
-            bError = sal_True;
+            bError = true;
             break;
         }
     }
@@ -1961,7 +1961,7 @@ void    SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
         aSet.Put(aBrush);
     }
 
-    sal_Bool bPutBreak = sal_True;
+    bool bPutBreak = true;
     const uno::Any* pPage;
     if(GetProperty(FN_UNO_PAGE_STYLE, 0, pPage) || GetProperty(RES_PAGEDESC, 0xff, pPage))
     {
@@ -1983,7 +1983,7 @@ void    SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
                     aDesc.SetNumOffset( nTmp );
                 }
                 aSet.Put(aDesc);
-                bPutBreak = sal_False;
+                bPutBreak = false;
             }
 
         }
@@ -2025,18 +2025,18 @@ void    SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
     const uno::Any* pWidth      = 0;
     GetProperty(FN_TABLE_WIDTH, 0xff, pWidth  );
 
-    sal_Bool bPutSize = pWidth != 0;
+    bool bPutSize = pWidth != 0;
     SwFmtFrmSize aSz( ATT_VAR_SIZE);
     if(pWidth)
     {
         ((SfxPoolItem&)aSz).PutValue(*pWidth, MID_FRMSIZE_WIDTH);
-        bPutSize = sal_True;
+        bPutSize = true;
     }
     sal_Bool bTemp = pSzRel ? *(sal_Bool*)pSzRel->getValue() : sal_False;
     if(pSzRel && bTemp && pRelWidth)
     {
         ((SfxPoolItem&)aSz).PutValue(*pRelWidth, MID_FRMSIZE_REL_WIDTH|CONVERT_TWIPS);
-        bPutSize = sal_True;
+        bPutSize = true;
     }
     if(bPutSize)
     {
@@ -2545,7 +2545,7 @@ uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXTextTable::getDataArray()
                 {
                     // check if table box value item is set
                     SwFrmFmt* pBoxFmt = pBox->GetFrmFmt();
-                    sal_Bool bIsNum = pBoxFmt->GetItemState( RES_BOXATR_VALUE, sal_False ) == SFX_ITEM_SET;
+                    bool bIsNum = pBoxFmt->GetItemState( RES_BOXATR_VALUE, sal_False ) == SFX_ITEM_SET;
                     //const SfxPoolItem* pItem;
                     //SwDoc* pDoc = pXCell->GetDoc();
                     //sal_Bool bIsText = (SFX_ITEM_SET != pBoxFmt->GetAttrSet().GetItemState(RES_BOXATR_FORMAT, sal_True, &pItem)
@@ -2682,7 +2682,7 @@ void SwXTextTable::setData(const uno::Sequence< uno::Sequence< double > >& rData
     SolarMutexGuard aGuard;
     sal_Int16 nRowCount = getRowCount();
     sal_Int16 nColCount = getColumnCount();
-    sal_Bool bChanged = sal_False;
+    bool bChanged = false;
 
     if(!nRowCount || !nColCount)
     {
@@ -2716,7 +2716,7 @@ void SwXTextTable::setData(const uno::Sequence< uno::Sequence< double > >& rData
                     throw uno::RuntimeException();
                 }
                 xCell->setValue(pColArray[nCol - nColStart]);
-                bChanged=sal_True;
+                bChanged=true;
             }
         }
         if ( bChanged )
@@ -3512,7 +3512,7 @@ void SwXTextTable::setName(const OUString& rName) throw( uno::RuntimeException )
     if(pFmt)
     {
         const String aOldName( pFmt->GetName() );
-        sal_Bool bNameFound = sal_False;
+        bool bNameFound = false;
         SwFrmFmt* pTmpFmt;
         const SwFrmFmts* pTbl = pFmt->GetDoc()->GetTblFrmFmts();
         for( sal_uInt16 i = pTbl->size(); i; )
@@ -3520,7 +3520,7 @@ void SwXTextTable::setName(const OUString& rName) throw( uno::RuntimeException )
                 pTmpFmt->GetName() == sNewTblName &&
                             pFmt->GetDoc()->IsUsed( *pTmpFmt ))
             {
-                bNameFound = sal_True;
+                bNameFound = true;
                 break;
             }
 
@@ -4094,7 +4094,7 @@ void SwXCellRange::GetDataSequence(
                     if (pAnyData)
                     {
                         // check if table box value item is set
-                        sal_Bool bIsNum = pBox->GetFrmFmt()->GetItemState( RES_BOXATR_VALUE, sal_False ) == SFX_ITEM_SET;
+                        bool bIsNum = pBox->GetFrmFmt()->GetItemState( RES_BOXATR_VALUE, sal_False ) == SFX_ITEM_SET;
                         //sal_uLong nNdPos = pBox->IsValidNumTxtNd( sal_True );
                         if (!bIsNum/* && ULONG_MAX == nNdPos*/)
                             pAnyData[nDtaCnt++] <<= lcl_getString(*pXCell);
@@ -4214,7 +4214,7 @@ uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXCellRange::getDataArray()
                 {
                     // check if table box value item is set
                     SwFrmFmt* pBoxFmt = pBox->GetFrmFmt();
-                    sal_Bool bIsNum = pBoxFmt->GetItemState( RES_BOXATR_VALUE, sal_False ) == SFX_ITEM_SET;
+                    bool bIsNum = pBoxFmt->GetItemState( RES_BOXATR_VALUE, sal_False ) == SFX_ITEM_SET;
                     //const SfxPoolItem* pItem;
                     //SwDoc* pDoc = pXCell->GetDoc();
                     //sal_Bool bIsText = (SFX_ITEM_SET != pBoxFmt->GetAttrSet().GetItemState(RES_BOXATR_FORMAT, sal_True, &pItem)
@@ -4773,7 +4773,7 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno:
         throw uno::RuntimeException();
     else
     {
-        sal_Bool bSuccess = sal_False;
+        bool bSuccess = false;
         SwTable* pTable = SwTable::FindTable( pFrmFmt );
         if(!pTable->IsTblComplex())
         {
@@ -4805,7 +4805,7 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno:
                         UnoActionContext aAction(pFrmFmt->GetDoc());
                         pFrmFmt->GetDoc()->DeleteRow(*pUnoCrsr);
                         delete pUnoCrsr;
-                        bSuccess = sal_True;
+                        bSuccess = true;
                     }
                     {
                         // hier muessen die Actions aufgehoben werden
@@ -4982,7 +4982,7 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( u
         throw uno::RuntimeException();
     else
     {
-        sal_Bool bSuccess = sal_False;
+        bool bSuccess = false;
         SwTable* pTable = SwTable::FindTable( pFrmFmt );
         if(!pTable->IsTblComplex())
         {
@@ -5014,7 +5014,7 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( u
                         UnoActionContext aAction(pFrmFmt->GetDoc());
                         pFrmFmt->GetDoc()->DeleteCol(*pUnoCrsr);
                         delete pUnoCrsr;
-                        bSuccess = sal_True;
+                        bSuccess = true;
                     }
                     {
                         // hier muessen die Actions aufgehoben werden

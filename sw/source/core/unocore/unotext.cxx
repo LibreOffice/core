@@ -948,7 +948,7 @@ SwXText::setString(const OUString& rString) throw (uno::RuntimeException)
         //the inserting of nodes should only be done if really necessary
         //to prevent #97924# (removes paragraph attributes when setting the text
         //e.g. of a table cell
-        sal_Bool bInsertNodes = sal_False;
+        bool bInsertNodes = false;
         SwNodeIndex aStartIdx(*pStartNode);
         do
         {
@@ -957,7 +957,7 @@ SwXText::setString(const OUString& rString) throw (uno::RuntimeException)
             if(rCurrentNode.GetNodeType() == ND_SECTIONNODE
                 ||rCurrentNode.GetNodeType() == ND_TABLENODE)
             {
-                bInsertNodes = sal_True;
+                bInsertNodes = true;
                 break;
             }
         }

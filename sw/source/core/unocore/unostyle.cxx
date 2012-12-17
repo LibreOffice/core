@@ -1390,7 +1390,7 @@ void SwXStyle::setName(const OUString& rName) throw( uno::RuntimeException )
         pBasePool->SetSearchMask(eFamily, SFXSTYLEBIT_ALL );
         SfxStyleSheetBase* pBase = pBasePool->Find(sStyleName);
         OSL_ENSURE(pBase, "where is the style?" );
-        sal_Bool bExcept = sal_True;
+        bool bExcept = true;
         if(pBase && pBase->IsUserDefined())
         {
             rtl::Reference< SwDocStyleSheet > xTmp( new SwDocStyleSheet( *(SwDocStyleSheet*)pBase ) );
@@ -1466,7 +1466,7 @@ void SwXStyle::setParentStyle(const OUString& rParentStyle)
     if(pBasePool)
     {
         pBasePool->SetSearchMask(eFamily);
-        sal_Bool bExcept = sal_False;
+        bool bExcept = false;
         SfxStyleSheetBase* pBase = pBasePool->Find(sStyleName);
         if(pBase)
         {
@@ -1479,7 +1479,7 @@ void SwXStyle::setParentStyle(const OUString& rParentStyle)
             }
         }
         else
-            bExcept = sal_True;
+            bExcept = true;
         if(bExcept)
             throw uno::RuntimeException();
     }
@@ -2411,11 +2411,11 @@ uno::Sequence< uno::Any > SAL_CALL SwXStyle::GetPropertyValues_Impl(
             pPropImpl->GetProperty ( pNames[nProp], pAny );
             if( !pAny )
             {
-                sal_Bool bExcept = sal_False;
+                bool bExcept = false;
                 switch( eFamily )
                 {
                     case SFX_STYLE_FAMILY_PSEUDO:
-                        bExcept = sal_True;
+                        bExcept = true;
                     break;
                     case SFX_STYLE_FAMILY_PARA:
                     case SFX_STYLE_FAMILY_PAGE:
@@ -2436,7 +2436,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXStyle::GetPropertyValues_Impl(
                             rItem.QueryValue ( pRet[nProp], pEntry->nMemberId );
                         }
                         else
-                            bExcept = sal_True;
+                            bExcept = true;
                     }
                     break;
 
@@ -3069,50 +3069,50 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                 case FN_UNO_FOOTER_HEIGHT:
                 case FN_UNO_FOOTER_EAT_SPACING:
                 {
-                    sal_Bool bFooter = sal_False;
+                    bool bFooter = false;
                     sal_uInt16 nItemType = TYPE_BOOL;
                     sal_uInt16 nRes = 0;
                     switch(pEntry->nWID)
                     {
-                        case FN_UNO_FOOTER_ON:                  bFooter = sal_True;
+                        case FN_UNO_FOOTER_ON:                  bFooter = true;
                         //kein break;
                         case FN_UNO_HEADER_ON:                  nRes = SID_ATTR_PAGE_ON;
                         break;
-                        case FN_UNO_FOOTER_BACKGROUND:          bFooter = sal_True;
+                        case FN_UNO_FOOTER_BACKGROUND:          bFooter = true;
                         // kein break;
                         case FN_UNO_HEADER_BACKGROUND:          nRes = RES_BACKGROUND; nItemType = TYPE_BRUSH;
                         break;
-                        case FN_UNO_FOOTER_BOX:                 bFooter = sal_True;
+                        case FN_UNO_FOOTER_BOX:                 bFooter = true;
                         // kein break;
                         case FN_UNO_HEADER_BOX:                 nRes = RES_BOX; nItemType = TYPE_BOX;
                         break;
-                        case FN_UNO_FOOTER_LR_SPACE:            bFooter = sal_True;
+                        case FN_UNO_FOOTER_LR_SPACE:            bFooter = true;
                         // kein break;
                         case FN_UNO_HEADER_LR_SPACE:            nRes = RES_LR_SPACE;nItemType = TYPE_LRSPACE;
                         break;
-                        case FN_UNO_FOOTER_SHADOW:              bFooter = sal_True;
+                        case FN_UNO_FOOTER_SHADOW:              bFooter = true;
                         // kein break;
                         case FN_UNO_HEADER_SHADOW:              nRes = RES_SHADOW;nItemType = TYPE_SHADOW;
                         break;
-                        case FN_UNO_FOOTER_BODY_DISTANCE:       bFooter = sal_True;
+                        case FN_UNO_FOOTER_BODY_DISTANCE:       bFooter = true;
                         // kein break;
                         case FN_UNO_HEADER_BODY_DISTANCE:       nRes = RES_UL_SPACE;nItemType = TYPE_ULSPACE;
                         break;
-                        case FN_UNO_FOOTER_IS_DYNAMIC_DISTANCE: bFooter = sal_True;
+                        case FN_UNO_FOOTER_IS_DYNAMIC_DISTANCE: bFooter = true;
                         // kein break;
                         case FN_UNO_HEADER_IS_DYNAMIC_DISTANCE: nRes = SID_ATTR_PAGE_DYNAMIC;
                         break;
-                        case FN_UNO_FOOTER_SHARE_CONTENT:       bFooter = sal_True;
+                        case FN_UNO_FOOTER_SHARE_CONTENT:       bFooter = true;
                         // kein break;
                         case FN_UNO_HEADER_SHARE_CONTENT:       nRes = SID_ATTR_PAGE_SHARED;
                         break;
                         case FN_UNO_FIRST_SHARE_CONTENT: nRes = SID_ATTR_PAGE_SHARED_FIRST;
                         break;
-                        case FN_UNO_FOOTER_HEIGHT:              bFooter = sal_True;
+                        case FN_UNO_FOOTER_HEIGHT:              bFooter = true;
                         // kein break;
                         case FN_UNO_HEADER_HEIGHT:              nRes = SID_ATTR_PAGE_SIZE;nItemType = TYPE_SIZE;
                         break;
-                        case FN_UNO_FOOTER_EAT_SPACING:     bFooter = sal_True;
+                        case FN_UNO_FOOTER_EAT_SPACING:     bFooter = true;
                         // kein break;
                         case FN_UNO_HEADER_EAT_SPACING:     nRes = RES_HEADER_FOOTER_EAT_SPACING;nItemType = TYPE_SIZE;
                         break;
@@ -3286,7 +3286,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
             }
             sal_uInt16 nRes = 0;
             bool bHeader = false;
-            sal_Bool bLeft = sal_False;
+            bool bLeft = false;
             bool bFirst = false;
             switch(pEntry->nWID)
             {
@@ -3321,11 +3321,11 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
                     {
                         rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *(SwDocStyleSheet*)pBase ) );
                         const SfxItemSet& rSet = xStyle->GetItemSet();
-                        sal_Bool bFooter = sal_False;
+                        bool bFooter = false;
                         switch(pEntry->nWID)
                         {
                             case FN_UNO_FOOTER_ON:
-                                bFooter = sal_True;
+                                bFooter = true;
                             // kein break!
                             case FN_UNO_HEADER_ON:
                             {
@@ -3335,41 +3335,41 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
                                 nRes = SID_ATTR_PAGE_ON;
                             }
                             break;
-                            case FN_UNO_FOOTER_BACKGROUND:      bFooter = sal_True;
+                            case FN_UNO_FOOTER_BACKGROUND:      bFooter = true;
                             // kein break;
                             case FN_UNO_HEADER_BACKGROUND:      nRes = RES_BACKGROUND;
                             break;
-                            case FN_UNO_FOOTER_BOX:             bFooter = sal_True;
+                            case FN_UNO_FOOTER_BOX:             bFooter = true;
                             // kein break;
                             case FN_UNO_HEADER_BOX:             nRes = RES_BOX;
                             break;
-                            case FN_UNO_FOOTER_LR_SPACE:        bFooter = sal_True;
+                            case FN_UNO_FOOTER_LR_SPACE:        bFooter = true;
                             // kein break;
                             case FN_UNO_HEADER_LR_SPACE:        nRes = RES_LR_SPACE;
                             break;
-                            case FN_UNO_FOOTER_SHADOW:          bFooter = sal_True;
+                            case FN_UNO_FOOTER_SHADOW:          bFooter = true;
                             // kein break;
                             case FN_UNO_HEADER_SHADOW:          nRes = RES_SHADOW;
                             break;
-                            case FN_UNO_FOOTER_BODY_DISTANCE:   bFooter = sal_True;
+                            case FN_UNO_FOOTER_BODY_DISTANCE:   bFooter = true;
                             // kein break;
                             case FN_UNO_HEADER_BODY_DISTANCE:   nRes = RES_UL_SPACE;
                             break;
-                            case FN_UNO_FOOTER_IS_DYNAMIC_DISTANCE: bFooter = sal_True;
+                            case FN_UNO_FOOTER_IS_DYNAMIC_DISTANCE: bFooter = true;
                             // kein break;
                             case FN_UNO_HEADER_IS_DYNAMIC_DISTANCE: nRes = SID_ATTR_PAGE_DYNAMIC;
                             break;
-                            case FN_UNO_FOOTER_SHARE_CONTENT:   bFooter = sal_True;
+                            case FN_UNO_FOOTER_SHARE_CONTENT:   bFooter = true;
                             // kein break;
                             case FN_UNO_HEADER_SHARE_CONTENT:   nRes = SID_ATTR_PAGE_SHARED;
                             break;
                             case FN_UNO_FIRST_SHARE_CONTENT: nRes = SID_ATTR_PAGE_SHARED_FIRST;
                             break;
-                            case FN_UNO_FOOTER_HEIGHT:          bFooter = sal_True;
+                            case FN_UNO_FOOTER_HEIGHT:          bFooter = true;
                             // kein break;
                             case FN_UNO_HEADER_HEIGHT:          nRes = SID_ATTR_PAGE_SIZE;
                             break;
-                            case FN_UNO_FOOTER_EAT_SPACING: bFooter = sal_True;
+                            case FN_UNO_FOOTER_EAT_SPACING: bFooter = true;
                             // kein break;
                             case FN_UNO_HEADER_EAT_SPACING: nRes = RES_HEADER_FOOTER_EAT_SPACING;
                             break;
@@ -3393,7 +3393,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
                 case  FN_UNO_HEADER       :
                     goto Header;
                 case  FN_UNO_HEADER_LEFT  :
-                    bLeft = sal_True; goto Header;
+                    bLeft = true; goto Header;
                 case  FN_UNO_HEADER_FIRST  :
                     bFirst = true; goto Header;
                 case  FN_UNO_HEADER_RIGHT :
@@ -3404,9 +3404,9 @@ Header:
                 case  FN_UNO_FOOTER       :
                     goto Footer;
                 case  FN_UNO_FOOTER_LEFT  :
-                    bLeft = sal_True; goto Footer;
+                    bLeft = true; goto Footer;
                 case  FN_UNO_FOOTER_FIRST  :
-                    bFirst = sal_True; goto Footer;
+                    bFirst = true; goto Footer;
                 case  FN_UNO_FOOTER_RIGHT :
 Footer:
                     nRes = RES_FOOTER;
@@ -3414,7 +3414,7 @@ MakeObject:
                 {
                     const SwPageDesc& rDesc = aBase.GetOldPageDesc();
                     const SwFrmFmt* pFrmFmt = 0;
-                    sal_Bool bShare = (bHeader && rDesc.IsHeaderShared())||
+                    bool bShare = (bHeader && rDesc.IsHeaderShared())||
                                     (!bHeader && rDesc.IsFooterShared());
                     bool bShareFirst = rDesc.IsFirstShared();
                     // TextLeft returns the left content if there is one,
