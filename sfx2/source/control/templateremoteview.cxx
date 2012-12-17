@@ -10,7 +10,7 @@
 #include <sfx2/templateremoteview.hxx>
 
 #include <comphelper/processfactory.hxx>
-#include <sfx2/templateremoteviewitem.hxx>
+#include <sfx2/templaterepository.hxx>
 #include <sfx2/templateview.hxx>
 #include <sfx2/templateviewitem.hxx>
 #include <svtools/imagemgr.hxx>
