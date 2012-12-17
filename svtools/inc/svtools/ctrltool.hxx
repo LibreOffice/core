@@ -83,6 +83,13 @@ Name generiert, der dem Anwender praesentiert werden kann.
 
 --------------------------------------------------------------------------
 
+XubString FontList::GetFontMapText( const FontInfo& rInfo ) const;
+
+Diese Methode gibt einen Matchstring zurueck, der dem Anwender
+anzeigen soll, welche Probleme es mit diesem Font geben kann.
+
+--------------------------------------------------------------------------
+
 FontInfo FontList::Get( const String& rName, const String& rStyleName ) const;
 
 Diese Methode sucht aus dem uebergebenen Namen und dem uebergebenen StyleName
@@ -131,6 +138,9 @@ von der FontList, sollte deshalb das Array nicht mehr referenziert werden.
 
 #define FONTLIST_FONTINFO_NOTFOUND  ((sal_uInt16)0xFFFF)
 
+#define FONTLIST_FONTNAMETYPE_PRINTER           ((sal_uInt16)0x0001)
+#define FONTLIST_FONTNAMETYPE_SCREEN            ((sal_uInt16)0x0002)
+
 class SVT_DLLPUBLIC FontList
 {
 private:
@@ -169,6 +179,7 @@ public:
 
     OutputDevice*           GetDevice() const { return mpDev; }
     OutputDevice*           GetDevice2() const { return mpDev2; }
+    XubString               GetFontMapText( const FontInfo& rInfo ) const;
 
     const OUString&         GetNormalStr() const { return maNormal; }
     const OUString&         GetItalicStr() const { return maNormalItalic; }

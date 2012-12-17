@@ -48,6 +48,7 @@ class SvxCharBasePage : public SfxTabPage
 {
 protected:
     SvxFontPrevWindow*  m_pPreviewWin;
+    FixedText*          m_pFontTypeFT;
 
     sal_Bool                m_bPreviewBackgroundToCharacter;
 
