@@ -1524,12 +1524,12 @@
                         </enumeration>
                         <enumeration oor:value="1">
                             <info>
-                                <desc>Ask before Recalc</desc>
+                                <desc>Recalc never</desc>
                             </info>
                         </enumeration>
                         <enumeration oor:value="2">
                             <info>
-                                <desc>Recalc never</desc>
+                                <desc>Ask before Recalc</desc>
                             </info>
                         </enumeration>
                     </constraints>

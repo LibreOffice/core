@@ -47,6 +47,7 @@
 #include "document.hxx"
 #include "docsh.hxx"
 #include "globstr.hrc"
+#include "calcconfig.hxx"
 
 #include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Calc.hxx>
@@ -321,9 +322,10 @@ void WorkbookFragment::finalizeImport()
     ScDocument& rDoc = getScDocument();
     ScDocShell* pDocSh = static_cast<ScDocShell*>(rDoc.GetDocumentShell());
     Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
-    sal_Int32 nRecalcMode = officecfg::Office::Calc::Formula::Load::OOXMLRecalcMode::get(xContext);
+    ScRecalcOptions nRecalcMode =
+        static_cast<ScRecalcOptions>(officecfg::Office::Calc::Formula::Load::OOXMLRecalcMode::get(xContext));
     bool bHardRecalc = false;
-    if (nRecalcMode == 1)
+    if (nRecalcMode == RECALC_ASK)
     {
         if (rDoc.IsUserInteractionEnabled())
         {
@@ -349,7 +351,7 @@ void WorkbookFragment::finalizeImport()
             batch->commit();
         }
     }
-    else if (nRecalcMode == 0)
+    else if (nRecalcMode == RECALC_ALWAYS)
         bHardRecalc = true;
 
     if (bHardRecalc)
