@@ -865,10 +865,10 @@ bool ScConditionEntry::IsTopNElement( double nArg ) const
     for(ScConditionEntryCache::ValueCacheType::const_reverse_iterator itr = mpCache->maValues.rbegin(),
             itrEnd = mpCache->maValues.rend(); itr != itrEnd; ++itr)
     {
-        if(itr->first <= nArg)
-            return true;
         if(nCells >= nVal1)
             return false;
+        if(itr->first <= nArg)
+            return true;
         nCells += itr->second;
     }
 
@@ -886,10 +886,10 @@ bool ScConditionEntry::IsBottomNElement( double nArg ) const
     for(ScConditionEntryCache::ValueCacheType::const_iterator itr = mpCache->maValues.begin(),
             itrEnd = mpCache->maValues.end(); itr != itrEnd; ++itr)
     {
-        if(itr->first >= nArg)
-            return true;
         if(nCells >= nVal1)
             return false;
+        if(itr->first >= nArg)
+            return true;
         nCells += itr->second;
     }
 
@@ -905,10 +905,10 @@ bool ScConditionEntry::IsTopNPercent( double nArg ) const
     for(ScConditionEntryCache::ValueCacheType::const_reverse_iterator itr = mpCache->maValues.rbegin(),
             itrEnd = mpCache->maValues.rend(); itr != itrEnd; ++itr)
     {
-        if(itr->first <= nArg)
-            return true;
         if(nCells >= nLimitCells)
             return false;
+        if(itr->first <= nArg)
+            return true;
         nCells += itr->second;
     }
 
@@ -924,10 +924,10 @@ bool ScConditionEntry::IsBottomNPercent( double nArg ) const
     for(ScConditionEntryCache::ValueCacheType::const_iterator itr = mpCache->maValues.begin(),
             itrEnd = mpCache->maValues.end(); itr != itrEnd; ++itr)
     {
-        if(itr->first >= nArg)
-            return true;
         if(nCells >= nLimitCells)
             return false;
+        if(itr->first >= nArg)
+            return true;
         nCells += itr->second;
     }
 
