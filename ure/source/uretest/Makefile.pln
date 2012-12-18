@@ -40,31 +40,32 @@ test-regview: out.pln/types.rdb
 test-cpptest: out.pln/cppmain.uno.so out.pln/types.rdb out.pln/services.rdb
 	$(GCCS_COMPAT) $(URE_HOME)/bin/uno \
             -c test.cpp.cppmain.Component -l file://$(PWD)/$< \
-            -ro $(URE_HOME)/share/misc/types.rdb -ro out.pln/types.rdb \
-            -ro $(URE_HOME)/share/misc/services.rdb -ro out.pln/services.rdb
+            -env:URE_MORE_TYPES=file://$(PWD)/out.pln/types.rdb \
+            -env:URE_MORE_SERVICES=file://$(PWD)/out.pln/services.rdb
 
 .PHONY: test-javatest
 test-javatest: out.pln/javamain.uno.jar out.pln/types.rdb out.pln/services.rdb
 	$(GCCS_COMPAT) $(URE_HOME)/bin/uno \
             -c test.java.javamain.Component -l file://$(PWD)/$< \
-            -ro $(URE_HOME)/share/misc/types.rdb -ro out.pln/types.rdb \
-            -ro $(URE_HOME)/share/misc/services.rdb -ro out.pln/services.rdb
+            -env:URE_MORE_TYPES=file://$(PWD)/out.pln/types.rdb \
+            -env:URE_MORE_SERVICES=file://$(PWD)/out.pln/services.rdb
 
 .PHONY: test-javanative
 test-javanative: out.pln/runner.jar out.pln/javanative.jar \
-            out.pln/javanative.rc out.pln/services.rdb out.pln/types.rdb
-	$(GCCS_COMPAT) LD_LIBRARY_PATH=$(URE_HOME)/lib java \
+            out.pln/types.rdb out.pln/services.rdb
+	URE_MORE_TYPES=file://$(PWD)/out.pln/types.rdb \
+            URE_MORE_SERVICES=file://$(PWD)/out.pln/services.rdb \
+            $(GCCS_COMPAT) LD_LIBRARY_PATH=$(URE_HOME)/lib java \
             -jar out.pln/runner.jar file://$(URE_HOME)/share/java/ \
-            file://$(PWD)/out.pln/javanative.jar \
-            file://$(PWD)/out.pln/javanative.rc
+            file://$(PWD)/out.pln/javanative.jar
 
 .PHONY: test-clientserver
-test-clientserver: out.pln/cppserver.uno.so out.pln/runner.jar \
-            out.pln/javaclient.jar
+test-clientserver: out.pln/cppserver.uno.so out.pln/types.rdb \
+            out.pln/services.rdb out.pln/runner.jar out.pln/javaclient.jar
 	$(GCCS_COMPAT) $(URE_HOME)/bin/uno -c test.cpp.cppserver.Component \
             -l file://$(PWD)/out.pln/cppserver.uno.so \
-            -ro $(URE_HOME)/share/misc/types.rdb -ro out.pln/types.rdb \
-            -ro $(URE_HOME)/share/misc/services.rdb \
+            -env:URE_MORE_TYPES=file://$(PWD)/out.pln/types.rdb \
+            -env:URE_MORE_SERVICES=file://$(PWD)/out.pln/services.rdb \
             -u 'uno:pipe,name=ure_test;urp;server' --singleaccept &
 	sleep 5 && \
             java -jar out.pln/runner.jar file://$(URE_HOME)/share/java/ \
@@ -216,12 +217,6 @@ out.pln/class/javanative/test/java/javanative/JavaNative.class: \
 	javac -classpath \
             $(URE_HOME)/share/java/juh.jar:$(URE_HOME)/share/java/ridl.jar:out.pln/tester.jar \
             -sourcepath . -d out.pln/class/javanative $<
-
-out.pln/javanative.rc: | out.pln
-	echo 'URE_INTERNAL_LIB_DIR=$${file\u003A//$(URE_HOME)/lib/unorc:URE_INTERNAL_LIB_DIR}' > $@
-	echo 'URE_INTERNAL_JAVA_DIR=$${file\u003A//$(URE_HOME)/lib/unorc:URE_INTERNAL_JAVA_DIR}' >> $@
-	echo 'UNO_TYPES=$${file\u003A//$(URE_HOME)/lib/unorc:UNO_TYPES} file://$(PWD)/out.pln/types.rdb' >> $@
-	echo 'UNO_SERVICES=$${file\u003A//$(URE_HOME)/lib/unorc:UNO_SERVICES} file://$(PWD)/out.pln/services.rdb' >> $@
 
 
 out.pln/javaclient.jar: \

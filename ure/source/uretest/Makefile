@@ -61,36 +61,35 @@ test-cpptest: out.sdk/cppmain.uno.$(SHAREDLIB_EXT) out.sdk/types.rdb \
             out.sdk/services.rdb
 	$(GCCS_COMPAT) uno \
             -c test.cpp.cppmain.Component -l $(URLPREFIX)$(cwd)/$< \
-            -ro "$(subst \,/,$(URLPREFIX)$(URE_TYPES))" -ro out.sdk/types.rdb \
-            -ro "$(subst \,/,$(URLPREFIX)$(URE_SERVICES))" \
-            -ro out.sdk/services.rdb
+            -env:URE_MORE_TYPES=$(URLPREFIX)$(cwd)/out.sdk/types.rdb \
+            -env:URE_MORE_SERVICES=$(URLPREFIX)$(cwd)/out.sdk/services.rdb
 
 .PHONY: test-javatest
 test-javatest: out.sdk/javamain.uno.jar out.sdk/types.rdb out.sdk/services.rdb
 	$(GCCS_COMPAT) uno \
             -c test.java.javamain.Component -l $(URLPREFIX)$(cwd)/$< \
-            -ro "$(subst \,/,$(URLPREFIX)$(URE_TYPES))" -ro out.sdk/types.rdb \
-            -ro "$(subst \,/,$(URLPREFIX)$(URE_SERVICES))" \
-            -ro out.sdk/services.rdb
+            -env:URE_MORE_TYPES=$(URLPREFIX)$(cwd)/out.sdk/types.rdb \
+            -env:URE_MORE_SERVICES=$(URLPREFIX)$(cwd)/out.sdk/services.rdb
 
 .PHONY: test-javanative
 test-javanative: out.sdk/runner.jar out.sdk/javanative.jar \
-            out.sdk/javanative.rc out.sdk/services.rdb out.sdk/types.rdb
-	$(GCCS_COMPAT) $(SDK_JAVA) -jar out.sdk/runner.jar $(ure_java_url)/ \
-            $(URLPREFIX)$(cwd)/out.sdk/javanative.jar \
-            $(URLPREFIX)$(cwd)/out.sdk/javanative.rc
+            out.sdk/services.rdb out.sdk/types.rdb
+	URE_MORE_TYPES=$(URLPREFIX)$(cwd)/out.sdk/types.rdb \
+            URE_MORE_SERVICES=$(URLPREFIX)$(cwd)/out.sdk/services.rdb \
+            $(GCCS_COMPAT) $(SDK_JAVA) -jar out.sdk/runner.jar \
+            $(ure_java_url)/ $(URLPREFIX)$(cwd)/out.sdk/javanative.jar
 
 do_server = $(GCCS_COMPAT) uno -c test.cpp.cppserver.Component \
     -l $(URLPREFIX)$(cwd)/out.sdk/cppserver.uno.$(SHAREDLIB_EXT) \
-    -ro "$(subst \,/,$(URLPREFIX)$(URE_TYPES))" -ro out.sdk/types.rdb \
-    -ro "$(subst \,/,$(URLPREFIX)$(URE_SERVICES))" -ro out.sdk/services.rdb \
+    -env:URE_MORE_TYPES=$(URLPREFIX)$(cwd)/out.sdk/types.rdb \
+    -env:URE_MORE_SERVICES=$(URLPREFIX)$(cwd)/out.sdk/services.rdb \
     -u "uno:pipe,name=ure_test;urp;server" --singleaccept
 do_client = $(SDK_JAVA) -jar out.sdk/runner.jar $(ure_java_url)/ \
     $(URLPREFIX)$(cwd)/out.sdk/javaclient.jar \
     "uno:pipe,name=ure_test;urp;server"
 .PHONY: test-clientserver
-test-clientserver: out.sdk/cppserver.uno.$(SHAREDLIB_EXT) out.sdk/runner.jar \
-            out.sdk/javaclient.jar
+test-clientserver: out.sdk/cppserver.uno.$(SHAREDLIB_EXT) out.sdk/types.rdb \
+            out.sdk/services.rdb out.sdk/runner.jar out.sdk/javaclient.jar
 ifeq "$(PLATFORM)" "windows"
 	echo $(subst %,%%,$(do_server)) > out.sdk/server.bat
 	echo $(subst %,%%,$(do_client)) > out.sdk/client.bat
@@ -233,12 +232,6 @@ out.sdk/class/javanative/test/java/javanative/JavaNative.class: \
 	$(SDK_JAVAC) $(JAVAC_FLAGS) \
             -classpath "$(CLASSPATH)$(PATH_SEPARATOR)out.sdk/tester.jar" \
             -sourcepath . -d out.sdk/class/javanative $<
-
-out.sdk/javanative.rc: | out.sdk
-	echo $(qt2)URE_INTERNAL_LIB_DIR=$${$(subst :,\u003A,$(ure_unorc_url)):URE_INTERNAL_LIB_DIR}$(qt2) > $@
-	echo $(qt2)URE_INTERNAL_JAVA_DIR=$${$(subst :,\u003A,$(ure_unorc_url)):URE_INTERNAL_JAVA_DIR}$(qt2) >> $@
-	echo $(qt2)UNO_TYPES=$${$(subst :,\u003A,$(ure_unorc_url)):UNO_TYPES} $(URLPREFIX)$(cwd)/out.sdk/types.rdb$(qt2) >> $@
-	echo $(qt2)UNO_SERVICES=$${$(subst :,\u003A,$(ure_unorc_url)):UNO_SERVICES} $(URLPREFIX)$(cwd)/out.sdk/services.rdb$(qt2) >> $@
 
 
 out.sdk/javaclient.jar: \

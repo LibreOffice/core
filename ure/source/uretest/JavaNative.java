@@ -23,9 +23,7 @@ import test.java.tester.Tester;
 
 public final class JavaNative {
     public static void main(String[] arguments) throws Exception {
-        Tester.test(
-            Bootstrap.defaultBootstrap_InitialComponentContext(
-                arguments[0], null));
+        Tester.test(Bootstrap.defaultBootstrap_InitialComponentContext());
     }
 
     private JavaNative() {}

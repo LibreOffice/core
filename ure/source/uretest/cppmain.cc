@@ -104,7 +104,6 @@ private:
         "com.sun.star.io.TextInputStream",
         "com.sun.star.io.TextOutputStream",
         "com.sun.star.java.JavaVirtualMachine",
-        "com.sun.star.lang.MultiServiceFactory",
         "com.sun.star.lang.RegistryServiceManager",
         "com.sun.star.lang.ServiceManager",
         "com.sun.star.loader.Java",
