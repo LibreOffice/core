@@ -30,32 +30,6 @@
 #define CUSTOM_TYPE_DURATION    5
 #define CUSTOM_TYPE_DATETIME    6
 
-// 4 TP_DOCINFORELOAD
-#define PAGE_WIDTH          260
-#define WIDTH_CTRL_SPACE    3
-#define WIDTH_0             10
-#define WIDTH_1             48
-#define WIDTH_2             28
-#define WIDTH_FT1           (WIDTH_1 - WIDTH_CTRL_SPACE)
-#define COL_0               6
-#define COL_1               (COL_0+WIDTH_0)
-#define COL_2               (COL_1+WIDTH_1)
-#define COL_3               (COL_2+WIDTH_2)
-#define COL_4               (COL_3+WIDTH_CTRL_SPACE)
-#define COL_7               (PAGE_WIDTH-2*WIDTH_0)
-#define COL_6               (COL_7-WIDTH_0)
-#define COL_5               (COL_6-WIDTH_CTRL_SPACE)
-#define COL_LAST            COL_7
-
-#define ROWDIFF_FT_EDTFLD   ((RSC_CD_TEXTBOX_HEIGHT-RSC_CD_FIXEDTEXT_HEIGHT)/2)
-#define ROW_0               6
-#define ROW_1               (ROW_0+16)
-#define ROW_2               (ROW_1+13)
-#define ROW_3               (ROW_2+16)
-#define ROW_4               (ROW_3+13)
-#define ROW_5               (ROW_4+16)
-#define ROW_6               (ROW_5+16)
-
 // defines ---------------------------------------------------------------
 
 #define FT_INFO1            15
@@ -67,22 +41,6 @@
 #define FT_INFO4            21
 #define ED_INFO4            22
 #define BTN_EDITLABEL       34
-#define FT_URL              43
-#define ED_URL              44
-
-#define RB_NOAUTOUPDATE     63
-#define RB_RELOADUPDATE     64
-#define RB_FORWARDUPDATE    65
-#define FT_EVERY            66
-#define ED_RELOAD           67
-#define FT_RELOADSECS       68
-#define FT_AFTER            69
-#define ED_FORWARD          70
-#define FT_FORWARDSECS      71
-#define FT_FRAME            72
-#define CB_FRAME            73
-#define PB_BROWSEURL        74
-#define STR_FORWARD_ERRMSSG 75
 
 #define WIN_PROPERTIES      90
 #define SB_VERTICAL         91

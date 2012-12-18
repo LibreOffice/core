@@ -240,22 +240,24 @@ namespace sfx2
 class SfxInternetPage : public SfxTabPage
 {
 private:
-    RadioButton             aRBNoAutoUpdate;
-    RadioButton             aRBReloadUpdate;
-    RadioButton             aRBForwardUpdate;
+    VclContainer*           m_pContainer;
 
-    FixedText               aFTEvery;
-    NumericField            aNFReload;
-    FixedText               aFTReloadSeconds;
+    RadioButton*            m_pRBNoAutoUpdate;
+    RadioButton*            m_pRBReloadUpdate;
+    RadioButton*            m_pRBForwardUpdate;
 
-    FixedText               aFTAfter;
-    NumericField            aNFAfter;
-    FixedText               aFTAfterSeconds;
-    FixedText               aFTURL;
-    Edit                    aEDForwardURL;
-    PushButton              aPBBrowseURL;
-    FixedText               aFTFrame;
-    ComboBox                aCBFrame;
+    FixedText*              m_pFTEvery;
+    NumericField*           m_pNFReload;
+    FixedText*              m_pFTReloadSeconds;
+
+    FixedText*              m_pFTAfter;
+    NumericField*           m_pNFAfter;
+    FixedText*              m_pFTAfterSeconds;
+    FixedText*              m_pFTURL;
+    Edit*                   m_pEDForwardURL;
+    PushButton*             m_pPBBrowseURL;
+    FixedText*              m_pFTFrame;
+    ComboBox*               m_pCBFrame;
 
     String                  aForwardErrorMessg;
     String                  aBaseURL;

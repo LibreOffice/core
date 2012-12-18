@@ -512,6 +512,10 @@ String RID_SVXSTR_INCORRECT_PASSWORD
 {
     Text [ en-US ] = "Incorrect password" ;
 };
+String RID_SVXSTR_FORWARD_ERRMSSG
+{
+    Text [ en-US ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL." ;
+};
 
 ModalDialog DLG_HELP_LICENSING
 {
