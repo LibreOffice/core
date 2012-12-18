@@ -1152,8 +1152,9 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uString_new(
 /** Allocate a new string containing space for a given number of characters.
 
     The reference count of the new string will be 1. The length of the string
-    will be nLen. This function throws std::bad_alloc on out-of-memory
-    conditions.
+    will be nLen. This function does not handle out-of-memory conditions.
+
+    For nLen < 0 or failed allocation this method returns NULL.
 
     The characters of the capacity are not cleared, and the length is set to
     nLen, unlike the similar method of rtl_uString_new_WithLength which
