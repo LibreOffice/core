@@ -343,30 +343,6 @@ static AquaSalFrame* getMouseContainerFrame()
     return bRet;
 }
 
-#if 0 // windowWillEnterFullScreen doesn't do anything useful yet
--(void)windowWillEnterFullScreen: (NSNotification*)pNotification
-{
-    YIELD_GUARD;
-
-    if( !mpFrame || !AquaSalFrame::isAlive( mpFrame ) )
-        return;
-    // TODO: implement something useful
-    (void)pNotification;
-}
-#endif
-
-#if 0 // windowWillExitFullScreen doesn't do anything useful yet
--(void)windowWillExitFullScreen: (NSNotification*)pNotification
-{
-    YIELD_GUARD;
-
-    if( !mpFrame || !AquaSalFrame::isAlive( mpFrame ) )
-        return;
-    // TODO: implement something useful
-    (void)pNotification;
-}
-#endif
-
 -(void)windowDidEnterFullScreen: (NSNotification*)pNotification
 {
     YIELD_GUARD;
