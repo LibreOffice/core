@@ -114,9 +114,8 @@ out.sdk/cppmain.uno.$(SHAREDLIB_EXT): out.sdk/cppmain.$(OBJ_EXT) | out.sdk
 
 out.sdk/cppmain.$(OBJ_EXT): cppmain.cc out.sdk/cpputypes.cppumaker.flag \
             out.sdk/types.cppumaker.flag | out.sdk
-	$(CC) $(CC_FLAGS) $(CC_OUTPUT_SWITCH)$@ -I$(PRJ)/include/stl \
-            $(CC_INCLUDES) -Iout.sdk/include/cpputypes -Iout.sdk/include/types \
-            $(CC_DEFINES) $<
+	$(CC) $(CC_FLAGS) $(CC_OUTPUT_SWITCH)$@ $(CC_INCLUDES) \
+            -Iout.sdk/include/cpputypes -Iout.sdk/include/types $(CC_DEFINES) $<
 
 
 out.sdk/cpptest.uno.$(SHAREDLIB_EXT): out.sdk/cpptest.$(OBJ_EXT) | out.sdk
@@ -125,9 +124,8 @@ out.sdk/cpptest.uno.$(SHAREDLIB_EXT): out.sdk/cpptest.$(OBJ_EXT) | out.sdk
 
 out.sdk/cpptest.$(OBJ_EXT): cpptest.cc out.sdk/cpputypes.cppumaker.flag \
             out.sdk/types.cppumaker.flag | out.sdk
-	$(CC) $(CC_FLAGS) $(CC_OUTPUT_SWITCH)$@ -I$(PRJ)/include/stl \
-            $(CC_INCLUDES) -Iout.sdk/include/cpputypes -Iout.sdk/include/types \
-            $(CC_DEFINES) $<
+	$(CC) $(CC_FLAGS) $(CC_OUTPUT_SWITCH)$@ $(CC_INCLUDES) \
+            -Iout.sdk/include/cpputypes -Iout.sdk/include/types $(CC_DEFINES) $<
 
 
 out.sdk/cppserver.uno.$(SHAREDLIB_EXT): out.sdk/cppserver.$(OBJ_EXT) | out.sdk
@@ -136,9 +134,8 @@ out.sdk/cppserver.uno.$(SHAREDLIB_EXT): out.sdk/cppserver.$(OBJ_EXT) | out.sdk
 
 out.sdk/cppserver.$(OBJ_EXT): cppserver.cc out.sdk/cpputypes.cppumaker.flag \
             out.sdk/types.cppumaker.flag | out.sdk
-	$(CC) $(CC_FLAGS) $(CC_OUTPUT_SWITCH)$@ -I$(PRJ)/include/stl \
-            $(CC_INCLUDES) -Iout.sdk/include/cpputypes -Iout.sdk/include/types \
-            $(CC_DEFINES) $<
+	$(CC) $(CC_FLAGS) $(CC_OUTPUT_SWITCH)$@ $(CC_INCLUDES) \
+            -Iout.sdk/include/cpputypes -Iout.sdk/include/types $(CC_DEFINES) $<
 
 
 out.sdk/cpputypes.cppumaker.flag: | out.sdk
