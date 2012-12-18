@@ -855,11 +855,7 @@ void handleEnumType(
             rtl::OString(RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Enum")),
             rtl::OString()));
     SAL_WNODEPRECATED_DECLARATIONS_POP
-    rtl::OStringBuffer buf;
-    buf.append('L');
-    buf.append(className);
-    buf.append(';');
-    rtl::OString classDescriptor(buf.makeStringAndClear());
+    rtl::OString classDescriptor("L" + className + ";");
     {for (sal_uInt16 i = 0; i < fields; ++i) {
         RTConstValue fieldValue(reader.getFieldValue(i));
         if (fieldValue.m_type != RT_TYPE_INT32

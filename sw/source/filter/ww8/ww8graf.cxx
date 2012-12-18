@@ -154,11 +154,8 @@ void wwFrameNamer::SetUniqueGraphName(SwFrmFmt *pFrmFmt, const rtl::OUString &rF
 {
     if (mbIsDisabled || rFixed.isEmpty())
         return;
-    rtl::OUStringBuffer aName(msSeed);
-    aName.append(++mnImportedGraphicsCount);
-    aName.append(": ");
-    aName.append(rFixed);
-    pFrmFmt->SetName(aName.makeStringAndClear());
+
+    pFrmFmt->SetName(msSeed+OUString::valueOf(++mnImportedGraphicsCount) + ": " + rFixed);
 }
 
 // ReadGrafStart liest die ObjektDaten ein und erzeugt falls noetig einen Anker

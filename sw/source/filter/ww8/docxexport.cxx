@@ -294,14 +294,12 @@ void DocxExport::DoFormText(const SwInputField* /*pFld*/)
 
 rtl::OString DocxExport::OutputChart( uno::Reference< frame::XModel >& xModel, sal_Int32 nCount )
 {
-    rtl::OUString aFileName = rtl::OUStringBuffer().append("charts/chart").append(nCount).append(".xml").makeStringAndClear();
-
+    OUString aFileName = "charts/chart" + OUString::valueOf(nCount) + ".xml";
     OUString sId = m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
                     "http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart",
                     aFileName );
 
-    aFileName = rtl::OUStringBuffer().append("word/charts/chart").append(nCount).append(".xml").makeStringAndClear();
-
+    aFileName = "word/charts/chart" + OUString::valueOf(nCount) + ".xml";
     ::sax_fastparser::FSHelperPtr pChartFS =
         m_pFilter->openFragmentStreamWithSerializer( aFileName,
             "application/vnd.openxmlformats-officedocument.drawingml.chart" );

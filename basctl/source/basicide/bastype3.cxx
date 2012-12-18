@@ -455,13 +455,7 @@ SvTreeListEntry* TreeListBox::FindRootEntry( const ScriptDocument& rDocument, Li
 
 OUString CreateMgrAndLibStr( const OUString& rMgrName, const OUString& rLibName )
 {
-    OUStringBuffer aName;
-    aName.append('[');
-    aName.append(rMgrName);
-    aName.append(']');
-    aName.append('.');
-    aName.append(rLibName);
-    return aName.makeStringAndClear();
+    return "[" + rMgrName + "]." + rLibName;
 }
 
 

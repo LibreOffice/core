@@ -183,17 +183,14 @@ OUString BaseWindow::GetTitle()
 
 OUString BaseWindow::CreateQualifiedName()
 {
-    OUStringBuffer aName;
+    OUString aName;
     if ( !m_aLibName.isEmpty() )
     {
         LibraryLocation eLocation = m_aDocument.getLibraryLocation( m_aLibName );
-        aName.append(m_aDocument.getTitle(eLocation));
-        aName.append('.');
-        aName.append(m_aLibName);
-        aName.append('.');
-        aName.append(GetTitle());
+        aName = m_aDocument.getTitle(eLocation) + "." + m_aLibName + "." +
+                GetTitle();
     }
-    return aName.makeStringAndClear();
+    return aName;
 }
 
 void BaseWindow::SetReadOnly (bool)

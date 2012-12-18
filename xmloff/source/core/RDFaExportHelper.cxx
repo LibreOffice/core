@@ -56,8 +56,6 @@ using namespace ::com::sun::star;
 
 namespace xmloff {
 
-static const char s_prefix [] = "_:b";
-
 static ::rtl::OUString
 makeCURIE(SvXMLExport * i_pExport,
     uno::Reference<rdf::XURI> const & i_xURI)
@@ -128,10 +126,7 @@ RDFaExportHelper::LookupBlankNode(
         m_BlankNodeMap[ i_xBlankNode->getStringValue() ] );
     if (rEntry.isEmpty())
     {
-        ::rtl::OUStringBuffer buf;
-        buf.appendAscii(s_prefix);
-        buf.append(++m_Counter);
-        rEntry = buf.makeStringAndClear();
+        rEntry = "_:b" + OUString::valueOf(++m_Counter);
     }
     return rEntry;
 }
