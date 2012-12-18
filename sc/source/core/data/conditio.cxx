@@ -1684,24 +1684,40 @@ bool ScCondDateFormatEntry::IsValid( const ScAddress& rPos ) const
                 return true;
             break;
         case condformat::LASTWEEK:
-            if( rActDate.GetYear() == aCellDate.GetYear() )
+            if( rActDate.GetDayOfWeek() != SUNDAY )
             {
-                if( rActDate.GetWeekOfYear( SUNDAY ) == aCellDate.GetWeekOfYear( SUNDAY ) + 1 )
-                    return true;
+                Date aBegin(rActDate - 8 - static_cast<long>(rActDate.GetDayOfWeek()));
+                Date aEnd(rActDate - 2 -static_cast<long>(rActDate.GetDayOfWeek()));
+                return aCellDate.IsBetween( aBegin, aEnd );
+            }
+            else
+            {
+                Date aBegin(rActDate - 8);
+                Date aEnd(rActDate - 1);
+                return aCellDate.IsBetween( aBegin, aEnd );
             }
             break;
         case condformat::THISWEEK:
-            if( rActDate.GetYear() == aCellDate.GetYear() )
+            if( rActDate.GetDayOfWeek() != SUNDAY )
             {
-                if( rActDate.GetWeekOfYear( SUNDAY ) == aCellDate.GetWeekOfYear( SUNDAY ) )
-                    return true;
+                Date aBegin(rActDate - 1 - static_cast<long>(rActDate.GetDayOfWeek()));
+                Date aEnd(rActDate + 5 - static_cast<long>(rActDate.GetDayOfWeek()));
+                return aCellDate.IsBetween( aBegin, aEnd );
+            }
+            else
+            {
+                Date aEnd( rActDate + 6);
+                return aCellDate.IsBetween( rActDate, aEnd );
             }
             break;
         case condformat::NEXTWEEK:
-            if( rActDate.GetYear() == aCellDate.GetYear() )
+            if( rActDate.GetDayOfWeek() != SUNDAY )
             {
-                if( rActDate.GetWeekOfYear( SUNDAY ) == aCellDate.GetWeekOfYear( SUNDAY ) - 1 )
-                    return true;
+                return aCellDate.IsBetween( rActDate + 6 - static_cast<long>(rActDate.GetDayOfWeek()), rActDate + 12 - static_cast<long>(rActDate.GetDayOfWeek()) );
+            }
+            else
+            {
+                return aCellDate.IsBetween( rActDate + 7, rActDate + 13 );
             }
             break;
         case condformat::LASTMONTH:
