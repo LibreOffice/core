@@ -2510,7 +2510,7 @@ sal_Bool SwMSConvertControls::InsertControl(
         return sal_False;
 
     uno::Reference< uno::XInterface > xCreate = rServiceFactory->createInstance(
-        "com.sun.star.drawing.ControlShape"));
+        "com.sun.star.drawing.ControlShape");
     if( !xCreate.is() )
         return sal_False;
 
