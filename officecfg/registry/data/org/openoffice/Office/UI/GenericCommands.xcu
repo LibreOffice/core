@@ -4053,11 +4053,6 @@
                     <value xml:lang="en-US">Do Not Mark Errors</value>
                 </prop>
             </node>
-            <node oor:name=".uno:AddressBookSource" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Address Book Source...</value>
-                </prop>
-            </node>
             <node oor:name=".uno:RubyDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">As~ian phonetic guide...</value>

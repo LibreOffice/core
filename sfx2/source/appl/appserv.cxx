@@ -45,7 +45,6 @@
 #include <comphelper/storagehelper.hxx>
 #include "comphelper/configurationhelper.hxx"
 
-#include <svtools/addresstemplate.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/restartdialog.hxx>
 #include <svl/visitem.hxx>
@@ -596,14 +595,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         {
             SfxTemplateManagerDlg dlg;
             dlg.Execute();
-            bDone = true;
-            break;
-        }
-
-        case SID_TEMPLATE_ADDRESSBOKSOURCE:
-        {
-            svt::AddressBookSourceDialog aDialog(GetTopWindow(), ::comphelper::getProcessServiceFactory());
-            aDialog.Execute();
             bDone = true;
             break;
         }
