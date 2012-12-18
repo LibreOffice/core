@@ -58,7 +58,6 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     pdfunzip \
     rdbedit \
     propex \
-    regsingleton \
     regsvrex \
     renewpo \
     rsc \
