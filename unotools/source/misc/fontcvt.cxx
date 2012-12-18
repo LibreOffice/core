@@ -806,6 +806,79 @@ static const sal_Unicode aMTExtraTab[224] =
              0,         0,         0,         0
 };
 
+static const sal_Unicode aAdobeSymbolToAppleSymbolTab[224] =
+{
+    // F020
+        0x0020,    0x0021,    0x2200,    0x0023,
+        0x2203,    0x0025,    0x0026,    0x220D,
+        0x0028,    0x0029,    0x2217,    0x002B,
+        0x002C,    0x2212,    0x002E,    0x002F,
+    // F030
+        0x0030,    0x0031,    0x0032,    0x0033,
+        0x0034,    0x0035,    0x0036,    0x0037,
+        0x0038,    0x0039,    0x003A,    0x003B,
+        0x003C,    0x003D,    0x003E,    0x003F,
+    // F040
+        0x2245,    0x0391,    0x0392,    0x03A7,
+        0x0394,    0x0395,    0x03A6,    0x0393,
+        0x0397,    0x0399,    0x03D1,    0x039A,
+        0x039B,    0x039C,    0x039D,    0x039F,
+    // F050
+        0x03A0,    0x0398,    0x03A1,    0x03A3,
+        0x03A4,    0x03A5,    0x03C2,    0x03A9,
+        0x039E,    0x03A8,    0x0396,    0x005B,
+        0x2234,    0x005D,    0x22A5,    0x005F,
+    // F060
+        0xF8E5,    0x03B1,    0x03B2,    0x03C7,
+        0x03B4,    0x03B5,    0x03C6,    0x03B3,
+        0x03B7,    0x03B9,    0x03D5,    0x03BA,
+        0x03BB,    0x03BC,    0x03BD,    0x03BF,
+    // F070
+        0x03C0,    0x03B8,    0x03C1,    0x03C3,
+        0x03C4,    0x03C5,    0x03D6,    0x03C9,
+        0x03BE,    0x03C8,    0x03B6,    0x007B,
+        0x007C,    0x007D,    0x223C,    0x007F,
+    // F080
+        0x0080,    0x0081,    0x0082,    0x0083,
+        0x0084,    0x0085,    0x0086,    0x0087,
+        0x0088,    0x0089,    0x008A,    0x008B,
+        0x008C,    0x008D,    0x008E,    0x008F,
+    // F090
+        0x0090,    0x0091,    0x0092,    0x0093,
+        0x0094,    0x0095,    0x0096,    0x0097,
+        0x0098,    0x0099,    0x009A,    0x009B,
+        0x009C,    0x009D,    0x009E,    0x009F,
+    // F0a0
+        0x20AC,    0x03D2,    0x2032,    0x2264,
+        0x2044,    0x221E,    0x0192,    0x2663,
+        0x2666,    0x2665,    0x2660,    0x2194,
+        0x2190,    0x2191,    0x2192,    0x2193,
+    // F0b0
+        0x00B0,    0x00B1,    0x2033,    0x2065,
+        0x00D7,    0x221D,    0x2202,    0x2022,
+        0x00F7,    0x2260,    0x2261,    0x2248,
+        0x2026,    0x23D0,    0x23AF,    0x21B5,
+    // F0c0
+        0x2135,    0x2111,    0x211C,    0x2118,
+        0x2297,    0x2295,    0x2205,    0x2229,
+        0x222A,    0x2283,    0x2287,    0x2284,
+        0x2282,    0x2286,    0x2208,    0x2209,
+    // F0d0
+        0x2220,    0x2207,    0x00AE,    0x00A9,
+        0x2122,    0x220F,    0x221A,    0x22C5,
+        0x00AC,    0x2227,    0x2228,    0x21D4,
+        0x21D0,    0x21D1,    0x21D2,    0x21D3,
+    // F0e0
+        0x25CA,    0x3008,    0x00AE,    0x00A9,
+        0x2122,    0x2211,    0x239B,    0x239C,
+        0x239D,    0x23A1,    0x23A2,    0x23A3,
+        0x23A7,    0x23A8,    0x23A9,    0x23AA,
+    // F0f0
+        0xF8FF,    0x3009,    0x222B,    0x2320,
+        0x23AE,    0x2321,    0x239E,    0x239F,
+        0x23A0,    0x23A4,    0x23A5,    0x23A6,
+        0x23AB,    0x23AC,    0x23AD,    0x00FF
+};
 
 //=======================================================================
 
@@ -1411,7 +1484,7 @@ void ConvertChar::RecodeString( String& rStr, xub_StrLen nIndex, xub_StrLen nLen
 
 struct RecodeTable { const char* pOrgName; ConvertChar aCvt;};
 
-static RecodeTable aRecodeTable[] =
+static RecodeTable aStarSymbolRecodeTable[] =
 {
     // the first two entries must be StarMath and StarBats; do not reorder!
     // reason: fgrep for FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS
@@ -1435,6 +1508,10 @@ static RecodeTable aRecodeTable[] =
     {"mtextra",         {aMTExtraTab, "StarSymbol", NULL}}
 };
 
+static RecodeTable aAppleSymbolRecodeTable[] = {
+    {"symbol",         {aAdobeSymbolToAppleSymbolTab, "AppleSymbol", NULL}}
+};
+
 static ConvertChar aImplStarSymbolCvt = { NULL, "StarBats", ImplStarSymbolToStarBats };
 
 // -----------------------------------------------------------------------
@@ -1450,10 +1527,23 @@ const ConvertChar* ConvertChar::GetRecodeData( const String& rOrgFontName, const
     if( aMapName.EqualsAscii( "starsymbol" )
      || aMapName.EqualsAscii( "opensymbol" ) )
     {
-        int nEntries = SAL_N_ELEMENTS(aRecodeTable);
+        int nEntries = SAL_N_ELEMENTS(aStarSymbolRecodeTable);
         for( int i = 0; i < nEntries; ++i)
         {
-            RecodeTable& r = aRecodeTable[i];
+            RecodeTable& r = aStarSymbolRecodeTable[i];
+            if( aOrgName.EqualsAscii( r.pOrgName ) )
+                { pCvt = &r.aCvt; break; }
+        }
+    }
+    //It's plausible that it's better to implement this
+    //as an additional encoding alongside the existing
+    //adobe-symbol to unicode conversion in rtl instead
+    else if( aMapName.EqualsAscii("applesymbol") )
+    {
+        int nEntries = SAL_N_ELEMENTS(aAppleSymbolRecodeTable);
+        for( int i = 0; i < nEntries; ++i)
+        {
+            RecodeTable& r = aAppleSymbolRecodeTable[i];
             if( aOrgName.EqualsAscii( r.pOrgName ) )
                 { pCvt = &r.aCvt; break; }
         }
@@ -1481,12 +1571,12 @@ FontToSubsFontConverter CreateFontToSubsFontConverter(
 
     if ( nFlags & FONTTOSUBSFONT_IMPORT )
     {
-        int nEntries = SAL_N_ELEMENTS(aRecodeTable);
+        int nEntries = SAL_N_ELEMENTS(aStarSymbolRecodeTable);
         if ( nFlags & FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS ) // only StarMath+StarBats
             nEntries = 2;
         for( int i = 0; i < nEntries; ++i )
         {
-            RecodeTable& r = aRecodeTable[i];
+            RecodeTable& r = aStarSymbolRecodeTable[i];
             if( aName.EqualsAscii( r.pOrgName ) )
                 { pCvt = &r.aCvt; break; }
         }
