@@ -92,10 +92,12 @@ public:
 
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape > mXRenderedCustomShape;
 
+    mutable com::sun::star::uno::Reference< com::sun::star::drawing::XCustomShapeEngine > mxCustomShapeEngine;
+
     // #i37011# render geometry shadow
     SdrObject*                                          mpLastShadowGeometry;
 
-    static com::sun::star::uno::Reference< com::sun::star::drawing::XCustomShapeEngine > GetCustomShapeEngine( const SdrObjCustomShape* pCustomShape );
+    com::sun::star::uno::Reference< com::sun::star::drawing::XCustomShapeEngine > GetCustomShapeEngine() const;
 
 //  SVX_DLLPRIVATE com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::drawing::XCustomShapeHandle > >
 //      SdrObjCustomShape::GetInteraction( const SdrObjCustomShape* pCustomShape ) const;
