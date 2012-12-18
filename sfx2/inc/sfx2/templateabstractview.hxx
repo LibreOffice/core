@@ -85,7 +85,7 @@ public:
 
     virtual void reload () { };
 
-    virtual void filterTemplatesByApp (const FILTER_APPLICATION &eApp) = 0;
+    virtual void filterTemplatesByApp (const FILTER_APPLICATION &eApp);
 
     virtual void showOverlay (bool bVisible) = 0;
 
@@ -131,6 +131,9 @@ protected:
 
     TemplateView *mpItemView;
     Link maOverlayItemStateHdl;
+
+    bool mbFilteredResults;     // Flag keep track if overlay has been filtered so folders can get filtered too afterwards
+    FILTER_APPLICATION meFilterOption;
 };
 
 #endif // __SFX2_TEMPLATEABSTRACTVIEW_HXX__

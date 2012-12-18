@@ -25,8 +25,6 @@ public:
 
     virtual ~TemplateRemoteView ();
 
-    virtual void filterTemplatesByApp (const FILTER_APPLICATION &eApp);
-
     virtual void showOverlay (bool bVisible);
 
     bool loadRepository (TemplateRepository* pRepository, bool bRefresh);

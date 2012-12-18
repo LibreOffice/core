@@ -60,12 +60,6 @@ TemplateRemoteView::~TemplateRemoteView ()
 {
 }
 
-void TemplateRemoteView::filterTemplatesByApp(const FILTER_APPLICATION &eApp)
-{
-    if (mpItemView->IsVisible())
-        mpItemView->filterItems(ViewFilter_Application(eApp));
-}
-
 void TemplateRemoteView::showOverlay (bool bVisible)
 {
     mpItemView->Show(bVisible);
