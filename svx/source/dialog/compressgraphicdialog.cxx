@@ -65,14 +65,6 @@ void CompressGraphicsDialog::Initialize()
     get(m_pBtnCalculate,        "calculate");
     get(m_pInterpolationCombo,  "interpolation-method-combo");
 
-    m_pResolutionLB->InsertEntry(OUString("50"));
-    m_pResolutionLB->InsertEntry(OUString("75"));
-    m_pResolutionLB->InsertEntry(OUString("96"));
-    m_pResolutionLB->InsertEntry(OUString("150"));
-    m_pResolutionLB->InsertEntry(OUString("200"));
-    m_pResolutionLB->InsertEntry(OUString("300"));
-    m_pResolutionLB->InsertEntry(OUString("600"));
-
     m_pInterpolationCombo->SelectEntry( OUString("Lanczos") );
 
     m_pMFNewWidth->SetModifyHdl( LINK( this, CompressGraphicsDialog, NewWidthModifiedHdl ));
