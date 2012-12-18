@@ -211,7 +211,7 @@ class TestCase( unittest.TestCase):
           wasHere = 0
           try:
                 raise ioExc( "huhuh" , self.tobj )
-          except unoExc , instance:
+          except unoExc as instance:
                 wasHere = 1
                 self.failUnless( wasHere , "exceptiont test 1" )
 
@@ -239,7 +239,7 @@ class TestCase( unittest.TestCase):
                 self.failUnless( 0 , "exception test 5a" )
           except ioExc:
                 self.failUnless( 0 , "exception test 5b" )
-          except illegalArg, i:
+          except illegalArg as i:
                 self.failUnless( 1 == i.ArgumentPosition , "exception member test" )
                 self.failUnless( "foo" == i.Message , "exception member test 2 " )
                 wasHere = 1

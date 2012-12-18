@@ -37,8 +37,8 @@ A macro with arguments must have its open paren immediately following
 its name without any whitespace.
 """
         if self.debug:
-            print "-"*68
-            print "parsing '%s'"%self.buffer
+            print("-"*68)
+            print("parsing '%s'"%self.buffer)
 
         i = 0
         bufSize = len(self.buffer)
@@ -105,17 +105,17 @@ character is the open paren.
 
     def setMacro (self, name, vars, content):
         if self.debug:
-            print "-"*68
-            print "name: %s"%name
+            print("-"*68)
+            print("name: %s"%name)
             for var in vars:
-                print "var: %s"%var
+                print("var: %s"%var)
             if len(vars) == 0:
-                print "no vars"
-            print "content: '%s'"%content
+                print("no vars")
+            print("content: '%s'"%content)
 
         if len(content) > 0:
             self.macro = Macro(name)
-            for i in xrange(0, len(vars)):
+            for i in range(0, len(vars)):
                 self.macro.vars[vars[i]] = i
 
             # tokinize it using lexer.
@@ -125,16 +125,16 @@ character is the open paren.
             mclexer.tokenize()
             self.macro.tokens = mclexer.getTokens()
             if self.debug:
-                print self.macro.tokens
+                print(self.macro.tokens)
 
             if not self.isValidMacro(self.macro):
                 self.macro = None
 
         if self.debug:
             if self.macro != None:
-                print "macro registered!"
+                print("macro registered!")
             else:
-                print "macro not registered"
+                print("macro not registered")
 
     def isValidMacro (self, macro):
 

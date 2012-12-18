@@ -25,7 +25,7 @@ import sys
 localeNames = {'fr': 'French', 'hu': 'Hungarian', 'de': 'German'}
 def getLocaleName (code):
     global localeNames
-    if localeNames.has_key(code):
+    if code in localeNames:
         return localeNames[code]
     else:
         return "(unknown locale)"
@@ -42,7 +42,7 @@ class LocaleData(object):
         self.funcList = {}
 
     def addKeywordMap (self, funcName, localeName, engName):
-        if not self.funcList.has_key(funcName):
+        if funcName not in self.funcList:
             self.funcList[funcName] = []
 
         self.funcList[funcName].append([localeName, engName])
@@ -136,7 +136,7 @@ class Parser(object):
         for item in buf:
             sys.stdout.write(chr(item))
         if linefeed:
-            print ''
+            print('')
 
     def parse (self):
 

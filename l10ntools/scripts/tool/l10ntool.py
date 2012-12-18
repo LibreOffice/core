@@ -123,7 +123,7 @@ class AbstractL10nTool:
         try:
             shutil.copy(inputfilename, outputfilename)
         except IOError:
-            print "ERROR: Can not copy file '" + inputfilename + "' to " + "'" + outputfilename + "'"
+            print("ERROR: Can not copy file '" + inputfilename + "' to " + "'" + outputfilename + "'")
             sys.exit(-1)
 
     def extract(self):
@@ -131,7 +131,7 @@ class AbstractL10nTool:
             f = open(self._options.outputfile, "w+")
             f.write(self.extract_file(self._options.inputfile))
         except IOError:
-            print "ERROR: Can not write file " + self._options.outputfile
+            print("ERROR: Can not write file " + self._options.outputfile)
         else:
             f.close()
 
@@ -173,7 +173,7 @@ class AbstractL10nTool:
         dir = filename[:filename.rfind('/')]
         if os.path.exists(dir):
             if os.path.isfile(dir):
-                print "ERROR: There is a file '"+dir+"' where I want create a directory"
+                print("ERROR: There is a file '"+dir+"' where I want create a directory")
                 sys.exit(-1)
             else:
                 return
@@ -181,7 +181,7 @@ class AbstractL10nTool:
             try:
                 os.makedirs(dir)
             except IOError:
-                print "Error: Can not create dir " + dir
+                print("Error: Can not create dir " + dir)
                 sys.exit(-1)
 
     def test_options(self):
@@ -191,7 +191,7 @@ class AbstractL10nTool:
                 ( is_valid(opt.inputfile) and (( is_valid(opt.path_prefix) and is_valid(opt.path_postfix) ) or is_valid(opt.outputfile)) and \
                 ( ( is_valid(opt.input_sdf_file) and ( is_valid(opt.outputfile) or  ( is_valid(opt.path_prefix) and is_valid(opt.path_postfix) ) or \
                 ( is_valid(opt.inputfile) and is_valid(opt.outputFile)) ))))
-        print "Strange options ..."
+        print("Strange options ...")
         sys.exit( -1 )
 
     def read_inputfile_list(self):
@@ -201,7 +201,7 @@ class AbstractL10nTool:
                 f = open(self._options.inputfile[1:], "r")
                 lines = [line.strip('\n') for line in f.readlines()]
             except IOError:
-                print "ERROR: Can not read file list " + self._options.inputfile[2:]
+                print("ERROR: Can not read file list " + self._options.inputfile[2:])
                 sys.exit(-1)
             else:
                 f.close()

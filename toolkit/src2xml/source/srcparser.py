@@ -108,12 +108,12 @@ class MacroExpander(object):
 
     def expandToken (self):
         token = self.tokens[self.pos]
-        if not self.defines.has_key(token):
+        if token not in self.defines:
             self.pos += 1
             return
 
         macro = self.defines[token]
-        nvars = len(macro.vars.keys())
+        nvars = len(list(macro.vars.keys()))
         if nvars == 0:
             # Simple expansion
             self.tokens[self.pos:self.pos+1] = macro.tokens
@@ -123,7 +123,7 @@ class MacroExpander(object):
             values, lastPos = self.parseValues()
             newtokens = []
             for mtoken in macro.tokens:
-                if macro.vars.has_key(mtoken):
+                if mtoken in macro.vars:
                     # variable
                     pos = macro.vars[mtoken]
                     valtokens = values[pos]
@@ -155,15 +155,15 @@ words, whitespace does not end a token.
                 tk = self.tokens[self.pos+i]
             except IndexError:
                 progress ("error parsing values (%d)\n"%i)
-                for j in xrange(0, i):
-                    print self.tokens[self.pos+j],
-                print ''
+                for j in range(0, i):
+                    print(self.tokens[self.pos+j], end=' ')
+                print('')
                 srclexer.dumpTokens(self.tokens)
                 srclexer.dumpTokens(self.newtokens)
-                print "tokens expanded so far:"
+                print("tokens expanded so far:")
                 for tk in self.expandedTokens:
-                    print "-"*20
-                    print tk
+                    print("-"*20)
+                    print(tk)
                     srclexer.dumpTokens(self.defines[tk].tokens)
                 sys.exit(1)
             if tk == '(':
@@ -207,7 +207,7 @@ class SrcParser(object):
         # Expand defined macros.
         if self.debug:
             progress ("-"*68+"\n")
-            for key in self.defines.keys():
+            for key in list(self.defines.keys()):
                 progress ("define: %s\n"%key)
 
         self.expandMacro()
@@ -314,7 +314,7 @@ handler.
     def closeBrace (self, i):
         if len(self.tokenBuf) > 0:
             if self.debug:
-                print self.tokenBuf
+                print(self.tokenBuf)
             raise ParseError ('')
         self.elementStack.pop()
         return i

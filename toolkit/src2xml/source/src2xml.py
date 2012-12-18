@@ -182,12 +182,12 @@ def dry_one_file (file_name, options):
     try:
         str = convert(file_name, options)
         progress ("  SUCCESS\n")
-    except Exception, e:
+    except Exception as e:
         if options.keep_going:
             progress ("  FAILED\n")
         else:
             import traceback
-            print traceback.format_exc (None)
+            print(traceback.format_exc (None))
             raise e
 
 def post_process (s):

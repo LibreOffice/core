@@ -39,14 +39,14 @@ class Xtxex(AbstractL10nTool):
             return
         # merge usual lang
         sdfline = self.prepare_sdf_line(inputfilename,lang)
-        if sdfdata.has_key(sdfline.get_id()):
+        if sdfline.get_id() in sdfdata:
             line = sdfdata[sdfline.get_id()].text.replace("\\n", '\n')
             self.make_dirs(outputfilename)
             try:
                 f = open(outputfilename, "w+")
                 f.write(line)
             except IOError:
-                print "ERROR: Can not write file " + outputfilename
+                print("ERROR: Can not write file " + outputfilename)
                 sys.exit(-1)
             else:
                 f.close()
@@ -62,7 +62,7 @@ class Xtxex(AbstractL10nTool):
             f = open(inputfile, "r")
             lines = f.readlines()
         except IOError:
-            print "ERROR: Can not open file " + inputfile
+            print("ERROR: Can not open file " + inputfile)
             sys.exit(-1)
         else:
             f.close()
