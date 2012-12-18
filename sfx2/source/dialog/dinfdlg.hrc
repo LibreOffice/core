@@ -58,12 +58,6 @@
 
 // defines ---------------------------------------------------------------
 
-#define FT_TITLE            9
-#define ED_TITLE            10
-#define FT_THEMA            11
-#define ED_THEMA            12
-#define FT_KEYWORDS         13
-#define ED_KEYWORDS         14
 #define FT_INFO1            15
 #define ED_INFO1            16
 #define FT_INFO2            17
@@ -72,8 +66,6 @@
 #define ED_INFO3            20
 #define FT_INFO4            21
 #define ED_INFO4            22
-#define FT_COMMENT          23
-#define ED_COMMENT          24
 #define BTN_EDITLABEL       34
 #define FT_URL              43
 #define ED_URL              44

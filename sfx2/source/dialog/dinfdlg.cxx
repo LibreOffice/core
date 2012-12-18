@@ -616,23 +616,15 @@ bool SfxDocumentInfoItem::PutValue( const Any& rVal, sal_uInt8 nMemberId )
 }
 
 //------------------------------------------------------------------------
-SfxDocumentDescPage::SfxDocumentDescPage( Window * pParent, const SfxItemSet& rItemSet )  :
-
-    SfxTabPage( pParent, SfxResId( TP_DOCINFODESC ), rItemSet ),
-
-    aTitleFt    ( this, SfxResId( FT_TITLE ) ),
-    aTitleEd    ( this, SfxResId( ED_TITLE ) ),
-    aThemaFt    ( this, SfxResId( FT_THEMA ) ),
-    aThemaEd    ( this, SfxResId( ED_THEMA ) ),
-    aKeywordsFt ( this, SfxResId( FT_KEYWORDS ) ),
-    aKeywordsEd ( this, SfxResId( ED_KEYWORDS ) ),
-    aCommentFt  ( this, SfxResId( FT_COMMENT ) ),
-    aCommentEd  ( this, SfxResId( ED_COMMENT ) ),
-
-    pInfoItem   ( NULL )
+SfxDocumentDescPage::SfxDocumentDescPage( Window * pParent, const SfxItemSet& rItemSet )
+    : SfxTabPage(pParent, "DescriptionInfoPage", "sfx/ui/descriptioninfopage.ui", rItemSet)
+    , m_pInfoItem   ( NULL )
 
 {
-    FreeResource();
+    get(m_pTitleEd, "title");
+    get(m_pThemaEd, "subject");
+    get(m_pKeywordsEd, "keywords");
+    get(m_pCommentEd, "comments");
 }
 
 //------------------------------------------------------------------------
@@ -645,10 +637,10 @@ SfxTabPage *SfxDocumentDescPage::Create(Window *pParent, const SfxItemSet &rItem
 sal_Bool SfxDocumentDescPage::FillItemSet(SfxItemSet &rSet)
 {
     // Test whether a change is present
-    const sal_Bool bTitleMod = aTitleEd.IsModified();
-    const sal_Bool bThemeMod = aThemaEd.IsModified();
-    const sal_Bool bKeywordsMod = aKeywordsEd.IsModified();
-    const sal_Bool bCommentMod = aCommentEd.IsModified();
+    const sal_Bool bTitleMod = m_pTitleEd->IsModified();
+    const sal_Bool bThemeMod = m_pThemaEd->IsModified();
+    const sal_Bool bKeywordsMod = m_pKeywordsEd->IsModified();
+    const sal_Bool bCommentMod = m_pCommentEd->IsModified();
     if ( !( bTitleMod || bThemeMod || bKeywordsMod || bCommentMod ) )
     {
         return sal_False;
@@ -664,7 +656,7 @@ sal_Bool SfxDocumentDescPage::FillItemSet(SfxItemSet &rSet)
         pExSet = pDlg->GetExampleSet();
 
     if ( pExSet && SFX_ITEM_SET != pExSet->GetItemState( SID_DOCINFO, sal_True, &pItem ) )
-        pInfo = pInfoItem;
+        pInfo = m_pInfoItem;
     else if ( pItem )
         pInfo = new SfxDocumentInfoItem( *(const SfxDocumentInfoItem *)pItem );
 
@@ -676,22 +668,22 @@ sal_Bool SfxDocumentDescPage::FillItemSet(SfxItemSet &rSet)
 
     if ( bTitleMod )
     {
-        pInfo->setTitle( aTitleEd.GetText() );
+        pInfo->setTitle( m_pTitleEd->GetText() );
     }
     if ( bThemeMod )
     {
-        pInfo->setSubject( aThemaEd.GetText() );
+        pInfo->setSubject( m_pThemaEd->GetText() );
     }
     if ( bKeywordsMod )
     {
-        pInfo->setKeywords( aKeywordsEd.GetText() );
+        pInfo->setKeywords( m_pKeywordsEd->GetText() );
     }
     if ( bCommentMod )
     {
-        pInfo->setDescription( aCommentEd.GetText() );
+        pInfo->setDescription( m_pCommentEd->GetText() );
     }
     rSet.Put( SfxDocumentInfoItem( *pInfo ) );
-    if ( pInfo != pInfoItem )
+    if ( pInfo != m_pInfoItem )
     {
         delete pInfo;
     }
@@ -702,20 +694,20 @@ sal_Bool SfxDocumentDescPage::FillItemSet(SfxItemSet &rSet)
 //------------------------------------------------------------------------
 void SfxDocumentDescPage::Reset(const SfxItemSet &rSet)
 {
-    pInfoItem = &(SfxDocumentInfoItem &)rSet.Get(SID_DOCINFO);
+    m_pInfoItem = &(SfxDocumentInfoItem &)rSet.Get(SID_DOCINFO);
 
-    aTitleEd.SetText( pInfoItem->getTitle() );
-    aThemaEd.SetText( pInfoItem->getSubject() );
-    aKeywordsEd.SetText( pInfoItem->getKeywords() );
-    aCommentEd.SetText( pInfoItem->getDescription() );
+    m_pTitleEd->SetText( m_pInfoItem->getTitle() );
+    m_pThemaEd->SetText( m_pInfoItem->getSubject() );
+    m_pKeywordsEd->SetText( m_pInfoItem->getKeywords() );
+    m_pCommentEd->SetText( m_pInfoItem->getDescription() );
 
     SFX_ITEMSET_ARG( &rSet, pROItem, SfxBoolItem, SID_DOC_READONLY, sal_False );
     if ( pROItem && pROItem->GetValue() )
     {
-        aTitleEd.SetReadOnly( sal_True );
-        aThemaEd.SetReadOnly( sal_True );
-        aKeywordsEd.SetReadOnly( sal_True );
-        aCommentEd.SetReadOnly( sal_True );
+        m_pTitleEd->SetReadOnly( sal_True );
+        m_pThemaEd->SetReadOnly( sal_True );
+        m_pKeywordsEd->SetReadOnly( sal_True );
+        m_pCommentEd->SetReadOnly( sal_True );
     }
 }
 
@@ -946,10 +938,10 @@ sal_Bool SfxDocumentPage::FillItemSet( SfxItemSet& rSet )
 
         if ( pExpSet && SFX_ITEM_SET == pExpSet->GetItemState( SID_DOCINFO, sal_True, &pItem ) )
         {
-            SfxDocumentInfoItem* pInfoItem = (SfxDocumentInfoItem*)pItem;
+            SfxDocumentInfoItem* m_pInfoItem = (SfxDocumentInfoItem*)pItem;
             sal_Bool bUseData = ( STATE_CHECK == m_pUseUserDataCB->GetState() );
-            pInfoItem->SetUseUserData( bUseData );
-            rSet.Put( SfxDocumentInfoItem( *pInfoItem ) );
+            m_pInfoItem->SetUseUserData( bUseData );
+            rSet.Put( SfxDocumentInfoItem( *m_pInfoItem ) );
             bRet = sal_True;
         }
     }
@@ -960,13 +952,13 @@ sal_Bool SfxDocumentPage::FillItemSet( SfxItemSet& rSet )
         const SfxPoolItem* pItem;
         if ( pExpSet && SFX_ITEM_SET == pExpSet->GetItemState( SID_DOCINFO, sal_True, &pItem ) )
         {
-            SfxDocumentInfoItem* pInfoItem = (SfxDocumentInfoItem*)pItem;
+            SfxDocumentInfoItem* m_pInfoItem = (SfxDocumentInfoItem*)pItem;
             sal_Bool bUseAuthor = bEnableUseUserData && m_pUseUserDataCB->IsChecked();
-            SfxDocumentInfoItem newItem( *pInfoItem );
+            SfxDocumentInfoItem newItem( *m_pInfoItem );
             newItem.resetUserData( bUseAuthor
                 ? SvtUserOptions().GetFullName()
                 : ::rtl::OUString() );
-            pInfoItem->SetUseUserData( STATE_CHECK == m_pUseUserDataCB->GetState() );
+            m_pInfoItem->SetUseUserData( STATE_CHECK == m_pUseUserDataCB->GetState() );
             newItem.SetUseUserData( STATE_CHECK == m_pUseUserDataCB->GetState() );
 
             newItem.SetDeleteUserData( sal_True );
@@ -995,12 +987,12 @@ sal_Bool SfxDocumentPage::FillItemSet( SfxItemSet& rSet )
 void SfxDocumentPage::Reset( const SfxItemSet& rSet )
 {
     // Determine the document information
-    const SfxDocumentInfoItem *pInfoItem =
+    const SfxDocumentInfoItem *m_pInfoItem =
         &(const SfxDocumentInfoItem &)rSet.Get(SID_DOCINFO);
 
     // template data
-    if ( pInfoItem->HasTemplate() )
-        m_pTemplValFt->SetText( pInfoItem->getTemplateName() );
+    if ( m_pInfoItem->HasTemplate() )
+        m_pTemplValFt->SetText( m_pInfoItem->getTemplateName() );
     else
     {
         m_pTemplFt->Hide();
@@ -1008,7 +1000,7 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
     }
 
     // determine file name
-    String aFile( pInfoItem->GetValue() );
+    String aFile( m_pInfoItem->GetValue() );
     String aFactory( aFile );
     if ( aFile.Len() > 2 && aFile.GetChar(0) == '[' )
     {
@@ -1077,25 +1069,25 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
         m_pFileValFt->SetText( aURL.GetPartBeforeLastName() );
 
     // handle access data
-    sal_Bool m_bUseUserData = pInfoItem->IsUseUserData();
+    sal_Bool m_bUseUserData = m_pInfoItem->IsUseUserData();
     const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
-    m_pCreateValFt->SetText( ConvertDateTime_Impl( pInfoItem->getAuthor(),
-        pInfoItem->getCreationDate(), rLocaleWrapper ) );
-    util::DateTime aTime( pInfoItem->getModificationDate() );
+    m_pCreateValFt->SetText( ConvertDateTime_Impl( m_pInfoItem->getAuthor(),
+        m_pInfoItem->getCreationDate(), rLocaleWrapper ) );
+    util::DateTime aTime( m_pInfoItem->getModificationDate() );
     if ( aTime.Month > 0 )
         m_pChangeValFt->SetText( ConvertDateTime_Impl(
-            pInfoItem->getModifiedBy(), aTime, rLocaleWrapper ) );
-    aTime = pInfoItem->getPrintDate();
+            m_pInfoItem->getModifiedBy(), aTime, rLocaleWrapper ) );
+    aTime = m_pInfoItem->getPrintDate();
     if ( aTime.Month > 0 )
-        m_pPrintValFt->SetText( ConvertDateTime_Impl( pInfoItem->getPrintedBy(),
+        m_pPrintValFt->SetText( ConvertDateTime_Impl( m_pInfoItem->getPrintedBy(),
             aTime, rLocaleWrapper ) );
-    const long nTime = pInfoItem->getEditingDuration();
+    const long nTime = m_pInfoItem->getEditingDuration();
     if ( m_bUseUserData )
     {
         const Time aT( nTime/3600, (nTime%3600)/60, nTime%60 );
         m_pTimeLogValFt->SetText( rLocaleWrapper.getDuration( aT ) );
         m_pDocNoValFt->SetText( String::CreateFromInt32(
-            pInfoItem->getEditingCycles() ) );
+            m_pInfoItem->getEditingCycles() ) );
     }
 
     TriState eState = (TriState)m_bUseUserData;
@@ -1462,7 +1454,7 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog( Window* pParent,
 {
     FreeResource();
 
-     const SfxDocumentInfoItem* pInfoItem =
+     const SfxDocumentInfoItem* m_pInfoItem =
         &(const SfxDocumentInfoItem &)rItemSet.Get( SID_DOCINFO );
 
 #ifdef DBG_UTIL
@@ -1477,7 +1469,7 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog( Window* pParent,
          rItemSet.GetItemState( SID_EXPLORER_PROPS_START, sal_False, &pItem ) )
     {
         // File name
-        String aFile( pInfoItem->GetValue() );
+        String aFile( m_pInfoItem->GetValue() );
 
         INetURLObject aURL;
         aURL.SetSmartProtocol( INET_PROT_FILE );
@@ -2347,8 +2339,8 @@ sal_Bool SfxCustomPropertiesPage::FillItemSet( SfxItemSet& rSet )
 void SfxCustomPropertiesPage::Reset( const SfxItemSet& rItemSet )
 {
     m_aPropertiesCtrl.ClearAllLines();
-    const SfxDocumentInfoItem* pInfoItem = &(const SfxDocumentInfoItem &)rItemSet.Get(SID_DOCINFO);
-    std::vector< CustomProperty* > aCustomProps = pInfoItem->GetCustomProperties();
+    const SfxDocumentInfoItem* m_pInfoItem = &(const SfxDocumentInfoItem &)rItemSet.Get(SID_DOCINFO);
+    std::vector< CustomProperty* > aCustomProps = m_pInfoItem->GetCustomProperties();
     for ( sal_uInt32 i = 0; i < aCustomProps.size(); i++ )
     {
         m_aPropertiesCtrl.AddLine( aCustomProps[i]->m_sName, aCustomProps[i]->m_aValue, false );

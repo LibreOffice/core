@@ -214,15 +214,11 @@ public:
 class SfxDocumentDescPage : public SfxTabPage
 {
 private:
-    FixedText               aTitleFt;
-    Edit                    aTitleEd;
-    FixedText               aThemaFt;
-    Edit                    aThemaEd;
-    FixedText               aKeywordsFt;
-    Edit                    aKeywordsEd;
-    FixedText               aCommentFt;
-    MultiLineEdit           aCommentEd;
-    SfxDocumentInfoItem*    pInfoItem;
+    Edit*                   m_pTitleEd;
+    Edit*                   m_pThemaEd;
+    Edit*                   m_pKeywordsEd;
+    VclMultiLineEdit*       m_pCommentEd;
+    SfxDocumentInfoItem*    m_pInfoItem;
 
 protected:
     SfxDocumentDescPage( Window* pParent, const SfxItemSet& );
