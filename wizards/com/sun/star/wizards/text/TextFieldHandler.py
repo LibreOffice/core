@@ -154,14 +154,12 @@ class TextFieldHandler(object):
 
     def removeUserFieldByContent(self):
         #Remove userfield when its text is empty
-        try:
-            xDependentTextFields = TextFieldHandler.dictTextFields.values()
-            for i in xDependentTextFields:
-                try:
-                    if not i.TextFieldMaster.Content:
-                        i.dispose()
-                except UnknownPropertyException:
-                    pass
-
-        except Exception:
-            traceback.print_exc()
+        xDependentTextFields = TextFieldHandler.arrayTextFields
+        for i in xDependentTextFields:
+            try:
+                if not i.TextFieldMaster.Content:
+                    i.dispose()
+            except Exception:
+                #TextField doesn't even have the attribute Content,
+                #so it's empty
+                i.dispose()
