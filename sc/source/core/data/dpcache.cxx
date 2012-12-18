@@ -303,7 +303,7 @@ bool ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
     SCROW nEndRow = rRange.aEnd.Row();
 
     // Sanity check
-    if (!ValidRow(nStartRow) || !ValidRow(nEndRow) || nEndRow-nStartRow <= 0)
+    if (!ValidRow(nStartRow) || !ValidRow(nEndRow) || nEndRow <= nStartRow)
         return false;
 
     sal_uInt16 nStartCol = rRange.aStart.Col();
@@ -321,6 +321,15 @@ bool ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
     pDoc->ShrinkToDataArea(nDocTab, nCol1, nRow1, nCol2, nRow2);
     bool bTailEmptyRows = nEndRow > nRow2; // Trailing empty rows exist.
     nEndRow = nRow2;
+
+    if (nEndRow <= nStartRow)
+    {
+        // Check this again since the end row position has changed. It's
+        // possible that the new end row becomes lower than the start row
+        // after the shrinkage.
+        Clear();
+        return false;
+    }
 
     maFields.reserve(mnColumnCount);
     for (size_t i = 0; i < static_cast<size_t>(mnColumnCount); ++i)
