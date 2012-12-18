@@ -78,6 +78,7 @@
 #include <time.h>
 #include <memory>
 #include <vector>
+#include "boost/noncopyable.hpp"
 #include "boost/scoped_array.hpp"
 #define OUSTR(x) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
 
@@ -703,6 +704,23 @@ JavaVirtualMachine::getSupportedServiceNames()
     return serviceGetSupportedServiceNames();
 }
 
+namespace {
+
+struct JavaInfoGuard: private boost::noncopyable {
+    JavaInfoGuard(): info(0) {}
+
+    ~JavaInfoGuard() { jfw_freeJavaInfo(info); }
+
+    void clear() {
+        jfw_freeJavaInfo(info);
+        info = 0;
+    }
+
+    JavaInfo * info;
+};
+
+}
+
 css::uno::Any SAL_CALL
 JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
     throw (css::uno::RuntimeException)
@@ -727,6 +745,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
     if (aId != aProcessId)
         return css::uno::Any();
 
+    JavaInfoGuard info;
     while (!m_xVirtualMachine.is()) // retry until successful
     {
         // This is the second attempt to create Java.  m_bDontCreateJvm is
@@ -773,7 +792,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
         if (getenv("STOC_FORCE_NO_JRE"))
             errcode = JFW_E_NO_SELECT;
         else
-            errcode = jfw_startVM(arOptions, index, & m_pJavaVm,
+            errcode = jfw_startVM(info.info, arOptions, index, & m_pJavaVm,
                                   & pMainThreadEnv);
 
         bool bStarted = false;
@@ -784,7 +803,8 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
         {
             // No Java configured. We silenty run the java configuration
             // Java.
-            javaFrameworkError errFind = jfw_findAndSelectJRE( NULL );
+            info.clear();
+            javaFrameworkError errFind = jfw_findAndSelectJRE(&info.info);
             if (getenv("STOC_FORCE_NO_JRE"))
                 errFind = JFW_E_NO_JAVA_FOUND;
             if (errFind == JFW_E_NONE)
@@ -861,7 +881,9 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
                     if (bExist == sal_False
                         && ! (pJavaInfo->nRequirements & JFW_REQUIRE_NEEDRESTART))
                     {
-                        javaFrameworkError errFind = jfw_findAndSelectJRE( NULL );
+                        info.clear();
+                        javaFrameworkError errFind = jfw_findAndSelectJRE(
+                            &info.info);
                         if (errFind == JFW_E_NONE)
                         {
                             continue;

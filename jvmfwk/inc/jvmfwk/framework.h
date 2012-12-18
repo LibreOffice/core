@@ -482,6 +482,8 @@ JVMFWK_DLLPUBLIC javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
     created and JFW_E_NEED_RESTART error is returned. If a VM is already running
     then a JFW_E_RUNNING_JVM is returned.</p>
 
+    @param pInfo
+    [in] optional pointer to a specific JRE; must be caller-freed if not NULL
     @param arOptions
     [in] the array containing additional start arguments or NULL.
     @param nSize
@@ -516,9 +518,9 @@ JVMFWK_DLLPUBLIC javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
     JFW_E_FAILED_VERSION the &quot;Default Mode&quot; is active. The JRE determined by
     <code>JAVA_HOME</code>does not meet the version requirements.
  */
-JVMFWK_DLLPUBLIC javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions,
-                                 sal_Int32 nSize, JavaVM **ppVM,
-                                 JNIEnv **ppEnv);
+JVMFWK_DLLPUBLIC javaFrameworkError SAL_CALL jfw_startVM(
+    JavaInfo const * pInfo, JavaVMOption * arOptions, sal_Int32 nSize,
+    JavaVM ** ppVM, JNIEnv ** ppEnv);
 
 /** determines the JRE that is to be used.
 
