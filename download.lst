@@ -2,8 +2,8 @@ CDR_MD5SUM := 3c0037fb07dea2f0bbae8386fa7c6a9a
 export CDR_TARBALL := libcdr-0.0.9.tar.bz2
 MSPUB_MD5SUM := b2db54b6e96287ac995d7ed654ace4fc
 export MSPUB_TARBALL := libmspub-0.0.3.tar.bz2
-VISIO_MD5SUM := 2552fffcc8428c8b5506218f0cf802db
-export VISIO_TARBALL := libvisio-0.0.23.tar.bz2
+VISIO_MD5SUM := 1962a4183bac8a247989af17ef8882ea
+export VISIO_TARBALL := libvisio-0.0.24.tar.bz2
 
 export AFMS_TARBALL := 1756c4fa6c616ae15973c104cd8cb256-Adobe-Core35_AFMs-314.tar.gz
 export APACHE_COMMONS_CODEC_TARBALL := af3c3acf618de6108d65fcdc92b492e1-commons-codec-1.3-src.tar.gz
