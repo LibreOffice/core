@@ -1100,7 +1100,7 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, sal_Bool bNotifyFields )
         SwFrmFmt *pFmtWish = 0;
         if (bFirst)
             pFmtWish = pDesc->GetFirstFmt();
-        else
+        if (!pFmtWish)
             pFmtWish = bOdd ? pDesc->GetRightFmt() : pDesc->GetLeftFmt();
 
         if ( bActOdd != bOdd ||
@@ -1195,7 +1195,7 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, sal_Bool bNotifyFields )
             {
                 //Format mit verdrehter Logic besorgen.
                 pFmtWish = bOdd ? pDesc->GetLeftFmt() : pDesc->GetRightFmt();
-                if ( pPage->GetFmt() != pFmtWish )
+                if ( pFmtWish && pPage->GetFmt() != pFmtWish )
                     pPage->SetFrmFmt( pFmtWish );
             }
 #if OSL_DEBUG_LEVEL > 0
