@@ -30,7 +30,7 @@ for x in $headers; do
         inobjects=
         ifstack=0
         while read line ; do
-            if (test "$line" = "))") || (echo $line | grep -q ", "); then
+            if test "$line" = "))" ; then
                 inobjects=
             elif echo $line | grep -q -e add_exception_objects -e add_noexception_objects -e add_cxxobject -e add_cxxobjects ; then
                 inobjects=1
@@ -43,7 +43,9 @@ for x in $headers; do
                 ifstack=$((ifstack - 1))
             elif test -n "$inobjects" -a $ifstack -eq 0; then
                 file=$line
-                if ! test -f "$root/$file".cxx ; then
+                if echo $line | grep -q ", "; then
+                    true # $if() probably, or something similar
+                elif ! test -f "$root/$file".cxx ; then
                     echo No file $file in $module/$makefile >&2
                 else
                     cat "$root/$file".cxx | grep -e '^\s*#include' | sed 's/\(#include [<"][^>"]*[>"]\).*/\1/' | sed 's#\.\./##g#' >>$tmpfile
