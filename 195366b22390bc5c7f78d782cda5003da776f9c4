@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAR3///8E\u003d",
+        "filename": "formula/inc/formula/opcode.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-12-18T20:38:20Z",
+      "side": 1,
+      "message": "For better overview I\u0027d place these in the \"Jump commands\" section near the top of the enum, between ocIf and ocChose.",
+      "revId": "195366b22390bc5c7f78d782cda5003da776f9c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAR3///8A\u003d",
+        "filename": "formula/source/core/api/FormulaCompiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1197,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-12-18T20:38:20Z",
+      "side": 1,
+      "message": "Please make that\n\n  OpCode eOpCode\n\ninstead of\n\n short nOpCode\n\nReason is that the debugger displays the actual OpCode enum names instead of just numbers in an --enable-dbgutil build. Entire line should read\n\n OpCode eFacOpCode \u003d pFacToken-\u003eGetOpCode();\n\nFor reason of eFacOpCode name see below in comment for second short  nOpCode \u003d ...",
+      "revId": "195366b22390bc5c7f78d782cda5003da776f9c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAR3///74\u003d",
+        "filename": "formula/source/core/api/FormulaCompiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1199,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-12-18T20:38:20Z",
+      "side": 1,
+      "message": "These nOpCode have of course to be eFacOpCode then.",
+      "revId": "195366b22390bc5c7f78d782cda5003da776f9c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAR3///78\u003d",
+        "filename": "formula/source/core/api/FormulaCompiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1218,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-12-18T20:38:20Z",
+      "side": 1,
+      "message": "Ditto,\n\n  OpCode eOpCode\n\nBut, actually this definition here shadows the one on line 1197 and produces a -Werror\u003dshadow compile error. As we don\u0027t need a second variable here, just change both occurrences to eFacOpCode and only declare the first one above, so this line here then reads\n\n eFacOpCode \u003d pFacToken-\u003eGetOpCode();",
+      "revId": "195366b22390bc5c7f78d782cda5003da776f9c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAR3///70\u003d",
+        "filename": "formula/source/core/api/FormulaCompiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1219,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-12-18T20:38:20Z",
+      "side": 1,
+      "message": "These nOpCode have of course to be eFacOpCode then.",
+      "revId": "195366b22390bc5c7f78d782cda5003da776f9c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAR3///7w\u003d",
+        "filename": "sc/source/core/tool/interpr4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3957,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-12-18T20:38:20Z",
+      "side": 1,
+      "message": "Also here, for better overview move these after ocIf above.",
+      "revId": "195366b22390bc5c7f78d782cda5003da776f9c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
