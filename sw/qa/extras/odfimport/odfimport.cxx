@@ -25,6 +25,7 @@
  * instead of those above.
  */
 
+#include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
@@ -39,6 +40,7 @@ public:
     void testEmptySvgFamilyName();
     void testHideAllSections();
     void testOdtBorders();
+    void testPageStyleLayoutRight();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -56,6 +58,7 @@ void Test::run()
         {"empty-svg-family-name.odt", &Test::testEmptySvgFamilyName},
         {"fdo53210.odt", &Test::testHideAllSections},
         {"borders_ooo33.odt", &Test::testOdtBorders},
+        {"hello.odt", &Test::testPageStyleLayoutRight},
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
@@ -268,6 +271,13 @@ void Test::testOdtBorders()
             }
         }
     } while(xParaEnum->hasMoreElements());
+}
+
+void Test::testPageStyleLayoutRight()
+{
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Default Style"), uno::UNO_QUERY);
+    // This caused a crash.
+    xPropertySet->setPropertyValue("PageStyleLayout", uno::makeAny(style::PageStyleLayout_RIGHT));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
