@@ -279,9 +279,10 @@ void ScAttrArray::AddCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nInd
     {
         const ScPatternAttr* pPattern = GetPattern(nTempStartRow);
 
-        ScPatternAttr aPattern( pDocument->GetPool() );
+        boost::scoped_ptr<ScPatternAttr> pNewPattern;
         if(pPattern)
         {
+            pNewPattern.reset( new ScPatternAttr(*pPattern) );
             SCROW nPatternStartRow;
             SCROW nPatternEndRow;
             GetPatternRange( nPatternStartRow, nPatternEndRow, nTempStartRow );
@@ -296,17 +297,18 @@ void ScAttrArray::AddCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nInd
 
             ScCondFormatItem aItem;
             aItem.SetCondFormatData( aCondFormatData );
-            aPattern.GetItemSet().Put( aItem );
+            pNewPattern->GetItemSet().Put( aItem );
         }
         else
         {
+            pNewPattern.reset( new ScPatternAttr( pDocument->GetPool() ) );
             ScCondFormatItem aItem;
             aItem.AddCondFormatData(nIndex);
-            aPattern.GetItemSet().Put( aItem );
+            pNewPattern->GetItemSet().Put( aItem );
             nTempEndRow = nEndRow;
         }
 
-        SetPatternArea( nTempStartRow, nTempEndRow, &aPattern, true );
+        SetPatternArea( nTempStartRow, nTempEndRow, pNewPattern.get(), true );
         nTempStartRow = nTempEndRow + 1;
     }
     while(nTempEndRow < nEndRow);
@@ -328,9 +330,9 @@ void ScAttrArray::RemoveCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 n
     {
         const ScPatternAttr* pPattern = GetPattern(nTempStartRow);
 
-        ScPatternAttr aPattern( pDocument->GetPool() );
         if(pPattern)
         {
+            ScPatternAttr aPattern( *pPattern );
             SCROW nPatternStartRow;
             SCROW nPatternEndRow;
             GetPatternRange( nPatternStartRow, nPatternEndRow, nTempStartRow );
