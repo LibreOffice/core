@@ -142,6 +142,9 @@
 #define PB_LICENSING_SHOW                       (RID_SFX_APP_START + 210)
 #define PB_LICENSING_CLOSE                      (RID_SFX_APP_START + 211)
 
+#define RID_SVXSTR_END_REDLINING_WARNING        (RID_SFX_APP_START + 212)
+#define RID_SVXSTR_INCORRECT_PASSWORD           (RID_SFX_APP_START + 213)
+
 #define MD_DDE_LINKEDIT                         (RID_SFX_APP_START + 1)
 
 #endif // #ifndef _SFX_APP_HRC

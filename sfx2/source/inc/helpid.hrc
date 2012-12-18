@@ -155,7 +155,6 @@
 
 #define HID_TASKPANE_WINDOW                                     "SFX2_HID_TASKPANE_WINDOW"
 #define HID_TASKPANE_VIEW_MENU                                  "SFX2_HID_TASKPANE_VIEW_MENU"
-#define HID_DOCINFOSECURITY                                     "SFX2_HID_DOCINFOSECURITY"
 
 #endif // #ifndef _SFX_HELPID_HRC
 

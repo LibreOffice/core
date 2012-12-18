@@ -94,6 +94,5 @@ hidspecial HID_DID_SAVE_PACKED_XML              { HelpID = HID_DID_SAVE_PACKED_X
 hidspecial HID_HELP_ONHELP                      { HelpID = HID_HELP_ONHELP; };
 hidspecial HID_HELP_TEXT_SELECTION_MODE         { HelpID = HID_HELP_TEXT_SELECTION_MODE; };
 hidspecial HID_DLG_CHECKFORONLINEUPDATE         { HelpID = HID_DLG_CHECKFORONLINEUPDATE; };
-hidspecial HID_DOCINFOSECURITY                  { HelpID = HID_DOCINFOSECURITY; };
 hidspecial HID_TASKPANE_VIEW_MENU               { HelpID = HID_TASKPANE_VIEW_MENU; };
 

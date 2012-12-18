@@ -20,7 +20,6 @@
 
 #include "sfx2/securitypage.hxx"
 
-#include "securitypage.hrc"
 #include "sfxresid.hxx"
 
 #include <sfx2/sfx.hrc>
@@ -39,6 +38,8 @@
 #include <svl/intitem.hxx>
 #include <svl/PasswordHelper.hxx>
 #include <svtools/xwindowitem.hxx>
+
+#include "../appl/app.hrc"
 
 
 using namespace ::com::sun::star;
@@ -125,7 +126,7 @@ static bool lcl_IsPasswordCorrect( const String &rPassword )
     if (SvPasswordHelper::CompareHashPassword( aPasswordHash, rPassword ))
         bRes = true;    // password was correct
     else
-        InfoBox( NULL, SfxResId( RID_SFX_INCORRECT_PASSWORD ).toString() ).Execute();
+        InfoBox( NULL, SFX2_RESSTR(RID_SVXSTR_INCORRECT_PASSWORD) ).Execute();
 
     return bRes;
 }
@@ -135,25 +136,10 @@ struct SfxSecurityPage_Impl
 {
     SfxSecurityPage &   m_rMyTabPage;
 
-    FixedLine           m_aNewPasswordToOpenFL;
-    FixedText           m_aNewPasswordToOpenFT;
-    Edit                m_aNewPasswordToOpenED;
-    FixedText           m_aConfirmPasswordToOpenFT;
-    Edit                m_aConfirmPasswordToOpenED;
-    FixedText           m_aNewPasswordInfoFT;
-
-    FixedLine           m_aNewPasswordToModifyFL;
-    FixedText           m_aNewPasswordToModifyFT;
-    Edit                m_aNewPasswordToModifyED;
-    FixedText           m_aConfirmPasswordToModifyFT;
-    Edit                m_aConfirmPasswordToModifyED;
-
-    FixedLine           m_aOptionsFL;
-    CheckBox            m_aOpenReadonlyCB;
-    CheckBox            m_aRecordChangesCB;         // for record changes
-    PushButton          m_aChangeProtectionPB;      // for record changes
-    String              m_aProtectSTR;              // for record changes
-    String              m_aUnProtectSTR;            // for record changes
+    CheckBox*           m_pOpenReadonlyCB;
+    CheckBox*           m_pRecordChangesCB;         // for record changes
+    PushButton*         m_pProtectPB;               // for record changes
+    PushButton*         m_pUnProtectPB;             // for record changes
     RedliningMode       m_eRedlingMode;             // for record changes
 
     bool                m_bOrigPasswordIsConfirmed;
@@ -176,65 +162,24 @@ struct SfxSecurityPage_Impl
 
 SfxSecurityPage_Impl::SfxSecurityPage_Impl( SfxSecurityPage &rTabPage, const SfxItemSet & ) :
     m_rMyTabPage                    (rTabPage),
-    m_aNewPasswordToOpenFL          (&rTabPage, SfxResId( PASSWORD_TO_OPEN_FL ) ),
-    m_aNewPasswordToOpenFT          (&rTabPage, SfxResId( PASSWORD_TO_OPEN_FT ) ),
-    m_aNewPasswordToOpenED          (&rTabPage, SfxResId( PASSWORD_TO_OPEN_ED ) ),
-    m_aConfirmPasswordToOpenFT      (&rTabPage, SfxResId( CONFIRM_PASSWORD_TO_OPEN_FT ) ),
-    m_aConfirmPasswordToOpenED      (&rTabPage, SfxResId( CONFIRM_PASSWORD_TO_OPEN_ED ) ),
-    m_aNewPasswordInfoFT            (&rTabPage, SfxResId( PASSWORD_INFO_FT ) ),
-    m_aNewPasswordToModifyFL        (&rTabPage, SfxResId( PASSWORD_TO_MODIFY_FL ) ),
-    m_aNewPasswordToModifyFT        (&rTabPage, SfxResId( PASSWORD_TO_MODIFY_FT ) ),
-    m_aNewPasswordToModifyED        (&rTabPage, SfxResId( PASSWORD_TO_MODIFY_ED ) ),
-    m_aConfirmPasswordToModifyFT    (&rTabPage, SfxResId( CONFIRM_PASSWORD_TO_MODIFY_FT ) ),
-    m_aConfirmPasswordToModifyED    (&rTabPage, SfxResId( CONFIRM_PASSWORD_TO_MODIFY_ED ) ),
-    m_aOptionsFL                    (&rTabPage, SfxResId( OPTIONS_FL ) ),
-    m_aOpenReadonlyCB               (&rTabPage, SfxResId( OPEN_READONLY_CB ) ),
-    m_aRecordChangesCB              (&rTabPage, SfxResId( RECORD_CHANGES_CB ) ),
-    m_aChangeProtectionPB           (&rTabPage, SfxResId( CHANGE_PROTECTION_PB ) ),
-    m_aProtectSTR                   ( SfxResId( STR_PROTECT ).toString() ),
-    m_aUnProtectSTR                 ( SfxResId( STR_UNPROTECT ).toString() ),
     m_eRedlingMode                  ( RL_NONE ),
     m_bOrigPasswordIsConfirmed      ( false ),
     m_bNewPasswordIsValid           ( false ),
-    m_aEndRedliningWarning          ( SfxResId( STR_END_REDLINING_WARNING ).toString() ),
+    m_aEndRedliningWarning          ( SFX2_RESSTR(RID_SVXSTR_END_REDLINING_WARNING) ),
     m_bEndRedliningWarningDone      ( false )
 {
-    m_aChangeProtectionPB.SetText( m_aProtectSTR );
+    rTabPage.get(m_pOpenReadonlyCB, "readonly");
+    rTabPage.get(m_pRecordChangesCB, "recordchanges");
+    rTabPage.get(m_pProtectPB, "protect");
+    rTabPage.get(m_pUnProtectPB, "unprotect");
+    m_pProtectPB->Show();
+    m_pUnProtectPB->Hide();
 
     // force toggle hdl called before visual change of checkbox
-    m_aRecordChangesCB.SetStyle( m_aRecordChangesCB.GetStyle() | WB_EARLYTOGGLE );
-    m_aRecordChangesCB.SetToggleHdl( LINK( this, SfxSecurityPage_Impl, RecordChangesCBToggleHdl ) );
-    m_aChangeProtectionPB.SetClickHdl( LINK( this, SfxSecurityPage_Impl, ChangeProtectionPBHdl ) );
-
-
-    // #i112277: for the time being (OOO 3.3) the following options should not
-    // be available. In the long run however it is planned to implement the yet
-    // missing functionality. Thus now we hide them and move the remaining ones up.
-    m_aNewPasswordToOpenFL.Hide();
-    m_aNewPasswordToOpenFT.Hide();
-    m_aNewPasswordToOpenED.Hide();
-    m_aConfirmPasswordToOpenFT.Hide();
-    m_aConfirmPasswordToOpenED.Hide();
-    m_aNewPasswordInfoFT.Hide();
-    m_aNewPasswordToModifyFL.Hide();
-    m_aNewPasswordToModifyFT.Hide();
-    m_aNewPasswordToModifyED.Hide();
-    m_aConfirmPasswordToModifyFT.Hide();
-    m_aConfirmPasswordToModifyED.Hide();
-    const long nDelta = m_aOptionsFL.GetPosPixel().Y() - m_aNewPasswordToOpenFL.GetPosPixel().Y();
-    Point aPos;
-    aPos = m_aOptionsFL.GetPosPixel();
-    aPos.Y() -= nDelta;
-    m_aOptionsFL.SetPosPixel( aPos );
-    aPos = m_aOpenReadonlyCB.GetPosPixel();
-    aPos.Y() -= nDelta;
-    m_aOpenReadonlyCB.SetPosPixel( aPos );
-    aPos = m_aRecordChangesCB.GetPosPixel();
-    aPos.Y() -= nDelta;
-    m_aRecordChangesCB.SetPosPixel( aPos );
-    aPos = m_aChangeProtectionPB.GetPosPixel();
-    aPos.Y() -= nDelta;
-    m_aChangeProtectionPB.SetPosPixel( aPos );
+    m_pRecordChangesCB->SetStyle( m_pRecordChangesCB->GetStyle() | WB_EARLYTOGGLE );
+    m_pRecordChangesCB->SetToggleHdl( LINK( this, SfxSecurityPage_Impl, RecordChangesCBToggleHdl ) );
+    m_pProtectPB->SetClickHdl( LINK( this, SfxSecurityPage_Impl, ChangeProtectionPBHdl ) );
+    m_pUnProtectPB->SetClickHdl( LINK( this, SfxSecurityPage_Impl, ChangeProtectionPBHdl ) );
 }
 
 
@@ -252,8 +197,8 @@ sal_Bool SfxSecurityPage_Impl::FillItemSet_Impl( SfxItemSet & )
     {
         if (m_eRedlingMode != RL_NONE )
         {
-            const bool bDoRecordChanges     = m_aRecordChangesCB.IsChecked();
-            const bool bDoChangeProtection  = m_aChangeProtectionPB.GetText() != m_aProtectSTR;
+            const bool bDoRecordChanges     = m_pRecordChangesCB->IsChecked();
+            const bool bDoChangeProtection  = m_pUnProtectPB->IsVisible();
 
             // sanity checks
             DBG_ASSERT( bDoRecordChanges || !bDoChangeProtection, "no change recording should imply no change protection" );
@@ -280,7 +225,7 @@ sal_Bool SfxSecurityPage_Impl::FillItemSet_Impl( SfxItemSet & )
         }
 
         // open read-only?
-        const sal_Bool bDoOpenReadonly = m_aOpenReadonlyCB.IsChecked();
+        const sal_Bool bDoOpenReadonly = m_pOpenReadonlyCB->IsChecked();
         if (pCurDocShell->HasSecurityOptOpenReadOnly() &&
             bDoOpenReadonly != pCurDocShell->IsSecurityOptOpenReadOnly())
         {
@@ -297,17 +242,20 @@ void SfxSecurityPage_Impl::Reset_Impl( const SfxItemSet & )
 {
     SfxObjectShell* pCurDocShell = SfxObjectShell::Current();
 
-    String sNewText = m_aProtectSTR;
     if (!pCurDocShell)
     {
         // no doc -> hide document settings
-        m_aOpenReadonlyCB.Disable();
-        m_aRecordChangesCB.Disable();
-        m_aChangeProtectionPB.Disable();
+        m_pOpenReadonlyCB->Disable();
+        m_pRecordChangesCB->Disable();
+        m_pProtectPB->Show();
+        m_pProtectPB->Disable();
+        m_pUnProtectPB->Hide();
+        m_pUnProtectPB->Disable();
     }
     else
     {
         bool bIsHTMLDoc = false;
+        bool bProtect = true, bUnProtect = false;
         SfxViewShell* pViewSh = SfxViewShell::Current();
         if (pViewSh)
         {
@@ -323,11 +271,11 @@ void SfxSecurityPage_Impl::Reset_Impl( const SfxItemSet & )
         sal_Bool bIsReadonly = pCurDocShell->IsReadOnly();
         if (pCurDocShell->HasSecurityOptOpenReadOnly() && !bIsHTMLDoc)
         {
-            m_aOpenReadonlyCB.Check( pCurDocShell->IsSecurityOptOpenReadOnly() );
-            m_aOpenReadonlyCB.Enable( !bIsReadonly );
+            m_pOpenReadonlyCB->Check( pCurDocShell->IsSecurityOptOpenReadOnly() );
+            m_pOpenReadonlyCB->Enable( !bIsReadonly );
         }
         else
-            m_aOpenReadonlyCB.Disable();
+            m_pOpenReadonlyCB->Disable();
 
         bool bRecordChanges;
         if (QueryRecordChangesState( RL_WRITER, bRecordChanges ) && !bIsHTMLDoc)
@@ -342,13 +290,17 @@ void SfxSecurityPage_Impl::Reset_Impl( const SfxItemSet & )
             bool bProtection;
             QueryRecordChangesProtectionState( m_eRedlingMode, bProtection );
 
-            m_aChangeProtectionPB.Enable( !bIsReadonly );
+            m_pProtectPB->Enable( !bIsReadonly );
+            m_pUnProtectPB->Enable( !bIsReadonly );
             // set the right text
             if (bProtection)
-                sNewText = m_aUnProtectSTR;
+            {
+                bProtect = false;
+                bUnProtect = true;
+            }
 
-            m_aRecordChangesCB.Check( bRecordChanges );
-            m_aRecordChangesCB.Enable( /*!bProtection && */!bIsReadonly );
+            m_pRecordChangesCB->Check( bRecordChanges );
+            m_pRecordChangesCB->Enable( /*!bProtection && */!bIsReadonly );
 
             m_bOrigPasswordIsConfirmed = true;   // default case if no password is set
             uno::Sequence< sal_Int8 > aPasswordHash;
@@ -362,21 +314,24 @@ void SfxSecurityPage_Impl::Reset_Impl( const SfxItemSet & )
             // A Calc document that is shared will have 'm_eRedlingMode == RL_NONE'
             // In shared documents change recording and protection must be disabled,
             // similar to documents that do not support change recording at all.
-            m_aRecordChangesCB.Check( sal_False );
-            m_aRecordChangesCB.Disable();
-            m_aChangeProtectionPB.Check( sal_False );
-            m_aChangeProtectionPB.Disable();
+            m_pRecordChangesCB->Check( sal_False );
+            m_pRecordChangesCB->Disable();
+            m_pProtectPB->Check( sal_False );
+            m_pUnProtectPB->Check( sal_False );
+            m_pProtectPB->Disable();
+            m_pUnProtectPB->Disable();
         }
-    }
 
-    m_aChangeProtectionPB.SetText( sNewText );
+        m_pProtectPB->Show(bProtect);
+        m_pUnProtectPB->Show(bUnProtect);
+    }
 }
 
 
 IMPL_LINK_NOARG(SfxSecurityPage_Impl, RecordChangesCBToggleHdl)
 {
     // when change recording gets disabled protection must be disabled as well
-    if (!m_aRecordChangesCB.IsChecked())    // the new check state is already present, thus the '!'
+    if (!m_pRecordChangesCB->IsChecked())    // the new check state is already present, thus the '!'
     {
         bool bAlreadyDone = false;
         if (!m_bEndRedliningWarningDone)
@@ -390,7 +345,7 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, RecordChangesCBToggleHdl)
         }
 
         const bool bNeedPasssword = !m_bOrigPasswordIsConfirmed
-                && m_aChangeProtectionPB.GetText() != m_aProtectSTR;
+                && m_pProtectPB->IsVisible();
         if (!bAlreadyDone && bNeedPasssword)
         {
             String aPasswordText;
@@ -407,15 +362,15 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, RecordChangesCBToggleHdl)
         }
 
         if (bAlreadyDone)
-            m_aRecordChangesCB.Check( true );     // restore original state
+            m_pRecordChangesCB->Check( true );     // restore original state
         else
         {
             // remember required values to change protection and change recording in
             // FillItemSet_Impl later on if password was correct.
             m_bNewPasswordIsValid = true;
             m_aNewPassword = String();
-
-            m_aChangeProtectionPB.SetText( m_aProtectSTR );
+            m_pProtectPB->Show();
+            m_pUnProtectPB->Hide();
         }
     }
 
@@ -429,7 +384,7 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, ChangeProtectionPBHdl)
         return 0;
 
     // the push button text is always the opposite of the current state. Thus:
-    const bool bCurrentProtection = m_aChangeProtectionPB.GetText() != m_aProtectSTR;
+    const bool bCurrentProtection = m_pUnProtectPB->IsVisible();
 
     // ask user for password (if still necessary)
     String aPasswordText;
@@ -457,9 +412,10 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, ChangeProtectionPBHdl)
     m_bNewPasswordIsValid = true;
     m_aNewPassword = bNewProtection? aPasswordText : String();
 
-    m_aRecordChangesCB.Check( bNewProtection );
-    // toggle text of button "Protect" <-> "Unprotect"
-    m_aChangeProtectionPB.SetText( bNewProtection ? m_aUnProtectSTR : m_aProtectSTR );
+    m_pRecordChangesCB->Check( bNewProtection );
+
+    m_pUnProtectPB->Show(bNewProtection);
+    m_pProtectPB->Show(!bNewProtection);
 
     return 0;
 }
@@ -471,12 +427,10 @@ SfxTabPage* SfxSecurityPage::Create( Window * pParent, const SfxItemSet & rItemS
 }
 
 
-SfxSecurityPage::SfxSecurityPage( Window* pParent, const SfxItemSet& rItemSet ) :
-    SfxTabPage( pParent, SfxResId( TP_DOCINFOSECURITY ), rItemSet )
+SfxSecurityPage::SfxSecurityPage( Window* pParent, const SfxItemSet& rItemSet )
+    : SfxTabPage(pParent, "SecurityInfoPage", "sfx/ui/securityinfopage.ui", rItemSet)
 {
     m_pImpl = std::auto_ptr< SfxSecurityPage_Impl >(new SfxSecurityPage_Impl( *this, rItemSet ));
-
-    FreeResource();
 }
 
 

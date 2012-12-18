@@ -504,6 +504,14 @@ String RID_SVXSTR_GRFILTER_TOOBIG
 {
     Text [ en-US ] = "Not enough memory to insert graphic" ;
 };
+String RID_SVXSTR_END_REDLINING_WARNING
+{
+    Text [ en-US ] = "This action will exit the change recording mode.\nAny information about changes will be lost.\n\nExit change recording mode?\n\n" ;
+};
+String RID_SVXSTR_INCORRECT_PASSWORD
+{
+    Text [ en-US ] = "Incorrect password" ;
+};
 
 ModalDialog DLG_HELP_LICENSING
 {
