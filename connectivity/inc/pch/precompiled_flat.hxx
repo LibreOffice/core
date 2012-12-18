@@ -7,12 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <comphelper/extract.hxx>
-#include <comphelper/numbers.hxx>
-#include <comphelper/processfactory.hxx>
-#include <comphelper/sequence.hxx>
-#include <comphelper/string.hxx>
-#include <comphelper/types.hxx>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -21,10 +15,10 @@
 #include <com/sun/star/sdbc/KeyRule.hpp>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
-#include <com/sun/star/sdbcx/CompareBookmark.hpp>
-#include <com/sun/star/sdbcx/KeyType.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
+#include <com/sun/star/sdbcx/CompareBookmark.hpp>
+#include <com/sun/star/sdbcx/KeyType.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbcx/XDeleteRows.hpp>
 #include <com/sun/star/sdbcx/XIndexesSupplier.hpp>
@@ -32,6 +26,12 @@
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/NumberFormatsSupplier.hpp>
 #include <com/sun/star/util/NumberFormatter.hpp>
+#include <comphelper/extract.hxx>
+#include <comphelper/numbers.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
+#include <comphelper/string.hxx>
+#include <comphelper/types.hxx>
 #include <cppuhelper/factory.hxx>
 #include <ctype.h>
 #include <i18npool/languagetag.hxx>

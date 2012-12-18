@@ -7,19 +7,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include "sal/config.h"
 #include <algorithm>
 #include <cmath>
-#include <comphelper/extract.hxx>
-#include <comphelper/processfactory.hxx>
-#include <comphelper/property.hxx>
-#include <comphelper/sequence.hxx>
-#include <comphelper/types.hxx>
-#include <comphelper/uno3.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/sdb/SQLFilterOperator.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/FetchDirection.hpp>
@@ -27,11 +23,10 @@
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/XColumnLocate.hpp>
-#include <com/sun/star/sdbcx/KeyType.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
+#include <com/sun/star/sdbcx/KeyType.hpp>
 #include <com/sun/star/sdbcx/XIndexesSupplier.hpp>
-#include <com/sun/star/sdb/SQLFilterOperator.hpp>
 #include <com/sun/star/ucb/SearchCommandArgument.hpp>
 #include <com/sun/star/ucb/SearchRecursion.hpp>
 #include <com/sun/star/ucb/SortedDynamicResultSetFactory.hpp>
@@ -41,18 +36,23 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Time.hpp>
+#include <comphelper/extract.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/property.hxx>
+#include <comphelper/sequence.hxx>
+#include <comphelper/types.hxx>
+#include <comphelper/uno3.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <i18npool/mslangid.hxx>
 #include <iostream>
 #include <iterator>
-#include <i18npool/mslangid.hxx>
 #include <osl/diagnose.h>
 #include <osl/nlsupport.h>
 #include <osl/thread.h>
 #include <rtl/logfile.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
-#include "sal/config.h"
 #include <stdio.h>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
