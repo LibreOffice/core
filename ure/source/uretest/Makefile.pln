@@ -33,7 +33,7 @@ URE_HOME ?= /opt/openoffice.org/ure
 check: test-regview test-cpptest test-javatest test-javanative test-clientserver
 
 .PHONY: test-regview
-test-regview: out.pln/services.rdb
+test-regview: out.pln/types.rdb
 	$(URE_HOME)/bin/regview $< > /dev/null
 
 .PHONY: test-cpptest
@@ -263,14 +263,9 @@ out.pln/types.urd: types.idl | out.pln
             -I$(SDK_HOME)/idl -cid -we $<
 
 
-out.pln/services.rdb: out.pln/cpptest.uno.so out.pln/javatest.uno.jar | out.pln
-	rm -f $@
-	$(URE_HOME)/bin/regcomp -register -r $@ \
-            -c file://$(PWD)/out.pln/cpptest.uno.so
-	$(URE_HOME)/bin/regcomp -register \
-            -br $(URE_HOME)/share/misc/types.rdb \
-            -br $(URE_HOME)/share/misc/services.rdb -r $@ \
-            -c file://$(PWD)/out.pln/javatest.uno.jar
+out.pln/services.rdb: services.rdb.in | out.pln/cpptest.uno.so \
+            out.pln/javatest.uno.jar out.pln
+	sed -e s/@SHAREDLIB_EXT@/so/ < $^ > $@
 
 
 out.pln/lib/libuno_cppu.so: | out.pln/lib

@@ -279,13 +279,10 @@ out.sdk/types.urd: types.idl | out.sdk
 	$(IDLC) -O$(@D) -I$(IDL_DIR) -cid -we $<
 
 
-out.sdk/services.rdb: out.sdk/cpptest.uno.$(SHAREDLIB_EXT) \
-            out.sdk/javatest.uno.jar | out.sdk
+out.sdk/services.rdb: services.rdb.in | out.sdk/cpptest.uno.$(SHAREDLIB_EXT) \
+            out.sdk/javatest.uno.jar out.sdk
 	$(DEL) $(subst /,$(PS),$@)
-	$(REGCOMP) -register -r $@ \
-            -c $(URLPREFIX)$(cwd)/out.sdk/cpptest.uno.$(SHAREDLIB_EXT)
-	$(REGCOMP) -register -br "$(URE_TYPES)" -br "$(URE_SERVICES)" -r $@ \
-            -c $(URLPREFIX)$(cwd)/out.sdk/javatest.uno.jar
+	sed -e s/@SHAREDLIB_EXT@/$(SHAREDLIB_EXT)/ < $^ > $@
 
 
 out.sdk:

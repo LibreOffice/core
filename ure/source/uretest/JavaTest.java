@@ -32,12 +32,6 @@ public final class JavaTest implements XTest {
         throw new TestException("test", this);
     }
 
-    public static boolean __writeRegistryServiceInfo(XRegistryKey key) {
-        return
-            FactoryHelper.writeRegistryServiceInfo(
-                IMPLEMENTATION_NAME, SERVICE_NAME, key);
-    }
-
     public static XSingleServiceFactory __getServiceFactory(
         String name, XMultiServiceFactory factory, XRegistryKey key)
     {
