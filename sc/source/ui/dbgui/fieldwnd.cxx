@@ -46,6 +46,7 @@
 
 #include "pvlaydlg.hxx"
 #include "dpuiglobal.hxx"
+#include "dpmacros.hxx"
 #include "AccessibleDataPilotControl.hxx"
 #include "scresid.hxx"
 #include "pivot.hrc"
@@ -59,6 +60,26 @@ using ::com::sun::star::accessibility::XAccessible;
 
 const size_t PIVOTFIELD_INVALID = static_cast< size_t >(-1);
 const size_t INVALID_INDEX = static_cast<size_t>(-1);
+
+#if DEBUG_PIVOT_TABLE
+#include <iostream>
+using std::cout;
+using std::endl;
+#endif
+
+namespace {
+
+#if DEBUG_PIVOT_TABLE
+void DumpAllFuncData(const ScDPFieldControlBase::FuncDataType& rData)
+{
+    cout << "---" << endl;
+    ScDPFieldControlBase::FuncDataType::const_iterator it = rData.begin(), itEnd = rData.end();
+    for (; it != itEnd; ++it)
+        it->Dump();
+}
+#endif
+
+}
 
 ScDPFieldControlBase::FieldName::FieldName(const rtl::OUString& rText, bool bFits, sal_uInt8 nDupCount) :
     maText(rText), mbFits(bFits), mnDupCount(nDupCount) {}
@@ -130,44 +151,44 @@ bool ScDPFieldControlBase::IsExistingIndex( size_t nIndex ) const
     return nIndex < maFieldNames.size();
 }
 
-void ScDPFieldControlBase::AddField( const rtl::OUString& rText, size_t nNewIndex )
+void ScDPFieldControlBase::AppendField( const rtl::OUString& rText, const ScPivotFuncData& rFunc )
 {
-    OSL_ENSURE( nNewIndex == maFieldNames.size(), "ScDPFieldWindow::AddField - invalid index" );
-    if( IsValidIndex( nNewIndex ) )
-    {
-        sal_uInt8 nDupCount = GetNextDupCount(rText);
-        maFieldNames.push_back(FieldName(rText, true, nDupCount));
-        AccessRef xRef(mxAccessible);
-        if ( xRef.is() )
-            xRef->AddField(nNewIndex);
-    }
+    size_t nNewIndex = maFieldNames.size();
+
+    sal_uInt8 nDupCount = GetNextDupCount(rText);
+    maFieldNames.push_back(FieldName(rText, true, nDupCount));
+    maFuncData.push_back(new ScPivotFuncData(rFunc));
+
+    AccessRef xRef(mxAccessible);
+    if ( xRef.is() )
+        xRef->AddField(nNewIndex);
 }
 
-bool ScDPFieldControlBase::AddField(
-    const rtl::OUString& rText, const Point& rPos, size_t& rnIndex, sal_uInt8& rnDupCount)
+size_t ScDPFieldControlBase::AddField(
+    const rtl::OUString& rText, const Point& rPos, const ScPivotFuncData& rFunc)
 {
     size_t nNewIndex = GetFieldIndex(rPos);
-    if (nNewIndex != PIVOTFIELD_INVALID)
-    {
-        if( nNewIndex > maFieldNames.size() )
-            nNewIndex = maFieldNames.size();
+    if (nNewIndex == PIVOTFIELD_INVALID)
+        return PIVOTFIELD_INVALID;
 
-        sal_uInt8 nDupCount = GetNextDupCount(rText);
-        maFieldNames.insert(maFieldNames.begin() + nNewIndex, FieldName(rText, true, nDupCount));
-        mnFieldSelected = nNewIndex;
-        ResetScrollBar();
-        Invalidate();
-        rnIndex = nNewIndex;
-        rnDupCount = nDupCount;
+    if (nNewIndex > maFieldNames.size())
+        nNewIndex = maFieldNames.size();
 
-        AccessRef xRef( mxAccessible );
-        if ( xRef.is() )
-            xRef->AddField(nNewIndex);
+    sal_uInt8 nDupCount = GetNextDupCount(rText);
+    maFieldNames.insert(maFieldNames.begin() + nNewIndex, FieldName(rText, true, nDupCount));
 
-        return true;
-    }
+    maFuncData.insert(maFuncData.begin() + nNewIndex, new ScPivotFuncData(rFunc));
+    maFuncData.back().mnDupCount = nDupCount;
 
-    return false;
+    mnFieldSelected = nNewIndex;
+    ResetScrollBar();
+    Invalidate();
+
+    AccessRef xRef( mxAccessible );
+    if ( xRef.is() )
+        xRef->AddField(nNewIndex);
+
+    return nNewIndex;
 }
 
 bool ScDPFieldControlBase::MoveField(size_t nCurPos, const Point& rPos, size_t& rnIndex)
@@ -185,21 +206,26 @@ bool ScDPFieldControlBase::MoveField(size_t nCurPos, const Point& rPos, size_t& 
         return true;
 
     FieldName aName = maFieldNames[nCurPos];
+    ScPivotFuncData aFunc = maFuncData[nCurPos];
     if (nNewIndex >= maFieldNames.size())
     {
         // Move to the back.
         maFieldNames.erase(maFieldNames.begin()+nCurPos);
         maFieldNames.push_back(aName);
+        maFuncData.erase(maFuncData.begin()+nCurPos);
+        maFuncData.push_back(new ScPivotFuncData(aFunc));
         rnIndex = maFieldNames.size()-1;
     }
     else
     {
         maFieldNames.erase(maFieldNames.begin()+nCurPos);
+        maFuncData.erase(maFuncData.begin()+nCurPos);
         size_t nTmp = nNewIndex; // we need to keep the original index for accessible.
         if (nNewIndex > nCurPos)
             --nTmp;
 
         maFieldNames.insert(maFieldNames.begin()+nTmp, aName);
+        maFuncData.insert(maFuncData.begin()+nTmp, new ScPivotFuncData(aFunc));
         rnIndex = nTmp;
     }
 
@@ -213,38 +239,25 @@ bool ScDPFieldControlBase::MoveField(size_t nCurPos, const Point& rPos, size_t& 
     return true;
 }
 
-bool ScDPFieldControlBase::AppendField(const rtl::OUString& rText, size_t& rnIndex)
+void ScDPFieldControlBase::DeleteFieldByIndex( size_t nIndex )
 {
-    if (!IsValidIndex(maFieldNames.size()))
-        return false;
+    if (!IsExistingIndex(nIndex))
+        // Nothing to delete.
+        return;
 
-    sal_uInt8 nDupCount = GetNextDupCount(rText);
-    maFieldNames.push_back(FieldName(rText, true, nDupCount));
-    mnFieldSelected = maFieldNames.size() - 1;
+    AccessRef xRef(mxAccessible);
+    if (xRef.is())
+        xRef->RemoveField(nIndex);
+
+
+    maFieldNames.erase(maFieldNames.begin() + nIndex);
+    if (mnFieldSelected >= maFieldNames.size())
+        mnFieldSelected = maFieldNames.size() - 1;
+
+    maFuncData.erase(maFuncData.begin() + nIndex);
+
     ResetScrollBar();
     Invalidate();
-
-    rnIndex = mnFieldSelected;
-    return true;
-}
-
-void ScDPFieldControlBase::DelField( size_t nDelIndex )
-{
-    if ( IsExistingIndex(nDelIndex) )
-    {
-        {
-            AccessRef xRef( mxAccessible );
-            if ( xRef.is() )
-                xRef->RemoveField(nDelIndex);
-        }
-
-        maFieldNames.erase( maFieldNames.begin() + nDelIndex );
-        if (mnFieldSelected >= maFieldNames.size())
-            mnFieldSelected = maFieldNames.size() - 1;
-
-        ResetScrollBar();
-        Invalidate();
-    }
 }
 
 size_t ScDPFieldControlBase::GetFieldCount() const
@@ -265,6 +278,7 @@ void ScDPFieldControlBase::ClearFields()
             xRef->RemoveField( nIdx - 1 );
 
     maFieldNames.clear();
+    maFuncData.clear();
 }
 
 void ScDPFieldControlBase::SetFieldText(const rtl::OUString& rText, size_t nIndex, sal_uInt8 nDupCount)
@@ -690,6 +704,7 @@ void ScDPFieldControlBase::MoveField( size_t nDestIndex )
     if (nDestIndex != mnFieldSelected)
     {
         std::swap(maFieldNames[nDestIndex], maFieldNames[mnFieldSelected]);
+        std::swap(maFuncData[nDestIndex], maFuncData[mnFieldSelected]);
         mnFieldSelected = nDestIndex;
     }
 }
@@ -744,6 +759,29 @@ sal_uInt8 ScDPFieldControlBase::GetNextDupCount(const rtl::OUString& rFieldText)
     return nMax;
 }
 
+sal_uInt8 ScDPFieldControlBase::GetNextDupCount(const ScPivotFuncData& rData, size_t nSelfIndex) const
+{
+    sal_uInt8 nDupCount = 0;
+    bool bFound = false;
+    for (size_t i = 0, n = maFuncData.size(); i < n; ++i)
+    {
+        if (i == nSelfIndex)
+            // Skip itself.
+            continue;
+
+        const ScPivotFuncData& r = maFuncData[i];
+
+        if (r.mnCol != rData.mnCol || r.mnFuncMask != rData.mnFuncMask)
+            continue;
+
+        bFound = true;
+        if (r.mnDupCount > nDupCount)
+            nDupCount = r.mnDupCount;
+    }
+
+    return bFound ? nDupCount + 1 : 0;
+}
+
 void ScDPFieldControlBase::SelectNext()
 {
     MoveSelection(mnFieldSelected + 1);
@@ -754,6 +792,104 @@ void ScDPFieldControlBase::GrabFocusAndSelect( size_t nIndex )
     MoveSelection( nIndex );
     if( !HasFocus() )
         GrabFocus();
+}
+
+const ScPivotFuncData& ScDPFieldControlBase::GetFuncData(size_t nIndex) const
+{
+    return maFuncData.at(nIndex);
+}
+
+ScPivotFuncData& ScDPFieldControlBase::GetFuncData(size_t nIndex)
+{
+    return maFuncData.at(nIndex);
+}
+
+namespace {
+
+class PushFuncItem : std::unary_function<ScPivotFuncData, void>
+{
+    std::vector<ScDPFieldControlBase::FuncItem>& mrItems;
+public:
+    PushFuncItem(std::vector<ScDPFieldControlBase::FuncItem>& rItems) : mrItems(rItems) {}
+
+    void operator() (const ScPivotFuncData& r)
+    {
+        ScDPFieldControlBase::FuncItem aItem;
+        aItem.mnCol = r.mnCol;
+        aItem.mnFuncMask = r.mnFuncMask;
+        mrItems.push_back(aItem);
+    }
+};
+
+}
+
+void ScDPFieldControlBase::GetAllFuncItems(std::vector<FuncItem>& rItems) const
+{
+    std::for_each(maFuncData.begin(), maFuncData.end(), PushFuncItem(rItems));
+}
+
+namespace {
+
+class PivotFieldInserter : public ::std::unary_function<ScPivotFuncData, void>
+{
+    vector<ScPivotField>& mrFields;
+public:
+    explicit PivotFieldInserter(vector<ScPivotField>& r, size_t nSize) : mrFields(r)
+    {
+        mrFields.reserve(nSize);
+    }
+
+    PivotFieldInserter(const PivotFieldInserter& r) : mrFields(r.mrFields) {}
+
+    void operator() (const ScPivotFuncData& r)
+    {
+        ScPivotField aField;
+        aField.nCol = r.mnCol;
+        aField.mnOriginalDim = r.mnOriginalDim;
+        aField.mnDupCount = r.mnDupCount;
+        aField.nFuncMask = r.mnFuncMask;
+        aField.maFieldRef = r.maFieldRef;
+        mrFields.push_back(aField);
+    }
+};
+
+}
+
+void ScDPFieldControlBase::ConvertToPivotArray(std::vector<ScPivotField>& rArray) const
+{
+    for_each(maFuncData.begin(), maFuncData.end(), PivotFieldInserter(rArray, maFuncData.size()));
+}
+
+namespace {
+
+class EqualByDimOnly : std::unary_function<ScPivotFuncData, bool>
+{
+    const ScPivotFuncData& mrData;
+    long mnDim;
+
+public:
+    EqualByDimOnly(const ScPivotFuncData& rData) : mrData(rData)
+    {
+        mnDim = rData.mnCol;
+        if (rData.mnOriginalDim >= 0)
+            mnDim = rData.mnOriginalDim;
+    }
+    bool operator() (const ScPivotFuncData& rData) const
+    {
+        long nDim = rData.mnCol;
+        if (rData.mnOriginalDim >= 0)
+            nDim = rData.mnOriginalDim;
+
+        return nDim == mnDim;
+    }
+};
+
+}
+
+size_t ScDPFieldControlBase::GetFieldIndexByData( const ScPivotFuncData& rData ) const
+{
+    FuncDataType::const_iterator it = std::find_if(maFuncData.begin(), maFuncData.end(), EqualByDimOnly(rData));
+    return it == maFuncData.end() ? PIVOTFIELD_INVALID : std::distance(maFuncData.begin(), it);
 }
 
 //=============================================================================

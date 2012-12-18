@@ -62,17 +62,25 @@
 #include "sc.hrc"
 #include "scabstdlg.hxx"
 
+#include <boost/scoped_ptr.hpp>
+
 using namespace com::sun::star;
 using ::rtl::OUString;
 using ::std::vector;
 using ::std::for_each;
 
-ScPivotLayoutDlg::FieldRect::FieldRect(const Rectangle* pRect, ScPivotFieldType eType) :
-    mpRect(pRect), meType(eType) {}
-
 namespace {
 
 const sal_uInt16 STD_FORMAT = sal_uInt16( SCA_VALID | SCA_TAB_3D | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE );
+
+Point DlgPos2WndPos( const Point& rPt, const Window& rWnd )
+{
+    Point aWndPt( rPt );
+    aWndPt.X() = rPt.X()-rWnd.GetPosPixel().X();
+    aWndPt.Y() = rPt.Y()-rWnd.GetPosPixel().Y();
+
+    return aWndPt;
+}
 
 } // namespace
 
@@ -152,6 +160,13 @@ ScPivotLayoutDlg::ScPivotLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window
     maBtnMore.AddWindow( &maBtnDrillDown );
     maBtnMore.SetClickHdl( LINK( this, ScPivotLayoutDlg, MoreClickHdl ) );
 
+    maFieldCtrls.reserve(5);
+    maFieldCtrls.push_back(&maWndPage);
+    maFieldCtrls.push_back(&maWndCol);
+    maFieldCtrls.push_back(&maWndRow);
+    maFieldCtrls.push_back(&maWndData);
+    maFieldCtrls.push_back(&maWndSelect);
+
     InitControlAndDlgSizes();
 
     if (mxDlgDPObject->GetSheetDesc())
@@ -186,7 +201,7 @@ ScPivotLayoutDlg::ScPivotLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window
     maBtnCancel.SetClickHdl( LINK( this, ScPivotLayoutDlg, CancelHdl ) );
 
     // Set focus handler for the reference edit text boxes.
-    Link aGetFocusLink = LINK(this, ScPivotLayoutDlg, GetFocusHdl);
+    Link aGetFocusLink = LINK(this, ScPivotLayoutDlg, GetRefEditFocusHdl);
     if (maEdInPos.IsEnabled())
         maEdInPos.SetGetFocusHdl(aGetFocusLink);
     maEdOutPos.SetGetFocusHdl(aGetFocusLink);
@@ -214,7 +229,8 @@ ScPivotLayoutDlg::ScPivotLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window
                 sal_uInt16 nInsert = maLbOutPos.InsertEntry( aName );
 
                 aRange.aStart.Format( aRefStr, SCA_ABS_3D, mpDoc, mpDoc->GetAddressConvention() );
-                maLbOutPos.SetEntryData(nInsert, new rtl::OUString(aRefStr));
+                maRefStrs.push_back(new OUString(aRefStr));
+                maLbOutPos.SetEntryData(nInsert, &maRefStrs.back());
             }
         }
     }
@@ -237,6 +253,7 @@ ScPivotLayoutDlg::ScPivotLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window
                        maPivotData.nRow,
                        maPivotData.nTab ).Format( aStr, STD_FORMAT, mpDoc, mpDoc->GetAddressConvention() );
             maEdOutPos.SetText( aStr );
+            maOutputRefStr = aStr;
             EdOutModifyHdl(0);
         }
         else
@@ -262,8 +279,6 @@ ScPivotLayoutDlg::ScPivotLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window
 
 ScPivotLayoutDlg::~ScPivotLayoutDlg()
 {
-    for (sal_uInt16 i = 2, nEntries = maLbOutPos.GetEntryCount(); i < nEntries; ++i)
-        delete (OUString*)maLbOutPos.GetEntryData(i);
 }
 
 sal_Bool ScPivotLayoutDlg::Close()
@@ -289,8 +304,8 @@ void ScPivotLayoutDlg::InitWndSelect(const ScDPLabelDataVector& rLabels)
             // For dimension with duplicates, use the layout name of the
             // original dimension if available.  Be aware that duplicate
             // dimensions may have different layout names.
-            maWndSelect.AddField(maLabelData[i].getDisplayName(), i);
-            maSelectArr.push_back(new ScPivotFuncData(maLabelData[i].mnCol, maLabelData[i].mnFuncMask));
+            ScPivotFuncData aFunc(maLabelData[i].mnCol, maLabelData[i].mnFuncMask);
+            maWndSelect.AppendField(maLabelData[i].getDisplayName(), aFunc);
         }
     }
     maWndSelect.ResetScrollBar();
@@ -307,24 +322,20 @@ void ScPivotLayoutDlg::InitWndData(const vector<ScPivotField>& rFields)
         if (nCol == PIVOT_DATA_FIELD)
             continue;
 
-        size_t nFieldIndex = maDataArr.size();
-        maDataArr.push_back(
-            new ScPivotFuncData(nCol, it->mnOriginalDim, nMask, it->mnDupCount, it->maFieldRef));
-
         // data field - we need to concatenate function name with the field name.
         ScDPLabelData* pData = GetLabelData(nCol);
         OSL_ENSURE( pData, "ScDPLabelData not found" );
         if (pData)
         {
+            ScPivotFuncData aFunc(nCol, it->mnOriginalDim, nMask, it->mnDupCount, it->maFieldRef);
             OUString aStr = pData->maLayoutName;
             if (aStr.isEmpty())
             {
-                sal_uInt16 nInitMask = maDataArr.back().mnFuncMask;
-                aStr = GetFuncString(nInitMask, pData->mbIsValue);
+                aStr = GetFuncString(aFunc.mnFuncMask, pData->mbIsValue);
                 aStr += pData->maName;
             }
 
-            maWndData.AddField(aStr, nFieldIndex);
+            maWndData.AppendField(aStr, aFunc);
             pData->mnFuncMask = nMask;
         }
     }
@@ -334,10 +345,9 @@ void ScPivotLayoutDlg::InitWndData(const vector<ScPivotField>& rFields)
 void ScPivotLayoutDlg::InitFieldWindow( const vector<ScPivotField>& rFields, ScPivotFieldType eType )
 {
     OSL_ASSERT(eType != PIVOTFIELDTYPE_DATA);
-    ScDPFuncDataVec* pInitArr = GetFieldDataArray(eType);
     ScDPFieldControlBase* pInitWnd = GetFieldWindow(eType);
 
-    if (!pInitArr || !pInitWnd)
+    if (!pInitWnd)
         return;
 
     vector<ScPivotField>::const_iterator itr = rFields.begin(), itrEnd = rFields.end();
@@ -348,10 +358,8 @@ void ScPivotLayoutDlg::InitFieldWindow( const vector<ScPivotField>& rFields, ScP
         if (nCol == PIVOT_DATA_FIELD)
             continue;
 
-        size_t nFieldIndex = pInitArr->size();
-        pInitArr->push_back(
-            new ScPivotFuncData(nCol, itr->mnOriginalDim, nMask, itr->mnDupCount, itr->maFieldRef));
-        pInitWnd->AddField(GetLabelString(nCol), nFieldIndex);
+        ScPivotFuncData aFunc(nCol, itr->mnOriginalDim, nMask, itr->mnDupCount, itr->maFieldRef);
+        pInitWnd->AppendField(GetLabelString(nCol), aFunc);
     }
     pInitWnd->ResetScrollBar();
 }
@@ -380,9 +388,9 @@ void ScPivotLayoutDlg::GrabFieldFocus( ScDPFieldControlBase& rFieldWindow )
 
 void ScPivotLayoutDlg::AddField( size_t nFromIndex, ScPivotFieldType eToType, const Point& rAtPos )
 {
-    ScPivotFuncData fData = maSelectArr[nFromIndex];
+    ScPivotFuncData aFunc = maWndSelect.GetFuncData(nFromIndex); // local copy
 
-    bool bAllowed = IsOrientationAllowed( fData.mnCol, eToType );
+    bool bAllowed = IsOrientationAllowed(aFunc.mnCol, eToType);
     if (!bAllowed)
         return;
 
@@ -392,17 +400,12 @@ void ScPivotLayoutDlg::AddField( size_t nFromIndex, ScPivotFieldType eToType, co
     ScDPFieldControlBase* rmWnd2 = NULL;
     GetOtherFieldWindows(eToType, rmWnd1, rmWnd2);
 
-    ScDPFuncDataVec*    toArr = GetFieldDataArray(eToType);
-    ScDPFuncDataVec*    rmArr1 = NULL;
-    ScDPFuncDataVec*    rmArr2 = NULL;
-    GetOtherDataArrays(eToType, rmArr1, rmArr2);
-
     if (eToType == PIVOTFIELDTYPE_DATA)
     {
         // Data field allows duplicates.
-        ScDPLabelData* p = GetLabelData(fData.mnCol);
+        ScDPLabelData* p = GetLabelData(aFunc.mnCol);
         OUString aStr = p->maLayoutName;
-        sal_uInt16 nMask = fData.mnFuncMask;
+        sal_uInt16 nMask = aFunc.mnFuncMask;
         if (nMask == PIVOT_FUNC_NONE)
             nMask = PIVOT_FUNC_SUM; // Use SUM by default.
         if (aStr.isEmpty())
@@ -411,55 +414,40 @@ void ScPivotLayoutDlg::AddField( size_t nFromIndex, ScPivotFieldType eToType, co
             aStr += p->maName;
         }
 
-        size_t nAddedAt = 0;
-        sal_uInt8 nDupCount = 0;
-        if (toWnd->AddField(aStr, DlgPos2WndPos(rAtPos, *toWnd), nAddedAt, nDupCount))
-        {
-            fData.mnFuncMask = nMask;
-            fData.mnDupCount = nDupCount;
-            Insert(toArr, fData, nAddedAt);
+        aFunc.mnFuncMask = nMask;
+        size_t nAddedAt = toWnd->AddField(aStr, DlgPos2WndPos(rAtPos, *toWnd), aFunc);
+        if (nAddedAt != PIVOTFIELD_INVALID)
             toWnd->GrabFocus();
-        }
 
         return;
     }
 
-    if (!Contains(toArr, fData, nAt))
+    nAt = toWnd->GetFieldIndexByData(aFunc);
+    if (nAt == PIVOTFIELD_INVALID)
     {
-        // ggF. in anderem Fenster entfernen
-        if ( rmArr1 )
+        if (rmWnd1)
         {
-            if ( Contains( rmArr1, fData, nAt ) )
-            {
-                rmWnd1->DelField( nAt );
-                Remove( rmArr1, nAt );
-            }
+            nAt = rmWnd1->GetFieldIndexByData(aFunc);
+            if (nAt != PIVOTFIELD_INVALID)
+                rmWnd1->DeleteFieldByIndex(nAt);
         }
-        if ( rmArr2 )
+        if (rmWnd2)
         {
-            if ( Contains( rmArr2, fData, nAt ) )
-            {
-                rmWnd2->DelField( nAt );
-                Remove( rmArr2, nAt );
-            }
+            nAt = rmWnd2->GetFieldIndexByData(aFunc);
+            if (nAt != PIVOTFIELD_INVALID)
+                rmWnd2->DeleteFieldByIndex(nAt);
         }
 
-        size_t nAddedAt = 0;
-        sal_uInt8 nDupCount = 0;
-        ScDPLabelData& rData = maLabelData[nFromIndex+mnOffset];
-        if (toWnd->AddField(
-            rData.getDisplayName(), DlgPos2WndPos(rAtPos, *toWnd), nAddedAt, nDupCount))
-        {
-            fData.mnDupCount = nDupCount;
-            Insert( toArr, fData, nAddedAt );
+        const ScDPLabelData& rData = maLabelData[nFromIndex+mnOffset];
+        size_t nAddedAt = toWnd->AddField(rData.getDisplayName(), DlgPos2WndPos(rAtPos, *toWnd), aFunc);
+        if (nAddedAt != PIVOTFIELD_INVALID)
             toWnd->GrabFocus();
-        }
     }
 }
 
 void ScPivotLayoutDlg::AppendField(size_t nFromIndex, ScPivotFieldType eToType)
 {
-    ScPivotFuncData aFuncData = maSelectArr[nFromIndex];
+    ScPivotFuncData aFunc = maWndSelect.GetFuncData(nFromIndex); // local copy
 
     size_t nAt = 0;
     ScDPFieldControlBase* toWnd = GetFieldWindow(eToType);
@@ -467,61 +455,45 @@ void ScPivotLayoutDlg::AppendField(size_t nFromIndex, ScPivotFieldType eToType)
     ScDPFieldControlBase* rmWnd2 = NULL;
     GetOtherFieldWindows(eToType, rmWnd1, rmWnd2);
 
-    ScDPFuncDataVec*    toArr = GetFieldDataArray(eToType);
-    ScDPFuncDataVec*    rmArr1 = NULL;
-    ScDPFuncDataVec*    rmArr2 = NULL;
-    GetOtherDataArrays(eToType, rmArr1, rmArr2);
-
     bool bDataArr = eToType == PIVOTFIELDTYPE_DATA;
 
-    if ( (!Contains( toArr, aFuncData, nAt )) )
+    nAt = toWnd->GetFieldIndexByData(aFunc);
+    if (nAt == PIVOTFIELD_INVALID)
     {
-        // ggF. in anderem Fenster entfernen
-        if ( rmArr1 )
+        if (rmWnd1)
         {
-            if ( Contains( rmArr1, aFuncData, nAt ) )
-            {
-                rmWnd1->DelField( nAt );
-                Remove( rmArr1, nAt );
-            }
+            nAt = rmWnd1->GetFieldIndexByData(aFunc);
+            if (nAt != PIVOTFIELD_INVALID)
+                rmWnd1->DeleteFieldByIndex(nAt);
         }
-        if ( rmArr2 )
+        if (rmWnd2)
         {
-            if ( Contains( rmArr2, aFuncData, nAt ) )
-            {
-                rmWnd2->DelField( nAt );
-                Remove( rmArr2, nAt );
-            }
+            nAt = rmWnd2->GetFieldIndexByData(aFunc);
+            if (nAt != PIVOTFIELD_INVALID)
+                rmWnd2->DeleteFieldByIndex(nAt);
         }
 
         ScDPLabelData&  rData = maLabelData[nFromIndex+mnOffset];
-        size_t      nAddedAt = 0;
 
         if ( !bDataArr )
         {
-            if ( toWnd->AppendField(rData.getDisplayName(), nAddedAt) )
-            {
-                Insert( toArr, aFuncData, nAddedAt );
-                toWnd->GrabFocus();
-            }
+            toWnd->AppendField(rData.getDisplayName(), aFunc);
+            toWnd->GrabFocus();
         }
         else
         {
-            ScDPLabelData* p = GetLabelData(aFuncData.mnCol);
+            ScDPLabelData* p = GetLabelData(aFunc.mnCol);
             OUString aStr = p->maLayoutName;
-            sal_uInt16 nMask = aFuncData.mnFuncMask;
+            sal_uInt16 nMask = aFunc.mnFuncMask;
             if (aStr.isEmpty())
             {
                 aStr = GetFuncString(nMask);
                 aStr += p->maName;
             }
 
-            if ( toWnd->AppendField(aStr, nAddedAt) )
-            {
-                aFuncData.mnFuncMask = nMask;
-                Insert( toArr, aFuncData, nAddedAt );
-                toWnd->GrabFocus();
-            }
+            aFunc.mnFuncMask = nMask;
+            toWnd->AppendField(aStr, aFunc);
+            toWnd->GrabFocus();
         }
     }
 }
@@ -541,79 +513,57 @@ void ScPivotLayoutDlg::MoveField( ScPivotFieldType eFromType, size_t nFromIndex,
         ScDPFieldControlBase* rmWnd2   = NULL;
         GetOtherFieldWindows(eToType, rmWnd1, rmWnd2);
 
-        ScDPFuncDataVec*    fromArr  = GetFieldDataArray(eFromType);
-        ScDPFuncDataVec*    toArr    = GetFieldDataArray(eToType);
-
-        ScDPFuncDataVec*    rmArr1   = NULL;
-        ScDPFuncDataVec*    rmArr2   = NULL;
-        GetOtherDataArrays(eToType, rmArr1, rmArr2);
-
         bool bDataArr = eToType == PIVOTFIELDTYPE_DATA;
 
-        if ( fromArr && toArr && fromWnd && toWnd )
+        if (fromWnd && toWnd)
         {
-            ScPivotFuncData fData = (*fromArr)[nFromIndex];
-            bool bAllowed = IsOrientationAllowed( fData.mnCol, eToType );
+            ScPivotFuncData aFunc = fromWnd->GetFuncData(nFromIndex); // local copy
+            bool bAllowed = IsOrientationAllowed(aFunc.mnCol, eToType);
 
-            size_t nAt = 0;
-            if ( bAllowed && Contains( fromArr, fData, nAt ) )
+            size_t nAt = fromWnd->GetFieldIndexByData(aFunc);
+            if (bAllowed && nAt != PIVOTFIELD_INVALID)
             {
-                fromWnd->DelField( nAt );
-                Remove( fromArr, nAt );
+                fromWnd->DeleteFieldByIndex(nAt);
 
-                if (!Contains( toArr, fData, nAt ))
+                nAt = toWnd->GetFieldIndexByData(aFunc);
+                if (nAt == PIVOTFIELD_INVALID)
                 {
                     size_t nAddedAt = 0;
-                    sal_uInt8 nDupCount = 0;
                     if ( !bDataArr )
                     {
-                        // ggF. in anderem Fenster entfernen
-                        if ( rmArr1 )
+                        if (rmWnd1)
                         {
-                            if ( Contains( rmArr1, fData, nAt ) )
-                            {
-                                rmWnd1->DelField( nAt );
-                                Remove( rmArr1, nAt );
-                            }
+                            nAt = rmWnd1->GetFieldIndexByData(aFunc);
+                            if (nAt != PIVOTFIELD_INVALID)
+                                rmWnd1->DeleteFieldByIndex(nAt);
                         }
-                        if ( rmArr2 )
+                        if (rmWnd2)
                         {
-                            if ( Contains( rmArr2, fData, nAt ) )
-                            {
-                                rmWnd2->DelField( nAt );
-                                Remove( rmArr2, nAt );
-                            }
+                            nAt = rmWnd2->GetFieldIndexByData(aFunc);
+                            if (nAt != PIVOTFIELD_INVALID)
+                                rmWnd2->DeleteFieldByIndex(nAt);
                         }
 
-                        if ( toWnd->AddField( GetLabelString( fData.mnCol ),
-                                              DlgPos2WndPos( rAtPos, *toWnd ),
-                                              nAddedAt, nDupCount) )
-                        {
-                            fData.mnDupCount = nDupCount;
-                            Insert( toArr, fData, nAddedAt );
+                        nAddedAt = toWnd->AddField(
+                            GetLabelString(aFunc.mnCol), DlgPos2WndPos(rAtPos, *toWnd), aFunc);
+                        if (nAddedAt != PIVOTFIELD_INVALID)
                             toWnd->GrabFocus();
-                        }
                     }
                     else
                     {
-                        ScDPLabelData* p = GetLabelData(fData.mnCol);
+                        ScDPLabelData* p = GetLabelData(aFunc.mnCol);
                         OUString aStr = p->maLayoutName;
-                        sal_uInt16 nMask = fData.mnFuncMask;
+                        sal_uInt16 nMask = aFunc.mnFuncMask;
                         if (aStr.isEmpty())
                         {
                             aStr = GetFuncString(nMask);
                             aStr += p->maName;
                         }
 
-                        if ( toWnd->AddField( aStr,
-                                              DlgPos2WndPos( rAtPos, *toWnd ),
-                                              nAddedAt, nDupCount) )
-                        {
-                            fData.mnFuncMask = nMask;
-                            fData.mnDupCount = nDupCount;
-                            Insert( toArr, fData, nAddedAt );
+                        aFunc.mnFuncMask = nMask;
+                        nAddedAt = toWnd->AddField(aStr, DlgPos2WndPos(rAtPos, *toWnd), aFunc);
+                        if (nAddedAt != PIVOTFIELD_INVALID)
                             toWnd->GrabFocus();
-                        }
                     }
                 }
             }
@@ -621,27 +571,23 @@ void ScPivotLayoutDlg::MoveField( ScPivotFieldType eFromType, size_t nFromIndex,
     }
     else // -> eFromType == eToType
     {
-        ScDPFieldControlBase* theWnd  = GetFieldWindow(eFromType);
-        ScDPFuncDataVec*    theArr   = GetFieldDataArray(eFromType);
-        size_t              nAt      = 0;
-        Point               aToPos;
+        ScDPFieldControlBase* pWnd  = GetFieldWindow(eFromType);
+        if (!pWnd)
+            return;
 
-        ScPivotFuncData fData = (*theArr)[nFromIndex];
+        const ScPivotFuncData& rFunc = pWnd->GetFuncData(nFromIndex);
 
-        if ( Contains( theArr, fData, nAt ) )
+        size_t nAt = pWnd->GetFieldIndexByData(rFunc);
+        if (nAt != PIVOTFIELD_INVALID)
         {
+            Point aToPos = DlgPos2WndPos( rAtPos, *pWnd );
             size_t nToIndex = 0;
-            aToPos = DlgPos2WndPos( rAtPos, *theWnd );
-            theWnd->GetExistingIndex( aToPos, nToIndex );
+            pWnd->GetExistingIndex(aToPos, nToIndex);
 
             if ( nToIndex != nAt )
             {
                 size_t nAddedAt = 0;
-                if (theWnd->MoveField(nAt, aToPos, nAddedAt))
-                {
-                    Remove(theArr, nAt);
-                    Insert(theArr, fData, nAddedAt);
-                }
+                pWnd->MoveField(nAt, aToPos, nAddedAt);
             }
         }
     }
@@ -660,121 +606,92 @@ void ScPivotLayoutDlg::MoveFieldToEnd( ScPivotFieldType eFromType, size_t nFromI
         ScDPFieldControlBase* rmWnd2   = NULL;
         GetOtherFieldWindows(eToType, rmWnd1, rmWnd2);
 
-        ScDPFuncDataVec*    fromArr  = GetFieldDataArray(eFromType);
-        ScDPFuncDataVec*    toArr    = GetFieldDataArray(eToType);
-
-        ScDPFuncDataVec*    rmArr1   = NULL;
-        ScDPFuncDataVec*    rmArr2   = NULL;
-        GetOtherDataArrays(eToType, rmArr1, rmArr2);
-
         bool bDataArr = eToType == PIVOTFIELDTYPE_DATA;
 
-        if ( fromArr && toArr && fromWnd && toWnd )
+        if (!fromWnd || !toWnd)
+            return;
+
+        ScPivotFuncData aFunc = fromWnd->GetFuncData(nFromIndex); // local copy
+
+        size_t nAt = fromWnd->GetFieldIndexByData(aFunc);
+        if (nAt != PIVOTFIELD_INVALID)
         {
-            ScPivotFuncData fData = (*fromArr)[nFromIndex];
+            fromWnd->DeleteFieldByIndex(nAt);
 
-            size_t nAt = 0;
-            if ( Contains( fromArr, fData, nAt ) )
+            nAt = toWnd->GetFieldIndexByData(aFunc);
+            if (nAt == PIVOTFIELD_INVALID)
             {
-                fromWnd->DelField( nAt );
-                Remove( fromArr, nAt );
-
-                if (!Contains( toArr, fData, nAt ))
-                {
-                    size_t nAddedAt = 0;
-                    if ( !bDataArr )
-                    {
-                        // ggF. in anderem Fenster entfernen
-                        if ( rmArr1 )
-                        {
-                            if ( Contains( rmArr1, fData, nAt ) )
-                            {
-                                rmWnd1->DelField( nAt );
-                                Remove( rmArr1, nAt );
-                            }
-                        }
-                        if ( rmArr2 )
-                        {
-                            if ( Contains( rmArr2, fData, nAt ) )
-                            {
-                                rmWnd2->DelField( nAt );
-                                Remove( rmArr2, nAt );
-                            }
-                        }
-
-                        if ( toWnd->AppendField( GetLabelString( fData.mnCol ), nAddedAt ) )
-                        {
-                            Insert( toArr, fData, nAddedAt );
-                            toWnd->GrabFocus();
-                        }
-                    }
-                    else
-                    {
-                        ScDPLabelData* p = GetLabelData(fData.mnCol);
-                        OUString aStr = p->maLayoutName;
-                        sal_uInt16 nMask = fData.mnFuncMask;
-                        if (aStr.isEmpty())
-                        {
-                            aStr = GetFuncString(nMask);
-                            aStr += p->maName;
-                        }
-
-                        if ( toWnd->AppendField(aStr, nAddedAt) )
-                        {
-                            fData.mnFuncMask = nMask;
-                            Insert( toArr, fData, nAddedAt );
-                            toWnd->GrabFocus();
-                        }
-                    }
-                }
-            }
-        }
-    }
-    else // -> eFromType == eToType
-    {
-        ScDPFieldControlBase* theWnd  = GetFieldWindow(eFromType);
-        ScDPFuncDataVec*    theArr   = GetFieldDataArray(eFromType);
-        size_t              nAt      = 0;
-        Point               aToPos;
-        bool bDataArr = eFromType == PIVOTFIELDTYPE_DATA;
-
-        ScPivotFuncData fData = (*theArr)[nFromIndex];
-
-        if ( Contains( theArr, fData, nAt ) )
-        {
-            size_t nToIndex = 0;
-            theWnd->GetExistingIndex( aToPos, nToIndex );
-
-            if ( nToIndex != nAt )
-            {
-                size_t nAddedAt = 0;
-
-                theWnd->DelField( nAt );
-                Remove( theArr, nAt );
-
                 if ( !bDataArr )
                 {
-                    if ( theWnd->AppendField(GetLabelString( fData.mnCol ), nAddedAt) )
+                    if (rmWnd1)
                     {
-                        Insert( theArr, fData, nAddedAt );
+                        nAt = rmWnd1->GetFieldIndexByData(aFunc);
+                        if (nAt != PIVOTFIELD_INVALID)
+                            rmWnd1->DeleteFieldByIndex(nAt);
                     }
+                    if (rmWnd2)
+                    {
+                        nAt = rmWnd2->GetFieldIndexByData(aFunc);
+                        if (nAt != PIVOTFIELD_INVALID)
+                            rmWnd2->DeleteFieldByIndex(nAt);
+                    }
+
+                    toWnd->AppendField(GetLabelString(aFunc.mnCol), aFunc);
+                    toWnd->GrabFocus();
                 }
                 else
                 {
-                    ScDPLabelData* p = GetLabelData(fData.mnCol);
+                    ScDPLabelData* p = GetLabelData(aFunc.mnCol);
                     OUString aStr = p->maLayoutName;
-                    sal_uInt16 nMask = fData.mnFuncMask;
+                    sal_uInt16 nMask = aFunc.mnFuncMask;
                     if (aStr.isEmpty())
                     {
                         aStr = GetFuncString(nMask);
                         aStr += p->maName;
                     }
 
-                    if ( theWnd->AppendField(aStr, nAddedAt) )
+                    aFunc.mnFuncMask = nMask;
+                    toWnd->AppendField(aStr, aFunc);
+                    toWnd->GrabFocus();
+                }
+            }
+        }
+    }
+    else // -> eFromType == eToType
+    {
+        ScDPFieldControlBase* pWnd  = GetFieldWindow(eFromType);
+        if (!pWnd)
+            return;
+
+        Point aToPos;
+        bool bDataArr = eFromType == PIVOTFIELDTYPE_DATA;
+
+        ScPivotFuncData aFunc = pWnd->GetFuncData(nFromIndex); // local copy
+        size_t nAt = pWnd->GetFieldIndexByData(aFunc);
+        if (nAt != PIVOTFIELD_INVALID)
+        {
+            size_t nToIndex = 0;
+            pWnd->GetExistingIndex( aToPos, nToIndex );
+
+            if ( nToIndex != nAt )
+            {
+                pWnd->DeleteFieldByIndex(nAt);
+
+                if ( !bDataArr )
+                    pWnd->AppendField(GetLabelString(aFunc.mnCol), aFunc);
+                else
+                {
+                    ScDPLabelData* p = GetLabelData(aFunc.mnCol);
+                    OUString aStr = p->maLayoutName;
+                    sal_uInt16 nMask = aFunc.mnFuncMask;
+                    if (aStr.isEmpty())
                     {
-                        fData.mnFuncMask = nMask;
-                        Insert( theArr, fData, nAddedAt );
+                        aStr = GetFuncString(nMask);
+                        aStr += p->maName;
                     }
+
+                    aFunc.mnFuncMask = nMask;
+                    pWnd->AppendField(aStr, aFunc);
                 }
             }
         }
@@ -783,19 +700,17 @@ void ScPivotLayoutDlg::MoveFieldToEnd( ScPivotFieldType eFromType, size_t nFromI
 
 void ScPivotLayoutDlg::RemoveField( ScPivotFieldType eFromType, size_t nIndex )
 {
-    ScDPFuncDataVec* pArr = GetFieldDataArray(eFromType);
+    ScDPFieldControlBase* pWnd = GetFieldWindow(eFromType);
+    if (!pWnd)
+        return;
 
-    if( pArr )
-    {
-        ScDPFieldControlBase* pWnd = GetFieldWindow( eFromType );
-        if (pWnd)
-        {
-            pWnd->DelField( nIndex );
-            Remove( pArr, nIndex );
-            if( pWnd->IsEmpty() )
-                GrabFieldFocus( maWndSelect );
-        }
-    }
+    if (nIndex >= pWnd->GetFieldCount())
+        // out of bound
+        return;
+
+    pWnd->DeleteFieldByIndex(nIndex);
+    if (pWnd->IsEmpty())
+        GrabFieldFocus(maWndSelect);
 }
 
 PointerStyle ScPivotLayoutDlg::NotifyMouseButtonDown( ScPivotFieldType eType, size_t nFieldIndex )
@@ -824,103 +739,104 @@ PointerStyle ScPivotLayoutDlg::NotifyMouseButtonDown( ScPivotFieldType eType, si
 
 void ScPivotLayoutDlg::NotifyDoubleClick( ScPivotFieldType eType, size_t nFieldIndex )
 {
-    ScDPFuncDataVec* pArr = GetFieldDataArray(eType);
+    ScDPFieldControlBase* pWnd = GetFieldWindow(eType);
+    if (!pWnd)
+        return;
 
-    if ( pArr )
+    if (nFieldIndex >= pWnd->GetFieldCount())
     {
-        if ( nFieldIndex >= pArr->size() )
-        {
-            OSL_FAIL("invalid selection");
-            return;
-        }
+        OSL_FAIL("invalid selection");
+        return;
+    }
 
-        size_t nArrPos = 0;
-        if( ScDPLabelData* pData = GetLabelData( (*pArr)[nFieldIndex].mnCol, &nArrPos ) )
-        {
-            ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-            OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
+    ScPivotFuncData& rFunc = pWnd->GetFuncData(nFieldIndex);
+    ScDPLabelData* pData = GetLabelData(rFunc.mnCol);
+    if (!pData)
+        return;
 
-            switch ( eType )
+    ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
+
+    switch ( eType )
+    {
+        case PIVOTFIELDTYPE_PAGE:
+        case PIVOTFIELDTYPE_COL:
+        case PIVOTFIELDTYPE_ROW:
+        {
+            // list of names of all data fields
+            vector<ScDPName> aDataFieldNames;
+            vector<ScDPFieldControlBase::FuncItem> aFuncItems;
+            maWndData.GetAllFuncItems(aFuncItems);
+            vector<ScDPFieldControlBase::FuncItem>::const_iterator it = aFuncItems.begin(), itEnd = aFuncItems.end();
+            for (; it != itEnd; ++it)
             {
-                case PIVOTFIELDTYPE_PAGE:
-                case PIVOTFIELDTYPE_COL:
-                case PIVOTFIELDTYPE_ROW:
+                ScDPLabelData* pDFData = GetLabelData(it->mnCol);
+                if (!pDFData)
+                    continue;
+
+                if (pDFData->maName.isEmpty())
+                    continue;
+
+                OUString aLayoutName = pDFData->maLayoutName;
+                if (aLayoutName.isEmpty())
                 {
-                    // list of names of all data fields
-                    vector<ScDPName> aDataFieldNames;
-                    for( ScDPFuncDataVec::const_iterator aIt = maDataArr.begin(), aEnd = maDataArr.end();
-                            (aIt != aEnd); ++aIt)
-                    {
-                        ScDPLabelData* pDFData = GetLabelData(aIt->mnCol);
-                        if (!pDFData)
-                            continue;
-
-                        if (pDFData->maName.isEmpty())
-                            continue;
-
-                        OUString aLayoutName = pDFData->maLayoutName;
-                        if (aLayoutName.isEmpty())
-                        {
-                            // No layout name exists.  Use the stock name.
-                            sal_uInt16 nMask = aIt->mnFuncMask;
-                            OUString aFuncStr = GetFuncString(nMask);
-                            aLayoutName = aFuncStr + pDFData->maName;
-                        }
-                        aDataFieldNames.push_back(ScDPName(pDFData->maName, aLayoutName));
-                    }
-
-                    bool bLayout = (eType == PIVOTFIELDTYPE_ROW) &&
-                        ((aDataFieldNames.size() > 1) || (nFieldIndex + 1 < pArr->size()));
-
-                    AbstractScDPSubtotalDlg* pDlg = pFact->CreateScDPSubtotalDlg(
-                        this, RID_SCDLG_PIVOTSUBT,
-                        *mxDlgDPObject, *pData, (*pArr)[nFieldIndex], aDataFieldNames, bLayout );
-
-                    if ( pDlg->Execute() == RET_OK )
-                    {
-                        pDlg->FillLabelData( *pData );
-                        (*pArr)[nFieldIndex].mnFuncMask = pData->mnFuncMask;
-                    }
-                    delete pDlg;
+                    // No layout name exists.  Use the stock name.
+                    sal_uInt16 nMask = it->mnFuncMask;
+                    OUString aFuncStr = GetFuncString(nMask);
+                    aLayoutName = aFuncStr + pDFData->maName;
                 }
-                break;
-
-                case PIVOTFIELDTYPE_DATA:
-                {
-                    ScPivotFuncData& rFuncData = maDataArr[nFieldIndex];
-                    AbstractScDPFunctionDlg* pDlg = pFact->CreateScDPFunctionDlg(
-                        this, RID_SCDLG_DPDATAFIELD,
-                        maLabelData, *pData, rFuncData);
-
-                    if ( pDlg->Execute() == RET_OK )
-                    {
-                        bool bFuncChanged = rFuncData.mnFuncMask != pDlg->GetFuncMask();
-                        rFuncData.mnFuncMask = pData->mnFuncMask = pDlg->GetFuncMask();
-                        rFuncData.maFieldRef = pDlg->GetFieldRef();
-
-                        if (bFuncChanged)
-                            // Get the new duplicate count since the function has changed.
-                            rFuncData.mnDupCount = GetNextDupCount(maDataArr, rFuncData, nFieldIndex);
-
-                        ScDPLabelData* p = GetLabelData(rFuncData.mnCol);
-                        OUString aStr = p->maLayoutName;
-                        if (aStr.isEmpty())
-                        {
-                            // Layout name is not available.  Use default name.
-                            aStr = GetFuncString (rFuncData.mnFuncMask);
-                            aStr += p->maName;
-                        }
-                        maWndData.SetFieldText(aStr, nFieldIndex, rFuncData.mnDupCount);
-                    }
-                    delete pDlg;
-                }
-                break;
-
-                default:
-                {
-                    // added to avoid warnings
-                }
+                aDataFieldNames.push_back(ScDPName(pDFData->maName, aLayoutName));
             }
+
+            bool bLayout = (eType == PIVOTFIELDTYPE_ROW) &&
+                ((aDataFieldNames.size() > 1) || (nFieldIndex + 1 < pWnd->GetFieldCount()));
+
+            boost::scoped_ptr<AbstractScDPSubtotalDlg> pDlg(
+                pFact->CreateScDPSubtotalDlg(
+                    this, RID_SCDLG_PIVOTSUBT, *mxDlgDPObject, *pData, rFunc,
+                    aDataFieldNames, bLayout));
+
+            if ( pDlg->Execute() == RET_OK )
+            {
+                pDlg->FillLabelData( *pData );
+                rFunc.mnFuncMask = pData->mnFuncMask;
+            }
+        }
+        break;
+
+        case PIVOTFIELDTYPE_DATA:
+        {
+            ScPivotFuncData& rFuncData = maWndData.GetFuncData(nFieldIndex);
+            boost::scoped_ptr<AbstractScDPFunctionDlg> pDlg(
+                pFact->CreateScDPFunctionDlg(
+                    this, RID_SCDLG_DPDATAFIELD, maLabelData, *pData, rFuncData));
+
+            if ( pDlg->Execute() == RET_OK )
+            {
+                bool bFuncChanged = rFuncData.mnFuncMask != pDlg->GetFuncMask();
+                rFuncData.mnFuncMask = pData->mnFuncMask = pDlg->GetFuncMask();
+                rFuncData.maFieldRef = pDlg->GetFieldRef();
+
+                if (bFuncChanged)
+                    // Get the new duplicate count since the function has changed.
+                    rFuncData.mnDupCount = maWndData.GetNextDupCount(rFuncData, nFieldIndex);
+
+                ScDPLabelData* p = GetLabelData(rFuncData.mnCol);
+                OUString aStr = p->maLayoutName;
+                if (aStr.isEmpty())
+                {
+                    // Layout name is not available.  Use default name.
+                    aStr = GetFuncString (rFuncData.mnFuncMask);
+                    aStr += p->maName;
+                }
+                maWndData.SetFieldText(aStr, nFieldIndex, rFuncData.mnDupCount);
+            }
+        }
+        break;
+
+        default:
+        {
+            // added to avoid warnings
         }
     }
 }
@@ -1004,7 +920,6 @@ PointerStyle ScPivotLayoutDlg::GetPointerStyleAtPoint( const Point& /* rScrPos *
     if (!mbIsDrag)
         return POINTER_ARROW;
 
-//    Point aPos = ScreenToOutputPixel(rScrPos);
     if (eFieldType == PIVOTFIELDTYPE_UNKNOWN)
         // Outside any field areas.
         return meDnDFromType == PIVOTFIELDTYPE_SELECT ? POINTER_PIVOT_FIELD : POINTER_PIVOT_DELETE;
@@ -1013,8 +928,11 @@ PointerStyle ScPivotLayoutDlg::GetPointerStyleAtPoint( const Point& /* rScrPos *
         return POINTER_PIVOT_FIELD;
 
     // check if the target orientation is allowed for this field
-    ScDPFuncDataVec* fromArr = GetFieldDataArray(meDnDFromType);
-    const ScPivotFuncData& rData = (*fromArr)[mnDnDFromIndex];
+    ScDPFieldControlBase* pWnd = GetFieldWindow(meDnDFromType);
+    if (!pWnd)
+        return POINTER_ARROW;
+
+    const ScPivotFuncData& rData = pWnd->GetFuncData(mnDnDFromIndex);
     if (!IsOrientationAllowed(rData.mnCol, eFieldType))
         return POINTER_NOTALLOWED;
 
@@ -1034,17 +952,30 @@ PointerStyle ScPivotLayoutDlg::GetPointerStyleAtPoint( const Point& /* rScrPos *
     return POINTER_PIVOT_FIELD;
 }
 
+namespace {
+
+class InsideFieldControl : std::unary_function<ScDPFieldControlBase*, bool>
+{
+    Point maOutPos;
+public:
+    InsideFieldControl(const Point& rOutPos) : maOutPos(rOutPos) {}
+
+    bool operator() (const ScDPFieldControlBase* p) const
+    {
+        Rectangle aRect(p->GetPosPixel(), p->GetSizePixel());
+        return aRect.IsInside(maOutPos);
+    }
+};
+
+}
+
 ScPivotFieldType ScPivotLayoutDlg::GetFieldTypeAtPoint( const Point& rScrPos ) const
 {
     Point aOutputPos = ScreenToOutputPixel(rScrPos);
-    std::vector<FieldRect>::const_iterator it = maFieldRects.begin(), itEnd = maFieldRects.end();
-    for (; it != itEnd; ++it)
-    {
-        if (it->mpRect->IsInside(aOutputPos))
-            return it->meType;
-    }
+    std::vector<ScDPFieldControlBase*>::const_iterator it =
+        std::find_if(maFieldCtrls.begin(), maFieldCtrls.end(), InsideFieldControl(aOutputPos));
 
-    return PIVOTFIELDTYPE_UNKNOWN;
+    return it == maFieldCtrls.end() ? PIVOTFIELDTYPE_UNKNOWN : (*it)->GetFieldType();
 }
 
 void ScPivotLayoutDlg::Deactivate()
@@ -1056,56 +987,27 @@ void ScPivotLayoutDlg::Deactivate()
     NotifyFieldFocus( meLastActiveType, true );
 }
 
-bool ScPivotLayoutDlg::Contains( ScDPFuncDataVec* pArr, const ScPivotFuncData& rData, size_t& nAt )
-{
-    if (!pArr || pArr->empty())
-        return false;
+namespace {
 
-    ScDPFuncDataVec::const_iterator itr, itrBeg = pArr->begin(), itrEnd = pArr->end();
-    for (itr = itrBeg; itr != itrEnd; ++itr)
+class FindLabelDataByCol : std::unary_function<ScDPLabelData, bool>
+{
+    SCCOL mnCol;
+public:
+    FindLabelDataByCol(SCCOL nCol) : mnCol(nCol) {}
+
+    bool operator() (const ScDPLabelData& r) const
     {
-        if (*itr == rData)
-        {
-            // found!
-            nAt = ::std::distance(itrBeg, itr);
-            return true;
-        }
+        return r.mnCol == mnCol;
     }
-    return false;
+};
+
 }
 
-void ScPivotLayoutDlg::Remove( ScDPFuncDataVec* pArr, size_t nAt )
+ScDPLabelData* ScPivotLayoutDlg::GetLabelData( SCCOL nCol )
 {
-    if ( !pArr || (nAt>=pArr->size()) )
-        return;
-
-    pArr->erase( pArr->begin() + nAt );
-}
-
-void ScPivotLayoutDlg::Insert( ScDPFuncDataVec* pArr, const ScPivotFuncData& rFData, size_t nAt )
-{
-    if (!pArr)
-        return;
-
-    std::auto_ptr<ScPivotFuncData> p(new ScPivotFuncData(rFData));
-    if (nAt >= pArr->size())
-        pArr->push_back(p);
-    else
-        pArr->insert(pArr->begin() + nAt, p);
-}
-
-ScDPLabelData* ScPivotLayoutDlg::GetLabelData( SCsCOL nCol, size_t* pnPos )
-{
-    ScDPLabelData* pData = 0;
-    for( ScDPLabelDataVector::iterator aIt = maLabelData.begin(), aEnd = maLabelData.end(); !pData && (aIt != aEnd); ++aIt )
-    {
-        if( aIt->mnCol == nCol )
-        {
-            pData = &*aIt;
-            if( pnPos ) *pnPos = aIt - maLabelData.begin();
-        }
-    }
-    return pData;
+    ScDPLabelDataVector::iterator it =
+        std::find_if(maLabelData.begin(), maLabelData.end(), FindLabelDataByCol(nCol));
+    return it == maLabelData.end() ? NULL : &(*it);
 }
 
 rtl::OUString ScPivotLayoutDlg::GetLabelString( SCsCOL nCol )
@@ -1178,15 +1080,6 @@ rtl::OUString ScPivotLayoutDlg::GetFuncString( sal_uInt16& rFuncMask, bool bIsVa
     return aBuf.makeStringAndClear();
 }
 
-Point ScPivotLayoutDlg::DlgPos2WndPos( const Point& rPt, Window& rWnd )
-{
-    Point aWndPt( rPt );
-    aWndPt.X() = rPt.X()-rWnd.GetPosPixel().X();
-    aWndPt.Y() = rPt.Y()-rWnd.GetPosPixel().Y();
-
-    return aWndPt;
-}
-
 void ScPivotLayoutDlg::InitControlAndDlgSizes()
 {
     // The pivot.src file only specifies the positions of the controls. Here,
@@ -1224,18 +1117,6 @@ void ScPivotLayoutDlg::InitControlAndDlgSizes()
     nH += GetSettings().GetStyleSettings().GetScrollBarSize() + OUTER_MARGIN_VER;
     maWndSelect.SetSizePixel(
         Size(2 * nFldW + ROW_FIELD_BTN_GAP + 10, nH));
-
-    maRectPage   = Rectangle( maWndPage.GetPosPixel(),    maWndPage.GetSizePixel() );
-    maRectRow    = Rectangle( maWndRow.GetPosPixel(),     maWndRow.GetSizePixel() );
-    maRectCol    = Rectangle( maWndCol.GetPosPixel(),     maWndCol.GetSizePixel() );
-    maRectData   = Rectangle( maWndData.GetPosPixel(),    maWndData.GetSizePixel() );
-    maRectSelect = Rectangle( maWndSelect.GetPosPixel(),  maWndSelect.GetSizePixel() );
-
-    maFieldRects.push_back(FieldRect(&maRectPage, PIVOTFIELDTYPE_PAGE));
-    maFieldRects.push_back(FieldRect(&maRectRow, PIVOTFIELDTYPE_ROW));
-    maFieldRects.push_back(FieldRect(&maRectCol, PIVOTFIELDTYPE_COL));
-    maFieldRects.push_back(FieldRect(&maRectData, PIVOTFIELDTYPE_DATA));
-    maFieldRects.push_back(FieldRect(&maRectSelect, PIVOTFIELDTYPE_SELECT));
 
     maWndPage.CalcSize();
     maWndRow.CalcSize();
@@ -1311,48 +1192,21 @@ void ScPivotLayoutDlg::AdjustDlgSize()
     std::for_each(aWndToMove.begin(), aWndToMove.end(), MoveWndDown(nDelta));
 }
 
-namespace {
-
-class PivotFieldInserter : public ::std::unary_function<ScPivotFuncData, void>
-{
-    vector<ScPivotField>& mrFields;
-public:
-    explicit PivotFieldInserter(vector<ScPivotField>& r, size_t nSize) : mrFields(r)
-    {
-        mrFields.reserve(nSize);
-    }
-
-    PivotFieldInserter(const PivotFieldInserter& r) : mrFields(r.mrFields) {}
-
-    void operator() (const ScPivotFuncData& r)
-    {
-        ScPivotField aField;
-        aField.nCol = r.mnCol;
-        aField.mnOriginalDim = r.mnOriginalDim;
-        aField.mnDupCount = r.mnDupCount;
-        aField.nFuncMask = r.mnFuncMask;
-        aField.maFieldRef = r.maFieldRef;
-        mrFields.push_back(aField);
-    }
-};
-
-}
-
 bool ScPivotLayoutDlg::GetPivotArrays(
     vector<ScPivotField>& rPageFields, vector<ScPivotField>& rColFields,
     vector<ScPivotField>& rRowFields, vector<ScPivotField>& rDataFields )
 {
     vector<ScPivotField> aPageFields;
-    for_each(maPageArr.begin(), maPageArr.end(), PivotFieldInserter(aPageFields, maPageArr.size()));
+    maWndPage.ConvertToPivotArray(aPageFields);
 
     vector<ScPivotField> aColFields;
-    for_each(maColArr.begin(), maColArr.end(), PivotFieldInserter(aColFields, maColArr.size()+1));
+    maWndCol.ConvertToPivotArray(aColFields);
 
     vector<ScPivotField> aRowFields;
-    for_each(maRowArr.begin(), maRowArr.end(), PivotFieldInserter(aRowFields, maRowArr.size()+1));
+    maWndRow.ConvertToPivotArray(aRowFields);
 
     vector<ScPivotField> aDataFields;
-    for_each(maDataArr.begin(), maDataArr.end(), PivotFieldInserter(aDataFields, maDataArr.size()));
+    maWndData.ConvertToPivotArray(aDataFields);
 
     sheet::DataPilotFieldOrientation eOrientDataLayout = sheet::DataPilotFieldOrientation_ROW;
     ScDPSaveData* pSaveData = mxDlgDPObject->GetSaveData();
@@ -1472,14 +1326,88 @@ void ScPivotLayoutDlg::UpdateSrcRange()
     maWndCol.ClearFields();
     maWndPage.ClearFields();
 
-    maSelectArr.clear();
-    maRowArr.clear();
-    maColArr.clear();
-    maDataArr.clear();
-    maPageArr.clear();
-
     InitFieldWindows();
     RepaintFieldWindows();
+}
+
+void ScPivotLayoutDlg::UpdateOutputPos()
+{
+    sal_uInt16 nSelPos = maLbOutPos.GetSelectEntryPos();
+    OUString aEntryStr = maLbOutPos.GetEntry(nSelPos);
+
+    if (aEntryStr == maStrNewTable)
+    {
+        // New sheet as output.
+        maEdOutPos.Disable();
+        maRbOutPos.Disable();
+        maEdOutPos.SetText(OUString()); // Clear the reference text.
+    }
+    else if (aEntryStr == maStrUndefined)
+    {
+        maEdOutPos.Enable();
+        maRbOutPos.Enable();
+        maEdOutPos.SetText(maOutputRefStr);
+        OutputPosUpdated();
+    }
+    else
+    {
+        // Named range as output. Get its corresponding reference string.
+        const OUString* p = (const OUString*)maLbOutPos.GetEntryData(nSelPos);
+        if (p)
+            maEdOutPos.SetText(*p);
+    }
+}
+
+void ScPivotLayoutDlg::OutputPosUpdated()
+{
+    OUString aOutPosStr = maEdOutPos.GetText();
+    sal_uInt16 nResult = ScAddress().Parse(aOutPosStr, mpDoc, mpDoc->GetAddressConvention());
+
+    if (!(nResult & SCA_VALID))
+    {
+        // Not a valid reference.
+        maEdOutPos.SetRefValid(false);
+        return;
+    }
+
+    maEdOutPos.SetRefValid(true);
+
+    boost::ptr_vector<OUString>::const_iterator it =
+        std::find(maRefStrs.begin(), maRefStrs.end(), aOutPosStr);
+
+    if (it == maRefStrs.end())
+    {
+        // This is NOT one of the named ranges.
+        maLbOutPos.SelectEntryPos(0);
+        return;
+    }
+
+    // Select the corresponding named range item in the list box.  Be sure to
+    // offset for the top two entries which are reserved for something else.
+    boost::ptr_vector<OUString>::const_iterator itBeg = maRefStrs.begin();
+    size_t nPos = std::distance(itBeg, it);
+    maLbOutPos.SelectEntryPos(nPos+2);
+}
+
+namespace {
+
+void EnableAndGrabFocus(formula::RefEdit& rEdit)
+{
+    rEdit.Enable();
+    rEdit.GrabFocus();
+    rEdit.Enable();
+}
+
+}
+
+void ScPivotLayoutDlg::MoreBtnClicked()
+{
+    mbRefInputMode = maBtnMore.GetState();
+    if (!maBtnMore.GetState())
+        return;
+
+    formula::RefEdit* p = maEdInPos.IsEnabled() ? &maEdInPos : &maEdOutPos;
+    EnableAndGrabFocus(*p);
 }
 
 void ScPivotLayoutDlg::RepaintFieldWindows()
@@ -1534,73 +1462,6 @@ void ScPivotLayoutDlg::GetOtherFieldWindows(ScPivotFieldType eType, ScDPFieldCon
     }
 }
 
-ScPivotLayoutDlg::ScDPFuncDataVec* ScPivotLayoutDlg::GetFieldDataArray(ScPivotFieldType eType)
-{
-    switch (eType)
-    {
-        case PIVOTFIELDTYPE_PAGE:
-            return &maPageArr;
-        case PIVOTFIELDTYPE_COL:
-            return &maColArr;
-        case PIVOTFIELDTYPE_ROW:
-            return &maRowArr;
-        case PIVOTFIELDTYPE_DATA:
-            return &maDataArr;
-        case PIVOTFIELDTYPE_SELECT:
-            return &maSelectArr;
-        default:
-            ;
-    }
-    return NULL;
-}
-
-void ScPivotLayoutDlg::GetOtherDataArrays(
-    ScPivotFieldType eType, ScDPFuncDataVec*& rpArr1, ScDPFuncDataVec*& rpArr2)
-{
-    rpArr1 = NULL;
-    rpArr2 = NULL;
-    switch (eType)
-    {
-        case PIVOTFIELDTYPE_PAGE:
-            rpArr1 = &maRowArr;
-            rpArr2 = &maColArr;
-            break;
-        case PIVOTFIELDTYPE_COL:
-            rpArr1 = &maPageArr;
-            rpArr2 = &maRowArr;
-            break;
-        case PIVOTFIELDTYPE_ROW:
-            rpArr1 = &maPageArr;
-            rpArr2 = &maColArr;
-            break;
-        default:
-            ;
-    }
-}
-
-sal_uInt8 ScPivotLayoutDlg::GetNextDupCount(
-    const ScDPFuncDataVec& rArr, const ScPivotFuncData& rData, size_t nDataIndex) const
-{
-    sal_uInt8 nDupCount = 0;
-    bool bFound = false;
-    for (size_t i = 0, n = rArr.size(); i < n; ++i)
-    {
-        const ScPivotFuncData& r = rArr[i];
-        if (i == nDataIndex)
-            // Skip itself.
-            continue;
-
-        if (r.mnCol != rData.mnCol || r.mnFuncMask != rData.mnFuncMask)
-            continue;
-
-        bFound = true;
-        if (r.mnDupCount > nDupCount)
-            nDupCount = r.mnDupCount;
-    }
-
-    return bFound ? nDupCount + 1 : 0;
-}
-
 void ScPivotLayoutDlg::SetReference( const ScRange& rRef, ScDocument* pDoc )
 {
     if (!mbRefInputMode || !mpRefInputEdit)
@@ -1620,6 +1481,8 @@ void ScPivotLayoutDlg::SetReference( const ScRange& rRef, ScDocument* pDoc )
         rtl::OUString aRefStr;
         rRef.aStart.Format( aRefStr, STD_FORMAT, pDoc, pDoc->GetAddressConvention() );
         mpRefInputEdit->SetRefString(aRefStr);
+        maOutputRefStr = aRefStr;
+        OutputPosUpdated();
     }
 }
 
@@ -1833,52 +1696,13 @@ IMPL_LINK_NOARG(ScPivotLayoutDlg, CancelHdl)
 
 IMPL_LINK_NOARG(ScPivotLayoutDlg, MoreClickHdl)
 {
-    if ( maBtnMore.GetState() )
-    {
-        mbRefInputMode = true;
-        if ( maEdInPos.IsEnabled() )
-        {
-            maEdInPos.Enable();
-            maEdInPos.GrabFocus();
-            maEdInPos.Enable();
-        }
-        else
-        {
-        maEdOutPos.Enable();
-        maEdOutPos.GrabFocus();
-            maEdOutPos.Enable();
-        }
-    }
-    else
-    {
-        mbRefInputMode = false;
-    }
+    MoreBtnClicked();
     return 0;
 }
 
 IMPL_LINK_NOARG(ScPivotLayoutDlg, EdOutModifyHdl)
 {
-    rtl::OUString theCurPosStr = maEdOutPos.GetText();
-    sal_uInt16  nResult = ScAddress().Parse( theCurPosStr, mpDoc, mpDoc->GetAddressConvention() );
-
-    if ( SCA_VALID == (nResult & SCA_VALID) )
-    {
-        rtl::OUString* pStr = NULL;
-        bool bFound  = false;
-        sal_uInt16  i       = 0;
-        sal_uInt16  nCount  = maLbOutPos.GetEntryCount();
-
-        for ( i=2; i<nCount && !bFound; i++ )
-        {
-            pStr = static_cast<rtl::OUString*>(maLbOutPos.GetEntryData(i));
-            bFound = (theCurPosStr == *pStr);
-        }
-
-        if ( bFound )
-            maLbOutPos.SelectEntryPos( --i );
-        else
-            maLbOutPos.SelectEntryPos( 0 );
-    }
+    OutputPosUpdated();
     return 0;
 }
 
@@ -1890,36 +1714,13 @@ IMPL_LINK_NOARG(ScPivotLayoutDlg, EdInModifyHdl)
 
 IMPL_LINK_NOARG(ScPivotLayoutDlg, SelAreaHdl)
 {
-    rtl::OUString  aString;
-    sal_uInt16  nSelPos = maLbOutPos.GetSelectEntryPos();
-
-    if ( nSelPos > 1 )
-    {
-        aString = *(rtl::OUString*)maLbOutPos.GetEntryData(nSelPos);
-    }
-    else if ( nSelPos == maLbOutPos.GetEntryCount()-1 ) // auf neue Tabelle?
-    {
-        maEdOutPos.Disable();
-        maRbOutPos.Disable();
-    }
-    else
-    {
-        maEdOutPos.Enable();
-        maRbOutPos.Enable();
-    }
-
-    maEdOutPos.SetText( aString );
+    UpdateOutputPos();
     return 0;
 }
 
-IMPL_LINK( ScPivotLayoutDlg, GetFocusHdl, formula::RefEdit*, pEdit )
+IMPL_LINK( ScPivotLayoutDlg, GetRefEditFocusHdl, formula::RefEdit*, pEdit )
 {
-    if (pEdit == &maEdInPos)
-        mpRefInputEdit = &maEdInPos;
-    else if (pEdit == &maEdOutPos)
-        mpRefInputEdit = &maEdOutPos;
-    else mpRefInputEdit = NULL;
-
+    mpRefInputEdit = pEdit;
     return 0;
 }
 

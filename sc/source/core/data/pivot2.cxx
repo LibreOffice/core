@@ -43,6 +43,12 @@
 #include "stlpool.hxx"
 #include "stlsheet.hxx"
 
+#if DEBUG_PIVOT_TABLE
+#include <iostream>
+using std::cout;
+using std::endl;
+#endif
+
 using ::com::sun::star::sheet::DataPilotFieldReference;
 using ::rtl::OUString;
 using ::std::vector;
@@ -228,6 +234,15 @@ bool ScPivotFuncData::operator== (const ScPivotFuncData& r) const
 
     return equals(maFieldRef, r.maFieldRef);
 }
+
+#if DEBUG_PIVOT_TABLE
+void ScPivotFuncData::Dump() const
+{
+    cout << "ScPivotFuncData: (col=" << mnCol << ", original dim=" << mnOriginalDim
+        << ", func mask=" << mnFuncMask << ", duplicate count=" << static_cast<int>(mnDupCount)
+        << ")" << endl;
+}
+#endif
 
 // ============================================================================
 
