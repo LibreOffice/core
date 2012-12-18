@@ -311,59 +311,43 @@ void PresenterHelpView::Paint (const awt::Rectangle& rUpdateBox)
     TextContainer::const_iterator iBlockEnd (mpTextContainer->end());
     for ( ; iBlock!=iBlockEnd; ++iBlock)
     {
-        /// check whether RTL interface or not
-        if(!Application::GetSettings().GetLayoutRTL())
+        sal_Int32 LeftX1 = gnHorizontalGap;
+        sal_Int32 LeftX2 = aWindowBox.Width/2 - gnHorizontalGap;
+        sal_Int32 RightX1 = aWindowBox.Width/2 + gnHorizontalGap;
+        sal_Int32 RightX2 = aWindowBox.Width - gnHorizontalGap;
+        /* check whether RTL interface or not
+           then replace the windowbox position */
+        if(Application::GetSettings().GetLayoutRTL())
         {
-            const double nLeftHeight (
-                (*iBlock)->maLeft.Paint(mxCanvas,
-                    geometry::RealRectangle2D(
-                        gnHorizontalGap,
-                        nY,
-                        aWindowBox.Width/2 - gnHorizontalGap,
-                        aWindowBox.Height - gnVerticalBorder),
-                    false,
-                    aViewState,
-                    aRenderState,
-                    mpFont->mxFont));
-            const double nRightHeight (
-                (*iBlock)->maRight.Paint(mxCanvas,
-                    geometry::RealRectangle2D(
-                        aWindowBox.Width/2 + gnHorizontalGap,
-                        nY,
-                        aWindowBox.Width - gnHorizontalGap,
-                        aWindowBox.Height - gnVerticalBorder),
-                    true,
-                    aViewState,
-                    aRenderState,
-                    mpFont->mxFont));
-            nY += ::std::max(nLeftHeight,nRightHeight);
+            LeftX1 = aWindowBox.Width/2 + gnHorizontalGap;
+            LeftX2 = aWindowBox.Width - gnHorizontalGap;
+            RightX1 = gnHorizontalGap;
+            RightX2 = aWindowBox.Width/2 - gnHorizontalGap;
         }
-        else
-        {
-            const double nLeftHeight (
-                (*iBlock)->maLeft.Paint(mxCanvas,
-                    geometry::RealRectangle2D(
-                        aWindowBox.Width/2 + gnHorizontalGap,
+        const double nLeftHeight (
+            (*iBlock)->maLeft.Paint(mxCanvas,
+                geometry::RealRectangle2D(
+                        LeftX1,
                         nY,
-                        aWindowBox.Width - gnHorizontalGap,
+                        LeftX2,
                         aWindowBox.Height - gnVerticalBorder),
-                    false,
-                    aViewState,
-                    aRenderState,
-                    mpFont->mxFont));
-            const double nRightHeight (
-                (*iBlock)->maRight.Paint(mxCanvas,
-                    geometry::RealRectangle2D(
-                        gnHorizontalGap,
+                false,
+                aViewState,
+                aRenderState,
+                mpFont->mxFont));
+        const double nRightHeight (
+            (*iBlock)->maRight.Paint(mxCanvas,
+                geometry::RealRectangle2D(
+                        RightX1,
                         nY,
-                        aWindowBox.Width/2 - gnHorizontalGap,
+                        RightX2,
                         aWindowBox.Height - gnVerticalBorder),
-                    true,
-                    aViewState,
-                    aRenderState,
-                    mpFont->mxFont));
-            nY += ::std::max(nLeftHeight,nRightHeight);
-        }
+                true,
+                aViewState,
+                aRenderState,
+                mpFont->mxFont));
+
+        nY += ::std::max(nLeftHeight,nRightHeight);
     }
 
     Reference<rendering::XSpriteCanvas> xSpriteCanvas (mxCanvas, UNO_QUERY);
