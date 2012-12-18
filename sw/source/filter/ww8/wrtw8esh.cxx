@@ -163,12 +163,12 @@ bool WW8Export::MiserableFormFieldExportHack(const SwFrmFmt& rFrmFmt)
             uno::Reference< lang::XServiceInfo > xInfo(xControlModel,
                 uno::UNO_QUERY);
             uno::Reference<beans::XPropertySet> xPropSet(xControlModel, uno::UNO_QUERY);
-            if (xInfo->supportsService(C2U("com.sun.star.form.component.ComboBox")))
+            if (xInfo->supportsService("com.sun.star.form.component.ComboBox"))
             {
                 DoComboBox(xPropSet);
                 bHack = true;
             }
-            else if (xInfo->supportsService(C2U("com.sun.star.form.component.CheckBox")))
+            else if (xInfo->supportsService("com.sun.star.form.component.CheckBox"))
             {
                 DoCheckBox(xPropSet);
                 bHack = true;
@@ -183,11 +183,11 @@ void WW8Export::DoComboBox(uno::Reference<beans::XPropertySet> xPropSet)
 {
     rtl::OUString sSelected;
     uno::Sequence<rtl::OUString> aListItems;
-    xPropSet->getPropertyValue(C2U("StringItemList")) >>= aListItems;
+    xPropSet->getPropertyValue("StringItemList") >>= aListItems;
     sal_Int32 nNoStrings = aListItems.getLength();
     if (nNoStrings)
     {
-        uno::Any aTmp = xPropSet->getPropertyValue(C2U("DefaultText"));
+        uno::Any aTmp = xPropSet->getPropertyValue("DefaultText");
         const rtl::OUString *pStr = (const rtl::OUString *)aTmp.getValue();
         if (pStr)
             sSelected = *pStr;
@@ -195,7 +195,7 @@ void WW8Export::DoComboBox(uno::Reference<beans::XPropertySet> xPropSet)
 
     rtl::OUString sName;
     {
-        uno::Any aTmp = xPropSet->getPropertyValue(C2U("Name"));
+        uno::Any aTmp = xPropSet->getPropertyValue("Name");
         const rtl::OUString *pStr = (const rtl::OUString *)aTmp.getValue();
         if (pStr)
             sName = *pStr;
@@ -207,7 +207,7 @@ void WW8Export::DoComboBox(uno::Reference<beans::XPropertySet> xPropSet)
         // property "Help" does not exist and due to the no-existence an exception is thrown.
         try
         {
-            uno::Any aTmp = xPropSet->getPropertyValue(C2U("HelpText"));
+            uno::Any aTmp = xPropSet->getPropertyValue("HelpText");
             const rtl::OUString *pStr = (const rtl::OUString *)aTmp.getValue();
             if (pStr)
                 sHelp = *pStr;
@@ -218,7 +218,7 @@ void WW8Export::DoComboBox(uno::Reference<beans::XPropertySet> xPropSet)
 
     rtl::OUString sToolTip;
     {
-        uno::Any aTmp = xPropSet->getPropertyValue(C2U("Name"));
+        uno::Any aTmp = xPropSet->getPropertyValue("Name");
         const rtl::OUString *pStr = (const rtl::OUString *)aTmp.getValue();
         if (pStr)
             sToolTip = *pStr;
@@ -309,27 +309,27 @@ void WW8Export::DoCheckBox(uno::Reference<beans::XPropertySet> xPropSet)
     aFFData.setCheckboxHeight(0x14);
 
     sal_Int16 nTemp = 0;
-    xPropSet->getPropertyValue(C2U("DefaultState")) >>= nTemp;
+    xPropSet->getPropertyValue("DefaultState") >>= nTemp;
     aFFData.setDefaultResult(nTemp);
 
-    xPropSet->getPropertyValue(C2U("State")) >>= nTemp;
+    xPropSet->getPropertyValue("State") >>= nTemp;
     aFFData.setResult(nTemp);
 
     ::rtl::OUString aStr;
-    static ::rtl::OUString sName(C2U("Name"));
+    static ::rtl::OUString sName("Name");
     if (xPropSetInfo->hasPropertyByName(sName))
     {
         xPropSet->getPropertyValue(sName) >>= aStr;
         aFFData.setName(aStr);
     }
 
-    static ::rtl::OUString sHelpText(C2U("HelpText"));
+    static ::rtl::OUString sHelpText("HelpText");
     if (xPropSetInfo->hasPropertyByName(sHelpText))
     {
         xPropSet->getPropertyValue(sHelpText) >>= aStr;
         aFFData.setHelp(aStr);
     }
-    static ::rtl::OUString sHelpF1Text(C2U("HelpF1Text"));
+    static ::rtl::OUString sHelpF1Text("HelpF1Text");
     if (xPropSetInfo->hasPropertyByName(sHelpF1Text))
     {
         xPropSet->getPropertyValue(sHelpF1Text) >>= aStr;

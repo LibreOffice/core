@@ -2262,7 +2262,7 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const String &rString,
         case RES_CHRATR_COLOR:
             {
                 String pNm;
-                if (xPropSetInfo->hasPropertyByName(pNm = C2U("TextColor")))
+                if (xPropSetInfo->hasPropertyByName(pNm = "TextColor"))
                 {
                     aTmp <<= (sal_Int32)((SvxColorItem*)pItem)->GetValue().GetColor();
                     rPropSet->setPropertyValue(pNm, aTmp);
@@ -2274,22 +2274,22 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const String &rString,
             {
                 const SvxFontItem *pFontItem = (SvxFontItem *)pItem;
                 String pNm;
-                if (xPropSetInfo->hasPropertyByName(pNm = C2U("FontStyleName")))
+                if (xPropSetInfo->hasPropertyByName(pNm = "FontStyleName"))
                 {
                     aTmp <<= rtl::OUString( pFontItem->GetStyleName());
                     rPropSet->setPropertyValue( pNm, aTmp );
                 }
-                if (xPropSetInfo->hasPropertyByName(pNm = C2U("FontFamily")))
+                if (xPropSetInfo->hasPropertyByName(pNm = "FontFamily"))
                 {
                     aTmp <<= (sal_Int16)pFontItem->GetFamily();
                     rPropSet->setPropertyValue( pNm, aTmp );
                 }
-                if (xPropSetInfo->hasPropertyByName(pNm = C2U("FontCharset")))
+                if (xPropSetInfo->hasPropertyByName(pNm = "FontCharset"))
                 {
                     aTmp <<= (sal_Int16)pFontItem->GetCharSet();
                     rPropSet->setPropertyValue( pNm, aTmp );
                 }
-                if (xPropSetInfo->hasPropertyByName(pNm = C2U("FontPitch")))
+                if (xPropSetInfo->hasPropertyByName(pNm = "FontPitch"))
                 {
                     aTmp <<= (sal_Int16)pFontItem->GetPitch();
                     rPropSet->setPropertyValue( pNm, aTmp );
@@ -2364,8 +2364,7 @@ sal_Bool WW8FormulaListBox::Import(const uno::Reference <
     lang::XMultiServiceFactory> &rServiceFactory,
     uno::Reference <form::XFormComponent> &rFComp,awt::Size &rSz )
 {
-    uno::Reference<uno::XInterface> xCreate = rServiceFactory->createInstance(
-        C2U("com.sun.star.form.component.ComboBox"));
+    uno::Reference<uno::XInterface> xCreate = rServiceFactory->createInstance("com.sun.star.form.component.ComboBox");
     if( !xCreate.is() )
         return sal_False;
 
@@ -2380,16 +2379,16 @@ sal_Bool WW8FormulaListBox::Import(const uno::Reference <
         aTmp <<= sTitle;
     else
         aTmp <<= sName;
-    xPropSet->setPropertyValue(C2U("Name"), aTmp );
+    xPropSet->setPropertyValue("Name", aTmp );
 
     if (!sToolTip.isEmpty())
     {
         aTmp <<= sToolTip;
-        xPropSet->setPropertyValue(C2U("HelpText"), aTmp );
+        xPropSet->setPropertyValue("HelpText", aTmp );
     }
 
     sal_Bool bDropDown(sal_True);
-    xPropSet->setPropertyValue(C2U("Dropdown"), cppu::bool2any(bDropDown));
+    xPropSet->setPropertyValue("Dropdown", cppu::bool2any(bDropDown));
 
     if (!maListEntries.empty())
     {
@@ -2398,7 +2397,7 @@ sal_Bool WW8FormulaListBox::Import(const uno::Reference <
         for (sal_uInt32 nI = 0; nI < nLen; ++nI)
             aListSource[nI] = rtl::OUString(maListEntries[nI]);
         aTmp <<= aListSource;
-        xPropSet->setPropertyValue(C2U("StringItemList"), aTmp );
+        xPropSet->setPropertyValue("StringItemList", aTmp );
 
         if (fDropdownIndex < nLen)
         {
@@ -2409,7 +2408,7 @@ sal_Bool WW8FormulaListBox::Import(const uno::Reference <
             aTmp <<= aListSource[0];
         }
 
-        xPropSet->setPropertyValue(C2U("DefaultText"), aTmp );
+        xPropSet->setPropertyValue("DefaultText", aTmp );
 
         rSz = rRdr.MiserableDropDownFormHack(maListEntries[0], xPropSet);
     }
@@ -2441,7 +2440,7 @@ static void lcl_AddToPropertyContainer
     {
         uno::Reference<beans::XPropertyContainer>
             xPropContainer(xPropSet, uno::UNO_QUERY);
-        uno::Any aAny(C2U(""));
+        uno::Any aAny(OUString(""));
         xPropContainer->addProperty
             (rPropertyName,
              static_cast<sal_Int16>(beans::PropertyAttribute::BOUND |
@@ -2457,8 +2456,7 @@ sal_Bool WW8FormulaCheckBox::Import(const uno::Reference <
     lang::XMultiServiceFactory> &rServiceFactory,
     uno::Reference <form::XFormComponent> &rFComp,awt::Size &rSz )
 {
-    uno::Reference< uno::XInterface > xCreate = rServiceFactory->createInstance(
-        C2U("com.sun.star.form.component.CheckBox"));
+    uno::Reference< uno::XInterface > xCreate = rServiceFactory->createInstance("com.sun.star.form.component.CheckBox");
     if( !xCreate.is() )
         return sal_False;
 
@@ -2476,16 +2474,16 @@ sal_Bool WW8FormulaCheckBox::Import(const uno::Reference <
         aTmp <<= sTitle;
     else
         aTmp <<= sName;
-    xPropSet->setPropertyValue(C2U("Name"), aTmp );
+    xPropSet->setPropertyValue("Name", aTmp );
 
     aTmp <<= (sal_Int16)nChecked;
-    xPropSet->setPropertyValue(C2U("DefaultState"), aTmp);
+    xPropSet->setPropertyValue("DefaultState", aTmp);
 
     if (!sToolTip.isEmpty())
-        lcl_AddToPropertyContainer(xPropSet, C2U("HelpText"), sToolTip);
+        lcl_AddToPropertyContainer(xPropSet, "HelpText", sToolTip);
 
     if (!sHelp.isEmpty())
-        lcl_AddToPropertyContainer(xPropSet, C2U("HelpF1Text"), sHelp);
+        lcl_AddToPropertyContainer(xPropSet, "HelpF1Text", sHelp);
 
     return sal_True;
 
@@ -2512,7 +2510,7 @@ sal_Bool SwMSConvertControls::InsertControl(
         return sal_False;
 
     uno::Reference< uno::XInterface > xCreate = rServiceFactory->createInstance(
-        C2U("com.sun.star.drawing.ControlShape"));
+        "com.sun.star.drawing.ControlShape"));
     if( !xCreate.is() )
         return sal_False;
 
@@ -2534,11 +2532,11 @@ sal_Bool SwMSConvertControls::InsertControl(
         nTemp= text::TextContentAnchorType_AS_CHARACTER;
 
     aTmp <<= nTemp;
-    xShapePropSet->setPropertyValue(C2U("AnchorType"), aTmp );
+    xShapePropSet->setPropertyValue("AnchorType", aTmp );
 
     nTemp= text::VertOrientation::TOP;
     aTmp <<= nTemp;
-    xShapePropSet->setPropertyValue(C2U("VertOrient"), aTmp );
+    xShapePropSet->setPropertyValue("VertOrient", aTmp );
 
     uno::Reference< text::XText >  xDummyTxtRef;
     uno::Reference< text::XTextRange >  xTxtRg =
@@ -2546,7 +2544,7 @@ sal_Bool SwMSConvertControls::InsertControl(
 
     aTmp.setValue(&xTxtRg,::getCppuType((
         uno::Reference< text::XTextRange >*)0));
-    xShapePropSet->setPropertyValue(C2U("TextRange"), aTmp );
+    xShapePropSet->setPropertyValue("TextRange", aTmp );
 
     // Das Control-Model am Control-Shape setzen
     uno::Reference< drawing::XControlShape >  xControlShape( xShape,
