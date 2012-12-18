@@ -429,8 +429,44 @@ Resource RID_PRICING_FUNCTION_NAMES
 
 };
 
-// for translating function names
+
+// These were originally meant to be able to load Excel documents that for
+// some time were stored with localized function names.
+// This is not relevant to this add-in, so we only supply the same
+// (English) function names again.
+// see also: GetExcelName() or GetCompNames() or getCompatibilityNames()
 Resource RID_PRICING_DEFFUNCTION_NAMES
 {
+    StringArray PRICING_DEFFUNCNAME_OptBarrier
+    {
+        ItemList =
+        {
+            < "OPT_BARRIER"; >;
+        };
+    };
 
+
+    StringArray PRICING_DEFFUNCNAME_OptTouch
+    {
+        ItemList =
+        {
+            < "OPT_TOUCH"; >;
+        };
+    };
+
+    StringArray PRICING_DEFFUNCNAME_OptProbHit
+    {
+        ItemList =
+        {
+            < "OPT_PROB_HIT"; >;
+        };
+    };
+
+    StringArray PRICING_DEFFUNCNAME_OptProbInMoney
+    {
+        ItemList =
+        {
+            < "OPT_PROB_INMONEY"; >;
+        };
+    };
 };
