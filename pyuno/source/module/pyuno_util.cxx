@@ -61,6 +61,7 @@ namespace pyuno
 PyRef ustring2PyUnicode( const OUString & str )
 {
     PyRef ret;
+
 #if Py_UNICODE_SIZE == 2
     // YD force conversion since python/2 uses wchar_t
     ret = PyRef( PyUnicode_FromUnicode( (const Py_UNICODE*)str.getStr(), str.getLength() ), SAL_NO_ACQUIRE );
@@ -85,9 +86,15 @@ OUString pyString2ustring( PyObject *pystr )
 #if Py_UNICODE_SIZE == 2
     ret = OUString( (sal_Unicode * ) PyUnicode_AS_UNICODE( pystr ) );
 #else
+#if PY_VERSION_HEX >= 0x03030000
+    Py_ssize_t size;
+    char *pUtf8 = PyUnicode_AsUTF8AndSize(pystr, &size);
+    ret = OUString(pUtf8, size, RTL_TEXTENCODING_UTF8);
+#else
     PyObject* pUtf8 = PyUnicode_AsUTF8String(pystr);
     ret = OUString(PyBytes_AsString(pUtf8), PyBytes_Size(pUtf8), RTL_TEXTENCODING_UTF8);
     Py_DECREF(pUtf8);
+#endif
 #endif
     }
     else

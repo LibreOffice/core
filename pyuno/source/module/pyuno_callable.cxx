@@ -199,7 +199,11 @@ static PyTypeObject PyUNO_callable_Type =
     (printfunc) 0,
     (getattrfunc) 0,
     (setattrfunc) 0,
+#if PY_MAJOR_VERSION >= 3
+    0,
+#else
     (cmpfunc) 0,
+#endif
     (reprfunc) 0,
     0,
     0,

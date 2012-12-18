@@ -342,7 +342,7 @@ PyObject *PyUNO_invoke( PyObject *object, const char *name , PyObject *args )
         Runtime runtime;
 
         PyRef paras,callable;
-        if( PyObject_IsInstance( object, getPyUnoClass( runtime ).get() ) )
+        if( PyObject_IsInstance( object, getPyUnoClass().get() ) )
         {
             PyUNO* me = (PyUNO*) object;
             OUString attrName = OUString::createFromAscii(name);
@@ -441,19 +441,30 @@ PyObject *PyUNO_str( PyObject * self )
         buf.append( OUStringToOString(s,RTL_TEXTENCODING_ASCII_US) );
     }
 
-    return PyBytes_FromString( buf.getStr());
+    return PYSTR_FROMSTR( buf.getStr() );
 }
 
+#if PY_MAJOR_VERSION >= 3
+PyObject* PyUNO_getattr (PyObject* self, PyObject* attr_name)
+#else
 PyObject* PyUNO_getattr (PyObject* self, char* name)
+#endif
 {
     PyUNO* me;
 
+#if PY_VERSION_HEX >= 0x03030000
+    char *name = PyUnicode_AsUTF8(attr_name);
+#elif PY_MAJOR_VERSION >= 3
+    PyRef pUtf8(PyUnicode_AsUTF8String(attr_name), SAL_NO_ACQUIRE);
+    char *name = PyBytes_AsString(pUtf8.get());
+#endif
     try
     {
 
         Runtime runtime;
 
         me = (PyUNO*) self;
+#if PY_MAJOR_VERSION < 3
         //Handle Python dir () stuff first...
         if (strcmp (name, "__members__") == 0)
         {
@@ -469,17 +480,20 @@ PyObject* PyUNO_getattr (PyObject* self, char* name)
             }
             return member_list;
         }
+#endif
 
         if (strcmp (name, "__dict__") == 0)
         {
             Py_INCREF (Py_None);
             return Py_None;
         }
+#if PY_MAJOR_VERSION < 3
         if (strcmp (name, "__methods__") == 0)
         {
             Py_INCREF (Py_None);
             return Py_None;
         }
+#endif
         if (strcmp (name, "__class__") == 0)
         {
             if( me->members->wrappedObject.getValueTypeClass() ==
@@ -550,10 +564,20 @@ PyObject* PyUNO_getattr (PyObject* self, char* name)
     return NULL;
 }
 
+#if PY_MAJOR_VERSION >= 3
+int PyUNO_setattr (PyObject* self, PyObject* attr_name, PyObject* value)
+#else
 int PyUNO_setattr (PyObject* self, char* name, PyObject* value)
+#endif
 {
     PyUNO* me;
 
+#if PY_VERSION_HEX >= 0x03030000
+    char *name = PyUnicode_AsUTF8(attr_name);
+#elif PY_MAJOR_VERSION >= 3
+    PyRef pUtf8(PyUnicode_AsUTF8String(attr_name), SAL_NO_ACQUIRE);
+    char *name = PyBytes_AsString(pUtf8.get());
+#endif
     me = (PyUNO*) self;
     try
     {
@@ -594,6 +618,99 @@ int PyUNO_setattr (PyObject* self, char* name, PyObject* value)
     return 1; //as above.
 }
 
+#if PY_MAJOR_VERSION >= 3
+static PyObject *PyUNO_dir( PyObject *self, PyObject *that )
+{
+    PyUNO* me;
+    PyObject* member_list;
+    Sequence<OUString> oo_member_list;
+
+    me = (PyUNO*) self;
+    oo_member_list = me->members->xInvocation->getMemberNames ();
+    member_list = PyList_New (oo_member_list.getLength ());
+    for (int i = 0; i < oo_member_list.getLength (); i++)
+    {
+        // setitem steals a reference
+        PyList_SetItem (member_list, i, ustring2PyUnicode(oo_member_list[i]).getAcquired() );
+    }
+    return member_list;
+}
+
+static PyObject *PyUNO_richcompare( PyObject *self, PyObject *that, int op )
+{
+    switch (op)
+    {
+    case Py_EQ:
+    case Py_NE:
+        if( self == that )
+        {
+            if (op == Py_EQ)
+                Py_RETURN_TRUE;
+            else
+                Py_RETURN_FALSE;
+        }
+        try
+        {
+            Runtime runtime;
+            if( PyObject_IsInstance( that, getPyUnoClass().get() ) )
+            {
+                PyUNO *me = reinterpret_cast< PyUNO*> ( self );
+                PyUNO *other = reinterpret_cast< PyUNO *> (that );
+                com::sun::star::uno::TypeClass tcMe = me->members->wrappedObject.getValueTypeClass();
+                com::sun::star::uno::TypeClass tcOther = other->members->wrappedObject.getValueTypeClass();
+
+                if( tcMe == tcOther )
+                {
+                    if( tcMe == com::sun::star::uno::TypeClass_STRUCT ||
+                        tcMe == com::sun::star::uno::TypeClass_EXCEPTION )
+                    {
+                        Reference< XMaterialHolder > xMe( me->members->xInvocation,UNO_QUERY);
+                        Reference< XMaterialHolder > xOther( other->members->xInvocation,UNO_QUERY );
+                        if( xMe->getMaterial() == xOther->getMaterial() )
+                        {
+                            if (op == Py_EQ)
+                                Py_RETURN_TRUE;
+                            else
+                                Py_RETURN_FALSE;
+                        }
+                    }
+                    else if( tcMe == com::sun::star::uno::TypeClass_INTERFACE )
+                    {
+                        if( me->members->wrappedObject == other->members->wrappedObject )
+                        {
+                            if (op == Py_EQ)
+                                Py_RETURN_TRUE;
+                            else
+                                Py_RETURN_FALSE;
+                        }
+                    }
+                }
+            }
+            if (op == Py_EQ)
+                Py_RETURN_FALSE;
+            else
+                Py_RETURN_TRUE;
+        }
+        catch( com::sun::star::uno::RuntimeException & e)
+        {
+            raisePyExceptionWithAny( makeAny( e ) );
+        }
+        break;
+    default:
+        PyErr_SetString(Py_NotImplemented, "not implemented");
+        break;
+    }
+
+    return NULL;
+}
+
+
+static struct PyMethodDef PyUNO_methods[] = {
+    { "__dir__", (PyCFunction)PyUNO_dir, METH_VARARGS, NULL},
+    { NULL, NULL }
+};
+
+#else
 // ensure object identity and struct equality
 static int PyUNO_cmp( PyObject *self, PyObject *that )
 {
@@ -603,7 +720,7 @@ static int PyUNO_cmp( PyObject *self, PyObject *that )
     try
     {
         Runtime runtime;
-        if( PyObject_IsInstance( that, getPyUnoClass( runtime ).get() ) )
+        if( PyObject_IsInstance( that, getPyUnoClass().get() ) )
         {
 
             PyUNO *me = reinterpret_cast< PyUNO*> ( self );
@@ -636,6 +753,7 @@ static int PyUNO_cmp( PyObject *self, PyObject *that )
     }
     return retDefault;
 }
+#endif
 
 static PyTypeObject PyUNOType =
 {
@@ -645,9 +763,15 @@ static PyTypeObject PyUNOType =
     0,
     (destructor) PyUNO_del,
     (printfunc) 0,
-    (getattrfunc) PyUNO_getattr,
-    (setattrfunc) PyUNO_setattr,
-    PyUNO_cmp,
+#if PY_MAJOR_VERSION >= 3
+    (getattrfunc) 0,
+    (setattrfunc) 0,
+    0,
+#else
+    (getattrfunc) PyUNO_getattr, /* tp_getattr */
+    (setattrfunc) PyUNO_setattr, /* tp_setattr */
+    (cmpfunc) PyUNO_cmp,
+#endif
     (reprfunc) PyUNO_repr,
     0,
     0,
@@ -655,18 +779,31 @@ static PyTypeObject PyUNOType =
     (hashfunc) 0,
     (ternaryfunc) 0,
     (reprfunc) PyUNO_str,
+#if PY_MAJOR_VERSION >= 3
+    (getattrofunc)PyUNO_getattr, /* tp_getattro */
+    (setattrofunc)PyUNO_setattr, /* tp_setattro */
+#else
     (getattrofunc)0,
     (setattrofunc)0,
+#endif
     NULL,
     0,
     NULL,
     (traverseproc)0,
     (inquiry)0,
+#if PY_MAJOR_VERSION >= 3
+    PyUNO_richcompare, /* tp_richcompare */
+#else
     (richcmpfunc)0,
+#endif
     0,
     (getiterfunc)0,
     (iternextfunc)0,
+#if PY_MAJOR_VERSION >= 3
+    PyUNO_methods, /* tp_methods */
+#else
     NULL,
+#endif
     NULL,
     NULL,
     NULL,
@@ -690,7 +827,7 @@ static PyTypeObject PyUNOType =
 #endif
 };
 
-PyRef getPyUnoClass( const Runtime &)
+PyRef getPyUnoClass()
 {
     return PyRef( reinterpret_cast< PyObject * > ( &PyUNOType ) );
 }

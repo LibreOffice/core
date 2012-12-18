@@ -43,6 +43,19 @@
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/weakref.hxx>
 
+//
+// Local workarounds for compatibility issues
+//
+#if PY_MAJOR_VERSION >= 3
+    #define PYSTR_FROMSTR               PyUnicode_FromString
+    #define USTR_TO_PYSTR               ustring2PyUnicode
+    #define PYSTR_CHECK                 PyUnicode_Check
+#else
+    #define PYSTR_FROMSTR               PyBytes_FromString
+    #define USTR_TO_PYSTR               ustring2PyString
+    #define PYSTR_CHECK                 PyBytes_Check
+#endif
+
 namespace pyuno
 {
 
@@ -161,7 +174,7 @@ PyRef getEnumClass( const Runtime &);
 PyRef getBoolClass( const Runtime &);
 PyRef getCharClass( const Runtime &);
 PyRef getByteSequenceClass( const Runtime & );
-PyRef getPyUnoClass( const Runtime &);
+PyRef getPyUnoClass();
 PyRef getClass( const rtl::OUString & name , const Runtime & runtime );
 PyRef getAnyClass( const Runtime &);
 PyObject *PyUNO_invoke( PyObject *object, const char *name , PyObject *args );

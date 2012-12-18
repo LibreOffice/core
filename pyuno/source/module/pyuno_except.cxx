@@ -142,7 +142,7 @@ static PyRef createClass( const OUString & name, const Runtime &runtime )
     }
     PyRef args( PyTuple_New( 3 ), SAL_NO_ACQUIRE );
 
-    PyRef pyTypeName = ustring2PyString( name /*.replace( '.', '_' )*/ );
+    PyRef pyTypeName = USTR_TO_PYSTR( name /*.replace( '.', '_' )*/ );
 
     PyRef bases;
     if( base.is() )
@@ -162,7 +162,7 @@ static PyRef createClass( const OUString & name, const Runtime &runtime )
     PyTuple_SetItem( args.get(), 2, PyDict_New() );
 
     PyRef ret(
-        PyObject_CallObject(reinterpret_cast<PyObject *>(&PyClass_Type) , args.get()),
+        PyObject_CallObject(reinterpret_cast<PyObject *>(&PyType_Type) , args.get()),
         SAL_NO_ACQUIRE );
 
     // now overwrite ctor and attrib functions
@@ -170,7 +170,7 @@ static PyRef createClass( const OUString & name, const Runtime &runtime )
     {
         PyObject_SetAttrString(
             ret.get(), const_cast< char * >("__pyunointerface__"),
-            ustring2PyString(name).get() );
+            USTR_TO_PYSTR(name).get() );
     }
     else
     {
@@ -179,13 +179,16 @@ static PyRef createClass( const OUString & name, const Runtime &runtime )
         PyRef getter = getObjectFromUnoModule( runtime,"_uno_struct__getattr__" );
         PyRef repr = getObjectFromUnoModule( runtime,"_uno_struct__repr__" );
         PyRef eq = getObjectFromUnoModule( runtime,"_uno_struct__eq__" );
+#if PY_MAJOR_VERSION >= 3
+        PyRef dir = getObjectFromUnoModule( runtime, "_uno_struct__dir__" );
+#endif
 
         PyObject_SetAttrString(
             ret.get(), const_cast< char * >("__pyunostruct__"),
-            ustring2PyString(name).get() );
+            USTR_TO_PYSTR(name).get() );
         PyObject_SetAttrString(
             ret.get(), const_cast< char * >("typeName"),
-            ustring2PyString(name).get() );
+            USTR_TO_PYSTR(name).get() );
         PyObject_SetAttrString(
             ret.get(), const_cast< char * >("__init__"), ctor.get() );
         PyObject_SetAttrString(
@@ -198,6 +201,10 @@ static PyRef createClass( const OUString & name, const Runtime &runtime )
             ret.get(), const_cast< char * >("__str__"), repr.get() );
         PyObject_SetAttrString(
             ret.get(), const_cast< char * >("__eq__"), eq.get() );
+#if PY_MAJOR_VERSION >= 3
+        PyObject_SetAttrString(
+            ret.get(), const_cast< char * >("__dir__"), dir.get() );
+#endif
     }
     return ret;
 }
@@ -233,7 +240,7 @@ PyRef getClass( const OUString & name , const Runtime &runtime)
 
         PyObject_SetAttrString(
             ret.get(), const_cast< char * >("__pyunointerface__"),
-            ustring2PyString(name).get() );
+            USTR_TO_PYSTR(name).get() );
     }
     else
     {
