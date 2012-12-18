@@ -63,7 +63,7 @@ private:
     OUString handleSsub();
     OUString handleSsubsup();
     OUString handleSsup();
-    OUString readOMathArg();
+    OUString readOMathArg( int stoptoken );
     OUString readOMathArgInElement( int token );
     oox::formulaimport::XmlStream& stream;
 };

@@ -69,7 +69,7 @@ OUString SmOoxmlImport::handleStream()
     {
         // strictly speaking, it is not OMathArg here, but currently supported
         // functionality is the same like OMathArg, in the future this may need improving
-        OUString item = readOMathArg();
+        OUString item = readOMathArg( M_TOKEN( oMath ));
         if( item.isEmpty())
             continue;
         if( !ret.isEmpty())
@@ -87,10 +87,10 @@ OUString SmOoxmlImport::handleStream()
     return ret;
 }
 
-OUString SmOoxmlImport::readOMathArg()
+OUString SmOoxmlImport::readOMathArg( int stoptoken )
 {
     OUString ret;
-    while( !stream.atEnd() && stream.currentToken() != CLOSING( stream.currentToken()))
+    while( !stream.atEnd() && stream.currentToken() != CLOSING( stoptoken ))
     {
         if( !ret.isEmpty())
             ret += " ";
@@ -164,7 +164,7 @@ OUString SmOoxmlImport::readOMathArg()
 OUString SmOoxmlImport::readOMathArgInElement( int token )
 {
     stream.ensureOpeningTag( token );
-    OUString ret = readOMathArg();
+    OUString ret = readOMathArg( token );
     stream.ensureClosingTag( token );
     return ret;
 }
