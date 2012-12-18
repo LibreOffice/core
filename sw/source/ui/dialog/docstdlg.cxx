@@ -34,48 +34,39 @@
 #include <fldmgr.hxx>
 #include <fldbas.hxx>
 
-#include <docstdlg.hrc>
-
-
 SfxTabPage *  SwDocStatPage::Create(Window *pParent, const SfxItemSet &rSet)
 {
     return new SwDocStatPage(pParent, rSet);
 }
 
-SwDocStatPage::SwDocStatPage(Window *pParent, const SfxItemSet &rSet) :
+SwDocStatPage::SwDocStatPage(Window *pParent, const SfxItemSet &rSet)
 
-    SfxTabPage  (pParent, SW_RES(TP_DOC_STAT), rSet),
-    aPageLbl    (this, SW_RES( FT_PAGE       )),
-    aPageNo     (this, SW_RES( FT_PAGE_COUNT )),
-    aTableLbl   (this, SW_RES( FT_TABLE      )),
-    aTableNo    (this, SW_RES( FT_TABLE_COUNT)),
-    aGrfLbl     (this, SW_RES( FT_GRF        )),
-    aGrfNo      (this, SW_RES( FT_GRF_COUNT  )),
-    aOLELbl     (this, SW_RES( FT_OLE        )),
-    aOLENo      (this, SW_RES( FT_OLE_COUNT  )),
-    aParaLbl    (this, SW_RES( FT_PARA       )),
-    aParaNo     (this, SW_RES( FT_PARA_COUNT )),
-    aWordLbl    (this, SW_RES( FT_WORD       )),
-    aWordNo     (this, SW_RES( FT_WORD_COUNT )),
-    aCharLbl    (this, SW_RES( FT_CHAR       )),
-    aCharNo     (this, SW_RES( FT_CHAR_COUNT )),
-    aCharExclSpacesLbl (this, SW_RES( FT_CHAR_EXCL_SPACES )),
-    aCharExclSpacesNo (this, SW_RES( FT_CHAR_COUNT_EXCL_SPACES )),
-    aLineLbl    (this, SW_RES( FT_LINE       )),
-    aLineNo     (this, SW_RES( FT_LINE_COUNT )),
-    aUpdatePB   (this, SW_RES( PB_PDATE      ))
+    : SfxTabPage(pParent, "StatisticsInfoPage", "modules/swriter/ui/statisticsinfopage.ui", rSet)
+
 {
+    get(m_pPageNo, "nopages");
+    get(m_pTableNo, "notables");
+    get(m_pGrfNo, "nogrfs");
+    get(m_pOLENo, "nooles");
+    get(m_pParaNo, "noparas");
+    get(m_pWordNo, "nowords");
+    get(m_pCharNo, "nochars");
+    get(m_pCharExclSpacesNo, "nocharsexspaces");
+
+    get(m_pLineLbl, "lineft");
+    get(m_pLineNo, "nolines");
+    get(m_pUpdatePB, "update");
+
     Update();
-    FreeResource();
-    aUpdatePB.SetClickHdl(LINK(this, SwDocStatPage, UpdateHdl));
+    m_pUpdatePB->SetClickHdl(LINK(this, SwDocStatPage, UpdateHdl));
     //#111684# is the current view a page preview no SwFEShell can be found -> hide the update button
     SwDocShell* pDocShell = (SwDocShell*) SfxObjectShell::Current();
     SwFEShell* pFEShell = pDocShell->GetFEShell();
     if(!pFEShell)
     {
-        aUpdatePB.Show(sal_False);
-        aLineLbl.Show(sal_False);
-        aLineNo .Show(sal_False);
+        m_pUpdatePB->Show(sal_False);
+        m_pLineLbl->Show(sal_False);
+        m_pLineNo->Show(sal_False);
     }
 
 }
@@ -105,14 +96,14 @@ void  SwDocStatPage::Reset(const SfxItemSet &/*rSet*/)
 
 void SwDocStatPage::SetData(const SwDocStat &rStat)
 {
-    aTableNo.SetText(String::CreateFromInt32( rStat.nTbl ));
-    aGrfNo.SetText(String::CreateFromInt32( rStat.nGrf ));
-    aOLENo.SetText(String::CreateFromInt32( rStat.nOLE ));
-    aPageNo.SetText(String::CreateFromInt32( rStat.nPage ));
-    aParaNo.SetText(String::CreateFromInt32( rStat.nPara ));
-    aWordNo.SetText(String::CreateFromInt32( rStat.nWord ));
-    aCharNo.SetText(String::CreateFromInt32( rStat.nChar ));
-    aCharExclSpacesNo.SetText(String::CreateFromInt32( rStat.nCharExcludingSpaces ));
+    m_pTableNo->SetText(String::CreateFromInt32( rStat.nTbl ));
+    m_pGrfNo->SetText(String::CreateFromInt32( rStat.nGrf ));
+    m_pOLENo->SetText(String::CreateFromInt32( rStat.nOLE ));
+    m_pPageNo->SetText(String::CreateFromInt32( rStat.nPage ));
+    m_pParaNo->SetText(String::CreateFromInt32( rStat.nPara ));
+    m_pWordNo->SetText(String::CreateFromInt32( rStat.nWord ));
+    m_pCharNo->SetText(String::CreateFromInt32( rStat.nChar ));
+    m_pCharExclSpacesNo->SetText(String::CreateFromInt32( rStat.nCharExcludingSpaces ));
 }
 
 /*------------------------------------------------------------------------
@@ -145,7 +136,7 @@ IMPL_LINK_NOARG(SwDocStatPage, UpdateHdl)
     SwDocShell* pDocShell = (SwDocShell*) SfxObjectShell::Current();
     SwFEShell* pFEShell = pDocShell->GetFEShell();
     if(pFEShell)
-        aLineNo.SetText( String::CreateFromInt32( pFEShell->GetLineCount(sal_False)));
+        m_pLineNo->SetText( String::CreateFromInt32( pFEShell->GetLineCount(sal_False)));
     //pButton->Disable();
     return 0;
 }

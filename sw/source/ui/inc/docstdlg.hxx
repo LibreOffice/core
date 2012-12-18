@@ -44,26 +44,19 @@ protected:
     DECL_LINK(UpdateHdl, void *);
 
 private:
-    FixedText       aPageLbl;
-    FixedInfo       aPageNo;
-    FixedText       aTableLbl;
-    FixedInfo       aTableNo;
-    FixedText       aGrfLbl;
-    FixedInfo       aGrfNo;
-    FixedText       aOLELbl;
-    FixedInfo       aOLENo;
-    FixedText       aParaLbl;
-    FixedInfo       aParaNo;
-    FixedText       aWordLbl;
-    FixedInfo       aWordNo;
-    FixedText       aCharLbl;
-    FixedInfo       aCharNo;
-    FixedText       aCharExclSpacesLbl;
-    FixedInfo       aCharExclSpacesNo;
-    FixedText       aLineLbl;
-    FixedInfo       aLineNo;
+    FixedText*      m_pPageNo;
+    FixedText*      m_pTableNo;
+    FixedText*      m_pGrfNo;
+    FixedText*      m_pOLENo;
+    FixedText*      m_pParaNo;
+    FixedText*      m_pWordNo;
+    FixedText*      m_pCharNo;
+    FixedText*      m_pCharExclSpacesNo;
 
-    PushButton      aUpdatePB;
+    FixedText*      m_pLineLbl;
+    FixedText*      m_pLineNo;
+    PushButton*     m_pUpdatePB;
+
     SwDocStat       aDocStat;
 
     void            Update();

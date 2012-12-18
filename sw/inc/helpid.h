@@ -159,7 +159,6 @@
 #define HID_FRM_STD                                             "SW_HID_FRM_STD"
 #define HID_GRF_EXT                                             "SW_HID_GRF_EXT"
 #define HID_COLUMN                                              "SW_HID_COLUMN"
-#define HID_DOC_STAT                                            "SW_HID_DOC_STAT"
 #define HID_FOOTNOTE_PAGE                                       "SW_HID_FOOTNOTE_PAGE"
 #define HID_FORMAT_TABLE                                        "SW_HID_FORMAT_TABLE"
 #define HID_TABLE_COLUMN                                        "SW_HID_TABLE_COLUMN"
