@@ -989,7 +989,14 @@ public:
 
     static SdrObject* getSdrObjectFromXShape( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xInt );
 
-    // setting the UNO representation is allowed for the UNO representation itself only!
+    /** Sets a new UNO representation of the shape
+      *
+      * This is only a public interface function. The actual work is
+      * done by impl_setUnoShape().
+      *
+      * Calling this function is only allowed for the UNO representation
+      * itself!
+      */
     void setUnoShape(
             const com::sun::star::uno::Reference<
                 com::sun::star::uno::XInterface>& _rxUnoShape);
@@ -1045,7 +1052,17 @@ public:
     void SetBLIPSizeRectangle( const Rectangle& aRect );
 
 protected:
-    void    impl_setUnoShape( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxUnoShape );
+    /** Sets a new UNO shape
+      *
+      * The default implementation of this function sets the new UNO
+      * shape. Derived classes should override the function to handle
+      * any other actions that are needed when the shape is being
+      * changed.
+      *
+      * The implementation _must_ call the same method of its parent
+      * class (preferably as the first step)!
+      */
+    virtual void    impl_setUnoShape( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxUnoShape );
 
     /**
      Helper function for reimplementing Clone().

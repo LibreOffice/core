@@ -3211,9 +3211,17 @@ bool SdrObjCustomShape::doConstructOrthogonal(const ::rtl::OUString& rName)
 void SdrObjCustomShape::InvalidateRenderGeometry()
 {
     mXRenderedCustomShape = 0L;
-    mxCustomShapeEngine = 0L;
     SdrObject::Free( mpLastShadowGeometry );
     mpLastShadowGeometry = 0L;
+}
+
+void SdrObjCustomShape::impl_setUnoShape(const uno::Reference<uno::XInterface>& rxUnoShape)
+{
+    SdrTextObj::impl_setUnoShape(rxUnoShape);
+
+    // The shape engine is created with _current_ shape. This means we
+    // _must_ reset it when the shape changes.
+    mxCustomShapeEngine.set(0);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

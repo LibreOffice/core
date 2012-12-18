@@ -83,6 +83,7 @@ private:
 
 protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
+    virtual void impl_setUnoShape(const com::sun::star::uno::Reference<com::sun::star::uno::XInterface>& rxUnoShape);
 
 public:
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
