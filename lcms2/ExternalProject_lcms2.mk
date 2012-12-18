@@ -21,7 +21,7 @@ ifeq ($(filter-out 14 13,$(COMEX)),)
 $(call gb_ExternalProject_get_state_target,lcms2,build):
 	cd $(EXTERNAL_WORKDIR)/Projects/VC2010/lcms2_DLL \
 	&& MSBuild.exe lcms2_DLL.vcxproj /p:Configuration=Release /p:Platform=Win32 /p:TargetName=lcms2 \
-	$(if $(filter 14,$(COMEX)),/p:PlatformToolset=v110) \
+	$(if $(filter 14,$(COMEX)),/p:PlatformToolset=v110 /p:VisualStudioVersion=11.0) \
 	&& touch $@
 else
 $(call gb_ExternalProject_get_state_target,lcms2,build):
