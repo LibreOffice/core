@@ -6,13 +6,15 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+
+#include <errno.h>
 #include <stdlib.h>
+#include <string.h>
 #include <algorithm>
 #include <vector>
 
 #include <comphelper/processfactory.hxx>
 #include <rtl/strbuf.hxx>
-#include <string.h>
 
 #include "DiscoveryService.hxx"
 
