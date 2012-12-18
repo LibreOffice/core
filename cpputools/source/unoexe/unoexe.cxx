@@ -29,6 +29,7 @@
 #include <rtl/process.h>
 #include <rtl/string.h>
 #include <rtl/strbuf.hxx>
+#include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <uno/environment.h>
@@ -58,12 +59,6 @@
 #include <osl/thread.h>
 #include <osl/file.hxx>
 
-#ifdef SAL_UNX
-#define SEPARATOR '/'
-#else
-#define SEPARATOR '\\'
-#endif
-
 using namespace std;
 using namespace osl;
 using namespace cppu;
@@ -83,42 +78,18 @@ using ::rtl::OUStringBuffer;
 namespace unoexe
 {
 
-static sal_Bool isFileUrl(const OUString& fileName)
-{
-    if (fileName.indexOf("file://") == 0 )
-        return sal_True;
-    return sal_False;
-}
-
 static OUString convertToFileUrl(const OUString& fileName)
 {
-    if ( isFileUrl(fileName) )
-    {
-        return fileName;
+    OUString uWorkingDir;
+    if (osl_getProcessWorkingDir(&uWorkingDir.pData) != osl_Process_E_None) {
+        OSL_ASSERT(false);
     }
-
-    OUString uUrlFileName;
-    if ( fileName.indexOf('.') == 0 || fileName.indexOf(SEPARATOR) < 0 )
+    if (!uWorkingDir.isEmpty()
+        && uWorkingDir[uWorkingDir.getLength() - 1] != '/')
     {
-        OUString uWorkingDir;
-        if (osl_getProcessWorkingDir(&uWorkingDir.pData) != osl_Process_E_None) {
-            OSL_ASSERT(false);
-        }
-        if (FileBase::getAbsoluteFileURL(uWorkingDir, fileName, uUrlFileName)
-            != FileBase::E_None)
-        {
-            OSL_ASSERT(false);
-        }
-    } else
-    {
-        if (FileBase::getFileURLFromSystemPath(fileName, uUrlFileName)
-            != FileBase::E_None)
-        {
-            OSL_ASSERT(false);
-        }
+        uWorkingDir += "/";
     }
-
-    return uUrlFileName;
+    return rtl::Uri::convertRelToAbs(uWorkingDir, fileName);
 }
 
 static sal_Bool s_quiet = false;
@@ -362,6 +333,13 @@ static Reference< XSimpleRegistry > openRegistry(
         out( rURL );
         out( ": " );
         out( e.Message );
+    }
+    catch (rtl::MalformedUriException & e)
+    {
+        out( "\n> warning: cannot open registry " );
+        out( rURL );
+        out( ": " );
+        out( e.getMessage() );
     }
 
     return Reference< XSimpleRegistry >();
