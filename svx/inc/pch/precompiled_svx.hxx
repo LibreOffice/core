@@ -250,16 +250,21 @@
 #include <numeric>
 #include "osl/diagnose.h"
 #include <osl/diagnose.h>
+#include "osl/file.hxx"
 #include <osl/file.hxx>
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
 #include <osl/nlsupport.h>
+#include "osl/process.h"
 #include <osl/security.hxx>
+#include <pwd.h>
+#include "rtl/bootstrap.hxx"
 #include <rtl/bootstrap.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/locale.h>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
+#include "rtl/strbuf.hxx"
 #include <rtl/strbuf.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/textenc.h>
@@ -349,6 +354,7 @@
 #include <toolkit/helper/externallock.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/unohlp.hxx>
+#include "tools/appendunixshellword.hxx"
 #include <tools/color.hxx>
 #include <tools/debug.hxx>
 #include <tools/errinf.hxx>
@@ -364,6 +370,7 @@
 #include <tools/string.hxx>
 #include <tools/urlobj.hxx>
 #include <unicode/uchar.h>
+#include <unistd.h>
 #include "uno/lbnames.h"
 #include <uno/mapping.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>

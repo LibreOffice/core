@@ -276,6 +276,7 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/XNumberingRulesSupplier.hpp>
 #include <com/sun/star/text/XSimpleText.hpp>
+#include <com/sun/star/text/XTextAppend.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
