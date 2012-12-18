@@ -26,7 +26,7 @@ ifeq ($(OS)$(COM),WNTMSC)
 $(call gb_ExternalProject_get_state_target,python3,build) :
 ifeq ($(VCVER),110)
 	cd $(EXTERNAL_WORKDIR)/PCbuild \
-	&& MAKEFLAGS= MSBuild.exe pcbuild.sln /t:Build /p:Configuration=Release /p:PlatformToolset=v110 \
+	&& MAKEFLAGS= MSBuild.exe pcbuild.sln /t:Build /p:Configuration=Release /p:PlatformToolset=v110 /p:VisualStudioVersion=11.0 \
 	&& cd $(EXTERNAL_WORKDIR) \
 	&& ln -s PCbuild LO_lib \
 	&& touch $@
