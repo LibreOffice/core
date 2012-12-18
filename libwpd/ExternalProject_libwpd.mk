@@ -30,7 +30,7 @@ $(call gb_ExternalProject_get_state_target,libwpd,build) :
 else
 $(call gb_ExternalProject_get_state_target,libwpd,build) :
 	cd $(EXTERNAL_WORKDIR)/build/win32 \
-	&& msbuild.exe libwpd.vcxproj /p:PlatformToolset=v110 /p:TargetName=libwpd-0.9 /p:Configuration=Release \
+	&& msbuild.exe libwpd.vcxproj /p:PlatformToolset=v110 /p:VisualStudioVersion=11.0 /p:TargetName=libwpd-0.9 /p:Configuration=Release \
 	&& touch $@
 endif
 else
