@@ -11,48 +11,48 @@ root=`dirname $0`
 root=`cd $root/../.. && pwd`
 
 if test -z "$1"; then
-headers=`ls $root/*/inc/pch/precompiled_*.hxx`
+    headers=`ls $root/*/inc/pch/precompiled_*.hxx`
 else
-headers="$1"
+    headers="$1"
 fi
 
 for x in $headers; do
-header=$x
-echo updating `echo $header | sed -e s%$root/%%`
-module=`echo $header | sed -e s%$root/%% -e s%/.*%%`
-name=`echo $header | sed -e s/.*precompiled_// -e s/\.hxx//`
-makefile="Library_$name.mk"
+    header=$x
+    echo updating `echo $header | sed -e s%$root/%%`
+    module=`echo $header | sed -e s%$root/%% -e s%/.*%%`
+    name=`echo $header | sed -e s/.*precompiled_// -e s/\.hxx//`
+    makefile="Library_$name.mk"
 
-tmpfile=`mktemp`
+    tmpfile=`mktemp`
 
-cat "$root/$module/$makefile" | sed 's#\\$##' | \
-    (
-    inobjects=
-    ifstack=0
-    while read line ; do
-    if (test "$line" = "))") || (echo $line | grep -q ", "); then
+    cat "$root/$module/$makefile" | sed 's#\\$##' | \
+        (
         inobjects=
-    elif echo $line | grep -q -e add_exception_objects -e add_noexception_objects -e add_cxxobject -e add_cxxobjects ; then
-        inobjects=1
-        if test $ifstack -ne 0 ; then
-            echo Sources in a conditional, ignoring for now. >&2
-        fi
-    elif echo $line | grep -q ^if ; then
-        ifstack=$((ifstack + 1))
-    elif echo $line | grep -q ^endif ; then
-        ifstack=$((ifstack - 1))
-    elif test -n "$inobjects" -a $ifstack -eq 0; then
-        file=$line
-        if ! test -f "$root/$file".cxx ; then
-            echo No file $file in $module/$makefile >&2
-        else
-            cat "$root/$file".cxx | grep -e '^\s*#include' | sed 's/\(#include [<"][^>"]*[>"]\).*/\1/' | sed 's#\.\./##g#' >>$tmpfile
-        fi
-    fi
-    done
-    )
+        ifstack=0
+        while read line ; do
+            if (test "$line" = "))") || (echo $line | grep -q ", "); then
+                inobjects=
+            elif echo $line | grep -q -e add_exception_objects -e add_noexception_objects -e add_cxxobject -e add_cxxobjects ; then
+                inobjects=1
+                if test $ifstack -ne 0 ; then
+                    echo Sources in a conditional, ignoring for now. >&2
+                fi
+            elif echo $line | grep -q ^if ; then
+                ifstack=$((ifstack + 1))
+            elif echo $line | grep -q ^endif ; then
+                ifstack=$((ifstack - 1))
+            elif test -n "$inobjects" -a $ifstack -eq 0; then
+                file=$line
+                if ! test -f "$root/$file".cxx ; then
+                    echo No file $file in $module/$makefile >&2
+                else
+                    cat "$root/$file".cxx | grep -e '^\s*#include' | sed 's/\(#include [<"][^>"]*[>"]\).*/\1/' | sed 's#\.\./##g#' >>$tmpfile
+                fi
+            fi
+        done
+        )
 
-cat >$header <<EOF
+    cat >$header <<EOF
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
@@ -64,16 +64,16 @@ cat >$header <<EOF
 
 EOF
 
-# Library_svx needs this (sendreportw32.cxx)
-if test "$makefile" = Library_svx.mk ; then
-    cat >>$header <<EOF
+    # Library_svx needs this (sendreportw32.cxx)
+    if test "$makefile" = Library_svx.mk ; then
+        cat >>$header <<EOF
 #ifdef WNT
 #define UNICODE
 #define _UNICODE
 #endif
 
 EOF
-fi
+    fi
 
 function local_file()
 (
@@ -100,23 +100,23 @@ function filter_ignore()
     grep -v -F -e '#include <editeng/eeitemid.hxx>'
 )
 
-# " in #include "foo" breaks echo down below, so " -> @
-cat $tmpfile | sort -u | filter_ignore | sed 's/"/@/g' | \
-    (
-    while read line; do
-        file=`echo $line | sed 's/.*[<"@]\([^>"@]*\)[>"@].*/\1/'`
-        if ! local_file "$file"; then
-            echo $line | sed 's/@/"/g' >>$header
-        fi
-    done
-    )
+    # " in #include "foo" breaks echo down below, so " -> @
+    cat $tmpfile | sort -u | filter_ignore | sed 's/"/@/g' | \
+        (
+        while read line; do
+            file=`echo $line | sed 's/.*[<"@]\([^>"@]*\)[>"@].*/\1/'`
+            if ! local_file "$file"; then
+                echo $line | sed 's/@/"/g' >>$header
+            fi
+        done
+        )
 
-cat >>$header <<EOF
+    cat >>$header <<EOF
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 EOF
 
-rm $tmpfile
+    rm $tmpfile
 done
 
 #echo Done.
