@@ -2853,7 +2853,7 @@ sal_Int32 ImpSvNumberformatScan::RemoveQuotes( OUString& rStr )
         sal_Int32 n = rStr.getLength() - 1;
         if ( c == '"' && rStr[n] == '"' )
         {
-            rStr = rStr.copy(1,n);
+            rStr = rStr.copy( 1, n-1);
             return 2;
         }
         else if ( c == '\\' )
