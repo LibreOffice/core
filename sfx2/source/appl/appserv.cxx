@@ -477,8 +477,8 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_SEND_FEEDBACK:
         {
             ::rtl::OUString module = SfxHelp::GetCurrentModuleIdentifier();
-            ::rtl::OUString sURL("http://hub.libreoffice.org/send-feedback/?version=" + utl::ConfigManager::getAboutBoxProductVersion() +
-				 "&locale=" + utl::ConfigManager::getLocale() + "&module=" + module.copy(module.lastIndexOf(".") + 1 )  );
+            ::rtl::OUString sURL("http://hub.libreoffice.org/send-feedback/?LOversion=" + utl::ConfigManager::getAboutBoxProductVersion() +
+                "&LOlocale=" + utl::ConfigManager::getLocale() + "&LOmodule=" + module.copy(module.lastIndexOf(".") + 1 )  );
             try
             {
                 uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
