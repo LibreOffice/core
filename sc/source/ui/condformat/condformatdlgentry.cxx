@@ -1170,6 +1170,9 @@ ScDateFrmtEntry::ScDateFrmtEntry( Window* pParent, ScDocument* pDoc, const ScCon
     {
         sal_Int32 nPos = static_cast<sal_Int32>(pFormat->GetDateType());
         maLbDateEntry.SelectEntryPos(nPos);
+
+        rtl::OUString aStyleName = pFormat->GetStyleName();
+        maLbStyle.SelectEntry(aStyleName);
     }
 }
 
@@ -1180,6 +1183,7 @@ void ScDateFrmtEntry::Init()
 
     FillStyleListBox( mpDoc, maLbStyle );
     maLbStyle.SetSelectHdl( LINK( this, ScDateFrmtEntry, StyleSelectHdl ) );
+    maLbStyle.SelectEntryPos(1);
 }
 
 void ScDateFrmtEntry::SetActive()
@@ -1193,9 +1197,9 @@ void ScDateFrmtEntry::SetActive()
 
 void ScDateFrmtEntry::SetInactive()
 {
-    maLbDateEntry.Show();
-    maFtStyle.Show();
-    maWdPreview.Show();
+    maLbDateEntry.Hide();
+    maFtStyle.Hide();
+    maWdPreview.Hide();
 
     Deselect();
 }
