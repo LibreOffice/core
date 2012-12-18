@@ -29,6 +29,7 @@
 #include "address.hxx"
 #include "pivot.hxx"
 
+struct ScPivotField;
 class ScPivotLayoutDlg;
 class ScAccessibleDataPilotControl;
 
@@ -65,6 +66,13 @@ protected:
     typedef ::std::vector<FieldName> FieldNames;
 
 public:
+    typedef boost::ptr_vector<ScPivotFuncData> FuncDataType;
+
+    struct FuncItem
+    {
+        SCCOL mnCol;
+        sal_uInt16 mnFuncMask;
+    };
 
     /**
      * Custom scroll bar to pass the command event to its parent window.
@@ -111,21 +119,19 @@ public:
     /** @return  TRUE, if the field with the given index exists. */
     bool            IsExistingIndex( size_t nIndex ) const;
 
-    /** Inserts a field to the specified index. */
-    void AddField( const rtl::OUString& rText, size_t nNewIndex );
+    void AppendField( const rtl::OUString& rText, const ScPivotFuncData& rFunc );
 
-    /** Inserts a field using the specified pixel position.
-        @param rPos  The coordinates to insert the field.
-        @param rnIndex  The new index of the field is returned here.
-        @return  true, if the field has been created. */
-    bool AddField(const rtl::OUString& rText, const Point& rPos, size_t& rnIndex, sal_uInt8& rnDupCount);
+    /**
+     * Inserts a field using the specified pixel position.
+     *
+     * @param rPos  The coordinates to insert the field.
+     */
+    size_t AddField(const rtl::OUString& rText, const Point& rPos, const ScPivotFuncData& rFunc);
 
     bool MoveField(size_t nCurPos, const Point& rPos, size_t& rnIndex);
 
-    bool AppendField(const rtl::OUString& rText, size_t& rnIndex);
-
-    /** Removes a field from the specified index. */
-    void            DelField( size_t nDelIndex );
+    /** Remove a field by specified index. */
+    void DeleteFieldByIndex( size_t nIndex );
 
     /** Returns the number of existing fields. */
     size_t          GetFieldCount() const;
@@ -151,6 +157,17 @@ public:
     void            SelectNext();
     /** Grabs focus and sets new selection. */
     void            GrabFocusAndSelect( size_t nIndex );
+
+    const ScPivotFuncData& GetFuncData(size_t nIndex) const;
+    ScPivotFuncData& GetFuncData(size_t nIndex);
+
+    void GetAllFuncItems(std::vector<FuncItem>& rItems) const;
+
+    sal_uInt8 GetNextDupCount(const ScPivotFuncData& rData, size_t nSelfIndex) const;
+
+    void ConvertToPivotArray(std::vector<ScPivotField>& rFields) const;
+
+    size_t GetFieldIndexByData( const ScPivotFuncData& rData ) const;
 
     virtual void            Paint( const Rectangle& rRect );
 
@@ -222,6 +239,7 @@ private:
     typedef ::std::vector<Window*> Paintables;
     Paintables maPaintables;
 
+    FuncDataType maFuncData;
     FieldNames maFieldNames;   /// String array of the field names and flags, if text fits into button.
     ScPivotLayoutDlg*  mpDlg;
     FixedText*      mpCaption;     /// FixedText containing the name of the control.

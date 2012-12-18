@@ -40,6 +40,7 @@
 #include "global.hxx"
 #include "address.hxx"
 #include "dpglobal.hxx"
+#include "dpmacros.hxx"
 
 #include <vector>
 #include <boost/ptr_container/ptr_vector.hpp>
@@ -164,6 +165,10 @@ struct ScPivotFuncData
         const ::com::sun::star::sheet::DataPilotFieldReference& rFieldRef );
 
     bool operator== (const ScPivotFuncData& r) const;
+
+#if DEBUG_PIVOT_TABLE
+    void Dump() const;
+#endif
 };
 
 typedef ::std::vector< ScPivotFuncData > ScPivotFuncDataVector;
