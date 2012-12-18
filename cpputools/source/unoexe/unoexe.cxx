@@ -350,18 +350,20 @@ static Reference< XSimpleRegistry > openRegistry(
         if (xNewReg->isValid())
             return xNewReg;
         else
+        {
             xNewReg->close();
+            out( "\n> warning: cannot open registry " );
+            out( rURL );
+        }
     }
-    catch (Exception &)
+    catch (Exception & e)
     {
+        out( "\n> warning: cannot open registry " );
+        out( rURL );
+        out( ": " );
+        out( e.Message );
     }
 
-    out( "\n> warning: cannot open registry \"" );
-    out( rURL );
-    if (bReadOnly)
-        out( "\" for reading, ignoring!" );
-    else
-        out( "\" for reading and writing, ignoring!" );
     return Reference< XSimpleRegistry >();
 }
 //--------------------------------------------------------------------------------------------------
