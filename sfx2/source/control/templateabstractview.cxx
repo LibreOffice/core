@@ -8,6 +8,7 @@
  */
 
 #include <sfx2/templateabstractview.hxx>
+#include <sfx2/templatecontaineritem.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <sfx2/templateview.hxx>
@@ -50,9 +51,44 @@ bool ViewFilter_Application::isValid (const OUString &rPath) const
 
 bool ViewFilter_Application::operator () (const ThumbnailViewItem *pItem)
 {
-    const TemplateViewItem *pTempItem = static_cast<const TemplateViewItem*>(pItem);
+    const TemplateViewItem *pTempItem = dynamic_cast<const TemplateViewItem*>(pItem);
+    if (pTempItem)
+        return isValid(pTempItem->getPath());
 
-    return isValid(pTempItem->getPath());
+    TemplateContainerItem *pContainerItem = const_cast<TemplateContainerItem*>(dynamic_cast<const TemplateContainerItem*>(pItem));
+    if (pContainerItem)
+    {
+        std::vector<TemplateItemProperties> &rTemplates = pContainerItem->maTemplates;
+
+        size_t nVisCount = 0;
+
+        // Clear thumbnails
+        pContainerItem->maPreview1.Clear();
+        pContainerItem->maPreview2.Clear();
+
+        for (size_t i = 0, n = rTemplates.size(); i < n; ++i)
+        {
+            if (isValid(rTemplates[i].aPath))
+            {
+                ++nVisCount;
+                if ( pContainerItem->maPreview1.IsEmpty( ) )
+                {
+                    pContainerItem->maPreview1 = TemplateAbstractView::scaleImg(rTemplates[i].aThumbnail,
+                                                                       TEMPLATE_THUMBNAIL_MAX_WIDTH*0.75,
+                                                                       TEMPLATE_THUMBNAIL_MAX_HEIGHT*0.75);
+                }
+                else if ( pContainerItem->maPreview2.IsEmpty() )
+                {
+                    pContainerItem->maPreview2 = TemplateAbstractView::scaleImg(rTemplates[i].aThumbnail,
+                                                                       TEMPLATE_THUMBNAIL_MAX_WIDTH*0.75,
+                                                                       TEMPLATE_THUMBNAIL_MAX_HEIGHT*0.75);
+                }
+            }
+        }
+
+        return mApp != FILTER_APP_NONE ? nVisCount : true ;
+    }
+    return true;
 }
 
 bool ViewFilter_Keyword::operator ()(const ThumbnailViewItem *pItem)
@@ -64,14 +100,18 @@ bool ViewFilter_Keyword::operator ()(const ThumbnailViewItem *pItem)
 
 TemplateAbstractView::TemplateAbstractView (Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren)
     : ThumbnailView(pParent,nWinStyle,bDisableTransientChildren),
-      mpItemView(new TemplateView(this))
+      mpItemView(new TemplateView(this)),
+      mbFilteredResults(false),
+      meFilterOption(FILTER_APP_NONE)
 {
     mpItemView->setItemStateHdl(LINK(this,TemplateAbstractView,OverlayItemStateHdl));
 }
 
 TemplateAbstractView::TemplateAbstractView(Window *pParent, const ResId &rResId, bool bDisableTransientChildren)
     : ThumbnailView(pParent,rResId,bDisableTransientChildren),
-      mpItemView(new TemplateView(this))
+      mpItemView(new TemplateView(this)),
+      mbFilteredResults(false),
+      meFilterOption(FILTER_APP_NONE)
 {
     mpItemView->setItemStateHdl(LINK(this,TemplateAbstractView,OverlayItemStateHdl));
 }
@@ -117,6 +157,21 @@ void TemplateAbstractView::sortOverlayItems(const boost::function<bool (const Th
                                                                         const ThumbnailViewItem*) > &func)
 {
     mpItemView->sortItems(func);
+}
+
+void TemplateAbstractView::filterTemplatesByApp (const FILTER_APPLICATION &eApp)
+{
+    meFilterOption = eApp;
+
+    if (mpItemView->IsVisible())
+    {
+        mbFilteredResults = true;
+        mpItemView->filterItems(ViewFilter_Application(eApp));
+    }
+    else
+    {
+        filterItems(ViewFilter_Application(eApp));
+    }
 }
 
 void TemplateAbstractView::filterTemplatesByKeyword(const OUString &rKeyword)

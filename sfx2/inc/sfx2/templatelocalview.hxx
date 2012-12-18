@@ -41,8 +41,6 @@ public:
 
     virtual void showOverlay (bool bVisible);
 
-    virtual void filterTemplatesByApp (const FILTER_APPLICATION &eApp);
-
     std::vector<TemplateItemProperties>
         getFilteredItems (const boost::function<bool (const TemplateItemProperties&) > &rFunc) const;
 
@@ -79,8 +77,6 @@ private:
 
 private:
 
-    bool mbFilteredResults;     // Flag keep track if overlay has been filtered so folders can get filtered too afterwards
-    FILTER_APPLICATION meFilterOption;
     SfxDocumentTemplates *mpDocTemplates;
 };
 

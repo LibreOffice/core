@@ -32,60 +32,8 @@ using namespace ::com::sun::star::frame;
 
 static void lcl_updateThumbnails (TemplateContainerItem *pItem);
 
-class FolderFilter_Application : public ViewFilter_Application
-{
-public:
-
-    FolderFilter_Application (FILTER_APPLICATION eApp)
-        : ViewFilter_Application(eApp)
-    {
-    }
-
-    bool operator () (const ThumbnailViewItem *pItem)
-    {
-        TemplateContainerItem *pFolderItem = (TemplateContainerItem*)pItem;
-
-        std::vector<TemplateItemProperties> &rTemplates = pFolderItem->maTemplates;
-
-        size_t nVisCount = 0;
-
-        // Clear thumbnails
-        pFolderItem->maPreview1.Clear();
-        pFolderItem->maPreview2.Clear();
-
-        for (size_t i = 0, n = rTemplates.size(); i < n; ++i)
-        {
-            if (isValid(rTemplates[i].aPath))
-            {
-                ++nVisCount;
-                if ( pFolderItem->maPreview1.IsEmpty( ) )
-                {
-                    pFolderItem->maPreview1 = TemplateAbstractView::scaleImg(rTemplates[i].aThumbnail,
-                                                                       TEMPLATE_THUMBNAIL_MAX_WIDTH*0.75,
-                                                                       TEMPLATE_THUMBNAIL_MAX_HEIGHT*0.75);
-                }
-                else if ( pFolderItem->maPreview2.IsEmpty() )
-                {
-                    pFolderItem->maPreview2 = TemplateAbstractView::scaleImg(rTemplates[i].aThumbnail,
-                                                                       TEMPLATE_THUMBNAIL_MAX_WIDTH*0.75,
-                                                                       TEMPLATE_THUMBNAIL_MAX_HEIGHT*0.75);
-                }
-            }
-        }
-
-        return meApp != FILTER_APP_NONE ? nVisCount : true ;
-    }
-
-
-private:
-
-    FILTER_APPLICATION meApp;
-};
-
 TemplateLocalView::TemplateLocalView ( Window* pParent, const ResId& rResId, bool bDisableTransientChildren)
     : TemplateAbstractView(pParent,rResId,bDisableTransientChildren),
-      mbFilteredResults(false),
-      meFilterOption(FILTER_APP_NONE),
       mpDocTemplates(new SfxDocumentTemplates)
 {
     mpItemView->SetColor(GetSettings().GetStyleSettings().GetFieldColor());
@@ -196,28 +144,13 @@ void TemplateLocalView::showOverlay (bool bVisible)
         // Check if the folder view needs to be filtered
         if (mbFilteredResults)
         {
-            filterItems(FolderFilter_Application(meFilterOption));
+            filterItems(ViewFilter_Application(meFilterOption));
 
             mbFilteredResults = false;
             meFilterOption = FILTER_APP_NONE;
         }
 
         mpItemView->Clear();
-    }
-}
-
-void TemplateLocalView::filterTemplatesByApp (const FILTER_APPLICATION &eApp)
-{
-    meFilterOption = eApp;
-
-    if (mpItemView->IsVisible())
-    {
-        mbFilteredResults = true;
-        mpItemView->filterItems(ViewFilter_Application(eApp));
-    }
-    else
-    {
-        filterItems(FolderFilter_Application(eApp));
     }
 }
 
