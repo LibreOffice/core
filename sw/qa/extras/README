@@ -5,12 +5,13 @@ tests. This file documents how to add new testcases to this framework.
 
 == Import tests
 
-Import tests are the easier ones. All start with a `load()` method that loads a
-file to `mxComponent`, which represents the UNO model of the document.
+Import tests are the easier ones. First you need to add a new entry to the
+table inside the `run()` method, so the framework will load the specified file
+to `mxComponent`, which represents the UNO model of the document.
 
-The rest of the testcase is about asserting this document model: use the UNO
-API to retrieve properties, then use `CPPUNIT_ASSERT_EQUAL()` to test against
-an expected value.
+The rest of the testcase is about implementing the test method asserting this
+document model: use the UNO API to retrieve properties, then use
+`CPPUNIT_ASSERT_EQUAL()` to test against an expected value.
 
 See below for more details on writing the UNO code see below.
 
@@ -26,8 +27,10 @@ Yes, this means that you can test the export code (using this framework) if the
 importer is working correctly. (But that's not so bad, users usually expect a
 feature to work in both the importer and the exporter.)
 
-The only difference is that instead of `load()`, you call `roundtrip()` to load
-the test document, then you can assert it as discussed above.
+The only difference is that in these tests the test method is called twice:
+once after the initial import -- so you can see if the export fails due to an
+import problem in fact -- and once after the export and import.  The test
+method should still assert the document model only, as discussed above.
 
 == Helper methods
 
