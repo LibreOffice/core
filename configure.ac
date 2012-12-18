@@ -2279,6 +2279,7 @@ dnl cross-compiling would imply a non-desktop OS.
 
 if test $_os != iOS -a $_os != Android; then
     BUILD_TYPE="$BUILD_TYPE DESKTOP"
+    BUILD_TYPE_IS_DESKTOP=YES
 fi
 
 # Currently we build only viewer apps for Android (and for iOS not even that yet), so to avoid getting
@@ -9498,7 +9499,7 @@ fi
 AC_SUBST(ENABLE_PACKAGEKIT)
 
 AC_MSG_CHECKING([whether to enable Impress remote control])
-if test -n "$enable_sdremote" -a "$enable_sdremote" != "no"; then
+if test "$BUILD_TYPE_IS_DESKTOP" = YES -a -n "$enable_sdremote" -a "$enable_sdremote" != "no"; then
     AC_MSG_RESULT([yes])
     ENABLE_SDREMOTE=YES
     AC_MSG_CHECKING([whether to enable Bluetooth support in Impress remote control])
