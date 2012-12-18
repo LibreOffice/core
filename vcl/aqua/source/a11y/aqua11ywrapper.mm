@@ -977,21 +977,38 @@ Reference < XAccessibleContext > hitTestRunner ( com::sun::star::awt::Point poin
         Reference < XAccessibleComponent > rxAccessibleComponent ( rxAccessibleContext, UNO_QUERY );
         if ( rxAccessibleComponent.is() ) {
             com::sun::star::awt::Point location = rxAccessibleComponent -> getLocationOnScreen();
-            com::sun::star::awt::Point hitPoint ( point.X - location.X , point.Y - location.Y); 
+            com::sun::star::awt::Point hitPoint ( point.X - location.X , point.Y - location.Y);
             Reference < XAccessible > rxAccessible = rxAccessibleComponent -> getAccessibleAtPoint ( hitPoint );
             if ( rxAccessible.is() && rxAccessible -> getAccessibleContext().is() &&
                  rxAccessible -> getAccessibleContext() -> getAccessibleChildCount() == 0 ) {
                 hitChild = rxAccessible -> getAccessibleContext();
             }
-        } 
-        if ( !hitChild.is() && rxAccessibleContext -> getAccessibleChildCount() > 0 ) { // special treatment for e.g. comboboxes
-            for ( int i = 0; i < rxAccessibleContext -> getAccessibleChildCount(); i++ ) {
-                Reference < XAccessible > rxAccessibleChild = rxAccessibleContext -> getAccessibleChild ( i );
-                if ( rxAccessibleChild.is() && rxAccessibleChild -> getAccessibleContext().is() && rxAccessibleChild -> getAccessibleContext() -> getAccessibleRole() != AccessibleRole::LIST ) {
-                    Reference < XAccessibleContext > myHitChild = hitTestRunner ( point, rxAccessibleChild -> getAccessibleContext() );
-                    if ( myHitChild.is() ) {
-                        hitChild = myHitChild;
-                        break;
+        }
+
+        // iterate the hirerachy looking doing recursive hit testing.
+        // apparently necessary as a special treatment for e.g. comboboxes
+        if ( !hitChild.is() ) {
+            bool bSafeToIterate = true;
+            sal_Int32 nCount = rxAccessibleContext -> getAccessibleChildCount();
+
+            if ( nCount < 0 || nCount > SAL_MAX_UINT16 /* slow enough for anyone */ )
+                bSafeToIterate = false;
+            else { // manages descendants is an horror from the a11y standards guys.
+                Reference< XAccessibleStateSet > xStateSet;
+                xStateSet = rxAccessibleContext -> getAccessibleStateSet();
+                if (xStateSet.is() && xStateSet -> contains(AccessibleStateType::MANAGES_DESCENDANTS ) )
+                    bSafeToIterate = false;
+            }
+
+            if( bSafeToIterate ) {
+                for ( int i = 0; i < rxAccessibleContext -> getAccessibleChildCount(); i++ ) {
+                    Reference < XAccessible > rxAccessibleChild = rxAccessibleContext -> getAccessibleChild ( i );
+                    if ( rxAccessibleChild.is() && rxAccessibleChild -> getAccessibleContext().is() && rxAccessibleChild -> getAccessibleContext() -> getAccessibleRole() != AccessibleRole::LIST ) {
+                        Reference < XAccessibleContext > myHitChild = hitTestRunner ( point, rxAccessibleChild -> getAccessibleContext() );
+                        if ( myHitChild.is() ) {
+                            hitChild = myHitChild;
+                            break;
+                        }
                     }
                 }
             }

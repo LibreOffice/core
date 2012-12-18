@@ -44,6 +44,8 @@ using namespace ::com::sun::star::accessibility;
 
 //=====  internal  ============================================================
 
+// FIXME: really unclear why we have an ScAccessibleTableBase with
+// only this single sub-class
 ScAccessibleSpreadsheet::ScAccessibleSpreadsheet(
         ScAccessibleDocument* pAccDoc,
         ScTabViewShell* pViewShell,
