@@ -38,6 +38,8 @@ using namespace sd;
 DiscoveryService::DiscoveryService() :
     mSocket(0)
 {
+    int rc;
+
     mSocket = socket( AF_INET, SOCK_DGRAM, IPPROTO_UDP );
 
     sockaddr_in aAddr;
@@ -45,14 +47,14 @@ DiscoveryService::DiscoveryService() :
     aAddr.sin_addr.s_addr = htonl(INADDR_ANY);
     aAddr.sin_port = htons( PORT_DISCOVERY );
 
-    bind( mSocket, (sockaddr*) &aAddr, sizeof(sockaddr_in) );
+    rc = bind( mSocket, (sockaddr*) &aAddr, sizeof(sockaddr_in) );
 
     struct ip_mreq multicastRequest;
 
     multicastRequest.imr_multiaddr.s_addr = inet_addr( "239.0.0.1" );
     multicastRequest.imr_interface.s_addr = htonl(INADDR_ANY);
 
-    setsockopt( mSocket, IPPROTO_IP, IP_ADD_MEMBERSHIP,
+    rc = setsockopt( mSocket, IPPROTO_IP, IP_ADD_MEMBERSHIP,
 #ifdef WNT
         (const char*)
 #endif
