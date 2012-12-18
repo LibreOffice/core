@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="upper">20</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkGrid" id="NumberFormatPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -136,7 +141,8 @@
           <object class="GtkLabel" id="formatf">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Format code</property>
+            <property name="label" translatable="yes">_Format code</property>
+            <property name="use_underline">True</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -202,7 +208,8 @@
                   <object class="GtkLabel" id="decimalsft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Decimal places</property>
+                    <property name="label" translatable="yes">_Decimal places</property>
+                    <property name="use_underline">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -215,7 +222,8 @@
                   <object class="GtkLabel" id="leadzerosft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Leading zeroes </property>
+                    <property name="label" translatable="yes">Leading _zeroes</property>
+                    <property name="use_underline">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -226,12 +234,13 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="negnumred">
-                    <property name="label" translatable="yes">Negative numbers red</property>
+                    <property name="label" translatable="yes">_Negative numbers red</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_action_appearance">False</property>
+                    <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -244,12 +253,13 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="thousands">
-                    <property name="label" translatable="yes">Thousands separator</property>
+                    <property name="label" translatable="yes">_Thousands separator</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_action_appearance">False</property>
+                    <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -326,7 +336,8 @@
               <object class="GtkLabel" id="categoryft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Category</property>
+                <property name="label" translatable="yes">_Category</property>
+                <property name="use_underline">True</property>
                 <attributes>
                   <attribute name="weight" value="semibold"/>
                 </attributes>
@@ -396,7 +407,8 @@
               <object class="GtkLabel" id="formatft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Format</property>
+                <property name="label" translatable="yes">F_ormat</property>
+                <property name="use_underline">True</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -459,12 +471,13 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="sourceformat">
-                        <property name="label" translatable="yes">Source Format</property>
+                        <property name="label" translatable="yes">So_urce Format</property>
                         <property name="use_action_appearance">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="no_show_all">True</property>
                         <property name="use_action_appearance">False</property>
+                        <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -483,7 +496,8 @@
               <object class="GtkLabel" id="languageft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Language</property>
+                <property name="label" translatable="yes">_Language</property>
+                <property name="use_underline">True</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -505,11 +519,6 @@
         <property name="height">1</property>
       </packing>
     </child>
-  </object>
-  <object class="GtkAdjustment" id="adjustment1">
-    <property name="upper">20</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
   </object>
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
