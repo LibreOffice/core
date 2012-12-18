@@ -42,10 +42,6 @@ public:
     inline const TextParagraphPropertiesVector& getAggregationListStyle() const { return maAggregationListStyle; };
     inline TextParagraphPropertiesVector&       getAggregationListStyle() { return maAggregationListStyle; };
 
-#if defined(DBG_UTIL) && OSL_DEBUG_LEVEL > 1
-    void dump() const;
-#endif
-
 protected:
 
     TextParagraphPropertiesVector maListStyle;
