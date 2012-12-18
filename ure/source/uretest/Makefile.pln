@@ -87,7 +87,8 @@ out.pln/cppmain.o: cppmain.cc out.pln/cpputypes.cppumaker.flag \
             out.pln/types.cppumaker.flag | out.pln
 	g++ -c -o $@ -fpic -fvisibility=hidden -Wall -Wno-ctor-dtor-privacy \
             -I $(SDK_HOME)/include -I out.pln/include/cpputypes \
-            -I out.pln/include/types -DCPPU_ENV=gcc3 -DLINUX -DUNX $<
+            -I out.pln/include/types -DCPPU_ENV=gcc3 \
+            -DHAVE_GCC_VISIBILITY_FEATURE -DLINUX -DUNX $<
 
 
 out.pln/cpptest.uno.so: out.pln/cpptest.o | out.pln out.pln/lib/libuno_cppu.so \
@@ -99,7 +100,8 @@ out.pln/cpptest.o: cpptest.cc out.pln/cpputypes.cppumaker.flag \
             out.pln/types.cppumaker.flag | out.pln
 	g++ -c -o $@ -fpic -fvisibility=hidden -Wall -Wno-ctor-dtor-privacy \
             -I $(SDK_HOME)/include -I out.pln/include/cpputypes \
-            -I out.pln/include/types -DCPPU_ENV=gcc3 -DLINUX -DUNX $<
+            -I out.pln/include/types -DCPPU_ENV=gcc3 \
+            -DHAVE_GCC_VISIBILITY_FEATURE -DLINUX -DUNX $<
 
 
 out.pln/cppserver.uno.so: out.pln/cppserver.o | out.pln \
@@ -112,7 +114,8 @@ out.pln/cppserver.o: cppserver.cc out.pln/cpputypes.cppumaker.flag \
             out.pln/types.cppumaker.flag | out.pln
 	g++ -c -o $@ -fpic -fvisibility=hidden -Wall -Wno-ctor-dtor-privacy \
             -I $(SDK_HOME)/include -I out.pln/include/cpputypes \
-            -I out.pln/include/types -DCPPU_ENV=gcc3 -DLINUX -DUNX $<
+            -I out.pln/include/types -DCPPU_ENV=gcc3 \
+            -DHAVE_GCC_VISIBILITY_FEATURE -DLINUX -DUNX $<
 
 
 out.pln/cpputypes.cppumaker.flag: | out.pln
