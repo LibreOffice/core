@@ -40,7 +40,7 @@ gb_CppunitTest__interactive := $(true)
 endif
 
 ifneq ($(strip $(VALGRIND)),)
-gb_CppunitTest_VALGRINDTOOL := $(ICECREAM_RUN) valgrind --tool=$(VALGRIND) --num-callers=50 --error-exitcode=1 --quiet --leak-check=no
+gb_CppunitTest_VALGRINDTOOL := valgrind --tool=$(VALGRIND) --num-callers=50 --error-exitcode=1 --quiet --leak-check=no
 ifeq ($(strip $(VALGRIND)),memcheck)
 G_SLICE := always-malloc
 GLIBCXX_FORCE_NEW := 1
@@ -91,7 +91,7 @@ $(call gb_CppunitTest_get_target,%) :| $(gb_CppunitTest_CPPTESTTARGET)
 		DISABLE_SAL_DBGBOX=t \
 		$(if $(SAL_DIAGNOSE_ABORT),SAL_DIAGNOSE_ABORT=$(SAL_DIAGNOSE_ABORT)) \
 		STAR_RESOURCEPATH=$(dir $(call gb_ResTarget_get_outdir_target,example)) \
-		$(gb_CppunitTest_GDBTRACE) $(gb_CppunitTest_VALGRINDTOOL) $(gb_CppunitTest_CPPTESTTARGET) \
+		$(ICECREAM_RUN) $(gb_CppunitTest_GDBTRACE) $(gb_CppunitTest_VALGRINDTOOL) $(gb_CppunitTest_CPPTESTTARGET) \
 		$(call gb_LinkTarget_get_target,CppunitTest/$(call gb_CppunitTest_get_libfilename,$*)) \
 		$(call gb_CppunitTest__make_args) \
 		$(if $(gb_CppunitTest__interactive),,> $@.log 2>&1 || (cat $@.log && $(UNIT_FAILED_MSG) && false))))
