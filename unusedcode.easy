@@ -42,7 +42,6 @@ connectivity::file::OStatement_Base::reset()
 connectivity::sdbcx::OGroup::OGroup(rtl::OUString const&, unsigned char)
 connectivity::sdbcx::OGroup::OGroup(unsigned char)
 jfw_plugin::VendorBase::createInstance()
-oox::drawingml::TextListStyle::dump() const
 oox::xls::BiffDrawingObjectBase::BiffDrawingObjectBase(oox::xls::WorksheetHelper const&)
 sc_apitest::main()
 sd::LeftDrawPaneShell::RegisterInterface(SfxModule*)
