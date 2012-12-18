@@ -390,13 +390,13 @@
                     <property name="column_span_column">0</property>
                     <property name="has_entry">True</property>
                     <items>
-                      <item translatable="yes">50</item>
-                      <item translatable="yes">75</item>
-                      <item translatable="yes">96</item>
-                      <item translatable="yes">150</item>
-                      <item translatable="yes">200</item>
-                      <item translatable="yes">300</item>
-                      <item translatable="yes">600</item>
+                      <item translatable="no">50</item>
+                      <item translatable="no">75</item>
+                      <item translatable="no">96</item>
+                      <item translatable="no">150</item>
+                      <item translatable="no">200</item>
+                      <item translatable="no">300</item>
+                      <item translatable="no">600</item>
                     </items>
                     <child internal-child="entry">
                       <object class="GtkEntry" id="comboboxtext-entry">
