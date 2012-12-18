@@ -16,9 +16,8 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import uno
-import os.path
 import traceback
-from unohelper import systemPathToFileUrl
+from unohelper import systemPathToFileUrl, absolutize
 from ..ui.event.CommonListener import TerminateListenerProcAdapter
 from ..common.Desktop import Desktop
 
@@ -210,9 +209,11 @@ class OfficeDocument(object):
             else:
                 oStoreProperties = list(range(0))      
 
+            StorePath = systemPathToFileUrl(StorePath)
+            sPath = StorePath[:(StorePath.rfind("/") + 1)]
+            sFile = StorePath[(StorePath.rfind("/") + 1):]
             xComponent.storeToURL(
-                os.path.abspath(systemPathToFileUrl(StorePath)),
-                tuple(oStoreProperties))
+                absolutize(sPath, sFile), tuple(oStoreProperties))
             return True
         except ErrorCodeIOException:
             #Throw this exception when trying to save a file 
