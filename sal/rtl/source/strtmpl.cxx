@@ -1215,7 +1215,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newFromLiteral )( IMPL_RTL_STRINGDATA** ppThi
                                                      sal_Int32 allocExtra )
     SAL_THROW_EXTERN_C()
 {
-    if ( !nLen )
+    if ( nLen + allocExtra == 0 )
     {
         IMPL_RTL_STRINGNAME( new )( ppThis );
         return;
