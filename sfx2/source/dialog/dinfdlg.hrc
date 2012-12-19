@@ -45,7 +45,6 @@
 #define WIN_PROPERTIES      90
 #define SB_VERTICAL         91
 #define FT_PROPERTIES       92
-#define CTRL_PROPERTIES     93
 #define BTN_ADD             94
 #define RB_PROPERTY_YES     100
 #define RB_PROPERTY_NO      101

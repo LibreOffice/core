@@ -526,9 +526,7 @@ public:
 class SfxCustomPropertiesPage : public SfxTabPage
 {
 private:
-    CustomPropertiesControl m_aPropertiesCtrl;
-    PushButton              m_aAddBtn;
-    FixedText               m_aPropertiesFT; // Sym2_5121----, Moved by Steve Yin
+    CustomPropertiesControl* m_pPropertiesCtrl;
 
     DECL_LINK(AddHdl, void *);
 

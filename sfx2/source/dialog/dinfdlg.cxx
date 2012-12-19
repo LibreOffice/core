@@ -2228,6 +2228,12 @@ CustomPropertiesControl::CustomPropertiesControl( Window* pParent, const ResId& 
     m_aVertScroll.SetScrollHdl( aScrollLink );
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeCustomPropertiesControl(Window *pParent,
+    VclBuilder::stringmap &)
+{
+    return new CustomPropertiesControl(pParent, SfxResId(SFX_CTRL_CUSTOM_PROPERTIES));
+}
+
 CustomPropertiesControl::~CustomPropertiesControl()
 {
 }
@@ -2258,23 +2264,17 @@ void CustomPropertiesControl::AddLine( const ::rtl::OUString& sName, Any& rAny, 
 }
 
 // class SfxCustomPropertiesPage -----------------------------------------
-SfxCustomPropertiesPage::SfxCustomPropertiesPage( Window* pParent, const SfxItemSet& rItemSet ) :
-
-    SfxTabPage( pParent, SfxResId( TP_CUSTOMPROPERTIES ), rItemSet ),
-    m_aPropertiesCtrl   ( this, SfxResId( CTRL_PROPERTIES ) ),
-    m_aAddBtn           ( this, SfxResId( BTN_ADD ) ),
-    m_aPropertiesFT     ( this, SfxResId( FT_PROPERTIES ) )
-
+SfxCustomPropertiesPage::SfxCustomPropertiesPage( Window* pParent, const SfxItemSet& rItemSet )
+    : SfxTabPage(pParent, "CustomInfoPage", "sfx/ui/custominfopage.ui", rItemSet)
 {
-    FreeResource();
-
-    m_aAddBtn.SetClickHdl( LINK( this, SfxCustomPropertiesPage, AddHdl ) );
+    get(m_pPropertiesCtrl, "properties");
+    get<PushButton>("add")->SetClickHdl(LINK(this, SfxCustomPropertiesPage, AddHdl));
 }
 
 IMPL_LINK_NOARG(SfxCustomPropertiesPage, AddHdl)
 {
     Any aAny;
-    m_aPropertiesCtrl.AddLine( ::rtl::OUString(), aAny, true );
+    m_pPropertiesCtrl->AddLine( ::rtl::OUString(), aAny, true );
     return 0;
 }
 
@@ -2300,7 +2300,7 @@ sal_Bool SfxCustomPropertiesPage::FillItemSet( SfxItemSet& rSet )
     if ( pInfo )
     {
         pInfo->ClearCustomProperties();
-        Sequence< beans::PropertyValue > aPropertySeq = m_aPropertiesCtrl.GetCustomProperties();
+        Sequence< beans::PropertyValue > aPropertySeq = m_pPropertiesCtrl->GetCustomProperties();
         sal_Int32 i = 0, nCount = aPropertySeq.getLength();
         for ( ; i < nCount; ++i )
         {
@@ -2319,19 +2319,19 @@ sal_Bool SfxCustomPropertiesPage::FillItemSet( SfxItemSet& rSet )
 
 void SfxCustomPropertiesPage::Reset( const SfxItemSet& rItemSet )
 {
-    m_aPropertiesCtrl.ClearAllLines();
+    m_pPropertiesCtrl->ClearAllLines();
     const SfxDocumentInfoItem* m_pInfoItem = &(const SfxDocumentInfoItem &)rItemSet.Get(SID_DOCINFO);
     std::vector< CustomProperty* > aCustomProps = m_pInfoItem->GetCustomProperties();
     for ( sal_uInt32 i = 0; i < aCustomProps.size(); i++ )
     {
-        m_aPropertiesCtrl.AddLine( aCustomProps[i]->m_sName, aCustomProps[i]->m_aValue, false );
+        m_pPropertiesCtrl->AddLine( aCustomProps[i]->m_sName, aCustomProps[i]->m_aValue, false );
     }
 }
 
 int SfxCustomPropertiesPage::DeactivatePage( SfxItemSet* /*pSet*/ )
 {
     int nRet = LEAVE_PAGE;
-    if ( !m_aPropertiesCtrl.AreAllLinesValid() )
+    if ( !m_pPropertiesCtrl->AreAllLinesValid() )
         nRet = KEEP_PAGE;
     return nRet;
 }

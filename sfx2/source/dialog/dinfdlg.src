@@ -101,6 +101,44 @@ TabPage TP_DOCINFOUSER
     };
 };
 
+Control SFX_CTRL_CUSTOM_PROPERTIES
+{
+    HelpId = HID_CTRL_CUSTOMPROPERTIES;
+    Pos = MAP_APPFONT ( 6 , 18 ) ;
+    Size = MAP_APPFONT ( 248 , 141 ) ;
+    Border = TRUE;
+    DialogControl = TRUE;
+    Window WIN_PROPERTIES
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 0 , 10 ) ;
+        Size = MAP_APPFONT ( 240 , 134 ) ;
+        DialogControl = TRUE;
+    };
+    ScrollBar SB_VERTICAL
+    {
+        Pos = MAP_APPFONT ( 238 , 10 ) ;
+        Size = MAP_APPFONT ( 8 , 129 ) ;
+        VScroll = TRUE;
+    };
+    String STR_HEADER_NAME
+    {
+        Text [ en-US ] = "Name" ;
+    };
+    String STR_HEADER_TYPE
+    {
+        Text [ en-US ] = "Type" ;
+    };
+    String STR_HEADER_VALUE
+    {
+        Text [ en-US ] = "Value" ;
+    };
+    String STR_HEADER_ACTION
+    {
+        Text [ en-US ] = "" ;
+    };
+};
+
 // TP_CUSTOMPROPERTIES ---------------------------------------------------
 
 TabPage TP_CUSTOMPROPERTIES
@@ -114,43 +152,6 @@ TabPage TP_CUSTOMPROPERTIES
         Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Left = TRUE ;
         Text [ en-US ] = "~Properties" ;
-    };
-    Control CTRL_PROPERTIES
-    {
-        HelpId = HID_CTRL_CUSTOMPROPERTIES;
-        Pos = MAP_APPFONT ( 6 , 18 ) ;
-        Size = MAP_APPFONT ( 248 , 141 ) ;
-        Border = TRUE;
-        DialogControl = TRUE;
-        Window WIN_PROPERTIES
-        {
-            OutputSize = TRUE ;
-            Pos = MAP_APPFONT ( 0 , 10 ) ;
-            Size = MAP_APPFONT ( 240 , 134 ) ;
-            DialogControl = TRUE;
-        };
-        ScrollBar SB_VERTICAL
-        {
-            Pos = MAP_APPFONT ( 238 , 10 ) ;
-            Size = MAP_APPFONT ( 8 , 129 ) ;
-            VScroll = TRUE;
-        };
-        String STR_HEADER_NAME
-        {
-            Text [ en-US ] = "Name" ;
-        };
-        String STR_HEADER_TYPE
-        {
-            Text [ en-US ] = "Type" ;
-        };
-        String STR_HEADER_VALUE
-        {
-            Text [ en-US ] = "Value" ;
-        };
-        String STR_HEADER_ACTION
-        {
-            Text [ en-US ] = "" ;
-        };
     };
     PushButton BTN_ADD
     {
