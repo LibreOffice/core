@@ -183,7 +183,7 @@ public:
         , nCapacity( internal::ConstCharArrayDetector< T, void >::size - 1 + 16 )
     {
         assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
-        rtl_uString_newFromLiteral( &pData, literal, internal::ConstCharArrayDetector< T, void >::size - 1, 16 );
+        ( internal::ConstCharArrayDetector< T >::size - 1 ) ? rtl_uString_newFromLiteral( &pData, literal, internal::ConstCharArrayDetector< T, void >::size - 1, 16 ) : rtl_uString_new_WithLength( &pData, 16 );
 #ifdef RTL_STRING_UNITTEST
         rtl_string_unittest_const_literal = true;
 #endif
