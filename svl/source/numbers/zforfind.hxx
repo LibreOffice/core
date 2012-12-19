@@ -177,6 +177,12 @@ private:
      */
     sal_uInt16  nDatePatternStart;
 
+    /** Count of numbers that matched the accepted pattern, if any, else 0.
+
+        @see GetDatePatternNumbers()
+     */
+    sal_uInt16  nDatePatternNumbers;
+
 #ifdef _ZFORFIND_CXX        // methods private to implementation
     void Reset();                               // Reset all variables before start of analysis
 
@@ -374,6 +380,10 @@ private:
         @returns TRUE if separator matched.
      */
     bool SkipDatePatternSeparator( sal_uInt16 nParticle, sal_Int32 & rPos );
+
+    /** Returns count of numbers in accepted date pattern.
+     */
+    sal_uInt16 GetDatePatternNumbers();
 
     /** Obtain order of accepted date pattern coded as, for example,
         ('D'<<16)|('M'<<8)|'Y'

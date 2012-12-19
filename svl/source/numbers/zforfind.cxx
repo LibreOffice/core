@@ -140,6 +140,7 @@ void ImpSvNumberInputScan::Reset()
     nMayBeMonthDate = 0;
     nAcceptedDatePattern = -2;
     nDatePatternStart = 0;
+    nDatePatternNumbers = 0;
     nCanForceToIso8601 = 0;
 }
 
@@ -1179,6 +1180,7 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
     for (sal_Int32 nPattern=0; nPattern < sDateAcceptancePatterns.getLength(); ++nPattern)
     {
         sal_uInt16 nNext = nDatePatternStart;
+        nDatePatternNumbers = 0;
         bool bOk = true;
         const OUString& rPat = sDateAcceptancePatterns[nPattern];
         sal_Int32 nPat = 0;
@@ -1190,6 +1192,8 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
             case 'M':
             case 'D':
                 bOk = IsNum[nNext];
+                if (bOk)
+                    ++nDatePatternNumbers;
                 break;
             default:
                 bOk = !IsNum[nNext];
@@ -1227,12 +1231,45 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
             if (nNext < nAnzStrings)
             {
                 // Pattern end but not input end.
-                if (!IsNum[nNext])
+                // A trailing blank may be part of the current pattern input,
+                // if pattern is "D.M." and input is "D.M. hh:mm" last was
+                // ". ", or may be following the current pattern input, if
+                // pattern is "D.M" and input is "D.M hh:mm" last was "M".
+                sal_Int32 nPos = 0;
+                sal_uInt16 nCheck;
+                if (nPat > 0 && nNext > 0)
+                {
+                    // nPat is one behind after the for loop.
+                    sal_Int32 nPatCheck = nPat - 1;
+                    switch (rPat[nPatCheck])
+                    {
+                        case 'Y':
+                        case 'M':
+                        case 'D':
+                            nCheck = nNext;
+                            break;
+                        default:
+                            {
+                                nCheck = nNext - 1;
+                                // Advance position in input to match length of
+                                // non-YMD (separator) characters in pattern.
+                                sal_Unicode c;
+                                do
+                                {
+                                    ++nPos;
+                                } while ((c = rPat[--nPatCheck]) != 'Y' && c != 'M' && c != 'D');
+                            }
+                    }
+                }
+                else
+                {
+                    nCheck = nNext;
+                }
+                if (!IsNum[nCheck])
                 {
                     // Trailing (or separating if time follows) blanks are ok.
-                    sal_Int32 nPos = 0;
-                    SkipBlanks( sStrArray[nNext], nPos);
-                    if (nPos == sStrArray[nNext].getLength())
+                    SkipBlanks( sStrArray[nCheck], nPos);
+                    if (nPos == sStrArray[nCheck].getLength())
                     {
                         nAcceptedDatePattern = nPattern;
                         return true;
@@ -1303,6 +1340,18 @@ bool ImpSvNumberInputScan::SkipDatePatternSeparator( sal_uInt16 nParticle, sal_I
         }
     }
     return false;
+}
+
+//---------------------------------------------------------------------------
+
+sal_uInt16 ImpSvNumberInputScan::GetDatePatternNumbers()
+{
+    // If not initialized yet start with first number, if any.
+    if (!IsAcceptedDatePattern( (nAnzNums ? nNums[0] : 0)))
+    {
+        return 0;
+    }
+    return nDatePatternNumbers;
 }
 
 //---------------------------------------------------------------------------
@@ -3392,7 +3441,15 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,             
                     }
                     else
                     {
-                        res = IsAcceptedDatePattern( nNums[0]) || MayBeIso8601() || nMatchedAllStrings;
+                        // Even if a date pattern was matched, for abbreviated
+                        // pattern like "D.M." an input of "D.M. #" was
+                        // accepted because # could had been a time. Here we do
+                        // not have a combined date/time input though and #
+                        // would be taken as Year in this example, which it is
+                        // not. The count of numbers in pattern must match the
+                        // count of numbers in input.
+                        res = (GetDatePatternNumbers() == nAnzNums)
+                            || MayBeIso8601() || nMatchedAllStrings;
                     }
                 }
                 break;
