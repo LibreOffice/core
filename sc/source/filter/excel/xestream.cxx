@@ -999,7 +999,7 @@ sax_fastparser::FSHelperPtr XclExpXmlStream::GetStreamForPath( const OUString& s
     return maOpenedStreamMap[ sPath ].second;
 }
 
-sax_fastparser::FSHelperPtr& XclExpXmlStream::WriteAttributes( sal_Int32 nAttribute, ... )
+sax_fastparser::FSHelperPtr& XclExpXmlStream::WriteAttributesInternal( sal_Int32 nAttribute, ... )
 {
     sax_fastparser::FSHelperPtr& rStream = GetCurrentStream();
 
@@ -1017,7 +1017,7 @@ sax_fastparser::FSHelperPtr& XclExpXmlStream::WriteAttributes( sal_Int32 nAttrib
         }
 
         nAttribute = va_arg( args, sal_Int32 );
-        if( nAttribute == FSEND )
+        if( nAttribute == FSEND_internal )
             break;
     } while( true );
     va_end( args );

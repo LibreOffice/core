@@ -47,14 +47,16 @@ FastSerializerHelper::~FastSerializerHelper()
     delete mpSerializer;
 }
 
-void FastSerializerHelper::startElementV(sal_Int32 elementTokenId, va_list args)
+void FastSerializerHelper::startElementInternal(sal_Int32 elementTokenId, ...)
 {
+    va_list args;
+    va_start( args, elementTokenId );
     FastAttributeList* pAttrList = new FastAttributeList( mxTokenHandler );
 
     while (true)
     {
         sal_Int32 nName = va_arg(args, sal_Int32);
-        if (nName == FSEND)
+        if (nName == FSEND_internal)
             break;
         const char* pValue = va_arg(args, const char*);
         if (pValue)
@@ -63,16 +65,19 @@ void FastSerializerHelper::startElementV(sal_Int32 elementTokenId, va_list args)
 
     const com::sun::star::uno::Reference<com::sun::star::xml::sax::XFastAttributeList> xAttrList(pAttrList);
     mpSerializer->startFastElement(elementTokenId, xAttrList);
+    va_end( args );
 }
 
-void FastSerializerHelper::singleElementV(sal_Int32 elementTokenId, va_list args)
+void FastSerializerHelper::singleElementInternal(sal_Int32 elementTokenId, ...)
 {
+    va_list args;
+    va_start( args, elementTokenId );
     FastAttributeList* pAttrList = new FastAttributeList( mxTokenHandler );
 
     while (true)
     {
         sal_Int32 nName = va_arg(args, sal_Int32);
-        if (nName == FSEND)
+        if (nName == FSEND_internal)
             break;
         const char* pValue = va_arg(args, const char*);
         if  (pValue)
@@ -81,6 +86,7 @@ void FastSerializerHelper::singleElementV(sal_Int32 elementTokenId, va_list args
 
     const com::sun::star::uno::Reference<com::sun::star::xml::sax::XFastAttributeList> xAttrList(pAttrList);
     mpSerializer->singleFastElement(elementTokenId, xAttrList);
+    va_end( args );
 }
 
 void FastSerializerHelper::endElement(sal_Int32 elementTokenId)
@@ -88,13 +94,13 @@ void FastSerializerHelper::endElement(sal_Int32 elementTokenId)
     mpSerializer->endFastElement(elementTokenId);
 }
 
-void FastSerializerHelper::startElementV(sal_Int32 elementTokenId, XFastAttributeListRef xAttrList)
+void FastSerializerHelper::startElement(sal_Int32 elementTokenId, XFastAttributeListRef xAttrList)
 {
     mpSerializer->startFastElement(elementTokenId, xAttrList);
 }
 
 
-void FastSerializerHelper::singleElementV(sal_Int32 elementTokenId, XFastAttributeListRef xAttrList)
+void FastSerializerHelper::singleElement(sal_Int32 elementTokenId, XFastAttributeListRef xAttrList)
 {
     mpSerializer->singleFastElement(elementTokenId, xAttrList);
 }
