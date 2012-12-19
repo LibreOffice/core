@@ -843,14 +843,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     }
     else if (name == "GtkLinkButton")
         pWindow = new FixedHyperlink(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK|WB_NOLABEL);
-    else if (name == "GtkComboBox")
-    {
-        extractModel(id, rMap);
-        ListBox *pListBox = new ListBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK);
-        pListBox->EnableAutoSize(true);
-        pWindow = pListBox;
-    }
-    else if (name == "GtkComboBoxText")
+    else if ((name == "GtkComboBox") || (name == "GtkComboBoxText"))
     {
         extractModel(id, rMap);
         if (extractEntry(rMap))
