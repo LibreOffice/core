@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAR3///14\u003d",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1454,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2012-12-19T11:27:10Z",
+      "side": 1,
+      "message": "Operator\u003d\u003d does case-sensitive comparing, so this should be still equalsIgnoreAsciiCase().",
+      "revId": "8bc7f2746e7bb8d2052576e14ce7f210b17ce412",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
