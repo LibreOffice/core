@@ -63,8 +63,6 @@ public:
     virtual void        importAttribs( sal_Int32 nElement, const AttributeList& rAttribs );
     /** Derived classes import filter settings from the passed record. */
     virtual void        importRecord( sal_Int32 nRecId, SequenceInputStream& rStrm );
-    /** Derived classes import filter settings from the FILTERCOLUMN record. */
-    virtual void        importBiffRecord( BiffInputStream& rStrm, sal_uInt16 nFlags );
 
     /** Derived classes return converted UNO API filter settings representing all filter settings. */
     virtual ApiFilterSettings finalizeImport( sal_Int32 nMaxCount );
@@ -110,8 +108,6 @@ public:
     virtual void        importAttribs( sal_Int32 nElement, const AttributeList& rAttribs );
     /** Imports filter settings from the FILTERS and FILTER records. */
     virtual void        importRecord( sal_Int32 nRecId, SequenceInputStream& rStrm );
-    /** Imports filter settings from the FILTERCOLUMN record. */
-    virtual void        importBiffRecord( BiffInputStream& rStrm, sal_uInt16 nFlags );
 
     /** Returns converted UNO API filter settings representing all filter settings. */
     virtual ApiFilterSettings finalizeImport( sal_Int32 nMaxCount );
@@ -159,8 +155,6 @@ public:
     virtual void        importAttribs( sal_Int32 nElement, const AttributeList& rAttribs );
     /** Imports filter settings from the FILTERS and FILTER records. */
     virtual void        importRecord( sal_Int32 nRecId, SequenceInputStream& rStrm );
-    /** Imports filter settings from the FILTERCOLUMN record. */
-    virtual void        importBiffRecord( BiffInputStream& rStrm, sal_uInt16 nFlags );
 
     /** Returns converted UNO API filter settings representing all filter settings. */
     virtual ApiFilterSettings finalizeImport( sal_Int32 nMaxCount );

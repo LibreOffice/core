@@ -211,10 +211,6 @@ void FilterSettingsBase::importRecord( sal_Int32 /*nRecId*/, SequenceInputStream
 {
 }
 
-void FilterSettingsBase::importBiffRecord( BiffInputStream& /*rStrm*/, sal_uInt16 /*nFlags*/ )
-{
-}
-
 ApiFilterSettings FilterSettingsBase::finalizeImport( sal_Int32 /*nMaxCount*/ )
 {
     return ApiFilterSettings();
@@ -326,13 +322,6 @@ void Top10Filter::importRecord( sal_Int32 nRecId, SequenceInputStream& rStrm )
         mbTop = getFlag( nFlags, BIFF12_TOP10FILTER_TOP );
         mbPercent = getFlag( nFlags, BIFF12_TOP10FILTER_PERCENT );
     }
-}
-
-void Top10Filter::importBiffRecord( BiffInputStream& /*rStrm*/, sal_uInt16 nFlags )
-{
-    mfValue = extractValue< sal_uInt16 >( nFlags, 7, 9 );
-    mbTop = getFlag( nFlags, BIFF_FILTERCOLUMN_TOP );
-    mbPercent = getFlag( nFlags, BIFF_FILTERCOLUMN_PERCENT );
 }
 
 ApiFilterSettings Top10Filter::finalizeImport( sal_Int32 /*nMaxCount*/ )
@@ -510,19 +499,6 @@ void CustomFilter::importRecord( sal_Int32 nRecId, SequenceInputStream& rStrm )
         }
         break;
     }
-}
-
-void CustomFilter::importBiffRecord( BiffInputStream& rStrm, sal_uInt16 nFlags )
-{
-    mbAnd = !getFlag( nFlags, BIFF_FILTERCOLUMN_OR );
-
-    FilterCriterionModel aCriterion1, aCriterion2;
-    aCriterion1.readBiffData( rStrm );
-    aCriterion2.readBiffData( rStrm );
-    aCriterion1.readString( rStrm, getBiff(), getTextEncoding() );
-    aCriterion2.readString( rStrm, getBiff(), getTextEncoding() );
-    appendCriterion( aCriterion1 );
-    appendCriterion( aCriterion2 );
 }
 
 ApiFilterSettings CustomFilter::finalizeImport( sal_Int32 /*nMaxCount*/ )
