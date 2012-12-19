@@ -9,7 +9,7 @@
 
 # Technically these files do not belong to extras module, but they must
 # be delivered from somewhere, so why not from extras...
-$(eval $(call gb_Package_Package,extras_extensions,$(SRCDIR)/src))
+$(eval $(call gb_Package_Package,extras_extensions,$(TARFILE_LOCATION)))
 
 ifneq ($(BARCODE_EXTENSION_PACK),)
 $(eval $(call gb_Package_add_file,extras_extensions,bin/Barcode.oxt,$(BARCODE_EXTENSION_PACK)))
