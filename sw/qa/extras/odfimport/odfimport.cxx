@@ -40,6 +40,7 @@ public:
     void testEmptySvgFamilyName();
     void testHideAllSections();
     void testOdtBorders();
+    void testPageStyleLayoutDefault();
     void testPageStyleLayoutRight();
 
     CPPUNIT_TEST_SUITE(Test);
@@ -58,6 +59,7 @@ void Test::run()
         {"empty-svg-family-name.odt", &Test::testEmptySvgFamilyName},
         {"fdo53210.odt", &Test::testHideAllSections},
         {"borders_ooo33.odt", &Test::testOdtBorders},
+        {"hello.odt", &Test::testPageStyleLayoutDefault},
         {"hello.odt", &Test::testPageStyleLayoutRight},
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -271,6 +273,13 @@ void Test::testOdtBorders()
             }
         }
     } while(xParaEnum->hasMoreElements());
+}
+
+void Test::testPageStyleLayoutDefault()
+{
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Default Style"), uno::UNO_QUERY);
+    // This was style::PageStyleLayout_MIRRORED.
+    CPPUNIT_ASSERT_EQUAL(style::PageStyleLayout_ALL, getProperty<style::PageStyleLayout>(xPropertySet, "PageStyleLayout"));
 }
 
 void Test::testPageStyleLayoutRight()
