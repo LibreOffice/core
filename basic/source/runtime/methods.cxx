@@ -868,7 +868,9 @@ RTLFUNC(Hex)
         sal_uInt32 nVal = pArg->IsInteger() ?
             static_cast<sal_uInt16>(pArg->GetInteger()) :
             static_cast<sal_uInt32>(pArg->GetLong());
-        rPar.Get(0)->PutString( rtl::OUString::valueOf( sal_Int64(nVal), 16 ) );
+		rtl::OUString aStr(rtl::OUString::valueOf( sal_Int64(nVal), 16 ));
+		aStr = aStr.toAsciiUpperCase();
+        rPar.Get(0)->PutString( aStr );
     }
 }
 
