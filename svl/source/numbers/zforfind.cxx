@@ -1571,11 +1571,21 @@ input for the following reasons:
                 {
                     case 0:             // not found
                     {
-                        bool bHadExact;
                         sal_uInt32 nExactDateOrder = (bFormatTurn ?
                                 pFormat->GetExactDateOrder() :
                                 GetDatePatternOrder());
                         bool bIsExact = (0xff < nExactDateOrder && nExactDateOrder <= 0xffff);
+                        if (!bIsExact && bFormatTurn && IsAcceptedDatePattern( nNums[0]))
+                        {
+                            // If input does not match format but pattern, use pattern
+                            // instead, even if eEDF==NF_EVALDATEFORMAT_FORMAT_INTL.
+                            // For example, format has "Y-M-D" and pattern is "D.M.",
+                            // input with 2 numbers can't match format and 31.12. would
+                            // lead to 1931-12-01 (fdo#54344)
+                            nExactDateOrder = GetDatePatternOrder();
+                            bIsExact = (0xff < nExactDateOrder && nExactDateOrder <= 0xffff);
+                        }
+                        bool bHadExact;
                         if (bIsExact)
                         {   // formatted as date and exactly 2 parts
                             bHadExact = true;
