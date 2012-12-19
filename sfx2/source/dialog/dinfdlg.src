@@ -29,139 +29,6 @@ String STR_SFX_NEWOFFICEDOC
     Text [ en-US ] = "%PRODUCTNAME document" ;
 };
 
- // TP_DOCINFOUSER --------------------------------------------------------
-
-TabPage TP_DOCINFOUSER
-{
-    HelpId = HID_DOCINFOUSER ;
-    Hide = TRUE ;
-    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
-    FixedText FT_INFO1
-    {
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
-        Left = TRUE ;
-    };
-    Edit ED_INFO1
-    {
-        HelpID = "sfx2:Edit:TP_DOCINFOUSER:ED_INFO1";
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 17 ) ;
-        Size = MAP_APPFONT ( 248 , RSC_CD_TEXTBOX_HEIGHT ) ;
-        Left = TRUE ;
-    };
-    FixedText FT_INFO2
-    {
-        Pos = MAP_APPFONT ( 6 , 32 ) ;
-        Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
-        Left = TRUE ;
-    };
-    Edit ED_INFO2
-    {
-        HelpID = "sfx2:Edit:TP_DOCINFOUSER:ED_INFO2";
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 43 ) ;
-        Size = MAP_APPFONT ( 248 , RSC_CD_TEXTBOX_HEIGHT ) ;
-        Left = TRUE ;
-    };
-    FixedText FT_INFO3
-    {
-        Pos = MAP_APPFONT ( 6 , 58 ) ;
-        Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
-        Left = TRUE ;
-    };
-    Edit ED_INFO3
-    {
-        HelpID = "sfx2:Edit:TP_DOCINFOUSER:ED_INFO3";
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 69 ) ;
-        Size = MAP_APPFONT ( 248 , RSC_CD_TEXTBOX_HEIGHT ) ;
-        Left = TRUE ;
-    };
-    FixedText FT_INFO4
-    {
-        Pos = MAP_APPFONT ( 6 , 84 ) ;
-        Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
-        Left = TRUE ;
-    };
-    Edit ED_INFO4
-    {
-        HelpID = "sfx2:Edit:TP_DOCINFOUSER:ED_INFO4";
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 95 ) ;
-        Size = MAP_APPFONT ( 248 , RSC_CD_TEXTBOX_HEIGHT ) ;
-        Left = TRUE ;
-    };
-    PushButton BTN_EDITLABEL
-    {
-        HelpID = "sfx2:PushButton:TP_DOCINFOUSER:BTN_EDITLABEL";
-        Pos = MAP_APPFONT ( 194 , 165 ) ;
-        Size = MAP_APPFONT ( 60 , RSC_CD_PUSHBUTTON_HEIGHT ) ;
-        Text [ en-US ] = "~Info fields..." ;
-    };
-};
-
-Control SFX_CTRL_CUSTOM_PROPERTIES
-{
-    HelpId = HID_CTRL_CUSTOMPROPERTIES;
-    Pos = MAP_APPFONT ( 6 , 18 ) ;
-    Size = MAP_APPFONT ( 248 , 141 ) ;
-    Border = TRUE;
-    DialogControl = TRUE;
-    Window WIN_PROPERTIES
-    {
-        OutputSize = TRUE ;
-        Pos = MAP_APPFONT ( 0 , 10 ) ;
-        Size = MAP_APPFONT ( 240 , 134 ) ;
-        DialogControl = TRUE;
-    };
-    ScrollBar SB_VERTICAL
-    {
-        Pos = MAP_APPFONT ( 238 , 10 ) ;
-        Size = MAP_APPFONT ( 8 , 129 ) ;
-        VScroll = TRUE;
-    };
-    String STR_HEADER_NAME
-    {
-        Text [ en-US ] = "Name" ;
-    };
-    String STR_HEADER_TYPE
-    {
-        Text [ en-US ] = "Type" ;
-    };
-    String STR_HEADER_VALUE
-    {
-        Text [ en-US ] = "Value" ;
-    };
-    String STR_HEADER_ACTION
-    {
-        Text [ en-US ] = "" ;
-    };
-};
-
-// TP_CUSTOMPROPERTIES ---------------------------------------------------
-
-TabPage TP_CUSTOMPROPERTIES
-{
-    HelpId = HID_TP_CUSTOMPROPERTIES ;
-    Hide = TRUE ;
-    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
-    FixedText FT_PROPERTIES
-    {
-        Pos = MAP_APPFONT ( 6 , 7 ) ;
-        Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
-        Left = TRUE ;
-        Text [ en-US ] = "~Properties" ;
-    };
-    PushButton BTN_ADD
-    {
-        HelpID = "sfx2:PushButton:TP_CUSTOMPROPERTIES:BTN_ADD";
-        Pos = MAP_APPFONT( 204 , 165 );
-        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
-        Text [ en-US ] = "~Add";
-    };
-};
-
 ComboBox SFX_CB_PROPERTY_NAME
 {
     Pos = MAP_APPFONT ( 0 , 2 ) ;
@@ -317,6 +184,7 @@ TabDialog SID_DOCINFO
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Moveable = TRUE ;
+    Sizeable = TRUE ;
     Text [ en-US ] = "Properties of " ;
     TabControl 1
     {

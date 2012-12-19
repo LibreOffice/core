@@ -1698,10 +1698,11 @@ void CustomPropertyLine::SetRemoved()
     m_aRemoveButton.Hide();
 }
 
-// class CustomPropertiesWindow ------------------------------------------
-CustomPropertiesWindow::CustomPropertiesWindow( Window* pParent, const ResId& rResId ) :
-
-    Window( pParent, rResId ),
+CustomPropertiesWindow::CustomPropertiesWindow(Window* pParent,
+    const OUString &rHeaderAccName,
+    const OUString &rHeaderAccType,
+    const OUString &rHeaderAccValue) :
+    Window(pParent),
     m_aNameBox      ( this, SfxResId( SFX_CB_PROPERTY_NAME ) ),
     m_aTypeBox      ( this, SfxResId( SFX_LB_PROPERTY_TYPE ) ),
     m_aValueEdit    ( this, SfxResId( SFX_ED_PROPERTY_VALUE ) ),
@@ -1721,10 +1722,9 @@ CustomPropertiesWindow::CustomPropertiesWindow( Window* pParent, const ResId& rR
     m_aBoxLoseFocusTimer.SetTimeout( 300 );
     m_aBoxLoseFocusTimer.SetTimeoutHdl( LINK( this, CustomPropertiesWindow, BoxTimeoutHdl ) );
 
-    ResMgr* pResMgr = rResId.GetResMgr();
-    m_aNameBox.SetAccessibleName( ResId( STR_HEADER_NAME, *pResMgr ).toString() );
-    m_aTypeBox.SetAccessibleName( ResId( STR_HEADER_TYPE, *pResMgr ).toString() );
-    m_aValueEdit.SetAccessibleName( ResId( STR_HEADER_VALUE, *pResMgr ).toString() );
+    m_aNameBox.SetAccessibleName(rHeaderAccName);
+    m_aTypeBox.SetAccessibleName(rHeaderAccType);
+    m_aValueEdit.SetAccessibleName(rHeaderAccValue);
 }
 
 CustomPropertiesWindow::~CustomPropertiesWindow()
@@ -1911,7 +1911,7 @@ void CustomPropertiesWindow::InitControls( HeaderBar* pHeaderBar, const ScrollBa
         Rectangle aRect = pHeaderBar->GetItemRect( pHeaderBar->GetItemId( nPos++ ) );
         Size aSize = (*pCurrent)->GetSizePixel();
         Point aPos = (*pCurrent)->GetPosPixel();
-        long nWidth = aRect.getWidth() - nOffset;
+        long nWidth = aRect.GetWidth() - nOffset;
         if ( *pCurrent == &m_aRemoveButton )
             nWidth -= pScrollBar->GetSizePixel().Width();
         aSize.Width() = nWidth;
@@ -1958,6 +1958,39 @@ sal_uInt16 CustomPropertiesWindow::GetVisibleLineCount() const
             nCount++;
     }
     return nCount;
+}
+
+void CustomPropertiesWindow::updateLineWidth()
+{
+    Window* pWindows[] = {  &m_aNameBox, &m_aTypeBox, &m_aValueEdit,
+                            &m_aDateField, &m_aTimeField,
+                            &m_aDurationField, &m_aEditButton,
+                            &m_aYesNoButton, &m_aRemoveButton, NULL };
+
+    for (std::vector< CustomPropertyLine* >::iterator aI =
+        m_aCustomPropertiesLines.begin(), aEnd = m_aCustomPropertiesLines.end();
+        aI != aEnd; ++aI)
+    {
+        CustomPropertyLine* pNewLine = *aI;
+
+        Window* pNewWindows[] =
+            {   &pNewLine->m_aNameBox, &pNewLine->m_aTypeBox, &pNewLine->m_aValueEdit,
+                &pNewLine->m_aDateField, &pNewLine->m_aTimeField,
+                &pNewLine->m_aDurationField, &pNewLine->m_aEditButton,
+                &pNewLine->m_aYesNoButton, &pNewLine->m_aRemoveButton, NULL };
+
+        Window** pCurrent = pWindows;
+        Window** pNewCurrent = pNewWindows;
+        while ( *pCurrent )
+        {
+            Size aSize = (*pCurrent)->GetSizePixel();
+            Point aPos = (*pCurrent)->GetPosPixel();
+            aPos.Y() = (*pNewCurrent)->GetPosPixel().Y();
+            (*pNewCurrent)->SetPosSizePixel( aPos, aSize );
+            pCurrent++;
+            pNewCurrent++;
+        }
+    }
 }
 
 void CustomPropertiesWindow::AddLine( const ::rtl::OUString& sName, Any& rAny )
@@ -2186,81 +2219,112 @@ Sequence< beans::PropertyValue > CustomPropertiesWindow::GetCustomProperties() c
     return aPropertiesSeq;
 }
 
-// class CustomPropertiesControl -----------------------------------------
-CustomPropertiesControl::CustomPropertiesControl( Window* pParent, const ResId& rResId ) :
-
-    Control( pParent, rResId ),
-
-    m_aHeaderBar    ( this, WB_BUTTONSTYLE | WB_BOTTOMBORDER ),
-    m_aPropertiesWin( this, ResId( WIN_PROPERTIES, *rResId.GetResMgr() ) ),
-    m_aVertScroll   ( this, ResId( SB_VERTICAL, *rResId.GetResMgr() ) ),
-
-    m_nThumbPos     ( 0 )
-
+CustomPropertiesControl::CustomPropertiesControl(Window* pParent)
+    : VclVBox(pParent)
+    , m_nThumbPos(0)
 {
-    m_aPropertiesWin.SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetFieldColor() ) );
-    m_aVertScroll.EnableDrag();
-    m_aVertScroll.Show();
-    long nWidth = GetOutputSizePixel().Width();
-    m_aHeaderBar.SetPosSizePixel( Point(), Size( nWidth, m_aVertScroll.GetPosPixel().Y() ) );
+}
+
+void CustomPropertiesControl::Init(VclBuilderContainer& rBuilder)
+{
+    m_pHeaderBar = new HeaderBar(this, WB_BUTTONSTYLE | WB_BOTTOMBORDER);
+    m_pBody = new VclHBox(this);
+    OUString sName = rBuilder.get<FixedText>("name")->GetText();
+    OUString sType = rBuilder.get<FixedText>("type")->GetText();
+    OUString sValue = rBuilder.get<FixedText>("value")->GetText();
+    m_pPropertiesWin = new CustomPropertiesWindow(m_pBody, sName, sType, sValue);
+    m_pVertScroll = new ScrollBar(m_pBody, WB_VERT);
+
+    set_hexpand(true);
+    set_vexpand(true);
+    set_expand(true);
+    set_fill(true);
+
+    m_pBody->set_hexpand(true);
+    m_pBody->set_vexpand(true);
+    m_pBody->set_expand(true);
+    m_pBody->set_fill(true);
+    m_pBody->Show();
+
+    m_pPropertiesWin->set_hexpand(true);
+    m_pPropertiesWin->set_vexpand(true);
+    m_pPropertiesWin->set_expand(true);
+    m_pPropertiesWin->set_fill(true);
+    m_pPropertiesWin->Show();
+
+    m_pPropertiesWin->SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetFieldColor() ) );
+    m_pVertScroll->EnableDrag();
+    m_pVertScroll->Show();
+
+    m_pHeaderBar->set_height_request(16);
+
     const HeaderBarItemBits nHeadBits = HIB_VCENTER | HIB_FIXED | HIB_FIXEDPOS | HIB_LEFT;
-    nWidth = nWidth / 4;
-    ResMgr* pResMgr = rResId.GetResMgr();
-    m_aHeaderBar.InsertItem( HI_NAME, ResId( STR_HEADER_NAME, *pResMgr ).toString(), nWidth, nHeadBits );
-    m_aHeaderBar.InsertItem( HI_TYPE, ResId( STR_HEADER_TYPE, *pResMgr ).toString(), nWidth, nHeadBits );
-    m_aHeaderBar.InsertItem( HI_VALUE, ResId( STR_HEADER_VALUE, *pResMgr ).toString(), nWidth, nHeadBits );
-    m_aHeaderBar.InsertItem( HI_ACTION, ResId( STR_HEADER_ACTION, *pResMgr ).toString(), nWidth, nHeadBits );
-    m_aHeaderBar.Show();
 
-    FreeResource();
+    m_pHeaderBar->InsertItem( HI_NAME, sName, 0, nHeadBits );
+    m_pHeaderBar->InsertItem( HI_TYPE, sType, 0, nHeadBits );
+    m_pHeaderBar->InsertItem( HI_VALUE, sValue, 0, nHeadBits );
+    m_pHeaderBar->InsertItem( HI_ACTION, OUString(), 0, nHeadBits );
+    m_pHeaderBar->Show();
 
-    m_aPropertiesWin.InitControls( &m_aHeaderBar, &m_aVertScroll );
-    m_aPropertiesWin.SetRemovedHdl( LINK( this, CustomPropertiesControl, RemovedHdl ) );
+    m_pPropertiesWin->SetRemovedHdl( LINK( this, CustomPropertiesControl, RemovedHdl ) );
 
-    m_aVertScroll.SetRangeMin( 0 );
-    sal_Int32 nScrollOffset = m_aPropertiesWin.GetLineHeight();
-    sal_Int32 nVisibleEntries = m_aPropertiesWin.GetSizePixel().Height() / nScrollOffset;
-    m_aVertScroll.SetRangeMax( nVisibleEntries );
-    m_aVertScroll.SetPageSize( nVisibleEntries - 1 );
-    m_aVertScroll.SetVisibleSize( nVisibleEntries );
+    m_pVertScroll->SetRangeMin( 0 );
+    m_pVertScroll->SetRangeMax( 0 );
+    m_pVertScroll->SetVisibleSize( 0xFFFF );
 
     Link aScrollLink = LINK( this, CustomPropertiesControl, ScrollHdl );
-    m_aVertScroll.SetScrollHdl( aScrollLink );
+    m_pVertScroll->SetScrollHdl( aScrollLink );
+}
+
+void CustomPropertiesControl::setAllocation(const Size &rAllocation)
+{
+    VclVBox::setAllocation(rAllocation);
+
+    m_pPropertiesWin->InitControls( m_pHeaderBar, m_pVertScroll );
+    sal_Int32 nScrollOffset = m_pPropertiesWin->GetLineHeight();
+    sal_Int32 nVisibleEntries = m_pPropertiesWin->GetSizePixel().Height() / nScrollOffset;
+    m_pVertScroll->SetPageSize( nVisibleEntries - 1 );
+    m_pVertScroll->SetVisibleSize( nVisibleEntries );
+    m_pPropertiesWin->updateLineWidth();
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeCustomPropertiesControl(Window *pParent,
     VclBuilder::stringmap &)
 {
-    return new CustomPropertiesControl(pParent, SfxResId(SFX_CTRL_CUSTOM_PROPERTIES));
+    return new CustomPropertiesControl(pParent);
 }
 
 CustomPropertiesControl::~CustomPropertiesControl()
 {
+    delete m_pVertScroll;
+    delete m_pPropertiesWin;
+    delete m_pBody;
+    delete m_pHeaderBar;
 }
 
 IMPL_LINK( CustomPropertiesControl, ScrollHdl, ScrollBar*, pScrollBar )
 {
-    sal_Int32 nOffset = m_aPropertiesWin.GetLineHeight();
+    sal_Int32 nOffset = m_pPropertiesWin->GetLineHeight();
     nOffset *= ( m_nThumbPos - pScrollBar->GetThumbPos() );
     m_nThumbPos = pScrollBar->GetThumbPos();
-    m_aPropertiesWin.DoScroll( nOffset );
+    m_pPropertiesWin->DoScroll( nOffset );
     return 0;
 }
 
 IMPL_LINK_NOARG(CustomPropertiesControl, RemovedHdl)
 {
-    m_aVertScroll.SetRangeMax( m_aPropertiesWin.GetVisibleLineCount() + 1 );
-    if ( m_aPropertiesWin.GetOutputSizePixel().Height() < m_aPropertiesWin.GetVisibleLineCount() * m_aPropertiesWin.GetLineHeight() )
-        m_aVertScroll.DoScrollAction ( SCROLL_LINEUP );
+    m_pVertScroll->SetRangeMax( m_pPropertiesWin->GetVisibleLineCount() + 1 );
+    if ( m_pPropertiesWin->GetOutputSizePixel().Height() < m_pPropertiesWin->GetVisibleLineCount() * m_pPropertiesWin->GetLineHeight() )
+        m_pVertScroll->DoScrollAction ( SCROLL_LINEUP );
     return 0;
 }
 
 void CustomPropertiesControl::AddLine( const ::rtl::OUString& sName, Any& rAny, bool bInteractive )
 {
-    m_aPropertiesWin.AddLine( sName, rAny );
-    m_aVertScroll.SetRangeMax( m_aPropertiesWin.GetVisibleLineCount() + 1 );
-    if ( bInteractive && m_aPropertiesWin.GetOutputSizePixel().Height() < m_aPropertiesWin.GetVisibleLineCount() * m_aPropertiesWin.GetLineHeight() )
-        m_aVertScroll.DoScroll( m_aPropertiesWin.GetVisibleLineCount() + 1 );
+    m_pPropertiesWin->AddLine( sName, rAny );
+    m_pVertScroll->SetRangeMax( m_pPropertiesWin->GetVisibleLineCount() + 1 );
+    if ( bInteractive && m_pPropertiesWin->GetOutputSizePixel().Height() < m_pPropertiesWin->GetVisibleLineCount() * m_pPropertiesWin->GetLineHeight() )
+        m_pVertScroll->DoScroll( m_pPropertiesWin->GetVisibleLineCount() + 1 );
 }
 
 // class SfxCustomPropertiesPage -----------------------------------------
@@ -2268,6 +2332,7 @@ SfxCustomPropertiesPage::SfxCustomPropertiesPage( Window* pParent, const SfxItem
     : SfxTabPage(pParent, "CustomInfoPage", "sfx/ui/custominfopage.ui", rItemSet)
 {
     get(m_pPropertiesCtrl, "properties");
+    m_pPropertiesCtrl->Init(*this);
     get<PushButton>("add")->SetClickHdl(LINK(this, SfxCustomPropertiesPage, AddHdl));
 }
 

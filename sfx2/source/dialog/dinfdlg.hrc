@@ -32,29 +32,8 @@
 
 // defines ---------------------------------------------------------------
 
-#define FT_INFO1            15
-#define ED_INFO1            16
-#define FT_INFO2            17
-#define ED_INFO2            18
-#define FT_INFO3            19
-#define ED_INFO3            20
-#define FT_INFO4            21
-#define ED_INFO4            22
-#define BTN_EDITLABEL       34
-
-#define WIN_PROPERTIES      90
-#define SB_VERTICAL         91
-#define FT_PROPERTIES       92
-#define BTN_ADD             94
 #define RB_PROPERTY_YES     100
 #define RB_PROPERTY_NO      101
-
-#define STR_HEADER_NAME     90
-#define STR_HEADER_TYPE     91
-#define STR_HEADER_VALUE    92
-#define STR_HEADER_ACTION   93
-
-#define EDIT_FILE_NAME      94
 
 #define PB_OK                   100
 #define PB_CANCEL               101

@@ -26,7 +26,6 @@
 #define HID_PRINTMONITOR                                      "SFX2_HID_PRINTMONITOR"
 #define HID_MANAGE_STYLES                                     "SFX2_HID_MANAGE_STYLES"
 #define HID_CONFIG_EVENT                                      "SFX2_HID_CONFIG_EVENT"
-#define HID_DOCINFOUSER                                       "SFX2_HID_DOCINFOUSER"
 #define HID_BROWSERCONTROL                                    "SFX2_HID_BROWSERCONTROL"
 #define HID_PRINT_OPTIONS                                     "SFX2_HID_PRINT_OPTIONS"
 #define HID_PREVIEW_FRAME                                     "SFX2_HID_PREVIEW_FRAME"
@@ -135,8 +134,6 @@
 #define HID_WARNING_ALIENFORMAT                               "SFX2_HID_WARNING_ALIENFORMAT"
 #define HID_HELP_ONSTARTUP_BOX                                "SFX2_HID_HELP_ONSTARTUP_BOX"
 #define HID_DLG_CHECKFORONLINEUPDATE                          "SFX2_HID_DLG_CHECKFORONLINEUPDATE"
-#define HID_TP_CUSTOMPROPERTIES                               "SFX2_HID_TP_CUSTOMPROPERTIES"
-#define HID_CTRL_CUSTOMPROPERTIES                             "SFX2_HID_CTRL_CUSTOMPROPERTIES"
 #define HID_CTRL_CUSTOMPROPS_YES_NO                           "SFX2_HID_CTRL_CUSTOMPROPS_YES_NO"
 #define HID_DLG_CUSTOMPROPS_DURATION                          "SFX2_HID_DLG_CUSTOMPROPS_DURATION"
 

@@ -23,18 +23,23 @@
 #include "sfx2/dllapi.h"
 
 #include <com/sun/star/util/DateTime.hpp>
-#include <vcl/edit.hxx>
-#include <vcl/field.hxx>
-#include <svtools/stdctrl.hxx>
+#include <com/sun/star/util/Duration.hpp>
+
 #include <svl/stritem.hxx>
+#include <svl/zforlist.hxx>
+
+#include <svtools/headbar.hxx>
+#include <svtools/stdctrl.hxx>
 #include <svtools/svmedit.hxx>
 
+#include <unotools/syslocale.hxx>
+
+#include <vcl/edit.hxx>
+#include <vcl/field.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/scrbar.hxx>
-#include <svtools/headbar.hxx>
-#include <unotools/syslocale.hxx>
-#include <svl/zforlist.hxx>
-#include <com/sun/star/util/Duration.hpp>
+
 #include "tabdlg.hxx"
 
 namespace com { namespace sun { namespace star {
@@ -478,7 +483,10 @@ private:
     void        ValidateLine( CustomPropertyLine* pLine, bool bIsFromTypeBox );
 
 public:
-    CustomPropertiesWindow( Window* pParent, const ResId& rResId );
+    CustomPropertiesWindow(Window* pParent,
+        const OUString &rHeaderAccName,
+        const OUString &rHeaderAccType,
+        const OUString &rHeaderAccValue);
     ~CustomPropertiesWindow();
 
     void                InitControls( HeaderBar* pHeaderBar, const ScrollBar* pScrollBar );
@@ -492,16 +500,20 @@ public:
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
                         GetCustomProperties() const;
     void                SetRemovedHdl( const Link& rLink ) { m_aRemovedHdl = rLink; }
+
+    void                InitRemoveButton(const ScrollBar &rScrollBar);
+    void                updateLineWidth();
 };
 
 // class CustomPropertiesControl -----------------------------------------
 
-class CustomPropertiesControl : public Control
+class CustomPropertiesControl : public VclVBox
 {
 private:
-    HeaderBar               m_aHeaderBar;
-    CustomPropertiesWindow  m_aPropertiesWin;
-    ScrollBar               m_aVertScroll;
+    HeaderBar*              m_pHeaderBar;
+    VclHBox*                m_pBody;
+    CustomPropertiesWindow* m_pPropertiesWin;
+    ScrollBar*              m_pVertScroll;
 
     sal_Int32               m_nThumbPos;
 
@@ -509,16 +521,18 @@ private:
     DECL_LINK( RemovedHdl, void* );
 
 public:
-    CustomPropertiesControl( Window* pParent, const ResId& rResId );
+    CustomPropertiesControl(Window* pParent);
     ~CustomPropertiesControl();
 
     void            AddLine( const ::rtl::OUString& sName, com::sun::star::uno::Any& rAny, bool bInteractive );
 
-    inline bool     AreAllLinesValid() const { return m_aPropertiesWin.AreAllLinesValid(); }
-    inline void     ClearAllLines() { m_aPropertiesWin.ClearAllLines(); }
+    inline bool     AreAllLinesValid() const { return m_pPropertiesWin->AreAllLinesValid(); }
+    inline void     ClearAllLines() { m_pPropertiesWin->ClearAllLines(); }
     inline ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
                     GetCustomProperties() const
-                        { return m_aPropertiesWin.GetCustomProperties(); }
+                        { return m_pPropertiesWin->GetCustomProperties(); }
+    void    Init(VclBuilderContainer& rParent);
+    virtual void setAllocation(const Size &rAllocation);
 };
 
 // class SfxCustomPropertiesPage -----------------------------------------
