@@ -661,6 +661,8 @@ void BackingWindow::layoutButton(
 
 void BackingWindow::Paint( const Rectangle& )
 {
+    Resize();
+
     Wallpaper aBack( svtools::ColorConfig().GetColorValue(::svtools::APPBACKGROUND).nColor );
     Region aClip( Rectangle( Point( 0, 0 ), GetOutputSizePixel() ) );
     Rectangle aBmpRect(maControlRect);
@@ -849,6 +851,9 @@ void BackingWindow::Resize()
     nYPos += nB2Delta - nDiff;
     maOpenButton.SetPosSizePixel( Point( maControlRect.Left() + mnBtnPos, nYPos ), Size( mnTextColumnWidth[0], maButtonImageSize.Height() ) );
     maTemplateButton.SetPosSizePixel( Point( maControlRect.Left() + mnBtnPos + mnColumnWidth[0], nYPos ), Size( mnTextColumnWidth[1], maButtonImageSize.Height() ) );
+
+    if( !IsInPaint())
+        Invalidate();
 }
 
 IMPL_LINK_NOARG(BackingWindow, ToolboxHdl)
