@@ -29,22 +29,21 @@ $(eval $(call gb_CustomTarget_CustomTarget,testtools/uno_test))
 # this target is phony to run it every time
 .PHONY : $(call gb_CustomTarget_get_target,testtools/uno_test)
 
-# NOTE: the dependency on ure/services.rdb is there because we need some
+# NOTE: the dependency on ure/services.rdb is also there because we need some
 # of the URE libs from stoc and this is the easiest way to ensure they
 # are available when the test is run .-)
 $(call gb_CustomTarget_get_target,testtools/uno_test) : \
-		$(call gb_Rdb_get_outdir_target,uno_services) \
-		$(call gb_Rdb_get_outdir_target,ure/services) \
 		$(call gb_Executable_get_target_for_build,uno) \
 		$(call gb_InternalUnoApi_get_target,bridgetest) \
 		$(call gb_Library_get_target,$(gb_CPPU_ENV)_uno) \
-		$(call gb_Package_get_target,cppuhelper_unorc)
-	$(call gb_Helper_abbreviate_dirs,\
-		$(call gb_Executable_get_target_for_build,uno) \
-		-ro $(OUTDIR)/xml/uno_services.rdb \
-		-ro $(OUTDIR)/bin/udkapi.rdb \
-		-ro $(WORKDIR)/UnoApiTarget/bridgetest.rdb \
+		$(call gb_Package_get_target,cppuhelper_unorc) \
+		$(call gb_Rdb_get_outdir_target,uno_services) \
+		$(call gb_Rdb_get_outdir_target,ure/services) \
+		$(call gb_UnoApiMerge_get_target,ure/types)
+	$(call gb_Executable_get_target_for_build,uno) \
 		-s com.sun.star.test.bridge.BridgeTest \
-		-- com.sun.star.test.bridge.CppTestObject)
+		-- com.sun.star.test.bridge.CppTestObject \
+		-env:UNO_SERVICES='$(call gb_Helper_make_url,$(call gb_Rdb_get_outdir_target,ure/services)) $(call gb_Helper_make_url,$(call gb_Rdb_get_outdir_target,uno_services))' \
+		-env:UNO_TYPES='$(call gb_Helper_make_url,$(call gb_UnoApiMerge_get_target,ure/types)) $(call gb_Helper_make_url,$(WORKDIR)/UnoApiTarget/bridgetest.rdb)'
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:
