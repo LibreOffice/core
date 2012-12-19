@@ -2343,22 +2343,6 @@ ImplFontEntry* ImplFontCache::GetFontEntry( ImplDevFontList* pFontList,
 {
     String aSearchName = rFont.GetName();
 
-    // TODO: also add device specific name caching
-    if( !pDevSpecific )
-    {
-        // check if the requested font name is already known
-        // if it is already known get its normalized search name
-        FontNameList::const_iterator it_name = maFontNameList.find( aSearchName );
-        if( it_name != maFontNameList.end() )
-            if( !(*it_name).second.EqualsAscii( "hg", 0, 2)
-#ifdef ENABLE_GRAPHITE
-                && (aSearchName.Search(grutils::GrFeatureParser::FEAT_PREFIX)
-                    == STRING_NOTFOUND)
-#endif
-            )
-                aSearchName = (*it_name).second;
-    }
-
     // initialize internal font request object
     FontSelectPattern aFontSelData( rFont, aSearchName, rSize, fExactHeight );
     return GetFontEntry( pFontList, aFontSelData, pDevSpecific );
@@ -2397,16 +2381,6 @@ ImplFontEntry* ImplFontCache::GetFontEntry( ImplDevFontList* pFontList,
         {
             // we have an indirect cache hit
             pEntry = (*it).second;
-            // cache the requested and the selected font names
-            // => next time there is a good chance for a direct cache hit
-            // don't allow the cache to grow too big
-            // TODO: implement some fancy LRU caching?
-            if( maFontNameList.size() >= 4000 )
-                maFontNameList.clear();
-            // TODO: also add device specific name caching
-            if( !pDevSpecific )
-                if( aFontSelData.maName != aFontSelData.maSearchName )
-                    maFontNameList[ aFontSelData.maName ] = aFontSelData.maSearchName;
         }
     }
 
