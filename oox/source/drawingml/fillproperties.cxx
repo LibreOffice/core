@@ -181,7 +181,8 @@ Color FillProperties::getBestSolidColor() const
 }
 
 void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
-        const GraphicHelper& rGraphicHelper, sal_Int32 nShapeRotation, sal_Int32 nPhClr ) const
+        const GraphicHelper& rGraphicHelper, sal_Int32 nShapeRotation, sal_Int32 nPhClr,
+        bool bFlipH, bool bFlipV ) const
 {
     if( moFillType.has() )
     {
@@ -224,6 +225,12 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                         if( maGradientProps.maGradientStops.begin()->second.hasTransparency() )
                             nStartTrans = maGradientProps.maGradientStops.begin()->second.getTransparency()*255/100;
                     }
+
+                    // Adjust for flips
+                    if ( bFlipH )
+                        nShapeRotation = 180*60000 - nShapeRotation;
+                    if ( bFlipV )
+                        nShapeRotation = -nShapeRotation;
 
                     // "rotate with shape" not set, or set to false -> do not rotate
                     if ( !maGradientProps.moRotateWithShape.get( false ) )
