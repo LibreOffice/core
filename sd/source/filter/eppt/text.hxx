@@ -214,7 +214,7 @@ class ParagraphObj : public std::vector<PortionObj*>, public PropStateValue, pub
                         ~ParagraphObj();
 
         void            Write( SvStream* pStrm );
-        sal_uInt32          Count() const { return mnTextSize; };
+        sal_uInt32      CharacterCount() const { return mnTextSize; };
 
         ParagraphObj&   operator=( const ParagraphObj& rParagraphObj );
 };
