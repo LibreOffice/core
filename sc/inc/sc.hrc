@@ -587,6 +587,8 @@
 #define SID_DEFINE_COLROWNAMERANGES (SID_NEW_SLOTS+58)
 
 #define FID_NOTE_VISIBLE        (SID_NEW_SLOTS+59)
+#define FID_SHOW_NOTE           (SID_NEW_SLOTS+100)
+#define FID_HIDE_NOTE           (SID_NEW_SLOTS+101)
 
 //  items for validation
 #define FID_VALID_MODE          (SID_NEW_SLOTS+60)

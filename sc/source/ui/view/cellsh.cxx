@@ -905,6 +905,82 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                 }
                 break;
 
+            case FID_HIDE_NOTE:
+            case FID_SHOW_NOTE:
+                {
+                    bool bEnable = false;
+                    bool bSearchForHidden = nWhich == FID_SHOW_NOTE;
+                    if (!rMark.IsMarked() && !rMark.IsMultiMarked())
+                    {
+                        // Check current cell
+                        const ScPostIt* pNote = pDoc->GetNotes(nTab)->findByAddress(nPosX, nPosY);
+                        if ( pNote && pDoc->IsBlockEditable( nTab, nPosX,nPosY, nPosX,nPosY ) )
+                            if ( pNote->IsCaptionShown() != bSearchForHidden)
+                                bEnable = true;
+                    }
+                    else
+                    {
+                        // Check selection range
+                        ScRangeListRef aRangesRef;
+                        pData->GetMultiArea(aRangesRef);
+                        ScRangeList aRanges = *aRangesRef;
+                        size_t nRangeSize = aRanges.size();
+                        
+                        for ( size_t i = 0; i < nRangeSize && !bEnable; ++i )
+                        {
+                            const ScRange * pRange = aRanges[i];
+                            const SCROW nRow0 = pRange->aStart.Row();
+                            const SCROW nRow1 = pRange->aEnd.Row();
+                            const SCCOL nCol0 = pRange->aStart.Col();
+                            const SCCOL nCol1 = pRange->aEnd.Col();
+                            const SCTAB nRangeTab = pRange->aStart.Tab();
+                            const size_t nCellNumber = ( nRow1 - nRow0 ) * ( nCol1 - nCol0 );
+                            const ScNotes *pNotes = pDoc->GetNotes(nRangeTab);
+                            
+                            if ( nCellNumber < pNotes->size() )
+                            {
+                                // Check by each cell
+                                for ( SCROW nRow = nRow0; nRow <= nRow1 && !bEnable; ++nRow )
+                                {
+                                    for ( SCCOL nCol = nCol0; nCol <= nCol1; ++nCol )
+                                    {
+                                        const ScPostIt* pNote = pNotes->findByAddress(nCol, nRow);
+                                        if ( pNote && pDoc->IsBlockEditable( nRangeTab, nCol,nRow, nCol,nRow ) )
+                                        {
+                                            if ( pNote->IsCaptionShown() != bSearchForHidden)
+                                            {
+                                                bEnable = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                // Check by each document note
+                                for (ScNotes::const_iterator itr = pNotes->begin(); itr != pNotes->end(); ++itr)
+                                {
+                                    SCCOL nCol = itr->first.first;
+                                    SCROW nRow = itr->first.second;
+
+                                    if ( nCol <= nCol1 && nRow <= nRow1 && nCol >= nCol0 && nRow >= nRow0 )
+                                    {
+                                        if ( itr->second->IsCaptionShown() != bSearchForHidden)
+                                        {
+                                            bEnable = true; //note found
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if ( !bEnable )
+                        rSet.DisableItem( nWhich );
+                }
+                break;
+
             case SID_DELETE_NOTE:
                 {
                     bool bEnable = false;

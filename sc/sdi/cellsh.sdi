@@ -187,6 +187,8 @@ interface CellSelection
     SID_COLORSCALE          [ ExecMethod = ExecuteEdit; ]
     SID_DATABAR             [ ExecMethod = ExecuteEdit; ]
     FID_NOTE_VISIBLE        [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+    FID_HIDE_NOTE           [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+    FID_SHOW_NOTE           [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     SID_DELETE_NOTE         [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     SID_DEC_INDENT          [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     SID_INC_INDENT          [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]

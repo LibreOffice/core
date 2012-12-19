@@ -711,7 +711,17 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Show Comment</value>
                 </prop>
-      </node>
+            </node>
+            <node oor:name=".uno:ShowNote" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Show Comment</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:HideNote" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Hide Comment</value>
+                </prop>
+            </node>
       <node oor:name=".uno:InsertAnnotation" oor:op="replace">
           <prop oor:name="Label" oor:type="xs:string">
             <value xml:lang="en-US">Comm~ent</value>
