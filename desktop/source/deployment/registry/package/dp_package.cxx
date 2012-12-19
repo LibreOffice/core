@@ -866,7 +866,7 @@ void BackendImpl::PackageImpl::processPackage_(
             try {
                 xPackage->registerPackage( startup, xSubAbortChannel, xCmdEnv );
             }
-            catch (const Exception &)
+            catch (const Exception & e)
             {
                //We even try a rollback if the user cancelled the action (CommandAbortedException)
                 //in order to prevent invalid database entries.
@@ -1366,9 +1366,15 @@ Reference<deployment::XPackage> BackendImpl::PackageImpl::bindBundleItem(
 
     Reference<deployment::XPackage>xPackage;
     try {
-        xPackage.set( getMyBackend()->m_xRootRegistry->bindPackage(
-                          url, mediaType, bRemoved, identifier, xCmdEnv ) );
-        OSL_ASSERT( xPackage.is() );
+        try {
+            xPackage.set( getMyBackend()->m_xRootRegistry->bindPackage(
+                              url, mediaType, bRemoved, identifier, xCmdEnv ) );
+            OSL_ASSERT( xPackage.is() );
+        } catch (css::lang::IllegalArgumentException & e) {
+            css::uno::Any exc(cppu::getCaughtException());
+            throw css::lang::WrappedTargetException(
+                "wrapped: " + e.Message, e.Context, exc);
+        }
     }
     catch (const RuntimeException &) {
         throw;
