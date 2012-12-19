@@ -99,10 +99,6 @@ using ::com::sun::star::table::CellAddress;
 using ::com::sun::star::sheet::XFormulaParser;
 using ::com::sun::star::sheet::XFormulaTokens;
 using ::oox::core::XmlFilterBase;
-using ::rtl::OString;
-using ::rtl::OStringBuffer;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using ::sax_fastparser::FSHelperPtr;
 
 DBG(extern void dump_pset(Reference< XPropertySet > rXPropSet));
@@ -189,7 +185,7 @@ Reference< chart2::data::XLabeledDataSequence > lcl_getCategories( const Referen
     catch( const uno::Exception & ex )
     {
         (void)ex; // avoid warning for pro build
-        OSL_FAIL( rtl::OUStringToOString(
+        OSL_FAIL( OUStringToOString(
                         OUString(  "Exception caught. Type: " ) +
                         OUString::createFromAscii( typeid( ex ).name()) +
                         OUString(  ", Message: " ) +
@@ -306,7 +302,7 @@ bool lcl_isSeriesAttachedToFirstAxis(
     catch( const uno::Exception & ex )
     {
         (void)ex; // avoid warning for pro build
-        OSL_FAIL( rtl::OUStringToOString(
+        OSL_FAIL( OUStringToOString(
                         OUString(  "Exception caught. Type: " ) +
                         OUString::createFromAscii( typeid( ex ).name()) +
                         OUString(  ", Message: " ) +
@@ -403,35 +399,35 @@ void lcl_fillCategoriesIntoStringVector(
 sal_Int32 lcl_getChartType( const OUString& sChartType )
 {
     chart::TypeId eChartTypeId = chart::TYPEID_UNKNOWN;
-    if(( 0 == sChartType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart.BarDiagram" )))
-        || ( 0 == sChartType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.ColumnChartType") ) ) )
+    if(( 0 == sChartType.reverseCompareTo( "com.sun.star.chart.BarDiagram" ))
+        || ( 0 == sChartType.reverseCompareTo( "com.sun.star.chart2.ColumnChartType" )))
         eChartTypeId = chart::TYPEID_BAR;
-    else if(( 0 == sChartType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart.AreaDiagram" )))
-        || ( 0 == sChartType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.AreaChartType") ) ) )
+    else if(( 0 == sChartType.reverseCompareTo( "com.sun.star.chart.AreaDiagram" ))
+        || ( 0 == sChartType.reverseCompareTo( "com.sun.star.chart2.AreaChartType" ) ) )
         eChartTypeId = chart::TYPEID_AREA;
-    else if(( 0 == sChartType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart.LineDiagram" )))
-        || ( 0 == sChartType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.LineChartType") ) ) )
+    else if(( 0 == sChartType.reverseCompareTo( "com.sun.star.chart.LineDiagram" ))
+        || ( 0 == sChartType.reverseCompareTo( "com.sun.star.chart2.LineChartType" ) ) )
         eChartTypeId = chart::TYPEID_LINE;
-    else if(( 0 == sChartType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart.PieDiagram" )))
-        || ( 0 == sChartType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.PieChartType") ) ) )
+    else if(( 0 == sChartType.reverseCompareTo( "com.sun.star.chart.PieDiagram" ))
+        || ( 0 == sChartType.reverseCompareTo( "com.sun.star.chart2.PieChartType") ) )
         eChartTypeId = chart::TYPEID_PIE;
-    else if(( 0 == sChartType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart.DonutDiagram" )))
-        || ( 0 == sChartType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.DonutChartType") ) ) )
+    else if(( 0 == sChartType.reverseCompareTo( "com.sun.star.chart.DonutDiagram"))
+        || ( 0 == sChartType.reverseCompareTo( "com.sun.star.chart2.DonutChartType") ) )
         eChartTypeId = chart::TYPEID_DOUGHNUT;
-    else if(( 0 == sChartType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart.XYDiagram" )))
-        || ( 0 == sChartType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.ScatterChartType") ) ) )
+    else if(( 0 == sChartType.reverseCompareTo( "com.sun.star.chart.XYDiagram"))
+        || ( 0 == sChartType.reverseCompareTo( "com.sun.star.chart2.ScatterChartType") ) )
         eChartTypeId = chart::TYPEID_SCATTER;
-    else if(( 0 == sChartType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart.NetDiagram" )))
-        || ( 0 == sChartType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.NetChartType") ) ) )
+    else if(( 0 == sChartType.reverseCompareTo( "com.sun.star.chart.NetDiagram"))
+        || ( 0 == sChartType.reverseCompareTo( "com.sun.star.chart2.NetChartType") ) )
         eChartTypeId = chart::TYPEID_RADARLINE;
-    else if(( 0 == sChartType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart.FilledNetDiagram" )))
-        || ( 0 == sChartType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.FilledNetChartType") ) ) )
+    else if(( 0 == sChartType.reverseCompareTo( "com.sun.star.chart.FilledNetDiagram"))
+        || ( 0 == sChartType.reverseCompareTo( "com.sun.star.chart2.FilledNetChartType") ) )
         eChartTypeId = chart::TYPEID_RADARAREA;
-    else if(( 0 == sChartType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart.StockDiagram" )))
-        || ( 0 == sChartType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.CandleStickChartType") ) ) )
+    else if(( 0 == sChartType.reverseCompareTo( "com.sun.star.chart.StockDiagram"))
+        || ( 0 == sChartType.reverseCompareTo( "com.sun.star.chart2.CandleStickChartType") ) )
         eChartTypeId = chart::TYPEID_STOCK;
-    else if(( 0 == sChartType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart.BubbleDiagram" )))
-        || ( 0 == sChartType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.BubbleChartType") ) ) )
+    else if(( 0 == sChartType.reverseCompareTo( "com.sun.star.chart.BubbleDiagram"))
+        || ( 0 == sChartType.reverseCompareTo( "com.sun.star.chart2.BubbleChartType") ) )
         eChartTypeId = chart::TYPEID_BUBBLE;
 
     return eChartTypeId;
@@ -507,14 +503,14 @@ OUString ChartExport::parseFormula( const OUString& rRange )
     {
         OSL_TRACE("ChartExport::parseFormula, parser is invalid");
         //FIXME: currently just using simple converter, e.g $Sheet1.$A$1:$C$1 -> Sheet1!$A$1:$C$1
-        String aRange( rRange );
-        if( aRange.SearchAscii("$") == 0 )
-            aRange = aRange.Copy(1);
-        aRange.SearchAndReplaceAllAscii(".$", rtl::OUString("!$") );
+        OUString aRange( rRange );
+        if( aRange.indexOf("$") == 0 )
+            aRange = aRange.copy(1);
+        aRange = aRange.replaceAll(".$", "!$" );
         aResult = aRange;
     }
 
-    OSL_TRACE("ChartExport::parseFormula, the originla formula is %s, the new formula is %s ", rtl::OUStringToOString( rRange, RTL_TEXTENCODING_UTF8 ).getStr(), rtl::OUStringToOString( aResult, RTL_TEXTENCODING_UTF8 ).getStr());
+    OSL_TRACE("ChartExport::parseFormula, the originla formula is %s, the new formula is %s ", OUStringToOString( rRange, RTL_TEXTENCODING_UTF8 ).getStr(), OUStringToOString( aResult, RTL_TEXTENCODING_UTF8 ).getStr());
     return aResult;
 }
 
@@ -631,7 +627,7 @@ void ChartExport::InitRangeSegmentationProperties( const Reference< chart2::XCha
             {
                 Reference< chart2::data::XDataSource > xDataSource( lcl_pressUsedDataIntoRectangularFormat( xChartDoc, mbHasCategoryLabels ));
                 Sequence< beans::PropertyValue > aArgs( xDataProvider->detectArguments( xDataSource ));
-                ::rtl::OUString sCellRange, sBrokenRange;
+                OUString sCellRange, sBrokenRange;
                 bool bBrokenRangeAvailable = false;
                 for( sal_Int32 i=0; i<aArgs.getLength(); ++i )
                 {
@@ -672,7 +668,7 @@ void ChartExport::InitRangeSegmentationProperties( const Reference< chart2::XCha
         catch( const uno::Exception & ex )
         {
             (void)ex; // avoid warning for pro build
-            OSL_FAIL( rtl::OUStringToOString(
+            OSL_FAIL( OUStringToOString(
                             OUString(  "Exception caught. Type: " ) +
                             OUString::createFromAscii( typeid( ex ).name()) +
                             OUString(  ", Message: " ) +
@@ -2330,7 +2326,7 @@ void ChartExport::exportDataPoints(
                 {
                     (void)rEx; // avoid warning for pro build
                     OSL_TRACE( "Exception caught during Export of data point: %s",
-                                    rtl::OUStringToOString( rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+                                    OUStringToOString( rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
                 }
             }
             else

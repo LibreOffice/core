@@ -90,10 +90,6 @@ using ::com::sun::star::text::XText;
 using ::com::sun::star::text::XTextContent;
 using ::com::sun::star::text::XTextField;
 using ::com::sun::star::text::XTextRange;
-using ::rtl::OString;
-using ::rtl::OStringBuffer;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using ::sax_fastparser::FSHelperPtr;
 
 DBG(extern void dump_pset(Reference< XPropertySet > rXPropSet));
@@ -102,10 +98,10 @@ namespace oox {
 namespace drawingml {
 
 #define GETA(propName) \
-    GetProperty( rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( #propName ) ) )
+    GetProperty( rXPropSet, String( #propName ) )
 
 #define GETAD(propName) \
-    ( GetPropertyAndState( rXPropSet, rXPropState, String( RTL_CONSTASCII_USTRINGPARAM( #propName ) ), eState ) && eState == beans::PropertyState_DIRECT_VALUE )
+    ( GetPropertyAndState( rXPropSet, rXPropState, String( #propName ), eState ) && eState == beans::PropertyState_DIRECT_VALUE )
 
 #define GET(variable, propName) \
     if ( GETA(propName) ) \
@@ -405,10 +401,10 @@ void DrawingML::WriteOutline( Reference< XPropertySet > rXPropSet )
 
 OUString DrawingML::WriteImage( const OUString& rURL )
 {
-    rtl::OString aURLBS(rtl::OUStringToOString(rURL, RTL_TEXTENCODING_UTF8));
+    OString aURLBS(OUStringToOString(rURL, RTL_TEXTENCODING_UTF8));
 
     const char aURLBegin[] = "vnd.sun.star.GraphicObject:";
-    sal_Int32 index = aURLBS.indexOfL(RTL_CONSTASCII_STRINGPARAM(aURLBegin));
+    sal_Int32 index = aURLBS.indexOf(aURLBegin);
 
     if ( index != -1 )
     {
@@ -841,14 +837,14 @@ const char* DrawingML::GetFieldType( ::com::sun::star::uno::Reference< ::com::su
 {
     const char* sType = NULL;
     Reference< XPropertySet > rXPropSet( rRun, UNO_QUERY );
-    String aFieldType;
+    OUString aFieldType;
 
     if( GETA( TextPortionType ) ) {
-        aFieldType = String( *(::rtl::OUString*)mAny.getValue() );
+        aFieldType = OUString( *(OUString*)mAny.getValue() );
         DBG(printf ("field type: %s\n", USS(aFieldType) ));
     }
 
-    if( aFieldType == S( "TextField" ) ) {
+    if( aFieldType == "TextField" ) {
         Reference< XTextField > rXTextField;
         GET( rXTextField, TextField );
         if( rXTextField.is() ) {
@@ -1455,8 +1451,7 @@ void DrawingML::WriteConnectorConnections( EscherConnectorListEntry& rConnectorE
 
 sal_Unicode DrawingML::SubstituteBullet( sal_Unicode cBulletId, ::com::sun::star::awt::FontDescriptor& rFontDesc )
 {
-    if ( rFontDesc.Name.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("starsymbol")) ||
-         rFontDesc.Name.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("opensymbol")) )
+    if ( rFontDesc.Name == "starsymbol" || rFontDesc.Name == "opensymbol" )
     {
         rtl_TextEncoding eCharSet = rFontDesc.CharSet;
         cBulletId = msfilter::util::bestFitOpenSymbolToMSFont(cBulletId, eCharSet, rFontDesc.Name);
@@ -1472,7 +1467,7 @@ sax_fastparser::FSHelperPtr DrawingML::CreateOutputStream (
     const Reference< XOutputStream >& xParentRelation,
     const char* sContentType,
     const char* sRelationshipType,
-    ::rtl::OUString* pRelationshipId )
+    OUString* pRelationshipId )
 {
     OUString sRelationshipId;
     if (xParentRelation.is())

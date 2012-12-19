@@ -32,12 +32,9 @@
 #include <typeinfo>
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::rtl::OUString;
 
 // ----------------------------------------
 
@@ -167,7 +164,7 @@ bool SchXMLSeriesHelper::isCandleStickSeries(
                                         xNewDiagram, xSeries ) );
             if( xChartType.is() )
             {
-                rtl::OUString aServiceName( xChartType->getChartType() );
+                OUString aServiceName( xChartType->getChartType() );
                 if( aServiceName == "com.sun.star.chart2.CandleStickChartType" )
                     bRet = true;
             }
