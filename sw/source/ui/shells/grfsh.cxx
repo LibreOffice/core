@@ -290,20 +290,20 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 }
                 aMgr.UpdateFlyFrm();
 
-                sal_Bool bApplyUsrPref = sal_False;
+                bool bApplyUsrPref = false;
                 if (SFX_ITEM_SET == pSet->GetItemState(
                     FN_KEEP_ASPECT_RATIO, sal_True, &pItem ))
                 {
                     aUsrPref.SetKeepRatio(
                                     ((const SfxBoolItem*)pItem)->GetValue() );
-                    bApplyUsrPref = sal_True;
+                    bApplyUsrPref = true;
                 }
                 if( SFX_ITEM_SET == pSet->GetItemState(
                     SID_ATTR_GRAF_KEEP_ZOOM, sal_True, &pItem ))
                 {
                     aUsrPref.SetGrfKeepZoom(
                                     ((const SfxBoolItem*)pItem)->GetValue() );
-                    bApplyUsrPref = sal_True;
+                    bApplyUsrPref = true;
                 }
 
                 if( bApplyUsrPref )
@@ -524,8 +524,8 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
     SwWrtShell &rSh = GetShell();
     SfxItemSet aCoreSet( GetPool(), aNoTxtNodeSetRange );
     rSh.GetCurAttr( aCoreSet );
-    sal_Bool bParentCntProt = 0 != rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT );
-    sal_Bool bIsGrfCntnt = CNT_GRF == GetShell().GetCntType();
+    bool bParentCntProt = 0 != rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT );
+    bool bIsGrfCntnt = CNT_GRF == GetShell().GetCntType();
 
     SetGetStateSet( &rSet );
 
@@ -533,24 +533,24 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
     sal_uInt16 nWhich = aIter.FirstWhich();
     while( nWhich )
     {
-        sal_Bool bDisable = bParentCntProt;
+        bool bDisable = bParentCntProt;
         switch( nWhich )
         {
         case SID_INSERT_GRAPHIC:
         case FN_FORMAT_GRAFIC_DLG:
         case SID_TWAIN_TRANSFER:
             if( bParentCntProt || !bIsGrfCntnt )
-                bDisable = sal_True;
+                bDisable = true;
             break;
         case SID_SAVE_GRAPHIC:
         case SID_EXTERNAL_EDIT:
             if( rSh.GetGraphicType() == GRAPHIC_NONE )
-                bDisable = sal_True;
+                bDisable = true;
             break;
         case SID_COLOR_SETTINGS:
         {
             if ( bParentCntProt || !bIsGrfCntnt )
-                bDisable = sal_True;
+                bDisable = true;
             else
             {
                 svx::ToolboxAccess aToolboxAccess( TOOLBOX_NAME );
@@ -622,7 +622,7 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
                 {
                     if( pGrafObj->IsAnimated() ||
                         GRAPHIC_GDIMETAFILE == pGrafObj->GetType() )
-                        bDisable = sal_True;
+                        bDisable = true;
                     else
                         rSet.Put( SfxUInt16Item( nWhich, ((SwTransparencyGrf&)
                             aCoreSet.Get(RES_GRFATR_TRANSPARENCY)).GetValue() ));
@@ -655,7 +655,7 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
         case SID_GRFFILTER_SOLARIZE:
             {
                 if( bParentCntProt || !bIsGrfCntnt )
-                    bDisable = sal_True;
+                    bDisable = true;
                 // #i59688# load graphic only if type is unknown
                 else
                 {
@@ -677,7 +677,7 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
             break;
 
         default:
-            bDisable = sal_False;
+            bDisable = false;
         }
 
         if( bDisable )
