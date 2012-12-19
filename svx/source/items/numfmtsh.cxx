@@ -1313,15 +1313,13 @@ void SvxNumberFormatShell::SetComment4Entry(short nEntry,String aEntStr)
 
 String SvxNumberFormatShell::GetComment4Entry(short nEntry)
 {
-    const SvNumberformat *pNumEntry;
-
     if(nEntry < 0)
         return String();
 
     if( static_cast<size_t>(nEntry) < aCurEntryList.size())
     {
         sal_uInt32  nMyNfEntry=aCurEntryList[nEntry];
-        pNumEntry = pFormatter->GetEntry(nMyNfEntry);
+        const SvNumberformat *pNumEntry = pFormatter->GetEntry(nMyNfEntry);
         if(pNumEntry!=NULL)
             return pNumEntry->GetComment();
     }
@@ -1346,7 +1344,6 @@ String SvxNumberFormatShell::GetComment4Entry(short nEntry)
 
 short SvxNumberFormatShell::GetCategory4Entry(short nEntry)
 {
-    const SvNumberformat *pNumEntry;
     if(nEntry<0) return 0;
 
     if( static_cast<size_t>(nEntry) < aCurEntryList.size() )
@@ -1355,7 +1352,7 @@ short SvxNumberFormatShell::GetCategory4Entry(short nEntry)
 
         if(nMyNfEntry!=NUMBERFORMAT_ENTRY_NOT_FOUND)
         {
-            pNumEntry = pFormatter->GetEntry(nMyNfEntry);
+            const SvNumberformat *pNumEntry = pFormatter->GetEntry(nMyNfEntry);
             sal_uInt16 nMyCat,nMyType;
             if(pNumEntry!=NULL)
             {
@@ -1392,13 +1389,12 @@ short SvxNumberFormatShell::GetCategory4Entry(short nEntry)
 
 bool SvxNumberFormatShell::GetUserDefined4Entry(short nEntry)
 {
-    const SvNumberformat *pNumEntry;
-    if(nEntry<0) return 0;
+    if(nEntry<0) return false;
 
     if( static_cast<size_t>(nEntry) < aCurEntryList.size())
     {
         sal_uInt32  nMyNfEntry=aCurEntryList[nEntry];
-        pNumEntry = pFormatter->GetEntry(nMyNfEntry);
+        const SvNumberformat *pNumEntry = pFormatter->GetEntry(nMyNfEntry);
 
         if(pNumEntry!=NULL)
         {
@@ -1429,8 +1425,6 @@ bool SvxNumberFormatShell::GetUserDefined4Entry(short nEntry)
 
 String SvxNumberFormatShell::GetFormat4Entry(short nEntry)
 {
-    const SvNumberformat *pNumEntry;
-
     if(nEntry < 0)
         return String();
 
@@ -1442,7 +1436,7 @@ String SvxNumberFormatShell::GetFormat4Entry(short nEntry)
     else
     {
         sal_uInt32  nMyNfEntry=aCurEntryList[nEntry];
-        pNumEntry = pFormatter->GetEntry(nMyNfEntry);
+        const SvNumberformat *pNumEntry = pFormatter->GetEntry(nMyNfEntry);
 
         if(pNumEntry!=NULL)
             return pNumEntry->GetFormatstring();

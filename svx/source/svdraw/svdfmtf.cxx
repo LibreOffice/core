@@ -928,13 +928,13 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaMapModeAction& rAct)
 
 void ImpSdrGDIMetaFileImport::MapScaling()
 {
-    size_t i, nAnz = aTmpList.size();
+    size_t nAnz = aTmpList.size();
     const MapMode& rMap = aVD.GetMapMode();
     Point aMapOrg( rMap.GetOrigin() );
     sal_Bool bMov2 = aMapOrg.X() != 0 || aMapOrg.Y() != 0;
     if ( bMov2 )
     {
-        for ( i = nMapScalingOfs; i < nAnz; i++ )
+        for (size_t i = nMapScalingOfs; i < nAnz; i++ )
         {
             SdrObject* pObj = aTmpList[i];
             if ( bMov2 )

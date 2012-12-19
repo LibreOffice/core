@@ -1427,7 +1427,6 @@ sal_Bool SdrMarkView::MarkObj(const Rectangle& rRect, sal_Bool bUnmark)
 {
     sal_Bool bFnd=sal_False;
     Rectangle aR(rRect);
-    SdrObject* pObj;
     SdrObjList* pObjList;
     BrkAction();
     SdrPageView* pPV = GetSdrPageView();
@@ -1437,6 +1436,7 @@ sal_Bool SdrMarkView::MarkObj(const Rectangle& rRect, sal_Bool bUnmark)
         pObjList=pPV->GetObjList();
         Rectangle aFrm1(aR);
         sal_uIntPtr nObjAnz=pObjList->GetObjCount();
+        SdrObject* pObj;
         for (sal_uIntPtr nO=0; nO<nObjAnz; nO++) {
             pObj=pObjList->GetObj(nO);
             Rectangle aRect(pObj->GetCurrentBoundRect());

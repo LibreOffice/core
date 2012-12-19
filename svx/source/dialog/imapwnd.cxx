@@ -547,12 +547,12 @@ sal_Int8 IMapWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
 void IMapWindow::RequestHelp( const HelpEvent& rHEvt )
 {
-    SdrObject*          pSdrObj = NULL;
-    SdrPageView*        pPageView = NULL;
     Point               aPos = PixelToLogic( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ) );
 
     if ( Help::IsBalloonHelpEnabled() || Help::IsQuickHelpEnabled() )
     {
+        SdrObject*          pSdrObj = NULL;
+        SdrPageView*        pPageView = NULL;
         if ( pView->PickObj( aPos, pView->getHitTolLog(), pSdrObj, pPageView ) )
         {
             const IMapObject*   pIMapObj = GetIMapObj( pSdrObj );

@@ -298,12 +298,12 @@ sal_Bool SvxHFPage::FillItemSet( SfxItemSet& rSet )
         aSet.Put( *pBBSet );
     else
     {
-        const SfxItemSet* _pSet;
         const SfxPoolItem* pItem;
 
         if ( SFX_ITEM_SET ==
              GetItemSet().GetItemState( GetWhich( nId ), sal_False, &pItem ) )
         {
+            const SfxItemSet* _pSet;
             _pSet = &( (SvxSetItem*)pItem )->GetItemSet();
 
             if ( _pSet->GetItemState( nWBrush ) == SFX_ITEM_SET )

@@ -1248,14 +1248,14 @@ void SdrDragObjOwn::MoveSdrDrag(const Point& rNoSnapPnt)
 bool SdrDragObjOwn::EndSdrDrag(bool /*bCopy*/)
 {
     Hide();
-    SdrUndoAction* pUndo = NULL;
-    SdrUndoAction* pUndo2 = NULL;
     std::vector< SdrUndoAction* > vConnectorUndoActions;
     bool bRet = false;
     SdrObject* pObj = GetDragObj();
 
     if(pObj)
     {
+        SdrUndoAction* pUndo = NULL;
+        SdrUndoAction* pUndo2 = NULL;
         const bool bUndo = getSdrDragView().IsUndoEnabled();
 
         if( bUndo )
@@ -2313,8 +2313,7 @@ void SdrDragShear::MoveSdrDrag(const Point& rPnt)
             nWink=nNeuWink;
             aFact=aNeuFact;
             double a=nWink*nPi180;
-            double nTan1=0.0;
-            nTan1=tan(a); // calculate now, so as little time as possible passes between Hide() and Show()
+            double nTan1=tan(a); // calculate now, so as little time as possible passes between Hide() and Show()
             Hide();
             nTan=nTan1;
             DragStat().NextMove(rPnt);
