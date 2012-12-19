@@ -3237,12 +3237,12 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         bFrmDrag = sal_False;
                         if ( !bHandledFlyClick && !bIsDocReadOnly && rSh.IsInsideSelectedObj(aDocPos) &&
                              0 == rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) )
-
+                        {
 /* this is no good, on the one hand GetSelectionType is used as flag field (take a look into the GetSelectionType method)
    on the other hand the return value is used in a switch without proper masking (very nice), this must lead to trouble
 */
-                        switch ( rSh.GetSelectionType() &~ ( nsSelectionType::SEL_FONTWORK | nsSelectionType::SEL_EXTRUDED_CUSTOMSHAPE ) )
-                        {
+                            switch ( rSh.GetSelectionType() &~ ( nsSelectionType::SEL_FONTWORK | nsSelectionType::SEL_EXTRUDED_CUSTOMSHAPE ) )
+                            {
                             case nsSelectionType::SEL_GRF:
                                 RstMBDownFlags();
                                 GetView().GetViewFrame()->GetBindings().Execute(
@@ -3271,6 +3271,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 if ( rView.GetCurShell()->ISA(SwDrawTextShell) )
                                     ((SwDrawTextShell*)rView.GetCurShell())->Init();
                                 return;
+                            }
                         }
 
                         // if the cursor position was corrected or if a Fly
@@ -5328,7 +5329,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                 xub_StrLen nMarkIdx = pCrsr->GetMark()->nContent.GetIndex();
 
                 if( !rSh.GetCrsr()->HasMark() )
-                rSh.GetCrsr()->SetMark();
+                    rSh.GetCrsr()->SetMark();
 
                 rSh.SttCrsrMove();
 
