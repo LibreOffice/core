@@ -1,0 +1,40 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+Some documentation for the variables specified in file openoffice.lst.
+
+VARIABLE NAME                   USAGE
+-------------------------------------------------------------------------------
+BASISPACKAGEPREFIX              name prefix for the installation packages
+                                for Linux/Solaris platforms
+UREPACKAGEPREFIX                name prefix for the URE installation packages
+                                for Linux platforms
+SOLSUREPACKAGEPREFIX            name prefix for the URE installation packages
+                                for Solaris platforms
+
+STARTCENTER_ADDFEATURE_URL      URL in start center to link to extension website
+STARTCENTER_INFO_URL            URL in start center to link to product homepage
+STARTCENTER_TEMPLREP_URL        URL in start center to link to templates website
+
+DICT_REPO_URL                   specifies a repository URL where users can 
+                                download additional dictionaries
+
+UPDATEURL                       URL for the application update functionality
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
