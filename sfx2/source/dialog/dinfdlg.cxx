@@ -2254,7 +2254,7 @@ void CustomPropertiesControl::Init(VclBuilderContainer& rBuilder)
     m_pVertScroll->EnableDrag();
     m_pVertScroll->Show();
 
-    m_pHeaderBar->set_height_request(16);
+    m_pHeaderBar->set_height_request(GetTextHeight() + 6);
 
     const HeaderBarItemBits nHeadBits = HIB_VCENTER | HIB_FIXED | HIB_FIXEDPOS | HIB_LEFT;
 

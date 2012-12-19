@@ -1359,7 +1359,7 @@ SvxPathControl::SvxPathControl(Window* pParent)
     , bHasBeenShown(false)
 {
     m_pHeaderBar = new HeaderBar(this, WB_BOTTOMBORDER);
-    m_pHeaderBar->set_height_request(16);
+    m_pHeaderBar->set_height_request(GetTextHeight() + 6);
 
     m_pFocusCtrl = new XMLFilterListBox(this);
     m_pFocusCtrl->set_fill(true);
