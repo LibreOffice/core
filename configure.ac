@@ -4130,6 +4130,10 @@ if test "$cross_compiling" = "yes"; then
         config.guess \
         config_host.mk.in \
         configure \
+        Makefile.in \
+        config/config_global.h.in \
+        config/config_telepathy.h.in \
+        config/config_vclplug.h.in \
         bin/get_config_variables \
         $srcdir/solenv/bin/getcompver.awk \
         $SRC_ROOT/solenv/inc/langlist.mk \
