@@ -208,6 +208,7 @@
           <object class="GtkAlignment" id="alignment15">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
               <object class="GtkGrid" id="grid8">
@@ -640,6 +641,7 @@
           <object class="GtkAlignment" id="alignment12">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
               <object class="svxlo:SvxFontPrevWindow" id="preview">
