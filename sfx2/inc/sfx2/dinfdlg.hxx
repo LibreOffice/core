@@ -303,11 +303,13 @@ public:
 
 class SFX2_DLLPUBLIC SfxDocumentInfoDialog : public SfxTabDialog
 {
+private:
+    sal_uInt16 m_nDocInfoId;
 protected:
     virtual void    PageCreated( sal_uInt16 nId, SfxTabPage& rPage );
 
 public:
-    SfxDocumentInfoDialog(  Window* pParent, const SfxItemSet& );
+    SfxDocumentInfoDialog( Window* pParent, const SfxItemSet& );
 };
 
 // class CustomPropertiesRemoveButton ------------------------------------

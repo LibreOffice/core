@@ -427,7 +427,33 @@ SfxTabDialog::SfxTabDialog
     , pFrame(pViewFrame)
     , INI_LIST(pItemSet)
 {
-    Init_Impl( bFmt, pUserButtonText, rResId );
+    Init_Impl( bFmt, pUserButtonText, &rResId );
+}
+
+SfxTabDialog::SfxTabDialog
+(
+    SfxViewFrame* pViewFrame,     // Frame, to which the Dialog belongs
+    Window* pParent,              // Parent Window
+    const rtl::OString& rID, const rtl::OUString& rUIXMLDescription, //Dialog Name, Dialog .ui path
+    const SfxItemSet* pItemSet,   // Itemset with the data;
+                                  // can be NULL, when Pages are onDemand
+    sal_Bool bEditFmt,            // Flag: templates are processed
+                                  // when yes -> additional Button for standard
+    const String* pUserButtonText // Text for UserButton;
+                                  // if != 0, the UserButton is created
+)
+    : TabDialog(pParent, rID, rUIXMLDescription)
+    , pFrame(pViewFrame)
+    , pSet(pItemSet)
+    , pOutSet(0)
+    , pRanges(0)
+    , nResId(0)
+    , nAppPageId(USHRT_MAX)
+    , bItemsReset(sal_False)
+    , bFmt(bEditFmt)
+    , pExampleSet(0)
+{
+    Init_Impl( bFmt, pUserButtonText, NULL );
 }
 
 // -----------------------------------------------------------------------
@@ -453,7 +479,7 @@ SfxTabDialog::SfxTabDialog
     , pFrame(0)
     , INI_LIST(pItemSet)
 {
-    Init_Impl( bFmt, pUserButtonText, rResId );
+    Init_Impl( bFmt, pUserButtonText, &rResId );
     DBG_WARNING( "Please use the Construtor with the ViewFrame" );
 }
 
@@ -518,7 +544,7 @@ SfxTabDialog::~SfxTabDialog()
 
 // -----------------------------------------------------------------------
 
-void SfxTabDialog::Init_Impl( sal_Bool bFmtFlag, const String* pUserButtonText, const ResId& rResId )
+void SfxTabDialog::Init_Impl( sal_Bool bFmtFlag, const String* pUserButtonText, const ResId *pResId )
 
 /*  [Description]
 
@@ -534,11 +560,11 @@ void SfxTabDialog::Init_Impl( sal_Bool bFmtFlag, const String* pUserButtonText, 
         m_pBox->set_expand(true);
     }
 
-    m_pTabCtrl = m_pUIBuilder ? m_pUIBuilder->get<TabControl>(SAL_STRINGIFY(ID_TABCONTROL)) : NULL;
+    m_pTabCtrl = m_pUIBuilder ? m_pUIBuilder->get<TabControl>("tabcontrol") : NULL;
     m_bOwnsTabCtrl = m_pTabCtrl == NULL;
     if (m_bOwnsTabCtrl)
     {
-        m_pTabCtrl = new TabControl(m_pBox, ResId(ID_TABCONTROL, *rResId.GetResMgr()));
+        m_pTabCtrl = new TabControl(m_pBox, ResId(ID_TABCONTROL, *pResId->GetResMgr()));
         m_pTabCtrl->set_expand(true);
     }
 
@@ -788,16 +814,39 @@ void SfxTabDialog::AddTabPage
 */
 
 (
-    sal_uInt16 nId,                    // Page ID
+    sal_uInt16 nId,                // Page ID
     CreateTabPage pCreateFunc,     // Pointer to the Factory Method
     GetTabPageRanges pRangesFunc,  // Pointer to the Method for quering
                                    // Ranges onDemand
-    sal_Bool bItemsOnDemand            // indicates whether the set of this page is
+    sal_Bool bItemsOnDemand        // indicates whether the set of this page is
                                    // requested when created
 )
 {
     pImpl->pData->Append(
         new Data_Impl( nId, pCreateFunc, pRangesFunc, bItemsOnDemand ) );
+}
+
+sal_uInt16 SfxTabDialog::AddTabPage
+
+/*  [Description]
+
+    Adding a page to the dialogue. Must correspond to a entry in the
+    TabControl in the dialog .ui
+*/
+
+(
+    const OString &rName,         // Page ID
+    CreateTabPage pCreateFunc,     // Pointer to the Factory Method
+    GetTabPageRanges pRangesFunc,  // Pointer to the Method for quering
+                                   // Ranges onDemand
+    sal_Bool bItemsOnDemand        // indicates whether the set of this page is
+                                   // requested when created
+)
+{
+    sal_uInt16 nId = m_pTabCtrl->GetPageId(rName);
+    pImpl->pData->Append(
+        new Data_Impl( nId, pCreateFunc, pRangesFunc, bItemsOnDemand ) );
+    return nId;
 }
 
 // -----------------------------------------------------------------------

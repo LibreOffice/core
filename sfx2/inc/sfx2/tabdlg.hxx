@@ -103,7 +103,7 @@ friend class SfxTabDialogController;
     DECL_DLLPRIVATE_LINK(BaseFmtHdl, void *);
     DECL_DLLPRIVATE_LINK(UserHdl, void *);
     DECL_DLLPRIVATE_LINK(CancelHdl, void *);
-    SAL_DLLPRIVATE void Init_Impl( sal_Bool bFmtFlag, const String* pUserButtonText, const ResId& rResId );
+    SAL_DLLPRIVATE void Init_Impl( sal_Bool bFmtFlag, const String* pUserButtonText, const ResId* pResId );
 
 protected:
     virtual short               Ok();
@@ -135,12 +135,22 @@ public:
     SfxTabDialog( SfxViewFrame *pViewFrame, Window* pParent, const ResId &rResId,
                   const SfxItemSet * = 0, sal_Bool bEditFmt = sal_False,
                   const String *pUserButtonText = 0 );
+    SfxTabDialog( SfxViewFrame *pViewFrame, Window* pParent,
+                  const rtl::OString& rID, const rtl::OUString& rUIXMLDescription,
+                  const SfxItemSet * = 0, sal_Bool bEditFmt = sal_False,
+                  const String *pUserButtonText = 0 );
     ~SfxTabDialog();
 
     void                AddTabPage( sal_uInt16 nId,
                                     CreateTabPage pCreateFunc,      // != 0
                                     GetTabPageRanges pRangesFunc,   // can be 0
                                     sal_Bool bItemsOnDemand = sal_False);
+    sal_uInt16          AddTabPage( const OString& rName,
+                                    CreateTabPage pCreateFunc,      // != 0
+                                    GetTabPageRanges pRangesFunc,   // can be 0
+                                    sal_Bool bItemsOnDemand = sal_False);
+
+
     void                AddTabPage( sal_uInt16 nId,
                                     const String &rRiderText,
                                     CreateTabPage pCreateFunc,      // != 0

@@ -1428,14 +1428,12 @@ int SfxInternetPage::DeactivatePage( SfxItemSet* /*pSet*/ )
 
 //------------------------------------------------------------------------
 SfxDocumentInfoDialog::SfxDocumentInfoDialog( Window* pParent,
-                                              const SfxItemSet& rItemSet ) :
-
-    SfxTabDialog( 0, pParent, SfxResId( SID_DOCINFO ), &rItemSet )
-
+                                              const SfxItemSet& rItemSet )
+    : SfxTabDialog(0, pParent, "DocumentPropertiesDialog",
+        "sfx/ui/documentpropertiesdialog.ui", &rItemSet)
+    , m_nDocInfoId(0)
 {
-    FreeResource();
-
-     const SfxDocumentInfoItem* m_pInfoItem =
+    const SfxDocumentInfoItem* m_pInfoItem =
         &(const SfxDocumentInfoItem &)rItemSet.Get( SID_DOCINFO );
 
 #ifdef DBG_UTIL
@@ -1475,18 +1473,18 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog( Window* pParent,
     SetText( aTitle );
 
     // Property Pages
-    AddTabPage(TP_DOCINFODESC, SfxDocumentDescPage::Create, 0);
-    AddTabPage(TP_DOCINFODOC, SfxDocumentPage::Create, 0);
-    AddTabPage(TP_CUSTOMPROPERTIES, SfxCustomPropertiesPage::Create, 0);
-    AddTabPage(TP_DOCINFORELOAD, SfxInternetPage::Create, 0);
-    AddTabPage(TP_DOCINFOSECURITY, SfxSecurityPage::Create, 0);
+    m_nDocInfoId = AddTabPage("general", SfxDocumentPage::Create, 0);
+    AddTabPage("description", SfxDocumentDescPage::Create, 0);
+    AddTabPage("customprops", SfxCustomPropertiesPage::Create, 0);
+    AddTabPage("internet", SfxInternetPage::Create, 0);
+    AddTabPage("security", SfxSecurityPage::Create, 0);
 }
 
 // -----------------------------------------------------------------------
 
 void SfxDocumentInfoDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
-    if ( TP_DOCINFODOC == nId )
+    if ( m_nDocInfoId == nId )
         ( (SfxDocumentPage&)rPage ).EnableUseUserData();
 }
 

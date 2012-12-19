@@ -23,7 +23,6 @@
 #include "dinfdlg.hrc"
 #include "dialog.hrc"
 
- // TP_DOCINFODESC --------------------------------------------------------
 String STR_SFX_NEWOFFICEDOC
 {
     Text [ en-US ] = "%PRODUCTNAME document" ;
@@ -177,47 +176,6 @@ QueryBox SFX_QB_WRONG_TYPE
     Buttons = WB_OK_CANCEL ;
     DefButton = WB_DEF_OK ;
     Message [ en-US ] = "The value entered does not match the specified type.\nThe value will be stored as text." ;
-};
-
-TabDialog SID_DOCINFO
-{
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Moveable = TRUE ;
-    Sizeable = TRUE ;
-    Text [ en-US ] = "Properties of " ;
-    TabControl 1
-    {
-        SVLook = TRUE ;
-        PageList =
-        {
-            PageItem
-            {
-                Identifier = TP_DOCINFODOC ;
-                Text [ en-US ] = "General" ;
-            };
-            PageItem
-            {
-                Identifier = TP_DOCINFODESC ;
-                Text [ en-US ] = "Description" ;
-            };
-            PageItem
-            {
-                Identifier = TP_CUSTOMPROPERTIES ;
-                Text [ en-US ] = "Custom Properties" ;
-            };
-            PageItem
-            {
-                Identifier = TP_DOCINFORELOAD ;
-                Text [ en-US ] = "Internet" ;
-            };
-            PageItem
-            {
-                Identifier = TP_DOCINFOSECURITY ;
-                Text [ en-US ] = "Security" ;
-            };
-        };
-    };
 };
 
 ModalDialog RID_EDIT_DURATIONS

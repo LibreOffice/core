@@ -130,11 +130,6 @@
 
 #define RID_DOCALREADYLOADED_DLG            (RID_SFX_START+1)
 
-#define TP_DOCINFODESC                      (RID_SFX_START+3)
-#define TP_DOCINFODOC                       (RID_SFX_START+4)
-#define TP_DOCINFORELOAD                    (RID_SFX_START+13)
-#define TP_CUSTOMPROPERTIES                 (RID_SFX_START+14)
-#define TP_DOCINFOSECURITY                  (RID_SFX_START+215)
 #define DLG_DOCINFO_EDT                     (RID_SFX_START+6)
 #define TP_MANAGE_STYLES                    (RID_SFX_START+7)
 #define DLG_STYLE_DESIGNER                  (RID_SFX_START+8)
