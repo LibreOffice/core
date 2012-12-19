@@ -18,45 +18,35 @@
  */
 
 #include <stdio.h>
-#include <vector>
 
 #include "sal/main.h"
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
-#include <osl/module.h>
 
 #include <rtl/process.h>
 #include <rtl/string.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#include <uno/environment.h>
-#include <uno/mapping.hxx>
-
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/bootstrap.hxx>
-#include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/shlib.hxx>
 #include <cppuhelper/implbase1.hxx>
 
 #include <com/sun/star/lang/XMain.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/loader/XImplementationLoader.hpp>
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/connection/XAcceptor.hpp>
 #include <com/sun/star/connection/XConnection.hpp>
 #include <com/sun/star/bridge/XBridgeFactory.hpp>
 #include <com/sun/star/bridge/XBridge.hpp>
-#include <osl/process.h>
-#include <osl/thread.h>
-#include <osl/file.hxx>
 
 using namespace std;
 using namespace osl;
@@ -76,21 +66,6 @@ using ::rtl::OUStringBuffer;
 
 namespace unoexe
 {
-
-static OUString convertToFileUrl(const OUString& fileName)
-{
-    OUString uWorkingDir;
-    if (osl_getProcessWorkingDir(&uWorkingDir.pData) != osl_Process_E_None) {
-        OSL_ASSERT(false);
-    }
-    OUString uUrlFileName;
-    if (FileBase::getAbsoluteFileURL(uWorkingDir, fileName, uUrlFileName)
-        != FileBase::E_None)
-    {
-        OSL_ASSERT(false);
-    }
-    return uUrlFileName;
-}
 
 static sal_Bool s_quiet = false;
 
@@ -114,7 +89,6 @@ static inline void out( const OUString & rText )
 static const char arUsingText[] =
 "\nusing:\n\n"
 "uno [-c ComponentImplementationName -l LocationUrl | -s ServiceName]\n"
-"    [-ro ReadOnlyRegistry1] [-ro ReadOnlyRegistry2] ... [-rw ReadWriteRegistry]\n"
 "    [-u uno:(socket[,host=HostName][,port=nnn]|pipe[,name=PipeName]);<protocol>;Name\n"
 "        [--singleaccept] [--singleinstance]]\n"
 "    [--quiet]\n"
@@ -275,67 +249,6 @@ void createInstance(
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\"!") );
         throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface >() );
     }
-}
-//--------------------------------------------------------------------------------------------------
-static Reference< XSimpleRegistry > nestRegistries(
-    const Reference< XSimpleRegistry > & xReadWrite,
-    const Reference< XSimpleRegistry > & xReadOnly )
-    throw (Exception)
-{
-    Reference< XSimpleRegistry > xReg( createNestedRegistry() );
-    if (! xReg.is())
-    {
-        throw RuntimeException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("no nested registry service!" ) ),
-            Reference< XInterface >() );
-    }
-
-    Reference< XInitialization > xInit( xReg, UNO_QUERY );
-    if (! xInit.is())
-        throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM("nested registry does not export interface \"com.sun.star.lang.XInitialization\"!" ) ), Reference< XInterface >() );
-
-    Sequence< Any > aArgs( 2 );
-    aArgs[0] <<= xReadWrite;
-    aArgs[1] <<= xReadOnly;
-    xInit->initialize( aArgs );
-
-    return xReg;
-}
-//--------------------------------------------------------------------------------------------------
-static Reference< XSimpleRegistry > openRegistry(
-    const OUString & rURL,
-    sal_Bool bReadOnly, sal_Bool bCreate )
-    throw (Exception)
-{
-    Reference< XSimpleRegistry > xNewReg( createSimpleRegistry() );
-    if (! xNewReg.is())
-    {
-        throw RuntimeException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("no simple registry service!" ) ),
-            Reference< XInterface >() );
-    }
-
-    try
-    {
-        xNewReg->open( convertToFileUrl(rURL), bReadOnly, bCreate );
-        if (xNewReg->isValid())
-            return xNewReg;
-        else
-        {
-            xNewReg->close();
-            out( "\n> warning: cannot open registry " );
-            out( rURL );
-        }
-    }
-    catch (Exception & e)
-    {
-        out( "\n> warning: cannot open registry " );
-        out( rURL );
-        out( ": " );
-        out( e.Message );
-    }
-
-    return Reference< XSimpleRegistry >();
 }
 //--------------------------------------------------------------------------------------------------
 static Reference< XInterface > loadComponent(
@@ -584,16 +497,11 @@ SAL_IMPLEMENT_MAIN()
     try
     {
         OUString aImplName, aLocation, aServiceName, aUnoUrl;
-        vector< OUString > aReadOnlyRegistries;
         Sequence< OUString > aParams;
         sal_Bool bSingleAccept = sal_False;
         sal_Bool bSingleInstance = sal_False;
 
         //#### read command line arguments #########################################################
-
-        bool bOldRegistryMimic = false;
-        bool bNewRegistryMimic = false;
-        OUString aReadWriteRegistry;
 
         sal_uInt32 nPos = 0;
         // read up to arguments
@@ -610,52 +518,16 @@ SAL_IMPLEMENT_MAIN()
                 break;
             }
 
-            if (readOption( &aImplName, "c", &nPos, arg)                ||
-                readOption( &aLocation, "l", &nPos, arg)                ||
-                readOption( &aServiceName, "s", &nPos, arg)             ||
-                readOption( &aUnoUrl, "u", &nPos, arg)                  ||
-                readOption( &s_quiet, "quiet", &nPos, arg)              ||
-                readOption( &bSingleAccept, "singleaccept", &nPos, arg) ||
-                readOption( &bSingleInstance, "singleinstance", &nPos, arg))
-            {
-                continue;
-            }
-            OUString aRegistry;
-            if (readOption( &aRegistry, "ro", &nPos, arg))
-            {
-                aReadOnlyRegistries.push_back( aRegistry );
-                bNewRegistryMimic = true;
-                continue;
-            }
-            if (readOption( &aReadWriteRegistry, "rw", &nPos, arg))
-            {
-                bNewRegistryMimic = true;
-                continue;
-            }
-            if (readOption( &aRegistry, "r", &nPos, arg))
-            {
-                aReadOnlyRegistries.push_back( aRegistry );
-                aReadWriteRegistry = aRegistry;
-                out( "\n> warning: DEPRECATED use of option -r, use -ro or -rw!" );
-                bOldRegistryMimic = true;
-                continue;
-            }
-
-            // else illegal argument
-            OUStringBuffer buf( 64 );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("unexpected parameter \"") );
-            buf.append(arg);
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\"!") );
-            throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface >() );
-        }
-
-        if (bOldRegistryMimic) // last one was set to be read-write
-        {
-            aReadOnlyRegistries.pop_back();
-            if (bOldRegistryMimic && bNewRegistryMimic)
+            if (!(readOption( &aImplName, "c", &nPos, arg)                ||
+                  readOption( &aLocation, "l", &nPos, arg)                ||
+                  readOption( &aServiceName, "s", &nPos, arg)             ||
+                  readOption( &aUnoUrl, "u", &nPos, arg)                  ||
+                  readOption( &s_quiet, "quiet", &nPos, arg)              ||
+                  readOption( &bSingleAccept, "singleaccept", &nPos, arg) ||
+                  readOption( &bSingleInstance, "singleinstance", &nPos, arg)))
             {
                 throw RuntimeException(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("mixing with DEPRECATED registry options!") ),
+                    "unexpected argument \"" + arg + "\"",
                     Reference< XInterface >() );
             }
         }
@@ -689,60 +561,10 @@ SAL_IMPLEMENT_MAIN()
         sal_uInt32 nOffset = nPos;
         for ( ; nPos < nCount; ++nPos )
         {
-            if (rtl_getAppCommandArg( nPos, &pParams[nPos -nOffset].pData )
-                != osl_Process_E_None)
-            {
-                OSL_ASSERT(false);
-            }
+            rtl_getAppCommandArg( nPos, &pParams[nPos -nOffset].pData );
         }
 
-        if ((!aReadOnlyRegistries.empty()) ||
-            aReadWriteRegistry.getLength() > 0)
-        {
-            //#### create registry #############################################
-
-            Reference< XSimpleRegistry > xRegistry;
-
-            // ReadOnly registries
-            for ( size_t nReg = 0; nReg < aReadOnlyRegistries.size(); ++nReg )
-            {
-#if OSL_DEBUG_LEVEL > 1
-                out( "\n> trying to open ro registry: " );
-                out( OUStringToOString(
-                         aReadOnlyRegistries[ nReg ],
-                         RTL_TEXTENCODING_ASCII_US ).getStr() );
-#endif
-                Reference< XSimpleRegistry > xNewReg(
-                    openRegistry(
-                        aReadOnlyRegistries[ nReg ], sal_True, sal_False ) );
-                if (xNewReg.is())
-                    xRegistry = (xRegistry.is() ? nestRegistries(
-                                     xNewReg, xRegistry ) : xNewReg);
-            }
-            if (!aReadWriteRegistry.isEmpty())
-            {
-#if OSL_DEBUG_LEVEL > 1
-                out( "\n> trying to open rw registry: " );
-                out( OUStringToOString(
-                         aReadWriteRegistry,
-                         RTL_TEXTENCODING_ASCII_US ).getStr() );
-#endif
-                // ReadWrite registry
-                Reference< XSimpleRegistry > xNewReg(
-                    openRegistry( aReadWriteRegistry, sal_False, sal_True ) );
-                if (xNewReg.is())
-                    xRegistry = (xRegistry.is()
-                                 ? nestRegistries( xNewReg, xRegistry )
-                                 : xNewReg);
-            }
-
-            OSL_ASSERT( xRegistry.is() );
-            xContext = bootstrap_InitialComponentContext( xRegistry );
-        }
-        else // defaulting
-        {
-            xContext = defaultBootstrap_InitialComponentContext();
-        }
+        xContext = defaultBootstrap_InitialComponentContext();
 
         //#### accept, instanciate, etc. ###########################################################
 

@@ -296,7 +296,6 @@
 		  <blockquote>
 		  <b><code>uno (-c&lt;ComponentImplementationName&gt; -l &lt;LocationUrl&gt;
 		    | -s &lt;ServiceName&gt;) <br>
-            [-ro &lt;ReadOnlyRegistry1&gt;] [-ro &lt;ReadOnlyRegistry2&gt;] ... [-rw &lt;ReadWriteRegistry&gt;]<br>
             [-u uno:(socket[,host=&lt;HostName&gt;][,port=&lt;nnn&gt;]|pipe[,name=&lt;PipeName&gt;]);iiop|urp;&lt;Name&gt;<br>
             [--singleaccept] [--singleinstance]] <br>
             [-- &lt;Argument1 Argument2 ...&gt;]
@@ -319,15 +318,6 @@
             <td class="cell15"><code>&lt;Name&gt;</code></td>
             <td class="cell85">Identifier for demanded called component
 			instances.</td>
-          </tr>
-          <tr>
-            <td class="cell15"><code>&lt;Registries&gt;</code></td>
-            <td class="cell85">The optional <code>&lt;Registries&gt;</code>
-			(e.g., c:\myreg.rdb) are used by the ServiceManager. The <i>ro</i>
-			ones are opened for reading only; whereas, a single <i>rw</i> one
-			will be opened for reading and writing. If the <i>rw</i> one does
-			not exist, then it may be created. Components may read and write to
-			store their persistent state.</td>
           </tr>
           <tr>
             <td class="cell15"><code>--singleaccept</code></td>
