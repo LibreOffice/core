@@ -1983,7 +1983,6 @@ sal_Bool SwFlowFrm::MoveFwd( sal_Bool bMakePage, sal_Bool bPageBreak, sal_Bool b
         // If our NewUpper lies in a SectionFrm, we need to make sure
         // that it won't destroy itself in Calc.
         SwSectionFrm* pSect = pNewUpper->FindSctFrm();
-        bool bUnlock = false;
         if( pSect )
         {
             // If we only switch column within our SectionFrm, we better don't
@@ -1991,7 +1990,7 @@ sal_Bool SwFlowFrm::MoveFwd( sal_Bool bMakePage, sal_Bool bPageBreak, sal_Bool b
             // call us again, etc.
             if( pSect != rThis.FindSctFrm() )
             {
-                bUnlock = !pSect->IsColLocked();
+                bool bUnlock = !pSect->IsColLocked();
                 pSect->ColLock();
                 pNewUpper->Calc();
                 if( bUnlock )

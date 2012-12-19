@@ -912,10 +912,9 @@ void SwTableAutoFmt::StoreTableProperties(const SwTable &table)
 
 sal_Bool SwTableAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions )
 {
-    sal_Bool    bRet = sal_True;
     sal_uInt16  nVal = 0;
     rStream >> nVal;
-    bRet = 0 == rStream.GetError();
+    sal_Bool bRet = 0 == rStream.GetError();
 
     if( bRet && (nVal == AUTOFORMAT_DATA_ID_X ||
             (AUTOFORMAT_DATA_ID_504 <= nVal && nVal <= AUTOFORMAT_DATA_ID)) )
