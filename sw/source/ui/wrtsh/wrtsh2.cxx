@@ -257,7 +257,10 @@ void SwWrtShell::ClickToField( const SwField& rFld )
 
             }
 
-            Right( CRSR_SKIP_CHARS, sal_True, 1, sal_False );       // Feld selektieren
+            StartAllAction();
+            Right( CRSR_SKIP_CHARS, true, 0, false ); // Select the field.
+            NormalizePam();   // Cursor at the beginning of it.
+            EndAllAction();
 
             if( nSlotId )
             {
