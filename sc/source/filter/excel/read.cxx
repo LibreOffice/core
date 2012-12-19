@@ -314,7 +314,6 @@ FltError ImportExcel::Read( void )
                     case EXC_ID_FILESHARING: ReadFileSharing();         break;
                     case 0x41:  rTabViewSett.ReadPane( maStrm );        break;
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345]
-                    case 0x56:  Builtinfmtcnt(); break; // BUILTINFMTCNT[  34 ]
                     case 0x5D:  GetCurrSheetDrawing().ReadObj( maStrm );break;
                     case 0x7D:  Colinfo(); break;       // COLINFO      [  345]
                     case 0x8C:  Country(); break;       // COUNTRY      [  345]
@@ -323,7 +322,6 @@ FltError ImportExcel::Read( void )
                     case 0x0208: Row34(); break;        // ROW          [  34 ]
                     case 0x0218: rNameMgr.ReadName( maStrm );           break;
                     case 0x0221: Array34(); break;      // ARRAY        [  34 ]
-                    case 0x0223: Externname34(); break; // EXTERNNAME   [  34 ]
                     case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345]
                     case 0x0231: rFontBfr.ReadFont( maStrm );           break;
                     case 0x023E: rTabViewSett.ReadWindow2( maStrm, false );break;
@@ -386,7 +384,6 @@ FltError ImportExcel::Read( void )
                     case 0x41:  rTabViewSett.ReadPane( maStrm );        break;
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345]
                     case 0x55:  DefColWidth(); break;
-                    case 0x56:  Builtinfmtcnt(); break; // BUILTINFMTCNT[  34 ]
                     case 0x5D:  GetCurrSheetDrawing().ReadObj( maStrm );break;
                     case 0x7D:  Colinfo(); break;       // COLINFO      [  345]
                     case 0x8C:  Country(); break;       // COUNTRY      [  345]
@@ -396,7 +393,6 @@ FltError ImportExcel::Read( void )
                     case 0x0208: Row34(); break;        // ROW          [  34 ]
                     case 0x0218: rNameMgr.ReadName( maStrm );           break;
                     case 0x0221: Array34(); break;      // ARRAY        [  34 ]
-                    case 0x0223: Externname34(); break; // EXTERNNAME   [  34 ]
                     case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345]
                     case 0x0231: rFontBfr.ReadFont( maStrm );           break;
                     case 0x023E: rTabViewSett.ReadWindow2( maStrm, false );break;
@@ -426,13 +422,10 @@ FltError ImportExcel::Read( void )
                     case 0x17:  Externsheet(); break;   // EXTERNSHEET  [ 2345]
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345]
                     case 0x55:  DefColWidth(); break;
-                    case 0x56:  Builtinfmtcnt(); break; // BUILTINFMTCNT[  34 ]
                     case 0x8C:  Country(); break;       // COUNTRY      [  345]
-                    case 0x8F:  Bundleheader(); break;  // BUNDLEHEADER [   4 ]
                     case 0x92:  rPal.ReadPalette( maStrm );             break;
                     case 0x99:  Standardwidth(); break; // STANDARDWIDTH[   45]
                     case 0x0218: rNameMgr.ReadName( maStrm );           break;
-                    case 0x0223: Externname34(); break; // EXTERNNAME   [  34 ]
                     case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345]
                     case 0x0231: rFontBfr.ReadFont( maStrm );           break;
                     case 0x0409:                        // BOF          [   4 ]
@@ -496,11 +489,9 @@ FltError ImportExcel::Read( void )
                     case 0x41:  rTabViewSett.ReadPane( maStrm );        break;
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345]
                     case 0x55:  DefColWidth(); break;
-                    case 0x56:  Builtinfmtcnt(); break; // BUILTINFMTCNT[  34 ]
                     case 0x5D:  GetCurrSheetDrawing().ReadObj( maStrm );break;
                     case 0x7D:  Colinfo(); break;       // COLINFO      [  345]
                     case 0x8C:  Country(); break;       // COUNTRY      [  345]
-                    case 0x8F:  Bundleheader(); break;  // BUNDLEHEADER [   4 ]
                     case 0x92:  rPal.ReadPalette( maStrm );             break;
                     case 0x99:  Standardwidth(); break; // STANDARDWIDTH[   45]
                     case 0xA1:  rPageSett.ReadSetup( maStrm );          break;
@@ -582,7 +573,6 @@ FltError ImportExcel::Read( void )
                     case 0x1E:  rNumFmtBfr.ReadFormat( maStrm );        break;
                     case 0x22:  Rec1904(); break;       // 1904         [ 2345]
                     case 0x31:  rFontBfr.ReadFont( maStrm );            break;
-                    case 0x56:  Builtinfmtcnt(); break; // BUILTINFMTCNT[  34 ]
                     case 0x8D:  Hideobj(); break;       // HIDEOBJ      [  345]
                     case 0xDE:  Olesize(); break;
                     case 0xE0:  rXFBfr.ReadXF( maStrm );                break;
@@ -626,7 +616,6 @@ FltError ImportExcel::Read( void )
                         case 0x99:  Standardwidth(); break; // STANDARDWIDTH[   45]
                         case 0x0208: Row34(); break;        // ROW          [  34 ]
                         case 0x0221: Array34(); break;      // ARRAY        [  34 ]
-                        case 0x0223: Externname34(); break; // EXTERNNAME   [  34 ]
                         case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345]
                         case 0x023E: rTabViewSett.ReadWindow2( maStrm, false );break;
                         case 0x04BC: Shrfmla(); break;      // SHRFMLA      [    5]
@@ -1048,7 +1037,6 @@ FltError ImportExcel8::Read( void )
                     break;
                     case 0x0E:  Precision(); break;     // PRECISION
                     case 0x22:  Rec1904(); break;       // 1904         [ 2345   ]
-                    case 0x56:  Builtinfmtcnt(); break; // BUILTINFMTCNT[  34    ]
                     case 0x8D:  Hideobj(); break;       // HIDEOBJ      [  345   ]
                     case 0xD3:  SetHasBasic(); break;
                     case 0xDE:  Olesize(); break;

@@ -657,12 +657,6 @@ void ImportExcel::DefColWidth( void )
     pColRowBuff->SetDefWidth( nScWidth );
 }
 
-
-void ImportExcel::Builtinfmtcnt( void )
-{
-}
-
-
 void ImportExcel::Colinfo( void )
 {// Column Formatting Information
     sal_uInt16  nColFirst, nColLast, nColWidth, nXF;
@@ -797,11 +791,6 @@ void ImportExcel::Hideobj( void )
     aOpts.SetObjMode( VOBJ_TYPE_DRAW,  eDraw );
 
     pD->SetViewOptions( aOpts );
-}
-
-
-void ImportExcel::Bundleheader( void )
-{
 }
 
 
@@ -1014,12 +1003,6 @@ void ImportExcel::Array34( void )
                 pErgebnis);
     }
 }
-
-
-void ImportExcel::Externname34( void )
-{
-}
-
 
 void ImportExcel::Defrowheight345( void )
 {
