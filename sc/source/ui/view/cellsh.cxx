@@ -926,7 +926,10 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
                                     if ( nCol <= aRanges[nPos]->aEnd.Col() && nRow <= aRanges[nPos]->aEnd.Row()
                                             && nCol >= aRanges[nPos]->aStart.Col() && nRow >= aRanges[nPos]->aStart.Row() )
+                                    {
                                         bEnable = true; //note found
+                                        break;
+                                    }
                                 }
                             }
                         }
