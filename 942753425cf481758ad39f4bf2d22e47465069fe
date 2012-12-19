@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAR3///0Q\u003d",
+        "filename": "vcl/headless/headlessinst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2012-12-19T20:04:34Z",
+      "side": 1,
+      "message": "aError  \u003d \"Unknown application error\";",
+      "revId": "942753425cf481758ad39f4bf2d22e47465069fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAR3///0M\u003d",
+        "filename": "vcl/headless/headlessinst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2012-12-19T20:04:34Z",
+      "side": 1,
+      "message": "static OUString aEnv( \"headless\"  );",
+      "revId": "942753425cf481758ad39f4bf2d22e47465069fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
