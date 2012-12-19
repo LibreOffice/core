@@ -732,7 +732,7 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
     {
         ParagraphObj* pPara = rTextObj.GetParagraph(i);
         PortionObj* pPortion = pPara->front();
-        nCharCount = pPara->size();
+        nCharCount = pPara->CharacterCount();
 
         nDepth = pPara->nDepth;
         if ( nDepth > 4)
@@ -2980,7 +2980,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                 for ( sal_uInt32 i = 0; i < aTextObj.ParagraphCount() ; ++i )
                                 {
                                     ParagraphObj* pPara = aTextObj.GetParagraph(i);
-                                    sal_uInt32 nCharCount = pPara->Count();
+                                    sal_uInt32 nCharCount = pPara->CharacterCount();
                                     sal_uInt16 nDepth = pPara->nDepth;
                                     if ( nDepth > 4)
                                         nDepth = 4;
