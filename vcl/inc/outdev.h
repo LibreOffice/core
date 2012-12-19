@@ -210,10 +210,6 @@ private:
     typedef ::boost::unordered_map<FontSelectPattern,ImplFontEntry*,IFSD_Hash,IFSD_Equal > FontInstanceList;
     FontInstanceList    maFontInstanceList;
 
-    // cache of recently requested font names vs. selected font names
-    typedef ::boost::unordered_map<String,String,FontNameHash> FontNameList;
-    FontNameList        maFontNameList;
-
 public:
                         ImplFontCache( bool bPrinter );
                         ~ImplFontCache();
