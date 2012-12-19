@@ -115,13 +115,13 @@ sal_uLong SwReader::Read( const Reader& rOptions )
 
     sal_Bool bReadPageDescs = sal_False;
     bool const bDocUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
-    sal_Bool bSaveUndo = bDocUndo && pCrsr;
+    bool bSaveUndo = bDocUndo && pCrsr;
     if( bSaveUndo )
     {
         // das Einlesen von Seitenvorlagen ist nicht Undofaehig!
         if( 0 != ( bReadPageDescs = po->aOpt.IsPageDescs() ) )
         {
-            bSaveUndo = sal_False;
+            bSaveUndo = false;
             pDoc->GetIDocumentUndoRedo().DelAllUndoObj();
         }
         else
@@ -142,7 +142,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
     // only read templates? then ignore multi selection!
     sal_Bool bFmtsOnly = po->aOpt.IsFmtsOnly();
 
-    while( sal_True )
+    while( true )
     {
         if( bSaveUndo )
             pUndo = new SwUndoInsDoc( *pPam );
@@ -472,7 +472,7 @@ SwDoc* Reader::GetTemplateDoc()
         String aFileName = aTDir.GetMainURL( INetURLObject::NO_DECODE );
         OSL_ENSURE( !aTDir.HasError(), "No absolute path for template name!" );
         DateTime aCurrDateTime( DateTime::SYSTEM );
-        sal_Bool bLoad = sal_False;
+        bool bLoad = false;
 
         // Wenn das Template schon mal geladen wurde, nur einmal pro
         // Minute nachschauen, ob es geaendert wurde.
@@ -485,7 +485,7 @@ SwDoc* Reader::GetTemplateDoc()
                             &aTstDate, &aTstTime ) &&
                 ( !pTemplate || aDStamp != aTstDate || aTStamp != aTstTime ))
             {
-                bLoad = sal_True;
+                bLoad = true;
                 aDStamp = aTstDate;
                 aTStamp = aTstTime;
             }

@@ -655,7 +655,7 @@ static CSS1SelectorType GetTokenAndClass( const CSS1Selector *pSelector,
     return eType;
 }
 
-extern sal_Bool swhtml_css1atr_equalFontItems( const SfxPoolItem& r1, const SfxPoolItem& r2 );
+extern bool swhtml_css1atr_equalFontItems( const SfxPoolItem& r1, const SfxPoolItem& r2 );
 
 static void RemoveScriptItems( SfxItemSet& rItemSet, sal_uInt16 nScript,
                                const SfxItemSet *pParentItemSet = 0 )

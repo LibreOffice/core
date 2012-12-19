@@ -125,7 +125,7 @@ const SfxFilter* SwIoSystem::GetFilterOfFormat(const String& rFmtNm,
         if( pCnt || pFltCnt == &aCntSwWeb )
             break;
         pFltCnt = &aCntSwWeb;
-    } while( sal_True );
+    } while( true );
     return 0;
 }
 
@@ -302,7 +302,7 @@ const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
         // templates should not get precedence over "normal" filters (#i35508, #i33168)
         const SfxFilter* pTemplateFilter = 0;
         const SfxFilter* pOldFilter = pFCntnr->GetFilter4FilterName( rPrefFltName );
-        sal_Bool bLookForTemplate = pOldFilter && pOldFilter->IsOwnTemplateFormat();
+        bool bLookForTemplate = pOldFilter && pOldFilter->IsOwnTemplateFormat();
         if ( pMedium->IsStorage() )
         {
             com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xStor = pMedium->GetStorage();

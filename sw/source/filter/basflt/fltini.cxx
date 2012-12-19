@@ -354,7 +354,7 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
                                                                         GetCntntIdx();
                 if( pSttNd )
                 {
-                        sal_Bool bOnlyOneNode = sal_True;
+                        bool bOnlyOneNode = true;
                         sal_uLong nMinFrm = 0;
                         sal_uLong nMaxFrm = 0;
                         SwTxtNode* pFirstTxtNd = 0;
@@ -370,7 +370,7 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
                                         else if( pFirstTxtNd != pTxtNd )
                                         {
                                                 // forget it
-                                                bOnlyOneNode = sal_False;
+                                                bOnlyOneNode = false;
                                                 break;
                                         }
 

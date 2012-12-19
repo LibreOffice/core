@@ -2048,7 +2048,7 @@ void SwHTMLParser::NextToken( int nToken )
 }
 
 
-extern sal_Bool swhtml_css1atr_equalFontItems( const SfxPoolItem& r1, const SfxPoolItem& r2 );
+extern bool swhtml_css1atr_equalFontItems( const SfxPoolItem& r1, const SfxPoolItem& r2 );
 
 static void lcl_swhtml_getItemInfo( const _HTMLAttr& rAttr,
                                  sal_Bool& rScriptDependent, sal_Bool& rFont,

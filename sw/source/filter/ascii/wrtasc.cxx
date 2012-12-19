@@ -111,7 +111,7 @@ sal_uLong SwASCWriter::WriteStream()
 
     SwPaM* pPam = pOrigPam;
 
-    sal_Bool bWriteSttTag = bUCS2_WithStartChar &&
+    bool bWriteSttTag = bUCS2_WithStartChar &&
         (RTL_TEXTENCODING_UCS2 == GetAsciiOptions().GetCharSet() ||
         RTL_TEXTENCODING_UTF8 == GetAsciiOptions().GetCharSet());
 
@@ -120,7 +120,7 @@ sal_uLong SwASCWriter::WriteStream()
 
     // Output all areas of the pam into the ASC file
     do {
-        sal_Bool bTstFly = sal_True;
+        bool bTstFly = true;
         while( pCurPam->GetPoint()->nNode.GetIndex() < pCurPam->GetMark()->nNode.GetIndex() ||
               (pCurPam->GetPoint()->nNode.GetIndex() == pCurPam->GetMark()->nNode.GetIndex() &&
                pCurPam->GetPoint()->nContent.GetIndex() <= pCurPam->GetMark()->nContent.GetIndex()) )
@@ -175,11 +175,11 @@ sal_uLong SwASCWriter::WriteStream()
                                 break;
 
                         }
-                        bWriteSttTag = sal_False;
+                        bWriteSttTag = false;
                     }
                     Out( aASCNodeFnTab, *pNd, *this );
                 }
-                bTstFly = sal_False;        // Testing once is enough
+                bTstFly = false;        // Testing once is enough
             }
 
             if( !pCurPam->Move( fnMoveForward, fnGoNode ) )

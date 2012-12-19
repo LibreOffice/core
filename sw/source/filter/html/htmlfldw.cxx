@@ -60,7 +60,7 @@ const sal_Char *SwHTMLWriter::GetNumFormat( sal_uInt16 nFmt )
     return pFmtStr;
 }
 
-extern sal_Bool swhtml_css1atr_equalFontItems( const SfxPoolItem& r1, const SfxPoolItem& r2 );
+extern bool swhtml_css1atr_equalFontItems( const SfxPoolItem& r1, const SfxPoolItem& r2 );
 static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
                                  const SwTxtNode& rTxtNd, xub_StrLen nFldPos )
 {

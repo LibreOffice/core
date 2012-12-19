@@ -54,7 +54,7 @@ public:
     void NextPos()      { nAktSwPos = SearchNext( nAktSwPos + 1 ); }
 
     xub_StrLen WhereNext() const        { return nAktSwPos; }
-    sal_Bool OutAttr( xub_StrLen nSwPos );
+    bool OutAttr( xub_StrLen nSwPos );
 };
 
 
@@ -93,9 +93,9 @@ xub_StrLen SwASC_AttrIter::SearchNext( xub_StrLen nStartPos )
 }
 
 
-sal_Bool SwASC_AttrIter::OutAttr( xub_StrLen nSwPos )
+bool SwASC_AttrIter::OutAttr( xub_StrLen nSwPos )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     const SwpHints* pTxtAttrs = rNd.GetpSwpHints();
     if( pTxtAttrs )
     {
@@ -105,7 +105,7 @@ sal_Bool SwASC_AttrIter::OutAttr( xub_StrLen nSwPos )
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
             if ( pHt->HasDummyChar() && nSwPos == *pHt->GetStart() )
             {
-                bRet = sal_True;
+                bRet = true;
                 String sOut;
                 switch( pHt->Which() )
                 {
@@ -149,7 +149,7 @@ static Writer& OutASC_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 
     xub_StrLen nStrPos = rWrt.pCurPam->GetPoint()->nContent.GetIndex();
     xub_StrLen nNodeEnde = rNd.Len(), nEnde = nNodeEnde;
-    sal_Bool bLastNd =  rWrt.pCurPam->GetPoint()->nNode == rWrt.pCurPam->GetMark()->nNode;
+    bool bLastNd =  rWrt.pCurPam->GetPoint()->nNode == rWrt.pCurPam->GetMark()->nNode;
     if( bLastNd )
         nEnde = rWrt.pCurPam->GetMark()->nContent.GetIndex();
 
