@@ -232,21 +232,21 @@ void createInstance(
                         OUString(),
                         OUString( "com.sun.star.comp.io.Acceptor" ),
                         xSF, Reference< XRegistryKey >(),
-                        "acceptor" ) ) );
+                        "acceptor_" ) ) );
                     // connector
                     xSet->insert( makeAny( loadSharedLibComponentFactory(
                         OUString( "connector.uno" SAL_DLLEXTENSION ),
                         OUString(),
                         OUString( "com.sun.star.comp.io.Connector" ),
                         xSF, Reference< XRegistryKey >(),
-                        "connector" ) ) );
+                        "connector_" ) ) );
                     // bridge factory
                     xSet->insert( makeAny( loadSharedLibComponentFactory(
                         OUString( "binaryurp.uno" SAL_DLLEXTENSION ),
                         OUString(),
                         OUString( "com.sun.star.comp.bridge.BridgeFactory" ),
                         xSF, Reference< XRegistryKey >(),
-                        "binaryurp" ) ) );
+                        "binaryurp_" ) ) );
                 }
                 s_bSet = sal_True;
             }
