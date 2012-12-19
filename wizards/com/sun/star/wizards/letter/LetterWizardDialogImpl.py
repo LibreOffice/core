@@ -29,7 +29,6 @@ from ..ui.PathSelection import PathSelection
 from ..ui.event.UnoDataAware import UnoDataAware
 from ..ui.event.RadioDataAware import RadioDataAware
 from ..text.TextElement import TextElement
-from ..text.ViewHandler import ViewHandler
 from ..text.TextFieldHandler import TextFieldHandler
 from ..document.OfficeDocument import OfficeDocument
 
@@ -240,8 +239,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
                 oDoc = OfficeDocument.load(
                     Desktop.getDesktop(self.xMSF),
                     self.sPath, "_default", loadValues)
-                myViewHandler = ViewHandler(self.xMSF, oDoc)
-                myViewHandler.setViewSetting("ZoomType", OPTIMAL)
+                oDoc.CurrentController.ViewSettings.ZoomType = OPTIMAL
             else:
                 pass
 
