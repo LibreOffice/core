@@ -1171,7 +1171,7 @@ void SbiRuntime::StepARGV()
 // is removed afterwards.
 void SbiRuntime::StepINPUT()
 {
-    OUStringBuffer sin = "";
+    OUStringBuffer sin;
     OUString s;
     char ch = 0;
     SbError err;
