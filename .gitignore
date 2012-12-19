@@ -102,9 +102,6 @@ TAGS
 # MSVC debug information
 /*/vc90.pdb
 
-# libxslt debug memdump
-.memdump
-
 # LibreOffice lock files
 .~lock.*#
 
