@@ -52,7 +52,6 @@ $(eval $(call gb_Pyuno_add_files,wizards,\
     text/TextDocument.py \
     text/TextFieldHandler.py \
     text/TextSectionHandler.py \
-    text/ViewHandler.py \
     ui/__init__.py \
     ui/ControlScroller.py \
     ui/ImageList.py \

@@ -24,7 +24,6 @@ from ..ui.PathSelection import PathSelection
 from ..ui.event.UnoDataAware import UnoDataAware
 from ..ui.event.RadioDataAware import RadioDataAware
 from ..text.TextFieldHandler import TextFieldHandler
-from ..text.ViewHandler import ViewHandler
 from ..text.TextElement import TextElement
 from ..common.Configuration import Configuration
 from ..common.SystemDialog import SystemDialog
@@ -206,8 +205,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
 
                 oDoc = OfficeDocument.load(Desktop.getDesktop(self.xMSF),
                     self.sPath, "_default", loadValues)
-                myViewHandler = ViewHandler(self.xMSF, oDoc)
-                myViewHandler.setViewSetting("ZoomType", OPTIMAL)
+                oDoc.CurrentController.ViewSettings.ZoomType = OPTIMAL
             else:
                 pass
                 #TODO: Error Handling
