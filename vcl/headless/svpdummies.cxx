@@ -69,16 +69,16 @@ Rectangle SvpSalSystem::GetDisplayScreenWorkAreaPosSizePixel( unsigned int nScre
     return GetDisplayScreenPosSizePixel( nScreen );
 }
 
-rtl::OUString SvpSalSystem::GetDisplayScreenName( unsigned int nScreen )
+OUString SvpSalSystem::GetDisplayScreenName( unsigned int nScreen )
 {
-   rtl::OUStringBuffer aBuf( 32 );
+   OUStringBuffer aBuf( 32 );
    aBuf.appendAscii( "VirtualScreen " );
    aBuf.append( sal_Int32(nScreen) );
    return aBuf.makeStringAndClear();
 }
 
-int SvpSalSystem::ShowNativeDialog( const rtl::OUString&, const rtl::OUString&,
-                                    const std::list< rtl::OUString >&, int )
+int SvpSalSystem::ShowNativeDialog( const OUString&, const OUString&,
+                                    const std::list< OUString >&, int )
 {
     return 0;
 }
