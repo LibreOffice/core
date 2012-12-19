@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAR3///z4\u003d",
+        "filename": "filter/source/msfilter/msvbahelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2012-12-19T20:26:17Z",
+      "side": 1,
+      "message": "If we make\n\nconst char sUrlPart0[] \u003d \"vnd.sun.star.script:\";\n\nas \n\nconst OUString sUrlPart0(\"vnd.sun.star.script:\");\n\n(idem for sUrlPart1[])\n\nmany lines can be more elegant here and below.",
+      "revId": "56de02de4ba4b94da0b9d1fb0d1167d145b544f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAR3///0E\u003d",
+        "filename": "filter/source/msfilter/msvbahelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2012-12-19T20:26:17Z",
+      "side": 1,
+      "message": "if ( !sMod.isEmpty()) // we wish to find the macro is a specific module",
+      "revId": "56de02de4ba4b94da0b9d1fb0d1167d145b544f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAR3///0A\u003d",
+        "filename": "filter/source/msfilter/msvbahelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2012-12-19T20:26:17Z",
+      "side": 1,
+      "message": "if ( !sContainer.isEmpty() )",
+      "revId": "56de02de4ba4b94da0b9d1fb0d1167d145b544f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAR3///z8\u003d",
+        "filename": "filter/source/msfilter/msvbahelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2012-12-19T20:26:17Z",
+      "side": 1,
+      "message": "aRes.msResolvedMacro +\u003d \".\";",
+      "revId": "56de02de4ba4b94da0b9d1fb0d1167d145b544f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
