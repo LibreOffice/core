@@ -46,6 +46,7 @@
 #include "region.h"
 #include "langboost.hxx"
 
+#include <config_graphite.h>
 #ifdef ENABLE_GRAPHITE
 #include <graphite_layout.hxx>
 #include <graphite_serverfont.hxx>

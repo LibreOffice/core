@@ -28,6 +28,7 @@
 #include "vcl/svapp.hxx"
 #include <outfont.hxx>
 #include <impfont.hxx>
+#include <config_graphite.h>
 #ifdef ENABLE_GRAPHITE
 #include <graphite2/Font.h>
 #include <graphite_layout.hxx>

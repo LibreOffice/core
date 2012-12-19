@@ -24,6 +24,7 @@
 
 #include <rtl/textcvt.h>
 
+#include <config_graphite.h>
 #ifdef ENABLE_GRAPHITE
 class GraphiteFaceWrapper;
 #endif

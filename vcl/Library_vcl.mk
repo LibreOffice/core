@@ -293,10 +293,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 
 ## handle Graphite
 ifeq ($(ENABLE_GRAPHITE),TRUE)
-# add defines, graphite sources for all platforms
-$(eval $(call gb_Library_add_defs,vcl,\
-    -DENABLE_GRAPHITE \
-))
+# add graphite sources for all platforms
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/glyphs/graphite_features \
     vcl/source/glyphs/graphite_layout \

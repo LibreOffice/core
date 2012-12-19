@@ -64,6 +64,7 @@
 
 #include <algorithm>
 
+#include <config_graphite.h>
 #ifdef ENABLE_GRAPHITE
 #include <graphite2/Font.h>
 #endif

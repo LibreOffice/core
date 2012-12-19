@@ -56,6 +56,8 @@
 
 #include <vector>
 
+#include <config_graphite.h>
+
 #if OSL_DEBUG_LEVEL > 1
 #include <ndtxt.hxx>        // pSwpHints, output operator
 #endif

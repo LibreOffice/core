@@ -29,6 +29,7 @@
 #include "boost/scoped_ptr.hpp"
 #include <boost/unordered_set.hpp>
 
+#include <config_graphite.h>
 #ifdef ENABLE_GRAPHITE
 #include <graphite2/Font.h>
 #endif

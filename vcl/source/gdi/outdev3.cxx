@@ -63,6 +63,7 @@
 
 #include "osl/file.h"
 
+#include <config_graphite.h>
 #ifdef ENABLE_GRAPHITE
 #include "graphite_features.hxx"
 #endif

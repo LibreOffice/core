@@ -1,3 +1,1 @@
-config_global.h
-config_vclplug.h
-config_telepathy.h
+config_*.h

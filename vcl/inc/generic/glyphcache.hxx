@@ -48,6 +48,7 @@ class RawBitmap;
 class ServerFontLayout;
 #include <sallayout.hxx>
 
+#include <config_graphite.h>
 #ifdef ENABLE_GRAPHITE
 class GraphiteFaceWrapper;
 #endif

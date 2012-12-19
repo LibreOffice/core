@@ -66,6 +66,7 @@
 #include "salframe.hxx"
 #include "outdev.h"
 
+#include <config_graphite.h>
 #ifdef ENABLE_GRAPHITE
 #include <graphite_layout.hxx>
 #include <graphite_serverfont.hxx>

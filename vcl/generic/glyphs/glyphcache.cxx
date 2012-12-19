@@ -27,6 +27,7 @@
 #include <vcl/bitmap.hxx>
 #include <outfont.hxx>
 
+#include <config_graphite.h>
 #ifdef ENABLE_GRAPHITE
 #include <graphite_features.hxx>
 #endif

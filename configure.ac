@@ -8462,6 +8462,7 @@ AC_MSG_CHECKING([whether to enable graphite support])
 if test "$_os" = "WINNT" -o "$_os" = "Linux" && test "$enable_graphite" = "" -o "$enable_graphite" != "no"; then
     AC_MSG_RESULT([yes])
     ENABLE_GRAPHITE="TRUE"
+    AC_DEFINE(ENABLE_GRAPHITE)
     AC_MSG_CHECKING([which graphite to use])
     if test "$with_system_graphite" = "yes"; then
         AC_MSG_RESULT([external])
@@ -12423,6 +12424,7 @@ fi
 
 AC_CONFIG_FILES([config_host.mk Makefile])
 AC_CONFIG_HEADERS([config/config_global.h])
+AC_CONFIG_HEADERS([config/config_graphite.h])
 AC_CONFIG_HEADERS([config/config_telepathy.h])
 AC_CONFIG_HEADERS([config/config_vclplug.h])
 AC_OUTPUT
