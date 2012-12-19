@@ -41,6 +41,7 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="orientation">vertical</property>
+    <property name="spacing">6</property>
     <child>
       <object class="GtkFrame" id="frame5">
         <property name="visible">True</property>
@@ -51,6 +52,7 @@
           <object class="GtkAlignment" id="alignment5">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
               <object class="GtkGrid" id="grid4">
@@ -233,6 +235,7 @@
           <object class="GtkAlignment" id="alignment6">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
               <object class="GtkBox" id="box5">
@@ -330,6 +333,7 @@
                       <object class="GtkLabel" id="label24">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="margin_right">12</property>
                         <property name="label" translatable="yes">Scale width</property>
                       </object>
                       <packing>
@@ -418,6 +422,7 @@
           <object class="GtkAlignment" id="alignment7">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
               <object class="GtkBox" id="box4">
@@ -511,6 +516,7 @@
           <object class="GtkAlignment" id="alignment13">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
               <object class="svxlo:SvxFontPrevWindow" id="preview">
