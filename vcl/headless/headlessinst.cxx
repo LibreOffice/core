@@ -52,15 +52,15 @@ class HeadlessSalSystem : public SvpSalSystem {
 public:
     HeadlessSalSystem() : SvpSalSystem() {}
     virtual ~HeadlessSalSystem() {}
-    virtual int ShowNativeDialog( const rtl::OUString& rTitle,
-                                  const rtl::OUString& rMessage,
-                                  const std::list< rtl::OUString >& rButtons,
+    virtual int ShowNativeDialog( const OUString& rTitle,
+                                  const OUString& rMessage,
+                                  const std::list< OUString >& rButtons,
                                   int nDefButton )
     {
         (void)rButtons; (void)nDefButton;
         ::fprintf(stdout, "LibreOffice - dialog '%s': '%s'",
-                            rtl::OUStringToOString(rTitle, RTL_TEXTENCODING_ASCII_US).getStr(),
-                            rtl::OUStringToOString(rMessage, RTL_TEXTENCODING_ASCII_US).getStr());
+                            OUStringToOString(rTitle, RTL_TEXTENCODING_ASCII_US).getStr(),
+                            OUStringToOString(rMessage, RTL_TEXTENCODING_ASCII_US).getStr());
         return 0;
     }
 };
@@ -84,15 +84,15 @@ void DeInitSalData() {}
 void InitSalMain()   {}
 void DeInitSalMain() {}
 
-void SalAbort( const rtl::OUString& rErrorText, bool bDumpCore )
+void SalAbort( const OUString& rErrorText, bool bDumpCore )
 {
-    rtl::OUString aError( rErrorText );
+    OUString aError( rErrorText );
     if( aError.isEmpty() )
-        aError = rtl::OUString::createFromAscii("Unknown application error");
-    ::fprintf( stderr, "%s\n", rtl::OUStringToOString(rErrorText, osl_getThreadTextEncoding()).getStr() );
+        aError = OUString::createFromAscii("Unknown application error");
+    ::fprintf( stderr, "%s\n", OUStringToOString(rErrorText, osl_getThreadTextEncoding()).getStr() );
 
     ::fprintf( stderr, "SalAbort: '%s'",
-                        rtl::OUStringToOString(aError, RTL_TEXTENCODING_ASCII_US).getStr());
+                        OUStringToOString(aError, RTL_TEXTENCODING_ASCII_US).getStr());
     if( bDumpCore )
         abort();
     else
@@ -101,7 +101,7 @@ void SalAbort( const rtl::OUString& rErrorText, bool bDumpCore )
 
 const OUString& SalGetDesktopEnvironment()
 {
-    static rtl::OUString aEnv( RTL_CONSTASCII_USTRINGPARAM( "headless" ) );
+    static OUString aEnv( RTL_CONSTASCII_USTRINGPARAM( "headless" ) );
     return aEnv;
 }
 

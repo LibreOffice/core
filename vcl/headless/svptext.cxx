@@ -367,7 +367,7 @@ void SvpSalGraphics::GetDevFontSubstList( OutputDevice* )
 // ---------------------------------------------------------------------------
 
 bool SvpSalGraphics::AddTempDevFont( ImplDevFontList*,
-    const rtl::OUString&, const rtl::OUString& )
+    const OUString&, const OUString& )
 {
     return false;
 }
@@ -375,7 +375,7 @@ bool SvpSalGraphics::AddTempDevFont( ImplDevFontList*,
 // ---------------------------------------------------------------------------
 
 sal_Bool SvpSalGraphics::CreateFontSubset(
-    const rtl::OUString& rToFile,
+    const OUString& rToFile,
     const PhysicalFontFace* pFont,
     sal_Int32* pGlyphIDs,
     sal_uInt8* pEncoding,
