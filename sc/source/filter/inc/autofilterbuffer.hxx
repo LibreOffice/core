@@ -135,8 +135,6 @@ struct FilterCriterionModel
 
     /** Imports the criterion model from the passed BIFF12 stream. */
     void                readBiffData( SequenceInputStream& rStrm );
-    /** Imports the initial criterion data from the passed BIFF5/BIFF8 stream. */
-    void                readBiffData( BiffInputStream& rStrm );
     /** Imports the trailing string data from the passed BIFF5/BIFF8 stream. */
     void                readString( BiffInputStream& rStrm, BiffType eBiff, rtl_TextEncoding eTextEnc );
 };
