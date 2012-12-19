@@ -113,16 +113,13 @@ SCROW ScClipParam::getPasteRowSize()
 ScRange ScClipParam::getWholeRange() const
 {
     ScRange aWhole;
-    bool bFirst = true;
-    for ( size_t i = 0, n = maRanges.size(); i < n; ++i )
+    size_t nRangeSize = maRanges.size();
+    if (nRangeSize < 1)
+        return aWhole;
+    aWhole = *maRanges[0];
+    for ( size_t i = 1; i < nRangeSize; ++i )
     {
         const ScRange* p = maRanges[i];
-        if (bFirst)
-        {
-            aWhole = *p;
-            bFirst = false;
-            continue;
-        }
 
         if (aWhole.aStart.Col() > p->aStart.Col())
             aWhole.aStart.SetCol(p->aStart.Col());
