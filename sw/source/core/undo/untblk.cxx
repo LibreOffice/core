@@ -34,7 +34,7 @@
 SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
     : SwUndo( nUndoId ), SwUndRng( rPam ),
     pTxtFmtColl( 0 ), pLastNdColl(0), pFrmFmts( 0 ), pRedlData( 0 ),
-    bSttWasTxtNd( sal_True ), nNdDiff( 0 ), pPos( 0 ), nSetPos( 0 )
+    bSttWasTxtNd( sal_True ), nNdDiff( 0 ), nSetPos( 0 )
 {
     pHistory = new SwHistory;
     SwDoc* pDoc = (SwDoc*)rPam.GetDoc();
@@ -131,24 +131,13 @@ void SwUndoInserts::SetInsertRange( const SwPaM& rPam, sal_Bool bScanFlys,
 
 SwUndoInserts::~SwUndoInserts()
 {
-    if( pPos ) // delete also the section from UndoNodes array
+    if (m_pUndoNodeIndex) // delete also the section from UndoNodes array
     {
         // Insert saves content in IconSection
-        SwNodes& rUNds = pPos->nNode.GetNodes();
-        if( pPos->nContent.GetIndex() ) // do not delete complete Node
-        {
-            SwTxtNode* pTxtNd = pPos->nNode.GetNode().GetTxtNode();
-            OSL_ENSURE( pTxtNd, "no TextNode to delete from" );
-            if( pTxtNd ) // robust
-            {
-                pTxtNd->EraseText( pPos->nContent );
-            }
-            pPos->nNode++;
-        }
-        pPos->nContent.Assign( 0, 0 );
-        rUNds.Delete( pPos->nNode, rUNds.GetEndOfExtras().GetIndex() -
-                                    pPos->nNode.GetIndex() );
-        delete pPos;
+        SwNodes& rUNds = m_pUndoNodeIndex->GetNodes();
+        rUNds.Delete(*m_pUndoNodeIndex,
+            rUNds.GetEndOfExtras().GetIndex() - m_pUndoNodeIndex->GetIndex());
+        m_pUndoNodeIndex.reset();
     }
     delete pFrmFmts;
     delete pRedlData;
@@ -189,8 +178,9 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
 
         if( *pPam->GetPoint() != *pPam->GetMark() )
         {
-            pPos = new SwPosition( *pPam->GetPoint() );
-            MoveToUndoNds( *pPam, &pPos->nNode, &pPos->nContent );
+            m_pUndoNodeIndex.reset(
+                    new SwNodeIndex(pDoc->GetNodes().GetEndOfContent()));
+            MoveToUndoNds( *pPam, m_pUndoNodeIndex.get(), 0 );
 
             if( !bSttWasTxtNd )
                 pPam->Move( fnMoveBackward, fnGoCntnt );
@@ -269,15 +259,14 @@ void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
     pHistory->SetTmpEnd( nSetPos );
 
     // retrieve start position for rollback
-    if( ( nSttNode != nEndNode || nSttCntnt != nEndCntnt ) && pPos )
+    if( ( nSttNode != nEndNode || nSttCntnt != nEndCntnt ) && m_pUndoNodeIndex)
     {
         sal_Bool bMvBkwrd = MovePtBackward( *pPam );
 
-        // re-insert content again (first detach pPos!)
-        sal_uLong nMvNd = pPos->nNode.GetIndex();
-        xub_StrLen nMvCnt = pPos->nContent.GetIndex();
-        DELETEZ( pPos );
-        MoveFromUndoNds( *pDoc, nMvNd, nMvCnt, *pPam->GetMark() );
+        // re-insert content again (first detach m_pUndoNodeIndex!)
+        sal_uLong const nMvNd = m_pUndoNodeIndex->GetIndex();
+        m_pUndoNodeIndex.reset();
+        MoveFromUndoNds( *pDoc, nMvNd, 0, *pPam->GetMark() );
         if( bSttWasTxtNd )
             MovePtForward( *pPam, bMvBkwrd );
         pPam->Exchange();

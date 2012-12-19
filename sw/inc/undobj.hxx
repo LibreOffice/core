@@ -21,6 +21,7 @@
 
 #include <vector>
 
+#include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 
 #include <svl/undo.hxx>
@@ -230,7 +231,8 @@ class SwUndoInserts : public SwUndo, public SwUndRng, private SwUndoSaveCntnt
     sal_Bool bSttWasTxtNd;
 protected:
     sal_uLong nNdDiff;
-    SwPosition *pPos;                   // Content for Redo.
+    /// start of Content in UndoNodes for Redo
+    ::boost::scoped_ptr<SwNodeIndex> m_pUndoNodeIndex;
     sal_uInt16 nSetPos;                 // Start in the history list.
 
     SwUndoInserts( SwUndoId nUndoId, const SwPaM& );
