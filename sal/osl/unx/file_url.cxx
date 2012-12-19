@@ -675,10 +675,20 @@ namespace /* private */
 
 oslFileError osl_getAbsoluteFileURL(rtl_uString*  ustrBaseDirURL, rtl_uString* ustrRelativeURL, rtl_uString** pustrAbsoluteURL)
 {
+    // Work around the below call to getSystemPathFromFileURL rejecting input
+    // that starts with "/" (for whatever reason it behaves that way; but
+    // changing that would start to break lots of tests at least):
+    rtl::OUString relUrl(ustrRelativeURL);
+    if (relUrl.startsWith("//")) {
+        relUrl = "file:" + relUrl;
+    } else if (relUrl.startsWith("/")) {
+        relUrl = "file://" + relUrl;
+    }
+
     FileBase::RC  rc;
     rtl::OUString unresolved_path;
 
-    rc = FileBase::getSystemPathFromFileURL(rtl::OUString(ustrRelativeURL), unresolved_path);
+    rc = FileBase::getSystemPathFromFileURL(relUrl, unresolved_path);
 
     if(FileBase::E_None != rc)
         return oslFileError(rc);

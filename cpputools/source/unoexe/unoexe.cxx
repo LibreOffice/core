@@ -29,7 +29,6 @@
 #include <rtl/process.h>
 #include <rtl/string.h>
 #include <rtl/strbuf.hxx>
-#include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <uno/environment.h>
@@ -84,12 +83,13 @@ static OUString convertToFileUrl(const OUString& fileName)
     if (osl_getProcessWorkingDir(&uWorkingDir.pData) != osl_Process_E_None) {
         OSL_ASSERT(false);
     }
-    if (!uWorkingDir.isEmpty()
-        && uWorkingDir[uWorkingDir.getLength() - 1] != '/')
+    OUString uUrlFileName;
+    if (FileBase::getAbsoluteFileURL(uWorkingDir, fileName, uUrlFileName)
+        != FileBase::E_None)
     {
-        uWorkingDir += "/";
+        OSL_ASSERT(false);
     }
-    return rtl::Uri::convertRelToAbs(uWorkingDir, fileName);
+    return uUrlFileName;
 }
 
 static sal_Bool s_quiet = false;
@@ -333,13 +333,6 @@ static Reference< XSimpleRegistry > openRegistry(
         out( rURL );
         out( ": " );
         out( e.Message );
-    }
-    catch (rtl::MalformedUriException & e)
-    {
-        out( "\n> warning: cannot open registry " );
-        out( rURL );
-        out( ": " );
-        out( e.getMessage() );
     }
 
     return Reference< XSimpleRegistry >();
