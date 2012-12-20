@@ -30,10 +30,6 @@ namespace oox {
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 
-using ::rtl::OStringBuffer;
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
-
 // ============================================================================
 
 void PropertySet::set( const Reference< XPropertySet >& rxPropSet )

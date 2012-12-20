@@ -31,9 +31,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-
 // ============================================================================
 
 namespace {

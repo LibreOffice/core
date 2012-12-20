@@ -34,12 +34,6 @@ namespace oox {
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 
-using ::rtl::OString;
-using ::rtl::OStringBuffer;
-using ::rtl::OStringToOUString;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-
 namespace {
 
 const sal_Int32 INPUTSTREAM_BUFFERSIZE      = 0x8000;

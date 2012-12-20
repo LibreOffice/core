@@ -47,7 +47,6 @@ using ::com::sun::star::text::WritingMode;
 #include <cppuhelper/implbase2.hxx>
 #include <osl/mutex.hxx>
 #include "oox/token/propertynames.hxx"
-using ::rtl::OUString;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::RuntimeException;
@@ -75,7 +74,6 @@ using ::com::sun::star::container::XIndexReplace;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::uno;
-using ::rtl::OString;
 using ::com::sun::star::style::LineSpacing;
 using ::com::sun::star::text::WritingMode;
 using ::com::sun::star::drawing::TextHorizontalAdjust;

@@ -36,8 +36,6 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
-using ::rtl::OUString;
-
 // ============================================================================
 
 ObjectContainer::ObjectContainer( const Reference< XMultiServiceFactory >& rxModelFactory, const OUString& rServiceName ) :
