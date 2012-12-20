@@ -14,7 +14,7 @@ $(eval $(call gb_CustomTarget_register_targets,postprocess/signing,\
 ))
 
 # PFXFILE and PFXPASSWORD should be set in environment
-TIMESTAMPURL ?= "http://timestamp.verisign.com/scripts/timstamp.dll"
+TIMESTAMPURL ?= "http://timestamp.globalsign.com/scripts/timestamp.dll"
 
 $(call gb_CustomTarget_get_workdir,postprocess/signing)/signing.done: \
 	$(SRCDIR)/postprocess/signing/signing.pl \
