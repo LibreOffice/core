@@ -21,6 +21,7 @@
 #define _DOCFLD_HXX
 
 #include <calc.hxx>
+#include <doc.hxx>
 #include <o3tl/sorted_vector.hxx>
 
 class SwTxtFld;
@@ -146,6 +147,7 @@ class SwDocUpdtFld
 
     sal_uLong nNodes;               // if the node count is different
     sal_uInt8 nFldLstGetMode;
+    SwDoc* pDocument;
 
     bool bInUpdateFlds : 1;     // currently there is an UpdateFlds
     bool bFldsDirty : 1;        // some fields are invalid
@@ -155,7 +157,7 @@ class SwDocUpdtFld
     void GetBodyNode( const SwSectionNode&);
 
 public:
-    SwDocUpdtFld();
+    SwDocUpdtFld(SwDoc* pDocument);
     ~SwDocUpdtFld();
 
     const _SetGetExpFlds* GetSortLst() const { return pFldSortLst; }
@@ -171,7 +173,15 @@ public:
     void SetInUpdateFlds( bool b )      { bInUpdateFlds = b; }
 
     bool IsFieldsDirty() const          { return bFldsDirty; }
-    void SetFieldsDirty( bool b )       { bFldsDirty = b; }
+    void SetFieldsDirty( bool b )
+    {
+        bFldsDirty = b;
+
+        if (b)
+        {
+            pDocument->StartBackgroundJobs();
+        }
+    }
 
     SwHash** GetFldTypeTable() const { return (SwHash**)aFldTypeTable; }
 };

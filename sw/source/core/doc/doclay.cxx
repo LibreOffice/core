@@ -1817,6 +1817,11 @@ void SwDoc::UnblockIdling()
         aIdleTimer.Start();
 }
 
+void SwDoc::StartBackgroundJobs() {
+    // Trigger DoIdleJobs(), asynchronously.
+    aIdleTimer.Start();
+}
+
 /*************************************************************************
 |*
 |*  SwDoc::DoIdleJobs()
@@ -1839,8 +1844,7 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
         do {
             if( pSh->ActionPend() )
             {
-                if( pTimer )
-                    pTimer->Start();
+                pTimer->Start();
                 return 0;
             }
             pSh = (ViewShell*)pSh->GetNext();
@@ -1856,7 +1860,6 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
             if (bIsOnlineSpell && bIsAutoGrammar)
                 StartGrammarChecking( *this );
         }
-        SwFldUpdateFlags nFldUpdFlag;
         std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();//swmod 080320
         std::set<SwRootFrm*>::iterator pLayIter = aAllLayouts.begin();
         for ( ;pLayIter != aAllLayouts.end();++pLayIter )
@@ -1864,20 +1867,28 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
             if ((*pLayIter)->IsIdleFormat())
             {
                 (*pLayIter)->GetCurrShell()->LayoutIdle();
-                break;
+
+                // Defer the remaining work.
+                pTimer->Start();
+                return 0;
             }
         }
-        bool bAllValid = pLayIter == aAllLayouts.end() ? 1 : 0;
-        if( bAllValid && ( AUTOUPD_FIELD_ONLY ==
-                 ( nFldUpdFlag = getFieldUpdateFlags(true) )
+
+        SwFldUpdateFlags nFldUpdFlag = getFieldUpdateFlags(true);
+        if( ( AUTOUPD_FIELD_ONLY == nFldUpdFlag
                     || AUTOUPD_FIELD_AND_CHARTS == nFldUpdFlag ) &&
-                GetUpdtFlds().IsFieldsDirty() &&
-                !GetUpdtFlds().IsInUpdateFlds() &&
-                !IsExpFldsLocked()
+                GetUpdtFlds().IsFieldsDirty()
                 // If we switch the field name the Fields are not updated.
                 // So the "backgorund update" should always be carried out
                 /* && !pStartSh->GetViewOptions()->IsFldName()*/ )
         {
+            if ( GetUpdtFlds().IsInUpdateFlds() ||
+                 IsExpFldsLocked() )
+            {
+                pTimer->Start();
+                return 0;
+            }
+
             //  Action brackets!
             GetUpdtFlds().SetInUpdateFlds( true );
 
@@ -1904,8 +1915,6 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
     if( pModLogFile && 1 != (long)pModLogFile )
         delete pModLogFile, ((long&)pModLogFile) = 1;
 #endif
-    if( pTimer )
-        pTimer->Start();
     return 0;
 }
 

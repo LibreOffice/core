@@ -211,7 +211,7 @@ SwDoc::SwDoc()
     pDefTOXBases( new SwDefTOXBase_Impl() ),
     pCurrentView( 0 ),  //swmod 071225
     pDrawModel( 0 ),
-    pUpdtFlds( new SwDocUpdtFld() ),
+    pUpdtFlds( new SwDocUpdtFld( this ) ),
     pFldTypes( new SwFldTypes() ),
     pVirDev( 0 ),
     pPrt( 0 ),

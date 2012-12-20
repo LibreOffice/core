@@ -965,6 +965,7 @@ public:
     virtual void StopIdling();
     virtual void BlockIdling();
     virtual void UnblockIdling();
+    virtual void StartBackgroundJobs();
 
     /** IDocumentChartDataProviderAccess
     */

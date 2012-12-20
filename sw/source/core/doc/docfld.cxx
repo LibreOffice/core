@@ -2555,8 +2555,8 @@ void SwDocUpdtFld::RemoveFldType( const SwFieldType& rType )
     }
 }
 
-SwDocUpdtFld::SwDocUpdtFld()
-    : pFldSortLst(0), nFldLstGetMode(0)
+SwDocUpdtFld::SwDocUpdtFld(SwDoc* pDoc)
+    : pFldSortLst(0), nFldLstGetMode(0), pDocument(pDoc)
 {
     bInUpdateFlds = bFldsDirty = sal_False;
     memset( aFldTypeTable, 0, sizeof( aFldTypeTable ) );

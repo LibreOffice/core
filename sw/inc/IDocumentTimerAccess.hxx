@@ -20,30 +20,40 @@
  #ifndef IDOCUMENTTIMERACCESS_HXX_INCLUDED
  #define IDOCUMENTTIMERACCESS_HXX_INCLUDED
 
- /** Get information about the current document state
+ /** Manipulate background jobs of the document. It starts with a mode of
+ 'started' and a block count of 0.
  */
  class IDocumentTimerAccess
  {
  public:
     /**
-    Set modus to start, i.e. start timer if block count == 0
+    Set modus to 'start'.
     */
     virtual void StartIdling() = 0;
 
     /**
-    Set modus to stopped, i.e. stop timer if running
+    Set mode to 'stopped'.
     */
     virtual void StopIdling() = 0;
 
     /**
-    Increment block count, stop timer if running
+    Increment block count.
     */
     virtual void BlockIdling() = 0;
 
     /**
-    Decrement block count, start timer if block count == 0 AND modus == start
+    Decrement block count.
     */
     virtual void UnblockIdling() = 0;
+
+    /**
+    Do these jobs asynchronously: do grammar checking,
+    do layout, and update fields.
+    They will be delayed until mode is start AND block count == 0.
+    The implementation might delay them further, for example
+    it might wait until the application is idle.
+    */
+    virtual void StartBackgroundJobs() = 0;
 
  protected:
     virtual ~IDocumentTimerAccess() {};

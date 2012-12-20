@@ -20,6 +20,8 @@
 #define SW_ROOTFRM_HXX
 
 #include "layfrm.hxx"
+#include <viewsh.hxx>
+#include <doc.hxx>
 
 class SwCntntFrm;
 class ViewShell;
@@ -203,12 +205,33 @@ public:
 
     virtual Size ChgSize( const Size& aNewSize );
 
-    void SetIdleFlags() { bIdleFormat = sal_True; }
+    void SetIdleFlags()
+    {
+        bIdleFormat = sal_True;
+
+        ViewShell* lcl_pCurrShell = GetCurrShell();
+        // May be NULL if called from SfxBaseModel::dispose
+        // (this happens in the build test 'rtfexport').
+        if (lcl_pCurrShell != NULL)
+            lcl_pCurrShell->GetDoc()->StartBackgroundJobs();
+    }
     sal_Bool IsIdleFormat()  const { return bIdleFormat; }
     void ResetIdleFormat()     { bIdleFormat = sal_False; }
 
     bool IsNeedGrammarCheck() const         { return mbNeedGrammarCheck; }
-    void SetNeedGrammarCheck( bool bVal )   { mbNeedGrammarCheck = bVal; }
+    void SetNeedGrammarCheck( bool bVal )
+    {
+        mbNeedGrammarCheck = bVal;
+
+        if ( bVal )
+        {
+            ViewShell* lcl_pCurrShell = GetCurrShell();
+            // May be NULL if called from SfxBaseModel::dispose
+            // (this happens in the build test 'rtfexport').
+            if (lcl_pCurrShell != NULL)
+                lcl_pCurrShell->GetDoc()->StartBackgroundJobs();
+        }
+    }
 
     //Sorgt dafuer, dass alle gewuenschten Seitengebunden Flys eine Seite finden
     void SetAssertFlyPages() { bAssertFlyPages = sal_True; }
