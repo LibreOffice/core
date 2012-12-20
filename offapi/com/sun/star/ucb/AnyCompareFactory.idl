@@ -20,6 +20,7 @@
 #define __com_sun_star_ucb_AnyCompareFactory_idl__
 
 #include <com/sun/star/ucb/XAnyCompareFactory.idl>
+#include <com/sun/star/lang/Locale.idl>
 
 
 module com { module sun { module star { module ucb {
@@ -28,7 +29,10 @@ module com { module sun { module star { module ucb {
 
     @since OOo 1.1.2
 */
-published service AnyCompareFactory : XAnyCompareFactory;
+published service AnyCompareFactory : XAnyCompareFactory
+{
+    createWithLocale([in] com::sun::star::lang::Locale aLocale);
+};
 
 
 }; }; }; };

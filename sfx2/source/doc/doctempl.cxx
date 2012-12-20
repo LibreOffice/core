@@ -57,7 +57,7 @@
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
-#include <com/sun/star/ucb/XAnyCompareFactory.hpp>
+#include <com/sun/star/ucb/AnyCompareFactory.hpp>
 #include <com/sun/star/ucb/XAnyCompare.hpp>
 #include <com/sun/star/ucb/NumberedSortingInfo.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -1625,12 +1625,7 @@ sal_Bool SfxDocTemplate_Impl::Construct( )
 
     uno::Reference< XLocalizable > xLocalizable( mxTemplates, UNO_QUERY );
 
-    Sequence< Any > aCompareArg(1);
-    *(aCompareArg.getArray()) <<= xLocalizable->getLocale();
-    m_rCompareFactory = uno::Reference< XAnyCompareFactory >(
-                    xFactory->createInstanceWithArguments( OUString("com.sun.star.ucb.AnyCompareFactory"),
-                                                           aCompareArg ),
-                    UNO_QUERY );
+    m_rCompareFactory = AnyCompareFactory::createWithLocale(xContext, xLocalizable->getLocale());
 
     uno::Reference < XContent > aRootContent = mxTemplates->getContent();
     uno::Reference < XCommandEnvironment > aCmdEnv;
