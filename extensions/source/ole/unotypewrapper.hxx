@@ -19,21 +19,8 @@
 #ifndef UNO_TYPE_WRAPPER_HXX
 #define UNO_TYPE_WRAPPER_HXX
 
-#pragma warning (push,1)
-#pragma warning (disable:4548)
+#include <wincrap.hxx>
 
-#include <tools/presys.h>
-#define STRICT
-#define _WIN32_WINNT 0x0403
-#define _WIN32_DCOM
-#if OSL_DEBUG_LEVEL > 1
-#define _ATL_DEBUG_INTERFACES
-#endif
-#include <atlbase.h>
-extern CComModule _Module;
-#include <atlcom.h>
-
-#pragma warning (pop)
 #pragma warning (disable:4505)
     // disable "unreferenced local function has been removed" globally
 
@@ -87,9 +74,6 @@ public:
 
     CComBSTR m_sName;
 };
-
-// This here so that WIN_ULONG is used also in the magic macros above
-#include <tools/postsys.h>
 
 #endif
 

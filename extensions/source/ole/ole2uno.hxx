@@ -25,29 +25,8 @@
 #pragma once
 #endif
 
-#define STRICT
-#ifndef _WIN32_WINNT
-#define _WIN32_WINNT 0x0400
-#endif
+#include <wincrap.hxx>
 
-#define _WIN32_DCOM
-#if OSL_DEBUG_LEVEL > 0
-//#define _ATL_DEBUG_INTERFACES
-#endif
-
-#pragma warning (push,1)
-#pragma warning (disable:4917)
-#pragma warning (disable:4005)
-#pragma warning (disable:4548)
-
-#include <tchar.h>
-#include <dispex.h>
-
-#include <tools/presys.h>
-#include <list>
-#include <tools/postsys.h>
-
-#pragma warning (pop)
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/script/XInvocation.hpp>

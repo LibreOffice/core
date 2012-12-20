@@ -17,20 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __OLEOBJW_HXX
-#define __OLEOBJW_HXX
+#ifndef OLEOBJW_HXX
+#define OLEOBJW_HXX
+
 #include "ole2uno.hxx"
+#include "wincrap.hxx"
 
-#include <tools/presys.h>
-#define _WIN32_WINNT 0x0403
-
-#ifdef _MSC_VER
-#undef _DEBUG // why?
-#endif
-#include <atlbase.h>
 #include <vector>
 #include <boost/unordered_map.hpp>
-#include <tools/postsys.h>
 
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase4.hxx>

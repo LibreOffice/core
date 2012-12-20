@@ -35,17 +35,6 @@
 #include "oleobjw.hxx"
 #include <rtl/unload.h>
 
-#include <tools/presys.h>
-#define _WIN32_WINNT 0x0403
-
-#ifdef _MSC_VER
-#undef _DEBUG
-#endif
-#include <atlbase.h>
-extern CComModule _Module;
-#include <atlcom.h>
-#include <tools/postsys.h>
-
 
 using namespace cppu;
 using namespace osl;

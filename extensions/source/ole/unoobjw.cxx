@@ -17,19 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-// http://stackoverflow.com/questions/5839292/error-c1189-after-installing-visual-studio-2010
-#define _WIN32_WINNT 0x403
-
-
 #include "ole2uno.hxx"
+#if _WIN32_WINNT != 0x403
+#error wrong _WIN32_WINNT
+#endif
 #include <stdio.h>
-#include <tools/presys.h>
-#include <olectl.h>
 #include <vector>
 #include <list>
 #include <boost/unordered_map.hpp>
-#include <tools/postsys.h>
 
 
 #include <osl/diagnose.h>

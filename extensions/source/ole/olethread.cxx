@@ -17,14 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifdef _MSC_VER
-#define _WIN32_WINNT  0x0400
-#endif
-
 #include "ole2uno.hxx"
-
-#include <tools/presys.h>
-#include <tools/postsys.h>
 
 #include <osl/thread.hxx>
 
