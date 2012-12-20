@@ -96,12 +96,11 @@ AppendPS (FILE* pDst, osl::File* pSrc, sal_uChar* pBuffer,
 osl::File*
 PrinterJob::CreateSpoolFile (const rtl::OUString& rName, const rtl::OUString& rExtension)
 {
-    osl::File::RC nError = osl::File::E_None;
     osl::File*    pFile  = NULL;
 
     rtl::OUString aFile = rName + rExtension;
     rtl::OUString aFileURL;
-    nError = osl::File::getFileURLFromSystemPath( aFile, aFileURL );
+    osl::File::RC nError = osl::File::getFileURLFromSystemPath( aFile, aFileURL );
     if (nError != osl::File::E_None)
         return NULL;
     aFileURL = maSpoolDirName + rtl::OUString("/") + aFileURL;

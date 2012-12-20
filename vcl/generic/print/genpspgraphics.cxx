@@ -1250,7 +1250,6 @@ bool GenPspGraphics::filterText( const rtl::OUString& rOrig, rtl::OUString& rNew
 
     bool bRet = false;
     bool bStarted = false;
-    bool bStopped = false;
     sal_Int32 nPos;
     sal_Int32 nStart = 0;
     sal_Int32 nStop = rLen;
@@ -1269,6 +1268,7 @@ bool GenPspGraphics::filterText( const rtl::OUString& rOrig, rtl::OUString& rNew
     }
     if( m_bPhoneCollectionActive )
     {
+        bool bStopped = false;
         bRet = true;
         nPos = bStarted ? nStart + FAX_PHONE_TOKEN_LENGTH : 0;
         if( ( nPos = aPhone.indexOfAsciiL( FAX_END_TOKEN, FAX_END_TOKEN_LENGTH, nPos ) ) != -1 )
