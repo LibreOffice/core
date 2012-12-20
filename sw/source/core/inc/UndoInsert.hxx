@@ -32,7 +32,8 @@ class SwUndoFmtAttr;
 
 class SwUndoInsert: public SwUndo, private SwUndoSaveCntnt
 {
-    SwPosition *pPos;                   // Inhalt fuers Redo
+    /// start of Content in UndoNodes for Redo
+    ::boost::scoped_ptr<SwNodeIndex> m_pUndoNodeIndex;
     String *pTxt, *pUndoTxt;
     SwRedlineData* pRedlData;
     sal_uLong nNode;

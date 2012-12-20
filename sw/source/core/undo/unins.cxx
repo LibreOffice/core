@@ -102,7 +102,7 @@ SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd, xub_StrLen nCnt,
             xub_StrLen nL,
             const IDocumentContentOperations::InsertFlags nInsertFlags,
             sal_Bool bWDelim )
-    : SwUndo(UNDO_TYPING), pPos( 0 ), pTxt( 0 ), pRedlData( 0 ),
+    : SwUndo(UNDO_TYPING), pTxt( 0 ), pRedlData( 0 ),
         nNode( rNd.GetIndex() ), nCntnt(nCnt), nLen(nL),
         bIsWordDelim( bWDelim ), bIsAppend( sal_False )
     , m_nInsertFlags(nInsertFlags)
@@ -112,7 +112,7 @@ SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd, xub_StrLen nCnt,
 
 // #111827#
 SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd )
-    : SwUndo(UNDO_SPLITNODE), pPos( 0 ), pTxt( 0 ),
+    : SwUndo(UNDO_SPLITNODE), pTxt( 0 ),
         pRedlData( 0 ), nNode( rNd.GetIndex() ), nCntnt(0), nLen(1),
         bIsWordDelim( sal_False ), bIsAppend( sal_True )
     , m_nInsertFlags(IDocumentContentOperations::INS_EMPTYEXPAND)
@@ -184,21 +184,13 @@ sal_Bool SwUndoInsert::CanGrouping( const SwPosition& rPos )
 
 SwUndoInsert::~SwUndoInsert()
 {
-    if( pPos )      // delete the section from UndoNodes array
+    if (m_pUndoNodeIndex) // delete the section from UndoNodes array
     {
         // Insert saves the content in IconSection
-        SwNodes& rUNds = pPos->nNode.GetNode().GetNodes();
-        if( pPos->nContent.GetIndex() )         // do not delete the whole node
-        {
-            SwTxtNode* pTxtNd = pPos->nNode.GetNode().GetTxtNode();
-            OSL_ENSURE( pTxtNd, "no TextNode to delete from" );
-            pTxtNd->EraseText( pPos->nContent );
-            pPos->nNode++;
-        }
-        pPos->nContent.Assign( 0, 0 );
-        rUNds.Delete( pPos->nNode, rUNds.GetEndOfExtras().GetIndex() -
-                                    pPos->nNode.GetIndex() );
-        delete pPos;
+        SwNodes& rUNds = m_pUndoNodeIndex->GetNodes();
+        rUNds.Delete(*m_pUndoNodeIndex,
+            rUNds.GetEndOfExtras().GetIndex() - m_pUndoNodeIndex->GetIndex());
+        m_pUndoNodeIndex.reset();
     }
     else if( pTxt )     // the inserted text
         delete pTxt;
@@ -264,8 +256,9 @@ void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
 
             if( !pTxt )
             {
-                pPos = new SwPosition( *aPaM.GetPoint() );
-                MoveToUndoNds( aPaM, &pPos->nNode, &pPos->nContent );
+                m_pUndoNodeIndex.reset(
+                        new SwNodeIndex(pDoc->GetNodes().GetEndOfContent()));
+                MoveToUndoNds(aPaM, m_pUndoNodeIndex.get(), 0);
             }
             nNode = aPaM.GetPoint()->nNode.GetIndex();
             nCntnt = aPaM.GetPoint()->nContent.GetIndex();
@@ -332,11 +325,10 @@ void SwUndoInsert::RedoImpl(::sw::UndoRedoContext & rContext)
             }
             else
             {
-                // re-insert content (log out pPos before!)
-                sal_uLong nMvNd = pPos->nNode.GetIndex();
-                xub_StrLen nMvCnt = pPos->nContent.GetIndex();
-                DELETEZ( pPos );
-                MoveFromUndoNds( *pTmpDoc, nMvNd, nMvCnt, *pPam->GetMark() );
+                // re-insert content again (first detach m_pUndoNodeIndex!)
+                sal_uLong const nMvNd = m_pUndoNodeIndex->GetIndex();
+                m_pUndoNodeIndex.reset();
+                MoveFromUndoNds(*pTmpDoc, nMvNd, 0, *pPam->GetMark());
             }
             nNode = pPam->GetMark()->nNode.GetIndex();
             nCntnt = pPam->GetMark()->nContent.GetIndex();
