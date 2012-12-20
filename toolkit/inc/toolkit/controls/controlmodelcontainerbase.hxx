@@ -38,7 +38,7 @@
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
 #include <cppuhelper/implbase8.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>
 #include <toolkit/controls/unocontrolmodel.hxx>
 #include <toolkit/controls/unocontrolcontainer.hxx>
@@ -216,9 +216,10 @@ class ResourceListener  :public ::com::sun::star::util::XModifyListener,
         bool                                                                                    m_bListening;
 };
 
-typedef ::cppu::AggImplInheritanceHelper2   < UnoControlContainer
+typedef ::cppu::AggImplInheritanceHelper3   < UnoControlContainer
                             ,   ::com::sun::star::container::XContainerListener
                             ,   ::com::sun::star::util::XChangesListener
+                            ,   ::com::sun::star::util::XModifyListener
                             >   ContainerControl_IBase;
 
 class ControlContainerBase : public ContainerControl_IBase
@@ -259,6 +260,10 @@ public:
     // ::com::sun::star::awt::XControl
     sal_Bool SAL_CALL setModel( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& Model ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL setDesignMode( sal_Bool bOn ) throw(::com::sun::star::uno::RuntimeException);
+    // XModifyListener
+    // Using a dummy/no-op implementation here, not sure if every container control needs
+    // to implement this, certainly Dialog does, lets see about others
+    virtual void SAL_CALL modified( const ::com::sun::star::lang::EventObject& ) throw (::com::sun::star::uno::RuntimeException) {}
 protected:
     virtual void ImplModelPropertiesChanged( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyChangeEvent >& rEvents ) throw(::com::sun::star::uno::RuntimeException);
     virtual void removingControl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl );
