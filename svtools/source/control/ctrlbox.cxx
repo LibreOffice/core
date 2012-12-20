@@ -763,6 +763,18 @@ LineListBox::LineListBox( Window* pParent, WinBits nWinStyle ) :
     ImplInit();
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeLineListBox(Window *pParent, VclBuilder::stringmap &rMap)
+{
+    bool bDropdown = extractDropdown(rMap);
+    WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
+    if (bDropdown)
+        nWinBits |= WB_DROPDOWN;
+    LineListBox *pListBox = new LineListBox(pParent, nWinBits);
+    if (bDropdown)
+        pListBox->EnableAutoSize(true);
+    return pListBox;
+}
+
 // -----------------------------------------------------------------------
 
 LineListBox::LineListBox( Window* pParent, const ResId& rResId ) :

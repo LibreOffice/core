@@ -44,12 +44,7 @@ class SwColumnPage;
 
 class SwColumnDlg : public SfxModalDialog
 {
-    OKButton            aOK;
-    CancelButton        aCancel;
-    HelpButton          aHelp;
-
-    FixedText           aApplyToFT;
-    ListBox             aApplyToLB;
+    ListBox*            m_pApplyToLB;
 
     SwWrtShell&         rWrtShell;
     SwColumnPage*       pTabPage;
@@ -80,11 +75,15 @@ public:
 
 class ColumnValueSet : public ValueSet
 {
-    public:
-        ColumnValueSet(Window* pParent, const ResId& rResId) :
-            ValueSet(pParent, rResId){}
-        ~ColumnValueSet();
-
+public:
+    ColumnValueSet(Window* pParent, const ResId& rResId)
+        : ValueSet(pParent, rResId)
+    {
+    }
+    ColumnValueSet(Window* pParent)
+        : ValueSet(pParent, WB_TABSTOP | WB_ITEMBORDER | WB_DOUBLEBORDER)
+    {
+    }
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 };
@@ -94,48 +93,39 @@ class ColumnValueSet : public ValueSet
  --------------------------------------------------------------------*/
 class SwColumnPage : public SfxTabPage
 {
-    FixedLine       aFLGroup;
-    FixedText       aClNrLbl;
-    NumericField    aCLNrEdt;
-    ColumnValueSet  aDefaultVS;
-    ImageList       aPreColsIL;
-    CheckBox        aBalanceColsCB;
+    NumericField*   m_pCLNrEdt;
+    ColumnValueSet* m_pDefaultVS;
+    CheckBox*       m_pBalanceColsCB;
 
-    FixedLine       aFLLayout;
-    ImageButton     aBtnUp;
-    FixedText       aColumnFT;
-    FixedText       aWidthFT;
-    FixedText       aDistFT;
-    FixedText       aLbl1;
-    PercentField    aEd1;
-    PercentField    aDistEd1;
-    FixedText       aLbl2;
-    PercentField    aEd2;
-    PercentField    aDistEd2;
-    FixedText       aLbl3;
-    PercentField    aEd3;
-    ImageButton     aBtnDown;
-    CheckBox        aAutoWidthBox;
+    PushButton*     m_pBtnBack;
+    FixedText*      m_pLbl1;
+    PercentFieldWrap aEd1;
+    FixedText*      m_pLbl2;
+    PercentFieldWrap aEd2;
+    FixedText*      m_pLbl3;
+    PercentFieldWrap aEd3;
+    PushButton*     m_pBtnNext;
+    PercentFieldWrap aDistEd1;
+    PercentFieldWrap aDistEd2;
+    CheckBox*       m_pAutoWidthBox;
 
+    FixedText*      m_pLineTypeLbl;
+    LineListBox*    m_pLineTypeDLB;
+    FixedText*      m_pLineWidthLbl;
+    MetricField*    m_pLineWidthEdit;
+    FixedText*      m_pLineColorLbl;
+    ColorListBox*   m_pLineColorDLB;
+    FixedText*      m_pLineHeightLbl;
+    MetricField*    m_pLineHeightEdit;
+    FixedText*      m_pLinePosLbl;
+    ListBox*        m_pLinePosDLB;
 
-    FixedLine       aFLLineType;
-    FixedText       aLineTypeLbl;
-    LineListBox     aLineTypeDLB;
-    FixedText       aLineWidthLbl;
-    MetricField     aLineWidthEdit;
-    FixedText       aLineColorLbl;
-    ColorListBox    aLineColorDLB;
-    FixedText       aLineHeightLbl;
-    MetricField     aLineHeightEdit;
-    FixedText       aLinePosLbl;
-    ListBox         aLinePosDLB;
-
-    FixedText       aTextDirectionFT;
-    ListBox         aTextDirectionLB;
+    FixedText*      m_pTextDirectionFT;
+    ListBox*        m_pTextDirectionLB;
 
     // Example
-    SwColExample        aPgeExampleWN;
-    SwColumnOnlyExample aFrmExampleWN;
+    SwColExample*   m_pPgeExampleWN;
+    SwColumnOnlyExample* m_pFrmExampleWN;
 
     SwColMgr*       pColMgr;
 
@@ -144,7 +134,7 @@ class SwColumnPage : public SfxTabPage
     long            nColWidth[nMaxCols];
     long            nColDist[nMaxCols];
     sal_uInt16          nMinWidth;
-    PercentField    *pModifiedField;
+    PercentFieldWrap*   pModifiedField;
     sal_Bool            bFormat;
     sal_Bool            bFrm;
     sal_Bool            bHtmlMode;
@@ -152,8 +142,8 @@ class SwColumnPage : public SfxTabPage
 
     // Handler
     DECL_LINK( ColModify, NumericField * );
-    DECL_LINK( GapModify, PercentField * );
-    DECL_LINK( EdModify, PercentField * );
+    DECL_LINK( GapModify, PercentFieldWrap * );
+    DECL_LINK( EdModify, PercentFieldWrap * );
     DECL_LINK( AutoWidthHdl, CheckBox * );
     DECL_LINK( SetDefaultsHdl, ValueSet * );
 
@@ -189,12 +179,22 @@ public:
     void SetFrmMode(sal_Bool bMod);
     void SetPageWidth(long nPageWidth);
 
-    void SetFormatUsed(sal_Bool bFmt) { bFormat = bFmt; }
+    void SetFormatUsed(sal_Bool bFmt)
+    {
+        bFormat = bFmt;
+    }
 
-    void ShowBalance(sal_Bool bShow) {aBalanceColsCB.Show(bShow);}
+    void ShowBalance(sal_Bool bShow)
+    {
+        m_pBalanceColsCB->Show(bShow);
+    }
+
     void SetInSection(sal_Bool bSet);
 
-    void ActivateColumnControl() {aCLNrEdt.GrabFocus();}
+    void ActivateColumnControl()
+    {
+        m_pCLNrEdt->GrabFocus();
+    }
 };
 
 #endif

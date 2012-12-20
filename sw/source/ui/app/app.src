@@ -21,6 +21,7 @@
 #include <svx/dialogs.hrc>
 #include <svx/globlmn.hrc>
 #include "cmdid.h"
+#include "access.hrc"
 #include "globals.hrc"
 #include "app.hrc"
 #include "statstr.hrc"
@@ -706,6 +707,16 @@ String STR_AUTHMRK_INSERT
 {
 
     Text [ en-US ] = "Insert Bibliography Entry";
+};
+
+String STR_ACCESS_PAGESETUP_SPACING
+{
+    Text [ en-US ] = "Spacing between %1 and %2";
+};
+
+String STR_ACCESS_COLUMN_WIDTH
+{
+    Text [ en-US ] = "Column %1 Width";
 };
 
 ToolBox RID_MODULE_TOOLBOX

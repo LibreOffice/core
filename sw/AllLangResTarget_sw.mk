@@ -129,7 +129,6 @@ $(eval $(call gb_SrsTarget_add_files,sw/res,\
     sw/source/ui/fldui/fldvar.src \
     sw/source/ui/fldui/inpdlg.src \
     sw/source/ui/fmtui/tmpdlg.src \
-    sw/source/ui/frmdlg/column.src \
     sw/source/ui/frmdlg/frmpage.src \
     sw/source/ui/frmdlg/frmui.src \
     sw/source/ui/frmdlg/wrap.src \

@@ -25,7 +25,6 @@
 #define HID_FLD_INPUT                                           "SW_HID_FLD_INPUT"
 #define HID_DOCINFO_EDT                                         "SW_HID_DOCINFO_EDT"
 #define HID_PASSWD                                              "SW_HID_PASSWD"
-#define HID_FORMAT_COLUMN                                       "SW_HID_FORMAT_COLUMN"
 #define HID_CONFIG_SAVE                                         "SW_HID_CONFIG_SAVE"
 #define HID_NUM_NAMES                                           "SW_HID_NUM_NAMES"
 
@@ -158,7 +157,6 @@
 #define HID_FRM_EXT                                             "SW_HID_FRM_EXT"
 #define HID_FRM_STD                                             "SW_HID_FRM_STD"
 #define HID_GRF_EXT                                             "SW_HID_GRF_EXT"
-#define HID_COLUMN                                              "SW_HID_COLUMN"
 #define HID_FOOTNOTE_PAGE                                       "SW_HID_FOOTNOTE_PAGE"
 #define HID_FORMAT_TABLE                                        "SW_HID_FORMAT_TABLE"
 #define HID_TABLE_COLUMN                                        "SW_HID_TABLE_COLUMN"

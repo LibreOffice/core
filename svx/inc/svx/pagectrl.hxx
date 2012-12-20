@@ -79,6 +79,7 @@ protected:
 
 public:
     SvxPageWindow( Window* pParent, const ResId& rId );
+    SvxPageWindow( Window* pParent );
     ~SvxPageWindow();
 
     void        SetWidth( long nW )                     { aSize.Width()  = nW; }
@@ -153,6 +154,8 @@ public:
     void        SetFrameDirection(sal_Int32 nFrameDirection);
 
     void        ResetBackground();
+
+    virtual Size GetOptimalSize(WindowSizeType eType) const;
 };
 
 #endif // #ifndef _SVX_PAGECTRL_HXX

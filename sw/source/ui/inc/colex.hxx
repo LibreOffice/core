@@ -31,9 +31,17 @@ class SfxItemSet;
 class SW_DLLPUBLIC SwPageExample : public SvxPageWindow
 {
 public:
-    SwPageExample(Window* pPar, const ResId& rResId ) :
-                                SvxPageWindow(pPar, rResId )
-                                {SetSize(SvxPaperInfo::GetPaperSize(PAPER_A4));/*DIN A4*/}
+    SwPageExample(Window* pPar, const ResId& rResId)
+        : SvxPageWindow(pPar, rResId)
+    {
+        SetSize(SvxPaperInfo::GetPaperSize(PAPER_A4));
+    }
+
+    SwPageExample(Window* pPar)
+        : SvxPageWindow(pPar)
+    {
+        SetSize(SvxPaperInfo::GetPaperSize(PAPER_A4));
+    }
 
     void UpdateExample( const SfxItemSet& rSet );
 };
@@ -69,14 +77,23 @@ protected:
                            const sal_Bool bEnabled );
 
 public:
-        SwColExample(Window* pPar, const ResId& rResId ) :
-                                SwPageExample(pPar, rResId ),
-                                pColMgr(0){}
+    SwColExample(Window* pPar, const ResId& rResId)
+        : SwPageExample(pPar, rResId)
+        , pColMgr(0)
+    {
+    }
+
+    SwColExample(Window* pPar)
+        : SwPageExample(pPar)
+        , pColMgr(0)
+    {
+    }
 
     void UpdateExample( const SfxItemSet& rSet, SwColMgr* pMgr  )
-        {   pColMgr = pMgr;
-            SwPageExample::UpdateExample(rSet);
-        }
+    {
+        pColMgr = pMgr;
+        SwPageExample::UpdateExample(rSet);
+    }
 };
 
 class SW_DLLPUBLIC SwColumnOnlyExample : public Window
@@ -91,10 +108,12 @@ protected:
     virtual void Paint( const Rectangle& rRect );
 
 public:
-    SwColumnOnlyExample( Window* , const ResId& );
+    SwColumnOnlyExample(Window* , const ResId&);
+    SwColumnOnlyExample(Window*);
 
     void        SetColumns(const SwFmtCol& rCol);
 
+    virtual Size GetOptimalSize(WindowSizeType eType) const;
 };
 
 #endif // _COLEX_HXX
