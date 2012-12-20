@@ -219,6 +219,7 @@
 // dialogs
 
 #define DLG_LOGIN                       (RID_SVTOOLS_START+113)
+#define DLG_ADDRESSBOOKSOURCE           (RID_SVTOOLS_START+114)
 
 //.............................................................................
 // bitmaps

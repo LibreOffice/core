@@ -25,6 +25,9 @@
   <implementation name="com.sun.star.comp.graphic.GraphicRendererVCL">
     <service name="com.sun.star.graphic.GraphicRendererVCL"/>
   </implementation>
+  <implementation name="com.sun.star.comp.svtools.OAddressBookSourceDialogUno">
+    <service name="com.sun.star.ui.AddressBookSourceDialog"/>
+  </implementation>
   <implementation name="com.sun.star.comp.svtools.uno.Wizard">
     <service name="com.sun.star.ui.dialogs.Wizard"/>
   </implementation>

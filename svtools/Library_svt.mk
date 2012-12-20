@@ -123,6 +123,7 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/control/urlcontrol \
     svtools/source/control/valueacc \
     svtools/source/control/valueset \
+    svtools/source/dialogs/addresstemplate \
     svtools/source/dialogs/colrdlg \
     svtools/source/dialogs/filedlg \
     svtools/source/dialogs/filedlg2 \
@@ -230,6 +231,7 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/toolpanel/toolpaneldeckpeer \
     svtools/source/toolpanel/toolpaneldrawer \
     svtools/source/toolpanel/toolpaneldrawerpeer \
+    svtools/source/uno/addrtempuno \
     svtools/source/uno/contextmenuhelper \
     svtools/source/uno/framestatuslistener \
     svtools/source/uno/generictoolboxcontroller \

@@ -60,6 +60,7 @@
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <svtools/localresaccess.hxx>
+#include <svtools/addresstemplate.hxx>
 #include "svtools/treelistentry.hxx"
 #include <comphelper/processfactory.hxx>
 
@@ -134,6 +135,7 @@ friend class SfxOrganizeListBox_Impl;
     OKButton                aOkBtn;
     MenuButton              aEditBtn;
     HelpButton              aHelpBtn;
+    PushButton              aAddressTemplateBtn;
     PushButton              aFilesBtn;
 
     Accelerator             aEditAcc;
@@ -157,6 +159,7 @@ friend class SfxOrganizeListBox_Impl;
     DECL_LINK( MenuSelect_Impl, Menu * );
     DECL_LINK( MenuActivate_Impl, Menu * );
     DECL_LINK( AddFiles_Impl, Button * );
+    DECL_LINK( OnAddressTemplateClicked, Button * );
 
     DECL_LINK(ImportHdl, void *);
     DECL_LINK(ExportHdl, void *);
@@ -193,6 +196,7 @@ SfxOrganizeDlg_Impl::SfxOrganizeDlg_Impl( SfxTemplateOrganizeDlg* pParent,
     aOkBtn              ( pParent, SfxResId( BTN_OK ) ),
     aEditBtn            ( pParent, SfxResId( BTN_EDIT ) ),
     aHelpBtn            ( pParent, SfxResId( BTN_HELP ) ),
+    aAddressTemplateBtn ( pParent, SfxResId( BTN_ADDRESSTEMPLATE ) ),
     aFilesBtn           ( pParent, SfxResId( BTN_FILES ) ),
 
     aEditAcc    ( SfxResId( ACC_EDIT ) ),
@@ -246,6 +250,8 @@ SfxOrganizeDlg_Impl::SfxOrganizeDlg_Impl( SfxTemplateOrganizeDlg* pParent,
 
     aFilesBtn.SetClickHdl(
         LINK(this,SfxOrganizeDlg_Impl, AddFiles_Impl));
+    aAddressTemplateBtn.SetClickHdl(
+        LINK(this,SfxOrganizeDlg_Impl, OnAddressTemplateClicked));
     aLeftTypLb.SetSelectHdl(
         LINK(this, SfxOrganizeDlg_Impl, LeftListBoxSelect_Impl));
     aRightTypLb.SetSelectHdl(
@@ -259,6 +265,8 @@ SfxOrganizeDlg_Impl::SfxOrganizeDlg_Impl( SfxTemplateOrganizeDlg* pParent,
     aRightLb.SetPosSizePixel(pParent->LogicToPixel(Point(103, 6), MAP_APPFONT),
                              pParent->LogicToPixel(Size(94, 132), MAP_APPFONT));
 
+    if ( !SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SDATABASE) )
+        aAddressTemplateBtn.Hide();
     Font aFont(aLeftLb.GetFont());
     aFont.SetWeight(WEIGHT_NORMAL);
     aLeftLb.SetFont(aFont);
@@ -2154,6 +2162,16 @@ IMPL_LINK( SfxOrganizeDlg_Impl, RightListBoxSelect_Impl, ListBox *, pBox )
     aRightLb.GrabFocus();
     GetFocus_Impl(&aRightLb);
     return 0;
+}
+
+//-------------------------------------------------------------------------
+
+IMPL_LINK( SfxOrganizeDlg_Impl, OnAddressTemplateClicked, Button *, pButton )
+{
+    (void)pButton; //unused
+    svt::AddressBookSourceDialog aDialog(pDialog, ::comphelper::getProcessServiceFactory());
+    aDialog.Execute();
+    return 0L;
 }
 
 //-------------------------------------------------------------------------

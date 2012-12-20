@@ -55,6 +55,13 @@ ModalDialog DLG_ORGANIZE
         Text [ en-US ] = "~File..." ;
         TabStop = TRUE ;
     };
+    PushButton BTN_ADDRESSTEMPLATE
+    {
+        HelpID = "sfx2:PushButton:DLG_ORGANIZE:BTN_ADDRESSTEMPLATE";
+        Pos = MAP_APPFONT ( 205 , 124 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text [ en-US ] = "~Address Book..." ;
+    };
     ListBox LB_LEFT_TYP
     {
         HelpID = "sfx2:ListBox:DLG_ORGANIZE:LB_LEFT_TYP";

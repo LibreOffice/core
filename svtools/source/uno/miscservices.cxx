@@ -75,6 +75,7 @@ namespace
 
 // -------------------------------------------------------------------------------------
 
+DECLARE_CREATEINSTANCE_NAMESPACE( svt, OAddressBookSourceDialogUno )
 DECLARE_CREATEINSTANCE( SvFilterOptionsDialog )
 DECLARE_CREATEINSTANCE_NAMESPACE( unographic, GraphicProvider )
 DECLARE_CREATEINSTANCE_NAMESPACE( unographic, GraphicRendererVCL )
@@ -91,6 +92,19 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL svt_component_getFactory (
     {
         Reference< XSingleServiceFactory > xFactory;
         if (rtl_str_compare (
+                pImplementationName, "com.sun.star.comp.svtools.OAddressBookSourceDialogUno") == 0)
+        {
+            Sequence< OUString > aServiceNames(1);
+            aServiceNames.getArray()[0] =
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.AddressBookSourceDialog" ));
+
+            xFactory = ::cppu::createSingleFactory (
+                reinterpret_cast< XMultiServiceFactory* >( _pServiceManager ),
+                OUString::createFromAscii( pImplementationName ),
+                svt::OAddressBookSourceDialogUno_CreateInstance,
+                aServiceNames);
+        }
+        else if (rtl_str_compare (
                      pImplementationName, "com.sun.star.svtools.SvFilterOptionsDialog") == 0)
         {
             Sequence< OUString > aServiceNames(1);
