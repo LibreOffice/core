@@ -442,14 +442,25 @@ sal_Bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const ::com::sun::star::un
             QueryBox aBox(
                 GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
                 ScGlobal::GetRscString(STR_QUERY_FORMULA_RECALC_ONLOAD_ODS));
+            aBox.SetCheckBoxText(ScGlobal::GetRscString(STR_ALWAYS_PERFORM_SELECTED));
 
             bHardRecalc = aBox.Execute() == RET_YES;
+
+            if (aBox.GetCheckBoxState())
+            {
+                // Always perform selected action in the future.
+                boost::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create() );
+                officecfg::Office::Calc::Formula::Load::ODFRecalcMode::set(sal_Int32(0), batch);
+                ScFormulaOptions aOpt = SC_MOD()->GetFormulaOptions();
+                aOpt.SetODFRecalcOptions(bHardRecalc ? RECALC_ALWAYS : RECALC_NEVER);
+                SC_MOD()->SetFormulaOptions(aOpt);
+
+                batch->commit();
+            }
         }
     }
     else if (nRecalcMode == RECALC_ALWAYS)
         bHardRecalc = true;
-
-    fprintf(stdout, "ScDocShell::LoadXML:   hard recalc = %d\n", bHardRecalc);
 
     if (bHardRecalc)
         DoHardRecalc(false);
