@@ -29,8 +29,7 @@ ifeq ($(PRODUCT),full)
 			-f $(PFXFILE) \
 			-p $(PFXPASSWORD) \
 			-t $(TIMESTAMPURL) \
-			$(OUTDIR)/bin/*.dll $(OUTDIR)/bin/so/*.dll \
-			$(OUTDIR)/bin/*.exe $(OUTDIR)/bin/so/*.exe \
+			$(OUTDIR)/bin/*.dll $(OUTDIR)/bin/*.exe \
 	&& touch $@
 else
 	@echo "Doing nothing on non product builds ..."
