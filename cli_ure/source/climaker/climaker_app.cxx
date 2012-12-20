@@ -452,8 +452,7 @@ SAL_IMPLEMENT_MAIN()
         }
 
         // bootstrap uno
-        xContext = ::cppu::bootstrap_InitialComponentContext(
-            Reference< registry::XSimpleRegistry >() );
+        xContext = ::cppu::defaultBootstrap_InitialComponentContext();
         Reference< container::XHierarchicalNameAccess > xTDmgr(
             xContext->getValueByName(
                 OUSTR("/singletons/com.sun.star.reflection."
