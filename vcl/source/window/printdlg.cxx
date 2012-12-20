@@ -591,12 +591,6 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     mpForwardBtn->SetStyle( mpForwardBtn->GetStyle() | WB_BEVELBUTTON );
     mpBackwardBtn->SetStyle( mpBackwardBtn->GetStyle() | WB_BEVELBUTTON );
 
-    // set symbols on forward and backward button
-    mpBackwardBtn->SetSymbol( SYMBOL_PREV );
-    mpForwardBtn->SetSymbol( SYMBOL_NEXT );
-    mpBackwardBtn->ImplSetSmallSymbol( sal_True );
-    mpForwardBtn->ImplSetSmallSymbol( sal_True );
-
     maPageStr = mpNumPagesText->GetText();
 
     // init reverse print

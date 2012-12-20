@@ -53,8 +53,8 @@ void MoreButton::ImplInit( Window* pParent, WinBits nStyle )
 
     ShowState();
 
-    SetSymbolAlign( SYMBOLALIGN_RIGHT );
-    ImplSetSmallSymbol( sal_True );
+    SetSymbolAlign(SYMBOLALIGN_RIGHT);
+    SetSmallSymbol(true);
 
     if ( ! ( nStyle & ( WB_RIGHT | WB_LEFT ) ) )
     {

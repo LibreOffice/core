@@ -65,8 +65,8 @@ class ImplCommonButtonData
 public:
     Rectangle       maFocusRect;
     long            mnSeparatorX;
-    sal_uInt16          mnButtonState;
-    sal_Bool            mbSmallSymbol;
+    sal_uInt16      mnButtonState;
+    bool            mbSmallSymbol;
 
     Image           maImage;
     ImageAlign      meImageAlign;
@@ -79,7 +79,7 @@ public:
 
 // -----------------------------------------------------------------------
 ImplCommonButtonData::ImplCommonButtonData() : maFocusRect(), mnSeparatorX(0), mnButtonState(0),
-mbSmallSymbol(sal_False), maImage(), meImageAlign(IMAGEALIGN_TOP), meSymbolAlign(SYMBOLALIGN_LEFT)
+mbSmallSymbol(false), maImage(), meImageAlign(IMAGEALIGN_TOP), meSymbolAlign(SYMBOLALIGN_LEFT)
 {
 }
 
@@ -580,7 +580,7 @@ void Button::ImplSetSymbolAlign( SymbolAlign eAlign )
 }
 
 // -----------------------------------------------------------------------
-void Button::ImplSetSmallSymbol( sal_Bool bSmall )
+void Button::SetSmallSymbol(bool bSmall)
 {
     mpButtonData->mbSmallSymbol = bSmall;
 }

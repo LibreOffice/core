@@ -228,19 +228,30 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
             continue;
         aImagesToBeRemoved.insert(aI->m_sValue);
 
-        VclBuilder::stringmap::iterator aFind = m_pParserState->m_aStockMap.find(aI->m_sValue);
+        VclBuilder::StockMap::iterator aFind = m_pParserState->m_aStockMap.find(aI->m_sValue);
         if (aFind == m_pParserState->m_aStockMap.end())
             pTarget->SetModeImage(pImage->GetImage());
         else
         {
-            const OString &rImage = aFind->second;
-            SymbolType eType = mapStockToSymbol(rImage);
+            const stockinfo &rImageInfo = aFind->second;
+            SymbolType eType = mapStockToSymbol(rImageInfo.m_sStock);
             SAL_WARN_IF(eType == SYMBOL_NOSYMBOL, "vcl", "missing stock image element for button");
             if (eType == SYMBOL_NOSYMBOL)
                 continue;
             pTarget->SetSymbol(eType);
             if (eType == SYMBOL_IMAGE)
-                pTarget->SetModeImage(Bitmap(VclResId(mapStockToImageResource(rImage))));
+                pTarget->SetModeImage(Bitmap(VclResId(mapStockToImageResource(rImageInfo.m_sStock))));
+            switch (rImageInfo.m_nSize)
+            {
+                case 1:
+                    pTarget->SetSmallSymbol();
+                    break;
+                case 4:
+                    break;
+                default:
+                    SAL_WARN("vcl.layout", "unsupported image size " << rImageInfo.m_nSize);
+                    break;
+            }
         }
     }
 
@@ -672,8 +683,16 @@ bool VclBuilder::extractStock(const OString &id, stringmap &rMap)
     VclBuilder::stringmap::iterator aFind = rMap.find(OString("stock"));
     if (aFind != rMap.end())
     {
-        m_pParserState->m_aStockMap[id] = aFind->second;
+        stockinfo aInfo;
+        aInfo.m_sStock = aFind->second;
         rMap.erase(aFind);
+        aFind = rMap.find(OString("icon-size"));
+        if (aFind != rMap.end())
+        {
+            aInfo.m_nSize = aFind->second.toInt32();
+            rMap.erase(aFind);
+        }
+        m_pParserState->m_aStockMap[id] = aInfo;
         return true;
     }
     return false;

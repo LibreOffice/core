@@ -119,7 +119,14 @@ private:
     typedef std::map<OString, OString> WidgetTranslations;
     typedef std::map<OString, WidgetTranslations> Translations;
 
-    typedef std::map<OString, OString> StockMap;
+    struct stockinfo
+    {
+        OString m_sStock;
+        int m_nSize;
+        stockinfo() : m_nSize(4) {}
+    };
+
+    typedef std::map<OString, stockinfo> StockMap;
 
     struct ParserState
     {
