@@ -18,19 +18,48 @@
  */
 
 #include "sal/config.h"
-#include <rtl/ustring.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/reflection/XIdlClass.hpp>
 
-using namespace ::com::sun::star;
+#include <cstdlib>
 
-// Stubs for removed functionality, to be killed when we bump sal SONAME
+#include "com/sun/star/uno/Exception.hpp"
+#include "com/sun/star/uno/Reference.hxx"
+#include "com/sun/star/uno/Sequence.hxx"
+#include "sal/types.h"
 
-SAL_DLLPUBLIC_EXPORT
-reflection::XIdlClass * SAL_CALL createStandardClassWithSequence(
-	const uno::Reference < lang::XMultiServiceFactory > &, const rtl::OUString &,
-	const uno::Reference < reflection::XIdlClass > &, const uno::Sequence < rtl::OUString > & )
-	SAL_THROW( () )
+namespace com { namespace sun { namespace star {
+    namespace lang { class XMultiServiceFactory; }
+    namespace reflection { class XIdlClass; }
+    namespace registry { class XSimpleRegistry; }
+    namespace uno { class XComponentContext; }
+} } }
+namespace rtl { class OUString; }
+
+// Stubs for removed functionality, to be killed when we bump cppuhelper SONAME
+
+SAL_DLLPUBLIC_EXPORT css::uno::Reference< css::uno::XComponentContext > SAL_CALL
+bootstrap_InitialComponentContext(
+    css::uno::Reference< css::registry::XSimpleRegistry > const &,
+    rtl::OUString const &) SAL_THROW((css::uno::Exception))
+{
+    for (;;) { std::abort(); } // avoid "must return a value" warnings
+}
+
+SAL_DLLPUBLIC_EXPORT css::uno::Reference< css::registry::XSimpleRegistry >
+SAL_CALL createNestedRegistry(rtl::OUString const &) SAL_THROW(()) {
+    for (;;) { std::abort(); } // avoid "must return a value" warnings
+}
+
+SAL_DLLPUBLIC_EXPORT css::uno::Reference< css::registry::XSimpleRegistry >
+SAL_CALL createSimpleRegistry(rtl::OUString const &) SAL_THROW(()) {
+    for (;;) { std::abort(); } // avoid "must return a value" warnings
+}
+
+SAL_DLLPUBLIC_EXPORT css::reflection::XIdlClass * SAL_CALL
+createStandardClassWithSequence(
+    css::uno::Reference< css::lang::XMultiServiceFactory > const &,
+    rtl::OUString const &,
+    css::uno::Reference< css::reflection::XIdlClass > const &,
+    css::uno::Sequence< rtl::OUString > const &) SAL_THROW(())
 {
     for (;;) { std::abort(); } // avoid "must return a value" warnings
 }

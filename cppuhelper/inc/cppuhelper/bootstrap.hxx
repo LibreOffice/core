@@ -28,40 +28,11 @@
 
 namespace com { namespace sun { namespace star {
     namespace container { class XHierarchicalNameAccess; }
-    namespace registry { class XSimpleRegistry; }
     namespace uno { class XComponentContext; }
 } } }
 
 namespace cppu
 {
-
-/** Creates a simple registry service instance.
-
-    @rBootstrapPath optional bootstrap path for initial components
-    @return simple registry service instance
-
-    @deprecated Registry-based type/service information is successively
-    replaced with more modern formats; client code should exclusively use
-    ::cppu::defaultBootstrap_InitialComponentContext (or ::cppu::bootstrap).
-*/
-CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::registry::XSimpleRegistry >
-SAL_CALL createSimpleRegistry(
-    const ::rtl::OUString & rBootstrapPath = ::rtl::OUString() )
-    SAL_THROW(());
-
-/** Creates a nested registry service instance.
-
-    @rBootstrapPath optional bootstrap path for initial components
-    @return nested registry service instance
-
-    @deprecated Registry-based type/service information is successively
-    replaced with more modern formats; client code should exclusively use
-    ::cppu::defaultBootstrap_InitialComponentContext (or ::cppu::bootstrap).
-*/
-CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::registry::XSimpleRegistry >
-SAL_CALL createNestedRegistry(
-    const ::rtl::OUString & rBootstrapPath = ::rtl::OUString() )
-    SAL_THROW(());
 
 /** Installs type description manager instance, i.e. registers a callback at cppu core.
 
@@ -71,28 +42,6 @@ SAL_CALL createNestedRegistry(
 CPPUHELPER_DLLPUBLIC sal_Bool SAL_CALL installTypeDescriptionManager(
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameAccess > const & xTDMgr )
     SAL_THROW(());
-
-/** Bootstraps an initial component context with service manager upon a given registry.
-    This includes insertion of initial services:
-      - (registry) service manager, shared lib loader,
-      - simple registry, nested registry,
-      - implementation registration
-      - registry typedescription provider, typedescription manager (also installs it into cppu core)
-
-    @param xRegistry registry for service manager and singleton objects of context (may be null)
-    @param rBootstrapPath optional bootstrap path for initial components
-    @return component context
-
-    @deprecated Registry-based type/service information is successively
-    replaced with more modern formats; client code should exclusively use
-    ::cppu::defaultBootstrap_InitialComponentContext (or ::cppu::bootstrap).
-*/
-CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > SAL_CALL
-bootstrap_InitialComponentContext(
-    ::com::sun::star::uno::Reference< ::com::sun::star::registry::XSimpleRegistry > const & xRegistry,
-    ::rtl::OUString const & rBootstrapPath = ::rtl::OUString() )
-    SAL_THROW( (::com::sun::star::uno::Exception) );
-
 
 /** Bootstraps an initial component context with service manager upon
     information from bootstrap variables.

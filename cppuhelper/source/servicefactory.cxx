@@ -43,8 +43,7 @@
 #include "com/sun/star/container/XSet.hpp"
 #include "com/sun/star/container/XHierarchicalNameAccess.hpp"
 #include "com/sun/star/registry/XSimpleRegistry.hpp"
-#include "com/sun/star/registry/XImplementationRegistration.hpp"
-#include "com/sun/star/security/XAccessController.hpp"
+#include "com/sun/star/uno/SecurityException.hpp"
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
 #endif
@@ -63,9 +62,6 @@ using namespace ::com::sun::star::uno;
 
 namespace cppu
 {
-
-Reference< security::XAccessController >
-createDefaultAccessController() SAL_THROW(());
 
 static Reference< XInterface > SAL_CALL createInstance(
     Reference< XInterface > const & xFactory,
@@ -91,7 +87,9 @@ static Reference< XInterface > SAL_CALL createInstance(
         Reference< XInterface >() );
 }
 
-Reference< registry::XSimpleRegistry > SAL_CALL createSimpleRegistry(
+namespace {
+
+Reference< registry::XSimpleRegistry > createSimpleRegistry(
     OUString const & rBootstrapPath )
     SAL_THROW(())
 {
@@ -122,7 +120,7 @@ Reference< registry::XSimpleRegistry > SAL_CALL createSimpleRegistry(
     return Reference< registry::XSimpleRegistry >();
 }
 
-Reference< registry::XSimpleRegistry > SAL_CALL createNestedRegistry(
+Reference< registry::XSimpleRegistry > createNestedRegistry(
     OUString const & rBootstrapPath )
     SAL_THROW(())
 {
@@ -153,6 +151,7 @@ Reference< registry::XSimpleRegistry > SAL_CALL createNestedRegistry(
     return Reference< registry::XSimpleRegistry >();
 }
 
+}
 
 /** bootstrap variables:
 
@@ -669,30 +668,6 @@ Reference< lang::XMultiServiceFactory > SAL_CALL createRegistryServiceFactory(
 {
     return Reference< lang::XMultiServiceFactory >( createImplServiceFactory(
         rWriteRegistry, rReadRegistry, bReadOnly, rBootstrapPath ), UNO_QUERY );
-}
-
-Reference< XComponentContext > SAL_CALL bootstrap_InitialComponentContext(
-    Reference< registry::XSimpleRegistry > const & xRegistry,
-    OUString const & rBootstrapPath )
-    SAL_THROW( (Exception) )
-{
-    Bootstrap bootstrap;
-
-    Reference< lang::XMultiComponentFactory > xSF(
-        bootstrapInitialSF( rBootstrapPath ) );
-    Reference< XComponentContext > xContext(
-        bootstrapInitialContext(
-            xSF, xRegistry, xRegistry, rBootstrapPath, bootstrap ) );
-
-    // initialize sf
-    Reference< lang::XInitialization > xInit( xSF, UNO_QUERY );
-    OSL_ASSERT( xInit.is() );
-    Sequence< Any > aSFInit( 2 );
-    aSFInit[ 0 ] <<= xRegistry;
-    aSFInit[ 1 ] <<= xContext; // default context
-    xInit->initialize( aSFInit );
-
-    return xContext;
 }
 
 }
