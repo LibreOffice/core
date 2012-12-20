@@ -18,26 +18,6 @@
 -->
 <oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:name="ExtensionDependencies" oor:package="org.openoffice.Office">
   <node oor:name="Extensions">
-    <node oor:name="com.oracle.Office.Connector.Professional" oor:op="replace">
-      <prop oor:name="Versions">
-        <value>
-          <it>1.0.0</it>
-        </value>
-      </prop>
-      <prop oor:name="Dependencies">
-        <value>&lt;d:dependencies xmlns:d="http://openoffice.org/extensions/description/2006"&gt;&lt;d:OpenOffice.org-maximal-version d:name="OpenOffice.org 3.3" value="3.3"/&gt;&lt;/d:dependencies&gt;</value>
-      </prop>
-    </node>
-    <node oor:name="org.openoffice.bi.OracleBIConnector" oor:op="replace">
-      <prop oor:name="Versions">
-        <value>
-          <it>1.0</it>
-        </value>
-      </prop>
-      <prop oor:name="Dependencies">
-        <value>&lt;d:dependencies xmlns:d="http://openoffice.org/extensions/description/2006"&gt;&lt;d:OpenOffice.org-maximal-version d:name="OpenOffice.org 3.3" value="3.3"/&gt;&lt;/d:dependencies&gt;</value>
-      </prop>
-    </node>
     <node oor:name="com.sun.PresenterScreen-linux_x86" oor:op="replace">
       <prop oor:name="Versions">
         <value>
