@@ -80,6 +80,7 @@ protected:
         rtl::OUString aICUText;
         UText *ut;
         icu::BreakIterator *aBreakIterator;
+        com::sun::star::lang::Locale maLocale;
 
         BI_Data()
             : ut(NULL)
@@ -91,10 +92,10 @@ protected:
             utext_close(ut);
         }
 
-    } character, word, sentence, line, *icuBI;
+    } character, sentence, line, *icuBI;
+    BI_Data words[4]; // 4 is css::i18n::WordType enumeration size
 
-    com::sun::star::lang::Locale aLocale;
-    sal_Int16 aBreakType, aWordType;
+    sal_Int16 aBreakType;
 
     void SAL_CALL loadICUBreakIterator(const com::sun::star::lang::Locale& rLocale,
         sal_Int16 rBreakType, sal_Int16 rWordType, const sal_Char* name, const rtl::OUString& rText) throw(com::sun::star::uno::RuntimeException);
