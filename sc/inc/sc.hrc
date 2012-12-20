@@ -639,6 +639,9 @@
 #define SID_INSERT_FIELD_TITLE  (SID_NEW_SLOTS+98)
 #define SID_INSERT_FIELD_DATE_VAR (SID_NEW_SLOTS+99)
 
+#define FID_SHOW_NOTE           (SID_NEW_SLOTS+100)
+#define FID_HIDE_NOTE           (SID_NEW_SLOTS+101)
+
 // idl parameter
 
 #define SID_SORT_BYROW          (SC_PARAM_START)
