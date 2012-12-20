@@ -39,6 +39,9 @@
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
+#include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/awt/FontUnderline.hpp>
+#include <com/sun/star/awt/FontSlant.hpp>
 
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -80,6 +83,7 @@ public:
     void testTextFrameBorders();
     void testTextframeGradient();
     void testCellBtlr();
+    void testTableStylerPrSz();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -123,6 +127,7 @@ void Test::run()
         {"textframe-borders.docx", &Test::testTextFrameBorders},
         {"textframe-gradient.docx", &Test::testTextframeGradient},
         {"cell-btlr.docx", &Test::testCellBtlr},
+        {"table-style-rPr-sz.docx", &Test::testTableStylerPrSz},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -624,6 +629,25 @@ void Test::testCellBtlr()
     OString aAttribute = "val";
     OUString aValue = OUString::createFromAscii((const char*)xmlGetProp(pXmlNode, BAD_CAST(aAttribute.getStr())));
     CPPUNIT_ASSERT_EQUAL(OUString("btLr"), aValue);
+}
+
+void Test::testTableStylerPrSz()
+{
+    // Verify that font size inside the table is 20pt, despite the sz attribute in the table size.
+    // Also check that other rPr attribute are used: italic, bold, underline
+    // Office has the same behavior
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xCell->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL(20.f, getProperty<float>(getRun(xPara, 1), "CharHeight"));
+    CPPUNIT_ASSERT_EQUAL(awt::FontUnderline::SINGLE, getProperty<short>(getRun(xPara, 1), "CharUnderline"));
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(getRun(xPara, 1), "CharWeight"));
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC, getProperty<awt::FontSlant>(getRun(xPara, 1), "CharPosture"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
