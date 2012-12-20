@@ -586,6 +586,10 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
             {
                 if (!m_pImpl->m_pCurrentEntry)
                     break;
+                if (m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_TABLE) {
+                    // 'pPr'/'rPr' for a table style are handled from 'tblStylePr' tag
+                    break;
+                }
 
                 TablePropertiesHandlerPtr pTblHandler( new TablePropertiesHandler( true ) );
                 pTblHandler->SetProperties( m_pImpl->m_pCurrentEntry->pProperties );
