@@ -276,7 +276,7 @@
 #define SID_PASSWORDINTERACTION             (SID_SFX_START + 1723)
 #define SID_GOTOLINE                        (SID_SFX_START + 1724)
 #define SID_SHOWLINES                       (SID_SFX_START + 1725)
-#define	SID_BLUETOOTH_SENDDOC				(SID_SFX_START + 1726)
+#define SID_BLUETOOTH_SENDDOC               (SID_SFX_START + 1726)
 #define SID_TEMPLATE_MANAGER                (SID_SFX_START + 1727)
 
 //      SID_SFX_free_START                  (SID_SFX_START + 1728)
