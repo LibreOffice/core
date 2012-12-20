@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <iostream>
-
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 
@@ -1978,6 +1976,90 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 }
                 else
                     rReq.Ignore();
+            }
+            break;
+
+        case FID_HIDE_NOTE:
+        case FID_SHOW_NOTE:
+            {
+                bool bShowNote     = nSlot == FID_SHOW_NOTE;
+                ScViewData* pData  = GetViewData();
+                ScDocument* pDoc   = pData->GetDocument();
+                ScMarkData& rMark  = pData->GetMarkData();
+                bool bDone = false;
+
+                if (!rMark.IsMarked() && !rMark.IsMultiMarked())
+                {
+                    // Check current cell
+                    ScAddress aPos( pData->GetCurX(), pData->GetCurY(), pData->GetTabNo() );
+                    if( pDoc->GetNotes( aPos.Tab() )->findByAddress(aPos) )
+                    {
+                        pData->GetDocShell()->GetDocFunc().ShowNote( aPos, bShowNote );
+                        bDone = true;
+                    }
+                }
+                else
+                {
+                    // Check selection range
+                    ScRangeListRef aRangesRef;
+                    pData->GetMultiArea(aRangesRef);
+                    ScRangeList aRanges = *aRangesRef;
+                    size_t nRangeSize = aRanges.size();
+
+                    for ( size_t i = 0; i < nRangeSize; ++i )
+                    {
+                        const ScRange * pRange = aRanges[i];
+                        const SCROW nRow0 = pRange->aStart.Row();
+                        const SCROW nRow1 = pRange->aEnd.Row();
+                        const SCCOL nCol0 = pRange->aStart.Col();
+                        const SCCOL nCol1 = pRange->aEnd.Col();
+                        const SCTAB nRangeTab = pRange->aStart.Tab();
+                        const size_t nCellNumber = ( nRow1 - nRow0 ) * ( nCol1 - nCol0 );
+                        ScNotes *pNotes = pDoc->GetNotes(nRangeTab);
+
+                        if ( nCellNumber < pNotes->size() )
+                        {
+                            // Check by each cell
+                            for ( SCROW nRow = nRow0; nRow <= nRow1; ++nRow )
+                            {
+                                for ( SCCOL nCol = nCol0; nCol <= nCol1; ++nCol )
+                                {
+                                    ScPostIt* pNote = pNotes->findByAddress(nCol, nRow);
+                                    if ( pNote && pDoc->IsBlockEditable( nRangeTab, nCol,nRow, nCol,nRow ) )
+                                    {
+                                        ScAddress aPos( nCol, nRow, nRangeTab );
+                                        pData->GetDocShell()->GetDocFunc().ShowNote( aPos, bShowNote );
+                                        bDone = true;
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            // Check by each document note
+                            for (ScNotes::const_iterator itr = pNotes->begin(); itr != pNotes->end(); ++itr)
+                            {
+                                SCCOL nCol = itr->first.first;
+                                SCROW nRow = itr->first.second;
+
+                                if ( nCol <= nCol1 && nRow <= nRow1 && nCol >= nCol0 && nRow >= nRow0 )
+                                {
+                                    ScAddress aPos( nCol, nRow, nRangeTab );
+                                    pData->GetDocShell()->GetDocFunc().ShowNote( aPos, bShowNote );
+                                    bDone = true;
+                                }
+                            }
+                        }
+                    }
+
+                    if ( bDone )
+                    {
+                        rReq.Done();
+                        rBindings.Invalidate( nSlot );
+                    }
+                    else
+                         rReq.Ignore();
+                }
             }
             break;
 

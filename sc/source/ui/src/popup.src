@@ -96,9 +96,15 @@ Menu RID_POPUP_CELLS
         };
         MenuItem
         {
-            Identifier = FID_NOTE_VISIBLE ;
-            HelpId = CMD_FID_NOTE_VISIBLE ;
+            Identifier = FID_SHOW_NOTE ;
+            HelpId = CMD_FID_SHOW_NOTE ;
             Text [ en-US ] = "Sho~w Comment" ;
+        };
+        MenuItem
+        {
+            Identifier = FID_HIDE_NOTE ;
+            HelpId = CMD_FID_HIDE_NOTE ;
+            Text [ en-US ] = "~Hide Comment" ;
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -614,9 +620,15 @@ Menu RID_POPUP_PAGEBREAK
          //------------------------------
         MenuItem
         {
-            Identifier = FID_NOTE_VISIBLE ;
-            HelpId = CMD_FID_NOTE_VISIBLE ;
+            Identifier = FID_SHOW_NOTE ;
+            HelpId = CMD_FID_SHOW_NOTE ;
             Text [ en-US ] = "Sho~w Comment" ;
+        };
+        MenuItem
+        {
+            Identifier = FID_HIDE_NOTE ;
+            HelpId = CMD_FID_HIDE_NOTE ;
+            Text [ en-US ] = "~Hide Comment" ;
         };
     };
 };

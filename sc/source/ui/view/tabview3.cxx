@@ -364,6 +364,8 @@ void ScTabView::SelectionChanged()
     rBindings.Invalidate( SID_CURRENTCELL );    // -> Navigator
     rBindings.Invalidate( SID_AUTO_FILTER );    // -> Menue
     rBindings.Invalidate( FID_NOTE_VISIBLE );
+    rBindings.Invalidate( FID_SHOW_NOTE );
+    rBindings.Invalidate( FID_HIDE_NOTE );
     rBindings.Invalidate( SID_DELETE_NOTE );
 
         //  Funktionen, die evtl disabled werden muessen

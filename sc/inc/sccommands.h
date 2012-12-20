@@ -66,6 +66,8 @@
 #define CMD_FID_TAB_MOVE                            ".uno:Move"
 #define CMD_SID_PREVIEW_NEXT                        ".uno:NextPage"
 #define CMD_FID_NOTE_VISIBLE                        ".uno:NoteVisible"
+#define CMD_FID_SHOW_NOTE                           ".uno:ShowNote"
+#define CMD_FID_HIDE_NOTE                           ".uno:HideNote"
 #define CMD_SID_DELETE_NOTE                         ".uno:DeleteNote"
 #define CMD_SID_MIRROR_HORIZONTAL                   ".uno:ObjectMirrorHorizontal"
 #define CMD_SID_MIRROR_VERTICAL                     ".uno:ObjectMirrorVertical"
