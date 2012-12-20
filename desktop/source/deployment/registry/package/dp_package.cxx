@@ -866,7 +866,7 @@ void BackendImpl::PackageImpl::processPackage_(
             try {
                 xPackage->registerPackage( startup, xSubAbortChannel, xCmdEnv );
             }
-            catch (const Exception & e)
+            catch (const Exception &)
             {
                //We even try a rollback if the user cancelled the action (CommandAbortedException)
                 //in order to prevent invalid database entries.
