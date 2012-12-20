@@ -656,6 +656,8 @@ void SvxFontPrevWindow::Paint( const Rectangle& )
             pImpl->aText = GetText();
         else if ( !pImpl->bSelection && !pImpl->bTextInited )
         {
+            using namespace com::sun::star::i18n::ScriptType;
+
             SfxViewShell* pSh = SfxViewShell::Current();
 
             if ( pSh && !pImpl->bGetSelection && !pImpl->bUseFontNameAsText )
@@ -668,8 +670,6 @@ void SvxFontPrevWindow::Paint( const Rectangle& )
 
             if ( !pImpl->bSelection || pImpl->bUseFontNameAsText )
             {
-                using namespace com::sun::star::i18n::ScriptType;
-
                 //If we're showing multiple sample texts, then they're all
                 //sample texts. If only showing Latin, continue to use
                 //the fontname as the preview
@@ -695,6 +695,11 @@ void SvxFontPrevWindow::Paint( const Rectangle& )
 
             if ( !pImpl->aText.Len() )
                 pImpl->aText = GetText();
+
+            if (!pImpl->aText.Len())
+            {   // fdo#58427: still no text? let's try that one...
+                pImpl->aText = makeRepresentativeTextForFont(LATIN, rFont);
+            }
 
             // remove line feeds and carriage returns from string
             bool bNotEmpty = false;
