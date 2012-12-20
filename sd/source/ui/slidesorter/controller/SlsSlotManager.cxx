@@ -527,9 +527,6 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
     rSet.Put( SfxBoolItem( SID_NOTESMODE, sal_False ) );
     rSet.Put( SfxBoolItem( SID_HANDOUTMODE, sal_False ) );
 
-    // Vorlagenkatalog darf nicht aufgerufen werden
-    rSet.DisableItem(SID_STYLE_CATALOG);
-
     if (pShell!=NULL && pShell->IsMainViewShell())
     {
         rSet.DisableItem(SID_SPELL_DIALOG);

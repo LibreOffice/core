@@ -47,7 +47,6 @@ $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/docinsert.hxx,sfx2/docinsert
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/dockwin.hxx,sfx2/dockwin.hxx))
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/docmacromode.hxx,sfx2/docmacromode.hxx))
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/docstoragemodifylistener.hxx,sfx2/docstoragemodifylistener.hxx))
-$(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/doctdlg.hxx,sfx2/doctdlg.hxx))
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/doctempl.hxx,sfx2/doctempl.hxx))
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/event.hxx,sfx2/event.hxx))
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/evntconf.hxx,sfx2/evntconf.hxx))

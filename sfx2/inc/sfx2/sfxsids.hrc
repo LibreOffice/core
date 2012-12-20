@@ -334,8 +334,6 @@
 // Floating Window Template
 #define SID_STYLE_DESIGNER                  (SID_SFX_START + 539)
 
-// Organizer
-#define SID_ORGANIZER                       (SID_SFX_START + 540)
 #define SID_TEMPLATE_ADDRESSBOKSOURCE       (SID_SFX_START + 1655)
 
 // Ruby dialog
@@ -379,7 +377,6 @@
 
 #define SID_ACTIVEDOCUMENT                  (SID_SFX_START + 570)
 #define SID_DEFAULTFILEPATH                 (SID_SFX_START + 571)
-#define SID_STYLE_CATALOG                   (SID_SFX_START + 573)
 #define SID_OBJECT                          (SID_SFX_START + 575)
 
 // Doc-Properties

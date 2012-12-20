@@ -96,9 +96,7 @@
 #include <sfx2/docfac.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
-#include "docvor.hxx"
 #include <sfx2/new.hxx>
-#include <sfx2/templdlg.hxx>
 #include "sfxtypes.hxx"
 #include <sfx2/tabdlg.hxx>
 #include "arrdecl.hxx"
@@ -598,17 +596,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         {
             SfxTemplateManagerDlg dlg;
             dlg.Execute();
-            bDone = true;
-            break;
-        }
-
-        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        case SID_ORGANIZER:
-        {
-            SfxTemplateOrganizeDlg  *pDlg =
-                new SfxTemplateOrganizeDlg(NULL);
-            pDlg->Execute();
-            delete pDlg;
             bDone = true;
             break;
         }

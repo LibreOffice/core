@@ -2352,11 +2352,6 @@
                     <value>1</value>
                 </prop>
             </node>
-            <node oor:name=".uno:Organizer" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Organize...</value>
-                </prop>
-            </node>
             <node oor:name=".uno:OutlineFormat" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Formatting On/Off</value>
@@ -2718,11 +2713,6 @@
             <node oor:name=".uno:OpenSmartTagMenuOnCursor" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Open Smart Tag Menu</value>
-                </prop>
-            </node>
-            <node oor:name=".uno:StyleCatalog" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Catalog...</value>
                 </prop>
             </node>
             <node oor:name=".uno:InsertImage" oor:op="replace">
@@ -5326,11 +5316,6 @@
             <node oor:name=".uno:ToolsMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">~Tools</value>
-                </prop>
-            </node>
-            <node oor:name=".uno:TemplateMenu" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Templates</value>
                 </prop>
             </node>
             <node oor:name=".uno:SpellingMenu" oor:op="replace">

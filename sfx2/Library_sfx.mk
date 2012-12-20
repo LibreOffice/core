@@ -193,11 +193,9 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/doc/docinsert \
     sfx2/source/doc/docmacromode \
     sfx2/source/doc/docstoragemodifylistener \
-    sfx2/source/doc/doctdlg \
     sfx2/source/doc/doctempl \
     sfx2/source/doc/doctemplates \
     sfx2/source/doc/doctemplateslocal \
-    sfx2/source/doc/docvor \
     sfx2/source/doc/frmdescr \
     sfx2/source/doc/graphhelp \
     sfx2/source/doc/guisaveas \
@@ -237,7 +235,6 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/view/frame2 \
     sfx2/source/view/frmload \
     sfx2/source/view/ipclient \
-    sfx2/source/view/orgmgr \
     sfx2/source/view/printer \
     sfx2/source/view/sfxbasecontroller \
     sfx2/source/view/userinputinterception \

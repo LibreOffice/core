@@ -55,7 +55,6 @@
 #include "fltfnc.hxx"
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfac.hxx>
-#include "docvor.hxx"
 #include <sfx2/doctempl.hxx>
 #include <sfx2/module.hxx>
 #include "sfx2/imgmgr.hxx"
@@ -91,7 +90,6 @@ static sal_uInt16 nLastItemId = USHRT_MAX;
 
 TYPEINIT0(SfxCommonTemplateDialog_Impl);
 TYPEINIT1(SfxTemplateDialog_Impl,SfxCommonTemplateDialog_Impl);
-TYPEINIT1(SfxTemplateCatalog_Impl,SfxCommonTemplateDialog_Impl);
 
 SFX_IMPL_DOCKINGWINDOW_WITHID(SfxTemplateDialogWrapper, SID_STYLE_DESIGNER)
 
@@ -226,21 +224,6 @@ SfxChildAlignment SfxTemplateDialog::CheckAlignment(SfxChildAlignment eActAlign,
         default:
             return eAlign;
     }
-}
-
-//-------------------------------------------------------------------------
-
-SfxTemplateCatalog::SfxTemplateCatalog(Window *pParent, SfxBindings *pBindings)
- : SfxModalDialog(pParent,SfxResId(RID_STYLECATALOG))
-{
-    pImpl = new SfxTemplateCatalog_Impl(pParent, pBindings, this);
-}
-
-//-------------------------------------------------------------------------
-
-SfxTemplateCatalog::~SfxTemplateCatalog()
-{
-    delete pImpl;
 }
 
 //-------------------------------------------------------------------------
@@ -2158,8 +2141,6 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, ApplyHdl, Control *, pControl )
                      GetSelectedEntry(), String(),
                      ( sal_uInt16 )GetFamilyItem_Impl()->GetFamily(),
                      0, 0, &nModifier );
-        if(ISA(SfxTemplateCatalog_Impl))
-            ((SfxTemplateCatalog_Impl*) this)->pReal->EndDialog(RET_OK);
     }
     ResetFocus();
     return 0;
@@ -2640,218 +2621,6 @@ IMPL_LINK( SfxTemplateDialog_Impl, MenuSelectHdl, Menu*, pMenu)
     return 0;
 }
 //-------------------------------------------------------------------------
-
-SfxTemplateCatalog_Impl::SfxTemplateCatalog_Impl( Window* /*pParent*/, SfxBindings* pB,
-                                                  SfxTemplateCatalog* pTmpWindow ) :
-
-    SfxCommonTemplateDialog_Impl( pB, pTmpWindow ),
-
-    aFamList    ( pTmpWindow, SfxResId( BT_TOOL ) ),
-    aOkBtn      ( pTmpWindow, SfxResId( BT_OK ) ),
-    aCancelBtn  ( pTmpWindow, SfxResId( BT_CANCEL ) ),
-    aNewBtn     ( pTmpWindow, SfxResId( BT_NEW ) ),
-    aChangeBtn  ( pTmpWindow, SfxResId( BT_EDIT ) ),
-    aDelBtn     ( pTmpWindow, SfxResId( BT_DEL ) ),
-    aOrgBtn     ( pTmpWindow, SfxResId( BT_ORG ) ),
-    aHelpBtn    ( pTmpWindow, SfxResId( BT_HELP ) ),
-    pReal       ( pTmpWindow ),
-    aHelper     ( pTmpWindow )
-
-{
-    aNewBtn.Disable();
-    aDelBtn.Disable();
-    aChangeBtn.Disable();
-
-    SFX_APP()->Get_Impl()->pTemplateCommon = GetISfxTemplateCommon();
-    pTmpWindow->FreeResource();
-
-    Initialize();
-
-    aFamList.SetSelectHdl(  LINK( this, SfxTemplateCatalog_Impl, FamListSelect ) );
-    aOkBtn.SetClickHdl(     LINK( this, SfxTemplateCatalog_Impl, OkHdl ) );
-    aCancelBtn.SetClickHdl( LINK( this, SfxTemplateCatalog_Impl, CancelHdl ) );
-    aNewBtn.SetClickHdl(    LINK( this, SfxTemplateCatalog_Impl, NewHdl ) );
-    aDelBtn.SetClickHdl(    LINK( this, SfxTemplateCatalog_Impl, DelHdl ) );
-    aChangeBtn.SetClickHdl( LINK( this, SfxTemplateCatalog_Impl, ChangeHdl ) );
-    aOrgBtn.SetClickHdl(    LINK( this, SfxTemplateCatalog_Impl, OrgHdl ) );
-}
-
-//-------------------------------------------------------------------------
-
-SfxTemplateCatalog_Impl::~SfxTemplateCatalog_Impl()
-{
-    SFX_APP()->Get_Impl()->pTemplateCommon = 0;
-}
-
-//-------------------------------------------------------------------------
-
-IMPL_LINK_INLINE_START( SfxTemplateCatalog_Impl, OkHdl, Button *, pButton )
-{
-    (void)pButton; //unused
-    ApplyHdl( NULL );
-    pReal->EndDialog( RET_OK );
-    return 0;
-}
-IMPL_LINK_INLINE_END( SfxTemplateCatalog_Impl, OkHdl, Button *, pButton )
-
-//-------------------------------------------------------------------------
-
-IMPL_LINK_INLINE_START( SfxTemplateCatalog_Impl, CancelHdl, Button *, pButton )
-{
-    (void)pButton; //unused
-    pReal->EndDialog( RET_CANCEL );
-    return 0;
-}
-IMPL_LINK_INLINE_END( SfxTemplateCatalog_Impl, CancelHdl, Button *, pButton )
-
-//-------------------------------------------------------------------------
-
-IMPL_LINK_INLINE_START( SfxTemplateCatalog_Impl, NewHdl, Button *, pButton )
-{
-    (void)pButton; //unused
-    aCancelBtn.SetText( SfxResId(STR_CLOSE).toString() );
-    SfxCommonTemplateDialog_Impl::NewHdl( NULL );
-    return 0;
-}
-IMPL_LINK_INLINE_END( SfxTemplateCatalog_Impl, NewHdl, Button *, pButton )
-
-//-------------------------------------------------------------------------
-
-IMPL_LINK_INLINE_START( SfxTemplateCatalog_Impl, ChangeHdl, Button *, pButton )
-{
-    (void)pButton; //unused
-    aCancelBtn.SetText( SfxResId(STR_CLOSE).toString() );
-    SfxCommonTemplateDialog_Impl::EditHdl( NULL );
-    return 0;
-}
-IMPL_LINK_INLINE_END( SfxTemplateCatalog_Impl, ChangeHdl, Button *, pButton )
-
-//-------------------------------------------------------------------------
-
-IMPL_LINK_INLINE_START( SfxTemplateCatalog_Impl, DelHdl, Button *, pButton )
-{
-    (void)pButton; //unused
-    SfxCommonTemplateDialog_Impl::DeleteHdl( NULL );
-    return 0;
-}
-IMPL_LINK_INLINE_END( SfxTemplateCatalog_Impl, DelHdl, Button *, pButton )
-
-//-------------------------------------------------------------------------
-
-IMPL_LINK( SfxTemplateCatalog_Impl, OrgHdl, Button *, pButton )
-{
-    (void)pButton; //unused
-    aCancelBtn.SetText( SfxResId(STR_CLOSE).toString() );
-    SfxDocumentTemplates aTemplates;
-    aTemplates.Construct();
-    SfxTemplateOrganizeDlg* pDlg = new SfxTemplateOrganizeDlg( pReal, &aTemplates );
-    const short nRet = pDlg->Execute();
-    delete pDlg;
-    if ( RET_OK == nRet )
-        Update_Impl();
-    else if ( RET_EDIT_STYLE == nRet )
-        pReal->EndDialog( RET_CANCEL );
-    return 0;
-}
-
-//-------------------------------------------------------------------------
-
-void SfxTemplateCatalog_Impl::EnableEdit( sal_Bool bEnable )
-{
-    SfxCommonTemplateDialog_Impl::EnableEdit( bEnable );
-    aChangeBtn.Enable( bEnable );
-}
-
-//-------------------------------------------------------------------------
-
-void SfxTemplateCatalog_Impl::EnableDel( sal_Bool bEnable )
-{
-    SfxCommonTemplateDialog_Impl::EnableDel( bEnable );
-    aDelBtn.Enable( bEnable );
-}
-
-void SfxTemplateCatalog_Impl::EnableNew(sal_Bool bEnable)
-{
-    SfxCommonTemplateDialog_Impl::EnableNew( bEnable );
-    aNewBtn.Enable( bEnable );
-}
-
-//-------------------------------------------------------------------------
-
-IMPL_LINK_INLINE_START( SfxTemplateCatalog_Impl, FamListSelect, ListBox *, pList )
-{
-    const sal_uInt16 nEntry = aFamIds[pList->GetSelectEntryPos()];
-    FamilySelect(nEntry);
-    return 0;
-}
-IMPL_LINK_INLINE_END( SfxTemplateCatalog_Impl, FamListSelect, ListBox *, pList )
-
-//-------------------------------------------------------------------------
-
-void SfxTemplateCatalog_Impl::EnableItem( sal_uInt16 nMesId, sal_Bool bCheck )
-{
-    if ( nMesId == SID_STYLE_WATERCAN )
-        aOkBtn.Enable( bCheck );
-    if ( nMesId > SFX_STYLE_FAMILY_PSEUDO || nMesId < SFX_STYLE_FAMILY_CHAR )
-        return;
-}
-
-//-------------------------------------------------------------------------
-
-void SfxTemplateCatalog_Impl::CheckItem(sal_uInt16 nMesId, sal_Bool /*bCheck*/)
-{
-    if ( nMesId > SFX_STYLE_FAMILY_PSEUDO || nMesId < SFX_STYLE_FAMILY_CHAR )
-        return;
-    sal_uInt16 i;
-    for ( i = 0; i < aFamIds.size() && aFamIds[i] != nMesId; i++ ) ;
-    aFamList.SelectEntryPos(i);
-}
-
-//-------------------------------------------------------------------------
-
-sal_Bool SfxTemplateCatalog_Impl::IsCheckedItem(sal_uInt16 nMesId)
-{
-    if ( nMesId > SFX_STYLE_FAMILY_PSEUDO || nMesId < SFX_STYLE_FAMILY_CHAR )
-        return sal_False;
-    sal_uInt16 i;
-    for ( i = 0; i < aFamIds.size() && aFamIds[i] != nMesId; i++ )
-        ;
-    return aFamList.IsEntrySelected( rtl::OUString::valueOf(static_cast<sal_Int32>(i)) );
-}
-
-//-------------------------------------------------------------------------
-// The list has only to master the disabling, since during his life time no
-// changes in selection can be made,
-void SfxTemplateCatalog_Impl::EnableFamilyItem( sal_uInt16 nId, sal_Bool bEnable )
-{
-    if ( !bEnable )
-        for ( sal_uInt16 nPos = aFamIds.size(); nPos--; )
-            if ( aFamIds[ nPos ] == nId )
-            {
-                aFamIds.erase( aFamIds.begin() + nPos );
-                aFamList.RemoveEntry( nPos );
-            }
-}
-
-void SfxTemplateCatalog_Impl::InsertFamilyItem( sal_uInt16 nId, const SfxStyleFamilyItem* pItem )
-{
-    if ( nId > SFX_STYLE_FAMILY_PSEUDO || nId < SFX_STYLE_FAMILY_CHAR )
-        return;
-    aFamList.InsertEntry( pItem->GetText(), 0 );
-    aFamIds.insert( aFamIds.begin(), nId );
-}
-
-void SfxTemplateCatalog_Impl::ClearFamilyList()
-{
-    aFamList.Clear();
-    aFamIds.clear();
-}
-
-void SfxTemplateCatalog_Impl::PrepareDeleteAction()
-{
-    aDelBtn.Disable();
-    aCancelBtn.SetText( SfxResId(STR_CLOSE).toString() );
-}
 
 
 void SfxCommonTemplateDialog_Impl::SetFamily( sal_uInt16 nId )

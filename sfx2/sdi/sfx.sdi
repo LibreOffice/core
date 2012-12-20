@@ -4646,31 +4646,6 @@ SfxVoidItem TemplateManager SID_TEMPLATE_MANAGER
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem Organizer SID_ORGANIZER
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_TEMPLATE;
-]
-
-//--------------------------------------------------------------------------
 SfxTemplateItem PageStyle SID_STYLE_FAMILY4
 
 [
@@ -6469,31 +6444,6 @@ SfxTemplateItem StyleApplyState SID_STYLE_APPLY
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_DOCUMENT;
-]
-
-//--------------------------------------------------------------------------
-SfxVoidItem StyleCatalog SID_STYLE_CATALOG
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_TEMPLATE;
 ]
 
 //--------------------------------------------------------------------------

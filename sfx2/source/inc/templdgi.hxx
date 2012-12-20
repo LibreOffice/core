@@ -323,57 +323,6 @@ public:
     ~SfxTemplateDialog_Impl();
 };
 
-// class SfxTemplateCatalog_Impl -----------------------------------------
-
-class SfxTemplateCatalog_Impl : public SfxCommonTemplateDialog_Impl
-{
-private:
-    friend class SfxTemplateControllerItem;
-    friend class SfxCommonTemplateDialog_Impl;
-
-    ListBox                 aFamList;
-    OKButton                aOkBtn;
-    CancelButton            aCancelBtn;
-    PushButton              aNewBtn;
-    PushButton              aChangeBtn;
-    PushButton              aDelBtn;
-    PushButton              aOrgBtn;
-    HelpButton              aHelpBtn;
-
-    SfxTemplateCatalog*     pReal;
-    std::vector<sal_uInt16> aFamIds;
-    SfxModalDefParentHelper aHelper;
-
-protected:
-    virtual void    EnableItem( sal_uInt16 nMesId, sal_Bool bCheck = sal_True );
-    virtual void    CheckItem( sal_uInt16 nMesId, sal_Bool bCheck = sal_True );
-    virtual sal_Bool    IsCheckedItem( sal_uInt16 nMesId );
-    virtual void    InsertFamilyItem( sal_uInt16 nId, const SfxStyleFamilyItem* pIten );
-    virtual void    EnableFamilyItem( sal_uInt16 nId, sal_Bool bEnabled = sal_True );
-    virtual void    ClearFamilyList();
-    virtual void    EnableEdit( sal_Bool = sal_True );
-    virtual void    EnableDel( sal_Bool = sal_True );
-    virtual void    EnableNew( sal_Bool = sal_True );
-
-        using SfxCommonTemplateDialog_Impl::NewHdl;
-    DECL_LINK( FamListSelect, ListBox * );
-    DECL_LINK( OkHdl, Button * );
-    DECL_LINK( CancelHdl, Button * );
-    DECL_LINK( NewHdl, Button * );
-    DECL_LINK( ChangeHdl, Button * );
-    DECL_LINK( DelHdl, Button * );
-    DECL_LINK( OrgHdl, Button * );
-
-public:
-    TYPEINFO();
-    SfxTemplateCatalog_Impl( Window* pParent, SfxBindings*, SfxTemplateCatalog* pWindow );
-    ~SfxTemplateCatalog_Impl();
-
-friend class SfxTemplateCatalog;
-
-    virtual void    PrepareDeleteAction();
-};
-
 #endif // #ifndef _SFX_TEMPDLGI_HXX
 
 

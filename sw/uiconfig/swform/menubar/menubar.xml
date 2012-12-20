@@ -58,13 +58,6 @@
       </menu:menu>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:SetDocumentProperties"/>
-      <menu:menu menu:id=".uno:TemplateMenu">
-        <menu:menupopup>
-          <menu:menuitem menu:id=".uno:Organizer"/>
-          <menu:menuitem menu:id=".uno:SaveAsTemplate"/>
-          <menu:menuitem menu:id=".uno:OpenTemplate"/>
-        </menu:menupopup>
-      </menu:menu>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:PrintPreview"/>
       <menu:menuitem menu:id=".uno:Print"/>

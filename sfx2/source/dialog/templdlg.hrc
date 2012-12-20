@@ -15,20 +15,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#define LB_FMT 3
-#define BTN_EDIT 11
-#define BTN_DELETE 12
 #define TB_ACTION 15
-#define BTN_NEW 10
-#define LB_FILTER 4
 
-#define BT_OK 1
-#define BT_CANCEL 2
-#define BT_ORG 3
-#define BT_DEL 4
-#define BT_EDIT 5
-#define BT_NEW 6
-#define BT_HELP 7
 #define BT_FLIST 8
 #define BT_VLIST 9
-#define BT_TOOL 10

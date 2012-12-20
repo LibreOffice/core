@@ -443,11 +443,6 @@ interface TextDrawText
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
-    SID_STYLE_CATALOG  // ole(no) api(play/rec)
-    [
-        StateMethod = StateDisableItems ;
-    ]
-
     SID_AUTOSPELL_CHECK
     [
         ExecMethod = Execute;

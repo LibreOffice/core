@@ -200,11 +200,6 @@ interface SlideSorterView
         ExecMethod = ExecCtrl ;
         StateMethod = GetMenuState ;
     ]
-    SID_STYLE_CATALOG // ole : no, status : ?
-    [
-        ExecMethod = FuTemporary ;
-        StateMethod = GetMenuState ;
-    ]
     SID_SLIDE_TRANSITIONS_PANEL // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;

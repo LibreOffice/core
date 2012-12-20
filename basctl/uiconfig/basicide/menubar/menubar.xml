@@ -32,13 +32,6 @@
             <menu:menuitem menu:id=".uno:CheckOut"/>
             <menu:menuitem menu:id=".uno:CancelCheckOut"/>
             <menu:menuitem menu:id=".uno:CheckIn"/>
-            <menu:menu menu:id=".uno:TemplateMenu">
-                <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:Organizer"/>
-                    <menu:menuitem menu:id=".uno:SaveAsTemplate"/>
-                    <menu:menuitem menu:id=".uno:OpenTemplate"/>
-                </menu:menupopup>
-            </menu:menu>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:Signature"/>
             <menu:menuseparator/>

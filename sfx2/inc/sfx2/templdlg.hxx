@@ -29,7 +29,6 @@
 #include <sfx2/basedlgs.hxx>
 
 class SfxTemplateDialog_Impl;
-class SfxTemplateCatalog_Impl;
 
 // class ISfxTemplateCommon ----------------------------------------------
 
@@ -66,19 +65,6 @@ public:
 
     ISfxTemplateCommon*         GetISfxTemplateCommon();
     void                        SetParagraphFamily();
-};
-
-// class SfxTemplateCatalog ----------------------------------------------
-
-class SfxTemplateCatalog : public SfxModalDialog
-{
-private:
-    SfxTemplateCatalog_Impl *pImpl;
-
-public:
-    SfxTemplateCatalog(Window * pParent, SfxBindings *pBindings);
-    ~SfxTemplateCatalog();
-    friend class SfxTemplateCatalog_Impl;
 };
 
 // class SfxTemplateDialogWrapper ----------------------------------------

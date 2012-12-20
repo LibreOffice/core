@@ -43,12 +43,6 @@ interface Annotation : _Annotation
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
-    SID_STYLE_CATALOG  // ole(no) api(play/rec)
-    [
-        StateMethod = StateDisableItems ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
-
     SID_TWAIN_SELECT
     [
         StateMethod = StateDisableItems ;
