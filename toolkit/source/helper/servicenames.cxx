@@ -92,8 +92,6 @@ const sal_Char __FAR_DATA szServiceName_AnimatedImagesControl[] = "com.sun.star.
 const sal_Char __FAR_DATA szServiceName_AnimatedImagesControlModel[] = "com.sun.star.awt.AnimatedImagesControlModel";
 const sal_Char __FAR_DATA szServiceName_SpinningProgressControlModel[] = "com.sun.star.awt.SpinningProgressControlModel";
 const sal_Char __FAR_DATA szServiceName_UnoSimpleAnimationControl[] = "com.sun.star.awt.UnoSimpleAnimationControl", szServiceName2_UnoSimpleAnimationControl[] = "com.sun.star.awt.UnoControlSimpleAnimation";
-const sal_Char __FAR_DATA szServiceName_UnoThrobberControlModel[] = "com.sun.star.awt.UnoThrobberControlModel", szServiceName2_UnoThrobberControlModel[] = "com.sun.star.awt.UnoControlThrobberModel";
-const sal_Char __FAR_DATA szServiceName_UnoThrobberControl[] = "com.sun.star.awt.UnoThrobberControl", szServiceName2_UnoThrobberControl[] = "com.sun.star.awt.UnoControlThrobber";
 const sal_Char __FAR_DATA szServiceName_UnoControlFixedHyperlink[] = "com.sun.star.awt.UnoControlFixedHyperlink";
 const sal_Char __FAR_DATA szServiceName_UnoControlFixedHyperlinkModel[] = "com.sun.star.awt.UnoControlFixedHyperlinkModel";
 const sal_Char __FAR_DATA szServiceName_GridControl[] = "com.sun.star.awt.grid.UnoControlGrid";

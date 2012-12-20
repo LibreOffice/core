@@ -29,7 +29,7 @@ import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XDialog;
 import com.sun.star.awt.XDialogEventHandler;
 import com.sun.star.awt.XDialogProvider2;
-import com.sun.star.awt.XThrobber;
+import com.sun.star.awt.XAnimation;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.uno.UnoRuntime;
@@ -210,7 +210,7 @@ public class WikiDialog implements XDialogEventHandler, XTopWindowListener
             XMultiServiceFactory xDialogFactory = ( XMultiServiceFactory ) UnoRuntime.queryInterface( XMultiServiceFactory.class, xDialogModel );
             if ( xDialogFactory != null )
             {
-                XControlModel xThrobberModel = (XControlModel)UnoRuntime.queryInterface( XControlModel.class, xDialogFactory.createInstance( "com.sun.star.awt.UnoThrobberControlModel" ) );
+                XControlModel xThrobberModel = (XControlModel)UnoRuntime.queryInterface( XControlModel.class, xDialogFactory.createInstance( "com.sun.star.awt.SpinningProgressControlModel" ) );
                 XPropertySet xThrobberProps = (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class, xThrobberModel );
                 if ( xThrobberProps != null )
                 {
@@ -239,13 +239,13 @@ public class WikiDialog implements XDialogEventHandler, XTopWindowListener
         {
             try
             {
-                XThrobber xThrobber = (XThrobber)UnoRuntime.queryInterface( XThrobber.class, m_xControlContainer.getControl( "WikiThrobber" ) );
+                XAnimation xThrobber = (XAnimation)UnoRuntime.queryInterface( XAnimation.class, m_xControlContainer.getControl( "WikiThrobber" ) );
                 if ( xThrobber != null )
                 {
                     if ( bActive )
-                        xThrobber.start();
+                        xThrobber.startAnimation();
                     else
-                        xThrobber.stop();
+                        xThrobber.stopAnimation();
                 }
             }
             catch( Exception e )

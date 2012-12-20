@@ -97,8 +97,6 @@ extern const sal_Char __FAR_DATA szServiceName_SortableGridDataModel[];
 
 extern const sal_Char __FAR_DATA szServiceName_UnoSimpleAnimationControl[], szServiceName2_UnoSimpleAnimationControl[];
 extern const sal_Char __FAR_DATA szServiceName_UnoSimpleAnimationControlModel[], szServiceName2_UnoSimpleAnimationControlModel[];
-extern const sal_Char __FAR_DATA szServiceName_UnoThrobberControl[], szServiceName2_UnoThrobberControl[];
-extern const sal_Char __FAR_DATA szServiceName_UnoThrobberControlModel[], szServiceName2_UnoThrobberControlModel[];
 extern const sal_Char __FAR_DATA szServiceName_AnimatedImagesControl[];
 extern const sal_Char __FAR_DATA szServiceName_AnimatedImagesControlModel[];
 extern const sal_Char __FAR_DATA szServiceName_SpinningProgressControlModel[];

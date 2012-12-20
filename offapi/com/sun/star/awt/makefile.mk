@@ -195,8 +195,6 @@ IDLFILES=\
     UnoControlSimpleAnimationModel.idl\
     UnoControlSpinButton.idl\
     UnoControlSpinButtonModel.idl\
-    UnoControlThrobber.idl\
-    UnoControlThrobberModel.idl\
     UnoControlTimeField.idl\
     UnoControlTimeFieldModel.idl\
     VclContainerEvent.idl\
@@ -290,7 +288,6 @@ IDLFILES=\
     SystemDependentXWindow.idl\
     XSimpleAnimation.idl\
     XSimpleTabController.idl\
-    XThrobber.idl\
     XTabController.idl\
     XTabControllerModel.idl\
         XTabListener.idl\

@@ -20,14 +20,14 @@
  *
  ***********************************************************-->
 <description xmlns="http://openoffice.org/extensions/description/2006" xmlns:d="http://openoffice.org/extensions/description/2006" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <version value="1.2.0"/>
+    <version value="1.2.1"/>
     <identifier value="@WIKIEXTENSIONID@"/>
     <display-name>
         <name lang="en-US">@WIKIEXTENSIONPRODUCTNAME@</name>
     </display-name>
     <registration>
         <simple-license accept-by="admin" default-license-id="lic-en-US">
-            <license-text xlink:href="license/LICENSE" lang="isocode" license-id="lic-isocode"/>
+            <license-text xlink:href="license/LICENSE" lang="en-US" license-id="lic-en-US"/>
         </simple-license>
     </registration>
     <dependencies>

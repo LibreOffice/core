@@ -192,3 +192,6 @@
 
 06/12/2012 (arielch): TaskID=121442
   Extend css::awt::XGraphics for StatusbarController implementation
+
+19/12/2012 (arielch): TaskID=121513
+  Remove deprecated AWT Throbber API
