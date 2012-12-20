@@ -2130,8 +2130,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             if( NS_sprm::LN_CHpsBi == nSprmId )
             {
                 rContext->Insert( PROP_CHAR_HEIGHT_COMPLEX, true, aVal );
-                // Also set Western, but don't overwrite it.
-                rContext->Insert( PROP_CHAR_HEIGHT, true, aVal, false );
             }
             else
             {
