@@ -85,8 +85,6 @@
 -o toolkit.UnoControlTimeField
 -o toolkit.UnoControlTimeFieldModel
 -o toolkit.UnoScrollBarControl
-#i86020 -o toolkit.UnoSimpleAnimationControl
-#i86021 -o toolkit.UnoSimpleAnimationControlModel
 -o toolkit.UnoSpinButtonControl
 -o toolkit.UnoSpinButtonControlModel
 #i86298 -o toolkit.UnoTreeControl

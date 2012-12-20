@@ -255,14 +255,6 @@
     <service name="com.sun.star.awt.UnoControlScrollBar"/>
     <service name="stardiv.vcl.control.ScrollBar"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoSimpleAnimationControl">
-    <service name="com.sun.star.awt.UnoControlSimpleAnimation"/>
-    <service name="com.sun.star.awt.UnoSimpleAnimationControl"/>
-  </implementation>
-  <implementation name="stardiv.Toolkit.UnoSimpleAnimationControlModel">
-    <service name="com.sun.star.awt.UnoControlSimpleAnimationModel"/>
-    <service name="com.sun.star.awt.UnoSimpleAnimationControlModel"/>
-  </implementation>
   <implementation name="org.openoffice.comp.toolkit.SpinningProgressControlModel">
     <service name="com.sun.star.awt.SpinningProgressControlModel"/>
   </implementation>

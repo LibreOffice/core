@@ -97,8 +97,6 @@ extern const sal_Char szServiceName_DefaultGridColumnModel[];
 extern const sal_Char szServiceName_GridColumn[];
 extern const sal_Char szServiceName_SortableGridDataModel[];
 
-extern const sal_Char szServiceName_UnoSimpleAnimationControl[], szServiceName2_UnoSimpleAnimationControl[];
-extern const sal_Char szServiceName_UnoSimpleAnimationControlModel[], szServiceName2_UnoSimpleAnimationControlModel[];
 extern const sal_Char szServiceName_AnimatedImagesControl[];
 extern const sal_Char szServiceName_AnimatedImagesControlModel[];
 extern const sal_Char szServiceName_SpinningProgressControlModel[];

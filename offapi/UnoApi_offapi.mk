@@ -573,8 +573,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/awt,\
 	UnoControlRoadmapModel \
 	UnoControlScrollBar \
 	UnoControlScrollBarModel \
-	UnoControlSimpleAnimation \
-	UnoControlSimpleAnimationModel \
 	UnoControlSpinButton \
 	UnoControlSpinButtonModel \
 	UnoControlTimeField \
@@ -1853,7 +1851,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/awt,\
 	XRequestCallback \
 	XReschedule \
 	XScrollBar \
-	XSimpleAnimation \
 	XSimpleTabController \
 	XSpinField \
 	XSpinListener \

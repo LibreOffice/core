@@ -92,8 +92,6 @@ const sal_Char szServiceName_UnoFrameModel[] = "com.sun.star.awt.UnoFrameModel";
 const sal_Char szServiceName_TreeControl[] = "com.sun.star.awt.tree.TreeControl";
 const sal_Char szServiceName_TreeControlModel[] = "com.sun.star.awt.tree.TreeControlModel";
 const sal_Char szServiceName_MutableTreeDataModel[] = "com.sun.star.awt.tree.MutableTreeDataModel";
-const sal_Char szServiceName_UnoSimpleAnimationControlModel[] = "com.sun.star.awt.UnoSimpleAnimationControlModel", szServiceName2_UnoSimpleAnimationControlModel[] = "com.sun.star.awt.UnoControlSimpleAnimationModel";
-const sal_Char szServiceName_UnoSimpleAnimationControl[] = "com.sun.star.awt.UnoSimpleAnimationControl", szServiceName2_UnoSimpleAnimationControl[] = "com.sun.star.awt.UnoControlSimpleAnimation";
 const sal_Char szServiceName_UnoControlFixedHyperlink[] = "com.sun.star.awt.UnoControlFixedHyperlink";
 const sal_Char szServiceName_UnoControlFixedHyperlinkModel[] = "com.sun.star.awt.UnoControlFixedHyperlinkModel";
 const sal_Char szServiceName_GridControl[] = "com.sun.star.awt.grid.UnoControlGrid";
