@@ -60,7 +60,7 @@ namespace dbaui
     DBG_NAME(ComposerDialog)
     //---------------------------------------------------------------------
     ComposerDialog::ComposerDialog(const Reference< XMultiServiceFactory >& _rxORB)
-        :ComposerDialog_BASE( _rxORB )
+        :OGenericUnoDialog( _rxORB )
     {
         DBG_CTOR(ComposerDialog,NULL);
 

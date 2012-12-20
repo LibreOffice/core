@@ -39,11 +39,10 @@ namespace dbaui
     //= ComposerDialog
     //=====================================================================
     class ComposerDialog;
-    typedef ::svt::OGenericUnoDialog                                    ComposerDialog_BASE;
     typedef ::comphelper::OPropertyArrayUsageHelper< ComposerDialog >  ComposerDialog_PBASE;
 
     class ComposerDialog
-            :public ComposerDialog_BASE
+            :public svt::OGenericUnoDialog
             ,public ComposerDialog_PBASE
     {
         OModuleClient m_aModuleClient;
