@@ -1514,7 +1514,32 @@
                     <!-- UIHint: Tools - Options - Spreadsheet - Formula -->
                     <info>
                         <author>Markus Mohrhard</author>
-                        <desc>Specifies whether to force a hard recalc after load</desc>
+                        <desc>Specifies whether to force a hard recalc after load on OOXML-based Excel documents (2007 and newer).</desc>
+                    </info>
+                    <constraints>
+                        <enumeration oor:value="0">
+                            <info>
+                                <desc>Recalc always</desc>
+                            </info>
+                        </enumeration>
+                        <enumeration oor:value="1">
+                            <info>
+                                <desc>Recalc never</desc>
+                            </info>
+                        </enumeration>
+                        <enumeration oor:value="2">
+                            <info>
+                                <desc>Ask before Recalc</desc>
+                            </info>
+                        </enumeration>
+                    </constraints>
+                    <value>1</value>
+                </prop>
+                <prop oor:name="ODFRecalcMode" oor:type="xs:int" oor:nillable="false">
+                    <!-- UIHint: Tools - Options - Spreadsheet - Formula -->
+                    <info>
+                        <author>Kohei Yoshida</author>
+                        <desc>Specifies whether to force a hard recalc after load on non-LibreOffice-generated ODF documents.</desc>
                     </info>
                     <constraints>
                         <enumeration oor:value="0">
