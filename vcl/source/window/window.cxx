@@ -4954,6 +4954,7 @@ void Window::StateChanged( StateChangedType eType )
         case STATE_CHANGE_STATE:
         case STATE_CHANGE_DATA:
         case STATE_CHANGE_INITSHOW:
+        case STATE_CHANGE_CONTROL_FOCUS:
             break;
         //stuff that does invalidate the layout
         default:
