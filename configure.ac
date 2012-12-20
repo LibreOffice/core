@@ -8380,10 +8380,10 @@ if test "$with_system_icu" = "yes"; then
     ICU_MINOR=`echo $ICU_VERSION | cut -d"." -f2`
     ICU_MICRO=`echo $ICU_VERSION | cut -d"." -f3`
 
-    if test "$ICU_MAJOR" -ge "4"; then
+    if test "$ICU_MAJOR" -ge "4" -a "$ICU_MINOR" -ge 6; then
         AC_MSG_RESULT([OK, $ICU_VERSION])
     else
-        AC_MSG_ERROR([not suitable, only >= 4.0 supported currently])
+        AC_MSG_ERROR([not suitable, only >= 4.6 supported currently])
     fi
 
     if test "$cross_compiling" = "yes" -a \( "$with_system_icu_for_build" = "yes" -o "$with_system_icu_for_build" = "force" \); then
