@@ -105,22 +105,47 @@ bool RewritePlugin::insertTextBefore( SourceLocation Loc, StringRef Str )
 
 bool RewritePlugin::removeText( SourceLocation Start, unsigned Length, RewriteOptions opts )
     {
-    if( rewriter.RemoveText( Start, Length, opts ))
-        return reportEditFailure( Start );
-    return true;
-    }
-
-bool RewritePlugin::removeText( CharSourceRange range, RewriteOptions opts )
-    {
-    if( rewriter.RemoveText( range, opts ))
-        return reportEditFailure( range.getBegin());
-    return true;
+    return removeText( SourceRange( Start, Start.getLocWithOffset( Length )), opts );
     }
 
 bool RewritePlugin::removeText( SourceRange range, RewriteOptions opts )
     {
+    if( opts.RemoveWholeStatement )
+        {
+        if( !adjustForWholeStatement( &range ))
+            return reportEditFailure( range.getBegin());
+        }
     if( rewriter.RemoveText( range, opts ))
         return reportEditFailure( range.getBegin());
+    return true;
+    }
+
+bool RewritePlugin::adjustForWholeStatement( SourceRange* range )
+    {
+    SourceManager& SM = rewriter.getSourceMgr();
+    SourceLocation fileStartLoc = SM.getLocForStartOfFile( SM.getFileID( range->getBegin()));
+    if( fileStartLoc.isInvalid())
+        return false;
+    bool invalid = false;
+    const char* fileBuf = SM.getCharacterData( fileStartLoc, &invalid );
+    if( invalid )
+        return false;
+    const char* startBuf = SM.getCharacterData( range->getBegin(), &invalid );
+    if( invalid )
+        return false;
+    const char* endBuf = SM.getCharacterData( range->getEnd(), &invalid );
+    if( invalid )
+        return false;
+    const char* startSpacePos = startBuf;
+    // do not skip \n here, RemoveLineIfEmpty can take care of that
+    --startSpacePos;
+    while( startSpacePos >= fileBuf && ( *startSpacePos == ' ' || *startSpacePos == '\t' ))
+        --startSpacePos;
+    const char* semiPos = strchr( endBuf, ';' );
+    if( semiPos == NULL )
+        return false;
+    *range = SourceRange( range->getBegin().getLocWithOffset( startSpacePos - startBuf + 1 ),
+        range->getEnd().getLocWithOffset( semiPos - endBuf + 1 ));
     return true;
     }
 
