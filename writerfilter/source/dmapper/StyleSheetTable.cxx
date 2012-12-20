@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+ #include <iostream>
 #include <resourcemodel/ResourceModelHelper.hxx>
 #include <StyleSheetTable.hxx>
 #include <dmapper/DomainMapper.hxx>
@@ -586,7 +587,6 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
             {
                 if (!m_pImpl->m_pCurrentEntry)
                     break;
-
                 TablePropertiesHandlerPtr pTblHandler( new TablePropertiesHandler( true ) );
                 pTblHandler->SetProperties( m_pImpl->m_pCurrentEntry->pProperties );
                 if ( !pTblHandler->sprm( rSprm ) )
@@ -595,6 +595,15 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
 
                     PropertyMapPtr pProps(new PropertyMap());
                     m_pImpl->m_rDMapper.sprmWithProps( rSprm, pProps );
+
+                    // Office ignores <w:sz> inside <rPr> for table style, so restore default value
+                    if (m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_TABLE) {
+                        if (nSprmId == NS_ooxml::LN_CT_Style_rPr) {
+                            uno::Any aVal = uno::makeAny( 20 );
+                            pProps->Insert( PROP_CHAR_HEIGHT, true, aVal );
+                            pProps->Insert( PROP_CHAR_HEIGHT_ASIAN, true, aVal );
+                        }
+                    }
 
                     m_pImpl->m_pCurrentEntry->pProperties->InsertProps(pProps);
 
