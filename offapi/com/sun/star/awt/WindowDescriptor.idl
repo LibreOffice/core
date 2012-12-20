@@ -95,7 +95,6 @@ published struct WindowDescriptor
             <li>simpleanimation</li>
             <li>spinbutton</li>
             <li>spinfield</li>
-            <li>throbber</li>
             <li>splitter</li>
             <li>splitwindow</li>
             <li>statusbar</li>

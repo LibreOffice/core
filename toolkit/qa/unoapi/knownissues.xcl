@@ -128,14 +128,6 @@ toolkit.UnoSimpleAnimationControl
 toolkit.UnoSimpleAnimationControlModel
 # -> disabled in toolkit.sce
 
-### i86022 ###
-toolkit.UnoThrobberControl
-# -> disabled in toolkit.sce
-
-### i86023 ###
-toolkit.UnoThrobberControlModel
-# -> disabled in toolkit.sce
-
 ### i86298 ###
 toolkit.UnoTreeControl
 # -> disabled in toolkit.sce
@@ -159,7 +151,6 @@ toolkit.UnoControlListBox::com::sun::star::awt::XView
 toolkit.UnoControlEdit::com::sun::star::awt::XView
 toolkit.UnoControlImageControl::com::sun::star::awt::XView
 toolkit.UnoControlDialog::com::sun::star::awt::XView
-toolkit.UnoThrobberControl::com::sun::star::awt::XView
 toolkit.UnoControlFileControl::com::sun::star::awt::XView
 toolkit.UnoControlCurrencyField::com::sun::star::awt::XView
 toolkit.UnoSimpleAnimationControl::com::sun::star::awt::XView
@@ -195,7 +186,6 @@ toolkit.UnoControlContainer::com::sun::star::lang::XComponent
 toolkit.UnoControlFixedText::com::sun::star::lang::XComponent
 toolkit.UnoControlListBox::com::sun::star::lang::XComponent
 toolkit.UnoControlCheckBoxModel::com::sun::star::lang::XComponent
-toolkit.UnoThrobberControlModel::com::sun::star::lang::XComponent
 toolkit.UnoControlEditModel::com::sun::star::lang::XComponent
 toolkit.UnoControlEdit::com::sun::star::lang::XComponent
 toolkit.UnoControlImageControl::com::sun::star::lang::XComponent
@@ -204,7 +194,6 @@ toolkit.UnoControlGroupBoxModel::com::sun::star::lang::XComponent
 toolkit.UnoControlImageControlModel::com::sun::star::lang::XComponent
 toolkit.UnoControlNumericFieldModel::com::sun::star::lang::XComponent
 toolkit.UnoSimpleAnimationControlModel::com::sun::star::lang::XComponent
-toolkit.UnoThrobberControl::com::sun::star::lang::XComponent
 toolkit.UnoControlFileControl::com::sun::star::lang::XComponent
 toolkit.UnoControlCurrencyField::com::sun::star::lang::XComponent
 toolkit.UnoControlComboBoxModel::com::sun::star::lang::XComponent

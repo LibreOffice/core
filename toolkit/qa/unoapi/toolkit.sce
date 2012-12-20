@@ -89,7 +89,5 @@
 #i86021 -o toolkit.UnoSimpleAnimationControlModel
 -o toolkit.UnoSpinButtonControl
 -o toolkit.UnoSpinButtonControlModel
-#i86022 -o toolkit.UnoThrobberControl
-#i86023 -o toolkit.UnoThrobberControlModel
 #i86298 -o toolkit.UnoTreeControl
 -o toolkit.UnoTreeModel

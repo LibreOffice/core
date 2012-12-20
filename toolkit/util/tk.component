@@ -278,14 +278,6 @@
   <implementation name="stardiv.Toolkit.UnoSpinButtonModel">
     <service name="com.sun.star.awt.UnoControlSpinButtonModel"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoThrobberControl">
-    <service name="com.sun.star.awt.UnoControlThrobber"/>
-    <service name="com.sun.star.awt.UnoThrobberControl"/>
-  </implementation>
-  <implementation name="stardiv.Toolkit.UnoThrobberControlModel">
-    <service name="com.sun.star.awt.UnoControlThrobberModel"/>
-    <service name="com.sun.star.awt.UnoThrobberControlModel"/>
-  </implementation>
   <implementation name="stardiv.Toolkit.UnoTimeFieldControl">
     <service name="com.sun.star.awt.UnoControlTimeField"/>
     <service name="stardiv.vcl.control.TimeField"/>

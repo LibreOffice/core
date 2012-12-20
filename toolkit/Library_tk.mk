@@ -70,7 +70,6 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/awt/vclxwindow1 \
     toolkit/source/awt/vclxwindows \
     toolkit/source/awt/xsimpleanimation \
-    toolkit/source/awt/xthrobber \
     toolkit/source/controls/accessiblecontrolcontext \
     toolkit/source/controls/controlmodelcontainerbase \
     toolkit/source/controls/dialogcontrol \
@@ -92,7 +91,6 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/controls/tkscrollbar \
     toolkit/source/controls/tksimpleanimation \
     toolkit/source/controls/tkspinbutton \
-    toolkit/source/controls/tkthrobber \
     toolkit/source/controls/animatedimages \
     toolkit/source/controls/spinningprogress \
     toolkit/source/controls/tree/treecontrol \

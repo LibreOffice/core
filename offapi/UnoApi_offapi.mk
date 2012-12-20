@@ -577,8 +577,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/awt,\
 	UnoControlSimpleAnimationModel \
 	UnoControlSpinButton \
 	UnoControlSpinButtonModel \
-	UnoControlThrobber \
-	UnoControlThrobberModel \
 	UnoControlTimeField \
 	UnoControlTimeFieldModel \
 ))
@@ -1874,7 +1872,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/awt,\
 	XTextEditField \
 	XTextLayoutConstrains \
 	XTextListener \
-	XThrobber \
 	XTimeField \
 	XToggleButton \
 	XToolkit \

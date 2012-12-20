@@ -89,7 +89,7 @@ STD_RES_FILE( gid_File_Res_Cui, cui )
 
 STD_RES_FILE( gid_File_Res_Sw, sw )
 
-STD_RES_FILE( gid_File_Res_Tk, tk )
+
 STD_RES_FILE( gid_File_Res_Acc, acc )
 
 STD_RES_FILE( gid_File_Res_Tpl, tpl )

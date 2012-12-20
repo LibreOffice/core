@@ -20,7 +20,6 @@
 $(eval $(call gb_Module_Module,toolkit))
 
 $(eval $(call gb_Module_add_targets,toolkit,\
-    AllLangResTarget_tk \
     Library_tk \
 ))
 
