@@ -29,8 +29,6 @@ namespace oox {
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::uno;
 
-using ::rtl::OUString;
-
 namespace {
 
 const sal_Int32 PROGRESS_RANGE      = 1000000;
