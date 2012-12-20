@@ -653,7 +653,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
     bool                    bSilent = false;
 
     // does the function have been called by the user interface or by an API call
-    sal_Bool bIsAPI = rReq.IsAPI();
+    sal_Bool bIsAPI = rReq.GetArgs() && rReq.GetArgs()->Count();
     if ( bIsAPI )
     {
         // the function have been called by the API
