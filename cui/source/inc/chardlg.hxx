@@ -48,7 +48,6 @@ class SvxCharBasePage : public SfxTabPage
 {
 protected:
     SvxFontPrevWindow*  m_pPreviewWin;
-    FixedText*          m_pFontTypeFT;
 
     sal_Bool                m_bPreviewBackgroundToCharacter;
 
@@ -88,6 +87,7 @@ private:
     FontSizeBox*        m_pWestFontSizeLB;
     FixedText*          m_pWestFontLanguageFT;
     SvxLanguageBox*     m_pWestFontLanguageLB;
+    FixedText*          m_pWestFontTypeFT;
 
     VclContainer*       m_pEastFrame;
     FixedText*          m_pEastFontNameFT;
@@ -98,6 +98,7 @@ private:
     FontSizeBox*        m_pEastFontSizeLB;
     FixedText*          m_pEastFontLanguageFT;
     SvxLanguageBox*     m_pEastFontLanguageLB;
+    FixedText*          m_pEastFontTypeFT;
 
     VclContainer*       m_pCTLFrame;
     FixedText*          m_pCTLFontNameFT;
@@ -108,6 +109,7 @@ private:
     FontSizeBox*        m_pCTLFontSizeLB;
     FixedText*          m_pCTLFontLanguageFT;
     SvxLanguageBox*     m_pCTLFontLanguageLB;
+    FixedText*          m_pCTLFontTypeFT;
 
     SvxCharNamePage_Impl*   m_pImpl;
 

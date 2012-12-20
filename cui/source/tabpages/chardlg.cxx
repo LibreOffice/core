@@ -301,6 +301,7 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet )
 
         get(m_pWestFontLanguageFT, "westlangft-cjk");
         get(m_pWestFontLanguageLB, "westlanglb-cjk");
+        get(m_pWestFontTypeFT, "westfontinfo-cjk");
     }
     else
     {
@@ -314,6 +315,7 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet )
 
         get(m_pWestFontLanguageFT, "westlangft-nocjk");
         get(m_pWestFontLanguageLB, "westlanglb-nocjk");
+        get(m_pWestFontTypeFT, "westfontinfo-nocjk");
     }
 
     get(m_pEastFrame, "asian");
@@ -325,6 +327,7 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet )
     get(m_pEastFontSizeLB, "eastsizelb");
     get(m_pEastFontLanguageFT, "eastlangft");
     get(m_pEastFontLanguageLB, "eastlanglb");
+    get(m_pEastFontTypeFT, "eastfontinfo");
 
     get(m_pCTLFrame, "ctl");
     get(m_pCTLFontNameFT, "ctlfontnameft");
@@ -335,6 +338,7 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet )
     get(m_pCTLFontSizeLB, "ctlsizelb");
     get(m_pCTLFontLanguageFT, "ctllangft");
     get(m_pCTLFontLanguageLB, "ctllanglb");
+    get(m_pCTLFontTypeFT, "ctlfontinfo");
 
     //In MacOSX the standard dialogs name font-name, font-style as
     //Family, Typeface
@@ -365,7 +369,6 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet )
     m_pCTLFrame->Show(bShowCTL);
 
     get(m_pPreviewWin, "preview");
-    get(m_pFontTypeFT, "fontinfo");
 
     m_pWestFontLanguageLB->SetLanguageList(LANG_LIST_WESTERN, sal_True, sal_False, sal_True);
     m_pEastFontLanguageLB->SetLanguageList(LANG_LIST_CJK, sal_True, sal_False, sal_True);
@@ -538,15 +541,25 @@ void SvxCharNamePage::UpdatePreview_Impl()
     // Font
     const FontList* pFontList = GetFontList();
 
-    FontInfo aFontInfo =
-        calcFontInfo(rFont,this,m_pWestFontNameLB,m_pWestFontStyleLB,m_pWestFontSizeLB,m_pWestFontLanguageLB,pFontList,GetWhich( SID_ATTR_CHAR_FONT ),GetWhich( SID_ATTR_CHAR_FONTHEIGHT ));
+    FontInfo aWestFontInfo = calcFontInfo(rFont, this, m_pWestFontNameLB,
+        m_pWestFontStyleLB, m_pWestFontSizeLB, m_pWestFontLanguageLB,
+        pFontList, GetWhich(SID_ATTR_CHAR_FONT),
+        GetWhich(SID_ATTR_CHAR_FONTHEIGHT));
+    m_pWestFontTypeFT->SetText(pFontList->GetFontMapText(aWestFontInfo));
 
-    calcFontInfo(rCJKFont,this,m_pEastFontNameLB,m_pEastFontStyleLB,m_pEastFontSizeLB,m_pEastFontLanguageLB,pFontList,GetWhich( SID_ATTR_CHAR_CJK_FONT ),GetWhich( SID_ATTR_CHAR_CJK_FONTHEIGHT ));
+    FontInfo aEastFontInfo = calcFontInfo(rCJKFont, this, m_pEastFontNameLB,
+        m_pEastFontStyleLB, m_pEastFontSizeLB, m_pEastFontLanguageLB,
+        pFontList, GetWhich(SID_ATTR_CHAR_CJK_FONT),
+        GetWhich(SID_ATTR_CHAR_CJK_FONTHEIGHT));
+    m_pEastFontTypeFT->SetText(pFontList->GetFontMapText(aEastFontInfo));
 
-    calcFontInfo(rCTLFont,this,m_pCTLFontNameLB,m_pCTLFontStyleLB,m_pCTLFontSizeLB,m_pCTLFontLanguageLB,pFontList,GetWhich( SID_ATTR_CHAR_CTL_FONT ),GetWhich( SID_ATTR_CHAR_CTL_FONTHEIGHT ));
+    FontInfo aCTLFontInfo = calcFontInfo(rCTLFont,
+        this, m_pCTLFontNameLB, m_pCTLFontStyleLB, m_pCTLFontSizeLB,
+        m_pCTLFontLanguageLB, pFontList, GetWhich(SID_ATTR_CHAR_CTL_FONT),
+        GetWhich(SID_ATTR_CHAR_CTL_FONTHEIGHT));
+    m_pCTLFontTypeFT->SetText(pFontList->GetFontMapText(aCTLFontInfo));
 
     m_pPreviewWin->Invalidate();
-    m_pFontTypeFT->SetText( pFontList->GetFontMapText( aFontInfo ) );
 }
 
 // -----------------------------------------------------------------------
@@ -822,9 +835,21 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
         }
     }
 
-    if ( Western == eLangGrp )
-        m_pFontTypeFT->SetText( pFontList->GetFontMapText(
-            pFontList->Get( pNameBox->GetText(), pStyleBox->GetText() ) ) );
+    OUString sMapText(pFontList->GetFontMapText(
+        pFontList->Get(pNameBox->GetText(), pStyleBox->GetText())));
+
+    switch (eLangGrp)
+    {
+        case Western:
+            m_pWestFontTypeFT->SetText(sMapText);
+            break;
+        case Asian:
+            m_pEastFontTypeFT->SetText(sMapText);
+            break;
+        case Ctl:
+            m_pCTLFontTypeFT->SetText(sMapText);
+            break;
+    }
 
     // save these settings
     pNameBox->SaveValue();
