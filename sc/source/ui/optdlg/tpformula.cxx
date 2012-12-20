@@ -63,7 +63,10 @@ ScTpFormulaOptions::ScTpFormulaOptions(Window* pParent, const SfxItemSet& rCoreA
     maEdSepArrayRow(this, ScResId(ED_FORMULA_SEP_ARRAY_R)),
     maBtnSepReset(this, ScResId(BTN_FORMULA_SEP_RESET)),
     maFlRecalcOptions(this, ScResId(FL_RECALC_OPTIONS)),
-    maLbOOXMLRecalcOptions( this, ScResId(LB_OOXML_RECALC)),
+    maFtOOXMLRecalc(this, ScResId(FT_OOXML_RECALC)),
+    maLbOOXMLRecalcOptions(this, ScResId(LB_OOXML_RECALC)),
+    maFtODFRecalc(this, ScResId(FT_ODF_RECALC)),
+    maLbODFRecalcOptions(this, ScResId(LB_ODF_RECALC)),
     mnDecSep(0)
 {
     maLbFormulaSyntax.InsertEntry(ScResId(SCSTR_FORMULA_SYNTAX_CALC_A1).toString());
@@ -248,7 +251,8 @@ sal_Bool ScTpFormulaOptions::FillItemSet(SfxItemSet& rCoreSet)
     OUString aSep             = maEdSepFuncArg.GetText();
     OUString aSepArrayCol     = maEdSepArrayCol.GetText();
     OUString aSepArrayRow     = maEdSepArrayRow.GetText();
-    sal_Int16 aOOXMLRecalcMode = maLbOOXMLRecalcOptions.GetSelectEntryPos();
+    sal_Int16 nOOXMLRecalcMode = maLbOOXMLRecalcOptions.GetSelectEntryPos();
+    sal_Int16 nODFRecalcMode = maLbODFRecalcOptions.GetSelectEntryPos();
 
     if (maBtnCustomCalcDefault.IsChecked())
     {
@@ -261,7 +265,8 @@ sal_Bool ScTpFormulaOptions::FillItemSet(SfxItemSet& rCoreSet)
          || static_cast<OUString>(maEdSepFuncArg.GetSavedValue()) != aSep
          || static_cast<OUString>(maEdSepArrayCol.GetSavedValue()) != aSepArrayCol
          || static_cast<OUString>(maEdSepArrayRow.GetSavedValue()) != aSepArrayRow
-         || maLbOOXMLRecalcOptions.GetSavedValue() != aOOXMLRecalcMode
+         || maLbOOXMLRecalcOptions.GetSavedValue() != nOOXMLRecalcMode
+         || maLbODFRecalcOptions.GetSavedValue() != nODFRecalcMode
          || maSavedConfig != maCurrentConfig )
     {
         ::formula::FormulaGrammar::Grammar eGram = ::formula::FormulaGrammar::GRAM_DEFAULT;
@@ -279,19 +284,8 @@ sal_Bool ScTpFormulaOptions::FillItemSet(SfxItemSet& rCoreSet)
         break;
         }
 
-        ScRecalcOptions eOOXMLRecalc = RECALC_ASK;
-        switch (aOOXMLRecalcMode)
-        {
-            case 0:
-                eOOXMLRecalc = RECALC_ALWAYS;
-                break;
-            case 1:
-                eOOXMLRecalc = RECALC_NEVER;
-                break;
-            case 2:
-                eOOXMLRecalc = RECALC_ASK;
-                break;
-        };
+        ScRecalcOptions eOOXMLRecalc = static_cast<ScRecalcOptions>(nOOXMLRecalcMode);
+        ScRecalcOptions eODFRecalc = static_cast<ScRecalcOptions>(nODFRecalcMode);
 
         aOpt.SetFormulaSyntax(eGram);
         aOpt.SetUseEnglishFuncName(bEnglishFuncName);
@@ -300,6 +294,7 @@ sal_Bool ScTpFormulaOptions::FillItemSet(SfxItemSet& rCoreSet)
         aOpt.SetFormulaSepArrayRow(aSepArrayRow);
         aOpt.SetCalcConfig(maCurrentConfig);
         aOpt.SetOOXMLRecalcOptions(eOOXMLRecalc);
+        aOpt.SetODFRecalcOptions(eODFRecalc);
 
         rCoreSet.Put( ScTpFormulaItem( SID_SCFORMULAOPTIONS, aOpt ) );
         bRet = true;
@@ -336,21 +331,12 @@ void ScTpFormulaOptions::Reset(const SfxItemSet& rCoreSet)
     maLbFormulaSyntax.SaveValue();
 
     ScRecalcOptions eOOXMLRecalc = aOpt.GetOOXMLRecalcOptions();
-
-    switch (eOOXMLRecalc)
-    {
-        case RECALC_ALWAYS:
-            maLbOOXMLRecalcOptions.SelectEntryPos(0);
-            break;
-        case RECALC_NEVER:
-            maLbOOXMLRecalcOptions.SelectEntryPos(1);
-            break;
-        case RECALC_ASK:
-            maLbOOXMLRecalcOptions.SelectEntryPos(2);
-            break;
-    }
-
+    maLbOOXMLRecalcOptions.SelectEntryPos(static_cast<sal_uInt16>(eOOXMLRecalc));
     maLbOOXMLRecalcOptions.SaveValue();
+
+    ScRecalcOptions eODFRecalc = aOpt.GetODFRecalcOptions();
+    maLbODFRecalcOptions.SelectEntryPos(static_cast<sal_uInt16>(eODFRecalc));
+    maLbODFRecalcOptions.SaveValue();
 
     // english function name.
     maCbEnglishFuncName.Check( aOpt.GetUseEnglishFuncName() );

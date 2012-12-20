@@ -49,6 +49,7 @@ private:
     ::rtl::OUString aFormulaSepArrayCol;
 
     ScRecalcOptions meOOXMLRecalc;
+    ScRecalcOptions meODFRecalc;
 
 public:
     ScFormulaOptions();
@@ -78,6 +79,9 @@ public:
 
     void SetOOXMLRecalcOptions( ScRecalcOptions eOpt ) { meOOXMLRecalc = eOpt; }
     ScRecalcOptions GetOOXMLRecalcOptions() const { return meOOXMLRecalc; }
+
+    void SetODFRecalcOptions( ScRecalcOptions eOpt ) { meODFRecalc = eOpt; }
+    ScRecalcOptions GetODFRecalcOptions() const { return meODFRecalc; }
 
     void ResetFormulaSeparators();
 

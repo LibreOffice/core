@@ -76,7 +76,10 @@ private:
     PushButton maBtnSepReset;
 
     FixedLine maFlRecalcOptions;
+    FixedText maFtOOXMLRecalc;
     ListBox maLbOOXMLRecalcOptions;
+    FixedText maFtODFRecalc;
+    ListBox maLbODFRecalcOptions;
 
     /** Stores old separator value of currently focused separator edit box.
         This value is used to revert undesired value change. */

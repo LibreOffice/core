@@ -291,9 +291,38 @@ TabPage RID_SCPAGE_FORMULA
         Size = MAP_APPFONT( 248, 8 );
         Text [ en-US ] = "Recalculation on file load";
     };
+
+    FixedText FT_OOXML_RECALC
+    {
+        Pos = MAP_APPFONT ( 21, 149 );
+        Size = MAP_APPFONT ( 120, 8 );
+        Text [ en-US ] = "Excel 2007 and newer";
+    };
+
     ListBox LB_OOXML_RECALC
     {
-        Pos = MAP_APPFONT( 21, 147 );
+        Pos = MAP_APPFONT( 151, 147 );
+        Size = MAP_APPFONT( 80, 50 );
+        Border = TRUE;
+        DropDown = TRUE;
+        StringList [ en-US ] =
+        {
+            "Always recalculate";
+            "Never recalculate";
+            "Prompt user";
+        };
+    };
+
+    FixedText FT_ODF_RECALC
+    {
+        Pos = MAP_APPFONT ( 21, 165 );
+        Size = MAP_APPFONT ( 120, 8 );
+        Text [ en-US ] = "ODF Spreadsheet (not saved by LibreOffice)";
+    };
+
+    ListBox LB_ODF_RECALC
+    {
+        Pos = MAP_APPFONT( 151, 163 );
         Size = MAP_APPFONT( 80, 50 );
         Border = TRUE;
         DropDown = TRUE;

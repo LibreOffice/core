@@ -59,7 +59,8 @@ ScFormulaOptions::ScFormulaOptions( const ScFormulaOptions& rCpy ) :
     aFormulaSepArg      ( rCpy.aFormulaSepArg ),
     aFormulaSepArrayRow ( rCpy.aFormulaSepArrayRow ),
     aFormulaSepArrayCol ( rCpy.aFormulaSepArrayCol ),
-    meOOXMLRecalc       ( rCpy.meOOXMLRecalc )
+    meOOXMLRecalc       ( rCpy.meOOXMLRecalc ),
+    meODFRecalc         ( rCpy.meODFRecalc )
 {
 }
 
@@ -72,6 +73,7 @@ void ScFormulaOptions::SetDefaults()
     bUseEnglishFuncName = false;
     eFormulaGrammar     = ::formula::FormulaGrammar::GRAM_NATIVE;
     meOOXMLRecalc = RECALC_ASK;
+    meODFRecalc = RECALC_ASK;
 
     // unspecified means use the current formula syntax.
     aCalcConfig.reset();
@@ -151,6 +153,7 @@ ScFormulaOptions& ScFormulaOptions::operator=( const ScFormulaOptions& rCpy )
     aFormulaSepArrayRow = rCpy.aFormulaSepArrayRow;
     aFormulaSepArrayCol = rCpy.aFormulaSepArrayCol;
     meOOXMLRecalc       = rCpy.meOOXMLRecalc;
+    meODFRecalc         = rCpy.meODFRecalc;
     return *this;
 }
 
@@ -162,7 +165,8 @@ bool ScFormulaOptions::operator==( const ScFormulaOptions& rOpt ) const
         && aFormulaSepArg      == rOpt.aFormulaSepArg
         && aFormulaSepArrayRow == rOpt.aFormulaSepArrayRow
         && aFormulaSepArrayCol == rOpt.aFormulaSepArrayCol
-        && meOOXMLRecalc       == rOpt.meOOXMLRecalc;
+        && meOOXMLRecalc       == rOpt.meOOXMLRecalc
+        && meODFRecalc         == rOpt.meODFRecalc;
 }
 
 bool ScFormulaOptions::operator!=( const ScFormulaOptions& rOpt ) const
@@ -219,7 +223,8 @@ SfxPoolItem* ScTpFormulaItem::Clone( SfxItemPool * ) const
 #define SCFORMULAOPT_STRING_REF_SYNTAX    5
 #define SCFORMULAOPT_EMPTY_STRING_AS_ZERO 6
 #define SCFORMULAOPT_OOXML_RECALC         7
-#define SCFORMULAOPT_COUNT                8
+#define SCFORMULAOPT_ODF_RECALC           8
+#define SCFORMULAOPT_COUNT                9
 
 Sequence<OUString> ScFormulaCfg::GetPropertyNames()
 {
@@ -233,6 +238,7 @@ Sequence<OUString> ScFormulaCfg::GetPropertyNames()
         "Syntax/StringRefAddressSyntax", // SCFORMULAOPT_STRING_REF_SYNTAX
         "Syntax/EmptyStringAsZero",      // SCFORMULAOPT_EMPTY_STRING_AS_ZERO
         "Load/OOXMLRecalcMode",          // SCFORMULAOPT_OOXML_RECALC
+        "Load/ODFRecalcMode",            // SCFORMULAOPT_ODF_RECALC
     };
     Sequence<OUString> aNames(SCFORMULAOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -380,6 +386,30 @@ ScFormulaCfg::ScFormulaCfg() :
                     SetOOXMLRecalcOptions(eOpt);
                 }
                 break;
+                case SCFORMULAOPT_ODF_RECALC:
+                {
+                    ScRecalcOptions eOpt = RECALC_ASK;
+                    if (pValues[nProp] >>= nIntVal)
+                    {
+                        switch (nIntVal)
+                        {
+                            case 0:
+                                eOpt = RECALC_ALWAYS;
+                                break;
+                            case 1:
+                                eOpt = RECALC_NEVER;
+                                break;
+                            case 2:
+                                eOpt = RECALC_ASK;
+                                break;
+                            default:
+                                SAL_WARN("sc", "unknown odf recalc option!");
+                        }
+                    }
+
+                    SetODFRecalcOptions(eOpt);
+                }
+                break;
                 default:
                     ;
                 }
@@ -448,6 +478,25 @@ void ScFormulaCfg::Commit()
             {
                 sal_Int32 nVal = 2;
                 switch (GetOOXMLRecalcOptions())
+                {
+                    case RECALC_ALWAYS:
+                        nVal = 0;
+                        break;
+                    case RECALC_NEVER:
+                        nVal = 1;
+                        break;
+                    case RECALC_ASK:
+                        nVal = 2;
+                        break;
+                }
+
+                pValues[nProp] <<= nVal;
+            }
+            break;
+            case SCFORMULAOPT_ODF_RECALC:
+            {
+                sal_Int32 nVal = 2;
+                switch (GetODFRecalcOptions())
                 {
                     case RECALC_ALWAYS:
                         nVal = 0;
