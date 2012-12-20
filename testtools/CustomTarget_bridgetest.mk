@@ -48,8 +48,8 @@ $(testtools_BRIDGEDIR)/bridgetest_server$(testtools_BATCHSUFFIX) :| $(testtools_
 		"-s com.sun.star.test.bridge.CppTestObject" \
 		"-u 'uno:socket$(COMMA)host=127.0.0.1$(COMMA)port=2002;urp;test'" \
 		"--singleaccept" \
-		"-env:UNO_SERVICES='$(call gb_Helper_make_url,$(call gb_Rdb_get_outdir_target,ure/services)) $(call gb_Helper_make_url,$(call gb_Rdb_get_outdir_target,uno_services))'" \
-		"-env:UNO_TYPES='$(call gb_Helper_make_url,$(call gb_UnoApiMerge_get_target,ure/types)) $(call gb_Helper_make_url,$(WORKDIR)/UnoApiTarget/bridgetest.rdb)'" \
+		"-env:URE_MORE_SERVICES=$(call gb_Helper_make_url,$(call gb_Rdb_get_outdir_target,uno_services))" \
+		"-env:URE_MORE_TYPES=$(call gb_Helper_make_url,$(WORKDIR)/UnoApiTarget/bridgetest.rdb)" \
 		> $@)
 	$(if $(filter-out WNT,$(OS)),chmod +x $@)
 
@@ -60,8 +60,8 @@ $(testtools_BRIDGEDIR)/bridgetest_javaserver$(testtools_BATCHSUFFIX) :| $(testto
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		echo \
-		"UNO_SERVICES='$(call gb_Helper_make_url,$(call gb_Rdb_get_outdir_target,ure/services)) $(call gb_Helper_make_url,$(call gb_Rdb_get_outdir_target,uno_services))'" \
-		"UNO_TYPES='$(call gb_Helper_make_url,$(call gb_UnoApiMerge_get_target,ure/types)) $(call gb_Helper_make_url,$(WORKDIR)/UnoApiTarget/bridgetest.rdb)'" \
+		"URE_MORE_SERVICES=$(call gb_Helper_make_url,$(call gb_Rdb_get_outdir_target,uno_services))" \
+		"URE_MORE_TYPES=$(call gb_Helper_make_url,$(WORKDIR)/UnoApiTarget/bridgetest.rdb)" \
 		"java" \
 		"-classpath $(testtools_MY_CLASSPATH)$(gb_CLASSPATHSEP)$(OUTDIR)/bin/testComponent.jar" \
 		"com.sun.star.comp.bridge.TestComponentMain" \
@@ -77,10 +77,9 @@ $(testtools_BRIDGEDIR)/bridgetest_inprocess_java$(testtools_BATCHSUFFIX) :| $(te
 		"LD_LIBRARY_PATH=$(OUTDIR)/lib" \
 		"$(call gb_Executable_get_target_for_build,uno)" \
 		"-s com.sun.star.test.bridge.BridgeTest" \
-		"-env:UNO_SERVICES='$(call gb_Helper_make_url,$(call gb_Rdb_get_outdir_target,ure/services)) $(call gb_Helper_make_url,$(call gb_Rdb_get_outdir_target,uno_services))'" \
-		"-env:UNO_TYPES='$(call gb_Helper_make_url,$(call gb_UnoApiMerge_get_target,ure/types)) $(call gb_Helper_make_url,$(WORKDIR)/UnoApiTarget/bridgetest.rdb)'" \
 		"-env:URE_INTERNAL_JAVA_DIR=file://$(OUTDIR)/bin" \
-		"-env:URE_INTERNAL_LIB_DIR=file://$(OUTDIR)/lib" \
+		"-env:URE_MORE_SERVICES=$(call gb_Helper_make_url,$(call gb_Rdb_get_outdir_target,uno_services))" \
+		"-env:URE_MORE_TYPES=$(call gb_Helper_make_url,$(WORKDIR)/UnoApiTarget/bridgetest.rdb)" \
 		"-- com.sun.star.test.bridge.JavaTestObject noCurrentContext" \
 		> $@)
 	$(if $(filter-out WNT,$(OS)),chmod +x $@)
@@ -91,8 +90,8 @@ $(testtools_BRIDGEDIR)/bridgetest_client$(testtools_BATCHSUFFIX) :| $(testtools_
 		echo "$(call gb_Executable_get_target_for_build,uno)" \
 		"-s com.sun.star.test.bridge.BridgeTest --" \
 		"-u 'uno:socket$(COMMA)host=127.0.0.1$(COMMA)port=2002;urp;test'" \
-		"-env:UNO_SERVICES='$(call gb_Helper_make_url,$(call gb_Rdb_get_outdir_target,ure/services)) $(call gb_Helper_make_url,$(call gb_Rdb_get_outdir_target,uno_services))'" \
-		"-env:UNO_TYPES='$(call gb_Helper_make_url,$(call gb_UnoApiMerge_get_target,ure/types)) $(call gb_Helper_make_url,$(WORKDIR)/UnoApiTarget/bridgetest.rdb)'" \
+		"-env:URE_MORE_SERVICES=$(call gb_Helper_make_url,$(call gb_Rdb_get_outdir_target,uno_services))" \
+		"-env:URE_MORE_TYPES=$(call gb_Helper_make_url,$(WORKDIR)/UnoApiTarget/bridgetest.rdb)" \
 		> $@)
 	$(if $(filter-out WNT,$(OS)),chmod +x $@)
 

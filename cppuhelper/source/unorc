@@ -18,3 +18,5 @@
 
 [Bootstrap]
 URE_INTERNAL_LIB_DIR=${ORIGIN}
+UNO_SERVICES=${ORIGIN}/../xml/ure/services.rdb ${URE_MORE_SERVICES}
+UNO_TYPES=${ORIGIN}/../bin/ure/types.rdb ${URE_MORE_TYPES}
