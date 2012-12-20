@@ -335,20 +335,20 @@ void WorkbookFragment::finalizeImport()
                 ScGlobal::GetRscString(STR_QUERY_FORMULA_RECALC_ONLOAD_XLS));
             aBox.SetCheckBoxText(ScGlobal::GetRscString(STR_ALWAYS_PERFORM_SELECTED));
 
-            boost::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create() );
             sal_Int32 nRet = aBox.Execute();
             bHardRecalc = nRet == RET_YES;
 
             if (aBox.GetCheckBoxState())
             {
                 // Always perform selected action in the future.
+                boost::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create() );
                 officecfg::Office::Calc::Formula::Load::OOXMLRecalcMode::set(sal_Int32(0), batch);
                 ScFormulaOptions aOpt = SC_MOD()->GetFormulaOptions();
                 aOpt.SetOOXMLRecalcOptions(bHardRecalc ? RECALC_ALWAYS : RECALC_NEVER);
                 SC_MOD()->SetFormulaOptions(aOpt);
 
+                batch->commit();
             }
-            batch->commit();
         }
     }
     else if (nRecalcMode == RECALC_ALWAYS)
