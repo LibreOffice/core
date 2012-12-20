@@ -340,7 +340,7 @@ def identify(imagefile):
     result, _ = process.communicate()
     if process.wait() != 0:
         raise Exception("identify failed")
-    if result.partition("\n")[0] != "1":
+    if result.partition(b"\n")[0] != b"1":
         print("identify result: " + result)
         print("DIFFERENCE in " + imagefile)
 
@@ -365,13 +365,13 @@ def compareImages(file):
         print("DIFFERENT NUMBER OF IMAGES FOR: " + file)
 
 def compareAllImages(dirs, suffix):
-    print "compareAllImages..."
+    print("compareAllImages...")
     for dir in dirs:
         files = filelist(dir, suffix)
 #        print("compareAllImages:" + str(files))
         for f in files:
             compareImages(f)
-    print "...compareAllImages done"
+    print("...compareAllImages done")
 
 
 def parseArgs(argv):
