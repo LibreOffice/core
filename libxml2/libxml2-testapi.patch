@@ -1,5 +1,5 @@
---- misc/libxml2-2.7.6/testapi.c	2009-09-24 23:32:00.000000000 +0800
-+++ misc/build/libxml2-2.7.6/testapi.c	2012-05-29 14:17:00.868020600 +0800
+--- misc/libxml2-2.7.8/testapi.c	2009-09-24 23:32:00.000000000 +0800
++++ misc/build/libxml2-2.7.8/testapi.c	2012-05-29 14:17:00.868020600 +0800
 @@ -291,7 +291,7 @@
  static xmlChar gen_xmlChar(int no, int nr ATTRIBUTE_UNUSED) {
      if (no == 0) return('a');

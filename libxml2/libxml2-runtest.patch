@@ -1,5 +1,5 @@
---- misc/libxml2-2.7.6/runtest.c	2009-09-24 23:32:00.000000000 +0800
-+++ misc/build/libxml2-2.7.6/runtest.c	2012-05-29 14:17:16.852600200 +0800
+--- misc/libxml2-2.7.8/runtest.c	2009-09-24 23:32:00.000000000 +0800
++++ misc/build/libxml2-2.7.8/runtest.c	2012-05-29 14:17:16.852600200 +0800
 @@ -2728,7 +2728,7 @@
      "file:///path/to/a%20b.html",
      "/path/to/a b.html",
