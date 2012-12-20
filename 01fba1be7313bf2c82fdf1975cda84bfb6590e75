@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAR3///zY\u003d",
+        "filename": "sc/inc/sc.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-12-20T02:25:01Z",
+      "side": 1,
+      "message": "It would be better to append the new definitions after SID_INSERT_FIELD_DATE_VAR(SID_NEW_SLOTS+99) so the next developer looking to add something actually spots the last number used.",
+      "revId": "01fba1be7313bf2c82fdf1975cda84bfb6590e75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAR3///zU\u003d",
+        "filename": "sc/source/ui/view/cellsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 928,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-12-20T02:25:01Z",
+      "side": 1,
+      "message": "Please don\u0027t introduce whitespace on otherwise empty lines, or in general no trailing whitespace.",
+      "revId": "01fba1be7313bf2c82fdf1975cda84bfb6590e75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAR3///zQ\u003d",
+        "filename": "sc/source/ui/view/cellsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 939,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-12-20T02:25:01Z",
+      "side": 1,
+      "message": "Ditto, whitespace until indent level. Please check your editor settings.",
+      "revId": "01fba1be7313bf2c82fdf1975cda84bfb6590e75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAR3///zM\u003d",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1990,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-12-20T02:25:01Z",
+      "side": 1,
+      "message": "whitespace error",
+      "revId": "01fba1be7313bf2c82fdf1975cda84bfb6590e75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAR3///zI\u003d",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2008,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-12-20T02:25:01Z",
+      "side": 1,
+      "message": "whitespace error",
+      "revId": "01fba1be7313bf2c82fdf1975cda84bfb6590e75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAR3///zE\u003d",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2019,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-12-20T02:25:01Z",
+      "side": 1,
+      "message": "whitespace error",
+      "revId": "01fba1be7313bf2c82fdf1975cda84bfb6590e75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAR3///zA\u003d",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2054,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-12-20T02:25:01Z",
+      "side": 1,
+      "message": "whitespace error",
+      "revId": "01fba1be7313bf2c82fdf1975cda84bfb6590e75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
