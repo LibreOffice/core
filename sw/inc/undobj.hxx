@@ -147,14 +147,14 @@ protected:
     SwHistory* pHistory;
 
     // Needed for deletion of content. For Redo content is moved into the
-    // UndoNodesArray. These methods insert a separator for the attributes
-    // at the end of a TextNode. So the attributes do not get expanded.
+    // UndoNodesArray. These methods always create a new node to insert
+    // content. So the attributes do not get expanded.
     // MoveTo:      moves from the NodesArray into the UndoNodesArray.
     // MoveFrom:    moves from the UndoNodesArray into the NodesArray.
     void MoveToUndoNds( SwPaM& rPam,
-                        SwNodeIndex* pNodeIdx = 0, SwIndex* pCntIdx = 0,
+                        SwNodeIndex* pNodeIdx = 0,
                         sal_uLong* pEndNdIdx = 0, xub_StrLen * pEndCntIdx = 0 );
-    void MoveFromUndoNds( SwDoc& rDoc, sal_uLong nNodeIdx, xub_StrLen nCntntIdx,
+    void MoveFromUndoNds( SwDoc& rDoc, sal_uLong nNodeIdx,
                           SwPosition& rInsPos,
                           sal_uLong* pEndNdIdx = 0, xub_StrLen * pEndCntIdx = 0 );
 

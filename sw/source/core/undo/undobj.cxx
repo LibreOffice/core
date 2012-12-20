@@ -313,15 +313,15 @@ SwUndoSaveCntnt::~SwUndoSaveCntnt()
 }
 
 // This is needed when deleting content. For REDO all contents will be moved
-// into the UndoNodesArray. These methods add a seperator for the attributes to
-// the end of TextNodes. As a result, the attributes will not be expanded.
+// into the UndoNodesArray. These methods always create a new node to insert
+// content. As a result, the attributes will not be expanded.
 // - MoveTo   moves from NodesArray into UndoNodesArray
 // - MoveFrom moves from UndoNodesArray into NodesArray
 //
 // If pEndNdIdx is given, Undo/Redo calls -Ins/DelFly. In that case the whole
 // section should be moved.
 void SwUndoSaveCntnt::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
-                    SwIndex* pCntIdx, sal_uLong* pEndNdIdx, xub_StrLen* pEndCntIdx )
+                    sal_uLong* pEndNdIdx, xub_StrLen* pEndCntIdx )
 {
     SwDoc& rDoc = *rPaM.GetDoc();
     ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
@@ -337,7 +337,6 @@ void SwUndoSaveCntnt::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
 
     // keep as sal_uInt16; the indices shift!
     sal_uLong nTmpMvNode = aPos.nNode.GetIndex();
-    xub_StrLen nTmpMvCntnt = aPos.nContent.GetIndex();
 
     if( pCpyNd || pEndNdIdx )
     {
@@ -359,19 +358,10 @@ void SwUndoSaveCntnt::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
     aPos.nNode = nTmpMvNode;
     if( pNodeIdx )
         *pNodeIdx = aPos.nNode;
-
-    if( pCntIdx )
-    {
-        SwCntntNode* pCNd = aPos.nNode.GetNode().GetCntntNode();
-        if( pCNd )
-            pCntIdx->Assign( pCNd, nTmpMvCntnt );
-        else
-            pCntIdx->Assign( 0, 0 );
-    }
 }
 
 void SwUndoSaveCntnt::MoveFromUndoNds( SwDoc& rDoc, sal_uLong nNodeIdx,
-                            xub_StrLen nCntIdx, SwPosition& rInsPos,
+                            SwPosition& rInsPos,
                             sal_uLong* pEndNdIdx, xub_StrLen* pEndCntIdx )
 {
     // here comes the recovery
@@ -398,7 +388,7 @@ void SwUndoSaveCntnt::MoveFromUndoNds( SwDoc& rDoc, sal_uLong nNodeIdx,
 
         aPaM.SetMark();
         aPaM.GetPoint()->nNode = nNodeIdx;
-        aPaM.GetPoint()->nContent.Assign( aPaM.GetCntntNode(), nCntIdx );
+        aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), 0);
 
         _SaveRedlEndPosForRestore aRedlRest( rInsPos.nNode, rInsPos.nContent.GetIndex() );
 
@@ -427,7 +417,7 @@ void SwUndoSaveCntnt::MoveFromUndoNds( SwDoc& rDoc, sal_uLong nNodeIdx,
 
     }
     else {
-        OSL_FAIL( "What happened now?" );
+        assert(false); // wtf?
     }
 }
 
@@ -848,7 +838,7 @@ void SwUndoSaveSection::SaveSection( SwDoc* , const SwNodeRange& rRange )
     // Keep positions as SwIndex so that this section can be deleted in DTOR
     sal_uLong nEnd;
     pMvStt = new SwNodeIndex( rRange.aStart );
-    MoveToUndoNds( aPam, pMvStt, 0, &nEnd, 0 );
+    MoveToUndoNds(aPam, pMvStt, &nEnd, 0);
     nMvLen = nEnd - pMvStt->GetIndex() + 1;
 }
 
@@ -877,7 +867,7 @@ void SwUndoSaveSection::RestoreSection( SwDoc* pDoc, const SwNodeIndex& rInsPos 
     {
         SwPosition aInsPos( rInsPos );
         sal_uLong nEnd = pMvStt->GetIndex() + nMvLen - 1;
-        MoveFromUndoNds( *pDoc, pMvStt->GetIndex(), 0, aInsPos, &nEnd, 0 );
+        MoveFromUndoNds(*pDoc, pMvStt->GetIndex(), aInsPos, &nEnd, 0);
 
         // destroy indices again, content was deleted from UndoNodes array
         DELETEZ( pMvStt );

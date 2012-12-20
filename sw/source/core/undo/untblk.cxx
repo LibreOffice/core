@@ -180,7 +180,7 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
         {
             m_pUndoNodeIndex.reset(
                     new SwNodeIndex(pDoc->GetNodes().GetEndOfContent()));
-            MoveToUndoNds( *pPam, m_pUndoNodeIndex.get(), 0 );
+            MoveToUndoNds(*pPam, m_pUndoNodeIndex.get());
 
             if( !bSttWasTxtNd )
                 pPam->Move( fnMoveBackward, fnGoCntnt );
@@ -266,7 +266,7 @@ void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
         // re-insert content again (first detach m_pUndoNodeIndex!)
         sal_uLong const nMvNd = m_pUndoNodeIndex->GetIndex();
         m_pUndoNodeIndex.reset();
-        MoveFromUndoNds( *pDoc, nMvNd, 0, *pPam->GetMark() );
+        MoveFromUndoNds(*pDoc, nMvNd, *pPam->GetMark());
         if( bSttWasTxtNd )
             MovePtForward( *pPam, bMvBkwrd );
         pPam->Exchange();
