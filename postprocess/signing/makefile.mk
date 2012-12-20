@@ -29,7 +29,7 @@ TARGET=signing
 
 EXCLUDELIST=no_signing.txt
 LOGFILE=$(MISC)$/signing_log.txt
-IMAGENAMES=$(SOLARBINDIR)$/*.dll $(SOLARBINDIR)$/so$/*.dll $(SOLARBINDIR)$/*.exe $(SOLARBINDIR)$/so$/*.exe
+IMAGENAMES=$(SOLARBINDIR)$/*.dll $(SOLARBINDIR)$/*.exe
 TIMESTAMPURL*="http://timestamp.globalsign.com/scripts/timestamp.dll"
 
 signing.done :
