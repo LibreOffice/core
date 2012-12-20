@@ -70,7 +70,6 @@
 #include <toolkit/awt/vclxtabpagecontainer.hxx>
 #include <toolkit/awt/vclxtabpagemodel.hxx>
 
-#include <toolkit/awt/xsimpleanimation.hxx>
 #include <toolkit/awt/animatedimagespeer.hxx>
 #include <toolkit/awt/vclxtopwindow.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
@@ -314,7 +313,6 @@ static ComponentInfo __FAR_DATA aComponentInfos [] =
     { "radiobutton",        WINDOW_RADIOBUTTON },
     { "scrollbar",          WINDOW_SCROLLBAR },
     { "scrollbarbox",       WINDOW_SCROLLBARBOX },
-    { "simpleanimation",    WINDOW_CONTROL },
     { "animatedimages",     WINDOW_CONTROL },
     { "spinbutton",         WINDOW_SPINBUTTON },
     { "spinfield",          WINDOW_SPINFIELD },
@@ -1007,14 +1005,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 }
             break;
             case WINDOW_CONTROL:
-                if  ( aServiceName.EqualsAscii( "simpleanimation" ) )
-                {
-                    pNewWindow = new Throbber( pParent, nWinBits, Throbber::IMAGES_NONE );
-                    ((Throbber*)pNewWindow)->SetScaleMode( css::awt::ImageScaleMode::Anisotropic );
-                        // (compatibility)
-                    *ppNewComp = new ::toolkit::XSimpleAnimation;
-                }
-                else if ( rDescriptor.WindowServiceName.equalsIgnoreAsciiCase(
+                if ( rDescriptor.WindowServiceName.equalsIgnoreAsciiCase(
                         ::rtl::OUString::createFromAscii("tabpagecontainer") ) )
                 {
                     pNewWindow = new TabControl( pParent, nWinBits );

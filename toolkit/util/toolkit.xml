@@ -646,26 +646,6 @@
         <supported-service>com.sun.star.awt.UnoControlSpinButton</supported-service>
     </component-description>
     <component-description>
-        <author>Dirk Voelzke</author>
-        <name>com.sun.star.comp.toolkit.UnoSimpleAnimationControlModel</name>
-        <description>specifies the model of a simple animation control</description>
-        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
-        <language>c++</language>
-        <status value="final" />
-        <supported-service>com.sun.star.awt.UnoControlModel</supported-service>
-        <supported-service>com.sun.star.awt.UnoSimpleAnimationControlModel</supported-service>
-    </component-description>
-    <component-description>
-        <author>Dirk Voelzke</author>
-        <name>com.sun.star.comp.toolkit.UnoSimpleAnimationControl</name>
-        <description>specifies a simple animation control</description>
-        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
-        <language>c++</language>
-        <status value="final" />
-        <supported-service>com.sun.star.awt.UnoControl</supported-service>
-        <supported-service>com.sun.star.awt.UnoSimpleAnimationControl</supported-service>
-    </component-description>
-    <component-description>
         <author>Christian Lippka</author>
         <name>stardiv.Toolkit.UnoTreeModel</name>
         <description>specifies the model of a tree control</description>

@@ -195,3 +195,6 @@
 
 19/12/2012 (arielch): TaskID=121513
   Remove deprecated AWT Throbber API
+
+19/12/2012 (arielch): TaskID=121514
+  Remove deprecated AWT UnoControlSimpleAnimation API

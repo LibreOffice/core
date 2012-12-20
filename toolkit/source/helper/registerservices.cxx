@@ -45,7 +45,6 @@
 #include <toolkit/controls/roadmapcontrol.hxx>
 #include <toolkit/controls/tkscrollbar.hxx>
 #include "toolkit/controls/tkspinbutton.hxx"
-#include <toolkit/controls/tksimpleanimation.hxx>
 #include <toolkit/controls/animatedimages.hxx>
 #include <toolkit/controls/spinningprogress.hxx>
 #include <toolkit/controls/dialogcontrol.hxx>
@@ -196,8 +195,6 @@ IMPL_CREATEINSTANCE( VCLXPopupMenu )
 IMPL_CREATEINSTANCE( VCLXPrinterServer )
 IMPL_CREATEINSTANCE2( UnoRoadmapControl )
 IMPL_CREATEINSTANCE2( UnoControlRoadmapModel )
-IMPL_CREATEINSTANCE2( UnoSimpleAnimationControl )
-IMPL_CREATEINSTANCE2( UnoSimpleAnimationControlModel )
 IMPL_CREATEINSTANCE2( UnoControlTabPage )
 IMPL_CREATEINSTANCE2( UnoControlTabPageModel )
 IMPL_CREATEINSTANCE2( UnoControlTabPageContainer )
@@ -298,8 +295,6 @@ TOOLKIT_DLLPUBLIC void* SAL_CALL component_getFactory( const sal_Char* sImplemen
         GET_FACTORY( TreeControl, szServiceName_TreeControl, NULL )
         GET_FACTORY( TreeControlModel, szServiceName_TreeControlModel, NULL )
         GET_FACTORY( MutableTreeDataModel, szServiceName_MutableTreeDataModel, NULL )
-        GET_FACTORY( UnoSimpleAnimationControlModel, szServiceName_UnoSimpleAnimationControlModel, szServiceName2_UnoSimpleAnimationControlModel )
-        GET_FACTORY( UnoSimpleAnimationControl, szServiceName_UnoSimpleAnimationControl, szServiceName2_UnoSimpleAnimationControl )
         GET_FACTORY( UnoFixedHyperlinkControl, szServiceName_UnoControlFixedHyperlink, NULL )
         GET_FACTORY( UnoControlFixedHyperlinkModel, szServiceName_UnoControlFixedHyperlinkModel, NULL )
         GET_FACTORY( GridControl, szServiceName_GridControl, NULL );

@@ -87,11 +87,9 @@ const sal_Char __FAR_DATA szServiceName_UnoSpinButtonModel[] = "com.sun.star.awt
 const sal_Char __FAR_DATA szServiceName_TreeControl[] = "com.sun.star.awt.tree.TreeControl";
 const sal_Char __FAR_DATA szServiceName_TreeControlModel[] = "com.sun.star.awt.tree.TreeControlModel";
 const sal_Char __FAR_DATA szServiceName_MutableTreeDataModel[] = "com.sun.star.awt.tree.MutableTreeDataModel";
-const sal_Char __FAR_DATA szServiceName_UnoSimpleAnimationControlModel[] = "com.sun.star.awt.UnoSimpleAnimationControlModel", szServiceName2_UnoSimpleAnimationControlModel[] = "com.sun.star.awt.UnoControlSimpleAnimationModel";
 const sal_Char __FAR_DATA szServiceName_AnimatedImagesControl[] = "com.sun.star.awt.AnimatedImagesControl";
 const sal_Char __FAR_DATA szServiceName_AnimatedImagesControlModel[] = "com.sun.star.awt.AnimatedImagesControlModel";
 const sal_Char __FAR_DATA szServiceName_SpinningProgressControlModel[] = "com.sun.star.awt.SpinningProgressControlModel";
-const sal_Char __FAR_DATA szServiceName_UnoSimpleAnimationControl[] = "com.sun.star.awt.UnoSimpleAnimationControl", szServiceName2_UnoSimpleAnimationControl[] = "com.sun.star.awt.UnoControlSimpleAnimation";
 const sal_Char __FAR_DATA szServiceName_UnoControlFixedHyperlink[] = "com.sun.star.awt.UnoControlFixedHyperlink";
 const sal_Char __FAR_DATA szServiceName_UnoControlFixedHyperlinkModel[] = "com.sun.star.awt.UnoControlFixedHyperlinkModel";
 const sal_Char __FAR_DATA szServiceName_GridControl[] = "com.sun.star.awt.grid.UnoControlGrid";

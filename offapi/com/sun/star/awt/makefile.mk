@@ -191,8 +191,6 @@ IDLFILES=\
     UnoControlRoadmapModel.idl\
     UnoControlScrollBar.idl\
     UnoControlScrollBarModel.idl\
-    UnoControlSimpleAnimation.idl\
-    UnoControlSimpleAnimationModel.idl\
     UnoControlSpinButton.idl\
     UnoControlSpinButtonModel.idl\
     UnoControlTimeField.idl\
@@ -286,7 +284,6 @@ IDLFILES=\
     XSystemDependentMenuPeer.idl\
     XSystemDependentWindowPeer.idl\
     SystemDependentXWindow.idl\
-    XSimpleAnimation.idl\
     XSimpleTabController.idl\
     XTabController.idl\
     XTabControllerModel.idl\
