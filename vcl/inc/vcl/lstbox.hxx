@@ -187,7 +187,8 @@ public:
     void            SetDoubleClickHdl( const Link& rLink )  { maDoubleClickHdl = rLink; }
     const Link&     GetDoubleClickHdl() const               { return maDoubleClickHdl; }
 
-    Size            CalcMinimumSize() const;
+    Size            CalcSubEditSize() const;    //size of area inside lstbox, i.e. no scrollbar/dropdown
+    Size            CalcMinimumSize() const;    //size of lstbox area, i.e. including scrollbar/dropdown
     virtual Size    GetOptimalSize(WindowSizeType eType) const;
     Size            CalcAdjustedSize( const Size& rPrefSize ) const;
     Size            CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const;

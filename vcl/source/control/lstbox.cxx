@@ -1288,17 +1288,12 @@ Size ListBox::CalcMinimumSize() const
     if (!mpImplLB)
         return aSz;
 
-    if ( !IsDropDownBox() )
-        aSz = mpImplLB->CalcSize (mnLineCount ? mnLineCount : mpImplLB->GetEntryList()->GetEntryCount());
-    else
+    aSz = CalcSubEditSize();
+
+    if (IsDropDownBox())
     {
-        aSz.Height() = mpImplLB->CalcSize( 1 ).Height();
         aSz.Height() += 4; // add a space between entry and border
-        // size to maxmimum entry width and add a little breathing space
-        aSz.Width() = mpImplLB->GetMaxEntryWidth() + 4;
-        // do not create ultrathin ListBoxes, it doesn't look good
-        if( aSz.Width() < GetSettings().GetStyleSettings().GetScrollBarSize() )
-            aSz.Width() = GetSettings().GetStyleSettings().GetScrollBarSize();
+        aSz.Width() += 4;  // add a little breathing space
 
         // try native borders; scrollbar size may not be a good indicator
         // see how large the edit area inside is to estimate what is needed for the dropdown
@@ -1319,7 +1314,7 @@ Size ListBox::CalcMinimumSize() const
 
     aSz = CalcWindowSize( aSz );
 
-    if ( IsDropDownBox() ) // check minimum height of dropdown box
+    if (IsDropDownBox()) // check minimum height of dropdown box
     {
         ImplControlValue aControlValue;
         Rectangle aRect( Point( 0, 0 ), aSz );
@@ -1330,6 +1325,28 @@ Size ListBox::CalcMinimumSize() const
             if( aBound.GetHeight() > aSz.Height() )
                 aSz.Height() = aBound.GetHeight();
         }
+    }
+
+    return aSz;
+}
+
+Size ListBox::CalcSubEditSize() const
+{
+    Size aSz;
+
+    if (!mpImplLB)
+        return aSz;
+
+    if ( !IsDropDownBox() )
+        aSz = mpImplLB->CalcSize (mnLineCount ? mnLineCount : mpImplLB->GetEntryList()->GetEntryCount());
+    else
+    {
+        aSz.Height() = mpImplLB->CalcSize( 1 ).Height();
+        // size to maxmimum entry width
+        aSz.Width() = mpImplLB->GetMaxEntryWidth();
+        // do not create ultrathin ListBoxes, it doesn't look good
+        if( aSz.Width() < GetSettings().GetStyleSettings().GetScrollBarSize() )
+            aSz.Width() = GetSettings().GetStyleSettings().GetScrollBarSize();
     }
 
     return aSz;

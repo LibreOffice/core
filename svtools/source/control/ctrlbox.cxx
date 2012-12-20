@@ -680,9 +680,16 @@ void LineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
                             Color aColor1, Color aColor2, Color aColorDist,
                             sal_uInt16 nStyle, Bitmap& rBmp )
 {
-    Size aSize = GetOutputSizePixel();
-    aSize.Width() -= 20;
+    //TODO, rather than including the " " text to force
+    //the line height, better would be do drop
+    //this calculation and draw a bitmap of height
+    //equal to normal text line and center the
+    //line within that
+    long nMinWidth = GetTextWidth(OUString("----------"));
+    Size aSize = CalcSubEditSize();
+    aSize.Width() = std::max(nMinWidth, aSize.Width());
     aSize.Width() -= aTxtSize.Width();
+    aSize.Width() -= 6;
     aSize.Height() = aTxtSize.Height();
 
     // SourceUnit nach Twips
