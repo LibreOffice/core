@@ -636,14 +636,11 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
 
                     if (nWhich==SID_ATTR_PARA_ADJUST_LEFT)
                         eAdjust = SVX_ADJUST_LEFT;
-                    else
-                    if (nWhich==SID_ATTR_PARA_ADJUST_RIGHT)
+                    else if (nWhich==SID_ATTR_PARA_ADJUST_RIGHT)
                         eAdjust = SVX_ADJUST_RIGHT;
-                    else
-                    if (nWhich==SID_ATTR_PARA_ADJUST_CENTER)
+                    else if (nWhich==SID_ATTR_PARA_ADJUST_CENTER)
                         eAdjust = SVX_ADJUST_CENTER;
-                    else
-                    if (nWhich==SID_ATTR_PARA_ADJUST_BLOCK)
+                    else if (nWhich==SID_ATTR_PARA_ADJUST_BLOCK)
                         eAdjust = SVX_ADJUST_BLOCK;
 
                     if( !pAdjust )
@@ -669,11 +666,9 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
 
                     if (nWhich==SID_ATTR_PARA_LINESPACE_10)
                         nLSpace = 100;
-                    else
-                    if (nWhich==SID_ATTR_PARA_LINESPACE_15)
+                    else if (nWhich==SID_ATTR_PARA_LINESPACE_15)
                         nLSpace = 150;
-                    else
-                    if (nWhich==SID_ATTR_PARA_LINESPACE_20)
+                    else if (nWhich==SID_ATTR_PARA_LINESPACE_20)
                         nLSpace = 200;
 
                     if( !pLSpace )
@@ -884,7 +879,7 @@ void SwAnnotationShell::StateClpbrd(SfxItemSet &rSet)
                         SvxClipboardFmtItem aFormats( SID_CLIPBOARD_FORMAT_ITEMS );
                         if ( aDataHelper.HasFormat( SOT_FORMAT_RTF ) )
                             aFormats.AddClipbrdFormat( SOT_FORMAT_RTF );
-                            aFormats.AddClipbrdFormat( SOT_FORMAT_STRING );
+                        aFormats.AddClipbrdFormat( SOT_FORMAT_STRING );
                         rSet.Put( aFormats );
                     }
                     else

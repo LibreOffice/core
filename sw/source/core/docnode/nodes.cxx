@@ -291,8 +291,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
                                     {
                                         rNds.GetDoc()->GetDocShell()->Broadcast( SwFmtFldHint( &pTxtFld->GetFld(), pTxtFld->GetFld().IsFldInDoc() ? SWFMTFLD_INSERTED : SWFMTFLD_REMOVED ) );
                                     }
-                                    else
-                                    if( RES_DDEFLD == pTyp->Which() )
+                                    else if( RES_DDEFLD == pTyp->Which() )
                                     {
                                         if( bToUndo )
                                             ((SwDDEFieldType*)pTyp)->DecRefCnt();

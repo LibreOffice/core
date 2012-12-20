@@ -293,13 +293,13 @@ void SwModule::ApplyUserCharUnit(sal_Bool bApplyChar, sal_Bool bWeb)
     if(bWeb)
     {
         if(!pWebUsrPref)
-        GetUsrPref(sal_True);
+            GetUsrPref(sal_True);
         pPref = pWebUsrPref;
     }
     else
     {
         if(!pUsrPref)
-        GetUsrPref(sal_False);
+            GetUsrPref(sal_False);
         pPref = pUsrPref;
     }
     sal_Bool bOldApplyCharUnit = pPref->IsApplyCharUnit();

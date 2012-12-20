@@ -523,8 +523,7 @@ void SwPostItMgr::PreparePageContainer()
         for (int i=0; i<lPageSize - lContainerSize;i++)
             mPages.push_back( new SwPostItPageItem());
     }
-    else
-    if (lContainerSize > lPageSize)
+    else if (lContainerSize > lPageSize)
     {
         for (int i=mPages.size()-1; i >= lPageSize;--i)
         {
@@ -1470,8 +1469,7 @@ bool SwPostItMgr::ScrollbarHit(const unsigned long aPage,const Point &aPoint)
             Scroll( -1*GetScrollSize(), aPage);
         return true;
     }
-    else
-    if (aRectTop.IsInside(aPoint))
+    else if (aRectTop.IsInside(aPoint))
     {
         if (aPoint.X() < long((aPointTop.X() + GetSidebarWidth()/3*2)))
             Scroll(GetScrollSize(), aPage);

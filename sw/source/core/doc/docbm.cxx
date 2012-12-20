@@ -1392,12 +1392,12 @@ void _SaveCntntIdx(SwDoc* pDoc,
             FOREACHSHELL_START( pShell )
                 SwPaM *_pStkCrsr = PCURSH->GetStkCrsr();
                 if( _pStkCrsr )
-                do {
-                    lcl_ChkPaM( rSaveArr, nNode, nCntnt, *_pStkCrsr,
-                                aSave, false );
-                    aSave.IncCount();
-                } while ( (_pStkCrsr != 0 ) &&
-                    ((_pStkCrsr=(SwPaM *)_pStkCrsr->GetNext()) != PCURSH->GetStkCrsr()) );
+                    do {
+                        lcl_ChkPaM( rSaveArr, nNode, nCntnt, *_pStkCrsr,
+                                    aSave, false );
+                        aSave.IncCount();
+                    } while ( (_pStkCrsr != 0 ) &&
+                        ((_pStkCrsr=(SwPaM *)_pStkCrsr->GetNext()) != PCURSH->GetStkCrsr()) );
 
                 FOREACHPAM_START( PCURSH->_GetCrsr() )
                     lcl_ChkPaM( rSaveArr, nNode, nCntnt, *PCURCRSR,
@@ -1517,16 +1517,16 @@ void _RestoreCntntIdx(SwDoc* pDoc,
                         FOREACHSHELL_START( pShell )
                             SwPaM *_pStkCrsr = PCURSH->GetStkCrsr();
                             if( _pStkCrsr )
-                            do {
-                                if( aSave.GetCount() == nCnt )
-                                {
-                                    pPos = &_pStkCrsr->GetBound( 0x0800 ==
-                                                        aSave.GetType() );
-                                    break;
-                                }
-                                ++nCnt;
-                            } while ( (_pStkCrsr != 0 ) &&
-                                ((_pStkCrsr=(SwPaM *)_pStkCrsr->GetNext()) != PCURSH->GetStkCrsr()) );
+                                do {
+                                    if( aSave.GetCount() == nCnt )
+                                    {
+                                        pPos = &_pStkCrsr->GetBound( 0x0800 ==
+                                                            aSave.GetType() );
+                                        break;
+                                    }
+                                    ++nCnt;
+                                } while ( (_pStkCrsr != 0 ) &&
+                                    ((_pStkCrsr=(SwPaM *)_pStkCrsr->GetNext()) != PCURSH->GetStkCrsr()) );
 
                             if( pPos )
                                 break;
@@ -1678,16 +1678,16 @@ void _RestoreCntntIdx(std::vector<sal_uLong> &rSaveArr,
                         FOREACHSHELL_START( pShell )
                             SwPaM *_pStkCrsr = PCURSH->GetStkCrsr();
                             if( _pStkCrsr )
-                            do {
-                                if( aSave.GetCount() == nCnt )
-                                {
-                                    pPos = &_pStkCrsr->GetBound( 0x0800 ==
-                                                aSave.GetType() );
-                                    break;
-                                }
-                                ++nCnt;
-                            } while ( (_pStkCrsr != 0 ) &&
-                                ((_pStkCrsr=(SwPaM *)_pStkCrsr->GetNext()) != PCURSH->GetStkCrsr()) );
+                                do {
+                                    if( aSave.GetCount() == nCnt )
+                                    {
+                                        pPos = &_pStkCrsr->GetBound( 0x0800 ==
+                                                    aSave.GetType() );
+                                        break;
+                                    }
+                                    ++nCnt;
+                                } while ( (_pStkCrsr != 0 ) &&
+                                    ((_pStkCrsr=(SwPaM *)_pStkCrsr->GetNext()) != PCURSH->GetStkCrsr()) );
 
                             if( pPos )
                                 break;

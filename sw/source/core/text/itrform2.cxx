@@ -2548,12 +2548,14 @@ SwFlyCntPortion *SwTxtFormatter::NewFlyCntPortion( SwTxtFormatInfo &rInf,
             aBase.Y() = Y() + pRet->GetAscent();
             nMode |= AS_CHAR_ULSPACE;
             if( !rInf.IsTest() )
+            {
                 aTmpBase = aBase;
                 if ( GetInfo().GetTxtFrm()->IsVertical() )
                     GetInfo().GetTxtFrm()->SwitchHorizontalToVertical( aTmpBase );
 
                 pRet->SetBase( *rInf.GetTxtFrm(), aTmpBase, nTmpAscent,
                                nTmpDescent, nFlyAsc, nFlyDesc, nMode );
+            }
         }
     }
     else

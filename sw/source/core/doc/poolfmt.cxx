@@ -361,7 +361,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
                                                 : GetTxtCollFromPool( nParent ));
         else
 //FEATURE::CONDCOLL
-        pNewColl = new SwTxtFmtColl( GetAttrPool(), aNm, !nParent
+            pNewColl = new SwTxtFmtColl( GetAttrPool(), aNm, !nParent
                                             ? pDfltTxtFmtColl
                                             : GetTxtCollFromPool( nParent ));
         pNewColl->SetPoolFmtId( nId );

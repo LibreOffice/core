@@ -385,7 +385,7 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
                         if( bVert )
                             Prt().SSize().Width() += nChgHght;
                         else
-                        Prt().SSize().Height() += nChgHght;
+                            Prt().SSize().Height() += nChgHght;
                         UNDO_SWAP( this )
                         return;
                     }

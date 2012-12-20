@@ -2797,8 +2797,7 @@ bool SwpHints::TryInsertHint( SwTxtAttr* const pHint, SwTxtNode &rNode,
     // Also attributes without length may be inserted directly.
     // SETATTR_NOHINTADJUST is set e.g., during undo.
     // Portion building in not necessary during XML import.
-    else
-    if ( !bNoHintAdjustMode &&
+    else if ( !bNoHintAdjustMode &&
          !pHint->IsOverlapAllowedAttr() &&
          !rNode.GetDoc()->IsInXMLImport() &&
          ( RES_TXTATR_AUTOFMT == nWhich ||

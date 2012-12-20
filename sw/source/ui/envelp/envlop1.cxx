@@ -243,8 +243,8 @@ IMPL_LINK( SwEnvPage, DatabaseHdl, ListBox *, pListBox )
     }
     else
         sActDBName.SetToken(1, DB_DELIM, aTableLB.GetSelectEntry());
-        pSh->GetNewDBMgr()->GetColumnNames(&aDBFieldLB, aDatabaseLB.GetSelectEntry(),
-                                           aTableLB.GetSelectEntry());
+    pSh->GetNewDBMgr()->GetColumnNames(&aDBFieldLB, aDatabaseLB.GetSelectEntry(),
+                                       aTableLB.GetSelectEntry());
     return 0;
 }
 

@@ -1202,8 +1202,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
             rHTMLWrt.OutNewLine();
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_applet, sal_False );
     }
-    else
-    if( aGlobName == SvGlobalName( SO3_PLUGIN_CLASSID ) )
+    else if( aGlobName == SvGlobalName( SO3_PLUGIN_CLASSID ) )
     {
         // fuer Plugins die Paramater als Optionen schreiben
 

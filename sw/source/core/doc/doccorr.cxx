@@ -127,10 +127,10 @@ void PaMCorrAbs( const SwPaM& rRange,
         FOREACHSHELL_START( pShell )
             SwPaM *_pStkCrsr = PCURSH->GetStkCrsr();
             if( _pStkCrsr )
-            do {
-                lcl_PaMCorrAbs( *_pStkCrsr, aStart, aEnd, aNewPos );
-            } while ( (_pStkCrsr != 0 ) &&
-                ((_pStkCrsr=(SwPaM *)_pStkCrsr->GetNext()) != PCURSH->GetStkCrsr()) );
+                do {
+                    lcl_PaMCorrAbs( *_pStkCrsr, aStart, aEnd, aNewPos );
+                } while ( (_pStkCrsr != 0 ) &&
+                    ((_pStkCrsr=(SwPaM *)_pStkCrsr->GetNext()) != PCURSH->GetStkCrsr()) );
 
             FOREACHPAM_START( PCURSH->_GetCrsr() )
                 lcl_PaMCorrAbs( *PCURCRSR, aStart, aEnd, aNewPos );
@@ -273,10 +273,10 @@ void PaMCorrRel( const SwNodeIndex &rOldNode,
         FOREACHSHELL_START( pShell )
             SwPaM *_pStkCrsr = PCURSH->GetStkCrsr();
             if( _pStkCrsr )
-            do {
-                lcl_PaMCorrRel1( _pStkCrsr, pOldNode, aNewPos, nCntIdx );
-            } while ( (_pStkCrsr != 0 ) &&
-                ((_pStkCrsr=(SwPaM *)_pStkCrsr->GetNext()) != PCURSH->GetStkCrsr()) );
+                do {
+                    lcl_PaMCorrRel1( _pStkCrsr, pOldNode, aNewPos, nCntIdx );
+                } while ( (_pStkCrsr != 0 ) &&
+                    ((_pStkCrsr=(SwPaM *)_pStkCrsr->GetNext()) != PCURSH->GetStkCrsr()) );
 
             FOREACHPAM_START( PCURSH->_GetCrsr() )
                 lcl_PaMCorrRel1( PCURCRSR, pOldNode, aNewPos, nCntIdx);

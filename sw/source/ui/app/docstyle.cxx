@@ -2543,7 +2543,9 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                     ? !(nId & USER_FMT)
                         // searched for used and found none
                     : bIsSearchUsed )
-                continue;
+                {
+                    continue;
+                }
 
                 if( rDoc.get(IDocumentSettingAccess::HTML_MODE) && !(nId & USER_FMT) &&
                     !( RES_POOLCHR_HTML_BEGIN <= nId &&

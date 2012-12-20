@@ -215,9 +215,7 @@ IMPL_LINK_NOARG(SwFldDokInfPage, TypeHdl)
         pSelEntry = aTypeTLB.GetEntry(0);
         aTypeTLB.Select(pSelEntry);
     }
-    else
-
-    if (pOldEntry != pSelEntry)
+    else if (pOldEntry != pSelEntry)
         FillSelectionLB((sal_uInt16)(sal_uLong)pSelEntry->GetUserData());
 
     SubTypeHdl();

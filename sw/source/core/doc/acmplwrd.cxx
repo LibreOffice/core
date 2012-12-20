@@ -146,7 +146,7 @@ void SwAutoCompleteClient::Modify( const SfxPoolItem* pOld, const SfxPoolItem *)
     case RES_OBJECTDYING:
         if( (void*)GetRegisteredIn() == ((SwPtrMsgPoolItem *)pOld)->pObject )
             ((SwModify*)GetRegisteredIn())->Remove(this);
-            pAutoCompleteWord->DocumentDying(*pDoc);
+        pAutoCompleteWord->DocumentDying(*pDoc);
         break;
 
     }

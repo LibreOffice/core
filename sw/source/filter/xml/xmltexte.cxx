@@ -227,7 +227,7 @@ static void lcl_addURL ( SvXMLExport &rExport, const String &rURL,
     String sRelURL;
 
     if( bToRel && (rURL.Len() > 0) )
-    sRelURL = URIHelper::simpleNormalizedMakeRelative(rExport.GetOrigFileName(),
+        sRelURL = URIHelper::simpleNormalizedMakeRelative(rExport.GetOrigFileName(),
               rURL);
     else
         sRelURL = rURL;

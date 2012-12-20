@@ -3112,7 +3112,7 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
                 }
 
                 if ( pSh->GetDoc()->get( IDocumentSettingAccess::BACKGROUND_PARA_OVER_DRAWINGS ) )
-                pPage->PaintBaBo( aPaintRect, pPage, sal_True, /*bOnlyTxtBackground=*/true );
+                    pPage->PaintBaBo( aPaintRect, pPage, sal_True, /*bOnlyTxtBackground=*/true );
 
                 if( pSh->GetWin() )
                 {

@@ -1358,7 +1358,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     {
                         nKernSum += nSpaceAdd;
                         if( j < i )
-                        rInf.GetOut().DrawText( aTmpPos, rInf.GetText(),
+                            rInf.GetOut().DrawText( aTmpPos, rInf.GetText(),
                                                 rInf.GetIdx() + j, i - j );
                         j = i + 1;
                         SwTwips nAdd = pKernArray[ i ] + nKernSum;

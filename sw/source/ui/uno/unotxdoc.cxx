@@ -1794,11 +1794,9 @@ Sequence< OUString > SwXTextDocument::getSupportedServiceNames(void) throw( Runt
 
     if (bTextDoc)
         pArray[2] = OUString ( RTL_CONSTASCII_USTRINGPARAM ( ( "com.sun.star.text.TextDocument" ) ) );
-    else
-    if (bWebDoc)
+    else if (bWebDoc)
         pArray[2] = OUString ( RTL_CONSTASCII_USTRINGPARAM ( ( "com.sun.star.text.WebDocument" ) ) );
-    else
-    if (bGlobalDoc)
+    else if (bGlobalDoc)
         pArray[2] = OUString ( RTL_CONSTASCII_USTRINGPARAM ( ( "com.sun.star.text.GlobalDocument" ) ) );
 
     return aRet;

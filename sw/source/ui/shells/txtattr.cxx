@@ -250,13 +250,13 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
                     aSize.SetHeight( lSize );
                     aAttrSet.Put( aSize );
                 }
-                if( aAttrSet.Count() )
-                {
-                    if( pColl )
-                        pColl->SetFmtAttr( aAttrSet );
-                    else
-                        rWrtSh.SetAttr( aAttrSet );
-                }
+            if( aAttrSet.Count() )
+            {
+                if( pColl )
+                    pColl->SetFmtAttr( aAttrSet );
+                else
+                    rWrtSh.SetAttr( aAttrSet );
+            }
             rReq.Done();
         }
         break;

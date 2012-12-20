@@ -702,7 +702,7 @@ protected:
     virtual uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
     {
         if ( !hasByName( aName ) )
-        throw container::NoSuchElementException();
+            throw container::NoSuchElementException();
         DocPropsByName::iterator it = mNamedDocProps.find( aName );
         return uno::Any( it->second );
 
