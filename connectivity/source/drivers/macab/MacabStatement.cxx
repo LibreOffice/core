@@ -321,7 +321,6 @@ void MacabCommonStatement::setMacabFields(MacabResultSet *pResult) const throw(S
 void MacabCommonStatement::selectRecords(MacabResultSet *pResult) const throw(SQLException)
 {
     const OSQLParseNode *pParseNode;
-    MacabCondition *pCondition;
 
     pParseNode = m_aSQLIterator.getWhereTree();
     if (pParseNode != NULL)
@@ -332,7 +331,7 @@ void MacabCommonStatement::selectRecords(MacabResultSet *pResult) const throw(SQ
             // support them, uncomment this line and fix resetParameters.
             //resetParameters();
             pParseNode = pParseNode->getChild(1);
-            pCondition = analyseWhereClause(pParseNode);
+            MacabCondition *pCondition = analyseWhereClause(pParseNode);
             if (pCondition->isAlwaysTrue())
                 pResult->allMacabRecords();
             else if (!pCondition->isAlwaysFalse())
@@ -349,7 +348,6 @@ void MacabCommonStatement::selectRecords(MacabResultSet *pResult) const throw(SQ
 void MacabCommonStatement::sortRecords(MacabResultSet *pResult) const throw(SQLException)
 {
     const OSQLParseNode *pParseNode;
-    MacabOrder *pOrder;
 
     pParseNode = m_aSQLIterator.getOrderTree();
     if (pParseNode != NULL)
@@ -357,7 +355,7 @@ void MacabCommonStatement::sortRecords(MacabResultSet *pResult) const throw(SQLE
         if (SQL_ISRULE(pParseNode, opt_order_by_clause))
         {
             pParseNode = pParseNode->getChild(2);
-            pOrder = analyseOrderByClause(pParseNode);
+            MacabOrder *pOrder = analyseOrderByClause(pParseNode);
             pResult->sortMacabRecords(pOrder);
             delete pOrder;
         }

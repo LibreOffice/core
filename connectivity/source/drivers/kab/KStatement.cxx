@@ -313,7 +313,6 @@ void KabCommonStatement::setKabFields(KabResultSet *pResult) const throw(SQLExce
 void KabCommonStatement::selectAddressees(KabResultSet *pResult) const throw(SQLException)
 {
     const OSQLParseNode *pParseNode;
-    KabCondition *pCondition;
 
     pParseNode = m_aSQLIterator.getWhereTree();
     if (pParseNode != NULL)
@@ -322,7 +321,7 @@ void KabCommonStatement::selectAddressees(KabResultSet *pResult) const throw(SQL
         {
             resetParameters();
             pParseNode = pParseNode->getChild(1);
-            pCondition = analyseWhereClause(pParseNode);
+            KabCondition *pCondition = analyseWhereClause(pParseNode);
             if (pCondition->isAlwaysTrue())
                 pResult->allKabAddressees();
             else if (!pCondition->isAlwaysFalse())
@@ -339,7 +338,6 @@ void KabCommonStatement::selectAddressees(KabResultSet *pResult) const throw(SQL
 void KabCommonStatement::sortAddressees(KabResultSet *pResult) const throw(SQLException)
 {
     const OSQLParseNode *pParseNode;
-    KabOrder *pOrder;
 
     pParseNode = m_aSQLIterator.getOrderTree();
     if (pParseNode != NULL)
@@ -347,7 +345,7 @@ void KabCommonStatement::sortAddressees(KabResultSet *pResult) const throw(SQLEx
         if (SQL_ISRULE(pParseNode, opt_order_by_clause))
         {
             pParseNode = pParseNode->getChild(2);
-            pOrder = analyseOrderByClause(pParseNode);
+            KabOrder *pOrder = analyseOrderByClause(pParseNode);
             pResult->sortKabAddressees(pOrder);
             delete pOrder;
         }

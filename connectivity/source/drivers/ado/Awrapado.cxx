@@ -278,9 +278,7 @@ void WpADOCommand::put_ActiveConnection(/* [in] */ const OLEVariant& vConn)
 void WpADOCommand::Create()
 {
     IClassFactory2* pInterface2 = NULL;
-    IUnknown        *pOuter     = NULL;
-    HRESULT         hr;
-    hr = CoGetClassObject( ADOS::CLSID_ADOCOMMAND_21,
+    HRESULT hr = CoGetClassObject( ADOS::CLSID_ADOCOMMAND_21,
                           CLSCTX_INPROC_SERVER,
                           NULL,
                           IID_IClassFactory2,
@@ -289,6 +287,7 @@ void WpADOCommand::Create()
     if( !FAILED( hr ) )
     {
         ADOCommand* pCommand=NULL;
+        IUnknown* pOuter=NULL;
 
         hr = pInterface2->CreateInstanceLic(  pOuter,
                                             NULL,
@@ -688,9 +687,7 @@ sal_Bool WpADOProperty::PutValue(const OLEVariant &aValVar)
  void WpADORecordset::Create()
 {
     IClassFactory2* pInterface2 = NULL;
-    IUnknown        *pOuter     = NULL;
-    HRESULT         hr;
-    hr = CoGetClassObject( ADOS::CLSID_ADORECORDSET_21,
+    HRESULT hr = CoGetClassObject( ADOS::CLSID_ADORECORDSET_21,
                           CLSCTX_INPROC_SERVER,
                           NULL,
                           IID_IClassFactory2,
@@ -699,6 +696,7 @@ sal_Bool WpADOProperty::PutValue(const OLEVariant &aValVar)
     if( !FAILED( hr ) )
     {
         ADORecordset *pRec = NULL;
+        IUnknown *pOuter = NULL;
         hr = pInterface2->CreateInstanceLic(  pOuter,
                                             NULL,
                                             ADOS::IID_ADORECORDSET_21,
