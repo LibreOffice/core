@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "docsh.hxx"
+
 #include "scitems.hxx"
 #include <editeng/justifyitem.hxx>
 #include <sot/clsids.hxx>
@@ -92,11 +94,11 @@
 #include "tabprotection.hxx"
 #include "docparam.hxx"
 
-#include "docsh.hxx"
 #include "docshimp.hxx"
 #include "sizedev.hxx"
 #include <rtl/logfile.hxx>
 
+#include <officecfg/Office/Calc.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include "uiitems.hxx"
@@ -426,17 +428,28 @@ sal_Bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const ::com::sun::star::un
     uno::Reference<document::XDocumentProperties> xDocProps = xDPS->getDocumentProperties();
     rtl::OUString sGenerator = xDocProps->getGenerator();
 
-    bool bHardRecalc = false;
-    if (aDocument.IsUserInteractionEnabled() && xDocProps->getGenerator().indexOf("LibreOffice") == -1)
-    {
-        // Generator is not LibreOffice.  Ask if the user wants to perform
-        // full re-calculation.
-        QueryBox aBox(
-            GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
-            ScGlobal::GetRscString(STR_QUERY_FORMULA_RECALC_ONLOAD_ODS));
+    Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
+    ScRecalcOptions nRecalcMode =
+        static_cast<ScRecalcOptions>(officecfg::Office::Calc::Formula::Load::ODFRecalcMode::get(xContext));
 
-        bHardRecalc = aBox.Execute() == RET_YES;
+    bool bHardRecalc = false;
+    if (nRecalcMode == RECALC_ASK)
+    {
+        if (aDocument.IsUserInteractionEnabled() && xDocProps->getGenerator().indexOf("LibreOffice") == -1)
+        {
+            // Generator is not LibreOffice.  Ask if the user wants to perform
+            // full re-calculation.
+            QueryBox aBox(
+                GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
+                ScGlobal::GetRscString(STR_QUERY_FORMULA_RECALC_ONLOAD_ODS));
+
+            bHardRecalc = aBox.Execute() == RET_YES;
+        }
     }
+    else if (nRecalcMode == RECALC_ALWAYS)
+        bHardRecalc = true;
+
+    fprintf(stdout, "ScDocShell::LoadXML:   hard recalc = %d\n", bHardRecalc);
 
     if (bHardRecalc)
         DoHardRecalc(false);
