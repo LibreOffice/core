@@ -332,21 +332,8 @@ void SwUndoSaveCntnt::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
     SwNodes & rNds = rDoc.GetUndoManager().GetUndoNodes();
     SwPosition aPos( pEndNdIdx ? rNds.GetEndOfPostIts()
                                : rNds.GetEndOfExtras() );
-    aPos.nNode--;
 
     const SwPosition* pStt = rPaM.Start(), *pEnd = rPaM.End();
-
-    if( pCpyNd || pEndNdIdx || !aPos.nNode.GetNode().GetCntntNode() ||
-        (!pStt->nContent.GetIndex() && (pStt->nNode != pEnd->nNode ||
-                (!pStt->nNode.GetNode().GetCntntNode() ||
-                    pStt->nNode.GetNode().GetCntntNode()->Len() ==
-                        pEnd->nContent.GetIndex() ) ) ) )
-    {
-        aPos.nNode++;
-        aPos.nContent = 0;
-    }
-    else
-        aPos.nNode.GetNode().GetCntntNode()->MakeEndIndex( &aPos.nContent );
 
     // keep as sal_uInt16; the indices shift!
     sal_uLong nTmpMvNode = aPos.nNode.GetIndex();
@@ -362,29 +349,6 @@ void SwUndoSaveCntnt::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
     else
     {
         rDoc.GetNodes().MoveRange( rPaM, aPos, rNds );
-
-        SwTxtNode* pTxtNd = aPos.nNode.GetNode().GetTxtNode();
-        if( pTxtNd )        // add a seperator for the attributes
-        {
-            // But since all attributes will be touched at an insert (meaning
-            // deleted from the array and re-added again), attributes might
-            // disappear (e.g. "no bold" for 10-20,  "bold" for 12-15 -> when
-            // inserting/deleting, the "bold" will be deleted, which is not
-            // wanted here!)! Thus do not touch the hints but manipulate the
-            // string directly.
-            String& rStr = (String&)pTxtNd->GetTxt();
-            // For safety reasons better only if positioned at the end
-            if( rStr.Len() == aPos.nContent.GetIndex() )
-            {
-                rStr.Insert( ' ' );
-                ++aPos.nContent;
-            }
-            else
-            {
-                pTxtNd->InsertText( rtl::OUString(' '), aPos.nContent,
-                        IDocumentContentOperations::INS_NOHINTEXPAND );
-            }
-        }
     }
     if( pEndNdIdx )
         *pEndNdIdx = aPos.nNode.GetIndex();
@@ -427,15 +391,10 @@ void SwUndoSaveCntnt::MoveFromUndoNds( SwDoc& rDoc, sal_uLong nNodeIdx,
     }
 
     SwTxtNode* pTxtNd = aPaM.GetNode()->GetTxtNode();
-    if( !pEndNdIdx && pTxtNd )  // delete the seperator again
+    if (!pEndNdIdx && pTxtNd)
     {
         if( pEndCntIdx )
             aPaM.GetPoint()->nContent.Assign( pTxtNd, *pEndCntIdx );
-        if( pTxtNd->GetTxt().Len() )
-        {
-            GoInCntnt( aPaM, fnMoveBackward );
-            pTxtNd->EraseText( aPaM.GetPoint()->nContent, 1 );
-        }
 
         aPaM.SetMark();
         aPaM.GetPoint()->nNode = nNodeIdx;
