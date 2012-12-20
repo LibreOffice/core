@@ -1238,7 +1238,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 uno::Sequence< beans::Property > aProperties(
                     rProperties.getLength() );
 
-                if ( m_aFailedPropNames.size() > 0 )
+                if ( !m_aFailedPropNames.empty() )
                 {
                     sal_Int32 nProps = 0;
                     sal_Int32 nCount = rProperties.getLength();
@@ -1277,7 +1277,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                     ContentProperties::UCBNamesToDAVNames(
                         aProperties, aPropNames );
 
-                if ( aPropNames.size() > 0 )
+                if ( !aPropNames.empty() )
                 {
                     std::vector< DAVResource > resources;
                     try
@@ -1329,7 +1329,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                     aHeaderNames,
                     true /* bIncludeUnmatched */ );
 
-                if ( aHeaderNames.size() > 0 )
+                if ( !aHeaderNames.empty() )
                 {
                     try
                     {
@@ -1757,7 +1757,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         }
     } // for
 
-    if ( !bTransient && aProppatchValues.size() )
+    if ( !bTransient && (!aProppatchValues.empty()) )
     {
         try
         {
