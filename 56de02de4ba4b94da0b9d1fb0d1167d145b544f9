@@ -19,6 +19,40 @@
     },
     {
       "key": {
+        "uuid": "AAAAR3///ww\u003d",
+        "filename": "filter/source/msfilter/msvbahelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-12-20T03:18:42Z",
+      "side": 1,
+      "message": "while at discarding ::rtl prefix, you might do it competely",
+      "revId": "56de02de4ba4b94da0b9d1fb0d1167d145b544f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAR3///ws\u003d",
+        "filename": "filter/source/msfilter/msvbahelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-12-20T03:18:42Z",
+      "side": 1,
+      "message": "!sLibrary.isEmpty() \u0026\u0026 !sMacro.isEmpty()\nis clearer here.\ndo not use getLength() just to test for empty/non-empty",
+      "revId": "56de02de4ba4b94da0b9d1fb0d1167d145b544f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAR3///0E\u003d",
         "filename": "filter/source/msfilter/msvbahelper.cxx",
         "patchSetId": 1
@@ -64,6 +98,24 @@
       "writtenOn": "2012-12-19T20:26:17Z",
       "side": 1,
       "message": "aRes.msResolvedMacro +\u003d \".\";",
+      "revId": "56de02de4ba4b94da0b9d1fb0d1167d145b544f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAR3///wo\u003d",
+        "filename": "filter/source/msfilter/msvbahelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-12-20T03:18:42Z",
+      "side": 1,
+      "message": "the new code reverse the original order\nbeside it would be simpler and more efficeint as a one line:\n\naRes.mnResovedMacro \u003d sContainer + \".\" + sModule + \".\" + sProcedure",
+      "parentUuid": "AAAAR3///z8\u003d",
       "revId": "56de02de4ba4b94da0b9d1fb0d1167d145b544f9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
