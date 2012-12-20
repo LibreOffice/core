@@ -780,9 +780,6 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
 {
     ViewShell::GetMenuState(rSet);
 
-    // Style catalog must not be called
-    rSet.DisableItem( SID_STYLE_CATALOG );
-
     rSet.Put(SfxBoolItem(SID_DIAMODE, sal_False));
     rSet.Put(SfxBoolItem(SID_DRAWINGMODE, sal_False));
     rSet.Put(SfxBoolItem(SID_OUTLINEMODE, sal_True));

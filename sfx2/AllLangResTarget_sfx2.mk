@@ -66,7 +66,6 @@ $(eval $(call gb_SrsTarget_add_files,sfx/res,\
     sfx2/source/dialog/titledockwin.src \
     sfx2/source/dialog/versdlg.src \
     sfx2/source/doc/doc.src \
-    sfx2/source/doc/doctdlg.src \
     sfx2/source/doc/doctempl.src \
     sfx2/source/doc/graphhelp.src \
     sfx2/source/doc/new.src \

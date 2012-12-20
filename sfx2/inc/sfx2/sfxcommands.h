@@ -62,7 +62,6 @@
 #define CMD_SID_DOCTEMPLATE                         ".uno:SaveAsTemplate"
 #define CMD_SID_SEARCH_DLG                          ".uno:SearchDialog"
 #define CMD_SID_SHOW_BROWSER                        ".uno:ShowBrowser"
-#define CMD_SID_STYLE_CATALOG                       ".uno:StyleCatalog"
 #define CMD_SID_STYLE_NEW_BY_EXAMPLE                ".uno:StyleNewByExample"
 #define CMD_SID_INET_DLG                            ".uno:InternetDialog"
 

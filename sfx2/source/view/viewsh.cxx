@@ -451,14 +451,6 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
             }
             break;
         }
-        case SID_STYLE_CATALOG:
-        {
-            SfxTemplateCatalog aCatalog(
-                SFX_APP()->GetTopWindow(), &GetViewFrame()->GetBindings());
-            aCatalog.Execute();
-            rReq.Ignore();
-            break;
-        }
         case SID_ACTIVATE_STYLE_APPLY:
         {
             com::sun::star::uno::Reference< com::sun::star::frame::XFrame > xFrame(
@@ -814,13 +806,6 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
     {
         switch ( nSID )
         {
-            case SID_STYLE_CATALOG:
-            {
-                if ( !GetViewFrame()->KnowsChildWindow( SID_STYLE_DESIGNER ) )
-                    rSet.DisableItem( nSID );
-                break;
-            }
-
             // Printer functions
             case SID_PRINTDOC:
             case SID_PRINTDOCDIRECT:

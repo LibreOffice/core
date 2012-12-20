@@ -250,11 +250,6 @@ interface OutlineView
         ExecMethod = FuTemporaryModify ;
         StateMethod = GetMenuState ;
     ]
-    SID_STYLE_CATALOG // ole : no, status : ?
-    [
-        ExecMethod = FuTemporary ;
-        StateMethod = GetMenuState ;
-    ]
      // Vorlagen
      // kein Menueeintrag
     SID_STYLE_FAMILY2 // ole : no, status : ?

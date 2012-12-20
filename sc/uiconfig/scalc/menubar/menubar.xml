@@ -52,13 +52,6 @@
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:SetDocumentProperties"/>
             <menu:menuitem menu:id=".uno:Signature"/>
-            <menu:menu menu:id=".uno:TemplateMenu">
-                <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:Organizer"/>
-                    <menu:menuitem menu:id=".uno:AddressBookSource"/>
-                    <menu:menuitem menu:id=".uno:OpenTemplate"/>
-                </menu:menupopup>
-            </menu:menu>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:WebHtml"/>
             <menu:menuseparator/>
