@@ -428,6 +428,7 @@
       <menu:menuitem menu:id=".uno:Gallery"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:BibliographyComponent"/>
+      <menu:menuitem menu:id=".uno:AddressBookSource"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:MergeDocuments"/>
       <menu:menuseparator/>
