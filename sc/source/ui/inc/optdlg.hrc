@@ -167,7 +167,10 @@
 #define BTN_CUSTOM_CALC_CUSTOM    94
 #define BTN_CUSTOM_CALC_DETAILS   95
 #define FL_RECALC_OPTIONS         96
-#define LB_OOXML_RECALC           97
+#define FT_OOXML_RECALC           97
+#define LB_OOXML_RECALC           98
+#define FT_ODF_RECALC             99
+#define LB_ODF_RECALC            100
 
 // TP_COMPATIBILITY
 #define FL_KEY_BINDINGS       1
