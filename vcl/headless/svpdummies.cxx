@@ -71,10 +71,7 @@ Rectangle SvpSalSystem::GetDisplayScreenWorkAreaPosSizePixel( unsigned int nScre
 
 OUString SvpSalSystem::GetDisplayScreenName( unsigned int nScreen )
 {
-   OUStringBuffer aBuf( 32 );
-   aBuf.appendAscii( "VirtualScreen " );
-   aBuf.append( sal_Int32(nScreen) );
-   return aBuf.makeStringAndClear();
+   return "VirtualScreen " + OUString::valueOf(sal_Int32(nScreen));
 }
 
 int SvpSalSystem::ShowNativeDialog( const OUString&, const OUString&,

@@ -88,7 +88,7 @@ void SalAbort( const OUString& rErrorText, bool bDumpCore )
 {
     OUString aError( rErrorText );
     if( aError.isEmpty() )
-        aError = OUString::createFromAscii("Unknown application error");
+        aError = "Unknown application error";
     ::fprintf( stderr, "%s\n", OUStringToOString(rErrorText, osl_getThreadTextEncoding()).getStr() );
 
     ::fprintf( stderr, "SalAbort: '%s'",
@@ -101,7 +101,7 @@ void SalAbort( const OUString& rErrorText, bool bDumpCore )
 
 const OUString& SalGetDesktopEnvironment()
 {
-    static OUString aEnv( RTL_CONSTASCII_USTRINGPARAM( "headless" ) );
+    static OUString aEnv( "headless" );
     return aEnv;
 }
 
