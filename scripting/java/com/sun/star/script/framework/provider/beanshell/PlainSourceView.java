@@ -240,4 +240,4 @@ class GlyphGutter extends JComponent {
         g.setColor(Color.black);
         g.drawPolygon(arrow);
     }
-};
+}

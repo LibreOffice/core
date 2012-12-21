@@ -152,7 +152,7 @@ public class _XContainer extends MultiMethodTest {
             bElementReplaced = true;
          }
          public void disposing (EventObject obj) {}
-    };
+    }
 
     MyListener listener = new MyListener();
 

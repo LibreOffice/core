@@ -96,7 +96,7 @@ public class SdMasterPage extends TestCase {
 
         try {
             log.println( "creating a draw document" );
-            xDrawDoc = SOF.createDrawDoc(null);;
+            xDrawDoc = SOF.createDrawDoc(null);
          } catch (com.sun.star.uno.Exception e) {
             // Some exception occures.FAILED
             e.printStackTrace( log );
@@ -109,7 +109,7 @@ public class SdMasterPage extends TestCase {
     */
     protected void cleanup( TestParameters Param, PrintWriter log) {
         log.println("disposing xDrawDoc");
-        util.DesktopTools.closeDoc(xDrawDoc);;
+        util.DesktopTools.closeDoc(xDrawDoc);
     }
 
     /**

@@ -61,7 +61,7 @@ public class ScIndexEnumeration_TableConditionalEntryEnumeration extends TestCas
 
         try {
             log.println( "creating a sheetdocument" );
-            xSpreadsheetDoc = SOF.createCalcDoc(null);;
+            xSpreadsheetDoc = SOF.createCalcDoc(null);
         } catch (com.sun.star.uno.Exception e) {
             // Some exception occures.FAILED
             e.printStackTrace( log );

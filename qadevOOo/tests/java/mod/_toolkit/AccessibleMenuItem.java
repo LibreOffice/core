@@ -182,7 +182,6 @@ public class AccessibleMenuItem extends TestCase {
      */
     protected void cleanup(TestParameters Param, PrintWriter log) {
         util.DesktopTools.closeDoc(xTextDoc);
-        ;
     }
 
     /**

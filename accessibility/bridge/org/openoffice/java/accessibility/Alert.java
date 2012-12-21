@@ -58,5 +58,5 @@ public class Alert extends Dialog {
         public AccessibleRole getAccessibleRole() {
             return AccessibleRole.ALERT;
         }
-    };
+    }
 }

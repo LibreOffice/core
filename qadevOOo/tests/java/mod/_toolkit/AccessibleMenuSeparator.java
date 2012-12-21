@@ -149,7 +149,6 @@ public class AccessibleMenuSeparator extends TestCase {
      */
     protected void cleanup(TestParameters Param, PrintWriter log) {
         util.DesktopTools.closeDoc(xTextDoc);
-        ;
     }
 
     /**
@@ -164,3 +163,4 @@ public class AccessibleMenuSeparator extends TestCase {
         }
     }
 }
+

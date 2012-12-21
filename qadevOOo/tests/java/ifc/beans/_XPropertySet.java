@@ -72,7 +72,7 @@ public class _XPropertySet extends MultiMethodTest {
             propertyChanged = true;
          }
          public void disposing (EventObject obj) {}
-    };
+    }
 
     private final XPropertyChangeListener PClistener = new MyChangeListener();
 
@@ -92,7 +92,7 @@ public class _XPropertySet extends MultiMethodTest {
             vetoableChanged = true;
          }
          public void disposing (EventObject obj) {}
-    };
+    }
 
     private final XVetoableChangeListener VClistener = new MyVetoListener();
 

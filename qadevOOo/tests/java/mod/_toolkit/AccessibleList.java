@@ -202,7 +202,6 @@ public class AccessibleList extends TestCase {
         }
 
         util.DesktopTools.closeDoc(xTextDoc);
-        ;
     }
 
     /**

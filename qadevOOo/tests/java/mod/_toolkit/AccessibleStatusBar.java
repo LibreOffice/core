@@ -90,7 +90,6 @@ public class AccessibleStatusBar extends TestCase {
 
         if (xTextDoc != null) {
             util.DesktopTools.closeDoc(xTextDoc);
-            ;
         }
     }
 
@@ -120,8 +119,6 @@ public class AccessibleStatusBar extends TestCase {
         if (xTextDoc != null) {
             util.DesktopTools.closeDoc(xTextDoc);
         }
-
-        ;
 
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory(

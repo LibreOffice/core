@@ -67,4 +67,4 @@ public class QueryDefinition
         catch (PropertyVetoException e) { }
         catch (IllegalArgumentException e) { }
     }
-};
+}

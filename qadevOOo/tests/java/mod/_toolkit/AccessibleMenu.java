@@ -166,7 +166,6 @@ public class AccessibleMenu extends TestCase {
     protected void cleanup(TestParameters Param, PrintWriter log) {
         try {
             util.DesktopTools.closeDoc(xTextDoc);
-            ;
         } catch (com.sun.star.lang.DisposedException e) {
             log.println("Object already disposed");
         }
@@ -190,3 +189,4 @@ public class AccessibleMenu extends TestCase {
         }
     }
 }
+

@@ -213,7 +213,7 @@ public class AccessibleBrowseBoxTableCell extends TestCase {
     */
     private void shortWait() {
         try {
-            Thread.sleep(5000); ;
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             System.out.println("While waiting :" + e) ;
         }

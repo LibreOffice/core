@@ -176,7 +176,6 @@ public class AccessibleComboBox extends TestCase {
         }
 
         util.DesktopTools.closeDoc(xTextDoc);
-        ;
     }
 
     /**

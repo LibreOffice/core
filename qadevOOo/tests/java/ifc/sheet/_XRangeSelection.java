@@ -102,7 +102,7 @@ public class _XRangeSelection extends MultiMethodTest {
         requiredMethod("addRangeSelectionListener()");
 
         // get the sheet center
-        Point center = getSheetCenter();;
+        Point center = getSheetCenter();
         if (center == null)
             throw new StatusException(Status.failed("Couldn't get the sheet center."));
 
@@ -211,7 +211,7 @@ public class _XRangeSelection extends MultiMethodTest {
                 if (xacc != null) {
                     if (xacc.getAccessibleContext().getAccessibleName().indexOf("d2")>0) {
                         tw=tw_temp;
-                    };
+                    }
                 } else {
                     log.println("\t unknown window");
                 }

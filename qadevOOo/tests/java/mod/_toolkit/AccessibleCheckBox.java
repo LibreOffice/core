@@ -195,7 +195,6 @@ public class AccessibleCheckBox extends TestCase {
             psDiag.interrupt();
             log.println("closing the document");
             util.DesktopTools.closeDoc(xTextDoc);
-            ;
             log.println("reinitialize the variable");
             xTextDoc = null;
         } catch (com.sun.star.lang.IndexOutOfBoundsException ioe) {
