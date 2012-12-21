@@ -508,18 +508,6 @@ namespace
                 pWindow = new CancelButton(pParent, nBits);
             else if (sType == "gtk-help")
                 pWindow = new HelpButton(pParent, nBits);
-            else if (sType == "gtk-media-next")
-            {
-                PushButton *pBtn = new PushButton(pParent, nBits);
-                pBtn->SetSymbol(SYMBOL_NEXT);
-                pWindow = pBtn;
-            }
-            else if (sType == "gtk-media-previous")
-            {
-                PushButton *pBtn = new PushButton(pParent, nBits);
-                pBtn->SetSymbol(SYMBOL_PREV);
-                pWindow = pBtn;
-            }
             else
             {
                 pWindow = new PushButton(pParent, nBits);
