@@ -32,3 +32,18 @@
      if (xmlWrapStat(path, &stat_buffer) == -1)
          return 0;
  #else
+--- misc/libxml2-2.7.8/win32/Makefile.msvc	2010-11-04 09:58:43.000000000 -0500
++++ misc/build/libxml2-2.7.8/win32/Makefile.msvc	2012-12-21 01:07:45.000000000 -0500
+@@ -71,9 +71,9 @@
+ !if "$(WITH_ICONV)" == "1"
+ LIBS = $(LIBS) iconv.lib
+ !endif 
+-+!if "$(WITH_ICU)" == "1"
+-+LIBS = $(LIBS) icu.lib
+-+!endif
++!if "$(WITH_ICU)" == "1"
++LIBS = $(LIBS) icu.lib
++!endif
+ !if "$(WITH_ZLIB)" == "1"
+ LIBS = $(LIBS) zdll.lib
+ !endif
