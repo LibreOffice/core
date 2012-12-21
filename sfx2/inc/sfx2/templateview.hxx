@@ -36,26 +36,28 @@ public:
 
     void InsertItems (const std::vector<TemplateItemProperties> &rTemplates);
 
-    void setDblClickHdl (const Link &rLink) { maDblClickHdl = rLink; }
-
     void setCloseHdl (const Link &rLink) { maAllButton.SetClickHdl(rLink); }
     void setMasterView(TemplateAbstractView* pMasterView) { mpMasterView = pMasterView; }
     virtual bool renameItem(ThumbnailViewItem* pItem, rtl::OUString sNewTitle);
+
+
+    // FIXME Kept only during the refactoring
+    void setOpenHdl (const Link &rLink) { maOpenHdl = rLink; }
+    virtual void OnItemDblClicked(ThumbnailViewItem *pItem) { maOpenHdl.Call(pItem); }
 
 protected:
 
     virtual void Resize ();
 
-    virtual void OnItemDblClicked (ThumbnailViewItem *pItem);
-
 private:
     TemplateAbstractView* mpMasterView;
+
+    Link maOpenHdl;
 
     PushButton maAllButton;
     FixedText  maFTName;
     sal_uInt16 mnId;
     OUString maName;
-    Link maDblClickHdl;
 };
 
 #endif // TEMPLATEVIEW_HXX

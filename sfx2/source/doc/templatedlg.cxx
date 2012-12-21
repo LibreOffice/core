@@ -172,7 +172,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
 
     maView->setItemStateHdl(LINK(this,SfxTemplateManagerDlg,TVFolderStateHdl));
     maView->setOverlayItemStateHdl(LINK(this,SfxTemplateManagerDlg,TVTemplateStateHdl));
-    maView->setOverlayDblClickHdl(LINK(this,SfxTemplateManagerDlg,OpenTemplateHdl));
+    maView->setOpenHdl(LINK(this,SfxTemplateManagerDlg,OpenTemplateHdl));
     maView->setOverlayCloseHdl(LINK(this,SfxTemplateManagerDlg,CloseOverlayHdl));
 
     // Set online view position and dimensions
@@ -183,7 +183,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
                                     TEMPLATE_ITEM_PADDING);
 
     mpOnlineView->setOverlayItemStateHdl(LINK(this,SfxTemplateManagerDlg,TVTemplateStateHdl));
-    mpOnlineView->setOverlayDblClickHdl(LINK(this,SfxTemplateManagerDlg,OpenTemplateHdl));
+    mpOnlineView->setOpenHdl(LINK(this,SfxTemplateManagerDlg,OpenTemplateHdl));
     mpOnlineView->setOverlayCloseHdl(LINK(this,SfxTemplateManagerDlg,CloseOverlayHdl));
 
     mpSearchView->setItemMaxTextLength(TEMPLATE_ITEM_MAX_TEXT_LENGTH);
