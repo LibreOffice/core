@@ -46,7 +46,7 @@
 #include <Carbon/Carbon.h>
 #include "postmac.h"
 
-#if !defined(MAC_OS_X_VERSION_10_7)
+#if MACOSX_SDK_VERSION < 1070
 
 enum {
     NSFullScreenWindowMask = (1 << 14)
@@ -57,9 +57,9 @@ enum {
     NSWindowCollectionBehaviorFullScreenAuxiliary = (1 << 8)
 };
 
-#if !defined(MAC_OS_X_VERSION_10_5)
+#if MACOSX_SDK_VERSION < 1050
 
-typedef unsigned int NSWindowCollectionBehavior;
+typedef NSUInteger NSWindowCollectionBehavior;
 
 #endif
 
