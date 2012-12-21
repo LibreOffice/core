@@ -25,7 +25,6 @@
  * instead of those above.
  */
 
-#include <unotools/tempfile.hxx>
 #include <swmodeltestbase.hxx>
 
 class Test : public SwModelTestBase
@@ -50,24 +49,17 @@ void Test::run()
         {"fdo38244.odt", &Test::testFdo38244},
         {"first-header-footer.odt", &Test::testFirstHeaderFooter},
     };
+    header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
         MethodEntry<Test>& rEntry = aMethods[i];
-        mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/odfexport/data/") + OUString::createFromAscii(rEntry.pName));
+        load("/sw/qa/extras/odfexport/data/", rEntry.pName);
         // If the testcase is stored in some other format, it's pointless to test.
         if (OString(rEntry.pName).endsWith(".odt"))
             (this->*rEntry.pMethod)();
-        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-        uno::Sequence<beans::PropertyValue> aArgs(1);
-        aArgs[0].Name = "FilterName";
-        aArgs[0].Value <<= OUString("writer8");
-        utl::TempFile aTempFile;
-        aTempFile.EnableKillingFile();
-        xStorable->storeToURL(aTempFile.GetURL(), aArgs);
-        uno::Reference<lang::XComponent> xComponent(xStorable, uno::UNO_QUERY);
-        xComponent->dispose();
-        mxComponent = loadFromDesktop(aTempFile.GetURL());
+        reload("writer8");
         (this->*rEntry.pMethod)();
+        finish();
     }
 }
 

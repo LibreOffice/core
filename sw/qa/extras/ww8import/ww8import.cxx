@@ -69,11 +69,13 @@ void Test::run()
         {"n757905.doc", &Test::testN757905},
         {"all_gaps_word.doc", &Test::testAllGapsWord},
     };
+    header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
         MethodEntry<Test>& rEntry = aMethods[i];
-        mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/ww8import/data/") + OUString::createFromAscii(rEntry.pName));
+        load("/sw/qa/extras/ww8import/data/", rEntry.pName);
         (this->*rEntry.pMethod)();
+        finish();
     }
 }
 

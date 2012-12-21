@@ -209,6 +209,7 @@ void Test::run()
         {"fdo54473.rtf", &Test::testFdo54473},
         {"fdo49934.rtf", &Test::testFdo49934},
     };
+    header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
         MethodEntry<Test>& rEntry = aMethods[i];
@@ -225,10 +226,11 @@ void Test::run()
             aSettings.SetLanguageTag(LanguageTag("lt"));
             Application::SetSettings(aSettings);
         }
-        mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/rtfimport/data/") + OUString::createFromAscii(rEntry.pName));
+        load("/sw/qa/extras/rtfimport/data/", rEntry.pName);
         if (OString(rEntry.pName) == "fdo48023.rtf" || OString(rEntry.pName) == "fdo44211.rtf")
             Application::SetSettings(aSavedSettings);
         (this->*rEntry.pMethod)();
+        finish();
     }
 }
 

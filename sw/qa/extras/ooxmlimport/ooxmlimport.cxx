@@ -175,11 +175,13 @@ void Test::run()
         {"tableborder-finedash.docx", &Test::testFineTableDash},
         {"n792778.docx", &Test::testN792778},
     };
+    header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
         MethodEntry<Test>& rEntry = aMethods[i];
-        mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/ooxmlimport/data/") + OUString::createFromAscii(rEntry.pName));
+        load("/sw/qa/extras/ooxmlimport/data/",  rEntry.pName);
         (this->*rEntry.pMethod)();
+        finish();
     }
 }
 

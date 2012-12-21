@@ -31,8 +31,6 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#include <unotools/tempfile.hxx>
-
 #include <swmodeltestbase.hxx>
 
 class Test : public SwModelTestBase
@@ -61,22 +59,17 @@ void Test::run()
         {"fdo46020.odt", &Test::testFdo46020},
         {"first-header-footer.doc", &Test::testFirstHeaderFooter},
     };
+    header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
         MethodEntry<Test>& rEntry = aMethods[i];
-        mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/ww8export/data/") + OUString::createFromAscii(rEntry.pName));
+        load("/sw/qa/extras/ww8export/data/", rEntry.pName);
         // If the testcase is stored in some other format, it's pointless to test.
         if (OString(rEntry.pName).endsWith(".doc"))
             (this->*rEntry.pMethod)();
-        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-        uno::Sequence<beans::PropertyValue> aArgs(1);
-        aArgs[0].Name = "FilterName";
-        aArgs[0].Value <<= OUString("MS Word 97");
-        utl::TempFile aTempFile;
-        aTempFile.EnableKillingFile();
-        xStorable->storeToURL(aTempFile.GetURL(), aArgs);
-        mxComponent = loadFromDesktop(aTempFile.GetURL());
+        reload("MS Word 97");
         (this->*rEntry.pMethod)();
+        finish();
     }
 }
 

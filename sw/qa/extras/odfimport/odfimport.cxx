@@ -62,11 +62,13 @@ void Test::run()
         {"hello.odt", &Test::testPageStyleLayoutDefault},
         {"hello.odt", &Test::testPageStyleLayoutRight},
     };
+    header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
         MethodEntry<Test>& rEntry = aMethods[i];
-        mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/odfimport/data/") + OUString::createFromAscii(rEntry.pName));
+        load("/sw/qa/extras/odfimport/data/",  rEntry.pName);
         (this->*rEntry.pMethod)();
+        finish();
     }
 }
 

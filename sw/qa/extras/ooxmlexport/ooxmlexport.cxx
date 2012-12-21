@@ -111,24 +111,17 @@ void Test::run()
         "math-mso2k7.docx",
     };
     std::vector<const char*> vBlacklist(aBlacklist, aBlacklist + SAL_N_ELEMENTS(aBlacklist));
+    header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
         MethodEntry<Test>& rEntry = aMethods[i];
-        mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/ooxmlexport/data/") + OUString::createFromAscii(rEntry.pName));
+        load("/sw/qa/extras/ooxmlexport/data/", rEntry.pName);
         // If the testcase is stored in some other format, it's pointless to test.
         if (OString(rEntry.pName).endsWith(".docx") && std::find(vBlacklist.begin(), vBlacklist.end(), rEntry.pName) == vBlacklist.end())
             (this->*rEntry.pMethod)();
-        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-        uno::Sequence<beans::PropertyValue> aArgs(1);
-        aArgs[0].Name = "FilterName";
-        aArgs[0].Value <<= OUString("Office Open XML Text");
-        utl::TempFile aTempFile;
-        aTempFile.EnableKillingFile();
-        xStorable->storeToURL(aTempFile.GetURL(), aArgs);
-        uno::Reference<lang::XComponent> xComponent(xStorable, uno::UNO_QUERY);
-        xComponent->dispose();
-        mxComponent = loadFromDesktop(aTempFile.GetURL());
+        reload("Office Open XML Text");
         (this->*rEntry.pMethod)();
+        finish();
     }
 }
 

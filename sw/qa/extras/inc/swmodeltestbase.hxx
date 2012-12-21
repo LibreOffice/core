@@ -35,6 +35,7 @@
 #include <unotest/macros_test.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/processfactory.hxx>
+#include <unotools/tempfile.hxx>
 
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
@@ -227,6 +228,39 @@ protected:
         return getProperty<OUString>(getProperty< uno::Reference<beans::XPropertySet> >(xFormula, "Model"), "Formula");
     }
 
+    void header()
+    {
+        fprintf(stderr, "File tested,Execution Time (ms)\n");
+    }
+
+    void load(const char* pDir, const char* pName)
+    {
+        // Output name early, so in the case of a hang, the name of the hanging input file is visible.
+        fprintf(stderr, "%s,", pName);
+        m_nStartTime = osl_getGlobalTimer();
+        mxComponent = loadFromDesktop(getURLFromSrc(pDir) + OUString::createFromAscii(pName));
+    }
+    
+    void reload(OUString aFilter)
+    {
+        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+        uno::Sequence<beans::PropertyValue> aArgs(1);
+        aArgs[0].Name = "FilterName";
+        aArgs[0].Value <<= aFilter;
+        utl::TempFile aTempFile;
+        aTempFile.EnableKillingFile();
+        xStorable->storeToURL(aTempFile.GetURL(), aArgs);
+        uno::Reference<lang::XComponent> xComponent(xStorable, uno::UNO_QUERY);
+        xComponent->dispose();
+        mxComponent = loadFromDesktop(aTempFile.GetURL());
+    }
+
+    void finish()
+    {
+        sal_uInt32 nEndTime = osl_getGlobalTimer();
+        fprintf(stderr, "%" SAL_PRIuUINT32"\n", nEndTime - m_nStartTime);
+    }
+
     uno::Reference<lang::XComponent> mxComponent;
     xmlBufferPtr mpXmlBuffer;
 
@@ -236,6 +270,7 @@ protected:
         const char* pName;
         void (T::*pMethod)();
     };
+    sal_uInt32 m_nStartTime;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
