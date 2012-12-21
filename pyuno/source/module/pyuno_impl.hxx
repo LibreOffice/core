@@ -19,6 +19,11 @@
 #ifndef _PYUNO_IMPL_
 #define _PYUNO_IMPL_
 
+#if defined(_MSC_VER) && (_MSC_VER >= 1700)
+// Workaround for some horrible hypot() mess
+#include <math.h>
+#endif
+
 #include <Python.h>
 
 //Must define PyVarObject_HEAD_INIT for Python 2.5 or older
