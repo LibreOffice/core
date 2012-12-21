@@ -124,7 +124,6 @@ public:
 
 private:
     void setCharClass(const LanguageTag& rLanguageTag);
-    sal_uInt16 SAL_CALL capitalType(const OUString&, CharClass *);
     OUString SAL_CALL makeLowerCase(const OUString&, CharClass *);
 
 };

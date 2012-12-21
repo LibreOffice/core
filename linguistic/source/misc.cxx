@@ -592,6 +592,32 @@ sal_Bool IsUpper( const String &rText, xub_StrLen nPos, xub_StrLen nLen, sal_Int
             && !(nFlags & KCharacterType::LOWER);
 }
 
+CapType SAL_CALL capitalType(const OUString& aTerm, CharClass * pCC)
+{
+        sal_Int32 tlen = aTerm.getLength();
+        if ((pCC) && (tlen))
+        {
+            String aStr(aTerm);
+            sal_Int32 nc = 0;
+            for (sal_uInt16 tindex = 0; tindex < tlen;  tindex++)
+            {
+                if (pCC->getCharacterType(aStr,tindex) &
+                   ::com::sun::star::i18n::KCharacterType::UPPER) nc++;
+            }
+
+            if (nc == 0)
+                return CAPTYPE_NOCAP;
+            if (nc == tlen)
+                return CAPTYPE_ALLCAP;
+            if ((nc == 1) && (pCC->getCharacterType(aStr,0) &
+                  ::com::sun::star::i18n::KCharacterType::UPPER))
+                return CAPTYPE_INITCAP;
+
+            return CAPTYPE_MIXED;
+        }
+        return CAPTYPE_UNKNOWN;
+}
+
 
 String ToLower( const String &rText, sal_Int16 nLanguage )
 {
