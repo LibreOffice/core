@@ -724,7 +724,7 @@ ShutdownThread::run()
         xQuickStarter->setFastPropertyValue(0, uno::makeAny(false));
 
     // Shutdown the office
-    uno::Reference< frame::XDesktop2 > xDesktop = Desktop::create(m_xContext);
+    uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(m_xContext);
 
     xDesktop->terminate();
 }

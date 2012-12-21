@@ -149,8 +149,7 @@ namespace dbaui
         return new DlgFilterCrit( _pParent, m_aContext.getUNOContext(), _rxConnection, m_xComposer, _rxColumns );
     }
 
-    void RowsetFilterDialog::initialize( const Sequence< Any >& aArguments )
-            throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException)
+    void SAL_CALL RowsetFilterDialog::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException)
     {
         if( aArguments.getLength() == 3 )
         {

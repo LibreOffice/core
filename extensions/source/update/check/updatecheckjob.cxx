@@ -152,7 +152,7 @@ void InitUpdateCheckJobThread::setTerminating() {
 UpdateCheckJob::UpdateCheckJob( const uno::Reference<uno::XComponentContext>& xContext ) :
     m_xContext(xContext)
 {
-    m_xDesktop.set( Desktop::create(xContext) );
+    m_xDesktop.set( frame::Desktop::create(xContext) );
     m_xDesktop->addTerminateListener( this );
 }
 
