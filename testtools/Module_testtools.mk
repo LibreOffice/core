@@ -45,15 +45,11 @@ $(eval $(call gb_Module_add_targets,testtools,\
 ))
 endif
 
-# FIXME: currently failing to build with
-# Attempted to read or write protected memory. This is often an
-# indication that other memory is corrupt.
-# at ?A0x393b8821.sal_main()
-#ifeq ($(COM),MSC)
-#$(eval $(call gb_Module_add_targets,testtools,\
-#	CustomTarget_bridgetest_climaker \
-#))
-#endif
+ifeq ($(COM),MSC)
+$(eval $(call gb_Module_add_targets,testtools,\
+	CustomTarget_bridgetest_climaker \
+))
+endif
 
 # FIXME: Mac OSX PPC GCC fails this test!, likely broken UNO bridge.
 # (is it still relevant?)
