@@ -28,6 +28,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/text/XFootnotesSupplier.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
@@ -67,6 +68,7 @@ public:
     void testFdo53113();
     void testFdo55939();
     void testTextFrames();
+    void testFdo53604();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -109,6 +111,7 @@ void Test::run()
         {"fdo53113.odt", &Test::testFdo53113},
         {"fdo55939.odt", &Test::testFdo55939},
         {"textframes.odt", &Test::testTextFrames},
+        {"fdo53604.odt", &Test::testFdo53604},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -447,6 +450,14 @@ void Test::testTextFrames()
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xIndexAccess->getCount());
+}
+
+void Test::testFdo53604()
+{
+    // Invalid output on empty footnote.
+    uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFootnotes(xFootnotesSupplier->getFootnotes(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xFootnotes->getCount());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
