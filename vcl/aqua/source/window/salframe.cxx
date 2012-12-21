@@ -57,6 +57,12 @@ enum {
     NSWindowCollectionBehaviorFullScreenAuxiliary = (1 << 8)
 };
 
+#if !defined(MAC_OS_X_VERSION_10_5)
+
+typedef unsigned int NSWindowCollectionBehavior;
+
+#endif
+
 #endif
 
 using namespace std;
