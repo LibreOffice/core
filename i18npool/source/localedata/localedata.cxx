@@ -447,7 +447,7 @@ oslGenericFunction SAL_CALL lcl_LookupTableHelper::getFunctionSymbolByName(
     for ( sal_Int16 i = 0; i < nbOfLocales; i++)
     {
         if (localeName.equalsAscii(aLibTable[i].pLocale) ||
-                (bFallback && localeName == aFallback))
+                (bFallback && aFallback.equalsAscii(aLibTable[i].pLocale)))
         {
 #ifndef DISABLE_DYNLOADING
             LocaleDataLookupTableItem* pCurrent = 0;
