@@ -72,12 +72,11 @@ sal_Bool FormulaHelper::GetNextFunc( const String&  rFormula,
                                  const IFunctionDescription**   ppFDesc,   // = NULL
                                  ::std::vector< ::rtl::OUString>*   pArgs )  const // = NULL
 {
-    sal_Bool        bFound = sal_False;
     xub_StrLen  nOldStart = rFStart;
     String      aFname;
 
     rFStart = GetFunctionStart( rFormula, rFStart, bBack, ppFDesc ? &aFname : NULL );
-    bFound  = ( rFStart != FUNC_NOTFOUND );
+    sal_Bool bFound  = ( rFStart != FUNC_NOTFOUND );
 
     if ( bFound )
     {

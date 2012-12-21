@@ -114,7 +114,6 @@ void ArgEdit::KeyInput( const KeyEvent& rKEvt )
     KeyCode     aCode   = rKEvt.GetKeyCode();
     sal_Bool        bUp     = (aCode.GetCode() == KEY_UP);
     sal_Bool        bDown   = (aCode.GetCode() == KEY_DOWN);
-    ArgEdit*    pEd     = NULL;
 
     if (   pSlider
         && ( !aCode.IsShift() && !aCode.IsMod1() && !aCode.IsMod2() )
@@ -122,9 +121,10 @@ void ArgEdit::KeyInput( const KeyEvent& rKEvt )
     {
         if ( nArgs > 1 )
         {
-            long    nThumb       = pSlider->GetThumbPos();
-            sal_Bool    bDoScroll    = sal_False;
-            sal_Bool    bChangeFocus = sal_False;
+            ArgEdit* pEd = NULL;
+            long nThumb = pSlider->GetThumbPos();
+            sal_Bool bDoScroll = sal_False;
+            sal_Bool bChangeFocus = sal_False;
 
             if ( bDown )
             {
