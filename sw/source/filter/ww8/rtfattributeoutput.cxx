@@ -2336,12 +2336,15 @@ void RtfAttributeOutput::TextFootnote_Impl( const SwFmtFtn& rFootnote )
     m_aRun.clear();
     bool bInRunOrig = m_bInRun;
     m_bInRun = false;
+    bool bSingleEmptyRunOrig = m_bSingleEmptyRun;
+    m_bSingleEmptyRun = false;
     m_bBufferSectionHeaders = true;
     m_rExport.WriteSpecialText( pIndex->GetIndex() + 1,
             pIndex->GetNode().EndOfSectionIndex(),
             !rFootnote.IsEndNote() ? TXT_FTN : TXT_EDN);
     m_bBufferSectionHeaders = false;
     m_bInRun = bInRunOrig;
+    m_bSingleEmptyRun = bSingleEmptyRunOrig;
     m_aRun = aRun;
     m_aRun->append(m_aSectionHeaders.makeStringAndClear());
 
