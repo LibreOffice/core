@@ -41,6 +41,14 @@ namespace {
         else
             return false;
     }
+    static bool loadSvg(rtl::OUString aUri, BitmapEx &rBitmap)
+    {
+        rtl::Bootstrap::expandMacros( aUri );
+        INetURLObject aObj( aUri );
+        SvgData aSvgData(aObj.PathToFileName());
+        rBitmap = aSvgData.getReplacement();
+        return !rBitmap.IsEmpty();
+    }
 }
 
 bool Application::LoadBrandBitmap (const char* pName, BitmapEx &rBitmap)
@@ -80,13 +88,9 @@ bool Application::LoadBrandSVG (const char *pName, BitmapEx &rBitmap)
     rtl::OUString aLocaleName = ( aBaseName + rtl::OUString("-") +
                                   aLanguageTag.getBcp47() +
                                   aSvg );
-    //rtl::OUString uri = rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program/edition" ) + aLocaleName;
+    rtl::OUString uriOpt = rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program/edition" ) + aLocaleName;
     rtl::OUString uri = rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program" ) + aBaseName+aSvg;
-    rtl::Bootstrap::expandMacros( uri );
-    INetURLObject aObj( uri );
-    SvgData aSvgData(aObj.PathToFileName());
-    rBitmap = aSvgData.getReplacement();
-    return true;
+    return ( loadSvg( uriOpt, rBitmap ) || loadSvg( uri, rBitmap ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
