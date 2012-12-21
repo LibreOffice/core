@@ -43,13 +43,6 @@
 #include <set>
 #include <string.h>
 
-// values asigned to capitalization types
-#define CAPTYPE_UNKNOWN 0
-#define CAPTYPE_NOCAP   1
-#define CAPTYPE_INITCAP 2
-#define CAPTYPE_ALLCAP  3
-#define CAPTYPE_MIXED   4
-
 // XML-header to query SPELLML support
 #define SPELLML_SUPPORT "<?xml?>"
 
@@ -581,34 +574,6 @@ void SAL_CALL Thesaurus::initialize( const Sequence< Any >& rArguments )
 
 
 
-sal_uInt16 SAL_CALL Thesaurus::capitalType(const OUString& aTerm, CharClass * pCC)
-{
-        sal_Int32 tlen = aTerm.getLength();
-        if ((pCC) && (tlen))
-        {
-            String aStr(aTerm);
-            sal_Int32 nc = 0;
-            for (sal_uInt16 tindex = 0; tindex < tlen;  tindex++)
-            {
-                if (pCC->getCharacterType(aStr,tindex) &
-                   ::com::sun::star::i18n::KCharacterType::UPPER) nc++;
-            }
-
-            if (nc == 0)
-                return (sal_uInt16) CAPTYPE_NOCAP;
-            if (nc == tlen)
-                return (sal_uInt16) CAPTYPE_ALLCAP;
-            if ((nc == 1) && (pCC->getCharacterType(aStr,0) &
-                  ::com::sun::star::i18n::KCharacterType::UPPER))
-                return (sal_uInt16) CAPTYPE_INITCAP;
-
-            return (sal_uInt16) CAPTYPE_MIXED;
-        }
-        return (sal_uInt16) CAPTYPE_UNKNOWN;
-}
-
-
-
 OUString SAL_CALL Thesaurus::makeLowerCase(const OUString& aTerm, CharClass * pCC)
 {
     if (pCC)
@@ -750,12 +715,5 @@ void * SAL_CALL Thesaurus_getFactory( const sal_Char * pImplName,
 
 
 ///////////////////////////////////////////////////////////////////////////
-
-
-#undef CAPTYPE_UNKNOWN
-#undef CAPTYPE_NOCAP
-#undef CAPTYPE_INITCAP
-#undef CAPTYPE_ALLCAP
-#undef CAPTYPE_MIXED
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
