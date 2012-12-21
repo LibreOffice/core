@@ -72,7 +72,6 @@
 #include <comphelper/uno3.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
-#include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <rtl/logfile.hxx>
 #include <rtl/math.hxx>

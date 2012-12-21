@@ -25,7 +25,6 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implementationentry.hxx>
 

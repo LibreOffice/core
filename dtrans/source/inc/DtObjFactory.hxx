@@ -22,7 +22,6 @@
 #define _DTOBJFACTORY_HXX_
 
 #include <com/sun/star/datatransfer/XTransferable.hpp>
-#include <cppuhelper/servicefactory.hxx>
 
 #include <systools/win32/comtools.hxx>
 

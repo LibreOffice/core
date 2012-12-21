@@ -36,7 +36,6 @@
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <com/sun/star/ucb/XUniversalContentBroker.hpp>
 #include <uno/current_context.hxx>
-#include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <officecfg/Setup.hxx>
 #include <osl/file.hxx>

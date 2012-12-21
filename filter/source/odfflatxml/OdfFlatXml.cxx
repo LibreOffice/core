@@ -30,7 +30,6 @@
 
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase.hxx>
 

@@ -22,7 +22,6 @@
 #define _FETCLIST_HXX_
 
 #include <sal/types.h>
-#include <cppuhelper/servicefactory.hxx>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include "Fetc.hxx"
 

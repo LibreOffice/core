@@ -28,7 +28,6 @@
 #include <vcl/msgbox.hxx>
 #include <tools/shl.hxx>
 #include <svx/dialmgr.hxx>
-#include <cppuhelper/servicefactory.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/textsearch.hxx>
 #include <com/sun/star/util/SearchOptions.hpp>

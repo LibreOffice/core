@@ -26,7 +26,6 @@
 
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/bootstrap.hxx>
-#include <cppuhelper/servicefactory.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/oslfile2streamwrap.hxx>
 

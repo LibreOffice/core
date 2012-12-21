@@ -41,7 +41,6 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase4.hxx>
-#include <cppuhelper/servicefactory.hxx>
 
 using namespace ::rtl;
 using namespace ::cppu;

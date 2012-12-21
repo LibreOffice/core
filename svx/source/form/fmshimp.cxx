@@ -84,7 +84,6 @@
 #include <comphelper/stl_types.hxx>
 #include <comphelper/string.hxx>
 #include <connectivity/dbtools.hxx>
-#include <cppuhelper/servicefactory.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/logfile.hxx>
 #include <sfx2/dispatch.hxx>

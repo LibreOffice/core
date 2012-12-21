@@ -28,8 +28,6 @@
 #include <uno/mapping.hxx>
 #include "com/sun/star/uno/RuntimeException.hpp"
 
-#include <cppuhelper/servicefactory.hxx>
-
 #ifdef LINUX
 #undef minor
 #undef major

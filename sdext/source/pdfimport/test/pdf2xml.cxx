@@ -30,7 +30,6 @@
 #include <rtl/bootstrap.hxx>
 
 #include <cppuhelper/bootstrap.hxx>
-#include <cppuhelper/servicefactory.hxx>
 #include <comphelper/processfactory.hxx>
 
 using namespace ::pdfi;

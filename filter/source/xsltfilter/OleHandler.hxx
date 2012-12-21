@@ -43,7 +43,6 @@
 #include <libxslt/variables.h>
 
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <osl/module.h>

@@ -34,7 +34,6 @@
  *************************************************************************/
 
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase3.hxx>

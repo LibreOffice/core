@@ -42,7 +42,6 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/servicefactory.hxx>
 #include <comphelper/docpasswordrequest.hxx>
 #include <xmlsecurity/biginteger.hxx>
 #include <sal/log.hxx>
