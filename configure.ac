@@ -3398,8 +3398,17 @@ else
 fi
 AC_SUBST(ENABLE_SYMBOLS)
 
-dnl Check for explicit C/CXX/OBJC/OBJCXX/LDFLAGS. We by default use the ones specified
-dnl by our build system, but explicit override is possible.
+# Check for explicit A/C/CXX/OBJC/OBJCXX/LDFLAGS.
+# By default use the ones specified by our build system,
+# but explicit override is possible.
+AC_MSG_CHECKING(for explicit AFLAGS)
+if test -n "$AFLAGS"; then
+    AC_MSG_RESULT([$AFLAGS])
+    x_AFLAGS=
+else
+    AC_MSG_RESULT(no)
+    x_AFLAGS=[\#]
+fi
 AC_MSG_CHECKING(for explicit CFLAGS)
 if test -n "$CFLAGS"; then
     AC_MSG_RESULT([$CFLAGS])
@@ -3440,11 +3449,13 @@ else
     AC_MSG_RESULT(no)
     x_LDFLAGS=[\#]
 fi
+AC_SUBST(AFLAGS)
 AC_SUBST(CFLAGS)
 AC_SUBST(CXXFLAGS)
 AC_SUBST(OBJCFLAGS)
 AC_SUBST(OBJCXXFLAGS)
 AC_SUBST(LDFLAGS)
+AC_SUBST(x_AFLAGS)
 AC_SUBST(x_CFLAGS)
 AC_SUBST(x_CXXFLAGS)
 AC_SUBST(x_OBJCFLAGS)

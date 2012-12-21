@@ -54,6 +54,8 @@ gb_CCVER := $(shell $(gb_CC) -dumpversion | $(gb_AWK) -F. -- '{ print $$1*10000+
 
 gb_CPPU_ENV := gcc3
 
+gb_AFLAGS := $(AFLAGS)
+
 gb_COMPILERDEFS := \
 	-D$(COM) \
 	-DCPPU_ENV=$(gb_CPPU_ENV) \

@@ -67,7 +67,7 @@ gb_RCDEFS := \
 gb_RCFLAGS := \
 	 -V
 
-gb_AFLAGS := /c /Cp
+gb_AFLAGS := $(AFLAGS)
 
 # Do we really need to disable to many warnings? It seems to me that
 # many of these warnings are for custructs that we have been actively
