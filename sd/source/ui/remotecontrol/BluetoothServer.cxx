@@ -32,9 +32,16 @@
   // LO vs WinAPI conflict
   #undef WB_LEFT
   #undef WB_RIGHT
-  #undef MSC // Unset a legacy define, as otherwise ws2bth.h breaks
   #include <winsock2.h>
+  // HACK: ws2bth.h defines a struct with a field named MSC, which is
+  // a #define set by gbuild. Plain #undef MSC here fails with MSVC
+  // used together with ccache (bug, presumably), so #define it to some
+  // other usable value.
+  #undef MSC
+  #define MSC mscfield
   #include <ws2bth.h>
+  #undef MSC
+  #define MSC
 #endif
 
 #ifdef __MINGW32__
