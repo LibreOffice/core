@@ -56,17 +56,17 @@ XMLFilterTabPageXSLT::XMLFilterTabPageXSLT( Window* pParent, ResMgr& rResMgr, co
     maFTNeedsXSLT2( this, ResId (FT_XML_NEEDS_XSLT2, rResMgr ) ),
     maCBNeedsXSLT2( this, ResId (CB_XML_NEEDS_XSLT2, rResMgr ) ),
 
-    sHTTPSchema( RTL_CONSTASCII_USTRINGPARAM( "http://" ) ),
-    sSHTTPSchema( RTL_CONSTASCII_USTRINGPARAM( "shttp://" ) ),
-    sFILESchema( RTL_CONSTASCII_USTRINGPARAM( "file://" ) ),
-    sFTPSchema( RTL_CONSTASCII_USTRINGPARAM( "ftp://" ) ),
-    sInstPath( RTL_CONSTASCII_USTRINGPARAM( "$(prog)/" ) )
+    sHTTPSchema( "http://" ),
+    sSHTTPSchema( "shttp://" ),
+    sFILESchema( "file://" ),
+    sFTPSchema( "ftp://" ),
+    sInstPath( "$(prog)/" )
 {
     FreeResource();
 
     try
     {
-        css::uno::Reference< XConfigManager > xCfgMgr( rxMSF->createInstance(OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.config.SpecialConfigManager" ))), UNO_QUERY );
+        css::uno::Reference< XConfigManager > xCfgMgr( rxMSF->createInstance( "com.sun.star.config.SpecialConfigManager" ), UNO_QUERY );
         if( xCfgMgr.is() )
             sInstPath = xCfgMgr->substituteVariables( sInstPath );
     }
@@ -120,23 +120,23 @@ void XMLFilterTabPageXSLT::SetURL( SvtURLBox& rURLBox, const OUString& rURL )
 {
     OUString aPath;
 
-    if( rURL.matchIgnoreAsciiCase( OUString( RTL_CONSTASCII_USTRINGPARAM( "file://" ) ) ) )
+    if( rURL.matchIgnoreAsciiCase( "file://" ) )
     {
         osl::FileBase::getSystemPathFromFileURL( rURL, aPath );
 
         rURLBox.SetBaseURL( rURL );
         rURLBox.SetText( aPath );
     }
-    else if( rURL.matchIgnoreAsciiCase( OUString( RTL_CONSTASCII_USTRINGPARAM( "http://" ) ) ) ||
-             rURL.matchIgnoreAsciiCase( OUString( RTL_CONSTASCII_USTRINGPARAM( "shttp://" ) ) ) ||
-             rURL.matchIgnoreAsciiCase( OUString( RTL_CONSTASCII_USTRINGPARAM( "ftp://" ) ) ) )
+    else if( rURL.matchIgnoreAsciiCase( "http://" ) ||
+             rURL.matchIgnoreAsciiCase( "shttp://" ) ||
+             rURL.matchIgnoreAsciiCase( "ftp://" ) )
     {
         rURLBox.SetBaseURL( rURL );
         rURLBox.SetText( rURL );
     }
     else if( !rURL.isEmpty() )
     {
-        rtl::OUString aURL( rURL );
+        OUString aURL( rURL );
         aURL = URIHelper::SmartRel2Abs( sInstPath, aURL, Link(), false );
         osl::FileBase::getSystemPathFromFileURL( aURL, aPath );
 
@@ -146,7 +146,7 @@ void XMLFilterTabPageXSLT::SetURL( SvtURLBox& rURLBox, const OUString& rURL )
     else
     {
         rURLBox.SetBaseURL( sInstPath );
-        String aEmpty;
+        OUString aEmpty;
         rURLBox.SetText( aEmpty );
     }
 }
@@ -155,15 +155,15 @@ OUString XMLFilterTabPageXSLT::GetURL( SvtURLBox& rURLBox )
 {
     OUString aURL;
     OUString aStrPath ( rURLBox.GetText() );
-    if( aStrPath.matchIgnoreAsciiCase( OUString( RTL_CONSTASCII_USTRINGPARAM( "http://" ) ) ) ||
-        aStrPath.matchIgnoreAsciiCase( OUString( RTL_CONSTASCII_USTRINGPARAM( "shttp://" ) ) ) ||
-        aStrPath.matchIgnoreAsciiCase( OUString( RTL_CONSTASCII_USTRINGPARAM( "ftp://" ) ) ) )
+    if( aStrPath.matchIgnoreAsciiCase( "http://" ) ||
+        aStrPath.matchIgnoreAsciiCase( "shttp://" ) ||
+        aStrPath.matchIgnoreAsciiCase( "ftp://" ) )
     {
         return aStrPath;
     }
     else
     {
-        const String aBaseURL ( rURLBox.GetBaseURL() );
+        const OUString aBaseURL ( rURLBox.GetBaseURL() );
         osl::FileBase::getFileURLFromSystemPath( aStrPath, aURL );
     }
 

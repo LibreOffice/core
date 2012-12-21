@@ -25,7 +25,6 @@
 #include "xmlfiltersettingsdialog.hxx"
 #include "xmlfilterhelpids.hrc"
 
-using ::rtl::OUString;
 XMLFilterTabPageBasic::XMLFilterTabPageBasic( Window* pParent, ResMgr& rResMgr ) :
     TabPage( pParent, ResId( RID_XML_FILTER_TABPAGE_BASIC, rResMgr ) ),
     maFTFilterName( this, ResId( FT_XML_FILTER_NAME, rResMgr ) ),
@@ -48,7 +47,7 @@ XMLFilterTabPageBasic::XMLFilterTabPageBasic( Window* pParent, ResMgr& rResMgr )
     std::vector< application_info_impl* >::iterator aIter( rInfos.begin() );
     while( aIter != rInfos.end() )
     {
-        XubString aEntry( (*aIter++)->maDocumentUIName );
+        OUString aEntry( (*aIter++)->maDocumentUIName );
         maCBApplication.InsertEntry( aEntry );
     }
 }
@@ -57,24 +56,24 @@ XMLFilterTabPageBasic::~XMLFilterTabPageBasic()
 {
 }
 
-static OUString checkExtensions( const String& rExtensions )
+static OUString checkExtensions( const OUString& rExtensions )
 {
-    const sal_Unicode* pSource = rExtensions.GetBuffer();
-    sal_Int32 nCount = rExtensions.Len();
+    const sal_Unicode* pSource = rExtensions.getStr();
+    sal_Int32 nCount = rExtensions.getLength();
 
-    String aRet;
+    OUString aRet;
     while( nCount-- )
     {
         switch(*pSource)
         {
         case sal_Unicode(','):
-            aRet += sal_Unicode(';');
+            aRet += ";";
             break;
         case sal_Unicode('.'):
         case sal_Unicode('*'):
             break;
         default:
-            aRet += *pSource;
+            aRet += OUString( *pSource );
         }
 
         pSource++;
