@@ -23,6 +23,7 @@
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/compbase3.hxx>
 #include <osl/module.h>
 
@@ -122,7 +123,7 @@ namespace connectivity
                                                             //  MacabConnection objects for this Driver
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
                                         m_xContext;       // the multi-service factory
-            MacabImplModule               m_aImplModule;
+            MacabImplModule             m_aImplModule;
 
         public:
             static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception );

@@ -23,7 +23,7 @@
 
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/lang/NullPointerException.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
 #include "resource/macab_res.hrc"
@@ -41,7 +41,7 @@ using namespace connectivity::macab;
 // = MacabImplModule
 // =======================================================================
 // --------------------------------------------------------------------------------
-MacabImplModule::MacabImplModule( const Reference< XMultiServiceFactory >& _rxContext )
+MacabImplModule::MacabImplModule()
     :m_bAttemptedLoadModule(false)
     ,m_hConnectorModule(NULL)
     ,m_pConnectionFactoryFunc(NULL)
@@ -173,7 +173,7 @@ MacabDriver::MacabDriver(
     const Reference< ::com::sun::star::uno::XComponentContext >& _rxContext)
     : MacabDriver_BASE(m_aMutex),
       m_xContext(_rxContext),
-      m_aImplModule(_rxFactory)
+      m_aImplModule()
 {
     if ( !m_xContext.is() )
         throw NullPointerException();
@@ -181,7 +181,7 @@ MacabDriver::MacabDriver(
     osl_atomic_increment( &m_refCount );
     try
     {
-        Reference< XDesktop2 > xDesktop = frame::Desktop::create( m_xContext );
+        Reference< XDesktop2 > xDesktop = Desktop::create( m_xContext );
         xDesktop->addTerminateListener( this );
     }
     catch( const Exception& )
