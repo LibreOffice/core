@@ -85,7 +85,7 @@ public class AccessibleBrowseBox extends TestCase {
      * @param log writer to log information while testing
      *
      * @see TestEnvironment
-     * @see #getTestEnvironment()
+     * @see #getTestEnvironment
      */
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
 

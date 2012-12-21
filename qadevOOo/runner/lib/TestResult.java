@@ -59,7 +59,7 @@ public class TestResult {
      * The method makes the method tested with the status, i.e. it adds the
      * status to its state and makes it completed.
      *
-     * @param method reffers to the method whoch was tested
+     * @param method refers to the method which was tested
      * @param status describes the result of testing the method
      * @return <tt>true</tt> if status is OK, <tt>false</tt> otherwise.
      *
@@ -99,4 +99,4 @@ public class TestResult {
         return (Status)testedMethods.get( method );
     }
 
-}    
+}

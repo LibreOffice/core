@@ -105,7 +105,7 @@ public class MultiPropertyTest extends MultiMethodTest
      * calls testProperty method for the method. Otherwise calls
      * super.invokeTestMethod().
      *
-     * @see #MultiMethodTest.invokeTestMethod()
+     * @see MultiMethodTest#invokeTestMethod
      */
     protected void invokeTestMethod(Method meth, String methName)
     {
@@ -560,7 +560,7 @@ public class MultiPropertyTest extends MultiMethodTest
      * Tests the property using <code>PropertyValueSwitcher</code>
      * tester and two values for this property.
      *
-     * @see #PropertyValueSwitcher
+     * @see PropertyValueSwitcher
      */
     protected void testProperty(String propName, Object val1, Object val2)
     {
