@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <stdio.h>
 
 #include <stdlib.h>
 
@@ -1309,6 +1310,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     {
         aPam.Move( fnMoveBackward, fnGoNode );
     }
+#if 1
     if (rProperties.getLength())
     {
         // now set the properties
@@ -1345,6 +1347,26 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
             }
         }
     }
+#else
+    try
+    {
+        SfxItemPropertySet const*const pParaPropSet =
+            aSwMapProvider.GetPropertySet(PROPERTY_MAP_PARAGRAPH);
+        if (!bIllegalException)
+            SwUnoCursorHelper::SetPropertyValues(aPam, *pParaPropSet, rProperties);
+    }
+    catch (const lang::IllegalArgumentException& rIllegal)
+    {
+        sMessage = rIllegal.Message;
+        bIllegalException = true;
+    }
+    catch (const uno::RuntimeException& rRuntime)
+    {
+        sMessage = rRuntime.Message;
+        bRuntimeException = true;
+    }
+#endif
+
     m_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_END, NULL);
     if (bIllegalException || bRuntimeException)
     {
@@ -1415,43 +1437,23 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         pCursor->GetPoint()->nContent = nContentPos;
     }
 
-    if (rCharacterAndParagraphProperties.getLength())
+    try
     {
-        const SfxItemPropertyMap &rCursorMap =
-            aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR)
-                ->getPropertyMap();
-        beans::PropertyValue const*const pValues =
-            rCharacterAndParagraphProperties.getConstArray();
-        SfxItemPropertySet const*const pCursorPropSet =
-            aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR);
-        const sal_Int32 nLen(rCharacterAndParagraphProperties.getLength());
-        for (sal_Int32 nProp = 0; nProp < nLen; ++nProp)
-        {
-            if (!rCursorMap.getByName( pValues[nProp].Name ))
-            {
-                bIllegalException = true;
-                break;
-            }
-            try
-            {
-                SwUnoCursorHelper::SetPropertyValue(
-                    *pCursor, *pCursorPropSet,
-                    pValues[nProp].Name, pValues[nProp].Value,
-                    nsSetAttrMode::SETATTR_NOFORMATATTR);
-            }
-            catch (const lang::IllegalArgumentException& rIllegal)
-            {
-                sMessage = rIllegal.Message;
-                bIllegalException = true;
-                break;
-            }
-            catch (const uno::RuntimeException& rRuntime)
-            {
-                sMessage = rRuntime.Message;
-                bRuntimeException = true;
-                break;
-            }
-        }
+      SfxItemPropertySet const*const pCursorPropSet =
+          aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR);
+      SwUnoCursorHelper::SetPropertyValues(*pCursor, *pCursorPropSet,
+                                           rCharacterAndParagraphProperties,
+                                           nsSetAttrMode::SETATTR_NOFORMATATTR);
+    }
+    catch (const lang::IllegalArgumentException& rIllegal)
+    {
+        sMessage = rIllegal.Message;
+        bIllegalException = true;
+    }
+    catch (const uno::RuntimeException& rRuntime)
+    {
+        sMessage = rRuntime.Message;
+        bRuntimeException = true;
     }
     m_pImpl->m_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
     if (bIllegalException || bRuntimeException)

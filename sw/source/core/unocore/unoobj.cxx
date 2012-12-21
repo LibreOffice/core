@@ -1861,34 +1861,81 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         lang::IllegalArgumentException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
+    uno::Sequence< beans::PropertyValue > aValues(1);
+    aValues[0].Name = rPropertyName;
+    aValues[0].Value = rValue;
+    SetPropertyValues(rPaM, rPropSet, aValues, nAttrMode, bTableMode);
+}
+
+void SwUnoCursorHelper::SetPropertyValues(
+    SwPaM& rPaM, const SfxItemPropertySet& rPropSet,
+    const uno::Sequence< beans::PropertyValue > &rPropertyValues,
+    const SetAttrMode nAttrMode, const bool bTableMode)
+throw (beans::UnknownPropertyException, beans::PropertyVetoException,
+        lang::IllegalArgumentException, lang::WrappedTargetException,
+        uno::RuntimeException)
+{
+    if (!rPropertyValues.getLength())
+        return;
+
     SwDoc *const pDoc = rPaM.GetDoc();
-    SfxItemPropertySimpleEntry const*const pEntry =
-        rPropSet.getPropertyMap().getByName(rPropertyName);
-    if (!pEntry)
+    rtl::OUString aUnknownExMsg, aPropertyVetoExMsg;
+
+    // Build set of attributes we want to fetch
+    std::vector<sal_uInt16> aWhichPairs;
+    std::vector<SfxItemPropertySimpleEntry const*> aEntries;
+    aEntries.reserve(rPropertyValues.getLength());
+    for (sal_Int32 i = 0; i < rPropertyValues.getLength(); ++i)
     {
-        throw beans::UnknownPropertyException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown property: "))
-                + rPropertyName,
-            static_cast<cppu::OWeakObject *>(0));
+        const rtl::OUString &rPropertyName = rPropertyValues[i].Name;
+
+        SfxItemPropertySimpleEntry const* pEntry =
+            rPropSet.getPropertyMap().getByName(rPropertyName);
+
+        // Queue up any exceptions until the end ...
+        if (!pEntry)
+        {
+            aUnknownExMsg += "Unknown property: '" + rPropertyName + "' ";
+            break;
+        }
+        else if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
+        {
+            aPropertyVetoExMsg += "Property is read-only: '" + rPropertyName + "' ";
+            break;
+        } else {
+// FIXME: we should have some nice way of merging ranges surely ?
+            aWhichPairs.push_back(pEntry->nWID);
+            aWhichPairs.push_back(pEntry->nWID);
+        }
+        aEntries.push_back(pEntry);
     }
 
-    if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
+    if (!aWhichPairs.empty())
     {
-        throw beans::PropertyVetoException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("Property is read-only: "))
-                + rPropertyName,
-            static_cast<cppu::OWeakObject *>(0));
+        aWhichPairs.push_back(0); // terminate
+        SfxItemSet aItemSet(pDoc->GetAttrPool(), &aWhichPairs[0]);
+
+        // Fetch, overwrite, and re-set the attributes from the core
+        SwUnoCursorHelper::GetCrsrAttr( rPaM, aItemSet );
+
+        for (sal_Int32 i = 0; ( i < rPropertyValues.getLength() &&
+                                i < (sal_Int32)aEntries.size() ); ++i)
+        {
+            const uno::Any &rValue = rPropertyValues[i].Value;
+            SfxItemPropertySimpleEntry const*const pEntry = aEntries[i];
+            if (!pEntry)
+                continue;
+            if (!SwUnoCursorHelper::SetCursorPropertyValue(*pEntry, rValue, rPaM, aItemSet))
+                rPropSet.setPropertyValue(*pEntry, rValue, aItemSet);
+        }
+
+        SwUnoCursorHelper::SetCrsrAttr(rPaM, aItemSet, nAttrMode, bTableMode);
     }
 
-    SfxItemSet aItemSet( pDoc->GetAttrPool(), pEntry->nWID, pEntry->nWID );
-    SwUnoCursorHelper::GetCrsrAttr( rPaM, aItemSet );
-
-    if (!SwUnoCursorHelper::SetCursorPropertyValue(
-                *pEntry, rValue, rPaM, aItemSet))
-    {
-        rPropSet.setPropertyValue(*pEntry, rValue, aItemSet );
-    }
-    SwUnoCursorHelper::SetCrsrAttr(rPaM, aItemSet, nAttrMode, bTableMode);
+    if (!aUnknownExMsg.isEmpty())
+        throw beans::UnknownPropertyException(aUnknownExMsg, static_cast<cppu::OWeakObject *>(0));
+    if (!aPropertyVetoExMsg.isEmpty())
+        throw beans::PropertyVetoException(aPropertyVetoExMsg, static_cast<cppu::OWeakObject *>(0));
 }
 
 uno::Sequence< beans::PropertyState >

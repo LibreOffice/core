@@ -151,6 +151,19 @@ namespace SwUnoCursorHelper
                 ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::lang::WrappedTargetException,
                 ::com::sun::star::uno::RuntimeException);
+    /// @param bTableMode: attributes should be applied to a table selection
+    void SetPropertyValues(
+            SwPaM& rPaM,
+            const SfxItemPropertySet & rPropSet,
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > &
+            rPropertyValues,
+            const SetAttrMode nAttrMode = nsSetAttrMode::SETATTR_DEFAULT,
+            const bool bTableMode = false)
+        throw (::com::sun::star::beans::UnknownPropertyException,
+                ::com::sun::star::beans::PropertyVetoException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::lang::WrappedTargetException,
+                ::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Any  GetPropertyValue(
             SwPaM& rPaM,
             const SfxItemPropertySet & rPropSet,
