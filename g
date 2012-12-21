@@ -52,7 +52,24 @@ local hook_name
 		ln -sf "${COREDIR?}/${repo?}/.git-hooks/${hook_name?}" "${hook?}"
 	    fi
 	done
+    elif [ -d .git/modules/${repo}/hooks ] ; then
+	for hook_name in $(ls -1 ${COREDIR?}/.git-hooks) ; do
+            hook=".git/modules/${repo?}/hooks/${hook_name?}"
+            if [ ! -e "${hook?}" -o -L "${hook?}" ] ; then
+		rm -f "${hook?}"
+		ln -sf "${COREDIR?}/.git-hooks/${hook_name?}" "${hook?}"
+            fi
+	done
+        # override if need be by the submodules' own hooks
+	for hook_name in $(ls -1 ${COREDIR?}/${repo?}/.git-hooks 2>/dev/null) ; do
+            hook=".git/modules/${repo?}/hooks/${hook_name?}"
+            if [ ! -e "${hook?}" -o -L "${hook?}" ] ; then
+		rm -f "${hook?}"
+		ln -sf "${COREDIR?}/${repo?}/.git-hooks/${hook_name?}" "${hook?}"
+	    fi
+	done
     fi
+
 }
 
 refresh_all_hooks()
