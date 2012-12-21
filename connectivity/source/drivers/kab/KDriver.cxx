@@ -26,7 +26,7 @@
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/lang/NullPointerException.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
@@ -313,7 +313,7 @@ KabDriver::KabDriver(
     osl_atomic_increment( &m_refCount );
     try
     {
-        Reference< XDesktop2 > xDesktop = css::frame::Desktop::create( m_xContext);
+        Reference< XDesktop2 > xDesktop = Desktop::create( m_xContext);
         xDesktop->addTerminateListener( this );
     }
     catch( const Exception& )
