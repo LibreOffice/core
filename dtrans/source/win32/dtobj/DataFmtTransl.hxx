@@ -23,6 +23,7 @@
 
 #include <com/sun/star/datatransfer/XDataFormatTranslator.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 

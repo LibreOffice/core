@@ -23,6 +23,7 @@
 
 #include <sal/types.h>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include "Fetc.hxx"
 
 #if defined _MSC_VER
