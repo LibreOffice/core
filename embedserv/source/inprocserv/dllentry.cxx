@@ -207,10 +207,10 @@ extern "C" STDAPI INPROC_DLLPUBLIC DllCanUnloadNow()
 // -------------------------------------------------------------------------------
 STDAPI INPROC_DLLPUBLIC DllRegisterServer( void )
 {
-    char aLibPath[1024];
     HMODULE aCurModule = GetModuleHandleA( "inprocserv.dll" );
     if( aCurModule )
     {
+        char aLibPath[1024];
         DWORD nLen = GetModuleFileNameA( aCurModule, aLibPath, 1019 );
         if ( nLen && nLen < 1019 )
         {

@@ -176,12 +176,10 @@ STDMETHODIMP EmbedDocument_Impl::DoVerb(
                 OSL_ENSURE(m_pDocHolder,"no document for inplace activation");
 
                 return m_pDocHolder->InPlaceActivate(pActiveSite,FALSE);
-                break;
             case OLEIVERB_UIACTIVATE:
                 OSL_ENSURE(m_pDocHolder,"no document for     inplace activation");
 
                 return m_pDocHolder->InPlaceActivate(pActiveSite,TRUE);
-                break;
             case OLEIVERB_PRIMARY:
             case OLEIVERB_SHOW:
                 OSL_ENSURE(m_pDocHolder,"no document for inplace activation");
