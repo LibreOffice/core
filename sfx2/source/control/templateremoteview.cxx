@@ -60,17 +60,6 @@ TemplateRemoteView::~TemplateRemoteView ()
 {
 }
 
-void TemplateRemoteView::showOverlay (bool bVisible)
-{
-    mpItemView->Show(bVisible);
-
-    // Clear items is the overlay is closed.
-    if (!bVisible)
-    {
-        mpItemView->Clear();
-    }
-}
-
 bool TemplateRemoteView::loadRepository (TemplateRepository* pItem, bool bRefresh)
 {
     if (!pItem)

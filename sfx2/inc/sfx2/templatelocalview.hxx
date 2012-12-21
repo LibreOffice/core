@@ -39,8 +39,6 @@ public:
 
     std::vector<OUString> getFolderNames ();
 
-    virtual void showOverlay (bool bVisible);
-
     std::vector<TemplateItemProperties>
         getFilteredItems (const boost::function<bool (const TemplateItemProperties&) > &rFunc) const;
 
@@ -70,10 +68,6 @@ public:
                          const OUString &rName);
 
     bool isTemplateNameUnique (const sal_uInt16 nRegionItemId, const OUString &rName) const;
-
-private:
-
-    virtual void OnItemDblClicked (ThumbnailViewItem *pRegionItem);
 
 private:
 

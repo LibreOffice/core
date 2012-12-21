@@ -25,8 +25,6 @@ public:
 
     virtual ~TemplateRemoteView ();
 
-    virtual void showOverlay (bool bVisible);
-
     bool loadRepository (TemplateRepository* pRepository, bool bRefresh);
 
 private:

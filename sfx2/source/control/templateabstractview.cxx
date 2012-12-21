@@ -175,15 +175,36 @@ void TemplateAbstractView::filterTemplatesByApp (const FILTER_APPLICATION &eApp)
     }
 }
 
+void TemplateAbstractView::showOverlay (bool bVisible)
+{
+    mpItemView->Show(bVisible);
+
+    // Clear items is the overlay is closed.
+    if (!bVisible)
+    {
+        // Check if the folder view needs to be filtered
+        if (mbFilteredResults)
+        {
+            filterItems(ViewFilter_Application(meFilterOption));
+
+            mbFilteredResults = false;
+            meFilterOption = FILTER_APP_NONE;
+        }
+
+        mpItemView->Clear();
+    }
+}
+
 void TemplateAbstractView::filterTemplatesByKeyword(const OUString &rKeyword)
 {
     if (mpItemView->IsVisible())
         mpItemView->filterItems(ViewFilter_Keyword(rKeyword));
 }
 
-void TemplateAbstractView::setOverlayDblClickHdl(const Link &rLink)
+void TemplateAbstractView::setOpenHdl(const Link &rLink)
 {
-    mpItemView->setDblClickHdl(rLink);
+    maOpenHdl = rLink;
+    mpItemView->setOpenHdl(rLink);
 }
 
 void TemplateAbstractView::setOverlayCloseHdl(const Link &rLink)
@@ -349,6 +370,28 @@ IMPL_LINK(TemplateAbstractView, OverlayItemStateHdl, const ThumbnailViewItem*, p
 {
     maOverlayItemStateHdl.Call((void*)pItem);
     return 0;
+}
+
+void TemplateAbstractView::OnItemDblClicked (ThumbnailViewItem *pItem)
+{
+    TemplateContainerItem* pContainerItem = dynamic_cast<TemplateContainerItem*>(pItem);
+    if ( pContainerItem )
+    {
+        // Fill templates
+        sal_uInt16 nRegionId = pContainerItem->mnId-1;
+
+        mpItemView->setId(nRegionId);
+        mpItemView->setName(pContainerItem->maTitle);
+        mpItemView->InsertItems(pContainerItem->maTemplates);
+
+        mpItemView->filterItems(ViewFilter_Application(meFilterOption));
+
+        showOverlay(true);
+    }
+    else
+    {
+        maOpenHdl.Call(pItem);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

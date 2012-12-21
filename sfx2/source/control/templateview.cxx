@@ -90,11 +90,6 @@ void TemplateView::Resize()
     ThumbnailView::Resize();
 }
 
-void TemplateView::OnItemDblClicked(ThumbnailViewItem *pItem)
-{
-    maDblClickHdl.Call(pItem);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 
 
