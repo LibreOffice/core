@@ -521,7 +521,6 @@ namespace dbaui
 
     protected:
 #ifdef _MSC_VER
-        __declspec(noreturn)
         OGenericUnoController();    // never implemented
 #endif
     };

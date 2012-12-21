@@ -209,8 +209,10 @@ OGenericUnoController::OGenericUnoController(const Reference< XMultiServiceFacto
 }
 
 #ifdef _MSC_VER
-// -----------------------------------------------------------------------------
-__declspec(noreturn)
+
+#pragma warning(push)
+#pragma warning(disable:4702)
+
 OGenericUnoController::OGenericUnoController()
     :OGenericUnoController_Base( getMutex() )
     ,m_pView(NULL)
@@ -230,6 +232,9 @@ OGenericUnoController::OGenericUnoController()
     // we simply abort here.
     abort();
 }
+
+#pragma warning(pop)
+
 #endif
 
 // -----------------------------------------------------------------------------
