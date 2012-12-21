@@ -147,7 +147,7 @@ public:
         if ( arguments[0] >>= m_sURI )
         {
             // create( [in] string uri );
-            uno::Reference< frame::XDesktop2 > desktop = frame::Desktop::Create( m_rContext );
+            uno::Reference< frame::XDesktop2 > desktop = frame::Desktop::create( m_rContext );
 
             beans::PropertyValues loadProps(3);
             loadProps[0].Name = "Hidden";
