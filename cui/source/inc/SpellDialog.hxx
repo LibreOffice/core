@@ -173,7 +173,6 @@ private:
 
     const String    m_sTitleSpelling;
     const String    m_sTitleSpellingGrammar;
-    const String    m_sTitleSpellingGrammarVendor;
 
     Size            aOldWordEDSize;
     Link            aDialogUndoLink;

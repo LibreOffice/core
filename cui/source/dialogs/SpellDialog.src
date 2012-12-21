@@ -220,9 +220,5 @@ ModelessDialog RID_SVXDLG_SPELLCHECK
     {
         Text[ en-US ] = "Spelling and Grammar: $LANGUAGE ($LOCATION)";
     };
-    String ST_SPELLING_AND_GRAMMAR_VENDORNAME
-    {
-        Text[ en-US ] = "Spelling and Grammar: $LANGUAGE ($LOCATION) [$VendorName]";
-    };
 };
  // ********************************************************************** EOF

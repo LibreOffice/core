@@ -243,7 +243,6 @@ SpellDialog::SpellDialog(
     aNoSuggestionsST( CUI_RES(ST_NOSUGGESTIONS)),
     m_sTitleSpelling              ( CUI_RES( ST_SPELLING                        ) ),
     m_sTitleSpellingGrammar       ( CUI_RES( ST_SPELLING_AND_GRAMMAR            ) ),
-    m_sTitleSpellingGrammarVendor ( CUI_RES( ST_SPELLING_AND_GRAMMAR_VENDORNAME ) ),
     aDialogUndoLink( LINK (this, SpellDialog, DialogUndoHdl)),
     bModified( false ),
     bFocusLocked( true ),
@@ -922,28 +921,7 @@ static Image lcl_GetImageFromPngUrl( const ::rtl::OUString &rFileUrl )
 }
 void SpellDialog::SetTitle_Impl(LanguageType nLang)
 {
-    String sTitle( m_sTitleSpelling );
-    if( rParent.HasGrammarChecking() )
-    {
-        String sVendor;
-        const SpellErrorDescription* pSpellErrorDescription = aSentenceED.GetAlternatives();
-        if( pSpellErrorDescription && !pSpellErrorDescription->sServiceName.isEmpty() )
-        {
-            uno::Reference< lang::XServiceDisplayName > xDisplayName( pSpellErrorDescription->xGrammarChecker, uno::UNO_QUERY );
-            if( xDisplayName.is() )
-                sVendor = xDisplayName->getServiceDisplayName( pSpellErrorDescription->aLocale );
-        }
-
-        if( sVendor.Len() )
-        {
-            sTitle = m_sTitleSpellingGrammarVendor;
-            sTitle.SearchAndReplaceAscii( "$VendorName", sVendor );
-        }
-        else
-        {
-            sTitle = m_sTitleSpellingGrammar;
-        }
-    }
+    String sTitle = rParent.HasGrammarChecking() ? m_sTitleSpellingGrammar : m_sTitleSpelling;
     sTitle.SearchAndReplaceAscii( "$LANGUAGE ($LOCATION)", SvtLanguageTable::GetLanguageString(nLang) );
     SetText( sTitle );
 }

@@ -37,7 +37,6 @@
 #define ST_RESUME       50
 #define ST_SPELLING                 51
 #define ST_SPELLING_AND_GRAMMAR     52
-#define ST_SPELLING_AND_GRAMMAR_VENDORNAME  53
 #define CB_CHECK_GRAMMAR            54
 #define LINK_EXPLAIN                  55
 #define FT_EXPLAIN                  56
