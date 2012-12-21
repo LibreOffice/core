@@ -208,8 +208,9 @@ OGenericUnoController::OGenericUnoController(const Reference< XMultiServiceFacto
     }
 }
 
-#ifdef WNT
+#ifdef _MSC_VER
 // -----------------------------------------------------------------------------
+__declspec(noreturn)
 OGenericUnoController::OGenericUnoController()
     :OGenericUnoController_Base( getMutex() )
     ,m_pView(NULL)

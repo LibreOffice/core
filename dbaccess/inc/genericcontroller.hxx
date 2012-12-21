@@ -520,7 +520,8 @@ namespace dbaui
         virtual void SAL_CALL removeMouseClickHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseClickHandler >& xHandler ) throw (::com::sun::star::uno::RuntimeException);
 
     protected:
-#ifdef WNT
+#ifdef _MSC_VER
+        __declspec(noreturn)
         OGenericUnoController();    // never implemented
 #endif
     };
