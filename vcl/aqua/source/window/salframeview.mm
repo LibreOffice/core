@@ -273,6 +273,43 @@ static AquaSalFrame* getMouseContainerFrame()
     }
 }
 
+-(void)windowDidEnterFullScreen: (NSNotification*)pNotification
+{
+    (void)pNotification;
+    YIELD_GUARD;
+
+    if( !mpFrame || !AquaSalFrame::isAlive( mpFrame))
+        return;
+
+    SAL_INFO("vcl.macosx", OSL_THIS_FUNC << ": mbFullScreen was " << mpFrame->mbFullScreen);
+
+    mpFrame->mbFullScreen = true;
+}
+
+-(void)windowDidExitFullScreen: (NSNotification*)pNotification
+{
+    (void)pNotification;
+    YIELD_GUARD;
+
+    if( !mpFrame || !AquaSalFrame::isAlive( mpFrame))
+        return;
+
+    SAL_INFO("vcl.macosx", OSL_THIS_FUNC << ": mbFullScreen was " << mpFrame->mbFullScreen);
+
+    mpFrame->mbFullScreen = false;
+
+    // Without this, if viewing the Start Centre in the system
+    // full-screen state, when going back using the system's
+    // unfulscreen menubar button, the Start Centre ends up
+    // garbled. For some reason the same doesn't happen in Writer,
+    // Calc etc.
+    if( mpFrame->mbShown )
+    {
+        mpFrame->CallCallback( SALEVENT_MOVERESIZE, NULL );
+        mpFrame->SendPaintEvent();
+    }
+}
+
 -(void)windowDidMiniaturize: (NSNotification*)pNotification
 {
     (void)pNotification;

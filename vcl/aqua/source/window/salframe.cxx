@@ -46,6 +46,18 @@
 #include <Carbon/Carbon.h>
 #include "postmac.h"
 
+#if !defined(MAC_OS_X_VERSION_10_7)
+
+enum {
+    NSFullScreenWindowMask = (1 << 14)
+};
+
+enum {
+    NSWindowCollectionBehaviorFullScreenPrimary = (1 << 7),
+    NSWindowCollectionBehaviorFullScreenAuxiliary = (1 << 8)
+};
+
+#endif
 
 using namespace std;
 
@@ -194,6 +206,31 @@ void AquaSalFrame::initWindowAndView()
     @catch ( id exception )
     {
         return;
+    }
+
+    // On 10.7 and later, if the window is suitable and is
+    // resizable, we make it full-screenable.
+
+    bool bAllowFullScreen = (0 == (mnStyle & (SAL_FRAME_STYLE_DIALOG | SAL_FRAME_STYLE_TOOLTIP | SAL_FRAME_STYLE_SYSTEMCHILD | SAL_FRAME_STYLE_FLOAT | SAL_FRAME_STYLE_TOOLWINDOW | SAL_FRAME_STYLE_INTRO)));
+    bAllowFullScreen &= (0 == (~mnStyle & (SAL_FRAME_STYLE_SIZEABLE)));
+    bAllowFullScreen &= (mpParent == NULL);
+
+    if (GetSalData()->mnSystemVersion >= 0x1070 &&
+       ((mnStyleMask & NSTitledWindowMask) && (mnStyleMask & NSResizableWindowMask))) {
+
+        // Hmm. The docs say that one should use NSInvocation whenever
+        // the method does not return an object. collectionBehavior
+        // returns an NSWindowCollectionBehavior (NSUInteger). So
+        // should I? Or maybe I should just use the low-level
+        // objc_msgSend()?
+        NSWindowCollectionBehavior behavior = (NSWindowCollectionBehavior) [mpWindow performSelector: @selector(collectionBehavior)];
+
+        SAL_INFO("vcl.macosx", OSL_THIS_FUNC << ": bAllowFullScreen=" << bAllowFullScreen << ", behavior=" << hex << behavior);
+
+        [mpWindow performSelector: @selector(setCollectionBehavior:) withObject: (id) (behavior | (bAllowFullScreen ? NSWindowCollectionBehaviorFullScreenPrimary : NSWindowCollectionBehaviorFullScreenAuxiliary))];
+
+        behavior = (NSWindowCollectionBehavior) [mpWindow performSelector: @selector(collectionBehavior)];
+        SAL_INFO("vcl.macosx", OSL_THIS_FUNC << ": after setCollectionBehavior: behavior=" << hex << behavior);
     }
 
     if( (mnStyle & SAL_FRAME_STYLE_TOOLTIP) )
@@ -741,10 +778,27 @@ void AquaSalFrame::ShowFullScreen( sal_Bool bFullScreen, sal_Int32 nDisplay )
     // #i113170# may not be the main thread if called from UNO API
     SalData::ensureThreadAutoreleasePool();
 
+    SAL_INFO("vcl.macosx", OSL_THIS_FUNC << ": mbFullScreen=" << mbFullScreen << ", bFullScreen=" << bFullScreen);
+
     if( mbFullScreen == bFullScreen )
         return;
 
     mbFullScreen = bFullScreen;
+
+    if (GetSalData()->mnSystemVersion >= 0x1070) {
+        // If the system full-screen state already is our desired, do nothing
+        if ((([mpWindow styleMask] & NSFullScreenWindowMask) == NSFullScreenWindowMask) == mbFullScreen)
+            return;
+
+        SAL_INFO("vcl.macosx", OSL_THIS_FUNC << ": calling toggleFullScreen()");
+
+        // Otherwise toggle the system full-screen state
+        [mpWindow performSelector: @selector(toggleFullScreen:)];
+
+        // Nothing more to do?
+        return;
+    }
+
     if( bFullScreen )
     {
         // hide the dock and the menubar if we are on the menu screen

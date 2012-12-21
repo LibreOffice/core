@@ -35,6 +35,8 @@
 -(void)windowDidChangeScreen: (NSNotification*)pNotification;
 -(void)windowDidMove: (NSNotification*)pNotification;
 -(void)windowDidResize: (NSNotification*)pNotification;
+-(void)windowDidEnterFullScreen: (NSNotification*)pNotification;
+-(void)windowDidExitFullScreen: (NSNotification*)pNotification;
 -(void)windowDidMiniaturize: (NSNotification*)pNotification;
 -(void)windowDidDeminiaturize: (NSNotification*)pNotification;
 -(BOOL)windowShouldClose: (NSNotification*)pNotification;
