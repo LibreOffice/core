@@ -217,9 +217,10 @@ void TemplateAbstractView::filterTemplatesByKeyword(const OUString &rKeyword)
         mpItemView->filterItems(ViewFilter_Keyword(rKeyword));
 }
 
-void TemplateAbstractView::setOverlayDblClickHdl(const Link &rLink)
+void TemplateAbstractView::setOpenHdl(const Link &rLink)
 {
-    mpItemView->setDblClickHdl(rLink);
+    maOpenHdl = rLink;
+    mpItemView->setOpenHdl(rLink);
 }
 
 void TemplateAbstractView::setOverlayCloseHdl(const Link &rLink)
@@ -393,6 +394,28 @@ IMPL_LINK(TemplateAbstractView, OverlayItemStateHdl, const ThumbnailViewItem*, p
 {
     maOverlayItemStateHdl.Call((void*)pItem);
     return 0;
+}
+
+void TemplateAbstractView::OnItemDblClicked (ThumbnailViewItem *pItem)
+{
+    TemplateContainerItem* pContainerItem = dynamic_cast<TemplateContainerItem*>(pItem);
+    if ( pContainerItem )
+    {
+        // Fill templates
+        sal_uInt16 nRegionId = pContainerItem->mnId-1;
+
+        mpItemView->setId(nRegionId);
+        mpItemView->setName(pContainerItem->maTitle);
+        mpItemView->InsertItems(pContainerItem->maTemplates);
+
+        mpItemView->filterItems(ViewFilter_Application(meFilterOption));
+
+        showOverlay(true);
+    }
+    else
+    {
+        maOpenHdl.Call(pItem);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

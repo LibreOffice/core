@@ -94,11 +94,6 @@ void TemplateView::Resize()
     ThumbnailView::Resize();
 }
 
-void TemplateView::OnItemDblClicked(ThumbnailViewItem *pItem)
-{
-    maDblClickHdl.Call(pItem);
-}
-
 bool TemplateView::renameItem(ThumbnailViewItem* pItem, rtl::OUString sNewTitle)
 {
     if (mpMasterView)

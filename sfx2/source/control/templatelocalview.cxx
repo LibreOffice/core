@@ -123,26 +123,6 @@ std::vector<OUString> TemplateLocalView::getFolderNames()
     return ret;
 }
 
-void TemplateLocalView::showOverlay (bool bVisible)
-{
-    mpItemView->Show(bVisible);
-
-    // Clear items is the overlay is closed.
-    if (!bVisible)
-    {
-        // Check if the folder view needs to be filtered
-        if (mbFilteredResults)
-        {
-            filterItems(ViewFilter_Application(meFilterOption));
-
-            mbFilteredResults = false;
-            meFilterOption = FILTER_APP_NONE;
-        }
-
-        mpItemView->Clear();
-    }
-}
-
 std::vector<TemplateItemProperties>
 TemplateLocalView::getFilteredItems(const boost::function<bool (const TemplateItemProperties&) > &rFunc) const
 {
@@ -591,19 +571,6 @@ bool TemplateLocalView::isTemplateNameUnique(const sal_uInt16 nRegionItemId, con
     return true;
 }
 
-void TemplateLocalView::OnItemDblClicked (ThumbnailViewItem *pRegionItem)
-{
-    // Fill templates
-    sal_uInt16 nRegionId = pRegionItem->mnId-1;
-
-    mpItemView->setId(nRegionId);
-    mpItemView->setName(mpDocTemplates->GetRegionName(nRegionId));
-    mpItemView->InsertItems(static_cast<TemplateContainerItem*>(pRegionItem)->maTemplates);
-
-    mpItemView->filterItems(ViewFilter_Application(meFilterOption));
-
-    showOverlay(true);
-}
 
 bool TemplateLocalView::renameItem(ThumbnailViewItem* pItem, rtl::OUString sNewTitle)
 {

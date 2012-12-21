@@ -87,7 +87,7 @@ public:
 
     virtual void filterTemplatesByApp (const FILTER_APPLICATION &eApp);
 
-    virtual void showOverlay (bool bVisible) = 0;
+    void showOverlay (bool bVisible);
 
     void setItemDimensions (long ItemWidth, long ThumbnailHeight, long DisplayHeight, int itemPadding);
 
@@ -109,7 +109,7 @@ public:
 
     void setOverlayItemStateHdl (const Link &aLink) { maOverlayItemStateHdl = aLink; }
 
-    void setOverlayDblClickHdl (const Link &rLink);
+    void setOpenHdl (const Link &rLink);
 
     void setOverlayCloseHdl (const Link &rLink);
 
@@ -127,10 +127,13 @@ protected:
 
     DECL_LINK(OverlayItemStateHdl, const ThumbnailViewItem*);
 
+    virtual void OnItemDblClicked(ThumbnailViewItem *pItem);
+
 protected:
 
     TemplateView *mpItemView;
     Link maOverlayItemStateHdl;
+    Link maOpenHdl;
 
     bool mbFilteredResults;     // Flag keep track if overlay has been filtered so folders can get filtered too afterwards
     FILTER_APPLICATION meFilterOption;
