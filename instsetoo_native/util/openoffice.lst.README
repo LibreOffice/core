@@ -23,6 +23,29 @@ Some documentation for the variables specified in file openoffice.lst.
 
 VARIABLE NAME                   USAGE
 -------------------------------------------------------------------------------
+PRODUCTVERSION                  Beside other stuff it is used together with
+                                the "buildid" (main/solenv/inc/minor.mk) to
+                                create the ProductVersion property for 
+                                Microsoft Windows - "major.minor.build".
+                                Note: major = [0..255], minor = [0..255],
+                                      build = [0..65535]
+                                It is expected that PRODUCTVERSION follows
+                                one of the following patterns:
+                                (1) single decimal - e.g. "3"
+                                (2) dec. dot dec. - e.g. "3.4"
+                                (3) dec. dot dec. dot dec. - e.g. "3.4.1"
+                                The first decimal is put into "major".
+                                The second decimal is concatenated with the third
+                                and is put into "minor".
+                                E.g. "3.4.1" becomes "3.41.[buildid]"
+                                The ProductVersion property is used during
+                                the Windows installation to check, if a
+                                newer or older version is already installed.
+
+LIBRARYVERSION                  Together with "buildid" and "vendornumber"
+                                it becomes the version of the installation
+                                files
+
 BASISPACKAGEPREFIX              name prefix for the installation packages
                                 for Linux/Solaris platforms
 UREPACKAGEPREFIX                name prefix for the URE installation packages

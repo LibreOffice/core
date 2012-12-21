@@ -41,7 +41,7 @@ TARGET=debian
 
 .IF "$(PKGFORMAT)"!="$(PKGFORMAT:s/deb//)"
 
-DEBFILES=$(foreach,i,{$(PRODUCTLIST)} $(PKGDIR)$/$i3.4-$(TARGET)-menus_$(PKGVERSION.$i)-$(PKGREV)_all.deb)
+DEBFILES=$(foreach,i,{$(PRODUCTLIST)} $(PKGDIR)$/$i3.5-$(TARGET)-menus_$(PKGVERSION.$i)-$(PKGREV)_all.deb)
 
 .ENDIF
 
@@ -56,22 +56,22 @@ ALLTAR : $(DEBFILES)
 
 %/DEBIAN/control : $$(@:f)
     @$(MKDIRHIER) $(@:d) $*$/etc $*$/usr/share/applnk/Office $*$/usr/lib/menu
-    ln -sf /opt/$(UNIXFILENAME.$(*:f:s/-/ /:1:s/3.4//)) $*$/etc$/
-    /bin/sh -c -x "cd $(COMMONMISC)$/$(*:f:s/-/ /:1:s/3.4//) && DESTDIR=$(shell @cd $*; pwd) ICON_PREFIX=$(ICONPREFIX) KDEMAINDIR=/usr GNOMEDIR=/usr create_tree.sh"
-        @cat openoffice.org-debian-menus | sed -e 's/%PRODUCTNAME/$(PRODUCTNAME.$(*:f:s/-/ /:1:s/3.4//)) $(PRODUCTVERSION.$(*:f:s/-/ /:1:s/3.4//))/' -e 's/%PREFIX/$(UNIXFILENAME.$(*:f:s/-/ /:1:s/3.4//))/' -e 's/%ICONPREFIX/$(ICONPREFIX.$(*:f:s/-/ /:1:s/3.4//))/' > $*$/usr/lib/menu/$(*:f:s/_/ /:1:s/3.4//)
-    echo "Package: $(*:f:s/_/ /:1:s/3.4//)" > $@
-    cat $(@:f) | tr -d "\015" | sed "s/%productname/$(PRODUCTNAME.$(*:f:s/-/ /:1:s/3.4//))/" >> $@
-    echo "Version: $(PKGVERSION.$(*:f:s/-/ /:1:s/3.4//))-$(PKGREV)" >> $@
+    ln -sf /opt/$(UNIXFILENAME.$(*:f:s/-/ /:1:s/3.5//)) $*$/etc$/
+    /bin/sh -c -x "cd $(COMMONMISC)$/$(*:f:s/-/ /:1:s/3.5//) && DESTDIR=$(shell @cd $*; pwd) ICON_PREFIX=$(ICONPREFIX) KDEMAINDIR=/usr GNOMEDIR=/usr create_tree.sh"
+        @cat openoffice.org-debian-menus | sed -e 's/%PRODUCTNAME/$(PRODUCTNAME.$(*:f:s/-/ /:1:s/3.5//)) $(PRODUCTVERSION.$(*:f:s/-/ /:1:s/3.5//))/' -e 's/%PREFIX/$(UNIXFILENAME.$(*:f:s/-/ /:1:s/3.5//))/' -e 's/%ICONPREFIX/$(ICONPREFIX.$(*:f:s/-/ /:1:s/3.5//))/' > $*$/usr/lib/menu/$(*:f:s/_/ /:1:s/3.5//)
+    echo "Package: $(*:f:s/_/ /:1:s/3.5//)" > $@
+    cat $(@:f) | tr -d "\015" | sed "s/%productname/$(PRODUCTNAME.$(*:f:s/-/ /:1:s/3.5//))/" >> $@
+    echo "Version: $(PKGVERSION.$(*:f:s/-/ /:1:s/3.5//))-$(PKGREV)" >> $@
     @du -k -s $* | awk -F ' ' '{ printf "Installed-Size: %s\n", $$1 ; }' >> $@
 
 %/DEBIAN/postinst : $$(@:f)
-     @cat $< | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME.$(*:f:s/-/ /:1:s/3.4//))/g" > $@
+     @cat $< | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME.$(*:f:s/-/ /:1:s/3.5//))/g" > $@
 
 %/DEBIAN/postrm : $$(@:f)
-     @cat $< | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME.$(*:f:s/-/ /:1:s/3.4//))/g" > $@
+     @cat $< | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME.$(*:f:s/-/ /:1:s/3.5//))/g" > $@
 
 %/DEBIAN/prerm : $$(@:f)
-     @cat $< | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME.$(*:f:s/-/ /:1:s/3.4//))/g" > $@
+     @cat $< | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME.$(*:f:s/-/ /:1:s/3.5//))/g" > $@
 
 # --- packaging ---------------------------------------------------
 

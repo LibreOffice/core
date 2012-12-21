@@ -21,7 +21,7 @@ Globals
 			UREPACKAGEPREFIX openoffice.org
 			SOLSUREPACKAGEPREFIX openofficeorg
 			USE_FILEVERSION 1
-			LIBRARYVERSION 9.4.0
+			LIBRARYVERSION 9.5.0
 			POOLPRODUCT 1
 			REGISTRATION_HOST https://registration.openoffice.org
 			REGISTRATIONURL http://survey.services.openoffice.org/user/index.php
@@ -54,7 +54,7 @@ OpenOffice
 		variables
 		{
 			PRODUCTNAME OpenOffice.org
-			PRODUCTVERSION 3.5
+			PRODUCTVERSION 3.5.0
 			PRODUCTEXTENSION 
 			LONG_PRODUCTEXTENSION 
 			SHORT_PRODUCTEXTENSION 
@@ -88,7 +88,7 @@ OpenOffice
 			STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
 			CHANGETARGETDIR 1
 			USE_FILEVERSION 1
-			LIBRARYVERSION 9.4.0
+			LIBRARYVERSION 9.5.0
 			PATCHCODEFILE ooo_patchcodes.txt
 			DOWNLOADBANNER	ooobanner.bmp
 			DOWNLOADBITMAP	ooobitmap.bmp
@@ -118,7 +118,7 @@ OpenOffice_wJRE
 		variables
 		{
 			PRODUCTNAME OpenOffice.org
-			PRODUCTVERSION 3.5
+			PRODUCTVERSION 3.5.0
 			PRODUCTEXTENSION 
 			LONG_PRODUCTEXTENSION 
 			SHORT_PRODUCTEXTENSION 
@@ -152,7 +152,7 @@ OpenOffice_wJRE
 			STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
 			CHANGETARGETDIR 1
 			USE_FILEVERSION 1
-			LIBRARYVERSION 9.4.0
+			LIBRARYVERSION 9.5.0
 			PATCHCODEFILE ooo_patchcodes.txt
 			JAVAPRODUCT 1
 			DOWNLOADBANNER	ooobanner.bmp
@@ -182,7 +182,7 @@ OpenOffice_Dev
 		variables
 		{
 			PRODUCTNAME OOo-dev
-			PRODUCTVERSION 3.5
+			PRODUCTVERSION 3.5.0
 			PRODUCTEXTENSION 
 			LONG_PRODUCTEXTENSION 
 			SHORT_PRODUCTEXTENSION 
@@ -222,7 +222,7 @@ OpenOffice_Dev
 			CHANGETARGETDIR 1
 			USE_FILEVERSION 1
 			JAVAPRODUCT 0
-			LIBRARYVERSION 9.4.0
+			LIBRARYVERSION 9.5.0
 			PATCHCODEFILE ooodev_patchcodes.txt
 			CODEFILENAME codes_ooodev.txt
 			DOWNLOADBANNER	ooobanner.bmp
@@ -255,7 +255,7 @@ URE
         variables
         {
             PRODUCTNAME URE
-            PRODUCTVERSION 3.5
+            PRODUCTVERSION 3.5.0
             PACKAGEVERSION 3.5
             PACKAGEREVISION 1
             PRODUCTEXTENSION
@@ -296,7 +296,7 @@ OpenOffice_SDK
         variables
         {
             PRODUCTNAME OpenOffice.org
-            PRODUCTVERSION 3.5
+            PRODUCTVERSION 3.5.0
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
             SHORT_PRODUCTEXTENSION
@@ -342,7 +342,7 @@ OpenOffice_Dev_SDK
         variables
         {
             PRODUCTNAME OOo-dev
-            PRODUCTVERSION 3.5
+            PRODUCTVERSION 3.5.0
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
             SHORT_PRODUCTEXTENSION
