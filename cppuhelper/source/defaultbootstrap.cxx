@@ -233,13 +233,9 @@ struct Data: private boost::noncopyable {
     ImplementationMap singletons;
 };
 
-// This is largely a copy from stoc/source/simpleregistry/textualservices.cxx
-// (which it obsoletes); cppuhelper's published interface concept makes it
-// difficult to make both places use a shared Parser implementation, so I
-// created a copy for now (until the whole stoc/source/simpleregistry stuff can
-// be removed in an incompatible LibreOffice version).  For simplicity, this
-// code keeps throwing css::registry::InvalidRegistryException for invalid XML
-// rdbs (even though that does not fit the exception's name):
+// For simplicity, this code keeps throwing
+// css::registry::InvalidRegistryException for invalid XML rdbs (even though
+// that does not fit the exception's name):
 class Parser: private boost::noncopyable {
 public:
     Parser(
