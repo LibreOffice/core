@@ -32,6 +32,7 @@ $(eval $(call gb_Library_set_componentfile,macab1,connectivity/source/drivers/ma
 $(eval $(call gb_Library_use_sdk_api,macab1))
 
 $(eval $(call gb_Library_use_libraries,macab1,\
+	comphelper \
 	cppu \
 	cppuhelper \
 	dbtools \
