@@ -28,6 +28,10 @@
 
 $(eval $(call gb_Library_Library,scn))
 
+$(eval $(call gb_Library_use_externals,scn,\
+    sane_headers \
+))
+
 $(eval $(call gb_Library_set_componentfile,scn,extensions/source/scanner/scn))
 
 $(eval $(call gb_Library_use_sdk_api,scn))
@@ -56,9 +60,6 @@ $(eval $(call gb_Library_add_exception_objects,scn,\
 ))
 else
 ifeq ($(GUI),UNX)
-ifneq (,$(filter SANE,$(BUILD_TYPE)))
-$(eval $(call gb_Library_use_packages,scn,sane_inc))
-endif
 
 $(eval $(call gb_Library_add_exception_objects,scn,\
 	extensions/source/scanner/grid \

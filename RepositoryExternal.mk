@@ -126,6 +126,21 @@ endef
 
 endif
 
+ifeq (SANEUNX,$(filter SANE,$(BUILD_TYPE))$(GUI))
+
+define gb_LinkTarget__use_sane_headers
+$(call gb_Library_use_packages,$(1),\
+	sane_inc \
+)
+
+endef
+
+else
+
+gb_LinkTarget__use_sane_headers :=
+
+endif
+
 # External libraries
 
 ifeq ($(SYSTEM_CPPUNIT),YES)
