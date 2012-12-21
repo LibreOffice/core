@@ -72,11 +72,7 @@ using namespace i18n::ScriptType;
 #define isRehChar(c)        IS_JOINING_GROUP((c), REH)
 #define isTehMarbutaChar(c) IS_JOINING_GROUP((c), TEH_MARBUTA)
 #define isWawChar(c)        IS_JOINING_GROUP((c), WAW)
-#if ( (U_ICU_VERSION_MAJOR_NUM > 4 ) || ((U_ICU_VERSION_MAJOR_NUM == 4) && (U_ICU_VERSION_MINOR_NUM >= 4)) )
 #define isYehChar(c)        (IS_JOINING_GROUP((c), YEH) || IS_JOINING_GROUP((c), FARSI_YEH))
-#else
-#define isYehChar(c)        (c == 0x626 || c == 0x649 || c == 0x64A || c == 0x678 || c == 0x6CC || c == 0x6CE || c == 0x6D0 || c == 0x6D1)
-#endif
 #define isSeenOrSadChar(c)  (IS_JOINING_GROUP((c), SAD) || IS_JOINING_GROUP((c), SEEN))
 
 bool isTransparentChar ( sal_Unicode cCh )
