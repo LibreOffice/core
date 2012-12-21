@@ -1883,9 +1883,9 @@ void OutputDevice::ImplDrawAlpha( const Bitmap& rBmp, const AlphaMask& rAlpha,
         {
             GDIMetaFile*    pOldMetaFile = mpMetaFile;
             const bool      bOldMap = mbMap;
-            Bitmap          aBmp( GetBitmap( aDstRect.TopLeft(), aDstRect.GetSize() ) );
-            mpMetaFile = NULL;
+            mpMetaFile = NULL; // fdo#55044 reset before GetBitmap!
             mbMap = false;
+            Bitmap          aBmp( GetBitmap( aDstRect.TopLeft(), aDstRect.GetSize() ) );
 
             // #109044# The generated bitmap need not necessarily be
             // of aDstRect dimensions, it's internally clipped to
