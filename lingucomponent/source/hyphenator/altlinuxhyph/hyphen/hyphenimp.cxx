@@ -35,6 +35,7 @@
 #include <rtl/textenc.h>
 
 #include <linguistic/lngprops.hxx>
+#include <linguistic/misc.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/lingucfg.hxx>
@@ -56,13 +57,6 @@ using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
 using ::rtl::OUString;
-
-// values asigned to capitalization types
-#define CAPTYPE_UNKNOWN 0
-#define CAPTYPE_NOCAP   1
-#define CAPTYPE_INITCAP 2
-#define CAPTYPE_ALLCAP  3
-#define CAPTYPE_MIXED   4
 
 // min, max
 #define Max(a,b) (a > b ? a : b)
@@ -711,31 +705,6 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
     return NULL;
 }
 
-sal_uInt16 SAL_CALL Hyphenator::capitalType(const OUString& aTerm, CharClass * pCC)
-{
-    sal_Int32 tlen = aTerm.getLength();
-    if ((pCC) && (tlen))
-    {
-        String aStr(aTerm);
-        sal_Int32 nc = 0;
-        for (xub_StrLen tindex = 0; tindex < tlen;  tindex++)
-        {
-            if (pCC->getCharacterType(aStr,tindex) & ::com::sun::star::i18n::KCharacterType::UPPER)
-                nc++;
-        }
-
-        if (nc == 0)
-            return (sal_uInt16) CAPTYPE_NOCAP;
-        if (nc == tlen)
-            return (sal_uInt16) CAPTYPE_ALLCAP;
-        if ((nc == 1) && (pCC->getCharacterType(aStr,0) & ::com::sun::star::i18n::KCharacterType::UPPER))
-            return (sal_uInt16) CAPTYPE_INITCAP;
-
-        return (sal_uInt16) CAPTYPE_MIXED;
-    }
-    return (sal_uInt16) CAPTYPE_UNKNOWN;
-}
-
 OUString SAL_CALL Hyphenator::makeLowerCase(const OUString& aTerm, CharClass * pCC)
 {
     if (pCC)
@@ -948,11 +917,5 @@ void * SAL_CALL Hyphenator_getFactory( const sal_Char * pImplName,
 
 
 ///////////////////////////////////////////////////////////////////////////
-
-#undef CAPTYPE_UNKNOWN
-#undef CAPTYPE_NOCAP
-#undef CAPTYPE_INITCAP
-#undef CAPTYPE_ALLCAP
-#undef CAPTYPE_MIXED
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

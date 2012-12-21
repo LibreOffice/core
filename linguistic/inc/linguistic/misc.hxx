@@ -82,6 +82,12 @@ namespace linguistic
 #define DIC_ERR_UNKNOWN     3
 #define DIC_ERR_NOT_EXISTS  4
 
+// values asigned to capitalization types
+enum eCapType
+{
+    CAPTYPE_UNKNOWN, CAPTYPE_NOCAP, CAPTYPE_INITCAP, CAPTYPE_ALLCAP,
+    CAPTYPE_MIXED
+};
 
 LNG_DLLPUBLIC ::osl::Mutex& GetLinguMutex();
 
@@ -120,6 +126,7 @@ LNG_DLLPUBLIC sal_Int32 GetPosInWordToCheck( const rtl::OUString &rTxt, sal_Int3
 LNG_DLLPUBLIC sal_Bool        IsUpper( const String &rText, xub_StrLen nPos, xub_StrLen nLen, sal_Int16 nLanguage );
 
 inline sal_Bool        IsUpper( const String &rText, sal_Int16 nLanguage )     { return IsUpper( rText, 0, rText.Len(), nLanguage ); }
+LNG_DLLPUBLIC eCapType SAL_CALL capitalType(const OUString&, CharClass *);
 
 String      ToLower( const String &rText, sal_Int16 nLanguage );
 LNG_DLLPUBLIC sal_Bool      HasDigits( const ::rtl::OUString &rText );

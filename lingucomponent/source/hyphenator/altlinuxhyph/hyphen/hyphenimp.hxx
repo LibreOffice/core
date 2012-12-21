@@ -132,7 +132,6 @@ public:
 
 
 private:
-        sal_uInt16 SAL_CALL capitalType(const OUString&, CharClass *);
         OUString SAL_CALL makeLowerCase(const OUString&, CharClass *);
         OUString SAL_CALL makeUpperCase(const OUString&, CharClass *);
         OUString SAL_CALL makeInitCap(const OUString&, CharClass *);

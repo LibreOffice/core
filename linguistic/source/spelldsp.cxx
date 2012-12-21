@@ -37,13 +37,6 @@
 #include "lngsvcmgr.hxx"
 #include "linguistic/lngprops.hxx"
 
-// values asigned to capitalization types
-#define CAPTYPE_UNKNOWN 0
-#define CAPTYPE_NOCAP   1
-#define CAPTYPE_INITCAP 2
-#define CAPTYPE_ALLCAP  3
-#define CAPTYPE_MIXED   4
-
 using namespace osl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
@@ -837,32 +830,6 @@ void SpellCheckerDispatcher::setCharClass(const LanguageTag& rLanguageTag)
     pCharClass->setLanguageTag(rLanguageTag);
 }
 
-sal_uInt16 SAL_CALL SpellCheckerDispatcher::capitalType(const OUString& aTerm, CharClass * pCC)
-{
-        sal_Int32 tlen = aTerm.getLength();
-        if ((pCC) && (tlen))
-        {
-            String aStr(aTerm);
-            sal_Int32 nc = 0;
-            for (sal_uInt16 tindex = 0; tindex < tlen;  tindex++)
-            {
-                if (pCC->getCharacterType(aStr,tindex) &
-                   ::com::sun::star::i18n::KCharacterType::UPPER) nc++;
-            }
-
-            if (nc == 0)
-                return (sal_uInt16) CAPTYPE_NOCAP;
-            if (nc == tlen)
-                return (sal_uInt16) CAPTYPE_ALLCAP;
-            if ((nc == 1) && (pCC->getCharacterType(aStr,0) &
-                  ::com::sun::star::i18n::KCharacterType::UPPER))
-                return (sal_uInt16) CAPTYPE_INITCAP;
-
-            return (sal_uInt16) CAPTYPE_MIXED;
-        }
-        return (sal_uInt16) CAPTYPE_UNKNOWN;
-}
-
 
 
 OUString SAL_CALL SpellCheckerDispatcher::makeLowerCase(const OUString& aTerm, CharClass * pCC)
@@ -871,11 +838,5 @@ OUString SAL_CALL SpellCheckerDispatcher::makeLowerCase(const OUString& aTerm, C
         return pCC->lowercase(aTerm);
     return aTerm;
 }
-
-#undef CAPTYPE_UNKNOWN
-#undef CAPTYPE_NOCAP
-#undef CAPTYPE_INITCAP
-#undef CAPTYPE_ALLCAP
-#undef CAPTYPE_MIXED
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
