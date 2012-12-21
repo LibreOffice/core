@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAASH///9o\u003d",
+        "filename": "linguistic/inc/linguistic/misc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-12-21T15:47:56Z",
+      "side": 1,
+      "message": "Actually the enum name should start with a capital letter, variable instances have the prefix \u0027e\u0027. I\u0027ll change that in the amended commit.",
+      "revId": "a7d969b9fbdf79569bdda203fd8015a31c5772f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASH///9s\u003d",
+        "filename": "linguistic/inc/linguistic/misc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-12-21T15:47:56Z",
+      "side": 1,
+      "message": "For better readability it\u0027s preferable to have each value on a separate line, I\u0027ll do that in the amended commit.",
+      "revId": "a7d969b9fbdf79569bdda203fd8015a31c5772f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
