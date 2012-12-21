@@ -47,7 +47,6 @@ $(eval $(call gb_Jar_add_sourcefiles,juh,\
     javaunohelper/com/sun/star/comp/helper/BootstrapException \
     javaunohelper/com/sun/star/comp/helper/ComponentContext \
     javaunohelper/com/sun/star/comp/helper/ComponentContextEntry \
-    javaunohelper/com/sun/star/comp/helper/RegistryServiceFactory \
     javaunohelper/com/sun/star/comp/helper/SharedLibraryLoader \
     javaunohelper/com/sun/star/comp/helper/UnoInfo \
     javaunohelper/com/sun/star/comp/juhtest/SmoketestCommandEnvironment \

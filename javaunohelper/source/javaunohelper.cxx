@@ -25,8 +25,6 @@
 #include <uno/mapping.hxx>
 
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/servicefactory.hxx>
-#include <cppuhelper/component_context.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -239,95 +237,6 @@ Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
     }
 #endif
     return joSLL_cpp;
-}
-
-/*
- * Class:     com_sun_star_comp_helper_RegistryServiceFactory
- * Method:    createRegistryServiceFactory
- * Signature: (Ljava/lang/String;Ljava/lang/String;Z)Ljava/lang/Object;
- */
-extern "C" SAL_JNI_EXPORT jobject JNICALL
-Java_com_sun_star_comp_helper_RegistryServiceFactory_createRegistryServiceFactory(
-    JNIEnv * pJEnv, SAL_UNUSED_PARAMETER jclass, jstring jWriteRegFile,
-    jstring jReadRegFile, jboolean jbReadOnly, jobject loader )
-{
-    jobject joRegServiceFac = 0;
-
-    try
-    {
-        OUString aWriteRegFile;
-        OUString aReadRegFile;
-
-        sal_Bool bReadOnly = jbReadOnly == JNI_FALSE ? sal_False : sal_True;
-
-        if (jReadRegFile) {
-            const jchar* pjReadRegFile = pJEnv->GetStringChars(jReadRegFile, NULL);
-            aReadRegFile = OUString(pjReadRegFile);
-            pJEnv->ReleaseStringChars(jReadRegFile, pjReadRegFile);
-        }
-
-        if (jWriteRegFile) {
-            const jchar * pjWriteRegFile = pJEnv->GetStringChars(jWriteRegFile, NULL);
-            aWriteRegFile = OUString(pjWriteRegFile);
-            pJEnv->ReleaseStringChars(jWriteRegFile, pjWriteRegFile);
-        }
-
-        // bootstrap
-        Reference< lang::XMultiServiceFactory > rMSFac;
-        if (aReadRegFile.isEmpty())
-            rMSFac = ::cppu::createRegistryServiceFactory( aWriteRegFile, bReadOnly);
-        else
-            rMSFac = ::cppu::createRegistryServiceFactory(aWriteRegFile, aReadRegFile, bReadOnly);
-
-        Reference< beans::XPropertySet > xProps(
-            rMSFac, UNO_QUERY_THROW );
-        Reference< XComponentContext > xContext(
-            xProps->getPropertyValue( OUSTR("DefaultContext") ), UNO_QUERY_THROW );
-
-        // create vm access
-        ::rtl::Reference< ::jvmaccess::UnoVirtualMachine > vm_access(
-            ::javaunohelper::create_vm_access( pJEnv, loader ) );
-        // wrap vm singleton entry
-        xContext = ::javaunohelper::install_vm_singleton( xContext, vm_access );
-        rMSFac.set( xContext->getServiceManager(), UNO_QUERY_THROW );
-
-        // get uno envs
-        OUString aCurrentEnv(RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME));
-        OUString java_env_name = OUSTR(UNO_LB_JAVA);
-        Environment java_env, curr_env;
-        uno_getEnvironment((uno_Environment **)&curr_env, aCurrentEnv.pData, NULL);
-        uno_getEnvironment( (uno_Environment **)&java_env, java_env_name.pData, vm_access.get() );
-
-        Mapping curr_java(curr_env.get(), java_env.get());
-        if (! curr_java.is())
-        {
-            throw RuntimeException(
-                OUSTR("no C++ <-> Java mapping available!"), Reference< XInterface >() );
-        }
-
-        jobject joGlobalRegServiceFac =
-            (jobject)curr_java.mapInterface(
-                rMSFac.get(),
-                getCppuType((Reference< lang::XMultiServiceFactory > *)0) );
-        joRegServiceFac = pJEnv->NewLocalRef( joGlobalRegServiceFac );
-          pJEnv->DeleteGlobalRef(joGlobalRegServiceFac);
-    }
-    catch (Exception & exc)
-    {
-        jclass c = pJEnv->FindClass( "com/sun/star/uno/RuntimeException" );
-        if (0 != c)
-        {
-            OString cstr( ::rtl::OUStringToOString(
-                              exc.Message, RTL_TEXTENCODING_JAVA_UTF8 ) );
-            OSL_TRACE( __FILE__": forwarding Exception: %s", cstr.getStr() );
-            pJEnv->ThrowNew( c, cstr.getStr() );
-        }
-        return 0;
-    }
-
-    OSL_TRACE("javaunohelper.cxx: object %i", joRegServiceFac);
-
-    return joRegServiceFac;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

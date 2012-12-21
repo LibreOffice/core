@@ -49,6 +49,14 @@ SAL_CALL createNestedRegistry(rtl::OUString const &) SAL_THROW(()) {
     for (;;) { std::abort(); } // avoid "must return a value" warnings
 }
 
+SAL_DLLPUBLIC_EXPORT css::uno::Reference< css::lang::XMultiServiceFactory >
+SAL_CALL createRegistryServiceFactory(
+    rtl::OUString const &, rtl::OUString const &, sal_Bool,
+    rtl::OUString const &) SAL_THROW((css::uno::Exception))
+{
+    for (;;) { std::abort(); } // avoid "must return a value" warnings
+}
+
 SAL_DLLPUBLIC_EXPORT css::uno::Reference< css::registry::XSimpleRegistry >
 SAL_CALL createSimpleRegistry(rtl::OUString const &) SAL_THROW(()) {
     for (;;) { std::abort(); } // avoid "must return a value" warnings

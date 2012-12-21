@@ -74,7 +74,6 @@ $(eval $(call gb_Package_add_file,cppuhelper_inc,inc/cppuhelper/propshlp.hxx,cpp
 $(eval $(call gb_Package_add_file,cppuhelper_inc,inc/cppuhelper/proptypehlp.h,cppuhelper/proptypehlp.h))
 $(eval $(call gb_Package_add_file,cppuhelper_inc,inc/cppuhelper/proptypehlp.hxx,cppuhelper/proptypehlp.hxx))
 $(eval $(call gb_Package_add_file,cppuhelper_inc,inc/cppuhelper/queryinterface.hxx,cppuhelper/queryinterface.hxx))
-$(eval $(call gb_Package_add_file,cppuhelper_inc,inc/cppuhelper/servicefactory.hxx,cppuhelper/servicefactory.hxx))
 $(eval $(call gb_Package_add_file,cppuhelper_inc,inc/cppuhelper/shlib.hxx,cppuhelper/shlib.hxx))
 $(eval $(call gb_Package_add_file,cppuhelper_inc,inc/cppuhelper/supportsservice.hxx,cppuhelper/supportsservice.hxx))
 $(eval $(call gb_Package_add_file,cppuhelper_inc,inc/cppuhelper/typeprovider.hxx,cppuhelper/typeprovider.hxx))

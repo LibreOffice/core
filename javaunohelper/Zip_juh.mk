@@ -33,7 +33,6 @@ $(eval $(call gb_Zip_add_files,juh_src,\
     com/sun/star/comp/helper/BootstrapException.java \
     com/sun/star/comp/helper/ComponentContext.java \
     com/sun/star/comp/helper/ComponentContextEntry.java \
-    com/sun/star/comp/helper/RegistryServiceFactory.java \
     com/sun/star/comp/helper/SharedLibraryLoader.java \
     com/sun/star/comp/helper/UnoInfo.java \
     com/sun/star/comp/juhtest/SmoketestCommandEnvironment.java \
