@@ -34,20 +34,22 @@ $(call gb_CustomTarget_get_target,i18npool/localedata) : \
 	$(patsubst %.xml,$(i18npool_LDDIR)/localedata_%.cxx, \
 		$(notdir $(wildcard $(SRCDIR)/i18npool/source/localedata/data/*.xml)))
 
+# The dependencies on ure/services.rdb and ure/types.rdb are implicitly required
+# due to the settings for URE_SERVICES and URE_TYPES in cppuhelper/source/unorc:
 $(i18npool_LDDIR)/localedata_%.cxx : \
 		$(SRCDIR)/i18npool/source/localedata/data/%.xml \
 		$(i18npool_LDDIR)/saxparser.rdb \
-		$(OUTDIR_FOR_BUILD)/bin/types.rdb \
+		$(call gb_UnoApiMerge_get_target_for_build,ure/types) \
 		$(call gb_Executable_get_target_for_build,saxparser) \
-		$(call gb_Rdb_get_outdir_target,ure/services) \
+		$(call gb_Rdb_get_outdir_target_for_build,ure/services) \
 		$(call gb_Library_get_target,$(gb_CPPU_ENV)_uno) \
-		$(call gb_Package_get_target,cppuhelper_unorc)
+		$(call gb_Package_get_target_for_build,cppuhelper_unorc)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),SAX,1)
 	$(call gb_Helper_abbreviate_dirs, \
 		$(call gb_Helper_execute,saxparser) $* $< $@.tmp \
 			$(call gb_Helper_make_url,$(i18npool_LDDIR)/saxparser.rdb) \
-			$(call gb_Helper_make_url,$(OUTDIR_FOR_BUILD)/bin/types.rdb) \
-			-env:LO_LIB_DIR=$(call gb_Helper_make_url,$(gb_Helper_OUTDIR_FOR_BUILDLIBDIR)) \
+			-env:LO_LIB_DIR=$(call gb_Helper_make_url,$(gb_Helper_OUTDIR_FOR_BUILDLIBDIR) \
+			-env:URE_MORE_SERVICES=$(call gb_Helper_make_url,$(i18npool_LDDIR)/saxparser.rdb)) \
 			$(if $(findstring s,$(MAKEFLAGS)),> /dev/null 2>&1) && \
 		sed 's/\(^.*get[^;]*$$\)/SAL_DLLPUBLIC_EXPORT \1/' $@.tmp > $@ && \
 		rm $@.tmp)

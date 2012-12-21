@@ -33,8 +33,7 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 
-#include <comphelper/processfactory.hxx>
-#include <cppuhelper/servicefactory.hxx>
+#include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase3.hxx>
 
@@ -299,22 +298,19 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
 
 
-    if( argc < 6) {
-        printf( "usage : %s <locaLe> <XML inputfile> <destination file> <services.rdb location> <types.rdb location>\n", argv[0] );
+    if( argc < 4) {
+        printf( "usage : %s <locaLe> <XML inputfile> <destination file>\n", argv[0] );
         exit( 1 );
     }
 
-    // create service manager
-    Reference< XMultiServiceFactory > xSMgr;
+    Reference< XComponentContext > xContext;
     try
     {
-        xSMgr = createRegistryServiceFactory(
-            ::rtl::OUString::createFromAscii(argv[4]),
-            ::rtl::OUString::createFromAscii(argv[5]), true );
+        xContext = defaultBootstrap_InitialComponentContext();
     }
     catch ( const Exception &e )
     {
-        printf( "Exception on createRegistryServiceFactory %s\n",
+        printf( "Exception bootstrapping UNO: %s\n",
             OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).getStr() );
         exit(1);
     }
@@ -323,7 +319,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     // parser demo
     // read xml from a file and count elements
     //--------------------------------
-    Reference< XParser > rParser = Parser::create(comphelper::getComponentContext(xSMgr));
+    Reference< XParser > rParser = Parser::create(xContext);
 
     int nError = 0;
     // create and connect the document handler to the parser
