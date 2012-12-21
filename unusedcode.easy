@@ -8,7 +8,6 @@ ScFiltersTest::testColorScaleXLSX()
 ScMenuFloatingWindow::getDoc()
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
 ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any const&)
-SfxDocumentTemplateDlg::SfxDocumentTemplateDlg(Window*, SfxDocumentTemplates*)
 TextEngine::GetLeftMargin() const
 TransitionScene::clear()
 UnoControl::UnoControl()

@@ -180,7 +180,6 @@ public:
     using SotObject::GetInterface;
     using SfxShell::Activate;           // with sal_Bool bMDI
     using SfxShell::Deactivate;         // with sal_Bool bMDI
-    using SfxObjectShell::Print;        // print styles
 
 #ifdef ENABLE_TELEPATHY
     SC_DLLPRIVATE ScCollaboration* GetCollaboration();

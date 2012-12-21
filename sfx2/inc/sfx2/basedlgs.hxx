@@ -40,18 +40,6 @@ class HelpButton;
 class Button;
 class FixedLine;
 
-// class SfxModalDefParentHelper -----------------------------------------
-
-class SfxModalDefParentHelper
-{
-private:
-    Window *pOld;
-
-public:
-    SfxModalDefParentHelper(Window* pWindow);
-    ~SfxModalDefParentHelper();
-};
-
 // class SfxModalDialog --------------------------------------------------
 
 class SFX2_DLLPUBLIC SfxModalDialog: public ModalDialog

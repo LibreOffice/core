@@ -24,6 +24,7 @@ $(eval $(call gb_UI_add_uifiles,cui,\
 	cui/uiconfig/ui/scriptorganizer \
 	cui/uiconfig/ui/select_persona_dialog \
 	cui/uiconfig/ui/specialcharacters \
+	cui/uiconfig/ui/spellingdialog \
 	cui/uiconfig/ui/thesaurus \
 	cui/uiconfig/ui/twolinespage \
 	cui/uiconfig/ui/zoomdialog \

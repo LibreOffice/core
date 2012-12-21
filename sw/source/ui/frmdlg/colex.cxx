@@ -295,30 +295,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwColExample(Window *pParen
     return new SwColExample(pParent);
 }
 
-SwColumnOnlyExample::SwColumnOnlyExample( Window* pParent, const ResId& rResId)
-    : Window(pParent, rResId)
-    , m_aFrmSize(1,1)
-{
-    SetMapMode( MapMode( MAP_TWIP ) );
-    m_aWinSize = GetOutputSizePixel();
-    m_aWinSize.Height() -= 4;
-    m_aWinSize.Width() -= 4;
-
-    m_aWinSize = PixelToLogic( m_aWinSize );
-
-    SetBorderStyle( WINDOW_BORDER_MONO );
-
-    m_aFrmSize  = SvxPaperInfo::GetPaperSize(PAPER_A4);// DIN A4
-    ::FitToActualSize(m_aCols, (sal_uInt16)m_aFrmSize.Width());
-
-    long nHeight = m_aFrmSize.Height();
-    Fraction aScale( m_aWinSize.Height(), nHeight );
-    MapMode aMapMode( GetMapMode() );
-    aMapMode.SetScaleX( aScale );
-    aMapMode.SetScaleY( aScale );
-    SetMapMode( aMapMode );
-}
-
 SwColumnOnlyExample::SwColumnOnlyExample(Window* pParent)
     : Window(pParent)
     , m_aFrmSize(1,1)

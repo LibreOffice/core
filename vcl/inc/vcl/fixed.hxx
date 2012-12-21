@@ -79,12 +79,8 @@ public:
 
 class VCL_DLLPUBLIC SelectableFixedText : public Edit
 {
-private:
-    void    Init();
-
 public:
     SelectableFixedText( Window* pParent, WinBits nStyle = 0 );
-    SelectableFixedText( Window* pParent, const ResId& rResId );
 
     virtual void    LoseFocus();
 };

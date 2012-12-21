@@ -108,7 +108,6 @@ protected:
     virtual void Paint( const Rectangle& rRect );
 
 public:
-    SwColumnOnlyExample(Window* , const ResId&);
     SwColumnOnlyExample(Window*);
 
     void        SetColumns(const SwFmtCol& rCol);

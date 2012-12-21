@@ -143,9 +143,6 @@ public:
     void                SetHierarchyURL( const OUString& rURL) { maOwnURL = rURL; }
 
     int                 Compare( const OUString& rTitle ) const;
-
-    SfxObjectShellRef   CreateObjectShell();
-    sal_Bool                DeleteObjectShell();
 };
 
 }
@@ -179,7 +176,6 @@ public:
     DocTempl_EntryData_Impl*     GetEntry( const OUString& rName ) const;
 
     const OUString&     GetTitle() const { return maTitle; }
-    const OUString&     GetTargetURL();
     const OUString&     GetHierarchyURL();
 
     size_t              GetCount() const;
@@ -383,23 +379,6 @@ sal_uInt16 SfxDocumentTemplates::GetRegionCount() const
 
 //------------------------------------------------------------------------
 
-sal_Bool SfxDocumentTemplates::IsRegionLoaded( sal_uInt16 nIdx ) const
-{
-    DocTemplLocker_Impl aLocker( *pImp );
-
-    if ( !pImp->Construct() )
-        return sal_False;
-
-    RegionData_Impl *pData = pImp->GetRegion( nIdx );
-
-    if ( pData )
-        return sal_True;
-    else
-        return sal_False;
-}
-
-//------------------------------------------------------------------------
-
 sal_uInt16 SfxDocumentTemplates::GetCount
 (
     sal_uInt16 nRegion              /* Region index whose number is
@@ -468,42 +447,6 @@ const String& SfxDocumentTemplates::GetName
         maTmpString.Erase();
 
     return maTmpString;
-}
-
-//------------------------------------------------------------------------
-
-String SfxDocumentTemplates::GetFileName
-(
-    sal_uInt16 nRegion,     //  Region Index, in which the entry lies
-    sal_uInt16 nIdx         //  Index of the entry
-)   const
-
-/*  [Description]
-
-    Returns the file name of an entry in Region
-
-    [Return value]                 File name of the entry
-*/
-{
-    DocTemplLocker_Impl aLocker( *pImp );
-
-    if ( !pImp->Construct() )
-        return String();
-
-    DocTempl_EntryData_Impl  *pEntry = NULL;
-    RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
-
-    if ( pRegion )
-        pEntry = pRegion->GetEntry( nIdx );
-
-    if ( pEntry )
-    {
-        INetURLObject aURLObj( pEntry->GetTargetURL() );
-        return aURLObj.getName( INetURLObject::LAST_SEGMENT, true,
-                                INetURLObject::DECODE_WITH_CHARSET );
-    }
-    else
-        return String();
 }
 
 //------------------------------------------------------------------------
@@ -1098,190 +1041,6 @@ sal_Bool SfxDocumentTemplates::InsertDir
 
 //------------------------------------------------------------------------
 
-sal_Bool SfxDocumentTemplates::SetName
-(
-    const String&   rName,      //  Der zu setzende Name
-    sal_uInt16          nRegion,    //  Region Index
-    sal_uInt16          nIdx        /*  Index of the entry oder USHRT_MAX,
-                                    if a directory is meant. */
-)
-
-/*  [Description]
-
-    Change the name of an entry or a directory
-
-    [Return value]
-
-    sal_Bool            sal_True,   Action could be performed
-                        sal_False,  Action could not be performed
-
-*/
-
-{
-    DocTemplLocker_Impl aLocker( *pImp );
-
-    if ( ! pImp->Construct() )
-        return sal_False;
-
-    RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
-    DocTempl_EntryData_Impl *pEntry = NULL;
-
-    if ( !pRegion )
-        return sal_False;
-
-    uno::Reference< XDocumentTemplates > xTemplates = pImp->getDocTemplates();
-    OUString aEmpty;
-
-    if ( nIdx == USHRT_MAX )
-    {
-        if ( pRegion->GetTitle() == OUString( rName ) )
-            return sal_True;
-
-        // we have to rename a region
-        if ( xTemplates->renameGroup( pRegion->GetTitle(), rName ) )
-        {
-            pRegion->SetTitle( rName );
-            pRegion->SetTargetURL( aEmpty );
-            pRegion->SetHierarchyURL( aEmpty );
-            return sal_True;
-        }
-    }
-    else
-    {
-        pEntry = pRegion->GetEntry( nIdx );
-
-        if ( !pEntry )
-            return sal_False;
-
-        if ( pEntry->GetTitle() == OUString( rName ) )
-            return sal_True;
-
-        if ( xTemplates->renameTemplate( pRegion->GetTitle(),
-                                         pEntry->GetTitle(),
-                                         rName ) )
-        {
-            pEntry->SetTitle( rName );
-            pEntry->SetTargetURL( aEmpty );
-            pEntry->SetHierarchyURL( aEmpty );
-            return sal_True;
-        }
-    }
-
-    return sal_False;
-}
-
-//------------------------------------------------------------------------
-
-sal_Bool SfxDocumentTemplates::Rescan()
-
-/*  [Description]
-
-    Comparison of administrative data with the current state on disk.
-    The logical name for which no file exists, will be removed from the
-    administrative structure. Files for which no record exists will be included.
-
-    [Return value]
-
-    sal_Bool            sal_True,   Action could be performed
-                        sal_False,  Action could not be performed
-
-    [Cross-references]
-
-    <SfxTemplateDir::Scan(sal_Bool bDirectory, sal_Bool bSave)>
-    <SfxTemplateDir::Freshen(const SfxTemplateDir &rNew)>
-*/
-{
-    if ( !pImp->Construct() )
-        return sal_False;
-
-    pImp->Rescan();
-
-    return sal_True;
-}
-
-//------------------------------------------------------------------------
-
-SfxObjectShellRef SfxDocumentTemplates::CreateObjectShell
-(
-    sal_uInt16 nRegion,         //  Region Index
-    sal_uInt16 nIdx             //  Index of the entry
-)
-
-/*  [Description]
-
-    Access to the document shell of an entry
-
-    [Return value]
-
-    SfxObjectShellRef         Referece to the ObjectShell
-
-    [Cross-references]
-
-    <SfxTemplateDirEntry::CreateObjectShell()>
-    <SfxDocumentTemplates::DeleteObjectShell(sal_uInt16, sal_uInt16)>
-*/
-
-{
-    DocTemplLocker_Impl aLocker( *pImp );
-
-    if ( !pImp->Construct() )
-        return NULL;
-
-    RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
-    DocTempl_EntryData_Impl *pEntry = NULL;
-
-    if ( pRegion )
-        pEntry = pRegion->GetEntry( nIdx );
-
-    if ( pEntry )
-        return pEntry->CreateObjectShell();
-    else
-        return NULL;
-}
-
-//------------------------------------------------------------------------
-
-sal_Bool SfxDocumentTemplates::DeleteObjectShell
-(
-    sal_uInt16 nRegion,         //  Region Index
-    sal_uInt16 nIdx             //  Index of the entry
-)
-
-/*  [Description]
-
-    Releasing the ObjectShell of an entry
-
-    [Return value]
-
-    sal_Bool            sal_True,   Action could be performed
-                        sal_False,  Action could not be performed
-
-    [Cross-references]
-
-    <SfxTemplateDirEntry::DeleteObjectShell()>
-    <SfxDocumentTemplates::CreateObjectShell(sal_uInt16, sal_uInt16)>
-*/
-
-{
-    DocTemplLocker_Impl aLocker( *pImp );
-
-    if ( ! pImp->Construct() )
-        return sal_True;
-
-    RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
-    DocTempl_EntryData_Impl *pEntry = NULL;
-
-    if ( pRegion )
-        pEntry = pRegion->GetEntry( nIdx );
-
-    if ( pEntry )
-        return pEntry->DeleteObjectShell();
-    else
-        return sal_True;
-}
-
-//------------------------------------------------------------------------
-
 sal_Bool SfxDocumentTemplates::GetFull
 (
     const String &rRegion,      // Region Name
@@ -1458,60 +1217,6 @@ void SfxDocumentTemplates::ReInitFromComponent()
     pImp->ReInitFromComponent();
 }
 
-
-sal_Bool SfxDocumentTemplates::HasUserContents( sal_uInt16 nRegion, sal_uInt16 nIdx ) const
-{
-    DocTemplLocker_Impl aLocker( *pImp );
-
-    sal_Bool bResult = sal_False;
-
-    RegionData_Impl* pRegion = pImp->GetRegion( nRegion );
-
-    if ( pRegion )
-    {
-        ::rtl::OUString aRegionTargetURL = pRegion->GetTargetURL();
-        if ( !aRegionTargetURL.isEmpty() )
-        {
-            sal_uInt16 nLen = 0;
-            sal_uInt16 nStartInd = 0;
-
-            if( nIdx == USHRT_MAX )
-            {
-                // this is a folder
-                // check whether there is at least one editable template
-                nLen = ( sal_uInt16 )pRegion->GetCount();
-                nStartInd = 0;
-                if ( nLen == 0 )
-                    bResult = sal_True; // the writing part of empty folder with writing URL can be removed
-            }
-            else
-            {
-                // this is a template
-                // check whether the template is inserted by user
-                nLen = 1;
-                nStartInd = nIdx;
-            }
-
-            for ( sal_uInt16 nInd = nStartInd; nInd < nStartInd + nLen; nInd++ )
-            {
-                DocTempl_EntryData_Impl* pEntryData = pRegion->GetEntry( nInd );
-                if ( pEntryData )
-                {
-                    ::rtl::OUString aEntryTargetURL = pEntryData->GetTargetURL();
-                    if ( !aEntryTargetURL.isEmpty()
-                      && ::utl::UCBContentHelper::IsSubPath( aRegionTargetURL, aEntryTargetURL ) )
-                    {
-                        bResult = sal_True;
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
-    return bResult;
-}
-
 // -----------------------------------------------------------------------
 DocTempl_EntryData_Impl::DocTempl_EntryData_Impl( RegionData_Impl* pParent,
                                 const OUString& rTitle )
@@ -1527,114 +1232,6 @@ DocTempl_EntryData_Impl::DocTempl_EntryData_Impl( RegionData_Impl* pParent,
 int DocTempl_EntryData_Impl::Compare( const OUString& rTitle ) const
 {
     return maTitle.compareTo( rTitle );
-}
-
-// -----------------------------------------------------------------------
-SfxObjectShellRef DocTempl_EntryData_Impl::CreateObjectShell()
-{
-    if( ! mxObjShell.Is() )
-    {
-        mbIsOwner = sal_False;
-        sal_Bool bDum = sal_False;
-        SfxApplication *pSfxApp = SFX_APP();
-        String          aTargetURL = GetTargetURL();
-
-        mxObjShell = pSfxApp->DocAlreadyLoaded( aTargetURL, sal_True, bDum );
-
-        if( ! mxObjShell.Is() )
-        {
-            mbIsOwner = sal_True;
-            SfxMedium *pMed=new SfxMedium(
-                aTargetURL,(STREAM_STD_READWRITE | STREAM_SHARE_DENYALL) );
-            const SfxFilter* pFilter = NULL;
-            pMed->UseInteractionHandler(sal_True);
-            if( pSfxApp->GetFilterMatcher().GuessFilter(
-                *pMed, &pFilter, SFX_FILTER_TEMPLATE, 0 ) ||
-                (pFilter && !pFilter->IsOwnFormat()) ||
-                (pFilter && !pFilter->UsesStorage()) )
-            {
-                SfxErrorContext aEc( ERRCTX_SFX_LOADTEMPLATE,
-                                     aTargetURL );
-                delete pMed;
-                mbDidConvert=sal_True;
-                sal_uIntPtr lErr;
-                if ( mxObjShell.Is() ) {
-                    lErr = pSfxApp->LoadTemplate( mxObjShell,aTargetURL);
-                    if( lErr != ERRCODE_NONE )
-                        ErrorHandler::HandleError(lErr);
-                }
-
-            }
-            else if (pFilter)
-            {
-                mbDidConvert=sal_False;
-                mxObjShell = SfxObjectShell::CreateObject( pFilter->GetServiceName(), SFX_CREATE_MODE_ORGANIZER );
-                if ( mxObjShell.Is() )
-                {
-                    mxObjShell->DoInitNew(0);
-                    // TODO/LATER: make sure that we don't use binary templates!
-                    if( mxObjShell->LoadFrom( *pMed ) )
-                    {
-                        mxObjShell->DoSaveCompleted( pMed );
-                    }
-                    else
-                        mxObjShell.Clear();
-                }
-            }
-        }
-    }
-
-    return (SfxObjectShellRef)(SfxObjectShell*) mxObjShell;
-}
-
-//------------------------------------------------------------------------
-sal_Bool DocTempl_EntryData_Impl::DeleteObjectShell()
-{
-    sal_Bool bRet = sal_True;
-
-    if ( mxObjShell.Is() )
-    {
-        if( mxObjShell->IsModified() )
-        {
-            // Here we also save, if the Template is being processed ...
-            bRet = sal_False;
-
-            if ( mbIsOwner )
-            {
-                if( mbDidConvert )
-                {
-                    bRet=mxObjShell->PreDoSaveAs_Impl(
-                        GetTargetURL(),
-                        mxObjShell->GetFactory().GetFilterContainer()->GetAnyFilter( SFX_FILTER_EXPORT | SFX_FILTER_IMPORT, SFX_FILTER_INTERNAL )->GetFilterName(), 0 );
-                }
-                else
-                {
-                    if( mxObjShell->Save() )
-                    {
-                        uno::Reference< embed::XTransactedObject > xTransacted( mxObjShell->GetStorage(), uno::UNO_QUERY );
-                        DBG_ASSERT( xTransacted.is(), "Storage must implement XTransactedObject!\n" );
-                        if ( xTransacted.is() )
-                        {
-                            try
-                            {
-                                xTransacted->commit();
-                                bRet = sal_True;
-                            }
-                            catch( uno::Exception& )
-                            {
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        if( bRet )
-        {
-            mxObjShell.Clear();
-        }
-    }
-    return bRet;
 }
 
 // -----------------------------------------------------------------------
@@ -1814,31 +1411,6 @@ const OUString& RegionData_Impl::GetHierarchyURL()
     }
 
     return maOwnURL;
-}
-
-// -----------------------------------------------------------------------
-const OUString& RegionData_Impl::GetTargetURL()
-{
-    if ( maTargetURL.isEmpty() )
-    {
-        uno::Reference< XCommandEnvironment > aCmdEnv;
-        Content aRegion;
-
-        if ( Content::create( GetHierarchyURL(), aCmdEnv, comphelper::getProcessComponentContext(), aRegion ) )
-        {
-            OUString aPropName( TARGET_DIR_URL  );
-
-            getTextProperty_Impl( aRegion, aPropName, maTargetURL );
-            // The targeturl must be substituted: $(baseinsturl) (#i32656#)
-            maTargetURL = SvtPathOptions().SubstituteVariable( maTargetURL );
-        }
-        else
-        {
-            SAL_WARN( "sfx2.doc", "GetTargetURL(): Could not create hierarchy content!" );
-        }
-    }
-
-    return maTargetURL;
 }
 
 // -----------------------------------------------------------------------

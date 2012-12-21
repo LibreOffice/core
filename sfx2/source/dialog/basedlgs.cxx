@@ -93,21 +93,6 @@ void SfxFloatingWindow_Impl::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-// class SfxModalDefParentHelper -----------------------------------------
-
-SfxModalDefParentHelper::SfxModalDefParentHelper( Window *pWindow)
-{
-    pOld = Application::GetDefDialogParent();
-    Application::SetDefDialogParent( pWindow );
-}
-
-// -----------------------------------------------------------------------
-
-SfxModalDefParentHelper::~SfxModalDefParentHelper()
-{
-    Application::SetDefDialogParent( pOld );
-}
-
 // -----------------------------------------------------------------------
 
 void SfxModalDialog::SetDialogData_Impl()

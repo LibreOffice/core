@@ -200,11 +200,6 @@ public:
     void                        NotifyEvent(const SfxEventHint& rEvent, bool bSynchron = true );
     sal_Bool                        IsDowning() const;
     sal_Bool                        IsSecureURL( const INetURLObject &rURL, const String *pReferer ) const;
-    static SfxObjectShellRef    DocAlreadyLoaded( const String &rName,
-                                                  sal_Bool bSilent,
-                                                  sal_Bool bActivate,
-                                                  sal_Bool bForbidVisible = sal_False,
-                                                  const String* pPostStr = 0);
     void                        ResetLastDir();
 
     SAL_DLLPRIVATE static SfxApplication* Get() { return pApp;}

@@ -353,15 +353,6 @@ SfxActionListBox::SfxActionListBox
 
 //-------------------------------------------------------------------------
 
-SfxActionListBox::SfxActionListBox( SfxCommonTemplateDialog_Impl* pParent,
-                                    const ResId &rResId) :
-    DropListBox_Impl(pParent->GetWindow(), rResId, pParent)
-{
-    EnableContextMenuHandling();
-}
-
-//-------------------------------------------------------------------------
-
 PopupMenu* SfxActionListBox::CreateContextMenu( void )
 {
 
@@ -762,48 +753,6 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, Sfx
     Font aFont = aFmtLb.GetFont();
     aFont.SetWeight( WEIGHT_NORMAL );
     aFmtLb.SetFont( aFont );
-}
-
-//-------------------------------------------------------------------------
-
-SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, ModalDialog* pW ) :
-
-    aISfxTemplateCommon     ( this ),
-    pBindings               ( pB ),
-    pWindow                 ( pW ),
-    pModule                 ( NULL ),
-    pTimer                  ( NULL ),
-    pStyleSheetPool         ( NULL ),
-    pTreeBox                ( NULL ),
-    pCurObjShell            ( NULL ),
-    m_pDeletionWatcher      ( NULL ),
-
-    aFmtLb                  ( this, SfxResId( BT_VLIST ) ),
-    aFilterLb               ( pW, SfxResId( BT_FLIST ) ),
-
-    nActFamily              ( 0xffff ),
-    nActFilter              ( 0 ),
-    nAppFilter              ( 0 ),
-
-    bDontUpdate             ( sal_False ),
-    bIsWater                ( sal_False ),
-    bEnabled                ( sal_True ),
-    bUpdate                 ( sal_False ),
-    bUpdateFamily           ( sal_False ),
-    bCanEdit                ( sal_False ),
-    bCanDel                 ( sal_False ),
-    bCanNew                 ( sal_True ),
-    bCanHide                ( sal_True ),
-    bCanShow                ( sal_False ),
-    bWaterDisabled          ( sal_False ),
-    bNewByExampleDisabled   ( sal_False ),
-    bUpdateByExampleDisabled( sal_False ),
-    bTreeDrag               ( sal_True ),
-    bHierarchical           ( sal_False ),
-    bBindingUpdate          ( sal_True )
-
-{
-    aFmtLb.SetStyle( aFmtLb.GetStyle() | WB_SORT );
 }
 
 //-------------------------------------------------------------------------

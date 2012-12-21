@@ -60,17 +60,14 @@ public:
 
     const SfxDocumentTemplates &operator=(const SfxDocumentTemplates &);
 
-    sal_Bool                           Rescan( );
     void                ReInitFromComponent();
 
-    sal_Bool                IsRegionLoaded( sal_uInt16 nIdx ) const;
     sal_uInt16              GetRegionCount() const;
     const String&       GetRegionName(sal_uInt16 nIdx) const;                   //dv!
     String              GetFullRegionName(sal_uInt16 nIdx) const;
 
     sal_uInt16              GetCount(sal_uInt16 nRegion) const;
     const String&       GetName(sal_uInt16 nRegion, sal_uInt16 nIdx) const;         //dv!
-    String              GetFileName(sal_uInt16 nRegion, sal_uInt16 nIdx) const;
     String              GetPath(sal_uInt16 nRegion, sal_uInt16 nIdx) const;
 
     // Allows to retrieve the target template URL from the UCB
@@ -94,13 +91,9 @@ public:
                          sal_uInt16 nSourceIdx);
     sal_Bool            Delete(sal_uInt16 nRegion, sal_uInt16 nIdx);
     sal_Bool            InsertDir(const String &rText, sal_uInt16 nRegion);
-    sal_Bool            SetName(const String &rName, sal_uInt16 nRegion, sal_uInt16 nIdx);
 
     sal_Bool            CopyTo(sal_uInt16 nRegion, sal_uInt16 nIdx, const String &rName) const;
     sal_Bool            CopyFrom(sal_uInt16 nRegion, sal_uInt16 nIdx, String &rName);
-
-    SfxObjectShellRef CreateObjectShell(sal_uInt16 nRegion, sal_uInt16 nIdx);
-    sal_Bool            DeleteObjectShell(sal_uInt16, sal_uInt16);
 
     sal_Bool            GetFull( const String& rRegion, const String& rName, String& rPath );
     sal_Bool            GetLogicNames( const String& rPath, String& rRegion, String& rName ) const;
@@ -121,10 +114,6 @@ public:
         So set <arg>_bSmart</arg> to <TRUE/> to do a check for necessity first.
     */
     void            Update( sal_Bool _bSmart = sal_True );
-
-    // allows to detect whether it is allowed to delete ( at least partially )
-    // a group or a template, or to edit a template
-    sal_Bool        HasUserContents( sal_uInt16 nRegion, sal_uInt16 nIdx ) const;
 };
 
 #endif // #ifndef _SFXDOCTEMPL_HXX

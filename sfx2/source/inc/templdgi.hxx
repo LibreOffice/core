@@ -83,7 +83,6 @@ class SfxActionListBox : public DropListBox_Impl
 protected:
 public:
     SfxActionListBox( SfxCommonTemplateDialog_Impl* pParent, WinBits nWinBits );
-    SfxActionListBox( SfxCommonTemplateDialog_Impl* pParent, const ResId &rResId );
 
     virtual PopupMenu*  CreateContextMenu( void );
 };
@@ -230,7 +229,6 @@ public:
     TYPEINFO();
 
     SfxCommonTemplateDialog_Impl( SfxBindings* pB, SfxDockingWindow* );
-    SfxCommonTemplateDialog_Impl( SfxBindings* pB, ModalDialog* );
     ~SfxCommonTemplateDialog_Impl();
 
     DECL_LINK( MenuSelectHdl, Menu * );

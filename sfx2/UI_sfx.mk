@@ -19,7 +19,6 @@ $(eval $(call gb_UI_add_uifiles,sfx,\
 	sfx2/uiconfig/ui/password \
 	sfx2/uiconfig/ui/printeroptionsdialog \
 	sfx2/uiconfig/ui/securityinfopage \
-	sfx2/uiconfig/ui/templatemanagementdialog \
 ))
 
 # vim: set noet sw=4 ts=4:
