@@ -99,13 +99,13 @@ static ::rtl::OUString lcl_getFlatURL( uno::Reference<beans::XPropertySet>& xSou
     if(xSourceProperties.is())
     {
         rtl::OUString sDBURL;
-        xSourceProperties->getPropertyValue(C2U("URL")) >>= sDBURL;
+        xSourceProperties->getPropertyValue("URL") >>= sDBURL;
         if(String(sDBURL).SearchAscii("sdbc:flat:") == 0)
         {
             uno::Sequence<OUString> aFilters;
-            xSourceProperties->getPropertyValue(C2U("TableFilter")) >>= aFilters;
+            xSourceProperties->getPropertyValue("TableFilter") >>= aFilters;
             uno::Sequence<PropertyValue> aInfo;
-            xSourceProperties->getPropertyValue(C2U("Info")) >>= aInfo;
+            xSourceProperties->getPropertyValue("Info") >>= aInfo;
             if(aFilters.getLength() == 1 && aInfo.getLength() )
             {
                 ::rtl::OUString sFieldDelim;
@@ -114,13 +114,13 @@ static ::rtl::OUString lcl_getFlatURL( uno::Reference<beans::XPropertySet>& xSou
                 ::rtl::OUString sCharSet;
                 for(sal_Int32 nInfo = 0; nInfo < aInfo.getLength(); ++nInfo)
                 {
-                    if(aInfo[nInfo].Name == C2U("FieldDelimiter"))
+                    if(aInfo[nInfo].Name == "FieldDelimiter")
                         aInfo[nInfo].Value >>= sFieldDelim;
-                    else if(aInfo[nInfo].Name == C2U("StringDelimiter"))
+                    else if(aInfo[nInfo].Name == "StringDelimiter")
                         aInfo[nInfo].Value >>= sStringDelim;
-                    else if(aInfo[nInfo].Name == C2U("Extension"))
+                    else if(aInfo[nInfo].Name == "Extension")
                         aInfo[nInfo].Value >>= sExtension;
-                    else if(aInfo[nInfo].Name == C2U("CharSet"))
+                    else if(aInfo[nInfo].Name == "CharSet")
                         aInfo[nInfo].Value >>= sCharSet;
                 }
                 if(!sCharSet.compareToAscii( cUTF8 ))
@@ -128,9 +128,9 @@ static ::rtl::OUString lcl_getFlatURL( uno::Reference<beans::XPropertySet>& xSou
                     sURL = String(sDBURL).Copy( 10 );
                     //#i97577# at this point the 'URL' can also be a file name!
                     sURL = URIHelper::SmartRel2Abs( INetURLObject(), sURL );
-                    sURL += C2U("/");
+                    sURL += "/";
                     sURL += aFilters[0];
-                    sURL += C2U(".");
+                    sURL += ".";
                     sURL += sExtension;
                 }
             }
@@ -289,21 +289,21 @@ IMPL_LINK_NOARG(SwAddressListDialog, FilterHdl_Impl)
             {
                 uno::Reference<lang::XMultiServiceFactory> xConnectFactory(pUserData->xConnection, UNO_QUERY_THROW);
                 uno::Reference<XSingleSelectQueryComposer> xComposer(
-                        xConnectFactory->createInstance(C2U("com.sun.star.sdb.SingleSelectQueryComposer")), UNO_QUERY_THROW);
+                        xConnectFactory->createInstance("com.sun.star.sdb.SingleSelectQueryComposer"), UNO_QUERY_THROW);
 
                 uno::Reference<XRowSet> xRowSet(
-                        xMgr->createInstance(C2U("com.sun.star.sdb.RowSet")), UNO_QUERY);
+                        xMgr->createInstance("com.sun.star.sdb.RowSet"), UNO_QUERY);
                 uno::Reference<XPropertySet> xRowProperties(xRowSet, UNO_QUERY);
-                xRowProperties->setPropertyValue(C2U("DataSourceName"),
+                xRowProperties->setPropertyValue("DataSourceName",
                         makeAny(OUString(m_aListLB.GetEntryText(pSelect, ITEMID_NAME - 1))));
-                xRowProperties->setPropertyValue(C2U("Command"), makeAny(
+                xRowProperties->setPropertyValue("Command", makeAny(
                         OUString(sCommand)));
-                xRowProperties->setPropertyValue(C2U("CommandType"), makeAny(pUserData->nCommandType));
-                xRowProperties->setPropertyValue(C2U("ActiveConnection"), makeAny(pUserData->xConnection.getTyped()));
+                xRowProperties->setPropertyValue("CommandType", makeAny(pUserData->nCommandType));
+                xRowProperties->setPropertyValue("ActiveConnection", makeAny(pUserData->xConnection.getTyped()));
                 xRowSet->execute();
 
                 ::rtl::OUString sQuery;
-                xRowProperties->getPropertyValue(C2U("ActiveCommand"))>>= sQuery;
+                xRowProperties->getPropertyValue("ActiveCommand")>>= sQuery;
                 xComposer->setQuery(sQuery);
                 if(!pUserData->sFilter.isEmpty())
                     xComposer->setFilter(pUserData->sFilter);
@@ -367,32 +367,32 @@ IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, PushButton*, pButton)
             }
             uno::Reference<XPropertySet> xDataProperties(xNewInstance, UNO_QUERY);
 
-            OUString sDBURL(C2U("sdbc:flat:"));
+            OUString sDBURL("sdbc:flat:");
             //only the 'path' has to be added
             INetURLObject aTempURL(aURL);
             aTempURL.removeSegment();
             aTempURL.removeFinalSlash();
             sDBURL += aTempURL.GetMainURL(INetURLObject::NO_DECODE);
             Any aAny(&sDBURL, ::getCppuType(&sDBURL));
-            xDataProperties->setPropertyValue(C2U("URL"), aAny);
+            xDataProperties->setPropertyValue("URL", aAny);
             //set the filter to the file name without extension
             uno::Sequence<OUString> aFilters(1);
             aFilters[0] = sNewName;
             aAny <<= aFilters;
-            xDataProperties->setPropertyValue(C2U("TableFilter"), aAny);
+            xDataProperties->setPropertyValue("TableFilter", aAny);
 
             uno::Sequence<PropertyValue> aInfo(4);
             PropertyValue* pInfo = aInfo.getArray();
-            pInfo[0].Name = C2U("FieldDelimiter");
+            pInfo[0].Name = "FieldDelimiter";
             pInfo[0].Value <<= OUString('\t');
-            pInfo[1].Name = C2U("StringDelimiter");
+            pInfo[1].Name = "StringDelimiter";
             pInfo[1].Value <<= OUString('"');
-            pInfo[2].Name = C2U("Extension");
-            pInfo[2].Value <<= ::rtl::OUString(aURL.getExtension());//C2U("csv");
-            pInfo[3].Name = C2U("CharSet");
+            pInfo[2].Name = "Extension";
+            pInfo[2].Value <<= ::rtl::OUString(aURL.getExtension());//"csv";
+            pInfo[3].Name = "CharSet";
             pInfo[3].Value <<= rtl::OUString::createFromAscii(cUTF8);
             aAny <<= aInfo;
-            xDataProperties->setPropertyValue(C2U("Info"), aAny);
+            xDataProperties->setPropertyValue("Info", aAny);
 
             uno::Reference<sdb::XDocumentDataSource> xDS(xNewInstance, UNO_QUERY_THROW);
             uno::Reference<frame::XStorable> xStore(xDS->getDatabaseDocument(), UNO_QUERY_THROW);

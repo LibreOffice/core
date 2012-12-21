@@ -191,7 +191,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
         Reference<sdbcx::XColumnsSupplier> xColSupp,
         const SwDBData& rData )
     : SfxModalDialog( rView.GetWindow(), SW_RES( DLG_AP_INSERT_DB_SEL )),
-    ConfigItem(C2U("Office.Writer/InsertData/DataSet"), CONFIG_MODE_DELAYED_UPDATE),
+    ConfigItem("Office.Writer/InsertData/DataSet", CONFIG_MODE_DELAYED_UPDATE),
     aFtInsertData( this, SW_RES( FT_INSERT_DATA )),
     aRbAsTable( this, SW_RES( RB_AS_TABLE )),
     aRbAsField( this, SW_RES( RB_AS_FIELD )),
@@ -257,7 +257,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
         Reference< util::XNumberFormats > xNumberFormats;
         if(xSourceProps.is())
         {
-            Any aFormats = xSourceProps->getPropertyValue(C2U("NumberFormatsSupplier"));
+            Any aFormats = xSourceProps->getPropertyValue("NumberFormatsSupplier");
             if(aFormats.hasValue())
             {
                 Reference< util::XNumberFormatsSupplier> xSuppl;
@@ -299,7 +299,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
                 case DataType::TIMESTAMP:
                 {
                     pNew->bHasFmt = sal_True;
-                    Any aFormat = xCol->getPropertyValue(C2U("FormatKey"));
+                    Any aFormat = xCol->getPropertyValue("FormatKey");
                     if(aFormat.hasValue())
                     {
                         sal_Int32 nFmt = 0;
@@ -309,8 +309,8 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
                             try
                             {
                                 Reference<XPropertySet> xNumProps = xNumberFormats->getByKey( nFmt );
-                                Any aFormatVal = xNumProps->getPropertyValue(C2U("FormatString"));
-                                Any aLocale = xNumProps->getPropertyValue(C2U("Locale"));
+                                Any aFormatVal = xNumProps->getPropertyValue("FormatString");
+                                Any aLocale = xNumProps->getPropertyValue("Locale");
                                 rtl::OUString sFormat;
                                 aFormatVal >>= sFormat;
                                 lang::Locale aLoc;
@@ -1089,7 +1089,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                 sal_Int32 eDataType = 0;
                 if( xColumnProps.is() )
                 {
-                    Any aType = xColumnProps->getPropertyValue(C2U("Type"));
+                    Any aType = xColumnProps->getPropertyValue("Type");
                     aType >>= eDataType;
                 }
                 try
@@ -1222,7 +1222,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
             Reference<XPropertySet> xSourceProps(xSource, UNO_QUERY);
             if(xSourceProps.is())
             {
-              Any aFormats = xSourceProps->getPropertyValue(C2U("NumberFormatsSupplier"));
+              Any aFormats = xSourceProps->getPropertyValue("NumberFormatsSupplier");
               if(aFormats.hasValue())
               {
                   Reference< util::XNumberFormatsSupplier> xSuppl;
@@ -1230,7 +1230,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                   if(xSuppl.is())
                   {
                         Reference< XPropertySet > xSettings = xSuppl->getNumberFormatSettings();
-                        Any aNull = xSettings->getPropertyValue(C2U("NullDate"));
+                        Any aNull = xSettings->getPropertyValue("NullDate");
                         aNull >>= aDBFormatData.aNullDate;
                         if(aDBFormatData.xFormatter.is())
                             aDBFormatData.xFormatter->attachNumberFormatsSupplier(xSuppl);
@@ -1302,7 +1302,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                                                 &nValue ) );
                             if( DBL_MAX != nValue )
                             {
-                                Any aType = xColumnProps->getPropertyValue(C2U("Type"));
+                                Any aType = xColumnProps->getPropertyValue("Type");
                                 sal_Int32 eDataType = 0;
                                 aType >>= eDataType;
                                 if( DataType::DATE == eDataType  || DataType::TIME == eDataType  ||
@@ -1524,7 +1524,7 @@ static rtl::OUString lcl_CreateUniqueName(const Sequence<rtl::OUString>& aNames)
 {
     sal_Int32 nIdx = aNames.getLength();
     const rtl::OUString* pNames = aNames.getConstArray();
-    rtl::OUString sTest(C2U("_"));
+    rtl::OUString sTest("_");
     rtl::OUString sRet;
     while(sal_True)
     {
@@ -1556,9 +1556,9 @@ void SwInsertDBColAutoPilot::Commit()
         Sequence<rtl::OUString> aSourceNames(2);
         rtl::OUString* pSourceNames = aSourceNames.getArray();
         pSourceNames[0] = pNames[nNode];
-        pSourceNames[0] += C2U("/DataSource");
+        pSourceNames[0] += "/DataSource";
         pSourceNames[1] = pNames[nNode];
-        pSourceNames[1] += C2U("/Command");
+        pSourceNames[1] += "/Command";
         Sequence<Any> aSourceProperties = GetProperties(aSourceNames);
         const Any* pSourceProps = aSourceProperties.getArray();
         rtl::OUString sSource, sCommand;
@@ -1578,7 +1578,7 @@ void SwInsertDBColAutoPilot::Commit()
     Sequence<PropertyValue> aValues(aNodeNames.getLength());
     PropertyValue* pValues = aValues.getArray();
     const rtl::OUString* pNodeNames = aNodeNames.getConstArray();
-    rtl::OUString sSlash(C2U("/"));
+    rtl::OUString sSlash("/");
     for(sal_Int32 i = 0; i < aNodeNames.getLength(); i++)
     {
         pValues[i].Name = sSlash;
@@ -1618,7 +1618,7 @@ void SwInsertDBColAutoPilot::Commit()
 
     SetSetProperties(rtl::OUString(), aValues);
 
-    sNewNode += C2U("/ColumnSet");
+    sNewNode += "/ColumnSet";
     rtl::OUString sDelim("/__");
 
     LanguageType ePrevLang = (LanguageType)-1;
@@ -1719,7 +1719,7 @@ void SwInsertDBColAutoPilot::Load()
                  pNewData->bIsEmptyHeadln = *(sal_Bool*)pDataSourceProps[10].getValue();
 
             rtl::OUString sSubNodeName(pNames[nNode]);
-            sSubNodeName += C2U("/ColumnSet/");
+            sSubNodeName += "/ColumnSet/";
             Sequence <rtl::OUString> aSubNames = GetNodeNames(sSubNodeName);
             const rtl::OUString* pSubNames = aSubNames.getConstArray();
             for(sal_Int32 nSub = 0; nSub < aSubNames.getLength(); nSub++)

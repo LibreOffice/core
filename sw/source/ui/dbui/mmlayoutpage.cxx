@@ -123,7 +123,7 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
     SwView* pView = m_pWizard->GetSwView();
     uno::Sequence< beans::PropertyValue > aValues(1);
     beans::PropertyValue* pValues = aValues.getArray();
-    pValues[0].Name = C2U("FilterName");
+    pValues[0].Name = "FilterName";
     pValues[0].Value <<= ::rtl::OUString(pSfxFlt->GetFilterName());
 
     uno::Reference< frame::XStorable > xStore( pView->GetDocShell()->GetModel(), uno::UNO_QUERY);

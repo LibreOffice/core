@@ -557,7 +557,7 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, OkHdl_Impl)
                     rtl::OUString("$(userurl)/database") ));
         aDlgHelper.SetDisplayDirectory( sPath );
         uno::Reference< XFilterManager > xFltMgr(xFP, uno::UNO_QUERY);
-        ::rtl::OUString sCSV(C2U("*.csv"));
+        ::rtl::OUString sCSV("*.csv");
         xFltMgr->appendFilter( m_sAddressListFilterName, sCSV );
         xFltMgr->setCurrentFilter( m_sAddressListFilterName ) ;
 

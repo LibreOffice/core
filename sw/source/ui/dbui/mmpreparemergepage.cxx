@@ -121,19 +121,19 @@ IMPL_LINK( SwMailMergePrepareMergePage, MoveHdl_Impl, void*, pCtrl)
     Sequence< PropertyValue > aArgs(7);
     Sequence<Any> aSelection(1);
     aSelection[0] <<= rConfigItem.GetResultSetPosition();
-    aArgs[0].Name = C2U("Selection");
+    aArgs[0].Name = "Selection";
     aArgs[0].Value <<= aSelection;
-    aArgs[1].Name = C2U("DataSourceName");
+    aArgs[1].Name = "DataSourceName";
     aArgs[1].Value <<= rDBData.sDataSource;
-    aArgs[2].Name = C2U("Command");
+    aArgs[2].Name = "Command";
     aArgs[2].Value <<= rDBData.sCommand;
-    aArgs[3].Name = C2U("CommandType");
+    aArgs[3].Name = "CommandType";
     aArgs[3].Value <<= rDBData.nCommandType;
-    aArgs[4].Name = C2U("ActiveConnection");
+    aArgs[4].Name = "ActiveConnection";
     aArgs[4].Value <<=  rConfigItem.GetConnection().getTyped();
-    aArgs[5].Name = C2U("Filter");
+    aArgs[5].Name = "Filter";
     aArgs[5].Value <<= rConfigItem.GetFilter();
-    aArgs[6].Name = C2U("Cursor");
+    aArgs[6].Name = "Cursor";
     aArgs[6].Value <<= rConfigItem.GetResultSet();
 
     ::svx::ODataAccessDescriptor aDescriptor(aArgs);

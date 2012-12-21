@@ -180,7 +180,7 @@ public:
 };
 
 SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
-    ConfigItem(C2U("Office.Writer/MailMergeWizard"), 0),
+    ConfigItem("Office.Writer/MailMergeWizard", 0),
         nResultSetCursorPos(-1),
         nCurrentAddressBlock(0),
         bIsAddressBlock(sal_True),
@@ -368,7 +368,7 @@ static OUString lcl_CreateNodeName(Sequence<OUString>& rAssignments )
     do
     {
         bFound = false;
-        sNewName = C2U("_");
+        sNewName = "_";
         sNewName += OUString::valueOf(nStart);
         //search if the name exists
         for(sal_Int32 nAssign = 0; nAssign < rAssignments.getLength(); ++nAssign)
@@ -398,7 +398,7 @@ static void lcl_ConvertToNumbers(OUString& rBlock, const ResStringArray& rHeader
         String sHeader = rHeaders.GetString( i );
         sHeader.Insert('<', 0);
         sHeader += '>';
-        String sReplace(C2U("<>"));
+        String sReplace("<>");
         sReplace.Insert('0' + i, 1);
         sBlock.SearchAndReplaceAll(sHeader, sReplace);
     }
@@ -594,7 +594,7 @@ void  SwMailMergeConfigItem_Impl::Commit()
             OUString sNewNode = !aAssignIter->sConfigNodeName.isEmpty() ?
                         aAssignIter->sConfigNodeName :
                         lcl_CreateNodeName(aAssignments);
-            OUString sSlash = C2U("/");
+            OUString sSlash = "/";
             OUString sNodePath = rtl::OUString::createFromAscii(cAddressDataAssignments);
             sNodePath += sSlash;
             sNodePath += sNewNode;
@@ -905,17 +905,17 @@ Reference< XResultSet>   SwMailMergeConfigItem::GetResultSet() const
             if( xMgr.is() )
             {
                 Reference<XRowSet> xRowSet(
-                        xMgr->createInstance(C2U("com.sun.star.sdb.RowSet")), UNO_QUERY);
+                        xMgr->createInstance("com.sun.star.sdb.RowSet"), UNO_QUERY);
                 Reference<XPropertySet> xRowProperties(xRowSet, UNO_QUERY);
-                xRowProperties->setPropertyValue(C2U("DataSourceName"), makeAny(m_pImpl->aDBData.sDataSource));
-                xRowProperties->setPropertyValue(C2U("Command"), makeAny(m_pImpl->aDBData.sCommand));
-                xRowProperties->setPropertyValue(C2U("CommandType"), makeAny(m_pImpl->aDBData.nCommandType));
-                xRowProperties->setPropertyValue(C2U("FetchSize"), makeAny((sal_Int32)10));
-                xRowProperties->setPropertyValue(C2U("ActiveConnection"), makeAny(m_pImpl->xConnection.getTyped()));
+                xRowProperties->setPropertyValue("DataSourceName", makeAny(m_pImpl->aDBData.sDataSource));
+                xRowProperties->setPropertyValue("Command", makeAny(m_pImpl->aDBData.sCommand));
+                xRowProperties->setPropertyValue("CommandType", makeAny(m_pImpl->aDBData.nCommandType));
+                xRowProperties->setPropertyValue("FetchSize", makeAny((sal_Int32)10));
+                xRowProperties->setPropertyValue("ActiveConnection", makeAny(m_pImpl->xConnection.getTyped()));
                 try
                 {
-                    xRowProperties->setPropertyValue(C2U("ApplyFilter"), makeAny(!m_pImpl->sFilter.isEmpty()));
-                    xRowProperties->setPropertyValue(C2U("Filter"), makeAny(m_pImpl->sFilter));
+                    xRowProperties->setPropertyValue("ApplyFilter", makeAny(!m_pImpl->sFilter.isEmpty()));
+                    xRowProperties->setPropertyValue("Filter", makeAny(m_pImpl->sFilter));
                 }
                 catch (const Exception&)
                 {
@@ -960,8 +960,8 @@ void  SwMailMergeConfigItem::SetFilter(::rtl::OUString& rFilter)
         {
             try
             {
-                xRowProperties->setPropertyValue(C2U("ApplyFilter"), makeAny(!m_pImpl->sFilter.isEmpty()));
-                xRowProperties->setPropertyValue(C2U("Filter"), makeAny(m_pImpl->sFilter));
+                xRowProperties->setPropertyValue("ApplyFilter", makeAny(!m_pImpl->sFilter.isEmpty()));
+                xRowProperties->setPropertyValue("Filter", makeAny(m_pImpl->sFilter));
                 uno::Reference<XRowSet> xRowSet( m_pImpl->xResultSet, UNO_QUERY_THROW );
                 xRowSet->execute();
             }

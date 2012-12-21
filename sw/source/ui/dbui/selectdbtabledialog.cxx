@@ -149,22 +149,21 @@ IMPL_LINK(SwSelectDBTableDialog, PreviewHdl, PushButton*, pButton)
         {
             Reference<XDataSource> xSource(xChild->getParent(), UNO_QUERY);
             Reference<XPropertySet> xPrSet(xSource, UNO_QUERY);
-            xPrSet->getPropertyValue(C2U("Name")) >>= sDataSourceName;
+            xPrSet->getPropertyValue("Name") >>= sDataSourceName;
         }
         OSL_ENSURE(!sDataSourceName.isEmpty(), "no data source found");
         Sequence<PropertyValue> aProperties(5);
         PropertyValue* pProperties = aProperties.getArray();
-        pProperties[0].Name = C2U("DataSourceName");
+        pProperties[0].Name = "DataSourceName";
         pProperties[0].Value <<= sDataSourceName;
-        pProperties[1].Name = C2U("Command");
+        pProperties[1].Name = "Command";
         pProperties[1].Value <<= sTableOrQuery;
-        pProperties[2].Name = C2U("CommandType");
+        pProperties[2].Name = "CommandType";
         pProperties[2].Value <<= nCommandType;
-        pProperties[3].Name = C2U("ShowTreeView");
-        sal_Bool bFalse = sal_False;
-        pProperties[3].Value <<= bFalse;
-        pProperties[4].Name = C2U("ShowTreeViewButton");
-        pProperties[4].Value <<= bFalse;
+        pProperties[3].Name = "ShowTreeView";
+        pProperties[3].Value <<= sal_False;
+        pProperties[4].Name = "ShowTreeViewButton";
+        pProperties[4].Value <<= sal_False;
 
         SwDBTablePreviewDialog* pDlg = new SwDBTablePreviewDialog(pButton, aProperties);
         pDlg->Execute();

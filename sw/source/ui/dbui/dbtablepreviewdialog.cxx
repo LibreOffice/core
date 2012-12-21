@@ -69,7 +69,7 @@ SwDBTablePreviewDialog::SwDBTablePreviewDialog(Window* pParent, uno::Sequence< b
         // create a frame wrapper for myself
         uno::Reference< lang::XMultiServiceFactory >
                                     xMgr = comphelper::getProcessServiceFactory();
-        m_xFrame = uno::Reference< frame::XFrame >(xMgr->createInstance(C2U("com.sun.star.frame.Frame")), uno::UNO_QUERY);
+        m_xFrame = uno::Reference< frame::XFrame >(xMgr->createInstance("com.sun.star.frame.Frame"), uno::UNO_QUERY);
         if(m_xFrame.is())
         {
             m_xFrame->initialize( VCLUnoHelper::GetInterface ( m_pBeamerWIN ) );
@@ -83,10 +83,8 @@ SwDBTablePreviewDialog::SwDBTablePreviewDialog(Window* pParent, uno::Sequence< b
     {
         uno::Reference<frame::XDispatchProvider> xDP(m_xFrame, uno::UNO_QUERY);
         util::URL aURL;
-        aURL.Complete = C2U(".component:DB/DataSourceBrowser");
-        uno::Reference<frame::XDispatch> xD = xDP->queryDispatch(aURL,
-                    C2U(""),
-                    0x0C);
+        aURL.Complete = ".component:DB/DataSourceBrowser";
+        uno::Reference<frame::XDispatch> xD = xDP->queryDispatch(aURL, "", 0x0C);
         if(xD.is())
         {
             xD->dispatch(aURL, rValues);

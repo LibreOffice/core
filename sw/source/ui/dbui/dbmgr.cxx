@@ -167,14 +167,14 @@ bool lcl_getCountFromResultSet( sal_Int32& rCount, const uno::Reference<XResultS
         try
         {
             sal_Bool bFinal = sal_False;
-            Any aFinal = xPrSet->getPropertyValue(C2U("IsRowCountFinal"));
+            Any aFinal = xPrSet->getPropertyValue("IsRowCountFinal");
             aFinal >>= bFinal;
             if(!bFinal)
             {
                 xResultSet->last();
                 xResultSet->first();
             }
-            Any aCount = xPrSet->getPropertyValue(C2U("RowCount"));
+            Any aCount = xPrSet->getPropertyValue("RowCount");
             if( aCount >>= rCount )
                 return true;
         }
@@ -237,7 +237,7 @@ static void lcl_InitNumberFormatter(SwDSParam& rParam, uno::Reference<XDataSourc
     uno::Reference<XPropertySet> xSourceProps(xSource, UNO_QUERY);
     if(xSourceProps.is())
     {
-        Any aFormats = xSourceProps->getPropertyValue(C2U("NumberFormatsSupplier"));
+        Any aFormats = xSourceProps->getPropertyValue("NumberFormatsSupplier");
         if(aFormats.hasValue())
         {
             uno::Reference<XNumberFormatsSupplier> xSuppl;
@@ -245,7 +245,7 @@ static void lcl_InitNumberFormatter(SwDSParam& rParam, uno::Reference<XDataSourc
             if(xSuppl.is())
             {
                 uno::Reference< XPropertySet > xSettings = xSuppl->getNumberFormatSettings();
-                Any aNull = xSettings->getPropertyValue(C2U("NullDate"));
+                Any aNull = xSettings->getPropertyValue("NullDate");
                 aNull >>= rParam.aNullDate;
                 if(rParam.xFormatter.is())
                     rParam.xFormatter->attachNumberFormatsSupplier(xSuppl);
@@ -1462,7 +1462,7 @@ sal_uLong SwNewDBMgr::GetColumnFmt( uno::Reference< XDataSource> xSource,
         uno::Reference< XNumberFormats > xNumberFormats;
         if(xSourceProps.is())
         {
-            Any aFormats = xSourceProps->getPropertyValue(C2U("NumberFormatsSupplier"));
+            Any aFormats = xSourceProps->getPropertyValue("NumberFormatsSupplier");
             if(aFormats.hasValue())
             {
                 uno::Reference<XNumberFormatsSupplier> xSuppl;
@@ -1476,7 +1476,7 @@ sal_uLong SwNewDBMgr::GetColumnFmt( uno::Reference< XDataSource> xSource,
         bool bUseDefault = true;
         try
         {
-            Any aFormatKey = xColumn->getPropertyValue(C2U("FormatKey"));
+            Any aFormatKey = xColumn->getPropertyValue("FormatKey");
             if(aFormatKey.hasValue())
             {
                 sal_Int32 nFmt = 0;
@@ -1486,8 +1486,8 @@ sal_uLong SwNewDBMgr::GetColumnFmt( uno::Reference< XDataSource> xSource,
                     try
                     {
                         uno::Reference<XPropertySet> xNumProps = xNumberFormats->getByKey( nFmt );
-                        Any aFormatString = xNumProps->getPropertyValue(C2U("FormatString"));
-                        Any aLocaleVal = xNumProps->getPropertyValue(C2U("Locale"));
+                        Any aFormatString = xNumProps->getPropertyValue("FormatString");
+                        Any aLocaleVal = xNumProps->getPropertyValue("Locale");
                         rtl::OUString sFormat;
                         aFormatString >>= sFormat;
                         lang::Locale aLoc;
@@ -1603,23 +1603,22 @@ uno::Reference< sdbcx::XColumnsSupplier> SwNewDBMgr::GetColumnSupplier(uno::Refe
         sal_Int32 nCommandType = SW_DB_SELECT_TABLE == eTableOrQuery ?
                 CommandType::TABLE : CommandType::QUERY;
         Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-        Reference<XRowSet> xRowSet(
-                xMgr->createInstance(C2U("com.sun.star.sdb.RowSet")), UNO_QUERY);
+        Reference<XRowSet> xRowSet(xMgr->createInstance("com.sun.star.sdb.RowSet"), UNO_QUERY);
 
         ::rtl::OUString sDataSource;
         Reference<XDataSource> xSource = SwNewDBMgr::getDataSourceAsParent(xConnection, sDataSource);
         Reference<XPropertySet> xSourceProperties(xSource, UNO_QUERY);
         if(xSourceProperties.is())
         {
-            xSourceProperties->getPropertyValue(C2U("Name")) >>= sDataSource;
+            xSourceProperties->getPropertyValue("Name") >>= sDataSource;
         }
 
         Reference<XPropertySet> xRowProperties(xRowSet, UNO_QUERY);
-        xRowProperties->setPropertyValue(C2U("DataSourceName"), makeAny(sDataSource));
-        xRowProperties->setPropertyValue(C2U("Command"), makeAny(::rtl::OUString(rTableOrQuery)));
-        xRowProperties->setPropertyValue(C2U("CommandType"), makeAny(nCommandType));
-        xRowProperties->setPropertyValue(C2U("FetchSize"), makeAny((sal_Int32)10));
-        xRowProperties->setPropertyValue(C2U("ActiveConnection"), makeAny(xConnection));
+        xRowProperties->setPropertyValue("DataSourceName", makeAny(sDataSource));
+        xRowProperties->setPropertyValue("Command", makeAny(::rtl::OUString(rTableOrQuery)));
+        xRowProperties->setPropertyValue("CommandType", makeAny(nCommandType));
+        xRowProperties->setPropertyValue("FetchSize", makeAny((sal_Int32)10));
+        xRowProperties->setPropertyValue("ActiveConnection", makeAny(xConnection));
         xRowSet->execute();
         xRet = Reference<XColumnsSupplier>( xRowSet, UNO_QUERY );
     }
@@ -1641,7 +1640,7 @@ String SwNewDBMgr::GetDBField(uno::Reference<XPropertySet> xColumnProps,
     if(!xColumn.is())
         return sRet;
 
-    Any aType = xColumnProps->getPropertyValue(C2U("Type"));
+    Any aType = xColumnProps->getPropertyValue("Type");
     sal_Int32 eDataType = 0;
     aType >>= eDataType;
     switch(eDataType)
@@ -1966,8 +1965,8 @@ sal_Bool SwNewDBMgr::OpenDataSource(const String& rDataSource, const String& rTa
             }
             pFound->xStatement = pFound->xConnection->createStatement();
             rtl::OUString aQuoteChar = xMetaData->getIdentifierQuoteString();
-            rtl::OUString sStatement(C2U("SELECT * FROM "));
-            sStatement = C2U("SELECT * FROM ");
+            rtl::OUString sStatement("SELECT * FROM ");
+            sStatement = "SELECT * FROM ";
             sStatement += aQuoteChar;
             sStatement += rTableOrQuery;
             sStatement += aQuoteChar;
@@ -2193,18 +2192,18 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
     String sFilterMDB(SW_RES(STR_FILTER_MDB));
     String sFilterACCDB(SW_RES(STR_FILTER_ACCDB));
 #endif
-    xFltMgr->appendFilter( sFilterAll, C2U("*") );
-    xFltMgr->appendFilter( sFilterAllData, C2U("*.ods;*.sxc;*.dbf;*.xls;*.txt;*.csv"));
+    xFltMgr->appendFilter( sFilterAll, "*" );
+    xFltMgr->appendFilter( sFilterAllData, "*.ods;*.sxc;*.dbf;*.xls;*.txt;*.csv");
 
-    xFltMgr->appendFilter( sFilterSXB, C2U("*.odb") );
-    xFltMgr->appendFilter( sFilterSXC, C2U("*.ods;*.sxc") );
-    xFltMgr->appendFilter( sFilterDBF, C2U("*.dbf") );
-    xFltMgr->appendFilter( sFilterXLS, C2U("*.xls") );
-    xFltMgr->appendFilter( sFilterTXT, C2U("*.txt") );
-    xFltMgr->appendFilter( sFilterCSV, C2U("*.csv") );
+    xFltMgr->appendFilter( sFilterSXB, "*.odb" );
+    xFltMgr->appendFilter( sFilterSXC, "*.ods;*.sxc" );
+    xFltMgr->appendFilter( sFilterDBF, "*.dbf" );
+    xFltMgr->appendFilter( sFilterXLS, "*.xls" );
+    xFltMgr->appendFilter( sFilterTXT, "*.txt" );
+    xFltMgr->appendFilter( sFilterCSV, "*.csv" );
 #ifdef WNT
-    xFltMgr->appendFilter( sFilterMDB, C2U("*.mdb") );
-    xFltMgr->appendFilter( sFilterACCDB, C2U("*.accdb") );
+    xFltMgr->appendFilter( sFilterMDB, "*.mdb" );
+    xFltMgr->appendFilter( sFilterACCDB, "*.accdb" );
 #endif
 
     xFltMgr->setCurrentFilter( sFilterAll ) ;
@@ -2230,7 +2229,7 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
             || sExt.EqualsIgnoreCaseAscii("ods")
                 || sExt.EqualsIgnoreCaseAscii("xls"))
         {
-            rtl::OUString sDBURL(C2U("sdbc:calc:"));
+            rtl::OUString sDBURL("sdbc:calc:");
             sDBURL += aTempURL.GetMainURL(INetURLObject::NO_DECODE);
             aURLAny <<= sDBURL;
         }
@@ -2238,7 +2237,7 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
         {
             aTempURL.removeSegment();
             aTempURL.removeFinalSlash();
-            rtl::OUString sDBURL(C2U("sdbc:dbase:"));
+            rtl::OUString sDBURL("sdbc:dbase:");
             sDBURL += aTempURL.GetMainURL(INetURLObject::NO_DECODE);
             aURLAny <<= sDBURL;
             //set the filter to the file name without extension
@@ -2250,7 +2249,7 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
         {
             aTempURL.removeSegment();
             aTempURL.removeFinalSlash();
-            rtl::OUString sDBURL(C2U("sdbc:flat:"));
+            rtl::OUString sDBURL("sdbc:flat:");
             //only the 'path' has to be added
             sDBURL += aTempURL.GetMainURL(INetURLObject::NO_DECODE);
             aURLAny <<= sDBURL;
@@ -2264,14 +2263,14 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
 #ifdef WNT
         else if(sExt.EqualsIgnoreCaseAscii("mdb"))
         {
-            rtl::OUString sDBURL(C2U("sdbc:ado:access:PROVIDER=Microsoft.Jet.OLEDB.4.0;DATA SOURCE="));
+            rtl::OUString sDBURL("sdbc:ado:access:PROVIDER=Microsoft.Jet.OLEDB.4.0;DATA SOURCE=");
             sDBURL += aTempURL.PathToFileName();
             aURLAny <<= sDBURL;
             aSuppressVersionsAny <<= makeAny(true);
         }
         else if(sExt.EqualsIgnoreCaseAscii("accdb"))
         {
-            rtl::OUString sDBURL(C2U("sdbc:ado:PROVIDER=Microsoft.ACE.OLEDB.12.0;DATA SOURCE="));
+            rtl::OUString sDBURL("sdbc:ado:PROVIDER=Microsoft.ACE.OLEDB.12.0;DATA SOURCE=");
             sDBURL += aTempURL.PathToFileName();
             aURLAny <<= sDBURL;
             aSuppressVersionsAny <<= makeAny(true);
@@ -2313,27 +2312,26 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
                 Reference<XPropertySet> xDataProperties(xNewInstance, UNO_QUERY);
 
                 if(aURLAny.hasValue())
-                    xDataProperties->setPropertyValue(C2U("URL"), aURLAny);
+                    xDataProperties->setPropertyValue("URL", aURLAny);
                 if(aTableFilterAny.hasValue())
-                    xDataProperties->setPropertyValue(C2U("TableFilter"), aTableFilterAny);
+                    xDataProperties->setPropertyValue("TableFilter", aTableFilterAny);
                 if(aSuppressVersionsAny.hasValue())
-                    xDataProperties->setPropertyValue(C2U("SuppressVersionColumns"), aSuppressVersionsAny);
+                    xDataProperties->setPropertyValue("SuppressVersionColumns", aSuppressVersionsAny);
                 if(aInfoAny.hasValue())
-                    xDataProperties->setPropertyValue(C2U("Info"), aInfoAny);
+                    xDataProperties->setPropertyValue("Info", aInfoAny);
 
                 if( bTextConnection )
                 {
-                    uno::Reference < ui::dialogs::XExecutableDialog > xSettingsDlg(
-                                xMgr->createInstance( C2U( "com.sun.star.sdb.TextConnectionSettings" ) ), uno::UNO_QUERY);
+                    uno::Reference < ui::dialogs::XExecutableDialog > xSettingsDlg(xMgr->createInstance( "com.sun.star.sdb.TextConnectionSettings" ), uno::UNO_QUERY);
                     if( xSettingsDlg->execute() )
                     {
-                        uno::Any aSettings = xDataProperties->getPropertyValue( C2U( "Settings" ) );
+                        uno::Any aSettings = xDataProperties->getPropertyValue( "Settings" );
                         uno::Reference < beans::XPropertySet > xDSSettings;
                         aSettings >>= xDSSettings;
                         ::comphelper::copyProperties(
                             uno::Reference < beans::XPropertySet >( xSettingsDlg, uno::UNO_QUERY ),
                             xDSSettings );
-                        xDSSettings->setPropertyValue( C2U("Extension"), uno::makeAny( ::rtl::OUString( sExt )));
+                        xDSSettings->setPropertyValue( "Extension", uno::makeAny( ::rtl::OUString( sExt )));
                     }
                 }
 
@@ -2428,7 +2426,7 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
 
                 uno::Sequence< beans::PropertyValue > aValues(1);
                 beans::PropertyValue* pValues = aValues.getArray();
-                pValues[0].Name = C2U("FilterName");
+                pValues[0].Name = "FilterName";
                 pValues[0].Value <<= ::rtl::OUString(pSfxFlt->GetFilterName());
                 uno::Reference< XStorable > xStore( xDocShell->GetModel(), uno::UNO_QUERY);
                 sTempURL = URIHelper::SmartRel2Abs( INetURLObject(), utl::TempFile::CreateTempName() );
@@ -2636,15 +2634,14 @@ uno::Reference<XResultSet> SwNewDBMgr::createCursor(const ::rtl::OUString& _sDat
         uno::Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
         if( xMgr.is() )
         {
-            uno::Reference<XInterface> xInstance = xMgr->createInstance(
-                C2U( "com.sun.star.sdb.RowSet" ));
+            uno::Reference<XInterface> xInstance = xMgr->createInstance("com.sun.star.sdb.RowSet");
             uno::Reference<XPropertySet> xRowSetPropSet(xInstance, UNO_QUERY);
             if(xRowSetPropSet.is())
             {
-                xRowSetPropSet->setPropertyValue(C2U("DataSourceName"), makeAny(_sDataSourceName));
-                xRowSetPropSet->setPropertyValue(C2U("ActiveConnection"), makeAny(_xConnection));
-                xRowSetPropSet->setPropertyValue(C2U("Command"), makeAny(_sCommand));
-                xRowSetPropSet->setPropertyValue(C2U("CommandType"), makeAny(_nCommandType));
+                xRowSetPropSet->setPropertyValue("DataSourceName", makeAny(_sDataSourceName));
+                xRowSetPropSet->setPropertyValue("ActiveConnection", makeAny(_xConnection));
+                xRowSetPropSet->setPropertyValue("Command", makeAny(_sCommand));
+                xRowSetPropSet->setPropertyValue("CommandType", makeAny(_nCommandType));
 
                 uno::Reference< XCompletedExecution > xRowSet(xInstance, UNO_QUERY);
 

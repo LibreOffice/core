@@ -668,7 +668,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
             return 0;
         uno::Sequence< beans::PropertyValue > aValues(1);
         beans::PropertyValue* pValues = aValues.getArray();
-        pValues[0].Name = C2U("FilterName");
+        pValues[0].Name = "FilterName";
         pValues[0].Value <<= ::rtl::OUString(sFilter);
 
         uno::Reference< frame::XStorable > xStore( pTargetView->GetDocShell()->GetModel(), uno::UNO_QUERY);
@@ -720,7 +720,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
 
         uno::Sequence< beans::PropertyValue > aValues(1);
         beans::PropertyValue* pValues = aValues.getArray();
-        pValues[0].Name = C2U("FilterName");
+        pValues[0].Name = "FilterName";
         pValues[0].Value <<= ::rtl::OUString(pSfxFlt->GetFilterName());
 
         uno::Reference< frame::XStorable > xStore( pTargetView->GetDocShell()->GetModel(), uno::UNO_QUERY);
@@ -1155,7 +1155,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
 
     uno::Sequence< beans::PropertyValue > aValues(1);
     beans::PropertyValue* pValues = aValues.getArray();
-    pValues[0].Name = C2U("FilterName");
+    pValues[0].Name = "FilterName";
     pValues[0].Value <<= ::rtl::OUString(pTargetSfxFlt->GetFilterName());
 
     uno::Reference< frame::XStorable > xStore( pTargetView->GetDocShell()->GetModel(), uno::UNO_QUERY);
@@ -1203,11 +1203,11 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         {
             uno::Sequence< beans::PropertyValue > aFilterValues(MM_DOCTYPE_TEXT == nDocType ? 2 : 1);
             beans::PropertyValue* pFilterValues = aFilterValues.getArray();
-            pFilterValues[0].Name = C2U("FilterName");
+            pFilterValues[0].Name = "FilterName";
             pFilterValues[0].Value <<= ::rtl::OUString(pSfxFlt->GetFilterName());
             if(MM_DOCTYPE_TEXT == nDocType)
             {
-                pFilterValues[1].Name = C2U("FilterOptions");
+                pFilterValues[1].Name = "FilterOptions";
                 pFilterValues[1].Value <<= ::rtl::OUString(sFilterOptions);
             }
 
