@@ -127,7 +127,7 @@ namespace accessibility
         DBG_CHKTHIS( AccessibleImageBullet, NULL );
         (void)i;
 
-        throw lang::IndexOutOfBoundsException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No children available")),
+        throw lang::IndexOutOfBoundsException("No children available",
                                               uno::Reference< uno::XInterface >
                                               ( static_cast< ::cppu::OWeakObject* > (this) ) ); // static_cast: disambiguate hierarchy
     }
@@ -153,7 +153,7 @@ namespace accessibility
         return AccessibleRole::GRAPHIC;
     }
 
-    ::rtl::OUString SAL_CALL  AccessibleImageBullet::getAccessibleDescription() throw (uno::RuntimeException)
+    OUString SAL_CALL  AccessibleImageBullet::getAccessibleDescription() throw (uno::RuntimeException)
     {
         DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
@@ -163,7 +163,7 @@ namespace accessibility
         return EE_RESSTR(RID_SVXSTR_A11Y_IMAGEBULLET_DESCRIPTION);
     }
 
-    ::rtl::OUString SAL_CALL  AccessibleImageBullet::getAccessibleName() throw (uno::RuntimeException)
+    OUString SAL_CALL  AccessibleImageBullet::getAccessibleName() throw (uno::RuntimeException)
     {
         DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
@@ -321,7 +321,7 @@ namespace accessibility
             }
         }
 
-        throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Cannot access parent")),
+        throw uno::RuntimeException("Cannot access parent",
                                     uno::Reference< uno::XInterface >
                                     ( static_cast< XAccessible* > (this) ) );   // disambiguate hierarchy
     }
@@ -341,7 +341,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
-        throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Not focusable")),
+        throw uno::RuntimeException("Not focusable",
                                     uno::Reference< uno::XInterface >
                                     ( static_cast< XAccessible* > (this) ) );   // disambiguate hierarchy
     }
@@ -369,20 +369,20 @@ namespace accessibility
         return static_cast<sal_Int32>( aColor.GetColor() );
     }
 
-    ::rtl::OUString SAL_CALL AccessibleImageBullet::getImplementationName (void) throw (uno::RuntimeException)
+    OUString SAL_CALL AccessibleImageBullet::getImplementationName (void) throw (uno::RuntimeException)
     {
         DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("AccessibleImageBullet"));
+        return OUString("AccessibleImageBullet");
     }
 
-    sal_Bool SAL_CALL AccessibleImageBullet::supportsService (const ::rtl::OUString& sServiceName) throw (uno::RuntimeException)
+    sal_Bool SAL_CALL AccessibleImageBullet::supportsService (const OUString& sServiceName) throw (uno::RuntimeException)
     {
         DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
         //  Iterate over all supported service names and return true if on of them
         //  matches the given name.
-        uno::Sequence< ::rtl::OUString> aSupportedServices (
+        uno::Sequence< OUString > aSupportedServices (
             getSupportedServiceNames ());
         for (int i=0; i<aSupportedServices.getLength(); i++)
             if (sServiceName == aSupportedServices[i])
@@ -390,19 +390,19 @@ namespace accessibility
         return sal_False;
     }
 
-    uno::Sequence< ::rtl::OUString> SAL_CALL AccessibleImageBullet::getSupportedServiceNames (void) throw (uno::RuntimeException)
+    uno::Sequence< OUString > SAL_CALL AccessibleImageBullet::getSupportedServiceNames (void) throw (uno::RuntimeException)
     {
         DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
-        const ::rtl::OUString sServiceName (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.accessibility.AccessibleContext"));
-        return uno::Sequence< ::rtl::OUString > (&sServiceName, 1);
+        const OUString sServiceName ("com.sun.star.accessibility.AccessibleContext");
+        return uno::Sequence< OUString > (&sServiceName, 1);
     }
 
-    ::rtl::OUString SAL_CALL AccessibleImageBullet::getServiceName (void) throw (uno::RuntimeException)
+    OUString SAL_CALL AccessibleImageBullet::getServiceName (void) throw (uno::RuntimeException)
     {
         DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.accessibility.AccessibleContext"));
+        return OUString("com.sun.star.accessibility.AccessibleContext");
     }
 
     void AccessibleImageBullet::SetIndexInParent( sal_Int32 nIndex )
@@ -569,7 +569,7 @@ namespace accessibility
         if( mpEditSource )
             return *mpEditSource;
         else
-            throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No edit source, object is defunct")),
+            throw uno::RuntimeException("No edit source, object is defunct",
                                         uno::Reference< uno::XInterface >
                                         ( static_cast< ::cppu::OWeakObject* >
                                           ( const_cast< AccessibleImageBullet* > (this) ) ) );  // disambiguate hierarchy
@@ -583,7 +583,7 @@ namespace accessibility
         SvxTextForwarder* pTextForwarder = rEditSource.GetTextForwarder();
 
         if( !pTextForwarder )
-            throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unable to fetch text forwarder, object is defunct")),
+            throw uno::RuntimeException("Unable to fetch text forwarder, object is defunct",
                                         uno::Reference< uno::XInterface >
                                         ( static_cast< ::cppu::OWeakObject* >
                                           ( const_cast< AccessibleImageBullet* > (this) ) ) );  // disambiguate hierarchy
@@ -591,7 +591,7 @@ namespace accessibility
         if( pTextForwarder->IsValid() )
             return *pTextForwarder;
         else
-            throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Text forwarder is invalid, object is defunct")),
+            throw uno::RuntimeException("Text forwarder is invalid, object is defunct",
                                         uno::Reference< uno::XInterface >
                                         ( static_cast< ::cppu::OWeakObject* >
                                           ( const_cast< AccessibleImageBullet* > (this) ) ) );  // disambiguate hierarchy
@@ -606,7 +606,7 @@ namespace accessibility
 
         if( !pViewForwarder )
         {
-            throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unable to fetch view forwarder, object is defunct")),
+            throw uno::RuntimeException("Unable to fetch view forwarder, object is defunct",
                                         uno::Reference< uno::XInterface >
                                         ( static_cast< ::cppu::OWeakObject* >
                                           ( const_cast< AccessibleImageBullet* > (this) ) ) );  // disambiguate hierarchy
@@ -615,7 +615,7 @@ namespace accessibility
         if( pViewForwarder->IsValid() )
             return *pViewForwarder;
         else
-            throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("View forwarder is invalid, object is defunct")),
+            throw uno::RuntimeException("View forwarder is invalid, object is defunct",
                                         uno::Reference< uno::XInterface >
                                         ( static_cast< ::cppu::OWeakObject* >
                                           ( const_cast< AccessibleImageBullet* > (this) )  ) ); // disambiguate hierarchy
