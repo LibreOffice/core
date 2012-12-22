@@ -1331,6 +1331,12 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
         {
             for( int j = rVisualItem.mnMinCharPos; j < rVisualItem.mnEndCharPos; ++j )
                 mpLogClusters[j] = sal::static_int_cast<WORD>(~0U);
+            if (rArgs.mnMinCharPos >= rVisualItem.mnEndCharPos)
+            {   // fdo#47553 adjust "guessed" min (maybe up to -8 off) to
+                // actual min so it can be used properly in GetNextGlyphs
+                assert(mnSubStringMin <= rVisualItem.mnEndCharPos);
+                mnSubStringMin = rVisualItem.mnEndCharPos;
+            }
             continue;
         }
 
@@ -1785,7 +1791,10 @@ int UniscribeLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
         int nGlyphWidth = pGlyphWidths[ nStart ];
         int nCharPos = -1;    // no need to determine charpos
         if( mpGlyphs2Chars )  // unless explicitly requested+provided
+        {
             nCharPos = mpGlyphs2Chars[ nStart ];
+            assert(-1 != nCharPos);
+        }
 
         // inject kashida glyphs if needed
         if( !mbDisableGlyphInjection
