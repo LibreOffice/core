@@ -36,8 +36,6 @@
 
 #include <boost/noncopyable.hpp>
 
-#define CREATE_CONST_ASC(s) String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM(s))
-
 class SwDoc;
 class SwPaM;
 class String;
