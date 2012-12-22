@@ -20,7 +20,6 @@
 
 #include <editeng/AccessibleSelectionBase.hxx>
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 

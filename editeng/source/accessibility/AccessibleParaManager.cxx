@@ -185,7 +185,7 @@ namespace accessibility
                 uno::Reference< XAccessible > xChild( static_cast< ::cppu::OWeakObject* > (pChild), uno::UNO_QUERY );
 
                 if( !xChild.is() )
-                    throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Child creation failed")), xFrontEnd);
+                    throw uno::RuntimeException("Child creation failed", xFrontEnd);
 
                 aChild = WeakPara::HardRefType( xChild, pChild );
 
