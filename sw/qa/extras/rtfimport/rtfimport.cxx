@@ -129,6 +129,7 @@ public:
     void testFdo57708();
     void testFdo54473();
     void testFdo49934();
+    void testFdo57886();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -208,6 +209,7 @@ void Test::run()
         {"fdo57708.rtf", &Test::testFdo57708},
         {"fdo54473.rtf", &Test::testFdo54473},
         {"fdo49934.rtf", &Test::testFdo49934},
+        {"fdo57886.rtf", &Test::testFdo57886},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -958,6 +960,12 @@ void Test::testFdo49934()
 {
     // Column break without columns defined should be a page break, but it was just ignored.
     CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
+void Test::testFdo57886()
+{
+    // Was 'int from <?> to <?> <?>'.
+    CPPUNIT_ASSERT_EQUAL(OUString("int from {firstlower} to {firstupper} {firstbody}"), getFormula(getRun(getParagraph(1), 1)));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
