@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAASH///8o\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 5916,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-12-22T00:10:15Z",
+      "side": 1,
+      "message": "no tabs here please",
+      "revId": "4555f962e59ab3292adf1de66cd8fe933ce5e984",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASH///8s\u003d",
+        "filename": "readlicense_oo/txt/license.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 1383,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-12-22T00:10:15Z",
+      "side": 1,
+      "message": "tab problems and trailing whitespaces..",
+      "revId": "4555f962e59ab3292adf1de66cd8fe933ce5e984",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
