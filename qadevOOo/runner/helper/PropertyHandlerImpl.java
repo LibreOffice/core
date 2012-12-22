@@ -62,7 +62,7 @@ public class PropertyHandlerImpl implements XPropertyHandler{
     }
 
     /**
-     * This method currently do nothig
+     * This method currently does nothing
      * @param xPropertyChangeListener the listener to notify about property changes
      * @throws com.sun.star.lang.NullPointerException com::sun::star::lang::NullPointerException if the listener is NULL
      */
@@ -157,7 +157,7 @@ public class PropertyHandlerImpl implements XPropertyHandler{
     }
 
     /**
-     * This method currently do nothig
+     * This method currently does nothing
      * @return null
      */
     public com.sun.star.beans.Property[] getSupportedProperties() {
@@ -206,7 +206,7 @@ public class PropertyHandlerImpl implements XPropertyHandler{
     }
 
     /**
-     * This method currently do nothig
+     * This method currently does nothing
      * @param xEventListener the listener to be revoked
      */
     public void removeEventListener(com.sun.star.lang.XEventListener xEventListener) {

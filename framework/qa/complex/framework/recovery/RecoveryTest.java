@@ -409,7 +409,7 @@ public class RecoveryTest extends ComplexTestCase {
 
     /**
      * This function uses accessibility to handle the dialog "Are you sure".
-     * It cklick "Yes" or "No", dependend on the value of the parameter <CODE>Yes</CODE>
+     * It click "Yes" or "No", dependend on the value of the parameter <CODE>Yes</CODE>
      * @param yes If value is <CODE>TRUE</CODE> the button "Yes" was clicked, otherwise the button
      * "No".
      */
