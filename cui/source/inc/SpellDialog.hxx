@@ -70,13 +70,14 @@ private:
 
     void            CallModifyLink() {m_aModifyLink.Call(this);}
 
-    SpellDialog*    GetSpellDialog() const {return (SpellDialog*)GetParent();}
+    SpellDialog*    GetSpellDialog() const {return (SpellDialog*)GetParentDialog();}
 protected:
     virtual long    PreNotify( NotifyEvent& rNEvt );
 
 public:
-                    SentenceEditWindow_Impl( SpellDialog* pParent, const ResId& rResId );
-                    ~SentenceEditWindow_Impl();
+    SentenceEditWindow_Impl(Window* pParent, const ResId& rResId);
+    SentenceEditWindow_Impl(Window* pParent, WinBits nBits);
+    ~SentenceEditWindow_Impl();
 
     void            SetModifyHdl(const Link& rLink) { m_aModifyLink = rLink;}
 
@@ -115,15 +116,6 @@ public:
     void            ResetIgnoreErrorsAt()   { m_aIgnoreErrorsAt.clear(); }
 };
 
-class HelpFixedText : public FixedText
-{
-    public:
-        HelpFixedText( Window* pParent, const ResId& rResId );
-
-        virtual void Paint( const Rectangle& rRect );
-        long GetActualHeight( );
-};
-
 // class SvxSpellDialog ---------------------------------------------
 class SpellDialogChildWindow;
 
@@ -134,47 +126,41 @@ class SpellDialog : public SfxModelessDialog
     friend class SentenceEditWindow_Impl;
 private:
 
-    FixedText       aLanguageFT;
-    SvxLanguageBox  aLanguageLB;
+    FixedText*      m_pLanguageFT;
+    SvxLanguageBox* m_pLanguageLB;
 
-    HelpFixedText   aExplainFT;
-    FixedHyperlink  aExplainLink;
+    FixedText*      m_pExplainFT;
+    FixedHyperlink* m_pExplainLink;
 
-    FixedText       aNotInDictFT;
-    SentenceEditWindow_Impl  aSentenceED;
+    FixedText*      m_pNotInDictFT;
+    SentenceEditWindow_Impl* m_pSentenceED;
 
-    FixedText       aSuggestionFT;
-    ListBox         aSuggestionLB;
+    FixedText*      m_pSuggestionFT;
+    ListBox*        m_pSuggestionLB;
 
-    PushButton      aIgnorePB;
-    PushButton      aIgnoreAllPB;
-    PushButton      aIgnoreRulePB;
-    MenuButton      aAddToDictMB;
-    PushButton      aAddToDictPB;
+    PushButton*     m_pIgnorePB;
+    PushButton*     m_pIgnoreAllPB;
+    PushButton*     m_pIgnoreRulePB;
+    PushButton*     m_pAddToDictPB;
+    MenuButton*     m_pAddToDictMB;
 
-    PushButton      aChangePB;
-    PushButton      aChangeAllPB;
-    PushButton      aAutoCorrPB;
+    PushButton*     m_pChangePB;
+    PushButton*     m_pChangeAllPB;
+    PushButton*     m_pAutoCorrPB;
 
-    CheckBox        aCheckGrammarCB;
+    CheckBox*       m_pCheckGrammarCB;
 
-    HelpButton      aHelpPB;
-    PushButton      aOptionsPB;
-    PushButton      aUndoPB;
-    PushButton      aClosePB;
+    PushButton*     m_pOptionsPB;
+    PushButton*     m_pUndoPB;
+    PushButton*     m_pClosePB;
 
-    GroupBox        aBackgroundGB;
+    OUString        m_sResumeST;
+    OUString        m_sIgnoreOnceST;
+    OUString        m_sNoSuggestionsST;
 
-    Image           aVendorImage;
+    String          m_sTitleSpelling;
+    String          m_sTitleSpellingGrammar;
 
-    String          aResumeST;
-    String          aIgnoreOnceST;
-    String          aNoSuggestionsST;
-
-    const String    m_sTitleSpelling;
-    const String    m_sTitleSpellingGrammar;
-
-    Size            aOldWordEDSize;
     Link            aDialogUndoLink;
 
     bool            bModified;
@@ -225,7 +211,6 @@ private:
     void            SetTitle_Impl(LanguageType nLang);
 
 protected:
-    virtual void    Paint( const Rectangle& rRect );
     virtual long    Notify( NotifyEvent& rNEvt );
 
     String getReplacementString() const;
