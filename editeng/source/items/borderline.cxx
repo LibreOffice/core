@@ -123,62 +123,45 @@ ConvertBorderStyleFromWord(int const nWordLineStyle)
         case  9:
         case 20:
             return SOLID;
-            break;
         case  6:
             return DOTTED;
-            break;
         case  7:
             return DASHED;
-            break;
         case 22:
             return FINE_DASHED;
-            break;
         // then the shading beams which we represent by a double line
         case 23:
             return DOUBLE;
-            break;
         // then the double lines, for which we have good matches
         case  3:
         case 10: // Don't have triple so use double
         case 21: // Don't have double wave: use double instead
             return DOUBLE;
-            break;
         case 11:
             return THINTHICK_SMALLGAP;
-            break;
         case 12:
         case 13: // Don't have thin thick thin, so use thick thin
             return THICKTHIN_SMALLGAP;
-            break;
         case 14:
             return THINTHICK_MEDIUMGAP;
-            break;
         case 15:
         case 16: // Don't have thin thick thin, so use thick thin
             return THICKTHIN_MEDIUMGAP;
-            break;
         case 17:
             return THINTHICK_LARGEGAP;
-            break;
         case 18:
         case 19: // Don't have thin thick thin, so use thick thin
             return THICKTHIN_LARGEGAP;
-            break;
         case 24:
             return EMBOSSED;
-            break;
         case 25:
             return ENGRAVED;
-            break;
         case 26:
             return OUTSET;
-            break;
         case 27:
             return INSET;
-            break;
         default:
             return NONE;
-            break;
     }
 }
 
@@ -205,13 +188,10 @@ ConvertBorderWidthFromWord(SvxBorderStyle const eStyle, double const fWidth,
             {
                 case 2:
                     return (fWidth * 2.0); // thick
-                    break;
                 case 5: // fdo#55526: map 0 hairline width to > 0
                     return (fWidth > 1.0) ? fWidth : 1.0;
-                    break;
                 default:
                     return fWidth;
-                    break;
             }
             break;
 
@@ -222,48 +202,38 @@ ConvertBorderWidthFromWord(SvxBorderStyle const eStyle, double const fWidth,
         // Display a minimum effective border width of 1pt
         case FINE_DASHED:
             return (fWidth > 0 && fWidth < 20) ? 20 : fWidth;
-            break;
 
         // Double lines
         case DOUBLE:
             return fWidth * 3.0;
-            break;
 
         case THINTHICK_MEDIUMGAP:
         case THICKTHIN_MEDIUMGAP:
         case EMBOSSED:
         case ENGRAVED:
             return fWidth * 2.0;
-            break;
 
         case THINTHICK_SMALLGAP:
             return fWidth + THINTHICK_SMALLGAP_line2 + THINTHICK_SMALLGAP_gap;
-            break;
 
         case THINTHICK_LARGEGAP:
             return fWidth + THINTHICK_LARGEGAP_line1 + THINTHICK_LARGEGAP_line2;
-            break;
 
         case THICKTHIN_SMALLGAP:
             return fWidth + THICKTHIN_SMALLGAP_line1 + THICKTHIN_SMALLGAP_gap;
-            break;
 
         case THICKTHIN_LARGEGAP:
             return fWidth + THICKTHIN_LARGEGAP_line1 + THICKTHIN_LARGEGAP_line2;
-            break;
 
         case OUTSET:
             return (fWidth * 2.0) + OUTSET_line1;
-            break;
 
         case INSET:
             return (fWidth * 2.0) + INSET_line2;
-            break;
 
         default:
             assert(false); // should only be called for known border style
             return 0;
-            break;
     }
 }
 
@@ -278,48 +248,38 @@ ConvertBorderWidthToWord(SvxBorderStyle const eStyle, double const fWidth)
         case DASHED:
         case FINE_DASHED:
             return fWidth;
-            break;
 
         // Double lines
         case DOUBLE:
             return fWidth / 3.0;
-            break;
 
         case THINTHICK_MEDIUMGAP:
         case THICKTHIN_MEDIUMGAP:
         case EMBOSSED:
         case ENGRAVED:
             return fWidth / 2.0;
-            break;
 
         case THINTHICK_SMALLGAP:
             return fWidth - THINTHICK_SMALLGAP_line2 - THINTHICK_SMALLGAP_gap;
-            break;
 
         case THINTHICK_LARGEGAP:
             return fWidth - THINTHICK_LARGEGAP_line1 - THINTHICK_LARGEGAP_line2;
-            break;
 
         case THICKTHIN_SMALLGAP:
             return fWidth - THICKTHIN_SMALLGAP_line1 - THICKTHIN_SMALLGAP_gap;
-            break;
 
         case THICKTHIN_LARGEGAP:
             return fWidth - THICKTHIN_LARGEGAP_line1 - THICKTHIN_LARGEGAP_line2;
-            break;
 
         case OUTSET:
             return (fWidth - OUTSET_line1) / 2.0;
-            break;
 
         case INSET:
             return (fWidth - INSET_line2) / 2.0;
-            break;
 
         default:
             assert(false); // should only be called for known border style
             return 0;
-            break;
     }
 }
 

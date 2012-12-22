@@ -998,9 +998,9 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
 
         Reference< XDictionaryList >  xDicList( SvxGetDictionaryList() );
         Sequence< Reference< XDictionary >  > aDics;
-        const Reference< XDictionary >  *pDic = NULL;
         if (xDicList.is())
         {
+            const Reference< XDictionary >  *pDic = NULL;
             // add the default positive dictionary to dic-list (if not already done).
             // This is to ensure that there is at least one dictionary to which
             // words could be added.

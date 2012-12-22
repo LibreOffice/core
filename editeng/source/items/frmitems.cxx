@@ -1970,7 +1970,6 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 }
             }
             return sal_True;
-            break;
     }
 
     if( bDistMember || nMemberId == BORDER_DISTANCE )
