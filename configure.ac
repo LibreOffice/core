@@ -5986,7 +5986,7 @@ dnl ===================================================================
 if test "$SOLAR_JAVA" != ""; then
 
     # Windows-specific tests
-    if test "$build_os" = "cygwin" -a "$_os" = "WINNT"; then
+    if test "$build_os" = "cygwin"; then
         if test "$BITNESS_OVERRIDE" = 64; then
             bitness="64-bit"
             otherbitness="32-bit"
@@ -6029,7 +6029,7 @@ if test "$SOLAR_JAVA" != ""; then
         fi
     fi
 
-    if test "$build_os" = "cygwin" -a "$_os" = "WINNT"; then
+    if test "$build_os" = "cygwin"; then
         # Check that the JDK found is correct architecture
         # Why is this necessary, we don't link with any library from the JDK I think,
 
@@ -6159,7 +6159,7 @@ if test "$SOLAR_JAVA" != ""; then
     if test -z "$JAVACOMPILER"; then
         AC_MSG_ERROR([$javacompiler not found set with_jdk_home])
     fi
-    if test "$build_os" = "cygwin" -a "$_os" = "WINNT"; then
+    if test "$build_os" = "cygwin"; then
         if test x`echo "$JAVACOMPILER" | $GREP -i '\.exe$'` = x; then
             JAVACOMPILER="${JAVACOMPILER}.exe"
         fi
@@ -6215,7 +6215,7 @@ if test "$SOLAR_JAVA" != ""; then
     if test -z "$JAVADOC"; then
         AC_MSG_ERROR([$_javadoc_path not found set with_jdk_home])
     fi
-    if test "$build_os" = "cygwin" -a "$_os" = "WINNT"; then
+    if test "$build_os" = "cygwin"; then
         if test x`echo "$JAVADOC" | $GREP -i '\.exe$'` = x; then
             JAVADOC="${JAVADOC}.exe"
         fi
