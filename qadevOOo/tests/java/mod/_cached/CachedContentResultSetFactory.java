@@ -72,7 +72,7 @@ public class CachedContentResultSetFactory extends TestCase {
     *      {@link ifc.XCachedContentResultSetFactory} : the destination
     *   interface requires as its parameter an instance of
     *   <code>CachedContentResultSetStub</code> service. It is created
-    *   using <code>UniversalContentBroker</code> and queriing it for
+    *   using <code>UniversalContentBroker</code> and querying it for
     *   <code>PackageContent</code> which represents JAR file mentioned
     *   above. Then the dynamic list of file contents (entries) is retrieved,
     *   and a static list is created from it. Using

@@ -52,7 +52,7 @@ public class Status extends SimpleStatus {
 
     /**
      * Construct a status: use own message and state.
-     * @parame messaeg An own message for the status.
+     * @parame message An own message for the status.
      * @param state: OK or FAILED.
      */
     public Status(String message, boolean state) {
