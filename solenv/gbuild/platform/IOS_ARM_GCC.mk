@@ -62,15 +62,8 @@ gb_CXXFLAGS := \
 	-Wno-ctor-dtor-privacy \
 	-Wno-non-virtual-dtor \
 	-fno-strict-aliasing \
-	-fsigned-char
-
-# No idea if -malign-natural is needed, but macosx.mk uses it...
-# Why it isn't used in gb_CFLAGS I have no idea.
-# Anyway, Clang doesn't have this option.
-ifneq ($(COM_GCC_IS_CLANG),TRUE)
-gb_CXXFLAGS += \
-	-malign-natural
-endif
+	-fsigned-char \
+	$(CXXFLAGS_CXX11) \
 
 # these are to get gcc to switch to Objective-C++ or Objective-C mode
 gb_OBJC_OBJCXX_COMMON_FLAGS := -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40300
