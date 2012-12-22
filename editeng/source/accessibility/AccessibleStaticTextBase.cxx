@@ -300,8 +300,7 @@ namespace accessibility
         DBG_CHKTHIS( AccessibleStaticTextBase_Impl, NULL );
 
         if( !mpTextParagraph )
-            throw lang::DisposedException (
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("object has been already disposed")), mxThis );
+            throw lang::DisposedException ("object has been already disposed", mxThis );
 
         // TODO: Have a differnt method on AccessibleEditableTextPara
         // that does not care about state changes
@@ -353,7 +352,7 @@ namespace accessibility
         DBG_CHKTHIS( AccessibleStaticTextBase_Impl, NULL );
 
         if( nFlatIndex < 0 )
-            throw lang::IndexOutOfBoundsException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AccessibleStaticTextBase_Impl::Index2Internal: character index out of bounds")),
+            throw lang::IndexOutOfBoundsException("AccessibleStaticTextBase_Impl::Index2Internal: character index out of bounds",
                                                   mxThis);
         // gratuitously accepting larger indices here, AccessibleEditableTextPara will throw eventually
 
@@ -386,7 +385,7 @@ namespace accessibility
         }
 
         // not found? Out of bounds
-        throw lang::IndexOutOfBoundsException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AccessibleStaticTextBase_Impl::Index2Internal: character index out of bounds")),
+        throw lang::IndexOutOfBoundsException("AccessibleStaticTextBase_Impl::Index2Internal: character index out of bounds",
                                               mxThis);
     }
 
@@ -643,7 +642,7 @@ namespace accessibility
         return mpImpl->GetParagraph( aPos.nPara ).getCharacter( aPos.nIndex );
     }
 
-    uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleStaticTextBase::getCharacterAttributes( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRequestedAttributes ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+    uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleStaticTextBase::getCharacterAttributes( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< OUString >& aRequestedAttributes ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         SolarMutexGuard aGuard;
 
@@ -709,7 +708,7 @@ namespace accessibility
         return -1;
     }
 
-    ::rtl::OUString SAL_CALL AccessibleStaticTextBase::getSelectedText() throw (uno::RuntimeException)
+    OUString SAL_CALL AccessibleStaticTextBase::getSelectedText() throw (uno::RuntimeException)
     {
         SolarMutexGuard aGuard;
 
@@ -718,7 +717,7 @@ namespace accessibility
 
         // #104481# Return the empty string for 'no selection'
         if( nStart < 0 || nEnd < 0 )
-            return ::rtl::OUString();
+            return OUString();
 
         return getTextRange( nStart, nEnd );
     }
@@ -762,19 +761,19 @@ namespace accessibility
                                      aEndIndex.nPara, aEndIndex.nIndex );
     }
 
-    ::rtl::OUString SAL_CALL AccessibleStaticTextBase::getText() throw (uno::RuntimeException)
+    OUString SAL_CALL AccessibleStaticTextBase::getText() throw (uno::RuntimeException)
     {
         SolarMutexGuard aGuard;
 
         sal_Int32 i, nParas;
-        ::rtl::OUString aRes;
+        OUString aRes;
         for( i=0, nParas=mpImpl->GetParagraphCount(); i<nParas; ++i )
             aRes += mpImpl->GetParagraph(i).getText();
 
         return aRes;
     }
 
-    ::rtl::OUString SAL_CALL AccessibleStaticTextBase::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+    OUString SAL_CALL AccessibleStaticTextBase::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         SolarMutexGuard aGuard;
 
@@ -792,7 +791,7 @@ namespace accessibility
         else
         {
             sal_Int32 i( aStartIndex.nPara );
-            ::rtl::OUString aRes( mpImpl->GetParagraph(i).getTextRange( aStartIndex.nIndex,
+            OUString aRes( mpImpl->GetParagraph(i).getTextRange( aStartIndex.nIndex,
                                                                         mpImpl->GetParagraph(i).getCharacterCount()-1) );
             ++i;
 
@@ -931,7 +930,7 @@ namespace accessibility
     }
 
     // XAccessibleTextAttributes
-    uno::Sequence< beans::PropertyValue > AccessibleStaticTextBase::getDefaultAttributes( const uno::Sequence< ::rtl::OUString >& RequestedAttributes ) throw (uno::RuntimeException)
+    uno::Sequence< beans::PropertyValue > AccessibleStaticTextBase::getDefaultAttributes( const uno::Sequence< OUString >& RequestedAttributes ) throw (uno::RuntimeException)
     {
         // get the intersection of the default attributes of all paragraphs
 
@@ -968,7 +967,7 @@ namespace accessibility
         return aDefAttrVec.getAsConstList();
     }
 
-    uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleStaticTextBase::getRunAttributes( sal_Int32 nIndex, const uno::Sequence< ::rtl::OUString >& RequestedAttributes ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+    uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleStaticTextBase::getRunAttributes( sal_Int32 nIndex, const uno::Sequence< OUString >& RequestedAttributes ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         // get those default attributes of the paragraph, which are not part
         // of the intersection of all paragraphs and add them to the run attributes
