@@ -2849,7 +2849,7 @@ if test "$_os" = "WINNT" -a "$WITH_MINGW" != yes; then
     fi
 
     AC_MSG_CHECKING([whether to use ActiveX])
-    if test "$enable_activex" = "yes" -o "$enable_activex" = "TRUE" -o "$enable_activex" = ""; then
+    if test "$enable_activex" = "yes" -o "$enable_activex" = ""; then
         DISABLE_ACTIVEX=""
         SCPDEFS="$SCPDEFS -DWITH_ACTIVEX_COMPONENT"
         AC_MSG_RESULT([yes])
@@ -2859,7 +2859,7 @@ if test "$_os" = "WINNT" -a "$WITH_MINGW" != yes; then
     fi
 
     AC_MSG_CHECKING([whether to use ATL])
-    if test "$enable_atl" = "yes" -o "$enable_atl" = "TRUE" -o "$enable_atl" = ""; then
+    if test "$enable_atl" = "yes" -o "$enable_atl" = ""; then
         DISABLE_ATL=""
         AC_MSG_RESULT([yes])
     else
