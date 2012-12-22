@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAASH///7w\u003d",
+        "filename": "external/CustomTarget_msms.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2012-12-22T16:21:32Z",
+      "side": 1,
+      "message": "I think it would be better if this list were assembled in configure.ac . That would make Package_msms.mk simpler too.",
+      "revId": "11285a35277abc8ffc3875941f35417ca161d33a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASH///74\u003d",
+        "filename": "external/CustomTarget_msms.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2012-12-22T16:21:32Z",
+      "side": 1,
+      "message": "This redefines the pattern target for gb_CustomTarget_get_target which creates the .done file. That means the rule will be re-run on every build. And the checks belong to configure.ac anyway.",
+      "revId": "11285a35277abc8ffc3875941f35417ca161d33a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASH///70\u003d",
+        "filename": "external/CustomTarget_msvc_dlls.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2012-12-22T16:21:32Z",
+      "side": 1,
+      "message": "Again, this check belongs to configure.ac .",
+      "revId": "11285a35277abc8ffc3875941f35417ca161d33a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
