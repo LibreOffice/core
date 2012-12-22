@@ -70,16 +70,19 @@ $(eval $(call gb_CppunitTest_use_components,sw_subsequent_rtfimport,\
 	basic/util/sb \
 	comphelper/util/comphelp \
     configmgr/source/configmgr \
+    embeddedobj/util/embobj \
     fileaccess/source/fileacc \
     filter/source/config/cache/filterconfig1 \
     framework/util/fwk \
     i18npool/util/i18npool \
     linguistic/source/lng \
     package/util/package2 \
+    package/source/xstor/xstor \
     sax/source/expatwrap/expwrap \
     sw/util/sw \
     sw/util/swd \
     sfx2/util/sfx \
+    starmath/util/sm \
     svl/source/fsstor/fsstorage \
     svtools/util/svt \
     toolkit/util/tk \
