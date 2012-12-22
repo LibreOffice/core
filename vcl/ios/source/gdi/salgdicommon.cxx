@@ -314,7 +314,7 @@ void IosSalGraphics::copyBits( const SalTwoRect *pPosAry, SalGraphics *pSrcGraph
 
     DBG_ASSERT( pSrc->mxLayer!=NULL, "IosSalGraphics::copyBits() from non-layered graphics" );
 
-    const CGPoint aDstPoint = { +pPosAry->mnDestX - pPosAry->mnSrcX, pPosAry->mnDestY - pPosAry->mnSrcY };
+    const CGPoint aDstPoint = { static_cast<CGFloat>(+pPosAry->mnDestX - pPosAry->mnSrcX), static_cast<CGFloat>(pPosAry->mnDestY - pPosAry->mnSrcY) };
     if( (pPosAry->mnSrcWidth == pPosAry->mnDestWidth &&
          pPosAry->mnSrcHeight == pPosAry->mnDestHeight) &&
         (!mnBitmapDepth || (aDstPoint.x + pSrc->mnWidth) <= mnWidth) ) // workaround a Quartz crasher
@@ -330,7 +330,7 @@ void IosSalGraphics::copyBits( const SalTwoRect *pPosAry, SalGraphics *pSrcGraph
             }
         }
         CGContextSaveGState( xCopyContext );
-        const CGRect aDstRect = { {pPosAry->mnDestX, pPosAry->mnDestY}, {pPosAry->mnDestWidth, pPosAry->mnDestHeight} };
+        const CGRect aDstRect = { { static_cast<CGFloat>(pPosAry->mnDestX), static_cast<CGFloat>(pPosAry->mnDestY) }, { static_cast<CGFloat>(pPosAry->mnDestWidth), static_cast<CGFloat>(pPosAry->mnDestHeight) } };
         CGContextClipToRect( xCopyContext, aDstRect );
 
         // draw at new destination
@@ -447,10 +447,10 @@ void IosSalGraphics::copyArea( long nDstX, long nDstY,long nSrcX, long nSrcY,
     CGLayerRef xSrcLayer = mxLayer;
     // TODO: if( mnBitmapDepth > 0 )
     {
-        const CGSize aSrcSize = { nSrcWidth, nSrcHeight };
+        const CGSize aSrcSize = { static_cast<CGFloat>(nSrcWidth), static_cast<CGFloat>(nSrcHeight) };
         xSrcLayer = ::CGLayerCreateWithContext( xCopyContext, aSrcSize, NULL );
         const CGContextRef xSrcContext = CGLayerGetContext( xSrcLayer );
-        CGPoint aSrcPoint = { -nSrcX, -nSrcY };
+        CGPoint aSrcPoint = { static_cast<CGFloat>(-nSrcX), static_cast<CGFloat>(-nSrcY) };
         if( IsFlipped() )
         {
             ::CGContextTranslateCTM( xSrcContext, 0, +nSrcHeight );
@@ -461,7 +461,7 @@ void IosSalGraphics::copyArea( long nDstX, long nDstY,long nSrcX, long nSrcY,
     }
 
     // draw at new destination
-    const CGPoint aDstPoint = { +nDstX, +nDstY };
+    const CGPoint aDstPoint = { static_cast<CGFloat>(+nDstX), static_cast<CGFloat>(+nDstY) };
     ::CGContextDrawLayerAtPoint( xCopyContext, aDstPoint, xSrcLayer );
 
     // cleanup
@@ -512,7 +512,7 @@ bool IosSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
     }
     if ( CheckContext() )
     {
-        const CGRect aDstRect = {{rTR.mnDestX, rTR.mnDestY}, {rTR.mnDestWidth, rTR.mnDestHeight}};
+        const CGRect aDstRect = { { static_cast<CGFloat>(rTR.mnDestX), static_cast<CGFloat>(rTR.mnDestY) }, { static_cast<CGFloat>(rTR.mnDestWidth), static_cast<CGFloat>(rTR.mnDestHeight) } };
         CGContextDrawImage( mrContext, aDstRect, xMaskedImage );
         RefreshRect( aDstRect );
     }
@@ -532,7 +532,7 @@ bool IosSalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
     CGContextSaveGState( mrContext );
     CGContextSetAlpha( mrContext, (100-nTransparency) * (1.0/100) );
 
-    CGRect aRect = {{nX,nY},{nWidth-1,nHeight-1}};
+    CGRect aRect = { { static_cast<CGFloat>(nX), static_cast<CGFloat>(nY) }, { static_cast<CGFloat>(nWidth-1), static_cast<CGFloat>(nHeight-1) } };
     if( IsPenVisible() )
     {
         aRect.origin.x += 0.5;
@@ -562,8 +562,8 @@ void IosSalGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSa
     {
         return;
     }
-    const CGRect aDstRect = {{pPosAry->mnDestX, pPosAry->mnDestY},
-                             {pPosAry->mnDestWidth, pPosAry->mnDestHeight}};
+    const CGRect aDstRect = { { static_cast<CGFloat>(pPosAry->mnDestX), static_cast<CGFloat>(pPosAry->mnDestY) },
+                              { static_cast<CGFloat>(pPosAry->mnDestWidth), static_cast<CGFloat>(pPosAry->mnDestHeight) } };
     CGContextDrawImage( mrContext, aDstRect, xImage );
     CGImageRelease( xImage );
     RefreshRect( aDstRect );
@@ -590,8 +590,8 @@ void IosSalGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSa
     {
         return;
     }
-    const CGRect aDstRect = {{pPosAry->mnDestX, pPosAry->mnDestY},
-                             {pPosAry->mnDestWidth, pPosAry->mnDestHeight}};
+    const CGRect aDstRect = { { static_cast<CGFloat>(pPosAry->mnDestX), static_cast<CGFloat>(pPosAry->mnDestY) },
+                              { static_cast<CGFloat>(pPosAry->mnDestWidth), static_cast<CGFloat>(pPosAry->mnDestHeight) } };
     CGContextDrawImage( mrContext, aDstRect, xMaskedImage );
     CGImageRelease( xMaskedImage );
     RefreshRect( aDstRect );
@@ -640,8 +640,8 @@ void IosSalGraphics::drawMask( const SalTwoRect* pPosAry,
     {
         return;
     }
-    const CGRect aDstRect = {{pPosAry->mnDestX, pPosAry->mnDestY},
-                             {pPosAry->mnDestWidth, pPosAry->mnDestHeight}};
+    const CGRect aDstRect = { { static_cast<CGFloat>(pPosAry->mnDestX), static_cast<CGFloat>(pPosAry->mnDestY) },
+                              { static_cast<CGFloat>(pPosAry->mnDestWidth), static_cast<CGFloat>(pPosAry->mnDestHeight) } };
     CGContextDrawImage( mrContext, aDstRect, xImage );
     CGImageRelease( xImage );
     RefreshRect( aDstRect );
@@ -1103,7 +1103,7 @@ SalColor IosSalGraphics::getPixel( long nX, long nY )
     {
         nY = mnHeight - nY;
     }
-    const CGPoint aCGPoint = {-nX, -nY};
+    const CGPoint aCGPoint = { static_cast<CGFloat>(-nX), static_cast<CGFloat>(-nY)};
     CGContextDrawLayerAtPoint( xOnePixelContext, aCGPoint, mxLayer );
     CGContextRelease( xOnePixelContext );
 
@@ -1131,7 +1131,7 @@ void IosSalGraphics::ImplDrawPixel( long nX, long nY, const RGBAColor& rColor )
     // overwrite the fill color
     CGContextSetFillColor( mrContext, rColor.AsArray() );
     // draw 1x1 rect, there is no pixel drawing in Quartz
-    CGRect aDstRect = {{nX,nY,},{1,1}};
+    CGRect aDstRect = { { static_cast<CGFloat>(nX), static_cast<CGFloat>(nY) }, { 1, 1 } };
     CGContextFillRect( mrContext, aDstRect );
     RefreshRect( aDstRect );
     // reset the fill color
@@ -1352,7 +1352,7 @@ bool IosSalGraphics::setClipRegion( const Region& i_rClip )
         {
             if( nW && nH )
             {
-                CGRect aRect = {{nX,nY}, {nW,nH}};
+                CGRect aRect = { { static_cast<CGFloat>(nX), static_cast<CGFloat>(nY) }, { static_cast<CGFloat>(nW), static_cast<CGFloat>(nH) } };
                 CGPathAddRect( mxClipPath, NULL, aRect );
             }
             bRegionRect = i_rClip.ImplGetNextRect( aInfo, nX, nY, nW, nH );
@@ -1582,7 +1582,7 @@ bool XorEmulation::UpdateTarget()
         const int nWidth  = (int)CGImageGetWidth( xXorImage );
         const int nHeight = (int)CGImageGetHeight( xXorImage );
         // TODO: update minimal changerect
-        const CGRect aFullRect = {{0,0},{nWidth,nHeight}};
+        const CGRect aFullRect = { { 0, 0 }, { static_cast<CGFloat>(nWidth), static_cast<CGFloat>(nHeight) } };
         CGContextDrawImage( m_xTargetContext, aFullRect, xXorImage );
         CGImageRelease( xXorImage );
     }

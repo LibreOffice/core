@@ -98,7 +98,7 @@ void CoreTextStyleInfo::SetColor(SalColor color)
     msgs_debug(style, "r:%d g:%d b:%d -->", SALCOLOR_RED(color), SALCOLOR_GREEN(color), SALCOLOR_BLUE(color));
     SafeCFRelease(m_color);
     CGColorSpaceRef rgb_space = CGColorSpaceCreateDeviceRGB();
-    CGFloat c[] = { SALCOLOR_RED(color) / 255.0, SALCOLOR_GREEN(color) / 255.0, SALCOLOR_BLUE(color) / 255.0, 1.0 };
+    CGFloat c[] = { SALCOLOR_RED(color) / 255.0f, SALCOLOR_GREEN(color) / 255.0f, SALCOLOR_BLUE(color) / 255.0f, 1.0 };
     m_color = CGColorCreate(rgb_space, c);
     CGColorSpaceRelease(rgb_space);
     msgs_debug(style,"color=%p <--", m_color);

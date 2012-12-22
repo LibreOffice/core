@@ -153,14 +153,14 @@ void IosSalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
 
 void IosSalObject::setClippedPosSize()
 {
-    CGRect aViewRect = { { 0, 0 }, { mnWidth, mnHeight } };
+    CGRect aViewRect = { { 0, 0 }, { static_cast<CGFloat>(mnWidth), static_cast<CGFloat>(mnHeight) } };
     if( maSysData.pView )
     {
         UIView *pView = maSysData.pView;
         [pView setFrame: aViewRect];
     }
 
-    CGRect aClipViewRect = { { mnX, mnY }, { mnWidth, mnHeight } };
+    CGRect aClipViewRect = { { static_cast<CGFloat>(mnX), static_cast<CGFloat>(mnY) }, { static_cast<CGFloat>(mnWidth), static_cast<CGFloat>(mnHeight) } };
     CGPoint aClipPt = { 0, 0 };
     if( mbClip )
     {

@@ -1076,7 +1076,7 @@ void IosSalFrame::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
 
     if( nWidth && nHeight )
     {
-        CGRect aRect = { { nX, nY }, { nWidth, nHeight } };
+        CGRect aRect = { { static_cast<CGFloat>(nX), static_cast<CGFloat>(nY) }, { static_cast<CGFloat>(nWidth), static_cast<CGFloat>(nHeight) } };
         VCLToCocoaTouch( aRect, false );
         maClippingRects.push_back( CGRectMake(aRect.origin.x, aRect.origin.y, aRect.size.width, aRect.size.height) );
     }

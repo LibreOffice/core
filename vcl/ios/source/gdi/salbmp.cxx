@@ -88,7 +88,7 @@ bool IosSalBitmap::Create( CGLayerRef xLayer, int nBitmapBits,
     CreateContext();
 
     // copy layer content into the bitmap buffer
-    const CGPoint aSrcPoint = { -nX, -nY };
+    const CGPoint aSrcPoint = { static_cast<CGFloat>(-nX), static_cast<CGFloat>(-nY) };
     ::CGContextDrawLayerAtPoint( mxGraphicContext, aSrcPoint, xLayer );
     return true;
 }
@@ -731,7 +731,7 @@ CGImageRef IosSalBitmap::CreateCroppedImage( int nX, int nY, int nNewWidth, int 
     else
     {
         nY = mnHeight - (nY + nNewHeight); // adjust for y-mirrored context
-        const CGRect aCropRect = {{nX, nY}, {nNewWidth, nNewHeight}};
+        const CGRect aCropRect = { { static_cast<CGFloat>(nX), static_cast<CGFloat>(nY)}, { static_cast<CGFloat>(nNewWidth), static_cast<CGFloat>(nNewHeight) } };
         xCroppedImage = CGImageCreateWithImageInRect( mxCachedImage, aCropRect );
     }
 
