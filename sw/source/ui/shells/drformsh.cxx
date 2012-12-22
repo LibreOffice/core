@@ -113,7 +113,7 @@ void SwDrawFormShell::Execute(SfxRequest &rReq)
                         uno::Reference< beans::XPropertySet >  xPropSet(xControlModel, uno::UNO_QUERY);
 
                         // Darf man eine URL an dem Objekt setzen?
-                        OUString sTargetURL( C2U( "TargetURL" ));
+                        OUString sTargetURL( "TargetURL" );
                         uno::Reference< beans::XPropertySetInfo >  xPropInfoSet = xPropSet->getPropertySetInfo();
                         if( xPropInfoSet->hasPropertyByName( sTargetURL ))
                         {
@@ -122,7 +122,7 @@ void SwDrawFormShell::Execute(SfxRequest &rReq)
                             {
                                 uno::Any aTmp;
                                 // Ja!
-                                ::rtl::OUString sLabel(C2U("Label"));
+                                ::rtl::OUString sLabel("Label");
                                 if( xPropInfoSet->hasPropertyByName(sLabel) )
                                 {
                                     aTmp <<= OUString(rHLinkItem.GetName());
@@ -139,13 +139,13 @@ void SwDrawFormShell::Execute(SfxRequest &rReq)
                                 if( rHLinkItem.GetTargetFrame().Len() )
                                 {
                                     aTmp <<=  OUString(rHLinkItem.GetTargetFrame());
-                                    xPropSet->setPropertyValue( C2U("TargetFrame"), aTmp );
+                                    xPropSet->setPropertyValue( "TargetFrame", aTmp );
                                 }
 
 
                                 form::FormButtonType eButtonType = form::FormButtonType_URL;
                                 aTmp.setValue( &eButtonType, ::getCppuType((const form::FormButtonType*)0));
-                                xPropSet->setPropertyValue( C2U("ButtonType"), aTmp );
+                                xPropSet->setPropertyValue( "ButtonType", aTmp );
                             }
                         }
                     }
@@ -191,16 +191,16 @@ void SwDrawFormShell::GetState(SfxItemSet& rSet)
 
                         uno::Any aTmp;
                         uno::Reference< beans::XPropertySetInfo >  xInfo = xPropSet->getPropertySetInfo();
-                        if(xInfo->hasPropertyByName(C2U("ButtonType" )))
+                        if(xInfo->hasPropertyByName( "ButtonType" ))
                         {
                              form::FormButtonType eButtonType = form::FormButtonType_URL;
-                            aTmp = xPropSet->getPropertyValue( C2U("ButtonType") );
+                            aTmp = xPropSet->getPropertyValue( "ButtonType" );
                             if( aTmp >>= eButtonType )
                             {
                                 // Label
-                                if(xInfo->hasPropertyByName( C2U("Label") ))
+                                if(xInfo->hasPropertyByName( "Label" ))
                                 {
-                                    aTmp = xPropSet->getPropertyValue( C2U("Label") );
+                                    aTmp = xPropSet->getPropertyValue( "Label" );
                                     OUString sTmp;
                                     if( (aTmp >>= sTmp) && !sTmp.isEmpty())
                                     {
@@ -209,9 +209,9 @@ void SwDrawFormShell::GetState(SfxItemSet& rSet)
                                 }
 
                                 // URL
-                                if(xInfo->hasPropertyByName( C2U("TargetURL" )))
+                                if(xInfo->hasPropertyByName( "TargetURL" ))
                                 {
-                                    aTmp = xPropSet->getPropertyValue( C2U("TargetURL") );
+                                    aTmp = xPropSet->getPropertyValue( "TargetURL" );
                                     OUString sTmp;
                                     if( (aTmp >>= sTmp) && !sTmp.isEmpty())
                                     {
@@ -220,9 +220,9 @@ void SwDrawFormShell::GetState(SfxItemSet& rSet)
                                 }
 
                                 // Target
-                                if(xInfo->hasPropertyByName( C2U("TargetFrame") ))
+                                if(xInfo->hasPropertyByName( "TargetFrame" ))
                                 {
-                                    aTmp = xPropSet->getPropertyValue( C2U("TargetFrame") );
+                                    aTmp = xPropSet->getPropertyValue( "TargetFrame" );
                                     OUString sTmp;
                                     if( (aTmp >>= sTmp) && !sTmp.isEmpty())
                                     {

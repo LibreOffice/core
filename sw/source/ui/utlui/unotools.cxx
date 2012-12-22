@@ -116,7 +116,7 @@ void    SwOneExampleFrame::CreateControl()
     uno::Reference< lang::XMultiServiceFactory >
                                     xMgr = comphelper::getProcessServiceFactory();
     uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
-    uno::Reference< uno::XInterface >  xInst = xMgr->createInstance( C2U("com.sun.star.frame.FrameControl") );
+    uno::Reference< uno::XInterface >  xInst = xMgr->createInstance( "com.sun.star.frame.FrameControl" );
     _xControl = uno::Reference< awt::XControl >(xInst, uno::UNO_QUERY);
     if(_xControl.is())
     {
@@ -141,20 +141,20 @@ void    SwOneExampleFrame::CreateControl()
 
         uno::Sequence<beans::PropertyValue> aSeq(3);
         beans::PropertyValue* pValues = aSeq.getArray();
-        pValues[0].Name = C2U("ReadOnly");
+        pValues[0].Name = "ReadOnly";
         sal_Bool bTrue = sal_True;
         pValues[0].Value.setValue(&bTrue, ::getBooleanCppuType());
-        pValues[1].Name = C2U("OpenFlags");
-        pValues[1].Value <<= C2U("-RB");
-        pValues[2].Name = C2U("Referer");
-        pValues[2].Value <<= C2U("private:user");
+        pValues[1].Name = "OpenFlags";
+        pValues[1].Value <<= OUString("-RB");
+        pValues[2].Name = "Referer";
+        pValues[2].Value <<= OUString("private:user");
         uno::Any aArgs;
         aArgs.setValue(&aSeq, ::getCppuType((uno::Sequence<beans::PropertyValue>*)0));
 
-        xPrSet->setPropertyValue( C2U("LoaderArguments"), aArgs );
+        xPrSet->setPropertyValue( "LoaderArguments", aArgs );
         //save and set readonly???
 
-        xPrSet->setPropertyValue(C2U("ComponentURL"), aURL);
+        xPrSet->setPropertyValue("ComponentURL", aURL);
 
         aLoadedTimer.Start();
         bServiceAvailable = sal_True;
@@ -178,7 +178,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
 
     // now get the model
     uno::Reference< beans::XPropertySet >  xPrSet(_xControl, uno::UNO_QUERY);
-    uno::Any aFrame = xPrSet->getPropertyValue(C2U("Frame"));
+    uno::Any aFrame = xPrSet->getPropertyValue("Frame");
     uno::Reference< frame::XFrame >  xFrm;
     aFrame >>= xFrm;
 
@@ -188,7 +188,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
         try
         {
             uno::Reference< frame::XLayoutManager > xLayoutManager;
-            uno::Any aValue = xPropSet->getPropertyValue(C2U("LayoutManager"));
+            uno::Any aValue = xPropSet->getPropertyValue("LayoutManager");
             aValue >>= xLayoutManager;
             if ( xLayoutManager.is() )
                 xLayoutManager->setVisible( sal_False );
@@ -319,7 +319,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
 
         uno::Reference< style::XStyleFamiliesSupplier >  xSSupp( xDoc, uno::UNO_QUERY);
         uno::Reference< container::XNameAccess >  xStyles = xSSupp->getStyleFamilies();
-        uno::Any aPFamily = xStyles->getByName( C2U("PageStyles" ) );
+        uno::Any aPFamily = xStyles->getByName( "PageStyles" );
         uno::Reference< container::XNameContainer >  xPFamily;
 
         if( 0 == (EX_SHOW_DEFAULT_PAGE == nStyleFlags)

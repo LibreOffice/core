@@ -987,24 +987,24 @@ Sequence< beans::PropertyValue > SwXTextDocument::getPagePrintSettings(void)
             aData = *pData;
         Any aVal;
         aVal <<= (sal_Int16)aData.GetRow();
-        pArray[0] = beans::PropertyValue(C2U("PageRows"), -1, aVal, PropertyState_DIRECT_VALUE);
+        pArray[0] = beans::PropertyValue("PageRows", -1, aVal, PropertyState_DIRECT_VALUE);
         aVal <<= (sal_Int16)aData.GetCol();
-        pArray[1] = beans::PropertyValue(C2U("PageColumns"), -1, aVal, PropertyState_DIRECT_VALUE);
+        pArray[1] = beans::PropertyValue("PageColumns", -1, aVal, PropertyState_DIRECT_VALUE);
         aVal <<= (sal_Int32)TWIP_TO_MM100_UNSIGNED(aData.GetLeftSpace());
-        pArray[2] = beans::PropertyValue(C2U("LeftMargin"), -1, aVal, PropertyState_DIRECT_VALUE);
+        pArray[2] = beans::PropertyValue("LeftMargin", -1, aVal, PropertyState_DIRECT_VALUE);
         aVal <<= (sal_Int32)TWIP_TO_MM100_UNSIGNED(aData.GetRightSpace());
-        pArray[3] = beans::PropertyValue(C2U("RightMargin"), -1, aVal, PropertyState_DIRECT_VALUE);
+        pArray[3] = beans::PropertyValue("RightMargin", -1, aVal, PropertyState_DIRECT_VALUE);
         aVal <<= (sal_Int32)TWIP_TO_MM100_UNSIGNED(aData.GetTopSpace());
-        pArray[4] = beans::PropertyValue(C2U("TopMargin"), -1, aVal, PropertyState_DIRECT_VALUE);
+        pArray[4] = beans::PropertyValue("TopMargin", -1, aVal, PropertyState_DIRECT_VALUE);
         aVal <<= (sal_Int32)TWIP_TO_MM100_UNSIGNED(aData.GetBottomSpace());
-        pArray[5] = beans::PropertyValue(C2U("BottomMargin"), -1, aVal, PropertyState_DIRECT_VALUE);
+        pArray[5] = beans::PropertyValue("BottomMargin", -1, aVal, PropertyState_DIRECT_VALUE);
         aVal <<= (sal_Int32)TWIP_TO_MM100_UNSIGNED(aData.GetHorzSpace());
-        pArray[6] = beans::PropertyValue(C2U("HoriMargin"), -1, aVal, PropertyState_DIRECT_VALUE);
+        pArray[6] = beans::PropertyValue("HoriMargin", -1, aVal, PropertyState_DIRECT_VALUE);
         aVal <<= (sal_Int32)TWIP_TO_MM100_UNSIGNED(aData.GetVertSpace());
-        pArray[7] = beans::PropertyValue(C2U("VertMargin"), -1, aVal, PropertyState_DIRECT_VALUE);
+        pArray[7] = beans::PropertyValue("VertMargin", -1, aVal, PropertyState_DIRECT_VALUE);
         sal_Bool bTemp = aData.GetLandscape();
         aVal.setValue(&bTemp, ::getCppuBooleanType());
-        pArray[8] = beans::PropertyValue(C2U("IsLandscape"), -1, aVal, PropertyState_DIRECT_VALUE);
+        pArray[8] = beans::PropertyValue("IsLandscape", -1, aVal, PropertyState_DIRECT_VALUE);
     }
     else
         throw RuntimeException();
@@ -1640,8 +1640,8 @@ Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServic
         {
             sal_Int32 nIndex = COM_SUN_STAR__DRAWING_LENGTH;
             OUString sCategory = rServiceName.getToken( 0, '.', nIndex );
-            sal_Bool bShape = sCategory == C2U("drawing");
-            if( bShape || sCategory == C2U("form"))
+            sal_Bool bShape = sCategory == "drawing";
+            if( bShape || sCategory == "form")
             {
                 if(bShape)
                 {
@@ -1666,7 +1666,7 @@ Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServic
                     }
                 }
             }
-            else if (sCategory == C2U ("document") )
+            else if (sCategory == "document" )
             {
                 if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.document.Settings") ) )
                     xRet = Reference < XInterface > ( *new SwXDocumentSettings ( this ) );
@@ -1675,12 +1675,12 @@ Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServic
                     xRet = (::cppu::OWeakObject * )new SvXMLEmbeddedObjectHelper( *pDocShell, EMBEDDEDOBJECTHELPER_MODE_READ );
                 }
             }
-            else if (sCategory == C2U ("text") )
+            else if (sCategory == "text" )
             {
                 if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.DocumentSettings") ) )
                     xRet = Reference < XInterface > ( *new SwXDocumentSettings ( this ) );
             }
-            else if (sCategory == C2U ("chart2") )
+            else if (sCategory == "chart2" )
             {
                 if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.data.DataProvider") ) )
                     xRet = Reference < XInterface > ( dynamic_cast< chart2::data::XDataProvider * >(pDocShell->getIDocumentChartDataProviderAccess()->GetChartDataProvider()) );
@@ -1693,7 +1693,7 @@ Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServic
                 //! adding the shapes to the draw page).
                 //! For inserting OLE objects the proper way is to use
                 //! "com.sun.star.text.TextEmbeddedObject"!
-                if (rServiceName.lastIndexOf( C2U(".OLE2Shape") ) == rServiceName.getLength() - 10)
+                if (rServiceName.lastIndexOf( ".OLE2Shape" ) == rServiceName.getLength() - 10)
                     throw ServiceNotRegisteredException();  // declare service to be not registered with this factory
 
                 //
@@ -1763,7 +1763,7 @@ Sequence< OUString > SwXTextDocument::getAvailableServiceNames(void)
 
 OUString SwXTextDocument::getImplementationName(void) throw( RuntimeException )
 {
-    return C2U("SwXTextDocument");
+    return OUString("SwXTextDocument");
 }
 
 sal_Bool SwXTextDocument::supportsService(const OUString& rServiceName) throw( RuntimeException )
@@ -2305,7 +2305,7 @@ static OutputDevice * lcl_GetOutputDevice( const SwPrintUIOptions &rPrintUIOptio
 {
     OutputDevice *pOut = 0;
 
-    uno::Any aAny( rPrintUIOptions.getValue( C2U( "RenderDevice" ) ));
+    uno::Any aAny( rPrintUIOptions.getValue( "RenderDevice" ));
     uno::Reference< awt::XDevice >  xRenderDevice;
     aAny >>= xRenderDevice;
     if (xRenderDevice.is())
@@ -3440,13 +3440,13 @@ sal_Bool SwXLinkTargetSupplier::hasElements(void) throw( RuntimeException )
 
 OUString SwXLinkTargetSupplier::getImplementationName(void) throw( RuntimeException )
 {
-    return C2U("SwXLinkTargetSupplier");
+    return OUString("SwXLinkTargetSupplier");
 }
 
 sal_Bool SwXLinkTargetSupplier::supportsService(const OUString& rServiceName)
                                                 throw( RuntimeException )
 {
-    return (rServiceName == C2U("com.sun.star.document.LinkTargets"));
+    return (rServiceName == "com.sun.star.document.LinkTargets");
 }
 
 Sequence< OUString > SwXLinkTargetSupplier::getSupportedServiceNames(void)
@@ -3454,7 +3454,7 @@ Sequence< OUString > SwXLinkTargetSupplier::getSupportedServiceNames(void)
 {
     Sequence< OUString > aRet(1);
     OUString* pNames = aRet.getArray();
-    pNames[0] = C2U("com.sun.star.document.LinkTargets");
+    pNames[0] = "com.sun.star.document.LinkTargets";
     return aRet;
 }
 
@@ -3727,13 +3727,13 @@ Reference< XNameAccess >  SwXLinkNameAccessWrapper::getLinks(void)
 
 OUString SwXLinkNameAccessWrapper::getImplementationName(void) throw( RuntimeException )
 {
-    return C2U("SwXLinkNameAccessWrapper");
+    return OUString("SwXLinkNameAccessWrapper");
 }
 
 sal_Bool SwXLinkNameAccessWrapper::supportsService(const OUString& rServiceName)
                                                     throw( RuntimeException )
 {
-    return (rServiceName == C2U("com.sun.star.document.LinkTargets"));
+    return (rServiceName == "com.sun.star.document.LinkTargets");
 }
 
 Sequence< OUString > SwXLinkNameAccessWrapper::getSupportedServiceNames(void)
@@ -3741,7 +3741,7 @@ Sequence< OUString > SwXLinkNameAccessWrapper::getSupportedServiceNames(void)
 {
     Sequence< OUString > aRet(1);
     OUString* pNames = aRet.getArray();
-    pNames[0] = C2U("com.sun.star.document.LinkTargets");
+    pNames[0] = "com.sun.star.document.LinkTargets";
     return aRet;
 }
 
@@ -3806,19 +3806,19 @@ void SwXOutlineTarget::removeVetoableChangeListener(
 
 OUString SwXOutlineTarget::getImplementationName(void) throw( RuntimeException )
 {
-    return C2U("SwXOutlineTarget");
+    return OUString("SwXOutlineTarget");
 }
 
 sal_Bool SwXOutlineTarget::supportsService(const OUString& ServiceName) throw( RuntimeException )
 {
-    return C2U("com.sun.star.document.LinkTarget") == ServiceName;
+    return ServiceName == "com.sun.star.document.LinkTarget";
 }
 
 Sequence< OUString > SwXOutlineTarget::getSupportedServiceNames(void) throw( RuntimeException )
 {
     Sequence < OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.document.LinkTarget");
+    pArray[0] = "com.sun.star.document.LinkTarget";
 
     return aRet;
 }

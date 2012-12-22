@@ -57,7 +57,7 @@ SwHyphWrapper::SwHyphWrapper( SwView* pVw,
 {
     uno::Reference< beans::XPropertySet >  xProp( GetLinguPropertySet() );
     bAutomatic = xProp.is() ?
-            *(sal_Bool*)xProp->getPropertyValue( C2U(UPN_IS_HYPH_AUTO) ).getValue() : sal_False;
+            *(sal_Bool*)xProp->getPropertyValue(UPN_IS_HYPH_AUTO).getValue() : sal_False;
     SetHyphen();
 }
 

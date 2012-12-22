@@ -376,18 +376,18 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                         }
                         beans::PropertyValues aPropVals(nParamCount);
                         beans::PropertyValue* pPropValArr = aPropVals.getArray();
-                        pPropValArr[0].Name = C2U("TokenType");
+                        pPropValArr[0].Name = "TokenType";
                         pPropValArr[0].Value <<= OUString(sTokenType);
-                        pPropValArr[1].Name = C2U("CharacterStyleName");
+                        pPropValArr[1].Name = "CharacterStyleName";
                         pPropValArr[1].Value <<= OUString(aToken.sCharStyleName);
                         if(TOKEN_TAB_STOP == aToken.eTokenType)
                         {
-                            pPropValArr[2].Name = C2U("TabStopRightAligned");
+                            pPropValArr[2].Name = "TabStopRightAligned";
                             sal_Bool bTemp = SVX_TAB_ADJUST_END == aToken.eTabAlign;
                             pPropValArr[2].Value.setValue(&bTemp, ::getBooleanCppuType());
-                            pPropValArr[3].Name = C2U("TabStopFillCharacter");
+                            pPropValArr[3].Name = "TabStopFillCharacter";
                             pPropValArr[3].Value <<= OUString(aToken.cTabFillChar);
-                            pPropValArr[4].Name = C2U("TabStopPosition");
+                            pPropValArr[4].Name = "TabStopPosition";
                             SwTwips nTempPos = aToken.nTabStopPosition >= 0 ?
                                                             aToken.nTabStopPosition : 0;
                             nTempPos = TWIP_TO_MM100(nTempPos);
@@ -395,7 +395,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                         }
                         else if(TOKEN_TEXT == aToken.eTokenType)
                         {
-                            pPropValArr[2].Name = C2U("Text");
+                            pPropValArr[2].Name = "Text";
                             pPropValArr[2].Value <<= OUString(aToken.sText);
                         }
                     beans::PropertyValues* pValues = aSequPropVals.getArray();

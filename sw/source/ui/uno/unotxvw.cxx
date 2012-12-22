@@ -1007,7 +1007,7 @@ void SAL_CALL SwXTextView::removeVetoableChangeListener(
 
 OUString SwXTextView::getImplementationName(void) throw( RuntimeException )
 {
-    return C2U("SwXTextView");
+    return OUString("SwXTextView");
 }
 
 sal_Bool SwXTextView::supportsService(const OUString& rServiceName) throw( RuntimeException )
@@ -1019,8 +1019,8 @@ Sequence< OUString > SwXTextView::getSupportedServiceNames(void) throw( RuntimeE
 {
     Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.TextDocumentView");
-    pArray[1] = C2U("com.sun.star.view.OfficeDocumentView");
+    pArray[0] = "com.sun.star.text.TextDocumentView";
+    pArray[1] = "com.sun.star.view.OfficeDocumentView";
     return aRet;
 }
 
@@ -1852,7 +1852,7 @@ void SwXTextViewCursor::gotoStartOfLine(sal_Bool bExpand) throw( uno::RuntimeExc
 
 OUString SwXTextViewCursor::getImplementationName(void) throw( RuntimeException )
 {
-    return C2U("SwXTextViewCursor");
+    return OUString("SwXTextViewCursor");
 }
 
 sal_Bool SwXTextViewCursor::supportsService(const OUString& rServiceName) throw( RuntimeException )
@@ -1870,13 +1870,13 @@ Sequence< OUString > SwXTextViewCursor::getSupportedServiceNames(void) throw( Ru
 {
     Sequence< OUString > aRet(7);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.TextViewCursor");
-    pArray[1] = C2U("com.sun.star.style.CharacterProperties");
-    pArray[2] = C2U("com.sun.star.style.CharacterPropertiesAsian");
-    pArray[3] = C2U("com.sun.star.style.CharacterPropertiesComplex");
-    pArray[4] = C2U("com.sun.star.style.ParagraphProperties");
-    pArray[5] = C2U("com.sun.star.style.ParagraphPropertiesAsian");
-    pArray[6] = C2U("com.sun.star.style.ParagraphPropertiesComplex");
+    pArray[0] = "com.sun.star.text.TextViewCursor";
+    pArray[1] = "com.sun.star.style.CharacterProperties";
+    pArray[2] = "com.sun.star.style.CharacterPropertiesAsian";
+    pArray[3] = "com.sun.star.style.CharacterPropertiesComplex";
+    pArray[4] = "com.sun.star.style.ParagraphProperties";
+    pArray[5] = "com.sun.star.style.ParagraphPropertiesAsian";
+    pArray[6] = "com.sun.star.style.ParagraphPropertiesComplex";
     return aRet;
 }
 

@@ -546,19 +546,19 @@ void SwXPrintSettings::_postGetValues ()
 
 OUString SwXPrintSettings::getImplementationName(void) throw( RuntimeException )
 {
-    return C2U("SwXPrintSettings");
+    return OUString("SwXPrintSettings");
 }
 
 sal_Bool SwXPrintSettings::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return C2U("com.sun.star.text.PrintSettings") == rServiceName;
+    return rServiceName == "com.sun.star.text.PrintSettings";
 }
 
 Sequence< OUString > SwXPrintSettings::getSupportedServiceNames(void) throw( RuntimeException )
 {
     Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.PrintSettings");
+    pArray[0] = "com.sun.star.text.PrintSettings";
     return aRet;
 }
 
@@ -983,19 +983,19 @@ void SwXViewSettings::_postGetValues ()
 
 OUString SwXViewSettings::getImplementationName(void) throw( RuntimeException )
 {
-    return C2U("SwXViewSettings");
+    return OUString("SwXViewSettings");
 }
 
 sal_Bool SwXViewSettings::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return C2U("com.sun.star.text.ViewSettings") == rServiceName;
+    return rServiceName == "com.sun.star.text.ViewSettings";
 }
 
 Sequence< OUString > SwXViewSettings::getSupportedServiceNames(void) throw( RuntimeException )
 {
     Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.ViewSettings");
+    pArray[0] = "com.sun.star.text.ViewSettings";
     return aRet;
 }
 

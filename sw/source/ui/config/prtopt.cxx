@@ -69,7 +69,7 @@ Sequence<OUString> SwPrintOptions::GetPropertyNames()
 }
 
 SwPrintOptions::SwPrintOptions(sal_Bool bWeb) :
-    ConfigItem(bWeb ? C2U("Office.WriterWeb/Print") :  C2U("Office.Writer/Print"),
+    ConfigItem(bWeb ? OUString("Office.WriterWeb/Print") : OUString("Office.Writer/Print"),
         CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE),
     bIsWeb(bWeb)
 {

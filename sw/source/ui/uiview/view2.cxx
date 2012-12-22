@@ -1044,9 +1044,9 @@ void SwView::Execute(SfxRequest &rReq)
 
                     Sequence<PropertyValue> aProperties(3);
                     PropertyValue* pValues = aProperties.getArray();
-                    pValues[0].Name = C2U("DataSourceName");
-                    pValues[1].Name = C2U("Command");
-                    pValues[2].Name = C2U("CommandType");
+                    pValues[0].Name = "DataSourceName";
+                    pValues[1].Name = "Command";
+                    pValues[2].Name = "CommandType";
                     pValues[0].Value <<= aData.sDataSource;
                     pValues[1].Value <<= aData.sCommand;
                     pValues[2].Value <<= aData.nCommandType;
@@ -2350,9 +2350,9 @@ void SwView::GenerateFormLetter(sal_Bool bUseCurrentDocument)
 
             Sequence<PropertyValue> aProperties(3);
             PropertyValue* pValues = aProperties.getArray();
-            pValues[0].Name = C2U("DataSourceName");
-            pValues[1].Name = C2U("Command");
-            pValues[2].Name = C2U("CommandType");
+            pValues[0].Name = "DataSourceName";
+            pValues[1].Name = "Command";
+            pValues[2].Name = "CommandType";
             pValues[0].Value <<= aData.sDataSource;
             pValues[1].Value <<= aData.sCommand;
             pValues[2].Value <<= aData.nCommandType;

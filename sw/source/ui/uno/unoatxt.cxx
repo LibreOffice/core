@@ -173,7 +173,7 @@ uno::Reference< text::XAutoTextGroup >  SwXAutoTextContainer::insertNewByName(
     if(aGroupName.isEmpty())
     {
         lang::IllegalArgumentException aIllegal;
-        aIllegal.Message = C2U("group name must not be empty");
+        aIllegal.Message = "group name must not be empty";
         throw aIllegal;
     }
     for(sal_Int32 nPos = 0; nPos < aGroupName.getLength(); nPos++)
@@ -187,7 +187,7 @@ uno::Reference< text::XAutoTextGroup >  SwXAutoTextContainer::insertNewByName(
             continue;
         }
         lang::IllegalArgumentException aIllegal;
-        aIllegal.Message = C2U("group name must contain a-z, A-z, '_', ' ' only");
+        aIllegal.Message = "group name must contain a-z, A-z, '_', ' ' only";
         throw aIllegal;
     }
     String sGroup(aGroupName);
@@ -716,19 +716,19 @@ void SwXAutoTextGroup::Invalidate()
 
 OUString SwXAutoTextGroup::getImplementationName(void) throw( uno::RuntimeException )
 {
-    return C2U("SwXAutoTextGroup");
+    return OUString("SwXAutoTextGroup");
 }
 
 sal_Bool SwXAutoTextGroup::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    return C2U("com.sun.star.text.AutoTextGroup") == rServiceName;
+    return OUString("com.sun.star.text.AutoTextGroup") == rServiceName;
 }
 
 uno::Sequence< OUString > SwXAutoTextGroup::getSupportedServiceNames(void) throw( uno::RuntimeException )
 {
     uno::Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.AutoTextGroup");
+    pArray[0] = OUString("com.sun.star.text.AutoTextGroup");
     return aRet;
 }
 
@@ -997,19 +997,19 @@ void SwXAutoTextEntry::applyTo(const uno::Reference< text::XTextRange > & xTextR
 
 OUString SwXAutoTextEntry::getImplementationName(void) throw( uno::RuntimeException )
 {
-    return C2U("SwXAutoTextEntry");
+    return OUString("SwXAutoTextEntry");
 }
 
 sal_Bool SwXAutoTextEntry::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    return C2U("com.sun.star.text.AutoTextEntry") == rServiceName;
+    return rServiceName == "com.sun.star.text.AutoTextEntry";
 }
 
 uno::Sequence< OUString > SwXAutoTextEntry::getSupportedServiceNames(void) throw( uno::RuntimeException )
 {
     uno::Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.AutoTextEntry");
+    pArray[0] = "com.sun.star.text.AutoTextEntry";
     return aRet;
 }
 

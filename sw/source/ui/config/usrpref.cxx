@@ -112,7 +112,7 @@ Sequence<OUString> SwContentViewConfig::GetPropertyNames()
 }
 
 SwContentViewConfig::SwContentViewConfig(sal_Bool bIsWeb, SwMasterUsrPref& rPar) :
-    ConfigItem(bIsWeb ? C2U("Office.WriterWeb/Content") :  C2U("Office.Writer/Content")),
+    ConfigItem(bIsWeb ? OUString("Office.WriterWeb/Content") :  OUString("Office.Writer/Content")),
     rParent(rPar),
     bWeb(bIsWeb)
 {
@@ -249,7 +249,7 @@ Sequence<OUString> SwLayoutViewConfig::GetPropertyNames()
 }
 
 SwLayoutViewConfig::SwLayoutViewConfig(sal_Bool bIsWeb, SwMasterUsrPref& rPar) :
-    ConfigItem(bIsWeb ? C2U("Office.WriterWeb/Layout") :  C2U("Office.Writer/Layout"),
+    ConfigItem(bIsWeb ? OUString("Office.WriterWeb/Layout") :  OUString("Office.Writer/Layout"),
         CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE),
     rParent(rPar),
     bWeb(bIsWeb)
@@ -383,7 +383,7 @@ Sequence<OUString> SwGridConfig::GetPropertyNames()
 }
 
 SwGridConfig::SwGridConfig(sal_Bool bIsWeb, SwMasterUsrPref& rPar) :
-    ConfigItem(bIsWeb ? C2U("Office.WriterWeb/Grid") :  C2U("Office.Writer/Grid"),
+    ConfigItem(bIsWeb ? OUString("Office.WriterWeb/Grid") :  OUString("Office.Writer/Grid"),
         CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE),
     rParent(rPar)
 {
@@ -471,7 +471,7 @@ Sequence<OUString> SwCursorConfig::GetPropertyNames()
 }
 
 SwCursorConfig::SwCursorConfig(SwMasterUsrPref& rPar) :
-    ConfigItem(C2U("Office.Writer/Cursor"),
+    ConfigItem("Office.Writer/Cursor",
         CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE),
     rParent(rPar)
 {
@@ -537,12 +537,12 @@ void SwCursorConfig::Load()
 void SwCursorConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
 
 SwWebColorConfig::SwWebColorConfig(SwMasterUsrPref& rPar) :
-    ConfigItem(C2U("Office.WriterWeb/Background"),
+    ConfigItem("Office.WriterWeb/Background",
         CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE),
     rParent(rPar),
     aPropNames(1)
 {
-    aPropNames.getArray()[0] = C2U("Color");
+    aPropNames.getArray()[0] = "Color";
 }
 
 SwWebColorConfig::~SwWebColorConfig()

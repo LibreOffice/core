@@ -173,7 +173,7 @@ SfxPoolItem* SwEnvItem::Clone(SfxItemPool*) const
 }
 
 SwEnvCfgItem::SwEnvCfgItem() :
-    ConfigItem(C2U("Office.Writer/Envelope"))
+    ConfigItem("Office.Writer/Envelope")
 {
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);

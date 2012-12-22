@@ -84,7 +84,7 @@ void SwBaseShell::InsertURLButton(const String& rURL, const String& rTarget, con
             uno::Any aTmp;
 
             aTmp <<= OUString(rTxt);
-            xPropSet->setPropertyValue( C2U("Label"), aTmp );
+            xPropSet->setPropertyValue( "Label", aTmp );
 
             SfxMedium* pMedium = rSh.GetView().GetDocShell()->GetMedium();
             INetURLObject aAbs;
@@ -92,18 +92,18 @@ void SwBaseShell::InsertURLButton(const String& rURL, const String& rTarget, con
                 aAbs = pMedium->GetURLObject();
 
             aTmp <<= OUString(URIHelper::SmartRel2Abs(aAbs, rURL));
-            xPropSet->setPropertyValue( C2U("TargetURL"), aTmp );
+            xPropSet->setPropertyValue( "TargetURL", aTmp );
 
             if( rTarget.Len() )
             {
                 aTmp <<= OUString(rTarget);
-                xPropSet->setPropertyValue( C2U("TargetFrame"), aTmp );
+                xPropSet->setPropertyValue( "TargetFrame", aTmp );
             }
 
 
             form::FormButtonType eButtonType = form::FormButtonType_URL;
             aTmp.setValue( &eButtonType, ::getCppuType((const form::FormButtonType*)0));
-            xPropSet->setPropertyValue( C2U("ButtonType"), aTmp );
+            xPropSet->setPropertyValue( "ButtonType", aTmp );
 
             if ( ::avmedia::MediaWindow::isMediaURL( rURL ) )
             {

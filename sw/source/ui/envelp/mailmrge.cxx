@@ -270,7 +270,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
             // create a frame wrapper for myself
             uno::Reference< XMultiServiceFactory >
                                         xMgr = comphelper::getProcessServiceFactory();
-            xFrame = uno::Reference< XFrame >(xMgr->createInstance(C2U("com.sun.star.frame.Frame")), UNO_QUERY);
+            xFrame = uno::Reference< XFrame >(xMgr->createInstance("com.sun.star.frame.Frame"), UNO_QUERY);
             if(xFrame.is())
             {
                 xFrame->initialize( VCLUnoHelper::GetInterface ( pBeamerWin ) );
@@ -284,19 +284,19 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
         {
             uno::Reference<XDispatchProvider> xDP(xFrame, UNO_QUERY);
             URL aURL;
-            aURL.Complete = C2U(".component:DB/DataSourceBrowser");
+            aURL.Complete = ".component:DB/DataSourceBrowser";
             uno::Reference<XDispatch> xD = xDP->queryDispatch(aURL,
-                        C2U(""),
+                        "",
                         0x0C);
             if(xD.is())
             {
                 Sequence<PropertyValue> aProperties(3);
                 PropertyValue* pProperties = aProperties.getArray();
-                pProperties[0].Name = C2U("DataSourceName");
+                pProperties[0].Name = "DataSourceName";
                 pProperties[0].Value <<= OUString(rSourceName);
-                pProperties[1].Name = C2U("Command");
+                pProperties[1].Name = "Command";
                 pProperties[1].Value <<= OUString(rTableName);
-                pProperties[2].Name = C2U("CommandType");
+                pProperties[2].Name = "CommandType";
                 pProperties[2].Value <<= nCommandType;
                 xD->dispatch(aURL, aProperties);
                 pBeamerWin->Show();
@@ -408,13 +408,13 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     try
     {
         uno::Reference< container::XNameContainer> xFilterFactory(
-                xMSF->createInstance(C2U("com.sun.star.document.FilterFactory")), UNO_QUERY_THROW);
+                xMSF->createInstance("com.sun.star.document.FilterFactory"), UNO_QUERY_THROW);
         uno::Reference< container::XContainerQuery > xQuery(xFilterFactory, UNO_QUERY_THROW);
-        OUString sCommand(C2U("matchByDocumentService=com.sun.star.text.TextDocument:iflags="));
+        OUString sCommand("matchByDocumentService=com.sun.star.text.TextDocument:iflags=");
         sCommand += String::CreateFromInt32(SFX_FILTER_EXPORT);
-        sCommand += C2U(":eflags=");
+        sCommand += ":eflags=";
         sCommand += String::CreateFromInt32(SFX_FILTER_NOTINFILEDLG);
-        sCommand += C2U(":default_first");
+        sCommand += ":default_first";
         uno::Reference< container::XEnumeration > xList = xQuery->createSubSetEnumerationByQuery(sCommand);
         const ::rtl::OUString sName(RTL_CONSTASCII_USTRINGPARAM("Name"));
         sal_uInt16 nODT = USHRT_MAX;

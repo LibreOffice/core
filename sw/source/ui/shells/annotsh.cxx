@@ -1157,9 +1157,9 @@ void SwAnnotationShell::ExecLingu(SfxRequest &rReq)
                                 {
                                     try
                                     {
-                                        xProp->getPropertyValue( C2U("IsDirectionToSimplified") ) >>= bToSimplified;
-                                        xProp->getPropertyValue( C2U("IsUseCharacterVariants") ) >>= bUseVariants;
-                                        xProp->getPropertyValue( C2U("IsTranslateCommonTerms") ) >>= bCommonTerms;
+                                        xProp->getPropertyValue( "IsDirectionToSimplified" ) >>= bToSimplified;
+                                        xProp->getPropertyValue( "IsUseCharacterVariants" ) >>= bUseVariants;
+                                        xProp->getPropertyValue( "IsTranslateCommonTerms" ) >>= bCommonTerms;
                                     }
                                     catch (const Exception&)
                                     {

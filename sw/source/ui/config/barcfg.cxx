@@ -36,7 +36,7 @@ using namespace com::sun::star::uno;
 #define SEL_TYPE_GRAPHIC        4
 
 SwToolbarConfigItem::SwToolbarConfigItem( sal_Bool bWeb ) :
-    ConfigItem(bWeb ? C2U("Office.WriterWeb/ObjectBar") :  C2U("Office.Writer/ObjectBar"),
+    ConfigItem(bWeb ? OUString("Office.WriterWeb/ObjectBar") : OUString("Office.Writer/ObjectBar"),
         CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE)
 {
     for(sal_uInt16 i = 0; i <= SEL_TYPE_GRAPHIC; i++ )

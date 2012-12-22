@@ -52,8 +52,7 @@ void SwVisitingCardPage::InitFrameControl()
                                             getProcessServiceFactory();
     //now the AutoText ListBoxes have to be filled
 
-    uno::Reference< uno::XInterface >  xAText =
-        xMgr->createInstance( C2U("com.sun.star.text.AutoTextContainer") );
+    uno::Reference< uno::XInterface >  xAText = xMgr->createInstance( "com.sun.star.text.AutoTextContainer" );
     _xAutoText = uno::Reference< container::XNameAccess >(xAText, uno::UNO_QUERY);
 
     uno::Sequence<OUString> aNames = _xAutoText->getElementNames();

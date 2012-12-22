@@ -32,7 +32,7 @@ using namespace ::com::sun::star::beans;
 using ::rtl::OUString;
 
 SwLabelConfig::SwLabelConfig() :
-    ConfigItem(C2U("Office.Labels/Manufacturer"))
+    ConfigItem("Office.Labels/Manufacturer")
 {
     aNodeNames = GetNodeNames(OUString());
 }
@@ -55,8 +55,8 @@ static Sequence<OUString> lcl_CreatePropertyNames(const OUString& rPrefix)
     for(sal_Int32 nProp = 0; nProp < 2; nProp++)
         pProperties[nProp] = rPrefix;
 
-    pProperties[ 0] += C2U("Name");
-    pProperties[ 1] += C2U("Measure");
+    pProperties[ 0] += "Name";
+    pProperties[ 1] += "Measure";
     return aProperties;
 }
 
@@ -122,7 +122,7 @@ static Sequence<PropertyValue> lcl_CreateProperties(
     const OUString* pNames = rPropNames.getConstArray();
     Sequence<PropertyValue> aRet(rPropNames.getLength());
     PropertyValue* pValues = aRet.getArray();
-    OUString sColon(C2U(";"));
+    OUString sColon(";");
 
     for(sal_Int32 nProp = 0; nProp < rPropNames.getLength(); nProp++)
     {
@@ -133,7 +133,7 @@ static Sequence<PropertyValue> lcl_CreateProperties(
             case 1:
             {
                 OUString sTmp;
-                sTmp += C2U( rRec.bCont ? "C" : "S");                         sTmp += sColon;
+                sTmp += OUString( rRec.bCont ? "C" : "S");                    sTmp += sColon;
                 sTmp += OUString::valueOf(TWIP_TO_MM100(rRec.lHDist) );       sTmp += sColon;
                 sTmp += OUString::valueOf(TWIP_TO_MM100(rRec.lVDist));        sTmp += sColon;
                 sTmp += OUString::valueOf(TWIP_TO_MM100(rRec.lWidth)  );      sTmp += sColon;
@@ -160,9 +160,9 @@ void    SwLabelConfig::FillLabels(const OUString& rManufacturer, SwLabRecs& rLab
     for(sal_Int32 nLabel = 0; nLabel < aLabels.getLength(); nLabel++)
     {
         OUString sPrefix(sManufacturer);
-        sPrefix += C2U("/");
+        sPrefix += "/";
         sPrefix += pLabels[nLabel];
-        sPrefix += C2U("/");
+        sPrefix += "/";
         Sequence<OUString> aPropNames = lcl_CreatePropertyNames(sPrefix);
         Sequence<Any>   aValues = GetProperties(aPropNames);
         SwLabRec* pNewRec = lcl_CreateSwLabRec(aValues, rManufacturer);
@@ -187,12 +187,12 @@ sal_Bool    SwLabelConfig::HasLabel(const rtl::OUString& rManufacturer, const rt
         for(sal_Int32 nLabel = 0; nLabel < aLabels.getLength(); nLabel++)
         {
             OUString sPrefix(sManufacturer);
-            sPrefix += C2U("/");
+            sPrefix += "/";
             sPrefix += pLabels[nLabel];
-            sPrefix += C2U("/");
+            sPrefix += "/";
             Sequence<OUString> aProperties(1);
             aProperties.getArray()[0] = sPrefix;
-            aProperties.getArray()[0] += C2U("Name");
+            aProperties.getArray()[0] += "Name";
             Sequence<Any>   aValues = GetProperties(aProperties);
             const Any* pValues = aValues.getConstArray();
             if(pValues[0].hasValue())
@@ -246,12 +246,12 @@ void SwLabelConfig::SaveLabel(  const rtl::OUString& rManufacturer,
     for(sal_Int32 nLabel = 0; nLabel < aLabels.getLength(); nLabel++)
     {
         OUString sPrefix(sManufacturer);
-        sPrefix += C2U("/");
+        sPrefix += "/";
         sPrefix += pLabels[nLabel];
-        sPrefix += C2U("/");
+        sPrefix += "/";
         Sequence<OUString> aProperties(1);
         aProperties.getArray()[0] = sPrefix;
-        aProperties.getArray()[0] += C2U("Name");
+        aProperties.getArray()[0] += "Name";
         Sequence<Any>   aValues = GetProperties(aProperties);
         const Any* pValues = aValues.getConstArray();
         if(pValues[0].hasValue())
@@ -269,7 +269,7 @@ void SwLabelConfig::SaveLabel(  const rtl::OUString& rManufacturer,
     if(sFoundNode.isEmpty())
     {
         sal_Int32 nIndex = aLabels.getLength();
-        OUString sPrefix(C2U("Label"));
+        OUString sPrefix("Label");
         sFoundNode = sPrefix;
         sFoundNode += OUString::valueOf(nIndex);
         while(lcl_Exists(sFoundNode, aLabels))
@@ -279,9 +279,9 @@ void SwLabelConfig::SaveLabel(  const rtl::OUString& rManufacturer,
         }
     }
     OUString sPrefix(wrapConfigurationElementName(rManufacturer));
-    sPrefix += C2U("/");
+    sPrefix += "/";
     sPrefix += sFoundNode;
-    sPrefix += C2U("/");
+    sPrefix += "/";
     Sequence<OUString> aPropNames = lcl_CreatePropertyNames(sPrefix);
     Sequence<PropertyValue> aPropValues = lcl_CreateProperties(aPropNames, rRec);
     SetSetProperties(wrapConfigurationElementName(rManufacturer), aPropValues);

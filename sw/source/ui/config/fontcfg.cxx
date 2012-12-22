@@ -90,7 +90,7 @@ Sequence<OUString> SwStdFontConfig::GetPropertyNames()
 }
 
 SwStdFontConfig::SwStdFontConfig() :
-    utl::ConfigItem(C2U("Office.Writer"))
+    utl::ConfigItem("Office.Writer")
 {
     SvtLinguOptions aLinguOpt;
 

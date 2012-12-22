@@ -130,7 +130,7 @@ SwIndexMarkPane::SwIndexMarkPane(Dialog &rDialog, sal_Bool bNewDlg,
 
         xExtendedIndexEntrySupplier =
             uno::Reference< i18n::XExtendedIndexEntrySupplier > (
-                    xMSF->createInstance( C2U("com.sun.star.i18n.IndexEntrySupplier") ),
+                    xMSF->createInstance( "com.sun.star.i18n.IndexEntrySupplier"),
                                                                         uno::UNO_QUERY );
 
         m_pPhoneticFT0->Show();
@@ -1353,11 +1353,9 @@ IMPL_LINK(SwAuthorMarkPane, ChangeSourceHdl, RadioButton*, pButton)
         if(!bBibAccessInitialized)
         {
              uno::Reference< lang::XMultiServiceFactory > xMSF = getProcessServiceFactory();
-            xBibAccess = uno::Reference< container::XNameAccess > (
-                            xMSF->createInstance( C2U("com.sun.star.frame.Bibliography") ),
-                                                                        uno::UNO_QUERY );
+            xBibAccess = uno::Reference< container::XNameAccess > (xMSF->createInstance( "com.sun.star.frame.Bibliography"), uno::UNO_QUERY );
             uno::Reference< beans::XPropertySet >  xPropSet(xBibAccess, uno::UNO_QUERY);
-            OUString uPropName(C2U("BibliographyDataFieldNames"));
+            OUString uPropName("BibliographyDataFieldNames");
             if(xPropSet.is() && xPropSet->getPropertySetInfo()->hasPropertyByName(uPropName))
             {
                 uno::Any aNames = xPropSet->getPropertyValue(uPropName);

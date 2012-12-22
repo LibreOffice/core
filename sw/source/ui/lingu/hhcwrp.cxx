@@ -391,8 +391,8 @@ void SwHHCWrapper::ReplaceUnit(
          ReplacementAction eAction,
          LanguageType *pNewUnitLanguage )
 {
-    static OUString aBracketedStart( C2U( "(" ) );
-    static OUString aBracketedEnd( C2U( ")" ) );
+    static OUString aBracketedStart( "(" );
+    static OUString aBracketedEnd( ")" );
 
     OSL_ENSURE( nUnitStart >= 0 && nUnitEnd >= nUnitStart, "wrong arguments" );
     if (!(nUnitStart >= 0 && nUnitEnd >= nUnitStart))

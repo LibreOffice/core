@@ -149,9 +149,9 @@ void SwView::ExecLingu(SfxRequest &rReq)
                             {
                                 try
                                 {
-                                    xProp->getPropertyValue( C2U("IsDirectionToSimplified") ) >>= bToSimplified;
-                                    xProp->getPropertyValue( C2U("IsUseCharacterVariants") ) >>= bUseVariants;
-                                    xProp->getPropertyValue( C2U("IsTranslateCommonTerms") ) >>= bCommonTerms;
+                                    xProp->getPropertyValue( "IsDirectionToSimplified" ) >>= bToSimplified;
+                                    xProp->getPropertyValue( "IsUseCharacterVariants" ) >>= bUseVariants;
+                                    xProp->getPropertyValue( "IsTranslateCommonTerms" ) >>= bCommonTerms;
                                 }
                                 catch (const Exception&)
                                 {
@@ -273,7 +273,7 @@ void SwView::SpellStart( SvxSpellArea eWhich,
 {
     Reference< beans::XPropertySet >  xProp( ::GetLinguPropertySet() );
     sal_Bool bIsWrapReverse = (!pConvArgs && xProp.is()) ?
-            *(sal_Bool*)xProp->getPropertyValue( C2U(UPN_IS_WRAP_REVERSE) ).getValue() : sal_False;
+            *(sal_Bool*)xProp->getPropertyValue( UPN_IS_WRAP_REVERSE ).getValue() : sal_False;
 
     SwDocPositions eStart = DOCPOS_START;
     SwDocPositions eEnde  = DOCPOS_END;
@@ -458,7 +458,7 @@ void SwView::HyphenateDocument()
         pWrtShell->StartUndo(UNDO_INSATTR);         // spaeter gueltig
 
         sal_Bool bHyphSpecial = xProp.is() ?
-                *(sal_Bool*)xProp->getPropertyValue( C2U(UPN_IS_HYPH_SPECIAL) ).getValue() : sal_False;
+                *(sal_Bool*)xProp->getPropertyValue( UPN_IS_HYPH_SPECIAL ).getValue() : sal_False;
         sal_Bool bSelection = ((SwCrsrShell*)pWrtShell)->HasSelection() ||
             pWrtShell->GetCrsr() != pWrtShell->GetCrsr()->GetNext();
         sal_Bool bOther = pWrtShell->HasOtherCnt() && bHyphSpecial && !bSelection;
@@ -476,7 +476,7 @@ void SwView::HyphenateDocument()
                 {
                     sal_Bool bTrue = sal_True;
                     Any aTmp(&bTrue, ::getBooleanCppuType());
-                    xProp->setPropertyValue( C2U(UPN_IS_HYPH_SPECIAL), aTmp );
+                    xProp->setPropertyValue( UPN_IS_HYPH_SPECIAL, aTmp );
                 }
             }
             else

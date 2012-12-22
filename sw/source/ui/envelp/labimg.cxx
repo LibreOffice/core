@@ -267,7 +267,7 @@ Sequence<rtl::OUString> SwLabCfgItem::GetPropertyNames()
 }
 
 SwLabCfgItem::SwLabCfgItem(sal_Bool bLabel) :
-    ConfigItem(bLabel ? C2U("Office.Writer/Label") :  C2U("Office.Writer/BusinessCard")),
+    ConfigItem(bLabel ? OUString("Office.Writer/Label") : OUString("Office.Writer/BusinessCard")),
     bIsLabel(bLabel)
 {
     Sequence<OUString> aNames = GetPropertyNames();
