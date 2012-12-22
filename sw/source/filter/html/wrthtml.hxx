@@ -230,7 +230,7 @@ struct SwHTMLFmtInfo
     sal_uInt16 nTopMargin;
     sal_uInt16 nBottomMargin;
 
-    sal_Bool bScriptDependent;
+    bool bScriptDependent;
 
     // Konstruktor fuer einen Dummy zum Suchen
     SwHTMLFmtInfo( const SwFmt *pF ) :
@@ -245,13 +245,13 @@ struct SwHTMLFmtInfo
                    sal_Bool bHardDrop=sal_False );
     ~SwHTMLFmtInfo();
 
-    friend sal_Bool operator==( const SwHTMLFmtInfo& rInfo1,
+    friend bool operator==( const SwHTMLFmtInfo& rInfo1,
                             const SwHTMLFmtInfo& rInfo2 )
     {
         return (long)rInfo1.pFmt == (long)rInfo2.pFmt;
     }
 
-    friend sal_Bool operator<( const SwHTMLFmtInfo& rInfo1,
+    friend bool operator<( const SwHTMLFmtInfo& rInfo1,
                             const SwHTMLFmtInfo& rInfo2 )
     {
         return (long)rInfo1.pFmt < (long)rInfo2.pFmt;
@@ -544,8 +544,8 @@ public:
     sal_uInt32 GetHTMLMode() const { return nHTMLMode; }
     sal_Bool IsHTMLMode( sal_uInt32 nMode ) const { return (nHTMLMode & nMode) != 0; }
 
-    inline sal_Bool IsCSS1Source( sal_uInt16 n ) const;
-    inline sal_Bool IsCSS1Script( sal_uInt16 n ) const;
+    inline bool IsCSS1Source( sal_uInt16 n ) const;
+    inline bool IsCSS1Script( sal_uInt16 n ) const;
 
     static const sal_Char *GetNumFormat( sal_uInt16 nFmt );
     static void PrepareFontList( const SvxFontItem& rFontItem, String& rNames,
@@ -556,12 +556,12 @@ public:
     FieldUnit GetCSS1Unit() const { return eCSS1Unit; }
 };
 
-inline sal_Bool SwHTMLWriter::IsCSS1Source( sal_uInt16 n ) const
+inline bool SwHTMLWriter::IsCSS1Source( sal_uInt16 n ) const
 {
     return n == (nCSS1OutMode & CSS1_OUTMODE_SOURCE);
 }
 
-inline sal_Bool SwHTMLWriter::IsCSS1Script( sal_uInt16 n ) const
+inline bool SwHTMLWriter::IsCSS1Script( sal_uInt16 n ) const
 {
     sal_uInt16 nScript = (nCSS1OutMode & CSS1_OUTMODE_SCRIPT);
     return CSS1_OUTMODE_ANY_SCRIPT == nScript || n == nScript;

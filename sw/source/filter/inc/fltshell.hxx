@@ -52,7 +52,7 @@ inline void SwFltClearFlag(sal_uLong& rFieldFlags, int no)
 inline void SwFltSetFlag(sal_uLong& rFieldFlags, int no)
     { rFieldFlags |= 1L << no; }
 
-inline sal_Bool SwFltGetFlag(sal_uLong nFieldFlags, int no)
+inline bool SwFltGetFlag(sal_uLong nFieldFlags, int no)
     { return (nFieldFlags & (1L << no)) != 0; }
 
 //Subvert the Node/Content system to get positions which don't update as
@@ -134,7 +134,7 @@ class SW_DLLPUBLIC SwFltControlStack : private ::boost::noncopyable
 
 protected:
     SwDoc* pDoc;
-    sal_Bool bIsEndStack;
+    bool bIsEndStack;
 
     void MoveAttrs( const SwPosition&  rPos );
     virtual void SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry& rEntry);
@@ -156,7 +156,7 @@ public:
     SwFltControlStack(SwDoc* pDo, sal_uLong nFieldFl);
     virtual ~SwFltControlStack();
 
-    sal_Bool IsFlagSet(Flags no) const  { return ::SwFltGetFlag(nFieldFlags, no);}
+    bool IsFlagSet(Flags no) const  { return ::SwFltGetFlag(nFieldFlags, no);}
 
     void NewAttr(const SwPosition& rPos, const SfxPoolItem & rAttr );
 
@@ -313,7 +313,7 @@ public:
     SwFltEndStack(SwDoc* pDo, sal_uLong nFieldFl)
         :SwFltControlStack(pDo, nFieldFl)
     {
-        bIsEndStack = sal_True;
+        bIsEndStack = true;
     }
 };
 
@@ -640,7 +640,7 @@ public:
         eSubMode = None;
     }
 
-    sal_Bool IsFlagSet(SwFltControlStack::Flags no) const
+    bool IsFlagSet(SwFltControlStack::Flags no) const
         { return aStack.IsFlagSet(no); }
     void ConvertUStr( String& rInOut );
     OUString QuoteStr( const OUString& rIn );

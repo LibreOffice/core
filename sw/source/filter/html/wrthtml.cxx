@@ -487,9 +487,9 @@ static const SwFmtCol *lcl_html_GetFmtCol( const SwHTMLWriter& rHTMLWrt,
     return pCol;
 }
 
-static sal_Bool lcl_html_IsMultiColStart( const SwHTMLWriter& rHTMLWrt, sal_uLong nIndex )
+static bool lcl_html_IsMultiColStart( const SwHTMLWriter& rHTMLWrt, sal_uLong nIndex )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     const SwSectionNode *pSectNd =
         rHTMLWrt.pDoc->GetNodes()[nIndex]->GetSectionNode();
     if( pSectNd )
@@ -497,15 +497,15 @@ static sal_Bool lcl_html_IsMultiColStart( const SwHTMLWriter& rHTMLWrt, sal_uLon
         const SwSection& rSection = pSectNd->GetSection();
         const SwSectionFmt *pFmt = rSection.GetFmt();
         if( pFmt && lcl_html_GetFmtCol( rHTMLWrt, rSection, *pFmt ) )
-            bRet = sal_True;
+            bRet = true;
     }
 
     return bRet;
 }
 
-static sal_Bool lcl_html_IsMultiColEnd( const SwHTMLWriter& rHTMLWrt, sal_uLong nIndex )
+static bool lcl_html_IsMultiColEnd( const SwHTMLWriter& rHTMLWrt, sal_uLong nIndex )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     const SwEndNode *pEndNd = rHTMLWrt.pDoc->GetNodes()[nIndex]->GetEndNode();
     if( pEndNd )
         bRet = lcl_html_IsMultiColStart( rHTMLWrt,
@@ -519,7 +519,7 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
                                      const SwSection& rSection,
                                      const SwSectionFmt& rFmt,
                                   const SwFmtCol *pCol,
-                                  sal_Bool bContinued=sal_False )
+                                  bool bContinued=false )
 {
     OSL_ENSURE( pCol || !bContinued, "Continuation of DIV" );
 
@@ -558,7 +558,7 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
 
         String aEncURL( URIHelper::simpleNormalizedMakeRelative(rHTMLWrt.GetBaseURL(), aURL ) );
         sal_Unicode cDelim = 255U;
-        sal_Bool bURLContainsDelim =
+        bool bURLContainsDelim =
             (STRING_NOTFOUND != aEncURL.Search( cDelim ) );
 
         HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), aEncURL,
@@ -651,8 +651,8 @@ static Writer& OutHTML_Section( Writer& rWrt, const SwSectionNode& rSectNd )
     const SwSectionFmt *pFmt = rSection.GetFmt();
     OSL_ENSURE( pFmt, "Section without a format?" );
 
-    sal_Bool bStartTag = sal_True;
-    sal_Bool bEndTag = sal_True;
+    bool bStartTag = true;
+    bool bEndTag = true;
     const SwSectionFmt *pSurrFmt = 0;
     const SwSectionNode *pSurrSectNd = 0;
     const SwSection *pSurrSection = 0;
@@ -666,11 +666,11 @@ static Writer& OutHTML_Section( Writer& rWrt, const SwSectionNode& rSectNd )
         // If the next node is a columned section node, too, don't export
         // an empty section.
         if( lcl_html_IsMultiColStart( rHTMLWrt, nSectSttIdx+1 ) )
-            bStartTag = sal_False;
+            bStartTag = false;
 
         // The same applies if the section end with another columned section.
         if( lcl_html_IsMultiColEnd( rHTMLWrt, nSectEndIdx-1 ) )
-            bEndTag = sal_False;
+            bEndTag = false;
 
         //.is there a columned section arround this one?
         const SwStartNode *pSttNd = rSectNd.StartOfSectionNode();
@@ -722,7 +722,7 @@ static Writer& OutHTML_Section( Writer& rWrt, const SwSectionNode& rSectNd )
         pSurrSectNd->EndOfSectionIndex() - nSectEndIdx > 1 &&
         !lcl_html_IsMultiColStart( rHTMLWrt, nSectEndIdx+1 ) )
         lcl_html_OutSectionStartTag( rHTMLWrt, *pSurrSection, *pSurrFmt,
-                                     pSurrCol, sal_True );
+                                     pSurrCol, true );
 
     return rWrt;
 }
@@ -813,9 +813,9 @@ static void OutBodyColor( const sal_Char *pTag, const SwFmt *pFmt,
 
     const SfxItemSet& rItemSet = pFmt->GetAttrSet();
     const SfxPoolItem *pRefItem = 0, *pItem = 0;
-    sal_Bool bItemSet = SFX_ITEM_SET == rItemSet.GetItemState( RES_CHRATR_COLOR,
+    bool bItemSet = SFX_ITEM_SET == rItemSet.GetItemState( RES_CHRATR_COLOR,
                                                            sal_True, &pItem);
-    sal_Bool bRefItemSet = pRefFmt &&
+    bool bRefItemSet = pRefFmt &&
         SFX_ITEM_SET == pRefFmt->GetAttrSet().GetItemState( RES_CHRATR_COLOR,
                                                             sal_True, &pRefItem);
     if( bItemSet )

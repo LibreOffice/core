@@ -255,7 +255,7 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
                               sal_Bool bOutStyles,
                               LanguageType eDfltLang,
                               sal_uInt16 nCSS1Script, sal_Bool bHardDrop ) :
-    pFmt( pF ), pRefFmt(0), pItemSet( 0 ), bScriptDependent( sal_False )
+    pFmt( pF ), pRefFmt(0), pItemSet( 0 ), bScriptDependent( false )
 {
     sal_uInt16 nRefPoolId = 0;
     // Den Selektor des Formats holen
@@ -556,7 +556,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         rHWrt.aTxtCollInfos.insert( pFmtInfo );
         String aName( rFmt.GetName() );
         if( 0 != rHWrt.aScriptParaStyles.count( aName ) )
-            ((SwHTMLFmtInfo *)pFmtInfo)->bScriptDependent = sal_True;
+            ((SwHTMLFmtInfo *)pFmtInfo)->bScriptDependent = true;
     }
 
     // Jetzt wird festgelegt, was aufgrund des Tokens so moeglich ist
@@ -1656,7 +1656,7 @@ const SwHTMLFmtInfo *HTMLEndPosLst::GetFmtInfo( const SwFmt& rFmt,
         rFmtInfos.insert( pFmtInfo );
         String aName( rFmt.GetName() );
         if( 0 != rScriptTxtStyles.count( aName ) )
-            ((SwHTMLFmtInfo *)pFmtInfo)->bScriptDependent = sal_True;
+            ((SwHTMLFmtInfo *)pFmtInfo)->bScriptDependent = true;
     }
 
     return pFmtInfo;
@@ -2943,7 +2943,7 @@ Writer& OutHTML_INetFmt( Writer& rWrt, const SwFmtINetFmt& rINetFmt, sal_Bool bO
     rtl::OStringBuffer sOut;
     sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_anchor);
 
-    sal_Bool bScriptDependent = sal_False;
+    bool bScriptDependent = false;
     {
         const SwCharFmt* pFmt = rWrt.pDoc->GetCharFmtFromPool(
                  RES_POOLCHR_INET_NORMAL );
