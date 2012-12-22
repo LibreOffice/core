@@ -33,7 +33,6 @@
 
 #include <utility>
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using ::com::sun::star::uno::Reference;
@@ -231,7 +230,7 @@ uno::Reference<XAccessible> SAL_CALL
 {
     ThrowIfDisposed ();
     throw lang::IndexOutOfBoundsException (
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("no child with index ") + nIndex),
+        "no child with index " + OUString(nIndex),
         NULL);
 }
 
@@ -296,7 +295,7 @@ sal_Int16 SAL_CALL
 
 
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
        AccessibleContextBase::getAccessibleDescription (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -423,8 +422,7 @@ lang::Locale SAL_CALL
 
 //=====  XAccessibleEventListener  ============================================
 
-void SAL_CALL
-    AccessibleContextBase::addAccessibleEventListener (
+void SAL_CALL AccessibleContextBase::addAccessibleEventListener (
         const uno::Reference<XAccessibleEventListener >& rxListener)
     throw (uno::RuntimeException)
 {
@@ -447,8 +445,7 @@ void SAL_CALL
 
 
 
-void SAL_CALL
-    AccessibleContextBase::removeAccessibleEventListener (
+void SAL_CALL AccessibleContextBase::removeAccessibleEventListener (
         const uno::Reference<XAccessibleEventListener >& rxListener )
     throw (uno::RuntimeException)
 {
@@ -473,8 +470,7 @@ void SAL_CALL
 
 //=====  XServiceInfo  ========================================================
 
-::rtl::OUString SAL_CALL
-       AccessibleContextBase::getImplementationName (void)
+OUString SAL_CALL AccessibleContextBase::getImplementationName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
     ThrowIfDisposed ();
@@ -491,7 +487,7 @@ sal_Bool SAL_CALL
     ThrowIfDisposed ();
     //  Iterate over all supported service names and return true if on of them
     //  matches the given name.
-    uno::Sequence< ::rtl::OUString> aSupportedServices (
+    uno::Sequence< OUString > aSupportedServices (
         getSupportedServiceNames ());
     for (int i=0; i<aSupportedServices.getLength(); i++)
         if (sServiceName == aSupportedServices[i])
@@ -502,16 +498,14 @@ sal_Bool SAL_CALL
 
 
 
-uno::Sequence< ::rtl::OUString> SAL_CALL
+uno::Sequence< OUString > SAL_CALL
        AccessibleContextBase::getSupportedServiceNames (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
     ThrowIfDisposed ();
     static const OUString sServiceNames[2] = {
-        OUString(
-            "com.sun.star.accessibility.Accessible"),
-        OUString(
-            "com.sun.star.accessibility.AccessibleContext")
+            "com.sun.star.accessibility.Accessible",
+            "com.sun.star.accessibility.AccessibleContext"
     };
     return uno::Sequence<OUString> (sServiceNames, 2);
 }
@@ -564,7 +558,7 @@ void SAL_CALL AccessibleContextBase::disposing (void)
 
 
 void AccessibleContextBase::SetAccessibleDescription (
-    const ::rtl::OUString& rDescription,
+    const OUString& rDescription,
     StringOrigin eDescriptionOrigin)
     throw (uno::RuntimeException)
 {
@@ -589,7 +583,7 @@ void AccessibleContextBase::SetAccessibleDescription (
 
 
 void AccessibleContextBase::SetAccessibleName (
-    const ::rtl::OUString& rName,
+    const OUString& rName,
     StringOrigin eNameOrigin)
     throw (uno::RuntimeException)
 {
@@ -613,19 +607,19 @@ void AccessibleContextBase::SetAccessibleName (
 
 
 
-::rtl::OUString AccessibleContextBase::CreateAccessibleDescription (void)
+OUString AccessibleContextBase::CreateAccessibleDescription (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("Empty Description"));
+    return OUString("Empty Description");
 }
 
 
 
 
-::rtl::OUString AccessibleContextBase::CreateAccessibleName (void)
+OUString AccessibleContextBase::CreateAccessibleName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("Empty Name"));
+    return OUString("Empty Name");
 }
 
 
@@ -669,8 +663,7 @@ void AccessibleContextBase::ThrowIfDisposed (void)
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         OSL_TRACE ("Calling disposed object. Throwing exception:");
-        throw lang::DisposedException (
-            OUString("object has been already disposed"),
+        throw lang::DisposedException ("object has been already disposed",
             static_cast<uno::XWeak*>(this));
     }
 }

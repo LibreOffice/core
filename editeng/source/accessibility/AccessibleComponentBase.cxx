@@ -184,19 +184,17 @@ sal_Int32 SAL_CALL AccessibleComponentBase::getBackground (void)
 
 
 
-::rtl::OUString SAL_CALL AccessibleComponentBase::getTitledBorderText (void)
+OUString SAL_CALL AccessibleComponentBase::getTitledBorderText (void)
         throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString ("");
+    return OUString();
 }
 
 
-
-
-::rtl::OUString SAL_CALL AccessibleComponentBase::getToolTipText (void)
+OUString SAL_CALL AccessibleComponentBase::getToolTipText (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString ("");
+    return OUString();
 }
 
 
