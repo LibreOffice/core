@@ -1674,7 +1674,6 @@ void XclImpChartObj::DoPostProcessSdrObj( XclImpDffConverter& rDffConv, SdrObjec
             Reference< XEmbedPersist > xPersist( xEmbObj, UNO_QUERY_THROW );
             Reference< XModel > xModel( xEmbObj->getComponent(), UNO_QUERY_THROW );
             mxChart->Convert( xModel, rDffConv, xPersist->getEntryName(), rSdrObj.GetLogicRect() );
-            xPersist->storeOwn();
         }
         catch( const Exception& )
         {
