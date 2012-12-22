@@ -45,6 +45,7 @@ namespace frm
     //---------------------------------------------------------------------
     OErrorBroadcaster::~OErrorBroadcaster( )
     {
+        (void) m_rBHelper;
         OSL_ENSURE( m_rBHelper.bDisposed || m_rBHelper.bInDispose,
             "OErrorBroadcaster::~OErrorBroadcaster: not disposed!" );
         // herein, we don't have a chance to do the dispose ourself ....

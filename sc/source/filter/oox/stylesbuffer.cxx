@@ -700,6 +700,7 @@ Font::Font( const WorkbookHelper& rHelper, bool bDxf ) :
     maUsedFlags( !bDxf ),
     mbDxf( bDxf )
 {
+    (void) mbDxf;
 }
 
 Font::Font( const WorkbookHelper& rHelper, const FontModel& rModel ) :
@@ -708,6 +709,7 @@ Font::Font( const WorkbookHelper& rHelper, const FontModel& rModel ) :
     maUsedFlags( true ),
     mbDxf( false )
 {
+    (void) mbDxf;
 }
 
 void Font::importAttribs( sal_Int32 nElement, const AttributeList& rAttribs )
@@ -1675,6 +1677,7 @@ void Border::importBorder( SequenceInputStream& rStrm )
 
 void Border::importDxfBorder( sal_Int32 nElement, SequenceInputStream& rStrm )
 {
+    (void) mbDxf;
     OSL_ENSURE( mbDxf, "Border::importDxfBorder - missing conditional formatting flag" );
     if( BorderLineModel* pBorderLine = getBorderLine( nElement ) )
     {

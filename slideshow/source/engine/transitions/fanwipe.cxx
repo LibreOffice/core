@@ -51,6 +51,7 @@ namespace internal {
     }
     else
     {
+        (void) m_fanIn;
         OSL_ASSERT( ! m_fanIn );
         res.transform(basegfx::tools::createScaleTranslateB2DHomMatrix(0.5, 1.0, 0.5, 1.0));
     }
