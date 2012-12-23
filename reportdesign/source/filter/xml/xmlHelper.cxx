@@ -401,9 +401,9 @@ const SvXMLEnumMapEntry* OXMLHelper::GetImageScaleOptions()
 {
        static SvXMLEnumMapEntry s_aXML_EnumMap[] =
        {
-               // { XML_NONE,          awt::ImageScaleMode::None }, // default
-               { XML_ISOTROPIC,        awt::ImageScaleMode::Isotropic },
-               { XML_ANISOTROPIC,      awt::ImageScaleMode::Anisotropic },
+               // { XML_NONE,          awt::ImageScaleMode::NONE }, // default
+               { XML_ISOTROPIC,        awt::ImageScaleMode::ISOTROPIC },
+               { XML_ANISOTROPIC,      awt::ImageScaleMode::ANISOTROPIC },
                { XML_TOKEN_INVALID, 0 }
        };
        return s_aXML_EnumMap;

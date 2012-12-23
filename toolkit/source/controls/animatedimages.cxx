@@ -305,11 +305,11 @@ namespace toolkit
         {
         case BASEPROPERTY_IMAGE_SCALE_MODE:
         {
-            sal_Int16 nImageScaleMode( ImageScaleMode::Anisotropic );
+            sal_Int16 nImageScaleMode( ImageScaleMode::ANISOTROPIC );
             OSL_VERIFY( i_value >>= nImageScaleMode );  // convertFastPropertyValue ensures that this has the proper type
-            if  (   ( nImageScaleMode != ImageScaleMode::None )
-                &&  ( nImageScaleMode != ImageScaleMode::Isotropic )
-                &&  ( nImageScaleMode != ImageScaleMode::Anisotropic )
+            if  (   ( nImageScaleMode != ImageScaleMode::NONE )
+                &&  ( nImageScaleMode != ImageScaleMode::ISOTROPIC )
+                &&  ( nImageScaleMode != ImageScaleMode::ANISOTROPIC )
                 )
                 throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
         }
@@ -337,7 +337,7 @@ namespace toolkit
             return makeAny( (sal_Bool)sal_True );
 
         case BASEPROPERTY_IMAGE_SCALE_MODE:
-            return makeAny( ImageScaleMode::None );
+            return makeAny( ImageScaleMode::NONE );
 
         default:
             return UnoControlModel::ImplGetDefaultValue( i_propertyId );
@@ -387,7 +387,7 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     ::sal_Int16 SAL_CALL AnimatedImagesControlModel::getScaleMode() throw (RuntimeException)
     {
-        sal_Int16 nImageScaleMode( ImageScaleMode::Anisotropic );
+        sal_Int16 nImageScaleMode( ImageScaleMode::ANISOTROPIC );
         OSL_VERIFY( getPropertyValue( GetPropertyName( BASEPROPERTY_IMAGE_SCALE_MODE ) ) >>= nImageScaleMode );
         return nImageScaleMode;
     }
