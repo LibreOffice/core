@@ -17,7 +17,11 @@ SHELL=/usr/bin/env bash
 SRCDIR := @SRC_ROOT@
 BUILDDIR := @BUILDDIR@
 
-ifeq (,$(MAKE_RESTARTS))
+# Next 'if' means:
+# If you want to make something more than help clean distclean,
+# and make has not yet restarted itself..
+# ..run autogen.sh if needed and force make to restart itself.
+ifeq (,$(MAKE_RESTARTS)$(if $(filter-out help clean distclean,$(MAKECMDGOALS)),,T))
 
 .PHONY : force-restart
 Makefile: $(BUILDDIR)/config_host.mk force-restart
