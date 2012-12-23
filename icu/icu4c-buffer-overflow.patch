@@ -1,0 +1,29 @@
+I: Statement might be overflowing a buffer in strncat. Common mistake:
+   BAD: strncat(buffer,charptr,sizeof(buffer)) is wrong, it takes the left over size as 3rd argument
+   GOOD: strncat(buffer,charptr,sizeof(buffer)-strlen(buffer)-1)
+E: icu bufferoverflowstrncat pkgdata.cpp:299:87
+
+---
+ source/tools/pkgdata/pkgdata.cpp |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+Index: icu/source/tools/pkgdata/pkgdata.cpp
+===================================================================
+--- icu.orig/source/tools/pkgdata/pkgdata.cpp
++++ icu/source/tools/pkgdata/pkgdata.cpp
+@@ -1914,12 +1914,12 @@ static void loadLists(UPKGOptions *o, UE
+     const char cmd[] = "icu-config --incpkgdatafile";
+ 
+     /* #1 try the same path where pkgdata was called from. */
+-    findDirname(progname, cmdBuf, 1024, &status);
++    findDirname(progname, cmdBuf, sizeof(cmdBuf), &status);
+     if(U_SUCCESS(status)) {
+       if (cmdBuf[0] != 0) {
+-          uprv_strncat(cmdBuf, U_FILE_SEP_STRING, 1024);
++          uprv_strncat(cmdBuf, U_FILE_SEP_STRING, sizeof(cmdBuf)-1-strlen(cmdBuf));
+       }
+-      uprv_strncat(cmdBuf, cmd, 1024);
++      uprv_strncat(cmdBuf, cmd, sizeof(cmdBuf)-1-strlen(cmdBuf));
+       
+       if(verbose) {
+         fprintf(stdout, "# Calling icu-config: %s\n", cmdBuf);
