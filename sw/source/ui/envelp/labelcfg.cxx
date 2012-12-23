@@ -133,7 +133,7 @@ static Sequence<PropertyValue> lcl_CreateProperties(
             case 1:
             {
                 OUString sTmp;
-                sTmp += OUString( rRec.bCont ? "C" : "S");                    sTmp += sColon;
+                sTmp += ( rRec.bCont ? "C" : "S" );                           sTmp += sColon;
                 sTmp += OUString::valueOf(TWIP_TO_MM100(rRec.lHDist) );       sTmp += sColon;
                 sTmp += OUString::valueOf(TWIP_TO_MM100(rRec.lVDist));        sTmp += sColon;
                 sTmp += OUString::valueOf(TWIP_TO_MM100(rRec.lWidth)  );      sTmp += sColon;
