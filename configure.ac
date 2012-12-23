@@ -1745,74 +1745,25 @@ AC_ARG_WITH(
     ],,
     [with_doxygen=yes])
 
-AC_ARG_WITH(cl-home,
-    AS_HELP_STRING([--with-cl-home],
-        [For Windows NT users, please supply the path for the Microsoft C/C++
-         compiler. Note that this is not the location of the compiler binary but
-         the location of the entire distribution.])
+AC_ARG_WITH(visual-studio,
+    AS_HELP_STRING([--with-visual-studio=<2012/2010/2008>],
+        [Specify which Visual Studio version to use in case several are
+         are installed. If not specified, the order of preference is
+         2012, 2010 and 2008 (including Express editions).])
     [
-                          Usage:     --with-cl-home=<absolute path to Microsoft
-                                                            C/C++ compiler home>
+                          Usage:     --with-visual-studio=<2012/2010/2008>
     ],
 ,)
 
-AC_ARG_WITH(mspdb-path,
-    AS_HELP_STRING([--with-mspdb-path],
-        [For Microsoft C/C++ compiler users, please supply the path pointing to
-         the mspdb80.dll (if using Visual Studio 2008) or mspdb100.dll (if using
-         Visual Studio 2010).])
+AC_ARG_WITH(windows-sdk,
+    AS_HELP_STRING([--with-windows-sdk=<6.0(A)/7.0(A)/7.1(A)/8.0(A)>],
+        [Specify which Windows SDK, or "Windows Kit", version to use
+         in case the one that came with the selected Visual Studio
+         is not what you want for some reason. Note that not all compiler/SDK
+         combinations are supported. The intent is that this option should not
+         be needed.])
     [
-                          Usage:     --with-mspdb-path=<path to
-                                                       mspdb80.dll/mspdb100.dll>
-    ],
-,)
-
-AC_ARG_WITH(midl-path,
-    AS_HELP_STRING([--with-midl-path],
-        [For Microsoft compiler users, please supply the path pointing to the midl.exe.])
-    [
-                          Usage:     --with-midl-path=<abs. path to midl.exe>
-    ],
-,)
-
-AC_ARG_WITH(csc-path,
-    AS_HELP_STRING([--with-csc-path],
-        [For Windows builds, please supply the path pointing to the csc.exe.
-         Usually found automatically when building on Windows.])
-    [
-                          Usage:     --with-csc-path=<abs. path to csc.exe>
-    ],
-,)
-
-AC_ARG_WITH(dotnet-framework-home,
-    AS_HELP_STRING([--with-dotnet-framework-home],
-        [For Microsoft compiler users, please supply the path pointing to
-         lib/mscoree.lib, usually something like:
-         "/cygdrive/c/Program Files/Windows SDKs/Windows/v7.0"])
-    [
-                          Note that in most cases it will be automatically
-                          found, though.
-
-                          Usage:     --with-dotnet-framework-home=<absolute path to .NET
-                                                          Framework>
-    ],
-,)
-
-AC_ARG_WITH(windows-sdk-home,
-    AS_HELP_STRING([--with-windows-sdk-home],
-        [For Windows builds, please supply the path to the Windows SDK.
-         Usually found automatically when building on Windows.])
-    [
-                          Usage:     --with-windows-sdk-home=<absolute path to Windows SDK>
-    ],
-,)
-
-AC_ARG_WITH(directx-home,
-    AS_HELP_STRING([--with-directx-home],
-        [For Windows users, please supply the path to the Microsoft DirectX SDK.])
-    [
-                          Usage:     --with-directx-home=<absolute path to
-                                                          Microsoft DirectX SDK>
+                          Usage:     --with-windows-sdk=6.0(A)/7.0(A)/7.1(A)/8.0(A)>
     ],
 ,)
 
@@ -1997,14 +1948,6 @@ AC_ARG_WITH(compat-oowrappers,
         [Install oo* wrappers in parallel with
          lo* ones to keep backward compatibility.
          Has effect only with make distro-pack-install]),
-,)
-
-AC_ARG_WITH(asm-home,
-    AS_HELP_STRING([--with-asm-home],
-        [For Windows, please supply the path for the ml.exe or ml64.exe assembler.])
-    [
-                          Usage:     --with-asm-home=<path to assembler directory>
-    ],
 ,)
 
 AC_ARG_WITH(os-version,
@@ -2819,6 +2762,7 @@ dnl ===================================================================
 
 reg_get_value()
 {
+    # Return value: $regvalue
     unset regvalue
     _regvalue=`cat "/proc/registry/$1" 2> /dev/null`
 
@@ -2832,10 +2776,10 @@ if test "$_os" = "WINNT" -a "$WITH_MINGW" != yes; then
     AC_MSG_CHECKING([whether to build a 64-bit LibreOffice])
     if test "$enable_64_bit" = "" -o "$enable_64_bit" = "no"; then
         AC_MSG_RESULT([no])
-        SDK_ARCH="x86"
+        WINDOWS_SDK_ARCH="x86"
     else
         AC_MSG_RESULT([yes])
-        SDK_ARCH="x64"
+        WINDOWS_SDK_ARCH="x64"
         BITNESS_OVERRIDE=64
     fi
 
@@ -3026,12 +2970,54 @@ fi
 AC_SUBST(HAVE_LD_BSYMBOLIC_FUNCTIONS)
 
 dnl ===================================================================
-dnl  Check which Microsoft C/C++ or MinGW compiler is used for WINNT
+dnl  Check which Visual Studio or MinGW compiler is used
 dnl ===================================================================
+
+map_vs_year_to_version()
+{
+    # Return value: $vsversion
+
+    unset vsversion
+
+    case $1 in
+    2008)
+        vsversion=9.0;;
+    2010)
+        vsversion=10.0;;
+    2012)
+        vsversion=11.0;;
+    *)
+        AC_MSG_ERROR([Assertion failure - invalid argument "$1" to map_vs_year_to_version()]);;
+    esac
+}
+
+vs_versions_to_check()
+{
+    # Args: $1 (optional) : versions to check, in the order of preference
+    # Return value: $vsversions
+
+    unset vsversions
+
+    if test -n "$1"; then
+        map_vs_year_to_version "$1"
+        vsversions=$vsversion
+    else
+        # By default we prefer 2012, then 2010, then 2008
+        vsversions="11.0 10.0 9.0"
+    fi
+}
+
 find_msvs()
 {
-    # find Visual Studio 2012/2010/2008
-    for ver in 11.0 10.0 9.0; do
+    # Find Visual Studio 2012/2010/2008
+    # Args: $1 (optional) : versions to check, in the order of preference
+    # Return value: $vstest
+
+    unset vstest
+
+    vs_versions_to_check "$1"
+
+    for ver in $vsversions; do
         reg_get_value HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver/Setup/VS/ProductDir
         if test -n "$regvalue"; then
             vstest=$regvalue
@@ -3047,8 +3033,15 @@ find_msvs()
 
 find_msvc()
 {
-    # find Visual Studio 2012/2010/2008
-    for ver in 11.0 10.0 9.0; do
+    # Find Visual C++ 2012/2010/2008
+    # Args: $1 (optional) : The VS version year
+    # Return values: $vctest, $vcyear, $vcnum, $vcnumwithdot
+
+    unset vctest vcnum vcnumwithdot
+
+    vs_versions_to_check "$1"
+
+    for ver in $vsversions; do
         reg_get_value HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver/Setup/VC/ProductDir
         if test -n "$regvalue"; then
             vctest=$regvalue
@@ -3060,87 +3053,103 @@ find_msvc()
             break
         fi
     done
+    if test -n "$vctest"; then
+        vcnumwithdot=$ver
+        case "$vcnumwithdot" in
+        9.0)
+            vcyear=2008
+            vcnum=90
+            ;;
+        10.0)
+            vcyear=2010
+            vcnum=100
+            ;;
+        11.0)
+            vcyear=2012
+            vcnum=110
+            ;;
+        esac
+    fi
 }
 
 SHOWINCLUDES_PREFIX=
 if test "$_os" = "WINNT"; then
     if test "$WITH_MINGW" != "yes"; then
-        AC_MSG_CHECKING([for a friendly Microsoft C/C++ compiler installation path])
-        if test -z "$with_cl_home"; then
-            find_msvc
-            if test "$BITNESS_OVERRIDE" = ""; then
-                if test -x "$vctest/bin/cl.exe"; then
-                    with_cl_home=$vctest
-                fi
+        AC_MSG_CHECKING([Visual C++])
+
+        find_msvc "$with_visual_studio"
+
+        if test -z "$vctest"; then
+            if test -n "$with_visual_studio"; then
+                AC_MSG_ERROR([No Visual Studio $with_visual_studio installation found])
             else
-                if test -x "$vctest/bin/amd64/cl.exe"; then
-                    with_cl_home=$vctest
-                fi
+                AC_MSG_ERROR([No Visual Studio 2012, 2010 or 2008 installation found])
+            fi
+        fi
+
+        if test "$BITNESS_OVERRIDE" = ""; then
+            if test -f "$vctest/bin/cl.exe"; then
+                VC_PRODUCT_DIR=$vctest
+            else
+                AC_MSG_ERROR([No compiler (cl.exe) in $vctest/bin/cl.exe])
             fi
         else
-            with_cl_home=`cygpath -u "$with_cl_home"`
+            # It makes sense, I think, to restrict 64-bit support to VS2010 or newer
+            if test $vcnum -lt 100; then
+               AC_MSG_ERROR([We have no plans to support building a 64-bit LibreOffice with VS 2008])
+            fi
+
+            if test -f "$vctest/bin/amd64/cl.exe"; then
+                VC_PRODUCT_DIR=$vctest
+            else
+                AC_MSG_ERROR([No compiler (cl.exe) in $vctest/bin/amd64/cl.exe])
+            fi
         fi
-        with_cl_home=`cygpath -d "$with_cl_home"`
-        with_cl_home=`cygpath -u "$with_cl_home"`
-        AC_MSG_RESULT([$with_cl_home])
+
+        VC_PRODUCT_DIR=`cygpath -d "$VC_PRODUCT_DIR"`
+        VC_PRODUCT_DIR=`cygpath -u "$VC_PRODUCT_DIR"`
+        AC_MSG_RESULT([$VC_PRODUCT_DIR])
 
         dnl ===========================================================
-        dnl  Check for mspdb80.dll/mspdb100.dll/mspdb110.dll
+        dnl  Check for the corresponding mspdb*.dll
         dnl ===========================================================
-        dnl MSVS 2008/10/12 Compiler
-        if test -n "$with_mspdb_path"; then
-            with_mspdb_path=`cygpath -u "$with_mspdb_path"`
-        fi
-        if test -e "$with_mspdb_path/mspdb80.dll" -o -e "$with_mspdb_path/mspdb100.dll" -o -e "$with_mspdb_path/mspdb110.dll"; then
-            MSPDB_PATH="$with_mspdb_path"
-        fi
-        dnl MSVS 2008 case
-        if test -z "$MSPDB_PATH" -a -e "$with_cl_home/../Common7/IDE/mspdb80.dll"; then
-            MSPDB_PATH="$with_cl_home/../Common7/IDE"
-        fi
-        dnl Windows SDK 6.0 case
-        if test -z "$MSPDB_PATH" -a -e "$with_cl_home/bin/mspdb80.dll"; then
-            MSPDB_PATH="$with_cl_home/bin"
-        fi
-        dnl MSVS 2010 case
-        if test -z "$MSPDB_PATH" -a -e "$with_cl_home/../Common7/IDE/mspdb100.dll"; then
-            MSPDB_PATH="$with_cl_home/../Common7/IDE"
-        fi
-        dnl MSVS 2012 case
-        if test -z "$MSPDB_PATH" -a -e "$with_cl_home/../Common7/IDE/mspdb110.dll"; then
-            MSPDB_PATH="$with_cl_home/../Common7/IDE"
+
+        MSPDB_PATH=
+
+        if test "$BITNESS_OVERRIDE" == ""; then
+            MSPDB_PATH="$VC_PRODUCT_DIR/../Common7/IDE"
+        else
+            MSPDB_PATH="$VC_PRODUCT_DIR/bin/amd64"
         fi
 
-        if test -z "$MSPDB_PATH"; then
-            dnl AC_PATH_PROG only checks if MSPDB_PATH is still empty
-            AC_PATH_PROG(MSPDB_PATH, mspdb80.dll)
-            AC_PATH_PROG(MSPDB_PATH, mspdb100.dll)
-            AC_PATH_PROG(MSPDB_PATH, mspdb110.dll)
-            MSPDB_PATH=`dirname "$MSPDB_PATH"`
+        if test ! -e "$MSPDB_PATH/mspdb${vcnum}.dll"; then
+            AC_MSG_ERROR([No mspdb${vcnum}.dll in $MSPDB_PATH, Visual Studio installation broken?])
         fi
 
-        if test -z "$MSPDB_PATH"; then
-            AC_MSG_ERROR([You need a mspdb80.dll or mspdb100.dll or mspdb110.dll, make sure it is in the path or use --with-mspdb-path])
-        fi
         MSPDB_PATH=`cygpath -d "$MSPDB_PATH"`
         MSPDB_PATH=`cygpath -u "$MSPDB_PATH"`
+
         dnl The path needs to be added before cl is called
         PATH="$MSPDB_PATH:$PATH"
 
-        AC_MSG_CHECKING([the Microsoft C/C++ Compiler])
+        AC_MSG_CHECKING([cl.exe])
+
+        # Is there really ever a need to pass CC explicitly? Surely we can hope to get all the
+        # automagical niceness to work OK? If somebody has some unsupported compiler in some weird
+        # location, isn't it likely that lots of other things needs changes, too, and just setting CC
+        # is not enough?
+
         if test -z "$CC"; then
             if test "$BITNESS_OVERRIDE" = ""; then
-                if test -x "$with_cl_home/bin/cl.exe"; then
-                    CC="$with_cl_home/bin/cl.exe"
+                if test -f "$VC_PRODUCT_DIR/bin/cl.exe"; then
+                    CC="$VC_PRODUCT_DIR/bin/cl.exe"
                 fi
             else
-                if test -x "$with_cl_home/bin/amd64/cl.exe"; then
-                    CC="$with_cl_home/bin/amd64/cl.exe"
+                if test -f "$VC_PRODUCT_DIR/bin/amd64/cl.exe"; then
+                    CC="$VC_PRODUCT_DIR/bin/amd64/cl.exe"
                 fi
             fi
-            if test -z "$CC"; then
-                AC_PATH_PROG(CC, cl.exe)
-            fi
+
             # This gives us a posix path with 8.3 filename restrictions
             CC=`cygpath -d "$CC"`
             CC=`cygpath -u "$CC"`
@@ -3148,47 +3157,54 @@ if test "$_os" = "WINNT"; then
 
         if test -n "$CC"; then
             # Remove /cl.exe from CC case insensitive
-            AC_MSG_RESULT([found ($CC)])
+            AC_MSG_RESULT([found ($CC), Visual C++ $vcyear])
             if test "$BITNESS_OVERRIDE" = ""; then
                 COMPATH=`echo $CC | $SED -e 's@\/[[Bb]][[Ii]][[Nn]]\/[[cC]][[lL]]\.[[eE]][[xX]][[eE]].*@@' -e 's@^.* @@'`
             else
-                if test -n "$with_cl_home"; then
-                    COMPATH=`echo $with_cl_home`
+                if test -n "$VC_PRODUCT_DIR"; then
+                    # Huh, why not just an assignment?
+                    COMPATH=`echo $VC_PRODUCT_DIR`
                 fi
             fi
             export INCLUDE=`cygpath -d "$COMPATH/Include"`
-            dnl  Check which Microsoft C/C++ compiler is found
-            AC_MSG_CHECKING([the Version of Microsoft C/C++ Compiler])
-            # The following finds Microsoft, matches nn.nn.nnnn then pulls numbers out.
-            CCNUMVER=`$CC 2>&1 | $AWK "/Microsoft/ && /..\\...\\...../ {
-                            x = match( \\\$0, /..\\...\\...../ )
-                            CCversion = substr( \\\$0, RSTART, RLENGTH)
-                            tokencount = split (CCversion,vertoken,\".\")
-                            for ( i = 1 ; i <= tokencount ; i++ ) {
-                                printf (\"%04d\",vertoken[[i]] )
-                            }
-                            }"`
-            if test "$CCNUMVER" -ge "001700000000"; then
-                COMEX=14
-                MSVSVER=2012
-                VCVER=110
-            elif test "$CCNUMVER" -ge "001600000000"; then
-                COMEX=13
-                MSVSVER=2010
-                VCVER=100
-            elif test "$CCNUMVER" -ge "001500000000"; then
-                COMEX=12
-                MSVSVER=2008
-                VCVER=90
-            else
-                AC_MSG_ERROR([Compiler too old. Use Microsoft Visual Studio 2008 or 2010.])
-            fi
+
             PathFormat "$COMPATH"
             COMPATH="$formatted_path"
 
-            AC_MSG_RESULT([found compiler version $CCNUMVER (MSVS $MSVSVER).])
+            VCVER=$vcnum
+            MSVSVER=$vcyear
+
+            # The WINDOWS_SDK_ACCEPTABLE_VERSIONS is mostly an educated guess...  Assuming newer ones
+            # are always "better", we list them in reverse chronological order.
+
+            case $vcnum in
+            90)
+                COMEX=12
+                WINDOWS_SDK_ACCEPTABLE_VERSIONS="7.1A 7.1 7.0A 6.0A"
+                ;;
+            100)
+                COMEX=13
+                WINDOWS_SDK_ACCEPTABLE_VERSIONS="7.1A 7.1 7.0A 6.0A"
+                ;;
+            110)
+                COMEX=14
+                WINDOWS_SDK_ACCEPTABLE_VERSIONS="8.0"
+                ;;
+            esac
+
+            # The expectation is that --with-windows-sdk should not need to be used
+            if test -n "$with_windows_sdk"; then
+                case " $WINDOWS_SDK_ACCEPTABLE_VERSIONS " in
+                *" "$with_windows_sdk" "*)
+                    WINDOWS_SDK_ACCEPTABLE_VERSIONS=$with_windows_sdk
+                    ;;
+                *)
+                    AC_MSG_ERROR([Windows SDK $with_windows_sdk is not known to work witn VS $MSVSVER])
+                    ;;
+                esac
+            fi
         else
-            AC_MSG_ERROR([Microsoft C/C++ Compiler not found. Use --with-cl-home or set path to cl.exe.])
+            AC_MSG_ERROR([Visual C++ not found after all, huh])
         fi
 
         dnl We need to guess the prefix of the -showIncludes output, it can be
@@ -3210,7 +3226,7 @@ if test "$_os" = "WINNT"; then
         # 64-bit OS. The 64-bit Explorer extension is a feature that
         # has been present since long in OOo. Don't confuse it with
         # building LibreOffice itself as 64-bit code, which is
-        # unfished work and highly experimental.
+        # unfinished work and highly experimental.
 
         BUILD_X64=
         CXX_X64_BINARY=
@@ -3219,19 +3235,19 @@ if test "$_os" = "WINNT"; then
 
         if test "$BITNESS_OVERRIDE" = ""; then
             AC_MSG_CHECKING([for a x64 compiler and libraries for 64-bit Explorer extensions])
-            if test -f "$with_cl_home/atlmfc/lib/amd64/atls.lib"; then
+            if test -f "$VC_PRODUCT_DIR/atlmfc/lib/amd64/atls.lib"; then
                 # Prefer native x64 compiler to cross-compiler, in case we are running
                 # the build on a 64-bit OS.
-                if "$with_cl_home/bin/amd64/cl.exe" -? </dev/null >/dev/null 2>&1; then
+                if "$VC_PRODUCT_DIR/bin/amd64/cl.exe" -? </dev/null >/dev/null 2>&1; then
                     BUILD_X64=TRUE
-                    CXX_X64_BINARY="$with_cl_home/bin/amd64/cl.exe"
-                    LINK_X64_BINARY="$with_cl_home/bin/amd64/link.exe"
-                    LIBMGR_X64_BINARY="$with_cl_home/bin/amd64/lib.exe"
-                elif "$with_cl_home/bin/x86_amd64/cl.exe" -? </dev/null >/dev/null 2>&1; then
+                    CXX_X64_BINARY="$VC_PRODUCT_DIR/bin/amd64/cl.exe"
+                    LINK_X64_BINARY="$VC_PRODUCT_DIR/bin/amd64/link.exe"
+                    LIBMGR_X64_BINARY="$VC_PRODUCT_DIR/bin/amd64/lib.exe"
+                elif "$VC_PRODUCT_DIR/bin/x86_amd64/cl.exe" -? </dev/null >/dev/null 2>&1; then
                     BUILD_X64=TRUE
-                    CXX_X64_BINARY="$with_cl_home/bin/x86_amd64/cl.exe"
-                    LINK_X64_BINARY="$with_cl_home/bin/x86_amd64/link.exe"
-                    LIBMGR_X64_BINARY="$with_cl_home/bin/x86_amd64/lib.exe"
+                    CXX_X64_BINARY="$VC_PRODUCT_DIR/bin/x86_amd64/cl.exe"
+                    LINK_X64_BINARY="$VC_PRODUCT_DIR/bin/x86_amd64/link.exe"
+                    LIBMGR_X64_BINARY="$VC_PRODUCT_DIR/bin/x86_amd64/lib.exe"
                 fi
             fi
             if test "$BUILD_X64" = TRUE; then
@@ -4750,15 +4766,12 @@ if test $_os = Darwin; then
     fi
 fi
 
-dnl ===================================================================
-dnl  .NET needs special treatment
-dnl (does the above comment really mean .NET, or is it misusing
-dnl that to mean Visual Studio .NET 2003 ? And does this also
-dnl in fact apply equally to what we actually support, i.e.
-dnl Visual Studio 2008 and 2010?)
-dnl ===================================================================
 find_csc()
 {
+    # Return value: $csctest
+
+    unset csctest
+
     if test $VCVER -eq 90; then
         reg_get_value "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/NET Framework Setup/NDP/v3.5/InstallPath"
         if test -n "$regvalue"; then
@@ -4768,60 +4781,90 @@ find_csc()
         reg_get_value HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/.NETFramework/InstallRoot
         if test -n "$regvalue"; then
             csctest=${regvalue}"v2.0.50727"
+            return
         fi
     else
         reg_get_value "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/NET Framework Setup/NDP/v4/Client/InstallPath"
         if test -n "$regvalue"; then
             csctest=$regvalue
-            break
+            return
         fi
     fi
 }
 
 find_al()
 {
+    # Return value: $altest
+
+    unset altest
+
     for x in `ls /proc/registry/HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft\ SDKs/Windows`; do
         reg_get_value "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/$x/WinSDK-NetFx40Tools/InstallationFolder"
         if test -n "$regvalue" -a \( -f "$regvalue/al.exe" -o -f "$regvalue/bin/al.exe" \); then
             altest=$regvalue
-            break
+            return
         fi
     done
 }
 
 find_dotnetsdk()
 {
+    # Return value: $frametest (that's a silly name...)
+
+    unset frametest
+
     for ver in 1.1 2.0; do
         reg_get_value HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/.NETFramework/sdkInstallRootv$ver
         if test -n "$regvalue"; then
             frametest=$regvalue
-            break
+            return
         fi
     done
 }
 
-find_winsdk()
+find_winsdk_version()
 {
-    reg_get_value "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows Kits/Installed Roots/KitsRoot"
-    if test -n "$regvalue"; then
-        winsdktest=$regvalue
-        return
-    fi
-    reg_get_value "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/CurrentInstallFolder"
-    if test -n "$regvalue"; then
-        winsdktest=$regvalue
-        return
-    fi
-    reg_get_value "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MicrosoftSDK/Directories/Install Dir"
-    if test -n "$regvalue"; then
-        winsdktest=$regvalue
-        return
-    fi
-    for x in `ls /proc/registry/HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MicrosoftSDK/InstalledSDKs`; do
-        reg_get_value "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MicrosoftSDK/InstalledSDKs/$x/Install Dir"
+    # Args: $1 : SDK version as in "6.0A", "7.0" etc
+    # Return value: $winsdktest
+
+    unset winsdktest
+
+    # Why we look for them in this particular order I don't know. But OTOH I
+    case "$1" in
+    6.0*|7.*)
+        reg_get_value "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v${1}/InstallationFolder"
         if test -n "$regvalue"; then
             winsdktest=$regvalue
-            break
+            return
+        fi
+        ;;
+    8.*)
+        reg_get_value "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows Kits/Installed Roots/KitsRoot"
+        if test -n "$regvalue"; then
+            winsdktest=$regvalue
+            return
+        fi
+        ;;
+    esac
+}
+
+find_winsdk()
+{
+    # Args: $1 (optional) : list of acceptable SDK versions
+    # Return value: $winsdktest
+
+    unset winsdktest
+
+    if test -n "$1"; then
+        sdkversions=$1
+    else
+        sdkversions="$WINDOWS_SDK_ACCEPTABLE_VERSIONS"
+    fi
+
+    for ver in $sdkversions; do
+        find_winsdk_version $ver
+        if test -n "$winsdktest"; then
+            return
         fi
     done
 }
@@ -4868,10 +4911,10 @@ copy_msvc_dlls()
         vsarch=amd64
     fi
 
-    if test -f $with_cl_home/redist/$vsarch/Microsoft.VC${VCVER}.CRT/msvcp${VCVER}.dll; then
-        vsdlldir=$with_cl_home/redist/$vsarch/Microsoft.VC${VCVER}.CRT
+    if test -f $VC_PRODUCT_DIR/redist/$vsarch/Microsoft.VC${VCVER}.CRT/msvcp${VCVER}.dll; then
+        vsdlldir=$VC_PRODUCT_DIR/redist/$vsarch/Microsoft.VC${VCVER}.CRT
     else
-        AC_MSG_ERROR([can not find VS dll $with_cl_home/redist/$vsarch/Microsoft.VC${VCVER}.CRT/msvcp${VCVER}.dll])
+        AC_MSG_ERROR([can not find VS dll $VC_PRODUCT_DIR/redist/$vsarch/Microsoft.VC${VCVER}.CRT/msvcp${VCVER}.dll])
     fi
 
     cp $vsdlldir/msvcp${VCVER}.dll $vsdlldir/msvcr${VCVER}.dll ./external/msvcp${VCVER}
@@ -4904,131 +4947,79 @@ if test "$build_os" = "cygwin"; then
     copy_dbghelp_dll
 
     dnl Check midl.exe
-    AC_PATH_PROG(MIDL_PATH, midl.exe)
-    if test -n "$MIDL_PATH"; then
-        MIDL_PATH=`dirname "$MIDL_PATH"`
-    else
-        AC_MSG_CHECKING([for midl.exe more thoroughly])
+    AC_MSG_CHECKING([for midl.exe])
+
+    find_winsdk
+    if test -f "$winsdktest/Bin/midl.exe"; then
+        MIDL_PATH="$winsdktest/Bin"
+    elif test -f "$winsdktest/Bin/$WINDOWS_SDK_ARCH/midl.exe"; then
+        MIDL_PATH="$winsdktest/Bin/$WINDOWS_SDK_ARCH"
     fi
-    if test -n "$with_midl_path"; then
-        with_midl_path=`cygpath -u "$with_midl_path"`
-    fi
-    if test -x "$with_midl_path/midl.exe"; then
-        MIDL_PATH="$with_midl_path"
-    fi
-    if test -z "$MIDL_PATH" -a -e "$with_cl_home/../Common7/Tools/Bin/midl.exe"; then
-        MIDL_PATH="$with_cl_home/../Common7/Tools/Bin"
-    fi
-    if test -z "$MIDL_PATH"; then
-        find_msvs
-        if test -x "$vstest/Common7/Tools/Bin/midl.exe"; then
-            MIDL_PATH="$vstest/Common7/Tools/Bin"
-        fi
-    fi
-    if test -z "$MIDL_PATH"; then
-        find_winsdk
-        if test -x "$winsdktest/Bin/midl.exe"; then
-            MIDL_PATH="$winsdktest/Bin"
-        elif test -x "$winsdktest/Bin/$SDK_ARCH/midl.exe"; then
-            MIDL_PATH="$winsdktest/Bin/$SDK_ARCH"
-        fi
-    fi
-    if test ! -x "$MIDL_PATH/midl.exe"; then
-        AC_MSG_ERROR([midl.exe not found. Make sure it's in PATH or use --with-midl-path])
+    if test ! -f "$MIDL_PATH/midl.exe"; then
+        AC_MSG_ERROR([midl.exe not found in $winsdktest/Bin/$WINDOWS_SDK_ARCH, Windows SDK installation broken?])
     else
         AC_MSG_RESULT([$MIDL_PATH/midl.exe])
     fi
+
     # Convert to posix path with 8.3 filename restrictions ( No spaces )
     MIDL_PATH=`cygpath -d "$MIDL_PATH"`
     MIDL_PATH=`cygpath -u "$MIDL_PATH"`
 
     dnl Check csc.exe
-    AC_PATH_PROG(CSC_PATH, csc.exe)
-    if test -n "$CSC_PATH"; then
-        CSC_PATH=`dirname "$CSC_PATH"`
+    AC_MSG_CHECKING([for csc.exe])
+    find_csc
+    if test -f "$csctest/csc.exe"; then
+        CSC_PATH="$csctest"
     fi
-    if test -n "$with_csc_path"; then
-        with_csc_path=`cygpath -u "$with_csc_path"`
-    else
-        AC_MSG_CHECKING([for csc.exe more thoroughly])
-    fi
-    if test -x "$with_csc_path/csc.exe"; then
-        CSC_PATH="$with_csc_path"
-    else
-       find_csc
-       if test -x "$csctest/csc.exe"; then
-           CSC_PATH="$csctest"
-       fi
-    fi
-    if test ! -x "$CSC_PATH/csc.exe"; then
-        AC_MSG_ERROR([csc.exe not found. Make sure it's in the path or use --with-csc-path])
+    if test ! -f "$CSC_PATH/csc.exe"; then
+        AC_MSG_ERROR([csc.exe not found as $CSC_PATH/csc.exe])
     else
         AC_MSG_RESULT([$CSC_PATH/csc.exe])
     fi
-    # Convert to posix path with 8.3 filename restrictions ( No spaces )
+
     CSC_PATH=`cygpath -d "$CSC_PATH"`
     CSC_PATH=`cygpath -u "$CSC_PATH"`
 
     dnl Check al.exe
-    AC_PATH_PROG(AL_PATH, al.exe)
-    if test -n "$AL_PATH"; then
-        AL_PATH=`dirname "$AL_PATH"`
-    else
-        AC_MSG_CHECKING([for al.exe more thoroughly])
+    AC_MSG_CHECKING([for al.exe])
+    find_winsdk
+    if test -f "$winsdktest/Bin/al.exe"; then
+        AL_PATH="$winsdktest/Bin"
+    elif test -f "$winsdktest/Bin/$WINDOWS_SDK_ARCH/al.exe"; then
+        AL_PATH="$winsdktest/Bin/$WINDOWS_SDK_ARCH"
     fi
-    if test -n "$with_al_path"; then
-        with_al_path=`cygpath -u "$with_al_path"`
-    fi
-    if test -x "$with_al_path/al.exe"; then
-        AL_PATH="$with_al_path"
-    fi
-    if test -z "$AL_PATH"; then
-        find_winsdk
-        if test -x "$winsdktest/Bin/al.exe"; then
-            AL_PATH="$winsdktest/Bin"
-        elif test -x "$winsdktest/Bin/$SDK_ARCH/al.exe"; then
-            AL_PATH="$winsdktest/Bin/$SDK_ARCH"
-        fi
-    fi
+
     if test -z "$AL_PATH"; then
         find_al
-        if test -x "$altest/bin/al.exe"; then
+        if test -f "$altest/bin/al.exe"; then
             AL_PATH="$altest/bin"
-        elif test -x "$altest/al.exe"; then
+        elif test -f "$altest/al.exe"; then
             AL_PATH="$altest"
         fi
     fi
-    if test ! -x "$AL_PATH/al.exe"; then
-        AC_MSG_ERROR([al.exe not found. Make sure it's in PATH or use --with-al-path])
+    if test ! -f "$AL_PATH/al.exe"; then
+        AC_MSG_ERROR([al.exe not found as $AL_PATH/al.exe])
     else
         AC_MSG_RESULT([$AL_PATH/al.exe])
     fi
 
-    # Convert to posix path with 8.3 filename restrictions ( No spaces )
     AL_PATH=`cygpath -d "$AL_PATH"`
     AL_PATH=`cygpath -u "$AL_PATH"`
 
     dnl Check mscoree.lib / .NET Framework dir
     AC_MSG_CHECKING(.NET Framework)
-    if test -n "$with_dotnet_framework_home"; then
-        with_dotnet_framework_home=`cygpath -u "$with_dotnet_framework_home"`
-    fi
-    if test -f "$with_dotnet_framework_home/lib/mscoree.lib"; then
-        DOTNET_FRAMEWORK_HOME="$with_dotnet_framework_home"
-    fi
-    if test -z "$DOTNET_FRAMEWORK_HOME"; then
-        find_dotnetsdk
-        if test -f "$frametest/lib/mscoree.lib"; then
-            DOTNET_FRAMEWORK_HOME="$frametest"
-        else
-            find_winsdk
-            if test -f "$winsdktest/lib/mscoree.lib" -o -f "$winsdktest/lib/win8/um/$SDK_ARCH/mscoree.lib"; then
-                DOTNET_FRAMEWORK_HOME="$winsdktest"
-            fi
+    find_dotnetsdk
+    if test -f "$frametest/lib/mscoree.lib"; then
+        DOTNET_FRAMEWORK_HOME="$frametest"
+    else
+        find_winsdk
+        if test -f "$winsdktest/lib/mscoree.lib" -o -f "$winsdktest/lib/win8/um/$WINDOWS_SDK_ARCH/mscoree.lib"; then
+            DOTNET_FRAMEWORK_HOME="$winsdktest"
         fi
     fi
-    if test ! -f "$DOTNET_FRAMEWORK_HOME/lib/mscoree.lib" -a ! -f "$DOTNET_FRAMEWORK_HOME/lib/win8/um/$SDK_ARCH/mscoree.lib"; then
-        AC_MSG_ERROR([mscoree.lib (.NET Framework) not found. Make sure you use --with-dotnet-framework-home])
+
+    if test ! -f "$DOTNET_FRAMEWORK_HOME/lib/mscoree.lib" -a ! -f "$DOTNET_FRAMEWORK_HOME/lib/win8/um/$WINDOWS_SDK_ARCH/mscoree.lib"; then
+        AC_MSG_ERROR([mscoree.lib (.NET Framework) not found])
     fi
     AC_MSG_RESULT(found)
 
@@ -8988,53 +8979,55 @@ dnl and add "-a \( "$WITH_MINGW" != "yes" \)" then
 if test "$_os" = "WINNT"; then
     AC_MSG_CHECKING([for Windows SDK])
     if test "$build_os" = "cygwin"; then
-        if test -z "$with_windows_sdk_home"; then
-            # This first line will detect a February 2003 Microsoft Platform SDK
-                        find_winsdk
-            WINDOWS_SDK_HOME=$winsdktest
-            # But there might be also an April 2005 PSDK, unfortunately MS changed
-            # the registry entry. (we prefer the old version!?)
-            if test -z "$WINDOWS_SDK_HOME"; then
-                WINDOWS_SDK_HOME=`cat /proc/registry/HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MicrosoftSDK/InstalledSDKs/*/Install\ Dir 2> /dev/null | tr '\000' '\n' | head -n 1`
-            fi
-            # normalize if found
-            if test -n "$WINDOWS_SDK_HOME"; then
-                WINDOWS_SDK_HOME=`cygpath -d "$WINDOWS_SDK_HOME"`
-                WINDOWS_SDK_HOME=`cygpath -u "$WINDOWS_SDK_HOME"`
+        # This first line will detect a February 2003 Microsoft Platform SDK
+        find_winsdk
+        WINDOWS_SDK_HOME=$winsdktest
 
-                # If this sdk is incomplete, lets see if the one
-                # recommended to be installed is available.
+        # But there might be also an April 2005 PSDK, unfortunately MS changed
+        # the registry entry. (we prefer the old version!?)
+        if test -z "$WINDOWS_SDK_HOME"; then
+            WINDOWS_SDK_HOME=`cat /proc/registry/HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MicrosoftSDK/InstalledSDKs/*/Install\ Dir 2> /dev/null | tr '\000' '\n' | head -n 1`
+        fi
 
-                # This refers to the Windows SDK 8 (as distributed
-                # with Visual Studio 2012, or maybe also
-                # separately), I assume.
+        # normalize if found
+        if test -n "$WINDOWS_SDK_HOME"; then
+            WINDOWS_SDK_HOME=`cygpath -d "$WINDOWS_SDK_HOME"`
+            WINDOWS_SDK_HOME=`cygpath -u "$WINDOWS_SDK_HOME"`
 
-                # I wouldn't say that it is "incomplete", it is
-                # just structured differtently. We do seem to try
-                # to adapt to that structure below (look for the
-                # Include/um etc stuff), so rejecting it here is a
-                # bit premature... *but* then one notices that
-                # compiling with MSVS2008 and trying to use SDK 8
-                # leads to horrible errors in ICU at least. Oh
-                # well.
+            # If this sdk is incomplete, lets see if the one
+            # recommended to be installed is available.
 
-                if test ! -x "$WINDOWS_SDK_HOME/bin/msiinfo.exe"; then
-                    WINDOWS_SDK7_HOME=`cat "/proc/registry/HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v7.1/InstallationFolder" 2> /dev/null | tr '\000' '\n' | head -n 1`
-                    if test -n "$WINDOWS_SDK7_HOME"; then
-                        WINDOWS_SDK_HOME=`cygpath -d "$WINDOWS_SDK7_HOME"`
-                        WINDOWS_SDK_HOME=`cygpath -u "$WINDOWS_SDK_HOME"`
-                    fi
+            # This refers to the Windows SDK 8 (as distributed
+            # with Visual Studio 2012, or maybe also
+            # separately), I assume.
+
+            # I wouldn't say that it is "incomplete", it is
+            # just structured differtently. We do seem to try
+            # to adapt to that structure below (look for the
+            # Include/um etc stuff), so rejecting it here is a
+            # bit premature... *but* then one notices that
+            # compiling with MSVS2008 and trying to use SDK 8
+            # leads to horrible errors in ICU at least. Oh
+            # well.
+
+            if test ! -x "$WINDOWS_SDK_HOME/bin/msiinfo.exe"; then
+                WINDOWS_SDK7_HOME=`cat "/proc/registry/HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v7.1/InstallationFolder" 2> /dev/null | tr '\000' '\n' | head -n 1`
+                if test -n "$WINDOWS_SDK7_HOME"; then
+                    WINDOWS_SDK_HOME=`cygpath -d "$WINDOWS_SDK7_HOME"`
+                    WINDOWS_SDK_HOME=`cygpath -u "$WINDOWS_SDK_HOME"`
                 fi
             fi
-        else
-            WINDOWS_SDK_HOME=`cygpath -u "$with_windows_sdk_home"`
         fi
     fi
+
     if test -n "$WINDOWS_SDK_HOME"; then
         # Remove a possible trailing backslash
         WINDOWS_SDK_HOME=`echo $WINDOWS_SDK_HOME | $SED 's/\/$//'`
         # Problem with current PSDK (iz 49865)
-        # (What "current" does that mean?)
+
+        # (That "current" refers to something ancient... it hasn't been called the "Platform SDK"
+        # ("PSDK") for ages.
+
         if test -f "$WINDOWS_SDK_HOME/Lib/libcp.lib"; then
             AC_MSG_ERROR([
 Some modules do not build correctly with MS Platform SDK - April 2005
@@ -9056,7 +9049,7 @@ problem can be found in issue 49856.])
         fi
         if test -f "$WINDOWS_SDK_HOME/lib/user32.lib"; then
             HAVE_PSDK_LIB="yes"
-        elif test -f "$WINDOWS_SDK_HOME/lib/win8/um/$SDK_ARCH/user32.lib"; then
+        elif test -f "$WINDOWS_SDK_HOME/lib/win8/um/$WINDOWS_SDK_ARCH/user32.lib"; then
             HAVE_PSDK_LIB="yes"
         else
             HAVE_PSDK_LIB="no"
@@ -9136,21 +9129,17 @@ dnl =========================================
 if test -n "$ENABLE_DIRECTX" -a "$_os" = "WINNT"; then
     AC_MSG_CHECKING([for DirectX SDK])
     if test "$build_os" = "cygwin"; then
-        if test -z "$with_directx_home"; then
-            dnl A standard installation of the DirectX SDK sets $DXSDK_DIR
-            if test -n "$DXSDK_DIR"; then
-                DIRECTXSDK_HOME=`cygpath -d "$DXSDK_DIR"`
-                DIRECTXSDK_HOME=`cygpath -u "$DIRECTXSDK_HOME"`
-            fi
-            # At this point $DIRECTXSDK_HOME might still be undefined. This will lead to
-            # the "DirectX SDK not found" error later
-        else
-            DIRECTXSDK_HOME=`cygpath -u "$with_directx_home"`
+        dnl A standard installation of the DirectX SDK sets $DXSDK_DIR
+        if test -n "$DXSDK_DIR"; then
+            DIRECTXSDK_HOME=`cygpath -d "$DXSDK_DIR"`
+            DIRECTXSDK_HOME=`cygpath -u "$DIRECTXSDK_HOME"`
         fi
+        # At this point $DIRECTXSDK_HOME might still be undefined. This will lead to
+        # the "DirectX SDK not found" error later.
+        # (Where?)
+
         # Remove a possible trailing backslash
         DIRECTXSDK_HOME=`echo $DIRECTXSDK_HOME | $SED 's/\/$//'`
-    elif test -n "$with_directx_home"; then
-        DIRECTXSDK_HOME="$with_directx_home"
     fi
 
     if test -f "$DIRECTXSDK_HOME/Include/ddraw.h" -o -f "$DIRECTXSDK_HOME/Include/d3d9.h"; then
@@ -9302,30 +9291,17 @@ if test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
         assembler=ml64.exe
         assembler_bin=bin/amd64
     fi
-    if test -n "$with_asm_home"; then
-        with_asm_home=`cygpath -u "$with_asm_home"`
-    fi
-    if test -x "$with_asm_home/$assembler"; then
-        AC_MSG_CHECKING([$assembler assembler path])
-        AC_MSG_RESULT([$with_asm_home/$assembler])
-        ML_EXE="$with_asm_home/$assembler"
+
+    AC_MSG_CHECKING([$VC_PRODUCT_DIR/$assembler_bin/$assembler])
+    if test -f "$VC_PRODUCT_DIR/$assembler_bin/$assembler"; then
+        ASM_HOME=$VC_PRODUCT_DIR/$assembler_bin
+        AC_MSG_RESULT([found])
+        ML_EXE="$VC_PRODUCT_DIR/$assembler_bin/$assembler"
     else
-        AC_PATH_PROG(ML_EXE, $assembler)
-        if test -z "$ML_EXE"; then
-            AC_MSG_CHECKING([$with_cl_home/$assembler_bin/$assembler])
-            if test -x "$with_cl_home/$assembler_bin/$assembler"; then
-                with_asm_home=$with_cl_home/$assembler_bin
-                AC_MSG_RESULT([found])
-                ML_EXE="$with_cl_home/$assembler_bin/$assembler"
-            else
-                AC_MSG_ERROR([Configure did not find $assembler assembler.])
-            fi
-        else
-            with_asm_home="ASM_IN_PATH"
-            ML_EXE="$assembler"
-        fi
+        AC_MSG_ERROR([Configure did not find $assembler assembler.])
     fi
-    PathFormat "$with_asm_home"
+
+    PathFormat "$ASM_HOME"
     ASM_HOME="$formatted_path"
 else
     ASM_HOME=""
