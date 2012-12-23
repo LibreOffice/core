@@ -21,18 +21,14 @@
 
 #include <com/sun/star/awt/XPopupMenu.idl>
 
-
 module com {  module sun {  module star {  module awt {
 
-
-/** describes a pop-up menu which is a recursive container for commands
-
-    <p>A pop-up menu can be used as a standalone object to display a context
-       menu. It's also possible to use a pop-up menu to integrate it into
+/** describes a popup menu which is a recursive container for commands
+    <p>A popup menu can be used as a standalone object to display a context
+       menu. It's also possible to use a popup menu to integrate it into
        another menu.</p>
  */
 published service PopupMenu : XPopupMenu;
-
 
 }; }; }; };
 

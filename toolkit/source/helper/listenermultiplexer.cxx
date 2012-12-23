@@ -184,10 +184,10 @@ IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( AdjustmentListenerMultiplexer, ::com::s
 //  class MenuListenerMultiplexer
 //  ----------------------------------------------------
 IMPL_LISTENERMULTIPLEXER_BASEMETHODS( MenuListenerMultiplexer, ::com::sun::star::awt::XMenuListener )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( MenuListenerMultiplexer, ::com::sun::star::awt::XMenuListener, highlight, ::com::sun::star::awt::MenuEvent )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( MenuListenerMultiplexer, ::com::sun::star::awt::XMenuListener, select, ::com::sun::star::awt::MenuEvent )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( MenuListenerMultiplexer, ::com::sun::star::awt::XMenuListener, activate, ::com::sun::star::awt::MenuEvent )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( MenuListenerMultiplexer, ::com::sun::star::awt::XMenuListener, deactivate, ::com::sun::star::awt::MenuEvent )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( MenuListenerMultiplexer, ::com::sun::star::awt::XMenuListener, itemHighlighted, ::com::sun::star::awt::MenuEvent )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( MenuListenerMultiplexer, ::com::sun::star::awt::XMenuListener, itemSelected, ::com::sun::star::awt::MenuEvent )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( MenuListenerMultiplexer, ::com::sun::star::awt::XMenuListener, itemActivated, ::com::sun::star::awt::MenuEvent )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( MenuListenerMultiplexer, ::com::sun::star::awt::XMenuListener, itemDeactivated, ::com::sun::star::awt::MenuEvent )
 
 //  ----------------------------------------------------
 //  class TreeSelectionListenerMultiplexer

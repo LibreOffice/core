@@ -217,10 +217,10 @@ DECL_LISTENERMULTIPLEXER_END
 //  class MenuListenerMultiplexer
 //  ----------------------------------------------------
 DECL_LISTENERMULTIPLEXER_START( MenuListenerMultiplexer, ::com::sun::star::awt::XMenuListener )
-    void SAL_CALL highlight( const ::com::sun::star::awt::MenuEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL select( const ::com::sun::star::awt::MenuEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL activate( const ::com::sun::star::awt::MenuEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL deactivate( const ::com::sun::star::awt::MenuEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL itemHighlighted( const ::com::sun::star::awt::MenuEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL itemSelected( const ::com::sun::star::awt::MenuEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL itemActivated( const ::com::sun::star::awt::MenuEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL itemDeactivated( const ::com::sun::star::awt::MenuEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
 DECL_LISTENERMULTIPLEXER_END
 
 //  ----------------------------------------------------

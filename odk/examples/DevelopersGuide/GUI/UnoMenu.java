@@ -22,7 +22,6 @@ import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.WindowAttribute;
 import com.sun.star.awt.WindowClass;
 import com.sun.star.awt.XMenuBar;
-import com.sun.star.awt.XMenuExtended;
 import com.sun.star.awt.XMenuListener;
 import com.sun.star.awt.XPopupMenu;
 import com.sun.star.awt.XToolkit;
@@ -64,21 +63,26 @@ public UnoMenu(XComponentContext _xContext, XMultiComponentFactory _xMCF) {
     XPopupMenu xPopupMenu = null;
     try{
         // create a popup menu
-        Object oPopupMenu = m_xMCF.createInstanceWithContext("stardiv.Toolkit.VCLXPopupMenu", m_xContext);
+        Object oPopupMenu = m_xMCF.createInstanceWithContext("com.sun.star.awt.PopupMenu", m_xContext);
         xPopupMenu = UnoRuntime.queryInterface(XPopupMenu.class, oPopupMenu);
-        XMenuExtended xMenuExtended = UnoRuntime.queryInterface(XMenuExtended.class, xPopupMenu);
 
-        xPopupMenu.insertItem((short) 0, "~First Entry", MenuItemStyle.AUTOCHECK, (short) 0);
-        xPopupMenu.insertItem((short) 1, "First ~Radio Entry", (short) (MenuItemStyle.RADIOCHECK + MenuItemStyle.AUTOCHECK), (short) 1);
-        xPopupMenu.insertItem((short) 2, "~Second Radio Entry", (short) (MenuItemStyle.RADIOCHECK + MenuItemStyle.AUTOCHECK), (short) 2);
-        xPopupMenu.insertItem((short) 3, "~Third RadioEntry",(short) (MenuItemStyle.RADIOCHECK + MenuItemStyle.AUTOCHECK), (short) 3);
-        xPopupMenu.insertSeparator((short)4);
-        xPopupMenu.insertItem((short) 4, "F~ifth Entry", (short) (MenuItemStyle.CHECKABLE + MenuItemStyle.AUTOCHECK), (short) 5);
-        xPopupMenu.insertItem((short) 5, "~Fourth Entry", (short) (MenuItemStyle.CHECKABLE + MenuItemStyle.AUTOCHECK), (short) 6);
-        xPopupMenu.enableItem((short) 1, false);
-        xPopupMenu.insertItem((short) 6, "~Sixth Entry", (short) 0, (short) 7);
-        xPopupMenu.insertItem((short) 7, "~Close Dialog", (short) 0, (short) 8);
-        xPopupMenu.checkItem((short) 2, true);
+        // ID must start be > 0
+        short nId = 1;
+        short nPos = 0;
+
+        xPopupMenu.insertItem(nId++, "First Entry", MenuItemStyle.AUTOCHECK, nPos++);
+        xPopupMenu.insertItem(nId++, "First Radio Entry", (short) (MenuItemStyle.RADIOCHECK + MenuItemStyle.AUTOCHECK), nPos++);
+        xPopupMenu.insertItem(nId++, "Second Radio Entry", (short) (MenuItemStyle.RADIOCHECK + MenuItemStyle.AUTOCHECK), nPos++);
+        xPopupMenu.insertItem(nId++, "Third RadioEntry",(short) (MenuItemStyle.RADIOCHECK + MenuItemStyle.AUTOCHECK), nPos++);
+        xPopupMenu.insertSeparator(nPos++);
+        xPopupMenu.insertItem(nId++, "Fifth Entry", (short) (MenuItemStyle.CHECKABLE + MenuItemStyle.AUTOCHECK), nPos++);
+        xPopupMenu.insertItem(nId++, "Fourth Entry", (short) (MenuItemStyle.CHECKABLE + MenuItemStyle.AUTOCHECK), nPos++);
+        xPopupMenu.insertItem(nId++, "Sixth Entry", (short) 0, nPos++);
+        xPopupMenu.insertItem(nId++, "Close Dialog", (short) 0, nPos++);
+
+        xPopupMenu.enableItem((short) 2, false);
+        xPopupMenu.checkItem((short) 3, true);
+
         xPopupMenu.addMenuListener(this);
     }catch( Exception e ) {
         throw new java.lang.RuntimeException("cannot happen...");
@@ -90,12 +94,12 @@ public UnoMenu(XComponentContext _xContext, XMultiComponentFactory _xMCF) {
     public void addMenuBar(XTopWindow _xTopWindow, XMenuListener _xMenuListener){
     try{
         // create a menubar at the global MultiComponentFactory...
-        Object oMenuBar = m_xMCF.createInstanceWithContext("stardiv.Toolkit.VCLXMenuBar", m_xContext);
+        Object oMenuBar = m_xMCF.createInstanceWithContext("com.sun.star.awt.MenuBar", m_xContext);
         // add the menu items...
         XMenuBar xMenuBar = UnoRuntime.queryInterface(XMenuBar.class, oMenuBar);
-        xMenuBar.insertItem((short) 0, "~First MenuBar Item", com.sun.star.awt.MenuItemStyle.AUTOCHECK, (short) 0);
-        xMenuBar.insertItem((short) 1, "~Second MenuBar Item", com.sun.star.awt.MenuItemStyle.AUTOCHECK, (short) 1);
-        xMenuBar.setPopupMenu((short) 0, getPopupMenu());
+        xMenuBar.insertItem((short) 1, "~First MenuBar Item", com.sun.star.awt.MenuItemStyle.AUTOCHECK, (short) 0);
+        xMenuBar.insertItem((short) 2, "~Second MenuBar Item", com.sun.star.awt.MenuItemStyle.AUTOCHECK, (short) 1);
+        xMenuBar.setPopupMenu((short) 1, getPopupMenu());
         xMenuBar.addMenuListener(_xMenuListener);
         _xTopWindow.setMenuBar(xMenuBar);
     }catch( Exception e ) {
@@ -154,31 +158,31 @@ public UnoMenu(XComponentContext _xContext, XMultiComponentFactory _xMCF) {
         addMenuBar(xTopWindow, this);
     }
 
-    public void select(MenuEvent menuEvent){
+    public void itemSelected(MenuEvent menuEvent){
         // find out which menu item has been triggered,
         // by getting the menu-id...
         switch (menuEvent.MenuId){
-            case 0:
-                // add your menu-item-specific code here:
-                break;
             case 1:
                 // add your menu-item-specific code here:
                 break;
-            case 7:
+            case 2:
+                // add your menu-item-specific code here:
+                break;
+            case 8:
                 closeDialog();
             default:
                 //..
         }
     }
 
-    public void highlight(MenuEvent menuEvent) {
+    public void itemHighlighted(MenuEvent menuEvent) {
         int i = 0;
     }
 
-    public void deactivate(MenuEvent menuEvent) {
+    public void itemDeactivated(MenuEvent menuEvent) {
         int i = 0;    }
 
-    public void activate(MenuEvent menuEvent) {
+    public void itemActivated(MenuEvent menuEvent) {
         int i = 0;
     }
 

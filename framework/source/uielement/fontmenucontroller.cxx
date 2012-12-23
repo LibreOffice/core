@@ -157,7 +157,7 @@ void FontMenuController::impl_select(const Reference< XDispatch >& _xDispatch,co
         _xDispatch->dispatch( aTargetURL, aArgs );
 }
 
-void SAL_CALL FontMenuController::activate( const css::awt::MenuEvent& ) throw (RuntimeException)
+void SAL_CALL FontMenuController::itemActivated( const css::awt::MenuEvent& ) throw (RuntimeException)
 {
     osl::MutexGuard aLock( m_aMutex );
 

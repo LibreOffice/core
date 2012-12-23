@@ -95,9 +95,9 @@ public UnoMenu2(XComponentContext _xContext, XMultiComponentFactory _xMCF) {
 
     public void mousePressed(MouseEvent mouseEvent) {
         if (mouseEvent.PopupTrigger){
-            Rectangle aRectangle = new Rectangle(mouseEvent.X, mouseEvent.Y, 0, 0);
+            Rectangle aPos = new Rectangle(mouseEvent.X, mouseEvent.Y, 0, 0);
             XControl xControl = UnoRuntime.queryInterface(XControl.class, mouseEvent.Source);
-            getPopupMenu().execute( xControl.getPeer(), aRectangle, com.sun.star.awt.PopupMenuDirection.DEFAULT);
+            getPopupMenu().execute( xControl.getPeer(), aPos, com.sun.star.awt.PopupMenuDirection.EXECUTE_DEFAULT);
         }
     }
 

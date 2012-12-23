@@ -59,7 +59,7 @@ class PopupMenuControllerImpl
 };
 
 //========================================================================
-// class PopupMenuController
+// class PopupMenuController REMOVE REMOVE REMOVE
 //========================================================================
 
 PopupMenuController::PopupMenuController( const Reference< uno::XComponentContext >& rxContext )

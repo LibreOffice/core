@@ -317,7 +317,7 @@ void ControlMenuController::impl_select(const Reference< XDispatch >& /*_xDispat
     }
 }
 
-void SAL_CALL ControlMenuController::activate( const css::awt::MenuEvent& ) throw (RuntimeException)
+void SAL_CALL ControlMenuController::itemActivated( const css::awt::MenuEvent& ) throw (RuntimeException)
 {
     osl::ResettableMutexGuard aLock( m_aMutex );
 

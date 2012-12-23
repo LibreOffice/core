@@ -18,7 +18,9 @@
 
 package ifc.frame;
 
+import com.sun.star.graphic.XGraphic;
 import com.sun.star.awt.XPopupMenu;
+import com.sun.star.awt.KeyEvent;
 import com.sun.star.frame.XPopupMenuController;
 import lib.MultiMethodTest;
 
@@ -54,7 +56,7 @@ public class _XPopupMenuController extends MultiMethodTest {
             System.out.println("enableItem called.");
         }
 
-        public short execute(com.sun.star.awt.XWindowPeer xWindowPeer, com.sun.star.awt.Rectangle rectangle, short param) {
+        public short execute(com.sun.star.awt.XWindowPeer xWindowPeer, com.sun.star.awt.Rectangle pos, short param) {
             System.out.println("execute called.");
             return 0;
         }
@@ -125,6 +127,95 @@ public class _XPopupMenuController extends MultiMethodTest {
 
         public void setPopupMenu(short param, com.sun.star.awt.XPopupMenu xPopupMenu) {
             System.out.println("setPopupMenu called.");
+        }
+
+        public XGraphic getItemImage(short param ) {
+            System.out.println("getItemImage called.");
+            return null;
+        }
+
+        public void setItemImage(short param, XGraphic param1, boolean param2 ) {
+            System.out.println("setItemImage called.");
+        }
+
+        public KeyEvent getAcceleratorKeyEvent(short param ) {
+            System.out.println("getAcceleratorKeyEvent called.");
+            return new KeyEvent();
+        }
+
+        public void setAcceleratorKeyEvent(short param, KeyEvent param1 ) {
+            System.out.println("setAcceleratorKeyEvent called.");
+        }
+
+        public void endExecute() {
+            System.out.println("endExecute called.");
+        }
+
+        public boolean isInExecute() {
+            System.out.println("isInExecute called.");
+            return false;
+        }
+
+        public boolean isPopupMenu() {
+            System.out.println("isPopupMenu called.");
+            return true;
+        }
+
+        public String getTipHelpText(short param ) {
+            System.out.println("getTipHelpText called.");
+            return null;
+        }
+
+        public void setTipHelpText(short param, String param1 ) {
+            System.out.println("setTipHelpText called.");
+        }
+
+        public String getHelpText(short param ) {
+            System.out.println("getHelpText called.");
+            return null;
+        }
+
+        public void setHelpText(short param, String param1 ) {
+            System.out.println("setHelpText called.");
+        }
+
+        public String getHelpCommand(short param ) {
+            System.out.println("getHelpCommand called.");
+            return null;
+        }
+
+        public void setHelpCommand(short param, String param1 ) {
+            System.out.println("setHelpCommand called.");
+        }
+
+        public String getCommand(short param ) {
+            System.out.println("getCommand called.");
+            return null;
+        }
+
+        public void setCommand(short param, String param1 ) {
+            System.out.println("setCommand called.");
+        }
+
+        public void enableAutoMnemonics(boolean param ) {
+            System.out.println("enableAutoMnemonics called.");
+        }
+
+        public void hideDisabledEntries(boolean param ) {
+            System.out.println("hideDisabledEntries called.");
+        }
+
+        public com.sun.star.awt.MenuItemType getItemType(short param ) {
+            System.out.println("getItemType called.");
+            return com.sun.star.awt.MenuItemType.DONTKNOW;
+        }
+
+        public void setItemType(com.sun.star.awt.MenuItemType param ) {
+            System.out.println("setItemType called.");
+        }
+
+        public void clear() {
+            System.out.println("clear called.");
         }
     }
 }

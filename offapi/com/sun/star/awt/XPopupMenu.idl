@@ -19,56 +19,167 @@
 #ifndef __com_sun_star_awt_XPopupMenu_idl__
 #define __com_sun_star_awt_XPopupMenu_idl__
 
+#include <com/sun/star/awt/KeyEvent.idl>
+#include <com/sun/star/awt/Rectangle.idl>
+#include <com/sun/star/awt/XMenu.idl>
+#include <com/sun/star/graphic/XGraphic.idl>
+
 #include <com/sun/star/awt/XMenu.idl>
 
 #include <com/sun/star/awt/Rectangle.idl>
 
+module com {  module sun {  module star {  module awt {
 
- module com {  module sun {  module star {  module awt {
-
- published interface XWindowPeer;
-
+published interface XWindowPeer;
 
 /** controls a pop-up menu.
  */
 published interface XPopupMenu: XMenu
 {
-
     /** inserts a separator at the specified position.
-     */
-    void insertSeparator( [in] short nPos );
 
+        @param nItemPos
+            specifies the position where the menu separator will be insterted.
+     */
+    void insertSeparator( [in] short nItemPos );
 
     /** sets the menu default item.
+
+        @param nItemId
+            specifies the menu item identifier.
      */
     void setDefaultItem( [in] short nItemId );
 
-
     /** returns the menu default item.
+
+        @return
+            the ID of the default item.
      */
     short getDefaultItem();
 
-
     /** sets the state of the item to be checked or unchecked.
+
+        @param nItemId
+            specifies the menu item identifier.
+
+        @param bCheck
+            specifies if the item is checked (`TRUE`) or unchecked (`FALSE`).
      */
     void checkItem( [in] short nItemId,
-             [in] boolean bCheck );
-
+                             [in] boolean bCheck );
 
     /** returns whether the item is checked or unchecked.
+
+        @param nItemId
+            specifies the menu item identifier.
+
+        @return
+            `TRUE` if the item is checked, `FALSE` otherwise.
      */
     boolean isItemChecked( [in] short nItemId );
 
+    /** executes the popup menu and returns the selected item
+        or <code>0</code>, if cancelled.
 
-    /** executes the pop-up menu and returns the selected item
-        or <code>0</code>, if canceled.
+        @param Parent
+            the parent window.
+
+        @param Position
+            a <type>Rectangle</type> representing the coordinates system
+            where the popup menu should be executed.
+
+        @param Direction
+            the direction in which a popup menu will grow, as specified
+            by one of the PopupMenuDirection constants.
+
+        @return
+            returns the selected item or <code>0</code>, if cancelled.
      */
     short execute( [in] XWindowPeer Parent,
-             [in] Rectangle Area,
-             [in] short Direction );
+                   [in] Rectangle Position,
+                   [in] short Direction );
+
+    /** queries if the PopupMenu is being.
+
+        <p>Returns `TRUE` only if the PopupMenu is being executed
+        as a result of invoking <member >XPopupMenu::execute()</member>; that is,
+        for a PopupMenu activated by a MenuBar item,
+        this methods returns `FALSE`.</p>
+
+        @return
+            `TRUE` if the PopupMenu is being executed,
+            `FALSE` otherwise.
+
+        @see <member >XPopupMenu::execute()</member>
+    */
+    boolean isInExecute();
+
+    /** ends the execution of the PopupMenu.
+        <p><member scope="com::sun::star::awt">XPopupMenu::execute()</member>
+        will then return 0.</p>
+
+        @see <member scope="com::sun::star::awt">XPopupMenu::execute()</member>
+    */
+    void endExecute();
+
+    /** sets the KeyEvent for the menu item.
+
+        <p>The KeyEvent is <b>only</b> used as a container to transport
+        the shortcut information, this methods only draws the text corresponding to
+        this keyboard shortcut. The client code is responsible for listening to
+        keyboard events (typicaly done via XUserInputInterception),
+        and dispatch the respective command.</p>
+
+        @param nItemId
+            specifies the menu item identifier for which the KeyEvent should be set.
+
+        @param aKeyEvent
+            specifies the KeyEvent for the menu item.
+    */
+    void setAcceleratorKeyEvent( [in] short nItemId,
+                                 [in] KeyEvent aKeyEvent );
+
+    /** retrieves the KeyEvent for the menu item.
+
+        <p>The KeyEvent is <b>only</b> used as a container to transport
+        the shortcut information, so that in this case
+        <member scope="::com::sun::star::lang::">EventObject::Source</member> is <NULL/>.</p>
+
+        @param nItemId
+            specifies the menu item identifier for which the KeyEvent should be retrieved.
+
+        @return
+            the KeyEvent struct assigned to the requested menu item.
+    */
+    KeyEvent getAcceleratorKeyEvent( [in] short nItemId );
+
+    /** sets the image for the menu item.
+
+        @param nItemId
+            specifies the menu item identifier for which the image should be set.
+
+        @param xGraphic
+            specifies the image for the menu item.
+
+        @param bScale
+            if `TRUE`, the image will be scaled to the standard size used internally by
+            the implementation.
+    */
+    void setItemImage( [in] short nItemId,
+                       [in] ::com::sun::star::graphic::XGraphic xGraphic,
+                       [in] boolean bScale );
+
+    /** retrieves the image for the menu item.
+
+        @param nItemId
+            specifies the menu item identifier for which the image should be retrieved.
+
+        @return
+            a XGraphic reference to the current image for the requested menu item.
+    */
+    ::com::sun::star::graphic::XGraphic getItemImage( [in] short nItemId );
 
 };
-
 
 }; }; }; };
 

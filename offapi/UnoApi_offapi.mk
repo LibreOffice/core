@@ -1746,7 +1746,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/awt,\
 	MenuEvent \
 	MenuItemStyle \
 	MenuItemType \
-	MenuLogo \
 	MessageBoxButtons \
 	MessageBoxCommand \
 	MouseButton \
@@ -1831,9 +1830,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/awt,\
 	XListBox \
 	XMenu \
 	XMenuBar \
-	XMenuBarExtended \
-	XMenuExtended \
-	XMenuExtended2 \
 	XMenuListener \
 	XMessageBox \
 	XMessageBoxFactory \
@@ -1847,7 +1843,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/awt,\
 	XPatternField \
 	XPointer \
 	XPopupMenu \
-	XPopupMenuExtended \
 	XPrinter \
 	XPrinterPropertySet \
 	XPrinterServer \

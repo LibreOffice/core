@@ -19,35 +19,26 @@
 #ifndef __com_sun_star_awt_MenuItemStyle_idl__
 #define __com_sun_star_awt_MenuItemStyle_idl__
 
-
-
- module com {  module sun {  module star {  module awt {
-
+module com {  module sun {  module star {  module awt {
 
 /** These values are used to specify the properties of a menu item.
-
-    <p>They may be expanded in future versions.</p>
  */
-published constants MenuItemStyle
+constants MenuItemStyle
 {
-
     /** specifies an item which can be checked independently.
      */
     const short CHECKABLE = 1;
 
-
-    /** specifies an item which can be checked dependent on the neighboring
+    /** specifies an item which can be checked dependent on the neighbouring
         items.
      */
     const short RADIOCHECK = 2;
-
 
     /** specifies to check this item automatically on select.
      */
     const short AUTOCHECK = 4;
 
 };
-
 
 }; }; }; };
 

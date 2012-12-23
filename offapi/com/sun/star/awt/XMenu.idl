@@ -20,97 +20,277 @@
 #define __com_sun_star_awt_XMenu_idl__
 
 #include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/awt/MenuItemType.idl>
 
+module com {  module sun {  module star {  module awt {
 
-
- module com {  module sun {  module star {  module awt {
-
- published interface XPopupMenu;
- published interface XMenuListener;
-
+published interface XPopupMenu;
+published interface XMenuListener;
 
 /** specifies a simple menu.
  */
 published interface XMenu: com::sun::star::uno::XInterface
 {
-
     /** adds the specified menu listener to receive events from this menu.
+
+        @param xListener
+            the XMenuListener to be added.
      */
     void addMenuListener( [in] XMenuListener xListener );
 
-
     /** removes the specified menu listener so that it no longer
         receives events from this menu.
+
+        @param xListener
+            the XMenuListener to be removed.
      */
     void removeMenuListener( [in] XMenuListener xListener );
 
-
     /** inserts an item into the menu.
-
         <p>The item is appended if the position is greater than or equal to
-        <code>getItemCount()</code> or if it is negative.</p>
+        <member>getItemCount()</member> or if it is negative.</p>
+
+        @param nItemId
+            specifies the ID of the menu item to be insterted.
+
+        @param aText
+            specifies the label of the menu item.
+
+        @param nItemStyle
+            specifies the style of the menu item, as defined in
+            MenuItemStyle.
+
+        @param nItemPos
+            specifies the position where the menu item will be insterted.
      */
     void insertItem( [in] short nItemId,
-             [in] string aText,
-             [in] short nItemStyle,
-             [in] short nPos );
-
+                     [in] string aText,
+                     [in] short nItemStyle,
+                     [in] short nItemPos );
 
     /** removes one or more items from the menu.
-     */
-    void removeItem( [in] short nPos,
-             [in] short nCount );
 
+        @param nItemPos
+            specifies the position of the (first) menu item to be removed.
+
+        @param nCount
+            specifies the number of menu items to remove.
+     */
+    void removeItem( [in] short nItemPos,
+                     [in] short nCount );
+
+    /** removes all items from the menu.
+     */
+    void clear();
 
     /** returns the number of items in the menu.
+
+        @return
+            the number of items in this XMenu.
      */
     short getItemCount();
 
+    /** returns the ID of the item at the specified position.
 
-    /** returns the id of the item at the specified position.
+        @param nItemPos
+            specifies the position of the menu item for which the item ID is queried.
+
+        @return
+            the ID of the menu item at the given position.
      */
-    short getItemId( [in] short nPos );
+    short getItemId( [in] short nItemPos );
 
+    /** returns the position of the item with the specified ID.
 
-    /** returns the position of the item with the specified id.
+        @param nItemId
+            specifies the ID of the menu item for which the item position is queried.
+
+        @return
+            the position of the menu item with the specified ID.
      */
-    short getItemPos( [in] short nId );
+    short getItemPos( [in] short nItemId );
 
+    /** retrieves the type of the menu item.
+
+        @param nItemPos
+            specifies the position of the menu item for which the item type is queried.
+
+        @return
+            a MenuItemType indicating the item type.
+    */
+    ::com::sun::star::awt::MenuItemType getItemType( [in] short nItemPos );
 
     /** enables or disables the menu item.
+
+        @param nItemId
+            specifies the menu item ID.
+
+        @param bEnable
+            specifies whether the menu item should be enabled (`TRUE`) or
+            disabled (`FALSE`).
      */
     void enableItem( [in] short nItemId,
-             [in] boolean bEnable );
-
+                     [in] boolean bEnable );
 
     /** returns the state of the menu item.
+
+        @param nItemId
+            specifies the menu item ID.
+
+        @return
+            `TRUE` if the item is enabled, `FALSE` otherwise.
      */
     boolean isItemEnabled( [in] short nItemId );
 
+    /** specifies whether disabled menu entries should be hidden, or not.
+
+        @param bHide
+            if `TRUE`, disabled menu entries are hidden.
+    */
+    void hideDisabledEntries( [in] boolean bHide );
+
+    /** specifies whether mnemonics are automatically assigned to menu items, or not.
+
+        @param bEnable
+            if `TRUE`, mnemonics are automatically assigned to menu items.
+    */
+    void enableAutoMnemonics( [in] boolean bEnable );
 
     /** sets the text for the menu item.
+
+        @param nItemId
+            specifies the ID of the menu item.
+
+        @param aText
+            specifies the label of the menu item.
      */
     void setItemText( [in] short nItemId,
-             [in] string aText );
-
+                      [in] string aText );
 
     /** returns the string for the given item id.
+
+        @param nItemId
+            specifies the ID of the menu item.
+
+        @return
+            the label of the menu item.
      */
     string getItemText( [in] short nItemId );
 
+    /** sets the command string for the menu item.
 
-    /** sets the pop-up menu for a specified menu item.
+        @param nItemId
+            specifies the menu item ID for which the command should be set.
+
+        @param aCommand
+            specifies the command for the menu item.
+    */
+    void setCommand( [in] short nItemId,
+                     [in] string aCommand );
+
+    /** retrieves the command string for the menu item.
+
+        @param nItemId
+            specifies the menu item ID for which the command URL should be set.
+
+        @return
+            the command of the menu item.
+    */
+    string getCommand( [in] short nItemId );
+
+    /** sets the help command string for the menu item.
+
+        @param nItemId
+            specifies the menu item ID for which the help command URL be set.
+
+        @param aCommand
+            specifies the help command for the menu item.
+    */
+    void setHelpCommand( [in] short nItemId,
+                         [in] string aCommand );
+
+    /** retrieves the help command string for the menu item.
+
+        @param nItemId
+            specifies the menu item ID for which the help command should be set.
+
+        @return
+            the help command of the menu item.
+    */
+    string getHelpCommand( [in] short nItemId );
+
+    /** sets the help text for the menu item.
+
+        @param nItemId
+            specifies the menu item identifier for which the help text should be set.
+
+        @param sHelpText
+            specifies the help text for the menu item.
+    */
+    void setHelpText( [in] short nItemId,
+                      [in] string sHelpText );
+
+    /** retrieves the help text for the menu item.
+
+        @param nItemId
+            specifies the menu item identifier for which the help text should be retrieved.
+
+        @return
+            a string with the help text.
+    */
+    string getHelpText( [in] short nItemId );
+
+    /** sets the tip help text for the menu item.
+
+        @param nItemId
+            specifies the menu item identifier for which the tip help text should be set.
+
+        @param sTipHelpText
+            specifies the tip help text for the menu item.
+    */
+    void setTipHelpText( [in] short nItemId,
+                         [in] string sTipHelpText );
+
+    /** retrieves the tip help text for the menu item.
+
+        @param nItemId
+            specifies the menu item identifier for which the tip help text should be retrieved.
+
+        @return
+            a string with the tip help text.
+    */
+    string getTipHelpText( [in] short nItemId );
+
+    /** checks whether an XMenu is an XPopupMenu.
+
+        @return
+                `TRUE` if the menu is a PopupMenu,
+                `FALSE` if it is a MenuBar.
+    */
+    boolean isPopupMenu();
+
+    /** sets the popup menu for a specified menu item.
+
+        @param nItemId
+            specifies the menu item ID for which the XPopupMenu should be set.
+
+        @param aPopupMenu
+            specifies a XPopupMenu.
      */
     void setPopupMenu( [in] short nItemId,
-             [in] XPopupMenu aPopupMenu );
+                       [in] XPopupMenu aPopupMenu );
 
+    /** returns the popup menu from the menu item.
 
-    /** returns the pop-up menu from the menu item.
+        @param nItemId
+            specifies the menu item ID for which the XPopupMenu should be retrieved.
+
+        @return
+            a XPopupMenu.
      */
     XPopupMenu getPopupMenu( [in] short nItemId );
 
 };
-
 
 }; }; }; };
 

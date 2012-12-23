@@ -18,10 +18,11 @@
  */
 
 #include <toolkit/awt/vclxmenu.hxx>
+#include <toolkit/helper/convert.hxx>
 #include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/servicenames.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <toolkit/helper/convert.hxx>
+
 #include <cppuhelper/typeprovider.hxx>
 #include <rtl/uuid.h>
 #include <osl/mutex.hxx>
@@ -29,53 +30,27 @@
 #include <vcl/menu.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/image.hxx>
+#include <vcl/keycod.hxx>
+#include <vcl/menu.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/svapp.hxx>
 
 #include <com/sun/star/awt/KeyModifier.hpp>
 
-
-#ifdef DBG_UTIL
-    #define THROW_MENUITEM_NOT_FOUND( Func, nItemId ) \
-        if ( MENU_ITEM_NOTFOUND == mpMenu->GetItemPos( nItemId ) ) \
-            throw  ::com::sun::star::container::NoSuchElementException( \
-                Func \
-                ": There is no menu item with " \
-                + OUString::valueOf( sal_Int32( nItemId ) ) \
-                + " as identifier", \
-                *this \
-            );
-    #define THROW_MENUPOS_NOT_FOUND( Func, nPos ) \
-        if ( MENU_ITEM_NOTFOUND == sal_uInt16( nPos ) ) \
-            throw  ::com::sun::star::container::NoSuchElementException( \
-                Func \
-                ": There is no menu item at position " \
-                + OUString::valueOf( sal_Int32( nPos ) ), \
-                *this \
-            );
-#else
-    #define THROW_MENUITEM_NOT_FOUND( Func, nItemId ) \
-        if ( MENU_ITEM_NOTFOUND == mpMenu->GetItemPos( nItemId ) ) \
-            throw  ::com::sun::star::container::NoSuchElementException();
-    #define THROW_MENUPOS_NOT_FOUND( Func, nPos ) \
-        if ( MENU_ITEM_NOTFOUND == sal_uInt16( nPos ) ) \
-            throw  ::com::sun::star::container::NoSuchElementException();
-#endif
-
-
-//  ----------------------------------------------------
-//  class VCLXMenu
-//  ----------------------------------------------------
+using rtl::OUString;
+using rtl::OUStringBuffer;
 
 DBG_NAME(VCLXMenu)
 
-VCLXMenu::VCLXMenu() : maMenuListeners( *this )
+VCLXMenu::VCLXMenu()
+    : maMenuListeners( *this )
 {
     DBG_CTOR( VCLXMenu, 0 );
     mpMenu = NULL;
 }
 
-VCLXMenu::VCLXMenu( Menu* pMenu ) : maMenuListeners( *this )
+VCLXMenu::VCLXMenu( Menu* pMenu )
+    : maMenuListeners( *this )
 {
     DBG_CTOR( VCLXMenu, 0 );
     mpMenu = pMenu;
@@ -127,10 +102,10 @@ IMPL_LINK( VCLXMenu, MenuEventListener, VclSimpleEvent*, pEvent )
                 {
                     if ( maMenuListeners.getLength() )
                     {
-                        ::com::sun::star::awt::MenuEvent aEvent;
+                        css::awt::MenuEvent aEvent;
                         aEvent.Source = (::cppu::OWeakObject*)this;
                         aEvent.MenuId = mpMenu->GetCurItemId();
-                        maMenuListeners.select( aEvent );
+                        maMenuListeners.itemSelected( aEvent );
                     }
                 }
                 break;
@@ -143,10 +118,10 @@ IMPL_LINK( VCLXMenu, MenuEventListener, VclSimpleEvent*, pEvent )
                 {
                     if ( maMenuListeners.getLength() )
                     {
-                        ::com::sun::star::awt::MenuEvent aEvent;
+                        css::awt::MenuEvent aEvent;
                         aEvent.Source = (::cppu::OWeakObject*)this;
                         aEvent.MenuId = mpMenu->GetCurItemId();
-                        maMenuListeners.highlight( aEvent );
+                        maMenuListeners.itemHighlighted( aEvent );
                     }
                 }
                 break;
@@ -154,10 +129,10 @@ IMPL_LINK( VCLXMenu, MenuEventListener, VclSimpleEvent*, pEvent )
                 {
                     if ( maMenuListeners.getLength() )
                     {
-                        ::com::sun::star::awt::MenuEvent aEvent;
+                        css::awt::MenuEvent aEvent;
                         aEvent.Source = (::cppu::OWeakObject*)this;
                         aEvent.MenuId = mpMenu->GetCurItemId();
-                        maMenuListeners.activate( aEvent );
+                        maMenuListeners.itemActivated( aEvent );
                     }
                 }
                 break;
@@ -165,10 +140,10 @@ IMPL_LINK( VCLXMenu, MenuEventListener, VclSimpleEvent*, pEvent )
                 {
                     if ( maMenuListeners.getLength() )
                     {
-                        ::com::sun::star::awt::MenuEvent aEvent;
+                        css::awt::MenuEvent aEvent;
                         aEvent.Source = (::cppu::OWeakObject*)this;
                         aEvent.MenuId = mpMenu->GetCurItemId();
-                        maMenuListeners.deactivate( aEvent );
+                        maMenuListeners.itemDeactivated( aEvent );
                     }
                 }
                 break;
@@ -197,14 +172,8 @@ IMPL_LINK( VCLXMenu, MenuEventListener, VclSimpleEvent*, pEvent )
 }
 
 
-//=============================================================================
-//=============================================================================
-//=============================================================================
-
-
-// ::com::sun::star::lang::XServiceInfo
 OUString SAL_CALL VCLXMenu::getImplementationName(  )
-throw (::com::sun::star::uno::RuntimeException)
+throw (css::uno::RuntimeException)
 {
     ::osl::ResettableGuard < ::osl::Mutex > aGuard( GetMutex() );
     const sal_Bool bIsPopupMenu = IsPopupMenu();
@@ -219,15 +188,14 @@ throw (::com::sun::star::uno::RuntimeException)
     return implName;
 }
 
-
-::com::sun::star::uno::Sequence< OUString > SAL_CALL VCLXMenu::getSupportedServiceNames(  )
-throw (::com::sun::star::uno::RuntimeException)
+css::uno::Sequence< OUString > SAL_CALL VCLXMenu::getSupportedServiceNames(  )
+throw (css::uno::RuntimeException)
 {
     ::osl::ResettableGuard < ::osl::Mutex > aGuard( GetMutex() );
     const sal_Bool bIsPopupMenu = IsPopupMenu();
     aGuard.clear();
 
-    ::com::sun::star::uno::Sequence< OUString > aNames( 1 );
+    css::uno::Sequence< OUString > aNames( 1 );
     if ( bIsPopupMenu )
         aNames[ 0 ] = OUString::createFromAscii( szServiceName2_PopupMenu );
     else
@@ -237,10 +205,11 @@ throw (::com::sun::star::uno::RuntimeException)
 }
 
 
-::sal_Bool SAL_CALL VCLXMenu::supportsService( const OUString& rServiceName )
-throw (::com::sun::star::uno::RuntimeException)
+::sal_Bool SAL_CALL VCLXMenu::supportsService(
+    const OUString& rServiceName )
+throw (css::uno::RuntimeException)
 {
-    ::com::sun::star::uno::Sequence< OUString > aServiceNames( getSupportedServiceNames() );
+    css::uno::Sequence< OUString > aServiceNames( getSupportedServiceNames() );
 
     if ( aServiceNames[ 0 ] == rServiceName )
         return sal_True;
@@ -249,46 +218,39 @@ throw (::com::sun::star::uno::RuntimeException)
 }
 
 
-// ::com::sun::star::uno::XInterface
-::com::sun::star::uno::Any VCLXMenu::queryInterface( const ::com::sun::star::uno::Type & rType )
-throw(::com::sun::star::uno::RuntimeException)
+css::uno::Any VCLXMenu::queryInterface(
+    const css::uno::Type & rType )
+throw(css::uno::RuntimeException)
 {
     ::osl::ResettableGuard < ::osl::Mutex > aGuard( GetMutex() );
     const sal_Bool bIsPopupMenu = IsPopupMenu();
     aGuard.clear();
 
-    ::com::sun::star::uno::Any aRet;
+    css::uno::Any aRet;
 
     if ( bIsPopupMenu )
         aRet = ::cppu::queryInterface(  rType,
-                                        (static_cast< ::com::sun::star::awt::XMenu* >((::com::sun::star::awt::XMenuBar*) this) ),
-                                        (static_cast< ::com::sun::star::awt::XPopupMenu* >(this)),
-                                        (static_cast< ::com::sun::star::awt::XPopupMenuExtended* >(this)),
-                                        (static_cast< ::com::sun::star::awt::XMenuExtended* >((::com::sun::star::awt::XPopupMenuExtended*) this) ),
-                                        (static_cast< ::com::sun::star::awt::XMenuExtended2* >((::com::sun::star::awt::XPopupMenuExtended*) this) ),
-                                        (static_cast< ::com::sun::star::lang::XTypeProvider* >(this)),
-                                        (static_cast< ::com::sun::star::lang::XServiceInfo* >(this)),
-                                        (static_cast< ::com::sun::star::lang::XUnoTunnel* >(this)) );
+                                        (static_cast< css::awt::XMenu* >((css::awt::XMenuBar*) this) ),
+                                        (static_cast< css::awt::XPopupMenu* >(this)),
+                                        (static_cast< css::lang::XTypeProvider* >(this)),
+                                        (static_cast< css::lang::XServiceInfo* >(this)),
+                                        (static_cast< css::lang::XUnoTunnel* >(this)) );
     else
         aRet = ::cppu::queryInterface(  rType,
-                                        (static_cast< ::com::sun::star::awt::XMenu* >((::com::sun::star::awt::XMenuBar*) this) ),
-                                        (static_cast< ::com::sun::star::awt::XMenuBar* >(this)),
-                                        (static_cast< ::com::sun::star::awt::XMenuBarExtended* >(this)),
-                                        (static_cast< ::com::sun::star::awt::XMenuExtended* >((::com::sun::star::awt::XMenuBarExtended*) this) ),
-                                        (static_cast< ::com::sun::star::awt::XMenuExtended2* >((::com::sun::star::awt::XMenuBarExtended*) this) ),
-                                        (static_cast< ::com::sun::star::lang::XTypeProvider* >(this)),
-                                        (static_cast< ::com::sun::star::lang::XServiceInfo* >(this)),
-                                        (static_cast< ::com::sun::star::lang::XUnoTunnel* >(this)) );
+                                        (static_cast< css::awt::XMenu* >((css::awt::XMenuBar*) this) ),
+                                        (static_cast< css::awt::XMenuBar* >(this)),
+                                        (static_cast< css::lang::XTypeProvider* >(this)),
+                                        (static_cast< css::lang::XServiceInfo* >(this)),
+                                        (static_cast< css::lang::XUnoTunnel* >(this)) );
 
     return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
 }
 
-// ::com::sun::star::lang::XUnoTunnel
+
 IMPL_XUNOTUNNEL( VCLXMenu )
 
-// ::com::sun::star::lang::XTypeProvider
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > VCLXMenu::getTypes()
-throw(::com::sun::star::uno::RuntimeException)
+css::uno::Sequence< css::uno::Type > VCLXMenu::getTypes()
+throw(css::uno::RuntimeException)
 {
     ::osl::ResettableGuard < ::osl::Mutex > aGuard( GetMutex() );
     const sal_Bool bIsPopupMenu = IsPopupMenu();
@@ -305,13 +267,10 @@ throw(::com::sun::star::uno::RuntimeException)
             if( !pCollectionPopupMenu )
             {
                 static ::cppu::OTypeCollection collectionPopupMenu(
-                getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XTypeProvider>* ) NULL ),
-                getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenu>* ) NULL ),
-                getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu>* ) NULL ),
-                getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenuExtended>* ) NULL ),
-                getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuExtended>* ) NULL ),
-                getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuExtended2>* ) NULL ),
-                getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XServiceInfo>* ) NULL ) );
+                getCppuType( ( css::uno::Reference< css::lang::XTypeProvider>* ) NULL ),
+                getCppuType( ( css::uno::Reference< css::awt::XMenu>* ) NULL ),
+                getCppuType( ( css::uno::Reference< css::awt::XPopupMenu>* ) NULL ),
+                getCppuType( ( css::uno::Reference< css::lang::XServiceInfo>* ) NULL ) );
                 pCollectionPopupMenu = &collectionPopupMenu;
             }
         }
@@ -326,13 +285,10 @@ throw(::com::sun::star::uno::RuntimeException)
             if( !pCollectionMenuBar )
             {
                 static ::cppu::OTypeCollection collectionMenuBar(
-                getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XTypeProvider>* ) NULL ),
-                getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenu>* ) NULL ),
-                getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuBar>* ) NULL ),
-                getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuBarExtended>* ) NULL ),
-                getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuExtended>* ) NULL ),
-                getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuExtended2>* ) NULL ),
-                getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XServiceInfo>* ) NULL ) );
+                getCppuType( ( css::uno::Reference< css::lang::XTypeProvider>* ) NULL ),
+                getCppuType( ( css::uno::Reference< css::awt::XMenu>* ) NULL ),
+                getCppuType( ( css::uno::Reference< css::awt::XMenuBar>* ) NULL ),
+                getCppuType( ( css::uno::Reference< css::lang::XServiceInfo>* ) NULL ) );
                 pCollectionMenuBar = &collectionMenuBar;
             }
         }
@@ -341,8 +297,8 @@ throw(::com::sun::star::uno::RuntimeException)
 }
 
 
-::com::sun::star::uno::Sequence< sal_Int8 > VCLXMenu::getImplementationId()
-throw(::com::sun::star::uno::RuntimeException)
+css::uno::Sequence< sal_Int8 > VCLXMenu::getImplementationId()
+throw(css::uno::RuntimeException)
 {
     ::osl::ResettableGuard < ::osl::Mutex > aGuard( GetMutex() );
     const sal_Bool bIsPopupMenu = IsPopupMenu();
@@ -381,27 +337,30 @@ throw(::com::sun::star::uno::RuntimeException)
     }
 }
 
-
-//=============================================================================
-//=============================================================================
-//=============================================================================
-
-
-void VCLXMenu::addMenuListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXMenu::addMenuListener(
+    const css::uno::Reference< css::awt::XMenuListener >& rxListener )
+throw(css::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     maMenuListeners.addInterface( rxListener );
 }
 
-void VCLXMenu::removeMenuListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXMenu::removeMenuListener(
+    const css::uno::Reference< css::awt::XMenuListener >& rxListener )
+throw(css::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     maMenuListeners.removeInterface( rxListener );
 }
 
-void VCLXMenu::insertItem( sal_Int16 nItemId, const OUString& aText, sal_Int16 nItemStyle, sal_Int16 nPos ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXMenu::insertItem(
+    sal_Int16 nItemId,
+    const OUString& aText,
+    sal_Int16 nItemStyle,
+    sal_Int16 nPos )
+throw(css::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -410,7 +369,10 @@ void VCLXMenu::insertItem( sal_Int16 nItemId, const OUString& aText, sal_Int16 n
         mpMenu->InsertItem(nItemId, aText, (MenuItemBits)nItemStyle, OString(), nPos);
 }
 
-void VCLXMenu::removeItem( sal_Int16 nPos, sal_Int16 nCount ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXMenu::removeItem(
+    sal_Int16 nPos,
+    sal_Int16 nCount )
+throw(css::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -425,7 +387,8 @@ void VCLXMenu::removeItem( sal_Int16 nPos, sal_Int16 nCount ) throw(::com::sun::
     }
 }
 
-sal_Int16 VCLXMenu::getItemCount(  ) throw(::com::sun::star::uno::RuntimeException)
+sal_Int16 VCLXMenu::getItemCount(  )
+throw(css::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -433,7 +396,9 @@ sal_Int16 VCLXMenu::getItemCount(  ) throw(::com::sun::star::uno::RuntimeExcepti
     return mpMenu ? mpMenu->GetItemCount() : 0;
 }
 
-sal_Int16 VCLXMenu::getItemId( sal_Int16 nPos ) throw(::com::sun::star::uno::RuntimeException)
+sal_Int16 VCLXMenu::getItemId(
+    sal_Int16 nPos )
+throw(css::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -441,7 +406,9 @@ sal_Int16 VCLXMenu::getItemId( sal_Int16 nPos ) throw(::com::sun::star::uno::Run
     return mpMenu ? mpMenu->GetItemId( nPos ) : 0;
 }
 
-sal_Int16 VCLXMenu::getItemPos( sal_Int16 nId ) throw(::com::sun::star::uno::RuntimeException)
+sal_Int16 VCLXMenu::getItemPos(
+    sal_Int16 nId )
+throw(css::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -449,7 +416,10 @@ sal_Int16 VCLXMenu::getItemPos( sal_Int16 nId ) throw(::com::sun::star::uno::Run
     return mpMenu ? mpMenu->GetItemPos( nId ) : 0;
 }
 
-void VCLXMenu::enableItem( sal_Int16 nItemId, sal_Bool bEnable ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXMenu::enableItem(
+    sal_Int16 nItemId,
+    sal_Bool bEnable )
+throw(css::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -458,7 +428,9 @@ void VCLXMenu::enableItem( sal_Int16 nItemId, sal_Bool bEnable ) throw(::com::su
         mpMenu->EnableItem( nItemId, bEnable );
 }
 
-sal_Bool VCLXMenu::isItemEnabled( sal_Int16 nItemId ) throw(::com::sun::star::uno::RuntimeException)
+sal_Bool VCLXMenu::isItemEnabled(
+    sal_Int16 nItemId )
+throw(css::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -466,7 +438,10 @@ sal_Bool VCLXMenu::isItemEnabled( sal_Int16 nItemId ) throw(::com::sun::star::un
     return mpMenu ? mpMenu->IsItemEnabled( nItemId ) : sal_False;
 }
 
-void VCLXMenu::setItemText( sal_Int16 nItemId, const OUString& aText ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXMenu::setItemText(
+    sal_Int16 nItemId,
+    const OUString& aText )
+throw(css::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -475,7 +450,9 @@ void VCLXMenu::setItemText( sal_Int16 nItemId, const OUString& aText ) throw(::c
         mpMenu->SetItemText( nItemId, aText );
 }
 
-OUString VCLXMenu::getItemText( sal_Int16 nItemId ) throw(::com::sun::star::uno::RuntimeException)
+OUString VCLXMenu::getItemText(
+    sal_Int16 nItemId )
+throw(css::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -486,7 +463,10 @@ OUString VCLXMenu::getItemText( sal_Int16 nItemId ) throw(::com::sun::star::uno:
     return aItemText;
 }
 
-void VCLXMenu::setPopupMenu( sal_Int16 nItemId, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu >& rxPopupMenu ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXMenu::setPopupMenu(
+    sal_Int16 nItemId,
+    const css::uno::Reference< css::awt::XPopupMenu >& rxPopupMenu )
+throw(css::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -497,7 +477,7 @@ void VCLXMenu::setPopupMenu( sal_Int16 nItemId, const ::com::sun::star::uno::Ref
     if ( mpMenu && pVCLMenu && pVCLMenu->GetMenu() && pVCLMenu->IsPopupMenu() )
     {
         // Selbst eine Ref halten!
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu > * pNewRef = new ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu > ;
+        css::uno::Reference< css::awt::XPopupMenu > * pNewRef = new css::uno::Reference< css::awt::XPopupMenu > ;
         *pNewRef = rxPopupMenu;
         maPopupMenuRefs.push_back( pNewRef );
 
@@ -505,18 +485,20 @@ void VCLXMenu::setPopupMenu( sal_Int16 nItemId, const ::com::sun::star::uno::Ref
     }
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu > VCLXMenu::getPopupMenu( sal_Int16 nItemId ) throw(::com::sun::star::uno::RuntimeException)
+css::uno::Reference< css::awt::XPopupMenu > VCLXMenu::getPopupMenu(
+    sal_Int16 nItemId )
+throw(css::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu >  aRef;
+    css::uno::Reference< css::awt::XPopupMenu >  aRef;
     Menu* pMenu = mpMenu ? mpMenu->GetPopupMenu( nItemId ) : NULL;
     if ( pMenu )
     {
         for ( size_t n = maPopupMenuRefs.size(); n; )
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu > * pRef = maPopupMenuRefs[ --n ];
+            css::uno::Reference< css::awt::XPopupMenu > * pRef = maPopupMenuRefs[ --n ];
             Menu* pM = ((VCLXMenu*)pRef->get())->GetMenu();
             if ( pM == pMenu )
             {
@@ -534,8 +516,10 @@ void VCLXMenu::setPopupMenu( sal_Int16 nItemId, const ::com::sun::star::uno::Ref
     return aRef;
 }
 
-// ::com::sun::star::awt::XPopupMenu
-void VCLXMenu::insertSeparator( sal_Int16 nPos ) throw(::com::sun::star::uno::RuntimeException)
+// css::awt::XPopupMenu
+void VCLXMenu::insertSeparator(
+    sal_Int16 nPos )
+throw(css::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -544,7 +528,9 @@ void VCLXMenu::insertSeparator( sal_Int16 nPos ) throw(::com::sun::star::uno::Ru
         mpMenu->InsertSeparator(OString(), nPos);
 }
 
-void VCLXMenu::setDefaultItem( sal_Int16 nItemId ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXMenu::setDefaultItem(
+    sal_Int16 nItemId )
+throw(css::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -553,7 +539,8 @@ void VCLXMenu::setDefaultItem( sal_Int16 nItemId ) throw(::com::sun::star::uno::
         mpMenu->SetDefaultItem( nItemId );
 }
 
-sal_Int16 VCLXMenu::getDefaultItem(  ) throw(::com::sun::star::uno::RuntimeException)
+sal_Int16 VCLXMenu::getDefaultItem(  )
+throw(css::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -561,7 +548,10 @@ sal_Int16 VCLXMenu::getDefaultItem(  ) throw(::com::sun::star::uno::RuntimeExcep
     return mpMenu ? mpMenu->GetDefaultItem() : 0;
 }
 
-void VCLXMenu::checkItem( sal_Int16 nItemId, sal_Bool bCheck ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXMenu::checkItem(
+    sal_Int16 nItemId,
+    sal_Bool bCheck )
+throw(css::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -570,7 +560,9 @@ void VCLXMenu::checkItem( sal_Int16 nItemId, sal_Bool bCheck ) throw(::com::sun:
         mpMenu->CheckItem( nItemId, bCheck );
 }
 
-sal_Bool VCLXMenu::isItemChecked( sal_Int16 nItemId ) throw(::com::sun::star::uno::RuntimeException)
+sal_Bool VCLXMenu::isItemChecked(
+    sal_Int16 nItemId )
+throw(css::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -578,19 +570,30 @@ sal_Bool VCLXMenu::isItemChecked( sal_Int16 nItemId ) throw(::com::sun::star::un
     return mpMenu ? mpMenu->IsItemChecked( nItemId ) : sal_False;
 }
 
-sal_Int16 VCLXMenu::execute( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& rxWindowPeer, const ::com::sun::star::awt::Rectangle& rArea, sal_Int16 nFlags ) throw(::com::sun::star::uno::RuntimeException)
+sal_Int16 VCLXMenu::execute(
+    const css::uno::Reference< css::awt::XWindowPeer >& rxWindowPeer,
+    const css::awt::Rectangle& rPos,
+    sal_Int16 nFlags )
+throw(css::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     sal_Int16 nRet = 0;
     if ( mpMenu && IsPopupMenu() )
-        nRet = ((PopupMenu*)mpMenu)->Execute( VCLUnoHelper::GetWindow( rxWindowPeer ), VCLRectangle(rArea), nFlags | POPUPMENU_NOMOUSEUPCLOSE );
+    {
+        nRet = ((PopupMenu*)mpMenu)->Execute( VCLUnoHelper::GetWindow( rxWindowPeer ),
+                                              VCLRectangle( rPos ),
+                                              nFlags | POPUPMENU_NOMOUSEUPCLOSE );
+    }
     return nRet;
 }
 
 
-void SAL_CALL VCLXMenu::setCommand( sal_Int16 nItemId, const OUString& aCommand ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL VCLXMenu::setCommand(
+    sal_Int16 nItemId,
+    const OUString& aCommand )
+throw (css::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -599,7 +602,9 @@ void SAL_CALL VCLXMenu::setCommand( sal_Int16 nItemId, const OUString& aCommand 
         mpMenu->SetItemCommand( nItemId, aCommand );
 }
 
-OUString SAL_CALL VCLXMenu::getCommand( sal_Int16 nItemId ) throw (::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL VCLXMenu::getCommand(
+    sal_Int16 nItemId )
+throw (css::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -610,7 +615,10 @@ OUString SAL_CALL VCLXMenu::getCommand( sal_Int16 nItemId ) throw (::com::sun::s
     return aItemCommand;
 }
 
-void SAL_CALL VCLXMenu::setHelpCommand( sal_Int16 nItemId, const OUString& aHelp ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL VCLXMenu::setHelpCommand(
+    sal_Int16 nItemId,
+    const OUString& aHelp )
+throw (css::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -619,7 +627,9 @@ void SAL_CALL VCLXMenu::setHelpCommand( sal_Int16 nItemId, const OUString& aHelp
         mpMenu->SetHelpCommand( nItemId, aHelp );
 }
 
-OUString SAL_CALL VCLXMenu::getHelpCommand( sal_Int16 nItemId ) throw (::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL VCLXMenu::getHelpCommand(
+    sal_Int16 nItemId )
+throw (css::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -631,17 +641,11 @@ OUString SAL_CALL VCLXMenu::getHelpCommand( sal_Int16 nItemId ) throw (::com::su
 }
 
 
-// ============================================================================
-// ============================================================================
-// ============================================================================
-
-
-// BEGIN ANONYMOUS NAMESPACE
 namespace
 {
-    Image lcl_XGraphic2VCLImage(
-                                const css::uno::Reference< css::graphic::XGraphic >& xGraphic,
-                                sal_Bool bResize )
+    static Image lcl_XGraphic2VCLImage(
+        const css::uno::Reference< css::graphic::XGraphic >& xGraphic,
+        sal_Bool bResize )
     {
         Image aImage;
         if ( !xGraphic.is() )
@@ -673,13 +677,9 @@ namespace
         return aImage;
     }
 
-    /**
-        As svtools builds after toolkit, we can not include/use
-        svtools/inc/acceleratorexecute.hxx
-        So I just copy here svt::AcceleratorExecute::st_AWTKey2VCLKey
-        and svt::AcceleratorExecute::st_VCLKey2AWTKey
-    */
-    css::awt::KeyEvent lcl_VCLKey2AWTKey(const KeyCode& aVCLKey)
+    /** Copied from svtools/inc/acceleratorexecute.hxx */
+    static css::awt::KeyEvent lcl_VCLKey2AWTKey(
+        const KeyCode& aVCLKey)
     {
         css::awt::KeyEvent aAWTKey;
         aAWTKey.Modifiers = 0;
@@ -708,24 +708,19 @@ namespace
         return KeyCode(nKey, bShift, bMod1, bMod2, bMod3);
     }
 
-} // END ANONYMOUS NAMESPACE
+}
 
 
-// ============================================================================
-// ============================================================================
-// ============================================================================
-
-
-// XMenuExtended2 Methods
-
-::sal_Bool SAL_CALL VCLXMenu::isPopupMenu(  ) throw (::com::sun::star::uno::RuntimeException)
+::sal_Bool SAL_CALL VCLXMenu::isPopupMenu(  )
+throw (css::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
     return IsPopupMenu();
 }
 
-void SAL_CALL VCLXMenu::clear(  ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL VCLXMenu::clear(  )
+throw (css::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -734,26 +729,26 @@ void SAL_CALL VCLXMenu::clear(  ) throw (::com::sun::star::uno::RuntimeException
 }
 
 
-::com::sun::star::awt::MenuItemType SAL_CALL VCLXMenu::getItemType( ::sal_Int16 nItemPos )
-throw ( ::com::sun::star::container::NoSuchElementException,
-        ::com::sun::star::uno::RuntimeException)
+css::awt::MenuItemType SAL_CALL VCLXMenu::getItemType(
+    ::sal_Int16 nItemPos )
+throw (css::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    ::com::sun::star::awt::MenuItemType aMenuItemType =
-        ::com::sun::star::awt::MenuItemType_DONTKNOW;
+    css::awt::MenuItemType aMenuItemType =
+        css::awt::MenuItemType_DONTKNOW;
     if ( mpMenu )
     {
-        THROW_MENUPOS_NOT_FOUND( "VCLXMenu::getItemType()", nItemPos )
-        aMenuItemType = ( (::com::sun::star::awt::MenuItemType) mpMenu->GetItemType( nItemPos ) );
+        aMenuItemType = ( (css::awt::MenuItemType) mpMenu->GetItemType( nItemPos ) );
     }
 
     return aMenuItemType;
 }
 
-void SAL_CALL VCLXMenu::hideDisabledEntries( ::sal_Bool bHide )
-throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL VCLXMenu::hideDisabledEntries(
+    ::sal_Bool bHide )
+throw (css::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -767,15 +762,8 @@ throw (::com::sun::star::uno::RuntimeException)
 }
 
 
-// ============================================================================
-// ============================================================================
-// ============================================================================
-
-
-// XPopupMenuExtended Methods
-
 ::sal_Bool SAL_CALL VCLXMenu::isInExecute(  )
-throw (::com::sun::star::uno::RuntimeException)
+throw (css::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -788,7 +776,7 @@ throw (::com::sun::star::uno::RuntimeException)
 
 
 void SAL_CALL VCLXMenu::endExecute()
-throw (::com::sun::star::uno::RuntimeException)
+throw (css::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -798,54 +786,9 @@ throw (::com::sun::star::uno::RuntimeException)
 }
 
 
-void SAL_CALL VCLXMenu::setLogo( const ::com::sun::star::awt::MenuLogo& aMenuLogo )
-throw (::com::sun::star::uno::RuntimeException)
-{
-    SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
-    if ( mpMenu )
-    {
-        if ( aMenuLogo.Graphic.is() )
-        {
-            Image aImage = lcl_XGraphic2VCLImage( aMenuLogo.Graphic, sal_False );
-            MenuLogo aVCLMenuLogo;
-
-            aVCLMenuLogo.aBitmap        = aImage.GetBitmapEx();
-            aVCLMenuLogo.aStartColor    = Color( (sal_uInt32)(aMenuLogo.StartColor) );
-            aVCLMenuLogo.aEndColor      = Color( (sal_uInt32)(aMenuLogo.EndColor) );
-
-            mpMenu->SetLogo( aVCLMenuLogo );
-        }
-        else
-            mpMenu->SetLogo();
-    }
-}
-
-
-::com::sun::star::awt::MenuLogo SAL_CALL VCLXMenu::getLogo(  )
-throw (::com::sun::star::uno::RuntimeException)
-{
-    SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
-    ::com::sun::star::awt::MenuLogo aAWTMenuLogo;
-    if ( mpMenu )
-    {
-        if ( mpMenu->HasLogo() )
-        {
-            MenuLogo aVCLMenuLogo      = mpMenu->GetLogo();
-            aAWTMenuLogo.Graphic       = Image(aVCLMenuLogo.aBitmap).GetXGraphic();
-            aAWTMenuLogo.StartColor    = aVCLMenuLogo.aStartColor.GetColor();
-            aAWTMenuLogo.EndColor      = aVCLMenuLogo.aEndColor.GetColor();
-        }
-    }
-    return aAWTMenuLogo;
-}
-
-
-void SAL_CALL VCLXMenu::enableAutoMnemonics( ::sal_Bool bEnable )
-throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL VCLXMenu::enableAutoMnemonics(
+    ::sal_Bool bEnable )
+throw (css::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -859,34 +802,32 @@ throw (::com::sun::star::uno::RuntimeException)
 }
 
 
-void SAL_CALL VCLXMenu::setAcceleratorKeyEvent( ::sal_Int16 nItemId,
-                                                const ::com::sun::star::awt::KeyEvent& aKeyEvent )
-throw ( ::com::sun::star::container::NoSuchElementException,
-        ::com::sun::star::uno::RuntimeException)
+void SAL_CALL VCLXMenu::setAcceleratorKeyEvent(
+    ::sal_Int16 nItemId,
+    const css::awt::KeyEvent& aKeyEvent )
+throw (css::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    if ( mpMenu && IsPopupMenu() )
+    if ( mpMenu && IsPopupMenu() && MENU_ITEM_NOTFOUND != mpMenu->GetItemPos( nItemId ) )
     {
-        THROW_MENUITEM_NOT_FOUND( "VCLXMenu::setAcceleratorKeyEvent()", nItemId )
         KeyCode aVCLKeyCode = lcl_AWTKey2VCLKey( aKeyEvent );
         mpMenu->SetAccelKey( nItemId, aVCLKeyCode );
     }
 }
 
 
-::com::sun::star::awt::KeyEvent SAL_CALL VCLXMenu::getAcceleratorKeyEvent( ::sal_Int16 nItemId )
-throw ( ::com::sun::star::container::NoSuchElementException,
-        ::com::sun::star::uno::RuntimeException)
+css::awt::KeyEvent SAL_CALL VCLXMenu::getAcceleratorKeyEvent(
+    ::sal_Int16 nItemId )
+throw (css::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    ::com::sun::star::awt::KeyEvent aKeyEvent;
-    if ( mpMenu && IsPopupMenu() )
+    css::awt::KeyEvent aKeyEvent;
+    if ( mpMenu && IsPopupMenu() && MENU_ITEM_NOTFOUND != mpMenu->GetItemPos( nItemId ) )
     {
-        THROW_MENUITEM_NOT_FOUND( "VCLXMenu::getAcceleratorKeyEvent()", nItemId )
         KeyCode nKeyCode = mpMenu->GetAccelKey( nItemId );
         aKeyEvent = lcl_VCLKey2AWTKey( nKeyCode );
     }
@@ -895,32 +836,31 @@ throw ( ::com::sun::star::container::NoSuchElementException,
 }
 
 
-void SAL_CALL VCLXMenu::setHelpText( ::sal_Int16 nItemId, const OUString& sHelpText )
-throw ( ::com::sun::star::container::NoSuchElementException,
-        ::com::sun::star::uno::RuntimeException)
+void SAL_CALL VCLXMenu::setHelpText(
+    ::sal_Int16 nItemId,
+    const OUString& sHelpText )
+throw (css::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    if ( mpMenu && IsPopupMenu() )
+    if ( mpMenu && MENU_ITEM_NOTFOUND != mpMenu->GetItemPos( nItemId ) )
     {
-        THROW_MENUITEM_NOT_FOUND( "VCLXMenu::setHelpText()", nItemId )
         mpMenu->SetHelpText( nItemId, sHelpText );
     }
 }
 
 
-OUString SAL_CALL VCLXMenu::getHelpText( ::sal_Int16 nItemId )
-throw ( ::com::sun::star::container::NoSuchElementException,
-        ::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL VCLXMenu::getHelpText(
+    ::sal_Int16 nItemId )
+throw (css::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     OUString sHelpText;
-    if ( mpMenu && IsPopupMenu() )
+    if ( mpMenu && MENU_ITEM_NOTFOUND != mpMenu->GetItemPos( nItemId ) )
     {
-        THROW_MENUITEM_NOT_FOUND( "VCLXMenu::getHelpText()", nItemId )
         sHelpText = mpMenu->GetHelpText( nItemId );
     }
 
@@ -928,32 +868,31 @@ throw ( ::com::sun::star::container::NoSuchElementException,
 }
 
 
-void SAL_CALL VCLXMenu::setTipHelpText( ::sal_Int16 nItemId, const OUString& sTipHelpText )
-throw ( ::com::sun::star::container::NoSuchElementException,
-        ::com::sun::star::uno::RuntimeException)
+void SAL_CALL VCLXMenu::setTipHelpText(
+    ::sal_Int16 nItemId,
+    const OUString& sTipHelpText )
+throw (css::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    if ( mpMenu && IsPopupMenu() )
+    if ( mpMenu && MENU_ITEM_NOTFOUND != mpMenu->GetItemPos( nItemId ) )
     {
-        THROW_MENUITEM_NOT_FOUND( "VCLXMenu::setTipHelpText()", nItemId )
         mpMenu->SetTipHelpText( nItemId, sTipHelpText );
     }
 }
 
 
-OUString SAL_CALL VCLXMenu::getTipHelpText( ::sal_Int16 nItemId )
-throw ( ::com::sun::star::container::NoSuchElementException,
-        ::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL VCLXMenu::getTipHelpText(
+    ::sal_Int16 nItemId )
+throw (css::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     OUString sTipHelpText;
-    if ( mpMenu && IsPopupMenu() )
+    if ( mpMenu && MENU_ITEM_NOTFOUND != mpMenu->GetItemPos( nItemId ) )
     {
-        THROW_MENUITEM_NOT_FOUND( "VCLXMenu::getTipHelpText()", nItemId )
         sTipHelpText = mpMenu->GetTipHelpText( nItemId );
     }
     return sTipHelpText;
@@ -961,110 +900,40 @@ throw ( ::com::sun::star::container::NoSuchElementException,
 
 
 void SAL_CALL VCLXMenu::setItemImage(
-                                            ::sal_Int16 nItemId,
-                                            const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& xGraphic, ::sal_Bool bScale )
-throw ( ::com::sun::star::container::NoSuchElementException,
-        ::com::sun::star::uno::RuntimeException)
+    ::sal_Int16 nItemId,
+    const css::uno::Reference< css::graphic::XGraphic >& xGraphic,
+    ::sal_Bool bScale )
+throw (css::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    if ( mpMenu && IsPopupMenu() )
+    if ( mpMenu && IsPopupMenu() && MENU_ITEM_NOTFOUND != mpMenu->GetItemPos( nItemId ) )
     {
-        THROW_MENUITEM_NOT_FOUND( "VCLXMenu::setItemImage()", nItemId )
         Image aImage = lcl_XGraphic2VCLImage( xGraphic, bScale );
         mpMenu->SetItemImage( nItemId, aImage );
     }
 }
 
 
-::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > SAL_CALL VCLXMenu::getItemImage( ::sal_Int16 nItemId )
-throw ( ::com::sun::star::container::NoSuchElementException,
-        ::com::sun::star::uno::RuntimeException)
+css::uno::Reference< css::graphic::XGraphic > SAL_CALL
+VCLXMenu::getItemImage(
+    ::sal_Int16 nItemId )
+throw (css::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > rxGraphic;
+    css::uno::Reference< css::graphic::XGraphic > rxGraphic;
 
-    if ( mpMenu && IsPopupMenu() )
+    if ( mpMenu && IsPopupMenu() && MENU_ITEM_NOTFOUND != mpMenu->GetItemPos( nItemId ) )
     {
-        THROW_MENUITEM_NOT_FOUND( "VCLXMenu::getItemImage()", nItemId )
         Image aImage = mpMenu->GetItemImage( nItemId );
         if ( !!aImage )
             rxGraphic = aImage.GetXGraphic();
     }
     return rxGraphic;
 }
-
-
-void SAL_CALL VCLXMenu::setItemImageAngle( ::sal_Int16 nItemId, ::sal_Int32 nAngle )
-throw ( ::com::sun::star::container::NoSuchElementException,
-        ::com::sun::star::uno::RuntimeException)
-{
-    SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
-    if ( mpMenu && IsPopupMenu() )
-    {
-        THROW_MENUITEM_NOT_FOUND( "VCLXMenu::setItemImageAngle()", nItemId )
-        mpMenu->SetItemImageAngle( nItemId, nAngle );
-    }
-}
-
-
-::sal_Int32 SAL_CALL VCLXMenu::getItemImageAngle( ::sal_Int16 nItemId )
-throw ( ::com::sun::star::container::NoSuchElementException,
-        ::com::sun::star::uno::RuntimeException)
-{
-    SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
-    ::sal_Int32 nItemImageAngle( 0 );
-    if ( mpMenu && IsPopupMenu() )
-    {
-        THROW_MENUITEM_NOT_FOUND( "VCLXMenu::getItemImageAngle()", nItemId )
-        nItemImageAngle = mpMenu->GetItemImageAngle( nItemId );
-    }
-    return nItemImageAngle;
-}
-
-
-void SAL_CALL VCLXMenu::setItemImageMirrorMode( ::sal_Int16 nItemId, ::sal_Bool bMirror )
-throw ( ::com::sun::star::container::NoSuchElementException,
-        ::com::sun::star::uno::RuntimeException)
-{
-    SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
-    if ( mpMenu && IsPopupMenu() )
-    {
-        THROW_MENUITEM_NOT_FOUND( "VCLXMenu::setItemImageMirrorMode()", nItemId )
-        mpMenu->SetItemImageMirrorMode( nItemId, bMirror );
-    }
-}
-
-
-::sal_Bool SAL_CALL VCLXMenu::isItemImageInMirrorMode( ::sal_Int16 nItemId )
-throw ( ::com::sun::star::container::NoSuchElementException,
-        ::com::sun::star::uno::RuntimeException)
-{
-    SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
-    sal_Bool bMirrorMode( sal_False );
-    if ( mpMenu && IsPopupMenu() )
-    {
-        THROW_MENUITEM_NOT_FOUND( "VCLXMenu::isItemImageInMirrorMode()", nItemId )
-        bMirrorMode = mpMenu->GetItemImageMirrorMode( nItemId );
-    }
-    return bMirrorMode;
-}
-
-
-//  ----------------------------------------------------
-//  class VCLXMenuBar
-//  ----------------------------------------------------
 
 DBG_NAME(VCLXMenuBar);
 
@@ -1079,9 +948,6 @@ VCLXMenuBar::VCLXMenuBar( MenuBar* pMenuBar ) : VCLXMenu( (Menu *)pMenuBar )
     DBG_CTOR( VCLXMenuBar, 0 );
 }
 
-//  ----------------------------------------------------
-//  class VCLXPopupMenu
-//  ----------------------------------------------------
 
 DBG_NAME(VCLXPopupMenu);
 

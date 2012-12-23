@@ -184,10 +184,8 @@ throw (::com::sun::star::uno::RuntimeException)
     // now display the popup menu and execute every command ...
 
     Reference< awt::XWindowPeer > xParent( m_xParentWindow, UNO_QUERY );
-    com::sun::star::awt::Rectangle aRectangle;
-    aRectangle.X = aPos.X;
-    aRectangle.Y = aPos.Y;
-    sal_Int16 nId = xPopupMenu->execute( xParent, aRectangle, com::sun::star::awt::PopupMenuDirection::EXECUTE_UP+16 );
+    com::sun::star::awt::Rectangle aRect( aPos.X, aPos.Y, 0, 0 );
+    sal_Int16 nId = xPopupMenu->execute( xParent, aRect, com::sun::star::awt::PopupMenuDirection::EXECUTE_UP+16 );
     //click "More..."
     if ( nId && m_xFrame.is() )
     {

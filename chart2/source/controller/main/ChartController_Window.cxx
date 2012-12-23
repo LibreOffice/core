@@ -132,12 +132,11 @@ bool lcl_MoveObjectLogic(
 
 void lcl_insertMenuCommand(
     const uno::Reference< awt::XPopupMenu > & xMenu,
-    const uno::Reference< awt::XMenuExtended > & xMenuEx,
     sal_Int16 nId, const OUString & rCommand )
 {
     static OUString aEmptyString;
     xMenu->insertItem( nId, aEmptyString, 0, -1 );
-    xMenuEx->setCommand( nId, rCommand );
+    xMenu->setCommand( nId, rCommand );
 }
 
 OUString lcl_getFormatCommandForObjectCID( const OUString& rCID )
@@ -1034,15 +1033,14 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
             uno::Reference< awt::XPopupMenu > xPopupMenu(
                 m_xCC->getServiceManager()->createInstanceWithContext(
                     "com.sun.star.awt.PopupMenu", m_xCC ), uno::UNO_QUERY );
-            uno::Reference< awt::XMenuExtended > xMenuEx( xPopupMenu, uno::UNO_QUERY );
-            if( xPopupMenu.is() && xMenuEx.is())
+            if( xPopupMenu.is())
             {
                 sal_Int16 nUniqueId = 1;
                 ObjectType eObjectType = ObjectIdentifier::getObjectType( m_aSelection.getSelectedCID() );
                 Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram( getModel() );
 
                 OUString aFormatCommand( lcl_getFormatCommandForObjectCID( m_aSelection.getSelectedCID() ) );
-                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, aFormatCommand );
+                lcl_insertMenuCommand( xPopupMenu, nUniqueId++, aFormatCommand );
 
                 //some commands for dataseries and points:
                 //-----
@@ -1094,17 +1092,17 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                     if( bIsPoint )
                     {
                         if( bHasDataLabelAtPoint )
-                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:FormatDataLabel" );
+                            lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:FormatDataLabel" );
                         if( !bHasDataLabelAtPoint )
-                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertDataLabel" );
+                            lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:InsertDataLabel" );
                         else
-                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DeleteDataLabel" );
+                            lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:DeleteDataLabel" );
                         if( bSelectedPointIsFormatted )
-                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:ResetDataPoint" );
+                            lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:ResetDataPoint" );
 
                         xPopupMenu->insertSeparator( -1 );
 
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:FormatDataSeries" );
+                        lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:FormatDataSeries" );
                     }
 
                     Reference< chart2::XChartType > xChartType( DiagramHelper::getChartTypeOfSeries( xDiagram, xSeries ) );
@@ -1120,8 +1118,8 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
 
                                 if( bJapaneseStyle )
                                 {
-                                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:FormatStockLoss" );
-                                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:FormatStockGain" );
+                                    lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:FormatStockLoss" );
+                                    lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:FormatStockGain" );
                                 }
                             }
                         }
@@ -1132,62 +1130,61 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                     }
 
                     if( bHasDataLabelsAtSeries )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:FormatDataLabels" );
+                        lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:FormatDataLabels" );
                     if( xTrendline.is() )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:FormatTrendline" );
+                        lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:FormatTrendline" );
                     if( bHasEquation )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:FormatTrendlineEquation" );
+                        lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:FormatTrendlineEquation" );
                     if( xMeanValue.is() )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:FormatMeanValue" );
+                        lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:FormatMeanValue" );
                     if( bHasXErrorBars )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:FormatXErrorBars" );
+                        lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:FormatXErrorBars" );
                     if( bHasYErrorBars )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:FormatYErrorBars" );
+                        lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:FormatYErrorBars" );
 
                     xPopupMenu->insertSeparator( -1 );
 
                     if( !bHasDataLabelsAtSeries )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertDataLabels" );
+                        lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:InsertDataLabels" );
                     if( !xTrendline.is() )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertTrendline" );
+                        lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:InsertTrendline" );
                     else if( !bHasEquation )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertTrendlineEquation" );
+                        lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:InsertTrendlineEquation" );
                     if( !xMeanValue.is() )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertMeanValue" );
+                        lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:InsertMeanValue" );
                     if( !bHasXErrorBars )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertXErrorBars" );
+                        lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:InsertXErrorBars" );
                     if( !bHasYErrorBars )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertYErrorBars" );
+                        lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:InsertYErrorBars" );
 
 
                     if( bHasDataLabelsAtSeries || ( bHasDataLabelsAtPoints && bHasFormattedDataPointsOtherThanSelected ) )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DeleteDataLabels" );
+                        lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:DeleteDataLabels" );
                     if( xTrendline.is() )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DeleteTrendline" );
+                        lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:DeleteTrendline" );
                     if( bHasEquation )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DeleteTrendlineEquation" );
+                        lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:DeleteTrendlineEquation" );
                     if( xMeanValue.is() )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DeleteMeanValue" );
+                        lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:DeleteMeanValue" );
                     if( bHasXErrorBars )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DeleteXErrorBars" );
+                        lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:DeleteXErrorBars" );
                     if( bHasYErrorBars )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DeleteYErrorBars" );
+                        lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:DeleteYErrorBars" );
 
                     if( bHasFormattedDataPointsOtherThanSelected )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:ResetAllDataPoints" );
+                        lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:ResetAllDataPoints" );
 
                     xPopupMenu->insertSeparator( -1 );
 
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId, ".uno:ArrangeRow" );
+                    lcl_insertMenuCommand( xPopupMenu, nUniqueId, ".uno:ArrangeRow" );
                     uno::Reference< awt::XPopupMenu > xArrangePopupMenu(
                         m_xCC->getServiceManager()->createInstanceWithContext(
                             "com.sun.star.awt.PopupMenu", m_xCC ), uno::UNO_QUERY );
-                    uno::Reference< awt::XMenuExtended > xArrangeMenuEx( xArrangePopupMenu, uno::UNO_QUERY );
-                    if( xArrangePopupMenu.is() && xArrangeMenuEx.is())
+                    if( xArrangePopupMenu.is() )
                     {
                         sal_Int16 nSubId = nUniqueId + 1;
-                        lcl_insertMenuCommand( xArrangePopupMenu, xArrangeMenuEx, nSubId++, ".uno:Forward" );
-                        lcl_insertMenuCommand( xArrangePopupMenu, xArrangeMenuEx, nSubId, ".uno:Backward" );
+                        lcl_insertMenuCommand( xArrangePopupMenu, nSubId++, ".uno:Forward" );
+                        lcl_insertMenuCommand( xArrangePopupMenu, nSubId, ".uno:Backward" );
                         xPopupMenu->setPopupMenu( nUniqueId, xArrangePopupMenu );
                         nUniqueId = nSubId;
                     }
@@ -1195,17 +1192,17 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                 }
                 else if( OBJECTTYPE_DATA_CURVE == eObjectType )
                 {
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:FormatTrendlineEquation" );
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertTrendlineEquation" );
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertTrendlineEquationAndR2" );
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertR2Value" );
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DeleteTrendlineEquation" );
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DeleteR2Value" );
+                    lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:FormatTrendlineEquation" );
+                    lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:InsertTrendlineEquation" );
+                    lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:InsertTrendlineEquationAndR2" );
+                    lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:InsertR2Value" );
+                    lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:DeleteTrendlineEquation" );
+                    lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:DeleteR2Value" );
                 }
                 else if( OBJECTTYPE_DATA_CURVE_EQUATION == eObjectType )
                 {
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertR2Value" );
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DeleteR2Value" );
+                    lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:InsertR2Value" );
+                    lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:DeleteR2Value" );
                 }
 
                 //some commands for axes: and grids
@@ -1229,38 +1226,38 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                             bHasTitle = !TitleHelper::getCompleteString( xTitled->getTitleObject() ).isEmpty();
 
                         if( OBJECTTYPE_AXIS  != eObjectType && bIsAxisVisible )
-                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:FormatAxis" );
+                            lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:FormatAxis" );
                         if( OBJECTTYPE_GRID != eObjectType && bIsMajorGridVisible && !bIsSecondaryAxis )
-                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:FormatMajorGrid" );
+                            lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:FormatMajorGrid" );
                         if( OBJECTTYPE_SUBGRID != eObjectType && bIsMinorGridVisible && !bIsSecondaryAxis )
-                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:FormatMinorGrid" );
+                            lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:FormatMinorGrid" );
 
                         xPopupMenu->insertSeparator( -1 );
 
                         if( OBJECTTYPE_AXIS  != eObjectType && !bIsAxisVisible )
-                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertAxis" );
+                            lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:InsertAxis" );
                         if( OBJECTTYPE_GRID != eObjectType && !bIsMajorGridVisible && !bIsSecondaryAxis )
-                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertMajorGrid" );
+                            lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:InsertMajorGrid" );
                         if( OBJECTTYPE_SUBGRID != eObjectType && !bIsMinorGridVisible && !bIsSecondaryAxis )
-                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertMinorGrid" );
+                            lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:InsertMinorGrid" );
                         if( !bHasTitle )
-                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertAxisTitle" );
+                            lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:InsertAxisTitle" );
 
                         if( bIsAxisVisible )
-                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DeleteAxis" );
+                            lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:DeleteAxis" );
                         if( bIsMajorGridVisible && !bIsSecondaryAxis )
-                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DeleteMajorGrid" );
+                            lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:DeleteMajorGrid" );
                         if( bIsMinorGridVisible && !bIsSecondaryAxis )
-                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DeleteMinorGrid" );
+                            lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:DeleteMinorGrid" );
                     }
                 }
 
                 if( OBJECTTYPE_DATA_STOCK_LOSS == eObjectType )
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:FormatStockGain" );
+                    lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:FormatStockGain" );
                 else if( OBJECTTYPE_DATA_STOCK_GAIN == eObjectType )
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:FormatStockLoss" );
+                    lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:FormatStockLoss" );
 
-                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:TransformDialog" );
+                lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:TransformDialog" );
 
                 if( OBJECTTYPE_PAGE == eObjectType || OBJECTTYPE_DIAGRAM == eObjectType
                     || OBJECTTYPE_DIAGRAM_WALL == eObjectType
@@ -1270,24 +1267,24 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                     if( OBJECTTYPE_UNKNOWN != eObjectType )
                         xPopupMenu->insertSeparator( -1 );
                     bool bHasLegend = LegendHelper::hasLegend( xDiagram );
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertTitles" );
+                    lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:InsertTitles" );
                     if( !bHasLegend )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertLegend" );
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertRemoveAxes" );
+                        lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:InsertLegend" );
+                    lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:InsertRemoveAxes" );
                     if( bHasLegend )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DeleteLegend" );
+                        lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:DeleteLegend" );
                 }
                 //-----
 
                 xPopupMenu->insertSeparator( -1 );
-                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DiagramType" );
-                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DataRanges" );
-                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DiagramData" );
-                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:View3D" );
+                lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:DiagramType" );
+                lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:DataRanges" );
+                lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:DiagramData" );
+                lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:View3D" );
                 xPopupMenu->insertSeparator( -1 );
-                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:Cut" );
-                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:Copy" );
-                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:Paste" );
+                lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:Cut" );
+                lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:Copy" );
+                lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:Paste" );
 
                 ::svt::ContextMenuHelper aContextMenuHelper( m_xFrame );
                 Point aPos( rCEvt.GetMousePosPixel() );
