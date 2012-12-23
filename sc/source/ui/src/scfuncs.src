@@ -8679,6 +8679,46 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The text to be converted to a number." ;
         };
     };
+     // -=*# Resource for function NUMBERVALUE #*=-
+    Resource SC_OPCODE_NUMBERVALUE
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Converts text to a number, locale-independent." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_TEXT;
+            U2S( HID_FUNC_NUMBERVALUE );
+            3;  0; 0; 0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "text" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The text to be converted to a number, locale-independent." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "text" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "Decimal separator." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "text" ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "Group separator." ;
+        };
+    };
      // -=*# Resource for function TEXT #*=-
     Resource SC_OPCODE_TEXT
     {

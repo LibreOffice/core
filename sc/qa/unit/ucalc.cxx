@@ -4178,6 +4178,7 @@ void Test::testFunctionLists()
         "LEN",
         "LOWER",
         "MID",
+//        "NUMBERVALUE",
         "PROPER",
         "REPLACE",
         "REPT",

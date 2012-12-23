@@ -338,6 +338,7 @@ hidspecial HID_FUNC_GROSS2       { HelpID = HID_FUNC_GROSS2; };
 hidspecial HID_FUNC_GROSS        { HelpID = HID_FUNC_GROSS; };
 hidspecial HID_FUNC_KLEIN        { HelpID = HID_FUNC_KLEIN; };
 hidspecial HID_FUNC_WERT         { HelpID = HID_FUNC_WERT; };
+hidspecial HID_FUNC_NUMBERVALUE  { HelpID = HID_FUNC_NUMBERVALUE; };
 hidspecial HID_FUNC_TEXT         { HelpID = HID_FUNC_TEXT; };
 hidspecial HID_FUNC_T        { HelpID = HID_FUNC_T; };
 hidspecial HID_FUNC_ERSETZEN         { HelpID = HID_FUNC_ERSETZEN; };

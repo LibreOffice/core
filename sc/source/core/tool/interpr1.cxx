@@ -32,6 +32,7 @@
 #include <unotools/transliterationwrapper.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/logfile.hxx>
+#include <rtl/math.hxx>
 
 #include "interpre.hxx"
 #include "patattr.hxx"
@@ -3200,6 +3201,113 @@ void ScInterpreter::ScValue()
         PushDouble(fVal);
     else
         PushIllegalArgument();
+}
+
+
+// fdo 57180
+void ScInterpreter::ScNumberValue()
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScNumberValue" );
+
+    UniString aInputString;
+    UniString aDecimalSeparator, aGroupSeparator;
+    sal_Unicode cDecimalSeparator, cGroupSeparator;
+
+    aGroupSeparator = GetString();
+    aDecimalSeparator = GetString();
+    if ( aDecimalSeparator.Len() > 1 )
+    {
+        //separator length must be 1
+        PushIllegalArgument();
+        return;
+    }
+    if ( aGroupSeparator.Len() > 1 || aGroupSeparator == aDecimalSeparator )
+    {
+        //separator length must be 1, and decimal separator cannot be same as group separator
+        PushIllegalArgument();
+        return;
+    }
+    cGroupSeparator = aGroupSeparator.GetChar( 0 );
+    cDecimalSeparator = aDecimalSeparator.GetChar( 0 );
+
+    switch ( GetRawStackType() )
+    {
+        case svSingleRef:
+        case svDoubleRef:
+            {
+                ScAddress aAdr;
+                if ( !PopDoubleRefOrSingleRef( aAdr ) )
+                {
+                    PushIllegalArgument();
+                    return;
+                }
+                ScBaseCell* pCell = GetCell( aAdr );
+                if ( pCell )
+                    GetCellString( aInputString, pCell );
+                else
+                {
+                    PushIllegalArgument();
+                    return;
+                }
+            }
+            break;
+        case svDouble:
+        case svEmptyCell:
+        case svString:
+        case svMissing:
+            aInputString = GetString();
+            break;
+        default:
+            {
+                PushIllegalArgument();
+                return;
+            }
+    }
+
+    for ( xub_StrLen i = 0; i < aInputString.Len(); i++ )
+    {
+        if ( aInputString.GetChar( i ) == cGroupSeparator )
+            aInputString.Erase( i--, 1 ); // remove group separators
+        else
+        {
+            if ( aInputString.GetChar( i ) == cDecimalSeparator )
+            {
+                aInputString.SetChar( i, 0x002E ); // set decimal separator to '.'
+                break;
+            }
+        }
+    }
+    for ( xub_StrLen i = 0; i < aInputString.Len(); i++ )
+    {
+        sal_Unicode c = aInputString.GetChar( i );
+        if ( c == 0x0020 || c == 0x0009 || c == 0x000A || c == 0x000D )
+            aInputString.Erase( i--, 1 ); // remove spaces etc.
+    }
+    if ( aInputString.GetChar( 0 ) == 0x002E )
+        aInputString.Insert( String( "0" ), 0 );  // insert preceeding 0
+    int iPercentCount = 0;
+    for ( xub_StrLen i = 0; i < aInputString.Len(); i++ )
+    {
+        if ( aInputString.GetChar( i ) == 0x0025 )
+        {
+            aInputString.Erase( i--, 1 );  // remove and count '%'
+            iPercentCount++;
+        }
+    }
+    rtl_math_ConversionStatus eStatus;
+    sal_Unicode const *pStart = aInputString.GetBuffer();
+    sal_Unicode const *pEnd   = pStart + aInputString.Len();
+    double fVal = rtl_math_uStringToDouble( pStart, pEnd, 0x002E, 0, &eStatus, 0 );
+    if ( eStatus == rtl_math_ConversionStatus_Ok )
+    {
+        for ( int i = 1; i <= iPercentCount; i++ )
+            fVal /= 100;    // process '%' from input string
+        PushDouble(fVal);
+    }
+    else
+    {
+        PushIllegalArgument();
+    }
 }
 
 
