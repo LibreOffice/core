@@ -312,7 +312,6 @@ IDLFILES=\
     XWindowListener.idl\
     XWindowListener2.idl\
     XWindowPeer.idl\
-    XMenuExtended.idl\
     MaxChildrenException.idl\
     XDialog2.idl\
     XLayoutContainer.idl\
@@ -321,10 +320,6 @@ IDLFILES=\
     XLayoutRoot.idl\
     XLayoutUnit.idl \
     MenuItemType.idl \
-    MenuLogo.idl \
-    XMenuExtended2.idl \
-    XMenuBarExtended.idl \
-    XPopupMenuExtended.idl \
     XItemList.idl \
     XItemListListener.idl \
     ItemListEvent.idl \

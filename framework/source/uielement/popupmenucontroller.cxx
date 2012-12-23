@@ -211,7 +211,7 @@ Reference< awt::XWindow > SAL_CALL PopupMenuController::createPopupWindow() thro
 
         if( !mxPopupMenu.is() )
         {
-            mxPopupMenu = Reference< awt::XPopupMenu >( getServiceManager()->createInstance( DECLARE_ASCII( "stardiv.Toolkit.VCLXPopupMenu" ) ), UNO_QUERY_THROW );
+            mxPopupMenu = Reference< awt::XPopupMenu >( getServiceManager()->createInstance( DECLARE_ASCII( "com.sun.star.awt.PopupMenu" ) ), UNO_QUERY_THROW );
             mxPopupMenuController->setPopupMenu( mxPopupMenu );
         }
         else
@@ -221,7 +221,7 @@ Reference< awt::XWindow > SAL_CALL PopupMenuController::createPopupWindow() thro
         }
         pToolBox->SetItemDown( nItemId, sal_True );
         Reference< awt::XWindowPeer > xPeer( getParent(), UNO_QUERY_THROW );
-        mxPopupMenu->execute( xPeer, VCLUnoHelper::ConvertToAWTRect( aRect ), 0 );
+        mxPopupMenu->execute( xPeer, awt::Point( aRect.getX(), aRect.getY() ), 0 );
         pToolBox->SetItemDown( nItemId, sal_False );
     }
     catch( Exception& )

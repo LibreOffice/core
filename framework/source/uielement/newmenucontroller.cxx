@@ -412,7 +412,7 @@ void SAL_CALL NewMenuController::statusChanged( const FeatureStateEvent& ) throw
 }
 
 // XMenuListener
-void SAL_CALL NewMenuController::select( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
+void SAL_CALL NewMenuController::itemSelected( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
 {
     Reference< css::awt::XPopupMenu > xPopupMenu;
     Reference< XDispatch >            xDispatch;
@@ -470,7 +470,7 @@ void SAL_CALL NewMenuController::select( const css::awt::MenuEvent& rEvent ) thr
     }
 }
 
-void SAL_CALL NewMenuController::activate( const css::awt::MenuEvent& ) throw (RuntimeException)
+void SAL_CALL NewMenuController::itemActivated( const css::awt::MenuEvent& ) throw (RuntimeException)
 {
     vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
     if ( m_xFrame.is() && m_xPopupMenu.is() )

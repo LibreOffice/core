@@ -19,19 +19,13 @@
  *
  *************************************************************/
 
-
 #ifndef __com_sun_star_awt_MenuItemType_idl__
 #define __com_sun_star_awt_MenuItemType_idl__
 
-
-//=============================================================================
-
- module com {  module sun {  module star {  module awt {
-
-//=============================================================================
+module com {  module sun {  module star {  module awt {
 
 /** specifies the type of a menu item, as returned by
-    <member scope="com::sun::star::awt">XMenuExtended2::getItemType()</member>.
+    <member scope="com::sun::star::awt">XMenu::getItemType()</member>.
  */
 published enum MenuItemType
 {
@@ -56,8 +50,6 @@ published enum MenuItemType
     SEPARATOR
 
 };
-
-//=============================================================================
 
 }; }; }; };
 

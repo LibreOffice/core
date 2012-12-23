@@ -925,7 +925,7 @@ void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent&
             if ( impl_isEmptyGraphics_nothrow() )
                 xMenu->enableItem( ID_CLEAR_GRAPHICS, sal_False );
 
-            awt::Rectangle aRect( e.X, e.Y, 0, 0 );
+            awt::Point aPos( e.X, e.Y );
             if ( ( e.X < 0 ) || ( e.Y < 0 ) )
             {   // context menu triggered by keyboard
                 // position it in the center of the control
@@ -935,12 +935,12 @@ void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent&
                 if ( xWindow.is() )
                 {
                     awt::Rectangle aPosSize = xWindow->getPosSize();
-                    aRect.X = aPosSize.Width / 2;
-                    aRect.Y = aPosSize.Height / 2;
+                    aPos.X = aPosSize.Width / 2;
+                    aPos.Y = aPosSize.Height / 2;
                 }
             }
 
-            const sal_Int16 nResult = xMenu->execute( xWindowPeer, aRect, PopupMenuDirection::EXECUTE_DEFAULT );
+            const sal_Int16 nResult = xMenu->execute( xWindowPeer, aPos, PopupMenuDirection::EXECUTE_DEFAULT );
 
             switch ( nResult )
             {

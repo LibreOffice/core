@@ -38,7 +38,6 @@
 #include <com/sun/star/awt/MenuItemStyle.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/awt/XMenuExtended.hpp>
 
 //_________________________________________________________________________________________________________________
 //  includes of other projects
@@ -103,17 +102,9 @@ void PopupMenuControllerBase::throwIfDisposed() throw ( RuntimeException )
 // protected function
 void PopupMenuControllerBase::resetPopupMenu( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu )
 {
-    VCLXPopupMenu* pPopupMenu = 0;
     if ( rPopupMenu.is() && rPopupMenu->getItemCount() > 0 )
     {
-         pPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( rPopupMenu );
-         if ( pPopupMenu )
-         {
-            vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
-
-            PopupMenu* pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
-            pVCLPopupMenu->Clear();
-         }
+        rPopupMenu->clear();
     }
 }
 
@@ -151,7 +142,7 @@ void SAL_CALL PopupMenuControllerBase::disposing( const EventObject& ) throw ( R
 }
 
 // XMenuListener
-void SAL_CALL PopupMenuControllerBase::highlight( const awt::MenuEvent& ) throw (RuntimeException)
+void SAL_CALL PopupMenuControllerBase::itemHighlighted( const awt::MenuEvent& ) throw (RuntimeException)
 {
 }
 
@@ -163,17 +154,16 @@ void PopupMenuControllerBase::impl_select(const Reference< XDispatch >& _xDispat
         _xDispatch->dispatch( aURL, aArgs );
 }
 
-void SAL_CALL PopupMenuControllerBase::select( const awt::MenuEvent& rEvent ) throw (RuntimeException)
+void SAL_CALL PopupMenuControllerBase::itemSelected( const awt::MenuEvent& rEvent ) throw (RuntimeException)
 {
     throwIfDisposed();
 
     osl::MutexGuard aLock( m_aMutex );
 
-    Reference< awt::XMenuExtended > xExtMenu( m_xPopupMenu, UNO_QUERY );
-    if( xExtMenu.is() )
+    if( m_xPopupMenu.is() )
     {
         Sequence<PropertyValue> aArgs;
-        dispatchCommand( xExtMenu->getCommand( rEvent.MenuId ), aArgs );
+        dispatchCommand( m_xPopupMenu->getCommand( rEvent.MenuId ), aArgs );
     }
 }
 
@@ -208,11 +198,11 @@ IMPL_STATIC_LINK_NOINSTANCE( PopupMenuControllerBase, ExecuteHdl_Impl, PopupMenu
     return 0;
 }
 
-void SAL_CALL PopupMenuControllerBase::activate( const awt::MenuEvent& ) throw (RuntimeException)
+void SAL_CALL PopupMenuControllerBase::itemActivated( const awt::MenuEvent& ) throw (RuntimeException)
 {
 }
 
-void SAL_CALL PopupMenuControllerBase::deactivate( const awt::MenuEvent& ) throw (RuntimeException)
+void SAL_CALL PopupMenuControllerBase::itemDeactivated( const awt::MenuEvent& ) throw (RuntimeException)
 {
 }
 

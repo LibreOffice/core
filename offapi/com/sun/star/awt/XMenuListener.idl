@@ -23,52 +23,32 @@
 #ifndef __com_sun_star_awt_XMenuListener_idl__
 #define __com_sun_star_awt_XMenuListener_idl__
 
-#ifndef __com_sun_star_lang_XEventListener_idl__
 #include <com/sun/star/lang/XEventListener.idl>
-#endif
-
-#ifndef __com_sun_star_awt_MenuEvent_idl__
 #include <com/sun/star/awt/MenuEvent.idl>
-#endif
 
-
-//=============================================================================
-
- module com {  module sun {  module star {  module awt {
-
-//=============================================================================
+module com {  module sun {  module star {  module awt {
 
 /** makes it possible to receive menu events on a window.
  */
 published interface XMenuListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
-
     /** is invoked when a menu item is highlighted.
      */
-    [oneway] void highlight( [in] com::sun::star::awt::MenuEvent rEvent );
-
-    //-------------------------------------------------------------------------
+    [oneway] void itemHighlighted( [in] MenuEvent aEvent );
 
     /** is invoked when a menu item is selected.
      */
-    [oneway] void select( [in] com::sun::star::awt::MenuEvent rEvent );
-
-    //-------------------------------------------------------------------------
+    [oneway] void itemSelected( [in] MenuEvent aEvent );
 
     /** is invoked when a menu is activated.
      */
-    [oneway] void activate( [in] com::sun::star::awt::MenuEvent rEvent );
-
-    //-------------------------------------------------------------------------
+    [oneway] void itemActivated( [in] MenuEvent aEvent );
 
     /** is invoked when a menu is deactivated.
      */
-    [oneway] void deactivate( [in] com::sun::star::awt::MenuEvent rEvent );
+    [oneway] void itemDeactivated( [in] MenuEvent aEvent );
 
 };
-
-//=============================================================================
 
 }; }; }; };
 

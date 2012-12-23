@@ -186,13 +186,8 @@ void SelectionModeStatusbarController::ExecutePopupMenu( const Point &aPos )
 
         xPopupMenu->checkItem( nIdOffset + m_eSelectionMode, sal_True );
 
-        Rectangle aRect;
-        aRect.X = aPos.X;
-        aRect.Y = aPos.Y;
-
         Reference< XWindowPeer > xParent( m_xStatusbarWindow, UNO_QUERY );
-
-        const sal_Int16 nSelId = xPopupMenu->execute( xParent, aRect, PopupMenuDirection::EXECUTE_UP );
+        const sal_Int16 nSelId = xPopupMenu->execute( xParent, aPos, PopupMenuDirection::EXECUTE_UP );
         if ( nSelId )
         {
             Sequence< PropertyValue > aArgs( 1 );
