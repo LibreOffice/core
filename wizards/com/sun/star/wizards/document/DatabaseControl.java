@@ -218,7 +218,7 @@ public class DatabaseControl extends Control
             }
             else if (getControlType() == FormHandler.SOIMAGECONTROL)
             {
-                xPropertySet.setPropertyValue("ScaleMode", com.sun.star.awt.ImageScaleMode.Isotropic);
+                xPropertySet.setPropertyValue("ScaleMode", com.sun.star.awt.ImageScaleMode.ISOTROPIC);
             }
         }
         catch (Exception e)

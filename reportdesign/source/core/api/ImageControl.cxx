@@ -118,7 +118,7 @@ OImageControl::OImageControl(uno::Reference< uno::XComponentContext > const & _x
 :ImageControlBase(m_aMutex)
 ,ImageControlPropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),lcl_getImageOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
-,m_nScaleMode(awt::ImageScaleMode::None)
+,m_nScaleMode(awt::ImageScaleMode::NONE)
 ,m_bPreserveIRI(sal_True)
 {
     DBG_CTOR( rpt_OImageControl,NULL);
@@ -131,7 +131,7 @@ OImageControl::OImageControl(uno::Reference< uno::XComponentContext > const & _x
 :ImageControlBase(m_aMutex)
 ,ImageControlPropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),lcl_getImageOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
-,m_nScaleMode(awt::ImageScaleMode::None)
+,m_nScaleMode(awt::ImageScaleMode::NONE)
 ,m_bPreserveIRI(sal_True)
 {
     DBG_CTOR( rpt_OImageControl,NULL);
@@ -472,7 +472,7 @@ OUString SAL_CALL OImageControl::getShapeType(  ) throw (uno::RuntimeException)
 // -----------------------------------------------------------------------------
 void SAL_CALL OImageControl::setScaleMode( ::sal_Int16 _scalemode ) throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    if ( _scalemode < awt::ImageScaleMode::None ||_scalemode > awt::ImageScaleMode::Anisotropic )
+    if ( _scalemode < awt::ImageScaleMode::NONE ||_scalemode > awt::ImageScaleMode::ANISOTROPIC )
         throw lang::IllegalArgumentException();
     set(PROPERTY_SCALEMODE,_scalemode,m_nScaleMode);
 }

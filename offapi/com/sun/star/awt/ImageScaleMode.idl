@@ -20,9 +20,7 @@
 #ifndef __com_sun_star_awt_ImageScaleMode_idl__
 #define __com_sun_star_awt_ImageScaleMode_idl__
 
-
 module com { module sun { module star { module awt {
-
 
 /** defines modes how an image displayed in a given area should be scaled to fit this area
  */
@@ -30,23 +28,21 @@ constants ImageScaleMode
 {
     /** specifies that no scaling should happen at all
     */
-    const short None = 0;
+    const short NONE = 0;
 
     /** specifies that the image should be scaled up or down to the size of the surrounding area isotropically,
         i.e. by keeping its aspect ratio.
     */
-    const short Isotropic = 1;
+    const short ISOTROPIC = 1;
 
     /** specifies that the image should be scaled up or down to the size of the surrounding area anisotropically.
 
         <p>The image will finally cover all of the surrounding area, but its dimensions might be distorted.</p>
     */
-    const short Anisotropic = 2;
+    const short ANISOTROPIC = 2;
 };
 
-
 }; }; }; };
-
 
 #endif
 

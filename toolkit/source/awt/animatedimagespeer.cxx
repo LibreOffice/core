@@ -366,7 +366,7 @@ namespace toolkit
 
             case BASEPROPERTY_IMAGE_SCALE_MODE:
             {
-                sal_Int16 nScaleMode( ImageScaleMode::Anisotropic );
+                sal_Int16 nScaleMode( ImageScaleMode::ANISOTROPIC );
                 ImageControl* pImageControl = dynamic_cast< ImageControl* >( GetWindow() );
                 if ( pImageControl && ( i_value >>= nScaleMode ) )
                 {
@@ -406,7 +406,7 @@ namespace toolkit
         case BASEPROPERTY_IMAGE_SCALE_MODE:
             {
                 ImageControl const* pImageControl = dynamic_cast< ImageControl* >( GetWindow() );
-                aReturn <<= ( pImageControl ? pImageControl->GetScaleMode() : ImageScaleMode::Anisotropic );
+                aReturn <<= ( pImageControl ? pImageControl->GetScaleMode() : ImageScaleMode::ANISOTROPIC );
             }
             break;
 

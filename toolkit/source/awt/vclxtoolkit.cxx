@@ -978,14 +978,14 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 if  ( aServiceName.EqualsAscii( "simpleanimation" ) )
                 {
                     pNewWindow = new Throbber( pParent, nWinBits, Throbber::IMAGES_NONE );
-                    ((Throbber*)pNewWindow)->SetScaleMode( css::awt::ImageScaleMode::Anisotropic );
+                    ((Throbber*)pNewWindow)->SetScaleMode( css::awt::ImageScaleMode::ANISOTROPIC );
                         // (compatibility)
                     *ppNewComp = new ::toolkit::XSimpleAnimation;
                 }
                 else if ( aServiceName.EqualsAscii( "throbber" ) )
                 {
                     pNewWindow = new Throbber( pParent, nWinBits, Throbber::IMAGES_NONE );
-                    ((Throbber*)pNewWindow)->SetScaleMode( css::awt::ImageScaleMode::Anisotropic );
+                    ((Throbber*)pNewWindow)->SetScaleMode( css::awt::ImageScaleMode::ANISOTROPIC );
                         // (compatibility)
                     *ppNewComp = new ::toolkit::XThrobber;
                 }

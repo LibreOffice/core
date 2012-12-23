@@ -849,7 +849,7 @@ uno::Any UnoControlImageControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) 
         return uno::makeAny( OUString::createFromAscii( szServiceName_UnoControlImageControl ) );
 
     if ( nPropId == BASEPROPERTY_IMAGE_SCALE_MODE )
-        return makeAny( awt::ImageScaleMode::Anisotropic );
+        return makeAny( awt::ImageScaleMode::ANISOTROPIC );
 
     return GraphicControlModel::ImplGetDefaultValue( nPropId );
 }
@@ -885,9 +885,9 @@ void SAL_CALL UnoControlImageControlModel::setFastPropertyValue_NoBroadcast( sal
             if ( !mbAdjustingImageScaleMode && ImplHasProperty( BASEPROPERTY_SCALEIMAGE ) )
             {
                 mbAdjustingImageScaleMode = true;
-                sal_Int16 nScaleMode( awt::ImageScaleMode::Anisotropic );
+                sal_Int16 nScaleMode( awt::ImageScaleMode::ANISOTROPIC );
                 OSL_VERIFY( _rValue >>= nScaleMode );
-                setDependentFastPropertyValue( BASEPROPERTY_SCALEIMAGE, uno::makeAny( sal_Bool( nScaleMode != awt::ImageScaleMode::None ) ) );
+                setDependentFastPropertyValue( BASEPROPERTY_SCALEIMAGE, uno::makeAny( sal_Bool( nScaleMode != awt::ImageScaleMode::NONE ) ) );
                 mbAdjustingImageScaleMode = false;
             }
             break;
@@ -897,7 +897,7 @@ void SAL_CALL UnoControlImageControlModel::setFastPropertyValue_NoBroadcast( sal
                 mbAdjustingImageScaleMode = true;
                 sal_Bool bScale = sal_True;
                 OSL_VERIFY( _rValue >>= bScale );
-                setDependentFastPropertyValue( BASEPROPERTY_IMAGE_SCALE_MODE, uno::makeAny( bScale ? awt::ImageScaleMode::Anisotropic : awt::ImageScaleMode::None ) );
+                setDependentFastPropertyValue( BASEPROPERTY_IMAGE_SCALE_MODE, uno::makeAny( bScale ? awt::ImageScaleMode::ANISOTROPIC : awt::ImageScaleMode::NONE ) );
                 mbAdjustingImageScaleMode = false;
             }
             break;

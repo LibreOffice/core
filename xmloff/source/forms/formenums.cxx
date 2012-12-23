@@ -315,11 +315,11 @@ namespace xmloff
                 {
                     static const SvXMLEnumMapEntry aScaleModeMap[] =
                     {
-                        { XML_BACKGROUND_NO_REPEAT, ImageScaleMode::None },
-                        { XML_REPEAT,               ImageScaleMode::None },  // repeating the image is not supported
-                        { XML_STRETCH,              ImageScaleMode::Anisotropic },
-                        { XML_SCALE,                ImageScaleMode::Isotropic },
-                        { XML_TOKEN_INVALID,        ImageScaleMode::None }
+                        { XML_BACKGROUND_NO_REPEAT, ImageScaleMode::NONE },
+                        { XML_REPEAT,               ImageScaleMode::NONE },  // repeating the image is not supported
+                        { XML_STRETCH,              ImageScaleMode::ANISOTROPIC },
+                        { XML_SCALE,                ImageScaleMode::ISOTROPIC },
+                        { XML_TOKEN_INVALID,        ImageScaleMode::NONE }
                     };
                     rReturn = aScaleModeMap;
                 }

@@ -80,10 +80,10 @@ OXMLImage::OXMLImage( ORptFilter& rImport,
                     break;
                 case XML_TOK_SCALE:
                     {
-                        sal_uInt16 nRet = awt::ImageScaleMode::None;
+                        sal_uInt16 nRet = awt::ImageScaleMode::NONE;
                         if ( s_sTRUE == sValue )
                         {
-                            nRet = awt::ImageScaleMode::Anisotropic;
+                            nRet = awt::ImageScaleMode::ANISOTROPIC;
                         }
                         else
                         {

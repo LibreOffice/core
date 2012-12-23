@@ -140,7 +140,7 @@ MyWin::MyWin( Window* pParent, WinBits nWinStyle ) :
     m_aSvpBitmaps.Show();
 
     m_aImage.SetPosSizePixel( Point( 170, 10 ), Size( 400, 400 ) );
-    m_aImage.SetScaleMode( com::sun::star::awt::ImageScaleMode::None );
+    m_aImage.SetScaleMode( com::sun::star::awt::ImageScaleMode::NONE );
     m_aImage.Show();
 
     m_aQuitButton.SetPosSizePixel( Point( 10, 300 ), Size( 120,25 ) );

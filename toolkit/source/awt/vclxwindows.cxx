@@ -693,7 +693,7 @@ void VCLXImageControl::setProperty( const OUString& PropertyName, const ::com::s
     {
         case BASEPROPERTY_IMAGE_SCALE_MODE:
         {
-            sal_Int16 nScaleMode( ImageScaleMode::Anisotropic );
+            sal_Int16 nScaleMode( ImageScaleMode::ANISOTROPIC );
             if ( pImageControl && ( Value >>= nScaleMode ) )
             {
                 pImageControl->SetScaleMode( nScaleMode );
@@ -707,7 +707,7 @@ void VCLXImageControl::setProperty( const OUString& PropertyName, const ::com::s
             sal_Bool bScaleImage = sal_False;
             if ( pImageControl && ( Value >>= bScaleImage ) )
             {
-                pImageControl->SetScaleMode( bScaleImage ? ImageScaleMode::Anisotropic : ImageScaleMode::None );
+                pImageControl->SetScaleMode( bScaleImage ? ImageScaleMode::ANISOTROPIC : ImageScaleMode::NONE );
             }
         }
         break;
@@ -729,11 +729,11 @@ void VCLXImageControl::setProperty( const OUString& PropertyName, const ::com::s
     switch ( nPropType )
     {
         case BASEPROPERTY_IMAGE_SCALE_MODE:
-            aProp <<= ( pImageControl ? pImageControl->GetScaleMode() : ImageScaleMode::Anisotropic );
+            aProp <<= ( pImageControl ? pImageControl->GetScaleMode() : ImageScaleMode::ANISOTROPIC );
             break;
 
         case BASEPROPERTY_SCALEIMAGE:
-            aProp <<= ( pImageControl && pImageControl->GetScaleMode() != ImageScaleMode::None ) ? sal_True : sal_False;
+            aProp <<= ( pImageControl && pImageControl->GetScaleMode() != ImageScaleMode::NONE ) ? sal_True : sal_False;
             break;
 
         default:

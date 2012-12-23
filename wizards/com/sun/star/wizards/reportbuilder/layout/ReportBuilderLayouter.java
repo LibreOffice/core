@@ -783,7 +783,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                         final XImageControl xImageControl = UnoRuntime.queryInterface(XImageControl.class, xReportControlModel);
                         if (xImageControl != null)
                         {
-                            xImageControl.setScaleMode(com.sun.star.awt.ImageScaleMode.Isotropic);
+                            xImageControl.setScaleMode(com.sun.star.awt.ImageScaleMode.ISOTROPIC);
                         }
                     }
                     else

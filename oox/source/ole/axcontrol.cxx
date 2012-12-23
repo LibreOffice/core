@@ -508,12 +508,12 @@ void ControlConverter::convertAxPicture( PropertyMap& rPropMap, const StreamData
     convertPicture( rPropMap, rPicData );
 
     // picture scale mode
-    sal_Int16 nScaleMode = ImageScaleMode::None;
+    sal_Int16 nScaleMode = ImageScaleMode::NONE;
     switch( nPicSizeMode )
     {
-        case AX_PICSIZE_CLIP:       nScaleMode = ImageScaleMode::None;          break;
-        case AX_PICSIZE_STRETCH:    nScaleMode = ImageScaleMode::Anisotropic;   break;
-        case AX_PICSIZE_ZOOM:       nScaleMode = ImageScaleMode::Isotropic;     break;
+        case AX_PICSIZE_CLIP:       nScaleMode = ImageScaleMode::NONE;          break;
+        case AX_PICSIZE_STRETCH:    nScaleMode = ImageScaleMode::ANISOTROPIC;   break;
+        case AX_PICSIZE_ZOOM:       nScaleMode = ImageScaleMode::ISOTROPIC;     break;
         default:    OSL_FAIL( "ControlConverter::convertAxPicture - unknown picture size mode" );
     }
     rPropMap.setProperty( PROP_ScaleMode, nScaleMode );
