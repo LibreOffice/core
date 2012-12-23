@@ -211,7 +211,7 @@ InfoBox INFOBOX_EXPIRED
 {
     Buttons = WB_OK ;
     DefButton = WB_DEF_OK ;
-    Message [ en-US ] = "This Evaluation Version has expired. To find out more about %PRODUCTNAME,\nvisit http://www.oracle.com/us/products/applications/open-office.";
+    Message [ en-US ] = "This Evaluation Version has expired. To find out more about %PRODUCTNAME,\nvisit http://www.openoffice.org";
 };
 
 String STR_TITLE_EXPIRED

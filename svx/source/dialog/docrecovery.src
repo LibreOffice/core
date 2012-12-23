@@ -371,7 +371,7 @@ TabPage RID_SVXPAGE_ERR_REP_WELCOME
         Pos = MAP_APPFONT( RECOV_COL1, RECOV_ROW2 );
         Size = MAP_APPFONT( RECOV_CONTROLWIDTH, (RECOV_ROW7-RECOV_ROW2-RSC_SP_CTRL_Y) );
         WordBreak = TRUE;
-        Text[ en-US ] = "This error report tool gathers information about how %PRODUCTNAME is working and sends it to Oracle to help improve future versions.\n\nIt's easy - just send the report without any further effort on your part by clicking 'Send' in the next dialog, or you can briefly describe how the error occurred and then click 'Send'. If you want to see the report, click the 'Show Report' button. No data will be sent if you click 'Do Not Send'.\n\nCustomer Privacy\nThe information gathered is limited to data concerning the state of %PRODUCTNAME %PRODUCTVERSION when the error occurred. Other information about passwords or document contents is not collected.\n\nThe information will only be used to improve the quality of %PRODUCTNAME and will not be shared with third parties.\nFor more information on Oracle's privacy policy, visit\nwww.oracle.com/html/services-privacy-policy.html";
+        Text[ en-US ] = "This error report tool gathers information about how %PRODUCTNAME is working and sends it to Apache OpenOffice to help improve future versions.\n\nIt's easy - just send the report without any further effort on your part by clicking 'Send' in the next dialog, or you can briefly describe how the error occurred and then click 'Send'. If you want to see the report, click the 'Show Report' button. No data will be sent if you click 'Do Not Send'.\n\nCustomer Privacy\nThe information gathered is limited to data concerning the state of %PRODUCTNAME %PRODUCTVERSION when the error occurred. Other information about passwords or document contents is not collected.\n\nThe information will only be used to improve the quality of %PRODUCTNAME and will not be shared with third parties.\nFor more information on Apache OpenOffice's privacy policy, visit\nwww.oracle.com/html/services-privacy-policy.html";
     };
     FixedLine FL_RECOV_BOTTOM
     {
@@ -479,7 +479,7 @@ TabPage RID_SVXPAGE_ERR_REP_SEND
         Pos = MAP_APPFONT( ERRSEND_COL0, ERRSEND_ROW12 );
         Size = MAP_APPFONT( ERRSEND_CONTROLWIDTH2, RSC_CD_CHECKBOX_HEIGHT );
         Check = FALSE;
-        Text[ en-US ] = "~I allow Oracle to contact me regarding this report.";
+        Text[ en-US ] = "~I allow Apache OpenOffice to contact me regarding this report.";
     };
     FixedText FT_ERRSEND_EMAILADDR
     {
