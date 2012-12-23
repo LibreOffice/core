@@ -130,6 +130,7 @@ public:
     void testFdo54473();
     void testFdo49934();
     void testFdo57886();
+    void testFdo58076();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -210,6 +211,7 @@ void Test::run()
         {"fdo54473.rtf", &Test::testFdo54473},
         {"fdo49934.rtf", &Test::testFdo49934},
         {"fdo57886.rtf", &Test::testFdo57886},
+        {"fdo58076.rtf", &Test::testFdo58076},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -966,6 +968,16 @@ void Test::testFdo57886()
 {
     // Was 'int from <?> to <?> <?>'.
     CPPUNIT_ASSERT_EQUAL(OUString("int from {firstlower} to {firstupper} {firstbody}"), getFormula(getRun(getParagraph(1), 1)));
+}
+
+void Test::testFdo58076()
+{
+    // An additional section was created, so the default page style didn't have the custom margins.
+    uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2251), getProperty<sal_Int32>(xStyle, "LeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1752), getProperty<sal_Int32>(xStyle, "RightMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(635), getProperty<sal_Int32>(xStyle, "TopMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(635), getProperty<sal_Int32>(xStyle, "BottomMargin"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

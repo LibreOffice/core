@@ -590,6 +590,8 @@ namespace writerfilter {
                 bool m_bWasInFrame;
                 /// A picture was seen in the current paragraph.
                 bool m_bHadPicture;
+                /// The document has multiple sections.
+                bool m_bHadSect;
         };
     } // namespace rtftok
 } // namespace writerfilter
