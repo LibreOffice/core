@@ -671,6 +671,60 @@ void testFuncCOUNTIF(ScDocument* pDoc)
     CPPUNIT_ASSERT_MESSAGE("We shouldn't count empty string as valid number.", result == 0.0);
 }
 
+void testFuncNUMBERVALUE( ScDocument* pDoc )
+{
+    // NUMBERVALUE fdo#57180
+
+    // Empty A1:A39 first.
+    clearRange(pDoc, ScRange(0, 0, 0, 0, 40, 0));
+
+    // Raw data (rows 1 through 5)
+    const char* aData[] = {
+        "1ag99b9",
+        "1 234d56E-2",
+        "d4",
+        "1a2b3e1%"
+    };
+
+    SCROW nRows = SAL_N_ELEMENTS(aData);
+    for (SCROW i = 0; i < nRows; ++i)
+        pDoc->SetString(0, i, 0, rtl::OUString::createFromAscii(aData[i]));
+
+    printRange(pDoc, ScRange(0, 0, 0, 0, 3, 0), "data range for NUMBERVALUE");
+
+    // formulas and results
+    struct {
+        const char* pFormula; double fResult;
+    } aChecks[] = {
+        { "=NUMBERVALUE(A1;\"b\";\"ag\")", 199.9 },
+        { "=NUMBERVALUE(A2;\"d\")",        12.3456 },
+        { "=NUMBERVALUE(A3;\"d\";\"foo\")", 0.4 },
+        { "=NUMBERVALUE(A4;\"b\";\"a\")",   1.23 }
+    };
+
+    nRows = SAL_N_ELEMENTS(aChecks);
+    for (SCROW i = 0; i < nRows; ++i)
+    {
+        SCROW nRow = 20 + i;
+        pDoc->SetString(0, nRow, 0, rtl::OUString::createFromAscii(aChecks[i].pFormula));
+    }
+    pDoc->CalcAll();
+
+    for (SCROW i = 0; i < nRows; ++i)
+    {
+        double result;
+        SCROW nRow = 20 + i;
+        pDoc->GetValue(0, nRow, 0, result);
+        bool bGood = result == aChecks[i].fResult;
+        if (!bGood)
+        {
+            cerr << "row " << (nRow+1) << ": formula" << aChecks[i].pFormula
+                << "  expected=" << aChecks[i].fResult << "  actual=" << result << endl;
+            CPPUNIT_ASSERT_MESSAGE("Unexpected result for NUMBERVALUE", false);
+        }
+    }
+}
+
 void testFuncVLOOKUP(ScDocument* pDoc)
 {
     // VLOOKUP
@@ -1063,6 +1117,7 @@ void Test::testCellFunctions()
     testFuncPRODUCT(m_pDoc);
     testFuncN(m_pDoc);
     testFuncCOUNTIF(m_pDoc);
+    testFuncNUMBERVALUE(m_pDoc);
     testFuncVLOOKUP(m_pDoc);
     testFuncMATCH(m_pDoc);
     testFuncCELL(m_pDoc);
@@ -4400,6 +4455,7 @@ void Test::testFunctionLists()
         "LEN",
         "LOWER",
         "MID",
+        "NUMBERVALUE",
         "PROPER",
         "REPLACE",
         "REPT",

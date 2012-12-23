@@ -32,6 +32,7 @@
 #include <unotools/transliterationwrapper.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/logfile.hxx>
+#include <rtl/math.hxx>
 
 #include "interpre.hxx"
 #include "patattr.hxx"
@@ -135,10 +136,7 @@ void ScInterpreter::ScIfJump()
                 SCSIZE nCols, nRows;
                 pMat->GetDimensions( nCols, nRows );
                 if ( nCols == 0 || nRows == 0 )
-                {
                     PushIllegalArgument();
-                    return;
-                }
                 else if (pTokenMatrixMap && ((aMapIter = pTokenMatrixMap->find(
                                     pCur)) != pTokenMatrixMap->end()))
                     xNew = (*aMapIter).second;
@@ -3203,6 +3201,106 @@ void ScInterpreter::ScValue()
         PushDouble(fVal);
     else
         PushIllegalArgument();
+}
+
+
+// fdo#57180
+void ScInterpreter::ScNumberValue()
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScNumberValue" );
+
+    sal_uInt8 nParamCount = GetByte();
+    OUString aInputString;
+    OUString aDecimalSeparator, aGroupSeparator;
+    sal_Unicode cDecimalSeparator;
+
+    if ( nParamCount == 3 )
+        aGroupSeparator = GetString();
+
+    if ( nParamCount >= 2 )
+    {
+        aDecimalSeparator = GetString();
+        if ( aDecimalSeparator.getLength() == 1  )
+            cDecimalSeparator = aDecimalSeparator[ 0 ];
+        else
+        {
+            PushIllegalArgument();  //if given, separator length must be 1
+            return;
+        }
+    }
+    else
+        cDecimalSeparator = '.';
+
+    if ( aGroupSeparator.indexOf( cDecimalSeparator ) >= 0 )
+    {
+        PushIllegalArgument(); //decimal separator cannot appear in group separator
+        return;
+    }
+
+    switch ( GetRawStackType() )
+    {
+        case svSingleRef:
+        case svDoubleRef:
+        case svExternalSingleRef :
+        case svExternalDoubleRef:
+        case svMatrix:
+        case svMissing:
+        case svString:
+            aInputString = GetString();
+            break;
+        case svDouble:
+            return; // nothing to be done
+        case svEmptyCell:
+            if ( GetGlobalConfig().mbEmptyStringAsZero )
+            {
+                aInputString = GetString();
+                break;
+            }
+            //else fall through
+        default:
+            PushIllegalArgument();
+            return;
+    }
+    if ( !nGlobalError )
+    {
+        int i, j;
+        i = aInputString.getLength();
+        while ( (j = aInputString.indexOf( aGroupSeparator ) ) >= 0 && j < i )
+        {
+            aInputString = aInputString.replaceAt( j, aGroupSeparator.getLength(), "" ); // remove group separators
+            i -= aGroupSeparator.getLength();
+        }
+
+        for ( i = aInputString.getLength(); i >= 0; --i )
+        {
+            sal_Unicode c = aInputString[ i ];
+            if ( c == 0x0020 || c == 0x0009 || c == 0x000A || c == 0x000D )
+                aInputString = aInputString.replaceAt( i, 1, "" ); // remove spaces etc.
+        }
+        if ( aInputString[ 0 ] == cDecimalSeparator )
+            aInputString = aInputString.replaceAt( 0, 0, "0" );  // insert preceeding 0
+        int iPercentCount = 0;
+        for ( i = aInputString.getLength() - 1; aInputString[ i ] == 0x0025 && i >= 0; i-- )
+        {
+            if ( aInputString[ i ] == 0x0025 )
+            {
+                aInputString = aInputString.replaceAt( i, 1, "" );  // remove and count trailing '%'
+                iPercentCount++;
+            }
+        }
+
+        rtl_math_ConversionStatus eStatus;
+        sal_Int32 nParseEnd;
+        double fVal = ::rtl::math::stringToDouble( aInputString, cDecimalSeparator, 0, &eStatus, &nParseEnd );
+        if ( eStatus == rtl_math_ConversionStatus_Ok && nParseEnd == aInputString.getLength() )
+        {
+            for ( i = 1; i <= iPercentCount; i++ )
+                fVal /= 100;    // process '%' from input string
+            PushDouble(fVal);
+            return;
+        }
+    }
+    PushIllegalArgument();
 }
 
 

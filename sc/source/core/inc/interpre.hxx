@@ -459,6 +459,7 @@ void ScLower();
 void ScLen();
 void ScT();
 void ScValue();
+void ScNumberValue();
 void ScClean();
 void ScChar();
 void ScJis();
