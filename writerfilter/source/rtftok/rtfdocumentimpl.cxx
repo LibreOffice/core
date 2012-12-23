@@ -275,7 +275,8 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_bIgnoreNextContSectBreak(false),
     m_bNeedSect(true),
     m_bWasInFrame(false),
-    m_bHadPicture(false)
+    m_bHadPicture(false),
+    m_bHadSect(false)
 {
     OSL_ASSERT(xInputStream.is());
     m_pInStream.reset(utl::UcbStreamHelper::CreateStream(xInputStream, sal_True));
@@ -526,7 +527,7 @@ void RTFDocumentImpl::sectBreak(bool bFinal = false)
 
     // Normally a section break at the end of the doc is necessary. Unless the
     // last control word in the document is a section break itself.
-    if (!bNeedSect)
+    if (!bNeedSect || !m_bHadSect)
     {
         RTFValue::Pointer_t pBreak = m_aStates.top().aSectionSprms.find(NS_sprm::LN_SBkc);
         // In case the last section is a continous one, we don't need to output a section break.
@@ -1629,6 +1630,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             break;
         case RTF_SECT:
             {
+                m_bHadSect = true;
                 if (m_bIgnoreNextContSectBreak)
                     m_bIgnoreNextContSectBreak = false;
                 else
