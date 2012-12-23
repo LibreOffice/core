@@ -16,6 +16,8 @@
 
 #include <fstream>
 
+#include <config_clang.h>
+
 namespace loplugin
 {
 
@@ -110,11 +112,7 @@ void SalLogAreas::checkArea( StringRef area, SourceLocation location )
 
 void SalLogAreas::readLogAreas()
     {
-#define STRINGIFY2( s ) #s
-#define STRINGIFY( s ) STRINGIFY2( s )
-    ifstream is( STRINGIFY( SRCDIR ) "/sal/inc/sal/log-areas.dox" );
-#undef STRINGIFY
-#undef STRINGIFY2
+    ifstream is( SRCDIR "/sal/inc/sal/log-areas.dox" );
     while( is.good())
         {
         string line;

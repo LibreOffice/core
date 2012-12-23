@@ -106,6 +106,7 @@ AC_SUBST(SRC_ROOT)
 AC_SUBST(BUILDDIR)
 AC_SUBST(EXEEXT_FOR_BUILD)
 AC_SUBST(x_Cygwin)
+AC_DEFINE_UNQUOTED(SRCDIR,"$SRC_ROOT")
 
 if test "z$EUID" = "z0" -a "`uname -o 2>/dev/null`" = "Cygwin"; then
     AC_MSG_ERROR([You must build LibreOffice as a normal user - not using an administrative account])
@@ -4164,6 +4165,7 @@ if test "$cross_compiling" = "yes"; then
         config_host.mk.in \
         configure \
         Makefile.in \
+        config/config_clang.h.in \
         config/config_global.h.in \
         config/config_graphite.h.in \
         config/config_telepathy.h.in \
@@ -12353,6 +12355,7 @@ else
 fi
 
 AC_CONFIG_FILES([config_host.mk Makefile])
+AC_CONFIG_HEADERS([config/config_clang.h])
 AC_CONFIG_HEADERS([config/config_global.h])
 AC_CONFIG_HEADERS([config/config_graphite.h])
 AC_CONFIG_HEADERS([config/config_telepathy.h])

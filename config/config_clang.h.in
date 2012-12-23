@@ -1,0 +1,12 @@
+/*
+
+Settings related to Clang compiler plugins.
+
+*/
+
+#ifndef CONFIG_CLANG_H
+#define CONFIG_CLANG_H
+
+#undef SRCDIR
+
+#endif
