@@ -16,6 +16,7 @@
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/Frontend/FrontendAction.h>
 #include <clang/Frontend/FrontendPluginRegistry.h>
+#include <stdio.h>
 
 #include "bodynotinblock.hxx"
 #include "lclstaticfix.hxx"
@@ -180,19 +181,25 @@ class PluginHandler
                  ++it )
                 {
                 const FileEntry* e = context.getSourceManager().getFileEntryForID( it->first );
-                string filename = std::string( e->getName()) + ".new";
+                char* filename = new char[ strlen( e->getName()) + 100 ];
+                sprintf( filename, "%s.new.%d", e->getName(), getpid());
                 string error;
-                // TODO If there will be actually plugins also modifying headers,
-                // race conditions should be avoided here.
-                raw_fd_ostream ostream( filename.c_str(), error );
+                bool ok = false;
+                raw_fd_ostream ostream( filename, error );
                 DiagnosticsEngine& diag = context.getDiagnostics();
-                if( !error.empty())
+                if( error.empty())
+                    {
+                    it->second.write( ostream );
+                    ostream.close();
+                    if( !ostream.has_error() && rename( filename, e->getName()) == 0 )
+                        ok = true;
+                    }
+                ostream.clear_error();
+                unlink( filename );
+                if( !ok )
                     diag.Report( diag.getCustomDiagID( DiagnosticsEngine::Error,
-                        "cannot write modified source to %0 (%1) [loplugin]" )) << filename << error;
-                else
-                    diag.Report( diag.getCustomDiagID( DiagnosticsEngine::Note,
-                        "modified source %0 [loplugin]" )) << filename;
-                it->second.write( ostream );
+                        "cannot write modified source to %0 (%1) [loplugin]" )) << e->getName() << error;
+                delete[] filename;
                 }
             }
     private:
