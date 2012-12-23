@@ -1760,47 +1760,21 @@ void Text::Paint (
             aContext,
             rendering::TextDirection::WEAK_LEFT_TO_RIGHT,
             0));
-    /** this responsible of the toolbar and the zoom
-        that in the note mode.
-        check whether RTL interface or not. */
-    if(!Application::GetSettings().GetLayoutRTL()){
-        geometry::RealRectangle2D aBox (xLayout->queryTextBounds());
-        const double nTextWidth = aBox.X2 - aBox.X1;
-        const double nY = rBoundingBox.Y + rBoundingBox.Height - aBox.Y2;
-        const double nX = rBoundingBox.X + (rBoundingBox.Width - nTextWidth)/2;
+    geometry::RealRectangle2D aBox (xLayout->queryTextBounds());
+    const double nTextWidth = aBox.X2 - aBox.X1;
+    const double nY = rBoundingBox.Y + rBoundingBox.Height - aBox.Y2;
+    const double nX = rBoundingBox.X + (rBoundingBox.Width - nTextWidth)/2;
 
-        rendering::RenderState aRenderState(
-            geometry::AffineMatrix2D(1,0,nX, 0,1,nY),
-            NULL,
-            Sequence<double>(4),
-            rendering::CompositeOperation::SOURCE);
-        PresenterCanvasHelper::SetDeviceColor(aRenderState, mpFont->mnColor);
-        rxCanvas->drawText(
-            aContext,
-            mpFont->mxFont,
-            rViewState,
-            aRenderState,
-            rendering::TextDirection::WEAK_LEFT_TO_RIGHT);
-    }
-    else {
-        geometry::RealRectangle2D aBox (xLayout->queryTextBounds());
-        const double nTextWidth = aBox.X2 - aBox.X1;
-        const double nY = rBoundingBox.Y + rBoundingBox.Height - aBox.Y2;
-        const double nX = rBoundingBox.X + (rBoundingBox.Width + nTextWidth)/2;
-
-        rendering::RenderState aRenderState(
-            geometry::AffineMatrix2D(1,0,nX, 0,1,nY),
-            NULL,
-            Sequence<double>(4),
-            rendering::CompositeOperation::SOURCE);
-        PresenterCanvasHelper::SetDeviceColor(aRenderState, mpFont->mnColor);
-        rxCanvas->drawText(
-            aContext,
-            mpFont->mxFont,
-            rViewState,
-            aRenderState,
-            rendering::TextDirection::WEAK_RIGHT_TO_LEFT);
-    }
+    rendering::RenderState aRenderState(
+        geometry::AffineMatrix2D(1,0,nX, 0,1,nY),
+        NULL,
+        Sequence<double>(4),
+        rendering::CompositeOperation::SOURCE);
+    PresenterCanvasHelper::SetDeviceColor(aRenderState, mpFont->mnColor);
+    rxCanvas->drawTextLayout(
+        xLayout,
+        rViewState,
+        aRenderState);
 }
 
 geometry::RealRectangle2D Text::GetBoundingBox (const Reference<rendering::XCanvas>& rxCanvas)
@@ -1811,25 +1785,13 @@ geometry::RealRectangle2D Text::GetBoundingBox (const Reference<rendering::XCanv
             mpFont->PrepareFont(rxCanvas);
         if (mpFont->mxFont.is())
         {
-            /// check whether RTL interface or not
-            if(!Application::GetSettings().GetLayoutRTL()){
-                rendering::StringContext aContext (msText, 0, msText.getLength());
-                    Reference<rendering::XTextLayout> xLayout (
-                    mpFont->mxFont->createTextLayout(
-                        aContext,
-                        rendering::TextDirection::WEAK_LEFT_TO_RIGHT,
-                        0));
-                return xLayout->queryTextBounds();
-            }
-            else {
-                rendering::StringContext aContext (msText, 0, msText.getLength());
-                    Reference<rendering::XTextLayout> xLayout (
-                    mpFont->mxFont->createTextLayout(
-                        aContext,
-                        rendering::TextDirection::WEAK_RIGHT_TO_LEFT,
-                        0));
-                return xLayout->queryTextBounds();
-            }
+            rendering::StringContext aContext (msText, 0, msText.getLength());
+                Reference<rendering::XTextLayout> xLayout (
+                mpFont->mxFont->createTextLayout(
+                    aContext,
+                    rendering::TextDirection::WEAK_LEFT_TO_RIGHT,
+                    0));
+            return xLayout->queryTextBounds();
         }
     }
     return geometry::RealRectangle2D(0,0,0,0);
@@ -1851,71 +1813,29 @@ OUString TimeFormatter::FormatTime (const oslDateTime& rTime)
     const sal_Int32 nHours (sal::static_int_cast<sal_Int32>(rTime.Hours));
     const sal_Int32 nMinutes (sal::static_int_cast<sal_Int32>(rTime.Minutes));
     const sal_Int32 nSeconds(sal::static_int_cast<sal_Int32>(rTime.Seconds));
+    // Hours
+    if (mbIs24HourFormat)
+        sText.append(OUString::valueOf(nHours));
+    else
+        sText.append(OUString::valueOf(
+            sal::static_int_cast<sal_Int32>(nHours>12 ? nHours-12 : nHours)));
 
-    /// check whether RTL interface or not
-    if(!Application::GetSettings().GetLayoutRTL()){
-        // Hours
-        if (mbIs24HourFormat)
-            sText.append(OUString::valueOf(nHours));
-        else
-            sText.append(OUString::valueOf(
-                sal::static_int_cast<sal_Int32>(nHours>12 ? nHours-12 : nHours)));
+    sText.append(A2S(":"));
 
+    // Minutes
+    const OUString sMinutes (OUString::valueOf(nMinutes));
+    if (sMinutes.getLength() == 1)
+        sText.append(A2S("0"));
+    sText.append(sMinutes);
+
+    // Seconds
+    if (mbIsShowSeconds)
+    {
         sText.append(A2S(":"));
-
-        // Minutes
-        const OUString sMinutes (OUString::valueOf(nMinutes));
-        if (sMinutes.getLength() == 1)
+        const OUString sSeconds (OUString::valueOf(nSeconds));
+        if (sSeconds.getLength() == 1)
             sText.append(A2S("0"));
-        sText.append(sMinutes);
-
-        // Seconds
-        if (mbIsShowSeconds)
-        {
-            sText.append(A2S(":"));
-            const OUString sSeconds (OUString::valueOf(nSeconds));
-            if (sSeconds.getLength() == 1)
-                sText.append(A2S("0"));
-            sText.append(sSeconds);
-        }
-    }
-    else {
-        // Seconds
-        if (mbIsShowSeconds)
-        {
-            const OUString sSeconds (OUString::valueOf(nSeconds));
-            if (sSeconds.getLength() == 1){
-                sText.append(sSeconds[0]);
-                sText.append(A2S("0"));
-            }
-            else {
-                sText.append(sSeconds[1]);
-                sText.append(sSeconds[0]);
-            }
-            sText.append(A2S(":"));
-        }
-
-        // Minutes
-        const OUString sMinutes (OUString::valueOf(nMinutes));
-        if (sMinutes.getLength() == 1){
-            sText.append(sMinutes[0]);
-            sText.append(A2S("0"));
-        }
-        else {
-            sText.append(sMinutes[1]);
-            sText.append(sMinutes[0]);
-        }
-        // Hours
-        OUString tempHours;
-            sText.append(A2S(":"));
-        if (mbIs24HourFormat)
-            tempHours = OUString::valueOf(nHours);
-        else
-            tempHours = OUString::valueOf(
-                sal::static_int_cast<sal_Int32>(nHours>12 ? nHours-12 : nHours));
-        if (tempHours.getLength() > 1)
-            sText.append(tempHours[1]);
-        sText.append(tempHours[0]);
+        sText.append(sSeconds);
     }
     if (mbIsAmPmFormat)
     {
