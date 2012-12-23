@@ -432,14 +432,14 @@ PoEntry::PoEntry(const OString& rSDFLine, const TYPE eType)
     /*Default case is unneeded because the type of eType has
       only three element*/
     }
-    m_pGenPo->setExtractCom(
-        ( !vParts[HELPTEXT].isEmpty() ?  vParts[HELPTEXT] + "\n" : OString( "" )) +
-        lcl_GenKeyId(
-            vParts[SOURCEFILE] + sMsgCtxt + vParts[eType] ) );
     m_pGenPo->setMsgCtxt(sMsgCtxt);
     m_pGenPo->setMsgId(
         lcl_UnEscapeSDFText(
             vParts[eType],vParts[SOURCEFILE].endsWith(".xhp")));
+    m_pGenPo->setExtractCom(
+        ( !vParts[HELPTEXT].isEmpty() ?  vParts[HELPTEXT] + "\n" : OString( "" )) +
+        lcl_GenKeyId(
+            m_pGenPo->getReference() + sMsgCtxt + m_pGenPo->getMsgId() ) );
     m_bIsInitialized = true;
 }
 
