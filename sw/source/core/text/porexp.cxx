@@ -252,7 +252,7 @@ void SwBlankPortion::HandlePortion( SwPortionHandler& rPH ) const
  *************************************************************************/
 
 SwPostItsPortion::SwPostItsPortion( sal_Bool bScrpt )
-    : nViewWidth(0), bScript( bScrpt )
+    : bScript( bScrpt )
 {
     nLineLength = 1;
     SetWhichPor( POR_POSTITS );

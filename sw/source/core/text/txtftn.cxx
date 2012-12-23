@@ -850,7 +850,7 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
     SwDoc *pDoc = pFrm->GetNode()->GetDoc();
 
     if( rInf.IsTest() )
-        return new SwFtnPortion( rFtn.GetViewNumStr( *pDoc ), pFrm, pFtn );
+        return new SwFtnPortion( rFtn.GetViewNumStr( *pDoc ), pFtn );
 
     SWAP_IF_SWAPPED( pFrm )
 
@@ -970,7 +970,7 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
     }
     // Endlich: FtnPortion anlegen und raus hier...
     SwFtnPortion *pRet = new SwFtnPortion( rFtn.GetViewNumStr( *pDoc ),
-                                            pFrm, pFtn, nReal );
+                                           pFtn, nReal );
     rInf.SetFtnInside( true );
 
     UNDO_SWAP( pFrm )
@@ -1401,10 +1401,9 @@ SwFtnSave::~SwFtnSave()
  *                      SwFtnPortion::SwFtnPortion()
  *************************************************************************/
 
-SwFtnPortion::SwFtnPortion( const XubString &rExpand, SwTxtFrm *pFrame,
+SwFtnPortion::SwFtnPortion( const XubString &rExpand,
                             SwTxtFtn *pFootn, KSHORT nReal )
         : SwFldPortion( rExpand, 0 )
-        , pFrm(pFrame)
         , pFtn(pFootn)
         , nOrigHeight( nReal )
         // #i98418#

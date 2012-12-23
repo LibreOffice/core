@@ -30,14 +30,13 @@ class SwTxtFtn;
 
 class SwFtnPortion : public SwFldPortion
 {
-    SwTxtFrm *pFrm;         // To be able to call RemoveFtn in the dtor
     SwTxtFtn *pFtn;
     KSHORT nOrigHeight;
     // #i98418#
     bool mbPreferredScriptTypeSet;
     sal_uInt8 mnPreferredScriptType;
 public:
-    SwFtnPortion( const XubString &rExpand, SwTxtFrm *pFrm, SwTxtFtn *pFtn,
+    SwFtnPortion( const XubString &rExpand, SwTxtFtn *pFtn,
                   KSHORT nOrig = KSHRT_MAX );
     inline KSHORT& Orig() { return nOrigHeight; }
 

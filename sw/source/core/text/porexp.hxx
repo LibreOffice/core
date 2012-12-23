@@ -79,7 +79,6 @@ public:
 
 class SwPostItsPortion : public SwExpandPortion
 {
-    KSHORT  nViewWidth;
     sal_Bool    bScript;
 public:
             SwPostItsPortion( sal_Bool bScrpt );

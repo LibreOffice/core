@@ -619,7 +619,6 @@ SbaXDataBrowserController::SbaXDataBrowserController(const Reference< ::com::sun
     ,m_sStateUndoRecord(ModuleRes(RID_STR_UNDO_MODIFY_RECORD))
     ,m_sModuleIdentifier( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.DataSourceBrowser" ) ) )
     ,m_pFormControllerImpl(NULL)
-    ,m_nPendingLoadFinished(0)
     ,m_nFormActionNestingLevel(0)
     ,m_bLoadCanceled( sal_False )
     ,m_bCannotSelectUnfiltered( true )
@@ -1293,7 +1292,6 @@ void SbaXDataBrowserController::elementReplaced(const ::com::sun::star::containe
 sal_Bool SbaXDataBrowserController::suspend(sal_Bool /*bSuspend*/) throw( RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::suspend" );
-    OSL_ENSURE(m_nPendingLoadFinished == 0, "SbaXDataBrowserController::suspend : there shouldn't be a pending load !");
 
     m_aAsyncGetCellFocus.CancelCall();
     m_aAsyncDisplayError.CancelCall();

@@ -111,7 +111,6 @@ namespace dbaui
         // members for asynchronous load operations
         FormControllerImpl*     m_pFormControllerImpl;  // implementing the XFormController
 
-        sal_uLong                   m_nPendingLoadFinished;         // the event used to tell ourself that the load is finished
         sal_uInt16              m_nFormActionNestingLevel;      // see enter-/leaveFormAction
 
         sal_Bool                m_bLoadCanceled : 1;            // the load was canceled somehow
