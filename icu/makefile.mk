@@ -57,6 +57,7 @@ PATCH_FILES=\
     icu4c-macosx.patch \
     icu4c-solarisgcc.patch \
     icu4c-mkdir.patch \
+    icu4c-buffer-overflow.patch \
 
 .IF "$(OS)"=="ANDROID"
 PATCH_FILES+=\
