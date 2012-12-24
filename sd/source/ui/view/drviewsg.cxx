@@ -84,12 +84,11 @@ void DrawViewShell::GetIMapState( SfxItemSet& rSet )
     if( GetViewFrame()->HasChildWindow( SvxIMapDlgChildWindow::GetChildWindowId() ) )
     {
         const SdrMarkList&  rMarkList = mpDrawView->GetMarkedObjectList();
-        const SdrObject*    pObj = NULL;
         sal_uLong               nMarkCount = rMarkList.GetMarkCount();
 
         if ( nMarkCount == 1 )
         {
-            pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+            const SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
             SvxIMapDlg* pImageMapDialog = ViewShell::Implementation::GetImageMapDialog();
             if ( ( pObj->ISA( SdrGrafObj ) /*|| pObj->ISA( SdrOle2Obj )*/ )

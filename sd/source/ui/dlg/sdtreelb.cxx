@@ -1351,7 +1351,6 @@ void SdPageObjsTLB::AddShapeToTransferable (
     ::sd::DrawDocShell* pDocShell = mpDoc->GetDocSh();
     if (bIsDescriptorFillingPending && pDocShell!=NULL)
     {
-        bIsDescriptorFillingPending = false;
         pDocShell->FillTransferableObjectDescriptor(aObjectDescriptor);
     }
 
@@ -1415,7 +1414,7 @@ void SdPageObjsTLB::AddShapeToTransferable (
                 return pViewShell.get();
         }
     }
-    catch (uno::Exception e)
+    catch (uno::Exception &e)
     {
         // When there is an exception then simply use the default value of
         // bIsEnabled and disable the controls.

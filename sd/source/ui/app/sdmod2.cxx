@@ -400,8 +400,6 @@ SfxItemSet*  SdModule::CreateItemSet( sal_uInt16 nSlot )
     if( nSlot == SID_SD_GRAPHIC_OPTIONS )
         eDocType = DOCUMENT_TYPE_DRAW;
 
-    ::sd::ViewShell* pViewShell = NULL;
-
     if (pDocSh)
     {
         pDoc = pDocSh->GetDoc();
@@ -411,7 +409,7 @@ SfxItemSet*  SdModule::CreateItemSet( sal_uInt16 nSlot )
         if( pDoc && eDocType == pDoc->GetDocumentType() )
             pFrameView = pDocSh->GetFrameView();
 
-        pViewShell = pDocSh->GetViewShell();
+        ::sd::ViewShell* pViewShell = pDocSh->GetViewShell();
         if (pViewShell != NULL)
             pViewShell->WriteFrameViewData();
     }

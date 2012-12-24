@@ -461,7 +461,6 @@ IMPL_LINK( SdDefineCustomShowDlg, ClickButtonHdl, void *, p )
 void SdDefineCustomShowDlg::CheckCustomShow()
 {
     sal_Bool bDifferent = sal_False;
-    SdPage* pPage = NULL;
     SvTreeListEntry* pEntry = NULL;
 
     // Anzahl vergleichen
@@ -490,6 +489,7 @@ void SdDefineCustomShowDlg::CheckCustomShow()
     // Seiten-Pointer neu setzen
     if( bDifferent )
     {
+        SdPage* pPage = NULL;
         for( pEntry = aLbCustomPages.First();
              pEntry != NULL;
              pEntry = aLbCustomPages.Next( pEntry ) )

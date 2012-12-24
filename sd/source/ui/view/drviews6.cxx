@@ -400,12 +400,11 @@ void DrawViewShell::GetBmpMaskState( SfxItemSet& rSet )
     const SdrMarkList&  rMarkList = mpDrawView->GetMarkedObjectList();
     const SdrObject*    pObj = NULL;
     sal_uInt16              nId = SvxBmpMaskChildWindow::GetChildWindowId();
-    SvxBmpMask*         pDlg = NULL;
     sal_Bool                bEnable = sal_False;
 
     if ( GetViewFrame()->HasChildWindow( nId ) )
     {
-        pDlg = (SvxBmpMask*) ( GetViewFrame()->GetChildWindow( nId )->GetWindow() );
+        SvxBmpMask* pDlg = (SvxBmpMask*) ( GetViewFrame()->GetChildWindow( nId )->GetWindow() );
 
         if ( pDlg->NeedsColorList() )
             pDlg->SetColorList( GetDoc()->GetColorList() );

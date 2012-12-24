@@ -99,7 +99,6 @@ void FuLineEnd::DoExecute( SfxRequest& )
         SdrObject::Free( pConvPolyObj );
 
         XLineEndListRef pLineEndList = mpDoc->GetLineEndList();
-        XLineEndEntry* pEntry;
 
         String aNewName( SdResId( STR_LINEEND ) );
         String aDesc( SdResId( STR_DESC_LINEEND ) );
@@ -142,7 +141,7 @@ void FuLineEnd::DoExecute( SfxRequest& )
 
                 if( bDifferent )
                 {
-                    pEntry = new XLineEndEntry( aPolyPolygon, aName );
+                    XLineEndEntry* pEntry = new XLineEndEntry( aPolyPolygon, aName );
                     pLineEndList->Insert( pEntry, LIST_APPEND);
                 }
                 else
