@@ -55,7 +55,7 @@ sal_Int16 SwWriteTableCell::GetVertOri() const
 
 //-----------------------------------------------------------------------
 
-SwWriteTableRow::SwWriteTableRow( long nPosition, sal_Bool bUseLayoutHeights )
+SwWriteTableRow::SwWriteTableRow( long nPosition, bool bUseLayoutHeights )
     : pBackground(0), nPos(nPosition), mbUseLayoutHeights(bUseLayoutHeights),
     nTopBorder(USHRT_MAX), nBottomBorder(USHRT_MAX), bTopBorder(true),
     bBottomBorder(true)
@@ -98,8 +98,8 @@ sal_uInt32 SwWriteTable::GetBoxWidth( const SwTableBox *pBox )
 long SwWriteTable::GetLineHeight( const SwTableLine *pLine )
 {
 #ifdef DBG_UTIL
-    sal_Bool bOldGetLineHeightCalled = m_bGetLineHeightCalled;
-    m_bGetLineHeightCalled = sal_True;
+    bool bOldGetLineHeightCalled = m_bGetLineHeightCalled;
+    m_bGetLineHeightCalled = true;
 #endif
 
     long nHeight = 0;
@@ -115,7 +115,7 @@ long SwWriteTable::GetLineHeight( const SwTableLine *pLine )
         // #i60390# - in some cases we still want to continue
         // to use the layout heights even if one of the rows has a height of 0
         // ('hidden' rows)
-        bUseLayoutHeights = bLayoutAvailable; /*sal_False;*/
+        bUseLayoutHeights = bLayoutAvailable;
 
 #ifdef DBG_UTIL
         SAL_WARN_IF( !bLayoutAvailable && bOldGetLineHeightCalled, "sw", "Layout ungueltig?" );

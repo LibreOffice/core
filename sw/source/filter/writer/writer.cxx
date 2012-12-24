@@ -361,7 +361,7 @@ void Writer::PutNumFmtFontsInAttrPool()
     const SwNumFmt* pFmt;
     const Font* pFont;
     const Font* pDefFont = &numfunc::GetDefBulletFont();
-    sal_Bool bCheck = sal_False;
+    bool bCheck = false;
 
     for( sal_uInt16 nGet = rListTbl.size(); nGet; )
         if( pDoc->IsUsed( *(pRule = rListTbl[ --nGet ] )))
@@ -378,7 +378,7 @@ void Writer::PutNumFmtFontsInAttrPool()
                             continue;
                     }
                     else if( *pFont == *pDefFont )
-                        bCheck = sal_True;
+                        bCheck = true;
 
                     _AddFontItem( rPool, SvxFontItem( pFont->GetFamily(),
                                 pFont->GetName(), pFont->GetStyleName(),
@@ -386,7 +386,7 @@ void Writer::PutNumFmtFontsInAttrPool()
                 }
 }
 
-void Writer::PutEditEngFontsInAttrPool( sal_Bool bIncl_CJK_CTL )
+void Writer::PutEditEngFontsInAttrPool( bool bIncl_CJK_CTL )
 {
     SfxItemPool& rPool = pDoc->GetAttrPool();
     if( rPool.GetSecondaryPool() )

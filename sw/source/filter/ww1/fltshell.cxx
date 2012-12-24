@@ -64,7 +64,7 @@
 
 using namespace com::sun::star;
 
-static SwCntntNode* GetCntntNode(SwDoc* pDoc, SwNodeIndex& rIdx, sal_Bool bNext)
+static SwCntntNode* GetCntntNode(SwDoc* pDoc, SwNodeIndex& rIdx, bool bNext)
 {
     SwCntntNode * pCNd = rIdx.GetNode().GetCntntNode();
     if(!pCNd && 0 == (pCNd = bNext ? pDoc->GetNodes().GoNext(&rIdx)
@@ -123,13 +123,13 @@ bool SwFltStackEntry::MakeRegion(SwDoc* pDoc, SwPaM& rRegion, bool bCheck,
 
     // !!! Die Content-Indizies beziehen sich immer auf den Node !!!
     rRegion.GetPoint()->nNode = rMkPos.m_nNode.GetIndex() + 1;
-    SwCntntNode* pCNd = GetCntntNode(pDoc, rRegion.GetPoint()->nNode, sal_True);
+    SwCntntNode* pCNd = GetCntntNode(pDoc, rRegion.GetPoint()->nNode, true);
     rRegion.GetPoint()->nContent.Assign(pCNd, rMkPos.m_nCntnt);
     rRegion.SetMark();
     if (rMkPos.m_nNode != rPtPos.m_nNode)
     {
         rRegion.GetPoint()->nNode = rPtPos.m_nNode.GetIndex() + 1;
-        pCNd = GetCntntNode(pDoc, rRegion.GetPoint()->nNode, sal_False);
+        pCNd = GetCntntNode(pDoc, rRegion.GetPoint()->nNode, false);
     }
     rRegion.GetPoint()->nContent.Assign(pCNd, rPtPos.m_nCntnt);
     OSL_ENSURE( CheckNodesRange( rRegion.Start()->nNode,
@@ -397,7 +397,7 @@ static void MakePoint(const SwFltStackEntry& rEntry, SwDoc* pDoc,
     // nur noch im Format gesetzt werden.
     rRegion.DeleteMark();
     rRegion.GetPoint()->nNode = rEntry.m_aMkPos.m_nNode.GetIndex() + 1;
-    SwCntntNode* pCNd = GetCntntNode(pDoc, rRegion.GetPoint()->nNode, sal_True);
+    SwCntntNode* pCNd = GetCntntNode(pDoc, rRegion.GetPoint()->nNode, true);
     rRegion.GetPoint()->nContent.Assign(pCNd, rEntry.m_aMkPos.m_nCntnt);
 }
 
@@ -428,8 +428,8 @@ static void MakeBookRegionOrPoint(const SwFltStackEntry& rEntry, SwDoc* pDoc,
 // rTmpStart ist ReinRaus-Parameter: Anfang des zu untersuchenden Bereiches rein,
 //                                   Anfang des gueltigen Bereichs raus
 // rTmpEnd ist raus-Parameter
-// Return-Bool ist sal_True fuer gueltigen Bereich
-static sal_Bool IterateNumrulePiece( const SwNodeIndex& rEnd,
+// Return-Bool ist true fuer gueltigen Bereich
+static bool IterateNumrulePiece( const SwNodeIndex& rEnd,
                                 SwNodeIndex& rTmpStart, SwNodeIndex& rTmpEnd )
 {
     while( ( rTmpStart <= rEnd )
@@ -961,7 +961,7 @@ SwFltShell::SwFltShell(SwDoc* pDoc, SwPaM& rPaM, const String& rBaseURL, sal_Boo
 
         // verhinder das Einlesen von Tabellen in Fussnoten / Tabellen
         sal_uLong nNd = pPos->nNode.GetIndex();
-        sal_Bool bReadNoTbl = 0 != pSttNd->FindTableNode() ||
+        bool bReadNoTbl = 0 != pSttNd->FindTableNode() ||
             ( nNd < pDoc->GetNodes().GetEndOfInserts().GetIndex() &&
             pDoc->GetNodes().GetEndOfInserts().StartOfSectionIndex() < nNd );
         if( bReadNoTbl )
@@ -1260,36 +1260,36 @@ SwFieldType* SwFltShell::GetSysFldType(sal_uInt16 eWhich)
     return GetDoc().GetSysFldType(eWhich);
 }
 
-sal_Bool SwFltShell::GetWeightBold()
+bool SwFltShell::GetWeightBold()
 {
     return ((SvxWeightItem&)GetNodeOrStyAttr(RES_CHRATR_WEIGHT)).GetWeight()
                                 != WEIGHT_NORMAL;
 }
 
-sal_Bool SwFltShell::GetPostureItalic()
+bool SwFltShell::GetPostureItalic()
 {
     return ((SvxPostureItem&)GetNodeOrStyAttr(RES_CHRATR_POSTURE)).GetPosture()
                                 != ITALIC_NONE;
 }
 
-sal_Bool SwFltShell::GetCrossedOut()
+bool SwFltShell::GetCrossedOut()
 {
     return ((SvxCrossedOutItem&)GetNodeOrStyAttr(RES_CHRATR_CROSSEDOUT))
                                     .GetStrikeout() != STRIKEOUT_NONE;
 }
 
-sal_Bool SwFltShell::GetContour()
+bool SwFltShell::GetContour()
 {
     return ((SvxContourItem&)GetNodeOrStyAttr(RES_CHRATR_CONTOUR)).GetValue();
 }
 
-sal_Bool SwFltShell::GetCaseKapitaelchen()
+bool SwFltShell::GetCaseKapitaelchen()
 {
     return ((SvxCaseMapItem&)GetNodeOrStyAttr(RES_CHRATR_CASEMAP))
                                     .GetCaseMap() == SVX_CASEMAP_KAPITAELCHEN;
 }
 
-sal_Bool SwFltShell::GetCaseVersalien()
+bool SwFltShell::GetCaseVersalien()
 {
     return ((SvxCaseMapItem&)GetNodeOrStyAttr(RES_CHRATR_CASEMAP))
                                     .GetCaseMap() == SVX_CASEMAP_VERSALIEN;
@@ -1314,10 +1314,10 @@ const SfxPoolItem& SwFltOutBase::GetCellAttr(sal_uInt16 nWhich)
     return GetDoc().GetAttrPool().GetDefaultItem(nWhich);
 }
 
-sal_Bool SwFltOutBase::BeginTable()
+bool SwFltOutBase::BeginTable()
 {
     OSL_FAIL("BeginTable ausserhalb von normalem Text");
-    return sal_False;
+    return false;
 }
 
 void SwFltOutBase::NextTableCell()
@@ -1375,14 +1375,14 @@ void SwFltOutBase::EndTable()
     return pTable != 0;
 };
 
-sal_Bool SwFltOutDoc::BeginTable()
+bool SwFltOutDoc::BeginTable()
 {
     if(bReadNoTbl)
-        return sal_False;
+        return false;
 
     if (pTable){
         OSL_FAIL("BeginTable in Table");
-        return sal_False;
+        return false;
     }
                             // Alle Attribute schliessen, da sonst Attribute
                             // entstehen koennen, die in Flys reinragen
@@ -1401,7 +1401,7 @@ sal_Bool SwFltOutDoc::BeginTable()
     usTableX =
     usTableY = 0;
     SeekCell(usTableY, usTableX, sal_True);
-    return sal_True;
+    return true;
 }
 
 SwTableBox* SwFltOutDoc::GetBox(sal_uInt16 ny, sal_uInt16 nx /*= USHRT_MAX */)
@@ -1697,7 +1697,7 @@ SfxItemSet* SwFltOutBase::NewFlyDefaults()
     return p;
 }
 
-sal_Bool SwFltOutBase::BeginFly( RndStdIds eAnchor /*= FLY_AT_PARA*/,
+bool SwFltOutBase::BeginFly( RndStdIds eAnchor /*= FLY_AT_PARA*/,
                            sal_Bool bAbsolutePos /*= sal_False*/,
                            const SfxItemSet* pMoreAttrs /*= 0*/)
 {
@@ -1705,7 +1705,7 @@ sal_Bool SwFltOutBase::BeginFly( RndStdIds eAnchor /*= FLY_AT_PARA*/,
     OSL_ENSURE(!pMoreAttrs, "SwFltOutBase:BeginFly mit pMoreAttrs" );
     eFlyAnchor = eAnchor;
     bFlyAbsPos = bAbsolutePos;      // Bloedsinn eigentlich
-    return sal_True;
+    return true;
 }
 
 /*virtual*/ void SwFltOutBase::SetFlyAnchor( RndStdIds eAnchor )
@@ -1734,7 +1734,7 @@ void SwFltOutBase::EndFly()
 // Flys in SwFltDoc
 //-----------------------------------------------------------------------------
 
-/* virtual */ sal_Bool SwFltOutDoc::IsInFly()
+/* virtual */ bool SwFltOutDoc::IsInFly()
 {
     return pFly != 0;
 };
@@ -1746,7 +1746,7 @@ SwFrmFmt* SwFltOutDoc::MakeFly( RndStdIds eAnchor, SfxItemSet* pSet )
     return pFly;
 }
 
-sal_Bool SwFltOutDoc::BeginFly( RndStdIds eAnchor,
+bool SwFltOutDoc::BeginFly( RndStdIds eAnchor,
                            sal_Bool bAbsolutePos ,
                            const SfxItemSet* pMoreAttrs)
 
@@ -1785,7 +1785,7 @@ sal_Bool SwFltOutDoc::BeginFly( RndStdIds eAnchor,
     SwCntntNode *pNode = pPaM->GetCntntNode();
     pPaM->GetPoint()->nContent.Assign( pNode, 0 );
 
-    return sal_True;
+    return true;
 }
 
 /*virtual*/ void SwFltOutDoc::SetFlyFrmAttr(const SfxPoolItem& rAttr)
@@ -1829,7 +1829,7 @@ void SwFltOutDoc::EndFly()
 //-----------------------------------------------------------------------------
 // Flys in SwFltFormatCollection
 //-----------------------------------------------------------------------------
-/*virtual*/ sal_Bool SwFltFormatCollection::IsInFly()
+/*virtual*/ bool SwFltFormatCollection::IsInFly()
 {
     return bHasFly;
 };
@@ -1850,48 +1850,48 @@ void SwFltOutDoc::EndFly()
         return GetDoc().GetAttrPool().GetDefaultItem(nWhich);
 }
 
-sal_Bool SwFltFormatCollection::BeginFly( RndStdIds eAnchor,
+bool SwFltFormatCollection::BeginFly( RndStdIds eAnchor,
                            sal_Bool bAbsolutePos,
                            const SfxItemSet* pMoreAttrs)
 
 {
     SwFltOutBase::BeginFly( eAnchor, bAbsolutePos, pMoreAttrs );
-    bHasFly = sal_True;
-    return sal_True;
+    bHasFly = true;
+    return true;
 }
 
 void SwFltFormatCollection::EndFly()    // Wird nie aufgerufen
 {
 }
 
-sal_Bool SwFltFormatCollection::BeginStyleFly( SwFltOutDoc* pOutDoc )
+bool SwFltFormatCollection::BeginStyleFly( SwFltOutDoc* pOutDoc )
 {
     OSL_ENSURE( pOutDoc, "BeginStyleFly ohne pOutDoc" );
     OSL_ENSURE( pOutDoc && !pOutDoc->IsInFly(), "BeginStyleFly in Fly" );
     if( pOutDoc && !pOutDoc->IsInFly() )
         return pOutDoc->BeginFly( eFlyAnchor, bFlyAbsPos, pFlyAttrs );
     else
-        return sal_False;
+        return false;
 }
 
 //-----------------------------------------------------------------------------
 // Flys in SwFltShell
 //-----------------------------------------------------------------------------
 
-sal_Bool SwFltShell::BeginFly( RndStdIds eAnchor,
+bool SwFltShell::BeginFly( RndStdIds eAnchor,
                            sal_Bool bAbsolutePos)
 {
     if (pOut->IsInFly()){
         OSL_FAIL("BeginFly in Fly");
-        return sal_False;
+        return false;
     }
     if (pOutDoc->IsInTable()){
         OSL_FAIL("BeginFly in Table");
-        return sal_False;
+        return false;
     }
     pOut->BeginFly( eAnchor, bAbsolutePos, pColls[nAktStyle]->GetpFlyAttrs() );
     eSubMode = Fly;
-    return sal_True;
+    return true;
 }
 
 void SwFltShell::SetFlyXPos( short nXPos, sal_Int16 eHRel,
@@ -2020,7 +2020,7 @@ SwPageDesc* SwFltShell::MakePageDesc(SwPageDesc* pFirstPageDesc)
     if(bStdPD)                      // keine Neuen PageDescs
         return pCurrentPageDesc;
 
-    sal_Bool bFollow = (pFirstPageDesc != 0);
+    bool bFollow = (pFirstPageDesc != 0);
     SwPageDesc* pNewPD;
     sal_uInt16 nPos;
     if (bFollow && pFirstPageDesc->GetFollow() != pFirstPageDesc)
@@ -2053,7 +2053,7 @@ SwFltFormatCollection::SwFltFormatCollection(
     SwFltOutBase(_rDoc),
     pColl(_rDoc.GetTxtCollFromPool( static_cast< sal_uInt16 >(nType), false )),
     pFlyAttrs( 0 ),
-    bHasFly( sal_False )
+    bHasFly( false )
 {
     Reset();            // Default-Attrs loeschen und Auto-Flag
 }
@@ -2062,7 +2062,7 @@ SwFltFormatCollection::SwFltFormatCollection(
     SwDoc& _rDoc, const String& rName ) :
     SwFltOutBase(_rDoc),
     pFlyAttrs( 0 ),
-    bHasFly( sal_False )
+    bHasFly( false )
 {
     pColl = _rDoc.MakeTxtFmtColl(rName, (SwTxtFmtColl*)_rDoc.GetDfltTxtFmtColl());
     Reset();            // Default-Attrs loeschen und Auto-Flag

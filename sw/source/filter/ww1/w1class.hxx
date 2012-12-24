@@ -174,7 +174,7 @@ public:
     String GetText( sal_uLong ulOffset, sal_uLong nLen ) const;
 
     enum Consts { MinChar = 32 };
-    static sal_Bool IsChar( sal_Unicode c )     { return c >= MinChar; }
+    static bool IsChar( sal_Unicode c )     { return c >= MinChar; }
 };
 
 /////////////////////////////////////////////////////////////// DocText

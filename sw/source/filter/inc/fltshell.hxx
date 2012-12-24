@@ -349,7 +349,7 @@ public:
     virtual const SfxPoolItem& GetNodeOrStyAttr(sal_uInt16 nWhich) = 0;
 
     virtual const SfxPoolItem& GetCellAttr(sal_uInt16 nWhich);
-    virtual sal_Bool BeginTable();
+    virtual bool BeginTable();
     virtual void NextTableCell();
     virtual void NextTableRow();
     virtual void SetTableWidth(SwTwips nW);
@@ -361,10 +361,10 @@ public:
     virtual void DeleteCell(sal_uInt16 nCell);
     virtual void EndTable();
 
-    virtual sal_Bool IsInFly() = 0;
+    virtual bool IsInFly() = 0;
     virtual void SetFlyFrmAttr(const SfxPoolItem& rAttr) = 0;
     virtual const SfxPoolItem& GetFlyFrmAttr(sal_uInt16 nWhich) = 0;
-    virtual sal_Bool BeginFly( RndStdIds eAnchor, sal_Bool bAbsolutePos,
+    virtual bool BeginFly( RndStdIds eAnchor, sal_Bool bAbsolutePos,
                                const SfxItemSet* pMoreAttrs = 0 );
     virtual void SetFlyAnchor( RndStdIds eAnchor );
     virtual void EndFly();
@@ -406,7 +406,7 @@ public:
 
     sal_Bool IsInTable();
     virtual const SfxPoolItem& GetCellAttr(sal_uInt16 nWhich);
-    virtual sal_Bool BeginTable();
+    virtual bool BeginTable();
     virtual void NextTableCell();
     virtual void NextTableRow();
     virtual void SetTableWidth(SwTwips nW);
@@ -419,10 +419,10 @@ public:
     virtual void EndTable();
 
     SwFrmFmt* MakeFly( RndStdIds eAnchor, SfxItemSet* pSet );
-    virtual sal_Bool IsInFly();
+    virtual bool IsInFly();
     virtual void SetFlyFrmAttr(const SfxPoolItem& rAttr);
     virtual const SfxPoolItem& GetFlyFrmAttr(sal_uInt16 nWhich);
-    virtual sal_Bool BeginFly( RndStdIds eAnchor, sal_Bool bAbsolutePos,
+    virtual bool BeginFly( RndStdIds eAnchor, sal_Bool bAbsolutePos,
                                const SfxItemSet* pMoreAttrs = 0 );
     virtual void EndFly();
 };
@@ -431,7 +431,7 @@ class SwFltFormatCollection : public SwFltOutBase
 {
     SwTxtFmtColl* pColl;
     SfxItemSet* pFlyAttrs;      // Simulation der Flys in Styles
-    sal_Bool bHasFly;
+    bool bHasFly;
 public:
     SwFltFormatCollection(SwDoc&, RES_POOL_COLLFMT_TYPE nType);
     SwFltFormatCollection(SwDoc&, const String& rName );
@@ -448,19 +448,19 @@ public:
 
 //  SwTxtFmtColl* Search(String, CharSet eSrc);
     SwTxtFmtColl* GetColl()         { return pColl; }
-    void SetHasFly()                { bHasFly = sal_True; }
+    void SetHasFly()                { bHasFly = true; }
     SfxItemSet* GetpFlyAttrs()      { return pFlyAttrs; }
 
     virtual SwFltOutBase& operator << (const SfxPoolItem& rItem);
     virtual const SfxPoolItem& GetAttr(sal_uInt16 nWhich);
     virtual const SfxPoolItem& GetNodeOrStyAttr(sal_uInt16 nWhich);
 
-    virtual sal_Bool IsInFly();
+    virtual bool IsInFly();
     virtual void SetFlyFrmAttr(const SfxPoolItem& rAttr);
     virtual const SfxPoolItem& GetFlyFrmAttr(sal_uInt16 nWhich);
-    virtual sal_Bool BeginFly( RndStdIds eAnchor, sal_Bool bAbsolutePos,
+    virtual bool BeginFly( RndStdIds eAnchor, sal_Bool bAbsolutePos,
                                const SfxItemSet* pMoreAttrs = 0 );
-    sal_Bool BeginStyleFly( SwFltOutDoc* pOutDoc );
+    bool BeginStyleFly( SwFltOutDoc* pOutDoc );
     virtual void EndFly();
 };
 
@@ -562,8 +562,8 @@ public:
         return ( pOut == pOutDoc ) ? pOutDoc->IsInTable() : 0; }
     const SfxPoolItem& GetCellAttr(sal_uInt16 nWhich) {
         return pOut->GetCellAttr(nWhich); }
-    sal_Bool BeginTable() {
-        sal_Bool b = pOut->BeginTable();
+    bool BeginTable() {
+        bool b = pOut->BeginTable();
         if(b) eSubMode = Table;
         return b; }
     void NextTableCell() {
@@ -589,8 +589,8 @@ public:
     void EndTable() {
         pOut->EndTable(); }
 // methoden zur verwaltung von Flys
-    sal_Bool IsInFly() { return pOut->IsInFly(); }
-    sal_Bool BeginFly( RndStdIds eAnchor = FLY_AT_PARA, sal_Bool bAbsolutePos = sal_False );
+    bool IsInFly() { return pOut->IsInFly(); }
+    bool BeginFly( RndStdIds eAnchor = FLY_AT_PARA, sal_Bool bAbsolutePos = sal_False );
     void SetFlyAnchor( RndStdIds eAnchor )
         { pOut->SetFlyAnchor( eAnchor ); }
     void SetFlyXPos( short nXPos, sal_Int16 eHRel = com::sun::star::text::RelOrientation::FRAME,
@@ -650,12 +650,12 @@ public:
     const SfxPoolItem& GetAttr(sal_uInt16 nWhich);
     const SfxPoolItem& GetFlyFrmAttr(sal_uInt16 nWhich);
     SwFieldType* GetSysFldType(sal_uInt16 eWhich);
-    sal_Bool GetWeightBold();
-    sal_Bool GetPostureItalic();
-    sal_Bool GetCrossedOut();
-    sal_Bool GetContour();
-    sal_Bool GetCaseKapitaelchen();
-    sal_Bool GetCaseVersalien();
+    bool GetWeightBold();
+    bool GetPostureItalic();
+    bool GetCrossedOut();
+    bool GetContour();
+    bool GetCaseKapitaelchen();
+    bool GetCaseVersalien();
 
     const String& GetBaseURL() const { return sBaseURL; }
 };

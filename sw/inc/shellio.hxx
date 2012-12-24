@@ -396,7 +396,7 @@ protected:
     sal_Bool CopyNextPam( SwPaM ** );
 
     void PutNumFmtFontsInAttrPool();
-    void PutEditEngFontsInAttrPool( sal_Bool bIncl_CJK_CTL = sal_True );
+    void PutEditEngFontsInAttrPool( bool bIncl_CJK_CTL = true );
 
     virtual sal_uLong WriteStream() = 0;
     void                SetBaseURL( const String& rURL ) { sBaseURL = rURL; }

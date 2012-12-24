@@ -106,7 +106,7 @@ class SW_DLLPUBLIC SwWriteTableRow
     const SvxBrushItem *pBackground;// Hintergrund
 
     long nPos;                  // End-Position (twips) der Zeile
-    sal_Bool mbUseLayoutHeights;
+    bool mbUseLayoutHeights;
 
     // Forbidden and not implemented.
     SwWriteTableRow();
@@ -125,7 +125,7 @@ public:
     bool bTopBorder : 1;            // Welche Umrandungen sind da?
     bool bBottomBorder : 1;
 
-    SwWriteTableRow( long nPos, sal_Bool bUseLayoutHeights );
+    SwWriteTableRow( long nPos, bool bUseLayoutHeights );
 
     SwWriteTableCell *AddCell( const SwTableBox *pBox,
                                  sal_uInt16 nRow, sal_uInt16 nCol,
@@ -250,15 +250,15 @@ protected:
     sal_uInt32 nTabWidth;              // Absolute/Relative Breite der Tabelle
 
     bool bRelWidths : 1;        // Breiten relativ ausgeben?
-    sal_Bool bUseLayoutHeights : 1; // Layout zur Hoehenbestimmung nehmen?
+    bool bUseLayoutHeights : 1; // Layout zur Hoehenbestimmung nehmen?
 #ifdef DBG_UTIL
-    sal_Bool m_bGetLineHeightCalled : 1;
+    bool m_bGetLineHeightCalled : 1;
 #endif
 
     bool bColsOption : 1;
     bool bColTags : 1;
-    sal_Bool bLayoutExport : 1;
-    sal_Bool bCollectBorderWidth : 1;
+    bool bLayoutExport : 1;
+    bool bCollectBorderWidth : 1;
 
     virtual sal_Bool ShouldExpandSub( const SwTableBox *pBox,
                                 sal_Bool bExpandedBefore, sal_uInt16 nDepth ) const;
