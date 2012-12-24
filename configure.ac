@@ -3157,7 +3157,7 @@ if test "$_os" = "WINNT"; then
 
         if test -n "$CC"; then
             # Remove /cl.exe from CC case insensitive
-            AC_MSG_RESULT([found ($CC), Visual C++ $vcyear])
+            AC_MSG_RESULT([found Visual C++ $vcyear ($CC)])
             if test "$BITNESS_OVERRIDE" = ""; then
                 COMPATH=`echo $CC | $SED -e 's@\/[[Bb]][[Ii]][[Nn]]\/[[cC]][[lL]]\.[[eE]][[xX]][[eE]].*@@' -e 's@^.* @@'`
             else
@@ -8979,108 +8979,66 @@ dnl and add "-a \( "$WITH_MINGW" != "yes" \)" then
 if test "$_os" = "WINNT"; then
     AC_MSG_CHECKING([for Windows SDK])
     if test "$build_os" = "cygwin"; then
-        # This first line will detect a February 2003 Microsoft Platform SDK
         find_winsdk
         WINDOWS_SDK_HOME=$winsdktest
-
-        # But there might be also an April 2005 PSDK, unfortunately MS changed
-        # the registry entry. (we prefer the old version!?)
-        if test -z "$WINDOWS_SDK_HOME"; then
-            WINDOWS_SDK_HOME=`cat /proc/registry/HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MicrosoftSDK/InstalledSDKs/*/Install\ Dir 2> /dev/null | tr '\000' '\n' | head -n 1`
-        fi
 
         # normalize if found
         if test -n "$WINDOWS_SDK_HOME"; then
             WINDOWS_SDK_HOME=`cygpath -d "$WINDOWS_SDK_HOME"`
             WINDOWS_SDK_HOME=`cygpath -u "$WINDOWS_SDK_HOME"`
-
-            # If this sdk is incomplete, lets see if the one
-            # recommended to be installed is available.
-
-            # This refers to the Windows SDK 8 (as distributed
-            # with Visual Studio 2012, or maybe also
-            # separately), I assume.
-
-            # I wouldn't say that it is "incomplete", it is
-            # just structured differtently. We do seem to try
-            # to adapt to that structure below (look for the
-            # Include/um etc stuff), so rejecting it here is a
-            # bit premature... *but* then one notices that
-            # compiling with MSVS2008 and trying to use SDK 8
-            # leads to horrible errors in ICU at least. Oh
-            # well.
-
-            if test ! -x "$WINDOWS_SDK_HOME/bin/msiinfo.exe"; then
-                WINDOWS_SDK7_HOME=`cat "/proc/registry/HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v7.1/InstallationFolder" 2> /dev/null | tr '\000' '\n' | head -n 1`
-                if test -n "$WINDOWS_SDK7_HOME"; then
-                    WINDOWS_SDK_HOME=`cygpath -d "$WINDOWS_SDK7_HOME"`
-                    WINDOWS_SDK_HOME=`cygpath -u "$WINDOWS_SDK_HOME"`
-                fi
-            fi
         fi
     fi
 
     if test -n "$WINDOWS_SDK_HOME"; then
         # Remove a possible trailing backslash
         WINDOWS_SDK_HOME=`echo $WINDOWS_SDK_HOME | $SED 's/\/$//'`
-        # Problem with current PSDK (iz 49865)
-
-        # (That "current" refers to something ancient... it hasn't been called the "Platform SDK"
-        # ("PSDK") for ages.
-
-        if test -f "$WINDOWS_SDK_HOME/Lib/libcp.lib"; then
-            AC_MSG_ERROR([
-Some modules do not build correctly with MS Platform SDK - April 2005
-Edition if the library ($WINDOWS_SDK_HOME/Lib/libcp.lib) is found.
-Remove/rename/backup that file and restart configure. Details about this
-problem can be found in issue 49856.])
-        fi
 
         if test -f "$WINDOWS_SDK_HOME/Include/adoint.h" \
              -a -f "$WINDOWS_SDK_HOME/Include/SqlUcode.h" \
              -a -f "$WINDOWS_SDK_HOME/Include/usp10.h"; then
-            HAVE_PSDK_H="yes"
+            have_windows_sdk_headers=yes
         elif test -f "$WINDOWS_SDK_HOME/Include/um/adoint.h" \
              -a -f "$WINDOWS_SDK_HOME/Include/um/SqlUcode.h" \
              -a -f "$WINDOWS_SDK_HOME/Include/um/usp10.h"; then
-            HAVE_PSDK_H="yes"
+            have_windows_sdk_headers=yes
         else
-            HAVE_PSDK_H="no"
-        fi
-        if test -f "$WINDOWS_SDK_HOME/lib/user32.lib"; then
-            HAVE_PSDK_LIB="yes"
-        elif test -f "$WINDOWS_SDK_HOME/lib/win8/um/$WINDOWS_SDK_ARCH/user32.lib"; then
-            HAVE_PSDK_LIB="yes"
-        else
-            HAVE_PSDK_LIB="no"
+            have_windows_sdk_headers=no
         fi
 
-        if test "$HAVE_PSDK_H" = "no" -o "$HAVE_PSDK_LIB" = "no"; then
+        if test -f "$WINDOWS_SDK_HOME/lib/user32.lib"; then
+            have_windows_sdk_libs=yes
+        elif test -f "$WINDOWS_SDK_HOME/lib/win8/um/$WINDOWS_SDK_ARCH/user32.lib"; then
+            have_windows_sdk_libs=yes
+        else
+            have_windows_sdk_libs=no
+        fi
+
+        if test $have_windows_sdk_headers = no -o $have_windows_sdk_libs = no; then
             AC_MSG_ERROR([Some (all?) Windows SDK files not found, please check if all needed parts of
 the  Windows SDK are installed.])
         fi
 
-        if test ! -x "$WINDOWS_SDK_HOME/bin/msiinfo.exe" \
-             -o ! -x "$WINDOWS_SDK_HOME/bin/msidb.exe" \
-             -o ! -x "$WINDOWS_SDK_HOME/bin/uuidgen.exe" \
-             -o ! -x "$WINDOWS_SDK_HOME/bin/msitran.exe"; then :
-        elif test ! -x "$WINDOWS_SDK_HOME/bin/x86/msiinfo.exe" \
-             -o ! -x "$WINDOWS_SDK_HOME/bin/x86/msidb.exe" \
-             -o ! -x "$WINDOWS_SDK_HOME/bin/x86/uuidgen.exe" \
-             -o ! -x "$WINDOWS_SDK_HOME/bin/x86/msitran.exe"; then :
+        if test ! -f "$WINDOWS_SDK_HOME/bin/msiinfo.exe" \
+             -o ! -f "$WINDOWS_SDK_HOME/bin/msidb.exe" \
+             -o ! -f "$WINDOWS_SDK_HOME/bin/uuidgen.exe" \
+             -o ! -f "$WINDOWS_SDK_HOME/bin/msitran.exe"; then :
+        elif test ! -f "$WINDOWS_SDK_HOME/bin/x86/msiinfo.exe" \
+             -o ! -f "$WINDOWS_SDK_HOME/bin/x86/msidb.exe" \
+             -o ! -f "$WINDOWS_SDK_HOME/bin/x86/uuidgen.exe" \
+             -o ! -f "$WINDOWS_SDK_HOME/bin/x86/msitran.exe"; then :
         else
-            AC_MSG_ERROR([Some (all) files of the Windows Installer SDK are missing, please install.])
+            AC_MSG_ERROR([Some (all?) Windows Installer tools in the Windows SDK are missing, please install.])
         fi
     fi
 
     if test -z "$WINDOWS_SDK_HOME"; then
-        AC_MSG_RESULT([no, hoping the necessary headers and libraries will be found anyway])
-    elif echo $WINDOWS_SDK_HOME | grep "v6.1" >/dev/null 2>/dev/null; then
-        WINDOWS_SDK_VERSION=61
-        AC_MSG_RESULT([found Windows SDK 6.1 ($WINDOWS_SDK_HOME)])
+        AC_MSG_RESULT([no, hoping the necessary headers and libraries will be found anyway!?])
     elif echo $WINDOWS_SDK_HOME | grep "v6.0" >/dev/null 2>/dev/null; then
         WINDOWS_SDK_VERSION=60
         AC_MSG_RESULT([found Windows SDK 6.0 ($WINDOWS_SDK_HOME)])
+    elif echo $WINDOWS_SDK_HOME | grep "v6.1" >/dev/null 2>/dev/null; then
+        WINDOWS_SDK_VERSION=61
+        AC_MSG_RESULT([found Windows SDK 6.1 ($WINDOWS_SDK_HOME)])
     elif echo $WINDOWS_SDK_HOME | grep "v7" >/dev/null 2>/dev/null; then
         WINDOWS_SDK_VERSION=70
         AC_MSG_RESULT([found Windows SDK 7 ($WINDOWS_SDK_HOME)])
