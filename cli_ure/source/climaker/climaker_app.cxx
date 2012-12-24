@@ -689,12 +689,20 @@ SAL_IMPLEMENT_MAIN()
 
         if (g_verbose)
         {
+#if _MSC_VER < 1700
+// Bogus: warning C4564: method 'CheckInvalidPathChars' of class 'System::IO::Path' defines unsupported default parameter 'checkAdditional'
+#pragma warning (push)
+#pragma warning (disable: 4564)
+#endif
             ::System::Console::Write(
                 "> saving assembly {0}{1}{2}...",
                 output_dir,
                 gcnew ::System::String(
                     ::System::IO::Path::DirectorySeparatorChar, 1 ),
                 output_file );
+#if _MSC_VER < 1700
+#pragma warning (pop)
+#endif
         }
         assembly_builder->Save( output_file );
         if (g_verbose)
