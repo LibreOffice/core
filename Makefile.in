@@ -268,7 +268,7 @@ ifeq ($(DISABLE_SCRIPTING),TRUE)
 endif
 ifeq ($(DISABLE_DBCONNECTIVITY),TRUE)
 # Ditto for dbconnectivity in the --disable-database-connectivity case
-	cd connectivity && sed -e 's/^\(export [A-Z0-9_]*=\)\(.*\)$$/\1"\2"/' <../config_host.mk >conftmp.sh && . conftmp.sh && rm conftmp.sh && $(SOLARENV)/bin/deliver.pl
+	$(GNUMAKE) connectivity
 endif
 	cd $(SRC_ROOT)/postprocess && unset MAKEFLAGS && \
 		$(SOLARENV)/bin/build.pl -P$(PARALLELISM) --all -- -P$(PARALLELISM) && \
