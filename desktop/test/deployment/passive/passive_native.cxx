@@ -220,7 +220,7 @@ void Dispatch::dispatch(
     css::uno::Reference< css::awt::XMessageBox > box(
         xToolkit->createMessageBox(
             xWindowPeer,
-            css::awt::Rectangle(), "infobox",
+            css::awt::MessageBoxType_INFOBOX,
             css::awt::MessageBoxButtons::BUTTONS_OK, "passive", "native"),
         css::uno::UNO_SET_THROW);
 

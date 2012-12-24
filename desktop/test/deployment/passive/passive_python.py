@@ -21,6 +21,7 @@ import unohelper
 
 from com.sun.star.awt import Rectangle
 from com.sun.star.awt.MessageBoxButtons import BUTTONS_OK
+from com.sun.star.awt.MessageBoxType import INFOBOX
 from com.sun.star.frame import XDispatch, XDispatchProvider
 from com.sun.star.lang import XServiceInfo
 
@@ -75,7 +76,7 @@ class Dispatch(unohelper.Base, XServiceInfo, XDispatch):
                 smgr.createInstanceWithContext( \
                     "com.sun.star.frame.Desktop", self.context). \
                     getCurrentFrame().getComponentWindow(), \
-                Rectangle(), "infobox", BUTTONS_OK, "passive", "python")
+                INFOBOX, BUTTONS_OK, "passive", "python")
         box.execute();
         box.dispose();
 

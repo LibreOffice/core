@@ -16,37 +16,40 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_awt_MessageBoxCommand_idl__
-#define __com_sun_star_awt_MessageBoxCommand_idl__
 
+#ifndef __com_sun_star_awt_MessageBoxResults_idl__
+#define __com_sun_star_awt_MessageBoxResults_idl__
 
+module com {  module sun {  module star {  module awt {
 
- module com {  module sun {  module star {  module awt {
-
-
-/** specifies a message box command.
-
-    @deprecated
+/** These constants are used to specify a result of executing a <type>XMessageBox</type>.
  */
-published constants MessageBoxCommand
+constants MessageBoxResults
 {
+    /** The user canceled the <type>XMessageBox</type>, by pressing "Cancel" or "Abort" button.
+     */
+    const short CANCEL  = 0;
 
-    const short CANCEL = 0;
+    /** The user pressed the "Ok" button.
+     */
+    const short OK      = 1;
 
+    /** The user pressed the "Yes" button.
+     */
+    const short YES     = 2;
 
-    const short OK = 1;
+    /** The user pressed the "No" button.
+     */
+    const short NO      = 3;
 
+    /** The user pressed the "Retry" button.
+     */
+    const short RETRY   = 4;
 
-    const short YES = 2;
-
-
-    const short NO = 3;
-
-
-    const short RETRY = 4;
-
+    /** The user pressed the "Ignore" button.
+     */
+    const short IGNORE  = 5;
 };
-
 
 }; }; }; };
 

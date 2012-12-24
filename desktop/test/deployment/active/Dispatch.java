@@ -19,6 +19,7 @@
 package com.sun.star.comp.test.deployment.active_java;
 
 import com.sun.star.awt.MessageBoxButtons;
+import com.sun.star.awt.MessageBoxType;
 import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.XMessageBox;
 import com.sun.star.awt.XMessageBoxFactory;
@@ -69,7 +70,7 @@ public final class Dispatch extends WeakBase implements XServiceInfo, XDispatch
                             smgr.createInstanceWithContext(
                                 "com.sun.star.frame.Desktop", context)).
                          getCurrentFrame().getComponentWindow())),
-                    new Rectangle(), "infobox", MessageBoxButtons.BUTTONS_OK,
+                    MessageBoxType.INFOBOX, MessageBoxButtons.BUTTONS_OK,
                     "active", "java");
             box.execute();
             UnoRuntime.queryInterface(XComponent.class, box).dispose();

@@ -157,8 +157,8 @@ public class MainThreadDialogExecutor implements XCallback
         else if ( m_xMessageBox != null )
         {
             int nRes = m_xMessageBox.execute();
-            m_bResult = ( nRes == com.sun.star.awt.MessageBoxCommand.OK
-                          || nRes == com.sun.star.awt.MessageBoxCommand.YES );
+            m_bResult = ( nRes == com.sun.star.awt.MessageBoxResults.OK
+                          || nRes == com.sun.star.awt.MessageBoxResults.YES );
         }
 
         m_bCalled = true;

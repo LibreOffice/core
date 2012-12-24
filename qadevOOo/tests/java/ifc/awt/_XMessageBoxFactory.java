@@ -47,7 +47,7 @@ public class _XMessageBoxFactory extends MultiMethodTest {
     public void _createMessageBox() {
         final XMessageBox mb = oObj.createMessageBox(
             (XWindowPeer) tEnv.getObjRelation("WINPEER"),
-            new Rectangle(0, 0, 100, 100), "errorbox", 1, "The Title",
+            com.sun.star.awt.MessageBoxType.ERRORBOX, 1, "The Title",
             "The Message");
         final UITools tools = new UITools(
             (XMultiServiceFactory) tParam.getMSF(),

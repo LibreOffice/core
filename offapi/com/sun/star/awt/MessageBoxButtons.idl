@@ -19,9 +19,7 @@
 #ifndef __com_sun_star_awt_MessageBoxButtons_idl__
 #define __com_sun_star_awt_MessageBoxButtons_idl__
 
-
- module com {  module sun {  module star {  module awt {
-
+module com {  module sun {  module star {  module awt {
 
 /** defines constants for the possible message box button
     combinations.
@@ -29,7 +27,6 @@
  */
 constants MessageBoxButtons
 {
-
     /** specifies a message with "OK" button.
      */
     const long BUTTONS_OK                   = 1;
@@ -78,7 +75,6 @@ constants MessageBoxButtons
      */
     const long DEFAULT_BUTTON_IGNORE        = 0x60000;
 };
-
 
 }; }; }; };
 

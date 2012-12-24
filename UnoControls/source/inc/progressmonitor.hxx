@@ -55,7 +55,6 @@
 #include <com/sun/star/awt/XComboBox.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XCheckBox.hpp>
-#include <com/sun/star/awt/MessageBoxCommand.hpp>
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
 #include <com/sun/star/awt/XProgressBar.hpp>
 

@@ -366,6 +366,47 @@ sal_uInt16 ImplGetComponentType( const String& rServiceName )
 }
 
 
+namespace
+{
+    struct MessageBoxTypeInfo
+    {
+        css::awt::MessageBoxType eType;
+        const sal_Char          *pName;
+        sal_Int32                nLen;
+    };
+
+    static MessageBoxTypeInfo aMessageBoxTypeInfo[] =
+    {
+        { css::awt::MessageBoxType_MESSAGEBOX,      RTL_CONSTASCII_STRINGPARAM("messbox") },
+        { css::awt::MessageBoxType_INFOBOX,         RTL_CONSTASCII_STRINGPARAM("infobox") },
+        { css::awt::MessageBoxType_WARNINGBOX,      RTL_CONSTASCII_STRINGPARAM("warningbox") },
+        { css::awt::MessageBoxType_ERRORBOX,        RTL_CONSTASCII_STRINGPARAM("errorbox") },
+        { css::awt::MessageBoxType_QUERYBOX,        RTL_CONSTASCII_STRINGPARAM("querybox") },
+        { css::awt::MessageBoxType_MAKE_FIXED_SIZE, 0, 0 }
+    };
+
+    static bool lcl_convertMessageBoxType(
+        rtl::OUString &sType,
+        css::awt::MessageBoxType eType )
+    {
+        const MessageBoxTypeInfo *pMap = aMessageBoxTypeInfo;
+        css::awt::MessageBoxType eVal = css::awt::MessageBoxType_MAKE_FIXED_SIZE;
+
+        while ( pMap->pName )
+        {
+            if ( pMap->eType == eType )
+            {
+                eVal = eType;
+                sType = rtl::OUString( pMap->pName, pMap->nLen, RTL_TEXTENCODING_ASCII_US );
+                break;
+            }
+            pMap++;
+        }
+
+        return ( eVal != css::awt::MessageBoxType_MAKE_FIXED_SIZE );
+    }
+}
+
 //  ----------------------------------------------------
 //  class VCLXToolkit
 //  ----------------------------------------------------
@@ -1214,8 +1255,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
 // ::com::sun::star::awt::XMessageBoxFactory
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMessageBox > SAL_CALL VCLXToolkit::createMessageBox(
     const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& aParent,
-    const ::com::sun::star::awt::Rectangle& aPosSize,
-    const OUString& aType,
+    ::com::sun::star::awt::MessageBoxType eType,
     ::sal_Int32 aButtons,
     const OUString& aTitle,
     const OUString& aMessage ) throw (::com::sun::star::uno::RuntimeException)
@@ -1256,11 +1296,13 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     if ( sal_Int32( aButtons & 0xffff0000L ) == css::awt::MessageBoxButtons::DEFAULT_BUTTON_IGNORE )
         nAddWinBits |= WB_DEF_IGNORE;
 
+    rtl::OUString aType;
+    lcl_convertMessageBoxType( aType, eType );
+
     aDescriptor.Type              = css::awt::WindowClass_MODALTOP;
     aDescriptor.WindowServiceName = aType;
     aDescriptor.ParentIndex       = -1;
     aDescriptor.Parent            = aParent;
-    aDescriptor.Bounds            = aPosSize;
     aDescriptor.WindowAttributes  = nWindowAttributes;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMessageBox > xMsgBox(
         ImplCreateWindow( aDescriptor, nAddWinBits ), css::uno::UNO_QUERY );

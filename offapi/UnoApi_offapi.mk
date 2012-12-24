@@ -1745,7 +1745,8 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/awt,\
 	MenuItemStyle \
 	MenuItemType \
 	MessageBoxButtons \
-	MessageBoxCommand \
+	MessageBoxResults \
+	MessageBoxType \
 	MouseButton \
 	MouseEvent \
 	MouseWheelBehavior \

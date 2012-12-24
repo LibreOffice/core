@@ -192,8 +192,7 @@ public class Inspector{
         try {
             Object oToolkit = m_xComponentContext.getServiceManager().createInstanceWithContext("com.sun.star.awt.Toolkit", m_xComponentContext);
             XMessageBoxFactory xMessageBoxFactory = UnoRuntime.queryInterface(XMessageBoxFactory.class, oToolkit);
-            Rectangle aRectangle = new Rectangle();
-            XMessageBox xMessageBox = xMessageBoxFactory.createMessageBox(_xWindowPeer, aRectangle, "errorbox", com.sun.star.awt.MessageBoxButtons.BUTTONS_OK, _sTitle, _sMessage);
+            XMessageBox xMessageBox = xMessageBoxFactory.createMessageBox(_xWindowPeer, com.sun.star.awt.MessageBoxType.ERRORBOX, com.sun.star.awt.MessageBoxButtons.BUTTONS_OK, _sTitle, _sMessage);
             XComponent xComponent = UnoRuntime.queryInterface(XComponent.class, xMessageBox);
             if (xMessageBox != null){
                 short nResult = xMessageBox.execute();

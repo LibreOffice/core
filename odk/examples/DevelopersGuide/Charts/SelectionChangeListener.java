@@ -56,6 +56,7 @@ import com.sun.star.awt.Point;
 import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.Size;
 import com.sun.star.awt.XMessageBoxFactory;
+import com.sun.star.awt.MessageBoxType;
 import com.sun.star.awt.XWindow;
 
 // __________ Implementation __________
@@ -204,10 +205,9 @@ public class SelectionChangeListener implements XSelectionChangeListener {
             XWindow xWin = aDesktop.getCurrentFrame().getContainerWindow();
             XWindowPeer aWinPeer = UnoRuntime.queryInterface(XWindowPeer.class, xWin);
 
-            Rectangle aRect = new Rectangle();
             int button = com.sun.star.awt.MessageBoxButtons.BUTTONS_OK;
             XMessageBoxFactory aMBF = UnoRuntime.queryInterface(XMessageBoxFactory.class, aToolKit);
-            XMessageBox xMB = aMBF.createMessageBox(aWinPeer, aRect, "infobox" , button, "Event-Notify", "Listener was called, selcetion has changed");
+            XMessageBox xMB = aMBF.createMessageBox(aWinPeer, MessageBoxType.INFOBOX, button, "Event-Notify", "Listener was called, selcetion has changed");
             xMB.execute();
         }
     }
