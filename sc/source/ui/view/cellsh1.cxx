@@ -1794,6 +1794,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     {
                         // check if at least one existing conditional format has the same range
                         const ScConditionalFormat* pCondFormat = pList->GetFormat(*itr);
+                        if(!pCondFormat)
+                            continue;
+
                         const ScRangeList& rCondFormatRange = pCondFormat->GetRange();
                         if(rCondFormatRange == aRangeList)
                         {
