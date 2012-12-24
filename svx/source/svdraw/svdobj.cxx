@@ -2926,8 +2926,40 @@ void SdrObject::MigrateItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, S
 
 void SdrObject::impl_setUnoShape( const uno::Reference< uno::XInterface >& _rxUnoShape )
 {
+    const uno::Reference< uno::XInterface>& xOldUnoShape( maWeakUnoShape );
+    // the UNO shape would be gutted by the following code; return early
+    if ( _rxUnoShape == xOldUnoShape )
+    {
+        if ( !xOldUnoShape.is() )
+        {
+            SAL_WARN_IF( mpSvxShape, "svx.sdr", "SdrObject::impl_setUnoShape: still having impl. pointer to dead object!" );
+            // make sure there is no stale impl. pointer if the UNO
+            // shape was destroyed meanwhile (remember we only hold weak
+            // reference to it!)
+            mpSvxShape = 0;
+        }
+        return;
+    }
+
+    bool bTransferOwnership( false );
+    if ( xOldUnoShape.is() )
+    {
+        bTransferOwnership = mpSvxShape->HasSdrObjectOwnership();
+        // Remove yourself from the current UNO shape. Its destructor
+        // will reset our UNO shape otherwise.
+        mpSvxShape->InvalidateSdrObject();
+    }
+
     maWeakUnoShape = _rxUnoShape;
     mpSvxShape = SvxShape::getImplementation( _rxUnoShape );
+
+    // I think this may never happen... But I am not sure enough .-)
+    if ( bTransferOwnership )
+    {
+        if ( _rxUnoShape.is() )
+            mpSvxShape->TakeSdrObjectOwnership();
+        SAL_WARN( "svx.uno", "a UNO shape took over an SdrObject previously owned by another UNO shape!");
+    }
 }
 
 /** only for internal use! */
