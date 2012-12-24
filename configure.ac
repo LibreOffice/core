@@ -3122,8 +3122,15 @@ if test "$_os" = "WINNT"; then
             MSPDB_PATH="$VC_PRODUCT_DIR/bin/amd64"
         fi
 
-        if test ! -e "$MSPDB_PATH/mspdb${vcnum}.dll"; then
-            AC_MSG_ERROR([No mspdb${vcnum}.dll in $MSPDB_PATH, Visual Studio installation broken?])
+        case $vcnum in
+        90)
+            mspdbnum=80;;
+        *)
+            mspdbnum=$vcnum;;
+        esac
+
+        if test ! -e "$MSPDB_PATH/mspdb${mspdbnum}.dll"; then
+            AC_MSG_ERROR([No mspdb${mspdbnum}.dll in $MSPDB_PATH, Visual Studio installation broken?])
         fi
 
         MSPDB_PATH=`cygpath -d "$MSPDB_PATH"`
