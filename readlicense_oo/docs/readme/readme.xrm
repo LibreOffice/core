@@ -50,7 +50,7 @@
 
 		<div id="Installation">
 			<h2 id="rr3fgf42r" xml:lang="en-US">Notes on Installation</h2>
-			<p class="note" id="javaneeded" xml:lang="en-US">${PRODUCTNAME} requires a recent version of JAVA for full functionality which is part of the ${PRODUCTNAME} installation package.</p>
+			<p class="note" id="javaneeded" xml:lang="en-US">${PRODUCTNAME} requires a recent version of JAVA for full functionality; JAVA can be downloaded from <a href="http://java.com">http://java.com</a>.</p>
 			<h3 id="sdfsdfgf42r" xml:lang="en-US">System Requirements</h3>
 			<div class="MAC" id="SystemRequirements_OSX">
 				<ul>
