@@ -131,6 +131,7 @@ public:
     void testFdo49934();
     void testFdo57886();
     void testFdo58076();
+    void testFdo57678();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -212,6 +213,7 @@ void Test::run()
         {"fdo49934.rtf", &Test::testFdo49934},
         {"fdo57886.rtf", &Test::testFdo57886},
         {"fdo58076.rtf", &Test::testFdo58076},
+        {"fdo57678.rtf", &Test::testFdo57678},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -978,6 +980,14 @@ void Test::testFdo58076()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1752), getProperty<sal_Int32>(xStyle, "RightMargin"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(635), getProperty<sal_Int32>(xStyle, "TopMargin"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(635), getProperty<sal_Int32>(xStyle, "BottomMargin"));
+}
+
+void Test::testFdo57678()
+{
+    // Paragraphs of the two tables were not converted to tables.
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
