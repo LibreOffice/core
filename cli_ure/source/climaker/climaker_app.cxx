@@ -572,10 +572,18 @@ SAL_IMPLEMENT_MAIN()
         // app domain
         ::System::AppDomain ^ current_appdomain =
               ::System::AppDomain::CurrentDomain;
+
+// Weird warning from this statement
+// warning C4538: 'cli::array<Type> ^' : const/volatile qualifiers on this type are not supported
+// Could be a compiler bug, says http://stackoverflow.com/questions/12151060/seemingly-inappropriate-compilation-warning-with-c-cli
+#pragma warning (push)
+#pragma warning (disable: 4538)
         // target assembly
         Emit::AssemblyBuilder ^ assembly_builder =
             current_appdomain->DefineDynamicAssembly(
                 assembly_name, Emit::AssemblyBuilderAccess::Save, output_dir );
+#pragma warning (pop)
+
         if (product.getLength() != 0)
         {
             array< ::System::Type^>^ params = gcnew array< ::System::Type^> (1);

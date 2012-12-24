@@ -101,7 +101,10 @@ static inline void emit_ldarg( Emit::ILGenerator ^ code, ::System::Int32 index )
     switch (index)
     {
     case 0:
+#pragma warning (push)
+#pragma warning (disable: 4538)
         code->Emit( Emit::OpCodes::Ldarg_0 );
+#pragma warning (pop)
         break;
     case 1:
         code->Emit( Emit::OpCodes::Ldarg_1 );
