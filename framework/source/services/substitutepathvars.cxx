@@ -747,13 +747,13 @@ rtl::OUString SubstitutePathVariables::GetHomeVariableValue() const
 rtl::OUString SubstitutePathVariables::GetPathVariableValue() const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::GetPathVariableValue" );
-    const int PATH_EXTEND_FACTOR = 120;
 
     rtl::OUString aRetStr;
     const char*   pEnv = getenv( "PATH" );
 
     if ( pEnv )
     {
+        const int PATH_EXTEND_FACTOR = 120;
         rtl::OUString       aTmp;
         rtl::OUString       aPathList( pEnv, strlen( pEnv ), osl_getThreadTextEncoding() );
         rtl::OUStringBuffer aPathStrBuffer( aPathList.getLength() * PATH_EXTEND_FACTOR / 100 );

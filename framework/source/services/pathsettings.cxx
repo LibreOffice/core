@@ -958,9 +958,7 @@ sal_Bool PathSettings::impl_isValidPath(const ::rtl::OUString& sPath) const
 //-----------------------------------------------------------------------------
 ::rtl::OUString impl_extractBaseFromPropName(const ::rtl::OUString& sPropName)
 {
-    sal_Int32 i = -1;
-
-    i = sPropName.indexOf(POSTFIX_INTERNAL_PATHS);
+    sal_Int32 i = sPropName.indexOf(POSTFIX_INTERNAL_PATHS);
     if (i > -1)
         return sPropName.copy(0, i);
     i = sPropName.indexOf(POSTFIX_USER_PATHS);

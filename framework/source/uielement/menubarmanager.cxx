@@ -81,7 +81,7 @@
 // Be careful removing this "bad" construct. There are serious problems
 // with #define STRICT and including windows.h. Changing this needs some
 // redesign on other projects, too. Especially sal/main.h which defines
-// HINSTANCE depending on STRCIT!!!!!!!!!!!!!!!
+// HINSTANCE depending on STRICT!!!!!!!!!!!!!!!
 struct SystemMenuData
 {
     unsigned long nSize;

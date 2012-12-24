@@ -146,7 +146,6 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
             const sal_uInt32 nCount = m_aRecentFilesItems.size();
             for ( sal_uInt32 i = 0; i < nCount; i++ )
             {
-                char menuShortCut[5] = "~n: ";
 
                 ::rtl::OUString aMenuShortCut;
                 if ( i <= 9 )
@@ -155,6 +154,7 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
                         aMenuShortCut = rtl::OUString( "1~0: " );
                     else
                     {
+                        char menuShortCut[5] = "~n: ";
                         menuShortCut[1] = (char)( '1' + i );
                         aMenuShortCut = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(menuShortCut) );
                     }

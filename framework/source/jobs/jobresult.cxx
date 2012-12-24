@@ -105,9 +105,7 @@ JobResult::JobResult( /*IN*/ const css::uno::Any& aResult )
     if ( aProtocol.empty() )
         return;
 
-    ::comphelper::SequenceAsHashMap::const_iterator pIt = aProtocol.end();
-
-    pIt = aProtocol.find(JobConst::ANSWER_DEACTIVATE_JOB());
+    ::comphelper::SequenceAsHashMap::const_iterator pIt = aProtocol.find(JobConst::ANSWER_DEACTIVATE_JOB());
     if (pIt != aProtocol.end())
     {
         pIt->second >>= m_bDeactivate;
