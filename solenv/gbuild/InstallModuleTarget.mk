@@ -113,7 +113,6 @@ endef
 
 gb_ScpMergeTarget_TARGET := $(call gb_Executable_get_target_for_build,ulfex)
 gb_ScpMergeTarget_COMMAND := $(gb_Helper_set_ld_path) $(gb_ScpMergeTarget_TARGET)
-gb_ScpMergeTarget_LANGS := $(filter-out qtz,$(filter-out en-US,$(gb_WITH_LANG)))
 
 gb_ScpMergeTarget_get_source = $(SRCDIR)/$(1).ulf
 
@@ -144,10 +143,10 @@ $(call gb_ScpMergeTarget_get_target,$(1)) : SCP_SOURCE := $(call gb_ScpMergeTarg
 $(call gb_ScpMergeTarget_get_target,$(1)) : $(call gb_ScpMergeTarget_get_source,$(1))
 $(call gb_ScpMergeTarget_get_target,$(1)) :| $(dir $(call gb_ScpMergeTarget_get_target,$(1))).dir
 $(call gb_ScpMergeTarget_get_target,$(1)) : \
-	SCP_POFILES := $(foreach lang,$(gb_ScpMergeTarget_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po)
+	SCP_POFILES := $(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po)
 $(call gb_ScpMergeTarget_get_target,$(1)) : \
-	$(foreach lang,$(gb_ScpMergeTarget_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po)
-$(foreach lang,$(gb_ScpMergeTarget_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po) :
+	$(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po)
+$(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po) :
 
 endef
 

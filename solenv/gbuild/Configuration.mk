@@ -253,7 +253,6 @@ $(call gb_XcuLangpackTarget_get_outdir_target,%) :
 
 gb_XcuMergeTarget_CFGEXTARGET := $(call gb_Executable_get_target_for_build,cfgex)
 gb_XcuMergeTarget_CFGEXCOMMAND := $(gb_Helper_set_ld_path) $(gb_XcuMergeTarget_CFGEXTARGET)
-gb_XcuMergeTarget_LANGS := $(filter-out qtz,$(filter-out en-US,$(gb_WITH_LANG)))
 
 # PRJNAME is computed from the stem (parameter $(2))
 define gb_XcuMergeTarget__command
@@ -286,10 +285,10 @@ $(call gb_XcuMergeTarget_get_clean_target,%) :
 define gb_XcuMergeTarget_XcuMergeTarget
 $(call gb_XcuMergeTarget_get_target,$(1)) : \
 	$(call gb_Configuration__get_source,$(2),$(3)/$(4)) \
-	$(wildcard $(foreach lang,$(gb_XcuMergeTarget_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po))
+	$(wildcard $(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po))
 $(call gb_XcuMergeTarget_get_target,$(1)) : \
-	POFILES := $(foreach lang,$(gb_XcuMergeTarget_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po)
-$(foreach lang,$(gb_XcuMergeTarget_TRANS_LANG),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po) :
+	POFILES := $(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po)
+$(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po) :
 endef
 
 

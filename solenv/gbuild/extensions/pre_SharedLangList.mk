@@ -32,4 +32,6 @@ gb_WITH_LANG += qtz
 endif
 endif
 
+gb_TRANS_LANGS = $(filter-out en-US,$(filter-out qtz,$(gb_WITH_LANG)))
+
 # vim: set noet ts=4 sw=4:

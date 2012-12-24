@@ -73,7 +73,7 @@ $(call gb_SrsPartMergeTarget_get_target,%) : $(SRCDIR)/% $(gb_Helper_MISCDUMMY) 
 		mkdir -p $(dir $@) && cp $< $@)
 
 define gb_SrsPartMergeTarget_SrsPartMergeTarget
-$(call gb_SrsPartMergeTarget__SrsPartMergeTarget_impl,$(1),$(if $(2),$(foreach lang,$(filter-out qtz,$(filter-out en-US,$(gb_WITH_LANG))),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po)))
+$(call gb_SrsPartMergeTarget__SrsPartMergeTarget_impl,$(1),$(if $(2),$(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po)))
 endef
 
 define gb_SrsPartMergeTarget__SrsPartMergeTarget_impl

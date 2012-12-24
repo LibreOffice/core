@@ -148,10 +148,10 @@ $(call gb_ExtensionTarget_get_workdir,$(1))/description.xml :| \
 
 ifneq ($(strip $(gb_WITH_LANG)),)
 $(call gb_ExtensionTarget_get_target,$(1)) : \
-	POFILES := $(foreach lang,$(filter-out qtz,$(gb_ExtensionTarget_TRANS_LANGS)),$(gb_POLOCATION)/$(lang)/$(2).po)
+	POFILES := $(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(2).po)
 $(call gb_ExtensionTarget_get_workdir,$(1))/description.xml : \
-	$(foreach lang,$(filter-out qtz,$(gb_ExtensionTarget_TRANS_LANGS)),$(gb_POLOCATION)/$(lang)/$(2).po)
-$(foreach lang,$(filter-out qtz,$(gb_ExtensionTarget_TRANS_LANGS)),$(gb_POLOCATION)/$(lang)/$(2).po) :
+	$(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(2).po)
+$(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(2).po) :
 endif
 
 $(foreach lang,$(gb_ExtensionTarget_ALL_LANGS), \
@@ -235,9 +235,9 @@ endef
 # localize .properties file
 # source file is copied to $(WORKDIR)
 define gb_ExtensionTarget_localize_properties
-ifneq ($(filter-out en-US,$(gb_ExtensionTarget_ALL_LANGS)),)
+ifneq ($(gb_TRANS_LANGS),)
 ifneq ($(ENABLE_RELEASE_BUILD),TRUE)
-$(call gb_ExtensionTarget_localize_properties_onelang,$(1),$(subst en_US,qtz,$(2)),$(3),qtz,$(firstword $(filter-out en-US,$(gb_ExtensionTarget_ALL_LANGS))))
+$(call gb_ExtensionTarget_localize_properties_onelang,$(1),$(subst en_US,qtz,$(2)),$(3),qtz,$(firstword $(gb_TRANS_LANGS)))
 endif
 endif
 $(foreach lang,$(filter-out qtz,$(gb_ExtensionTarget_ALL_LANGS)),\
@@ -326,14 +326,12 @@ $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5).done : \
         $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3)
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)-xhp.done : \
         $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3)
-ifneq ($(strip $(gb_WITH_LANG)),)
 ifneq ($(filter-out en-US,$(5)),)
 $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3) : \
 	POFILE := $(gb_POLOCATION)/$(5)$(subst $(SRCDIR),,$(2))$(patsubst %/,/%.po,$(patsubst ./,.po,$(dir $(or $(4),$(3)))))
 $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3) : \
         $(gb_POLOCATION)/$(5)$(subst $(SRCDIR),,$(2))$(patsubst %/,/%.po,$(patsubst ./,.po,$(dir $(or $(4),$(3)))))
 $(gb_POLOCATION)/$(5)$(subst $(SRCDIR),,$(2))$(patsubst %/,/%.po,$(patsubst ./,.po,$(dir $(or $(4),$(3))))) :
-endif
 endif
 $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3) : \
         $(if $(filter-out en-US,$(5)),$(gb_ExtensionTarget_HELPEXTARGET)) | \
@@ -368,14 +366,12 @@ endef
 define gb_ExtensionTarget__localize_helptreefile_onelang
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5).done : \
         $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3)
-ifneq ($(strip $(gb_WITH_LANG)),)
 ifneq ($(filter-out en-US,$(5)),)
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \
 	POFILE := $(gb_POLOCATION)/$(5)$(subst $(SRCDIR),,$(2))$(patsubst %/,/%.po,$(patsubst ./,.po,$(dir $(4))))
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \
         $(gb_POLOCATION)/$(5)$(subst $(SRCDIR),,$(2))$(patsubst %/,/%.po,$(patsubst ./,.po,$(dir $(4))))
 $(gb_POLOCATION)/$(5)$(subst $(SRCDIR),,$(2))$(patsubst %/,/%.po,$(patsubst ./,.po,$(dir $(4)))) :
-endif
 endif
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \
         $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)-xhp.done

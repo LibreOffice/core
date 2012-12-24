@@ -15,7 +15,6 @@ gb_UILocalizeTarget_WORKDIR := $(WORKDIR)/UILocalizeTarget
 
 gb_UILocalizeTarget_TARGET := $(call gb_Executable_get_target_for_build,uiex)
 gb_UILocalizeTarget_COMMAND := $(gb_Helper_set_ld_path) $(gb_UILocalizeTarget_TARGET)
-gb_UILocalizeTarget_LANGS := $(filter-out qtz,$(filter-out en-US,$(gb_WITH_LANG)))
 
 # If translatable strings from a .ui file are not merged into the
 # respective .po file yet, the produced translated files are empty (that
@@ -66,7 +65,7 @@ $(call gb_UILocalizeTarget_get_clean_target,%) :
 #
 # gb_UILocalizeTarget_UILocalizeTarget target
 define gb_UILocalizeTarget_UILocalizeTarget
-$(call gb_UILocalizeTarget__UILocalizeTarget_impl,$(1),$(foreach lang,$(gb_UILocalizeTarget_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po))
+$(call gb_UILocalizeTarget__UILocalizeTarget_impl,$(1),$(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po))
 
 endef
 
