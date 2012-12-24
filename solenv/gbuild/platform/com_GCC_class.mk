@@ -80,7 +80,7 @@ endef
 define gb_CObject__tool_command
 $(call gb_Output_announce,$(1).c,$(true),C  ,3)
 $(call gb_Helper_abbreviate_dirs,\
-        ICECC=no \
+        ICECC=no CCACHE_DISABLE=1 \
 	$(gb_CC) \
 		$(DEFS) \
 		$(T_CFLAGS) \
@@ -121,7 +121,7 @@ endef
 define gb_CxxObject__tool_command
 $(call gb_Output_announce,$(1).cxx,$(true),CXX,3)
 $(call gb_Helper_abbreviate_dirs,\
-        ICECC=no \
+        ICECC=no CCACHE_DISABLE=1 \
 	$(gb_CXX) \
 		$(DEFS) \
 		$(T_CXXFLAGS) \
