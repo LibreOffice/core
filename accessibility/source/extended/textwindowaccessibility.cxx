@@ -2131,7 +2131,7 @@ void Document::notifySelectionChange( sal_Int32 nFirst, sal_Int32 nLast )
         iLast = m_aVisibleEnd;
     if ( iFirst < iLast )
     {
-        for ( Paragraphs::iterator i = iFirst; i != iLast; i++ )
+        for ( Paragraphs::iterator i = iFirst; i != iLast; ++i )
         {
             ::rtl::Reference< ParagraphImpl > xParagraph( getParagraph( i ) );
             if ( xParagraph.is() )
