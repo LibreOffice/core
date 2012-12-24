@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
+<!DOCTYPE oor:component-data SYSTEM "../registry/component-update.dtd">
 <!--
  * This file is part of the LibreOffice project.
  *
