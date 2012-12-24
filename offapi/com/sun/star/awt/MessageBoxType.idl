@@ -19,31 +19,34 @@
  *
  *************************************************************/
 
-#ifndef __com_sun_star_awt_XMessageBox_idl__
-#define __com_sun_star_awt_XMessageBox_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
+#ifndef __com_sun_star_awt_MessageBoxCommand_idl__
+#define __com_sun_star_awt_MessageBoxCommand_idl__
 
 module com {  module sun {  module star {  module awt {
 
-/** gives access to a message box.
+/** specifies the type of a <type>XMessageBox</type>.
  */
-published interface XMessageBox
+published enum MessageBoxType
 {
-    /** the caption text.
+    /** A normal message box.
      */
-    [attribute] string CaptionText;
+    MESSAGEBOX,
 
-    /** the message text.
+    /** A message box to inform the user about a certain event
      */
-    [attribute] string MessageText;
+    INFOBOX,
 
-    /** shows the message box.
-
-        @return
-            one of <type>MessageBoxResults</type>.
+    /** A message to warn the user about a certain problem.
      */
-    short execute();
+    WARNINGBOX,
+
+    /** A message box to provide an error message to the user.
+     */
+    ERRORBOX,
+
+    /** A message box to query information from the user.
+     */
+    QUERYBOX
 };
 
 }; }; }; };

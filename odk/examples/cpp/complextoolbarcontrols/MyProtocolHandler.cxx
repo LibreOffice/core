@@ -58,8 +58,7 @@ void BaseDispatch::ShowMessageBox( const Reference< XFrame >& rFrame, const ::rt
     {
         Reference< XMessageBox > xMsgBox = xMsgBoxFactory->createMessageBox(
             Reference< XWindowPeer >( rFrame->getContainerWindow(), UNO_QUERY ),
-            Rectangle(0,0,300,200),
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "infobox" ) ),
+            com::sun::star::awt::MessageBoxType_INFOBOX,
             MessageBoxButtons::BUTTONS_OK,
             aTitle,
             aMsgText );

@@ -24,6 +24,7 @@
 package com.sun.star.wiki;
 
 import com.sun.star.awt.MessageBoxButtons;
+import com.sun.star.awt.MessageBoxType;
 import com.sun.star.awt.XControl;
 import com.sun.star.awt.XControlContainer;
 import com.sun.star.awt.XDialog;
@@ -1008,8 +1009,7 @@ public class Helper
                         {
                             xMB = xMBFactory.createMessageBox(
                                                      xParentPeer,
-                                                     new com.sun.star.awt.Rectangle(),
-                                                     "querybox",
+                                                     MessageBoxType.QUERYBOX,
                                                      MessageBoxButtons.BUTTONS_YES_NO | MessageBoxButtons.DEFAULT_BUTTON_NO,
                                                      sTitle,
                                                      sError );
@@ -1018,8 +1018,7 @@ public class Helper
                         {
                             xMB = xMBFactory.createMessageBox(
                                                      xParentPeer,
-                                                     new com.sun.star.awt.Rectangle(),
-                                                     "errorbox",
+                                                     MessageBoxType.ERRORBOX,
                                                      MessageBoxButtons.BUTTONS_OK,
                                                      sTitle,
                                                      sError );

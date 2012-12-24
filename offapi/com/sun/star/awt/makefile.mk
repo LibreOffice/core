@@ -117,7 +117,8 @@ IDLFILES=\
     MenuEvent.idl\
     MenuItemStyle.idl\
     MessageBoxButtons.idl\
-    MessageBoxCommand.idl\
+    MessageBoxResults.idl\
+    MessageBoxType.idl\
     MouseButton.idl\
     MouseEvent.idl\
     MouseWheelBehavior.idl\
