@@ -20,8 +20,6 @@
 #ifndef WW_WWSTYLES_HXX
 #define WW_WWSTYLES_HXX
 
-class String;       //yuck...
-
 #include <sal/types.h>
 
 namespace ww
