@@ -22,7 +22,6 @@
 
 #include <sal/types.h>
 #include <tools/link.hxx>
-#include <tools/gen.hxx>
 #include <vcl/image.hxx>
 #include "dbaccessdllapi.h"
 

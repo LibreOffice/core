@@ -29,11 +29,21 @@ class TOOLS_DLLPUBLIC SvBorder
 
 public:
     SvBorder()
-    { nTop = nRight = nBottom = nLeft = 0; }
+    {
+        nTop = nRight = nBottom = nLeft = 0;
+    }
     SvBorder( const Size & rSz )
-    { nTop = nBottom = rSz.Height(); nRight = nLeft = rSz.Width(); }
+    {
+        nTop = nBottom = rSz.Height();
+        nRight = nLeft = rSz.Width();
+    }
     SvBorder( long nLeftP, long nTopP, long nRightP, long nBottomP )
-    { nLeft = nLeftP; nTop = nTopP; nRight = nRightP; nBottom = nBottomP; }
+    {
+        nLeft = nLeftP;
+        nTop = nTopP;
+        nRight = nRightP;
+        nBottom = nBottomP;
+    }
     sal_Bool    operator == ( const SvBorder & rObj ) const
             {
                 return nTop == rObj.nTop && nRight == rObj.nRight &&

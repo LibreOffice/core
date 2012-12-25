@@ -20,7 +20,6 @@
 #ifndef SC_FORMDATA_HXX
 #define SC_FORMDATA_HXX
 
-#include <tools/gen.hxx>
 #include <formula/formdata.hxx>
 class ScInputHandler;
 class ScDocShell;

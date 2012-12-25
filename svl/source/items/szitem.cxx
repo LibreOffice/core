@@ -22,7 +22,6 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/awt/Size.hpp>
 #include <tools/stream.hxx>
-#include <tools/gen.hxx>
 
 #include <svl/poolitem.hxx>
 #include <svl/memberid.hrc>

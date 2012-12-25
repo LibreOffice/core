@@ -20,7 +20,6 @@
 #ifndef SC_XECHART_HXX
 #define SC_XECHART_HXX
 
-#include <tools/gen.hxx>
 #include "xerecord.hxx"
 #include "xlchart.hxx"
 #include "xlformula.hxx"
@@ -31,6 +30,7 @@
 #include <boost/ptr_container/ptr_map.hpp>
 
 class Size;
+class Rectangle;
 
 namespace com { namespace sun { namespace star {
     namespace awt

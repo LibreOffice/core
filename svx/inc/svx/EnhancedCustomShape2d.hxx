@@ -33,6 +33,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <svx/EnhancedCustomShapeFunctionParser.hxx>
+#include <tools/gen.hxx>
 
 #include <boost/shared_ptr.hpp>
 #include <vector>

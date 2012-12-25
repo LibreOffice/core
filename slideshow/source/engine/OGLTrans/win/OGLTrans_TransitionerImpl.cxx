@@ -42,6 +42,8 @@
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
 #include <com/sun/star/geometry/IntegerSize2D.hpp>
 
+#include <sal/types.h>
+
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/factory.hxx>
@@ -50,7 +52,6 @@
 #include <comphelper/servicedecl.hxx>
 
 #include <canvas/canvastools.hxx>
-#include <tools/gen.hxx>
 #include <vcl/window.hxx>
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>

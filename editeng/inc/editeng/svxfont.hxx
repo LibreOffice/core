@@ -32,6 +32,9 @@
 class SvxDoCapitals;
 class OutputDevice;
 class Printer;
+class Point;
+class Rectangle;
+class Size;
 
 class EDITENG_DLLPUBLIC SvxFont : public Font
 {

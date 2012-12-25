@@ -21,7 +21,7 @@
 #define _SDR_OVERLAY_OVERLAYOBJECTLIST_HXX
 
 #include <svx/sdr/overlay/overlayobject.hxx>
-#include <tools/gen.hxx>
+#include <sal/types.h>
 #include "svx/svxdllapi.h"
 
 //////////////////////////////////////////////////////////////////////////////
@@ -29,6 +29,8 @@
 #define DEFAULT_VALUE_FOR_HITTEST_PIXEL         (2L)
 
 //////////////////////////////////////////////////////////////////////////////
+
+class Point;
 
 namespace sdr
 {

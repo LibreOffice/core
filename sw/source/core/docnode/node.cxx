@@ -21,6 +21,7 @@
 #include <hintids.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/protitem.hxx>
+#include <tools/gen.hxx>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <fmtcntnt.hxx>
 #include <fmtanchr.hxx>

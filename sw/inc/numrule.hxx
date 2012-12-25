@@ -19,7 +19,7 @@
 #ifndef _NUMRULE_HXX
 #define _NUMRULE_HXX
 
-#include <tools/gen.hxx>
+#include <sal/types.h>
 #include <tools/string.hxx>
 #include <editeng/svxenum.hxx>
 #include <editeng/numitem.hxx>
@@ -42,6 +42,7 @@ class SwCharFmt;
 class SwDoc;
 class SwFmtVertOrient;
 class SwTxtNode;
+class Size;
 
 const sal_Unicode cBulletChar = 0x2022; ///< Character for lists.
 

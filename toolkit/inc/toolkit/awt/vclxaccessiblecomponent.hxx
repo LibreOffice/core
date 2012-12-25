@@ -32,8 +32,7 @@
 #include <comphelper/accimplaccess.hxx>
 #include <comphelper/accessiblecomponenthelper.hxx>
 
-#include <tools/gen.hxx>    // Size
-#include <tools/link.hxx>   // Size
+#include <tools/link.hxx>
 
 class Window;
 class VCLXWindow;

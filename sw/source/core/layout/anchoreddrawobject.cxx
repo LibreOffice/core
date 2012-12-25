@@ -33,6 +33,7 @@
 // --> #i32795#
 // template class <std::vector>
 #include <vector>
+#include <tools/gen.hxx>
 
 // --> #i28749#
 #include <com/sun/star/text/PositionLayoutDir.hpp>

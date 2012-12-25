@@ -20,6 +20,7 @@
 
 #include <math.h>
 #include <dxfvec.hxx>
+#include <tools/gen.hxx>
 
 
 //---------------------------- DXFVector ---------------------------------------

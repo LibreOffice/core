@@ -20,7 +20,7 @@
 #ifndef _SD_SDFILTER_HXX
 #define _SD_SDFILTER_HXX
 
-#include <tools/gen.hxx>
+#include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>

@@ -21,8 +21,8 @@
 #define _BASTYPE_HXX
 
 
+#include <sal/types.h>
 #include <tools/globname.hxx>
-#include <tools/gen.hxx>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
 

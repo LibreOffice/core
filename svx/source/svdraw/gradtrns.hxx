@@ -21,7 +21,6 @@
 #define _GRADTRANS_HXX
 
 #include <svx/xgrad.hxx>
-#include <tools/gen.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 
 class SdrObject;

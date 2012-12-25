@@ -26,10 +26,10 @@
 
 #include "rtl/string.hxx"
 
-#include "tools/gen.hxx"
-
 #include <list>
 #include <boost/unordered_map.hpp>
+
+class Point;
 
 namespace psp {
 

@@ -22,7 +22,6 @@
 
 #include <boost/shared_ptr.hpp>
 #include <rtl/ustring.hxx>
-#include <tools/gen.hxx>
 #include "address.hxx"
 #include "scdllapi.h"
 
@@ -34,6 +33,7 @@ class SdrCaptionObj;
 class SdrPage;
 class SfxItemSet;
 class ScDocument;
+class Rectangle;
 struct ScCaptionInitData;
 
 // ============================================================================

@@ -22,8 +22,8 @@
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
+#include <sal/types.h>
 #include <hash.hxx>
-#include <tools/gen.hxx>
 #include <tools/stream.hxx>
 
 enum SVTOKEN_ENUM { SVTOKEN_EMPTY,      SVTOKEN_COMMENT,

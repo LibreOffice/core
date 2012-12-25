@@ -22,7 +22,7 @@
 
 #include "svtools/svtdllapi.h"
 #include <osl/mutex.hxx>
-#include <tools/gen.hxx>
+#include <sal/types.h>
 
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <svtools/javacontext.hxx>

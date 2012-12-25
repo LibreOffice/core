@@ -20,7 +20,7 @@
 #define _PAM_HXX
 
 #include <stddef.h>         ///< For MemPool.
-#include <tools/gen.hxx>
+#include <sal/types.h>
 #include <tools/mempool.hxx>
 #include <cshtyp.hxx>       ///< For function definitions.
 #include <ring.hxx>         ///< Super class.
@@ -35,6 +35,7 @@ class SwDoc;
 class SwNode;
 class SwCntntNode;
 class SwPaM;
+class Point;
 
 namespace com { namespace sun { namespace star { namespace util {
     struct SearchOptions;

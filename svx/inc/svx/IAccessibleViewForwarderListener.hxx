@@ -21,7 +21,6 @@
 #define _SVX_ACCESSIBILITY_IACCESSIBLE_VIEW_FORWARDER_LISTENER_HXX
 
 #include <sal/types.h>
-#include <tools/gen.hxx>
 
 
 namespace accessibility {

@@ -20,7 +20,8 @@
 #define _ANCHOREDDRAWOBJECT_HXX
 
 #include <anchoredobject.hxx>
-#include <tools/gen.hxx>
+
+class Rectangle;
 
 /** class for the positioning of drawing objects
 

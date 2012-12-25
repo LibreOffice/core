@@ -54,6 +54,7 @@
 #include <com/sun/star/chart2/StackingDirection.hpp>
 #include <com/sun/star/chart2/TickmarkStyle.hpp>
 
+#include <tools/gen.hxx>
 #include <vcl/outdev.hxx>
 #include <filter/msfilter/escherex.hxx>
 

@@ -19,7 +19,9 @@
 #ifndef _POLY_H
 #define _POLY_H
 
-#include <tools/gen.hxx>
+#include <sal/types.h>
+
+class Point;
 
 class SAL_WARN_UNUSED ImplPolygonData
 {

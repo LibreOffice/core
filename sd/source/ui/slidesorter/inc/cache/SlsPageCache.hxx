@@ -22,10 +22,10 @@
 
 #include "cache/SlsCacheContext.hxx"
 #include <sal/types.h>
-#include <tools/gen.hxx>
 #include <boost/scoped_ptr.hpp>
 #include <vcl/bitmap.hxx>
 
+struct Size;
 
 namespace sd { namespace slidesorter { namespace cache {
 

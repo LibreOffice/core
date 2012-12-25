@@ -20,10 +20,11 @@
 #ifndef _SV_SVDATA_HXX
 #define _SV_SVDATA_HXX
 
+#include "sal/types.h"
+
 #include <osl/thread.hxx>
 #include <rtl/ref.hxx>
 
-#include "tools/gen.hxx"
 #include "tools/shl.hxx"
 #include "tools/link.hxx"
 #include "tools/fldunit.hxx"
@@ -50,7 +51,6 @@ class ImplDirectFontSubstitution;
 struct ImplHotKey;
 struct ImplEventHook;
 class Point;
-class Rectangle;
 class ResMgr;
 class ImplAccelManager;
 class ImplDevFontList;

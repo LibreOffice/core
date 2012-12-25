@@ -21,7 +21,6 @@
 #define _SDR_CONTACT_OBJECTCONTACTOFPAGEVIEW_HXX
 
 #include <svx/sdr/contact/objectcontact.hxx>
-#include <tools/gen.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations

@@ -20,7 +20,6 @@
 #ifndef _SD_UNDOHEADERFOOTER_HXX
 #define _SD_UNDOHEADERFOOTER_HXX
 
-#include <tools/gen.hxx>
 #include "sdundo.hxx"
 #include "sdpage.hxx"
 #include "sddllapi.h"

@@ -22,7 +22,6 @@
 
 #include <algorithm>
 #include <sal/types.h>
-#include <tools/gen.hxx>
 #include <tools/color.hxx>
 #include "svx/svxdllapi.h"
 #include <vcl/outdev.hxx>
@@ -30,6 +29,8 @@
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
+class Point;
+class Rectangle;
 class OutputDevice;
 
 namespace svx {

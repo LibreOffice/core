@@ -23,14 +23,16 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/table/XTable.hpp>
+#include <sal/types.h>
 #include <basegfx/range/b2irectangle.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
-#include <tools/gen.hxx>
 #include <boost/shared_ptr.hpp>
 #include <vector>
 #include <map>
 
 #include "svx/svdotable.hxx"
+
+class Rectangle;
 
 // -----------------------------------------------------------------------------
 

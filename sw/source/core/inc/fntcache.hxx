@@ -32,6 +32,7 @@ class SwDrawTextInfo;
 class ViewShell;
 class SwSubFont;
 class MapMode;
+class Point;
 
 class SwFntCache : public SwCache
 {

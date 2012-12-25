@@ -22,6 +22,7 @@
 #include <tools/debug.hxx>
 #include <tools/poly.hxx>
 #include <tools/helpers.hxx>
+#include <tools/gen.hxx>
 
 #include <svx/xpoly.hxx>
 #include "xpolyimp.hxx"

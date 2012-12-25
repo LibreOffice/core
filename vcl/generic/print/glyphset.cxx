@@ -27,6 +27,8 @@
 #include "fontsubset.hxx"
 #include "vcl/fontmanager.hxx"
 
+#include <tools/gen.hxx>
+
 #include "osl/thread.h"
 
 #include "sal/alloca.h"

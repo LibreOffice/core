@@ -18,6 +18,7 @@
  */
 
 
+#include <tools/gen.hxx>
 #include "SlsGenericPageCache.hxx"
 #include "SlsRequestFactory.hxx"
 #include "cache/SlsPageCache.hxx"

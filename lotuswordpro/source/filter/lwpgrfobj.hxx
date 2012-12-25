@@ -61,10 +61,11 @@
 #ifndef LWPGRFOBJECT_HXX_
 #define LWPGRFOBJECT_HXX_
 
+#include <sal/types.h>
+
 #include "lwpoleobject.hxx"
 #include "lwpheader.hxx"
 #include "xfilter/xfrect.hxx"
-#include <tools/gen.hxx>
 
 struct ImageProcessingData
 {

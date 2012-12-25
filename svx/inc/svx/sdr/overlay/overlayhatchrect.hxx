@@ -22,7 +22,6 @@
 
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <vcl/hatch.hxx>
-#include <tools/gen.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 

@@ -23,6 +23,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/font.hxx>
 #include <tools/debug.hxx>
+#include <tools/gen.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 
 

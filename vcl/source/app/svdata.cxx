@@ -26,6 +26,7 @@
 #include <rtl/process.h>
 #include <tools/debug.hxx>
 #include <tools/resary.hxx>
+#include <tools/gen.hxx>
 #include <unotools/fontcfg.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/string.hxx>

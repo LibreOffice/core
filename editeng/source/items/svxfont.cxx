@@ -20,6 +20,7 @@
 #include <comphelper/string.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/print.hxx>
+#include <tools/gen.hxx>
 #include <tools/poly.hxx>
 #include <unotools/charclass.hxx>
 #include <editeng/unolingu.hxx>

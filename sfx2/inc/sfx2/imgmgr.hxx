@@ -24,7 +24,6 @@
 #include "sfx2/dllapi.h"
 
 #include <sal/types.h>
-#include <tools/gen.hxx>
 #include <vcl/image.hxx>
 
 class ToolBox;

@@ -18,8 +18,6 @@
  */
 
 
-#include <tools/gen.hxx>
-
 #include <postithelper.hxx>
 #include <PostItMgr.hxx>
 #include <AnnotationWin.hxx>
@@ -38,6 +36,8 @@
 #include <scriptinfo.hxx>
 #include <editeng/charhiddenitem.hxx>
 #include <switerator.hxx>
+
+class Point;
 
 namespace {
 

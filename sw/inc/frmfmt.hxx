@@ -28,7 +28,6 @@
 class SwFlyFrm;
 class SwAnchoredObject;
 class Graphic;
-class Point;
 class ImageMap;
 class IMapObject;
 class SwRect;
