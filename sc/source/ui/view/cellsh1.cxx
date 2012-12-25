@@ -1786,6 +1786,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 boost::scoped_ptr<ScCondFormatDlg> pCondFormatDlg;
                 if(bContainsCondFormat)
                 {
+                    bool bContainsExistingCondFormat = false;
                     ScConditionalFormatList* pList = pDoc->GetCondFormList(aPos.Tab());
                     for (std::vector<sal_uInt32>::const_iterator itr = rCondFormats.begin(), itrEnd = rCondFormats.end();
                                             itr != itrEnd; ++itr)
@@ -1795,6 +1796,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         if(!pCondFormat)
                             continue;
 
+                        bContainsExistingCondFormat = true;
                         const ScRangeList& rCondFormatRange = pCondFormat->GetRange();
                         if(rCondFormatRange == aRangeList)
                         {
@@ -1807,7 +1809,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     // if not found a conditional format ask whether we should edit one of the existing
                     // or should create a new overlapping conditional format
 
-                    if(!pCondFormatDlg)
+                    if(!pCondFormatDlg && bContainsExistingCondFormat)
                     {
                         QueryBox aBox( pTabViewShell->GetDialogParent(), WinBits( WB_YES_NO | WB_DEF_YES ),
                                ScGlobal::GetRscString(STR_EDIT_EXISTING_COND_FORMATS) );
