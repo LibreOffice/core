@@ -92,7 +92,6 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,CPPUNIT,$(CPPUNIT_TARBALL)) \
 		$(call fetch_Optional,CT2N,$(CT2N_TARBALL)) \
 		$(call fetch_Optional,CURL,$(CURL_TARBALL)) \
-		$(call fetch_Optional,DBGHELP,$(DBGHELP_DLL)) \
 		$(call fetch_Optional,EPM,$(EPM_TARBALL)) \
 		$(call fetch_Optional,EXPAT,$(EXPAT_TARBALL)) \
 		$(call fetch_Optional,MORE_FONTS,$(FONT_DEJAVU_TARBALL)) \
@@ -164,7 +163,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,ZLIB,$(ZLIB_TARBALL)) \
 	,$(call fetch_Download_item,http://dev-www.libreoffice.org/src,$(item)))
 	$(foreach item, \
-		$(if $(filter WNT,$(OS)),$(DBGHELP_DLL)) \
+		$(call fetch_Optional,DBGHELP,$(DBGHELP_DLL)) \
 		$(call fetch_Optional,ODK,$(UNOWINREG_DLL)) \
 	,$(call fetch_Download_item,http://dev-www.libreoffice.org/extern,$(item)))
 	$(foreach item, \
