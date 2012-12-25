@@ -504,8 +504,8 @@ uno::Sequence< OUString > SAL_CALL
 {
     ThrowIfDisposed ();
     static const OUString sServiceNames[2] = {
-            "com.sun.star.accessibility.Accessible",
-            "com.sun.star.accessibility.AccessibleContext"
+            OUString("com.sun.star.accessibility.Accessible"),
+            OUString("com.sun.star.accessibility.AccessibleContext")
     };
     return uno::Sequence<OUString> (sServiceNames, 2);
 }
