@@ -19,7 +19,7 @@
 #ifndef _PYUNO_IMPL_
 #define _PYUNO_IMPL_
 
-#if defined(_MSC_VER) && (_MSC_VER >= 1700)
+#if defined(_MSC_VER) && (_MSC_VER >= 1600)
 // Workaround for some horrible hypot() mess
 #include <math.h>
 #endif
