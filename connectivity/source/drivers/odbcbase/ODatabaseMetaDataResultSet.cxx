@@ -250,6 +250,7 @@ Sequence< sal_Int8 > SAL_CALL ODatabaseMetaDataResultSet::getBytes( sal_Int32 co
         sal_Int32 nType = getMetaData()->getColumnType(columnIndex);
         switch(nType)
         {
+            case DataType::CHAR:
             case DataType::VARCHAR:
             case DataType::LONGVARCHAR:
             {
