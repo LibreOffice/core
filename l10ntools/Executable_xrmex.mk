@@ -53,6 +53,7 @@ $(eval $(call gb_Executable_use_externals,xrmex,\
     libxml2 \
     icuuc \
     icui18n \
+    icu_headers \
 ))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

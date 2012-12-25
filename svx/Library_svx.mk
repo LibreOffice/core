@@ -61,7 +61,10 @@ $(eval $(call gb_Library_use_libraries,svx,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_use_external,svx,icuuc))
+$(eval $(call gb_Library_use_externals,svx,\
+	icuuc \
+	icu_headers \
+))
 
 $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/accessibility/AccessibleControlShape \

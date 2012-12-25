@@ -11,6 +11,8 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,hunspell))
 
 $(eval $(call gb_StaticLibrary_use_unpacked,hunspell,hunspell))
 
+$(eval $(call gb_StaticLibrary_use_external,hunspell,icu_headers))
+
 $(eval $(call gb_StaticLibrary_set_warnings_not_errors,hunspell))
 
 $(eval $(call gb_StaticLibrary_add_defs,hunspell,\

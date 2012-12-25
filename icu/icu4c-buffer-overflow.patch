@@ -9,8 +9,8 @@ E: icu bufferoverflowstrncat pkgdata.cpp:299:87
 
 Index: icu/source/tools/pkgdata/pkgdata.cpp
 ===================================================================
---- misc/build/icu.orig/source/tools/pkgdata/pkgdata.cpp
-+++ misc/build/icu/source/tools/pkgdata/pkgdata.cpp
+--- build/icu.orig/source/tools/pkgdata/pkgdata.cpp
++++ build/icu/source/tools/pkgdata/pkgdata.cpp
 @@ -1914,12 +1914,12 @@ static void loadLists(UPKGOptions *o, UE
      const char cmd[] = "icu-config --incpkgdatafile";
  

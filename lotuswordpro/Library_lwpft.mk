@@ -53,6 +53,7 @@ $(eval $(call gb_Library_use_libraries,lwpft,\
 $(eval $(call gb_Library_use_externals,lwpft,\
     icui18n \
     icuuc \
+    icu_headers \
 ))
 
 $(eval $(call gb_Library_set_componentfile,lwpft,lotuswordpro/util/lwpfilter))
