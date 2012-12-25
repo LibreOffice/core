@@ -203,6 +203,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_build,\
 	xmlscript \
 	xmlsecurity \
 	$(call gb_Helper_optional,XSLTML,xsltml) \
+	$(call gb_Helper_optional,ZLIB,zlib) \
 ))
 
 ifeq ($(MERGELIBS),TRUE)
