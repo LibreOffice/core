@@ -1,6 +1,6 @@
-diff -uriwb misc/build/icu.old/source/aclocal.m4 misc/build/icu/source/aclocal.m4
---- misc/build/icu.old/source/aclocal.m4	2012-04-05 21:49:28.000000000 +0100
-+++ misc/build/icu/source/aclocal.m4	2012-06-21 15:44:57.299256932 +0100
+diff -uriwb build/icu.old/source/aclocal.m4 misc/build/icu/source/aclocal.m4
+--- build/icu.old/source/aclocal.m4	2012-04-05 21:49:28.000000000 +0100
++++ build/icu/source/aclocal.m4	2012-06-21 15:44:57.299256932 +0100
 @@ -455,7 +455,7 @@
              case "${host}" in
              *-*-solaris*)
@@ -21,9 +21,9 @@ diff -uriwb misc/build/icu.old/source/aclocal.m4 misc/build/icu/source/aclocal.m
          else
              case "${host}" in
              *-*-cygwin)
-diff -uriwb misc/build/icu.old/source/common/uposixdefs.h misc/build/icu/source/common/uposixdefs.h
---- misc/build/icu.old/source/common/uposixdefs.h	2012-04-05 21:46:18.000000000 +0100
-+++ misc/build/icu/source/common/uposixdefs.h	2012-06-21 15:45:17.613369477 +0100
+diff -uriwb build/icu.old/source/common/uposixdefs.h misc/build/icu/source/common/uposixdefs.h
+--- build/icu.old/source/common/uposixdefs.h	2012-04-05 21:46:18.000000000 +0100
++++ build/icu/source/common/uposixdefs.h	2012-06-21 15:45:17.613369477 +0100
 @@ -52,7 +52,7 @@
   *
   * z/OS needs this definition for timeval and to get usleep.
@@ -33,9 +33,9 @@ diff -uriwb misc/build/icu.old/source/common/uposixdefs.h misc/build/icu/source/
  #   define _XOPEN_SOURCE_EXTENDED 1
  #endif
  
-diff -uriwb misc/build/icu.old/source/configure misc/build/icu/source/configure
---- misc/build/icu.old/source/configure	2012-04-05 21:49:28.000000000 +0100
-+++ misc/build/icu/source/configure	2012-06-21 15:44:42.817030445 +0100
+diff -uriwb build/icu.old/source/configure misc/build/icu/source/configure
+--- build/icu.old/source/configure	2012-04-05 21:49:28.000000000 +0100
++++ build/icu/source/configure	2012-06-21 15:44:42.817030445 +0100
 @@ -4264,7 +4264,7 @@
              case "${host}" in
              *-*-solaris*)

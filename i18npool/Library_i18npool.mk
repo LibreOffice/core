@@ -50,6 +50,7 @@ $(eval $(call gb_Library_use_libraries,i18npool,\
 $(eval $(call gb_Library_use_externals,i18npool,\
 	icui18n \
 	icuuc \
+	icu_headers \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,i18npool,\

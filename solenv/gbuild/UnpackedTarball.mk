@@ -21,7 +21,7 @@ gb_UnpackedTarget_STRIP_COMPONENTS_ZIP_DEFAULT := 0
 define gb_UnpackedTarget__get_strip_components
 $(strip $(if $(2),\
 	$(2),\
-	$(if $(filter zip,$(suffix $(1))),\
+	$(if $(filter .zip,$(suffix $(1))),\
 		$(gb_UnpackedTarget_STRIP_COMPONENTS_ZIP_DEFAULT),\
 		$(gb_UnpackedTarget_STRIP_COMPONENTS_TAR_DEFAULT) \
 	) \
