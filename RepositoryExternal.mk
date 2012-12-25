@@ -507,6 +507,21 @@ endef
 
 endif # SYSTEM_LIBCMIS
 
+ifeq ($(OS)$(COM),WNTGCC)
+
+define gb_LinkTarget__use_jawt
+$(call gb_LinkTarget_use_packages,$(1),\
+	jawt \
+)
+
+endef
+
+else # $(OS)$(COM) != WNTGCC
+
+gb_LinkTarget__use_jawt :=
+
+endif # $(OS)$(COM) = WNTGCC
+
 
 ifeq ($(SYSTEM_LIBEXTTEXTCAT),YES)
 

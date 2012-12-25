@@ -36,6 +36,10 @@ $(eval $(call gb_Library_use_packages,officebean,\
 	sal_inc \
 ))
 
+$(eval $(call gb_Library_use_externals,officebean,\
+	jawt \
+))
+
 $(eval $(call gb_Library_add_cobjects,officebean,\
 	bean/native/unix/com_sun_star_comp_beans_LocalOfficeWindow \
 	bean/native/unix/com_sun_star_beans_LocalOfficeWindow \
