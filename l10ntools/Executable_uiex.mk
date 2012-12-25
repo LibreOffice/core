@@ -33,6 +33,7 @@ $(eval $(call gb_Executable_use_externals,uiex,\
     boost_headers \
     icuuc \
     icui18n \
+    icu_headers \
 ))
 
 # vim: set noet sw=4 ts=4:

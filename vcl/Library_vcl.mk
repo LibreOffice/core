@@ -98,6 +98,7 @@ endif
 $(eval $(call gb_Library_use_externals,vcl,\
 	icule \
 	icuuc \
+	icu_headers \
 	lcms2 \
 ))
 
