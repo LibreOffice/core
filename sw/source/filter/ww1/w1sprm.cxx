@@ -321,18 +321,12 @@ void Ww1SingleSprmPDyaLine::Start(
     if(nSpace < 0)
         nSpace = -nSpace;
     SvxLineSpacingItem aLSpc( LINE_SPACE_DEFAULT_HEIGHT, RES_PARATR_LINESPACING );
-    if(sal_True)
     {// MultilineSpace(proportional)
         long n = nSpace * 100 / 240;    // W1: 240 = 100%, SW: 100 = 100%
         if(n>200)
             n = 200; // SW_UI-Maximum
         aLSpc.GetLineSpaceRule() = SVX_LINE_SPACE_AUTO;
         aLSpc.SetPropLineSpace((sal_uInt8)n);
-    }
-    else
-    {// Fixed / Minimum
-        aLSpc.SetLineHeight((sal_uInt16)nSpace);
-        aLSpc.GetInterLineSpaceRule() = SVX_INTER_LINE_SPACE_OFF;
     }
     rOut << aLSpc;
 }
