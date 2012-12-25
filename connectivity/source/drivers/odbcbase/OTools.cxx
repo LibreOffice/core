@@ -444,6 +444,8 @@ Sequence<sal_Int8> OTools::getBytesValue(const OConnection* _pConnection,
                 return ::rtl::OUString();
 
             SQLLEN nReadChars;
+            OSL_ENSURE( (pcbValue < 0) || (pcbValue % 2 == 0),
+                        "ODBC: SQLGetData of SQL_C_WCHAR returned odd number of bytes");
             if ( (pcbValue == SQL_NO_TOTAL) || (pcbValue >= nMaxLen) )
             {
                 // we filled the buffer; remove the terminating null character
@@ -456,7 +458,7 @@ Sequence<sal_Int8> OTools::getBytesValue(const OConnection* _pConnection,
             }
             else
             {
-                nReadChars = pcbValue;
+                nReadChars = pcbValue/sizeof(sal_Unicode);
             }
 
             aData.append(waCharArray, nReadChars);
