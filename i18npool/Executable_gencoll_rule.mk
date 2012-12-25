@@ -42,6 +42,7 @@ $(eval $(call gb_Executable_use_externals,gencoll_rule,\
 	icudata \
 	icui18n \
 	icuuc \
+	icu_headers \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,gencoll_rule,\

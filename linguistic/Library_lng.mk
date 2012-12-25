@@ -58,7 +58,10 @@ $(eval $(call gb_Library_use_libraries,lng,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_use_external,lng,icuuc))
+$(eval $(call gb_Library_use_externals,lng,\
+	icuuc \
+	icu_headers \
+))
 
 $(eval $(call gb_Library_add_exception_objects,lng,\
 	linguistic/source/convdic \

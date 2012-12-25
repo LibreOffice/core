@@ -32,6 +32,7 @@ $(eval $(call gb_Executable_use_externals,stringex,\
     libxml2 \
     icuuc \
     icui18n \
+    icu_headers \
 ))
 
 # vim: set noet sw=4 ts=4:

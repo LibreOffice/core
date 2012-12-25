@@ -28,6 +28,7 @@ $(eval $(call gb_CppunitTest_use_components,i18npool_test_textsearch,\
 $(eval $(call gb_CppunitTest_use_externals,i18npool_test_textsearch,\
 	icui18n \
 	icuuc \
+	icu_headers \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,i18npool_test_textsearch,\

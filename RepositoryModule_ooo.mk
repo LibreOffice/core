@@ -94,6 +94,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 	$(call gb_Helper_optional,HYPHEN,hyphen) \
 	i18npool \
 	i18nutil \
+	$(call gb_Helper_optional,ICU,icu) \
 	idl \
 	$(call gb_Helper_optional,DESKTOP,idlc) \
 	io \

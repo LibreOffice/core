@@ -38,6 +38,7 @@ $(eval $(call gb_Executable_use_libraries,helpex,\
 $(eval $(call gb_Executable_use_externals,helpex,\
 	expat_utf8 \
 	boost_headers \
+	icu_headers \
 ))
 
 $(eval $(call gb_Executable_use_static_libraries,helpex,\

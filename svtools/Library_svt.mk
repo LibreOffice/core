@@ -60,6 +60,7 @@ $(eval $(call gb_Library_use_libraries,svt,\
 
 $(eval $(call gb_Library_use_externals,svt,\
     icuuc \
+    icu_headers \
     jpeg \
 ))
 

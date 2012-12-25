@@ -144,7 +144,10 @@ $(eval $(call gb_Library_use_libraries,editeng,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_use_external,editeng,icuuc))
+$(eval $(call gb_Library_use_externals,editeng,\
+	icuuc \
+	icu_headers \
+))
 
 # Runtime dependency for unit-tests
 $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,editeng)) :| \
