@@ -45,10 +45,6 @@ IDLFILES=\
     XSimpleMailClientSupplier.idl\
     SimpleCommandMail.idl \
     SimpleSystemMail.idl\
-    ProxySettings.idl\
-    SOffice52ProxySettings.idl\
-    SystemProxySettings.idl\
-    XProxySettings.idl
 
 # ------------------------------------------------------------------
 

@@ -20,7 +20,6 @@
 # *************************************************************
 job=cmdmail.SimpleCommandMail
 job=fileacc.SimpleFileAccess
-job=proxyset.SOffice52ProxySettings
 job=sc.ScCellFieldObj
 job=sc.ScCellFieldsObj
 job=sc.XMLImporter

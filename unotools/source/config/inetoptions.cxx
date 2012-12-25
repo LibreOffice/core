@@ -38,7 +38,6 @@
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/beans/XPropertiesChangeListener.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/system/XProxySettings.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>

@@ -217,7 +217,6 @@
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/svg/XSVGWriter.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
-#include <com/sun/star/system/XProxySettings.hpp>
 #include <com/sun/star/system/XSystemShellExecute.hpp>
 #include <com/sun/star/task/DocumentPasswordRequest.hpp>
 #include <com/sun/star/task/DocumentMSPasswordRequest.hpp>

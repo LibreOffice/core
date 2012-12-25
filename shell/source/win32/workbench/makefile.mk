@@ -41,7 +41,6 @@ CFLAGS+=/GX
 
 OBJFILES1=$(OBJ)$/TestSysShExec.obj
 OBJFILES2=$(OBJ)$/TestSmplMail.obj
-OBJFILES3=$(OBJ)$/TestProxySet.obj
 OBJFILES4=$(OBJ)$/Testfopen.obj
 
 OBJFILES=$(OBJFILES1)\
@@ -69,17 +68,6 @@ APP2STDLIBS+=	$(CPPULIB)			\
                 $(USER32LIB)
 
 APP2DEF=		$(MISC)$/$(APP2TARGET).def
-
-# --- TestProxy ---
-
-APP3TARGET=$(TARGET2)
-APP3OBJS=$(OBJFILES3)
-
-APP3STDLIBS+=	$(CPPULIB)			\
-                $(CPPUHELPERLIB)	\
-                $(SALLIB)
-
-APP3DEF=		$(MISC)$/$(APP3TARGET).def
 
 # --- Testfopen ---
 
