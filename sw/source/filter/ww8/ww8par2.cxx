@@ -3058,7 +3058,7 @@ void WW8TabDesc::SetTabShades( SwTableBox* pBox, short nWwIdx )
     }
 }
 
-SvxFrameDirection MakeDirection(sal_uInt16 nCode, sal_Bool bIsBiDi)
+SvxFrameDirection MakeDirection(sal_uInt16 nCode, bool bIsBiDi)
 {
     SvxFrameDirection eDir = FRMDIR_ENVIRONMENT;
     // 1: Asian layout with rotated CJK characters

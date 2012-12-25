@@ -1529,7 +1529,7 @@ sal_Int32 SwBasicEscherEx::WriteOLEFlyFrame(const SwFrmFmt& rFmt, sal_uInt32 nSh
         // the left, top corner is set to ( 0, 0 ) by default constructor,
         // if the width and height are set correctly bRectIsSet should be set to true
         awt::Rectangle aRect;
-        sal_Bool bRectIsSet = sal_False;
+        bool bRectIsSet = false;
 
 
         // TODO/LATER: should the icon size be stored in case of iconified object?
@@ -1540,7 +1540,7 @@ sal_Int32 SwBasicEscherEx::WriteOLEFlyFrame(const SwFrmFmt& rFmt, sal_uInt32 nSh
                 awt::Size aSize = xObj->getVisualAreaSize( nAspect );
                 aRect.Width = aSize.Width;
                 aRect.Height = aSize.Height;
-                bRectIsSet = sal_True;
+                bRectIsSet = true;
             }
             catch( const uno::Exception& )
             {}

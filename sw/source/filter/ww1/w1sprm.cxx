@@ -229,7 +229,7 @@ SvxBorderLine* Ww1SingleSprmPBrc::SetBorder(SvxBorderLine* pLine, W1_BRC10* pBrc
             pLine->SetWidth( DEF_LINE_WIDTH_0 );
         }
         else
-            OSL_ENSURE(sal_False, "unknown linewidth");
+            OSL_ENSURE(false, "unknown linewidth");
     }
     return pLine;
 }
@@ -415,7 +415,7 @@ void Ww1SingleSprmSColumns::Start(
 void Ww1SingleSprmPTtp::Start(
     Ww1Shell& /*rOut*/, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager& rMan)
 {
-    rMan.SetInTtp( sal_True );      // Besonderheit: wird bei InTable::Stop und
+    rMan.SetInTtp( true );      // Besonderheit: wird bei InTable::Stop und
                                 // nicht bei InTtp::Stop zurueckgesetzt,
                                 // da Auswertung in InTable
 }

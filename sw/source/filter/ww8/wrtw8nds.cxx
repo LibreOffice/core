@@ -2094,11 +2094,11 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
             }
         }
 
-        sal_Bool bParaRTL = sal_False;
+        bool bParaRTL = false;
         const SvxFrameDirectionItem* pItem = (const SvxFrameDirectionItem*)
             rNode.GetSwAttrSet().GetItem(RES_FRAMEDIR);
         if ( aAttrIter.IsParaRTL())
-            bParaRTL = sal_True;
+            bParaRTL = true;
 
         if( rNode.IsNumbered())
         {

@@ -96,9 +96,9 @@ Ww1Shell& operator <<(Ww1Shell& rOut, Ww1Manager& This)
     if (!This.Pushed())
     {
         { // der wird nur temporaer gebraucht:
-            This.SetInStyle( sal_True );
+            This.SetInStyle( true );
             Ww1StyleSheet(This.aFib).Out(rOut, This);
-            This.SetInStyle( sal_False );
+            This.SetInStyle( false );
         }
         { // dieser auch:
             Ww1Assoc(This.aFib).Out(rOut);
@@ -128,9 +128,9 @@ Ww1Shell& operator <<(Ww1Shell& rOut, Ww1Manager& This)
     // ist:
         cUnknown = This.pDoc->Out(rOut, *This.pSeek);
     }
-    This.SetStopAll(sal_True);
+    This.SetStopAll(true);
     This.OutStop(rOut, cUnknown);   // Damit die Attribute am Ende geschlossen
-    This.SetStopAll(sal_False);         // werden
+    This.SetStopAll(false);         // werden
     return rOut;
 }
 
@@ -213,7 +213,7 @@ void Ww1Manager::Out(Ww1Shell& rOut, sal_Unicode cUnknown)
 // Optimierung: Sie werden nur auf sinnvolle Werte gesetzt, wenn
 // das 0x07-Zeiche ansteht.
 
-    sal_Bool bLIsTtp = sal_False;
+    bool bLIsTtp = false;
     sal_Bool bLHasTtp = sal_False;
     if( cUnknown == 0x07 )
     {
@@ -484,7 +484,7 @@ static WWDateTime GetTimeDatePara( const String& rForm,
             DFF_DDDMMMY, DFF_DDDMMMY, DFF_DDDMMMYY, DFF_DDDMMMYY
         };
 
-        sal_Bool bHasDay = STRING_NOTFOUND != rForm.Search( 't' ) ||
+        bool bHasDay = STRING_NOTFOUND != rForm.Search( 't' ) ||
                        STRING_NOTFOUND != rForm.Search( 'T' ) ||
                        STRING_NOTFOUND != rForm.Search( 'd' ) ||
                        STRING_NOTFOUND != rForm.Search( 'D' );
@@ -603,7 +603,7 @@ void Ww1Fields::Out(Ww1Shell& rOut, Ww1Manager& rMan, sal_uInt16 nDepth)
             pData = GetData();
         }
         OSL_ENSURE(pData->chGet()==21, "Ww1PlainText");
-        sal_Bool bKnown = sal_True;
+        bool bKnown = true;
         OSL_ENSURE(pField==0, "Ww1PlainText");
         if (pField != 0)
         {
@@ -678,7 +678,7 @@ oncemore:
             IS("anzzeichen",     "numberofchars",  28)
             IS("dateiname",      "filename",       29)
             IS("vorlage",        "templatename",   30)
-                bKnown = sal_False;
+                bKnown = false;
 #undef IS
             if (rbType != 14)
                 goto oncemore;
@@ -923,14 +923,14 @@ oncemore:
                  || sExt.EqualsIgnoreCaseAscii( ".pic" ))
                     rOut.AddGraphic( sName );
                 else
-                    bKnown = sal_False;
+                    bKnown = false;
             }
             else
-                bKnown = sal_False;
+                bKnown = false;
         }
         break;
         default: // unknown
-            OSL_ENSURE(sal_False, "Ww1PlainText");
+            OSL_ENSURE(false, "Ww1PlainText");
         // unsupported:
         case 1: // unknown
         case 2: // possible bookmark
@@ -964,7 +964,7 @@ oncemore:
         case 52: // auto number outline
         case 53: // auto number legal
         case 54: // auto number arabic
-            bKnown = sal_False;
+            bKnown = false;
         break;
         }
         if( bKnown || sErgebnis.EqualsAscii( "\270" ))
@@ -1083,7 +1083,7 @@ void W1_CHP::Out(Ww1Shell& rOut, Ww1Manager& rMan)
                     rOut << SvxUnderlineItem(UNDERLINE_NONE, RES_CHRATR_UNDERLINE) <<
                         SvxWordLineModeItem(sal_False, RES_CHRATR_WORDLINEMODE);
                 } break;
-        default: OSL_ENSURE(sal_False, "Chpx");
+        default: OSL_ENSURE(false, "Chpx");
         case 1: {
                     rOut << SvxUnderlineItem(UNDERLINE_SINGLE, RES_CHRATR_UNDERLINE);
                 } break;
@@ -1101,7 +1101,7 @@ void W1_CHP::Out(Ww1Shell& rOut, Ww1Manager& rMan)
 
     if (fsIcoGet())
         switch(icoGet()) {
-        default: OSL_ENSURE(sal_False, "Chpx");
+        default: OSL_ENSURE(false, "Chpx");
         case 0: { rOut.EndItem(RES_CHRATR_COLOR); } break;
         case 1: { rOut << SvxColorItem(Color(COL_BLACK), RES_CHRATR_COLOR); } break;
         case 2: { rOut << SvxColorItem(Color(COL_LIGHTBLUE), RES_CHRATR_COLOR); } break;
@@ -1373,7 +1373,7 @@ SvxFontItem Ww1Fonts::GetFont(sal_uInt16 nFCode)
         }
         else
         {
-            OSL_ENSURE(sal_False, "WW1Fonts::GetFont: Nicht existenter Font !");
+            OSL_ENSURE(false, "WW1Fonts::GetFont: Nicht existenter Font !");
             eFamily = FAMILY_SWISS;
              aName.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "Helv" ));
             ePitch = PITCH_VARIABLE;

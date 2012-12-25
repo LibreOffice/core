@@ -1496,9 +1496,9 @@ public:
 class Ww1Manager
 {
     sal_Bool bOK;
-    sal_Bool bInTtp;
-    sal_Bool bInStyle;
-    sal_Bool bStopAll;
+    bool bInTtp;
+    bool bInStyle;
+    bool bStopAll;
     Ww1Fib aFib;
     Ww1Dop aDop;
     Ww1Fonts aFonts;
@@ -1526,12 +1526,12 @@ public:
     sal_Bool GetError() const       { return !bOK; }
 
 // Fuer Tabellen
-    void SetInTtp(sal_Bool bSet = sal_True)     { bInTtp = bSet; }
-    sal_Bool IsInTtp() const                { return bInTtp; }
-    void SetInStyle(sal_Bool bSet = sal_True)   { bInStyle = bSet; }
-    sal_Bool IsInStyle() const              { return bInStyle; }
-    void SetStopAll(sal_Bool bSet = sal_True)   { bStopAll = bSet; }
-    sal_Bool IsStopAll() const              { return bStopAll; }
+    void SetInTtp(bool bSet = true)     { bInTtp = bSet; }
+    bool IsInTtp() const                { return bInTtp; }
+    void SetInStyle(bool bSet = true)   { bInStyle = bSet; }
+    bool IsInStyle() const              { return bInStyle; }
+    void SetStopAll(bool bSet = true)   { bStopAll = bSet; }
+    bool IsStopAll() const              { return bStopAll; }
     sal_Bool HasInTable();
     sal_Bool HasTtp();
     sal_Bool LastHasTtp();

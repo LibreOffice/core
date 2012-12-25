@@ -436,7 +436,7 @@ void RtfExport::WritePageDescTable()
         OutULong( n ) << OOO_STRING_SVTOOLS_RTF_PGDSCUSE;
         OutULong( rPageDesc.ReadUseOn() );
 
-        OutPageDescription( rPageDesc, sal_False, sal_False );
+        OutPageDescription( rPageDesc, false, false );
 
         // search for the next page description
         sal_uInt16 i = nSize;
@@ -590,7 +590,7 @@ void RtfExport::ExportDocument_Impl()
         // All sections are unlocked by default
         Strm() << OOO_STRING_SVTOOLS_RTF_SECTUNLOCKED;
         OutLong(1);
-        OutPageDescription( rPageDesc, sal_False, sal_True );   // Changed bCheckForFirstPage to sal_True so headers
+        OutPageDescription( rPageDesc, false, true );   // Changed bCheckForFirstPage to sal_True so headers
                                                             // following title page are correctly added - i13107
         if( pSttPgDsc )
         {
@@ -1009,7 +1009,7 @@ const String* RtfExport::GetRedline( sal_uInt16 nId )
     return NULL;
 }
 
-void RtfExport::OutPageDescription( const SwPageDesc& rPgDsc, sal_Bool bWriteReset, sal_Bool bCheckForFirstPage )
+void RtfExport::OutPageDescription( const SwPageDesc& rPgDsc, bool bWriteReset, bool bCheckForFirstPage )
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << " start");
     const SwPageDesc *pSave = pAktPageDesc;

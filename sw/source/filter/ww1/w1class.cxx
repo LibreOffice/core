@@ -1188,7 +1188,7 @@ void Ww1Chp::operator++()
 
 ////////////////////////////////////////////////////////////// Manager
 Ww1Manager::Ww1Manager(SvStream& rStrm, sal_uLong nFieldFlgs)
-    : bOK(sal_False), bInTtp(sal_False), bInStyle(sal_False), bStopAll(sal_False), aFib(rStrm),
+    : bOK(sal_False), bInTtp(false), bInStyle(false), bStopAll(false), aFib(rStrm),
     aDop(aFib), aFonts(aFib, nFieldFlgs), aDoc(aFib), pDoc(&aDoc),
     ulDocSeek(0), pSeek(&ulDocSeek), aFld(aFib), pFld(&aFld), aChp(aFib),
     aPap(aFib), aFtn(aFib), aBooks(aFib),

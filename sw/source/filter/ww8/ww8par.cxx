@@ -463,7 +463,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             //textbox, this was changed for #88277# to be created as a simple
             //rect to keep impress happy. For the rest of us we'd like to turn
             //it back into a textbox again.
-            sal_Bool bIsSimpleDrawingTextBox = (pImpRec->eShapeType == mso_sptTextBox);
+            bool bIsSimpleDrawingTextBox = (pImpRec->eShapeType == mso_sptTextBox);
             if (!bIsSimpleDrawingTextBox)
             {
                 //Either
@@ -2977,11 +2977,11 @@ bool SwWW8ImplReader::HandlePageBreakChar()
     if (!nInTable)
     {
         //xushanchuan add for issue106569
-        sal_Bool IsTemp=sal_True;
+        bool IsTemp=true;
         SwTxtNode* pTemp = pPaM->GetNode()->GetTxtNode();
         if ( pTemp && !( pTemp->GetTxt().Len() ) && ( bFirstPara || bFirstParaOfPage ) )
         {
-            IsTemp = sal_False;
+            IsTemp = false;
             AppendTxtNode(*pPaM->GetPoint());
             pTemp->SetAttr(*GetDfltAttr(RES_PARATR_NUMRULE));
         }
