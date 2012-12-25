@@ -152,7 +152,6 @@ public:
     /// This is used by OutputFlyFrame_Impl() to control the written syntax
     bool bRTFFlySyntax;
 
-    sal_Bool m_bOutStyleTab : 1;
     SvStream& Strm();
     SvStream& OutULong( sal_uLong nVal );
     SvStream& OutLong( long nVal );
