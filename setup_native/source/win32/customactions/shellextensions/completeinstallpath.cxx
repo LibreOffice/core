@@ -71,8 +71,6 @@ extern "C" UINT __stdcall CompleteInstallPath( MSIHANDLE handle )
     // so that in an OOo 3.3 or later, the directory "program" or "share" are directly created
     // below "c:\program files".
 
-    TCHAR   szValue[8192];
-    DWORD   nValueSize = sizeof(szValue);
     HKEY    hKey;
 
     // Reading property OFFICEDIRHOSTNAME_, that contains the part of the path behind
