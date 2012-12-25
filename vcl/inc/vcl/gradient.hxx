@@ -20,9 +20,9 @@
 #ifndef _SV_GRADIENT_HXX
 #define _SV_GRADIENT_HXX
 
+#include <sal/types.h>
 #include <vcl/dllapi.h>
 #include <tools/color.hxx>
-#include <tools/gen.hxx>
 
 #include <vcl/vclenum.hxx>
 
@@ -30,6 +30,8 @@
 // - Impl_Gradient -
 // ----------------
 
+class Rectangle;
+class Point;
 class SvStream;
 
 class Impl_Gradient

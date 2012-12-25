@@ -26,6 +26,7 @@
 #include <boost/bind.hpp>
 #include <boost/function.hpp>
 
+#include <tools/gen.hxx>
 
 namespace sd { namespace slidesorter { namespace view {
 

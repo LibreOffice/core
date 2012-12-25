@@ -21,9 +21,9 @@
 #define _EPPT_HXX_
 #include <vector>
 #include "escherex.hxx"
+#include <sal/types.h>
 #include <tools/solar.h>
 #include <sot/storage.hxx>
-#include <tools/gen.hxx>
 #include <vcl/graph.hxx>
 #include <unotools/fontcvt.hxx>
 #include <tools/string.hxx>

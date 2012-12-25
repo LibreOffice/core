@@ -19,6 +19,7 @@
 
 #include <vcl/keycodes.hxx>
 #include <tools/string.hxx>
+#include <tools/gen.hxx>
 
 #include <editeng/swafopt.hxx>
 

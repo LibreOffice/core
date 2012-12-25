@@ -23,7 +23,6 @@
 #include "view/SlsILayerPainter.hxx"
 #include "SlideSorter.hxx"
 
-#include <tools/gen.hxx>
 #include <vcl/region.hxx>
 #include <vcl/virdev.hxx>
 
@@ -32,6 +31,8 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
 #include <vector>
+
+class Rectangle;
 
 namespace sd { namespace slidesorter { namespace view {
 

@@ -19,7 +19,7 @@
 
 #ifndef _FLTCALL_HXX
 #define _FLTCALL_HXX
-#include <tools/gen.hxx>
+#include <sal/types.h>
 #include <vcl/field.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>

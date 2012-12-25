@@ -20,8 +20,8 @@
 #ifndef _SV_LINEINFO_HXX
 #define _SV_LINEINFO_HXX
 
+#include <sal/types.h>
 #include <vcl/dllapi.h>
-#include <tools/gen.hxx>
 #include <vcl/vclenum.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <com/sun/star/drawing/LineCap.hpp>

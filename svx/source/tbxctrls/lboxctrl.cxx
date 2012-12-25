@@ -21,6 +21,7 @@
 #ifdef   _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#include <sal/types.h>
 #include <vcl/lstbox.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/event.hxx>
@@ -29,7 +30,6 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewsh.hxx>
-#include <tools/gen.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <svtools/stdctrl.hxx>

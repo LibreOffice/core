@@ -22,6 +22,7 @@
 
 #include <svx/sdr/contact/viewcontactofsdrobj.hxx>
 #include "svx/svxdllapi.h"
+#include <tools/gen.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations

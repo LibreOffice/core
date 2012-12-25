@@ -311,11 +311,11 @@ Reference< XCellCursor > SAL_CALL TableModel::createCursor() throw (RuntimeExcep
 
 // -----------------------------------------------------------------------------
 
-Reference< XCellCursor > SAL_CALL TableModel::createCursorByRange( const Reference< XCellRange >& Range ) throw (IllegalArgumentException, RuntimeException)
+Reference< XCellCursor > SAL_CALL TableModel::createCursorByRange( const Reference< XCellRange >& rRange ) throw (IllegalArgumentException, RuntimeException)
 {
     ::SolarMutexGuard aGuard;
 
-    ICellRange* pRange = dynamic_cast< ICellRange* >( Range.get() );
+    ICellRange* pRange = dynamic_cast< ICellRange* >( rRange.get() );
     if( (pRange == 0) || (pRange->getTable().get() != this) )
         throw IllegalArgumentException();
 

@@ -23,8 +23,8 @@
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <tools/color.hxx>
+#include <tools/gen.hxx>
 
-class Rectangle;
 class Gradient;
 class BitmapEx;
 class ImplWallpaper;

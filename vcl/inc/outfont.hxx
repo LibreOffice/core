@@ -20,9 +20,9 @@
 #ifndef _SV_OUTFONT_HXX
 #define _SV_OUTFONT_HXX
 
+#include <sal/types.h>
 #include <tools/string.hxx>
 #include <i18npool/lang.h>
-#include <tools/gen.hxx>
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <unotools/fontdefs.hxx>
@@ -42,6 +42,7 @@ class Font;
 class ConvertChar;
 struct FontMatchStatus;
 class OutputDevice;
+class Size;
 
 namespace com { namespace sun { namespace star { namespace lang { struct Locale; }}}}
 

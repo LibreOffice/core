@@ -22,6 +22,7 @@
 
 #include <svx/sdr/contact/viewobjectcontactofsdrobj.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
+#include <tools/gen.hxx>
 
 namespace avmedia { class MediaItem; }
 class Window;

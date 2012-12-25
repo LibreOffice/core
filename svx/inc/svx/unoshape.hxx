@@ -37,7 +37,7 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
-#include <tools/gen.hxx>
+#include <sal/types.h>
 #include <tools/weakbase.hxx>
 #include <svl/lstner.hxx>
 #include <editeng/unoipset.hxx>
@@ -62,6 +62,8 @@ class SfxItemSet;
 class SdrModel;
 class SvxDrawPage;
 class SvGlobalName;
+class Pair;
+
 // Dimension arrows change size/position on save/reload (#i59051#)
 namespace basegfx
     {

@@ -20,6 +20,7 @@
 #ifndef _SVX_TABLE_TABLEMODEL_HXX_
 #define _SVX_TABLE_TABLEMODEL_HXX_
 
+#include <sal/types.h>
 #include <com/sun/star/util/XBroadcaster.hpp>
 #include <com/sun/star/table/XTable.hpp>
 #include <basegfx/range/b2irectangle.hxx>
@@ -27,7 +28,6 @@
 #include <cppuhelper/compbase2.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/listenernotification.hxx>
-#include <tools/gen.hxx>
 #include "celltypes.hxx"
 
 // -----------------------------------------------------------------------------
@@ -100,7 +100,7 @@ public:
 
     // XTable
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellCursor > SAL_CALL createCursor(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellCursor > SAL_CALL createCursorByRange( const ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange >& Range ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellCursor > SAL_CALL createCursorByRange( const ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange >& rRange ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getRowCount() throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getColumnCount() throw (::com::sun::star::uno::RuntimeException);
 

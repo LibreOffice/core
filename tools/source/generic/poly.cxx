@@ -23,6 +23,7 @@
 #include <tools/helpers.hxx>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
+#include <tools/gen.hxx>
 #include <poly.h>
 #include <tools/line.hxx>
 #include <tools/vector2d.hxx>

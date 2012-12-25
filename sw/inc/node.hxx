@@ -25,8 +25,8 @@
 #include <boost/utility.hpp>
 #include <boost/shared_ptr.hpp>
 
+#include <sal/types.h>
 #include <tools/mempool.hxx>
-#include <tools/gen.hxx>
 
 #include "swdllapi.h"
 #include <ndarr.hxx>
@@ -75,6 +75,7 @@ class IDocumentFieldsAccess;
 class IDocumentContentOperations;
 class IDocumentListItems;
 class SwOLENodes;
+class Point;
 
 /// Base class of the Writer document model elements.
 class SW_DLLPUBLIC SwNode

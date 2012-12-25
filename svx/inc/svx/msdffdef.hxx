@@ -20,9 +20,9 @@
 #ifndef _MSDFFDEF_HXX
 #define _MSDFFDEF_HXX
 
+#include <sal/types.h>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
-#include <tools/gen.hxx>
 #include "svx/svxdllapi.h"
 
 #define DFF_COMMON_RECORD_HEADER_SIZE           8

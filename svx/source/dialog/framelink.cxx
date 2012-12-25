@@ -21,6 +21,7 @@
 
 #include <math.h>
 #include <vcl/outdev.hxx>
+#include <tools/gen.hxx>
 #include <editeng/borderline.hxx>
 #include <svtools/borderhelper.hxx>
 

@@ -21,7 +21,6 @@
 #define _SVTOOLS_SCRIPTEDTEXT_HXX
 
 #include "svtools/svtdllapi.h"
-#include <tools/gen.hxx>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 
 
@@ -29,6 +28,8 @@ namespace rtl { class OUString; }
 class OutputDevice;
 class Font;
 class SvtScriptedTextHelper_Impl;
+class Size;
+class Point;
 
 
 //_____________________________________________________________________________

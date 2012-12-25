@@ -24,7 +24,6 @@
 #include <vector>
 
 #include "rtl/ustring.hxx"
-#include "tools/gen.hxx"
 #include "tools/resid.hxx"
 #include "tools/solar.h"
 #include "vcl/dialog.hxx"

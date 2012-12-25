@@ -18,7 +18,6 @@
  */
 
 #include <svx/sdr/overlay/overlaycrosshair.hxx>
-#include <tools/gen.hxx>
 #include <vcl/outdev.hxx>
 #include <svx/sdr/overlay/overlaytools.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>

@@ -18,6 +18,7 @@
  */
 
 #include <accessibility/helper/characterattributeshelper.hxx>
+#include <tools/gen.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;

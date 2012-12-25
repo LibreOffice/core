@@ -36,6 +36,7 @@
 #include <svx/xflclit.hxx>
 #include <svx/sdshitm.hxx>
 #include <svx/sdsxyitm.hxx>
+#include <tools/gen.hxx>
 
 #include "document.hxx"
 #include "docpool.hxx"

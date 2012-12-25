@@ -23,9 +23,9 @@
 #include <map>
 #include <boost/ptr_container/ptr_vector.hpp>
 
+#include <sal/types.h>
 #include <tools/solar.h>
 #include <sot/storage.hxx>
-#include <tools/gen.hxx>
 #include <tools/stream.hxx>
 
 #include <tools/string.hxx>

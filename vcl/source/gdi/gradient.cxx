@@ -20,6 +20,7 @@
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/debug.hxx>
+#include <tools/gen.hxx>
 #include <vcl/gradient.hxx>
 
 // =======================================================================

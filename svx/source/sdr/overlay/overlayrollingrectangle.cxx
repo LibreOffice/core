@@ -18,7 +18,6 @@
  */
 
 #include <svx/sdr/overlay/overlayrollingrectangle.hxx>
-#include <tools/gen.hxx>
 #include <vcl/outdev.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/sdr/overlay/overlaytools.hxx>

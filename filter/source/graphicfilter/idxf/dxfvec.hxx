@@ -20,8 +20,10 @@
 #ifndef _DXFVEC_HXX
 #define _DXFVEC_HXX
 
-#include <tools/gen.hxx>
+#include <sal/types.h>
 #include <vcl/lineinfo.hxx>
+
+class Point;
 
 class DXFLineInfo {
 public:

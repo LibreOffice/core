@@ -29,6 +29,8 @@
 #define GLX_GLXEXT_PROTOTYPES 1
 #include "OGLTrans_TransitionImpl.hxx"
 
+#include <sal/types.h>
+
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/rendering/IntegerBitmapLayout.hpp>
 #include <com/sun/star/rendering/ColorComponentTag.hpp>
@@ -54,7 +56,6 @@
 #include <canvas/canvastools.hxx>
 
 #include <tools/diagnose_ex.h>
-#include <tools/gen.hxx>
 
 #include <vcl/canvastools.hxx>
 #include <vcl/window.hxx>

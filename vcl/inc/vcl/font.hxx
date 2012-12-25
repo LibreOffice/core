@@ -20,8 +20,8 @@
 #ifndef _SV_FONT_HXX
 #define _SV_FONT_HXX
 
+#include <sal/types.h>
 #include <vcl/dllapi.h>
-#include <tools/gen.hxx>
 #include <tools/string.hxx>
 #include <i18npool/lang.h>
 #include <tools/color.hxx>
@@ -33,6 +33,7 @@ class SvStream;
 
 class Impl_Font;
 class ImplFontAttributes;
+class Size;
 
 // --------
 // - Font -

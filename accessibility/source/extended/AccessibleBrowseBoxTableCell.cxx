@@ -21,7 +21,6 @@
 #include "accessibility/extended/AccessibleBrowseBoxTableCell.hxx"
 #include <svtools/accessibletableprovider.hxx>
 #include "accessibility/extended/AccessibleBrowseBox.hxx"
-#include <tools/gen.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 

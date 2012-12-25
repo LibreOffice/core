@@ -20,7 +20,7 @@
 #ifndef SD_SLIDESORTER_CONTROLLER_SELECTION_OBSERVER_HXX
 #define SD_SLIDESORTER_CONTROLLER_SELECTION_OBSERVER_HXX
 
-#include <tools/gen.hxx>
+#include <sal/types.h>
 #include <vector>
 #include <boost/shared_ptr.hpp>
 

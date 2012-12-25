@@ -21,7 +21,7 @@
 #include <rtl/logfile.hxx>
 #include <com/sun/star/rendering/XCanvas.hpp>
 
-#include <tools/gen.hxx>
+#include <sal/types.h>
 #include <vcl/canvastools.hxx>
 
 #include <basegfx/range/b2drange.hxx>

@@ -24,7 +24,6 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <boost/noncopyable.hpp>
 #include <boost/function.hpp>
-#include <tools/gen.hxx>
 #include <vector>
 
 namespace sd { namespace slidesorter { namespace view {

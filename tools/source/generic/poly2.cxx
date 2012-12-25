@@ -28,6 +28,7 @@
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
+#include <tools/gen.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>

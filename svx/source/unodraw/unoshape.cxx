@@ -62,6 +62,7 @@
 #include "svx/svdomeas.hxx"
 #include "svx/svdpagv.hxx"
 #include "svx/svdpool.hxx"
+#include <tools/gen.hxx>
 #include <tools/shl.hxx>    //
 #include "svx/dialmgr.hxx"      // not nice, we need our own resources some day
 #include "svx/dialogs.hrc"      //

@@ -20,7 +20,7 @@
 #ifndef SC_IMP_OP_HXX
 #define SC_IMP_OP_HXX
 
-#include <tools/gen.hxx>
+#include <sal/types.h>
 #include "xiroot.hxx"
 #include "xistream.hxx"
 #include "xistyle.hxx"

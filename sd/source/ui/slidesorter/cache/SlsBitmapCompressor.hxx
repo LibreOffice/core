@@ -21,7 +21,6 @@
 #define SD_SLIDESORTER_BITMAP_COMPRESSOR_HXX
 
 #include <sal/types.h>
-#include <tools/gen.hxx>
 #include <boost/shared_ptr.hpp>
 
 

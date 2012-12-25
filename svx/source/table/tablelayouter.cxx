@@ -21,6 +21,8 @@
 #include <com/sun/star/table/XMergeableCell.hpp>
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
 
+#include <tools/gen.hxx>
+
 #include "cell.hxx"
 #include "cellrange.hxx"
 #include "tablemodel.hxx"

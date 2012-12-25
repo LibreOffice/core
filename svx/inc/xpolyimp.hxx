@@ -20,9 +20,10 @@
 #ifndef _XPOLYIMP_HXX
 #define _XPOLYIMP_HXX
 
-#include <tools/gen.hxx>
 #include <svx/xpoly.hxx>
 #include <vector>
+
+class Point;
 
 class ImpXPolygon
 {

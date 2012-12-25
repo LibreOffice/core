@@ -25,7 +25,6 @@
 #include <osl/conditn.hxx>
 #include <salwtype.hxx>
 #include <vcl/dllapi.h>
-#include <tools/gen.hxx>
 #include <list>
 #include <vector>
 
