@@ -656,62 +656,33 @@ void ScTable::CopyToClip(const ScRangeList& rRanges, ScTable* pTable,
 void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         SCsCOL nDx, SCsROW nDy, ScTable* pTable)
 {
-    std::map<sal_Int32, sal_Int32> aOldIdToNewId;
-    std::map<sal_Int32, ScRangeList> aIdToRange;
+    ScRange aOldRange( nCol1 - nDx, nRow1 - nDy, pTable->nTab, nCol2 - nDx, nRow2 - nDy, pTable->nTab);
+    ScRange aNewRange( nCol1, nRow1, nTab, nCol2, nRow2, nTab );
 
-    ScConditionalFormatList* pOldCondFormatList = pTable->mpCondFormatList.get();
-    for(SCCOL i = nCol1; i <= nCol2; ++i)
+    for(ScConditionalFormatList::const_iterator itr = pTable->mpCondFormatList->begin(),
+            itrEnd = pTable->mpCondFormatList->end(); itr != itrEnd; ++itr)
     {
-        ScAttrIterator* pIter = pTable->aCol[i-nDx].CreateAttrIterator( nRow1-nDy, nRow2-nDy );
-        SCROW nStartRow = 0, nEndRow = 0;
-        const ScPatternAttr* pPattern = pIter->Next( nStartRow, nEndRow );
-        const std::vector<sal_uInt32>& rCondFormatData = static_cast<const ScCondFormatItem&>(pPattern->GetItem(ATTR_CONDITIONAL)).GetCondFormatData();
-        for(std::vector<sal_uInt32>::const_iterator itr = rCondFormatData.begin(), itrEnd = rCondFormatData.end();
-                itr != itrEnd; ++itr)
-        {
-            if (aOldIdToNewId.find(*itr) == aOldIdToNewId.end())
-            {
-                ScConditionalFormat* pFormat = pOldCondFormatList->GetFormat(*itr);
-                if(!pFormat)
-                {
-                    // may happen in some strange circumstances where cell storage and
-                    // cond format storage are not in sync
-                    continue;
-                }
-                ScConditionalFormat* pNewFormat = pFormat->Clone(pDocument);
-                pNewFormat->SetKey(0);
-                //not in list => create entries in both maps and new format
-                sal_uLong nMax = 0;
-                for(ScConditionalFormatList::const_iterator itrCond = mpCondFormatList->begin();
-                                        itrCond != mpCondFormatList->end(); ++itrCond)
-                {
-                    if(itrCond->GetKey() > nMax)
-                        nMax = itrCond->GetKey();
-                }
-                pNewFormat->SetKey(nMax + 1);
-                mpCondFormatList->InsertNew(pNewFormat);
-                sal_Int32 nNewId = pNewFormat->GetKey();
-                aOldIdToNewId.insert( std::pair<sal_Int32, sal_Int32>( *itr, nNewId ) );
-                aIdToRange.insert( std::pair<sal_Int32, ScRangeList>( *itr, ScRangeList() ) );
-            }
-
-            aIdToRange.find(*itr)->second.Join( ScRange( i, nStartRow + nDy, nTab, i, nEndRow + nDy, nTab ) );
-        }
-    }
-
-    for(std::map<sal_Int32, ScRangeList>::const_iterator itr = aIdToRange.begin();
-            itr != aIdToRange.end(); ++itr)
-    {
-        sal_uInt32 nNewKey = aOldIdToNewId.find(itr->first)->second;
-        ScConditionalFormat* pFormat = mpCondFormatList->GetFormat( nNewKey );
-        if(!pFormat)
+        const ScRangeList& rCondFormatRange = itr->GetRange();
+        if(!rCondFormatRange.Intersects( aOldRange ))
             continue;
 
-        pFormat->UpdateReference(URM_MOVE, ScRange(nCol1 - nDx, nRow1 - nDy, pTable->nTab, nCol2 - nDx, nRow2 - nDy, pTable->nTab),
-                nDx, nDy, pTable->nTab - nTab);
-        pFormat->AddRange(itr->second);
+        ScRangeList aIntersectedRange = rCondFormatRange.GetIntersectedRange(aOldRange);
+        ScConditionalFormat* pNewFormat = itr->Clone(pDocument);
 
-        pDocument->AddCondFormatData( itr->second, nTab, nNewKey );
+        pNewFormat->AddRange(aIntersectedRange);
+        pNewFormat->UpdateReference(URM_MOVE, aNewRange, nDx, nDy, pTable->nTab - nTab);
+
+        sal_uLong nMax = 0;
+        for(ScConditionalFormatList::const_iterator itrCond = mpCondFormatList->begin();
+                itrCond != mpCondFormatList->end(); ++itrCond)
+        {
+            if(itrCond->GetKey() > nMax)
+                nMax = itrCond->GetKey();
+        }
+        pNewFormat->SetKey(nMax + 1);
+        mpCondFormatList->InsertNew(pNewFormat);
+
+        pDocument->AddCondFormatData( pNewFormat->GetRange(), nTab, pNewFormat->GetKey() );
     }
 }
 

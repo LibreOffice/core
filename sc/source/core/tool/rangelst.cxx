@@ -1148,6 +1148,32 @@ ScAddress ScRangeList::GetTopLeftCorner() const
     return aAddr;
 }
 
+ScRangeList ScRangeList::GetIntersectedRange(const ScRange& rRange) const
+{
+    ScRangeList aReturn;
+    for(const_iterator itr = maRanges.begin(), itrEnd = maRanges.end();
+            itr != itrEnd; ++itr)
+    {
+        if((*itr)->Intersects(rRange))
+        {
+            SCCOL nColStart1, nColEnd1, nColStart2, nColEnd2;
+            SCROW nRowStart1, nRowEnd1, nRowStart2, nRowEnd2;
+            SCTAB nTabStart1, nTabEnd1, nTabStart2, nTabEnd2;
+            (*itr)->GetVars(nColStart1, nRowStart1, nTabStart1,
+                        nColEnd1, nRowEnd1, nTabEnd1);
+            rRange.GetVars(nColStart2, nRowStart2, nTabStart2,
+                        nColEnd2, nRowEnd2, nTabEnd2);
+
+            ScRange aNewRange(std::max<SCCOL>(nColStart1, nColStart2), std::max<SCROW>(nRowStart1, nRowStart2),
+                    std::max<SCTAB>(nTabStart1, nTabStart2), std::min<SCCOL>(nColEnd1, nColEnd2),
+                    std::min<SCROW>(nRowEnd1, nRowEnd2), std::min<SCTAB>(nTabEnd1, nTabEnd2));
+            aReturn.Join(aNewRange);
+        }
+    }
+
+    return aReturn;
+}
+
 // === ScRangePairList ========================================================
 
 ScRangePairList::~ScRangePairList()
