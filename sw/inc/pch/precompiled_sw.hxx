@@ -67,7 +67,6 @@
 #include "com/sun/star/accessibility/XAccessibleTable.hpp"
 #include "com/sun/star/accessibility/XAccessibleTextAttributes.hpp"
 #include "com/sun/star/accessibility/XAccessibleValue.hpp"
-#include "com/sun/star/awt/MessageBoxCommand.hpp"
 #include "com/sun/star/awt/PosSize.hpp"
 #include "com/sun/star/awt/ScrollBarOrientation.hpp"
 #include "com/sun/star/awt/Size.hpp"
