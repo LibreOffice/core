@@ -1414,7 +1414,7 @@ void SdPageObjsTLB::AddShapeToTransferable (
                 return pViewShell.get();
         }
     }
-    catch (uno::Exception &e)
+    catch (uno::Exception &)
     {
         // When there is an exception then simply use the default value of
         // bIsEnabled and disable the controls.
