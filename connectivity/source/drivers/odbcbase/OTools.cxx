@@ -365,9 +365,11 @@ Sequence<sal_Int8> OTools::getBytesValue(const OConnection* _pConnection,
     SQLLEN pcbValue = SQL_NO_TOTAL;
     Sequence<sal_Int8> aData;
 
-    // >= because if the data is nMaxLen long, our buffer is actually ONE byte short,
-    // for the null byte terminator!
-    while (pcbValue == SQL_NO_TOTAL || pcbValue >= nMaxLen)
+    OSL_ENSURE( _fSqlType != SQL_CHAR  && _fSqlType != SQL_VARCHAR  && _fSqlType != SQL_LONGVARCHAR &&
+                _fSqlType != SQL_WCHAR && _fSqlType != SQL_WVARCHAR && _fSqlType != SQL_WLONGVARCHAR,
+                "connectivity::odbc::OTools::getBytesValue called with character _fSqlType");
+
+    while (pcbValue == SQL_NO_TOTAL || pcbValue > nMaxLen)
     {
         OTools::ThrowException(_pConnection,
                                (*(T3SQLGetData)_pConnection->getOdbcFunction(ODBC3SQLGetData))(
@@ -388,13 +390,8 @@ Sequence<sal_Int8> OTools::getBytesValue(const OConnection* _pConnection,
         // pcbValue will not be SQL_NO_TOTAL -> we have a reliable count
         if ( (pcbValue == SQL_NO_TOTAL) || (pcbValue >= nMaxLen) )
         {
-            // we filled the buffer; remove the terminating null byte
-            nReadBytes = nMaxLen-1;
-            if ( aCharArray[nReadBytes] != 0)
-            {
-                OSL_FAIL("Buggy ODBC driver? Did not null-terminate (variable length) data!");
-                ++nReadBytes;
-            }
+            // we filled the buffer
+            nReadBytes = nMaxLen;
         }
         else
         {
