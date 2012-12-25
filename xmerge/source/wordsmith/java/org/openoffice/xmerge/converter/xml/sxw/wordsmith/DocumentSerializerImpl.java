@@ -462,7 +462,7 @@ implements OfficeConstants, DocumentSerializer {
      *  <i>text:h</i>, <i>text:unordered-list</i> and
      *  <i>text:ordered-list</i>.
      *
-     *  @param  Node  <code>Node</code> to traverse.
+     *  @param  node  <code>Node</code> to traverse.
      *
      *  @throws  IOException  If any I/O error occurs.
      */

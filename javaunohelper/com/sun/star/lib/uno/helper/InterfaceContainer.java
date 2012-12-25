@@ -101,8 +101,6 @@ public class InterfaceContainer implements Cloneable
 
     /**
      * The size of the ArrayList (the number of elements it contains).
-     *
-     * @serial
      */
     private int size;
 

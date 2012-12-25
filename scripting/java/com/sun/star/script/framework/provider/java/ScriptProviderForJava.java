@@ -165,7 +165,7 @@ class ScriptImpl implements XScript
          *  Invoke
          *
          *
-         * @param aParams           All parameters; pure, out params are undefined in
+         * @param params            All parameters; pure, out params are undefined in
          *                      sequence, i.e., the value has to be ignored by the callee
          * @param aOutParamIndex    Out indices
          * @param aOutParam         Out parameters
@@ -173,7 +173,7 @@ class ScriptImpl implements XScript
          * @throws IllegalArgumentException If there is no matching script name
          * @throws CannotConvertException   If args do not match or cannot be converted
          *                              the those of the invokee
-         * @throws InvocationTargetException If the running script throws an exception
+         * @throws com.sun.star.reflection.InvocationTargetException If the running script throws an exception
          *              this information is captured and rethrown as this exception type.
          */
 

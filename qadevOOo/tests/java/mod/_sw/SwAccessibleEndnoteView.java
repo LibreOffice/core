@@ -55,10 +55,10 @@ public class SwAccessibleEndnoteView extends TestCase {
     * Called to create an instance of <code>TestEnvironment</code>
     * with an object to test and related objects.
     * Inserts the created endnote to the document.
-    * Changes zoom value to 10%(endnote must be in vissible area of the document).
+    * Changes zoom value to 10%(endnote must be in visible area of the document).
     * Obtains accessible object for the inserted endnote.
     *
-    * @param tParam test parameters
+    * @param Param test parameters
     * @param log writer to log information while testing
     *
     * @see TestEnvironment
@@ -165,8 +165,7 @@ public class SwAccessibleEndnoteView extends TestCase {
     /**
     * Called while disposing a <code>TestEnvironment</code>.
     * Disposes text document.
-    * @param tParam test parameters
-    * @param tEnv the environment to cleanup
+    * @param Param test parameters
     * @param log writer to log information while testing
     */
     protected void cleanup( TestParameters Param, PrintWriter log) {
@@ -179,7 +178,7 @@ public class SwAccessibleEndnoteView extends TestCase {
      * implementation does nothing. Subclasses can override to initialize
      * objects shared among all <code>TestEnvironment</code>s.
      *
-     * @param tParam test parameters
+     * @param Param test parameters
      * @param log writer to log information while testing
      *
      * @see #initializeTestCase

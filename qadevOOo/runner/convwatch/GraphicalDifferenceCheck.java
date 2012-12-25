@@ -128,8 +128,6 @@ public class GraphicalDifferenceCheck
      *
      * @param _sInputFile       the original document
      * @param _sReferencePath   the directory where the document will print as file or export as pdf.
-     *
-     * @throws  ConvWatchException if the are problems, see containing message
      */
     public static boolean isReferenceExists(String _sInputFile, String _sReferencePath, GraphicalTestArguments _aGTA)
         {
@@ -146,7 +144,7 @@ public class GraphicalDifferenceCheck
      *                          needed very much disk space (up to 10MB per page).
      *                          The path _sOutputPath must be writeable.
      * @param _sReferencePath   the directory where the document will print as file or export as pdf.
-     * @param _GTA              Helper class for lot of parameter to control the office.
+     * @param _aGTA             Helper class for lot of parameter to control the office.
      *
      * Disadvantage: stops rest if one test file has a problem.
      */
@@ -165,7 +163,7 @@ public class GraphicalDifferenceCheck
      *                          needed very much disk space (up to 10MB per page).
      *                          The path _sOutputPath must be writeable.
      * @param _sDiffPath        Path to older differences.
-     * @param _GTA              Helper class for lot of parameter to control the office.
+     * @param _aGTA             Helper class for lot of parameter to control the office.
      *
      *
      * Stops all, if one creation of reference fails
@@ -268,10 +266,10 @@ public class GraphicalDifferenceCheck
      *                          These documents need sufficient disk space (up to 10MB per page).
      *                          A directory structure will be created, which is a mirrored from input path.
      *
-     * @param resultDocName     Name by which the xComponent shall be saved as OpenOffice.org XML document.
+     * @param _resultDocName    Name by which the xComponent shall be saved as OpenOffice.org XML document.
      *                          If provided without suffix, the suffix will be derived from the export filter.
      * @param _sReferencePath   the directory where the document will print as file or export as pdf.
-     * @param _GTA              Helper class for lot of parameter to control the office.
+     * @param _aGTA             Helper class for lot of parameter to control the office.
      */
     public static boolean checkOneFile(XComponent xComponent, String _sOutputPath, String _resultDocName, String _sReferencePath, GraphicalTestArguments _aGTA ) throws ConvWatchException
         {

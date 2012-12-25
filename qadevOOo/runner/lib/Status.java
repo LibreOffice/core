@@ -43,8 +43,8 @@ public class Status extends SimpleStatus {
 
     /**
      * Construct a status: use runState and state
-     * @param runState: either PASSED, SKIPPED, etc.
-     * @param state: OK or FAILED.
+     * @param runState either PASSED, SKIPPED, etc.
+     * @param state OK or FAILED.
      */
     public Status(int runState, boolean state ) {
         super(runState, state);

@@ -71,7 +71,7 @@ import util.SOfficeFactory;
  * @see ifc.container._XNameContainer
  * @see ifc.container._XNameReplace
  * @see ifc.document._XTypeDetection
- * @see ifc.util.XFlushable
+ * @see ifc.util._XFlushable
  */
 public class TypeDetection extends TestCase {
 

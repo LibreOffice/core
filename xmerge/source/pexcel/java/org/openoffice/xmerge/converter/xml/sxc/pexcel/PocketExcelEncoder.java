@@ -35,9 +35,7 @@ import org.openoffice.xmerge.converter.xml.sxc.NameDefinition;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.Workbook;
 
 /**
- *  This class is used by {@link
- *  org.openoffice.xmerge.converter.xml.sxc.SxcDocumentSerializerImpl
- * SxcDocumentSerializerImpl} to encode the Pocket Excel format.
+ *  This class is used by {@link SxcDocumentSerializerImpl} to encode the Pocket Excel format.
  *
  *  @author  Martin Maher
  */

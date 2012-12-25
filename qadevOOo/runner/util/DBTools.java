@@ -412,9 +412,8 @@ public class DBTools {
     /**
     * Performs connection to DataSource specified.
     * @param dbSource <code>com.sun.star.sdb.DataSource</code> service
-    * specified data source which must be already registered in the
-    * <code>DatabaseContext</code> service.
-    * @param dbSource Data source to be connected to.
+    *     specified data source which must be already registered in the
+    *     <code>DatabaseContext</code> service.
     * @return Connection to the data source.
     */
     public XConnection connectToSource(Object dbSource)
@@ -763,7 +762,7 @@ public class DBTools {
      * are declared for column index fast find.
      * @param statement object used for executing a static SQL
      * statement and obtaining the results produced by it.
-     * @param table Test table name.
+     * @param tbl_name Test table name.
      */
     protected void createMySQLTable(Statement statement, String tbl_name)
         throws java.sql.SQLException {
@@ -811,7 +810,7 @@ public class DBTools {
      * Drops table.
      * @param statement object used for executing a static SQL
      * statement and obtaining the results produced by it.
-     * @param table Test table name.
+     * @param tbl_name Test table name.
      */
     protected void dropMySQLTable(Statement statement, String tbl_name)
         throws java.sql.SQLException {
