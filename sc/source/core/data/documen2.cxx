@@ -955,6 +955,8 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                 pSrcDoc->maTabs[nSrcPos]->CopyToTable(0, 0, MAXCOL, MAXROW,
                         ( bResultsOnly ? IDF_ALL & ~IDF_FORMULA : IDF_ALL),
                         false, maTabs[nDestPos] );
+                maTabs[nDestPos]->CopyConditionalFormat(0, 0, MAXCOL, MAXROW,
+                            0, 0, pSrcDoc->maTabs[nSrcPos]);
             }
         }
         maTabs[nDestPos]->SetTabNo(nDestPos);

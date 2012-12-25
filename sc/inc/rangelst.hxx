@@ -74,6 +74,8 @@ public:
     size_t          GetCellCount() const;
     ScAddress       GetTopLeftCorner() const;
 
+    ScRangeList     GetIntersectedRange(const ScRange& rRange) const;
+
     ScRange*        Remove(size_t nPos);
     void            RemoveAll();
 
