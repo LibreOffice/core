@@ -101,6 +101,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_build,\
 	$(call gb_Helper_optional,CMIS,libcmis) \
 	$(call gb_Helper_optional,LIBEXTTEXTCAT,libexttextcat) \
 	$(call gb_Helper_optional,LIBLANGTAG,liblangtag) \
+	$(call gb_Helper_optional,LIBPNG,libpng) \
 	$(call gb_Helper_optional,MSPUB,libmspub) \
 	$(call gb_Helper_optional,ORCUS,liborcus) \
 	librelogo \
