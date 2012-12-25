@@ -20,6 +20,8 @@ $(eval $(call gb_Library_Library,i18nutil))
 
 $(eval $(call gb_Library_use_package,i18nutil,i18nutil_inc))
 
+$(eval $(call gb_Library_use_external,i18nutil,icu_headers))
+
 $(eval $(call gb_Library_use_sdk_api,i18nutil))
 
 $(eval $(call gb_Library_add_defs,i18nutil,\

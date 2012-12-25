@@ -873,6 +873,8 @@ endif # SYSTEM_GRAPHITE
 
 ifeq ($(SYSTEM_ICU),YES)
 
+gb_LinkTarget__use_icu_headers:=
+
 define gb_LinkTarget__use_icudata
 $(call gb_LinkTarget_add_libs,$(1),-licudata)
 
@@ -901,6 +903,17 @@ gb_ICU_suffix:=lo
 else
 gb_ICU_suffix:=
 endif
+
+define gb_LinkTarget__use_icu_headers
+$(call gb_LinkTarget_use_unpacked,$(1),icu)
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,icu)/source \
+	-I$(call gb_UnpackedTarball_get_dir,icu)/source/common \
+	-I$(call gb_UnpackedTarball_get_dir,icu)/source/i18n \
+	$$(INCLUDE) \
+)
+
+endef
 
 # icudata and icui18n is called icudt and icuin when built with MSVC :-/
 ifeq ($(OS)$(COM),WNTMSC)

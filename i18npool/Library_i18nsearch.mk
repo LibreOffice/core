@@ -41,6 +41,7 @@ $(eval $(call gb_Library_use_sdk_api,i18nsearch))
 $(eval $(call gb_Library_use_externals,i18nsearch,\
 	icui18n \
 	icuuc \
+	icu_headers \
 ))
 
 $(eval $(call gb_Library_use_libraries,i18nsearch,\

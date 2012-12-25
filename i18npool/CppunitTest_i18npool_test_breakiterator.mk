@@ -28,6 +28,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,i18npool_test_breakiterator))
 
+$(eval $(call gb_CppunitTest_use_external,i18npool_test_breakiterator,icu_headers))
+
 $(eval $(call gb_CppunitTest_use_api,i18npool_test_breakiterator,\
 	udkapi \
 	offapi \

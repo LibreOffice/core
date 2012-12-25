@@ -63,6 +63,7 @@ $(eval $(call gb_Library_use_libraries,frm,\
 $(eval $(call gb_Library_use_externals,frm,\
     icui18n \
     icuuc \
+	icu_headers \
     libxml2 \
 ))
 
