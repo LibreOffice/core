@@ -93,7 +93,7 @@ function local_file()
 function filter_ignore()
 (
 # - filter out all files that are not normal headers
-# - gperffasttoken.hxx is not a problem header
+# - gperffasttoken.hxx is not a proper header
 # - sores.hxx provides BMP_PLUGIN, which is redefined
 # - some sources play ugly #define tricks with editeng/eeitemid.hxx
     grep -e '\.h[">]$' -e '\.hpp[">]$' -e '\.hdl[">]$' -e '\.hxx[">]$' -e '^[^\.]*>$' | \
