@@ -1662,8 +1662,12 @@ void XMLShapeExport::ImpExportOLE2Shape(
                 if( !sClassId.isEmpty() )
                     mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_CLASS_ID, sClassId );
 
-                // #i118485# Add text export, the draw OLE shape allows text now
-                ImpExportText( xShape );
+                if(eShapeType != XmlShapeTypePresChartShape && eShapeType != XmlShapeTypeDrawChartShape)
+                {
+                    // #i118485# Add text export, the draw OLE shape allows text now
+                    // fdo#58571 chart objects don't allow text:p
+                    ImpExportText( xShape );
+                }
 
                 if(!bExportEmbedded)
                 {
