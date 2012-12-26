@@ -506,7 +506,7 @@ bool ImplInitAccessBridge(bool bAllowCancel, bool &rCancelled)
 
 // -----------------------------------------------------------------------
 
-Window* ImplFindWindow( const SalFrame* pFrame, Point& rSalFramePos )
+Window* ImplFindWindow( const SalFrame* pFrame, ::Point& rSalFramePos )
 {
     ImplSVData* pSVData = ImplGetSVData();
     Window*     pFrameWindow = pSVData->maWinData.mpFirstFrame;
