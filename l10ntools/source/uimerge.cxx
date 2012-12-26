@@ -20,7 +20,6 @@
 
 #include "common.hxx"
 #include "export.hxx"
-#include "xrmmerge.hxx"
 #include "tokens.h"
 #include <iostream>
 #include <fstream>
