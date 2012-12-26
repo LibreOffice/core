@@ -73,30 +73,25 @@ private:
     ScDocShellRef m_xDocShRef;
 };
 
-namespace {
-
-std::ostream& operator<<(std::ostream& rStrm, const ScAddress& rAddr)
+static std::ostream& operator<<(std::ostream& rStrm, const ScAddress& rAddr)
 {
     rStrm << "Col: " << rAddr.Col() << " Row: " << rAddr.Row() << " Tab: " << rAddr.Tab() << "\n";
     return rStrm;
 }
 
-std::ostream& operator<<(std::ostream& rStrm, const ScRange& rRange)
+static std::ostream& operator<<(std::ostream& rStrm, const ScRange& rRange)
 {
     rStrm << "ScRange: " << rRange.aStart << rRange.aEnd << "\n";
     return rStrm;
 }
 
-std::ostream& operator<<(std::ostream& rStrm, const ScRangeList& rList)
+static std::ostream& operator<<(std::ostream& rStrm, const ScRangeList& rList)
 {
     rStrm << "ScRangeList: \n";
     for(size_t i = 0; i < rList.size(); ++i)
         rStrm << *rList[i];
     return rStrm;
 }
-
-}
-
 
 void Test::setUp()
 {
