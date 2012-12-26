@@ -275,8 +275,7 @@ ifeq ($(DISABLE_DBCONNECTIVITY),TRUE)
 	$(GNUMAKE) connectivity
 endif
 	cd $(SRC_ROOT)/postprocess && unset MAKEFLAGS && \
-		$(SOLARENV)/bin/build.pl -P$(PARALLELISM) --all -- -P$(PARALLELISM) && \
-		$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS)
+		$(SOLARENV)/bin/build.pl -P$(PARALLELISM) --all -- -P$(PARALLELISM)
 
 build: build-postprocess
 ifeq ($(OS_FOR_BUILD),WNT)
