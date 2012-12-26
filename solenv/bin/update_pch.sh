@@ -96,10 +96,17 @@ function filter_ignore()
 # - gperffasttoken.hxx is not a proper header
 # - sores.hxx provides BMP_PLUGIN, which is redefined
 # - some sources play ugly #define tricks with editeng/eeitemid.hxx
+# - jerror.h and jpeglib.h are not self-contained
+# - prewin.h, postwin.h and shlobj.h are WNT-only (to be fixed in a better way)
     grep -e '\.h[">]$' -e '\.hpp[">]$' -e '\.hdl[">]$' -e '\.hxx[">]$' -e '^[^\.]*>$' | \
     grep -v -F -e '#include "gperffasttoken.hxx"' | \
     grep -v -F -e '#include <svtools/sores.hxx>' | \
-    grep -v -F -e '#include <editeng/eeitemid.hxx>'
+    grep -v -F -e '#include <editeng/eeitemid.hxx>' | \
+    grep -v -F -e '#include "jerror.h"' | \
+    grep -v -F -e '#include "jpeglib.h"' | \
+    grep -v -F -e '#include <prewin.h>' | \
+    grep -v -F -e '#include <postwin.h>' | \
+    grep -v -F -e '#include <shlobj.h>'
 )
 
     # " in #include "foo" breaks echo down below, so " -> @

@@ -700,7 +700,7 @@ void AssignmentPersistentData::Commit()
         if ( !m_pImpl->bWorkingPersistent )
         {
             StyleSettings aSystemStyle = GetSettings().GetStyleSettings();
-            const Color& rNewColor = aSystemStyle.GetDialogColor();
+            const ::Color& rNewColor = aSystemStyle.GetDialogColor();
 
             m_aDatasource.SetReadOnly( sal_True );
             m_aDatasource.SetBackground( Wallpaper( rNewColor ) );
