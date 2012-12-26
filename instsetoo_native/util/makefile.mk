@@ -68,7 +68,10 @@ LOCALPYFILES= \
     $(BIN)$/pythonloader.py
 .ENDIF
 
-.IF "$(BUILD_TYPE)"=="$(BUILD_TYPE:s/HELP//)"
+# We can be pretty sure that the "HELP" in BUILD_TYPE, if it is there,
+# is surrounded by spaces. We can't look for just "HELP" here because
+# then DBGHELP would match...
+.IF "$(BUILD_TYPE)"=="$(BUILD_TYPE:s/ HELP //)"
 OOOHELPPACK=
 OOODEVHELPPACK=
 .ELSE
