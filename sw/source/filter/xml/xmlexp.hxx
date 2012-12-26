@@ -56,9 +56,7 @@ class SwXMLExport : public SvXMLExport
     SvXMLItemMapEntriesRef      xTableCellItemMap;
     UniReference < XMLPropertySetMapper > xParaPropMapper;
 
-    sal_Bool                    bExportWholeDoc : 1;// export whole document?
     sal_Bool                    bBlock : 1;         // export text block?
-    sal_Bool                    bExportFirstTableOnly : 1;
     sal_Bool                    bShowProgress : 1;
     sal_Bool                    bSavedShowChanges : 1;
 
