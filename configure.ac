@@ -4165,11 +4165,7 @@ if test "$cross_compiling" = "yes"; then
         config_host.mk.in \
         configure \
         Makefile.in \
-        config/config_clang.h.in \
-        config/config_global.h.in \
-        config/config_graphite.h.in \
-        config/config_telepathy.h.in \
-        config/config_vclplug.h.in \
+        config/config_*.h.in \
         bin/get_config_variables \
         $srcdir/solenv/bin/getcompver.awk \
         $SRC_ROOT/solenv/inc/langlist.mk \
