@@ -60,8 +60,6 @@ using namespace ::com::sun::star::script::vba;
 using namespace ::com::sun::star::uno;
 
 using ::comphelper::ConfigurationHelper;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 // ============================================================================
 
@@ -382,7 +380,7 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
             if( !bExitLoop && VbaHelper::extractKeyValue( aKey, aValue, aLine ) )
             {
                 sal_Int32 nType = ModuleType::UNKNOWN;
-                if( aKey.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "Document" ) ) )
+                if( aKey.equalsIgnoreAsciiCaseAscii( "Document" ) )
                 {
                     nType = ModuleType::DOCUMENT;
                     // strip automation server version from module names
@@ -390,11 +388,11 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
                     if( nSlashPos >= 0 )
                         aValue = aValue.copy( 0, nSlashPos );
                 }
-                else if( aKey.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "Module" ) ) )
+                else if( aKey.equalsIgnoreAsciiCaseAscii( "Module" ) )
                     nType = ModuleType::NORMAL;
-                else if( aKey.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "Class" ) ) )
+                else if( aKey.equalsIgnoreAsciiCaseAscii( "Class" ) )
                     nType = ModuleType::CLASS;
-                else if( aKey.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "BaseClass" ) ) )
+                else if( aKey.equalsIgnoreAsciiCaseAscii( "BaseClass" ) )
                     nType = ModuleType::FORM;
 
                 if( (nType != ModuleType::UNKNOWN) && !aValue.isEmpty() )

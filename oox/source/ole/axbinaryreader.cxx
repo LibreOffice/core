@@ -26,10 +26,6 @@ namespace ole {
 
 // ============================================================================
 
-using ::rtl::OUString;
-
-// ============================================================================
-
 namespace {
 
 const sal_uInt32 AX_STRING_SIZEMASK         = 0x7FFFFFFF;
@@ -218,7 +214,7 @@ void AxBinaryPropertyReader::readStringProperty( OUString& orValue )
     }
 }
 
-void AxBinaryPropertyReader::readGuidProperty( ::rtl::OUString& orGuid )
+void AxBinaryPropertyReader::readGuidProperty( OUString& orGuid )
 {
     if( startNextProperty() )
         maLargeProps.push_back( ComplexPropVector::value_type( new GuidProperty( orGuid ) ) );

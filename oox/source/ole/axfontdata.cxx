@@ -25,8 +25,6 @@
 namespace oox {
 namespace ole {
 
-using ::rtl::OUString;
-
 // ============================================================================
 
 AxFontData::AxFontData() :
