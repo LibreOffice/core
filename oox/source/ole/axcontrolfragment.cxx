@@ -38,7 +38,6 @@ using ::oox::core::ContextHandler2;
 using ::oox::core::ContextHandlerRef;
 using ::oox::core::FragmentHandler2;
 using ::oox::core::XmlFilterBase;
-using ::rtl::OUString;
 
 // ============================================================================
 

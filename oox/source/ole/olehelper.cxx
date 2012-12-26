@@ -46,9 +46,6 @@ namespace ole {
 
 // ============================================================================
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-
 using ::com::sun::star::form::XFormComponent;
 using ::com::sun::star::form::XForm;
 using ::com::sun::star::awt::XControlModel;
@@ -238,7 +235,7 @@ StdFontInfo::StdFontInfo() :
 {
 }
 
-StdFontInfo::StdFontInfo( const ::rtl::OUString& rName, sal_uInt32 nHeight,
+StdFontInfo::StdFontInfo( const OUString& rName, sal_uInt32 nHeight,
         sal_uInt16 nWeight, sal_uInt16 nCharSet, sal_uInt8 nFlags ) :
     maName( rName ),
     mnHeight( nHeight ),
@@ -361,22 +358,22 @@ class OleFormCtrlExportHelper
     Reference< XModel > mxDocModel;
     Reference< XControlModel > mxControlModel;
 
-    ::rtl::OUString maName;
-    ::rtl::OUString maTypeName;
-    ::rtl::OUString maFullName;
-    ::rtl::OUString maGUID;
+    OUString maName;
+    OUString maTypeName;
+    OUString maFullName;
+    OUString maGUID;
 public:
     OleFormCtrlExportHelper( const Reference< XComponentContext >& rxCtx, const Reference< XModel >& xDocModel, const Reference< XControlModel >& xModel );
     virtual ~OleFormCtrlExportHelper() { }
-    virtual ::rtl::OUString getGUID()
+    virtual OUString getGUID()
     {
-        rtl::OUString sResult;
+        OUString sResult;
         if ( maGUID.getLength() > 2 )
             sResult = maGUID.copy(1, maGUID.getLength() - 2 );
         return sResult;
     }
-    ::rtl::OUString getFullName() { return maFullName; }
-    ::rtl::OUString getTypeName() { return maTypeName; }
+    OUString getFullName() { return maFullName; }
+    OUString getTypeName() { return maTypeName; }
     bool isValid() { return mpModel != NULL; }
     void exportName( const Reference< XOutputStream >& rxOut );
     void exportCompObj( const Reference< XOutputStream >& rxOut );
@@ -475,7 +472,7 @@ MSConvertOCXControls::~MSConvertOCXControls()
 }
 
 bool
-MSConvertOCXControls::importControlFromStream( ::oox::BinaryInputStream& rInStrm, Reference< XFormComponent >& rxFormComp, const ::rtl::OUString& rGuidString )
+MSConvertOCXControls::importControlFromStream( ::oox::BinaryInputStream& rInStrm, Reference< XFormComponent >& rxFormComp, const OUString& rGuidString )
 {
     ::oox::ole::EmbeddedControl aControl( CREATE_OUSTRING( "Unknown" ) );
     if( ::oox::ole::ControlModelBase* pModel = aControl.createModelFromGuid( rGuidString  ) )
@@ -504,7 +501,7 @@ MSConvertOCXControls::ReadOCXCtlsStream( SotStorageStreamRef& rSrc1, Reference< 
     return sal_False;
 }
 
-bool MSConvertOCXControls::importControlFromStream( ::oox::BinaryInputStream& rInStrm, Reference< XFormComponent >& rxFormComp, const rtl::OUString& rStrmClassId,
+bool MSConvertOCXControls::importControlFromStream( ::oox::BinaryInputStream& rInStrm, Reference< XFormComponent >& rxFormComp, const OUString& rStrmClassId,
                                    sal_Int32 nStreamSize)
 {
     if ( !rInStrm.isEof() )
@@ -575,7 +572,7 @@ sal_Bool MSConvertOCXControls::ReadOCXStorage( SotStorageRef& xOleStg,
 
 sal_Bool MSConvertOCXControls::WriteOCXStream( const Reference< XModel >& rxModel, SotStorageRef &xOleStg,
     const Reference< XControlModel > &rxControlModel,
-    const com::sun::star::awt::Size& rSize, rtl::OUString &rName)
+    const com::sun::star::awt::Size& rSize, OUString &rName)
 {
     SvGlobalName aName;
 
@@ -584,10 +581,10 @@ sal_Bool MSConvertOCXControls::WriteOCXStream( const Reference< XModel >& rxMode
     if ( !exportHelper.isValid() )
         return sal_False;
 
-    rtl::OUString sId = exportHelper.getGUID();
+    OUString sId = exportHelper.getGUID();
     aName.MakeId(sId);
 
-    rtl::OUString sFullName = exportHelper.getFullName();
+    OUString sFullName = exportHelper.getFullName();
     rName = exportHelper.getTypeName();
     xOleStg->SetClass( aName,0x5C,sFullName);
     {
@@ -632,14 +629,14 @@ const Reference< XIndexContainer >&
             Reference< XNameContainer >  xNameCont =
                 xFormsSupplier->getForms();
 
-            rtl::OUString sStdName = CREATE_OUSTRING( "WW-Standard" );
-            rtl::OUString sName( sStdName );
+            OUString sStdName = CREATE_OUSTRING( "WW-Standard" );
+            OUString sName( sStdName );
             sal_uInt16 n = 0;
 
             while( xNameCont->hasByName( sName ) )
             {
                 sName = sStdName;
-                sName += rtl::OUString::valueOf(static_cast<sal_Int32>(++n));
+                sName += OUString::valueOf(static_cast<sal_Int32>(++n));
             }
 
             const Reference< XMultiServiceFactory > &rServiceFactory

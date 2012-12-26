@@ -43,12 +43,10 @@ using namespace ::com::sun::star::script::vba;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using ::com::sun::star::awt::KeyEvent;
 // ============================================================================
 typedef ::cppu::WeakImplHelper1< container::XIndexContainer > OleIdToNameContainer_BASE;
-typedef boost::unordered_map< sal_Int32, rtl::OUString >  ObjIdToName;
+typedef boost::unordered_map< sal_Int32, OUString >  ObjIdToName;
 
 class OleIdToNameContainer : public OleIdToNameContainer_BASE
 {
@@ -65,7 +63,7 @@ public:
     virtual void SAL_CALL insertByIndex( ::sal_Int32 Index, const Any& Element ) throw (IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        rtl::OUString sOleName;
+        OUString sOleName;
         if ( !( Element >>= sOleName ) )
             throw IllegalArgumentException();
         ObjIdToNameHash[ Index ] = sOleName;
@@ -83,7 +81,7 @@ public:
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !hasByIndex( Index ) )
             throw IndexOutOfBoundsException();
-        rtl::OUString sOleName;
+        OUString sOleName;
         if ( !( Element >>= sOleName ) )
             throw IllegalArgumentException();
         ObjIdToNameHash[ Index ] = sOleName;
@@ -104,7 +102,7 @@ public:
     // XElementAccess Methods
     virtual Type SAL_CALL getElementType(  ) throw (RuntimeException)
     {
-        return ::getCppuType( static_cast< const ::rtl::OUString* >( 0 ) );
+        return ::getCppuType( static_cast< const OUString* >( 0 ) );
     }
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (RuntimeException)
     {
@@ -216,7 +214,7 @@ void VbaModule::createEmptyModule( const Reference< container::XNameContainer >&
 OUString VbaModule::readSourceCode( StorageBase& rVbaStrg ) const
 {
     OUStringBuffer aSourceCode;
-    const static rtl::OUString sUnmatchedRemovedTag( RTL_CONSTASCII_USTRINGPARAM( "Rem removed unmatched Sub/End: " ) );
+    const static OUString sUnmatchedRemovedTag( "Rem removed unmatched Sub/End: " );
     if( !maStreamName.isEmpty() && (mnOffset != SAL_MAX_UINT32) )
     {
         BinaryXInputStream aInStrm( rVbaStrg.openInputStream( maStreamName ), true );
@@ -241,7 +239,7 @@ OUString VbaModule::readSourceCode( StorageBase& rVbaStrg ) const
             while( !aVbaTextStrm.isEof() )
             {
                 OUString aCodeLine = aVbaTextStrm.readLine();
-                if( aCodeLine.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "Attribute " ) ) )
+                if( aCodeLine.match( "Attribute " ) )
                 {
                     // attribute
                     int index = aCodeLine.indexOf( ".VB_ProcData.VB_Invoke_Func = " );
@@ -254,15 +252,15 @@ OUString VbaModule::readSourceCode( StorageBase& rVbaStrg ) const
                         // word doesn't store the shortcut in the module
                         // attributes
                         int nSpaceIndex = aCodeLine.indexOf(' ');
-                        rtl::OUString sProc = aCodeLine.copy( nSpaceIndex + 1, index - nSpaceIndex - 1);
+                        OUString sProc = aCodeLine.copy( nSpaceIndex + 1, index - nSpaceIndex - 1);
                         // for Excel short cut key seems limited to cntrl+'a-z, A-Z'
-                        rtl::OUString sKey = aCodeLine.copy( aCodeLine.lastIndexOf("= ") + 3, 1 );
+                        OUString sKey = aCodeLine.copy( aCodeLine.lastIndexOf("= ") + 3, 1 );
                         // only alpha key valid for key shortcut, however the api will accept other keys
                         if ( !isalpha( (char)sKey[ 0 ] ) )
                         {
                             // cntrl modifier is explicit ( but could be cntrl+shift ), parseKeyEvent
                             // will handle and uppercase letter appropriately
-                            rtl::OUString sApiKey = "^";
+                            OUString sApiKey = "^";
                             sApiKey += sKey;
                             try
                             {
@@ -281,12 +279,12 @@ OUString VbaModule::readSourceCode( StorageBase& rVbaStrg ) const
                     // The behaviour of the vba ide practically guarantees the case and
                     // spacing of Sub statement(s). However, indentation can be arbitrary hence
                     // the trim.
-                    rtl::OUString trimLine( aCodeLine.trim() );
+                    OUString trimLine( aCodeLine.trim() );
                     if ( mbExecutable && (
-                      trimLine.matchAsciiL( RTL_CONSTASCII_STRINGPARAM("Sub ") )         ||
-                      trimLine.matchAsciiL( RTL_CONSTASCII_STRINGPARAM("Public Sub ") )  ||
-                      trimLine.matchAsciiL( RTL_CONSTASCII_STRINGPARAM("Private Sub ") ) ||
-                      trimLine.matchAsciiL( RTL_CONSTASCII_STRINGPARAM("Static Sub ") ) ) )
+                      trimLine.match("Sub ")         ||
+                      trimLine.match("Public Sub ")  ||
+                      trimLine.match("Private Sub ") ||
+                      trimLine.match("Static Sub ") ) )
                     {
                         // this should never happen, basic doesn't support nested procedures
                         // first Sub Foo must be bogus
@@ -303,7 +301,7 @@ OUString VbaModule::readSourceCode( StorageBase& rVbaStrg ) const
                             procInfo.nPos = aSourceCode.getLength();
                         }
                     }
-                    else if ( mbExecutable && aCodeLine.trim().matchAsciiL( RTL_CONSTASCII_STRINGPARAM("End Sub")) )
+                    else if ( mbExecutable && aCodeLine.trim().match("End Sub") )
                     {
                         // un-matched End Sub
                         if ( !procInfo.bInProcedure )
@@ -318,7 +316,7 @@ OUString VbaModule::readSourceCode( StorageBase& rVbaStrg ) const
                     }
                     // normal source code line
                     if( !mbExecutable )
-                        aSourceCode.appendAscii( RTL_CONSTASCII_STRINGPARAM( "Rem " ) );
+                        aSourceCode.appendAscii( "Rem " );
                     aSourceCode.append( aCodeLine ).append( sal_Unicode( '\n' ) );
                 }
             }
@@ -338,22 +336,22 @@ void VbaModule::createModule( const OUString& rVBASourceCode,
     script::ModuleInfo aModuleInfo;
     aModuleInfo.ModuleType = mnType;
     OUStringBuffer aSourceCode;
-    aSourceCode.appendAscii( RTL_CONSTASCII_STRINGPARAM( "Rem Attribute VBA_ModuleType=" ) );
+    aSourceCode.appendAscii( "Rem Attribute VBA_ModuleType=" );
     switch( mnType )
     {
         case script::ModuleType::NORMAL:
-            aSourceCode.appendAscii( RTL_CONSTASCII_STRINGPARAM( "VBAModule" ) );
+            aSourceCode.appendAscii( "VBAModule" );
         break;
         case script::ModuleType::CLASS:
-            aSourceCode.appendAscii( RTL_CONSTASCII_STRINGPARAM( "VBAClassModule" ) );
+            aSourceCode.appendAscii( "VBAClassModule" );
         break;
         case script::ModuleType::FORM:
-            aSourceCode.appendAscii( RTL_CONSTASCII_STRINGPARAM( "VBAFormModule" ) );
+            aSourceCode.appendAscii( "VBAFormModule" );
             // hack from old filter, document Basic should know the XModel, but it doesn't
             aModuleInfo.ModuleObject.set( mxDocModel, UNO_QUERY );
         break;
         case script::ModuleType::DOCUMENT:
-            aSourceCode.appendAscii( RTL_CONSTASCII_STRINGPARAM( "VBADocumentModule" ) );
+            aSourceCode.appendAscii( "VBADocumentModule" );
             // get the VBA implementation object associated to the document module
             if( rxDocObjectNA.is() ) try
             {
@@ -364,19 +362,19 @@ void VbaModule::createModule( const OUString& rVBASourceCode,
             }
         break;
         default:
-            aSourceCode.appendAscii( RTL_CONSTASCII_STRINGPARAM( "VBAUnknown" ) );
+            aSourceCode.appendAscii( "VBAUnknown" );
     }
     aSourceCode.append( sal_Unicode( '\n' ) );
     if( mbExecutable )
     {
-        aSourceCode.appendAscii( RTL_CONSTASCII_STRINGPARAM( "Option VBASupport 1\n" ) );
+        aSourceCode.appendAscii( "Option VBASupport 1\n" );
         if( mnType == script::ModuleType::CLASS )
-            aSourceCode.appendAscii( RTL_CONSTASCII_STRINGPARAM( "Option ClassModule\n" ) );
+            aSourceCode.appendAscii( "Option ClassModule\n" );
     }
     else
     {
         // add a subroutine named after the module itself
-        aSourceCode.appendAscii( RTL_CONSTASCII_STRINGPARAM( "Sub " ) ).
+        aSourceCode.appendAscii( "Sub " ).
             append( maName.replace( ' ', '_' ) ).append( sal_Unicode( '\n' ) );
     }
 
@@ -385,7 +383,7 @@ void VbaModule::createModule( const OUString& rVBASourceCode,
 
     // close the subroutine named after the module
     if( !mbExecutable )
-        aSourceCode.appendAscii( RTL_CONSTASCII_STRINGPARAM( "End Sub\n" ) );
+        aSourceCode.appendAscii( "End Sub\n" );
 
     // insert extended module info
     try

@@ -558,11 +558,11 @@ void ControlConverter::convertToAxState( PropertySet& rPropSet,
     // control is awt or not )
     rPropSet.getProperty( nState, PROP_State );
 
-    rValue = rtl::OUString(); // empty e.g. 'don't know'
+    rValue = OUString(); // empty e.g. 'don't know'
     if ( nState == API_STATE_UNCHECKED )
-        rValue = rtl::OUString( '0' );
+        rValue = OUString('0');
     else if ( nState == API_STATE_CHECKED )
-        rValue = rtl::OUString( '1' );
+        rValue = OUString('1');
 
     // tristate
     if( bSupportsTriState && rPropSet.getProperty( bTmp, PROP_TriState ) )
@@ -2414,16 +2414,16 @@ HtmlSelectModel::HtmlSelectModel()
 bool
 HtmlSelectModel::importBinaryModel( BinaryInputStream& rInStrm )
 {
-    static String sMultiple( RTL_CONSTASCII_USTRINGPARAM("<SELECT MULTIPLE") );
-    static String sSelected( RTL_CONSTASCII_USTRINGPARAM("OPTION SELECTED") );
+    static OUString sMultiple( "<SELECT MULTIPLE" );
+    static OUString sSelected( "OPTION SELECTED" );
 
     OUString sStringContents = rInStrm.readUnicodeArray( rInStrm.size() );
 
-    String data = sStringContents;
+    OUString data = sStringContents;
 
     // replace crlf with lf
-    data.SearchAndReplaceAll( String( RTL_CONSTASCII_USTRINGPARAM( "\x0D\x0A" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "\x0A" ) ) );
-    std::vector< rtl::OUString > listValues;
+    data = data.replaceAll( "\x0D\x0A" , "\x0A" );
+    std::vector< OUString > listValues;
     std::vector< sal_Int16 > selectedIndices;
 
     // Ultra hacky parser for the info
@@ -2431,10 +2431,10 @@ HtmlSelectModel::importBinaryModel( BinaryInputStream& rInStrm )
 
     for ( sal_Int32 nToken = 0; nToken < nTokenCount; ++nToken )
     {
-        String sLine( data.GetToken( nToken, '\n' ) );
+        OUString sLine( data.getToken( nToken, '\n' ) );
         if ( !nToken ) // first line will tell us if multiselect is enabled
         {
-            if ( sLine.CompareTo( sMultiple, sMultiple.Len() ) == COMPARE_EQUAL )
+            if ( sLine == sMultiple )
                 mnMultiSelect = true;
         }
         // skip first and last lines, no data there
@@ -2442,17 +2442,17 @@ HtmlSelectModel::importBinaryModel( BinaryInputStream& rInStrm )
         {
             if ( comphelper::string::getTokenCount(sLine, '>') )
             {
-                String displayValue  = sLine.GetToken( 1, '>' );
-                if ( displayValue.Len() )
+                OUString displayValue  = sLine.getToken( 1, '>' );
+                if ( displayValue.getLength() )
                 {
                     // Really we should be using a proper html parser
                     // escaping some common bits to be escaped
-                    displayValue.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "&lt;" ) ), String( RTL_CONSTASCII_USTRINGPARAM("<") ) );
-                    displayValue.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "&gt;" ) ), String( RTL_CONSTASCII_USTRINGPARAM(">") ) );
-                    displayValue.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "&quot;" ) ), String( RTL_CONSTASCII_USTRINGPARAM("\"") ) );
-                    displayValue.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "&amp;" ) ), String( RTL_CONSTASCII_USTRINGPARAM("&") ) );
+                    displayValue = displayValue.replaceAll( "&lt;", "<" );
+                    displayValue = displayValue.replaceAll( "&gt;", ">" );
+                    displayValue = displayValue.replaceAll( "&quot;", "\"" );
+                    displayValue = displayValue.replaceAll( "&amp;", "&" );
                     listValues.push_back( displayValue );
-                    if( sLine.Search( sSelected ) != STRING_NOTFOUND )
+                    if( sLine.indexOf( sSelected ) != STRING_NOTFOUND )
                         selectedIndices.push_back( static_cast< sal_Int16 >( listValues.size() ) - 1 );
                 }
             }
@@ -2462,7 +2462,7 @@ HtmlSelectModel::importBinaryModel( BinaryInputStream& rInStrm )
     {
         msListData.realloc( listValues.size() );
         sal_Int32 index = 0;
-        for( std::vector< rtl::OUString >::iterator it = listValues.begin(); it != listValues.end(); ++it, ++index )
+        for( std::vector< OUString >::iterator it = listValues.begin(); it != listValues.end(); ++it, ++index )
              msListData[ index ] = *it;
     }
     if ( !selectedIndices.empty() )
@@ -2497,7 +2497,7 @@ HtmlTextBoxModel::importBinaryModel( BinaryInputStream& rInStrm )
     // in msocximex ( where this is ported from, it appears *nothing* is read
     // from the control stream ), surely there is some useful info there ?
     OSL_TRACE("HtmlTextBoxModel::importBinaryModel - string contents of stream :");
-    OSL_TRACE("%s", rtl::OUStringToOString( sStringContents, RTL_TEXTENCODING_UTF8 ).getStr() );
+    OSL_TRACE("%s", OUStringToOString( sStringContents, RTL_TEXTENCODING_UTF8 ).getStr() );
 #else
     (void) rInStrm;
 #endif
