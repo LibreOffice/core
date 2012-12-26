@@ -54,6 +54,7 @@ namespace dbaui
     namespace
     {
         //----------------------------------------------------------------
+        #undef UNOTYPE
         template < class ITEMTYPE, class UNOTYPE >
         class ItemAdapter
         {

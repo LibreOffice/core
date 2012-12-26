@@ -35,6 +35,8 @@ $(eval $(call gb_Library_set_include,dbu,\
     -I$(call gb_SrsTemplateTarget_get_include_dir,dbaccess) \
 ))
 
+$(eval $(call gb_Library_set_precompiled_header,dbu,$(SRCDIR)/dbaccess/inc/pch/precompiled_dbu))
+
 $(eval $(call gb_Library_use_sdk_api,dbu))
 
 $(eval $(call gb_Library_add_defs,dbu,\

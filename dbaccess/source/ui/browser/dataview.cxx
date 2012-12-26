@@ -49,7 +49,7 @@ namespace dbaui
         OutputDevice*   m_pDev;
 
     public:
-        ColorChanger( OutputDevice* _pDev, const Color& _rNewLineColor, const Color& _rNewFillColor )
+        ColorChanger( OutputDevice* _pDev, const ::Color& _rNewLineColor, const ::Color& _rNewFillColor )
             :m_pDev( _pDev )
         {
             m_pDev->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );

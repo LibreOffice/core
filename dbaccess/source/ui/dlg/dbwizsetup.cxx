@@ -974,8 +974,8 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             void doLoadAsync();
 
             // XTerminateListener
-            virtual void SAL_CALL queryTermination( const EventObject& Event ) throw (TerminationVetoException, RuntimeException);
-            virtual void SAL_CALL notifyTermination( const EventObject& Event ) throw (RuntimeException);
+            virtual void SAL_CALL queryTermination( const com::sun::star::lang::EventObject& Event ) throw (TerminationVetoException, RuntimeException);
+            virtual void SAL_CALL notifyTermination( const com::sun::star::lang::EventObject& Event ) throw (RuntimeException);
             // XEventListener
             virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
 
@@ -1056,17 +1056,17 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         }
 
         // .............................................................................
-        void SAL_CALL AsyncLoader::queryTermination( const EventObject& /*Event*/ ) throw (TerminationVetoException, RuntimeException)
+        void SAL_CALL AsyncLoader::queryTermination( const com::sun::star::lang::EventObject& /*Event*/ ) throw (TerminationVetoException, RuntimeException)
         {
             throw TerminationVetoException();
         }
 
         // .............................................................................
-        void SAL_CALL AsyncLoader::notifyTermination( const EventObject& /*Event*/ ) throw (RuntimeException)
+        void SAL_CALL AsyncLoader::notifyTermination( const com::sun::star::lang::EventObject& /*Event*/ ) throw (RuntimeException)
         {
         }
         // .............................................................................
-        void SAL_CALL AsyncLoader::disposing( const EventObject& /*Source*/ ) throw (RuntimeException)
+        void SAL_CALL AsyncLoader::disposing( const com::sun::star::lang::EventObject& /*Source*/ ) throw (RuntimeException)
         {
         }
     }
