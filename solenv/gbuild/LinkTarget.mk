@@ -877,7 +877,9 @@ $(call gb_CxxObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target
 $(call gb_CxxObject_get_target,$(2)) : T_CXXFLAGS += $(3)
 $(call gb_CxxObject_get_target,$(2)) : \
 	OBJECTOWNER := $(call gb_Object__owner,$(2),$(1))
+ifeq ($(gb_ENABLE_PCH),$(true))
 $(call gb_CxxObject_get_target,$(2)) : $(call gb_PrecompiledHeader_get_timestamp,$(1))
+endif
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : CXXOBJECTS += $(2)
@@ -974,8 +976,9 @@ $(call gb_GenCxxObject_get_target,$(2)) : T_CXXFLAGS += $(3)
 $(call gb_GenCxxObject_get_target,$(2)) : \
 	OBJECTOWNER := $(call gb_Object__owner,$(2),$(1))
 $(call gb_GenCxxObject_get_target,$(2)) : GEN_CXX_SOURCE := $(call gb_GenCxxObject_get_source,$(2),$(1))
-
+ifeq ($(gb_ENABLE_PCH),$(true))
 $(call gb_GenCxxObject_get_target,$(2)) : $(call gb_PrecompiledHeader_get_timestamp,$(1))
+endif
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : GENCXXOBJECTS += $(2)
@@ -1020,9 +1023,11 @@ endef
 
 define gb_LinkTarget_add_noexception_object
 $(call gb_LinkTarget_add_cxxobject,$(1),$(2),$(gb_LinkTarget_NOEXCEPTIONFLAGS) $(call gb_LinkTarget__get_cxxflags,$(3)))
+ifeq ($(gb_ENABLE_PCH),$(true))
 # noexception objects are rare, so generate matching .pch only when needed
 $(call gb_CxxObject_get_target,$(2)) : $(call gb_NoexPrecompiledHeader_get_timestamp,$(1))
 $(call gb_LinkTarget_get_target,$(1)) : PCHOBJS = $$(PCHOBJEX) $$(PCHOBJNOEX)
+endif
 endef
 
 define gb_LinkTarget_add_exception_object

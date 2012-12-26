@@ -69,7 +69,6 @@ INTERACTIVE VARIABLES:
                        3... = degugging information + no optimizations + extra
                               debug output (usually extremely verbose). Levels
                               > 2 are not used very much.
-       ENABLE_PCH      If not empty, use precompiled headers.
        TIMELOG / timelog
                        If not empty enable the RTL_LOGFILE_* time logging facility.
                        export RTL_LOGFILE=rtl_logfile.nopid when running office, to
