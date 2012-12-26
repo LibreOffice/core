@@ -569,8 +569,6 @@ public:
     /// Set pointer in format of section on itself.
     void NodesArrChgd();
 
-    // ueberprueft bei _nicht_ versteckten Bereichen, ob es Inhalt gibt, der
-    // _nicht_ in einem versteckten (Unter-)Bereich liegt
     /** Check for not hidden areas whether there is content that is not in
        a hidden sub-area. */
     sal_Bool IsCntntHidden() const;

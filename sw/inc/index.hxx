@@ -129,8 +129,8 @@ public:
     explicit SwIndexReg();
     virtual ~SwIndexReg();
 
-    // rtti, abgeleitete moegens gleichtun oder nicht. Wenn sie es gleichtun
-    // kann ueber das SwIndexReg typsicher gecastet werden.
+    /// rtti, derived classes might do the same. If so, one can cast typesavely
+    /// via SwIndexReg.
     TYPEINFO();
 
     void MoveTo( SwIndexReg& rArr );

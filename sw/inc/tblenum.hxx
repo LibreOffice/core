@@ -54,7 +54,7 @@ enum TblChgMode
 enum SplitTbl_HeadlineOption
 {
     HEADLINE_NONE = 0,          // Leave everything in place.
-    HEADLINE_BORDERCOPY,        // von der davor obere Line der vorhergehen Line
+    HEADLINE_BORDERCOPY,        // Copy border of the previous line.
     HEADLINE_CNTNTCOPY,         // Copy 1st line with all contents.
     HEADLINE_BOXATTRCOPY,       // Copy box attributs of 1st line.
     HEADLINE_BOXATRCOLLCOPY     // Copy box attributes and paragraph styles of 1st line.
