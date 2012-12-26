@@ -184,6 +184,7 @@
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>
 #include <com/sun/star/form/XFormsSupplier2.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XController.hpp>
@@ -530,6 +531,7 @@
 #include <mdds/multi_type_vector_types.hpp>
 #include <memory>
 #include <numeric>
+#include <officecfg/Office/Calc.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
@@ -673,7 +675,6 @@
 #include <svx/compressgraphicdialog.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <svx/dbaexchange.hxx>
-#include <svx/dbcharsethelper.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/extedit.hxx>

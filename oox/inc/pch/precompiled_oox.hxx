@@ -196,6 +196,7 @@
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
 #include <com/sun/star/form/binding/XListEntrySource.hpp>
 #include <com/sun/star/form/binding/XValueBinding.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/graphic/GraphicObject.hpp>
@@ -295,7 +296,6 @@
 #include <com/sun/star/xml/sax/XLocator.hpp>
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/docpasswordhelper.hxx>
-#include <comphelper/genericpropertyset.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/seqstream.hxx>
@@ -360,7 +360,6 @@
 #include <vcl/cvtgrf.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/unohelp.hxx>
 #include <vector>
 #include <xmlscript/xmldlg_imexp.hxx>
 

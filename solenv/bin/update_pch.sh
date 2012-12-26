@@ -48,7 +48,32 @@ for x in $headers; do
                 elif ! test -f "$root/$file".cxx ; then
                     echo No file $file in $module/$makefile >&2
                 else
-                    cat "$root/$file".cxx | grep -e '^\s*#include' | sed 's/\(#include [<"][^>"]*[>"]\).*/\1/' | sed 's#\.\./##g#' >>$tmpfile
+
+function list_file_includes()
+(
+    ifdepth=0
+    # filter out only preprocessor lines, get the first and second "words" after the #,
+    # also replace " with @ (would cause trouble when doing echo of the line)
+    cat "$1" | grep '^\s*#' | sed 's/^\s*#/#/' | sed 's/^\(#\w*\s+\w*\)\s+.*/\1/' | sed 's/"/@/g' | \
+        while read line; do
+            # skip everything surrounded by any #if
+            if echo "$line" | grep -q "#if" ; then
+                ifdepth=$((ifdepth + 1))
+                lastif="$line"
+            elif echo "$line" | grep -q "#endif" ; then
+                ifdepth=$((ifdepth - 1))
+                lastif="#if"
+            elif echo "$line" | grep -q "#include"; then
+                if test $ifdepth -eq 0; then
+                    echo $line | sed 's/@/"/g'
+                else
+                    echo "#include in $lastif : $line" | sed 's/@/"/g' >&2
+                fi
+            fi
+        done
+)
+
+                    list_file_includes "$root/$file".cxx | sed 's/\(#include [<@][^>@]*[>@]\).*/\1/' | sed 's#\.\./##g#' >>$tmpfile
                 fi
             fi
         done
@@ -97,16 +122,12 @@ function filter_ignore()
 # - sores.hxx provides BMP_PLUGIN, which is redefined
 # - some sources play ugly #define tricks with editeng/eeitemid.hxx
 # - jerror.h and jpeglib.h are not self-contained
-# - prewin.h, postwin.h and shlobj.h are WNT-only (to be fixed in a better way)
     grep -e '\.h[">]$' -e '\.hpp[">]$' -e '\.hdl[">]$' -e '\.hxx[">]$' -e '^[^\.]*>$' | \
     grep -v -F -e '#include "gperffasttoken.hxx"' | \
     grep -v -F -e '#include <svtools/sores.hxx>' | \
     grep -v -F -e '#include <editeng/eeitemid.hxx>' | \
     grep -v -F -e '#include "jerror.h"' | \
-    grep -v -F -e '#include "jpeglib.h"' | \
-    grep -v -F -e '#include <prewin.h>' | \
-    grep -v -F -e '#include <postwin.h>' | \
-    grep -v -F -e '#include <shlobj.h>'
+    grep -v -F -e '#include "jpeglib.h"'
 )
 
     # " in #include "foo" breaks echo down below, so " -> @

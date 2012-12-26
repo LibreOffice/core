@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "stdio.h"
 #include "com/sun/star/beans/XPropertySet.hpp"
 #include "com/sun/star/document/XDocumentProperties.hpp"
 #include "com/sun/star/script/Converter.hpp"
@@ -27,6 +26,7 @@
 #include "rtl/ustring.hxx"
 #include "sal/config.h"
 #include "sal/types.h"
+#include "stdio.h"
 #include "svl/filenotation.hxx"
 #include "svl/inettype.hxx"
 #include "svl/urihelper.hxx"
@@ -324,7 +324,6 @@
 #include <osl/module.hxx>
 #include <osl/mutex.hxx>
 #include <osl/security.hxx>
-#include <pwd.h>
 #include <rtl/bootstrap.hxx>
 #include <rtl/crc.h>
 #include <rtl/instance.hxx>
@@ -370,7 +369,6 @@
 #include <svl/urlfilter.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
-#include <sys/types.h>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <toolkit/awt/vclxwindow.hxx>

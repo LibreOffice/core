@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "svtools/colrdlg.hxx"
 #include "avmedia/mediawindow.hxx"
 #include "canvas/elapsedtime.hxx"
 #include "com/sun/star/office/XAnnotationEnumeration.hpp"
@@ -24,6 +23,7 @@
 #include "sal/log.hxx"
 #include "sal/types.h"
 #include "sfx2/viewfrm.hxx"
+#include "svtools/colrdlg.hxx"
 #include "svtools/slidesorterbaropt.hxx"
 #include "svtools/svlbitm.hxx"
 #include "svtools/toolpanelopt.hxx"
@@ -187,6 +187,7 @@
 #include <com/sun/star/embed/XVisualObject.hpp>
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/frame/AutoRecovery.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/frame/DocumentTemplates.hpp>
 #include <com/sun/star/frame/FrameAction.hpp>
@@ -196,7 +197,6 @@
 #include <com/sun/star/frame/UnknownModuleException.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDocumentTemplates.hpp>

@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <osl/thread.h>
 #include "com/sun/star/beans/XPropertySet.hpp"
 #include "com/sun/star/beans/XPropertySetInfo.hpp"
 #include "com/sun/star/text/XLineNumberingProperties.hpp"
@@ -26,7 +25,6 @@
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b3dvector.hxx>
 #include <boost/bind.hpp>
-#include <boost/iterator/transform_iterator.hpp>
 #include <boost/iterator_adaptors.hpp>
 #include <boost/ptr_container/ptr_set.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
@@ -484,7 +482,6 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <cstdio>
 #include <functional>
 #include <i18npool/languagetag.hxx>
 #include <i18npool/mslangid.hxx>

@@ -18,9 +18,7 @@
 #include "editeng/boxitem.hxx"
 #include "editeng/editobj.hxx"
 #include "editeng/editstat.hxx"
-#include "editeng/editview.hxx"
 #include "editeng/fhgtitem.hxx"
-#include "editeng/flditem.hxx"
 #include "editeng/fontitem.hxx"
 #include "editeng/forbiddencharacterstable.hxx"
 #include "editeng/frmdiritem.hxx"
@@ -63,8 +61,6 @@
 #include <basegfx/point/b3dpoint.hxx>
 #include <basegfx/polygon/b2dlinegeometry.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolygonclipper.hxx>
-#include <basegfx/polygon/b2dpolygoncutandtouch.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
@@ -598,7 +594,6 @@
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vector>
-#include <wchar.h>
 #include <xmloff/xmlictxt.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

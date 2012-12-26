@@ -86,7 +86,6 @@
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
-#include <com/sun/star/style/TabStop.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
@@ -182,7 +181,6 @@
 #include <osl/file.hxx>
 #include <osl/module.hxx>
 #include <osl/mutex.hxx>
-#include <osl/process.h>
 #include <rtl/instance.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
@@ -205,7 +203,6 @@
 #include <tools/resmgr.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/graph.hxx>

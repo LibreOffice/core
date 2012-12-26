@@ -45,7 +45,6 @@
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <i18npool/mslangid.hxx>
-#include <iostream>
 #include <iterator>
 #include <osl/diagnose.h>
 #include <osl/nlsupport.h>
