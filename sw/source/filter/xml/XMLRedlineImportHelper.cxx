@@ -103,7 +103,7 @@ public:
     void CopyPositionInto(SwPosition& rPos, SwDoc & rDoc);
     SwDoc* GetDoc();
 
-    sal_Bool IsValid();
+    bool IsValid();
 };
 
 XTextRangeOrNodeIndexPosition::XTextRangeOrNodeIndexPosition() :
@@ -193,7 +193,7 @@ SwDoc* XTextRangeOrNodeIndexPosition::GetDoc()
     return (NULL != pIndex) ? pIndex->GetNodes().GetDoc() : lcl_GetDocViaTunnel(xRange);
 }
 
-sal_Bool XTextRangeOrNodeIndexPosition::IsValid()
+bool XTextRangeOrNodeIndexPosition::IsValid()
 {
     return ( xRange.is() || (pIndex != NULL) );
 }
@@ -233,7 +233,7 @@ public:
     RedlineInfo* pNextRedline;
 
     /// store whether we expect an adjustment for this redline
-    sal_Bool bNeedsAdjustment;
+    bool bNeedsAdjustment;
 };
 
 RedlineInfo::RedlineInfo() :
@@ -246,7 +246,7 @@ RedlineInfo::RedlineInfo() :
     aAnchorEnd(),
     pContentIndex(NULL),
     pNextRedline(NULL),
-    bNeedsAdjustment( sal_False )
+    bNeedsAdjustment( false )
 {
 }
 
@@ -262,7 +262,7 @@ RedlineInfo::~RedlineInfo()
 //
 
 XMLRedlineImportHelper::XMLRedlineImportHelper(
-    sal_Bool bNoRedlinesPlease,
+    bool bNoRedlinesPlease,
     const Reference<XPropertySet> & rModel,
     const Reference<XPropertySet> & rImportInfo ) :
         sEmpty(),
@@ -278,9 +278,9 @@ XMLRedlineImportHelper::XMLRedlineImportHelper(
         xImportInfoPropertySet(rImportInfo)
 {
     // check to see if redline mode is handled outside of component
-    sal_Bool bHandleShowChanges = sal_True;
-    sal_Bool bHandleRecordChanges = sal_True;
-    sal_Bool bHandleProtectionKey = sal_True;
+    bool bHandleShowChanges = true;
+    bool bHandleRecordChanges = true;
+    bool bHandleProtectionKey = true;
     if ( xImportInfoPropertySet.is() )
     {
         Reference<XPropertySetInfo> xInfo =
@@ -333,7 +333,7 @@ XMLRedlineImportHelper::~XMLRedlineImportHelper()
         else
         {
             // try if only the adjustment was missing
-            pInfo->bNeedsAdjustment = sal_False;
+            pInfo->bNeedsAdjustment = false;
             if( IsReady(pInfo) )
             {
                 OSL_FAIL("RedlineInfo without adjustment; now inserted");
@@ -355,9 +355,9 @@ XMLRedlineImportHelper::~XMLRedlineImportHelper()
 
     // set redline mode, either to info property set, or directly to
     // the document
-    sal_Bool bHandleShowChanges = sal_True;
-    sal_Bool bHandleRecordChanges = sal_True;
-    sal_Bool bHandleProtectionKey = sal_True;
+    bool bHandleShowChanges = true;
+    bool bHandleRecordChanges = true;
+    bool bHandleProtectionKey = true;
     if ( xImportInfoPropertySet.is() )
     {
         Reference<XPropertySetInfo> xInfo =
@@ -535,7 +535,7 @@ void XMLRedlineImportHelper::SetCursor(
             }
 
             // also remember that we expect an adjustment for this redline
-            pInfo->bNeedsAdjustment = sal_True;
+            pInfo->bNeedsAdjustment = true;
         }
         else
         {
@@ -576,7 +576,7 @@ void XMLRedlineImportHelper::AdjustStartNodeCursor(
         // RedlineInfo found; now set Cursor
         RedlineInfo* pInfo = aFind->second;
 
-        pInfo->bNeedsAdjustment = sal_False;
+        pInfo->bNeedsAdjustment = false;
 
         // if now ready, insert into document
         if( IsReady(pInfo) )
@@ -590,7 +590,7 @@ void XMLRedlineImportHelper::AdjustStartNodeCursor(
 }
 
 
-inline sal_Bool XMLRedlineImportHelper::IsReady(RedlineInfo* pRedline)
+inline bool XMLRedlineImportHelper::IsReady(RedlineInfo* pRedline)
 {
     // we can insert a redline if we have start & end, and we don't
     // expect adjustments for either of these

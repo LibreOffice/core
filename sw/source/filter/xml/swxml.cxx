@@ -133,8 +133,8 @@ sal_Int32 ReadThroughComponent(
     const sal_Char* pFilterName,
     const Sequence<Any>& rFilterArguments,
     const OUString& rName,
-    sal_Bool bMustBeSuccessfull,
-    sal_Bool bEncrypted )
+    bool bMustBeSuccessfull,
+    bool bEncrypted )
 {
     OSL_ENSURE(xInputStream.is(), "input stream missing");
     OSL_ENSURE(xModelComponent.is(), "document missing");
@@ -188,7 +188,7 @@ sal_Int32 ReadThroughComponent(
         // sax parser sends wrapped exceptions,
         // try to find the original one
         xml::sax::SAXException aSaxEx = *(xml::sax::SAXException*)(&r);
-        sal_Bool bTryChild = sal_True;
+        bool bTryChild = true;
 
         while( bTryChild )
         {
@@ -196,7 +196,7 @@ sal_Int32 ReadThroughComponent(
             if ( aSaxEx.WrappedException >>= aTmp )
                 aSaxEx = aTmp;
             else
-                bTryChild = sal_False;
+                bTryChild = false;
         }
 
         packages::zip::ZipIOException aBrokenPackage;
@@ -303,7 +303,7 @@ sal_Int32 ReadThroughComponent(
     const sal_Char* pFilterName,
     const Sequence<Any>& rFilterArguments,
     const OUString& rName,
-    sal_Bool bMustBeSuccessfull)
+    bool bMustBeSuccessfull)
 {
     OSL_ENSURE(xStorage.is(), "Need storage!");
     OSL_ENSURE(NULL != pStreamName, "Please, please, give me a name!");
@@ -362,7 +362,7 @@ sal_Int32 ReadThroughComponent(
         Any aAny = xProps->getPropertyValue(
                 OUString( RTL_CONSTASCII_USTRINGPARAM("Encrypted") ) );
 
-        sal_Bool bEncrypted = aAny.getValueType() == ::getBooleanCppuType() &&
+        bool bEncrypted = aAny.getValueType() == ::getBooleanCppuType() &&
                 *(sal_Bool *)aAny.getValue();
 
         uno::Reference <io::XInputStream> xInputStream = xStream->getInputStream();
@@ -903,7 +903,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
         xStorage, xModelComp, "meta.xml", "Meta.xml", xServiceFactory,
         (bOASIS ? "com.sun.star.comp.Writer.XMLOasisMetaImporter"
                 : "com.sun.star.comp.Writer.XMLMetaImporter"),
-        aEmptyArgs, rName, sal_False );
+        aEmptyArgs, rName, false );
 
     sal_uInt32 nWarn2 = 0;
     if( !(IsOrganizerMode() || IsBlockMode() || aOpt.IsFmtsOnly() ||
@@ -913,21 +913,21 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
             xStorage, xModelComp, "settings.xml", NULL, xServiceFactory,
             (bOASIS ? "com.sun.star.comp.Writer.XMLOasisSettingsImporter"
                     : "com.sun.star.comp.Writer.XMLSettingsImporter"),
-            aFilterArgs, rName, sal_False );
+            aFilterArgs, rName, false );
     }
 
     nRet = ReadThroughComponent(
         xStorage, xModelComp, "styles.xml", NULL, xServiceFactory,
         (bOASIS ? "com.sun.star.comp.Writer.XMLOasisStylesImporter"
                 : "com.sun.star.comp.Writer.XMLStylesImporter"),
-        aFilterArgs, rName, sal_True );
+        aFilterArgs, rName, true );
 
     if( !nRet && !(IsOrganizerMode() || aOpt.IsFmtsOnly()) )
         nRet = ReadThroughComponent(
            xStorage, xModelComp, "content.xml", "Content.xml", xServiceFactory,
             (bOASIS ? "com.sun.star.comp.Writer.XMLOasisContentImporter"
                     : "com.sun.star.comp.Writer.XMLContentImporter"),
-           aFilterArgs, rName, sal_True );
+           aFilterArgs, rName, true );
 
     if( !(IsOrganizerMode() || IsBlockMode() || bInsertMode ||
           aOpt.IsFmtsOnly() ) )

@@ -53,7 +53,7 @@ class XMLRedlineImportHelper
 
     /// if sal_True, no redlines should be inserted into document
     /// (This typically happen when a document is loaded in 'insert'-mode.)
-    sal_Bool bIgnoreRedlines;
+    bool bIgnoreRedlines;
 
     /// save information for saving and reconstruction of the redline mode
     ::com::sun::star::uno::Reference<
@@ -67,7 +67,7 @@ class XMLRedlineImportHelper
 public:
 
     XMLRedlineImportHelper(
-        sal_Bool bIgnoreRedlines,       /// ignore redlines mode
+        bool bIgnoreRedlines,       /// ignore redlines mode
 
         // property sets of model + import info for saving + restoring the
         // redline mode
@@ -134,7 +134,7 @@ public:
 
 private:
 
-    inline sal_Bool IsReady(RedlineInfo* pRedline);
+    inline bool IsReady(RedlineInfo* pRedline);
 
     void InsertIntoDocument(RedlineInfo* pRedline);
 

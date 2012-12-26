@@ -59,7 +59,7 @@ private:
     // helper methods to write XML streams
 
     /// write a single XML stream into the package
-    sal_Bool WriteThroughComponent(
+    bool WriteThroughComponent(
         /// the component we export
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XComponent> & xComponent,
@@ -77,7 +77,7 @@ private:
 
     /// write a single output stream
     /// (to be called either directly or by WriteThroughComponent(...))
-    sal_Bool WriteThroughComponent(
+    bool WriteThroughComponent(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::io::XOutputStream> & xOutputStream,
         const ::com::sun::star::uno::Reference<

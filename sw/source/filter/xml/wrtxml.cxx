@@ -238,7 +238,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
     }
 
     // #i69627#
-    const sal_Bool bOASIS = ( SotStorage::GetVersion( xStg ) > SOFFICE_FILEFORMAT_60 );
+    const bool bOASIS = ( SotStorage::GetVersion( xStg ) > SOFFICE_FILEFORMAT_60 );
     if ( bOASIS &&
          docfunc::HasOutlineStyleToBeWrittenAsNormalListStyle( *pDoc ) )
     {
@@ -297,7 +297,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
     }
 
     // export sub streams for package, else full stream into a file
-    sal_Bool bWarn = sal_False, bErr = sal_False;
+    bool bWarn = false, bErr = false;
     String sWarnFile, sErrFile;
 
     // RDF metadata: export if ODF >= 1.2
@@ -324,11 +324,11 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
         { /* ignore */ }
         catch (uno::Exception &)
         {
-            bWarn = sal_True;
+            bWarn = true;
         }
     }
 
-    sal_Bool bStoreMeta = ( SFX_CREATE_MODE_EMBEDDED != pDoc->GetDocShell()->GetCreateMode() );
+    bool bStoreMeta = ( SFX_CREATE_MODE_EMBEDDED != pDoc->GetDocShell()->GetCreateMode() );
     if ( !bStoreMeta )
     {
         try
@@ -352,7 +352,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
                         : "com.sun.star.comp.Writer.XMLMetaExporter"),
                 aEmptyArgs, aProps ) )
         {
-            bWarn = sal_True;
+            bWarn = true;
             sWarnFile = String( RTL_CONSTASCII_STRINGPARAM("meta.xml"),
                                 RTL_TEXTENCODING_ASCII_US );
         }
@@ -370,7 +370,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
             {
                 if( !bWarn )
                 {
-                    bWarn = sal_True;
+                    bWarn = true;
                     sWarnFile = String( RTL_CONSTASCII_STRINGPARAM("settings.xml"),
                                         RTL_TEXTENCODING_ASCII_US );
                 }
@@ -384,7 +384,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
                     : "com.sun.star.comp.Writer.XMLStylesExporter"),
             aFilterArgs, aProps ) )
     {
-        bErr = sal_True;
+        bErr = true;
         sErrFile = String( RTL_CONSTASCII_STRINGPARAM("styles.xml"),
                            RTL_TEXTENCODING_ASCII_US );
     }
@@ -398,7 +398,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
                         : "com.sun.star.comp.Writer.XMLContentExporter"),
                 aFilterArgs, aProps ) )
         {
-            bErr = sal_True;
+            bErr = true;
             sErrFile = String( RTL_CONSTASCII_STRINGPARAM("content.xml"),
                                RTL_TEXTENCODING_ASCII_US );
         }
@@ -500,7 +500,7 @@ sal_uLong SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,
             : ((Writer *)this)->Write( rPaM, *rMed.GetOutStream(), pFileName );
 }
 
-sal_Bool SwXMLWriter::WriteThroughComponent(
+bool SwXMLWriter::WriteThroughComponent(
     const uno::Reference<XComponent> & xComponent,
     const sal_Char* pStreamName,
     const uno::Reference<lang::XMultiServiceFactory> & rFactory,
@@ -517,7 +517,7 @@ sal_Bool SwXMLWriter::WriteThroughComponent(
                                pStreamName );
 
     // open stream
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     try
     {
         OUString sStreamName = OUString::createFromAscii( pStreamName );
@@ -527,7 +527,7 @@ sal_Bool SwXMLWriter::WriteThroughComponent(
 
         uno::Reference <beans::XPropertySet > xSet( xStream, uno::UNO_QUERY );
         if( !xSet.is() )
-            return sal_False;
+            return false;
 
         OUString aMime( RTL_CONSTASCII_USTRINGPARAM("text/xml") );
         uno::Any aAny;
@@ -568,7 +568,7 @@ sal_Bool SwXMLWriter::WriteThroughComponent(
 
 }
 
-sal_Bool SwXMLWriter::WriteThroughComponent(
+bool SwXMLWriter::WriteThroughComponent(
     const uno::Reference<io::XOutputStream> & xOutputStream,
     const uno::Reference<XComponent> & xComponent,
     const uno::Reference<XMultiServiceFactory> & rFactory,
@@ -604,7 +604,7 @@ sal_Bool SwXMLWriter::WriteThroughComponent(
     OSL_ENSURE( xExporter.is(),
             "can't instantiate export filter component" );
     if( !xExporter.is() )
-        return sal_False;
+        return false;
     RTL_LOGFILE_CONTEXT_TRACE1( aFilterLog, "%s instantiated.", pServiceName );
 
     // connect model and filter
