@@ -1,2 +1,2 @@
-el      external :       soltools NULL
-el	external					usr1 - all el_mkout NULL
+el  external : soltools NULL
+el  external\prj                                        nmake - all el_external NULL
