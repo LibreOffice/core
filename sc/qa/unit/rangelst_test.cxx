@@ -38,6 +38,7 @@ public:
     void testDeleteArea_0Ranges();
     void testJoin_Case1();
     void testJoin_Case2();
+    void testGetIntersectedRange();
 
     void testUpdateReference_DeleteRow();
     void testUpdateReference_DeleteCol();
@@ -63,6 +64,7 @@ public:
     CPPUNIT_TEST(testJoin_Case2);
     CPPUNIT_TEST(testUpdateReference_DeleteRow);
     CPPUNIT_TEST(testUpdateReference_DeleteCol);
+    CPPUNIT_TEST(testGetIntersectedRange);
     CPPUNIT_TEST_SUITE_END();
 
 
@@ -70,6 +72,30 @@ private:
     ScDocument *m_pDoc;
     ScDocShellRef m_xDocShRef;
 };
+
+namespace {
+
+std::ostream& operator<<(std::ostream& rStrm, const ScAddress& rAddr)
+{
+    rStrm << "Col: " << rAddr.Col() << " Row: " << rAddr.Row() << " Tab: " << rAddr.Tab() << "\n";
+    return rStrm;
+}
+
+std::ostream& operator<<(std::ostream& rStrm, const ScRange& rRange)
+{
+    rStrm << "ScRange: " << rRange.aStart << rRange.aEnd << "\n";
+    return rStrm;
+}
+
+std::ostream& operator<<(std::ostream& rStrm, const ScRangeList& rList)
+{
+    rStrm << "ScRangeList: \n";
+    for(size_t i = 0; i < rList.size(); ++i)
+        rStrm << *rList[i];
+    return rStrm;
+}
+
+}
 
 
 void Test::setUp()
@@ -447,6 +473,13 @@ void Test::testUpdateReference_DeleteCol()
         CPPUNIT_ASSERT(!aList.In(ScRange(4, nRow, 0)));
     }
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(12), aList.GetCellCount());
+}
+
+void Test::testGetIntersectedRange()
+{
+    ScRangeList aList(ScRange(2, 2, 0, 5, 5, 0));
+    ScRangeList aIntersecting = aList.GetIntersectedRange(ScRange(0, 0, 0, 3, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(ScRangeList(ScRange(2,2,0,3,3,0)), aIntersecting);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
