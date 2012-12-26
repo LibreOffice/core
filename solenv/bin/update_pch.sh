@@ -103,7 +103,7 @@ function filter_ignore()
 )
 
     # " in #include "foo" breaks echo down below, so " -> @
-    cat $tmpfile | sort -u | filter_ignore | sed 's/"/@/g' | \
+    cat $tmpfile | LC_ALL=C sort -u | filter_ignore | sed 's/"/@/g' | \
         (
         while read line; do
             file=`echo $line | sed 's/.*[<"@]\([^>"@]*\)[>"@].*/\1/'`
