@@ -25,7 +25,7 @@ else:
     __lngpath__ = unohelper.fileUrlToSystemPath(re.sub("program/(fundamental.ini|fundamentalrc)$", "", urebootstrap))
 __lngpath__ = __lngpath__ + "share/Scripts/python/LibreLogo/".replace("/", os.sep)
 
-__translang__ = "cz|de|dk|el|en|es|fr|hu|it|nl|no|pl|pt|ru|se|sl" # FIXME supported languages for language guessing, expand this list, according to the localizations
+__translang__ = "ca|cs|de|dk|el|en|es|et|fr|hu|it|nl|no|pl|pt|ro|ru|se|sl" # FIXME supported languages for language guessing, expand this list, according to the localizations
 __lng__ = {}
 __docs__ = {}
 __prevcode__ = None
@@ -303,7 +303,7 @@ def __translate__(arg = None):
     guess.enableLanguages(tuple([Locale(i, "", "") for i in __translang__.split("|")]))
     guess = guess.guessPrimaryLanguage(text, 0, len(text))
     try:
-        l = {'cs': 'cs_CZ', 'el': 'el_GR', 'en': 'en_US'}[guess.Language]
+        l = {'cs': 'cs_CZ', 'el': 'el_GR', 'en': 'en_US', 'pt': 'pt_BR'}[guess.Language]
     except:
         l = guess.Language + '_' + guess.Language.upper()
     lang = __l12n__(l)
@@ -344,7 +344,8 @@ def __translate__(arg = None):
     _.doc.getText().setString(text)
     # convert to paragraphs
     __dispatcher__(".uno:ExecuteSearch", (__getprop__("SearchItem.SearchString", r"\n"), __getprop__("SearchItem.ReplaceString", r"\n"), \
-        __getprop__("Quiet", True), __getprop__("SearchItem.Command", 3), __getprop__("SearchItem.StyleFamily", 2)))
+        __getprop__("Quiet", True), __getprop__("SearchItem.Command", 3), __getprop__("SearchItem.StyleFamily", 2), \
+        __getprop__("SearchItem.AlgorithmType", 1), __getprop__("SearchItem.RowDirection", 1), __getprop__("SearchItem.SearchFlags", 65536)))
 
 class LogoProgram(threading.Thread):
     def __init__(self, code):
@@ -482,6 +483,7 @@ def hideturtle():
     turtle = __getshape__(__TURTLE__)
     if turtle:
         z = turtle.getPosition()
+        z = __Point__(z.X + turtle.BoundRect.Width / 2.0, z.Y + turtle.BoundRect.Height / 2.0)
         turtle.PolyPolygon = __TURTLESHAPE__[1]
         __visible__(turtle, False)
         turtle.LineTransparence, turtle.FillTransparence = 100, 100 # for saved files
@@ -494,7 +496,9 @@ def showturtle():
         if not turtle.Parent:
             _.drawpage.add(turtle)
         z = turtle.getPosition()
-        turtle.PolyPolygon = __TURTLESHAPE__[0]
+        r, turtle.RotateAngle = turtle.RotateAngle, 0
+        turtle.PolyPolygon, turtle.RotateAngle = __TURTLESHAPE__[0], r
+        z = __Point__(z.X - turtle.BoundRect.Width / 2.0, z.Y - turtle.BoundRect.Height / 2.0) 
         turtle.setPosition(z)
         pencolor(_.pencolor)
         fillcolor(_.areacolor)

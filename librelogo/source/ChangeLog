@@ -1,3 +1,9 @@
+2012-12-26 László Németh:
+    * fix turtle position and rotation at repeated hideturtle/showturtle
+    * add new languages, fix Czech and Brazilian Portuguese for
+      language guessing at translation
+    * fix line break to paragraph break conversion at translation 
+
 2012-12-17 László Németh:
     * handle possible translation problems (strip terminating bars)
     * keep double compilation of the commands
