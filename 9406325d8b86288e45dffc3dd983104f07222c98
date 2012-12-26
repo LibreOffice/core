@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAASH///4k\u003d",
+        "filename": "sd/source/ui/view/ViewClipboard.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1000099
+      },
+      "writtenOn": "2012-12-26T08:06:28Z",
+      "side": 1,
+      "message": "it would be interesting to check the reason for the original code here. would you be able to provide some insights, please? Thanks!",
+      "revId": "9406325d8b86288e45dffc3dd983104f07222c98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
