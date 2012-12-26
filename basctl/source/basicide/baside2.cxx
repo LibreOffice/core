@@ -134,13 +134,8 @@ void lcl_PrintHeader( Printer* pPrinter, sal_uInt16 nPages, sal_uInt16 nCurPage,
 
         if( bOutput )
         {
-            OUStringBuffer aPageStr;
-            aPageStr.appendAscii( " [" );
-            aPageStr.append(IDE_RESSTR(RID_STR_PAGE));
-            aPageStr.append(' ');
-            aPageStr.append( nCurPage );
-            aPageStr.append(']');
-            pPrinter->DrawText( aPos, aPageStr.makeStringAndClear() );
+            OUString aPageStr = " [" + IDE_RESSTR(RID_STR_PAGE) + " " + OUString::valueOf( nCurPage ) + "]";
+            pPrinter->DrawText( aPos, aPageStr );
         }
     }
 
