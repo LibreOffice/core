@@ -987,19 +987,19 @@ sal_Bool SwXTextTables::hasElements(void) throw( uno::RuntimeException )
 
 OUString SwXTextTables::getImplementationName(void) throw( uno::RuntimeException )
 {
-    return C2U("SwXTextTables");
+    return OUString("SwXTextTables");
 }
 
 sal_Bool SwXTextTables::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    return rServiceName == C2U("com.sun.star.text.TextTables");
+    return rServiceName == "com.sun.star.text.TextTables";
 }
 
 uno::Sequence< OUString > SwXTextTables::getSupportedServiceNames(void) throw( uno::RuntimeException )
 {
     uno::Sequence< OUString > aRet(1);
     OUString* pArr = aRet.getArray();
-    pArr[0] = C2U("com.sun.star.text.TextTables");
+    pArr[0] = "com.sun.star.text.TextTables";
     return aRet;
 }
 
@@ -1144,19 +1144,19 @@ Any SwXFrameEnumeration<T>::nextElement(void) throw( NoSuchElementException, Wra
 template<FlyCntType T>
 OUString SwXFrameEnumeration<T>::getImplementationName(void) throw( RuntimeException )
 {
-    return C2U("SwXFrameEnumeration");
+    return OUString("SwXFrameEnumeration");
 }
 
 template<FlyCntType T>
 sal_Bool SwXFrameEnumeration<T>::supportsService(const OUString& ServiceName) throw( RuntimeException )
 {
-    return C2U("com.sun.star.container.XEnumeration") == ServiceName;
+    return ServiceName == "com.sun.star.container.XEnumeration";
 }
 
 template<FlyCntType T>
 Sequence< OUString > SwXFrameEnumeration<T>::getSupportedServiceNames(void) throw( RuntimeException )
 {
-    return ::comphelper::makeSequence(C2U("com.sun.star.container.XEnumeration"));
+    return ::comphelper::makeSequence(OUString("com.sun.star.container.XEnumeration"));
 }
 
 /******************************************************************
@@ -1164,17 +1164,17 @@ Sequence< OUString > SwXFrameEnumeration<T>::getSupportedServiceNames(void) thro
  ******************************************************************/
 OUString SwXFrames::getImplementationName(void) throw( RuntimeException )
 {
-    return C2U("SwXFrames");
+    return OUString("SwXFrames");
 }
 
 sal_Bool SwXFrames::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return C2U("com.sun.star.text.TextFrames") == rServiceName;
+    return rServiceName == "com.sun.star.text.TextFrames";
 }
 
 Sequence<OUString> SwXFrames::getSupportedServiceNames(void) throw( RuntimeException )
 {
-    return ::comphelper::makeSequence(C2U("com.sun.star.text.TextFrames"));
+    return ::comphelper::makeSequence(OUString("com.sun.star.text.TextFrames"));
 }
 
 SwXFrames::SwXFrames(SwDoc* _pDoc, FlyCntType eSet) :
@@ -1331,19 +1331,19 @@ SwXFrame* SwXFrames::GetObject(SwFrmFmt& rFmt, FlyCntType eType)
  ******************************************************************/
 OUString SwXTextFrames::getImplementationName(void) throw( RuntimeException )
 {
-    return C2U("SwXTextFrames");
+    return OUString("SwXTextFrames");
 }
 
 sal_Bool SwXTextFrames::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return C2U("com.sun.star.text.TextFrames") == rServiceName;
+    return rServiceName == "com.sun.star.text.TextFrames";
 }
 
 Sequence< OUString > SwXTextFrames::getSupportedServiceNames(void) throw( RuntimeException )
 {
     Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.TextFrames");
+    pArray[0] = "com.sun.star.text.TextFrames";
     return aRet;
 }
 
@@ -1361,19 +1361,19 @@ SwXTextFrames::~SwXTextFrames()
  ******************************************************************/
 OUString SwXTextGraphicObjects::getImplementationName(void) throw( RuntimeException )
 {
-    return C2U("SwXTextGraphicObjects");
+    return OUString("SwXTextGraphicObjects");
 }
 
 sal_Bool SwXTextGraphicObjects::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return C2U("com.sun.star.text.TextGraphicObjects") == rServiceName;
+    return rServiceName == "com.sun.star.text.TextGraphicObjects";
 }
 
 Sequence< OUString > SwXTextGraphicObjects::getSupportedServiceNames(void) throw( RuntimeException )
 {
     Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.TextGraphicObjects");
+    pArray[0] = "com.sun.star.text.TextGraphicObjects";
     return aRet;
 }
 
@@ -1391,19 +1391,19 @@ SwXTextGraphicObjects::~SwXTextGraphicObjects()
  ******************************************************************/
 OUString SwXTextEmbeddedObjects::getImplementationName(void) throw( RuntimeException )
 {
-    return C2U("SwXTextEmbeddedObjects");
+    return OUString("SwXTextEmbeddedObjects");
 }
 
 sal_Bool SwXTextEmbeddedObjects::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return C2U("com.sun.star.text.TextEmbeddedObjects") == rServiceName;
+    return rServiceName == "com.sun.star.text.TextEmbeddedObjects";
 }
 
 Sequence< OUString > SwXTextEmbeddedObjects::getSupportedServiceNames(void) throw( RuntimeException )
 {
     Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.TextEmbeddedObjects");
+    pArray[0] = "com.sun.star.text.TextEmbeddedObjects";
     return aRet;
 }
 
@@ -1418,19 +1418,19 @@ SwXTextEmbeddedObjects::~SwXTextEmbeddedObjects()
 
 OUString SwXTextSections::getImplementationName(void) throw( RuntimeException )
 {
-    return C2U("SwXTextSections");
+    return OUString("SwXTextSections");
 }
 
 sal_Bool SwXTextSections::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return C2U("com.sun.star.text.TextSections") == rServiceName;
+    return rServiceName == "com.sun.star.text.TextSections";
 }
 
 Sequence< OUString > SwXTextSections::getSupportedServiceNames(void) throw( RuntimeException )
 {
     Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.TextSections");
+    pArray[0] = "com.sun.star.text.TextSections";
     return aRet;
 }
 
@@ -1816,19 +1816,19 @@ sal_Bool SwXNumberingRulesCollection::hasElements(void) throw( uno::RuntimeExcep
 
 OUString SwXFootnotes::getImplementationName(void) throw( RuntimeException )
 {
-    return C2U("SwXFootnotes");
+    return OUString("SwXFootnotes");
 }
 
 sal_Bool SwXFootnotes::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return C2U("com.sun.star.text.Footnotes") == rServiceName;
+    return rServiceName == "com.sun.star.text.Footnotes";
 }
 
 Sequence< OUString > SwXFootnotes::getSupportedServiceNames(void) throw( RuntimeException )
 {
     Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.Footnotes");
+    pArray[0] = "com.sun.star.text.Footnotes";
     return aRet;
 }
 
@@ -1915,19 +1915,19 @@ Reference<XFootnote>    SwXFootnotes::GetObject( SwDoc& rDoc, const SwFmtFtn& rF
 
 OUString SwXReferenceMarks::getImplementationName(void) throw( RuntimeException )
 {
-    return C2U("SwXReferenceMarks");
+    return OUString("SwXReferenceMarks");
 }
 
 sal_Bool SwXReferenceMarks::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return C2U("com.sun.star.text.ReferenceMarks") == rServiceName;
+    return rServiceName == "com.sun.star.text.ReferenceMarks";
 }
 
 Sequence< OUString > SwXReferenceMarks::getSupportedServiceNames(void) throw( RuntimeException )
 {
     Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.ReferenceMarks");
+    pArray[0] = "com.sun.star.text.ReferenceMarks";
     return aRet;
 }
 

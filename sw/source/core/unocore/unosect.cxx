@@ -292,7 +292,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 
     if (m_pImpl->m_sName.isEmpty())
     {
-        m_pImpl->m_sName = C2U("TextSection");
+        m_pImpl->m_sName = "TextSection";
     }
     SectionType eType = (m_pImpl->m_pProps->m_bDDE)
         ? DDE_LINK_SECTION
@@ -1761,7 +1761,7 @@ throw (uno::RuntimeException)
 OUString SAL_CALL
 SwXTextSection::getImplementationName() throw (uno::RuntimeException)
 {
-    return C2U("SwXTextSection");
+    return OUString("SwXTextSection");
 }
 
 static char const*const g_ServicesTextSection[] =

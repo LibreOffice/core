@@ -906,14 +906,14 @@ throw( uno::RuntimeException )
     SolarMutexGuard aGuard;
     uno::Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.TextContent");
+    pArray[0] = "com.sun.star.text.TextContent";
     return aRet;
 }
 
 OUString SwXTextPortion::getImplementationName()
 throw( uno::RuntimeException )
 {
-    return C2U("SwXTextPortion");
+    return OUString("SwXTextPortion");
 }
 
 sal_Bool SwXTextPortion::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
@@ -948,13 +948,13 @@ throw( uno::RuntimeException )
 
     uno::Sequence< OUString > aRet(7);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.TextPortion");
-    pArray[1] = C2U("com.sun.star.style.CharacterProperties");
-    pArray[2] = C2U("com.sun.star.style.CharacterPropertiesAsian");
-    pArray[3] = C2U("com.sun.star.style.CharacterPropertiesComplex");
-    pArray[4] = C2U("com.sun.star.style.ParagraphProperties");
-    pArray[5] = C2U("com.sun.star.style.ParagraphPropertiesAsian");
-    pArray[6] = C2U("com.sun.star.style.ParagraphPropertiesComplex");
+    pArray[0] = "com.sun.star.text.TextPortion";
+    pArray[1] = "com.sun.star.style.CharacterProperties";
+    pArray[2] = "com.sun.star.style.CharacterPropertiesAsian";
+    pArray[3] = "com.sun.star.style.CharacterPropertiesComplex";
+    pArray[4] = "com.sun.star.style.ParagraphProperties";
+    pArray[5] = "com.sun.star.style.ParagraphPropertiesAsian";
+    pArray[6] = "com.sun.star.style.ParagraphPropertiesComplex";
     return aRet;
 }
 

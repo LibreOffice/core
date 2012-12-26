@@ -278,7 +278,7 @@ throw (uno::RuntimeException)
 OUString SAL_CALL
 SwXParagraph::getImplementationName() throw (uno::RuntimeException)
 {
-    return C2U("SwXParagraph");
+    return OUString("SwXParagraph");
 }
 
 static char const*const g_ServicesParagraph[] =
@@ -1291,7 +1291,7 @@ SwXParagraph::getAvailableServiceNames() throw (uno::RuntimeException)
 {
     uno::Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.TextContent");
+    pArray[0] = "com.sun.star.text.TextContent";
     return aRet;
 }
 

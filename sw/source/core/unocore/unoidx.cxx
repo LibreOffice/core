@@ -147,13 +147,13 @@ static void lcl_ConvertTOUNameToProgrammaticName(OUString& rTmp)
 
     if(rTmp.equals(pShellRes->aTOXUserName))
     {
-        rTmp = OUString(C2U(cUserDefined));
+        rTmp = cUserDefined;
     }
     // if the version is not English but the alternative index's name is
     // "User-Defined" a " (user)" is appended
     else if(rTmp.equalsAscii(cUserDefined))
     {
-        rTmp += C2U(cUserSuffix);
+        rTmp += cUserSuffix;
     }
 }
 
@@ -172,7 +172,7 @@ lcl_ConvertTOUNameToUserName(OUString& rTmp)
         if (rTmp.matchAsciiL(cUserDefined, sizeof(cUserDefined)) &&
             rTmp.matchAsciiL(cUserSuffix, sizeof(cUserSuffix), USER_LEN))
         {
-            rTmp = C2U(cUserDefined);
+            rTmp = cUserDefined;
         }
     }
 }
@@ -453,7 +453,7 @@ throw (uno::RuntimeException)
 OUString SAL_CALL
 SwXDocumentIndex::getImplementationName() throw (uno::RuntimeException)
 {
-    return C2U("SwXDocumentIndex");
+    return OUString("SwXDocumentIndex");
 }
 
 sal_Bool SAL_CALL
@@ -462,7 +462,7 @@ throw (uno::RuntimeException)
 {
     SolarMutexGuard g;
 
-    return C2U("com.sun.star.text.BaseIndex") == rServiceName
+    return rServiceName == "com.sun.star.text.BaseIndex"
         || ((TOX_INDEX == m_pImpl->m_eTOXType) && rServiceName == "com.sun.star.text.DocumentIndex")
         || ((TOX_CONTENT == m_pImpl->m_eTOXType) && rServiceName == "com.sun.star.text.ContentIndex")
         || ((TOX_USER == m_pImpl->m_eTOXType) && rServiceName == "com.sun.star.text.UserDefinedIndex")
@@ -479,30 +479,30 @@ SwXDocumentIndex::getSupportedServiceNames() throw (uno::RuntimeException)
 
     uno::Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.BaseIndex");
+    pArray[0] = "com.sun.star.text.BaseIndex";
     switch (m_pImpl->m_eTOXType)
     {
         case TOX_INDEX:
-            pArray[1] = C2U("com.sun.star.text.DocumentIndex");
+            pArray[1] = "com.sun.star.text.DocumentIndex";
         break;
         case TOX_CONTENT:
-            pArray[1] = C2U("com.sun.star.text.ContentIndex");
+            pArray[1] = "com.sun.star.text.ContentIndex";
         break;
         case TOX_TABLES:
-            pArray[1] = C2U("com.sun.star.text.TableIndex");
+            pArray[1] = "com.sun.star.text.TableIndex";
         break;
         case TOX_ILLUSTRATIONS:
-            pArray[1] = C2U("com.sun.star.text.IllustrationsIndex");
+            pArray[1] = "com.sun.star.text.IllustrationsIndex";
         break;
         case TOX_OBJECTS:
-            pArray[1] = C2U("com.sun.star.text.ObjectIndex");
+            pArray[1] = "com.sun.star.text.ObjectIndex";
         break;
         case TOX_AUTHORITIES:
-            pArray[1] = C2U("com.sun.star.text.Bibliography");
+            pArray[1] = "com.sun.star.text.Bibliography";
         break;
         //case TOX_USER:
         default:
-            pArray[1] = C2U("com.sun.star.text.UserDefinedIndex");
+            pArray[1] = "com.sun.star.text.UserDefinedIndex";
     }
     return aRet;
 }
@@ -1669,7 +1669,7 @@ static const sal_Char cTextContent[]   = "com.sun.star.text.TextContent";
 OUString SAL_CALL
 SwXDocumentIndexMark::getImplementationName() throw (uno::RuntimeException)
 {
-    return C2U("SwXDocumentIndexMark");
+    return OUString("SwXDocumentIndexMark");
 }
 
 sal_Bool SAL_CALL
@@ -1698,19 +1698,19 @@ SwXDocumentIndexMark::getSupportedServiceNames() throw (uno::RuntimeException)
     const sal_Int32 nCnt = (m_pImpl->m_eTOXType == TOX_INDEX) ? 4 : 3;
     uno::Sequence< OUString > aRet(nCnt);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U(cBaseMark);
-    pArray[1] = C2U(cTextContent);
+    pArray[0] = cBaseMark;
+    pArray[1] = cTextContent;
     switch (m_pImpl->m_eTOXType)
     {
         case TOX_USER:
-            pArray[2] = C2U(cUserMark);
+            pArray[2] = cUserMark;
         break;
         case TOX_CONTENT:
-            pArray[2] = C2U(cContentMark);
+            pArray[2] = cContentMark;
         break;
         case TOX_INDEX:
-            pArray[2] = C2U(cIdxMark);
-            pArray[3] = C2U(cIdxMarkAsian);
+            pArray[2] = cIdxMark;
+            pArray[3] = cIdxMarkAsian;
         break;
 
         default:
@@ -2375,7 +2375,7 @@ SwXDocumentIndexes::~SwXDocumentIndexes()
 OUString SAL_CALL
 SwXDocumentIndexes::getImplementationName() throw (uno::RuntimeException)
 {
-    return C2U("SwXDocumentIndexes");
+    return OUString("SwXDocumentIndexes");
 }
 
 static char const*const g_ServicesDocumentIndexes[] =
@@ -2577,7 +2577,7 @@ OUString SAL_CALL
 SwXDocumentIndex::StyleAccess_Impl::getImplementationName()
 throw (uno::RuntimeException)
 {
-    return C2U("SwXDocumentIndex::StyleAccess_Impl");
+    return OUString("SwXDocumentIndex::StyleAccess_Impl");
 }
 
 static char const*const g_ServicesIndexStyleAccess[] =
@@ -2711,7 +2711,7 @@ OUString SAL_CALL
 SwXDocumentIndex::TokenAccess_Impl::getImplementationName()
 throw (uno::RuntimeException)
 {
-    return C2U("SwXDocumentIndex::TokenAccess_Impl");
+    return OUString("SwXDocumentIndex::TokenAccess_Impl");
 }
 
 static char const*const g_ServicesIndexTokenAccess[] =
@@ -2893,7 +2893,7 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
                 if(nType < 0 || nType > text::BibliographyDataField::ISBN)
                 {
                     lang::IllegalArgumentException aExcept;
-                    aExcept.Message = C2U("BibliographyDataField - wrong value");
+                    aExcept.Message = "BibliographyDataField - wrong value";
                     aExcept.ArgumentPosition = static_cast< sal_Int16 >(j);
                     throw aExcept;
                 }
@@ -3009,15 +3009,15 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
 
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
-                pArr[nCurrentElement].Name = C2U("TokenType");
+                pArr[nCurrentElement].Name = "TokenType";
                 pArr[nCurrentElement++].Value <<=
                     OUString(RTL_CONSTASCII_USTRINGPARAM("TokenEntryNumber"));
 
-                pArr[nCurrentElement].Name = C2U("CharacterStyleName");
+                pArr[nCurrentElement].Name = "CharacterStyleName";
                 pArr[nCurrentElement++].Value <<= aProgCharStyle;
                 if( aToken.nChapterFormat != CF_NUMBER )
                 {
-                    pArr[nCurrentElement].Name = C2U("ChapterFormat");
+                    pArr[nCurrentElement].Name = "ChapterFormat";
                     sal_Int16 nVal;
 // the allowed values for chapter format, when used as entry number,
 // are CF_NUMBER and CF_NUM_NOPREPST_TITLE only, all else forced to
@@ -3038,7 +3038,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                 // only  a ChapterLevel != MAXLEVEL is registered
                 if (aToken.nOutlineLevel != MAXLEVEL)
                 {
-                    pArr[nCurrentElement].Name = C2U("ChapterLevel");
+                    pArr[nCurrentElement].Name = "ChapterLevel";
                     pArr[nCurrentElement].Value <<= aToken.nOutlineLevel;
                 }
             }
@@ -3049,10 +3049,10 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                 rCurTokenSeq.realloc( 2 );
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
-                pArr[0].Name = C2U("TokenType");
+                pArr[0].Name = "TokenType";
                 pArr[0].Value <<= OUString(RTL_CONSTASCII_USTRINGPARAM("TokenEntryText"));
 
-                pArr[1].Name = C2U("CharacterStyleName");
+                pArr[1].Name = "CharacterStyleName";
                 pArr[1].Value <<= aProgCharStyle;
             }
             break;
@@ -3061,29 +3061,29 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                 rCurTokenSeq.realloc(5); // #i21237#
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
-                pArr[0].Name = C2U("TokenType");
+                pArr[0].Name = "TokenType";
                 pArr[0].Value <<= OUString(RTL_CONSTASCII_USTRINGPARAM("TokenTabStop"));
 
                 if(SVX_TAB_ADJUST_END == aToken.eTabAlign)
                 {
-                    pArr[1].Name = C2U("TabStopRightAligned");
+                    pArr[1].Name = "TabStopRightAligned";
                     sal_Bool bTemp = sal_True;
                     pArr[1].Value.setValue(&bTemp, ::getCppuBooleanType());
                 }
                 else
                 {
-                    pArr[1].Name = C2U("TabStopPosition");
+                    pArr[1].Name = "TabStopPosition";
                     sal_Int32 nPos = (TWIP_TO_MM100(aToken.nTabStopPosition));
                     if(nPos < 0)
                         nPos = 0;
                     pArr[1].Value <<= (sal_Int32)nPos;
                 }
-                pArr[2].Name = C2U("TabStopFillCharacter");
+                pArr[2].Name = "TabStopFillCharacter";
                 pArr[2].Value <<= OUString(aToken.cTabFillChar);
-                pArr[3].Name = C2U("CharacterStyleName");
+                pArr[3].Name = "CharacterStyleName";
                 pArr[3].Value <<= aProgCharStyle;
                 // #i21237#
-                pArr[4].Name = C2U("WithTab");
+                pArr[4].Name = "WithTab";
                 pArr[4].Value <<= static_cast<sal_Bool>(aToken.bWithTab);
             }
             break;
@@ -3092,13 +3092,13 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                 rCurTokenSeq.realloc( 3 );
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
-                pArr[0].Name = C2U("TokenType");
+                pArr[0].Name = "TokenType";
                 pArr[0].Value <<= OUString(RTL_CONSTASCII_USTRINGPARAM("TokenText"));
 
-                pArr[1].Name = C2U("CharacterStyleName");
+                pArr[1].Name = "CharacterStyleName";
                 pArr[1].Value <<= aProgCharStyle;
 
-                pArr[2].Name = C2U("Text");
+                pArr[2].Name = "Text";
                 pArr[2].Value <<= OUString(aToken.sText);
             }
             break;
@@ -3107,10 +3107,10 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                 rCurTokenSeq.realloc( 2 );
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
-                pArr[0].Name = C2U("TokenType");
+                pArr[0].Name = "TokenType";
                 pArr[0].Value <<= OUString(RTL_CONSTASCII_USTRINGPARAM("TokenPageNumber"));
 
-                pArr[1].Name = C2U("CharacterStyleName");
+                pArr[1].Name = "CharacterStyleName";
                 pArr[1].Value <<= aProgCharStyle;
             }
             break;
@@ -3119,13 +3119,13 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                 rCurTokenSeq.realloc( 4 );
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
-                pArr[0].Name = C2U("TokenType");
+                pArr[0].Name = "TokenType";
                 pArr[0].Value <<= OUString(RTL_CONSTASCII_USTRINGPARAM("TokenChapterInfo"));
 
-                pArr[1].Name = C2U("CharacterStyleName");
+                pArr[1].Name = "CharacterStyleName";
                 pArr[1].Value <<= aProgCharStyle;
 
-                pArr[2].Name = C2U("ChapterFormat");
+                pArr[2].Name = "ChapterFormat";
                 sal_Int16 nVal = text::ChapterFormat::NUMBER;
                 switch(aToken.nChapterFormat)
                 {
@@ -3147,7 +3147,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                 }
                 pArr[2].Value <<= nVal;
 // #i53420#
-                pArr[3].Name = C2U("ChapterLevel");
+                pArr[3].Name = "ChapterLevel";
                 pArr[3].Value <<= aToken.nOutlineLevel;
             }
             break;
@@ -3156,10 +3156,10 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                 rCurTokenSeq.realloc( 2 );
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
-                pArr[0].Name = C2U("TokenType");
+                pArr[0].Name = "TokenType";
                 pArr[0].Value <<=
                     OUString(RTL_CONSTASCII_USTRINGPARAM("TokenHyperlinkStart"));
-                pArr[1].Name = C2U("CharacterStyleName");
+                pArr[1].Name = "CharacterStyleName";
                 pArr[1].Value <<= aProgCharStyle;
             }
             break;
@@ -3168,7 +3168,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                 rCurTokenSeq.realloc( 1 );
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
-                pArr[0].Name = C2U("TokenType");
+                pArr[0].Name = "TokenType";
                 pArr[0].Value <<=
                     OUString(RTL_CONSTASCII_USTRINGPARAM("TokenHyperlinkEnd"));
             }
@@ -3178,14 +3178,14 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                 rCurTokenSeq.realloc( 3 );
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
-                pArr[0].Name = C2U("TokenType");
+                pArr[0].Name = "TokenType";
                 pArr[0].Value <<=
                     OUString(RTL_CONSTASCII_USTRINGPARAM("TokenBibliographyDataField"));
 
-                pArr[1].Name = C2U("CharacterStyleName");
+                pArr[1].Name = "CharacterStyleName";
                 pArr[1].Value <<= aProgCharStyle;
 
-                pArr[2].Name = C2U("BibliographyDataField");
+                pArr[2].Name = "BibliographyDataField";
                 pArr[2].Value <<= sal_Int16(aToken.nAuthorityField);
             }
             break;

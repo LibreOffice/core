@@ -173,7 +173,7 @@ static void lcl_SetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimpleEn
                 else
                 {
                     lang::IllegalArgumentException aExcept;
-                    aExcept.Message = C2U("relative width cannot be switched on with this property");
+                    aExcept.Message = "relative width cannot be switched on with this property";
                     throw aExcept;
                 }
             }
@@ -1248,7 +1248,7 @@ SwTableBox* SwXCell::FindBox(SwTable* pTable, SwTableBox* pBox2)
 
 OUString SwXCell::getImplementationName(void) throw( uno::RuntimeException )
 {
-    return C2U("SwXCell");
+    return OUString("SwXCell");
 }
 
 sal_Bool SwXCell::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
@@ -1261,7 +1261,7 @@ uno::Sequence< OUString > SwXCell::getSupportedServiceNames(void) throw( uno::Ru
 {
     uno::Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.CellProperties");
+    pArray[0] = "com.sun.star.text.CellProperties";
     return aRet;
 }
 
@@ -1270,19 +1270,19 @@ uno::Sequence< OUString > SwXCell::getSupportedServiceNames(void) throw( uno::Ru
  ******************************************************************/
 OUString SwXTextTableRow::getImplementationName(void) throw( uno::RuntimeException )
 {
-    return C2U("SwXTextTableRow");
+    return OUString("SwXTextTableRow");
 }
 
 sal_Bool SwXTextTableRow::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    return C2U("com.sun.star.text.TextTableRow") == rServiceName;
+    return rServiceName == "com.sun.star.text.TextTableRow";
 }
 
 uno::Sequence< OUString > SwXTextTableRow::getSupportedServiceNames(void) throw( uno::RuntimeException )
 {
     uno::Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.TextTableRow");
+    pArray[0] = "com.sun.star.text.TextTableRow";
     return aRet;
 }
 TYPEINIT1(SwXTextTableRow, SwClient);
@@ -1457,12 +1457,12 @@ SwTableLine* SwXTextTableRow::FindLine(SwTable* pTable, SwTableLine* pLine)
  ******************************************************************/
 OUString SwXTextTableCursor::getImplementationName(void) throw( uno::RuntimeException )
 {
-    return C2U("SwXTextTableCursor");
+    return OUString("SwXTextTableCursor");
 }
 
 sal_Bool SwXTextTableCursor::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    return C2U("com.sun.star.text.TextTableCursor") == rServiceName;
+    return rServiceName == "com.sun.star.text.TextTableCursor";
 }
 
 IMPLEMENT_FORWARD_XINTERFACE2(SwXTextTableCursor,SwXTextTableCursor_Base,OTextCursorHelper)
@@ -1477,7 +1477,7 @@ uno::Sequence< OUString > SwXTextTableCursor::getSupportedServiceNames(void) thr
 {
     uno::Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.TextTableCursor");
+    pArray[0] = "com.sun.star.text.TextTableCursor";
     return aRet;
 }
 
@@ -2517,7 +2517,7 @@ uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXTextTable::getDataArray()
     if(!nRowCount || !nColCount)
     {
         uno::RuntimeException aRuntime;
-        aRuntime.Message = C2U("Table too complex");
+        aRuntime.Message = "Table too complex";
         throw aRuntime;
     }
     SwFrmFmt* pFmt = GetFrmFmt();
@@ -2583,7 +2583,7 @@ void SAL_CALL SwXTextTable::setDataArray(
         if(pTable->IsTblComplex())
         {
             uno::RuntimeException aRuntime;
-            aRuntime.Message = C2U("Table too complex");
+            aRuntime.Message = "Table too complex";
             throw aRuntime;
         }
 
@@ -2643,7 +2643,7 @@ uno::Sequence< uno::Sequence< double > > SwXTextTable::getData(void)
     if(!nRowCount || !nColCount)
     {
         uno::RuntimeException aRuntime;
-        aRuntime.Message = C2U("Table too complex");
+        aRuntime.Message = "Table too complex";
         throw aRuntime;
     }
     //
@@ -2687,7 +2687,7 @@ void SwXTextTable::setData(const uno::Sequence< uno::Sequence< double > >& rData
     if(!nRowCount || !nColCount)
     {
         uno::RuntimeException aRuntime;
-        aRuntime.Message = C2U("Table too complex");
+        aRuntime.Message = "Table too complex";
         throw aRuntime;
     }
     SwFrmFmt* pFmt = GetFrmFmt();
@@ -2731,7 +2731,7 @@ uno::Sequence< OUString > SwXTextTable::getRowDescriptions(void) throw( uno::Run
     if(!nRowCount)
     {
         uno::RuntimeException aRuntime;
-        aRuntime.Message = C2U("Table too complex");
+        aRuntime.Message = "Table too complex";
         throw aRuntime;
     }
     uno::Sequence< OUString > aRet(bFirstColumnAsLabel ? nRowCount - 1 : nRowCount);
@@ -2807,7 +2807,7 @@ uno::Sequence< OUString > SwXTextTable::getColumnDescriptions(void)
     if(!nColCount)
     {
         uno::RuntimeException aRuntime;
-        aRuntime.Message = C2U("Table too complex");
+        aRuntime.Message = "Table too complex";
         throw aRuntime;
     }
     uno::Sequence< OUString > aRet(bFirstRowAsLabel ? nColCount - 1 : nColCount);
@@ -2847,7 +2847,7 @@ void SwXTextTable::setColumnDescriptions(const uno::Sequence< OUString >& rColum
     if(!nColCount)
     {
         uno::RuntimeException aRuntime;
-        aRuntime.Message = C2U("Table too complex");
+        aRuntime.Message = "Table too complex";
         throw aRuntime;
     }
     SwFrmFmt* pFmt = GetFrmFmt();
@@ -3608,7 +3608,7 @@ void SwXTextTable::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 
 OUString SAL_CALL SwXTextTable::getImplementationName(void) throw( uno::RuntimeException )
 {
-    return C2U("SwXTextTable");
+    return OUString("SwXTextTable");
 }
 
 sal_Bool SwXTextTable::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
@@ -3624,10 +3624,10 @@ uno::Sequence< OUString > SwXTextTable::getSupportedServiceNames(void) throw( un
 {
     uno::Sequence< OUString > aRet(4);
     OUString* pArr = aRet.getArray();
-    pArr[0] = C2U("com.sun.star.document.LinkTarget");
-    pArr[1] = C2U("com.sun.star.text.TextTable");
-    pArr[2] = C2U("com.sun.star.text.TextContent");
-    pArr[2] = C2U("com.sun.star.text.TextSortable");
+    pArr[0] = "com.sun.star.document.LinkTarget";
+    pArr[1] = "com.sun.star.text.TextTable";
+    pArr[2] = "com.sun.star.text.TextContent";
+    pArr[2] = "com.sun.star.text.TextSortable";
     return aRet;
 }
 
@@ -3657,7 +3657,7 @@ TYPEINIT1(SwXCellRange, SwClient);
 
 OUString SwXCellRange::getImplementationName(void) throw( uno::RuntimeException )
 {
-    return C2U("SwXCellRange");
+    return OUString("SwXCellRange");
 }
 
 sal_Bool SwXCellRange::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
@@ -3673,13 +3673,13 @@ uno::Sequence< OUString > SwXCellRange::getSupportedServiceNames(void) throw( un
 {
     uno::Sequence< OUString > aRet(7);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.CellRange");
-     pArray[1] = C2U("com.sun.star.style.CharacterProperties");
-    pArray[2] = C2U("com.sun.star.style.CharacterPropertiesAsian");
-    pArray[3] = C2U("com.sun.star.style.CharacterPropertiesComplex");
-    pArray[4] = C2U("com.sun.star.style.ParagraphProperties");
-    pArray[5] = C2U("com.sun.star.style.ParagraphPropertiesAsian");
-    pArray[6] = C2U("com.sun.star.style.ParagraphPropertiesComplex");
+    pArray[0] = "com.sun.star.text.CellRange";
+    pArray[1] = "com.sun.star.style.CharacterProperties";
+    pArray[2] = "com.sun.star.style.CharacterPropertiesAsian";
+    pArray[3] = "com.sun.star.style.CharacterPropertiesComplex";
+    pArray[4] = "com.sun.star.style.ParagraphProperties";
+    pArray[5] = "com.sun.star.style.ParagraphPropertiesAsian";
+    pArray[6] = "com.sun.star.style.ParagraphPropertiesComplex";
     return aRet;
 }
 
@@ -4046,7 +4046,7 @@ void SwXCellRange::GetDataSequence(
     if(!nRowCount || !nColCount)
     {
         uno::RuntimeException aRuntime;
-        aRuntime.Message = C2U("Table too complex");
+        aRuntime.Message = "Table too complex";
         throw aRuntime;
     }
 
@@ -4184,7 +4184,7 @@ uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXCellRange::getDataArray()
     if(!nRowCount || !nColCount)
     {
         uno::RuntimeException aRuntime;
-        aRuntime.Message = C2U("Table too complex");
+        aRuntime.Message = "Table too complex";
         throw aRuntime;
     }
     uno::Sequence< uno::Sequence< uno::Any > > aRowSeq(nRowCount);
@@ -4245,7 +4245,7 @@ void SAL_CALL SwXCellRange::setDataArray(
     if(!nRowCount || !nColCount)
     {
         uno::RuntimeException aRuntime;
-        aRuntime.Message = C2U("Table too complex");
+        aRuntime.Message = "Table too complex";
         throw aRuntime;
     }
     SwFrmFmt* pFmt = GetFrmFmt();
@@ -4308,7 +4308,7 @@ uno::Sequence< uno::Sequence< double > > SwXCellRange::getData(void) throw( uno:
     if(!nRowCount || !nColCount)
     {
         uno::RuntimeException aRuntime;
-        aRuntime.Message = C2U("Table too complex");
+        aRuntime.Message = "Table too complex";
         throw aRuntime;
     }
     uno::Sequence< uno::Sequence< double > > aRowSeq(bFirstRowAsLabel ? nRowCount - 1 : nRowCount);
@@ -4347,7 +4347,7 @@ void SwXCellRange::setData(const uno::Sequence< uno::Sequence< double > >& rData
     if(!nRowCount || !nColCount)
     {
         uno::RuntimeException aRuntime;
-        aRuntime.Message = C2U("Table too complex");
+        aRuntime.Message = "Table too complex";
         throw aRuntime;
     }
     SwFrmFmt* pFmt = GetFrmFmt();
@@ -4389,7 +4389,7 @@ uno::Sequence< OUString > SwXCellRange::getRowDescriptions(void)
     if(!nRowCount)
     {
         uno::RuntimeException aRuntime;
-        aRuntime.Message = C2U("Table too complex");
+        aRuntime.Message = "Table too complex";
         throw aRuntime;
     }
     uno::Sequence< OUString > aRet(bFirstColumnAsLabel ? nRowCount - 1 : nRowCount);
@@ -4463,7 +4463,7 @@ uno::Sequence< OUString > SwXCellRange::getColumnDescriptions(void)
     if(!nColCount)
     {
         uno::RuntimeException aRuntime;
-        aRuntime.Message = C2U("Table too complex");
+        aRuntime.Message = "Table too complex";
         throw aRuntime;
     }
     uno::Sequence< OUString > aRet(bFirstRowAsLabel ? nColCount - 1 : nColCount);
@@ -4617,19 +4617,19 @@ void SwXCellRange::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
  ******************************************************************/
 OUString SwXTableRows::getImplementationName(void) throw( uno::RuntimeException )
 {
-    return C2U("SwXTableRows");
+    return OUString("SwXTableRows");
 }
 
 sal_Bool SwXTableRows::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    return C2U("com.sun.star.text.TableRows") == rServiceName;
+    return rServiceName == "com.sun.star.text.TableRows";
 }
 
 uno::Sequence< OUString > SwXTableRows::getSupportedServiceNames(void) throw( uno::RuntimeException )
 {
     uno::Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.TableRows");
+    pArray[0] = "com.sun.star.text.TableRows";
     return aRet;
 }
 TYPEINIT1(SwXTableRows, SwClient);
@@ -4726,7 +4726,7 @@ void SwXTableRows::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno:
             if (nCount <= 0 || !(0 <= nIndex && nIndex <= nRowCount))
             {
                 uno::RuntimeException aExcept;
-                aExcept.Message = C2U("Illegal arguments");
+                aExcept.Message = "Illegal arguments";
                 throw aExcept;
             }
 
@@ -4817,7 +4817,7 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno:
         if(!bSuccess)
         {
             uno::RuntimeException aExcept;
-            aExcept.Message = C2U("Illegal arguments");
+            aExcept.Message = "Illegal arguments";
             throw aExcept;
         }
     }
@@ -4833,19 +4833,19 @@ void SwXTableRows::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
  ******************************************************************/
 OUString SwXTableColumns::getImplementationName(void) throw( uno::RuntimeException )
 {
-    return C2U("SwXTableColumns");
+    return OUString("SwXTableColumns");
 }
 
 sal_Bool SwXTableColumns::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    return C2U("com.sun.star.text.TableColumns") == rServiceName;
+    return rServiceName == "com.sun.star.text.TableColumns";
 }
 
 uno::Sequence< OUString > SwXTableColumns::getSupportedServiceNames(void) throw( uno::RuntimeException )
 {
     uno::Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.TableColumns");
+    pArray[0] = "com.sun.star.text.TableColumns";
     return aRet;
 }
 
@@ -4938,7 +4938,7 @@ void SwXTableColumns::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( u
             if (nCount <= 0 || !(0 <= nIndex && nIndex <= nColCount))
             {
                 uno::RuntimeException aExcept;
-                aExcept.Message = C2U("Illegal arguments");
+                aExcept.Message = "Illegal arguments";
                 throw aExcept;
             }
 
@@ -5026,7 +5026,7 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( u
         if(!bSuccess)
         {
             uno::RuntimeException aExcept;
-            aExcept.Message = C2U("Illegal arguments");
+            aExcept.Message = "Illegal arguments";
             throw aExcept;
         }
     }

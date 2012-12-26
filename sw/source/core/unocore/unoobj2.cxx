@@ -530,7 +530,7 @@ SwXParagraphEnumeration::~SwXParagraphEnumeration()
 OUString SAL_CALL
 SwXParagraphEnumeration::getImplementationName() throw (uno::RuntimeException)
 {
-    return C2U("SwXParagraphEnumeration");
+    return OUString("SwXParagraphEnumeration");
 }
 
 static char const*const g_ServicesParagraphEnum[] =
@@ -1645,7 +1645,7 @@ throw (uno::RuntimeException)
 OUString SAL_CALL
 SwXTextRanges::getImplementationName() throw (uno::RuntimeException)
 {
-    return C2U("SwXTextRanges");
+    return OUString("SwXTextRanges");
 }
 
 static char const*const g_ServicesTextRanges[] =
@@ -1942,7 +1942,7 @@ throw (container::NoSuchElementException,
 OUString SAL_CALL
 SwXParaFrameEnumeration::getImplementationName() throw (uno::RuntimeException)
 {
-    return C2U("SwXParaFrameEnumeration");
+    return OUString("SwXParaFrameEnumeration");
 }
 
 static char const*const g_ServicesParaFrameEnum[] =

@@ -1366,25 +1366,25 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
     //
     aResult.realloc(5);
     sal_Int32 nProps = 0;
-    aResult[nProps  ].Name = C2U("FirstCellAsLabel");
+    aResult[nProps  ].Name = "FirstCellAsLabel";
     aResult[nProps++].Value <<= bFirstCellIsLabel;
-    aResult[nProps  ].Name = C2U("CellRangeRepresentation");
+    aResult[nProps  ].Name = "CellRangeRepresentation";
     aResult[nProps++].Value <<= aSortedCellRanges;
     if (!aBrokenCellRangeForExport.isEmpty())
     {
-        aResult[nProps  ].Name = C2U("BrokenCellRangeForExport");
+        aResult[nProps  ].Name = "BrokenCellRangeForExport";
         aResult[nProps++].Value <<= aBrokenCellRangeForExport;
     }
     if (nDtaSrcIsColumns == 0 || nDtaSrcIsColumns == 1)
     {
         chart::ChartDataRowSource eDataRowSource = (nDtaSrcIsColumns == 1) ?
                     chart::ChartDataRowSource_COLUMNS : chart::ChartDataRowSource_ROWS;
-        aResult[nProps  ].Name = C2U("DataRowSource");
+        aResult[nProps  ].Name = "DataRowSource";
         aResult[nProps++].Value <<= eDataRowSource;
 
         if (aSequenceMapping.getLength() != 0)
         {
-            aResult[nProps  ].Name = C2U("SequenceMapping");
+            aResult[nProps  ].Name = "SequenceMapping";
             aResult[nProps++].Value <<= aSequenceMapping;
         }
     }
@@ -1505,7 +1505,7 @@ void SAL_CALL SwChartDataProvider::removeEventListener(
 OUString SAL_CALL SwChartDataProvider::getImplementationName(  )
     throw (uno::RuntimeException)
 {
-    return C2U("SwChartDataProvider");
+    return OUString("SwChartDataProvider");
 }
 
 sal_Bool SAL_CALL SwChartDataProvider::supportsService(
@@ -1521,7 +1521,7 @@ uno::Sequence< OUString > SAL_CALL SwChartDataProvider::getSupportedServiceNames
 {
     SolarMutexGuard aGuard;
     uno::Sequence< OUString > aRes(1);
-    aRes.getArray()[0] = C2U( SN_DATA_PROVIDER );
+    aRes.getArray()[0] = SN_DATA_PROVIDER;
     return aRes;
 }
 
@@ -1888,7 +1888,7 @@ OUString SAL_CALL SwChartDataSource::getImplementationName(  )
     throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return C2U("SwChartDataSource");
+    return OUString("SwChartDataSource");
 }
 
 sal_Bool SAL_CALL SwChartDataSource::supportsService(
@@ -1904,7 +1904,7 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSource::getSupportedServiceNames( 
 {
     SolarMutexGuard aGuard;
     uno::Sequence< OUString > aRes(1);
-    aRes.getArray()[0] = C2U( SN_DATA_SOURCE );
+    aRes.getArray()[0] = SN_DATA_SOURCE;
     return aRes;
 }
 
@@ -2350,7 +2350,7 @@ void SAL_CALL SwChartDataSequence::removeVetoableChangeListener(
 OUString SAL_CALL SwChartDataSequence::getImplementationName(  )
     throw (uno::RuntimeException)
 {
-    return C2U("SwChartDataSequence");
+    return OUString("SwChartDataSequence");
 }
 
 sal_Bool SAL_CALL SwChartDataSequence::supportsService(
@@ -2365,7 +2365,7 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::getSupportedServiceNames
 {
     SolarMutexGuard aGuard;
     uno::Sequence< OUString > aRes(1);
-    aRes.getArray()[0] = C2U( SN_DATA_SEQUENCE );
+    aRes.getArray()[0] = SN_DATA_SEQUENCE;
     return aRes;
 }
 
@@ -2833,7 +2833,7 @@ uno::Reference< util::XCloneable > SAL_CALL SwChartLabeledDataSequence::createCl
 OUString SAL_CALL SwChartLabeledDataSequence::getImplementationName(  )
     throw (uno::RuntimeException)
 {
-    return C2U("SwChartLabeledDataSequence");
+    return OUString("SwChartLabeledDataSequence");
 }
 
 sal_Bool SAL_CALL SwChartLabeledDataSequence::supportsService(
@@ -2848,7 +2848,7 @@ uno::Sequence< OUString > SAL_CALL SwChartLabeledDataSequence::getSupportedServi
 {
     SolarMutexGuard aGuard;
     uno::Sequence< OUString > aRes(1);
-    aRes.getArray()[0] = C2U( SN_LABELED_DATA_SEQUENCE );
+    aRes.getArray()[0] = SN_LABELED_DATA_SEQUENCE;
     return aRes;
 }
 

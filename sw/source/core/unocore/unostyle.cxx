@@ -188,19 +188,19 @@ public:
  ******************************************************************/
 OUString SwXStyleFamilies::getImplementationName(void) throw( uno::RuntimeException )
 {
-    return C2U("SwXStyleFamilies");
+    return OUString("SwXStyleFamilies");
 }
 
 sal_Bool SwXStyleFamilies::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    return C2U("com.sun.star.style.StyleFamilies") == rServiceName;
+    return rServiceName == "com.sun.star.style.StyleFamilies";
 }
 
 uno::Sequence< OUString > SwXStyleFamilies::getSupportedServiceNames(void) throw( uno::RuntimeException )
 {
     uno::Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.style.StyleFamilies");
+    pArray[0] = "com.sun.star.style.StyleFamilies";
     return aRet;
 }
 
@@ -255,11 +255,11 @@ uno::Sequence< OUString > SwXStyleFamilies::getElementNames(void) throw( uno::Ru
 {
     uno::Sequence< OUString > aNames(STYLE_FAMILY_COUNT);
     OUString* pNames = aNames.getArray();
-    pNames[0] = C2U("CharacterStyles");
-    pNames[1] = C2U("ParagraphStyles");
-    pNames[2] = C2U("FrameStyles");
-    pNames[3] = C2U("PageStyles");
-    pNames[4] = C2U("NumberingStyles");
+    pNames[0] = "CharacterStyles";
+    pNames[1] = "ParagraphStyles";
+    pNames[2] = "FrameStyles";
+    pNames[3] = "PageStyles";
+    pNames[4] = "NumberingStyles";
     return aNames;
 }
 
@@ -437,19 +437,19 @@ uno::Sequence< beans::PropertyValue > SwXStyleFamilies::getStyleLoaderOptions(vo
  ******************************************************************/
 OUString SwXStyleFamily::getImplementationName(void) throw( uno::RuntimeException )
 {
-    return C2U("SwXStyleFamily");
+    return OUString("SwXStyleFamily");
 }
 
 sal_Bool SwXStyleFamily::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    return C2U("com.sun.star.style.StyleFamily") == rServiceName;
+    return rServiceName == "com.sun.star.style.StyleFamily";
 }
 
 uno::Sequence< OUString > SwXStyleFamily::getSupportedServiceNames(void) throw( uno::RuntimeException )
 {
     uno::Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.style.StyleFamily");
+    pArray[0] = "com.sun.star.style.StyleFamily";
     return aRet;
 }
 
@@ -1187,25 +1187,25 @@ TYPEINIT1(SwXStyle, SfxListener);
 
 OUString SwXStyle::getImplementationName(void) throw( uno::RuntimeException )
 {
-    return C2U("SwXStyle");
+    return OUString("SwXStyle");
 }
 
 sal_Bool SwXStyle::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    sal_Bool bRet = C2U("com.sun.star.style.Style") == rServiceName;
+    sal_Bool bRet = rServiceName == "com.sun.star.style.Style";
     if(!bRet && SFX_STYLE_FAMILY_CHAR == eFamily)
         bRet = !rServiceName.compareToAscii("com.sun.star.style.CharacterStyle")||
                !rServiceName.compareToAscii("com.sun.star.style.CharacterProperties")||
                !rServiceName.compareToAscii("com.sun.star.style.CharacterPropertiesAsian")||
                !rServiceName.compareToAscii("com.sun.star.style.CharacterPropertiesComplex");
     if(!bRet && SFX_STYLE_FAMILY_PARA == eFamily)
-        bRet = (C2U("com.sun.star.style.ParagraphStyle") == rServiceName)||
-               (C2U("com.sun.star.style.ParagraphProperties") == rServiceName) ||
-               (C2U("com.sun.star.style.ParagraphPropertiesAsian") == rServiceName) ||
-               (C2U("com.sun.star.style.ParagraphPropertiesComplex") == rServiceName);
+        bRet = (rServiceName == "com.sun.star.style.ParagraphStyle")||
+               (rServiceName == "com.sun.star.style.ParagraphProperties") ||
+               (rServiceName == "com.sun.star.style.ParagraphPropertiesAsian") ||
+               (rServiceName == "com.sun.star.style.ParagraphPropertiesComplex");
     if(!bRet && SFX_STYLE_FAMILY_PAGE == eFamily)
-        bRet = (C2U("com.sun.star.style.PageStyle") == rServiceName)||
-               (C2U("com.sun.star.style.PageProperties") == rServiceName);
+        bRet = (rServiceName == "com.sun.star.style.PageStyle")||
+               (rServiceName == "com.sun.star.style.PageProperties");
 
     return  bRet;
 }
@@ -1225,26 +1225,26 @@ uno::Sequence< OUString > SwXStyle::getSupportedServiceNames(void) throw( uno::R
         nCount = 3;
     uno::Sequence< OUString > aRet(nCount);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.style.Style");
+    pArray[0] = "com.sun.star.style.Style";
     switch(eFamily)
     {
         case SFX_STYLE_FAMILY_CHAR:
-            pArray[1] = C2U("com.sun.star.style.CharacterStyle");
-            pArray[2] = C2U("com.sun.star.style.CharacterProperties");
-            pArray[3] = C2U("com.sun.star.style.CharacterPropertiesAsian");
-            pArray[4] = C2U("com.sun.star.style.CharacterPropertiesComplex");
+            pArray[1] = "com.sun.star.style.CharacterStyle";
+            pArray[2] = "com.sun.star.style.CharacterProperties";
+            pArray[3] = "com.sun.star.style.CharacterPropertiesAsian";
+            pArray[4] = "com.sun.star.style.CharacterPropertiesComplex";
         break;
         case SFX_STYLE_FAMILY_PAGE:
-            pArray[1] = C2U("com.sun.star.style.PageStyle");
-            pArray[2] = C2U("com.sun.star.style.PageProperties");
+            pArray[1] = "com.sun.star.style.PageStyle";
+            pArray[2] = "com.sun.star.style.PageProperties";
         break;
         case SFX_STYLE_FAMILY_PARA:
-            pArray[1] = C2U("com.sun.star.style.ParagraphStyle");
-            pArray[2] = C2U("com.sun.star.style.ParagraphProperties");
-            pArray[3] = C2U("com.sun.star.style.ParagraphPropertiesAsian");
-            pArray[4] = C2U("com.sun.star.style.ParagraphPropertiesComplex");
+            pArray[1] = "com.sun.star.style.ParagraphStyle";
+            pArray[2] = "com.sun.star.style.ParagraphProperties";
+            pArray[3] = "com.sun.star.style.ParagraphPropertiesAsian";
+            pArray[4] = "com.sun.star.style.ParagraphPropertiesComplex";
         if(bIsConditional)
-            pArray[5] = C2U("com.sun.star.style.ConditionalParagraphStyle");
+            pArray[5] = "com.sun.star.style.ConditionalParagraphStyle";
         break;
 
         default:
@@ -3636,9 +3636,9 @@ uno::Sequence< rtl::OUString > SwXAutoStyles::getElementNames(void)
 {
     uno::Sequence< OUString > aNames(AUTOSTYLE_FAMILY_COUNT);
     OUString* pNames = aNames.getArray();
-    pNames[0] = C2U("CharacterStyles");
-    pNames[1] = C2U("RubyStyles");
-    pNames[2] = C2U("ParagraphStyles");
+    pNames[0] = "CharacterStyles";
+    pNames[1] = "RubyStyles";
+    pNames[2] = "ParagraphStyles";
     return aNames;
 }
 

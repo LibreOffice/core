@@ -289,19 +289,19 @@ const unsigned short aUnoToSvxAdjust[] =
  ******************************************************************/
 OUString SwXFootnoteProperties::getImplementationName(void) throw( RuntimeException )
 {
-    return C2U("SwXFootnoteProperties");
+    return OUString("SwXFootnoteProperties");
 }
 
 sal_Bool SwXFootnoteProperties::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return C2U("com.sun.star.text.FootnoteSettings") == rServiceName;
+    return rServiceName == "com.sun.star.text.FootnoteSettings";
 }
 
 Sequence< OUString > SwXFootnoteProperties::getSupportedServiceNames(void) throw( RuntimeException )
 {
     Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.FootnoteSettings");
+    pArray[0] = "com.sun.star.text.FootnoteSettings";
     return aRet;
 }
 
@@ -599,19 +599,19 @@ void SwXFootnoteProperties::removeVetoableChangeListener(
  ******************************************************************/
 OUString SwXEndnoteProperties::getImplementationName(void) throw( RuntimeException )
 {
-    return C2U("SwXEndnoteProperties");
+    return OUString("SwXEndnoteProperties");
 }
 
 sal_Bool SwXEndnoteProperties::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return C2U("com.sun.star.text.FootnoteSettings") == rServiceName;
+    return rServiceName == "com.sun.star.text.FootnoteSettings";
 }
 
 Sequence< OUString > SwXEndnoteProperties::getSupportedServiceNames(void) throw( RuntimeException )
 {
     Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.FootnoteSettings");
+    pArray[0] = "com.sun.star.text.FootnoteSettings";
     return aRet;
 }
 
@@ -830,19 +830,19 @@ void SwXEndnoteProperties::removeVetoableChangeListener(const OUString& /*Proper
  ******************************************************************/
 OUString SwXLineNumberingProperties::getImplementationName(void) throw( RuntimeException )
 {
-    return C2U("SwXLineNumberingProperties");
+    return OUString("SwXLineNumberingProperties");
 }
 
 sal_Bool SwXLineNumberingProperties::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return C2U("com.sun.star.text.LineNumberingProperties") == rServiceName;
+    return rServiceName == "com.sun.star.text.LineNumberingProperties";
 }
 
 Sequence< OUString > SwXLineNumberingProperties::getSupportedServiceNames(void) throw( RuntimeException )
 {
     Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.LineNumberingProperties");
+    pArray[0] = "com.sun.star.text.LineNumberingProperties";
     return aRet;
 }
 
@@ -1143,19 +1143,19 @@ sal_Int64 SwXNumberingRules::getSomething( const uno::Sequence< sal_Int8 > & rId
 
 OUString SwXNumberingRules::getImplementationName(void) throw( RuntimeException )
 {
-    return C2U("SwXNumberingRules");
+    return OUString("SwXNumberingRules");
 }
 
 sal_Bool SwXNumberingRules::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return C2U("com.sun.star.text.NumberingRules") == rServiceName;
+    return rServiceName == "com.sun.star.text.NumberingRules";
 }
 
 Sequence< OUString > SwXNumberingRules::getSupportedServiceNames(void) throw( RuntimeException )
 {
     Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.NumberingRules");
+    pArray[0] = "com.sun.star.text.NumberingRules";
     return aRet;
 }
 
@@ -2312,7 +2312,7 @@ OUString SwXNumberingRules::getName() throw( RuntimeException )
 void SwXNumberingRules::setName(const OUString& /*rName*/) throw( RuntimeException )
 {
     RuntimeException aExcept;
-    aExcept.Message = C2U("readonly");
+    aExcept.Message = "readonly";
     throw aExcept;
 }
 
@@ -2330,7 +2330,7 @@ void SwXNumberingRules::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew
 
 OUString SwXChapterNumbering::getImplementationName(void) throw( RuntimeException )
 {
-    return C2U("SwXChapterNumbering");
+    return OUString("SwXChapterNumbering");
 }
 
 sal_Bool SwXChapterNumbering::supportsService(const OUString& rServiceName) throw( RuntimeException )
@@ -2344,8 +2344,8 @@ Sequence< OUString > SwXChapterNumbering::getSupportedServiceNames(void) throw( 
 {
     Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.ChapterNumbering");
-    pArray[1] = C2U("com.sun.star.text.NumberingRules");
+    pArray[0] = "com.sun.star.text.ChapterNumbering";
+    pArray[1] = "com.sun.star.text.NumberingRules";
     return aRet;
 }
 
@@ -2363,19 +2363,19 @@ SwXChapterNumbering::~SwXChapterNumbering()
  ******************************************************************/
 OUString SwXTextColumns::getImplementationName(void) throw( RuntimeException )
 {
-    return C2U("SwXTextColumns");
+    return OUString("SwXTextColumns");
 }
 
 sal_Bool SwXTextColumns::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return C2U("com.sun.star.text.TextColumns") == rServiceName;
+    return rServiceName == "com.sun.star.text.TextColumns";
 }
 
 Sequence< OUString > SwXTextColumns::getSupportedServiceNames(void) throw( RuntimeException )
 {
     Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.TextColumns");
+    pArray[0] = "com.sun.star.text.TextColumns";
     return aRet;
 }
 

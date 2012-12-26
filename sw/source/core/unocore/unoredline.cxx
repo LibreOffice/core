@@ -213,11 +213,11 @@ static OUString lcl_RedlineTypeToOUString(RedlineType_t eType)
     OUString sRet;
     switch(eType & nsRedlineType_t::REDLINE_NO_FLAG_MASK)
     {
-        case nsRedlineType_t::REDLINE_INSERT: sRet = C2U("Insert"); break;
-        case nsRedlineType_t::REDLINE_DELETE: sRet = C2U("Delete"); break;
-        case nsRedlineType_t::REDLINE_FORMAT: sRet = C2U("Format"); break;
-        case nsRedlineType_t::REDLINE_TABLE:  sRet = C2U("TextTable"); break;
-        case nsRedlineType_t::REDLINE_FMTCOLL:sRet = C2U("Style"); break;
+        case nsRedlineType_t::REDLINE_INSERT: sRet = "Insert"; break;
+        case nsRedlineType_t::REDLINE_DELETE: sRet = "Delete"; break;
+        case nsRedlineType_t::REDLINE_FORMAT: sRet = "Format"; break;
+        case nsRedlineType_t::REDLINE_TABLE:  sRet = "TextTable"; break;
+        case nsRedlineType_t::REDLINE_FMTCOLL:sRet = "Style"; break;
     }
     return sRet;
 }

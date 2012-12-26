@@ -411,7 +411,7 @@ sal_Int64 SAL_CALL SwXFieldMaster::getSomething( const uno::Sequence< sal_Int8 >
 
 OUString SwXFieldMaster::getImplementationName(void) throw( uno::RuntimeException )
 {
-    return C2U("SwXFieldMaster");
+    return OUString("SwXFieldMaster");
 }
 
 sal_Bool SwXFieldMaster::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
@@ -447,7 +447,7 @@ uno::Sequence< OUString > SwXFieldMaster::getSupportedServiceNames(void) throw( 
 {
     uno::Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.TextFieldMaster");
+    pArray[0] = "com.sun.star.text.TextFieldMaster";
 
     const sal_Char* pEntry1;
     switch( nResTypeId )
@@ -2295,7 +2295,7 @@ void SwXTextField::update(  ) throw (uno::RuntimeException)
 
 OUString SwXTextField::getImplementationName(void) throw( uno::RuntimeException )
 {
-    return C2U("SwXTextField");
+    return OUString("SwXTextField");
 }
 
 static OUString OldNameToNewName_Impl( const OUString &rOld )
@@ -2341,7 +2341,7 @@ uno::Sequence< OUString > SwXTextField::getSupportedServiceNames(void) throw( un
     *pArray++ = sServiceName;
     if (nLen == 3)
         *pArray++ = sServiceNameCC;
-    *pArray++ = C2U("com.sun.star.text.TextContent");
+    *pArray++ = "com.sun.star.text.TextContent";
     return aRet;
 }
 
@@ -2392,7 +2392,7 @@ const SwField*  SwXTextField::GetField() const
  ******************************************************************/
 OUString SwXTextFieldMasters::getImplementationName(void) throw( uno::RuntimeException )
 {
-    return C2U("SwXTextFieldMasters");
+    return OUString("SwXTextFieldMasters");
 }
 
 sal_Bool SwXTextFieldMasters::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
@@ -2404,7 +2404,7 @@ uno::Sequence< OUString > SwXTextFieldMasters::getSupportedServiceNames(void) th
 {
     uno::Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.TextFieldMasters");
+    pArray[0] = "com.sun.star.text.TextFieldMasters";
     return aRet;
 }
 
@@ -2610,7 +2610,7 @@ sal_Bool SwXTextFieldMasters::hasElements(void) throw( uno::RuntimeException )
 
 OUString SwXTextFieldTypes::getImplementationName(void) throw( uno::RuntimeException )
 {
-    return C2U("SwXTextFieldTypes");
+    return OUString("SwXTextFieldTypes");
 }
 
 sal_Bool SwXTextFieldTypes::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
@@ -2622,7 +2622,7 @@ uno::Sequence< OUString > SwXTextFieldTypes::getSupportedServiceNames(void) thro
 {
     uno::Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.TextFields");
+    pArray[0] = "com.sun.star.text.TextFields";
     return aRet;
 }
 
@@ -2700,7 +2700,7 @@ void SwXTextFieldTypes::removeRefreshListener(const uno::Reference< util::XRefre
  ******************************************************************/
 OUString SwXFieldEnumeration::getImplementationName(void) throw( uno::RuntimeException )
 {
-    return C2U("SwXFieldEnumeration");
+    return OUString("SwXFieldEnumeration");
 }
 
 sal_Bool SwXFieldEnumeration::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
@@ -2712,7 +2712,7 @@ uno::Sequence< OUString > SwXFieldEnumeration::getSupportedServiceNames(void) th
 {
     uno::Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.FieldEnumeration");
+    pArray[0] = "com.sun.star.text.FieldEnumeration";
     return aRet;
 }
 

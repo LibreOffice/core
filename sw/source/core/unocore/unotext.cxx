@@ -513,19 +513,19 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     if (!xRange.is())
     {
         lang::IllegalArgumentException aIllegal;
-        aIllegal.Message = C2U("first parameter invalid;");
+        aIllegal.Message = "first parameter invalid;";
         throw aIllegal;
     }
     if (!xContent.is())
     {
         lang::IllegalArgumentException aIllegal;
-        aIllegal.Message += C2U("second parameter invalid");
+        aIllegal.Message += "second parameter invalid";
         throw aIllegal;
     }
     if(!GetDoc())
     {
         uno::RuntimeException aRuntime;
-        aRuntime.Message = C2U(cInvalidObject);
+        aRuntime.Message = cInvalidObject;
         throw aRuntime;
     }
 
@@ -533,7 +533,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     if (!::sw::XTextRangeToSwPaM(aPam, xRange))
     {
         lang::IllegalArgumentException aIllegal;
-        aIllegal.Message = C2U("first parameter invalid");
+        aIllegal.Message = "first parameter invalid";
         throw aIllegal;
     }
     // first test if the range is at the right position, then call
@@ -570,7 +570,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     if (pOwnStartNode != pTmp)
     {
         uno::RuntimeException aRunException;
-        aRunException.Message = C2U("text interface and cursor not related");
+        aRunException.Message = "text interface and cursor not related";
         throw aRunException;
     }
 
@@ -583,8 +583,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     if (!xContentTunnel.is())
     {
         lang::IllegalArgumentException aArgException;
-        aArgException.Message =
-            C2U("text content does not support lang::XUnoTunnel");
+        aArgException.Message = "text content does not support lang::XUnoTunnel";
         throw aArgException;
     }
     SwXDocumentIndexMark *const pDocumentIndexMark =
@@ -630,7 +629,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     if(!GetDoc())
     {
         uno::RuntimeException aRuntime;
-        aRuntime.Message = C2U(cInvalidObject);
+        aRuntime.Message = cInvalidObject;
         throw aRuntime;
     }
 
@@ -748,7 +747,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     if(!GetDoc())
     {
         uno::RuntimeException aRuntime;
-        aRuntime.Message = C2U(cInvalidObject);
+        aRuntime.Message = cInvalidObject;
         throw aRuntime;
     }
 
@@ -801,7 +800,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     if(!GetDoc())
     {
         uno::RuntimeException aRuntime;
-        aRuntime.Message = C2U(cInvalidObject);
+        aRuntime.Message = cInvalidObject;
         throw aRuntime;
     }
 
@@ -854,7 +853,7 @@ throw (container::NoSuchElementException, uno::RuntimeException)
     if(!xContent.is())
     {
         uno::RuntimeException aRuntime;
-        aRuntime.Message = C2U("first parameter invalid");
+        aRuntime.Message = "first parameter invalid";
         throw aRuntime;
     }
     xContent->dispose();
@@ -878,7 +877,7 @@ SwXText::getStart() throw (uno::RuntimeException)
     if(!xRef.is())
     {
         uno::RuntimeException aRuntime;
-        aRuntime.Message = C2U(cInvalidObject);
+        aRuntime.Message = cInvalidObject;
         throw aRuntime;
     }
     xRef->gotoStart(sal_False);
@@ -895,7 +894,7 @@ SwXText::getEnd() throw (uno::RuntimeException)
     if(!xRef.is())
     {
         uno::RuntimeException aRuntime;
-        aRuntime.Message = C2U(cInvalidObject);
+        aRuntime.Message = cInvalidObject;
         throw aRuntime;
     }
     xRef->gotoEnd(sal_False);
@@ -911,7 +910,7 @@ OUString SAL_CALL SwXText::getString() throw (uno::RuntimeException)
     if(!xRet.is())
     {
         uno::RuntimeException aRuntime;
-        aRuntime.Message = C2U(cInvalidObject);
+        aRuntime.Message = cInvalidObject;
         throw aRuntime;
     }
     xRet->gotoEnd(sal_True);
@@ -926,7 +925,7 @@ SwXText::setString(const OUString& rString) throw (uno::RuntimeException)
     if (!GetDoc())
     {
         uno::RuntimeException aRuntime;
-        aRuntime.Message = C2U(cInvalidObject);
+        aRuntime.Message = cInvalidObject;
         throw aRuntime;
     }
 
@@ -976,7 +975,7 @@ SwXText::setString(const OUString& rString) throw (uno::RuntimeException)
     {
         GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_END, NULL);
         uno::RuntimeException aRuntime;
-        aRuntime.Message = C2U(cInvalidObject);
+        aRuntime.Message = cInvalidObject;
         throw aRuntime;
     }
     xRet->gotoEnd(sal_True);
@@ -1147,7 +1146,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     if (!pEntry)
     {
         beans::UnknownPropertyException aExcept;
-        aExcept.Message = C2U("Unknown property: ");
+        aExcept.Message = "Unknown property: ";
         aExcept.Message += rPropertyName;
         throw aExcept;
     }
@@ -2385,7 +2384,7 @@ SwXBodyText::~SwXBodyText()
 OUString SAL_CALL
 SwXBodyText::getImplementationName() throw (uno::RuntimeException)
 {
-    return C2U("SwXBodyText");
+    return OUString("SwXBodyText");
 }
 
 static char const*const g_ServicesBodyText[] =
@@ -2505,7 +2504,7 @@ SwXBodyText::createTextCursor() throw (uno::RuntimeException)
     if (!xRef.is())
     {
         uno::RuntimeException aRuntime;
-        aRuntime.Message = C2U(cInvalidObject);
+        aRuntime.Message = cInvalidObject;
         throw aRuntime;
     }
     return xRef;
@@ -2521,7 +2520,7 @@ throw (uno::RuntimeException)
     if(!IsValid())
     {
         uno::RuntimeException aRuntime;
-        aRuntime.Message = C2U(cInvalidObject);
+        aRuntime.Message = cInvalidObject;
         throw aRuntime;
     }
 
@@ -2566,7 +2565,7 @@ throw (uno::RuntimeException)
     if (!IsValid())
     {
         uno::RuntimeException aRuntime;
-        aRuntime.Message = C2U(cInvalidObject);
+        aRuntime.Message = cInvalidObject;
         throw aRuntime;
     }
 
@@ -2596,7 +2595,7 @@ SwXBodyText::hasElements() throw (uno::RuntimeException)
     if (!IsValid())
     {
         uno::RuntimeException aRuntime;
-        aRuntime.Message = C2U(cInvalidObject);
+        aRuntime.Message = cInvalidObject;
         throw aRuntime;
     }
 
@@ -2682,7 +2681,7 @@ SwXHeadFootText::~SwXHeadFootText()
 OUString SAL_CALL
 SwXHeadFootText::getImplementationName() throw (uno::RuntimeException)
 {
-    return C2U("SwXHeadFootText");
+    return OUString("SwXHeadFootText");
 }
 
 static char const*const g_ServicesHeadFootText[] =
@@ -2815,7 +2814,7 @@ throw (uno::RuntimeException)
     if (!::sw::XTextRangeToSwPaM(aPam, xTextPosition))
     {
         uno::RuntimeException aRuntime;
-        aRuntime.Message = C2U(cInvalidObject);
+        aRuntime.Message = cInvalidObject;
         throw aRuntime;
     }
 

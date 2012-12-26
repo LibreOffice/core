@@ -939,7 +939,7 @@ bool SwXTextCursor::IsAtEndOfMeta() const
 
 OUString SwXTextCursor::getImplementationName() throw (uno::RuntimeException)
 {
-    return C2U("SwXTextCursor");
+    return OUString("SwXTextCursor");
 }
 
 static char const*const g_ServicesTextCursor[] =
@@ -1243,7 +1243,7 @@ throw (uno::RuntimeException)
         if (!bNotForced)
         {
             throw uno::RuntimeException(
-                C2U("gotoRange: parameter range not contained in nesting"
+                OUString("gotoRange: parameter range not contained in nesting"
                     " text content for which this cursor was created"),
                 static_cast<text::XWordCursor*>(this));
         }
@@ -2491,19 +2491,19 @@ SwUnoCursorHelper::CreateSortDescriptor(const bool bFromTable)
 
     uno::Any aVal;
     aVal.setValue( &bFromTable, ::getCppuBooleanType());
-    pArray[0] = beans::PropertyValue(C2U("IsSortInTable"), -1, aVal,
+    pArray[0] = beans::PropertyValue("IsSortInTable", -1, aVal,
                     beans::PropertyState_DIRECT_VALUE);
 
     aVal <<= sal_Unicode(' ');
-    pArray[1] = beans::PropertyValue(C2U("Delimiter"), -1, aVal,
+    pArray[1] = beans::PropertyValue("Delimiter", -1, aVal,
                     beans::PropertyState_DIRECT_VALUE);
 
     aVal <<= (sal_Bool) sal_False;
-    pArray[2] = beans::PropertyValue(C2U("IsSortColumns"), -1, aVal,
+    pArray[2] = beans::PropertyValue("IsSortColumns", -1, aVal,
                     beans::PropertyState_DIRECT_VALUE);
 
     aVal <<= (sal_Int32) 3;
-    pArray[3] = beans::PropertyValue(C2U("MaxSortFieldsCount"), -1, aVal,
+    pArray[3] = beans::PropertyValue("MaxSortFieldsCount", -1, aVal,
                     beans::PropertyState_DIRECT_VALUE);
 
     uno::Sequence< table::TableSortField > aFields(3);
@@ -2548,7 +2548,7 @@ SwUnoCursorHelper::CreateSortDescriptor(const bool bFromTable)
     pFields[2].CollatorAlgorithm = aCollAlg;
 
     aVal <<= aFields;
-    pArray[4] = beans::PropertyValue(C2U("SortFields"), -1, aVal,
+    pArray[4] = beans::PropertyValue("SortFields", -1, aVal,
                     beans::PropertyState_DIRECT_VALUE);
 
     return aRet;
@@ -2701,7 +2701,7 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
                 bRet = sal_False;
             }
         }
-        else if (0 == rPropName.indexOf(C2U("IsSortNumeric")) &&
+        else if (0 == rPropName.indexOf("IsSortNumeric") &&
             rPropName.getLength() == 14 &&
             (rPropName.getStr()[13] >= '0' && rPropName.getStr()[13] <= '9'))
         {
@@ -2718,7 +2718,7 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
                 bRet = sal_False;
             }
         }
-        else if (0 == rPropName.indexOf(C2U("IsSortAscending")) &&
+        else if (0 == rPropName.indexOf("IsSortAscending") &&
             rPropName.getLength() == 16 &&
             (rPropName.getStr()[15] >= '0' && rPropName.getStr()[15] <= '9'))
         {

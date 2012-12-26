@@ -186,7 +186,7 @@ throw (uno::RuntimeException)
 OUString SAL_CALL
 SwXFootnote::getImplementationName() throw (uno::RuntimeException)
 {
-    return C2U("SwXFootnote");
+    return OUString("SwXFootnote");
 }
 
 static char const*const g_ServicesFootnote[] =

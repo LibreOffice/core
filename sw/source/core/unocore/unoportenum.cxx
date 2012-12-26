@@ -219,14 +219,14 @@ throw(uno::RuntimeException)
 OUString SwXTextPortionEnumeration::getImplementationName()
 throw( RuntimeException )
 {
-    return C2U("SwXTextPortionEnumeration");
+    return OUString("SwXTextPortionEnumeration");
 }
 
 sal_Bool
 SwXTextPortionEnumeration::supportsService(const OUString& rServiceName)
 throw( RuntimeException )
 {
-    return C2U("com.sun.star.text.TextPortionEnumeration") == rServiceName;
+    return rServiceName == "com.sun.star.text.TextPortionEnumeration";
 }
 
 Sequence< OUString > SwXTextPortionEnumeration::getSupportedServiceNames()
@@ -234,7 +234,7 @@ throw( RuntimeException )
 {
     Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.TextPortionEnumeration");
+    pArray[0] = "com.sun.star.text.TextPortionEnumeration";
     return aRet;
 }
 

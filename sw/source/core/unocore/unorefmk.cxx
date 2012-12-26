@@ -163,7 +163,7 @@ throw (uno::RuntimeException)
 OUString SAL_CALL SwXReferenceMark::getImplementationName()
 throw (uno::RuntimeException)
 {
-    return C2U("SwXReferenceMark");
+    return OUString("SwXReferenceMark");
 }
 
 static char const*const g_ServicesReferenceMark[] =
@@ -835,8 +835,8 @@ bool SwXMeta::CheckForOwnMemberMeta(const SwPaM & rPam, const bool bAbsorb)
     if (&pStartPos->nNode.GetNode() != pTxtNode)
     {
         throw lang::IllegalArgumentException(
-            C2U("trying to insert into a nesting text content, but start "
-                "of text range not in same paragraph as text content"),
+            "trying to insert into a nesting text content, but start "
+                "of text range not in same paragraph as text content",
                 0, 0);
     }
     bool bForceExpandHints(false);
@@ -846,8 +846,8 @@ bool SwXMeta::CheckForOwnMemberMeta(const SwPaM & rPam, const bool bAbsorb)
     if ((nStartPos < nMetaStart) || (nStartPos > nMetaEnd))
     {
         throw lang::IllegalArgumentException(
-            C2U("trying to insert into a nesting text content, but start "
-                "of text range not inside text content"),
+            "trying to insert into a nesting text content, but start "
+                "of text range not inside text content",
                 0, 0);
     }
     else if (nStartPos == nMetaEnd)
@@ -860,8 +860,8 @@ bool SwXMeta::CheckForOwnMemberMeta(const SwPaM & rPam, const bool bAbsorb)
         if (&pEndPos->nNode.GetNode() != pTxtNode)
         {
             throw lang::IllegalArgumentException(
-                C2U("trying to insert into a nesting text content, but end "
-                    "of text range not in same paragraph as text content"),
+                "trying to insert into a nesting text content, but end "
+                    "of text range not in same paragraph as text content",
                     0, 0);
         }
         const xub_StrLen nEndPos(pEndPos->nContent.GetIndex());
@@ -870,8 +870,8 @@ bool SwXMeta::CheckForOwnMemberMeta(const SwPaM & rPam, const bool bAbsorb)
         if ((nEndPos < nMetaStart) || (nEndPos > nMetaEnd))
         {
             throw lang::IllegalArgumentException(
-                C2U("trying to insert into a nesting text content, but end "
-                    "of text range not inside text content"),
+                "trying to insert into a nesting text content, but end "
+                    "of text range not inside text content",
                     0, 0);
         }
         else if (nEndPos == nMetaEnd)
@@ -904,7 +904,7 @@ throw (uno::RuntimeException)
 ::rtl::OUString SAL_CALL
 SwXMeta::getImplementationName() throw (uno::RuntimeException)
 {
-    return C2U("SwXMeta");
+    return OUString("SwXMeta");
 }
 
 static char const*const g_ServicesMeta[] =
@@ -1341,7 +1341,7 @@ SwXMetaField::~SwXMetaField()
 ::rtl::OUString SAL_CALL
 SwXMetaField::getImplementationName() throw (uno::RuntimeException)
 {
-    return C2U("SwXMetaField");
+    return OUString("SwXMetaField");
 }
 
 static char const*const g_ServicesMetaField[] =

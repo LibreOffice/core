@@ -687,21 +687,21 @@ sal_Bool    SwXTextSearch::HasReplaceAttributes() const
 
 OUString SwXTextSearch::getImplementationName(void) throw( uno::RuntimeException )
 {
-    return C2U("SwXTextSearch");
+    return OUString("SwXTextSearch");
 }
 
 sal_Bool SwXTextSearch::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    return C2U("com.sun.star.util.SearchDescriptor") == rServiceName ||
-            C2U("com.sun.star.util.ReplaceDescriptor") == rServiceName;
+    return rServiceName == "com.sun.star.util.SearchDescriptor" ||
+            rServiceName == "com.sun.star.util.ReplaceDescriptor";
 }
 
 uno::Sequence< OUString > SwXTextSearch::getSupportedServiceNames(void) throw( uno::RuntimeException )
 {
     uno::Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.util.SearchDescriptor");
-    pArray[1] = C2U("com.sun.star.util.ReplaceDescriptor");
+    pArray[0] = "com.sun.star.util.SearchDescriptor";
+    pArray[1] = "com.sun.star.util.ReplaceDescriptor";
     return aRet;
 }
 

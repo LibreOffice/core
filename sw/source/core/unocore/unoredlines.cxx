@@ -97,7 +97,7 @@ sal_Bool SwXRedlines::hasElements(  ) throw(uno::RuntimeException)
 
 OUString SwXRedlines::getImplementationName(void) throw( uno::RuntimeException )
 {
-    return C2U("SwXRedlines");
+    return OUString("SwXRedlines");
 }
 
 sal_Bool SwXRedlines::supportsService(const rtl::OUString& /*ServiceName*/)
@@ -164,7 +164,7 @@ uno::Any SwXRedlineEnumeration::nextElement(void)
 
 rtl::OUString SwXRedlineEnumeration::getImplementationName(void) throw( uno::RuntimeException )
 {
-    return C2U("SwXRedlineEnumeration");
+    return OUString("SwXRedlineEnumeration");
 }
 
 sal_Bool SwXRedlineEnumeration::supportsService(const rtl::OUString& /*ServiceName*/) throw( uno::RuntimeException )

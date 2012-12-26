@@ -427,17 +427,17 @@ uno::Any SwXShapesEnumeration::nextElement(void) throw(container::NoSuchElementE
 
 OUString SwXShapesEnumeration::getImplementationName(void) throw(uno::RuntimeException)
 {
-    return C2U("SwXShapeEnumeration");
+    return OUString("SwXShapeEnumeration");
 }
 
 sal_Bool SwXShapesEnumeration::supportsService(const OUString& ServiceName) throw(uno::RuntimeException)
 {
-    return C2U("com.sun.star.container.XEnumeration") == ServiceName;
+    return ServiceName == "com.sun.star.container.XEnumeration";
 }
 
 uno::Sequence< OUString > SwXShapesEnumeration::getSupportedServiceNames(void) throw(uno::RuntimeException)
 {
-    return ::comphelper::makeSequence(C2U("com.sun.star.container.XEnumeration"));
+    return ::comphelper::makeSequence(OUString("com.sun.star.container.XEnumeration"));
 }
 
 /****************************************************************************
@@ -452,19 +452,19 @@ uno::Reference< container::XEnumeration > SwXDrawPage::createEnumeration(void) t
 
 rtl::OUString SwXDrawPage::getImplementationName(void) throw( uno::RuntimeException )
 {
-    return C2U("SwXDrawPage");
+    return OUString("SwXDrawPage");
 }
 
 sal_Bool SwXDrawPage::supportsService(const rtl::OUString& rServiceName) throw( uno::RuntimeException )
 {
-    return C2U("com.sun.star.drawing.GenericDrawPage") == rServiceName;
+    return rServiceName == "com.sun.star.drawing.GenericDrawPage";
 }
 
 uno::Sequence< rtl::OUString > SwXDrawPage::getSupportedServiceNames(void) throw( uno::RuntimeException )
 {
     uno::Sequence< rtl::OUString > aRet(1);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.drawing.GenericDrawPage");
+    pArray[0] = "com.sun.star.drawing.GenericDrawPage";
     return aRet;
 }
 
@@ -587,9 +587,9 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
     {
         uno::RuntimeException aExcept;
         if(pShape)
-            aExcept.Message = C2U("object already inserted");
+            aExcept.Message = "object already inserted";
         else
-            aExcept.Message = C2U("illegal object");
+            aExcept.Message = "illegal object";
         throw aExcept;
     }
 
@@ -2127,7 +2127,7 @@ void SwXShape::removeEventListener(
 
 rtl::OUString SwXShape::getImplementationName(void) throw( uno::RuntimeException )
 {
-    return C2U("SwXShape");
+    return OUString("SwXShape");
 }
 
 sal_Bool SwXShape::supportsService(const rtl::OUString& rServiceName) throw( uno::RuntimeException )
@@ -2157,7 +2157,7 @@ uno::Sequence< rtl::OUString > SwXShape::getSupportedServiceNames(void) throw( u
     else
     {
         aSeq.realloc(1);
-        aSeq.getArray()[0] = C2U("com.sun.star.drawing.Shape");
+        aSeq.getArray()[0] = "com.sun.star.drawing.Shape";
     }
     return aSeq;
 }

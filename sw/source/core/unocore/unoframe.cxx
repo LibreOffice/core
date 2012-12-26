@@ -725,7 +725,7 @@ TYPEINIT1(SwXFrame, SwClient);
 
 OUString SwXFrame::getImplementationName(void) throw( uno::RuntimeException )
 {
-    return C2U("SwXFrame");
+    return OUString("SwXFrame");
 }
 
 sal_Bool SwXFrame::supportsService(const :: OUString& rServiceName) throw( uno::RuntimeException )
@@ -739,9 +739,9 @@ uno::Sequence< OUString > SwXFrame::getSupportedServiceNames(void) throw( uno::R
 {
     uno::Sequence< OUString > aRet(3);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.BaseFrame");
-    pArray[1] = C2U("com.sun.star.text.TextContent");
-    pArray[2] = C2U("com.sun.star.document.LinkTarget");
+    pArray[0] = "com.sun.star.text.BaseFrame";
+    pArray[1] = "com.sun.star.text.TextContent";
+    pArray[2] = "com.sun.star.document.LinkTarget";
     return aRet;
 }
 
@@ -1318,7 +1318,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                     if(!pFlyFmt || pFlyFmt->Which() == RES_DRAWFRMFMT)
                     {
                         lang::IllegalArgumentException aExcept;
-                        aExcept.Message = C2U("Anchor to frame: no frame found");
+                        aExcept.Message = "Anchor to frame: no frame found";
                         throw aExcept;
                     }
                     else
@@ -2406,7 +2406,7 @@ awt::Point SwXFrame::getPosition(void) throw( uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
     uno::RuntimeException aRuntime;
-    aRuntime.Message = C2U("position cannot be determined with this method");
+    aRuntime.Message = "position cannot be determined with this method";
     throw aRuntime;
 }
 
@@ -2414,13 +2414,13 @@ void SwXFrame::setPosition(const awt::Point& /*aPosition*/) throw( uno::RuntimeE
 {
     SolarMutexGuard aGuard;
     uno::RuntimeException aRuntime;
-    aRuntime.Message = C2U("position cannot be changed with this method");
+    aRuntime.Message = "position cannot be changed with this method";
     throw aRuntime;
 }
 
 awt::Size SwXFrame::getSize(void) throw( uno::RuntimeException )
 {
-    const ::uno::Any aVal = getPropertyValue(C2U("Size"));
+    const ::uno::Any aVal = getPropertyValue("Size");
     awt::Size* pRet =  (awt::Size*)aVal.getValue();
     return *pRet;
 }
@@ -2429,12 +2429,12 @@ void SwXFrame::setSize(const awt::Size& aSize)
     throw( beans::PropertyVetoException, uno::RuntimeException )
 {
     const ::uno::Any aVal(&aSize, ::getCppuType(static_cast<const awt::Size*>(0)));
-    setPropertyValue(C2U("Size"), aVal);
+    setPropertyValue("Size", aVal);
 }
 
 OUString SwXFrame::getShapeType(void) throw( uno::RuntimeException )
 {
-    return C2U("FrameShape");
+    return OUString("FrameShape");
 }
 
 /******************************************************************
@@ -2674,7 +2674,7 @@ void SwXTextFrame::removeEventListener(const uno::Reference< lang::XEventListene
 
 OUString SwXTextFrame::getImplementationName(void) throw( uno::RuntimeException )
 {
-    return C2U("SwXTextFrame");
+    return OUString("SwXTextFrame");
 }
 
 sal_Bool SwXTextFrame::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
@@ -2689,8 +2689,8 @@ uno::Sequence< OUString > SwXTextFrame::getSupportedServiceNames(void) throw( un
     uno::Sequence < OUString > aRet = SwXFrame::getSupportedServiceNames();
     aRet.realloc(aRet.getLength() + 2);
     OUString* pArray = aRet.getArray();
-    pArray[aRet.getLength() - 2] = C2U("com.sun.star.text.TextFrame");
-    pArray[aRet.getLength() - 1] = C2U("com.sun.star.text.Text");
+    pArray[aRet.getLength() - 2] = "com.sun.star.text.TextFrame";
+    pArray[aRet.getLength() - 1] = "com.sun.star.text.Text";
     return aRet;
 }
 
@@ -2836,7 +2836,7 @@ void SwXTextGraphicObject::removeEventListener(const uno::Reference< lang::XEven
 
 OUString SwXTextGraphicObject::getImplementationName(void) throw( uno::RuntimeException )
 {
-    return C2U("SwXTextGraphicObject");
+    return OUString("SwXTextGraphicObject");
 }
 
 sal_Bool SwXTextGraphicObject::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
@@ -2851,7 +2851,7 @@ uno::Sequence< OUString > SwXTextGraphicObject::getSupportedServiceNames(void)
     uno::Sequence < OUString > aRet = SwXFrame::getSupportedServiceNames();
     aRet.realloc(aRet.getLength() + 1);
     OUString* pArray = aRet.getArray();
-    pArray[aRet.getLength() - 1] = C2U("com.sun.star.text.TextGraphicObject");
+    pArray[aRet.getLength() - 1] = "com.sun.star.text.TextGraphicObject";
     return aRet;
 }
 
@@ -3097,7 +3097,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL SwXTextEmbeddedObject::getReplaceme
 OUString SwXTextEmbeddedObject::getImplementationName(void) throw( uno::RuntimeException )
 
 {
-    return C2U("SwXTextEmbeddedObject");
+    return OUString("SwXTextEmbeddedObject");
 }
 
 sal_Bool SwXTextEmbeddedObject::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
@@ -3112,7 +3112,7 @@ uno::Sequence< OUString > SwXTextEmbeddedObject::getSupportedServiceNames(void)
     uno::Sequence < OUString > aRet = SwXFrame::getSupportedServiceNames();
     aRet.realloc(aRet.getLength() + 1);
     OUString* pArray = aRet.getArray();
-    pArray[aRet.getLength() - 1] = C2U("com.sun.star.text.TextEmbeddedObject");
+    pArray[aRet.getLength() - 1] = "com.sun.star.text.TextEmbeddedObject";
     return aRet;
 }
 
