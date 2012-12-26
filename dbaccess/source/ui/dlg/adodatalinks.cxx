@@ -24,6 +24,9 @@
 #pragma warning(push, 1)
 #pragma warning(disable: 4917)
 #endif
+// LO/windows.h conflict
+#undef WB_LEFT
+#undef WB_RIGHT
 #include "msdasc.h"        // OLE DB Service Component header
 #if defined _MSC_VER
 #pragma warning(push, 1)
