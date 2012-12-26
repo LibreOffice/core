@@ -1520,7 +1520,10 @@ bool lcl_CutRange( ScRange& rRange, const ScRange& rOther )
 void ScConditionalFormat::DoRepaint( const ScRange* pModified )
 {
     if(pModified)
-        pDoc->RepaintRange(*pModified);
+    {
+        if(maRanges.Intersects(*pModified))
+            pDoc->RepaintRange(*pModified);
+    }
     else
     {
         // all conditional format cells
