@@ -112,7 +112,6 @@ namespace gb
             List<Library> LINKED_LIBS;
             List<Path> AUXTARGETS;
             List<Path> INCLUDE;
-            List<Path> INCLUDE_STL;
             List<StaticLibrary> LINKED_STATIC_LIBS;
             List<String> CFLAGS;
             List<String> CXXFLAGS;
@@ -140,7 +139,6 @@ namespace gb
             static const List<String> CXXFLAGS;
             static const List<String> LDFLAGS;
             static const List<Path> INCLUDE;
-            static const List<Path> INCLUDE_STL;
     };
 }
 /* vim: set filetype=cpp : */

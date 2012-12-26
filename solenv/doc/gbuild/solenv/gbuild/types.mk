@@ -160,10 +160,6 @@ namespace gb { namespace types
             /// \$\$(INCLUDE) contains the current paths and can be used if
             /// just a few need to be modified.
             void set_include(List<Path> include);
-            /// Sets the stl include paths for C++ compilation.
-            /// \$\$(INCLUDE_STL) contains the current paths and can be used if
-            /// just a few need to be modified.
-            void set_include_stl(List<Path> include_stl);
     };
     /// A target using the resource compiler
     class UsesRsc
