@@ -17,6 +17,7 @@
 #include <clang/Frontend/FrontendAction.h>
 #include <clang/Frontend/FrontendPluginRegistry.h>
 #include <stdio.h>
+#include <unistd.h>
 
 #include "bodynotinblock.hxx"
 #include "lclstaticfix.hxx"
