@@ -9,6 +9,8 @@
 
 #include <sal/main.h>
 
+#include <osl/file.hxx>
+
 #include <rtl/strbuf.hxx>
 
 #include <libexslt/exslt.h>
@@ -126,37 +128,21 @@ namespace
         }
         return sReturn.makeStringAndClear();
     }
-}
 
-bool Merge(
-    const rtl::OString &rSDFFile,
-    const rtl::OString &rSourceFile,
-    const rtl::OString &rDestinationFile)
-{
-    Export::InitLanguages( true );
-    std::ofstream aDestination(
-        rDestinationFile.getStr(), std::ios_base::out | std::ios_base::trunc);
-    if (!aDestination.is_open()) {
-        return false;
-    }
-
-    aDestination << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-    aDestination << "<t>\n";
-
-    MergeDataFile aMergeDataFile( rSDFFile, rSourceFile, sal_False );
-    rtl::OString sTmp( Export::sLanguages );
-    if( sTmp.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("ALL")) )
-        Export::SetLanguages( aMergeDataFile.GetLanguages() );
-
-    std::vector<rtl::OString> aLanguages = Export::GetLanguages();
-
-    const MergeDataHashMap& rMap = aMergeDataFile.getMap();
-
-    for(size_t n = 0; n < aLanguages.size(); ++n)
+    bool lcl_MergeLang(
+            const MergeDataHashMap &rMap,
+            const rtl::OString &rLanguage,
+            const rtl::OString &rDestinationFile)
     {
-        rtl::OString sCur = aLanguages[ n ];
-        if (sCur.isEmpty() || sCur.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("en-US")))
-            continue;
+        std::ofstream aDestination(
+            rDestinationFile.getStr(), std::ios_base::out | std::ios_base::trunc);
+        if (!aDestination.is_open()) {
+            return false;
+        }
+
+        aDestination << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+        aDestination << "<t>\n";
+
         for (MergeDataHashMap::const_iterator aI = rMap.begin(), aEnd = rMap.end(); aI != aEnd; ++aI)
         {
             if (aI->second->sGID.isEmpty())
@@ -164,7 +150,7 @@ bool Merge(
 
             PFormEntrys* pFoo = aI->second->GetPFormEntries();
             rtl::OString sOut;
-            pFoo->GetText( sOut, STRING_TYP_TEXT, sCur);
+            pFoo->GetText( sOut, STRING_TYP_TEXT, rLanguage );
 
             if (sOut.isEmpty())
                 continue;
@@ -174,11 +160,67 @@ bool Merge(
                 << "i=\"" << aI->second->sLID.getStr() << "\">"
                 << QuotHTML(sOut).getStr() << "</e>\n";
         }
+
+        aDestination << "</t>";
+        aDestination.close();
+
+        return true;
     }
 
-    aDestination << "</t>";
-    aDestination.close();
-    return sal_True;
+}
+
+bool Merge(
+    const rtl::OString &rSDFFile,
+    const rtl::OString &rSourceFile,
+    const rtl::OString &rDestinationDir)
+{
+    {
+        bool bDestinationIsDir(false);
+
+        const rtl::OUString aDestDir(rtl::OStringToOUString(rDestinationDir, RTL_TEXTENCODING_UTF8));
+        rtl::OUString aDestDirUrl;
+        if (osl::FileBase::E_None == osl::FileBase::getFileURLFromSystemPath(aDestDir, aDestDirUrl))
+        {
+            osl::DirectoryItem aTmp;
+            if (osl::DirectoryItem::E_None == osl::DirectoryItem::get(aDestDirUrl, aTmp))
+            {
+                osl::FileStatus aDestinationStatus(osl_FileStatus_Mask_Type);
+                if (osl::DirectoryItem::E_None == aTmp.getFileStatus(aDestinationStatus))
+                    bDestinationIsDir = aDestinationStatus.isDirectory();
+            }
+        }
+
+        if (!bDestinationIsDir)
+        {
+            fprintf(stderr, "%s must be a directory\n", rDestinationDir.getStr());
+            return false;
+        }
+    }
+
+    Export::InitLanguages( true );
+
+    MergeDataFile aMergeDataFile( rSDFFile, rSourceFile, sal_False );
+    rtl::OString sTmp( Export::sLanguages );
+    if( sTmp.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("ALL")) )
+        Export::SetLanguages( aMergeDataFile.GetLanguages() );
+
+    std::vector<rtl::OString> aLanguages = Export::GetLanguages();
+
+    const MergeDataHashMap& rMap = aMergeDataFile.getMap();
+    const rtl::OString aDestinationDir(rDestinationDir + "/");
+
+    bool bResult = true;
+    for(size_t n = 0; n < aLanguages.size(); ++n)
+    {
+        rtl::OString sCur = aLanguages[ n ];
+        if (sCur.isEmpty() || sCur.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("en-US")))
+            continue;
+        const rtl::OString aDestinationFile(aDestinationDir + sCur + ".ui");
+        if (!lcl_MergeLang(rMap, sCur, aDestinationFile))
+            bResult = false;
+    }
+
+    return bResult;
 }
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)

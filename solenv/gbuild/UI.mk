@@ -22,7 +22,7 @@ echo $(POFILES) > $${MERGEINPUT} && \
 $(call gb_Helper_abbreviate_dirs,\
 	$(gb_UILocalizeTarget_COMMAND) \
 		-i $(UI_FILE) \
-		-o $(1) \
+		-o $(dir $(1)) \
 		-l $(UI_LANG) \
 		-m $${MERGEINPUT} ) && \
 rm -rf $${MERGEINPUT}
