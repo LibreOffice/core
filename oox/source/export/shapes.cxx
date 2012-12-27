@@ -439,6 +439,7 @@ static const CustomShapeTypeTranslationTable pCustomShapeTypeTranslationTable[] 
     { "ooxml-flowChartMerge", "flowChartMerge" },
     { "ooxml-line", "line" },
     { "ooxml-downArrow", "downArrow" },
+    { "ooxml-upArrow", "upArrow" },
     { "ooxml-curvedDownArrow", "curvedDownArrow" },
     { "ooxml-actionButtonReturn", "actionButtonReturn" },
     { "ooxml-flowChartInputOutput", "flowChartInputOutput" },

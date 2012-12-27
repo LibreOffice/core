@@ -1652,6 +1652,222 @@ class ShapeCdownArrow : public CustomShapeProvider
     return aPropertyMap;
   }
 };
+class ShapeCupArrow : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
+  {
+    PropertyMap aPropertyMap;
+
+    {
+        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (2);
+        {
+            Any aAny ((sal_Int32) 50000);
+            aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = CREATE_OUSTRING ("adj1");
+        }
+        {
+            Any aAny ((sal_Int32) 50000);
+            aAdjSequence [1].Value = aAny;
+            aAdjSequence [1].Name = CREATE_OUSTRING ("adj2");
+        }
+        aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
+    }
+    {
+        static const char *aStrings[] = {
+            "min(logwidth,logheight)",
+            "100000*logheight/?0 ",
+            "if(0-$0 ,0,if(100000-$0 ,$0 ,100000))",
+            "if(0-$1 ,0,if(?1 -$1 ,$1 ,?1 ))",
+            "?0 *?3 /100000",
+            "0+?4 -0",
+            "logwidth*?2 /200000",
+            "logwidth/2",
+            "?7 +0-?6 ",
+            "?7 +?6 -0",
+            "logwidth/2",
+            "?8 *?4 /?10 ",
+            "?5 +0 -?11",
+            "logwidth",
+            "logheight"
+        };
+        aPropertyMap [PROP_Equations] <<= createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings );
+    }
+    {
+        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (2);
+        {
+            Sequence< PropertyValue > aPropSequence (4);
+            {
+                aPropSequence [0].Name = CREATE_OUSTRING ("Position");
+                static const CustomShapeProvider::ParameterPairData aData =
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    8, 14
+                };
+                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
+            }
+            {
+                aPropSequence [1].Name = CREATE_OUSTRING ("RangeXMaximum");
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 100000);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [1].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [2].Name = CREATE_OUSTRING ("RangeXMinimum");
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 0);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [2].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [3].Name = CREATE_OUSTRING ("RefX");
+                Any aAny ((sal_Int32) 0);
+                aPropSequence [3].Value = makeAny (aAny);
+            }
+            aPropSequenceSequence [0] = aPropSequence;
+        }
+        {
+            Sequence< PropertyValue > aPropSequence (4);
+            {
+                aPropSequence [0].Name = CREATE_OUSTRING ("Position");
+                static const CustomShapeProvider::ParameterPairData aData =
+                {
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    0, 5
+                };
+                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
+            }
+            {
+                aPropSequence [1].Name = CREATE_OUSTRING ("RangeYMaximum");
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 1);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aPropSequence [1].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [2].Name = CREATE_OUSTRING ("RangeYMinimum");
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 0);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [2].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [3].Name = CREATE_OUSTRING ("RefY");
+                Any aAny ((sal_Int32) 1);
+                aPropSequence [3].Value = makeAny (aAny);
+            }
+            aPropSequenceSequence [1] = aPropSequence;
+        }
+        aPropertyMap [PROP_Handles] <<= aPropSequenceSequence;
+    }
+    {
+        aPropertyMap [PROP_MirroredX] <<= Any ((sal_Bool) sal_False);
+    }
+    {
+        aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
+    }
+    {
+        Sequence< PropertyValue > aPropSequence (3);
+        {
+            aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
+            static const CustomShapeProvider::ParameterPairData aData[] = {
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    8, 5
+                },
+                {
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    0, 5
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    7, 0
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    13, 5
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    9, 5
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    9, 14
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    8, 14
+                }
+            };
+            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
+        }
+        {
+            aPropSequence [1].Name = CREATE_OUSTRING ("Segments");
+            static const sal_uInt16 nValues[] = {
+            // Command, Count
+                1,1,
+                2,6,
+                4,0,
+                5,0
+            };
+            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
+        }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("TextFrames");
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        8, 12
+                    };
+                    aTextFrame.TopLeft = createParameterPair(&aData);
+                }
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        9, 13
+                    };
+                    aTextFrame.BottomRight = createParameterPair(&aData);
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
+        aPropertyMap [PROP_Path] <<= aPropSequence;
+    }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+    }
+    aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-upArrow");
+
+    return aPropertyMap;
+  }
+};
 class ShapeCcurvedDownArrow : public CustomShapeProvider
 {
   virtual PropertyMap getProperties()
@@ -8476,6 +8692,7 @@ void CustomShapeProperties::initializePresetsMap4()
     maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "flowChartMerge" ) ) ) ] = new ShapeCflowChartMerge();
     maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "line" ) ) ) ] = new ShapeCline();
     maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "downArrow" ) ) ) ] = new ShapeCdownArrow();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "upArrow" ) ) ) ] = new ShapeCupArrow();
     maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "curvedDownArrow" ) ) ) ] = new ShapeCcurvedDownArrow();
     maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "actionButtonReturn" ) ) ) ] = new ShapeCactionButtonReturn();
     maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "flowChartInputOutput" ) ) ) ] = new ShapeCflowChartInputOutput();
