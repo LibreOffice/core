@@ -24,6 +24,8 @@
 
 #include <string.h>
 #include <sal/log.hxx>
+#include <limits>
+#include <boost/static_assert.hpp>
 
 /*
 inline void rtl_str_ImplCopy( IMPL_RTL_STRCODE* pDest,
@@ -914,97 +916,108 @@ sal_Bool SAL_CALL IMPL_RTL_STRNAME( toBoolean )( const IMPL_RTL_STRCODE* pStr )
 }
 
 /* ----------------------------------------------------------------------- */
+namespace {
+    template <typename T> static inline T IMPL_RTL_STRNAME( toInt )( const IMPL_RTL_STRCODE* pStr,
+                                                                     sal_Int16 nRadix )
+    {
+        BOOST_STATIC_ASSERT(std::numeric_limits<T>::is_signed);
+        sal_Bool    bNeg;
+        sal_Int16   nDigit;
+        T           n = 0;
+
+        if ( (nRadix < RTL_STR_MIN_RADIX) || (nRadix > RTL_STR_MAX_RADIX) )
+            nRadix = 10;
+
+        /* Skip whitespaces */
+        while ( *pStr && rtl_ImplIsWhitespace( IMPL_RTL_USTRCODE( *pStr ) ) )
+            pStr++;
+
+        if ( *pStr == '-' )
+        {
+            bNeg = sal_True;
+            pStr++;
+        }
+        else
+        {
+            if ( *pStr == '+' )
+                pStr++;
+            bNeg = sal_False;
+        }
+
+        while ( *pStr )
+        {
+            nDigit = rtl_ImplGetDigit( IMPL_RTL_USTRCODE( *pStr ), nRadix );
+            if ( nDigit < 0 )
+                break;
+
+            n *= nRadix;
+            n += nDigit;
+
+            pStr++;
+        }
+
+        if ( bNeg )
+            return -n;
+        else
+            return n;
+    }
+
+
+    template <typename T> static inline T IMPL_RTL_STRNAME( toUInt )( const IMPL_RTL_STRCODE* pStr,
+                                                                      sal_Int16 nRadix )
+    {
+        BOOST_STATIC_ASSERT(!std::numeric_limits<T>::is_signed);
+        sal_Int16   nDigit;
+        T           n = 0;
+
+        if ( (nRadix < RTL_STR_MIN_RADIX) || (nRadix > RTL_STR_MAX_RADIX) )
+            nRadix = 10;
+
+        /* Skip whitespaces */
+        while ( *pStr && rtl_ImplIsWhitespace( IMPL_RTL_USTRCODE( *pStr ) ) )
+            ++pStr;
+
+        // skip optional explicit sign
+        if ( *pStr == '+' )
+            ++pStr;
+
+        while ( *pStr )
+        {
+            nDigit = rtl_ImplGetDigit( IMPL_RTL_USTRCODE( *pStr ), nRadix );
+            if ( nDigit < 0 )
+                break;
+
+            n *= nRadix;
+            n += nDigit;
+
+            ++pStr;
+        }
+
+        return n;
+    }
+}
 
 sal_Int32 SAL_CALL IMPL_RTL_STRNAME( toInt32 )( const IMPL_RTL_STRCODE* pStr,
                                                 sal_Int16 nRadix )
     SAL_THROW_EXTERN_C()
 {
-    sal_Bool    bNeg;
-    sal_Int16   nDigit;
-    sal_Int32   n = 0;
-
-    if ( (nRadix < RTL_STR_MIN_RADIX) || (nRadix > RTL_STR_MAX_RADIX) )
-        nRadix = 10;
-
-    /* Skip whitespaces */
-    while ( *pStr && rtl_ImplIsWhitespace( IMPL_RTL_USTRCODE( *pStr ) ) )
-        pStr++;
-
-    if ( *pStr == '-' )
-    {
-        bNeg = sal_True;
-        pStr++;
-    }
-    else
-    {
-        if ( *pStr == '+' )
-            pStr++;
-        bNeg = sal_False;
-    }
-
-    while ( *pStr )
-    {
-        nDigit = rtl_ImplGetDigit( IMPL_RTL_USTRCODE( *pStr ), nRadix );
-        if ( nDigit < 0 )
-            break;
-
-        n *= nRadix;
-        n += nDigit;
-
-        pStr++;
-    }
-
-    if ( bNeg )
-        return -n;
-    else
-        return n;
+    return IMPL_RTL_STRNAME( toInt )<sal_Int32>(pStr, nRadix);
 }
-
-/* ----------------------------------------------------------------------- */
 
 sal_Int64 SAL_CALL IMPL_RTL_STRNAME( toInt64 )( const IMPL_RTL_STRCODE* pStr,
                                                 sal_Int16 nRadix )
     SAL_THROW_EXTERN_C()
 {
-    sal_Bool    bNeg;
-    sal_Int16   nDigit;
-    sal_Int64   n = 0;
+    return IMPL_RTL_STRNAME( toInt )<sal_Int64>(pStr, nRadix);
+}
 
-    if ( (nRadix < RTL_STR_MIN_RADIX) || (nRadix > RTL_STR_MAX_RADIX) )
-        nRadix = 10;
+/* ----------------------------------------------------------------------- */
 
-    /* Skip whitespaces */
-    while ( *pStr && rtl_ImplIsWhitespace( IMPL_RTL_USTRCODE( *pStr ) ) )
-        pStr++;
-
-    if ( *pStr == '-' )
-    {
-        bNeg = sal_True;
-        pStr++;
-    }
-    else
-    {
-        if ( *pStr == '+' )
-            pStr++;
-        bNeg = sal_False;
-    }
-
-    while ( *pStr )
-    {
-        nDigit = rtl_ImplGetDigit( IMPL_RTL_USTRCODE( *pStr ), nRadix );
-        if ( nDigit < 0 )
-            break;
-
-        n *= nRadix;
-        n += nDigit;
-
-        pStr++;
-    }
-
-    if ( bNeg )
-        return -n;
-    else
-        return n;
+sal_uInt64 SAL_CALL IMPL_RTL_STRNAME( toUInt64 )( const IMPL_RTL_STRCODE* pStr,
+                                                  sal_Int16 nRadix )
+    SAL_THROW_EXTERN_C()
+{
+    return IMPL_RTL_STRNAME( toUInt )<sal_uInt64>(pStr, nRadix);
 }
 
 /* ======================================================================= */
