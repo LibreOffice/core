@@ -65,7 +65,7 @@ namespace writerfilter {
             RTFSprms(const RTFSprms& rSprms);
             ~RTFSprms();
             RTFSprms& operator=(const RTFSprms& rOther);
-            RTFValue::Pointer_t find(Id nKeyword);
+            RTFValue::Pointer_t find(Id nKeyword, bool bFirst = true);
             /// Does the same as ->push_back(), except that it can overwrite existing entries.
             void set(Id nKeyword, RTFValue::Pointer_t pValue, bool bOverwrite = true);
             bool erase(Id nKeyword);

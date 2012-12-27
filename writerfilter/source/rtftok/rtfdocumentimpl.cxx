@@ -277,7 +277,8 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_bNeedSect(true),
     m_bWasInFrame(false),
     m_bHadPicture(false),
-    m_bHadSect(false)
+    m_bHadSect(false),
+    m_nCellxMax(0)
 {
     OSL_ASSERT(xInputStream.is());
     m_pInStream.reset(utl::UcbStreamHelper::CreateStream(xInputStream, sal_True));
@@ -1620,7 +1621,11 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 if (bNeedPap)
                     runProps();
                 if (!m_pCurrentBuffer)
+                {
                     parBreak();
+                    // Not in table? Reset max width.
+                    m_nCellxMax = 0;
+                }
                 else if (m_aStates.top().nDestinationState != DESTINATION_SHAPETEXT)
                 {
                     RTFValue::Pointer_t pValue;
@@ -1684,6 +1689,11 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         case RTF_ROW:
         case RTF_NESTROW:
             {
+                // If the right edge of the last cell (row width) is smaller than the width of some other row, mimic the WW8 import: add a fake cell.
+                RTFValue::Pointer_t pLastCellx = m_aStates.top().aTableRowSprms.find(NS_ooxml::LN_CT_TblGridBase_gridCol, false);
+                if (pLastCellx.get() && pLastCellx->getInt() < m_nCellxMax)
+                    dispatchValue(RTF_CELLX, m_nCellxMax);
+
                 if (m_aStates.top().nCells)
                 {
                     // Make a backup before we start popping elements
@@ -2946,6 +2956,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aStates.top().aTableCellAttributes = m_aDefaultState.aTableCellAttributes;
                 // We assume text after a row definition always belongs to the table, to handle text before the real INTBL token
                 dispatchFlag(RTF_INTBL);
+                m_nCellxMax = std::max(m_nCellxMax, nParam);
             }
             break;
         case RTF_TRRH:
