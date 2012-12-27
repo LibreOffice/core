@@ -1,5 +1,5 @@
 --- misc/raptor-1.4.18/config.guess	2010-09-16 03:07:14.000000000 -0500
-+++ misc/build/raptor-1.4.18/config.guess	2010-09-16 03:08:00.000000000 -0500
++++ misc/raptor-1.4.18/config.guess	2010-09-16 03:08:00.000000000 -0500
 @@ -532,7 +532,7 @@
  		echo rs6000-ibm-aix3.2
  	fi
