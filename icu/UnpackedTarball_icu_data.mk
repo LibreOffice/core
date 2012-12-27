@@ -9,6 +9,6 @@
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,icu_data))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,icu_data,$(ICU_DATA_SUBSET_ZIP)))
+$(eval $(call gb_UnpackedTarball_set_tarball,icu_data,$(ICU_DATA_SUBSET_ZIP),0))
 
 # vim: set noet sw=4 ts=4:
