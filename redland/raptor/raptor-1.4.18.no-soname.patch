@@ -1,5 +1,5 @@
 --- misc/raptor-1.4.18/configure
-+++ misc/build/raptor-1.4.18/configure
++++ misc/raptor-1.4.18/configure
 @@ -7848,7 +7848,7 @@
  	*)
  	  tmp_sharedflag='-shared' ;;

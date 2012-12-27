@@ -1,5 +1,5 @@
 --- misc/raptor-1.4.18/src/raptor-config.in	Sat Jan  6 05:02:00 2007
-+++ misc/build/raptor-1.4.18/src/raptor-config.in	Mon Jun 16 15:55:38 2008
++++ misc/raptor-1.4.18/src/raptor-config.in	Mon Jun 16 15:55:38 2008
 @@ -21,14 +21,23 @@
  # 
  #

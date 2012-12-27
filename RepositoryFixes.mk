@@ -66,6 +66,7 @@ gb_Library_DLLFILENAMES := $(patsubst log_uno:log_uno%,log_uno:log_uno_uno%,$(gb
 gb_Library_DLLFILENAMES := $(patsubst ucbhelper:ucbhelper%,ucbhelper:ucbhelper4%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst unsafe_uno:unsafe_uno%,unsafe_uno:unsafe_uno_uno%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst z:z%,z:zlib%,$(gb_Library_DLLFILENAMES))
+gb_Library_DLLFILENAMES := $(patsubst rdf:rdf%,rdf:librdf%,$(gb_Library_DLLFILENAMES))
 
 # libpyuno_wrapper.dll => pyuno.pyd
 gb_Library_DLLFILENAMES := $(patsubst pyuno:pyuno.dll,pyuno:pyuno.pyd,$(gb_Library_DLLFILENAMES))
