@@ -30,7 +30,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#if defined WIN32 && defined MSC
+#ifdef _MSC_VER
 #include <float.h>
 #define isnan _isnan
 #endif

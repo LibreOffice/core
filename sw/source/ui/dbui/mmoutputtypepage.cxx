@@ -27,7 +27,7 @@
 
 SwMailMergeOutputTypePage::SwMailMergeOutputTypePage( SwMailMergeWizard* _pParent) :
     svt::OWizardPage( _pParent, SW_RES(DLG_MM_OUTPUTTYPE_PAGE)),
-#ifdef MSC
+#ifdef _MSC_VER
 #pragma warning (disable : 4355)
 #endif
     m_aHeaderFI(    this, SW_RES( FI_HEADER    )),
@@ -36,7 +36,7 @@ SwMailMergeOutputTypePage::SwMailMergeOutputTypePage( SwMailMergeWizard* _pParen
     m_aMailRB(      this, SW_RES( RB_MAIL    )),
     m_aHintHeaderFI(this, SW_RES( FI_HINTHEADER)),
     m_aHintFI(      this, SW_RES( FI_HINT)),
-#ifdef MSC
+#ifdef _MSC_VER
 #pragma warning (default : 4355)
 #endif
     m_sLetterHintHeader(  SW_RES( ST_LETTERHINTHEADER)),

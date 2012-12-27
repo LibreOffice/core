@@ -54,7 +54,7 @@ static void lcl_Move(Control* pCtrl, long nYOffset)
 
 SwMailMergeAddressBlockPage::SwMailMergeAddressBlockPage( SwMailMergeWizard* _pParent) :
     svt::OWizardPage(_pParent, SW_RES(DLG_MM_ADDRESSBLOCK_PAGE)),
-#ifdef MSC
+#ifdef _MSC_VER
 #pragma warning (disable : 4355)
 #endif
     m_aHeaderFI(        this, SW_RES(  FI_HEADER           ) ),
@@ -80,7 +80,7 @@ SwMailMergeAddressBlockPage::SwMailMergeAddressBlockPage( SwMailMergeWizard* _pP
     m_aDocumentIndexFI( this, SW_RES( FI_DOCINDEX    ) ),
     m_aPrevSetIB(       this, SW_RES( IB_PREVSET     ) ),
     m_aNextSetIB(       this, SW_RES( IB_NEXTSET     ) ),
-#ifdef MSC
+#ifdef _MSC_VER
 #pragma warning (default : 4355)
 #endif
     m_sDocument(        SW_RES(       STR_DOCUMENT  ) ),
@@ -340,7 +340,7 @@ IMPL_LINK(SwMailMergeAddressBlockPage, InsertDataHdl_Impl, ImageButton*, pButton
 SwSelectAddressBlockDialog::SwSelectAddressBlockDialog(
                 Window* pParent, SwMailMergeConfigItem& rConfig) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_SELECTADDRESSBLOCK)),
-#ifdef MSC
+#ifdef _MSC_VER
 #pragma warning (disable : 4355)
 #endif
     m_aSelectFT( this, SW_RES(         FT_SELECT)),
@@ -357,7 +357,7 @@ SwSelectAddressBlockDialog::SwSelectAddressBlockDialog(
     m_aOK( this, SW_RES(               PB_OK)),
     m_aCancel( this, SW_RES(           PB_CANCEL)),
     m_aHelp( this, SW_RES(             PB_HELP)),
-#ifdef MSC
+#ifdef _MSC_VER
 #pragma warning (default : 4355)
 #endif
     m_rConfig(rConfig)
@@ -543,7 +543,7 @@ void SwRestrictedComboBox::Modify()
 SwCustomizeAddressBlockDialog::SwCustomizeAddressBlockDialog(
         Window* pParent, SwMailMergeConfigItem& rConfig, DialogType eType) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_CUSTOMIZEADDRESSBLOCK)),
-#ifdef MSC
+#ifdef _MSC_VER
 #pragma warning (disable : 4355)
 #endif
     m_aAddressElementsFT( this, SW_RES(       FT_ADDRESSELEMENTS             )),
@@ -564,7 +564,7 @@ SwCustomizeAddressBlockDialog::SwCustomizeAddressBlockDialog(
     m_aOK( this, SW_RES(                      PB_OK                          )),
     m_aCancel( this, SW_RES(                  PB_CANCEL                      )),
     m_aHelp( this, SW_RES(                    PB_HELP                        )),
-#ifdef MSC
+#ifdef _MSC_VER
 #pragma warning (default : 4355)
 #endif
     m_rConfigItem(rConfig),
@@ -965,13 +965,13 @@ public:
 SwAssignFieldsControl::SwAssignFieldsControl(
         Window* pParent, const ResId& rResId, SwMailMergeConfigItem& rConfigItem) :
     Control(pParent, rResId),
-#ifdef MSC
+#ifdef _MSC_VER
 #pragma warning (disable : 4355)
 #endif
     m_aVScroll(this,  ResId(SCR_1, *rResId.GetResMgr()     )),
     m_aHeaderHB(this, WB_BUTTONSTYLE | WB_BOTTOMBORDER),
     m_aWindow(this, ResId(WIN_DATA, *rResId.GetResMgr())),
-#ifdef MSC
+#ifdef _MSC_VER
 #pragma warning (default : 4355)
 #endif
     m_rConfigItem(rConfigItem),
@@ -1239,7 +1239,7 @@ SwAssignFieldsDialog::SwAssignFieldsDialog(
         const ::rtl::OUString& rPreview,
         bool bIsAddressBlock) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_ASSIGNFIELDS)),
-#ifdef MSC
+#ifdef _MSC_VER
 #pragma warning (disable : 4355)
 #endif
     m_aMatchingFI( this, SW_RES(     FI_MATCHING)),
@@ -1250,7 +1250,7 @@ SwAssignFieldsDialog::SwAssignFieldsDialog(
     m_aOK( this, SW_RES(             PB_OK       )),
     m_aCancel( this, SW_RES(         PB_CANCEL   )),
     m_aHelp( this, SW_RES(           PB_HELP     )),
-#ifdef MSC
+#ifdef _MSC_VER
 #pragma warning (default : 4355)
 #endif
     m_sNone(SW_RESSTR(SW_STR_NONE)),

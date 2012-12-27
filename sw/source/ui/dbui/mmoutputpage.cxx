@@ -238,7 +238,7 @@ public:
 
 SwCopyToDialog::SwCopyToDialog(Window* pParent) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_COPYTO)),
-#ifdef MSC
+#ifdef _MSC_VER
 #pragma warning (disable : 4355)
 #endif
     m_aDescriptionFI( this, SW_RES(       FI_DESCRIPTION )),
@@ -251,7 +251,7 @@ SwCopyToDialog::SwCopyToDialog(Window* pParent) :
     m_aOK( this, SW_RES(                  PB_OK          )),
     m_aCancel( this, SW_RES(              PB_CANCEL      )),
     m_aHelp( this, SW_RES(                PB_HELP        ))
-#ifdef MSC
+#ifdef _MSC_VER
 #pragma warning (default : 4355)
 #endif
 {
@@ -264,7 +264,7 @@ SwCopyToDialog::~SwCopyToDialog()
 
 SwMailMergeOutputPage::SwMailMergeOutputPage( SwMailMergeWizard* _pParent) :
     svt::OWizardPage( _pParent, SW_RES(DLG_MM_OUTPUT_PAGE)),
-#ifdef MSC
+#ifdef _MSC_VER
 #pragma warning (disable : 4355)
 #endif
     m_aHeaderFI(this,           SW_RES(  FI_HEADER           ) ),
@@ -316,7 +316,7 @@ SwMailMergeOutputPage::SwMailMergeOutputPage( SwMailMergeWizard* _pParent) :
     m_sNoSubjectST(SW_RES(           ST_NOSUBJECT )),
     m_sNoAttachmentNameST(SW_RES(    ST_NOATTACHMENTNAME )),
     m_sConfigureMail(SW_RES(         ST_CONFIGUREMAIL)),
-#ifdef MSC
+#ifdef _MSC_VER
 #pragma warning (default : 4355)
 #endif
     m_bCancelSaving( false ),

@@ -141,7 +141,7 @@ static ::rtl::OUString lcl_getFlatURL( uno::Reference<beans::XPropertySet>& xSou
 
 SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_ADDRESSLISTDIALOG)),
-#ifdef MSC
+#ifdef _MSC_VER
 #pragma warning (disable : 4355)
 #endif
     m_aDescriptionFI( this, SW_RES(  FI_DESCRIPTION    )),
@@ -157,7 +157,7 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent) :
     m_aOK( this, SW_RES(             PB_OK             )),
     m_aCancel( this, SW_RES(         PB_CANCEL         )),
     m_aHelp( this, SW_RES(           PB_HELP           )),
-#ifdef MSC
+#ifdef _MSC_VER
 #pragma warning (default : 4355)
 #endif
     m_sName(        SW_RES( ST_NAME )),

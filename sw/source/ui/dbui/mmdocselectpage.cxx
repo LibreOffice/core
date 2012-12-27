@@ -46,7 +46,7 @@ using namespace svt;
 
 SwMailMergeDocSelectPage::SwMailMergeDocSelectPage( SwMailMergeWizard* _pParent ) :
     svt::OWizardPage(_pParent, SW_RES(DLG_MM_DOCSELECT_PAGE)),
-#ifdef MSC
+#ifdef _MSC_VER
 #pragma warning (disable : 4355)
 #endif
     m_aHeaderFI(this,          SW_RES(  FI_HEADER           ) ),
@@ -59,7 +59,7 @@ SwMailMergeDocSelectPage::SwMailMergeDocSelectPage( SwMailMergeWizard* _pParent 
     m_aBrowseDocPB      (this, SW_RES( PB_LOADDOC )),
     m_aBrowseTemplatePB (this, SW_RES( PB_BROWSETEMPLATE )),
     m_aRecentDocLB      (this, SW_RES( LB_RECENTDOC )),
-#ifdef MSC
+#ifdef _MSC_VER
 #pragma warning (default : 4355)
 #endif
     m_pWizard(_pParent)

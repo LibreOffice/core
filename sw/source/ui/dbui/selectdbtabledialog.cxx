@@ -45,7 +45,7 @@ using namespace ::com::sun::star::beans;
 SwSelectDBTableDialog::SwSelectDBTableDialog(Window* pParent,
         const uno::Reference< sdbc::XConnection>& rConnection) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_SELECTDBTABLEDDIALOG)),
-#ifdef MSC
+#ifdef _MSC_VER
 #pragma warning (disable : 4355)
 #endif
     m_aSelectFI( this, SW_RES(       FI_SELECT     )),
@@ -56,7 +56,7 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(Window* pParent,
     m_aOK( this, SW_RES(             PB_OK         )),
     m_aCancel( this, SW_RES(         PB_CANCEL     )),
     m_aHelp( this, SW_RES(           PB_HELP       )),
-#ifdef MSC
+#ifdef _MSC_VER
 #pragma warning (default : 4355)
 #endif
     m_sName( SW_RES( ST_NAME )),

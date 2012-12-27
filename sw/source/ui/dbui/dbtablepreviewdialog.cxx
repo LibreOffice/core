@@ -39,13 +39,13 @@ using namespace ::rtl;
 
 SwDBTablePreviewDialog::SwDBTablePreviewDialog(Window* pParent, uno::Sequence< beans::PropertyValue>& rValues ) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_DBTABLEPREVIEWDIALOG)),
-#ifdef MSC
+#ifdef _MSC_VER
 #pragma warning (disable : 4355)
 #endif
     m_aDescriptionFI( this, SW_RES(        FI_DESCRIPTION)),
     m_pBeamerWIN( new Window(this, SW_RES( WIN_BEAMER ))),
     m_aOK( this, SW_RES(                   PB_OK  ))
-#ifdef MSC
+#ifdef _MSC_VER
 #pragma warning (default : 4355)
 #endif
 {

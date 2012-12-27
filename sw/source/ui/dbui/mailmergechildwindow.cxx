@@ -278,7 +278,7 @@ SwSendWarningBox_Impl::~SwSendWarningBox_Impl()
 
 SwSendMailDialog::SwSendMailDialog(Window *pParent, SwMailMergeConfigItem& rConfigItem) :
     ModelessDialog /*SfxModalDialog*/(pParent, SW_RES(DLG_MM_SENDMAILS)),
-#ifdef MSC
+#ifdef _MSC_VER
 #pragma warning (disable : 4355)
 #endif
     m_aStatusFL( this, SW_RES(             FL_STATUS             )),
@@ -294,7 +294,7 @@ SwSendMailDialog::SwSendMailDialog(Window *pParent, SwMailMergeConfigItem& rConf
     m_aSeparatorFL( this, SW_RES(          FL_SEPARATOR          )),
     m_aStopPB( this, SW_RES(               PB_STOP               )),
     m_aClosePB( this, SW_RES(              PB_CLOSE              )),
-#ifdef MSC
+#ifdef _MSC_VER
 #pragma warning (default : 4355)
 #endif
     m_sMore(m_aDetailsPB.GetText()),

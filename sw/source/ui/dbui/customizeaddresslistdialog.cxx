@@ -29,7 +29,7 @@
 SwCustomizeAddressListDialog::SwCustomizeAddressListDialog(
         Window* pParent, const SwCSVData& rOldData) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_CUSTOMIZE_ADDRESS_LIST)),
-#ifdef MSC
+#ifdef _MSC_VER
 #pragma warning (disable : 4355)
 #endif
     m_aFieldsFT( this, SW_RES(    FT_FIELDS)),
@@ -43,7 +43,7 @@ SwCustomizeAddressListDialog::SwCustomizeAddressListDialog(
     m_aOK( this, SW_RES(          PB_OK)),
     m_aCancel( this, SW_RES(      PB_CANCEL)),
     m_aHelp( this, SW_RES(        PB_HELP)),
-#ifdef MSC
+#ifdef _MSC_VER
 #pragma warning (default : 4355)
 #endif
     m_pNewData( new SwCSVData(rOldData))
@@ -185,7 +185,7 @@ SwCSVData*    SwCustomizeAddressListDialog::GetNewData()
 SwAddRenameEntryDialog::SwAddRenameEntryDialog(
         Window* pParent, bool bRename, const ::std::vector< ::rtl::OUString >& rCSVHeader) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_ADD_RENAME_ENTRY)),
-#ifdef MSC
+#ifdef _MSC_VER
 #pragma warning (disable : 4355)
 #endif
     m_aFieldNameFT( this, SW_RES( FT_FIELDNAME)),
@@ -193,7 +193,7 @@ SwAddRenameEntryDialog::SwAddRenameEntryDialog(
     m_aOK( this, SW_RES(          PB_OK)),
     m_aCancel( this, SW_RES(      PB_CANCEL)),
     m_aHelp( this, SW_RES(        PB_HELP)),
-#ifdef MSC
+#ifdef _MSC_VER
 #pragma warning (default : 4355)
 #endif
     m_rCSVHeader(rCSVHeader)

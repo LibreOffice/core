@@ -23,7 +23,7 @@
 // We need this to enable namespace support in libgrengine headers.
 #define GR_NAMESPACE
 
-#ifndef MSC
+#ifndef _MSC_VER
 #include <graphite_layout.hxx>
 
 // Modules

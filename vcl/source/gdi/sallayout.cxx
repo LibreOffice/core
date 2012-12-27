@@ -56,7 +56,7 @@
 FILE * mslLogFile = NULL;
 FILE * mslLog()
 {
-#ifdef MSC
+#ifdef _MSC_VER
     std::string logFileName(getenv("TEMP"));
     logFileName.append("\\msllayout.log");
     if (mslLogFile == NULL) mslLogFile = fopen(logFileName.c_str(),"w");

@@ -41,12 +41,12 @@
 #include <vcl/sysdata.hxx>
 #include "scanner.hxx"
 
-#if defined MSC
+#if defined _MSC_VER
 #pragma warning (push,1)
 #pragma warning (disable:4668)
 #endif
 #include "twain/twain.h"
-#if defined MSC
+#if defined _MSC_VER
 #pragma warning (pop)
 #endif
 

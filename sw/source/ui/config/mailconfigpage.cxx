@@ -127,7 +127,7 @@ public:
 
 SwMailConfigPage::SwMailConfigPage( Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage(pParent, SW_RES(TP_MAILCONFIG), rSet),
-#ifdef MSC
+#ifdef _MSC_VER
 #pragma warning (disable : 4355)
 #endif
     m_aIdentityFL( this, SW_RES(       FL_IDENTITY)),
@@ -147,7 +147,7 @@ SwMailConfigPage::SwMailConfigPage( Window* pParent, const SfxItemSet& rSet ) :
     m_aServerAuthenticationPB( this, SW_RES( PB_AUTHENTICATION )),
     m_aSeparatorFL( this,            SW_RES( FL_SEPARATOR      )),
     m_aTestPB( this, SW_RES(           PB_TEST)),
-#ifdef MSC
+#ifdef _MSC_VER
 #pragma warning (default : 4355)
 #endif
     m_pConfigItem( new SwMailMergeConfigItem )
@@ -236,7 +236,7 @@ IMPL_LINK_NOARG(SwMailConfigPage, TestHdl)
 
 SwTestAccountSettingsDialog::SwTestAccountSettingsDialog(SwMailConfigPage* pParent) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_TESTACCOUNTSETTINGS)),
-#ifdef MSC
+#ifdef _MSC_VER
 #pragma warning (disable : 4355)
 #endif
     m_aInfoFI( this, SW_RES(         FI_INFO )),
@@ -248,7 +248,7 @@ SwTestAccountSettingsDialog::SwTestAccountSettingsDialog(SwMailConfigPage* pPare
     m_aStopPB( this, SW_RES(         PB_STOP   )),
     m_aCancelPB( this, SW_RES(       PB_CANCEL )),
     m_aHelpPB( this, SW_RES(         PB_HELP   )),
-#ifdef MSC
+#ifdef _MSC_VER
 #pragma warning (default : 4355)
 #endif
     m_aImageList( SW_RES(ILIST) ),
@@ -444,7 +444,7 @@ SwMailConfigDlg::~SwMailConfigDlg()
 SwAuthenticationSettingsDialog::SwAuthenticationSettingsDialog(
         SwMailConfigPage* pParent, SwMailMergeConfigItem& rItem) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_SERVERAUTHENTICATION)),
-#ifdef MSC
+#ifdef _MSC_VER
 #pragma warning (disable : 4355)
 #endif
         m_aAuthenticationCB( this,          SW_RES( CB_AUTHENTICATION        )),
@@ -471,7 +471,7 @@ SwAuthenticationSettingsDialog::SwAuthenticationSettingsDialog(
         m_aOKPB( this,                      SW_RES( PB_OK                   )),
         m_aCancelPB( this,                  SW_RES( PB_CANCEL               )),
         m_aHelpPB( this,                    SW_RES( PB_HELP                 )),
-#ifdef MSC
+#ifdef _MSC_VER
 #pragma warning (default : 4355)
 #endif
         rConfigItem( rItem )
