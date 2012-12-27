@@ -1,5 +1,5 @@
 --- misc/raptor-1.4.18/src/raptor_abbrev.c	2008-06-15 09:34:06.000000000 +0200
-+++ misc/build/raptor-1.4.18/src/raptor_abbrev.c	2011-05-18 18:58:35.440435467 +0200
++++ misc/raptor-1.4.18/src/raptor_abbrev.c	2011-05-18 18:58:35.440435467 +0200
 @@ -124,6 +124,7 @@
          case RAPTOR_IDENTIFIER_TYPE_UNKNOWN: 
          default:
