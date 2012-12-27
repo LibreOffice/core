@@ -292,7 +292,13 @@ build-nocheck : export SKIP_TESTS := YES
 build-nocheck : build
 
 cross-toolset: bootstrap fetch
+# We need to build icu for the build platform, as building icu for the host
+# platform requires tools built as part of icu that can run on the build
+# platform. see --with-cross-build in icu/ExternalProject_icu.mk
+	$(GNUMAKE) gb_Side=build icu
+#
 	cd cross_toolset && $(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS)
+#
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 ifneq (WNT,$(OS))
 # We need to build nss for nsinstall... See NSINSTALL=... in nss/makefile.mk

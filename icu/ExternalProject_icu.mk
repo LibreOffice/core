@@ -37,7 +37,7 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 	$(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-shared-libgcc)" \
 	./configure
 	$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
-	--with-cross-build=$(call gb_UnpackedTarball_get_dir,icu)/source) \
+		--with-cross-build=$(subst $(INPATH),$(INPATH_FOR_BUILD),$(call gb_UnpackedTarball_get_dir,icu))/source) \
 	--enable-layout --disable-static --enable-shared --disable-samples \
 	&& $(GNUMAKE) \
 	&& for lib in icudata icuin icuuc icule icutu; do \
@@ -76,7 +76,7 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 		$(if $(filter TRUE,$(DISABLE_DYNLOADING)),--enable-static --disable-shared,\
 		--disable-static --enable-shared $(if $(filter ANDROID,$(OS)),--with-library-suffix=lo)) \
 		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)\
-		--with-cross-build=$(call gb_UnpackedTarball_get_dir,icu)/source)\
+			--with-cross-build=$(subst $(INPATH),$(INPATH_FOR_BUILD),$(call gb_UnpackedTarball_get_dir,icu))/source)\
 	&& $(GNUMAKE) \
 	&& touch $@
 
