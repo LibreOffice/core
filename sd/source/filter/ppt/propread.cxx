@@ -39,7 +39,7 @@ PropEntry::PropEntry( const PropEntry& rProp ) :
     memcpy( (void*)mpBuf, (void*)rProp.mpBuf, mnSize );
 };
 
-const PropEntry& PropEntry::operator=(const PropEntry& rPropEntry)
+PropEntry& PropEntry::operator=(const PropEntry& rPropEntry)
 {
     if ( this != &rPropEntry )
     {

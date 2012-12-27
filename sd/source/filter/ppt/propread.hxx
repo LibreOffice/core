@@ -113,7 +113,7 @@ struct PropEntry
     PropEntry( const PropEntry& rProp );
     ~PropEntry() { delete[] mpBuf; } ;
 
-    const PropEntry& operator=(const PropEntry& rPropEntry);
+    PropEntry& operator=(const PropEntry& rPropEntry);
 };
 
 class PropItem : public SvMemoryStream
