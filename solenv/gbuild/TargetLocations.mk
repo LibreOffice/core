@@ -161,8 +161,8 @@ gb_SrsTemplateTarget_get_include_dir = $(WORKDIR)/SrsTemplatePartTarget/$(firstw
 gb_SrsTemplateTarget_get_target = $(WORKDIR)/SrsTemplateTarget/$(1)
 gb_ThesaurusIndexTarget_get_target = $(WORKDIR)/ThesaurusIndexTarget/$(basename $(1)).idx
 gb_UI_get_target = $(WORKDIR)/UI/$(1).done
-gb_UILocalizeTarget_get_target = $(WORKDIR)/UILocalizeTarget/$(1).ui
-gb_UITarget_get_target = $(WORKDIR)/UITarget/$(1).done
+gb_UILocalizeTarget_get_target = $(WORKDIR)/UILocalizeTarget/$(1).done
+gb_UILocalizeTarget_get_workdir = $(WORKDIR)/UILocalizeTarget/$(1)
 gb_UnoApiTarget_get_external_headers_target = $(WORKDIR)/UnoApiTarget/$(1).external
 gb_UnoApiTarget_get_headers_target = $(WORKDIR)/UnoApiTarget/$(1).headers
 gb_UnoApiTarget_get_target = $(WORKDIR)/UnoApiTarget/$(1).rdb
@@ -264,7 +264,6 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	ExternalProject \
 	UI \
 	UILocalizeTarget \
-	UITarget \
 	UnoApiHeadersTarget \
 	UnoApiTarget \
 	UnpackedTarball \
