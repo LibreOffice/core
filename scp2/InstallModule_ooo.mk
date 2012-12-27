@@ -170,7 +170,6 @@ $(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
 endif
 
 ifneq ($(SYSTEM_REDLAND),YES)
-include $(OUTDIR)/inc/redlandversion.mk
 
 $(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
 	-DRAPTOR_MAJOR=$(RAPTOR_MAJOR) \
