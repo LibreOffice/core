@@ -62,21 +62,21 @@ $(eval $(call gb_ExternalPackage_add_files,icu,lib,\
 ))
 else
 $(eval $(call gb_ExternalPackage_add_files,icu,lib,\
-	source/lib/libicudata.$(gb_Library_DLLEXT).$(ICU_MAJOR).$(ICU_MINOR).$(ICU_MICRO) \
-	source/lib/libicudata.$(gb_Library_DLLEXT).$(ICU_MAJOR) \
-	source/lib/libicudata.$(gb_Library_DLLEXT) \
-	source/lib/libicuuc.$(gb_Library_DLLEXT).$(ICU_MAJOR).$(ICU_MINOR).$(ICU_MICRO) \
-	source/lib/libicuuc.$(gb_Library_DLLEXT).$(ICU_MAJOR) \
-	source/lib/libicuuc.$(gb_Library_DLLEXT) \
-	source/lib/libicui18n.$(gb_Library_DLLEXT).$(ICU_MAJOR).$(ICU_MINOR).$(ICU_MICRO) \
-	source/lib/libicui18n.$(gb_Library_DLLEXT).$(ICU_MAJOR) \
-	source/lib/libicui18n.$(gb_Library_DLLEXT) \
-	source/lib/libicule.$(gb_Library_DLLEXT).$(ICU_MAJOR).$(ICU_MINOR).$(ICU_MICRO) \
-	source/lib/libicule.$(gb_Library_DLLEXT).$(ICU_MAJOR) \
-	source/lib/libicule.$(gb_Library_DLLEXT) \
-	source/lib/libicutu.$(gb_Library_DLLEXT).$(ICU_MAJOR).$(ICU_MINOR).$(ICU_MICRO) \
-	source/lib/libicutu.$(gb_Library_DLLEXT).$(ICU_MAJOR) \
-	source/lib/libicutu.$(gb_Library_DLLEXT) \
+	source/lib/libicudata$(gb_Library_DLLEXT).$(ICU_MAJOR).$(ICU_MINOR).$(ICU_MICRO) \
+	source/lib/libicudata$(gb_Library_DLLEXT).$(ICU_MAJOR) \
+	source/lib/libicudata$(gb_Library_DLLEXT) \
+	source/lib/libicuuc$(gb_Library_DLLEXT).$(ICU_MAJOR).$(ICU_MINOR).$(ICU_MICRO) \
+	source/lib/libicuuc$(gb_Library_DLLEXT).$(ICU_MAJOR) \
+	source/lib/libicuuc$(gb_Library_DLLEXT) \
+	source/lib/libicui18n$(gb_Library_DLLEXT).$(ICU_MAJOR).$(ICU_MINOR).$(ICU_MICRO) \
+	source/lib/libicui18n$(gb_Library_DLLEXT).$(ICU_MAJOR) \
+	source/lib/libicui18n$(gb_Library_DLLEXT) \
+	source/lib/libicule$(gb_Library_DLLEXT).$(ICU_MAJOR).$(ICU_MINOR).$(ICU_MICRO) \
+	source/lib/libicule$(gb_Library_DLLEXT).$(ICU_MAJOR) \
+	source/lib/libicule$(gb_Library_DLLEXT) \
+	source/lib/libicutu$(gb_Library_DLLEXT).$(ICU_MAJOR).$(ICU_MINOR).$(ICU_MICRO) \
+	source/lib/libicutu$(gb_Library_DLLEXT).$(ICU_MAJOR) \
+	source/lib/libicutu$(gb_Library_DLLEXT) \
 ))
 $(eval $(call gb_ExternalPackage_add_files,icu,bin,\
 	source/bin/genccode \
