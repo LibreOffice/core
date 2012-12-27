@@ -31,7 +31,7 @@ static RscCompiler * pRscCompiler = NULL;
 /*                                                              */
 /*  Description :   Gibt die Temporaeren Dateien frei.          */
 /****************************************************************/
-#if defined( UNX ) || defined ( GCC ) || defined(__MINGW32__)
+#if defined( UNX ) || defined ( __GNUC__ ) || defined(__MINGW32__)
         void ExitProgram( void ){
 #else
     void cdecl ExitProgram( void ){

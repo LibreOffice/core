@@ -27,7 +27,7 @@
 #error please use asm/interlck_sparc.s
 #elif defined ( SOLARIS) && defined ( X86 )
 #error please use asm/interlck_x86.s
-#elif defined ( GCC ) && ( defined ( X86 ) || defined ( X86_64 ) )
+#elif defined ( __GNUC__ ) && ( defined ( X86 ) || defined ( X86_64 ) )
 /* That's possible on x86-64 too since oslInterlockedCount is a sal_Int32 */
 
 extern int osl_isSingleCPU;

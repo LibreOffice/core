@@ -29,7 +29,7 @@ class SwBodyFrm: public SwLayoutFrm
 protected:
     virtual void Format( const SwBorderAttrs *pAttrs = 0 );
 
-#if defined ( GCC) && defined ( C272 )
+#if defined ( __GNUC__ ) && defined ( C272 )
     ~SwBodyFrm();
 #endif
 

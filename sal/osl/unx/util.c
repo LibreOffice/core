@@ -259,7 +259,7 @@ void osl_InitSparcV9(void)
 
 #endif /* SOLARIS */
 
-#if defined(NETBSD) && defined(GCC) && !defined(__sparcv9) && !defined(__sparc_v9__)
+#if defined(NETBSD) && defined(__GNUC__) && !defined(__sparcv9) && !defined(__sparc_v9__)
 
 #include <sys/param.h>
 #include <sys/sysctl.h>

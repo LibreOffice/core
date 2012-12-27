@@ -57,7 +57,6 @@ gb_CPPU_ENV := gcc3
 gb_AFLAGS := $(AFLAGS)
 
 gb_COMPILERDEFS := \
-	-D$(COM) \
 	-DCPPU_ENV=$(gb_CPPU_ENV) \
 
 gb_CFLAGS_COMMON := \

@@ -240,7 +240,9 @@ static OUString val2str( void const * pVal, typelib_TypeDescriptionReference * p
     case typelib_TypeClass_HYPER:
     case typelib_TypeClass_UNSIGNED_HYPER:
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("0x") );
-#if defined(GCC) && defined(SPARC)
+#if defined(__GNUC__) && defined(SPARC)
+// I guess this really should check if there are strict alignment
+// requirements, not just "GCC on SPARC".
         {
             sal_Int64 aVal;
             *(sal_Int32 *)&aVal = *(sal_Int32 *)pVal;

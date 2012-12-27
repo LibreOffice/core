@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if defined (UNX) || defined (GCC)
+#if defined (UNX) || defined (__GNUC__)
 #include <unistd.h>
 #else
 #include <direct.h>
