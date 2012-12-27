@@ -1,5 +1,5 @@
 --- misc/raptor-1.4.18/src/win32_raptor_config.h	Wed Apr  2 06:50:14 2008
-+++ misc/build/raptor-1.4.18/src/win32_raptor_config.h	Wed Feb 18 13:21:23 2009
++++ misc/raptor-1.4.18/src/win32_raptor_config.h	Wed Feb 18 13:21:23 2009
 @@ -38,6 +38,8 @@
  
  #define HAVE_STDLIB_H 1

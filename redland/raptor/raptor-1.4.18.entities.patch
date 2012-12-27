@@ -1,5 +1,5 @@
 --- misc/raptor-1.4.18/src/raptor.h.old	2008-06-20 07:47:38.000000000 +0200
-+++ misc/build/raptor-1.4.18/src/raptor.h	2012-02-15 16:54:21.000000000 +0100
++++ misc/raptor-1.4.18/src/raptor.h	2012-02-15 16:54:21.000000000 +0100
 @@ -376,6 +376,7 @@ typedef struct {
   * @RAPTOR_FEATURE_JSON_EXTRA_DATA: JSON serializer extra top-level data
   * @RAPTOR_FEATURE_RSS_TRIPLES: Atom/RSS serializer writes extra RDF triples it finds (none, rdf-xml, atom-triples)
@@ -19,7 +19,7 @@
  
  
 --- misc/raptor-1.4.18/src/raptor_feature.c.old	2008-06-05 08:54:16.000000000 +0200
-+++ misc/build/raptor-1.4.18/src/raptor_feature.c	2012-02-15 16:55:09.000000000 +0100
++++ misc/raptor-1.4.18/src/raptor_feature.c	2012-02-15 16:55:09.000000000 +0100
 @@ -89,7 +89,8 @@ static const struct
    { RAPTOR_FEATURE_JSON_CALLBACK     , 6,  "jsonCallback", "JSON serializer callback" },
    { RAPTOR_FEATURE_JSON_EXTRA_DATA   , 6,  "jsonExtraData", "JSON serializer extra data" },
@@ -31,7 +31,7 @@
  
  
 --- misc/raptor-1.4.18/src/raptor_internal.h.old	2008-06-03 07:04:09.000000000 +0200
-+++ misc/build/raptor-1.4.18/src/raptor_internal.h	2012-02-15 16:52:08.000000000 +0100
++++ misc/raptor-1.4.18/src/raptor_internal.h	2012-02-15 16:52:08.000000000 +0100
 @@ -983,6 +983,14 @@ struct raptor_sax2_s {
  
    /* base URI for resolving relative URIs or xml:base URIs */
@@ -48,7 +48,7 @@
  
  int raptor_sax2_init(void);
 --- misc/raptor-1.4.18/src/raptor_libxml.c.old	2008-06-14 05:35:27.000000000 +0200
-+++ misc/build/raptor-1.4.18/src/raptor_libxml.c	2012-02-15 16:52:08.000000000 +0100
++++ misc/raptor-1.4.18/src/raptor_libxml.c	2012-02-15 16:52:08.000000000 +0100
 @@ -142,18 +142,126 @@ raptor_libxml_hasExternalSubset (void* u
  
  static xmlParserInputPtr
@@ -184,7 +184,7 @@
  static xmlEntityPtr
  raptor_libxml_getParameterEntity(void* user_data, const xmlChar *name) {
 --- misc/raptor-1.4.18/src/raptor_parse.c.old	2008-06-15 09:18:50.000000000 +0200
-+++ misc/build/raptor-1.4.18/src/raptor_parse.c	2012-02-15 16:52:08.000000000 +0100
++++ misc/raptor-1.4.18/src/raptor_parse.c	2012-02-15 16:52:08.000000000 +0100
 @@ -1294,6 +1294,7 @@ raptor_set_feature(raptor_parser *parser
      case RAPTOR_FEATURE_MICROFORMATS:
      case RAPTOR_FEATURE_HTML_LINK:
@@ -202,7 +202,7 @@
        break;
  
 --- misc/raptor-1.4.18/src/raptor_rdfxml.c.old	2008-06-15 10:12:06.000000000 +0200
-+++ misc/build/raptor-1.4.18/src/raptor_rdfxml.c	2012-02-15 16:52:08.000000000 +0100
++++ misc/raptor-1.4.18/src/raptor_rdfxml.c	2012-02-15 16:52:08.000000000 +0100
 @@ -1124,6 +1124,9 @@ raptor_rdfxml_parse_start(raptor_parser*
    raptor_sax2_set_feature(rdf_xml_parser->sax2, 
                            RAPTOR_FEATURE_NO_NET,
@@ -214,7 +214,7 @@
    raptor_sax2_parse_start(rdf_xml_parser->sax2, uri);
  
 --- misc/raptor-1.4.18/src/raptor_rss.c.old	2008-05-21 22:25:57.000000000 +0200
-+++ misc/build/raptor-1.4.18/src/raptor_rss.c	2012-02-15 16:52:08.000000000 +0100
++++ misc/raptor-1.4.18/src/raptor_rss.c	2012-02-15 16:52:08.000000000 +0100
 @@ -251,6 +251,9 @@ raptor_rss_parse_start(raptor_parser *rd
    raptor_sax2_set_feature(rss_parser->sax2, 
                            RAPTOR_FEATURE_NO_NET,
@@ -226,7 +226,7 @@
    raptor_sax2_parse_start(rss_parser->sax2, uri);
  
 --- misc/raptor-1.4.18/src/raptor_sax2.c.old	2008-06-15 10:12:20.000000000 +0200
-+++ misc/build/raptor-1.4.18/src/raptor_sax2.c	2012-02-15 16:52:08.000000000 +0100
++++ misc/raptor-1.4.18/src/raptor_sax2.c	2012-02-15 16:52:08.000000000 +0100
 @@ -96,6 +96,8 @@ raptor_new_sax2(void* user_data, raptor_
  
    sax2->user_data=user_data;
@@ -323,7 +323,7 @@
      return sax2->external_entity_ref_handler(sax2->user_data,
                                               context, base, systemId, publicId);
 --- misc/raptor-1.4.18/src/raptor_serialize.c.old	2008-06-20 02:55:31.000000000 +0200
-+++ misc/build/raptor-1.4.18/src/raptor_serialize.c	2012-02-15 16:52:08.000000000 +0100
++++ misc/raptor-1.4.18/src/raptor_serialize.c	2012-02-15 16:52:08.000000000 +0100
 @@ -859,6 +859,7 @@ raptor_serializer_set_feature(raptor_ser
  
      /* Shared */
@@ -357,7 +357,7 @@
      /* XML writer features */
      case RAPTOR_FEATURE_WRITER_AUTO_INDENT:
 --- misc/raptor-1.4.18/src/raptor_turtle_writer.c.old	2008-06-20 07:47:48.000000000 +0200
-+++ misc/build/raptor-1.4.18/src/raptor_turtle_writer.c	2012-02-15 16:52:08.000000000 +0100
++++ misc/raptor-1.4.18/src/raptor_turtle_writer.c	2012-02-15 16:52:08.000000000 +0100
 @@ -723,6 +723,7 @@ raptor_turtle_writer_set_feature(raptor_
  
      /* Shared */
@@ -375,7 +375,7 @@
      /* XML writer features */
      case RAPTOR_FEATURE_RELATIVE_URIS:
 --- misc/raptor-1.4.18/src/raptor_xml_writer.c.old	2008-06-03 07:05:56.000000000 +0200
-+++ misc/build/raptor-1.4.18/src/raptor_xml_writer.c	2012-02-15 16:52:08.000000000 +0100
++++ misc/raptor-1.4.18/src/raptor_xml_writer.c	2012-02-15 16:52:08.000000000 +0100
 @@ -906,6 +906,7 @@ raptor_xml_writer_set_feature(raptor_xml
  
      /* Shared */

@@ -723,9 +723,55 @@ $(call gb_LinkTarget_add_libs,$(1),$(REDLAND_LIBS))
 
 endef
 
+gb_LinkTarget__use_redland_headers:=
+
+gb_LinkTarget__use_raptor_headers:=
+
+gb_LinkTarget__use_rasqal_headers:=
+
 else # !SYSTEM_REDLAND
 
-ifneq ($(OS),ANDROID)
+define gb_LinkTarget__use_redland_headers
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,redland)/librdf \
+	$$(INCLUDE) \
+)
+
+endef
+
+define gb_LinkTarget__use_raptor_headers
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,raptor)/src \
+	$$(INCLUDE) \
+)
+
+endef
+
+define gb_LinkTarget__use_rasqal_headers
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,rasqal)/src \
+	$$(INCLUDE) \
+)
+
+endef
+
+ifeq ($(COM),MSC)
+
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
+	rdf \
+	rasqal \
+	raptor \
+))
+define gb_LinkTarget__use_librdf
+$(call gb_LinkTarget_use_static_libraries,$(1),\
+	rdf \
+	raptor \
+	rasqal \
+)
+
+endef
+
+else ifneq ($(OS),ANDROID)
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	rdf \

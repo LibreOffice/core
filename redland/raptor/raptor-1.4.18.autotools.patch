@@ -1,5 +1,5 @@
 --- misc/raptor-1.4.18/config.sub	2008-04-03 05:15:09.000000000 +0200
-+++ misc/build/raptor-1.4.18/config.sub	2011-09-27 10:01:06.000000000 +0200
++++ misc/raptor-1.4.18/config.sub	2011-09-27 10:01:06.000000000 +0200
 @@ -120,7 +120,7 @@
  # Here we must recognize all the valid KERNEL-OS combinations.
  maybe_os=`echo $1 | sed 's/^\(.*\)-\([^-]*-[^-]*\)$/\2/'`
