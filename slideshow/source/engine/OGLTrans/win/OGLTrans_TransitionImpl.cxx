@@ -859,7 +859,7 @@ RotateAndScaleDepthByHeight* RotateAndScaleDepthByHeight::clone()
     return new RotateAndScaleDepthByHeight(*this);
 }
 
-const Primitive& Primitive::operator=(const Primitive& rvalue)
+Primitive& Primitive::operator=(const Primitive& rvalue)
 {
     for(unsigned int i( 0 ); i < rvalue.Operations.size(); ++i)
         Operations.push_back(rvalue.Operations[i]->clone());

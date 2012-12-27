@@ -224,7 +224,7 @@ public:
 
     void applyOperations(double nTime, double SlideWidthScale, double SlideHeightScale);
     void display(double nTime, double SlideWidthScale, double SlideHeightScale);
-    const Primitive& operator=(const Primitive& rvalue);
+    Primitive& operator=(const Primitive& rvalue);
 
     /** PushBack a vertex,normal, and tex coord. Each SlideLocation is where on the slide is mapped to this location ( from (0,0) to (1,1)  ). This will make sure the correct aspect ratio is used, and helps to make slides begin and end at the correct position. (0,0) is the top left of the slide, and (1,1) is the bottom right.
 

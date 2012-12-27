@@ -1011,7 +1011,7 @@ void SEllipseTranslate::interpolate(double t,double /* SlideWidthScale */,double
     glTranslated(x, 0, y);
 }
 
-const Primitive& Primitive::operator=(const Primitive& rvalue)
+Primitive& Primitive::operator=(const Primitive& rvalue)
 {
     Primitive aTmp(rvalue);
     swap(aTmp);

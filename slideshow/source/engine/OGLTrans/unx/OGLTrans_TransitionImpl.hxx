@@ -272,7 +272,7 @@ public:
     Primitive() {}
     // making copy constructor explicit makes the class un-suitable for use with stl containers
     Primitive(const Primitive& rvalue);
-    const Primitive& operator=(const Primitive& rvalue);
+    Primitive& operator=(const Primitive& rvalue);
 
     void swap(Primitive& rOther);
 
