@@ -592,6 +592,8 @@ namespace writerfilter {
                 bool m_bHadPicture;
                 /// The document has multiple sections.
                 bool m_bHadSect;
+                /// Max width of the rows in the current table.
+                int m_nCellxMax;
         };
     } // namespace rtftok
 } // namespace writerfilter

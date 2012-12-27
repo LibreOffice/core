@@ -132,6 +132,7 @@ public:
     void testFdo57886();
     void testFdo58076();
     void testFdo57678();
+    void testFdo45183();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -214,6 +215,7 @@ void Test::run()
         {"fdo57886.rtf", &Test::testFdo57886},
         {"fdo58076.rtf", &Test::testFdo58076},
         {"fdo57678.rtf", &Test::testFdo57678},
+        {"fdo45183.rtf", &Test::testFdo45183},
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
@@ -986,6 +988,19 @@ void Test::testFdo57678()
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
+}
+
+void Test::testFdo45183()
+{
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    // Was text::WrapTextMode_PARALLEL, i.e. shpfblwtxt didn't send the shape below text.
+    CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_THROUGHT, getProperty<text::WrapTextMode>(xDraws->getByIndex(0), "Surround"));
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    // Was 247, resulting in a table having width almost zero and height of 10+ pages.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(16237), getProperty<sal_Int32>(xTables->getByIndex(0), "Width"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
