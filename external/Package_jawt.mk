@@ -9,6 +9,6 @@
 
 $(eval $(call gb_Package_Package,jawt,$(call gb_CustomTarget_get_workdir,external/jawt)))
 
-$(eval $(call gb_Package_add_file,jawt,libjawt.dll.a,lib/libjawt.dll.a))
+$(eval $(call gb_Package_add_file,jawt,lib/libjawt.dll.a,libjawt.dll.a))
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:
