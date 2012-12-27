@@ -115,24 +115,21 @@ endif
 $$(eval $$(call gb_Module_register_target,$(call gb_UI_get_target,$(1)),$(call gb_UI_get_clean_target,$(1))))
 endef
 
-# gb_UI__get_outdir_filename target file lang?
-gb_UI__get_outdir_filename = xml/uiconfig/$(1)/ui/$(if $(3),res/$(3)/)$(notdir $(2))$(if $(3),,.ui)
-
-# gb_UI__add_uifile target package destfile srcfile lang?
+# gb_UI__package_uifile target package destfile srcfile
 define gb_UI__package_uifile
-$(call gb_Package_add_file,$(2),$(call gb_UI__get_outdir_filename,$(1),$(3),$(5)),$(4))
+$(call gb_Package_add_file,$(2),xml/uiconfig/$(1)/ui/$(3),$(4))
 
 endef
 
 # gb_UI__add_uifile target file
 define gb_UI__add_uifile
-$(call gb_UI__package_uifile,$(1),$(1)_ui,$(2),$(2).ui)
+$(call gb_UI__package_uifile,$(1),$(1)_ui,$(notdir $(2)).ui,$(2).ui)
 
 endef
 
 # gb_UI__add_uifile_for_lang target file lang
 define gb_UI__add_uifile_for_lang
-$(call gb_UI__package_uifile,$(1),$(1)_ui_localized,$(2),$(2)/$(3).ui,$(3))
+$(call gb_UI__package_uifile,$(1),$(1)_ui_localized,res/$(3)/$(notdir $(2)),$(2)/$(3).ui)
 
 endef
 
