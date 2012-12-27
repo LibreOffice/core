@@ -336,7 +336,7 @@ bool SendHTTPRequest(
 
                 if ( pszProxyServer )
                     sprintf( buffer,
-                    "POST http://%s:%d/soap/servlet/rpcrouter HTTP/1.0\r\n"
+                    "POST http://%s:%u/soap/servlet/rpcrouter HTTP/1.0\r\n"
                         "Content-Type: text/xml; charset=\"utf-8\"\r\n"
                         "Content-Length: %d\r\n"
                         "SOAPAction: \"\"\r\n\r\n",
@@ -525,21 +525,19 @@ bool send_crash_report( const boost::unordered_map< string, string >& rSettings 
 
 static bool append_file( const char *filename, string& rString )
 {
-    char buf[1024];
-    bool bSuccess = false;
-
     FILE *fp = fopen( filename, "r" );
     if ( fp )
     {
+        char buf[1024];
         while (fgets(buf, sizeof(buf), fp) != NULL)
         {
             rString.append( buf );
         }
         fclose( fp );
-        bSuccess = true;
+        return true;
     }
 
-    return bSuccess;
+    return false;
 }
 
 string crash_get_details( const boost::unordered_map< string, string >& rSettings )

@@ -319,9 +319,7 @@ void AffineBridge::v_leave(void)
 
 int  AffineBridge::v_isValid(rtl::OUString * pReason)
 {
-    int result = 1;
-
-    result = m_enterCount > 0;
+    int result = m_enterCount > 0;
     if (!result)
         *pReason = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("not entered"));
 

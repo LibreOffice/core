@@ -410,7 +410,6 @@ Reference< ::com::sun::star::sdbc::XConnection> TestConnected
             break;
         default:
             return pConnection;
-            break;
     }
     pConnection =
         pDriver->connect(url,aValue);

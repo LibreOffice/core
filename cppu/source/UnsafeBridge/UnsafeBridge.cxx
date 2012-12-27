@@ -118,12 +118,11 @@ void UnsafeBridge::v_leave(void)
 
 int UnsafeBridge::v_isValid(rtl::OUString * pReason)
 {
-    int result = 1;
-
-    result = m_count > 0;
+    int result = m_count > 0;
     if (!result)
+    {
         *pReason = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("not entered"));
-
+    }
     else
     {
         result = m_threadId == osl_getThreadIdentifier(NULL);
