@@ -793,11 +793,15 @@ int RTFDocumentImpl::resolvePict(bool bInline)
     {
         // wrap sprm
         RTFSprms aAnchorWrapAttributes;
+        RTFSprms aAnchorAttributes;
         for (RTFSprms::Iterator_t i = m_aStates.top().aCharacterAttributes.begin(); i != m_aStates.top().aCharacterAttributes.end(); ++i)
+        {
             if (i->first == NS_ooxml::LN_CT_WrapSquare_wrapText)
                 aAnchorWrapAttributes.set(i->first, i->second);
+            else if (i->first == NS_rtf::LN_WR)
+                aAnchorAttributes.set(i->first, i->second);
+        }
         RTFValue::Pointer_t pAnchorWrapValue(new RTFValue(aAnchorWrapAttributes));
-        RTFSprms aAnchorAttributes;
         RTFSprms aAnchorSprms;
         aAnchorSprms.set(NS_ooxml::LN_CT_Anchor_extent, pExtentValue);
         if (aAnchorWrapAttributes.size())
@@ -3314,6 +3318,14 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                     aPointSequenceSequence[0] = rDrawingObject.aPolyLinePoints;
                     rDrawingObject.xPropertySet->setPropertyValue("PolyPolygon", uno::Any(aPointSequenceSequence));
                 }
+            }
+            break;
+        case RTF_SHPFBLWTXT:
+            if (nParam == 1)
+            {
+                // Shape is below text -> send it to the background.
+                m_aStates.top().aCharacterAttributes.erase(NS_ooxml::LN_CT_WrapSquare_wrapText);
+                m_aStates.top().aCharacterAttributes.set(NS_rtf::LN_WR, RTFValue::Pointer_t(new RTFValue(3)));
             }
             break;
         default:
