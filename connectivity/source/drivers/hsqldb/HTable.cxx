@@ -155,7 +155,7 @@ void SAL_CALL OHSQLTable::alterColumnByName( const ::rtl::OUString& colName, con
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(
-#ifdef GCC
+#ifdef __GNUC__
         ::connectivity::sdbcx::OTableDescriptor_BASE::rBHelper.bDisposed
 #else
         rBHelper.bDisposed
@@ -372,7 +372,7 @@ void SAL_CALL OHSQLTable::rename( const ::rtl::OUString& newName ) throw(SQLExce
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(
-#ifdef GCC
+#ifdef __GNUC__
         ::connectivity::sdbcx::OTableDescriptor_BASE::rBHelper.bDisposed
 #else
         rBHelper.bDisposed

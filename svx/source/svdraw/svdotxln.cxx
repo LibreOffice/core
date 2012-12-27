@@ -269,7 +269,7 @@ void SdrTextObj::ImpLinkAnmeldung()
     sfx2::LinkManager* pLinkManager=pModel!=NULL ? pModel->GetLinkManager() : NULL;
     if (pLinkManager!=NULL && pData!=NULL && pData->pLink==NULL) { // don't register twice
         pData->pLink=new ImpSdrObjTextLink(this);
-#ifdef GCC
+#ifdef __GNUC__
         pLinkManager->InsertFileLink(*pData->pLink,OBJECT_CLIENT_FILE,pData->aFileName,
                                      pData->aFilterName.Len() ?
                                       &pData->aFilterName : (const String *)NULL,

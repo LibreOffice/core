@@ -555,7 +555,7 @@ SbiRuntime::SbiRuntime( SbModule* pm, SbMethod* pe, sal_uInt32 nStart )
     nOps      = 0;
     refExprStk = new SbxArray;
     SetVBAEnabled( pMod->IsVBACompat() );
-#if defined GCC
+#if defined __GNUC__
     SetParameters( pe ? pe->GetParameters() : (class SbxArray *)NULL );
 #else
     SetParameters( pe ? pe->GetParameters() : NULL );

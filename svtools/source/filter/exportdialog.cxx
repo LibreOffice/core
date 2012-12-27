@@ -18,7 +18,7 @@
  */
 
 
-#ifndef GCC
+#ifndef __GNUC__
 #   pragma hdrstop
 #endif
 

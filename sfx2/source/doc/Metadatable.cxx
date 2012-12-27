@@ -1658,7 +1658,7 @@ throw (uno::RuntimeException)
 #include <stdio.h>
 
 static void dump(sfx2::XmlIdList_t * pList)
-#ifdef GCC
+#ifdef __GNUC__
 __attribute__ ((unused))
 #endif
 ;

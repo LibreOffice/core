@@ -505,7 +505,7 @@ int main( int argc, char **argv)
     return 0;
 }
 
-#ifdef GCC
+#ifdef __GNUC__
 extern "C" {
     void __pure_virtual()
     {}

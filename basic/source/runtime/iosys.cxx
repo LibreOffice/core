@@ -842,7 +842,7 @@ void SbiIoSystem::Shutdown()
     if( !aOut.isEmpty() )
     {
         rtl::OUString aOutStr(rtl::OStringToOUString(aOut, osl_getThreadTextEncoding()));
-#if defined GCC
+#if defined __GNUC__
         Window* pParent = Application::GetDefDialogParent();
         MessBox( pParent, WinBits( WB_OK ), OUString(), aOutStr ).Execute();
 #else

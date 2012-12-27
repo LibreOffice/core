@@ -18,7 +18,7 @@
  */
 
 
-#ifdef GCC
+#ifdef __GNUC__
 #include <iostream>
 #endif
 #include "connectivity/sdbcx/VColumn.hxx"

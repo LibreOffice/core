@@ -489,7 +489,7 @@ void SAL_CALL OTableHelper::rename( const ::rtl::OUString& newName ) throw(SQLEx
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(
-#ifdef GCC
+#ifdef __GNUC__
         ::connectivity::sdbcx::OTableDescriptor_BASE::rBHelper.bDisposed
 #else
         rBHelper.bDisposed
@@ -540,7 +540,7 @@ void SAL_CALL OTableHelper::alterColumnByIndex( sal_Int32 index, const Reference
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(
-#ifdef GCC
+#ifdef __GNUC__
         ::connectivity::sdbcx::OTableDescriptor_BASE::rBHelper.bDisposed
 #else
         rBHelper.bDisposed

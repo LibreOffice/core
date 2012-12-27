@@ -638,7 +638,7 @@ inline sal_Bool SwWrtShell::IsInClickToEdit() const { return bIsInClickToEdit; }
 
 inline sal_Bool SwWrtShell::Is_FnDragEQBeginDrag() const
 {
-#ifdef GCC
+#ifdef __GNUC__
     SELECTFUNC  fnTmp = &SwWrtShell::BeginDrag;
     return fnDrag == fnTmp;
 #else

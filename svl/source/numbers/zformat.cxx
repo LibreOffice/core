@@ -2795,7 +2795,7 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
             bool bStop = false;
             while (!bStop)
             {
-#ifdef GCC
+#ifdef __GNUC__
                 // #i21648# GCC over-optimizes something resulting
                 // in wrong fTest values throughout the loops.
                 volatile

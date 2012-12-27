@@ -54,7 +54,7 @@
 #ifdef WNT
 # define snprintf _snprintf
 
-#if defined GCC
+#if defined __GNUC__
 #pragma GCC diagnostic warning "-Wformat"
 #pragma GCC diagnostic warning "-Wformat-extra-args"
 #endif

@@ -48,7 +48,7 @@
 */
 #define WIN32_LEAN_AND_MEAN
 
-#ifdef GCC
+#ifdef __GNUC__
     // windows.h includes winsock2.h
     // if _WIN32_WINNT > 0x0400
     // so someone cannot include winsock.h
@@ -80,7 +80,7 @@
     #pragma warning(pop)
 #endif
 
-#ifdef GCC
+#ifdef __GNUC__
     #   ifndef SA_FAMILY_DECL
     #       define SA_FAMILY_DECL short sa_family
     #   endif
@@ -95,6 +95,6 @@
     #   define NSPROTO_IPX      1000
     #   define NSPROTO_SPX      1256
     #   define NSPROTO_SPXII    1257
-#endif // #ifdef GCC
+#endif // #ifdef __GNUC__
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

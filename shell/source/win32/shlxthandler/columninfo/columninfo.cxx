@@ -27,7 +27,7 @@
 #include <sal/macros.h>
 #include <malloc.h>
 
-#if defined GCC
+#if defined __GNUC__
 #pragma GCC diagnostic warning "-Wmissing-braces"
 #endif
 
