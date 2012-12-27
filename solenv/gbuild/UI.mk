@@ -17,6 +17,19 @@ gb_UILocalizeTarget_TARGET := $(call gb_Executable_get_target_for_build,uiex)
 gb_UILocalizeTarget_COMMAND := $(gb_Helper_set_ld_path) $(gb_UILocalizeTarget_TARGET)
 gb_UILocalizeTarget_LANGS := $(filter-out qtz,$(filter-out en-US,$(gb_WITH_LANG)))
 
+# If translatable strings from a .ui file are not merged into the
+# respective .po file yet, the produced translated files are empty (that
+# is, they only contain the root element), but qtz is not created at all
+# which breaks delivery. This hack avoids the problem by creating a
+# dummy translation file.
+define gb_UILocalizeTarget__fix_missing_qtz
+$(if $(filter qtz,$(gb_WITH_LANG)),\
+	&& if [ ! -f $(1)/qtz.ui ]; then \
+		echo '<?xml version="1.0"?><t></t>' > $(1)/qtz.ui; \
+	fi \
+)
+endef
+
 define gb_UILocalizeTarget__command
 $(call gb_Output_announce,$(2),$(true),UIX,1)
 MERGEINPUT=`$(gb_MKTEMP)` && \
@@ -27,6 +40,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		-o $(call gb_UILocalizeTarget_get_workdir,$(2)) \
 		-l all \
 		-m $${MERGEINPUT} \
+	$(call gb_UILocalizeTarget__fix_missing_qtz,$(call gb_UILocalizeTarget_get_workdir,$(2))) \
 	&& touch $(1) \
 ) && \
 rm -rf $${MERGEINPUT}
