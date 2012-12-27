@@ -1337,7 +1337,7 @@ DirEntry DirEntry::TempName( DirEntryKind eKind ) const
              * Welcome to the 21st century, we can have longer filenames now ;)
              * New format: pfx + "5 char milli/micro second res" + "current pid" + ".tmp"
              */
-#if (defined MSC || defined __MINGW32__) && defined WNT
+#ifdef _WIN32
             /* Milliseconds !! */
             static unsigned long u = GetTickCount();
             unsigned long mypid = static_cast<unsigned long>(_getpid());

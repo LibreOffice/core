@@ -140,7 +140,9 @@ using namespace nsSwDocInfoSubType;
  * gepflegt werden: rtf\rtfatr.cxx, sw6\sw6atr.cxx, w4w\w4watr.cxx
 */
 
-#if !defined(MSC) && !defined(UNX) && !defined(PPC) && !defined(__MINGW32__)
+#if !defined(_MSC_VER) && !defined(UNX) && !defined(PPC) && !defined(__MINGW32__)
+
+#error Interesting, I though this ifdef block would never be compiled. So remove this line and please tell me --tml@iki.fi
 
 #define ATTRFNTAB_SIZE 130
 #if ATTRFNTAB_SIZE != POOLATTR_END - POOLATTR_BEGIN
