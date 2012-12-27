@@ -35,9 +35,14 @@ $(eval $(call gb_Library_use_libraries,unordf,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_use_externals,unordf,librdf))
-$(eval $(call gb_Library_use_externals,unordf,libxslt))
-$(eval $(call gb_Library_use_externals,unordf,libxml2))
+$(eval $(call gb_Library_use_externals,unordf,\
+	librdf \
+	redland_headers \
+	raptor_headers \
+	rasqal_headers \
+	libxslt \
+	libxml2 \
+))
 
 $(eval $(call gb_Library_add_exception_objects,unordf,\
     unoxml/source/rdf/CBlankNode \

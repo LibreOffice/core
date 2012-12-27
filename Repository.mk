@@ -512,6 +512,8 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     ooofilt_x64 \
     propertyhdl \
     propertyhdl_x64 \
+	raptor \
+	rasqal \
     shlxthdl \
     shlxthdl_x64 \
     so_activex \
