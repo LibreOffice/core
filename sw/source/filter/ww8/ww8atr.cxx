@@ -129,33 +129,6 @@ using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 using namespace nsFieldFlags;
 using namespace nsSwDocInfoSubType;
-
-/*
- * um nicht immer wieder nach einem Update festzustellen, das irgendwelche
- * Hint-Ids dazugekommen sind, wird hier definiert, die Groesse der Tabelle
- * definiert und mit der akt. verglichen. Bei unterschieden wird der
- * Compiler schon meckern.
- *
- * diese Section und die dazugeherigen Tabellen muessen in folgenden Files
- * gepflegt werden: rtf\rtfatr.cxx, sw6\sw6atr.cxx, w4w\w4watr.cxx
-*/
-
-#if !defined(_MSC_VER) && !defined(UNX) && !defined(PPC) && !defined(__MINGW32__)
-
-#error Interesting, I though this ifdef block would never be compiled. So remove this line and please tell me --tml@iki.fi
-
-#define ATTRFNTAB_SIZE 130
-#if ATTRFNTAB_SIZE != POOLATTR_END - POOLATTR_BEGIN
-#   error "Attribut-Tabelle ist ungueltigt. Wurden neue Hint-ID's zugefuegt ??"
-#endif
-
-#define NODETAB_SIZE 3
-#if NODETAB_SIZE != RES_NODE_END - RES_NODE_BEGIN
-#   error "Node-Tabelle ist ungueltigt. Wurden neue Hint-ID's zugefuegt ??"
-#endif
-
-#endif
-
 using namespace sw::util;
 using namespace sw::types;
 

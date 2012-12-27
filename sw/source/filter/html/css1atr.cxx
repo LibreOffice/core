@@ -94,26 +94,6 @@
 using namespace ::com::sun::star;
 using ::editeng::SvxBorderLine;
 
-/*
- * um nicht immer wieder nach einem Update festzustellen, das irgendwelche
- * Hint-Ids dazugekommen sind, wird hier definiert, die Groesse der Tabelle
- * definiert und mit der akt. verglichen. Bei unterschieden wird der
- * Compiler schon meckern.
- *
- * diese Section und die dazugeherigen Tabellen muessen in folgenden Files
- * gepflegt werden: rtf\rtfatr.cxx, sw6\sw6atr.cxx, w4w\w4watr.cxx
- */
-#if !defined(UNX) && !defined(_MSC_VER) && !defined(PPC) && !defined(__MINGW32__)
-
-#error Interesting, I though this ifdef block would never be compiled. So remove this line and please tell me --tml@iki.fi
-
-#define ATTRFNTAB_SIZE 130
-#if ATTRFNTAB_SIZE != POOLATTR_END - POOLATTR_BEGIN
-#error Attribut-Tabelle ist ungueltigt. Wurden neue Hint-IDs zugefuegt ??
-#endif
-
-#endif
-
 #define HTML_HEADSPACE (12*20)
 
 #define CSS1_BACKGROUND_ATTR    1
