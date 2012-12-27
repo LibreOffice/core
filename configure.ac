@@ -4167,9 +4167,9 @@ if test "$cross_compiling" = "yes"; then
         Makefile.in \
         config/config_*.h.in \
         bin/get_config_variables \
-        $srcdir/solenv/bin/getcompver.awk \
-        $SRC_ROOT/solenv/inc/langlist.mk \
-        $SRC_ROOT/solenv/inc/postset.mk \
+        solenv/bin/getcompver.awk \
+        solenv/inc/langlist.mk \
+        solenv/inc/postset.mk \
     | (cd CONF-FOR-BUILD && tar xf -)
     (
     unset COM GUI GUIBASE OS CPU CPUNAME
