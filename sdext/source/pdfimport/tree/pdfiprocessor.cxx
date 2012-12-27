@@ -210,7 +210,7 @@ sal_Int32 PDFIProcessor::getFontId( const FontAttributes& rAttr ) const
 // line diagnose block - start
 void PDFIProcessor::processGlyphLine()
 {
-    if( m_GlyphsList.size()<1 )
+    if( m_GlyphsList.empty() )
         return;
 
     double fPreAvarageSpaceValue= 0.0;
