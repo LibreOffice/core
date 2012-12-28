@@ -30,11 +30,10 @@
 #include <com/sun/star/io/WrongFormatException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
-#ifdef DBG_COPYPASTE
 #include <unotools/localfilehelper.hxx>
 #include <tools/stream.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#endif
+#include <unotools/streamwrap.hxx>
 
 using namespace ::rtl;
 using namespace ::cppu;
@@ -91,16 +90,28 @@ sal_Bool RtfFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescri
         aMediaDesc.addInputStream();
         aMediaDesc[ MediaDescriptor::PROP_INPUTSTREAM() ] >>= xInputStream;
 
-#ifdef DBG_COPYPASTE
+        // If this is set, write to this file, instead of the real document during paste.
+        char* pEnv = getenv("SW_DEBUG_RTF_PASTE_TO");
         OUString aOutStr;
-        if (utl::LocalFileHelper::ConvertPhysicalNameToURL("/tmp/stream.rtf", aOutStr))
+        if (!bIsNewDoc && pEnv && utl::LocalFileHelper::ConvertPhysicalNameToURL(OStringToOUString(pEnv, RTL_TEXTENCODING_UTF8), aOutStr))
         {
             SvStream* pOut = utl::UcbStreamHelper::CreateStream(aOutStr, STREAM_WRITE);
             SvStream* pIn = utl::UcbStreamHelper::CreateStream(xInputStream);
             *pOut << *pIn;
             delete pOut;
+            return true;
         }
-#endif
+
+        // If this is set, read from this file, instead of the real clipboard during paste.
+        pEnv = getenv("SW_DEBUG_RTF_PASTE_FROM");
+        if (!bIsNewDoc && pEnv)
+        {
+            OUString aInStr;
+            utl::LocalFileHelper::ConvertPhysicalNameToURL(OStringToOUString(pEnv, RTL_TEXTENCODING_UTF8), aInStr);
+            SvStream* pStream = utl::UcbStreamHelper::CreateStream(aInStr, STREAM_READ);
+            uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
+            xInputStream.set(xStream, uno::UNO_QUERY);
+        }
 
         uno::Reference<frame::XFrame> xFrame = aMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_FRAME(),
                 uno::Reference<frame::XFrame>());
