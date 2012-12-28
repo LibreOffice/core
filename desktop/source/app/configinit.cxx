@@ -24,27 +24,13 @@
 #include <comphelper/processfactory.hxx>
 #include <uno/current_context.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <osl/diagnose.h>
-#include <stdio.h>
+#include <rtl/ustring.hxx>
 #include <com/sun/star/task/InteractionHandler.hpp>
 
 // ----------------------------------------------------------------------------
 
-namespace uno           = ::com::sun::star::uno;
-namespace lang          = ::com::sun::star::lang;
-using rtl::OUString;
-using uno::UNO_QUERY;
+using namespace ::com::sun::star;
 
-// ----------------------------------------------------------------------------
-
-// must be aligned with configmgr/source/misc/configinteractionhandler
-static char const CONFIG_ERROR_HANDLER[] = "configuration.interaction-handler";
-// ----------------------------------------------------------------------------
-
-#define OUSTRING( constascii ) OUString( RTL_CONSTASCII_USTRINGPARAM( constascii ) )
-
-#define k_ERRORHANDLER OUSTRING( CONFIGURATION_ERROR_HANDLER )
 
 // ----------------------------------------------------------------------------
 // ConfigurationErrorHandler
@@ -113,7 +99,8 @@ private:
 uno::Any SAL_CALL ConfigurationErrorHandler::Context::getValueByName( OUString const & aName)
         throw (uno::RuntimeException)
 {
-    if ( aName == CONFIG_ERROR_HANDLER )
+        // must be aligned with configmgr/source/misc/configinteractionhandler
+    if ( aName == "configuration.interaction-handler" )
     {
         if ( !m_xHandler.is() )
             m_xHandler = ConfigurationErrorHandler::getDefaultInteractionHandler();
@@ -156,7 +143,7 @@ void ConfigurationErrorHandler::deactivate()
 ConfigurationErrorHandler::InteractionHandler ConfigurationErrorHandler::getDefaultInteractionHandler()
 {
     uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-    InteractionHandler xHandler( com::sun::star::task::InteractionHandler::createWithParent(xContext, 0), UNO_QUERY );
+    InteractionHandler xHandler( com::sun::star::task::InteractionHandler::createWithParent(xContext, 0), uno::UNO_QUERY );
     return xHandler;
 }
 //------------------------------------------------------------------------------
