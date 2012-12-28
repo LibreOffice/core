@@ -2083,6 +2083,10 @@ namespace
                         rController.setDistinct(sal_True);
                         rController.InvalidateFeature(SID_QUERY_DISTINCT_VALUES);
                     }
+                    else
+                    {
+                        rController.setDistinct(sal_False);
+                    }
                     if ( (eErrorCode = InstallFields(_pView,pParseTree, pTableView->GetTabWinMap())) == eOk )
                     {
                         // GetSelectionCriteria must be called before GetHavingCriteria
