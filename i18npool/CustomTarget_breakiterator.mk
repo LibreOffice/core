@@ -33,6 +33,11 @@ i18npool_BIDIR := $(call gb_CustomTarget_get_workdir,i18npool/breakiterator)
 $(call gb_CustomTarget_get_target,i18npool/breakiterator) : \
 	$(i18npool_BIDIR)/dict_ja.cxx $(i18npool_BIDIR)/dict_zh.cxx $(i18npool_BIDIR)/OpenOffice_dat.c
 
+ifeq ($(SYSTEM_ICU),NO)
+$(call gb_CustomTarget_get_target,i18npool/breakiterator) : \
+	$(call gb_ExternalPackage_get_target,icu)
+endif
+
 $(i18npool_BIDIR)/dict_%.cxx : \
 		$(SRCDIR)/i18npool/source/breakiterator/data/%.dic \
 		$(call gb_Executable_get_target_for_build,gendict) \
