@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAASX////Q\u003d",
+        "filename": "tools/source/fsys/tempfile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000099
+      },
+      "writtenOn": "2012-12-28T07:04:15Z",
+      "side": 1,
+      "message": "Instead of duplicating the function - is there a way to share the common code?",
+      "revId": "094ac9273d4bec7b54c2823390cd7b6d0dad4aad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
