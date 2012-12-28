@@ -2579,7 +2579,7 @@ sal_Bool SwFEShell::IsAlignPossible() const
 }
 
 
-// temporary fix till  SS of JOE is availale
+// temporary fix till  SS of JOE is available
 void SwFEShell::CheckUnboundObjects()
 {
     SET_CURR_SHELL( this );
@@ -2611,9 +2611,8 @@ void SwFEShell::CheckUnboundObjects()
                             Imp()->GetDrawView()->GetCurrentObjIdentifier() : 0xFFFF;
 
             SwFmtAnchor aAnch;
-            const SwFrm *pAnch = 0;
             {
-            pAnch = ::FindAnchor( pPage, aPt, sal_True );
+            const SwFrm *pAnch = ::FindAnchor( pPage, aPt, sal_True );
             SwPosition aPos( *((SwCntntFrm*)pAnch)->GetNode() );
             aAnch.SetType( FLY_AT_PARA );
             aAnch.SetAnchor( &aPos );

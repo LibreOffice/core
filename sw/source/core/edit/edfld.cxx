@@ -316,7 +316,6 @@ void SwEditShell::UpdateFlds( SwField &rFld )
     SET_CURR_SHELL( this );
     StartAllAction();
     {
-        SwField *pCurFld = 0;
 
         // Wenn es keine Selektionen gibt, gilt der Wert der aktuellen
         // Cursor-Position.
@@ -377,7 +376,7 @@ void SwEditShell::UpdateFlds( SwField &rFld )
                     if( 0 != (pTxtFld = GetDocTxtFld( pCurStt )) )
                     {
                         pFmtFld = (SwFmtFld*)&pTxtFld->GetFld();
-                        pCurFld = pFmtFld->GetFld();
+                        SwField *pCurFld = pFmtFld->GetFld();
 
                         // bei gemischten Feldtypen
                         if( pCurFld->GetTyp()->Which() !=

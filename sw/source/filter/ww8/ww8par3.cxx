@@ -925,8 +925,7 @@ void WW8ListManager::AdjustLVL( sal_uInt8 nLevel, SwNumRule& rNumRule,
 {
     bNewCharFmtCreated = false;
     SfxItemSet* pThisLevelItemSet;
-    SfxItemSet* pLowerLevelItemSet;
-    sal_uInt8        nIdenticalItemSetLevel;
+    sal_uInt8 nIdenticalItemSetLevel;
     const SfxPoolItem* pItem;
 
     SwNumFmt aNumFmt  = rNumRule.Get( nLevel );
@@ -937,6 +936,7 @@ void WW8ListManager::AdjustLVL( sal_uInt8 nLevel, SwNumRule& rNumRule,
     {
         nIdenticalItemSetLevel = nMaxLevel;
         SfxItemIter aIter( *pThisLevelItemSet );
+        SfxItemSet* pLowerLevelItemSet;
         for (sal_uInt8 nLowerLevel = 0; nLowerLevel < nLevel; ++nLowerLevel)
         {
             pLowerLevelItemSet = rListItemSet[ nLowerLevel ];

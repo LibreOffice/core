@@ -644,7 +644,6 @@ String DenoteSpecialCharacters(const String & rStr)
 SwRewriter SwUndoDelete::GetRewriter() const
 {
     SwRewriter aResult;
-    String * pStr = NULL;
 
     if (nNode != 0)
     {
@@ -673,6 +672,7 @@ SwRewriter SwUndoDelete::GetRewriter() const
         }
         else
         {
+            String * pStr = NULL;
             if (pSttStr != NULL)
                 pStr = pSttStr;
             else if (pEndStr != NULL)

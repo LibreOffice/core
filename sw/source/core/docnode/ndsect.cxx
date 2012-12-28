@@ -241,7 +241,6 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
                 }
             }
 
-            const SwCntntNode* pCNd;
             if( pPrvNd && 1 == nRegionRet )
             {
                 pSttPos->nNode.Assign( *pPrvNd );
@@ -259,7 +258,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
             }
             else
             {
-                pCNd = pEndPos->nNode.GetNode().GetCntntNode();
+                const SwCntntNode* pCNd = pEndPos->nNode.GetNode().GetCntntNode();
                 if( pCNd && pCNd->Len() != pEndPos->nContent.GetIndex() )
                 {
                     xub_StrLen nCntnt = pSttPos->nContent.GetIndex();
@@ -807,10 +806,10 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
         }
         else
         {
-            SwNode* pNd;
             ++aInsPos;
             if (!lcl_IsTOXSection(rSectionData))
             {
+                SwNode* pNd;
                 while( aInsPos.GetIndex() < Count() - 1 &&
                         ( pNd = &aInsPos.GetNode())->IsEndNode() &&
                         pNd->StartOfSectionNode()->IsSectionNode())

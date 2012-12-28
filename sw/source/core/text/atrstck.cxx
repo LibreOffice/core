@@ -644,12 +644,11 @@ void SwAttrHandler::ActivateTop( SwFont& rFnt, const sal_uInt16 nAttr )
         // check, if an rotation attribute has to be applied
         sal_uInt16 nTwoLineStack = StackPos[ RES_CHRATR_TWO_LINES ];
         sal_Bool bTwoLineAct = sal_False;
-        const SfxPoolItem* pTwoLineItem = 0;
         const SwTxtAttr* pTwoLineAttr = aAttrStack[ nTwoLineStack ].Top();
 
         if ( pTwoLineAttr )
         {
-             pTwoLineItem = CharFmt::GetItem( *pTwoLineAttr, RES_CHRATR_TWO_LINES );
+             const SfxPoolItem* pTwoLineItem = CharFmt::GetItem( *pTwoLineAttr, RES_CHRATR_TWO_LINES );
              bTwoLineAct = ((SvxTwoLinesItem*)pTwoLineItem)->GetValue();
         }
         else
@@ -661,12 +660,11 @@ void SwAttrHandler::ActivateTop( SwFont& rFnt, const sal_uInt16 nAttr )
 
         // eventually, an rotate attribute has to be activated
         sal_uInt16 nRotateStack = StackPos[ RES_CHRATR_ROTATE ];
-        const SfxPoolItem* pRotateItem = 0;
         const SwTxtAttr* pRotateAttr = aAttrStack[ nRotateStack ].Top();
 
         if ( pRotateAttr )
         {
-            pRotateItem = CharFmt::GetItem( *pRotateAttr, RES_CHRATR_ROTATE );
+            const SfxPoolItem* pRotateItem = CharFmt::GetItem( *pRotateAttr, RES_CHRATR_ROTATE );
             rFnt.SetVertical( ((SvxCharRotateItem*)pRotateItem)->GetValue(),
                                bVertLayout );
         }
@@ -844,12 +842,11 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, sal_Bool bPu
 
             sal_uInt16 nTwoLineStack = StackPos[ RES_CHRATR_TWO_LINES ];
             sal_Bool bTwoLineAct = sal_False;
-            const SfxPoolItem* pTwoLineItem = 0;
             const SwTxtAttr* pTwoLineAttr = aAttrStack[ nTwoLineStack ].Top();
 
             if ( pTwoLineAttr )
             {
-                pTwoLineItem = CharFmt::GetItem( *pTwoLineAttr, RES_CHRATR_TWO_LINES );
+                const SfxPoolItem* pTwoLineItem = CharFmt::GetItem( *pTwoLineAttr, RES_CHRATR_TWO_LINES );
                 bTwoLineAct = ((SvxTwoLinesItem*)pTwoLineItem)->GetValue();
             }
             else
@@ -884,12 +881,11 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, sal_Bool bPu
                 break;
 
             sal_uInt16 nRotateStack = StackPos[ RES_CHRATR_ROTATE ];
-            const SfxPoolItem* pRotateItem = 0;
             const SwTxtAttr* pRotateAttr = aAttrStack[ nRotateStack ].Top();
 
             if ( pRotateAttr )
             {
-                pRotateItem = CharFmt::GetItem( *pRotateAttr, RES_CHRATR_ROTATE );
+                const SfxPoolItem* pRotateItem = CharFmt::GetItem( *pRotateAttr, RES_CHRATR_ROTATE );
                 rFnt.SetVertical( ((SvxCharRotateItem*)pRotateItem)->GetValue(),
                                    bVertLayout );
             }

@@ -1059,11 +1059,10 @@ void SwHistory::Add( SwFlyFrmFmt& rFmt, sal_uInt16& rSetPos )
 {
     OSL_ENSURE( !m_nEndDiff, "History was not deleted after REDO" );
 
-    SwHistoryHint * pHint;
     const sal_uInt16 nWh = rFmt.Which();
     if( RES_FLYFRMFMT == nWh || RES_DRAWFRMFMT == nWh )
     {
-        pHint = new SwHistoryTxtFlyCnt( &rFmt );
+        SwHistoryHint * pHint = new SwHistoryTxtFlyCnt( &rFmt );
         m_SwpHstry.push_back( pHint );
 
         const SwFmtChain* pChainItem;

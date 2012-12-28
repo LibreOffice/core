@@ -1481,7 +1481,6 @@ sal_Bool SwNodes::CheckNodesRange( const SwNodeIndex& rStt, const SwNodeIndex& r
 *************************************************************************/
 void SwNodes::DelNodes( const SwNodeIndex & rStart, sal_uLong nCnt )
 {
-    int bUpdateNum = 0;
     sal_uLong nSttIdx = rStart.GetIndex();
 
     if( !nSttIdx && nCnt == GetEndOfContent().GetIndex()+1 )
@@ -1509,6 +1508,7 @@ void SwNodes::DelNodes( const SwNodeIndex & rStart, sal_uLong nCnt )
     }
     else
     {
+        int bUpdateNum = 0;
         for( sal_uLong n = nSttIdx, nEnd = nSttIdx + nCnt; n < nEnd; ++n )
         {
             SwNode* pNd = (*this)[ n ];
