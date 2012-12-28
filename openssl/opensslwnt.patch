@@ -1,5 +1,5 @@
 --- misc/openssl-0.9.8v/crypto/x509v3/v3_pci.c	2007-03-05 01:06:47.000000000 +0100
-+++ misc/build/openssl-0.9.8v/crypto/x509v3/v3_pci.c	2010-03-26 12:04:20.961547300 +0100
++++ build/openssl-0.9.8v/crypto/x509v3/v3_pci.c	2010-03-26 12:04:20.961547300 +0100
 @@ -2,7 +2,7 @@
  /* Contributed to the OpenSSL Project 2004
   * by Richard Levitte (richard@levitte.org)
@@ -10,7 +10,7 @@
   * All rights reserved.
   *
 --- misc/openssl-0.9.8v/crypto/x509v3/v3_pcia.c	2004-12-28 01:21:33.000000000 +0100
-+++ misc/build/openssl-0.9.8v/crypto/x509v3/v3_pcia.c	2010-03-26 12:04:20.961547300 +0100
++++ build/openssl-0.9.8v/crypto/x509v3/v3_pcia.c	2010-03-26 12:04:20.961547300 +0100
 @@ -2,7 +2,7 @@
  /* Contributed to the OpenSSL Project 2004
   * by Richard Levitte (richard@levitte.org)
@@ -21,7 +21,7 @@
   * All rights reserved.
   *
 --- misc/openssl-0.9.8v/ms/do_ms.bat	2009-07-28 14:51:19.000000000 +0200
-+++ misc/build/openssl-0.9.8v/ms/do_ms.bat	2010-03-26 12:19:19.399047300 +0100
++++ build/openssl-0.9.8v/ms/do_ms.bat	2010-03-26 12:19:19.399047300 +0100
 @@ -1,11 +1,11 @@
  
 -perl util\mkfiles.pl >MINFO
@@ -44,7 +44,7 @@
 +%1 util\mkdef.pl 32 libeay > ms\libeay32.def
 +%1 util\mkdef.pl 32 ssleay > ms\ssleay32.def
 --- misc/openssl-0.9.8v/util/mk1mf.pl	2009-09-20 14:46:42.000000000 +0200
-+++ misc/build/openssl-0.9.8v/util/mk1mf.pl	2010-03-26 12:04:20.977172300 +0100
++++ build/openssl-0.9.8v/util/mk1mf.pl	2010-03-26 12:04:20.977172300 +0100
 @@ -128,7 +128,7 @@
  $inc_def="outinc";
  $tmp_def="tmp";
@@ -66,6 +66,24 @@
  	if ($key eq "RELATIVE_DIRECTORY")
  		{
  		if ($lib ne "")
+@@ -529,7 +529,7 @@
+ # Set your compiler options
+ PLATFORM=$platform
+ CC=$bin_dir${cc}
+-CFLAG=$cflags
++CFLAG=$cflags \$(SOLARINC)
+ APP_CFLAG=$app_cflag
+ LIB_CFLAG=$lib_cflag
+ SHLIB_CFLAG=$shl_cflag
+@@ -544,7 +544,7 @@
+ 
+ LINK=$link
+ LFLAGS=$lflags
+-RSC=$rsc
++RSC=$rsc \$(SOLARINC)
+ FIPSLINK=\$(PERL) util${o}fipslink.pl
+ 
+ AES_ASM_OBJ=$aes_asm_obj
 @@ -730,7 +735,7 @@
  printf OUT <<EOF;
  #ifdef $platform_cpp_symbol
@@ -76,7 +94,7 @@
  EOF
  printf OUT "  #define DATE \"%s\"\n", scalar gmtime();
 --- misc/openssl-0.9.8v/util/pl/VC-32.pl	2010-02-04 02:10:24.000000000 +0100
-+++ misc/build/openssl-0.9.8v/util/pl/VC-32.pl	2010-03-26 12:04:20.977172300 +0100
++++ build/openssl-0.9.8v/util/pl/VC-32.pl	2010-03-26 12:04:20.977172300 +0100
 @@ -32,7 +32,7 @@
  $l_flags =~ s/-L(\S+)/\/libpath:$1/g;
  
@@ -134,8 +152,8 @@
  
  sub do_lib_rule
  	{
---- misc/build/openssl-0.9.8v/ms/uplink.c
-+++ misc/build/openssl-0.9.8v/ms/uplink.c
+--- build/openssl-0.9.8v/ms/uplink.c
++++ build/openssl-0.9.8v/ms/uplink.c
 @@ -1,5 +1,6 @@
  #if (defined(_WIN64) || defined(_WIN32_WCE)) && !defined(UNICODE)
  #define UNICODE
