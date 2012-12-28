@@ -30,17 +30,18 @@ $(eval $(call gb_CustomTarget_CustomTarget,i18npool/breakiterator))
 
 i18npool_BIDIR := $(call gb_CustomTarget_get_workdir,i18npool/breakiterator)
 
+ifeq ($(SYSTEM_ICU),NO)
+i18npool_ICUTARGET := $(call gb_ExternalPackage_get_target,icu)
+else
+i18npool_ICUTARGET :=
+endif
+
 $(call gb_CustomTarget_get_target,i18npool/breakiterator) : \
 	$(i18npool_BIDIR)/dict_ja.cxx $(i18npool_BIDIR)/dict_zh.cxx $(i18npool_BIDIR)/OpenOffice_dat.c
 
-ifeq ($(SYSTEM_ICU),NO)
-$(call gb_CustomTarget_get_target,i18npool/breakiterator) : \
-	$(call gb_ExternalPackage_get_target,icu)
-endif
-
 $(i18npool_BIDIR)/dict_%.cxx : \
 		$(SRCDIR)/i18npool/source/breakiterator/data/%.dic \
-		$(call gb_Executable_get_target_for_build,gendict) \
+		$(call gb_Executable_get_target_for_build,gendict) $(i18npool_ICUTARGET) \
 		| $(i18npool_BIDIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),DIC,1)
 	$(call gb_Helper_abbreviate_dirs,\
@@ -93,7 +94,7 @@ i18npool_BRKTXTS := \
 # Output of gencmn is redirected to OpenOffice_tmp.c with the -t switch.
 $(i18npool_BIDIR)/OpenOffice_dat.c : $(SRCDIR)/i18npool/CustomTarget_breakiterator.mk \
 		$(patsubst %.brk,$(i18npool_BIDIR)/%_brk.c,$(i18npool_BRKTXTS)) \
-		$(i18npool_GENCMNTARGET)
+		$(i18npool_GENCMNTARGET) $(i18npool_ICUTARGET)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CMN,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		RESPONSEFILE=$(shell $(gb_MKTEMP)) && \
@@ -105,13 +106,13 @@ $(i18npool_BIDIR)/OpenOffice_dat.c : $(SRCDIR)/i18npool/CustomTarget_breakiterat
 		echo '#endif' >> $@ && \
 		cat $(subst _dat,_tmp,$@) >> $@)
 
-$(i18npool_BIDIR)/%_brk.c : $(i18npool_BIDIR)/%.brk $(i18npool_GENCCODETARGET)
+$(i18npool_BIDIR)/%_brk.c : $(i18npool_BIDIR)/%.brk $(i18npool_GENCCODETARGET) $(i18npool_ICUTARGET)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CCD,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		$(i18npool_GENCCODE) -n OpenOffice -d $(i18npool_BIDIR)/ $< \
 			$(if $(findstring s,$(MAKEFLAGS)),> /dev/null))
 
-$(i18npool_BIDIR)/%.brk : $(i18npool_BIDIR)/%.txt $(i18npool_GENBRKTARGET)
+$(i18npool_BIDIR)/%.brk : $(i18npool_BIDIR)/%.txt $(i18npool_GENBRKTARGET) $(i18npool_ICUTARGET)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),BRK,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		$(i18npool_GENBRK) -r $< -o $@ $(if $(findstring s,$(MAKEFLAGS)),> /dev/null))
