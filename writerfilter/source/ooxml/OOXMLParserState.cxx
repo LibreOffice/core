@@ -103,7 +103,7 @@ const string OOXMLParserState::getHandle() const
 {
     char sBuffer[256];
 
-    snprintf(sBuffer, sizeof(sBuffer), "%d", mnHandle);
+    snprintf(sBuffer, sizeof(sBuffer), "%u", mnHandle);
 
     return sBuffer;
 }

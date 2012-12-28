@@ -110,10 +110,10 @@ void WW8TableDataHandler::startTable(unsigned int nRows, unsigned int nDepth,
     char sBuffer[256];
 
     string tmpStr = "<tabledata.table rows=\"";
-    snprintf(sBuffer, sizeof(sBuffer), "%d", nRows);
+    snprintf(sBuffer, sizeof(sBuffer), "%u", nRows);
     tmpStr += sBuffer;
     tmpStr += "\" depth=\"";
-    snprintf(sBuffer, sizeof(sBuffer), "%d", nDepth);
+    snprintf(sBuffer, sizeof(sBuffer), "%u", nDepth);
     tmpStr += sBuffer;
     tmpStr += "\">";
 
@@ -130,7 +130,7 @@ void WW8TableDataHandler::startRow
 {
     char sBuffer[256];
 
-    snprintf(sBuffer, sizeof(sBuffer), "%d", nCols);
+    snprintf(sBuffer, sizeof(sBuffer), "%u", nCols);
     string tmpStr = "<tabledata.row cells=\"";
     tmpStr += sBuffer;
     tmpStr += "\">";
