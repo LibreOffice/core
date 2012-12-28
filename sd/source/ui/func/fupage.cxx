@@ -240,7 +240,6 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
         p2 = pPtr[3];
         pPtr += 2;
     }
-    pPtr += 2;
     SfxItemSet aMergedAttr( *aNewAttr.GetPool(), p1, p2 );
 
     mergeItemSetsImpl( aMergedAttr, aNewAttr );
