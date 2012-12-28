@@ -1381,7 +1381,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
         if ( pFormatter )
         {
             sal_Int32 nNatNum = pFormatter->GetNatNum()->convertFromXmlAttributes( aNatNumAttr );
-            aFormatCode.appendAscii( RTL_CONSTASCII_STRINGPARAM( "[NatNum" ) );
+            aFormatCode.append( "[NatNum" );
             aFormatCode.append( nNatNum, 10 );
 
             LanguageType eLang = LanguageTag( aNatNumAttr.Locale ).getLanguageType( false);
@@ -1389,7 +1389,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
                 eLang = LANGUAGE_SYSTEM;            //! error handling for invalid locales?
             if ( eLang != nFormatLang && eLang != LANGUAGE_SYSTEM )
             {
-                aFormatCode.appendAscii( RTL_CONSTASCII_STRINGPARAM( "][$-" ) );
+                aFormatCode.append( "][$-" );
                 // language code in upper hex:
                 aFormatCode.append(rtl::OUString::valueOf(sal_Int32(eLang), 16).toAsciiUpperCase());
             }

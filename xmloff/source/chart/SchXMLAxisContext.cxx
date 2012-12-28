@@ -779,7 +779,7 @@ void SchXMLAxisContext::CorrectAxisPositions( const Reference< chart2::XChartDoc
                     if( xMainXAxisProp.is() && xMainYAxisProp.is() )
                     {
                         chart2::ScaleData aMainXScale = xMainXAxis->getScaleData();
-                        if( 0 == rChartTypeServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.ScatterChartType" ) ) )
+                        if( 0 == rChartTypeServiceName.reverseCompareTo( "com.sun.star.chart2.ScatterChartType" ) )
                         {
                             xMainYAxisProp->setPropertyValue( OUString("CrossoverPosition")
                                     , uno::makeAny( ::com::sun::star::chart::ChartAxisPosition_VALUE) );

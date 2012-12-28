@@ -1444,7 +1444,7 @@ namespace xmloff
     SvXMLImportContext* OTextLikeImport::CreateChildContext( sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
         const Reference< XAttributeList >& _rxAttrList )
     {
-        if ( ( XML_NAMESPACE_TEXT == _nPrefix ) && _rLocalName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("p")) )
+        if ( ( XML_NAMESPACE_TEXT == _nPrefix ) && _rLocalName.equalsIgnoreAsciiCase("p") )
         {
             OSL_ENSURE( m_eElementType == OControlElement::TEXT_AREA,
                 "OTextLikeImport::CreateChildContext: text paragraphs in a non-text-area?" );

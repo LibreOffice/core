@@ -223,58 +223,58 @@ OUString GetChartTypeByClassName(
     bool bInternalType = false;
 
     if( bUseOldNames )
-        aResultBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart."));
+        aResultBuffer.append( "com.sun.star.chart.");
     else
-        aResultBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2."));
+        aResultBuffer.append( "com.sun.star.chart2.");
 
     bInternalType = true;
 
     if( IsXMLToken( rClassName, XML_LINE ))
-        aResultBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM("Line"));
+        aResultBuffer.append("Line");
     else if( IsXMLToken( rClassName, XML_AREA ))
-        aResultBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM("Area"));
+        aResultBuffer.append("Area");
     else if( IsXMLToken( rClassName, XML_BAR ))
     {
         if( bUseOldNames )
-            aResultBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM("Bar"));
+            aResultBuffer.append("Bar");
         else
         {
-            aResultBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM("Column"));
+            aResultBuffer.append("Column");
             // @todo: might be Bar
         }
     }
     else if( IsXMLToken( rClassName, XML_CIRCLE ))
-        aResultBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM("Pie"));
+        aResultBuffer.append("Pie");
     else if( IsXMLToken( rClassName, XML_RING ))
-        aResultBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM("Donut"));
+        aResultBuffer.append("Donut");
     else if( IsXMLToken( rClassName, XML_SCATTER ))
     {
         if( bUseOldNames )
-            aResultBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM("XY"));
+            aResultBuffer.append("XY");
         else
-            aResultBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM("Scatter"));
+            aResultBuffer.append("Scatter");
     }
 
     else if( IsXMLToken( rClassName, XML_BUBBLE ))
-        aResultBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM("Bubble"));
+        aResultBuffer.append("Bubble");
     else if( IsXMLToken( rClassName, XML_RADAR ))
-        aResultBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM("Net"));
+        aResultBuffer.append("Net");
     else if( IsXMLToken( rClassName, XML_FILLED_RADAR ))
-        aResultBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM("FilledNet"));
+        aResultBuffer.append("FilledNet");
     else if( IsXMLToken( rClassName, XML_STOCK ))
     {
         if( bUseOldNames )
-            aResultBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM("Stock"));
+            aResultBuffer.append("Stock");
         else
-            aResultBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM("CandleStick"));
+            aResultBuffer.append("CandleStick");
     }
     else if( IsXMLToken( rClassName, XML_SURFACE ))
     {
         //@todo change this if a surface chart is available
         if( bUseOldNames )
-            aResultBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM("Bar"));
+            aResultBuffer.append("Bar");
         else
-            aResultBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM("Column"));
+            aResultBuffer.append("Column");
     }
     else
         bInternalType = false;
@@ -283,9 +283,9 @@ OUString GetChartTypeByClassName(
         return OUString();
 
     if( bUseOldNames )
-        aResultBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM("Diagram"));
+        aResultBuffer.append("Diagram");
     else
-        aResultBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM("ChartType"));
+        aResultBuffer.append("ChartType");
 
     return aResultBuffer.makeStringAndClear();
 
@@ -322,15 +322,15 @@ XMLTokenEnum getTokenByChartType(
                 eResult = XML_LINE;
             else if ( aServiceName == "Area" )
                 eResult = XML_AREA;
-            else if( aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Bar")) ||
-                     (!bUseOldNames && aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Column"))))
+            else if( aServiceName == "Bar" ||
+                     (!bUseOldNames && aServiceName == "Column"))
                 eResult = XML_BAR;
             else if ( aServiceName == "Pie" )
                 eResult = XML_CIRCLE;
             else if ( aServiceName == "Donut" )
                 eResult = XML_RING;
-            else if( (bUseOldNames && aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("XY"))) ||
-                     (!bUseOldNames && aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Scatter"))))
+            else if( (bUseOldNames && aServiceName == "XY") ||
+                     (!bUseOldNames && aServiceName == "Scatter"))
                 eResult = XML_SCATTER;
             else if ( aServiceName == "Bubble" )
                 eResult = XML_BUBBLE;
@@ -338,8 +338,8 @@ XMLTokenEnum getTokenByChartType(
                 eResult = XML_RADAR;
             else if ( aServiceName == "FilledNet" )
                 eResult = XML_FILLED_RADAR;
-            else if( (bUseOldNames && aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Stock"))) ||
-                     (!bUseOldNames && aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("CandleStick"))))
+            else if( (bUseOldNames && aServiceName == "Stock") ||
+                     (!bUseOldNames && aServiceName == "CandleStick"))
                 eResult = XML_STOCK;
         }
     }

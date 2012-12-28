@@ -497,9 +497,9 @@ void SAL_CALL XMLTransformerBase::initialize( const Sequence< Any >& aArguments 
 
 static sal_Int16 lcl_getUnit( const OUString& rValue )
 {
-    if( rValue.endsWithIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "cm" ) ) )
+    if( rValue.endsWithIgnoreAsciiCase( "cm" ) )
         return util::MeasureUnit::CM;
-    else if ( rValue.endsWithIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "mm" ) ) )
+    else if ( rValue.endsWithIgnoreAsciiCase( "mm" ) )
         return util::MeasureUnit::MM;
     else
         return util::MeasureUnit::INCH;

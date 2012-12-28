@@ -862,7 +862,7 @@ void SchXMLChartContext::EndElement()
             bool bLinesOn = true;
             if( (maSeriesDefaultsAndStyles.maLinesOnProperty >>= bLinesOn) && !bLinesOn )
             {
-                if( 0 == maChartTypeServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.ScatterChartType" ) ) )
+                if( 0 == maChartTypeServiceName.reverseCompareTo( "com.sun.star.chart2.ScatterChartType" ) )
                 {
                     bSwitchOffLinesForScatter = true;
                     SchXMLSeries2Context::switchSeriesLinesOff( maSeriesDefaultsAndStyles.maSeriesStyleList );

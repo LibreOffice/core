@@ -510,8 +510,8 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
             if( nFound & FOUND_LIBRARY )
             {
                 OUString sLocation( GetXMLToken(
-                    (aStrLibrary.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("StarOffice")) ||
-                     aStrLibrary.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("application")) ) ? XML_APPLICATION
+                    (aStrLibrary.equalsIgnoreAsciiCase("StarOffice") ||
+                     aStrLibrary.equalsIgnoreAsciiCase("application") ) ? XML_APPLICATION
                                                                        : XML_DOCUMENT ) );
                 OUStringBuffer sTmp( sLocation.getLength() + aStrMacro.getLength() + 1 );
                 sTmp = sLocation;

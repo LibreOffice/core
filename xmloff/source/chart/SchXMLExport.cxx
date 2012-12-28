@@ -2088,7 +2088,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
 
     // stock-chart elements
     OUString sChartType ( xDiagram->getDiagramType());
-    if( 0 == sChartType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart.StockDiagram" )))
+    if( 0 == sChartType.reverseCompareTo( "com.sun.star.chart.StockDiagram" ))
     {
         Reference< chart::XStatisticDisplay > xStockPropProvider( xDiagram, uno::UNO_QUERY );
         if( xStockPropProvider.is())

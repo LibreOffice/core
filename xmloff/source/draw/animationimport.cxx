@@ -1164,7 +1164,7 @@ void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< :
                 if( xIter.is() )
                 {
                     double fInterval = 0.0;
-                    if( rValue.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("P")) )
+                    if( rValue.match("P") )
                     {
                         ::com::sun::star::util::Duration aDuration;
                         if (::sax::Converter::convertDuration(aDuration, rValue))

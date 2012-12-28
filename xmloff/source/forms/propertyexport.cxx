@@ -698,8 +698,7 @@ namespace xmloff
             // the property must exist
             if (!m_xPropertyInfo->hasPropertyByName(_rPropertyName))
             {
-                rtl::OStringBuffer aBuf(RTL_CONSTASCII_STRINGPARAM(
-                    "OPropertyExport::dbg_implCheckProperty: no property with the name "));
+                rtl::OStringBuffer aBuf("OPropertyExport::dbg_implCheckProperty: no property with the name ");
                 aBuf.append(rtl::OUStringToOString(_rPropertyName, RTL_TEXTENCODING_ASCII_US)).append('!');
                 OSL_FAIL(aBuf.getStr());
                 return;

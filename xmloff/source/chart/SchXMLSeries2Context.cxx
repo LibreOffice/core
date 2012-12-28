@@ -275,9 +275,9 @@ SchXMLSeries2Context::SchXMLSeries2Context(
         mbSymbolSizeIsMissingInFile(false),
         maChartSize( rChartSize )
 {
-    if( 0 == aGlobalChartTypeName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.DonutChartType" ) ) )
+    if( 0 == aGlobalChartTypeName.reverseCompareTo( "com.sun.star.chart2.DonutChartType" ) )
     {
-        maSeriesChartTypeName = ::rtl::OUString("com.sun.star.chart2.PieChartType" );
+        maSeriesChartTypeName = "com.sun.star.chart2.PieChartType";
         maGlobalChartTypeName = maSeriesChartTypeName;
     }
 }
