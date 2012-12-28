@@ -41,8 +41,6 @@
 #include <rtl/ustrbuf.hxx>
 
 using namespace utl;
-using rtl::OUString;
-using rtl::OString;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
 using namespace com::sun::star::lang;
@@ -50,7 +48,6 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 using namespace com::sun::star::configuration;
 
-#define C2U(cChar) OUString(RTL_CONSTASCII_USTRINGPARAM(cChar))
 #include <cppuhelper/implbase1.hxx> // helper for implementations
 
 #ifdef DBG_UTIL
@@ -285,7 +282,7 @@ void ConfigItem::impl_packLocalizedProperties(  const   Sequence< OUString >&   
     for( nSourceCounter=0; nSourceCounter<nSourceSize; ++nSourceCounter )
     {
         // If item a special localized one ... convert and pack it ...
-        if( lInValues[nSourceCounter].getValueTypeName() == C2U("com.sun.star.uno.XInterface") )
+        if( lInValues[nSourceCounter].getValueTypeName() == "com.sun.star.uno.XInterface" )
         {
             lInValues[nSourceCounter] >>= xLocalizedNode;
             Reference< XNameContainer > xSetAccess( xLocalizedNode, UNO_QUERY );
@@ -361,10 +358,10 @@ void ConfigItem::impl_unpackLocalizedProperties(    const   Sequence< OUString >
         // If item a special localized one ... split it and insert his parts to output lists ...
         if( lInValues[nSourceCounter].getValueType() == ::getCppuType( (const Sequence< PropertyValue >*)NULL ) )
         {
-            lInValues[nSourceCounter]   >>= lProperties             ;
-            sNodeName               =   lInNames[nSourceCounter]    ;
-            sNodeName               +=  C2U("/")                    ;
-            nPropertiesSize         =   lProperties.getLength()     ;
+            lInValues[nSourceCounter] >>= lProperties;
+            nPropertiesSize = lProperties.getLength();
+
+            sNodeName = lInNames[nSourceCounter] + "/";
 
             if( (nDestinationCounter+nPropertiesSize) > lOutNames.getLength() )
             {

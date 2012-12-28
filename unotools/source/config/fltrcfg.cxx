@@ -28,10 +28,6 @@
 using namespace utl;
 using namespace com::sun::star::uno;
 
-using ::rtl::OUString;
-
-#define C2U(cChar) OUString(RTL_CONSTASCII_USTRINGPARAM(cChar))
-
 // -----------------------------------------------------------------------
 #define FILTERCFG_WORD_CODE             0x0001
 #define FILTERCFG_WORD_STORAGE          0x0002
@@ -94,8 +90,8 @@ void    SvtAppFilterOptions_Impl::Commit()
 {
     Sequence<OUString> aNames(2);
     OUString* pNames = aNames.getArray();
-    pNames[0] = C2U("Load");
-    pNames[1] = C2U("Save");
+    pNames[0] = "Load";
+    pNames[1] = "Save";
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
@@ -115,8 +111,8 @@ void    SvtAppFilterOptions_Impl::Load()
 {
     Sequence<OUString> aNames(2);
     OUString* pNames = aNames.getArray();
-    pNames[0] = C2U("Load");
-    pNames[1] = C2U("Save");
+    pNames[0] = "Load";
+    pNames[1] = "Save";
 
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
@@ -153,7 +149,7 @@ void SvtWriterFilterOptions_Impl::Commit()
     SvtAppFilterOptions_Impl::Commit();
 
     Sequence<OUString> aNames(1);
-    aNames[0] = C2U("Executable");
+    aNames[0] = "Executable";
     Sequence<Any> aValues(1);
     aValues[0] <<= bLoadExecutable;
 
@@ -165,7 +161,7 @@ void SvtWriterFilterOptions_Impl::Load()
     SvtAppFilterOptions_Impl::Load();
 
     Sequence<OUString> aNames(1);
-    aNames[0] = C2U("Executable");
+    aNames[0] = "Executable";
 
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
@@ -199,7 +195,7 @@ void SvtCalcFilterOptions_Impl::Commit()
     SvtAppFilterOptions_Impl::Commit();
 
     Sequence<OUString> aNames(1);
-    aNames[0] = C2U("Executable");
+    aNames[0] = "Executable";
     Sequence<Any> aValues(1);
     aValues[0] <<= bLoadExecutable;
 
@@ -211,7 +207,7 @@ void SvtCalcFilterOptions_Impl::Load()
     SvtAppFilterOptions_Impl::Load();
 
     Sequence<OUString> aNames(1);
-    aNames[0] = C2U("Executable");
+    aNames[0] = "Executable";
 
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
@@ -227,9 +223,9 @@ struct SvtFilterOptions_Impl
     SvtAppFilterOptions_Impl aImpressCfg;
 
     SvtFilterOptions_Impl() :
-        aWriterCfg(C2U("Office.Writer/Filter/Import/VBA")),
-        aCalcCfg(C2U("Office.Calc/Filter/Import/VBA")),
-        aImpressCfg(C2U("Office.Impress/Filter/Import/VBA"))
+        aWriterCfg("Office.Writer/Filter/Import/VBA"),
+        aCalcCfg("Office.Calc/Filter/Import/VBA"),
+        aImpressCfg("Office.Impress/Filter/Import/VBA")
     {
         nFlags = FILTERCFG_WORD_CODE |
             FILTERCFG_WORD_STORAGE |
@@ -301,7 +297,7 @@ sal_Bool SvtFilterOptions_Impl::IsFlag( sal_uLong nFlag ) const
 // -----------------------------------------------------------------------
 
 SvtFilterOptions::SvtFilterOptions() :
-    ConfigItem( C2U("Office.Common/Filter/Microsoft") ),
+    ConfigItem( "Office.Common/Filter/Microsoft" ),
     pImp(new SvtFilterOptions_Impl)
 {
     RTL_LOGFILE_CONTEXT(aLog, "unotools SvtFilterOptions::SvtFilterOptions()");
