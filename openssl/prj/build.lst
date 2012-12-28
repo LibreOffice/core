@@ -1,3 +1,2 @@
 ssl      openssl  :  soltools external EXPAT:expat NULL
-ssl      openssl     usr1           -       all     ssl_mkout NULL
 ssl      openssl     nmake          -       all     ssl_openssl NULL 

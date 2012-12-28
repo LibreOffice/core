@@ -81,7 +81,10 @@ $(eval $(call gb_Library_use_libraries,oox,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_use_external,oox,openssl))
+$(eval $(call gb_Library_use_externals,oox,\
+	openssl \
+	openssl_headers \
+))
 
 $(eval $(call gb_Library_set_componentfile,oox,oox/util/oox))
 
