@@ -85,16 +85,10 @@ static OUString locateSofficeIniFile()
 
     if ( utl::Bootstrap::locateUserData( aUserDataPath ) == utl::Bootstrap::PATH_EXISTS )
     {
-        const char CONFIG_DIR[] = "/config";
-
         sal_Int32 nIndex = aSofficeIniFileURL.lastIndexOf( '/');
         if ( nIndex > 0 )
         {
-            OUString        aUserSofficeIniFileURL;
-            OUStringBuffer  aBuffer( aUserDataPath );
-            aBuffer.appendAscii( CONFIG_DIR );
-            aBuffer.append( aSofficeIniFileURL.copy( nIndex ));
-            aUserSofficeIniFileURL = aBuffer.makeStringAndClear();
+            OUString aUserSofficeIniFileURL = aUserDataPath + "/config" + aSofficeIniFileURL.copy( nIndex );
 
             if ( existsURL( aUserSofficeIniFileURL ))
                 return aUserSofficeIniFileURL;

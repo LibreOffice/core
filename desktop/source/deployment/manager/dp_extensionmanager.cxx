@@ -1304,13 +1304,11 @@ sal_Bool ExtensionManager::synchronize(
 {
     try
     {
-        sal_Bool bModified = sal_False;
-
         ::osl::MutexGuard guard(getMutex());
         String sSynchronizingShared(StrSyncRepository::get());
         sSynchronizingShared.SearchAndReplaceAllAscii( "%NAME", OUSTR("shared"));
         dp_misc::ProgressLevel progressShared(xCmdEnv, sSynchronizingShared);
-        bModified = getSharedRepository()->synchronize(xAbortChannel, xCmdEnv);
+        sal_Bool bModified = getSharedRepository()->synchronize(xAbortChannel, xCmdEnv);
         progressShared.update(OUSTR("\n\n"));
 
         String sSynchronizingBundled(StrSyncRepository::get());

@@ -250,13 +250,10 @@ void SilentCheckPrerequisitesCommandEnv::handle(
     deployment::LicenseException licExc;
     deployment::PlatformException platformExc;
     deployment::DependencyException depExc;
-    bool approve = false;
-    bool abort = false;
 
     if (request >>= licExc)
     {
-        approve = true;
-        handle_(approve, abort, xRequest);
+        handle_(true, false, xRequest); // approve = true, abort = false
     }
     else if ((request >>= platformExc)
              || (request >>= depExc))
