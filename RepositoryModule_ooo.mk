@@ -138,6 +138,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 	oovbaapi \
 	oox \
 	$(call gb_Helper_optional,OPENLDAP,openldap) \
+	$(call gb_Helper_optional,OPENSSL,openssl) \
 	package \
 	padmin \
 	$(call gb_Helper_optional,POSTGRESQL,postgresql) \

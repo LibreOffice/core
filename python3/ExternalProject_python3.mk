@@ -11,7 +11,10 @@ $(eval $(call gb_ExternalProject_ExternalProject,python3))
 
 $(eval $(call gb_ExternalProject_use_unpacked,python3,python3))
 
-$(eval $(call gb_ExternalProject_use_external,python3,expat))
+$(eval $(call gb_ExternalProject_use_externals,python3,\
+	expat \
+	openssl \
+))
 
 $(eval $(call gb_ExternalProject_register_targets,python3,\
 	build \
@@ -75,8 +78,8 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 			--enable-shared \
 		) \
 		CC="$(strip $(CC) \
-			$(if $(filter YES,$(SYSTEM_OPENSSL)),, -I$(OUTDIR)/inc/external) \
-			$(if $(filter YES,$(SYSTEM_EXPAT)),, -I$(OUTDIR)/inc/external/expat) \
+			$(if $(filter NO,$(SYSTEM_OPENSSL)),-I$(call gb_UnpackedTarball_get_dir,openssl)/include) \
+			$(if $(filter NO,$(SYSTEM_EXPAT)),-I$(OUTDIR)/inc/external/expat) \
 			$(if $(SYSBASE), -I$(SYSBASE)/usr/include) \
 			)" \
 		$(if $(python3_cflags),CFLAGS='$(python3_cflags)') \
