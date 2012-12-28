@@ -214,13 +214,13 @@ SbiTokenizer::SbiTokenizer( const ::rtl::OUString& rSrc, StarBASIC* pb )
            : SbiScanner( rSrc, pb )
 {
     pTokTable = aTokTable_Basic;
-    TokenTable *tp;
     bEof = bAs = false;
     eCurTok = NIL;
     ePush = NIL;
     bEos = bKeywords = bErrorIsSymbol = true;
     if( !nToken )
     {
+        TokenTable *tp;
         for( nToken = 0, tp = pTokTable; tp->t; nToken++, tp++ )
         {}
     }

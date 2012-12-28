@@ -643,7 +643,6 @@ void dbg_traceStep( SbModule* pModule, sal_uInt32 nPC, sal_Int32 nCallLvl )
 
 void dbg_traceNotifyCall( SbModule* pModule, SbMethod* pMethod, sal_Int32 nCallLvl, bool bLeave )
 {
-    static const char* pSeparator = "' ================================================================================";
 
     if( !GbTraceOn )
     {
@@ -763,6 +762,7 @@ void dbg_traceNotifyCall( SbModule* pModule, SbMethod* pMethod, sal_Int32 nCallL
     int nIndent = nCallLvl * GnIndentPerCallLevel;
     if( !bLeave && !bOwnBlockSteps )
     {
+        static const char* pSeparator = "' ================================================================================";
         lcl_lineOut( "" );
         lcl_lineOut( pSeparator, lcl_getSpaces( nIndent ) );
     }
