@@ -14,6 +14,7 @@ $(eval $(call gb_Library_use_unpacked,neon,neon))
 $(eval $(call gb_Library_use_externals,neon,\
 	libxml2 \
 	openssl \
+	openssl_headers \
 	zlib \
 ))
 

@@ -20,6 +20,7 @@ $(eval $(call gb_Library_use_libraries,rdf,\
 
 $(eval $(call gb_Library_use_externals,rdf,\
 	openssl \
+	openssl_headers \
 	raptor_headers \
 	rasqal_headers \
 ))
