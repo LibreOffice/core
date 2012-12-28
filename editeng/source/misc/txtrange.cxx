@@ -460,7 +460,7 @@ void SvxBoundArgs::Add()
                         "BoundArgs: Array-Count: Confusion" );
         }
     }
-    if( 0 != ( nCount = pLongArr->size() ) )
+    if( !pLongArr->empty() )
     {
         if( bInner )
         {
