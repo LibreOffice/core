@@ -61,7 +61,7 @@ $(eval $(call gb_ExternalPackage_add_files,icu,lib,\
 	source/lib/libicutulo.so \
 ))
 else
-$(eval $(call gb_ExternalPackage_add_file,icu,lib,libicudata$(gb_Library_DLLEXT).$(ICU_MAJOR).$(ICU_MINOR).$(ICU_MICRO),source/lib/libicudata$(gb_Library_DLLEXT).$(ICU_MAJOR).$(ICU_MINOR).$(ICU_MICRO)))
+$(eval $(call gb_ExternalPackage_add_file,icu,lib/libicudata$(gb_Library_DLLEXT).$(ICU_MAJOR).$(ICU_MINOR).$(ICU_MICRO),source/lib/libicudata$(gb_Library_DLLEXT).$(ICU_MAJOR).$(ICU_MINOR).$(ICU_MICRO)))
 $(eval $(call gb_ExternalPackage_add_file,icu,lib/libicudata$(gb_Library_DLLEXT).$(ICU_MAJOR),source/lib/libicudata$(gb_Library_DLLEXT).$(ICU_MAJOR).$(ICU_MINOR).$(ICU_MICRO)))
 $(eval $(call gb_ExternalPackage_add_file,icu,lib/libicudata$(gb_Library_DLLEXT),source/lib/libicudata$(gb_Library_DLLEXT).$(ICU_MAJOR).$(ICU_MINOR).$(ICU_MICRO)))
 $(eval $(call gb_ExternalPackage_add_file,icu,lib/libicuuc$(gb_Library_DLLEXT).$(ICU_MAJOR).$(ICU_MINOR).$(ICU_MICRO),source/lib/libicuuc$(gb_Library_DLLEXT).$(ICU_MAJOR).$(ICU_MINOR).$(ICU_MICRO)))
