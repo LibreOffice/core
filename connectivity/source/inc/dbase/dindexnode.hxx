@@ -26,7 +26,7 @@
 #include <tools/ref.hxx>
 
 #define NODE_NOTFOUND 0xFFFF
-#define PAGE_SIZE 512
+#define DINDEX_PAGE_SIZE 512
 
 namespace connectivity
 {

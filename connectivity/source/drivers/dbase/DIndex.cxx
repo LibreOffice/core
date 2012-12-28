@@ -150,7 +150,7 @@ sal_Bool ODbaseIndex::openIndexFile()
             if(m_pFileStream)
             {
                 m_pFileStream->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
-                m_pFileStream->SetBufferSize(PAGE_SIZE);
+                m_pFileStream->SetBufferSize(DINDEX_PAGE_SIZE);
                 (*m_pFileStream) >> *this;
             }
         }
@@ -349,7 +349,7 @@ ONDXPage* ODbaseIndex::CreatePage(sal_uInt32 nPagePos, ONDXPage* pParent, sal_Bo
 SvStream& connectivity::dbase::operator >> (SvStream &rStream, ODbaseIndex& rIndex)
 {
     rStream.Seek(0);
-    rStream.Read(&rIndex.m_aHeader,PAGE_SIZE);
+    rStream.Read(&rIndex.m_aHeader,DINDEX_PAGE_SIZE);
 
     rIndex.m_nRootPage = rIndex.m_aHeader.db_rootpage;
     rIndex.m_nPageCount = rIndex.m_aHeader.db_pagecount;
@@ -359,7 +359,7 @@ SvStream& connectivity::dbase::operator >> (SvStream &rStream, ODbaseIndex& rInd
 SvStream& connectivity::dbase::operator << (SvStream &rStream, ODbaseIndex& rIndex)
 {
     rStream.Seek(0);
-    OSL_VERIFY_EQUALS( rStream.Write(&rIndex.m_aHeader,PAGE_SIZE), PAGE_SIZE, "Write not successful: Wrong header size for dbase index!");
+    OSL_VERIFY_EQUALS( rStream.Write(&rIndex.m_aHeader,DINDEX_PAGE_SIZE), DINDEX_PAGE_SIZE, "Write not successful: Wrong header size for dbase index!");
     return rStream;
 }
 // -------------------------------------------------------------------------
@@ -496,7 +496,7 @@ sal_Bool ODbaseIndex::CreateImpl()
     }
 
     m_pFileStream->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
-    m_pFileStream->SetBufferSize(PAGE_SIZE);
+    m_pFileStream->SetBufferSize(DINDEX_PAGE_SIZE);
 
     // firstly the result must be sorted
     utl::SharedUNOComponent<XStatement> xStmt;
@@ -545,13 +545,13 @@ sal_Bool ODbaseIndex::CreateImpl()
     m_aHeader.db_keytype = (nType == DataType::VARCHAR || nType == DataType::CHAR) ? 0 : 1;
     m_aHeader.db_keylen  = (m_aHeader.db_keytype) ? 8 : (sal_uInt16)getINT32(xTableCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)));
     m_aHeader.db_keylen = (( m_aHeader.db_keylen - 1) / 4 + 1) * 4;
-    m_aHeader.db_maxkeys = (PAGE_SIZE - 4) / (8 + m_aHeader.db_keylen);
+    m_aHeader.db_maxkeys = (DINDEX_PAGE_SIZE - 4) / (8 + m_aHeader.db_keylen);
     if ( m_aHeader.db_maxkeys < 3 )
     {
         impl_killFileAndthrowError_throw(STR_COULD_NOT_CREATE_INDEX_KEYSIZE,sFile);
     }
 
-    m_pFileStream->SetStreamSize(PAGE_SIZE);
+    m_pFileStream->SetStreamSize(DINDEX_PAGE_SIZE);
 
     rtl::OString aCol(rtl::OUStringToOString(aName, m_pTable->getConnection()->getTextEncoding()));
     strncpy(m_aHeader.db_name, aCol.getStr(), std::min<size_t>(sizeof(m_aHeader.db_name), aCol.getLength()));

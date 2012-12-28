@@ -57,11 +57,11 @@ sdbcx::ObjectType ODbaseIndexes::createObject(const ::rtl::OUString& _rName)
     if(pFileStream)
     {
         pFileStream->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
-        pFileStream->SetBufferSize(PAGE_SIZE);
+        pFileStream->SetBufferSize(DINDEX_PAGE_SIZE);
         ODbaseIndex::NDXHeader aHeader;
 
         pFileStream->Seek(0);
-        pFileStream->Read(&aHeader,PAGE_SIZE);
+        pFileStream->Read(&aHeader,DINDEX_PAGE_SIZE);
         delete pFileStream;
 
         ODbaseIndex* pIndex = new ODbaseIndex(m_pTable,aHeader,_rName);

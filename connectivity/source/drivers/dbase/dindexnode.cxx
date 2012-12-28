@@ -834,7 +834,7 @@ static sal_uInt32 nValue;
 //------------------------------------------------------------------
 SvStream& connectivity::dbase::operator >> (SvStream &rStream, ONDXPage& rPage)
 {
-    rStream.Seek(rPage.GetPagePos() * PAGE_SIZE);
+    rStream.Seek(rPage.GetPagePos() * DINDEX_PAGE_SIZE);
     rStream >> nValue >> rPage.aChild;
     rPage.nCount = sal_uInt16(nValue);
 
@@ -847,17 +847,17 @@ SvStream& connectivity::dbase::operator >> (SvStream &rStream, ONDXPage& rPage)
 SvStream& connectivity::dbase::operator << (SvStream &rStream, const ONDXPage& rPage)
 {
     // Page doesn't exist yet
-    sal_uIntPtr nSize = (rPage.GetPagePos() + 1) * PAGE_SIZE;
+    sal_uIntPtr nSize = (rPage.GetPagePos() + 1) * DINDEX_PAGE_SIZE;
     if (nSize > rStream.Seek(STREAM_SEEK_TO_END))
     {
         rStream.SetStreamSize(nSize);
-        rStream.Seek(rPage.GetPagePos() * PAGE_SIZE);
+        rStream.Seek(rPage.GetPagePos() * DINDEX_PAGE_SIZE);
 
-        char aEmptyData[PAGE_SIZE];
-        memset(aEmptyData,0x00,PAGE_SIZE);
-        rStream.Write((sal_uInt8*)aEmptyData,PAGE_SIZE);
+        char aEmptyData[DINDEX_PAGE_SIZE];
+        memset(aEmptyData,0x00,DINDEX_PAGE_SIZE);
+        rStream.Write((sal_uInt8*)aEmptyData,DINDEX_PAGE_SIZE);
     }
-    sal_uIntPtr nCurrentPos = rStream.Seek(rPage.GetPagePos() * PAGE_SIZE);
+    sal_uIntPtr nCurrentPos = rStream.Seek(rPage.GetPagePos() * DINDEX_PAGE_SIZE);
     OSL_UNUSED( nCurrentPos );
 
     nValue = rPage.nCount;
@@ -870,7 +870,7 @@ SvStream& connectivity::dbase::operator << (SvStream &rStream, const ONDXPage& r
     // check if we have to fill the stream with '\0'
     if(i < rPage.rIndex.getHeader().db_maxkeys)
     {
-        sal_uIntPtr nTell = rStream.Tell() % PAGE_SIZE;
+        sal_uIntPtr nTell = rStream.Tell() % DINDEX_PAGE_SIZE;
         sal_uInt16 nBufferSize = rStream.GetBufferSize();
         sal_uIntPtr nRemainSize = nBufferSize - nTell;
         if ( nRemainSize <= nBufferSize )
