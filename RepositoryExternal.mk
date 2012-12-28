@@ -1014,6 +1014,9 @@ endif # SYSTEM_ICU
 
 ifeq ($(SYSTEM_OPENSSL),YES)
 
+gb_LinkTarget__use_openssl_headers:=
+gb_ExternalProject__use_openssl:=
+
 define gb_LinkTarget__use_openssl
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
@@ -1036,6 +1039,19 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     ssl \
 ))
 endif
+
+define gb_ExternalProject__use_openssl
+$(call gb_ExternalProject_use_package,$(1),openssl)
+
+endef
+
+define gb_LinkTarget__use_openssl_headers
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,openssl)/include \
+	$$(INCLUDE) \
+)
+
+endef
 
 define gb_LinkTarget__use_openssl
 ifeq ($(OS),WNT)

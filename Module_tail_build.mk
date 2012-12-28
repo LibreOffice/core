@@ -70,7 +70,9 @@ $(eval $(call gb_Module_add_moduledirs,tail_build,\
 	embedserv \
 	$(call gb_Helper_optional,EPM,epm) \
 	eventattacher \
+	$(call gb_Helper_optional,EXPAT,expat) \
 	extensions \
+	external \
 	extras \
 	fileaccess \
 	filter \
@@ -130,11 +132,13 @@ $(eval $(call gb_Module_add_moduledirs,tail_build,\
 	oovbaapi \
 	oox \
 	$(call gb_Helper_optional,OPENLDAP,openldap) \
+	$(call gb_Helper_optional,OPENSSL,openssl) \
 	package \
 	padmin \
 	$(call gb_Helper_optional,POSTGRESQL,postgresql) \
 	psprint_config \
 	$(call gb_Helper_optional,PYUNO,pyuno) \
+	$(call gb_Helper_optional,PYTHON,python3) \
 	$(call gb_Helper_optional,QADEVOOO,qadevOOo) \
 	readlicense_oo \
 	$(call gb_Helper_optional,REDLAND,redland) \
