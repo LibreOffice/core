@@ -80,7 +80,6 @@ extern "C"
 void* xmlStreamOpen( const char* uri )
 {
     ::com::sun::star::uno::Reference< com::sun::star::io::XInputStream > xInputStream ;
-    ::com::sun::star::io::XInputStream* pInputStream ;
 
     if( ( enableXmlStreamIO & XMLSTREAMIO_INITIALIZED ) &&
         ( enableXmlStreamIO & XMLSTREAMIO_REGISTERED ) ) {
@@ -101,6 +100,7 @@ void* xmlStreamOpen( const char* uri )
         }
 
         if( xInputStream.is() ) {
+            ::com::sun::star::io::XInputStream* pInputStream ;
             pInputStream = xInputStream.get() ;
             pInputStream->acquire() ;
             return ( void* )pInputStream ;
@@ -138,11 +138,10 @@ int xmlStreamRead( void* context, char* buffer, int len )
 extern "C"
 int xmlStreamClose( void * context )
 {
-    ::com::sun::star::io::XInputStream* pInputStream ;
-
     if( ( enableXmlStreamIO & XMLSTREAMIO_INITIALIZED ) &&
         ( enableXmlStreamIO & XMLSTREAMIO_REGISTERED ) ) {
         if( context != NULL ) {
+            ::com::sun::star::io::XInputStream* pInputStream ;
             pInputStream = ( ::com::sun::star::io::XInputStream* )context ;
             pInputStream->release() ;
         }
