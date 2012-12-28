@@ -49,11 +49,11 @@ namespace drawinglayer
                 // get destination size in pixels
                 const MapMode aMapModePixel(MAP_PIXEL);
                 const sal_uInt32 nViewVisibleArea(nDiscreteWidth * nDiscreteHeight);
-                double fReduceFactor(1.0);
                 drawinglayer::primitive2d::Primitive2DSequence aSequence(rSeq);
 
                 if(nViewVisibleArea > nMaxQuadratPixels)
                 {
+                    double fReduceFactor(1.0);
                     // reduce render size
                     fReduceFactor = sqrt((double)nMaxQuadratPixels / (double)nViewVisibleArea);
                     nDiscreteWidth = basegfx::fround((double)nDiscreteWidth * fReduceFactor);
