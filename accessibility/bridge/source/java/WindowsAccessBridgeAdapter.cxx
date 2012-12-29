@@ -125,10 +125,10 @@ Java_org_openoffice_accessibility_WindowsAccessBridgeAdapter_createMapping(JNIEn
 
         if ( g_xUnoVirtualMachine.is() )
         {
-            OUString sJava(RTL_CONSTASCII_USTRINGPARAM("java"));
+            OUString sJava("java");
             uno_getEnvironment(&pJava_environment, sJava.pData, g_xUnoVirtualMachine.get());
 
-            OUString sCppu_current_lb_name(RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME));
+            OUString sCppu_current_lb_name(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
             uno_getEnvironment(&pUno_environment, sCppu_current_lb_name.pData, NULL);
 
             if ( pJava_environment && pUno_environment )
