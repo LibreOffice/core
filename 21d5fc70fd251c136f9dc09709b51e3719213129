@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAASX///9g\u003d",
+        "filename": "basctl/source/basicide/moduldl2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1322,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2012-12-29T15:42:58Z",
+      "side": 1,
+      "message": "is this line just  +\"/\" ?",
+      "revId": "21d5fc70fd251c136f9dc09709b51e3719213129",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
