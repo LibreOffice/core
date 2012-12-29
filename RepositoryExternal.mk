@@ -2588,20 +2588,4 @@ endef
 
 endif
 
-ifeq ($(SYSTEM_ICU),YES)
-
-gb_ExternalExecutable__register_gendict :=
-
-else
-
-define gb_ExternalExecutable__register_gendict
-$(call gb_ExternalExecutable_set_internal,gendict)
-$(call gb_ExternalExecutable_add_dependencies,gendict,\
-	$(call gb_Package_get_target_for_build,icu) \
-)
-
-endef
-
-endif
-
 # vim: set noet sw=4 ts=4:
