@@ -22,7 +22,7 @@
 # semi-integrated with the stuff from Configuration.mk; not exactly pretty...
 
 ifeq ($(SOLAR_JAVA),)
-filter_MERGE_TARGET := $(call gb_ExternalExecutable_get_deps,python) \
+filter_MERGE_TARGET := $(call gb_ExternalExecutable_get_dependencies,python) \
 	$(SRCDIR)/filter/source/config/tools/merge/pyAltFCFGMerge
 filter_MERGE := $(call gb_ExternalExecutable_get_command,python) \
 	$(SRCDIR)/filter/source/config/tools/merge/pyAltFCFGMerge
@@ -230,7 +230,7 @@ $(call gb_Configuration_get_clean_target,fcfg_langpack) : \
 define filter_XcuResTarget__rule
 $$(call filter_XcuResTarget_get_target,$(1)) : \
 		$(filter_XSLT_langfilter) $(filter_XcuFilterUiTarget) \
-		| $(call gb_ExternalExecutable_get_deps,xsltproc)
+		| $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 	$$(call gb_Output_announce,$(1),$(true),XCU,1)
 	$$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $$(dir $$@) && \

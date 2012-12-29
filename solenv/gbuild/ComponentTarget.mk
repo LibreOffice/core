@@ -53,7 +53,7 @@ $(call gb_ComponentTarget_get_clean_target,%) :
 
 $(call gb_ComponentTarget_get_target,%) : \
 		$(call gb_ComponentTarget_get_source,%) \
-		| $(call gb_ExternalExecutable_get_deps,xsltproc)
+		| $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 	$(call gb_ComponentTarget__command,$@,$<,$*)
 
 # the .dir is for make 3.81, which ignores trailing /

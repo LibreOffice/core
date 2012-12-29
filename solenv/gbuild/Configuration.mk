@@ -58,7 +58,7 @@ gb_Configuration__get_source = $(SRCDIR)/$(2)
 gb_Configuration_PRIMARY_REGISTRY_NAME := registry
 
 gb_Configuration_XSLTCOMMAND = $(call gb_ExternalExecutable_get_command,xsltproc)
-gb_Configuration_XSLTCOMMAND_DEPS = $(call gb_ExternalExecutable_get_deps,xsltproc)
+gb_Configuration_XSLTCOMMAND_DEPS = $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 
 # XcsTarget class
 

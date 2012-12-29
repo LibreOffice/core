@@ -282,7 +282,7 @@ $(call gb_CustomTarget_get_workdir,extras/source/autotext)/%/mimetype : $(SRCDIR
 	cp $< $@
 
 $(call gb_CustomTarget_get_workdir,extras/source/autotext)/%.xml : $(SRCDIR)/extras/source/autotext/lang/%.xml \
-		| $(call gb_ExternalExecutable_get_deps,xsltproc)
+		| $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 	$(call gb_Output_announce,$*.xml,$(true),XSL,1)
 	$(call gb_ExternalExecutable_get_command,xsltproc) -o $@ $(SRCDIR)/extras/util/compact.xsl $<
 

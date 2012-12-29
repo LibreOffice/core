@@ -56,7 +56,7 @@ $(readlicense_oo_README_PATTERN) : \
 		$(SRCDIR)/readlicense_oo/docs/readme.xsl \
 		$(readlicense_oo_README_XRM) \
 		| $(readlicense_oo_DIR)/.dir \
-		  $(call gb_ExternalExecutable_get_deps,xsltproc)
+		  $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),XSL,1)
 	$(call gb_Helper_abbreviate_dirs, \
 		$(call gb_ExternalExecutable_get_command,xsltproc) --nonet --novalid -o $@.out \
