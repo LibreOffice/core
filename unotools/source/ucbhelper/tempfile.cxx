@@ -42,7 +42,7 @@ using namespace osl;
 namespace
 {
     struct TempNameBase_Impl
-        : public rtl::Static< OUString, TempNameBase_Impl > {};
+        : public rtl::Static< ::rtl::OUString, TempNameBase_Impl > {};
 }
 
 namespace utl
@@ -60,23 +60,23 @@ struct TempFile_Impl
                     {}
 };
 
-OUString getParentName( const OUString& aFileName )
+rtl::OUString getParentName( const rtl::OUString& aFileName )
 {
     sal_Int32 lastIndex = aFileName.lastIndexOf( sal_Unicode('/') );
-    OUString aParent = aFileName.copy( 0,lastIndex );
+    rtl::OUString aParent = aFileName.copy( 0,lastIndex );
 
     if( aParent[ aParent.getLength()-1] == sal_Unicode(':') && aParent.getLength() == 6 )
-        aParent += "/";
+        aParent += rtl::OUString("/");
 
-    if( aParent == "file://" )
-        aParent = "file:///";
+    if( 0 == aParent.compareToAscii( "file://" ) )
+        aParent = rtl::OUString("file:///");
 
     return aParent;
 }
 
-sal_Bool ensuredir( const OUString& rUnqPath )
+sal_Bool ensuredir( const rtl::OUString& rUnqPath )
 {
-    OUString aPath;
+    rtl::OUString aPath;
     if ( rUnqPath.isEmpty() )
         return sal_False;
 
@@ -107,7 +107,7 @@ umask(old_mode);
     if( !bSuccess )
     {
         // perhaps parent(s) don't exist
-        OUString aParentDir = getParentName( aPath );
+        rtl::OUString aParentDir = getParentName( aPath );
         if ( aParentDir != aPath )
         {
             bSuccess = ensuredir( getParentName( aPath ) );
@@ -136,10 +136,10 @@ String ConstructTempDir_Impl( const String* pParent )
                     comphelper::getProcessComponentContext() ) );
 
         // if parent given try to use it
-        OUString aTmp( *pParent );
+        rtl::OUString aTmp( *pParent );
 
         // test for valid filename
-        OUString aRet;
+        rtl::OUString aRet;
         ::osl::FileBase::getFileURLFromSystemPath(
             ::ucbhelper::getSystemPathFromFileURL( pBroker, aTmp ),
             aRet );
@@ -157,10 +157,10 @@ String ConstructTempDir_Impl( const String* pParent )
 
     if ( !aName.Len() )
     {
-        OUString &rTempNameBase_Impl = TempNameBase_Impl::get();
+        ::rtl::OUString &rTempNameBase_Impl = TempNameBase_Impl::get();
         if (rTempNameBase_Impl.isEmpty())
         {
-            OUString ustrTempDirURL;
+            ::rtl::OUString ustrTempDirURL;
             ::osl::FileBase::RC rc = ::osl::File::getTempDirURL(
                 ustrTempDirURL );
             if (rc == ::osl::FileBase::E_None)
@@ -180,62 +180,6 @@ String ConstructTempDir_Impl( const String* pParent )
     return aName;
 }
 
-OUString ConstructTempDir_Impl( const OUString* pParent )
-{
-    OUString aName;
-    if ( pParent && pParent->getLength() )
-    {
-        com::sun::star::uno::Reference<
-            com::sun::star::ucb::XUniversalContentBroker > pBroker(
-                com::sun::star::ucb::UniversalContentBroker::create(
-                    comphelper::getProcessComponentContext() ) );
-
-        // if parent given try to use it
-        OUString aTmp( *pParent );
-
-        // test for valid filename
-        OUString aRet;
-        ::osl::FileBase::getFileURLFromSystemPath(
-            ::ucbhelper::getSystemPathFromFileURL( pBroker, aTmp ),
-            aRet );
-        if ( !aRet.isEmpty() )
-        {
-            ::osl::DirectoryItem aItem;
-            sal_Int32 i = aRet.getLength();
-            if ( aRet[i-1] == '/' )
-                i--;
-
-            if ( DirectoryItem::get( aRet.copy(0, i), aItem ) == FileBase::E_None )
-                aName = aRet;
-        }
-    }
-
-    if ( !aName.isEmpty() )
-    {
-        OUString &rTempNameBase_Impl = TempNameBase_Impl::get();
-        if (rTempNameBase_Impl.isEmpty())
-        {
-            OUString ustrTempDirURL;
-            ::osl::FileBase::RC rc = ::osl::File::getTempDirURL(
-                ustrTempDirURL );
-            if (rc == ::osl::FileBase::E_None)
-                rTempNameBase_Impl = ustrTempDirURL;
-        }
-        // if no parent or invalid parent : use default directory
-        DBG_ASSERT( !rTempNameBase_Impl.isEmpty(), "No TempDir!" );
-        aName = rTempNameBase_Impl;
-        ensuredir( aName );
-    }
-
-    // Make sure that directory ends with a separator
-    sal_Int32 i = aName.getLength();
-    if( i>0 && aName[i-1] != '/' )
-        aName += "/";
-
-    return aName;
-}
-
-
 void CreateTempName_Impl( String& rName, sal_Bool bKeep, sal_Bool bDir = sal_True )
 {
     // add a suitable tempname
@@ -243,7 +187,7 @@ void CreateTempName_Impl( String& rName, sal_Bool bKeep, sal_Bool bDir = sal_Tru
     unsigned const nRadix = 36;
     unsigned long const nMax = (nRadix*nRadix*nRadix*nRadix*nRadix*nRadix);
     String aName( rName );
-    aName += OUString( "lu" );
+    aName += rtl::OUString( "lu" );
 
     rName.Erase();
     static unsigned long u = Time::GetSystemTicks() % nMax;
@@ -251,8 +195,8 @@ void CreateTempName_Impl( String& rName, sal_Bool bKeep, sal_Bool bDir = sal_Tru
     {
         u %= nMax;
         String aTmp( aName );
-        aTmp += OUString::valueOf(static_cast<sal_Int64>(u), nRadix);
-        aTmp += OUString( ".tmp" );
+        aTmp += rtl::OUString::valueOf(static_cast<sal_Int64>(u), nRadix);
+        aTmp += rtl::OUString( ".tmp" );
 
         if ( bDir )
         {
@@ -328,7 +272,7 @@ void lcl_createName(TempFile_Impl& _rImpl,const String& rLeadingChars,sal_Bool _
         if ( pExtension )
             aTmp += *pExtension;
         else
-            aTmp += OUString( ".tmp" );
+            aTmp += rtl::OUString( ".tmp" );
         if ( bDirectory )
         {
             FileBase::RC err = Directory::create( aTmp );
@@ -377,74 +321,6 @@ umask(old_mode);
 }
 
 
-void lcl_createName(TempFile_Impl& _rImpl,const OUString& rLeadingChars,sal_Bool _bStartWithZero, const OUString* pExtension, const OUString* pParent, sal_Bool bDirectory)
-{
-    _rImpl.bIsDirectory = bDirectory;
-
-    // get correct directory
-    OUString aName = ConstructTempDir_Impl( pParent );
-
-    sal_Bool bUseNumber = _bStartWithZero;
-    // now use special naming scheme ( name takes leading chars and an index counting up from zero
-    aName += rLeadingChars;
-    for ( sal_Int32 i=0;; i++ )
-    {
-        OUString aTmp( aName );
-        if ( bUseNumber )
-            aTmp += OUString::valueOf( static_cast< sal_Int32>(i) );
-        bUseNumber = sal_True;
-        if ( pExtension )
-            aTmp += *pExtension;
-        else
-            aTmp += ".tmp";
-        if ( bDirectory )
-        {
-            FileBase::RC err = Directory::create( aTmp );
-            if ( err == FileBase::E_None )
-            {
-                _rImpl.aName = aTmp;
-                break;
-            }
-            else if ( err != FileBase::E_EXIST )
-                // if f.e. name contains invalid chars stop trying to create dirs
-                break;
-        }
-        else
-        {
-            File aFile( aTmp );
-#ifdef UNX
-/* RW permission for the user only! */
- mode_t old_mode = umask(077);
-#endif
-            FileBase::RC err = aFile.open(osl_File_OpenFlag_Create);
-#ifdef UNX
-umask(old_mode);
-#endif
-            if ( err == FileBase::E_None || err == FileBase::E_NOLCK )
-            {
-                _rImpl.aName = aTmp;
-                aFile.close();
-                break;
-            }
-            else if ( err != FileBase::E_EXIST )
-            {
-                // if f.e. name contains invalid chars stop trying to create dirs
-                // but if there is a folder with such name proceed further
-
-                DirectoryItem aTmpItem;
-                FileStatus aTmpStatus( osl_FileStatus_Mask_Type );
-                if ( DirectoryItem::get( aTmp, aTmpItem ) != FileBase::E_None
-                  || aTmpItem.getFileStatus( aTmpStatus ) != FileBase::E_None
-                  || aTmpStatus.getFileType() != FileStatus::Directory )
-                    break;
-            }
-        }
-        if ( !_bStartWithZero )
-            aTmp += OUString::valueOf( static_cast<sal_Int32>(i) );
-    }
-}
-
-
 String TempFile::CreateTempName( const String* pParent )
 {
     // get correct directory
@@ -454,7 +330,7 @@ String TempFile::CreateTempName( const String* pParent )
     CreateTempName_Impl( aName, sal_False );
 
     // convert to file URL
-    OUString aTmp;
+    rtl::OUString aTmp;
     if ( aName.Len() )
         FileBase::getSystemPathFromFileURL( aName, aTmp );
     return aTmp;
@@ -479,14 +355,6 @@ TempFile::TempFile( const String& rLeadingChars, const String* pExtension, const
 {
     lcl_createName(*pImp,rLeadingChars,sal_True, pExtension, pParent, bDirectory);
 }
-
-TempFile::TempFile( const OUString& rLeadingChars, const OUString* pExtension, const OUString* pParent, sal_Bool bDirectory)
-    : pImp( new TempFile_Impl )
-    , bKillingFileEnabled( sal_False )
-{
-    lcl_createName(*pImp,rLeadingChars,sal_True, pExtension, pParent, bDirectory);
-}
-
 TempFile::TempFile( const String& rLeadingChars,sal_Bool _bStartWithZero, const String* pExtension, const String* pParent, sal_Bool bDirectory)
     : pImp( new TempFile_Impl )
     , bKillingFileEnabled( sal_False )
@@ -520,7 +388,7 @@ sal_Bool TempFile::IsValid() const
 
 String TempFile::GetFileName() const
 {
-    OUString aTmp;
+    rtl::OUString aTmp;
     FileBase::getSystemPathFromFileURL( pImp->aName, aTmp );
     return aTmp;
 }
@@ -529,7 +397,7 @@ String TempFile::GetURL() const
 {
     if ( !pImp->aURL.Len() )
     {
-        OUString aTmp;
+        rtl::OUString aTmp;
         LocalFileHelper::ConvertPhysicalNameToURL( GetFileName(), aTmp );
         pImp->aURL = aTmp;
     }
@@ -564,7 +432,7 @@ String TempFile::SetTempNameBaseDirectory( const String &rBaseName )
     if( !rBaseName.Len() )
         return String();
 
-    OUString aUnqPath( rBaseName );
+    rtl::OUString aUnqPath( rBaseName );
 
     // remove trailing slash
     if ( rBaseName.GetChar( rBaseName.Len() - 1 ) == sal_Unicode( '/' ) )
@@ -580,14 +448,14 @@ String TempFile::SetTempNameBaseDirectory( const String &rBaseName )
         bRet = sal_True;
 
     // failure to create base directory means returning an empty string
-    OUString aTmp;
+    rtl::OUString aTmp;
     if ( bRet )
     {
         // append own internal directory
         bRet = sal_True;
-        OUString &rTempNameBase_Impl = TempNameBase_Impl::get();
+        ::rtl::OUString &rTempNameBase_Impl = TempNameBase_Impl::get();
         rTempNameBase_Impl = rBaseName;
-        rTempNameBase_Impl += "/";
+        rTempNameBase_Impl += rtl::OUString('/');
 
         TempFile aBase( NULL, sal_True );
         if ( aBase.IsValid() )

@@ -69,9 +69,6 @@ public:
                     TempFile( const String& rLeadingChars, const String* pExtension=NULL, const String* pParent=NULL,
                                 sal_Bool bDirectory=sal_False);
 
-                    TempFile( const OUString& rLeadingChars, const OUString* pExtension=NULL, const OUString* pParent=NULL,
-                                sal_Bool bDirectory=sal_False);
-
                     /**
                     Same as above; additionally the name starts with some given characters followed by a counter ( example:
                     rLeadingChars="abc" means "abc0","abc1" and so on, depending on existing files in the folder ).

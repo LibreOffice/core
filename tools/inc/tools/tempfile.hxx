@@ -41,8 +41,7 @@ public:
         The extension string may be f.e. ".txt" or "", if no extension string is
         given, ".tmp" is used.
     */
-    TempFile( const String&   rLeadingChars, const String*   pExtension=NULL, const String*   pParent=NULL, sal_Bool bDirectory=sal_False );
-    TempFile( const OUString& rLeadingChars, const OUString* pExtension=NULL, const OUString* pParent=NULL, sal_Bool bDirectory=sal_False );
+    TempFile( const String& rLeadingChars, const String* pExtension=NULL, const String* pParent=NULL, sal_Bool bDirectory=sal_False );
 
     /** TempFile will be removed from disk in dtor if EnableKillingTempFile was
         called before. TempDirs will be removed recursively in that case. */
