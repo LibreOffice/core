@@ -34,39 +34,37 @@
 
 #include <list>
 
-using namespace ::utl                   ;
-using namespace ::rtl                   ;
-using namespace ::osl                   ;
-using namespace ::com::sun::star::uno   ;
+using namespace ::utl;
+using namespace ::rtl;
+using namespace ::osl;
+using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
-#define ASCII_STR(s)                        OUString( RTL_CONSTASCII_USTRINGPARAM(s) )
-#define ROOTNODE_MISC                       ASCII_STR("Office.Common/Misc")
+#define ROOTNODE_MISC "Office.Common/Misc"
 
-#define PROPERTYNAME_PLUGINSENABLED         ASCII_STR("PluginsEnabled")
-#define PROPERTYHANDLE_PLUGINSENABLED       0
-#define PROPERTYNAME_SYMBOLSET              ASCII_STR("SymbolSet")
+#define PROPERTYNAME_PLUGINSENABLED         "PluginsEnabled"
+#define PROPERTYHANDLE_PLUGINSENABLED      0
+#define PROPERTYNAME_SYMBOLSET              "SymbolSet"
 #define PROPERTYHANDLE_SYMBOLSET            1
-#define PROPERTYNAME_TOOLBOXSTYLE           ASCII_STR("ToolboxStyle")
+#define PROPERTYNAME_TOOLBOXSTYLE           "ToolboxStyle"
 #define PROPERTYHANDLE_TOOLBOXSTYLE         2
-#define PROPERTYNAME_USESYSTEMFILEDIALOG    ASCII_STR("UseSystemFileDialog")
+#define PROPERTYNAME_USESYSTEMFILEDIALOG    "UseSystemFileDialog"
 #define PROPERTYHANDLE_USESYSTEMFILEDIALOG  3
-#define PROPERTYNAME_SYMBOLSTYLE            ASCII_STR("SymbolStyle")
+#define PROPERTYNAME_SYMBOLSTYLE            "SymbolStyle"
 #define PROPERTYHANDLE_SYMBOLSTYLE          4
-#define PROPERTYNAME_USESYSTEMPRINTDIALOG   ASCII_STR("UseSystemPrintDialog")
+#define PROPERTYNAME_USESYSTEMPRINTDIALOG   "UseSystemPrintDialog"
 #define PROPERTYHANDLE_USESYSTEMPRINTDIALOG 5
-#define PROPERTYNAME_SHOWLINKWARNINGDIALOG  ASCII_STR("ShowLinkWarningDialog")
-#define PROPERTYHANDLE_SHOWLINKWARNINGDIALOG 7
-#define PROPERTYNAME_DISABLEUICUSTOMIZATION ASCII_STR("DisableUICustomization")
-#define PROPERTYHANDLE_DISABLEUICUSTOMIZATION           8
-#define PROPERTYNAME_ALWAYSALLOWSAVE        ASCII_STR("AlwaysAllowSave")
-#define PROPERTYHANDLE_ALWAYSALLOWSAVE      9
-#define PROPERTYNAME_EXPERIMENTALMODE       ASCII_STR("ExperimentalMode")
-#define PROPERTYHANDLE_EXPERIMENTALMODE     10
-#define PROPERTYNAME_MACRORECORDERMODE       ASCII_STR("MacroRecorderMode")
-#define PROPERTYHANDLE_MACRORECORDERMODE    11
+#define PROPERTYNAME_SHOWLINKWARNINGDIALOG  "ShowLinkWarningDialog"
+#define PROPERTYHANDLE_SHOWLINKWARNINGDIALOG 6
+#define PROPERTYNAME_DISABLEUICUSTOMIZATION  "DisableUICustomization"
+#define PROPERTYHANDLE_DISABLEUICUSTOMIZATION   7
+#define PROPERTYNAME_ALWAYSALLOWSAVE            "AlwaysAllowSave"
+#define PROPERTYHANDLE_ALWAYSALLOWSAVE      8
+#define PROPERTYNAME_EXPERIMENTALMODE       "ExperimentalMode"
+#define PROPERTYHANDLE_EXPERIMENTALMODE     9
+#define PROPERTYNAME_MACRORECORDERMODE      "MacroRecorderMode"
+#define PROPERTYHANDLE_MACRORECORDERMODE    10
 
-#define VCL_TOOLBOX_STYLE_FLAT              ((sal_uInt16)0x0004) // from <vcl/toolbox.hxx>
 
 class SvtMiscOptions_Impl : public ConfigItem
 {
@@ -96,15 +94,15 @@ class SvtMiscOptions_Impl : public ConfigItem
         ~SvtMiscOptions_Impl();
 
         /*-****************************************************************************************************//**
-            @short      called for notify of configmanager
-            @descr      These method is called from the ConfigManager before application ends or from the
+            @short    called for notify of configmanager
+            @descr    These method is called from the ConfigManager before application ends or from the
                          PropertyChangeListener if the sub tree broadcasts changes. You must update your
                         internal values.
 
             @seealso    baseclass ConfigItem
 
-            @param      "seqPropertyNames" is the list of properties which should be updated.
-            @return     -
+            @param    "seqPropertyNames" is the list of properties which should be updated.
+            @return  -
 
             @onerror    -
         *//*-*****************************************************************************************************/
@@ -118,14 +116,14 @@ class SvtMiscOptions_Impl : public ConfigItem
         void Load( const Sequence< OUString >& rPropertyNames );
 
         /*-****************************************************************************************************//**
-            @short      write changes to configuration
-            @descr      These method writes the changed values into the sub tree
+            @short    write changes to configuration
+            @descr    These method writes the changed values into the sub tree
                         and should always called in our destructor to guarantee consistency of config data.
 
             @seealso    baseclass ConfigItem
 
-            @param      -
-            @return     -
+            @param    -
+            @return  -
 
             @onerror    -
         *//*-*****************************************************************************************************/
@@ -187,15 +185,15 @@ class SvtMiscOptions_Impl : public ConfigItem
         inline void SetSymbolsStyle( sal_Int16 nSet )
         { ImplSetSymbolsStyle( true, nSet, ::rtl::OUString() ); }
 
-        inline void SetSymbolsStyleName( ::rtl::OUString &rName )
+        inline void SetSymbolsStyleName( OUString &rName )
         { ImplSetSymbolsStyle( false, 0, rName ); }
 
         inline sal_Bool IsGetSymbolsStyleReadOnly()
         { return m_bIsSymbolsStyleRO; }
 
-        // translate to VCL settings ( "0" = 3D, "1" = FLAT )
+            // 0x0004 is VCL_TOOLBOX_STYLE_FLAT in <vcl/toolbox.hxx>
         inline sal_Int16 GetToolboxStyle()
-        { return m_nToolboxStyle ? VCL_TOOLBOX_STYLE_FLAT : 0; }
+        { return m_nToolboxStyle ? ((sal_uInt16)0x0004) : 0; }
 
         // translate from VCL settings
         void SetToolboxStyle( sal_Int16 nStyle, bool _bSetModified );
@@ -232,14 +230,14 @@ class SvtMiscOptions_Impl : public ConfigItem
     private:
 
         /*-****************************************************************************************************//**
-            @short      return list of key names of our configuration management which represent oue module tree
-            @descr      These methods return a static const list of key names. We need it to get needed values from our
+            @short    return list of key names of our configuration management which represent oue module tree
+            @descr    These methods return a static const list of key names. We need it to get needed values from our
                         configuration management.
 
             @seealso    -
 
-            @param      -
-            @return     A list of needed configuration keys is returned.
+            @param    -
+            @return  A list of needed configuration keys is returned.
 
             @onerror    -
         *//*-*****************************************************************************************************/
@@ -275,15 +273,12 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
     , m_bMacroRecorderMode( sal_False )
 
 {
-    // Use our static list of configuration keys to get his values.
-    Sequence< OUString >    seqNames    = GetPropertyNames  (           );
+    // Use GetPropertyNames to get all configuration key names & values.
+    Sequence< OUString > seqNames = GetPropertyNames ( );
     Load( seqNames );
-    Sequence< Any >         seqValues   = GetProperties     ( seqNames  );
-    Sequence< sal_Bool >    seqRO       = GetReadOnlyStates ( seqNames  );
+    Sequence< Any >     seqValues = GetProperties    ( seqNames  );
+    Sequence< sal_Bool > seqRO    = GetReadOnlyStates( seqNames  );
 
-    // Safe impossible cases.
-    // We need values from ALL configuration keys.
-    // Follow assignment use order of values in relation to our list of key names!
     DBG_ASSERT( !(seqNames.getLength()!=seqValues.getLength()), "SvtMiscOptions_Impl::SvtMiscOptions_Impl()\nI miss some values of configuration keys!\n" );
 
     // Copy values from list in right order to our internal member.
@@ -440,67 +435,72 @@ void SvtMiscOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
             continue;
         switch( lcl_MapPropertyName(rPropertyNames[nProperty], aInternalPropertyNames) )
         {
-            case PROPERTYHANDLE_PLUGINSENABLED      :   {
-                                                            if( !(seqValues[nProperty] >>= m_bPluginsEnabled) )
-                                                            {
-                                                                OSL_FAIL("Wrong type of \"Misc\\PluginsEnabled\"!" );
-                                                            }
-                                                        }
-                                                    break;
-            case PROPERTYHANDLE_SYMBOLSET           :   {
-                                                            if( !(seqValues[nProperty] >>= m_nSymbolsSize) )
-                                                            {
-                                                                OSL_FAIL("Wrong type of \"Misc\\SymbolSet\"!" );
-                                                            }
-                                                        }
-                                                    break;
-            case PROPERTYHANDLE_TOOLBOXSTYLE        :   {
-                                                            if( !(seqValues[nProperty] >>= m_nToolboxStyle) )
-                                                            {
-                                                                OSL_FAIL("Wrong type of \"Misc\\ToolboxStyle\"!" );
-                                                            }
-                                                        }
-                                                    break;
-            case PROPERTYHANDLE_USESYSTEMFILEDIALOG      :   {
-                                                            if( !(seqValues[nProperty] >>= m_bUseSystemFileDialog) )
-                                                            {
-                                                                OSL_FAIL("Wrong type of \"Misc\\UseSystemFileDialog\"!" );
-                                                            }
-                                                        }
-                                                    break;
-            case PROPERTYHANDLE_USESYSTEMPRINTDIALOG     :   {
-                                                            if( !(seqValues[nProperty] >>= m_bUseSystemPrintDialog) )
-                                                            {
-                                                                OSL_FAIL("Wrong type of \"Misc\\UseSystemPrintDialog\"!" );
-                                                            }
-                                                        }
-                                                    break;
-            case PROPERTYHANDLE_SHOWLINKWARNINGDIALOG     :   {
-                                                            if( !(seqValues[nProperty] >>= m_bShowLinkWarningDialog) )
-                                                            {
-                                                                OSL_FAIL("Wrong type of \"Misc\\ShowLinkWarningDialog\"!" );
-                                                            }
-                                                        }
-                                                    break;
-            case PROPERTYHANDLE_SYMBOLSTYLE         :   {
-                                                            ::rtl::OUString aSymbolsStyle;
-                                                            if( seqValues[nProperty] >>= aSymbolsStyle )
-                                                                SetSymbolsStyleName( aSymbolsStyle );
-                                                            else
-                                                            {
-                                                                OSL_FAIL("Wrong type of \"Misc\\SymbolStyle\"!" );
-                                                            }
-                                                        }
-                                                    break;
-            case PROPERTYHANDLE_DISABLEUICUSTOMIZATION      :   {
-                                                            if( !(seqValues[nProperty] >>= m_bDisableUICustomization) )
-                                                                OSL_FAIL("Wrong type of \"Misc\\DisableUICustomization\"!" );
-                                                        }
-                                                    break;
+            case PROPERTYHANDLE_PLUGINSENABLED:
+            {
+                if( !(seqValues[nProperty] >>= m_bPluginsEnabled) )
+                    OSL_FAIL("Wrong type of \"Misc\\PluginsEnabled\"!" );
+                break;
+            }
+            case PROPERTYHANDLE_SYMBOLSET:
+            {
+                if( !(seqValues[nProperty] >>= m_nSymbolsSize) )
+                    OSL_FAIL("Wrong type of \"Misc\\SymbolSet\"!" );
+                break;
+            }
+            case PROPERTYHANDLE_TOOLBOXSTYLE:
+            {
+                if( !(seqValues[nProperty] >>= m_nToolboxStyle) )
+                    OSL_FAIL("Wrong type of \"Misc\\ToolboxStyle\"!" );
+                break;
+            }
+            case PROPERTYHANDLE_USESYSTEMFILEDIALOG:
+            {
+                if( !(seqValues[nProperty] >>= m_bUseSystemFileDialog) )
+                    OSL_FAIL("Wrong type of \"Misc\\UseSystemFileDialog\"!" );
+                break;
+            }
+            case PROPERTYHANDLE_USESYSTEMPRINTDIALOG :
+            {
+                if( !(seqValues[nProperty] >>= m_bUseSystemPrintDialog) )
+                    OSL_FAIL("Wrong type of \"Misc\\UseSystemPrintDialog\"!" );
+                break;
+            }
+            case PROPERTYHANDLE_SHOWLINKWARNINGDIALOG :
+            {
+                if( !(seqValues[nProperty] >>= m_bShowLinkWarningDialog) )
+                    OSL_FAIL("Wrong type of \"Misc\\ShowLinkWarningDialog\"!" );
+                break;
+            }
+            case PROPERTYHANDLE_SYMBOLSTYLE :
+            {   OUString aSymbolsStyle;
+                if( seqValues[nProperty] >>= aSymbolsStyle )
+                    SetSymbolsStyleName( aSymbolsStyle );
+                else
+                    OSL_FAIL("Wrong type of \"Misc\\SymbolStyle\"!" );
+                break;
+            }
+            case PROPERTYHANDLE_DISABLEUICUSTOMIZATION:
+            {
+                if( !(seqValues[nProperty] >>= m_bDisableUICustomization) )
+                    OSL_FAIL("Wrong type of \"Misc\\DisableUICustomization\"!" );
+            }
+            break;
             case PROPERTYHANDLE_ALWAYSALLOWSAVE:
             {
                 if( !(seqValues[nProperty] >>= m_bAlwaysAllowSave) )
                     OSL_FAIL("Wrong type of \"Misc\\AlwaysAllowSave\"!" );
+            }
+            break;
+            case PROPERTYHANDLE_EXPERIMENTALMODE:
+            {
+                if( !(seqValues[nProperty] >>= m_bExperimentalMode) )
+                    OSL_FAIL("Wrong type of \"Misc\\MacroRecorderMode\"!" );
+            }
+            break;
+            case PROPERTYHANDLE_MACRORECORDERMODE:
+            {
+                if( !(seqValues[nProperty] >>= m_bMacroRecorderMode) )
+                    OSL_FAIL("Wrong type of \"Misc\\MacroRecorderMode\"!" );
             }
             break;
         }
@@ -596,10 +596,11 @@ void SvtMiscOptions_Impl::Notify( const Sequence< OUString >& rPropertyNames )
 //*****************************************************************************************************************
 void SvtMiscOptions_Impl::Commit()
 {
-    // Get names of supported properties, create a list for values and copy current values to it.
-    Sequence< OUString >    seqNames    = GetPropertyNames  ();
-    sal_Int32               nCount      = seqNames.getLength();
-    Sequence< Any >         seqValues   ( nCount );
+    // Get names of supported properties, and their values.
+    Sequence< OUString >  seqNames = GetPropertyNames  ();
+    sal_Int32  nCount = seqNames.getLength();
+    Sequence< Any >  seqValues( nCount );
+
     for( sal_Int32 nProperty=0; nProperty<nCount; ++nProperty )
     {
         switch( nProperty )
@@ -700,27 +701,22 @@ Sequence< OUString > SvtMiscOptions_Impl::GetPropertyNames()
         PROPERTYNAME_MACRORECORDERMODE
     };
 
-    // Initialize return sequence with these list ...
+    //  return as sequence
     const Sequence< OUString > seqPropertyNames( pProperties, SAL_N_ELEMENTS( pProperties ) );
-    // ... and return it.
     return seqPropertyNames;
 }
 
 //*****************************************************************************************************************
-//  initialize static member
-//  DON'T DO IT IN YOUR HEADER!
-//  see definition for further informations
+//  initialize static members
 //*****************************************************************************************************************
-SvtMiscOptions_Impl*    SvtMiscOptions::m_pDataContainer    = NULL  ;
-sal_Int32               SvtMiscOptions::m_nRefCount = 0     ;
+SvtMiscOptions_Impl*  SvtMiscOptions::m_pDataContainer= NULL;
+sal_Int32             SvtMiscOptions::m_nRefCount = 0;
 
 //*****************************************************************************************************************
 //  constructor
 //*****************************************************************************************************************
 SvtMiscOptions::SvtMiscOptions()
 {
-    // Global access, must be guarded (multithreading!).
-    MutexGuard aGuard( GetInitMutex() );
     // Increase our refcount ...
     ++m_nRefCount;
     // ... and initialize our data container only if it not already exist!
@@ -738,7 +734,8 @@ SvtMiscOptions::SvtMiscOptions()
 SvtMiscOptions::~SvtMiscOptions()
 {
     // Global access, must be guarded (multithreading!)
-    MutexGuard aGuard( GetInitMutex() );
+  MutexGuard aGuard( Mutex::getGlobalMutex() );
+
     // Decrease our refcount.
     --m_nRefCount;
     // If last instance was deleted ...
@@ -888,16 +885,6 @@ sal_Bool SvtMiscOptions::IsMacroRecorderMode() const
     return m_pDataContainer->IsMacroRecorderMode();
 }
 
-namespace
-{
-    class theSvtMiscOptionsMutex :
-        public rtl::Static< osl::Mutex, theSvtMiscOptionsMutex > {};
-}
-
-Mutex & SvtMiscOptions::GetInitMutex()
-{
-    return theSvtMiscOptionsMutex::get();
-}
 
 void SvtMiscOptions::AddListenerLink( const Link& rLink )
 {
