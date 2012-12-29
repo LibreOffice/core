@@ -2521,7 +2521,10 @@ define gb_ExternalExecutable__register_python
 $(call gb_ExternalExecutable_set_internal,python)
 $(call gb_ExternalExecutable_set_precommand,python,$(gb_PYTHON_PRECOMMAND))
 $(call gb_ExternalExecutable_add_dependencies,python,\
-	$(call gb_Package_get_target,python3) \
+	$(if $(filter MACOSX,$(OS)) \
+		,$(call gb_Zip_get_outdir_target_for_build,LibreOfficePython.framework) \
+		,$(call gb_Package_get_target_for_build,python3) \
+	) \
 )
 
 endef

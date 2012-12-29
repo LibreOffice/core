@@ -60,6 +60,7 @@ gb_UnoApiMerge_get_target = $(OUTDIR)/bin/$(1).rdb
 gb_UnoApiMerge_get_target_for_build = $(OUTDIR_FOR_BUILD)/bin/$(1).rdb
 gb_Jar_get_outdir_target = $(OUTDIR)/bin/$(1).jar
 gb_Zip_get_outdir_target = $(OUTDIR)/pck/$(1).zip
+gb_Zip_get_outdir_target_for_build = $(OUTDIR_FOR_BUILD)/pck/$(1).zip
 # outdir targets: $(1) is path
 gb_Configuration_registry = $(OUTDIR)/xml/registry
 gb_XcsTarget_get_outdir_target = \
