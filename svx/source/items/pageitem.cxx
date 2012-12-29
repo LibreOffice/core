@@ -84,15 +84,14 @@ int SvxPageItem::operator==( const SfxPoolItem& rAttr ) const
 
 inline XubString GetUsageText( const sal_uInt16 eU )
 {
-    if ( eU & SVX_PAGE_LEFT )
-        return SVX_RESSTR(RID_SVXITEMS_PAGE_USAGE_LEFT);
-    if ( eU & SVX_PAGE_RIGHT )
-        return SVX_RESSTR(RID_SVXITEMS_PAGE_USAGE_RIGHT);
-    if ( eU & SVX_PAGE_ALL )
-        return SVX_RESSTR(RID_SVXITEMS_PAGE_USAGE_ALL);
-    if ( eU & SVX_PAGE_MIRROR )
-        return SVX_RESSTR(RID_SVXITEMS_PAGE_USAGE_MIRROR);
-    return String();
+    switch( eU & 0x000f )
+    {
+        case SVX_PAGE_LEFT  : return SVX_RESSTR(RID_SVXITEMS_PAGE_USAGE_LEFT);
+        case SVX_PAGE_RIGHT : return SVX_RESSTR(RID_SVXITEMS_PAGE_USAGE_RIGHT);
+        case SVX_PAGE_ALL   : return SVX_RESSTR(RID_SVXITEMS_PAGE_USAGE_ALL);
+        case SVX_PAGE_MIRROR: return SVX_RESSTR(RID_SVXITEMS_PAGE_USAGE_MIRROR);
+        default:              return String();
+    }
 }
 
 //------------------------------------------------------------------------
