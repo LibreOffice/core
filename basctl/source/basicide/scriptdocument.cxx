@@ -942,14 +942,14 @@ namespace basctl
             Reference< XUriReference > xUriRef( xUriFac->parse( aLinkURL ), UNO_QUERY_THROW );
 
             OUString aScheme = xUriRef->getScheme();
-            if ( aScheme.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("file")) )
+            if ( aScheme.equalsIgnoreAsciiCase("file") )
             {
                 aFileURL = aLinkURL;
             }
-            else if ( aScheme.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.pkg")) )
+            else if ( aScheme.equalsIgnoreAsciiCase("vnd.sun.star.pkg") )
             {
                 OUString aAuthority = xUriRef->getAuthority();
-                if ( aAuthority.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.expand:")) )
+                if ( aAuthority.matchIgnoreAsciiCase("vnd.sun.star.expand:") )
                 {
                     OUString aDecodedURL( aAuthority.copy( sizeof ( "vnd.sun.star.expand:" ) - 1 ) );
                     aDecodedURL = ::rtl::Uri::decode( aDecodedURL, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
