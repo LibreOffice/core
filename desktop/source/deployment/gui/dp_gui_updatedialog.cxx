@@ -133,10 +133,8 @@ static const sal_uInt16 CMD_ENABLE_UPDATE = 1;
 static const sal_uInt16 CMD_IGNORE_UPDATE = 2;
 static const sal_uInt16 CMD_IGNORE_ALL_UPDATES = 3;
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
-
-#define IGNORED_UPDATES     OUSTR("/org.openoffice.Office.ExtensionManager/ExtensionUpdateData/IgnoredUpdates")
-#define PROPERTY_VERSION    OUSTR("Version")
+#define IGNORED_UPDATES     OUString("/org.openoffice.Office.ExtensionManager/ExtensionUpdateData/IgnoredUpdates")
+#define PROPERTY_VERSION    "Version"
 
 enum Kind { ENABLED_UPDATE, DISABLED_UPDATE, SPECIFIC_ERROR };
 
@@ -346,7 +344,7 @@ void UpdateDialog::Thread::execute()
         if (extensions[2].is() )
             sVersionBundled = extensions[2]->getVersion();
 
-        bool bSharedReadOnly = extMgr->isReadOnlyRepository(OUSTR("shared"));
+        bool bSharedReadOnly = extMgr->isReadOnlyRepository("shared");
 
         dp_misc::UPDATE_SOURCE sourceUser = dp_misc::isUpdateUserExtension(
             bSharedReadOnly, sVersionUser, sVersionShared, sVersionBundled, sOnlineVersion);
@@ -823,19 +821,19 @@ void UpdateDialog::createNotifyJob( bool bPrepareOnly,
                 comphelper::getProcessComponentContext()));
 
         beans::PropertyValue aProperty;
-        aProperty.Name  = OUSTR( "nodepath" );
-        aProperty.Value = uno::makeAny( OUSTR("org.openoffice.Office.Addons/AddonUI/OfficeHelp/UpdateCheckJob") );
+        aProperty.Name  = "nodepath";
+        aProperty.Value = uno::makeAny( OUString("org.openoffice.Office.Addons/AddonUI/OfficeHelp/UpdateCheckJob") );
 
         uno::Sequence< uno::Any > aArgumentList( 1 );
         aArgumentList[0] = uno::makeAny( aProperty );
 
         uno::Reference< container::XNameAccess > xNameAccess(
             xConfigProvider->createInstanceWithArguments(
-                OUSTR("com.sun.star.configuration.ConfigurationAccess"), aArgumentList ),
+                "com.sun.star.configuration.ConfigurationAccess", aArgumentList ),
             uno::UNO_QUERY_THROW );
 
         util::URL aURL;
-        xNameAccess->getByName(OUSTR("URL")) >>= aURL.Complete;
+        xNameAccess->getByName("URL") >>= aURL.Complete;
 
         uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
         uno::Reference < util::XURLTransformer > xTransformer = util::URLTransformer::create(xContext);
@@ -850,10 +848,10 @@ void UpdateDialog::createNotifyJob( bool bPrepareOnly,
         if( xDispatch.is() )
         {
             uno::Sequence< beans::PropertyValue > aPropList(2);
-            aProperty.Name  = OUSTR( "updateList" );
+            aProperty.Name  = "updateList";
             aProperty.Value = uno::makeAny( rItemList );
             aPropList[0] = aProperty;
-            aProperty.Name  = OUSTR( "prepareOnly" );
+            aProperty.Name  = "prepareOnly";
             aProperty.Value = uno::makeAny( bPrepareOnly );
             aPropList[1] = aProperty;
 
@@ -862,8 +860,8 @@ void UpdateDialog::createNotifyJob( bool bPrepareOnly,
     }
     catch( const uno::Exception& e )
     {
-        dp_misc::TRACE( OUSTR("Caught exception: ")
-            + e.Message + OUSTR("\n thread terminated.\n\n"));
+        dp_misc::TRACE( "Caught exception: "
+            + e.Message + "\n thread terminated.\n\n");
     }
 }
 
@@ -987,7 +985,7 @@ bool UpdateDialog::showDescription(uno::Reference< deployment::XPackage > const 
     OSL_ASSERT(aExtension.is());
     beans::StringPair pubInfo = aExtension->getPublisherInfo();
     return showDescription(std::make_pair(pubInfo.First, pubInfo.Second),
-                           OUSTR(""));
+                           "");
 }
 
 bool UpdateDialog::showDescription(std::pair< rtl::OUString, rtl::OUString > const & pairPublisher,
@@ -1053,11 +1051,11 @@ void UpdateDialog::getIgnoredUpdates()
 {
     uno::Reference< lang::XMultiServiceFactory > xConfig(
         configuration::theDefaultProvider::get(m_context));
-    beans::NamedValue aValue( OUSTR("nodepath"), uno::Any( IGNORED_UPDATES ) );
+    beans::NamedValue aValue( "nodepath", uno::Any( IGNORED_UPDATES ) );
     uno::Sequence< uno::Any > args(1);
     args[0] <<= aValue;
 
-    uno::Reference< container::XNameAccess > xNameAccess( xConfig->createInstanceWithArguments( OUSTR("com.sun.star.configuration.ConfigurationAccess"), args), uno::UNO_QUERY_THROW );
+    uno::Reference< container::XNameAccess > xNameAccess( xConfig->createInstanceWithArguments( "com.sun.star.configuration.ConfigurationAccess", args), uno::UNO_QUERY_THROW );
     uno::Sequence< rtl::OUString > aElementNames = xNameAccess->getElementNames();
 
     for ( sal_Int32 i = 0; i < aElementNames.getLength(); i++ )
@@ -1079,12 +1077,12 @@ void UpdateDialog::storeIgnoredUpdates()
     {
         uno::Reference< lang::XMultiServiceFactory > xConfig(
             configuration::theDefaultProvider::get(m_context));
-        beans::NamedValue aValue( OUSTR("nodepath"), uno::Any( IGNORED_UPDATES ) );
+        beans::NamedValue aValue( "nodepath", uno::Any( IGNORED_UPDATES ) );
         uno::Sequence< uno::Any > args(1);
         args[0] <<= aValue;
 
         uno::Reference< container::XNameContainer > xNameContainer( xConfig->createInstanceWithArguments(
-            OUSTR("com.sun.star.configuration.ConfigurationUpdateAccess"), args ), uno::UNO_QUERY_THROW );
+            "com.sun.star.configuration.ConfigurationUpdateAccess", args ), uno::UNO_QUERY_THROW );
 
         for ( std::vector< UpdateDialog::IgnoredUpdate* >::iterator i( m_ignoredUpdates.begin() ); i != m_ignoredUpdates.end(); ++i )
         {
@@ -1246,8 +1244,8 @@ IMPL_LINK_NOARG(UpdateDialog, selectionHandler)
                 if (data.unsatisfiedDependencies.getLength() != 0)
                 {
                     // create error string for version mismatch
-                    ::rtl::OUString sVersion( RTL_CONSTASCII_USTRINGPARAM("%VERSION") );
-                    ::rtl::OUString sProductName( RTL_CONSTASCII_USTRINGPARAM("%PRODUCTNAME") );
+                    ::rtl::OUString sVersion( "%VERSION" );
+                    ::rtl::OUString sProductName( "%PRODUCTNAME" );
                     sal_Int32 nPos = m_noDependencyCurVer.indexOf( sVersion );
                     if ( nPos >= 0 )
                     {
@@ -1271,7 +1269,7 @@ IMPL_LINK_NOARG(UpdateDialog, selectionHandler)
                          i < data.unsatisfiedDependencies.getLength(); ++i)
                     {
                         b.append(LF);
-                        b.appendAscii(RTL_CONSTASCII_STRINGPARAM("  "));
+                        b.appendAscii("  ");
                             // U+2003 EM SPACE would be better than two spaces,
                             // but some fonts do not contain it
                         b.append(
@@ -1279,7 +1277,7 @@ IMPL_LINK_NOARG(UpdateDialog, selectionHandler)
                                 data.unsatisfiedDependencies[i]));
                     }
                     b.append(LF);
-                    b.appendAscii(RTL_CONSTASCII_STRINGPARAM("  "));
+                    b.appendAscii("  ");
                     b.append(m_noDependencyCurVer);
                 }
                 break;

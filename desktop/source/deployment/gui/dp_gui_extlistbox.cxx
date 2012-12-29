@@ -31,11 +31,9 @@
 #include "com/sun/star/deployment/DeploymentException.hpp"
 #include "cppuhelper/weakref.hxx"
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
-
-#define USER_PACKAGE_MANAGER    OUSTR("user")
-#define SHARED_PACKAGE_MANAGER  OUSTR("shared")
-#define BUNDLED_PACKAGE_MANAGER OUSTR("bundled")
+#define USER_PACKAGE_MANAGER    "user"
+#define SHARED_PACKAGE_MANAGER  "shared"
+#define BUNDLED_PACKAGE_MANAGER "bundled"
 
 using namespace ::com::sun::star;
 
@@ -147,10 +145,10 @@ void Entry_Impl::checkDependencies()
             rtl::OUString aMissingDep( DialogHelper::getResourceString( RID_STR_ERROR_MISSING_DEPENDENCIES ) );
             for ( sal_Int32 i = 0; i < depExc.UnsatisfiedDependencies.getLength(); ++i )
             {
-                aMissingDep += OUSTR("\n");
+                aMissingDep += "\n";
                 aMissingDep += dp_misc::Dependencies::getErrorText( depExc.UnsatisfiedDependencies[i]);
             }
-            aMissingDep += OUSTR("\n");
+            aMissingDep += "\n";
             m_sErrorText = aMissingDep;
             m_bMissingDeps = true;
         }
@@ -313,10 +311,9 @@ sal_Int32 ExtensionBox_Impl::getSelIndex() const
 void ExtensionBox_Impl::checkIndex( sal_Int32 nIndex ) const
 {
     if ( nIndex < 0 )
-        throw lang::IllegalArgumentException( OUSTR("The list index starts with 0"),0, 0 );
+        throw lang::IllegalArgumentException( "The list index starts with 0",0, 0 );
     if ( static_cast< sal_uInt32 >( nIndex ) >= m_vEntries.size())
-        throw lang::IllegalArgumentException( OUSTR("There is no element at the provided position."
-        "The position exceeds the number of available list entries"),0, 0 );
+        throw lang::IllegalArgumentException( "There is no element at the provided position. The position exceeds the number of available list entries",0, 0 );
 }
 
 //------------------------------------------------------------------------------
@@ -375,7 +372,7 @@ void ExtensionBox_Impl::select( const rtl::OUString & sName )
 
     for ( It iIter = m_vEntries.begin(); iIter != m_vEntries.end(); ++iIter )
     {
-        if ( sName.equals( (*iIter)->m_sTitle ) )
+        if ( sName.equals( (*iIter)->m_sTitle ))
         {
             long nPos = iIter - m_vEntries.begin();
             selectEntry( nPos );
@@ -409,7 +406,7 @@ void ExtensionBox_Impl::CalcActiveHeight( const long nPos )
 
     rtl::OUString aText( m_vEntries[ nPos ]->m_sErrorText );
     if ( !aText.isEmpty() )
-        aText += OUSTR("\n");
+        aText += "\n";
     aText += m_vEntries[ nPos ]->m_sDescription;
 
     Rectangle aRect = GetTextRect( Rectangle( Point(), aSize ), aText,
@@ -629,7 +626,7 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl pEntr
     if ( pEntry->m_sErrorText.Len() )
     {
         if ( pEntry->m_bActive )
-            sDescription = pEntry->m_sErrorText + OUSTR("\n") + pEntry->m_sDescription;
+            sDescription = pEntry->m_sErrorText + OUString("\n") + pEntry->m_sDescription;
         else
             sDescription = pEntry->m_sErrorText;
     }
@@ -1054,8 +1051,8 @@ long ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &
     }
 
     pEntry->m_bHasOptions = m_pManager->supportsOptions( xPackage );
-    pEntry->m_bUser       = xPackage->getRepositoryName().equals( USER_PACKAGE_MANAGER );
-    pEntry->m_bShared     = xPackage->getRepositoryName().equals( SHARED_PACKAGE_MANAGER );
+    pEntry->m_bUser       = (xPackage->getRepositoryName() == USER_PACKAGE_MANAGER);
+    pEntry->m_bShared     = (xPackage->getRepositoryName() == SHARED_PACKAGE_MANAGER);
     pEntry->m_bNew        = m_bInCheckMode;
     pEntry->m_bMissingLic = bLicenseMissing;
 

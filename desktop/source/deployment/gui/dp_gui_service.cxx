@@ -235,14 +235,14 @@ void ServiceImpl::startExecuteModal(
             OSL_ASSERT( ! bAppUp );
             app.reset( new MyApp );
             if (! InitVCL() )
-                throw RuntimeException( OUSTR("Cannot initialize VCL!"),
+                throw RuntimeException( "Cannot initialize VCL!",
                                         static_cast<OWeakObject *>(this) );
             AllSettings as = app->GetSettings();
             as.SetUILanguageTag( LanguageTag( utl::ConfigManager::getLocale() ) );
             app->SetSettings( as );
             app->SetDisplayName(
                 utl::ConfigManager::getProductName() +
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ")) +
+                rtl::OUString(" ") +
                 utl::ConfigManager::getProductVersion());
             ExtensionCmdQueue::syncRepositories( m_xComponentContext );
         }
@@ -299,7 +299,7 @@ void ServiceImpl::startExecuteModal(
 //______________________________________________________________________________
 void ServiceImpl::trigger( OUString const &rEvent ) throw (RuntimeException)
 {
-    if ( rEvent == OUSTR("SHOW_UPDATE_DIALOG") )
+    if ( rEvent == "SHOW_UPDATE_DIALOG" )
         m_bShowUpdateOnly = true;
     else
         m_bShowUpdateOnly = false;

@@ -108,7 +108,7 @@ namespace {
 
 OUString getVersion( OUString const & sVersion )
 {
-    return ( sVersion.isEmpty() ) ? OUString( RTL_CONSTASCII_USTRINGPARAM( "0" ) ) : sVersion;
+    return ( sVersion.isEmpty() ) ? OUString( "0" ) : sVersion;
 }
 
 OUString getVersion( const uno::Reference< deployment::XPackage > &rPackage )
@@ -358,8 +358,8 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
 {
     uno::Any request( xRequest->getRequest() );
     OSL_ASSERT( request.getValueTypeClass() == uno::TypeClass_EXCEPTION );
-    dp_misc::TRACE( OUSTR("[dp_gui_cmdenv.cxx] incoming request:\n")
-        + ::comphelper::anyToString(request) + OUSTR("\n"));
+    dp_misc::TRACE( "[dp_gui_cmdenv.cxx] incoming request:\n"
+        + ::comphelper::anyToString(request) + "\n");
 
     lang::WrappedTargetException wtExc;
     deployment::DependencyException depExc;
@@ -399,10 +399,8 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
             if (xPackageType.is())
             {
                 approve = ( xPackage->isBundle() &&
-                            xPackageType->getMediaType().matchAsciiL(
-                                RTL_CONSTASCII_STRINGPARAM(
-                                    "application/"
-                                    "vnd.sun.star.legacy-package-bundle") ));
+                            xPackageType->getMediaType().match(
+                               "application/vnd.sun.star.legacy-package-bundle" ));
             }
         }
         abort = !approve;
@@ -862,7 +860,7 @@ void ExtensionCmdQueue::Thread::_addExtension( ::rtl::Reference< ProgressCmdEnv 
     uno::Any anyTitle;
     try
     {
-        anyTitle = ::ucbhelper::Content( rPackageURL, rCmdEnv.get(), m_xContext ).getPropertyValue( OUSTR("Title") );
+        anyTitle = ::ucbhelper::Content( rPackageURL, rCmdEnv.get(), m_xContext ).getPropertyValue( "Title" );
     }
     catch ( const uno::Exception & )
     {
@@ -1111,7 +1109,7 @@ void ExtensionCmdQueue::acceptLicense( const uno::Reference< deployment::XPackag
 
 void ExtensionCmdQueue::syncRepositories( const uno::Reference< uno::XComponentContext > &xContext )
 {
-    dp_misc::syncRepositories( false, new ProgressCmdEnv( xContext, NULL, OUSTR("Extension Manager") ) );
+    dp_misc::syncRepositories( false, new ProgressCmdEnv( xContext, NULL, "Extension Manager" ) );
 }
 
 void ExtensionCmdQueue::stop()
@@ -1127,7 +1125,7 @@ bool ExtensionCmdQueue::isBusy()
 void handleInteractionRequest( const uno::Reference< uno::XComponentContext > & xContext,
                                const uno::Reference< task::XInteractionRequest > & xRequest )
 {
-    ::rtl::Reference< ProgressCmdEnv > xCmdEnv( new ProgressCmdEnv( xContext, NULL, OUSTR("Extension Manager") ) );
+    ::rtl::Reference< ProgressCmdEnv > xCmdEnv( new ProgressCmdEnv( xContext, NULL, "Extension Manager" ) );
     xCmdEnv->handle( xRequest );
 }
 

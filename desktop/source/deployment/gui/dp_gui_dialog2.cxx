@@ -73,8 +73,6 @@
 #include <vector>
 #include <boost/shared_ptr.hpp>
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::system;
 
@@ -88,9 +86,9 @@ namespace dp_gui {
 #define PROGRESS_WIDTH      60
 #define PROGRESS_HEIGHT     14
 
-#define USER_PACKAGE_MANAGER    OUSTR("user")
-#define SHARED_PACKAGE_MANAGER  OUSTR("shared")
-#define BUNDLED_PACKAGE_MANAGER OUSTR("bundled")
+#define USER_PACKAGE_MANAGER    "user"
+#define SHARED_PACKAGE_MANAGER  "shared"
+#define BUNDLED_PACKAGE_MANAGER "bundled"
 
 //------------------------------------------------------------------------------
 struct StrAllFiles : public rtl::StaticWithInit< OUString, StrAllFiles >
@@ -582,7 +580,7 @@ String DialogHelper::getResourceString( sal_uInt16 id )
 //------------------------------------------------------------------------------
 bool DialogHelper::IsSharedPkgMgr( const uno::Reference< deployment::XPackage > &xPackage )
 {
-    if ( xPackage->getRepositoryName().equals( SHARED_PACKAGE_MANAGER ) )
+    if ( xPackage->getRepositoryName() == SHARED_PACKAGE_MANAGER )
         return true;
     else
         return false;
@@ -765,15 +763,15 @@ long ExtMgrDialog::addPackageToList( const uno::Reference< deployment::XPackage 
 
     m_pExtensionBox->removeEntry(xPackage);
 
-    if (m_pBundledCbx->IsChecked() && xPackage->getRepositoryName().equals( BUNDLED_PACKAGE_MANAGER ))
+    if (m_pBundledCbx->IsChecked() && (xPackage->getRepositoryName() == BUNDLED_PACKAGE_MANAGER) )
     {
        return m_pExtensionBox->addEntry( xPackage, bLicenseMissing );
     }
-    else if (m_pSharedCbx->IsChecked() && xPackage->getRepositoryName().equals( SHARED_PACKAGE_MANAGER ))
+    else if (m_pSharedCbx->IsChecked() && (xPackage->getRepositoryName() == SHARED_PACKAGE_MANAGER) )
     {
         return m_pExtensionBox->addEntry( xPackage, bLicenseMissing );
     }
-    else if (m_pUserCbx->IsChecked() && xPackage->getRepositoryName().equals( USER_PACKAGE_MANAGER ))
+    else if (m_pUserCbx->IsChecked() && (xPackage->getRepositoryName() == USER_PACKAGE_MANAGER ))
     {
         return m_pExtensionBox->addEntry( xPackage, bLicenseMissing );
     }
@@ -892,7 +890,7 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
     const uno::Reference< uno::XComponentContext > xContext( m_pManager->getContext() );
     const uno::Reference< ui::dialogs::XFilePicker > xFilePicker(
         xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-            OUSTR("com.sun.star.ui.dialogs.FilePicker"),
+            "com.sun.star.ui.dialogs.FilePicker",
             uno::Sequence< uno::Any >( &mode, 1 ), xContext ), uno::UNO_QUERY_THROW );
     xFilePicker->setTitle( m_sAddPackages );
 
@@ -924,14 +922,14 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
                 buf.append( filter );
                 insertion.first->second = buf.makeStringAndClear();
             }
-            if ( xPackageType->getMediaType() == OUSTR( "application/vnd.sun.star.package-bundle" ) )
+            if ( xPackageType->getMediaType() == "application/vnd.sun.star.package-bundle" )
                 sDefaultFilter = title;
         }
     }
 
     const uno::Reference< ui::dialogs::XFilterManager > xFilterManager( xFilePicker, uno::UNO_QUERY_THROW );
     // All files at top:
-    xFilterManager->appendFilter( StrAllFiles::get(), OUSTR("*.*") );
+    xFilterManager->appendFilter( StrAllFiles::get(), "*.*" );
     // then supported ones:
     t_string2string::const_iterator iPos( title2filter.begin() );
     const t_string2string::const_iterator iEnd( title2filter.end() );

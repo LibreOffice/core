@@ -295,26 +295,26 @@ void UpdateInstallDialog::setError(INSTALL_ERROR err, ::rtl::OUString const & sE
         OSL_ASSERT(0);
     }
 
-    sError.SearchAndReplace(String(OUSTR("%NAME")), String(sExtension), 0);
+    sError.SearchAndReplace(String("%NAME"), String(sExtension), 0);
     //We want to have an empty line between the error messages. However,
     //there shall be no empty line after the last entry.
     if (m_bNoEntry)
         m_bNoEntry = false;
     else
-        m_mle_info.InsertText(OUSTR("\n"));
+        m_mle_info.InsertText(OUString("\n"));
     m_mle_info.InsertText(sError);
     //Insert more information about the error
     if (!exceptionMessage.isEmpty())
-        m_mle_info.InsertText(m_sThisErrorOccurred + exceptionMessage + OUSTR("\n"));
+        m_mle_info.InsertText(m_sThisErrorOccurred + exceptionMessage + "\n");
 
     m_mle_info.InsertText(m_sNoInstall);
-    m_mle_info.InsertText(OUSTR("\n"));
+    m_mle_info.InsertText(OUString("\n"));
 }
 
 void UpdateInstallDialog::setError(OUString const & exceptionMessage)
 {
     m_bError = true;
-    m_mle_info.InsertText(exceptionMessage + OUSTR("\n"));
+    m_mle_info.InsertText(exceptionMessage + "\n");
 }
 
 IMPL_LINK_NOARG(UpdateInstallDialog, cancelHandler)
@@ -333,25 +333,25 @@ void UpdateInstallDialog::Thread::downloadExtensions()
         //create the download directory in the temp folder
         OUString sTempDir;
         if (::osl::FileBase::getTempDirURL(sTempDir) != ::osl::FileBase::E_None)
-            throw cssu::Exception(OUSTR("Could not get URL for the temp directory. No extensions will be installed."), 0);
+            throw cssu::Exception("Could not get URL for the temp directory. No extensions will be installed.", 0);
 
         //create a unique name for the directory
         OUString tempEntry, destFolder;
         if (::osl::File::createTempFile(&sTempDir, 0, &tempEntry ) != ::osl::File::E_None)
-            throw cssu::Exception(OUSTR("Could not create a temporary file in ") + sTempDir +
-             OUSTR(". No extensions will be installed"), 0 );
+            throw cssu::Exception("Could not create a temporary file in " + sTempDir +
+             ". No extensions will be installed", 0 );
 
         tempEntry = tempEntry.copy( tempEntry.lastIndexOf( '/' ) + 1 );
 
         destFolder = dp_misc::makeURL( sTempDir, tempEntry );
-        destFolder += OUSTR("_");
+        destFolder += "_";
         m_sDownloadFolder = destFolder;
         try
         {
             dp_misc::create_folder(0, destFolder, m_updateCmdEnv.get(), true );
         } catch (const cssu::Exception & e)
         {
-            throw cssu::Exception(e.Message + OUSTR(" No extensions will be installed."), 0);
+            throw cssu::Exception(e.Message + " No extensions will be installed.", 0);
         }
 
 
@@ -416,7 +416,7 @@ void UpdateInstallDialog::Thread::downloadExtensions()
                     {
                         if (j != vecExceptions.begin())
                             buf.appendAscii("\n");
-                        buf.append(OUSTR("Could not download "));
+                        buf.append("Could not download ");
                         buf.append(j->first);
                         buf.appendAscii(". ");
                         buf.append(j->second.Message);
@@ -485,15 +485,15 @@ void UpdateInstallDialog::Thread::installExtensions()
             }
             if (!curData.aUpdateSource.is() && !curData.sLocalURL.isEmpty())
             {
-                css::beans::NamedValue prop(OUSTR("EXTENSION_UPDATE"), css::uno::makeAny(OUSTR("1")));
+                css::beans::NamedValue prop("EXTENSION_UPDATE", css::uno::makeAny(OUString("1")));
                 if (!curData.bIsShared)
                     xExtension = m_dialog.getExtensionManager()->addExtension(
                         curData.sLocalURL, css::uno::Sequence<css::beans::NamedValue>(&prop, 1),
-                        OUSTR("user"), xAbortChannel, m_updateCmdEnv.get());
+                        "user", xAbortChannel, m_updateCmdEnv.get());
                 else
                     xExtension = m_dialog.getExtensionManager()->addExtension(
                         curData.sLocalURL, css::uno::Sequence<css::beans::NamedValue>(&prop, 1),
-                        OUSTR("shared"), xAbortChannel, m_updateCmdEnv.get());
+                        "shared", xAbortChannel, m_updateCmdEnv.get());
             }
             else if (curData.aUpdateSource.is())
             {
@@ -502,15 +502,15 @@ void UpdateInstallDialog::Thread::installExtensions()
                 //add extension. Currently it contains only "SUPPRESS_LICENSE". So it it could happen
                 //that a license is displayed when updating from the shared repository, although the
                 //shared extension was installed using "SUPPRESS_LICENSE".
-                css::beans::NamedValue prop(OUSTR("EXTENSION_UPDATE"), css::uno::makeAny(OUSTR("1")));
+                css::beans::NamedValue prop("EXTENSION_UPDATE", css::uno::makeAny(OUString("1")));
                 if (!curData.bIsShared)
                     xExtension = m_dialog.getExtensionManager()->addExtension(
                         curData.aUpdateSource->getURL(), css::uno::Sequence<css::beans::NamedValue>(&prop, 1),
-                        OUSTR("user"), xAbortChannel, m_updateCmdEnv.get());
+                        "user", xAbortChannel, m_updateCmdEnv.get());
                 else
                     xExtension = m_dialog.getExtensionManager()->addExtension(
                         curData.aUpdateSource->getURL(), css::uno::Sequence<css::beans::NamedValue>(&prop, 1),
-                        OUSTR("shared"), xAbortChannel, m_updateCmdEnv.get());
+                        "shared", xAbortChannel, m_updateCmdEnv.get());
             }
         }
         catch (css::deployment::DeploymentException & de)
@@ -591,12 +591,12 @@ void UpdateInstallDialog::Thread::download(OUString const & sDownloadURL, Update
         0, &tempEntry ) != ::osl::File::E_None)
     {
         //ToDo feedback in window that download of this component failed
-        throw cssu::Exception(OUSTR("Could not create temporary file in folder ") + destFolder + OUSTR("."), 0);
+        throw cssu::Exception("Could not create temporary file in folder " + destFolder + ".", 0);
     }
     tempEntry = tempEntry.copy( tempEntry.lastIndexOf( '/' ) + 1 );
 
     destFolder = dp_misc::makeURL( m_sDownloadFolder, tempEntry );
-    destFolder += OUSTR("_");
+    destFolder += "_";
 
     ::ucbhelper::Content destFolderContent;
     dp_misc::create_folder( &destFolderContent, destFolder, m_updateCmdEnv.get() );
@@ -617,7 +617,7 @@ void UpdateInstallDialog::Thread::download(OUString const & sDownloadURL, Update
                 return;
             }
             //all errors should be handeld by the command environment.
-            aUpdateData.sLocalURL = destFolder + OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) ) + sTitle;
+            aUpdateData.sLocalURL = destFolder + "/" + sTitle;
         }
     }
 }
@@ -659,8 +659,8 @@ void UpdateCommandEnv::handle(
 {
     cssu::Any request( xRequest->getRequest() );
     OSL_ASSERT( request.getValueTypeClass() == cssu::TypeClass_EXCEPTION );
-    dp_misc::TRACE(OUSTR("[dp_gui_cmdenv.cxx] incoming request:\n")
-        + ::comphelper::anyToString(request) + OUSTR("\n\n"));
+    dp_misc::TRACE("[dp_gui_cmdenv.cxx] incoming request:\n"
+        + ::comphelper::anyToString(request) + "\n\n");
 
     css::deployment::VersionException verExc;
     bool approve = false;
