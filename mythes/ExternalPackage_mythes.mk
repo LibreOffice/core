@@ -17,9 +17,6 @@ $(eval $(call gb_ExternalPackage_add_file,mythes,lib/libmythes.a,.libs/libmythes
 
 endif
 
-$(eval $(call gb_ExternalPackage_add_files,mythes,bin,\
-	th_gen_idx.pl \
-))
 $(eval $(call gb_ExternalPackage_add_unpacked_files,mythes,inc,\
     mythes.hxx \
 ))
