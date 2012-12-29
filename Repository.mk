@@ -754,6 +754,10 @@ $(eval $(call gb_Helper_register_jars,OXT, \
 
 # External executables
 $(eval $(call gb_ExternalExecutable_register_executables,\
+	genbrk \
+	genccode \
+	gencmn \
+	gendict \
 	python \
 	ucpp \
 	xmllint \

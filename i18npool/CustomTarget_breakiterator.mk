@@ -30,46 +30,16 @@ $(eval $(call gb_CustomTarget_CustomTarget,i18npool/breakiterator))
 
 i18npool_BIDIR := $(call gb_CustomTarget_get_workdir,i18npool/breakiterator)
 
-ifeq ($(SYSTEM_ICU),NO)
-i18npool_ICUTARGET := $(call gb_ExternalPackage_get_target,icu)
-else
-i18npool_ICUTARGET :=
-endif
-
 $(call gb_CustomTarget_get_target,i18npool/breakiterator) : \
 	$(i18npool_BIDIR)/dict_ja.cxx $(i18npool_BIDIR)/dict_zh.cxx $(i18npool_BIDIR)/OpenOffice_dat.c
 
 $(i18npool_BIDIR)/dict_%.cxx : \
 		$(SRCDIR)/i18npool/source/breakiterator/data/%.dic \
-		$(call gb_Executable_get_target_for_build,gendict) $(i18npool_ICUTARGET) \
+		$(call gb_ExternalExecutable_get_dependencies,gendict) \
 		| $(i18npool_BIDIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),DIC,1)
 	$(call gb_Helper_abbreviate_dirs,\
-		$(call gb_Helper_execute,gendict) $< $@ $(patsubst $(i18npool_BIDIR)/dict_%.cxx,%,$@))
-
-ifeq ($(SYSTEM_GENBRK),)
-i18npool_GENBRKTARGET := $(call gb_Executable_get_target_for_build,genbrk)
-i18npool_GENBRK := $(call gb_Helper_execute,genbrk)
-else
-i18npool_GENBRKTARGET :=
-i18npool_GENBRK := $(SYSTEM_GENBRK)
-endif
-
-ifeq ($(SYSTEM_GENCCODE),)
-i18npool_GENCCODETARGET := $(call gb_Executable_get_target_for_build,genccode)
-i18npool_GENCCODE := $(call gb_Helper_execute,genccode)
-else
-i18npool_GENCCODETARGET :=
-i18npool_GENCCODE := $(SYSTEM_GENCCODE)
-endif
-
-ifeq ($(SYSTEM_GENCMN),)
-i18npool_GENCMNTARGET := $(call gb_Executable_get_target_for_build,gencmn)
-i18npool_GENCMN := $(call gb_Helper_execute,gencmn)
-else
-i18npool_GENCMNTARGET :=
-i18npool_GENCMN := $(SYSTEM_GENCMN)
-endif
+		$(call gb_ExternalExecutable_get_command,gendict) $< $@ $(patsubst $(i18npool_BIDIR)/dict_%.cxx,%,$@))
 
 i18npool_BRKTXTS := \
     char_in.brk \
@@ -94,28 +64,28 @@ i18npool_BRKTXTS := \
 # Output of gencmn is redirected to OpenOffice_tmp.c with the -t switch.
 $(i18npool_BIDIR)/OpenOffice_dat.c : $(SRCDIR)/i18npool/CustomTarget_breakiterator.mk \
 		$(patsubst %.brk,$(i18npool_BIDIR)/%_brk.c,$(i18npool_BRKTXTS)) \
-		$(i18npool_GENCMNTARGET) $(i18npool_ICUTARGET)
+		$(call gb_ExternalExecutable_get_dependencies,gencmn)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CMN,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		RESPONSEFILE=$(shell $(gb_MKTEMP)) && \
 		$(foreach brk,$(i18npool_BRKTXTS),echo '$(brk)' >> $${RESPONSEFILE} && ) \
-		$(i18npool_GENCMN) -n OpenOffice -t tmp -S -d $(i18npool_BIDIR)/ 0 $${RESPONSEFILE} && \
+		$(call gb_ExternalExecutable_get_command,gencmn) -n OpenOffice -t tmp -S -d $(i18npool_BIDIR)/ 0 $${RESPONSEFILE} && \
 		rm -f $${RESPONSEFILE} && \
 		echo '#ifdef _MSC_VER' > $@ && \
 		echo '#pragma warning( disable : 4229 4668 )' >> $@ && \
 		echo '#endif' >> $@ && \
 		cat $(subst _dat,_tmp,$@) >> $@)
 
-$(i18npool_BIDIR)/%_brk.c : $(i18npool_BIDIR)/%.brk $(i18npool_GENCCODETARGET) $(i18npool_ICUTARGET)
+$(i18npool_BIDIR)/%_brk.c : $(i18npool_BIDIR)/%.brk $(call gb_ExternalExecutable_get_dependencies,genccode)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CCD,1)
 	$(call gb_Helper_abbreviate_dirs,\
-		$(i18npool_GENCCODE) -n OpenOffice -d $(i18npool_BIDIR)/ $< \
+		$(call gb_ExternalExecutable_get_command,genccode) -n OpenOffice -d $(i18npool_BIDIR)/ $< \
 			$(if $(findstring s,$(MAKEFLAGS)),> /dev/null))
 
-$(i18npool_BIDIR)/%.brk : $(i18npool_BIDIR)/%.txt $(i18npool_GENBRKTARGET) $(i18npool_ICUTARGET)
+$(i18npool_BIDIR)/%.brk : $(i18npool_BIDIR)/%.txt $(call gb_ExternalExecutable_get_dependencies,genbrk)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),BRK,1)
 	$(call gb_Helper_abbreviate_dirs,\
-		$(i18npool_GENBRK) -r $< -o $@ $(if $(findstring s,$(MAKEFLAGS)),> /dev/null))
+		$(call gb_ExternalExecutable_get_command,genbrk) -r $< -o $@ $(if $(findstring s,$(MAKEFLAGS)),> /dev/null))
 
 # fdo#31271 ")" reclassified in more recent Unicode Standards / ICU 4.4
 # * Prepend set empty as of Unicode Version 6.1 / ICU 4.9, which bails out if used.

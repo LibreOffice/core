@@ -2531,4 +2531,77 @@ endef
 
 endif # SYSTEM_PYTHON
 
+ifneq ($(SYSTEM_GENBRK),)
+
+define gb_ExternalExecutable__register_genbrk
+$(call gb_ExternalExecutable_set_external,genbrk,$(SYSTEM_GENBRK))
+
+endef
+
+else # ! SYSTEM_GENBRK
+
+define gb_ExternalExecutable__register_genbrk
+$(call gb_ExternalExecutable_set_internal,genbrk)
+$(call gb_ExternalExecutable_add_dependencies,genbrk,\
+	$(call gb_Package_get_target_for_build,icu) \
+)
+
+endef
+
+endif
+
+ifneq ($(SYSTEM_GENCCODE),)
+
+define gb_ExternalExecutable__register_genccode
+$(call gb_ExternalExecutable_set_external,genccode,$(SYSTEM_GENCCODE))
+
+endef
+
+else # ! SYSTEM_GENCCODE
+
+define gb_ExternalExecutable__register_genccode
+$(call gb_ExternalExecutable_set_internal,genccode)
+$(call gb_ExternalExecutable_add_dependencies,genccode,\
+	$(call gb_Package_get_target_for_build,icu) \
+)
+
+endef
+
+endif
+
+ifneq ($(SYSTEM_GENCMN),)
+
+define gb_ExternalExecutable__register_gencmn
+$(call gb_ExternalExecutable_set_external,gencmn,$(SYSTEM_GENCMN))
+
+endef
+
+else # ! SYSTEM_GENCMN
+
+define gb_ExternalExecutable__register_gencmn
+$(call gb_ExternalExecutable_set_internal,gencmn)
+$(call gb_ExternalExecutable_add_dependencies,gencmn,\
+	$(call gb_Package_get_target_for_build,icu) \
+)
+
+endef
+
+endif
+
+ifeq ($(SYSTEM_ICU),YES)
+
+gb_ExternalExecutable__register_gendict :=
+
+else
+
+define gb_ExternalExecutable__register_gendict
+$(call gb_ExternalExecutable_set_internal,gendict)
+$(call gb_ExternalExecutable_add_dependencies,gendict,\
+	$(call gb_Package_get_target_for_build,icu) \
+)
+
+endef
+
+endif
+
 # vim: set noet sw=4 ts=4:
