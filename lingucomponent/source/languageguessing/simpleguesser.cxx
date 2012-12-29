@@ -95,9 +95,14 @@ SimpleGuesser::SimpleGuesser()
     h = NULL;
 }
 
-void SimpleGuesser::operator=(SimpleGuesser& sg){
+SimpleGuesser& SimpleGuesser::operator=(const SimpleGuesser& sg){
+    // Check for self-assignment!
+    if (this == &sg)      // Same object?
+      return *this;        // Yes, so skip assignment, and just return *this.
+
     if(h){textcat_Done(h);}
     h = sg.h;
+    return *this;
 }
 
 SimpleGuesser::~SimpleGuesser()

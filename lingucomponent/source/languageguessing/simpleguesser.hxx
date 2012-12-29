@@ -37,10 +37,10 @@ public:
     /**inits the object with conf file "./conf.txt"*/
     SimpleGuesser();
 
-    /** Compares the current Simpleguesser with an other
-     * @param SimpleGuesser& sg the other guesser to compare
+    /**
+     * @param SimpleGuesser& sg the other guesser
      */
-    void operator=(SimpleGuesser& sg);
+    SimpleGuesser& operator=(const SimpleGuesser& sg);
 
     /**
      * destroy the object
