@@ -67,28 +67,26 @@ private:
     DocumentSignatureMode   meSignatureMode;
     css::uno::Sequence < css::uno::Sequence < css::beans::PropertyValue > > m_manifest;
 
-    FixedText           maHintDocFT;
-    FixedText           maHintBasicFT;
-    FixedText           maHintPackageFT;
-    SvxSimpleTableContainer maSignaturesLBContainer;
-    SvxSimpleTable      maSignaturesLB;
-    FixedImage          maSigsValidImg;
-    FixedInfo           maSigsValidFI;
-    FixedImage          maSigsInvalidImg;
-    FixedInfo           maSigsInvalidFI;
-    FixedImage          maSigsNotvalidatedImg;
-    FixedInfo           maSigsNotvalidatedFI;
-    FixedInfo           maSigsOldSignatureFI;
+    FixedText*          m_pHintDocFT;
+    FixedText*          m_pHintBasicFT;
+    FixedText*          m_pHintPackageFT;
+    SvxSimpleTable*     m_pSignaturesLB;
+    FixedImage*         m_pSigsValidImg;
+    FixedText*          m_pSigsValidFI;
+    FixedImage*         m_pSigsInvalidImg;
+    FixedText*          m_pSigsInvalidFI;
+    FixedImage*         m_pSigsNotvalidatedImg;
+    FixedText*          m_pSigsNotvalidatedFI;
+    FixedImage*         m_pSigsOldSignatureImg;
+    FixedText*          m_pSigsOldSignatureFI;
 
-    PushButton          maViewBtn;
-    PushButton          maAddBtn;
-    PushButton          maRemoveBtn;
+    PushButton*         m_pViewBtn;
+    PushButton*         m_pAddBtn;
+    PushButton*         m_pRemoveBtn;
 
-    FixedLine           maBottomSepFL;
-    OKButton            maOKBtn;
-    HelpButton          maHelpBtn;
+    PushButton*         m_pCloseBtn;
 
-    ::rtl::OUString m_sODFVersion;
+    OUString m_sODFVersion;
     //Signals if the document contains already a document signature. This is only
     //importent when we are signing macros and if the value is true.
     bool m_bHasDocumentSignature;

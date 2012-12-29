@@ -381,12 +381,6 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
         AlignAfterImage( _rImage, static_cast< Control& >( _rFI ), _nXOffset );
         ShrinkToFitWidth( _rFI );
     }
-
-    void AlignAndFitImageAndControl( FixedImage& _rImage, FixedInfo& _rFI, long _nXOffset )
-    {
-        _rImage.SetSizePixel( _rImage.GetImage().GetSizePixel() );
-        AlignAfterImage( _rImage, _rFI, _nXOffset );
-    }
 }
 
 

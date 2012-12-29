@@ -52,7 +52,6 @@ namespace XmlSec
     long            ShrinkToFitWidth( Control& _rCtrl, long _nOffs = 0 );       // return = new width
     void            AlignAfterImage( const FixedImage& _rImage, Control& _rCtrl, long _nXOffset = 0 );
     void            AlignAfterImage( const FixedImage& _rImage, FixedInfo& _rFI, long _nXOffset = 0 );
-    void            AlignAndFitImageAndControl( FixedImage& _rImage, FixedInfo& _rFI, long _nXOffset = 0 );
 }
 
 #define XMLSEC_RES(id)      ResId(id,*XmlSec::GetResMgr())

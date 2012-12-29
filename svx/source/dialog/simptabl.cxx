@@ -18,6 +18,7 @@
  */
 
 #include <svx/simptabl.hxx>
+#include <vcl/builder.hxx>
 #include <vcl/svapp.hxx>
 
 #include <comphelper/processfactory.hxx>
@@ -27,11 +28,24 @@
 
 // SvxSimpleTableContainer  ------------------------------------------------------
 
-SvxSimpleTableContainer::SvxSimpleTableContainer( Window* pParent, const ResId& rResId)
+SvxSimpleTableContainer::SvxSimpleTableContainer(Window* pParent, const ResId& rResId)
     : Control(pParent, rResId)
     , m_pTable(NULL)
 {
     SetBorderStyle(WINDOW_BORDER_NOBORDER);
+}
+
+SvxSimpleTableContainer::SvxSimpleTableContainer(Window* pParent, WinBits nBits)
+    : Control(pParent, nBits)
+    , m_pTable(NULL)
+{
+    SetBorderStyle(WINDOW_BORDER_NOBORDER);
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxSimpleTableContainer(Window *pParent,
+    VclBuilder::stringmap &)
+{
+    return new SvxSimpleTableContainer(pParent);
 }
 
 void SvxSimpleTableContainer::SetTable(SvxSimpleTable* pTable)

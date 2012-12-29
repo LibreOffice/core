@@ -61,42 +61,11 @@
 #define DLGS_BOTTOM_OK_X(dlgw)          (DLGS_BOTTOM_CANCEL_X(dlgw)-RSC_SP_CTRL_DESC_X-RSC_CD_PUSHBUTTON_WIDTH)
 
 
-// --------- dialog Digital Signatures ---------
-#define BTN_ADDCERT                     2
-#define BTN_REMOVECERT                  3
-#define FT_HINT_DOC                     4
-#define FT_HINT_BASIC                   5
-#define FT_HINT_PACK                    6
-#define IMG_STATE_VALID                 7
-#define FI_STATE_VALID                  8
-#define IMG_STATE_BROKEN                9
-#define FI_STATE_BROKEN                 10
-#define IMG_STATE_NOTVALIDATED          11
-#define FI_STATE_NOTVALIDATED           12
-#define FI_STATE_OLDSIGNATURE           16
-
-#define DS_BTNWIDTH_1                   70
-
-// --------- dialog Ceritficate chooser ---------
-#define FT_HINT_SELECT                  1
-
-#define CS_WIDTH                        DLGS_WIDTH
-#define CS_HEIGHT                       DLGS_HEIGHT
-#define CS_BTNWIDTH_1                   DS_BTNWIDTH_1
+// --------- tab dialog Certificate viewer ---------
 
 #define CS_COL_0                        RSC_SP_DLG_INNERBORDER_LEFT
-#define CS_COL_2                        (CS_WIDTH-RSC_SP_DLG_INNERBORDER_RIGHT)
-#define CS_COL_1                        (CS_COL_2-CS_BTNWIDTH_1)
-
-#define CS_ROW_0                        RSC_SP_DLG_INNERBORDER_TOP
-#define CS_ROW_1                        (CS_ROW_0+RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_DESC_X)
-#define CS_ROW_4                        DLGS_BOTTOM_LAST_CTRL_L(CS_HEIGHT)
-#define CS_ROW_3                        (CS_ROW_4-RSC_CD_PUSHBUTTON_HEIGHT)
-#define CS_ROW_2                        (CS_ROW_3-RSC_SP_CTRL_Y)
-
+#define CS_COL_2                        (DLGS_WIDTH-RSC_SP_DLG_INNERBORDER_RIGHT)
 #define CS_LB_WIDTH                     (CS_COL_2-CS_COL_0)
-
-// --------- tab dialog Certificate viewer ---------
 
 #define CV_COL_0                        TD_SP_INNERBORDER_LEFT
 #define CV_COL_1                        (TP_WIDTH-RSC_SP_TBPG_INNERBORDER_RIGHT)

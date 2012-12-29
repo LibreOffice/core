@@ -174,79 +174,78 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
     Window* pParent,
     uno::Reference< uno::XComponentContext >& rxCtx, DocumentSignatureMode eMode,
     sal_Bool bReadOnly, const ::rtl::OUString& sODFVersion, bool bHasDocumentSignature)
-    :ModalDialog        ( pParent, XMLSEC_RES( RID_XMLSECDLG_DIGSIG ) )
-    ,mxCtx              ( rxCtx )
-    ,maSignatureHelper  ( rxCtx )
-    ,meSignatureMode    ( eMode )
-    ,maHintDocFT        ( this, XMLSEC_RES( FT_HINT_DOC ) )
-    ,maHintBasicFT      ( this, XMLSEC_RES( FT_HINT_BASIC ) )
-    ,maHintPackageFT    ( this, XMLSEC_RES( FT_HINT_PACK ) )
-    ,maSignaturesLBContainer(this, XMLSEC_RES(LB_SIGNATURES))
-    ,maSignaturesLB(maSignaturesLBContainer)
-    ,maSigsValidImg     ( this, XMLSEC_RES( IMG_STATE_VALID ) )
-    ,maSigsValidFI      ( this, XMLSEC_RES( FI_STATE_VALID ) )
-    ,maSigsInvalidImg   ( this, XMLSEC_RES( IMG_STATE_BROKEN ) )
-    ,maSigsInvalidFI    ( this, XMLSEC_RES( FI_STATE_BROKEN ) )
-    ,maSigsNotvalidatedImg( this, XMLSEC_RES( IMG_STATE_NOTVALIDATED ) )
-    ,maSigsNotvalidatedFI ( this, XMLSEC_RES( FI_STATE_NOTVALIDATED ) )
-    ,maSigsOldSignatureFI ( this, XMLSEC_RES( FI_STATE_OLDSIGNATURE) )
-    ,maViewBtn          ( this, XMLSEC_RES( BTN_VIEWCERT ) )
-    ,maAddBtn           ( this, XMLSEC_RES( BTN_ADDCERT ) )
-    ,maRemoveBtn        ( this, XMLSEC_RES( BTN_REMOVECERT ) )
-    ,maBottomSepFL      ( this, XMLSEC_RES( FL_BOTTOM_SEP ) )
-    ,maOKBtn            ( this, XMLSEC_RES( BTN_OK ) )
-    ,maHelpBtn          ( this, XMLSEC_RES( BTN_HELP ) )
-    ,m_sODFVersion (sODFVersion)
-    ,m_bHasDocumentSignature(bHasDocumentSignature)
-    ,m_bWarningShowSignMacro(false)
+    : ModalDialog(pParent, "DigitalSignaturesDialog", "xmlsec/ui/digitalsignaturesdialog.ui")
+    , mxCtx(rxCtx)
+    , maSignatureHelper(rxCtx)
+    , meSignatureMode(eMode)
+    , m_sODFVersion (sODFVersion)
+    , m_bHasDocumentSignature(bHasDocumentSignature)
+    , m_bWarningShowSignMacro(false)
 {
-    // #i48253# the tablistbox needs its own unique id
-    maSignaturesLB.Window::SetUniqueId( HID_XMLSEC_TREE_SIGNATURESDLG );
-    Size aControlSize( maSignaturesLB.GetSizePixel() );
-    aControlSize = maSignaturesLB.PixelToLogic( aControlSize, MapMode( MAP_APPFONT ) );
+    get(m_pHintDocFT, "dochint");
+    get(m_pHintBasicFT, "macrohint");
+    get(m_pHintPackageFT, "packagehint");
+    get(m_pViewBtn, "view");
+    get(m_pAddBtn, "sign");
+    get(m_pRemoveBtn, "remove");
+    get(m_pCloseBtn, "close");
+    get(m_pSigsValidImg, "validimg");
+    get(m_pSigsValidFI, "validft");
+    get(m_pSigsInvalidImg, "invalidimg");
+    get(m_pSigsInvalidFI, "invalidft");
+    get(m_pSigsNotvalidatedImg, "notvalidatedimg");
+    get(m_pSigsNotvalidatedFI, "notvalidatedft");
+    get(m_pSigsOldSignatureImg, "oldsignatureimg");
+    get(m_pSigsOldSignatureFI, "oldsignatureft");
+
+    Size aControlSize(275, 109);
     const long nControlWidth = aControlSize.Width();
+    aControlSize = LogicToPixel(aControlSize, MAP_APPFONT);
+    SvxSimpleTableContainer *pSignatures = get<SvxSimpleTableContainer>("signatures");
+    pSignatures->set_width_request(aControlSize.Width());
+    pSignatures->set_height_request(aControlSize.Height());
+
+    m_pSignaturesLB = new SvxSimpleTable(*pSignatures);
+    // #i48253# the tablistbox needs its own unique id
+    m_pSignaturesLB->Window::SetUniqueId( HID_XMLSEC_TREE_SIGNATURESDLG );
     static long nTabs[] = { 4, 0, 6*nControlWidth/100, 36*nControlWidth/100, 74*nControlWidth/100 };
-    maSignaturesLB.SetTabs( &nTabs[ 0 ] );
-    maSignaturesLB.InsertHeaderEntry( XMLSEC_RES( STR_HEADERBAR ) );
+    m_pSignaturesLB->SetTabs( &nTabs[ 0 ] );
 
-    maSigsNotvalidatedFI.SetText( XMLSEC_RES( STR_NO_INFO_TO_VERIFY ) );
-
-    FreeResource();
+    OUStringBuffer sHeader;
+    sHeader.append("\t").append(get<FixedText>("signed")->GetText())
+        .append("\t").append(get<FixedText>("issued")->GetText())
+        .append("\t").append(get<FixedText>("date")->GetText());
+    m_pSignaturesLB->InsertHeaderEntry(sHeader.makeStringAndClear());
 
     mbVerifySignatures = true;
     mbSignaturesChanged = false;
 
-    maSignaturesLB.SetSelectHdl( LINK( this, DigitalSignaturesDialog, SignatureHighlightHdl ) );
-    maSignaturesLB.SetDoubleClickHdl( LINK( this, DigitalSignaturesDialog, SignatureSelectHdl ) );
+    m_pSignaturesLB->SetSelectHdl( LINK( this, DigitalSignaturesDialog, SignatureHighlightHdl ) );
+    m_pSignaturesLB->SetDoubleClickHdl( LINK( this, DigitalSignaturesDialog, SignatureSelectHdl ) );
 
-    maViewBtn.SetClickHdl( LINK( this, DigitalSignaturesDialog, ViewButtonHdl ) );
-    maViewBtn.Disable();
+    m_pViewBtn->SetClickHdl( LINK( this, DigitalSignaturesDialog, ViewButtonHdl ) );
+    m_pViewBtn->Disable();
 
-    maAddBtn.SetClickHdl( LINK( this, DigitalSignaturesDialog, AddButtonHdl ) );
+    m_pAddBtn->SetClickHdl( LINK( this, DigitalSignaturesDialog, AddButtonHdl ) );
     if ( bReadOnly  )
-        maAddBtn.Disable();
+        m_pAddBtn->Disable();
 
-    maRemoveBtn.SetClickHdl( LINK( this, DigitalSignaturesDialog, RemoveButtonHdl ) );
-    maRemoveBtn.Disable();
+    m_pRemoveBtn->SetClickHdl( LINK( this, DigitalSignaturesDialog, RemoveButtonHdl ) );
+    m_pRemoveBtn->Disable();
 
-    maOKBtn.SetClickHdl( LINK( this, DigitalSignaturesDialog, OKButtonHdl) );
+    m_pCloseBtn->SetClickHdl( LINK( this, DigitalSignaturesDialog, OKButtonHdl) );
 
     switch( meSignatureMode )
     {
-        case SignatureModeDocumentContent:  maHintDocFT.Show();     break;
-        case SignatureModeMacros:           maHintBasicFT.Show();   break;
-        case SignatureModePackage:          maHintPackageFT.Show(); break;
+        case SignatureModeDocumentContent:  m_pHintDocFT->Show();     break;
+        case SignatureModeMacros:           m_pHintBasicFT->Show();   break;
+        case SignatureModePackage:          m_pHintPackageFT->Show(); break;
     }
-
-    // adjust fixed text to images
-    XmlSec::AlignAndFitImageAndControl( maSigsValidImg, maSigsValidFI, 5 );
-    XmlSec::AlignAndFitImageAndControl( maSigsInvalidImg, maSigsInvalidFI, 5 );
-    XmlSec::AlignAndFitImageAndControl( maSigsNotvalidatedImg, maSigsNotvalidatedFI, 5 );
-    XmlSec::AlignAndFitImageAndControl( maSigsNotvalidatedImg, maSigsOldSignatureFI, 5 );
 }
 
 DigitalSignaturesDialog::~DigitalSignaturesDialog()
 {
+    delete m_pSignaturesLB;
 }
 
 sal_Bool DigitalSignaturesDialog::Init()
@@ -362,10 +361,10 @@ short DigitalSignaturesDialog::Execute()
 
 IMPL_LINK_NOARG(DigitalSignaturesDialog, SignatureHighlightHdl)
 {
-    bool bSel = maSignaturesLB.FirstSelected() ? true : false;
-    maViewBtn.Enable( bSel );
-    if ( maAddBtn.IsEnabled() ) // not read only
-        maRemoveBtn.Enable( bSel );
+    bool bSel = m_pSignaturesLB->FirstSelected() ? true : false;
+    m_pViewBtn->Enable( bSel );
+    if ( m_pAddBtn->IsEnabled() ) // not read only
+        m_pRemoveBtn->Enable( bSel );
 
     return 0;
 }
@@ -523,11 +522,11 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, RemoveButtonHdl)
 {
     if (!canRemove())
         return 0;
-    if( maSignaturesLB.FirstSelected() )
+    if( m_pSignaturesLB->FirstSelected() )
     {
         try
         {
-            sal_uInt16 nSelected = (sal_uInt16) (sal_uIntPtr) maSignaturesLB.FirstSelected()->GetUserData();
+            sal_uInt16 nSelected = (sal_uInt16) (sal_uIntPtr) m_pSignaturesLB->FirstSelected()->GetUserData();
             maCurrentSignatureInformations.erase( maCurrentSignatureInformations.begin()+nSelected );
 
             // Export all other signatures...
@@ -570,7 +569,7 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, StartVerifySignatureHdl)
 
 void DigitalSignaturesDialog::ImplFillSignaturesBox()
 {
-    maSignaturesLB.Clear();
+    m_pSignaturesLB->Clear();
 
     uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > xSecEnv = maSignatureHelper.GetSecurityEnvironment();
     uno::Reference<com::sun::star::security::XSerialNumberAdapter> xSerialNumberAdapter =
@@ -654,11 +653,11 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
             Image aImage;
             if (!bSigValid)
             {
-                aImage = maSigsInvalidImg.GetImage();
+                aImage = m_pSigsInvalidImg->GetImage();
             }
             else if (bSigValid && !bCertValid)
             {
-                aImage = maSigsNotvalidatedImg.GetImage();
+                aImage = m_pSigsNotvalidatedImg->GetImage();
             }
             //Check if the signature is a "old" document signature, that is, which was created
             //by an version of OOo previous to 3.2
@@ -666,25 +665,25 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
                 && bSigValid && bCertValid && !DocumentSignatureHelper::isOOo3_2_Signature(
                 maCurrentSignatureInformations[n]))
             {
-                aImage = maSigsNotvalidatedImg.GetImage();
+                aImage = m_pSigsNotvalidatedImg->GetImage();
                 bAllNewSignatures &= false;
             }
             else if (meSignatureMode == SignatureModeDocumentContent
                 && bSigValid && bCertValid && DocumentSignatureHelper::isOOo3_2_Signature(
                 maCurrentSignatureInformations[n]))
             {
-                aImage = maSigsValidImg.GetImage();
+                aImage = m_pSigsValidImg->GetImage();
             }
             else if (meSignatureMode == SignatureModeMacros
                 && bSigValid && bCertValid)
             {
-                aImage = maSigsValidImg.GetImage();
+                aImage = m_pSigsValidImg->GetImage();
             }
 
-            SvTreeListEntry* pEntry = maSignaturesLB.InsertEntry( OUString(), aImage, aImage );
-            maSignaturesLB.SetEntryText( aSubject, pEntry, 1 );
-            maSignaturesLB.SetEntryText( aIssuer, pEntry, 2 );
-            maSignaturesLB.SetEntryText( aDateTimeStr, pEntry, 3 );
+            SvTreeListEntry* pEntry = m_pSignaturesLB->InsertEntry( OUString(), aImage, aImage );
+            m_pSignaturesLB->SetEntryText( aSubject, pEntry, 1 );
+            m_pSignaturesLB->SetEntryText( aIssuer, pEntry, 2 );
+            m_pSignaturesLB->SetEntryText( aDateTimeStr, pEntry, 3 );
             pEntry->SetUserData( ( void* ) n );     // missuse user data as index
         }
     }
@@ -693,22 +692,26 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
     bool bAllCertsValid = (nValidCerts == nInfos);
     bool bShowValidState = nInfos && (bAllSigsValid && bAllCertsValid && bAllNewSignatures);
 
-    bool bShowNotValidatedState = nInfos && (bAllSigsValid && (!bAllCertsValid || !bAllNewSignatures));
+    m_pSigsValidImg->Show( bShowValidState);
+    m_pSigsValidFI->Show( bShowValidState );
+
     bool bShowInvalidState = nInfos && !bAllSigsValid;
 
-    maSigsValidImg.Show( bShowValidState);
-    maSigsValidFI.Show( bShowValidState );
-    maSigsInvalidImg.Show( bShowInvalidState );
-    maSigsInvalidFI.Show( bShowInvalidState );
+    m_pSigsInvalidImg->Show( bShowInvalidState );
+    m_pSigsInvalidFI->Show( bShowInvalidState );
 
-    maSigsNotvalidatedImg.Show(bShowNotValidatedState);
+    bool bShowNotValidatedState = nInfos && bAllSigsValid && !bAllCertsValid;
+
+    m_pSigsNotvalidatedImg->Show(bShowNotValidatedState);
+    m_pSigsNotvalidatedFI->Show(bShowNotValidatedState);
+
     //bAllNewSignatures is always true if we are not in document mode
-    maSigsNotvalidatedFI.Show(nInfos && bAllSigsValid && ! bAllCertsValid);
-    maSigsOldSignatureFI.Show(nInfos && bAllSigsValid && bAllCertsValid && !bAllNewSignatures);
+    bool bShowOldSignature = nInfos && bAllSigsValid && bAllCertsValid && !bAllNewSignatures;
+    m_pSigsOldSignatureImg->Show(bShowOldSignature);
+    m_pSigsOldSignatureFI->Show(bShowOldSignature);
 
     SignatureHighlightHdl( NULL );
 }
-
 
 //If bUseTempStream is true then the temporary signature stream is used.
 //Otherwise the real signature stream is used.
@@ -734,9 +737,9 @@ void DigitalSignaturesDialog::ImplGetSignatureInformations(bool bUseTempStream)
 
 void DigitalSignaturesDialog::ImplShowSignaturesDetails()
 {
-    if( maSignaturesLB.FirstSelected() )
+    if( m_pSignaturesLB->FirstSelected() )
     {
-        sal_uInt16 nSelected = (sal_uInt16) (sal_uIntPtr) maSignaturesLB.FirstSelected()->GetUserData();
+        sal_uInt16 nSelected = (sal_uInt16) (sal_uIntPtr) m_pSignaturesLB->FirstSelected()->GetUserData();
         const SignatureInformation& rInfo = maCurrentSignatureInformations[ nSelected ];
         css::uno::Reference<css::xml::crypto::XSecurityEnvironment > xSecEnv =
             maSignatureHelper.GetSecurityEnvironment();

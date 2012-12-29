@@ -50,16 +50,9 @@ private:
     cssu::Sequence< cssu::Reference< dcss::security::XCertificate > > maCerts;
     SignatureInformations maCertsToIgnore;
 
-    FixedText           maHintFT;
-    SvxSimpleTableContainer m_aCertLBContainer;
-    SvxSimpleTable      maCertLB;
-
-    PushButton          maViewBtn;
-
-    FixedLine           maBottomSepFL;
-    OKButton            maOKBtn;
-    CancelButton        maCancelBtn;
-    HelpButton          maHelpBtn;
+    SvxSimpleTable*     m_pCertLB;
+    PushButton*         m_pViewBtn;
+    OKButton*           m_pOKBtn;
 
     bool                mbInitialized;
 

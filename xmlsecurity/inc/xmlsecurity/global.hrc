@@ -21,8 +21,6 @@
 
 // global resource ids
 
-#define RID_XMLSECDLG_DIGSIG                1000
-#define RID_XMLSECDLG_CERTCHOOSER           1001
 #define RID_XMLSECDLG_CERTVIEWER            1002
 #define RID_XMLSECTP_GENERAL                1003
 #define RID_XMLSECTP_DETAILS                1004

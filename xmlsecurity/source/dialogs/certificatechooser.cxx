@@ -29,15 +29,9 @@
 #include <com/sun/star/security/CertificateCharacters.hpp>
 #include <com/sun/star/security/SerialNumberAdapter.hpp>
 
-#include <dialogs.hrc>
 #include <resourcemanager.hxx>
 #include <vcl/msgbox.hxx>
 #include "svtools/treelistentry.hxx"
-
-/* HACK: disable some warnings for MS-C */
-#ifdef _MSC_VER
-#pragma warning (disable : 4355)    // 4355: this used in initializer-list
-#endif
 
 using namespace ::com::sun::star;
 
@@ -47,7 +41,7 @@ sal_uInt16 CertificateChooser::GetSelectedEntryPos( void ) const
 {
     sal_uInt16  nSel = INVAL_SEL;
 
-    SvTreeListEntry* pSel = maCertLB.FirstSelected();
+    SvTreeListEntry* pSel = m_pCertLB->FirstSelected();
     if( pSel )
         nSel = (sal_uInt16) ( sal_uIntPtr ) pSel->GetUserData();
 
@@ -55,25 +49,31 @@ sal_uInt16 CertificateChooser::GetSelectedEntryPos( void ) const
 }
 
 CertificateChooser::CertificateChooser( Window* _pParent, uno::Reference< uno::XComponentContext>& _rxCtx, uno::Reference< dcss::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment, const SignatureInformations& _rCertsToIgnore )
-    :ModalDialog    ( _pParent, XMLSEC_RES( RID_XMLSECDLG_CERTCHOOSER ) )
-    ,maCertsToIgnore( _rCertsToIgnore )
-    ,maHintFT       ( this, XMLSEC_RES( FT_HINT_SELECT ) )
-    ,m_aCertLBContainer(this, XMLSEC_RES(LB_SIGNATURES))
-    ,maCertLB(m_aCertLBContainer)
-    ,maViewBtn      ( this, XMLSEC_RES( BTN_VIEWCERT ) )
-    ,maBottomSepFL  ( this, XMLSEC_RES( FL_BOTTOM_SEP ) )
-    ,maOKBtn        ( this, XMLSEC_RES( BTN_OK ) )
-    ,maCancelBtn    ( this, XMLSEC_RES( BTN_CANCEL ) )
-    ,maHelpBtn      ( this, XMLSEC_RES( BTN_HELP ) )
+    : ModalDialog(_pParent, "SelectCertificateDialog", "xmlsec/ui/selectcertificatedialog.ui")
+    , maCertsToIgnore( _rCertsToIgnore )
 {
-    static long nTabs[] = { 3, 0, 30*CS_LB_WIDTH/100, 60*CS_LB_WIDTH/100 };
-    maCertLB.SetTabs( &nTabs[0] );
-    maCertLB.InsertHeaderEntry( XMLSEC_RES( STR_HEADERBAR ) );
-    maCertLB.SetSelectHdl( LINK( this, CertificateChooser, CertificateHighlightHdl ) );
-    maCertLB.SetDoubleClickHdl( LINK( this, CertificateChooser, CertificateSelectHdl ) );
-    maViewBtn.SetClickHdl( LINK( this, CertificateChooser, ViewButtonHdl ) );
+    get(m_pOKBtn, "ok");
+    get(m_pViewBtn, "viewcert");
 
-    FreeResource();
+    Size aControlSize(275, 122);
+    const long nControlWidth = aControlSize.Width();
+    aControlSize = LogicToPixel(aControlSize, MAP_APPFONT);
+    SvxSimpleTableContainer *pSignatures = get<SvxSimpleTableContainer>("signatures");
+    pSignatures->set_width_request(aControlSize.Width());
+    pSignatures->set_height_request(aControlSize.Height());
+
+    m_pCertLB = new SvxSimpleTable(*pSignatures);
+    static long nTabs[] = { 3, 0, 30*nControlWidth/100, 60*nControlWidth/100 };
+    m_pCertLB->SetTabs( &nTabs[0] );
+    OUStringBuffer sHeader;
+    sHeader.append(get<FixedText>("issuedto")->GetText())
+        .append("\t").append(get<FixedText>("issuedby")->GetText())
+        .append("\t").append(get<FixedText>("expiration")->GetText());
+    m_pCertLB->InsertHeaderEntry(sHeader.makeStringAndClear());
+
+    m_pCertLB->SetSelectHdl( LINK( this, CertificateChooser, CertificateHighlightHdl ) );
+    m_pCertLB->SetDoubleClickHdl( LINK( this, CertificateChooser, CertificateSelectHdl ) );
+    m_pViewBtn->SetClickHdl( LINK( this, CertificateChooser, ViewButtonHdl ) );
 
     mxCtx = _rxCtx;
     mxSecurityEnvironment = _rxSecurityEnvironment;
@@ -85,6 +85,7 @@ CertificateChooser::CertificateChooser( Window* _pParent, uno::Reference< uno::X
 
 CertificateChooser::~CertificateChooser()
 {
+    delete m_pCertLB;
 }
 
 short CertificateChooser::Execute()
@@ -178,7 +179,7 @@ void CertificateChooser::ImplInitialize()
             sEntry.append( XmlSec::GetContentPart( maCerts[ nC ]->getIssuerName() ) );
             sEntry.append( '\t' );
             sEntry.append( XmlSec::GetDateString( maCerts[ nC ]->getNotValidAfter() ) );
-            SvTreeListEntry* pEntry = maCertLB.InsertEntry( sEntry.makeStringAndClear() );
+            SvTreeListEntry* pEntry = m_pCertLB->InsertEntry( sEntry.makeStringAndClear() );
             pEntry->SetUserData( ( void* )(sal_IntPtr)nC ); // missuse user data as index
         }
 
@@ -201,8 +202,8 @@ uno::Reference< dcss::security::XCertificate > CertificateChooser::GetSelectedCe
 IMPL_LINK_NOARG(CertificateChooser, CertificateHighlightHdl)
 {
     sal_Bool bEnable = GetSelectedCertificate().is();
-    maViewBtn.Enable( bEnable );
-    maOKBtn.Enable( bEnable );
+    m_pViewBtn->Enable( bEnable );
+    m_pOKBtn->Enable( bEnable );
     return 0;
 }
 
