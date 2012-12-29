@@ -95,7 +95,7 @@ sal_uInt16 PageUsageToPos_Impl( sal_uInt16 nUsage )
     for ( sal_uInt16 i = 0; i < SAL_N_ELEMENTS(aArr); ++i )
         if ( aArr[i] == ( nUsage & 0x000f ) )
             return i;
-    return SVX_PAGE_ALL;
+    return 0;
 }
 
 // -----------------------------------------------------------------------
@@ -103,7 +103,7 @@ sal_uInt16 PageUsageToPos_Impl( sal_uInt16 nUsage )
 sal_uInt16 PosToPageUsage_Impl( sal_uInt16 nPos )
 {
     if ( nPos >= SAL_N_ELEMENTS(aArr) )
-        return 0;
+        return SVX_PAGE_ALL;
     return aArr[nPos];
 }
 
