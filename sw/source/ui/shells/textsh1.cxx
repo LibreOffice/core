@@ -1426,7 +1426,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             break;
         case FN_GLOSSARY_DLG:
             {
-                rSet.Put(SfxBoolItem(nWhich), sal_True);
+                rSet.Put( SfxBoolItem( nWhich, sal_True ) );
             }
             break;
 
