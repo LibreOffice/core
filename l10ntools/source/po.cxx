@@ -265,7 +265,8 @@ namespace
         aCRC32.process_bytes(rGenerator.getStr(), rGenerator.getLength());
         sal_uInt32 nCRC = aCRC32.checksum();
         //Use all readable ASCII character exclude xml special tags: ",',&,<,>
-        const OString sSymbols = "!#$%()*+,-./0123456789:;=?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+        static const OString sSymbols =
+            "!#$%()*+,-./0123456789:;=?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
         char sKeyId[5];
         for( short nKeyInd = 0; nKeyInd < 4; ++nKeyInd )
         {
@@ -312,12 +313,14 @@ namespace
     {
 
         UErrorCode nIcuErr = U_ZERO_ERROR;
-        sal_uInt32 nSearchFlags = UREGEX_DOTALL | UREGEX_CASE_INSENSITIVE;
+        static const sal_uInt32 nSearchFlags =
+            UREGEX_DOTALL | UREGEX_CASE_INSENSITIVE;
         OUString sLocaleText( OStringToOUString(rText,RTL_TEXTENCODING_UTF8) );
-        OUString sPattern("<[/]\?\?[a-z_-]+?(?:| +[a-z]+?=\".*?\") *[/]\?\?>");
-        UnicodeString sSearchPat(
-            reinterpret_cast<const UChar*>(
-                sPattern.getStr()), sPattern.getLength() );
+        static const OUString sPattern(
+            "<[/]\?\?[a-z_-]+?(?:| +[a-z]+?=\".*?\") *[/]\?\?>");
+        static const UnicodeString sSearchPat(
+            reinterpret_cast<const UChar*>(sPattern.getStr()),
+            sPattern.getLength() );
         UnicodeString sSource(
             reinterpret_cast<const UChar*>(
                 sLocaleText.getStr()), sLocaleText.getLength() );
@@ -344,11 +347,11 @@ namespace
     static OString lcl_EscapeTags( const OString& rText )
     {
         typedef std::vector<OString> StrVec_t;
-        const OString vInitializer[] = {
+        static const OString vInitializer[] = {
             "ahelp", "link", "item", "emph", "defaultinline",
             "switchinline", "caseinline", "variable",
             "bookmark_value", "image", "embedvar", "alt" };
-        const StrVec_t vTagsForEscape( vInitializer,
+        static const StrVec_t vTagsForEscape( vInitializer,
             vInitializer + sizeof(vInitializer) / sizeof(vInitializer[0]) );
         StrVec_t vFoundTags;
         lcl_FindAllTag(rText,vFoundTags);
