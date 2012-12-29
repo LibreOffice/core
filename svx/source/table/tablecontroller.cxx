@@ -2340,7 +2340,7 @@ bool SvxTableController::GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAtt
             {
                 // FALSE= InvalidItems nicht al Default, sondern als "Loecher" betrachten
                 rTargetSet.Put(pTextEditOutlinerView->GetAttribs(), sal_False);
-                rTargetSet.Put( SvxScriptTypeItem( pTextEditOutlinerView->GetSelectedScriptType() ), sal_False );
+                rTargetSet.Put( SvxScriptTypeItem( pTextEditOutlinerView->GetSelectedScriptType() ) );
             }
         }
 

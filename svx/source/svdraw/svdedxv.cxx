@@ -1348,7 +1348,7 @@ sal_Bool SdrObjEditView::GetAttributes(SfxItemSet& rTargetSet, sal_Bool bOnlyHar
         {
             // FALSE= regard InvalidItems as "holes," not as Default
             rTargetSet.Put(pTextEditOutlinerView->GetAttribs(), sal_False);
-            rTargetSet.Put( SvxScriptTypeItem( pTextEditOutlinerView->GetSelectedScriptType() ), sal_False );
+            rTargetSet.Put( SvxScriptTypeItem( pTextEditOutlinerView->GetSelectedScriptType() ) );
         }
 
         if(GetMarkedObjectCount()==1 && GetMarkedObjectByIndex(0)==mxTextEditObj.get())
