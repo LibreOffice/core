@@ -1314,14 +1314,12 @@ void LibPage::ExportAsPackage( const String& aLibName )
 
         ::ucbhelper::Content sourceContent( aSourcePath, xCmdEnv, comphelper::getProcessComponentContext() );
 
-        OUStringBuffer buf;
-        buf.appendAscii( "vnd.sun.star.zip://" );
-        buf.append( ::rtl::Uri::encode( aPackageURL,
-                                        rtl_UriCharClassRegName,
-                                        rtl_UriEncodeIgnoreEscapes,
-                                        RTL_TEXTENCODING_UTF8 ) );
-        buf.append( static_cast<sal_Unicode>('/') );
-        OUString destFolder( buf.makeStringAndClear() );
+        OUString destFolder = "vnd.sun.star.zip://" +
+                              ::rtl::Uri::encode( aPackageURL,
+                                                  rtl_UriCharClassRegName,
+                                                  rtl_UriEncodeIgnoreEscapes,
+                                                  RTL_TEXTENCODING_UTF8 ) +
+                              "/";
 
         if( xSFA->exists( aPackageURL ) )
             xSFA->kill( aPackageURL );
