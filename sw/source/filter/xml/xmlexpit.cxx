@@ -227,7 +227,7 @@ void SvXMLExportItemMapper::exportElementItems(
 {
     const sal_uInt16 nCount = rIndexArray.size();
 
-    sal_Bool bItemsExported = sal_False;
+    bool bItemsExported = false;
     for( sal_uInt16 nIndex = 0; nIndex < nCount; nIndex++ )
     {
         const sal_uInt16 nElement = rIndexArray[ nIndex ];
@@ -242,7 +242,7 @@ void SvXMLExportItemMapper::exportElementItems(
             rExport.IgnorableWhitespace();
             handleElementItem( rExport, *pEntry, *pItem, rUnitConverter,
                                rSet, nFlags);
-            bItemsExported = sal_True;
+            bItemsExported = true;
         }
     }
 
@@ -373,13 +373,13 @@ static bool lcl_isOdfDoubleLine( const SvxBorderLine* pLine )
     return bIsOdfDouble;
 }
 
-sal_Bool SvXMLExportItemMapper::QueryXMLValue(
+bool SvXMLExportItemMapper::QueryXMLValue(
     const SfxPoolItem& rItem,
     OUString& rValue,
     sal_uInt16 nMemberId,
     const SvXMLUnitConverter& rUnitConverter )
 {
-    sal_Bool bOk = sal_False;
+    bool bOk = false;
     OUStringBuffer aOut;
 
     switch ( rItem.Which() )
@@ -390,7 +390,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
             const SvxLRSpaceItem* pLRSpace = PTR_CAST(SvxLRSpaceItem, &rItem);
             OSL_ENSURE( pLRSpace != NULL, "Wrong Which-ID!" );
 
-            bOk = sal_True;
+            bOk = true;
             switch( nMemberId )
             {
                 case  MID_L_MARGIN:
@@ -426,7 +426,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                                 aOut, pLRSpace->IsAutoFirst() );
                     }
                     else
-                        bOk = sal_False;
+                        bOk = false;
                     break;
 
                 case  MID_FIRST_LINE_INDENT:
@@ -444,12 +444,12 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                         }
                     }
                     else
-                        bOk = sal_False;
+                        bOk = false;
                     break;
 
                 default:
                     OSL_FAIL( "unknown member id!");
-                    bOk = sal_False;
+                    bOk = false;
                     break;
             }
         }
@@ -492,7 +492,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                     OSL_FAIL("unknown MemberId");
             };
 
-            bOk = sal_True;
+            bOk = true;
         }
         break;
 
@@ -519,7 +519,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                 case SVX_SHADOW_NONE:
                 default:
                     rValue = GetXMLToken(XML_NONE);
-                    return sal_True;
+                    return true;
                 }
 
             nX *= pShadow->GetWidth();
@@ -531,7 +531,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
             aOut.append( sal_Unicode(' ') );
             rUnitConverter.convertMeasureToXML( aOut, nY );
 
-            bOk = sal_True;
+            bOk = true;
         }
         break;
 
@@ -581,14 +581,14 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                 case TOP_BORDER_PADDING:
                 case BOTTOM_BORDER_PADDING:
                 {
-                    sal_Bool bEqual = nLeftDist == nRightDist &&
+                    bool bEqual = nLeftDist == nRightDist &&
                                       nLeftDist == nTopDist &&
                                       nLeftDist == nBottomDist;
                     // don't export individual paddings if all paddings are equal and
                     // don't export all padding if some paddings are not equal
                     if( (bEqual && ALL_BORDER_PADDING != nMemberId) ||
                         (!bEqual && ALL_BORDER_PADDING == nMemberId) )
-                        return sal_False;
+                        return false;
                 }
                 break;
                 case ALL_BORDER:
@@ -597,7 +597,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                 case TOP_BORDER:
                 case BOTTOM_BORDER:
                 {
-                    sal_Bool bEqual = ( NULL == pTop && NULL == pBottom &&
+                    bool bEqual = ( NULL == pTop && NULL == pBottom &&
                                         NULL == pLeft && NULL == pRight ) ||
                                       ( pTop && pBottom && pLeft && pRight &&
                                        *pTop == *pBottom  && *pTop == *pLeft &&
@@ -607,7 +607,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                     // don't export all borders if some are not equal
                     if( (bEqual && ALL_BORDER != nMemberId) ||
                         (!bEqual && ALL_BORDER == nMemberId) )
-                        return sal_False;
+                        return false;
                 }
                 break;
                 case ALL_BORDER_LINE_WIDTH:
@@ -618,9 +618,9 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                 {
                     // if no line is set, there is nothing to export
                     if( !pTop && !pBottom && !pLeft && !pRight )
-                        return sal_False;
+                        return false;
 
-                    sal_Bool bEqual = NULL != pTop &&
+                    bool bEqual = NULL != pTop &&
                                       NULL != pBottom &&
                                       NULL != pLeft &&
                                       NULL != pRight;
@@ -651,31 +651,31 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                         case ALL_BORDER_LINE_WIDTH:
                             if( !bEqual || pTop->GetDistance() == 0 ||
                                 !lcl_isOdfDoubleLine( pTop ) )
-                                return sal_False;
+                                return false;
                             break;
                         case LEFT_BORDER_LINE_WIDTH:
                             if( bEqual || NULL == pLeft ||
                                 0 == pLeft->GetDistance() ||
                                 !lcl_isOdfDoubleLine( pLeft ) )
-                                return sal_False;
+                                return false;
                             break;
                         case RIGHT_BORDER_LINE_WIDTH:
                             if( bEqual || NULL == pRight ||
                                 0 == pRight->GetDistance() ||
                                 !lcl_isOdfDoubleLine( pRight ) )
-                                return sal_False;
+                                return false;
                             break;
                         case TOP_BORDER_LINE_WIDTH:
                             if( bEqual || NULL == pTop ||
                                 0 == pTop->GetDistance() ||
                                 !lcl_isOdfDoubleLine( pTop ) )
-                                return sal_False;
+                                return false;
                             break;
                         case BOTTOM_BORDER_LINE_WIDTH:
                             if( bEqual || NULL == pBottom ||
                                 0 == pBottom->GetDistance() ||
                                 !lcl_isOdfDoubleLine( pBottom ) )
-                                return sal_False;
+                                return false;
                             break;
                     }
                 }
@@ -812,7 +812,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                         pLine = pBottom;
                         break;
                     default:
-                        return sal_False;
+                        return false;
                     }
                     rUnitConverter.convertMeasureToXML( aOut, pLine->GetInWidth() );
                     aOut.append( sal_Unicode( ' ' ) );
@@ -822,7 +822,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                     break;
                 }
 
-            bOk = sal_True;
+            bOk = true;
         }
         break;
 
@@ -848,7 +848,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                         eEnum = 0;
                         break;
                     default:
-                        return sal_False;
+                        return false;
                 }
                 break;
             case MID_BREAK_AFTER:
@@ -864,7 +864,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                         eEnum = 0;
                         break;
                     default:
-                        return sal_False;
+                        return false;
                 }
                 break;
             }
@@ -881,7 +881,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
             aOut.append( pFmtKeep->GetValue()
                          ? GetXMLToken( XML_ALWAYS )
                          : GetXMLToken( XML_AUTO ) );
-            bOk = sal_True;
+            bOk = true;
         }
         break;
 
@@ -904,7 +904,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                         ::sax::Converter::convertColor(aOut,
                                 pBrush->GetColor().GetColor());
                     }
-                    bOk = sal_True;
+                    bOk = true;
                     break;
 
                 case MID_GRAPHIC_LINK:
@@ -915,7 +915,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                         OUString sTmp;
                         aAny >>= sTmp;
                         aOut.append( sTmp );
-                        bOk = sal_True;
+                        bOk = true;
                     }
                     break;
 
@@ -926,19 +926,19 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                     case GPOS_MT:
                     case GPOS_RT:
                         aOut.append( GetXMLToken(XML_TOP) );
-                        bOk = sal_True;
+                        bOk = true;
                         break;
                     case GPOS_LM:
                     case GPOS_MM:
                     case GPOS_RM:
                         aOut.append( GetXMLToken(XML_CENTER) );
-                        bOk = sal_True;
+                        bOk = true;
                         break;
                     case GPOS_LB:
                     case GPOS_MB:
                     case GPOS_RB:
                         aOut.append( GetXMLToken(XML_BOTTOM) );
-                        bOk = sal_True;
+                        bOk = true;
                         break;
                     default:
                         ;
@@ -977,12 +977,12 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                     if( GPOS_AREA == eGraphicPos )
                     {
                         aOut.append( GetXMLToken(XML_BACKGROUND_STRETCH)  );
-                        bOk = sal_True;
+                        bOk = true;
                     }
                     else if( GPOS_NONE != eGraphicPos && GPOS_TILED != eGraphicPos  )
                     {
                         aOut.append( GetXMLToken(XML_BACKGROUND_NO_REPEAT) );
-                        bOk = sal_True;
+                        bOk = true;
                     }
                 }
                 break;
@@ -992,7 +992,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                         pBrush->GetGraphicFilter() )
                     {
                         aOut.append( pBrush->GetGraphicFilter()->GetBuffer() );
-                        bOk = sal_True;
+                        bOk = true;
                     }
                     break;
             }
@@ -1015,7 +1015,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                 {
                     ::sax::Converter::convertNumber(aOut, number);
                 }
-                bOk = sal_True;
+                bOk = true;
             }
         }
         break;
@@ -1027,7 +1027,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
             OSL_ENSURE( pSplit != NULL, "Wrong Which-ID" );
 
             ::sax::Converter::convertBool( aOut, pSplit->GetValue() );
-            bOk = sal_True;
+            bOk = true;
         }
         break;
 
@@ -1038,7 +1038,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
 
             rUnitConverter.convertEnum( aOut, pHoriOrient->GetHoriOrient(),
                                         aXMLTableAlignMap );
-            bOk = sal_True;
+            bOk = true;
         }
         break;
 
@@ -1049,7 +1049,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
 
             rUnitConverter.convertEnum( aOut, pVertOrient->GetVertOrient(),
                                         aXMLTableVAlignMap );
-            bOk = sal_True;
+            bOk = true;
         }
         break;
 
@@ -1058,7 +1058,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
             SwFmtFrmSize* pFrmSize = PTR_CAST(SwFmtFrmSize, &rItem);
             OSL_ENSURE( pFrmSize != NULL, "Wrong Which-ID" );
 
-            sal_Bool bOutHeight = sal_False;
+            bool bOutHeight = false;
             switch( nMemberId )
             {
                 case MID_FRMSIZE_REL_WIDTH:
@@ -1066,23 +1066,23 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                     {
                         ::sax::Converter::convertPercent(
                                 aOut, pFrmSize->GetWidthPercent() );
-                        bOk = sal_True;
+                        bOk = true;
                     }
                     break;
                 case MID_FRMSIZE_MIN_HEIGHT:
                     if( ATT_MIN_SIZE == pFrmSize->GetHeightSizeType() )
-                        bOutHeight = sal_True;
+                        bOutHeight = true;
                     break;
                 case MID_FRMSIZE_FIX_HEIGHT:
                     if( ATT_FIX_SIZE == pFrmSize->GetHeightSizeType() )
-                        bOutHeight = sal_True;
+                        bOutHeight = true;
                     break;
             }
 
             if( bOutHeight )
             {
                 rUnitConverter.convertMeasureToXML(aOut, pFrmSize->GetHeight());
-                bOk = sal_True;
+                bOk = true;
             }
         }
         break;
@@ -1115,7 +1115,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
             aOut.append( pBorders->GetValue()
                          ? GetXMLToken( XML_COLLAPSING )
                          : GetXMLToken( XML_SEPARATING ) );
-            bOk = sal_True;
+            bOk = true;
         }
         break;
 

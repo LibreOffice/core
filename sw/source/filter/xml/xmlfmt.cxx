@@ -75,7 +75,7 @@ public:
 
     SwXMLConditionParser_Impl( const OUString& rInp );
 
-    sal_Bool IsValid() const { return 0 != nCondition; }
+    bool IsValid() const { return 0 != nCondition; }
 
     sal_uInt32 GetCondition() const { return nCondition; }
     sal_uInt32 GetSubCondition() const { return nSubCondition; }
@@ -136,14 +136,14 @@ SwXMLConditionParser_Impl::SwXMLConditionParser_Impl( const OUString& rInp ) :
     nLength( rInp.getLength() )
 {
     OUString sFunc;
-    sal_Bool bHasSub = sal_False;
+    bool bHasSub = false;
     sal_uInt32 nSub = 0;
     sal_Bool bOK = SkipWS() && MatchName( sFunc ) && SkipWS() &&
                MatchChar( '(' ) && SkipWS() && MatchChar( ')' ) && SkipWS();
     if( bOK && MatchChar( '=' ) )
     {
         bOK = SkipWS() && MatchNumber( nSub ) && SkipWS();
-        bHasSub = sal_True;
+        bHasSub = true;
     }
 
     bOK &= nPos == nLength;
@@ -210,7 +210,7 @@ public:
 
     TYPEINFO();
 
-    sal_Bool IsValid() const { return 0 != nCondition; }
+    bool IsValid() const { return 0 != nCondition; }
 
     sal_uInt32 GetCondition() const { return nCondition; }
     sal_uInt32 GetSubCondition() const { return nSubCondition; }
@@ -438,9 +438,9 @@ class SwXMLItemSetStyleContext_Impl : public SvXMLStyleContext
 
     OUString                sDataStyleName;
 
-    sal_Bool                bHasMasterPageName : 1;
-    sal_Bool                bPageDescConnected : 1;
-    sal_Bool                bDataStyleIsResolved;
+    bool                bHasMasterPageName : 1;
+    bool                bPageDescConnected : 1;
+    bool                bDataStyleIsResolved;
 
     SvXMLImportContext *CreateItemSetContext(
             sal_uInt16 nPrefix,
@@ -480,12 +480,12 @@ public:
     const SfxItemSet *GetItemSet() const { return pItemSet; }
 
     const OUString& GetMasterPageName() const { return sMasterPageName; }
-    sal_Bool HasMasterPageName() const { return bHasMasterPageName; }
+    bool HasMasterPageName() const { return bHasMasterPageName; }
 
-    sal_Bool IsPageDescConnected() const { return bPageDescConnected; }
+    bool IsPageDescConnected() const { return bPageDescConnected; }
     void ConnectPageDesc();
 
-    sal_Bool ResolveDataStyleName();
+    bool ResolveDataStyleName();
 };
 
 void SwXMLItemSetStyleContext_Impl::SetAttribute( sal_uInt16 nPrefixKey,
@@ -497,7 +497,7 @@ void SwXMLItemSetStyleContext_Impl::SetAttribute( sal_uInt16 nPrefixKey,
         if ( IsXMLToken( rLocalName, XML_MASTER_PAGE_NAME ) )
         {
             sMasterPageName = rValue;
-            bHasMasterPageName = sal_True;
+            bHasMasterPageName = true;
         }
         else if ( IsXMLToken( rLocalName, XML_DATA_STYLE_NAME ) )
         {
@@ -505,7 +505,7 @@ void SwXMLItemSetStyleContext_Impl::SetAttribute( sal_uInt16 nPrefixKey,
             if (!rValue.isEmpty())
             {
                 sDataStyleName = rValue;
-                bDataStyleIsResolved = sal_False;   // needs to be resolved
+                bDataStyleIsResolved = false;   // needs to be resolved
             }
         }
         else
@@ -574,9 +574,9 @@ SwXMLItemSetStyleContext_Impl::SwXMLItemSetStyleContext_Impl( SwXMLImport& rImpo
     pItemSet( 0 ),
     pTextStyle( 0 ),
     rStyles( rStylesC ),
-    bHasMasterPageName( sal_False ),
-    bPageDescConnected( sal_False ),
-    bDataStyleIsResolved( sal_True )
+    bHasMasterPageName( false ),
+    bPageDescConnected( false ),
+    bDataStyleIsResolved( true )
 {
 }
 
@@ -636,7 +636,7 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
 {
     if( bPageDescConnected || !HasMasterPageName() )
         return;
-    bPageDescConnected = sal_True;
+    bPageDescConnected = true;
 
     SwDoc *pDoc = SwImport::GetDocFromXMLImport( GetSwImport() );
 
@@ -687,7 +687,7 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
     }
 }
 
-sal_Bool SwXMLItemSetStyleContext_Impl::ResolveDataStyleName()
+bool SwXMLItemSetStyleContext_Impl::ResolveDataStyleName()
 {
     // resolve, if not already done
     if (! bDataStyleIsResolved)
@@ -711,13 +711,13 @@ sal_Bool SwXMLItemSetStyleContext_Impl::ResolveDataStyleName()
         }
 
         // now resolved
-        bDataStyleIsResolved = sal_True;
-        return sal_True;
+        bDataStyleIsResolved = true;
+        return true;
     }
     else
     {
         // was already resolved; nothing to do
-        return sal_False;
+        return false;
     }
 }
 
@@ -1045,7 +1045,7 @@ void SwXMLImport::UpdateTxtCollConditions( SwDoc *pDoc )
         {
             const SwFmtCollConditions& rConditions =
                 ((const SwConditionTxtFmtColl *)pColl)->GetCondColls();
-            sal_Bool bSendModify = sal_False;
+            bool bSendModify = false;
             for( sal_uInt16 j=0; j < rConditions.size() && !bSendModify; j++ )
             {
                 const SwCollCondition& rCond = rConditions[j];
@@ -1055,7 +1055,7 @@ void SwXMLImport::UpdateTxtCollConditions( SwDoc *pDoc )
                 case PARA_IN_TABLEBODY:
                 case PARA_IN_FOOTER:
                 case PARA_IN_HEADER:
-                    bSendModify = sal_True;
+                    bSendModify = true;
                     break;
                 }
             }
