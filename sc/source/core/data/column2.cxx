@@ -1221,10 +1221,10 @@ bool ScColumn::IsEmptyBlock(SCROW nStartRow, SCROW nEndRow) const
 SCSIZE ScColumn::GetEmptyLinesInBlock( SCROW nStartRow, SCROW nEndRow, ScDirection eDir ) const
 {
     SCSIZE nLines = 0;
-    bool bFound = false;
     SCSIZE i;
     if ( !maItems.empty() )
     {
+        bool bFound = false;
         if (eDir == DIR_BOTTOM)
         {
             i = maItems.size();

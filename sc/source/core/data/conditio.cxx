@@ -527,11 +527,9 @@ void ScConditionEntry::UpdateReference( UpdateRefMode eUpdateRefMode,
     bool bInsertTab = ( eUpdateRefMode == URM_INSDEL && nDz >= 1 );
     bool bDeleteTab = ( eUpdateRefMode == URM_INSDEL && nDz <= -1 );
 
-    bool bChanged1 = false;
-    bool bChanged2 = false;
-
     if (pFormula1)
     {
+        bool bChanged1 = false;
         if ( bInsertTab )
             lcl_CondUpdateInsertTab( *pFormula1, rRange.aStart.Tab(), aSrcPos.Tab(), bChanged1, nDz );
         else
@@ -553,6 +551,7 @@ void ScConditionEntry::UpdateReference( UpdateRefMode eUpdateRefMode,
     }
     if (pFormula2)
     {
+        bool bChanged2 = false;
         if ( bInsertTab )
             lcl_CondUpdateInsertTab( *pFormula2, rRange.aStart.Tab(), aSrcPos.Tab(), bChanged2, nDz );
         else

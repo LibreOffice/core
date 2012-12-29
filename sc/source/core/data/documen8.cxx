@@ -449,8 +449,6 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
     ScStyleSheet*       pStyle   = NULL;
     ScColumnIterator*   pColIter = NULL;
     ScTable*            pTable   = NULL;
-    ScColumn*           pColumn  = NULL;
-    ScBaseCell*         pCell    = NULL;
     SCTAB               nTab     = aCurTextWidthCalcPos.Tab();
     SCROW               nRow     = aCurTextWidthCalcPos.Row();
     SCsCOL              nCol     = aCurTextWidthCalcPos.Col();
@@ -484,10 +482,11 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
         sal_uInt16 nRestart = 0;
         sal_uInt16 nZoom = 0;
         sal_uInt16 nCount = 0;
+        ScBaseCell* pCell = NULL;
 
         nZoom    = GET_SCALEVALUE(pStyle->GetItemSet(),ATTR_PAGE_SCALE);
         Fraction aZoomFract( nZoom, 100 );
-        pColumn  = &pTable->aCol[nCol];
+        ScColumn* pColumn  = &pTable->aCol[nCol];
         pColIter = new ScColumnIterator( pColumn, nRow, MAXROW );
 
         while ( (nZoom > 0) && (nCount < CALCMAX) && (nRestart < 2) )

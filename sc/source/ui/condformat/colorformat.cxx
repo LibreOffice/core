@@ -136,14 +136,13 @@ ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow, const ScDataBarForma
 void ScDataBarSettingsDlg::Init()
 {
     SfxObjectShell*     pDocSh      = SfxObjectShell::Current();
-    const SfxPoolItem*  pItem       = NULL;
     XColorListRef       pColorTable;
 
     DBG_ASSERT( pDocSh, "DocShell not found!" );
 
     if ( pDocSh )
     {
-        pItem = pDocSh->GetItem( SID_COLOR_TABLE );
+        const SfxPoolItem*  pItem = pDocSh->GetItem( SID_COLOR_TABLE );
         if ( pItem != NULL )
             pColorTable = ( (SvxColorListItem*)pItem )->GetColorList();
     }

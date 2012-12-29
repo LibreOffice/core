@@ -682,9 +682,9 @@ PPDParser::PPDParser( const String& rFile ) :
     // read in the file
     std::list< rtl::OString > aLines;
     PPDDecompressStream aStream( m_aFile );
-    bool bLanguageEncoding = false;
     if( aStream.IsOpen() )
     {
+        bool bLanguageEncoding = false;
         while( ! aStream.IsEof() )
         {
             rtl::OString aCurLine = aStream.ReadLine();

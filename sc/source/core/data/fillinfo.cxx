@@ -599,13 +599,13 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                     {
                         //  Blockmarken
                         const ScMarkArray* pThisMarkArr = pMarkData->GetArray()+nX;
-                        bool bThisMarked;
                         nArrY = 1;
                         nCurRow = nY1;                                      // einzelne Zeile
                         nThisRow = nY1;                                     // Ende des Bereichs
 
                         if ( pThisMarkArr->Search( nY1, nIndex ) )
                         {
+                            bool bThisMarked;
                             do
                             {
                                 nThisRow=pThisMarkArr->pData[nIndex].nRow;      // Ende des Bereichs

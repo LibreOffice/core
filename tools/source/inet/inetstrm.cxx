@@ -1480,10 +1480,10 @@ int INetMIMEMessageStream::PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize)
 
                 const sal_Char* pChar;
                 const sal_Char* pOldPos;
+                int status;
                 for( pOldPos = pChar = (const sal_Char *) pMsgBuffer->GetData(); nBufSize--;
                      pChar++ )
                 {
-                    int status;
                     if( *pChar == '\r' || *pChar == '\n' )
                     {
                         if( aDelim.compareTo(pOldPos, aDelim.getLength())
