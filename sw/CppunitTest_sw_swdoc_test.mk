@@ -95,9 +95,12 @@ $(eval $(call gb_CppunitTest_use_components,sw_swdoc_test,\
     fileaccess/source/fileacc \
     framework/util/fwk \
     i18npool/util/i18npool \
+    package/util/package2 \
+    package/source/xstor/xstor \
     sfx2/util/sfx \
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \
+    unotools/util/utl \
     unoxml/source/service/unoxml \
 ))
 
