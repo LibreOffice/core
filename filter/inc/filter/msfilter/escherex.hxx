@@ -1001,13 +1001,13 @@ struct EscherPropertyValueHelper
     static sal_Bool GetPropertyValue(
         ::com::sun::star::uno::Any& rAny,
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
-        const String& rPropertyName,
+        const OUString& rPropertyName,
         sal_Bool bTestPropertyAvailability = sal_False
     );
 
     static ::com::sun::star::beans::PropertyState GetPropertyState(
         const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > &,
-        const String& rPropertyName
+        const OUString& rPropertyName
     );
 };
 
@@ -1249,7 +1249,7 @@ public:
                     //             will be created, containing the BLIP directly (e.g. for Excel charts).
     sal_Bool    CreateGraphicProperties(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
-                    const String& rSource,
+                    const OUString& rSource,
                     const sal_Bool bCreateFillBitmap,
                     const sal_Bool bCreateCroppingAttributes = sal_False,
                     const sal_Bool bFillBitmapModeAllowed = sal_True
@@ -1641,7 +1641,7 @@ public:
     virtual void AddChildAnchor( const Rectangle& rRectangle );
     virtual void AddClientAnchor( const Rectangle& rRectangle );
 
-    virtual sal_uInt32 EnterGroup( const String& rShapeName, const Rectangle* pBoundRect = 0 );
+    virtual sal_uInt32 EnterGroup( const OUString& rShapeName, const Rectangle* pBoundRect = 0 );
     sal_uInt32  EnterGroup( const Rectangle* pBoundRect = NULL );
     sal_uInt32  GetGroupLevel() const { return mnGroupLevel; };
     virtual sal_Bool SetGroupSnapRect( sal_uInt32 nGroupLevel, const Rectangle& rRect );

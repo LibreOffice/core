@@ -30,9 +30,9 @@
 using namespace ::com::sun::star;
 using namespace ::rtl;
 
-#define C2U(cChar)  rtl::OUString(cChar)
+#define C2U(cChar) OUString(cChar)
 
-static char sWW8_form[] = "WW-Standard";
+OUString sWW8_form( "WW-Standard" );
 
 SvxMSConvertOCXControls::SvxMSConvertOCXControls( const uno::Reference< frame::XModel >& rxModel) : mxModel(rxModel)
 {
@@ -106,13 +106,13 @@ const uno::Reference< container::XIndexContainer >&
 
             // Das Formular bekommt einen Namen wie "WW-Standard[n]" und
             // wird in jedem Fall neu angelegt.
-            UniString sName( sWW8_form, RTL_TEXTENCODING_MS_1252 );
+            OUString sName( sWW8_form );
             sal_uInt16 n = 0;
 
             while( xNameCont->hasByName( sName ) )
             {
-                sName.AssignAscii( sWW8_form );
-                sName += String::CreateFromInt32( ++n );
+                sName = sWW8_form;
+                sName += OUString::valueOf( static_cast<sal_Int32>(++n) );
             }
 
             const uno::Reference< lang::XMultiServiceFactory > &rServiceFactory
@@ -121,8 +121,8 @@ const uno::Reference< container::XIndexContainer >&
                 return xFormComps;
 
             uno::Reference< uno::XInterface >  xCreate =
-                rServiceFactory->createInstance(C2U(
-                    "com.sun.star.form.component.Form"));
+                rServiceFactory->createInstance( C2U(
+                    "com.sun.star.form.component.Form") );
             if( xCreate.is() )
             {
                 uno::Reference< beans::XPropertySet > xFormPropSet( xCreate,
