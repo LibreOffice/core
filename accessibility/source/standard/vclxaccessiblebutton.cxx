@@ -139,7 +139,7 @@ OUString VCLXAccessibleButton::getAccessibleName(  ) throw (RuntimeException)
     OUString aName( VCLXAccessibleTextComponent::getAccessibleName() );
     sal_Int32 nLength = aName.getLength();
 
-    if ( nLength >= 3 && aName.matchAsciiL( RTL_CONSTASCII_STRINGPARAM("..."), nLength - 3 ) )
+    if ( nLength >= 3 && aName.match( "...", nLength - 3 ) )
     {
         if ( nLength == 3 )
         {
@@ -152,12 +152,12 @@ OUString VCLXAccessibleButton::getAccessibleName(  ) throw (RuntimeException)
             aName = aName.copy( 0, nLength - 3 );
         }
     }
-    else if ( nLength >= 3 && aName.matchAsciiL( RTL_CONSTASCII_STRINGPARAM("<< "), 0 ) )
+    else if ( nLength >= 3 && aName.match( "<< ", 0 ) )
     {
         // remove the leading symbols
         aName = aName.copy( 3, nLength - 3 );
     }
-    else if ( nLength >= 3 && aName.matchAsciiL( RTL_CONSTASCII_STRINGPARAM(" >>"), nLength - 3 ) )
+    else if ( nLength >= 3 && aName.match( " >>", nLength - 3 ) )
     {
         // remove the trailing symbols
         aName = aName.copy( 0, nLength - 3 );
