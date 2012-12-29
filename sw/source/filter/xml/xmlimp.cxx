@@ -80,15 +80,6 @@ using namespace ::com::sun::star::xforms;
 using namespace ::xmloff::token;
 using namespace ::std;
 
-struct OUStringEquals
-{
-    sal_Bool operator()( const rtl::OUString &r1,
-                         const rtl::OUString &r2) const
-    {
-        return r1 == r2;
-    }
-};
-
 //----------------------------------------------------------------------------
 
 enum SwXMLDocTokens
