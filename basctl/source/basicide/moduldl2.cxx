@@ -288,7 +288,7 @@ sal_Bool CheckBox::EditingEntry( SvTreeListEntry* pEntry, Selection& )
 
     // check, if Standard library
     OUString aLibName = GetEntryText( pEntry, 0 );
-    if ( aLibName.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "Standard" ) ) )
+    if ( aLibName.equalsIgnoreAsciiCase( "Standard" ) )
     {
         ErrorBox( this, WB_OK | WB_DEF_OK, IDE_RESSTR(RID_STR_CANNOTCHANGENAMESTDLIB) ).Execute();
         return false;
@@ -572,7 +572,7 @@ void LibPage::CheckButtons()
             aInsertLibButton.Disable();
             aDelButton.Disable();
         }
-        else if ( aLibName.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "Standard" ) ) )
+        else if ( aLibName.equalsIgnoreAsciiCase( "Standard" ) )
         {
             aPasswordButton.Disable();
             aNewLibButton.Enable();
