@@ -118,14 +118,12 @@ static void lcl_GetMergeRange( SCsCOL nX, SCsROW nY, SCSIZE nArrY,
             !pDoc->RowHidden(rStartY, nTab, NULL, &nLastRow) &&
             (SCsROW) pRowInfo[nArrY].nRowNo == rStartY)
         {
-            bHOver = pRowInfo[nArrY].pCellInfo[rStartX+1].bHOverlapped;
             bVOver = pRowInfo[nArrY].pCellInfo[rStartX+1].bVOverlapped;
         }
         else
         {
             sal_uInt16 nOverlap = ((ScMergeFlagAttr*)pDoc->GetAttr(
                                 rStartX, rStartY, nTab, ATTR_MERGE_FLAG ))->GetValue();
-            bHOver = ((nOverlap & SC_MF_HOR) != 0);
             bVOver = ((nOverlap & SC_MF_VER) != 0);
         }
     }
