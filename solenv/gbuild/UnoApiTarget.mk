@@ -72,7 +72,7 @@ endef
 # idlc as well so their dummy rule fires if that changes.
 $(call gb_UnoApiPartTarget_get_target,%.done) : \
 		$(gb_UnoApiPartTarget_IDLCTARGET) \
-		| $(call gb_ExternalExecutable_get_deps,ucpp)
+		| $(call gb_ExternalExecutable_get_dependencies,ucpp)
 	$(call gb_UnoApiPartTarget__command,$@,$*,$(filter-out $(gb_UnoApiPartTarget_IDLCTARGET),$(if $(filter $(gb_UnoApiPartTarget_IDLCTARGET),$?),$^,$?)))
 
 ifeq ($(gb_FULLDEPS),$(true))

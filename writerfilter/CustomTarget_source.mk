@@ -204,6 +204,6 @@ $(writerfilter_WORK)/OOXMLFactory%.hxx : $(writerfilter_SRC)/ooxml/factory_ns.xs
 
 $(call gb_CustomTarget_get_target,writerfilter/source) : $(writerfilter_ALL)
 
-$(writerfilter_ALL) :| $(call gb_ExternalExecutable_get_deps,xsltproc) $(writerfilter_WORK)/.dir
+$(writerfilter_ALL) :| $(call gb_ExternalExecutable_get_dependencies,xsltproc) $(writerfilter_WORK)/.dir
 
 # vim: set noet sw=4 ts=4:

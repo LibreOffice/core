@@ -2459,7 +2459,7 @@ gb_ExternalExecutable__register_xmllint :=
 else # ! SYSTEM_LIBXML_FOR_BUILD
 
 define gb_ExternalExecutable__register_xmllint
-gb_ExternalExecutable__xmllint_TARGET := $(call gb_Executable_get_target_for_build,xmllint)
+$(call gb_ExternalExecutable_set_internal,xmllint)
 
 endef
 
@@ -2472,7 +2472,7 @@ gb_ExternalExecutable__register_xsltproc :=
 else # ! SYSTEM_LIBXSLT_FOR_BUILD
 
 define gb_ExternalExecutable__register_xsltproc
-gb_ExternalExecutable__xsltproc_TARGET := $(call gb_Executable_get_target_for_build,xsltproc)
+$(call gb_ExternalExecutable_set_internal,xsltproc)
 
 endef
 
@@ -2485,7 +2485,7 @@ gb_ExternalExecutable__register_ucpp :=
 else # ! SYSTEM_UCPP
 
 define gb_ExternalExecutable__register_ucpp
-gb_ExternalExecutable__ucpp_TARGET := $(call gb_Executable_get_target_for_build,ucpp)
+$(call gb_ExternalExecutable_set_internal,ucpp)
 
 endef
 
@@ -2495,7 +2495,7 @@ endif # SYSTEM_UCPP
 ifeq ($(SYSTEM_PYTHON),YES)
 
 define gb_ExternalExecutable__register_python
-gb_ExternalExecutable__python_COMMAND := $(ICECREAM_RUN) $(PYTHON)
+$(call gb_ExternalExecutable_set_external,python,$(PYTHON))
 
 endef
 
@@ -2505,7 +2505,7 @@ else ifeq ($(OS),MACOSX)
 #gbuild/platform/macosx.mk correctly for mac, e.g. PYTHONPATH and PYTHONHOME
 #dirs for in-tree internal python
 define gb_ExternalExecutable__register_python
-gb_ExternalExecutable__python_COMMAND := $(ICECREAM_RUN) $(PYTHON)
+$(call gb_ExternalExecutable_set_external,python,$(PYTHON))
 
 endef
 
@@ -2518,11 +2518,11 @@ else # ! SYSTEM_PYTHON
 
 # internal python
 define gb_ExternalExecutable__register_python
-gb_ExternalExecutable__python_TARGET := $(call gb_Executable_get_target_for_build,python)
-gb_ExternalExecutable__python_PRECOMMAND := $(gb_PYTHON_PRECOMMAND)
-gb_ExternalExecutable__python_DEPS := \
-	$(call gb_Executable_get_target_for_build,python) \
-	$(call gb_Package_get_target,python3)
+$(call gb_ExternalExecutable_set_internal,python)
+$(call gb_ExternalExecutable_set_precommand,python,$(gb_PYTHON_PRECOMMAND))
+$(call gb_ExternalExecutable_add_dependencies,python,\
+	$(call gb_Package_get_target,python3) \
+)
 
 endef
 

@@ -59,7 +59,7 @@ $(filter_GEN_svg_Tokens_cxx) : $(filter_GEN_svg_Tokens_gperf)
 			 > $(filter_GEN_svg_Tokens_cxx))
 
 $(filter_GEN_svg_Script_hxx) : \
-			$(call gb_ExternalExecutable_get_deps,python) \
+			$(call gb_ExternalExecutable_get_dependencies,python) \
 			$(filter_SRC_svg_PresentationEngine) $(filter_SRC_svg_Js2Hxx) \
 			| $(filter_SVGWORK)/.dir
 	$(call gb_Output_announce,$@,build,PY ,1)

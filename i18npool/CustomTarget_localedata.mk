@@ -56,7 +56,7 @@ $(i18npool_LDDIR)/localedata_%.cxx : \
 
 $(i18npool_LDDIR)/saxparser.rdb : $(i18npool_LDDIR)/saxparser.input \
 		$(SOLARENV)/bin/packcomponents.xslt \
-		| $(call gb_ExternalExecutable_get_deps,xsltproc)
+	| $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),RDB,1)
 	$(call gb_Helper_abbreviate_dirs, \
 		$(call gb_ExternalExecutable_get_command,xsltproc) --nonet --stringparam prefix $(OUTDIR_FOR_BUILD)/xml/ \
