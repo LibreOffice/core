@@ -20,7 +20,7 @@ $(call gb_ExternalProject_get_state_target,redland,build):
 	cd $(EXTERNAL_WORKDIR) \
 	&& CC="$(CC) -mthreads $(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-shared-libgcc)" \
 	LDFLAGS="-Wl,--no-undefined -Wl,--enable-runtime-pseudo-reloc-v2 -Wl,--export-all-symbols $(subst ;, -L,$(ILIB))" \
-	LIBXML2LIB="$(if $(filter YES,$(SYSTEM_LIBXML2)),$(LIBXML_LIBS),-lxml2)" \
+	LIBXML2LIB="$(if $(filter YES,$(SYSTEM_LIBXML)),$(LIBXML_LIBS),-lxml2)" \
 	XSLTLIB="$(if $(filter YES,$(SYSTEM_LIBXSLT)),$(LIBXSLT_LIBS),-lxslt)" \
 	OBJDUMP="$(HOST_PLATFORM)-objdump" \
 	./configure --disable-static --disable-gtk-doc --with-openssl-digests \
@@ -36,6 +36,7 @@ else
 $(call gb_ExternalProject_get_state_target,redland,build):
 	cd $(EXTERNAL_WORKDIR) \
 	&& CFLAGS="$(if $(filter TRUE,$(DISABLE_DYNLOADING)),-fvisibility=hidden)" \
+	PATH="$(OUTDIR)/bin:$$PATH" \
 	LDFLAGS="-L$(OUTDIR)/lib \
 	$(if $(filter LINUX FREEBSD,$(OS)),-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath$(COMMA)'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib' -Wl$(COMMA)-noinhibit-exec) \
 	$(if $(SYSBASE),$(if $(filter LINUX SOLARIS,$(OS)),-L$(SYSBASE)/lib -L$(SYSBASE)/usr/lib -lpthread -ldl)) \
