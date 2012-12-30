@@ -32,7 +32,6 @@ namespace lang  = com::sun::star::lang;
 namespace ucb = com::sun::star::ucb;
 namespace uno = com::sun::star::uno;
 
-#define OUSTR(s) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
 
 using ::com::sun::star::uno::Reference;
 using ::rtl::OUString;
@@ -49,7 +48,7 @@ ExtensionProperties::ExtensionProperties(
     Reference<uno::XComponentContext> const & xContext) :
     m_xCmdEnv(xCmdEnv), m_xContext(xContext)
 {
-    m_propFileUrl = urlExtension + OUSTR("properties");
+    m_propFileUrl = urlExtension + "properties";
 
     ::std::list< ::std::pair< OUString, OUString> > props;
     if (! dp_misc::create_ucb_content(NULL, m_propFileUrl, 0, false))
@@ -61,7 +60,7 @@ ExtensionProperties::ExtensionProperties(
     typedef ::std::list< ::std::pair< OUString, OUString> >::const_iterator CI;
     for (CI i = props.begin(); i != props.end(); ++i)
     {
-        if (i->first.equals(OUSTR(PROP_SUPPRESS_LICENSE)))
+        if (i->first == PROP_SUPPRESS_LICENSE)
             m_prop_suppress_license = i->second;
     }
 }
@@ -74,39 +73,34 @@ ExtensionProperties::ExtensionProperties(
     Reference<uno::XComponentContext> const & xContext) :
     m_xCmdEnv(xCmdEnv), m_xContext(xContext)
 {
-    m_propFileUrl = urlExtension + OUSTR("properties");
+    m_propFileUrl = urlExtension + "properties";
 
     for (sal_Int32 i = 0; i < properties.getLength(); i++)
     {
         css::beans::NamedValue const & v = properties[i];
-        if (v.Name.equals(OUSTR(PROP_SUPPRESS_LICENSE)))
+        if (v.Name == PROP_SUPPRESS_LICENSE)
         {
             m_prop_suppress_license = getPropertyValue(v);
         }
-        else if (v.Name.equals(OUSTR(PROP_EXTENSION_UPDATE)))
+        else if (v.Name == PROP_EXTENSION_UPDATE)
         {
             m_prop_extension_update = getPropertyValue(v);
         }
         else
         {
             throw lang::IllegalArgumentException(
-                OUSTR("Extension Manager: unknown property"), 0, -1);
+                "Extension Manager: unknown property", 0, -1);
         }
     }
 }
 
 OUString ExtensionProperties::getPropertyValue(css::beans::NamedValue const & v)
 {
-    OUString value(OUSTR("0"));
-    if (v.Value >>= value)
-    {
-        if (value.equals(OUSTR("1")))
-            value = OUSTR("1");
-    }
-    else
+    OUString value("0");
+    if (! (v.Value >>= value) )
     {
         throw lang::IllegalArgumentException(
-            OUSTR("Extension Manager: wrong property value"), 0, -1);
+            "Extension Manager: wrong property value", 0, -1);
     }
     return value;
 }
@@ -117,8 +111,8 @@ void ExtensionProperties::write()
 
     if (m_prop_suppress_license)
     {
-        buf.append(OUSTR(PROP_SUPPRESS_LICENSE));
-        buf.append(OUSTR("="));
+        buf.append(PROP_SUPPRESS_LICENSE);
+        buf.append("=");
         buf.append(*m_prop_suppress_license);
     }
 
@@ -137,7 +131,7 @@ bool ExtensionProperties::isSuppressedLicense()
     bool ret = false;
     if (m_prop_suppress_license)
     {
-        if (m_prop_suppress_license->equals(OUSTR("1")))
+        if (*m_prop_suppress_license == "1")
             ret = true;
     }
     return ret;
@@ -148,7 +142,7 @@ bool ExtensionProperties::isExtensionUpdate()
     bool ret = false;
     if (m_prop_extension_update)
     {
-        if (m_prop_extension_update->equals(OUSTR("1")))
+        if (*m_prop_extension_update == "1")
             ret = true;
     }
     return ret;

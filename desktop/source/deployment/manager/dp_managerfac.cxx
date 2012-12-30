@@ -95,7 +95,7 @@ inline void PackageManagerFactoryImpl::check()
     if (rBHelper.bInDispose || rBHelper.bDisposed)
     {
         throw lang::DisposedException(
-            OUSTR("PackageManagerFactory instance has already been disposed!"),
+            "PackageManagerFactory instance has already been disposed!",
             static_cast<OWeakObject *>(this) );
     }
 }
@@ -149,9 +149,9 @@ PackageManagerFactoryImpl::getPackageManager( OUString const & context )
             m_xSharedMgr = xRet;
         else if ( context == "bundled" )
             m_xBundledMgr = xRet;
-        else if (context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("tmp") ))
+        else if ( context == "tmp" )
             m_xTmpMgr = xRet;
-        else if (context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bak") ))
+        else if ( context == "bak" )
             m_xBakMgr = xRet;
     }
     else

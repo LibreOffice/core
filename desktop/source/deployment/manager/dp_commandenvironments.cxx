@@ -35,8 +35,6 @@ namespace task = com::sun::star::task;
 namespace ucb = com::sun::star::ucb;
 namespace uno = com::sun::star::uno;
 
-#define OUSTR(s) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
-
 using ::com::sun::star::uno::Reference;
 using ::rtl::OUString;
 
@@ -195,8 +193,8 @@ void LicenseCommandEnv::handle(
     if (request >>= licExc)
     {
         if (m_bSuppressLicense
-            || m_repository.equals(OUSTR("bundled"))
-            || licExc.AcceptBy.equals(OUSTR("admin")))
+            || m_repository == "bundled"
+            || licExc.AcceptBy == "admin")
         {
             //always approve in bundled case, because we do not support
             //showing licenses anyway.

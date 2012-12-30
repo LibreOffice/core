@@ -53,7 +53,6 @@ namespace css_ucb    = com::sun::star::ucb ;
 namespace uno        = com::sun::star::uno ;
 namespace xml = com::sun::star::xml ;
 
-#define UNISTRING(s) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
 
 namespace dp_info {
 
@@ -142,15 +141,15 @@ rtl::OUString SAL_CALL
 PackageInformationProvider::getPackageLocation( const rtl::OUString& _sExtensionId )
     throw ( uno::RuntimeException )
 {
-    rtl::OUString aLocationURL = getPackageLocation( UNISTRING("user"), _sExtensionId );
+    rtl::OUString aLocationURL = getPackageLocation( rtl::OUString("user"), _sExtensionId );
 
     if ( aLocationURL.isEmpty() )
     {
-        aLocationURL = getPackageLocation( UNISTRING("shared"), _sExtensionId );
+        aLocationURL = getPackageLocation( rtl::OUString("shared"), _sExtensionId );
     }
     if ( aLocationURL.isEmpty() )
     {
-        aLocationURL = getPackageLocation( UNISTRING("bundled"), _sExtensionId );
+        aLocationURL = getPackageLocation( rtl::OUString("bundled"), _sExtensionId );
     }
     if ( !aLocationURL.isEmpty() )
     {
@@ -237,7 +236,7 @@ PackageInformationProvider::isUpdateAvailable( const rtl::OUString& _sExtensionI
         if (extensions[2].is() )
             sVersionBundled = extensions[2]->getVersion();
 
-        bool bSharedReadOnly = extMgr->isReadOnlyRepository(OUSTR("shared"));
+        bool bSharedReadOnly = extMgr->isReadOnlyRepository("shared");
 
         dp_misc::UPDATE_SOURCE sourceUser = dp_misc::isUpdateUserExtension(
             bSharedReadOnly, sVersionUser, sVersionShared, sVersionBundled, sOnlineVersion);

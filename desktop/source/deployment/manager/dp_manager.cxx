@@ -168,18 +168,18 @@ void PackageManagerImpl::initActivationLayer(
             create_folder( 0, m_activePackages_expanded, xCmdEnv, true);
 
         OUString dbName;
-        if (m_context.equals(OUSTR("user")))
-            dbName = m_activePackages_expanded + OUSTR(".pmap");
+        if (m_context == "user")
+            dbName = m_activePackages_expanded + ".pmap";
         else
         {
             // Create the extension data base in the user installation
             create_folder( 0, m_registrationData_expanded, xCmdEnv, true);
-            dbName = m_registrationData_expanded + OUSTR("/extensions.pmap");
+            dbName = m_registrationData_expanded + "/extensions.pmap";
         }
         // The data base can always be written because it it always in the user installation
         m_activePackagesDB.reset( new ActivePackages( dbName, false ) );
 
-        if (! m_readOnly && ! m_context.equals(OUSTR("bundled")))
+        if (! m_readOnly && ! (m_context == "bundled"))
         {
             // clean up activation layer, scan for zombie temp dirs:
             ActivePackages::Entries id2temp( m_activePackagesDB->getEntries() );
@@ -200,8 +200,7 @@ void PackageManagerImpl::initActivationLayer(
                             1 /* Title */ ) );
 
                 const char extensionRemoved[] = "removed";
-                if (title.endsWithAsciiL(
-                        extensionRemoved, sizeof(extensionRemoved) - 1))
+                if (title.endsWith( extensionRemoved ))
                 {
                     //save the file name withouth the "removed" part
                     sal_Int32 index = title.lastIndexOfAsciiL(
@@ -221,7 +220,7 @@ void PackageManagerImpl::initActivationLayer(
                 }
             }
 
-            bool bShared = m_context.equals(OUSTR("shared")) ? true : false;
+            bool bShared = (m_context == "shared") ? true : false;
             for ( ::std::size_t pos = 0; pos < tempEntries.size(); ++pos )
             {
                 OUString const & tempEntry = tempEntries[ pos ];
@@ -256,7 +255,7 @@ void PackageManagerImpl::initActivationLayer(
                             ::osl::Security aSecurity;
                             aSecurity.getUserName( aUserName );
                             ucbhelper::Content remFileContent(
-                                url + OUSTR("removed"), Reference<XCommandEnvironment>(), m_xComponentContext);
+                                url + "removed", Reference<XCommandEnvironment>(), m_xComponentContext);
                             ::rtl::ByteSequence data = dp_misc::readFile(remFileContent);
                             ::rtl::OString osData(reinterpret_cast<const sal_Char*>(data.getConstArray()),
                                                   data.getLength());
@@ -267,13 +266,13 @@ void PackageManagerImpl::initActivationLayer(
                         }
                     }
                     // temp entry not needed anymore:
-                    erase_path( url + OUSTR("_"),
+                    erase_path( url + "_",
                                 Reference<XCommandEnvironment>(),
                                 false /* no throw: ignore errors */ );
                     erase_path( url, Reference<XCommandEnvironment>(),
                                 false /* no throw: ignore errors */ );
                     //delete the xxx.tmpremoved file
-                    erase_path(url + OUSTR("removed"),
+                    erase_path(url + "removed",
                                Reference<XCommandEnvironment>(), false);
                 }
             }
@@ -338,14 +337,10 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
 
     OUString logFile, stamp;
     if ( context == "user" ) {
-        that->m_activePackages = OUSTR(
-            "vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE/uno_packages");
-        that->m_registrationData = OUSTR(
-            "vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE");
-        that->m_registryCache = OUSTR(
-            "vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE/registry");
-        logFile = OUSTR(
-            "vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE/log.txt");
+        that->m_activePackages = "vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE/uno_packages";
+        that->m_registrationData = "vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE";
+        that->m_registryCache = "vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE/registry";
+        logFile = "vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE/log.txt";
         //We use the extension .sys for the file because on Windows Vista a sys
         //(as well as exe and dll) file
         //will not be written in the VirtualStore. For example if the process has no
@@ -357,54 +352,39 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
         //using virtualization it appears that he/she can. Then a shared extension can
         //be installed but is only visible for the user (because the extension is in
         //the virtual store).
-        stamp = OUSTR("$UNO_USER_PACKAGES_CACHE");
+        stamp = "$UNO_USER_PACKAGES_CACHE";
     }
     else if ( context == "shared" ) {
-        that->m_activePackages = OUSTR(
-            "vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE/uno_packages");
-        that->m_registrationData = OUSTR(
-            "vnd.sun.star.expand:$SHARED_EXTENSIONS_USER");
-        that->m_registryCache = OUSTR(
-            "vnd.sun.star.expand:$SHARED_EXTENSIONS_USER/registry");
-        logFile = OUSTR(
-            "vnd.sun.star.expand:$SHARED_EXTENSIONS_USER/log.txt");
-        stamp = OUSTR("$UNO_SHARED_PACKAGES_CACHE");
+        that->m_activePackages = "vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE/uno_packages";
+        that->m_registrationData = "vnd.sun.star.expand:$SHARED_EXTENSIONS_USER";
+        that->m_registryCache = "vnd.sun.star.expand:$SHARED_EXTENSIONS_USER/registry";
+        logFile = "vnd.sun.star.expand:$SHARED_EXTENSIONS_USER/log.txt";
+        stamp = "$UNO_SHARED_PACKAGES_CACHE";
     }
     else if ( context == "bundled" ) {
-        that->m_activePackages = OUSTR(
-            "vnd.sun.star.expand:$BUNDLED_EXTENSIONS");
-        that->m_registrationData = OUSTR(
-            "vnd.sun.star.expand:$BUNDLED_EXTENSIONS_USER");
-        that->m_registryCache = OUSTR(
-            "vnd.sun.star.expand:$BUNDLED_EXTENSIONS_USER/registry");
-        logFile = OUSTR(
-            "vnd.sun.star.expand:$BUNDLED_EXTENSIONS_USER/log.txt");
+        that->m_activePackages = "vnd.sun.star.expand:$BUNDLED_EXTENSIONS";
+        that->m_registrationData = "vnd.sun.star.expand:$BUNDLED_EXTENSIONS_USER";
+        that->m_registryCache = "vnd.sun.star.expand:$BUNDLED_EXTENSIONS_USER/registry";
+        logFile = "vnd.sun.star.expand:$BUNDLED_EXTENSIONS_USER/log.txt";
         //No stamp file. We assume that bundled is always readonly. It must not be
         //modified from ExtensionManager but only by the installer
     }
     else if ( context == "tmp" ) {
-        that->m_activePackages = OUSTR(
-            "vnd.sun.star.expand:$TMP_EXTENSIONS/extensions");
-        that->m_registrationData = OUSTR(
-            "vnd.sun.star.expand:$TMP_EXTENSIONS");
-        that->m_registryCache = OUSTR(
-            "vnd.sun.star.expand:$TMP_EXTENSIONS/registry");
-        stamp = OUSTR("$TMP_EXTENSIONS");
+        that->m_activePackages = "vnd.sun.star.expand:$TMP_EXTENSIONS/extensions";
+        that->m_registrationData = "vnd.sun.star.expand:$TMP_EXTENSIONS";
+        that->m_registryCache = "vnd.sun.star.expand:$TMP_EXTENSIONS/registry";
+        stamp = "$TMP_EXTENSIONS";
     }
-    else if (context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bak") )) {
-        that->m_activePackages = OUSTR(
-            "vnd.sun.star.expand:$BAK_EXTENSIONS/extensions");
-        that->m_registrationData = OUSTR(
-            "vnd.sun.star.expand:$BAK_EXTENSIONS");
-        that->m_registryCache = OUSTR(
-            "vnd.sun.star.expand:$BAK_EXTENSIONS/registry");
-        stamp = OUSTR("vnd.sun.star.expand:$BAK_EXTENSIONS/stamp.sys");
+    else if (context == "bak") {
+        that->m_activePackages = "vnd.sun.star.expand:$BAK_EXTENSIONS/extensions";
+        that->m_registrationData = "vnd.sun.star.expand:$BAK_EXTENSIONS";
+        that->m_registryCache = "vnd.sun.star.expand:$BAK_EXTENSIONS/registry";
+        stamp = "vnd.sun.star.expand:$BAK_EXTENSIONS/stamp.sys";
     }
 
-    else if (! context.matchAsciiL(
-                 RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.tdoc:/") )) {
+    else if (! context.match("vnd.sun.star.tdoc:/")) {
         throw lang::IllegalArgumentException(
-            OUSTR("invalid context given: ") + context,
+            "invalid context given: " + context,
             Reference<XInterface>(), static_cast<sal_Int16>(-1) );
     }
 
@@ -485,7 +465,7 @@ void PackageManagerImpl::disposing()
     catch (const Exception &) {
         Any exc( ::cppu::getCaughtException() );
         throw lang::WrappedTargetRuntimeException(
-            OUSTR("caught unexpected exception while disposing..."),
+            "caught unexpected exception while disposing...",
             static_cast<OWeakObject *>(this), exc );
     }
 }
@@ -567,11 +547,10 @@ OUString PackageManagerImpl::detectMediaType(
     ::ucbhelper::Content ucbContent(ucbContent_);
     OUString url( ucbContent.getURL() );
     OUString mediaType;
-    if (url.matchAsciiL( RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.tdoc:") ) ||
-        url.matchAsciiL( RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.pkg:") ))
+    if (url.match( "vnd.sun.star.tdoc:" ) || url.match( "vnd.sun.star.pkg:" ))
     {
         try {
-            ucbContent.getPropertyValue( OUSTR("MediaType") ) >>= mediaType;
+            ucbContent.getPropertyValue( "MediaType" ) >>= mediaType;
         }
         catch (const beans::UnknownPropertyException &) {
         }
@@ -615,26 +594,22 @@ OUString PackageManagerImpl::insertToActivationLayer(
     OUString tempEntry = aTemp.GetURL();
     tempEntry = tempEntry.copy(tempEntry.lastIndexOf('/') + 1);
     OUString destFolder = makeURL( m_activePackages, tempEntry);
-    destFolder += OUSTR("_");
+    destFolder += "_";
 
     // prepare activation folder:
     ::ucbhelper::Content destFolderContent;
     create_folder( &destFolderContent, destFolder, xCmdEnv );
 
     // copy content into activation temp dir:
-    if (mediaType.matchIgnoreAsciiCaseAsciiL(
-            RTL_CONSTASCII_STRINGPARAM(
-                "application/vnd.sun.star.package-bundle") ) ||
+    if (mediaType.matchIgnoreAsciiCase("application/vnd.sun.star.package-bundle") ||
         // xxx todo: more sophisticated parsing
-        mediaType.matchIgnoreAsciiCaseAsciiL(
-            RTL_CONSTASCII_STRINGPARAM(
-                "application/vnd.sun.star.legacy-package-bundle") ))
+        mediaType.matchIgnoreAsciiCase("application/vnd.sun.star.legacy-package-bundle"))
     {
         // inflate content:
         ::rtl::OUStringBuffer buf;
         if (!sourceContent.isFolder())
         {
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.zip://") );
+            buf.appendAscii( "vnd.sun.star.zip://" );
             buf.append( ::rtl::Uri::encode( sourceContent.getURL(),
                                             rtl_UriCharClassRegName,
                                             rtl_UriEncodeIgnoreEscapes,
@@ -652,13 +627,13 @@ OUString PackageManagerImpl::insertToActivationLayer(
     if (! destFolderContent.transferContent(
             sourceContent, ::ucbhelper::InsertOperation_COPY,
             title, NameClash::OVERWRITE ))
-        throw RuntimeException( OUSTR("UCB transferContent() failed!"), 0 );
+        throw RuntimeException( "UCB transferContent() failed!", 0 );
 
 
     // write to DB:
     //bundled extensions should only be added by the synchronizeAddedExtensions
     //functions. Moreover, there is no "temporary folder" for bundled extensions.
-    OSL_ASSERT(!m_context.equals(OUSTR("bundled")));
+    OSL_ASSERT(!(m_context == "bundled"));
     OUString sFolderUrl = makeURLAppendSysPathSegment(destFolderContent.getURL(), title);
     DescriptionInfoset info =
         dp_misc::getDescriptionInfoset(sFolderUrl);
@@ -730,10 +705,10 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
     if (m_readOnly)
     {
         OUString message;
-        if (m_context == OUSTR("shared"))
-            message = OUSTR("You need write permissions to install a shared extension!");
+        if (m_context == "shared")
+            message = "You need write permissions to install a shared extension!";
         else
-            message = OUSTR("You need write permissions to install this extension!");
+            message = "You need write permissions to install this extension!";
         throw deployment::DeploymentException(
             message, static_cast<OWeakObject *>(this), Any() );
     }
@@ -770,8 +745,7 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
                     sourceContent, ::ucbhelper::InsertOperation_COPY,
                     OUString(),
                     NameClash::ASK /* xxx todo: ASK not needed? */))
-                throw RuntimeException(
-                    OUSTR("UCB transferContent() failed!"), 0 );
+                throw RuntimeException("UCB transferContent() failed!", 0 );
             // set media-type:
             ::ucbhelper::Content docContent(
                 makeURL( m_context, title_enc ), xCmdEnv, m_xComponentContext );
@@ -779,12 +753,11 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
                 // clashes, but the whole m_activePackages.getLength()==0
                 // case (i.e., document-relative deployment) currently does
                 // not work, anyway.
-            docContent.setPropertyValue(
-                OUSTR("MediaType"), Any(mediaType) );
+            docContent.setPropertyValue("MediaType", Any(mediaType) );
 
             // xxx todo: obsolete in the future
             try {
-                docFolderContent.executeCommand( OUSTR("flush"), Any() );
+                docFolderContent.executeCommand( "flush", Any() );
             }
             catch (const UnsupportedCommandException &) {
             }
@@ -909,13 +882,13 @@ void PackageManagerImpl::removePackage(
             //the flag file it will then recognize, that the extension was
             //deleted and can then update the extnesion database of the shared
             //extensions in the user installation.
-            if ( xPackage.is() && !m_readOnly && !xPackage->isRemoved() && m_context.equals(OUSTR("shared")))
+            if ( xPackage.is() && !m_readOnly && !xPackage->isRemoved() && (m_context == "shared"))
             {
                 ActivePackages::Data val;
                 m_activePackagesDB->get( & val, id, fileName);
                 OSL_ASSERT(!val.temporaryName.isEmpty());
                 OUString url(makeURL(m_activePackages_expanded,
-                                     val.temporaryName + OUSTR("removed")));
+                                     val.temporaryName + "removed"));
                 ::ucbhelper::Content contentRemoved(url, xCmdEnv, m_xComponentContext);
                 OUString aUserName;
                 ::osl::Security aSecurity;
@@ -969,9 +942,9 @@ OUString PackageManagerImpl::getDeployPath( ActivePackages::Data const & data )
     //The bundled extensions are not contained in an additional folder
     //with a unique name. data.temporaryName contains already the
     //UTF8 encoded folder name. See PackageManagerImpl::synchronize
-    if (!m_context.equals(OUSTR("bundled")))
+    if (!(m_context == "bundled"))
     {
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("_/") );
+        buf.appendAscii( "_/" );
         buf.append( ::rtl::Uri::encode( data.fileName, rtl_UriCharClassPchar,
                                     rtl_UriEncodeIgnoreEscapes,
                                     RTL_TEXTENCODING_UTF8 ) );
@@ -1019,7 +992,7 @@ Reference<deployment::XPackage> PackageManagerImpl::getDeployedPackage_(
     {
         //Ignore extensions where XPackage::checkPrerequisites failed.
         //They must not be usable for this user.
-        if (data.failedPrerequisites.equals(OUSTR("0")))
+        if (data.failedPrerequisites == "0")
         {
             xExtension = m_xRegistry->bindPackage(
                 getDeployPath( data ), data.mediaType, false, OUString(), xCmdEnv );
@@ -1043,7 +1016,7 @@ PackageManagerImpl::getDeployedPackages_(
     ActivePackages::Entries::const_iterator const iEnd( id2temp.end() );
     for ( ; iPos != iEnd; ++iPos )
     {
-        if (! iPos->second.failedPrerequisites.equals(OUSTR("0")))
+        if (! (iPos->second.failedPrerequisites == "0"))
             continue;
         try {
             packages.push_back(
@@ -1106,7 +1079,7 @@ Reference<deployment::XPackage> PackageManagerImpl::getDeployedPackage(
         logIntern( exc );
         throw deployment::DeploymentException(
             // ought never occur...
-            OUSTR("error while accessing deployed package: ") + id,
+            "error while accessing deployed package: " + id,
             static_cast<OWeakObject *>(this), exc );
     }
 }
@@ -1151,7 +1124,7 @@ PackageManagerImpl::getDeployedPackages(
         logIntern( exc );
         throw deployment::DeploymentException(
             // ought never occur...
-            OUSTR("error while getting all deployed packages: ") + m_context,
+            "error while getting all deployed packages: " + m_context,
             static_cast<OWeakObject *>(this), exc );
     }
 }
@@ -1171,8 +1144,8 @@ void PackageManagerImpl::reinstallDeployedPackages(
     check();
     if (!force && office_is_running())
         throw RuntimeException(
-            OUSTR("You must close any running Office process before "
-                  "reinstalling packages!"), static_cast<OWeakObject *>(this) );
+            "You must close any running Office process before reinstalling packages!",
+            static_cast<OWeakObject *>(this) );
 
     Reference<XCommandEnvironment> xCmdEnv;
     if (m_xLogFile.is())
@@ -1182,7 +1155,7 @@ void PackageManagerImpl::reinstallDeployedPackages(
 
     try {
         ProgressLevel progress(
-            xCmdEnv, OUSTR("Reinstalling all deployed packages...") );
+            xCmdEnv, "Reinstalling all deployed packages..." );
 
         try_dispose( m_xRegistry );
         m_xRegistry.clear();
@@ -1214,8 +1187,7 @@ void PackageManagerImpl::reinstallDeployedPackages(
         Any exc( ::cppu::getCaughtException() );
         logIntern( exc );
         throw deployment::DeploymentException(
-            OUSTR("Error while reinstalling all previously deployed "
-                  "packages of context ") + m_context,
+            "Error while reinstalling all previously deployed packages of context " + m_context,
             static_cast<OWeakObject *>(this), exc );
     }
 }
@@ -1233,12 +1205,12 @@ bool PackageManagerImpl::synchronizeRemovedExtensions(
 
     //find all which are in the extension data base but which
     //are removed already.
-    OSL_ASSERT(!m_context.equals(OUSTR("user")));
+    OSL_ASSERT(!(m_context == "user"));
     bool bModified = false;
     ActivePackages::Entries id2temp( m_activePackagesDB->getEntries() );
 
     typedef ActivePackages::Entries::const_iterator ITActive;
-    bool bShared = m_context.equals(OUSTR("shared"));
+    bool bShared = (m_context == "shared");
 
     for (ITActive i = id2temp.begin(); i != id2temp.end(); ++i)
     {
@@ -1248,7 +1220,7 @@ bool PackageManagerImpl::synchronizeRemovedExtensions(
             //shared repository including the temporary name
             OUString url = makeURL(m_activePackages, i->second.temporaryName);
             if (bShared)
-                url = makeURLAppendSysPathSegment( url + OUSTR("_"), i->second.fileName);
+                url = makeURLAppendSysPathSegment( url + "_", i->second.fileName);
 
             bool bRemoved = false;
             //Check if the URL to the extension is still the same
@@ -1271,8 +1243,8 @@ bool PackageManagerImpl::synchronizeRemovedExtensions(
 
                 if (create_ucb_content(
                         &contentRemoved,
-                        m_activePackages_expanded + OUSTR("/") +
-                        i->second.temporaryName + OUSTR("removed"),
+                        m_activePackages_expanded + "/" +
+                        i->second.temporaryName + "removed",
                         Reference<XCommandEnvironment>(), false))
                 {
                     bRemoved = true;
@@ -1321,7 +1293,7 @@ bool PackageManagerImpl::synchronizeAddedExtensions(
     Reference<css::ucb::XCommandEnvironment> const & xCmdEnv)
 {
     bool bModified = false;
-    OSL_ASSERT(!m_context.equals(OUSTR("user")));
+    OSL_ASSERT(!(m_context == "user"));
 
     ActivePackages::Entries id2temp( m_activePackagesDB->getEntries() );
     //check if the folder exist at all. The shared extension folder
@@ -1346,7 +1318,7 @@ bool PackageManagerImpl::synchronizeAddedExtensions(
             //The temporary folders of user and shared have an '_' at then end.
             //But the name in ActivePackages.temporaryName is saved without.
             OUString title2 = title;
-            bool bShared = m_context.equals(OUSTR("shared"));
+            bool bShared = (m_context == "shared");
             if (bShared)
             {
                 OSL_ASSERT(title2[title2.getLength() -1] == '_');
@@ -1367,19 +1339,19 @@ bool PackageManagerImpl::synchronizeAddedExtensions(
 
                 // The folder was not found in the data base, so it must be
                 // an added extension
-                OUString url(m_activePackages_expanded + OUSTR("/") + titleEncoded);
+                OUString url(m_activePackages_expanded + "/" + titleEncoded);
                 OUString sExtFolder;
                 if (bShared) //that is, shared
                 {
                     //Check if the extension was not "deleted" already which is indicated
                     //by a xxx.tmpremoved file
                     ::ucbhelper::Content contentRemoved;
-                    if (create_ucb_content(&contentRemoved, url + OUSTR("removed"),
+                    if (create_ucb_content(&contentRemoved, url + "removed",
                                            Reference<XCommandEnvironment>(), false))
                         continue;
                     sExtFolder = getExtensionFolder(
-                        m_activePackages_expanded +
-                        OUString(OUSTR("/")) + titleEncoded + OUSTR("_"), xCmdEnv, m_xComponentContext);
+                        m_activePackages_expanded + "/" + titleEncoded + "_",
+                        xCmdEnv, m_xComponentContext);
                     url = makeURLAppendSysPathSegment(m_activePackages_expanded, title);
                     url = makeURLAppendSysPathSegment(url, sExtFolder);
                 }
@@ -1407,7 +1379,7 @@ bool PackageManagerImpl::synchronizeAddedExtensions(
                     //showing a license if simple-licens/@accept-by = "admin"
                     //It will also prevent showing the license for bundled extensions
                     //which is not supported.
-                    OSL_ASSERT(!m_context.equals(OUSTR("user")));
+                    OSL_ASSERT(!(m_context == "user"));
 
                     // shall the license be suppressed?
                     DescriptionInfoset info =
@@ -1453,7 +1425,7 @@ sal_Bool PackageManagerImpl::synchronize(
 {
     check();
     bool bModified = false;
-    if (m_context.equals(OUSTR("user")))
+    if (m_context == "user")
         return bModified;
     bModified |=
         synchronizeRemovedExtensions(xAbortChannel, xCmdEnv);
@@ -1475,7 +1447,7 @@ Sequence< Reference<deployment::XPackage> > PackageManagerImpl::getExtensionsWit
         ActivePackages::Entries id2temp( m_activePackagesDB->getEntries() );
 
         ActivePackages::Entries::const_iterator i = id2temp.begin();
-        bool bShared = m_context.equals(OUSTR("shared"));
+        bool bShared = (m_context == "shared");
 
         for (; i != id2temp.end(); ++i )
         {
@@ -1490,7 +1462,7 @@ Sequence< Reference<deployment::XPackage> > PackageManagerImpl::getExtensionsWit
             //Prepare the URL to the extension
             OUString url = makeURL(m_activePackages, i->second.temporaryName);
             if (bShared)
-                url = makeURLAppendSysPathSegment( url + OUSTR("_"), i->second.fileName);
+                url = makeURLAppendSysPathSegment( url + "_", i->second.fileName);
 
             Reference<deployment::XPackage> p = m_xRegistry->bindPackage(
                 url, OUString(), false, OUString(), xCmdEnv );
@@ -1513,7 +1485,7 @@ Sequence< Reference<deployment::XPackage> > PackageManagerImpl::getExtensionsWit
     {
         Any exc = ::cppu::getCaughtException();
         deployment::DeploymentException de(
-            OUSTR("PackageManagerImpl::getExtensionsWithUnacceptedLicenses"),
+            "PackageManagerImpl::getExtensionsWithUnacceptedLicenses",
             static_cast<OWeakObject*>(this), exc);
         exc <<= de;
         ::cppu::throwException(exc);
@@ -1538,8 +1510,8 @@ sal_Int32 PackageManagerImpl::checkPrerequisites(
             return 0;
         if (!m_context.equals(extension->getRepositoryName()))
             throw lang::IllegalArgumentException(
-                OUSTR("PackageManagerImpl::checkPrerequisites: extension is not"
-                      " from this repository."), 0, 0);
+                "PackageManagerImpl::checkPrerequisites: extension is not from this repository.",
+                0, 0);
 
         ActivePackages::Data dbData;
         OUString id = dp_misc::getIdentifier(extension);
@@ -1559,7 +1531,7 @@ sal_Int32 PackageManagerImpl::checkPrerequisites(
         else
         {
             throw lang::IllegalArgumentException(
-                OUSTR("PackageManagerImpl::checkPrerequisites: unknown extension"),
+                "PackageManagerImpl::checkPrerequisites: unknown extension",
                 0, 0);
 
         }
@@ -1578,7 +1550,7 @@ sal_Int32 PackageManagerImpl::checkPrerequisites(
     } catch (...) {
         uno::Any excOccurred = ::cppu::getCaughtException();
         deployment::DeploymentException exc(
-            OUSTR("PackageManagerImpl::checkPrerequisites: exception "),
+            "PackageManagerImpl::checkPrerequisites: exception ",
             static_cast<OWeakObject*>(this), excOccurred);
         throw exc;
     }
