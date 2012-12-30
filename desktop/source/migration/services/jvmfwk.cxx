@@ -43,8 +43,6 @@
 #include "osl/thread.hxx"
 using ::rtl::OUString;
 
-#define OUSTR(x) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
-
 #define SERVICE_NAME "com.sun.star.migration.Java"
 #define IMPL_NAME "com.sun.star.comp.desktop.migration.Java"
 
@@ -219,12 +217,12 @@ JavaMigration::~JavaMigration()
 
 OUString jvmfwk_getImplementationName()
 {
-    return OUSTR(IMPL_NAME);
+    return OUString(IMPL_NAME);
 }
 
 css::uno::Sequence< OUString > jvmfwk_getSupportedServiceNames()
 {
-    OUString str_name = OUSTR(SERVICE_NAME);
+    OUString str_name = SERVICE_NAME;
     return css::uno::Sequence< OUString >( &str_name, 1 );
 }
 
@@ -317,8 +315,8 @@ void JavaMigration::migrateJavarc()
         return;
 
     OUString sValue;
-    rtl::Bootstrap javaini(m_sUserDir + OUSTR( "/user/config/" SAL_CONFIGFILE("java") ));
-    sal_Bool bSuccess = javaini.getFrom(OUSTR("Home"), sValue);
+    rtl::Bootstrap javaini(m_sUserDir + "/user/config/" + SAL_CONFIGFILE("java"));
+    sal_Bool bSuccess = javaini.getFrom("Home", sValue);
     OSL_ENSURE(bSuccess, "[Service implementation " IMPL_NAME
                        "] XJob::execute: Could not get Home entry from java.ini/javarc.");
     if (bSuccess == sal_True && !sValue.isEmpty())
@@ -430,12 +428,12 @@ void SAL_CALL  JavaMigration::setPropertyValue(
             sal_Bool val = sal_Bool();
             if ((aValue >>= val) == sal_False)
                 throw MalformedDataException(
-                    OUSTR("[Service implementation " IMPL_NAME
-                       "] XLayerHandler::setPropertyValue received wrong type for Enable property"), 0, Any());
+                       OUString("[Service implementation ") + IMPL_NAME +
+                       "] XLayerHandler::setPropertyValue received wrong type for Enable property", 0, Any());
             if (jfw_setEnabled(val) != JFW_E_NONE)
                 throw WrappedTargetException(
-                    OUSTR("[Service implementation " IMPL_NAME
-                       "] XLayerHandler::setPropertyValue: jfw_setEnabled failed."), 0, Any());
+                       OUString("[Service implementation ") + IMPL_NAME +
+                       "] XLayerHandler::setPropertyValue: jfw_setEnabled failed.", 0, Any());
 
             break;
         }
@@ -444,13 +442,13 @@ void SAL_CALL  JavaMigration::setPropertyValue(
              OUString cp;
              if ((aValue >>= cp) == sal_False)
                  throw MalformedDataException(
-                     OUSTR("[Service implementation " IMPL_NAME
-                           "] XLayerHandler::setPropertyValue received wrong type for UserClassPath property"), 0, Any());
+                           OUString("[Service implementation ") + IMPL_NAME +
+                           "] XLayerHandler::setPropertyValue received wrong type for UserClassPath property", 0, Any());
 
              if (jfw_setUserClassPath(cp.pData) != JFW_E_NONE)
                  throw WrappedTargetException(
-                     OUSTR("[Service implementation " IMPL_NAME
-                       "] XLayerHandler::setPropertyValue: jfw_setUserClassPath failed."), 0, Any());
+                       OUString("[Service implementation ") +  IMPL_NAME +
+                       "] XLayerHandler::setPropertyValue: jfw_setUserClassPath failed.", 0, Any());
              break;
          }
         default:

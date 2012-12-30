@@ -47,10 +47,10 @@ using namespace ::com::sun::star::uno;
 namespace migration
 {
 
-static ::rtl::OUString sExtensionSubDir = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/user/uno_packages/" ) );
-static ::rtl::OUString sSubDirName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cache" ) );
-static ::rtl::OUString sDescriptionXmlFile = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/description.xml" ) );
-static ::rtl::OUString sExtensionRootSubDirName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/uno_packages" ) );
+static ::rtl::OUString sExtensionSubDir( "/user/uno_packages/" );
+static ::rtl::OUString sSubDirName( "cache" );
+static ::rtl::OUString sDescriptionXmlFile( "/description.xml" );
+static ::rtl::OUString sExtensionRootSubDirName( "/uno_packages" );
 
 // =============================================================================
 // component operations
@@ -64,7 +64,7 @@ static ::rtl::OUString sExtensionRootSubDirName = ::rtl::OUString( RTL_CONSTASCI
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         if ( !pImplName )
         {
-            static ::rtl::OUString aImplName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.desktop.migration.OOo3Extensions" ) );
+            static ::rtl::OUString aImplName( "com.sun.star.comp.desktop.migration.OOo3Extensions" );
             pImplName = &aImplName;
         }
     }
@@ -82,7 +82,7 @@ Sequence< ::rtl::OUString > OO3ExtensionMigration_getSupportedServiceNames()
         if ( !pNames )
         {
             static Sequence< ::rtl::OUString > aNames(1);
-            aNames.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.migration.Extensions" ) );
+            aNames.getArray()[0] = "com.sun.star.migration.Extensions";
             pNames = &aNames;
         }
     }
@@ -229,25 +229,19 @@ bool OO3ExtensionMigration::scanDescriptionXml( const ::rtl::OUString& sDescript
                 if ( xRoot.is() && xRoot->getTagName() == "description" )
                 {
                     uno::Reference< xml::xpath::XXPathAPI > xPath(
-                        m_ctx->getServiceManager()->createInstanceWithContext(
-                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.xpath.XPathAPI")),
+                        m_ctx->getServiceManager()->createInstanceWithContext( "com.sun.star.xml.xpath.XPathAPI",
                             m_ctx),
                         uno::UNO_QUERY);
 
-                    xPath->registerNS(
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("desc")),
-                        xRoot->getNamespaceURI());
-                    xPath->registerNS(
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("xlink")),
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("http://www.w3.org/1999/xlink")));
+                    xPath->registerNS("desc", xRoot->getNamespaceURI());
+                    xPath->registerNS("xlink", "http://www.w3.org/1999/xlink");
 
                     try
                     {
                         uno::Reference< xml::dom::XNode > xRootNode( xRoot, uno::UNO_QUERY );
                         uno::Reference< xml::dom::XNode > xNode(
                             xPath->selectSingleNode(
-                                xRootNode,
-                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("desc:identifier/@value")) ));
+                                xRootNode, "desc:identifier/@value" ));
                         if ( xNode.is() )
                             aExtIdentifier = xNode->getNodeValue();
                     }
@@ -328,7 +322,7 @@ bool OO3ExtensionMigration::migrateExtension( const ::rtl::OUString& sSourceDir 
             uno::Reference< deployment::XPackage > xPackage =
                 m_xExtensionManager->addExtension(
                     sSourceDir, uno::Sequence<beans::NamedValue>(),
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user")), xAbortChannel, xCmdEnv );
+                    "user", xAbortChannel, xCmdEnv );
 
             if ( xPackage.is() )
                 return true;

@@ -32,8 +32,8 @@ namespace migration
 //.........................................................................
 
 
-    #define sSourceUserBasic ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/user/basic"))
-    #define sTargetUserBasic ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/user/__basic_80"))
+    #define sSourceUserBasic ::rtl::OUString( "/user/basic" )
+    #define sTargetUserBasic ::rtl::OUString( "/user/__basic_80" )
 
     // =============================================================================
     // component operations
@@ -41,7 +41,7 @@ namespace migration
 
     ::rtl::OUString BasicMigration_getImplementationName()
     {
-        return ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.desktop.migration.Basic"));
+        return ::rtl::OUString("com.sun.star.comp.desktop.migration.Basic");
     }
 
     // -----------------------------------------------------------------------------
@@ -49,7 +49,7 @@ namespace migration
     Sequence< ::rtl::OUString > BasicMigration_getSupportedServiceNames()
     {
         Sequence< ::rtl::OUString > aNames(1);
-        aNames.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.migration.Basic" ) );
+        aNames.getArray()[0] = "com.sun.star.migration.Basic";
         return aNames;
     }
 

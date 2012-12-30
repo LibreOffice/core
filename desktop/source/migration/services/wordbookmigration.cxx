@@ -32,8 +32,8 @@ namespace migration
 //.........................................................................
 
 
-    static ::rtl::OUString sSourceSubDir = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/user/wordbook" ) );
-    static ::rtl::OUString sTargetSubDir = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/user/wordbook" ) );
+    static ::rtl::OUString sSourceSubDir( "/user/wordbook" );
+    static ::rtl::OUString sTargetSubDir( "/user/wordbook" );
 
 
     // =============================================================================
@@ -48,7 +48,7 @@ namespace migration
             ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
             if ( !pImplName )
             {
-                static ::rtl::OUString aImplName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.desktop.migration.Wordbooks" ) );
+                static ::rtl::OUString aImplName( "com.sun.star.comp.desktop.migration.Wordbooks" );
                 pImplName = &aImplName;
             }
         }
@@ -66,7 +66,7 @@ namespace migration
             if ( !pNames )
             {
                 static Sequence< ::rtl::OUString > aNames(1);
-                aNames.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.migration.Wordbooks" ) );
+                aNames.getArray()[0] = ::rtl::OUString( "com.sun.star.migration.Wordbooks" );
                 pNames = &aNames;
             }
         }
