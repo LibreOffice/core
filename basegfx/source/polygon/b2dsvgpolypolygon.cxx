@@ -767,10 +767,6 @@ namespace basegfx
 
             if(aCurrPoly.count())
             {
-                const B2DPoint aFirstPoint(aCurrPoly.getB2DPoint(0));
-                const B2DPoint aLastPoint(aCurrPoly.getB2DPoint(aCurrPoly.count()-1));
-                if ( (aFirstPoint.getX()-aLastPoint.getX())*(aFirstPoint.getX()-aLastPoint.getX()) +
-                     (aFirstPoint.getY()-aLastPoint.getY())*(aFirstPoint.getY()-aLastPoint.getY()) < 1 ) bIsClosed = true;
                 // end-process last poly
                 if(bIsClosed)
                 {
