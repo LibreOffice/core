@@ -356,7 +356,7 @@ endef
 define gb_Executable__get_command
 $(if $(filter NONE,$(gb_Executable_VALIDGROUPS)),,$(call gb_Output_error,executable group NONE does not exist!))
 $(if $(filter $(1),$(gb_Executable_NONE)),,$(gb_Helper_set_ld_path)) \
-    $(call gb_Executable_get_target_for_build,$(1))
+$(call gb_Executable_get_target_for_build,$(1))
 endef
 
 # Get complete command-line for running the executable
