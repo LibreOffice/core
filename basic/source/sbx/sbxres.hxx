@@ -67,7 +67,7 @@
 
 #define SBXRES_MAX          44
 
-class SbxRes : public ::rtl::OUString
+class SbxRes : public OUString
 {
 public:
     SbxRes( sal_uInt16 );

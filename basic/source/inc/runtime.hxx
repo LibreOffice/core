@@ -115,7 +115,7 @@ public:
     OUString sFullNameToBeChecked;
     WildCard* pWildCard;
 
-    Sequence< ::rtl::OUString > aDirSeq;
+    Sequence< OUString > aDirSeq;
 
     SbiRTLData();
     ~SbiRTLData();

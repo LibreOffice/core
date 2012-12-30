@@ -80,7 +80,7 @@ using namespace ::osl;
 void SFURL_firing_impl( const ScriptEvent& aScriptEvent, Any* pRet, const Reference< frame::XModel >& xModel )
 {
         OSL_TRACE("SFURL_firing_impl() processing script url %s",
-            ::rtl::OUStringToOString( aScriptEvent.ScriptCode,
+            OUStringToOString( aScriptEvent.ScriptCode,
                 RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         try
         {
@@ -137,13 +137,13 @@ void SFURL_firing_impl( const ScriptEvent& aScriptEvent, Any* pRet, const Refere
         catch ( const RuntimeException& re )
         {
             OSL_TRACE("SFURL_firing_impl() Caught RuntimeException reason %s.",
-                ::rtl::OUStringToOString( re.Message,
+                OUStringToOString( re.Message,
                     RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         }
         catch ( const Exception& e )
         {
             OSL_TRACE("SFURL_firing_impl() Caught Exception reason %s.",
-                ::rtl::OUStringToOString( e.Message,
+                OUStringToOString( e.Message,
                     RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         }
 
@@ -206,7 +206,7 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
         if( comphelper::string::getTokenCount(aMacro, '.') == 3 )
         {
             sal_Int32 nLast = 0;
-            ::rtl::OUString aFullLibName = aMacro.getToken( (sal_Int32)0, (sal_Unicode)'.', nLast );
+            OUString aFullLibName = aMacro.getToken( (sal_Int32)0, (sal_Unicode)'.', nLast );
 
             sal_Int32 nIndex = aFullLibName.indexOf( (sal_Unicode)':' );
             if (nIndex >= 0)
@@ -343,7 +343,7 @@ Any implFindDialogLibForDialog( const Any& rDlgAny, SbxObject* pBasic )
 {
     Any aRetDlgLibAny;
 
-    SbxVariable* pDlgLibContVar = pBasic->Find(rtl::OUString("DialogLibraries"), SbxCLASS_OBJECT);
+    SbxVariable* pDlgLibContVar = pBasic->Find(OUString("DialogLibraries"), SbxCLASS_OBJECT);
     if( pDlgLibContVar && pDlgLibContVar->ISA(SbUnoObject) )
     {
         SbUnoObject* pDlgLibContUnoObj = (SbUnoObject*)(SbxBase*)pDlgLibContVar;
@@ -353,8 +353,8 @@ Any implFindDialogLibForDialog( const Any& rDlgAny, SbxObject* pBasic )
         OSL_ENSURE( xDlgLibContNameAccess.is(), "implFindDialogLibForDialog: no lib container for the given dialog!" );
         if( xDlgLibContNameAccess.is() )
         {
-            Sequence< ::rtl::OUString > aLibNames = xDlgLibContNameAccess->getElementNames();
-            const ::rtl::OUString* pLibNames = aLibNames.getConstArray();
+            Sequence< OUString > aLibNames = xDlgLibContNameAccess->getElementNames();
+            const OUString* pLibNames = aLibNames.getConstArray();
             sal_Int32 nLibNameCount = aLibNames.getLength();
 
             for( sal_Int32 iLib = 0 ; iLib < nLibNameCount ; iLib++ )
@@ -369,8 +369,8 @@ Any implFindDialogLibForDialog( const Any& rDlgAny, SbxObject* pBasic )
                 OSL_ENSURE( xDlgLibNameAccess.is(), "implFindDialogLibForDialog: invalid dialog lib!" );
                 if( xDlgLibNameAccess.is() )
                 {
-                    Sequence< ::rtl::OUString > aDlgNames = xDlgLibNameAccess->getElementNames();
-                    const ::rtl::OUString* pDlgNames = aDlgNames.getConstArray();
+                    Sequence< OUString > aDlgNames = xDlgLibNameAccess->getElementNames();
+                    const OUString* pDlgNames = aDlgNames.getConstArray();
                     sal_Int32 nDlgNameCount = aDlgNames.getLength();
 
                     for( sal_Int32 iDlg = 0 ; iDlg < nDlgNameCount ; iDlg++ )
@@ -460,7 +460,7 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
 
     // Create new uno dialog
     Reference< XNameContainer > xDialogModel( xMSF->createInstance(
-                      ::rtl::OUString("com.sun.star.awt.UnoControlDialogModel")), UNO_QUERY );
+                      OUString("com.sun.star.awt.UnoControlDialogModel")), UNO_QUERY );
     if( !xDialogModel.is() )
     {
         return;

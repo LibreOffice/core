@@ -264,7 +264,7 @@ start:
         case SbxSTRING:
         case SbxBYREF | SbxSTRING:
             if( !p->pOUString )
-                p->pOUString = new ::rtl::OUString;
+                p->pOUString = new OUString;
             ImpCvtNum( (double) n, 0, *p->pOUString );
             break;
         case SbxOBJECT:
@@ -433,7 +433,7 @@ start:
                 nRes = 0;
             else
             {
-                   ::rtl::OString aOStr = ::rtl::OUStringToOString
+                   ::OString aOStr = OUStringToOString
                     ( *p->pOUString, RTL_TEXTENCODING_ASCII_US );
                 nRes = aOStr.toInt64();
                 if( nRes == 0 )
@@ -541,10 +541,10 @@ start:
         case SbxLPSTR:
         {
             if( !p->pOUString )
-                p->pOUString = new ::rtl::OUString;
+                p->pOUString = new OUString;
 
-            ::rtl::OString  aOStr  = ::rtl::OString::valueOf( n );
-               (*p->pOUString) = ::rtl::OStringToOUString
+            ::OString  aOStr  = ::OString::valueOf( n );
+               (*p->pOUString) = ::OStringToOUString
                 ( aOStr, RTL_TEXTENCODING_ASCII_US );
             break;
         }
@@ -694,7 +694,7 @@ start:
                 nRes = 0;
             else
             {
-                   ::rtl::OString aOStr = ::rtl::OUStringToOString
+                   ::OString aOStr = OUStringToOString
                     ( *p->pOUString, RTL_TEXTENCODING_ASCII_US );
                 sal_Int64 n64 = aOStr.toInt64();
                 if( n64 == 0 )
@@ -816,13 +816,13 @@ start:
         case SbxSTRING:
         case SbxLPSTR:
             if( !p->pOUString )
-                p->pOUString = new ::rtl::OUString;
+                p->pOUString = new OUString;
             if( n > SbxMAXSALINT64 )
                 SbxBase::SetError( SbxERR_CONVERSION );
             else
             {
-                ::rtl::OString  aOStr  = ::rtl::OString::valueOf( (sal_Int64)n );
-                   (*p->pOUString) = ::rtl::OStringToOUString
+                ::OString  aOStr  = ::OString::valueOf( (sal_Int64)n );
+                   (*p->pOUString) = ::OStringToOUString
                     ( aOStr, RTL_TEXTENCODING_ASCII_US );
             }
             break;

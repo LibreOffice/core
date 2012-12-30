@@ -217,7 +217,7 @@ start:
         case SbxLPSTR:
         {
             if( !p->pOUString )
-                p->pOUString = new ::rtl::OUString;
+                p->pOUString = new OUString;
             ImpCvtNum( (double) n, 6, *p->pOUString );
             break;
         }

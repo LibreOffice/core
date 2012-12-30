@@ -27,10 +27,10 @@
 // The conversion of an item onto String was handled via the Put-Methods
 // of the several data types to avoid double code.
 
-::rtl::OUString ImpGetString( const SbxValues* p )
+OUString ImpGetString( const SbxValues* p )
 {
     SbxValues aTmp;
-    ::rtl::OUString aRes;
+    OUString aRes;
     aTmp.eType = SbxSTRING;
     aTmp.pOUString = &aRes;
     switch( +p->eType )
@@ -100,7 +100,7 @@
         case SbxERROR:
             // Here will be created the String "Error n"
             aRes = SbxRes( STRING_ERRORMSG );
-            aRes += ::rtl::OUString( p->nUShort ); break;
+            aRes += OUString( p->nUShort ); break;
         case SbxDATE:
             ImpPutDate( &aTmp, p->nDouble ); break;
 
@@ -136,13 +136,13 @@
 }
 
 // From 1997-04-10, new function for SbxValue::GetCoreString()
-::rtl::OUString ImpGetCoreString( const SbxValues* p )
+OUString ImpGetCoreString( const SbxValues* p )
 {
     // For now only for double
     if( ( p->eType & (~SbxBYREF) ) == SbxDOUBLE )
     {
         SbxValues aTmp;
-        rtl::OUString aRes;
+        OUString aRes;
         aTmp.eType = SbxSTRING;
         aTmp.pOUString = &aRes;
         if( p->eType == SbxDOUBLE )
@@ -155,15 +155,15 @@
         return ImpGetString( p );
 }
 
-void ImpPutString( SbxValues* p, const ::rtl::OUString* n )
+void ImpPutString( SbxValues* p, const OUString* n )
 {
     SbxValues aTmp;
     aTmp.eType = SbxSTRING;
-    ::rtl::OUString* pTmp = NULL;
+    OUString* pTmp = NULL;
     // as a precaution, if a NULL-Ptr appears
     if( !n )
-        n = pTmp = new ::rtl::OUString;
-    aTmp.pOUString = (::rtl::OUString*)n;
+        n = pTmp = new OUString;
+    aTmp.pOUString = (OUString*)n;
     switch( +p->eType )
     {
         case SbxCHAR:
@@ -203,7 +203,7 @@ void ImpPutString( SbxValues* p, const ::rtl::OUString* n )
             if( !n->isEmpty() )
             {
                 if( !p->pOUString )
-                    p->pOUString = new ::rtl::OUString( *n );
+                    p->pOUString = new OUString( *n );
                 else
                     *p->pOUString = *n;
             }
@@ -255,7 +255,7 @@ void ImpPutString( SbxValues* p, const ::rtl::OUString* n )
 
 
 // Convert string to an array of bytes, preserving unicode (2bytes per character)
-SbxArray* StringToByteArray(const ::rtl::OUString& rStr)
+SbxArray* StringToByteArray(const OUString& rStr)
 {
     sal_Int32 nArraySize = rStr.getLength() * 2;
     const sal_Unicode* pSrc = rStr.getStr();
@@ -291,10 +291,10 @@ SbxArray* StringToByteArray(const ::rtl::OUString& rStr)
 }
 
 // Convert an array of bytes to string (2bytes per character)
-::rtl::OUString ByteArrayToString(SbxArray* pArr)
+OUString ByteArrayToString(SbxArray* pArr)
 {
     sal_uInt16 nCount = pArr->Count();
-    ::rtl::OUStringBuffer aStrBuf;
+    OUStringBuffer aStrBuf;
     sal_Unicode aChar = 0;
     for( sal_uInt16 i = 0 ; i < nCount ; i++ )
     {

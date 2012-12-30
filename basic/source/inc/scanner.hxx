@@ -31,8 +31,8 @@ class StarBASIC;
 
 class SbiScanner
 {
-    ::rtl::OUString   aBuf;             // input buffer
-    ::rtl::OUString   aLine;
+    OUString   aBuf;             // input buffer
+    OUString   aLine;
     const sal_Unicode* pLine;
     const sal_Unicode* pSaveLine;
 
@@ -40,8 +40,8 @@ class SbiScanner
     void scanGoto();
     bool readLine();
 protected:
-    ::rtl::OUString aSym;
-    ::rtl::OUString aError;
+    OUString aSym;
+    OUString aError;
     SbxDataType eScanType;
     StarBASIC* pBasic;                  // instance for error callbacks
     double nVal;                        // numeric value
@@ -66,7 +66,7 @@ protected:
     bool   bInStatement;
     void   GenError( SbError );
 public:
-    SbiScanner( const ::rtl::OUString&, StarBASIC* = NULL );
+    SbiScanner( const OUString&, StarBASIC* = NULL );
    ~SbiScanner();
 
     void  EnableErrors()            { bError = false; }
@@ -89,7 +89,7 @@ public:
     bool  DoesColonFollow();
 
     bool NextSym();
-    const ::rtl::OUString& GetSym() { return aSym;  }
+    const OUString& GetSym() { return aSym;  }
     SbxDataType GetType()           { return eScanType; }
     double    GetDbl()              { return nVal;  }
 };

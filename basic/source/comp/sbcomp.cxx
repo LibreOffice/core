@@ -227,7 +227,7 @@ struct TraceTextData
     rtl::OString m_aTraceStr_PCode;
 };
 typedef std::hash_map< sal_Int32, TraceTextData > PCToTextDataMap;
-typedef std::hash_map< ::rtl::OUString, PCToTextDataMap*, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > ModuleTraceMap;
+typedef std::hash_map< OUString, PCToTextDataMap*, OUStringHash, ::std::equal_to< OUString > > ModuleTraceMap;
 
 ModuleTraceMap      GaModuleTraceMap;
 ModuleTraceMap&     rModuleTraceMap = GaModuleTraceMap;
@@ -261,7 +261,7 @@ static rtl::OString lcl_toOStringSkipLeadingWhites( const OUString& aStr )
 {
     static sal_Char Buffer[1000];
 
-    rtl::OString aOStr = OUStringToOString( rtl::OUString( aStr ), RTL_TEXTENCODING_ASCII_US );
+    rtl::OString aOStr = OUStringToOString( OUString( aStr ), RTL_TEXTENCODING_ASCII_US );
     const sal_Char* pStr = aOStr.getStr();
 
     // Skip whitespace
@@ -365,7 +365,7 @@ struct FunctionItem
         , m_bBlockSteps( false )
     {}
 };
-typedef std::hash_map< ::rtl::OUString, FunctionItem*, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > FunctionItemMap;
+typedef std::hash_map< OUString, FunctionItem*, OUStringHash, ::std::equal_to< OUString > > FunctionItemMap;
 
 static std::stack< double >             GaCallEnterTimeStack;
 static std::stack< FunctionItem* >      GaFunctionItemStack;
@@ -525,7 +525,7 @@ void dbg_tracePrint( const OUString& aStr, sal_Int32 nCallLvl, bool bCallLvlRela
         nCallLvl += GnLastCallLvl;
     }
     int nIndent = nCallLvl * GnIndentPerCallLevel;
-    lcl_lineOut( OUStringToOString( rtl::OUString( aStr ), RTL_TEXTENCODING_ASCII_US ).getStr(), lcl_getSpaces( nIndent ) );
+    lcl_lineOut( OUStringToOString( OUString( aStr ), RTL_TEXTENCODING_ASCII_US ).getStr(), lcl_getSpaces( nIndent ) );
 }
 
 void dbg_traceStep( SbModule* pModule, sal_uInt32 nPC, sal_Int32 nCallLvl )
@@ -564,7 +564,7 @@ void dbg_traceStep( SbModule* pModule, sal_uInt32 nPC, sal_Int32 nCallLvl )
     ModuleTraceMap::iterator it = rModuleTraceMap.find( aModuleName );
     if( it == rModuleTraceMap.end() )
     {
-        const char* pModuleNameStr = OUStringToOString( rtl::OUString( aModuleName ), RTL_TEXTENCODING_ASCII_US ).getStr();
+        const char* pModuleNameStr = OUStringToOString( OUString( aModuleName ), RTL_TEXTENCODING_ASCII_US ).getStr();
         char Buffer[200];
         sprintf( Buffer, "TRACE ERROR: Unknown module \"%s\"", pModuleNameStr );
         lcl_lineOut( Buffer );
@@ -581,7 +581,7 @@ void dbg_traceStep( SbModule* pModule, sal_uInt32 nPC, sal_Int32 nCallLvl )
     PCToTextDataMap::iterator itInner = pInnerMap->find( nPC );
     if( itInner == pInnerMap->end() )
     {
-        const char* pModuleNameStr = OUStringToOString( rtl::OUString( aModuleName ), RTL_TEXTENCODING_ASCII_US ).getStr();
+        const char* pModuleNameStr = OUStringToOString( OUString( aModuleName ), RTL_TEXTENCODING_ASCII_US ).getStr();
         char Buffer[200];
         sprintf( Buffer, "TRACE ERROR: No info for PC = %d in module \"%s\"", (int)nPC, pModuleNameStr );
         lcl_lineOut( Buffer );
@@ -803,7 +803,7 @@ void dbg_traceNotifyCall( SbModule* pModule, SbMethod* pMethod, sal_Int32 nCallL
         pPostStr = TimeBuffer;
     }
 #endif
-    lcl_lineOut( (!bLeave || !bOwnBlockSteps) ? OUStringToOString( rtl::OUString( aStr ), RTL_TEXTENCODING_ASCII_US ).getStr() : "}",
+    lcl_lineOut( (!bLeave || !bOwnBlockSteps) ? OUStringToOString( OUString( aStr ), RTL_TEXTENCODING_ASCII_US ).getStr() : "}",
                  lcl_getSpaces( nIndent ), pPostStr );
     if( !bLeave )
     {
@@ -836,7 +836,7 @@ void dbg_traceNotifyError( SbError nTraceErr, const OUString& aTraceErrMsg,
 #endif
     GnLastCallLvl = nCallLvl;
 
-    rtl::OString aOTraceErrMsg = OUStringToOString( rtl::OUString( aTraceErrMsg ), RTL_TEXTENCODING_ASCII_US );
+    rtl::OString aOTraceErrMsg = OUStringToOString( OUString( aTraceErrMsg ), RTL_TEXTENCODING_ASCII_US );
 
     char Buffer[200];
     const char* pHandledStr = bTraceErrHandled ? " / HANDLED" : "";
@@ -922,7 +922,7 @@ void RTL_Impl_TraceCommand( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
         }
 
         char Buffer[500];
-        const char* pValStr = OUStringToOString( rtl::OUString( aValStr ), RTL_TEXTENCODING_ASCII_US ).getStr();
+        const char* pValStr = OUStringToOString( OUString( aValStr ), RTL_TEXTENCODING_ASCII_US ).getStr();
 
         sprintf( Buffer, "### TRACE_PRINT: %s ###", pValStr );
         int nIndent = GnLastCallLvl * GnIndentPerCallLevel;

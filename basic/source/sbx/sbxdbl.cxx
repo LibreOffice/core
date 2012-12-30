@@ -194,7 +194,7 @@ start:
         case SbxSTRING:
         case SbxLPSTR:
             if( !p->pOUString )
-                p->pOUString = new ::rtl::OUString;
+                p->pOUString = new OUString;
             ImpCvtNum( (double) n, 14, *p->pOUString, bCoreString );
             break;
         case SbxOBJECT:

@@ -36,16 +36,16 @@ namespace basic
 class SfxDialogLibraryContainer : public SfxLibraryContainer
 {
     // Methods to distinguish between different library types
-    virtual SfxLibrary* SAL_CALL implCreateLibrary( const ::rtl::OUString& aName );
+    virtual SfxLibrary* SAL_CALL implCreateLibrary( const OUString& aName );
     virtual SfxLibrary* SAL_CALL implCreateLibraryLink
-        ( const ::rtl::OUString& aName, const ::rtl::OUString& aLibInfoFileURL,
-          const ::rtl::OUString& StorageURL, sal_Bool ReadOnly );
+        ( const OUString& aName, const OUString& aLibInfoFileURL,
+          const OUString& StorageURL, sal_Bool ReadOnly );
     virtual ::com::sun::star::uno::Any SAL_CALL createEmptyLibraryElement( void );
     virtual bool SAL_CALL isLibraryElementValid( ::com::sun::star::uno::Any aElement ) const;
     virtual void SAL_CALL writeLibraryElement
     (
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& xLibrary,
-        const ::rtl::OUString& aElementName,
+        const OUString& aElementName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutput
     )
         throw(::com::sun::star::uno::Exception);
@@ -53,11 +53,11 @@ class SfxDialogLibraryContainer : public SfxLibraryContainer
     virtual ::com::sun::star::uno::Any SAL_CALL importLibraryElement
     (
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& xLibrary,
-        const ::rtl::OUString& aElementName,
-        const ::rtl::OUString& aFile,
+        const OUString& aElementName,
+        const OUString& aFile,
         const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xElementStream );
 
-    virtual void SAL_CALL importFromOldStorage( const ::rtl::OUString& aFile );
+    virtual void SAL_CALL importFromOldStorage( const OUString& aFile );
 
     virtual SfxLibraryContainer* createInstanceImpl( void );
 
@@ -82,16 +82,16 @@ public:
         implCreateStringResource( class SfxDialogLibrary* pDialog );
 
     // Methods XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName( )
+    virtual OUString SAL_CALL getImplementationName( )
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames( )
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames( )
         throw (::com::sun::star::uno::RuntimeException);
     // XLibraryQueryExecutable
-    virtual sal_Bool SAL_CALL HasExecutableCode(const rtl::OUString&)
+    virtual sal_Bool SAL_CALL HasExecutableCode(const OUString&)
         throw (::com::sun::star::uno::RuntimeException);
     // Service
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_static();
-    static ::rtl::OUString getImplementationName_static();
+    static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_static();
+    static OUString getImplementationName_static();
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL Create
         ( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xServiceManager )
             throw( ::com::sun::star::uno::Exception );
@@ -108,13 +108,13 @@ class SfxDialogLibrary  :public SfxLibrary
     SfxDialogLibraryContainer*                                      m_pParent;
     ::com::sun::star::uno::Reference
         < ::com::sun::star::resource::XStringResourcePersistence>   m_xStringResourcePersistence;
-    ::rtl::OUString                                                 m_aName;
+    OUString                                                 m_aName;
 
     // Provide modify state including resources
     virtual sal_Bool isModified( void );
     virtual void storeResources( void );
-    virtual void storeResourcesAsURL( const ::rtl::OUString& URL, const ::rtl::OUString& NewName );
-    virtual void storeResourcesToURL( const ::rtl::OUString& URL,
+    virtual void storeResourcesAsURL( const OUString& URL, const OUString& NewName );
+    virtual void storeResourcesToURL( const OUString& URL,
         const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler  );
     virtual void storeResourcesToStorage( const ::com::sun::star::uno::Reference
         < ::com::sun::star::embed::XStorage >& xStorage );
@@ -123,7 +123,7 @@ public:
     SfxDialogLibrary
     (
         ModifiableHelper& _rModifiable,
-        const ::rtl::OUString& aName,
+        const OUString& aName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xMSF,
         const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >& xSFI,
         SfxDialogLibraryContainer* pParent
@@ -132,10 +132,10 @@ public:
     SfxDialogLibrary
     (
         ModifiableHelper& _rModifiable,
-        const ::rtl::OUString& aName,
+        const OUString& aName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xMSF,
         const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >& xSFI,
-        const ::rtl::OUString& aLibInfoFileURL, const ::rtl::OUString& aStorageURL, sal_Bool ReadOnly,
+        const OUString& aLibInfoFileURL, const OUString& aStorageURL, sal_Bool ReadOnly,
         SfxDialogLibraryContainer* pParent
     );
 
@@ -146,7 +146,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceResolver >
         SAL_CALL getStringResource(  ) throw (::com::sun::star::uno::RuntimeException);
 
-    ::rtl::OUString getName( void )
+    OUString getName( void )
         { return m_aName; }
 
     ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourcePersistence >

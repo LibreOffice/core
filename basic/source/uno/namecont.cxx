@@ -1022,7 +1022,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
     if( meInitMode == DEFAULT )
     {
         INetURLObject aUserBasicInetObj( maLibraryPath.getToken(1, (sal_Unicode)';') );
-        OUString aStandardStr( RTL_CONSTASCII_USTRINGPARAM("Standard") );
+        OUString aStandardStr("Standard");
 
         static char const strPrevFolderName_1[] = "__basic_80";
         static char const strPrevFolderName_2[] = "__basic_80_2";
@@ -1573,7 +1573,7 @@ void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
 void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
                                                      const ::xmlscript::LibDescriptor& rLib,
                                                      const uno::Reference< embed::XStorage >& xStorage,
-                                                     const ::rtl::OUString& aTargetURL,
+                                                     const OUString& aTargetURL,
                                                      Reference< XSimpleFileAccess3 > xToUseSFI )
 {
     // Create sax writer
@@ -1634,7 +1634,7 @@ void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
                 xSFI->createFolder( aLibDirPath );
             }
             aInetObj.insertName( maInfoFileName, sal_False, INetURLObject::LAST_SEGMENT, sal_True, INetURLObject::ENCODE_ALL );
-            aInetObj.setExtension( OUString( RTL_CONSTASCII_USTRINGPARAM("xlb") ) );
+            aInetObj.setExtension( OUString( "xlb" ) );
             aLibInfoPath = aInetObj.GetMainURL( INetURLObject::NO_DECODE );
         }
         else
@@ -1693,7 +1693,7 @@ bool SfxLibraryContainer::implLoadLibraryIndexFile(  SfxLibrary* pLib,
     if( bStorage )
     {
         aLibInfoPath = maInfoFileName;
-        aLibInfoPath += String( RTL_CONSTASCII_USTRINGPARAM("-lb.xml") );
+        aLibInfoPath += String( "-lb.xml" );
 
         try
         {
@@ -2845,7 +2845,7 @@ void SAL_CALL SfxLibraryContainer::exportLibrary( const OUString& Name, const OU
 OUString SfxLibraryContainer::expand_url( const OUString& url )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    if (0 == url.compareToAscii( RTL_CONSTASCII_STRINGPARAM(EXPAND_PROTOCOL ":") ))
+    if (0 == url.compareTo( EXPAND_PROTOCOL ":" ))
     {
         if( !mxMacroExpander.is() )
         {

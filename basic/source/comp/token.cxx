@@ -210,7 +210,7 @@ TokenLabelInfo::~TokenLabelInfo()
 
 // the constructor detects the length of the token table
 
-SbiTokenizer::SbiTokenizer( const ::rtl::OUString& rSrc, StarBASIC* pb )
+SbiTokenizer::SbiTokenizer( const OUString& rSrc, StarBASIC* pb )
            : SbiScanner( rSrc, pb )
 {
     pTokTable = aTokTable_Basic;
@@ -240,11 +240,11 @@ void SbiTokenizer::Push( SbiToken t )
 
 void SbiTokenizer::Error( SbError code, const char* pMsg )
 {
-    aError = ::rtl::OUString::createFromAscii( pMsg );
+    aError = OUString::createFromAscii( pMsg );
     Error( code );
 }
 
-void SbiTokenizer::Error( SbError code, const ::rtl::OUString &aMsg )
+void SbiTokenizer::Error( SbError code, const OUString &aMsg )
 {
     aError = aMsg;
     Error( code );
@@ -275,24 +275,24 @@ SbiToken SbiTokenizer::Peek()
 
 // For decompilation. Numbers and symbols return an empty string.
 
-const ::rtl::OUString& SbiTokenizer::Symbol( SbiToken t )
+const OUString& SbiTokenizer::Symbol( SbiToken t )
 {
     // character token?
     if( t < FIRSTKWD )
     {
-        aSym = ::rtl::OUString::valueOf(sal::static_int_cast<sal_Unicode>(t));
+        aSym = OUString::valueOf(sal::static_int_cast<sal_Unicode>(t));
         return aSym;
     }
     switch( t )
     {
     case NEG   :
-        aSym = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-"));
+        aSym = OUString("-");
         return aSym;
     case EOS   :
-        aSym = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":/CRLF"));
+        aSym = OUString(":/CRLF");
         return aSym;
     case EOLN  :
-        aSym = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CRLF"));
+        aSym = OUString("CRLF");
         return aSym;
     default:
         break;
@@ -302,14 +302,14 @@ const ::rtl::OUString& SbiTokenizer::Symbol( SbiToken t )
     {
         if( tp->t == t )
         {
-            aSym = ::rtl::OStringToOUString(tp->s, RTL_TEXTENCODING_ASCII_US);
+            aSym = OStringToOUString(tp->s, RTL_TEXTENCODING_ASCII_US);
             return aSym;
         }
     }
     const sal_Unicode *p = aSym.getStr();
     if (*p <= ' ')
     {
-        aSym = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("???"));
+        aSym = OUString("???");
     }
     return aSym;
 }
@@ -506,7 +506,7 @@ special:
     if( bCompatible )
     {
         // #129904 Suppress system
-        if( eTok == STOP && aSym.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("system")) )
+        if( eTok == STOP && aSym.equalsIgnoreAsciiCase("system") )
         {
             eCurTok = SYMBOL;
         }

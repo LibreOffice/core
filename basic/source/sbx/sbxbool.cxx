@@ -174,7 +174,7 @@ void ImpPutBool( SbxValues* p, sal_Int16 n )
         case SbxSTRING:
         case SbxLPSTR:
             if ( !p->pOUString )
-                p->pOUString = new ::rtl::OUString( SbxRes( n ? STRING_TRUE : STRING_FALSE ) );
+                p->pOUString = new OUString( SbxRes( n ? STRING_TRUE : STRING_FALSE ) );
             else
                 *p->pOUString = SbxRes( n ? STRING_TRUE : STRING_FALSE );
             break;

@@ -78,7 +78,7 @@ const char* GetSbxRes( sal_uInt16 nId )
 }
 
 SbxRes::SbxRes( sal_uInt16 nId )
-    : ::rtl::OUString( ::rtl::OUString::createFromAscii( GetSbxRes( nId ) ) )
+    : OUString( OUString::createFromAscii( GetSbxRes( nId ) ) )
 {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -291,14 +291,14 @@ namespace basic
         OUString aAppBasicDir( aPathCFG.GetBasicPath() );
         if ( aAppBasicDir.isEmpty() )
         {
-            aPathCFG.SetBasicPath(rtl::OUString("$(prog)"));
+            aPathCFG.SetBasicPath(OUString("$(prog)"));
         }
         // soffice.new search only in user dir => first dir
         OUString aAppFirstBasicDir = aAppBasicDir.getToken(1, ';');
 
         // Create basic and load it
         // AppBasicDir is now a PATH
-        INetURLObject aAppBasic( SvtPathOptions().SubstituteVariable(rtl::OUString("$(progurl)")) );
+        INetURLObject aAppBasic( SvtPathOptions().SubstituteVariable(OUString("$(progurl)")) );
         aAppBasic.insertName( Application::GetAppName() );
 
         BasicManager* pBasicManager = new BasicManager( new StarBASIC, &aAppBasicDir );
@@ -308,8 +308,8 @@ namespace basic
         OUString aFileName( aAppBasic.getName() );
         aAppBasic = INetURLObject( aAppBasicDir.getToken(1, ';') );
         DBG_ASSERT(aAppBasic.GetProtocol() != INET_PROT_NOT_VALID,
-            rtl::OStringBuffer(RTL_CONSTASCII_STRINGPARAM("Invalid URL: \"")).
-            append(rtl::OUStringToOString(aAppBasicDir,
+            OStringBuffer("Invalid URL: \"").
+            append(OUStringToOString(aAppBasicDir,
                 osl_getThreadTextEncoding())).
             append('"').getStr()
         );

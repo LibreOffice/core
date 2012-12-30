@@ -54,7 +54,7 @@ SbxValue::SbxValue( SbxDataType t, void* p ) : SbxBase()
         case SbxSINGLE:     n |= SbxBYREF; aData.pSingle = (float*) p; break;
         case SbxDATE:
         case SbxDOUBLE:     n |= SbxBYREF; aData.pDouble = (double*) p; break;
-        case SbxSTRING:     n |= SbxBYREF; aData.pOUString = (::rtl::OUString*) p; break;
+        case SbxSTRING:     n |= SbxBYREF; aData.pOUString = (OUString*) p; break;
         case SbxERROR:
         case SbxUSHORT:
         case SbxBOOL:       n |= SbxBYREF; aData.pUShort = (sal_uInt16*) p; break;
@@ -99,7 +99,7 @@ SbxValue::SbxValue( const SbxValue& r )
         {
             case SbxSTRING:
                 if( aData.pOUString )
-                    aData.pOUString = new ::rtl::OUString( *aData.pOUString );
+                    aData.pOUString = new OUString( *aData.pOUString );
                 break;
             case SbxOBJECT:
                 if( aData.pObj )
@@ -141,7 +141,7 @@ SbxValue& SbxValue::operator=( const SbxValue& r )
                 SbxArray* pArr = PTR_CAST(SbxArray, pObj);
                 if( pArr )
                 {
-                    ::rtl::OUString aStr = ByteArrayToString( pArr );
+                    OUString aStr = ByteArrayToString( pArr );
                     PutString(aStr);
                     return *this;
                 }
@@ -579,10 +579,10 @@ sal_Bool SbxValue::Put( const SbxValues& rVal )
 // if Float were declared with ',' as the decimal seperator or BOOl
 // explicit with "TRUE" or "FALSE".
 // Implementation in ImpConvStringExt (SBXSCAN.CXX)
-sal_Bool SbxValue::PutStringExt( const ::rtl::OUString& r )
+sal_Bool SbxValue::PutStringExt( const OUString& r )
 {
     // Copy; if it is Unicode convert it immediately
-    ::rtl::OUString aStr( r );
+    OUString aStr( r );
 
     // Identify the own type (not as in Put() with TheRealValue(),
     // Objects are not handled anyway)
@@ -596,9 +596,9 @@ sal_Bool SbxValue::PutStringExt( const ::rtl::OUString& r )
     // elsewise take the original (Unicode remain)
     sal_Bool bRet;
     if( ImpConvStringExt( aStr, eTargetType ) )
-        aRes.pOUString = (::rtl::OUString*)&aStr;
+        aRes.pOUString = (OUString*)&aStr;
     else
-        aRes.pOUString = (::rtl::OUString*)&r;
+        aRes.pOUString = (OUString*)&r;
 
     // #34939: Set a Fixed-Flag at Strings. which contain a number, and
     // if this has a Num-Type, so that the type will not be changed
@@ -673,11 +673,11 @@ sal_Bool SbxValue::fillAutomationDecimal
 }
 
 
-sal_Bool SbxValue::PutString( const ::rtl::OUString& r )
+sal_Bool SbxValue::PutString( const OUString& r )
 {
     SbxValues aRes;
     aRes.eType = SbxSTRING;
-    aRes.pOUString = (::rtl::OUString*) &r;
+    aRes.pOUString = (OUString*) &r;
     Put( aRes );
     return sal_Bool( !IsError() );
 }
@@ -739,7 +739,7 @@ sal_Bool SbxValue::ImpIsNumeric( bool bOnlyIntntl ) const
     {
         if( aData.pOUString )
         {
-            ::rtl::OUString s( *aData.pOUString );
+            OUString s( *aData.pOUString );
             double n;
             SbxDataType t2;
             sal_uInt16 nLen = 0;
@@ -924,7 +924,7 @@ sal_Bool SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
                 // Not even Left OK?
                 else if( aL.pOUString == NULL )
                 {
-                    aL.pOUString = new ::rtl::OUString();
+                    aL.pOUString = new OUString();
                 }
                 Put( aL );
             }
@@ -1465,136 +1465,136 @@ sal_Bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
         }
         case SbxSTRING:
         {
-            rtl::OUString aVal = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(r,
+            OUString aVal = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(r,
                 RTL_TEXTENCODING_ASCII_US);
             if( aVal.getLength() )
-                aData.pOUString = new ::rtl::OUString( aVal );
-            else
-                aData.pOUString = NULL; // JSM 1995-09-22
-            break;
-        }
-        case SbxERROR:
-        case SbxUSHORT:
-            r >> aData.nUShort; break;
-        case SbxOBJECT:
-        {
-            sal_uInt8 nMode;
-            r >> nMode;
-            switch( nMode )
+                    aData.pOUString = new OUString( aVal );
+                else
+                    aData.pOUString = NULL; // JSM 1995-09-22
+                break;
+            }
+            case SbxERROR:
+            case SbxUSHORT:
+                r >> aData.nUShort; break;
+            case SbxOBJECT:
             {
-                case 0:
-                    aData.pObj = NULL;
-                    break;
-                case 1:
-                    aData.pObj = SbxBase::Load( r );
-                    return sal_Bool( aData.pObj != NULL );
-                case 2:
-                    aData.pObj = this;
-                    break;
+                sal_uInt8 nMode;
+                r >> nMode;
+                switch( nMode )
+                {
+                    case 0:
+                        aData.pObj = NULL;
+                        break;
+                    case 1:
+                        aData.pObj = SbxBase::Load( r );
+                        return sal_Bool( aData.pObj != NULL );
+                    case 2:
+                        aData.pObj = this;
+                        break;
+                }
+                break;
             }
-            break;
-        }
-        case SbxCHAR:
-        {
-            char c;
-            r >> c;
-            aData.nChar = c;
-            break;
-        }
-        case SbxBYTE:
-            r >> aData.nByte; break;
-        case SbxULONG:
-            r >> aData.nULong; break;
-        case SbxINT:
-        {
-            sal_uInt8 n;
-            r >> n;
-            // Match the Int on this system?
-            if( n > SAL_TYPES_SIZEOFINT )
-                r >> aData.nLong, aData.eType = SbxLONG;
-            else {
-                sal_Int32 nInt;
-                r >> nInt;
-                aData.nInt = nInt;
+            case SbxCHAR:
+            {
+                char c;
+                r >> c;
+                aData.nChar = c;
+                break;
             }
-            break;
-        }
-        case SbxUINT:
-        {
-            sal_uInt8 n;
-            r >> n;
-            // Match the UInt on this system?
-            if( n > SAL_TYPES_SIZEOFINT )
-                r >> aData.nULong, aData.eType = SbxULONG;
-            else {
-                sal_uInt32 nUInt;
-                r >> nUInt;
-                aData.nUInt = nUInt;
+            case SbxBYTE:
+                r >> aData.nByte; break;
+            case SbxULONG:
+                r >> aData.nULong; break;
+            case SbxINT:
+            {
+                sal_uInt8 n;
+                r >> n;
+                // Match the Int on this system?
+                if( n > SAL_TYPES_SIZEOFINT )
+                    r >> aData.nLong, aData.eType = SbxLONG;
+                else {
+                    sal_Int32 nInt;
+                    r >> nInt;
+                    aData.nInt = nInt;
+                }
+                break;
             }
-            break;
+            case SbxUINT:
+            {
+                sal_uInt8 n;
+                r >> n;
+                // Match the UInt on this system?
+                if( n > SAL_TYPES_SIZEOFINT )
+                    r >> aData.nULong, aData.eType = SbxULONG;
+                else {
+                    sal_uInt32 nUInt;
+                    r >> nUInt;
+                    aData.nUInt = nUInt;
+                }
+                break;
+            }
+            case SbxEMPTY:
+            case SbxNULL:
+            case SbxVOID:
+                break;
+            case SbxDATAOBJECT:
+                r >> aData.nLong;
+                break;
+            // #78919 For backwards compatibility
+            case SbxWSTRING:
+            case SbxWCHAR:
+                break;
+            default:
+                memset (&aData,0,sizeof(aData));
+                ResetFlag(SBX_FIXED);
+                aData.eType = SbxNULL;
+                DBG_ASSERT( !this, "Nicht unterstuetzer Datentyp geladen" );
+                return sal_False;
         }
-        case SbxEMPTY:
-        case SbxNULL:
-        case SbxVOID:
-            break;
-        case SbxDATAOBJECT:
-            r >> aData.nLong;
-            break;
-        // #78919 For backwards compatibility
-        case SbxWSTRING:
-        case SbxWCHAR:
-            break;
-        default:
-            memset (&aData,0,sizeof(aData));
-            ResetFlag(SBX_FIXED);
-            aData.eType = SbxNULL;
-            DBG_ASSERT( !this, "Nicht unterstuetzer Datentyp geladen" );
-            return sal_False;
+        return sal_True;
     }
-    return sal_True;
-}
 
-sal_Bool SbxValue::StoreData( SvStream& r ) const
-{
-    sal_uInt16 nType = sal::static_int_cast< sal_uInt16 >(aData.eType);
-    r << nType;
-    switch( nType & 0x0FFF )
+    sal_Bool SbxValue::StoreData( SvStream& r ) const
     {
-        case SbxBOOL:
-        case SbxINTEGER:
-            r << aData.nInteger; break;
-        case SbxLONG:
-            r << aData.nLong; break;
-        case SbxDATE:
-            // #49935: Save as double, elsewise an error during the read in
-            ((SbxValue*)this)->aData.eType = (SbxDataType)( ( nType & 0xF000 ) | SbxDOUBLE );
-            write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(r, GetCoreString(), RTL_TEXTENCODING_ASCII_US);
-            ((SbxValue*)this)->aData.eType = (SbxDataType)nType;
-            break;
-        case SbxSINGLE:
-        case SbxDOUBLE:
-            write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(r, GetCoreString(), RTL_TEXTENCODING_ASCII_US);
-            break;
-        case SbxSALUINT64:
-        case SbxSALINT64:
-            // see comment in SbxValue::StoreData
-            r << aData.uInt64;
-            break;
-        case SbxCURRENCY:
+        sal_uInt16 nType = sal::static_int_cast< sal_uInt16 >(aData.eType);
+        r << nType;
+        switch( nType & 0x0FFF )
         {
-            sal_Int32 tmpHi = ( (aData.nInt64 >> 32) &  0xFFFFFFFF );
-            sal_Int32 tmpLo = ( sal_Int32 )aData.nInt64;
-            r << tmpHi << tmpLo;
-            break;
-        }
-        case SbxSTRING:
-            if( aData.pOUString )
+            case SbxBOOL:
+            case SbxINTEGER:
+                r << aData.nInteger; break;
+            case SbxLONG:
+                r << aData.nLong; break;
+            case SbxDATE:
+                // #49935: Save as double, elsewise an error during the read in
+                ((SbxValue*)this)->aData.eType = (SbxDataType)( ( nType & 0xF000 ) | SbxDOUBLE );
+                write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(r, GetCoreString(), RTL_TEXTENCODING_ASCII_US);
+                ((SbxValue*)this)->aData.eType = (SbxDataType)nType;
+                break;
+            case SbxSINGLE:
+            case SbxDOUBLE:
+                write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(r, GetCoreString(), RTL_TEXTENCODING_ASCII_US);
+                break;
+            case SbxSALUINT64:
+            case SbxSALINT64:
+                // see comment in SbxValue::StoreData
+                r << aData.uInt64;
+                break;
+            case SbxCURRENCY:
             {
-                write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(r, *aData.pOUString, RTL_TEXTENCODING_ASCII_US);
+                sal_Int32 tmpHi = ( (aData.nInt64 >> 32) &  0xFFFFFFFF );
+                sal_Int32 tmpLo = ( sal_Int32 )aData.nInt64;
+                r << tmpHi << tmpLo;
+                break;
             }
-            else
-            {
-                write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(r, rtl::OUString(), RTL_TEXTENCODING_ASCII_US);
+            case SbxSTRING:
+                if( aData.pOUString )
+                {
+                    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(r, *aData.pOUString, RTL_TEXTENCODING_ASCII_US);
+                }
+                else
+                {
+                    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(r, OUString(), RTL_TEXTENCODING_ASCII_US);
             }
             break;
         case SbxERROR:

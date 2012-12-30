@@ -120,7 +120,7 @@ static void FilterWhiteSpace( OUString& rStr )
     {
         return;
     }
-    rtl::OUStringBuffer aRet;
+    OUStringBuffer aRet;
 
     for (sal_Int32 i = 0; i < rStr.getLength(); ++i)
     {
@@ -372,7 +372,7 @@ void implChr( SbxArray& rPar, bool bChrW )
         if( !bChrW && SbiRuntime::isVBAEnabled() )
         {
             sal_Char c = static_cast<sal_Char>(pArg->GetByte());
-            aStr = rtl::OUString(&c, 1, osl_getThreadTextEncoding());
+            aStr = OUString(&c, 1, osl_getThreadTextEncoding());
         }
         else
         {
@@ -444,7 +444,7 @@ RTLFUNC(CurDir)
     char* pBuffer = new char[ _MAX_PATH ];
     if ( _getdcwd( nCurDir, pBuffer, _MAX_PATH ) != 0 )
     {
-        rPar.Get(0)->PutString( rtl::OUString::createFromAscii( pBuffer ) );
+        rPar.Get(0)->PutString( OUString::createFromAscii( pBuffer ) );
     }
     else
     {
@@ -466,7 +466,7 @@ RTLFUNC(CurDir)
           }
         if( getcwd( pMem, nSize-1 ) != NULL )
           {
-            rPar.Get(0)->PutString( rtl::OUString::createFromAscii(pMem) );
+            rPar.Get(0)->PutString( OUString::createFromAscii(pMem) );
             delete [] pMem;
             return;
           }
@@ -868,7 +868,7 @@ RTLFUNC(Hex)
         sal_uInt32 nVal = pArg->IsInteger() ?
             static_cast<sal_uInt16>(pArg->GetInteger()) :
             static_cast<sal_uInt32>(pArg->GetLong());
-        rtl::OUString aStr(rtl::OUString::valueOf( sal_Int64(nVal), 16 ));
+        OUString aStr(OUString::valueOf( sal_Int64(nVal), 16 ));
         aStr = aStr.toAsciiUpperCase();
         rPar.Get(0)->PutString( aStr );
     }
@@ -1315,7 +1315,7 @@ RTLFUNC(Oct)
         {
             snprintf( aBuffer, sizeof(aBuffer), "%lo", static_cast<long unsigned int>(pArg->GetLong()) );
         }
-        rPar.Get(0)->PutString( rtl::OUString::createFromAscii( aBuffer ) );
+        rPar.Get(0)->PutString( OUString::createFromAscii( aBuffer ) );
     }
 }
 
@@ -1777,7 +1777,7 @@ RTLFUNC(Val)
             }
             if ( nRadix != 10 )
             {
-                OString aByteStr(rtl::OUStringToOString(aStr, osl_getThreadTextEncoding()));
+                OString aByteStr(OUStringToOString(aStr, osl_getThreadTextEncoding()));
                 sal_Int16 nlResult = (sal_Int16)strtol( aByteStr.getStr()+2, &pEndPtr, nRadix);
                 nResult = (double)nlResult;
             }
@@ -1839,7 +1839,7 @@ RTLFUNC(CDateToIso)
             implGetDateYear( aDate ),
             implGetDateMonth( aDate ),
             implGetDateDay( aDate ) );
-        OUString aRetStr = rtl::OUString::createFromAscii( Buffer );
+        OUString aRetStr = OUString::createFromAscii( Buffer );
         rPar.Get(0)->PutString( aRetStr );
     }
     else
@@ -2219,7 +2219,7 @@ RTLFUNC(Time)
             char buf[ 20 ];
             snprintf( buf, sizeof(buf), "%02d:%02d:%02d",
                       aTime.GetHour(), aTime.GetMin(), aTime.GetSec() );
-            aRes = rtl::OUString::createFromAscii( buf );
+            aRes = OUString::createFromAscii( buf );
         }
         else
         {
@@ -2749,11 +2749,11 @@ RTLFUNC(Dir)
                         {
                             if( pRTLData->nCurDirPos == -2 )
                             {
-                                aPath = ::rtl::OUString("." );
+                                aPath = OUString("." );
                             }
                             else if( pRTLData->nCurDirPos == -1 )
                             {
-                                aPath = ::rtl::OUString(".." );
+                                aPath = OUString(".." );
                             }
                             pRTLData->nCurDirPos++;
                         }
@@ -2865,11 +2865,11 @@ RTLFUNC(Dir)
                     {
                         if( pRTLData->nCurDirPos == -2 )
                         {
-                            aPath = ::rtl::OUString("." );
+                            aPath = OUString("." );
                         }
                         else if( pRTLData->nCurDirPos == -1 )
                         {
-                            aPath = ::rtl::OUString(".." );
+                            aPath = OUString(".." );
                         }
                         pRTLData->nCurDirPos++;
                     }
@@ -2935,7 +2935,7 @@ RTLFUNC(GetAttr)
             aEntry.ToAbs();
 
             // #57064 extract the real-path for virtual URLs
-            OString aByteStrFullPath(rtl::OUStringToOString(aEntry.GetFull(),
+            OString aByteStrFullPath(OUStringToOString(aEntry.GetFull(),
                                                             osl_getThreadTextEncoding()));
             DWORD nRealFlags = GetFileAttributes (aByteStrFullPath.getStr());
             if (nRealFlags != 0xffffffff)
@@ -3620,7 +3620,7 @@ OUString getBasicTypeName( SbxDataType eType )
     {
         nPos = nTypeNameCount - 1;
     }
-    return rtl::OUString::createFromAscii(pTypeNames[nPos]);
+    return OUString::createFromAscii(pTypeNames[nPos]);
 }
 
 String getObjectTypeName( SbxVariable* pVar )
@@ -3655,7 +3655,7 @@ String getObjectTypeName( SbxVariable* pVar )
                 {
                     // is this a VBA object ?
                     uno::Reference< ooo::vba::XHelperInterface > xVBA( aObj, uno::UNO_QUERY );
-                    Sequence< rtl::OUString > sServices = xServInfo->getSupportedServiceNames();
+                    Sequence< OUString > sServices = xServInfo->getSupportedServiceNames();
                     if ( sServices.getLength() )
                     {
                         sRet = sServices[ 0 ];
@@ -3671,7 +3671,7 @@ String getObjectTypeName( SbxVariable* pVar )
                         {
                             try
                             {
-                                xInv->getValue( rtl::OUString( "$GetTypeName" ) ) >>= sRet;
+                                xInv->getValue( OUString( "$GetTypeName" ) ) >>= sRet;
                             }
                             catch(const Exception& )
                             {
@@ -4149,11 +4149,11 @@ RTLFUNC(StrConv)
             }
         }
         pChar[nSize] = '\0';
-        ::rtl::OString aOStr(pChar);
+        OString aOStr(pChar);
         delete[] pChar;
 
         // there is no concept about default codepage in unix. so it is incorrectly in unix
-        OUString aOUStr = ::rtl::OStringToOUString(aOStr, osl_getThreadTextEncoding());
+        OUString aOUStr = OStringToOUString(aOStr, osl_getThreadTextEncoding());
         rPar.Get(0)->PutString( aOUStr );
         return;
     }
@@ -4161,7 +4161,7 @@ RTLFUNC(StrConv)
     {
         OUString aOUStr(aNewStr);
         // there is no concept about default codepage in unix. so it is incorrectly in unix
-        ::rtl::OString aOStr = ::rtl::OUStringToOString(aNewStr,osl_getThreadTextEncoding());
+        OString aOStr = OUStringToOString(aNewStr,osl_getThreadTextEncoding());
         const sal_Char* pChar = aOStr.getStr();
         sal_Int32 nArraySize = aOStr.getLength();
         SbxDimArray* pArray = new SbxDimArray(SbxBYTE);
@@ -4619,8 +4619,8 @@ RTLFUNC(Partition)
     // will be handled properly during any subsequent sort operation.
 
     // calculate the  maximun number of characters before lowervalue and uppervalue
-    OUString aBeforeStart = ::rtl::OUString::valueOf( nStart - 1 );
-    OUString aAfterStop = ::rtl::OUString::valueOf( nStop + 1 );
+    OUString aBeforeStart = OUString::valueOf( nStart - 1 );
+    OUString aAfterStop = OUString::valueOf( nStop + 1 );
     sal_Int32 nLen1 = aBeforeStart.getLength();
     sal_Int32 nLen2 = aAfterStop.getLength();
     sal_Int32 nLen = nLen1 >= nLen2 ? nLen1:nLen2;
@@ -4645,8 +4645,8 @@ RTLFUNC(Partition)
             nLowerValue = ((( nNumber - nStart ) / nInterval ) * nInterval ) + nStart;
             nUpperValue = nLowerValue + nInterval - 1;
         }
-        aLowerValue = ::rtl::OUString::valueOf( nLowerValue );
-        aUpperValue = ::rtl::OUString::valueOf( nUpperValue );
+        aLowerValue = OUString::valueOf( nLowerValue );
+        aUpperValue = OUString::valueOf( nUpperValue );
     }
 
     nLen1 = aLowerValue.getLength();

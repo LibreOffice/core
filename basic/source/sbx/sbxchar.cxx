@@ -249,9 +249,9 @@ start:
         case SbxSTRING:
         case SbxLPSTR:
             if ( !p->pOUString )
-                p->pOUString = new ::rtl::OUString( n );
+                p->pOUString = new OUString( n );
             else
-                *p->pOUString = ::rtl::OUString( n );
+                *p->pOUString = OUString( n );
             break;
         case SbxOBJECT:
         {
