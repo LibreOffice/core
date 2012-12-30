@@ -308,11 +308,9 @@ namespace basic
         OUString aFileName( aAppBasic.getName() );
         aAppBasic = INetURLObject( aAppBasicDir.getToken(1, ';') );
         DBG_ASSERT(aAppBasic.GetProtocol() != INET_PROT_NOT_VALID,
-            OStringBuffer("Invalid URL: \"").
-            append(OUStringToOString(aAppBasicDir,
-                osl_getThreadTextEncoding())).
-            append('"').getStr()
-        );
+            OString("Invalid URL: \"" +
+                    OUStringToOString(aAppBasicDir, osl_getThreadTextEncoding()) +
+                    "\""));
         aAppBasic.insertName( aFileName );
         pBasicManager->SetStorageName( aAppBasic.PathToFileName() );
 

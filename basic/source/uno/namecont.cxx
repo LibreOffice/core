@@ -237,9 +237,7 @@ void NameContainer::removeByName( const OUString& aName )
     NameContainerNameMap::iterator aIt = mHashMap.find( aName );
     if( aIt == mHashMap.end() )
     {
-        OUString sMessage = OUStringBuffer().append('"')
-            .append(aName).append("\" not found")
-            .makeStringAndClear();
+        OUString sMessage = "\"" + aName + "\" not found";
         throw NoSuchElementException(sMessage, uno::Reference< uno::XInterface >());
     }
 
