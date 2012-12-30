@@ -678,11 +678,10 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                 if( !isLibraryElementValid( pLib->getByName( aElementName ) ) )
                 {
                     #if OSL_DEBUG_LEVEL > 0
-                    OStringBuffer aMessage;
-                    aMessage.append( "invalid library element '" );
-                    aMessage.append( OUStringToOString( aElementName, osl_getThreadTextEncoding() ) );
-                    aMessage.append( "'." );
-                    OSL_FAIL( aMessage.makeStringAndClear().getStr() );
+                    OString aMessage = "invalid library element '" +
+                                        OUStringToOString( aElementName, osl_getThreadTextEncoding() ) +
+                                        "'.";
+                    OSL_FAIL( aMessage );
                     #endif
                     continue;
                 }
@@ -767,11 +766,10 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                 if( !isLibraryElementValid( pLib->getByName( aElementName ) ) )
                 {
                     #if OSL_DEBUG_LEVEL > 0
-                    OStringBuffer aMessage;
-                    aMessage.append( "invalid library element '" );
-                    aMessage.append( OUStringToOString( aElementName, osl_getThreadTextEncoding() ) );
-                    aMessage.append( "'." );
-                    OSL_FAIL( aMessage.makeStringAndClear().getStr() );
+                    OString aMessage = "invalid library element '" +
+                                       OUStringToOString( aElementName, osl_getThreadTextEncoding() ) +
+                                       "'.";
+                    OSL_FAIL( aMessage );
                     #endif
                     continue;
                 }

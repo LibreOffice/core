@@ -1663,9 +1663,9 @@ void StarBASIC::MakeErrorText( SbError nId, const OUString& aMsg )
     }
     else if( nOldID != 0 )
     {
-        OUStringBuffer aStdMsg;
-        aStdMsg.append("Fehler ").append(static_cast<sal_Int32>(nOldID)).append(": Kein Fehlertext verfuegbar!");
-        GetSbData()->aErrMsg = aStdMsg.makeStringAndClear();
+        OUString aStdMsg = "Fehler " + OUString::valueOf(static_cast<sal_Int32>(nOldID)) +
+                           ": Kein Fehlertext verfuegbar!";
+        GetSbData()->aErrMsg = aStdMsg;
     }
     else
     {
@@ -1741,10 +1741,9 @@ sal_Bool StarBASIC::RTError( SbError code, const OUString& rMsg, sal_Int32 l, sa
         // like vba ( adds an error number etc )
         if ( SbiRuntime::isVBAEnabled() && ( code == SbERR_BASIC_COMPAT ) )
         {
-            OUStringBuffer aTmp;
-            aTmp.append('\'').append(SbxErrObject::getUnoErrObject()->getNumber())
-                .append("\'\n").append(!GetSbData()->aErrMsg.isEmpty() ? GetSbData()->aErrMsg : rMsg);
-            code = (sal_uIntPtr)*new StringErrorInfo( code, aTmp.makeStringAndClear() );
+            OUString aTmp = "\'" + OUString::valueOf(SbxErrObject::getUnoErrObject()->getNumber()) +
+                            "\'\n" + OUString(!GetSbData()->aErrMsg.isEmpty() ? GetSbData()->aErrMsg : rMsg);
+            code = (sal_uIntPtr)*new StringErrorInfo( code, aTmp );
         }
         else
         {
