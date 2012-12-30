@@ -599,11 +599,6 @@ void ScMenuFloatingWindow::fillMenuItemsToAccessible(ScAccessibleFilterMenu* pAc
     }
 }
 
-ScDocument* ScMenuFloatingWindow::getDoc()
-{
-    return mpDoc;
-}
-
 void ScMenuFloatingWindow::resizeToFitMenuItems()
 {
     SetOutputSizePixel(getMenuSize());
