@@ -16,7 +16,7 @@ $(eval $(call gb_ExternalPackage_add_file,rasqal,bin/rasqal-config,src/rasqal-co
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_ExternalPackage_add_file,rasqal,lib/librasqal-lo.1.dylib,src/.libs/librasqal-lo.1.dylib))
 $(eval $(call gb_ExternalPackage_add_file,rasqal,lib/librasqal.dylib,src/.libs/librasqal-lo.1.dylib))
-else ifneq ($(filter IOS ANDRIOD,$(OS)),)
+else ifneq ($(filter IOS ANDROID,$(OS)),)
 $(eval $(call gb_ExternalPackage_add_file,rasqal,lib/librasqal.a,src/.libs/librasqal.a))
 else ifneq ($(filter WNT,$(OS)),)
 $(eval $(call gb_ExternalPackage_add_file,rasqal,lib/librasqal.a,src/.libs/librasqal.a))

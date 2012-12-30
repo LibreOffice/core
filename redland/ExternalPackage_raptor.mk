@@ -16,7 +16,7 @@ $(eval $(call gb_ExternalPackage_add_file,raptor,bin/raptor-config,src/raptor-co
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_ExternalPackage_add_file,raptor,lib/libraptor-lo.1.dylib,src/.libs/libraptor-lo.1.dylib))
 $(eval $(call gb_ExternalPackage_add_file,raptor,lib/libraptor.dylib,src/.libs/libraptor-lo.1.dylib))
-else ifneq ($(filter IOS ANDRIOD,$(OS)),)
+else ifneq ($(filter IOS ANDROID,$(OS)),)
 $(eval $(call gb_ExternalPackage_add_file,raptor,lib/libraptor.a,src/.libs/libraptor.a))
 else ifneq ($(filter WNT,$(OS)),)
 $(eval $(call gb_ExternalPackage_add_file,raptor,lib/libraptor.a,src/.libs/libraptor.a))
