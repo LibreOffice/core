@@ -133,6 +133,7 @@ public:
     void testFdo58076();
     void testFdo57678();
     void testFdo45183();
+    void testFdo54612();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -216,6 +217,7 @@ void Test::run()
         {"fdo58076.rtf", &Test::testFdo58076},
         {"fdo57678.rtf", &Test::testFdo57678},
         {"fdo45183.rtf", &Test::testFdo45183},
+        {"fdo54612.rtf", &Test::testFdo54612},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1003,6 +1005,14 @@ void Test::testFdo45183()
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
     // Was 247, resulting in a table having width almost zero and height of 10+ pages.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(16237), getProperty<sal_Int32>(xTables->getByIndex(0), "Width"));
+}
+
+void Test::testFdo54612()
+{
+    // \dpptx without a \dppolycount caused a crash.
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(8), xDraws->getCount());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
