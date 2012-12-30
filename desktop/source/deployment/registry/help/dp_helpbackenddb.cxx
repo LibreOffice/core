@@ -50,22 +50,22 @@ HelpBackendDb::HelpBackendDb(
 
 OUString HelpBackendDb::getDbNSName()
 {
-    return OUSTR(EXTENSION_REG_NS);
+    return OUString(EXTENSION_REG_NS);
 }
 
 OUString HelpBackendDb::getNSPrefix()
 {
-    return OUSTR(NS_PREFIX);
+    return OUString(NS_PREFIX);
 }
 
 OUString HelpBackendDb::getRootElementName()
 {
-    return OUSTR(ROOT_ELEMENT_NAME);
+    return OUString(ROOT_ELEMENT_NAME);
 }
 
 OUString HelpBackendDb::getKeyElementName()
 {
-    return OUSTR(KEY_ELEMENT_NAME);
+    return OUString(KEY_ELEMENT_NAME);
 }
 
 
@@ -77,7 +77,7 @@ void HelpBackendDb::addEntry(::rtl::OUString const & url, Data const & data)
             Reference<css::xml::dom::XNode> helpNode
                 = writeKeyElement(url);
 
-            writeSimpleElement(OUSTR("data-url"), data.dataUrl, helpNode);
+            writeSimpleElement("data-url", data.dataUrl, helpNode);
             save();
         }
     }
@@ -89,8 +89,7 @@ void HelpBackendDb::addEntry(::rtl::OUString const & url, Data const & data)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
-            OUSTR("Extension Manager: failed to write data entry in help backend db: ") +
-            m_urlDb, 0, exc);
+            "Extension Manager: failed to write data entry in help backend db: " + m_urlDb, 0, exc);
     }
 }
 
@@ -104,7 +103,7 @@ HelpBackendDb::getEntry(::rtl::OUString const & url)
         Reference<css::xml::dom::XNode> aNode = getKeyElement(url);
         if (aNode.is())
         {
-            retData.dataUrl = readSimpleElement(OUSTR("data-url"), aNode);
+            retData.dataUrl = readSimpleElement("data-url", aNode);
         }
         else
         {
@@ -120,14 +119,13 @@ HelpBackendDb::getEntry(::rtl::OUString const & url)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
-            OUSTR("Extension Manager: failed to read data entry in help backend db: ") +
-            m_urlDb, 0, exc);
+            "Extension Manager: failed to read data entry in help backend db: " + m_urlDb, 0, exc);
     }
 }
 
 ::std::list<OUString> HelpBackendDb::getAllDataUrls()
 {
-    return getOneChildFromAllEntries(OUString(RTL_CONSTASCII_USTRINGPARAM("data-url")));
+    return getOneChildFromAllEntries("data-url");
 }
 
 } // namespace help

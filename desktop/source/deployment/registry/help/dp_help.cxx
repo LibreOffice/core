@@ -130,8 +130,7 @@ BackendImpl::BackendImpl(
     Sequence<Any> const & args,
     Reference<XComponentContext> const & xComponentContext )
     : PackageRegistryBackend( args, xComponentContext ),
-      m_xHelpTypeInfo( new Package::TypeInfo(
-                               OUSTR("application/vnd.sun.star.help"),
+      m_xHelpTypeInfo( new Package::TypeInfo("application/vnd.sun.star.help",
                                rtl::OUString(),
                                getResourceString(RID_STR_HELP),
                                RID_IMG_HELP ) ),
@@ -140,7 +139,7 @@ BackendImpl::BackendImpl(
     m_typeInfos[ 0 ] = m_xHelpTypeInfo;
     if (!transientMode())
     {
-        OUString dbFile = makeURL(getCachePath(), OUSTR("backenddb.xml"));
+        OUString dbFile = makeURL(getCachePath(), "backenddb.xml");
         m_backendDb.reset(
             new HelpBackendDb(getComponentContext(), dbFile));
 
@@ -267,8 +266,7 @@ BackendImpl * BackendImpl::PackageImpl::getMyBackend() const
         //May throw a DisposedException
         check();
         //We should never get here...
-        throw RuntimeException(
-            OUSTR("Failed to get the BackendImpl"),
+        throw RuntimeException("Failed to get the BackendImpl",
             static_cast<OWeakObject*>(const_cast<PackageImpl *>(this)));
     }
     return pBackend;
@@ -298,7 +296,7 @@ bool BackendImpl::PackageImpl::extensionContainsCompiledHelp()
                     continue;
 
                 //look if there is the folder help.idxl in the language folder
-                OUString compUrl(stat.getFileURL() + OUSTR("/help.idxl"));
+                OUString compUrl(stat.getFileURL() + "/help.idxl");
                 ::osl::Directory compiledFolder(compUrl);
                 if (compiledFolder.open() != ::osl::File::E_None)
                 {
@@ -435,8 +433,7 @@ void BackendImpl::implProcessHelp(
                         const OUString aSlash("/");
 
                         rtl::OUString aJarFile(
-                            makeURL(sHelpFolder, langFolderURLSegment + aSlash + aHelpStr +
-                                    OUSTR(".jar")));
+                            makeURL(sHelpFolder, langFolderURLSegment + aSlash + aHelpStr + ".jar"));
                         aJarFile = ::dp_misc::expandUnoRcUrl(aJarFile);
 
                         rtl::OUString aEncodedJarFilePath = rtl::Uri::encode(

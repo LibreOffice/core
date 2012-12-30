@@ -145,14 +145,12 @@ BackendImpl::BackendImpl(
     Reference<XComponentContext> const & xComponentContext )
     : t_helper( args, xComponentContext ),
       m_xBasicLibTypeInfo( new Package::TypeInfo(
-                               OUSTR("application/"
-                                     "vnd.sun.star.basic-library"),
+                               "application/vnd.sun.star.basic-library",
                                OUString() /* no file filter */,
                                getResourceString(RID_STR_BASIC_LIB),
                                RID_IMG_SCRIPTLIB) ),
       m_xDialogLibTypeInfo( new Package::TypeInfo(
-                                OUSTR("application/"
-                                      "vnd.sun.star.dialog-library"),
+                                "application/vnd.sun.star.dialog-library",
                                 OUString() /* no file filter */,
                                 getResourceString(RID_STR_DIALOG_LIB),
                                 RID_IMG_DIALOGLIB) ),
@@ -165,7 +163,7 @@ BackendImpl::BackendImpl(
 
     if (!transientMode())
     {
-        OUString dbFile = makeURL(getCachePath(), OUSTR("backenddb.xml"));
+        OUString dbFile = makeURL(getCachePath(), "backenddb.xml");
         m_backendDb.reset(
             new ScriptBackendDb(getComponentContext(), dbFile));
     }
@@ -229,14 +227,14 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         {
             // probe for script.xlb:
             if (create_ucb_content(
-                    0, makeURL( url, OUSTR("script.xlb") ),
+                    0, makeURL( url, "script.xlb" ),
                     xCmdEnv, false /* no throw */ ))
-                mediaType = OUSTR("application/vnd.sun.star.basic-library");
+                mediaType = OUString("application/vnd.sun.star.basic-library");
             // probe for dialog.xlb:
             else if (create_ucb_content(
-                         0, makeURL( url, OUSTR("dialog.xlb") ),
+                         0, makeURL( url, "dialog.xlb" ),
                          xCmdEnv, false /* no throw */ ))
-                mediaType = OUSTR("application/vnd.sun.star.dialog-library");
+                mediaType = OUString("application/vnd.sun.star.dialog-library");
         }
         if (mediaType.isEmpty())
             throw lang::IllegalArgumentException(
@@ -250,7 +248,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
     {
         if (type.equalsIgnoreAsciiCaseAscii("application"))
         {
-            OUString dialogURL( makeURL( url, OUSTR("dialog.xlb") ) );
+            OUString dialogURL( makeURL( url, "dialog.xlb" ) );
             if (! create_ucb_content(
                     0, dialogURL, xCmdEnv, false /* no throw */ )) {
                 dialogURL = OUString();
@@ -258,7 +256,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
 
             if (subType.equalsIgnoreAsciiCaseAscii("vnd.sun.star.basic-library"))
             {
-                OUString scriptURL( makeURL( url, OUSTR("script.xlb")));
+                OUString scriptURL( makeURL( url, "script.xlb"));
                 if (! create_ucb_content(
                         0, scriptURL, xCmdEnv, false /* no throw */ )) {
                     scriptURL = OUString();
@@ -295,7 +293,7 @@ BackendImpl * BackendImpl::PackageImpl::getMyBackend() const
         check();
         //We should never get here...
         throw RuntimeException(
-            OUSTR("Failed to get the BackendImpl"),
+            "Failed to get the BackendImpl",
             static_cast<OWeakObject*>(const_cast<PackageImpl *>(this)));
     }
     return pBackend;
@@ -326,7 +324,7 @@ lcl_maybeRemoveScript(
     if (bExists && xScriptLibs.is() && xScriptLibs->hasByName(rName))
     {
         const OUString sScriptUrl = xScriptLibs->getOriginalLibraryLinkURL(rName);
-        if (sScriptUrl.equals(rScriptURL))
+        if (sScriptUrl == rScriptURL)
             xScriptLibs->removeLibrary(rName);
     }
 }
@@ -347,9 +345,9 @@ lcl_maybeAddScript(
             //We assume here that library names in extensions are unique, which may not be the case
             //ToDo: If the script exist in another extension, then both extensions must have the
             //same id
-            if (sOriginalUrl.match(OUSTR("vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE"))
-                || sOriginalUrl.match(OUSTR("vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE"))
-                || sOriginalUrl.match(OUSTR("vnd.sun.star.expand:$BUNDLED_EXTENSIONS")))
+            if (sOriginalUrl.match("vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE")
+                || sOriginalUrl.match("vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE")
+                || sOriginalUrl.match("vnd.sun.star.expand:$BUNDLED_EXTENSIONS"))
             {
                 xScriptLibs->removeLibrary(rName);
                 bCanAdd = true;
@@ -395,7 +393,7 @@ void BackendImpl::PackageImpl::processPackage_(
         {
             xScriptLibs.set(
                 xComponentContext->getServiceManager()->createInstanceWithContext(
-                    OUSTR("com.sun.star.script.ApplicationScriptLibraryContainer"),
+                    "com.sun.star.script.ApplicationScriptLibraryContainer",
                     xComponentContext ), UNO_QUERY_THROW );
         }
 
@@ -403,7 +401,7 @@ void BackendImpl::PackageImpl::processPackage_(
         {
             xDialogLibs.set(
                 xComponentContext->getServiceManager()->createInstanceWithContext(
-                    OUSTR("com.sun.star.script.ApplicationDialogLibraryContainer"),
+                    "com.sun.star.script.ApplicationDialogLibraryContainer",
                     xComponentContext ), UNO_QUERY_THROW );
         }
     }

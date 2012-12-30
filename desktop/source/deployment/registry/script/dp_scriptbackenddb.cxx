@@ -48,22 +48,22 @@ ScriptBackendDb::ScriptBackendDb(
 
 OUString ScriptBackendDb::getDbNSName()
 {
-    return OUSTR(EXTENSION_REG_NS);
+    return OUString(EXTENSION_REG_NS);
 }
 
 OUString ScriptBackendDb::getNSPrefix()
 {
-    return OUSTR(NS_PREFIX);
+    return OUString(NS_PREFIX);
 }
 
 OUString ScriptBackendDb::getRootElementName()
 {
-    return OUSTR(ROOT_ELEMENT_NAME);
+    return OUString(ROOT_ELEMENT_NAME);
 }
 
 OUString ScriptBackendDb::getKeyElementName()
 {
-    return OUSTR(KEY_ELEMENT_NAME);
+    return OUString(KEY_ELEMENT_NAME);
 }
 
 

@@ -137,7 +137,7 @@ inline void PackageRegistryImpl::check()
     ::osl::MutexGuard guard( getMutex() );
     if (rBHelper.bInDispose || rBHelper.bDisposed) {
         throw lang::DisposedException(
-            OUSTR("PackageRegistry instance has already been disposed!"),
+            "PackageRegistry instance has already been disposed!",
             static_cast<OWeakObject *>(this) );
     }
 }
@@ -225,7 +225,7 @@ void PackageRegistryImpl::insertBackend(
             const OUString fileFilter( xPackageType->getFileFilter() );
             //The package backend shall also be called to determine the mediatype
             //(XPackageRegistry.bindPackage) when the URL points to a directory.
-            const bool bExtension = mediaType.equals(OUSTR("application/vnd.sun.star.package-bundle"));
+            const bool bExtension = (mediaType == "application/vnd.sun.star.package-bundle");
             if (fileFilter.isEmpty() || fileFilter == "*.*" || fileFilter == "*" || bExtension)
             {
                 m_ambiguousBackends.insert( xBackend );
@@ -235,7 +235,7 @@ void PackageRegistryImpl::insertBackend(
                 sal_Int32 nIndex = 0;
                 do {
                     OUString token( fileFilter.getToken( 0, ';', nIndex ) );
-                    if (token.matchAsciiL( RTL_CONSTASCII_STRINGPARAM("*.") ))
+                    if (token.match( "*." ))
                         token = token.copy( 1 );
                     if (token.isEmpty())
                         continue;
@@ -274,16 +274,13 @@ void PackageRegistryImpl::insertBackend(
         else
         {
             ::rtl::OUStringBuffer buf;
-            buf.appendAscii(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "more than one PackageRegistryBackend for "
-                    "media-type=\"") );
+            buf.appendAscii( "more than one PackageRegistryBackend for media-type=\"" );
             buf.append( mediaType );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\" => ") );
+            buf.appendAscii( "\" => " );
             buf.append( Reference<lang::XServiceInfo>(
                             xBackend, UNO_QUERY_THROW )->
                         getImplementationName() );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\"!") );
+            buf.appendAscii( "\"!" );
             OSL_FAIL( ::rtl::OUStringToOString(
                             buf.makeStringAndClear(),
                             RTL_TEXTENCODING_UTF8).getStr() );
@@ -313,7 +310,7 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
         Reference<container::XContentEnumerationAccess>(
             xComponentContext->getServiceManager(),
             UNO_QUERY_THROW )->createContentEnumeration(
-                OUSTR("com.sun.star.deployment.PackageRegistryBackend") ) );
+                "com.sun.star.deployment.PackageRegistryBackend" ) );
     if (xEnum.is())
     {
         while (xEnum->hasMoreElements())
@@ -355,7 +352,7 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
             }
             if (! xBackend.is()) {
                 throw DeploymentException(
-                    OUSTR("cannot instantiate PackageRegistryBackend service: ")
+                    "cannot instantiate PackageRegistryBackend service: "
                     + Reference<lang::XServiceInfo>(
                         element, UNO_QUERY_THROW )->getImplementationName(),
                     static_cast<OWeakObject *>(that) );
@@ -398,20 +395,18 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
               iPos != that->m_filter2mediaType.end(); ++iPos )
         {
             ::rtl::OUStringBuffer buf;
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("extension \"") );
+            buf.appendAscii( "extension \"" );
             buf.append( iPos->first );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
-                                 "\" maps to media-type \"") );
+            buf.appendAscii( "\" maps to media-type \"" );
             buf.append( iPos->second );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
-                                 "\" maps to backend ") );
+            buf.appendAscii( "\" maps to backend " );
             const Reference<deployment::XPackageRegistry> xBackend(
                 that->m_mediaType2backend.find( iPos->second )->second );
             allBackends.insert( xBackend );
             buf.append( Reference<lang::XServiceInfo>(
                             xBackend, UNO_QUERY_THROW )
                         ->getImplementationName() );
-            dp_misc::writeConsole( buf.makeStringAndClear() + OUSTR("\n"));
+            dp_misc::writeConsole( buf.makeStringAndClear() + "\n");
         }
         dp_misc::TRACE( "> [dp_registry.cxx] ambiguous backends:\n\n" );
         for ( t_registryset::const_iterator iPos(
@@ -422,7 +417,7 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
             buf.append(
                 Reference<lang::XServiceInfo>(
                     *iPos, UNO_QUERY_THROW )->getImplementationName() );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(": ") );
+            buf.appendAscii( ": " );
             const Sequence< Reference<deployment::XPackageTypeInfo> > types(
                 (*iPos)->getSupportedPackageTypes() );
             for ( sal_Int32 pos = 0; pos < types.getLength(); ++pos ) {
@@ -431,14 +426,14 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
                 buf.append( xInfo->getMediaType() );
                 const OUString filter( xInfo->getFileFilter() );
                 if (!filter.isEmpty()) {
-                    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" (") );
+                    buf.appendAscii( " (" );
                     buf.append( filter );
-                    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(")") );
+                    buf.appendAscii( ")" );
                 }
                 if (pos < (types.getLength() - 1))
-                    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(", ") );
+                    buf.appendAscii( ", " );
             }
-            dp_misc::TRACE(buf.makeStringAndClear() + OUSTR("\n\n"));
+            dp_misc::TRACE(buf.makeStringAndClear() + "\n\n");
         }
         allBackends.insert( that->m_ambiguousBackends.begin(),
                             that->m_ambiguousBackends.end() );

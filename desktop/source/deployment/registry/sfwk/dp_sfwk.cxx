@@ -112,8 +112,7 @@ BackendImpl * BackendImpl::PackageImpl::getMyBackend() const
         //May throw a DisposedException
         check();
         //We should never get here...
-        throw RuntimeException(
-            OUSTR("Failed to get the BackendImpl"),
+        throw RuntimeException("Failed to get the BackendImpl",
             static_cast<OWeakObject*>(const_cast<PackageImpl *>(this)));
     }
     return pBackend;
@@ -156,7 +155,7 @@ BackendImpl::PackageImpl::PackageImpl(
         rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
     m_name = m_displayName;
 
-    dp_misc::TRACE(OUSTR("PakageImpl displayName is ") + m_displayName);
+    dp_misc::TRACE("PakageImpl displayName is " + m_displayName);
 }
 
 //______________________________________________________________________________
@@ -165,9 +164,9 @@ BackendImpl::BackendImpl(
     Reference<XComponentContext> const & xComponentContext )
     : PackageRegistryBackend( args, xComponentContext ),
       m_xTypeInfo( new Package::TypeInfo(
-                       OUSTR("application/vnd.sun.star.framework-script"),
+                       "application/vnd.sun.star.framework-script",
                        OUString() /* no file filter */,
-                       OUSTR("Scripting Framework Script Library"),
+                       "Scripting Framework Script Library",
                        RID_IMG_SCRIPTLIB ) )
 {
     if (! transientMode())
@@ -207,10 +206,10 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         {
             // probe for parcel-descriptor.xml:
             if (create_ucb_content(
-                    0, makeURL( url, OUSTR("parcel-descriptor.xml") ),
+                    0, makeURL( url, "parcel-descriptor.xml" ),
                     xCmdEnv, false /* no throw */ ))
             {
-                mediaType = OUSTR("application/vnd.sun.star.framework-script");
+                mediaType = OUString("application/vnd.sun.star.framework-script");
             }
         }
         if (mediaType.isEmpty())
@@ -229,7 +228,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
             {
                 OUString lang = OUString("Script");
                 OUString sParcelDescURL = makeURL(
-                    url, OUSTR("parcel-descriptor.xml") );
+                    url, "parcel-descriptor.xml" );
 
                 ::ucbhelper::Content ucb_content;
 
@@ -260,13 +259,13 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
 
                 OUString sfwkLibType = getResourceString( RID_STR_SFWK_LIB );
                 // replace %MACRONAME placeholder with language name
-                OUString MACRONAME( OUSTR("%MACROLANG" ) );
+                OUString MACRONAME( "%MACROLANG" );
                 sal_Int32 startOfReplace = sfwkLibType.indexOf( MACRONAME );
                 sal_Int32 charsToReplace = MACRONAME.getLength();
                 sfwkLibType = sfwkLibType.replaceAt( startOfReplace, charsToReplace, lang );
                 dp_misc::TRACE("******************************\n");
-                dp_misc::TRACE(OUSTR(" BackEnd detected lang = ") + lang + OUSTR("\n"));
-                dp_misc::TRACE(OUSTR(" for url ") + sParcelDescURL + OUSTR("\n") );
+                dp_misc::TRACE(" BackEnd detected lang = " + lang + "\n");
+                dp_misc::TRACE(" for url " + sParcelDescURL + "\n");
                 dp_misc::TRACE("******************************\n");
                 return new PackageImpl( this, url, sfwkLibType, bRemoved, identifier);
             }
@@ -289,15 +288,15 @@ void BackendImpl::PackageImpl:: initPackageHandler()
 
     if ( that->m_eContext == CONTEXT_USER )
     {
-        aContext  <<= OUSTR("user");
+        aContext  <<= OUString("user");
     }
     else if ( that->m_eContext == CONTEXT_SHARED )
     {
-        aContext  <<= OUSTR("share");
+        aContext  <<= OUString("share");
     }
     else if ( that->m_eContext == CONTEXT_BUNDLED )
     {
-        aContext  <<= OUSTR("bundled");
+        aContext  <<= OUString("bundled");
     }
     else
     {
@@ -307,7 +306,7 @@ void BackendImpl::PackageImpl:: initPackageHandler()
 
     Reference< provider::XScriptProviderFactory > xFac(
         that->getComponentContext()->getValueByName(
-            OUSTR( "/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory") ), UNO_QUERY );
+            "/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory"), UNO_QUERY );
 
     if ( xFac.is() )
     {
@@ -347,7 +346,7 @@ void BackendImpl::PackageImpl::processPackage_(
     if ( !m_xNameCntrPkgHandler.is() )
     {
         dp_misc::TRACE("no package handler!!!!\n");
-        throw RuntimeException( OUSTR("No package Handler " ),
+        throw RuntimeException( "No package Handler ",
             Reference< XInterface >() );
     }
 

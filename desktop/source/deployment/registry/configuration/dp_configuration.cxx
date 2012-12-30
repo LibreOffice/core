@@ -167,7 +167,7 @@ void BackendImpl::disposing()
     catch (const Exception &) {
         Any exc( ::cppu::getCaughtException() );
         throw lang::WrappedTargetRuntimeException(
-            OUSTR("caught unexpected exception while disposing..."),
+            "caught unexpected exception while disposing...",
             static_cast<OWeakObject *>(this), exc );
     }
 }
@@ -180,15 +180,13 @@ BackendImpl::BackendImpl(
       m_configmgrini_inited( false ),
       m_configmgrini_modified( false ),
       m_xConfDataTypeInfo( new Package::TypeInfo(
-                               OUSTR("application/"
-                                     "vnd.sun.star.configuration-data"),
-                               OUSTR("*.xcu"),
+                               "application/vnd.sun.star.configuration-data",
+                               "*.xcu",
                                getResourceString(RID_STR_CONF_DATA),
                                RID_IMG_CONF_XML ) ),
       m_xConfSchemaTypeInfo( new Package::TypeInfo(
-                                 OUSTR("application/"
-                                       "vnd.sun.star.configuration-schema"),
-                                 OUSTR("*.xcs"),
+                                 "application/vnd.sun.star.configuration-schema",
+                                 "*.xcs",
                                  getResourceString(RID_STR_CONF_SCHEMA),
                                  RID_IMG_CONF_XML ) ),
       m_typeInfos( 2 )
@@ -204,7 +202,7 @@ BackendImpl::BackendImpl(
     }
     else
     {
-        OUString dbFile = makeURL(getCachePath(), OUSTR("backenddb.xml"));
+        OUString dbFile = makeURL(getCachePath(), "backenddb.xml");
         m_backendDb.reset(
             new ConfigurationBackendDb(getComponentContext(), dbFile));
         //clean up data folders which are no longer used.
@@ -221,7 +219,7 @@ BackendImpl::BackendImpl(
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<PersistentMap> pMap;
         SAL_WNODEPRECATED_DECLARATIONS_POP
-        rtl::OUString aCompatURL( makeURL( getCachePath(), OUSTR("registered_packages.pmap") ) );
+        rtl::OUString aCompatURL( makeURL( getCachePath(), "registered_packages.pmap" ) );
 
         // Don't create it if it doesn't exist already
         if ( ::utl::UCBContentHelper::Exists( expandUnoRcUrl( aCompatURL ) ) )
@@ -313,15 +311,11 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         if (create_ucb_content( &ucbContent, url, xCmdEnv ))
         {
             const OUString title( StrTitle::getTitle( ucbContent ) );
-            if (title.endsWithIgnoreAsciiCaseAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM(".xcu") )) {
-                mediaType = OUSTR("application/"
-                                  "vnd.sun.star.configuration-data");
+            if (title.endsWithIgnoreAsciiCase( ".xcu" )) {
+                mediaType = OUString("application/vnd.sun.star.configuration-data");
             }
-            if (title.endsWithIgnoreAsciiCaseAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM(".xcs") )) {
-                mediaType = OUSTR("application/"
-                                  "vnd.sun.star.configuration-schema");
+            if (title.endsWithIgnoreAsciiCase( ".xcs" )) {
+                mediaType = OUString("application/vnd.sun.star.configuration-schema");
             }
         }
         if (mediaType.isEmpty())
@@ -377,11 +371,11 @@ void BackendImpl::configmgrini_verify_init(
         ::ucbhelper::Content ucb_content;
         if (create_ucb_content(
                 &ucb_content,
-                makeURL( getCachePath(), OUSTR("configmgr.ini") ),
+                makeURL( getCachePath(), "configmgr.ini" ),
                 xCmdEnv, false /* no throw */ ))
         {
             OUString line;
-            if (readLine( &line, OUSTR("SCHEMA="), ucb_content,
+            if (readLine( &line, "SCHEMA=", ucb_content,
                           RTL_TEXTENCODING_UTF8 ))
             {
                 sal_Int32 index = RTL_CONSTASCII_LENGTH("SCHEMA=");
@@ -397,7 +391,7 @@ void BackendImpl::configmgrini_verify_init(
                 }
                 while (index >= 0);
             }
-            if (readLine( &line, OUSTR("DATA="), ucb_content,
+            if (readLine( &line, "DATA=", ucb_content,
                           RTL_TEXTENCODING_UTF8 )) {
                 sal_Int32 index = RTL_CONSTASCII_LENGTH("DATA=");
                 do {
@@ -435,7 +429,7 @@ void BackendImpl::configmgrini_flush(
     {
         t_stringlist::const_iterator iPos( m_xcs_files.begin() );
         t_stringlist::const_iterator const iEnd( m_xcs_files.end() );
-        buf.append( RTL_CONSTASCII_STRINGPARAM("SCHEMA=") );
+        buf.append( "SCHEMA=" );
         while (iPos != iEnd) {
             // encoded ASCII file-urls:
             const ::rtl::OString item(
@@ -451,7 +445,7 @@ void BackendImpl::configmgrini_flush(
     {
         t_stringlist::const_iterator iPos( m_xcu_files.begin() );
         t_stringlist::const_iterator const iEnd( m_xcu_files.end() );
-        buf.append( RTL_CONSTASCII_STRINGPARAM("DATA=") );
+        buf.append( "DATA=" );
         while (iPos != iEnd) {
             // encoded ASCII file-urls:
             const ::rtl::OString item(
@@ -471,7 +465,7 @@ void BackendImpl::configmgrini_flush(
                 reinterpret_cast<sal_Int8 const *>(buf.getStr()),
                 buf.getLength() ) ) );
     ::ucbhelper::Content ucb_content(
-        makeURL( getCachePath(), OUSTR("configmgr.ini") ), xCmdEnv, m_xComponentContext );
+        makeURL( getCachePath(), "configmgr.ini" ), xCmdEnv, m_xComponentContext );
     ucb_content.writeStream( xData, true /* replace existing */ );
 
     m_configmgrini_modified = false;
@@ -539,7 +533,7 @@ BackendImpl * BackendImpl::PackageImpl::getMyBackend() const
         check();
         //We should never get here...
         throw RuntimeException(
-            OUSTR("Failed to get the BackendImpl"),
+            "Failed to get the BackendImpl",
             static_cast<OWeakObject*>(const_cast<PackageImpl *>(this)));
     }
     return pBackend;
@@ -580,19 +574,19 @@ OUString encodeForXml( OUString const & text )
         sal_Unicode c = text[ pos ];
         switch (c) {
         case '<':
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("&lt;") );
+            buf.appendAscii( "&lt;" );
             break;
         case '>':
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("&gt;") );
+            buf.appendAscii( "&gt;" );
             break;
         case '&':
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("&amp;") );
+            buf.appendAscii( "&amp;" );
             break;
         case '\'':
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("&apos;") );
+            buf.appendAscii( "&apos;" );
             break;
         case '\"':
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("&quot;") );
+            buf.appendAscii( "&quot;" );
             break;
         default:
             buf.append( c );
@@ -649,7 +643,8 @@ OUString replaceOrigin(
         }
         else if (rtl_str_shortenedCompare_WithLength(
                      pBytes, nBytes,
-                     RTL_CONSTASCII_STRINGPARAM("origin%"),
+                     "origin%",
+                     RTL_CONSTASCII_LENGTH("origin%"),
                      RTL_CONSTASCII_LENGTH("origin%")) == 0)
         {
             if (origin.isEmpty()) {
@@ -786,9 +781,9 @@ void BackendImpl::PackageImpl::processPackage_(
             try
             {
                 ::ucbhelper::Content(
-                    makeURL( that->getCachePath(), OUSTR("registry") ),
+                    makeURL( that->getCachePath(), "registry" ),
                     xCmdEnv, that->getComponentContext() ).executeCommand(
-                        OUSTR("delete"), Any( true /* delete physically */ ) );
+                        "delete", Any( true /* delete physically */ ) );
             }
             catch(const Exception&)
             {

@@ -96,8 +96,7 @@ PackageRegistryBackend::PackageRegistryBackend(
         m_eContext = CONTEXT_BUNDLED;
     else if ( m_context == "tmp" )
         m_eContext = CONTEXT_TMP;
-    else if (m_context.matchIgnoreAsciiCaseAsciiL(
-                 RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.tdoc:/") ))
+    else if (m_context.matchIgnoreAsciiCase("vnd.sun.star.tdoc:/"))
         m_eContext = CONTEXT_DOCUMENT;
     else
         m_eContext = CONTEXT_UNKNOWN;
@@ -109,7 +108,7 @@ void PackageRegistryBackend::check()
     ::osl::MutexGuard guard( getMutex() );
     if (rBHelper.bInDispose || rBHelper.bDisposed) {
         throw lang::DisposedException(
-            OUSTR("PackageRegistryBackend instance has already been disposed!"),
+            "PackageRegistryBackend instance has already been disposed!",
             static_cast<OWeakObject *>(this) );
     }
 }
@@ -130,7 +129,7 @@ void PackageRegistryBackend::disposing()
     catch (const Exception &) {
         Any exc( ::cppu::getCaughtException() );
         throw lang::WrappedTargetRuntimeException(
-            OUSTR("caught unexpected exception while disposing!"),
+            "caught unexpected exception while disposing!",
             static_cast<OWeakObject *>(this), exc );
     }
 }
@@ -157,11 +156,11 @@ Reference<deployment::XPackage> PackageRegistryBackend::bindPackage(
             if (!mediaType.isEmpty() &&
                 mediaType != xPackage->getPackageType()->getMediaType())
                 throw lang::IllegalArgumentException
-                    (OUSTR("XPackageRegistry::bindPackage: media type does not match"),
+                    ("XPackageRegistry::bindPackage: media type does not match",
                      static_cast<OWeakObject*>(this), 1);
             if (xPackage->isRemoved() != bRemoved)
                 throw deployment::InvalidRemovedParameterException(
-                    OUSTR("XPackageRegistry::bindPackage: bRemoved parameter does not match"),
+                    "XPackageRegistry::bindPackage: bRemoved parameter does not match",
                     static_cast<OWeakObject*>(this), xPackage->isRemoved(), xPackage);
             return xPackage;
         }
@@ -186,7 +185,7 @@ Reference<deployment::XPackage> PackageRegistryBackend::bindPackage(
     catch (const Exception &) {
         Any exc( ::cppu::getCaughtException() );
         throw deployment::DeploymentException(
-            OUSTR("Error binding package: ") + url,
+            "Error binding package: " + url,
             static_cast<OWeakObject *>(this), exc );
     }
 
@@ -278,7 +277,7 @@ void PackageRegistryBackend::deleteUnusedFolders(
                     xResultSet, UNO_QUERY_THROW )->getString(
                         1 /* Title */ ) );
 
-            if (title.endsWithAsciiL(RTL_CONSTASCII_STRINGPARAM(tmp)))
+            if (title.endsWith(tmp))
                 tempEntries.push_back(
                     makeURLAppendSysPathSegment(sDataFolder, title));
         }
@@ -351,7 +350,7 @@ void Package::check() const
     ::osl::MutexGuard guard( getMutex() );
     if (rBHelper.bInDispose || rBHelper.bDisposed) {
         throw lang::DisposedException(
-            OUSTR("Package instance has already been disposed!"),
+            "Package instance has already been disposed!",
             static_cast<OWeakObject *>(const_cast<Package *>(this)));
     }
 }
@@ -408,7 +407,7 @@ void Package::checkAborted(
 {
     if (abortChannel.is() && abortChannel->isAborted()) {
         throw CommandAbortedException(
-            OUSTR("abort!"), static_cast<OWeakObject *>(this) );
+            "abort!", static_cast<OWeakObject *>(this) );
     }
 }
 
@@ -577,7 +576,7 @@ void Package::exportTo(
     if (! destFolder.transferContent(
             sourceContent, ::ucbhelper::InsertOperation_COPY,
             newTitle, nameClashAction ))
-        throw RuntimeException( OUSTR("UCB transferContent() failed!"), 0 );
+        throw RuntimeException( "UCB transferContent() failed!", 0 );
 }
 
 //______________________________________________________________________________
@@ -629,7 +628,7 @@ beans::Optional< beans::Ambiguous<sal_Bool> > Package::isRegistered(
     catch (const Exception &) {
         Any exc( ::cppu::getCaughtException() );
         throw deployment::DeploymentException(
-            OUSTR("unexpected exception occurred!"),
+            "unexpected exception occurred!",
             static_cast<OWeakObject *>(this), exc );
     }
 }
@@ -740,7 +739,7 @@ PackageRegistryBackend * Package::getMyBackend() const
         check();
         //We should never get here...
         throw RuntimeException(
-            OUSTR("Failed to get the BackendImpl"),
+            "Failed to get the BackendImpl",
             static_cast<OWeakObject*>(const_cast<Package *>(this)));
     }
     return pBackend;

@@ -293,14 +293,13 @@ BackendImpl::BackendImpl(
     : ImplBaseT( args, xComponentContext ),
       m_xRootRegistry( xRootRegistry ),
       m_xBundleTypeInfo( new Package::TypeInfo(
-                             OUSTR("application/vnd.sun.star.package-bundle"),
-                             OUSTR("*.oxt;*.uno.pkg"),
+                             "application/vnd.sun.star.package-bundle",
+                             "*.oxt;*.uno.pkg",
                              getResourceString(RID_STR_PACKAGE_BUNDLE),
                              RID_IMG_DEF_PACKAGE_BUNDLE ) ),
       m_xLegacyBundleTypeInfo( new Package::TypeInfo(
-                                   OUSTR("application/"
-                                         "vnd.sun.star.legacy-package-bundle"),
-                                   OUSTR("*.zip"),
+                                   "application/vnd.sun.star.legacy-package-bundle",
+                                   "*.zip",
                                    m_xBundleTypeInfo->getShortDescription(),
                                    RID_IMG_DEF_PACKAGE_BUNDLE ) ),
     m_typeInfos(2)
@@ -311,7 +310,7 @@ BackendImpl::BackendImpl(
     if (!transientMode())
     {
         OUString dbFile = makeURL(getCachePath(), getImplementationName());
-        dbFile = makeURL(dbFile, OUSTR("backenddb.xml"));
+        dbFile = makeURL(dbFile, "backenddb.xml");
         m_backendDb.reset(
             new ExtensionBackendDb(getComponentContext(), dbFile));
    }
@@ -327,7 +326,7 @@ void BackendImpl::disposing()
 // XServiceInfo
 OUString BackendImpl::getImplementationName() throw (RuntimeException)
 {
-    return OUSTR("com.sun.star.comp.deployment.bundle.PackageRegistryBackend");
+    return OUString("com.sun.star.comp.deployment.bundle.PackageRegistryBackend");
 }
 
 sal_Bool BackendImpl::supportsService( OUString const& name )
@@ -387,25 +386,22 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                 //Every .oxt, uno.pkg file must contain a META-INF folder
                 ::ucbhelper::Content metaInfContent;
                 if (create_ucb_content(
-                    &metaInfContent, makeURL( url, OUSTR("META-INF") ),
+                    &metaInfContent, makeURL( url, "META-INF" ),
                     xCmdEnv, false /* no throw */ ))
                 {
-                     mediaType = OUSTR("application/vnd.sun.star.package-bundle");
+                     mediaType = OUString("application/vnd.sun.star.package-bundle");
                 }
                 //No support of legacy bundles, because every folder could be one.
             }
             else
             {
                 const OUString title( StrTitle::getTitle( ucbContent ) );
-                if (title.endsWithIgnoreAsciiCaseAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM(".oxt") ) ||
-                    title.endsWithIgnoreAsciiCaseAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM(".uno.pkg") ))
-                    mediaType = OUSTR("application/vnd.sun.star.package-bundle");
-                else if (title.endsWithIgnoreAsciiCaseAsciiL(
-                             RTL_CONSTASCII_STRINGPARAM(".zip") ))
+                if (title.endsWithIgnoreAsciiCase(".oxt") ||
+                    title.endsWithIgnoreAsciiCase(".uno.pkg"))
+                    mediaType = OUString("application/vnd.sun.star.package-bundle");
+                else if (title.endsWithIgnoreAsciiCase(".zip"))
                     mediaType =
-                        OUSTR("application/vnd.sun.star.legacy-package-bundle");
+                        OUString("application/vnd.sun.star.legacy-package-bundle");
             }
         }
         if (mediaType.isEmpty())
@@ -498,8 +494,7 @@ BackendImpl * BackendImpl::PackageImpl::getMyBackend() const
         //May throw a DisposedException
         check();
         //We should never get here...
-        throw RuntimeException(
-            OUSTR("Failed to get the BackendImpl"),
+        throw RuntimeException("Failed to get the BackendImpl",
             static_cast<OWeakObject*>(const_cast<PackageImpl *>(this)));
     }
     return pBackend;
@@ -590,7 +585,7 @@ OUString BackendImpl::PackageImpl::getTextFromURL(
     {
         Any exc( ::cppu::getCaughtException() );
             throw css::deployment::DeploymentException(
-                OUSTR("Could not read file ") + licenseUrl, 0, exc);
+                "Could not read file " + licenseUrl, 0, exc);
     }
 
 }
@@ -676,14 +671,14 @@ bool BackendImpl::PackageImpl::checkDependencies(
         //license is available.
         if (sLic.isEmpty())
             throw css::deployment::DeploymentException(
-                OUSTR("Could not obtain path to license. Possible error in description.xml"), 0, Any());
-        OUString sHref = m_url_expanded + OUSTR("/") + sLic;
+                "Could not obtain path to license. Possible error in description.xml", 0, Any());
+        OUString sHref = m_url_expanded + "/" + sLic;
            OUString sLicense = getTextFromURL(xCmdEnv, sHref);
         ////determine who has to agree to the license
         //check correct value for attribute
-        if ( ! (simplLicAttr->acceptBy.equals(OUSTR("user")) || simplLicAttr->acceptBy.equals(OUSTR("admin"))))
+        if ( ! (simplLicAttr->acceptBy == "user" || simplLicAttr->acceptBy == "admin"))
             throw css::deployment::DeploymentException(
-                OUSTR("Could not obtain attribute simple-lincense@accept-by or it has no valid value"), 0, Any());
+                "Could not obtain attribute simple-lincense@accept-by or it has no valid value", 0, Any());
 
 
         //Only use interaction if there is no version of this extension already installed
@@ -705,7 +700,7 @@ bool BackendImpl::PackageImpl::checkDependencies(
             if (! interactContinuation(
                 Any(licExc), task::XInteractionApprove::static_type(), xCmdEnv, &approve, &abort ))
                 throw css::deployment::DeploymentException(
-                    OUSTR("Could not interact with user."), 0, Any());
+                    "Could not interact with user.", 0, Any());
 
             if (approve == true)
                 return true;
@@ -723,7 +718,7 @@ bool BackendImpl::PackageImpl::checkDependencies(
         throw;
     } catch (const css::uno::Exception&) {
         Any anyExc = cppu::getCaughtException();
-        throw css::deployment::DeploymentException(OUSTR("Unexpected exception"), 0, anyExc);
+        throw css::deployment::DeploymentException("Unexpected exception", 0, anyExc);
     }
 }
 
@@ -826,13 +821,13 @@ uno::Reference< graphic::XGraphic > BackendImpl::PackageImpl::getIcon( sal_Bool 
     OUString aIconURL = getDescriptionInfoset().getIconURL( bHighContrast );
     if ( !aIconURL.isEmpty() )
     {
-        OUString aFullIconURL = m_url_expanded + OUSTR("/") + aIconURL;
+        OUString aFullIconURL = m_url_expanded + "/" + aIconURL;
 
         uno::Reference< XComponentContext > xContext( getMyBackend()->getComponentContext() );
         uno::Reference< graphic::XGraphicProvider > xGraphProvider( graphic::GraphicProvider::create(xContext) );
 
             uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
-            aMediaProps[0].Name = OUSTR( "URL" );
+            aMediaProps[0].Name = "URL";
             aMediaProps[0].Value <<= aFullIconURL;
 
         xGraphic = xGraphProvider->queryGraphic( aMediaProps );
@@ -875,7 +870,7 @@ void BackendImpl::PackageImpl::processPackage_(
                 bool approve = false, abort = false;
                 if (! interactContinuation(
                         Any( lang::WrappedTargetException(
-                                 OUSTR("bundle item registration error!"),
+                                 "bundle item registration error!",
                                  static_cast<OWeakObject *>(this), exc ) ),
                         task::XInteractionApprove::static_type(), xCmdEnv,
                         &approve, &abort )) {
@@ -891,8 +886,7 @@ void BackendImpl::PackageImpl::processPackage_(
                     continue;
 
                 {
-                    ProgressLevel progress(
-                        xCmdEnv, OUSTR("rollback...") );
+                    ProgressLevel progress( xCmdEnv, "rollback..." );
                     // try rollback
                     for ( ; pos--; )
                     {
@@ -909,7 +903,7 @@ void BackendImpl::PackageImpl::processPackage_(
                             // ignore any errors of rollback
                         }
                     }
-                    progress.update( OUSTR("rollback finished.") );
+                    progress.update( "rollback finished." );
                 }
 
                 deployment::DeploymentException dpExc;
@@ -955,7 +949,7 @@ void BackendImpl::PackageImpl::processPackage_(
                 bool approve = false, abort = false;
                 if (! interactContinuation(
                         Any( lang::WrappedTargetException(
-                                 OUSTR("bundle item revocation error!"),
+                                 "bundle item revocation error!",
                                  static_cast<OWeakObject *>(this), exc ) ),
                         task::XInteractionApprove::static_type(), xCmdEnv,
                         &approve, &abort )) {
@@ -986,7 +980,7 @@ OUString BackendImpl::PackageImpl::getDescription()
     OUString sDescription;
     if (!sRelativeURL.isEmpty())
     {
-        OUString sURL = m_url_expanded + OUSTR("/") + sRelativeURL;
+        OUString sURL = m_url_expanded + "/" + sRelativeURL;
 
         try
         {
@@ -1020,7 +1014,7 @@ OUString BackendImpl::PackageImpl::getLicenseText()
 
         if ( !aLicenseURL.isEmpty() )
         {
-            OUString aFullURL = m_url_expanded + OUSTR("/") + aLicenseURL;
+            OUString aFullURL = m_url_expanded + "/" + aLicenseURL;
                sLicense = getTextFromURL( Reference< ucb::XCommandEnvironment >(), aFullURL);
            }
     }
@@ -1043,7 +1037,7 @@ void BackendImpl::PackageImpl::exportTo(
         m_url_expanded, xCmdEnv, getMyBackend()->getComponentContext() );
     OUString title(newTitle);
     if (title.isEmpty())
-        sourceContent.getPropertyValue( OUSTR( "Title" ) ) >>= title;
+        sourceContent.getPropertyValue( "Title" ) >>= title;
     OUString destURL( makeURL( destFolderURL, ::rtl::Uri::encode(
                                    title, rtl_UriCharClassPchar,
                                    rtl_UriEncodeIgnoreEscapes,
@@ -1056,7 +1050,7 @@ void BackendImpl::PackageImpl::exportTo(
             bool replace = false, abort = false;
             if (! interactContinuation(
                     Any( ucb::NameClashResolveRequest(
-                             OUSTR("file already exists: ") + title,
+                             "file already exists: " + title,
                              static_cast<OWeakObject *>(this),
                              task::InteractionClassification_QUERY,
                              destFolderURL, title, OUString() ) ),
@@ -1067,14 +1061,13 @@ void BackendImpl::PackageImpl::exportTo(
         }
     }
     else if (nameClashAction != ucb::NameClash::OVERWRITE) {
-        throw ucb::CommandFailedException(
-            OUSTR("unsupported nameClashAction!"),
+        throw ucb::CommandFailedException("unsupported nameClashAction!",
             static_cast<OWeakObject *>(this), Any() );
     }
     erase_path( destURL, xCmdEnv );
 
     ::rtl::OUStringBuffer buf;
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.zip://") );
+    buf.appendAscii( "vnd.sun.star.zip://" );
     buf.append( ::rtl::Uri::encode( destURL,
                                     rtl_UriCharClassRegName,
                                     rtl_UriEncodeIgnoreEscapes,
@@ -1100,7 +1093,7 @@ void BackendImpl::PackageImpl::exportTo(
             if (! destFolderContent.transferContent(
                     subContent, ::ucbhelper::InsertOperation_COPY,
                     OUString(), ucb::NameClash::OVERWRITE ))
-                throw RuntimeException( OUSTR("UCB transferContent() failed!"),
+                throw RuntimeException( "UCB transferContent() failed!",
                                         static_cast<OWeakObject *>(this) );
             progress.update( Any() ); // animating progress bar
         }
@@ -1109,7 +1102,7 @@ void BackendImpl::PackageImpl::exportTo(
     // assure META-INF folder:
     ::ucbhelper::Content metainfFolderContent;
     create_folder( &metainfFolderContent,
-                   makeURL( destFolderContent.getURL(), OUSTR("META-INF") ),
+                   makeURL( destFolderContent.getURL(), "META-INF" ),
                    xCmdEnv );
 
     if (m_legacyBundle)
@@ -1140,9 +1133,9 @@ void BackendImpl::PackageImpl::exportTo(
         manifest.reserve( bundle.getLength() );
         sal_Int32 baseURLlen = m_url_expanded.getLength();
         Reference<deployment::XPackage> const *pbundle = bundle.getConstArray();
-        const OUString strMediaType = OUSTR("MediaType");
-        const OUString strFullPath = OUSTR("FullPath");
-        const OUString strIsFolder = OUSTR("IsFolder");
+        const OUString strMediaType( "MediaType" );
+        const OUString strFullPath( "FullPath" );
+        const OUString strIsFolder( "IsFolder" );
         for ( sal_Int32 pos = bundle.getLength(); pos--; )
         {
             Reference<deployment::XPackage> const & xPackage = pbundle[ pos ];
@@ -1154,7 +1147,7 @@ void BackendImpl::PackageImpl::exportTo(
             ::ucbhelper::Content ucbContent(
                 url_, xCmdEnv, getMyBackend()->getComponentContext() );
             if (ucbContent.getPropertyValue(strIsFolder).get<bool>())
-                fullPath += OUSTR("/");
+                fullPath += "/";
             Sequence<beans::PropertyValue> attribs( 2 );
             beans::PropertyValue * pattribs = attribs.getArray();
             pattribs[ 0 ].Name = strFullPath;
@@ -1167,7 +1160,7 @@ void BackendImpl::PackageImpl::exportTo(
             if (xPackageType.is())
                 mediaType = xPackageType->getMediaType();
             else
-                mediaType = OUSTR("unknown");
+                mediaType = "unknown";
             pattribs[ 1 ].Value <<= mediaType;
             manifest.push_back( attribs );
         }
@@ -1183,7 +1176,7 @@ void BackendImpl::PackageImpl::exportTo(
 
         // write buffered pipe data to content:
         ::ucbhelper::Content manifestContent(
-            makeURL( metainfFolderContent.getURL(), OUSTR("manifest.xml") ),
+            makeURL( metainfFolderContent.getURL(), "manifest.xml" ),
             xCmdEnv, getMyBackend()->getComponentContext() );
         manifestContent.writeStream(
             Reference<io::XInputStream>( xPipe, UNO_QUERY_THROW ),
@@ -1195,7 +1188,7 @@ void BackendImpl::PackageImpl::exportTo(
         ::ucbhelper::Content manifestContent;
         if ( ! create_ucb_content(
             &manifestContent,
-            makeURL( m_url_expanded, OUSTR("META-INF/manifest.xml") ),
+            makeURL( m_url_expanded, "META-INF/manifest.xml" ),
             xCmdEnv, false ) )
         {
             OSL_FAIL( "### missing META-INF/manifest.xml file!" );
@@ -1205,13 +1198,13 @@ void BackendImpl::PackageImpl::exportTo(
         if (! metainfFolderContent.transferContent(
                 manifestContent, ::ucbhelper::InsertOperation_COPY,
                 OUString(), ucb::NameClash::OVERWRITE ))
-            throw RuntimeException( OUSTR("UCB transferContent() failed!"),
+            throw RuntimeException( "UCB transferContent() failed!",
                                     static_cast<OWeakObject *>(this) );
     }
 
     // xxx todo: maybe obsolete in the future
     try {
-        destFolderContent.executeCommand( OUSTR("flush"), Any() );
+        destFolderContent.executeCommand( "flush", Any() );
     }
     catch (const ucb::UnsupportedCommandException &) {
     }
@@ -1249,16 +1242,15 @@ Sequence< Reference<deployment::XPackage> > BackendImpl::PackageImpl::getBundle(
                     OUString mediaType;
                     // probe for script.xlb:
                     if (create_ucb_content(
-                            0, makeURL( m_url_expanded, OUSTR("script.xlb") ),
+                            0, makeURL( m_url_expanded, "script.xlb" ),
                             xCmdEnv, false /* no throw */ )) {
-                        mediaType = OUSTR("application/vnd.sun.star.basic-library");
+                        mediaType = "application/vnd.sun.star.basic-library";
                     }
                     // probe for dialog.xlb:
                     else if (create_ucb_content(
-                                 0, makeURL( m_url_expanded, OUSTR("dialog.xlb") ),
+                                 0, makeURL( m_url_expanded, "dialog.xlb" ),
                                  xCmdEnv, false /* no throw */ ))
-                        mediaType = OUSTR("application/vnd.sun.star."
-                                          "dialog-library");
+                        mediaType = "application/vnd.sun.star.dialog-library";
 
                     if (!mediaType.isEmpty()) {
                         const Reference<deployment::XPackage> xPackage(
@@ -1293,7 +1285,7 @@ Sequence< Reference<deployment::XPackage> > BackendImpl::PackageImpl::getBundle(
             catch (const Exception &) {
                 Any exc( ::cppu::getCaughtException() );
                 throw deployment::DeploymentException(
-                    OUSTR("error scanning bundle: ") + getURL(),
+                    "error scanning bundle: " + getURL(),
                     static_cast<OWeakObject *>(this), exc );
             }
         }
@@ -1390,8 +1382,7 @@ Reference<deployment::XPackage> BackendImpl::PackageImpl::bindBundleItem(
                                lang::IllegalArgumentException const *>(0) ) ))
         {
             interactContinuation(
-                Any( lang::WrappedTargetException(
-                         OUSTR("bundle item error!"),
+                Any( lang::WrappedTargetException("bundle item error!",
                          static_cast<OWeakObject *>(this), exc ) ),
                 task::XInteractionApprove::static_type(), xCmdEnv, 0, 0 );
         }
@@ -1419,7 +1410,7 @@ void BackendImpl::PackageImpl::scanBundle(
     ::ucbhelper::Content manifestContent;
     if (! create_ucb_content(
             &manifestContent,
-            makeURL( m_url_expanded, OUSTR("META-INF/manifest.xml") ),
+            makeURL( m_url_expanded, "META-INF/manifest.xml" ),
             xCmdEnv, false /* no throw */ ))
     {
         OSL_FAIL( "### missing META-INF/manifest.xml file!" );
@@ -1460,8 +1451,7 @@ void BackendImpl::PackageImpl::scanBundle(
         if (! INetContentTypes::parse( mediaType, type, subType, &params ))
             continue;
 
-        INetContentTypeParameter const * param = params.find(
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("platform")));
+        INetContentTypeParameter const * param = params.find("platform");
         if (param != 0 && !platform_fits( param->m_sValue ))
             continue;
         const OUString url( makeURL( packageRootURL, fullPath ) );
@@ -1471,7 +1461,7 @@ void BackendImpl::PackageImpl::scanBundle(
             subType.equalsIgnoreAsciiCaseAscii( "vnd.sun.star.package-bundle-description"))
         {
             // check locale:
-            param = params.find(rtl::OString(RTL_CONSTASCII_STRINGPARAM("locale")));
+            param = params.find("locale");
             if (param == 0) {
                 if (descrFile.isEmpty())
                     descrFile = url;
@@ -1549,16 +1539,14 @@ void BackendImpl::PackageImpl::scanLegacyBundle(
 
     // check for platform paths:
     const OUString title( StrTitle::getTitle( ucbContent ) );
-    if (title.endsWithIgnoreAsciiCaseAsciiL(
-            RTL_CONSTASCII_STRINGPARAM(".plt") ) &&
+    if (title.endsWithIgnoreAsciiCase( ".plt" ) &&
         !platform_fits( title.copy( 0, title.getLength() - 4 ) )) {
         return;
     }
-    if (title.endsWithIgnoreAsciiCaseAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("skip_registration") ))
+    if (title.endsWithIgnoreAsciiCase("skip_registration") )
         skip_registration = true;
 
-    OUString ar [] = { OUSTR("Title"), OUSTR("IsFolder") };
+    OUString ar [] = { "Title", "IsFolder" };
     Reference<sdbc::XResultSet> xResultSet(
         ucbContent.createCursor(
             Sequence<OUString>( ar, ARLEN(ar) ),
@@ -1588,9 +1576,7 @@ void BackendImpl::PackageImpl::scanLegacyBundle(
 
             if (skip_registration &&
                 // xxx todo: additional parsing?
-                mediaType.matchIgnoreAsciiCaseAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM(
-                        "application/vnd.sun.star.uno-component") ))
+                mediaType.matchIgnoreAsciiCase("application/vnd.sun.star.uno-component"))
                 continue;
 
             bundle.push_back( xPackage );
@@ -1598,12 +1584,8 @@ void BackendImpl::PackageImpl::scanLegacyBundle(
 
         if (mediaType.isEmpty() ||
             // script.xlb, dialog.xlb can be met everywhere:
-            mediaType.matchIgnoreAsciiCaseAsciiL(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "application/vnd.sun.star.basic-library") ) ||
-            mediaType.matchIgnoreAsciiCaseAsciiL(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "application/vnd.sun.star.dialog-library") ))
+            mediaType.matchIgnoreAsciiCase("application/vnd.sun.star.basic-library") ||
+            mediaType.matchIgnoreAsciiCase("application/vnd.sun.star.dialog-library"))
         {
             if (xRow->getBoolean( 2 /* IsFolder */ )) { // recurse into folder:
                 scanLegacyBundle(

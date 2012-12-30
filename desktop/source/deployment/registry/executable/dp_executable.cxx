@@ -108,14 +108,12 @@ BackendImpl::BackendImpl(
     Reference<XComponentContext> const & xComponentContext )
     : PackageRegistryBackend( args, xComponentContext ),
       m_xExecutableTypeInfo(new Package::TypeInfo(
-                                OUSTR("application/vnd.sun.star.executable"),
-                                OUSTR(""),
-                                OUSTR("Executable"),
-                                RID_IMG_COMPONENT ) )
+                                "application/vnd.sun.star.executable",
+                                "", "Executable", RID_IMG_COMPONENT ) )
 {
     if (!transientMode())
     {
-        OUString dbFile = makeURL(getCachePath(), OUSTR("backenddb.xml"));
+        OUString dbFile = makeURL(getCachePath(), "backenddb.xml");
         m_backendDb.reset(
             new ExecutableBackendDb(getComponentContext(), dbFile));
    }
@@ -204,8 +202,7 @@ BackendImpl * BackendImpl::ExecutablePackageImpl::getMyBackend() const
         //May throw a DisposedException
         check();
         //We should never get here...
-        throw RuntimeException(
-            OUSTR("Failed to get the BackendImpl"),
+        throw RuntimeException( "Failed to get the BackendImpl",
             static_cast<OWeakObject*>(const_cast<ExecutablePackageImpl *>(this)));
     }
     return pBackend;
@@ -243,12 +240,12 @@ void BackendImpl::ExecutablePackageImpl::processPackage_(
         //Setting the executable attribut does not affect executables on Windows
         if (getFileAttributes(attributes))
         {
-            if(getMyBackend()->m_context.equals(OUSTR("user")))
+            if(getMyBackend()->m_context == "user")
                 attributes |= osl_File_Attribute_OwnExe;
-            else if (getMyBackend()->m_context.equals(OUSTR("shared")))
+            else if (getMyBackend()->m_context == "shared")
                 attributes |= (osl_File_Attribute_OwnExe | osl_File_Attribute_GrpExe
                                | osl_File_Attribute_OthExe);
-            else if (!getMyBackend()->m_context.equals(OUSTR("bundled")))
+            else if (!(getMyBackend()->m_context == "bundled"))
                 //Bundled extension are required to be in the properly
                 //installed. That is an executable must have the right flags
                 OSL_ASSERT(0);
@@ -273,12 +270,12 @@ bool BackendImpl::ExecutablePackageImpl::isUrlTargetInExtension()
 {
     bool bSuccess = false;
     OUString sExtensionDir;
-    if(getMyBackend()->m_context.equals(OUSTR("user")))
-        sExtensionDir = dp_misc::expandUnoRcTerm(OUSTR("$UNO_USER_PACKAGES_CACHE"));
-    else if (getMyBackend()->m_context.equals(OUSTR("shared")))
-        sExtensionDir = dp_misc::expandUnoRcTerm(OUSTR("$UNO_SHARED_PACKAGES_CACHE"));
-    else if (getMyBackend()->m_context.equals(OUSTR("bundled")))
-        sExtensionDir = dp_misc::expandUnoRcTerm(OUSTR("$BUNDLED_EXTENSIONS"));
+    if(getMyBackend()->m_context == "user")
+        sExtensionDir = dp_misc::expandUnoRcTerm("$UNO_USER_PACKAGES_CACHE");
+    else if (getMyBackend()->m_context == "shared")
+        sExtensionDir = dp_misc::expandUnoRcTerm("$UNO_SHARED_PACKAGES_CACHE");
+    else if (getMyBackend()->m_context == "bundled")
+        sExtensionDir = dp_misc::expandUnoRcTerm("$BUNDLED_EXTENSIONS");
     else
         OSL_ASSERT(0);
     //remove file ellipses

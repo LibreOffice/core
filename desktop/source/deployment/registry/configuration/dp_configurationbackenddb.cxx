@@ -50,22 +50,22 @@ ConfigurationBackendDb::ConfigurationBackendDb(
 
 OUString ConfigurationBackendDb::getDbNSName()
 {
-    return OUSTR(EXTENSION_REG_NS);
+    return OUString(EXTENSION_REG_NS);
 }
 
 OUString ConfigurationBackendDb::getNSPrefix()
 {
-    return OUSTR(NS_PREFIX);
+    return OUString(NS_PREFIX);
 }
 
 OUString ConfigurationBackendDb::getRootElementName()
 {
-    return OUSTR(ROOT_ELEMENT_NAME);
+    return OUString(ROOT_ELEMENT_NAME);
 }
 
 OUString ConfigurationBackendDb::getKeyElementName()
 {
-    return OUSTR(KEY_ELEMENT_NAME);
+    return OUString(KEY_ELEMENT_NAME);
 }
 
 
@@ -77,8 +77,8 @@ void ConfigurationBackendDb::addEntry(::rtl::OUString const & url, Data const & 
             Reference<css::xml::dom::XNode> helpNode
                 = writeKeyElement(url);
 
-            writeSimpleElement(OUSTR("data-url"), data.dataUrl, helpNode);
-            writeSimpleElement(OUSTR("ini-entry"), data.iniEntry, helpNode);
+            writeSimpleElement("data-url", data.dataUrl, helpNode);
+            writeSimpleElement("ini-entry", data.iniEntry, helpNode);
             save();
         }
     }
@@ -90,7 +90,7 @@ void ConfigurationBackendDb::addEntry(::rtl::OUString const & url, Data const & 
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
-            OUSTR("Extension Manager: failed to write data entry in configuration backend db: ") +
+            "Extension Manager: failed to write data entry in configuration backend db: " +
             m_urlDb, 0, exc);
     }
 }
@@ -105,8 +105,8 @@ ConfigurationBackendDb::getEntry(::rtl::OUString const & url)
         Reference<css::xml::dom::XNode> aNode = getKeyElement(url);
         if (aNode.is())
         {
-            retData.dataUrl = readSimpleElement(OUSTR("data-url"), aNode);
-            retData.iniEntry = readSimpleElement(OUSTR("ini-entry"), aNode);
+            retData.dataUrl = readSimpleElement("data-url", aNode);
+            retData.iniEntry = readSimpleElement("ini-entry", aNode);
         }
         else
         {
@@ -122,7 +122,7 @@ ConfigurationBackendDb::getEntry(::rtl::OUString const & url)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
-            OUSTR("Extension Manager: failed to read data entry in configuration backend db: ") +
+            "Extension Manager: failed to read data entry in configuration backend db: " +
             m_urlDb, 0, exc);
     }
 }
@@ -138,7 +138,7 @@ ConfigurationBackendDb::getEntry(::rtl::OUString const & url)
         Reference<css::xml::xpath::XXPathAPI> xpathApi = getXPathAPI();
         const OUString sPrefix = getNSPrefix();
         OUString sExpression(
-            sPrefix + OUSTR(":configuration/") + sPrefix + OUSTR(":data-url/text()"));
+            sPrefix + ":configuration/" + sPrefix + ":data-url/text()");
         Reference<css::xml::dom::XNodeList> nodes =
             xpathApi->selectNodeList(root, sExpression);
         if (nodes.is())
@@ -157,7 +157,7 @@ ConfigurationBackendDb::getEntry(::rtl::OUString const & url)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
-            OUSTR("Extension Manager: failed to read data entry in configuration backend db: ") +
+            "Extension Manager: failed to read data entry in configuration backend db: " +
             m_urlDb, 0, exc);
     }
 }

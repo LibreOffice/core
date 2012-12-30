@@ -87,7 +87,7 @@ css::uno::Reference<css::xml::dom::XDocument> BackendDb::getDocument()
             m_doc = xDocBuilder->newDocument();
             const Reference<css::xml::dom::XElement> rootNode =
                 m_doc->createElementNS(getDbNSName(), getNSPrefix() +
-                                       OUSTR(":") + getRootElementName());
+                                       ":" + getRootElementName());
 
             m_doc->appendChild(Reference<css::xml::dom::XNode>(
                                    rootNode, UNO_QUERY_THROW));
@@ -95,12 +95,12 @@ css::uno::Reference<css::xml::dom::XDocument> BackendDb::getDocument()
         }
         else
             throw css::uno::RuntimeException(
-                OUSTR("Extension manager could not access database file:" )
+                "Extension manager could not access database file:"
                 + m_urlDb, 0);
 
         if (!m_doc.is())
             throw css::uno::RuntimeException(
-                OUSTR("Extension manager could not get root node of data base file: ")
+                "Extension manager could not get root node of data base file: "
                       + m_urlDb, 0);
     }
 
@@ -113,12 +113,12 @@ Reference<css::xml::xpath::XXPathAPI> BackendDb::getXPathAPI()
     {
         m_xpathApi = Reference< css::xml::xpath::XXPathAPI >(
             m_xContext->getServiceManager()->createInstanceWithContext(
-                OUSTR("com.sun.star.xml.xpath.XPathAPI"),
+                "com.sun.star.xml.xpath.XPathAPI",
                 m_xContext), css::uno::UNO_QUERY);
 
         if (!m_xpathApi.is())
             throw css::uno::RuntimeException(
-                OUSTR(" Could not create service com.sun.star.xml.xpath.XPathAPI"), 0);
+                " Could not create service com.sun.star.xml.xpath.XPathAPI", 0);
 
         m_xpathApi->registerNS(
             getNSPrefix(), getDbNSName());
@@ -155,7 +155,7 @@ void BackendDb::removeElement(::rtl::OUString const & sXPathExpression)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
-            OUSTR("Extension Manager: failed to write data entry in backend db: ") +
+            "Extension Manager: failed to write data entry in backend db: " +
             m_urlDb, 0, exc);
     }
 }
@@ -168,7 +168,7 @@ void BackendDb::removeEntry(::rtl::OUString const & url)
     sExpression.append(sPrefix);
     sExpression.appendAscii(":");
     sExpression.append(sKeyElement);
-    sExpression.append(OUSTR("[@url = \""));
+    sExpression.append("[@url = \"");
     sExpression.append(url);
     sExpression.appendAscii("\"]");
 
@@ -182,7 +182,7 @@ void BackendDb::revokeEntry(::rtl::OUString const & url)
         Reference<css::xml::dom::XElement> entry = Reference<css::xml::dom::XElement>(getKeyElement(url), UNO_QUERY);
         if (entry.is())
         {
-            entry->setAttribute(OUSTR("revoked"), OUSTR("true"));
+            entry->setAttribute("revoked", "true");
             save();
         }
     }
@@ -190,7 +190,7 @@ void BackendDb::revokeEntry(::rtl::OUString const & url)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
-            OUSTR("Extension Manager: failed to revoke data entry in backend db: ") +
+            "Extension Manager: failed to revoke data entry in backend db: " +
             m_urlDb, 0, exc);
     }
 }
@@ -204,7 +204,7 @@ bool BackendDb::activateEntry(::rtl::OUString const & url)
         if (entry.is())
         {
             //no attribute "active" means it is active, that is, registered.
-            entry->removeAttribute(OUSTR("revoked"));
+            entry->removeAttribute("revoked");
             save();
             ret = true;
         }
@@ -214,7 +214,7 @@ bool BackendDb::activateEntry(::rtl::OUString const & url)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
-            OUSTR("Extension Manager: failed to revoke data entry in backend db: ") +
+            "Extension Manager: failed to revoke data entry in backend db: " +
             m_urlDb, 0, exc);
     }
 }
@@ -227,8 +227,8 @@ bool BackendDb::hasActiveEntry(::rtl::OUString const & url)
         Reference<css::xml::dom::XElement> entry = Reference<css::xml::dom::XElement>(getKeyElement(url), UNO_QUERY);
         if (entry.is())
         {
-            OUString sActive = entry->getAttribute(OUSTR("revoked"));
-            if (!sActive.equals(OUSTR("true")))
+            OUString sActive = entry->getAttribute("revoked");
+            if (!(sActive == "true"))
                 ret = true;
         }
         return ret;
@@ -238,7 +238,7 @@ bool BackendDb::hasActiveEntry(::rtl::OUString const & url)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
-            OUSTR("Extension Manager: failed to determine an active entry in backend db: ") +
+            "Extension Manager: failed to determine an active entry in backend db: " +
             m_urlDb, 0, exc);
     }
 }
@@ -254,7 +254,7 @@ Reference<css::xml::dom::XNode> BackendDb::getKeyElement(
         sExpression.append(sPrefix);
         sExpression.appendAscii(":");
         sExpression.append(sKeyElement);
-        sExpression.append(OUSTR("[@url = \""));
+        sExpression.append("[@url = \"");
         sExpression.append(url);
         sExpression.appendAscii("\"]");
 
@@ -267,7 +267,7 @@ Reference<css::xml::dom::XNode> BackendDb::getKeyElement(
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
-            OUSTR("Extension Manager: failed to read key element in backend db: ") +
+            "Extension Manager: failed to read key element in backend db: " +
             m_urlDb, 0, exc);
     }
 }
@@ -286,7 +286,7 @@ void BackendDb::writeVectorOfPair(
             return;
         const OUString sNameSpace = getDbNSName();
         OSL_ASSERT(!sNameSpace.isEmpty());
-        const OUString sPrefix(getNSPrefix() + OUSTR(":"));
+        const OUString sPrefix(getNSPrefix() + ":");
         const Reference<css::xml::dom::XDocument> doc = getDocument();
         const Reference<css::xml::dom::XNode> root = doc->getFirstChild();
 
@@ -339,7 +339,7 @@ void BackendDb::writeVectorOfPair(
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
-            OUSTR("Extension Manager: failed to write data entry in backend db: ") +
+            "Extension Manager: failed to write data entry in backend db: " +
             m_urlDb, 0, exc);
     }
 }
@@ -355,10 +355,10 @@ BackendDb::readVectorOfPair(
     try
     {
         OSL_ASSERT(parent.is());
-        const OUString sPrefix(getNSPrefix() + OUSTR(":"));
+        const OUString sPrefix(getNSPrefix() + ":");
         const Reference<css::xml::xpath::XXPathAPI> xpathApi = getXPathAPI();
         const OUString sExprPairs(
-            sPrefix + sListTagName + OUSTR("/") + sPrefix + sPairTagName);
+            sPrefix + sListTagName + "/" + sPrefix + sPairTagName);
         const Reference<css::xml::dom::XNodeList> listPairs =
             xpathApi->selectNodeList(parent, sExprPairs);
 
@@ -367,11 +367,11 @@ BackendDb::readVectorOfPair(
         for (sal_Int32 i = 0; i < length; i++)
         {
             const Reference<css::xml::dom::XNode> aPair = listPairs->item(i);
-            const OUString sExprFirst(sPrefix + sFirstTagName + OUSTR("/text()"));
+            const OUString sExprFirst(sPrefix + sFirstTagName + "/text()");
             const Reference<css::xml::dom::XNode> first =
                 xpathApi->selectSingleNode(aPair, sExprFirst);
 
-            const OUString sExprSecond(sPrefix + sSecondTagName + OUSTR("/text()"));
+            const OUString sExprSecond(sPrefix + sSecondTagName + "/text()");
             const Reference<css::xml::dom::XNode> second =
                 xpathApi->selectSingleNode(aPair, sExprSecond);
             OSL_ASSERT(first.is() && second.is());
@@ -385,7 +385,7 @@ BackendDb::readVectorOfPair(
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
-            OUSTR("Extension Manager: failed to read data entry in backend db: ") +
+            "Extension Manager: failed to read data entry in backend db: " +
             m_urlDb, 0, exc);
     }
 }
@@ -402,7 +402,7 @@ void BackendDb::writeSimpleList(
         if (list.empty())
             return;
         const OUString sNameSpace = getDbNSName();
-        const OUString sPrefix(getNSPrefix() + OUSTR(":"));
+        const OUString sPrefix(getNSPrefix() + ":");
         const Reference<css::xml::dom::XDocument> doc = getDocument();
 
         const Reference<css::xml::dom::XElement> listNode(
@@ -430,7 +430,7 @@ void BackendDb::writeSimpleList(
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
-            OUSTR("Extension Manager: failed to write data entry in backend db: ") +
+            "Extension Manager: failed to write data entry in backend db: " +
             m_urlDb, 0, exc);
     }
 }
@@ -449,7 +449,7 @@ void BackendDb::writeSimpleElement(
         const Reference<css::xml::dom::XDocument> doc = getDocument();
         const OUString sNameSpace = getDbNSName();
         const Reference<css::xml::dom::XNode> dataNode(
-            doc->createElementNS(sNameSpace, sPrefix + OUSTR(":") + sElementName),
+            doc->createElementNS(sNameSpace, sPrefix + ":" + sElementName),
             UNO_QUERY_THROW);
         xParent->appendChild(dataNode);
 
@@ -461,7 +461,7 @@ void BackendDb::writeSimpleElement(
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
-            OUSTR("Extension Manager: failed to write data entry(writeSimpleElement) in backend db: ") +
+            "Extension Manager: failed to write data entry(writeSimpleElement) in backend db: " +
             m_urlDb, 0, exc);
     }
 
@@ -489,7 +489,7 @@ Reference<css::xml::dom::XNode> BackendDb::writeKeyElement(
         //invalid after its successful registration, for example if a second extension with
         //the same service is installed.
         const OUString sExpression(
-            sPrefix + OUSTR(":") + sElementName + OUSTR("[@url = \"") + url + OUSTR("\"]"));
+            sPrefix + ":" + sElementName + "[@url = \"" + url + "\"]");
         const Reference<css::xml::dom::XNode> existingNode =
             getXPathAPI()->selectSingleNode(root, sExpression);
         if (existingNode.is())
@@ -500,9 +500,9 @@ Reference<css::xml::dom::XNode> BackendDb::writeKeyElement(
         }
 
         const Reference<css::xml::dom::XElement> keyElement(
-            doc->createElementNS(sNameSpace, sPrefix +  OUSTR(":") + sElementName));
+            doc->createElementNS(sNameSpace, sPrefix +  ":" + sElementName));
 
-        keyElement->setAttribute(OUSTR("url"), url);
+        keyElement->setAttribute("url", url);
 
         const Reference<css::xml::dom::XNode> keyNode(
             keyElement, UNO_QUERY_THROW);
@@ -513,7 +513,7 @@ Reference<css::xml::dom::XNode> BackendDb::writeKeyElement(
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
-            OUSTR("Extension Manager: failed to write key element in backend db: ") +
+            "Extension Manager: failed to write key element in backend db: " +
             m_urlDb, 0, exc);
     }
 }
@@ -524,7 +524,7 @@ OUString BackendDb::readSimpleElement(
     try
     {
         const OUString sPrefix = getNSPrefix();
-        const OUString sExpr(sPrefix + OUSTR(":") + sElementName + OUSTR("/text()"));
+        const OUString sExpr(sPrefix + ":" + sElementName + "/text()");
         const Reference<css::xml::xpath::XXPathAPI> xpathApi = getXPathAPI();
         const Reference<css::xml::dom::XNode> val =
             xpathApi->selectSingleNode(xParent, sExpr);
@@ -536,7 +536,7 @@ OUString BackendDb::readSimpleElement(
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
-            OUSTR("Extension Manager: failed to read data (readSimpleElement) in backend db: ") +
+            "Extension Manager: failed to read data (readSimpleElement) in backend db: " +
             m_urlDb, 0, exc);
     }
 }
@@ -550,10 +550,10 @@ OUString BackendDb::readSimpleElement(
     try
     {
         OSL_ASSERT(parent.is());
-        const OUString sPrefix(getNSPrefix() + OUSTR(":"));
+        const OUString sPrefix(getNSPrefix() + ":");
         const Reference<css::xml::xpath::XXPathAPI> xpathApi = getXPathAPI();
         const OUString sExprList(
-            sPrefix + sListTagName + OUSTR("/") + sPrefix + sMemberTagName + OUSTR("/text()"));
+            sPrefix + sListTagName + "/" + sPrefix + sMemberTagName + "/text()");
         const Reference<css::xml::dom::XNodeList> list =
             xpathApi->selectNodeList(parent, sExprList);
 
@@ -570,7 +570,7 @@ OUString BackendDb::readSimpleElement(
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
-            OUSTR("Extension Manager: failed to read data entry in backend db: ") +
+            "Extension Manager: failed to read data entry in backend db: " +
             m_urlDb, 0, exc);
     }
 }
@@ -595,7 +595,7 @@ OUString BackendDb::readSimpleElement(
         buf.append(sPrefix);
         buf.appendAscii(":");
         buf.append(name);
-        buf.append(OUSTR("/text()"));
+        buf.append("/text()");
 
         Reference<css::xml::dom::XNodeList> nodes =
             xpathApi->selectNodeList(root, buf.makeStringAndClear());
@@ -615,7 +615,7 @@ OUString BackendDb::readSimpleElement(
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
-            OUSTR("Extension Manager: failed to read data entry in backend db: ") +
+            "Extension Manager: failed to read data entry in backend db: " +
             m_urlDb, 0, exc);
     }
 }
@@ -642,15 +642,15 @@ void RegisteredDb::addEntry(::rtl::OUString const & url)
 #if    OSL_DEBUG_LEVEL > 0
             //There must not be yet an entry with the same url
             OUString sExpression(
-                sPrefix + OUSTR(":") + sEntry + OUSTR("[@url = \"") + url + OUSTR("\"]"));
+                sPrefix + ":" + sEntry + "[@url = \"" + url + "\"]");
             Reference<css::xml::dom::XNode> _extensionNode =
                 getXPathAPI()->selectSingleNode(root, sExpression);
             OSL_ASSERT(! _extensionNode.is());
 #endif
             Reference<css::xml::dom::XElement> helpElement(
-                doc->createElementNS(sNameSpace, sPrefix +  OUSTR(":") + sEntry));
+                doc->createElementNS(sNameSpace, sPrefix +  ":" + sEntry));
 
-            helpElement->setAttribute(OUSTR("url"), url);
+            helpElement->setAttribute("url", url);
 
             Reference<css::xml::dom::XNode> helpNode(
                 helpElement, UNO_QUERY_THROW);
@@ -663,7 +663,7 @@ void RegisteredDb::addEntry(::rtl::OUString const & url)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
-            OUSTR("Extension Manager: failed to write data entry in backend db: ") +
+            "Extension Manager: failed to write data entry in backend db: " +
             m_urlDb, 0, exc);
     }
 }
@@ -675,7 +675,7 @@ bool RegisteredDb::getEntry(::rtl::OUString const & url)
         const OUString sPrefix = getNSPrefix();
         const OUString sEntry = getKeyElementName();
         const OUString sExpression(
-            sPrefix + OUSTR(":") + sEntry + OUSTR("[@url = \"") + url + OUSTR("\"]"));
+            sPrefix + ":" + sEntry + "[@url = \"" + url + "\"]");
         Reference<css::xml::dom::XDocument> doc = getDocument();
         Reference<css::xml::dom::XNode> root = doc->getFirstChild();
 
@@ -689,7 +689,7 @@ bool RegisteredDb::getEntry(::rtl::OUString const & url)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
-            OUSTR("Extension Manager: failed to read data entry in backend db: ") +
+            "Extension Manager: failed to read data entry in backend db: " +
             m_urlDb, 0, exc);
     }
 }

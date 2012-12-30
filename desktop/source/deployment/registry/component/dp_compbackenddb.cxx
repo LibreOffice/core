@@ -50,22 +50,22 @@ ComponentBackendDb::ComponentBackendDb(
 
 OUString ComponentBackendDb::getDbNSName()
 {
-    return OUSTR(EXTENSION_REG_NS);
+    return OUString(EXTENSION_REG_NS);
 }
 
 OUString ComponentBackendDb::getNSPrefix()
 {
-    return OUSTR(NS_PREFIX);
+    return OUString(NS_PREFIX);
 }
 
 OUString ComponentBackendDb::getRootElementName()
 {
-    return OUSTR(ROOT_ELEMENT_NAME);
+    return OUString(ROOT_ELEMENT_NAME);
 }
 
 OUString ComponentBackendDb::getKeyElementName()
 {
-    return OUSTR(KEY_ELEMENT_NAME);
+    return OUString(KEY_ELEMENT_NAME);
 }
 
 void ComponentBackendDb::addEntry(::rtl::OUString const & url, Data const & data)
@@ -74,22 +74,22 @@ void ComponentBackendDb::addEntry(::rtl::OUString const & url, Data const & data
         if (!activateEntry(url))
         {
             Reference<css::xml::dom::XNode> componentNode = writeKeyElement(url);
-            writeSimpleElement(OUSTR("java-type-library"),
+            writeSimpleElement("java-type-library",
                                OUString::valueOf((sal_Bool) data.javaTypeLibrary),
                                componentNode);
 
             writeSimpleList(
                 data.implementationNames,
-                OUSTR("implementation-names"),
-                OUSTR("name"),
+                "implementation-names",
+                "name",
                 componentNode);
 
             writeVectorOfPair(
                 data.singletons,
-                OUSTR("singletons"),
-                OUSTR("item"),
-                OUSTR("key"),
-                OUSTR("value"),
+                "singletons",
+                "item",
+                "key",
+                "value",
                 componentNode);
 
             save();
@@ -99,7 +99,7 @@ void ComponentBackendDb::addEntry(::rtl::OUString const & url, Data const & data
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
-            OUSTR("Extension Manager: failed to write data entry in backend db: ") +
+            "Extension Manager: failed to write data entry in backend db: " +
             m_urlDb, 0, exc);
     }
 }
@@ -112,23 +112,15 @@ ComponentBackendDb::Data ComponentBackendDb::getEntry(::rtl::OUString const & ur
         Reference<css::xml::dom::XNode> aNode = getKeyElement(url);
         if (aNode.is())
         {
-            bool bJava = readSimpleElement(OUSTR("java-type-library"), aNode)
-                .equals(OUSTR("true")) ? true : false;
+            bool bJava = (readSimpleElement("java-type-library", aNode) ==
+                "true") ? true : false;
             retData.javaTypeLibrary = bJava;
 
             retData.implementationNames =
-                readList(
-                    aNode,
-                    OUSTR("implementation-names"),
-                    OUSTR("name"));
+                readList( aNode, "implementation-names", "name");
 
             retData.singletons =
-                readVectorOfPair(
-                    aNode,
-                    OUSTR("singletons"),
-                    OUSTR("item"),
-                    OUSTR("key"),
-                    OUSTR("value"));
+                readVectorOfPair( aNode, "singletons", "item", "key", "value");
         }
         return retData;
     }
@@ -136,7 +128,7 @@ ComponentBackendDb::Data ComponentBackendDb::getEntry(::rtl::OUString const & ur
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
-            OUSTR("Extension Manager: failed to read data entry in backend db: ") +
+            "Extension Manager: failed to read data entry in backend db: " +
             m_urlDb, 0, exc);
     }
 }

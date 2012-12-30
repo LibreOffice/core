@@ -83,20 +83,20 @@ ParcelDescDocHandler::startElement( const OUString& aName,
             RuntimeException )
 {
 
-    dp_misc::TRACE(OUSTR("ParcelDescDocHandler::startElement() for ") +
-        aName + OUSTR("\n"));
+    dp_misc::TRACE("ParcelDescDocHandler::startElement() for " +
+        aName + "\n");
     if ( !skipIndex )
     {
         if ( aName == "parcel" )
         {
-            m_sLang = xAttribs->getValueByName( OUString("language" ) );
+            m_sLang = xAttribs->getValueByName( "language" );
         }
         ++skipIndex;
     }
     else
     {
-        dp_misc::TRACE(OUSTR("ParcelDescDocHandler::startElement() skipping for ")
-            + aName + OUSTR("\n"));
+        dp_misc::TRACE("ParcelDescDocHandler::startElement() skipping for "
+            + aName + "\n");
     }
 
 }
@@ -107,8 +107,8 @@ void SAL_CALL ParcelDescDocHandler::endElement( const OUString & aName )
     if ( skipIndex )
     {
         --skipIndex;
-        dp_misc::TRACE(OUSTR("ParcelDescDocHandler::endElement() skipping for ")
-            + aName + OUSTR("\n"));
+        dp_misc::TRACE("ParcelDescDocHandler::endElement() skipping for "
+            + aName + "\n");
     }
 }
 

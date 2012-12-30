@@ -49,22 +49,22 @@ ExtensionBackendDb::ExtensionBackendDb(
 
 OUString ExtensionBackendDb::getDbNSName()
 {
-    return OUSTR(EXTENSION_REG_NS);
+    return OUString(EXTENSION_REG_NS);
 }
 
 OUString ExtensionBackendDb::getNSPrefix()
 {
-    return OUSTR(NS_PREFIX);
+    return OUString(NS_PREFIX);
 }
 
 OUString ExtensionBackendDb::getRootElementName()
 {
-    return OUSTR(ROOT_ELEMENT_NAME);
+    return OUString(ROOT_ELEMENT_NAME);
 }
 
 OUString ExtensionBackendDb::getKeyElementName()
 {
-    return OUSTR(KEY_ELEMENT_NAME);
+    return OUString(KEY_ELEMENT_NAME);
 }
 
 void ExtensionBackendDb::addEntry(::rtl::OUString const & url, Data const & data)
@@ -74,13 +74,8 @@ void ExtensionBackendDb::addEntry(::rtl::OUString const & url, Data const & data
         if (!activateEntry(url))
         {
             Reference<css::xml::dom::XNode> extensionNodeNode = writeKeyElement(url);
-            writeVectorOfPair(
-                data.items,
-                OUSTR("extension-items"),
-                OUSTR("item"),
-                OUSTR("url"),
-                OUSTR("media-type"),
-                extensionNodeNode);
+            writeVectorOfPair( data.items, "extension-items", "item",
+                "url", "media-type", extensionNodeNode);
             save();
         }
     }
@@ -88,7 +83,7 @@ void ExtensionBackendDb::addEntry(::rtl::OUString const & url, Data const & data
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
-            OUSTR("Extension Manager: failed to write data entry in backend db: ") +
+            "Extension Manager: failed to write data entry in backend db: " +
             m_urlDb, 0, exc);
     }
 }
@@ -103,12 +98,8 @@ ExtensionBackendDb::Data ExtensionBackendDb::getEntry(::rtl::OUString const & ur
         if (aNode.is())
         {
             retData.items =
-                readVectorOfPair(
-                    aNode,
-                    OUSTR("extension-items"),
-                    OUSTR("item"),
-                    OUSTR("url"),
-                    OUSTR("media-type"));
+                readVectorOfPair( aNode, "extension-items", "item",
+                    "url", "media-type");
         }
         return retData;
     }
@@ -116,7 +107,7 @@ ExtensionBackendDb::Data ExtensionBackendDb::getEntry(::rtl::OUString const & ur
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
-            OUSTR("Extension Manager: failed to read data entry in backend db: ") +
+            "Extension Manager: failed to read data entry in backend db: " +
             m_urlDb, 0, exc);
     }
 }
