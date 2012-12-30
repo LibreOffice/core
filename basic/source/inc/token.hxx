@@ -143,14 +143,14 @@ protected:
     bool bAs;                       // last keyword was AS
     bool bErrorIsSymbol;            // Handle Error token as Symbol, not keyword
 public:
-    SbiTokenizer( const ::rtl::OUString&, StarBASIC* = NULL );
+    SbiTokenizer( const OUString&, StarBASIC* = NULL );
    ~SbiTokenizer();
 
     inline bool IsEof()             { return bEof; }
     inline bool IsEos()             { return bEos; }
 
     void  Push( SbiToken );
-    const ::rtl::OUString& Symbol( SbiToken );   // reconversion
+    const OUString& Symbol( SbiToken );   // reconversion
 
     SbiToken Peek();                    // read the next token
     SbiToken Next();                    // read a token
@@ -159,7 +159,7 @@ public:
     void Error( SbError c ) { GenError( c ); }
     void Error( SbError, SbiToken );
     void Error( SbError, const char* );
-    void Error( SbError, const ::rtl::OUString &);
+    void Error( SbError, const OUString &);
 
     static bool IsEoln( SbiToken t )
         { return t == EOS || t == EOLN || t == REM; }

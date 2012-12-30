@@ -69,7 +69,7 @@ DocumentsEnumeration::DocumentsEnumeration( const uno::Reference< frame::XModel 
     try
     {
         uno::Reference< frame::XModuleManager2 > xModuleManager( lclCreateModuleManager() );
-        ::rtl::OUString aIdentifier = xModuleManager->identify( rxModel );
+        OUString aIdentifier = xModuleManager->identify( rxModel );
         uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create( ::comphelper::getProcessComponentContext() );
         uno::Reference< container::XEnumerationAccess > xComponentsEA( xDesktop->getComponents(), uno::UNO_SET_THROW );
         uno::Reference< container::XEnumeration > xEnumeration( xComponentsEA->createEnumeration(), uno::UNO_SET_THROW );
@@ -173,7 +173,7 @@ void lclIterateDocuments( ModifyDocumentFunc pModifyDocumentFunc, const uno::Ref
 struct CurrDirPool
 {
     ::osl::Mutex maMutex;
-    ::std::map< ::rtl::OUString, ::rtl::OUString > maCurrDirs;
+    ::std::map< OUString, OUString > maCurrDirs;
 };
 
 struct StaticCurrDirPool : public ::rtl::Static< CurrDirPool, StaticCurrDirPool > {};
@@ -196,7 +196,7 @@ void enableContainerWindowsOfAllDocuments( const uno::Reference< frame::XModel >
 
 // ============================================================================
 
-void registerCurrentDirectory( const uno::Reference< frame::XModel >& rxModel, const ::rtl::OUString& rPath )
+void registerCurrentDirectory( const uno::Reference< frame::XModel >& rxModel, const OUString& rPath )
 {
     if( !rPath.isEmpty() )
     {
@@ -205,7 +205,7 @@ void registerCurrentDirectory( const uno::Reference< frame::XModel >& rxModel, c
         try
         {
             uno::Reference< frame::XModuleManager2 > xModuleManager( lclCreateModuleManager() );
-            ::rtl::OUString aIdentifier = xModuleManager->identify( rxModel );
+            OUString aIdentifier = xModuleManager->identify( rxModel );
             if( !aIdentifier.isEmpty() )
                 rPool.maCurrDirs[ aIdentifier ] = rPath;
         }

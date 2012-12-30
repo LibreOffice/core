@@ -71,7 +71,7 @@ typedef ::cppu::WeakImplHelper3<
 
 class NameContainer : public ::cppu::BaseMutex, public NameContainer_BASE
 {
-    typedef boost::unordered_map < OUString, sal_Int32, ::rtl::OUStringHash > NameContainerNameMap;
+    typedef boost::unordered_map < OUString, sal_Int32, OUStringHash > NameContainerNameMap;
 
     NameContainerNameMap mHashMap;
     ::com::sun::star::uno::Sequence< OUString > mNames;

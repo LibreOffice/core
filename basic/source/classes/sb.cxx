@@ -221,7 +221,7 @@ SbxObject* StarBASIC::getVBAGlobals( )
             {
                 try
                 {
-                    xDocFac->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAGlobals" ) ) );
+                    xDocFac->createInstance( OUString( "ooo.vba.VBAGlobals" ) );
                 }
                 catch(const Exception& )
                 {
@@ -236,7 +236,7 @@ SbxObject* StarBASIC::getVBAGlobals( )
 }
 
 //  i#i68894#
-SbxVariable* StarBASIC::VBAFind( const rtl::OUString& rName, SbxClassType t )
+SbxVariable* StarBASIC::VBAFind( const OUString& rName, SbxClassType t )
 {
     if( rName == "ThisComponent" )
     {
@@ -1175,7 +1175,7 @@ struct ClassModuleRunInitItem
 // to allow forward declaration in sbmod.hxx
 class ModuleInitDependencyMap : public
     boost::unordered_map< OUString, ClassModuleRunInitItem,
-                          ::rtl::OUStringHash, ::std::equal_to< OUString > >
+                          OUStringHash, ::std::equal_to< OUString > >
 {};
 
 void SbModule::implProcessModuleRunInit( ModuleInitDependencyMap& rMap, ClassModuleRunInitItem& rItem )

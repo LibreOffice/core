@@ -391,7 +391,7 @@ public:
     virtual void Clear();
 };
 
-typedef boost::unordered_map< OUString, ::com::sun::star::uno::Any, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > VBAConstantsHash;
+typedef boost::unordered_map< OUString, ::com::sun::star::uno::Any, OUStringHash, ::std::equal_to< OUString > > VBAConstantsHash;
 
 typedef std::vector< OUString > VBAConstantsVector;
 

@@ -87,7 +87,7 @@ BASIC_DLLPUBLIC void enableContainerWindowsOfAllDocuments(
  */
 BASIC_DLLPUBLIC void registerCurrentDirectory(
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel,
-    const ::rtl::OUString& rPath );
+    const OUString& rPath );
 
 // ============================================================================
 

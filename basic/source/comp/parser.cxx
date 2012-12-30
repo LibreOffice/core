@@ -134,7 +134,7 @@ SbiParser::SbiParser( StarBASIC* pb, SbModule* pm )
     bSingleLineIf =
     bExplicit = false;
     bClassModule = ( pm->GetModuleType() == com::sun::star::script::ModuleType::CLASS );
-    OSL_TRACE("Parser - %s, bClassModule %d", rtl::OUStringToOString( pm->GetName(), RTL_TEXTENCODING_UTF8 ).getStr(), bClassModule );
+    OSL_TRACE("Parser - %s, bClassModule %d", OUStringToOString( pm->GetName(), RTL_TEXTENCODING_UTF8 ).getStr(), bClassModule );
     pPool    = &aPublics;
     for( short i = 0; i < 26; i++ )
         eDefTypes[ i ] = SbxVARIANT;    // no explicit default type
@@ -783,7 +783,7 @@ void SbiParser::Option()
             {
                 bText = false;
             }
-            else if( eTok == SYMBOL && GetSym().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("text")) )
+            else if( eTok == SYMBOL && GetSym().equalsIgnoreAsciiCase("text") )
             {
                 bText = true;
             }
@@ -837,7 +837,7 @@ void addStringConst( SbiSymPool& rPool, const char* pSym, const OUString& rStr )
 
 inline void addStringConst( SbiSymPool& rPool, const char* pSym, const char* pStr )
 {
-    addStringConst( rPool, pSym, rtl::OUString::createFromAscii( pStr ) );
+    addStringConst( rPool, pSym, OUString::createFromAscii( pStr ) );
 }
 
 void SbiParser::AddConstants( void )

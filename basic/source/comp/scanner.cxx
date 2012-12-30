@@ -22,7 +22,7 @@
 
 #include <vcl/svapp.hxx>
 
-SbiScanner::SbiScanner( const ::rtl::OUString& rBuf, StarBASIC* p ) : aBuf( rBuf )
+SbiScanner::SbiScanner( const OUString& rBuf, StarBASIC* p ) : aBuf( rBuf )
 {
     pBasic   = p;
     pLine    = NULL;
@@ -156,10 +156,10 @@ void SbiScanner::scanGoto()
 
     if(n + 1 < aLine.getLength())
     {
-        ::rtl::OUString aTemp = aLine.copy(n, 2);
-        if(aTemp.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("to")))
+        OUString aTemp = aLine.copy(n, 2);
+        if(aTemp.equalsIgnoreAsciiCase("to"))
         {
-            aSym = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("goto"));
+            aSym = OUString("goto");
             pLine += n + 2 - nCol;
             nCol = n + 2;
         }
@@ -209,7 +209,7 @@ bool SbiScanner::NextSym()
     sal_Unicode buf[ BUF_SIZE ], *p = buf;
 
     eScanType = SbxVARIANT;
-    aSym = ::rtl::OUString();
+    aSym = OUString();
     bHash = bSymbol = bNumber = bSpaces = false;
 
     // read in line?
@@ -261,7 +261,7 @@ bool SbiScanner::NextSym()
         scanAlphanumeric();
 
         // Special handling for "go to"
-        if(nCol < aLine.getLength() && bCompatible && aSym.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("go")))
+        if(nCol < aLine.getLength() && bCompatible && aSym.equalsIgnoreAsciiCase("go"))
             scanGoto();
 
         // replace closing '_' by space when end of line is following
@@ -270,7 +270,7 @@ bool SbiScanner::NextSym()
         {
             // We are going to modify a potentially shared string, so force
             // a copy, so that aSym is not modified by the following operation
-            ::rtl::OUString aSymCopy( aSym.getStr(), aSym.getLength() );
+            OUString aSymCopy( aSym.getStr(), aSym.getLength() );
             aSym = aSymCopy;
 
             // HACK: modifying a potentially shared string here!
@@ -358,7 +358,7 @@ bool SbiScanner::NextSym()
         aSym = p; bNumber = true;
 
         if( comma > 1 || exp > 1 )
-        {   aError = ::rtl::OUString('.');
+        {   aError = OUString('.');
             GenError( SbERR_BAD_CHAR_IN_NUMBER );   }
 
         // #57844 use localized function
@@ -406,7 +406,7 @@ bool SbiScanner::NextSym()
             default :
                 // treated as an operator
                 --pLine; --nCol; nCol1 = nCol-1;
-                aSym = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("&"));
+                aSym = OUString("&");
                 return true;
         }
         bNumber = true;
@@ -421,11 +421,11 @@ bool SbiScanner::NextSym()
             // from 4.1.1996: buffer full, go on scanning empty
             if( (p-buf) == (BUF_SIZE-1) )
                 bBufOverflow = true;
-            else if( rtl::OUString( cmp ).indexOf( ch ) != -1 )
+            else if( OUString( cmp ).indexOf( ch ) != -1 )
                 *p++ = ch;
             else
             {
-                aError = ::rtl::OUString(ch);
+                aError = OUString(ch);
                 GenError( SbERR_BAD_CHAR_IN_NUMBER );
             }
         }
@@ -462,7 +462,7 @@ bool SbiScanner::NextSym()
             {
                 pLine++; nCol++;
                 if( *pLine != cSep || cSep == ']' ) break;
-            } else aError = ::rtl::OUString(cSep), GenError( SbERR_EXPECTED );
+            } else aError = OUString(cSep), GenError( SbERR_EXPECTED );
         }
         // If VBA Interop then doen't eat the [] chars
         if ( cSep == ']' && bVBASupportOn )
@@ -470,7 +470,7 @@ bool SbiScanner::NextSym()
         else
             aSym = aLine.copy( n, nCol - n - 1 );
         // get out duplicate string delimiters
-        ::rtl::OUStringBuffer aSymBuf;
+        OUStringBuffer aSymBuf;
         for ( sal_Int32 i = 0, len = aSym.getLength(); i < len; ++i )
         {
             aSymBuf.append( aSym[i] );
@@ -505,10 +505,10 @@ bool SbiScanner::NextSym()
 PrevLineCommentLbl:
 
     if( bPrevLineExtentsComment || (eScanType != SbxSTRING &&
-                                    ( aSym[0] == '\'' || aSym.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM("REM") ) ) ) )
+                                    ( aSym[0] == '\'' || aSym.equalsIgnoreAsciiCase( "REM" ) ) ) )
     {
         bPrevLineExtentsComment = false;
-        aSym = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("REM"));
+        aSym = OUString("REM");
         sal_Int32 nLen = rtl_ustr_getLength(pLine);
         if( bCompatible && pLine[ nLen - 1 ] == '_' && pLine[ nLen - 2 ] == ' ' )
             bPrevLineExtentsComment = true;
@@ -539,7 +539,7 @@ eoln:
         nLine = nOldLine;
         nCol1 = nOldCol1;
         nCol2 = nOldCol2;
-        aSym = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\n"));
+        aSym = OUString("\n");
         nColLock = 0;
         return true;
     }

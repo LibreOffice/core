@@ -115,7 +115,7 @@ void SbiParser::Line()
         aGen.Statement();
 
         KeywordSymbolInfo aInfo;
-        aInfo.m_aKeywordSymbol = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "line" ) );
+        aInfo.m_aKeywordSymbol = OUString( "line" );
         aInfo.m_eSbxDataType = GetType();
         aInfo.m_eTok = SYMBOL;
 
@@ -247,7 +247,7 @@ void SbiParser::Open()
     if( Peek() == SYMBOL )
     {
         Next();
-        if( aSym.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("LEN")) )
+        if( aSym.equalsIgnoreAsciiCase("LEN") )
         {
             TestToken( EQ );
             pLen = new SbiExpression( this );
@@ -278,7 +278,7 @@ void SbiParser::Name()
         aGen.Statement();
 
         KeywordSymbolInfo aInfo;
-        aInfo.m_aKeywordSymbol = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "name" ) );
+        aInfo.m_aKeywordSymbol = OUString( "name" );
         aInfo.m_eSbxDataType = GetType();
         aInfo.m_eTok = SYMBOL;
 

@@ -52,11 +52,11 @@ int CDECL SbCompare_PropertyValues_Impl( const void *arg1, const void *arg2 )
 
 struct SbCompare_UString_PropertyValue_Impl
 {
-   bool operator() (const ::rtl::OUString& lhs, PropertyValue const & rhs)
+   bool operator() (const OUString& lhs, PropertyValue const & rhs)
    {
       return lhs.compareTo(rhs.Name) < 0;
    }
-   bool operator() (PropertyValue const & lhs, const ::rtl::OUString& rhs)
+   bool operator() (PropertyValue const & lhs, const OUString& rhs)
    {
       return lhs.Name.compareTo(rhs) < 0;
    }
@@ -69,7 +69,7 @@ int CDECL SbCompare_Properties_Impl( const void *arg1, const void *arg2 )
 
 extern "C" int CDECL SbCompare_UString_Property_Impl( const void *arg1, const void *arg2 )
 {
-    const ::rtl::OUString *pArg1 = (::rtl::OUString*) arg1;
+    const OUString *pArg1 = (OUString*) arg1;
     const Property *pArg2 = (Property*) arg2;
     return pArg1->compareTo( pArg2->Name );
 }
@@ -102,7 +102,7 @@ Reference< XPropertySetInfo > SbPropertyValues::getPropertySetInfo(void) throw( 
 
 //-------------------------------------------------------------------------
 
-size_t SbPropertyValues::GetIndex_Impl( const ::rtl::OUString &rPropName ) const
+size_t SbPropertyValues::GetIndex_Impl( const OUString &rPropName ) const
 {
     SbPropertyValueArr_Impl::const_iterator it = std::lower_bound(
           m_aPropVals.begin(), m_aPropVals.end(), rPropName,
@@ -119,7 +119,7 @@ size_t SbPropertyValues::GetIndex_Impl( const ::rtl::OUString &rPropName ) const
 //----------------------------------------------------------------------------
 
 void SbPropertyValues::setPropertyValue(
-                    const ::rtl::OUString& aPropertyName,
+                    const OUString& aPropertyName,
                     const Any& aValue)
                     throw (::com::sun::star::beans::UnknownPropertyException,
                     ::com::sun::star::beans::PropertyVetoException,
@@ -135,7 +135,7 @@ void SbPropertyValues::setPropertyValue(
 //----------------------------------------------------------------------------
 
 Any SbPropertyValues::getPropertyValue(
-                    const ::rtl::OUString& aPropertyName)
+                    const OUString& aPropertyName)
                     throw(::com::sun::star::beans::UnknownPropertyException,
                     ::com::sun::star::lang::WrappedTargetException,
                     ::com::sun::star::uno::RuntimeException)
@@ -147,7 +147,7 @@ Any SbPropertyValues::getPropertyValue(
 //----------------------------------------------------------------------------
 
 void SbPropertyValues::addPropertyChangeListener(
-                    const ::rtl::OUString& aPropertyName,
+                    const OUString& aPropertyName,
                     const Reference< XPropertyChangeListener >& )
                     throw ()
 {
@@ -157,7 +157,7 @@ void SbPropertyValues::addPropertyChangeListener(
 //----------------------------------------------------------------------------
 
 void SbPropertyValues::removePropertyChangeListener(
-                    const ::rtl::OUString& aPropertyName,
+                    const OUString& aPropertyName,
                     const Reference< XPropertyChangeListener >& )
                     throw ()
 {
@@ -167,7 +167,7 @@ void SbPropertyValues::removePropertyChangeListener(
 //----------------------------------------------------------------------------
 
 void SbPropertyValues::addVetoableChangeListener(
-                    const ::rtl::OUString& aPropertyName,
+                    const OUString& aPropertyName,
                     const Reference< XVetoableChangeListener >& )
                     throw()
 {
@@ -177,7 +177,7 @@ void SbPropertyValues::addVetoableChangeListener(
 //----------------------------------------------------------------------------
 
 void SbPropertyValues::removeVetoableChangeListener(
-                    const ::rtl::OUString& aPropertyName,
+                    const OUString& aPropertyName,
                     const Reference< XVetoableChangeListener >& )
                     throw()
 {
@@ -221,7 +221,7 @@ PropertySetInfoImpl::PropertySetInfoImpl()
 {
 }
 
-sal_Int32 PropertySetInfoImpl::GetIndex_Impl( const ::rtl::OUString &rPropName ) const
+sal_Int32 PropertySetInfoImpl::GetIndex_Impl( const OUString &rPropName ) const
 {
     Property *pP;
     pP = (Property*)
@@ -236,7 +236,7 @@ Sequence< Property > PropertySetInfoImpl::getProperties(void) throw()
     return _aProps;
 }
 
-Property PropertySetInfoImpl::getPropertyByName(const ::rtl::OUString& Name) throw( RuntimeException )
+Property PropertySetInfoImpl::getPropertyByName(const OUString& Name) throw( RuntimeException )
 {
     sal_Int32 nIndex = GetIndex_Impl( Name );
     if( USHRT_MAX != nIndex )
@@ -244,7 +244,7 @@ Property PropertySetInfoImpl::getPropertyByName(const ::rtl::OUString& Name) thr
     return Property();
 }
 
-sal_Bool PropertySetInfoImpl::hasPropertyByName(const ::rtl::OUString& Name) throw( RuntimeException )
+sal_Bool PropertySetInfoImpl::hasPropertyByName(const OUString& Name) throw( RuntimeException )
 {
     sal_Int32 nIndex = GetIndex_Impl( Name );
     return USHRT_MAX != nIndex;
@@ -280,13 +280,13 @@ Sequence< Property > SbPropertySetInfo::getProperties(void) throw( RuntimeExcept
     return aImpl.getProperties();
 }
 
-Property SbPropertySetInfo::getPropertyByName(const ::rtl::OUString& Name)
+Property SbPropertySetInfo::getPropertyByName(const OUString& Name)
     throw( RuntimeException )
 {
     return aImpl.getPropertyByName( Name );
 }
 
-sal_Bool SbPropertySetInfo::hasPropertyByName(const ::rtl::OUString& Name)
+sal_Bool SbPropertySetInfo::hasPropertyByName(const OUString& Name)
     throw( RuntimeException )
 {
     return aImpl.hasPropertyByName( Name );
@@ -308,7 +308,7 @@ void RTL_Impl_CreatePropertySet( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWr
     }
 
     // Get class names of struct
-    ::rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM("stardiv.uno.beans.PropertySet") );
+    OUString aServiceName( "stardiv.uno.beans.PropertySet");
 
     Reference< XInterface > xInterface = (OWeakObject*) new SbPropertyValues();
 
