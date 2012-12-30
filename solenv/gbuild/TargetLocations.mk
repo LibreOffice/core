@@ -343,6 +343,31 @@ define gb_StaticLibrary_get_filename
 $(patsubst $(1):%,%,$(filter $(1):%,$(gb_StaticLibrary_FILENAMES)))
 endef
 
+# Get dependencies needed for running the executable
+#
+# This is not strictly necessary, but it makes the use more similar to
+# ExternalExecutable.
+#
+# gb_Executable_get_runtime_dependencies executable
+define gb_Executable_get_runtime_dependencies
+$(call gb_Executable_get_runtime_target,$(1))
+endef
+
+define gb_Executable__get_command
+$(if $(filter NONE,$(gb_Executable_VALIDGROUPS)),,$(call gb_Output_error,executable group NONE does not exist!))
+$(if $(filter $(1),$(gb_Executable_NONE)),,$(gb_Helper_set_ld_path)) \
+    $(call gb_Executable_get_target_for_build,$(1))
+endef
+
+# Get complete command-line for running the executable
+#
+# This includes setting library path, if necessary.
+#
+# gb_Executable_get_command executable
+define gb_Executable_get_command
+$(strip $(call gb_Executable__get_command,$(1)))
+endef
+
 gb_Executable_get_linktargetname = Executable/$(1)$(gb_Executable_EXT)
 gb_Library_get_linktargetname = Library/$(call gb_Library_get_filename,$(1))
 gb_StaticLibrary_get_linktargetname = StaticLibrary/$(call gb_StaticLibrary_get_filename,$(1))
