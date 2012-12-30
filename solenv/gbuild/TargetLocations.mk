@@ -349,9 +349,14 @@ endef
 # ExternalExecutable.
 #
 # gb_Executable_get_runtime_dependencies executable
+ifeq ($(CROSS_COMPILING),YES)
+define gb_Executable_get_runtime_dependencies
+endef
+else
 define gb_Executable_get_runtime_dependencies
 $(call gb_Executable_get_runtime_target,$(1))
 endef
+endif
 
 define gb_Executable__get_command
 $(if $(filter NONE,$(gb_Executable_VALIDGROUPS)),,$(call gb_Output_error,executable group NONE does not exist!))
