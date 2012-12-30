@@ -1546,7 +1546,7 @@ void BackendImpl::PackageImpl::scanLegacyBundle(
     if (title.endsWithIgnoreAsciiCase("skip_registration") )
         skip_registration = true;
 
-    OUString ar [] = { "Title", "IsFolder" };
+    OUString ar [] = { OUString("Title"), OUString("IsFolder") };
     Reference<sdbc::XResultSet> xResultSet(
         ucbContent.createCursor(
             Sequence<OUString>( ar, ARLEN(ar) ),
