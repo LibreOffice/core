@@ -57,7 +57,6 @@ $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
 	officecfg \
 	oovbaapi \
 	$(call gb_Helper_optional,QADEVOOO,qadevOOo) \
-	$(call gb_Helper_optional,REDLAND,redland) \
 	registry \
 	remotebridges \
 	ridljar \
