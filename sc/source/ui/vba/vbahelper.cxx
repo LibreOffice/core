@@ -275,7 +275,7 @@ getCurrentDocument() throw (uno::RuntimeException)
             if ( !xModel.is() )
             {
                 throw uno::RuntimeException(
-                    rtl::OUString( "Can't extract model from basic ( its obviously not set yet  therefore don't know the currently selected document") ), uno::Reference< uno::XInterface >() );
+                    rtl::OUString( "Can't extract model from basic ( its obviously not set yet  therefore don't know the currently selected document)" ), uno::Reference< uno::XInterface >() );
             }
             return xModel;
         }
