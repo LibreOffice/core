@@ -49,7 +49,7 @@ $(call gb_ExternalProject_get_state_target,redland,build):
 	--without-threestone --with-regex-library=posix --with-decimal=none \
 	--with-www=xml \
 	$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-        $(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
+	$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 	$(if $(filter IOS ANDROID,$(OS)),--disable-shared,--disable-static) \
 	$(if $(filter-out ANDROID,$(OS)),--with-threads) \
 	&& cd librdf \
