@@ -34,7 +34,7 @@ $(call gb_CustomTarget_get_target,i18npool/textconversion) : \
 
 $(call gb_CustomTarget_get_workdir,i18npool/textconversion)/%.cxx : \
 		$(SRCDIR)/i18npool/source/textconversion/data/%.dic \
-		$(call gb_Executable_get_target_for_build,genconv_dict) \
+		$(call gb_Executable_get_runtime_dependencies,genconv_dict) \
 		| $(call gb_CustomTarget_get_workdir,i18npool/textconversion)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CDC,1)
 	$(call gb_Helper_abbreviate_dirs, \

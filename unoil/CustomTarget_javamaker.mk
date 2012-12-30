@@ -32,7 +32,7 @@ unoil_JAVADIR := $(call gb_CustomTarget_get_workdir,unoil/javamaker)
 $(call gb_CustomTarget_get_target,unoil/javamaker) : $(unoil_JAVADIR)/done
 
 $(unoil_JAVADIR)/done : $(OUTDIR)/bin/offapi.rdb $(OUTDIR)/bin/udkapi.rdb \
-		$(call gb_Executable_get_target_for_build,javamaker) \
+		$(call gb_Executable_get_runtime_dependencies,javamaker) \
 		| $(unoil_JAVADIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),JVM,1)
 	$(call gb_Helper_abbreviate_dirs, \

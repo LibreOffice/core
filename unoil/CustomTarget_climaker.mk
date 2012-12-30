@@ -39,7 +39,7 @@ $(call gb_CustomTarget_get_target,unoil/climaker) : \
 $(unoil_CLIDIR)/cli_oootypes.dll : $(SRCDIR)/unoil/climaker/version.txt \
 		$(OUTDIR)/bin/offapi.rdb $(OUTDIR)/bin/udkapi.rdb \
 		$(OUTDIR)/bin/cliuno.snk $(OUTDIR)/bin/cli_uretypes.dll \
-		$(call gb_Executable_get_target_for_build,climaker) \
+		$(call gb_Executable_get_runtime_dependencies,climaker) \
 		| $(unoil_CLIDIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CLM,1)
 	$(call gb_Helper_abbreviate_dirs, \

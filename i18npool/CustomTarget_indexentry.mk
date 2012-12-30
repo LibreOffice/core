@@ -45,7 +45,7 @@ $(call gb_CustomTarget_get_target,i18npool/indexentry) : $(SRCDIR)/i18npool/Cust
 
 $(call gb_CustomTarget_get_workdir,i18npool/indexentry)/%.cxx : \
 		$(SRCDIR)/i18npool/source/indexentry/data/%.txt \
-		$(call gb_Executable_get_target_for_build,genindex_data) \
+		$(call gb_Executable_get_runtime_dependencies,genindex_data) \
 		| $(call gb_CustomTarget_get_workdir,i18npool/indexentry)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),IND,1)
 	$(call gb_Helper_abbreviate_dirs, \

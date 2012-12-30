@@ -32,7 +32,7 @@ ridljar_DIR := $(call gb_CustomTarget_get_workdir,ridljar/javamaker)
 $(call gb_CustomTarget_get_target,ridljar/javamaker) : $(ridljar_DIR)/done
 
 $(ridljar_DIR)/done : $(OUTDIR)/bin/udkapi.rdb \
-		$(call gb_Executable_get_target_for_build,javamaker) \
+		$(call gb_Executable_get_runtime_dependencies,javamaker) \
 		| $(ridljar_DIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),JVM,1)
 	$(call gb_Helper_abbreviate_dirs, \

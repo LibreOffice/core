@@ -34,7 +34,7 @@ $(call gb_CustomTarget_get_target,jurt/test/com/sun/star/lib/uno/protocols/urp) 
 $(jurt_TESTURP)/done : \
 		$(call gb_UnoApiTarget_get_target,test_urp) \
 		$(OUTDIR)/bin/udkapi.rdb \
-		$(call gb_Executable_get_target_for_build,javamaker)
+		$(call gb_Executable_get_runtime_dependencies,javamaker)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),JVM,1)
 	rm -rf $(jurt_TESTURP) && \
 	$(call gb_Helper_execute,javamaker -BUCR -O$(jurt_TESTURP) -nD $< -X$(OUTDIR)/bin/udkapi.rdb) && \

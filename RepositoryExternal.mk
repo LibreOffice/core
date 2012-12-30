@@ -2482,6 +2482,59 @@ endif # SYSTEM_JFREEREPORT
 
 # Executables
 
+# FIXME: the library target should be for build too
+define gb_Executable__register_bestreversemap
+$(call gb_Executable_add_runtime_dependencies,bestreversemap,\
+	$(if $(filter-out ANDROID,$(OS)),$(call gb_Library_get_target,sal_textenc)) \
+)
+endef
+
+ifneq ($(SYSTEM_ICU),YES)
+
+define gb_Executable__register_gendict
+$(call gb_Executable_add_runtime_dependencies,gendict,\
+	$(call gb_Package_get_target_for_build,icu) \
+)
+endef
+
+endif
+
+define gb_Executable__register_localize
+$(call gb_Executable_add_runtime_dependencies,localize,\
+	$(foreach exec,cfgex helpex propex transex3 treex uiex ulfex xrmex,\
+		$(call gb_Executable_get_runtime_dependencies,$(exec)) \
+	) \
+)
+endef
+
+# The dependencies on ure/services.rdb and ure/types.rdb are implicitly required
+# due to the settings for URE_SERVICES and URE_TYPES in cppuhelper/source/unorc:
+# FIXME: the library target should be for build too
+define gb_Executable__register_saxparser
+$(call gb_Executable_add_runtime_dependencies,saxparser,\
+	$(call gb_Library_get_target,$(gb_CPPU_ENV)_uno) \
+	$(call gb_Package_get_target_for_build,cppuhelper_unorc) \
+	$(call gb_Rdb_get_outdir_target_for_build,ure/services) \
+	$(call gb_UnoApiMerge_get_target_for_build,ure/types) \
+)
+endef
+
+# NOTE: the dependencies on ure/services.rdb and ure/types.rdb are implicitly
+# required due to the settings for URE_SERVICES and URE_TYPES in
+# cppuhelper/source/unorc
+# FIXME: the library target should be for build too
+define gb_Executable__register_uno
+$(call gb_Executable_add_runtime_dependencies,uno,\
+	$(call gb_Library_get_target,$(gb_CPPU_ENV)_uno) \
+	$(call gb_Package_get_target_for_build,cppuhelper_unorc) \
+	$(call gb_Rdb_get_outdir_target_for_build,ure/services) \
+	$(call gb_UnoApiMerge_get_target_for_build,ure/types) \
+)
+endef
+
+
+# External executables
+
 ifneq ($(SYSTEM_LIBXML_FOR_BUILD),YES)
 
 gb_ExternalExecutable__register_xmllint :=

@@ -35,15 +35,15 @@ $(call gb_CustomTarget_get_workdir,shell/source/win32/shlxthandler/res)/shlxthdl
 	$(SRCDIR)/shell/source/win32/shlxthandler/res/rcheader.txt \
 	$(SRCDIR)/shell/source/win32/shlxthandler/res/rctmpl.txt \
 	$(SRCDIR)/shell/source/win32/shlxthandler/res/shlxthdl.ulf \
-	| $(call gb_CustomTarget_get_workdir,shell/source/win32/shlxthandler/res)/.dir \
-	$(call gb_Executable_get_target_for_build,lngconvex)
+	$(call gb_Executable_get_runtime_dependencies,lngconvex) \
+	| $(call gb_CustomTarget_get_workdir,shell/source/win32/shlxthandler/res)/.dir
 
 $(call gb_CustomTarget_get_workdir,shell/source/win32/shlxthandler/res)/shlxthdl_impl.rc :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),LCX,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		cd $(SRCDIR)/shell/source/win32/shlxthandler/res && \
 		BRAND_BASE_DIR=$(call gb_Helper_make_url,$(OUTDIR)/unittest/install) \
-		$(call gb_Executable_get_target_for_build,lngconvex) \
+		$(call gb_Executable_get_command,lngconvex) \
 			-ulf shlxthdl.ulf \
 			-rc $@ \
 			-rct rctmpl.txt \

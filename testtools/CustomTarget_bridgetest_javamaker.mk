@@ -33,7 +33,7 @@ $(call gb_CustomTarget_get_target,testtools/bridgetest_javamaker) : $(testtools_
 $(testtools_JAVADIR)/done : \
 		$(call gb_UnoApiTarget_get_target,bridgetest) \
 		$(OUTDIR)/bin/types.rdb \
-		$(call gb_Executable_get_target_for_build,javamaker) \
+		$(call gb_Executable_get_runtime_dependencies,javamaker) \
 		| $(testtools_JAVADIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),JVM,1)
 	$(call gb_Helper_abbreviate_dirs, \

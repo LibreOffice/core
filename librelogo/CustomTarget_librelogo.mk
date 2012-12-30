@@ -32,17 +32,14 @@ librelogo_LANGS := $(filter-out qtz,$(filter-out en-US,$(gb_WITH_LANG)))
 $(eval $(foreach lang,$(librelogo_LANGS),$(call librelogo_Properties_Properties,$(subst -,_,$(lang)),$(lang))))
 endif
 
-librelogo_PROPMERGETARGET := $(call gb_Executable_get_target_for_build,propex)
-librelogo_PROPMERGECOMMAND := $(gb_Helper_set_ld_path) $(librelogo_PROPMERGETARGET)
-
 $(librelogo_DIR)/LibreLogo_%.properties : \
-		$(librelogo_PROPMERGETARGET) \
+		$(call gb_Executable_get_runtime_dependencies,propex) \
 		| $(librelogo_DIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRP,1)
 	$(call gb_Helper_abbreviate_dirs, \
 		MERGEINPUT=`$(gb_MKTEMP)` && \
 		echo $(POFILE) > $${MERGEINPUT} && \
-		$(librelogo_PROPMERGECOMMAND) \
+		$(call gb_Executable_get_command,propex) \
 			-p librelogo \
 			-i $(SOURCE) \
 			-o $@ \

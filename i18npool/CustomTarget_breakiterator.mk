@@ -30,18 +30,12 @@ $(eval $(call gb_CustomTarget_CustomTarget,i18npool/breakiterator))
 
 i18npool_BIDIR := $(call gb_CustomTarget_get_workdir,i18npool/breakiterator)
 
-ifeq ($(SYSTEM_ICU),NO)
-i18npool_ICUTARGET := $(call gb_ExternalPackage_get_target,icu)
-else
-i18npool_ICUTARGET :=
-endif
-
 $(call gb_CustomTarget_get_target,i18npool/breakiterator) : \
 	$(i18npool_BIDIR)/dict_ja.cxx $(i18npool_BIDIR)/dict_zh.cxx $(i18npool_BIDIR)/OpenOffice_dat.c
 
 $(i18npool_BIDIR)/dict_%.cxx : \
 		$(SRCDIR)/i18npool/source/breakiterator/data/%.dic \
-		$(call gb_Executable_get_target_for_build,gendict) $(i18npool_ICUTARGET) \
+		$(call gb_Executable_get_runtime_dependencies,gendict) \
 		| $(i18npool_BIDIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),DIC,1)
 	$(call gb_Helper_abbreviate_dirs,\

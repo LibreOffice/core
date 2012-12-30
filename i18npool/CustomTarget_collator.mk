@@ -56,7 +56,7 @@ $(call gb_CustomTarget_get_target,i18npool/collator) : $(SRCDIR)/i18npool/Custom
 
 $(i18npool_CODIR)/collator_%.cxx : \
 		$(SRCDIR)/i18npool/source/collator/data/%.txt \
-		$(call gb_Executable_get_target_for_build,gencoll_rule) \
+		$(call gb_Executable_get_runtime_dependencies,gencoll_rule) \
 		| $(i18npool_CODIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CLR,1)
 	$(call gb_Helper_abbreviate_dirs, \

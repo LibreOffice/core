@@ -23,9 +23,6 @@ readlicense_oo_READMEs := $(foreach lang,$(readlicense_oo_LANGS),$(readlicense_o
 readlicense_oo_README_PATTERN := $(readlicense_oo_DIR)/readme_%.txt
 endif
 
-readlicense_XRMEXTARGET := $(call gb_Executable_get_target_for_build,xrmex)
-readlicense_XRMEXCOMMAND := $(gb_Helper_set_ld_path) $(readlicense_XRMEXTARGET)
-
 $(call gb_CustomTarget_get_target,readlicense_oo/readme) : $(readlicense_oo_READMEs)
 
 ifeq ($(strip $(gb_WITH_LANG)),)
@@ -35,14 +32,14 @@ readlicense_oo_README_XRM := $(readlicense_oo_DIR)/readme.xrm
 
 $(readlicense_oo_DIR)/readme.xrm : \
 		$(SRCDIR)/readlicense_oo/docs/readme.xrm \
-		$(readlicense_XRMEXTARGET) \
+		$(call gb_Executable_get_runtime_dependencies,xrmex) \
 		$(foreach lang,$(filter-out qtz,$(filter-out en-US,$(gb_WITH_LANG))),$(gb_POLOCATION)/$(lang)/readlicense_oo/docs.po) \
 		| $(readlicense_oo_DIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),XRM,1)
 	$(call gb_Helper_abbreviate_dirs, \
         MERGEINPUT=`$(gb_MKTEMP)` && \
         echo $(foreach lang,$(filter-out qtz,$(filter-out en-US,$(gb_WITH_LANG))),$(gb_POLOCATION)/$(lang)/readlicense_oo/docs.po) > $${MERGEINPUT} && \
-		$(readlicense_XRMEXCOMMAND) \
+		$(call gb_Executable_get_command,xrmex) \
 			-p readlicense_oo \
 			-i $< \
 			-o $@ \

@@ -33,7 +33,7 @@ $(call gb_CustomTarget_get_target,testtools/bridgetest_climaker) : \
 
 $(testtools_CLIDIR)/cli_types_bridgetest.dll : \
 		$(OUTDIR)/bin/types.rdb $(OUTDIR)/bin/cli_uretypes.dll \
-		$(call gb_Executable_get_target_for_build,climaker) \
+		$(call gb_Executable_get_runtime_dependencies,climaker) \
 		| $(testtools_CLIDIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CLM,1)
 	$(call gb_Helper_abbreviate_dirs, \

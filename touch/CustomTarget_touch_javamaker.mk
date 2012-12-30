@@ -13,7 +13,7 @@ touch_javamaker_DIR := $(call gb_CustomTarget_get_workdir,touch)
 $(call gb_CustomTarget_get_target,touch/touch_javamaker) : $(touch_javamaker_DIR)/done
 
 $(touch_javamaker_DIR)/done : $(call gb_UnoApiTarget_get_target,touch) $(OUTDIR)/bin/types.rdb \
-		$(call gb_Executable_get_target_for_build,javamaker) | $(touch_javamaker_DIR)/.dir
+		$(call gb_Executable_get_runtime_dependencies,javamaker) | $(touch_javamaker_DIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),JVM,1)
 	$(call gb_Helper_abbreviate_dirs, \
 	rm -r $(touch_javamaker_DIR) && \
