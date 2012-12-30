@@ -1156,7 +1156,7 @@ void restartOnMac(bool passArguments) {
         for (sal_uInt32 i = 0; i < n; ++i) {
             rtl::OUString arg;
             OSL_VERIFY(osl_getCommandArg(i, &arg.pData) == osl_Process_E_None);
-            if (arg.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("--accept="))) {
+            if (arg.match("--accept=")) {
                 wait = true;
             }
             rtl::OString arg8;

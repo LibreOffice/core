@@ -42,10 +42,6 @@ using uno::UNO_QUERY;
 static char const CONFIG_ERROR_HANDLER[] = "configuration.interaction-handler";
 // ----------------------------------------------------------------------------
 
-#define OUSTRING( constascii ) OUString( RTL_CONSTASCII_USTRINGPARAM( constascii ) )
-
-#define k_ERRORHANDLER OUSTRING( CONFIGURATION_ERROR_HANDLER )
-
 // ----------------------------------------------------------------------------
 // ConfigurationErrorHandler
 // ----------------------------------------------------------------------------

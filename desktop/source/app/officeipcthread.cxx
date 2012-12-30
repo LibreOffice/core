@@ -547,8 +547,7 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
         // Seems another office is running. Pipe arguments to it and self terminate
         osl::StreamPipe aStreamPipe(pThread->maPipe.getHandle());
 
-        rtl::OStringBuffer aArguments(RTL_CONSTASCII_STRINGPARAM(
-            ARGUMENT_PREFIX));
+        rtl::OStringBuffer aArguments(ARGUMENT_PREFIX);
         rtl::OUString cwdUrl;
         if (!(tools::getProcessWorkingDir(cwdUrl) &&
               addArgument(aArguments, '1', cwdUrl)))

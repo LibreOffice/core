@@ -112,7 +112,7 @@ bool LanguageSelection::prepareLanguage()
     try
     {
         Reference< XPropertySet > xProp(getConfigAccess("org.openoffice.System/L10N/", sal_False), UNO_QUERY_THROW);
-        Any aWin16SysLocale = xProp->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("SystemLocale")));
+        Any aWin16SysLocale = xProp->getPropertyValue("SystemLocale");
         ::rtl::OUString sWin16SysLocale;
         aWin16SysLocale >>= sWin16SysLocale;
         if( !sWin16SysLocale.isEmpty())
@@ -129,7 +129,7 @@ bool LanguageSelection::prepareLanguage()
         OUString usLocale;
         Reference< XPropertySet > xLocaleProp(getConfigAccess(
             "org.openoffice.System/L10N", sal_True), UNO_QUERY_THROW);
-        xLocaleProp->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Locale"))) >>= usLocale;
+        xLocaleProp->getPropertyValue("Locale") >>= usLocale;
             setDefaultLanguage(usLocale);
     }
     catch (const Exception&)
@@ -193,7 +193,7 @@ bool LanguageSelection::prepareLanguage()
             if ( !bCmdLanguage )
             {
                 // Store language only
-                xProp->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("ooLocale")), makeAny(aLocaleString));
+                xProp->setPropertyValue("ooLocale", makeAny(aLocaleString));
                 Reference< XChangesBatch >(xProp, UNO_QUERY_THROW)->commitChanges();
             }
 
@@ -201,14 +201,14 @@ bool LanguageSelection::prepareLanguage()
             {
                 // Store language only
                 Reference< XPropertySet > xProp2(getConfigAccess("org.openoffice.Office.Linguistic/General/", sal_True), UNO_QUERY_THROW);
-                xProp2->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("UILocale")), makeAny(aLocaleString));
+                xProp2->setPropertyValue("UILocale", makeAny(aLocaleString));
                 Reference< XChangesBatch >(xProp2, UNO_QUERY_THROW)->commitChanges();
             }
 
             MsLangId::setConfiguredSystemUILanguage( aUILanguageTag.getLanguageType( false) );
 
             OUString sLocale;
-            xProp->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("ooSetupSystemLocale"))) >>= sLocale;
+            xProp->getPropertyValue("ooSetupSystemLocale") >>= sLocale;
             if ( !sLocale.isEmpty() )
             {
                 LanguageTag aLocaleLanguageTag(sLocale);
@@ -308,11 +308,11 @@ OUString LanguageSelection::getLanguageString()
         }
     }
     // fallback 1: en-US
-    OUString usFB(RTL_CONSTASCII_USTRINGPARAM("en-US"));
+    OUString usFB("en-US");
     if (isInstalledLanguage(usFB))
     {
         bFoundLanguage = sal_True;
-        aFoundLanguage = OUString(RTL_CONSTASCII_USTRINGPARAM("en-US"));
+        aFoundLanguage = "en-US";
         return aFoundLanguage;
     }
 
@@ -330,9 +330,9 @@ Reference< XNameAccess > LanguageSelection::getConfigAccess(const sal_Char* pPat
     try{
         OUString sAccessSrvc;
         if (bUpdate)
-            sAccessSrvc = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationUpdateAccess"));
+            sAccessSrvc = "com.sun.star.configuration.ConfigurationUpdateAccess";
         else
-            sAccessSrvc = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess"));
+            sAccessSrvc = "com.sun.star.configuration.ConfigurationAccess";
 
         OUString sConfigURL = OUString::createFromAscii(pPath);
 
@@ -371,7 +371,7 @@ static Sequence< OUString > _getFallbackLocales(const OUString& aIsoLang)
     Sequence< OUString > seqFallbacks;
     if ( aIsoLang == "zh-HK" ) {
         seqFallbacks = Sequence< OUString >(1);
-        seqFallbacks[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("zh-TW"));
+        seqFallbacks[0] = "zh-TW";
     }
     return seqFallbacks;
 }
@@ -442,7 +442,7 @@ OUString LanguageSelection::getUserLanguage()
     {
         try
         {
-            xAccess->getByName(OUString(RTL_CONSTASCII_USTRINGPARAM("UILocale"))) >>= aUserLanguage;
+            xAccess->getByName("UILocale") >>= aUserLanguage;
         }
         catch ( NoSuchElementException const & )
         {
@@ -466,7 +466,7 @@ OUString LanguageSelection::getSystemLanguage()
     {
         try
         {
-            xAccess->getByName(OUString(RTL_CONSTASCII_USTRINGPARAM("UILocale"))) >>= aUserLanguage;
+            xAccess->getByName("UILocale") >>= aUserLanguage;
         }
         catch ( NoSuchElementException const & )
         {
@@ -488,7 +488,7 @@ void LanguageSelection::resetUserLanguage()
     try
     {
         Reference< XPropertySet > xProp(getConfigAccess("org.openoffice.Office.Linguistic/General", sal_True), UNO_QUERY_THROW);
-        xProp->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("UILocale")), makeAny(OUString()));
+        xProp->setPropertyValue("UILocale", makeAny(OUString()));
         Reference< XChangesBatch >(xProp, UNO_QUERY_THROW)->commitChanges();
     }
     catch ( const PropertyVetoException& )

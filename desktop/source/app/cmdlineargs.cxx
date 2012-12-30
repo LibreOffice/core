@@ -161,7 +161,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                 if ( aArg.toChar() == '-' )
                 {
                     // handle this argument as an option
-                    if ( aArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-n")))
+                    if ( aArg.equalsIgnoreAsciiCase("-n"))
                     {
                         // force new documents based on the following documents
                         bForceNewEvent  = true;
@@ -173,7 +173,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bStartEvent     = false;
                         bDisplaySpec    = false;
                     }
-                    else if ( aArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM( "-o" )))
+                    else if ( aArg.equalsIgnoreAsciiCase("-o"))
                     {
                         // force open documents regardless if they are templates or not
                         bForceOpenEvent = true;
@@ -185,7 +185,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bStartEvent     = false;
                         bDisplaySpec    = false;
                     }
-                    else if ( aArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM( "-pt" )))
+                    else if ( aArg.equalsIgnoreAsciiCase("-pt"))
                     {
                         // Print to special printer
                         bPrintToEvent   = true;
@@ -198,7 +198,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bDisplaySpec    = false;
                         bForceOpenEvent = false;
                    }
-                   else if ( aArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM( "-p" )))
+                   else if ( aArg.equalsIgnoreAsciiCase("-p"))
                    {
                         // Print to default printer
                         bPrintEvent     = true;
@@ -210,7 +210,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bStartEvent     = false;
                         bDisplaySpec    = false;
                    }
-                   else if ( oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM( "view" )))
+                   else if ( oArg.equalsIgnoreAsciiCase("view"))
                    {
                         // open in viewmode
                         bOpenEvent      = false;
@@ -222,7 +222,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bStartEvent     = false;
                         bDisplaySpec    = false;
                    }
-                   else if ( oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM( "show" )))
+                   else if ( oArg.equalsIgnoreAsciiCase("show"))
                    {
                         // open in viewmode
                         bOpenEvent      = false;
@@ -234,7 +234,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bForceOpenEvent = false;
                         bDisplaySpec    = false;
                     }
-                    else if ( oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("display")))
+                    else if ( oArg.equalsIgnoreAsciiCase("display"))
                     {
                         // set display
                         bOpenEvent      = false;
@@ -246,7 +246,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bStartEvent     = false;
                         bDisplaySpec    = true;
                     }
-                    else if ( oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("language")))
+                    else if ( oArg.equalsIgnoreAsciiCase("language"))
                     {
                         bOpenEvent      = false;
                         bPrintEvent     = false;
@@ -257,23 +257,23 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bStartEvent     = false;
                         bDisplaySpec    = false;
                     }
-                    else if ( oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("convert-to")))
+                    else if ( oArg.equalsIgnoreAsciiCase("convert-to"))
                     {
                         bOpenEvent = false;
                         bConversionEvent = true;
                         bConversionParamsEvent = true;
                     }
-                    else if ( oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("print-to-file")))
+                    else if ( oArg.equalsIgnoreAsciiCase("print-to-file"))
                     {
                         bOpenEvent = false;
                         bBatchPrintEvent = true;
                     }
-                    else if ( oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("printer-name")) &&
+                    else if ( oArg.equalsIgnoreAsciiCase("printer-name") &&
                               bBatchPrintEvent )
                     {
                         bBatchPrinterNameEvent = true;
                     }
-                    else if ( oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("outdir")) &&
+                    else if ( oArg.equalsIgnoreAsciiCase("outdir") &&
                               (bConversionEvent || bBatchPrintEvent) )
                     {
                         bConversionOutEvent = true;
@@ -284,15 +284,15 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                     // primitive tools that /bin/sh offers, ignore them here
                     if (
 #if defined UNX
-                        !oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("backtrace")) &&
-                        !oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("strace")) &&
-                        !oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("valgrind")) &&
+                        !oArg.equalsIgnoreAsciiCase("backtrace") &&
+                        !oArg.equalsIgnoreAsciiCase("strace") &&
+                        !oArg.equalsIgnoreAsciiCase("valgrind") &&
                     // for X Session Management, handled in
                     // vcl/unx/generic/app/sm.cxx:
                         !oArg.match("session=") &&
 #endif
                     //ignore additional legacy options that don't do anything anymore
-                        !oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("nocrashreport")) &&
+                        !oArg.equalsIgnoreAsciiCase("nocrashreport") &&
                         m_unknown.isEmpty())
                     {
                         m_unknown = aArg;
@@ -381,7 +381,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
 bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& aArg, ::rtl::OUString& oArg )
 {
     bool bDeprecated = false;
-    if (aArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("--")))
+    if (aArg.matchIgnoreAsciiCase("--"))
     {
         oArg = ::rtl::OUString(aArg.getStr()+2, aArg.getLength()-2);
     }
@@ -396,29 +396,29 @@ bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& aArg
         return false;
     }
 
-    if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "minimized" )) )
+    if ( oArg == "minimized" )
     {
         m_minimized = true;
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "invisible" )) )
+    else if ( oArg == "invisible" )
     {
         m_invisible = true;
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "norestore" )) )
+    else if ( oArg == "norestore" )
     {
         m_norestore = true;
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "nodefault" )) )
+    else if ( oArg == "nodefault" )
     {
         m_nodefault = true;
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "headless" )) )
+    else if ( oArg == "headless" )
     {
         // Headless means also invisibile, so set this parameter to true!
         m_headless = true;
         m_invisible = true;
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "quickstart" )) )
+    else if ( oArg == "quickstart" )
     {
 #if defined(ENABLE_QUICKSTART_APPLET)
         m_quickstart = true;
@@ -430,63 +430,61 @@ bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& aArg
         m_noquickstart = true;
         m_quickstart = false;
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "terminate_after_init" )) )
+    else if ( oArg == "terminate_after_init" )
     {
         m_terminateafterinit = true;
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "nofirststartwizard" )) )
+    else if ( oArg == "nofirststartwizard" )
     {
         m_nofirststartwizard = true;
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "nologo" )) )
+    else if ( oArg == "nologo" )
     {
         m_nologo = true;
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "nolockcheck" )) )
+    else if ( oArg == "nolockcheck" )
     {
         m_nolockcheck = true;
         // Workaround for automated testing
         ::svt::DocumentLockFile::AllowInteraction( false );
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "help" ))
-        || aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-h" ))
-        || aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-?" )))
+    else if ( oArg == "help" || aArg == "-h" || aArg == "-?" )
     {
         m_help = true;
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "helpwriter" )) )
+    else if ( oArg == "helpwriter" )
     {
         m_helpwriter = true;
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "helpcalc" )) )
+    else if ( oArg == "helpcalc" )
     {
         m_helpcalc = true;
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "helpdraw" )) )
+    else if ( oArg == "helpdraw" )
     {
         m_helpdraw = true;
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "helpimpress" )) )
+    else if ( oArg == "helpimpress" )
     {
         m_helpimpress = true;
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "helpbase" )) )
+    else if ( oArg == "helpbase" )
     {
         m_helpbase = true;
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "helpbasic" )) )
+    else if ( oArg == "helpbasic" )
     {
         m_helpbasic = true;
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "helpmath" )) )
+    else if ( oArg == "helpmath" )
     {
         m_helpmath = true;
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "version" )) )
+    else if ( oArg == "version" )
     {
         m_version = true;
     }
-    else if ( oArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("splash-pipe=")) )
+    else if ( oArg.matchIgnoreAsciiCase("splash-pipe=") )
     {
         m_splashpipe = true;
     }
@@ -496,25 +494,25 @@ bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& aArg
        the only platform dependent parameter. Should more appear
        we should find a better solution
     */
-    else if ( aArg.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("-psn")) )
+    else if ( aArg.match("-psn") )
     {
         m_psn = true;
         return true;
     }
 #endif
-    else if ( oArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("infilter=")))
+    else if ( oArg.matchIgnoreAsciiCase("infilter="))
     {
         m_infilter.push_back(oArg.copy(RTL_CONSTASCII_LENGTH("infilter=")));
     }
-    else if ( oArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("accept=")))
+    else if ( oArg.matchIgnoreAsciiCase("accept="))
     {
         m_accept.push_back(oArg.copy(RTL_CONSTASCII_LENGTH("accept=")));
     }
-    else if ( oArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("unaccept=")))
+    else if ( oArg.matchIgnoreAsciiCase("unaccept="))
     {
         m_unaccept.push_back(oArg.copy(RTL_CONSTASCII_LENGTH("unaccept=")));
     }
-    else if ( oArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("language=")))
+    else if ( oArg.matchIgnoreAsciiCase("language="))
     {
         m_language = oArg.copy(RTL_CONSTASCII_LENGTH("language="));
     }

@@ -37,8 +37,7 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 {
 #if defined ANDROID
     try {
-        rtl::Bootstrap::setIniFilename(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///assets/program/lofficerc")));
+        rtl::Bootstrap::setIniFilename("file:///assets/program/lofficerc");
 #endif
     tools::extendApplicationEnvironment();
 
@@ -46,7 +45,7 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 
     desktop::Desktop aDesktop;
     // This string is used during initialization of the Gtk+ VCL module
-    aDesktop.SetAppName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("soffice")) );
+    aDesktop.SetAppName( OUString("soffice") );
 #ifdef UNX
     // handle --version and --help already here, otherwise they would be handled
     // after VCL initialization that might fail if $DISPLAY is not set
