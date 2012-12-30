@@ -13,8 +13,8 @@
 
 gb_UILocalizeTarget_WORKDIR := $(WORKDIR)/UILocalizeTarget
 
-gb_UILocalizeTarget_TARGET := $(call gb_Executable_get_target_for_build,uiex)
-gb_UILocalizeTarget_COMMAND := $(gb_Helper_set_ld_path) $(gb_UILocalizeTarget_TARGET)
+gb_UILocalizeTarget_DEPS := $(call gb_Executable_get_runtime_dependencies,uiex)
+gb_UILocalizeTarget_COMMAND := $(call gb_Executable_get_command,uiex)
 
 # If translatable strings from a .ui file are not merged into the
 # respective .po file yet, the produced translated files are empty (that
@@ -51,7 +51,7 @@ $(dir $(call gb_UILocalizeTarget_get_target,%)).dir :
 $(dir $(call gb_UILocalizeTarget_get_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
-$(call gb_UILocalizeTarget_get_target,%) : $(gb_UILocalizeTarget_TARGET)
+$(call gb_UILocalizeTarget_get_target,%) : $(gb_UILocalizeTarget_DEPS)
 	$(call gb_UILocalizeTarget__command,$@,$*)
 
 .PHONY : $(call gb_UILocalizeTarget_get_clean_target,%)

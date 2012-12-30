@@ -251,8 +251,8 @@ $(call gb_XcuLangpackTarget_get_outdir_target,%) :
 
 # XcuMergeTarget class
 
-gb_XcuMergeTarget_CFGEXTARGET := $(call gb_Executable_get_target_for_build,cfgex)
-gb_XcuMergeTarget_CFGEXCOMMAND := $(gb_Helper_set_ld_path) $(gb_XcuMergeTarget_CFGEXTARGET)
+gb_XcuMergeTarget_CFGEXDEPS := $(call gb_Executable_get_runtime_dependencies,cfgex)
+gb_XcuMergeTarget_CFGEXCOMMAND := $(call gb_Executable_get_command,cfgex)
 
 # PRJNAME is computed from the stem (parameter $(2))
 define gb_XcuMergeTarget__command
@@ -271,7 +271,7 @@ rm -rf $${MERGEINPUT}
 
 endef
 
-$(call gb_XcuMergeTarget_get_target,%) : $(gb_XcuMergeTarget_CFGEXTARGET)
+$(call gb_XcuMergeTarget_get_target,%) : $(gb_XcuMergeTarget_CFGEXDEPS)
 	$(if $(filter $(words $(POFILES)),$(words $(wildcard $(POFILES)))),\
 		$(call gb_XcuMergeTarget__command,$@,$*,$(filter %.xcu,$^)),\
 		mkdir -p $(dir $@) && cp $(filter %.xcu,$^) $@)

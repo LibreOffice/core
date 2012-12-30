@@ -52,7 +52,8 @@ endif
 #  gb_CppunitTest_get_filename
 # DBGSV_ERROR_OUT => in non-product builds, ensure that tools-based assertions do not pop up as message box, but are routed to the shell
 ifneq ($(CROSS_COMPILING),YES)
-gb_CppunitTest_CPPTESTTARGET := $(call gb_Executable_get_target,cppunit/cppunittester)
+gb_CppunitTest_CPPTESTDEPS := $(call gb_Executable_get_runtime_dependencies,cppunit/cppunittester)
+gb_CppunitTest_CPPTESTCOMMAND := $(call gb_Executable_get_command,cppunit/cppunittester)
 endif
 
 gb_CppunitTest__get_linktargetname = CppunitTest/$(call gb_CppunitTest_get_filename,$(1))
@@ -80,7 +81,7 @@ $(call gb_CppunitTest_get_clean_target,%) :
 		rm -f $(call gb_CppunitTest_get_target,$*) $(call gb_CppunitTest_get_target,$*).log)
 
 .PHONY : $(call gb_CppunitTest_get_target,%)
-$(call gb_CppunitTest_get_target,%) :| $(gb_CppunitTest_CPPTESTTARGET)
+$(call gb_CppunitTest_get_target,%) :| $(gb_CppunitTest_CPPTESTDEPS)
 	$(call gb_Output_announce,$*,$(true),CUT,2)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
@@ -91,7 +92,7 @@ $(call gb_CppunitTest_get_target,%) :| $(gb_CppunitTest_CPPTESTTARGET)
 		DISABLE_SAL_DBGBOX=t \
 		$(if $(SAL_DIAGNOSE_ABORT),SAL_DIAGNOSE_ABORT=$(SAL_DIAGNOSE_ABORT)) \
 		STAR_RESOURCEPATH=$(dir $(call gb_ResTarget_get_outdir_target,example)) \
-		$(ICECREAM_RUN) $(gb_CppunitTest_GDBTRACE) $(gb_CppunitTest_VALGRINDTOOL) $(gb_CppunitTest_CPPTESTTARGET) \
+		$(ICECREAM_RUN) $(gb_CppunitTest_GDBTRACE) $(gb_CppunitTest_VALGRINDTOOL) $(gb_CppunitTest_CPPTESTCOMMAND) \
 		$(call gb_LinkTarget_get_target,CppunitTest/$(call gb_CppunitTest_get_libfilename,$*)) \
 		$(call gb_CppunitTest__make_args) \
 		$(if $(gb_CppunitTest__interactive),,> $@.log 2>&1 || (cat $@.log && $(UNIT_FAILED_MSG) && false))))

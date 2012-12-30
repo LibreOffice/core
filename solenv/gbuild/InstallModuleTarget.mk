@@ -74,8 +74,8 @@ endef
 
 # ScpPreprocessTarget class
 
-gb_ScpPreprocessTarget_TARGET := $(call gb_Executable_get_target_for_build,cpp)
-gb_ScpPreprocessTarget_COMMAND := $(gb_Helper_set_ld_path) $(gb_ScpPreprocessTarget_TARGET)
+gb_ScpPreprocessTarget_DEPS := $(call gb_Executable_get_runtime_dependencies,cpp)
+gb_ScpPreprocessTarget_COMMAND := $(call gb_Executable_get_command,cpp)
 
 gb_ScpPreprocessTarget_get_source = $(SRCDIR)/$(1).scp
 
@@ -93,7 +93,7 @@ endef
 $(dir $(call gb_ScpPreprocessTarget_get_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
-$(call gb_ScpPreprocessTarget_get_target,%) : $(gb_ScpPreprocessTarget_TARGET)
+$(call gb_ScpPreprocessTarget_get_target,%) : $(gb_ScpPreprocessTarget_DEPS)
 	$(call gb_ScpPreprocessTarget__command,$@,$*)
 
 .PHONY : $(call gb_ScpPreprocessTarget_get_clean_target,%)
@@ -111,8 +111,8 @@ endef
 
 # ScpMergeTarget class
 
-gb_ScpMergeTarget_TARGET := $(call gb_Executable_get_target_for_build,ulfex)
-gb_ScpMergeTarget_COMMAND := $(gb_Helper_set_ld_path) $(gb_ScpMergeTarget_TARGET)
+gb_ScpMergeTarget_DEPS := $(call gb_Executable_get_runtime_dependencies,ulfex)
+gb_ScpMergeTarget_COMMAND := $(call gb_Executable_get_command,ulfex)
 
 gb_ScpMergeTarget_get_source = $(SRCDIR)/$(1).ulf
 
@@ -129,7 +129,7 @@ endef
 $(dir $(call gb_ScpMergeTarget_get_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
-$(call gb_ScpMergeTarget_get_target,%) : $(gb_ScpMergeTarget_TARGET)
+$(call gb_ScpMergeTarget_get_target,%) : $(gb_ScpMergeTarget_DEPS)
 	$(call gb_ScpMergeTarget__command,$@,$*)
 
 .PHONY : $(call gb_ScpMergeTarget_get_clean_target,%)
@@ -155,8 +155,8 @@ endef
 # platform:
 #  gb_ScpConvertTarget_ScpConvertTarget_platform
 
-gb_ScpConvertTarget_TARGET := $(call gb_Executable_get_target_for_build,ulfconv)
-gb_ScpConvertTarget_COMMAND := $(gb_Helper_set_ld_path) $(gb_ScpConvertTarget_TARGET)
+gb_ScpConvertTarget_DEPS := $(call gb_Executable_get_runtime_dependencies,ulfconv)
+gb_ScpConvertTarget_COMMAND := $(call gb_Executable_get_command,ulfconv)
 
 define gb_ScpConvertTarget__command
 $(call gb_Output_announce,$(2),$(true),SCC,1)
@@ -168,7 +168,7 @@ endef
 $(dir $(call gb_ScpConvertTarget_get_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
-$(call gb_ScpConvertTarget_get_target,%) : $(gb_ScpConvertTarget_TARGET)
+$(call gb_ScpConvertTarget_get_target,%) : $(gb_ScpConvertTarget_DEPS)
 	$(call gb_ScpConvertTarget__command,$@,$*)
 
 .PHONY : $(call gb_ScpConvertTarget_get_clean_target,%)

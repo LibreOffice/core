@@ -31,11 +31,10 @@
 # (This can be workarounded by using gb_Package, but really should not.)
 
 # SdiTarget class
-gb_SdiTarget_SVIDLTARGET := $(call gb_Executable_get_target_for_build,svidl)
-gb_SdiTarget_SVIDLCOMMAND := \
-	$(gb_Helper_set_ld_path) $(gb_SdiTarget_SVIDLTARGET)
+gb_SdiTarget_SVIDLDEPS := $(call gb_Executable_get_runtime_dependencies,svidl)
+gb_SdiTarget_SVIDLCOMMAND := $(call gb_Executable_get_command,svidl)
 
-$(call gb_SdiTarget_get_target,%) : $(SRCDIR)/%.sdi $(gb_SdiTarget_SVIDLTARGET)
+$(call gb_SdiTarget_get_target,%) : $(SRCDIR)/%.sdi $(gb_SdiTarget_SVIDLDEPS)
 	$(call gb_Output_announce,$*,$(true),SDI,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) $(dir $(call gb_SdiTarget_get_dep_target,$*)))

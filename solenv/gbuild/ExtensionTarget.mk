@@ -33,29 +33,21 @@
 gb_ExtensionTarget__get_preparation_target = $(WORKDIR)/ExtensionTarget/$(1).prepare
 
 gb_ExtensionTarget_ZIPCOMMAND := zip $(if $(findstring s,$(MAKEFLAGS)),-q)
-gb_ExtensionTarget_XRMEXTARGET := $(call gb_Executable_get_target_for_build,xrmex)
-gb_ExtensionTarget_XRMEXCOMMAND := \
-	$(gb_Helper_set_ld_path) $(gb_ExtensionTarget_XRMEXTARGET)
+gb_ExtensionTarget_XRMEXDEPS := $(call gb_Executable_get_runtime_dependencies,xrmex)
+gb_ExtensionTarget_XRMEXCOMMAND := $(call gb_Executable_get_command,xrmex)
 
-gb_ExtensionTarget_PROPMERGETARGET := $(call gb_Executable_get_target_for_build,propex)
-gb_ExtensionTarget_PROPMERGECOMMAND := \
-	$(gb_Helper_set_ld_path) $(gb_ExtensionTarget_PROPMERGETARGET)
+gb_ExtensionTarget_PROPMERGEDEPS := $(call gb_Executable_get_runtime_dependencies,propex)
+gb_ExtensionTarget_PROPMERGECOMMAND := $(call gb_Executable_get_command,propmerge)
 
-gb_ExtensionTarget_TREEXTARGET := $(call gb_Executable_get_target_for_build,treex)
-gb_ExtensionTarget_TREEXCOMMAND := \
-    $(gb_Helper_set_ld_path) $(gb_ExtensionTarget_TREEXTARGET)
+gb_ExtensionTarget_TREEXDEPS := $(call gb_Executable_get_runtime_dependencies,treex)
+gb_ExtensionTarget_TREEXCOMMAND := $(call gb_Executable_get_command,treex)
 
-gb_ExtensionTarget_HELPEXTARGET := $(call gb_Executable_get_target_for_build,helpex)
-gb_ExtensionTarget_HELPEXCOMMAND := \
-	$(gb_Helper_set_ld_path) $(gb_ExtensionTarget_HELPEXTARGET)
-gb_ExtensionTarget_HELPINDEXERTARGET := \
-    $(call gb_Executable_get_target_for_build,HelpIndexer)
-gb_ExtensionTarget_HELPINDEXERCOMMAND := \
-	$(gb_Helper_set_ld_path) $(gb_ExtensionTarget_HELPINDEXERTARGET)
-gb_ExtensionTarget_HELPLINKERTARGET := \
-    $(call gb_Executable_get_target_for_build,HelpLinker)
-gb_ExtensionTarget_HELPLINKERCOMMAND := \
-	$(gb_Helper_set_ld_path) $(gb_ExtensionTarget_HELPLINKERTARGET)
+gb_ExtensionTarget_HELPEXDEPS := $(call gb_Executable_get_runtime_dependencies,helpex)
+gb_ExtensionTarget_HELPEXCOMMAND := $(call gb_Executable_get_command,helpex)
+gb_ExtensionTarget_HELPINDEXERDEPS := $(call gb_Executable_get_runtime_dependencies,HelpIndexer)
+gb_ExtensionTarget_HELPINDEXERCOMMAND := $(call gb_Executable_get_command,HelpIndexer)
+gb_ExtensionTarget_HELPLINKERDEPS := $(call gb_Executable_get_runtime_dependencies,HelpLinker)
+gb_ExtensionTarget_HELPLINKERCOMMAND := $(call gb_Executable_get_command,HelpLinker)
 # does not contain en-US because it is special cased in gb_ExtensionTarget_ExtensionTarget
 gb_ExtensionTarget_TRANS_LANGS := $(filter-out en-US,$(gb_WITH_LANG))
 gb_ExtensionTarget_ALL_LANGS := en-US $(gb_ExtensionTarget_TRANS_LANGS)
@@ -95,7 +87,7 @@ $(call gb_ExtensionTarget_get_workdir,%)/description.xml :
 		mkdir -p $(call gb_ExtensionTarget_get_workdir,$*) && \
 		cp -f $(LOCATION)/description.xml $@)
 else
-$(call gb_ExtensionTarget_get_workdir,%)/description.xml : $(gb_ExtensionTarget_XRMEXTARGET)
+$(call gb_ExtensionTarget_get_workdir,%)/description.xml : $(gb_ExtensionTarget_XRMEXDEPS)
 	$(call gb_Output_announce,$*/description.xml,$(true),XRM,3)
 	MERGEINPUT=`$(gb_MKTEMP)` && \
 	echo $(POFILES) > $${MERGEINPUT} && \
@@ -257,7 +249,7 @@ $(call gb_ExtensionTarget_get_target,$(1)) : $(call gb_ExtensionTarget_get_rootd
 $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) \
 		:| $(call gb_ExtensionTarget__get_preparation_target,$(1))
 $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : $(3) \
-		$(gb_ExtensionTarget_PROPMERGETARGET)
+		$(gb_ExtensionTarget_PROPMERGEDEPS)
 	$$(call gb_Output_announce,$(2),$(true),PRP,3)
 	$$(call gb_Helper_abbreviate_dirs, \
 		mkdir -p $$(dir $$@) && \
@@ -334,7 +326,7 @@ $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3) : \
 $(gb_POLOCATION)/$(5)$(subst $(SRCDIR),,$(2))$(patsubst %/,/%.po,$(patsubst ./,.po,$(dir $(or $(4),$(3))))) :
 endif
 $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3) : \
-        $(if $(filter-out en-US,$(5)),$(gb_ExtensionTarget_HELPEXTARGET)) | \
+        $(if $(filter-out en-US,$(5)),$(gb_ExtensionTarget_HELPEXDEPS)) | \
         $(call gb_ExtensionTarget_get_workdir,$(1))/help/.dir
 $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3) : \
         $(2)/$(or $(4),$(3))
@@ -376,7 +368,7 @@ endif
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \
         $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)-xhp.done
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \
-        $(gb_ExtensionTarget_TREEXTARGET) | \
+        $(gb_ExtensionTarget_TREEXDEPS) | \
         $(2)/$(4)
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \
         $(2)/$(or $(4),$(3))
@@ -403,8 +395,8 @@ endef
 #     gb_ExtensionTarget_add_helpfile)
 define gb_ExtensionTarget__compile_help_onelang
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(2).done : \
-        $(gb_ExtensionTarget_HELPINDEXERTARGET) \
-        $(gb_ExtensionTarget_HELPLINKERTARGET) \
+        $(gb_ExtensionTarget_HELPINDEXERDEPS) \
+        $(gb_ExtensionTarget_HELPLINKERDEPS) \
         $(OUTDIR_FOR_BUILD)/bin/embed.xsl \
         $(OUTDIR_FOR_BUILD)/bin/idxcaption.xsl \
         $(OUTDIR_FOR_BUILD)/bin/idxcontent.xsl | \

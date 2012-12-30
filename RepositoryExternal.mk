@@ -2489,6 +2489,18 @@ $(call gb_Executable_add_runtime_dependencies,bestreversemap,\
 )
 endef
 
+# TODO depending on the whole URE might be overkill, but I do not have a
+# Windows machine to debug it...
+# FIXME: the library target should be for build too
+define gb_Executable__register_climaker
+$(call gb_Executable_add_runtime_dependencies,climaker,\
+	$(call gb_Library_get_target,$(gb_CPPU_ENV)_uno) \
+	$(call gb_Package_get_target_for_build,cppuhelper_unorc) \
+	$(call gb_Rdb_get_outdir_target_for_build,ure/services) \
+	$(call gb_UnoApiMerge_get_target_for_build,ure/types) \
+)
+endef
+
 ifneq ($(SYSTEM_ICU),YES)
 
 define gb_Executable__register_gendict
@@ -2498,6 +2510,12 @@ $(call gb_Executable_add_runtime_dependencies,gendict,\
 endef
 
 endif
+
+define gb_Executable__register_idlc
+$(call gb_Executable_add_runtime_dependencies,idlc,\
+	$(call gb_ExternalExecutable_get_dependencies,ucpp) \
+)
+endef
 
 define gb_Executable__register_localize
 $(call gb_Executable_add_runtime_dependencies,localize,\

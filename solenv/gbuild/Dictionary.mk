@@ -11,8 +11,8 @@
 
 gb_ThesaurusIndexTarget_CHECK_TARGET := $(SRCDIR)/dictionaries/util/th_check.pl
 gb_ThesaurusIndexTarget_CHECK_COMMAND := PERL_UNICODE=0 $(PERL) -w $(gb_ThesaurusIndexTarget_CHECK_TARGET)
-gb_ThesaurusIndexTarget_INDEX_TARGET := $(call gb_Executable_get_target_for_build,idxdict)
-gb_ThesaurusIndexTarget_INDEX_COMMAND := $(gb_Helper_set_ld_path) $(gb_ThesaurusIndexTarget_INDEX_TARGET)
+gb_ThesaurusIndexTarget_INDEX_DEPS := $(call gb_Executable_get_runtime_dependencies,idxdict)
+gb_ThesaurusIndexTarget_INDEX_COMMAND := $(call gb_Executable_get_command,idxdict)
 
 define gb_ThesaurusIndexTarget__command
 $(call gb_Output_announce,$(2),$(true),THI,1)
@@ -28,7 +28,7 @@ $(dir $(call gb_ThesaurusIndexTarget_get_target,%)).dir :
 $(dir $(call gb_ThesaurusIndexTarget_get_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
-$(call gb_ThesaurusIndexTarget_get_target,%) : $(gb_ThesaurusIndexTarget_INDEX_TARGET) | $(gb_ThesaurusIndexTarget_CHECK_TARGET)
+$(call gb_ThesaurusIndexTarget_get_target,%) : $(gb_ThesaurusIndexTarget_INDEX_DEPS) | $(gb_ThesaurusIndexTarget_CHECK_TARGET)
 	$(call gb_ThesaurusIndexTarget__command,$@,$*)
 
 .PHONY : $(call gb_ThesaurusIndexTarget_get_clean_target,%)

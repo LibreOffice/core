@@ -28,8 +28,8 @@
 
 # UnoApiPartTarget
 
-gb_UnoApiPartTarget_IDLCTARGET := $(call gb_Executable_get_target_for_build,idlc)
-gb_UnoApiPartTarget_IDLCCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiPartTarget_IDLCTARGET)
+gb_UnoApiPartTarget_IDLCDEPS := $(call gb_Executable_get_runtime_dependencies,idlc)
+gb_UnoApiPartTarget_IDLCCOMMAND := SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(call gb_Executable_get_command,idlc)
 
 # The .urd files are actually created by the gb_UnoApiPartTarget__command,
 # invoked for the per-directory .done files.
@@ -70,10 +70,8 @@ endef
 # If idlc changed, rebuild everything; otherwise just the changed files.
 # In order for this to work the .urd files need to have a dependency on
 # idlc as well so their dummy rule fires if that changes.
-$(call gb_UnoApiPartTarget_get_target,%.done) : \
-		$(gb_UnoApiPartTarget_IDLCTARGET) \
-		| $(call gb_ExternalExecutable_get_dependencies,ucpp)
-	$(call gb_UnoApiPartTarget__command,$@,$*,$(filter-out $(gb_UnoApiPartTarget_IDLCTARGET),$(if $(filter $(gb_UnoApiPartTarget_IDLCTARGET),$?),$^,$?)))
+$(call gb_UnoApiPartTarget_get_target,%.done) : $(gb_UnoApiPartTarget_IDLCDEPS)
+	$(call gb_UnoApiPartTarget__command,$@,$*,$(filter-out $(gb_UnoApiPartTarget_IDLCDEPS),$(if $(filter $(gb_UnoApiPartTarget_IDLCDEPS),$?),$^,$?)))
 
 ifeq ($(gb_FULLDEPS),$(true))
 
@@ -85,10 +83,10 @@ endif
 
 # UnoApiTarget
 
-gb_UnoApiTarget_REGCOMPARETARGET := $(call gb_Executable_get_target_for_build,regcompare)
-gb_UnoApiTarget_REGCOMPARECOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiTarget_REGCOMPARETARGET)
-gb_UnoApiTarget_REGMERGETARGET := $(call gb_Executable_get_target_for_build,regmerge)
-gb_UnoApiTarget_REGMERGECOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiTarget_REGMERGETARGET)
+gb_UnoApiTarget_REGCOMPAREDEPS := $(call gb_Executable_get_runtime_dependencies,regcompare)
+gb_UnoApiTarget_REGCOMPARECOMMAND := SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(call gb_Executable_get_command,regcompare)
+gb_UnoApiTarget_REGMERGEDEPS := $(call gb_Executable_get_runtime_dependencies,regmerge)
+gb_UnoApiTarget_REGMERGECOMMAND := SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(call gb_Executable_get_command,regmerge)
 
 gb_UnoApiTarget_TYPESRDB := $(call gb_UnoApiTarget_get_target,types)
 
@@ -148,7 +146,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),200,\
 		$(foreach idl,$(patsubst %.idl,%,$(3)),$(call gb_UnoApiPartTarget_get_dep_target,$(idl)))) && \
-	$(call gb_Executable_get_target_for_build,concat-deps) $${RESPONSEFILE} > $(1)) && \
+	$(call gb_Executable_get_command,concat-deps) $${RESPONSEFILE} > $(1)) && \
 	rm -f $${RESPONSEFILE}
 
 endef
@@ -185,7 +183,7 @@ $(call gb_UnoApiPartTarget_get_target,$(2)/idl.done) : \
 	$(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd)
 $(call gb_UnoApiTarget__add_urdfile,$(1),$(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd))
 $(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd) \
-	: $(gb_UnoApiPartTarget_IDLCTARGET) \
+	: $(gb_UnoApiPartTarget_IDLCDEPS) \
 	| $(call gb_UnoApiPartTarget_get_target,$(2)/.dir)
 
 ifeq ($(gb_FULLDEPS),$(true))
@@ -208,7 +206,7 @@ endef
 define gb_UnoApiTarget_add_idlfiles
 $(foreach idl,$(3),$(call gb_UnoApiTarget_add_idlfile,$(1),$(2),$(idl)))
 $(call gb_UnoApiTarget__add_idlfiles,$(1),$(2),$(3))
-$(call gb_UnoApiTarget_get_target,$(1)) : $(gb_UnoApiTarget_REGMERGETARGET)
+$(call gb_UnoApiTarget_get_target,$(1)) : $(gb_UnoApiTarget_REGMERGEDEPS)
 
 endef
 
@@ -223,7 +221,7 @@ endef
 
 define gb_UnoApiTarget_merge_api
 $(foreach rdb,$(2),$(call gb_UnoApiTarget__merge_api,$(1),$(rdb)))
-$(call gb_UnoApiTarget_get_target,$(1)) : $(gb_UnoApiTarget_REGMERGETARGET)
+$(call gb_UnoApiTarget_get_target,$(1)) : $(gb_UnoApiTarget_REGMERGEDEPS)
 
 endef
 
@@ -243,7 +241,7 @@ endef
 
 define gb_UnoApiTarget_set_reference_rdbfile
 $(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_REFERENCE := $(SRCDIR)/$(strip $(2)).rdb
-$(call gb_UnoApiTarget_get_target,$(1)) : $(gb_UnoApiTarget_REGCOMPARETARGET)
+$(call gb_UnoApiTarget_get_target,$(1)) : $(gb_UnoApiTarget_REGCOMPAREDEPS)
 
 endef
 
@@ -298,8 +296,8 @@ ifeq ($(origin gb_UnoApiHeadersTarget_select_variant),undefined)
 $(eval $(call gb_Output_error,gb_UnoApiHeadersTarget_select_variant must be defined by platform))
 endif
 
-gb_UnoApiHeadersTarget_CPPUMAKERTARGET := $(call gb_Executable_get_target_for_build,cppumaker)
-gb_UnoApiHeadersTarget_CPPUMAKERCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiHeadersTarget_CPPUMAKERTARGET)
+gb_UnoApiHeadersTarget_CPPUMAKERDEPS := $(call gb_Executable_get_runtime_dependencies,cppumaker)
+gb_UnoApiHeadersTarget_CPPUMAKERCOMMAND := SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(call gb_Executable_get_command,cppumaker)
 
 define gb_UnoApiHeadersTarget__command
 	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),100,\
@@ -314,17 +312,17 @@ define gb_UnoApiHeadersTarget__command
 endef
 
 $(call gb_UnoApiHeadersTarget_get_real_bootstrap_target,%) : \
-		$(gb_UnoApiHeadersTarget_CPPUMAKERTARGET)
+		$(gb_UnoApiHeadersTarget_CPPUMAKERDEPS)
 	$(call gb_Output_announce,$*,$(true),HPB,3) \
 	$(call gb_UnoApiHeadersTarget__command,$@,$*,$(call gb_UnoApiHeadersTarget_get_bootstrap_dir,$*))
 
 $(call gb_UnoApiHeadersTarget_get_real_comprehensive_target,%) : \
-		$(gb_UnoApiHeadersTarget_CPPUMAKERTARGET)
+		$(gb_UnoApiHeadersTarget_CPPUMAKERDEPS)
 	$(call gb_Output_announce,$*,$(true),HPC,3)
 	$(call gb_UnoApiHeadersTarget__command,$@,$*,$(call gb_UnoApiHeadersTarget_get_comprehensive_dir,$*),-C)
 
 $(call gb_UnoApiHeadersTarget_get_real_target,%) : \
-		$(gb_UnoApiHeadersTarget_CPPUMAKERTARGET)
+		$(gb_UnoApiHeadersTarget_CPPUMAKERDEPS)
 	$(call gb_Output_announce,$*,$(true),HPP,3) \
 	$(call gb_UnoApiHeadersTarget__command,$@,$*,$(call gb_UnoApiHeadersTarget_get_dir,$*),-L)
 

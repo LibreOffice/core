@@ -11,8 +11,8 @@
 
 gb_CliUnoApiTarget_EXT := $(gb_CliAssembly_POLICYEXT)
 
-gb_CliUnoApiTarget_TARGET := $(call gb_Executable_get_target_for_build,climaker)
-gb_CliUnoApiTarget_COMMAND := $(gb_Helper_set_ld_path) $(gb_CliUnoApiTarget_TARGET)
+gb_CliUnoApiTarget_DEPS := $(call gb_Executable_get_runtime_dependencies,climaker)
+gb_CliUnoApiTarget_COMMAND := $(call gb_Executable_get_command,climaker)
 
 define gb_CliUnoApiTarget__command
 $(call gb_Output_announce,$(2),$(true),CLI,4)
@@ -35,13 +35,7 @@ $(dir $(call gb_CliUnoApiTarget_get_target,%)).dir :
 $(dir $(call gb_CliUnoApiTarget_get_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
-# TODO depending on the whole URE might be overkill, but I do not have a
-# Windows machine to debug it...
-$(call gb_CliUnoApiTarget_get_target,%) : \
-		$(gb_CliUnoApiTarget_TARGET) \
-		$(call gb_Library_get_target,$(gb_CPPU_ENV)_uno) \
-		$(call gb_Package_get_target,cppuhelper_unorc) \
-		$(call gb_Rdb_get_outdir_target,ure/services)
+$(call gb_CliUnoApiTarget_get_target,%) : $(gb_CliUnoApiTarget_DEPS)
 	$(call gb_CliUnoApiTarget__command,$@,$*,$<)
 
 .PHONY : $(call gb_CliUnoApiTarget_get_clean_target,%)
