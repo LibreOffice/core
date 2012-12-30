@@ -296,7 +296,7 @@ rtl::OUString ProgressHandler::toString(const uno::Any & rStatus)
         return rtl::OUString(sResult);
     }
 
-    return rtl::OUString("(Unknown object"));
+    return rtl::OUString("(Unknown object)");
 }
 
 //============================================================================
