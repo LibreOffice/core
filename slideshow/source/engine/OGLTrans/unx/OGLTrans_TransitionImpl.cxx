@@ -67,14 +67,6 @@ void TransitionScene::swap(TransitionScene& rOther)
     swap(maSceneObjects, rOther.maSceneObjects);
 }
 
-void TransitionScene::clear()
-{
-    maLeavingSlidePrimitives.clear();
-    maEnteringSlidePrimitives.clear();
-    maOverallOperations.clear();
-    maSceneObjects.clear();
-}
-
 OGLTransitionImpl::~OGLTransitionImpl()
 {
 }

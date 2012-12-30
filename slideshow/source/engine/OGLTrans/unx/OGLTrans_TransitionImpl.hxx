@@ -95,7 +95,6 @@ public:
     TransitionScene& operator=(const TransitionScene& rOther);
 
     void swap(TransitionScene& rOther);
-    void clear();
 
     const Primitives_t& getLeavingSlide() const
     {
