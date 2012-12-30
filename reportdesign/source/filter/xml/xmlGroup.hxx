@@ -35,7 +35,7 @@ namespace rptxml
         ORptFilter& GetOwnImport();
 
         OXMLGroup(const OXMLGroup&);
-        OXMLGroup operator =(const OXMLGroup&);
+        OXMLGroup& operator =(const OXMLGroup&);
     public:
 
         OXMLGroup( ORptFilter& rImport

@@ -38,7 +38,7 @@ namespace rptxml
 
         ORptFilter& GetOwnImport();
         OXMLCell(const OXMLCell&);
-        void operator =(const OXMLCell&);
+        OXMLCell& operator =(const OXMLCell&);
     public:
 
         OXMLCell( ORptFilter& rImport

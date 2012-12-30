@@ -38,7 +38,7 @@ namespace rptxml
         ORptFilter& GetOwnImport();
 
         OXMLFunction(const OXMLFunction&);
-        OXMLFunction operator =(const OXMLFunction&);
+        OXMLFunction& operator =(const OXMLFunction&);
     public:
 
         OXMLFunction( ORptFilter& rImport
