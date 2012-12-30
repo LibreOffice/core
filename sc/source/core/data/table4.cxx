@@ -1390,7 +1390,6 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     sal_uLong nActFormCnt = 0;
     for (rOuter = nOStart; rOuter <= nOEnd; rOuter++)
     {
-        bool bFirst = true;
         rInner = nISource;
         ScBaseCell* pSrcCell = aCol[nCol].GetCell(static_cast<SCROW>(nRow));
 
@@ -1467,6 +1466,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             {
                 if (eCellType == CELLTYPE_FORMULA)
                 {
+                    bool bFirst = true;
                     for (rInner = nIMin; rInner <= nIMax; rInner++)
                     {
                         if(HiddenRowColumn(rInner, bVertical, this))

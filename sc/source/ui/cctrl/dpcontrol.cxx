@@ -97,7 +97,6 @@ void ScDPFieldButton::setPopupLeft(bool b)
 
 void ScDPFieldButton::draw()
 {
-    const long nMargin = 2;
     bool bOldMapEnablaed = mpOutDev->IsMapModeEnabled();
     mpOutDev->EnableMapMode(false);
 
@@ -136,7 +135,7 @@ void ScDPFieldButton::draw()
 
         Point aTextPos = maPos;
         long nTHeight = mpOutDev->GetTextHeight();
-        aTextPos.setX(maPos.getX() + nMargin);
+        aTextPos.setX(maPos.getX() + 2); // 2 = Margin
         aTextPos.setY(maPos.getY() + (maSize.Height()-nTHeight)/2);
 
         mpOutDev->Push(PUSH_CLIPREGION);

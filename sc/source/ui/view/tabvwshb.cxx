@@ -222,13 +222,12 @@ ErrCode ScTabViewShell::DoVerb(long nVerb)
         return ERRCODE_SO_NOTIMPL;          // soll nicht sein
 
     SdrOle2Obj* pOle2Obj = NULL;
-    SdrObject* pObj = NULL;
     ErrCode nErr = ERRCODE_NONE;
 
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     if (rMarkList.GetMarkCount() == 1)
     {
-        pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+        SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
         if (pObj->GetObjIdentifier() == OBJ_OLE2)
             pOle2Obj = (SdrOle2Obj*) pObj;
     }

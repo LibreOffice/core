@@ -331,7 +331,6 @@ sal_Bool ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
         //  Undo initialisieren
 
         ScDocument* pUndoDoc = NULL;
-        ScDocument* pRedoDoc = NULL;
         if ( bAddUndo && bUndo )
         {
             pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
@@ -414,7 +413,7 @@ sal_Bool ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
 
         if ( bAddUndo && bUndo)
         {
-            pRedoDoc = new ScDocument( SCDOCMODE_UNDO );
+            ScDocument* pRedoDoc = new ScDocument( SCDOCMODE_UNDO );
             pRedoDoc->InitUndo( pDoc, nDestTab, nDestTab );
             pDoc->CopyToDocument( aNewRange, IDF_ALL & ~IDF_NOTE, false, pRedoDoc );
 

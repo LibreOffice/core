@@ -427,7 +427,6 @@ sal_Bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
 sal_Bool ScViewFunc::ApplyGraphicToObject( SdrObject* pPickObj, const Graphic& rGraphic )
 {
     sal_Bool bRet = false;
-    SdrGrafObj* pNewGrafObj = NULL;
 
     ScDrawView* pScDrawView = GetScDrawView();
     if ( pScDrawView && pPickObj )
@@ -441,7 +440,7 @@ sal_Bool ScViewFunc::ApplyGraphicToObject( SdrObject* pPickObj, const Graphic& r
             /******************************************************************
             * Das Graphik-Objekt bekommt eine neue Graphik
             ******************************************************************/
-            pNewGrafObj = (SdrGrafObj*) pPickObj->Clone();
+            SdrGrafObj* pNewGrafObj = (SdrGrafObj*) pPickObj->Clone();
             pNewGrafObj->SetGraphic(rGraphic);
 
             pScDrawView->BegUndo(ScGlobal::GetRscString(STR_UNDO_DRAGDROP));

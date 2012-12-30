@@ -82,7 +82,6 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
     {
         HideAllCursors();
 
-        ScDocument* pUndoDoc = NULL;
 
         ScDocShell* pDocSh = GetViewData()->GetDocShell();
         ScDocument* pDoc = pDocSh->GetDocument();
@@ -113,6 +112,7 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
             if (nEndRow > MAXROW)
                 nEndRow = MAXROW;
 
+            ScDocument* pUndoDoc = NULL;
             if (bRecord)
             {
                 pUndoDoc = new ScDocument( SCDOCMODE_UNDO );

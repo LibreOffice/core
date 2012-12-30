@@ -1017,7 +1017,6 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
         {
             SetPointer( Pointer( POINTER_ARROW ) );
 
-            bool bMoveRulerAction= true;
 
             ScDocument * pDoc = pDocShell->GetDocument();
             String   aOldName = pDoc->GetPageStyle( nTab );
@@ -1027,6 +1026,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
 
             if ( pStyleSheet )
             {
+                bool bMoveRulerAction= true;
                 ScStyleSaveData aOldData;
                 if( bUndo )
                     aOldData.InitFromStyle( pStyleSheet );

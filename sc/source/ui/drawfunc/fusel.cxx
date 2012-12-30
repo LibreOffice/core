@@ -120,8 +120,6 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
     if ( rMEvt.IsLeft() )
     {
         SdrHdl* pHdl = pView->PickHandle(aMDPos);
-        SdrObject* pObj;
-        SdrPageView* pPV;
 
         if ( pHdl!=NULL || pView->IsMarkedHit(aMDPos) )
         {
@@ -158,6 +156,8 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         }
         else
         {
+            SdrObject* pObj;
+            SdrPageView* pPV;
             sal_Bool bAlt = rMEvt.IsMod2();
             if ( !bAlt && pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, pPV, SDRSEARCH_PICKMACRO) )
             {

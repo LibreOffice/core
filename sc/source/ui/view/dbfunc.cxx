@@ -205,7 +205,6 @@ void ScDBFunc::NotifyCloseDbNameDlg( const ScDBCollection& rNewColl, const std::
     ScDocument* pDoc = pDocShell->GetDocument();
     ScDBCollection* pOldColl = pDoc->GetDBCollection();
     ScDBCollection* pUndoColl = NULL;
-    ScDBCollection* pRedoColl = NULL;
     const sal_Bool bRecord (pDoc->IsUndoEnabled());
 
     std::vector<ScRange>::const_iterator iter;
@@ -235,7 +234,7 @@ void ScDBFunc::NotifyCloseDbNameDlg( const ScDBCollection& rNewColl, const std::
 
     if (bRecord)
     {
-        pRedoColl = new ScDBCollection( rNewColl );
+        ScDBCollection* pRedoColl = new ScDBCollection( rNewColl );
         pDocShell->GetUndoManager()->AddUndoAction(
             new ScUndoDBData( pDocShell, pUndoColl, pRedoColl ) );
     }

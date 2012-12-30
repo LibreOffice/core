@@ -817,10 +817,10 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
                 //  und alle Objekte selektiert, die auf dieser Tabelle liegen
                 //! Exception, wenn Objekte auf verschiedenen Tabellen?
 
-                SdrPageView* pPV = NULL;
                 long nCount = xShapeColl->getCount();
                 if (nCount)
                 {
+                    SdrPageView* pPV = NULL;
                     sal_Bool bAllMarked(sal_True);
                     for ( long i = 0; i < nCount; i++ )
                     {

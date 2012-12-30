@@ -2653,10 +2653,12 @@ void ScInterpreter::ScArabic()
             sal_uInt16 nDigit1 = 0;
             sal_uInt16 nDigit2 = 0;
             bool bIsDec1 = false;
-            bool bIsDec2 = false;
             bValid = lcl_GetArabicValue( aRoman.GetChar( nCharIndex ), nDigit1, bIsDec1 );
             if( bValid && (nCharIndex + 1 < nCharCount) )
+            {
+                bool bIsDec2 = false;
                 bValid = lcl_GetArabicValue( aRoman.GetChar( nCharIndex + 1 ), nDigit2, bIsDec2 );
+            }
             if( bValid )
             {
                 if( nDigit1 >= nDigit2 )

@@ -60,9 +60,9 @@ ScDrawView::ScDrawView( OutputDevice* pOut, ScViewData* pData ) :
 
 void ScDrawView::SetPageAnchored()
 {
-    SdrObject* pObj = NULL;
     if( AreObjectsMarked() )
     {
+        SdrObject* pObj = NULL;
         const SdrMarkList* pMark = &GetMarkedObjectList();
         sal_uLong nCount = pMark->GetMarkCount();
         for( sal_uLong i=0; i<nCount; i++ )
@@ -85,9 +85,9 @@ void ScDrawView::SetCellAnchored()
     if (!pDoc)
         return;
 
-    SdrObject* pObj = NULL;
     if( AreObjectsMarked() )
     {
+        SdrObject* pObj = NULL;
         const SdrMarkList* pMark = &GetMarkedObjectList();
         sal_uLong nCount = pMark->GetMarkCount();
         for( sal_uLong i=0; i<nCount; i++ )
@@ -108,12 +108,12 @@ ScAnchorType ScDrawView::GetAnchorType() const
 {
     sal_Bool bPage = false;
     sal_Bool bCell = false;
-    const SdrObject* pObj = NULL;
     if( AreObjectsMarked() )
     {
         const SdrMarkList* pMark = &GetMarkedObjectList();
         sal_uLong nCount = pMark->GetMarkCount();
         Point p0;
+        const SdrObject* pObj = NULL;
         for( sal_uLong i=0; i<nCount; i++ )
         {
             pObj = pMark->GetMark(i)->GetMarkedSdrObj();

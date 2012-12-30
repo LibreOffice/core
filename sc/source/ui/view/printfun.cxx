@@ -1732,7 +1732,6 @@ void ScPrintFunc::PrintHF( long nPageNo, sal_Bool bHeader, long nStartY,
     MakeEditEngine();
 
     pEditEngine->SetPaperSize(aPaperSize);
-    const EditTextObject* pObject;
 
     //  Rahmen / Hintergrund
 
@@ -1778,7 +1777,7 @@ void ScPrintFunc::PrintHF( long nPageNo, sal_Bool bHeader, long nStartY,
 
         //  links
 
-        pObject = pHFItem->GetLeftArea();
+        const EditTextObject* pObject = pHFItem->GetLeftArea();
         if (pObject)
         {
             pEditDefaults->Put( SvxAdjustItem( SVX_ADJUST_LEFT, EE_PARA_JUST ) );

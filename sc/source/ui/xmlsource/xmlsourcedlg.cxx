@@ -336,12 +336,12 @@ void ScXMLSourceDlg::TreeItemSelected()
 
 void ScXMLSourceDlg::DefaultElementSelected(SvTreeListEntry& rEntry)
 {
-    ScOrcusXMLTreeParam::EntryData* pUserData = NULL;
 
     if (maLbTree.GetChildCount(&rEntry) > 0)
     {
         // Only an element with no child elements (leaf element) can be linked.
         bool bHasChild = false;
+        ScOrcusXMLTreeParam::EntryData* pUserData = NULL;
         for (SvTreeListEntry* pChild = maLbTree.FirstChild(&rEntry); pChild; pChild = maLbTree.NextSibling(pChild))
         {
             pUserData = ScOrcusXMLTreeParam::getUserData(*pChild);

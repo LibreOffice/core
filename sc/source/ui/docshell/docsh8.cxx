@@ -424,9 +424,9 @@ sal_uLong ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet
         sal_Bool bEnd = false;
         while ( !bEnd && xRowSet->next() )
         {
-            bool bSimpleRow = true;
             if ( nRow <= MAXROW )
             {
+                bool bSimpleRow = true;
                 SCCOL nCol = 0;
                 for (i=0; i<nColCount; i++)
                 {
