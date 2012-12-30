@@ -693,14 +693,13 @@ void ScColorScale2FrmtEntry::Init()
     maLbEntryTypeMax.SetSelectHdl( LINK( this, ScColorScale2FrmtEntry, EntryTypeHdl ) );
 
     SfxObjectShell*     pDocSh      = SfxObjectShell::Current();
-    const SfxPoolItem*  pItem       = NULL;
     XColorListRef       pColorTable;
 
     DBG_ASSERT( pDocSh, "DocShell not found!" );
 
     if ( pDocSh )
     {
-        pItem = pDocSh->GetItem( SID_COLOR_TABLE );
+        const SfxPoolItem*  pItem = pDocSh->GetItem( SID_COLOR_TABLE );
         if ( pItem != NULL )
             pColorTable = ( (SvxColorListItem*)pItem )->GetColorList();
     }
@@ -852,14 +851,13 @@ void ScColorScale3FrmtEntry::Init()
     maLbEntryTypeMiddle.SetSelectHdl( LINK( this, ScColorScale3FrmtEntry, EntryTypeHdl ) );
 
     SfxObjectShell*     pDocSh      = SfxObjectShell::Current();
-    const SfxPoolItem*  pItem       = NULL;
     XColorListRef       pColorTable;
 
     DBG_ASSERT( pDocSh, "DocShell not found!" );
 
     if ( pDocSh )
     {
-        pItem = pDocSh->GetItem( SID_COLOR_TABLE );
+        const SfxPoolItem* pItem = pDocSh->GetItem( SID_COLOR_TABLE );
         if ( pItem != NULL )
             pColorTable = ( (SvxColorListItem*)pItem )->GetColorList();
     }

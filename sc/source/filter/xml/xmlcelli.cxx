@@ -1005,10 +1005,10 @@ void ScXMLTableRowCellContext::PutFormulaCell( const ScAddress& rCellPos )
     ::boost::scoped_ptr<ScExternalRefManager::ApiGuard> pExtRefGuard;
     pExtRefGuard.reset(new ScExternalRefManager::ApiGuard(pDoc));
 
-    ScBaseCell* pNewCell = NULL;
 
     if ( !aText.isEmpty() )
     {
+        ScBaseCell* pNewCell = NULL;
         if ( aText[0] == '=' && aText.getLength() > 1 )
         {
             // temporary formula string as string tokens

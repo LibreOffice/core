@@ -128,10 +128,10 @@ void ImportExcel::Formula(
         else
         {
             CellType        eCellType;
-            ScBaseCell*     pBaseCell;
             pD->GetCellType( aScPos.Col(), aScPos.Row(), aScPos.Tab(), eCellType );
             if( eCellType == CELLTYPE_FORMULA )
             {
+                ScBaseCell* pBaseCell;
                 pD->GetCell( aScPos.Col(), aScPos.Row(), aScPos.Tab(), pBaseCell );
                 pCell = ( ScFormulaCell* ) pBaseCell;
                 if( pCell )

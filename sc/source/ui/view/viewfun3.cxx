@@ -1194,7 +1194,6 @@ bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
 
     ScDocument* pUndoDoc    = NULL;
     ScDocument* pRefUndoDoc = NULL;
-    ScDocument* pRedoDoc    = NULL;
     ScRefUndoData* pUndoData = NULL;
 
     if ( bRecord )
@@ -1331,6 +1330,7 @@ bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
 
     if ( bRecord )
     {
+        ScDocument* pRedoDoc    = NULL;
         // Redo-Daten werden erst beim ersten Undo kopiert
         // ohne RefUndoDoc muss das Redo-Doc noch nicht angelegt werden
 

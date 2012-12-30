@@ -355,7 +355,6 @@ void ScChangeAction::RemoveAllDeletedIn()
 
 bool ScChangeAction::IsDeletedInDelType( ScChangeActionType eDelType ) const
 {
-    ScChangeAction* p;
     ScChangeActionLinkEntry* pL = GetDeletedIn();
     if ( pL )
     {
@@ -375,6 +374,7 @@ bool ScChangeAction::IsDeletedInDelType( ScChangeActionType eDelType ) const
             default:
                 eInsType = SC_CAT_NONE;
         }
+        ScChangeAction* p;
         while ( pL )
         {
             if ( (p = pL->GetAction()) != NULL &&
@@ -1033,10 +1033,10 @@ bool ScChangeActionDel::Reject( ScDocument* pDoc )
     if ( !aBigRange.IsValid( pDoc ) && GetType() != SC_CAT_DELETE_TABS )
         return false;
 
-    bool bOk = true;
 
     if ( IsTopDelete() )
     {   // den kompletten Bereich in einem Rutsch restaurieren
+        bool bOk = true;
         ScBigRange aTmpRange( GetOverAllRange() );
         if ( !aTmpRange.IsValid( pDoc ) )
         {

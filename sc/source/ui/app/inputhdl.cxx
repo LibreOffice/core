@@ -849,12 +849,12 @@ void ScInputHandler::ShowTipCursor()
                             nArgPos = aHelper.GetArgStart( aSelText, nNextFStart, 0 );
                             nArgs = static_cast<sal_uInt16>(ppFDesc->getParameterCount());
 
-                            bool bFlag = false;
                             rtl::OUString aNew;
                             ScTypedCaseStrSet::const_iterator it =
                                 findText(*pFormulaDataPara, pFormulaDataPara->end(), ppFDesc->getFunctionName(), aNew, false);
                             if (it != pFormulaDataPara->end())
                             {
+                                bool bFlag = false;
                                 sal_uInt16 nActive = 0;
                                 for( sal_uInt16 i=0; i < nArgs; i++ )
                                 {
@@ -1100,12 +1100,12 @@ void ScInputHandler::UseFormulaData()
                         nArgPos = aHelper.GetArgStart( aFormula, nNextFStart, 0 );
                         nArgs = static_cast<sal_uInt16>(ppFDesc->getParameterCount());
 
-                        bool bFlag = false;
                         rtl::OUString aNew;
                         ScTypedCaseStrSet::const_iterator it =
                             findText(*pFormulaDataPara, pFormulaDataPara->end(), ppFDesc->getFunctionName(), aNew, false);
                         if (it != pFormulaDataPara->end())
                         {
+                            bool bFlag = false;
                             sal_uInt16 nActive = 0;
                             for( sal_uInt16 i=0; i < nArgs; i++ )
                             {
@@ -2493,7 +2493,6 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
     SfxApplication* pSfxApp     = SFX_APP();
     EditTextObject* pObject     = NULL;
     ScPatternAttr*  pCellAttrs  = NULL;
-    bool            bAttrib     = false;    // Formatierung vorhanden ?
     bool            bForget     = false;    // wegen Gueltigkeit streichen ?
 
     rtl::OUString aString = GetEditText(pEngine);
@@ -2648,6 +2647,7 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
 
         RemoveAdjust();
 
+        bool bAttrib = false;    // Formatierung vorhanden ?
         //  check if EditObject is needed
 
         if ( bSpellErrors || nParCnt > 1 )
@@ -3478,13 +3478,13 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
 
         if ( pState )
         {
-            bool bIgnore = false;
 
             //  hier auch fremde Referenzeingabe beruecksichtigen (z.B. Funktions-AP),
             //  FormEditData falls gerade von der Hilfe auf Calc umgeschaltet wird:
 
             if ( !bFormulaMode && !pScMod->IsFormulaMode() && !pScMod->GetFormEditData() )
             {
+                bool bIgnore = false;
                 if ( bModified )
                 {
                     if (pState->GetPos() != aCursorPos)
