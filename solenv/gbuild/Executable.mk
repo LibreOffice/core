@@ -31,10 +31,20 @@
 # defined by platform
 #  gb_Executable_Executable_platform
 
+$(dir $(call gb_Executable_get_runtime_target,%)).dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
+$(dir $(call gb_Executable_get_runtime_target,%))%/.dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
+$(call gb_Executable_get_runtime_target,%) : $(call gb_Executable_get_target,%)
+	touch $@
+
 .PHONY : $(call gb_Executable_get_clean_target,%)
 $(call gb_Executable_get_clean_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -f $(call gb_Executable_get_target,$*) \
+			$(call gb_Executable_get_runtime_target,$*) \
 			$(AUXTARGETS))
 
 define gb_Executable_Executable
@@ -52,6 +62,7 @@ $(call gb_LinkTarget_set_targettype,$(2),Executable)
 $(call gb_LinkTarget_add_libs,$(2),$(gb_STDLIBS))
 $(call gb_Executable_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2)) \
 	| $(dir $(call gb_Executable_get_target,$(1))).dir
+$(call gb_Executable_get_runtime_target,$(1)) :| $(dir $(call gb_Executable_get_runtime_target,$(1))).dir
 $(call gb_Executable_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_target,$(2))
 $(call gb_Executable_get_clean_target,$(1)) : AUXTARGETS :=
 $(call gb_Executable_Executable_platform,$(1),$(2))
@@ -147,5 +158,40 @@ $(eval $(foreach method,\
 ,\
 	$(call gb_Executable_forward_to_Linktarget,$(method))\
 ))
+
+# Run-time use
+
+# Add dependencies needed for running the executable
+#
+# gb_Executable_add_runtime_dependencies executable dependencies
+define gb_Executable_add_runtime_dependencies
+$(call gb_Executable_get_runtime_target,$(1)) : $(2)
+
+endef
+
+# Get dependencies needed for running the executable
+#
+# This is not strictly necessary, but it makes the use more similar to
+# ExternalExecutable.
+#
+# gb_Executable_get_runtime_dependencies executable
+define gb_Executable_get_runtime_dependencies
+$(call gb_Executable_get_runtime_target,$(1))
+endef
+
+define gb_Executable__get_command
+$(if $(filter NONE,$(gb_Executable_VALIDGROUPS)),,$(call gb_Output_error,executable group NONE does not exist!))
+$(if $(filter $(1),$(gb_Executable_NONE)),,$(gb_Helper_set_ld_path)) \
+    $(call gb_Executable_get_target_for_build,$(1))
+endef
+
+# Get complete command-line for running the executable
+#
+# This includes setting library path, if necessary.
+#
+# gb_Executable_get_command executable
+define gb_Executable_get_command
+$(strip $(call gb_Executable__get_command,$(1)))
+endef
 
 # vim: set noet sw=4:

@@ -337,6 +337,8 @@ include $(foreach class, \
 	InstallScript \
 ,$(GBUILDDIR)/$(class).mk)
 
+$(eval $(call gb_Helper_process_executable_registrations))
+
 # optional extensions that should never be essential
 ifneq ($(wildcard $(GBUILDDIR)/extensions/post_*.mk),)
 include $(wildcard $(GBUILDDIR)/extensions/post_*.mk)

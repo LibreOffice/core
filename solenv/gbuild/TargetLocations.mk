@@ -106,6 +106,7 @@ gb_CxxObject_get_target = $(WORKDIR)/CxxObject/$(1).o
 gb_GenCxxObject_get_target = $(WORKDIR)/GenCxxObject/$(1).o
 gb_Executable_get_external_headers_target = $(WORKDIR)/ExternalHeaders/Executable/$(1)
 gb_Executable_get_headers_target = $(WORKDIR)/Headers/Executable/$(1)
+gb_Executable_get_runtime_target = $(WORKDIR)/Executable/$(1).run
 gb_ExtensionTarget_get_target = $(WORKDIR)/ExtensionTarget/$(1).oxt
 gb_ExtensionTarget_get_rootdir = $(WORKDIR)/ExtensionTarget/$(1)/root
 gb_ExtensionTarget_get_workdir = $(WORKDIR)/ExtensionTarget/$(1)

@@ -133,6 +133,14 @@ gb_Jar_KNOWN := $$(foreach group,$$(gb_Jar_VALIDGROUPS),$$(gb_Jar_$$(group)))
 
 endef
 
+define gb_Helper_process_executable_registrations
+$(foreach group,$(gb_Executable_VALIDGROUPS),\
+	$(foreach executable,$(gb_Executable_$(group)),\
+		$(if $(filter-out undefined,$(origin gb_Executable__register_$(executable))),\
+			$(call gb_Executable__register_$(executable)))))
+
+endef
+
 define gb_Helper_register_executables
 ifeq ($$(filter $(1),$$(gb_Executable_VALIDGROUPS)),)
 $$(eval $$(call gb_Output_error,$(1) is not a valid group for executables. Valid groups are: $$(gb_Executable_VALIDGROUPS)))
@@ -198,7 +206,7 @@ $(foreach def,$(1),$(if $(filter TRUE YES,$($(def))),-D$(def)))
 endef
 
 define gb_Helper_execute
-$(gb_Helper_set_ld_path) $(OUTDIR_FOR_BUILD)/bin/$(1)
+$(call gb_Executable_get_command,$(1))
 endef
 
 # gb_Helper_OUTDIRLIBDIR is set by the platform to the path the dynamic linker need to use
