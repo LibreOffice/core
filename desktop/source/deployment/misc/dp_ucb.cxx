@@ -104,7 +104,7 @@ bool create_folder(
         // invalid: has to be at least "auth:/..."
         if (throw_exc)
             throw ContentCreationException(
-                OUSTR("Cannot create folder (invalid path): ") + url,
+                "Cannot create folder (invalid path): " + url,
                 Reference<XInterface>(), ContentCreationError_UNKNOWN );
         return false;
     }
@@ -155,7 +155,7 @@ bool create_folder(
     }
     if (throw_exc)
         throw ContentCreationException(
-            OUSTR("Cannot create folder: ") + url,
+            "Cannot create folder: " + url,
             Reference<XInterface>(), ContentCreationError_UNKNOWN );
     return false;
 }
@@ -170,7 +170,7 @@ bool erase_path( OUString const & url,
     {
         try {
             ucb_content.executeCommand(
-                OUSTR("delete"), Any( true /* delete physically */ ) );
+                "delete", Any( true /* delete physically */ ) );
         }
         catch (const RuntimeException &) {
             throw;
@@ -192,8 +192,7 @@ bool erase_path( OUString const & url,
         ::xmlscript::createOutputStream( &bytes ) );
     if (! ucb_content.openStream( xStream ))
         throw RuntimeException(
-            OUSTR(
-                "::ucbhelper::Content::openStream( XOutputStream ) failed!"),
+            "::ucbhelper::Content::openStream( XOutputStream ) failed!",
             0 );
     return bytes;
 }

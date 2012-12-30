@@ -69,8 +69,7 @@ namespace {
 struct UnoRc : public rtl::StaticWithInit<
     boost::shared_ptr<rtl::Bootstrap>, UnoRc> {
     const boost::shared_ptr<rtl::Bootstrap> operator () () {
-        OUString unorc( RTL_CONSTASCII_USTRINGPARAM(
-                            "$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("uno")) );
+        OUString unorc( "$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("uno") );
         ::rtl::Bootstrap::expandMacros( unorc );
         ::boost::shared_ptr< ::rtl::Bootstrap > ret(
             new ::rtl::Bootstrap( unorc ) );
@@ -91,13 +90,12 @@ const OUString OfficePipeId::operator () ()
     if (!(aLocateResult == ::utl::Bootstrap::PATH_EXISTS ||
         aLocateResult == ::utl::Bootstrap::PATH_VALID))
     {
-        throw Exception(OUSTR("Extension Manager: Could not obtain path for UserInstallation."), 0);
+        throw Exception("Extension Manager: Could not obtain path for UserInstallation.", 0);
     }
 
     rtlDigest digest = rtl_digest_create( rtl_Digest_AlgorithmMD5 );
     if (!digest) {
-        throw RuntimeException(
-            OUSTR("cannot get digest rtl_Digest_AlgorithmMD5!"), 0 );
+        throw RuntimeException("cannot get digest rtl_Digest_AlgorithmMD5!", 0 );
     }
 
     sal_uInt8 const * data =
@@ -114,7 +112,7 @@ const OUString OfficePipeId::operator () ()
     // create hex-value string from the MD5 value to keep
     // the string size minimal
     ::rtl::OUStringBuffer buf;
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("SingleOfficeIPC_") );
+    buf.appendAscii( "SingleOfficeIPC_" );
     for ( sal_uInt32 i = 0; i < md5_key_len; ++i ) {
         buf.append( static_cast<sal_Int32>(md5_buf[ i ]), 0x10 );
     }
@@ -211,20 +209,13 @@ bool needToSyncRepository(OUString const & name)
     OUString file;
     if ( name == "bundled" )
     {
-        folder = OUString(
-            RTL_CONSTASCII_USTRINGPARAM("$BUNDLED_EXTENSIONS"));
-        file = OUString (
-            RTL_CONSTASCII_USTRINGPARAM(
-                "$BUNDLED_EXTENSIONS_USER/lastsynchronized"));
+        folder = OUString("$BUNDLED_EXTENSIONS");
+        file = OUString ("$BUNDLED_EXTENSIONS_USER/lastsynchronized");
     }
     else if ( name == "shared" )
     {
-        folder = OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "$UNO_SHARED_PACKAGES_CACHE/uno_packages"));
-        file = OUString (
-            RTL_CONSTASCII_USTRINGPARAM(
-                "$SHARED_EXTENSIONS_USER/lastsynchronized"));
+        folder = OUString("$UNO_SHARED_PACKAGES_CACHE/uno_packages");
+        file = OUString("$SHARED_EXTENSIONS_USER/lastsynchronized");
     }
     else
     {
@@ -279,8 +270,7 @@ OUString makeURL( OUString const & baseURL, OUString const & relPath_ )
     if (!relPath.isEmpty())
     {
         buf.append( static_cast<sal_Unicode>('/') );
-        if (baseURL.matchAsciiL(
-                RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.expand:") )) {
+        if (baseURL.match( "vnd.sun.star.expand:" )) {
             // encode for macro expansion: relPath is supposed to have no
             // macros, so encode $, {} \ (bootstrap mimic)
             relPath = encodeForRcFile(relPath);
@@ -320,9 +310,8 @@ OUString expandUnoRcTerm( OUString const & term_ )
 
 OUString makeRcTerm( OUString const & url )
 {
-    OSL_ASSERT( url.matchAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                                     "vnd.sun.star.expand:") ) );
-    if (url.matchAsciiL( RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.expand:") )) {
+    OSL_ASSERT( url.match( "vnd.sun.star.expand:" ));
+    if (url.match( "vnd.sun.star.expand:" )) {
         // cut protocol:
         OUString rcterm( url.copy( sizeof ("vnd.sun.star.expand:") - 1 ) );
         // decode uric class chars:
@@ -337,7 +326,7 @@ OUString makeRcTerm( OUString const & url )
 //==============================================================================
 OUString expandUnoRcUrl( OUString const & url )
 {
-    if (url.matchAsciiL( RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.expand:") )) {
+    if (url.match( "vnd.sun.star.expand:" )) {
         // cut protocol:
         OUString rcurl( url.copy( sizeof ("vnd.sun.star.expand:") - 1 ) );
         // decode uric class chars:
@@ -411,16 +400,16 @@ oslProcess raiseProcess(
     case osl_Process_E_None:
         break;
     case osl_Process_E_NotFound:
-        throw RuntimeException( OUSTR("image not found!"), 0 );
+        throw RuntimeException( "image not found!", 0 );
     case osl_Process_E_TimedOut:
-        throw RuntimeException( OUSTR("timout occurred!"), 0 );
+        throw RuntimeException( "timout occurred!", 0 );
     case osl_Process_E_NoPermission:
-        throw RuntimeException( OUSTR("permission denied!"), 0 );
+        throw RuntimeException( "permission denied!", 0 );
     case osl_Process_E_Unknown:
-        throw RuntimeException( OUSTR("unknown error!"), 0 );
+        throw RuntimeException( "unknown error!", 0 );
     case osl_Process_E_InvalidError:
     default:
-        throw RuntimeException( OUSTR("unmapped error!"), 0 );
+        throw RuntimeException( "unmapped error!", 0 );
     }
 
     return hProcess;
@@ -432,11 +421,11 @@ OUString generateRandomPipeId()
     // compute some good pipe id:
     static rtlRandomPool s_hPool = rtl_random_createPool();
     if (s_hPool == 0)
-        throw RuntimeException( OUSTR("cannot create random pool!?"), 0 );
+        throw RuntimeException( "cannot create random pool!?", 0 );
     sal_uInt8 bytes[ 32 ];
     if (rtl_random_getBytes(
             s_hPool, bytes, ARLEN(bytes) ) != rtl_Random_E_None) {
-        throw RuntimeException( OUSTR("random pool error!?"), 0 );
+        throw RuntimeException( "random pool error!?", 0 );
     }
     ::rtl::OUStringBuffer buf;
     for ( sal_uInt32 i = 0; i < ARLEN(bytes); ++i ) {
@@ -458,7 +447,7 @@ Reference<XInterface> resolveUnoURL(
     {
         if (abortChannel != 0 && abortChannel->isAborted()) {
             throw ucb::CommandAbortedException(
-                OUSTR("abort!"), Reference<XInterface>() );
+                "abort!", Reference<XInterface>() );
         }
         try {
             return xUnoUrlResolver->resolve( connectString );
@@ -541,7 +530,7 @@ void syncRepositories(
     bool force, Reference<ucb::XCommandEnvironment> const & xCmdEnv)
 {
     OUString sDisable;
-    ::rtl::Bootstrap::get( OUSTR( "DISABLE_EXTENSION_SYNCHRONIZATION" ), sDisable, OUString() );
+    ::rtl::Bootstrap::get( "DISABLE_EXTENSION_SYNCHRONIZATION", sDisable, OUString() );
     if (!sDisable.isEmpty())
         return;
 
@@ -549,9 +538,7 @@ void syncRepositories(
     //synchronize shared before bundled otherewise there are
     //more revoke and registration calls.
     sal_Bool bModified = false;
-    if (force
-        || needToSyncRepository(OUString(RTL_CONSTASCII_USTRINGPARAM("shared")))
-        || needToSyncRepository(OUString(RTL_CONSTASCII_USTRINGPARAM("bundled"))))
+    if (force || needToSyncRepository("shared") || needToSyncRepository("bundled"))
     {
         xExtensionManager =
             deployment::ExtensionManager::get(

@@ -65,13 +65,6 @@
 
 #define PLATFORM_AIX_POWERPC        "aix_powerpc"
 
-
-
-
-
-
-
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 using ::rtl::OUString;
 
 namespace dp_misc
@@ -81,7 +74,7 @@ namespace
     struct StrOperatingSystem :
         public rtl::StaticWithInit<OUString, StrOperatingSystem> {
             const OUString operator () () {
-                OUString os( RTL_CONSTASCII_USTRINGPARAM("$_OS") );
+                OUString os( "$_OS" );
                 ::rtl::Bootstrap::expandMacros( os );
                 return os;
             }
@@ -90,7 +83,7 @@ namespace
     struct StrCPU :
         public rtl::StaticWithInit<OUString, StrCPU> {
             const OUString operator () () {
-                OUString arch( RTL_CONSTASCII_USTRINGPARAM("$_ARCH") );
+                OUString arch( "$_ARCH" );
                 ::rtl::Bootstrap::expandMacros( arch );
                 return arch;
             }
@@ -110,81 +103,81 @@ namespace
 
     bool checkOSandCPU(OUString const & os, OUString const & cpu)
     {
-        return os.equals(StrOperatingSystem::get())
-            && cpu.equals(StrCPU::get());
+        return (os == StrOperatingSystem::get())
+            && (cpu == StrCPU::get());
     }
 
     bool isValidPlatform(OUString const &  token )
     {
         bool ret = false;
-        if (token.equals(OUSTR(PLATFORM_ALL)))
+        if (token == PLATFORM_ALL)
             ret = true;
-        else if (token.equals(OUSTR(PLATFORM_WIN_X86)))
-            ret = checkOSandCPU(OUSTR("Windows"), OUSTR("x86"));
-        else if (token.equals(OUSTR(PLATFORM_WIN_X86_64)))
-            ret = checkOSandCPU(OUSTR("Windows"), OUSTR("x86_64"));
-        else if (token.equals(OUSTR(PLATFORM_LINUX_X86)))
-            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("x86"));
-        else if (token.equals(OUSTR(PLATFORM_LINUX_X86_64)))
-            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("X86_64"));
-        else if (token.equals(OUSTR(PLATFORM_KFREEBSD_X86)))
-            ret = checkOSandCPU(OUSTR("kFreeBSD"), OUSTR("x86"));
-        else if (token.equals(OUSTR(PLATFORM_KFREEBSD_X86_64)))
-            ret = checkOSandCPU(OUSTR("kFreeBSD"), OUSTR("X86_64"));
-        else if (token.equals(OUSTR(PLATFORM_LINUX_SPARC)))
-            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("SPARC"));
-        else if (token.equals(OUSTR(PLATFORM_LINUX_POWERPC)))
-            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("PowerPC"));
-        else if (token.equals(OUSTR(PLATFORM_LINUX_POWERPC64)))
-            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("PowerPC_64"));
-        else if (token.equals(OUSTR(PLATFORM_LINUX_ARM_EABI)))
-            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("ARM_EABI"));
-        else if (token.equals(OUSTR(PLATFORM_LINUX_ARM_OABI)))
-            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("ARM_OABI"));
-        else if (token.equals(OUSTR(PLATFORM_LINUX_MIPS_EL)))
-            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("MIPS_EL"));
-        else if (token.equals(OUSTR(PLATFORM_LINUX_MIPS_EB)))
-            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("MIPS_EB"));
-        else if (token.equals(OUSTR(PLATFORM_LINUX_IA64)))
-            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("IA64"));
-        else if (token.equals(OUSTR(PLATFORM_LINUX_M68K)))
-            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("M68K"));
-        else if (token.equals(OUSTR(PLATFORM_LINUX_S390)))
-            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("S390"));
-        else if (token.equals(OUSTR(PLATFORM_LINUX_S390x)))
-            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("S390x"));
-        else if (token.equals(OUSTR(PLATFORM_LINUX_HPPA)))
-            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("HPPA"));
-        else if (token.equals(OUSTR(PLATFORM_LINUX_ALPHA)))
-            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("ALPHA"));
-        else if (token.equals(OUSTR(PLATFORM_SOLARIS_SPARC)))
-            ret = checkOSandCPU(OUSTR("Solaris"), OUSTR("SPARC"));
-        else if (token.equals(OUSTR(PLATFORM_SOLARIS_SPARC64)))
-            ret = checkOSandCPU(OUSTR("Solaris"), OUSTR("SPARC64"));
-        else if (token.equals(OUSTR(PLATFORM_SOLARIS_X86)))
-            ret = checkOSandCPU(OUSTR("Solaris"), OUSTR("x86"));
-        else if (token.equals(OUSTR(PLATFORM_FREEBSD_X86)))
-            ret = checkOSandCPU(OUSTR("FreeBSD"), OUSTR("x86"));
-        else if (token.equals(OUSTR(PLATFORM_FREEBSD_X86_64)))
-            ret = checkOSandCPU(OUSTR("FreeBSD"), OUSTR("X86_64"));
-        else if (token.equals(OUSTR(PLATFORM_NETBSD_X86)))
-            ret = checkOSandCPU(OUSTR("NetBSD"), OUSTR("x86"));
-        else if (token.equals(OUSTR(PLATFORM_NETBSD_X86_64)))
-            ret = checkOSandCPU(OUSTR("NetBSD"), OUSTR("X86_64"));
-        else if (token.equals(OUSTR(PLATFORM_MACOSX_X86)))
-            ret = checkOSandCPU(OUSTR("MacOSX"), OUSTR("x86"));
-        else if (token.equals(OUSTR(PLATFORM_MACOSX_PPC)))
-            ret = checkOSandCPU(OUSTR("MacOSX"), OUSTR("PowerPC"));
-        else if (token.equals(OUSTR(PLATFORM_AIX_POWERPC)))
-            ret = checkOSandCPU(OUSTR("AIX"), OUSTR("PowerPC"));
-        else if (token.equals(OUSTR(PLATFORM_OPENBSD_X86)))
-            ret = checkOSandCPU(OUSTR("OpenBSD"), OUSTR("x86"));
-        else if (token.equals(OUSTR(PLATFORM_OPENBSD_X86_64)))
-            ret = checkOSandCPU(OUSTR("OpenBSD"), OUSTR("X86_64"));
-        else if (token.equals(OUSTR(PLATFORM_DRAGONFLY_X86)))
-            ret = checkOSandCPU(OUSTR("DragonFly"), OUSTR("x86"));
-        else if (token.equals(OUSTR(PLATFORM_DRAGONFLY_X86_64)))
-            ret = checkOSandCPU(OUSTR("DragonFly"), OUSTR("X86_64"));
+        else if (token == PLATFORM_WIN_X86)
+            ret = checkOSandCPU("Windows", "x86");
+        else if (token == PLATFORM_WIN_X86_64)
+            ret = checkOSandCPU("Windows", "x86_64");
+        else if (token == PLATFORM_LINUX_X86)
+            ret = checkOSandCPU("Linux", "x86");
+        else if (token == PLATFORM_LINUX_X86_64)
+            ret = checkOSandCPU("Linux", "X86_64");
+        else if (token == PLATFORM_KFREEBSD_X86)
+            ret = checkOSandCPU("kFreeBSD", "x86");
+        else if (token == PLATFORM_KFREEBSD_X86_64)
+            ret = checkOSandCPU("kFreeBSD", "X86_64");
+        else if (token == PLATFORM_LINUX_SPARC)
+            ret = checkOSandCPU("Linux", "SPARC");
+        else if (token == PLATFORM_LINUX_POWERPC)
+            ret = checkOSandCPU("Linux", "PowerPC");
+        else if (token == PLATFORM_LINUX_POWERPC64)
+            ret = checkOSandCPU("Linux", "PowerPC_64");
+        else if (token == PLATFORM_LINUX_ARM_EABI)
+            ret = checkOSandCPU("Linux", "ARM_EABI");
+        else if (token == PLATFORM_LINUX_ARM_OABI)
+            ret = checkOSandCPU("Linux", "ARM_OABI");
+        else if (token == PLATFORM_LINUX_MIPS_EL)
+            ret = checkOSandCPU("Linux", "MIPS_EL");
+        else if (token == PLATFORM_LINUX_MIPS_EB)
+            ret = checkOSandCPU("Linux", "MIPS_EB");
+        else if (token == PLATFORM_LINUX_IA64)
+            ret = checkOSandCPU("Linux", "IA64");
+        else if (token == PLATFORM_LINUX_M68K)
+            ret = checkOSandCPU("Linux", "M68K");
+        else if (token == PLATFORM_LINUX_S390)
+            ret = checkOSandCPU("Linux", "S390");
+        else if (token == PLATFORM_LINUX_S390x)
+            ret = checkOSandCPU("Linux", "S390x");
+        else if (token == PLATFORM_LINUX_HPPA)
+            ret = checkOSandCPU("Linux", "HPPA");
+        else if (token == PLATFORM_LINUX_ALPHA)
+            ret = checkOSandCPU("Linux", "ALPHA");
+        else if (token == PLATFORM_SOLARIS_SPARC)
+            ret = checkOSandCPU("Solaris", "SPARC");
+        else if (token == PLATFORM_SOLARIS_SPARC64)
+            ret = checkOSandCPU("Solaris", "SPARC64");
+        else if (token == PLATFORM_SOLARIS_X86)
+            ret = checkOSandCPU("Solaris", "x86");
+        else if (token == PLATFORM_FREEBSD_X86)
+            ret = checkOSandCPU("FreeBSD", "x86");
+        else if (token == PLATFORM_FREEBSD_X86_64)
+            ret = checkOSandCPU("FreeBSD", "X86_64");
+        else if (token == PLATFORM_NETBSD_X86)
+            ret = checkOSandCPU("NetBSD", "x86");
+        else if (token == PLATFORM_NETBSD_X86_64)
+            ret = checkOSandCPU("NetBSD", "X86_64");
+        else if (token == PLATFORM_MACOSX_X86)
+            ret = checkOSandCPU("MacOSX", "x86");
+        else if (token == PLATFORM_MACOSX_PPC)
+            ret = checkOSandCPU("MacOSX", "PowerPC");
+        else if (token == PLATFORM_AIX_POWERPC)
+            ret = checkOSandCPU("AIX", "PowerPC");
+        else if (token == PLATFORM_OPENBSD_X86)
+            ret = checkOSandCPU("OpenBSD", "x86");
+        else if (token == PLATFORM_OPENBSD_X86_64)
+            ret = checkOSandCPU("OpenBSD", "X86_64");
+        else if (token == PLATFORM_DRAGONFLY_X86)
+            ret = checkOSandCPU("DragonFly", "x86");
+        else if (token == PLATFORM_DRAGONFLY_X86_64)
+            ret = checkOSandCPU("DragonFly", "X86_64");
         else
         {
             OSL_FAIL("Extension Manager: The extension supports an unknown platform. "

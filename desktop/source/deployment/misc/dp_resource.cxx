@@ -42,7 +42,7 @@ struct OfficeLocale :
         //fallback, the locale is currently only set when the user starts the
         //office for the first time.
         if (slang.isEmpty())
-            slang =  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en-US"));
+            slang = "en-US";
         return slang;
     }
 };
@@ -82,11 +82,11 @@ void checkPrimarySubtag(::rtl::OUString const & tag)
     sal_Int32 len = tag.getLength();
     sal_Unicode const * arLang = tag.getStr();
     if (len < 1 || len > 3)
-        throw Exception(OUSTR("Invalid language string."), 0);
+        throw Exception("Invalid language string.", 0);
 
     if (len == 1
         && (arLang[0] != 'i' && arLang[0] != 'x'))
-        throw Exception(OUSTR("Invalid language string."), 0);
+        throw Exception("Invalid language string.", 0);
 
     if (len == 2 || len == 3)
     {
@@ -95,7 +95,7 @@ void checkPrimarySubtag(::rtl::OUString const & tag)
             if ( !((arLang[i] >= 'A' && arLang[i] <= 'Z')
                 || (arLang[i] >= 'a' && arLang[i] <= 'z')))
             {
-                throw Exception(OUSTR("Invalid language string."), 0);
+                throw Exception("Invalid language string.", 0);
             }
         }
     }
@@ -108,7 +108,7 @@ void checkSecondSubtag(::rtl::OUString const & tag, bool & bIsCountry)
     sal_Int32 len = tag.getLength();
     sal_Unicode const * arLang = tag.getStr();
     if (len < 2 || len > 8)
-        throw Exception(OUSTR("Invalid language string."), 0);
+        throw Exception("Invalid language string.", 0);
     //country code
     bIsCountry = false;
     if (len == 2)
@@ -118,7 +118,7 @@ void checkSecondSubtag(::rtl::OUString const & tag, bool & bIsCountry)
             if (!( (arLang[i] >= 'A' && arLang[i] <= 'Z')
                 || (arLang[i] >= 'a' && arLang[i] <= 'z')))
             {
-                throw Exception(OUSTR("Invalid language string."), 0);
+                throw Exception("Invalid language string.", 0);
             }
         }
         bIsCountry = true;
@@ -132,7 +132,7 @@ void checkSecondSubtag(::rtl::OUString const & tag, bool & bIsCountry)
                 || (arLang[i] >= 'a' && arLang[i] <= 'z')
                 || (arLang[i] >= '0' && arLang[i] <= '9') ))
             {
-                throw Exception(OUSTR("Invalid language string."), 0);
+                throw Exception("Invalid language string.", 0);
             }
         }
     }
@@ -143,7 +143,7 @@ void checkThirdSubtag(::rtl::OUString const & tag)
     sal_Int32 len = tag.getLength();
     sal_Unicode const * arLang = tag.getStr();
     if (len < 1 || len > 8)
-        throw Exception(OUSTR("Invalid language string."), 0);
+        throw Exception("Invalid language string.", 0);
 
     for (sal_Int32 i = 0; i < len; i++)
     {
@@ -151,7 +151,7 @@ void checkThirdSubtag(::rtl::OUString const & tag)
             || (arLang[i] >= 'a' && arLang[i] <= 'z')
             || (arLang[i] >= '0' && arLang[i] <= '9') ))
         {
-            throw Exception(OUSTR("Invalid language string."), 0);
+            throw Exception("Invalid language string.", 0);
         }
     }
 }
