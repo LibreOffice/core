@@ -173,7 +173,7 @@ void SbiStream::MapError()
 
 // TODO: Code is copied from daemons2/source/uno/asciiEncoder.cxx
 
-OUString findUserInDescription( const ::rtl::OUString& aDescription )
+OUString findUserInDescription( const OUString& aDescription )
 {
     OUString user;
 
@@ -287,7 +287,7 @@ bool hasUno( void )
         {
             Reference< XUniversalContentBroker > xManager = UniversalContentBroker::create(xContext);
 
-            if ( !( xManager->queryContentProvider( ::rtl::OUString("file:///" ) ).is() ) )
+            if ( !( xManager->queryContentProvider( OUString("file:///" ) ).is() ) )
             {
                 // No UCB
                 bRetVal = false;
@@ -841,7 +841,7 @@ void SbiIoSystem::Shutdown()
     // anything left to PRINT?
     if( !aOut.isEmpty() )
     {
-        rtl::OUString aOutStr(rtl::OStringToOUString(aOut, osl_getThreadTextEncoding()));
+        OUString aOutStr(rtl::OStringToOUString(aOut, osl_getThreadTextEncoding()));
 #if defined __GNUC__
         Window* pParent = Application::GetDefDialogParent();
         MessBox( pParent, WinBits( WB_OK ), OUString(), aOutStr ).Execute();
@@ -951,7 +951,7 @@ void SbiIoSystem::ReadCon(rtl::OString& rIn)
     SbiInputDialog aDlg( NULL, aPromptStr );
     if( aDlg.Execute() )
     {
-        rIn = rtl::OUStringToOString(aDlg.GetInput(), osl_getThreadTextEncoding());
+        rIn = OUStringToOString(aDlg.GetInput(), osl_getThreadTextEncoding());
     }
     else
     {

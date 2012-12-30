@@ -157,7 +157,7 @@ void SetSbUnoObjectDfltPropName( SbxObject* pObj )
 
         if ( SbUnoObject::getDefaultPropName( pUnoObj, sDfltPropName ) )
         {
-            OSL_TRACE("SetSbUnoObjectDfltPropName setting dflt prop for %s", rtl::OUStringToOString( pObj->GetName(), RTL_TEXTENCODING_UTF8 ).getStr() );
+            OSL_TRACE("SetSbUnoObjectDfltPropName setting dflt prop for %s", OUStringToOString( pObj->GetName(), RTL_TEXTENCODING_UTF8 ).getStr() );
             pUnoObj->SetDfltProperty( sDfltPropName );
         }
     }
@@ -955,7 +955,7 @@ Type getUnoTypeForSbxValue( SbxValue* pVal )
                 }
 
                 OUStringBuffer aSeqTypeName;
-                aSeqTypeName.appendAscii(RTL_CONSTASCII_STRINGPARAM(aSeqLevelStr))
+                aSeqTypeName.appendAscii(aSeqLevelStr)
                             .append(aElementType.getTypeName());
                 aRetType = Type( TypeClass_SEQUENCE, aSeqTypeName.makeStringAndClear() );
             }
@@ -996,7 +996,7 @@ Type getUnoTypeForSbxValue( SbxValue* pVal )
                 OUStringBuffer aSeqTypeName;
                 for( short iDim = 0 ; iDim < nDims ; iDim++ )
                 {
-                    aSeqTypeName.appendAscii(RTL_CONSTASCII_STRINGPARAM(aSeqLevelStr));
+                    aSeqTypeName.appendAscii(aSeqLevelStr);
                 }
                 aSeqTypeName.append(aElementType.getTypeName());
                 aRetType = Type( TypeClass_SEQUENCE, aSeqTypeName.makeStringAndClear() );
@@ -1137,7 +1137,7 @@ static Any implRekMultiDimArrayToSequence( SbxDimArray* pArray,
     sal_Int32 i;
     for( i = 0 ; i < nSeqLevel ; i++ )
     {
-        aSeqTypeName.appendAscii(RTL_CONSTASCII_STRINGPARAM(aSeqLevelStr));
+        aSeqTypeName.appendAscii(aSeqLevelStr);
     }
     aSeqTypeName.append(aElemType.getTypeName());
     Type aSeqType( TypeClass_SEQUENCE, aSeqTypeName.makeStringAndClear() );
@@ -1672,7 +1672,7 @@ OUString getDbgObjectName( SbUnoObject* pUnoObj )
 {
     OUString aName = getDbgObjectNameImpl( pUnoObj );
     if( aName.isEmpty() )
-        aName += ::rtl::OUString("Unknown");
+        aName += OUString("Unknown");
 
     OUStringBuffer aRet;
     if( aName.getLength() > 20 )
@@ -1736,7 +1736,7 @@ bool checkUnoObjectType( SbUnoObject* pUnoObj, const OUString& rClass )
         }
         else
         {
-            aClassName += ::rtl::OUString( sal_Unicode( 'X' ) ) + rClass;
+            aClassName += OUString( sal_Unicode( 'X' ) ) + rClass;
         }
         Sequence< Type > aTypeSeq = xTypeProvider->getTypes();
         const Type* pTypeArray = aTypeSeq.getConstArray();
@@ -1797,7 +1797,7 @@ OUString Impl_GetSupportedInterfaces( SbUnoObject* pUnoObj )
     OUStringBuffer aRet;
     if( eType != TypeClass_INTERFACE )
     {
-        aRet.appendAscii( RTL_CONSTASCII_STRINGPARAM(ID_DBG_SUPPORTEDINTERFACES) );
+        aRet.appendAscii( ID_DBG_SUPPORTEDINTERFACES );
         aRet.appendAscii( " not available.\n(TypeClass is not TypeClass_INTERFACE)\n" );
     }
     else
@@ -3303,7 +3303,7 @@ Reference< XTypeDescriptionEnumeration > getTypeDescriptorEnumeration( const OUS
     return xEnum;
 }
 
-typedef boost::unordered_map< OUString, Any, ::rtl::OUStringHash, ::std::equal_to< OUString > > VBAConstantsHash;
+typedef boost::unordered_map< OUString, Any, OUStringHash, ::std::equal_to< OUString > > VBAConstantsHash;
 
 VBAConstantHelper&
 VBAConstantHelper::instance()
@@ -3436,7 +3436,7 @@ SbxVariable* SbUnoClass::Find( const OUString& rName, SbxClassType )
         if( m_xClass.is() )
         {
             // Is it a field(?)
-            ::rtl::OUString aUStr( rName );
+            OUString aUStr( rName );
             Reference< XIdlField > xField = m_xClass->getField( aUStr );
             Reference< XIdlClass > xClass;
             if( xField.is() )
@@ -5047,7 +5047,7 @@ void SbUnoStructRefObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCTyp
                     if( nId == -1 )     // Property ID_DBG_SUPPORTEDINTERFACES"
                     {
                         OUStringBuffer aRet;
-                        aRet.appendAscii( RTL_CONSTASCII_STRINGPARAM(ID_DBG_SUPPORTEDINTERFACES) );
+                        aRet.appendAscii( ID_DBG_SUPPORTEDINTERFACES );
                         aRet.appendAscii( " not available.\n(TypeClass is not TypeClass_INTERFACE)\n" );
 
                         pVar->PutString( aRet.makeStringAndClear() );
@@ -5124,7 +5124,7 @@ OUString SbUnoStructRefObject::getDbgObjectName()
     OUString aName = GetClassName();
     if( aName.isEmpty() )
     {
-        aName += ::rtl::OUString("Unknown");
+        aName += OUString("Unknown");
     }
     OUStringBuffer aRet;
     if( aName.getLength() > 20 )

@@ -26,9 +26,7 @@ using namespace com::sun::star;
 using namespace cppu;
 using namespace osl;
 
-using ::rtl::OUString;
-
-ModuleSizeExceeded::ModuleSizeExceeded( const uno::Sequence< ::rtl::OUString >& sModules )
+ModuleSizeExceeded::ModuleSizeExceeded( const uno::Sequence< OUString >& sModules )
 {
     script::ModuleSizeExceededRequest aReq;
     aReq.Names = sModules;

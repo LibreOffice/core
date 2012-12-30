@@ -616,7 +616,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                             }
                             else if( xIndexAccess.is() )
                             {
-                                sDefaultMethod = OUString( RTL_CONSTASCII_USTRINGPARAM( "getByIndex" ) );
+                                sDefaultMethod = OUString( "getByIndex" );
                             }
                             if ( !sDefaultMethod.isEmpty() )
                             {
@@ -979,7 +979,7 @@ void SbiRuntime::StepOPEN( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     SbxVariableRef pLen  = PopVar();
     short nBlkLen = pLen->GetInteger();
     short nChan   = pChan->GetInteger();
-    OString aName(rtl::OUStringToOString(pName->GetOUString(), osl_getThreadTextEncoding()));
+    OString aName(OUStringToOString(pName->GetOUString(), osl_getThreadTextEncoding()));
     pIosys->Open( nChan, aName, static_cast<short>( nOp1 ),
                   static_cast<short>( nOp2 ), nBlkLen );
     Error( pIosys->GetError() );

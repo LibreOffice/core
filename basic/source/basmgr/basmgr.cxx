@@ -1652,7 +1652,7 @@ uno::Any BasicManager::SetGlobalUNOConstant( const sal_Char* _pAsciiName, const 
     if ( !pStandardLib )
         return aOldValue;
 
-    OUString sVarName( ::rtl::OUString::createFromAscii( _pAsciiName ) );
+    OUString sVarName( OUString::createFromAscii( _pAsciiName ) );
 
     // obtain the old value
     SbxVariable* pVariable = pStandardLib->Find( sVarName, SbxCLASS_OBJECT );
@@ -1988,7 +1988,7 @@ uno::Any ModuleContainer_Impl::getByName( const OUString& aName )
     if( !pMod )
         throw container::NoSuchElementException();
     uno::Reference< script::XStarBasicModuleInfo > xMod = (XStarBasicModuleInfo*)new ModuleInfo_Impl
-        ( aName, ::rtl::OUString::createFromAscii( szScriptLanguage ), pMod->GetSource32() );
+        ( aName, OUString::createFromAscii( szScriptLanguage ), pMod->GetSource32() );
     uno::Any aRetAny;
     aRetAny <<= xMod;
     return aRetAny;

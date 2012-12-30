@@ -192,7 +192,7 @@ void SbxDecimal::setUInt( unsigned int val )
     setULong( (sal_uInt32)val );
 }
 
-bool SbxDecimal::setString( ::rtl::OUString* pOUString )
+bool SbxDecimal::setString( OUString* pOUString )
 {
     static LCID nLANGID = MAKELANGID( LANG_ENGLISH, SUBLANG_ENGLISH_US );
 
@@ -332,7 +332,7 @@ bool SbxDecimal::setSingle( float val )         { (void)val; return false; }
 bool SbxDecimal::setDouble( double val )        { (void)val; return false; }
 void SbxDecimal::setInt( int val )              { (void)val; }
 void SbxDecimal::setUInt( unsigned int val )    { (void)val; }
-bool SbxDecimal::setString( ::rtl::OUString* pOUString )    { (void)pOUString;  return false; }
+bool SbxDecimal::setString( OUString* pOUString )    { (void)pOUString;  return false; }
 
 bool SbxDecimal::getChar( sal_Unicode& rVal )   { (void)rVal; return false; }
 bool SbxDecimal::getShort( sal_Int16& rVal )        { (void)rVal; return false; }
@@ -344,7 +344,7 @@ bool SbxDecimal::getDouble( double& rVal )      { (void)rVal; return false; }
 
 #endif
 
-bool SbxDecimal::getString( ::rtl::OUString& rString )
+bool SbxDecimal::getString( OUString& rString )
 {
 #ifdef WIN32
     static LCID nLANGID = MAKELANGID( LANG_ENGLISH, SUBLANG_ENGLISH_US );
@@ -589,7 +589,7 @@ start:
         case SbxSTRING:
         case SbxBYREF | SbxSTRING:
             if( !p->pOUString )
-                p->pOUString = new ::rtl::OUString;
+                p->pOUString = new OUString;
             pDec->getString( *p->pOUString );
             break;
         case SbxOBJECT:

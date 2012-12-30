@@ -31,9 +31,9 @@ typedef ::cppu::WeakImplHelper2< vba::XErrObject, script::XDefaultProperty > Err
 
 class ErrObject : public ErrObjectImpl_BASE
 {
-    rtl::OUString m_sHelpFile;
-    rtl::OUString m_sSource;
-    rtl::OUString m_sDescription;
+    OUString m_sHelpFile;
+    OUString m_sSource;
+    OUString m_sDescription;
     sal_Int32 m_nNumber;
     sal_Int32 m_nHelpContext;
 
@@ -45,18 +45,18 @@ public:
     virtual void SAL_CALL setNumber( ::sal_Int32 _number ) throw (uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getHelpContext() throw (uno::RuntimeException);
     virtual void SAL_CALL setHelpContext( ::sal_Int32 _helpcontext ) throw (uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getHelpFile() throw (uno::RuntimeException);
-    virtual void SAL_CALL setHelpFile( const ::rtl::OUString& _helpfile ) throw (uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getDescription() throw (uno::RuntimeException);
-    virtual void SAL_CALL setDescription( const ::rtl::OUString& _description ) throw (uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getSource() throw (uno::RuntimeException);
-    virtual void SAL_CALL setSource( const ::rtl::OUString& _source ) throw (uno::RuntimeException);
+    virtual OUString SAL_CALL getHelpFile() throw (uno::RuntimeException);
+    virtual void SAL_CALL setHelpFile( const OUString& _helpfile ) throw (uno::RuntimeException);
+    virtual OUString SAL_CALL getDescription() throw (uno::RuntimeException);
+    virtual void SAL_CALL setDescription( const OUString& _description ) throw (uno::RuntimeException);
+    virtual OUString SAL_CALL getSource() throw (uno::RuntimeException);
+    virtual void SAL_CALL setSource( const OUString& _source ) throw (uno::RuntimeException);
 
     // Methods
     virtual void SAL_CALL Clear(  ) throw (uno::RuntimeException);
     virtual void SAL_CALL Raise( const uno::Any& Number, const uno::Any& Source, const uno::Any& Description, const uno::Any& HelpFile, const uno::Any& HelpContext ) throw (uno::RuntimeException);
     // XDefaultProperty
-    virtual ::rtl::OUString SAL_CALL getDefaultPropertyName(  ) throw (uno::RuntimeException);
+    virtual OUString SAL_CALL getDefaultPropertyName(  ) throw (uno::RuntimeException);
 
     // Helper method
     void setData( const uno::Any& Number, const uno::Any& Source, const uno::Any& Description,
@@ -82,7 +82,7 @@ void SAL_CALL
 ErrObject::setNumber( ::sal_Int32 _number ) throw (uno::RuntimeException)
 {
     GetSbData()->pInst->setErrorVB( _number, String() );
-    ::rtl::OUString _description = GetSbData()->pInst->GetErrorMsg();
+    OUString _description = GetSbData()->pInst->GetErrorMsg();
     setData( uno::makeAny( _number ), uno::Any(), uno::makeAny( _description ), uno::Any(), uno::Any() );
 }
 
@@ -97,38 +97,38 @@ ErrObject::setHelpContext( ::sal_Int32 _helpcontext ) throw (uno::RuntimeExcepti
     m_nHelpContext = _helpcontext;
 }
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
 ErrObject::getHelpFile() throw (uno::RuntimeException)
 {
     return m_sHelpFile;
 }
 
 void SAL_CALL
-ErrObject::setHelpFile( const ::rtl::OUString& _helpfile ) throw (uno::RuntimeException)
+ErrObject::setHelpFile( const OUString& _helpfile ) throw (uno::RuntimeException)
 {
     m_sHelpFile = _helpfile;
 }
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
 ErrObject::getDescription() throw (uno::RuntimeException)
 {
     return m_sDescription;
 }
 
 void SAL_CALL
-ErrObject::setDescription( const ::rtl::OUString& _description ) throw (uno::RuntimeException)
+ErrObject::setDescription( const OUString& _description ) throw (uno::RuntimeException)
 {
     m_sDescription = _description;
 }
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
 ErrObject::getSource() throw (uno::RuntimeException)
 {
     return m_sSource;
 }
 
 void SAL_CALL
-ErrObject::setSource( const ::rtl::OUString& _source ) throw (uno::RuntimeException)
+ErrObject::setSource( const OUString& _source ) throw (uno::RuntimeException)
 {
     m_sSource = _source;
 }
@@ -137,7 +137,7 @@ ErrObject::setSource( const ::rtl::OUString& _source ) throw (uno::RuntimeExcept
 void SAL_CALL
 ErrObject::Clear(  ) throw (uno::RuntimeException)
 {
-    m_sHelpFile = rtl::OUString();
+    m_sHelpFile = OUString();
     m_sSource = m_sHelpFile;
     m_sDescription = m_sSource;
     m_nNumber = 0;
@@ -153,10 +153,10 @@ ErrObject::Raise( const uno::Any& Number, const uno::Any& Source, const uno::Any
 }
 
 // XDefaultProperty
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
 ErrObject::getDefaultPropertyName(  ) throw (uno::RuntimeException)
 {
-    static rtl::OUString sDfltPropName( "Number" );
+    static OUString sDfltPropName( "Number" );
     return sDfltPropName;
 }
 
@@ -164,7 +164,7 @@ void ErrObject::setData( const uno::Any& Number, const uno::Any& Source, const u
     throw (uno::RuntimeException)
 {
     if ( !Number.hasValue() )
-        throw uno::RuntimeException( rtl::OUString("Missing Required Paramater"), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( OUString("Missing Required Paramater"), uno::Reference< uno::XInterface >() );
     Number >>= m_nNumber;
     Description >>= m_sDescription;
     Source >>= m_sSource;

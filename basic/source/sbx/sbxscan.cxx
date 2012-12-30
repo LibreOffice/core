@@ -59,10 +59,10 @@ void ImpGetIntntlSep( sal_Unicode& rcDecimalSep, sal_Unicode& rcThousandSep )
 // but exponent may also be a D, so data type is SbxDOUBLED
 // conversion error if data type is fixed and it doesn't fit
 
-SbxError ImpScan( const ::rtl::OUString& rWSrc, double& nVal, SbxDataType& rType,
+SbxError ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
                   sal_uInt16* pLen, bool bAllowIntntl, bool bOnlyIntntl )
 {
-    ::rtl::OString aBStr( ::rtl::OUStringToOString( rWSrc, RTL_TEXTENCODING_ASCII_US ) );
+    OString aBStr( OUStringToOString( rWSrc, RTL_TEXTENCODING_ASCII_US ) );
 
     char cIntntlComma, cIntntl1000;
     char cNonIntntlComma = '.';
@@ -104,7 +104,7 @@ SbxError ImpScan( const ::rtl::OUString& rWSrc, double& nVal, SbxDataType& rType
         short comma = 0;
         short ndig = 0;
         short ncdig = 0;    // number of digits after decimal point
-        rtl::OStringBuffer aSearchStr(RTL_CONSTASCII_STRINGPARAM("0123456789DEde"));
+        OStringBuffer aSearchStr("0123456789DEde");
         aSearchStr.append(cNonIntntlComma);
         if( cIntntlComma != cNonIntntlComma )
             aSearchStr.append(cIntntlComma);
@@ -370,7 +370,7 @@ static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth,
 // This routine is public because it's also used by the Put-functions
 // in the class SbxImpSTRING.
 
-void ImpCvtNum( double nNum, short nPrec, ::rtl::OUString& rRes, bool bCoreString )
+void ImpCvtNum( double nNum, short nPrec, OUString& rRes, bool bCoreString )
 {
     char *q;
     char cBuf[ 40 ], *p = cBuf;
@@ -394,13 +394,13 @@ void ImpCvtNum( double nNum, short nPrec, ::rtl::OUString& rRes, bool bCoreStrin
     if( *p == cDecimalSep ) p--;
     while( *q ) *++p = *q++;
     *++p = 0;
-    rRes = ::rtl::OUString::createFromAscii( cBuf );
+    rRes = OUString::createFromAscii( cBuf );
 }
 
-bool ImpConvStringExt( ::rtl::OUString& rSrc, SbxDataType eTargetType )
+bool ImpConvStringExt( OUString& rSrc, SbxDataType eTargetType )
 {
     bool bChanged = false;
-    ::rtl::OUString aNewString;
+    OUString aNewString;
 
     // only special cases are handled, nothing on default
     switch( eTargetType )
@@ -410,7 +410,7 @@ bool ImpConvStringExt( ::rtl::OUString& rSrc, SbxDataType eTargetType )
         case SbxDOUBLE:
         case SbxCURRENCY:
         {
-            ::rtl::OString aBStr( ::rtl::OUStringToOString( rSrc, RTL_TEXTENCODING_ASCII_US ) );
+            OString aBStr( OUStringToOString( rSrc, RTL_TEXTENCODING_ASCII_US ) );
 
             sal_Unicode cDecimalSep, cThousandSep;
             ImpGetIntntlSep( cDecimalSep, cThousandSep );
@@ -432,15 +432,15 @@ bool ImpConvStringExt( ::rtl::OUString& rSrc, SbxDataType eTargetType )
         // check as string in case of sal_Bool sal_True and sal_False
         case SbxBOOL:
         {
-            if( rSrc.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) )
+            if( rSrc.equalsIgnoreAsciiCase("true") )
             {
-                aNewString = ::rtl::OUString::valueOf( (sal_Int32)SbxTRUE );
+                aNewString = OUString::valueOf( (sal_Int32)SbxTRUE );
                 bChanged = true;
             }
             else
-            if( rSrc.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("false")) )
+            if( rSrc.equalsIgnoreAsciiCase("false") )
             {
-                aNewString = ::rtl::OUString::valueOf( (sal_Int32)SbxFALSE );
+                aNewString = OUString::valueOf( (sal_Int32)SbxFALSE );
                 bChanged = true;
             }
             break;
@@ -742,7 +742,7 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
                 }
                 else
                 {
-                    aFmtStr = rtl::OUString::createFromAscii(pInfo->mpOOoFormat);
+                    aFmtStr = OUString::createFromAscii(pInfo->mpOOoFormat);
                     aFormatter.PutandConvertEntry( aFmtStr, nCheckPos, nType, nIndex, LANGUAGE_ENGLISH, eLangType );
                 }
                 aFormatter.GetOutputString( nNumber, nIndex, rRes, &pCol );
@@ -789,13 +789,13 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
                 }
                 else
                 {
-                    rRes = rtl::OUString::valueOf(nMin);
+                    rRes = OUString::valueOf(nMin);
                 }
             }
             else if( aFmtStr.equalsIgnoreAsciiCase( VBAFORMAT_W ))
             {
                 sal_Int32 nWeekDay = implGetWeekDay( nNumber );
-                rRes = rtl::OUString::valueOf(nWeekDay);
+                rRes = OUString::valueOf(nWeekDay);
             }
             else if( aFmtStr.equalsIgnoreAsciiCase( VBAFORMAT_Y ))
             {
@@ -803,7 +803,7 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
                 double dBaseDate;
                 implDateSerial( nYear, 1, 1, dBaseDate );
                 sal_Int32 nYear32 = 1 + sal_Int32( nNumber - dBaseDate );
-                rRes = rtl::OUString::valueOf(nYear32);
+                rRes = OUString::valueOf(nYear32);
             }
             else
             {

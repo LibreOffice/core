@@ -148,7 +148,7 @@ void SbiRuntime::StepPAD( sal_uInt32 nOp1 )
     sal_Int32 nLen(nOp1);
     if( s.getLength() != nLen )
     {
-        rtl::OUStringBuffer aBuf(s);
+        OUStringBuffer aBuf(s);
         if (aBuf.getLength() > nLen)
         {
             comphelper::string::truncateToLength(aBuf, nLen);
@@ -435,7 +435,7 @@ bool SbiRuntime::implIsClass( SbxObject* pObj, const OUString& aClass )
     {
         bRet = pObj->IsClass( aClass );
         if( !bRet )
-            bRet = aClass.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM("object") );
+            bRet = aClass.equalsIgnoreAsciiCase( "object" );
         if( !bRet )
         {
             OUString aObjClass = pObj->GetClassName();

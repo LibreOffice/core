@@ -62,7 +62,7 @@ char * address(std::vector< char > & blob) {
     return blob.empty() ? 0 : &blob[0];
 }
 
-SbError convert(rtl::OUString const & source, rtl::OString * target) {
+SbError convert(OUString const & source, OString * target) {
     return
         source.convertToString(
             target, osl_getThreadTextEncoding(),
@@ -72,7 +72,7 @@ SbError convert(rtl::OUString const & source, rtl::OString * target) {
         //TODO: more specific errcode?
 }
 
-SbError convert(char const * source, sal_Int32 length, rtl::OUString * target) {
+SbError convert(char const * source, sal_Int32 length, OUString * target) {
     return
         rtl_convertStringToUString(
             &target->pData, source, length, osl_getThreadTextEncoding(),
@@ -184,7 +184,7 @@ SbError marshalString(
     SbxVariable * variable, bool special, MarshalData & data, void ** buffer)
 {
     OSL_ASSERT(variable != 0 && buffer != 0);
-    rtl::OString str;
+    OString str;
     SbError e = convert(variable->GetOUString(), &str);
     if (e != ERRCODE_NONE) {
         return e;
@@ -430,7 +430,7 @@ void const * unmarshal(SbxVariable * variable, void const * data) {
 }
 
 SbError unmarshalString(StringData const & data, SbxVariable & result) {
-    rtl::OUString str;
+    OUString str;
     if (data.buffer != 0) {
         char const * p = static_cast< char const * >(data.buffer);
         sal_Int32 len;
@@ -453,12 +453,12 @@ SbError unmarshalString(StringData const & data, SbxVariable & result) {
 }
 
 struct ProcData {
-    rtl::OString name;
+    OString name;
     FARPROC proc;
 };
 
 SbError call(
-    rtl::OUString const & dll, ProcData const & proc, SbxArray * arguments,
+    OUString const & dll, ProcData const & proc, SbxArray * arguments,
     SbxVariable & result)
 {
     if (arguments->Count() > 20)
@@ -472,10 +472,8 @@ SbError call(
     // requires special handling in unmarshalString; other functions might
     // require similar treatment, too:
     bool special =
-        dll.equalsIgnoreAsciiCaseAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("KERNEL32.DLL")) &&
-        (proc.name ==
-         rtl::OString(RTL_CONSTASCII_STRINGPARAM("GetLogicalDriveStringsA")));
+        dll.equalsIgnoreAsciiCase("KERNEL32.DLL") &&
+        (proc.name == OString("GetLogicalDriveStringsA"));
     for (int i = 1; i < (arguments == 0 ? 0 : arguments->Count()); ++i) {
         SbError e = marshal(
             true, arguments->Get(i), special && i == 2, stack, stack.size(),
@@ -570,7 +568,7 @@ SbError call(
     case SbxSTRING:
         {
             char const * s1 = reinterpret_cast< char const * >(iRetVal);
-            rtl::OUString s2;
+            OUString s2;
             SbError e = convert(s1, rtl_str_getLength(s1), &s2);
             if (e != ERRCODE_NONE) {
                 return e;
@@ -611,7 +609,7 @@ SbError call(
     return ERRCODE_NONE;
 }
 
-SbError getProcData(HMODULE handle, rtl::OUString const & name, ProcData * proc)
+SbError getProcData(HMODULE handle, OUString const & name, ProcData * proc)
 {
     OSL_ASSERT(proc != 0);
     if (name.getLength() != 0 && name[0] == '@') { //TODO: "@" vs. "#"???
@@ -621,13 +619,12 @@ SbError getProcData(HMODULE handle, rtl::OUString const & name, ProcData * proc)
         }
         FARPROC p = GetProcAddress(handle, reinterpret_cast< LPCSTR >(n));
         if (p != 0) {
-            proc->name = rtl::OString(RTL_CONSTASCII_STRINGPARAM("#")) +
-                rtl::OString::valueOf(n);
+            proc->name = OString("#") + OString::valueOf(n);
             proc->proc = p;
             return ERRCODE_NONE;
         }
     } else {
-        rtl::OString name8;
+        OString name8;
         SbError e = convert(name, &name8);
         if (e != ERRCODE_NONE) {
             return e;
@@ -648,15 +645,14 @@ SbError getProcData(HMODULE handle, rtl::OUString const & name, ProcData * proc)
                 return ERRCODE_NONE;
             }
         }
-        rtl::OString real(
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("_")) + name8);
+        OString real(OString("_") + name8);
         p = GetProcAddress(handle, real.getStr());
         if (p != 0) {
             proc->name = real;
             proc->proc = p;
             return ERRCODE_NONE;
         }
-        real = name8 + rtl::OString(RTL_CONSTASCII_STRINGPARAM("A"));
+        real = name8 + OString("A");
         p = GetProcAddress(handle, real.getStr());
         if (p != 0) {
             proc->name = real;
@@ -669,14 +665,14 @@ SbError getProcData(HMODULE handle, rtl::OUString const & name, ProcData * proc)
 
 struct Dll: public salhelper::SimpleReferenceObject {
 private:
-    typedef std::map< rtl::OUString, ProcData > Procs;
+    typedef std::map< OUString, ProcData > Procs;
 
     virtual ~Dll();
 
 public:
     Dll(): handle(0) {}
 
-    SbError getProc(rtl::OUString const & name, ProcData * proc);
+    SbError getProc(OUString const & name, ProcData * proc);
 
     HMODULE handle;
     Procs procs;
@@ -688,7 +684,7 @@ Dll::~Dll() {
     }
 }
 
-SbError Dll::getProc(rtl::OUString const & name, ProcData * proc) {
+SbError Dll::getProc(OUString const & name, ProcData * proc) {
     Procs::iterator i(procs.find(name));
     if (i != procs.end()) {
         *proc = i->second;
@@ -701,10 +697,10 @@ SbError Dll::getProc(rtl::OUString const & name, ProcData * proc) {
     return e;
 }
 
-rtl::OUString fullDllName(rtl::OUString const & name) {
-    rtl::OUString full(name);
+OUString fullDllName(OUString const & name) {
+    OUString full(name);
     if (full.indexOf('.') == -1) {
-        full += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".DLL"));
+        full += OUString(".DLL");
     }
     return full;
 }
@@ -713,15 +709,15 @@ rtl::OUString fullDllName(rtl::OUString const & name) {
 
 struct SbiDllMgr::Impl: private boost::noncopyable {
 private:
-    typedef std::map< rtl::OUString, rtl::Reference< Dll > > Dlls;
+    typedef std::map< OUString, Reference< Dll > > Dlls;
 
 public:
-    Dll * getDll(rtl::OUString const & name);
+    Dll * getDll(OUString const & name);
 
     Dlls dlls;
 };
 
-Dll * SbiDllMgr::Impl::getDll(rtl::OUString const & name) {
+Dll * SbiDllMgr::Impl::getDll(OUString const & name) {
     Dlls::iterator i(dlls.find(name));
     if (i == dlls.end()) {
         i = dlls.insert(Dlls::value_type(name, new Dll)).first;
@@ -736,13 +732,13 @@ Dll * SbiDllMgr::Impl::getDll(rtl::OUString const & name) {
 }
 
 SbError SbiDllMgr::Call(
-    rtl::OUString const & function, rtl::OUString const & library,
+    OUString const & function, OUString const & library,
     SbxArray * arguments, SbxVariable & result, bool cdeclConvention)
 {
     if (cdeclConvention) {
         return ERRCODE_BASIC_NOT_IMPLEMENTED;
     }
-    rtl::OUString dllName(fullDllName(library));
+    OUString dllName(fullDllName(library));
     Dll * dll = impl_->getDll(dllName);
     if (dll == 0) {
         return ERRCODE_BASIC_BAD_DLL_LOAD;
@@ -755,7 +751,7 @@ SbError SbiDllMgr::Call(
     return call(dllName, proc, arguments, result);
 }
 
-void SbiDllMgr::FreeDll(rtl::OUString const & library) {
+void SbiDllMgr::FreeDll(OUString const & library) {
     impl_->dlls.erase(library);
 }
 

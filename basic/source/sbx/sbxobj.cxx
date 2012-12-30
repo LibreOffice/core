@@ -39,8 +39,8 @@ SbxObject::SbxObject( const OUString& rClass )
     aData.pObj = this;
     if( !nNameHash )
     {
-        pNameProp = ::rtl::OUString::createFromAscii(GetSbxRes( STRING_NAMEPROP ));
-        pParentProp = ::rtl::OUString::createFromAscii(GetSbxRes( STRING_PARENTPROP ));
+        pNameProp = OUString::createFromAscii(GetSbxRes( STRING_NAMEPROP ));
+        pParentProp = OUString::createFromAscii(GetSbxRes( STRING_PARENTPROP ));
         nNameHash = MakeHashCode( pNameProp );
         nParentHash = MakeHashCode( pParentProp );
     }
@@ -214,8 +214,8 @@ SbxVariable* SbxObject::Find( const OUString& rName, SbxClassType t )
 #ifdef DBG_UTIL
     static sal_uInt16 nLvl = 0;
     static const char* pCls[] = { "DontCare","Array","Value","Variable","Method","Property","Object" };
-    rtl::OString aNameStr1(rtl::OUStringToOString(rName, RTL_TEXTENCODING_ASCII_US));
-    rtl::OString aNameStr2(rtl::OUStringToOString(SbxVariable::GetName(), RTL_TEXTENCODING_ASCII_US));
+    rtl::OString aNameStr1(OUStringToOString(rName, RTL_TEXTENCODING_ASCII_US));
+    rtl::OString aNameStr2(OUStringToOString(SbxVariable::GetName(), RTL_TEXTENCODING_ASCII_US));
     DbgOutf( "SBX: Search %.*s %s %s in %s",
              nLvl++, "                              ",
              ( t >= SbxCLASS_DONTCARE && t <= SbxCLASS_OBJECT )
@@ -283,8 +283,8 @@ SbxVariable* SbxObject::Find( const OUString& rName, SbxClassType t )
     nLvl--;
     if( pRes )
     {
-        rtl::OString aNameStr3(rtl::OUStringToOString(rName, RTL_TEXTENCODING_ASCII_US));
-        rtl::OString aNameStr4(rtl::OUStringToOString(SbxVariable::GetName(), RTL_TEXTENCODING_ASCII_US));
+        rtl::OString aNameStr3(OUStringToOString(rName, RTL_TEXTENCODING_ASCII_US));
+        rtl::OString aNameStr4(OUStringToOString(SbxVariable::GetName(), RTL_TEXTENCODING_ASCII_US));
         DbgOutf( "SBX: Found %.*s %s in %s",
             nLvl, "                              ", aNameStr3.getStr(), aNameStr4.getStr() );
     }
@@ -499,8 +499,8 @@ void SbxObject::Insert( SbxVariable* pVar )
         {
             aVarName = PTR_CAST(SbxObject,pVar)->GetClassName();
         }
-        rtl::OString aNameStr1(rtl::OUStringToOString(aVarName, RTL_TEXTENCODING_ASCII_US));
-        rtl::OString aNameStr2(rtl::OUStringToOString(SbxVariable::GetName(), RTL_TEXTENCODING_ASCII_US));
+        rtl::OString aNameStr1(OUStringToOString(aVarName, RTL_TEXTENCODING_ASCII_US));
+        rtl::OString aNameStr2(OUStringToOString(SbxVariable::GetName(), RTL_TEXTENCODING_ASCII_US));
         DbgOutf( "SBX: Insert %s %s in %s",
                  ( pVar->GetClass() >= SbxCLASS_DONTCARE &&
                    pVar->GetClass() <= SbxCLASS_OBJECT )
@@ -542,8 +542,8 @@ void SbxObject::QuickInsert( SbxVariable* pVar )
         {
             aVarName = PTR_CAST(SbxObject,pVar)->GetClassName();
         }
-        rtl::OString aNameStr1(rtl::OUStringToOString(aVarName, RTL_TEXTENCODING_ASCII_US));
-        rtl::OString aNameStr2(rtl::OUStringToOString(SbxVariable::GetName(), RTL_TEXTENCODING_ASCII_US));
+        rtl::OString aNameStr1(OUStringToOString(aVarName, RTL_TEXTENCODING_ASCII_US));
+        rtl::OString aNameStr2(OUStringToOString(SbxVariable::GetName(), RTL_TEXTENCODING_ASCII_US));
         DbgOutf( "SBX: Insert %s %s in %s",
                  ( pVar->GetClass() >= SbxCLASS_DONTCARE &&
                    pVar->GetClass() <= SbxCLASS_OBJECT )
@@ -569,8 +569,8 @@ void SbxObject::Remove( SbxVariable* pVar )
         {
             aVarName = PTR_CAST(SbxObject,pVar)->GetClassName();
         }
-        rtl::OString aNameStr1(rtl::OUStringToOString(aVarName, RTL_TEXTENCODING_ASCII_US));
-        rtl::OString aNameStr2(rtl::OUStringToOString(SbxVariable::GetName(), RTL_TEXTENCODING_ASCII_US));
+        rtl::OString aNameStr1(OUStringToOString(aVarName, RTL_TEXTENCODING_ASCII_US));
+        rtl::OString aNameStr2(OUStringToOString(SbxVariable::GetName(), RTL_TEXTENCODING_ASCII_US));
 #endif
         SbxVariableRef pVar_ = pArray->Get( nIdx );
         if( pVar_->IsBroadcaster() )
@@ -823,8 +823,8 @@ void SbxObject::Dump( SvStream& rStrm, sal_Bool bFill )
         GetAll( SbxCLASS_DONTCARE );
     }
     // Output the data of the object itself
-    rtl::OString aNameStr(rtl::OUStringToOString(GetName(), RTL_TEXTENCODING_ASCII_US));
-    rtl::OString aClassNameStr(rtl::OUStringToOString(aClassName, RTL_TEXTENCODING_ASCII_US));
+    rtl::OString aNameStr(OUStringToOString(GetName(), RTL_TEXTENCODING_ASCII_US));
+    rtl::OString aClassNameStr(OUStringToOString(aClassName, RTL_TEXTENCODING_ASCII_US));
     rStrm << "Object( "
           << rtl::OString::valueOf(reinterpret_cast<sal_Int64>(this)).getStr()<< "=='"
           << ( aNameStr.isEmpty() ?  "<unnamed>" : aNameStr.getStr() ) << "', "
@@ -834,7 +834,7 @@ void SbxObject::Dump( SvStream& rStrm, sal_Bool bFill )
           << " refs, ";
     if ( GetParent() )
     {
-        rtl::OString aParentNameStr(rtl::OUStringToOString(GetName(), RTL_TEXTENCODING_ASCII_US));
+        rtl::OString aParentNameStr(OUStringToOString(GetName(), RTL_TEXTENCODING_ASCII_US));
         rStrm << "in parent "
               << rtl::OString::valueOf(reinterpret_cast<sal_Int64>(GetParent())).getStr()
               << "=='" << ( aParentNameStr.isEmpty() ? "<unnamed>" : aParentNameStr.getStr()  ) << "'";
@@ -844,14 +844,14 @@ void SbxObject::Dump( SvStream& rStrm, sal_Bool bFill )
         rStrm << "no parent ";
     }
     rStrm << " )" << endl;
-    rtl::OString aIndentNameStr(rtl::OUStringToOString(aIndent, RTL_TEXTENCODING_ASCII_US));
+    rtl::OString aIndentNameStr(OUStringToOString(aIndent, RTL_TEXTENCODING_ASCII_US));
     rStrm << aIndentNameStr.getStr() << "{" << endl;
 
     // Flags
     OUString aAttrs;
     if( CollectAttrs( this, aAttrs ) )
     {
-        rtl::OString aAttrStr(rtl::OUStringToOString(aAttrs, RTL_TEXTENCODING_ASCII_US));
+        rtl::OString aAttrStr(OUStringToOString(aAttrs, RTL_TEXTENCODING_ASCII_US));
         rStrm << aIndentNameStr.getStr() << "- Flags: " << aAttrStr.getStr() << endl;
     }
 
