@@ -60,9 +60,8 @@ rtl::OUString getLibreOfficeMajorMinorMicro() {
 
 rtl::OUString getReferenceOpenOfficeOrgMajorMinor() {
     rtl::OUString v(
-        RTL_CONSTASCII_USTRINGPARAM(
             "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version")
-            ":Version:ReferenceOOoMajorMinor}"));
+            ":Version:ReferenceOOoMajorMinor}");
     rtl::Bootstrap::expandMacros(v); //TODO: check for failure
     return v;
 }
@@ -110,35 +109,24 @@ check(dp_misc::DescriptionInfoset const & infoset) {
         {
             sat = satisfiesMinimalVersion(
                 getReferenceOpenOfficeOrgMajorMinor(),
-                e->getAttribute(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value"))));
+                e->getAttribute("value"));
         } else if ( e->getNamespaceURI() == namespaceOpenOfficeOrg && e->getTagName() == maximalVersionOpenOfficeOrg )
         {
             sat = satisfiesMaximalVersion(
                 getReferenceOpenOfficeOrgMajorMinor(),
-                e->getAttribute(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value"))));
+                e->getAttribute("value"));
         } else if (e->getNamespaceURI() == namespaceLibreOffice && e->getTagName() == minimalVersionLibreOffice )
         {
             sat = satisfiesMinimalVersion(
                 getLibreOfficeMajorMinorMicro(),
-                e->getAttribute(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value"))));
-        } else if (e->hasAttributeNS(
-                       rtl::OUString(
-                           RTL_CONSTASCII_USTRINGPARAM(namespaceOpenOfficeOrg)),
-                       rtl::OUString(
-                           RTL_CONSTASCII_USTRINGPARAM(
-                               minimalVersionOpenOfficeOrg))))
+                e->getAttribute("value"));
+        } else if (e->hasAttributeNS(namespaceOpenOfficeOrg,
+                       minimalVersionOpenOfficeOrg))
         {
             sat = satisfiesMinimalVersion(
                 getReferenceOpenOfficeOrgMajorMinor(),
-                e->getAttributeNS(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(namespaceOpenOfficeOrg)),
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            minimalVersionOpenOfficeOrg))));
+                e->getAttributeNS(namespaceOpenOfficeOrg,
+                    minimalVersionOpenOfficeOrg));
         }
         if (!sat) {
             unsatisfied[unsat++] = e;
@@ -156,34 +144,24 @@ rtl::OUString getErrorText(
     {
         return produceErrorText(
                 dp_misc::getResId(RID_DEPLOYMENT_DEPENDENCIES_OOO_MIN).toString(),
-            dependency->getAttribute(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value"))));
+            dependency->getAttribute("value"));
     } else if (dependency->getNamespaceURI() == namespaceOpenOfficeOrg && dependency->getTagName() == maximalVersionOpenOfficeOrg )
     {
         return produceErrorText(
                 dp_misc::getResId(RID_DEPLOYMENT_DEPENDENCIES_OOO_MAX).toString(),
-            dependency->getAttribute(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value"))));
+            dependency->getAttribute("value"));
     } else if (dependency->getNamespaceURI() == namespaceLibreOffice && dependency->getTagName() == minimalVersionLibreOffice )
     {
         return produceErrorText(
                 dp_misc::getResId(RID_DEPLOYMENT_DEPENDENCIES_LO_MIN).toString(),
-            dependency->getAttribute(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value"))));
-    } else if (dependency->hasAttributeNS(
-                   rtl::OUString(
-                       RTL_CONSTASCII_USTRINGPARAM(namespaceOpenOfficeOrg)),
-                   rtl::OUString(
-                       RTL_CONSTASCII_USTRINGPARAM(
-                           minimalVersionOpenOfficeOrg))))
+            dependency->getAttribute("value"));
+    } else if (dependency->hasAttributeNS(namespaceOpenOfficeOrg,
+                   minimalVersionOpenOfficeOrg))
     {
         return produceErrorText(
                 dp_misc::getResId(RID_DEPLOYMENT_DEPENDENCIES_OOO_MIN).toString(),
-            dependency->getAttributeNS(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(namespaceOpenOfficeOrg)),
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(minimalVersionOpenOfficeOrg))));
+            dependency->getAttributeNS(namespaceOpenOfficeOrg,
+                minimalVersionOpenOfficeOrg));
     } else {
         return dp_misc::getResId(RID_DEPLOYMENT_DEPENDENCIES_UNKNOWN).toString();
     }

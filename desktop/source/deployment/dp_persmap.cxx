@@ -330,9 +330,9 @@ bool PersistentMap::importFromBDB()
 
     // get the name of its BDB counterpart
     rtl::OUString aDBName = m_MapFileName;
-    if( !aDBName.endsWithAsciiL( ".pmap", 5))
+    if( !aDBName.endsWith( ".pmap" ))
         return false;
-    aDBName = aDBName.replaceAt( aDBName.getLength()-5, 5, OUSTR(".db"));
+    aDBName = aDBName.replaceAt( aDBName.getLength()-5, 5, ".db");
 
     // open the corresponding BDB file for reading
     osl::File aDBFile( aDBName);

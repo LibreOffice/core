@@ -38,13 +38,13 @@
 
 #include "dp_misc_api.hxx"
 
-#define LOCKFILE_SUFFIX   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/.lock" ) )
-#define LOCKFILE_GROUP    rtl::OString(RTL_CONSTASCII_STRINGPARAM( "Lockdata" ) )
-#define LOCKFILE_USERKEY  rtl::OString(RTL_CONSTASCII_STRINGPARAM( "User" ) )
-#define LOCKFILE_HOSTKEY  rtl::OString(RTL_CONSTASCII_STRINGPARAM( "Host" ) )
-#define LOCKFILE_STAMPKEY rtl::OString(RTL_CONSTASCII_STRINGPARAM( "Stamp" ) )
-#define LOCKFILE_TIMEKEY  rtl::OString(RTL_CONSTASCII_STRINGPARAM( "Time" ) )
-#define LOCKFILE_IPCKEY   rtl::OString(RTL_CONSTASCII_STRINGPARAM( "IPCServer" ) )
+#define LOCKFILE_SUFFIX   rtl::OUString( "/.lock" )
+#define LOCKFILE_GROUP    rtl::OString( "Lockdata" )
+#define LOCKFILE_USERKEY  rtl::OString( "User" )
+#define LOCKFILE_HOSTKEY  rtl::OString( "Host" )
+#define LOCKFILE_STAMPKEY rtl::OString( "Stamp" )
+#define LOCKFILE_TIMEKEY  rtl::OString( "Time" )
+#define LOCKFILE_IPCKEY   rtl::OString( "IPCServer" )
 
 namespace desktop {
 

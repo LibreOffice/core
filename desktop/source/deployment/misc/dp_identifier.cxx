@@ -51,7 +51,7 @@ namespace dp_misc {
 
 ::rtl::OUString generateLegacyIdentifier(::rtl::OUString const & fileName) {
     rtl::OUStringBuffer b;
-    b.appendAscii(RTL_CONSTASCII_STRINGPARAM("org.openoffice.legacy."));
+    b.appendAscii("org.openoffice.legacy.");
     b.append(fileName);
     return b.makeStringAndClear();
 }

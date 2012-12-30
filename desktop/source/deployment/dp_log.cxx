@@ -106,8 +106,7 @@ ProgressLogImpl::ProgressLogImpl(
 
     // write log stamp
     OStringBuffer buf;
-    buf.append(
-        RTL_CONSTASCII_STRINGPARAM("###### Progress log entry ") );
+    buf.append( "###### Progress log entry " );
     TimeValue m_start_time, tLocal;
     oslDateTime date_time;
     if (osl_getSystemTime( &m_start_time ) &&
@@ -122,7 +121,7 @@ ProgressLogImpl::ProgressLogImpl(
             date_time.Hours, date_time.Minutes, date_time.Seconds );
         buf.append( ar );
     }
-    buf.append( RTL_CONSTASCII_STRINGPARAM("######\n") );
+    buf.append( "######\n" );
     log_write( buf.makeStringAndClear() );
 }
 
@@ -171,10 +170,10 @@ void ProgressLogImpl::update( Any const & Status )
         buf.append( msg );
     }
     else {
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("ERROR: ") );
+        buf.appendAscii( "ERROR: " );
         buf.append( ::comphelper::anyToString(Status) );
     }
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\n") );
+    buf.appendAscii( "\n" );
     log_write( OUStringToOString(
                    buf.makeStringAndClear(), osl_getThreadTextEncoding() ) );
 }
