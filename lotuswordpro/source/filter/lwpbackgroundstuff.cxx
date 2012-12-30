@@ -169,11 +169,8 @@ XFBGImage* LwpBackgroundStuff::GetFillPattern()
     XFBGImage* pXFBGImage = new XFBGImage();
     pXFBGImage->SetImageData(pImageBuff, nSize);
 
-    if (pImageBuff)
-    {
-        delete [] pImageBuff;
-        pImageBuff = NULL;
-    }
+    delete [] pImageBuff;
+    pImageBuff = NULL;
 
 
     pXFBGImage->SetRepeate();
