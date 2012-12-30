@@ -6245,8 +6245,8 @@ bool PDFWriterImpl::finalizeSignature()
     HASH_Update(hc, reinterpret_cast<const unsigned char*>(buffer), bytesRead);
     delete[] buffer;
 
-    buffer = new char[nLastByteRangeNo + 1];
     CHECK_RETURN( (osl_File_E_None == osl_setFilePos( m_aFile, osl_Pos_Absolut, m_nSignatureContentOffset + MAX_SIGNATURE_CONTENT_LENGTH + 1) ) );
+    buffer = new char[nLastByteRangeNo + 1];
     CHECK_RETURN( (osl_File_E_None == osl_readFile( m_aFile, buffer, nLastByteRangeNo, &bytesRead ) ) );
     if (bytesRead != (sal_uInt64) nLastByteRangeNo)
         SAL_WARN("vcl.gdi", "PDF Signing: Second buffer read failed!");
