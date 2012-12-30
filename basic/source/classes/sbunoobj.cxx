@@ -954,10 +954,8 @@ Type getUnoTypeForSbxValue( SbxValue* pVal )
                     }
                 }
 
-                OUStringBuffer aSeqTypeName;
-                aSeqTypeName.appendAscii(aSeqLevelStr)
-                            .append(aElementType.getTypeName());
-                aRetType = Type( TypeClass_SEQUENCE, aSeqTypeName.makeStringAndClear() );
+                OUString aSeqTypeName = aSeqLevelStr + aElementType.getTypeName();
+                aRetType = Type( TypeClass_SEQUENCE, aSeqTypeName );
             }
             // #i33795 Map also multi dimensional arrays to corresponding sequences
             else if( nDims > 1 )
