@@ -413,29 +413,15 @@ void PresenterButton::RenderButton (
     rendering::RenderState aRenderState (geometry::AffineMatrix2D(1,0,0, 0,1,0), NULL,
         Sequence<double>(4), rendering::CompositeOperation::SOURCE);
     PresenterCanvasHelper::SetDeviceColor(aRenderState, rpFont->mnColor);
+
+    aRenderState.AffineTransform.m02 = (rSize.Width - aTextBBox.X2 + aTextBBox.X1)/2;
+    aRenderState.AffineTransform.m12 = (rSize.Height - aTextBBox.Y2 + aTextBBox.Y1)/2 - aTextBBox.Y1;
+
     /// this is responsible of the close button
-    /// check whether RTL interface or not
-    if(!Application::GetSettings().GetLayoutRTL()){
-        aRenderState.AffineTransform.m02 = (rSize.Width - aTextBBox.X2 + aTextBBox.X1)/2;
-        aRenderState.AffineTransform.m12 = (rSize.Height - aTextBBox.Y2 + aTextBBox.Y1)/2 - aTextBBox.Y1;
-
-        rxCanvas->drawText(
-            aContext,
-            rpFont->mxFont,
-            rendering::ViewState(geometry::AffineMatrix2D(1,0,0, 0,1,0), NULL),
-            aRenderState,
-            rendering::TextDirection::WEAK_LEFT_TO_RIGHT);
-    }else{
-        aRenderState.AffineTransform.m02 = (rSize.Width + aTextBBox.X2 - aTextBBox.X1)/2;
-        aRenderState.AffineTransform.m12 = (rSize.Height - aTextBBox.Y2 + aTextBBox.Y1)/2 - aTextBBox.Y1;
-
-        rxCanvas->drawText(
-            aContext,
-            rpFont->mxFont,
-            rendering::ViewState(geometry::AffineMatrix2D(1,0,0, 0,1,0), NULL),
-            aRenderState,
-            rendering::TextDirection::WEAK_RIGHT_TO_LEFT);
-    }
+    rxCanvas->drawTextLayout(
+        xLayout,
+        rendering::ViewState(geometry::AffineMatrix2D(1,0,0, 0,1,0), NULL),
+        aRenderState);
 }
 
 void PresenterButton::Invalidate (void)

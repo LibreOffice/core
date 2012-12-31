@@ -782,35 +782,18 @@ void PresenterSlideShowView::PaintEndSlide (const awt::Rectangle& rRepaintBox)
             break;
 
         /// this is responsible of the " presentation exit " text inside the slide windows
-        /// check whether RTL interface or not
-        if(!Application::GetSettings().GetLayoutRTL()){
-            PresenterCanvasHelper::SetDeviceColor(aRenderState, util::Color(0x00ffffff));
-            aRenderState.AffineTransform.m02 = 20;
-            aRenderState.AffineTransform.m12 = 40;
-            const rendering::StringContext aContext (
-                msClickToExitPresentationText, 0, msClickToExitPresentationText.getLength());
-            pFont->PrepareFont(mxCanvas);
-            mxCanvas->drawText(
-                aContext,
-                pFont->mxFont,
-                aViewState,
-                aRenderState,
-                rendering::TextDirection::WEAK_LEFT_TO_RIGHT);
-        }
-        else{
-            PresenterCanvasHelper::SetDeviceColor(aRenderState, util::Color(0x00ffffff));
-            aRenderState.AffineTransform.m02 = rRepaintBox.Width-20;
-            aRenderState.AffineTransform.m12 = 40;
-            const rendering::StringContext aContext (
-                msClickToExitPresentationText, 0, msClickToExitPresentationText.getLength());
-            pFont->PrepareFont(mxCanvas);
-            mxCanvas->drawText(
-                aContext,
-                pFont->mxFont,
-                aViewState,
-                aRenderState,
-                rendering::TextDirection::WEAK_RIGHT_TO_LEFT);
-        }
+        PresenterCanvasHelper::SetDeviceColor(aRenderState, util::Color(0x00ffffff));
+        aRenderState.AffineTransform.m02 = 20;
+        aRenderState.AffineTransform.m12 = 40;
+        const rendering::StringContext aContext (
+            msClickToExitPresentationText, 0, msClickToExitPresentationText.getLength());
+        pFont->PrepareFont(mxCanvas);
+        const Reference<rendering::XTextLayout> xLayout (
+            pFont->mxFont->createTextLayout(aContext,rendering::TextDirection::WEAK_LEFT_TO_RIGHT,0));
+        mxCanvas->drawTextLayout(
+            xLayout,
+            aViewState,
+            aRenderState);
     }
     while (false);
 
