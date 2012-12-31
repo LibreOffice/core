@@ -26,4 +26,6 @@ $(eval $(call gb_ExternalPackage_add_file,rasqal,lib/librasqal-lo.so.1,src/.libs
 $(eval $(call gb_ExternalPackage_add_file,rasqal,lib/librasqal.so,src/.libs/librasqal-lo.so.1.0.0))
 endif
 
+$(eval $(call gb_ExternalPackage_add_file,rasqal,inc/external/rasqal.h,src/rasqal.h))
+
 # vim: set noet sw=4 ts=4:
