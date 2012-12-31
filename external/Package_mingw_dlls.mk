@@ -63,7 +63,7 @@ $(eval $(call gb_Package_add_files,mingw_dlls,bin,\
     $(MINGW_TERMCAP_DLL) \
     $(MINGW_ZLIB_DLL) \
     $(if $(filter YES,$(MINGW_SHARED_GCCLIB)),$(MINGW_GCCDLL)) \
-    $(if $(filter YES,$(MINGW_SHARED_GXXLIB)),$(MINGW_GXXDLL))
+    $(if $(filter YES,$(MINGW_SHARED_GXXLIB)),$(MINGW_GXXDLL)) \
 ))
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:
