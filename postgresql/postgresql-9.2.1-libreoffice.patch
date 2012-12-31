@@ -84,7 +84,7 @@
      if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
  
 -CPP_PROJ=/nologo /W3 /EHsc $(OPT) /I "..\..\include" /I "..\..\include\port\win32" /I "..\..\include\port\win32_msvc" /I "..\..\port" /I. /I "$(SSL_INC)" \
-+CPP_PROJ=/nologo /W3 /EHsc $(OPT) /I "..\..\include" /I "..\..\include\port\win32" /I "..\..\include\port\win32_msvc" /I "..\..\port" /I. $(SOLARINC) \
++CPP_PROJ=/nologo /W3 /EHsc $(OPT) /I "..\..\include" /I "..\..\include\port\win32" /I "..\..\include\port\win32_msvc" /I "..\..\port" /I. $(SOLARINC) /I $(WORKDIR)/UnpackedTarball/openssl/include \
   /D "FRONTEND" $(DEBUGDEF) \
   /D "WIN32" /D "_WINDOWS" /Fp"$(INTDIR)\libpq.pch" \
   /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c  \

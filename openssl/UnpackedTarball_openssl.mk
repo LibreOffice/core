@@ -29,6 +29,7 @@ $(eval $(call gb_UnpackedTarball_fix_end_of_line,openssl,\
 	include/openssl/ec.h \
 	include/openssl/ecdh.h \
 	include/openssl/ecdsa.h \
+	include/openssl/engine.h \
 	include/openssl/err.h \
 	include/openssl/evp.h \
 	include/openssl/hmac.h \
@@ -57,6 +58,7 @@ $(eval $(call gb_UnpackedTarball_fix_end_of_line,openssl,\
 	include/openssl/ssl23.h \
 	include/openssl/ssl3.h \
 	include/openssl/stack.h \
+	include/openssl/store.h \
 	include/openssl/symhacks.h \
 	include/openssl/tls1.h \
 	include/openssl/ui.h \
