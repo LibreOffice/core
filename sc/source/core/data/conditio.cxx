@@ -1289,9 +1289,9 @@ rtl::OUString ScConditionEntry::GetExpression( const ScAddress& rCursor, sal_uIn
         }
         else if (bIsStr1)
         {
-            aRet = """";
+            aRet = "\"";
             aRet += aStrVal1;
-            aRet += """";
+            aRet += "\"";
         }
         else
             mpDoc->GetFormatTable()->GetInputLineString(nVal1, nNumFmt, aRet);
