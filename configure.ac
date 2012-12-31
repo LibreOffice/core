@@ -5313,12 +5313,13 @@ dnl ===================================================================
 dnl Set the MinGW sys-root
 dnl ===================================================================
 if test "$WITH_MINGW" = "yes"; then
-    for sysroot in /usr/i686-w64-mingw32/sys-root/mingw; do
-        if test -d "$sysroot"; then
-            MINGW_SYSROOT="$sysroot"
-            break
-        fi
-    done
+    AC_MSG_CHECKING([for MinGW sysroot])
+    sysroot=`$CC -print-sysroot`
+    AS_IF([test -d "$sysroot"],
+          [MINGW_SYSROOT="$sysroot"
+           AC_MSG_RESULT([$MINGW_SYSROOT])],
+          [AC_MSG_RESULT([not found])
+           AC_MSG_ERROR([cannot determine MinGW sysroot])])
 fi
 AC_SUBST([MINGW_SYSROOT])
 
