@@ -11,8 +11,8 @@
 
 gb_CliUnoApiTarget_EXT := $(gb_CliAssembly_POLICYEXT)
 
-gb_CliUnoApiTarget_DEPS := $(call gb_Executable_get_runtime_dependencies,climaker)
-gb_CliUnoApiTarget_COMMAND := $(call gb_Executable_get_command,climaker)
+gb_CliUnoApiTarget_DEPS = $(call gb_Executable_get_runtime_dependencies,climaker)
+gb_CliUnoApiTarget_COMMAND = $(call gb_Executable_get_command,climaker)
 
 define gb_CliUnoApiTarget__command
 $(call gb_Output_announce,$(2),$(true),CLI,4)

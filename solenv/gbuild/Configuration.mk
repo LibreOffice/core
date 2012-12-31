@@ -251,8 +251,8 @@ $(call gb_XcuLangpackTarget_get_outdir_target,%) :
 
 # XcuMergeTarget class
 
-gb_XcuMergeTarget_CFGEXDEPS := $(call gb_Executable_get_runtime_dependencies,cfgex)
-gb_XcuMergeTarget_CFGEXCOMMAND := $(call gb_Executable_get_command,cfgex)
+gb_XcuMergeTarget_CFGEXDEPS = $(call gb_Executable_get_runtime_dependencies,cfgex)
+gb_XcuMergeTarget_CFGEXCOMMAND = $(call gb_Executable_get_command,cfgex)
 
 # PRJNAME is computed from the stem (parameter $(2))
 define gb_XcuMergeTarget__command

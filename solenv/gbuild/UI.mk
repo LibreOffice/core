@@ -13,8 +13,8 @@
 
 gb_UILocalizeTarget_WORKDIR := $(WORKDIR)/UILocalizeTarget
 
-gb_UILocalizeTarget_DEPS := $(call gb_Executable_get_runtime_dependencies,uiex)
-gb_UILocalizeTarget_COMMAND := $(call gb_Executable_get_command,uiex)
+gb_UILocalizeTarget_DEPS = $(call gb_Executable_get_runtime_dependencies,uiex)
+gb_UILocalizeTarget_COMMAND = $(call gb_Executable_get_command,uiex)
 
 # If translatable strings from a .ui file are not merged into the
 # respective .po file yet, the produced translated files are empty (that
