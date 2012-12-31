@@ -240,6 +240,138 @@ void ScInterpreter::ScIfJump()
 }
 
 
+void ScInterpreter::ScIfError( bool bNAonly )
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScIfError" );
+    const short* pJump = pCur->GetJump();
+    if ( !pJump )
+    {
+        PushIllegalParameter();
+        return;
+    }
+    short nJumpCount = pJump[ 0 ];
+    if ( nJumpCount != 2 )
+    {
+        PushIllegalArgument();
+        return;
+    }
+
+    if ( nGlobalError == 0 || ( bNAonly && nGlobalError != NOTAVAILABLE ) )
+    {
+        MatrixDoubleRefToMatrix();
+        switch ( GetStackType() )
+        {
+            case svDoubleRef:
+            case svSingleRef:
+            {
+                ScAddress aAdr;
+                if ( !PopDoubleRefOrSingleRef( aAdr ) )
+                {
+                    PushIllegalArgument();
+                    return;
+                }
+                ScBaseCell* pCell = GetCell( aAdr );
+                sal_uInt16 nErr = GetCellErrCode( pCell );
+                if ( nErr == 0 || ( bNAonly && nErr != NOTAVAILABLE ) )
+                {
+                    // no error, return 1st argument
+                    if ( pCell && pCell->HasValueData() )
+                    {
+                        PushDouble( GetCellValue(aAdr, pCell) );
+                        aCode.Jump( pJump[ nJumpCount  ], pJump[ nJumpCount ] );
+                        return;
+                    }
+                    else
+                    {
+                        String aInputString;
+                        GetCellString( aInputString, pCell );
+                        PushString( aInputString );
+                        aCode.Jump( pJump[ nJumpCount  ], pJump[ nJumpCount ] );
+                        return;
+                    }
+                }
+            }
+            break;
+            case svMatrix:
+            {
+                nFuncFmtType = NUMBERFORMAT_NUMBER;
+                ScMatrixRef pMat = PopMatrix();
+                if ( pMat && ( !nGlobalError || ( bNAonly && nGlobalError != NOTAVAILABLE ) ) )
+                {
+                    FormulaTokenRef xNew;
+                    ScTokenMatrixMap::const_iterator aMapIter;
+                    SCSIZE nCols, nRows;
+                    pMat->SetErrorInterpreter( NULL );
+                    pMat->GetDimensions( nCols, nRows );
+                    if ( nCols > 0 && nRows > 0 )
+                    {
+                        if ( pTokenMatrixMap &&
+                             ( ( aMapIter = pTokenMatrixMap->find( pCur ) ) != pTokenMatrixMap->end() ) )
+                        {
+                            xNew = (*aMapIter).second;
+                        }
+                        else
+                        {
+                            ScJumpMatrix* pJumpMat = new ScJumpMatrix( nCols, nRows );
+                            for ( SCSIZE nC = 0; nC < nCols; ++nC )
+                            {
+                                for ( SCSIZE nR = 0; nR < nRows; ++nR )
+                                {
+                                    double fVal;
+                                    sal_uInt16 nErr;
+                                    bool bIsValue = pMat->IsValue(nC, nR);
+                                    if ( bIsValue )
+                                    {
+                                        fVal = pMat->GetDouble( nC, nR );
+                                        nErr = !( pMat->GetError( nC, nR ) == 0 ||
+                                                  ( bNAonly &&
+                                                    pMat->GetError( nC, nR )!= NOTAVAILABLE ) );
+                                    }
+                                    else
+                                    {
+                                        fVal = 0.0;
+                                        nErr = 1;
+                                    }
+
+                                    if ( nErr == 0 )
+                                    {   // no error, return 1st argument
+                                        pJumpMat->SetJump( nC, nR, fVal,
+                                                pJump[ nJumpCount ], pJump[ nJumpCount ] );
+                                    }
+                                    else
+                                    {
+                                        // error, return 2nd argument
+                                        pJumpMat->SetJump( nC, nR, fVal,
+                                                pJump[ 1 ], pJump[ nJumpCount ] );
+                                    }
+                                }
+                            }
+                            xNew = new ScJumpMatrixToken( pJumpMat );
+                            GetTokenMatrixMap().insert( ScTokenMatrixMap::value_type( pCur, xNew ));
+                        }
+                    }
+                    PushTempToken( xNew.get() );
+                    // set endpoint of path for main code line
+                    aCode.Jump( pJump[ nJumpCount ], pJump[ nJumpCount ] );
+                    return;
+                }
+            }
+            break;
+            default:
+            {
+                //other stacktypes, no error, return 1st argument
+                aCode.Jump( pJump[ nJumpCount  ], pJump[ nJumpCount ] );
+                return;
+            }
+        }
+    }
+
+    // error, return 2nd argument
+    nGlobalError = 0;
+    aCode.Jump( pJump[ 1 ], pJump[ nJumpCount ] );
+}
+
+
 void ScInterpreter::ScChoseJump()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScChoseJump" );

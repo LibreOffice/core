@@ -34,6 +34,8 @@ enum OpCodeEnum
         ocExternalRef       = SC_OPCODE_EXTERNAL_REF,
     // Jump commands
         ocIf                = SC_OPCODE_IF,
+        ocIfError           = SC_OPCODE_IF_ERROR,
+        ocIfNA              = SC_OPCODE_IF_NA,
         ocChose             = SC_OPCODE_CHOSE,
     // Parentheses and separators
         ocOpen              = SC_OPCODE_OPEN,

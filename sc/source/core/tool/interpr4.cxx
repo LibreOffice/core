@@ -2712,7 +2712,7 @@ void ScInterpreter::ScExternal()
     }
     else if ( ( aUnoName = ScGlobal::GetAddInCollection()->FindFunction(aFuncName, false) ).Len()  )
     {
-        //  bLocalFirst=false in FindFunction, cFunc should be the stored 
+        //  bLocalFirst=false in FindFunction, cFunc should be the stored
         //  internal name
 
         ScUnoAddInCall aCall( *ScGlobal::GetAddInCollection(), aUnoName, nParamCount );
@@ -3815,7 +3815,8 @@ StackVar ScInterpreter::Interpret()
             // RPN code push without error
             PushWithoutError( (FormulaToken&) *pCur );
         }
-        else if (pTokenMatrixMap && !(eOp == ocIf || eOp == ocChose) &&
+        else if (pTokenMatrixMap &&
+                 !(eOp == ocIf || eOp == ocIfError || eOp == ocIfNA || eOp == ocChose) &&
                 ((aTokenMatrixMapIter = pTokenMatrixMap->find( pCur)) !=
                  pTokenMatrixMap->end()) &&
                 (*aTokenMatrixMapIter).second->GetType() != svJumpMatrix)
@@ -3836,7 +3837,7 @@ StackVar ScInterpreter::Interpret()
             nFuncFmtType = NUMBERFORMAT_NUMBER;
             nFuncFmtIndex = 0;
 
-            if ( eOp == ocIf || eOp == ocChose )
+            if ( eOp == ocIf || eOp == ocChose || eOp == ocIfError || eOp == ocIfNA )
                 nStackBase = sp;        // don't mess around with the jumps
             else
             {
@@ -3863,6 +3864,8 @@ StackVar ScInterpreter::Interpret()
                 case ocDBArea           : ScDBArea();                   break;
                 case ocColRowNameAuto   : ScColRowNameAuto();           break;
                 case ocIf               : ScIfJump();                   break;
+                case ocIfError          : ScIfError( false );           break;
+                case ocIfNA             : ScIfError( true );            break;
                 case ocChose            : ScChoseJump();                break;
                 case ocAdd              : ScAdd();                      break;
                 case ocSub              : ScSub();                      break;
@@ -4258,7 +4261,9 @@ StackVar ScInterpreter::Interpret()
     case ocIsString : \
     case ocIsValue : \
     case ocN : \
-    case ocType :
+    case ocType : \
+    case ocIfError : \
+    case ocIfNA :
 
         switch ( eOp )
         {

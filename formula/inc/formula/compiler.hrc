@@ -29,26 +29,28 @@
 #define SC_OPCODE_NAME                4
 #define SC_OPCODE_EXTERNAL_REF        5
 #define SC_OPCODE_IF                  6     /* jump commands */
-#define SC_OPCODE_CHOSE               7
-#define SC_OPCODE_OPEN                8     /* parentheses and separators */
-#define SC_OPCODE_CLOSE               9
-#define SC_OPCODE_SEP                10
-#define SC_OPCODE_MISSING            11     /* special OpCodes */
-#define SC_OPCODE_BAD                12
-#define SC_OPCODE_STRINGXML          13
-#define SC_OPCODE_SPACES             14
-#define SC_OPCODE_MAT_REF            15
-#define SC_OPCODE_DB_AREA            16     /* additional access operators */
-#define SC_OPCODE_MACRO              17
-#define SC_OPCODE_COL_ROW_NAME       18
-#define SC_OPCODE_COL_ROW_NAME_AUTO  19
-#define SC_OPCODE_PERCENT_SIGN       20     /* operator _follows_ value */
-#define SC_OPCODE_ARRAY_OPEN         21
-#define SC_OPCODE_ARRAY_CLOSE        22
-#define SC_OPCODE_ARRAY_ROW_SEP      23
-#define SC_OPCODE_ARRAY_COL_SEP      24     /* some convs use sep != col_sep */
-#define SC_OPCODE_STOP_DIV           25
-#define SC_OPCODE_SKIP               26     /* used to skip raw tokens during string compilation */
+#define SC_OPCODE_IF_ERROR            7
+#define SC_OPCODE_IF_NA               8
+#define SC_OPCODE_CHOSE               9
+#define SC_OPCODE_OPEN               10     /* parentheses and separators */
+#define SC_OPCODE_CLOSE              11
+#define SC_OPCODE_SEP                12
+#define SC_OPCODE_MISSING            13     /* special OpCodes */
+#define SC_OPCODE_BAD                14
+#define SC_OPCODE_STRINGXML          15
+#define SC_OPCODE_SPACES             16
+#define SC_OPCODE_MAT_REF            17
+#define SC_OPCODE_DB_AREA            18     /* additional access operators */
+#define SC_OPCODE_MACRO              19
+#define SC_OPCODE_COL_ROW_NAME       20
+#define SC_OPCODE_COL_ROW_NAME_AUTO  21
+#define SC_OPCODE_PERCENT_SIGN       22     /* operator _follows_ value */
+#define SC_OPCODE_ARRAY_OPEN         23
+#define SC_OPCODE_ARRAY_CLOSE        24
+#define SC_OPCODE_ARRAY_ROW_SEP      25
+#define SC_OPCODE_ARRAY_COL_SEP      26     /* some convs use sep != col_sep */
+#define SC_OPCODE_STOP_DIV           27
+#define SC_OPCODE_SKIP               28     /* used to skip raw tokens during string compilation */
 
 /*** error constants #... ***/
 #define SC_OPCODE_START_ERRORS       30

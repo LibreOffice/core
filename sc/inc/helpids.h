@@ -433,6 +433,8 @@
 #define HID_FUNC_NICHT                                          "SC_HID_FUNC_NICHT"
 #define HID_FUNC_WAHR                                           "SC_HID_FUNC_WAHR"
 #define HID_FUNC_WENN                                           "SC_HID_FUNC_WENN"
+#define HID_FUNC_IFERROR                                        "SC_HID_FUNC_IFERROR"
+#define HID_FUNC_IFNA                                           "SC_HID_FUNC_IFNA"
 #define HID_FUNC_ODER                                           "SC_HID_FUNC_ODER"
 #define HID_FUNC_UND                                            "SC_HID_FUNC_UND"
 #define HID_FUNC_XOR                                            "SC_HID_FUNC_XOR"
