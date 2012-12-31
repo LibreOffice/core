@@ -206,7 +206,7 @@ $(foreach def,$(1),$(if $(filter TRUE YES,$($(def))),-D$(def)))
 endef
 
 define gb_Helper_execute
-$(call gb_Executable_get_command,$(1))
+$(gb_Helper_set_ld_path) $(call gb_Executable_get_command,$(1))
 endef
 
 # gb_Helper_OUTDIRLIBDIR is set by the platform to the path the dynamic linker need to use
