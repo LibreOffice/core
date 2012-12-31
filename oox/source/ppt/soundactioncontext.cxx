@@ -26,7 +26,6 @@
 #include "oox/helper/propertymap.hxx"
 #include "oox/drawingml/embeddedwavaudiofile.hxx"
 
-using rtl::OUString;
 using namespace ::oox::core;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::uno;
@@ -63,17 +62,6 @@ namespace oox { namespace ppt {
                     // try the builtIn version
                     url = msSndName;
                 }
-#if 0 // OOo does not support embedded data yet
-                else if ( msEmbedded.getLength() != 0 )
-                {
-                    RelationsRef xRel = getHandler()->getRelations();
-                    url =   xRel->getRelationById( msEmbedded )->msTarget;
-                }
-                else if ( msLink.getLength() != 0 )
-                {
-                    url = msLink;
-                }
-#endif
                 if ( !url.isEmpty() )
                 {
                     maSlideProperties[ PROP_Sound ] <<= url;

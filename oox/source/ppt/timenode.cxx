@@ -41,7 +41,6 @@
 #include "oox/helper/helper.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 
-using ::rtl::OUString;
 using namespace ::oox::core;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -59,7 +58,6 @@ namespace oox { namespace ppt {
             switch( nNodeType )
             {
             case AnimationNodeType::PAR:
-//              sServiceName = CREATE_OUSTRING("com.sun.star.animations.IterateContainer");
                 sServiceName = CREATE_OUSTRING("com.sun.star.animations.ParallelTimeContainer");
                 break;
             case AnimationNodeType::SEQ:

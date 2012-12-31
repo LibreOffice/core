@@ -29,7 +29,6 @@
 #include "oox/ppt/timenodelistcontext.hxx"
 #include "buildlistcontext.hxx"
 
-using rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::oox::core;
 using namespace ::oox::drawingml;

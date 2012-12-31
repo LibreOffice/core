@@ -31,7 +31,7 @@ namespace oox { namespace ppt {
 
     struct Attribute
     {
-        ::rtl::OUString   name;
+        OUString   name;
         MS_AttributeNames type;
     };
 
@@ -49,7 +49,7 @@ namespace oox { namespace ppt {
 
         virtual void onEndElement();
 
-        virtual void onCharacters( const ::rtl::OUString& aChars );
+        virtual void onCharacters( const OUString& aChars );
 
         virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs );
 
@@ -57,7 +57,7 @@ namespace oox { namespace ppt {
         bool              mbInAttrList;
         bool              mbIsInAttrName;
         std::list< Attribute > maAttributes;
-        ::rtl::OUString   msCurrentAttribute;
+        OUString   msCurrentAttribute;
     };
 
 

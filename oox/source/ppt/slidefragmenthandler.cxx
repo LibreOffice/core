@@ -39,7 +39,6 @@
 #include "oox/ppt/pptimport.hxx"
 
 
-using rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::oox::core;
 using namespace ::oox::drawingml;
@@ -214,9 +213,9 @@ void SlideFragmentHandler::finalizeImport()
     }
     catch( uno::Exception& )
     {
-        OSL_FAIL( OString(rtl::OString("oox::ppt::SlideFragmentHandler::EndElement(), "
+        OSL_FAIL( OString(OString("oox::ppt::SlideFragmentHandler::EndElement(), "
                     "exception caught: ") +
-            rtl::OUStringToOString(
+            OUStringToOString(
                 comphelper::anyToString( cppu::getCaughtException() ),
                 RTL_TEXTENCODING_UTF8 )).getStr() );
     }

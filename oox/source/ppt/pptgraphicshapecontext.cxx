@@ -36,7 +36,6 @@
 #include "oox/drawingml/textbodycontext.hxx"
 #include <oox/token/tokens.hxx>
 
-using rtl::OUString;
 using namespace oox::core;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

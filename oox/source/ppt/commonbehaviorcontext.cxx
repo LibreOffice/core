@@ -35,8 +35,6 @@
 
 #include <string.h>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
@@ -95,7 +93,7 @@ namespace oox { namespace ppt {
                     if(msCurrentAttribute.compareToAscii( attrConv->mpMSName ) == 0 )
                     {
                         Attribute attr;
-                        attr.name = ::rtl::OUString::intern( attrConv->mpAPIName,
+                        attr.name = OUString::intern( attrConv->mpAPIName,
                                                              strlen(attrConv->mpAPIName),
                                                              RTL_TEXTENCODING_ASCII_US );
                         attr.type = attrConv->meAttribute;

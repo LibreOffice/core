@@ -35,7 +35,6 @@
 #include "oox/drawingml/fillproperties.hxx"
 #include "extdrawingfragmenthandler.hxx"
 
-using rtl::OUString;
 using namespace oox::core;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

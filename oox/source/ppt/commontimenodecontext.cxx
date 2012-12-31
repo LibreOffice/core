@@ -47,7 +47,6 @@ using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::xml::sax;
 
 
-using ::rtl::OUString;
 using ::com::sun::star::beans::NamedValue;
 
 namespace oox { namespace ppt {
