@@ -9,16 +9,17 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,external/jawt))
 
-$(eval $(call gb_CustomTarget_register_target,external/jawt,libjawt.dll.a))
+$(eval $(call gb_CustomTarget_register_targets,external/jawt,\
+	jawt.def \
+	libjawt.dll.a \
+))
 
-$(call gb_CustomTarget_get_workdir,external/jawt)/jawt.def:| \
-	$(call gb_CustomTarget_get_workdir,external/jawt)/.dir
+$(call gb_CustomTarget_get_workdir,external/jawt)/jawt.def:
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	echo EXPORTS > $@
 	echo "JAWT_GetAWT@8" >> $@
 
-$(call gb_CustomTarget_get_target,external/jawt)/libjawt.dll.a: \
-	$(call gb_CustomTarget_get_workdir,external/jawt)/jawt.def
+$(call gb_CustomTarget_get_target,external/jawt)/libjawt.dll.a: $(call gb_CustomTarget_get_workdir,external/jawt)/jawt.def
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),DLT,1)
 	$(DLLTOOL) --input-def=$< --output-lib=$@ --dllname=jawt.dll
 
