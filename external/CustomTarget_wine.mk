@@ -12,7 +12,7 @@ $(eval $(call gb_CustomTarget_CustomTarget,external/wine))
 $(eval $(call gb_CustomTarget_register_targets,external/wine,\
 	libgdiplus.dll.a \
 	libmsi.dll.a \
-	liburlmod.dll.a \
+	liburlmon.dll.a \
 ))
 
 $(call gb_CustomTarget_get_workdir,external/wine)/lib%.dll.a : $(SRCDIR)/external/wine/lib/%.def
