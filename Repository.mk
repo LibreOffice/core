@@ -30,7 +30,6 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     HelpIndexer \
     HelpLinker \
     adjustvisibility \
-    bestreversemap \
     bmp \
     bmpsum \
     cfgex \
@@ -175,6 +174,7 @@ endif
 ifneq ($(OS),IOS)
 
 $(eval $(call gb_Helper_register_executables,UREBIN,\
+	bestreversemap \
 	regmerge \
 	regview \
 	uno \
