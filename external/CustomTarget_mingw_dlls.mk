@@ -71,6 +71,6 @@ $(eval $(call gb_CustomTarget_register_targets,external/wine,\
 
 $(call gb_CustomTarget_get_workdir,external/mingw-dlls)/%.dll : $(MINGW_SYSROOT)/mingw/bin/%.dll
 	$(call gb_Output_announce,$*,$(true),CPY,1)
-	cp $< $*
+	cp $< $@
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:
