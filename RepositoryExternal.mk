@@ -953,12 +953,14 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 ))
 
 define gb_LinkTarget__use_icudata
+$(call gb_LinkTarget_use_package,$(1),icu)
 $(call gb_LinkTarget_use_libraries,$(1),\
 	icudt \
 )
 
 endef
 define gb_LinkTarget__use_icui18n
+$(call gb_LinkTarget_use_package,$(1),icu)
 $(call gb_LinkTarget_use_libraries,$(1),\
 	icuin \
 )
@@ -971,12 +973,14 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 ))
 
 define gb_LinkTarget__use_icudata
+$(call gb_LinkTarget_use_package,$(1),icu)
 $(call gb_LinkTarget_use_libraries,$(1),\
 	icudata$(gb_ICU_suffix) \
 )
 
 endef
 define gb_LinkTarget__use_icui18n
+$(call gb_LinkTarget_use_package,$(1),icu)
 $(call gb_LinkTarget_use_libraries,$(1),\
 	icui18n$(gb_ICU_suffix) \
 )
@@ -991,18 +995,21 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 ))
 
 define gb_LinkTarget__use_icule
+$(call gb_LinkTarget_use_package,$(1),icu)
 $(call gb_LinkTarget_use_libraries,$(1),\
 	icule$(gb_ICU_suffix) \
 )
 
 endef
 define gb_LinkTarget__use_icutu
+$(call gb_LinkTarget_use_package,$(1),icu)
 $(call gb_LinkTarget_use_libraries,$(1),\
 	icutu$(gb_ICU_suffix) \
 )
 
 endef
 define gb_LinkTarget__use_icuuc
+$(call gb_LinkTarget_use_package,$(1),icu)
 $(call gb_LinkTarget_use_libraries,$(1),\
 	icuuc$(gb_ICU_suffix) \
 )
