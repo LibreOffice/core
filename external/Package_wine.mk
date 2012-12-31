@@ -10,9 +10,9 @@
 $(eval $(call gb_Package_Package,dbghelp,$(call gb_CustomTarget_get_workdir,external/wine)))
 
 $(eval $(call gb_Package_add_files,dbghelp,lib,\
-	gdiplus.dll.a \
-	msi.dll.a \
-	urlmon.dll.a \
+	libgdiplus.dll.a \
+	libmsi.dll.a \
+	liburlmon.dll.a \
 ))
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:
