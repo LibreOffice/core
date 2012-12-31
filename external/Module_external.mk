@@ -15,7 +15,6 @@ $(eval $(call gb_Module_add_targets,external,\
 ifeq ($(OS)$(COM),WNTGCC)
 $(eval $(call gb_Module_add_targets,external,\
 	CustomTarget_jawt \
-	CustomTarget_mingw_dlls \
 	CustomTarget_wine \
 	Package_jawt \
 	Package_mingw_dlls \
