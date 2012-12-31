@@ -19,7 +19,7 @@ $(call gb_CustomTarget_get_workdir,external/jawt)/jawt.def:
 	echo EXPORTS > $@
 	echo "JAWT_GetAWT@8" >> $@
 
-$(call gb_CustomTarget_get_target,external/jawt)/libjawt.dll.a: $(call gb_CustomTarget_get_workdir,external/jawt)/jawt.def
+$(call gb_CustomTarget_get_workdir,external/jawt)/libjawt.dll.a: $(call gb_CustomTarget_get_workdir,external/jawt)/jawt.def
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),DLT,1)
 	$(DLLTOOL) --input-def=$< --output-lib=$@ --dllname=jawt.dll
 

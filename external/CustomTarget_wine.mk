@@ -15,7 +15,7 @@ $(eval $(call gb_CustomTarget_register_targets,external/wine,\
 	liburlmod.dll.a \
 ))
 
-$(call gb_CustomTarget_get_target,external/wine)/lib%.dll.a : $(SRCDIR)/external/wine/lib/%.def
+$(call gb_CustomTarget_get_workdir,external/wine)/lib%.dll.a : $(SRCDIR)/external/wine/lib/%.def
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),DLT,1)
 	$(DLLTOOL) --kill-at --input-def=$< --output-lib=$@ --dllname=$*.dll
 
