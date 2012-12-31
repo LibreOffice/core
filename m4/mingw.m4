@@ -47,8 +47,7 @@ AC_DEFUN([libo_MINGW_CHECK_DLL],
 [AC_ARG_VAR([MINGW_][$1][_DLL],[output variable containing the found dll name])dnl
 
 if test -n "$WITH_MINGW"; then
-    dnl TODO move this to configure: there is no need to call $CC more than once
-    _libo_mingw_dlldir=`$CC -print-sysroot`/mingw/bin
+    _libo_mingw_dlldir="[$MINGW_SYSROOT]"/mingw/bin
     _libo_mingw_dllname=
     AC_MSG_CHECKING([for $2 dll])
 

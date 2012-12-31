@@ -65,18 +65,11 @@ MINGW_DLLS := \
     $(if $(filter YES,$(MINGW_SHARED_GCCLIB)),$(MINGW_GCCDLL)) \
     $(if $(filter YES,$(MINGW_SHARED_GXXLIB)),$(MINGW_GXXDLL))
 
-POTENTIAL_MINGW_RUNTIME_BINDIRS := \
-	$(COMPATH)/$(HOST_PLATFORM)/sys-root/mingw/bin \
-	/usr/$(HOST_PLATFORM)/sys-root/mingw/bin
-
 $(eval $(call gb_CustomTarget_register_targets,external/wine,\
 	$(MINGW_DLLS) \
 ))
 
-$(call gb_CustomTarget_get_workdir,external/mingw-dlls)/%.dll: $(firstword $(wildcard $(foreach dir,$(POTENTIAL_MINGW_RUNTIME_BINDIRS), $(dir)/%)))
-	if ! test -f $<; then \
-		echo Could not find $*.dll in any of $(POTENTIAL_MINGW_RUNTIME_BINDIRS); \
-	fi
+$(call gb_CustomTarget_get_workdir,external/mingw-dlls)/%.dll : $(MINGW_SYSROOT)/mingw/bin/%.dll
 	$(call gb_Output_announce,$*,$(true),CPY,1)
 	cp $< $*
 
