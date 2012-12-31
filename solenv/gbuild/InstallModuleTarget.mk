@@ -74,8 +74,8 @@ endef
 
 # ScpPreprocessTarget class
 
-gb_ScpPreprocessTarget_DEPS = $(call gb_Executable_get_runtime_dependencies,cpp)
-gb_ScpPreprocessTarget_COMMAND = $(call gb_Executable_get_command,cpp)
+gb_ScpPreprocessTarget_DEPS := $(call gb_Executable_get_runtime_dependencies,cpp)
+gb_ScpPreprocessTarget_COMMAND := $(call gb_Executable_get_command,cpp)
 
 gb_ScpPreprocessTarget_get_source = $(SRCDIR)/$(1).scp
 
@@ -111,8 +111,8 @@ endef
 
 # ScpMergeTarget class
 
-gb_ScpMergeTarget_DEPS = $(call gb_Executable_get_runtime_dependencies,ulfex)
-gb_ScpMergeTarget_COMMAND = $(call gb_Executable_get_command,ulfex)
+gb_ScpMergeTarget_DEPS := $(call gb_Executable_get_runtime_dependencies,ulfex)
+gb_ScpMergeTarget_COMMAND := $(call gb_Executable_get_command,ulfex)
 
 gb_ScpMergeTarget_get_source = $(SRCDIR)/$(1).ulf
 
@@ -155,8 +155,8 @@ endef
 # platform:
 #  gb_ScpConvertTarget_ScpConvertTarget_platform
 
-gb_ScpConvertTarget_DEPS = $(call gb_Executable_get_runtime_dependencies,ulfconv)
-gb_ScpConvertTarget_COMMAND = $(call gb_Executable_get_command,ulfconv)
+gb_ScpConvertTarget_DEPS := $(call gb_Executable_get_runtime_dependencies,ulfconv)
+gb_ScpConvertTarget_COMMAND := $(gb_Helper_set_ld_path) $(call gb_Executable_get_command,ulfconv)
 
 define gb_ScpConvertTarget__command
 $(call gb_Output_announce,$(2),$(true),SCC,1)

@@ -33,21 +33,21 @@
 gb_ExtensionTarget__get_preparation_target = $(WORKDIR)/ExtensionTarget/$(1).prepare
 
 gb_ExtensionTarget_ZIPCOMMAND := zip $(if $(findstring s,$(MAKEFLAGS)),-q)
-gb_ExtensionTarget_XRMEXDEPS = $(call gb_Executable_get_runtime_dependencies,xrmex)
-gb_ExtensionTarget_XRMEXCOMMAND = $(call gb_Executable_get_command,xrmex)
+gb_ExtensionTarget_XRMEXDEPS := $(call gb_Executable_get_runtime_dependencies,xrmex)
+gb_ExtensionTarget_XRMEXCOMMAND := $(call gb_Executable_get_command,xrmex)
 
-gb_ExtensionTarget_PROPMERGEDEPS = $(call gb_Executable_get_runtime_dependencies,propex)
-gb_ExtensionTarget_PROPMERGECOMMAND = $(call gb_Executable_get_command,propex)
+gb_ExtensionTarget_PROPMERGEDEPS := $(call gb_Executable_get_runtime_dependencies,propex)
+gb_ExtensionTarget_PROPMERGECOMMAND := $(call gb_Executable_get_command,propex)
 
-gb_ExtensionTarget_TREEXDEPS = $(call gb_Executable_get_runtime_dependencies,treex)
-gb_ExtensionTarget_TREEXCOMMAND = $(call gb_Executable_get_command,treex)
+gb_ExtensionTarget_TREEXDEPS := $(call gb_Executable_get_runtime_dependencies,treex)
+gb_ExtensionTarget_TREEXCOMMAND := $(call gb_Executable_get_command,treex)
 
-gb_ExtensionTarget_HELPEXDEPS = $(call gb_Executable_get_runtime_dependencies,helpex)
-gb_ExtensionTarget_HELPEXCOMMAND = $(call gb_Executable_get_command,helpex)
-gb_ExtensionTarget_HELPINDEXERDEPS = $(call gb_Executable_get_runtime_dependencies,HelpIndexer)
-gb_ExtensionTarget_HELPINDEXERCOMMAND = $(call gb_Executable_get_command,HelpIndexer)
-gb_ExtensionTarget_HELPLINKERDEPS = $(call gb_Executable_get_runtime_dependencies,HelpLinker)
-gb_ExtensionTarget_HELPLINKERCOMMAND = $(call gb_Executable_get_command,HelpLinker)
+gb_ExtensionTarget_HELPEXDEPS := $(call gb_Executable_get_runtime_dependencies,helpex)
+gb_ExtensionTarget_HELPEXCOMMAND := $(call gb_Executable_get_command,helpex)
+gb_ExtensionTarget_HELPINDEXERDEPS := $(call gb_Executable_get_runtime_dependencies,HelpIndexer)
+gb_ExtensionTarget_HELPINDEXERCOMMAND := $(call gb_Executable_get_command,HelpIndexer)
+gb_ExtensionTarget_HELPLINKERDEPS := $(call gb_Executable_get_runtime_dependencies,HelpLinker)
+gb_ExtensionTarget_HELPLINKERCOMMAND := $(call gb_Executable_get_command,HelpLinker)
 # does not contain en-US because it is special cased in gb_ExtensionTarget_ExtensionTarget
 gb_ExtensionTarget_TRANS_LANGS := $(filter-out en-US,$(gb_WITH_LANG))
 gb_ExtensionTarget_ALL_LANGS := en-US $(gb_ExtensionTarget_TRANS_LANGS)

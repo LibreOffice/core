@@ -11,8 +11,8 @@
 
 gb_ThesaurusIndexTarget_CHECK_TARGET := $(SRCDIR)/dictionaries/util/th_check.pl
 gb_ThesaurusIndexTarget_CHECK_COMMAND := PERL_UNICODE=0 $(PERL) -w $(gb_ThesaurusIndexTarget_CHECK_TARGET)
-gb_ThesaurusIndexTarget_INDEX_DEPS = $(call gb_Executable_get_runtime_dependencies,idxdict)
-gb_ThesaurusIndexTarget_INDEX_COMMAND = $(call gb_Executable_get_command,idxdict)
+gb_ThesaurusIndexTarget_INDEX_DEPS := $(call gb_Executable_get_runtime_dependencies,idxdict)
+gb_ThesaurusIndexTarget_INDEX_COMMAND := $(call gb_Executable_get_command,idxdict)
 
 define gb_ThesaurusIndexTarget__command
 $(call gb_Output_announce,$(2),$(true),THI,1)
