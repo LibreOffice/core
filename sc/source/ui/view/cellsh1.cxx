@@ -1827,6 +1827,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                 const ScConditionalFormat* pCondFormat = pList->GetFormat(rCondFormats[0]);
                                 assert(pCondFormat);
                                 const ScRangeList& rCondFormatRange = pCondFormat->GetRange();
+                                nKey = pCondFormat->GetKey();
                                 pCondFormatDlg.reset( new ScCondFormatDlg( pTabViewShell->GetDialogParent(), pDoc, pCondFormat, rCondFormatRange, aPos, condformat::dialog::NONE ) );
                             }
                             else
