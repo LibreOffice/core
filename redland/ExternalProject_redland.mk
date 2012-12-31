@@ -11,6 +11,8 @@ $(eval $(call gb_ExternalProject_ExternalProject,redland))
 
 $(eval $(call gb_ExternalProject_use_unpacked,redland,redland))
 
+$(eval $(call gb_ExternalProject_use_package,redland,rasqal))
+
 $(eval $(call gb_ExternalProject_register_targets,redland,\
 	build \
 ))
