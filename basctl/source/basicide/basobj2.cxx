@@ -66,7 +66,7 @@ extern "C" {
     }
     SAL_DLLPUBLIC_EXPORT void basicide_macro_organizer( sal_Int16 nTabId )
     {
-        OSL_TRACE("in basicide_macro_organizer");
+        SAL_INFO("basctl.basicide","in basicide_macro_organizer");
         basctl::Organize( nTabId );
     }
 }
@@ -165,7 +165,7 @@ bool RenameModule (
 {
     if ( !rDocument.hasModule( rLibName, rOldName ) )
     {
-        OSL_FAIL( "basctl::RenameModule: old module name is invalid!" );
+        SAL_WARN( "basctl.basicide","basctl::RenameModule: old module name is invalid!" );
         return false;
     }
 
@@ -199,7 +199,7 @@ bool RenameModule (
 
             // update tabwriter
             sal_uInt16 nId = pShell->GetWindowId( pWin );
-            DBG_ASSERT( nId, "No entry in Tabbar!" );
+            SAL_WARN_IF( nId == 0 , "basctl.basicide ", "No entry in Tabbar!");
             if ( nId )
             {
                 TabBar& rTabBar = pShell->GetTabBar();
@@ -243,7 +243,7 @@ namespace
         // take ownership of the data
         ::std::auto_ptr< MacroExecutionData > pData( i_pData );
 
-        DBG_ASSERT( pData->xMethod->GetParent()->GetFlags() & SBX_EXTSEARCH, "Kein EXTSEARCH!" );
+        SAL_WARN_IF( !(pData->xMethod->GetParent()->GetFlags() & SBX_EXTSEARCH), "basctl.basicide","No EXTSEARCH!" );
 
         // in case this is a document-local macro, try to protect the document's Undo Manager from
         // flawed scripts
@@ -349,7 +349,7 @@ OUString ChooseMacro( const uno::Reference< frame::XModel >& rxLimitToDocument, 
                             xLimitToDocument.set( xScripts, UNO_QUERY );
                             if ( !xLimitToDocument.is() )
                             {
-                                OSL_ENSURE( false, "basctl::ChooseMacro: a script container which is no document!?" );
+                                SAL_WARN_IF(!xLimitToDocument.is(), "basctl.basicide", "basctl::ChooseMacro: a script container which is no document!?" );
                                 xLimitToDocument = rxLimitToDocument;
                             }
                         }
@@ -423,7 +423,7 @@ Sequence< OUString > GetMethodNames( const ScriptDocument& rDocument, const OUSt
             SbMethod* pMethod = (SbMethod*)xModule->GetMethods()->Get( i );
             if( pMethod->IsHidden() )
                 continue;
-            DBG_ASSERT( pMethod, "Method not found! (NULL)" );
+            SAL_WARN_IF( !pMethod, "basctl.basicide","Method not found! (NULL)" );
             aSeqMethods.getArray()[ iTarget++ ] = pMethod->GetName();
         }
     }
