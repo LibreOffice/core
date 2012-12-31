@@ -21,7 +21,6 @@
 #include "oox/drawingml/textliststylecontext.hxx"
 #include "oox/ppt/slidemastertextstylescontext.hxx"
 
-using rtl::OUString;
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;

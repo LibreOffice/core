@@ -22,7 +22,6 @@
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/core/contexthandler2.hxx"
 
-using ::rtl::OUString;
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;

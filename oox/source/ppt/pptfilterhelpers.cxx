@@ -23,11 +23,6 @@
 
 #include "pptfilterhelpers.hxx"
 
-
-using rtl::OUString;
-
-#include "pptfilterhelpers.hxx"
-
 namespace oox { namespace ppt {
 
     // BEGIN CUT&PASTE from sd pptanimations.hxx

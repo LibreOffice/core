@@ -36,7 +36,6 @@
 #include "oox/drawingml/textbodycontext.hxx"
 #include "oox/drawingml/transform2dcontext.hxx"
 
-using rtl::OUString;
 using namespace oox::core;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -191,7 +190,7 @@ Reference< XFastContextHandler > PPTShapeContext::createFastChildContext( sal_In
                               }
                               if ( pPlaceholder.get() )
                               {
-                                  OSL_TRACE("shape %s will get shape reference %s applied", rtl::OUStringToOString(mpShapePtr->getId(), RTL_TEXTENCODING_UTF8 ).getStr(), rtl::OUStringToOString(pPlaceholder->getId(), RTL_TEXTENCODING_UTF8 ).getStr());
+                                  OSL_TRACE("shape %s will get shape reference %s applied", OUStringToOString(mpShapePtr->getId(), RTL_TEXTENCODING_UTF8 ).getStr(), OUStringToOString(pPlaceholder->getId(), RTL_TEXTENCODING_UTF8 ).getStr());
                                   mpShapePtr->applyShapeReference( *pPlaceholder.get() );
                                   PPTShape* pPPTShape = dynamic_cast< PPTShape* >( pPlaceholder.get() );
                                   if ( pPPTShape )

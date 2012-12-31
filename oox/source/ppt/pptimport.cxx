@@ -24,7 +24,6 @@
 #include "oox/helper/graphichelper.hxx"
 #include "oox/ole/vbaproject.hxx"
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
