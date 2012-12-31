@@ -37,7 +37,7 @@ gb_ExtensionTarget_XRMEXDEPS := $(call gb_Executable_get_runtime_dependencies,xr
 gb_ExtensionTarget_XRMEXCOMMAND := $(call gb_Executable_get_command,xrmex)
 
 gb_ExtensionTarget_PROPMERGEDEPS := $(call gb_Executable_get_runtime_dependencies,propex)
-gb_ExtensionTarget_PROPMERGECOMMAND := $(call gb_Executable_get_command,propmerge)
+gb_ExtensionTarget_PROPMERGECOMMAND := $(call gb_Executable_get_command,propex)
 
 gb_ExtensionTarget_TREEXDEPS := $(call gb_Executable_get_runtime_dependencies,treex)
 gb_ExtensionTarget_TREEXCOMMAND := $(call gb_Executable_get_command,treex)
