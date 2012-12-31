@@ -29,7 +29,6 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include "oox/ppt/slidepersist.hxx"
 
-using rtl::OUString;
 using namespace ::oox::core;
 using namespace ::oox::drawingml;
 using namespace ::com::sun::star;
@@ -117,13 +116,13 @@ void PPTShape::addShape(
         const awt::Rectangle* pShapeRect,
         ::oox::drawingml::ShapeIdMap* pShapeMap )
 {
-    OSL_TRACE("add shape id: %s location: %s subtype: %d service: %s", rtl::OUStringToOString(msId, RTL_TEXTENCODING_UTF8 ).getStr(), meShapeLocation == Master ? "master" : meShapeLocation == Slide ? "slide" : meShapeLocation == Layout ? "layout" : "other", mnSubType, rtl::OUStringToOString(msServiceName, RTL_TEXTENCODING_UTF8 ).getStr());
+    OSL_TRACE("add shape id: %s location: %s subtype: %d service: %s", OUStringToOString(msId, RTL_TEXTENCODING_UTF8 ).getStr(), meShapeLocation == Master ? "master" : meShapeLocation == Slide ? "slide" : meShapeLocation == Layout ? "layout" : "other", mnSubType, OUStringToOString(msServiceName, RTL_TEXTENCODING_UTF8 ).getStr());
     // only placeholder from layout are being inserted
     if ( mnSubType && ( meShapeLocation == Master ) )
         return;
     try
     {
-        rtl::OUString sServiceName( msServiceName );
+        OUString sServiceName( msServiceName );
         if( !sServiceName.isEmpty() )
         {
             oox::drawingml::TextListStylePtr aMasterTextListStyle;
@@ -133,7 +132,7 @@ void PPTShape::addShape(
             if ( sServiceName != "com.sun.star.drawing.GraphicObjectShape" &&
                  sServiceName != "com.sun.star.drawing.OLE2Shape" )
             {
-                const rtl::OUString sOutlinerShapeService( "com.sun.star.presentation.OutlinerShape"  );
+                const OUString sOutlinerShapeService( "com.sun.star.presentation.OutlinerShape"  );
                 OSL_TRACE("has master: %p", rSlidePersist.getMasterPersist().get());
                 switch( mnSubType )
                 {
@@ -147,7 +146,7 @@ void PPTShape::addShape(
                     case XML_subTitle :
                     {
                         if ( ( meShapeLocation == Master ) || ( meShapeLocation == Layout ) )
-                            sServiceName = rtl::OUString();
+                            sServiceName = OUString();
                         else {
                             sServiceName = "com.sun.star.presentation.SubtitleShape";
                             aMasterTextListStyle = rSlidePersist.getMasterPersist().get() ? rSlidePersist.getMasterPersist()->getTitleTextStyle() : rSlidePersist.getTitleTextStyle();
@@ -224,7 +223,7 @@ void PPTShape::addShape(
                 }
             }
 
-            OSL_TRACE("shape service: %s", rtl::OUStringToOString(sServiceName, RTL_TEXTENCODING_UTF8 ).getStr());
+            OSL_TRACE("shape service: %s", OUStringToOString(sServiceName, RTL_TEXTENCODING_UTF8 ).getStr());
 
             if( mnSubType && getSubTypeIndex().has() && meShapeLocation == Layout ) {
                 oox::drawingml::ShapePtr pPlaceholder = PPTShape::findPlaceholderByIndex( getSubTypeIndex().get(), rSlidePersist.getShapes()->getChildren(), true );
@@ -282,7 +281,7 @@ void PPTShape::addShape(
                     }
                     if( pPPTPlaceholder->mpPlaceholder.get() ) {
                         OSL_TRACE("placeholder has parent placeholder: %s type: %s index: %d",
-                                  rtl::OUStringToOString( pPPTPlaceholder->mpPlaceholder->getId(), RTL_TEXTENCODING_UTF8 ).getStr(),
+                                  OUStringToOString( pPPTPlaceholder->mpPlaceholder->getId(), RTL_TEXTENCODING_UTF8 ).getStr(),
                                   lclDebugSubType( pPPTPlaceholder->mpPlaceholder->getSubType() ),
                                   pPPTPlaceholder->mpPlaceholder->getSubTypeIndex().get() );
                         OSL_TRACE("has textbody %d", pPPTPlaceholder->mpPlaceholder->getTextBody() != NULL );
@@ -297,7 +296,7 @@ void PPTShape::addShape(
                 } else if( !mpPlaceholder.get() ) {
                     aMasterTextListStyle.reset();
                 }
-                OSL_TRACE("placeholder id: %s", pPlaceholder.get() ? rtl::OUStringToOString(pPlaceholder->getId(), RTL_TEXTENCODING_UTF8 ).getStr() : "not found");
+                OSL_TRACE("placeholder id: %s", pPlaceholder.get() ? OUStringToOString(pPlaceholder->getId(), RTL_TEXTENCODING_UTF8 ).getStr() : "not found");
             }
 
             if ( !sServiceName.isEmpty() )
@@ -337,7 +336,7 @@ void PPTShape::addShape(
                  {
                     try
                     {
-                        rtl::OUString aTitleText;
+                        OUString aTitleText;
                         Reference< XTextRange > xText( xShape, UNO_QUERY_THROW );
                         aTitleText = xText->getString();
                         if ( !aTitleText.isEmpty() && ( aTitleText.getLength() < 64 ) )    // just a magic value, but we don't want to set slide names which are too long

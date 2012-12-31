@@ -41,7 +41,6 @@
 #include "oox/ppt/layoutfragmenthandler.hxx"
 #include "oox/ppt/pptimport.hxx"
 
-using rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::oox::core;
 using namespace ::oox::drawingml;
@@ -89,7 +88,7 @@ void ResolveTextFields( XmlFilterBase& rFilter )
             Reference< XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
             if ( xPropSetInfo->hasPropertyByName( sURL ) )
             {
-                rtl::OUString aURL;
+                OUString aURL;
                 if ( xPropSet->getPropertyValue( sURL ) >>= aURL )
                 {
                     const OUString sSlide = CREATE_OUSTRING( "#Slide " );
@@ -136,7 +135,7 @@ void PresentationFragmentHandler::finalizeImport()
     // todo: localized progress bar text
     const Reference< task::XStatusIndicator >& rxStatusIndicator( getFilter().getStatusIndicator() );
     if ( rxStatusIndicator.is() )
-        rxStatusIndicator->start( rtl::OUString(), 10000 );
+        rxStatusIndicator->start( OUString(), 10000 );
 
     try
     {
@@ -163,7 +162,7 @@ void PresentationFragmentHandler::finalizeImport()
             OUString aSlideFragmentPath = getFragmentPathFromRelId( maSlidesVector[ nSlide ] );
             if( !aSlideFragmentPath.isEmpty() )
             {
-				rtl::OUString aMasterFragmentPath;
+                OUString aMasterFragmentPath;
                 SlidePersistPtr pMasterPersistPtr;
                 SlidePersistPtr pSlidePersistPtr( new SlidePersist( rFilter, sal_False, sal_False, xSlide,
                                     ShapePtr( new PPTShape( Slide, "com.sun.star.drawing.GroupShape" ) ), mpTextListStyle ) );
@@ -286,9 +285,9 @@ void PresentationFragmentHandler::finalizeImport()
     }
     catch( uno::Exception& )
     {
-        OSL_FAIL( OString(rtl::OString("oox::ppt::PresentationFragmentHandler::EndDocument(), "
+        OSL_FAIL( OString(OString("oox::ppt::PresentationFragmentHandler::EndDocument(), "
                     "exception caught: ") +
-            rtl::OUStringToOString(
+            OUStringToOString(
                 comphelper::anyToString( cppu::getCaughtException() ),
                 RTL_TEXTENCODING_UTF8 )).getStr() );
 

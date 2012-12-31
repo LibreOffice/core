@@ -61,8 +61,6 @@ using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::xml::sax;
 using ::com::sun::star::beans::NamedValue;
 
-using ::rtl::OUString;
-
 namespace oox { namespace ppt {
 
     struct AnimColor
@@ -257,7 +255,7 @@ namespace oox { namespace ppt {
                         switch( maType )
                         {
                         case XML_verb:
-                            aParamValue.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("Verb"));
+                            aParamValue.Name = "Verb";
                             // TODO make sure msCommand has what we want
                             aParamValue.Value <<= msCommand.toInt32();
                             nCommand = EffectCommands::VERB;
@@ -272,7 +270,7 @@ namespace oox { namespace ppt {
                             {
                                 nCommand = EffectCommands::PLAY;
                             }
-                            else if( msCommand.compareToAscii( RTL_CONSTASCII_STRINGPARAM("playFrom") ) == 0 )
+                            else if( msCommand.compareToAscii( "playFrom" ) == 0 )
                             {
                                 const OUString aMediaTime( msCommand.copy( 9, msCommand.getLength() - 10 ) );
                                 rtl_math_ConversionStatus eStatus;

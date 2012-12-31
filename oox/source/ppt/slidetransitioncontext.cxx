@@ -31,7 +31,6 @@
 #include "oox/drawingml/shapegroupcontext.hxx"
 #include "oox/helper/attributelist.hxx"
 
-using rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::oox::core;
 using namespace ::oox::drawingml;

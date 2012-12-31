@@ -56,7 +56,7 @@ CustomShowContext::~CustomShowContext( )
     switch( aElementToken )
     {
         case PPT_TOKEN( sld ) :
-            mrCustomShow.maSldLst.push_back( rAttribs.getString( R_TOKEN( id ), rtl::OUString() ) );
+            mrCustomShow.maSldLst.push_back( rAttribs.getString( R_TOKEN( id ), OUString() ) );
             return this;
         default:
         break;

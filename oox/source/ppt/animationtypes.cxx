@@ -31,7 +31,7 @@ using namespace ::com::sun::star::xml::sax;
 namespace oox { namespace ppt {
 
 // ST_TLTime
-Any GetTime(  const ::rtl::OUString & val )
+Any GetTime(  const OUString & val )
 {
     Any aDuration;
     if( val.compareToAscii( "indefinite" ) == 0 )
@@ -47,7 +47,7 @@ Any GetTime(  const ::rtl::OUString & val )
 
 
 // ST_TLTimeAnimateValueTime
-Any GetTimeAnimateValueTime( const ::rtl::OUString & val )
+Any GetTimeAnimateValueTime( const OUString & val )
 {
     Any aPercent;
     if( val.compareToAscii( "indefinite" ) == 0 )

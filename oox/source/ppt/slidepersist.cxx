@@ -208,13 +208,13 @@ void SlidePersist::applyTextStyles( const XmlFilterBase& rFilterBase )
             if ( aXNameAccess.is() && aXNamed.is() )
             {
                 oox::drawingml::TextListStylePtr pTextListStylePtr;
-                rtl::OUString aStyle;
-                rtl::OUString aFamily;
+                OUString aStyle;
+                OUString aFamily;
 
-                const rtl::OUString sOutline( RTL_CONSTASCII_USTRINGPARAM( "outline1" ) );
-                const rtl::OUString sTitle( RTL_CONSTASCII_USTRINGPARAM( "title" ) );
-                const rtl::OUString sStandard( RTL_CONSTASCII_USTRINGPARAM( "standard" ) );
-                const rtl::OUString sSubtitle( RTL_CONSTASCII_USTRINGPARAM( "subtitle" ) );
+                const OUString sOutline( "outline1" );
+                const OUString sTitle( "title" );
+                const OUString sStandard( "standard" );
+                const OUString sSubtitle( "subtitle" );
 
                 for( int i = 0; i < 4; i++ )    // todo: aggregation of bodystyle (subtitle)
                 {
@@ -245,7 +245,7 @@ void SlidePersist::applyTextStyles( const XmlFilterBase& rFilterBase )
                         {
                             pTextListStylePtr = maOtherTextStylePtr;
                             aStyle = sStandard;
-                            aFamily = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "graphics" ) );
+                            aFamily = "graphics";
                             break;
                         }
                         case 5 :    // subtitle
@@ -276,7 +276,7 @@ void SlidePersist::applyTextStyles( const XmlFilterBase& rFilterBase )
                                             {
                                                 sal_Char pOutline[ 9 ] = "outline1";
                                                 pOutline[ 7 ] = static_cast< sal_Char >( '0' + nLevel );
-                                                rtl::OUString sOutlineStyle( rtl::OUString::createFromAscii( pOutline ) );
+                                                OUString sOutlineStyle( OUString::createFromAscii( pOutline ) );
                                                 if ( xFamilies->hasByName( sOutlineStyle ) )
                                                 {
                                                     xFamilies->getByName( sOutlineStyle ) >>= aXStyle;
@@ -313,7 +313,7 @@ void SlidePersist::hideShapesAsMasterShapes()
             std::vector< oox::drawingml::ShapePtr >::iterator aChildIter( rChildren.begin() );
             while( aChildIter != rChildren.end() ) {
                 PPTShape* pPPTShape = dynamic_cast< PPTShape* >( (*aChildIter++).get() );
-                OSL_TRACE("hide shape with id: %s", rtl::OUStringToOString(pPPTShape->getId(), RTL_TEXTENCODING_UTF8 ).getStr());
+                OSL_TRACE("hide shape with id: %s", OUStringToOString(pPPTShape->getId(), RTL_TEXTENCODING_UTF8 ).getStr());
                 pPPTShape->setHiddenMasterShape( true );
             }
         }
