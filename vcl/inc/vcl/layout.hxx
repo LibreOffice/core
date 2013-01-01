@@ -201,9 +201,8 @@ class VCL_DLLPUBLIC VclButtonBox : public VclBox
 {
 public:
     VclButtonBox(Window *pParent, int nSpacing)
-        : VclBox(pParent, true, nSpacing)
+        : VclBox(pParent, false, nSpacing)
         , m_eLayoutStyle(VCL_BUTTONBOX_DEFAULT_STYLE)
-        , m_bHomogeneousGroups(false)
     {
     }
     void set_layout(VclButtonBoxStyle eStyle)
@@ -218,20 +217,15 @@ public:
 protected:
     virtual Size calculateRequisition() const;
     virtual void setAllocation(const Size &rAllocation);
+    Size addSpacing(const Size &rSize, sal_uInt16 nVisibleChildren) const;
 private:
     VclButtonBoxStyle m_eLayoutStyle;
-    bool m_bHomogeneousGroups;
     struct Requisition
     {
-        sal_uInt16 m_nMainGroupChildren;
-        sal_uInt16 m_nSubGroupChildren;
+        std::vector<long> m_aMainGroupDimensions;
+        std::vector<long> m_aSubGroupDimensions;
         Size m_aMainGroupSize;
         Size m_aSubGroupSize;
-        Requisition()
-            : m_nMainGroupChildren(0)
-            , m_nSubGroupChildren(0)
-        {
-        }
     };
     Requisition calculatePrimarySecondaryRequisitions() const;
     Size addReqGroups(const VclButtonBox::Requisition &rReq) const;
