@@ -3739,10 +3739,12 @@ bool ScDocFunc::AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
 
             ScMarkData::iterator itr = aMark.begin(), itrEnd = aMark.end();
             for (; itr != itrEnd && *itr < nTabCount; ++itr)
+            {
                 SetWidthOrHeight( sal_True, 1,nCols, *itr, SC_SIZE_VISOPT, STD_EXTRA_WIDTH, false, sal_True);
                 SetWidthOrHeight( false,1,nRows, *itr, SC_SIZE_VISOPT, 0, false, false);
                 rDocShell.PostPaint( 0,0,*itr, MAXCOL,MAXROW,*itr,
                                 PAINT_GRID | PAINT_LEFT | PAINT_TOP );
+            }
         }
         else
         {
