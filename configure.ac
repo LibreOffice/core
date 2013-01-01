@@ -7546,6 +7546,11 @@ if test $enable_python = system; then
                 break
             fi
         done
+        AC_MSG_CHECKING([for python version])
+        AS_IF([test -n "$PYTHON_VERSION"],
+              [AC_MSG_RESULT([$PYTHON_VERSION])],
+              [AC_MSG_RESULT([not found])
+               AC_MSG_ERROR([no usable python found])])
         test -n "$PYTHON_CFLAGS" && break
     fi
 fi
