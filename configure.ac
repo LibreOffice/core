@@ -8255,6 +8255,9 @@ if test "$with_system_nss" = "yes"; then
     libo_MINGW_CHECK_DLL([SSL3], [ssl3])
 else
     SYSTEM_NSS="NO"
+	NSS_MAJOR="3"
+	NSS_MINOR="13"
+	NSS_PATCH="5"
     BUILD_TYPE="$BUILD_TYPE NSS"
     AC_MSG_RESULT([internal])
     if test "$build_os" = "cygwin"; then
@@ -8275,6 +8278,9 @@ from http://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32])
     fi
 fi # system nss
 AC_SUBST(SYSTEM_NSS)
+AC_SUBST(NSS_MAJOR)
+AC_SUBST(NSS_MINOR)
+AC_SUBST(NSS_PATCH)
 AC_SUBST(NSS_CFLAGS)
 AC_SUBST(NSS_LIBS)
 AC_SUBST(NSSBUILDTOOLS)

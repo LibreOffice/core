@@ -97,10 +97,29 @@
 -    ac_nss_lib_dir="/usr/lib /usr/lib64 /usr/local/lib /usr/lib/$ac_mozilla_name /usr/local/lib/$ac_mozilla_name"
 -    ac_nss_inc_dir="/usr/include /usr/include/mozilla /usr/local/include /usr/local/include/mozilla /usr/include/$ac_mozilla_name /usr/local/include/$ac_mozilla_name"
 +    ac_nss_lib_dir="${SOLARVERSION}/${INPATH}/lib${UPDMINOREXT}"
-+    ac_nss_inc_dir="${SOLARVERSION}/${INPATH}/inc${UPDMINOREXT}/mozilla"
++    ac_nss_inc_dir="${WORKDIR}/UnpackedTarball/nss/mozilla/dist/out/include ${WORKDIR}/UnpackedTarball/nss/mozilla/dist/public"
  
      AC_MSG_CHECKING(for nspr libraries >= $NSPR_MIN_VERSION)
      NSPR_INCLUDES_FOUND="no"
+@@ -637,15 +660,15 @@
+ 	NSPR_PRINIT_H="$with_nspr/include/prinit.h"
+     else
+ 	for dir in $ac_nss_inc_dir ; do
+-    	    if test -f $dir/nspr/prinit.h ; then
++    	    if test -f $dir/prinit.h ; then
+     		dnl do not add -I/usr/include because compiler does it anyway
+         	if test "z$dir" = "z/usr/include" ; then
+     		    NSPR_CFLAGS=""
+     		else
+-    		    NSPR_CFLAGS="-I$dir/nspr"
++    		    NSPR_CFLAGS="-I$dir"
+     		fi
+ 		NSPR_INCLUDES_FOUND="yes"
+-		NSPR_PRINIT_H="$dir/nspr/prinit.h"
++		NSPR_PRINIT_H="$dir/prinit.h"
+     		break
+     	    fi
+ 	done
 @@ -648,7 +671,7 @@
  	done
  	

@@ -1,3 +1,2 @@
 ns	nss	: solenv soltools NULL
-ns	nss						nmake	-	usr1	ns_mkout NULL
-ns	nss						nmake	-	all	ns_nss NULL
+ns	nss\prj						nmake	-	all	ns_nss NULL
