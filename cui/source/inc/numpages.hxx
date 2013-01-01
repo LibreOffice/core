@@ -65,8 +65,7 @@ class SvxSingleNumPickTabPage : public SfxTabPage
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
 
-    FixedLine               aValuesFL;
-    SvxNumValueSet*         pExamplesVS;
+    SvxNumValueSet*         m_pExamplesVS;
     SvxNumSettingsArr_Impl  aNumSettingsArr;
     SvxNumRule*             pActNum;
     SvxNumRule*             pSaveNum;
@@ -142,8 +141,7 @@ class SvxNumPickTabPage : public SfxTabPage
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
 
-    FixedLine           aValuesFL;
-    SvxNumValueSet*     pExamplesVS;
+    SvxNumValueSet*     m_pExamplesVS;
     String              sNumCharFmtName;
     String              sBulletCharFmtName;
 

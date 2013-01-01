@@ -184,22 +184,20 @@ static Font& lcl_GetDefaultBulletFont()
 }
 
 SvxSingleNumPickTabPage::SvxSingleNumPickTabPage(Window* pParent,
-                               const SfxItemSet& rSet)  :
-    SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_PICK_SINGLE_NUM ), rSet ),
-    aValuesFL(      this, CUI_RES(FL_VALUES) ),
-    pExamplesVS(    new SvxNumValueSet(this, CUI_RES(VS_VALUES), NUM_PAGETYPE_SINGLENUM )),
-    pActNum(0),
-    pSaveNum(0),
-    nActNumLvl( USHRT_MAX ),
-    bModified(sal_False),
-    bPreset(sal_False),
-    nNumItemId(SID_ATTR_NUMBERING_RULE)
+                               const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "PickNumberingPage", "cui/ui/picknumberingpage.ui", rSet)
+    , pActNum(0)
+    , pSaveNum(0)
+    , nActNumLvl(USHRT_MAX)
+    , bModified(false)
+    , bPreset(false)
+    , nNumItemId(SID_ATTR_NUMBERING_RULE)
 {
-    FreeResource();
     SetExchangeSupport();
-    pExamplesVS->SetSelectHdl(LINK(this, SvxSingleNumPickTabPage, NumSelectHdl_Impl));
-    pExamplesVS->SetDoubleClickHdl(LINK(this, SvxSingleNumPickTabPage, DoubleClickHdl_Impl));
-    pExamplesVS->SetHelpId(HID_VALUESET_SINGLENUM );
+    get(m_pExamplesVS, "valueset");
+    m_pExamplesVS->init(NUM_PAGETYPE_SINGLENUM);
+    m_pExamplesVS->SetSelectHdl(LINK(this, SvxSingleNumPickTabPage, NumSelectHdl_Impl));
+    m_pExamplesVS->SetDoubleClickHdl(LINK(this, SvxSingleNumPickTabPage, DoubleClickHdl_Impl));
 
     Reference<XDefaultNumberingProvider> xDefNum = lcl_GetNumberingProvider();
     if(xDefNum.is())
@@ -221,18 +219,17 @@ SvxSingleNumPickTabPage::SvxSingleNumPickTabPage(Window* pParent,
                 aNumSettingsArr.push_back(pNew);
             }
         }
-        catch(Exception&)
+        catch(const Exception&)
         {
         }
         Reference<XNumberingFormatter> xFormat(xDefNum, UNO_QUERY);
-        pExamplesVS->SetNumberingSettings(aNumberings, xFormat, rLocale);
+        m_pExamplesVS->SetNumberingSettings(aNumberings, xFormat, rLocale);
     }
 }
 
- SvxSingleNumPickTabPage::~SvxSingleNumPickTabPage()
+SvxSingleNumPickTabPage::~SvxSingleNumPickTabPage()
 {
     delete pActNum;
-    delete pExamplesVS;
     delete pSaveNum;
 }
 
@@ -275,13 +272,13 @@ void  SvxSingleNumPickTabPage::ActivatePage(const SfxItemSet& rSet)
     if(*pSaveNum != *pActNum)
     {
         *pActNum = *pSaveNum;
-        pExamplesVS->SetNoSelection();
+        m_pExamplesVS->SetNoSelection();
     }
 
     if(pActNum && (!lcl_IsNumFmtSet(pActNum, nActNumLvl) || bIsPreset))
     {
-        pExamplesVS->SelectItem(1);
-        NumSelectHdl_Impl(pExamplesVS);
+        m_pExamplesVS->SelectItem(1);
+        NumSelectHdl_Impl(m_pExamplesVS);
         bPreset = sal_True;
     }
     bPreset |= bIsPreset;
@@ -329,7 +326,7 @@ IMPL_LINK_NOARG(SvxSingleNumPickTabPage, NumSelectHdl_Impl)
     {
         bPreset = sal_False;
         bModified = sal_True;
-        sal_uInt16 nIdx = pExamplesVS->GetSelectItemId() - 1;
+        sal_uInt16 nIdx = m_pExamplesVS->GetSelectItemId() - 1;
         DBG_ASSERT(aNumSettingsArr.size() > nIdx, "wrong index");
         if(aNumSettingsArr.size() <= nIdx)
             return 0;
@@ -367,7 +364,7 @@ IMPL_LINK_NOARG(SvxSingleNumPickTabPage, NumSelectHdl_Impl)
 
 IMPL_LINK_NOARG(SvxSingleNumPickTabPage, DoubleClickHdl_Impl)
 {
-    NumSelectHdl_Impl(pExamplesVS);
+    NumSelectHdl_Impl(m_pExamplesVS);
     OKButton& rOk = GetTabDialog()->GetOKButton();
     rOk.GetClickHdl().Call(&rOk);
     return 0;
@@ -376,7 +373,7 @@ IMPL_LINK_NOARG(SvxSingleNumPickTabPage, DoubleClickHdl_Impl)
 
 SvxBulletPickTabPage::SvxBulletPickTabPage(Window* pParent,
                                const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "PickBulletPage", "cui/ui/pickbulletpage.ui", rSet)
+    : SfxTabPage(pParent, "PickNumberingPage", "cui/ui/picknumberingpage.ui", rSet)
     , pActNum(0)
     , pSaveNum(0)
     , nActNumLvl(USHRT_MAX)
@@ -538,25 +535,21 @@ void SvxBulletPickTabPage::PageCreated(SfxAllItemSet aSet)
 
 
 SvxNumPickTabPage::SvxNumPickTabPage(Window* pParent,
-                               const SfxItemSet& rSet) :
-    SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_PICK_NUM ), rSet ),
-    aValuesFL(      this, CUI_RES(FL_VALUES) ),
-    pExamplesVS(    new SvxNumValueSet(this, CUI_RES(VS_VALUES), NUM_PAGETYPE_NUM )),
-    pActNum(0),
-    pSaveNum(0),
-    nActNumLvl( USHRT_MAX ),
-    nNumItemId(SID_ATTR_NUMBERING_RULE),
-    bModified(sal_False),
-    bPreset(sal_False)
+                               const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "PickNumberingPage", "cui/ui/picknumberingpage.ui", rSet)
+    , pActNum(0)
+    , pSaveNum(0)
+    , nActNumLvl(USHRT_MAX)
+    , nNumItemId(SID_ATTR_NUMBERING_RULE)
+    , bModified(false)
+    , bPreset(false)
 {
-
-    FreeResource();
-
     SetExchangeSupport();
 
-    pExamplesVS->SetSelectHdl(LINK(this, SvxNumPickTabPage, NumSelectHdl_Impl));
-    pExamplesVS->SetDoubleClickHdl(LINK(this, SvxNumPickTabPage, DoubleClickHdl_Impl));
-    pExamplesVS->SetHelpId(HID_VALUESET_NUM       );
+    get(m_pExamplesVS, "valueset");
+    m_pExamplesVS->init(NUM_PAGETYPE_NUM);
+    m_pExamplesVS->SetSelectHdl(LINK(this, SvxNumPickTabPage, NumSelectHdl_Impl));
+    m_pExamplesVS->SetDoubleClickHdl(LINK(this, SvxNumPickTabPage, DoubleClickHdl_Impl));
 
     Reference<XDefaultNumberingProvider> xDefNum = lcl_GetNumberingProvider();
     if(xDefNum.is())
@@ -584,18 +577,17 @@ SvxNumPickTabPage::SvxNumPickTabPage(Window* pParent,
                 }
             }
         }
-        catch(Exception&)
+        catch(const Exception&)
         {
         }
         Reference<XNumberingFormatter> xFormat(xDefNum, UNO_QUERY);
-        pExamplesVS->SetOutlineNumberingSettings(aOutlineAccess, xFormat, rLocale);
+        m_pExamplesVS->SetOutlineNumberingSettings(aOutlineAccess, xFormat, rLocale);
     }
 }
 
- SvxNumPickTabPage::~SvxNumPickTabPage()
+SvxNumPickTabPage::~SvxNumPickTabPage()
 {
     delete pActNum;
-    delete pExamplesVS;
     delete pSaveNum;
 }
 
@@ -637,13 +629,13 @@ void  SvxNumPickTabPage::ActivatePage(const SfxItemSet& rSet)
     if(*pSaveNum != *pActNum)
     {
         *pActNum = *pSaveNum;
-        pExamplesVS->SetNoSelection();
+        m_pExamplesVS->SetNoSelection();
     }
 
     if(pActNum && (!lcl_IsNumFmtSet(pActNum, nActNumLvl) || bIsPreset))
     {
-        pExamplesVS->SelectItem(1);
-        NumSelectHdl_Impl(pExamplesVS);
+        m_pExamplesVS->SelectItem(1);
+        NumSelectHdl_Impl(m_pExamplesVS);
         bPreset = sal_True;
     }
     bPreset |= bIsPreset;
@@ -695,7 +687,7 @@ IMPL_LINK_NOARG(SvxNumPickTabPage, NumSelectHdl_Impl)
 
         const FontList*  pList = 0;
 
-        SvxNumSettingsArr_Impl& rItemArr = aNumSettingsArrays[pExamplesVS->GetSelectItemId() - 1];
+        SvxNumSettingsArr_Impl& rItemArr = aNumSettingsArrays[m_pExamplesVS->GetSelectItemId() - 1];
 
         Font& rActBulletFont = lcl_GetDefaultBulletFont();
         SvxNumSettings_Impl* pLevelSettings = 0;
@@ -774,7 +766,7 @@ IMPL_LINK_NOARG(SvxNumPickTabPage, NumSelectHdl_Impl)
 
 IMPL_LINK_NOARG(SvxNumPickTabPage, DoubleClickHdl_Impl)
 {
-    NumSelectHdl_Impl(pExamplesVS);
+    NumSelectHdl_Impl(m_pExamplesVS);
     OKButton& rOk = GetTabDialog()->GetOKButton();
     rOk.GetClickHdl().Call(&rOk);
     return 0;
@@ -789,7 +781,6 @@ void SvxNumPickTabPage::PageCreated(SfxAllItemSet aSet)
     if (pNumCharFmt &&pBulletCharFmt)
         SetCharFmtNames( pNumCharFmt->GetValue(),pBulletCharFmt->GetValue());
 }
-
 
 SvxBitmapPickTabPage::SvxBitmapPickTabPage(Window* pParent,
                                const SfxItemSet& rSet) :
