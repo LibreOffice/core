@@ -75,7 +75,7 @@ MediaControl::MediaControl( Window* pParent, MediaControlStyle eControlStyle ) :
     meControlStyle( eControlStyle ),
     mbLocked( false )
 {
-    const String aTimeText( RTL_CONSTASCII_USTRINGPARAM( " 00:00:00/00:00:00 " ) );
+    const String aTimeText( " 00:00:00/00:00:00 " );
 
     SetBackground();
     SetPaintTransparent( sal_True );
@@ -415,7 +415,7 @@ void MediaControl::implUpdateTimeField( double fCurTime )
         const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();
 
         aTimeString += rLocaleData.getDuration( Time( 0, 0, static_cast< sal_uInt32 >( floor( fCurTime ) ) ) );
-        aTimeString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " / " ));
+        aTimeString.AppendAscii( " / " );
         aTimeString += rLocaleData.getDuration( Time( 0, 0, static_cast< sal_uInt32 >( floor( maItem.getDuration() ) )) );
 
         if( maTimeEdit.GetText() != aTimeString )

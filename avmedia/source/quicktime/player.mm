@@ -394,7 +394,7 @@ uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber(  )
 ::rtl::OUString SAL_CALL Player::getImplementationName(  )
     throw (uno::RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( AVMEDIA_QUICKTIME_PLAYER_IMPLEMENTATIONNAME ) );
+    return ::rtl::OUString( AVMEDIA_QUICKTIME_PLAYER_IMPLEMENTATIONNAME );
 }
 
 // ------------------------------------------------------------------------------
@@ -402,7 +402,7 @@ uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber(  )
 sal_Bool SAL_CALL Player::supportsService( const ::rtl::OUString& ServiceName )
     throw (uno::RuntimeException)
 {
-    return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( AVMEDIA_QUICKTIME_PLAYER_SERVICENAME ) );
+    return ( ServiceName == AVMEDIA_QUICKTIME_PLAYER_SERVICENAME );
 }
 
 // ------------------------------------------------------------------------------
@@ -411,7 +411,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL Player::getSupportedServiceNames(  )
     throw (uno::RuntimeException)
 {
     uno::Sequence< ::rtl::OUString > aRet(1);
-    aRet[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( AVMEDIA_QUICKTIME_PLAYER_SERVICENAME ) );
+    aRet[0] = ::rtl::OUString( AVMEDIA_QUICKTIME_PLAYER_SERVICENAME );
 
     return aRet;
 }

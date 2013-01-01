@@ -317,7 +317,7 @@ void SAL_CALL Window::removeEventListener( const uno::Reference< lang::XEventLis
 ::rtl::OUString SAL_CALL Window::getImplementationName(  )
     throw (uno::RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( AVMEDIA_QUICKTIME_WINDOW_IMPLEMENTATIONNAME ) );
+    return ::rtl::OUString( AVMEDIA_QUICKTIME_WINDOW_IMPLEMENTATIONNAME );
 }
 
 // ------------------------------------------------------------------------------
@@ -325,7 +325,7 @@ void SAL_CALL Window::removeEventListener( const uno::Reference< lang::XEventLis
 sal_Bool SAL_CALL Window::supportsService( const ::rtl::OUString& ServiceName )
     throw (uno::RuntimeException)
 {
-    return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( AVMEDIA_QUICKTIME_WINDOW_SERVICENAME ) );
+    return ( ServiceName == AVMEDIA_QUICKTIME_WINDOW_SERVICENAME );
 }
 
 // ------------------------------------------------------------------------------
@@ -334,7 +334,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL Window::getSupportedServiceNames(  )
     throw (uno::RuntimeException)
 {
     uno::Sequence< ::rtl::OUString > aRet(1);
-    aRet[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( AVMEDIA_QUICKTIME_WINDOW_SERVICENAME ) );
+    aRet[0] = ::rtl::OUString( AVMEDIA_QUICKTIME_WINDOW_SERVICENAME );
 
     return aRet;
 }
