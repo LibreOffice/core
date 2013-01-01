@@ -744,7 +744,7 @@ void LngSvcMgr::UpdateAll()
         const OUString *pNodeName = aNodeNames.getConstArray();
         for (i = 0;  i < nNodeNames;  ++i)
         {
-            Locale aLocale( LanguageTag( pNodeName[i]).getLocale() );
+            Locale aLocale( (LanguageTag(pNodeName[i])).getLocale() );
             Sequence< OUString > aCfgSvcs( getConfiguredServices( aService, aLocale ));
             Sequence< OUString > aAvailSvcs( getAvailableServices( aService, aLocale ));
 
@@ -763,7 +763,7 @@ void LngSvcMgr::UpdateAll()
         const Locale *pAvailLocale = aAvailLocales.getConstArray();
         for (i = 0;  i < nAvailLocales;  ++i)
         {
-            OUString aCfgLocaleStr( LanguageTag( pAvailLocale[i] ).getBcp47() );
+            OUString aCfgLocaleStr( (LanguageTag(pAvailLocale[i])).getBcp47() );
 
             Sequence< OUString > aAvailSvcs( getAvailableServices( aService, pAvailLocale[i] ));
 
@@ -863,7 +863,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
         if (0 == rName.compareTo( aSpellCheckerList, aSpellCheckerList.getLength() ))
         {
             // delete old cached data, needs to be acquired new on demand
-			clearSvcInfoArray(pAvailSpellSvcs);
+            clearSvcInfoArray(pAvailSpellSvcs);
 
             OUString aNode( aSpellCheckerList );
             if (lcl_SeqHasString( aSpellCheckerListEntries, aKeyText ))
@@ -888,7 +888,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
         else if (0 == rName.compareTo( aGrammarCheckerList, aGrammarCheckerList.getLength() ))
         {
             // delete old cached data, needs to be acquired new on demand
-			clearSvcInfoArray(pAvailGrammarSvcs);
+            clearSvcInfoArray(pAvailGrammarSvcs);
 
             OUString aNode( aGrammarCheckerList );
             if (lcl_SeqHasString( aGrammarCheckerListEntries, aKeyText ))
@@ -916,7 +916,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
         else if (0 == rName.compareTo( aHyphenatorList, aHyphenatorList.getLength() ))
         {
             // delete old cached data, needs to be acquired new on demand
-			clearSvcInfoArray(pAvailHyphSvcs);
+            clearSvcInfoArray(pAvailHyphSvcs);
 
             OUString aNode( aHyphenatorList );
             if (lcl_SeqHasString( aHyphenatorListEntries, aKeyText ))
@@ -941,7 +941,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
         else if (0 == rName.compareTo( aThesaurusList, aThesaurusList.getLength() ))
         {
             // delete old cached data, needs to be acquired new on demand
-			clearSvcInfoArray(pAvailThesSvcs);
+            clearSvcInfoArray(pAvailThesSvcs);
 
             OUString aNode( aThesaurusList );
             if (lcl_SeqHasString( aThesaurusListEntries, aKeyText ))
@@ -1840,7 +1840,7 @@ sal_Bool LngSvcMgr::SaveCfgSvcs( const String &rServiceName )
             aCfgAny <<= aSvcImplNames;
             DBG_ASSERT( aCfgAny.hasValue(), "missing value for 'Any' type" );
 
-            OUString aCfgLocaleStr( LanguageTag( pLocale[i] ).getBcp47() );
+            OUString aCfgLocaleStr( (LanguageTag(pLocale[i])).getBcp47() );
             pValue->Value = aCfgAny;
             pValue->Name  = aNodeName;
             pValue->Name += OUString::valueOf( (sal_Unicode) '/' );
