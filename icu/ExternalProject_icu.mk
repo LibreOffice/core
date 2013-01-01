@@ -26,7 +26,7 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 	cd $(EXTERNAL_WORKDIR)/source \
 	&& export LIB="$(ILIB)" \
 	&& CFLAGS="$(SOLARINC)" CPPFLAGS="$(SOLARINC)" CXXFLAGS="$(SOLARINC)" ./runConfigureICU Cygwin/MSVC \
-	&& $(GNUMAKE) \
+	&& $(MAKE) \
 	&& touch $@
 else
 $(call gb_ExternalProject_get_state_target,icu,build) :
@@ -39,7 +39,7 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 	$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
 		--with-cross-build=$(subst $(INPATH),$(INPATH_FOR_BUILD),$(call gb_UnpackedTarball_get_dir,icu))/source) \
 	--enable-layout --disable-static --enable-shared --disable-samples \
-	&& $(GNUMAKE) \
+	&& $(MAKE) \
 	&& for lib in icudata icuin icuuc icule icutu; do \
 	@touch $$lib; \
 	done \
@@ -77,7 +77,7 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 		--disable-static --enable-shared $(if $(filter ANDROID,$(OS)),--with-library-suffix=lo)) \
 		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)\
 			--with-cross-build=$(subst $(INPATH),$(INPATH_FOR_BUILD),$(call gb_UnpackedTarball_get_dir,icu))/source)\
-	&& $(GNUMAKE) \
+	&& $(MAKE) \
 	&& touch $@
 
 endif

@@ -31,7 +31,7 @@ $(call gb_ExternalProject_get_state_target,rasqal,build):
 	--disable-pcre --with-decimal=none --with-www=xml \
 	--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
 	lt_cv_cc_dll_switch="-shared" \
-	&& $(GNUMAKE) \
+	&& $(MAKE) \
 	&& touch $@
 else
 $(call gb_ExternalProject_get_state_target,rasqal,build):
@@ -50,7 +50,7 @@ $(call gb_ExternalProject_get_state_target,rasqal,build):
 	$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 	$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO)\
 	$(if $(filter IOS ANDROID,$(OS)),--disable-shared,--disable-static) \
-	&& $(GNUMAKE) \
+	&& $(MAKE) \
 	&& touch $@
 endif
 # vim: set noet sw=4 ts=4:

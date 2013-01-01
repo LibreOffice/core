@@ -32,7 +32,7 @@ $(call gb_ExternalProject_get_state_target,redland,build):
 	--with-www=xml --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
 	lt_cv_cc_dll_switch="-shared" \
 	&& cd librdf \
-	&& $(GNUMAKE) \
+	&& $(MAKE) \
 	&& touch $@
 else
 $(call gb_ExternalProject_get_state_target,redland,build):
@@ -55,7 +55,7 @@ $(call gb_ExternalProject_get_state_target,redland,build):
 	$(if $(filter IOS ANDROID,$(OS)),--disable-shared,--disable-static) \
 	$(if $(filter-out ANDROID,$(OS)),--with-threads) \
 	&& cd librdf \
-	&& $(GNUMAKE) \
+	&& $(MAKE) \
 	&& touch $@
 endif
 # vim: set noet sw=4 ts=4:

@@ -29,7 +29,7 @@ $(call gb_ExternalProject_get_state_target,raptor,build):
 	--with-regex-library=posix --with-decimal=none --with-www=xml \
 	--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) --target=$(HOST_PLATFORM) \
 	lt_cv_cc_dll_switch="-shared" \
-	&& $(GNUMAKE) \
+	&& $(MAKE) \
 	&& touch $@
 else
 $(call gb_ExternalProject_get_state_target,raptor,build):
@@ -53,7 +53,7 @@ $(call gb_ExternalProject_get_state_target,raptor,build):
 	$(if $(filter NO,$(SYSTEM_LIBXML)), \
 		LIBXML2LIB=-lxml2 \
 		--with-xml2-config=$(OUTDIR)/bin/xml2-config) \
-	&& $(GNUMAKE) \
+	&& $(MAKE) \
 	&& touch $@
 endif
 # vim: set noet sw=4 ts=4:
