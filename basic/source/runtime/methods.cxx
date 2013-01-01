@@ -3294,7 +3294,11 @@ RTLFUNC(Shell)
                     NULL, 0,
                     &pApp ) == osl_Process_E_None;
 
-        osl_freeProcessHandle( pApp );
+        // 53521 only free process handle on success
+        if (bSucc)
+        {
+            osl_freeProcessHandle( pApp );
+        }
 
         for(int j = 0; i < nParamCount; i++)
         {
