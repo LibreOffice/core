@@ -372,7 +372,7 @@ namespace sdr
             }
             else
             {
-                mpItemSet->Put(SvxAdjustItem(SVX_ADJUST_CENTER, EE_PARA_JUST));
+                mpItemSet->Put(SvxAdjustItem(SVX_ADJUST_LEFT, EE_PARA_JUST));
                 mpItemSet->Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_CENTER));
                 mpItemSet->Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_CENTER));
             }
