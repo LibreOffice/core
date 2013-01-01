@@ -179,7 +179,6 @@ struct AnnotatingVisitor
             case XML_LINEARGRADIENT:
             {
                 const sal_Int32 nNumAttrs( xAttributes->getLength() );
-                rtl::OUString sAttributeValue;
                 maGradientVector.push_back(Gradient(Gradient::LINEAR));
 
                 // do we have a reference to a parent gradient? parse
@@ -217,7 +216,6 @@ struct AnnotatingVisitor
             case XML_RADIALGRADIENT:
             {
                 const sal_Int32 nNumAttrs( xAttributes->getLength() );
-                rtl::OUString sAttributeValue;
                 maGradientVector.push_back(Gradient(Gradient::RADIAL));
 
                 // do we have a reference to a parent gradient? parse
@@ -255,7 +253,6 @@ struct AnnotatingVisitor
             case XML_STOP:
             {
                 const sal_Int32 nNumAttrs( xAttributes->getLength() );
-                rtl::OUString sAttributeValue;
                 maGradientStopVector.push_back(GradientStop());
                 maGradientVector.back().maStops.push_back(maGradientStopVector.size()-1);
                 for( sal_Int32 i=0; i<nNumAttrs; ++i )
@@ -518,7 +515,8 @@ struct AnnotatingVisitor
             double rRotate, rShearX;
             if( rState.maFillGradient.maTransform.decompose(rScale, rTranslate, rRotate, rShearX) )
                 xAttrs->AddAttribute( "draw:angle",
-                                      rtl::OUString::valueOf(rRotate*1800.0/M_PI ) );
+                                      rtl::OUString::valueOf(rRotate*1800.0/M_PI + 900) );
+            SAL_INFO("svg", "maStops " << rState.maFillGradient.maStops[0] << " " << rState.maFillGradient.maStops[1] );
             xAttrs->AddAttribute( "draw:start-color",
                                   getOdfColor(
                                       maGradientStopVector[
@@ -813,6 +811,11 @@ struct AnnotatingVisitor
                             const sal_Int32 nTokenId,
                             const rtl::OUString& sValue )
     {
+        rtl::OString aValueUtf8( sValue.getStr(),
+                                 sValue.getLength(),
+                                 RTL_TEXTENCODING_UTF8 );
+
+        SAL_INFO("svg", "nTokenId " << nTokenId);
         switch(nTokenId)
         {
             case XML_HREF:
@@ -836,7 +839,18 @@ struct AnnotatingVisitor
             case XML_STYLE:
                 parseStyle( sValue );
                 break;
+            case XML_STOP_COLOR:
+                parseColor( aValueUtf8.getStr(), io_rGradientStop.maStopColor );
+                break;
+            case XML_STOP_OPACITY:
+                io_rGradientStop.maStopColor.a = sValue.toDouble();
+                if (io_rGradientStop.maStopColor.a < 0)
+                    io_rGradientStop.maStopColor.a = 0;
+                else if (io_rGradientStop.maStopColor.a > 1)
+                    io_rGradientStop.maStopColor.a = 1;
+                break;
             default:
+                SAL_INFO("svg", "nTokenId unknown " << getTokenName(nTokenId));
                 break;
         }
     }
@@ -1031,9 +1045,11 @@ struct AnnotatingVisitor
                 parseTextAlign(maCurrState,aValueUtf8.getStr());
                 break;
             case XML_STOP_COLOR:
+                SAL_INFO("svg", "XML_STOP_COLOR1");
                 if( maGradientVector.empty() ||
                     maGradientVector.back().maStops.empty() )
                     break;
+                SAL_INFO("svg", "XML_STOP_COLOR2");
                 parseColor( aValueUtf8.getStr(),
                             maGradientStopVector[
                                 maGradientVector.back().maStops.back()].maStopColor );

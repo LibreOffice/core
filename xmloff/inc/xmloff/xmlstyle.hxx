@@ -45,6 +45,7 @@ enum XMLStyleStylesElemTokens
     XML_TOK_TEXT_LIST_STYLE,
     XML_TOK_TEXT_OUTLINE,
     XML_TOK_STYLES_GRADIENTSTYLES,
+    XML_TOK_STYLES_LINEARGRADIENTSTYLES,
     XML_TOK_STYLES_HATCHSTYLES,
     XML_TOK_STYLES_BITMAPSTYLES,
     XML_TOK_STYLES_TRANSGRADIENTSTYLES,
@@ -74,8 +75,8 @@ class XMLOFF_DLLPUBLIC SvXMLStyleContext : public SvXMLImportContext
 
     sal_Bool            mbValid : 1;    // Set this to false in CreateAndInsert
                                     // if the style shouldn't be processed
-                                    // by Finish() or si somehow invalid.
-    sal_Bool            mbNew : 1;  // Set this to false in CreateAnsInsert
+                                    // by Finish() or is somehow invalid.
+    sal_Bool            mbNew : 1;  // Set this to false in CreateAndInsert
                                     // if the style is already existing.
     sal_Bool            mbDefaultStyle : 1;
 

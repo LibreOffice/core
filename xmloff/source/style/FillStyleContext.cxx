@@ -18,9 +18,11 @@
  */
 
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/awt/SvgGradient.hpp>
 #include "FillStyleContext.hxx"
 #include <xmloff/xmlimp.hxx>
 #include "xmloff/GradientStyle.hxx"
+#include "xmloff/SvgGradientStyle.hxx"
 #include "xmloff/HatchStyle.hxx"
 #include "xmloff/ImageStyle.hxx"
 #include "TransGradientStyle.hxx"
@@ -30,6 +32,8 @@
 #include <xmloff/nmspmap.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/XMLBase64ImportContext.hxx>
+#include <sax/tools/converter.hxx>
+#include <comphelper/sequence.hxx>
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
@@ -46,7 +50,6 @@ XMLGradientStyleContext::XMLGradientStyleContext( SvXMLImport& rImport, sal_uInt
                                               const uno::Reference< xml::sax::XAttributeList >& xAttrList)
 :   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList)
 {
-
     // start import
     XMLGradientStyleImport aGradientStyle( GetImport() );
     aGradientStyle.importXML( xAttrList, maAny, maStrName );
@@ -81,6 +84,152 @@ void XMLGradientStyleContext::EndElement()
 sal_Bool XMLGradientStyleContext::IsTransient() const
 {
     return sal_True;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
+TYPEINIT1( XMLLinearGradientStyleContext, SvXMLStyleContext );
+
+XMLLinearGradientStyleContext::XMLLinearGradientStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
+                                              const OUString& rLName,
+                                              const uno::Reference< xml::sax::XAttributeList >& xAttrList)
+:   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList)
+{
+    // start import
+    XMLSvgGradientStyleImport aGradientStyle( GetImport() );
+    aGradientStyle.importXML( xAttrList, maAny, maStrName );
+}
+
+XMLLinearGradientStyleContext::~XMLLinearGradientStyleContext()
+{
+}
+
+
+SvXMLImportContext* XMLLinearGradientStyleContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+{
+    if( (XML_NAMESPACE_SVG == nPrefix) && xmloff::token::IsXMLToken( rLocalName, xmloff::token::XML_STOP ) )
+    {
+        return new XMLSvgGradientStopImportContext(GetImport(),
+                                                   nPrefix, rLocalName,
+                                                   *this);
+    }
+    else
+    {
+        return SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
+    }
+}
+
+void XMLLinearGradientStyleContext::EndElement()
+{
+    uno::Reference< container::XNameContainer > xGradient( GetImport().GetGradientHelper() );
+
+    try
+    {
+        if(xGradient.is())
+        {
+            if( xGradient->hasByName( maStrName ) )
+            {
+                xGradient->replaceByName( maStrName, maAny );
+            }
+            else
+            {
+                xGradient->insertByName( maStrName, maAny );
+            }
+        }
+    }
+    catch( container::ElementExistException& )
+    {}
+}
+
+sal_Bool XMLLinearGradientStyleContext::IsTransient() const
+{
+    return sal_True;
+}
+
+void XMLLinearGradientStyleContext::SetGradientStop( ::com::sun::star::util::Color aColor, double aOffset)
+{
+    mStopColors.push_back( aColor );
+    mStopOffsets.push_back( aOffset );
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
+TYPEINIT1( XMLSvgGradientStopImportContext, SvXMLImportContext );
+
+XMLSvgGradientStopImportContext::XMLSvgGradientStopImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
+                                              const OUString& rLName,
+                                              XMLLinearGradientStyleContext& rGradientStyle)
+    :   SvXMLImportContext(rImport, nPrfx, rLName),
+        rGradientStyleContext(rGradientStyle)
+{
+}
+
+XMLSvgGradientStopImportContext::~XMLSvgGradientStopImportContext()
+{
+}
+
+void XMLSvgGradientStopImportContext::StartElement(
+    const uno::Reference<xml::sax::XAttributeList> & xAttrList)
+{
+    sal_Int16 nLength = xAttrList->getLength();
+    ::util::Color    aColor;
+    OUString    colorString("black");
+    double      opacity = 1;
+    double      offset=0;
+    double      nTmp;
+
+    for(sal_Int16 i=0; i<nLength; i++)
+    {
+        OUString sLocalName;
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
+            GetKeyByAttrName( xAttrList->getNameByIndex(i), &sLocalName );
+
+        if ( nPrefix == XML_NAMESPACE_SVG )
+        {
+            if ( xmloff::token::IsXMLToken(sLocalName, xmloff::token::XML_OFFSET) )
+            {
+                SAL_INFO("svg", "offset " << sLocalName << " " << xAttrList->getValueByIndex(i));
+                OUString  value = xAttrList->getValueByIndex( i );
+                // using convertDouble instead of convertPercent because the latter expects sal_Int32& as its first arg
+                if ((value.indexOf( "%" ) != -1) && ::sax::Converter::convertDouble( nTmp, value ))
+                {
+                    SAL_INFO("svg", "offset converted " << nTmp/100);
+                    offset = nTmp * 0.01;
+                }
+                else if ( ::sax::Converter::convertDouble( nTmp, value ) ) {
+                    SAL_INFO("svg", "offset converted " << nTmp);
+                    offset = nTmp;
+                }
+                else
+                {
+                    SAL_WARN("svg", "Could not convert gradient offset " << value);
+                }
+            }
+            else if ( xmloff::token::IsXMLToken(sLocalName, xmloff::token::XML_STOPCOLOR) )
+            {
+                colorString = xAttrList->getValueByIndex(i);
+                SAL_INFO("svg", "stop color " << sLocalName << " " << xAttrList->getValueByIndex(i));
+            }
+            else if ( xmloff::token::IsXMLToken(sLocalName, xmloff::token::XML_STOPOPACITY) )
+            {
+                SAL_INFO("svg", "stop opacity " << sLocalName << " " << xAttrList->getValueByIndex(i));
+                ::sax::Converter::convertDouble( nTmp, xAttrList->getValueByIndex(i) );
+                opacity = nTmp;
+            }
+        }
+    }
+    bool bColorSet;
+    bColorSet = ::sax::Converter::convertColor( aColor, colorString, opacity );
+    rGradientStyleContext.SetGradientStop( aColor, offset );
+}
+
+void XMLSvgGradientStopImportContext::EndElement()
+{
+    //    uno::Reference< container::XNameContainer > xGradient( GetImport().GetGradientHelper() );
+
+    SAL_INFO("svgb", "EndElement");
 }
 
 //////////////////////////////////////////////////////////////////////////////

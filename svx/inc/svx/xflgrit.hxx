@@ -23,6 +23,7 @@
 #include <svx/xit.hxx>
 #include <svx/xgrad.hxx>
 #include "svx/svxdllapi.h"
+#include <com/sun/star/awt/SvgGradient.hpp>
 
 class SdrModel;
 
@@ -31,8 +32,8 @@ class SdrModel;
 //------------------------
 class SVX_DLLPUBLIC XFillGradientItem : public NameOrIndex
 {
-    XGradient   aGradient;
-
+    XGradient           aGradient;
+    ::com::sun::star::awt::SvgGradient    aSvgGradient;
 public:
             TYPEINFO();
             XFillGradientItem() : NameOrIndex(XATTR_FILLGRADIENT, -1) {}

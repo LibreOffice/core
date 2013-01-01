@@ -22,6 +22,7 @@ $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/DashStyle.hxx,xmloff/Das
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/DocumentSettingsContext.hxx,xmloff/DocumentSettingsContext.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/EnumPropertyHdl.hxx,xmloff/EnumPropertyHdl.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/GradientStyle.hxx,xmloff/GradientStyle.hxx))
+$(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/SvgGradientStyle.hxx,xmloff/SvgGradientStyle.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/HatchStyle.hxx,xmloff/HatchStyle.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/ImageStyle.hxx,xmloff/ImageStyle.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/MarkerStyle.hxx,xmloff/MarkerStyle.hxx))

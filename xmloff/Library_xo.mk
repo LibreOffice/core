@@ -196,6 +196,7 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/style/EnumPropertyHdl \
     xmloff/source/style/FillStyleContext \
     xmloff/source/style/GradientStyle \
+    xmloff/source/style/SvgGradientStyle \
     xmloff/source/style/HatchStyle \
     xmloff/source/style/ImageStyle \
     xmloff/source/style/MarkerStyle \

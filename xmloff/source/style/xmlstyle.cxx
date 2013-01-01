@@ -490,6 +490,11 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext( sal_uInt16 p_nPr
                 pStyle = new XMLGradientStyleContext( GetImport(), p_nPrefix, rLocalName, xAttrList );
                 break;
             }
+            case XML_TOK_STYLES_LINEARGRADIENTSTYLES:
+            {
+                pStyle = new XMLLinearGradientStyleContext( GetImport(), p_nPrefix, rLocalName, xAttrList );
+                break;
+            }
             case XML_TOK_STYLES_HATCHSTYLES:
             {
                 pStyle = new XMLHatchStyleContext( GetImport(), p_nPrefix, rLocalName, xAttrList );
