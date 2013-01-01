@@ -44,7 +44,8 @@ public:
 
     void SetTable(SvxSimpleTable* pTable);
 
-    virtual void SetSizePixel(const Size& rNewSize);
+    virtual void Resize();
+
     virtual void GetFocus();
 };
 

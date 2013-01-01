@@ -59,9 +59,9 @@ long SvxSimpleTableContainer::PreNotify( NotifyEvent& rNEvt )
     return nResult;
 }
 
-void SvxSimpleTableContainer::SetSizePixel(const Size& rNewSize )
+void SvxSimpleTableContainer::Resize()
 {
-    Control::SetSizePixel(rNewSize);
+    Control::Resize();
     if (m_pTable)
         m_pTable->UpdateViewSize();
 }
