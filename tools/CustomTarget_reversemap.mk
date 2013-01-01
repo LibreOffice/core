@@ -30,7 +30,7 @@ $(call gb_CustomTarget_get_target,tools/reversemap) : \
 
 $(call gb_CustomTarget_get_workdir,tools/reversemap)/reversemap.hxx : \
 		$(call gb_Executable_get_runtime_dependencies,bestreversemap) \
-		$(call gb_CustomTarget_get_workdir,tools/reversemap)/.dir
+		| $(call gb_CustomTarget_get_workdir,tools/reversemap)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),BRM,1)
 	$(call gb_Helper_execute,bestreversemap > $@)
 
