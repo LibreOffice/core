@@ -746,10 +746,9 @@ void ScAutoFormatData::GetFromItemSet( sal_uInt16 nIndex, const SfxItemSet& rIte
 
 bool ScAutoFormatData::Load( SvStream& rStream, const ScAfVersions& rVersions )
 {
-    sal_Bool    bRet = true;
     sal_uInt16  nVer = 0;
     rStream >> nVer;
-    bRet = 0 == rStream.GetError();
+    bool bRet = 0 == rStream.GetError();
     if( bRet && (nVer == AUTOFORMAT_DATA_ID_X ||
             (AUTOFORMAT_DATA_ID_504 <= nVer && nVer <= AUTOFORMAT_DATA_ID)) )
     {
@@ -1016,8 +1015,6 @@ ScAutoFormat::iterator ScAutoFormat::end()
 
 bool ScAutoFormat::Load()
 {
-    bool bRet = true;
-
     INetURLObject aURL;
     SvtPathOptions aPathOpt;
     aURL.SetSmartURL( aPathOpt.GetUserConfigPath() );
@@ -1026,7 +1023,7 @@ bool ScAutoFormat::Load()
 
     SfxMedium aMedium( aURL.GetMainURL(INetURLObject::NO_DECODE), STREAM_READ );
     SvStream* pStream = aMedium.GetInStream();
-    bRet = (pStream && pStream->GetError() == 0);
+    bool bRet = (pStream && pStream->GetError() == 0);
     if (bRet)
     {
         SvStream& rStream = *pStream;
@@ -1079,8 +1076,6 @@ bool ScAutoFormat::Load()
 
 bool ScAutoFormat::Save()
 {
-    bool bRet = true;
-
     INetURLObject aURL;
     SvtPathOptions aPathOpt;
     aURL.SetSmartURL( aPathOpt.GetUserConfigPath() );
@@ -1089,7 +1084,7 @@ bool ScAutoFormat::Save()
 
     SfxMedium aMedium( aURL.GetMainURL(INetURLObject::NO_DECODE), STREAM_WRITE );
     SvStream* pStream = aMedium.GetOutStream();
-    bRet = (pStream && pStream->GetError() == 0);
+    bool bRet = (pStream && pStream->GetError() == 0);
     if (bRet)
     {
         const sal_uInt16 fileVersion = SOFFICE_FILEFORMAT_50;
