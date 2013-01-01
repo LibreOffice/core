@@ -375,29 +375,25 @@ IMPL_LINK_NOARG(SvxSingleNumPickTabPage, DoubleClickHdl_Impl)
 
 
 SvxBulletPickTabPage::SvxBulletPickTabPage(Window* pParent,
-                               const SfxItemSet& rSet)  :
-    SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_PICK_BULLET ), rSet ),
-    aValuesFL(      this, CUI_RES(FL_VALUES) ),
-    pExamplesVS(    new SvxNumValueSet(this, CUI_RES(VS_VALUES), NUM_PAGETYPE_BULLET )),
-    pActNum(0),
-    pSaveNum(0),
-    nActNumLvl( USHRT_MAX ),
-    bModified(sal_False),
-    bPreset(sal_False),
-    nNumItemId(SID_ATTR_NUMBERING_RULE)
+                               const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "PickBulletPage", "cui/ui/pickbulletpage.ui", rSet)
+    , pActNum(0)
+    , pSaveNum(0)
+    , nActNumLvl(USHRT_MAX)
+    , bModified(false)
+    , bPreset(false)
+    , nNumItemId(SID_ATTR_NUMBERING_RULE)
 {
-    FreeResource();
     SetExchangeSupport();
-    pExamplesVS->SetSelectHdl(LINK(this, SvxBulletPickTabPage, NumSelectHdl_Impl));
-    pExamplesVS->SetDoubleClickHdl(LINK(this, SvxBulletPickTabPage, DoubleClickHdl_Impl));
-    pExamplesVS->SetHelpId(HID_VALUESET_BULLET    );
-
+    get(m_pExamplesVS, "valueset");
+    m_pExamplesVS->init(NUM_PAGETYPE_BULLET),
+    m_pExamplesVS->SetSelectHdl(LINK(this, SvxBulletPickTabPage, NumSelectHdl_Impl));
+    m_pExamplesVS->SetDoubleClickHdl(LINK(this, SvxBulletPickTabPage, DoubleClickHdl_Impl));
 }
 
- SvxBulletPickTabPage::~SvxBulletPickTabPage()
+SvxBulletPickTabPage::~SvxBulletPickTabPage()
 {
     delete pActNum;
-    delete pExamplesVS;
     delete pSaveNum;
 }
 
@@ -439,13 +435,13 @@ void  SvxBulletPickTabPage::ActivatePage(const SfxItemSet& rSet)
     if(*pSaveNum != *pActNum)
     {
         *pActNum = *pSaveNum;
-        pExamplesVS->SetNoSelection();
+        m_pExamplesVS->SetNoSelection();
     }
 
     if(pActNum && (!lcl_IsNumFmtSet(pActNum, nActNumLvl) || bIsPreset))
     {
-        pExamplesVS->SelectItem(1);
-        NumSelectHdl_Impl(pExamplesVS);
+        m_pExamplesVS->SelectItem(1);
+        NumSelectHdl_Impl(m_pExamplesVS);
         bPreset = sal_True;
     }
     bPreset |= bIsPreset;
@@ -492,7 +488,7 @@ IMPL_LINK_NOARG(SvxBulletPickTabPage, NumSelectHdl_Impl)
     {
         bPreset = sal_False;
         bModified = sal_True;
-        sal_Unicode cChar = aBulletTypes[pExamplesVS->GetSelectItemId() - 1];
+        sal_Unicode cChar = aBulletTypes[m_pExamplesVS->GetSelectItemId() - 1];
         Font& rActBulletFont = lcl_GetDefaultBulletFont();
 
         sal_uInt16 nMask = 1;
@@ -522,7 +518,7 @@ IMPL_LINK_NOARG(SvxBulletPickTabPage, NumSelectHdl_Impl)
 
 IMPL_LINK_NOARG(SvxBulletPickTabPage, DoubleClickHdl_Impl)
 {
-    NumSelectHdl_Impl(pExamplesVS);
+    NumSelectHdl_Impl(m_pExamplesVS);
     OKButton& rOk = GetTabDialog()->GetOKButton();
     rOk.GetClickHdl().Call(&rOk);
     return 0;

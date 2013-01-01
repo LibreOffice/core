@@ -105,8 +105,7 @@ class SvxBulletPickTabPage : public SfxTabPage
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
 
-    FixedLine           aValuesFL;
-    SvxNumValueSet*     pExamplesVS;
+    SvxNumValueSet*     m_pExamplesVS;
     SvxNumRule*         pActNum;
     SvxNumRule*         pSaveNum;
     sal_uInt16              nActNumLvl;

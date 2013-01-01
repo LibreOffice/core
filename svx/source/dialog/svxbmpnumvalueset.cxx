@@ -399,6 +399,16 @@ SvxNumValueSet::SvxNumValueSet( Window* pParent, const ResId& rResId, sal_uInt16
     init(nType);
 }
 
+SvxNumValueSet::SvxNumValueSet(Window* pParent, WinBits nWinBits)
+    : ValueSet(pParent, nWinBits)
+{
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxNumValueSet(Window *pParent, VclBuilder::stringmap &)
+{
+    return new SvxNumValueSet(pParent, WB_TABSTOP);
+}
+
 void SvxNumValueSet::init(sal_uInt16 nType)
 {
     aLineColor = COL_LIGHTGRAY;

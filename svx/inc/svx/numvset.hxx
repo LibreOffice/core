@@ -65,11 +65,11 @@ class SVX_DLLPUBLIC SvxNumValueSet : public ValueSet
         com::sun::star::uno::Reference<
             com::sun::star::container::XIndexAccess> > aOutlineSettings;
 
-    void init(sal_uInt16 nType);
-
     public:
-        SvxNumValueSet( Window* pParent, const ResId& rResId, sal_uInt16 nType );
-        ~SvxNumValueSet();
+    SvxNumValueSet( Window* pParent, const ResId& rResId, sal_uInt16 nType );
+    SvxNumValueSet(Window* pParent, WinBits nWinBits = WB_TABSTOP);
+    void init(sal_uInt16 nType);
+    ~SvxNumValueSet();
 
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );
 
