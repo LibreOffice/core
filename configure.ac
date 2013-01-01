@@ -7546,8 +7546,8 @@ if test $enable_python = system; then
                 # 2.6.2 currently on OpenSUSE 12.1?
                 # rpm -q mingw32-python => mingw32-python-2.6.2-17.17.noarch
                 PYTHON_VERSION=$python_version.2
-                PYTHON_VERSION_MAJOR=${python_version%.*}
-                PYTHON_VERSION_MINOR=${python_version#*.}
+                PYTHON_VERSION_MAJOR=`echo $python_version | cut -d . -f 1`
+                PYTHON_VERSION_MINOR=`echo $python_version | cut -d . -f 2`
                 break
             fi
         done
