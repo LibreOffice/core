@@ -38,6 +38,7 @@
 #include "com/sun/star/lang/Locale.hpp"
 #include <unotools/syslocale.hxx>
 
+class BitmapEx;
 class CollatorWrapper;
 class LocaleDataWrapper;
 
@@ -326,6 +327,11 @@ private:
     sal_Bool                            mnAcceleratorsInContextMenus;
     Wallpaper                       maWorkspaceGradient;
     const void*                     mpFontOptions;
+
+    rtl::OUString                   maPersonaHeaderFooter; ///< Cache the settings to detect changes.
+
+    BitmapEx*                       mpPersonaHeaderBitmap; ///< Cache the header bitmap.
+    BitmapEx*                       mpPersonaFooterBitmap; ///< Cache the footer bitmap.
 };
 
 #define DEFAULT_WORKSPACE_GRADIENT_START_COLOR Color( 0xa3, 0xae, 0xb8 )
@@ -830,6 +836,9 @@ public:
                                         { return mpData->maWorkspaceGradient; }
     void                            SetWorkspaceGradient( const Wallpaper& rWall )
                                         { CopyData(); mpData->maWorkspaceGradient = rWall; }
+
+    const BitmapEx*                 GetPersonaHeader() const;
+    const BitmapEx*                 GetPersonaFooter() const;
 
     void                            SetStandardStyles();
 
