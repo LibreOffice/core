@@ -536,7 +536,7 @@ ModalDialog DLG_HELP_LICENSING
     String STR_LICENSING_INFORMATION_4
     {
         Text [ en-US ] =
-            "Copyright © 2000, 2012 LibreOffice contributors and/or their affiliates. All rights\n"
+            "Copyright © 2000, 2013 LibreOffice contributors and/or their affiliates. All rights\n"
             "reserved." ;
     };
     String STR_LICENSING_INFORMATION_5

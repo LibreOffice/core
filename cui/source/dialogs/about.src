@@ -75,7 +75,7 @@ ModalDialog RID_DEFAULTABOUT
     };
     String ABOUT_STR_COPYRIGHT
     {
-        Text[ en-US ] = "Copyright © 2000 - 2012 LibreOffice contributors and/or their affiliates";
+        Text[ en-US ] = "Copyright © 2000 - 2013 LibreOffice contributors and/or their affiliates";
     };
     String ABOUT_STR_BASED
     {
