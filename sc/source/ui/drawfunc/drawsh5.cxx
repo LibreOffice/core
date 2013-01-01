@@ -23,6 +23,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
 #include <tools/urlobj.hxx>
+#include <cliputil.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/fmglob.hxx>
@@ -357,7 +358,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
             break;
 
         case SID_PASTE:
-            OSL_FAIL( "SdrView::PasteClipboard not supported anymore" );
+            ScClipUtil::PasteFromClipboard ( GetViewData(), GetViewData()->GetViewShell(), true );
             break;
 
         case SID_SELECTALL:
