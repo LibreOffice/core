@@ -7532,7 +7532,12 @@ if test $enable_python = system; then
             if test -f ${MINGW_SYSROOT}/include/python${python_version}/Python.h; then
                 PYTHON_CFLAGS="-I${MINGW_SYSROOT}/include/python$python_version"
                 PYTHON_LIBS="-L${MINGW_SYSROOT}lib -lpython$python_version $python_libs"
-                MINGW_PYTHON_EXE=python.exe
+                AC_MSG_CHECKING([for python.exe])
+                AS_IF([test -f "$MINGW_SYSROOT/mingw/bin/python.exe"],
+                      [AC_MSG_RESULT([$MINGW_SYSROOT/mingw/bin/python.exe])
+                       MINGW_PYTHON_EXE=python.exe],
+                      [AC_MSG_RESULT([not found])
+                       AC_MSG_ERROR([could not find python.exe])])
                 libo_MINGW_CHECK_DLL([PYTHON], [libpython$python_version])
                 libo_MINGW_CHECK_DLL([READLINE], [libreadline6])
                 libo_MINGW_CHECK_DLL([TERMCAP], [libtermcap])
