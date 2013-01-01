@@ -26,23 +26,28 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,pyuno/python_shell))
 
-$(call gb_CustomTarget_get_target,pyuno/python_shell) : \
-    $(call gb_CustomTarget_get_workdir,pyuno/python_shell)/python.sh
+$(eval $(call gb_CustomTarget_register_targets,pyuno/python_shell,\
+	os.sh \
+	python.sh \
+))
 
 ifeq ($(OS),MACOSX)
 pyuno_PYTHON_SHELL_VERSION:=$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)
-pyuno_PYTHON_SHELL_STRIPRULE:=-e '/^NONMACSECTION/,/^MACSECTION/d'
 else
 pyuno_PYTHON_SHELL_VERSION:=$(PYTHON_VERSION)
-pyuno_PYTHON_SHELL_STRIPRULE:=-e '/^NONMACSECTION/d' -e '/^MACSECTION/,$$d'
 endif
 
-$(call gb_CustomTarget_get_workdir,pyuno/python_shell)/python.sh : $(SRCDIR)/pyuno/zipcore/python.sh | \
-    $(call gb_CustomTarget_get_workdir,pyuno/python_shell)/.dir
+$(call gb_CustomTarget_get_workdir,pyuno/python_shell)/python.sh : \
+		$(SRCDIR)/pyuno/zipcore/python.sh \
+		$(call gb_CustomTarget_get_workdir,pyuno/python_shell)/os.sh
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CAT,1)
+	cat $^ > $@ && chmod +x $@
+
+$(call gb_CustomTarget_get_workdir,pyuno/python_shell)/os.sh : \
+		$(SRCDIR)/pyuno/zipcore/$(if $(filter MACOSX,$(OS)),mac,nonmac).sh
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),SED,1)
-	sed -e "s/%%PYVERSION%%/$(pyuno_PYTHON_SHELL_VERSION)/g" -e \
-    "s/%%OOO_LIBRARY_PATH_VAR%%/$(gb_Helper_LIBRARY_PATH_VAR)/g" \
-    $(pyuno_PYTHON_SHELL_STRIPRULE) < $? > $@
-	chmod +x $@
+	sed -e "s/%%PYVERSION%%/$(pyuno_PYTHON_SHELL_VERSION)/g" \
+		-e "s/%%OOO_LIBRARY_PATH_VAR%%/$(gb_Helper_LIBRARY_PATH_VAR)/g" \
+		$< > $@
 
 # vim: set noet sw=4 ts=4:
