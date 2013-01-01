@@ -134,7 +134,7 @@ class IosSalPrinter : public SalPrinter
                                               bool i_bDirect,
                                               ImplJobSetup* i_pSetupData );
     // implement pull model print system
-    virtual sal_Bool                    StartJob( const const rtl::OUString* pFileName,
+    virtual sal_Bool                    StartJob( const rtl::OUString* pFileName,
                                               const rtl::OUString& rJobName,
                                               const rtl::OUString& rAppName,
                                               ImplJobSetup* i_pSetupData,
