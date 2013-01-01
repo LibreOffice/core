@@ -29,6 +29,7 @@
 #include <i18npool/languagetag.hxx>
 #include <unotools/syslocale.hxx>
 
+class BitmapEx;
 class CollatorWrapper;
 class LocaleDataWrapper;
 
@@ -347,6 +348,11 @@ private:
     DialogStyle                     maDialogStyle;
     FrameStyle                      maFrameStyle;
     const void*                     mpFontOptions;
+
+    OUString                        maPersonaHeaderFooter; ///< Cache the settings to detect changes.
+
+    BitmapEx*                       mpPersonaHeaderBitmap; ///< Cache the header bitmap.
+    BitmapEx*                       mpPersonaFooterBitmap; ///< Cache the footer bitmap.
 };
 
 #define DEFAULT_WORKSPACE_GRADIENT_START_COLOR Color( 0xa3, 0xae, 0xb8 )
@@ -859,6 +865,9 @@ public:
                                         { return mpData->maFrameStyle; }
     void                            SetFrameStyle( const FrameStyle& rStyle )
                                         { CopyData(); mpData->maFrameStyle = rStyle; }
+
+    const BitmapEx*                 GetPersonaHeader() const;
+    const BitmapEx*                 GetPersonaFooter() const;
 
     void                            SetStandardStyles();
 

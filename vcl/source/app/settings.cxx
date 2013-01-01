@@ -17,9 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <officecfg/Office/Common.hxx>
+
 #include <svsys.h>
 #include "comphelper/processfactory.hxx"
+#include <rtl/bootstrap.hxx>
 #include "tools/debug.hxx"
+#include <vcl/graphicfilter.hxx>
 
 #include "i18npool/mslangid.hxx"
 #include "i18npool/languagetag.hxx"
@@ -38,7 +42,7 @@
 #include "unotools/confignode.hxx"
 #include "unotools/syslocaleoptions.hxx"
 
-using ::rtl::OUString;
+using namespace ::com::sun::star;
 
 #include "svdata.hxx"
 #include "impimagetree.hxx"
@@ -198,7 +202,10 @@ sal_Bool MouseSettings::operator ==( const MouseSettings& rSet ) const
 
 // =======================================================================
 
-ImplStyleData::ImplStyleData()
+ImplStyleData::ImplStyleData() :
+    maPersonaHeaderFooter(),
+    mpPersonaHeaderBitmap( NULL ),
+    mpPersonaFooterBitmap( NULL )
 {
     mnRefCount                  = 1;
     mnScrollBarSize             = 16;
@@ -296,7 +303,10 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maGroupFont( rData.maGroupFont ),
     maWorkspaceGradient( rData.maWorkspaceGradient ),
     maDialogStyle( rData.maDialogStyle ),
-    maFrameStyle( rData.maFrameStyle )
+    maFrameStyle( rData.maFrameStyle ),
+    maPersonaHeaderFooter( rData.maPersonaHeaderFooter ),
+    mpPersonaHeaderBitmap( NULL ),
+    mpPersonaFooterBitmap( NULL )
 {
     mnRefCount                  = 1;
     mnBorderSize                = rData.mnBorderSize;
@@ -673,6 +683,100 @@ sal_Bool StyleSettings::GetUseImagesInMenus() const
         return GetPreferredUseImagesInMenus();
 
     return (sal_Bool)nStyle;
+}
+
+// -----------------------------------------------------------------------
+
+static BitmapEx* readBitmapEx( const OUString& rPath )
+{
+    OUString aPath( rPath );
+    rtl::Bootstrap::expandMacros( aPath );
+
+    // import the image
+    Graphic aGraphic;
+    if ( GraphicFilter::LoadGraphic( aPath, String(), aGraphic ) != GRFILTER_OK )
+        return NULL;
+
+    const BitmapEx& rBitmap( aGraphic.GetBitmapEx() );
+    if ( rBitmap.IsEmpty() )
+        return NULL;
+
+    return new BitmapEx( rBitmap );
+}
+
+enum WhichPersona { PERSONA_HEADER, PERSONA_FOOTER };
+
+/** Update the setting of the Persona header / footer in ImplStyleData */
+static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFooter, BitmapEx*& pHeaderFooterBitmap )
+{
+    uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    if ( !xContext.is() )
+        return;
+
+    // read from the configuration
+    OUString aPersona( officecfg::Office::Common::Misc::Persona::get( xContext ) );
+    OUString aPersonaSettings( officecfg::Office::Common::Misc::PersonaSettings::get( xContext ) );
+
+    // have the settings changed?
+    OUString aOldValue( aPersona + ";" + aPersonaSettings );
+    if ( rHeaderFooter == aOldValue )
+        return;
+
+    rHeaderFooter = aOldValue;
+
+    // now read the new values and setup bitmaps
+    OUString aHeader, aFooter;
+    if ( aPersona == "own" )
+    {
+        sal_Int32 nIndex = 0;
+        aHeader = aPersonaSettings.getToken( 0, ';', nIndex );
+        if ( nIndex > 0 )
+            aFooter = aPersonaSettings.getToken( 0, ';', nIndex );
+    }
+    else if ( aPersona == "default" )
+    {
+        aHeader = "header.jpg";
+        aFooter = "footer.jpg";
+    }
+
+    OUString aName;
+    switch ( eWhich ) {
+        case PERSONA_HEADER: aName = aHeader; break;
+        case PERSONA_FOOTER: aName = aFooter; break;
+    }
+
+    delete pHeaderFooterBitmap;
+    pHeaderFooterBitmap = NULL;
+
+    if ( !aName.isEmpty() )
+    {
+        // try the gallery first, then edition, and the program path if
+        // everything else fails
+        OUString gallery = "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
+        rtl::Bootstrap::expandMacros( gallery );
+        gallery += "/user/gallery/personas/";
+
+        if ( aPersona == "own" )
+            pHeaderFooterBitmap = readBitmapEx( gallery + aName );
+
+        if ( !pHeaderFooterBitmap )
+            pHeaderFooterBitmap = readBitmapEx( "$BRAND_BASE_DIR/program/edition/" + aName );
+
+        if ( !pHeaderFooterBitmap )
+            pHeaderFooterBitmap = readBitmapEx( "$BRAND_BASE_DIR/program/" + aName );
+    }
+}
+
+const BitmapEx* StyleSettings::GetPersonaHeader() const
+{
+    setupPersonaHeaderFooter( PERSONA_HEADER, mpData->maPersonaHeaderFooter, mpData->mpPersonaHeaderBitmap );
+    return mpData->mpPersonaHeaderBitmap;
+}
+
+const BitmapEx* StyleSettings::GetPersonaFooter() const
+{
+    setupPersonaHeaderFooter( PERSONA_FOOTER, mpData->maPersonaHeaderFooter, mpData->mpPersonaFooterBitmap );
+    return mpData->mpPersonaFooterBitmap;
 }
 
 // -----------------------------------------------------------------------

@@ -146,7 +146,7 @@ sal_Bool SvxPersonalizationTabPage::FillItemSet( SfxItemSet & )
         aPersona = "own";
 
     bool bModified = false;
-    uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+    uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
     if ( xContext.is() &&
             ( aBackground != officecfg::Office::Common::Misc::BackgroundImage::get( xContext ) ||
               m_aBackgroundURL != officecfg::Office::Common::Misc::BackgroundImageURL::get( xContext ) ||
@@ -171,7 +171,7 @@ sal_Bool SvxPersonalizationTabPage::FillItemSet( SfxItemSet & )
 
 void SvxPersonalizationTabPage::Reset( const SfxItemSet & )
 {
-    uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+    uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
     // background image
     OUString aBackground( "default" );
