@@ -476,8 +476,20 @@ SvxBmpNumValueSet::SvxBmpNumValueSet( Window* pParent, const ResId& rResId )
     init();
 }
 
+SvxBmpNumValueSet::SvxBmpNumValueSet(Window* pParent, WinBits nWinBits)
+    : SvxNumValueSet(pParent, nWinBits)
+{
+    init();
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxBmpNumValueSet(Window *pParent, VclBuilder::stringmap &)
+{
+    return new SvxBmpNumValueSet(pParent, WB_TABSTOP);
+}
+
 void SvxBmpNumValueSet::init()
 {
+    SvxNumValueSet::init(NUM_PAGETYPE_BMP);
     bGrfNotFound = sal_False;
     GalleryExplorer::BeginLocking(GALLERY_THEME_BULLETS);
     SetStyle( GetStyle() | WB_VSCROLL );

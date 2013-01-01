@@ -783,58 +783,53 @@ void SvxNumPickTabPage::PageCreated(SfxAllItemSet aSet)
 }
 
 SvxBitmapPickTabPage::SvxBitmapPickTabPage(Window* pParent,
-                               const SfxItemSet& rSet) :
-    SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_PICK_BMP ), rSet ),
-    aValuesFL(      this, CUI_RES(FL_VALUES) ),
-    pExamplesVS(    new SvxBmpNumValueSet(this, CUI_RES(VS_VALUES)/*, aGrfNames*/ )),
-    aErrorText(     this, CUI_RES(FT_ERROR)),
-    aLinkedCB(      this, CUI_RES(CB_LINKED)),
-    pActNum(0),
-    pSaveNum(0),
-    nActNumLvl( USHRT_MAX ),
-    nNumItemId(SID_ATTR_NUMBERING_RULE),
-    bModified(sal_False),
-    bPreset(sal_False)
+                               const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "PickGraphicPage", "cui/ui/pickgraphicpage.ui", rSet)
+    , pActNum(0)
+    , pSaveNum(0)
+    , nActNumLvl(USHRT_MAX)
+    , nNumItemId(SID_ATTR_NUMBERING_RULE)
+    , bModified(false)
+    , bPreset(false)
 {
-    FreeResource();
     SetExchangeSupport();
+    get(m_pErrorText, "errorft");
+    get(m_pLinkedCB, "linkgraphics");
+    get(m_pExamplesVS, "valueset");
+    m_pExamplesVS->SetSelectHdl(LINK(this, SvxBitmapPickTabPage, NumSelectHdl_Impl));
+    m_pExamplesVS->SetDoubleClickHdl(LINK(this, SvxBitmapPickTabPage, DoubleClickHdl_Impl));
+    m_pLinkedCB->SetClickHdl(LINK(this, SvxBitmapPickTabPage, LinkBmpHdl_Impl));
+
     eCoreUnit = rSet.GetPool()->GetMetric(rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE));
-    pExamplesVS->SetSelectHdl(LINK(this, SvxBitmapPickTabPage, NumSelectHdl_Impl));
-    pExamplesVS->SetDoubleClickHdl(LINK(this, SvxBitmapPickTabPage, DoubleClickHdl_Impl));
-    aLinkedCB.SetClickHdl(LINK(this, SvxBitmapPickTabPage, LinkBmpHdl_Impl));
 
     // determine graphic name
     GalleryExplorer::FillObjList(GALLERY_THEME_BULLETS, aGrfNames);
-    pExamplesVS->SetHelpId(HID_VALUESET_NUMBMP    );
 
     sal_uInt16 i = 0;
     for(std::vector<String>::iterator it = aGrfNames.begin(); it != aGrfNames.end(); ++it, ++i)
     {
-        pExamplesVS->InsertItem( i + 1, i);
+        m_pExamplesVS->InsertItem( i + 1, i);
 
         INetURLObject aObj(*it);
         if(aObj.GetProtocol() == INET_PROT_FILE)
             *it = aObj.PathToFileName();
 
-        pExamplesVS->SetItemText( i + 1, *it );
+        m_pExamplesVS->SetItemText( i + 1, *it );
     }
 
     if(aGrfNames.empty())
     {
-        aErrorText.Show();
+        m_pErrorText->Show();
     }
     else
     {
-        pExamplesVS->Show();
-        pExamplesVS->Format();
+        m_pExamplesVS->Show();
+        m_pExamplesVS->Format();
     }
-
-    pExamplesVS->SetAccessibleRelationMemberOf( &aValuesFL );
 }
 
 SvxBitmapPickTabPage::~SvxBitmapPickTabPage()
 {
-    delete pExamplesVS;
     delete pActNum;
     delete pSaveNum;
 }
@@ -866,14 +861,14 @@ void  SvxBitmapPickTabPage::ActivatePage(const SfxItemSet& rSet)
     if(*pSaveNum != *pActNum)
     {
         *pActNum = *pSaveNum;
-        pExamplesVS->SetNoSelection();
+        m_pExamplesVS->SetNoSelection();
     }
 
     if(!aGrfNames.empty() &&
         (pActNum && (!lcl_IsNumFmtSet(pActNum, nActNumLvl) || bIsPreset)))
     {
-        pExamplesVS->SelectItem(1);
-        NumSelectHdl_Impl(pExamplesVS);
+        m_pExamplesVS->SelectItem(1);
+        NumSelectHdl_Impl(m_pExamplesVS);
         bPreset = sal_True;
     }
     bPreset |= bIsPreset;
@@ -930,13 +925,13 @@ void  SvxBitmapPickTabPage::Reset( const SfxItemSet& rSet )
         *pActNum = *pSaveNum;
     if(!pActNum->IsFeatureSupported(NUM_ENABLE_LINKED_BMP))
     {
-        aLinkedCB.Check(sal_False);
-        aLinkedCB.Enable(sal_False);
+        m_pLinkedCB->Check(sal_False);
+        m_pLinkedCB->Enable(sal_False);
     }
     else if(!pActNum->IsFeatureSupported(NUM_ENABLE_EMBEDDED_BMP))
     {
-        aLinkedCB.Check(sal_True);
-        aLinkedCB.Enable(sal_False);
+        m_pLinkedCB->Check(sal_True);
+        m_pLinkedCB->Enable(sal_False);
     }
 }
 
@@ -946,12 +941,12 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, NumSelectHdl_Impl)
     {
         bPreset = sal_False;
         bModified = sal_True;
-        sal_uInt16 nIdx = pExamplesVS->GetSelectItemId() - 1;
+        sal_uInt16 nIdx = m_pExamplesVS->GetSelectItemId() - 1;
 
         sal_uInt16 nMask = 1;
         String aEmptyStr;
         sal_uInt16 nSetNumberingType = SVX_NUM_BITMAP;
-        if(aLinkedCB.IsChecked())
+        if(m_pLinkedCB->IsChecked())
             nSetNumberingType |= LINK_TOKEN;
         for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
         {
@@ -985,7 +980,7 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, NumSelectHdl_Impl)
 
 IMPL_LINK_NOARG(SvxBitmapPickTabPage, DoubleClickHdl_Impl)
 {
-    NumSelectHdl_Impl(pExamplesVS);
+    NumSelectHdl_Impl(m_pExamplesVS);
     OKButton& rOk = GetTabDialog()->GetOKButton();
     rOk.GetClickHdl().Call(&rOk);
     return 0;
@@ -993,9 +988,9 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, DoubleClickHdl_Impl)
 
 IMPL_LINK_NOARG(SvxBitmapPickTabPage, LinkBmpHdl_Impl)
 {
-    if(!pExamplesVS->IsNoSelection())
+    if(!m_pExamplesVS->IsNoSelection())
     {
-        NumSelectHdl_Impl(pExamplesVS);
+        NumSelectHdl_Impl(m_pExamplesVS);
     }
     return 0;
 }

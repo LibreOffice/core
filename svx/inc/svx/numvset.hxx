@@ -106,8 +106,9 @@ class SVX_DLLPUBLIC SvxBmpNumValueSet : public SvxNumValueSet
     Timer&          GetFormatTimer() {return aFormatTimer;}
 
     public:
-        SvxBmpNumValueSet(Window* pParent, const ResId& rResId);
-        ~SvxBmpNumValueSet();
+    SvxBmpNumValueSet(Window* pParent, const ResId& rResId);
+    SvxBmpNumValueSet(Window* pParent, WinBits nWinBits = WB_TABSTOP);
+    ~SvxBmpNumValueSet();
 
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );
 

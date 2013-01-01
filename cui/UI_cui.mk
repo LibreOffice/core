@@ -20,6 +20,7 @@ $(eval $(call gb_UI_add_uifiles,cui,\
 	cui/uiconfig/ui/macroselectordialog \
 	cui/uiconfig/ui/numberformatpage \
 	cui/uiconfig/ui/personalization_tab \
+	cui/uiconfig/ui/pickgraphicpage \
 	cui/uiconfig/ui/picknumberingpage \
 	cui/uiconfig/ui/positionpage \
 	cui/uiconfig/ui/scriptorganizer \

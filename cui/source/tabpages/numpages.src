@@ -23,47 +23,6 @@
 
 /**************************************************************************/
 /*                                                                        */
-/*  TabPage                                                               */
-/*                                                                        */
-/**************************************************************************/
-TabPage RID_SVXPAGE_PICK_BMP
-{
-    HelpID = HID_SVXPAGE_PICK_BMP;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
-    Hide = TRUE;
-    FixedLine FL_VALUES
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ en-US ] = "Selection" ;
-    };
-    Control VS_VALUES
-    {
-        Pos = MAP_APPFONT ( 9 , 14 ) ;
-        Size = MAP_APPFONT ( 242 , 152 ) ;
-        TabStop = TRUE ;
-        Hide = TRUE ;
-    };
-    CheckBox CB_LINKED
-    {
-        HelpID = "cui:CheckBox:RID_SVXPAGE_PICK_BMP:CB_LINKED";
-        Pos = MAP_APPFONT ( 9 , 169 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
-        TabStop = TRUE ;
-        Text [ en-US ] = "~Link graphics";
-    };
-    FixedText FT_ERROR
-    {
-        Pos = MAP_APPFONT ( 9 , 14 ) ;
-        Size = MAP_APPFONT ( 242 , 30 ) ;
-        Text [ en-US ] = "The Gallery theme 'Bullets' is empty (no graphics)." ;
-        Hide = TRUE ;
-        WordBreak = TRUE ;
-    };
-};
-/**************************************************************************/
-/*                                                                        */
 /*  TabPage Numerierungsoptionen                                          */
 /*                                                                        */
 /**************************************************************************/

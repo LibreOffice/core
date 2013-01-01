@@ -27,12 +27,6 @@
 #define LB_FORM         210
 #define ED_FORM         211
 
-#define FL_VALUES               220
-#define VS_VALUES       221
-#define ST_CUSTOMIZE    222
-#define FT_ERROR        223
-#define CB_LINKED       224
-
 #define FT_LEVEL            151
 #define LB_LEVEL            152
 #define FL_FORMAT           153

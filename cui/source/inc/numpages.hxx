@@ -185,10 +185,9 @@ class SvxBitmapPickTabPage : public SfxTabPage
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
 
-    FixedLine           aValuesFL;
-    SvxBmpNumValueSet*  pExamplesVS;
-    FixedText           aErrorText;
-    CheckBox            aLinkedCB;
+    FixedText*          m_pErrorText;
+    SvxBmpNumValueSet*  m_pExamplesVS;
+    CheckBox*           m_pLinkedCB;
 
     std::vector<String> aGrfNames;
     String              sNumCharFmtName;
