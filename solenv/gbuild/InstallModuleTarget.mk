@@ -156,7 +156,7 @@ endef
 #  gb_ScpConvertTarget_ScpConvertTarget_platform
 
 gb_ScpConvertTarget_DEPS := $(call gb_Executable_get_runtime_dependencies,ulfconv)
-gb_ScpConvertTarget_COMMAND := $(gb_Helper_set_ld_path) $(call gb_Executable_get_command,ulfconv)
+gb_ScpConvertTarget_COMMAND := $(call gb_Executable_get_command,ulfconv)
 
 define gb_ScpConvertTarget__command
 $(call gb_Output_announce,$(2),$(true),SCC,1)
