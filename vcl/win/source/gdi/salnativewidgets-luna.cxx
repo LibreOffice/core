@@ -449,7 +449,7 @@ void ImplConvertSpinbuttonValues( int nControlPart, const ControlState& rState, 
 }
 
 /// Draw an own toolbar style on Windows Vista or later, looks better there
-void impl_drawAeroToolbar( HDC hDC, RECT rc, bool bHorizontal )
+static void impl_drawAeroToolbar( HDC hDC, RECT rc, bool bHorizontal )
 {
     if ( rc.top == 0 && bHorizontal )
     {
