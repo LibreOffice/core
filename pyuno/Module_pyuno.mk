@@ -48,10 +48,8 @@ endif
 # with SYSTEM_PYTHON=YES and SYSTEM_PYTHON=NO
 
 # zipcore: pyuno/python.exe on Windows
-# zipcore: pyversion.hxx on Windows
 ifeq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,pyuno,\
-    CustomTarget_pyversion \
     Executable_python_wrapper \
 ))
 endif

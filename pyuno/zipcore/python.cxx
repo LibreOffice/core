@@ -32,8 +32,6 @@
 
 #include "tools/pathutils.hxx"
 
-#include "pyversion.hxx"
-
 #define MY_LENGTH(s) (sizeof (s) / sizeof *(s) - 1)
 #define MY_STRING(s) (s), MY_LENGTH(s)
 

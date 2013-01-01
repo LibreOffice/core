@@ -26,12 +26,12 @@
 
 $(eval $(call gb_Executable_Executable,pyuno/python))
 
-$(eval $(call gb_Executable_use_static_libraries,pyuno/python,\
-    ooopathutils \
+$(eval $(call gb_Executable_add_defs,pyuno/python,\
+    -DMY_PYVERSION=L\"$(PYTHON_VERSION)\" \
 ))
 
-$(eval $(call gb_Executable_use_custom_headers,pyuno/python,\
-    pyuno/pyversion \
+$(eval $(call gb_Executable_use_static_libraries,pyuno/python,\
+    ooopathutils \
 ))
 
 $(eval $(call gb_Executable_add_noexception_objects,pyuno/python,\
