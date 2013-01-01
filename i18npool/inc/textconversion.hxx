@@ -82,8 +82,10 @@ public:
             throw( com::sun::star::uno::RuntimeException );
 protected :
     const sal_Char* implementationName;
+#ifndef DISABLE_DYNLOADING
     oslModule hModule;
     oslGenericFunction SAL_CALL getFunctionBySymbol(const sal_Char* func);
+#endif
 };
 
 // for Hangul2Hanja conversion
