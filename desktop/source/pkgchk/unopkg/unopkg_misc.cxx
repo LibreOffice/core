@@ -115,16 +115,16 @@ bool isOption( OptionInfo const * option_info, sal_uInt32 * pIndex )
     if (len == 2 && arg[ 1 ] == option_info->m_short_option)
     {
         ++(*pIndex);
-        dp_misc::TRACE(OUSTR(__FILE__": identified option \'")
-            + OUSTR("\'") + OUString( option_info->m_short_option ) + OUSTR("\n"));
+        dp_misc::TRACE(OUString(__FILE__) + ": identified option \'"
+            + "\'" + OUString( option_info->m_short_option ) + "\n");
         return true;
     }
     if (arg[ 1 ] == '-' && rtl_ustr_ascii_compare(
             arg.pData->buffer + 2, option_info->m_name ) == 0)
     {
         ++(*pIndex);
-        dp_misc::TRACE(OUSTR( __FILE__": identified option \'")
-            + OUString::createFromAscii(option_info->m_name) + OUSTR("\'\n"));
+        dp_misc::TRACE(OUString( __FILE__) + ": identified option \'"
+            + OUString::createFromAscii(option_info->m_name) + "\'\n");
         return true;
     }
     return false;
@@ -137,7 +137,7 @@ bool isBootstrapVariable(sal_uInt32 * pIndex)
 
     OUString arg;
     osl_getCommandArg(*pIndex, &arg.pData);
-    if (arg.matchAsciiL("-env:", 5))
+    if (arg.match("-env:"))
     {
         ++(*pIndex);
         return true;
@@ -155,8 +155,8 @@ bool readArgument(
         {
             OSL_ASSERT( pValue != 0 );
             osl_getCommandArg( *pIndex, &pValue->pData );
-            dp_misc::TRACE(OUSTR( __FILE__": argument value: ")
-                + *pValue + OUSTR("\n"));
+            dp_misc::TRACE(OUString( __FILE__) + ": argument value: "
+                + *pValue + "\n");
             ++(*pIndex);
             return true;
         }
@@ -172,8 +172,7 @@ struct ExecutableDir : public rtl::StaticWithInit<
     const OUString operator () () {
         OUString path;
         if (osl_getExecutableFile( &path.pData ) != osl_Process_E_None) {
-            throw RuntimeException(
-                OUSTR("cannot locate executable directory!"),0  );
+            throw RuntimeException("cannot locate executable directory!",0);
         }
         return path.copy( 0, path.lastIndexOf( '/' ) );
     }
@@ -215,8 +214,7 @@ OUString makeAbsoluteFileUrl(
         }
         else if (throw_exc)
         {
-            throw RuntimeException(
-                OUSTR("cannot get file url from system path: ") +
+            throw RuntimeException("cannot get file url from system path: " +
                 sys_path, Reference< XInterface >() );
         }
     }
@@ -227,13 +225,11 @@ OUString makeAbsoluteFileUrl(
     {
         if (throw_exc) {
             ::rtl::OUStringBuffer buf;
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
-                                 "making absolute file url failed: \"") );
+            buf.appendAscii( "making absolute file url failed: \"" );
             buf.append( base_url );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
-                                 "\" (base-url) and \"") );
+            buf.appendAscii( "\" (base-url) and \"" );
             buf.append( file_url );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\" (file-url)!") );
+            buf.appendAscii( "\" (file-url)!" );
             throw RuntimeException(
                 buf.makeStringAndClear(), Reference< XInterface >() );
         }
@@ -258,7 +254,7 @@ void printf_line(
     OUString const & name, OUString const & value, sal_Int32 level )
 {
    printf_space( level );
-    dp_misc::writeConsole(name + OUSTR(": ") + value + OUSTR("\n"));
+    dp_misc::writeConsole(name + ": " + value + "\n");
 }
 
 //------------------------------------------------------------------------------
@@ -272,11 +268,11 @@ void printf_package(
             true, dp_misc::getIdentifier( xPackage ) )
         : xPackage->getIdentifier() );
     if (id.IsPresent)
-        printf_line( OUSTR("Identifier"), id.Value, level );
+        printf_line( "Identifier", id.Value, level );
     OUString version(xPackage->getVersion());
     if (!version.isEmpty())
-        printf_line( OUSTR("Version"), version, level + 1 );
-    printf_line( OUSTR("URL"), xPackage->getURL(), level + 1 );
+        printf_line( "Version", version, level + 1 );
+    printf_line( "URL", xPackage->getURL(), level + 1 );
 
     beans::Optional< beans::Ambiguous<sal_Bool> > option(
         xPackage->isRegistered( Reference<task::XAbortChannel>(), xCmdEnv ) );
@@ -284,22 +280,21 @@ void printf_package(
     if (option.IsPresent) {
         beans::Ambiguous<sal_Bool> const & reg = option.Value;
         if (reg.IsAmbiguous)
-            value = OUSTR("unknown");
+            value = "unknown";
         else
-            value = reg.Value ? OUSTR("yes") : OUSTR("no");
+            value = reg.Value ? OUString("yes") : OUString("no");
     }
     else
-        value = OUSTR("n/a");
-    printf_line( OUSTR("is registered"), value, level + 1 );
+        value = "n/a";
+    printf_line( "is registered", value, level + 1 );
 
     const Reference<deployment::XPackageTypeInfo> xPackageType(
         xPackage->getPackageType() );
     OSL_ASSERT( xPackageType.is() );
     if (xPackageType.is()) {
-        printf_line( OUSTR("Media-Type"),
-                     xPackageType->getMediaType(), level + 1 );
+        printf_line( "Media-Type", xPackageType->getMediaType(), level + 1 );
     }
-    printf_line( OUSTR("Description"), xPackage->getDescription(), level + 1 );
+    printf_line( "Description", xPackage->getDescription(), level + 1 );
     if (xPackage->isBundle()) {
         Sequence< Reference<deployment::XPackage> > seq(
             xPackage->getBundle( Reference<task::XAbortChannel>(), xCmdEnv ) );
@@ -321,9 +316,9 @@ void printf_unaccepted_licenses(
 {
         OUString id(
             dp_misc::getIdentifier(ext) );
-        printf_line( OUSTR("Identifier"), id, 0 );
+        printf_line( "Identifier", id, 0 );
         printf_space(1);
-        dp_misc::writeConsole(OUSTR("License not accepted\n\n"));
+        dp_misc::writeConsole("License not accepted\n\n");
 }
 
 //==============================================================================
@@ -349,7 +344,7 @@ void printf_packages(
                 printf_unaccepted_licenses(*i);
             else
                 printf_package( *i, xCmdEnv, level );
-            dp_misc::writeConsole(OUSTR("\n"));
+            dp_misc::writeConsole("\n");
         }
     }
 }
@@ -382,25 +377,23 @@ Reference<XComponentContext> connectToOffice(
     bool verbose )
 {
     Sequence<OUString> args( 3 );
-    args[ 0 ] = OUSTR("--nologo");
-    args[ 1 ] = OUSTR("--nodefault");
+    args[ 0 ] = "--nologo";
+    args[ 1 ] = "--nodefault";
 
     OUString pipeId( ::dp_misc::generateRandomPipeId() );
     ::rtl::OUStringBuffer buf;
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("--accept=pipe,name=") );
+    buf.appendAscii( "--accept=pipe,name=" );
     buf.append( pipeId );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(";urp;") );
+    buf.appendAscii( ";urp;" );
     args[ 2 ] = buf.makeStringAndClear();
-    OUString appURL( getExecutableDir() + OUSTR("/soffice") );
+    OUString appURL( getExecutableDir() + "/soffice" );
 
     if (verbose)
     {
         dp_misc::writeConsole(
-            OUSTR("Raising process: ") +
-            appURL +
-            OUSTR("\nArguments: --nologo --nodefault ") +
-            args[2] +
-            OUSTR("\n"));
+            "Raising process: " + appURL +
+            "\nArguments: --nologo --nodefault " + args[2] +
+            "\n");
     }
 
     ::dp_misc::raiseProcess( appURL, args );
@@ -409,10 +402,9 @@ Reference<XComponentContext> connectToOffice(
         dp_misc::writeConsole("OK.  Connecting...");
 
     OSL_ASSERT( buf.getLength() == 0 );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("uno:pipe,name=") );
+    buf.appendAscii( "uno:pipe,name=" );
     buf.append( pipeId );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
-                         ";urp;StarOffice.ComponentContext") );
+    buf.appendAscii( ";urp;StarOffice.ComponentContext" );
     Reference<XComponentContext> xRet(
         ::dp_misc::resolveUnoURL(
             buf.makeStringAndClear(), xLocalComponentContext ),
@@ -431,11 +423,11 @@ Reference<XComponentContext> connectToOffice(
 OUString getLockFilePath()
 {
     OUString ret;
-    OUString sBootstrap(RTL_CONSTASCII_USTRINGPARAM("${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}"));
+    OUString sBootstrap("${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}");
     rtl::Bootstrap::expandMacros(sBootstrap);
     OUString sAbs;
     if (::osl::File::E_None ==  ::osl::File::getAbsoluteFileURL(
-        sBootstrap, OUSTR(".lock"), sAbs))
+        sBootstrap, ".lock", sAbs))
     {
         if (::osl::File::E_None ==
             ::osl::File::getSystemPathFromFileURL(sAbs, sBootstrap))
@@ -454,7 +446,7 @@ Reference<XComponentContext> getUNO(
     // do not create any user data (for the root user) in --shared mode:
     if (shared) {
         rtl::Bootstrap::set(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CFG_CacheUrl")),
+            rtl::OUString("CFG_CacheUrl"),
             rtl::OUString());
     }
 
@@ -475,14 +467,14 @@ Reference<XComponentContext> getUNO(
             //the ResMgr
             String sError(ResId(RID_STR_UNOPKG_ERROR, *DeploymentResMgr::get()));
 
-            sMsg = sMsg + OUSTR("\n") + getLockFilePath();
+            sMsg = sMsg + OUString("\n") + getLockFilePath();
 
             if (bGui)
             {
                 //We show a message box or print to the console that there
                 //is another instance already running
                 if ( ! InitVCL() )
-                    throw RuntimeException( OUSTR("Cannot initialize VCL!"),
+                    throw RuntimeException( "Cannot initialize VCL!",
                                             NULL );
                 {
                     WarningBox warn(NULL, WB_OK | WB_DEF_OK, sMsg);
@@ -493,8 +485,7 @@ Reference<XComponentContext> getUNO(
                 DeInitVCL();
             }
 
-            throw LockFileException(
-                OUSTR("\n") + sError + sMsg + OUSTR("\n"));
+            throw LockFileException(OUString("\n") + sError + sMsg + "\n");
         }
     }
 

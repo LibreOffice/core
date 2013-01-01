@@ -114,7 +114,7 @@ CommandEnvironmentImpl::CommandEnvironmentImpl(
         m_xLogFile.set(
             xComponentContext->getServiceManager()
             ->createInstanceWithArgumentsAndContext(
-                OUSTR("com.sun.star.comp.deployment.ProgressLog"),
+                "com.sun.star.comp.deployment.ProgressLog",
                 Sequence<Any>( &logfile, 1 ), xComponentContext ),
             UNO_QUERY_THROW );
     }
@@ -151,7 +151,7 @@ void CommandEnvironmentImpl::printLicense(
     OUString sNO = String(ResId(RID_STR_UNOPKG_ACCEPT_LIC_NO, *pResMgr));
     OUString sN = String(ResId(RID_STR_UNOPKG_ACCEPT_LIC_N, *pResMgr));
 
-    OUString sNewLine(RTL_CONSTASCII_USTRINGPARAM("\n"));
+    OUString sNewLine("\n");
 
     dp_misc::writeConsole(sNewLine + sNewLine + s1 + sNewLine + sNewLine);
     dp_misc::writeConsole(sLicense + sNewLine + sNewLine);
@@ -211,8 +211,8 @@ void CommandEnvironmentImpl::handle(
 {
     Any request( xRequest->getRequest() );
     OSL_ASSERT( request.getValueTypeClass() == TypeClass_EXCEPTION );
-    dp_misc::TRACE(OUSTR("[unopkg_cmdenv.cxx] incoming request:\n")
-        + ::comphelper::anyToString(request) + OUSTR("\n\n"));
+    dp_misc::TRACE("[unopkg_cmdenv.cxx] incoming request:\n"
+        + ::comphelper::anyToString(request) + "\n\n");
 
     // selections:
     bool approve = false;
@@ -238,10 +238,8 @@ void CommandEnvironmentImpl::handle(
             OSL_ASSERT( xPackageType.is() );
             if (xPackageType.is()) {
                 approve = (xPackage->isBundle() &&
-                           xPackageType->getMediaType().matchAsciiL(
-                               RTL_CONSTASCII_STRINGPARAM(
-                                   "application/"
-                                   "vnd.sun.star.legacy-package-bundle") ));
+                           xPackageType->getMediaType().match(
+                               "application/vnd.sun.star.legacy-package-bundle") );
             }
         }
         abort = !approve;
@@ -275,7 +273,7 @@ void CommandEnvironmentImpl::handle(
     {
         String sMsg(ResId(RID_STR_UNSUPPORTED_PLATFORM, *dp_gui::DeploymentGuiResMgr::get()));
         sMsg.SearchAndReplaceAllAscii("%Name", platExc.package->getDisplayName());
-        dp_misc::writeConsole(OUSTR("\n") + sMsg + OUSTR("\n\n"));
+        dp_misc::writeConsole(OUString("\n") + sMsg + "\n\n");
         approve = true;
     }
     else {
@@ -295,8 +293,7 @@ void CommandEnvironmentImpl::handle(
     if (abort && m_option_verbose && !bLicenseException)
     {
         OUString msg = ::comphelper::anyToString(request);
-        dp_misc::writeConsoleError(
-            OUSTR("\nERROR: ") + msg + OUSTR("\n"));
+        dp_misc::writeConsoleError(OUString("\nERROR: ") + msg + "\n");
     }
 
     // select:
@@ -352,11 +349,11 @@ void CommandEnvironmentImpl::update_( Any const & Status )
     }
     else {
         ::rtl::OUStringBuffer buf;
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("WARNING: ") );
+        buf.appendAscii( "WARNING: " );
         deployment::DeploymentException dp_exc;
         if (Status >>= dp_exc) {
             buf.append( dp_exc.Message );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(", Cause: ") );
+            buf.appendAscii( ", Cause: " );
             buf.append( ::comphelper::anyToString(dp_exc.Cause) );
         }
         else {
@@ -375,9 +372,9 @@ void CommandEnvironmentImpl::update_( Any const & Status )
     }
 
     if (bUseErr)
-        dp_misc::writeConsoleError(msg + OUSTR("\n"));
+        dp_misc::writeConsoleError(msg + OUString("\n"));
     else
-        dp_misc::writeConsole(msg + OUSTR("\n"));
+        dp_misc::writeConsole(msg + OUString("\n"));
 }
 
 //______________________________________________________________________________

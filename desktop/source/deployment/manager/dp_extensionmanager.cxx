@@ -1308,7 +1308,7 @@ sal_Bool ExtensionManager::synchronize(
         sSynchronizingShared.SearchAndReplaceAllAscii( "%NAME", OUString("shared"));
         dp_misc::ProgressLevel progressShared(xCmdEnv, sSynchronizingShared);
         sal_Bool bModified = getSharedRepository()->synchronize(xAbortChannel, xCmdEnv);
-        progressShared.update(OUSTR("\n\n"));
+        progressShared.update("\n\n");
 
         String sSynchronizingBundled(StrSyncRepository::get());
         sSynchronizingBundled.SearchAndReplaceAllAscii( "%NAME", OUString("bundled"));

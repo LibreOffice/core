@@ -32,7 +32,6 @@
 #include "com/sun/star/awt/XWindow.hpp"
 #include "dp_misc_api.hxx"
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 #define ARLEN(x) (sizeof (x) / sizeof *(x))
 
 namespace dp_misc {

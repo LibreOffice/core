@@ -196,23 +196,23 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
     ::std::vector<OUString> cmdPackages;
 
     OptionInfo const * info_shared = getOptionInfo(
-        s_option_infos, OUSTR("shared") );
+        s_option_infos, "shared" );
     OptionInfo const * info_force = getOptionInfo(
-        s_option_infos, OUSTR("force") );
+        s_option_infos, "force" );
     OptionInfo const * info_verbose = getOptionInfo(
-        s_option_infos, OUSTR("verbose") );
+        s_option_infos, "verbose" );
     OptionInfo const * info_log = getOptionInfo(
-        s_option_infos, OUSTR("log-file") );
+        s_option_infos, "log-file" );
     OptionInfo const * info_context = getOptionInfo(
-        s_option_infos, OUSTR("deployment-context") );
+        s_option_infos, "deployment-context" );
     OptionInfo const * info_help = getOptionInfo(
-        s_option_infos, OUSTR("help") );
+        s_option_infos, "help" );
     OptionInfo const * info_version = getOptionInfo(
-        s_option_infos, OUSTR("version") );
+        s_option_infos, "version" );
     OptionInfo const * info_bundled = getOptionInfo(
-        s_option_infos, OUSTR("bundled") );
+        s_option_infos, "bundled" );
     OptionInfo const * info_suppressLicense = getOptionInfo(
-        s_option_infos, OUSTR("suppress-license") );
+        s_option_infos, "suppress-license" );
 
 
     Reference<XComponentContext> xComponentContext;
@@ -267,12 +267,12 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
                     {
                         // is option:
                         dp_misc::writeConsoleError(
-                                 OUSTR("\nERROR: unexpected option ") +
+                                 "\nERROR: unexpected option " +
                                  cmdArg +
-                                 OUSTR("!\n") +
-                                 OUSTR("       Use " APP_NAME " ") +
+                                 "!\n" +
+                                 "       Use " + APP_NAME + " " +
                                  toString(info_help) +
-                                 OUSTR(" to print all options.\n"));
+                                 " to print all options.\n");
                         return 1;
                     }
                     else
@@ -291,11 +291,11 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
         if (repository.isEmpty())
         {
             if (option_shared)
-                repository = OUSTR("shared");
+                repository = "shared";
             else if (option_bundled)
-                repository = OUSTR("bundled");
+                repository = "bundled";
             else
-                repository = OUSTR("user");
+                repository = "user";
         }
         else
         {
@@ -304,31 +304,29 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
             }
             else if (option_shared) {
                 dp_misc::writeConsoleError(
-                    OUSTR("WARNING: explicit context given!  ") +
-                    OUSTR("Ignoring option ") +
-                    toString( info_shared ) +
-                    OUSTR("!\n") );
+                    OUString("WARNING: explicit context given!  ") +
+                    "Ignoring option " + toString( info_shared ) + "!\n" );
             }
         }
 
-        if (subCommand.equals(OUSTR("reinstall")))
+        if (subCommand == "reinstall")
         {
             //We must prevent that services and types are loaded by UNO,
             //otherwise we cannot delete the registry data folder.
             OUString extensionUnorc;
-            if (repository.equals(OUSTR("user")))
-                extensionUnorc = OUSTR("$UNO_USER_PACKAGES_CACHE/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc");
-            else if (repository.equals(OUSTR("shared")))
-                extensionUnorc = OUSTR("$SHARED_EXTENSIONS_USER/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc");
-            else if (repository.equals(OUSTR("bundled")))
-                extensionUnorc = OUSTR("$BUNDLED_EXTENSIONS_USER/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc");
+            if (repository == "user")
+                extensionUnorc = "$UNO_USER_PACKAGES_CACHE/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc";
+            else if (repository == "shared")
+                extensionUnorc = "$SHARED_EXTENSIONS_USER/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc";
+            else if (repository == "bundled")
+                extensionUnorc = "$BUNDLED_EXTENSIONS_USER/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc";
             else
                 OSL_ASSERT(0);
 
             ::rtl::Bootstrap::expandMacros(extensionUnorc);
             oslFileError e = osl_removeFile(extensionUnorc.pData);
             if (e != osl_File_E_None && e != osl_File_E_NOENT)
-                throw Exception(OUSTR("Could not delete ") + extensionUnorc, 0);
+                throw Exception("Could not delete " + extensionUnorc, 0);
         }
 
         xComponentContext = getUNO(
@@ -345,7 +343,7 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
         //Do not synchronize when command is "reinstall". This could add types and services to UNO and
         //prevent the deletion of the registry data folder
         //synching is done in XExtensionManager.reinstall
-        if (!subcmd_gui && ! subCommand.equals(OUSTR("reinstall"))
+        if (!subcmd_gui && ! (subCommand == "reinstall")
             && ! dp_misc::office_is_running())
             dp_misc::syncRepositories(false, xCmdEnv);
 
@@ -357,8 +355,8 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
                 if (subcmd_add)
                 {
                     beans::NamedValue nvSuppress(
-                        OUSTR("SUPPRESS_LICENSE"), option_suppressLicense ?
-                        makeAny(OUSTR("1")):makeAny(OUSTR("0")));
+                        OUString("SUPPRESS_LICENSE"), option_suppressLicense ?
+                        makeAny(OUString("1")):makeAny(OUString("0")));
                         xExtensionManager->addExtension(
                             cmdPackage, Sequence<beans::NamedValue>(&nvSuppress, 1),
                             repository, Reference<task::XAbortChannel>(), xCmdEnv);
@@ -387,8 +385,7 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
                 }
             }
         }
-        else if (subCommand.equalsAsciiL(
-                     RTL_CONSTASCII_STRINGPARAM("reinstall") ))
+        else if ( subCommand == "reinstall" )
         {
             xExtensionManager->reinstallDeployedExtensions(
                 false, repository, Reference<task::XAbortChannel>(), xCmdEnv);
@@ -431,7 +428,7 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
                       vec_packages.size(), false);
 
                 dp_misc::writeConsole(
-                    OUSTR("All deployed ") + repository + OUSTR(" extensions:\n\n"));
+                    OUString("All deployed ") + repository + " extensions:\n\n");
             }
             else
             {
@@ -474,7 +471,7 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
 
                     else
                         throw lang::IllegalArgumentException(
-                            OUSTR("There is no such extension deployed: ") +
+                            "There is no such extension deployed: " +
                             cmdPackages[pos],0,-1);
                 }
 
@@ -540,24 +537,22 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
         else
         {
             dp_misc::writeConsoleError(
-                OUSTR("\nERROR: unknown sub-command ") +
-                subCommand +
-                OUSTR("!\n") +
-                OUSTR("       Use " APP_NAME " ") +
-                toString(info_help) +
-                OUSTR(" to print all options.\n"));
+                "\nERROR: unknown sub-command " +
+                subCommand + "!\n" +
+                "       Use " + APP_NAME + " " +
+                toString(info_help) + " to print all options.\n");
             return 1;
         }
 
         if (option_verbose)
-            dp_misc::writeConsole(OUSTR("\n" APP_NAME " done.\n"));
+            dp_misc::writeConsole(OUString("\n") + APP_NAME + " done.\n");
         //Force to release all bridges which connect us to the child processes
         dp_misc::disposeBridges(xLocalComponentContext);
         return 0;
     }
     catch (const ucb::CommandFailedException &e)
     {
-        dp_misc::writeConsoleError(e.Message + OUSTR("\n"));
+        dp_misc::writeConsoleError(e.Message + "\n");
         bNoOtherErrorMsg = true;
     }
     catch (const ucb::CommandAbortedException &)
@@ -578,11 +573,9 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
                 cause = e.Message;
         }
 
-        dp_misc::writeConsoleError(
-            OUSTR("\nERROR: ") + exc.Message + OUSTR("\n"));
+        dp_misc::writeConsoleError("\nERROR: " + exc.Message + "\n");
         if (!cause.isEmpty())
-            dp_misc::writeConsoleError(
-                OUSTR("       Cause: ") + cause + OUSTR("\n"));
+            dp_misc::writeConsoleError("       Cause: " + cause + "\n");
     }
     catch (const LockFileException & e)
     {
@@ -593,11 +586,9 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
     catch (const ::com::sun::star::uno::Exception & e ) {
         Any exc( ::cppu::getCaughtException() );
 
-        dp_misc::writeConsoleError(
-            OUSTR("\nERROR: ") +
-            OUString(option_verbose  ? e.Message + OUSTR("\nException details: \n") +
-            ::comphelper::anyToString(exc) : e.Message) +
-            OUSTR("\n"));
+        dp_misc::writeConsoleError("\nERROR: " +
+            OUString(option_verbose ? e.Message + "\nException details: \n" +
+            ::comphelper::anyToString(exc) : e.Message) + "\n");
     }
     if (!bNoOtherErrorMsg)
         dp_misc::writeConsoleError("\n" APP_NAME " failed.\n");

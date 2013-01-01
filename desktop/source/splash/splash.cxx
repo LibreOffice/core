@@ -334,11 +334,7 @@ IMPL_LINK( SplashScreen, AppEventListenerHdl, VclWindowEvent *, inEvent )
 // Read keys from edition/edition.ini or soffice{.ini|rc}:
 OUString implReadBootstrapKey( const OUString& _rKey )
 {
-    OUString sValue(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "${.override:${BRAND_BASE_DIR}/program/edition/edition.ini:")) +
-        _rKey + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("}")));
+    OUString sValue("${.override:${BRAND_BASE_DIR}/program/edition/edition.ini:" + _rKey + "}");
     rtl::Bootstrap::expandMacros(sValue);
     return sValue;
 }
@@ -347,27 +343,19 @@ void SplashScreen::loadConfig()
 {
     _bShowLogo = implReadBootstrapKey( "Logo" ) != "0";
 
-    OUString sProgressFrameColor = implReadBootstrapKey(
-        OUString( RTL_CONSTASCII_USTRINGPARAM( "ProgressFrameColor" ) ) );
-    OUString sProgressBarColor = implReadBootstrapKey(
-        OUString( RTL_CONSTASCII_USTRINGPARAM( "ProgressBarColor" ) ) );
-    OUString sProgressTextColor = implReadBootstrapKey(
-        OUString( RTL_CONSTASCII_USTRINGPARAM( "ProgressTextColor" ) ) );
-    OUString sProgressTextBaseline = implReadBootstrapKey(
-        OUString( RTL_CONSTASCII_USTRINGPARAM( "ProgressTextBaseline" ) ) );
-    OUString sSize = implReadBootstrapKey(
-        OUString( RTL_CONSTASCII_USTRINGPARAM( "ProgressSize" ) ) );
-    OUString sPosition = implReadBootstrapKey(
-        OUString( RTL_CONSTASCII_USTRINGPARAM( "ProgressPosition" ) ) );
-    OUString sFullScreenSplash = implReadBootstrapKey(
-        OUString( RTL_CONSTASCII_USTRINGPARAM( "FullScreenSplash" ) ) );
-    OUString sNativeProgress = implReadBootstrapKey(
-        OUString( RTL_CONSTASCII_USTRINGPARAM( "NativeProgress" ) ) );
+    OUString sProgressFrameColor = implReadBootstrapKey( "ProgressFrameColor" );
+    OUString sProgressBarColor = implReadBootstrapKey( "ProgressBarColor" );
+    OUString sProgressTextColor = implReadBootstrapKey( "ProgressTextColor" );
+    OUString sProgressTextBaseline = implReadBootstrapKey( "ProgressTextBaseline" );
+    OUString sSize = implReadBootstrapKey( "ProgressSize" );
+    OUString sPosition = implReadBootstrapKey( "ProgressPosition" );
+    OUString sFullScreenSplash = implReadBootstrapKey( "FullScreenSplash" );
+    OUString sNativeProgress = implReadBootstrapKey( "NativeProgress" );
 
 
     // Determine full screen splash mode
     _bFullScreenSplash = (( !sFullScreenSplash.isEmpty() ) &&
-                          ( !sFullScreenSplash.equalsAsciiL( "0", 1 )));
+                          ( !sFullScreenSplash.equals( "0" )));
 
     // Try to retrieve the relative values for the progress bar. The current
     // schema uses the screen ratio to retrieve the associated values.
