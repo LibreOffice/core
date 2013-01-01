@@ -3856,7 +3856,16 @@ static void ImplInitMenuWindow( Window* pWin, sal_Bool bFont, sal_Bool bMenuBar 
         pWin->SetPointFont( rStyleSettings.GetMenuFont() );
     if( bMenuBar )
     {
-        if( pWin->IsNativeControlSupported( CTRL_MENUBAR, PART_ENTIRE_CONTROL ) )
+        const BitmapEx* pPersonaBitmap = rStyleSettings.GetPersonaHeader();
+        if ( pPersonaBitmap != NULL )
+        {
+            Wallpaper aWallpaper( *pPersonaBitmap );
+            aWallpaper.SetStyle( WALLPAPER_TOPRIGHT );
+            pWin->SetBackground( aWallpaper );
+            pWin->SetPaintTransparent( sal_False );
+            pWin->SetParentClipMode( 0 );
+        }
+        else if ( pWin->IsNativeControlSupported( CTRL_MENUBAR, PART_ENTIRE_CONTROL ) )
         {
             pWin->SetBackground();  // background will be drawn by NWF
         }
@@ -5494,13 +5503,19 @@ void MenuBarWindow::HighlightItem( sal_uInt16 nPos, sal_Bool bHighlight )
                         MenubarValue aControlValue;
                         aControlValue.maTopDockingAreaHeight = ImplGetTopDockingAreaHeight( this );
 
-                        Point tmp(0,0);
-                        Rectangle aBgRegion( tmp, GetOutputSizePixel() );
-                        DrawNativeControl( CTRL_MENUBAR, PART_ENTIRE_CONTROL,
-                                           aBgRegion,
-                                           CTRL_STATE_ENABLED,
-                                           aControlValue,
-                                           OUString() );
+                        if ( GetSettings().GetStyleSettings().GetPersonaHeader() )
+                            Erase();
+                        else
+                        {
+                            Point tmp(0,0);
+                            Rectangle aBgRegion( tmp, GetOutputSizePixel() );
+                            DrawNativeControl( CTRL_MENUBAR, PART_ENTIRE_CONTROL,
+                                    aBgRegion,
+                                    CTRL_STATE_ENABLED,
+                                    aControlValue,
+                                    OUString() );
+                        }
+
                         ImplAddNWFSeparator( this, aControlValue );
 
                         // draw selected item
@@ -5524,12 +5539,18 @@ void MenuBarWindow::HighlightItem( sal_uInt16 nPos, sal_Bool bHighlight )
                         MenubarValue aMenubarValue;
                         aMenubarValue.maTopDockingAreaHeight = ImplGetTopDockingAreaHeight( this );
 
-                        // use full window size to get proper gradient
-                        // but clip accordingly
-                        Point aPt;
-                        Rectangle aCtrlRect( aPt, GetOutputSizePixel() );
+                        if ( GetSettings().GetStyleSettings().GetPersonaHeader() )
+                            Erase( aRect );
+                        else
+                        {
+                            // use full window size to get proper gradient
+                            // but clip accordingly
+                            Point aPt;
+                            Rectangle aCtrlRect( aPt, GetOutputSizePixel() );
 
-                        DrawNativeControl( CTRL_MENUBAR, PART_ENTIRE_CONTROL, aCtrlRect, CTRL_STATE_ENABLED, aMenubarValue, rtl::OUString() );
+                            DrawNativeControl( CTRL_MENUBAR, PART_ENTIRE_CONTROL, aCtrlRect, CTRL_STATE_ENABLED, aMenubarValue, rtl::OUString() );
+                        }
+
                         ImplAddNWFSeparator( this, aMenubarValue );
                     }
                     else
@@ -5751,13 +5772,19 @@ void MenuBarWindow::Paint( const Rectangle& )
 
     if( IsNativeControlSupported( CTRL_MENUBAR, PART_ENTIRE_CONTROL) )
     {
-        Point aPt;
-        Rectangle aCtrlRegion( aPt, GetOutputSizePixel() );
-
         MenubarValue aMenubarValue;
         aMenubarValue.maTopDockingAreaHeight = ImplGetTopDockingAreaHeight( this );
 
-        DrawNativeControl( CTRL_MENUBAR, PART_ENTIRE_CONTROL, aCtrlRegion, CTRL_STATE_ENABLED, aMenubarValue, rtl::OUString() );
+        if ( GetSettings().GetStyleSettings().GetPersonaHeader() )
+            Erase();
+        else
+        {
+            Point aPt;
+            Rectangle aCtrlRegion( aPt, GetOutputSizePixel() );
+
+            DrawNativeControl( CTRL_MENUBAR, PART_ENTIRE_CONTROL, aCtrlRegion, CTRL_STATE_ENABLED, aMenubarValue, rtl::OUString() );
+        }
+
         ImplAddNWFSeparator( this, aMenubarValue );
     }
     SetFillColor( GetSettings().GetStyleSettings().GetMenuColor() );
