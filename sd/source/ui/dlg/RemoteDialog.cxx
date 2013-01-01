@@ -25,6 +25,8 @@ RemoteDialog::RemoteDialog( Window *pWindow ) :
     mClientBox(         this, NULL, SdResId( LB_SERVERS ) ),
     mPreviouslyDiscoverable()
 {
+    (void) mPreviouslyDiscoverable; // avoid warnings about unused member
+
 #ifdef ENABLE_SDREMOTE
     FreeResource();
 
@@ -47,8 +49,6 @@ RemoteDialog::RemoteDialog( Window *pWindow ) :
     mButtonConnect.SetClickHdl( LINK( this, RemoteDialog, HandleConnectButton ) );
     SetCloseHdl( LINK( this, RemoteDialog, CloseHdl ) );
     mButtonCancel.SetClickHdl( LINK( this, RemoteDialog, CloseHdl ) );
-#else
-    (void) mPreviouslyDiscoverable; // avoid warnings about unused member
 #endif
 }
 
