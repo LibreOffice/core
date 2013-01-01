@@ -32,8 +32,8 @@ $(call gb_ExternalProject_get_state_target,openldap,build) :
 		$(if $(filter YES,$(SYSTEM_NSS)), \
 			CPPFLAGS="$(NSS_CFLAGS)" CFLAGS="$(NSS_CFLAGS)" LDFLAGS="$(NSS_LIBS)" \
 			, \
-			CPPFLAGS="-I $(OUTDIR)/inc/mozilla/nss -I $(OUTDIR)/inc/mozilla/nspr" \
-			CFLAGS="-I $(OUTDIR)/inc/mozilla/nss -I $(OUTDIR)/inc/mozilla/nspr" \
+			CPPFLAGS="-I$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/public/nss -I$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/out/include" \
+			CFLAGS="-I$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/public/nss -I$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/out/include" \
 			LDFLAGS="-L$(OUTDIR)/lib" \
 		) \
 	&& MAKEFLAGS= && $(MAKE) \

@@ -2206,9 +2206,7 @@ endif # GUIBASE=unx
 
 ifeq (,$(filter DESKTOP,$(BUILD_TYPE)))
 
-define gb_LinkTarget__use_nss3
-
-endef
+gb_LinkTarget__use_nss3:=
 
 else
 
@@ -2245,10 +2243,11 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
 ))
 
 define gb_LinkTarget__use_nss3
+$(call gb_LinkTarget_use_package,$(1),nss)
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
-	-I$(OUTDIR)/inc/mozilla/nspr \
-	-I$(OUTDIR)/inc/mozilla/nss \
+	-I$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/public/nss \
+	-I$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/out/include \
 )
 
 $(call gb_LinkTarget_use_libraries,$(1),\
@@ -2260,6 +2259,7 @@ $(call gb_LinkTarget_use_libraries,$(1),\
 endef
 
 define gb_LinkTarget__use_plc4
+$(call gb_LinkTarget_use_package,$(1),nss)
 $(call gb_LinkTarget_use_libraries,$(1),\
     plc4 \
 )
