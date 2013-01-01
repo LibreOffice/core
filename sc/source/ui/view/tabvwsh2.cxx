@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifdef _MSC_VER
-#pragma optimize ("", off)
-#endif
-
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/aeitem.hxx>

@@ -26,11 +26,6 @@
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 
-
-#ifdef _MSC_VER
-#pragma optimize("",off)
-#endif
-
 #include <sfx2/objsh.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdoole2.hxx>

@@ -59,10 +59,6 @@ XPMReader::~XPMReader()
 
 // ------------------------------------------------------------------------
 
-#ifdef _MSC_VER
-#pragma optimize ("",off)
-#endif
-
 ReadState XPMReader::ReadXPM( Graphic& rGraphic )
 {
     ReadState   eReadState;
@@ -217,10 +213,6 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
     }
     return eReadState;
 }
-
-#ifdef _MSC_VER
-#pragma optimize ("",on)
-#endif
 
 // ------------------------------------------------------------------------
 // ImplGetColor ermittelt saemtliche Farbwerte,

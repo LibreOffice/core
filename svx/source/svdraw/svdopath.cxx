@@ -35,11 +35,6 @@
 #include "svx/svdglob.hxx"  // Stringcache
 #include "svx/svdstr.hrc"   // the object's name
 
-#ifdef _MSC_VER
-#pragma optimize ("",off)
-#pragma warning(disable: 4748) // "... because optimizations are disabled ..."
-#endif
-
 #include <svx/xlnwtit.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xflclit.hxx>

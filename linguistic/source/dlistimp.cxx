@@ -870,11 +870,6 @@ static void AddUserData( const uno::Reference< XDictionary > &rDic )
     }
 }
 
-
-#if defined _MSC_VER
-#pragma optimize("g",off)
-#endif
-
 static sal_Bool IsVers2OrNewer( const String& rFileURL, sal_uInt16& nLng, sal_Bool& bNeg )
 {
     if (rFileURL.Len() == 0)

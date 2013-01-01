@@ -32,10 +32,6 @@
 
 #include <svtools/stdctrl.hxx>
 
-#ifdef _MSC_VER
-#pragma optimize ("", off)
-#endif
-
 #include <svtools/helpid.hrc>
 
 using namespace com::sun::star;

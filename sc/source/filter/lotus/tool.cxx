@@ -36,10 +36,6 @@
 
 #include <math.h>
 
-#ifdef _MSC_VER
-#pragma optimize("",off)
-#endif
-
 //--------------------------------------------------------- EXTERNE VARIABLEN -
 extern WKTYP                eTyp;           // -> filter.cxx, aktueller Dateityp
 extern ScDocument*          pDoc;           // -> filter.cxx, Aufhaenger zum Dokumentzugriff

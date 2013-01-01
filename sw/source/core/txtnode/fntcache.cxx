@@ -653,14 +653,6 @@ static bool lcl_IsMonoSpaceFont( const OutputDevice& rOut )
     return nWidth1 == nWidth2;
 }
 
-// ER 09.07.95 20:34
-// mit -Ox Optimierung stuerzt's unter win95 ab
-// JP 12.07.95: unter WNT auch (i386);       Alpha ??
-// global optimization off
-#ifdef _MSC_VER
-#pragma optimize("g",off)
-#endif
-
 /* This helper structure (SwForbidden) contains the already marked parts of the string
     to avoid double lines (e.g grammar + spell check error) */
 
@@ -1773,12 +1765,6 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         delete[] pKernArray;
     }
 }
-
-
-// optimization disabled for DrawText()
-#ifdef _MSC_VER
-#pragma optimize("",on)
-#endif
 
 
 /*************************************************************************

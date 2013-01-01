@@ -202,10 +202,6 @@ static void lcl_InsertMedia( const ::rtl::OUString& rMediaURL, bool bApi,
 |*
 \************************************************************************/
 
-#ifdef _MSC_VER
-#pragma optimize("",off)
-#endif
-
 FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
                                   Window*           pWin,
                                   ScDrawView*       pViewP,

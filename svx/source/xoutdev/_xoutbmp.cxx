@@ -299,10 +299,6 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
 
 // ------------------------------------------------------------------------
 
-#ifdef _MSC_VER
-#pragma optimize ( "", off )
-#endif
-
 sal_uInt16 XOutBitmap::ExportGraphic( const Graphic& rGraphic, const INetURLObject& rURL,
                                   GraphicFilter& rFilter, const sal_uInt16 nFormat,
                                   const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData )
@@ -328,10 +324,6 @@ sal_uInt16 XOutBitmap::ExportGraphic( const Graphic& rGraphic, const INetURLObje
 
     return nRet;
 }
-
-#ifdef _MSC_VER
-#pragma optimize ( "", on )
-#endif
 
 // ------------------------------------------------------------------------
 

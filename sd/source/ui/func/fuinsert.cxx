@@ -112,10 +112,6 @@ FunctionReference FuInsertGraphic::Create( ViewShell* pViewSh, ::sd::Window* pWi
     return xFunc;
 }
 
-#ifdef _MSC_VER
-#pragma optimize ( "", off )
-#endif
-
 void FuInsertGraphic::DoExecute( SfxRequest&  )
 {
     SvxOpenGraphicDialog    aDlg(SdResId(STR_INSERTGRAPHIC));
@@ -163,10 +159,6 @@ void FuInsertGraphic::DoExecute( SfxRequest&  )
         }
     }
 }
-
-#ifdef _MSC_VER
-#pragma optimize ( "", on )
-#endif
 
 /*************************************************************************
 |*

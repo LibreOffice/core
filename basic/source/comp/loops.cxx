@@ -451,10 +451,6 @@ done:
 
 // ON Error/Variable
 
-#ifdef _MSC_VER
-#pragma optimize("",off)
-#endif
-
 void SbiParser::On()
 {
     SbiToken eTok = Peek();
@@ -518,10 +514,6 @@ void SbiParser::On()
         else Error( SbERR_EXPECTED, "GoTo/Resume" );
     }
 }
-
-#ifdef _MSC_VER
-#pragma optimize("",off)
-#endif
 
 // RESUME [0]|NEXT|label
 

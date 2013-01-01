@@ -96,10 +96,6 @@ bool ScChartArray::operator==(const ScChartArray& rCmp) const
         && aName == rCmp.aName;
 }
 
-#ifdef _MSC_VER
-#pragma optimize("",off)
-#endif
-
 ScMemChart* ScChartArray::CreateMemChart()
 {
     ScRangeListRef aRangeListRef(GetRangeList());
@@ -484,10 +480,6 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
 
     return pMemChart;
 }
-
-#ifdef _MSC_VER
-#pragma optimize("",on)
-#endif
 
 ScChartCollection::ScChartCollection() {}
 ScChartCollection::ScChartCollection(const ScChartCollection& r) :

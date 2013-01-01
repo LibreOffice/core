@@ -679,10 +679,6 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickAddHdl_Impl)
 
 //------------------------------------------------------------------------
 
-#ifdef _MSC_VER
-#pragma optimize ( "", off )
-#endif
-
 IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl_Impl)
 {
     ResMgr& rMgr = CUI_MGR();
@@ -776,10 +772,6 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl_Impl)
 
     return 0L;
 }
-
-#ifdef _MSC_VER
-#pragma optimize ( "", on )
-#endif
 
 //------------------------------------------------------------------------
 

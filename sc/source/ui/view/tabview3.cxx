@@ -254,10 +254,6 @@ void ScTabView::InvalidateAttribs()
 //                  oder Referenz verschicken
 //      ohne Optimierung wegen BugId 29307
 
-#ifdef _MSC_VER
-#pragma optimize ( "", off )
-#endif
-
 void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
 {
     SCCOL nOldX = aViewData.GetCurX();
@@ -284,10 +280,6 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
         CursorPosChanged();
     }
 }
-
-#ifdef _MSC_VER
-#pragma optimize ( "", on )
-#endif
 
 void ScTabView::CheckSelectionTransfer()
 {

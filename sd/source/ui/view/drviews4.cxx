@@ -68,10 +68,6 @@ namespace sd {
 
 #define PIPETTE_RANGE 0
 
-#ifdef _MSC_VER
-#pragma optimize ( "", off )
-#endif
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing;
 
@@ -962,13 +958,6 @@ void DrawViewShell::ShowSnapLineContextMenu (
             break;
     }
 }
-
-
-
-
-#ifdef _MSC_VER
-#pragma optimize ( "", on )
-#endif
 
 } // end of namespace sd
 

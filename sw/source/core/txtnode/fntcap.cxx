@@ -541,11 +541,6 @@ void SwSubFont::DrawStretchCapital( SwDrawTextInfo &rInf )
  *                  SwSubFont::DoOnCapitals() const
  *************************************************************************/
 
-// JP 22.8.2001 - global optimization off - Bug 91245 / 91223
-#ifdef _MSC_VER
-#pragma optimize("g",off)
-#endif
-
 void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
 {
     OSL_ENSURE( pLastFont, "SwFont::DoOnCapitals: No LastFont?!" );
@@ -835,11 +830,5 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
     rDo.GetInf().SetText( rOldText );
     rDo.GetInf().SetKanaDiff( nKana );
 }
-
-// JP 22.8.2001 - global optimization off - Bug 91245 / 91223
-#ifdef _MSC_VER
-#pragma optimize("g",on)
-#endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

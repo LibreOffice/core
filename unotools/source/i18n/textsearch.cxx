@@ -206,11 +206,6 @@ TextSearch::~TextSearch()
  * methods, such as ordinary string searching or regular expression
  * matching, using the method pointer.
  */
-#if defined _MSC_VER
-#pragma optimize("", off)
-#pragma warning(push)
-#pragma warning(disable: 4748)
-#endif
 int TextSearch::SearchFrwrd( const String & rStr, xub_StrLen* pStart,
                             xub_StrLen* pEnde, SearchResult* pRes )
 {
@@ -405,12 +400,6 @@ void TextSearch::ReplaceBackReferences( String& rReplaceStr, const String &rStr,
         }
     }
 }
-
-
-#if defined _MSC_VER
-#pragma optimize("", on)
-#pragma warning(pop)
-#endif
 
 // ............................................................................
 }   // namespace utl

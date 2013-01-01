@@ -62,11 +62,6 @@ using namespace com::sun::star;
 
 // -----------------------------------------------------------------------
 
-#ifdef _MSC_VER
-#pragma optimize ( "", off )
-#endif
-
-
 void ScDrawView::Construct()
 {
     EnableExtendedKeyInputDispatcher(false);
@@ -570,10 +565,6 @@ void ScDrawView::UpdateUserViewOptions()
                            rGrid.GetFldDrawY() / (rGrid.GetFldDivisionY() + 1) ) );
     }
 }
-
-#ifdef _MSC_VER
-#pragma optimize ( "", on )
-#endif
 
 sal_Bool ScDrawView::SelectObject( const String& rName )
 {

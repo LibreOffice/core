@@ -50,14 +50,6 @@ Point aDragStartDiff;
 
 // -----------------------------------------------------------------------
 
-//! welche Funktionen aus drawview/drawvie4 muessen wirklich ohne Optimierung sein?
-
-#ifdef _MSC_VER
-#pragma optimize ( "", off )
-#endif
-
-// -----------------------------------------------------------------------
-
 void ScDrawView::CheckOle( const SdrMarkList& rMarkList, sal_Bool& rAnyOle, sal_Bool& rOneOle )
 {
     rAnyOle = rOneOle = false;
@@ -331,13 +323,6 @@ void ScDrawView::SetMarkedOriginalSize()
     else
         delete pUndoGroup;
 }
-
-
-#ifdef _MSC_VER
-#pragma optimize ( "", on )
-#endif
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

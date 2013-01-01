@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#ifdef _MSC_VER
-#pragma optimize("",off)
-#endif
-
 #include "scitems.hxx"
 #include <editeng/boxitem.hxx>
 #include <editeng/wghtitem.hxx>

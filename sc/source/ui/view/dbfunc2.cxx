@@ -24,14 +24,6 @@
 #include "sc.hrc"
 #include "globstr.hrc"
 
-
-// STATIC DATA -----------------------------------------------------------
-
-
-#ifdef _MSC_VER
-#pragma optimize ( "", off )
-#endif
-
 //==================================================================
 
 void ScDBFunc::UpdateCharts( sal_Bool bAllCharts )

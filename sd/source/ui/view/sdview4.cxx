@@ -64,10 +64,6 @@ using namespace com::sun::star;
 
 namespace sd {
 
-#ifdef _MSC_VER
-#pragma optimize ( "", off )
-#endif
-
 /*************************************************************************
 |*
 |* Graphik einfuegen
@@ -566,11 +562,6 @@ IMPL_LINK_NOARG(View, DropErrorHdl)
     InfoBox( mpViewSh ? mpViewSh->GetActiveWindow() : 0, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
     return 0;
 }
-
-#ifdef _MSC_VER
-#pragma optimize ( "", on )
-#endif
-
 
 /*************************************************************************
 |*

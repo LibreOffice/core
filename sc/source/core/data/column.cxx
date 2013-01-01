@@ -37,10 +37,6 @@
 #include "detfunc.hxx"          // for Notes in Sort/Swap
 #include "postit.hxx"
 
-//#pragma optimize ( "", off )
-//  nur Search ohne Optimierung!
-
-// STATIC DATA -----------------------------------------------------------
 using ::editeng::SvxBorderLine;
 using namespace formula;
 
@@ -668,11 +664,6 @@ void ScColumn::ApplyAttr( SCROW nRow, const SfxPoolItem& rAttr )
         // alte Version mit SfxItemPoolCache:
 }
 
-#ifdef _MSC_VER
-#pragma optimize ( "", off )
-#endif
-
-
 bool ScColumn::Search( SCROW nRow, SCSIZE& nIndex ) const
 {
     if ( maItems.empty() )
@@ -760,11 +751,6 @@ bool ScColumn::Search( SCROW nRow, SCSIZE& nIndex ) const
         nIndex = static_cast<SCSIZE>(nLo); // rear index
     return bFound;
 }
-
-#ifdef _MSC_VER
-#pragma optimize ( "", on )
-#endif
-
 
 ScBaseCell* ScColumn::GetCell( SCROW nRow ) const
 {

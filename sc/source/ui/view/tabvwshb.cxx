@@ -20,10 +20,6 @@
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 
-#ifdef _MSC_VER
-#pragma optimize ("", off)
-#endif
-
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <sfx2/app.hxx>

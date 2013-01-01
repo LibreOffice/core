@@ -304,10 +304,6 @@ void BrowseBox::EndScroll()
 
 //-------------------------------------------------------------------
 
-#ifdef _MSC_VER
-#pragma optimize( "", off )
-#endif
-
 void BrowseBox::ToggleSelection( sal_Bool bForce )
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
@@ -380,10 +376,6 @@ void BrowseBox::ToggleSelection( sal_Bool bForce )
 
     bNotToggleSel = sal_False;
 }
-
-#ifdef _MSC_VER
-#pragma optimize( "", on )
-#endif
 
 //-------------------------------------------------------------------
 
@@ -1457,9 +1449,6 @@ IMPL_LINK( BrowseBox, StartDragHdl, HeaderBar*, pBar )
 
 //-------------------------------------------------------------------
 // usually only the first column was resized
-#ifdef _MSC_VER
-#pragma optimize("",off)
-#endif
 
 void BrowseBox::MouseButtonDown( const MouseEvent& rEvt )
 {
@@ -1514,10 +1503,6 @@ void BrowseBox::MouseButtonDown( const MouseEvent& rEvt )
     else
         SetNoSelection();
 }
-
-#ifdef _MSC_VER
-#pragma optimize("",on)
-#endif
 
 //-------------------------------------------------------------------
 

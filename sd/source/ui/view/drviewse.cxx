@@ -101,10 +101,6 @@ using namespace ::com::sun::star::presentation;
 
 namespace sd {
 
-#ifdef _MSC_VER
-#pragma optimize ( "", off )
-#endif
-
 /*************************************************************************
 |*
 |* Permanente Funktionen
@@ -1684,10 +1680,6 @@ void DrawViewShell::StopSlideShow (bool /*bCloseFrame*/)
         xPresentation->end();
     }
 }
-
-#ifdef _MSC_VER
-#pragma optimize ( "", on )
-#endif
 
 } // end of namespace sd
 

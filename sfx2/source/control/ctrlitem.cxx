@@ -353,10 +353,4 @@ SfxItemState SfxControllerItem::GetItemState
                         : SFX_ITEM_AVAILABLE;
 }
 
-//------------------------------------------------------------------------
-
-#ifdef _MSC_VER
-#pragma optimize("g",off)
-#endif
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

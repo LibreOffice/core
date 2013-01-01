@@ -577,14 +577,6 @@ SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
     return pDocPrinter;
 }
 
-//-------------------------------------------------------------------------
-// Sadly enough the problem arises with WIN32 that nothing is printed when
-// SID_PRINTDOCDIRECT auflaueft. At the moment the only known solution in this
-// case is to turn off the optimazation.
-#ifdef _MSC_VER
-#pragma optimize ( "", off )
-#endif
-
 void SfxViewShell::ExecPrint( const uno::Sequence < beans::PropertyValue >& rProps, sal_Bool bIsAPI, sal_Bool bIsDirect )
 {
     // get the current selection; our controller should know it
@@ -889,11 +881,6 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
         }
     }
 }
-
-// Turn on optimazation again.
-#ifdef _MSC_VER
-#pragma optimize ( "", on )
-#endif
 
 //--------------------------------------------------------------------
 

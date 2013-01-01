@@ -80,8 +80,6 @@
 #include <PostItMgr.hxx>
 #include <vector>
 
-//#pragma optimize("ity",on)
-
 /*************************************************************************
 |*
 |*  SwLayAction static stuff

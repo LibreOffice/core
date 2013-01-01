@@ -370,11 +370,6 @@ static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth,
 // This routine is public because it's also used by the Put-functions
 // in the class SbxImpSTRING.
 
-#ifdef _MSC_VER
-#pragma optimize( "", off )
-#pragma warning(disable: 4748) // "... because optimizations are disabled ..."
-#endif
-
 void ImpCvtNum( double nNum, short nPrec, ::rtl::OUString& rRes, bool bCoreString )
 {
     char *q;
@@ -401,10 +396,6 @@ void ImpCvtNum( double nNum, short nPrec, ::rtl::OUString& rRes, bool bCoreStrin
     *++p = 0;
     rRes = ::rtl::OUString::createFromAscii( cBuf );
 }
-
-#ifdef _MSC_VER
-#pragma optimize( "", on )
-#endif
 
 bool ImpConvStringExt( ::rtl::OUString& rSrc, SbxDataType eTargetType )
 {

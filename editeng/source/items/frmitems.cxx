@@ -3309,10 +3309,6 @@ void SvxLineItem::SetLine( const SvxBorderLine* pNew )
     pLine = pNew ? new SvxBorderLine( *pNew ) : 0;
 }
 
-#ifdef _MSC_VER
-#pragma optimize ( "", off )
-#endif
-
 // class SvxBrushItem ----------------------------------------------------
 
 #define LOAD_GRAPHIC    ((sal_uInt16)0x0001)
@@ -4138,10 +4134,6 @@ SvxBrushItem::SvxBrushItem( const CntWallpaperItem& rItem, sal_uInt16 _nWhich ) 
         SetGraphicPos( WallpaperStyle2GraphicPos((WallpaperStyle)rItem.GetStyle() ) );
     }
 }
-
-#ifdef _MSC_VER
-#pragma optimize ( "", on )
-#endif
 
 void  SvxBrushItem::ApplyGraphicTransparency_Impl()
 {

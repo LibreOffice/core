@@ -70,10 +70,6 @@
 #include <svtools/soerr.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
-#ifdef _MSC_VER
-#pragma optimize ( "", off )
-#endif
-
 using namespace com::sun::star;
 
 #ifndef DISABLE_DYNLOADING // otherwise use the one in sw...
@@ -1091,10 +1087,6 @@ sal_Int8 ViewShell::ExecuteDrop (
     ::sd::View* pView = GetView();
     return( pView ? pView->ExecuteDrop( rEvt, rTargetHelper, pTargetWindow, nPage, nLayer ) : DND_ACTION_NONE );
 }
-
-#ifdef _MSC_VER
-#pragma optimize ( "", on )
-#endif
 
 void ViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence <
     ::com::sun::star::beans::PropertyValue >& rSequence, sal_Bool bBrowse)

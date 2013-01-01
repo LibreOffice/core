@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifdef _MSC_VER
-#pragma optimize("",off)
-                                        // sonst Absturz Win beim Fuellen
-#endif
-
 #include "scitems.hxx"
 #include <comphelper/string.hxx>
 #include <svx/algitem.hxx>

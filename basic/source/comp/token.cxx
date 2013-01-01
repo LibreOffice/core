@@ -533,11 +533,6 @@ special:
     return eCurTok;
 }
 
-#ifdef _MSC_VER
-#pragma optimize("",off)
-#endif
-
-
 bool SbiTokenizer::MayBeLabel( bool bNeedsColon )
 {
     if( eCurTok == SYMBOL || m_aTokenLabelInfo.canTokenBeLabel( eCurTok ) )
@@ -551,10 +546,5 @@ bool SbiTokenizer::MayBeLabel( bool bNeedsColon )
                   && nVal >= 0 );
     }
 }
-
-#ifdef _MSC_VER
-#pragma optimize("",off)
-#endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

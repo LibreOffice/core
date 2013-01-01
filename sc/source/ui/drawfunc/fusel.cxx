@@ -56,10 +56,6 @@
 
 // -----------------------------------------------------------------------
 
-#ifdef _MSC_VER
-#pragma optimize ( "", off )
-#endif
-
 using namespace com::sun::star;
 
 /*************************************************************************
@@ -635,10 +631,5 @@ void FuSelection::Deactivate()
     **************************************************************************/
     FuDraw::Deactivate();
 }
-
-
-#ifdef _MSC_VER
-#pragma optimize ( "", on )
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
