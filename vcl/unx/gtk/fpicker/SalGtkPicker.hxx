@@ -61,7 +61,6 @@ class SalGtkPicker
 
         // to instantiate own services
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
-        ::com::sun::star::uno::Reference< com::sun::star::uno::XInterface > createInstance( const rtl::OUString &rName );
 
         rtl::OUString getResString( sal_Int32 aId );
     private:

@@ -66,7 +66,6 @@ class SVX_DLLPUBLIC SvxNumValueSet : public ValueSet
             com::sun::star::container::XIndexAccess> > aOutlineSettings;
 
     public:
-    SvxNumValueSet( Window* pParent, const ResId& rResId, sal_uInt16 nType );
     SvxNumValueSet(Window* pParent, WinBits nWinBits = WB_TABSTOP);
     void init(sal_uInt16 nType);
     ~SvxNumValueSet();
@@ -106,7 +105,6 @@ class SVX_DLLPUBLIC SvxBmpNumValueSet : public SvxNumValueSet
     Timer&          GetFormatTimer() {return aFormatTimer;}
 
     public:
-    SvxBmpNumValueSet(Window* pParent, const ResId& rResId);
     SvxBmpNumValueSet(Window* pParent, WinBits nWinBits = WB_TABSTOP);
     ~SvxBmpNumValueSet();
 

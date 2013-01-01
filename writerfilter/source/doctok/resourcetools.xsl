@@ -371,34 +371,6 @@ namespace NS_sprm { </xsl:text>
   <xsl:text> | cat&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="UML:Model" mode="sprmidstoxml">
-  <xsl:text>
-void sprmidsToXML(::std::ostream &amp; out)
-{
-  </xsl:text>
-  <xsl:for-each select=".//UML:Class[.//UML:Stereotype/@xmi.idref='ww8sprm']">
-    <xsl:variable name="sprmcode">
-      <xsl:value-of select=".//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref = 'sprmcode']/UML:TaggedValue.dataValue"/>
-    </xsl:variable>
-    <xsl:variable name="sprmcodelower">
-      <xsl:value-of select="translate($sprmcode, 'ABCDEF', 'abcdef')"/>
-    </xsl:variable>
-    <xsl:variable name="sprmidname">
-      <xsl:text>sprm:</xsl:text>
-      <xsl:value-of select="substring-after(@name, 'sprm')"/>
-    </xsl:variable>
-    <xsl:text>
-    out &lt;&lt; "&lt;theid name=\"</xsl:text>
-    <xsl:value-of select="$sprmidname"/>
-    <xsl:text>\"&gt;</xsl:text>
-    <xsl:value-of select="$sprmcodelower"/>
-    <xsl:text>&lt;/theid&gt;" &lt;&lt; endl;</xsl:text>
-  </xsl:for-each>
-  <xsl:text>
-}
-  </xsl:text>
-</xsl:template>
-
 <xsl:template match="UML:Model" mode='sprmreplace'>
   <xsl:for-each select=".//UML:Class[.//UML:Stereotype/@xmi.idref='ww8sprm']">
     <xsl:variable name="pattern">
@@ -438,83 +410,6 @@ sed "s/</xsl:text>
 <!-- Key all attributes with the same name and same value -->
 <xsl:key name="same-valued-tagged-data"
          match="UML:TaggedValue.dataValue" use="." />
-
-<xsl:template name="analyzerdoctokidsattrs">
-  <xsl:text>
-  /* Attributes */</xsl:text>
-  <xsl:for-each select='.//UML:Attribute[@name!="reserved"]'>
-    <xsl:if test='count(.//UML:Stereotype[@xmi.idref="noqname"]) = 0'>
-      <xsl:for-each select='.//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="attrid"]'>
-        <xsl:choose>
-          <xsl:when test='generate-id(UML:TaggedValue.dataValue) != generate-id(key("same-valued-tagged-data", UML:TaggedValue.dataValue)[1])'/>
-          <xsl:otherwise>
-            <xsl:text>
-    out &lt;&lt; "&lt;theid name=\"</xsl:text>
-    <xsl:value-of select=".//UML:TaggedValue.dataValue"/>
-    <xsl:text>\"&gt;</xsl:text>
-    <xsl:value-of select='10000 + position()'/>
-    <xsl:text>&lt;/theid&gt;" &lt;&lt; endl;</xsl:text>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:for-each>
-    </xsl:if>
-  </xsl:for-each>
-</xsl:template>
-
-<xsl:template name="analyzerdoctokidsops">
-  <xsl:text>
-  /* Operations */</xsl:text>
-  <xsl:for-each select='.//UML:Operation[@name!="reserved"]'>
-    <xsl:if test='count(.//UML:Stereotype[@xmi.idref="noqname"]) = 0'>
-      <xsl:for-each select='.//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="opid"]'>
-        <xsl:choose>
-          <xsl:when test='generate-id(UML:TaggedValue.dataValue) != generate-id(key("same-valued-tagged-data", UML:TaggedValue.dataValue)[1])'/>
-          <xsl:otherwise>
-            <xsl:text>
-    out &lt;&lt; "&lt;theid name=\"</xsl:text>
-    <xsl:value-of select=".//UML:TaggedValue.dataValue"/>
-    <xsl:text>\"&gt;</xsl:text>
-    <xsl:value-of select='20000 + position()'/>
-    <xsl:text>&lt;/theid&gt;" &lt;&lt; endl;</xsl:text>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:for-each>
-    </xsl:if>
-  </xsl:for-each>
-</xsl:template>
-
-<xsl:template name="analyzerdoctokidsclasses">
-  <xsl:text>
-  /* clases */</xsl:text>
-  <xsl:for-each select='.//UML:Class[@name!="reserved"]'>
-    <xsl:for-each select='.//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="classid"]'>
-      <xsl:choose>
-        <xsl:when test='.//UML:Stereotype[@xmi.idref="noqname"]'/>
-        <xsl:when test='generate-id(UML:TaggedValue.dataValue) != generate-id(key("same-valued-tagged-data", UML:TaggedValue.dataValue)[1])'/>
-        <xsl:otherwise>
-          <xsl:text>
-    out &lt;&lt; "&lt;theid name=\"</xsl:text>
-    <xsl:value-of select=".//UML:TaggedValue.dataValue"/>
-    <xsl:text>\"&gt;</xsl:text>
-    <xsl:value-of select='30000 + position()'/>
-    <xsl:text>&lt;/theid&gt;" &lt;&lt; endl;</xsl:text>
-        </xsl:otherwise>
-      </xsl:choose>
-  </xsl:for-each>
-  </xsl:for-each>
-</xsl:template>
-
-<xsl:template match="UML:Model" mode="analyzerdoctokids">
-  <xsl:text>
-void doctokidsToXML(::std::ostream &amp; out)
-{</xsl:text>
-<xsl:call-template name="analyzerdoctokidsattrs"/>
-<xsl:call-template name="analyzerdoctokidsops"/>
-<xsl:call-template name="analyzerdoctokidsclasses"/>
-<xsl:text>
-}
-  </xsl:text>
-</xsl:template>
 
   <xsl:template name="licenseheader">
     <xsl:text>

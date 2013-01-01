@@ -28,8 +28,6 @@
 namespace writerfilter
 {
   <xsl:apply-templates select=".//UML:Model" mode="qnametostr"/>
-  <xsl:apply-templates select='.//UML:Model' mode='sprmidstoxml'/>
-  <xsl:apply-templates select='.//UML:Model' mode='analyzerdoctokids'/>
 }
 </xsl:template>
 </xsl:stylesheet>

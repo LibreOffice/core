@@ -79,39 +79,6 @@ void QNameToString::init_ooxml()
     </xsl:text>
   </xsl:template>
 
-  <xsl:template name="ooxmlidstoxml">
-    <xsl:text>
-void ooxmlsprmidsToXML(::std::ostream &amp; out)
-{</xsl:text>
-    <xsl:for-each select="//@tokenid">
-      <xsl:if test="contains(., 'ooxml:') and generate-id(.) = generate-id(key('tokenids', .)[1]) and ancestor::element">
-        <xsl:text>
-    out &lt;&lt; "&lt;theid name=\"</xsl:text>
-    <xsl:value-of select="."/>
-    <xsl:text>\"&gt;</xsl:text>
-    <xsl:value-of select="90000 + position()"/>
-    <xsl:text>&lt;/theid&gt;" &lt;&lt; endl; </xsl:text>
-      </xsl:if> 
-    </xsl:for-each>
-    <xsl:text>
-}</xsl:text>
-    <xsl:text>
-void ooxmlidsToXML(::std::ostream &amp; out)
-{</xsl:text>
-    <xsl:for-each select="//@tokenid">
-      <xsl:if test="contains(., 'ooxml:') and generate-id(.) = generate-id(key('tokenids', .)[1]) and ancestor::attribute">
-        <xsl:text>
-    out &lt;&lt; "&lt;theid name=\"</xsl:text>
-    <xsl:value-of select="."/>
-    <xsl:text>\"&gt;</xsl:text>
-    <xsl:value-of select="90000 + position()"/>
-    <xsl:text>&lt;/theid&gt;" &lt;&lt; endl; </xsl:text>
-      </xsl:if> 
-    </xsl:for-each>
-    <xsl:text>
-}</xsl:text>
-  </xsl:template>
-
   <xsl:template match="/">
 #include "ooxml/resourceids.hxx"
 #include "resourcemodel/QNameToString.hxx"
@@ -119,7 +86,6 @@ void ooxmlidsToXML(::std::ostream &amp; out)
 namespace writerfilter
 {
     <xsl:call-template name="qnametostr"/>
-    <xsl:call-template name="ooxmlidstoxml"/>
 }
   </xsl:template>
 

@@ -393,12 +393,6 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     pDev->SetLineColor(aOldColor);
 }
 
-SvxNumValueSet::SvxNumValueSet( Window* pParent, const ResId& rResId, sal_uInt16 nType )
-    : ValueSet( pParent, rResId )
-{
-    init(nType);
-}
-
 SvxNumValueSet::SvxNumValueSet(Window* pParent, WinBits nWinBits)
     : ValueSet(pParent, nWinBits)
 {
@@ -468,12 +462,6 @@ void SvxNumValueSet::SetOutlineNumberingSettings(
         if( i < 8 )
             SetItemText( i + 1, SVX_RESSTR( RID_SVXSTR_OUTLINENUM_DESCRIPTIONS + i ));
     }
-}
-
-SvxBmpNumValueSet::SvxBmpNumValueSet( Window* pParent, const ResId& rResId )
-    : SvxNumValueSet( pParent, rResId, NUM_PAGETYPE_BMP )
-{
-    init();
 }
 
 SvxBmpNumValueSet::SvxBmpNumValueSet(Window* pParent, WinBits nWinBits)

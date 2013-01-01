@@ -427,10 +427,6 @@ public:
     createDocument(WW8Stream::Pointer_t rpStream);
 };
 
-void sprmidsToXML(::std::iostream & out);
-
-void doctokidsToXML(::std::iostream & out);
-
 }}
 
 #endif // INCLUDED_WW8_DOCUMENT_HXX

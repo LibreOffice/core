@@ -256,9 +256,4 @@ void SAL_CALL SalGtkPicker::implsetTitle( const rtl::OUString& aTitle ) throw( u
     gtk_window_set_title( GTK_WINDOW( m_pDialog ), aWindowTitle.getStr() );
 }
 
-uno::Reference< uno::XInterface > SalGtkPicker::createInstance( const rtl::OUString &rName )
-{
-    return m_xContext->getServiceManager()->createInstanceWithContext( rName, m_xContext );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

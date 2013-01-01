@@ -1190,16 +1190,6 @@ bool SpellDialog::ApplyChangeAllList_Impl(SpellPortions& rSentence, bool &bHasRe
 }
 
 //-----------------------------------------------------------------------
-SentenceEditWindow_Impl::SentenceEditWindow_Impl(Window* pParent, const ResId& rResId)
-    : MultiLineEdit(pParent, rResId)
-    , m_nErrorStart(0)
-    , m_nErrorEnd(0)
-    , m_bIsUndoEditMode(false)
-{
-    DisableSelectionOnFocus();
-}
-
-//-----------------------------------------------------------------------
 SentenceEditWindow_Impl::SentenceEditWindow_Impl(Window * pParent, WinBits nBits)
     : MultiLineEdit(pParent, nBits)
     , m_nErrorStart(0)

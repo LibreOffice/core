@@ -75,7 +75,6 @@ protected:
     virtual long    PreNotify( NotifyEvent& rNEvt );
 
 public:
-    SentenceEditWindow_Impl(Window* pParent, const ResId& rResId);
     SentenceEditWindow_Impl(Window* pParent, WinBits nBits);
     ~SentenceEditWindow_Impl();
 
