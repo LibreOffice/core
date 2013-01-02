@@ -86,11 +86,11 @@ def nsinstall(argv):
   if options.m:
     # mode is specified
     try:
-      options.m = int(options.m, 8)
       # I have no idea why nss insists on using this mode for installed headers.
       # It causes problems with updating the files during a rebuild.
-      if options.m == 0444:
-        options.m = 0644
+      if options.m == 444:
+        options.m = 644
+      options.m = int(options.m)
     except:
       sys.stderr.write('nsinstall: ' + options.m + ' is not a valid mode\n')
       return 1

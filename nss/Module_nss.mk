@@ -13,7 +13,7 @@ ifeq ($(SYSTEM_NSS),NO)
 ifeq ($(filter ANDROID IOS,$(OS)),)
 $(eval $(call gb_Module_add_targets,nss,\
 	UnpackedTarball_nss \
-	$(if $(filter build,$(gb_Side)),,ExternalPackage_nss) \
+	ExternalPackage_nss \
 	ExternalProject_nss \
 ))
 endif
