@@ -148,6 +148,34 @@ $(call gb_UI__package_uifile,$(1),$(1)_ui_localized,res/$(3)/$(notdir $(2)),$(2)
 
 endef
 
+# gb_UI__add_translations_impl target uifile langs
+define gb_UI__add_translations_impl
+$(call gb_UILocalizeTarget_UILocalizeTarget,$(2))
+$(call gb_UI_get_target,$(1)) : $(call gb_UILocalizeTarget_get_target,$(2))
+$(call gb_UI_get_clean_target,$(1)) : $(call gb_UILocalizeTarget_get_clean_target,$(2))
+$(call gb_Package_get_preparation_target,$(1)_ui_localized) : $(call gb_UILocalizeTarget_get_target,$(2))
+$(foreach lang,$(3),$(call gb_UI__add_uifile_for_lang,$(1),$(2),$(lang)))
+
+endef
+
+# gb_UI__add_translations target uifile langs
+define gb_UI__add_translations
+$(if $(strip $(3)),$(call gb_UI__add_translations_impl,$(1),$(2),$(3)))
+
+endef
+
+# Adds translations for languages that have corresponding .po file
+#
+# gb_UI__add_uifile_translations target uifile
+define gb_UI__add_uifile_translations
+$(call gb_UI__add_translations,$(1),$(2),\
+	$(foreach lang,$(gb_UI_LANGS),\
+		$(if $(wildcard $(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(2))).po),$(lang)) \
+	) \
+)
+
+endef
+
 # Adds .ui file to the package
 #
 # The file is relative to $(SRCDIR) and without extension.
@@ -157,11 +185,7 @@ define gb_UI_add_uifile
 $(call gb_UI__add_uifile,$(1),$(2))
 
 ifneq ($(gb_UI_LANGS),)
-$(call gb_UILocalizeTarget_UILocalizeTarget,$(2))
-$(call gb_UI_get_target,$(1)) : $(call gb_UILocalizeTarget_get_target,$(2))
-$(call gb_UI_get_clean_target,$(1)) : $(call gb_UILocalizeTarget_get_clean_target,$(2))
-$(call gb_Package_get_preparation_target,$(1)_ui_localized) : $(call gb_UILocalizeTarget_get_target,$(2))
-$(foreach lang,$(gb_UI_LANGS),$(call gb_UI__add_uifile_for_lang,$(1),$(2),$(lang)))
+$(call gb_UI__add_uifile_translations,$(1),$(2))
 endif
 
 endef
