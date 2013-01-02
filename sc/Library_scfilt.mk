@@ -65,8 +65,8 @@ $(eval $(call gb_Library_use_libraries,scfilt,\
 ))
 
 $(eval $(call gb_Library_use_externals,scfilt,\
-	zlib \
 	orcus \
+	zlib \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,scfilt,\
