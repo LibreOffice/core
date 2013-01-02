@@ -66,7 +66,7 @@
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <unotools/viewoptions.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <svtools/helpid.hrc>

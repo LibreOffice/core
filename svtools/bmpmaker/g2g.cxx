@@ -26,7 +26,7 @@
 #include <tools/fsys.hxx>
 #include <tools/stream.hxx>
 #include <vcl/svapp.hxx>
-#include "svtools/filter.hxx"
+#include <vcl/graphicfilter.hxx>
 
 #define EXIT_NOERROR                0x00000000
 #define EXIT_COMMONERROR            0x00000001

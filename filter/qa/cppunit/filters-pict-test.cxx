@@ -9,7 +9,7 @@
 
 #include <unotest/filters-test.hxx>
 #include <test/bootstrapfixture.hxx>
-#include <svtools/FilterConfigItem.hxx>
+#include <vcl/FilterConfigItem.hxx>
 #include <tools/stream.hxx>
 #include <vcl/graph.hxx>
 

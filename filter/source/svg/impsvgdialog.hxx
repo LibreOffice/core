@@ -33,7 +33,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
 #include <svtools/stdctrl.hxx>
-#include <svtools/FilterConfigItem.hxx>
+#include <vcl/FilterConfigItem.hxx>
 
 #define SVG_EXPORTFILTER_CONFIGPATH         "Office.Common/Filter/SVG/Export/"
 #define SVG_PROP_TINYPROFILE                "TinyMode"

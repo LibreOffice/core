@@ -24,7 +24,7 @@
 #include <vcl/bmpacc.hxx>
 #include <svl/solar.hrc>
 #include <svtools/fltcall.hxx>
-#include <svtools/FilterConfigItem.hxx>
+#include <vcl/FilterConfigItem.hxx>
 
 #define NewSubfileType              254
 #define ImageWidth                  256

@@ -23,7 +23,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
-#include <svtools/FilterConfigItem.hxx>
+#include <vcl/FilterConfigItem.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/frame.hxx>

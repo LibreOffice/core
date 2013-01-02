@@ -19,7 +19,7 @@
 
 #include <tools/stream.hxx>
 #include <vcl/metaact.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <basegfx/tools/canvastools.hxx>
 #include <basegfx/tools/gradienttools.hxx>
 #include <basegfx/tools/tools.hxx>

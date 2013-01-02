@@ -39,7 +39,7 @@
 #include <vcl/window.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/bitmap.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <svtools/miscopt.hxx>
 
 using namespace ::com::sun::star;

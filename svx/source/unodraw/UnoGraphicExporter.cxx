@@ -45,7 +45,7 @@
 #include <vcl/metaact.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
-#include <svtools/FilterConfigItem.hxx>
+#include <vcl/FilterConfigItem.hxx>
 #include <svl/outstrm.hxx>
 #include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
@@ -56,7 +56,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdograf.hxx>
 #include "svx/xoutbmp.hxx"
-#include "svtools/filter.hxx"
+#include <vcl/graphicfilter.hxx>
 #include "svx/unoapi.hxx"
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>

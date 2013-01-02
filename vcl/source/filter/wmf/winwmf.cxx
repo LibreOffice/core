@@ -21,7 +21,7 @@
 #include "winmtf.hxx"
 #include <boost/scoped_array.hpp>
 #include <vcl/gdimtf.hxx>
-#include <svtools/wmf.hxx>
+#include <vcl/wmf.hxx>
 #include <rtl/crc.h>
 #include <rtl/tencinfo.h>
 #include <osl/endian.h>

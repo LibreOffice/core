@@ -21,7 +21,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/bmpacc.hxx>
 #include <svtools/fltcall.hxx>
-#include <svtools/FilterConfigItem.hxx>
+#include <vcl/FilterConfigItem.hxx>
 
 //============================ RASWriter ==================================
 

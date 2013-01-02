@@ -37,7 +37,7 @@
 #include <svl/whiter.hxx>
 #include <svl/itempool.hxx>
 #include <svtools/ctrltool.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <sot/clsids.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/visitem.hxx>

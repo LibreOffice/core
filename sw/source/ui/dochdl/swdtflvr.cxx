@@ -65,7 +65,7 @@
 #include <sfx2/docfile.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/streamwrap.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 
 #include <svx/unomodel.hxx>
 #include <fmturl.hxx>

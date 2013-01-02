@@ -27,13 +27,13 @@
 #include <tools/urlobj.hxx>
 #include <svl/solar.hrc>
 #include <svl/urihelper.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <svl/itempool.hxx>
 #include <sfx2/docfile.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <vcl/svapp.hxx>
 
-#include "svtools/filter.hxx"
+#include <vcl/graphicfilter.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/fmmodel.hxx>

@@ -50,7 +50,7 @@
 #include <editeng/sizeitem.hxx>
 #include <editeng/svxacorr.hxx>
 #include <editeng/scripttypeitem.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <svx/htmlmode.hxx>
 #include <svx/pfiledlg.hxx>
 #include <svtools/htmlcfg.hxx>

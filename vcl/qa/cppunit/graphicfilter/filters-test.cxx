@@ -33,18 +33,18 @@
 #include <osl/file.hxx>
 #include <osl/process.h>
 
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 
 using namespace ::com::sun::star;
 
 /* Implementation of Filters test */
 
-class SvtoolsFiltersTest
+class VclFiltersTest
     : public test::FiltersTest
     , public test::BootstrapFixture
 {
 public:
-    SvtoolsFiltersTest() : BootstrapFixture(true, false) {}
+    VclFiltersTest() : BootstrapFixture(true, false) {}
 
     virtual bool load(const rtl::OUString &,
         const rtl::OUString &rURL, const rtl::OUString &,
@@ -55,12 +55,12 @@ public:
      */
     void testCVEs();
 
-    CPPUNIT_TEST_SUITE(SvtoolsFiltersTest);
+    CPPUNIT_TEST_SUITE(VclFiltersTest);
     CPPUNIT_TEST(testCVEs);
     CPPUNIT_TEST_SUITE_END();
 };
 
-bool SvtoolsFiltersTest::load(const rtl::OUString &,
+bool VclFiltersTest::load(const rtl::OUString &,
     const rtl::OUString &rURL, const rtl::OUString &,
     unsigned int, unsigned int, unsigned int)
 {
@@ -70,38 +70,40 @@ bool SvtoolsFiltersTest::load(const rtl::OUString &,
     return aGraphicFilter.ImportGraphic(aGraphic, rURL, aFileStream) == 0;
 }
 
-void SvtoolsFiltersTest::testCVEs()
+void VclFiltersTest::testCVEs()
 {
+#ifndef DISABLE_CVE_TESTS
     testDir(rtl::OUString(),
-        getURLFromSrc("/svtools/qa/cppunit/data/wmf/"),
+        getURLFromSrc("/vcl/qa/cppunit/graphicfilter/data/wmf/"),
         rtl::OUString());
 
     testDir(rtl::OUString(),
-        getURLFromSrc("/svtools/qa/cppunit/data/emf/"),
+        getURLFromSrc("/vcl/qa/cppunit/graphicfilter/data/emf/"),
         rtl::OUString());
 
     testDir(rtl::OUString(),
-        getURLFromSrc("/svtools/qa/cppunit/data/sgv/"),
+        getURLFromSrc("/vcl/qa/cppunit/graphicfilter/data/sgv/"),
         rtl::OUString());
 
     testDir(rtl::OUString(),
-        getURLFromSrc("/svtools/qa/cppunit/data/png/"),
+        getURLFromSrc("/vcl/qa/cppunit/graphicfilter/data/png/"),
         rtl::OUString());
 
     testDir(rtl::OUString(),
-        getURLFromSrc("/svtools/qa/cppunit/data/jpg/"),
+        getURLFromSrc("/vcl/qa/cppunit/graphicfilter/data/jpg/"),
         rtl::OUString());
 
     testDir(rtl::OUString(),
-        getURLFromSrc("/svtools/qa/cppunit/data/gif/"),
+        getURLFromSrc("/vcl/qa/cppunit/graphicfilter/data/gif/"),
         rtl::OUString());
 
     testDir(rtl::OUString(),
-        getURLFromSrc("/svtools/qa/cppunit/data/bmp/"),
+        getURLFromSrc("/vcl/qa/cppunit/graphicfilter/data/bmp/"),
         rtl::OUString());
+#endif
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(SvtoolsFiltersTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(VclFiltersTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

@@ -30,17 +30,14 @@
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/file.hxx>
-#include <svtools/filter.hxx>
-#include "FilterConfigCache.hxx"
-#include <svtools/FilterConfigItem.hxx>
-#include <svtools/fltcall.hxx>
-#include <svtools/wmf.hxx>
-#include "gifread.hxx"
-#include "jpeg.hxx"
-#include "xbmread.hxx"
-#include "xpmread.hxx"
+#include <vcl/graphicfilter.hxx>
+#include <vcl/FilterConfigItem.hxx>
+#include <vcl/wmf.hxx>
+#include "igif/gifread.hxx"
+#include "jpeg/jpeg.hxx"
+#include "ixbm/xbmread.hxx"
+#include "ixpm/xpmread.hxx"
 #include <svl/solar.hrc>
-#include <svtools/svtools.hrc>
 #include "sgffilt.hxx"
 #include "osl/module.hxx"
 #include <com/sun/star/uno/Reference.h>
@@ -64,7 +61,7 @@
 #include <vcl/metaact.hxx>
 #include <vector>
 
-#include "SvFilterOptionsDialog.hxx"
+#include "FilterConfigCache.hxx"
 
 #define PMGCHUNG_msOG       0x6d734f47      // Microsoft Office Animated GIF
 
@@ -110,7 +107,7 @@ public:
                                         ~ImpFilterOutputStream() {}
 };
 
-sal_Bool ImplDirEntryHelper::Exists( const INetURLObject& rObj )
+static sal_Bool DirEntryExists( const INetURLObject& rObj )
 {
     sal_Bool bExists = sal_False;
 
@@ -139,7 +136,7 @@ sal_Bool ImplDirEntryHelper::Exists( const INetURLObject& rObj )
 
 // -----------------------------------------------------------------------------
 
-void ImplDirEntryHelper::Kill( const String& rMainUrl )
+static void KillDirEntry( const String& rMainUrl )
 {
     try
     {
@@ -1323,6 +1320,13 @@ sal_uInt16 GraphicFilter::GetExportFormatNumberForShortName( const String& rShor
 
 // ------------------------------------------------------------------------
 
+String GraphicFilter::GetExportInternalFilterName( sal_uInt16 nFormat )
+{
+    return pConfig->GetExportInternalFilterName( nFormat );
+}
+
+// ------------------------------------------------------------------------
+
 sal_uInt16 GraphicFilter::GetExportFormatNumberForTypeName( const String& rType )
 {
     return pConfig->GetExportFormatNumberForTypeName( rType );
@@ -1855,7 +1859,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLO
     RTL_LOGFILE_CONTEXT( aLog, "GraphicFilter::ExportGraphic() (thb)" );
     sal_uInt16  nRetValue = GRFILTER_FORMATERROR;
     DBG_ASSERT( rPath.GetProtocol() != INET_PROT_NOT_VALID, "GraphicFilter::ExportGraphic() : ProtType == INET_PROT_NOT_VALID" );
-    sal_Bool        bAlreadyExists = ImplDirEntryHelper::Exists( rPath );
+    sal_Bool bAlreadyExists = DirEntryExists( rPath );
 
     String      aMainUrl( rPath.GetMainURL( INetURLObject::NO_DECODE ) );
     SvStream*   pStream = ::utl::UcbStreamHelper::CreateStream( aMainUrl, STREAM_WRITE | STREAM_TRUNC );
@@ -1865,7 +1869,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLO
         delete pStream;
 
         if( ( GRFILTER_OK != nRetValue ) && !bAlreadyExists )
-            ImplDirEntryHelper::Kill( aMainUrl );
+            KillDirEntry( aMainUrl );
     }
     return nRetValue;
 #endif
@@ -2263,61 +2267,6 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
         ImplSetError( nStatus, &rOStm );
     }
     return nStatus;
-#endif
-}
-
-// ------------------------------------------------------------------------
-
-sal_Bool GraphicFilter::Setup( sal_uInt16 )
-{
-    return sal_False;
-}
-
-// ------------------------------------------------------------------------
-
-sal_Bool GraphicFilter::HasExportDialog( sal_uInt16 nFormat )
-{
-    return pConfig->IsExportDialog( nFormat );
-}
-
-// ------------------------------------------------------------------------
-
-sal_Bool GraphicFilter::DoExportDialog( Window* pWindow, sal_uInt16 nFormat )
-{
-    return DoExportDialog( pWindow, nFormat, FUNIT_MM );
-}
-
-sal_Bool GraphicFilter::DoExportDialog( Window*, sal_uInt16 nFormat, FieldUnit )
-{
-#ifdef DISABLE_EXPORT
-    (void) nFormat;
-
-    return sal_False;
-#else
-    sal_Bool bRet = sal_False;
-     com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
-        xSMgr( ::comphelper::getProcessServiceFactory() );
-
-    uno::Reference< com::sun::star::uno::XInterface > xFilterOptionsDialog
-        ( xSMgr->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.svtools.SvFilterOptionsDialog" )) ),
-            com::sun::star::uno::UNO_QUERY );
-    if ( xFilterOptionsDialog.is() )
-    {
-        com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XExecutableDialog > xExecutableDialog
-            ( xFilterOptionsDialog, ::com::sun::star::uno::UNO_QUERY );
-        com::sun::star::uno::Reference< com::sun::star::beans::XPropertyAccess > xPropertyAccess
-            ( xFilterOptionsDialog, ::com::sun::star::uno::UNO_QUERY );
-        if ( xExecutableDialog.is() && xPropertyAccess.is() )
-        {
-            com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aMediaDescriptor( 1 );
-            aMediaDescriptor[ 0 ].Name = String( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ) );
-            rtl::OUString aStr( pConfig->GetExportInternalFilterName( nFormat ) );
-            aMediaDescriptor[ 0 ].Value <<= aStr;
-            xPropertyAccess->setPropertyValues( aMediaDescriptor );
-            bRet = xExecutableDialog->execute() == com::sun::star::ui::dialogs::ExecutableDialogResults::OK;
-        }
-    }
-    return bRet;
 #endif
 }
 

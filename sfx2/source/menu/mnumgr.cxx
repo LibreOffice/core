@@ -42,7 +42,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <osl/file.hxx>
 #include <vcl/graph.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <svl/lngmisc.hxx>
 
 #include <sfx2/mnumgr.hxx>

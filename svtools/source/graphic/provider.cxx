@@ -27,8 +27,8 @@
 #include <tools/resid.hxx>
 #include <tools/resmgr.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <svtools/filter.hxx>
-#include <svtools/wmf.hxx>
+#include <vcl/graphicfilter.hxx>
+#include <vcl/wmf.hxx>
 #include <svl/solar.hrc>
 #include <vcl/virdev.hxx>
 #include <com/sun/star/io/XStream.hpp>

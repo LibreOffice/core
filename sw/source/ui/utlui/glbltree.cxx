@@ -28,7 +28,7 @@
 #include <sot/filelist.hxx>
 #include <svl/eitem.hxx>
 #include <svl/urlbmk.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include "svtools/treelistentry.hxx"
 #include <sfx2/docinsert.hxx>
 #include <sfx2/filedlghelper.hxx>

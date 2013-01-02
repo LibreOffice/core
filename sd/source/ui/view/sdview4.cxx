@@ -37,7 +37,7 @@
 #include <avmedia/mediawindow.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include "app.hrc"
 #include "Window.hxx"
 #include "DrawDocShell.hxx"

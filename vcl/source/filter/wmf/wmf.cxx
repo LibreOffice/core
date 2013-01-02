@@ -21,7 +21,7 @@
 #include "winmtf.hxx"
 #include "emfwr.hxx"
 #include "wmfwr.hxx"
-#include <svtools/wmf.hxx>
+#include <vcl/wmf.hxx>
 #include <comphelper/scopeguard.hxx>
 
 // -----------------------------------------------------------------------------

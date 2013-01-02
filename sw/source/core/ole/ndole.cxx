@@ -51,7 +51,7 @@
 #include <vcl/graph.hxx>
 #include <sot/formats.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <comcore.hrc>
 
 using rtl::OUString;

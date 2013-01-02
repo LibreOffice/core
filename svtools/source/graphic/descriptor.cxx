@@ -21,7 +21,7 @@
 
 #include <osl/mutex.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <svl/itemprop.hxx>
 #include <comphelper/servicehelper.hxx>
 

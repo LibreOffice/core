@@ -19,7 +19,7 @@
 
 
 #include <svtools/embedhlp.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <svtools/svtools.hrc>
 #include <svtools/svtresid.hxx>
 

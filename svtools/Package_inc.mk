@@ -20,7 +20,6 @@
 $(eval $(call gb_Package_Package,svtools_inc,$(SRCDIR)/svtools/inc))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/AccessibleBrowseBoxObjType.hxx,svtools/AccessibleBrowseBoxObjType.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/DocumentInfoPreview.hxx,svtools/DocumentInfoPreview.hxx))
-$(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/FilterConfigItem.hxx,svtools/FilterConfigItem.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/QueryFolderName.hxx,svtools/QueryFolderName.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/acceleratorexecute.hxx,svtools/acceleratorexecute.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/accessibilityoptions.hxx,svtools/accessibilityoptions.hxx))
@@ -58,7 +57,6 @@ $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/filedlg.hxx,svtools/fi
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/filedlg2.hrc,svtools/filedlg2.hrc))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/fileurlbox.hxx,svtools/fileurlbox.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/fileview.hxx,svtools/fileview.hxx))
-$(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/filter.hxx,svtools/filter.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/filechangedchecker.hxx,svtools/filechangedchecker.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/fltcall.hxx,svtools/fltcall.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/fmtfield.hxx,svtools/fmtfield.hxx))
@@ -174,7 +172,6 @@ $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/viewdataentry.hxx,svto
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/wallitem.hxx,svtools/wallitem.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/wizardmachine.hxx,svtools/wizardmachine.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/wizdlg.hxx,svtools/wizdlg.hxx))
-$(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/wmf.hxx,svtools/wmf.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/xwindowitem.hxx,svtools/xwindowitem.hxx))
 
 # vim: set noet sw=4 ts=4:

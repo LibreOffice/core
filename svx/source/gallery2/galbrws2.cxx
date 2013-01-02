@@ -30,7 +30,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sfxsids.hrc>
-#include "svtools/filter.hxx"
+#include <vcl/graphicfilter.hxx>
 #include <editeng/brshitem.hxx>
 #include "helpid.hrc"
 #include "svx/gallery.hxx"

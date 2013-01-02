@@ -91,7 +91,7 @@
 #include "svx/extrud3d.hxx"
 
 #include <boost/bind.hpp>
-#include <svtools/wmf.hxx>
+#include <vcl/wmf.hxx>
 
 using ::rtl::OUString;
 using namespace ::osl;

@@ -57,7 +57,7 @@
 #include <linguistic/misc.hxx>
 #include <osl/file.hxx>
 #include <rtl/string.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/imagemgr.hxx>
 #include <sfx2/request.hxx>

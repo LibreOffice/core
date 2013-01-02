@@ -30,7 +30,7 @@
 #include <osl/thread.hxx>
 #include <osl/process.h>
 #include <osl/time.h>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <svtools/filechangedchecker.hxx>
 #include <svx/xoutbmp.hxx>
 #include <unotools/ucbstreamhelper.hxx>

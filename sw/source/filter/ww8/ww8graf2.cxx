@@ -45,7 +45,8 @@
 #include "ww8par.hxx"           // class SwWWImplReader
 #include "ww8par2.hxx"          // struct WWFlyPara
 #include "ww8graf.hxx"
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
+#include <vcl/wmf.hxx>
 
 using namespace ::com::sun::star;
 using namespace sw::types;

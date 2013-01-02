@@ -26,7 +26,7 @@
 #include <comphelper/mediadescriptor.hxx>
 #include <unotools/fltrcfg.hxx>
 
-#include <svtools/wmf.hxx>
+#include <vcl/wmf.hxx>
 
 #include <editeng/eeitem.hxx>
 

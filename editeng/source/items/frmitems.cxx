@@ -54,7 +54,7 @@
 #include <svtools/borderhelper.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <editeng/editids.hrc>
 #include <editeng/editrids.hrc>
 #include <editeng/pbinitem.hxx>

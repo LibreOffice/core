@@ -21,7 +21,8 @@
 #ifndef _FILTER_CONFIG_ITEM_HXX_
 #define _FILTER_CONFIG_ITEM_HXX_
 
-#include "svtools/svtdllapi.h"
+#include <vcl/dllapi.h>
+
 #include <tools/string.hxx>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/uno/Any.h>
@@ -31,54 +32,54 @@
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 
-class SVT_DLLPUBLIC FilterConfigItem
+class VCL_DLLPUBLIC FilterConfigItem
 {
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xUpdatableView;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xPropSet;
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aFilterData;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xUpdatableView;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xPropSet;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aFilterData;
 
-        sal_Bool    bModified;
+    sal_Bool    bModified;
 
-        SVT_DLLPRIVATE sal_Bool ImplGetPropertyValue( ::com::sun::star::uno::Any& rAny,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPropSet,
-                            const ::rtl::OUString& rPropName,
-                                sal_Bool bTestPropertyAvailability );
+    sal_Bool ImplGetPropertyValue( ::com::sun::star::uno::Any& rAny,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPropSet,
+                        const OUString& rPropName,
+                            sal_Bool bTestPropertyAvailability );
 
-        SVT_DLLPRIVATE void     ImpInitTree( const String& rTree );
+    void     ImpInitTree( const String& rTree );
 
 
-        SVT_DLLPRIVATE static ::com::sun::star::beans::PropertyValue* GetPropertyValue(
-                    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rPropSeq,
-                        const ::rtl::OUString& rName );
-        SVT_DLLPRIVATE static  sal_Bool WritePropertyValue(
-                    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rPropSeq,
-                        const ::com::sun::star::beans::PropertyValue& rPropValue );
+    static ::com::sun::star::beans::PropertyValue* GetPropertyValue(
+                ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rPropSeq,
+                    const OUString& rName );
+    static  sal_Bool WritePropertyValue(
+                ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rPropSeq,
+                    const ::com::sun::star::beans::PropertyValue& rPropValue );
 
-    public :
+public :
 
-        FilterConfigItem( const ::rtl::OUString& rSubTree );
-        FilterConfigItem( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData );
-        FilterConfigItem( const ::rtl::OUString& rSubTree, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData );
-        ~FilterConfigItem();
+    FilterConfigItem( const OUString& rSubTree );
+    FilterConfigItem( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData );
+    FilterConfigItem( const OUString& rSubTree, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData );
+    ~FilterConfigItem();
 
-        // all read methods are trying to return values in following order:
-        // 1. FilterData PropertySequence
-        // 2. configuration
-        // 3. given default
-        sal_Bool    ReadBool( const ::rtl::OUString& rKey, sal_Bool bDefault );
-        sal_Int32   ReadInt32( const ::rtl::OUString& rKey, sal_Int32 nDefault );
-        ::rtl::OUString
-                    ReadString( const ::rtl::OUString& rKey, const ::rtl::OUString& rDefault );
+    // all read methods are trying to return values in following order:
+    // 1. FilterData PropertySequence
+    // 2. configuration
+    // 3. given default
+    sal_Bool    ReadBool( const OUString& rKey, sal_Bool bDefault );
+    sal_Int32   ReadInt32( const OUString& rKey, sal_Int32 nDefault );
+    OUString
+                ReadString( const OUString& rKey, const OUString& rDefault );
 
-        // try to store to configuration
-        // and always stores into the FilterData sequence
-        void        WriteBool( const ::rtl::OUString& rKey, sal_Bool bValue );
-        void        WriteInt32( const ::rtl::OUString& rKey, sal_Int32 nValue );
+    // try to store to configuration
+    // and always stores into the FilterData sequence
+    void        WriteBool( const OUString& rKey, sal_Bool bValue );
+    void        WriteInt32( const OUString& rKey, sal_Int32 nValue );
 
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > GetFilterData() const;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > GetFilterData() const;
 
-        // GetStatusIndicator is returning the "StatusIndicator" property of the FilterData sequence
-        ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > GetStatusIndicator() const;
+    // GetStatusIndicator is returning the "StatusIndicator" property of the FilterData sequence
+    ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > GetStatusIndicator() const;
 };
 
 #endif  // _FILTER_CONFIG_ITEM_HXX_

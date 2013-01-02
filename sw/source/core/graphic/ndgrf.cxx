@@ -23,7 +23,7 @@
 #include <svl/undo.hxx>
 #include <svl/fstathelper.hxx>
 #include <svtools/imap.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <sot/storage.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <editeng/boxitem.hxx>

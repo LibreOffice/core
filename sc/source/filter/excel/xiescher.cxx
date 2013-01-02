@@ -44,7 +44,7 @@
 #include <sfx2/objsh.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/fltrcfg.hxx>
-#include <svtools/wmf.hxx>
+#include <vcl/wmf.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/classids.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

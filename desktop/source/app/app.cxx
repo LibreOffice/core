@@ -94,7 +94,7 @@
 #include <svtools/fontsubstconfig.hxx>
 #include <svtools/accessibilityoptions.hxx>
 #include <svtools/apearcfg.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 
 #include "langselect.hxx"
 

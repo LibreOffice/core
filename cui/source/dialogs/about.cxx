@@ -26,7 +26,7 @@
 #include <unotools/bootstrap.hxx>
 #include <com/sun/star/uno/Any.h>
 #include <vcl/graph.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <svtools/langhelp.hxx>
 
 #include "com/sun/star/system/SystemShellExecuteFlags.hpp"
