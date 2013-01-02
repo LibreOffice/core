@@ -216,6 +216,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/report,\
 	ReportControlFormat \
 	ReportControlModel \
 	ReportDefinition \
+    ReportEngine \
 	Section \
 	Shape \
 ))

@@ -101,7 +101,7 @@ void SAL_CALL OReportEngineJFree::dispose() throw(uno::RuntimeException)
 uno::Sequence< ::rtl::OUString > OReportEngineJFree::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
 {
     uno::Sequence< ::rtl::OUString > aServices(1);
-    aServices.getArray()[0] = SERVICE_REPORTENGINE;
+    aServices.getArray()[0] = OUString("com.sun.star.report.ReportEngine");
 
     return aServices;
 }

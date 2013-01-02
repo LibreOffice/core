@@ -26,7 +26,6 @@ IMPLEMENT_CONSTASCII_USTRING(SERVICE_FIXEDTEXT          , "com.sun.star.report.F
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_FORMATTEDFIELD     , "com.sun.star.report.FormattedField");
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_IMAGECONTROL       , "com.sun.star.report.ImageControl");
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_FORMATCONDITION    , "com.sun.star.report.FormatCondition");
-IMPLEMENT_CONSTASCII_USTRING(SERVICE_REPORTENGINE       , "com.sun.star.report.ReportEngine");
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_FUNCTION           , "com.sun.star.report.Function");
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_REPORTDEFINITION   , "com.sun.star.report.ReportDefinition");
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_SHAPE              , "com.sun.star.report.Shape");

@@ -89,6 +89,7 @@
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/status/FontHeight.hpp>
+#include <com/sun/star/report/ReportEngine.hpp>
 #include <com/sun/star/report/XFormattedField.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdbc/SQLWarning.hpp>
@@ -2914,7 +2915,7 @@ uno::Reference<frame::XModel> OReportController::executeReport()
             {
                 WaitObject aWait(getView()); // cursor
                 if ( !m_xReportEngine.is() )
-                    m_xReportEngine.set(getORB()->createInstance(SERVICE_REPORTENGINE),uno::UNO_QUERY_THROW);
+                    m_xReportEngine.set( report::ReportEngine::create(m_xContext) );
                 m_xReportEngine->setReportDefinition(m_xReportDefinition);
                 m_xReportEngine->setActiveConnection(getConnection());
                 Reference<XFrame> xFrame = getXFrame();
@@ -4296,7 +4297,7 @@ embed::VisualRepresentation SAL_CALL OReportController::getPreferredVisualRepres
         try
         {
             if ( !m_xReportEngine.is() )
-                m_xReportEngine.set(getORB()->createInstance(SERVICE_REPORTENGINE),uno::UNO_QUERY_THROW);
+                m_xReportEngine.set( report::ReportEngine::create(m_xContext) );
             const sal_Int32 nOldMaxRows = m_xReportEngine->getMaxRows();
             m_xReportEngine->setMaxRows(MAX_ROWS_FOR_PREVIEW);
             m_xReportEngine->setReportDefinition(m_xReportDefinition);
