@@ -2697,8 +2697,16 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
         Reference< XNameAccess > xFields(mrParent.getDataPilotFields(), UNO_QUERY);
         if (xFields.is())
         {
-            xRet.set(xFields->getByName(sNewDim), UNO_QUERY);
-            OSL_ENSURE(xRet.is(), "there is a name, so there should be also a field");
+            try
+            {
+                xRet.set(xFields->getByName(sNewDim), UNO_QUERY);
+                OSL_ENSURE(xRet.is(), "there is a name, so there should be also a field");
+            }
+            catch (const container::NoSuchElementException&)
+            {
+                // Avoid throwing exception that's not specified in the method signature.
+                throw RuntimeException();
+            }
         }
     }
     return xRet;
