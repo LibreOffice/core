@@ -418,11 +418,13 @@ bool ScMatrixImpl::IsImmutable() const
 void ScMatrixImpl::Resize(SCSIZE nC, SCSIZE nR)
 {
     maMat.resize(nR, nC);
+    maMatFlag.resize(nR, nC);
 }
 
 void ScMatrixImpl::Resize(SCSIZE nC, SCSIZE nR, double fVal)
 {
     maMat.resize(nR, nC, fVal);
+    maMatFlag.resize(nR, nC);
 }
 
 void ScMatrixImpl::SetErrorInterpreter( ScInterpreter* p)

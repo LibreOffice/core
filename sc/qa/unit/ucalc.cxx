@@ -1548,6 +1548,16 @@ void Test::testMatrix()
     pMat->PutString(aStr, 8, 2);
     pMat->PutEmptyPath(8, 11);
     checkMatrixElements<PartiallyFilledEmptyMatrix>(*pMat);
+
+    // Test resizing.
+    pMat = new ScMatrix(0, 0);
+    pMat->Resize(2, 2, 1.5);
+    pMat->PutEmpty(1, 1);
+
+    CPPUNIT_ASSERT_EQUAL(1.5, pMat->GetDouble(0, 0));
+    CPPUNIT_ASSERT_EQUAL(1.5, pMat->GetDouble(0, 1));
+    CPPUNIT_ASSERT_EQUAL(1.5, pMat->GetDouble(1, 0));
+    CPPUNIT_ASSERT_MESSAGE("PutEmpty() call failed.", pMat->IsEmpty(1, 1));
 }
 
 void Test::testEnterMixedMatrix()
