@@ -16,7 +16,24 @@ $(eval $(call gb_ExternalPackage_add_files,nss,bin,\
 	config/nss-config \
 ))
 
-ifeq ($(OS),WNT)
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_ExternalPackage_add_files,nss,lib,\
+		mozilla/dist/out/lib/libcrmf.a \
+		mozilla/dist/out/lib/libfreebl3.dylib \
+		mozilla/dist/out/lib/libnspr4.dylib \
+		mozilla/dist/out/lib/libnss3.dylib \
+		mozilla/dist/out/lib/libnssckbi.dylib \
+		mozilla/dist/out/lib/libnssdbm3.dylib \
+		mozilla/dist/out/lib/libnsssysinit.dylib \
+		mozilla/dist/out/lib/libnssutil3.dylib \
+		mozilla/dist/out/lib/libplc4.dylib \
+		mozilla/dist/out/lib/libplds4.dylib \
+		mozilla/dist/out/lib/libsmime3.dylib \
+		mozilla/dist/out/lib/libsoftokn3.dylib \
+		mozilla/dist/out/lib/libsqlite3.dylib \
+		mozilla/dist/out/lib/libssl3.dylib \
+))
+else ifeq ($(OS),WNT)
 ifeq ($(COM),MSC)
 $(eval $(call gb_ExternalPackage_add_files,nss,lib,\
 		mozilla/dist/out/lib/nspr4.lib \
@@ -56,7 +73,7 @@ $(eval $(call gb_ExternalPackage_add_files,nss,bin,\
 		mozilla/dist/out/lib/sqlite3.dll \
 		mozilla/dist/out/lib/ssl3.dll \
 ))
-else # OS!=WNT
+else # OS!=WNT/MACOSX
 $(eval $(call gb_ExternalPackage_add_files,nss,lib,\
 		mozilla/dist/out/lib/libcrmf.a \
 		mozilla/dist/out/lib/libfreebl3.so \
