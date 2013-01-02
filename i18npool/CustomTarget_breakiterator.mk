@@ -88,13 +88,29 @@ $(i18npool_BIDIR)/%.brk : $(i18npool_BIDIR)/%.txt $(call gb_ExternalExecutable_g
 		$(call gb_ExternalExecutable_get_command,genbrk) -r $< -o $@ $(if $(findstring s,$(MAKEFLAGS)),> /dev/null))
 
 # fdo#31271 ")" reclassified in more recent Unicode Standards / ICU 4.4
-# * Prepend set empty as of Unicode Version 6.1 / ICU 4.9, which bails out if used.
+# * Prepend set empty as of Unicode Version 6.1 / ICU 49, which bails out if used.
 #   NOTE: strips every line with _word_ 'Prepend', including $Prepend
+# * Conditional_Japanese_Starter does not exist in ICU < 49, which bail out if used.
+# * Hebrew_Letter does not exist in ICU < 49, which bail out if used.
 #   NOTE: I sincerely hope there is a better way to avoid problems than this abominable
 #   sed substitution...
 $(i18npool_BIDIR)/%.txt : \
 	$(SRCDIR)/i18npool/source/breakiterator/data/%.txt | $(i18npool_BIDIR)/.dir
 	sed -e ': dummy' \
+		$(if $(filter-out YES,$(ICU_RECLASSIFIED_CONDITIONAL_JAPANESE_STARTER)),\
+			-e '/\[:LineBreak =  Conditional_Japanese_Starter:\]/d' \
+			-e 's# $$CJ##' \
+		) \
+		$(if $(filter-out YES,$(ICU_RECLASSIFIED_HEBREW_LETTER)),\
+			-e '/\[:LineBreak =  Hebrew_Letter:\]/d' \
+			-e '/^$$HLcm =/d' \
+			-e '/^$$HLcm $$NUcm;/d' \
+			-e '/^$$NUcm $$HLcm;/d' \
+			-e '/^$$HL $$CM+;/d' \
+			-e 's# | $$HL\(cm\)\?##g' \
+			-e 's#$$HLcm ##g' \
+			-e 's# $$HL##g' \
+		) \
 		$(if $(filter YES,$(ICU_RECLASSIFIED_PREPEND_SET_EMPTY)),-e "/Prepend/d") \
 		$< > $@
 

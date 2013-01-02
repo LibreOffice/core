@@ -74,7 +74,9 @@ public:
 #endif
 
     CPPUNIT_TEST(testWordBoundaries);
+#if (U_ICU_VERSION_MAJOR_NUM > 4)
     CPPUNIT_TEST(testKhmer);
+#endif
     CPPUNIT_TEST(testJapanese);
     CPPUNIT_TEST_SUITE_END();
 private:
@@ -865,6 +867,10 @@ void TestBreakIterator::testNorthernThai()
 }
 #endif
 
+#if (U_ICU_VERSION_MAJOR_NUM > 4)
+// Not sure if any version earlier than 49 did have Khmer word boundary
+// dictionaries, 4.6 does not.
+
 //A test to ensure that our khmer word boundary detection is useful
 //https://bugs.freedesktop.org/show_bug.cgi?id=52020
 void TestBreakIterator::testKhmer()
@@ -886,6 +892,7 @@ void TestBreakIterator::testKhmer()
 
     CPPUNIT_ASSERT(aBounds.startPos == 3 && aBounds.endPos == 5);
 }
+#endif
 
 void TestBreakIterator::testJapanese()
 {
