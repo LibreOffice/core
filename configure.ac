@@ -159,7 +159,7 @@ if test -n "$with_android_ndk"; then
     if test $build_os = linux-gnu; then
         case $build_cpu in
         x86_64)
-            case "`echo $ANDROID_NDK_HOME/toolchains/$android_cpu*-*$with_android_ndk_toolchain_version/prebuilt/linux-x86_64/bin`" in
+            case "`ls -d $ANDROID_NDK_HOME/toolchains/$android_cpu*-*$with_android_ndk_toolchain_version/prebuilt/linux-x86_64/bin 2>/dev/null`" in
             */bin|*/bin\ */bin*)
                 toolchain_system=linux-x86_64
                 ;;
