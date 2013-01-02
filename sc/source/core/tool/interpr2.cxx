@@ -52,6 +52,9 @@
 #include <string.h>
 #include <math.h>
 
+#include <boost/math/special_functions/expm1.hpp>
+#include <boost/math/special_functions/log1p.hpp>
+
 using namespace formula;
 // STATIC DATA -----------------------------------------------------------
 
@@ -1135,11 +1138,11 @@ double ScInterpreter::ScGetRmz(double fRate, double fNper, double fPv,
     else
     {
         if (fPaytype > 0.0) // payment in advance
-            fPayment = (fFv + fPv * exp( fNper * ::rtl::math::log1p(fRate) ) ) * fRate /
-                (::rtl::math::expm1( (fNper + 1) * ::rtl::math::log1p(fRate) ) - fRate);
+            fPayment = (fFv + fPv * exp( fNper * ::boost::math::log1p(fRate) ) ) * fRate /
+                (::boost::math::expm1( (fNper + 1) * ::boost::math::log1p(fRate) ) - fRate);
         else  // payment in arrear
-            fPayment = (fFv + fPv * exp(fNper * ::rtl::math::log1p(fRate) ) ) * fRate /
-                ::rtl::math::expm1( fNper * ::rtl::math::log1p(fRate) );
+            fPayment = (fFv + fPv * exp(fNper * ::boost::math::log1p(fRate) ) ) * fRate /
+                ::boost::math::expm1( fNper * ::boost::math::log1p(fRate) );
     }
     return -fPayment;
 }
