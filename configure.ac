@@ -8508,7 +8508,9 @@ dnl ===================================================================
 dnl Check for NPAPI interface to plug browser plugins into LibreOffice documents
 dnl ===================================================================
 AC_MSG_CHECKING([whether to plug browser plugins into LibreOffice documents])
-if test "$_os" != Android -a "$_os" != iOS
+# Obviously no such thing on iOS or Android. Also not possible when building 
+# 64-bit OS X code as the plugin code uses QuickTime and Carbon.
+if test "$_os" != Android -a "$_os" != iOS -a \( $_os != Darwin -o "$BITNESS_OVERRIDE" = "" \)
 then
     AC_MSG_RESULT([yes])
     ENABLE_NPAPI_FROM_BROWSER=YES
