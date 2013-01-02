@@ -373,7 +373,7 @@ IMPL_LINK_NOARG(SvxSingleNumPickTabPage, DoubleClickHdl_Impl)
 
 SvxBulletPickTabPage::SvxBulletPickTabPage(Window* pParent,
                                const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "PickNumberingPage", "cui/ui/picknumberingpage.ui", rSet)
+    : SfxTabPage(pParent, "PickBulletPage", "cui/ui/pickbulletpage.ui", rSet)
     , pActNum(0)
     , pSaveNum(0)
     , nActNumLvl(USHRT_MAX)
@@ -536,7 +536,7 @@ void SvxBulletPickTabPage::PageCreated(SfxAllItemSet aSet)
 
 SvxNumPickTabPage::SvxNumPickTabPage(Window* pParent,
                                const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "PickNumberingPage", "cui/ui/picknumberingpage.ui", rSet)
+    : SfxTabPage(pParent, "PickOutlinePage", "cui/ui/pickoutlinepage.ui", rSet)
     , pActNum(0)
     , pSaveNum(0)
     , nActNumLvl(USHRT_MAX)
