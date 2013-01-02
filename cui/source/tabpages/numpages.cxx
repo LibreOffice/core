@@ -29,6 +29,7 @@
 #include <helpid.hrc>
 #include <editeng/numitem.hxx>
 #include <svl/eitem.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/gallery.hxx>
 #include <svl/urihelper.hxx>
@@ -2293,6 +2294,29 @@ static sal_uInt16 lcl_DrawBullet(VirtualDevice* pVDev,
     return nRet;
 }
 
+SvxNumberingPreview::SvxNumberingPreview(Window* pParent, const ResId& rResId )
+    : Window(pParent, rResId), pActNum(0),nPageWidth(0), pOutlineNames(0)
+    , bPosition(sal_False), nActLevel(USHRT_MAX)
+{
+    SetBorderStyle( WINDOW_BORDER_MONO );
+}
+
+SvxNumberingPreview::SvxNumberingPreview(Window* pParent, WinBits nWinBits)
+    : Window(pParent, nWinBits)
+    , pActNum(0)
+    , nPageWidth(0)
+    , pOutlineNames(0)
+    , bPosition(false)
+    , nActLevel(USHRT_MAX)
+{
+    SetBorderStyle(WINDOW_BORDER_MONO);
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxNumberingPreview(Window *pParent, VclBuilder::stringmap &)
+{
+    return new SvxNumberingPreview(pParent, WB_BORDER);
+}
+
 // paint preview of numeration
 void    SvxNumberingPreview::Paint( const Rectangle& /*rRect*/ )
 {
@@ -2592,118 +2616,107 @@ void    SvxNumberingPreview::Paint( const Rectangle& /*rRect*/ )
 
 }
 
+//See uiconfig/swriter/ui/outlinepositionpage.ui for effectively a duplicate
+//dialog to this one, except with a different preview window impl.
+//TODO, determine if SwNumPositionTabPage and SvxNumPositionTabPage can be
+//merged
 SvxNumPositionTabPage::SvxNumPositionTabPage(Window* pParent,
-                               const SfxItemSet& rSet) :
-    SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_NUM_POSITION ), rSet ),
-    aPositionFL(    this, CUI_RES(FL_POSITION )),
-    aLevelFT(       this, CUI_RES(FT_LEVEL    )),
-    aLevelLB(       this, CUI_RES(LB_LEVEL  )),
-    aDistBorderFT(  this, CUI_RES(FT_BORDERDIST )),
-    aDistBorderMF(  this, CUI_RES(MF_BORDERDIST )),
-    aRelativeCB(    this, CUI_RES(CB_RELATIVE       )),
-    aIndentFT(      this, CUI_RES(FT_INDENT     )),
-    aIndentMF(      this, CUI_RES(MF_INDENT     )),
-    aDistNumFT(     this, CUI_RES(FT_NUMDIST        )),
-    aDistNumMF(     this, CUI_RES(MF_NUMDIST        )),
-    aAlignFT(       this, CUI_RES(FT_ALIGN  )),
-    aAlignLB(       this, CUI_RES(LB_ALIGN  )),
-    aLabelFollowedByFT( this, CUI_RES(FT_LABEL_FOLLOWED_BY) ),
-    aLabelFollowedByLB( this, CUI_RES(LB_LABEL_FOLLOWED_BY) ),
-    aListtabFT( this, CUI_RES(FT_LISTTAB) ),
-    aListtabMF( this, CUI_RES(MF_LISTTAB) ),
-    aAlign2FT( this, CUI_RES(FT_ALIGN_2) ),
-    aAlign2LB( this, CUI_RES(LB_ALIGN_2) ),
-    aAlignedAtFT( this, CUI_RES(FT_ALIGNED_AT) ),
-    aAlignedAtMF( this, CUI_RES(MF_ALIGNED_AT) ),
-    aIndentAtFT( this, CUI_RES(FT_INDENT_AT) ),
-    aIndentAtMF( this, CUI_RES(MF_INDENT_AT) ),
-    aStandardPB(    this, CUI_RES(PB_STANDARD       )),
-    pPreviewWIN(    new SvxNumberingPreview(this, CUI_RES(WIN_PREVIEW   ))),
-    pActNum(0),
-    pSaveNum(0),
-    nActNumLvl( USHRT_MAX ),
-    nNumItemId(SID_ATTR_NUMBERING_RULE),
-        bModified(false),
-        bPreset(false),
-    bInInintControl(sal_False),
-    bLabelAlignmentPosAndSpaceModeActive( false )
+                               const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "NumberingPositionPage", "cui/ui/numberingpositionpage.ui", rSet)
+    , pActNum(0)
+    , pSaveNum(0)
+    , nActNumLvl(USHRT_MAX)
+    , nNumItemId(SID_ATTR_NUMBERING_RULE)
+    , bModified(false)
+    , bPreset(false)
+    , bInInintControl(false)
+    , bLabelAlignmentPosAndSpaceModeActive(false)
 {
-    FreeResource();
     SetExchangeSupport();
-    pPreviewWIN->SetBackground(Wallpaper(Color(COL_TRANSPARENT)));
 
-    aRelativeCB.Check();
-    aAlignLB.SetSelectHdl(LINK(this, SvxNumPositionTabPage, EditModifyHdl_Impl));
-    aAlign2LB.SetSelectHdl(LINK(this, SvxNumPositionTabPage, EditModifyHdl_Impl));
-    for ( sal_uInt16 i = 0; i < aAlignLB.GetEntryCount(); ++i )
+    get(m_pLevelLB, "levellb");
+    get(m_pDistBorderFT, "indent");
+    get(m_pDistBorderMF, "indentmf");
+    get(m_pRelativeCB, "relative");
+    get(m_pIndentFT, "numberingwidth");
+    get(m_pIndentMF, "numberingwidthmf");
+    get(m_pDistNumFT, "numdist");
+    get(m_pDistNumMF, "numdistmf");
+    get(m_pAlignFT, "numalign");
+    get(m_pAlignLB, "numalignlb");
+
+    get(m_pLabelFollowedByFT, "numfollowedby");
+    get(m_pLabelFollowedByLB, "numfollowedbylb");
+    get(m_pListtabFT, "at");
+    get(m_pListtabMF, "atmf");
+    get(m_pAlign2FT, "num2align");
+    get(m_pAlign2LB, "num2alignlb");
+    get(m_pAlignedAtFT, "alignedat");
+    get(m_pAlignedAtMF, "alignedatmf");
+    get(m_pIndentAtFT, "indentat");
+    get(m_pIndentAtMF, "indentatmf");
+
+    get(m_pStandardPB, "standard");
+    get(m_pPreviewWIN, "preview");
+
+    m_pPreviewWIN->SetBackground(Wallpaper(Color(COL_TRANSPARENT)));
+
+    m_pRelativeCB->Check();
+    m_pAlignLB->SetSelectHdl(LINK(this, SvxNumPositionTabPage, EditModifyHdl_Impl));
+    m_pAlign2LB->SetSelectHdl(LINK(this, SvxNumPositionTabPage, EditModifyHdl_Impl));
+    for ( sal_uInt16 i = 0; i < m_pAlignLB->GetEntryCount(); ++i )
     {
-        aAlign2LB.InsertEntry( aAlignLB.GetEntry( i ) );
+        m_pAlign2LB->InsertEntry( m_pAlignLB->GetEntry( i ) );
     }
-    aAlign2LB.SetDropDownLineCount( aAlign2LB.GetEntryCount() );
-    aAlign2FT.SetText( aAlignFT.GetText() );
+    m_pAlign2LB->SetDropDownLineCount( m_pAlign2LB->GetEntryCount() );
 
     Link aLk = LINK(this, SvxNumPositionTabPage, DistanceHdl_Impl);
 
-    aDistBorderMF.SetUpHdl(aLk);
-    aDistBorderMF.SetDownHdl(aLk);
-    aDistBorderMF.SetLoseFocusHdl(aLk);
+    m_pDistBorderMF->SetUpHdl(aLk);
+    m_pDistBorderMF->SetDownHdl(aLk);
+    m_pDistBorderMF->SetLoseFocusHdl(aLk);
 
-    aDistNumMF.SetUpHdl(aLk);
-    aDistNumMF.SetDownHdl(aLk);
-    aDistNumMF.SetLoseFocusHdl(aLk);
+    m_pDistNumMF->SetUpHdl(aLk);
+    m_pDistNumMF->SetDownHdl(aLk);
+    m_pDistNumMF->SetLoseFocusHdl(aLk);
 
-    aIndentMF.SetUpHdl(aLk);
-    aIndentMF.SetDownHdl(aLk);
-    aIndentMF.SetLoseFocusHdl(aLk);
+    m_pIndentMF->SetUpHdl(aLk);
+    m_pIndentMF->SetDownHdl(aLk);
+    m_pIndentMF->SetLoseFocusHdl(aLk);
 
-    aLabelFollowedByLB.SetDropDownLineCount( aLabelFollowedByLB.GetEntryCount() );
-    aLabelFollowedByLB.SetSelectHdl( LINK(this, SvxNumPositionTabPage, LabelFollowedByHdl_Impl) );
+    m_pLabelFollowedByLB->SetDropDownLineCount( m_pLabelFollowedByLB->GetEntryCount() );
+    m_pLabelFollowedByLB->SetSelectHdl( LINK(this, SvxNumPositionTabPage, LabelFollowedByHdl_Impl) );
 
     aLk = LINK(this, SvxNumPositionTabPage, ListtabPosHdl_Impl);
-    aListtabMF.SetUpHdl(aLk);
-    aListtabMF.SetDownHdl(aLk);
-    aListtabMF.SetLoseFocusHdl(aLk);
+    m_pListtabMF->SetUpHdl(aLk);
+    m_pListtabMF->SetDownHdl(aLk);
+    m_pListtabMF->SetLoseFocusHdl(aLk);
 
     aLk = LINK(this, SvxNumPositionTabPage, AlignAtHdl_Impl);
-    aAlignedAtMF.SetUpHdl(aLk);
-    aAlignedAtMF.SetDownHdl(aLk);
-    aAlignedAtMF.SetLoseFocusHdl(aLk);
+    m_pAlignedAtMF->SetUpHdl(aLk);
+    m_pAlignedAtMF->SetDownHdl(aLk);
+    m_pAlignedAtMF->SetLoseFocusHdl(aLk);
 
     aLk = LINK(this, SvxNumPositionTabPage, IndentAtHdl_Impl);
-    aIndentAtMF.SetUpHdl(aLk);
-    aIndentAtMF.SetDownHdl(aLk);
-    aIndentAtMF.SetLoseFocusHdl(aLk);
+    m_pIndentAtMF->SetUpHdl(aLk);
+    m_pIndentAtMF->SetDownHdl(aLk);
+    m_pIndentAtMF->SetLoseFocusHdl(aLk);
 
-    aLevelLB.SetSelectHdl(LINK(this, SvxNumPositionTabPage, LevelHdl_Impl));
-    aRelativeCB.SetClickHdl(LINK(this, SvxNumPositionTabPage, RelativeHdl_Impl));
-    aStandardPB.SetClickHdl(LINK(this, SvxNumPositionTabPage, StandardHdl_Impl));
+    m_pLevelLB->EnableMultiSelection(true);
+    m_pLevelLB->SetSelectHdl(LINK(this, SvxNumPositionTabPage, LevelHdl_Impl));
+    m_pRelativeCB->SetClickHdl(LINK(this, SvxNumPositionTabPage, RelativeHdl_Impl));
+    m_pStandardPB->SetClickHdl(LINK(this, SvxNumPositionTabPage, StandardHdl_Impl));
 
 
-    aRelativeCB.Check(bLastRelative);
-    pPreviewWIN->SetPositionMode();
+    m_pRelativeCB->Check(bLastRelative);
+    m_pPreviewWIN->SetPositionMode();
     eCoreUnit = rSet.GetPool()->GetMetric(rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE));
-
-#if OSL_DEBUG_LEVEL > 1
-    pDebugFixedText = new FixedText(this, 0);
-    pDebugFixedText->Show();
-    Size aSize(200, 20);
-    Point aPos(250,0);
-
-    pDebugFixedText->SetPosSizePixel(aPos, aSize);
-    pDebugFixedText->SetText(OUString("Das ist ein Debug-Text"));
-#endif
-
-    aStandardPB.SetAccessibleRelationMemberOf(&aPositionFL);
 }
 
 SvxNumPositionTabPage::~SvxNumPositionTabPage()
 {
     delete pActNum;
-    delete pPreviewWIN;
     delete pSaveNum;
-#if OSL_DEBUG_LEVEL > 1
-    delete pDebugFixedText;
-#endif
 }
 /*-------------------------------------------------------*/
 
@@ -2739,13 +2752,13 @@ void SvxNumPositionTabPage::InitControls()
 {
     bInInintControl = sal_True;
     const bool bRelative = !bLabelAlignmentPosAndSpaceModeActive &&
-                     aRelativeCB.IsEnabled() && aRelativeCB.IsChecked();
-    const bool bSingleSelection = aLevelLB.GetSelectEntryCount() == 1 &&
+                     m_pRelativeCB->IsEnabled() && m_pRelativeCB->IsChecked();
+    const bool bSingleSelection = m_pLevelLB->GetSelectEntryCount() == 1 &&
                             USHRT_MAX != nActNumLvl;
 
-    aDistBorderMF.Enable( !bLabelAlignmentPosAndSpaceModeActive &&
+    m_pDistBorderMF->Enable( !bLabelAlignmentPosAndSpaceModeActive &&
                           ( bSingleSelection || bRelative ) );
-    aDistBorderFT.Enable( !bLabelAlignmentPosAndSpaceModeActive &&
+    m_pDistBorderFT->Enable( !bLabelAlignmentPosAndSpaceModeActive &&
                           ( bSingleSelection || bRelative ) );
 
     bool bSetDistEmpty = false;
@@ -2831,24 +2844,20 @@ void SvxNumPositionTabPage::InitControls()
         {
             nDistBorderNum = (long)aNumFmtArr[nLvl]->GetAbsLSpace()+ aNumFmtArr[nLvl]->GetFirstLineOffset();
         }
-        SetMetricValue(aDistBorderMF, nDistBorderNum, eCoreUnit);
+        SetMetricValue(*m_pDistBorderMF, nDistBorderNum, eCoreUnit);
     }
     else
         bSetDistEmpty = true;
 
-#if OSL_DEBUG_LEVEL > 1
-    lcl_PrintDebugOutput(*pDebugFixedText, *aNumFmtArr[nLvl]);
-#endif
-
     const String aEmptyStr;
     if(bSameDist)
-        SetMetricValue(aDistNumMF, aNumFmtArr[nLvl]->GetCharTextDistance(), eCoreUnit);
+        SetMetricValue(*m_pDistNumMF, aNumFmtArr[nLvl]->GetCharTextDistance(), eCoreUnit);
     else
-        aDistNumMF.SetText(aEmptyStr);
+        m_pDistNumMF->SetText(aEmptyStr);
     if(bSameIndent)
-        SetMetricValue(aIndentMF, - aNumFmtArr[nLvl]->GetFirstLineOffset(), eCoreUnit);
+        SetMetricValue(*m_pIndentMF, - aNumFmtArr[nLvl]->GetFirstLineOffset(), eCoreUnit);
     else
-        aIndentMF.SetText(aEmptyStr);
+        m_pIndentMF->SetText(aEmptyStr);
 
     if(bSameAdjust)
     {
@@ -2857,13 +2866,13 @@ void SvxNumPositionTabPage::InitControls()
             nPos = 0;
         else if(aNumFmtArr[nLvl]->GetNumAdjust() == SVX_ADJUST_RIGHT)
             nPos = 2;
-        aAlignLB.SelectEntryPos(nPos);
-        aAlign2LB.SelectEntryPos( nPos );
+        m_pAlignLB->SelectEntryPos(nPos);
+        m_pAlign2LB->SelectEntryPos( nPos );
     }
     else
     {
-        aAlignLB.SetNoSelection();
-        aAlign2LB.SetNoSelection();
+        m_pAlignLB->SetNoSelection();
+        m_pAlign2LB->SetNoSelection();
     }
 
     if ( bSameLabelFollowedBy )
@@ -2877,55 +2886,55 @@ void SvxNumPositionTabPage::InitControls()
         {
             nPos = 2;
         }
-        aLabelFollowedByLB.SelectEntryPos( nPos );
+        m_pLabelFollowedByLB->SelectEntryPos( nPos );
     }
     else
     {
-        aLabelFollowedByLB.SetNoSelection();
+        m_pLabelFollowedByLB->SetNoSelection();
     }
 
     if ( aNumFmtArr[nLvl]->GetLabelFollowedBy() == SvxNumberFormat::LISTTAB )
     {
-        aListtabFT.Enable( true );
-        aListtabMF.Enable( true );
+        m_pListtabFT->Enable( true );
+        m_pListtabMF->Enable( true );
         if ( bSameListtab )
         {
-            SetMetricValue( aListtabMF, aNumFmtArr[nLvl]->GetListtabPos(), eCoreUnit );
+            SetMetricValue(*m_pListtabMF, aNumFmtArr[nLvl]->GetListtabPos(), eCoreUnit);
         }
         else
         {
-            aListtabMF.SetText(aEmptyStr);
+            m_pListtabMF->SetText(aEmptyStr);
         }
     }
     else
     {
-        aListtabFT.Enable( false );
-        aListtabMF.Enable( false );
-        aListtabMF.SetText(aEmptyStr);
+        m_pListtabFT->Enable( false );
+        m_pListtabMF->Enable( false );
+        m_pListtabMF->SetText(aEmptyStr);
     }
 
     if ( bSameAlignAt )
     {
-        SetMetricValue( aAlignedAtMF,
+        SetMetricValue(*m_pAlignedAtMF,
                         aNumFmtArr[nLvl]->GetIndentAt() + aNumFmtArr[nLvl]->GetFirstLineIndent(),
-                        eCoreUnit );
+                        eCoreUnit);
     }
     else
     {
-        aAlignedAtMF.SetText(aEmptyStr);
+        m_pAlignedAtMF->SetText(aEmptyStr);
     }
 
     if ( bSameIndentAt )
     {
-        SetMetricValue( aIndentAtMF, aNumFmtArr[nLvl]->GetIndentAt(), eCoreUnit );
+        SetMetricValue(*m_pIndentAtMF, aNumFmtArr[nLvl]->GetIndentAt(), eCoreUnit);
     }
     else
     {
-        aIndentAtMF.SetText(aEmptyStr);
+        m_pIndentAtMF->SetText(aEmptyStr);
     }
 
     if ( bSetDistEmpty )
-        aDistBorderMF.SetText(aEmptyStr);
+        m_pDistBorderMF->SetText(aEmptyStr);
 
     bInInintControl = sal_False;
 }
@@ -2954,35 +2963,35 @@ void SvxNumPositionTabPage::ActivatePage(const SfxItemSet& rSet)
         *pActNum = *pSaveNum;
         nActNumLvl = nTmpNumLvl;
         sal_uInt16 nMask = 1;
-        aLevelLB.SetUpdateMode(sal_False);
-        aLevelLB.SetNoSelection();
-        aLevelLB.SelectEntryPos( pActNum->GetLevelCount(), nActNumLvl == USHRT_MAX);
+        m_pLevelLB->SetUpdateMode(false);
+        m_pLevelLB->SetNoSelection();
+        m_pLevelLB->SelectEntryPos( pActNum->GetLevelCount(), nActNumLvl == USHRT_MAX);
         if(nActNumLvl != USHRT_MAX)
             for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
             {
                 if(nActNumLvl & nMask)
-                    aLevelLB.SelectEntryPos( i, sal_True);
+                    m_pLevelLB->SelectEntryPos( i, sal_True);
                 nMask <<= 1 ;
             }
-        aRelativeCB.Enable(nActNumLvl != 1);
-        aLevelLB.SetUpdateMode(sal_True);
+        m_pRelativeCB->Enable(nActNumLvl != 1);
+        m_pLevelLB->SetUpdateMode(sal_True);
 
         InitPosAndSpaceMode();
         ShowControlsDependingOnPosAndSpaceMode();
 
         InitControls();
     }
-    pPreviewWIN->SetLevel(nActNumLvl);
-    pPreviewWIN->Invalidate();
+    m_pPreviewWIN->SetLevel(nActNumLvl);
+    m_pPreviewWIN->Invalidate();
 }
 
 int  SvxNumPositionTabPage::DeactivatePage(SfxItemSet *_pSet)
 {
     if(_pSet)
     {
-        if(aDistBorderMF.IsEnabled())
-            DistanceHdl_Impl(&aDistBorderMF);
-        DistanceHdl_Impl(&aIndentMF);
+        if(m_pDistBorderMF->IsEnabled())
+            DistanceHdl_Impl(m_pDistBorderMF);
+        DistanceHdl_Impl(m_pIndentMF);
         FillItemSet(*_pSet);
     }
     return sal_True;
@@ -3023,43 +3032,45 @@ void SvxNumPositionTabPage::Reset( const SfxItemSet& rSet )
     pSaveNum = new SvxNumRule(*((SvxNumBulletItem*)pItem)->GetNumRule());
 
     // insert levels
-    if(!aLevelLB.GetEntryCount())
+    if(!m_pLevelLB->GetEntryCount())
     {
         for(sal_uInt16 i = 1; i <= pSaveNum->GetLevelCount(); i++)
-            aLevelLB.InsertEntry( OUString::valueOf(static_cast<sal_Int32>(i)) );
+            m_pLevelLB->InsertEntry( OUString::valueOf(static_cast<sal_Int32>(i)) );
         if(pSaveNum->GetLevelCount() > 1)
         {
             OUString sEntry( "1 - " );
             sEntry += OUString::valueOf( static_cast<sal_Int32>(pSaveNum->GetLevelCount()) );
-            aLevelLB.InsertEntry(sEntry);
-            aLevelLB.SelectEntry(sEntry);
+            m_pLevelLB->InsertEntry(sEntry);
+            m_pLevelLB->SelectEntry(sEntry);
         }
         else
-            aLevelLB.SelectEntryPos(0);
+            m_pLevelLB->SelectEntryPos(0);
     }
     else
-        aLevelLB.SelectEntryPos(aLevelLB.GetEntryCount() - 1);
+        m_pLevelLB->SelectEntryPos(m_pLevelLB->GetEntryCount() - 1);
     sal_uInt16 nMask = 1;
-    aLevelLB.SetUpdateMode(sal_False);
-    aLevelLB.SetNoSelection();
+    m_pLevelLB->SetUpdateMode(sal_False);
+    m_pLevelLB->SetNoSelection();
     if(nActNumLvl == USHRT_MAX)
     {
-        aLevelLB.SelectEntryPos( pSaveNum->GetLevelCount(), sal_True);
+        m_pLevelLB->SelectEntryPos( pSaveNum->GetLevelCount(), sal_True);
     }
     else
+    {
         for(sal_uInt16 i = 0; i < pSaveNum->GetLevelCount(); i++)
         {
             if(nActNumLvl & nMask)
-                aLevelLB.SelectEntryPos( i, sal_True);
+                m_pLevelLB->SelectEntryPos( i, sal_True);
             nMask <<= 1;
         }
-    aLevelLB.SetUpdateMode(sal_True);
+    }
+    m_pLevelLB->SetUpdateMode(sal_True);
 
     if(!pActNum)
         pActNum = new  SvxNumRule(*pSaveNum);
     else if(*pSaveNum != *pActNum)
         *pActNum = *pSaveNum;
-    pPreviewWIN->SetNumRule(pActNum);
+    m_pPreviewWIN->SetNumRule(pActNum);
 
     InitPosAndSpaceMode();
     ShowControlsDependingOnPosAndSpaceMode();
@@ -3100,28 +3111,28 @@ void SvxNumPositionTabPage::InitPosAndSpaceMode()
 
 void SvxNumPositionTabPage::ShowControlsDependingOnPosAndSpaceMode()
 {
-    aDistBorderFT.Show( !bLabelAlignmentPosAndSpaceModeActive );
-    aDistBorderMF.Show( !bLabelAlignmentPosAndSpaceModeActive );
-    aRelativeCB.Show( !bLabelAlignmentPosAndSpaceModeActive );
-    aIndentFT.Show( !bLabelAlignmentPosAndSpaceModeActive );
-    aIndentMF.Show( !bLabelAlignmentPosAndSpaceModeActive );
-    aDistNumFT.Show( !bLabelAlignmentPosAndSpaceModeActive &&
+    m_pDistBorderFT->Show( !bLabelAlignmentPosAndSpaceModeActive );
+    m_pDistBorderMF->Show( !bLabelAlignmentPosAndSpaceModeActive );
+    m_pRelativeCB->Show( !bLabelAlignmentPosAndSpaceModeActive );
+    m_pIndentFT->Show( !bLabelAlignmentPosAndSpaceModeActive );
+    m_pIndentMF->Show( !bLabelAlignmentPosAndSpaceModeActive );
+    m_pDistNumFT->Show( !bLabelAlignmentPosAndSpaceModeActive &&
                      pActNum->IsFeatureSupported(NUM_CONTINUOUS) );
-    aDistNumMF.Show( !bLabelAlignmentPosAndSpaceModeActive &&
+    m_pDistNumMF->Show( !bLabelAlignmentPosAndSpaceModeActive &&
                      pActNum->IsFeatureSupported(NUM_CONTINUOUS));
-    aAlignFT.Show( !bLabelAlignmentPosAndSpaceModeActive );
-    aAlignLB.Show( !bLabelAlignmentPosAndSpaceModeActive );
+    m_pAlignFT->Show( !bLabelAlignmentPosAndSpaceModeActive );
+    m_pAlignLB->Show( !bLabelAlignmentPosAndSpaceModeActive );
 
-    aLabelFollowedByFT.Show( bLabelAlignmentPosAndSpaceModeActive );
-    aLabelFollowedByLB.Show( bLabelAlignmentPosAndSpaceModeActive );
-    aListtabFT.Show( bLabelAlignmentPosAndSpaceModeActive );
-    aListtabMF.Show( bLabelAlignmentPosAndSpaceModeActive );
-    aAlign2FT.Show( bLabelAlignmentPosAndSpaceModeActive );
-    aAlign2LB.Show( bLabelAlignmentPosAndSpaceModeActive );
-    aAlignedAtFT.Show( bLabelAlignmentPosAndSpaceModeActive );
-    aAlignedAtMF.Show( bLabelAlignmentPosAndSpaceModeActive );
-    aIndentAtFT.Show( bLabelAlignmentPosAndSpaceModeActive );
-    aIndentAtMF.Show( bLabelAlignmentPosAndSpaceModeActive );
+    m_pLabelFollowedByFT->Show( bLabelAlignmentPosAndSpaceModeActive );
+    m_pLabelFollowedByLB->Show( bLabelAlignmentPosAndSpaceModeActive );
+    m_pListtabFT->Show( bLabelAlignmentPosAndSpaceModeActive );
+    m_pListtabMF->Show( bLabelAlignmentPosAndSpaceModeActive );
+    m_pAlign2FT->Show( bLabelAlignmentPosAndSpaceModeActive );
+    m_pAlign2LB->Show( bLabelAlignmentPosAndSpaceModeActive );
+    m_pAlignedAtFT->Show( bLabelAlignmentPosAndSpaceModeActive );
+    m_pAlignedAtMF->Show( bLabelAlignmentPosAndSpaceModeActive );
+    m_pIndentAtFT->Show( bLabelAlignmentPosAndSpaceModeActive );
+    m_pIndentAtMF->Show( bLabelAlignmentPosAndSpaceModeActive );
 }
 
 SfxTabPage* SvxNumPositionTabPage::Create( Window* pParent,
@@ -3134,19 +3145,19 @@ void    SvxNumPositionTabPage::SetMetric(FieldUnit eMetric)
 {
     if(eMetric == FUNIT_MM)
     {
-        aDistBorderMF .SetDecimalDigits(1);
-        aDistNumMF    .SetDecimalDigits(1);
-        aIndentMF     .SetDecimalDigits(1);
-        aListtabMF.SetDecimalDigits(1);
-        aAlignedAtMF.SetDecimalDigits(1);
-        aIndentAtMF.SetDecimalDigits(1);
+        m_pDistBorderMF->SetDecimalDigits(1);
+        m_pDistNumMF->SetDecimalDigits(1);
+        m_pIndentMF->SetDecimalDigits(1);
+        m_pListtabMF->SetDecimalDigits(1);
+        m_pAlignedAtMF->SetDecimalDigits(1);
+        m_pIndentAtMF->SetDecimalDigits(1);
     }
-    aDistBorderMF .SetUnit( eMetric );
-    aDistNumMF    .SetUnit( eMetric );
-    aIndentMF     .SetUnit( eMetric );
-    aListtabMF.SetUnit( eMetric );
-    aAlignedAtMF.SetUnit( eMetric );
-    aIndentAtMF.SetUnit( eMetric );
+    m_pDistBorderMF->SetUnit( eMetric );
+    m_pDistNumMF->SetUnit( eMetric );
+    m_pIndentMF->SetUnit( eMetric );
+    m_pListtabMF->SetUnit( eMetric );
+    m_pAlignedAtMF->SetUnit( eMetric );
+    m_pIndentAtMF->SetUnit( eMetric );
 }
 
 IMPL_LINK_NOARG(SvxNumPositionTabPage, EditModifyHdl_Impl)
@@ -3158,9 +3169,9 @@ IMPL_LINK_NOARG(SvxNumPositionTabPage, EditModifyHdl_Impl)
         {
             SvxNumberFormat aNumFmt(pActNum->GetLevel(i));
 
-            const sal_uInt16 nPos = aAlignLB.IsVisible()
-                                ? aAlignLB.GetSelectEntryPos()
-                                : aAlign2LB.GetSelectEntryPos();
+            const sal_uInt16 nPos = m_pAlignLB->IsVisible()
+                                ? m_pAlignLB->GetSelectEntryPos()
+                                : m_pAlign2LB->GetSelectEntryPos();
             SvxAdjust eAdjust = SVX_ADJUST_CENTER;
             if(nPos == 0)
                 eAdjust = SVX_ADJUST_LEFT;
@@ -3213,7 +3224,7 @@ IMPL_LINK( SvxNumPositionTabPage, LevelHdl_Impl, ListBox *, pBox )
             nMask <<=1;
         }
     }
-    aRelativeCB.Enable(nActNumLvl != 1);
+    m_pRelativeCB->Enable(nActNumLvl != 1);
     SetModified();
     InitPosAndSpaceMode();
     ShowControlsDependingOnPosAndSpaceMode();
@@ -3227,18 +3238,15 @@ IMPL_LINK( SvxNumPositionTabPage, DistanceHdl_Impl, MetricField *, pFld )
         return 0;
     long nValue = GetCoreValue(*pFld, eCoreUnit);
     sal_uInt16 nMask = 1;
-#if OSL_DEBUG_LEVEL > 1
-    sal_Bool bFirst = sal_True;
-#endif
     for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
     {
         if(nActNumLvl & nMask)
         {
             SvxNumberFormat aNumFmt( pActNum->GetLevel( i ) );
-            if(pFld == &aDistBorderMF)
+            if (pFld == m_pDistBorderMF)
             {
 
-                if(aRelativeCB.IsChecked())
+                if(m_pRelativeCB->IsChecked())
                 {
                     if(0 == i)
                     {
@@ -3259,11 +3267,11 @@ IMPL_LINK( SvxNumPositionTabPage, DistanceHdl_Impl, MetricField *, pFld )
                     aNumFmt.SetAbsLSpace( (short)nValue - aNumFmt.GetFirstLineOffset());
                 }
             }
-            else if(pFld == &aDistNumMF)
+            else if (pFld == m_pDistNumMF)
             {
                 aNumFmt.SetCharTextDistance( (short)nValue );
             }
-            else if(pFld == &aIndentMF)
+            else if (pFld == m_pIndentMF)
             {
                 // together with the FirstLineOffset the AbsLSpace must be changed, too
                 long nDiff = nValue + aNumFmt.GetFirstLineOffset();
@@ -3272,21 +3280,16 @@ IMPL_LINK( SvxNumPositionTabPage, DistanceHdl_Impl, MetricField *, pFld )
                 aNumFmt.SetFirstLineOffset( -(short)nValue );
             }
 
-#if OSL_DEBUG_LEVEL > 1
-            if(bFirst)
-                lcl_PrintDebugOutput(*pDebugFixedText, aNumFmt);
-            bFirst = sal_False;
-#endif
             pActNum->SetLevel( i, aNumFmt );
         }
         nMask <<= 1;
     }
 
     SetModified();
-    if(!aDistBorderMF.IsEnabled())
+    if(!m_pDistBorderMF->IsEnabled())
     {
         String aEmptyStr;
-        aDistBorderMF.SetText(aEmptyStr);
+        m_pDistBorderMF->SetText(aEmptyStr);
     }
 
     return 0;
@@ -3295,7 +3298,7 @@ IMPL_LINK( SvxNumPositionTabPage, DistanceHdl_Impl, MetricField *, pFld )
 IMPL_LINK( SvxNumPositionTabPage, RelativeHdl_Impl, CheckBox *, pBox )
 {
     sal_Bool bOn = pBox->IsChecked();
-    sal_Bool bSingleSelection = aLevelLB.GetSelectEntryCount() == 1 && USHRT_MAX != nActNumLvl;
+    sal_Bool bSingleSelection = m_pLevelLB->GetSelectEntryCount() == 1 && USHRT_MAX != nActNumLvl;
     sal_Bool bSetValue = sal_False;
     long nValue = 0;
     if(bOn || bSingleSelection)
@@ -3326,11 +3329,11 @@ IMPL_LINK( SvxNumPositionTabPage, RelativeHdl_Impl, CheckBox *, pBox )
     }
     String aEmptyStr;
     if(bSetValue)
-        SetMetricValue(aDistBorderMF, nValue,   eCoreUnit);
+        SetMetricValue(*m_pDistBorderMF, nValue,   eCoreUnit);
     else
-        aDistBorderMF.SetText(aEmptyStr);
-    aDistBorderMF.Enable(bOn || bSingleSelection);
-    aDistBorderFT.Enable(bOn || bSingleSelection);
+        m_pDistBorderMF->SetText(aEmptyStr);
+    m_pDistBorderMF->Enable(bOn || bSingleSelection);
+    m_pDistBorderFT->Enable(bOn || bSingleSelection);
     bLastRelative = bOn;
     return 0;
 }
@@ -3340,7 +3343,7 @@ IMPL_LINK_NOARG(SvxNumPositionTabPage, LabelFollowedByHdl_Impl)
     // determine value to be set at the chosen list levels
     SvxNumberFormat::LabelFollowedBy eLabelFollowedBy = SvxNumberFormat::LISTTAB;
     {
-        const sal_uInt16 nPos = aLabelFollowedByLB.GetSelectEntryPos();
+        const sal_uInt16 nPos = m_pLabelFollowedByLB->GetSelectEntryPos();
         if ( nPos == 1 )
         {
             eLabelFollowedBy = SvxNumberFormat::SPACE;
@@ -3378,15 +3381,15 @@ IMPL_LINK_NOARG(SvxNumPositionTabPage, LabelFollowedByHdl_Impl)
 
     // enable/disable metric field for list tab stop position depending on
     // selected item following the list label.
-    aListtabFT.Enable( eLabelFollowedBy == SvxNumberFormat::LISTTAB );
-    aListtabMF.Enable( eLabelFollowedBy == SvxNumberFormat::LISTTAB );
+    m_pListtabFT->Enable( eLabelFollowedBy == SvxNumberFormat::LISTTAB );
+    m_pListtabMF->Enable( eLabelFollowedBy == SvxNumberFormat::LISTTAB );
     if ( bSameListtabPos && eLabelFollowedBy == SvxNumberFormat::LISTTAB )
     {
-        SetMetricValue( aListtabMF, pActNum->GetLevel( nFirstLvl ).GetListtabPos(), eCoreUnit );
+        SetMetricValue(*m_pListtabMF, pActNum->GetLevel( nFirstLvl ).GetListtabPos(), eCoreUnit);
     }
     else
     {
-        aListtabMF.SetText( String() );
+        m_pListtabMF->SetText( String() );
     }
 
     SetModified();
@@ -3408,9 +3411,6 @@ IMPL_LINK( SvxNumPositionTabPage, ListtabPosHdl_Impl, MetricField*, pFld )
             SvxNumberFormat aNumFmt( pActNum->GetLevel(i) );
             aNumFmt.SetListtabPos( nValue );
             pActNum->SetLevel( i, aNumFmt );
-#if OSL_DEBUG_LEVEL > 1
-            lcl_PrintDebugOutput(*pDebugFixedText, aNumFmt);
-#endif
         }
         nMask <<= 1;
     }
@@ -3435,9 +3435,6 @@ IMPL_LINK( SvxNumPositionTabPage, AlignAtHdl_Impl, MetricField*, pFld )
             const long nFirstLineIndent = nValue - aNumFmt.GetIndentAt();
             aNumFmt.SetFirstLineIndent( nFirstLineIndent );
             pActNum->SetLevel( i, aNumFmt );
-#if OSL_DEBUG_LEVEL > 1
-            lcl_PrintDebugOutput(*pDebugFixedText, aNumFmt);
-#endif
         }
         nMask <<= 1;
     }
@@ -3465,9 +3462,6 @@ IMPL_LINK( SvxNumPositionTabPage, IndentAtHdl_Impl, MetricField*, pFld )
             const long nNewFirstLineIndent = nAlignedAt - nValue;
             aNumFmt.SetFirstLineIndent( nNewFirstLineIndent );
             pActNum->SetLevel( i, aNumFmt );
-#if OSL_DEBUG_LEVEL > 1
-            lcl_PrintDebugOutput(*pDebugFixedText, aNumFmt);
-#endif
         }
         nMask <<= 1;
     }
@@ -3522,8 +3516,8 @@ void SvxNumPositionTabPage::SetModified(sal_Bool bRepaint)
     bModified = sal_True;
     if(bRepaint)
     {
-        pPreviewWIN->SetLevel(nActNumLvl);
-        pPreviewWIN->Invalidate();
+        m_pPreviewWIN->SetLevel(nActNumLvl);
+        m_pPreviewWIN->Invalidate();
     }
 }
 

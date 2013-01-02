@@ -37,10 +37,6 @@
 #define LB_FMT          158
 #define FT_SUFFIX       159
 #define ED_SUFFIX       160
-#define FT_BORDERDIST   161
-#define MF_BORDERDIST   162
-#define FT_NUMDIST      163
-#define MF_NUMDIST      164
 #define FT_INDENT       165
 #define MF_INDENT       166
 #define FT_CHARFMT      167
@@ -60,9 +56,7 @@
 #define FT_ORIENT       182
 #define LB_ORIENT       183
 #define MB_BITMAP       184
-#define CB_RELATIVE     185
 #define FT_ALL_LEVEL    186
-#define PB_STANDARD     187
 #define CB_SAME_LEVEL   188
 #define FL_SAME_LEVEL   189
 #define FT_BUL_COLOR    190

@@ -26,7 +26,7 @@
 # i88330 -o sc.ScAccessibleDocument
 # i91045 -o sc.ScAccessibleDocumentPagePreview
 -o sc.ScAccessiblePageHeader
--o sc.ScAccessiblePageHeaderArea
+# fdo#FOO -o sc.ScAccessiblePageHeaderArea
 -o sc.ScAccessiblePreviewCell
 -o sc.ScAccessiblePreviewHeaderCell
 -o sc.ScAccessiblePreviewTable

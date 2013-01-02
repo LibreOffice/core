@@ -57,6 +57,10 @@
 
 static sal_Bool bLastRelative = sal_False;
 
+//See cui/uiconfig/ui/numberingpositionpage.ui for effectively a duplicate
+//dialog to this one, except with a different preview window impl.
+//TODO, determine if SwNumPositionTabPage and SvxNumPositionTabPage can be
+//merged
 SwNumPositionTabPage::SwNumPositionTabPage(Window* pParent,
                                const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OutlinePositionPage",

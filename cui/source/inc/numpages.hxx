@@ -36,9 +36,35 @@
 class SvxNumRule;
 class SvxBmpNumValueSet;
 class SvxNumValueSet;
-class SvxNumberingPreview;
 class SvxBrushItem;
 
+class SvxNumberingPreview : public Window
+{
+    const SvxNumRule*   pActNum;
+    Font                aStdFont;
+    long                nPageWidth;
+    const String*       pOutlineNames;
+    sal_Bool                bPosition;
+    sal_uInt16              nActLevel;
+
+    protected:
+        virtual void        Paint( const Rectangle& rRect );
+
+    public:
+        SvxNumberingPreview(Window* pParent, const ResId& rResId );
+        SvxNumberingPreview(Window* pParent, WinBits nWinBits = WB_BORDER);
+
+        void    SetNumRule(const SvxNumRule* pNum)
+                    {pActNum = pNum; Invalidate();};
+        void    SetPageWidth(long nPgWidth)
+                                {nPageWidth = nPgWidth;}
+        void    SetOutlineNames(const String* pNames)
+                        {pOutlineNames = pNames;}
+        void    SetPositionMode()
+                        { bPosition = sal_True;}
+        void    SetLevel(sal_uInt16 nSet) {nActLevel = nSet;}
+
+};
 
 //------------------------------------------------
 
@@ -362,41 +388,36 @@ class SvxNumPositionTabPage : public SfxTabPage
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
 
-    FixedLine           aPositionFL;
-    FixedText           aLevelFT;
-    MultiListBox        aLevelLB;
+    ListBox*            m_pLevelLB;
 
     // former set of controls shown for numbering rules containing list level
     // attributes in SvxNumberFormat::SvxNumPositionAndSpaceMode == LABEL_WIDTH_AND_POSITION
-    FixedText           aDistBorderFT;
-    MetricField         aDistBorderMF;
-    CheckBox            aRelativeCB;
-    FixedText           aIndentFT;
-    MetricField         aIndentMF;
-    FixedText           aDistNumFT;
-    MetricField         aDistNumMF;
-    FixedText           aAlignFT;
-    ListBox             aAlignLB;
+    FixedText*          m_pDistBorderFT;
+    MetricField*        m_pDistBorderMF;
+    CheckBox*           m_pRelativeCB;
+    FixedText*          m_pIndentFT;
+    MetricField*        m_pIndentMF;
+    FixedText*          m_pDistNumFT;
+    MetricField*        m_pDistNumMF;
+    FixedText*          m_pAlignFT;
+    ListBox*            m_pAlignLB;
 
     // new set of controls shown for numbering rules containing list level
     // attributes in SvxNumberFormat::SvxNumPositionAndSpaceMode == LABEL_ALIGNMENT
-    FixedText           aLabelFollowedByFT;
-    ListBox             aLabelFollowedByLB;
-    FixedText           aListtabFT;
-    MetricField         aListtabMF;
-    FixedText           aAlign2FT;
-    ListBox             aAlign2LB;
-    FixedText           aAlignedAtFT;
-    MetricField         aAlignedAtMF;
-    FixedText           aIndentAtFT;
-    MetricField         aIndentAtMF;
+    FixedText*          m_pLabelFollowedByFT;
+    ListBox*            m_pLabelFollowedByLB;
+    FixedText*          m_pListtabFT;
+    MetricField*        m_pListtabMF;
+    FixedText*          m_pAlign2FT;
+    ListBox*            m_pAlign2LB;
+    FixedText*          m_pAlignedAtFT;
+    MetricField*        m_pAlignedAtMF;
+    FixedText*          m_pIndentAtFT;
+    MetricField*        m_pIndentAtMF;
 
-    PushButton          aStandardPB;
+    PushButton*         m_pStandardPB;
 
-#if OSL_DEBUG_LEVEL > 1
-    FixedText*          pDebugFixedText;
-#endif
-    SvxNumberingPreview* pPreviewWIN;
+    SvxNumberingPreview* m_pPreviewWIN;
 
     SvxNumRule*         pActNum;
     SvxNumRule*         pSaveNum;

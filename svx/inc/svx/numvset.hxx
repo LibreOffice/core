@@ -112,37 +112,6 @@ class SVX_DLLPUBLIC SvxBmpNumValueSet : public SvxNumValueSet
 
 };
 
-class SvxNumberingPreview : public Window
-{
-    const SvxNumRule*   pActNum;
-    Font                aStdFont;
-    long                nPageWidth;
-    const String*       pOutlineNames;
-    sal_Bool                bPosition;
-    sal_uInt16              nActLevel;
-
-    protected:
-        virtual void        Paint( const Rectangle& rRect );
-
-    public:
-        SvxNumberingPreview(Window* pParent, const ResId& rResId ) :
-            Window(pParent, rResId),
-            pActNum(0),nPageWidth(0), pOutlineNames(0), bPosition(sal_False), nActLevel(USHRT_MAX)
-            { SetBorderStyle( WINDOW_BORDER_MONO ); }
-
-        void    SetNumRule(const SvxNumRule* pNum)
-                    {pActNum = pNum; Invalidate();};
-        void    SetPageWidth(long nPgWidth)
-                                {nPageWidth = nPgWidth;}
-        void    SetOutlineNames(const String* pNames)
-                        {pOutlineNames = pNames;}
-        void    SetPositionMode()
-                        { bPosition = sal_True;}
-        void    SetLevel(sal_uInt16 nSet) {nActLevel = nSet;}
-
-};
-
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

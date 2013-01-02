@@ -222,8 +222,8 @@ void SvxNumberPreview::DataChanged( const DataChangedEvent& rDCEvt )
 
 SvxNumberFormatTabPage::SvxNumberFormatTabPage(Window* pParent,
     const SfxItemSet& rCoreAttrs)
-    : SfxTabPage(pParent, "NumberFormatPage",
-        "cui/ui/numberformatpage.ui", rCoreAttrs)
+    : SfxTabPage(pParent, "NumberingFormatPage",
+        "cui/ui/numberingformatpage.ui", rCoreAttrs)
     , pNumItem(NULL)
     , pNumFmtShell(NULL)
     , nInitFormat(ULONG_MAX)
