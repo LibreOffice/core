@@ -154,7 +154,24 @@ if test -n "$with_android_ndk"; then
         android_cpu=x86
     fi
 
-    ANDROID_ABI_PREBUILT_BIN=`echo $ANDROID_NDK_HOME/toolchains/$android_cpu*-*$with_android_ndk_toolchain_version/prebuilt/*/bin`
+    # Check if there is a (self-built) 64-bit tool-chain
+    toolchain_system='*'
+    if test $build_os = linux-gnu; then
+        case $build_cpu in
+        x86_64)
+            case "`echo $ANDROID_NDK_HOME/toolchains/$android_cpu*-*$with_android_ndk_toolchain_version/prebuilt/linux-x86_64/bin`" in
+            */bin|*/bin\ */bin*)
+                toolchain_system=linux-x86_64
+                ;;
+            esac
+            ;;
+        i?86|x86)
+            toolchain_system=linux-x86
+            ;;
+        esac
+    fi
+
+    ANDROID_ABI_PREBUILT_BIN=`echo $ANDROID_NDK_HOME/toolchains/$android_cpu*-*$with_android_ndk_toolchain_version/prebuilt/$toolchain_system/bin`
     # Check if there are several toolchain versions
     case "$ANDROID_ABI_PREBUILT_BIN" in
     */bin\ */bin*)
@@ -487,6 +504,10 @@ linux-android*)
 
     if test -z "$with_android_ndk"; then
         AC_MSG_ERROR([the --with-android-ndk option is mandatory])
+    fi
+
+    if test -z "$with_android_ndk_toolchain_version"; then
+        AC_MSG_ERROR([the --with-android-ndk-toolchain-version option is mandatory])
     fi
 
     if test -z "$with_android_sdk"; then
