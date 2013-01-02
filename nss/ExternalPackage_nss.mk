@@ -29,8 +29,10 @@ $(eval $(call gb_ExternalPackage_add_files,nss,lib,\
 		mozilla/dist/out/lib/libplds4.dylib \
 		mozilla/dist/out/lib/libsmime3.dylib \
 		mozilla/dist/out/lib/libsoftokn3.dylib \
-		mozilla/dist/out/lib/libsqlite3.dylib \
 		mozilla/dist/out/lib/libssl3.dylib \
+))
+$(eval $(call gb_ExternalPackage_add_files,nss,lib/sqlite,\
+	        $(if $(filter 1060 1070 1080,$(MAC_OS_X_VERSION_MIN_REQUIRED)),,mozilla/dist/out/lib/libsqlite3.dylib) \
 ))
 else ifeq ($(OS),WNT)
 ifeq ($(COM),MSC)
@@ -86,8 +88,10 @@ $(eval $(call gb_ExternalPackage_add_files,nss,lib,\
 		mozilla/dist/out/lib/libplds4.so \
 		mozilla/dist/out/lib/libsmime3.so \
 		mozilla/dist/out/lib/libsoftokn3.so \
-		mozilla/dist/out/lib/libsqlite3.so \
 		mozilla/dist/out/lib/libssl3.so \
+))
+$(eval $(call gb_ExternalPackage_add_files,nss,lib/sqlite,\
+	        mozilla/dist/out/lib/libsqlite3.so \
 ))
 endif
 
