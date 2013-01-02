@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <office:gradient-table xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.org/2000/style" xmlns:text="http://openoffice.org/2000/text" xmlns:table="http://openoffice.org/2000/table" xmlns:draw="http://openoffice.org/2000/drawing" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="http://openoffice.org/2000/meta" xmlns:number="http://openoffice.org/2000/datastyle" xmlns:svg="http://www.w3.org/2000/svg" xmlns:chart="http://openoffice.org/2000/chart" xmlns:dr3d="http://openoffice.org/2000/dr3d" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="http://openoffice.org/2000/form" xmlns:script="http://openoffice.org/2000/script">
   <!-- #121511# new entries derived from Symphony, moved gray gradients to the front -->
   <draw:gradient draw:name="Gray Gradient 1" draw:style="linear" draw:start-color="#1c1c1c" draw:end-color="#cccccc" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="0" draw:border="0%"/>
@@ -33,7 +32,7 @@
   <draw:gradient draw:name="Radial red/yellow" draw:style="radial" draw:cx="50%" draw:cy="50%" draw:start-color="#ff3333" draw:end-color="#e6ff00" draw:start-intensity="100%" draw:end-intensity="100%" draw:border="0%"/>
   <draw:gradient draw:name="Axial light red/white" draw:style="axial" draw:start-color="#ff0000" draw:end-color="#ffffff" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="0" draw:border="50%"/>
 
-  <!-- not so useful old gradients (vandidates for removal) -->
+  <!-- not so useful old gradients (candidates for removal) -->
   <draw:gradient draw:name="Gradient 2" draw:style="axial" draw:start-color="#000080" draw:end-color="#800000" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="300" draw:border="10%"/>
   <draw:gradient draw:name="Gradient 4" draw:style="ellipsoid" draw:cx="40%" draw:cy="40%" draw:start-color="#ffff00" draw:end-color="#008000" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="900" draw:border="30%"/>
   <draw:gradient draw:name="Gradient 5" draw:style="square" draw:cx="50%" draw:cy="50%" draw:start-color="#008000" draw:end-color="#800080" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="1200" draw:border="40%"/>
