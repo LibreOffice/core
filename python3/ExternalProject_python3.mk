@@ -74,7 +74,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 		$(if $(filter AIX,$(OS)),--disable-ipv6 --with-threads) \
 		$(if $(filter WNT-GCC,$(OS)-$(COM)),--with-threads ac_cv_printf_zd_format=no) \
 		$(if $(filter MACOSX,$(OS)), \
-			--enable-universalsdk=$(MACOSX_SDK_PATH) --with-universal-archs=32-bit --enable-framework=/@__________________________________________________OOO --with-framework-name=LibreOfficePython, \
+			$(if $(filter INTEL POWERPC,$(CPUNAME)),--enable-universalsdk=$(MACOSX_SDK_PATH) --with-universal-archs=32-bit) --enable-framework=/@__________________________________________________OOO --with-framework-name=LibreOfficePython, \
 			--enable-shared \
 		) \
 		CC="$(strip $(CC) \
