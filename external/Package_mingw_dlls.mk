@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,mingw_dlls,$(MINGW_SYSROOT)/mingw/bin))
+$(eval $(call gb_Package_Package,mingw_dlls,$(MINGW_SYSROOT)/bin))
 
 $(eval $(call gb_Package_add_files,mingw_dlls,bin,\
     $(MINGW_BOOST_DATE_TIME_DLL) \

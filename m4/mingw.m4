@@ -47,7 +47,7 @@ AC_DEFUN([libo_MINGW_CHECK_DLL],
 [AC_ARG_VAR([MINGW_][$1][_DLL],[output variable containing the found dll name])dnl
 
 if test -n "$WITH_MINGW"; then
-    _libo_mingw_dlldir="[$MINGW_SYSROOT]"/mingw/bin
+    _libo_mingw_dlldir="[$MINGW_SYSROOT]"/bin
     _libo_mingw_dllname=
     AC_MSG_CHECKING([for $2 dll])
 
