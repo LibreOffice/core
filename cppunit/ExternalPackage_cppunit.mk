@@ -24,7 +24,9 @@ else
 ifneq ($(DISABLE_DYNLOADING),TRUE)
 $(eval $(call gb_ExternalPackage_add_file,cppunit,bin/DllPlugInTester,src/DllPlugInTester/.libs/DllPlugInTester))
 else
+ifneq ($(filter DESKTOP,$(BUILD_TYPE)),)
 $(eval $(call gb_ExternalPackage_add_file,cppunit,bin/DllPlugInTester,src/DllPlugInTester/DllPlugInTester))
+endif
 endif
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_ExternalPackage_add_file,cppunit,lib/libcppunit-1.13.0.dylib,src/cppunit/.libs/libcppunit-1.13.0.dylib))
