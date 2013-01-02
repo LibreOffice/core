@@ -121,7 +121,16 @@ public:
      */
     void testSheetsFunc();
     void testVolatileFunc();
+
+    /**
+     * Basic test for formula dependency tracking.
+     */
     void testFormulaDepTracking();
+
+    /**
+     * Another test for formula dependency tracking, inspired by fdo#56278.
+     */
+    void testFormulaDepTracking2();
     void testFuncParam();
     void testNamedRange();
     void testCSV();
@@ -248,6 +257,7 @@ public:
     CPPUNIT_TEST(testSheetsFunc);
     CPPUNIT_TEST(testVolatileFunc);
     CPPUNIT_TEST(testFormulaDepTracking);
+    CPPUNIT_TEST(testFormulaDepTracking2);
     CPPUNIT_TEST(testFuncParam);
     CPPUNIT_TEST(testNamedRange);
     CPPUNIT_TEST(testCSV);
@@ -1219,6 +1229,30 @@ void Test::testFormulaDepTracking()
     CPPUNIT_ASSERT_MESSAGE("Unexpected formula value.", m_pDoc->GetValue(0, 4, 0) == 2.0);
     CPPUNIT_ASSERT_MESSAGE("Unexpected formula value.", m_pDoc->GetValue(1, 4, 0) == 2.0);
     CPPUNIT_ASSERT_MESSAGE("Unexpected formula value.", m_pDoc->GetValue(2, 4, 0) == 4.0);
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testFormulaDepTracking2()
+{
+    CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet", m_pDoc->InsertTab (0, "foo"));
+
+    AutoCalcSwitch aACSwitch(m_pDoc, true); // turn on auto calculation.
+
+    double val = 2.0;
+    m_pDoc->SetValue(0, 0, 0, val);
+    val = 4.0;
+    m_pDoc->SetValue(1, 0, 0, val);
+    val = 5.0;
+    m_pDoc->SetValue(0, 1, 0, val);
+    m_pDoc->SetString(2, 0, 0, "=A1/B1");
+    m_pDoc->SetString(1, 1, 0, "=B1*C1");
+
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(1, 1, 0)); // B2 should equal 2.
+
+    clearRange(m_pDoc, ScAddress(2, 0, 0)); // Delete C1.
+
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(1, 1, 0)); // B2 should now equal 0.
 
     m_pDoc->DeleteTab(0);
 }
