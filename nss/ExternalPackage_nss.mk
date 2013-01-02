@@ -24,7 +24,6 @@ $(eval $(call gb_ExternalPackage_add_files,nss,lib,\
 		mozilla/dist/out/lib/libnss3.dylib \
 		mozilla/dist/out/lib/libnssckbi.dylib \
 		mozilla/dist/out/lib/libnssdbm3.dylib \
-		mozilla/dist/out/lib/libnsssysinit.dylib \
 		mozilla/dist/out/lib/libnssutil3.dylib \
 		mozilla/dist/out/lib/libplc4.dylib \
 		mozilla/dist/out/lib/libplds4.dylib \
