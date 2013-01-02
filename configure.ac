@@ -7529,9 +7529,9 @@ if test $enable_python = system; then
         dnl How to find out the cross-compilation Python installation path?
         dnl Let's hardocode what we know for different distributions for now...
         for python_version in 2.6; do
-            if test -f ${MINGW_SYSROOT}/include/python${python_version}/Python.h; then
-                PYTHON_CFLAGS="-I${MINGW_SYSROOT}/include/python$python_version"
-                PYTHON_LIBS="-L${MINGW_SYSROOT}lib -lpython$python_version $python_libs"
+            if test -f ${MINGW_SYSROOT}/mingw/include/python${python_version}/Python.h; then
+                PYTHON_CFLAGS="-I${MINGW_SYSROOT}/mingw/include/python$python_version"
+                PYTHON_LIBS="-L${MINGW_SYSROOT}/mingw/lib -lpython$python_version $python_libs"
                 AC_MSG_CHECKING([for python.exe])
                 AS_IF([test -f "$MINGW_SYSROOT/mingw/bin/python.exe"],
                       [AC_MSG_RESULT([$MINGW_SYSROOT/mingw/bin/python.exe])
