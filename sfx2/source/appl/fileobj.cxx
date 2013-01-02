@@ -23,7 +23,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
 #include <sot/formats.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <sfx2/lnkbase.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/progress.hxx>

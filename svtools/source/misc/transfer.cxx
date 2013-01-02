@@ -50,7 +50,7 @@
 
 #include "svl/urlbmk.hxx"
 #include "inetimg.hxx"
-#include <svtools/wmf.hxx>
+#include <vcl/wmf.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/transfer.hxx>
 #include <rtl/strbuf.hxx>

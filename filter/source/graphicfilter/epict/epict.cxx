@@ -18,7 +18,7 @@
  */
 
 #include <vcl/metaact.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <svl/solar.hrc>
 #include <svtools/fltcall.hxx>
 

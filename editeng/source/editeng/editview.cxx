@@ -31,7 +31,7 @@
 #include <svl/languageoptions.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/langtab.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 
 #include <svl/srchitem.hxx>
 

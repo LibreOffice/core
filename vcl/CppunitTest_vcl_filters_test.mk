@@ -25,13 +25,19 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_CppunitTest_CppunitTest,svtools_filters_test))
+$(eval $(call gb_CppunitTest_CppunitTest,vcl_filters_test))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,svtools_filters_test, \
-    svtools/qa/cppunit/filters-test \
+$(eval $(call gb_CppunitTest_add_exception_objects,vcl_filters_test, \
+    vcl/qa/cppunit/graphicfilter/filters-test \
 ))
 
-$(eval $(call gb_CppunitTest_use_libraries,svtools_filters_test, \
+ifeq ($(DISABLE_CVE_TESTS),TRUE)
+$(eval $(call gb_CppunitTest_add_defs,vcl_filters_test,\
+    -DDISABLE_CVE_TESTS \
+))
+endif
+
+$(eval $(call gb_CppunitTest_use_libraries,vcl_filters_test, \
 	comphelper \
 	cppu \
 	cppuhelper \
@@ -44,19 +50,19 @@ $(eval $(call gb_CppunitTest_use_libraries,svtools_filters_test, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,svtools_filters_test,\
+$(eval $(call gb_CppunitTest_use_api,vcl_filters_test,\
     udkapi \
     offapi \
 ))
 
-$(eval $(call gb_CppunitTest_use_ure,svtools_filters_test))
+$(eval $(call gb_CppunitTest_use_ure,vcl_filters_test))
 
-$(eval $(call gb_CppunitTest_use_components,svtools_filters_test,\
+$(eval $(call gb_CppunitTest_use_components,vcl_filters_test,\
     configmgr/source/configmgr \
     i18npool/util/i18npool \
     ucb/source/core/ucb1 \
 ))
 
-$(eval $(call gb_CppunitTest_use_configuration,svtools_filters_test))
+$(eval $(call gb_CppunitTest_use_configuration,vcl_filters_test))
 
 # vim: set noet sw=4 ts=4:

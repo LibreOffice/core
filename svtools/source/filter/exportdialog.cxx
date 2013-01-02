@@ -23,8 +23,8 @@
 #endif
 
 #include <tools/stream.hxx>
-#include <svtools/filter.hxx>
-#include <svtools/FilterConfigItem.hxx>
+#include <vcl/graphicfilter.hxx>
+#include <vcl/FilterConfigItem.hxx>
 #include <svtools/svtools.hrc>
 #include <svtools/svtresid.hxx>
 #include <com/sun/star/io/XStream.hpp>

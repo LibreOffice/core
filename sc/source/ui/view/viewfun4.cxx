@@ -34,7 +34,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <svtools/langtab.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <svl/stritem.hxx>
 #include <svtools/transfer.hxx>
 #include <svl/urlbmk.hxx>

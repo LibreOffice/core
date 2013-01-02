@@ -36,6 +36,7 @@
 #include <sot/exchange.hxx>
 #include <sot/storinfo.hxx>
 #include <vcl/cvtgrf.hxx>
+#include <vcl/wmf.hxx>
 #include "viscache.hxx"
 
 // SvxItem-Mapping. Is needed to successfully include the SvxItem-Header
@@ -57,7 +58,7 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <editeng/charscaleitem.hxx>
 #include <editeng/kernitem.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <tools/string.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/virdev.hxx>

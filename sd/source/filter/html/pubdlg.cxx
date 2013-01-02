@@ -24,7 +24,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/lstbox.hxx>
-#include <svtools/FilterConfigItem.hxx>
+#include <vcl/FilterConfigItem.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/combobox.hxx>

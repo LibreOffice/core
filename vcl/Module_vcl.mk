@@ -82,4 +82,8 @@ $(eval $(call gb_Module_add_targets,vcl,\
 ))
 endif
 
+$(eval $(call gb_Module_add_check_targets,vcl,\
+	CppunitTest_vcl_filters_test \
+))
+
 # vim: set noet sw=4 ts=4:

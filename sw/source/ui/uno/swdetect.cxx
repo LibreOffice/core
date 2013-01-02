@@ -53,7 +53,7 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/brokenpackageint.hxx>
-#include <svtools/FilterConfigItem.hxx>
+#include <vcl/FilterConfigItem.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <comphelper/ihwrapnofilter.hxx>
 

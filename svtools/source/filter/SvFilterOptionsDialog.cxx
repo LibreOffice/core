@@ -19,9 +19,8 @@
 
 
 #include "SvFilterOptionsDialog.hxx"
-#include <svtools/FilterConfigItem.hxx>
-#include <svtools/filter.hxx>
-#include "FilterConfigCache.hxx"
+#include <vcl/FilterConfigItem.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <osl/file.hxx>
 #include <osl/module.hxx>
 #include <svl/solar.hrc>
@@ -197,10 +196,10 @@ sal_Int16 SvFilterOptionsDialog::execute()
     {
         GraphicFilter aGraphicFilter( sal_True );
 
-        sal_uInt16 nFormat, nFilterCount = aGraphicFilter.pConfig->GetExportFormatCount();
+        sal_uInt16 nFormat, nFilterCount = aGraphicFilter.GetExportFormatCount();
         for ( nFormat = 0; nFormat < nFilterCount; nFormat++ )
         {
-            if ( aGraphicFilter.pConfig->GetExportInternalFilterName( nFormat ) == aInternalFilterName )
+            if ( aGraphicFilter.GetExportInternalFilterName( nFormat ) == aInternalFilterName )
                 break;
         }
         if ( nFormat < nFilterCount )
@@ -213,8 +212,8 @@ sal_Int16 SvFilterOptionsDialog::execute()
             pResMgr = ResMgr::CreateResMgr( "svt", Application::GetSettings().GetUILanguageTag().getLocale() );
             aFltCallDlgPara.pResMgr = pResMgr;
 
-            aFltCallDlgPara.aFilterExt = aGraphicFilter.pConfig->GetExportFormatShortName( nFormat );
-            sal_Bool bIsPixelFormat( aGraphicFilter.pConfig->IsExportPixelFormat( nFormat ) );
+            aFltCallDlgPara.aFilterExt = aGraphicFilter.GetExportFormatShortName( nFormat );
+            sal_Bool bIsPixelFormat( aGraphicFilter.IsExportPixelFormat( nFormat ) );
             if ( ExportDialog( aFltCallDlgPara, mxMgr, mxSourceDocument, mbExportSelection, bIsPixelFormat ).Execute() == RET_OK )
                 nRet = ui::dialogs::ExecutableDialogResults::OK;
 

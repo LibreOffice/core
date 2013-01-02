@@ -19,13 +19,13 @@
 
 #include <dlgunit.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/sdgcpitm.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/compressgraphicdialog.hxx>
-#include <svtools/filter.hxx>
 #include <sfx2/dispatch.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/uno/Sequence.hxx>

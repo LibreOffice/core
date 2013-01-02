@@ -51,7 +51,7 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <svx/xoutbmp.hxx>
 
 // --

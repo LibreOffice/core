@@ -29,7 +29,7 @@
 #include <avmedia/mediawindow.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/opengrf.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <svx/gallery1.hxx>
 #include <svx/galtheme.hxx>
 #include "cuigaldlg.hxx"

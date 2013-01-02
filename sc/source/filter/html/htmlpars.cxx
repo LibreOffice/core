@@ -40,7 +40,7 @@
 #include <sfx2/objsh.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <svtools/parhtml.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmltokn.h>

@@ -24,7 +24,7 @@
 #include <vcl/msgbox.hxx>
 #include <svl/solar.hrc>
 #include <svtools/fltcall.hxx>
-#include <svtools/FilterConfigItem.hxx>
+#include <vcl/FilterConfigItem.hxx>
 
 //============================ PGMWriter ==================================
 

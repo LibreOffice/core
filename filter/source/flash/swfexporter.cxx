@@ -32,8 +32,8 @@
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <vcl/metaact.hxx>
-#include <svtools/wmf.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/wmf.hxx>
+#include <vcl/graphicfilter.hxx>
 
 #include "swfexporter.hxx"
 #include "swfwriter.hxx"

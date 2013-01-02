@@ -22,8 +22,9 @@
 #include <tools/solar.h>
 #include <comphelper/string.hxx>
 #include <editeng/paperinf.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/wmf.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>

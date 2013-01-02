@@ -25,7 +25,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdview.hxx>
 #include <svx/linkwarn.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <svl/stritem.hxx>
 #include <svtools/miscopt.hxx>
 #include <vcl/msgbox.hxx>

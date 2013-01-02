@@ -22,7 +22,8 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <rtl/math.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
+#include <vcl/wmf.hxx>
 #include <svl/itemiter.hxx>
 #include "svl/urihelper.hxx"
 

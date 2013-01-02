@@ -24,7 +24,7 @@
 
 #include <tools/shl.hxx>
 #include <svl/lngmisc.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <svtools/svlbitm.hxx>
 #include <svtools/treelistbox.hxx>
 #include "svtools/treelistentry.hxx"

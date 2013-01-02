@@ -20,29 +20,19 @@
 #ifndef _FILTER_HXX
 #define _FILTER_HXX
 
-#include <svtools/fltcall.hxx>
-#include "svtools/svtdllapi.h"
-#include <tools/stream.hxx>
-#include <vcl/graph.hxx>
 #include <tools/gen.hxx>
+#include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
+#include <vcl/dllapi.h>
 #include <vcl/field.hxx>
+#include <vcl/graph.hxx>
+
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
+class FilterConfigCache;
 struct WMF_EXTERNALHEADER;
-// -----------------------
-// - GraphicFilter-Types -
-// -----------------------
-
-struct ImplDirEntryHelper
-{
-    static sal_Bool Exists( const INetURLObject& rObj );
-    static void Kill( const String& rStr );
-};
-
-class Window;
-class Graphic;
+struct ConvertData;
 
 #define OPT_FILTERSECTION           "Graphic"
 
@@ -134,7 +124,7 @@ class Graphic;
 // - GraphicDescriptor -
 // ---------------------
 
-class SVT_DLLPUBLIC GraphicDescriptor
+class VCL_DLLPUBLIC GraphicDescriptor
 {
     SvStream*           pFileStm;
 
@@ -226,10 +216,7 @@ public:
     static String GetImportFormatShortName( sal_uInt16 nFormat );
 };
 
-// -----------------
-// - GraphicFilter -
-// -----------------
-
+/** Information about errors during the GraphicFilter operation. */
 struct FilterErrorEx
 {
     sal_uLong   nFilterError;
@@ -238,11 +225,8 @@ struct FilterErrorEx
             FilterErrorEx() : nFilterError( 0UL ), nStreamError( 0UL ) {}
 };
 
-// -----------------------------------------------------------------------------
-
-struct ConvertData;
-class FilterConfigCache;
-class SVT_DLLPUBLIC GraphicFilter
+/** Class to import and export graphic formats. */
+class VCL_DLLPUBLIC GraphicFilter
 {
     friend class SvFilterOptionsDialog;
 
@@ -287,6 +271,7 @@ public:
     sal_uInt16          GetExportFormatNumber( const String& rFormatName );
     sal_uInt16          GetExportFormatNumberForMediaType( const String& rShortName );
     sal_uInt16          GetExportFormatNumberForShortName( const String& rShortName );
+    String          GetExportInternalFilterName( sal_uInt16 nFormat );
     sal_uInt16      GetExportFormatNumberForTypeName( const String& rType );
     String          GetExportFormatName( sal_uInt16 nFormat );
     String          GetExportFormatTypeName( sal_uInt16 nFormat );
@@ -295,10 +280,6 @@ public:
     String          GetExportOSFileType( sal_uInt16 nFormat );
     String          GetExportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry = 0 );
     sal_Bool            IsExportPixelFormat( sal_uInt16 nFormat );
-
-    sal_Bool            HasExportDialog( sal_uInt16 nFormat );
-    sal_Bool            DoExportDialog( Window* pWindow, sal_uInt16 nFormat );
-    sal_Bool            DoExportDialog( Window* pWindow, sal_uInt16 nFormat, FieldUnit eFieldUnit );
 
     sal_uInt16          ExportGraphic( const Graphic& rGraphic, const INetURLObject& rPath,
                                     sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW,
@@ -333,8 +314,6 @@ public:
                                    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData,
                                    WMF_EXTERNALHEADER *pExtHeader = NULL );
 
-    sal_Bool            Setup( sal_uInt16 nFormat );
-
     void            Abort() { bAbort = sal_True; }
 
     const FilterErrorEx&    GetLastError() const;
@@ -347,13 +326,6 @@ public:
                      GraphicFilter* pFilter = NULL,
                      sal_uInt16* pDeterminedFormat = NULL );
 };
-
-// ------------------------------------
-// - Windows Metafile Lesen/Schreiben -
-// ------------------------------------
-
-SVT_DLLPUBLIC sal_Bool ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF, FilterConfigItem* pConfigItem );
-SVT_DLLPUBLIC sal_Bool WriteWindowMetafileBits( SvStream& rStream, const GDIMetaFile& rMTF );
 
 #endif  //_FILTER_HXX
 

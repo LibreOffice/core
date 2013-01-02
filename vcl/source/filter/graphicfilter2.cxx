@@ -22,8 +22,7 @@
 #include <stdio.h>
 #include <tools/stream.hxx>
 #include <vcl/outdev.hxx>
-#include <svtools/filter.hxx>
-#include "FilterConfigCache.hxx"
+#include <vcl/graphicfilter.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
 #define DATA_SIZE           640

@@ -33,7 +33,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
 #include <svtools/fltcall.hxx>
-#include <svtools/wmf.hxx>
+#include <vcl/wmf.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docinf.hxx>
 #include <svx/unoapi.hxx>

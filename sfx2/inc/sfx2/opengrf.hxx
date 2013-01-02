@@ -20,7 +20,7 @@
 #define _SFX2_OPENGRF_HXX
 
 #include <memory>       // auto_ptr
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <sfx2/dllapi.h>
 
 struct  SvxOpenGrf_Impl;

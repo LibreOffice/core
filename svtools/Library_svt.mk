@@ -58,7 +58,6 @@ $(eval $(call gb_Library_use_libraries,svt,\
 
 $(eval $(call gb_Library_use_externals,svt,\
     icuuc \
-    jpeg \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,svt,\
@@ -141,27 +140,8 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/edit/svmedit2 \
     svtools/source/edit/syntaxhighlight \
     svtools/source/edit/textwindowpeer \
-    svtools/source/filter/FilterConfigCache \
-    svtools/source/filter/FilterConfigItem \
     svtools/source/filter/SvFilterOptionsDialog \
     svtools/source/filter/exportdialog \
-    svtools/source/filter/filter \
-    svtools/source/filter/filter2 \
-    svtools/source/filter/sgfbram \
-    svtools/source/filter/sgvmain \
-    svtools/source/filter/sgvspln \
-    svtools/source/filter/sgvtext \
-    svtools/source/filter/igif/decode \
-    svtools/source/filter/igif/gifread \
-    svtools/source/filter/ixbm/xbmread \
-    svtools/source/filter/ixpm/xpmread \
-    svtools/source/filter/jpeg/jpeg \
-    svtools/source/filter/wmf/emfwr \
-    svtools/source/filter/wmf/enhwmf \
-    svtools/source/filter/wmf/winmtf \
-    svtools/source/filter/wmf/winwmf \
-    svtools/source/filter/wmf/wmf \
-    svtools/source/filter/wmf/wmfwr \
     svtools/source/graphic/descriptor \
     svtools/source/graphic/graphic \
     svtools/source/graphic/graphicunofactory \
@@ -252,10 +232,6 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/uno/wizard/wizardpagecontroller \
     svtools/source/uno/wizard/wizardshell \
     svtools/source/urlobj/inetimg \
-))
-
-$(eval $(call gb_Library_add_cobjects,svt,\
-    svtools/source/filter/jpeg/jpegc \
 ))
 
 ifeq ($(OS),WNT)

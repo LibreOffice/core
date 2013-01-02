@@ -20,7 +20,7 @@
 #include <tools/string.hxx>
 #include <svx/graphichelper.hxx>
 #include <unotools/pathoptions.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <sfx2/docfile.hxx>
 #include <svx/xoutbmp.hxx>
 #include <sfx2/filedlghelper.hxx>

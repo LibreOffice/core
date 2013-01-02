@@ -38,7 +38,7 @@
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <ucbhelper/simpleinteractionrequest.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <rtl/ustring.h>
 #include <rtl/logfile.hxx>
 #include <svl/itemset.hxx>
@@ -58,7 +58,7 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/brokenpackageint.hxx>
-#include <svtools/FilterConfigItem.hxx>
+#include <vcl/FilterConfigItem.hxx>
 #include <sot/storage.hxx>
 #include <unotools/moduleoptions.hxx>
 

@@ -26,7 +26,7 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <vcl/svapp.hxx>
 #include <sot/storage.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <svl/itemiter.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdotext.hxx>

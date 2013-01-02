@@ -18,6 +18,7 @@
 #
 
 $(eval $(call gb_Package_Package,vcl_inc,$(SRCDIR)/vcl/inc))
+$(eval $(call gb_Package_add_file,vcl_inc,inc/vcl/FilterConfigItem.hxx,vcl/FilterConfigItem.hxx))
 $(eval $(call gb_Package_add_file,vcl_inc,inc/vcl/abstdlg.hxx,vcl/abstdlg.hxx))
 $(eval $(call gb_Package_add_file,vcl_inc,inc/vcl/accel.hxx,vcl/accel.hxx))
 $(eval $(call gb_Package_add_file,vcl_inc,inc/vcl/alpha.hxx,vcl/alpha.hxx))
@@ -64,6 +65,7 @@ $(eval $(call gb_Package_add_file,vcl_inc,inc/vcl/gfxlink.hxx,vcl/gfxlink.hxx))
 $(eval $(call gb_Package_add_file,vcl_inc,inc/vcl/gradient.hxx,vcl/gradient.hxx))
 $(eval $(call gb_Package_add_file,vcl_inc,inc/vcl/graph.h,vcl/graph.h))
 $(eval $(call gb_Package_add_file,vcl_inc,inc/vcl/graph.hxx,vcl/graph.hxx))
+$(eval $(call gb_Package_add_file,vcl_inc,inc/vcl/graphicfilter.hxx,vcl/graphicfilter.hxx))
 $(eval $(call gb_Package_add_file,vcl_inc,inc/vcl/graphictools.hxx,vcl/graphictools.hxx))
 $(eval $(call gb_Package_add_file,vcl_inc,inc/vcl/group.hxx,vcl/group.hxx))
 $(eval $(call gb_Package_add_file,vcl_inc,inc/vcl/hatch.hxx,vcl/hatch.hxx))
@@ -162,6 +164,7 @@ $(eval $(call gb_Package_add_file,vcl_inc,inc/vcl/virdev.hxx,vcl/virdev.hxx))
 $(eval $(call gb_Package_add_file,vcl_inc,inc/vcl/waitobj.hxx,vcl/waitobj.hxx))
 $(eval $(call gb_Package_add_file,vcl_inc,inc/vcl/wall.hxx,vcl/wall.hxx))
 $(eval $(call gb_Package_add_file,vcl_inc,inc/vcl/window.hxx,vcl/window.hxx))
+$(eval $(call gb_Package_add_file,vcl_inc,inc/vcl/wmf.hxx,vcl/wmf.hxx))
 $(eval $(call gb_Package_add_file,vcl_inc,inc/vcl/wrkwin.hxx,vcl/wrkwin.hxx))
 $(eval $(call gb_Package_add_file,vcl_inc,inc/vcl/xtextedt.hxx,vcl/xtextedt.hxx))
 

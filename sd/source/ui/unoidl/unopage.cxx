@@ -55,7 +55,7 @@
 #include <comphelper/extract.hxx>
 #include <list>
 #include <svx/svditer.hxx>
-#include <svtools/wmf.hxx>
+#include <vcl/wmf.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/svdview.hxx>

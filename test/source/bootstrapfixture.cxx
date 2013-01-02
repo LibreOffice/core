@@ -41,7 +41,7 @@
 
 #include <vcl/svapp.hxx>
 #include <tools/resmgr.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <unotools/syslocaleoptions.hxx>
 
 using namespace ::com::sun::star;

@@ -47,7 +47,8 @@
 #include <shellio.hxx>
 #include <ndole.hxx>
 
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
+#include <vcl/wmf.hxx>
 
 #include "ww8scan.hxx"
 #include "ww8par.hxx"

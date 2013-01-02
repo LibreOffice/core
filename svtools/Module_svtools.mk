@@ -42,12 +42,6 @@ endif
 
 endif
 
-ifneq ($(DISABLE_CVE_TESTS),TRUE)
-$(eval $(call gb_Module_add_check_targets,svtools,\
-	CppunitTest_svtools_filters_test \
-))
-endif
-
 ifneq ($(OOO_JUNIT_JAR),)
 $(eval $(call gb_Module_add_subsequentcheck_targets,svtools,\
     JunitTest_svtools_unoapi \

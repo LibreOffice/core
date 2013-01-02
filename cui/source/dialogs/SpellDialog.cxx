@@ -28,7 +28,7 @@
 #include <svl/undo.hxx>
 #include <unotools/lingucfg.hxx>
 #include <vcl/textdata.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <editeng/unolingu.hxx>
 #include <editeng/splwrap.hxx>
 #include <linguistic/lngprops.hxx>

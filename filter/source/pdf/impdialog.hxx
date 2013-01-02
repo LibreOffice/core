@@ -32,7 +32,7 @@
 #include "vcl/group.hxx"
 #include "vcl/pdfwriter.hxx"
 
-#include "svtools/FilterConfigItem.hxx"
+#include <vcl/FilterConfigItem.hxx>
 
 #include "sfx2/tabdlg.hxx"
 

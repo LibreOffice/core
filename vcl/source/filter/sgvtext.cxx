@@ -21,7 +21,7 @@
 #include <rtl/math.h>
 #include <comphelper/string.hxx>
 #include <tools/config.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include "sgffilt.hxx"
 #include "sgfbram.hxx"
 #include "sgvmain.hxx"

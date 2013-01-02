@@ -34,7 +34,7 @@
 #include <svl/whiter.hxx>
 #include <svl/visitem.hxx>
 #include <sfx2/objitem.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <svx/gallery.hxx>
 #include <editeng/langitem.hxx>
 #include <svx/clipfmtitem.hxx>

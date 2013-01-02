@@ -22,7 +22,7 @@
 #include <osl/endian.h>
 #include <vcl/graph.hxx>
 #include <tools/poly.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include "sgffilt.hxx"
 #include "sgfbram.hxx"
 #include "sgvmain.hxx"

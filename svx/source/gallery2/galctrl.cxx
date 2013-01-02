@@ -32,7 +32,7 @@
 #include "galobj.hxx"
 #include <avmedia/mediawindow.hxx>
 #include "gallery.hrc"
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 
 // -----------
 // - Defines -

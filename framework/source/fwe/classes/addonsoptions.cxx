@@ -30,7 +30,7 @@
 #include <rtl/uri.hxx>
 #include <comphelper/processfactory.hxx>
 #include <vcl/graph.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 
 #include <boost/unordered_map.hpp>
 #include <algorithm>

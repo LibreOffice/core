@@ -34,8 +34,8 @@
 #include "vcl/svapp.hxx"
 #include "toolkit/awt/vclxdevice.hxx"
 #include "unotools/localfilehelper.hxx"
-#include "svtools/FilterConfigItem.hxx"
-#include "svtools/filter.hxx"
+#include <vcl/FilterConfigItem.hxx>
+#include <vcl/graphicfilter.hxx>
 #include "svl/solar.hrc"
 #include "comphelper/string.hxx"
 #include "comphelper/storagehelper.hxx"

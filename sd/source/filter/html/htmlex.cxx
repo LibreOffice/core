@@ -29,7 +29,7 @@
 #include <osl/file.hxx>
 #include <tools/fsys.hxx>
 #include <unotools/pathoptions.hxx>
-#include <svtools/FilterConfigItem.hxx>
+#include <vcl/FilterConfigItem.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -50,7 +50,7 @@
 #include <sfx2/docfile.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <svtools/colorcfg.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/wghtitem.hxx>

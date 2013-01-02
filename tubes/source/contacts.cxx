@@ -28,7 +28,7 @@
 
 #include <sal/config.h>
 
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <tubes/conference.hxx>
 #include <tubes/collaboration.hxx>
 #include <tubes/manager.hxx>

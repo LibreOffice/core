@@ -65,7 +65,7 @@
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
