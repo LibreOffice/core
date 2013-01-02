@@ -208,13 +208,12 @@ SfxPopupWindow* SwTbxAutoTextCtrl::CreatePopupWindow()
                 {
                     // Gruppenname mit Pfad-Extension besorgen
                     String sTitle;
-                    String sGroupName = pGlossaryList->GetGroupName(i - 1, sal_False, &sTitle);
                     sal_uInt16 nBlockCount = pGlossaryList->GetBlockCount(i -1);
                     if(nBlockCount)
                     {
                         sal_uInt16 nIndex = 100 * (i);
                         // aber ohne extension einfuegen
-                        pPopup->InsertItem( i, sTitle);//sGroupName.GetToken(0, GLOS_DELIM));
+                        pPopup->InsertItem( i, sTitle);
                         PopupMenu* pSub = new PopupMenu;
                         pSub->SetSelectHdl(aLnk);
                         pPopup->SetPopupMenu(i, pSub);
@@ -306,7 +305,6 @@ IMPL_LINK(SwTbxAutoTextCtrl, PopupHdl, PopupMenu*, pMenu)
         SwGlossaryList* pGlossaryList = ::GetGlossaryList();
         String sShortName;
         String sGroup = pGlossaryList->GetGroupName(nBlock - 1, sal_False);
-        String sLongName(pGlossaryList->GetBlockName(nBlock - 1, nId - (100 * nBlock) - 1, sShortName));
 
         SwGlossaryHdl* pGlosHdl = pView->GetGlosHdl();
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();

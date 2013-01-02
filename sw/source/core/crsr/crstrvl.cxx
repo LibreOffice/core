@@ -1377,7 +1377,7 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                             rCntntAtPos.eCntntAtPos = SwContentAtPos::SW_TABLEBOXVALUE;
                         else
 #endif
-                        ((SwTblBoxFormula*)pItem)->PtrToBoxNm( &pTblNd->GetTable() );
+                            ((SwTblBoxFormula*)pItem)->PtrToBoxNm( &pTblNd->GetTable() );
 
                         bRet = sal_True;
                         if( bSetCrsr )

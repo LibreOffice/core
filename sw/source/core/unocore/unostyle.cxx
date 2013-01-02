@@ -873,7 +873,7 @@ void SwXStyleFamily::insertByName(const OUString& rName, const uno::Any& rElemen
 #if OSL_DEBUG_LEVEL > 1
                     SfxStyleSheetBase& rNewBase =
 #endif
-                        pBasePool->Make(sStyleName, eFamily, nMask);
+                    pBasePool->Make(sStyleName, eFamily, nMask);
                     pNewStyle->SetDoc(pDocShell->GetDoc(), pBasePool);
                     pNewStyle->SetStyleName(sStyleName);
                     String sParentStyleName(pNewStyle->GetParentStyleName());

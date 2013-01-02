@@ -527,7 +527,6 @@ void Test::testFdo48356()
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
-    OUStringBuffer aBuf;
     int i = 0;
     while (xParaEnum->hasMoreElements())
     {

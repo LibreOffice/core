@@ -1691,7 +1691,6 @@ sal_uLong SwDocShell::LoadStylesFromFile( const String& rURL,
 
     // Create a URL from filename
     INetURLObject aURLObj( rURL );
-    String sURL( aURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
     // Set filter:
     String sFactory(rtl::OUString::createFromAscii(SwDocShell::Factory().GetShortName()));
