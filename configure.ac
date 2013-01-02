@@ -8287,22 +8287,6 @@ else
 	NSS_PATCH="5"
     BUILD_TYPE="$BUILD_TYPE NSS"
     AC_MSG_RESULT([internal])
-    if test "$build_os" = "cygwin"; then
-        AC_MSG_CHECKING([for nss build tooling]) # coming from mozilla
-        if test -z "$NSSBUILDTOOLS"; then
-            AC_MSG_ERROR([nss build tooling not provided
-Use the --with-nss-build-tools option after installing the tools obtained
-from http://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32])
-        else
-            if test \( "$WITH_MINGW" = "yes" -a  ! -d "$NSSBUILDTOOLS" \) \
-                    -o ! -d "$NSSBUILDTOOLS/moztools" \
-                    -o ! -d "$NSSBUILDTOOLS/msys" ; then
-                AC_MSG_ERROR([nss build tooling incomplete!])
-            else
-                AC_MSG_RESULT([ok])
-            fi
-        fi
-    fi
 fi # system nss
 AC_SUBST(SYSTEM_NSS)
 AC_SUBST(NSS_MAJOR)
@@ -8310,7 +8294,6 @@ AC_SUBST(NSS_MINOR)
 AC_SUBST(NSS_PATCH)
 AC_SUBST(NSS_CFLAGS)
 AC_SUBST(NSS_LIBS)
-AC_SUBST(NSSBUILDTOOLS)
 AC_SUBST(MINGW_SMIME3_DLL)
 
 dnl ===================================================================

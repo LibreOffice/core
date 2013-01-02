@@ -34,15 +34,15 @@ $(call gb_ExternalProject_get_state_target,nss,configure):
 
 ifeq ($(OS),WNT)
 ifeq ($(COM),MSC)
-$(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject_get_state_target,nss,configure)
+$(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject_get_state_target,nss,configure) $(call gb_ExternalExecutable_get_dependencies,python)
 	cd $(EXTERNAL_WORKDIR)/mozilla/security/nss \
 	&& $(if $(debug),,BUILD_OPT=1) \
 	MOZ_MSVCVERSION=9 OS_TARGET=WIN95 \
-	PATH="$(NSSBUILDTOOLS)/msys/bin:$(NSSBUILDTOOLS)/moztools/bin:$(PATH)" \
 	$(if $(filter X,$(CPU)),USE_64=1) \
 	LIB="$(ILIB)" \
 	XCFLAGS="$(SOLARINC)" \
 	$(MAKE) -j1 nss_build_all RC="rc.exe $(SOLARINC)" \
+	NSINSTALL='$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/nss/nsinstall.py' \
 	&& touch $@
 
 
@@ -53,7 +53,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject
 	CXX="$(CXX) $(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-shared-libgcc)" \
 	OS_LIBS="-ladvapi32 -lws2_32 -lmwsock -lwinm $(if $(filter YES,$(MINGW_SHARED_GXXLIB)),$(MINGW_SHARED_LIBSTDCPP))" \
 	OS_TARGET=WINNT RC="$(WINDRES)" OS_RELEASE="5.0" \
-	PATH="$(NSSBUILDTOOLS)/bin:$(PATH)" IMPORT_LIB_SUFFIX=dll.a \
+	IMPORT_LIB_SUFFIX=dll.a \
 	NSPR_CONFIGURE_OPTS="--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) --enable-shared --disable-static" \
 	NSINSTALL="$(PYTHON_FOR_BUILD) $(SRCDIR)/nss/nsinstall.py" \
 	$(MAKE) -j1 nss_build_all \
@@ -69,10 +69,9 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject
 	$(if $(filter SOLARIS,$(OS)),NS_USE_GCC=1) \
 	$(if $(filter YES,$(CROSS_COMPILING)),\
 	$(if $(filter MACOSXP,$(OS)$(CPU)),CPU_ARCH=ppc) \
-	NSINSTALL="$(subst $(INPATH),$(INPATH_FOR_BUILD),\
-	$(call gb_UnpackedTarball_get_dir,nss)/mozilla/security/coreconf/nsinstall/out/nsinstall)") \
+	NSINSTALL="$(PYTHON_FOR_BUILD) $(SRCDIR)/nss/nsinstall.py") \
 	NSDISTMODE=copy \
-	$(MAKE) -j1 $(if $(filter build,$(gb_Side)),build_coreconf,nss_build_all) \
+	$(MAKE) -j1 nss_build_all \
 	&& touch $@
 
 endif
