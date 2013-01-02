@@ -111,6 +111,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/drawing/fr
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/embed,\
 	DocumentCloser \
 	FileSystemStorageFactory \
+	HatchWindowFactory \
 	InstanceLocker \
 	OLESimpleStorage \
 	StorageFactory \

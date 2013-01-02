@@ -47,7 +47,7 @@
 #include <com/sun/star/bridge/XBridgeSupplier2.hpp>
 #include <com/sun/star/bridge/ModelDependent.hpp>
 #include <com/sun/star/embed/XHatchWindow.hpp>
-#include <com/sun/star/embed/XHatchWindowFactory.hpp>
+#include <com/sun/star/embed/HatchWindowFactory.hpp>
 #include <com/sun/star/embed/XInplaceClient.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XMenuBarMergingAcceptor.hpp>
@@ -150,11 +150,11 @@ static void InsertMenu_Impl( const uno::Reference< container::XIndexContainer >&
 }
 
 //===========================================================================
-DocumentHolder::DocumentHolder( const uno::Reference< lang::XMultiServiceFactory >& xFactory,
+DocumentHolder::DocumentHolder( const uno::Reference< uno::XComponentContext >& xContext,
                                 OCommonEmbeddedObject* pEmbObj )
 : m_pEmbedObj( pEmbObj ),
   m_pInterceptor( NULL ),
-  m_xFactory( xFactory ),
+  m_xContext( xContext ),
   m_bReadOnly( sal_False ),
   m_bWaitForClose( sal_False ),
   m_bAllowClosing( sal_False ),
@@ -173,7 +173,7 @@ DocumentHolder::DocumentHolder( const uno::Reference< lang::XMultiServiceFactory
     aArg.Value <<= sal_False;
     m_aOutplaceFrameProps[1] <<= aArg;
 
-    uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create( comphelper::getComponentContext(m_xFactory) );
+    uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create( m_xContext );
     m_refCount++;
     try
     {
@@ -247,7 +247,7 @@ void DocumentHolder::CloseFrame()
 //---------------------------------------------------------------------------
 void DocumentHolder::FreeOffice()
 {
-    uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create( comphelper::getComponentContext(m_xFactory) );
+    uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create( m_xContext );
     xDesktop->removeTerminateListener( this );
 
     // the following code is commented out since for now there is still no completely correct way to detect
@@ -410,13 +410,8 @@ sal_Bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& 
         if ( xModel.is() )
         {
 
-            uno::Reference< embed::XHatchWindowFactory > xHatchFactory(
-                    m_xFactory->createInstance(
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.HatchWindowFactory" )) ),
-                    uno::UNO_QUERY );
-
-            if ( !xHatchFactory.is() )
-                throw uno::RuntimeException();
+            uno::Reference< embed::XHatchWindowFactory > xHatchFactory =
+                    embed::HatchWindowFactory::create(m_xContext);
 
             uno::Reference< embed::XHatchWindow > xHatchWindow =
                             xHatchFactory->createHatchWindowInstance( xParent,
@@ -446,8 +441,7 @@ sal_Bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& 
                                                 awt::Rectangle(),//aOwnRectangle,
                                                 awt::WindowAttribute::SHOW | awt::VclWindowPeerAttribute::CLIPCHILDREN );
 
-        uno::Reference< awt::XToolkit2 > xToolkit =
-                            awt::Toolkit::create(comphelper::getComponentContext(m_xFactory));
+        uno::Reference< awt::XToolkit2 > xToolkit = awt::Toolkit::create(m_xContext);
 
         uno::Reference< awt::XWindowPeer > xNewWinPeer = xToolkit->createWindow( aOwnWinDescriptor );
         uno::Reference< awt::XWindow > xOwnWindow( xNewWinPeer, uno::UNO_QUERY );
@@ -456,7 +450,7 @@ sal_Bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& 
 
         // create a frame based on the specified window
         uno::Reference< lang::XSingleServiceFactory > xFrameFact(
-            m_xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.TaskCreator" )) ),
+            m_xContext->getServiceManager()->createInstanceWithContext( "com.sun.star.frame.TaskCreator", m_xContext ),
             uno::UNO_QUERY_THROW );
 
         uno::Sequence< uno::Any > aArgs( 2 );
@@ -554,14 +548,14 @@ uno::Reference< container::XIndexAccess > DocumentHolder::RetrieveOwnMenu_Impl()
     if ( !xResult.is() )
     {
         // no internal document configuration, use the one from the module
-        uno::Reference< frame::XModuleManager2 > xModuleMan( frame::ModuleManager::create(comphelper::getComponentContext(m_xFactory)) );
+        uno::Reference< frame::XModuleManager2 > xModuleMan = frame::ModuleManager::create(m_xContext);
         ::rtl::OUString aModuleIdent =
             xModuleMan->identify( uno::Reference< uno::XInterface >( m_xComponent, uno::UNO_QUERY ) );
 
         if ( !aModuleIdent.isEmpty() )
         {
-            uno::Reference< ui::XModuleUIConfigurationManagerSupplier > xModConfSupplier(
-                    ui::ModuleUIConfigurationManagerSupplier::create(comphelper::getComponentContext(m_xFactory)) );
+            uno::Reference< ui::XModuleUIConfigurationManagerSupplier > xModConfSupplier =
+                    ui::ModuleUIConfigurationManagerSupplier::create(m_xContext);
             uno::Reference< ::com::sun::star::ui::XUIConfigurationManager > xModUIConfMan(
                     xModConfSupplier->getUIConfigurationManager( aModuleIdent ),
                     uno::UNO_QUERY_THROW );
@@ -836,7 +830,7 @@ uno::Reference< frame::XFrame > DocumentHolder::GetDocFrame()
     if ( !m_xFrame.is() )
     {
         uno::Reference< lang::XSingleServiceFactory > xFrameFact(
-            m_xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.TaskCreator" ) )),
+            m_xContext->getServiceManager()->createInstanceWithContext( "com.sun.star.frame.TaskCreator", m_xContext ),
             uno::UNO_QUERY_THROW );
 
         m_xFrame.set(xFrameFact->createInstanceWithArguments( m_aOutplaceFrameProps ), uno::UNO_QUERY_THROW);

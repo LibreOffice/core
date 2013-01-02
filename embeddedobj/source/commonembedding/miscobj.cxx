@@ -29,6 +29,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <comphelper/mimeconfighelper.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include "closepreventer.hxx"
 #include "intercept.hxx"
@@ -98,7 +99,7 @@ void OCommonEmbeddedObject::CommonInit_Impl( const uno::Sequence< beans::NamedVa
     if ( !m_xFactory.is() )
         throw uno::RuntimeException();
 
-    m_pDocHolder = new DocumentHolder( m_xFactory, this );
+    m_pDocHolder = new DocumentHolder( comphelper::getComponentContext(m_xFactory), this );
     m_pDocHolder->acquire();
 
     // parse configuration entries

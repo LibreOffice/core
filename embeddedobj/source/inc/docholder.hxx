@@ -34,6 +34,7 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/embed/XHatchWindowController.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase6.hxx>
 
 class OCommonEmbeddedObject;
@@ -55,7 +56,7 @@ private:
     Interceptor*        m_pInterceptor;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor > m_xOutplaceInterceptor;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > m_xComponent;
 
@@ -114,7 +115,7 @@ public:
             throw ( ::com::sun::star::uno::Exception );
 
 
-    DocumentHolder( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
+    DocumentHolder( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
                     OCommonEmbeddedObject* pEmbObj );
     ~DocumentHolder();
 
