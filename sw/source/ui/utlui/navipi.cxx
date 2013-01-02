@@ -32,7 +32,7 @@
 #include <string>
 #include <svl/urlbmk.hxx>
 #include <svl/stritem.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <svl/urihelper.hxx>
 #include <sot/formats.hxx>
 #include <sot/filelist.hxx>

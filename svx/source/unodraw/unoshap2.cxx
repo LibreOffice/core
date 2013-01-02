@@ -43,7 +43,7 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <svtools/fltcall.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 
 #include <boost/scoped_ptr.hpp>
 #include <svx/svdpool.hxx>
@@ -70,7 +70,7 @@
 #include <basegfx/tools/unotools.hxx>
 
 #include <comphelper/servicehelper.hxx>
-#include <svtools/wmf.hxx>
+#include <vcl/wmf.hxx>
 
 using ::rtl::OUString;
 using namespace ::osl;

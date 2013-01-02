@@ -50,10 +50,6 @@ endif
 
 endif
 
-$(eval $(call gb_Module_add_check_targets,svtools,\
-	CppunitTest_svtools_filters_test \
-))
-
 $(eval $(call gb_Module_add_subsequentcheck_targets,svtools,\
     JunitTest_svtools_unoapi \
 ))

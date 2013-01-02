@@ -51,7 +51,7 @@
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/convert.hxx>
 
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <svtools/embedhlp.hxx>
 
 #include <sfx2/objsh.hxx>

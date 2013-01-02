@@ -48,7 +48,7 @@
 
 #include <sot/storage.hxx>
 #include <sot/exchange.hxx>
-#include <svtools/FilterConfigItem.hxx>
+#include <vcl/FilterConfigItem.hxx>
 
 #include <svx/svdmodel.hxx>
 #include "shapeimpl.hxx"
@@ -60,7 +60,7 @@
 #include "svx/svdview.hxx"
 #include "svx/svdglob.hxx"
 #include "svx/svdstr.hrc"
-#include <svtools/wmf.hxx>
+#include <vcl/wmf.hxx>
 
 ///////////////////////////////////////////////////////////////////////
 

@@ -36,8 +36,8 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/app.hxx>
 #include "svx/xoutbmp.hxx"
-#include <svtools/FilterConfigItem.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/FilterConfigItem.hxx>
+#include <vcl/graphicfilter.hxx>
 
 // -----------
 // - Defines -

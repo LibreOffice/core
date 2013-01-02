@@ -70,6 +70,10 @@ $(eval $(call gb_Library_use_api,vcl,\
     udkapi \
 ))
 
+$(eval $(call gb_Library_use_externals,vcl,\
+	jpeg \
+))
+
 $(eval $(call gb_Library_use_libraries,vcl,\
     tl \
     utl \
@@ -148,6 +152,25 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/control/spinfld \
     vcl/source/control/tabctrl \
     vcl/source/control/throbber \
+    vcl/source/filter/FilterConfigCache \
+    vcl/source/filter/FilterConfigItem \
+    vcl/source/filter/graphicfilter \
+    vcl/source/filter/graphicfilter2 \
+    vcl/source/filter/sgfbram \
+    vcl/source/filter/sgvmain \
+    vcl/source/filter/sgvspln \
+    vcl/source/filter/sgvtext \
+    vcl/source/filter/igif/decode \
+    vcl/source/filter/igif/gifread \
+    vcl/source/filter/ixbm/xbmread \
+    vcl/source/filter/ixpm/xpmread \
+    vcl/source/filter/jpeg/jpeg \
+    vcl/source/filter/wmf/emfwr \
+    vcl/source/filter/wmf/enhwmf \
+    vcl/source/filter/wmf/winmtf \
+    vcl/source/filter/wmf/winwmf \
+    vcl/source/filter/wmf/wmf \
+    vcl/source/filter/wmf/wmfwr \
     vcl/source/fontsubset/cff \
     vcl/source/fontsubset/fontsubset \
     vcl/source/fontsubset/gsub \
@@ -275,6 +298,10 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/window/window \
     vcl/source/window/winproc \
     vcl/source/window/wrkwin \
+))
+
+$(eval $(call gb_Library_add_cobjects,vcl,\
+    vcl/source/filter/jpeg/jpegc \
 ))
 
 # optional parts

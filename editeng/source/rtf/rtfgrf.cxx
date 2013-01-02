@@ -35,8 +35,8 @@
 #include <vcl/svapp.hxx>
 #include <svtools/rtfkeywd.hxx>
 #include <svtools/rtftoken.h>
-#include <svtools/filter.hxx>
-#include <svtools/wmf.hxx>
+#include <vcl/graphicfilter.hxx>
+#include <vcl/wmf.hxx>
 
 #include <editeng/svxrtf.hxx>
 

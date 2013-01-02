@@ -31,7 +31,7 @@
 #include <sot/storage.hxx>
 #include <sfx2/docfile.hxx>
 #include <svl/urihelper.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <shellio.hxx>

@@ -64,7 +64,7 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <sfx2/filedlghelper.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <svx/xoutbmp.hxx>
 
 // --

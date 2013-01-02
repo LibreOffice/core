@@ -57,7 +57,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/gradient.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <tools/zcodec.hxx>
 
 #include <boost/bind.hpp>

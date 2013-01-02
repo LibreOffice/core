@@ -37,7 +37,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/metric.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <vcl/graphictools.hxx>
 #include <vcl/rendergraphicrasterizer.hxx>
 

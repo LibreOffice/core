@@ -48,7 +48,7 @@
 #include <vcl/metaact.hxx>
 #include <tools/zcodec.hxx>
 
-#include "svtools/filter.hxx"
+#include <vcl/graphicfilter.hxx>
 #include "svx/xmlgrhlp.hxx"
 #include "svx/xmleohlp.hxx"
 

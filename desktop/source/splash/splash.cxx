@@ -47,7 +47,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/introwin.hxx>
 #include <vcl/virdev.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 
 #define NOT_LOADED  ((long)-1)
 
