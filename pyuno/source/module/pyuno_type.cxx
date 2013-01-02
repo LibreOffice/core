@@ -288,7 +288,7 @@ PyObject *importToGlobal(PyObject *str, PyObject *dict, PyObject *target)
             PyRef pTypeName( PyUnicode_AsUTF8String( str ), SAL_NO_ACQUIRE );
             const char *typeName = PyBytes_AsString( pTypeName.get() );
 #else
-            const char *targetName = PyBytes_AsString( target );
+            /*const*/ char *targetName = PyBytes_AsString( target );
             const char *typeName = PyBytes_AsString( str );
 #endif
             PyModule_AddObject(
