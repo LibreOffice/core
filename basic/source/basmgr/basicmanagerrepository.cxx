@@ -310,7 +310,7 @@ namespace basic
         DBG_ASSERT(aAppBasic.GetProtocol() != INET_PROT_NOT_VALID,
             OString("Invalid URL: \"" +
                     OUStringToOString(aAppBasicDir, osl_getThreadTextEncoding()) +
-                    "\""));
+                    "\"").getStr());
         aAppBasic.insertName( aFileName );
         pBasicManager->SetStorageName( aAppBasic.PathToFileName() );
 

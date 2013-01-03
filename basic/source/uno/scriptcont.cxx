@@ -681,7 +681,7 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                     OString aMessage = "invalid library element '" +
                                         OUStringToOString( aElementName, osl_getThreadTextEncoding() ) +
                                         "'.";
-                    OSL_FAIL( aMessage );
+                    OSL_FAIL( aMessage.getStr());
                     #endif
                     continue;
                 }
@@ -769,7 +769,7 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                     OString aMessage = "invalid library element '" +
                                        OUStringToOString( aElementName, osl_getThreadTextEncoding() ) +
                                        "'.";
-                    OSL_FAIL( aMessage );
+                    OSL_FAIL( aMessage.getStr());
                     #endif
                     continue;
                 }
