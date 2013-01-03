@@ -106,6 +106,8 @@ $(if $(filter Executable,$(1)),\
 	$$(call gb_Library_get_layer,$(2)))
 endef
 
+# To not export anything: -Wl$(COMMA)-exported_symbols_list$(COMMA)/dev/null
+# But for some reason that slows down ld significantly.
 
 define gb_LinkTarget__command_dynamiclink
 	$(if $(filter Library CppunitTest,$(TARGETTYPE)),@echo No dynamic libraries should be built for iOS && exit 1, \
@@ -114,6 +116,7 @@ define gb_LinkTarget__command_dynamiclink
 		$(gb_Executable_TARGETTYPEFLAGS) \
 		$(subst \d,$$,$(RPATH)) \
 		$(T_LDFLAGS) \
+		-Wl$(COMMA)-dead_strip \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
 		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
