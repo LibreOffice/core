@@ -330,7 +330,7 @@ public:
     bool                HasCommonElement( SCROW nFirstDataId, long nFirstIndex,
                                           const ScDPItemData& rSecondData, long nSecondIndex ) const;
 
-    ResultMembers* GetDimResultMembers( long nDim , ScDPDimension* pDim , ScDPLevel*   pLevel) const ;
+    ResultMembers* GetDimResultMembers(long nDim, ScDPDimension* pDim, ScDPLevel* pLevel) const;
 
     const ScDPSource*   GetSource() const;
 };

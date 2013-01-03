@@ -922,34 +922,30 @@ const ScDPSource* ScDPResultData::GetSource() const
     return pSource;
 }
 
-ResultMembers* ScDPResultData::GetDimResultMembers( long nDim ,  ScDPDimension* pDim, ScDPLevel*   pLevel) const
+ResultMembers* ScDPResultData::GetDimResultMembers(long nDim, ScDPDimension* pDim, ScDPLevel* pLevel) const
 {
-      if ( mpDimMembers[ nDim ] == NULL )
+    if (mpDimMembers[nDim])
+        return mpDimMembers[nDim];
+
+    ResultMembers* pResultMembers = new ResultMembers();
+    // global order is used to initialize aMembers, so it doesn't have to be looked at later
+    const ScMemberSortOrder& rGlobalOrder = pLevel->GetGlobalOrder();
+
+    ScDPMembers* pMembers = pLevel->GetMembersObject();
+    long nMembCount = pMembers->getCount();
+    for (long i = 0; i < nMembCount; ++i)
+    {
+        long nSorted = rGlobalOrder.empty() ? i : rGlobalOrder[i];
+        ScDPMember* pMember = pMembers->getByIndex(nSorted);
+        if (!pResultMembers->FindMember(pMember->GetItemDataId()))
         {
-
-                //long nDimSource = pDim->GetDimension();
-
-                ResultMembers* pResultMembers = new ResultMembers();
-                // global order is used to initialize aMembers, so it doesn't have to be looked at later
-                const ScMemberSortOrder& rGlobalOrder = pLevel->GetGlobalOrder();
-
-                ScDPMembers* pMembers = pLevel->GetMembersObject();
-                long nMembCount = pMembers->getCount();
-                for ( long i=0; i<nMembCount; i++ )
-                {
-                    long nSorted = rGlobalOrder.empty() ? i : rGlobalOrder[i];
-                    ScDPMember* pMember = pMembers->getByIndex(nSorted);
-                    if ( NULL == pResultMembers->FindMember( pMember->GetItemDataId() ) )
-                    {
-                            ScDPParentDimData* pNew = new ScDPParentDimData( i, pDim, pLevel, pMember );
-                                    pResultMembers->InsertMember(  pNew );
-                    }
-                }
-
-                mpDimMembers[ nDim ] = pResultMembers;
+            ScDPParentDimData* pNew = new ScDPParentDimData(i, pDim, pLevel, pMember);
+            pResultMembers->InsertMember(pNew);
         }
-        return   mpDimMembers[ nDim ];
+    }
 
+    mpDimMembers[nDim] = pResultMembers;
+    return mpDimMembers[nDim];
 }
 
 // -----------------------------------------------------------------------
