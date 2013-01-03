@@ -81,6 +81,7 @@ struct ScDPOutLevelData
     long                                nHier;
     long                                nLevel;
     long                                nDimPos;
+    sal_uInt32 mnSrcNumFmt; /// Prevailing number format used in the source data.
     uno::Sequence<sheet::MemberResult>  aResult;
     rtl::OUString                       maName;   /// Name is the internal field name.
     rtl::OUString                       maCaption; /// Caption is the name visible in the output table.
@@ -89,7 +90,7 @@ struct ScDPOutLevelData
     bool                                mbPageDim:1;
 
     ScDPOutLevelData() :
-        nDim(-1), nHier(-1), nLevel(-1), nDimPos(-1), mbHasHiddenMember(false), mbDataLayout(false), mbPageDim(false)
+        nDim(-1), nHier(-1), nLevel(-1), nDimPos(-1), mnSrcNumFmt(0), mbHasHiddenMember(false), mbDataLayout(false), mbPageDim(false)
     {}
 
     bool operator<(const ScDPOutLevelData& r) const
@@ -339,80 +340,76 @@ void lcl_FillNumberFormats( sal_uInt32*& rFormats, long& rCount,
     uno::Sequence<sheet::MemberResult> aResult = xLevRes->getResults();
 
     long nSize = aResult.getLength();
-    if (nSize)
+    if (!nSize)
+        return;
+
+    //  get names/formats for all data dimensions
+    //! merge this with the loop to collect ScDPOutLevelData?
+
+    rtl::OUString aDataNames[SC_DPOUT_MAXLEVELS];
+    sal_uInt32 nDataFormats[SC_DPOUT_MAXLEVELS];
+    long nDataCount = 0;
+    long nDimCount = xDims->getCount();
+    for (long nDim=0; nDim<nDimCount; nDim++)
     {
-        //  get names/formats for all data dimensions
-        //! merge this with the loop to collect ScDPOutLevelData?
-
-        rtl::OUString aDataNames[SC_DPOUT_MAXLEVELS];
-        sal_uInt32 nDataFormats[SC_DPOUT_MAXLEVELS];
-        long nDataCount = 0;
-        bool bAnySet = false;
-
-        long nDimCount = xDims->getCount();
-        for (long nDim=0; nDim<nDimCount; nDim++)
+        uno::Reference<uno::XInterface> xDim =
+                ScUnoHelpFunctions::AnyToInterface( xDims->getByIndex(nDim) );
+        uno::Reference<beans::XPropertySet> xDimProp( xDim, uno::UNO_QUERY );
+        uno::Reference<container::XNamed> xDimName( xDim, uno::UNO_QUERY );
+        if ( xDimProp.is() && xDimName.is() )
         {
-            uno::Reference<uno::XInterface> xDim =
-                    ScUnoHelpFunctions::AnyToInterface( xDims->getByIndex(nDim) );
-            uno::Reference<beans::XPropertySet> xDimProp( xDim, uno::UNO_QUERY );
-            uno::Reference<container::XNamed> xDimName( xDim, uno::UNO_QUERY );
-            if ( xDimProp.is() && xDimName.is() )
+            sheet::DataPilotFieldOrientation eDimOrient =
+                (sheet::DataPilotFieldOrientation) ScUnoHelpFunctions::GetEnumProperty(
+                    xDimProp, rtl::OUString(SC_UNO_DP_ORIENTATION),
+                    sheet::DataPilotFieldOrientation_HIDDEN );
+            if ( eDimOrient == sheet::DataPilotFieldOrientation_DATA )
             {
-                sheet::DataPilotFieldOrientation eDimOrient =
-                    (sheet::DataPilotFieldOrientation) ScUnoHelpFunctions::GetEnumProperty(
-                        xDimProp, rtl::OUString(SC_UNO_DP_ORIENTATION),
-                        sheet::DataPilotFieldOrientation_HIDDEN );
-                if ( eDimOrient == sheet::DataPilotFieldOrientation_DATA )
-                {
-                    aDataNames[nDataCount] = xDimName->getName();
-                    long nFormat = ScUnoHelpFunctions::GetLongProperty(
-                                            xDimProp,
-                                            rtl::OUString(SC_UNONAME_NUMFMT) );
-                    nDataFormats[nDataCount] = nFormat;
-                    if ( nFormat != 0 )
-                        bAnySet = true;
-                    ++nDataCount;
-                }
+                aDataNames[nDataCount] = xDimName->getName();
+                long nFormat = ScUnoHelpFunctions::GetLongProperty(
+                                        xDimProp,
+                                        rtl::OUString(SC_UNONAME_NUMFMT) );
+                nDataFormats[nDataCount] = nFormat;
+                ++nDataCount;
             }
-        }
-
-        if ( bAnySet )      // forget everything if all formats are 0 (or no data dimensions)
-        {
-            const sheet::MemberResult* pArray = aResult.getConstArray();
-
-            rtl::OUString aName;
-            sal_uInt32* pNumFmt = new sal_uInt32[nSize];
-            if (nDataCount == 1)
-            {
-                //  only one data dimension -> use its numberformat everywhere
-                long nFormat = nDataFormats[0];
-                for (long nPos=0; nPos<nSize; nPos++)
-                    pNumFmt[nPos] = nFormat;
-            }
-            else
-            {
-                for (long nPos=0; nPos<nSize; nPos++)
-                {
-                    //  if CONTINUE bit is set, keep previous name
-                    //! keep number format instead!
-                    if ( !(pArray[nPos].Flags & sheet::MemberResultFlags::CONTINUE) )
-                        aName = pArray[nPos].Name;
-
-                    sal_uInt32 nFormat = 0;
-                    for (long i=0; i<nDataCount; i++)
-                        if (aName == aDataNames[i])         //! search more efficiently?
-                        {
-                            nFormat = nDataFormats[i];
-                            break;
-                        }
-                    pNumFmt[nPos] = nFormat;
-                }
-            }
-
-            rFormats = pNumFmt;
-            rCount = nSize;
         }
     }
+
+    if (!nDataCount)
+        return;
+
+    const sheet::MemberResult* pArray = aResult.getConstArray();
+
+    rtl::OUString aName;
+    sal_uInt32* pNumFmt = new sal_uInt32[nSize];
+    if (nDataCount == 1)
+    {
+        //  only one data dimension -> use its numberformat everywhere
+        long nFormat = nDataFormats[0];
+        for (long nPos=0; nPos<nSize; nPos++)
+            pNumFmt[nPos] = nFormat;
+    }
+    else
+    {
+        for (long nPos=0; nPos<nSize; nPos++)
+        {
+            //  if CONTINUE bit is set, keep previous name
+            //! keep number format instead!
+            if ( !(pArray[nPos].Flags & sheet::MemberResultFlags::CONTINUE) )
+                aName = pArray[nPos].Name;
+
+            sal_uInt32 nFormat = 0;
+            for (long i=0; i<nDataCount; i++)
+                if (aName == aDataNames[i])         //! search more efficiently?
+                {
+                    nFormat = nDataFormats[i];
+                    break;
+                }
+            pNumFmt[nPos] = nFormat;
+        }
+    }
+
+    rFormats = pNumFmt;
+    rCount = nSize;
 }
 
 sal_uInt32 lcl_GetFirstNumberFormat( const uno::Reference<container::XIndexAccess>& xDims )
@@ -566,6 +563,8 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                     xDimProp, rtl::OUString(SC_UNO_DP_ISDATALAYOUT));
                 bool bHasHiddenMember = ScUnoHelpFunctions::GetBoolProperty(
                     xDimProp, OUString(SC_UNO_DP_HAS_HIDDEN_MEMBER));
+                sal_Int32 nNumFmt = ScUnoHelpFunctions::GetLongProperty(
+                    xDimProp, SC_UNO_DP_NUMBERFO, 0);
 
                 if ( eDimOrient != sheet::DataPilotFieldOrientation_HIDDEN )
                 {
@@ -613,6 +612,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                                         pColFields[nColFieldCount].nLevel  = nLev;
                                         pColFields[nColFieldCount].nDimPos = nDimPos;
                                         pColFields[nColFieldCount].aResult = xLevRes->getResults();
+                                        pColFields[nColFieldCount].mnSrcNumFmt = nNumFmt;
                                         pColFields[nColFieldCount].maName  = aName;
                                         pColFields[nColFieldCount].maCaption= aCaption;
                                         pColFields[nColFieldCount].mbHasHiddenMember = bHasHiddenMember;
@@ -626,6 +626,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                                         pRowFields[nRowFieldCount].nLevel  = nLev;
                                         pRowFields[nRowFieldCount].nDimPos = nDimPos;
                                         pRowFields[nRowFieldCount].aResult = xLevRes->getResults();
+                                        pRowFields[nRowFieldCount].mnSrcNumFmt = nNumFmt;
                                         pRowFields[nRowFieldCount].maName  = aName;
                                         pRowFields[nRowFieldCount].maCaption= aCaption;
                                         pRowFields[nRowFieldCount].mbHasHiddenMember = bHasHiddenMember;
@@ -642,6 +643,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                                         pPageFields[nPageFieldCount].nLevel  = nLev;
                                         pPageFields[nPageFieldCount].nDimPos = nDimPos;
                                         pPageFields[nPageFieldCount].aResult = getVisiblePageMembersAsResults(xLevel);
+                                        pPageFields[nPageFieldCount].mnSrcNumFmt = nNumFmt;
                                         pPageFields[nPageFieldCount].maName  = aName;
                                         pPageFields[nPageFieldCount].maCaption= aCaption;
                                         pPageFields[nPageFieldCount].mbHasHiddenMember = bHasHiddenMember;
@@ -746,13 +748,17 @@ void ScDPOutput::DataCell( SCCOL nCol, SCROW nRow, SCTAB nTab, const sheet::Data
 
         OSL_ENSURE( bSizesValid, "DataCell: !bSizesValid" );
         sal_uInt32 nFormat = 0;
+        bool bApplyFormat = false;
         if ( pColNumFmt )
         {
             if ( nCol >= nDataStartCol )
             {
                 long nIndex = nCol - nDataStartCol;
                 if ( nIndex < nColFmtCount )
+                {
                     nFormat = pColNumFmt[nIndex];
+                    bApplyFormat = true;
+                }
             }
         }
         else if ( pRowNumFmt )
@@ -761,13 +767,20 @@ void ScDPOutput::DataCell( SCCOL nCol, SCROW nRow, SCTAB nTab, const sheet::Data
             {
                 long nIndex = nRow - nDataStartRow;
                 if ( nIndex < nRowFmtCount )
+                {
                     nFormat = pRowNumFmt[nIndex];
+                    bApplyFormat = true;
+                }
             }
         }
         else if ( nSingleNumFmt != 0 )
+        {
             nFormat = nSingleNumFmt;        // single format is used everywhere
-        if ( nFormat != 0 )
-            pDoc->ApplyAttr( nCol, nRow, nTab, SfxUInt32Item( ATTR_VALUE_FORMAT, nFormat ) );
+            bApplyFormat = true;
+        }
+
+        if (bApplyFormat)
+            pDoc->ApplyAttr(nCol, nRow, nTab, SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
     }
     //  SubTotal formatting is controlled by headers
 }
@@ -980,20 +993,6 @@ void ScDPOutput::Output()
     if ( bDoFilter )
         lcl_DoFilterButton( pDoc, aStartPos.Col(), aStartPos.Row(), nTab );
 
-    //  output data results:
-
-    for (long nRow=0; nRow<nRowCount; nRow++)
-    {
-        SCROW nRowPos = nDataStartRow + (SCROW)nRow;                    //! check for overflow
-        const sheet::DataResult* pColAry = pRowAry[nRow].getConstArray();
-        long nThisColCount = pRowAry[nRow].getLength();
-        OSL_ENSURE( nThisColCount == nColCount, "count mismatch" );     //! ???
-        for (long nCol=0; nCol<nThisColCount; nCol++)
-        {
-            SCCOL nColPos = nDataStartCol + (SCCOL)nCol;                //! check for overflow
-            DataCell( nColPos, nRowPos, nTab, pColAry[nCol] );
-        }
-    }
     //  output page fields:
 
     for (nField=0; nField<nPageFieldCount; nField++)
@@ -1077,6 +1076,9 @@ void ScDPOutput::Output()
             }
             else if (  pArray[nCol].Flags & sheet::MemberResultFlags::SUBTOTAL )
                 outputimp.AddCol( nColPos );
+
+            // Apply the same number format as in data source.
+            pDoc->ApplyAttr(nColPos, nRowPos, nTab, SfxUInt32Item(ATTR_VALUE_FORMAT, pColFields[nField].mnSrcNumFmt));
         }
         if ( nField== 0 && nColFieldCount == 1 )
             outputimp.OutputBlockFrame( nDataStartCol,nTabStartRow, nTabEndCol,nRowPos-1 );
@@ -1127,6 +1129,24 @@ void ScDPOutput::Output()
             }
             else if (  pArray[nRow].Flags & sheet::MemberResultFlags::SUBTOTAL )
                 outputimp.AddRow( nRowPos );
+
+            // Apply the same number format as in data source.
+            pDoc->ApplyAttr(nColPos, nRowPos, nTab, SfxUInt32Item(ATTR_VALUE_FORMAT, pRowFields[nField].mnSrcNumFmt));
+        }
+    }
+
+    //  output data results:
+
+    for (long nRow=0; nRow<nRowCount; nRow++)
+    {
+        SCROW nRowPos = nDataStartRow + (SCROW)nRow;                    //! check for overflow
+        const sheet::DataResult* pColAry = pRowAry[nRow].getConstArray();
+        long nThisColCount = pRowAry[nRow].getLength();
+        OSL_ENSURE( nThisColCount == nColCount, "count mismatch" );     //! ???
+        for (long nCol=0; nCol<nThisColCount; nCol++)
+        {
+            SCCOL nColPos = nDataStartCol + (SCCOL)nCol;                //! check for overflow
+            DataCell( nColPos, nRowPos, nTab, pColAry[nCol] );
         }
     }
 
