@@ -119,28 +119,13 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
 {
     PutInOrder(nCol1, nCol2);
     PutInOrder(nRow1, nRow2);
-    SCTAB i, nTab1;
-    SCCOL j;
-    SCROW k;
-    i = 0;
-    bool bStop = false;
-    SCTAB nMax = static_cast<SCTAB>(maTabs.size());
-    ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
-    for (; itr != itrEnd && *itr < nMax; ++itr)
+    if (!rMark.GetSelectCount())
     {
-        if (maTabs[i])
-        {
-            i = *itr;
-            bStop = true;
-            break;
-        }
-    }
-    nTab1 = i;
-    if (!bStop)
-    {
-        OSL_FAIL("ScDocument::InsertMatrixFormula Keine Tabelle markiert");
+        SAL_WARN("sc", "ScDocument::InsertMatrixFormula Keine Tabelle markiert");
         return;
     }
+
+    SCTAB nTab1 = *rMark.begin();
 
     ScFormulaCell* pCell;
     ScAddress aPos( nCol1, nRow1, nTab1 );
@@ -149,7 +134,8 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
     else
         pCell = new ScFormulaCell( this, aPos, rFormula, eGram, MM_FORMULA );
     pCell->SetMatColsRows( nCol2 - nCol1 + 1, nRow2 - nRow1 + 1, bDirtyFlag );
-    itr = rMark.begin();
+    ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
+    SCTAB nMax = static_cast<SCTAB>(maTabs.size());
     for (; itr != itrEnd && *itr < nMax; ++itr)
     {
         if (maTabs[*itr])
@@ -186,9 +172,9 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
                 aRefData.nRelTab = *itr - nTab1;
                 t->GetSingleRef() = aRefData;
             }
-            for (j = nCol1; j <= nCol2; j++)
+            for (SCCOL j = nCol1; j <= nCol2; j++)
             {
-                for (k = nRow1; k <= nRow2; k++)
+                for (SCROW k = nRow1; k <= nRow2; k++)
                 {
                     if (j != nCol1 || k != nRow1)       // nicht in der ersten Zelle
                     {
