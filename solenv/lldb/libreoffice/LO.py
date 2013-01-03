@@ -29,21 +29,30 @@
 
 # script sys.path[:0] = [os.path.expanduser('~/lo/ios/solenv/lldb/libreoffice')]
 # script import LO
-# type summary add --python-function LO.rtluString_summary rtl_uString
-# type summary add --python-function LO.rtl_OUString_summary rtl::OUString
+# type summary add --skip-references --python-function LO.rtl_uString_summary rtl_uString
+# type summary add --skip-pointers --skip-references --python-function LO.rtl_OUString_summary rtl::OUString
 
 import lldb
 
-def rtluString_summary(rtlustring, dict):
+def rtl_uString_summary(valobj, dict):
     e = lldb.SBError()
 
-    length = rtlustring.GetChildMemberWithName('length').GetValueAsUnsigned(0)
-    buffer = rtlustring.GetChildMemberWithName('buffer')
+    # print "valobj = " + str(valobj) + ", valobj.GetData() = " + str(valobj.GetData()) + ", valobj.GetTypeName() = " + str(valobj.GetTypeName())
+
+    # As we don't use --skip-pointers when doing the "type summary add" for this function,
+    # the value to be printed might actually be a pointer to a rtl_uString. Weird, huh?
+    if valobj.TypeIsPointerType():
+        return rtl_uString_summary(valobj.Dereference(), dict)
+
+    length = valobj.GetChildMemberWithName('length').GetValueAsUnsigned(0)
+    buffer = valobj.GetChildMemberWithName('buffer')
+
+    buffer_ptr = buffer.AddressOf();
 
     s = '"'
     i = 0
     while i < length:
-        c = buffer.GetPointeeData(i, 1).GetUnsignedInt16(e, 0)
+        c = buffer_ptr.GetPointeeData(i, 1).GetUnsignedInt16(e, 0)
         if c == ord('"'):
             s = s + '\\"'
         elif c == ord('\\'):
@@ -65,7 +74,7 @@ def rtluString_summary(rtlustring, dict):
 
     return s
 
-def rtl_OUString_summary(rtloustring, dict):
-    return rtluString_summary(rtloustring.GetChildMemberWithName('pData'), dict)
+def rtl_OUString_summary(valobj, dict):
+    return rtl_uString_summary(valobj.GetChildMemberWithName('pData'), dict)
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
