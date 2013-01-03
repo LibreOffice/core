@@ -63,7 +63,7 @@ $(eval $(call gb_Library_use_system_win32_libs,ooofilt,\
 	uuid \
 ))
 
-ifneq ($(PRODUCT),full)
+ifeq ($(ENABLE_DBGUTIL),TRUE)
 $(eval $(call gb_Library_use_system_win32_libs,ooofilt,\
 	msvcrt \
 ))

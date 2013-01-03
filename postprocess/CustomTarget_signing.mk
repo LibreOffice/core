@@ -23,7 +23,7 @@ $(call gb_CustomTarget_get_workdir,postprocess/signing)/signing.done: \
 $(call gb_CustomTarget_get_workdir,postprocess/signing)/signing.done:
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
 ifeq ($(COM),MSC)
-ifeq ($(PRODUCT),full)
+ifneq ($(ENABLE_DBGUTIL),TRUE)
 	$(PERL) $< -e $(SRCDIR)/postprocess/signing/no_signing.txt
 			-l $(subst .done,_log.txt,$@) \
 			-f $(PFXFILE) \

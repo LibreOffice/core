@@ -34,7 +34,7 @@ else
 $(call gb_ExternalProject_get_state_target,xmlsec,build) :
 	cd $(EXTERNAL_WORKDIR)/win32 \
 	&& cscript configure.js crypto=mscrypto xslt=no iconv=no static=no \
-	$(if $(filter-out full,$(PRODUCT)),debug=yes) \
+	$(if $(filter TRUE,$(ENABLE_DBGUTIL)),debug=yes) \
 	&& unset MAKEFLAGS \
 	&& LIB="$(ILIB)" nmake \
 	&& touch $@

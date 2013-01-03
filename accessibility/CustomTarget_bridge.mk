@@ -30,7 +30,7 @@ $(eval $(call gb_CustomTarget_CustomTarget,accessibility/bridge))
 $(call gb_CustomTarget_get_target,accessibility/bridge) : \
     $(call gb_CustomTarget_get_workdir,accessibility/bridge)/org/openoffice/java/accessibility/Build.java
 
-ifeq ($(PRODUCT),)
+ifeq ($(ENABLE_DBGUTIL),TRUE)
 accessibility_DEBUG := true
 accessibility_PRODUCT := false
 else

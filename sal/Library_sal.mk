@@ -198,7 +198,7 @@ $(eval $(call gb_Library_add_cobjects,sal,\
 	sal/osl/unx/util \
 ))
 $(eval $(call gb_Library_add_cobject,sal,sal/osl/unx/signal, \
-	$(if $(filter $(ENABLE_CRASHDUMP),YES)$(if $(PRODUCT),,TRUE), \
+	$(if $(filter $(ENABLE_CRASHDUMP),YES)$(filter $(ENABLE_DBGUTIL),TRUE), \
 		-DSAL_ENABLE_CRASH_REPORT) \
 ))
 

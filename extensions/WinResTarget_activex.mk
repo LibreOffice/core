@@ -34,7 +34,7 @@ $(eval $(call gb_WinResTarget_use_custom_headers,activex_res,\
     extensions/source/activex/idl \
 ))
 
-ifneq ($(PRODUCT),)
+ifneq ($(ENABLE_DBGUTIL),TRUE)
 $(eval $(call gb_WinResTarget_add_defs,activex_res,\
 	-DPRODUCT \
 ))

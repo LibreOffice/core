@@ -21,7 +21,7 @@ gb_CliLibraryTarget_CSCFLAGS_DEBUG := \
 	-define:TRACE \
 
 ifeq ($(strip $(debug)),)
-ifeq ($(strip $(PRODUCT)),)
+ifeq ($(strip $(ENABLE_DBGUTIL)),TRUE)
 gb_CliLibraryTarget__get_csflags = $(gb_CliLibraryTarget_CSCFLAGS) $(gb_CliLibraryTarget_CSCFLAGS_DEBUG)
 else
 gb_CliLibraryTarget__get_csflags = $(gb_CliLibraryTarget_CSCFLAGS) -o
