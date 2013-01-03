@@ -690,6 +690,13 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             if ( !bSilent && pDoc->QueryHiddenInformation( WhenPrinting, NULL ) != RET_YES )
                 return;
 
+            // should we print only the selection or the whole document
+            SFX_REQUEST_ARG(rReq, pSelectItem, SfxBoolItem, SID_SELECTION, sal_False);
+            sal_Bool bSelection = ( pSelectItem != NULL && pSelectItem->GetValue() );
+            // detect non api call from writer ( that adds SID_SELECTION ) and reset bIsAPI
+            if ( pSelectItem && rReq.GetArgs()->Count() == 1 )
+                bIsAPI = sal_False;
+
             uno::Sequence < beans::PropertyValue > aProps;
             if ( bIsAPI )
             {
@@ -747,10 +754,6 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             // it would be better if writer handled this internally
             if( nId == SID_PRINTDOCDIRECT )
             {
-                // should we print only the selection or the whole document
-                SFX_REQUEST_ARG(rReq, pSelectItem, SfxBoolItem, SID_SELECTION, sal_False);
-                sal_Bool bSelection = ( pSelectItem != NULL && pSelectItem->GetValue() );
-
                 aProps[nLen].Name = rtl::OUString( "PrintSelectionOnly"  );
                 aProps[nLen].Value = makeAny( bSelection );
             }
