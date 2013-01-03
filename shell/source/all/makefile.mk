@@ -63,7 +63,6 @@ SLOFILES_X64=$(SLO_X64)$/xml_parser.obj
 .INCLUDE :  target.mk
 .IF "$(OS)" == "WNT" 
 INCLUDE!:=$(subst,/stl, $(INCLUDE))
-.EXPORT : INCLUDE 
 .ENDIF 
 .INCLUDE :  tg_wntx64.mk
 
