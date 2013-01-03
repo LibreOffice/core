@@ -56,18 +56,17 @@ public:
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
             xComponent,
         ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory > & rFactory,
+            ::com::sun::star::uno::XComponentContext > & rxContext,
         ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet > & rPropSet,
         const sal_Char* pComponentName );
 
     sal_Bool WriteThroughComponent(
         const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStor,
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
-            xComponent,
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComponent,
         const sal_Char* pStreamName,
         ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory > & rFactory,
+            ::com::sun::star::uno::XComponentContext > & rxContext,
         ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet > & rPropSet,
         const sal_Char* pComponentName );

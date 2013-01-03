@@ -95,9 +95,7 @@ using ::rtl::OUStringBuffer;
 sal_Bool SmXMLExportWrapper::Export(SfxMedium &rMedium)
 {
     sal_Bool bRet=sal_True;
-    uno::Reference<lang::XMultiServiceFactory>
-        xServiceFactory(comphelper::getProcessServiceFactory());
-    OSL_ENSURE(xServiceFactory.is(),"got no service manager");
+    uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
 
     //Get model
     uno::Reference< lang::XComponent > xModelComp(xModel, uno::UNO_QUERY );
@@ -207,7 +205,7 @@ sal_Bool SmXMLExportWrapper::Export(SfxMedium &rMedium)
                 xStatusIndicator->setValue(nSteps++);
 
             bRet = WriteThroughComponent(
-                    xStg, xModelComp, "meta.xml", xServiceFactory, xInfoSet,
+                    xStg, xModelComp, "meta.xml", xContext, xInfoSet,
                     (bOASIS ? "com.sun.star.comp.Math.XMLOasisMetaExporter"
                             : "com.sun.star.comp.Math.XMLMetaExporter"));
         }
@@ -217,7 +215,7 @@ sal_Bool SmXMLExportWrapper::Export(SfxMedium &rMedium)
                 xStatusIndicator->setValue(nSteps++);
 
             bRet = WriteThroughComponent(
-                    xStg, xModelComp, "content.xml", xServiceFactory, xInfoSet,
+                    xStg, xModelComp, "content.xml", xContext, xInfoSet,
                     "com.sun.star.comp.Math.XMLContentExporter");
         }
 
@@ -227,7 +225,7 @@ sal_Bool SmXMLExportWrapper::Export(SfxMedium &rMedium)
                 xStatusIndicator->setValue(nSteps++);
 
             bRet = WriteThroughComponent(
-                    xStg, xModelComp, "settings.xml", xServiceFactory, xInfoSet,
+                    xStg, xModelComp, "settings.xml", xContext, xInfoSet,
                     (bOASIS ? "com.sun.star.comp.Math.XMLOasisSettingsExporter"
                             : "com.sun.star.comp.Math.XMLSettingsExporter") );
         }
@@ -242,7 +240,7 @@ sal_Bool SmXMLExportWrapper::Export(SfxMedium &rMedium)
             xStatusIndicator->setValue(nSteps++);
 
         bRet = WriteThroughComponent(
-            xOut, xModelComp, xServiceFactory, xInfoSet,
+            xOut, xModelComp, xContext, xInfoSet,
             "com.sun.star.comp.Math.XMLContentExporter");
     }
 
@@ -257,7 +255,7 @@ sal_Bool SmXMLExportWrapper::Export(SfxMedium &rMedium)
 sal_Bool SmXMLExportWrapper::WriteThroughComponent(
     Reference<io::XOutputStream> xOutputStream,
     Reference<XComponent> xComponent,
-    Reference<lang::XMultiServiceFactory> & rFactory,
+    Reference<uno::XComponentContext> & rxContext,
     Reference<beans::XPropertySet> & rPropSet,
     const sal_Char* pComponentName )
 {
@@ -266,11 +264,7 @@ sal_Bool SmXMLExportWrapper::WriteThroughComponent(
     OSL_ENSURE(NULL != pComponentName, "Need component name!");
 
     // get component
-    Reference< xml::sax::XWriter > xSaxWriter = xml::sax::Writer::create(
-        comphelper::getComponentContext(rFactory) );
-    OSL_ENSURE( xSaxWriter.is(), "can't instantiate XML writer" );
-    if (!xSaxWriter.is())
-        return sal_False;
+    Reference< xml::sax::XWriter > xSaxWriter = xml::sax::Writer::create(rxContext );
 
     // connect XML writer to output stream
     xSaxWriter->setOutputStream( xOutputStream );
@@ -284,8 +278,8 @@ sal_Bool SmXMLExportWrapper::WriteThroughComponent(
 
     // get filter component
     Reference< document::XExporter > xExporter(
-        rFactory->createInstanceWithArguments(
-            OUString::createFromAscii(pComponentName), aArgs), UNO_QUERY);
+        rxContext->getServiceManager()->createInstanceWithArgumentsAndContext(OUString::createFromAscii(pComponentName), aArgs, rxContext),
+        UNO_QUERY);
     OSL_ENSURE( xExporter.is(),
             "can't instantiate export filter component" );
     if ( !xExporter.is() )
@@ -315,7 +309,7 @@ sal_Bool SmXMLExportWrapper::WriteThroughComponent(
     const Reference < embed::XStorage >& xStorage,
     Reference<XComponent> xComponent,
     const sal_Char* pStreamName,
-    Reference<lang::XMultiServiceFactory> & rFactory,
+    Reference<uno::XComponentContext> & rxContext,
     Reference<beans::XPropertySet> & rPropSet,
     const sal_Char* pComponentName
     )
@@ -359,7 +353,7 @@ sal_Bool SmXMLExportWrapper::WriteThroughComponent(
     }
 
     // write the stuff
-    sal_Bool bRet = WriteThroughComponent( xStream->getOutputStream(), xComponent, rFactory,
+    sal_Bool bRet = WriteThroughComponent( xStream->getOutputStream(), xComponent, rxContext,
         rPropSet, pComponentName );
 
     return bRet;
