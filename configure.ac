@@ -107,6 +107,7 @@ AC_SUBST(BUILDDIR)
 AC_SUBST(EXEEXT_FOR_BUILD)
 AC_SUBST(x_Cygwin)
 AC_DEFINE_UNQUOTED(SRCDIR,"$SRC_ROOT")
+AC_DEFINE_UNQUOTED(BUILDDIR,"$BUILDDIR")
 
 if test "z$EUID" = "z0" -a "`uname -o 2>/dev/null`" = "Cygwin"; then
     AC_MSG_ERROR([You must build LibreOffice as a normal user - not using an administrative account])
@@ -4092,6 +4093,8 @@ AC_SUBST(P_SEP)
 AC_SUBST(SOLARVER)
 AC_SUBST(WORKDIR)
 AC_SUBST(PLATFORMID)
+AC_DEFINE_UNQUOTED(OUTDIR,"$OUTDIR")
+AC_DEFINE_UNQUOTED(WORKDIR,"$WORKDIR")
 
 dnl ===================================================================
 dnl Test which package format to use

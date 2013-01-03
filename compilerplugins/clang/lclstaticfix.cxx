@@ -34,9 +34,7 @@ void LclStaticFix::run()
 
 bool LclStaticFix::VisitFunctionDecl( FunctionDecl* declaration )
     {
-    // TODO also LO header files? or a subdir?
-    // Only the .cxx file can be normally edited ... ?
-    if( !context.getSourceManager().isFromMainFile( declaration->getLocStart()))
+    if( ignoreLocation( declaration ))
         return true;
     if( declaration->isCXXClassMember())
         return true;

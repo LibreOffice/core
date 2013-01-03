@@ -25,6 +25,8 @@
 #include "sallogareas.hxx"
 #include "unusedvariablecheck.hxx"
 
+#include <config_clang.h>
+
 namespace loplugin
 {
 
@@ -51,7 +53,19 @@ DiagnosticBuilder Plugin::report( DiagnosticsEngine::Level level, StringRef mess
 
 bool Plugin::ignoreLocation( SourceLocation loc )
     {
-    return context.getSourceManager().isInSystemHeader( context.getSourceManager().getExpansionLoc( loc ));
+    SourceLocation expansionLoc = context.getSourceManager().getExpansionLoc( loc );
+    if( context.getSourceManager().isInSystemHeader( expansionLoc ))
+        return true;
+    bool invalid;
+    const char* bufferName = context.getSourceManager().getBufferName( expansionLoc, &invalid );
+    if( invalid )
+        return true;
+    if( strncmp( bufferName, OUTDIR, strlen( OUTDIR )) == 0
+        || strncmp( bufferName, WORKDIR, strlen( WORKDIR )) == 0
+        || strncmp( bufferName, BUILDDIR, strlen( BUILDDIR )) == 0
+        || strncmp( bufferName, SRCDIR, strlen( SRCDIR )) == 0 )
+        return false; // ok
+    return true;
     }
 
 
@@ -182,24 +196,64 @@ class PluginHandler
                  ++it )
                 {
                 const FileEntry* e = context.getSourceManager().getFileEntryForID( it->first );
-                char* filename = new char[ strlen( e->getName()) + 100 ];
-                sprintf( filename, "%s.new.%d", e->getName(), getpid());
+                DiagnosticsEngine& diag = context.getDiagnostics();
+                /* Check where the file actually is, and warn about cases where modification
+                   most probably doesn't matter (generated files in workdir).
+                   The order here is important, as OUTDIR and WORKDIR are often in SRCDIR/BUILDDIR,
+                   and BUILDDIR is sometimes in SRCDIR. */
+                string modifyFile;
+                if( strncmp( e->getName(), OUTDIR, strlen( OUTDIR )) == 0 )
+                    {
+                    /* Try to find a matching file for a file in solver/ (include files
+                       are usually included from there rather than from the source dir) if possible. */
+                    if( strncmp( e->getName(), OUTDIR "/inc/", strlen( OUTDIR ) + strlen( "/inc/" )) == 0 )
+                        {
+                        string filename( e->getName());
+                        int modulePos = strlen( OUTDIR ) + strlen( "/inc/" );
+                        int moduleEnd = filename.find( '/', modulePos );
+                        if( moduleEnd != string::npos )
+                            {
+                            modifyFile = SRCDIR "/" + filename.substr( modulePos, moduleEnd - modulePos )
+                                + "/inc/" + filename.substr( modulePos );
+                            }
+                        }
+                    if( modifyFile.empty())
+                        diag.Report( diag.getCustomDiagID( DiagnosticsEngine::Warning,
+                            "modified source in solver/ : %0 [loplugin]" )) << e->getName();
+                    }
+                else if( strncmp( e->getName(), WORKDIR, strlen( WORKDIR )) == 0 )
+                    diag.Report( diag.getCustomDiagID( DiagnosticsEngine::Warning,
+                        "modified source in workdir/ : %0 [loplugin]" )) << e->getName();
+                else if( strncmp( e->getName(), BUILDDIR, strlen( BUILDDIR )) == 0 )
+                    diag.Report( diag.getCustomDiagID( DiagnosticsEngine::Warning,
+                        "modified source in build dir : %0 [loplugin]" )) << e->getName();
+                else if( strncmp( e->getName(), SRCDIR, strlen( SRCDIR )) == 0 )
+                    ; // ok
+                else
+                    {
+                    diag.Report( diag.getCustomDiagID( DiagnosticsEngine::Warning,
+                        "modified source in unknown location, not modifying : %0 [loplugin]" )) << e->getName();
+                    continue; // --->
+                    }
+                if( modifyFile.empty())
+                    modifyFile = e->getName();
+                char* filename = new char[ modifyFile.length() + 100 ];
+                sprintf( filename, "%s.new.%d", modifyFile.c_str(), getpid());
                 string error;
                 bool ok = false;
                 raw_fd_ostream ostream( filename, error );
-                DiagnosticsEngine& diag = context.getDiagnostics();
                 if( error.empty())
                     {
                     it->second.write( ostream );
                     ostream.close();
-                    if( !ostream.has_error() && rename( filename, e->getName()) == 0 )
+                    if( !ostream.has_error() && rename( filename, modifyFile.c_str()) == 0 )
                         ok = true;
                     }
                 ostream.clear_error();
                 unlink( filename );
                 if( !ok )
                     diag.Report( diag.getCustomDiagID( DiagnosticsEngine::Error,
-                        "cannot write modified source to %0 (%1) [loplugin]" )) << e->getName() << error;
+                        "cannot write modified source to %0 (%1) [loplugin]" )) << modifyFile << error;
                 delete[] filename;
                 }
             }
