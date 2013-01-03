@@ -74,7 +74,6 @@ class SwXMLImport: public SvXMLImport
                                             // existing styles will be
                                             // overwritten.
     sal_Bool                bBlock : 1;     // Load text block
-    sal_Bool                bAutoStylesValid : 1;
     sal_Bool                bShowProgress : 1;
     sal_Bool                bOrganizerMode : 1;
     sal_Bool                bInititedXForms : 1;
