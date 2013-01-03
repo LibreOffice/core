@@ -153,14 +153,15 @@ define gb_LinkTarget__command_dynamiclink
 		$(T_LDFLAGS) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
+		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
 		$(foreach object,$(OBJCOBJECTS),$(call gb_ObjCObject_get_target,$(object))) \
 		$(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_target,$(object))) \
-		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
 		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),`cat $(extraobjectlist)`) \
 		$(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) \
 		$(call gb_LinkTarget__get_liblinkflags,$(LINKED_LIBS)) \
+		$(wildcard $(OUTDIR)/lib/*.a) \
 		$(LIBS) \
 		-o $(1))
 endef
@@ -184,7 +185,8 @@ endef
 
 define gb_LinkTarget__command
 $(call gb_Output_announce,$(2),$(true),LNK,4)
-$(call gb_LinkTarget__command_staticlink,$(1))
+$(if $(filter Executable,$(TARGETTYPE)),$(call gb_LinkTarget__command_dynamiclink,$(1),$(2)))
+$(if $(filter CppunitTest Library StaticLibrary,$(TARGETTYPE)),$(call gb_LinkTarget__command_staticlink,$(1)))
 endef
 
 define gb_LinkTarget_use_system_darwin_frameworks
@@ -247,7 +249,7 @@ gb_StaticLibrary_StaticLibrary_platform =
 
 # Executable class
 
-gb_Executable_EXT := .a
+gb_Executable_EXT :=
 gb_Executable_TARGETTYPEFLAGS := 
 
 gb_Executable_LAYER := \
