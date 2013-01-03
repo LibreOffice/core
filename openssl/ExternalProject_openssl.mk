@@ -61,7 +61,7 @@ $(call gb_ExternalProject_get_state_target,openssl,build):
 	&& export MAKEFLAGS="$(MAKEFLAGS:r=)" \
 	&& $(MAKE) -j1 build_libs \
 	CC="$(CC) $(if $(filter-out WNT,$(OS)),\
-	$(if $(filter TRUE,$(HAVE_GCC_VISIBILTIY_FEATURE)),\
+	$(if $(filter TRUE,$(HAVE_GCC_VISIBILITY_FEATURE)),\
 	-fvisibility=hidden))" \
 	&& touch $@
 endif
