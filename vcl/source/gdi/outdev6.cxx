@@ -848,8 +848,8 @@ void OutputDevice::ImplDrawBitmapWallpaper( long nX, long nY,
     }
     else
     {
-        aPos = Point( nX, nY );
-        aSize = Size( nWidth, nHeight );
+        aPos = Point( 0, 0 );
+        aSize = Size( mnOutWidth, mnOutHeight );
     }
 
     mpMetaFile = NULL;
