@@ -28,7 +28,7 @@ module com {  module sun {  module star {  module sheet {
 
     @see com::sun::star::sheet::XDataPilotResults
  */
-published struct DataResult
+struct DataResult
 {
     /** contains boolean flags describing the result.
 
