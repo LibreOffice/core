@@ -37,18 +37,18 @@ namespace rtl { class OUString; }
 /** Define various helper variables and functions for xmlimpit.cxx and
  * xmlexpit.cxx.  */
 
-sal_Bool sw_frmitems_parseXMLBorder( const ::rtl::OUString& rValue,
+bool sw_frmitems_parseXMLBorder( const ::rtl::OUString& rValue,
                                       const SvXMLUnitConverter& rUnitConverter,
-                                      sal_Bool& rHasStyle, sal_uInt16& rStyle,
-                                      sal_Bool& rHasWidth, sal_uInt16& rWidth,
+                                      bool& rHasStyle, sal_uInt16& rStyle,
+                                      bool& rHasWidth, sal_uInt16& rWidth,
                                       sal_uInt16& rNamedWidth,
-                                      sal_Bool& rHasColor, Color& rColor );
+                                      bool& rHasColor, Color& rColor );
 
-sal_Bool sw_frmitems_setXMLBorder( editeng::SvxBorderLine*& rpLine,
-                                    sal_Bool bHasStyle, sal_uInt16 nStyle,
-                                    sal_Bool bHasWidth, sal_uInt16 nWidth,
+bool sw_frmitems_setXMLBorder( editeng::SvxBorderLine*& rpLine,
+                                    bool bHasStyle, sal_uInt16 nStyle,
+                                    bool bHasWidth, sal_uInt16 nWidth,
                                     sal_uInt16 nNamedWidth,
-                                    sal_Bool bHasColor, const Color& rColor );
+                                    bool bHasColor, const Color& rColor );
 
 void sw_frmitems_setXMLBorder( editeng::SvxBorderLine*& rpLine,
                                 sal_uInt16 nWidth, sal_uInt16 nOutWidth,

@@ -68,15 +68,15 @@ class SwXMLImport: public SvXMLImport
                             xLateInitSettings;
 
     sal_uInt16              nStyleFamilyMask;// Mask of styles to load
-    sal_Bool                bLoadDoc : 1;   // Load doc or styles only
-    sal_Bool                bInsert : 1;    // Insert mode. If styles are
+    bool                bLoadDoc : 1;   // Load doc or styles only
+    bool                bInsert : 1;    // Insert mode. If styles are
                                             // loaded only sal_False means that
                                             // existing styles will be
                                             // overwritten.
-    sal_Bool                bBlock : 1;     // Load text block
-    sal_Bool                bShowProgress : 1;
-    sal_Bool                bOrganizerMode : 1;
-    sal_Bool                bInititedXForms : 1;
+    bool                bBlock : 1;     // Load text block
+    bool                bShowProgress : 1;
+    bool                bOrganizerMode : 1;
+    bool                bInititedXForms : 1;
     sal_Bool                bPreserveRedlineMode;
 
     void                    _InitItemImport();
@@ -153,10 +153,10 @@ public:
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
     SvXMLImportContext *CreateBodyContentContext( const ::rtl::OUString& rLocalName );
     sal_uInt16 GetStyleFamilyMask() const { return nStyleFamilyMask; }
-    sal_Bool IsInsertMode() const { return bInsert; }
-    sal_Bool IsStylesOnlyMode() const { return !bLoadDoc; }
-    sal_Bool IsBlockMode() const { return bBlock; }
-    sal_Bool IsOrganizerMode() const { return bOrganizerMode; }
+    bool IsInsertMode() const { return bInsert; }
+    bool IsStylesOnlyMode() const { return !bLoadDoc; }
+    bool IsBlockMode() const { return bBlock; }
+    bool IsOrganizerMode() const { return bOrganizerMode; }
 
     inline const SvXMLUnitConverter& GetTwipUnitConverter() const;
     inline const SvXMLImportItemMapper& GetTableItemMapper() const;
@@ -171,7 +171,7 @@ public:
     const SvXMLTokenMap& GetTableElemTokenMap();
     const SvXMLTokenMap& GetTableCellAttrTokenMap();
 
-    sal_Bool FindAutomaticStyle( sal_uInt16 nFamily,
+    bool FindAutomaticStyle( sal_uInt16 nFamily,
                              const ::rtl::OUString& rName,
                              const SfxItemSet **ppItemSet=0,
                              ::rtl::OUString *pParent=0 ) const;

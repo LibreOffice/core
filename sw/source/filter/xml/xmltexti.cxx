@@ -150,8 +150,8 @@ SwXMLTextImportHelper::SwXMLTextImportHelper(
         const uno::Reference < XModel>& rModel,
         SvXMLImport& rImport,
         const uno::Reference<XPropertySet> & rInfoSet,
-        sal_Bool bInsertM, sal_Bool bStylesOnlyM, sal_Bool _bProgress,
-        sal_Bool bBlockM, sal_Bool bOrganizerM,
+        bool bInsertM, bool bStylesOnlyM, bool _bProgress,
+        bool bBlockM, bool bOrganizerM,
         sal_Bool /*bPreserveRedlineMode*/ ) :
     XMLTextImportHelper( rModel, rImport, bInsertM, bStylesOnlyM, _bProgress,
                          bBlockM, bOrganizerM ),

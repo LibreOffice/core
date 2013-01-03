@@ -119,7 +119,7 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
                 if(eState >= SFX_ITEM_DEFAULT && pItem)
                 {
                     SfxPoolItem *pNewItem = pItem->Clone();
-                    sal_Bool bPut = sal_False;
+                    bool bPut = false;
 
                     if( 0 == (pEntry->nMemberId&MID_SW_FLAG_SPECIAL_ITEM_IMPORT) )
                     {
@@ -193,7 +193,7 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
 
 /** this method is called for every item that has the
     MID_SW_FLAG_SPECIAL_ITEM_IMPORT flag set */
-sal_Bool
+bool
 SvXMLImportItemMapper::handleSpecialItem(  const SvXMLItemMapEntry& /*rEntry*/,
                                             SfxPoolItem& /*rItem*/,
                                             SfxItemSet& /*rSet*/,
@@ -202,19 +202,19 @@ SvXMLImportItemMapper::handleSpecialItem(  const SvXMLItemMapEntry& /*rEntry*/,
                                             const SvXMLNamespaceMap& /*rNamespaceMap*/ )
 {
     OSL_FAIL( "unsuported special item in xml import" );
-    return sal_False;
+    return false;
 }
 
 /** this method is called for every item that has the
     MID_SW_FLAG_NO_ITEM_IMPORT flag set */
-sal_Bool SvXMLImportItemMapper::handleNoItem( const SvXMLItemMapEntry& /*rEntry*/,
+bool SvXMLImportItemMapper::handleNoItem( const SvXMLItemMapEntry& /*rEntry*/,
                                            SfxItemSet& /*rSet*/,
                                            const OUString& /*rValue*/,
                                            const SvXMLUnitConverter& /*rUnitConverter*/,
                                            const SvXMLNamespaceMap& /*rNamespaceMap*/ )
 {
     OSL_FAIL( "unsuported no item in xml import" );
-    return sal_False;
+    return false;
 }
 
 void
@@ -226,13 +226,13 @@ SvXMLImportItemMapper::finished(SfxItemSet &, SvXMLUnitConverter const&) const
 
 
 // put an XML-string value into an item
-sal_Bool SvXMLImportItemMapper::PutXMLValue(
+bool SvXMLImportItemMapper::PutXMLValue(
     SfxPoolItem& rItem,
     const ::rtl::OUString& rValue,
     sal_uInt16 nMemberId,
     const SvXMLUnitConverter& rUnitConverter )
 {
-    sal_Bool bOk = sal_False;
+    bool bOk = false;
 
     switch (rItem.Which())
         {
@@ -329,8 +329,8 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
             SvxShadowItem* pShadow = PTR_CAST(SvxShadowItem, &rItem);
             OSL_ENSURE( pShadow != NULL, "Wrong Which-ID" );
 
-            sal_Bool bColorFound = sal_False;
-            sal_Bool bOffsetFound = sal_False;
+            bool bColorFound = false;
+            bool bOffsetFound = false;
 
             SvXMLTokenEnumerator aTokenEnum( rValue );
 
@@ -343,17 +343,17 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                 if( IsXMLToken( aToken, XML_NONE ) )
                 {
                     pShadow->SetLocation( SVX_SHADOW_NONE );
-                    bOk = sal_True;
+                    bOk = true;
                 }
                 else if( !bColorFound && aToken.compareToAscii( "#", 1 ) == 0 )
                 {
                     sal_Int32 nColor(0);
                     bOk = ::sax::Converter::convertColor( nColor, aToken );
                     if( !bOk )
-                        return sal_False;
+                        return false;
 
                     aColor.SetColor(nColor);
-                    bColorFound = sal_True;
+                    bColorFound = true;
                 }
                 else if( !bOffsetFound )
                 {
@@ -401,7 +401,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                 pShadow->SetColor( aColor );
             }
             else
-                bOk = sal_False;
+                bOk = false;
         }
         break;
 
@@ -432,7 +432,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                     if (!rUnitConverter.convertMeasureToCore( nTemp, rValue,
                                 0, 0xffff ))
                     {
-                        return sal_False;
+                        return false;
                     }
 
                     if( nMemberId == LEFT_BORDER_PADDING ||
@@ -455,9 +455,9 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                 case TOP_BORDER:
                 case BOTTOM_BORDER:
                 {
-                    sal_Bool bHasStyle = sal_False;
-                    sal_Bool bHasWidth = sal_False;
-                    sal_Bool bHasColor = sal_False;
+                    bool bHasStyle = false;
+                    bool bHasWidth = false;
+                    bool bHasColor = false;
 
                     sal_uInt16 nStyle = USHRT_MAX;
                     sal_uInt16 nWidth = 0;
@@ -469,7 +469,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                                                       bHasStyle, nStyle,
                                                       bHasWidth, nWidth, nNamedWidth,
                                                       bHasColor, aColor ) )
-                        return sal_False;
+                        return false;
 
                     if( TOP_BORDER == nMemberId || ALL_BORDER == nMemberId )
                         sw_frmitems_setXMLBorder( pTop,
@@ -508,22 +508,22 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
 
                     OUString aToken;
                     if( !aTokenEnum.getNextToken( aToken ) )
-                        return sal_False;
+                        return false;
 
                     if (!rUnitConverter.convertMeasureToCore(nInWidth, aToken))
-                        return sal_False;
+                        return false;
 
                     if( !aTokenEnum.getNextToken( aToken ) )
-                        return sal_False;
+                        return false;
 
                     if (!rUnitConverter.convertMeasureToCore(nDistance, aToken))
-                        return sal_False;
+                        return false;
 
                     if( !aTokenEnum.getNextToken( aToken ) )
-                        return sal_False;
+                        return false;
 
                     if (!rUnitConverter.convertMeasureToCore(nOutWidth, aToken))
-                        return sal_False;
+                        return false;
 
                     // #i61946: accept line style even it's not part of our "normal" set of line styles
                     sal_uInt16 nWidth = 0;
@@ -569,7 +569,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
             delete pLeft;
             delete pRight;
 
-            bOk = sal_True;
+            bOk = true;
         }
         break;
 
@@ -581,12 +581,12 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
             sal_uInt16 eEnum;
 
             if( !rUnitConverter.convertEnum( eEnum, rValue, psXML_BreakType ) )
-                return sal_False;
+                return false;
 
             if( eEnum == 0 )
             {
                 pFmtBreak->SetValue( SVX_BREAK_NONE );
-                bOk = sal_True;
+                bOk = true;
             }
             else
             {
@@ -603,7 +603,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                                              SVX_BREAK_PAGE_AFTER) );
                         break;
                 }
-                bOk = sal_True;
+                bOk = true;
             }
         }
         break;
@@ -617,13 +617,13 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                  IsXMLToken( rValue, XML_TRUE ) )
             {
                 pFmtKeep->SetValue( sal_True );
-                bOk = sal_True;
+                bOk = true;
             }
             else if( IsXMLToken( rValue, XML_AUTO ) ||
                      IsXMLToken( rValue, XML_FALSE ) )
             {
                 pFmtKeep->SetValue( sal_False );
-                bOk = sal_True;
+                bOk = true;
             }
         }
         break;
@@ -640,14 +640,14 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                     if( IsXMLToken( rValue, XML_TRANSPARENT ) )
                     {
                         pBrush->GetColor().SetTransparency(0xff);
-                        bOk = sal_True;
+                        bOk = true;
                     }
                     else if (::sax::Converter::convertColor(nTempColor, rValue))
                     {
                         Color aTempColor(nTempColor);
                         aTempColor.SetTransparency(0);
                         pBrush->SetColor( aTempColor );
-                        bOk = sal_True;
+                        bOk = true;
                     }
                     break;
 
@@ -660,7 +660,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                     if( GPOS_NONE == eOldGraphicPos &&
                         GPOS_NONE != pBrush->GetGraphicPos() )
                         pBrush->SetGraphicPos( GPOS_TILED );
-                    bOk = sal_True  ;
+                    bOk = true;
                 }
                 break;
 
@@ -674,7 +674,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                         if( GPOS_MM != nPos || GPOS_NONE == eGraphicPos ||
                             GPOS_AREA == eGraphicPos || GPOS_TILED == eGraphicPos )
                             pBrush->SetGraphicPos( (SvxGraphicPosition)nPos );
-                        bOk = sal_True;
+                        bOk = true;
                     }
                 }
                 break;
@@ -685,13 +685,13 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                     sal_uInt16 nTmp;
                     SvXMLTokenEnumerator aTokenEnum( rValue );
                     OUString aToken;
-                    sal_Bool bHori = sal_False, bVert = sal_False;
-                    bOk = sal_True;
+                    bool bHori = false, bVert = false;
+                    bOk = true;
                     while( bOk && aTokenEnum.getNextToken( aToken ) )
                     {
                         if( bHori && bVert )
                         {
-                            bOk = sal_False;
+                            bOk = false;
                         }
                         else if( -1 != aToken.indexOf( sal_Unicode('%') ) )
                         {
@@ -702,20 +702,20 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                                 {
                                     ePos = nPrc < 25 ? GPOS_LT :
                                                (nPrc < 75 ? GPOS_MM : GPOS_RB);
-                                    bHori = sal_True;
+                                    bHori = true;
                                 }
                                 else
                                 {
                                     eTmp = nPrc < 25 ? GPOS_LT:
                                                (nPrc < 75 ? GPOS_LM : GPOS_LB);
                                     sw_frmitems_MergeXMLVertPos( ePos, eTmp );
-                                    bVert = sal_True;
+                                    bVert = true;
                                 }
                             }
                             else
                             {
                                 // wrong percentage
-                                bOk = sal_False;
+                                bOk = false;
                             }
                         }
                         else if( IsXMLToken( aToken, XML_CENTER ) )
@@ -736,8 +736,8 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                             else if( !bHori )
                                 ePos = (SvxGraphicPosition)nTmp;
                             else
-                                bOk = sal_False;
-                            bHori = sal_True;
+                                bOk = false;
+                            bHori = true;
                         }
                         else if( rUnitConverter.convertEnum( nTmp, aToken,
                                                          psXML_BrushVertPos ) )
@@ -748,16 +748,16 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                             else if( !bVert )
                                 ePos = (SvxGraphicPosition)nTmp;
                             else
-                                bOk = sal_False;
-                            bVert = sal_True;
+                                bOk = false;
+                            bVert = true;
                         }
                         else
                         {
-                            bOk = sal_False;
+                            bOk = false;
                         }
                     }
 
-                    bOk &= GPOS_NONE != ePos;
+                    if( GPOS_NONE == ePos ) bOk = false;
                     if( bOk )
                         pBrush->SetGraphicPos( ePos );
                 }
@@ -765,7 +765,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
 
                 case MID_GRAPHIC_FILTER:
                     pBrush->SetGraphicFilter( rValue );
-                    bOk = sal_True;
+                    bOk = true;
                     break;
                 }
         }
@@ -797,13 +797,13 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                  IsXMLToken( rValue, XML_TRUE ) )
             {
                 pSplit->SetValue( sal_True );
-                bOk = sal_True;
+                bOk = true;
             }
             else if( IsXMLToken( rValue, XML_ALWAYS ) ||
                      IsXMLToken( rValue, XML_FALSE ) )
             {
                 pSplit->SetValue( sal_False );
-                bOk = sal_True;
+                bOk = true;
             }
         }
         break;
@@ -835,7 +835,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
             else if(rValue.isEmpty())
             {
                 pVertOrient->SetVertOrient( text::VertOrientation::NONE );
-                bOk = sal_True;
+                bOk = true;
             }
         }
         break;
@@ -845,9 +845,9 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
             SwFmtFrmSize* pFrmSize = PTR_CAST(SwFmtFrmSize, &rItem);
             OSL_ENSURE( pFrmSize != NULL, "Wrong Which-ID" );
 
-            sal_Bool bSetHeight = sal_False;
-            sal_Bool bSetWidth = sal_False;
-            sal_Bool bSetSizeType = sal_False;
+            bool bSetHeight = false;
+            bool bSetWidth = false;
+            bool bSetSizeType = false;
             SwFrmSize eSizeType = ATT_VAR_SIZE;
             sal_Int32 nMin = MINLAY;
 
@@ -869,24 +869,24 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                 }
                 break;
                 case MID_FRMSIZE_WIDTH:
-                    bSetWidth = sal_True;
+                    bSetWidth = true;
                     break;
                 case MID_FRMSIZE_MIN_HEIGHT:
                     eSizeType = ATT_MIN_SIZE;
-                    bSetHeight = sal_True;
+                    bSetHeight = true;
                     nMin = 1;
-                    bSetSizeType = sal_True;
+                    bSetSizeType = true;
                     break;
                 case MID_FRMSIZE_FIX_HEIGHT:
                     eSizeType = ATT_FIX_SIZE;
-                    bSetHeight = sal_True;
+                    bSetHeight = true;
                     nMin = 1;
-                    bSetSizeType = sal_True;
+                    bSetSizeType = true;
                     break;
                 case MID_FRMSIZE_COL_WIDTH:
                     eSizeType = ATT_FIX_SIZE;
-                    bSetWidth = sal_True;
-                    bSetSizeType = sal_True;
+                    bSetWidth = true;
+                    bSetSizeType = true;
                     break;
                 case MID_FRMSIZE_REL_COL_WIDTH:
                 {
@@ -901,7 +901,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
 
                         pFrmSize->SetWidth( (sal_uInt16)nValue );
                         pFrmSize->SetHeightSizeType( ATT_VAR_SIZE );
-                        bOk = sal_True;
+                        bOk = true;
                     }
                 }
                 break;
@@ -951,15 +951,15 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
             if( IsXMLToken( rValue, XML_COLLAPSING ) )
             {
                 pBorders->SetValue( sal_True );
-                bOk = sal_True;
+                bOk = true;
             }
             else if( IsXMLToken( rValue, XML_SEPARATING ) )
             {
                 pBorders->SetValue( sal_False );
-                bOk = sal_True;
+                bOk = true;
             }
             else
-                bOk = sal_False;
+                bOk = false;
         }
         break;
 

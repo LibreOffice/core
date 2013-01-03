@@ -53,7 +53,7 @@ public:
 
     /** this method is called for every item that has the
         MID_SW_FLAG_SPECIAL_ITEM_IMPORT flag set */
-    virtual sal_Bool handleSpecialItem( const SvXMLItemMapEntry& rEntry,
+    virtual bool handleSpecialItem( const SvXMLItemMapEntry& rEntry,
                                     SfxPoolItem& rItem,
                                     SfxItemSet& rSet,
                                     const ::rtl::OUString& rValue,
@@ -62,7 +62,7 @@ public:
 
     /** this method is called for every item that has the
         MID_SW_FLAG_NO_ITEM_IMPORT flag set */
-    virtual sal_Bool handleNoItem( const SvXMLItemMapEntry& rEntry,
+    virtual bool handleNoItem( const SvXMLItemMapEntry& rEntry,
                                SfxItemSet& rSet,
                                const ::rtl::OUString& rValue,
                                const SvXMLUnitConverter& rUnitConverter,
@@ -79,7 +79,7 @@ public:
 
     /** This method is called for every item that should be set based
         upon an XML attribute value. */
-    static sal_Bool PutXMLValue(
+    static bool PutXMLValue(
         SfxPoolItem& rItem,
         const ::rtl::OUString& rValue,
         sal_uInt16 nMemberId,

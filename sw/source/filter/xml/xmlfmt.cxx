@@ -1068,7 +1068,7 @@ void SwXMLImport::UpdateTxtCollConditions( SwDoc *pDoc )
     }
 }
 
-sal_Bool SwXMLImport::FindAutomaticStyle(
+bool SwXMLImport::FindAutomaticStyle(
         sal_uInt16 nFamily,
         const OUString& rName,
         const SfxItemSet **ppItemSet,

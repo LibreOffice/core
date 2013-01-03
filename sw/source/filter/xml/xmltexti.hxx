@@ -42,8 +42,8 @@ public:
             SvXMLImport& rImport,
             const ::com::sun::star::uno::Reference <
                 ::com::sun::star::beans::XPropertySet>& rInfoSet,
-            sal_Bool bInsertM, sal_Bool bStylesOnlyM, sal_Bool bProgress,
-            sal_Bool bBlockM, sal_Bool bOrganizerM,
+            bool bInsertM, bool bStylesOnlyM, bool bProgress,
+            bool bBlockM, bool bOrganizerM,
             sal_Bool bPreserveRedlineMode );
     ~SwXMLTextImportHelper();
 

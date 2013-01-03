@@ -89,19 +89,19 @@ const sal_uInt16 aBorderWidths[] =
         DEF_LINE_WIDTH_1,
 };
 
-sal_Bool sw_frmitems_parseXMLBorder( const OUString& rValue,
+bool sw_frmitems_parseXMLBorder( const OUString& rValue,
                                       const SvXMLUnitConverter& rUnitConverter,
-                                      sal_Bool& rHasStyle, sal_uInt16& rStyle,
-                                      sal_Bool& rHasWidth, sal_uInt16& rWidth,
+                                      bool& rHasStyle, sal_uInt16& rStyle,
+                                      bool& rHasWidth, sal_uInt16& rWidth,
                                       sal_uInt16& rNamedWidth,
-                                      sal_Bool& rHasColor, Color& rColor )
+                                      bool& rHasColor, Color& rColor )
 {
     OUString aToken;
     SvXMLTokenEnumerator aTokens( rValue );
 
-    rHasStyle = sal_False;
-    rHasWidth = sal_False;
-    rHasColor = sal_False;
+    rHasStyle = false;
+    rHasWidth = false;
+    rHasColor = false;
 
     rStyle = USHRT_MAX;
     rWidth = 0;
@@ -114,29 +114,29 @@ sal_Bool sw_frmitems_parseXMLBorder( const OUString& rValue,
             rUnitConverter.convertEnum( rNamedWidth, aToken,
                                         psXML_NamedBorderWidths ) )
         {
-            rHasWidth = sal_True;
+            rHasWidth = true;
         }
         else if( !rHasStyle &&
                  rUnitConverter.convertEnum( rStyle, aToken,
                                              psXML_BorderStyles ) )
         {
-            rHasStyle = sal_True;
+            rHasStyle = true;
         }
         else if (!rHasColor && ::sax::Converter::convertColor(nTemp, aToken))
         {
             rColor.SetColor(nTemp);
-            rHasColor = sal_True;
+            rHasColor = true;
         }
         else if( !rHasWidth &&
              rUnitConverter.convertMeasureToCore(nTemp, aToken, 0, USHRT_MAX))
         {
             rWidth = (sal_uInt16)nTemp;
-            rHasWidth = sal_True;
+            rHasWidth = true;
         }
         else
         {
             // missformed
-            return sal_False;
+            return false;
         }
     }
 
@@ -151,17 +151,17 @@ void sw_frmitems_setXMLBorderStyle( SvxBorderLine& rLine, sal_uInt16 nStyle )
     rLine.SetBorderLineStyle(eStyle);
 }
 
-sal_Bool sw_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
-                                    sal_Bool bHasStyle, sal_uInt16 nStyle,
-                                    sal_Bool bHasWidth, sal_uInt16 nWidth,
+bool sw_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
+                                    bool bHasStyle, sal_uInt16 nStyle,
+                                    bool bHasWidth, sal_uInt16 nWidth,
                                     sal_uInt16 nNamedWidth,
-                                    sal_Bool bHasColor, const Color& rColor )
+                                    bool bHasColor, const Color& rColor )
 {
     // first of all, delete an empty line
     if( (bHasStyle && API_LINE_NONE == nStyle) ||
         (bHasWidth && USHRT_MAX == nNamedWidth && 0 == nWidth) )
     {
-        sal_Bool bRet = 0 != rpLine;
+        bool bRet = 0 != rpLine;
         if( rpLine )
         {
             delete rpLine;
@@ -173,7 +173,7 @@ sal_Bool sw_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
 
     // if there is no line and no style and no with, there will never be a line
     if( !rpLine && !(bHasStyle && bHasWidth) )
-        return sal_False;
+        return false;
 
     // We now do know that there will be a line
     if( !rpLine )
@@ -218,7 +218,7 @@ sal_Bool sw_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
     if( bHasColor )
         rpLine->SetColor( rColor );
 
-    return sal_True;
+    return true;
 }
 
 void sw_frmitems_setXMLBorder( SvxBorderLine*& rpLine,

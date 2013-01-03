@@ -66,14 +66,14 @@ public:
     SwXMLImportTableItemMapper_Impl( SvXMLItemMapEntriesRef rMapEntries );
     virtual ~SwXMLImportTableItemMapper_Impl();
 
-    virtual sal_Bool handleSpecialItem( const SvXMLItemMapEntry& rEntry,
+    virtual bool handleSpecialItem( const SvXMLItemMapEntry& rEntry,
                                 SfxPoolItem& rItem,
                                 SfxItemSet& rSet,
                                 const OUString& rValue,
                                 const SvXMLUnitConverter& rUnitConverter,
                                 const SvXMLNamespaceMap& rNamespaceMap );
 
-    virtual sal_Bool
+    virtual bool
     handleNoItem(SvXMLItemMapEntry const& rEntry,
                  SfxItemSet & rSet,
                  ::rtl::OUString const& rValue,
@@ -120,7 +120,7 @@ void SwXMLImportTableItemMapper_Impl::setMapEntries(
     SvXMLImportItemMapper::setMapEntries(rMapEntries);
 }
 
-sal_Bool SwXMLImportTableItemMapper_Impl::handleSpecialItem(
+bool SwXMLImportTableItemMapper_Impl::handleSpecialItem(
                                         const SvXMLItemMapEntry& rEntry,
                                         SfxPoolItem& rItem,
                                         SfxItemSet& rItemSet,
@@ -128,7 +128,7 @@ sal_Bool SwXMLImportTableItemMapper_Impl::handleSpecialItem(
                                         const SvXMLUnitConverter& rUnitConv,
                                         const SvXMLNamespaceMap& )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     sal_uInt16 nMemberId = static_cast< sal_Int16 >(rEntry.nMemberId & MID_SW_FLAG_MASK);
     switch( rItem.Which() )
     {
@@ -176,7 +176,7 @@ sal_Bool SwXMLImportTableItemMapper_Impl::handleSpecialItem(
 }
 
 
-sal_Bool SwXMLImportTableItemMapper_Impl::handleNoItem(
+bool SwXMLImportTableItemMapper_Impl::handleNoItem(
      SvXMLItemMapEntry const& rEntry,
      SfxItemSet & rSet,
      ::rtl::OUString const& rValue,

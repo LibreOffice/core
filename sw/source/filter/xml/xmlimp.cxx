@@ -419,12 +419,12 @@ SwXMLImport::SwXMLImport(
     pGraphicResolver( 0 ),
     pEmbeddedResolver( 0 ),
     nStyleFamilyMask( SFX_STYLE_FAMILY_ALL ),
-    bLoadDoc( sal_True ),
-    bInsert( sal_False ),
-    bBlock( sal_False ),
-    bShowProgress( sal_True ),
-    bOrganizerMode( sal_False ),
-    bInititedXForms( sal_False ),
+    bLoadDoc( true ),
+    bInsert( false ),
+    bBlock( false ),
+    bShowProgress( true ),
+    bOrganizerMode( false ),
+    bInititedXForms( false ),
     bPreserveRedlineMode( sal_True )
 {
     _InitItemImport();
@@ -442,7 +442,7 @@ SwXMLImport::~SwXMLImport() throw ()
 void SwXMLImport::setTextInsertMode(
          const Reference< XTextRange > & rInsertPos )
 {
-    bInsert = sal_True;
+    bInsert = true;
 
     Reference < XText > xText = rInsertPos->getText();
     Reference < XTextCursor > xTextCursor =
@@ -455,17 +455,17 @@ void SwXMLImport::setStyleInsertMode( sal_uInt16 nFamilies,
 {
     bInsert = !bOverwrite;
     nStyleFamilyMask = nFamilies;
-    bLoadDoc = sal_False;
+    bLoadDoc = false;
 }
 
 void SwXMLImport::setBlockMode( )
 {
-    bBlock = sal_True;
+    bBlock = true;
 }
 
 void SwXMLImport::setOrganizerMode( )
 {
-    bOrganizerMode = sal_True;
+    bOrganizerMode = true;
 }
 
 namespace
@@ -1730,7 +1730,7 @@ void SwXMLImport::initXForms()
     if( ! pDoc->isXForms() )
         pDoc->initXForms( false );
 
-    bInititedXForms = sal_True;
+    bInititedXForms = true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
