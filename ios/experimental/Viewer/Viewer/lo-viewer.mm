@@ -1,11 +1,11 @@
-/* -*- Mode: ObjC; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*
- * This file is part of the LibreOffice project.
- *
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
- */
+// -*- Mode: ObjC; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+//
+// This file is part of the LibreOffice project.
+//
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+//
 
 #include <stdlib.h>
 
@@ -119,37 +119,9 @@ lo_get_libmap(void)
     return map;
 }
 
-int 
-main(int argc, char ** argv)
+void
+lo_initialize(void)
 {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    int retVal = UIApplicationMain (argc, argv, @"UIApplication", @"loAppDelegate");
-    [pool release];
-    return retVal;
-}
-
-@interface loAppDelegate : NSObject <UIApplicationDelegate> {
-}
-@property (nonatomic, retain) UIWindow *window;
-@end
-
-@implementation loAppDelegate
-
-@synthesize window=_window;
-
-- (BOOL)application: (UIApplication *) application
-didFinishLaunchingWithOptions: (NSDictionary *) launchOptions
-{
-    int i;
-
-    (void) application;
-    (void) launchOptions;
-
-    UIWindow *uiw = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    uiw.backgroundColor = [UIColor redColor];
-    self.window = uiw;
-    [uiw release];
-
     // See unotest/source/cpp/bootstrapfixturebase.cxx
     const char *app_root = [[[NSBundle mainBundle] bundlePath] UTF8String];
     setenv("SRC_ROOT", app_root, 1);
@@ -158,15 +130,7 @@ didFinishLaunchingWithOptions: (NSDictionary *) launchOptions
     setenv("SAL_LOG", "yes", 1);
 
     const char *argv[] = {
-        "lo-qa-sc-filters-test",
-        "dummy-testlib",
-        "--headless",
-        "--protector",
-        "dummy-libunoexceptionprotector",
-        "unoexceptionprotector",
-        "--protector",
-        "dummy-libunobootstrapprotector",
-        "unobootstrapprotector",
+        "Viewer",
         "-env:URE_INTERNAL_LIB_DIR=file:///",
         "placeholder-uno-types",
         "placeholder-uno-services"
@@ -227,7 +191,7 @@ didFinishLaunchingWithOptions: (NSDictionary *) launchOptions
         "ComponentTarget/ucb/source/ucp/file/ucpfile1.component"
     };
 
-    for (i = 0; i < sizeof(services)/sizeof(services[0]); i++) {
+    for (unsigned i = 0; i < sizeof(services)/sizeof(services[0]); i++) {
         uno_services = [uno_services stringByAppendingString: @"file://"];
         uno_services = [uno_services stringByAppendingString: [app_root_escaped stringByAppendingPathComponent: [NSString stringWithUTF8String: services[i]]]];
         if (i < sizeof(services)/sizeof(services[0]) - 1)
@@ -239,22 +203,17 @@ didFinishLaunchingWithOptions: (NSDictionary *) launchOptions
 
     osl_setCommandArgs(argc, (char **) argv);
 
-    Reference< XComponentContext > xComponentContext(::cppu::defaultBootstrap_InitialComponentContext());
+    try {
 
-    Reference< XMultiComponentFactory > xMultiComponentFactoryClient(
-        xComponentContext->getServiceManager() );
+        Reference< XComponentContext > xComponentContext(::cppu::defaultBootstrap_InitialComponentContext());
 
-    Reference< XInterface > xInterface =
-        xMultiComponentFactoryClient->createInstanceWithContext(
-            OUString("com.sun.star.frame.Desktop"),
-            xComponentContext );
+        Reference< XMultiComponentFactory > xMultiComponentFactoryClient( xComponentContext->getServiceManager() );
 
-    // Do something here
-
-    [self.window makeKeyAndVisible];
-    return YES;
+        Reference< XInterface > xInterface =
+            xMultiComponentFactoryClient->createInstanceWithContext( OUString("com.sun.star.frame.Desktop"),
+                                                                     xComponentContext );
+    }
+    catch (Exception e) {
+        SAL_WARN("Viewer", e.Message);
+    }
 }
-
-@end
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -208,6 +208,14 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 ))
 endif
 
+ifeq ($(OS),IOS)
+
+$(eval $(call gb_Helper_register_executables,NONE,\
+    Viewer \
+))
+
+endif
+
 ifeq ($(OS),MACOSX)
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \

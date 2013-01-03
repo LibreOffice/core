@@ -98,6 +98,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 	idl \
 	$(call gb_Helper_optional,DESKTOP,idlc) \
 	io \
+	ios \
 	javaunohelper \
 	$(call gb_Helper_optional,JFREEREPORT,jfreereport) \
 	jurt \

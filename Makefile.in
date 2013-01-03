@@ -287,6 +287,9 @@ endif
 ifeq ($(OS),ANDROID)
 	cd android && $(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS)
 endif
+ifeq ($(OS),IOS)
+	cd ios && $(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS)
+endif
 
 build-nocheck : export SKIP_TESTS := YES
 build-nocheck : build
