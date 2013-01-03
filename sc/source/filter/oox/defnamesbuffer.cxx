@@ -285,6 +285,7 @@ ApiTokenSequence DefinedNameBase::importBiffFormula( sal_Int16 nBaseSheet, BiffI
 
 DefinedName::DefinedName( const WorkbookHelper& rHelper ) :
     DefinedNameBase( rHelper ),
+    mpScRangeData(NULL),
     mnTokenIndex( -1 ),
     mcBuiltinId( BIFF_DEFNAME_UNKNOWN ),
     mnFmlaSize( 0 )
