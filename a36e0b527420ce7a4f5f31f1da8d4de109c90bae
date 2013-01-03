@@ -1,0 +1,276 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAASX///34\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3213,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-03T15:08:14Z",
+      "side": 1,
+      "message": "Please do not use UniString, use OUString instead.",
+      "revId": "a36e0b527420ce7a4f5f31f1da8d4de109c90bae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASX///30\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3216,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-03T15:08:14Z",
+      "side": 1,
+      "message": "This needs checking beforehand if there are 3 parameters.",
+      "revId": "a36e0b527420ce7a4f5f31f1da8d4de109c90bae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASX///3w\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3217,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-03T15:08:14Z",
+      "side": 1,
+      "message": "This needs checking beforehand if there are 2 parameters.",
+      "revId": "a36e0b527420ce7a4f5f31f1da8d4de109c90bae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASX///3o\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3224,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-03T15:08:14Z",
+      "side": 1,
+      "message": "There can be more than one group separator, handling only a single character does not work in all cases. Please check the ODFF specification http://docs.oasis-open.org/office/v1.2/cs01/OpenDocument-v1.2-cs01-part2.html#NUMBERVALUE",
+      "revId": "a36e0b527420ce7a4f5f31f1da8d4de109c90bae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASX///3g\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3246,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-03T15:08:14Z",
+      "side": 1,
+      "message": "Here instead it needs to be checked whether the referenced cell contains a numeric or string value and acted accordingly.",
+      "revId": "a36e0b527420ce7a4f5f31f1da8d4de109c90bae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASX///3c\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3249,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-03T15:08:14Z",
+      "side": 1,
+      "message": "Instead, an empty cell should be treated as an empty string.",
+      "revId": "a36e0b527420ce7a4f5f31f1da8d4de109c90bae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASX///3k\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3254,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-03T15:08:14Z",
+      "side": 1,
+      "message": "In case of svDouble the value should not be automatically converted using GetString(), instead simply push the double value.",
+      "revId": "a36e0b527420ce7a4f5f31f1da8d4de109c90bae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASX///3U\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3260,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-03T15:08:14Z",
+      "side": 1,
+      "message": "Also the matrix and external reference cases need to be handled. See ScInterpreter::GetString() for the possible cases, just that no automatic conversion to string should be involved.",
+      "revId": "a36e0b527420ce7a4f5f31f1da8d4de109c90bae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASX///3M\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3265,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-03T15:08:14Z",
+      "side": 1,
+      "message": "Empty strings should be treated according to the setting \"Treat empty string as 0\", use GetGlobalConfig().mbEmptyStringAsZero to check. If not set, push an error for an empty string.",
+      "revId": "a36e0b527420ce7a4f5f31f1da8d4de109c90bae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASX///3I\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3266,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-03T15:08:14Z",
+      "side": 1,
+      "message": "In general I wonder why you didn\u0027t follow my advice to do certain checks and replacements only if there are more than one character passed as GroupSeparator. All following loops are unnecessary for the common simple cases and only add performance penalty.",
+      "revId": "a36e0b527420ce7a4f5f31f1da8d4de109c90bae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASX///3A\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3275,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-03T15:08:14Z",
+      "side": 1,
+      "message": "Do not replace the decimal separator, instead simply pass it to rtl::math::stringToDouble()",
+      "revId": "a36e0b527420ce7a4f5f31f1da8d4de109c90bae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASX///3E\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3284,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-03T15:08:14Z",
+      "side": 1,
+      "message": "If spaces etc. are not part of the group separator they are not to be removed.",
+      "revId": "a36e0b527420ce7a4f5f31f1da8d4de109c90bae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASX///3s\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3289,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-03T15:08:14Z",
+      "side": 1,
+      "message": "Looping from the beginning of the string removes % characters anywhere in the string, only trailing % are to be removed.",
+      "revId": "a36e0b527420ce7a4f5f31f1da8d4de109c90bae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASX///3Q\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3300,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-03T15:08:14Z",
+      "side": 1,
+      "message": "Instead of rtl_math_uStringToDouble() use rtl::math::stringToDouble() and pass also a sal_Int32* pParseEnd that afterwards is to be checked whether the function consumed the entire string or or only partially, in which case an error is to be pushed. This is the \"23.4 foo\" case.",
+      "revId": "a36e0b527420ce7a4f5f31f1da8d4de109c90bae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASX///38\u003d",
+        "filename": "sc/source/ui/src/scfuncs.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 8683,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-03T15:08:14Z",
+      "side": 1,
+      "message": "There is already a Resource SC_OPCODE_NUMBERVALUE in the file around line 9327, but with 2 parameters instead of 3 and with a \"suppress this function\" flag. Augment and change that entry to reflect reality instead of creating a duplicate entry, and change the flag from 1 to 0 to make the function appear in UI and lists.",
+      "revId": "a36e0b527420ce7a4f5f31f1da8d4de109c90bae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASX///4A\u003d",
+        "filename": "sc/source/ui/src/scfuncs.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 8694,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-03T15:08:14Z",
+      "side": 1,
+      "message": "DecimalSeparator and GroupSeparator are optional, so this line instead should be\n\n 3;  0; 1; 1;",
+      "revId": "a36e0b527420ce7a4f5f31f1da8d4de109c90bae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
