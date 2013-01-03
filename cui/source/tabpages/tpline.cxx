@@ -456,7 +456,7 @@ void SvxLineTabPage::SymbolSelected(MenuButton* pButton)
         break;
         default:
         {
-            SvxOpenGraphicDialog aGrfDlg(CUI_RES(RID_STR_EDIT_GRAPHIC));
+            SvxOpenGraphicDialog aGrfDlg(CUI_RES(RID_SVXSTR_EDIT_GRAPHIC));
             aGrfDlg.EnableLink(false);
             aGrfDlg.AsLink(false);
             if( !aGrfDlg.Execute() )

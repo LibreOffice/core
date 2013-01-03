@@ -253,48 +253,49 @@ class SvxNumOptionsTabPage : public SfxTabPage
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
 
-    FixedLine       aFormatFL;
-    FixedText       aLevelFT;
-    MultiListBox    aLevelLB;
+    ListBox*        m_pLevelLB;
 
-    FixedText       aFmtFT;
-    ListBox         aFmtLB;
-    FixedText       aPrefixFT;
-    Edit            aPrefixED;
-    FixedText       aSuffixFT;
-    Edit            aSuffixED;
-    FixedText       aCharFmtFT;
-    ListBox         aCharFmtLB;
-    FixedText       aBulColorFT;
-    ColorListBox    aBulColLB;
-    FixedText       aBulRelSizeFT;
-    MetricField     aBulRelSizeMF;
-    FixedText       aAllLevelFT;
-    NumericField    aAllLevelNF;
-    FixedText       aStartFT;
-    NumericField    aStartED;
-    PushButton      aBulletPB;
-    FixedText       aAlignFT;
-    ListBox         aAlignLB;
-    FixedText       aBitmapFT;
-    MenuButton      aBitmapMB;
-    FixedText       aSizeFT;
-    MetricField     aWidthMF;
-    FixedText       aMultFT;
-    MetricField     aHeightMF;
-    CheckBox        aRatioCB;
-    FixedText       aOrientFT;
-    ListBox         aOrientLB;
+    ListBox*        m_pFmtLB;
 
-    FixedLine       aSameLevelFL;
-    CheckBox        aSameLevelCB;
+    FixedText*      m_pSeperatorFT;
+    FixedText*      m_pPrefixFT;
+    Edit*           m_pPrefixED;
+    FixedText*      m_pSuffixFT;
+    Edit*           m_pSuffixED;
+    FixedText*      m_pCharFmtFT;
+    ListBox*        m_pCharFmtLB;
+    FixedText*      m_pBulColorFT;
+    ColorListBox*   m_pBulColLB;
+    FixedText*      m_pBulRelSizeFT;
+    MetricField*    m_pBulRelSizeMF;
+    FixedText*      m_pAllLevelFT;
+    NumericField*   m_pAllLevelNF;
+    FixedText*      m_pStartFT;
+    NumericField*   m_pStartED;
+    FixedText*      m_pBulletFT;
+    PushButton*     m_pBulletPB;
+    FixedText*      m_pAlignFT;
+    ListBox*        m_pAlignLB;
+    FixedText*      m_pBitmapFT;
+    MenuButton*     m_pBitmapMB;
+    sal_uInt16      m_nGalleryId;
+    FixedText*      m_pWidthFT;
+    MetricField*    m_pWidthMF;
+    FixedText*      m_pHeightFT;
+    MetricField*    m_pHeightMF;
+    CheckBox*       m_pRatioCB;
+    FixedText*      m_pOrientFT;
+    ListBox*        m_pOrientLB;
 
-    String          sNumCharFmtName;
-    String          sBulletCharFmtName;
+    VclContainer*   m_pAllLevelsFrame;
+    CheckBox*       m_pSameLevelCB;
+
+    SvxNumberingPreview* m_pPreviewWIN;
+
+    OUString        m_sNumCharFmtName;
+    OUString        m_sBulletCharFmtName;
 
     Timer           aInvalidateTimer;
-
-    SvxNumberingPreview*    pPreviewWIN;
 
     SvxNumRule*         pActNum;
     SvxNumRule*         pSaveNum;
@@ -310,8 +311,6 @@ class SvxNumOptionsTabPage : public SfxTabPage
 
     std::vector<String> aGrfNames;
     Font                aActBulletFont;
-    String              sBullet;
-    String              sStartWith;
 
     sal_uInt8               nBullet;
     sal_uInt16              nActNumLvl;
@@ -357,14 +356,14 @@ class SvxNumOptionsTabPage : public SfxTabPage
     virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 
-    void                SetCharFmts(const String& rNumName, const String& rBulletName )
-                                {
-                                    sNumCharFmtName = rNumName;
-                                    sBulletCharFmtName = rBulletName;
-                                }
+    void                SetCharFmts(const OUString& rNumName, const OUString& rBulletName)
+                        {
+                            m_sNumCharFmtName = rNumName;
+                            m_sBulletCharFmtName = rBulletName;
+                        }
     void                SetMetric(FieldUnit eSet);
 
-    ListBox&            GetCharFmtListBox() {return aCharFmtLB;}
+    ListBox&            GetCharFmtListBox() {return *m_pCharFmtLB;}
     void                SetModified(sal_Bool bRepaint = sal_True);
     virtual void        PageCreated(SfxAllItemSet aSet);
 

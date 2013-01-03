@@ -54,6 +54,11 @@ String RID_SVXSTR_AUTO_ENTRY
     Text [ en-US ] = "Automatic";
 };
 
+String RID_SVXSTR_EDIT_GRAPHIC
+{
+    Text [ en-US ] = "Link" ;
+};
+
 #define MASKCOLOR  MaskColor = \
     Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
 
