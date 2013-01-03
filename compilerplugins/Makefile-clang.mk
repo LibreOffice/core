@@ -14,6 +14,7 @@ CLANGSRC= \
     bodynotinblock.cxx \
     lclstaticfix.cxx \
     postfixincrementfix.cxx \
+    removeforwardstringdecl.cxx \
     sallogareas.cxx \
     unusedvariablecheck.cxx \
 

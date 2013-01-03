@@ -22,6 +22,7 @@
 #include "bodynotinblock.hxx"
 #include "lclstaticfix.hxx"
 #include "postfixincrementfix.hxx"
+#include "removeforwardstringdecl.hxx"
 #include "sallogareas.hxx"
 #include "unusedvariablecheck.hxx"
 
@@ -192,6 +193,7 @@ class PluginHandler
             , bodyNotInBlock( context )
             , lclStaticFix( context, rewriter )
             , postfixIncrementFix( context, rewriter )
+            , removeForwardStringDecl( context, rewriter )
             , salLogAreas( context )
             , unusedVariableCheck( context )
             {
@@ -204,6 +206,8 @@ class PluginHandler
                 lclStaticFix.run();
             else if( isArg( "postfixincrementfix" ))
                 postfixIncrementFix.run();
+            else if( isArg( "removeforwardstringdecl" ))
+                removeForwardStringDecl.run();
             else if( args.empty())
                 {
                 bodyNotInBlock.run();
@@ -292,6 +296,7 @@ class PluginHandler
         BodyNotInBlock bodyNotInBlock;
         LclStaticFix lclStaticFix;
         PostfixIncrementFix postfixIncrementFix;
+        RemoveForwardStringDecl removeForwardStringDecl;
         SalLogAreas salLogAreas;
         UnusedVariableCheck unusedVariableCheck;
     };
