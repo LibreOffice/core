@@ -160,11 +160,11 @@ OUString getAnnotationDateTimeString( const Reference< XAnnotation >& xAnnotatio
         Date aSysDate( Date::SYSTEM );
         Date aDate = Date( aDateTime.Day, aDateTime.Month, aDateTime.Year );
         if (aDate==aSysDate)
-            sRet = sRet + String(SdResId(STR_ANNOTATION_TODAY));
+            sRet = SdResId(STR_ANNOTATION_TODAY);
         else if (aDate == Date(aSysDate-1))
-            sRet = sRet + String(SdResId(STR_ANNOTATION_YESTERDAY));
+            sRet = SdResId(STR_ANNOTATION_YESTERDAY);
         else if (aDate.IsValidAndGregorian() )
-            sRet = sRet + rLocalData.getDate(aDate);
+            sRet = rLocalData.getDate(aDate);
 
         Time aTime( aDateTime.Hours, aDateTime.Minutes, aDateTime.Seconds, aDateTime.HundredthSeconds );
         if(aTime.GetTime() != 0)
