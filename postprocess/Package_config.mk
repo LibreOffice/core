@@ -12,7 +12,7 @@ $(eval $(call gb_Package_Package,postprocess_config,$(call gb_CustomTarget_get_w
 $(eval $(call gb_Package_add_file,postprocess_config,bin/uiconfig.zip,uiconfig.zip))
 
 $(eval $(call gb_Package_add_files,postprocess_config,bin,\
-	$(foreach lang,$(gb_UITarget_LANGS),uiconfig_$(lang).zip) \
+	$(foreach lang,$(filter-out en-US,$(gb_WITH_LANG)),uiconfig_$(lang).zip) \
 ))
 
 # vim: set noet sw=4 ts=4:
