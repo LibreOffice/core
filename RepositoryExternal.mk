@@ -178,6 +178,11 @@ endef
 
 endif
 
+define gb_LinkTarget__use_iconv
+$(call gb_LinkTarget_add_libs,$(1),-liconv)
+
+endef
+
 ifeq ($(SYSTEM_ZLIB),YES)
 
 define gb_LinkTarget__use_zlib
