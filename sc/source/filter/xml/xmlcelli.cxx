@@ -1063,8 +1063,8 @@ void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rCellPos )
                 //value/text of each matrix cell later
                 rXMLImport.GetTables().AddMatrixRange(
                         rCellPos.Col(), rCellPos.Row(),
-                        rCellPos.Col() + nMatrixCols - 1,
-                        rCellPos.Row() + nMatrixRows - 1,
+                        std::min<SCCOL>(rCellPos.Col() + nMatrixCols - 1, MAXCOL),
+                        std::min<SCROW>(rCellPos.Row() + nMatrixRows - 1, MAXROW),
                         pOUFormula->first, pOUFormula->second, eGrammar);
 
                 //set the value/text of the first matrix position (top-left).
