@@ -119,6 +119,8 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
 {
     PutInOrder(nCol1, nCol2);
     PutInOrder(nRow1, nRow2);
+    nCol2 = std::min<SCCOL>(nCol2, MAXCOL);
+    nRow2 = std::min<SCROW>(nRow2, MAXROW);
     if (!rMark.GetSelectCount())
     {
         SAL_WARN("sc", "ScDocument::InsertMatrixFormula Keine Tabelle markiert");
