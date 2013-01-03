@@ -326,6 +326,7 @@ void SfxPrinterController::jobStarted()
             now.Get100Sec(), now.GetSec(), now.GetMin(), now.GetHour(),
             now.GetDay(), now.GetMonth(), now.GetYear() ) );
 
+        SFX_APP()->NotifyEvent( SfxEventHint(SFX_EVENT_PRINTDOC, GlobalEventConfig::GetEventName( STR_EVENT_PRINTDOC ), mpObjectShell ) );
         // FIXME: how to get all print options incl. AdditionalOptions easily?
         uno::Sequence < beans::PropertyValue > aOpts;
         mpObjectShell->Broadcast( SfxPrintingHint( view::PrintableState_JOB_STARTED, aOpts ) );
