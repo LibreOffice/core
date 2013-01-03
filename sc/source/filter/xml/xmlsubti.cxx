@@ -220,6 +220,8 @@ void ScMyTables::AddColStyle(const sal_Int32 nRepeat, const rtl::OUString& rCell
 {
     rImport.GetStylesImportHelper()->AddColumnStyle(rCellStyleName, nCurrentColCount, nRepeat);
     nCurrentColCount += nRepeat;
+    SAL_WARN_IF(nCurrentColCount > MAXCOL, "sc", "more columns than fit into SCCOL");
+    nCurrentColCount = std::min<sal_Int32>( nCurrentColCount, MAXCOL );
 }
 
 uno::Reference< drawing::XDrawPage > ScMyTables::GetCurrentXDrawPage()
