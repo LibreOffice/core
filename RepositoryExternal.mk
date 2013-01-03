@@ -129,7 +129,7 @@ endif
 ifeq (SANE,$(filter SANE,$(BUILD_TYPE))$(filter WNT,$(OS)))
 
 define gb_LinkTarget__use_sane_headers
-$(call gb_Library_use_packages,$(1),\
+$(call gb_LinkTarget_use_packages,$(1),\
 	sane_inc \
 )
 
