@@ -9,3 +9,14 @@
  endif
  
  $(OBJDIR)/%.$(OBJ_SUFFIX): %.cpp
+--- misc/nss-3.13.5/mozilla/security/coreconf/rules.mk	2008-12-03 00:24:39.000000000 +0100
++++ misc/build/nss-3.13.5/mozilla/security/coreconf/rules.mk	2009-11-27 13:36:22.662753328 +0100
+@@ -411,7 +411,7 @@
+ endif
+ 
+ # The quotes allow absolute paths to contain spaces.
+-core_abspath = "$(if $(findstring :,$(1)),$(1),$(if $(filter /%,$(1)),$(1),$(PWD)/$(1)))"
++core_abspath = "$(if $(findstring :,$(1)),$(1),$(if $(filter /%,$(shell cygpath -m $(1))),$(1),$(shell cygpath -m $(PWD)/$(1))))"
+ 
+ $(OBJDIR)/$(PROG_PREFIX)%$(OBJ_SUFFIX): %.c
+ 	@$(MAKE_OBJDIR)
