@@ -5708,7 +5708,9 @@ istringstream strm( "test" ); return 0;
         LDFLAGS=$sharedlink_ldflags_save
     fi
 
-    if test "$HAVE_GCC_VISIBILITY_FEATURE" = "TRUE" -a "$HAVE_GCC_VISIBILITY_BROKEN" != "TRUE"; then
+    # As the below test checks things when linking self-compiled dynamic libraries, it presumably is irrelevant
+    # when we don't make any dynamic libraries?
+    if test "$DISABLE_DYNLOADING" = "" -a "$HAVE_GCC_VISIBILITY_FEATURE" = "TRUE" -a "$HAVE_GCC_VISIBILITY_BROKEN" != "TRUE"; then
         AC_MSG_CHECKING([if gcc is -fvisibility-inlines-hidden safe (Clang bug 11250)])
         cat > conftestlib1.cc <<_ACEOF
 template<typename T> struct S1 { virtual ~S1() {} virtual void f() {} };
