@@ -82,13 +82,13 @@ Menu RID_MENU_SPELL
             SubMenu = Menu
             {
             };
-            Text [ en-US ] = "~Add" ;
+            Text [ en-US ] = "~Add to Dictionary" ;
         };
         MenuItem
         {
             Identifier = MN_INSERT_SINGLE ;
             HelpId = HID_EDITENG_SPELLER_ADDWORD;
-            Text [ en-US ] = "~Add" ;
+            Text [ en-US ] = "~Add to Dictionary" ;
         };
         MenuItem
         {
