@@ -370,7 +370,7 @@ void SpellDialog::UpdateBoxes_Impl()
         m_pExplainLink->Hide();
     }
 
-    if (bOldShowExplain != m_pExplainLink->IsVisible() || bOldShowGrammar != m_pCheckGrammarCB->IsVisible())
+    if (bOldShowExplain != (bool) m_pExplainLink->IsVisible() || bOldShowGrammar != (bool) m_pCheckGrammarCB->IsVisible())
         setInitialLayoutSize();
 }
 // -----------------------------------------------------------------------
