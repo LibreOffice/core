@@ -1002,8 +1002,8 @@ void ScXMLTableRowCellContext::PutFormulaCell( const ScAddress& rCellPos )
     rtl::OUString aText = pOUFormula->first;
     rtl::OUString aFormulaNmsp = pOUFormula->second;
 
-    ::boost::scoped_ptr<ScExternalRefManager::ApiGuard> pExtRefGuard;
-    pExtRefGuard.reset(new ScExternalRefManager::ApiGuard(pDoc));
+    ::boost::scoped_ptr<ScExternalRefManager::ApiGuard> pExtRefGuard (
+            new ScExternalRefManager::ApiGuard(pDoc));
 
 
     if ( !aText.isEmpty() )
