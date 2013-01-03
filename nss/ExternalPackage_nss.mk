@@ -63,8 +63,10 @@ $(eval $(call gb_ExternalPackage_add_files,nss,lib,\
 ))
 endif
 $(eval $(call gb_ExternalPackage_add_files,nss,bin,\
+		mozilla/dist/out/lib/freebl3.dll \
 		mozilla/dist/out/lib/nspr4.dll \
 		mozilla/dist/out/lib/nss3.dll \
+		mozilla/dist/out/lib/nssckbi.dll \
 		mozilla/dist/out/lib/nssdbm3.dll \
 		mozilla/dist/out/lib/nssutil3.dll \
 		mozilla/dist/out/lib/plc4.dll \
