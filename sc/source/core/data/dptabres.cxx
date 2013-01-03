@@ -72,17 +72,7 @@ static sal_uInt16 nFuncStrIds[12] =     // passend zum enum ScSubTotalFunc
     STR_FUN_TEXT_VAR                // SUBTOTAL_FUNC_VARP
 };
 namespace {
-    template < typename T >
-    void lcl_ResizePointVector( T & vec, size_t nSize )
-    {
 
-        for ( size_t i = 0 ; i < vec.size(); i++ )
-        {
-            if ( vec[i] )
-                delete vec[i];
-        }
-        vec.resize( nSize, NULL );
-    }
     sal_Bool lcl_SearchMember( const std::vector <ScDPResultMember *>& list, SCROW nOrder, SCROW& rIndex)
     {
         rIndex = list.size();
@@ -740,8 +730,6 @@ ScDPResultData::ScDPResultData( ScDPSource* pSrc ) :        //! Ref
     bDataAtCol( false ),
     bDataAtRow( false )
 {
-
-    lcl_ResizePointVector( mpDimMembers , SC_DP_MAX_FIELDS );
 }
 
 ScDPResultData::~ScDPResultData()
@@ -750,7 +738,7 @@ ScDPResultData::~ScDPResultData()
     delete[] pMeasRefs;
     delete[] pMeasRefOrient;
 
-      lcl_ResizePointVector( mpDimMembers , 0 );
+    std::for_each(maDimMembers.begin(), maDimMembers.end(), ScDeleteObjectByPtr<ResultMembers>());
 }
 
 void ScDPResultData::SetMeasureData( long nCount, const ScSubTotalFunc* pFunctions,
@@ -924,8 +912,10 @@ const ScDPSource* ScDPResultData::GetSource() const
 
 ResultMembers* ScDPResultData::GetDimResultMembers(long nDim, ScDPDimension* pDim, ScDPLevel* pLevel) const
 {
-    if (mpDimMembers[nDim])
-        return mpDimMembers[nDim];
+    if (nDim < static_cast<long>(maDimMembers.size()) && maDimMembers[nDim])
+        return maDimMembers[nDim];
+
+    maDimMembers.resize(nDim+1, NULL);
 
     ResultMembers* pResultMembers = new ResultMembers();
     // global order is used to initialize aMembers, so it doesn't have to be looked at later
@@ -944,8 +934,8 @@ ResultMembers* ScDPResultData::GetDimResultMembers(long nDim, ScDPDimension* pDi
         }
     }
 
-    mpDimMembers[nDim] = pResultMembers;
-    return mpDimMembers[nDim];
+    maDimMembers[nDim] = pResultMembers;
+    return maDimMembers[nDim];
 }
 
 // -----------------------------------------------------------------------
