@@ -43,6 +43,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/sdb/OrderDialog.hpp>
 #include <com/sun/star/sdb/FilterDialog.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
@@ -2644,12 +2645,7 @@ namespace pcr
             }
             else
             {
-                const sal_Char* pAsciiServiceName = "com.sun.star.sdb.OrderDialog";
-                if ( !m_aContext.createComponent( pAsciiServiceName, xDialog ) )
-                {
-                    ShowServiceNotAvailableError( impl_getDefaultDialogParent_nothrow(), ::rtl::OUString::createFromAscii( pAsciiServiceName ), sal_True );
-                    return false;
-                }
+                xDialog.set( sdb::OrderDialog::createDefault(m_aContext.getUNOContext()) );
             }
 
 

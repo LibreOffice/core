@@ -153,6 +153,7 @@ namespace dbaui
     {
         if( aArguments.getLength() == 3 )
         {
+            // this is the FilterDialog::createWithQuery method
             Reference<com::sun::star::sdb::XSingleSelectQueryComposer> xQueryComposer;
             aArguments[0] >>= xQueryComposer;
             Reference<com::sun::star::sdbc::XRowSet> xRowSet;
@@ -192,6 +193,22 @@ namespace dbaui
     Dialog* RowsetOrderDialog::createComposerDialog( Window* _pParent, const Reference< XConnection >& _rxConnection, const Reference< XNameAccess >& _rxColumns )
     {
         return new DlgOrderCrit( _pParent, _rxConnection, m_xComposer, _rxColumns );
+    }
+
+    //---------------------------------------------------------------------
+    void SAL_CALL RowsetOrderDialog::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException)
+    {
+        if( aArguments.getLength() == 2 )
+        {
+            Reference<com::sun::star::sdb::XSingleSelectQueryComposer> xQueryComposer;
+            aArguments[0] >>= xQueryComposer;
+            Reference<com::sun::star::beans::XPropertySet> xRowSet;
+            aArguments[1] >>= xRowSet;
+            setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "QueryComposer" ) ), makeAny( xQueryComposer ) );
+            setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RowSet" ) ),        makeAny( xRowSet ) );
+        }
+        else
+            ComposerDialog::initialize(aArguments);
     }
 
     //---------------------------------------------------------------------

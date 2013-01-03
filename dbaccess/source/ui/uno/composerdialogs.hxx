@@ -125,6 +125,8 @@ namespace dbaui
 
         // OGenericUnoDialog overridables
         virtual void executedDialog( sal_Int16 _nExecutionResult );
+        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aArguments )
+            throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException);
     };
 
 //.........................................................................

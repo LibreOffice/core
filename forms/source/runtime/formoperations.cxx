@@ -37,6 +37,7 @@
 #include <com/sun/star/form/XConfirmDeleteListener.hpp>
 #include <com/sun/star/sdb/RowChangeEvent.hpp>
 #include <com/sun/star/sdb/RowChangeAction.hpp>
+#include <com/sun/star/sdb/OrderDialog.hpp>
 #include <com/sun/star/sdb/FilterDialog.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/form/XReset.hpp>
@@ -1615,25 +1616,7 @@ namespace frm
             }
             else
             {
-                PropertyValue aFirst;
-                aFirst.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "QueryComposer" ) );
-                aFirst.Value <<= m_xParser;
-
-                PropertyValue aSecond;
-                aSecond.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RowSet" ) );
-                aSecond.Value <<= m_xCursorProperties;
-
-                Sequence<Any> aInit(2);
-                aInit[0] <<= aFirst;
-                aInit[1] <<= aSecond;
-
-                ::rtl::OUString sDialogServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.OrderDialog" ) );
-                m_aContext.createComponentWithArguments( sDialogServiceName, aInit, xDialog );
-                if ( !xDialog.is() )
-                {
-                    ShowServiceNotAvailableError( NULL, sDialogServiceName, sal_True );
-                    return;
-                }
+                xDialog = com::sun::star::sdb::OrderDialog::createWithQuery(m_aContext.getUNOContext(), m_xParser, m_xCursorProperties);
             }
 
 
