@@ -294,7 +294,7 @@ private:
     bool                    bDataAtRow:1;
 
     //! add "displayed values" settings
-    mutable std::vector< ResultMembers* > mpDimMembers;
+    mutable std::vector<ResultMembers*> maDimMembers;
 public:
                         ScDPResultData( ScDPSource* pSrc );     //! Ref
                         ~ScDPResultData();
