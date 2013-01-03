@@ -57,6 +57,7 @@
 
 # backup and temporary editor files: the only convinience rules allowed here.
 *~
+.*sw?
 \#*
 
 # things below this point are targeted for elimination
