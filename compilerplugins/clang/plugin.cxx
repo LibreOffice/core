@@ -253,7 +253,7 @@ class PluginHandler
                 else if( strncmp( e->getName(), WORKDIR, strlen( WORKDIR )) == 0 )
                     diag.Report( diag.getCustomDiagID( DiagnosticsEngine::Warning,
                         "modified source in workdir/ : %0 [loplugin]" )) << e->getName();
-                else if( strncmp( e->getName(), BUILDDIR, strlen( BUILDDIR )) == 0 )
+                else if( strcmp( SRCDIR, BUILDDIR ) != 0 && strncmp( e->getName(), BUILDDIR, strlen( BUILDDIR )) == 0 )
                     diag.Report( diag.getCustomDiagID( DiagnosticsEngine::Warning,
                         "modified source in build dir : %0 [loplugin]" )) << e->getName();
                 else if( strncmp( e->getName(), SRCDIR, strlen( SRCDIR )) == 0 )
