@@ -97,45 +97,6 @@ gb_DEBUG_CFLAGS := -g
 gb_COMPILEROPTFLAGS := -O2
 gb_COMPILERNOOPTFLAGS := -O0
 
-# ObjCxxObject class
-
-define gb_ObjCxxObject__command
-$(call gb_Output_announce,$(2).mm,$(true),OCX,3)
-$(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(1)) $(dir $(4)) && \
-	$(gb_CXX) \
-		$(DEFS) \
-		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
-		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CXXFLAGS_WERROR)) \
-		$(T_OBJCXXFLAGS) \
-		-c $(3) \
-		-o $(1) \
-		-MMD -MT $(1) \
-		-MP -MF $(4) \
-		-I$(dir $(3)) \
-		$(INCLUDE))
-endef
-
-# ObjCObject class
-
-define gb_ObjCObject__command
-$(call gb_Output_announce,$(2).m,$(true),OCC,3)
-$(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(1)) $(dir $(4)) && \
-	$(gb_CC) \
-		$(DEFS) \
-		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
-		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \
-		$(T_OBJCFLAGS) \
-		-c $(3) \
-		-o $(1) \
-		-MMD -MT $(1) \
-		-MP -MF $(4) \
-		-I$(dir $(3)) \
-		$(INCLUDE))
-endef
-
-
 # LinkTarget class
 
 define gb_LinkTarget__get_rpath_for_layer

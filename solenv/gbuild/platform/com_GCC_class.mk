@@ -132,6 +132,44 @@ $(call gb_Helper_abbreviate_dirs,\
 		)
 endef
 
+# ObjCxxObject class
+
+define gb_ObjCxxObject__command
+$(call gb_Output_announce,$(2).mm,$(true),OCX,3)
+$(call gb_Helper_abbreviate_dirs,\
+	mkdir -p $(dir $(1)) $(dir $(4)) && \
+	$(gb_CXX) \
+		$(DEFS) \
+		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
+		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CXXFLAGS_WERROR)) \
+		$(T_OBJCXXFLAGS) \
+		-c $(3) \
+		-o $(1) \
+		-MMD -MT $(1) \
+		-MP -MF $(4) \
+		-I$(dir $(3)) \
+		$(INCLUDE))
+endef
+
+# ObjCObject class
+
+define gb_ObjCObject__command
+$(call gb_Output_announce,$(2).m,$(true),OCC,3)
+$(call gb_Helper_abbreviate_dirs,\
+	mkdir -p $(dir $(1)) $(dir $(4)) && \
+	$(gb_CC) \
+		$(DEFS) \
+		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
+		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \
+		$(T_OBJCFLAGS) \
+		-c $(3) \
+		-o $(1) \
+		-MMD -MT $(1) \
+		-MP -MF $(4) \
+		-I$(dir $(3)) \
+		$(INCLUDE))
+endef
+
 define gb_SrsPartTarget__command_dep
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(call gb_SrsPartTarget_get_dep_target,$(1))) && cd $(SRCDIR) && \
