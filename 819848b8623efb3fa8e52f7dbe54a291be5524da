@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAASX///2w\u003d",
+        "filename": "basic/source/uno/namecont.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-01-03T17:07:41Z",
+      "side": 1,
+      "message": "It is not necessary to explicitly keep the helper string object where suitable, especially in a simple case like here. This one can be made even more easily readable as \u0027throw NoSuchElementException( \"\\\"\" + aName ...\u0027.",
+      "revId": "819848b8623efb3fa8e52f7dbe54a291be5524da",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
