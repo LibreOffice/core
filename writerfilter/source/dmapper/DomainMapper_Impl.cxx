@@ -279,8 +279,21 @@ void DomainMapper_Impl::RemoveLastParagraph( )
         }
         else
             xCursor.set(m_aTextAppendStack.top().xCursor, uno::UNO_QUERY);
-        xCursor->goLeft( 1, true );
-        xCursor->setString(OUString());
+        uno::Reference<container::XEnumerationAccess> xEnumerationAccess(xCursor, uno::UNO_QUERY);
+        // Keep the character properties of the last but one paragraph, even if
+        // it's empty. This works for headers/footers, and maybe in other cases
+        // as well, but surely not in textboxes.
+        if (m_bInHeaderFooterImport && xEnumerationAccess.is())
+        {
+            uno::Reference<container::XEnumeration> xEnumeration = xEnumerationAccess->createEnumeration();
+            uno::Reference<lang::XComponent> xParagraph(xEnumeration->nextElement(), uno::UNO_QUERY);
+            xParagraph->dispose();
+        }
+        else
+        {
+            xCursor->goLeft( 1, true );
+            xCursor->setString(OUString());
+        }
     }
     catch( const uno::Exception& )
     {
