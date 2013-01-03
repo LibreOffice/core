@@ -127,8 +127,8 @@ static SfxBindings* getBindings( ViewShellBase& rBase )
 {
     if( rBase.GetMainViewShell().get() && rBase.GetMainViewShell()->GetViewFrame() )
         return &rBase.GetMainViewShell()->GetViewFrame()->GetBindings();
-    else
-        return 0;
+
+    return 0;
 }
 
 // --------------------------------------------------------------------
@@ -137,8 +137,8 @@ static SfxDispatcher* getDispatcher( ViewShellBase& rBase )
 {
     if( rBase.GetMainViewShell().get() && rBase.GetMainViewShell()->GetViewFrame() )
         return rBase.GetMainViewShell()->GetViewFrame()->GetDispatcher();
-    else
-        return 0;
+
+    return 0;
 }
 
 com::sun::star::util::DateTime getCurrentDateTime()
@@ -161,11 +161,9 @@ OUString getAnnotationDateTimeString( const Reference< XAnnotation >& xAnnotatio
         Date aDate = Date( aDateTime.Day, aDateTime.Month, aDateTime.Year );
         if (aDate==aSysDate)
             sRet = sRet + String(SdResId(STR_ANNOTATION_TODAY));
-        else
-        if (aDate == Date(aSysDate-1))
+        else if (aDate == Date(aSysDate-1))
             sRet = sRet + String(SdResId(STR_ANNOTATION_YESTERDAY));
-        else
-        if (aDate.IsValidAndGregorian() )
+        else if (aDate.IsValidAndGregorian() )
             sRet = sRet + rLocalData.getDate(aDate);
 
         Time aTime( aDateTime.Hours, aDateTime.Minutes, aDateTime.Seconds, aDateTime.HundredthSeconds );
@@ -1101,8 +1099,8 @@ Color AnnotationManagerImpl::GetColor(sal_uInt16 aAuthorIndex)
 
         return Color( aArrayNormal[ aAuthorIndex % (sizeof( aArrayNormal )/ sizeof( aArrayNormal[0] ))]);
     }
-    else
-        return Color(COL_WHITE);
+
+    return Color(COL_WHITE);
 }
 
 Color AnnotationManagerImpl::GetColorLight(sal_uInt16 aAuthorIndex)
@@ -1116,8 +1114,8 @@ Color AnnotationManagerImpl::GetColorLight(sal_uInt16 aAuthorIndex)
 
         return Color( aArrayLight[ aAuthorIndex % (sizeof( aArrayLight )/ sizeof( aArrayLight[0] ))]);
     }
-    else
-        return Color(COL_WHITE);
+
+    return Color(COL_WHITE);
 }
 
 Color AnnotationManagerImpl::GetColorDark(sal_uInt16 aAuthorIndex)
@@ -1131,8 +1129,8 @@ Color AnnotationManagerImpl::GetColorDark(sal_uInt16 aAuthorIndex)
 
         return Color( aArrayAnkor[  aAuthorIndex % (sizeof( aArrayAnkor )   / sizeof( aArrayAnkor[0] ))]);
     }
-    else
-        return Color(COL_WHITE);
+
+    return Color(COL_WHITE);
 }
 
 SdPage* AnnotationManagerImpl::GetNextPage( SdPage* pPage, bool bForeward )
