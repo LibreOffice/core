@@ -717,13 +717,33 @@ SwLinePortion *SwHolePortion::Compress() { return this; }
 
 void SwHolePortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
-    // #i16816# tagged pdf support
-    if( rInf.GetVsh() && rInf.GetVsh()->GetViewOptions()->IsPDFExport() &&
-        SwTaggedPDFHelper::IsExportTaggedPDF( *rInf.GetOut()) )
+    if( !rInf.GetOut() )
+        return;
+
+    // #i16816# export stuff only needed for tagged pdf support
+    if (!SwTaggedPDFHelper::IsExportTaggedPDF( *rInf.GetOut()) )
+        return;
+
+    // #i68503# the hole must have no decoration for a consistent visual appearance
+    const SwFont* pOrigFont = rInf.GetFont();
+    SwFont* pHoleFont = NULL;
+    SwFontSave* pFontSave = NULL;
+    if( pOrigFont->GetUnderline() != UNDERLINE_NONE
+    ||  pOrigFont->GetOverline() != UNDERLINE_NONE
+    ||  pOrigFont->GetStrikeout() != STRIKEOUT_NONE )
     {
-        const OUString aTxt( ' ' );
-        rInf.DrawText( aTxt, *this, 0, 1, false );
+        pHoleFont = new SwFont( *pOrigFont );
+        pHoleFont->SetUnderline( UNDERLINE_NONE );
+        pHoleFont->SetOverline( UNDERLINE_NONE );
+        pHoleFont->SetStrikeout( STRIKEOUT_NONE );
+        pFontSave = new SwFontSave( rInf, pHoleFont );
     }
+
+    const OUString aTxt( ' ' );
+    rInf.DrawText( aTxt, *this, 0, 1, false );
+
+    delete pFontSave;
+    delete pHoleFont;
 }
 
 /*************************************************************************
