@@ -106,18 +106,6 @@ SvxPersonalizationTabPage::SvxPersonalizationTabPage( Window *pParent, const Sfx
 
     get( m_pSelectPersona, "select_persona" );
     m_pSelectPersona->SetClickHdl( LINK( this, SvxPersonalizationTabPage, SelectPersona ) );
-
-#ifndef __WIN32__
-    // so far available for Windows only
-    Window *pWindow;
-    get( pWindow, "personas_label" );
-    pWindow->Hide();
-
-    m_pNoPersona->Hide();
-    m_pDefaultPersona->Hide();
-    m_pOwnPersona->Hide();
-    m_pSelectPersona->Hide();
-#endif
 }
 
 SvxPersonalizationTabPage::~SvxPersonalizationTabPage()
