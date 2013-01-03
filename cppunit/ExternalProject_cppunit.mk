@@ -45,10 +45,10 @@ $(call gb_ExternalProject_get_state_target,cppunit,build) :
 		--disable-latex-docs \
 		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________NONE) \
-		$(if $(filter-out WNT,$(OS)),,CXXFLAGS="-mthreads" LDFLAGS="-Wl,--enable-runtime-pseudo-reloc-v2") \
+		$(if $(filter WNT,$(OS)),LDFLAGS="-Wl$(COMMA)--enable-runtime-pseudo-reloc-v2") \
 		$(if $(filter SOLARIS,$(OS)),LIBS="-lm") \
 		$(if $(filter ANDROID,$(OS)),LIBS="-lgnustl_shared -lm") \
-		CXXFLAGS="$(if $(filter GCC,$(COM)),$(if $(filter LINUX FREEBSD OPENBSD NETBSD DRAGONFLY ANDROID,$(OS)),$(if $(filter-out full,$(PRODUCT)),-D_GLIBCXX_DEBUG))) \
+		CXXFLAGS="$(if $(filter GCC,$(COM)),$(if $(filter LINUX FREEBSD OPENBSD NETBSD DRAGONFLY ANDROID,$(OS)),$(if $(filter-out full,$(PRODUCT)),-D_GLIBCXX_DEBUG),$(if $(filter WNT,$(OS)),-mthreads))) \
 		$(if $(debug),-g)" \
 	&& cd src \
 	&& $(MAKE) \
