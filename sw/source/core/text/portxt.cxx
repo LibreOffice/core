@@ -49,6 +49,7 @@
 #include <pam.hxx>
 #include <doc.hxx>
 #include <xmloff/odffields.hxx>
+#include <vcl/pdfextoutdevdata.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
 const sal_Char *GetLangName( const MSHORT nLang );
@@ -739,13 +740,34 @@ SwLinePortion *SwHolePortion::Compress() { return this; }
 
 void SwHolePortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
-    // --> FME 2004-06-24 #i16816# tagged pdf support
-    if( rInf.GetVsh() && rInf.GetVsh()->GetViewOptions()->IsPDFExport() )
+    if( !rInf.GetOut() )
+        return;
+
+    // #i16816# export stuff only needed for tagged pdf support
+    const vcl::PDFExtOutDevData* pPDFExt = dynamic_cast<const vcl::PDFExtOutDevData*>( rInf.GetOut()->GetExtOutDevData() );
+    if( !pPDFExt || !pPDFExt->GetIsExportTaggedPDF())
+        return;
+
+    // #i68503# the hole must have no decoration for a consistent visual appearance
+    const SwFont* pOrigFont = rInf.GetFont();
+    SwFont* pHoleFont = NULL;
+    SwFontSave* pFontSave = NULL;
+    if( pOrigFont->GetUnderline() != UNDERLINE_NONE
+    ||  pOrigFont->GetOverline() != UNDERLINE_NONE
+    ||  pOrigFont->GetStrikeout() != STRIKEOUT_NONE )
     {
-        const XubString aTxt( ' ' );
-        rInf.DrawText( aTxt, *this, 0, 1, false );
+        pHoleFont = new SwFont( *pOrigFont );
+        pHoleFont->SetUnderline( UNDERLINE_NONE );
+        pHoleFont->SetOverline( UNDERLINE_NONE );
+        pHoleFont->SetStrikeout( STRIKEOUT_NONE );
+        pFontSave = new SwFontSave( rInf, pHoleFont );
     }
-    // <--
+
+    const XubString aTxt( ' ' );
+    rInf.DrawText( aTxt, *this, 0, 1, false );
+
+    delete pFontSave;
+    delete pHoleFont;
 }
 
 /*************************************************************************
