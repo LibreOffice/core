@@ -1,0 +1,11 @@
+--- misc/nss-3.13.5/mozilla/nsprpub/config/rules.mk	2008-12-03 00:24:39.000000000 +0100
++++ misc/build/nss-3.13.5/mozilla/nsprpub/config/rules.mk	2009-11-27 13:36:22.662753328 +0100
+@@ -415,7 +415,7 @@
+ 
+ ifdef NEED_ABSOLUTE_PATH
+ # The quotes allow absolute paths to contain spaces.
+-pr_abspath = "$(if $(findstring :,$(1)),$(1),$(if $(filter /%,$(1)),$(1),$(CURDIR)/$(1)))"
++pr_abspath = "$(if $(findstring :,$(1)),$(1),$(if $(filter /%,$(shell cygpath -m $(1))),$(1),$(shell cygpath -m $(CURDIR)/$(1))))"
+ endif
+ 
+ $(OBJDIR)/%.$(OBJ_SUFFIX): %.cpp
