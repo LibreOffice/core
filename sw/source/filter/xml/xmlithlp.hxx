@@ -44,13 +44,6 @@ sal_Bool sw_frmitems_parseXMLBorder( const ::rtl::OUString& rValue,
                                       sal_uInt16& rNamedWidth,
                                       sal_Bool& rHasColor, Color& rColor );
 
-void sw_frmitems_setXMLBorderWidth( editeng::SvxBorderLine& rLine,
-                                     sal_uInt16 nOutWidth, sal_uInt16 nInWidth,
-                                     sal_uInt16 nDistance );
-
-void sw_frmitems_setXMLBorderWidth( editeng::SvxBorderLine& rLine,
-                                     sal_uInt16 nWidth, sal_Bool bDouble );
-
 sal_Bool sw_frmitems_setXMLBorder( editeng::SvxBorderLine*& rpLine,
                                     sal_Bool bHasStyle, sal_uInt16 nStyle,
                                     sal_Bool bHasWidth, sal_uInt16 nWidth,
@@ -66,9 +59,6 @@ void sw_frmitems_MergeXMLHoriPos( SvxGraphicPosition& ePos,
 
 void sw_frmitems_MergeXMLVertPos( SvxGraphicPosition& ePos,
                                      SvxGraphicPosition eVert );
-
-extern const sal_uInt16 aSBorderWidths[];
-extern const sal_uInt16 aDBorderWidths[5*11];
 
 extern const struct SvXMLEnumMapEntry psXML_BorderStyles[];
 extern const struct SvXMLEnumMapEntry psXML_NamedBorderWidths[];
