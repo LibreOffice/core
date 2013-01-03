@@ -28,7 +28,7 @@ module com {  module sun {  module star {  module sheet {
 
     @see com::sun::star::sheet::XDataPilotMemberResults
  */
-published struct MemberResult
+struct MemberResult
 {
     /** the internal name of the field.
      */

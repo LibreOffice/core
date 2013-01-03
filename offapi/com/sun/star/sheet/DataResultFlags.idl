@@ -29,7 +29,7 @@ module com {  module sun {  module star {  module sheet {
 
     @see com::sun::star::sheet::DataResult
  */
-published constants DataResultFlags
+constants DataResultFlags
 {
 
     /** The element contains data.
