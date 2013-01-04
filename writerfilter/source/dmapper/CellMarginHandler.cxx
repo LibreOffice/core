@@ -84,6 +84,7 @@ void CellMarginHandler::lcl_sprm(Sprm & rSprm)
         switch( rSprm.getId() )
         {
             case NS_ooxml::LN_CT_TblCellMar_top:
+            case NS_ooxml::LN_CT_TcMar_top:
                 m_nTopMargin = m_nValue;
                 m_bTopMarginValid = true;
             break;
@@ -100,10 +101,12 @@ void CellMarginHandler::lcl_sprm(Sprm & rSprm)
                 }
             break;
             case NS_ooxml::LN_CT_TblCellMar_left:
+            case NS_ooxml::LN_CT_TcMar_left:
                 m_nLeftMargin = m_nValue;
                 m_bLeftMarginValid = true;
             break;
             case NS_ooxml::LN_CT_TblCellMar_bottom:
+            case NS_ooxml::LN_CT_TcMar_bottom:
                 m_nBottomMargin = m_nValue;
                 m_bBottomMarginValid = true;
             break;
@@ -120,11 +123,12 @@ void CellMarginHandler::lcl_sprm(Sprm & rSprm)
                 }
             break;
             case NS_ooxml::LN_CT_TblCellMar_right:
+            case NS_ooxml::LN_CT_TcMar_right:
                 m_nRightMargin = m_nValue;
                 m_bRightMarginValid = true;
             break;
             default:
-                OSL_FAIL( "unknown attribute");
+                OSL_FAIL( "unknown sprm");
         }
     }
     m_nValue = 0;

@@ -152,6 +152,26 @@ namespace dmapper {
                 }
             }
             break;
+            case NS_ooxml::LN_CT_TcPrBase_tcMar:
+                {
+                    writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+                    if (pProperties.get())
+                    {
+                        CellMarginHandlerPtr pCellMarginHandler(new CellMarginHandler);
+                        pProperties->resolve(*pCellMarginHandler);
+                        TablePropertyMapPtr pCellProperties(new TablePropertyMap);
+                        if (pCellMarginHandler->m_bTopMarginValid)
+                            pCellProperties->Insert(PROP_TOP_BORDER_DISTANCE, false, uno::makeAny(pCellMarginHandler->m_nTopMargin));
+                        if (pCellMarginHandler->m_bLeftMarginValid)
+                            pCellProperties->Insert(PROP_LEFT_BORDER_DISTANCE, false, uno::makeAny(pCellMarginHandler->m_nLeftMargin));
+                        if (pCellMarginHandler->m_bBottomMarginValid)
+                            pCellProperties->Insert(PROP_BOTTOM_BORDER_DISTANCE, false, uno::makeAny(pCellMarginHandler->m_nBottomMargin));
+                        if (pCellMarginHandler->m_bRightMarginValid)
+                            pCellProperties->Insert(PROP_RIGHT_BORDER_DISTANCE, false, uno::makeAny(pCellMarginHandler->m_nRightMargin));
+                        cellProps(pCellProperties);
+                    }
+                }
+            break;
             case NS_ooxml::LN_CT_TblPrBase_shd:
             {
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
