@@ -55,7 +55,7 @@ Menu MN_SPELL_POPUP
             SubMenu = Menu
             {
             };
-            Text [ en-US ] = "AutoCorrect" ;
+            Text [ en-US ] = "Always correct to" ;
         };
         MenuItem
         {
