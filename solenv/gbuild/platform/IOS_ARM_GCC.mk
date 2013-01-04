@@ -116,7 +116,7 @@ define gb_LinkTarget__command_dynamiclink
 		$(gb_Executable_TARGETTYPEFLAGS) \
 		$(subst \d,$$,$(RPATH)) \
 		$(T_LDFLAGS) \
-		-Wl$(COMMA)-dead_strip \
+		-dead_strip -fobjc_link_runtime \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
 		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
