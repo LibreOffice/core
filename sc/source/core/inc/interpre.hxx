@@ -33,13 +33,14 @@
 #include <math.h>
 #include <map>
 
-// Policy definition for STLPORT
+// STLport definitions
 // This works around some issues with Boost
+//
 #ifdef WNT
 #define _STLP_HAS_NATIVE_FLOAT_ABS
 #endif
 
-// Policy Definitions for Boost math.
+// Math policy definitions for Boost
 // This header must be included before including any Boost
 // math function.
 //
