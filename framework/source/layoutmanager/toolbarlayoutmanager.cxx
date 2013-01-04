@@ -1030,7 +1030,9 @@ void ToolbarLayoutManager::implts_createAddonsToolBars()
                     }
                 }
 
-                OUString aGenericAddonTitle = implts_generateGenericAddonToolbarTitle( i+1 );
+                OUString aAddonUIName = m_pAddonOptions->GetAddonsToolbarUIName( i );
+                OUString aAddonTitle = aAddonUIName.getLength() ?
+                    aAddonUIName : implts_generateGenericAddonToolbarTitle( i+1 );
 
                 if ( !aElement.m_aName.isEmpty() )
                 {
@@ -1040,7 +1042,7 @@ void ToolbarLayoutManager::implts_createAddonsToolBars()
                     aElement.m_xUIElement = xUIElement;
                     if ( aElement.m_aUIName.isEmpty() )
                     {
-                        aElement.m_aUIName = aGenericAddonTitle;
+                        aElement.m_aUIName = aAddonTitle;
                         implts_writeWindowStateData( aElement );
                     }
                 }
@@ -1053,7 +1055,7 @@ void ToolbarLayoutManager::implts_createAddonsToolBars()
                     implts_setElementData( aNewToolbar, xDockWindow );
                     if ( aNewToolbar.m_aUIName.isEmpty() )
                     {
-                        aNewToolbar.m_aUIName = aGenericAddonTitle;
+                        aNewToolbar.m_aUIName = aAddonTitle;
                         implts_writeWindowStateData( aNewToolbar );
                     }
                     implts_insertToolbar( aNewToolbar );
@@ -1066,7 +1068,7 @@ void ToolbarLayoutManager::implts_createAddonsToolBars()
                     SolarMutexGuard aGuard;
                     Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                     if ( pWindow->GetText().isEmpty() )
-                        pWindow->SetText( aGenericAddonTitle );
+                        pWindow->SetText( aAddonTitle );
                     if ( pWindow->GetType() == WINDOW_TOOLBOX )
                     {
                         ToolBox* pToolbar = (ToolBox *)pWindow;
@@ -1608,7 +1610,7 @@ void ToolbarLayoutManager::implts_writeWindowStateData( const UIElement& rElemen
     {
         try
         {
-            uno::Sequence< beans::PropertyValue > aWindowState( 8 );
+            uno::Sequence< beans::PropertyValue > aWindowState( 9 );
 
             aWindowState[0].Name  = OUString::createFromAscii( WINDOWSTATE_PROPERTY_DOCKED );
             aWindowState[0].Value = ::uno::makeAny( sal_Bool( !rElementData.m_bFloating ));
@@ -1631,6 +1633,8 @@ void ToolbarLayoutManager::implts_writeWindowStateData( const UIElement& rElemen
             aWindowState[6].Value = uno::makeAny( rElementData.m_aUIName );
             aWindowState[7].Name  = OUString::createFromAscii( WINDOWSTATE_PROPERTY_LOCKED );
             aWindowState[7].Value = uno::makeAny( rElementData.m_aDockedData.m_bLocked );
+            aWindowState[8].Name  = ::rtl::OUString::createFromAscii( WINDOWSTATE_PROPERTY_STYLE );
+            aWindowState[8].Value = uno::makeAny( rElementData.m_nStyle );
 
             OUString aName = rElementData.m_aName;
             if ( xPersistentWindowState->hasByName( aName ))
