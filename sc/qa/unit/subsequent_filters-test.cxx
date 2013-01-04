@@ -169,6 +169,8 @@ public:
 
     void testPivotTableBasicODS();
 
+    void testRowHeight();
+
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testRangeNameXLS);
     CPPUNIT_TEST(testRangeNameXLSX);
@@ -210,6 +212,7 @@ public:
     CPPUNIT_TEST(testCellAnchoredShapesODS);
 
     CPPUNIT_TEST(testPivotTableBasicODS);
+//  CPPUNIT_TEST(testRowHeight);
 
     //disable testPassword on MacOSX due to problems with libsqlite3
     //also crashes on DragonFly due to problems with nss/nspr headers
@@ -1565,6 +1568,59 @@ void ScFiltersTest::testPivotTableBasicODS()
     CPPUNIT_ASSERT_MESSAGE("There should be exactly 1 data field.", aDims.size() == 1);
     const ScDPSaveDimension* pDim = aDims.back();
     CPPUNIT_ASSERT_MESSAGE("Function for the data field should be COUNT.", pDim->GetFunction() == sheet::GeneralFunction_COUNT);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testRowHeight()
+{
+    OUString aFileNameBase("row-height-import.");
+    OUString aFileExt = OUString::createFromAscii(aFileFormats[ODS].pName);
+    OUString aFilterName = OUString::createFromAscii(aFileFormats[ODS].pFilterName);
+    OUString aFilterType = OUString::createFromAscii(aFileFormats[ODS].pTypeName);
+
+    rtl::OUString aFileName;
+    createFileURL(aFileNameBase, aFileExt, aFileName);
+
+    unsigned int nFormatType = aFileFormats[ODS].nFormatType;
+    unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
+    ScDocShellRef xDocSh = load(aFilterName, aFileName, rtl::OUString(), aFilterType,
+        nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
+
+    SCTAB nTab = 0;
+    SCROW nRow = 0;
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    // The first 3 rows have manual heights.
+    int nHeight = pDoc->GetRowHeight(nRow, nTab, false);
+    bool bManual = pDoc->IsManualRowHeight(nRow, nTab);
+    CPPUNIT_ASSERT_EQUAL(600, nHeight);
+    CPPUNIT_ASSERT_MESSAGE("this row should have a manual row height.", bManual);
+    nHeight = pDoc->GetRowHeight(++nRow, nTab, false);
+    bManual = pDoc->IsManualRowHeight(nRow, nTab);
+    CPPUNIT_ASSERT_EQUAL(1200, nHeight);
+    CPPUNIT_ASSERT_MESSAGE("this row should have a manual row height.", bManual);
+    nHeight = pDoc->GetRowHeight(++nRow, nTab, false);
+    bManual = pDoc->IsManualRowHeight(nRow, nTab);
+    CPPUNIT_ASSERT_EQUAL(1800, nHeight);
+    CPPUNIT_ASSERT_MESSAGE("this row should have a manual row height.", bManual);
+
+    // This one should have an automatic row height.
+    bManual = pDoc->IsManualRowHeight(++nRow, nTab);
+    CPPUNIT_ASSERT_MESSAGE("Row should have an automatic height.", !bManual);
+
+    // Followed by a row with manual height.
+    nHeight = pDoc->GetRowHeight(++nRow, nTab, false);
+    bManual = pDoc->IsManualRowHeight(nRow, nTab);
+    CPPUNIT_ASSERT_EQUAL(2400, nHeight);
+    CPPUNIT_ASSERT_MESSAGE("this row should have a manual row height.", bManual);
+
+    // And all the rest should have automatic heights.
+    bManual = pDoc->IsManualRowHeight(++nRow, nTab);
+    CPPUNIT_ASSERT_MESSAGE("Row should have an automatic height.", !bManual);
+
+    bManual = pDoc->IsManualRowHeight(MAXROW, nTab);
+    CPPUNIT_ASSERT_MESSAGE("Row should have an automatic height.", !bManual);
 
     xDocSh->DoClose();
 }

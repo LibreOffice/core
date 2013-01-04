@@ -1357,7 +1357,7 @@ public:
     SCROW                       LastNonFilteredRow(SCROW nStartRow, SCROW nEndRow, SCTAB nTab);
     SCROW                       CountNonFilteredRows(SCROW nStartRow, SCROW nEndRow, SCTAB nTab);
 
-    bool IsManualRowHeight(SCROW nRow, SCTAB nTab) const;
+    SC_DLLPUBLIC bool IsManualRowHeight(SCROW nRow, SCTAB nTab) const;
 
     /**
      * Write all column row flags to table's flag data, because not all column
