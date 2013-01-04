@@ -112,6 +112,7 @@ void DockingAreaWindow::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
         ImplInitBackground( this );
+        Invalidate();
     }
 }
 
