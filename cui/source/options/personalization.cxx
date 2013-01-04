@@ -16,6 +16,7 @@
 #include <tools/urlobj.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/svapp.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
@@ -160,6 +161,13 @@ sal_Bool SvxPersonalizationTabPage::FillItemSet( SfxItemSet & )
     officecfg::Office::Common::Misc::PersonaSettings::set( m_aPersonaSettings, batch );
 
     batch->commit();
+
+    if ( bModified )
+    {
+        // broadcast the change
+        DataChangedEvent aDataChanged( DATACHANGED_SETTINGS, NULL, SETTINGS_STYLE );
+        Application::NotifyAllWindows( aDataChanged );
+    }
 
     return bModified;
 }
