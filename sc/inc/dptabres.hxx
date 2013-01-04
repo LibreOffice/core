@@ -96,41 +96,43 @@ struct ScDPSubTotalState
     {}
 };
 
-//
-//  indexes when calculating running totals
-//  Col/RowVisible: simple counts from 0 - without sort order applied - visible index
-//                  (only used for running total / relative index)
-//  Col/RowIndexes: with sort order applied - member index
-//                  (used otherwise - so other members' children can be accessed)
-//
-
+/**
+ * indexes when calculating running totals
+ *
+ * Col/RowVisible: simple counts from 0 - without sort order applied
+ * - visible index (only used for running total / relative index)
+ *
+ * Col/RowSorted: with sort order applied - member index (used otherwise -
+ * so other members' children can be accessed).
+ */
 class ScDPRunningTotalState
 {
-    ScDPResultMember*   pColResRoot;
-    ScDPResultMember*   pRowResRoot;
-    long*               pColVisible;
-    long*               pColIndexes;
-    long*               pRowVisible;
-    long*               pRowIndexes;
-    long                nColIndexPos;
-    long                nRowIndexPos;
-
 public:
-            ScDPRunningTotalState( ScDPResultMember* pColRoot, ScDPResultMember* pRowRoot );
-            ~ScDPRunningTotalState();
+    typedef std::vector<long> IndexArray; /// array of long integers terminated by -1.
+
+    ScDPRunningTotalState( ScDPResultMember* pColRoot, ScDPResultMember* pRowRoot );
 
     ScDPResultMember*   GetColResRoot() const   { return pColResRoot; }
     ScDPResultMember*   GetRowResRoot() const   { return pRowResRoot; }
 
-    const long*         GetColVisible() const   { return pColVisible; }
-    const long*         GetColIndexes() const   { return pColIndexes; }
-    const long*         GetRowVisible() const   { return pRowVisible; }
-    const long*         GetRowIndexes() const   { return pRowIndexes; }
+    const IndexArray& GetColVisible() const;
+    const IndexArray& GetColSorted() const;
+    const IndexArray& GetRowVisible() const;
+    const IndexArray& GetRowSorted() const;
 
     void    AddColIndex( long nVisible, long nSorted );
     void    AddRowIndex( long nVisible, long nSorted );
     void    RemoveColIndex();
     void    RemoveRowIndex();
+
+private:
+    ScDPResultMember*   pColResRoot;
+    ScDPResultMember*   pRowResRoot;
+
+    mutable IndexArray maColVisible;
+    mutable IndexArray maColSorted;
+    mutable IndexArray maRowVisible;
+    mutable IndexArray maRowSorted;
 };
 
 struct ScDPRelativePos
