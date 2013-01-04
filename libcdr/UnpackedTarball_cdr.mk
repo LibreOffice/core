@@ -15,6 +15,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,cdr,1))
 
 $(eval $(call gb_UnpackedTarball_add_patches,cdr,\
 	libcdr/libcdr-configure.patch.1 \
+	libcdr/libcdr-issupported-exception.patch.1 \
 	libcdr/libcdr-msvc.patch \
 ))
 
