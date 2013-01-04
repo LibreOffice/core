@@ -833,6 +833,12 @@ void ScXMLTableRowCellContext::AddTextAndValueCells( const ScAddress& rCellPos,
     for (SCCOL i = 0; i < nColsRepeated; ++i)
     {
         rCurrentPos.SetCol( rCellPos.Col() + i );
+
+        // it makes no sense to import data after the last supported column
+        // fdo#58539 & gnome#627150
+        if(rCurrentPos.Col() > MAXCOL)
+            break;
+
         if (i > 0)
             rTables.AddColumn(false);
         if (!bIsEmpty)
@@ -840,6 +846,12 @@ void ScXMLTableRowCellContext::AddTextAndValueCells( const ScAddress& rCellPos,
             for (SCROW j = 0; j < nRepeatedRows; ++j)
             {
                 rCurrentPos.SetRow( rCellPos.Row() + j );
+
+                // it makes no sense to import data after last supported row
+                // fdo#58539 & gnome#627150
+                if(rCurrentPos.Row() > MAXROW)
+                    break;
+
                 if( (rCurrentPos.Col() == 0) && (j > 0) )
                 {
                     rTables.AddRow();

@@ -66,7 +66,8 @@ ScXMLTableColContext::ScXMLTableColContext( ScXMLImport& rImport,
         {
             case XML_TOK_TABLE_COL_ATTR_REPEATED:
                 {
-                    nColCount = sValue.toInt32();
+                    nColCount = std::max<sal_Int32>(sValue.toInt32(), 1);
+                    nColCount = std::min<sal_Int32>(nColCount, MAXCOLCOUNT);
                 }
                 break;
             case XML_TOK_TABLE_COL_ATTR_STYLE_NAME:
