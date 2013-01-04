@@ -18,6 +18,7 @@
             <child>
               <object class="GtkButton" id="help">
                 <property name="label">gtk-help</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -33,6 +34,7 @@
             <child>
               <object class="GtkButton" id="options">
                 <property name="label" translatable="yes">O_ptions...</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -47,6 +49,7 @@
             <child>
               <object class="GtkButton" id="undo">
                 <property name="label" translatable="yes">_Undo</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -61,6 +64,7 @@
             <child>
               <object class="GtkButton" id="close">
                 <property name="label">gtk-close</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -120,6 +124,7 @@
             <child>
               <object class="GtkButton" id="ignore">
                 <property name="label" translatable="yes">_Ignore Once</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -165,6 +170,7 @@
             <child>
               <object class="GtkButton" id="change">
                 <property name="label" translatable="yes">_Correct</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -181,6 +187,7 @@
             <child>
               <object class="GtkButton" id="changeall">
                 <property name="label" translatable="yes">Correct A_ll</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -197,6 +204,7 @@
             <child>
               <object class="GtkButton" id="autocorrect">
                 <property name="label" translatable="yes">Alwa_ys correct</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -213,6 +221,7 @@
             <child>
               <object class="GtkCheckButton" id="checkgrammar">
                 <property name="label" translatable="yes">Check _Grammar</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -230,6 +239,7 @@
             <child>
               <object class="GtkButton" id="ignoreall">
                 <property name="label" translatable="yes">I_gnore All</property>
+                <property name="use_action_appearance">False</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="no_show_all">True</property>
@@ -246,6 +256,7 @@
             <child>
               <object class="GtkButton" id="ignorerule">
                 <property name="label" translatable="yes">I_gnore Rule</property>
+                <property name="use_action_appearance">False</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="no_show_all">True</property>
@@ -292,6 +303,7 @@
             <child>
               <object class="GtkLinkButton" id="explainlink">
                 <property name="label" translatable="yes">More...</property>
+                <property name="use_action_appearance">False</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="no_show_all">True</property>
@@ -366,12 +378,13 @@
             </child>
             <child>
               <object class="GtkButton" id="add">
-                <property name="label">gtk-add</property>
+                <property name="label" translatable="yes">_Add to Dictionary</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="valign">center</property>
-                <property name="use_stock">True</property>
+                <property name="use_underline">True</property>
               </object>
               <packing>
                 <property name="left_attach">2</property>
@@ -382,12 +395,13 @@
             </child>
             <child>
               <object class="GtkButton" id="addmb:addmenu">
-                <property name="label">gtk-add</property>
+                <property name="label" translatable="yes">_Add to Dictionary</property>
+                <property name="use_action_appearance">False</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="no_show_all">True</property>
                 <property name="valign">center</property>
-                <property name="use_stock">True</property>
+                <property name="use_underline">True</property>
               </object>
               <packing>
                 <property name="left_attach">2</property>
