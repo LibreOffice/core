@@ -82,7 +82,7 @@ void RtfSdrExport::CloseContainer()
     EscherEx::CloseContainer();
 }
 
-sal_uInt32 RtfSdrExport::EnterGroup( const String& /*rShapeName*/, const Rectangle* /*pRect*/ )
+sal_uInt32 RtfSdrExport::EnterGroup( const OUString& /*rShapeName*/, const Rectangle* /*pRect*/ )
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 

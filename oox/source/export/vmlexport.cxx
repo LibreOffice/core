@@ -99,7 +99,7 @@ void VMLExport::CloseContainer()
     EscherEx::CloseContainer();
 }
 
-sal_uInt32 VMLExport::EnterGroup( const String& rShapeName, const Rectangle* pRect )
+sal_uInt32 VMLExport::EnterGroup( const OUString& rShapeName, const Rectangle* pRect )
 {
     sal_uInt32 nShapeId = GenerateShapeId();
 
@@ -108,8 +108,8 @@ sal_uInt32 VMLExport::EnterGroup( const String& rShapeName, const Rectangle* pRe
 
     pAttrList->add( XML_id, ShapeIdString( nShapeId ) );
 
-    if ( rShapeName.Len() )
-        pAttrList->add( XML_alt, OUStringToOString( OUString( rShapeName ), RTL_TEXTENCODING_UTF8 ) );
+    if ( rShapeName.getLength() )
+        pAttrList->add( XML_alt, OUStringToOString( rShapeName, RTL_TEXTENCODING_UTF8 ) );
 
     // style
     if ( pRect )
