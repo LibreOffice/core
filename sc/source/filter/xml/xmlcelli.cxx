@@ -1025,16 +1025,16 @@ void ScXMLTableRowCellContext::PutFormulaCell( const ScAddress& rCellPos )
         if ( aText[0] == '=' && aText.getLength() > 1 )
         {
             // temporary formula string as string tokens
-            ScTokenArray* pCode = new ScTokenArray;
+            boost::scoped_ptr<ScTokenArray> pCode(new ScTokenArray);
             pCode->AddStringXML( aText );
             if( (eGrammar == formula::FormulaGrammar::GRAM_EXTERNAL) && !aFormulaNmsp.isEmpty() )
                 pCode->AddStringXML( aFormulaNmsp );
 
             pDoc->IncXMLImportedFormulaCount( aText.getLength() );
-            pNewCell = new ScFormulaCell( pDoc, rCellPos, pCode, eGrammar, MM_NONE );
-            delete pCode;
+            pNewCell = new ScFormulaCell( pDoc, rCellPos, pCode.get(), eGrammar, MM_NONE );
 
             ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pNewCell);
+            pFCell->StartListeningTo(pDoc);
             SetFormulaCell(pFCell);
         }
         else if ( aText[0] == '\'' && aText.getLength() > 1 )
