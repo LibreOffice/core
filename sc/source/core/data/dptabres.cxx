@@ -273,72 +273,82 @@ static void lcl_Indent( ScDocument* pDoc, SCROW nStartRow, const ScAddress& rPos
 // -----------------------------------------------------------------------
 
 ScDPRunningTotalState::ScDPRunningTotalState( ScDPResultMember* pColRoot, ScDPResultMember* pRowRoot ) :
-    pColResRoot( pColRoot ),
-    pRowResRoot( pRowRoot ),
-    nColIndexPos( 0 ),
-    nRowIndexPos( 0 )
+    pColResRoot(pColRoot), pRowResRoot(pRowRoot)
 {
-    pColVisible = new long[SC_DP_MAX_FIELDS+1];
-    pColIndexes = new long[SC_DP_MAX_FIELDS+1];
-    pRowVisible = new long[SC_DP_MAX_FIELDS+1];
-    pRowIndexes = new long[SC_DP_MAX_FIELDS+1];
-    pColIndexes[0] = -1;
-    pRowIndexes[0] = -1;
+    // These arrays should never be empty as the terminating value must be present at all times.
+    maColVisible.push_back(-1);
+    maColSorted.push_back(-1);
+    maRowVisible.push_back(-1);
+    maRowSorted.push_back(-1);
 }
 
-ScDPRunningTotalState::~ScDPRunningTotalState()
+const ScDPRunningTotalState::IndexArray& ScDPRunningTotalState::GetColVisible() const
 {
-    delete[] pColVisible;
-    delete[] pColIndexes;
-    delete[] pRowVisible;
-    delete[] pRowIndexes;
+    return maColVisible;
+}
+
+const ScDPRunningTotalState::IndexArray& ScDPRunningTotalState::GetColSorted() const
+{
+    return maColSorted;
+}
+
+const ScDPRunningTotalState::IndexArray& ScDPRunningTotalState::GetRowVisible() const
+{
+    return maRowVisible;
+}
+
+const ScDPRunningTotalState::IndexArray& ScDPRunningTotalState::GetRowSorted() const
+{
+    return maRowSorted;
 }
 
 void ScDPRunningTotalState::AddColIndex( long nVisible, long nSorted )
 {
-    OSL_ENSURE( nColIndexPos < SC_DP_MAX_FIELDS, "too many column indexes" );
-    if ( nColIndexPos < SC_DP_MAX_FIELDS )
-    {
-        pColVisible[nColIndexPos] = nVisible;
-        pColIndexes[nColIndexPos] = nSorted;
-        pColVisible[nColIndexPos+1] = -1;
-        pColIndexes[nColIndexPos+1] = -1;
-        ++nColIndexPos;
-    }
+    maColVisible.back() = nVisible;
+    maColVisible.push_back(-1);
+
+    maColSorted.back() = nSorted;
+    maColSorted.push_back(-1);
 }
 
 void ScDPRunningTotalState::AddRowIndex( long nVisible, long nSorted )
 {
-    OSL_ENSURE( nRowIndexPos < SC_DP_MAX_FIELDS, "too many row indexes" );
-    if ( nRowIndexPos < SC_DP_MAX_FIELDS )
-    {
-        pRowVisible[nRowIndexPos] = nVisible;
-        pRowIndexes[nRowIndexPos] = nSorted;
-        pRowVisible[nRowIndexPos+1] = -1;
-        pRowIndexes[nRowIndexPos+1] = -1;
-        ++nRowIndexPos;
-    }
+    maRowVisible.back() = nVisible;
+    maRowVisible.push_back(-1);
+
+    maRowSorted.back() = nSorted;
+    maRowSorted.push_back(-1);
 }
 
 void ScDPRunningTotalState::RemoveColIndex()
 {
-    OSL_ENSURE( nColIndexPos > 0, "RemoveColIndex without index" );
-    if ( nColIndexPos > 0 )
+    OSL_ENSURE(!maColVisible.empty() && !maColSorted.empty(), "ScDPRunningTotalState::RemoveColIndex: array is already empty!");
+    if (maColVisible.size() >= 2)
     {
-        --nColIndexPos;
-        pColVisible[nColIndexPos] = -1;
-        pColIndexes[nColIndexPos] = -1;
+        maColVisible.pop_back();
+        maColVisible.back() = -1;
+    }
+
+    if (maColSorted.size() >= 2)
+    {
+        maColSorted.pop_back();
+        maColSorted.back() = -1;
     }
 }
 
 void ScDPRunningTotalState::RemoveRowIndex()
 {
-    OSL_ENSURE( nRowIndexPos > 0, "RemoveRowIndex without index" );
-    if ( nRowIndexPos > 0 )
+    OSL_ENSURE(!maRowVisible.empty() && !maRowSorted.empty(), "ScDPRunningTotalState::RemoveRowIndex: array is already empty!");
+    if (maRowVisible.size() >= 2)
     {
-        --nRowIndexPos;
-        pRowVisible[nRowIndexPos] = -1;
-        pRowIndexes[nRowIndexPos] = -1;
+        maRowVisible.pop_back();
+        maRowVisible.back() = -1;
+    }
+
+    if (maRowSorted.size() >= 2)
+    {
+        maRowSorted.pop_back();
+        maRowSorted.back() = -1;
     }
 }
 
@@ -2256,10 +2266,10 @@ void ScDPDataMember::UpdateRunningTotals( const ScDPResultMember* pRefMember,
                             long nRelativeDir = bRelative ?
                                 ( ( aReferenceValue.ReferenceItemType == sheet::DataPilotFieldReferenceItemType::PREVIOUS ) ? -1 : 1 ) : 0;
 
-                            const long* pColVisible = rRunning.GetColVisible();
-                            const long* pColIndexes = rRunning.GetColIndexes();
-                            const long* pRowVisible = rRunning.GetRowVisible();
-                            const long* pRowIndexes = rRunning.GetRowIndexes();
+                            const ScDPRunningTotalState::IndexArray& rColVisible = rRunning.GetColVisible();
+                            const ScDPRunningTotalState::IndexArray& rColSorted = rRunning.GetColSorted();
+                            const ScDPRunningTotalState::IndexArray& rRowVisible = rRunning.GetRowVisible();
+                            const ScDPRunningTotalState::IndexArray& rRowSorted = rRunning.GetRowSorted();
 
                             String aRefFieldName = aReferenceValue.ReferenceField;
 
@@ -2281,7 +2291,7 @@ void ScDPDataMember::UpdateRunningTotals( const ScDPResultMember* pRefMember,
                                 pSelectDim = rRunning.GetRowResRoot()->GetChildDimension();
                                 while ( pSelectDim && pSelectDim->GetName() != aRefFieldName )
                                 {
-                                    long nIndex = pRowIndexes[nRowPos];
+                                    long nIndex = rRowSorted[nRowPos];
                                     if ( nIndex >= 0 && nIndex < pSelectDim->GetMemberCount() )
                                         pSelectDim = pSelectDim->GetMember(nIndex)->GetChildDimension();
                                     else
@@ -2289,7 +2299,7 @@ void ScDPDataMember::UpdateRunningTotals( const ScDPResultMember* pRefMember,
                                     ++nRowPos;
                                 }
                                 // child dimension of innermost member?
-                                if ( pSelectDim && pRowIndexes[nRowPos] < 0 )
+                                if ( pSelectDim && rRowSorted[nRowPos] < 0 )
                                     pSelectDim = NULL;
                             }
 
@@ -2298,7 +2308,7 @@ void ScDPDataMember::UpdateRunningTotals( const ScDPResultMember* pRefMember,
                                 pSelectDim = rRunning.GetColResRoot()->GetChildDimension();
                                 while ( pSelectDim && pSelectDim->GetName() != aRefFieldName )
                                 {
-                                    long nIndex = pColIndexes[nColPos];
+                                    long nIndex = rColSorted[nColPos];
                                     if ( nIndex >= 0 && nIndex < pSelectDim->GetMemberCount() )
                                         pSelectDim = pSelectDim->GetMember(nIndex)->GetChildDimension();
                                     else
@@ -2306,7 +2316,7 @@ void ScDPDataMember::UpdateRunningTotals( const ScDPResultMember* pRefMember,
                                     ++nColPos;
                                 }
                                 // child dimension of innermost member?
-                                if ( pSelectDim && pColIndexes[nColPos] < 0 )
+                                if ( pSelectDim && rColSorted[nColPos] < 0 )
                                     pSelectDim = NULL;
                             }
 
@@ -2318,7 +2328,7 @@ void ScDPDataMember::UpdateRunningTotals( const ScDPResultMember* pRefMember,
                                 //  don't show or sum up the value. Otherwise, for following members,
                                 //  the running totals of details and subtotals wouldn't match.
 
-                                long nMyIndex = bRefDimInCol ? pColIndexes[nColPos] : pRowIndexes[nRowPos];
+                                long nMyIndex = bRefDimInCol ? rColSorted[nColPos] : rRowSorted[nRowPos];
                                 if ( nMyIndex >= 0 && nMyIndex < pSelectDim->GetMemberCount() )
                                 {
                                     const ScDPResultMember* pMyRefMember = pSelectDim->GetMember(nMyIndex);
@@ -2372,9 +2382,11 @@ void ScDPDataMember::UpdateRunningTotals( const ScDPResultMember* pRefMember,
                                                                         nColPos, rRunning );
                                     else
                                     {
-                                        long nSkip = nRowPos + 1;   // including the reference dimension
-                                        pSelectMember = pSelectDim->GetRowReferenceMember( NULL, NULL,
-                                                                        pRowIndexes+nSkip, pColIndexes );
+                                        const long* pRowSorted = &rRowSorted[0];
+                                        const long* pColSorted = &rColSorted[0];
+                                        pRowSorted += nRowPos + 1; // including the reference dimension
+                                        pSelectMember = pSelectDim->GetRowReferenceMember(
+                                            NULL, NULL, pRowSorted, pColSorted);
                                     }
 
                                     if ( pSelectMember )
@@ -2422,16 +2434,18 @@ void ScDPDataMember::UpdateRunningTotals( const ScDPResultMember* pRefMember,
                                     ScDPDataMember* pSelectMember;
                                     if ( bRefDimInCol )
                                     {
-                                        aRefItemPos.nBasePos = pColVisible[nColPos];    // without sort order applied
+                                        aRefItemPos.nBasePos = rColVisible[nColPos];    // without sort order applied
                                         pSelectMember = ScDPResultDimension::GetColReferenceMember( pRefPos, pRefName,
                                                                         nColPos, rRunning );
                                     }
                                     else
                                     {
-                                        aRefItemPos.nBasePos = pRowVisible[nRowPos];    // without sort order applied
-                                        long nSkip = nRowPos + 1;   // including the reference dimension
-                                        pSelectMember = pSelectDim->GetRowReferenceMember( pRefPos, pRefName,
-                                                                        pRowIndexes+nSkip, pColIndexes );
+                                        aRefItemPos.nBasePos = rRowVisible[nRowPos];    // without sort order applied
+                                        const long* pRowSorted = &rRowSorted[0];
+                                        const long* pColSorted = &rColSorted[0];
+                                        pRowSorted += nRowPos + 1; // including the reference dimension
+                                        pSelectMember = pSelectDim->GetRowReferenceMember(
+                                            pRefPos, pRefName, pRowSorted, pColSorted);
                                     }
 
                                     // difference or perc.difference is empty for the reference item itself
@@ -3266,8 +3280,8 @@ ScDPDataMember* ScDPResultDimension::GetColReferenceMember( const ScDPRelativePo
 {
     OSL_ENSURE( pRelativePos == NULL || pName == NULL, "can't use position and name" );
 
-    const long* pColIndexes = rRunning.GetColIndexes();
-    const long* pRowIndexes = rRunning.GetRowIndexes();
+    const long* pColIndexes = &rRunning.GetColSorted()[0];
+    const long* pRowIndexes = &rRunning.GetRowSorted()[0];
 
     // get own row member using all indexes
 
