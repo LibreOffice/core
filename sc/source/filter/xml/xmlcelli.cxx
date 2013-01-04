@@ -1064,7 +1064,7 @@ void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rCellPos )
     if( cellExists(rCellPos) )
     {
         SetContentValidation( rCellPos );
-        OSL_ENSURE(((nColsRepeated == 1) && (nRepeatedRows == 1)), "repeated cells with formula not possible now");
+        SAL_WARN_IF((nColsRepeated != 1) || (nRepeatedRows != 1), "sc", "repeated cells with formula not possible now");
         rXMLImport.GetStylesImportHelper()->AddCell(rCellPos);
 
         //add matrix
