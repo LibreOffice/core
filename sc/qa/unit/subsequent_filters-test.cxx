@@ -168,6 +168,7 @@ public:
     void testCellAnchoredShapesODS();
 
     void testPivotTableBasicODS();
+    void testFormulaDependency();
 
     void testRowHeight();
 
@@ -213,6 +214,7 @@ public:
 
     CPPUNIT_TEST(testPivotTableBasicODS);
 //  CPPUNIT_TEST(testRowHeight);
+    CPPUNIT_TEST(testFormulaDependency);
 
     //disable testPassword on MacOSX due to problems with libsqlite3
     //also crashes on DragonFly due to problems with nss/nspr headers
@@ -1747,6 +1749,34 @@ void ScFiltersTest::testNewCondFormat()
     rtl::OUString aCSVPath;
     createCSVPath( aCSVFile, aCSVPath );
     testCondFile(aCSVPath, pDoc, 0);
+}
+
+void ScFiltersTest::testFormulaDependency()
+{
+    const rtl::OUString aFileNameBase("dependencyTree.");
+    rtl::OUString aFileExtension(aFileFormats[ODS].pName, strlen(aFileFormats[ODS].pName), RTL_TEXTENCODING_UTF8 );
+    rtl::OUString aFilterName(aFileFormats[ODS].pFilterName, strlen(aFileFormats[ODS].pFilterName), RTL_TEXTENCODING_UTF8) ;
+    rtl::OUString aFileName;
+    createFileURL(aFileNameBase, aFileExtension, aFileName);
+    rtl::OUString aFilterType(aFileFormats[ODS].pTypeName, strlen(aFileFormats[ODS].pTypeName), RTL_TEXTENCODING_UTF8);
+    std::cout << aFileFormats[ODS].pName << " Test" << std::endl;
+
+    unsigned int nFormatType = aFileFormats[ODS].nFormatType;
+    unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
+    ScDocShellRef xDocSh = load(aFilterName, aFileName, rtl::OUString(), aFilterType,
+        nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    // check if formula in A1 changes value
+    double nVal = pDoc->GetValue(0,0,0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(nVal, 1.0, 1e-10);
+    pDoc->SetValue(0,1,0, 0.0);
+    nVal = pDoc->GetValue(0,0,0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(nVal, 2.0, 1e-10);
+
+    // check that the number format is implicity inherited
+    // CPPUNIT_ASSERT_EQUAL(pDoc->GetString(0,4,0), pDoc->GetString(0,5,0));
 }
 
 ScFiltersTest::ScFiltersTest()
