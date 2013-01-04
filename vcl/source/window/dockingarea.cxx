@@ -59,7 +59,27 @@ DockingAreaWindow::ImplData::~ImplData()
 
 static void ImplInitBackground( DockingAreaWindow* pThis )
 {
-    if( !pThis->IsNativeControlSupported( CTRL_TOOLBAR, PART_ENTIRE_CONTROL ) )
+    const BitmapEx* pPersonaBitmap = pThis->GetSettings().GetStyleSettings().GetPersonaHeader();
+    if ( pPersonaBitmap != NULL && pThis->GetAlign() == WINDOWALIGN_TOP )
+    {
+        Wallpaper aWallpaper( *pPersonaBitmap );
+        aWallpaper.SetStyle( WALLPAPER_TOPRIGHT );
+
+        // we need to shift the bitmap vertically so that it spans over the
+        // menubar conveniently
+        long nMenubarHeight = 0;
+        SystemWindow *pSysWin = pThis->GetSystemWindow();
+        if ( pSysWin && pSysWin->GetMenuBar() )
+        {
+            Window *pMenubarWin = pSysWin->GetMenuBar()->GetWindow();
+            if ( pMenubarWin )
+                nMenubarHeight = pMenubarWin->GetOutputHeightPixel();
+        }
+        aWallpaper.SetRect( Rectangle( Point( 0, -nMenubarHeight ), Size( pThis->GetOutputWidthPixel(), pThis->GetOutputHeightPixel() + nMenubarHeight ) ) );
+
+        pThis->SetBackground( aWallpaper );
+    }
+    else if( !pThis->IsNativeControlSupported( CTRL_TOOLBAR, PART_ENTIRE_CONTROL ) )
     {
         Wallpaper aWallpaper;
         aWallpaper.SetStyle( WALLPAPER_APPLICATIONGRADIENT );
@@ -136,6 +156,7 @@ void DockingAreaWindow::SetAlign( WindowAlign eNewAlign )
     if( eNewAlign != mpImplData->meAlign )
     {
         mpImplData->meAlign = eNewAlign;
+        ImplInitBackground( this );
         Invalidate();
     }
 }
@@ -162,7 +183,9 @@ void DockingAreaWindow::Paint( const Rectangle& )
         }
         ControlState        nState = CTRL_STATE_ENABLED;
 
-        if( !ImplGetSVData()->maNWFData.mbDockingAreaSeparateTB )
+        if ( GetAlign() == WINDOWALIGN_TOP && GetSettings().GetStyleSettings().GetPersonaHeader() )
+            Erase();
+        else if ( !ImplGetSVData()->maNWFData.mbDockingAreaSeparateTB )
         {
             // draw a single toolbar background covering the whole docking area
             Point tmp;
@@ -240,6 +263,7 @@ void DockingAreaWindow::Paint( const Rectangle& )
 
 void DockingAreaWindow::Resize()
 {
+    ImplInitBackground( this );
     ImplInvalidateMenubar( this );
     if( IsNativeControlSupported( CTRL_TOOLBAR, PART_ENTIRE_CONTROL ) )
         Invalidate();
