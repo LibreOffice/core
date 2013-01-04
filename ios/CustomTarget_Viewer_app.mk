@@ -28,9 +28,11 @@ endif
 
 # If run from Xcode, check that its configuration (device or
 # simulator) matches that of gbuild. We detect being run from Xcode by
-# looking for $(XCODE_VERSION_ACTUAL)
+# looking for $(SCRIPT_OUTPUT_FILE_0). The Run Script build phase in
+# our project has as its (single) output file the location of the app
+# executable in its app bundle.
 
-ifneq ($(XCODE_VERSION_ACTUAL),)
+ifneq ($(SCRIPT_OUTPUT_FILE_0),)
 
 export CCACHE_CPP2=y
 
@@ -44,16 +46,25 @@ endif
 
 endif
 
-APP := Viewer
+ifneq ($(SCRIPT_OUTPUT_FILE_0),)
+# When run from Xcode, we move the Viewer executable from solver into
+# the Viewer.app directory that Xcode uses.
+$(call gb_CustomTarget_get_target,ios/Viewer_app) : $(SCRIPT_OUTPUT_FILE_0)
 
-ios_Viewer_app_DIR := $(SRC_ROOT)/ios/experimental/Viewer/DerivedData/$(APP)/Build/Products/$(xcode_config)-$(xcode_sdk)/$(APP).app
+$(SCRIPT_OUTPUT_FILE_0) : $(call gb_Executable_get_target,Viewer)
+	$(call gb_Output_announce,$@,fii,APP,2)
+	mkdir -p `dirname $(SCRIPT_OUTPUT_FILE_0)`
+	mv $(call gb_Executable_get_target,Viewer) $(SCRIPT_OUTPUT_FILE_0)
 
-ios_Viewer_app_EXE := $(ios_Viewer_app_DIR)/Viewer
+else
+# When run just from the command line, we don't have any app bundle to
+# copy or move the executable to. So do nothing.
+$(call gb_CustomTarget_get_target,ios/Viewer_app) : $(call gb_Executable_get_target,Viewer)
 
-$(call gb_CustomTarget_get_target,ios/Viewer_app) : $(ios_Viewer_app_EXE)
+$(call gb_CustomTarget_get_clean_target,ios/Viewer_app) :
+# Here we just assume that Xcode's settings are default, or something
+	rm -rf experimental/Viewer/build
 
-$(ios_Viewer_app_EXE): $(call gb_Executable_get_target,Viewer)
-	mkdir -p $(ios_Viewer_app_DIR)
-	cp $(call gb_Executable_get_target,Viewer) $(ios_Viewer_app_DIR)
+endif
 
 # vim: set noet sw=4 ts=4:

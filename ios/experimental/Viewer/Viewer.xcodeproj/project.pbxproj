@@ -187,11 +187,11 @@
 			inputPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Viewer.app",
+				"$(CONFIGURATION_BUILD_DIR)/$(EXECUTABLE_PATH)",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd ../.. && /opt/lo/bin/make";
+			shellScript = "cd ../.. && /opt/lo/bin/make -r";
 		};
 /* End PBXShellScriptBuildPhase section */
 
