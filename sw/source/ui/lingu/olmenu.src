@@ -40,13 +40,13 @@ Menu MN_SPELL_POPUP
             SubMenu = Menu
             {
             };
-            Text [ en-US ] = "~Add" ;
+            Text [ en-US ] = "~Add to dictionary" ;
         };
         MenuItem
         {
             Identifier = MN_ADD_TO_DIC_SINGLE ;
             HelpID = HID_LINGU_ADD_WORD ;
-            Text [ en-US ] = "~Add" ;
+            Text [ en-US ] = "~Add to dictionary" ;
         };
         MenuItem
         {
