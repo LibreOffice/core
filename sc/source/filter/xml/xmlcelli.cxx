@@ -167,7 +167,8 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                 nMatrixRows = static_cast<SCROW>(sValue.toInt32());
             break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_REPEATED:
-                nColsRepeated = static_cast<SCCOL>(std::max( sValue.toInt32(), static_cast<sal_Int32>(1) ));
+                nColsRepeated = static_cast<SCCOL>(std::min<sal_Int32>( MAXCOLCOUNT,
+                            std::max( sValue.toInt32(), static_cast<sal_Int32>(1) ) ));
             break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_VALUE_TYPE:
                 nCellType = GetScImport().GetCellType(sValue);
