@@ -289,8 +289,6 @@ sal_Bool ScPivotLayoutDlg::Close()
 void ScPivotLayoutDlg::InitWndSelect(const ScDPLabelDataVector& rLabels)
 {
     size_t nLabelCount = rLabels.size();
-    if (nLabelCount > SC_DP_MAX_FIELDS)
-        nLabelCount = SC_DP_MAX_FIELDS;
 
     maLabelData.clear();
     maLabelData.reserve( nLabelCount );

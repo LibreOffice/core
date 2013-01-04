@@ -2227,9 +2227,7 @@ bool ScDPObject::FillLabelData(sal_Int32 nDim, ScDPLabelData& rLabels)
     uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
     uno::Reference<container::XIndexAccess> xDims = new ScNameToIndexAccess( xDimsName );
     sal_Int32 nDimCount = xDims->getCount();
-    if ( nDimCount > SC_DP_MAX_FIELDS )
-        nDimCount = SC_DP_MAX_FIELDS;
-    if (!nDimCount || nDim >= nDimCount)
+    if (nDimCount <= 0 || nDim >= nDimCount)
         return false;
 
     return FillLabelDataForDimension(xDims, nDim, rLabels);
@@ -2246,9 +2244,7 @@ bool ScDPObject::FillLabelData(ScPivotParam& rParam)
     uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
     uno::Reference<container::XIndexAccess> xDims = new ScNameToIndexAccess( xDimsName );
     sal_Int32 nDimCount = xDims->getCount();
-    if ( nDimCount > SC_DP_MAX_FIELDS )
-        nDimCount = SC_DP_MAX_FIELDS;
-    if (!nDimCount)
+    if (nDimCount <= 0)
         return false;
 
     for (sal_Int32 nDim = 0; nDim < nDimCount; ++nDim)
