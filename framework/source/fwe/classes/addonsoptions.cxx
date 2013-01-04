@@ -49,8 +49,10 @@ using namespace ::com::sun::star::beans ;
 using namespace ::com::sun::star::lang  ;
 using namespace ::com::sun::star;
 
+#define STR_TOOLBARITEMS    "ToolBarItems"
 #define ROOTNODE_ADDONMENU                              OUString("Office.Addons" )
 #define PATHDELIMITER                                   OUString("/"             )
+#define TOOLBARITEMS                                    OUString(STR_TOOLBARITEMS)
 #define SEPARATOR_URL_STR                               "private:separator"
 #define SEPARATOR_URL                                   OUString( SEPARATOR_URL_STR )
 
@@ -62,6 +64,7 @@ using namespace ::com::sun::star;
 #define PROPERTYNAME_SUBMENU                            ADDONSMENUITEM_PROPERTYNAME_SUBMENU
 #define PROPERTYNAME_CONTROLTYPE                        ADDONSMENUITEM_PROPERTYNAME_CONTROLTYPE
 #define PROPERTYNAME_WIDTH                              ADDONSMENUITEM_PROPERTYNAME_WIDTH
+#define PROPERTYNAME_TOOLBARITEMS                       TOOLBARITEMS
 
 #define PROPERTYNAME_ALIGN                              STATUSBARITEM_PROPERTYNAME_ALIGN
 #define PROPERTYNAME_AUTOSIZE                           STATUSBARITEM_PROPERTYNAME_AUTOSIZE
@@ -92,7 +95,7 @@ using namespace ::com::sun::star;
 #define PROPERTYNAME_MERGETOOLBAR_MERGECOMMANDPARAMETER OUString("MergeCommandParameter" )
 #define PROPERTYNAME_MERGETOOLBAR_MERGEFALLBACK         OUString("MergeFallback" )
 #define PROPERTYNAME_MERGETOOLBAR_MERGECONTEXT          OUString("MergeContext" )
-#define PROPERTYNAME_MERGETOOLBAR_TOOLBARITEMS          OUString("ToolBarItems" )
+#define PROPERTYNAME_MERGETOOLBAR_TOOLBARITEMS          OUString(STR_TOOLBARITEMS)
 
 #define PROPERTYNAME_MERGESTATUSBAR_MERGEPOINT               ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MergePoint" ))
 #define PROPERTYNAME_MERGESTATUSBAR_MERGECOMMAND             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MergeCommand" ))
@@ -113,7 +116,8 @@ using namespace ::com::sun::star;
 #define INDEX_ALIGN             8
 #define INDEX_AUTOSIZE          9
 #define INDEX_OWNERDRAW         10
-#define PROPERTYCOUNT_INDEX     11
+#define INDEX_TOOLBARITEMS      11
+#define PROPERTYCOUNT_INDEX     12
 
 // The following order is mandatory. Please add properties at the end!
 #define PROPERTYCOUNT_MENUITEM                          6
@@ -130,6 +134,11 @@ using namespace ::com::sun::star;
 #define OFFSET_POPUPMENU_CONTEXT                        1
 #define OFFSET_POPUPMENU_SUBMENU                        2
 #define OFFSET_POPUPMENU_URL                            3   // Used for property set
+
+// The following order is mandatory. Please add properties at the end!
+#define PROPERTYCOUNT_TOOLBAR                           2
+#define OFFSET_TOOLBAR_TITLE                            0
+#define OFFSET_TOOLBAR_TOOLBARITEMS                     1
 
 // The following order is mandatory. Please add properties at the end!
 #define PROPERTYCOUNT_TOOLBARITEM                       7
@@ -277,6 +286,7 @@ class AddonsOptions_Impl : public ConfigItem
         const Sequence< Sequence< PropertyValue > >&    GetAddonsMenuBarPart () const ;
         const Sequence< Sequence< PropertyValue > >&    GetAddonsToolBarPart ( sal_uInt32 nIndex ) const ;
         const OUString                           GetAddonsToolbarResourceName( sal_uInt32 nIndex ) const;
+        const OUString                           GetAddonsToolbarUIName( sal_uInt32 nIndex ) const;
         const Sequence< Sequence< PropertyValue > >&    GetAddonsHelpMenu    () const ;
         Image                                           GetImageFromURL( const OUString& aURL, sal_Bool bBig, sal_Bool bNoScale ) const;
         const MergeMenuInstructionContainer&            GetMergeMenuInstructions() const;
@@ -325,7 +335,9 @@ class AddonsOptions_Impl : public ConfigItem
 
         sal_Bool             ReadAddonMenuSet( Sequence< Sequence< PropertyValue > >& aAddonMenuSeq );
         sal_Bool             ReadOfficeMenuBarSet( Sequence< Sequence< PropertyValue > >& aAddonOfficeMenuBarSeq );
-        sal_Bool             ReadOfficeToolBarSet( AddonToolBars& rAddonOfficeToolBars, std::vector< OUString >& rAddonOfficeToolBarResNames );
+        sal_Bool             ReadOfficeToolBarSet( AddonToolBars& rAddonOfficeToolBars,
+                                                   std::vector< OUString >& rAddonOfficeToolBarResNames,
+                                                   std::vector< OUString >& rAddonOfficeToolBarUINames );
         sal_Bool             ReadToolBarItemSet( const OUString rToolBarItemSetNodeName, Sequence< Sequence< PropertyValue > >& aAddonOfficeToolBarSeq );
         sal_Bool             ReadOfficeHelpSet( Sequence< Sequence< PropertyValue > >& aAddonOfficeHelpMenuSeq );
         sal_Bool             ReadImages( ImageManager& aImageManager );
@@ -354,6 +366,7 @@ class AddonsOptions_Impl : public ConfigItem
 
         Sequence< OUString > GetPropertyNamesMenuItem( const OUString& aPropertyRootNode ) const;
         Sequence< OUString > GetPropertyNamesPopupMenu( const OUString& aPropertyRootNode ) const;
+        Sequence< OUString > GetPropertyNamesToolBar( const OUString& aPropertyRootNode ) const;
         Sequence< OUString > GetPropertyNamesToolBarItem( const OUString& aPropertyRootNode ) const;
         Sequence< OUString > GetPropertyNamesStatusbarItem( const ::rtl::OUString& aPropertyRootNode ) const;
         Sequence< OUString > GetPropertyNamesImages( const OUString& aPropertyRootNode ) const;
@@ -381,6 +394,7 @@ class AddonsOptions_Impl : public ConfigItem
         Sequence< Sequence< PropertyValue > >             m_aCachedMenuBarPartProperties;
         AddonToolBars                                     m_aCachedToolBarPartProperties;
         std::vector< OUString >                      m_aCachedToolBarPartResourceNames;
+        std::vector< OUString >                      m_aCachedToolBarPartUINames;
         Sequence< Sequence< PropertyValue > >             m_aCachedHelpMenuProperties;
         Reference< util::XMacroExpander >                 m_xMacroExpander;
         ImageManager                                      m_aImageManager;
@@ -414,6 +428,7 @@ AddonsOptions_Impl::AddonsOptions_Impl()
     m_aPropNames[ INDEX_ALIGN           ] = PROPERTYNAME_ALIGN;
     m_aPropNames[ INDEX_AUTOSIZE        ] = PROPERTYNAME_AUTOSIZE;
     m_aPropNames[ INDEX_OWNERDRAW       ] = PROPERTYNAME_OWNERDRAW;
+    m_aPropNames[ INDEX_TOOLBARITEMS    ] = PROPERTYNAME_TOOLBARITEMS;
 
     // initialize array with fixed images property names
     m_aPropImagesNames[ OFFSET_IMAGES_SMALL         ] = PROPERTYNAME_IMAGESMALL;
@@ -481,11 +496,14 @@ void AddonsOptions_Impl::ReadConfigurationData()
     m_aCachedToolBarPartProperties = AddonToolBars();
     m_aCachedHelpMenuProperties = Sequence< Sequence< PropertyValue > >();
     m_aCachedToolBarPartResourceNames.clear();
+    m_aCachedToolBarPartUINames.clear();
     m_aImageManager = ImageManager();
 
     ReadAddonMenuSet( m_aCachedMenuProperties );
     ReadOfficeMenuBarSet( m_aCachedMenuBarPartProperties );
-    ReadOfficeToolBarSet( m_aCachedToolBarPartProperties, m_aCachedToolBarPartResourceNames );
+    ReadOfficeToolBarSet( m_aCachedToolBarPartProperties,
+                          m_aCachedToolBarPartResourceNames,
+                          m_aCachedToolBarPartUINames );
 
     ReadOfficeHelpSet( m_aCachedHelpMenuProperties );
     ReadImages( m_aImageManager );
@@ -567,6 +585,15 @@ const OUString AddonsOptions_Impl::GetAddonsToolbarResourceName( sal_uInt32 nInd
         return m_aCachedToolBarPartResourceNames[nIndex];
     else
         return OUString();
+}
+
+
+const ::rtl::OUString AddonsOptions_Impl::GetAddonsToolbarUIName( sal_uInt32 nIndex ) const
+{
+    if ( nIndex < m_aCachedToolBarPartUINames.size() )
+        return m_aCachedToolBarPartUINames[nIndex];
+    else
+        return rtl::OUString();
 }
 
 //*****************************************************************************************************************
@@ -763,7 +790,10 @@ sal_Bool AddonsOptions_Impl::ReadOfficeMenuBarSet( Sequence< Sequence< PropertyV
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
-sal_Bool AddonsOptions_Impl::ReadOfficeToolBarSet( AddonToolBars& rAddonOfficeToolBars, std::vector< OUString >& rAddonOfficeToolBarResNames )
+sal_Bool AddonsOptions_Impl::ReadOfficeToolBarSet(
+    AddonToolBars& rAddonOfficeToolBars,
+    std::vector< OUString >& rAddonOfficeToolBarResNames,
+    std::vector< OUString >& rAddonOfficeToolBarUINames )
 {
     // Read the OfficeToolBar set and fill property sequences
     OUString             aAddonToolBarNodeName( "AddonUI/OfficeToolBar" );
@@ -774,10 +804,24 @@ sal_Bool AddonsOptions_Impl::ReadOfficeToolBarSet( AddonToolBars& rAddonOfficeTo
 
     for ( sal_uInt32 n = 0; n < nCount; n++ )
     {
-        OUString aToolBarItemNode( aAddonToolBarNode + aAddonToolBarNodeSeq[n] );
+        OUString aToolBarNode( aAddonToolBarNode + aAddonToolBarNodeSeq[n] + m_aPathDelimiter );
         rAddonOfficeToolBarResNames.push_back( aAddonToolBarNodeSeq[n] );
         rAddonOfficeToolBars.push_back( m_aEmptyAddonToolBar );
-        ReadToolBarItemSet( aToolBarItemNode, rAddonOfficeToolBars[n] );
+
+        Sequence< Any > aToolBarNodeValues = GetProperties( GetPropertyNamesToolBar( aToolBarNode ) );
+
+        rtl::OUString aUIName;
+        aToolBarNodeValues[OFFSET_TOOLBAR_TITLE] >>= aUIName;
+        rAddonOfficeToolBarUINames.push_back( aUIName );
+
+        Reference < XInterface > xToolbarItems;
+        if ( ( aToolBarNodeValues[OFFSET_TOOLBAR_TOOLBARITEMS] >>= xToolbarItems ) && xToolbarItems.is() )
+        {
+            ::rtl::OUStringBuffer aBuffer;
+            aBuffer.append( aToolBarNode );
+            aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( STR_TOOLBARITEMS ) );
+            ReadToolBarItemSet( aBuffer.makeStringAndClear(), rAddonOfficeToolBars[n] );
+        }
     }
 
     return ( !rAddonOfficeToolBars.empty() );
@@ -1715,6 +1759,17 @@ Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesPopupMenu( const OUStri
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
+Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesToolBar( const OUString& aPropertyRootNode ) const
+{
+    Sequence< ::rtl::OUString > lResult( PROPERTYCOUNT_TOOLBAR );
+
+    // Create property names dependent from the root node name
+    lResult[OFFSET_TOOLBAR_TITLE]        = ::rtl::OUString( aPropertyRootNode + m_aPropNames[ INDEX_TITLE ] );
+    lResult[OFFSET_TOOLBAR_TOOLBARITEMS] = ::rtl::OUString( aPropertyRootNode + m_aPropNames[ INDEX_TOOLBARITEMS ] );
+
+    return lResult;
+}
+
 Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesToolBarItem( const OUString& aPropertyRootNode ) const
 {
     Sequence< OUString > lResult( PROPERTYCOUNT_TOOLBARITEM );
@@ -1862,6 +1917,12 @@ const OUString AddonsOptions::GetAddonsToolbarResourceName( sal_uInt32 nIndex ) 
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->GetAddonsToolbarResourceName( nIndex );
+}
+
+const ::rtl::OUString AddonsOptions::GetAddonsToolbarUIName( sal_uInt32 nIndex ) const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->GetAddonsToolbarUIName( nIndex );
 }
 
 //*****************************************************************************************************************

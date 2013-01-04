@@ -1031,7 +1031,8 @@ void ToolbarLayoutManager::implts_createAddonsToolBars()
                 }
 
                 OUString aAddonUIName = m_pAddonOptions->GetAddonsToolbarUIName( i );
-                OUString aAddonTitle = aAddonUIName.getLength() ?
+                const bool bAddonUIName = aAddonUIName.getLength();
+                OUString aAddonTitle = bAddonUIName ?
                     aAddonUIName : implts_generateGenericAddonToolbarTitle( i+1 );
 
                 if ( !aElement.m_aName.isEmpty() )
@@ -1040,7 +1041,7 @@ void ToolbarLayoutManager::implts_createAddonsToolBars()
                     // UI changes for this document.
                     implts_setElementData( aElement, xDockWindow );
                     aElement.m_xUIElement = xUIElement;
-                    if ( aElement.m_aUIName.isEmpty() )
+                    if ( aElement.m_aUIName.isEmpty() && !bAddonUIName)
                     {
                         aElement.m_aUIName = aAddonTitle;
                         implts_writeWindowStateData( aElement );
@@ -1053,7 +1054,7 @@ void ToolbarLayoutManager::implts_createAddonsToolBars()
                     aNewToolbar.m_bFloating = true;
                     implts_readWindowStateData( aAddonToolBarName, aNewToolbar );
                     implts_setElementData( aNewToolbar, xDockWindow );
-                    if ( aNewToolbar.m_aUIName.isEmpty() )
+                    if ( aNewToolbar.m_aUIName.isEmpty() && !bAddonUIName)
                     {
                         aNewToolbar.m_aUIName = aAddonTitle;
                         implts_writeWindowStateData( aNewToolbar );
