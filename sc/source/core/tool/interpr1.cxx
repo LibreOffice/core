@@ -72,6 +72,9 @@
 #include "doubleref.hxx"
 #include "queryparam.hxx"
 
+#ifdef WNT /* #i121561# workaround build problem with stlport<5.2 and new boost on Windows */
+#define _STLP_HAS_NATIVE_FLOAT_ABS
+#endif
 #include <boost/math/special_functions/acosh.hpp>
 #include <boost/math/special_functions/asinh.hpp>
 #include <boost/math/special_functions/atanh.hpp>

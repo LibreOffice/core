@@ -44,6 +44,9 @@
 #include <vector>
 #include <algorithm>
 
+#ifdef WNT /* #i121561# workaround build problem with stlport<5.2 and new boost on Windows */
+#define _STLP_HAS_NATIVE_FLOAT_ABS
+#endif
 #include <boost/math/special_functions/atanh.hpp>
 #include <boost/math/special_functions/expm1.hpp>
 #include <boost/math/special_functions/log1p.hpp>
