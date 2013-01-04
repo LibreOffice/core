@@ -71,7 +71,14 @@ OUString SelectPersonaDialog::GetPersonaURL() const
         return OUString();
     }
 
-    return aText;
+    // canonicalize the URL
+    OUString aPersona( "persona/" );
+    sal_Int32 nPersona = aText.lastIndexOf( aPersona );
+
+    if ( nPersona < 0 )
+        return OUString();
+
+    return "http://www.getpersonas.com/persona/" + aText.copy( nPersona + aPersona.getLength() );
 }
 
 IMPL_LINK( SelectPersonaDialog, VisitPersonas, PushButton*, /*pButton*/ )
@@ -236,7 +243,7 @@ IMPL_LINK( SvxPersonalizationTabPage, SelectPersona, PushButton*, /*pButton*/ )
     while ( aDialog.Execute() == RET_OK )
     {
         OUString aURL( aDialog.GetPersonaURL() );
-        if ( aURL != "" )
+        if ( !aURL.isEmpty() )
         {
             if ( CopyPersonaToGallery( aURL ) )
                 m_pOwnPersona->Check();
@@ -312,7 +319,14 @@ bool SvxPersonalizationTabPage::CopyPersonaToGallery( const OUString &rURL )
     if ( !xFileAccess.is() )
         return false;
 
-    uno::Reference< io::XInputStream > xStream( xFileAccess->openFileRead( rURL ), uno::UNO_QUERY );
+    uno::Reference< io::XInputStream > xStream;
+    try {
+        xStream = xFileAccess->openFileRead( rURL );
+    }
+    catch (...)
+    {
+        return false;
+    }
     if ( !xStream.is() )
         return false;
 
