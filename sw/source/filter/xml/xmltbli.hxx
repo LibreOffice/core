@@ -88,9 +88,9 @@ class SwXMLTableContext : public XMLTextTableContext
 
     SwXMLDDETableContext_Impl   *pDDESource;
 
-    sal_Bool            bFirstSection : 1;
-    sal_Bool            bRelWidth : 1;
-    sal_Bool            bHasSubTables : 1;
+    bool            bFirstSection : 1;
+    bool            bRelWidth : 1;
+    bool            bHasSubTables : 1;
 
     sal_uInt16              nHeaderRows;
     sal_uInt32          nCurRow;
@@ -156,17 +156,17 @@ public:
 
     SwXMLImport& GetSwImport() { return (SwXMLImport&)GetImport(); }
 
-    void InsertColumn( sal_Int32 nWidth, sal_Bool bRelWidth,
+    void InsertColumn( sal_Int32 nWidth, bool bRelWidth,
                        const ::rtl::OUString *pDfltCellStyleName = 0 );
     sal_Int32 GetColumnWidth( sal_uInt32 nCol, sal_uInt32 nColSpan=1UL ) const;
     ::rtl::OUString GetColumnDefaultCellStyleName( sal_uInt32 nCol ) const;
     inline sal_uInt32 GetColumnCount() const;
-    inline sal_Bool HasColumnDefaultCellStyleNames() const;
+    inline bool HasColumnDefaultCellStyleNames() const;
 
-    sal_Bool IsInsertCellPossible() const { return nCurCol < GetColumnCount(); }
-    sal_Bool IsInsertColPossible() const { return nCurCol < USHRT_MAX; }
-    sal_Bool IsInsertRowPossible() const { return nCurRow < USHRT_MAX; }
-    sal_Bool IsValid() const { return pTableNode != 0; }
+    bool IsInsertCellPossible() const { return nCurCol < GetColumnCount(); }
+    bool IsInsertColPossible() const { return nCurCol < USHRT_MAX; }
+    bool IsInsertRowPossible() const { return nCurRow < USHRT_MAX; }
+    bool IsValid() const { return pTableNode != 0; }
 
     void InsertCell( const ::rtl::OUString& rStyleName,
                      sal_uInt32 nRowSpan=1U, sal_uInt32 nColSpan=1U,
@@ -193,7 +193,7 @@ public:
     virtual ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextContent > GetXTextContent() const;
 
-    void SetHasSubTables( sal_Bool bNew ) { bHasSubTables = bNew; }
+    void SetHasSubTables( bool bNew ) { bHasSubTables = bNew; }
 };
 
 inline SwXMLTableContext *SwXMLTableContext::GetParentTable() const
@@ -211,7 +211,7 @@ inline const SwStartNode *SwXMLTableContext::GetLastStartNode() const
     return GetPrevStartNode( 0UL, GetColumnCount() );
 }
 
-inline sal_Bool SwXMLTableContext::HasColumnDefaultCellStyleNames() const
+inline bool SwXMLTableContext::HasColumnDefaultCellStyleNames() const
 {
     return pColumnDefaultCellStyleNames != 0;
 }

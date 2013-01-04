@@ -636,7 +636,7 @@ SvXMLImportContext *SwXMLTableCellContext_Impl::CreateChildContext(
             if( GetTable()->IsValid() )
                 InsertContent( pTblContext );
 
-            GetTable()->SetHasSubTables( sal_True );
+            GetTable()->SetHasSubTables( true );
         }
     }
     else
@@ -772,7 +772,7 @@ SwXMLTableColContext_Impl::SwXMLTableColContext_Impl(
     }
 
     sal_Int32 nWidth = MINLAY;
-    sal_Bool bRelWidth = sal_True;
+    bool bRelWidth = true;
     if( !aStyleName.isEmpty() )
     {
         const SfxPoolItem *pItem;
@@ -1294,9 +1294,9 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     pLineFmt( 0 ),
     pSharedBoxFormats(NULL),
     pDDESource(NULL),
-    bFirstSection( sal_True ),
-    bRelWidth( sal_True ),
-    bHasSubTables( sal_False ),
+    bFirstSection( true ),
+    bRelWidth( true ),
+    bHasSubTables( false ),
     nHeaderRows( 0 ),
     nCurRow( 0UL ),
     nCurCol( 0UL ),
@@ -1439,9 +1439,9 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     pSharedBoxFormats(NULL),
     xParentTable( pTable ),
     pDDESource(NULL),
-    bFirstSection( sal_False ),
-    bRelWidth( sal_True ),
-    bHasSubTables( sal_False ),
+    bFirstSection( false ),
+    bRelWidth( true ),
+    bHasSubTables( false ),
     nHeaderRows( 0 ),
     nCurRow( 0UL ),
     nCurCol( 0UL ),
@@ -1517,7 +1517,7 @@ SvXMLImportContext *SwXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
     return pContext;
 }
 
-void SwXMLTableContext::InsertColumn( sal_Int32 nWidth2, sal_Bool bRelWidth2,
+void SwXMLTableContext::InsertColumn( sal_Int32 nWidth2, bool bRelWidth2,
                                          const OUString *pDfltCellStyleName )
 {
     OSL_ENSURE( nCurCol < USHRT_MAX,
@@ -1951,7 +1951,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox( SwTableLine *pUpper,
     pFrmFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, nColWidth ) );
 
     SwTableLines& rLines = pBox->GetTabLines();
-    sal_Bool bSplitted = sal_False;
+    bool bSplitted = false;
 
     while( !bSplitted )
     {
@@ -1978,7 +1978,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox( SwTableLine *pUpper,
                 rLines.push_back( pLine );
 
                 nStartRow = i+1UL;
-                bSplitted = sal_True;
+                bSplitted = true;
             }
         }
         if( !bSplitted )
@@ -2232,7 +2232,7 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
 
         sal_uInt32 nCol = nStartCol;
         sal_uInt32 nSplitCol = nRightCol;
-        sal_Bool bSplitted = sal_False;
+        bool bSplitted = false;
         while( !bSplitted )
         {
             OSL_ENSURE( nCol < nRightCol, "Zu weit gelaufen" );
@@ -2339,7 +2339,7 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
                     if ( 1 != nBoxRowSpan )
                         pBox->setRowSpan( nBoxRowSpan );
 
-                    bSplitted = sal_True;
+                    bSplitted = true;
                 }
                 else if( bHasSubTables && bHoriSplitPossible && bHoriSplitMayContinue )
                 {
@@ -2372,7 +2372,7 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
 
                     pBox = MakeTableBox( pLine, nTopRow, nStartCol,
                                          nBottomRow, nSplitCol );
-                    bSplitted = sal_True;
+                    bSplitted = true;
                 }
 
                 OSL_ENSURE( bHasSubTables || pBox, "Colspan trouble" );
@@ -2513,8 +2513,8 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
             sal_Int32 nExtraAbs =
                     nAbsForRelWidth > nMinAbs ? nAbsForRelWidth - nMinAbs : (sal_Int32)0L;
 
-            sal_Bool bMin = sal_False;      // Do all columns get the mininum width?
-            sal_Bool bMinExtra = sal_False; // Do all columns get the minimum width plus
+            bool bMin = false;      // Do all columns get the mininum width?
+            bool bMinExtra = false; // Do all columns get the minimum width plus
                                     // some extra space?
 
             if( nAbsForRelWidth <= nMinAbs )
@@ -2522,7 +2522,7 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
                 // If there is not enough space left for all columns to
                 // get the minimum width, they get the minimum width, anyway.
                 nAbsForRelWidth = nMinAbs;
-                bMin = sal_True;
+                bMin = true;
             }
             else if( nAbsForRelWidth <= (nRelWidth * MINLAY) /
                                         nMinRelColWidth )
@@ -2532,7 +2532,7 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
                 // relative width into account, each column gets the minimum
                 // width plus some extra space that is based on the additional
                 // space that is available.
-                bMinExtra = sal_True;
+                bMinExtra = true;
             }
             // Otherwise, if there is enouth space for every column, every
             // column gets this space.
@@ -2623,7 +2623,7 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
     for(sal_uInt32 i=0UL; i<nRows; ++i )
     {
         // Could we split the table behind the current line?
-        sal_Bool bSplit = sal_True;
+        bool bSplit = true;
         if ( bHasSubTables )
         {
             SwXMLTableRow_Impl *pRow = &(*pRows)[(sal_uInt16)i];
@@ -2669,7 +2669,7 @@ void SwXMLTableContext::MakeTable()
     SwFrmFmt *pFrmFmt = pTableNode->GetTable().GetFrmFmt();
 
     sal_Int16 eHoriOrient = text::HoriOrientation::FULL;
-    sal_Bool bSetHoriOrient = sal_False;
+    bool bSetHoriOrient = false;
 
     sal_uInt16 nPrcWidth = 0U;
 
@@ -2698,14 +2698,14 @@ void SwXMLTableContext::MakeTable()
                 if( pLRSpace )
                 {
                     eHoriOrient = text::HoriOrientation::NONE;
-                    bSetHoriOrient = sal_True;
+                    bSetHoriOrient = true;
                 }
                 break;
             case text::HoriOrientation::LEFT:
                 if( pLRSpace )
                 {
                     eHoriOrient = text::HoriOrientation::LEFT_AND_WIDTH;
-                    bSetHoriOrient = sal_True;
+                    bSetHoriOrient = true;
                 }
                 break;
             default:
@@ -2714,7 +2714,7 @@ void SwXMLTableContext::MakeTable()
         }
         else
         {
-            bSetHoriOrient = sal_True;
+            bSetHoriOrient = true;
         }
 
         const SwFmtFrmSize *pSize = 0;
@@ -2753,14 +2753,14 @@ void SwXMLTableContext::MakeTable()
                     {
                         nWidth = USHRT_MAX;
                     }
-                    bRelWidth = sal_False;
+                    bRelWidth = false;
                 }
             }
             else
             {
                 eHoriOrient = text::HoriOrientation::LEFT_AND_WIDTH == eHoriOrient
                                     ? text::HoriOrientation::NONE : text::HoriOrientation::FULL;
-                bSetHoriOrient = sal_True;
+                bSetHoriOrient = true;
                 nWidth = USHRT_MAX;
             }
             break;
@@ -2770,7 +2770,7 @@ void SwXMLTableContext::MakeTable()
     }
     else
     {
-        bSetHoriOrient = sal_True;
+        bSetHoriOrient = true;
         nWidth = USHRT_MAX;
     }
 
@@ -2859,7 +2859,7 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
     {
         // The Cursor already is in the first section
         pStNd = pTxtCrsr->GetPaM()->GetNode()->FindTableBoxStartNode();
-        bFirstSection = sal_False;
+        bFirstSection = false;
         OUString sStyleName( RTL_CONSTASCII_USTRINGPARAM("Standard") );
         GetImport().GetTextImport()->SetStyleAndAttrs( GetImport(),
             GetImport().GetTextImport()->GetCursor(), sStyleName, sal_True );

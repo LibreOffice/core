@@ -250,7 +250,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
     SwOLENode *pOLENd = 0;
     if( rHRef.copy( 0, nPos ) == "vnd.sun.star.ServiceName" )
     {
-        sal_Bool bInsert = sal_False;
+        bool bInsert = false;
         SvGlobalName aClassName;
         const XMLServiceMapEntry_Impl *pEntry = aServiceMap;
         while( pEntry->sFilterService )
@@ -264,7 +264,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
                                            pEntry->n7, pEntry->n8,
                                            pEntry->n9, pEntry->n10,
                                            pEntry->n11  );
-                bInsert = sal_True;
+                bInsert = true;
                 break;
             }
             pEntry++;
@@ -375,12 +375,12 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
         OSL_ENSURE( pOLENode, "Where is the OLE node" );
 
         OUStringBuffer aBuffer( rTblName.getLength() );
-        sal_Bool bQuoted = sal_False;
-        sal_Bool bEscape = sal_False;
-        sal_Bool bError = sal_False;
+        bool bQuoted = false;
+        bool bEscape = false;
+        bool bError = false;
         for( sal_Int32 i=0; i < rTblName.getLength(); i++ )
         {
-            sal_Bool bEndOfNameFound = sal_False;
+            bool bEndOfNameFound = false;
             sal_Unicode c = rTblName[i];
             switch( c )
             {
@@ -388,48 +388,48 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
                 if( bEscape )
                 {
                     aBuffer.append( c );
-                    bEscape = sal_False;
+                    bEscape = false;
                 }
                 else if( bQuoted )
                 {
-                    bEndOfNameFound = sal_True;
+                    bEndOfNameFound = true;
                 }
                 else if( 0 == i )
                 {
-                    bQuoted = sal_True;
+                    bQuoted = true;
                 }
                 else
                 {
-                    bError = sal_True;
+                    bError = true;
                 }
                 break;
             case '\\':
                 if( bEscape )
                 {
                     aBuffer.append( c );
-                    bEscape = sal_False;
+                    bEscape = false;
                 }
                 else
                 {
-                    bEscape = sal_True;
+                    bEscape = true;
                 }
                 break;
             case ' ':
             case '.':
                 if( !bQuoted )
                 {
-                    bEndOfNameFound = sal_True;
+                    bEndOfNameFound = true;
                 }
                 else
                 {
                     aBuffer.append( c );
-                    bEscape = sal_False;
+                    bEscape = false;
                 }
                 break;
             default:
                 {
                     aBuffer.append( c );
-                    bEscape = sal_False;
+                    bEscape = false;
                 }
                 break;
             }
@@ -445,7 +445,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
 
     sal_Int64 nDrawAspect = 0;
     const XMLPropStyleContext *pStyle = 0;
-    sal_Bool bHasSizeProps = sal_False;
+    bool bHasSizeProps = false;
     if( !rStyleName.isEmpty() )
     {
         pStyle = FindAutoFrameStyle( rStyleName );
@@ -489,7 +489,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
                             sal_Int32 nVal = 0;
                             rProp.maValue >>= nVal;
                             aVisArea.setWidth( nVal );
-                            bHasSizeProps = sal_True;
+                            bHasSizeProps = true;
                         }
                         break;
                     case CTF_OLE_VIS_AREA_HEIGHT:
@@ -497,7 +497,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
                             sal_Int32 nVal = 0;
                             rProp.maValue >>= nVal;
                             aVisArea.setHeight( nVal );
-                            bHasSizeProps = sal_True;
+                            bHasSizeProps = true;
                         }
                         break;
                     case CTF_OLE_DRAW_ASPECT:
@@ -768,7 +768,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
 
     ScrollingMode eScrollMode = ScrollingAuto;
     sal_Bool bHasBorder = sal_False;
-    sal_Bool bIsBorderSet = sal_False;
+    bool bIsBorderSet = false;
     Size aMargin( SIZE_NOT_SET, SIZE_NOT_SET );
     const XMLPropStyleContext *pStyle = 0;
     if( !rStyleName.isEmpty() )
@@ -804,7 +804,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
                     case CTF_FRAME_DISPLAY_BORDER:
                         {
                             bHasBorder = *(sal_Bool *)rProp.maValue.getValue();
-                            bIsBorderSet = sal_True;
+                            bIsBorderSet = true;
                         }
                         break;
                     case CTF_FRAME_MARGIN_HORI:

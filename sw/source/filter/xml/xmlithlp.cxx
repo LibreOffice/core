@@ -186,7 +186,7 @@ bool sw_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
           ((API_LINE_SOLID == nStyle && rpLine->GetDistance()) ||
             (API_LINE_DOUBLE == nStyle && !rpLine->GetDistance())) ) )
    {
-       sal_Bool bDouble = (bHasWidth && API_LINE_DOUBLE == nStyle ) ||
+       bool bDouble = (bHasWidth && API_LINE_DOUBLE == nStyle ) ||
            rpLine->GetDistance();
 
        // fdo#38542: for double borders, do not override the width

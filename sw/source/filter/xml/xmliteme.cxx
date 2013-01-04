@@ -135,7 +135,7 @@ void SwXMLTableItemMapper_Impl::handleSpecialItem(
             {
                 sal_Int16 eHoriOrient =
                     ((const SwFmtHoriOrient *)pItem)->GetHoriOrient();
-                sal_Bool bExport = sal_False;
+                bool bExport = false;
                 sal_uInt16 nMemberId =
                     static_cast<sal_uInt16>( rEntry.nMemberId & MID_SW_FLAG_MASK );
                 switch( nMemberId )

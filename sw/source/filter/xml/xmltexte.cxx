@@ -222,7 +222,7 @@ void SwXMLTextParagraphExport::setTextEmbeddedGraphicURL(
 }
 
 static void lcl_addURL ( SvXMLExport &rExport, const String &rURL,
-                         sal_Bool bToRel = sal_True )
+                         bool bToRel = true )
 {
     String sRelURL;
 
@@ -480,7 +480,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
         {
             OUString sURL;
 
-            sal_Bool bIsOwnLink = sal_False;
+            bool bIsOwnLink = false;
             if( SV_EMBEDDED_OWN == nType )
             {
                 try
@@ -504,7 +504,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
             }
 
             sURL = GetExport().AddEmbeddedObject( sURL );
-            lcl_addURL( rXMLExport, sURL, sal_False );
+            lcl_addURL( rXMLExport, sURL, false );
         }
         if( SV_EMBEDDED_OWN == nType && pOLENd->GetChartTblName().Len() )
         {
@@ -724,7 +724,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
         if( (rXMLExport.getExportFlags() & EXPORT_EMBEDDED) == 0 )
         {
             sURL = GetExport().AddEmbeddedObject( sURL );
-            lcl_addURL( rXMLExport, sURL, sal_False );
+            lcl_addURL( rXMLExport, sURL, false );
         }
 
         SvXMLElementExport aElementExport( GetExport(), XML_NAMESPACE_DRAW,

@@ -195,12 +195,12 @@ public:
     SwXMLTableFrmFmtsSort_Impl ( sal_uInt16 /* nInit */, sal_uInt16 /*nGrow*/ )
     {}
 
-    sal_Bool AddRow( SwFrmFmt& rFrmFmt, const OUString& rNamePrefix, sal_uInt32 nLine );
-    sal_Bool AddCell( SwFrmFmt& rFrmFmt, const OUString& rNamePrefix,
+    bool AddRow( SwFrmFmt& rFrmFmt, const OUString& rNamePrefix, sal_uInt32 nLine );
+    bool AddCell( SwFrmFmt& rFrmFmt, const OUString& rNamePrefix,
                   sal_uInt32 nCol, sal_uInt32 nRow, sal_Bool bTop );
 };
 
-sal_Bool SwXMLTableFrmFmtsSort_Impl::AddRow( SwFrmFmt& rFrmFmt,
+bool SwXMLTableFrmFmtsSort_Impl::AddRow( SwFrmFmt& rFrmFmt,
                                          const OUString& rNamePrefix,
                                             sal_uInt32 nLine )
 {
@@ -221,10 +221,10 @@ sal_Bool SwXMLTableFrmFmtsSort_Impl::AddRow( SwFrmFmt& rFrmFmt,
 
     // empty styles have not to be exported
     if( !pFrmSize && !pBrush && !pRowSplit )
-        return sal_False;
+        return false;
 
     // order is: -/brush, size/-, size/brush
-    sal_Bool bInsert = sal_True;
+    bool bInsert = true;
     SwXMLFrmFmts_Impl::iterator i;
     for( i = aFormatList.begin(); i < aFormatList.end(); ++i )
     {
@@ -290,7 +290,7 @@ sal_Bool SwXMLTableFrmFmtsSort_Impl::AddRow( SwFrmFmt& rFrmFmt,
         // found!
         const String& rFmtName = pTestFmt->GetName();
         rFrmFmt.SetName( rFmtName );
-        bInsert = sal_False;
+        bInsert = false;
         break;
     }
 
@@ -330,7 +330,7 @@ static void lcl_xmltble_appendBoxPrefix( OUStringBuffer& rBuffer,
     rBuffer.append( (sal_Int32)(nRow + 1));
 }
 
-sal_Bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
+bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
                                          const OUString& rNamePrefix,
                                             sal_uInt32 nCol, sal_uInt32 nRow, sal_Bool bTop )
 {
@@ -361,7 +361,7 @@ sal_Bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
 
     // empty styles have not to be exported
     if( !pVertOrient && !pBrush && !pBox && !pNumFmt && !pFrameDir )
-        return sal_False;
+        return false;
 
     // order is: -/-/-/num,
     //           -/-/box/-, --/-/box/num,
@@ -369,7 +369,7 @@ sal_Bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
     //           vert/-/-/-, vert/-/-/num, vert/-/box/-, ver/-/box/num,
     //           vert/brush/-/-, vert/brush/-/num, vert/brush/box/-,
     //           vert/brush/box/num
-    sal_Bool bInsert = sal_True;
+    bool bInsert = true;
     SwXMLFrmFmts_Impl::iterator i;
     for( i = aFormatList.begin(); i < aFormatList.end(); ++i )
     {
@@ -470,7 +470,7 @@ sal_Bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
         // found!
         const String& rFmtName = pTestFmt->GetName();
         rFrmFmt.SetName( rFmtName );
-        bInsert = sal_False;
+        bInsert = false;
         break;
     }
 
@@ -491,7 +491,7 @@ class SwXMLTableInfo_Impl
 {
     const SwTable *pTable;
     Reference < XTextSection > xBaseSection;
-    sal_Bool bBaseSectionValid;
+    bool bBaseSectionValid;
 
 public:
 
@@ -500,14 +500,14 @@ public:
     const SwTable *GetTable() const { return pTable; }
     const SwFrmFmt *GetTblFmt() const { return pTable->GetFrmFmt(); }
 
-    sal_Bool IsBaseSectionValid() const { return bBaseSectionValid; }
+    bool IsBaseSectionValid() const { return bBaseSectionValid; }
     const Reference < XTextSection >& GetBaseSection() const { return xBaseSection; }
     inline void SetBaseSection( const Reference < XTextSection >& rBase );
 };
 
 inline SwXMLTableInfo_Impl::SwXMLTableInfo_Impl( const SwTable *pTbl ) :
     pTable( pTbl ),
-    bBaseSectionValid( sal_False )
+    bBaseSectionValid( false )
 {
 }
 
@@ -515,7 +515,7 @@ inline void SwXMLTableInfo_Impl::SetBaseSection(
         const Reference < XTextSection >& rBaseSection )
 {
     xBaseSection = rBaseSection;
-    bBaseSectionValid = sal_True;
+    bBaseSectionValid = true;
 }
 
 // ---------------------------------------------------------------------
@@ -747,7 +747,7 @@ void SwXMLExport::ExportTableAutoStyles( const SwTableNode& rTblNd )
         sal_uInt32 nBaseWidth = 0UL;
         sal_Int8 nPrcWidth = rFrmSize.GetWidthPercent();
 
-        sal_Bool bFixAbsWidth = nPrcWidth != 0 || /*text::*/HoriOrientation::NONE == eTabHoriOri
+        bool bFixAbsWidth = nPrcWidth != 0 || /*text::*/HoriOrientation::NONE == eTabHoriOri
                                            || /*text::*/HoriOrientation::FULL == eTabHoriOri;
         if( bFixAbsWidth )
         {
