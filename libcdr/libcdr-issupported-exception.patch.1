@@ -1,0 +1,43 @@
+rhbz#891082: CMXDocument::isSupported: catch exceptions
+
+diff -ru cdr.old/src/lib/CMXDocument.cpp cdr/src/lib/CMXDocument.cpp
+--- cdr.old/src/lib/CMXDocument.cpp
++++ cdr/src/lib/CMXDocument.cpp
+@@ -46,20 +46,24 @@
+ */
+ bool libcdr::CMXDocument::isSupported(WPXInputStream *input)
+ {
+-  input->seek(0, WPX_SEEK_SET);
+-  unsigned riff = readU32(input);
+-  if (riff != FOURCC_RIFF && riff != FOURCC_RIFX)
+-    return false;
+-  input->seek(4, WPX_SEEK_CUR);
+-  char signature_c = (char)readU8(input);
+-  if (signature_c != 'C' && signature_c != 'c')
+-    return false;
+-  char signature_d = (char)readU8(input);
+-  if (signature_d != 'M' && signature_d != 'm')
+-    return false;
+-  char signature_r = (char)readU8(input);
+-  if (signature_r != 'X' && signature_r != 'x')
++  try {
++    input->seek(0, WPX_SEEK_SET);
++    unsigned riff = readU32(input);
++    if (riff != FOURCC_RIFF && riff != FOURCC_RIFX)
++      return false;
++    input->seek(4, WPX_SEEK_CUR);
++    char signature_c = (char)readU8(input);
++    if (signature_c != 'C' && signature_c != 'c')
++      return false;
++    char signature_d = (char)readU8(input);
++    if (signature_d != 'M' && signature_d != 'm')
++      return false;
++    char signature_r = (char)readU8(input);
++    if (signature_r != 'X' && signature_r != 'x')
++      return false;
++  } catch (...) {
+     return false;
++  }
+   return true;
+ }
+ 
