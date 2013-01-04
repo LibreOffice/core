@@ -44,10 +44,6 @@ COMP_TYPEFLAG = $(OUT_MISC)/cpp_$(COMP_NAME)_types.flag
 
 CXXFILES = \
            MyProtocolHandler.cxx \
-           MyJob.cxx \
-           MyListener.cxx \
-           WriterListener.cxx \
-           CalcListener.cxx \
            ListenerHelper.cxx \
            exports.cxx
 
@@ -118,9 +114,6 @@ $(COMP_COMPONENTS) :
 	@echo $(OSEP)?xml version="$(QM)1.0$(QM)" encoding="$(QM)UTF-8$(QM)"?$(CSEP) > $@
 	@echo $(OSEP)components xmlns="$(QM)http://openoffice.org/2010/uno-components$(QM)"$(CSEP) >> $@
 	@echo $(SQM)  $(SQM)$(OSEP)component loader="$(QM)com.sun.star.loader.SharedLibrary$(QM)" uri="$(QM)$(UNOPKG_PLATFORM)/$(COMP_IMPL_NAME)$(QM)"$(CSEP) >> $@
-	@echo $(SQM)    $(SQM)$(OSEP)implementation name="$(QM)vnd.My.impl.NewDocListener$(QM)"$(CSEP) >> $@
-	@echo $(SQM)      $(SQM)$(OSEP)service name="$(QM)vnd.My.NewDocListener$(QM)"/$(CSEP) >> $@
-	@echo $(SQM)    $(SQM)$(OSEP)/implementation$(CSEP) >> $@
 	@echo $(SQM)    $(SQM)$(OSEP)implementation name="$(QM)vnd.demo.Impl.ProtocolHandler$(QM)"$(CSEP) >> $@
 	@echo $(SQM)      $(SQM)$(OSEP)service name="$(QM)vnd.demo.ProtocolHandler$(QM)"/$(CSEP) >> $@
 	@echo $(SQM)    $(SQM)$(OSEP)/implementation$(CSEP) >> $@
@@ -152,7 +145,7 @@ endif
 
 Example : $(COMP_REGISTERFLAG)
 	@echo --------------------------------------------------------------------------------
-	@echo The "$(QM)ProtocolHandler$(QM)" addon component was installed if SDK_AUTO_DEPLOYMENT = YES.
+	@echo The "$(QM)Complext Toolbar Controlls$(QM)" component was installed if SDK_AUTO_DEPLOYMENT = YES.
 	@echo You can use this component inside your office installation, see the example
 	@echo description.
 	@echo --------------------------------------------------------------------------------
