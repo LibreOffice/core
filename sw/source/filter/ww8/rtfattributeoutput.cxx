@@ -3347,7 +3347,7 @@ void RtfAttributeOutput::FlyFrameOLEReplacement(const SwFlyFrmFmt* pFlyFrmFmt, S
         OSL_FAIL("failed to export the graphic");
     aWmfStream.Seek(STREAM_SEEK_TO_END);
     nSize = aWmfStream.Tell();
-    pGraphicAry = (sal_uInt8*)aStream.GetData();
+    pGraphicAry = (sal_uInt8*)aWmfStream.GetData();
     m_aRunText->append(ExportPICT( pFlyFrmFmt, aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize, m_rExport ));
     m_aRunText->append("}"); // nonshppict
 }
