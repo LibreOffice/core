@@ -33,6 +33,7 @@
 #include "dbustrings.hrc"
 #include <vcl/svapp.hxx>
 #include <vcl/waitobj.hxx>
+#include <com/sun/star/i18n/Collator.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/XAppend.hpp>
@@ -271,9 +272,8 @@ DBG_NAME(OTableSubscriptionPage)
                 // the collator for the string compares
                 try
                 {
-                    m_xCollator = Reference< XCollator >(m_xORB->getServiceManager()->createInstanceWithContext(SERVICE_I18N_COLLATOR, m_xORB), UNO_QUERY);
-                    if (m_xCollator.is())
-                        m_xCollator->loadDefaultCollator(Application::GetSettings().GetLanguageTag().getLocale(), 0);
+                    m_xCollator = Collator::create(m_xORB);
+                    m_xCollator->loadDefaultCollator(Application::GetSettings().GetLanguageTag().getLocale(), 0);
                 }
                 catch(const Exception&)
                 {
