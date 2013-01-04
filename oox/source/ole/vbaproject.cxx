@@ -70,7 +70,7 @@ bool lclReadConfigItem( const Reference< XInterface >& rxConfigAccess, const OUS
     // some applications do not support all configuration items, assume 'false' in this case
     try
     {
-        Any aItem = ConfigurationHelper::readRelativeKey( rxConfigAccess, CREATE_OUSTRING( "Filter/Import/VBA" ), rItemName );
+        Any aItem = ConfigurationHelper::readRelativeKey( rxConfigAccess, "Filter/Import/VBA", rItemName );
         return aItem.has< bool >() && aItem.get< bool >();
     }
     catch(const Exception& )
@@ -89,7 +89,7 @@ VbaFilterConfig::VbaFilterConfig( const Reference< XComponentContext >& rxContex
     if( rxContext.is() ) try
     {
         OSL_ENSURE( !rConfigCompName.isEmpty(), "VbaFilterConfig::VbaFilterConfig - invalid configuration component name" );
-        OUString aConfigPackage = CREATE_OUSTRING( "org.openoffice.Office." ) + rConfigCompName;
+        OUString aConfigPackage = "org.openoffice.Office." + rConfigCompName;
         mxConfigAccess = ConfigurationHelper::openConfig( rxContext, aConfigPackage, ConfigurationHelper::E_READONLY );
     }
     catch(const Exception& )
@@ -104,17 +104,17 @@ VbaFilterConfig::~VbaFilterConfig()
 
 bool VbaFilterConfig::isImportVba() const
 {
-    return lclReadConfigItem( mxConfigAccess, CREATE_OUSTRING( "Load" ) );
+    return lclReadConfigItem( mxConfigAccess, "Load" );
 }
 
 bool VbaFilterConfig::isImportVbaExecutable() const
 {
-    return lclReadConfigItem( mxConfigAccess, CREATE_OUSTRING( "Executable" ) );
+    return lclReadConfigItem( mxConfigAccess, "Executable" );
 }
 
 bool VbaFilterConfig::isExportVba() const
 {
-    return lclReadConfigItem( mxConfigAccess, CREATE_OUSTRING( "Save" ) );
+    return lclReadConfigItem( mxConfigAccess, "Save" );
 }
 
 // ============================================================================
@@ -147,7 +147,7 @@ VbaProject::VbaProject( const Reference< XComponentContext >& rxContext,
     VbaFilterConfig( rxContext, rConfigCompName ),
     mxContext( rxContext ),
     mxDocModel( rxDocModel ),
-    maPrjName( CREATE_OUSTRING( "Standard" ) )
+    maPrjName( "Standard" )
 {
     OSL_ENSURE( mxContext.is(), "VbaProject::VbaProject - missing component context" );
     OSL_ENSURE( mxDocModel.is(), "VbaProject::VbaProject - missing document model" );
@@ -264,7 +264,7 @@ Reference< XNameContainer > VbaProject::createDialogLibrary()
 
 void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGraphicHelper, bool bDefaultColorBgr )
 {
-    StorageRef xVbaStrg = rVbaPrjStrg.openSubStorage( CREATE_OUSTRING( "VBA" ), false );
+    StorageRef xVbaStrg = rVbaPrjStrg.openSubStorage( "VBA", false );
     OSL_ENSURE( xVbaStrg.get(), "VbaProject::importVba - cannot open 'VBA' substorage" );
     if( !xVbaStrg )
         return;
@@ -273,7 +273,7 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
         project such as the text encoding used throughout several streams, and
         a list of all code modules.
      */
-    BinaryXInputStream aInStrm( xVbaStrg->openInputStream( CREATE_OUSTRING( "dir" ) ), true );
+    BinaryXInputStream aInStrm( xVbaStrg->openInputStream( "dir" ), true );
     // VbaInputStream implements decompression
     VbaInputStream aDirStrm( aInStrm );
     OSL_ENSURE( !aDirStrm.isEof(), "VbaProject::importVba - cannot open 'dir' stream" );
@@ -362,7 +362,7 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
         -   The line 'BaseClass=<modulename>' declares a code module attached
             to a user form with the same name.
      */
-    BinaryXInputStream aPrjStrm( rVbaPrjStrg.openInputStream( CREATE_OUSTRING( "PROJECT" ) ), true );
+    BinaryXInputStream aPrjStrm( rVbaPrjStrg.openInputStream( "PROJECT" ), true );
     OSL_ENSURE( !aPrjStrm.isEof(), "VbaProject::importVba - cannot open 'PROJECT' stream" );
     // do not exit if this stream does not exist, but proceed to load the modules below
     if( !aPrjStrm.isEof() )
@@ -443,7 +443,7 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
         Reference< XNameAccess > xDocObjectNA;
         try
         {
-            xDocObjectNA.set( xModelFactory->createInstance( CREATE_OUSTRING( "ooo.vba.VBAObjectModuleObjectProvider" ) ), UNO_QUERY );
+            xDocObjectNA.set( xModelFactory->createInstance( "ooo.vba.VBAObjectModuleObjectProvider" ), UNO_QUERY );
         }
         catch(const Exception& )
         {
@@ -515,7 +515,7 @@ void VbaProject::attachMacros()
         aArgs[ 0 ] <<= mxDocModel;
         aArgs[ 1 ] <<= maPrjName;
         Reference< XVBAMacroResolver > xResolver( xFactory->createInstanceWithArgumentsAndContext(
-            CREATE_OUSTRING( "com.sun.star.script.vba.VBAMacroResolver" ), aArgs, mxContext ), UNO_QUERY_THROW );
+            "com.sun.star.script.vba.VBAMacroResolver", aArgs, mxContext ), UNO_QUERY_THROW );
         maMacroAttachers.forEachMem( &VbaMacroAttacherBase::resolveAndAttachMacro, ::boost::cref( xResolver ) );
     }
     catch(const Exception& )
@@ -531,7 +531,7 @@ void VbaProject::copyStorage( StorageBase& rVbaPrjStrg )
         Reference< XStorage > xDocStorage( xStorageBasedDoc->getDocumentStorage(), UNO_QUERY_THROW );
         {
             const sal_Int32 nOpenMode = ElementModes::SEEKABLE | ElementModes::WRITE | ElementModes::TRUNCATE;
-            Reference< XStream > xDocStream( xDocStorage->openStreamElement( CREATE_OUSTRING( "_MS_VBA_Macros" ), nOpenMode ), UNO_SET_THROW );
+            Reference< XStream > xDocStream( xDocStorage->openStreamElement( "_MS_VBA_Macros", nOpenMode ), UNO_SET_THROW );
             OleStorage aDestStorage( mxContext, xDocStream, false );
             rVbaPrjStrg.copyStorageToStorage( aDestStorage );
             aDestStorage.commit();

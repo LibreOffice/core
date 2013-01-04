@@ -85,15 +85,15 @@ void ObjectContainer::createContainer() const
 // ============================================================================
 
 ModelObjectHelper::ModelObjectHelper( const Reference< XMultiServiceFactory >& rxModelFactory ) :
-    maMarkerContainer(    rxModelFactory, CREATE_OUSTRING( "com.sun.star.drawing.MarkerTable" ) ),
-    maDashContainer(      rxModelFactory, CREATE_OUSTRING( "com.sun.star.drawing.DashTable" ) ),
-    maGradientContainer(  rxModelFactory, CREATE_OUSTRING( "com.sun.star.drawing.GradientTable" ) ),
-    maTransGradContainer(  rxModelFactory, CREATE_OUSTRING( "com.sun.star.drawing.TransparencyGradientTable" ) ),
-    maBitmapUrlContainer( rxModelFactory, CREATE_OUSTRING( "com.sun.star.drawing.BitmapTable" ) ),
-    maDashNameBase(      CREATE_OUSTRING( "msLineDash " ) ),
-    maGradientNameBase(  CREATE_OUSTRING( "msFillGradient " ) ),
-    maTransGradNameBase(  CREATE_OUSTRING( "msTransGradient " ) ),
-    maBitmapUrlNameBase( CREATE_OUSTRING( "msFillBitmap " ) )
+    maMarkerContainer(    rxModelFactory, "com.sun.star.drawing.MarkerTable" ),
+    maDashContainer(      rxModelFactory, "com.sun.star.drawing.DashTable" ),
+    maGradientContainer(  rxModelFactory, "com.sun.star.drawing.GradientTable" ),
+    maTransGradContainer(  rxModelFactory, "com.sun.star.drawing.TransparencyGradientTable" ),
+    maBitmapUrlContainer( rxModelFactory, "com.sun.star.drawing.BitmapTable" ),
+    maDashNameBase(      "msLineDash " ),
+    maGradientNameBase(  "msFillGradient " ),
+    maTransGradNameBase( "msTransGradient " ),
+    maBitmapUrlNameBase( "msFillBitmap " )
 {
 }
 

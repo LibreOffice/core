@@ -79,7 +79,7 @@ void ResolveTextFields( XmlFilterBase& rFilter )
         oox::core::TextFieldStack::const_iterator aIter( rTextFields.begin() );
         while( aIter != rTextFields.end() )
         {
-            const OUString sURL = CREATE_OUSTRING( "URL" );
+            const OUString sURL = "URL";
             Reference< drawing::XDrawPagesSupplier > xDPS( xModel, uno::UNO_QUERY_THROW );
             Reference< drawing::XDrawPages > xDrawPages( xDPS->getDrawPages(), uno::UNO_QUERY_THROW );
 
@@ -91,8 +91,8 @@ void ResolveTextFields( XmlFilterBase& rFilter )
                 OUString aURL;
                 if ( xPropSet->getPropertyValue( sURL ) >>= aURL )
                 {
-                    const OUString sSlide = CREATE_OUSTRING( "#Slide " );
-                    const OUString sNotes = CREATE_OUSTRING( "#Notes " );
+                    const OUString sSlide = "#Slide ";
+                    const OUString sNotes = "#Notes ";
                     sal_Bool bNotes = sal_False;
                     sal_Int32 nPageNumber = 0;
                     if ( aURL.match( sSlide ) )
@@ -114,7 +114,7 @@ void ResolveTextFields( XmlFilterBase& rFilter )
                                 xDrawPage = xPresentationPage->getNotesPage();
                             }
                             Reference< container::XNamed > xNamed( xDrawPage, UNO_QUERY_THROW );
-                            aURL = CREATE_OUSTRING( "#" ).concat( xNamed->getName() );
+                            aURL = OUString( "#" ).concat( xNamed->getName() );
                             xPropSet->setPropertyValue( sURL, Any( aURL ) );
                             Reference< text::XTextContent > xContent( rTextField.xTextField, UNO_QUERY);
                             Reference< text::XTextRange > xTextRange( rTextField.xTextCursor, UNO_QUERY );
@@ -338,7 +338,7 @@ bool PresentationFragmentHandler::importSlide( const FragmentHandlerRef& rxSlide
     SlidePersistPtr pMasterPersistPtr( pSlidePersistPtr->getMasterPersist() );
     if ( pMasterPersistPtr.get() )
     {
-        const OUString sLayout = CREATE_OUSTRING( "Layout" );
+        const OUString sLayout = "Layout";
         uno::Reference< beans::XPropertySet > xSet( xSlide, uno::UNO_QUERY_THROW );
         xSet->setPropertyValue( sLayout, Any( pMasterPersistPtr->getLayoutFromValueToken() ) );
     }

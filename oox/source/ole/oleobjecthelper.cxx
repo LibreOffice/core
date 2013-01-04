@@ -53,12 +53,12 @@ OleObjectInfo::OleObjectInfo() :
 // ============================================================================
 
 OleObjectHelper::OleObjectHelper( const Reference< XMultiServiceFactory >& rxModelFactory ) :
-    maEmbeddedObjScheme( CREATE_OUSTRING( "vnd.sun.star.EmbeddedObject:" ) ),
+    maEmbeddedObjScheme( "vnd.sun.star.EmbeddedObject:" ),
     mnObjectId( 100 )
 {
     if( rxModelFactory.is() ) try
     {
-        mxResolver.set( rxModelFactory->createInstance( CREATE_OUSTRING( "com.sun.star.document.ImportEmbeddedObjectResolver" ) ), UNO_QUERY );
+        mxResolver.set( rxModelFactory->createInstance( "com.sun.star.document.ImportEmbeddedObjectResolver" ), UNO_QUERY );
     }
     catch(const Exception& )
     {
@@ -95,7 +95,7 @@ bool OleObjectHelper::importOleObject( PropertyMap& rPropMap, const OleObjectInf
         // embedded OLE object - import the embedded data
         if( rOleObject.maEmbeddedData.hasElements() && mxResolver.is() ) try
         {
-            OUString aObjectId = CREATE_OUSTRING( "Obj" ) + OUString::valueOf( mnObjectId++ );
+            OUString aObjectId = "Obj" + OUString::valueOf( mnObjectId++ );
 
             Reference< XNameAccess > xResolverNA( mxResolver, UNO_QUERY_THROW );
             Reference< XOutputStream > xOutStrm( xResolverNA->getByName( aObjectId ), UNO_QUERY_THROW );

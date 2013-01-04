@@ -39,12 +39,12 @@ namespace oox { namespace ppt {
 
 OUString SAL_CALL QuickDiagrammingLayout_getImplementationName() throw()
 {
-    return CREATE_OUSTRING( "com.sun.star.comp.Impress.oox.QuickDiagrammingLayout" );
+    return OUString( "com.sun.star.comp.Impress.oox.QuickDiagrammingLayout" );
 }
 
 uno::Sequence< OUString > SAL_CALL QuickDiagrammingLayout_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName = CREATE_OUSTRING( "com.sun.star.comp.ooxpptx.dgm.layout" );
+    const OUString aServiceName = "com.sun.star.comp.ooxpptx.dgm.layout";
     const Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
@@ -84,8 +84,7 @@ bool QuickDiagrammingLayout::importDocument() throw()
             Reference<beans::XPropertySet> xPropSet2(xMasterPage,
                                                      UNO_QUERY_THROW);
             Reference<xml::dom::XDocument> xThemeFragment;
-            xPropSet2->getPropertyValue(
-                CREATE_OUSTRING("PPTTheme")) >>= xThemeFragment;
+            xPropSet2->getPropertyValue("PPTTheme") >>= xThemeFragment;
 
             importFragment(
                 new ThemeFragmentHandler(
@@ -101,14 +100,10 @@ bool QuickDiagrammingLayout::importDocument() throw()
     Reference<xml::dom::XDocument> xQStyleDom;
     Reference<xml::dom::XDocument> xColorStyleDom;
 
-    xPropSet->getPropertyValue(
-        CREATE_OUSTRING("DiagramData")) >>= xDataModelDom;
-    xPropSet->getPropertyValue(
-        CREATE_OUSTRING("DiagramLayout")) >>= xLayoutDom;
-    xPropSet->getPropertyValue(
-        CREATE_OUSTRING("DiagramQStyle")) >>= xQStyleDom;
-    xPropSet->getPropertyValue(
-        CREATE_OUSTRING("DiagramColorStyle")) >>= xColorStyleDom;
+    xPropSet->getPropertyValue("DiagramData") >>= xDataModelDom;
+    xPropSet->getPropertyValue("DiagramLayout") >>= xLayoutDom;
+    xPropSet->getPropertyValue("DiagramQStyle") >>= xQStyleDom;
+    xPropSet->getPropertyValue("DiagramColorStyle") >>= xColorStyleDom;
 
     oox::drawingml::ShapePtr pShape(
         new oox::drawingml::Shape( "com.sun.star.drawing.DiagramShape" ) );

@@ -127,7 +127,7 @@ sal_Int32 TextRun::insertAt(
         {
             OSL_TRACE( "OOX: URL field" );
             Reference< XMultiServiceFactory > xFactory( rFilterBase.getModel(), UNO_QUERY );
-            Reference< XTextField > xField( xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.text.TextField.URL" ) ), UNO_QUERY );
+            Reference< XTextField > xField( xFactory->createInstance( "com.sun.star.text.TextField.URL" ), UNO_QUERY );
             if( xField.is() )
             {
                 Reference< XTextCursor > xTextFieldCursor = xText->createTextCursor();

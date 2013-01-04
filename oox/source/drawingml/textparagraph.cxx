@@ -122,7 +122,7 @@ void TextParagraph::insertAt(
         // empty paragraphs do not have bullets in ppt
         if ( !nParagraphSize )
         {
-            const OUString sNumberingLevel( CREATE_OUSTRING( "NumberingLevel" ) );
+            const OUString sNumberingLevel( "NumberingLevel" );
             xProps->setPropertyValue( sNumberingLevel, Any( static_cast< sal_Int16 >( -1 ) ) );
         }
 

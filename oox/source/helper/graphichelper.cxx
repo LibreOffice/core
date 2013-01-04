@@ -67,7 +67,7 @@ inline sal_Int32 lclConvertScreenPixelToHmm( double fPixel, double fPixelPerHmm 
 GraphicHelper::GraphicHelper( const Reference< XComponentContext >& rxContext, const Reference< XFrame >& rxTargetFrame, const StorageRef& rxStorage ) :
     mxContext( rxContext ),
     mxStorage( rxStorage ),
-    maGraphicObjScheme( CREATE_OUSTRING( "vnd.sun.star.GraphicObject:" ) )
+    maGraphicObjScheme( "vnd.sun.star.GraphicObject:" )
 {
     OSL_ENSURE( mxContext.is(), "GraphicHelper::GraphicHelper - missing component context" );
     if( mxContext.is() )
@@ -239,20 +239,20 @@ Reference< XGraphic > GraphicHelper::importGraphic( const Reference< XInputStrea
     if( rxInStrm.is() && mxGraphicProvider.is() ) try
     {
         Sequence< PropertyValue > aArgs( 1 );
-        aArgs[ 0 ].Name = CREATE_OUSTRING( "InputStream" );
+        aArgs[ 0 ].Name = "InputStream";
         aArgs[ 0 ].Value <<= rxInStrm;
 
         if ( pExtHeader && pExtHeader->mapMode > 0 )
         {
             aArgs.realloc( aArgs.getLength() + 1 );
             Sequence< PropertyValue > aFilterData( 3 );
-            aFilterData[ 0 ].Name = CREATE_OUSTRING( "ExternalWidth" );
+            aFilterData[ 0 ].Name = "ExternalWidth";
             aFilterData[ 0 ].Value <<= pExtHeader->xExt;
-            aFilterData[ 1 ].Name = CREATE_OUSTRING( "ExternalHeight" );
+            aFilterData[ 1 ].Name = "ExternalHeight";
             aFilterData[ 1 ].Value <<= pExtHeader->yExt;
-            aFilterData[ 2 ].Name = CREATE_OUSTRING( "ExternalMapMode" );
+            aFilterData[ 2 ].Name = "ExternalMapMode";
             aFilterData[ 2 ].Value <<= pExtHeader->mapMode;
-            aArgs[ 1 ].Name = CREATE_OUSTRING( "FilterData" );
+            aArgs[ 1 ].Name = "FilterData";
             aArgs[ 1 ].Value <<= aFilterData;
         }
 

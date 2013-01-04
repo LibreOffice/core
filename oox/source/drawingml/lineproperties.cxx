@@ -185,20 +185,20 @@ void lclPushMarkerProperties( ShapePropertyMap& rPropMap,
     switch( nArrowType )
     {
         case XML_triangle:
-            aBuffer.append( CREATE_OUSTRING( "msArrowEnd" ) );
+            aBuffer.append( "msArrowEnd" );
         break;
         case XML_arrow:
-            aBuffer.append( CREATE_OUSTRING( "msArrowOpenEnd" ) );
+            aBuffer.append( "msArrowOpenEnd" );
         break;
         case XML_stealth:
-            aBuffer.append( CREATE_OUSTRING( "msArrowStealthEnd" ) );
+            aBuffer.append( "msArrowStealthEnd" );
         break;
         case XML_diamond:
-            aBuffer.append( CREATE_OUSTRING( "msArrowDiamondEnd" ) );
+            aBuffer.append( "msArrowDiamondEnd" );
             bMarkerCenter = true;
         break;
         case XML_oval:
-            aBuffer.append( CREATE_OUSTRING( "msArrowOvalEnd" ) );
+            aBuffer.append( "msArrowOvalEnd" );
             bMarkerCenter = true;
         break;
     }

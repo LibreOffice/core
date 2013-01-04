@@ -379,7 +379,7 @@ public:
     void exportCompObj( const Reference< XOutputStream >& rxOut );
     void exportControl( const Reference< XOutputStream >& rxOut, const ::com::sun::star::awt::Size& rSize );
 };
-OleFormCtrlExportHelper::OleFormCtrlExportHelper(  const Reference< XComponentContext >& rxCtx, const Reference< XModel >& rxDocModel, const Reference< XControlModel >& xCntrlModel ) : maControl( CREATE_OUSTRING( "Unknown" ) ), mpModel( NULL ), maGrfHelper( rxCtx, lcl_getFrame( rxDocModel ), StorageRef() ), mxDocModel( rxDocModel ), mxControlModel( xCntrlModel )
+OleFormCtrlExportHelper::OleFormCtrlExportHelper(  const Reference< XComponentContext >& rxCtx, const Reference< XModel >& rxDocModel, const Reference< XControlModel >& xCntrlModel ) : maControl( "Unknown" ), mpModel( NULL ), maGrfHelper( rxCtx, lcl_getFrame( rxDocModel ), StorageRef() ), mxDocModel( rxDocModel ), mxControlModel( xCntrlModel )
 {
     // try to get the guid
     Reference< com::sun::star::beans::XPropertySet > xProps( xCntrlModel, UNO_QUERY );
@@ -402,7 +402,7 @@ OleFormCtrlExportHelper::OleFormCtrlExportHelper(  const Reference< XComponentCo
                 Reference< XServiceInfo > xInfo( xCntrlModel,
                     UNO_QUERY);
                 if (xInfo->
-                    supportsService( CREATE_OUSTRING( "com.sun.star.form.component.FormattedField" ) ) )
+                    supportsService( "com.sun.star.form.component.FormattedField" ) )
                     nClassId = FORMULAFIELD;
             }
             else if ( nClassId == FormComponentType::COMMANDBUTTON )
@@ -416,9 +416,8 @@ OleFormCtrlExportHelper::OleFormCtrlExportHelper(  const Reference< XComponentCo
             {
                 Reference< XServiceInfo > xInfo( xCntrlModel,
                     UNO_QUERY);
-                if (xInfo->
-                    supportsService(OUString( CREATE_OUSTRING( "com.sun.star.form.component.ImageControl" ) ) ) )
-                nClassId = FormComponentType::IMAGECONTROL;
+                if (xInfo->supportsService("com.sun.star.form.component.ImageControl" ) )
+                    nClassId = FormComponentType::IMAGECONTROL;
             }
 
             GUIDCNamePairMap& cntrlMap = classIdToGUIDCNamePairMap::get();
@@ -427,7 +426,7 @@ OleFormCtrlExportHelper::OleFormCtrlExportHelper(  const Reference< XComponentCo
             {
                 aPropSet.getProperty(maName, PROP_Name );
                 maTypeName = OUString::createFromAscii( it->second.sName );
-                maFullName = CREATE_OUSTRING( "Microsoft Forms 2.0 " ) + maTypeName;
+                maFullName = "Microsoft Forms 2.0 " + maTypeName;
                 maControl =  EmbeddedControl( maName );
                 maGUID = OUString::createFromAscii( it->second.sGUID );
                 mpModel = maControl.createModelFromGuid( maGUID );
@@ -474,7 +473,7 @@ MSConvertOCXControls::~MSConvertOCXControls()
 bool
 MSConvertOCXControls::importControlFromStream( ::oox::BinaryInputStream& rInStrm, Reference< XFormComponent >& rxFormComp, const OUString& rGuidString )
 {
-    ::oox::ole::EmbeddedControl aControl( CREATE_OUSTRING( "Unknown" ) );
+    ::oox::ole::EmbeddedControl aControl( "Unknown" );
     if( ::oox::ole::ControlModelBase* pModel = aControl.createModelFromGuid( rGuidString  ) )
     {
         pModel->importBinaryModel( rInStrm );
@@ -541,14 +540,14 @@ sal_Bool MSConvertOCXControls::ReadOCXStorage( SotStorageRef& xOleStg,
 {
     if ( xOleStg.Is() )
     {
-        SvStorageStreamRef pNameStream = xOleStg->OpenSotStream( CREATE_OUSTRING("\3OCXNAME"));
+        SvStorageStreamRef pNameStream = xOleStg->OpenSotStream( OUString("\3OCXNAME"));
         BinaryXInputStream aNameStream( Reference< XInputStream >( new utl::OSeekableInputStreamWrapper( *pNameStream ) ), true );
 
-        SvStorageStreamRef pContents = xOleStg->OpenSotStream( CREATE_OUSTRING("contents"));
+        SvStorageStreamRef pContents = xOleStg->OpenSotStream( OUString("contents"));
         BinaryXInputStream aInStrm(  Reference< XInputStream >( new utl::OSeekableInputStreamWrapper( *pContents ) ), true );
 
 
-        SvStorageStreamRef pClsStrm = xOleStg->OpenSotStream( CREATE_OUSTRING("\1CompObj") );
+        SvStorageStreamRef pClsStrm = xOleStg->OpenSotStream(OUString("\1CompObj"));
         BinaryXInputStream aClsStrm( Reference< XInputStream >( new utl::OSeekableInputStreamWrapper(*pClsStrm ) ), true );
         aClsStrm.skip(12);
 
@@ -588,17 +587,17 @@ sal_Bool MSConvertOCXControls::WriteOCXStream( const Reference< XModel >& rxMode
     rName = exportHelper.getTypeName();
     xOleStg->SetClass( aName,0x5C,sFullName);
     {
-        SvStorageStreamRef pNameStream = xOleStg->OpenSotStream( CREATE_OUSTRING("\3OCXNAME"));
+        SvStorageStreamRef pNameStream = xOleStg->OpenSotStream(OUString("\3OCXNAME"));
         Reference< XOutputStream > xOut = new utl::OSeekableOutputStreamWrapper( *pNameStream );
         exportHelper.exportName( xOut );
     }
     {
-        SvStorageStreamRef pObjStream = xOleStg->OpenSotStream( CREATE_OUSTRING("\1CompObj"));
+        SvStorageStreamRef pObjStream = xOleStg->OpenSotStream(OUString("\1CompObj"));
         Reference< XOutputStream > xOut = new utl::OSeekableOutputStreamWrapper( *pObjStream );
         exportHelper.exportCompObj( xOut );
     }
     {
-        SvStorageStreamRef pContents = xOleStg->OpenSotStream( CREATE_OUSTRING("contents"));
+        SvStorageStreamRef pContents = xOleStg->OpenSotStream(OUString("contents"));
         Reference< XOutputStream > xOut = new utl::OSeekableOutputStreamWrapper( *pContents );
         exportHelper.exportControl( xOut, rSize );
     }
@@ -629,7 +628,7 @@ const Reference< XIndexContainer >&
             Reference< XNameContainer >  xNameCont =
                 xFormsSupplier->getForms();
 
-            OUString sStdName = CREATE_OUSTRING( "WW-Standard" );
+            OUString sStdName = "WW-Standard";
             OUString sName( sStdName );
             sal_uInt16 n = 0;
 
@@ -645,15 +644,14 @@ const Reference< XIndexContainer >&
                 return mxFormComps;
 
             Reference< XInterface >  xCreate =
-                rServiceFactory->createInstance( CREATE_OUSTRING(
-                    "com.sun.star.form.component.Form"));
+                rServiceFactory->createInstance("com.sun.star.form.component.Form");
             if( xCreate.is() )
             {
                 Reference< XPropertySet > xFormPropSet( xCreate,
                     UNO_QUERY );
 
                 Any aTmp(&sName,getCppuType((OUString *)0));
-                xFormPropSet->setPropertyValue( CREATE_OUSTRING("Name"), aTmp );
+                xFormPropSet->setPropertyValue( "Name", aTmp );
 
                 Reference< XForm > xForm( xCreate, UNO_QUERY );
                 OSL_ENSURE(xForm.is(), "No Form?");

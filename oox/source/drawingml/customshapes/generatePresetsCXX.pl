@@ -127,7 +127,7 @@ sub generateSource
 	print OUT "  {\n";
 	print OUT "    PropertyMap aPropertyMap;\n\n";
 	print OUT @{$sources->{$shape}};
-	print OUT "    aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING(\"ooxml-", $shape, "\");\n\n";
+	print OUT "    aPropertyMap [ PROP_Type ] <<= OUString(\"ooxml-", $shape, "\");\n\n";
 	print OUT "    return aPropertyMap;\n";
 	print OUT "  }\n";
 	print OUT "};\n";

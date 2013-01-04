@@ -40,7 +40,7 @@ DiagramDefinitionContext::DiagramDefinitionContext( ContextHandler& rParent,
     OUString sValue = xAttributes->getOptionalValue( XML_minVer );
     if( sValue.isEmpty() )
     {
-        sValue = CREATE_OUSTRING( "http://schemas.openxmlformats.org/drawingml/2006/diagram" );
+        sValue = "http://schemas.openxmlformats.org/drawingml/2006/diagram";
     }
     mpLayout->setMinVer( sValue );
     mpLayout->setUniqueId( xAttributes->getOptionalValue( XML_uniqueId ) );

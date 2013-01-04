@@ -101,7 +101,7 @@ private:
 };
 
 VbaControlNamesSet::VbaControlNamesSet() :
-    maDummyBaseName( CREATE_OUSTRING( "DummyGroupSep" ) ),
+    maDummyBaseName( "DummyGroupSep" ),
     mnIndex( 0 )
 {
 }
@@ -155,7 +155,7 @@ VbaDummyFormControl::VbaDummyFormControl( const OUString& rName )
 
     mxCtrlModel.reset( new AxLabelModel );
     mxCtrlModel->setAwtModelMode();
-    mxCtrlModel->importProperty( XML_Size, CREATE_OUSTRING( "10;10" ) );
+    mxCtrlModel->importProperty( XML_Size, "10;10" );
 }
 
 } // namespace
@@ -393,7 +393,7 @@ void VbaFormControl::importStorage( StorageBase& rStrg, const AxClassTable& rCla
     {
         /*  Open the 'f' stream containing the model of this control and a list
             of site models for all child controls. */
-        BinaryXInputStream aFStrm( rStrg.openInputStream( CREATE_OUSTRING( "f" ) ), true );
+        BinaryXInputStream aFStrm( rStrg.openInputStream( "f" ), true );
         OSL_ENSURE( !aFStrm.isEof(), "VbaFormControl::importStorage - missing 'f' stream" );
 
         /*  Read the properties of this container control and the class table
@@ -409,7 +409,7 @@ void VbaFormControl::importStorage( StorageBase& rStrg, const AxClassTable& rCla
             /*  Open the 'o' stream containing models of embedded simple
                 controls. Stream may be empty or missing, if this control
                 contains no controls or only container controls. */
-            BinaryXInputStream aOStrm( rStrg.openInputStream( CREATE_OUSTRING( "o" ) ), true );
+            BinaryXInputStream aOStrm( rStrg.openInputStream( "o" ), true );
 
             /*  Iterate over all embedded controls, import model from 'o'
                 stream (for embedded simple controls) or from the substorage
@@ -742,14 +742,14 @@ void VbaUserForm::importForm( const Reference< XNameContainer >& rxDialogLib,
         return;
 
     // check that the '03VBFrame' stream exists, this is required for forms
-    BinaryXInputStream aInStrm( rVbaFormStrg.openInputStream( CREATE_OUSTRING( "\003VBFrame" ) ), true );
+    BinaryXInputStream aInStrm( rVbaFormStrg.openInputStream( "\003VBFrame" ), true );
     OSL_ENSURE( !aInStrm.isEof(), "VbaUserForm::importForm - missing \\003VBFrame stream" );
     if( aInStrm.isEof() )
         return;
 
     // scan for the line 'Begin {GUID} <FormName>'
     TextInputStream aFrameTextStrm( mxContext, aInStrm, eTextEnc );
-    const OUString aBegin = CREATE_OUSTRING( "Begin" );
+    const OUString aBegin = "Begin";
     OUString aLine;
     bool bBeginFound = false;
     while( !bBeginFound && !aFrameTextStrm.isEof() )
@@ -758,7 +758,7 @@ void VbaUserForm::importForm( const Reference< XNameContainer >& rxDialogLib,
         bBeginFound = lclEatKeyword( aLine, aBegin );
     }
     // check for the specific GUID that represents VBA forms
-    if( !bBeginFound || !lclEatKeyword( aLine, CREATE_OUSTRING( "{C62A69F0-16DC-11CE-9E98-00AA00574A4F}" ) ) )
+    if( !bBeginFound || !lclEatKeyword( aLine, "{C62A69F0-16DC-11CE-9E98-00AA00574A4F}" ) )
         return;
 
     // remaining line is the form name

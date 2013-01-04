@@ -300,10 +300,10 @@ OUString FilterBase::getAbsoluteUrl( const OUString& rUrl ) const
 {
     // handle some special cases before calling ::rtl::Uri::convertRelToAbs()
 
-    const OUString aFileSchema = CREATE_OUSTRING( "file:" );
-    const OUString aFilePrefix = CREATE_OUSTRING( "file:///" );
+    const OUString aFileSchema = "file:";
+    const OUString aFilePrefix = "file:///";
     const sal_Int32 nFilePrefixLen = aFilePrefix.getLength();
-    const OUString aUncPrefix = CREATE_OUSTRING( "//" );
+    const OUString aUncPrefix = "//";
 
     /*  (1) convert all backslashes to slashes, and check that passed URL is
         not empty. */
@@ -427,15 +427,15 @@ OUString SAL_CALL FilterBase::getImplementationName() throw( RuntimeException )
 sal_Bool SAL_CALL FilterBase::supportsService( const OUString& rServiceName ) throw( RuntimeException )
 {
     return
-        (rServiceName == CREATE_OUSTRING( "com.sun.star.document.ImportFilter" )) ||
-        (rServiceName == CREATE_OUSTRING( "com.sun.star.document.ExportFilter" ));
+        (rServiceName == "com.sun.star.document.ImportFilter" ) ||
+        (rServiceName == "com.sun.star.document.ExportFilter" );
 }
 
 Sequence< OUString > SAL_CALL FilterBase::getSupportedServiceNames() throw( RuntimeException )
 {
     Sequence< OUString > aServiceNames( 2 );
-    aServiceNames[ 0 ] = CREATE_OUSTRING( "com.sun.star.document.ImportFilter" );
-    aServiceNames[ 1 ] = CREATE_OUSTRING( "com.sun.star.document.ExportFilter" );
+    aServiceNames[ 0 ] = "com.sun.star.document.ImportFilter";
+    aServiceNames[ 1 ] = "com.sun.star.document.ExportFilter";
     return aServiceNames;
 }
 
@@ -547,20 +547,19 @@ void FilterBase::setMediaDescriptor( const Sequence< PropertyValue >& rMediaDesc
     mxImpl->mxTargetFrame = mxImpl->maMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_FRAME(), Reference< XFrame >() );
     mxImpl->mxStatusIndicator = mxImpl->maMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_STATUSINDICATOR(), Reference< XStatusIndicator >() );
     mxImpl->mxInteractionHandler = mxImpl->maMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_INTERACTIONHANDLER(), Reference< XInteractionHandler >() );
-    mxImpl->mxParentShape = mxImpl->maMediaDesc.getUnpackedValueOrDefault( CREATE_OUSTRING( "ParentShape" ), mxImpl->mxParentShape );
+    mxImpl->mxParentShape = mxImpl->maMediaDesc.getUnpackedValueOrDefault( "ParentShape", mxImpl->mxParentShape );
 
     // Check for ISO OOXML
-    OUString sFilterName = mxImpl->maMediaDesc.getUnpackedValueOrDefault( CREATE_OUSTRING( "FilterName" ), OUString() );
+    OUString sFilterName = mxImpl->maMediaDesc.getUnpackedValueOrDefault( "FilterName", OUString() );
     try
     {
-        Reference< XNameAccess > xFilters( getServiceFactory()->createInstance(
-                    CREATE_OUSTRING( "com.sun.star.document.FilterFactory" ) ), UNO_QUERY_THROW );
+        Reference< XNameAccess > xFilters( getServiceFactory()->createInstance("com.sun.star.document.FilterFactory" ), UNO_QUERY_THROW );
         Any aValues = xFilters->getByName( sFilterName );
         Sequence<PropertyValue > aPropSeq;
         aValues >>= aPropSeq;
         SequenceAsHashMap aProps( aPropSeq );
 
-        sal_Int32 nVersion = aProps.getUnpackedValueOrDefault( CREATE_OUSTRING( "FileFormatVersion" ), sal_Int32( 0 ) );
+        sal_Int32 nVersion = aProps.getUnpackedValueOrDefault( "FileFormatVersion", sal_Int32( 0 ) );
         mxImpl->meVersion = OoxmlVersion( nVersion );
     }
     catch ( const Exception& )

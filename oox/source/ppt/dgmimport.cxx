@@ -33,12 +33,12 @@ namespace oox { namespace ppt {
 
 OUString SAL_CALL QuickDiagrammingImport_getImplementationName() throw()
 {
-    return CREATE_OUSTRING( "com.sun.star.comp.Impress.oox.QuickDiagrammingImport" );
+    return OUString( "com.sun.star.comp.Impress.oox.QuickDiagrammingImport" );
 }
 
 uno::Sequence< OUString > SAL_CALL QuickDiagrammingImport_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName = CREATE_OUSTRING( "com.sun.star.comp.ooxpptx.dgm.import" );
+    const OUString aServiceName = "com.sun.star.comp.ooxpptx.dgm.import";
     const Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }

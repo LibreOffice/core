@@ -182,8 +182,8 @@ namespace
 
 XmlFilterBaseImpl::XmlFilterBaseImpl( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
     maFastParser( rxContext ),
-    maBinSuffix( CREATE_OUSTRING( ".bin" ) ),
-    maVmlSuffix( CREATE_OUSTRING( ".vml" ) )
+    maBinSuffix( ".bin" ),
+    maVmlSuffix( ".vml" )
 {
     // register XML namespaces
     const Sequence< beans::Pair< OUString, sal_Int32 > > ids=
@@ -412,14 +412,14 @@ OUString lclAddRelation( const Reference< XRelationshipAccess > xRelations, sal_
     OUString sId = OUStringBuffer().appendAscii( "rId" ).append( nId ).makeStringAndClear();
 
     Sequence< StringPair > aEntry( bExternal ? 3 : 2 );
-    aEntry[0].First = CREATE_OUSTRING( "Type" );
+    aEntry[0].First = "Type";
     aEntry[0].Second = rType;
-    aEntry[1].First = CREATE_OUSTRING( "Target" );
+    aEntry[1].First = "Target";
     aEntry[1].Second = rTarget;
     if( bExternal )
     {
-        aEntry[2].First = CREATE_OUSTRING( "TargetMode" );
-        aEntry[2].Second = CREATE_OUSTRING( "External" );
+        aEntry[2].First = "TargetMode";
+        aEntry[2].Second = "External";
     }
     xRelations->insertRelationshipByID( sId, aEntry, sal_True );
 
@@ -525,14 +525,14 @@ writeCoreProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xPro
 {
     OUString sValue;
     if( rSelf.getVersion() == oox::core::ISOIEC_29500_2008  )
-        sValue = CREATE_OUSTRING( "http://schemas.openxmlformats.org/officedocument/2006/relationships/metadata/core-properties" );
+        sValue = "http://schemas.openxmlformats.org/officedocument/2006/relationships/metadata/core-properties";
     else
-        sValue = CREATE_OUSTRING( "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" );
+        sValue = "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties";
 
-    rSelf.addRelation( sValue, CREATE_OUSTRING( "docProps/core.xml" ) );
+    rSelf.addRelation( sValue, "docProps/core.xml" );
     FSHelperPtr pCoreProps = rSelf.openFragmentStreamWithSerializer(
-            CREATE_OUSTRING( "docProps/core.xml" ),
-            CREATE_OUSTRING( "application/vnd.openxmlformats-package.core-properties+xml" ) );
+            "docProps/core.xml",
+            "application/vnd.openxmlformats-package.core-properties+xml" );
     pCoreProps->startElementNS( XML_cp, XML_coreProperties,
             FSNS( XML_xmlns, XML_cp ),          "http://schemas.openxmlformats.org/package/2006/metadata/core-properties",
             FSNS( XML_xmlns, XML_dc ),          "http://purl.org/dc/elements/1.1/",
@@ -571,11 +571,11 @@ static void
 writeAppProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xProperties )
 {
     rSelf.addRelation(
-            CREATE_OUSTRING( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties" ),
-            CREATE_OUSTRING( "docProps/app.xml" ) );
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties",
+            "docProps/app.xml" );
     FSHelperPtr pAppProps = rSelf.openFragmentStreamWithSerializer(
-            CREATE_OUSTRING( "docProps/app.xml" ),
-            CREATE_OUSTRING( "application/vnd.openxmlformats-officedocument.extended-properties+xml" ) );
+            "docProps/app.xml",
+            "application/vnd.openxmlformats-officedocument.extended-properties+xml" );
     pAppProps->startElement( XML_Properties,
             XML_xmlns,                  "http://schemas.openxmlformats.org/officeDocument/2006/extended-properties",
             FSNS( XML_xmlns, XML_vt ),  "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes",

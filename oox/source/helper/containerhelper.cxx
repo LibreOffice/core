@@ -88,7 +88,7 @@ Reference< XIndexContainer > ContainerHelper::createIndexContainer( const Refere
     if( rxContext.is() ) try
     {
         Reference< XMultiServiceFactory > xFactory( rxContext->getServiceManager(), UNO_QUERY_THROW );
-        xContainer.set( xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.document.IndexedPropertyValues" ) ), UNO_QUERY_THROW );
+        xContainer.set( xFactory->createInstance( "com.sun.star.document.IndexedPropertyValues" ), UNO_QUERY_THROW );
     }
     catch( Exception& )
     {
@@ -103,7 +103,7 @@ Reference< XNameContainer > ContainerHelper::createNameContainer( const Referenc
     if( rxContext.is() ) try
     {
         Reference< XMultiServiceFactory > xFactory( rxContext->getServiceManager(), UNO_QUERY_THROW );
-        xContainer.set( xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.document.NamedPropertyValues" ) ), UNO_QUERY_THROW );
+        xContainer.set( xFactory->createInstance( "com.sun.star.document.NamedPropertyValues" ), UNO_QUERY_THROW );
     }
     catch( Exception& )
     {

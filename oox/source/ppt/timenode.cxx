@@ -58,34 +58,34 @@ namespace oox { namespace ppt {
             switch( nNodeType )
             {
             case AnimationNodeType::PAR:
-                sServiceName = CREATE_OUSTRING("com.sun.star.animations.ParallelTimeContainer");
+                sServiceName = "com.sun.star.animations.ParallelTimeContainer";
                 break;
             case AnimationNodeType::SEQ:
-                sServiceName = CREATE_OUSTRING("com.sun.star.animations.SequenceTimeContainer");
+                sServiceName = "com.sun.star.animations.SequenceTimeContainer";
                 break;
             case AnimationNodeType::ANIMATE:
-                sServiceName = CREATE_OUSTRING("com.sun.star.animations.Animate");
+                sServiceName = "com.sun.star.animations.Animate";
                 break;
             case AnimationNodeType::ANIMATECOLOR:
-                sServiceName = CREATE_OUSTRING("com.sun.star.animations.AnimateColor");
+                sServiceName = "com.sun.star.animations.AnimateColor";
                 break;
             case AnimationNodeType::TRANSITIONFILTER:
-                sServiceName = CREATE_OUSTRING("com.sun.star.animations.TransitionFilter");
+                sServiceName = "com.sun.star.animations.TransitionFilter";
                 break;
             case AnimationNodeType::ANIMATEMOTION:
-                sServiceName = CREATE_OUSTRING("com.sun.star.animations.AnimateMotion");
+                sServiceName = "com.sun.star.animations.AnimateMotion";
                 break;
             case AnimationNodeType::ANIMATETRANSFORM:
-                sServiceName = CREATE_OUSTRING("com.sun.star.animations.AnimateTransform");
+                sServiceName = "com.sun.star.animations.AnimateTransform";
                 break;
             case AnimationNodeType::COMMAND:
-                sServiceName = CREATE_OUSTRING("com.sun.star.animations.Command");
+                sServiceName = "com.sun.star.animations.Command";
                 break;
             case AnimationNodeType::SET:
-                sServiceName = CREATE_OUSTRING("com.sun.star.animations.AnimateSet");
+                sServiceName = "com.sun.star.animations.AnimateSet";
                 break;
             case AnimationNodeType::AUDIO:
-                sServiceName = CREATE_OUSTRING("com.sun.star.animations.Audio");
+                sServiceName = "com.sun.star.animations.Audio";
                 break;
             default:
                 OSL_TRACE( "OOX: uhandled type %x", nNodeType );
@@ -546,7 +546,7 @@ namespace oox { namespace ppt {
             case AnimationNodeType::SEQ:
             {
                 sal_Int16 nEnum = 0;
-                if( maUserData[ CREATE_OUSTRING( "node-type" ) ] >>= nEnum )
+                if( maUserData[ "node-type" ] >>= nEnum )
                 {
                     if( nEnum == EffectNodeType::MAIN_SEQUENCE )
                     {

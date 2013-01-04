@@ -66,7 +66,7 @@ TextCharacterPropertiesContext::TextCharacterPropertiesContext(
 /*   todo: we need to be able to iterate over the XFastAttributes
 
   // ST_TextNonNegativePoint
-    const OUString sCharKerning( CREATE_OUSTRING( "CharKerning" ) );
+    const OUString sCharKerning( "CharKerning" );
     //case A_TOKEN( kern ):
 
   // ST_TextLanguageID

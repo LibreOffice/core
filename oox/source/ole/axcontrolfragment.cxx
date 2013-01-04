@@ -132,7 +132,7 @@ ContextHandlerRef AxControlFragment::onCreateContext( sal_Int32 nElement, const 
                     if( xStrgStrm.is() )
                     {
                         OleStorage aStorage( getFilter().getComponentContext(), xStrgStrm, false );
-                        BinaryXInputStream aInStrm( aStorage.openInputStream( CREATE_OUSTRING( "f" ) ), true );
+                        BinaryXInputStream aInStrm( aStorage.openInputStream( "f" ), true );
                         if( !aInStrm.isEof() )
                             if( AxContainerModelBase* pModel = dynamic_cast< AxContainerModelBase* >( mrControl.createModelFromGuid( aClassId ) ) )
                                 pModel->importBinaryModel( aInStrm );

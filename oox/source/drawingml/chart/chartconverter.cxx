@@ -54,7 +54,7 @@ static OUString lclGenerateApiString( const OUString& rString )
     OUString aRetString = rString;
     sal_Int32 nQuotePos = aRetString.getLength();
     while( (nQuotePos = aRetString.lastIndexOf( '"', nQuotePos )) >= 0 )
-        aRetString = aRetString.replaceAt( nQuotePos, 1, CREATE_OUSTRING( "\"\"" ) );
+        aRetString = aRetString.replaceAt( nQuotePos, 1, "\"\"" );
     return OUStringBuffer().append( sal_Unicode( '"' ) ).append( aRetString ).append( sal_Unicode( '"' ) ).makeStringAndClear();
 }
 

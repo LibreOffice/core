@@ -277,7 +277,7 @@ namespace oox { namespace ppt {
                                 double fMediaTime = ::rtl::math::stringToDouble( aMediaTime, (sal_Unicode)('.'), (sal_Unicode)(','), &eStatus, NULL );
                                 if( eStatus == rtl_math_ConversionStatus_Ok )
                                 {
-                                    aParamValue.Name = CREATE_OUSTRING("MediaTime");
+                                    aParamValue.Name = "MediaTime";
                                     aParamValue.Value <<= fMediaTime;
                                 }
                                 nCommand = EffectCommands::PLAY;
@@ -296,7 +296,7 @@ namespace oox { namespace ppt {
                         if( nCommand == EffectCommands::CUSTOM )
                         {
                             OSL_TRACE("OOX: CmdTimeNodeContext::endFastElement(), unknown command!");
-                            aParamValue.Name = CREATE_OUSTRING("UserDefined");
+                            aParamValue.Name = "UserDefined";
                             aParamValue.Value <<= msCommand;
                         }
                         if( aParamValue.Value.hasValue() )

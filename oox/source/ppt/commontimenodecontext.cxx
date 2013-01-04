@@ -385,7 +385,7 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
 
         if( attribs.hasAttribute( XML_afterEffect ) )
         {
-            aUserData[ CREATE_OUSTRING( "after-effect" ) ]
+            aUserData[ "after-effect" ]
                 = makeAny( attribs.getBool( XML_afterEffect, false ) );
         }
         aProps[ NP_AUTOREVERSE ] = makeAny( attribs.getBool( XML_autoRev, false ) );
@@ -503,7 +503,7 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
                 nEnum = EffectNodeType::DEFAULT;
                 break;
             }
-            aUserData[ CREATE_OUSTRING( "node-type" ) ] <<= nEnum;
+            aUserData[ "node-type" ] <<= nEnum;
         }
 
         // ST_TLTimeNodePresetClassType
@@ -537,7 +537,7 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
                 nEffectPresetClass = 0;
                 break;
             }
-            aUserData[ CREATE_OUSTRING( "preset-class" ) ] = makeAny( nEffectPresetClass );
+            aUserData[ "preset-class" ] = makeAny( nEffectPresetClass );
             if( attribs.hasAttribute( XML_presetID ) )
             {
                 sal_Int32 nPresetId = attribs.getInteger( XML_presetID, 0 );
@@ -545,13 +545,12 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
                 while( p->mpStrPresetId && ((p->mnPresetClass != nEffectPresetClass) || (p->mnPresetId != nPresetId )) )
                     p++;
 
-                aUserData[ CREATE_OUSTRING( "preset-id" ) ]
+                aUserData[ "preset-id" ]
                     = makeAny( OUString::createFromAscii( p->mpStrPresetId ) );
                 sal_Int32 nPresetSubType = attribs.getInteger( XML_presetSubtype, 0 );
                 if( nPresetSubType )
                 {
-                    aUserData[ CREATE_OUSTRING( "preset-sub-type" ) ]
-                        = makeAny( getConvertedSubType( nEffectPresetClass, nPresetId, nPresetSubType ) );
+                    aUserData[ "preset-sub-type" ] = makeAny( getConvertedSubType( nEffectPresetClass, nPresetId, nPresetSubType ) );
                 }
             }
         }

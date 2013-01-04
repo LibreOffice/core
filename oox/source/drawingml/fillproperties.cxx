@@ -86,12 +86,12 @@ const awt::Size lclGetOriginalSize( const GraphicHelper& rGraphicHelper, const R
     try
     {
         Reference< beans::XPropertySet > xGraphicPropertySet( rxGraphic, UNO_QUERY_THROW );
-        if( xGraphicPropertySet->getPropertyValue( CREATE_OUSTRING( "Size100thMM" ) ) >>= aSizeHmm )
+        if( xGraphicPropertySet->getPropertyValue( "Size100thMM" ) >>= aSizeHmm )
         {
             if( !aSizeHmm.Width && !aSizeHmm.Height )
             {   // MAPMODE_PIXEL USED :-(
                 awt::Size aSourceSizePixel( 0, 0 );
-                if( xGraphicPropertySet->getPropertyValue( CREATE_OUSTRING( "SizePixel" ) ) >>= aSourceSizePixel )
+                if( xGraphicPropertySet->getPropertyValue( "SizePixel" ) >>= aSourceSizePixel )
                     aSizeHmm = rGraphicHelper.convertScreenPixelToHmm( aSourceSizePixel );
             }
         }

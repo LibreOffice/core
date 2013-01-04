@@ -116,9 +116,9 @@ OUString GetFormulaParameter( const EnhancedCustomShapeParameter& rParameter )
                 sal_Int32 nFormulaIndex;
                 if ( rParameter.Value >>= nFormulaIndex )
                 {
-                    aRet = CREATE_OUSTRING( "?" )
+                    aRet = "?"
                         + OUString::valueOf( nFormulaIndex )
-                            + CREATE_OUSTRING( " " );
+                            + " ";
                 }
             }
             else
@@ -134,9 +134,9 @@ OUString GetFormulaParameter( const EnhancedCustomShapeParameter& rParameter )
                 sal_Int32 nAdjustmentIndex;
                 if ( rParameter.Value >>= nAdjustmentIndex )
                 {
-                    aRet = CREATE_OUSTRING( "$" )
+                    aRet = "$"
                         + OUString::valueOf( nAdjustmentIndex )
-                            + CREATE_OUSTRING( " " );
+                            + " ";
                 }
             }
             else
@@ -147,73 +147,73 @@ OUString GetFormulaParameter( const EnhancedCustomShapeParameter& rParameter )
         break;
         case EnhancedCustomShapeParameterType::LEFT :
         {
-            const OUString sLeft( CREATE_OUSTRING( "left" ) );
+            const OUString sLeft( "left" );
             aRet = sLeft;
         }
         break;
         case EnhancedCustomShapeParameterType::TOP :
         {
-            const OUString sTop( CREATE_OUSTRING( "top" ) );
+            const OUString sTop( "top" );
             aRet = sTop;
         }
         break;
         case EnhancedCustomShapeParameterType::RIGHT :
         {
-            const OUString sRight( CREATE_OUSTRING( "right" ) );
+            const OUString sRight( "right" );
             aRet = sRight;
         }
         break;
         case EnhancedCustomShapeParameterType::BOTTOM :
         {
-            const OUString sBottom( CREATE_OUSTRING( "bottom" ) );
+            const OUString sBottom( "bottom" );
             aRet = sBottom;
         }
         break;
         case EnhancedCustomShapeParameterType::XSTRETCH :
         {
-            const OUString sXStretch( CREATE_OUSTRING( "xstretch" ) );
+            const OUString sXStretch( "xstretch" );
             aRet = sXStretch;
         }
         break;
         case EnhancedCustomShapeParameterType::YSTRETCH :
         {
-            const OUString sYStretch( CREATE_OUSTRING( "ystretch" ) );
+            const OUString sYStretch( "ystretch" );
             aRet = sYStretch;
         }
         break;
         case EnhancedCustomShapeParameterType::HASSTROKE :
         {
-            const OUString sHasStroke( CREATE_OUSTRING( "hasstroke" ) );
+            const OUString sHasStroke( "hasstroke" );
             aRet = sHasStroke;
         }
         break;
         case EnhancedCustomShapeParameterType::HASFILL :
         {
-            const OUString sHasFill( CREATE_OUSTRING( "hasfill" ) );
+            const OUString sHasFill( "hasfill"  );
             aRet = sHasFill;
         }
         break;
         case EnhancedCustomShapeParameterType::WIDTH :
         {
-            const OUString sWidth( CREATE_OUSTRING( "width" ) );
+            const OUString sWidth( "width"  );
             aRet = sWidth;
         }
         break;
         case EnhancedCustomShapeParameterType::HEIGHT :
         {
-            const OUString sHeight( CREATE_OUSTRING( "height" ) );
+            const OUString sHeight( "height"  );
             aRet = sHeight;
         }
         break;
         case EnhancedCustomShapeParameterType::LOGWIDTH :
         {
-            const OUString sLogWidth( CREATE_OUSTRING( "logwidth" ) );
+            const OUString sLogWidth( "logwidth"  );
             aRet = sLogWidth;
         }
         break;
         case EnhancedCustomShapeParameterType::LOGHEIGHT :
         {
-            const OUString sLogHeight( CREATE_OUSTRING( "logheight" ) );
+            const OUString sLogHeight( "logheight"  );
             aRet = sLogHeight;
         }
         break;
@@ -251,7 +251,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
                 {
                     CustomShapeGuide aGuide;
                     aGuide.maName = rValue;
-                    aGuide.maFormula = CREATE_OUSTRING( "logheight" );
+                    aGuide.maFormula = "logheight" ;
 
                     aRet.Value = Any( CustomShapeProperties::SetCustomShapeGuideValue( rCustomShapeProperties.getGuideList(), aGuide ) );
                     aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
@@ -281,7 +281,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
 
                 CustomShapeGuide aGuide;
                 aGuide.maName = rValue;
-                aGuide.maFormula = CREATE_OUSTRING( "logheight/" ) + OUString::valueOf( nIntVal );
+                aGuide.maFormula = "logheight/" + OUString::valueOf( nIntVal );
 
                 aRet.Value = Any( CustomShapeProperties::SetCustomShapeGuideValue( rCustomShapeProperties.getGuideList(), aGuide ) );
                 aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
@@ -300,7 +300,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
             {
                 CustomShapeGuide aGuide;
                 aGuide.maName = rValue;
-                aGuide.maFormula = CREATE_OUSTRING( "max(logwidth,logheight)" );
+                aGuide.maFormula = "max(logwidth,logheight)";
 
                 aRet.Value = Any( CustomShapeProperties::SetCustomShapeGuideValue( rCustomShapeProperties.getGuideList(), aGuide ) );
                 aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
@@ -310,7 +310,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
             {
                 CustomShapeGuide aGuide;
                 aGuide.maName = rValue;
-                aGuide.maFormula = CREATE_OUSTRING( "min(logwidth,logheight)" );
+                aGuide.maFormula = "min(logwidth,logheight)";
 
                 aRet.Value = Any( CustomShapeProperties::SetCustomShapeGuideValue( rCustomShapeProperties.getGuideList(), aGuide ) );
                 aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
@@ -332,7 +332,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
 
                 CustomShapeGuide aGuide;
                 aGuide.maName = rValue;
-                aGuide.maFormula = CREATE_OUSTRING( "min(logwidth,logheight)/" ) + OUString::valueOf( nIntVal );
+                aGuide.maFormula = "min(logwidth,logheight)/" + OUString::valueOf( nIntVal );
 
                 aRet.Value = Any( CustomShapeProperties::SetCustomShapeGuideValue( rCustomShapeProperties.getGuideList(), aGuide ) );
                 aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
@@ -346,7 +346,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
                 {
                     CustomShapeGuide aGuide;
                     aGuide.maName = rValue;
-                    aGuide.maFormula = CREATE_OUSTRING( "logwidth" );
+                    aGuide.maFormula = "logwidth" ;
 
                     aRet.Value = Any( CustomShapeProperties::SetCustomShapeGuideValue( rCustomShapeProperties.getGuideList(), aGuide ) );
                     aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
@@ -379,7 +379,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
 
                 CustomShapeGuide aGuide;
                 aGuide.maName = rValue;
-                aGuide.maFormula = CREATE_OUSTRING( "logwidth/" ) + OUString::valueOf( nIntVal );
+                aGuide.maFormula = "logwidth/" + OUString::valueOf( nIntVal );
 
                 aRet.Value = Any( CustomShapeProperties::SetCustomShapeGuideValue( rCustomShapeProperties.getGuideList(), aGuide ) );
                 aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
@@ -498,116 +498,116 @@ static OUString convertToOOEquation( CustomShapeProperties& rCustomShapeProperti
                 case FC_MULDIV :
                 {
                     if ( nParameters == 3 )
-                        aEquation = sParameters[ 0 ] + CREATE_OUSTRING( "*" ) + sParameters[ 1 ]
-                            + CREATE_OUSTRING( "/" ) + sParameters[ 2 ];
+                        aEquation = sParameters[ 0 ] + "*" + sParameters[ 1 ]
+                            + "/" + sParameters[ 2 ];
                 }
                 break;
                 case FC_PLUSMINUS :
                 {
                     if ( nParameters == 3 )
-                        aEquation = sParameters[ 0 ] + CREATE_OUSTRING( "+" ) + sParameters[ 1 ]
-                            + CREATE_OUSTRING( "-" ) + sParameters[ 2 ];
+                        aEquation = sParameters[ 0 ] + "+" + sParameters[ 1 ]
+                            + "-" + sParameters[ 2 ];
                 }
                 break;
                 case FC_PLUSDIV :
                 {
                     if ( nParameters == 3 )
-                        aEquation = CREATE_OUSTRING( "(" ) + sParameters[ 0 ] + CREATE_OUSTRING( "+" )
-                            + sParameters[ 1 ] + CREATE_OUSTRING( ")/" ) + sParameters[ 2 ];
+                        aEquation = "(" + sParameters[ 0 ] + "+"
+                            + sParameters[ 1 ] + ")/" + sParameters[ 2 ];
                 }
                 break;
                 case FC_IFELSE :
                 case FC_IFELSE1 :
                 {
                     if ( nParameters == 3 )
-                        aEquation = CREATE_OUSTRING( "if(" ) + sParameters[ 0 ] + CREATE_OUSTRING( "," )
-                            + sParameters[ 1 ] + CREATE_OUSTRING( "," ) + sParameters[ 2 ] + CREATE_OUSTRING( ")" );
+                        aEquation = "if(" + sParameters[ 0 ] + ","
+                            + sParameters[ 1 ] + "," + sParameters[ 2 ] + ")";
                 }
                 break;
                 case FC_ABS :
                 {
                     if ( nParameters == 1 )
-                        aEquation = CREATE_OUSTRING( "abs(" ) + sParameters[ 0 ] + CREATE_OUSTRING( ")" );
+                        aEquation = "abs(" + sParameters[ 0 ] + ")";
                 }
                 break;
                 case FC_AT2 :
                 {
                     if ( nParameters == 2 )
-                        aEquation = CREATE_OUSTRING( "(10800000*atan2(" ) + sParameters[ 1 ] + CREATE_OUSTRING( "," )
-                        + sParameters[ 0 ] + CREATE_OUSTRING( "))/pi" );
+                        aEquation = "(10800000*atan2(" + sParameters[ 1 ] + ","
+                        + sParameters[ 0 ] + "))/pi";
                 }
                 break;
                 case FC_CAT2 :
                 {
                     if ( nParameters == 3 )
-                        aEquation = sParameters[ 0 ] + CREATE_OUSTRING( "*(cos(atan2(" ) +
-                            sParameters[ 2 ] + CREATE_OUSTRING( "," ) + sParameters[ 1 ] + CREATE_OUSTRING( ")))" );
+                        aEquation = sParameters[ 0 ] + "*(cos(atan2(" +
+                            sParameters[ 2 ] + "," + sParameters[ 1 ] + ")))";
                 }
                 break;
                 case FC_COS :
                 {
                     if ( nParameters == 2 )
-                        aEquation = sParameters[ 0 ] + CREATE_OUSTRING( "*cos(pi*(" ) +
-                        sParameters[ 1 ] + CREATE_OUSTRING( ")/10800000)" );
+                        aEquation = sParameters[ 0 ] + "*cos(pi*(" +
+                        sParameters[ 1 ] + ")/10800000)";
                 }
                 break;
                 case FC_MAX :
                 {
                     if ( nParameters == 2 )
-                        aEquation = CREATE_OUSTRING( "max(" ) + sParameters[ 0 ] + CREATE_OUSTRING( "," ) +
-                            sParameters[ 1 ] + CREATE_OUSTRING( ")" );
+                        aEquation = "max(" + sParameters[ 0 ] + "," +
+                            sParameters[ 1 ] + ")";
                 }
                 break;
                 case FC_MIN :
                 {
                     if ( nParameters == 2 )
-                        aEquation = CREATE_OUSTRING( "min(" ) + sParameters[ 0 ] + CREATE_OUSTRING( "," ) +
-                            sParameters[ 1 ] + CREATE_OUSTRING( ")" );
+                        aEquation = "min(" + sParameters[ 0 ] + "," +
+                            sParameters[ 1 ] + ")";
                 }
                 break;
                 case FC_MOD :
                 {
                     if ( nParameters == 3 )
-                        aEquation = CREATE_OUSTRING( "sqrt(" )
-                            + sParameters[ 0 ] + CREATE_OUSTRING( "*" ) + sParameters[ 0 ] + CREATE_OUSTRING( "+" )
-                            + sParameters[ 1 ] + CREATE_OUSTRING( "*" ) + sParameters[ 1 ] + CREATE_OUSTRING( "+" )
-                            + sParameters[ 2 ] + CREATE_OUSTRING( "*" ) + sParameters[ 2 ] + CREATE_OUSTRING( ")" );
+                        aEquation = "sqrt("
+                            + sParameters[ 0 ] + "*" + sParameters[ 0 ] + "+"
+                            + sParameters[ 1 ] + "*" + sParameters[ 1 ] + "+"
+                            + sParameters[ 2 ] + "*" + sParameters[ 2 ] + ")";
                 }
                 break;
                 case FC_PIN :
                 {
                     if ( nParameters == 3 ) // if(x-y,x,if(y-z,z,y))
-                        aEquation = CREATE_OUSTRING( "if(" ) + sParameters[ 0 ] + CREATE_OUSTRING( "-" ) + sParameters[ 1 ]
-                            + CREATE_OUSTRING( "," ) + sParameters[ 0 ] + CREATE_OUSTRING( ",if(" ) + sParameters[ 2 ]
-                            + CREATE_OUSTRING( "-" ) + sParameters[ 1 ] + CREATE_OUSTRING( "," ) + sParameters[ 1 ]
-                            + CREATE_OUSTRING( "," ) + sParameters[ 2 ] + CREATE_OUSTRING( "))" );
+                        aEquation = "if(" + sParameters[ 0 ] + "-" + sParameters[ 1 ]
+                            + "," + sParameters[ 0 ] + ",if(" + sParameters[ 2 ]
+                            + "-" + sParameters[ 1 ] + "," + sParameters[ 1 ]
+                            + "," + sParameters[ 2 ] + "))";
                 }
                 break;
                 case FC_SAT2 :
                 {
                     if ( nParameters == 3 )
-                        aEquation = sParameters[ 0 ] + CREATE_OUSTRING( "*(sin(atan2(" ) +
-                            sParameters[ 2 ] + CREATE_OUSTRING( "," ) + sParameters[ 1 ] + CREATE_OUSTRING( ")))" );
+                        aEquation = sParameters[ 0 ] + "*(sin(atan2(" +
+                            sParameters[ 2 ] + "," + sParameters[ 1 ] + ")))";
                 }
                 break;
                 case FC_SIN :
                 {
                     if ( nParameters == 2 )
-                        aEquation = sParameters[ 0 ] + CREATE_OUSTRING( "*sin(pi*(" ) +
-                        sParameters[ 1 ] + CREATE_OUSTRING( ")/10800000)" );
+                        aEquation = sParameters[ 0 ] + "*sin(pi*(" +
+                        sParameters[ 1 ] + ")/10800000)";
                 }
                 break;
                 case FC_SQRT :
                 {
                     if ( nParameters == 1 )
-                        aEquation = CREATE_OUSTRING( "sqrt(" ) + sParameters[ 0 ] + CREATE_OUSTRING( ")" );
+                        aEquation = "sqrt(" + sParameters[ 0 ] + ")";
                 }
                 break;
                 case FC_TAN :
                 {
                     if ( nParameters == 2 )
-                        aEquation = sParameters[ 0 ] + CREATE_OUSTRING( "*tan(pi*(" ) +
-                        sParameters[ 1 ] + CREATE_OUSTRING( ")/10800000)" );
+                        aEquation = sParameters[ 0 ] + "*tan(pi*(" +
+                        sParameters[ 1 ] + ")/10800000)";
                 }
                 break;
                 case FC_VAL :
@@ -1100,18 +1100,18 @@ Reference< XFastContextHandler > Path2DContext::createFastChildContext( sal_Int3
             sal_Int32 nArcNum = mrCustomShapeProperties.getArcNum();
 
             // start angle
-            aGuide.maName = CREATE_OUSTRING("arctosa") + OUString::valueOf( nArcNum );
-            aGuide.maFormula = CREATE_OUSTRING( "(")
+            aGuide.maName = "arctosa" + OUString::valueOf( nArcNum );
+            aGuide.maFormula = "("
                 + GetFormulaParameter( GetAdjCoordinate( mrCustomShapeProperties, xAttribs->getOptionalValue( XML_stAng ) ) )
-                + CREATE_OUSTRING( ")/60000.0" );
+                + ")/60000.0";
             aAngles.First.Value = Any( CustomShapeProperties::SetCustomShapeGuideValue( mrCustomShapeProperties.getGuideList(), aGuide ) );
             aAngles.First.Type = EnhancedCustomShapeParameterType::EQUATION;
 
             // swing angle
-            aGuide.maName = CREATE_OUSTRING("arctosw") + OUString::valueOf( nArcNum );
-            aGuide.maFormula = CREATE_OUSTRING( "(")
+            aGuide.maName = "arctosw" + OUString::valueOf( nArcNum );
+            aGuide.maFormula = "("
                 + GetFormulaParameter( GetAdjCoordinate( mrCustomShapeProperties, xAttribs->getOptionalValue( XML_swAng ) ) )
-                + CREATE_OUSTRING( ")/60000.0" );
+                + ")/60000.0";
             aAngles.Second.Value = Any( CustomShapeProperties::SetCustomShapeGuideValue( mrCustomShapeProperties.getGuideList(), aGuide ) );
             aAngles.Second.Type = EnhancedCustomShapeParameterType::EQUATION;
 

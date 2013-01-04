@@ -542,7 +542,7 @@ Reference< XShape > SimpleShape::createPictureObject( const Reference< XShapes >
 // ============================================================================
 
 RectangleShape::RectangleShape( Drawing& rDrawing ) :
-    SimpleShape( rDrawing, CREATE_OUSTRING( "com.sun.star.drawing.RectangleShape" ) )
+    SimpleShape( rDrawing, "com.sun.star.drawing.RectangleShape" )
 {
 }
 
@@ -576,14 +576,14 @@ Reference<XShape> RectangleShape::implConvertAndInsert(const Reference<XShapes>&
 // ============================================================================
 
 EllipseShape::EllipseShape( Drawing& rDrawing ) :
-    SimpleShape( rDrawing, CREATE_OUSTRING( "com.sun.star.drawing.EllipseShape" ) )
+    SimpleShape( rDrawing, "com.sun.star.drawing.EllipseShape" )
 {
 }
 
 // ============================================================================
 
 PolyLineShape::PolyLineShape( Drawing& rDrawing ) :
-    SimpleShape( rDrawing, CREATE_OUSTRING( "com.sun.star.drawing.PolyLineShape" ) )
+    SimpleShape( rDrawing, "com.sun.star.drawing.PolyLineShape" )
 {
 }
 
@@ -711,7 +711,7 @@ Reference< XShape > BezierShape::implConvertAndInsert( const Reference< XShapes 
 // ============================================================================
 
 CustomShape::CustomShape( Drawing& rDrawing ) :
-    SimpleShape( rDrawing, CREATE_OUSTRING( "com.sun.star.drawing.CustomShape" ) )
+    SimpleShape( rDrawing, "com.sun.star.drawing.CustomShape" )
 {
 }
 
@@ -759,7 +759,7 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
         awt::Size aOleSize( rShapeRect.Width, rShapeRect.Height );
         if( rFilter.getOleObjectHelper().importOleObject( aOleProps, *pOleObjectInfo, aOleSize ) )
         {
-            Reference< XShape > xShape = mrDrawing.createAndInsertXShape( CREATE_OUSTRING( "com.sun.star.drawing.OLE2Shape" ), rxShapes, rShapeRect );
+            Reference< XShape > xShape = mrDrawing.createAndInsertXShape( "com.sun.star.drawing.OLE2Shape", rxShapes, rShapeRect );
             if( xShape.is() )
             {
                 // set the replacement graphic
@@ -857,7 +857,7 @@ Reference< XShape > GroupShape::implConvertAndInsert( const Reference< XShapes >
     aParentAnchor.maCoordSys = getCoordSystem();
     if( !mxChildren->empty() && (aParentAnchor.maCoordSys.Width > 0) && (aParentAnchor.maCoordSys.Height > 0) ) try
     {
-        xGroupShape = mrDrawing.createAndInsertXShape( CREATE_OUSTRING( "com.sun.star.drawing.GroupShape" ), rxShapes, rShapeRect );
+        xGroupShape = mrDrawing.createAndInsertXShape( "com.sun.star.drawing.GroupShape", rxShapes, rShapeRect );
         Reference< XShapes > xChildShapes( xGroupShape, UNO_QUERY_THROW );
         mxChildren->convertAndInsert( xChildShapes, &aParentAnchor );
         // no child shape has been created - delete the group shape

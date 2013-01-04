@@ -83,19 +83,19 @@ void BulletList::setNone( )
 
 void BulletList::setSuffixParenBoth()
 {
-    msNumberingSuffix <<= CREATE_OUSTRING( ")" );
-    msNumberingPrefix <<= CREATE_OUSTRING( "(" );
+    msNumberingSuffix <<= OUString( ")" );
+    msNumberingPrefix <<= OUString( "(" );
 }
 
 void BulletList::setSuffixParenRight()
 {
-    msNumberingSuffix <<= CREATE_OUSTRING( ")" );
+    msNumberingSuffix <<= OUString( ")" );
     msNumberingPrefix <<= OUString();
 }
 
 void BulletList::setSuffixPeriod()
 {
-    msNumberingSuffix <<= CREATE_OUSTRING( "." );
+    msNumberingSuffix <<= OUString( "." );
     msNumberingPrefix <<= OUString();
 }
 
@@ -107,7 +107,7 @@ void BulletList::setSuffixNone()
 
 void BulletList::setSuffixMinusRight()
 {
-    msNumberingSuffix <<= CREATE_OUSTRING( "-" );
+    msNumberingSuffix <<= OUString( "-" );
     msNumberingPrefix <<= OUString();
 }
 
@@ -487,7 +487,7 @@ float TextParagraphProperties::getCharHeightPoints( float fDefault ) const
 void TextParagraphProperties::dump() const
 {
     Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
-    Reference< ::com::sun::star::drawing::XShape > xShape( oox::ppt::PowerPointImport::mpDebugFilterBase->getModelFactory()->createInstance( CREATE_OUSTRING( "com.sun.star.presentation.TitleTextShape" ) ), UNO_QUERY );
+    Reference< ::com::sun::star::drawing::XShape > xShape( oox::ppt::PowerPointImport::mpDebugFilterBase->getModelFactory()->createInstance( "com.sun.star.presentation.TitleTextShape" ), UNO_QUERY );
     Reference< ::com::sun::star::text::XText > xText( xShape, UNO_QUERY );
 
     Reference< com::sun::star::drawing::XDrawPage > xDebugPage(ppt::SlidePersist::mxDebugPage.get(), UNO_QUERY);
@@ -496,7 +496,7 @@ void TextParagraphProperties::dump() const
 
     PropertyMap emptyMap;
 
-    const OUString sText = CREATE_OUSTRING("debug");
+    const OUString sText = "debug";
     xText->setString( sText );
     Reference< ::com::sun::star::text::XTextCursor > xStart( xText->createTextCursor(), UNO_QUERY );
     Reference< ::com::sun::star::text::XTextRange > xRange( xStart, UNO_QUERY );

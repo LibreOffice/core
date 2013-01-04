@@ -78,22 +78,22 @@ HyperLinkContext::HyperLinkContext( ContextHandler& rParent,
         // ppaction://macro?name=MACRO_NAME
         // ppaction://program
 
-        const OUString sPPAction( CREATE_OUSTRING( "ppaction://" ) );
+        const OUString sPPAction( "ppaction://" );
         if ( aAction.matchIgnoreAsciiCase( sPPAction, 0 ) )
         {
             OUString aPPAct( aAction.copy( sPPAction.getLength() ) );
             sal_Int32 nIndex = aPPAct.indexOf( '?', 0 );
             OUString aPPAction( nIndex > 0 ? aPPAct.copy( 0, nIndex ) : aPPAct );
 
-            const OUString sHlinkshowjump( CREATE_OUSTRING( "hlinkshowjump" ) );
-            const OUString sHlinksldjump( CREATE_OUSTRING( "hlinksldjump" ) );
+            const OUString sHlinkshowjump( "hlinkshowjump" );
+            const OUString sHlinksldjump( "hlinksldjump" );
             if ( aPPAction.match( sHlinkshowjump ) )
             {
-                const OUString sJump( CREATE_OUSTRING( "jump=" ) );
+                const OUString sJump( "jump=" );
                 if ( aPPAct.match( sJump, nIndex + 1 ) )
                 {
                     OUString aDestination( aPPAct.copy( nIndex + 1 + sJump.getLength() ) );
-                    sURL = sURL.concat( CREATE_OUSTRING( "#action?jump=" ) );
+                    sURL = sURL.concat( "#action?jump=" );
                     sURL = sURL.concat( aDestination );
                 }
             }
@@ -122,13 +122,13 @@ HyperLinkContext::HyperLinkContext( ContextHandler& rParent,
                     sal_Int32 nPageNumber = sHref.copy( nIndex2, nLength ).toInt32();
                     if ( nPageNumber )
                     {
-                        const OUString sSlide( CREATE_OUSTRING( "slide" ) );
-                        const OUString sNotesSlide( CREATE_OUSTRING( "notesSlide" ) );
+                        const OUString sSlide( "slide" );
+                        const OUString sNotesSlide( "notesSlide" );
                         const OUString aSlideType( sHref.copy( 0, nIndex2 ) );
                         if ( aSlideType.match( sSlide ) )
-                            sURL = CREATE_OUSTRING( "#Slide " ).concat( OUString::valueOf( nPageNumber ) );
+                            sURL = OUString( "#Slide " ).concat( OUString::valueOf( nPageNumber ) );
                         else if ( aSlideType.match( sNotesSlide ) )
-                            sURL = CREATE_OUSTRING( "#Notes " ).concat( OUString::valueOf( nPageNumber ) );
+                            sURL = OUString( "#Notes " ).concat( OUString::valueOf( nPageNumber ) );
 //                      else: todo for other types such as notesMaster or slideMaster as they can't be referenced easily
                     }
                 }

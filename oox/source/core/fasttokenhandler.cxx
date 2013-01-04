@@ -36,13 +36,13 @@ using ::rtl::OUString;
 
 OUString SAL_CALL FastTokenHandler_getImplementationName()
 {
-    return CREATE_OUSTRING( "com.sun.star.comp.oox.core.FastTokenHandler" );
+    return OUString( "com.sun.star.comp.oox.core.FastTokenHandler" );
 }
 
 Sequence< OUString > SAL_CALL FastTokenHandler_getSupportedServiceNames()
 {
     Sequence< OUString > aServiceNames( 1 );
-    aServiceNames[ 0 ] = CREATE_OUSTRING( "com.sun.star.xml.sax.FastTokenHandler" );
+    aServiceNames[ 0 ] = "com.sun.star.xml.sax.FastTokenHandler";
     return aServiceNames;
 }
 

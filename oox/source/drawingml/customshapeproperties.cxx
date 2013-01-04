@@ -154,7 +154,7 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
 
         if ( maAdjustmentGuideList.size() )
         {
-            const OUString sType = CREATE_OUSTRING( "Type" );
+            const OUString sType = "Type";
             const OUString sCustomShapeGeometry("CustomShapeGeometry");
             uno::Any aGeoPropSet = xPropSet->getPropertyValue( sCustomShapeGeometry );
             uno::Sequence< beans::PropertyValue > aGeoPropSeq;
@@ -201,7 +201,7 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
                         if ( sConnectorShapeType.getLength() > 0 )
                             aGeoPropSeq[ i ].Value <<= sConnectorShapeType;
                         else
-                            aGeoPropSeq[ i ].Value <<= CREATE_OUSTRING( "ooxml-CustomShape" );
+                            aGeoPropSeq[ i ].Value <<= OUString( "ooxml-CustomShape" );
                     }
                 }
             }
@@ -211,7 +211,7 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
     {
         sal_uInt32 i;
         PropertyMap aPropertyMap;
-        aPropertyMap[ PROP_Type ] <<= CREATE_OUSTRING( "ooxml-non-primitive" );
+        aPropertyMap[ PROP_Type ] <<= OUString( "ooxml-non-primitive" );
         aPropertyMap[ PROP_MirroredX ] <<= Any( mbMirroredX );
         aPropertyMap[ PROP_MirroredY ] <<= Any( mbMirroredY );
         awt::Size aSize;

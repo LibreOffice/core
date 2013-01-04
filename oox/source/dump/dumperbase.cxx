@@ -134,7 +134,7 @@ Reference< XTextOutputStream > InputOutputHelper::openTextOutputStream(
     if( rxContext.is() && rxOutStrm.is() && pcCharset ) try
     {
         Reference< XMultiServiceFactory > xFactory( rxContext->getServiceManager(), UNO_QUERY_THROW );
-        Reference< XActiveDataSource > xDataSource( xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.io.TextOutputStream" ) ), UNO_QUERY_THROW );
+        Reference< XActiveDataSource > xDataSource( xFactory->createInstance( "com.sun.star.io.TextOutputStream" ), UNO_QUERY_THROW );
         xDataSource->setOutputStream( rxOutStrm );
         xTextOutStrm.set( xDataSource, UNO_QUERY_THROW );
         xTextOutStrm->setEncoding( OUString::createFromAscii( pcCharset ) );
@@ -185,9 +185,9 @@ OUStringVector::const_iterator ItemFormat::parse( const OUStringVector& rFormatV
     if( meFmtType == FORMATTYPE_NONE )
     {
         if ( aFmtType == "unused" )
-            set( meDataType, FORMATTYPE_HEX, CREATE_OUSTRING( OOX_DUMP_UNUSED ) );
+            set( meDataType, FORMATTYPE_HEX, OOX_DUMP_UNUSED );
         else if ( aFmtType == "unknown" )
-            set( meDataType, FORMATTYPE_HEX, CREATE_OUSTRING( OOX_DUMP_UNKNOWN ) );
+            set( meDataType, FORMATTYPE_HEX, OOX_DUMP_UNKNOWN );
     }
 
     return aIt;
@@ -1119,7 +1119,7 @@ OUString FlagsList::implGetName( const Config& /*rCfg*/, sal_Int64 nKey ) const
     setFlag( nKey, nFound, false );
     if( nKey != 0 )
     {
-        OUStringBuffer aUnknown( CREATE_OUSTRING( OOX_DUMP_UNKNOWN ) );
+        OUStringBuffer aUnknown( OOX_DUMP_UNKNOWN );
         aUnknown.append( OOX_DUMP_ITEMSEP );
         StringHelper::appendShortHex( aUnknown, nKey, true );
         StringHelper::enclose( aUnknown, '(', ')' );

@@ -95,7 +95,7 @@ void SAL_CALL UnoBinaryInputStream::skipBytes( sal_Int32 nBytesToSkip )
 sal_Int32 SAL_CALL UnoBinaryInputStream::available() throw (NotConnectedException, IOException, RuntimeException)
 {
     ensureConnected();
-    throw RuntimeException( CREATE_OUSTRING( "Functionality not supported" ), Reference< XInputStream >() );
+    throw RuntimeException( "Functionality not supported", Reference< XInputStream >() );
 }
 
 void SAL_CALL UnoBinaryInputStream::closeInput() throw (NotConnectedException, IOException, RuntimeException)
@@ -108,7 +108,7 @@ void SAL_CALL UnoBinaryInputStream::closeInput() throw (NotConnectedException, I
 void UnoBinaryInputStream::ensureConnected() const throw (NotConnectedException)
 {
     if( !mpInStrm )
-        throw NotConnectedException( CREATE_OUSTRING( "Stream closed" ), Reference< XInterface >() );
+        throw NotConnectedException( "Stream closed", Reference< XInterface >() );
 }
 
 } // namespace
@@ -193,7 +193,7 @@ OUString TextInputStream::readToChar( sal_Unicode cChar, bool bIncludeChar )
     if( rxContext.is() && rxInStrm.is() && pcCharset ) try
     {
         Reference< XMultiServiceFactory > xFactory( rxContext->getServiceManager(), UNO_QUERY_THROW );
-        Reference< XActiveDataSink > xDataSink( xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.io.TextInputStream" ) ), UNO_QUERY_THROW );
+        Reference< XActiveDataSink > xDataSink( xFactory->createInstance( "com.sun.star.io.TextInputStream" ), UNO_QUERY_THROW );
         xDataSink->setInputStream( rxInStrm );
         xTextStrm.set( xDataSink, UNO_QUERY_THROW );
         xTextStrm->setEncoding( OUString::createFromAscii( pcCharset ) );

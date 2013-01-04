@@ -57,7 +57,7 @@ namespace {
 OUString lclGetShapeId( sal_Int32 nShapeId )
 {
     // identifier consists of a literal NUL character, a lowercase 's', and the id
-    return CREATE_OUSTRING( "\0s" ) + OUString::valueOf( nShapeId );
+    return OUString( "\0s" ) + OUString::valueOf( nShapeId );
 }
 
 /** Returns the numeric VML shape identifier from its textual representation. */
@@ -249,7 +249,7 @@ Reference< XShape > Drawing::createAndInsertXControlShape( const ::oox::ole::Emb
         Reference< XControlModel > xCtrlModel( getControlForm().convertAndInsert( rControl, rnCtrlIndex ), UNO_SET_THROW );
 
         // create the control shape
-        xShape = createAndInsertXShape( CREATE_OUSTRING( "com.sun.star.drawing.ControlShape" ), rxShapes, rShapeRect );
+        xShape = createAndInsertXShape( "com.sun.star.drawing.ControlShape", rxShapes, rShapeRect );
 
         // set the control model at the shape
         Reference< XControlShape >( xShape, UNO_QUERY_THROW )->setControl( xCtrlModel );

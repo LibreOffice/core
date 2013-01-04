@@ -76,14 +76,14 @@ Reference< XLabeledDataSequence > lclCreateLabeledDataSequence(
     if( pTitle )
     {
         TextConverter aTextConv( rParent, *pTitle );
-        xTitleSeq = aTextConv.createDataSequence( CREATE_OUSTRING( "label" ) );
+        xTitleSeq = aTextConv.createDataSequence( "label" );
     }
 
     // create the labeled data sequence, if values or title are present
     Reference< XLabeledDataSequence > xLabeledSeq;
     if( xValueSeq.is() || xTitleSeq.is() )
     {
-        xLabeledSeq.set( rParent.createInstance( CREATE_OUSTRING( "com.sun.star.chart2.data.LabeledDataSequence" ) ), UNO_QUERY );
+        xLabeledSeq.set( rParent.createInstance( "com.sun.star.chart2.data.LabeledDataSequence" ), UNO_QUERY );
         if( xLabeledSeq.is() )
         {
             xLabeledSeq->setValues( xValueSeq );
@@ -141,7 +141,7 @@ void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatt
 
         // data label separator (do not overwrite series separator, if no explicit point separator is present)
         if( bDataSeriesLabel || rDataLabel.moaSeparator.has() )
-            rPropSet.setProperty( PROP_LabelSeparator, rDataLabel.moaSeparator.get( CREATE_OUSTRING( "; " ) ) );
+            rPropSet.setProperty( PROP_LabelSeparator, rDataLabel.moaSeparator.get( "; " ) );
 
         // data label placement (do not overwrite series placement, if no explicit point placement is present)
         if( bDataSeriesLabel || rDataLabel.monLabelPos.has() )
@@ -256,7 +256,7 @@ void ErrorBarConverter::convertFromModel( const Reference< XDataSeries >& rxData
     bool bShowNeg = (mrModel.mnTypeId == XML_minus) || (mrModel.mnTypeId == XML_both);
     if( bShowPos || bShowNeg ) try
     {
-        Reference< XPropertySet > xErrorBar( createInstance( CREATE_OUSTRING( "com.sun.star.chart2.ErrorBar" ) ), UNO_QUERY_THROW );
+        Reference< XPropertySet > xErrorBar( createInstance( "com.sun.star.chart2.ErrorBar" ), UNO_QUERY_THROW );
         PropertySet aBarProp( xErrorBar );
 
         // plus/minus bars
@@ -351,15 +351,15 @@ Reference< XLabeledDataSequence > ErrorBarConverter::createLabeledDataSequence( 
         case ErrorBarModel::PLUS:
             switch( mrModel.mnDirection )
             {
-                case XML_x: aRole = CREATE_OUSTRING( "error-bars-x-positive" ); break;
-                case XML_y: aRole = CREATE_OUSTRING( "error-bars-y-positive" ); break;
+                case XML_x: aRole = "error-bars-x-positive"; break;
+                case XML_y: aRole = "error-bars-y-positive"; break;
             }
         break;
         case ErrorBarModel::MINUS:
             switch( mrModel.mnDirection )
             {
-                case XML_x: aRole = CREATE_OUSTRING( "error-bars-x-negative" ); break;
-                case XML_y: aRole = CREATE_OUSTRING( "error-bars-y-negative" ); break;
+                case XML_x: aRole = "error-bars-x-negative"; break;
+                case XML_y: aRole = "error-bars-y-negative"; break;
             }
         break;
     }
@@ -403,12 +403,12 @@ void TrendlineConverter::convertFromModel( const Reference< XDataSeries >& rxDat
         OUString aServiceName;
         switch( mrModel.mnTypeId )
         {
-            case XML_exp:       aServiceName = CREATE_OUSTRING( "com.sun.star.chart2.ExponentialRegressionCurve" ); break;
-            case XML_linear:    aServiceName = CREATE_OUSTRING( "com.sun.star.chart2.LinearRegressionCurve" );      break;
-            case XML_log:       aServiceName = CREATE_OUSTRING( "com.sun.star.chart2.LogarithmicRegressionCurve" ); break;
+            case XML_exp:       aServiceName = "com.sun.star.chart2.ExponentialRegressionCurve"; break;
+            case XML_linear:    aServiceName = "com.sun.star.chart2.LinearRegressionCurve";      break;
+            case XML_log:       aServiceName = "com.sun.star.chart2.LogarithmicRegressionCurve"; break;
             case XML_movingAvg: /* #i66819# moving average trendlines not supported */                              break;
             case XML_poly:      /* #i20819# polynomial trendlines not supported */                                  break;
-            case XML_power:     aServiceName = CREATE_OUSTRING( "com.sun.star.chart2.PotentialRegressionCurve" );   break;
+            case XML_power:     aServiceName = "com.sun.star.chart2.PotentialRegressionCurve";   break;
             default:            OSL_FAIL( "TrendlineConverter::convertFromModel - unknown trendline type" );
         }
         if( !aServiceName.isEmpty() )
@@ -510,7 +510,7 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
     const TypeGroupInfo& rTypeInfo = rTypeGroup.getTypeInfo();
 
     // create the data series object
-    Reference< XDataSeries > xDataSeries( createInstance( CREATE_OUSTRING( "com.sun.star.chart2.DataSeries" ) ), UNO_QUERY );
+    Reference< XDataSeries > xDataSeries( createInstance( "com.sun.star.chart2.DataSeries" ), UNO_QUERY );
     PropertySet aSeriesProp( xDataSeries );
 
     // attach data and title sequences to series
@@ -521,7 +521,7 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
         // create vector of all value sequences
         ::std::vector< Reference< XLabeledDataSequence > > aLabeledSeqVec;
         // add Y values
-        Reference< XLabeledDataSequence > xYValueSeq = createValueSequence( CREATE_OUSTRING( "values-y" ) );
+        Reference< XLabeledDataSequence > xYValueSeq = createValueSequence( "values-y" );
         if( xYValueSeq.is() )
         {
             aLabeledSeqVec.push_back( xYValueSeq );
@@ -532,13 +532,13 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
         // add X values of scatter and bubble charts
         if( !rTypeInfo.mbCategoryAxis )
         {
-            Reference< XLabeledDataSequence > xXValueSeq = createCategorySequence( CREATE_OUSTRING( "values-x" ) );
+            Reference< XLabeledDataSequence > xXValueSeq = createCategorySequence( "values-x" );
             if( xXValueSeq.is() )
                 aLabeledSeqVec.push_back( xXValueSeq );
             // add size values of bubble charts
             if( rTypeInfo.meTypeId == TYPEID_BUBBLE )
             {
-                Reference< XLabeledDataSequence > xSizeValueSeq = createLabeledDataSequence( SeriesModel::POINTS, CREATE_OUSTRING( "values-size" ), true );
+                Reference< XLabeledDataSequence > xSizeValueSeq = createLabeledDataSequence( SeriesModel::POINTS, "values-size", true );
                 if( xSizeValueSeq.is() )
                     aLabeledSeqVec.push_back( xSizeValueSeq );
             }

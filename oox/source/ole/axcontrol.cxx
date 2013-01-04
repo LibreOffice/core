@@ -218,8 +218,8 @@ void lclPrepareConverter( PropertySet& rConverter, const Reference< XModel >& rx
     {
         Reference< XMultiServiceFactory > xModelFactory( rxDocModel, UNO_QUERY_THROW );
         OUString aServiceName = bRange ?
-            CREATE_OUSTRING( "com.sun.star.table.CellRangeAddressConversion" ) :
-            CREATE_OUSTRING( "com.sun.star.table.CellAddressConversion" );
+            OUString( "com.sun.star.table.CellRangeAddressConversion" ) :
+            OUString( "com.sun.star.table.CellAddressConversion" );
         rConverter.set( xModelFactory->createInstance( aServiceName ) );
     }
     catch (const Exception& e)
@@ -358,15 +358,14 @@ void ControlConverter::bindToSources( const Reference< XControlModel >& rxCtrlMo
 
         // create argument sequence
         NamedValue aValue;
-        aValue.Name = CREATE_OUSTRING( "BoundCell" );
+        aValue.Name = "BoundCell";
         aValue.Value <<= aAddress;
         Sequence< Any > aArgs( 1 );
         aArgs[ 0 ] <<= aValue;
 
         // create the CellValueBinding instance and set at the control model
         Reference< XMultiServiceFactory > xModelFactory( mxDocModel, UNO_QUERY_THROW );
-        Reference< XValueBinding > xBinding( xModelFactory->createInstanceWithArguments(
-            CREATE_OUSTRING( "com.sun.star.table.CellValueBinding" ), aArgs ), UNO_QUERY_THROW );
+        Reference< XValueBinding > xBinding( xModelFactory->createInstanceWithArguments( "com.sun.star.table.CellValueBinding", aArgs ), UNO_QUERY_THROW );
         xBindable->setValueBinding( xBinding );
     }
     catch (const Exception& e)
@@ -391,15 +390,14 @@ void ControlConverter::bindToSources( const Reference< XControlModel >& rxCtrlMo
 
         // create argument sequence
         NamedValue aValue;
-        aValue.Name = CREATE_OUSTRING( "CellRange" );
+        aValue.Name = "CellRange";
         aValue.Value <<= aRangeAddr;
         Sequence< Any > aArgs( 1 );
         aArgs[ 0 ] <<= aValue;
 
         // create the EntrySource instance and set at the control model
         Reference< XMultiServiceFactory > xModelFactory( mxDocModel, UNO_QUERY_THROW );
-        Reference< XListEntrySource > xEntrySource( xModelFactory->createInstanceWithArguments(
-            CREATE_OUSTRING( "com.sun.star.table.CellRangeListSource"  ), aArgs ), UNO_QUERY_THROW );
+        Reference< XListEntrySource > xEntrySource( xModelFactory->createInstanceWithArguments("com.sun.star.table.CellRangeListSource", aArgs ), UNO_QUERY_THROW );
         xEntrySink->setListEntrySource( xEntrySource );
     }
     catch (const Exception& e)
@@ -612,38 +610,38 @@ OUString ControlModelBase::getServiceName() const
     ApiControlType eCtrlType = getControlType();
     if( mbAwtModel ) switch( eCtrlType )
     {
-        case API_CONTROL_BUTTON:        return CREATE_OUSTRING( "com.sun.star.awt.UnoControlButtonModel" );
-        case API_CONTROL_FIXEDTEXT:     return CREATE_OUSTRING( "com.sun.star.awt.UnoControlFixedTextModel" );
-        case API_CONTROL_IMAGE:         return CREATE_OUSTRING( "com.sun.star.awt.UnoControlImageControlModel" );
-        case API_CONTROL_CHECKBOX:      return CREATE_OUSTRING( "com.sun.star.awt.UnoControlCheckBoxModel" );
-        case API_CONTROL_RADIOBUTTON:   return CREATE_OUSTRING( "com.sun.star.form.component.RadioButton" );
-        case API_CONTROL_EDIT:          return CREATE_OUSTRING( "com.sun.star.awt.UnoControlEditModel" );
-        case API_CONTROL_NUMERIC:       return CREATE_OUSTRING( "com.sun.star.awt.UnoControlNumericFieldModel" );
-        case API_CONTROL_LISTBOX:       return CREATE_OUSTRING( "com.sun.star.form.component.ListBox" );
-        case API_CONTROL_COMBOBOX:      return CREATE_OUSTRING( "com.sun.star.form.component.ComboBox" );
-        case API_CONTROL_SPINBUTTON:    return CREATE_OUSTRING( "com.sun.star.form.component.SpinButton" );
-        case API_CONTROL_SCROLLBAR:     return CREATE_OUSTRING( "com.sun.star.form.component.ScrollBar" );
-        case API_CONTROL_PROGRESSBAR:   return CREATE_OUSTRING( "com.sun.star.awt.UnoControlProgressBarModel" );
-        case API_CONTROL_GROUPBOX:      return CREATE_OUSTRING( "com.sun.star.form.component.GroupBox" );
-        case API_CONTROL_PAGE:          return CREATE_OUSTRING( "com.sun.star.awt.UnoPageModel" );
-        case API_CONTROL_MULTIPAGE:     return CREATE_OUSTRING( "com.sun.star.awt.UnoMultiPageModel" );
-        case API_CONTROL_DIALOG:        return CREATE_OUSTRING( "com.sun.star.awt.UnoControlDialogModel" );
+        case API_CONTROL_BUTTON:        return OUString( "com.sun.star.awt.UnoControlButtonModel" );
+        case API_CONTROL_FIXEDTEXT:     return OUString( "com.sun.star.awt.UnoControlFixedTextModel" );
+        case API_CONTROL_IMAGE:         return OUString( "com.sun.star.awt.UnoControlImageControlModel" );
+        case API_CONTROL_CHECKBOX:      return OUString( "com.sun.star.awt.UnoControlCheckBoxModel" );
+        case API_CONTROL_RADIOBUTTON:   return OUString( "com.sun.star.form.component.RadioButton" );
+        case API_CONTROL_EDIT:          return OUString( "com.sun.star.awt.UnoControlEditModel" );
+        case API_CONTROL_NUMERIC:       return OUString( "com.sun.star.awt.UnoControlNumericFieldModel" );
+        case API_CONTROL_LISTBOX:       return OUString( "com.sun.star.form.component.ListBox" );
+        case API_CONTROL_COMBOBOX:      return OUString( "com.sun.star.form.component.ComboBox" );
+        case API_CONTROL_SPINBUTTON:    return OUString( "com.sun.star.form.component.SpinButton" );
+        case API_CONTROL_SCROLLBAR:     return OUString( "com.sun.star.form.component.ScrollBar" );
+        case API_CONTROL_PROGRESSBAR:   return OUString( "com.sun.star.awt.UnoControlProgressBarModel" );
+        case API_CONTROL_GROUPBOX:      return OUString( "com.sun.star.form.component.GroupBox" );
+        case API_CONTROL_PAGE:          return OUString( "com.sun.star.awt.UnoPageModel" );
+        case API_CONTROL_MULTIPAGE:     return OUString( "com.sun.star.awt.UnoMultiPageModel" );
+        case API_CONTROL_DIALOG:        return OUString( "com.sun.star.awt.UnoControlDialogModel" );
         default:    OSL_FAIL( "ControlModelBase::getServiceName - no AWT model service supported" );
     }
     else switch( eCtrlType )
     {
-        case API_CONTROL_BUTTON:        return CREATE_OUSTRING( "com.sun.star.form.component.CommandButton" );
-        case API_CONTROL_FIXEDTEXT:     return CREATE_OUSTRING( "com.sun.star.form.component.FixedText" );
-        case API_CONTROL_IMAGE:         return CREATE_OUSTRING( "com.sun.star.form.component.DatabaseImageControl" );
-        case API_CONTROL_CHECKBOX:      return CREATE_OUSTRING( "com.sun.star.form.component.CheckBox" );
-        case API_CONTROL_RADIOBUTTON:   return CREATE_OUSTRING( "com.sun.star.form.component.RadioButton" );
-        case API_CONTROL_EDIT:          return CREATE_OUSTRING( "com.sun.star.form.component.TextField" );
-        case API_CONTROL_NUMERIC:       return CREATE_OUSTRING( "com.sun.star.form.component.NumericField" );
-        case API_CONTROL_LISTBOX:       return CREATE_OUSTRING( "com.sun.star.form.component.ListBox" );
-        case API_CONTROL_COMBOBOX:      return CREATE_OUSTRING( "com.sun.star.form.component.ComboBox" );
-        case API_CONTROL_SPINBUTTON:    return CREATE_OUSTRING( "com.sun.star.form.component.SpinButton" );
-        case API_CONTROL_SCROLLBAR:     return CREATE_OUSTRING( "com.sun.star.form.component.ScrollBar" );
-        case API_CONTROL_GROUPBOX:      return CREATE_OUSTRING( "com.sun.star.form.component.GroupBox" );
+        case API_CONTROL_BUTTON:        return OUString( "com.sun.star.form.component.CommandButton" );
+        case API_CONTROL_FIXEDTEXT:     return OUString( "com.sun.star.form.component.FixedText" );
+        case API_CONTROL_IMAGE:         return OUString( "com.sun.star.form.component.DatabaseImageControl" );
+        case API_CONTROL_CHECKBOX:      return OUString( "com.sun.star.form.component.CheckBox" );
+        case API_CONTROL_RADIOBUTTON:   return OUString( "com.sun.star.form.component.RadioButton" );
+        case API_CONTROL_EDIT:          return OUString( "com.sun.star.form.component.TextField" );
+        case API_CONTROL_NUMERIC:       return OUString( "com.sun.star.form.component.NumericField" );
+        case API_CONTROL_LISTBOX:       return OUString( "com.sun.star.form.component.ListBox" );
+        case API_CONTROL_COMBOBOX:      return OUString( "com.sun.star.form.component.ComboBox" );
+        case API_CONTROL_SPINBUTTON:    return OUString( "com.sun.star.form.component.SpinButton" );
+        case API_CONTROL_SCROLLBAR:     return OUString( "com.sun.star.form.component.ScrollBar" );
+        case API_CONTROL_GROUPBOX:      return OUString( "com.sun.star.form.component.GroupBox" );
         default:    OSL_FAIL( "ControlModelBase::getServiceName - no form component service supported" );
     }
     return OUString();
@@ -674,7 +672,7 @@ void ControlModelBase::convertSize( PropertyMap& rPropMap, const ControlConverte
 
 ComCtlModelBase::ComCtlModelBase( sal_uInt32 nDataPartId5, sal_uInt32 nDataPartId6,
         sal_uInt16 nVersion, bool bCommonPart, bool bComplexPart ) :
-    maFontData( CREATE_OUSTRING( "Tahoma" ), 82500 ),
+    maFontData( "Tahoma", 82500 ),
     mnFlags( 0 ),
     mnVersion( nVersion ),
     mnDataPartId5( nDataPartId5 ),
@@ -2620,14 +2618,14 @@ Reference< XIndexContainer > EmbeddedForm::createXForm()
         try
         {
             Reference< XNameContainer > xFormsNC( mxFormsSupp->getForms(), UNO_SET_THROW );
-            OUString aFormName = CREATE_OUSTRING( "Standard" );
+            OUString aFormName = "Standard";
             if( xFormsNC->hasByName( aFormName ) )
             {
                 mxFormIC.set( xFormsNC->getByName( aFormName ), UNO_QUERY_THROW );
             }
             else if( mxModelFactory.is() )
             {
-                Reference< XForm > xForm( mxModelFactory->createInstance( CREATE_OUSTRING( "com.sun.star.form.component.Form" ) ), UNO_QUERY_THROW );
+                Reference< XForm > xForm( mxModelFactory->createInstance( "com.sun.star.form.component.Form" ), UNO_QUERY_THROW );
                 xFormsNC->insertByName( aFormName, Any( xForm ) );
                 mxFormIC.set( xForm, UNO_QUERY_THROW );
             }

@@ -64,7 +64,7 @@ const ::oox::drawingml::table::TableStyleListPtr ShapeFilterBase::getTableStyles
 
 ::oox::ole::VbaProject* ShapeFilterBase::implCreateVbaProject() const
 {
-    return new ::oox::ole::VbaProject( getComponentContext(), getModel(), CREATE_OUSTRING( "Writer" ) );
+    return new ::oox::ole::VbaProject( getComponentContext(), getModel(), "Writer" );
 }
 
 ::rtl::OUString ShapeFilterBase::implGetImplementationName() const

@@ -558,7 +558,7 @@ static const char* lclDumpAnyValueCode( Any value, int level = 0)
 
     if( value >>= strValue ) {
             printLevel (level);
-            fprintf (stderr,"OUString str = CREATE_OUSTRING (\"%s\");\n", USS( strValue ) );
+            fprintf (stderr,"OUString str = \"%s\";\n", USS( strValue ) );
             return "Any (str)";
     } else if( value >>= strArray ) {
             if (strArray.getLength() == 0)
@@ -580,7 +580,7 @@ static const char* lclDumpAnyValueCode( Any value, int level = 0)
                 printLevel (level);
                 fprintf (stderr, "{\n");
                 printLevel (level + 1);
-                fprintf (stderr, "aPropSequence [%d].Name = CREATE_OUSTRING (\"%s\");\n", i, USS( propArray[i].Name ));
+                fprintf (stderr, "aPropSequence [%d].Name = \"%s\";\n", i, USS( propArray[i].Name ));
                 const char *var = lclDumpAnyValueCode( propArray[i].Value, level + 1 );
                 printLevel (level + 1);
                 fprintf (stderr, "aPropSequence [%d].Value = makeAny (%s);\n", i, var);
@@ -631,7 +631,7 @@ static const char* lclDumpAnyValueCode( Any value, int level = 0)
                 fprintf (stderr, "aAdjSequence [%d].Value = %s;\n", i, var);
                 if (adjArray[i].Name.getLength() > 0) {
                     printLevel (level + 1);
-                    fprintf (stderr, "aAdjSequence [%d].Name = CREATE_OUSTRING (\"%s\");\n", i, USS (adjArray[i].Name));
+                    fprintf (stderr, "aAdjSequence [%d].Name = \"%s\";\n", i, USS (adjArray[i].Name));
                 }
                 printLevel (level);
                 fprintf (stderr, "}\n");
@@ -838,7 +838,7 @@ void PropertyMap::dumpCode( Reference< XPropertySet > rXPropSet )
 {
     Reference< XPropertySetInfo > info = rXPropSet->getPropertySetInfo ();
     Sequence< Property > props = info->getProperties ();
-    const OUString sType = CREATE_OUSTRING( "Type" );
+    const OUString sType = "Type";
 
     for (int i=0; i < props.getLength (); i++) {
 

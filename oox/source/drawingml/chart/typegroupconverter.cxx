@@ -243,16 +243,16 @@ Reference< XCoordinateSystem > TypeGroupConverter::createCoordinateSystem()
     if( maTypeInfo.mbPolarCoordSystem )
     {
         if( mb3dChart )
-            aServiceName = CREATE_OUSTRING( "com.sun.star.chart2.PolarCoordinateSystem3d" );
+            aServiceName = "com.sun.star.chart2.PolarCoordinateSystem3d";
         else
-            aServiceName = CREATE_OUSTRING( "com.sun.star.chart2.PolarCoordinateSystem2d" );
+            aServiceName = "com.sun.star.chart2.PolarCoordinateSystem2d";
     }
     else
     {
         if( mb3dChart )
-            aServiceName = CREATE_OUSTRING( "com.sun.star.chart2.CartesianCoordinateSystem3d" );
+            aServiceName = "com.sun.star.chart2.CartesianCoordinateSystem3d";
         else
-            aServiceName = CREATE_OUSTRING( "com.sun.star.chart2.CartesianCoordinateSystem2d" );
+            aServiceName = "com.sun.star.chart2.CartesianCoordinateSystem2d";
     }
 
     // create the coordinate system object
@@ -279,7 +279,7 @@ Reference< XLabeledDataSequence > TypeGroupConverter::createCategorySequence()
         if( (*aIt)->maSources.has( SeriesModel::CATEGORIES ) )
         {
             SeriesConverter aSeriesConv( *this, **aIt );
-            xLabeledSeq = aSeriesConv.createCategorySequence( CREATE_OUSTRING( "categories" ) );
+            xLabeledSeq = aSeriesConv.createCategorySequence( "categories" );
         }
     }
     return xLabeledSeq;
@@ -346,7 +346,7 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
         if( maTypeInfo.meTypeId == TYPEID_STOCK )
         {
             // create the data series object
-            Reference< XDataSeries > xDataSeries( createInstance( CREATE_OUSTRING( "com.sun.star.chart2.DataSeries" ) ), UNO_QUERY );
+            Reference< XDataSeries > xDataSeries( createInstance( "com.sun.star.chart2.DataSeries" ), UNO_QUERY );
             Reference< XDataSink > xDataSink( xDataSeries, UNO_QUERY );
             if( xDataSink.is() )
             {
@@ -360,10 +360,10 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
                     OUString aRole;
                     switch( nRoleIdx )
                     {
-                        case 0: aRole = CREATE_OUSTRING( "values-first" );  break;
-                        case 1: aRole = CREATE_OUSTRING( "values-max" );    break;
-                        case 2: aRole = CREATE_OUSTRING( "values-min" );    break;
-                        case 3: aRole = CREATE_OUSTRING( "values-last" );   break;
+                        case 0: aRole = "values-first";  break;
+                        case 1: aRole = "values-max";    break;
+                        case 2: aRole = "values-min";    break;
+                        case 3: aRole = "values-last";   break;
                     }
                     Reference< XLabeledDataSequence > xDataSeq = (*aIt)->createValueSequence( aRole );
                     if( xDataSeq.is() )

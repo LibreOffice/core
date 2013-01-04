@@ -443,7 +443,7 @@ void OlePropertyStreamObject::dumpBlob( sal_Int32 nPropId, const String& rName )
     if( nSize > 0 )
     {
         OUString aPropName = mxPropIds->getName( cfg(), nPropId );
-        if( aPropName == CREATE_OUSTRING( "'_PID_HLINKS'" ) )
+        if( aPropName == "'_PID_HLINKS'" )
             dumpHlinks( nSize );
         else
             dumpBinary( rName, nSize );

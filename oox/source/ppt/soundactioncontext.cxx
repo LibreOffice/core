@@ -70,7 +70,7 @@ namespace oox { namespace ppt {
             }
 //          else if( mbStopSound )
 //          {
-//              maSlideProperties[ CREATE_OUSTRING( "" ) ] = Any( sal_True );
+//              maSlideProperties[ "" ] = Any( sal_True );
 //          }
         }
     }

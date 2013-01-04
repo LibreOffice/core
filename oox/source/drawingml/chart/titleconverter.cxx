@@ -120,7 +120,7 @@ Reference< XFormattedString > TextConverter::appendFormattedString(
     Reference< XFormattedString > xFmtStr;
     try
     {
-        xFmtStr.set( ConverterRoot::createInstance( CREATE_OUSTRING( "com.sun.star.chart2.FormattedString" ) ), UNO_QUERY_THROW );
+        xFmtStr.set( ConverterRoot::createInstance( "com.sun.star.chart2.FormattedString" ), UNO_QUERY_THROW );
         xFmtStr->setString( bAddNewLine ? (rString + OUString( sal_Unicode( '\n' ) )) : rString );
         orStringVec.push_back( xFmtStr );
     }
@@ -152,7 +152,7 @@ void TitleConverter::convertFromModel( const Reference< XTitled >& rxTitled, con
         if( aStringSeq.hasElements() ) try
         {
             // create the title object and set the string data
-            Reference< XTitle > xTitle( createInstance( CREATE_OUSTRING( "com.sun.star.chart2.Title" ) ), UNO_QUERY_THROW );
+            Reference< XTitle > xTitle( createInstance( "com.sun.star.chart2.Title" ), UNO_QUERY_THROW );
             xTitle->setText( aStringSeq );
             rxTitled->setTitleObject( xTitle );
 
@@ -193,7 +193,7 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
         namespace cssc2 = ::com::sun::star::chart2;
 
         // create the legend
-        Reference< XLegend > xLegend( createInstance( CREATE_OUSTRING( "com.sun.star.chart2.Legend" ) ), UNO_QUERY_THROW );
+        Reference< XLegend > xLegend( createInstance( "com.sun.star.chart2.Legend" ), UNO_QUERY_THROW );
         rxDiagram->setLegend( xLegend );
         PropertySet aPropSet( xLegend );
         aPropSet.setProperty( PROP_Show, true );

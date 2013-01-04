@@ -52,11 +52,6 @@ namespace oox {
 #define CREATE_OSTRING( ascii ) \
     ::rtl::OString( RTL_CONSTASCII_STRINGPARAM( ascii ) )
 
-/** Expands to a temporary ::rtl::OUString, created from a literal(!) ASCII(!)
-    character array. */
-#define CREATE_OUSTRING( ascii ) \
-    ::rtl::OUString::intern( RTL_CONSTASCII_USTRINGPARAM( ascii ) )
-
 /** Convert an OUString to an ASCII C string. Use for debug purposes only. */
 #define OUSTRING_TO_CSTR( str ) \
     ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US ).getStr()

@@ -180,34 +180,34 @@ OUString FilterDetectDocHandler::getFilterNameFromContentType( const OUString& r
 {
     if( rContentType.equalsAscii("application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml" ) ||
         rContentType.equalsAscii("application/vnd.ms-word.document.macroEnabled.main+xml" ) )
-        return CREATE_OUSTRING( "writer_MS_Word_2007" );
+        return OUString( "writer_MS_Word_2007" );
 
     if( rContentType.equalsAscii("application/vnd.openxmlformats-officedocument.wordprocessingml.template.main+xml") ||
         rContentType.equalsAscii("application/vnd.ms-word.template.macroEnabledTemplate.main+xml") )
-        return CREATE_OUSTRING( "writer_MS_Word_2007_Template" );
+        return OUString( "writer_MS_Word_2007_Template" );
 
     if( rContentType.equalsAscii("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml") ||
         rContentType.equalsAscii("application/vnd.ms-excel.sheet.macroEnabled.main+xml") )
-        return CREATE_OUSTRING( "MS Excel 2007 XML" );
+        return OUString( "MS Excel 2007 XML" );
 
     if( rContentType.equalsAscii("application/vnd.openxmlformats-officedocument.spreadsheetml.template.main+xml") ||
         rContentType.equalsAscii("application/vnd.ms-excel.template.macroEnabled.main+xml") )
-        return CREATE_OUSTRING( "MS Excel 2007 XML Template" );
+        return OUString( "MS Excel 2007 XML Template" );
 
     if ( rContentType == "application/vnd.ms-excel.sheet.binary.macroEnabled.main" )
-        return CREATE_OUSTRING( "MS Excel 2007 Binary" );
+        return OUString( "MS Excel 2007 Binary" );
 
     if( rContentType.equalsAscii("application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml") ||
         rContentType.equalsAscii("application/vnd.ms-powerpoint.presentation.macroEnabled.main+xml") )
-        return CREATE_OUSTRING( "MS PowerPoint 2007 XML" );
+        return OUString( "MS PowerPoint 2007 XML" );
 
     if( rContentType.equalsAscii("application/vnd.openxmlformats-officedocument.presentationml.slideshow.main+xml") ||
         rContentType.equalsAscii("application/vnd.ms-powerpoint.slideshow.macroEnabled.main+xml") )
-        return CREATE_OUSTRING( "MS PowerPoint 2007 XML AutoPlay" );
+        return OUString( "MS PowerPoint 2007 XML AutoPlay" );
 
     if( rContentType.equalsAscii("application/vnd.openxmlformats-officedocument.presentationml.template.main+xml") ||
         rContentType.equalsAscii("application/vnd.ms-powerpoint.template.macroEnabled.main+xml") )
-        return CREATE_OUSTRING( "MS PowerPoint 2007 XML Template" );
+        return OUString( "MS PowerPoint 2007 XML Template" );
 
     return OUString();
 }
@@ -237,14 +237,14 @@ void FilterDetectDocHandler::parseContentTypesOverride( const AttributeList& rAt
 Sequence< OUString > FilterDetect_getSupportedServiceNames()
 {
     Sequence< OUString > aServiceNames( 1 );
-    aServiceNames[ 0 ] = CREATE_OUSTRING( "com.sun.star.frame.ExtendedTypeDetection" );
+    aServiceNames[ 0 ] = "com.sun.star.frame.ExtendedTypeDetection";
     return aServiceNames;
 }
 
 /* Helper for XServiceInfo */
 OUString FilterDetect_getImplementationName()
 {
-    return CREATE_OUSTRING( "com.sun.star.comp.oox.FormatDetector" );
+    return OUString( "com.sun.star.comp.oox.FormatDetector" );
 }
 
 /* Helper for registry */
@@ -451,10 +451,10 @@ Sequence< NamedValue > lclGenerateEncryptionKey( const PackageEncryptionInfo& rE
     if( lclCheckEncryptionData( pnKey, nRequiredKeyLen, rEncrInfo.mpnEncrVerifier, sizeof( rEncrInfo.mpnEncrVerifier ), rEncrInfo.mpnEncrVerifierHash, sizeof( rEncrInfo.mpnEncrVerifierHash ) ) )
     {
         SequenceAsHashMap aEncryptionData;
-        aEncryptionData[ CREATE_OUSTRING( "AES128EncryptionKey" ) ] <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( pnKey ), nRequiredKeyLen );
-        aEncryptionData[ CREATE_OUSTRING( "AES128EncryptionSalt" ) ] <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( rEncrInfo.mpnSalt ), rEncrInfo.mnSaltSize );
-        aEncryptionData[ CREATE_OUSTRING( "AES128EncryptionVerifier" ) ] <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( rEncrInfo.mpnEncrVerifier ), sizeof( rEncrInfo.mpnEncrVerifier ) );
-        aEncryptionData[ CREATE_OUSTRING( "AES128EncryptionVerifierHash" ) ] <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( rEncrInfo.mpnEncrVerifierHash ), sizeof( rEncrInfo.mpnEncrVerifierHash ) );
+        aEncryptionData[ "AES128EncryptionKey" ] <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( pnKey ), nRequiredKeyLen );
+        aEncryptionData[ "AES128EncryptionSalt" ] <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( rEncrInfo.mpnSalt ), rEncrInfo.mnSaltSize );
+        aEncryptionData[ "AES128EncryptionVerifier" ] <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( rEncrInfo.mpnEncrVerifier ), sizeof( rEncrInfo.mpnEncrVerifier ) );
+        aEncryptionData[ "AES128EncryptionVerifierHash" ] <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( rEncrInfo.mpnEncrVerifierHash ), sizeof( rEncrInfo.mpnEncrVerifierHash ) );
         aResult = aEncryptionData.getAsConstNamedValueList();
     }
 
@@ -496,9 +496,9 @@ PasswordVerifier::PasswordVerifier( const PackageEncryptionInfo& rEncryptInfo ) 
 ::comphelper::DocPasswordVerifierResult PasswordVerifier::verifyEncryptionData( const Sequence< NamedValue >& rEncryptionData )
 {
     SequenceAsHashMap aHashData( rEncryptionData );
-    Sequence< sal_Int8 > aKey = aHashData.getUnpackedValueOrDefault( CREATE_OUSTRING( "AES128EncryptionKey" ), Sequence< sal_Int8 >() );
-    Sequence< sal_Int8 > aVerifier = aHashData.getUnpackedValueOrDefault( CREATE_OUSTRING( "AES128EncryptionVerifier" ), Sequence< sal_Int8 >() );
-    Sequence< sal_Int8 > aVerifierHash = aHashData.getUnpackedValueOrDefault( CREATE_OUSTRING( "AES128EncryptionVerifierHash" ), Sequence< sal_Int8 >() );
+    Sequence< sal_Int8 > aKey = aHashData.getUnpackedValueOrDefault( "AES128EncryptionKey", Sequence< sal_Int8 >() );
+    Sequence< sal_Int8 > aVerifier = aHashData.getUnpackedValueOrDefault( "AES128EncryptionVerifier", Sequence< sal_Int8 >() );
+    Sequence< sal_Int8 > aVerifierHash = aHashData.getUnpackedValueOrDefault( "AES128EncryptionVerifierHash", Sequence< sal_Int8 >() );
 
     bool bResult = lclCheckEncryptionData(
         reinterpret_cast< const sal_uInt8* >( aKey.getConstArray() ), aKey.getLength(),
@@ -520,7 +520,7 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
         return xInStrm;
 
     // check if a temporary file is passed in the 'ComponentData' property
-    Reference< XStream > xDecrypted( rMediaDesc.getComponentDataEntry( CREATE_OUSTRING( "DecryptedPackage" ) ), UNO_QUERY );
+    Reference< XStream > xDecrypted( rMediaDesc.getComponentDataEntry( "DecryptedPackage" ), UNO_QUERY );
     if( xDecrypted.is() )
     {
         Reference< XInputStream > xDecrInStrm = xDecrypted->getInputStream();
@@ -533,8 +533,8 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
     if( aOleStorage.isStorage() ) try
     {
         // open the required input streams in the encrypted package
-        Reference< XInputStream > xEncryptionInfo( aOleStorage.openInputStream( CREATE_OUSTRING( "EncryptionInfo" ) ), UNO_SET_THROW );
-        Reference< XInputStream > xEncryptedPackage( aOleStorage.openInputStream( CREATE_OUSTRING( "EncryptedPackage" ) ), UNO_SET_THROW );
+        Reference< XInputStream > xEncryptionInfo( aOleStorage.openInputStream( "EncryptionInfo" ), UNO_SET_THROW );
+        Reference< XInputStream > xEncryptedPackage( aOleStorage.openInputStream( "EncryptedPackage" ), UNO_SET_THROW );
 
         // read the encryption info stream
         PackageEncryptionInfo aEncryptInfo;
@@ -558,7 +558,7 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
                 feature with password. Try this first before prompting the
                 user for a password. */
             ::std::vector< OUString > aDefaultPasswords;
-            aDefaultPasswords.push_back( CREATE_OUSTRING( "VelvetSweatshop" ) );
+            aDefaultPasswords.push_back( "VelvetSweatshop" );
 
             /*  Use the comphelper password helper to request a password.
                 This helper returns either with the correct password
@@ -603,7 +603,7 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
                 aDecryptedPackage.seekToStart();
 
                 // store temp file in media descriptor to keep it alive
-                rMediaDesc.setComponentDataEntry( CREATE_OUSTRING( "DecryptedPackage" ), Any( xTempFile ) );
+                rMediaDesc.setComponentDataEntry( "DecryptedPackage", Any( xTempFile ) );
 
                 Reference< XInputStream > xDecrInStrm = xTempFile->getInputStream();
                 if( lclIsZipPackage( mxContext, xDecrInStrm ) )
@@ -672,8 +672,8 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
 
             /*  Parse '_rels/.rels' to get the target path and '[Content_Types].xml'
                 to determine the content type of the part at the target path. */
-            aParser.parseStream( aZipStorage, CREATE_OUSTRING( "_rels/.rels" ) );
-            aParser.parseStream( aZipStorage, CREATE_OUSTRING( "[Content_Types].xml" ) );
+            aParser.parseStream( aZipStorage, "_rels/.rels" );
+            aParser.parseStream( aZipStorage, "[Content_Types].xml" );
         }
     }
     catch( const Exception& )

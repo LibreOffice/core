@@ -33,14 +33,14 @@ using namespace drawingml;
 
 ::rtl::OUString SAL_CALL ShapeContextHandler_getImplementationName()
 {
-    return CREATE_OUSTRING( "com.sun.star.comp.oox.ShapeContextHandler" );
+    return OUString( "com.sun.star.comp.oox.ShapeContextHandler" );
 }
 
 uno::Sequence< ::rtl::OUString > SAL_CALL
 ShapeContextHandler_getSupportedServiceNames()
 {
     uno::Sequence< ::rtl::OUString > s(1);
-    s[0] = CREATE_OUSTRING( "com.sun.star.xml.sax.FastShapeContextHandler" );
+    s[0] = "com.sun.star.xml.sax.FastShapeContextHandler";
     return s;
 }
 

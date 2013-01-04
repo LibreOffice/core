@@ -120,7 +120,7 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
         if( mrModel.mxTitle.is() || !aAutoTitle.isEmpty() )
         {
             if( aAutoTitle.isEmpty() )
-                aAutoTitle = CREATE_OUSTRING( "Chart Title" );
+                aAutoTitle = "Chart Title";
             Reference< XTitled > xTitled( getChartDocument(), UNO_QUERY_THROW );
             TitleConverter aTitleConv( *this, mrModel.mxTitle.getOrCreate() );
             aTitleConv.convertFromModel( xTitled, aAutoTitle, OBJECTTYPE_CHARTTITLE );

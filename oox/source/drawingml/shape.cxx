@@ -154,7 +154,7 @@ ChartShapeInfo& Shape::setChartType( bool bEmbedShapes )
 {
     OSL_ENSURE( meFrameType == FRAMETYPE_GENERIC, "Shape::setChartType - multiple frame types" );
     meFrameType = FRAMETYPE_CHART;
-    msServiceName = CREATE_OUSTRING( "com.sun.star.drawing.OLE2Shape" );
+    msServiceName = "com.sun.star.drawing.OLE2Shape";
     mxChartShapeInfo.reset( new ChartShapeInfo( bEmbedShapes ) );
     return *mxChartShapeInfo;
 }
@@ -163,7 +163,7 @@ void Shape::setDiagramType()
 {
     OSL_ENSURE( meFrameType == FRAMETYPE_GENERIC, "Shape::setDiagramType - multiple frame types" );
     meFrameType = FRAMETYPE_DIAGRAM;
-    msServiceName = CREATE_OUSTRING( "com.sun.star.drawing.GroupShape" );
+    msServiceName = "com.sun.star.drawing.GroupShape";
     mnSubType = 0;
 }
 
@@ -171,7 +171,7 @@ void Shape::setTableType()
 {
     OSL_ENSURE( meFrameType == FRAMETYPE_GENERIC, "Shape::setTableType - multiple frame types" );
     meFrameType = FRAMETYPE_TABLE;
-    msServiceName = CREATE_OUSTRING( "com.sun.star.drawing.TableShape" );
+    msServiceName = "com.sun.star.drawing.TableShape";
     mnSubType = 0;
 }
 
@@ -463,7 +463,7 @@ Reference< XShape > Shape::createAndInsert(
         if ( mbHidden || mbHiddenMasterShape )
         {
             SAL_INFO("oox", "invisible shape with id: " << msId);
-            const OUString sVisible( CREATE_OUSTRING( "Visible" ) );
+            const OUString sVisible( "Visible" );
             xSet->setPropertyValue( sVisible, Any( sal_False ) );
         }
 
@@ -635,7 +635,7 @@ OUString Shape::finalizeServiceName( XmlFilterBase& rFilter, const OUString& rSe
         {
             awt::Size aOleSize( rShapeRect.Width, rShapeRect.Height );
             if( rFilter.getOleObjectHelper().importOleObject( maShapeProperties, *mxOleObjectInfo, aOleSize ) )
-                aServiceName = CREATE_OUSTRING( "com.sun.star.drawing.OLE2Shape" );
+                aServiceName = "com.sun.star.drawing.OLE2Shape";
 
             // get the path to the representation graphic
             OUString aGraphicPath;
@@ -670,7 +670,7 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
             {
                 // set the chart2 OLE class ID at the OLE shape
                 PropertySet aShapeProp( mxShape );
-                aShapeProp.setProperty( PROP_CLSID, CREATE_OUSTRING( "12dcae26-281f-416f-a234-c3086127382e" ) );
+                aShapeProp.setProperty( PROP_CLSID, OUString( "12dcae26-281f-416f-a234-c3086127382e" ) );
 
                 // get the XModel interface of the embedded object from the OLE shape
                 Reference< frame::XModel > xDocModel;

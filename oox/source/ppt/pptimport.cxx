@@ -36,14 +36,14 @@ namespace oox { namespace ppt {
 
 OUString SAL_CALL PowerPointImport_getImplementationName() throw()
 {
-    return CREATE_OUSTRING( "com.sun.star.comp.oox.ppt.PowerPointImport" );
+    return OUString( "com.sun.star.comp.oox.ppt.PowerPointImport" );
 }
 
 uno::Sequence< OUString > SAL_CALL PowerPointImport_getSupportedServiceNames() throw()
 {
     Sequence< OUString > aSeq( 2 );
-    aSeq[ 0 ] = CREATE_OUSTRING( "com.sun.star.document.ImportFilter" );
-    aSeq[ 1 ] = CREATE_OUSTRING( "com.sun.star.document.ExportFilter" );
+    aSeq[ 0 ] = "com.sun.star.document.ImportFilter";
+    aSeq[ 1 ] = "com.sun.star.document.ExportFilter";
     return aSeq;
 }
 
@@ -140,7 +140,7 @@ sal_Bool SAL_CALL PowerPointImport::filter( const Sequence< PropertyValue >& rDe
         return true;
 
     if( isExportFilter() ) {
-        Reference< XExporter > xExporter( getServiceFactory()->createInstance( CREATE_OUSTRING( "com.sun.star.comp.Impress.oox.PowerPointExport" ) ), UNO_QUERY );
+        Reference< XExporter > xExporter( getServiceFactory()->createInstance( "com.sun.star.comp.Impress.oox.PowerPointExport" ), UNO_QUERY );
 
         if( xExporter.is() ) {
             Reference< XComponent > xDocument( getModel(), UNO_QUERY );
@@ -209,7 +209,7 @@ GraphicHelper* PowerPointImport::implCreateGraphicHelper() const
 
 ::oox::ole::VbaProject* PowerPointImport::implCreateVbaProject() const
 {
-    return new ::oox::ole::VbaProject( getComponentContext(), getModel(), CREATE_OUSTRING( "Impress" ) );
+    return new ::oox::ole::VbaProject( getComponentContext(), getModel(), "Impress" );
 }
 
 OUString PowerPointImport::implGetImplementationName() const

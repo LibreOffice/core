@@ -49,13 +49,13 @@ using ::rtl::OUString;
 
 OUString SAL_CALL DocumentPropertiesImport_getImplementationName()
 {
-    return CREATE_OUSTRING( "com.sun.star.comp.oox.docprop.DocumentPropertiesImporter" );
+    return OUString( "com.sun.star.comp.oox.docprop.DocumentPropertiesImporter" );
 }
 
 Sequence< OUString > SAL_CALL DocumentPropertiesImport_getSupportedServiceNames()
 {
     Sequence< OUString > aServices( 1 );
-    aServices[ 0 ] = CREATE_OUSTRING( "com.sun.star.document.OOXMLDocumentPropertiesImporter" );
+    aServices[ 0 ] = "com.sun.star.document.OOXMLDocumentPropertiesImporter";
     return aServices;
 }
 
@@ -155,7 +155,7 @@ void SAL_CALL DocumentPropertiesImport::importProperties(
     if( aCoreStreams.hasElements() || aExtStreams.hasElements() || aCustomStreams.hasElements() )
     {
         if( aCoreStreams.getLength() > 1 )
-            throw IOException( CREATE_OUSTRING( "Unexpected core properties stream!" ), Reference< XInterface >() );
+            throw IOException( "Unexpected core properties stream!", Reference< XInterface >() );
 
         ::oox::core::FastParser aParser( mxContext );
         aParser.registerNamespace( NMSP_packageMetaCorePr );

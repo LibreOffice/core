@@ -67,13 +67,12 @@ namespace dump {
 #define OOX_DUMP_UNKNOWN                    "?unknown"
 
 #define OOX_DUMP_ERRASCII( ascii )          "?err:" ascii
-#define OOX_DUMP_ERRSTRING( ascii )         CREATE_OUSTRING( OOX_DUMP_ERRASCII( ascii ) )
 
-#define OOX_DUMP_ERR_NOMAP                  OOX_DUMP_ERRSTRING( "no-map" )
-#define OOX_DUMP_ERR_NONAME                 OOX_DUMP_ERRSTRING( "no-name" )
-#define OOX_DUMP_ERR_STREAM                 OOX_DUMP_ERRSTRING( "stream-error" )
+#define OOX_DUMP_ERR_NOMAP                  "no-map"
+#define OOX_DUMP_ERR_NONAME                 "no-name"
+#define OOX_DUMP_ERR_STREAM                 "stream-error"
 
-#define OOX_DUMP_DUMPEXT                    CREATE_OUSTRING( ".dump" )
+#define OOX_DUMP_DUMPEXT                    ".dump"
 
 const sal_Unicode OOX_DUMP_STRQUOTE         = '\'';
 const sal_Unicode OOX_DUMP_FMLASTRQUOTE     = '"';

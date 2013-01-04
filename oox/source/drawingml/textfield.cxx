@@ -69,7 +69,7 @@ void lclCreateTextFields( std::list< Reference< XTextField > > & aFields,
             bool bIsDate = true;
             int idx = p.toInt32();
 //              OSL_TRACE( "OOX: p = %s, %d", p.pData->buffer, idx );
-            xIface = xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.text.TextField.DateTime" ) );
+            xIface = xFactory->createInstance( "com.sun.star.text.TextField.DateTime" );
             aFields.push_back( Reference< XTextField > ( xIface, UNO_QUERY ) );
             Reference< XPropertySet > xProps( xIface, UNO_QUERY_THROW );
 
@@ -92,10 +92,10 @@ void lclCreateTextFields( std::list< Reference< XTextField > > & aFields,
             case 7: // Date Mon-yy
                 break;
             case 8: // DateTime dd/mm/yyyy H:MM PM
-                lclCreateTextFields( aFields, xModel, CREATE_OUSTRING( "datetime12" ) );
+                lclCreateTextFields( aFields, xModel, "datetime12" );
                 break;
             case 9: // DateTime dd/mm/yy H:MM:SS PM
-                lclCreateTextFields( aFields, xModel, CREATE_OUSTRING( "datetime13" ) );
+                lclCreateTextFields( aFields, xModel, "datetime13" );
                 break;
             case 10: // Time H:MM
                 bIsDate = false;
@@ -111,8 +111,8 @@ void lclCreateTextFields( std::list< Reference< XTextField > > & aFields,
                 bIsDate = false;
                 break;
             }
-            xProps->setPropertyValue( CREATE_OUSTRING( "IsDate" ), makeAny( bIsDate ) );
-            xProps->setPropertyValue( CREATE_OUSTRING( "IsFixed" ), makeAny( false ) );
+            xProps->setPropertyValue( "IsDate", makeAny( bIsDate ) );
+            xProps->setPropertyValue( "IsFixed", makeAny( false ) );
         }
         catch(Exception & e)
         {
@@ -121,7 +121,7 @@ void lclCreateTextFields( std::list< Reference< XTextField > > & aFields,
     }
     else if ( sType.compareToAscii( "slidenum" ) == 0 )
     {
-        xIface = xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.text.TextField.PageNumber" ) );
+        xIface = xFactory->createInstance( "com.sun.star.text.TextField.PageNumber" );
         aFields.push_back( Reference< XTextField > ( xIface, UNO_QUERY ) );
     }
 }
@@ -168,7 +168,7 @@ sal_Int32 TextField::insertAt(
                     }
                     else
                     {
-                        xText->insertString( xStart, CREATE_OUSTRING( " " ), sal_False );
+                        xText->insertString( xStart, " ", sal_False );
                     }
                     xText->insertTextContent( xStart, xContent, sal_False );
                 }

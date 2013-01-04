@@ -130,7 +130,7 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
         ObjectFormatter& rFormatter = getFormatter();
 
         // create the axis object (always)
-        xAxis.set( createInstance( CREATE_OUSTRING( "com.sun.star.chart2.Axis" ) ), UNO_QUERY_THROW );
+        xAxis.set( createInstance( "com.sun.star.chart2.Axis" ), UNO_QUERY_THROW );
         PropertySet aAxisProp( xAxis );
         // #i58688# axis enabled
         aAxisProp.setProperty( PROP_Show, !mrModel.mbDeleted );
@@ -219,7 +219,7 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
                 if( mrModel.mnTypeId == C_TOKEN( dateAx ) )
                 {
                     // scaling algorithm
-                    aScaleData.Scaling.set( createInstance( CREATE_OUSTRING( "com.sun.star.chart2.LinearScaling" ) ), UNO_QUERY );
+                    aScaleData.Scaling.set( createInstance( "com.sun.star.chart2.LinearScaling" ), UNO_QUERY );
                     // min/max
                     lclSetValueOrClearAny( aScaleData.Minimum, mrModel.mofMin );
                     lclSetValueOrClearAny( aScaleData.Maximum, mrModel.mofMax );
@@ -250,8 +250,8 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
                 // scaling algorithm
                 bool bLogScale = lclIsLogarithmicScale( mrModel );
                 OUString aScalingService = bLogScale ?
-                    CREATE_OUSTRING( "com.sun.star.chart2.LogarithmicScaling" ) :
-                    CREATE_OUSTRING( "com.sun.star.chart2.LinearScaling" );
+                    OUString( "com.sun.star.chart2.LogarithmicScaling" ) :
+                    OUString( "com.sun.star.chart2.LinearScaling" );
                 aScaleData.Scaling.set( createInstance( aScalingService ), UNO_QUERY );
                 // min/max
                 lclSetValueOrClearAny( aScaleData.Minimum, mrModel.mofMin );
@@ -334,7 +334,7 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
         {
             Reference< XTitled > xTitled( xAxis, UNO_QUERY_THROW );
             TitleConverter aTitleConv( *this, *mrModel.mxTitle );
-            aTitleConv.convertFromModel( xTitled, CREATE_OUSTRING( "Axis Title" ), OBJECTTYPE_AXISTITLE, nAxesSetIdx, nAxisIdx );
+            aTitleConv.convertFromModel( xTitled, "Axis Title", OBJECTTYPE_AXISTITLE, nAxesSetIdx, nAxisIdx );
         }
     }
     catch( Exception& )
@@ -358,4 +358,4 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
 } // namespace drawingml
 } // namespace oox
 
-/* vim:n:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
