@@ -83,6 +83,7 @@ ScXMLTableRowContext::ScXMLTableRowContext( ScXMLImport& rImport,
             case XML_TOK_TABLE_ROW_ATTR_REPEATED:
             {
                 nRepeatedRows = std::max( sValue.toInt32(), (sal_Int32) 1 );
+                nRepeatedRows = std::min( nRepeatedRows, MAXROWCOUNT );
             }
             break;
             case XML_TOK_TABLE_ROW_ATTR_DEFAULT_CELL_STYLE_NAME:
