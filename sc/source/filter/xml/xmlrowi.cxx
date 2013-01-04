@@ -98,7 +98,6 @@ ScXMLTableRowContext::ScXMLTableRowContext( ScXMLImport& rImport,
             break;*/
         }
     }
-    mnLastRow = GetScImport().GetTables().GetCurrentRow() + nRepeatedRows;
     GetScImport().GetTables().AddRow();
     GetScImport().GetTables().SetRowStyle(sCellStyleName);
 }
@@ -156,12 +155,6 @@ void ScXMLTableRowContext::EndElement()
     }
     SCTAB nSheet = rXMLImport.GetTables().GetCurrentSheet();
     sal_Int32 nCurrentRow(rXMLImport.GetTables().GetCurrentRow());
-    if(nCurrentRow != mnLastRow)
-    {
-        // this document is most likely invalid in some way
-        SAL_WARN("sc", "we did not generate enough rows in the cell import!!");
-        nCurrentRow = mnLastRow;
-    }
     uno::Reference<sheet::XSpreadsheet> xSheet(rXMLImport.GetTables().GetCurrentXSheet());
     if(xSheet.is())
     {

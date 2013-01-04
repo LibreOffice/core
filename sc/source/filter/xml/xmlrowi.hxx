@@ -29,8 +29,6 @@ class ScXMLTableRowContext : public SvXMLImportContext
     rtl::OUString sStyleName;
     rtl::OUString sVisibility;
     sal_Int32 nRepeatedRows;
-    sal_Int32 mnLastRow; // to workaround problems with the cell import, can be removed when the cell
-                        // always adds enough rows
     bool bHasCell;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
