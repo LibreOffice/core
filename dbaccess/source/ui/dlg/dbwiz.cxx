@@ -343,11 +343,10 @@ sal_Bool ODbTypeWizDialog::saveDatasource()
     if ( pPage )
         pPage->FillItemSet(*m_pOutSet);
 
-    DataSourceInfoConverter aConverter( Reference<XMultiServiceFactory>(getORB()->getServiceManager(), UNO_QUERY_THROW) );
     ::rtl::OUString sOldURL;
     if ( m_pImpl->getCurrentDataSource().is() )
         m_pImpl->getCurrentDataSource()->getPropertyValue(PROPERTY_URL) >>= sOldURL;
-    aConverter.convert(m_pCollection,sOldURL,m_eType,m_pImpl->getCurrentDataSource());
+    DataSourceInfoConverter::convert( getORB(), m_pCollection,sOldURL,m_eType,m_pImpl->getCurrentDataSource());
     return sal_True;
 }
 // -----------------------------------------------------------------------------

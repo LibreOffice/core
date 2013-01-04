@@ -318,7 +318,7 @@ void lcl_removeUnused(const ::comphelper::NamedValueCollection& _aOld,const ::co
     }
 }
 // -----------------------------------------------------------------------------
-void DataSourceInfoConverter::convert(const ::dbaccess::ODsnTypeCollection* _pCollection,const ::rtl::OUString& _sOldURLPrefix,const ::rtl::OUString& _sNewURLPrefix,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xDatasource)
+void DataSourceInfoConverter::convert(const Reference<XComponentContext> & xContext, const ::dbaccess::ODsnTypeCollection* _pCollection,const ::rtl::OUString& _sOldURLPrefix,const ::rtl::OUString& _sNewURLPrefix,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xDatasource)
 {
     if ( _pCollection->getPrefix(_sOldURLPrefix) == _pCollection->getPrefix(_sNewURLPrefix) )
         return ;
@@ -326,7 +326,7 @@ void DataSourceInfoConverter::convert(const ::dbaccess::ODsnTypeCollection* _pCo
     _xDatasource->getPropertyValue(PROPERTY_INFO) >>= aInfo;
     ::comphelper::NamedValueCollection aDS(aInfo);
 
-    ::connectivity::DriversConfig aDriverConfig(comphelper::getComponentContext(m_xFactory));
+    ::connectivity::DriversConfig aDriverConfig(xContext);
 
     const ::comphelper::NamedValueCollection&  aOldProperties   = aDriverConfig.getProperties(_sOldURLPrefix);
     const ::comphelper::NamedValueCollection&  aNewProperties   = aDriverConfig.getProperties(_sNewURLPrefix);
@@ -355,9 +355,8 @@ void ODbTypeWizDialogSetup::activateDatabasePath()
     case OGeneralPage::eConnectExternal:
     {
         ::rtl::OUString sOld = m_sURL;
-        DataSourceInfoConverter aConverter( uno::Reference<lang::XMultiServiceFactory>(getORB()->getServiceManager(), uno::UNO_QUERY_THROW) );
         m_sURL = m_pGeneralPage->GetSelectedType();
-        aConverter.convert(m_pCollection,sOld,m_sURL,m_pImpl->getCurrentDataSource());
+        DataSourceInfoConverter::convert(getORB(), m_pCollection,sOld,m_sURL,m_pImpl->getCurrentDataSource());
         ::dbaccess::DATASOURCE_TYPE eType = VerifyDataSourceType(m_pCollection->determineType(m_sURL));
         if (eType ==  ::dbaccess::DST_UNKNOWN)
             eType = m_pCollection->determineType(m_sOldURL);

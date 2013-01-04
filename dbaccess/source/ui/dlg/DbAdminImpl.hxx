@@ -37,15 +37,13 @@ class Window;
 namespace dbaui
 {
 //.........................................................................
-    class DataSourceInfoConverter
+    namespace DataSourceInfoConverter
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
-    public:
-        DataSourceInfoConverter(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xFactory)
-            :m_xFactory(_xFactory)
-        {
-        }
-        void convert(const ::dbaccess::ODsnTypeCollection* _pCollection,const ::rtl::OUString& _sOldURLPrefix,const ::rtl::OUString& _sNewURLPrefix,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xDatasource);
+        void convert(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> & xContext,
+                     const ::dbaccess::ODsnTypeCollection* _pCollection,
+                     const ::rtl::OUString& _sOldURLPrefix,
+                     const ::rtl::OUString& _sNewURLPrefix,
+                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xDatasource);
     };
     class IItemSetHelper;
     //========================================================================
