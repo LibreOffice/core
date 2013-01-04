@@ -753,8 +753,8 @@ void ScDPSource::CreateRes_Impl()
     // or pointer arrays.
     vector<rtl::OUString> aDataNames;
     sheet::DataPilotFieldReference* pDataRefValues = NULL;
-    ScSubTotalFunc eDataFunctions[SC_DP_MAX_FIELDS];
-    sal_uInt16 nDataRefOrient[SC_DP_MAX_FIELDS];
+    vector<ScSubTotalFunc> aDataFunctions;
+    vector<sal_uInt16> aDataRefOrient;
     if (nDataDimCount)
     {
         aDataNames.resize(nDataDimCount);
@@ -785,11 +785,11 @@ void ScDPSource::CreateRes_Impl()
         }
 
         // Map UNO's enum to internal enum ScSubTotalFunc.
-        eDataFunctions[i] = ScDataUnoConversion::GeneralToSubTotal( eUser );
+        aDataFunctions.push_back(ScDataUnoConversion::GeneralToSubTotal(eUser));
 
         // Get reference field/item information.
         pDataRefValues[i] = pDim->GetReferenceValue();
-        nDataRefOrient[i] = sheet::DataPilotFieldOrientation_HIDDEN;    // default if not used
+        sal_uInt16 nDataRefOrient = sheet::DataPilotFieldOrientation_HIDDEN;    // default if not used
         sal_Int32 eRefType = pDataRefValues[i].ReferenceType;
         if ( eRefType == sheet::DataPilotFieldReferenceType::ITEM_DIFFERENCE ||
              eRefType == sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE ||
@@ -800,13 +800,15 @@ void ScDPSource::CreateRes_Impl()
                                     GetDimensionsObject()->getElementNames() );
             if ( nColumn >= 0 )
             {
-                nDataRefOrient[i] = GetOrientation( nColumn );
+                nDataRefOrient = GetOrientation(nColumn);
                 //  need fully initialized results to find reference values
                 //  (both in column or row dimensions), so updated values or
                 //  differences to 0 can be displayed even for empty results.
                 bLateInit = false;
             }
         }
+
+        aDataRefOrient.push_back(nDataRefOrient);
 
         aDataNames[i] = pDim->getName();
 
@@ -827,7 +829,7 @@ void ScDPSource::CreateRes_Impl()
     }
 
     pResData = new ScDPResultData( this );
-    pResData->SetMeasureData( nDataDimCount, eDataFunctions, pDataRefValues, nDataRefOrient, aDataNames );
+    pResData->SetMeasureData(nDataDimCount, &aDataFunctions[0], pDataRefValues, &aDataRefOrient[0], aDataNames);
     pResData->SetDataLayoutOrientation(nDataOrient);
     pResData->SetLateInit( bLateInit );
 
