@@ -341,8 +341,39 @@ namespace vcl_sal {
         { SunXK_Cut,   "Lõika" },
     };
 
+    static const struct KeysymNameReplacement aImplReplacements_Catalan[] =
+    {
+        { XK_Shift_L, "Maj" },
+        { XK_Shift_R, "Maj" },
+        { XK_Page_Up, "Re Pàg" },
+        { XK_Page_Down, "Av Pàg" },
+        { XK_End, "Fi" },
+        { XK_Home, "Inici" },
+        { XK_Delete, "Supr" },
+        { XK_Escape, "Esc" },
+        { XK_Right, "Dreta" },
+        { XK_Left, "Esquerra" },
+        { XK_Up, "Amunt" },
+        { XK_Down, "Avall" },
+        { XK_BackSpace, "Retrocés" },
+        { XK_Return, "Retorn" },
+        { XK_space, "Espai" },
+        { XK_KP_Enter, "Retorn" },
+        { SunXK_Stop,  "Atura" },
+        { SunXK_Again, "Repeteix" },
+        { SunXK_Props, "Props" },
+        { SunXK_Undo,  "Desfés" },
+        { SunXK_Front, "Davant" },
+        { SunXK_Copy,  "Còpia" },
+        { SunXK_Open,  "Obre" },
+        { SunXK_Paste, "Enganxa" },
+        { SunXK_Find,  "Cerca" },
+        { SunXK_Cut,   "Retalla" },
+    };
+
     static const struct KeyboardReplacements aKeyboards[] =
     {
+        { "ca", aImplReplacements_Catalan, SAL_N_ELEMENTS(aImplReplacements_Catalan) },
         { "de", aImplReplacements_German, SAL_N_ELEMENTS(aImplReplacements_German) },
         { "es", aImplReplacements_Spanish, SAL_N_ELEMENTS(aImplReplacements_Spanish) },
         { "et", aImplReplacements_Estonian, SAL_N_ELEMENTS(aImplReplacements_Estonian) },
