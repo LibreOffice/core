@@ -470,11 +470,7 @@ bool EmbedMedia(uno::Reference<frame::XModel> const& xModel,
             xTransaction->commit();
         }
 
-        OUStringBuffer buf("vnd.sun.star.Package:");
-        buf.append(media);
-        buf.append(sal_Unicode('/'));
-        buf.append(filename);
-        o_rEmbeddedURL = buf.makeStringAndClear();
+        o_rEmbeddedURL = "vnd.sun.star.Package:" + media + "/" + filename;
         return true;
     }
     catch (uno::Exception const&)
