@@ -111,6 +111,7 @@ public:
     void testN780645();
     void testFineTableDash();
     void testN792778();
+    void testN793262();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -174,6 +175,7 @@ void Test::run()
         {"n780645.docx", &Test::testN780645},
         {"tableborder-finedash.docx", &Test::testFineTableDash},
         {"n792778.docx", &Test::testN792778},
+        {"n793262.docx", &Test::testN793262},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1096,6 +1098,22 @@ void Test::testN792778()
     xInnerShape.set(xInnerGroupShape->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(11684), xInnerShape->getPosition().Y);
 }
+
+void Test::testN793262()
+{
+    uno::Reference<container::XEnumerationAccess> xHeaderText = getProperty< uno::Reference<container::XEnumerationAccess> >(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "HeaderText");
+    uno::Reference<container::XEnumeration> xHeaderParagraphs(xHeaderText->createEnumeration());
+    xHeaderParagraphs->nextElement();
+    // Font size of the last empty paragraph in the header was ignored, this was 11.
+    CPPUNIT_ASSERT_EQUAL(16.f, getProperty<float>(xHeaderParagraphs->nextElement(), "CharHeight"));
+
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    // Cell margins as direct formatting were ignored, this was 0.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(76), getProperty<sal_Int32>(xTable->getCellByName("A1"), "TopBorderDistance"));
+}
+
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
