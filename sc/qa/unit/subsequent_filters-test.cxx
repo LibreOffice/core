@@ -213,7 +213,7 @@ public:
     CPPUNIT_TEST(testCellAnchoredShapesODS);
 
     CPPUNIT_TEST(testPivotTableBasicODS);
-//  CPPUNIT_TEST(testRowHeight);
+    CPPUNIT_TEST(testRowHeight);
     CPPUNIT_TEST(testFormulaDependency);
 
     //disable testPassword on MacOSX due to problems with libsqlite3
