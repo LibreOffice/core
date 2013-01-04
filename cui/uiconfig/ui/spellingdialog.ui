@@ -164,7 +164,7 @@
             </child>
             <child>
               <object class="GtkButton" id="change">
-                <property name="label" translatable="yes">_Change</property>
+                <property name="label" translatable="yes">_Correct</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -180,7 +180,7 @@
             </child>
             <child>
               <object class="GtkButton" id="changeall">
-                <property name="label" translatable="yes">Change A_ll</property>
+                <property name="label" translatable="yes">Correct A_ll</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -196,7 +196,7 @@
             </child>
             <child>
               <object class="GtkButton" id="autocorrect">
-                <property name="label" translatable="yes">AutoCor_rect</property>
+                <property name="label" translatable="yes">Alwa_ys correct</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -212,7 +212,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="checkgrammar">
-                <property name="label" translatable="yes">Check _grammar</property>
+                <property name="label" translatable="yes">Check _Grammar</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
