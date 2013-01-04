@@ -98,14 +98,12 @@ private:
     ScDPTableData*          pData;              // data source (ScDPObject manages its life time)
     ScDPDimensions*         pDimensions;        // api objects
                                                 // settings:
-    long                    nColDims[SC_DP_MAX_FIELDS];
-    long                    nRowDims[SC_DP_MAX_FIELDS];
-    long                    nDataDims[SC_DP_MAX_FIELDS];
-    long                    nPageDims[SC_DP_MAX_FIELDS];
-    long                    nColDimCount;
-    long                    nRowDimCount;
-    long                    nDataDimCount;
-    long                    nPageDimCount;
+
+    std::vector<long> maColDims;
+    std::vector<long> maRowDims;
+    std::vector<long> maDataDims;
+    std::vector<long> maPageDims;
+
     bool                    bColumnGrand;
     bool                    bRowGrand;
     bool                    bIgnoreEmptyRows;

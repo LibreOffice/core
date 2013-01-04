@@ -109,10 +109,6 @@ static void lcl_SetBoolInAny( uno::Any& rAny, sal_Bool bValue )
 ScDPSource::ScDPSource( ScDPTableData* pD ) :
     pData( pD ),
     pDimensions( NULL ),
-    nColDimCount( 0 ),
-    nRowDimCount( 0 ),
-    nDataDimCount( 0 ),
-    nPageDimCount( 0 ),
     bColumnGrand( true ),       // default is true
     bRowGrand( true ),
     bIgnoreEmptyRows( false ),
@@ -152,33 +148,32 @@ const ::rtl::OUString* ScDPSource::GetGrandTotalName() const
 
 sal_uInt16 ScDPSource::GetOrientation(long nColumn)
 {
-    long i;
-    for (i=0; i<nColDimCount; i++)
-        if (nColDims[i] == nColumn)
-            return sheet::DataPilotFieldOrientation_COLUMN;
-    for (i=0; i<nRowDimCount; i++)
-        if (nRowDims[i] == nColumn)
-            return sheet::DataPilotFieldOrientation_ROW;
-    for (i=0; i<nDataDimCount; i++)
-        if (nDataDims[i] == nColumn)
-            return sheet::DataPilotFieldOrientation_DATA;
-    for (i=0; i<nPageDimCount; i++)
-        if (nPageDims[i] == nColumn)
-            return sheet::DataPilotFieldOrientation_PAGE;
+    if (std::find(maColDims.begin(), maColDims.end(), nColumn) != maColDims.end())
+        return sheet::DataPilotFieldOrientation_COLUMN;
+
+    if (std::find(maRowDims.begin(), maRowDims.end(), nColumn) != maRowDims.end())
+        return sheet::DataPilotFieldOrientation_ROW;
+
+    if (std::find(maDataDims.begin(), maDataDims.end(), nColumn) != maDataDims.end())
+        return sheet::DataPilotFieldOrientation_DATA;
+
+    if (std::find(maPageDims.begin(), maPageDims.end(), nColumn) != maPageDims.end())
+        return sheet::DataPilotFieldOrientation_PAGE;
+
     return sheet::DataPilotFieldOrientation_HIDDEN;
 }
 
 long ScDPSource::GetDataDimensionCount()
 {
-    return nDataDimCount;
+    return maDataDims.size();
 }
 
 ScDPDimension* ScDPSource::GetDataDimension(long nIndex)
 {
-    if (nIndex < 0 || nIndex >= nDataDimCount)
+    if (nIndex < 0 || static_cast<size_t>(nIndex) >= maDataDims.size())
         return NULL;
 
-    long nDimIndex = nDataDims[nIndex];
+    long nDimIndex = maDataDims[nIndex];
     return GetDimensionsObject()->getByIndex(nDimIndex);
 }
 
@@ -193,66 +188,81 @@ rtl::OUString ScDPSource::GetDataDimName(long nIndex)
 
 long ScDPSource::GetPosition(long nColumn)
 {
-    long i;
-    for (i=0; i<nColDimCount; i++)
-        if (nColDims[i] == nColumn)
-            return i;
-    for (i=0; i<nRowDimCount; i++)
-        if (nRowDims[i] == nColumn)
-            return i;
-    for (i=0; i<nDataDimCount; i++)
-        if (nDataDims[i] == nColumn)
-            return i;
-    for (i=0; i<nPageDimCount; i++)
-        if (nPageDims[i] == nColumn)
-            return i;
+    std::vector<long>::const_iterator it, itBeg = maColDims.begin(), itEnd = maColDims.end();
+    it = std::find(itBeg, itEnd, nColumn);
+    if (it != itEnd)
+        return std::distance(itBeg, it);
+
+    itBeg = maRowDims.begin();
+    itEnd = maRowDims.end();
+    it = std::find(itBeg, itEnd, nColumn);
+    if (it != itEnd)
+        return std::distance(itBeg, it);
+
+    itBeg = maDataDims.begin();
+    itEnd = maDataDims.end();
+    it = std::find(itBeg, itEnd, nColumn);
+    if (it != itEnd)
+        return std::distance(itBeg, it);
+
+    itBeg = maPageDims.begin();
+    itEnd = maPageDims.end();
+    it = std::find(itBeg, itEnd, nColumn);
+    if (it != itEnd)
+        return std::distance(itBeg, it);
+
     return 0;
 }
 
-static sal_Bool lcl_TestSubTotal( sal_Bool& rAllowed, long nColumn, long* pArray, long nCount, ScDPSource* pSource )
+namespace {
+
+bool testSubTotal( bool& rAllowed, long nColumn, const std::vector<long>& rDims, ScDPSource* pSource )
 {
-    for (long i=0; i<nCount; i++)
-        if (pArray[i] == nColumn)
+    rAllowed = true;
+    std::vector<long>::const_iterator it = rDims.begin(), itEnd = rDims.end();
+    for (; it != itEnd; ++it)
+    {
+        if (*it != nColumn)
+            continue;
+
+        if ( pSource->IsDataLayoutDimension(nColumn) )
         {
             //  no subtotals for data layout dim, no matter where
-            if ( pSource->IsDataLayoutDimension(nColumn) )
-                rAllowed = false;
-            else
-            {
-                //  no subtotals if no other dim but data layout follows
-                long nNextIndex = i+1;
-                if ( nNextIndex < nCount && pSource->IsDataLayoutDimension(pArray[nNextIndex]) )
-                    ++nNextIndex;
-                if ( nNextIndex >= nCount )
-                    rAllowed = false;
-            }
-
-            return sal_True;    // found
+            rAllowed = false;
+            return true;
         }
+
+        //  no subtotals if no other dim but data layout follows
+        ++it;
+        if (it != itEnd && pSource->IsDataLayoutDimension(*it))
+            ++it;
+        if (it == itEnd)
+            rAllowed = false;
+
+        return true;    // found
+    }
+
     return false;
+}
+
+void removeDim( long nRemove, std::vector<long>& rDims )
+{
+    std::vector<long>::iterator it = std::find(rDims.begin(), rDims.end(), nRemove);
+    if (it != rDims.end())
+        rDims.erase(it);
+}
+
 }
 
 sal_Bool ScDPSource::SubTotalAllowed(long nColumn)
 {
     //! cache this at ScDPResultData
-    sal_Bool bAllowed = sal_True;
-    if ( lcl_TestSubTotal( bAllowed, nColumn, nColDims, nColDimCount, this ) )
+    bool bAllowed = true;
+    if ( testSubTotal(bAllowed, nColumn, maColDims, this) )
         return bAllowed;
-    if ( lcl_TestSubTotal( bAllowed, nColumn, nRowDims, nRowDimCount, this ) )
+    if ( testSubTotal(bAllowed, nColumn, maRowDims, this) )
         return bAllowed;
     return bAllowed;
-}
-
-static void lcl_RemoveDim( long nRemove, long* pDims, long& rCount )
-{
-    for (long i=0; i<rCount; i++)
-        if ( pDims[i] == nRemove )
-        {
-            for (long j=i; j+1<rCount; j++)
-                pDims[j] = pDims[j+1];
-            --rCount;
-            return;
-        }
 }
 
 void ScDPSource::SetOrientation(long nColumn, sal_uInt16 nNew)
@@ -260,25 +270,25 @@ void ScDPSource::SetOrientation(long nColumn, sal_uInt16 nNew)
     //! change to no-op if new orientation is equal to old?
 
     // remove from old list
-    lcl_RemoveDim( nColumn, nColDims, nColDimCount );
-    lcl_RemoveDim( nColumn, nRowDims, nRowDimCount );
-    lcl_RemoveDim( nColumn, nDataDims, nDataDimCount );
-    lcl_RemoveDim( nColumn, nPageDims, nPageDimCount );
+    removeDim(nColumn, maColDims);
+    removeDim(nColumn, maRowDims);
+    removeDim(nColumn, maDataDims);
+    removeDim(nColumn, maPageDims);
 
     // add to new list
     switch (nNew)
     {
         case sheet::DataPilotFieldOrientation_COLUMN:
-            nColDims[nColDimCount++] = nColumn;
+            maColDims.push_back(nColumn);
             break;
         case sheet::DataPilotFieldOrientation_ROW:
-            nRowDims[nRowDimCount++] = nColumn;
+            maRowDims.push_back(nColumn);
             break;
         case sheet::DataPilotFieldOrientation_DATA:
-            nDataDims[nDataDimCount++] = nColumn;
+            maDataDims.push_back(nColumn);
             break;
         case sheet::DataPilotFieldOrientation_PAGE:
-            nPageDims[nPageDimCount++] = nColumn;
+            maPageDims.push_back(nColumn);
             break;
             // DataPilot Migration - Cache&&Performance
         case sheet::DataPilotFieldOrientation_HIDDEN:
@@ -514,8 +524,10 @@ void ScDPSource::disposeData()
     }
     SetDupCount( 0 );
 
-    //! Test ????
-    nColDimCount = nRowDimCount = nDataDimCount = nPageDimCount = 0;
+    maColDims.clear();
+    maRowDims.clear();
+    maDataDims.clear();
+    maPageDims.clear();
 
     pData->DisposeData();   // cached entries etc.
     bPageFiltered = false;
@@ -596,12 +608,11 @@ static long lcl_GetIndexFromName( const rtl::OUString rName, const uno::Sequence
 
 void ScDPSource::FillCalcInfo(bool bIsRow, ScDPTableData::CalcInfo& rInfo, bool &rHasAutoShow)
 {
-    long* nDims = bIsRow ? nRowDims : nColDims;
-    long nDimCount = bIsRow ? nRowDimCount : nColDimCount;
-
-    for (long i = 0; i < nDimCount; ++i)
+    const std::vector<long>& rDims = bIsRow ? maRowDims : maColDims;
+    std::vector<long>::const_iterator it = rDims.begin(), itEnd = rDims.end();
+    for (; it != itEnd; ++it)
     {
-        ScDPDimension* pDim = GetDimensionsObject()->getByIndex( nDims[i] );
+        ScDPDimension* pDim = GetDimensionsObject()->getByIndex(*it);
         long nHierarchy = pDim->getUsedHierarchy();
         if ( nHierarchy >= pDim->GetHierarchiesObject()->getCount() )
             nHierarchy = 0;
@@ -609,7 +620,7 @@ void ScDPSource::FillCalcInfo(bool bIsRow, ScDPTableData::CalcInfo& rInfo, bool 
         long nCount = pLevels->getCount();
 
         //! Test
-        if ( pDim->getIsDataLayoutDimension() && nDataDimCount < 2 )
+        if (pDim->getIsDataLayoutDimension() && maDataDims.size() < 2)
             nCount = 0;
         //! Test
 
@@ -622,17 +633,17 @@ void ScDPSource::FillCalcInfo(bool bIsRow, ScDPTableData::CalcInfo& rInfo, bool 
             pLevel->SetEnableLayout( bIsRow );
 
             if ( pLevel->GetAutoShow().IsEnabled )
-                rHasAutoShow = sal_True;
+                rHasAutoShow = true;
 
             if (bIsRow)
             {
-                rInfo.aRowLevelDims.push_back(nDims[i]);
+                rInfo.aRowLevelDims.push_back(*it);
                 rInfo.aRowDims.push_back(pDim);
                 rInfo.aRowLevels.push_back(pLevel);
             }
             else
             {
-                rInfo.aColLevelDims.push_back(nDims[i]);
+                rInfo.aColLevelDims.push_back(*it);
                 rInfo.aColDims.push_back(pDim);
                 rInfo.aColLevels.push_back(pLevel);
             }
@@ -642,29 +653,34 @@ void ScDPSource::FillCalcInfo(bool bIsRow, ScDPTableData::CalcInfo& rInfo, bool 
     }
 }
 
+namespace {
+
+class CategoryDimInserter : std::unary_function<long, void>
+{
+    ScDPSource& mrSource;
+    boost::unordered_set<sal_Int32>& mrCatDims;
+public:
+    CategoryDimInserter(ScDPSource& rSource, boost::unordered_set<sal_Int32>& rCatDims) :
+        mrSource(rSource),
+        mrCatDims(rCatDims) {}
+
+    void operator() (long nDim)
+    {
+        if (!mrSource.IsDataLayoutDimension(nDim))
+            mrCatDims.insert(nDim);
+    }
+};
+
+}
+
 void ScDPSource::GetCategoryDimensionIndices(boost::unordered_set<sal_Int32>& rCatDims)
 {
     boost::unordered_set<sal_Int32> aCatDims;
-    for (long i = 0; i < nColDimCount; ++i)
-    {
-        sal_Int32 nDim = static_cast<sal_Int32>(nColDims[i]);
-        if (!IsDataLayoutDimension(nDim))
-            aCatDims.insert(nDim);
-    }
 
-    for (long i = 0; i < nRowDimCount; ++i)
-    {
-        sal_Int32 nDim = static_cast<sal_Int32>(nRowDims[i]);
-        if (!IsDataLayoutDimension(nDim))
-            aCatDims.insert(nDim);
-    }
-
-    for (long i = 0; i < nPageDimCount; ++i)
-    {
-        sal_Int32 nDim = static_cast<sal_Int32>(nPageDims[i]);
-        if (!IsDataLayoutDimension(nDim))
-            aCatDims.insert(nDim);
-    }
+    CategoryDimInserter aInserter(*this, aCatDims);
+    std::for_each(maColDims.begin(), maColDims.end(), aInserter);
+    std::for_each(maRowDims.begin(), maRowDims.end(), aInserter);
+    std::for_each(maPageDims.begin(), maPageDims.end(), aInserter);
 
     rCatDims.swap(aCatDims);
 }
@@ -688,9 +704,10 @@ void ScDPSource::FilterCacheByPageDimensions()
 
     // filter table by page dimensions.
     vector<ScDPFilteredCache::Criterion> aCriteria;
-    for (long i = 0; i < nPageDimCount; ++i)
+    vector<long>::const_iterator it = maPageDims.begin(), itEnd = maPageDims.end();
+    for (; it != itEnd; ++it)
     {
-        ScDPDimension* pDim = GetDimensionsObject()->getByIndex(nPageDims[i]);
+        ScDPDimension* pDim = GetDimensionsObject()->getByIndex(*it);
         long nField = pDim->GetDimension();
 
         ScDPMembers* pMems = pDim->GetHierarchiesObject()->getByIndex(0)->
@@ -699,7 +716,7 @@ void ScDPSource::FilterCacheByPageDimensions()
         long nMemCount = pMems->getCount();
         ScDPFilteredCache::Criterion aFilter;
         aFilter.mnFieldIndex = static_cast<sal_Int32>(nField);
-        aFilter.mpFilter.reset(new ScDPFilteredCache::GroupFilter(/*rSharedString*/));
+        aFilter.mpFilter.reset(new ScDPFilteredCache::GroupFilter);
         ScDPFilteredCache::GroupFilter* pGrpFilter =
             static_cast<ScDPFilteredCache::GroupFilter*>(aFilter.mpFilter.get());
         for (long j = 0; j < nMemCount; ++j)
@@ -740,7 +757,7 @@ void ScDPSource::CreateRes_Impl()
         return;
 
     sal_uInt16 nDataOrient = GetDataLayoutOrientation();
-    if ( nDataDimCount > 1 && ( nDataOrient != sheet::DataPilotFieldOrientation_COLUMN &&
+    if (maDataDims.size() > 1 && ( nDataOrient != sheet::DataPilotFieldOrientation_COLUMN &&
                                 nDataOrient != sheet::DataPilotFieldOrientation_ROW ) )
     {
         //  if more than one data dimension, data layout orientation must be set
@@ -752,14 +769,9 @@ void ScDPSource::CreateRes_Impl()
     // eDataFunctions into a structure and use vector instead of static
     // or pointer arrays.
     vector<rtl::OUString> aDataNames;
-    sheet::DataPilotFieldReference* pDataRefValues = NULL;
+    vector<sheet::DataPilotFieldReference> aDataRefValues;
     vector<ScSubTotalFunc> aDataFunctions;
     vector<sal_uInt16> aDataRefOrient;
-    if (nDataDimCount)
-    {
-        aDataNames.resize(nDataDimCount);
-        pDataRefValues = new sheet::DataPilotFieldReference[nDataDimCount];
-    }
 
     ScDPTableData::CalcInfo aInfo;
 
@@ -771,11 +783,11 @@ void ScDPSource::CreateRes_Impl()
     // Go through all data dimensions (i.e. fields) and build their meta data
     // so that they can be passed on to ScDPResultData instance later.
     // TODO: aggregate all of data dimension info into a structure.
-    long i;
-    for (i=0; i<nDataDimCount; i++)
+    vector<long>::const_iterator it = maDataDims.begin(), itEnd = maDataDims.end();
+    for (; it != itEnd; ++it)
     {
         // Get function for each data field.
-        long nDimIndex = nDataDims[i];
+        long nDimIndex = *it;
         ScDPDimension* pDim = GetDimensionsObject()->getByIndex(nDimIndex);
         sheet::GeneralFunction eUser = (sheet::GeneralFunction)pDim->getFunction();
         if (eUser == sheet::GeneralFunction_AUTO)
@@ -788,16 +800,16 @@ void ScDPSource::CreateRes_Impl()
         aDataFunctions.push_back(ScDataUnoConversion::GeneralToSubTotal(eUser));
 
         // Get reference field/item information.
-        pDataRefValues[i] = pDim->GetReferenceValue();
+        aDataRefValues.push_back(pDim->GetReferenceValue());
         sal_uInt16 nDataRefOrient = sheet::DataPilotFieldOrientation_HIDDEN;    // default if not used
-        sal_Int32 eRefType = pDataRefValues[i].ReferenceType;
+        sal_Int32 eRefType = aDataRefValues.back().ReferenceType;
         if ( eRefType == sheet::DataPilotFieldReferenceType::ITEM_DIFFERENCE ||
              eRefType == sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE ||
              eRefType == sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE_DIFFERENCE ||
              eRefType == sheet::DataPilotFieldReferenceType::RUNNING_TOTAL )
         {
-            long nColumn = lcl_GetIndexFromName( pDataRefValues[i].ReferenceField,
-                                    GetDimensionsObject()->getElementNames() );
+            long nColumn = lcl_GetIndexFromName(
+                aDataRefValues.back().ReferenceField, GetDimensionsObject()->getElementNames());
             if ( nColumn >= 0 )
             {
                 nDataRefOrient = GetOrientation(nColumn);
@@ -810,18 +822,18 @@ void ScDPSource::CreateRes_Impl()
 
         aDataRefOrient.push_back(nDataRefOrient);
 
-        aDataNames[i] = pDim->getName();
+        aDataNames.push_back(pDim->getName());
 
         //! modify user visible strings as in ScDPResultData::GetMeasureString instead!
 
-        aDataNames[i] = ScDPUtil::getSourceDimensionName(aDataNames[i]);
+        aDataNames.back() = ScDPUtil::getSourceDimensionName(aDataNames.back());
 
         //! if the name is overridden by user, a flag must be set
         //! so the user defined name replaces the function string and field name.
 
         //! the complete name (function and field) must be stored at the dimension
 
-        long nSource = ((ScDPDimension*)pDim)->GetSourceDim();
+        long nSource = pDim->GetSourceDim();
         if (nSource >= 0)
             aInfo.aDataSrcCols.push_back(nSource);
         else
@@ -829,11 +841,18 @@ void ScDPSource::CreateRes_Impl()
     }
 
     pResData = new ScDPResultData( this );
-    pResData->SetMeasureData(nDataDimCount, &aDataFunctions[0], pDataRefValues, &aDataRefOrient[0], aDataNames);
+    const ScSubTotalFunc* pDataFunctions = NULL;
+    const sheet::DataPilotFieldReference* pDataRefValues = NULL;
+    const sal_uInt16* pDataRefOrient = NULL;
+    if (!maDataDims.empty())
+    {
+        pDataFunctions = &aDataFunctions[0];
+        pDataRefValues = &aDataRefValues[0];
+        pDataRefOrient = &aDataRefOrient[0];
+    }
+    pResData->SetMeasureData(maDataDims.size(), pDataFunctions, pDataRefValues, pDataRefOrient, aDataNames);
     pResData->SetDataLayoutOrientation(nDataOrient);
     pResData->SetLateInit( bLateInit );
-
-    delete[] pDataRefValues;
 
     bool bHasAutoShow = false;
 
@@ -843,18 +862,18 @@ void ScDPSource::CreateRes_Impl()
     // (both in column and row fields). aInitState is filled with the page
     // field selections, they are kept across the data iterator loop.
 
-    for (i=0; i<nPageDimCount; i++)
+    for (it = maPageDims.begin(), itEnd = maPageDims.end(); it != itEnd; ++it)
     {
-        ScDPDimension* pDim = GetDimensionsObject()->getByIndex( nPageDims[i] );
+        ScDPDimension* pDim = GetDimensionsObject()->getByIndex(*it);
         if ( pDim->HasSelectedPage() )
-            aInitState.AddMember( nPageDims[i], GetMemberId( nPageDims[i],  pDim->GetSelectedData() ) );
+            aInitState.AddMember(*it, GetMemberId(*it, pDim->GetSelectedData()));
     }
 
     // Show grand total columns only when the option is set *and* there is at
     // least one column field.  Same for the grand total rows.
     sal_uInt16 nDataLayoutOrient = GetDataLayoutOrientation();
-    long nColDimCount2 = nColDimCount - (nDataLayoutOrient == sheet::DataPilotFieldOrientation_COLUMN ? 1 : 0);
-    long nRowDimCount2 = nRowDimCount - (nDataLayoutOrient == sheet::DataPilotFieldOrientation_ROW ? 1 : 0);
+    long nColDimCount2 = maColDims.size() - (nDataLayoutOrient == sheet::DataPilotFieldOrientation_COLUMN ? 1 : 0);
+    long nRowDimCount2 = maRowDims.size() - (nDataLayoutOrient == sheet::DataPilotFieldOrientation_ROW ? 1 : 0);
     bool bShowColGrand = bColumnGrand && nColDimCount2 > 0;
     bool bShowRowGrand = bRowGrand && nRowDimCount2 > 0;
     pColResRoot = new ScDPResultMember(pResData, bShowColGrand);
@@ -879,9 +898,9 @@ void ScDPSource::CreateRes_Impl()
     pRowResRoot->SetHasElements();
 
     // initialize members object also for all page dimensions (needed for numeric groups)
-    for (i=0; i<nPageDimCount; i++)
+    for (it = maPageDims.begin(), itEnd = maPageDims.end(); it != itEnd; ++it)
     {
-        ScDPDimension* pDim = GetDimensionsObject()->getByIndex( nPageDims[i] );
+        ScDPDimension* pDim = GetDimensionsObject()->getByIndex(*it);
         long nHierarchy = pDim->getUsedHierarchy();
         if ( nHierarchy >= pDim->GetHierarchiesObject()->getCount() )
             nHierarchy = 0;
@@ -909,9 +928,9 @@ void ScDPSource::CreateRes_Impl()
 
     FilterCacheByPageDimensions();
 
-    aInfo.aPageDims.reserve(nPageDimCount);
-    for (i = 0; i < nPageDimCount; ++i)
-        aInfo.aPageDims.push_back(nPageDims[i]);
+    aInfo.aPageDims.reserve(maPageDims.size());
+    for (it = maPageDims.begin(), itEnd = maPageDims.end(); it != itEnd; ++it)
+        aInfo.aPageDims.push_back(*it);
 
     aInfo.pInitState = &aInitState;
     aInfo.pColRoot   = pColResRoot;
@@ -963,25 +982,20 @@ void ScDPSource::FillLevelList( sal_uInt16 nOrientation, std::vector<ScDPLevel*>
 {
     rList.clear();
 
-    long nDimCount = 0;
-    long* pDimIndex = NULL;
+    std::vector<long>* pDimIndex = NULL;
     switch (nOrientation)
     {
         case sheet::DataPilotFieldOrientation_COLUMN:
-            pDimIndex = nColDims;
-            nDimCount = nColDimCount;
+            pDimIndex = &maColDims;
             break;
         case sheet::DataPilotFieldOrientation_ROW:
-            pDimIndex = nRowDims;
-            nDimCount = nRowDimCount;
+            pDimIndex = &maRowDims;
             break;
         case sheet::DataPilotFieldOrientation_DATA:
-            pDimIndex = nDataDims;
-            nDimCount = nDataDimCount;
+            pDimIndex = &maDataDims;
             break;
         case sheet::DataPilotFieldOrientation_PAGE:
-            pDimIndex = nPageDims;
-            nDimCount = nPageDimCount;
+            pDimIndex = &maPageDims;
             break;
         default:
             OSL_FAIL( "ScDPSource::FillLevelList: unexpected orientation" );
@@ -994,9 +1008,10 @@ void ScDPSource::FillLevelList( sal_uInt16 nOrientation, std::vector<ScDPLevel*>
     }
 
     ScDPDimensions* pDims = GetDimensionsObject();
-    for (long nDim=0; nDim<nDimCount; nDim++)
+    std::vector<long>::const_iterator it = pDimIndex->begin(), itEnd = pDimIndex->end();
+    for (; it != itEnd; ++it)
     {
-        ScDPDimension* pDim = pDims->getByIndex(pDimIndex[nDim]);
+        ScDPDimension* pDim = pDims->getByIndex(*it);
         OSL_ENSURE( pDim->getOrientation() == nOrientation, "orientations are wrong" );
 
         ScDPHierarchies* pHiers = pDim->GetHierarchiesObject();
@@ -1147,11 +1162,11 @@ uno::Any SAL_CALL ScDPSource::getPropertyValue( const rtl::OUString& aPropertyNa
     else if ( aPropertyName.equalsAscii( SC_UNO_DP_DATADESC ) )             // read-only
         aRet <<= getDataDescription();
     else if ( aPropertyName.equalsAscii( SC_UNO_DP_ROWFIELDCOUNT ) )        // read-only
-        aRet <<= static_cast<sal_Int32>(nRowDimCount);
+        aRet <<= static_cast<sal_Int32>(maRowDims.size());
     else if ( aPropertyName.equalsAscii( SC_UNO_DP_COLUMNFIELDCOUNT ) )     // read-only
-        aRet <<= static_cast<sal_Int32>(nColDimCount);
+        aRet <<= static_cast<sal_Int32>(maColDims.size());
     else if ( aPropertyName.equalsAscii( SC_UNO_DP_DATAFIELDCOUNT ) )       // read-only
-        aRet <<= static_cast<sal_Int32>(nDataDimCount);
+        aRet <<= static_cast<sal_Int32>(maDataDims.size());
     else if (aPropertyName.equalsAscii(SC_UNO_DP_GRANDTOTAL_NAME))
     {
         if (mpGrandTotalName.get())

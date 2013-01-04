@@ -20,8 +20,6 @@
 #ifndef _SC_DPGLOBAL_HXX
 #define _SC_DPGLOBAL_HXX
 
-#define SC_DP_MAX_FIELDS  256
-
 #define     PIVOT_MAXFUNC           11
 #define     PIVOT_FUNC_NONE         0x0000
 #define     PIVOT_FUNC_SUM          0x0001
