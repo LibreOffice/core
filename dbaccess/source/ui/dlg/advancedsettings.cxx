@@ -516,7 +516,7 @@ namespace dbaui
     void AdvancedSettingsDialog::PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage)
     {
         // register ourself as modified listener
-        static_cast<OGenericAdministrationPage&>(_rPage).SetServiceFactory( Reference<XMultiServiceFactory>(m_pImpl->getORB()->getServiceManager(), UNO_QUERY_THROW) );
+        static_cast<OGenericAdministrationPage&>(_rPage).SetServiceFactory( getORB() );
         static_cast<OGenericAdministrationPage&>(_rPage).SetAdminDialog(this,this);
 
         AdjustLayout();

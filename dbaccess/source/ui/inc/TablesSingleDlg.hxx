@@ -31,8 +31,8 @@ namespace com { namespace sun { namespace star {
     namespace beans {
         class XPropertySet;
     }
-    namespace lang {
-        class XMultiServiceFactory;
+    namespace uno {
+        class XComponentContext;
     }
 }}}
 
@@ -55,7 +55,7 @@ class ODbDataSourceAdministrationHelper;
 
         OTableSubscriptionDialog(Window* pParent
             ,SfxItemSet* _pItems
-            ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
+            ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB
             ,const ::com::sun::star::uno::Any& _aDataSourceName
         );
         virtual ~OTableSubscriptionDialog();

@@ -300,7 +300,7 @@ TabPage* ODbTypeWizDialog::createPage(WizardState _nState)
     // register ourself as modified listener
     if ( pPage )
     {
-        static_cast<OGenericAdministrationPage*>(pPage)->SetServiceFactory( Reference<XMultiServiceFactory>(m_pImpl->getORB()->getServiceManager(), UNO_QUERY_THROW) );
+        static_cast<OGenericAdministrationPage*>(pPage)->SetServiceFactory( m_pImpl->getORB() );
         static_cast<OGenericAdministrationPage*>(pPage)->SetAdminDialog(this,this);
         // open our own resource block, as the page titles are strings local to this block
         LocalResourceAccess aDummy(DLG_DATABASE_ADMINISTRATION, RSC_TABDIALOG);

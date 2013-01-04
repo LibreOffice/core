@@ -45,10 +45,10 @@ DBG_NAME(OTableSubscriptionDialog)
     //========================================================================
 OTableSubscriptionDialog::OTableSubscriptionDialog(Window* pParent
             ,SfxItemSet* _pItems
-            ,const Reference< XMultiServiceFactory >& _rxORB
+            ,const Reference< XComponentContext >& _rxORB
             ,const ::com::sun::star::uno::Any& _aDataSourceName)
     :SfxSingleTabDialog(pParent,DLG_TABLE_FILTER,_pItems)
-    ,m_pImpl( new ODbDataSourceAdministrationHelper( comphelper::getComponentContext(_rxORB), pParent, this ) )
+    ,m_pImpl( new ODbDataSourceAdministrationHelper( _rxORB, pParent, this ) )
     ,m_bStopExecution(sal_False)
     ,m_pOutSet(_pItems)
 {

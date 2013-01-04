@@ -594,7 +594,7 @@ TabPage* ODbTypeWizDialogSetup::createPage(WizardState _nState)
 
     if ( pPage )
     {
-        pPage->SetServiceFactory( uno::Reference<lang::XMultiServiceFactory>(m_pImpl->getORB()->getServiceManager(), uno::UNO_QUERY_THROW) );
+        pPage->SetServiceFactory( m_pImpl->getORB() );
         pPage->SetAdminDialog(this, this);
 
         defaultButton( _nState == PAGE_DBSETUPWIZARD_FINAL ? WZB_FINISH : WZB_NEXT );

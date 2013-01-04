@@ -172,7 +172,7 @@ DBG_NAME(OConnectionHelper)
             {
                 try
                 {
-                    Reference< XFolderPicker2 > xFolderPicker = FolderPicker::create(comphelper::getComponentContext(m_xORB));
+                    Reference< XFolderPicker2 > xFolderPicker = FolderPicker::create(m_xORB);
 
                     sal_Bool bDoBrowse = sal_False;
                     String sOldPath = getURLNoPrefix();
@@ -518,7 +518,7 @@ DBG_NAME(OConnectionHelper)
         sal_Bool bExists = sal_False;
         IS_PATH_EXIST eExists = PATH_NOT_EXIST;
         Reference< ::com::sun::star::task::XInteractionHandler > xInteractionHandler(
-            task::InteractionHandler::createWithParent(comphelper::getComponentContext(m_xORB), 0), UNO_QUERY );
+            task::InteractionHandler::createWithParent(m_xORB, 0), UNO_QUERY );
         OFilePickerInteractionHandler* pHandler = new OFilePickerInteractionHandler(xInteractionHandler);
         xInteractionHandler = pHandler;
 

@@ -107,7 +107,7 @@ Reference<XPropertySetInfo>  SAL_CALL OTableFilterDialog::getPropertySetInfo() t
 //------------------------------------------------------------------------------
 Dialog* OTableFilterDialog::createDialog(Window* _pParent)
 {
-    OTableSubscriptionDialog* pDlg = new OTableSubscriptionDialog(_pParent, m_pDatasourceItems, m_aContext.getLegacyServiceFactory(),m_aInitialSelection);
+    OTableSubscriptionDialog* pDlg = new OTableSubscriptionDialog(_pParent, m_pDatasourceItems, m_aContext.getUNOContext(), m_aInitialSelection);
     return pDlg;
 }
 

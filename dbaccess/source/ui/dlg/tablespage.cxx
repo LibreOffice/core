@@ -271,7 +271,7 @@ DBG_NAME(OTableSubscriptionPage)
                 // the collator for the string compares
                 try
                 {
-                    m_xCollator = Reference< XCollator >(m_xORB->createInstance(SERVICE_I18N_COLLATOR), UNO_QUERY);
+                    m_xCollator = Reference< XCollator >(m_xORB->getServiceManager()->createInstanceWithContext(SERVICE_I18N_COLLATOR, m_xORB), UNO_QUERY);
                     if (m_xCollator.is())
                         m_xCollator->loadDefaultCollator(Application::GetSettings().GetLanguageTag().getLocale(), 0);
                 }
@@ -295,7 +295,7 @@ DBG_NAME(OTableSubscriptionPage)
                 m_aTablesList.GetModel()->SetCompareHdl(LINK(this, OTableSubscriptionPage, OnTreeEntryCompare));
 
                 Reference< XDriver > xDriver;
-                m_aTablesList.setORB(m_xORB);
+                m_aTablesList.setORB( Reference<XMultiServiceFactory>(m_xORB->getServiceManager(), UNO_QUERY_THROW) );
                 Reference<XPropertySet> xProp = m_pTablesDlg->getCurrentDataSource();
                 OSL_ENSURE(xProp.is(),"No data source set!");
                 if ( xProp.is() )
@@ -312,7 +312,7 @@ DBG_NAME(OTableSubscriptionPage)
 
                     xProp->setPropertyValue( PROPERTY_TABLETYPEFILTER, makeAny( Sequence< ::rtl::OUString >() ) );
                     Reference< ::com::sun::star::lang::XEventListener> xEvt;
-                    aErrorInfo = ::dbaui::createConnection(xProp,comphelper::getComponentContext(m_xORB),xEvt,m_xCurrentConnection);
+                    aErrorInfo = ::dbaui::createConnection(xProp, m_xORB, xEvt, m_xCurrentConnection);
 
                     xProp->setPropertyValue(PROPERTY_TABLEFILTER,aTableFilter);
                     xProp->setPropertyValue(PROPERTY_TABLETYPEFILTER,aTableTypeFilter);

@@ -88,11 +88,6 @@ namespace dbaui
         */
         void askForFileName(::sfx2::FileDialogHelper& _aFileOpen);
 
-           virtual void SetServiceFactory(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > _rxORB)
-        {
-            OGenericAdministrationPage::SetServiceFactory(_rxORB);
-        }
-
     protected:
         void            setURL( const String& _rURL );
         virtual bool    checkTestConnection();

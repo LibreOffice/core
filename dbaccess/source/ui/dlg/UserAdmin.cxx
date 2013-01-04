@@ -271,7 +271,7 @@ IMPL_LINK( OUserAdmin, UserHdl, PushButton *, pButton )
     }
     catch(const SQLException& e)
     {
-        ::dbaui::showError(::dbtools::SQLExceptionInfo(e),this, comphelper::getComponentContext(m_xORB));
+        ::dbaui::showError(::dbtools::SQLExceptionInfo(e), this, m_xORB);
         return 0;
     }
     catch(Exception& )
@@ -307,7 +307,7 @@ void OUserAdmin::fillWindows(::std::vector< ISaveValueWrapper* >& /*_rControlLis
 // -----------------------------------------------------------------------------
 void OUserAdmin::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
 {
-    m_TableCtrl.setComponentContext(comphelper::getComponentContext(m_xORB));
+    m_TableCtrl.setComponentContext(m_xORB);
     try
     {
         if ( !m_xConnection.is() && m_pAdminDialog )
@@ -334,7 +334,7 @@ void OUserAdmin::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
     }
     catch(const SQLException& e)
     {
-        ::dbaui::showError(::dbtools::SQLExceptionInfo(e),this,comphelper::getComponentContext(m_xORB));
+        ::dbaui::showError(::dbtools::SQLExceptionInfo(e), this, m_xORB);
     }
 
     OGenericAdministrationPage::implInitControls(_rSet, _bSaveValue);

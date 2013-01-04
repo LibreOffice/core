@@ -105,7 +105,7 @@ namespace dbaui
         IItemSetHelper* m_pItemSetHelper;
         FixedText*      m_pFT_HeaderText;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
                             m_xORB;
     public:
         OGenericAdministrationPage(Window* _pParent, const ResId& _rId, const SfxItemSet& _rAttrSet);
@@ -131,7 +131,7 @@ namespace dbaui
             @param  _rxORB
                 The service factory.
         */
-        virtual void SetServiceFactory(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > _rxORB)
+        void SetServiceFactory(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > _rxORB)
         {
             m_xORB = _rxORB;
         }
