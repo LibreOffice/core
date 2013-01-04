@@ -33,7 +33,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/DispatchResultEvent.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
-#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
@@ -932,8 +932,7 @@ UpdateCheck::install()
     osl::MutexGuard aGuard(m_aMutex);
 
     const uno::Reference< c3s::XSystemShellExecute > xShellExecute(
-        createService( UNISTRING( "com.sun.star.system.SystemShellExecute" ), m_xContext ),
-        uno::UNO_QUERY );
+        c3s::SystemShellExecute::create( m_xContext ) );
 
     try {
         // Construct install command ??

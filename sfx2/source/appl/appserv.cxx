@@ -39,7 +39,7 @@
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/system/SystemShellExecuteException.hpp>
 
@@ -851,11 +851,9 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
         {
             try
             {
-                uno::Reference< lang::XMultiServiceFactory > xSMGR =
-                    ::comphelper::getProcessServiceFactory();
                 uno::Reference< css::system::XSystemShellExecute > xSystemShell(
-                    xSMGR->createInstance( DEFINE_CONST_UNICODE("com.sun.star.system.SystemShellExecute" ) ),
-                    uno::UNO_QUERY_THROW );
+                    css::system::SystemShellExecute::create(
+                        ::comphelper::getProcessComponentContext() ) );
 
                 // read repository URL from configuration
                 ::rtl::OUString sTemplRepoURL =

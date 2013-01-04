@@ -65,7 +65,7 @@
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
-#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <unotools/localedatawrapper.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -1985,12 +1985,9 @@ IMPL_LINK ( SvtDocumentTemplateDialog, OpenLinkHdl_Impl, svt::FixedHyperlink*, E
     {
         try
         {
-            uno::Reference< lang::XMultiServiceFactory > xSMGR =
-                ::comphelper::getProcessServiceFactory();
             uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShell(
-                xSMGR->createInstance( ::rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SystemShellExecute" ) ) ),
-                uno::UNO_QUERY_THROW );
+                com::sun::star::system::SystemShellExecute::create(
+                    ::comphelper::getProcessComponentContext() ) );
             if ( xSystemShell.is() )
                 xSystemShell->execute( sURL, ::rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::DEFAULTS );
             EndDialog( RET_CANCEL );

@@ -46,7 +46,7 @@
 #include <vcl/tabpage.hxx>
 
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
-#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/uno/Any.h>
 
 #include "about.hxx"
@@ -532,13 +532,9 @@ IMPL_LINK ( AboutDialog, OpenLinkHdl_Impl, svt::FixedHyperlink*, EMPTYARG )
     {
         try
         {
-            uno::Reference< uno::XComponentContext > xContext =
-                ::comphelper::getProcessComponentContext();
             uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShell(
-                xContext->getServiceManager()->createInstanceWithContext(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SystemShellExecute" ) ),
-                    xContext ),
-                uno::UNO_QUERY_THROW );
+                com::sun::star::system::SystemShellExecute::create(
+                    ::comphelper::getProcessComponentContext() ) );
             if ( xSystemShell.is() )
                 xSystemShell->execute( sURL, rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::DEFAULTS );
         }

@@ -54,7 +54,7 @@
 
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/container/XNameAccess.hpp"
-#include "com/sun/star/system/XSystemShellExecute.hpp"
+#include "com/sun/star/system/SystemShellExecute.hpp"
 #include "com/sun/star/system/SystemShellExecuteFlags.hpp"
 #include "com/sun/star/task/XJobExecutor.hpp"
 #include "com/sun/star/util/XStringWidth.hpp"
@@ -971,9 +971,8 @@ IMPL_LINK( BackingWindow, ToolboxHdl, void*, EMPTYARG )
                     sURL = aURLObj.GetMainURL( INetURLObject::NO_DECODE );
 
                     Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
-                        comphelper::getProcessServiceFactory()->createInstance(
-                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SystemShellExecute" ) ) ),
-                        UNO_QUERY_THROW);
+                        com::sun::star::system::SystemShellExecute::create(
+                            ::comphelper::getProcessComponentContext() ) );
                     //throws css::lang::IllegalArgumentException, css::system::SystemShellExecuteException
                     xSystemShellExecute->execute( sURL, rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::DEFAULTS);
                 }

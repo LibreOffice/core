@@ -37,7 +37,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/awt/VisualEffect.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
 #include <com/sun/star/awt/ImageScaleMode.hpp>
@@ -2626,8 +2626,8 @@ void VCLXFixedHyperlink::ProcessWindowEvent( const VclWindowEvent& rVclWindowEve
                 if ( pBase )
                     sURL = pBase->GetURL();
                 Reference< ::com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
-                    ::comphelper::getProcessServiceFactory()->createInstance(
-                        ::rtl::OUString::createFromAscii( "com.sun.star.system.SystemShellExecute" )), uno::UNO_QUERY );
+                    ::com::sun::star::system::SystemShellExecute::create(
+                        ::comphelper::getProcessComponentContext() ) );
                 if ( sURL.getLength() > 0 && xSystemShellExecute.is() )
                 {
                     try

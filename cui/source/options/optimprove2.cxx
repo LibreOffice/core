@@ -40,7 +40,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/oooimprovement/XCore.hpp>
 #include <com/sun/star/oooimprovement/XCoreController.hpp>
-#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
 #include <comphelper/configurationhelper.hxx>
@@ -111,12 +111,9 @@ IMPL_LINK( SvxImprovementOptionsPage, HandleHyperlink, svt::FixedHyperlinkImage*
     {
         try
         {
-            uno::Reference< lang::XMultiServiceFactory > xSMGR =
-                ::comphelper::getProcessServiceFactory();
             uno::Reference< XSystemShellExecute > xSystemShell(
-                xSMGR->createInstance( ::rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SystemShellExecute" ) ) ),
-                uno::UNO_QUERY_THROW );
+                com::sun::star::system::SystemShellExecute::create(
+                    ::comphelper::getProcessComponentContext() ) );
             if ( xSystemShell.is() )
             {
                 xSystemShell->execute(

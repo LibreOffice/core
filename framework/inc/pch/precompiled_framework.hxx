@@ -222,7 +222,7 @@
 #include "com/sun/star/style/XStyleFamiliesSupplier.hpp"
 #include "com/sun/star/sync2/BadPartnershipException.hpp"
 #include "com/sun/star/system/SystemShellExecuteFlags.hpp"
-#include "com/sun/star/system/XSystemShellExecute.hpp"
+#include "com/sun/star/system/SystemShellExecute.hpp"
 #include "com/sun/star/task/ErrorCodeRequest.hpp"
 #include "com/sun/star/task/XAsyncJob.hpp"
 #include "com/sun/star/task/XInteractionAbort.hpp"

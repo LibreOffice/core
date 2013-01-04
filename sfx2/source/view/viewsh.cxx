@@ -36,7 +36,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/EmbedMisc.hpp>
-#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -709,9 +709,9 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                     return;
                 }
 
-                ::com::sun::star::uno::Reference< XSystemShellExecute > xSystemShellExecute( xSMGR->createInstance(
-                    ::rtl::OUString::createFromAscii( "com.sun.star.system.SystemShellExecute" )),
-                    css::uno::UNO_QUERY );
+                ::com::sun::star::uno::Reference< XSystemShellExecute > xSystemShellExecute(
+                    com::sun::star::system::SystemShellExecute::create(
+                        ::comphelper::getProcessComponentContext() ) );
 
                         sal_Bool bRet( sal_True );
                 if ( xSystemShellExecute.is() )

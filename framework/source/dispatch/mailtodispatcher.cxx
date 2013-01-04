@@ -35,7 +35,7 @@
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
-#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 
@@ -84,10 +84,10 @@ DEFINE_XTYPEPROVIDER_5(MailToDispatcher              ,
                        css::frame::XNotifyingDispatch,
                        css::frame::XDispatch         )
 
-DEFINE_XSERVICEINFO_MULTISERVICE(MailToDispatcher                   ,
-                                 ::cppu::OWeakObject                ,
-                                 SERVICENAME_PROTOCOLHANDLER        ,
-                                 IMPLEMENTATIONNAME_MAILTODISPATCHER)
+DEFINE_XSERVICEINFO_MULTISERVICE_2(MailToDispatcher                   ,
+                                   ::cppu::OWeakObject                ,
+                                   SERVICENAME_PROTOCOLHANDLER        ,
+                                   IMPLEMENTATIONNAME_MAILTODISPATCHER)
 
 DEFINE_INIT_SERVICE(MailToDispatcher,
                     {
@@ -105,17 +105,17 @@ DEFINE_INIT_SERVICE(MailToDispatcher,
     @short      standard ctor
     @descr      These initialize a new instance of ths class with needed informations for work.
 
-    @param      xFactory
-                    reference to uno servicemanager for creation of new services
+    @param      xContext
+                    reference to uno component context
 
     @modified   30.04.2002 14:10, as96863
 */
-MailToDispatcher::MailToDispatcher( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
+MailToDispatcher::MailToDispatcher( const css::uno::Reference< css::uno::XComponentContext >& xContext )
         //  Init baseclasses first
         : ThreadHelpBase( &Application::GetSolarMutex() )
         , OWeakObject   (                               )
         // Init member
-        , m_xFactory    ( xFactory                      )
+        , m_xContext    ( xContext                      )
 {
 }
 
@@ -129,7 +129,7 @@ MailToDispatcher::MailToDispatcher( const css::uno::Reference< css::lang::XMulti
 */
 MailToDispatcher::~MailToDispatcher()
 {
-    m_xFactory = NULL;
+    m_xContext = NULL;
 }
 
 //_________________________________________________________________________________________________________________
@@ -266,13 +266,14 @@ sal_Bool MailToDispatcher::implts_dispatch( const css::util::URL&               
 {
     sal_Bool bSuccess = sal_False;
 
-    css::uno::Reference< css::lang::XMultiServiceFactory > xFactory;
+    css::uno::Reference< css::uno::XComponentContext > xContext;
     /* SAFE */{
         ReadGuard aReadLock( m_aLock );
-        xFactory = m_xFactory;
+        xContext = m_xContext;
     /* SAFE */}
 
-    css::uno::Reference< css::system::XSystemShellExecute > xSystemShellExecute( xFactory->createInstance(SERVICENAME_SYSTEMSHELLEXECUTE), css::uno::UNO_QUERY );
+    css::uno::Reference< css::system::XSystemShellExecute > xSystemShellExecute(
+        css::system::SystemShellExecute::create( xContext ) );
     if (xSystemShellExecute.is())
     {
         try
