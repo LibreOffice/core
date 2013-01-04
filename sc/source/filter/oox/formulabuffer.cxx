@@ -122,7 +122,8 @@ void FormulaBuffer::applyCellFormula( ScDocument& rDoc, const ApiTokenSequence& 
     ScAddress aCellPos;
     ScUnoConversion::FillScAddress( aCellPos, rAddress );
     ScTokenConversion::ConvertToTokenArray( rDoc, aTokenArray, rTokens );
-    ScBaseCell* pNewCell = new ScFormulaCell( &rDoc, aCellPos, &aTokenArray );
+    ScFormulaCell* pNewCell = new ScFormulaCell( &rDoc, aCellPos, &aTokenArray );
+    pNewCell->StartListeningTo( &rDoc );
     rDoc.PutCell( aCellPos, pNewCell, sal_True );
 }
 
