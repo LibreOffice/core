@@ -357,6 +357,9 @@ Reference< XStyle > WorkbookGlobals::getStyleObject( const OUString& rStyleName,
     OSL_ENSURE( xStyle.is(), "WorkbookGlobals::getStyleObject - cannot access style object" );
     return xStyle;
 }
+
+namespace {
+
 ScRangeData* lcl_addNewByNameAndTokens( ScDocument& rDoc, ScRangeName* pNames, const OUString& rName, const Sequence<FormulaToken>& rTokens, sal_Int16 nIndex, sal_Int32 nUnoType )
 {
     bool bDone = false;
@@ -377,8 +380,6 @@ ScRangeData* lcl_addNewByNameAndTokens( ScDocument& rDoc, ScRangeName* pNames, c
         throw RuntimeException();
     return pNew;
 }
-
-namespace {
 
 rtl::OUString findUnusedName( const ScRangeName* pRangeName, const rtl::OUString& rSuggestedName )
 {
