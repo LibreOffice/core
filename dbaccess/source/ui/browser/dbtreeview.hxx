@@ -22,8 +22,6 @@
 
 #include <vcl/window.hxx>
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-
 class SvTreeList;
 namespace dbaui
 {
@@ -42,7 +40,6 @@ namespace dbaui
     public:
 
         DBTreeView( Window* pParent,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
                 WinBits nBits );
         ~DBTreeView();
 

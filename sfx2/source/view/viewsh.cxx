@@ -2001,7 +2001,7 @@ sal_Bool SfxViewShell::TryContextMenuInterception( Menu& rIn, const ::rtl::OUStr
 
     // create container from menu
     aEvent.ActionTriggerContainer = ::framework::ActionTriggerHelper::CreateActionTriggerContainerFromMenu(
-        ::comphelper::getProcessServiceFactory(), &rIn, &rMenuIdentifier );
+        &rIn, &rMenuIdentifier );
 
     // get selection from controller
     aEvent.Selection = uno::Reference < view::XSelectionSupplier > ( GetController(), uno::UNO_QUERY );

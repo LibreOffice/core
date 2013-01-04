@@ -43,7 +43,7 @@ class FWE_DLLPUBLIC RootActionTriggerContainer :  public PropertySetContainer,
                                     public com::sun::star::container::XNamed
 {
     public:
-        RootActionTriggerContainer( const Menu* pMenu, const ::rtl::OUString* pMenuIdentifier, const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager );
+        RootActionTriggerContainer( const Menu* pMenu, const ::rtl::OUString* pMenuIdentifier);
         virtual ~RootActionTriggerContainer();
 
         // XInterface

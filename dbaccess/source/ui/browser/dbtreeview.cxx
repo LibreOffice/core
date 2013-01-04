@@ -36,13 +36,13 @@ DBG_NAME(DBTreeView)
 //========================================================================
 // class DBTreeView
 //========================================================================
-DBTreeView::DBTreeView( Window* pParent, const Reference< XMultiServiceFactory >& _rxORB, WinBits nBits)
+DBTreeView::DBTreeView( Window* pParent, WinBits nBits)
                     :   Window( pParent, nBits )
                     , m_pTreeListBox(NULL)
 {
     DBG_CTOR(DBTreeView,NULL);
 
-    m_pTreeListBox = new DBTreeListBox(this, _rxORB ,WB_BORDER | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT);
+    m_pTreeListBox = new DBTreeListBox(this, WB_BORDER | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT);
     m_pTreeListBox->EnableCheckButton(NULL);
     m_pTreeListBox->SetDragDropMode( 0 );
     m_pTreeListBox->EnableInplaceEditing( sal_True );

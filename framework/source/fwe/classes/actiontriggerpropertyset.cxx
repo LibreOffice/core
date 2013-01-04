@@ -51,7 +51,7 @@ enum EPROPERTIES
 namespace framework
 {
 
-ActionTriggerPropertySet::ActionTriggerPropertySet( const Reference< XMultiServiceFactory >& /*xServiceManager*/ )
+ActionTriggerPropertySet::ActionTriggerPropertySet()
     : ThreadHelpBase           ( &Application::GetSolarMutex()               )
     , OBroadcastHelper         ( m_aLock.getShareableOslMutex()              )
     ,   OPropertySetHelper       ( *(static_cast< OBroadcastHelper * >(this)))

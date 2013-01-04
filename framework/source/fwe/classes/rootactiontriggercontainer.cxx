@@ -47,8 +47,8 @@ static Sequence< sal_Int8 > impl_getStaticIdentifier()
 }
 
 
-RootActionTriggerContainer::RootActionTriggerContainer( const Menu* pMenu, const ::rtl::OUString* pMenuIdentifier, const Reference< XMultiServiceFactory >& rServiceManager ) :
-    PropertySetContainer( rServiceManager )
+RootActionTriggerContainer::RootActionTriggerContainer( const Menu* pMenu, const ::rtl::OUString* pMenuIdentifier ) :
+    PropertySetContainer()
     ,   m_bContainerCreated( sal_False )
     ,   m_bContainerChanged( sal_False )
     ,   m_bInContainerCreation( sal_False )
@@ -96,11 +96,11 @@ Reference< XInterface > SAL_CALL RootActionTriggerContainer::createInstance( con
 throw ( Exception,  RuntimeException )
 {
     if ( aServiceSpecifier.equalsAscii( SERVICENAME_ACTIONTRIGGER ))
-        return (OWeakObject *)( new ActionTriggerPropertySet( m_xServiceManager ));
+        return (OWeakObject *)( new ActionTriggerPropertySet());
     else if ( aServiceSpecifier.equalsAscii( SERVICENAME_ACTIONTRIGGERCONTAINER ))
-        return (OWeakObject *)( new ActionTriggerContainer( m_xServiceManager ));
+        return (OWeakObject *)( new ActionTriggerContainer());
     else if ( aServiceSpecifier.equalsAscii( SERVICENAME_ACTIONTRIGGERSEPARATOR ))
-        return (OWeakObject *)( new ActionTriggerSeparatorPropertySet( m_xServiceManager ));
+        return (OWeakObject *)( new ActionTriggerSeparatorPropertySet());
     else
         throw com::sun::star::uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unknown service specifier!" )), (OWeakObject *)this );
 }

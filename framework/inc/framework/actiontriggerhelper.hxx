@@ -21,7 +21,6 @@
 #define __FRAMEWORK_HELPER_ACTIONTRIGGERHELPER_HXX_
 
 #include <com/sun/star/container/XIndexContainer.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <vcl/menu.hxx>
 #include <framework/fwedllapi.h>
 
@@ -49,7 +48,6 @@ namespace framework
             //                   the above mentioned restriction!!!
 
             static com::sun::star::uno::Reference< com::sun::star::container::XIndexContainer > CreateActionTriggerContainerFromMenu(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
                 const Menu* pMenu, const ::rtl::OUString* pMenuIdentifier );
 
             // Fills the submitted rActionTriggerContainer with the structure of the menu

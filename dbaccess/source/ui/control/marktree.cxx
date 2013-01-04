@@ -30,16 +30,16 @@ namespace dbaui
 
 DBG_NAME(OMarkableTreeListBox)
 
-OMarkableTreeListBox::OMarkableTreeListBox( Window* pParent, const Reference< XMultiServiceFactory >& _rxORB, WinBits nWinStyle )
-    : DBTreeListBox(pParent,_rxORB,nWinStyle)
+OMarkableTreeListBox::OMarkableTreeListBox( Window* pParent, WinBits nWinStyle )
+    : DBTreeListBox(pParent, nWinStyle)
 {
     DBG_CTOR(OMarkableTreeListBox,NULL);
 
     InitButtonData();
 }
 
-OMarkableTreeListBox::OMarkableTreeListBox( Window* pParent, const Reference< XMultiServiceFactory >& _rxORB, const ResId& rResId)
-    : DBTreeListBox(pParent,_rxORB,rResId)
+OMarkableTreeListBox::OMarkableTreeListBox( Window* pParent, const ResId& rResId)
+    : DBTreeListBox(pParent, rResId)
 {
     DBG_CTOR(OMarkableTreeListBox,NULL);
 

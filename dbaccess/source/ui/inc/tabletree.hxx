@@ -54,13 +54,11 @@ protected:
 public:
     OTableTreeListBox(
         Window* pParent,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
         WinBits nWinStyle,
         sal_Bool _bVirtualRoot );
 
     OTableTreeListBox(
         Window* pParent,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
         const ResId& rResId,
         sal_Bool _bVirtualRoot );
 

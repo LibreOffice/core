@@ -34,7 +34,7 @@ using namespace com::sun::star::beans;
 namespace framework
 {
 
-PropertySetContainer::PropertySetContainer( const Reference< XMultiServiceFactory >& )
+PropertySetContainer::PropertySetContainer()
         :   ThreadHelpBase( &Application::GetSolarMutex() )
         ,   OWeakObject()
 

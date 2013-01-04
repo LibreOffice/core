@@ -27,7 +27,6 @@
 #include <rtl/ustring.hxx>
 
 #include <com/sun/star/awt/XBitmap.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -47,7 +46,7 @@ class ActionTriggerPropertySet :  public ThreadHelpBase                       , 
                                     public ::cppu::OWeakObject
 {
     public:
-        FWE_DLLPUBLIC ActionTriggerPropertySet( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
+        FWE_DLLPUBLIC ActionTriggerPropertySet();
         FWE_DLLPUBLIC virtual ~ActionTriggerPropertySet();
 
         // XInterface

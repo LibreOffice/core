@@ -25,7 +25,6 @@
 #include <cppuhelper/weak.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -46,7 +45,7 @@ class ActionTriggerSeparatorPropertySet :   public ThreadHelpBase               
                                             public ::cppu::OWeakObject
 {
     public:
-        ActionTriggerSeparatorPropertySet( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
+        ActionTriggerSeparatorPropertySet();
         virtual ~ActionTriggerSeparatorPropertySet();
 
         // XInterface

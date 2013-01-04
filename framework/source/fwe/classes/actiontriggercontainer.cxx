@@ -31,8 +31,8 @@ using namespace com::sun::star::container;
 namespace framework
 {
 
-ActionTriggerContainer::ActionTriggerContainer( const Reference< XMultiServiceFactory >& rServiceManager ) :
-    PropertySetContainer( rServiceManager )
+ActionTriggerContainer::ActionTriggerContainer() :
+    PropertySetContainer()
 {
 }
 
@@ -75,11 +75,11 @@ Reference< XInterface > SAL_CALL ActionTriggerContainer::createInstance( const :
 throw ( ::com::sun::star::uno::Exception, RuntimeException)
 {
     if ( aServiceSpecifier.equalsAscii( SERVICENAME_ACTIONTRIGGER ))
-        return (OWeakObject *)( new ActionTriggerPropertySet( m_xServiceManager ));
+        return (OWeakObject *)( new ActionTriggerPropertySet());
     else if ( aServiceSpecifier.equalsAscii( SERVICENAME_ACTIONTRIGGERCONTAINER ))
-        return (OWeakObject *)( new ActionTriggerContainer( m_xServiceManager ));
+        return (OWeakObject *)( new ActionTriggerContainer());
     else if ( aServiceSpecifier.equalsAscii( SERVICENAME_ACTIONTRIGGERSEPARATOR ))
-        return (OWeakObject *)( new ActionTriggerSeparatorPropertySet( m_xServiceManager ));
+        return (OWeakObject *)( new ActionTriggerSeparatorPropertySet());
     else
         throw com::sun::star::uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unknown service specifier!" )), (OWeakObject *)this );
 }

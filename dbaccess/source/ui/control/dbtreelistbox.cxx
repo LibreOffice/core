@@ -62,25 +62,23 @@ DBG_NAME(DBTreeListBox)
 // class DBTreeListBox
 //========================================================================
 //------------------------------------------------------------------------
-DBTreeListBox::DBTreeListBox( Window* pParent, const Reference< XMultiServiceFactory >& _rxORB, WinBits nWinStyle ,sal_Bool _bHandleEnterKey)
+DBTreeListBox::DBTreeListBox( Window* pParent, WinBits nWinStyle ,sal_Bool _bHandleEnterKey)
     :SvTreeListBox(pParent,nWinStyle)
     ,m_pDragedEntry(NULL)
     ,m_pActionListener(NULL)
     ,m_pContextMenuProvider( NULL )
     ,m_bHandleEnterKey(_bHandleEnterKey)
-    ,m_xORB(_rxORB)
 {
     DBG_CTOR(DBTreeListBox,NULL);
     init();
 }
 // -----------------------------------------------------------------------------
-DBTreeListBox::DBTreeListBox( Window* pParent, const Reference< XMultiServiceFactory >& _rxORB, const ResId& rResId,sal_Bool _bHandleEnterKey)
+DBTreeListBox::DBTreeListBox( Window* pParent, const ResId& rResId,sal_Bool _bHandleEnterKey)
     :SvTreeListBox(pParent,rResId)
     ,m_pDragedEntry(NULL)
     ,m_pActionListener(NULL)
     ,m_pContextMenuProvider( NULL )
     ,m_bHandleEnterKey(_bHandleEnterKey)
-    ,m_xORB(_rxORB)
 {
     DBG_CTOR(DBTreeListBox,NULL);
     init();
@@ -630,7 +628,7 @@ PopupMenu* DBTreeListBox::CreateContextMenu( void )
     aEvent.ExecutePosition.X = -1;
     aEvent.ExecutePosition.Y = -1;
     aEvent.ActionTriggerContainer = ::framework::ActionTriggerHelper::CreateActionTriggerContainerFromMenu(
-        m_xORB, pContextMenu.get(), 0 );
+        pContextMenu.get(), 0 );
     aEvent.Selection = new SelectionSupplier( m_pContextMenuProvider->getCurrentSelection( *this ) );
 
     ::cppu::OInterfaceIteratorHelper aIter( *pInterceptors );

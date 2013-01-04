@@ -45,7 +45,7 @@ enum EPROPERTIES
 namespace framework
 {
 
-ActionTriggerSeparatorPropertySet::ActionTriggerSeparatorPropertySet( const Reference< XMultiServiceFactory >& /*ServiceManager*/ )
+ActionTriggerSeparatorPropertySet::ActionTriggerSeparatorPropertySet()
         :   ThreadHelpBase          ( &Application::GetSolarMutex()                     )
         ,   OBroadcastHelper        ( m_aLock.getShareableOslMutex()                    )
         ,   OPropertySetHelper      ( *(static_cast< OBroadcastHelper * >(this))      )

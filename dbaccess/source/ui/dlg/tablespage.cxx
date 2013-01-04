@@ -79,7 +79,7 @@ DBG_NAME(OTableSubscriptionPage)
     OTableSubscriptionPage::OTableSubscriptionPage( Window* pParent, const SfxItemSet& _rCoreAttrs,OTableSubscriptionDialog* _pTablesDlg )
         :OGenericAdministrationPage( pParent, ModuleRes(PAGE_TABLESUBSCRIPTION), _rCoreAttrs )
         ,m_aTables              (this, ModuleRes(FL_SEPARATOR1))
-        ,m_aTablesList          (this, NULL,ModuleRes(CTL_TABLESUBSCRIPTION),sal_True)
+        ,m_aTablesList          (this, ModuleRes(CTL_TABLESUBSCRIPTION),sal_True)
         ,m_aExplanation         (this, ModuleRes(FT_FILTER_EXPLANATION))
         ,m_bCatalogAtStart      ( sal_True )
         ,m_pTablesDlg(_pTablesDlg)
@@ -295,7 +295,6 @@ DBG_NAME(OTableSubscriptionPage)
                 m_aTablesList.GetModel()->SetCompareHdl(LINK(this, OTableSubscriptionPage, OnTreeEntryCompare));
 
                 Reference< XDriver > xDriver;
-                m_aTablesList.setORB( Reference<XMultiServiceFactory>(m_xORB->getServiceManager(), UNO_QUERY_THROW) );
                 Reference<XPropertySet> xProp = m_pTablesDlg->getCurrentDataSource();
                 OSL_ENSURE(xProp.is(),"No data source set!");
                 if ( xProp.is() )

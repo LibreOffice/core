@@ -25,7 +25,6 @@
 */
 #include <vector>
 #include <cppuhelper/weak.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <threadhelp/threadhelpbase.hxx>
@@ -39,7 +38,7 @@ class FWE_DLLPUBLIC PropertySetContainer : public com::sun::star::container::XIn
                              public ::cppu::OWeakObject
 {
     public:
-        PropertySetContainer( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& );
+        PropertySetContainer();
         virtual ~PropertySetContainer();
 
         // XInterface
@@ -75,9 +74,6 @@ class FWE_DLLPUBLIC PropertySetContainer : public com::sun::star::container::XIn
 
         virtual sal_Bool SAL_CALL hasElements()
             throw (::com::sun::star::uno::RuntimeException);
-
-    protected:
-        com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
 
     private:
         typedef std::vector< com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > > PropertySetVector;

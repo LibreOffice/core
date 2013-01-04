@@ -604,7 +604,6 @@ void OAppDetailPageHelper::createTablesPage(const Reference< XConnection>& _xCon
     if ( !m_pLists[E_TABLE] )
     {
         OTableTreeListBox* pTreeView = new OTableTreeListBox(this
-                                                            ,uno::Reference<lang::XMultiServiceFactory>(getBorderWin().getView()->getORB()->getServiceManager(), uno::UNO_QUERY_THROW)
                                                             ,WB_HASLINES | WB_SORT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT | WB_TABSTOP
                                                             ,sal_False);
         pTreeView->SetHelpId(HID_APP_TABLE_TREE);
@@ -777,7 +776,6 @@ void OAppDetailPageHelper::fillNames( const Reference< XNameAccess >& _xContaine
 DBTreeListBox* OAppDetailPageHelper::createSimpleTree( const rtl::OString& _sHelpId, const Image& _rImage)
 {
     DBTreeListBox* pTreeView = new DBTreeListBox(this,
-                       uno::Reference<lang::XMultiServiceFactory>(getBorderWin().getView()->getORB()->getServiceManager(), uno::UNO_QUERY_THROW),
                        WB_HASLINES | WB_SORT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT | WB_TABSTOP);
     pTreeView->SetHelpId( _sHelpId );
     return createTree( pTreeView, _rImage );

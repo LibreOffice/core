@@ -351,7 +351,7 @@ void OColumnString::Paint(const Point& rPos, SvTreeListBox& rDev, const SvViewDa
 }
 //========================================================================
 OColumnTreeBox::OColumnTreeBox( Window* pParent, const ResId& rResId )
-    : OMarkableTreeListBox(pParent,NULL,rResId)
+    : OMarkableTreeListBox(pParent, rResId)
 {
     SetDragDropMode( 0 );
     EnableInplaceEditing( sal_False );

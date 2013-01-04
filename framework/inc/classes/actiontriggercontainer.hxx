@@ -39,7 +39,7 @@ class FWE_DLLPUBLIC ActionTriggerContainer :    public PropertySetContainer,
                                 public com::sun::star::lang::XTypeProvider
 {
     public:
-        ActionTriggerContainer( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager );
+        ActionTriggerContainer();
         virtual ~ActionTriggerContainer();
 
         // XInterface

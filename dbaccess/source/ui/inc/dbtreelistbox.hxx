@@ -75,9 +75,6 @@ namespace dbaui
 
         sal_Bool                    m_bHandleEnterKey;
 
-    protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xORB;
-
     private:
         void init();
         DECL_LINK( OnTimeOut, void* );
@@ -87,20 +84,15 @@ namespace dbaui
 
     public:
         DBTreeListBox( Window* pParent
-            ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
             ,WinBits nWinStyle=0
             ,sal_Bool _bHandleEnterKey = sal_False);
         DBTreeListBox( Window* pParent
-            ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
             ,const ResId& rResId
             ,sal_Bool _bHandleEnterKey = sal_False);
         ~DBTreeListBox();
 
         void                    setControlActionListener( IControlActionListener* _pListener ) { m_pActionListener = _pListener; }
         void                    setContextMenuProvider( IContextMenuProvider* _pContextMenuProvider ) { m_pContextMenuProvider = _pContextMenuProvider; }
-
-        inline void setORB(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB) { m_xORB = _xORB; }
-
 
         void    SetPreExpandHandler(const Link& _rHdl)  { m_aPreExpandHandler = _rHdl; }
         void    SetSelChangeHdl( const Link& _rHdl )    { m_aSelChangeHdl = _rHdl; }

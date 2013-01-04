@@ -70,8 +70,8 @@ namespace DatabaseObjectContainer = ::com::sun::star::sdb::application::Database
 //========================================================================
 //= OTableTreeListBox
 //========================================================================
-OTableTreeListBox::OTableTreeListBox( Window* pParent, const Reference< XMultiServiceFactory >& _rxORB, WinBits nWinStyle,sal_Bool _bVirtualRoot )
-    :OMarkableTreeListBox(pParent,_rxORB,nWinStyle)
+OTableTreeListBox::OTableTreeListBox( Window* pParent, WinBits nWinStyle, sal_Bool _bVirtualRoot )
+    :OMarkableTreeListBox(pParent, nWinStyle)
     ,m_pImageProvider( new ImageProvider )
     ,m_bVirtualRoot(_bVirtualRoot)
     ,m_bNoEmptyFolders( false )
@@ -79,8 +79,8 @@ OTableTreeListBox::OTableTreeListBox( Window* pParent, const Reference< XMultiSe
     implSetDefaultImages();
 }
 //------------------------------------------------------------------------
-OTableTreeListBox::OTableTreeListBox( Window* pParent, const Reference< XMultiServiceFactory >& _rxORB, const ResId& rResId ,sal_Bool _bVirtualRoot)
-    :OMarkableTreeListBox(pParent,_rxORB,rResId)
+OTableTreeListBox::OTableTreeListBox( Window* pParent, const ResId& rResId, sal_Bool _bVirtualRoot)
+    :OMarkableTreeListBox(pParent, rResId)
     ,m_pImageProvider( new ImageProvider )
     ,m_bVirtualRoot(_bVirtualRoot)
     ,m_bNoEmptyFolders( false )

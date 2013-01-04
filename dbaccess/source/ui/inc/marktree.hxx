@@ -43,12 +43,8 @@ class OMarkableTreeListBox : public DBTreeListBox
     Link                m_aCheckButtonHandler;
 
 public:
-    OMarkableTreeListBox( Window* pParent
-                            ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
-                            , WinBits nWinStyle=0 );
-    OMarkableTreeListBox( Window* pParent
-                            ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
-                            , const ResId& rResId );
+    OMarkableTreeListBox( Window* pParent, WinBits nWinStyle=0 );
+    OMarkableTreeListBox( Window* pParent, const ResId& rResId );
     ~OMarkableTreeListBox();
 
     virtual void    KeyInput( const KeyEvent& rKEvt );

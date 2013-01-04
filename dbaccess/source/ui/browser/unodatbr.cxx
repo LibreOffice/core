@@ -380,7 +380,7 @@ sal_Bool SbaTableQueryBrowser::Construct(Window* pParent)
         m_pSplitter->SetPosSizePixel( ::Point(0,0), ::Size(nFrameWidth,0) );
         m_pSplitter->SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetDialogColor() ) );
 
-        m_pTreeView = new DBTreeView(getBrowserView(),getORB(), WB_TABSTOP | WB_BORDER);
+        m_pTreeView = new DBTreeView(getBrowserView(), WB_TABSTOP | WB_BORDER);
         m_pTreeView->SetPreExpandHandler(LINK(this, SbaTableQueryBrowser, OnExpandEntry));
 
         m_pTreeView->setCopyHandler(LINK(this, SbaTableQueryBrowser, OnCopyEntry));
