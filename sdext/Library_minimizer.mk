@@ -35,6 +35,11 @@ $(eval $(call gb_Library_use_externals,SunPresentationMinimizer,\
 
 $(eval $(call gb_Library_use_sdk_api,SunPresentationMinimizer))
 
+$(eval $(call gb_Library_use_api,SunPresentationMinimizer,\
+    offapi \
+    udkapi \
+))
+
 $(eval $(call gb_Library_use_libraries,SunPresentationMinimizer,\
     cppu \
     cppuhelper \
