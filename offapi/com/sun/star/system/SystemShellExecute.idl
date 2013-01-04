@@ -19,53 +19,24 @@
  *
  *************************************************************/
 
-
-
 #ifndef __com_sun_star_system_SystemShellExecute_idl__
 #define __com_sun_star_system_SystemShellExecute_idl__
 
-#ifndef __com_sun_star_lang_XServiceInfo_idl__
-#include <com/sun/star/lang/XServiceInfo.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XTypeProvider_idl__
-#include <com/sun/star/lang/XTypeProvider.idl>
-#endif
-
-//=============================================================================
+#include <com/sun/star/system/XSystemShellExecute.idl>
 
 module com { module sun { module star { module system {
 
-//=============================================================================
+published interface XSystemShellExecute;
 
- published interface XSystemShellExecute;
-
-//=============================================================================
 /** Specifies a system executer service. Such a service makes it possible
     to execute an arbitrary system command.
-
-    @see com::sun::star::system::XSystemShellExecute
 */
-
-published service SystemShellExecute
+published service SystemShellExecute : XSystemShellExecute
 {
-    //-------------------------------------------------------------------------
-    /** Provides access to a <type>XSystemShellExecute</type> interface.
-    */
-    interface XSystemShellExecute;
-
-    //-------------------------------------------------------------------------
-    /** Service should always support this interface.
-    */
-    interface com::sun::star::lang::XServiceInfo;
-
-    //-------------------------------------------------------------------------
-    /** Service should always support this interface.
-    */
-    interface com::sun::star::lang::XTypeProvider;
+    /** service constructor
+     */
+    create();
 };
-
-//=============================================================================
 
 }; }; }; };
 

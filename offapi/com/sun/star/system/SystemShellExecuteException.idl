@@ -19,40 +19,28 @@
  *
  *************************************************************/
 
-
-
 #ifndef __com_sun_star_system_SystemShellExecuteException_idl__
 #define __com_sun_star_system_SystemShellExecuteException_idl__
 
-#ifndef __com_sun_star_uno_Exception_idl__
 #include <com/sun/star/uno/Exception.idl>
-#endif
-
-//=============================================================================
 
 module com { module sun { module star { module system {
 
-//=============================================================================
-/** May be thrown in cases of errors executing a command using the <type>SystemShellExecute</type> service.
-    <member scope="com::sun::star::uno">Exception::Message</member> may contain a
-    system error message, but it is not mandatory.
-    The member PosixError specifies a POSIX conforming error code or -1 for
-    unknown errors.
+/** May be thrown in cases of errors executing a command using the
+    <type>SystemShellExecute</type> service.
+
+    <p><member scope="com::sun::star::uno">Exception::Message</member> may
+    contain a system error message, but it is not mandatory.</p>
+    <p>The member <member>PosixError</member> specifies a POSIX conforming error
+    code or -1 for unknown errors.</p>
  */
 published exception SystemShellExecuteException: com::sun::star::uno::Exception
 {
-    //=========================================================================
     /** A Posix conforming error code or -1 for unknown errors.
     */
     long PosixError;
 };
 
-//=============================================================================
-
 }; }; }; };
 
-/*=============================================================================
-
-
-=============================================================================*/
 #endif
