@@ -62,6 +62,8 @@ INCPRE+=$(SOLARVER)$/$(INPATH)$/inc$/lcms2
 TARFILE_NAME=libcdr-0.0.9
 TARFILE_MD5=3c0037fb07dea2f0bbae8386fa7c6a9a
 
+PATCH_FILES=libcdr-issupported-exception.patch.1
+
 BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 BUILD_DIR=src$/lib
 
