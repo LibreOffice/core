@@ -103,7 +103,7 @@ isDomainMatch(
 
 rtl::OUString
 getLocalizedDatTimeStr(
-    uno::Reference< lang::XMultiServiceFactory > const & xServiceFactory,
+    uno::Reference< uno::XComponentContext> const & xContext,
     util::DateTime const & rDateTime )
 {
     rtl::OUString aDateTimeStr;
@@ -115,7 +115,7 @@ getLocalizedDatTimeStr(
 
     LanguageType eUILang = Application::GetSettings().GetUILanguageTag().getLanguageType();
     SvNumberFormatter *pNumberFormatter
-        = new SvNumberFormatter( xServiceFactory, eUILang );
+        = new SvNumberFormatter( uno::Reference<lang::XMultiServiceFactory>(xContext->getServiceManager(), uno::UNO_QUERY_THROW), eUILang );
     String      aTmpStr;
     Color*      pColor = NULL;
     Date*       pNullDate = pNumberFormatter->GetNullDate();
@@ -137,7 +137,7 @@ getLocalizedDatTimeStr(
 sal_Bool
 executeUnknownAuthDialog(
     Window * pParent,
-    uno::Reference< lang::XMultiServiceFactory > const & xServiceFactory,
+    uno::Reference< uno::XComponentContext > const & xContext,
     const uno::Reference< security::XCertificate >& rXCert)
     SAL_THROW((uno::RuntimeException))
 {
@@ -149,7 +149,7 @@ executeUnknownAuthDialog(
         boost::scoped_ptr< UnknownAuthDialog > xDialog(
             new UnknownAuthDialog( pParent,
                                    rXCert,
-                                   xServiceFactory,
+                                   xContext,
                                    xManager.get()));
 
         // Get correct resource string
@@ -183,7 +183,7 @@ executeUnknownAuthDialog(
 sal_Bool
 executeSSLWarnDialog(
     Window * pParent,
-    uno::Reference< lang::XMultiServiceFactory > const & xServiceFactory,
+    uno::Reference< uno::XComponentContext > const & xContext,
     const uno::Reference< security::XCertificate >& rXCert,
     sal_Int32 const & failure,
     const rtl::OUString & hostName )
@@ -197,7 +197,7 @@ executeSSLWarnDialog(
         boost::scoped_ptr< SSLWarnDialog > xDialog(
            new SSLWarnDialog( pParent,
                               rXCert,
-                              xServiceFactory,
+                              xContext,
                               xManager.get()));
 
         // Get correct resource string
@@ -216,10 +216,10 @@ executeSSLWarnDialog(
                 aArguments_1.push_back(
                     getContentPart( rXCert->getSubjectName()) );
                 aArguments_1.push_back(
-                    getLocalizedDatTimeStr( xServiceFactory,
+                    getLocalizedDatTimeStr( xContext,
                                             rXCert->getNotValidAfter() ) );
                 aArguments_1.push_back(
-                    getLocalizedDatTimeStr( xServiceFactory,
+                    getLocalizedDatTimeStr( xContext,
                                             rXCert->getNotValidAfter() ) );
                 break;
             case SSLWARN_TYPE_INVALID:
@@ -257,7 +257,7 @@ executeSSLWarnDialog(
 void
 handleCertificateValidationRequest_(
     Window * pParent,
-    uno::Reference< lang::XMultiServiceFactory > const & xServiceFactory,
+    uno::Reference< uno::XComponentContext > const & xContext,
     ucb::CertificateValidationRequest const & rRequest,
     uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
         rContinuations)
@@ -278,7 +278,7 @@ handleCertificateValidationRequest_(
              == security::CertificateValidity::ROOT_UNTRUSTED) )
     {
         trustCert = executeUnknownAuthDialog( pParent,
-                                              xServiceFactory,
+                                              xContext,
                                               rRequest.Certificate );
     }
 
@@ -313,7 +313,7 @@ handleCertificateValidationRequest_(
           trustCert )
     {
         trustCert = executeSSLWarnDialog( pParent,
-                                          xServiceFactory,
+                                          xContext,
                                           rRequest.Certificate,
                                           SSLWARN_TYPE_DOMAINMISMATCH,
                                           rRequest.HostName );
@@ -326,7 +326,7 @@ handleCertificateValidationRequest_(
               trustCert )
     {
         trustCert = executeSSLWarnDialog( pParent,
-                                          xServiceFactory,
+                                          xContext,
                                           rRequest.Certificate,
                                           SSLWARN_TYPE_EXPIRED,
                                           rRequest.HostName );
@@ -343,7 +343,7 @@ handleCertificateValidationRequest_(
               trustCert )
     {
         trustCert = executeSSLWarnDialog( pParent,
-                                          xServiceFactory,
+                                          xContext,
                                           rRequest.Certificate,
                                           SSLWARN_TYPE_INVALID,
                                           rRequest.HostName );
@@ -374,7 +374,7 @@ UUIInteractionHelper::handleCertificateValidationRequest(
     if (aAnyRequest >>= aCertificateValidationRequest)
     {
         handleCertificateValidationRequest_(getParentProperty(),
-                                            m_xServiceFactory,
+                                            m_xContext,
                                             aCertificateValidationRequest,
                                             rRequest->getContinuations());
         return true;

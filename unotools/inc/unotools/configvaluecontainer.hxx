@@ -20,7 +20,7 @@
 
 #ifndef UNOTOOLS_CONFIGVALUECONTAINER_HXX
 #define UNOTOOLS_CONFIGVALUECONTAINER_HXX
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <osl/mutex.hxx>
 
 //.........................................................................
@@ -84,7 +84,7 @@ namespace utl
                 specifies the number of levels to access under the node given by <arg>_pConfigLocation</arg>
         */
         OConfigurationValueContainer(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB,
             ::osl::Mutex& _rAccessSafety,
             const sal_Char* _pConfigLocation,
             const sal_uInt16 _nAccessFlags = CVC_UPDATE_ACCESS | CVC_LAZY_UPDATE,

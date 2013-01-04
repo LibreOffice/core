@@ -212,13 +212,13 @@ namespace utl
     //=====================================================================
     struct OConfigurationValueContainerImpl
     {
-        Reference< XMultiServiceFactory >       xORB;           // the service factory
+        Reference< XComponentContext >          xORB;           // the service factory
         ::osl::Mutex&                           rMutex;         // the mutex for accessing the data containers
         OConfigurationTreeRoot                  aConfigRoot;    // the configuration node we're accessing
 
         NodeValueAccessors                      aAccessors;     // the accessors to the node values
 
-        OConfigurationValueContainerImpl( const Reference< XMultiServiceFactory >& _rxORB, ::osl::Mutex& _rMutex )
+        OConfigurationValueContainerImpl( const Reference< XComponentContext >& _rxORB, ::osl::Mutex& _rMutex )
             :xORB( _rxORB )
             ,rMutex( _rMutex )
         {
@@ -230,7 +230,7 @@ namespace utl
     //=====================================================================
 
     OConfigurationValueContainer::OConfigurationValueContainer(
-            const Reference< XMultiServiceFactory >& _rxORB, ::osl::Mutex& _rAccessSafety,
+            const Reference< XComponentContext >& _rxORB, ::osl::Mutex& _rAccessSafety,
             const sal_Char* _pConfigLocation, const sal_uInt16 _nAccessFlags, const sal_Int32 _nLevels )
         :m_pImpl( new OConfigurationValueContainerImpl( _rxORB, _rAccessSafety ) )
     {
@@ -249,7 +249,7 @@ namespace utl
 
         // .................................
         // create the configuration node we're about to work with
-        m_pImpl->aConfigRoot = OConfigurationTreeRoot::createWithServiceFactory(
+        m_pImpl->aConfigRoot = OConfigurationTreeRoot::createWithComponentContext(
             m_pImpl->xORB,
             _rConfigLocation,
             _nLevels,

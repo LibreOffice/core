@@ -48,7 +48,7 @@ IMPL_LINK_NOARG(UnknownAuthDialog, ViewCertHdl_Impl)
     uno::Reference< ::com::sun::star::security::XDocumentDigitalSignatures > xDocumentDigitalSignatures;
 
     xDocumentDigitalSignatures = uno::Reference< ::com::sun::star::security::XDocumentDigitalSignatures >(
-                    ::com::sun::star::security::DocumentDigitalSignatures::createDefault(comphelper::getComponentContext(getServiceFactory())) );
+                    ::com::sun::star::security::DocumentDigitalSignatures::createDefault(m_xContext) );
 
     xDocumentDigitalSignatures.get()->showCertificate(getCert());
 
@@ -61,7 +61,7 @@ UnknownAuthDialog::UnknownAuthDialog
 (
     Window*                                     pParent,
     const cssu::Reference< dcss::security::XCertificate >& rXCert,
-    const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+    const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext,
     ResMgr*                                     pResMgr
 ) :
     ModalDialog( pParent, ResId( DLG_UUI_UNKNOWNAUTH, *pResMgr ) ),
@@ -75,7 +75,7 @@ UnknownAuthDialog::UnknownAuthDialog
     m_aLine ( this, ResId( FL_LINE, *pResMgr ) ),
     m_aLabel1 ( this, ResId( FT_LABEL_1, *pResMgr ) ),
     m_aWarnImage ( this, ResId( IMG_WARN, *pResMgr ) ),
-    m_xServiceFactory ( xServiceFactory ),
+    m_xContext ( xContext ),
     m_rXCert ( rXCert )
 {
     FreeResource();

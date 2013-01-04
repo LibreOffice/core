@@ -21,6 +21,7 @@
 #include "abpilot.hrc"
 #include "abpresid.hrc"
 #include "componentmodule.hxx"
+#include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
 #include <svtools/localresaccess.hxx>
 #include "typeselectionpage.hxx"
@@ -171,10 +172,10 @@ namespace abp
             m_aNewDataSource.registerDataSource(m_aSettings.sRegisteredDataSourceName);
 
         // 3. write the data source / table names into the configuration
-        addressconfig::writeTemplateAddressSource( getORB(), m_aSettings.bRegisterDataSource ? m_aSettings.sRegisteredDataSourceName : m_aSettings.sDataSourceName, m_aSettings.sSelectedTable );
+        addressconfig::writeTemplateAddressSource( comphelper::getComponentContext(getORB()), m_aSettings.bRegisterDataSource ? m_aSettings.sRegisteredDataSourceName : m_aSettings.sDataSourceName, m_aSettings.sSelectedTable );
 
         // 4. write the field mapping
-        fieldmapping::writeTemplateAddressFieldMapping( getORB(), m_aSettings.aFieldMapping );
+        fieldmapping::writeTemplateAddressFieldMapping( comphelper::getComponentContext(getORB()), m_aSettings.aFieldMapping );
     }
 
     //---------------------------------------------------------------------
@@ -214,7 +215,7 @@ namespace abp
 
         implCommitAll();
 
-        addressconfig::markPilotSuccess( getORB() );
+        addressconfig::markPilotSuccess( comphelper::getComponentContext(getORB()) );
 
         return sal_True;
     }
@@ -326,7 +327,7 @@ namespace abp
     {
         DBG_ASSERT( !needManualFieldMapping( ), "OAddessBookSourcePilot::implDoAutoFieldMapping: invalid call!" );
 
-        fieldmapping::defaultMapping( getORB(), m_aSettings.aFieldMapping );
+        fieldmapping::defaultMapping( comphelper::getComponentContext(getORB()), m_aSettings.aFieldMapping );
     }
 
     //---------------------------------------------------------------------

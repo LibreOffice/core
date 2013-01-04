@@ -47,16 +47,14 @@ public:
         SAL_THROW((com::sun::star::uno::Exception));
 
 private:
-    com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory > m_xServiceFactory;
     UUIInteractionHelper * m_pImpl;
 
     UUIInteractionHandler(UUIInteractionHandler &); // not implemented
     void operator =(UUIInteractionHandler); // not implemented
 
     UUIInteractionHandler(com::sun::star::uno::Reference<
-                  com::sun::star::lang::XMultiServiceFactory >
-                  const & rServiceFactory)
+                  com::sun::star::uno::XComponentContext >
+                  const & rxContext)
         SAL_THROW(());
 
     virtual ~UUIInteractionHandler() SAL_THROW(());

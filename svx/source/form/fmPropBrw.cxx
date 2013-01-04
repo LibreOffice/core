@@ -513,13 +513,13 @@ IMPL_LINK( FmPropBrw, OnAsyncGetFocus, void*, /*NOTINTERESTEDIN*/ )
 //-----------------------------------------------------------------------
 namespace
 {
-    static bool lcl_shouldEnableHelpSection( const Reference< XMultiServiceFactory >& _rxFactory )
+    static bool lcl_shouldEnableHelpSection( const Reference< XComponentContext >& _rxContext )
     {
         const ::rtl::OUString sConfigName( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common/Forms/PropertyBrowser/" ) );
         const ::rtl::OUString sPropertyName( RTL_CONSTASCII_USTRINGPARAM( "DirectHelp" ) );
 
         ::utl::OConfigurationTreeRoot aConfiguration(
-            ::utl::OConfigurationTreeRoot::createWithServiceFactory( _rxFactory, sConfigName ) );
+            ::utl::OConfigurationTreeRoot::createWithComponentContext( _rxContext, sConfigName ) );
 
         bool bEnabled = false;
         OSL_VERIFY( aConfiguration.getNodeValue( sPropertyName ) >>= bEnabled );
@@ -576,7 +576,7 @@ void FmPropBrw::impl_createPropertyBrowser_throw( FmFormShell* _pFormShell )
         ::cppu::createComponentContext( aHandlerContextInfo, sizeof( aHandlerContextInfo ) / sizeof( aHandlerContextInfo[0] ),
         xOwnContext ) );
 
-    bool bEnableHelpSection = lcl_shouldEnableHelpSection( m_xORB );
+    bool bEnableHelpSection = lcl_shouldEnableHelpSection( xOwnContext );
 
     // an object inspector model
     m_xInspectorModel =

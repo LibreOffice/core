@@ -143,7 +143,7 @@ namespace abp
         }
 
         //-----------------------------------------------------------------
-        void defaultMapping(  const Reference< XMultiServiceFactory >& _rxORB, MapString2String& _rFieldAssignment ) SAL_THROW ( ( ) )
+        void defaultMapping(  const Reference< XComponentContext >& _rxContext, MapString2String& _rFieldAssignment ) SAL_THROW ( ( ) )
         {
             _rFieldAssignment.clear();
 
@@ -191,8 +191,8 @@ namespace abp
                 sDriverAliasesNodeName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/ColumnAliases" ));
 
                 // create a config node for this
-                OConfigurationTreeRoot aDriverFieldAliasing = OConfigurationTreeRoot::createWithServiceFactory(
-                    _rxORB, sDriverAliasesNodeName, -1, OConfigurationTreeRoot::CM_READONLY);
+                OConfigurationTreeRoot aDriverFieldAliasing = OConfigurationTreeRoot::createWithComponentContext(
+                    _rxContext, sDriverAliasesNodeName, -1, OConfigurationTreeRoot::CM_READONLY);
 
                 // loop through all programmatic pairs
                 DBG_ASSERT( 0 == SAL_N_ELEMENTS( pMappingProgrammatics ) % 2,
@@ -236,7 +236,7 @@ namespace abp
         }
 
         //-----------------------------------------------------------------
-        void writeTemplateAddressFieldMapping( const Reference< XMultiServiceFactory >& _rxORB, const MapString2String& _rFieldAssignment ) SAL_THROW ( ( ) )
+        void writeTemplateAddressFieldMapping( const Reference< XComponentContext >& _rxContext, const MapString2String& _rFieldAssignment ) SAL_THROW ( ( ) )
         {
             // want to have a non-const map for easier handling
             MapString2String aFieldAssignment( _rFieldAssignment );
@@ -245,8 +245,8 @@ namespace abp
             const ::rtl::OUString& sAddressBookNodeName = lcl_getAddressBookNodeName();
 
             // create a config node for this
-            OConfigurationTreeRoot aAddressBookSettings = OConfigurationTreeRoot::createWithServiceFactory(
-                _rxORB, sAddressBookNodeName, -1, OConfigurationTreeRoot::CM_UPDATABLE);
+            OConfigurationTreeRoot aAddressBookSettings = OConfigurationTreeRoot::createWithComponentContext(
+                _rxContext, sAddressBookNodeName, -1, OConfigurationTreeRoot::CM_UPDATABLE);
 
             OConfigurationNode aFields = aAddressBookSettings.openNode( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Fields" )) );
 
@@ -315,15 +315,15 @@ namespace abp
     //.....................................................................
 
         //-----------------------------------------------------------------
-        void writeTemplateAddressSource( const Reference< XMultiServiceFactory >& _rxORB,
+        void writeTemplateAddressSource( const Reference< XComponentContext >& _rxContext,
             const ::rtl::OUString& _rDataSourceName, const ::rtl::OUString& _rTableName ) SAL_THROW ( ( ) )
         {
             // access the configuration information which the driver uses for determining it's column names
             const ::rtl::OUString& sAddressBookNodeName = lcl_getAddressBookNodeName();
 
             // create a config node for this
-            OConfigurationTreeRoot aAddressBookSettings = OConfigurationTreeRoot::createWithServiceFactory(
-                _rxORB, sAddressBookNodeName, -1, OConfigurationTreeRoot::CM_UPDATABLE);
+            OConfigurationTreeRoot aAddressBookSettings = OConfigurationTreeRoot::createWithComponentContext(
+                _rxContext, sAddressBookNodeName, -1, OConfigurationTreeRoot::CM_UPDATABLE);
 
             aAddressBookSettings.setNodeValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "DataSourceName" )), makeAny( _rDataSourceName ) );
             aAddressBookSettings.setNodeValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Command" )), makeAny( _rTableName ) );
@@ -334,14 +334,14 @@ namespace abp
         }
 
         //-----------------------------------------------------------------
-        void markPilotSuccess( const Reference< XMultiServiceFactory >& _rxORB ) SAL_THROW ( ( ) )
+        void markPilotSuccess( const Reference< XComponentContext >& _rxContext ) SAL_THROW ( ( ) )
         {
             // access the configuration information which the driver uses for determining it's column names
             const ::rtl::OUString& sAddressBookNodeName = lcl_getAddressBookNodeName();
 
             // create a config node for this
-            OConfigurationTreeRoot aAddressBookSettings = OConfigurationTreeRoot::createWithServiceFactory(
-                _rxORB, sAddressBookNodeName, -1, OConfigurationTreeRoot::CM_UPDATABLE);
+            OConfigurationTreeRoot aAddressBookSettings = OConfigurationTreeRoot::createWithComponentContext(
+                _rxContext, sAddressBookNodeName, -1, OConfigurationTreeRoot::CM_UPDATABLE);
 
             // set the flag
             aAddressBookSettings.setNodeValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "AutoPilotCompleted" )), makeAny( (sal_Bool)sal_True ) );

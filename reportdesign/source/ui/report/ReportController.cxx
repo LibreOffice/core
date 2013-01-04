@@ -4001,7 +4001,7 @@ void OReportController::checkChartEnabled()
         try
         {
             ::utl::OConfigurationTreeRoot aConfiguration(
-                ::utl::OConfigurationTreeRoot::createWithServiceFactory( m_xServiceFactory, sConfigName ) );
+                ::utl::OConfigurationTreeRoot::createWithComponentContext( m_xContext, sConfigName ) );
 
             sal_Bool bChartEnabled = sal_False;
             if ( aConfiguration.hasByHierarchicalName(sPropertyName) )

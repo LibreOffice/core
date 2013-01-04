@@ -27,6 +27,7 @@
 
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/Sequence.hxx"
+#include "com/sun/star/uno/XComponentContext.hpp"
 
 #include "com/sun/star/beans/Optional.hpp"
 #include "com/sun/star/task/InteractionClassification.hpp"
@@ -87,7 +88,7 @@ class UUIInteractionHelper
 {
 private:
     mutable osl::Mutex                                                                      m_aPropertyMutex;
-            ::com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >  m_xServiceFactory;
+            ::com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >      m_xContext;
             ::com::sun::star::uno::Reference< com::sun::star::awt::XWindow >                m_xWindowParam;
             const OUString                                                                  m_aContextParam;
             StringHashMap                                                                   m_aTypedCustomHandlers;
@@ -97,14 +98,14 @@ private:
 public:
     UUIInteractionHelper(
         com::sun::star::uno::Reference<
-            com::sun::star::lang::XMultiServiceFactory > const & rServiceFactory,
+            com::sun::star::uno::XComponentContext > const & rxContext,
         com::sun::star::uno::Reference<
             com::sun::star::awt::XWindow > const & rxWindow,
         const OUString & rContextParam)
         SAL_THROW(());
     UUIInteractionHelper(
         com::sun::star::uno::Reference<
-            com::sun::star::lang::XMultiServiceFactory > const & rServiceFactory)
+            com::sun::star::uno::XComponentContext > const & rxContext)
         SAL_THROW(());
 
     ~UUIInteractionHelper() SAL_THROW(());
@@ -127,6 +128,9 @@ public:
         ::rtl::OUString aMessage,
             std::vector< rtl::OUString > const & rArguments );
 
+    ::com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+    getORB() const
+    { return m_xContext; }
 private:
     bool
     handleRequest_impl(

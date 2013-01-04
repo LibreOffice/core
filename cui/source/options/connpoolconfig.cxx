@@ -85,8 +85,8 @@ namespace offapp
     void ConnectionPoolConfig::GetOptions(SfxItemSet& _rFillItems)
     {
         // the config node where all pooling relevant info are stored under
-        OConfigurationTreeRoot aConnectionPoolRoot = OConfigurationTreeRoot::createWithServiceFactory(
-            ::comphelper::getProcessServiceFactory(), getConnectionPoolNodeName(), -1, OConfigurationTreeRoot::CM_READONLY);
+        OConfigurationTreeRoot aConnectionPoolRoot = OConfigurationTreeRoot::createWithComponentContext(
+            ::comphelper::getProcessComponentContext(), getConnectionPoolNodeName(), -1, OConfigurationTreeRoot::CM_READONLY);
 
         // the global "enabled" flag
         Any aEnabled = aConnectionPoolRoot.getNodeValue(getEnablePoolingNodeName());
@@ -150,8 +150,8 @@ namespace offapp
     void ConnectionPoolConfig::SetOptions(const SfxItemSet& _rSourceItems)
     {
         // the config node where all pooling relevant info are stored under
-        OConfigurationTreeRoot aConnectionPoolRoot = OConfigurationTreeRoot::createWithServiceFactory(
-            ::comphelper::getProcessServiceFactory(), getConnectionPoolNodeName(), -1, OConfigurationTreeRoot::CM_UPDATABLE);
+        OConfigurationTreeRoot aConnectionPoolRoot = OConfigurationTreeRoot::createWithComponentContext(
+            ::comphelper::getProcessComponentContext(), getConnectionPoolNodeName(), -1, OConfigurationTreeRoot::CM_UPDATABLE);
 
         if (!aConnectionPoolRoot.isValid())
             // already asserted by the OConfigurationTreeRoot

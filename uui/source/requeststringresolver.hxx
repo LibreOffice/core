@@ -22,6 +22,7 @@
 
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/task/XInteractionRequestStringResolver.hpp"
+#include "com/sun/star/uno/XComponentContext.hpp"
 #include "cppuhelper/implbase2.hxx"
 
 class UUIInteractionHelper;
@@ -46,8 +47,6 @@ public:
         SAL_THROW((com::sun::star::uno::Exception));
 
 private:
-    com::sun::star::uno::Reference<
-    com::sun::star::lang::XMultiServiceFactory > m_xServiceFactory;
     UUIInteractionHelper * m_pImpl;
 
     UUIInteractionRequestStringResolver(UUIInteractionRequestStringResolver &); // not implemented
@@ -55,8 +54,8 @@ private:
 
     UUIInteractionRequestStringResolver(
         com::sun::star::uno::Reference<
-            com::sun::star::lang::XMultiServiceFactory >
-                const & rServiceFactory)
+            com::sun::star::uno::XComponentContext >
+                const & rxContext)
         SAL_THROW(());
 
     virtual ~UUIInteractionRequestStringResolver() SAL_THROW(());

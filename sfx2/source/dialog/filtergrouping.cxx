@@ -315,8 +315,8 @@ namespace sfx2
     {
         //================================================================
         // open our config node
-        OConfigurationTreeRoot aFilterClassification = OConfigurationTreeRoot::createWithServiceFactory(
-            ::comphelper::getProcessServiceFactory(),
+        OConfigurationTreeRoot aFilterClassification = OConfigurationTreeRoot::createWithComponentContext(
+            ::comphelper::getProcessComponentContext(),
             DEFINE_CONST_OUSTRING( "org.openoffice.Office.UI/FilterClassification" ),
             -1,
             OConfigurationTreeRoot::CM_READONLY

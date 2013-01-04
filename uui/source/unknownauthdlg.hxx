@@ -26,7 +26,7 @@
 #include <vcl/button.hxx>
 #include <com/sun/star/security/XCertificate.hpp>
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace cssu = com::sun::star::uno;
 namespace dcss = ::com::sun::star;
@@ -50,7 +50,7 @@ private:
     FixedText   m_aLabel1;
     FixedImage  m_aWarnImage;
 
-    const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& m_xServiceFactory;
+    const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& m_xContext;
     const cssu::Reference< dcss::security::XCertificate >& m_rXCert;
     Window* m_pParent;
 
@@ -60,10 +60,8 @@ private:
     public:
     UnknownAuthDialog( Window* pParent,
                        const cssu::Reference< dcss::security::XCertificate >& rXCert,
-                       const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+                       const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext,
                        ResMgr * pResMgr );
-
-    const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > getServiceFactory() { return m_xServiceFactory; };
 
     cssu::Reference< dcss::security::XCertificate > getCert() { return m_rXCert; };
 

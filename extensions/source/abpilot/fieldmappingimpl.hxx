@@ -29,6 +29,9 @@ namespace com { namespace sun { namespace star {
     namespace lang {
         class XMultiServiceFactory;
     }
+    namespace uno {
+        class XComponentContext;
+    }
     namespace beans {
         class XPropertySet;
     }
@@ -69,7 +72,7 @@ namespace abp
             and this function creates a mapping which uses this configuration information.</p>
         */
         void defaultMapping(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
             MapString2String& /* [out] */ _rFieldAssignment
         ) SAL_THROW ( ( ) );
 
@@ -77,7 +80,7 @@ namespace abp
         /** writes a field mapping for the template document address source
         */
         void writeTemplateAddressFieldMapping(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
             const MapString2String& _rFieldAssignment
         ) SAL_THROW ( ( ) );
 
@@ -95,7 +98,7 @@ namespace abp
             expect it.
         */
         void writeTemplateAddressSource(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
             const ::rtl::OUString& _rDataSourceName,
             const ::rtl::OUString& _rTableName
         ) SAL_THROW ( ( ) );
@@ -103,7 +106,7 @@ namespace abp
         /** writes the configuration entry which states the the pilot has been completed successfully
         */
         void markPilotSuccess(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext
         ) SAL_THROW ( ( ) );
 
     //.....................................................................

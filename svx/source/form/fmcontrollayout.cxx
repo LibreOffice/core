@@ -285,8 +285,8 @@ namespace svxform
     {
         ::rtl::OUString sConfigName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common/Forms/ControlLayout/" ) );
         sConfigName += DocumentClassification::getModuleIdentifierForDocumentType( _eDocType );
-        return OConfigurationTreeRoot::createWithServiceFactory(
-            ::comphelper::getProcessServiceFactory(),    // TODO
+        return OConfigurationTreeRoot::createWithComponentContext(
+            ::comphelper::getProcessComponentContext(),    // TODO
             sConfigName );
     }
 

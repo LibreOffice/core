@@ -776,8 +776,8 @@ void SvtFileDialog::Init_Impl
     implArrangeControls();
 
     /// read our settings from the configuration
-    m_aConfiguration = OConfigurationTreeRoot::createWithServiceFactory(
-        ::comphelper::getProcessServiceFactory(),
+    m_aConfiguration = OConfigurationTreeRoot::createWithComponentContext(
+        ::comphelper::getProcessComponentContext(),
         OUString( "/org.openoffice.Office.UI/FilePicker" )
     );
 }

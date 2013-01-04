@@ -19,15 +19,15 @@
 
 #include "requeststringresolver.hxx"
 #include "iahndl.hxx"
+#include <comphelper/processfactory.hxx>
 
 using namespace com::sun;
 
 UUIInteractionRequestStringResolver::UUIInteractionRequestStringResolver(
-    star::uno::Reference< star::lang::XMultiServiceFactory > const &
-        rServiceFactory)
+    star::uno::Reference< star::uno::XComponentContext > const &
+        rxContext)
     SAL_THROW(())
-        : m_xServiceFactory(rServiceFactory),
-          m_pImpl(new UUIInteractionHelper(rServiceFactory))
+        : m_pImpl(new UUIInteractionHelper(rxContext))
 {
 }
 
@@ -98,7 +98,7 @@ UUIInteractionRequestStringResolver::createInstance(
 {
     try
     {
-        return *new UUIInteractionRequestStringResolver(rServiceFactory);
+        return *new UUIInteractionRequestStringResolver(comphelper::getComponentContext(rServiceFactory));
     }
     catch (std::bad_alloc const &)
     {

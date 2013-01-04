@@ -130,20 +130,20 @@ public:
 } /* namespace */
 
 UUIInteractionHelper::UUIInteractionHelper(
-    uno::Reference< lang::XMultiServiceFactory > const & rServiceFactory,
+    uno::Reference< uno::XComponentContext > const & rxContext,
     uno::Reference< awt::XWindow > const & rxWindowParam,
     const OUString & rContextParam)
     SAL_THROW(()):
-        m_xServiceFactory(rServiceFactory),
+        m_xContext(rxContext),
         m_xWindowParam(rxWindowParam),
         m_aContextParam(rContextParam)
 {
 }
 
 UUIInteractionHelper::UUIInteractionHelper(
-    uno::Reference< lang::XMultiServiceFactory > const & rServiceFactory)
+    uno::Reference< uno::XComponentContext > const & rxContext)
     SAL_THROW(()):
-        m_xServiceFactory(rServiceFactory)
+        m_xContext(rxContext)
 {
 }
 
@@ -370,7 +370,7 @@ bool UUIInteractionHelper::handleCustomRequest( const Reference< XInteractionReq
 {
     try
     {
-        Reference< XInteractionHandler2 > xHandler( m_xServiceFactory->createInstance( i_rServiceName ), UNO_QUERY_THROW );
+        Reference< XInteractionHandler2 > xHandler( m_xContext->getServiceManager()->createInstanceWithContext( i_rServiceName, m_xContext ), UNO_QUERY_THROW );
 
         Reference< XInitialization > xHandlerInit( xHandler, UNO_QUERY );
         if ( xHandlerInit.is() )
@@ -401,8 +401,8 @@ bool UUIInteractionHelper::handleTypedHandlerImplementations( Reference< XIntera
         return handleCustomRequest( rRequest, aCacheHitTest->second );
 
     // the base registration node for "typed" interaction handlers
-    const ::utl::OConfigurationTreeRoot aConfigRoot( ::utl::OConfigurationTreeRoot::createWithServiceFactory(
-        m_xServiceFactory,
+    const ::utl::OConfigurationTreeRoot aConfigRoot( ::utl::OConfigurationTreeRoot::createWithComponentContext(
+        m_xContext,
         OUString( "/org.openoffice.Interaction/InteractionHandlers" ),
         -1,
         ::utl::OConfigurationTreeRoot::CM_READONLY
@@ -926,7 +926,7 @@ UUIInteractionHelper::getInteractionHandlerList(
     try
     {
         uno::Reference< lang::XMultiServiceFactory > xConfigProv =
-            configuration::theDefaultProvider::get( comphelper::getComponentContext(m_xServiceFactory) );
+            configuration::theDefaultProvider::get( m_xContext );
 
         rtl::OUStringBuffer aFullPath;
         aFullPath.appendAscii(
@@ -1046,7 +1046,7 @@ UUIInteractionHelper::getInteractionHandler()
     SAL_THROW((uno::RuntimeException))
 {
     return InteractionHandler::createWithParentAndContext(
-        comphelper::getComponentContext(m_xServiceFactory), m_xWindowParam,
+        m_xContext, m_xWindowParam,
         m_aContextParam);
 }
 

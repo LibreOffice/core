@@ -81,7 +81,7 @@ executeFilterDialog(
 void
 handleNoSuchFilterRequest_(
     Window * pParent,
-    uno::Reference< lang::XMultiServiceFactory > const & xServiceFactory,
+    uno::Reference< uno::XComponentContext > const & xContext,
     document::NoSuchFilterRequest const & rRequest,
     uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
             rContinuations )
@@ -105,8 +105,8 @@ handleNoSuchFilterRequest_(
     uno::Reference< container::XContainerQuery > xFilterContainer;
     try
     {
-        xFilterContainer.set( xServiceFactory->createInstance(
-                                  ::rtl::OUString( "com.sun.star.document.FilterFactory") ),
+        xFilterContainer.set( xContext->getServiceManager()->createInstanceWithContext(
+                                  ::rtl::OUString( "com.sun.star.document.FilterFactory"), xContext ),
                               uno::UNO_QUERY );
     }
     catch ( uno::Exception const & )
@@ -195,7 +195,7 @@ handleNoSuchFilterRequest_(
 void
 handleAmbigousFilterRequest_(
     Window * pParent,
-    uno::Reference< lang::XMultiServiceFactory > const & xServiceFactory,
+    uno::Reference< uno::XComponentContext > const & xContext,
     document::AmbigousFilterRequest const & rRequest,
     uno::Sequence<
         uno::Reference<
@@ -211,8 +211,8 @@ handleAmbigousFilterRequest_(
     uno::Reference< container::XNameContainer > xFilterContainer;
     try
     {
-        xFilterContainer.set( xServiceFactory->createInstance(
-            ::rtl::OUString( "com.sun.star.document.FilterFactory") ),
+        xFilterContainer.set( xContext->getServiceManager()->createInstanceWithContext(
+            ::rtl::OUString( "com.sun.star.document.FilterFactory"), xContext ),
             uno::UNO_QUERY );
     }
     catch ( uno::Exception & )
@@ -298,7 +298,7 @@ handleAmbigousFilterRequest_(
 
 void
 handleFilterOptionsRequest_(
-    uno::Reference< lang::XMultiServiceFactory > const & xServiceFactory,
+    uno::Reference< uno::XComponentContext > const & xContext,
     document::FilterOptionsRequest const & rRequest,
     uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
         rContinuations)
@@ -311,8 +311,8 @@ handleFilterOptionsRequest_(
     uno::Reference< container::XNameAccess > xFilterCFG;
     try
     {
-        xFilterCFG.set( xServiceFactory->createInstance(
-                            ::rtl::OUString( "com.sun.star.document.FilterFactory" ) ),
+        xFilterCFG.set( xContext->getServiceManager()->createInstanceWithContext(
+                            ::rtl::OUString( "com.sun.star.document.FilterFactory" ), xContext ),
                         uno::UNO_QUERY );
     }
     catch ( uno::Exception const & )
@@ -351,8 +351,8 @@ handleFilterOptionsRequest_(
                         {
                             uno::Reference<
                                 ui::dialogs::XExecutableDialog > xFilterDialog(
-                                    xServiceFactory->createInstance(
-                                        aServiceName ),
+                                    xContext->getServiceManager()->createInstanceWithContext(
+                                        aServiceName, xContext ),
                                     uno::UNO_QUERY );
                             uno::Reference< beans::XPropertyAccess >
                                 xFilterProperties( xFilterDialog,
@@ -409,7 +409,7 @@ UUIInteractionHelper::handleNoSuchFilterRequest(
     if (aAnyRequest >>= aNoSuchFilterRequest)
     {
         handleNoSuchFilterRequest_(getParentProperty(),
-                                   m_xServiceFactory,
+                                   m_xContext,
                                    aNoSuchFilterRequest,
                                    rRequest->getContinuations());
         return true;
@@ -428,7 +428,7 @@ UUIInteractionHelper::handleAmbigousFilterRequest(
     if (aAnyRequest >>= aAmbigousFilterRequest)
     {
         handleAmbigousFilterRequest_(getParentProperty(),
-                                     m_xServiceFactory,
+                                     m_xContext,
                                      aAmbigousFilterRequest,
                                      rRequest->getContinuations());
         return true;
@@ -446,7 +446,7 @@ UUIInteractionHelper::handleFilterOptionsRequest(
     document::FilterOptionsRequest aFilterOptionsRequest;
     if (aAnyRequest >>= aFilterOptionsRequest)
     {
-        handleFilterOptionsRequest_(m_xServiceFactory,
+        handleFilterOptionsRequest_(m_xContext,
                                     aFilterOptionsRequest,
                                     rRequest->getContinuations());
         return true;

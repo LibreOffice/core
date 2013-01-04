@@ -186,7 +186,7 @@ void
 handleAuthenticationRequest_(
     Window * pParent,
     uno::Reference< task::XInteractionHandler2 > const & xIH,
-    uno::Reference< lang::XMultiServiceFactory > const & xServiceFactory,
+    uno::Reference< uno::XComponentContext > const & xContext,
     ucb::AuthenticationRequest const & rRequest,
     uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
         rContinuations,
@@ -205,7 +205,7 @@ handleAuthenticationRequest_(
 
     //////////////////////////
     // First, try to obtain credentials from password container service.
-    uui::PasswordContainerHelper aPwContainerHelper(comphelper::getComponentContext(xServiceFactory));
+    uui::PasswordContainerHelper aPwContainerHelper(xContext);
     if (aPwContainerHelper.handleAuthenticationRequest(rRequest,
                                                        xSupplyAuthentication,
                                                        rURL,
@@ -632,7 +632,7 @@ UUIInteractionHelper::handleAuthenticationRequest(
     {
         handleAuthenticationRequest_(getParentProperty(),
                                      getInteractionHandler(),
-                                     m_xServiceFactory,
+                                     m_xContext,
                                      aURLAuthenticationRequest,
                                      rRequest->getContinuations(),
                                      aURLAuthenticationRequest.URL);
@@ -644,7 +644,7 @@ UUIInteractionHelper::handleAuthenticationRequest(
     {
         handleAuthenticationRequest_(getParentProperty(),
                                      getInteractionHandler(),
-                                     m_xServiceFactory,
+                                     m_xContext,
                                      aAuthenticationRequest,
                                      rRequest->getContinuations(),
                                      rtl::OUString());

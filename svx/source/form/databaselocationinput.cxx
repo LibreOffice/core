@@ -161,8 +161,8 @@ namespace svx
         {
             // get the name of the default filter for database documents
             ::utl::OConfigurationTreeRoot aConfig(
-                ::utl::OConfigurationTreeRoot::createWithServiceFactory(
-                    m_aContext.getLegacyServiceFactory(),
+                ::utl::OConfigurationTreeRoot::createWithComponentContext(
+                    m_aContext.getUNOContext(),
                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Setup/Office/Factories/com.sun.star.sdb.OfficeDatabaseDocument" ) )
             ) );
             ::rtl::OUString sDatabaseFilter;

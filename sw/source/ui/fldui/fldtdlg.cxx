@@ -87,8 +87,8 @@ SwFldDlg::SwFldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent)
         AddTabPage(TP_FLD_FUNC, SwFldFuncPage::Create, 0);
 
         utl::OConfigurationTreeRoot aCfgRoot
-            = utl::OConfigurationTreeRoot::createWithServiceFactory(
-                ::comphelper::getProcessServiceFactory(),
+            = utl::OConfigurationTreeRoot::createWithComponentContext(
+                ::comphelper::getProcessComponentContext(),
                 rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
                         "/org.openoffice.Office.DataAccess/Policies/Features/Writer" ) ),

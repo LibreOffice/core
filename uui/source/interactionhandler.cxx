@@ -20,16 +20,16 @@
 #include "iahndl.hxx"
 #include "interactionhandler.hxx"
 #include "comphelper/namedvaluecollection.hxx"
+#include "comphelper/processfactory.hxx"
 #include "com/sun/star/awt/XWindow.hpp"
 
 using namespace com::sun::star;
 
 UUIInteractionHandler::UUIInteractionHandler(
-    uno::Reference< lang::XMultiServiceFactory > const &
-        rServiceFactory)
+    uno::Reference< uno::XComponentContext > const &
+        rxContext)
     SAL_THROW(())
-        : m_xServiceFactory(rServiceFactory),
-          m_pImpl(new UUIInteractionHelper(m_xServiceFactory))
+        : m_pImpl(new UUIInteractionHelper(rxContext))
 {
 }
 
@@ -68,6 +68,7 @@ UUIInteractionHandler::initialize(
     uno::Sequence< uno::Any > const & rArguments)
     throw (uno::Exception)
 {
+    uno::Reference<uno::XComponentContext> xContext = m_pImpl->getORB();
     delete m_pImpl;
 
     // The old-style InteractionHandler service supported a sequence of
@@ -91,7 +92,7 @@ UUIInteractionHandler::initialize(
         }
     }
 
-    m_pImpl = new UUIInteractionHelper(m_xServiceFactory, xWindow, aContext);
+    m_pImpl = new UUIInteractionHelper(xContext, xWindow, aContext);
 }
 
 void SAL_CALL
@@ -145,7 +146,7 @@ UUIInteractionHandler::createInstance(
 {
     try
     {
-        return *new UUIInteractionHandler(rServiceFactory);
+        return *new UUIInteractionHandler(comphelper::getComponentContext(rServiceFactory));
     }
     catch (std::bad_alloc const &)
     {
