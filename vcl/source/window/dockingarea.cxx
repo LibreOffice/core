@@ -50,7 +50,7 @@ DockingAreaWindow::ImplData::~ImplData()
 
 static void ImplInitBackground( DockingAreaWindow* pThis )
 {
-    const BitmapEx* pPersonaBitmap = pThis->GetSettings().GetStyleSettings().GetPersonaHeader();
+    const BitmapEx* pPersonaBitmap = Application::GetSettings().GetStyleSettings().GetPersonaHeader();
     if ( pPersonaBitmap != NULL && pThis->GetAlign() == WINDOWALIGN_TOP )
     {
         Wallpaper aWallpaper( *pPersonaBitmap );
@@ -174,7 +174,7 @@ void DockingAreaWindow::Paint( const Rectangle& )
         }
         ControlState        nState = CTRL_STATE_ENABLED;
 
-        if ( GetAlign() == WINDOWALIGN_TOP && GetSettings().GetStyleSettings().GetPersonaHeader() )
+        if ( GetAlign() == WINDOWALIGN_TOP && Application::GetSettings().GetStyleSettings().GetPersonaHeader() )
             Erase();
         else if ( !ImplGetSVData()->maNWFData.mbDockingAreaSeparateTB )
         {

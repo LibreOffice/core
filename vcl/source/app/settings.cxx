@@ -305,8 +305,8 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maDialogStyle( rData.maDialogStyle ),
     maFrameStyle( rData.maFrameStyle ),
     maPersonaHeaderFooter( rData.maPersonaHeaderFooter ),
-    mpPersonaHeaderBitmap( NULL ),
-    mpPersonaFooterBitmap( NULL )
+    mpPersonaHeaderBitmap( rData.mpPersonaHeaderBitmap? new BitmapEx( *rData.mpPersonaHeaderBitmap ): NULL ),
+    mpPersonaFooterBitmap( rData.mpPersonaFooterBitmap? new BitmapEx( *rData.mpPersonaFooterBitmap ): NULL )
 {
     mnRefCount                  = 1;
     mnBorderSize                = rData.mnBorderSize;
