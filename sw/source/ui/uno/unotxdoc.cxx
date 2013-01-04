@@ -2537,7 +2537,10 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
                 SwViewOption aOpt( *pViewShell->GetViewOptions() );
                 aOpt.setBrowseMode( false );
                 pViewShell->ApplyViewOptions( aOpt );
-                pSwView->RecheckBrowseMode();
+                if (pSwView)
+                {
+                    pSwView->RecheckBrowseMode();
+                }
             }
 
             // reformating the document for printing will show the changes in the view
