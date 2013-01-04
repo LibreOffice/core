@@ -157,6 +157,22 @@
     			</info>
     		</set>
 		</group>
+        <group oor:name="ToolBar">
+            <info>
+                <desc>Contains the structure of a toolbar.</desc>
+            </info>
+            <prop oor:name="Title" oor:type="xs:string" oor:localized="true">
+                <info>
+                    <desc>A localized string used as the toolbar title.</desc>
+                </info>
+                <value></value>
+            </prop>
+            <set oor:name="ToolBarItems" oor:node-type="ToolBarItem">
+                <info>
+                    <desc>Contains a list of sets of toolbar items that are part of add-on toolbars.</desc>
+                </info>
+            </set>
+        </group>
 		<group oor:name="ToolBarItem">
 			<info>
 				<desc>Describes a toolbar item representing a function of of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
@@ -400,10 +416,10 @@
 					<desc>Contains a list of menu merging instructions of different add-ons.</desc>
 				</info>
 			</set>
-			<set oor:name="OfficeToolBar" oor:node-type="ToolBarItems">
-				<info>
-					<desc>Contains a list of sets of toolbar items that are part of add-on toolbars.</desc>
-				</info>
+			<set oor:name="OfficeToolBar" oor:node-type="ToolBar">
+                <info>
+                    <desc>Contains a lists of addon toolbars.</desc>
+                </info>
 			</set>
 			<set oor:name="OfficeToolbarMerging" oor:node-type="MergeToolBarItems">
 			    <info>
