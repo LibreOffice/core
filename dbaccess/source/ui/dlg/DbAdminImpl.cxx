@@ -146,8 +146,8 @@ namespace
     //========================================================================
     //= ODbDataSourceAdministrationHelper
     //========================================================================
-ODbDataSourceAdministrationHelper::ODbDataSourceAdministrationHelper(const Reference< XMultiServiceFactory >& _xORB,Window* _pParent,IItemSetHelper* _pItemSetHelper)
-        : m_xORB(_xORB)
+ODbDataSourceAdministrationHelper::ODbDataSourceAdministrationHelper(const Reference< XComponentContext >& _xORB,Window* _pParent,IItemSetHelper* _pItemSetHelper)
+        : m_xContext(_xORB)
         , m_pParent(_pParent)
         , m_pItemSetHelper(_pItemSetHelper)
 {
@@ -209,7 +209,7 @@ ODbDataSourceAdministrationHelper::ODbDataSourceAdministrationHelper(const Refer
 
     try
     {
-        m_xDatabaseContext = DatabaseContext::create(comphelper::getComponentContext(m_xORB));
+        m_xDatabaseContext = DatabaseContext::create(m_xContext);
     }
     catch(const Exception&)
     {
@@ -252,7 +252,7 @@ sal_Bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< Propert
             if ( !xHandler.is() )
             {
                 // instantiate the default SDB interaction handler
-                xHandler = Reference< XInteractionHandler >( task::InteractionHandler::createWithParent(comphelper::getComponentContext(m_xORB), 0), UNO_QUERY );
+                xHandler = Reference< XInteractionHandler >( task::InteractionHandler::createWithParent(m_xContext, 0), UNO_QUERY );
             }
 
             String sName = pName ? pName->GetValue() : String();
@@ -373,7 +373,7 @@ void ODbDataSourceAdministrationHelper::clearPassword()
         catch (const SQLWarning& e) { aErrorInfo = SQLExceptionInfo(e); }
         catch (const SQLException& e) { aErrorInfo = SQLExceptionInfo(e); }
 
-        showError(aErrorInfo,m_pParent,comphelper::getComponentContext(getORB()));
+        showError(aErrorInfo,m_pParent,getORB());
     }
     if ( aRet.first.is() )
         successfullyConnected();// notify the admindlg to save the password
@@ -396,7 +396,7 @@ Reference< XDriver > ODbDataSourceAdministrationHelper::getDriver(const ::rtl::O
 
     try
     {
-        xDriverManager.set( ConnectionPool::create( comphelper::getComponentContext(getORB()) ) );
+        xDriverManager.set( ConnectionPool::create( getORB() ) );
     }
     catch (const Exception& e)
     {
@@ -734,7 +734,7 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
     // first determine which of all the items are relevant for the data source (depends on the connection url)
     ::rtl::OUString eType = getDatasourceType(_rSource);
     ::std::vector< sal_Int32> aDetailIds;
-    ODriversSettings::getSupportedIndirectSettings(eType,getORB(),aDetailIds);
+    ODriversSettings::getSupportedIndirectSettings(eType, getORB(), aDetailIds);
 
     // collect the translated property values for the relevant items
     PropertyValueSet aRelevantSettings;

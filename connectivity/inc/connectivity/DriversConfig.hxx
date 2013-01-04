@@ -20,7 +20,6 @@
 #define CONNECTIVITY_DRIVERSCONFIG_HXX_INCLUDED
 
 #include <comphelper/stl_types.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include "connectivity/dbtoolsdllapi.hxx"
@@ -44,11 +43,11 @@ namespace connectivity
     {
         mutable ::utl::OConfigurationTreeRoot   m_aInstalled;
         mutable TInstalledDrivers       m_aDrivers;
-        void Load(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB) const;
+        void Load(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB) const;
     public:
         DriversConfigImpl();
 
-        const TInstalledDrivers& getInstalledDrivers(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB) const { Load(_rxORB); return m_aDrivers; }
+        const TInstalledDrivers& getInstalledDrivers(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB) const { Load(_rxORB); return m_aDrivers; }
     };
     //
     // Allows to access all driver which are located in the configuration
@@ -59,7 +58,7 @@ namespace connectivity
 
         const ::comphelper::NamedValueCollection& impl_get(const ::rtl::OUString& _sURL,sal_Int32 _nProps) const;
     public:
-        DriversConfig(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
+        DriversConfig(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB);
         ~DriversConfig();
 
         DriversConfig( const DriversConfig& );
@@ -73,7 +72,7 @@ namespace connectivity
         ::com::sun::star::uno::Sequence< ::rtl::OUString > getURLs() const;
     private:
         OSharedConfigNode   m_aNode;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xORB;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xORB;
     };
 }
 #endif // CONNECTIVITY_DRIVERSCONFIG_HXX_INCLUDED

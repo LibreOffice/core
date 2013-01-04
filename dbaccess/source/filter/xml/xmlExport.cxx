@@ -27,6 +27,7 @@
 #include <xmloff/txtimp.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include "xmlstrings.hrc"
@@ -195,7 +196,7 @@ namespace dbaxml
 ODBExport::ODBExport(const Reference< XMultiServiceFactory >& _rxMSF,sal_uInt16 nExportFlag)
 : SvXMLExport( util::MeasureUnit::MM_10TH, _rxMSF, XML_DATABASE,
         EXPORT_OASIS | nExportFlag)
-,m_aTypeCollection(_rxMSF)
+,m_aTypeCollection(comphelper::getComponentContext(_rxMSF))
 ,m_bAllreadyFilled(sal_False)
 {
     GetMM100UnitConverter().SetCoreMeasureUnit(util::MeasureUnit::MM_10TH);
@@ -280,7 +281,7 @@ void ODBExport::exportDataSource()
         xSettingsState->getPropertyDefault( INFO_DECIMALDELIMITER ) >>= aDelimiter.sDecimal;
         xSettingsState->getPropertyDefault( INFO_THOUSANDSDELIMITER ) >>= aDelimiter.sThousand;
 
-        ::connectivity::DriversConfig aDriverConfig(getServiceFactory());
+        ::connectivity::DriversConfig aDriverConfig(comphelper::getComponentContext(getServiceFactory()));
         const ::rtl::OUString sURL = ::comphelper::getString(xProp->getPropertyValue(PROPERTY_URL));
         ::comphelper::NamedValueCollection aDriverSupportedProperties( aDriverConfig.getProperties( sURL ) );
 

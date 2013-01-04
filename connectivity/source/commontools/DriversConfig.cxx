@@ -90,14 +90,14 @@ DriversConfigImpl::DriversConfigImpl()
 {
 }
 // -----------------------------------------------------------------------------
-void DriversConfigImpl::Load(const uno::Reference< lang::XMultiServiceFactory >& _rxORB) const
+void DriversConfigImpl::Load(const uno::Reference< uno::XComponentContext >& _rxORB) const
 {
     if ( m_aDrivers.empty() )
     {
         if ( !m_aInstalled.isValid() )
         {
             static const ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.DataAccess.Drivers/Installed")); ///Installed
-            m_aInstalled = ::utl::OConfigurationTreeRoot::createWithServiceFactory(_rxORB, s_sNodeName, -1, ::utl::OConfigurationTreeRoot::CM_READONLY);
+            m_aInstalled = ::utl::OConfigurationTreeRoot::createWithComponentContext(_rxORB, s_sNodeName, -1, ::utl::OConfigurationTreeRoot::CM_READONLY);
         }
 
         if ( m_aInstalled.isValid() )
@@ -116,7 +116,7 @@ void DriversConfigImpl::Load(const uno::Reference< lang::XMultiServiceFactory >&
     }
 }
 // -----------------------------------------------------------------------------
-DriversConfig::DriversConfig(const uno::Reference< lang::XMultiServiceFactory >& _rxORB)
+DriversConfig::DriversConfig(const uno::Reference< uno::XComponentContext >& _rxORB)
 :m_xORB(_rxORB)
 {
 }

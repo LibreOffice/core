@@ -138,8 +138,8 @@ namespace dbaccess
         ,m_aConfigurationRoot()
         ,m_aRegistrationListeners( m_aMutex )
     {
-        m_aConfigurationRoot = ::utl::OConfigurationTreeRoot::createWithServiceFactory(
-            m_aContext.getLegacyServiceFactory(), getConfigurationRootPath(), -1, ::utl::OConfigurationTreeRoot::CM_UPDATABLE );
+        m_aConfigurationRoot = ::utl::OConfigurationTreeRoot::createWithComponentContext(
+            m_aContext.getUNOContext(), getConfigurationRootPath(), -1, ::utl::OConfigurationTreeRoot::CM_UPDATABLE );
     }
 
     DatabaseRegistrations::~DatabaseRegistrations()

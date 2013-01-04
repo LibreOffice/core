@@ -26,6 +26,7 @@
 #endif
 #include "dbadmin.hxx"
 #include <comphelper/extract.hxx>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/property.hxx>
 #include <osl/diagnose.h>
@@ -59,7 +60,7 @@ ODatabaseAdministrationDialog::ODatabaseAdministrationDialog(const Reference< XM
 {
     DBG_CTOR(ODatabaseAdministrationDialog,NULL);
 
-    m_pCollection = new ::dbaccess::ODsnTypeCollection(_rxORB);
+    m_pCollection = new ::dbaccess::ODsnTypeCollection(comphelper::getComponentContext(_rxORB));
     ODbAdminDialog::createItemSet(m_pDatasourceItems, m_pItemPool, m_pItemPoolDefaults, m_pCollection);
 }
 

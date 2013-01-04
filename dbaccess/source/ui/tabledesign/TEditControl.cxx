@@ -18,6 +18,7 @@
  */
 
 #include "TEditControl.hxx"
+#include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
@@ -141,7 +142,7 @@ void OTableEditorCtrl::Init()
     aColumnName = String( ModuleRes(STR_TAB_FIELD_COLUMN_DATATYPE) );
     InsertDataColumn( FIELD_TYPE, aColumnName, FIELDTYPE_WIDTH );
 
-    ::dbaccess::ODsnTypeCollection aDsnTypes(GetView()->getController().getORB());
+    ::dbaccess::ODsnTypeCollection aDsnTypes(comphelper::getComponentContext(GetView()->getController().getORB()));
     sal_Bool bShowColumnDescription = aDsnTypes.supportsColumnDescription(::comphelper::getString(GetView()->getController().getDataSource()->getPropertyValue(PROPERTY_URL)));
     aColumnName = String( ModuleRes(STR_TAB_HELP_TEXT) );
     InsertDataColumn( HELP_TEXT, aColumnName, bShowColumnDescription ? FIELDTYPE_WIDTH : FIELDDESCR_WIDTH );

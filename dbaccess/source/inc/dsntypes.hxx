@@ -20,8 +20,6 @@
 #ifndef _DBACCESS_DSNTYPES_HXX_
 #define _DBACCESS_DSNTYPES_HXX_
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-
 #include <comphelper/stl_types.hxx>
 #include "dbadllapi.hxx"
 #include <tools/string.hxx>
@@ -111,7 +109,7 @@ protected:
     StringVector    m_aDsnTypesDisplayNames;    /// user readable names for the datasource types
     StringVector    m_aDsnPrefixes;             /// DSN prefixes which determine the type of a datasource
     ::connectivity::DriversConfig m_aDriverConfig;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
 
 #if OSL_DEBUG_LEVEL > 0
     sal_Int32       m_nLivingIterators;         /// just for debugging reasons, counts the living iterators
@@ -121,7 +119,7 @@ public:
     class TypeIterator;
     friend class ODsnTypeCollection::TypeIterator;
 
-    ODsnTypeCollection(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xFactory);
+    ODsnTypeCollection(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xContext);
     ~ODsnTypeCollection();
 
     /// get the datasource type display name from a DSN string

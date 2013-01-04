@@ -56,7 +56,7 @@ DBG_NAME(OUserAdminDlg)
 //========================================================================
     OUserAdminDlg::OUserAdminDlg(Window* _pParent
                                             , SfxItemSet* _pItems
-                                            ,const Reference< XMultiServiceFactory >& _rxORB
+                                            ,const Reference< XComponentContext >& _rxORB
                                             ,const ::com::sun::star::uno::Any& _aDataSourceName
                                             ,const Reference< XConnection >& _xConnection)
         :SfxTabDialog(_pParent, ModuleRes(DLG_DATABASE_USERADMIN), _pItems)
@@ -107,7 +107,7 @@ DBG_NAME(OUserAdminDlg)
         try
         {
             ::dbtools::DatabaseMetaData aMetaData( createConnection().first );
-            if ( !aMetaData.supportsUserAdministration( ::comphelper::ComponentContext( getORB() ) ) )
+            if ( !aMetaData.supportsUserAdministration( getORB() ) )
             {
                 String sError(ModuleRes(STR_USERADMIN_NOT_AVAILABLE));
                 throw SQLException(sError,NULL,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")) ,0,Any());
@@ -115,7 +115,7 @@ DBG_NAME(OUserAdminDlg)
         }
         catch(const SQLException&)
         {
-            ::dbaui::showError( ::dbtools::SQLExceptionInfo( ::cppu::getCaughtException() ), GetParent(), ::comphelper::getComponentContext( getORB() ) );
+            ::dbaui::showError( ::dbtools::SQLExceptionInfo( ::cppu::getCaughtException() ), GetParent(), getORB() );
             return RET_CANCEL;
         }
         catch(const Exception&)
@@ -131,7 +131,7 @@ DBG_NAME(OUserAdminDlg)
     void OUserAdminDlg::PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage)
     {
         // register ourself as modified listener
-        static_cast<OGenericAdministrationPage&>(_rPage).SetServiceFactory(m_pImpl->getORB());
+        static_cast<OGenericAdministrationPage&>(_rPage).SetServiceFactory( Reference<XMultiServiceFactory>(m_pImpl->getORB()->getServiceManager(), UNO_QUERY_THROW) );
         static_cast<OGenericAdministrationPage&>(_rPage).SetAdminDialog(this,this);
 
         AdjustLayout();
@@ -162,7 +162,7 @@ DBG_NAME(OUserAdminDlg)
         return ::std::pair< Reference<XConnection>,sal_Bool> (m_xConnection,sal_False);
     }
     // -----------------------------------------------------------------------------
-    Reference< XMultiServiceFactory > OUserAdminDlg::getORB() const
+    Reference< XComponentContext > OUserAdminDlg::getORB() const
     {
         return m_pImpl->getORB();
     }

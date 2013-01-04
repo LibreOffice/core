@@ -89,7 +89,7 @@ namespace dbtools
         DatabaseMetaData_Impl()
             :xConnection()
             ,xConnectionMetaData()
-            ,aDriverConfig( ::comphelper::getProcessServiceFactory() )
+            ,aDriverConfig( ::comphelper::getProcessComponentContext() )
             ,sCachedIdentifierQuoteString()
             ,sCachedCatalogSeparator()
         {

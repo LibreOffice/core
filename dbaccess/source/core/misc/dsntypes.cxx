@@ -57,9 +57,9 @@ namespace dbaccess
 //=========================================================================
 DBG_NAME(ODsnTypeCollection)
 //-------------------------------------------------------------------------
-ODsnTypeCollection::ODsnTypeCollection(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xFactory)
-:m_aDriverConfig(_xFactory)
-,m_xFactory(_xFactory)
+ODsnTypeCollection::ODsnTypeCollection(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xContext)
+:m_aDriverConfig(_xContext)
+,m_xContext(_xContext)
 #if OSL_DEBUG_LEVEL > 0
 ,m_nLivingIterators(0)
 #endif
@@ -305,7 +305,7 @@ bool ODsnTypeCollection::isEmbeddedDatabase( const ::rtl::OUString& _sURL ) cons
 {
     ::rtl::OUString sEmbeddedDatabaseURL;
     static const ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.DataAccess")); ///Installed
-    const ::utl::OConfigurationTreeRoot aInstalled = ::utl::OConfigurationTreeRoot::createWithServiceFactory(m_xFactory, s_sNodeName, -1, ::utl::OConfigurationTreeRoot::CM_READONLY);
+    const ::utl::OConfigurationTreeRoot aInstalled = ::utl::OConfigurationTreeRoot::createWithComponentContext(m_xContext, s_sNodeName, -1, ::utl::OConfigurationTreeRoot::CM_READONLY);
     if ( aInstalled.isValid() )
     {
         if ( aInstalled.hasByName("EmbeddedDatabases/DefaultEmbeddedDatabase/Value") )

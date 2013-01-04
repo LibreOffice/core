@@ -108,7 +108,7 @@ Reference<XPropertySetInfo>  SAL_CALL ODataSourcePropertyDialog::getPropertySetI
 Dialog* ODataSourcePropertyDialog::createDialog(Window* _pParent)
 {
 
-    ODbAdminDialog* pDialog = new ODbAdminDialog(_pParent, m_pDatasourceItems, m_aContext.getLegacyServiceFactory());
+    ODbAdminDialog* pDialog = new ODbAdminDialog(_pParent, m_pDatasourceItems, m_aContext.getUNOContext());
 
     // the initial selection
     if ( m_aInitialSelection.hasValue() )

@@ -57,7 +57,7 @@ DBG_NAME(ODbAdminDialog)
 //-------------------------------------------------------------------------
 ODbAdminDialog::ODbAdminDialog(Window* _pParent
                                , SfxItemSet* _pItems
-                               , const Reference< XMultiServiceFactory >& _rxORB
+                               , const Reference< XComponentContext >& _rxContext
                                )
     :SfxTabDialog(_pParent, ModuleRes(DLG_DATABASE_ADMINISTRATION), _pItems)
     ,m_bApplied(sal_False)
@@ -66,7 +66,7 @@ ODbAdminDialog::ODbAdminDialog(Window* _pParent
 {
     DBG_CTOR(ODbAdminDialog,NULL);
 
-    m_pImpl = ::std::auto_ptr<ODbDataSourceAdministrationHelper>(new ODbDataSourceAdministrationHelper(_rxORB,this,this));
+    m_pImpl = ::std::auto_ptr<ODbDataSourceAdministrationHelper>(new ODbDataSourceAdministrationHelper(_rxContext,this,this));
 
     // add the initial tab page
     AddTabPage( m_nMainPageID, String( ModuleRes( STR_PAGETITLE_GENERAL ) ), OConnectionTabPage::Create, NULL );
@@ -98,7 +98,7 @@ short ODbAdminDialog::Ok()
 void ODbAdminDialog::PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage)
 {
     // register ourself as modified listener
-    static_cast<OGenericAdministrationPage&>(_rPage).SetServiceFactory(m_pImpl->getORB());
+    static_cast<OGenericAdministrationPage&>(_rPage).SetServiceFactory( Reference<XMultiServiceFactory>(m_pImpl->getORB()->getServiceManager(), UNO_QUERY_THROW) );
     static_cast<OGenericAdministrationPage&>(_rPage).SetAdminDialog(this,this);
 
     AdjustLayout();
@@ -297,7 +297,7 @@ SfxItemSet* ODbAdminDialog::getWriteOutputSet()
     return m_pImpl->createConnection();
 }
 // -----------------------------------------------------------------------------
-Reference< XMultiServiceFactory > ODbAdminDialog::getORB() const
+Reference< XComponentContext > ODbAdminDialog::getORB() const
 {
     return m_pImpl->getORB();
 }

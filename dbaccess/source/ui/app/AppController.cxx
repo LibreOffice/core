@@ -301,7 +301,7 @@ OApplicationController::OApplicationController(const Reference< XMultiServiceFac
     :OApplicationController_CBASE( _rxORB )
     ,m_aContextMenuInterceptors( getMutex() )
     ,m_pSubComponentManager( new SubComponentManager( *this, getSharedMutex() ) )
-    ,m_aTypeCollection(_rxORB)
+    ,m_aTypeCollection( comphelper::getComponentContext(_rxORB) )
     ,m_aTableCopyHelper(this)
     ,m_pClipbordNotifier(NULL)
     ,m_nAsyncDrop(0)
@@ -660,7 +660,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                     aReturn.bEnabled = xEnumAccess.is();
                     if ( aReturn.bEnabled )
                     {
-                        const ::rtl::OUString sReportEngineServiceName = ::dbtools::getDefaultReportEngineServiceName(m_xServiceFactory);
+                        const ::rtl::OUString sReportEngineServiceName = ::dbtools::getDefaultReportEngineServiceName(comphelper::getComponentContext(m_xServiceFactory));
                         aReturn.bEnabled = !sReportEngineServiceName.isEmpty();
                         if ( aReturn.bEnabled )
                         {

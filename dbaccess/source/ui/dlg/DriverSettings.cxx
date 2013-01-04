@@ -30,7 +30,7 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::beans::NamedValue;
 
 using namespace dbaui;
-void ODriversSettings::getSupportedIndirectSettings( const ::rtl::OUString& _sURLPrefix,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xFactory, ::std::vector< sal_Int32>& _out_rDetailsIds )
+void ODriversSettings::getSupportedIndirectSettings( const ::rtl::OUString& _sURLPrefix,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xContext, ::std::vector< sal_Int32>& _out_rDetailsIds )
 {
     // for a number of settings, we do not need to use hard-coded here, but can ask a
     // central DataSourceUI instance.
@@ -51,7 +51,7 @@ void ODriversSettings::getSupportedIndirectSettings( const ::rtl::OUString& _sUR
     // The best approach would be to extend the FeatureSet to contain *all* known data source features, not only
     // the ones from the "Advanced settings" UI.
 
-    ::connectivity::DriversConfig aDriverConfig(_xFactory);
+    ::connectivity::DriversConfig aDriverConfig(_xContext);
     const ::comphelper::NamedValueCollection& aProperties = aDriverConfig.getProperties(_sURLPrefix);
 #if OSL_DEBUG_LEVEL > 0
     {

@@ -122,7 +122,7 @@ DBG_NAME(ODbTypeWizDialogSetup)
 //-------------------------------------------------------------------------
 ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
                                ,SfxItemSet* _pItems
-                               ,const Reference< XMultiServiceFactory >& _rxORB
+                               ,const Reference< XComponentContext >& _rxORB
                                ,const ::com::sun::star::uno::Any& _aDataSourceName
                                )
     :svt::RoadmapWizard( _pParent, ModuleRes(DLG_DATABASE_WIZARD),
@@ -326,7 +326,7 @@ void DataSourceInfoConverter::convert(const ::dbaccess::ODsnTypeCollection* _pCo
     _xDatasource->getPropertyValue(PROPERTY_INFO) >>= aInfo;
     ::comphelper::NamedValueCollection aDS(aInfo);
 
-    ::connectivity::DriversConfig aDriverConfig(m_xFactory);
+    ::connectivity::DriversConfig aDriverConfig(comphelper::getComponentContext(m_xFactory));
 
     const ::comphelper::NamedValueCollection&  aOldProperties   = aDriverConfig.getProperties(_sOldURLPrefix);
     const ::comphelper::NamedValueCollection&  aNewProperties   = aDriverConfig.getProperties(_sNewURLPrefix);
@@ -355,7 +355,7 @@ void ODbTypeWizDialogSetup::activateDatabasePath()
     case OGeneralPage::eConnectExternal:
     {
         ::rtl::OUString sOld = m_sURL;
-        DataSourceInfoConverter aConverter(getORB());
+        DataSourceInfoConverter aConverter( uno::Reference<lang::XMultiServiceFactory>(getORB()->getServiceManager(), uno::UNO_QUERY_THROW) );
         m_sURL = m_pGeneralPage->GetSelectedType();
         aConverter.convert(m_pCollection,sOld,m_sURL,m_pImpl->getCurrentDataSource());
         ::dbaccess::DATASOURCE_TYPE eType = VerifyDataSourceType(m_pCollection->determineType(m_sURL));
@@ -440,7 +440,7 @@ SfxItemSet* ODbTypeWizDialogSetup::getWriteOutputSet()
     return m_pImpl->createConnection();
 }
 // -----------------------------------------------------------------------------
-Reference< XMultiServiceFactory > ODbTypeWizDialogSetup::getORB() const
+Reference< XComponentContext > ODbTypeWizDialogSetup::getORB() const
 {
     return m_pImpl->getORB();
 }
@@ -595,7 +595,7 @@ TabPage* ODbTypeWizDialogSetup::createPage(WizardState _nState)
 
     if ( pPage )
     {
-        pPage->SetServiceFactory(m_pImpl->getORB());
+        pPage->SetServiceFactory( uno::Reference<lang::XMultiServiceFactory>(m_pImpl->getORB()->getServiceManager(), uno::UNO_QUERY_THROW) );
         pPage->SetAdminDialog(this, this);
 
         defaultButton( _nState == PAGE_DBSETUPWIZARD_FINAL ? WZB_FINISH : WZB_NEXT );
@@ -734,7 +734,7 @@ namespace
 //-------------------------------------------------------------------------
 sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
 {
-    Reference< XInteractionHandler2 > xHandler( InteractionHandler::createWithParent(comphelper::getComponentContext(getORB()), 0) );
+    Reference< XInteractionHandler2 > xHandler( InteractionHandler::createWithParent(getORB(), 0) );
     try
     {
         if (callSaveAsDialog() == sal_True)
@@ -841,7 +841,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         }
         else if ( m_pCollection->isFileSystemBased(eType) )
         {
-            Reference< XSimpleFileAccess3 > xSimpleFileAccess(ucb::SimpleFileAccess::create(comphelper::getComponentContext(getORB())));
+            Reference< XSimpleFileAccess3 > xSimpleFileAccess(ucb::SimpleFileAccess::create(getORB()));
             INetURLObject aDBPathURL(m_sWorkPath);
             aDBPathURL.Append(m_aDocURL.getBase());
             createUniqueFolderName(&aDBPathURL);
@@ -858,7 +858,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     void ODbTypeWizDialogSetup::RegisterDataSourceByLocation(const ::rtl::OUString& _sPath)
     {
         Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
-        Reference< XDatabaseContext > xDatabaseContext( DatabaseContext::create(comphelper::getComponentContext(getORB())) );
+        Reference< XDatabaseContext > xDatabaseContext( DatabaseContext::create(getORB()) );
         Reference< XNameAccess > xNameAccessDatabaseContext(xDatabaseContext, UNO_QUERY_THROW );
         INetURLObject aURL( _sPath );
         ::rtl::OUString sFilename = aURL.getBase( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
@@ -909,7 +909,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     //-------------------------------------------------------------------------
     void ODbTypeWizDialogSetup::createUniqueFolderName(INetURLObject* pURL)
     {
-        Reference< XSimpleFileAccess3 > xSimpleFileAccess(ucb::SimpleFileAccess::create(comphelper::getComponentContext(getORB())));
+        Reference< XSimpleFileAccess3 > xSimpleFileAccess(ucb::SimpleFileAccess::create(getORB()));
         :: rtl::OUString sLastSegmentName = pURL->getName();
         sal_Bool bFolderExists = sal_True;
         sal_Int32 i = 1;
@@ -927,7 +927,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     //-------------------------------------------------------------------------
     String ODbTypeWizDialogSetup::createUniqueFileName(const INetURLObject& _rURL)
     {
-        Reference< XSimpleFileAccess3 > xSimpleFileAccess(ucb::SimpleFileAccess::create(comphelper::getComponentContext(getORB())));
+        Reference< XSimpleFileAccess3 > xSimpleFileAccess(ucb::SimpleFileAccess::create(getORB()));
         :: rtl::OUString sFilename = _rURL.getName();
         ::rtl::OUString BaseName = _rURL.getBase();
         ::rtl::OUString sExtension = _rURL.getExtension();
@@ -969,7 +969,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             OAsyncronousLink                    m_aAsyncCaller;
 
         public:
-            AsyncLoader( const Reference< XMultiServiceFactory >& _rxORB, const ::rtl::OUString& _rURL );
+            AsyncLoader( const Reference< XComponentContext >& _rxORB, const ::rtl::OUString& _rURL );
 
             void doLoadAsync();
 
@@ -984,16 +984,15 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         };
 
         // .............................................................................
-        AsyncLoader::AsyncLoader( const Reference< XMultiServiceFactory >& _rxORB, const ::rtl::OUString& _rURL )
+        AsyncLoader::AsyncLoader( const Reference< XComponentContext >& _rxORB, const ::rtl::OUString& _rURL )
             :m_sURL( _rURL )
             ,m_aAsyncCaller( LINK( this, AsyncLoader, OnOpenDocument ) )
         {
             try
             {
-                m_xDesktop.set( Desktop::create(comphelper::getComponentContext(_rxORB)) );
+                m_xDesktop.set( Desktop::create(_rxORB) );
                 m_xFrameLoader.set( m_xDesktop, UNO_QUERY_THROW );
-                m_xInteractionHandler =
-                    InteractionHandler::createWithParent(comphelper::getComponentContext(_rxORB), 0);
+                m_xInteractionHandler = InteractionHandler::createWithParent(_rxORB, 0);
             }
             catch( const Exception& )
             {

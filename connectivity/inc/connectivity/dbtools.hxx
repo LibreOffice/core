@@ -375,7 +375,7 @@ namespace dbtools
         ::com::sun::star::uno::Any& /* [out] */ _rSettingsValue
     );
 
-    OOO_DLLPUBLIC_DBTOOLS ::rtl::OUString getDefaultReportEngineServiceName(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
+    OOO_DLLPUBLIC_DBTOOLS ::rtl::OUString getDefaultReportEngineServiceName(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory);
 
     /** quote the given name with the given quote string.
     */

@@ -24,6 +24,7 @@
 #include <com/sun/star/sdbcx/XCreateCatalog.hpp>
 #include <com/sun/star/embed/XTransactionListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/compbase5.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/stl_types.hxx>
@@ -63,7 +64,7 @@ namespace connectivity
                                                                                                 //  of all the Connection objects
                                                                                                 //  for this Driver
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >                 m_xDriver;
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xFactory;
+            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
             sal_Bool                                                                            m_bInShutDownConnections;
 
             /** load the driver we want to delegate.
@@ -82,7 +83,7 @@ namespace connectivity
         public:
             /** creates a new delegator for a HSQLDB driver
             */
-            ODriverDelegator(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
+            ODriverDelegator(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);
 
             // XServiceInfo
             DECLARE_SERVICE_INFO();

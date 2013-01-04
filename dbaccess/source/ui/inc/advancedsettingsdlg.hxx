@@ -51,7 +51,7 @@ namespace dbaui
     public:
         AdvancedSettingsDialog( Window* _pParent
                             ,SfxItemSet* _pItems
-                            ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
+                            ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB
                             ,const ::com::sun::star::uno::Any& _aDataSourceName);
 
         virtual ~AdvancedSettingsDialog();
@@ -65,7 +65,7 @@ namespace dbaui
         virtual short   Execute();
 
         // forwards to ODbDataSourceAdministrationHelper
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() const;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getORB() const;
         virtual ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >,sal_Bool> createConnection();
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > getDriver();
         virtual ::rtl::OUString getDatasourceType(const SfxItemSet& _rSet) const;

@@ -242,7 +242,7 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
 OSDBCDriverManager::OSDBCDriverManager( const Reference< XComponentContext >& _rxContext )
     :m_aContext( _rxContext )
     ,m_aEventLogger( _rxContext, "org.openoffice.logging.sdbc.DriverManager" )
-    ,m_aDriverConfig(m_aContext.getLegacyServiceFactory())
+    ,m_aDriverConfig(m_aContext.getUNOContext())
     ,m_nLoginTimeout(0)
 {
     // bootstrap all objects supporting the .sdb.Driver service

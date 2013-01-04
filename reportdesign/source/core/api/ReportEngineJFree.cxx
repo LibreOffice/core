@@ -244,7 +244,7 @@ void SAL_CALL OReportEngineJFree::setStatusIndicator( const uno::Reference< task
             aConvertedProperties[nPos++].Value <<= m_xReport->getCaption();
 
             // create job factory and initialize
-            const ::rtl::OUString sReportEngineServiceName = ::dbtools::getDefaultReportEngineServiceName(xFactory);
+            const ::rtl::OUString sReportEngineServiceName = ::dbtools::getDefaultReportEngineServiceName(m_xContext);
             uno::Reference<task::XJob> xJob(m_xContext->getServiceManager()->createInstanceWithContext(sReportEngineServiceName,m_xContext),uno::UNO_QUERY_THROW);
             if ( !m_xReport->getCommand().isEmpty() )
             {

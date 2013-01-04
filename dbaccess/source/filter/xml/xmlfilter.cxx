@@ -176,7 +176,7 @@ namespace dbaxml
         protected:
             virtual ~DatasourceURLListener(){}
         public:
-            DatasourceURLListener(uno::Reference< lang::XMultiServiceFactory > const & _xFactory) : m_xFactory(_xFactory),m_aTypeCollection(_xFactory){}
+            DatasourceURLListener(uno::Reference< lang::XMultiServiceFactory > const & _xFactory) : m_xFactory(_xFactory),m_aTypeCollection(comphelper::getComponentContext(_xFactory)){}
             // XPropertyChangeListener
             virtual void SAL_CALL propertyChange( const beans::PropertyChangeEvent& _rEvent ) throw (uno::RuntimeException)
             {
@@ -871,7 +871,7 @@ void ODBFilter::setPropertyInfo()
     if ( !xDataSource.is() )
         return;
 
-    ::connectivity::DriversConfig aDriverConfig(getServiceFactory());
+    ::connectivity::DriversConfig aDriverConfig(comphelper::getComponentContext(getServiceFactory()));
     const ::rtl::OUString sURL = ::comphelper::getString(xDataSource->getPropertyValue(PROPERTY_URL));
     ::comphelper::NamedValueCollection aDataSourceSettings = aDriverConfig.getProperties( sURL );
 

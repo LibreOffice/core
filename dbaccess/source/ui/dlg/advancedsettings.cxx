@@ -44,6 +44,8 @@ namespace dbaui
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::lang::XMultiServiceFactory;
     using ::com::sun::star::uno::Any;
+    using ::com::sun::star::uno::XComponentContext;
+    using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::sdbc::XDriver;
@@ -451,10 +453,10 @@ namespace dbaui
     //========================================================================
     //------------------------------------------------------------------------
     AdvancedSettingsDialog::AdvancedSettingsDialog( Window* _pParent, SfxItemSet* _pItems,
-        const Reference< XMultiServiceFactory >& _rxORB, const Any& _aDataSourceName )
+        const Reference< XComponentContext >& _rxContext, const Any& _aDataSourceName )
         :SfxTabDialog(_pParent, ModuleRes(DLG_DATABASE_ADVANCED), _pItems)
     {
-        m_pImpl = ::std::auto_ptr<ODbDataSourceAdministrationHelper>(new ODbDataSourceAdministrationHelper(_rxORB,_pParent,this));
+        m_pImpl = ::std::auto_ptr<ODbDataSourceAdministrationHelper>(new ODbDataSourceAdministrationHelper(_rxContext,_pParent,this));
         m_pImpl->setDataSourceOrName(_aDataSourceName);
         Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
         m_pImpl->translateProperties(xDatasource, *_pItems);
@@ -514,7 +516,7 @@ namespace dbaui
     void AdvancedSettingsDialog::PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage)
     {
         // register ourself as modified listener
-        static_cast<OGenericAdministrationPage&>(_rPage).SetServiceFactory(m_pImpl->getORB());
+        static_cast<OGenericAdministrationPage&>(_rPage).SetServiceFactory( Reference<XMultiServiceFactory>(m_pImpl->getORB()->getServiceManager(), UNO_QUERY_THROW) );
         static_cast<OGenericAdministrationPage&>(_rPage).SetAdminDialog(this,this);
 
         AdjustLayout();
@@ -544,7 +546,7 @@ namespace dbaui
     }
 
     // -----------------------------------------------------------------------------
-    Reference< XMultiServiceFactory > AdvancedSettingsDialog::getORB() const
+    Reference< XComponentContext > AdvancedSettingsDialog::getORB() const
     {
         return m_pImpl->getORB();
     }

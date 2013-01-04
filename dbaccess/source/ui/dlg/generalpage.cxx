@@ -100,8 +100,8 @@ namespace dbaui
         bool bHideCreateNew = ( nCreateNewDBIndex == -1 );
 
         // also, if our application policies tell us to hide the option, do it
-        ::utl::OConfigurationTreeRoot aConfig( ::utl::OConfigurationTreeRoot::createWithServiceFactory(
-            ::comphelper::getProcessServiceFactory(),
+        ::utl::OConfigurationTreeRoot aConfig( ::utl::OConfigurationTreeRoot::createWithComponentContext(
+            ::comphelper::getProcessComponentContext(),
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.DataAccess/Policies/Features/Base" ) )
         ) );
         sal_Bool bAllowCreateLocalDatabase( sal_True );

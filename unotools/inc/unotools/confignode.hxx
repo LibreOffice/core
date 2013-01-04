@@ -296,6 +296,21 @@ namespace utl
         static OConfigurationTreeRoot createWithServiceFactory(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
             const ::rtl::OUString& _rPath, sal_Int32 _nDepth = -1, CREATION_MODE _eMode = CM_UPDATABLE, sal_Bool _bLazyWrite = sal_True);
 
+        /** open a new top-level configuration node<p/>
+            opens a new node which is the root if an own configuration sub tree. This is what "top level" means: The
+            node does not have a parent. It does not mean that the node represents a module tree (like org.openoffice.Office.Writer
+            or such).<br/>
+            In opposite to <method>createWithProvider</method>, createWithProvider expects a service factory. This factory
+            is used to create a configuration provider, and this provider is used to retrieve the node
+            @see    createWithProvider
+            @param      _rxContext      service factory to use to create the configuration provider.
+            @param      _rPath          path to the node the object should represent
+            @param      _nDepth         depth for node retrieval
+            @param      _eMode          specifies which privileges should be applied when retrieving the node
+        */
+        static OConfigurationTreeRoot createWithComponentContext(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
+            const ::rtl::OUString& _rPath, sal_Int32 _nDepth = -1, CREATION_MODE _eMode = CM_UPDATABLE, sal_Bool _bLazyWrite = sal_True);
+
         /** tolerant version of the <member>createWithServiceFactory</member>
 
             <p>No assertions are thrown in case of an failure to initialize the configuration service, but once

@@ -120,7 +120,7 @@ Reference<XPropertySetInfo>  SAL_CALL ODBTypeWizDialogSetup::getPropertySetInfo(
 //------------------------------------------------------------------------------
 Dialog* ODBTypeWizDialogSetup::createDialog(Window* _pParent)
 {
-    return new ODbTypeWizDialogSetup(_pParent, m_pDatasourceItems, m_aContext.getLegacyServiceFactory(), m_aInitialSelection);
+    return new ODbTypeWizDialogSetup(_pParent, m_pDatasourceItems, m_aContext.getUNOContext(), m_aInitialSelection);
 }
 // -----------------------------------------------------------------------------
 void ODBTypeWizDialogSetup::executedDialog(sal_Int16 _nExecutionResult)

@@ -97,7 +97,7 @@ namespace dbaui
         static FeatureSets s_aFeatureSets;
         if ( s_aFeatureSets.empty() )
         {
-            ::connectivity::DriversConfig aDriverConfig( ::comphelper::getProcessServiceFactory() );
+            ::connectivity::DriversConfig aDriverConfig( ::comphelper::getProcessComponentContext() );
             const uno::Sequence< ::rtl::OUString > aPatterns = aDriverConfig.getURLs();
             for (   const ::rtl::OUString* pattern = aPatterns.getConstArray();
                     pattern != aPatterns.getConstArray() + aPatterns.getLength();
@@ -130,7 +130,7 @@ namespace dbaui
         static Supported s_aSupport;
         if ( s_aSupport.empty() )
         {
-            ::connectivity::DriversConfig aDriverConfig(::comphelper::getProcessServiceFactory());
+            ::connectivity::DriversConfig aDriverConfig(::comphelper::getProcessComponentContext());
             const uno::Sequence< ::rtl::OUString > aURLs = aDriverConfig.getURLs();
             const ::rtl::OUString* pIter = aURLs.getConstArray();
             const ::rtl::OUString* pEnd = pIter + aURLs.getLength();

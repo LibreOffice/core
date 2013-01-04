@@ -984,9 +984,9 @@ sal_Int32 DBTypeConversion::convertUnicodeStringToLength( const ::rtl::OUString&
     return s_sNodeName;
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString getDefaultReportEngineServiceName(const Reference< XMultiServiceFactory >& _rxORB)
+::rtl::OUString getDefaultReportEngineServiceName(const Reference< XComponentContext >& _rxORB)
 {
-    ::utl::OConfigurationTreeRoot aReportEngines = ::utl::OConfigurationTreeRoot::createWithServiceFactory(
+    ::utl::OConfigurationTreeRoot aReportEngines = ::utl::OConfigurationTreeRoot::createWithComponentContext(
         _rxORB, lcl_getReportEngines(), -1, ::utl::OConfigurationTreeRoot::CM_READONLY);
 
     if ( aReportEngines.isValid() )

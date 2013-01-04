@@ -106,7 +106,7 @@ Reference<XPropertySetInfo>  SAL_CALL ODBTypeWizDialog::getPropertySetInfo() thr
 //------------------------------------------------------------------------------
 Dialog* ODBTypeWizDialog::createDialog(Window* _pParent)
 {
-    ODbTypeWizDialog* pDlg = new ODbTypeWizDialog(_pParent, m_pDatasourceItems, m_aContext.getLegacyServiceFactory(),m_aInitialSelection);
+    ODbTypeWizDialog* pDlg = new ODbTypeWizDialog(_pParent, m_pDatasourceItems, m_aContext.getUNOContext(),m_aInitialSelection);
     return pDlg;
 }
 

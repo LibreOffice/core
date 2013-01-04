@@ -57,8 +57,8 @@ namespace dbaui
         DECLARE_STL_MAP(sal_Int32, ::rtl::OUString, ::std::less< sal_Int32 >, MapInt2String);
 
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                            m_xORB;                 /// service factory
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+                            m_xContext;                 /// service factory
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseContext >
                                 m_xDatabaseContext;     /// database context we're working in
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xDatasource;
@@ -75,7 +75,7 @@ namespace dbaui
         IItemSetHelper*         m_pItemSetHelper;
     public:
 
-        ODbDataSourceAdministrationHelper(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB
+        ODbDataSourceAdministrationHelper(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xORB
                                         ,Window* _pParent
                                         ,IItemSetHelper* _pItemSetHelper);
 
@@ -92,7 +92,7 @@ namespace dbaui
         /// clear the password in the current data source's item set
         void        clearPassword();
 
-        inline ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() const { return m_xORB; }
+        inline ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getORB() const { return m_xContext; }
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseContext > getDatabaseContext() const { return m_xDatabaseContext; }
 

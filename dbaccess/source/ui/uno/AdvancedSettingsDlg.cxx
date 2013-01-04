@@ -135,7 +135,7 @@ namespace dbaui
     //------------------------------------------------------------------------------
     Dialog* OAdvancedSettingsDialog::createDialog(Window* _pParent)
     {
-        AdvancedSettingsDialog* pDlg = new AdvancedSettingsDialog(_pParent, m_pDatasourceItems, m_aContext.getLegacyServiceFactory(),m_aInitialSelection);
+        AdvancedSettingsDialog* pDlg = new AdvancedSettingsDialog(_pParent, m_pDatasourceItems, m_aContext.getUNOContext(),m_aInitialSelection);
         return pDlg;
     }
 

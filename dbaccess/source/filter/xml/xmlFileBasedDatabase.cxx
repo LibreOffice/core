@@ -26,6 +26,7 @@
 #include "xmlstrings.hrc"
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <svl/filenotation.hxx>
 #include <unotools/pathoptions.hxx>
@@ -99,7 +100,7 @@ OXMLFileBasedDatabase::OXMLFileBasedDatabase( ODBFilter& rImport,
     }
     if ( !(sLocation.isEmpty() || sMediaType.isEmpty()) )
     {
-        ::dbaccess::ODsnTypeCollection aTypeCollection(rImport.getORB());
+        ::dbaccess::ODsnTypeCollection aTypeCollection(comphelper::getComponentContext(rImport.getORB()));
         ::rtl::OUString sURL(aTypeCollection.getDatasourcePrefixFromMediaType(sMediaType,sFileTypeExtension));
         sURL += sLocation;
         try

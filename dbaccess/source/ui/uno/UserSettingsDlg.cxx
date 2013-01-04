@@ -107,7 +107,7 @@ Reference<XPropertySetInfo>  SAL_CALL OUserSettingsDialog::getPropertySetInfo() 
 //------------------------------------------------------------------------------
 Dialog* OUserSettingsDialog::createDialog(Window* _pParent)
 {
-    OUserAdminDlg* pDlg = new OUserAdminDlg(_pParent, m_pDatasourceItems, m_aContext.getLegacyServiceFactory(),m_aInitialSelection,m_xActiveConnection);
+    OUserAdminDlg* pDlg = new OUserAdminDlg(_pParent, m_pDatasourceItems, m_aContext.getUNOContext(),m_aInitialSelection,m_xActiveConnection);
     return pDlg;
 }
 

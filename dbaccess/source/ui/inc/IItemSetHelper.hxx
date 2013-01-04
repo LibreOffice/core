@@ -50,7 +50,7 @@ namespace dbaui
     class SAL_NO_VTABLE IDatabaseSettingsDialog
     {
     public:
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() const = 0;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getORB() const = 0;
         virtual ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >,sal_Bool> createConnection() = 0;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > getDriver() = 0;
         virtual ::rtl::OUString getDatasourceType(const SfxItemSet& _rSet) const = 0;

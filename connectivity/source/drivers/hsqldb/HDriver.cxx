@@ -74,7 +74,7 @@ namespace connectivity
     {
         Reference< XInterface >  SAL_CALL ODriverDelegator_CreateInstance(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFac) throw( Exception )
         {
-            return *(new ODriverDelegator(_rxFac));
+            return *(new ODriverDelegator(comphelper::getComponentContext(_rxFac)));
         }
     }
 
@@ -84,9 +84,9 @@ namespace connectivity
     //= ODriverDelegator
     //====================================================================
     //--------------------------------------------------------------------
-    ODriverDelegator::ODriverDelegator(const Reference< XMultiServiceFactory >& _rxFactory)
+    ODriverDelegator::ODriverDelegator(const Reference< XComponentContext >& _rxContext)
         : ODriverDelegator_BASE(m_aMutex)
-        ,m_xFactory(_rxFactory)
+        ,m_xContext(_rxContext)
         ,m_bInShutDownConnections(sal_False)
     {
     }
@@ -131,7 +131,7 @@ namespace connectivity
         if ( !m_xDriver.is() )
         {
             ::rtl::OUString sURL("jdbc:hsqldb:db");
-            Reference<XDriverManager2> xDriverAccess = DriverManager::create( comphelper::getComponentContext(m_xFactory) );
+            Reference<XDriverManager2> xDriverAccess = DriverManager::create( m_xContext );
             m_xDriver = xDriverAccess->getDriverByURL(sURL);
         }
 
@@ -141,14 +141,14 @@ namespace connectivity
     //--------------------------------------------------------------------
     namespace
     {
-        ::rtl::OUString lcl_getPermittedJavaMethods_nothrow( const Reference< XMultiServiceFactory >& _rxORB )
+        ::rtl::OUString lcl_getPermittedJavaMethods_nothrow( const Reference< XComponentContext >& _rxContext )
         {
             ::rtl::OUStringBuffer aConfigPath;
             aConfigPath.appendAscii( "/org.openoffice.Office.DataAccess/DriverSettings/" );
             aConfigPath.append     ( ODriverDelegator::getImplementationName_Static() );
             aConfigPath.appendAscii( "/PermittedJavaMethods" );
-            ::utl::OConfigurationTreeRoot aConfig( ::utl::OConfigurationTreeRoot::createWithServiceFactory(
-                _rxORB, aConfigPath.makeStringAndClear() ) );
+            ::utl::OConfigurationTreeRoot aConfig( ::utl::OConfigurationTreeRoot::createWithComponentContext(
+                _rxContext, aConfigPath.makeStringAndClear() ) );
 
             ::rtl::OUStringBuffer aPermittedMethods;
             Sequence< ::rtl::OUString > aNodeNames( aConfig.getNodeNames() );
@@ -252,7 +252,7 @@ namespace connectivity
                 // security: permitted Java classes
                 NamedValue aPermittedClasses(
                     ::rtl::OUString(  "hsqldb.method_class_names"  ),
-                    makeAny( lcl_getPermittedJavaMethods_nothrow( m_xFactory ) )
+                    makeAny( lcl_getPermittedJavaMethods_nothrow( m_xContext ) )
                 );
                 aProperties.put( "SystemProperties", Sequence< NamedValue >( &aPermittedClasses, 1 ) );
 
@@ -372,12 +372,12 @@ namespace connectivity
                     static Reference< XTerminateListener> s_xTerminateListener;
                     if( !s_xTerminateListener.is() )
                     {
-                        Reference< XDesktop2 > xDesktop = Desktop::create( comphelper::getComponentContext(m_xFactory) );
+                        Reference< XDesktop2 > xDesktop = Desktop::create( m_xContext );
 
                         s_xTerminateListener = new OConnectionController(this);
                         xDesktop->addTerminateListener(s_xTerminateListener);
                     }
-                    Reference< XComponent> xIfc = new OHsqlConnection( this, xOrig, comphelper::getComponentContext(m_xFactory) );
+                    Reference< XComponent> xIfc = new OHsqlConnection( this, xOrig, m_xContext );
                     xConnection.set(xIfc,UNO_QUERY);
                     m_aConnections.push_back(TWeakPair(WeakReferenceHelper(xOrig),TWeakConnectionPair(sKey,TWeakRefPair(WeakReferenceHelper(xConnection),WeakReferenceHelper()))));
 
@@ -817,15 +817,14 @@ namespace connectivity
         }
 
         //..............................................................
-        ::rtl::OUString lcl_getSystemLocale( const Reference< XMultiServiceFactory >& _rxORB )
+        ::rtl::OUString lcl_getSystemLocale( const Reference< XComponentContext >& _rxContext )
         {
             ::rtl::OUString sLocaleString = ::rtl::OUString(  "en-US"  );
             try
             {
                 //.........................................................
                 Reference< XMultiServiceFactory > xConfigProvider(
-                    com::sun::star::configuration::theDefaultProvider::get(
-                        comphelper::getComponentContext( _rxORB ) ) );
+                    com::sun::star::configuration::theDefaultProvider::get( _rxContext ) );
 
                 //.........................................................
                 // arguments for creating the config access
@@ -887,7 +886,7 @@ namespace connectivity
             {
                 ::rtl::OUStringBuffer aStatement;
                 aStatement.appendAscii( "SET DATABASE COLLATION \"" );
-                aStatement.appendAscii( lcl_getCollationForLocale( lcl_getSystemLocale( m_xFactory ) ) );
+                aStatement.appendAscii( lcl_getCollationForLocale( lcl_getSystemLocale( m_xContext ) ) );
                 aStatement.appendAscii( "\"" );
 
                 xStatement->execute( aStatement.makeStringAndClear() );

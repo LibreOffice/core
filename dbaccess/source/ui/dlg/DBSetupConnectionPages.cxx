@@ -556,8 +556,8 @@ DBG_NAME(OMySQLIntroPageSetup)
         {
             if ( m_aETDriverClass.GetText().Len() )
             {
-// TODO chage jvmaccess
-                ::rtl::Reference< jvmaccess::VirtualMachine > xJVM = ::connectivity::getJavaVM(m_pAdminDialog->getORB());
+// TODO change jvmaccess
+                ::rtl::Reference< jvmaccess::VirtualMachine > xJVM = ::connectivity::getJavaVM( uno::Reference<lang::XMultiServiceFactory>(m_pAdminDialog->getORB()->getServiceManager(), uno::UNO_QUERY_THROW) );
                 bSuccess = ::connectivity::existsJavaClassByName(xJVM,m_aETDriverClass.GetText());
             }
         }
@@ -676,8 +676,8 @@ DBG_NAME(OMySQLIntroPageSetup)
         {
             if ( m_aETDriverClass.GetText().Len() )
             {
-// TODO chage jvmaccess
-                ::rtl::Reference< jvmaccess::VirtualMachine > xJVM = ::connectivity::getJavaVM(m_pAdminDialog->getORB());
+// TODO change jvmaccess
+                ::rtl::Reference< jvmaccess::VirtualMachine > xJVM = ::connectivity::getJavaVM( uno::Reference<lang::XMultiServiceFactory>(m_pAdminDialog->getORB()->getServiceManager(), uno::UNO_QUERY_THROW) );
                 bSuccess = xJVM.is() && ::connectivity::existsJavaClassByName(xJVM,m_aETDriverClass.GetText());
             }
         }

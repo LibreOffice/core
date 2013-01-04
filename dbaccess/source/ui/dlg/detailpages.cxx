@@ -626,8 +626,8 @@ namespace dbaui
         {
             if ( m_aEDDriverClass.GetText().Len() )
             {
-// TODO chage jvmaccess
-                ::rtl::Reference< jvmaccess::VirtualMachine > xJVM = ::connectivity::getJavaVM(m_pAdminDialog->getORB());
+// TODO change jvmaccess
+                ::rtl::Reference< jvmaccess::VirtualMachine > xJVM = ::connectivity::getJavaVM( Reference<XMultiServiceFactory>(m_pAdminDialog->getORB()->getServiceManager(), UNO_QUERY_THROW) );
                 bSuccess = ::connectivity::existsJavaClassByName(xJVM,m_aEDDriverClass.GetText());
             }
         }

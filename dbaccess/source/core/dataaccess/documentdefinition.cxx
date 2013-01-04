@@ -1638,7 +1638,7 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& i_
                     {
                         // we seem to be a "new style" report, check if report extension is present.
                         Reference< XContentEnumerationAccess > xEnumAccess( m_aContext.getLegacyServiceFactory(), UNO_QUERY );
-                        const ::rtl::OUString sReportEngineServiceName = ::dbtools::getDefaultReportEngineServiceName(m_aContext.getLegacyServiceFactory());
+                        const ::rtl::OUString sReportEngineServiceName = ::dbtools::getDefaultReportEngineServiceName(m_aContext.getUNOContext());
                         Reference< XEnumeration > xEnumDrivers = xEnumAccess->createContentEnumeration(sReportEngineServiceName);
                         if ( !xEnumDrivers.is() || !xEnumDrivers->hasMoreElements() )
                         {
