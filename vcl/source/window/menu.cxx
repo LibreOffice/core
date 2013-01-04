@@ -3865,7 +3865,7 @@ static void ImplInitMenuWindow( Window* pWin, sal_Bool bFont, sal_Bool bMenuBar 
         pWin->SetPointFont( rStyleSettings.GetMenuFont() );
     if( bMenuBar )
     {
-        const BitmapEx* pPersonaBitmap = rStyleSettings.GetPersonaHeader();
+        const BitmapEx* pPersonaBitmap = Application::GetSettings().GetStyleSettings().GetPersonaHeader();
         if ( pPersonaBitmap != NULL )
         {
             Wallpaper aWallpaper( *pPersonaBitmap );
@@ -5517,7 +5517,7 @@ void MenuBarWindow::HighlightItem( sal_uInt16 nPos, sal_Bool bHighlight )
                         MenubarValue aControlValue;
                         aControlValue.maTopDockingAreaHeight = ImplGetTopDockingAreaHeight( this );
 
-                        if ( GetSettings().GetStyleSettings().GetPersonaHeader() )
+                        if ( Application::GetSettings().GetStyleSettings().GetPersonaHeader() )
                             Erase();
                         else
                         {
@@ -5553,7 +5553,7 @@ void MenuBarWindow::HighlightItem( sal_uInt16 nPos, sal_Bool bHighlight )
                         MenubarValue aMenubarValue;
                         aMenubarValue.maTopDockingAreaHeight = ImplGetTopDockingAreaHeight( this );
 
-                        if ( GetSettings().GetStyleSettings().GetPersonaHeader() )
+                        if ( Application::GetSettings().GetStyleSettings().GetPersonaHeader() )
                             Erase( aRect );
                         else
                         {
@@ -5797,7 +5797,7 @@ void MenuBarWindow::Paint( const Rectangle& )
         MenubarValue aMenubarValue;
         aMenubarValue.maTopDockingAreaHeight = ImplGetTopDockingAreaHeight( this );
 
-        if ( GetSettings().GetStyleSettings().GetPersonaHeader() )
+        if ( Application::GetSettings().GetStyleSettings().GetPersonaHeader() )
             Erase();
         else
         {

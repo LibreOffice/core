@@ -312,8 +312,8 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maGroupFont( rData.maGroupFont ),
     maWorkspaceGradient( rData.maWorkspaceGradient ),
     maPersonaHeaderFooter( rData.maPersonaHeaderFooter ),
-    mpPersonaHeaderBitmap( NULL ),
-    mpPersonaFooterBitmap( NULL )
+    mpPersonaHeaderBitmap( rData.mpPersonaHeaderBitmap? new BitmapEx( *rData.mpPersonaHeaderBitmap ): NULL ),
+    mpPersonaFooterBitmap( rData.mpPersonaFooterBitmap? new BitmapEx( *rData.mpPersonaFooterBitmap ): NULL )
 {
     mnRefCount                  = 1;
     mnBorderSize                = rData.mnBorderSize;
