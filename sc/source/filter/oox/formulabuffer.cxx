@@ -118,12 +118,13 @@ void FormulaBuffer::finalizeImport()
 
 void FormulaBuffer::applyCellFormula( ScDocument& rDoc, const ApiTokenSequence& rTokens, const ::com::sun::star::table::CellAddress& rAddress )
 {
-        ScTokenArray aTokenArray;
-        ScAddress aCellPos;
-        ScUnoConversion::FillScAddress( aCellPos, rAddress );
-        ScTokenConversion::ConvertToTokenArray( rDoc, aTokenArray, rTokens );
-        ScBaseCell* pNewCell = new ScFormulaCell( &rDoc, aCellPos, &aTokenArray );
-        rDoc.PutCell( aCellPos, pNewCell, sal_True );
+    ScTokenArray aTokenArray;
+    ScAddress aCellPos;
+    ScUnoConversion::FillScAddress( aCellPos, rAddress );
+    ScTokenConversion::ConvertToTokenArray( rDoc, aTokenArray, rTokens );
+    ScFormulaCell* pNewCell = new ScFormulaCell( &rDoc, aCellPos, &aTokenArray );
+    pNewCell->StartListeningTo( &rDoc );
+    rDoc.PutCell( aCellPos, pNewCell, sal_True );
 }
 
 void FormulaBuffer::applyCellFormulas( const std::vector< TokenAddressItem >& rVector )
