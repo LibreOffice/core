@@ -409,7 +409,6 @@ ScRangeData* WorkbookGlobals::createNamedRangeObject( OUString& orName, const Se
     return pScRangeData;
 }
 
-
 ScRangeData* WorkbookGlobals::createLocalNamedRangeObject( OUString& orName, const Sequence< FormulaToken >&  rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags, sal_Int32 nTab ) const
 {
     // create the name and insert it into the Calc document

@@ -118,12 +118,12 @@ void FormulaBuffer::finalizeImport()
 
 void FormulaBuffer::applyCellFormula( ScDocument& rDoc, const ApiTokenSequence& rTokens, const ::com::sun::star::table::CellAddress& rAddress )
 {
-        ScTokenArray aTokenArray;
-        ScAddress aCellPos;
-        ScUnoConversion::FillScAddress( aCellPos, rAddress );
-        ScTokenConversion::ConvertToTokenArray( rDoc, aTokenArray, rTokens );
-        ScBaseCell* pNewCell = new ScFormulaCell( &rDoc, aCellPos, &aTokenArray );
-        rDoc.PutCell( aCellPos, pNewCell, sal_True );
+    ScTokenArray aTokenArray;
+    ScAddress aCellPos;
+    ScUnoConversion::FillScAddress( aCellPos, rAddress );
+    ScTokenConversion::ConvertToTokenArray( rDoc, aTokenArray, rTokens );
+    ScBaseCell* pNewCell = new ScFormulaCell( &rDoc, aCellPos, &aTokenArray );
+    rDoc.PutCell( aCellPos, pNewCell, sal_True );
 }
 
 void FormulaBuffer::applyCellFormulas( const std::vector< TokenAddressItem >& rVector )
@@ -170,7 +170,7 @@ void FormulaBuffer::applyArrayFormulas( const std::vector< TokenRangeAddressItem
 
 void FormulaBuffer::createSharedFormulaMapEntry( const ::com::sun::star::table::CellAddress& rAddress, sal_Int32 nSharedId, const rtl::OUString& rTokens )
 {
-     std::vector<SharedFormulaEntry>& rSharedFormulas = sharedFormulas[ rAddress.Sheet ];
+    std::vector<SharedFormulaEntry>& rSharedFormulas = sharedFormulas[ rAddress.Sheet ];
     SharedFormulaEntry aEntry( rAddress, rTokens, nSharedId );
     rSharedFormulas.push_back( aEntry );
 }
