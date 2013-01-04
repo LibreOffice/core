@@ -51,35 +51,36 @@ class ScDPResultVisibilityData;
 
 struct ScDPValueData;
 class ScDPItemData;
-//
-//  Member names that are being processed for InitFrom/LateInitFrom
-//  (needed for initialization of grouped items)
-//
 
+/**
+ * Member names that are being processed for InitFrom/LateInitFrom (needed
+ * for initialization of grouped items).
+ */
 class ScDPInitState
 {
-    long*           pIndex;     // array
-    SCROW*     pData; // array
-    long            nCount;
-
 public:
-            ScDPInitState();
-            ~ScDPInitState();
+    struct Member
+    {
+        long mnSrcIndex;
+        SCROW mnNameIndex;
 
-    void    AddMember( long nSourceIndex,SCROW nMember);
-    void    RemoveMember();
+        Member(long nSrcIndex, SCROW nNameIndex);
+    };
 
-    long                GetCount() const    { return nCount; }
-    const long*         GetSource() const   { return pIndex; }
-    const SCROW* GetNameIds() const    { return pData; }
+    void AddMember(long nSourceIndex, SCROW nMember);
+    void RemoveMember();
+
+    const std::vector<Member>& GetMembers() const { return maMembers; }
+
+private:
+    std::vector<Member> maMembers;
 };
 
 typedef ::std::vector<sal_Int32> ScMemberSortOrder;
 
-//
-//  selected subtotal information, passed down the dimensions
-//
-
+/**
+ * Select subtotal information, passed down the dimensions.
+ */
 struct ScDPSubTotalState
 {
     ScSubTotalFunc eColForce;

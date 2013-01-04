@@ -222,40 +222,20 @@ sal_Bool ScDPColMembersOrder::operator()( sal_Int32 nIndex1, sal_Int32 nIndex2 )
     return lcl_IsLess( pDataMember1, pDataMember2, nMeasure, bAscending );
 }
 
-// -----------------------------------------------------------------------
-
-ScDPInitState::ScDPInitState() :
-    nCount( 0 )
-{
-    pIndex = new long[SC_DP_MAX_FIELDS];
-    pData = new SCROW[SC_DP_MAX_FIELDS];
-}
-
-ScDPInitState::~ScDPInitState()
-{
-    delete[] pIndex;
-    delete[] pData;
-}
+ScDPInitState::Member::Member(long nSrcIndex, SCROW nNameIndex) :
+    mnSrcIndex(nSrcIndex), mnNameIndex(nNameIndex) {}
 
 void ScDPInitState::AddMember( long nSourceIndex, SCROW nMember )
 {
-    OSL_ENSURE( nCount < SC_DP_MAX_FIELDS, "too many InitState members" );
-    if ( nCount < SC_DP_MAX_FIELDS )
-    {
-        pIndex[nCount] = nSourceIndex;
-        pData[nCount] = nMember;
-        ++nCount;
-    }
+    maMembers.push_back(Member(nSourceIndex, nMember));
 }
 
 void ScDPInitState::RemoveMember()
 {
-    OSL_ENSURE( nCount > 0, "RemoveColIndex without index" );
-    if ( nCount > 0 )
-        --nCount;
+    OSL_ENSURE(!maMembers.empty(), "ScDPInitState::RemoveMember: Attempt to remmove member while empty.");
+    if (!maMembers.empty())
+        maMembers.pop_back();
 }
-
-// -----------------------------------------------------------------------
 
 static void lcl_DumpRow( const String& rType, const String& rName, const ScDPAggData* pAggData,
                     ScDocument* pDoc, ScAddress& rPos )
@@ -2649,16 +2629,15 @@ sal_Bool ScDPGroupCompare::TestIncluded( const ScDPMember& rMember )
         //! get array of groups (or indexes) before loop?
         ScDPItemData aMemberData;
         rMember.FillItemData( aMemberData );
-        long nInitCount = rInitState.GetCount();
-        const long* pInitSource = rInitState.GetSource();
-        const SCROW* pInitNames = rInitState.GetNameIds();
 
-        for (long nInitPos=0; nInitPos<nInitCount && bInclude; nInitPos++)
+        const std::vector<ScDPInitState::Member>& rMemStates = rInitState.GetMembers();
+        std::vector<ScDPInitState::Member>::const_iterator it = rMemStates.begin(), itEnd = rMemStates.end();
+        for (; it != itEnd && bInclude; ++it)
         {
-            if ( pResultData->GetGroupBase( pInitSource[nInitPos] ) == nDimSource )
+            if (pResultData->GetGroupBase(it->mnSrcIndex) == nDimSource)
             {
-                bInclude = pResultData->IsInGroup( pInitNames[nInitPos], pInitSource[nInitPos],
-                                                    aMemberData, nDimSource );
+                bInclude = pResultData->IsInGroup(
+                    it->mnNameIndex, it->mnSrcIndex, aMemberData, nDimSource);
             }
         }
     }
@@ -2670,17 +2649,18 @@ sal_Bool ScDPGroupCompare::TestIncluded( const ScDPMember& rMember )
         //! get array of groups (or indexes) before loop?
         ScDPItemData aMemberData;
         rMember.FillItemData( aMemberData );
-        long nInitCount = rInitState.GetCount();
-        const long* pInitSource = rInitState.GetSource();
-       /*const ScDPItemData* pInitNames = rInitState.GetNames();*/
-        const SCROW* pInitNames = rInitState.GetNameIds();
-        for (long nInitPos=0; nInitPos<nInitCount && bInclude; nInitPos++)
-            if ( pResultData->GetGroupBase( pInitSource[nInitPos] ) == nGroupBase )
+        const std::vector<ScDPInitState::Member>& rMemStates = rInitState.GetMembers();
+        std::vector<ScDPInitState::Member>::const_iterator it = rMemStates.begin(), itEnd = rMemStates.end();
+        for (; it != itEnd && bInclude; ++it)
+        {
+            if (pResultData->GetGroupBase(it->mnSrcIndex) == nGroupBase)
             {
                 // same base (hierarchy between the two groups is irrelevant)
-                bInclude = pResultData->HasCommonElement( pInitNames[nInitPos], pInitSource[nInitPos],
-                                                        aMemberData, nDimSource );
+                bInclude = pResultData->HasCommonElement(
+                    it->mnNameIndex, it->mnSrcIndex, aMemberData, nDimSource);
             }
+
+        }
     }
 
     return bInclude;
