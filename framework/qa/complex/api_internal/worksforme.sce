@@ -18,7 +18,6 @@
 #  under the License.
 #  
 # *************************************************************
-job=cmdmail.SimpleCommandMail
 job=fileacc.SimpleFileAccess
 job=sc.ScCellFieldObj
 job=sc.ScCellFieldsObj

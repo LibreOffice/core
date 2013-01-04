@@ -311,7 +311,7 @@ my_components += \
     fps \
     ftransl \
     java_uno_accessbridge \
-    smplmail \
+    sysmail \
     sysdtrans \
     wininetbe1
 .END

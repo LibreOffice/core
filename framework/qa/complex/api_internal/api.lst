@@ -2,7 +2,6 @@ job1=cached.CachedContentResultSetFactory
 job2=cached.CachedContentResultSetStubFactory
 job3=cached.CachedDynamicResultSetFactory
 job4=cached.CachedDynamicResultSetStubFactory
-job5=cmdmail.SimpleCommandMail
 job6=corereflection.uno.CoreReflection
 job7=dbaccess.DBContentLoader
 job8=dbaccess.OCommandDefinition

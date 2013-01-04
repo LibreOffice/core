@@ -29,6 +29,6 @@
 ..\inc\kde_headers.h %_DEST%\inc%_EXT%\shell\kde_headers.h
 ..\%__SRC%\misc\localebe1.component %_DEST%\xml%_EXT%\localebe1.component
 ..\%__SRC%\misc\macbe1.component %_DEST%\xml%_EXT%\macbe1.component
-..\%__SRC%\misc\smplmail.component %_DEST%\xml%_EXT%\smplmail.component
+..\%__SRC%\misc\sysmail.component %_DEST%\xml%_EXT%\sysmail.component
 ..\%__SRC%\misc\syssh.component %_DEST%\xml%_EXT%\syssh.component
 ..\%__SRC%\misc\wininetbe1.component %_DEST%\xml%_EXT%\wininetbe1.component

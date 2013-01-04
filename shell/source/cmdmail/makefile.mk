@@ -37,7 +37,7 @@ COMP1TYPELIST=$(TARGET)
 DLLPRE=
 
 SLOFILES= \
-    $(SLO)$/cmdmailsuppl.obj \
+    $(SLO)$/syscmdmail.obj \
     $(SLO)$/cmdmailmsg.obj \
     $(SLO)$/cmdmailentry.obj
 SHL1OBJS=$(SLOFILES) 

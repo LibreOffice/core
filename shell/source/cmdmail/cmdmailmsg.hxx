@@ -19,113 +19,77 @@
  *
  *************************************************************/
 
-
-
 #ifndef _CMDMAILMSG_HXX_
 #define _CMDMAILMSG_HXX_
 
-#include <cppuhelper/implbase2.hxx>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/basemutex.hxx>
 
-#ifndef _COM_SUN_STAR_SYS_SHELL_XSYSTEMSHELLEXECUTE_HPP_
-#include <com/sun/star/system/XSimpleMailMessage2.hpp>
-#endif
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/system/XMailMessage.hpp>
 
-//----------------------------------------------------------
-// class declaration
-//----------------------------------------------------------
-
-class CmdMailMsg :
-    public  cppu::WeakImplHelper2<
-        ::com::sun::star::system::XSimpleMailMessage2,
-        ::com::sun::star::container::XNameAccess >
+namespace shell
 {
-    ::rtl::OUString                                   m_aBody;
-    ::rtl::OUString                                   m_aRecipient;
-    ::rtl::OUString                                   m_aOriginator;
-    ::rtl::OUString                                   m_aSubject;
-    ::com::sun::star::uno::Sequence< rtl::OUString >  m_CcRecipients;
-    ::com::sun::star::uno::Sequence< rtl::OUString >  m_BccRecipients;
-    ::com::sun::star::uno::Sequence< rtl::OUString >  m_Attachments;
+    typedef cppu::WeakImplHelper1<
+            com::sun::star::system::XMailMessage > CmdMailMsg_Base;
 
-    ::osl::Mutex m_aMutex;
+    class CmdMailMsg : protected cppu::BaseMutex,
+                       public  CmdMailMsg_Base
+    {
+    private:
+        ::rtl::OUString                                   m_aBody;
+        ::rtl::OUString                                   m_aRecipient;
+        ::rtl::OUString                                   m_aOriginator;
+        ::rtl::OUString                                   m_aSubject;
+        ::com::sun::star::uno::Sequence< rtl::OUString >  m_CcRecipients;
+        ::com::sun::star::uno::Sequence< rtl::OUString >  m_BccRecipients;
+        ::com::sun::star::uno::Sequence< rtl::OUString >  m_Attachments;
 
-public:
+    public:
+        CmdMailMsg();
 
-    CmdMailMsg() {};
+        virtual void SAL_CALL setBody( const ::rtl::OUString& aBody )
+            throw (::com::sun::star::uno::RuntimeException);
 
-    //------------------------------------------------
-    // XSimpleMailMessage
-    //------------------------------------------------
+        virtual ::rtl::OUString SAL_CALL getBody(  )
+            throw (::com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL setBody( const ::rtl::OUString& aBody )
-        throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setRecipient( const ::rtl::OUString& aRecipient )
+            throw (::com::sun::star::uno::RuntimeException);
 
-    virtual ::rtl::OUString SAL_CALL getBody(  )
-        throw (::com::sun::star::uno::RuntimeException);
+        virtual ::rtl::OUString SAL_CALL getRecipient(  )
+            throw (::com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL setRecipient( const ::rtl::OUString& aRecipient )
-        throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setCcRecipient( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aCcRecipient )
+            throw (::com::sun::star::uno::RuntimeException);
 
-    virtual ::rtl::OUString SAL_CALL getRecipient(  )
-        throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getCcRecipient(  )
+            throw (::com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL setCcRecipient( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aCcRecipient )
-        throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setBccRecipient( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aBccRecipient )
+            throw (::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getCcRecipient(  )
-        throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getBccRecipient(  )
+            throw (::com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL setBccRecipient( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aBccRecipient )
-        throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setOriginator( const ::rtl::OUString& aOriginator )
+            throw (::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getBccRecipient(  )
-        throw (::com::sun::star::uno::RuntimeException);
+        virtual ::rtl::OUString SAL_CALL getOriginator(  )
+            throw (::com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL setOriginator( const ::rtl::OUString& aOriginator )
-        throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setSubject( const ::rtl::OUString& aSubject )
+            throw (::com::sun::star::uno::RuntimeException);
 
-    virtual ::rtl::OUString SAL_CALL getOriginator(  )
-        throw (::com::sun::star::uno::RuntimeException);
+        virtual ::rtl::OUString SAL_CALL getSubject(  )
+            throw (::com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL setSubject( const ::rtl::OUString& aSubject )
-        throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setAttachement( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aAttachement )
+            throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
-    virtual ::rtl::OUString SAL_CALL getSubject(  )
-        throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAttachement(  )
+            throw (::com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL setAttachement( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aAttachement )
-        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAttachement(  )
-        throw (::com::sun::star::uno::RuntimeException);
-
-    //------------------------------------------------
-    // XNameAccess
-    //------------------------------------------------
-
-    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
-        throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  )
-        throw (::com::sun::star::uno::RuntimeException) ;
-
-    virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName )
-        throw (::com::sun::star::uno::RuntimeException);
-
-    //------------------------------------------------
-    // XElementAccess
-    //------------------------------------------------
-
-    virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  )
-        throw (::com::sun::star::uno::RuntimeException);
-
-    virtual sal_Bool SAL_CALL hasElements(  )
-        throw (::com::sun::star::uno::RuntimeException);
-
-};
+    };
+}
 
 #endif
