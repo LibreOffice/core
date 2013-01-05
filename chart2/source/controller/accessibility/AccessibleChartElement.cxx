@@ -39,8 +39,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
 using ::com::sun::star::uno::UNO_QUERY;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::osl::MutexGuard;
@@ -158,7 +156,7 @@ sal_Int32 AccessibleChartElement::ImplGetAccessibleChildCount() const
 OUString SAL_CALL AccessibleChartElement::getImplementationName()
     throw (RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "AccessibleChartElement" ));
+    return OUString( "AccessibleChartElement" );
 }
 
 // ________ AccessibleChartElement::XAccessibleContext (overloaded) ________

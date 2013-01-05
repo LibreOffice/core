@@ -52,7 +52,6 @@
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::rtl::OUString;
 using ::osl::MutexGuard;
 using ::com::sun::star::chart2::XAnyDescriptionAccess;
 using ::com::sun::star::chart::XComplexDescriptionAccess;
@@ -62,8 +61,7 @@ using ::com::sun::star::chart::XDateCategories;
 
 namespace
 {
-static const ::rtl::OUString lcl_aServiceName(
-    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart.ChartData" ));
+static const OUString lcl_aServiceName( "com.sun.star.comp.chart.ChartData" );
 
 uno::Sequence< uno::Sequence< double > > lcl_getNANInsteadDBL_MIN( const uno::Sequence< uno::Sequence< double > >& rData )
 {
@@ -528,12 +526,12 @@ void SAL_CALL ChartDataWrapper::setColumnDescriptions( const Sequence< OUString 
 }
 
 // ____ XComplexDescriptionAccess (write) ____
-void SAL_CALL ChartDataWrapper::setComplexRowDescriptions( const Sequence< Sequence< ::rtl::OUString > >& rRowDescriptions ) throw (uno::RuntimeException)
+void SAL_CALL ChartDataWrapper::setComplexRowDescriptions( const Sequence< Sequence< OUString > >& rRowDescriptions ) throw (uno::RuntimeException)
 {
     lcl_ComplexRowDescriptionsOperator aOperator( rRowDescriptions, m_spChart2ModelContact->getChart2Document() );
     applyData( aOperator );
 }
-void SAL_CALL ChartDataWrapper::setComplexColumnDescriptions( const Sequence< Sequence< ::rtl::OUString > >& rColumnDescriptions ) throw (uno::RuntimeException)
+void SAL_CALL ChartDataWrapper::setComplexColumnDescriptions( const Sequence< Sequence< OUString > >& rColumnDescriptions ) throw (uno::RuntimeException)
 {
     lcl_ComplexColumnDescriptionsOperator aOperator( rColumnDescriptions, m_spChart2ModelContact->getChart2Document() );
     applyData( aOperator );
@@ -694,7 +692,7 @@ void ChartDataWrapper::applyData( lcl_Operator& rDataOperator )
     }
 
     //detect arguments for the new data source
-    ::rtl::OUString aRangeString;
+    OUString aRangeString;
     bool bUseColumns = true;
     bool bFirstCellAsLabel = true;
     bool bHasCategories = true;
@@ -749,9 +747,9 @@ void ChartDataWrapper::applyData( lcl_Operator& rDataOperator )
 
 // --------------------------------------------------------------------------------
 
-uno::Sequence< ::rtl::OUString > ChartDataWrapper::getSupportedServiceNames_Static()
+uno::Sequence< OUString > ChartDataWrapper::getSupportedServiceNames_Static()
 {
-    uno::Sequence< ::rtl::OUString > aServices( 2 );
+    uno::Sequence< OUString > aServices( 2 );
     aServices[ 0 ] = "com.sun.star.chart.ChartDataArray";
     aServices[ 1 ] = "com.sun.star.chart.ChartData";
 

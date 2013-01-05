@@ -59,12 +59,10 @@ using ::osl::MutexGuard;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
-using ::rtl::OUString;
 
 namespace
 {
-static const OUString lcl_aServiceName(
-    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart.Axis" ));
+static const OUString lcl_aServiceName( "com.sun.star.comp.chart.Axis" );
 
 enum
 {
@@ -501,7 +499,7 @@ void SAL_CALL AxisWrapper::setSize( const awt::Size& /*aSize*/ )
 OUString SAL_CALL AxisWrapper::getShapeType()
     throw (uno::RuntimeException)
 {
-    return rtl::OUString("com.sun.star.chart.ChartAxis");
+    return OUString("com.sun.star.chart.ChartAxis");
 }
 
 // ____ XNumberFormatsSupplier ____

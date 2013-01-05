@@ -63,8 +63,7 @@ using ::osl::MutexGuard;
 
 namespace
 {
-static const ::rtl::OUString lcl_aServiceName(
-    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart.DataSeries" ));
+static const OUString lcl_aServiceName( "com.sun.star.comp.chart.DataSeries" );
 
 enum
 {
@@ -110,7 +109,7 @@ void lcl_AddPropertiesToVector_PointProperties(
     rOutProperties.push_back(
         Property( "LabelSeparator",
                   PROP_SERIES_DATAPOINT_LABEL_SEPARATOR,
-                  ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
+                  ::getCppuType( reinterpret_cast< const OUString * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -236,7 +235,7 @@ protected:
 
 WrappedAttachedAxisProperty::WrappedAttachedAxisProperty(
                 ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
-                : WrappedProperty("Axis",rtl::OUString())
+                : WrappedProperty("Axis",OUString())
             , m_spChart2ModelContact( spChart2ModelContact )
 {
 }
@@ -622,7 +621,7 @@ awt::Size DataSeriesPointWrapper::getCurrentSizeForReference()
 // WrappedPropertySet
 
 //XPropertyState
-beans::PropertyState SAL_CALL DataSeriesPointWrapper::getPropertyState( const ::rtl::OUString& rPropertyName )
+beans::PropertyState SAL_CALL DataSeriesPointWrapper::getPropertyState( const OUString& rPropertyName )
                                     throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     beans::PropertyState aState( beans::PropertyState_DIRECT_VALUE );
@@ -652,7 +651,7 @@ beans::PropertyState SAL_CALL DataSeriesPointWrapper::getPropertyState( const ::
     return aState;
 }
 
-void SAL_CALL DataSeriesPointWrapper::setPropertyToDefault( const ::rtl::OUString& rPropertyName )
+void SAL_CALL DataSeriesPointWrapper::setPropertyToDefault( const OUString& rPropertyName )
                                     throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     if( m_eType == DATA_SERIES )
@@ -663,7 +662,7 @@ void SAL_CALL DataSeriesPointWrapper::setPropertyToDefault( const ::rtl::OUStrin
         setPropertyValue( rPropertyName, getPropertyDefault( rPropertyName ) );
     }
 }
-Any SAL_CALL DataSeriesPointWrapper::getPropertyDefault( const ::rtl::OUString& rPropertyName )
+Any SAL_CALL DataSeriesPointWrapper::getPropertyDefault( const OUString& rPropertyName )
                                     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
@@ -765,7 +764,7 @@ const std::vector< WrappedProperty* > DataSeriesPointWrapper::createWrappedPrope
     return aWrappedProperties;
 }
 
-void SAL_CALL DataSeriesPointWrapper::setPropertyValue( const ::rtl::OUString& rPropertyName, const Any& rValue )
+void SAL_CALL DataSeriesPointWrapper::setPropertyValue( const OUString& rPropertyName, const Any& rValue )
                                     throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if(rPropertyName == "Lines")
@@ -826,7 +825,7 @@ void SAL_CALL DataSeriesPointWrapper::setPropertyValue( const ::rtl::OUString& r
         WrappedPropertySet::setPropertyValue( rPropertyName, rValue );
 }
 
-Any SAL_CALL DataSeriesPointWrapper::getPropertyValue( const rtl::OUString& rPropertyName )
+Any SAL_CALL DataSeriesPointWrapper::getPropertyValue( const OUString& rPropertyName )
                 throw ( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if( m_eType == DATA_POINT )
@@ -857,9 +856,9 @@ Any SAL_CALL DataSeriesPointWrapper::getPropertyValue( const rtl::OUString& rPro
 
 // ================================================================================
 
-uno::Sequence< ::rtl::OUString > DataSeriesPointWrapper::getSupportedServiceNames_Static()
+uno::Sequence< OUString > DataSeriesPointWrapper::getSupportedServiceNames_Static()
 {
-    uno::Sequence< ::rtl::OUString > aServices( 7 );
+    uno::Sequence< OUString > aServices( 7 );
     aServices[ 0 ] = "com.sun.star.chart.ChartDataRowProperties";
     aServices[ 1 ] = "com.sun.star.chart.ChartDataPointProperties";
     aServices[ 2 ] = "com.sun.star.xml.UserDefinedAttributesSupplier";
