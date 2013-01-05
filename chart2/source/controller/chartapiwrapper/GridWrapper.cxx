@@ -42,12 +42,10 @@ using ::com::sun::star::beans::Property;
 using ::osl::MutexGuard;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::rtl::OUString;
 
 namespace
 {
-static const OUString lcl_aServiceName(
-    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart.Grid" ));
+static const OUString lcl_aServiceName( "com.sun.star.comp.chart.Grid" );
 
 struct StaticGridWrapperPropertyArray_Initializer
 {

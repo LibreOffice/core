@@ -39,13 +39,9 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-
 namespace
 {
-static const ::rtl::OUString lcl_aServiceName(
-    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart.Area" ));
+static const OUString lcl_aServiceName( "com.sun.star.comp.chart.Area" );
 
 struct StaticAreaWrapperPropertyArray_Initializer
 {
@@ -121,10 +117,10 @@ void SAL_CALL AreaWrapper::setSize( const awt::Size& /*aSize*/ )
 }
 
 // ____ XShapeDescriptor (base of XShape) ____
-::rtl::OUString SAL_CALL AreaWrapper::getShapeType()
+OUString SAL_CALL AreaWrapper::getShapeType()
     throw (uno::RuntimeException)
 {
-    return rtl::OUString( "com.sun.star.chart.ChartArea" );
+    return OUString( "com.sun.star.chart.ChartArea" );
 }
 
 // ____ XComponent ____
@@ -180,9 +176,9 @@ const std::vector< WrappedProperty* > AreaWrapper::createWrappedProperties()
 
 // ================================================================================
 
-Sequence< ::rtl::OUString > AreaWrapper::getSupportedServiceNames_Static()
+Sequence< OUString > AreaWrapper::getSupportedServiceNames_Static()
 {
-    Sequence< ::rtl::OUString > aServices( 4 );
+    Sequence< OUString > aServices( 4 );
     aServices[ 0 ] = "com.sun.star.xml.UserDefinedAttributesSupplier";
     aServices[ 1 ] = "com.sun.star.beans.PropertySet";
     aServices[ 2 ] = "com.sun.star.drawing.FillProperties";
