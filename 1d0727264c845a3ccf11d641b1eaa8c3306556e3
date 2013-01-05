@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAASX///yk\u003d",
+        "filename": "cui/source/tabpages/page.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2013-01-05T21:30:01Z",
+      "side": 1,
+      "message": "Please be a bit more verbose in the commit message and tell what the patch does.",
+      "revId": "1d0727264c845a3ccf11d641b1eaa8c3306556e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
