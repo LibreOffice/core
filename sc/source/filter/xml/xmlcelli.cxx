@@ -47,6 +47,7 @@
 #include "scerrors.hxx"
 #include "editutil.hxx"
 #include "cell.hxx"
+#include "compiler.hxx"
 
 
 #include <xmloff/xmltkmap.hxx>
@@ -726,8 +727,13 @@ void ScXMLTableRowCellContext::SetFormulaCell(ScFormulaCell* pFCell) const
     {
         if( bFormulaTextResult && pOUTextValue )
         {
-            pFCell->SetHybridString( *pOUTextValue );
-            pFCell->ResetDirty();
+            static ScCompiler aComp(NULL, ScAddress());
+            aComp.SetGrammar(formula::FormulaGrammar::GRAM_ODFF);
+            if(!aComp.IsErrorConstant(*pOUTextValue))
+            {
+                pFCell->SetHybridString( *pOUTextValue );
+                pFCell->ResetDirty();
+            }
         }
         else if (!rtl::math::isNan(fValue))
         {
