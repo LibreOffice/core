@@ -946,8 +946,8 @@ bool PrintFontManager::Substitute( FontSelectPattern &rPattern, rtl::OUString& r
        FcCharSetDestroy(unicodes);
     }
 
-    addtopattern(pPattern, rPattern.meItalic, rPattern.meWeight,
-        rPattern.meWidthType, rPattern.mePitch);
+    addtopattern(pPattern, rPattern.GetSlant(), rPattern.GetWeight(),
+        rPattern.GetWidthType(), rPattern.GetPitch());
 
     // query fontconfig for a substitute
     FcConfigSubstitute(FcConfigGetCurrent(), pPattern, FcMatchPattern);
@@ -1017,13 +1017,13 @@ bool PrintFontManager::Substitute( FontSelectPattern &rPattern, rtl::OUString& r
             {
                 int val = 0;
                 if (FcResultMatch == FcPatternGetInteger(pSet->fonts[0], FC_WEIGHT, 0, &val))
-                    rPattern.meWeight = convertWeight(val);
+                    rPattern.SetWeight( convertWeight(val) );
                 if (FcResultMatch == FcPatternGetInteger(pSet->fonts[0], FC_SLANT, 0, &val))
-                    rPattern.meItalic = convertSlant(val);
+                    rPattern.SetItalic( convertSlant(val) );
                 if (FcResultMatch == FcPatternGetInteger(pSet->fonts[0], FC_SPACING, 0, &val))
-                    rPattern.mePitch = convertSpacing(val);
+                    rPattern.SetPitch ( convertSpacing(val) );
                 if (FcResultMatch == FcPatternGetInteger(pSet->fonts[0], FC_WIDTH, 0, &val))
-                    rPattern.meWidthType = convertWidth(val);
+                    rPattern.SetWidthType ( convertWidth(val) );
                 FcBool bEmbolden;
                 if (FcResultMatch == FcPatternGetBool(pSet->fonts[0], FC_EMBOLDEN, 0, &bEmbolden))
                     rPattern.mbEmbolden = bEmbolden;

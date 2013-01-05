@@ -840,13 +840,13 @@ sal_uInt16 GenPspGraphics::SetFont( FontSelectPattern *pEntry, int nFallbackLeve
     // determine which font attributes need to be emulated
     bool bArtItalic = false;
     bool bArtBold = false;
-    if( pEntry->meItalic == ITALIC_OBLIQUE || pEntry->meItalic == ITALIC_NORMAL )
+    if( pEntry->GetSlant() == ITALIC_OBLIQUE || pEntry->GetSlant() == ITALIC_NORMAL )
     {
         FontItalic eItalic = m_pPrinterGfx->GetFontMgr().getFontItalic( nID );
         if( eItalic != ITALIC_NORMAL && eItalic != ITALIC_OBLIQUE )
             bArtItalic = true;
     }
-    int nWeight = (int)pEntry->meWeight;
+    int nWeight = (int)pEntry->GetWeight();
     int nRealWeight = (int)m_pPrinterGfx->GetFontMgr().getFontWeight( nID );
     if( nRealWeight <= (int)WEIGHT_MEDIUM && nWeight > (int)WEIGHT_MEDIUM )
     {
@@ -1124,14 +1124,14 @@ void GenPspGraphics::DoGetGlyphWidths( psp::fontID aFont,
 ImplDevFontAttributes GenPspGraphics::Info2DevFontAttributes( const psp::FastPrintFontInfo& rInfo )
 {
     ImplDevFontAttributes aDFA;
-    aDFA.maName         = rInfo.m_aFamilyName;
-    aDFA.maStyleName    = rInfo.m_aStyleName;
-    aDFA.meFamily       = rInfo.m_eFamilyStyle;
-    aDFA.meWeight       = rInfo.m_eWeight;
-    aDFA.meItalic       = rInfo.m_eItalic;
-    aDFA.meWidthType    = rInfo.m_eWidth;
-    aDFA.mePitch        = rInfo.m_ePitch;
-    aDFA.mbSymbolFlag   = (rInfo.m_aEncoding == RTL_TEXTENCODING_SYMBOL);
+    aDFA.SetFamilyName( rInfo.m_aFamilyName );
+    aDFA.SetStyleName( rInfo.m_aStyleName );
+    aDFA.SetFamilyType( rInfo.m_eFamilyStyle );
+    aDFA.SetWeight( rInfo.m_eWeight );
+    aDFA.SetItalic( rInfo.m_eItalic );
+    aDFA.SetWidthType( rInfo.m_eWidth );
+    aDFA.SetPitch( rInfo.m_ePitch );
+    aDFA.SetSymbolFlag( (rInfo.m_aEncoding == RTL_TEXTENCODING_SYMBOL) );
     aDFA.mbSubsettable  = rInfo.m_bSubsettable;
     aDFA.mbEmbeddable   = rInfo.m_bEmbeddable;
 

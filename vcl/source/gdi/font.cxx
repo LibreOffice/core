@@ -751,14 +751,22 @@ void Font::Merge( const Font& rFont )
 void Font::GetFontAttributes( ImplFontAttributes& rAttrs ) const
 {
     // #i56788# Use members directly, don't risc config access.
-    rAttrs.maName = mpImplFont->maFamilyName;
-    rAttrs.maStyleName = mpImplFont->maStyleName;
-    rAttrs.meFamily = mpImplFont->meFamily;
-    rAttrs.mePitch = mpImplFont->mePitch;
-    rAttrs.meItalic = mpImplFont->meItalic;
-    rAttrs.meWeight = mpImplFont->meWeight;
-    rAttrs.meWidthType = WIDTH_DONTKNOW;
-    rAttrs.mbSymbolFlag= (mpImplFont->meCharSet == RTL_TEXTENCODING_SYMBOL);
+//    rAttrs.maName = mpImplFont->maFamilyName;
+    rAttrs.SetFamilyName( mpImplFont->maFamilyName );
+//    rAttrs.maStyleName = mpImplFont->maStyleName;
+    rAttrs.SetStyleName( mpImplFont->maStyleName );
+//    rAttrs.meFamily = mpImplFont->meFamily;
+    rAttrs.SetFamilyType( mpImplFont->meFamily );
+//    rAttrs.mePitch = mpImplFont->mePitch;
+    rAttrs.SetPitch( mpImplFont->mePitch );
+//    rAttrs.meItalic = mpImplFont->meItalic;
+    rAttrs.SetItalic( mpImplFont->meItalic );
+//    rAttrs.meWeight = mpImplFont->meWeight;
+    rAttrs.SetWeight( mpImplFont->meWeight );
+//    rAttrs.meWidthType = WIDTH_DONTKNOW;
+    rAttrs.SetWidthType( WIDTH_DONTKNOW );
+//    rAttrs.mbSymbolFlag= (mpImplFont->meCharSet == RTL_TEXTENCODING_SYMBOL);
+    rAttrs.SetSymbolFlag( mpImplFont->meCharSet == RTL_TEXTENCODING_SYMBOL );
 }
 
 
