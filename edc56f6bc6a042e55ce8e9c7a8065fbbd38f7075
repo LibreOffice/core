@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAASX///ys\u003d",
+        "filename": "vcl/source/gdi/font.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 753,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2013-01-05T21:23:39Z",
+      "side": 1,
+      "message": "What does this comment mean, is it relevant any more?",
+      "revId": "edc56f6bc6a042e55ce8e9c7a8065fbbd38f7075",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASX///yw\u003d",
+        "filename": "vcl/source/gdi/font.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 754,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2013-01-05T21:23:39Z",
+      "side": 1,
+      "message": "Please don\u0027t leave the old lines commented out like this.",
+      "revId": "edc56f6bc6a042e55ce8e9c7a8065fbbd38f7075",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
