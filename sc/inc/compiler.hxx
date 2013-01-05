@@ -350,7 +350,6 @@ private:
     bool IsDBRange( const String& );
     bool IsColRowName( const String& );
     bool IsBoolean( const String& );
-    bool IsErrorConstant( const String& );
     void AutoCorrectParsedSymbol();
 
     void SetRelNameReference();
@@ -387,6 +386,7 @@ public:
 
     // Check if it is a valid english function name
     bool IsEnglishSymbol( const String& rName );
+    bool IsErrorConstant( const String& );
 
     //! _either_ CompileForFAP _or_ AutoCorrection, _not_ both
     // #i101512# SetCompileForFAP is in formula::FormulaCompiler
