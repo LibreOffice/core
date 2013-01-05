@@ -107,6 +107,8 @@ public:
                                         ~ImpFilterOutputStream() {}
 };
 
+#ifndef DISABLE_EXPORT
+
 static sal_Bool DirEntryExists( const INetURLObject& rObj )
 {
     sal_Bool bExists = sal_False;
@@ -156,6 +158,8 @@ static void KillDirEntry( const String& rMainUrl )
         SAL_WARN( "svtools.filter", "Any other exception" );
     }
 }
+
+#endif // !DISABLE_EXPORT
 
 // --------------------
 // - Helper functions -
