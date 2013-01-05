@@ -239,7 +239,7 @@ class PluginHandler
                         {
                         string filename( e->getName());
                         int modulePos = strlen( OUTDIR ) + strlen( "/inc/" );
-                        int moduleEnd = filename.find( '/', modulePos );
+                        size_t moduleEnd = filename.find( '/', modulePos );
                         if( moduleEnd != string::npos )
                             {
                             modifyFile = SRCDIR "/" + filename.substr( modulePos, moduleEnd - modulePos )
