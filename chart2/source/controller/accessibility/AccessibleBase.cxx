@@ -583,13 +583,10 @@ Reference< XAccessible > AccessibleBase::ImplGetAccessibleChildById( sal_Int32 i
         i < 0 ||
         static_cast< ChildListVectorType::size_type >( i ) >= m_aChildList.size() )
     {
-        OUStringBuffer aBuf;
-        aBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "Index " ));
-        aBuf.append( i );
-        aBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " is invalid for range [ 0, " ));
-        aBuf.append( static_cast< sal_Int32 >( m_aChildList.size() - 1 ) );
-        aBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " ]" ) );
-        lang::IndexOutOfBoundsException aEx( aBuf.makeStringAndClear(),
+        OUString aBuf = "Index " + OUString::valueOf( i ) + " is invalid for range [ 0, " +
+                        OUString::valueOf( static_cast< sal_Int32 >( m_aChildList.size() - 1 ) ) +
+                        " ]";
+        lang::IndexOutOfBoundsException aEx( aBuf,
                                              const_cast< ::cppu::OWeakObject * >(
                                                  static_cast< const ::cppu::OWeakObject * >( this )));
         throw aEx;
