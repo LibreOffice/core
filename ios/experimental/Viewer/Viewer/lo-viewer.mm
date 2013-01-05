@@ -13,6 +13,7 @@
 #import <UIKit/UIKit.h>
 #include <postmac.h>
 
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <osl/detail/ios-bootstrap.h>
 #include <osl/process.h>
@@ -21,14 +22,12 @@
 #include <com/sun/star/bridge/XUnoUrlResolver.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::beans;
-using namespace com::sun::star::bridge;
-using namespace com::sun::star::frame;
-using namespace com::sun::star::registry;
+#include <vcl/svapp.hxx>
+
+using namespace com::sun::star;
 
 using ::rtl::OUString;
 using ::rtl::OUStringToOString;
@@ -122,15 +121,10 @@ lo_get_libmap(void)
 void
 lo_initialize(void)
 {
-    // See unotest/source/cpp/bootstrapfixturebase.cxx
-    const char *app_root = [[[NSBundle mainBundle] bundlePath] UTF8String];
-    setenv("SRC_ROOT", app_root, 1);
-    setenv("OUTDIR_FOR_BUILD", app_root, 1);
-
-    setenv("SAL_LOG", "yes", 1);
+    setenv("SAL_LOG", "+WARN+INFO", 1);
 
     const char *argv[] = {
-        "Viewer",
+        "placeholder-exe",
         "-env:URE_INTERNAL_LIB_DIR=file:///",
         "placeholder-uno-types",
         "placeholder-uno-services"
@@ -138,65 +132,31 @@ lo_initialize(void)
 
     const int argc = sizeof(argv)/sizeof(*argv);
 
+    argv[0] = [[[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent: @"Viewer"] UTF8String];
+
     NSString *app_root_escaped = [[[NSBundle mainBundle] bundlePath] stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding];
 
     NSString *uno_types = @"-env:UNO_TYPES=";
 
     uno_types = [uno_types stringByAppendingString: @"file://"];
-    uno_types = [uno_types stringByAppendingString: [app_root_escaped stringByAppendingPathComponent: @"udkapi.rdb"]];
+    uno_types = [uno_types stringByAppendingString: [app_root_escaped stringByAppendingPathComponent: @"ure/types.rdb"]];
 
-    uno_types = [uno_types stringByAppendingString: @" "];
-    uno_types = [uno_types stringByAppendingString: @"file://"];
+    uno_types = [uno_types stringByAppendingString: @" file://"];
     uno_types = [uno_types stringByAppendingString: [app_root_escaped stringByAppendingPathComponent: @"types.rdb"]];
 
-    uno_types = [uno_types stringByAppendingString: @" "];
-    uno_types = [uno_types stringByAppendingString: @"file://"];
-    uno_types = [uno_types stringByAppendingString: [app_root_escaped stringByAppendingPathComponent: @"ure/types.rdb"]];
+    uno_types = [uno_types stringByAppendingString: @" file://"];
+    uno_types = [uno_types stringByAppendingString: [app_root_escaped stringByAppendingPathComponent: @"offapi.rdb"]];
 
     assert(strcmp(argv[argc-2], "placeholder-uno-types") == 0);
     argv[argc-2] = [uno_types UTF8String];
 
     NSString *uno_services = @"-env:UNO_SERVICES=";
 
-    const char *services[] = {
-        "services.rdb",
-        "ComponentTarget/basic/util/sb.component",
-        "ComponentTarget/chart2/source/controller/chartcontroller.component",
-        "ComponentTarget/chart2/source/chartcore.component",
-        "ComponentTarget/comphelper/util/comphelp.component",
-        "ComponentTarget/eventattacher/source/evtatt.component",
-        "ComponentTarget/fileaccess/source/fileacc.component",
-        "ComponentTarget/filter/source/config/cache/filterconfig1.component",
-        "ComponentTarget/oox/util/oox.component",
-        "ComponentTarget/package/source/xstor/xstor.component",
-        "ComponentTarget/package/util/package2.component",
-        "ComponentTarget/sax/source/expatwrap/expwrap.component",
-        "ComponentTarget/sax/source/fastparser/fastsax.component",
-        "ComponentTarget/sc/util/sc.component",
-        "ComponentTarget/sc/util/scfilt.component",
-        "ComponentTarget/scaddins/source/analysis/analysis.component",
-        "ComponentTarget/scaddins/source/datefunc/date.component",
-        "ComponentTarget/sot/util/sot.component",
-        "ComponentTarget/svl/util/svl.component",
-        "ComponentTarget/toolkit/util/tk.component",
-        "ComponentTarget/ucb/source/ucp/tdoc/ucptdoc1.component",
-        "ComponentTarget/unotools/util/utl.component",
-        "ComponentTarget/unoxml/source/rdf/unordf.component",
-        "ComponentTarget/framework/util/fwk.component",
-        "ComponentTarget/i18npool/util/i18npool.component",
-        "ComponentTarget/sfx2/util/sfx.component",
-        "ComponentTarget/unoxml/source/service/unoxml.component",
-        "ComponentTarget/configmgr/source/configmgr.component",
-        "ComponentTarget/ucb/source/core/ucb1.component",
-        "ComponentTarget/ucb/source/ucp/file/ucpfile1.component"
-    };
+    uno_services = [uno_services stringByAppendingString: @"file://"];
+    uno_services = [uno_services stringByAppendingString: [app_root_escaped stringByAppendingPathComponent: @"ure/services.rdb"]];
 
-    for (unsigned i = 0; i < sizeof(services)/sizeof(services[0]); i++) {
-        uno_services = [uno_services stringByAppendingString: @"file://"];
-        uno_services = [uno_services stringByAppendingString: [app_root_escaped stringByAppendingPathComponent: [NSString stringWithUTF8String: services[i]]]];
-        if (i < sizeof(services)/sizeof(services[0]) - 1)
-            uno_services = [uno_services stringByAppendingString: @" "];
-    }
+    uno_services = [uno_services stringByAppendingString: @" file://"];
+    uno_services = [uno_services stringByAppendingString: [app_root_escaped stringByAppendingPathComponent: @"services.rdb"]];
 
     assert(strcmp(argv[argc-1], "placeholder-uno-services") == 0);
     argv[argc-1] = [uno_services UTF8String];
@@ -205,15 +165,21 @@ lo_initialize(void)
 
     try {
 
-        Reference< XComponentContext > xComponentContext(::cppu::defaultBootstrap_InitialComponentContext());
+        uno::Reference< uno::XComponentContext > xContext(::cppu::defaultBootstrap_InitialComponentContext());
 
-        Reference< XMultiComponentFactory > xMultiComponentFactoryClient( xComponentContext->getServiceManager() );
+        uno::Reference< lang::XMultiComponentFactory > xFactory( xContext->getServiceManager() );
 
-        Reference< XInterface > xInterface =
-            xMultiComponentFactoryClient->createInstanceWithContext( OUString("com.sun.star.frame.Desktop"),
-                                                                     xComponentContext );
+        uno::Reference< lang::XMultiServiceFactory > xSM( xFactory, uno::UNO_QUERY_THROW );
+
+        comphelper::setProcessServiceFactory( xSM );
+
+        InitVCL();
+
+        uno::Reference< uno::XInterface > xInterface =
+            xFactory->createInstanceWithContext( "com.sun.star.frame.Desktop",
+                                                 xContext );
     }
-    catch (Exception e) {
+    catch ( uno::Exception e ) {
         SAL_WARN("Viewer", e.Message);
     }
 }

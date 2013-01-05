@@ -48,13 +48,85 @@ endif
 
 ifneq ($(SCRIPT_OUTPUT_FILE_0),)
 # When run from Xcode, we move the Viewer executable from solver into
-# the Viewer.app directory that Xcode uses.
+# the Viewer.app directory that Xcode uses. We also set up/copy all
+# the run-time configuration etc files that the app needs.
 $(call gb_CustomTarget_get_target,ios/Viewer_app) : $(SCRIPT_OUTPUT_FILE_0)
+
+appdir=$(dir $(SCRIPT_OUTPUT_FILE_0))
+buildid=$(shell git log -1 --format=%H)
 
 $(SCRIPT_OUTPUT_FILE_0) : $(call gb_Executable_get_target,Viewer)
 	$(call gb_Output_announce,$@,fii,APP,2)
-	mkdir -p `dirname $(SCRIPT_OUTPUT_FILE_0)`
+	mkdir -p $(appdir)/ure
 	mv $(call gb_Executable_get_target,Viewer) $(SCRIPT_OUTPUT_FILE_0)
+#
+# Copy rdb files
+#
+	cp $(OUTDIR)/bin/types.rdb $(appdir)
+	cp $(OUTDIR)/bin/ure/types.rdb $(appdir)/ure
+	cp $(OUTDIR)/bin/offapi.rdb $(appdir)
+	cp $(OUTDIR)/xml/services.rdb $(appdir)
+	cp $(OUTDIR)/xml/ure/services.rdb $(appdir)/ure
+#
+# Copy "registry" files
+#
+	mkdir -p $(appdir)/registry/modules $(appdir)/registry/res
+	cp $(OUTDIR)/xml/*.xcd $(appdir)/registry
+	mv $(appdir)/registry/fcfg_langpack_en-US.xcd $(appdir)/registry/res
+	cp -R $(OUTDIR)/xml/registry/* $(appdir)/registry
+#
+# Copy .res files
+#
+# program/resource is hardcoded in tools/source/rc/resmgr.cxx. Sure,
+# we could set STAR_RESOURCE_PATH instead. sigh...
+#
+	mkdir -p $(appdir)/program/resource
+	cp $(OUTDIR)/bin/*en-US.res $(appdir)/program/resource
+#
+# Set up rc, the "inifile". See getIniFileName_Impl(). 
+#
+	( \
+		echo '[Bootstrap]' && \
+		echo 'URE_BOOTSTRAP=file://$$APP_DATA_DIR/fundamentalrc' && \
+		echo 'HOME=$$APP_DATA_DIR/tmp' && \
+	: ) > $(appdir)/rc
+#
+# Set up fundamentalrc, unorc, bootstraprc and versionrc.
+#
+# Do we really need all these?
+#
+	( \
+		echo '[Bootstrap]' && \
+		echo 'BRAND_BASE_DIR=file://$$APP_DATA_DIR' && \
+		echo 'CONFIGURATION_LAYERS=xcsxcu:$${BRAND_BASE_DIR}/registry module:$${BRAND_BASE_DIR}/registry/modules res:$${BRAND_BASE_DIR}/registry' && \
+	: ) > $(appdir)/fundamentalrc
+#
+	( \
+		echo '[Bootstrap]' && \
+		: UNO_TYPES and UNO_SERVICES are set up in lo-viewer.mm, is that sane? && \
+	: ) > $(appdir)/unorc
+#
+# bootstraprc must be in $BRAND_BASE_DIR/program
+#
+	mkdir -p $(appdir)/program
+	( \
+		echo '[Bootstrap]' && \
+		echo 'InstallMode=<installmode>' && \
+		echo 'ProductKey=LibreOffice Viewer $(PRODUCTVERSION)' && \
+		echo 'UserInstallation=file://$$APP_DATA_DIR' && \
+	: ) > $(appdir)/program/bootstraprc
+#
+# Is this really needed?
+#
+	( \
+		echo '[Version]' && \
+		echo 'AllLanguages=en-US' && \
+		echo 'BuildVersion=' && \
+		echo 'buildid=$(buildid)' && \
+		echo 'ProductBuildid=3' && \
+		echo 'ProductMajor=360' && \
+		echo 'ProductMinor=1' && \
+	: ) > $(appdir)/program/versionrc
 
 else
 # When run just from the command line, we don't have any app bundle to
