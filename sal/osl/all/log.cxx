@@ -56,6 +56,9 @@
 #define OSL_DETAIL_GETPID getpid()
 #endif
 
+#include <android/log.h>
+#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "log.cxx", __VA_ARGS__))
+
 #ifdef HAVE_SYSLOG_H
 #include <syslog.h>
 // sal/osl/unx/salinit.cxx::sal_detail_initialize updates this:
@@ -91,15 +94,23 @@ char const * toString(sal_detail_LogLevel level) {
 
 // getenv is not thread safe, so minimize use of result:
 char const * getEnvironmentVariable() {
+    static char const * cached_value = NULL;
     char const * p1 = std::getenv("SAL_LOG");
     if (p1 == 0) {
         return "+WARN";
     }
-    char const * p2 = strdup(p1); // leaked
+    char * p2 = strdup(p1); // leaked whenever it has changed
     if (p2 == 0) {
         std::abort(); // cannot do much here
     }
-    return p2;
+    if (cached_value == NULL) {
+        cached_value = p2;
+    } else if (strcmp(cached_value, p2) == 0) {
+        free(p2);
+    } else {
+        cached_value = p2;
+    }
+    return cached_value;
 }
 
 #ifdef HAVE_SYSLOG_H
@@ -122,7 +133,7 @@ bool report(sal_detail_LogLevel level, char const * area) {
     if (level == SAL_DETAIL_LOG_LEVEL_DEBUG)
         return true;
     assert(area != 0);
-    static char const * env = getEnvironmentVariable();
+    char const * env = getEnvironmentVariable();
     std::size_t areaLen = std::strlen(area);
     enum Sense { POSITIVE = 0, NEGATIVE = 1 };
     std::size_t senseLen[2] = { 0, 1 };
