@@ -641,6 +641,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/win/source/gdi/winlayout \
     vcl/win/source/gdi/wntgdi \
     vcl/win/source/window/salframe \
+    vcl/win/source/window/keynames \
     vcl/win/source/window/salmenu \
     vcl/win/source/window/salobj \
 ))
