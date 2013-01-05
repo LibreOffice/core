@@ -1238,7 +1238,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                 // position and that we don't have "empty" changes.
                 sal_uInt8 nLastTyp = i18n::ScriptType::WEAK;
                 xub_StrLen nLastPos = 0;
-                for (std::vector<ScriptChangeInfo>::const_iterator i2 = aScriptChanges.begin(); i2 < aScriptChanges.end(); ++i2)
+                for (std::vector<ScriptChangeInfo>::const_iterator i2 = aScriptChanges.begin(); i2 != aScriptChanges.end(); ++i2)
                 {
                     SAL_WARN_IF( nLastTyp == i2->type ||
                             nLastPos >= i2->position,
