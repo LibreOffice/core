@@ -256,11 +256,11 @@ void SAL_CALL CreationWizardUnoDlg::initialize( const uno::Sequence< uno::Any >&
         beans::PropertyValue aProperty;
         if(*pArguments >>= aProperty)
         {
-            if( aProperty.Name.compareToAscii( RTL_CONSTASCII_STRINGPARAM( "ParentWindow" ) ) == 0 )
+            if( aProperty.Name.compareTo( "ParentWindow" ) == 0 )
             {
                 aProperty.Value >>= m_xParentWindow;
             }
-            else if( aProperty.Name.compareToAscii( RTL_CONSTASCII_STRINGPARAM( "ChartModel" ) ) == 0 )
+            else if( aProperty.Name.compareTo( "ChartModel" ) == 0 )
             {
                 aProperty.Value >>= m_xChartModel;
             }

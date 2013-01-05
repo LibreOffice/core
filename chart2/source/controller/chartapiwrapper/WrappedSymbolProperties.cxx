@@ -49,8 +49,6 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::beans::Property;
-using ::rtl::OUString;
-
 
 namespace com { namespace sun { namespace star { namespace awt {
 
@@ -205,7 +203,7 @@ void WrappedSymbolProperties::addProperties( ::std::vector< Property > & rOutPro
     rOutProperties.push_back(
         Property( "SymbolBitmapURL",
                   PROP_CHART_SYMBOL_BITMAP_URL,
-                  ::getCppuType( reinterpret_cast< ::rtl::OUString * >(0)),
+                  ::getCppuType( reinterpret_cast< OUString * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -349,10 +347,9 @@ OUString WrappedSymbolBitmapURLProperty::getValueFromSeries( const Reference< be
         && aSymbol.Graphic.is())
     {
         GraphicObject aGrObj( Graphic( aSymbol.Graphic ));
-        aRet = OUString(RTL_CONSTASCII_USTRINGPARAM(
-            UNO_NAME_GRAPHOBJ_URLPREFIX));
-        aRet += OStringToOUString(aGrObj.GetUniqueID(),
-            RTL_TEXTENCODING_ASCII_US);
+        aRet = UNO_NAME_GRAPHOBJ_URLPREFIX +
+               OStringToOUString(aGrObj.GetUniqueID(),
+                                 RTL_TEXTENCODING_ASCII_US);
     }
     return aRet;
 }
@@ -367,12 +364,11 @@ void WrappedSymbolBitmapURLProperty::setValueToSeries(
     chart2::Symbol aSymbol;
     if( xSeriesPropertySet->getPropertyValue("Symbol") >>= aSymbol )
     {
-        bool bMatchesPrefix =
-            aNewGraphicURL.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( UNO_NAME_GRAPHOBJ_URLPREFIX ));
+        bool bMatchesPrefix = aNewGraphicURL.match( UNO_NAME_GRAPHOBJ_URLPREFIX );
         if( bMatchesPrefix )
         {
             GraphicObject aGrObj = GraphicObject(
-                rtl::OUStringToOString(aNewGraphicURL.copy( RTL_CONSTASCII_LENGTH(UNO_NAME_GRAPHOBJ_URLPREFIX) ), RTL_TEXTENCODING_ASCII_US));
+                OUStringToOString(aNewGraphicURL.copy( RTL_CONSTASCII_LENGTH(UNO_NAME_GRAPHOBJ_URLPREFIX) ), RTL_TEXTENCODING_ASCII_US));
             aSymbol.Graphic.set( aGrObj.GetGraphic().GetXGraphic());
             xSeriesPropertySet->setPropertyValue( "Symbol", uno::makeAny( aSymbol ) );
         }

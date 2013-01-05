@@ -55,13 +55,13 @@ LightButton::LightButton( Window* pParent, const ResId& rResId, sal_Int32 nLight
     SetModeImage( Image( SVX_RES(RID_SVXIMAGE_LIGHT_OFF)   ) );
 
     String aTipHelpStr( SchResId(STR_TIP_LIGHTSOURCE_X) );
-    rtl::OUString aTipHelp( aTipHelpStr  );
-    const rtl::OUString aReplacementStr( RTL_CONSTASCII_USTRINGPARAM( "%LIGHTNUMBER" ));
+    OUString aTipHelp( aTipHelpStr  );
+    const OUString aReplacementStr( "%LIGHTNUMBER" );
     sal_Int32 nIndex = aTipHelp.indexOf( aReplacementStr );
     if( nIndex != -1 )
     {
         aTipHelp = aTipHelp.replaceAt(nIndex, aReplacementStr.getLength(),
-            rtl::OUString::valueOf( nLightNumber ) );
+            OUString::valueOf( nLightNumber ) );
     }
     this->SetQuickHelpText( String( aTipHelp ) );
 }
@@ -179,10 +179,10 @@ namespace
         ::chart::LightSource aResult;
         if( 0 <= nIndex && nIndex < 8 )
         {
-            ::rtl::OUString aColorPropertyPrefix( RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor"));
-            ::rtl::OUString aDirectionPropertyPrefix( RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection"));
-            ::rtl::OUString aEnabledPropertyPrefix( RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn"));
-            ::rtl::OUString aIndex( ::rtl::OUString::valueOf( nIndex + 1 ));
+            OUString aColorPropertyPrefix("D3DSceneLightColor");
+            OUString aDirectionPropertyPrefix("D3DSceneLightDirection");
+            OUString aEnabledPropertyPrefix("D3DSceneLightOn");
+            OUString aIndex( OUString::valueOf( nIndex + 1 ));
 
             try
             {
@@ -193,9 +193,8 @@ namespace
             catch( const uno::Exception & ex )
             {
                 (void)(ex); // no warning in non-debug builds
-                OSL_FAIL( ::rtl::OUStringToOString(
-                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Property Exception caught. Message: " )) +
-                                ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
+                OSL_FAIL( OUStringToOString(OUString( "Property Exception caught. Message: " ) +
+                                            ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
             }
         }
         return aResult;
@@ -208,10 +207,10 @@ namespace
     {
         if( 0 <= nIndex && nIndex < 8 )
         {
-            ::rtl::OUString aColorPropertyPrefix( RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor"));
-            ::rtl::OUString aDirectionPropertyPrefix( RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection"));
-            ::rtl::OUString aEnabledPropertyPrefix( RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn"));
-            ::rtl::OUString aIndex( ::rtl::OUString::valueOf( nIndex + 1 ));
+            OUString aColorPropertyPrefix("D3DSceneLightColor");
+            OUString aDirectionPropertyPrefix("D3DSceneLightDirection");
+            OUString aEnabledPropertyPrefix("D3DSceneLightOn");
+            OUString aIndex( OUString::valueOf( nIndex + 1 ));
 
             try
             {
@@ -225,9 +224,8 @@ namespace
             catch( const uno::Exception & ex )
             {
                 (void)(ex); // no warning in non-debug builds
-                OSL_FAIL( ::rtl::OUStringToOString(
-                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Property Exception caught. Message: " )) +
-                                ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
+                OSL_FAIL( OUStringToOString(OUString("Property Exception caught. Message: " ) +
+                                            ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
             }
         }
     }
@@ -238,15 +236,13 @@ namespace
         sal_Int32 nResult = 0x000000;
         try
         {
-            xSceneProperties->getPropertyValue(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneAmbientColor"))) >>= nResult;
+            xSceneProperties->getPropertyValue(OUString("D3DSceneAmbientColor")) >>= nResult;
         }
         catch( const uno::Exception & ex )
         {
             (void)(ex); // no warning in non-debug builds
-            OSL_FAIL( ::rtl::OUStringToOString(
-                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Property Exception caught. Message: " )) +
-                            ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
+            OSL_FAIL( OUStringToOString(OUString("Property Exception caught. Message: " ) +
+                                        ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
         }
         return Color( nResult );
     }
@@ -257,16 +253,14 @@ namespace
     {
         try
         {
-            xSceneProperties->setPropertyValue(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneAmbientColor")),
-                uno::makeAny( rColor.GetColor()));
+            xSceneProperties->setPropertyValue(OUString("D3DSceneAmbientColor"),
+                                               uno::makeAny( rColor.GetColor()));
         }
         catch( const uno::Exception & ex )
         {
             (void)(ex); // no warning in non-debug builds
-            OSL_FAIL( ::rtl::OUStringToOString(
-                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Property Exception caught. Message: " )) +
-                            ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
+            OSL_FAIL( OUStringToOString(OUString( "Property Exception caught. Message: " ) +
+                                        ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
         }
     }
 }

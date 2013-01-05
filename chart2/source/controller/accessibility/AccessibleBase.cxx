@@ -58,8 +58,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
 using ::com::sun::star::uno::UNO_QUERY;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using ::com::sun::star::uno::Reference;
 using ::osl::MutexGuard;
 using ::osl::ClearableMutexGuard;
@@ -131,9 +129,8 @@ bool AccessibleBase::NotifyEvent( EventType eEventType, const AccessibleUniqueId
                     BroadcastAccEvent( AccessibleEventId::VISIBLE_DATA_CHANGED, aEmpty, aEmpty );
 #if OSL_DEBUG_LEVEL > 1
                     OSL_TRACE(
-                        ::rtl::OUStringToOString(
-                            OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                          "Visible data event sent by: " )) +
+                        OUStringToOString(
+                            OUString( "Visible data event sent by: " ) +
                             getAccessibleName(),
                             RTL_TEXTENCODING_ASCII_US ).getStr() );
 #endif
@@ -150,9 +147,8 @@ bool AccessibleBase::NotifyEvent( EventType eEventType, const AccessibleUniqueId
                     BroadcastAccEvent( AccessibleEventId::STATE_CHANGED, aSelected, aEmpty, true );
 #if OSL_DEBUG_LEVEL > 1
                     OSL_TRACE(
-                        ::rtl::OUStringToOString(
-                            OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                          "Selection acquired by: " )) +
+                        OUStringToOString(
+                            OUString( "Selection acquired by: " ) +
                             getAccessibleName(),
                             RTL_TEXTENCODING_ASCII_US ).getStr() );
 #endif
@@ -169,9 +165,8 @@ bool AccessibleBase::NotifyEvent( EventType eEventType, const AccessibleUniqueId
                     BroadcastAccEvent( AccessibleEventId::STATE_CHANGED, aEmpty, aSelected, true );
 #if OSL_DEBUG_LEVEL > 1
                     OSL_TRACE(
-                        ::rtl::OUStringToOString(
-                            OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                          "Selection lost by: " )) +
+                        OUStringToOString(
+                            OUString( "Selection lost by: " ) +
                             getAccessibleName(),
                             RTL_TEXTENCODING_ASCII_US ).getStr() );
 #endif
@@ -913,7 +908,7 @@ sal_Int32 AccessibleBase::getColor( eColorType eColType )
 OUString SAL_CALL AccessibleBase::getImplementationName()
     throw (RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "AccessibleBase" ));
+    return OUString( "AccessibleBase" );
 }
 
 sal_Bool SAL_CALL AccessibleBase::supportsService( const OUString& ServiceName )
@@ -925,10 +920,10 @@ sal_Bool SAL_CALL AccessibleBase::supportsService( const OUString& ServiceName )
 uno::Sequence< OUString > SAL_CALL AccessibleBase::getSupportedServiceNames()
     throw (RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aSeq( 2 );
-    ::rtl::OUString* pStr = aSeq.getArray();
-    pStr[ 0 ] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.Accessible" ));
-    pStr[ 1 ] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleContext" ));
+    uno::Sequence< OUString > aSeq( 2 );
+    OUString* pStr = aSeq.getArray();
+    pStr[ 0 ] = "com.sun.star.accessibility.Accessible";
+    pStr[ 1 ] = "com.sun.star.accessibility.AccessibleContext";
 
     return aSeq;
 }

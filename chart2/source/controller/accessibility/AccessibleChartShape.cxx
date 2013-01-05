@@ -85,10 +85,10 @@ AccessibleChartShape::~AccessibleChartShape()
 }
 
 // ________ XServiceInfo ________
-::rtl::OUString AccessibleChartShape::getImplementationName()
+OUString AccessibleChartShape::getImplementationName()
     throw (RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AccessibleChartShape" ) );
+    return OUString( "AccessibleChartShape" );
 }
 
 // ________ XAccessibleContext ________
@@ -125,10 +125,10 @@ sal_Int16 AccessibleChartShape::getAccessibleRole()
     return nRole;
 }
 
-::rtl::OUString AccessibleChartShape::getAccessibleDescription()
+OUString AccessibleChartShape::getAccessibleDescription()
     throw (::com::sun::star::uno::RuntimeException)
 {
-    ::rtl::OUString aDescription;
+    OUString aDescription;
     if ( m_pAccShape )
     {
         aDescription = m_pAccShape->getAccessibleDescription();
@@ -136,10 +136,10 @@ sal_Int16 AccessibleChartShape::getAccessibleRole()
     return aDescription;
 }
 
-::rtl::OUString AccessibleChartShape::getAccessibleName()
+OUString AccessibleChartShape::getAccessibleName()
     throw (::com::sun::star::uno::RuntimeException)
 {
-    ::rtl::OUString aName;
+    OUString aName;
     if ( m_pAccShape )
     {
         aName = m_pAccShape->getAccessibleName();
@@ -254,10 +254,10 @@ Reference< awt::XFont > AccessibleChartShape::getFont()
     return xFont;
 }
 
-::rtl::OUString AccessibleChartShape::getTitledBorderText()
+OUString AccessibleChartShape::getTitledBorderText()
     throw (uno::RuntimeException)
 {
-    ::rtl::OUString aText;
+    OUString aText;
     if ( m_pAccShape )
     {
         aText = m_pAccShape->getTitledBorderText();
@@ -265,10 +265,10 @@ Reference< awt::XFont > AccessibleChartShape::getFont()
     return aText;
 }
 
-::rtl::OUString AccessibleChartShape::getToolTipText()
+OUString AccessibleChartShape::getToolTipText()
     throw (::com::sun::star::uno::RuntimeException)
 {
-    ::rtl::OUString aText;
+    OUString aText;
     if ( m_pAccShape )
     {
         aText = m_pAccShape->getToolTipText();

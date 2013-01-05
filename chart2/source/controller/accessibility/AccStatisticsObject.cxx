@@ -22,8 +22,6 @@
 #include <vcl/svapp.hxx>
 #include <svx/svditer.hxx>
 
-using ::rtl::OUString;
-
 namespace chart
 {
 
@@ -47,7 +45,7 @@ OUString SAL_CALL AccStatisticsObject::getAccessibleName()
 OUString SAL_CALL AccStatisticsObject::getImplementationName()
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "StatisticsObject" ));
+    return OUString( "StatisticsObject" );
 }
 
 }  // namespace chart
