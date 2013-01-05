@@ -1,0 +1,310 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAASX///0s\u003d",
+        "filename": "formula/source/core/api/FormulaCompiler.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1187,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-05T03:36:54Z",
+      "side": 1,
+      "message": "Nitpick: this is actually // if, behind",
+      "revId": "1cbfc3173ed207f115ac01834372b1cdb89f82b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASX///0k\u003d",
+        "filename": "sc/qa/unit/ucalc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4001,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-05T03:36:54Z",
+      "side": 1,
+      "message": "These should be grouped under Logical Funcions instead, see ODFF.",
+      "revId": "1cbfc3173ed207f115ac01834372b1cdb89f82b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASX///zI\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-05T03:36:54Z",
+      "side": 1,
+      "message": "How should this happen? The compiler checks things beforehand and (hopefully ;-) generates correct code so there\u0027s no need to check this during interpret. Also IF() and CHOOSE() don\u0027t.",
+      "revId": "1cbfc3173ed207f115ac01834372b1cdb89f82b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASX///zE\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-05T03:36:54Z",
+      "side": 1,
+      "message": "Same, superfluous check.",
+      "revId": "1cbfc3173ed207f115ac01834372b1cdb89f82b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASX///zU\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-05T03:36:54Z",
+      "side": 1,
+      "message": "Checking nGlobalError here means the error condition is met if there was an error anywhere in the calculation chain. We only want to check for an error within the first argument though. Weirdly enough \u003d1/0+IFERROR(2,3) results in 5 ... because 2 is still on the stack (not popped) and then code for 3 is executed which pushes that and then ocAdd adds both.",
+      "revId": "1cbfc3173ed207f115ac01834372b1cdb89f82b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASX///zY\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-05T03:36:54Z",
+      "side": 1,
+      "message": "This is also executed if there is no cell content (pCell\u003d\u003dNULL), resulting in an empty string. An empty cell should be pushed instead in that case, ScEmptyCellToken. To simplify things, PushCellResultToken( false, ...) could be called for all cases if not error, that handles everything.\n\nHowever, for the non-matrix cases in case of not an error the original token can be simply reused instead of extracting and pushing values. So\n\n if (!sp)\n {\n     PushError( errUnknownStackVariable);\n     aCode.Jump( pJump[ nJumpCount  ], pJump[ nJumpCount ] );\n     return;\n }\n FormulaTokenRef xToken( pStack[ sp - 1 ] );\n ... check type, pop token, do things ...\n if (error)\n {\n     nGlobalError \u003d 0;\n     aCode.Jump( pJump[ 1 ], pJump[ nJumpCount ] );\n }\n else\n {\n     PushTempToken( xToken.get());\n     aCode.Jump( pJump[ nJumpCount  ], pJump[ nJumpCount ] );\n }",
+      "revId": "1cbfc3173ed207f115ac01834372b1cdb89f82b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASX///zw\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-05T03:36:54Z",
+      "side": 1,
+      "message": "The matrix case does not properly work. For example, have a range B3:B11 with\n\n-2, -1, 0, 1, 2, , \u003d\"\", x, \u003d1/0\n\nand the array formula {\u003dIFERROR(ABS(B3:B11),\"ouch\")} it displays FALSE for 0 and empty cell and string cells.\n\nThe array formula {\u003dIFERROR(B3:B11,\"ouch\")} displays FALSE for 0 and \"ouch\" for empty and string cells.\n\nActually this handling with ScJumpMatrix confuses the evaluated first argument of IFERROR()/IFNA() with a logical condition as used for IF() that is never returned, where the matrix consists of comparison results, or CHOOSE() where the matrix values are used to enumerate the jumps.\n\nThis needs to be handled differently.",
+      "revId": "1cbfc3173ed207f115ac01834372b1cdb89f82b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASX///zA\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-05T03:36:54Z",
+      "side": 1,
+      "message": "Why type number? The function returns any type, if any.",
+      "revId": "1cbfc3173ed207f115ac01834372b1cdb89f82b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASX///y8\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-05T03:36:54Z",
+      "side": 1,
+      "message": "String evaluates as error here.",
+      "revId": "1cbfc3173ed207f115ac01834372b1cdb89f82b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASX///y4\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-05T03:36:54Z",
+      "side": 1,
+      "message": "Problem with this is that a jump path with identical start and end values actually is no path and in ScInterpreter::JumpMatrix() is treated as a default empty path if fVal is 0 and thus results in FALSE.",
+      "revId": "1cbfc3173ed207f115ac01834372b1cdb89f82b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASX///0c\u003d",
+        "filename": "sc/source/core/tool/parclass.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-05T03:36:54Z",
+      "side": 1,
+      "message": "IFERROR takes only 2 parameters, not 3.",
+      "revId": "1cbfc3173ed207f115ac01834372b1cdb89f82b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASX///0g\u003d",
+        "filename": "sc/source/core/tool/parclass.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-05T03:36:54Z",
+      "side": 1,
+      "message": "Note that the fields were changed here in the meantime and CommonData::nRepeatLast is now sal_uInt8 instead of bool, so that should be 0 instead of false.",
+      "revId": "1cbfc3173ed207f115ac01834372b1cdb89f82b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASX///0Y\u003d",
+        "filename": "sc/source/core/tool/token.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-05T03:36:54Z",
+      "side": 1,
+      "message": "For these the jump count is 2 (If, Behind), not 3.",
+      "revId": "1cbfc3173ed207f115ac01834372b1cdb89f82b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASX///z4\u003d",
+        "filename": "sc/source/ui/src/scfuncs.src",
+        "patchSetId": 2
+      },
+      "lineNbr": 2664,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-05T03:36:54Z",
+      "side": 1,
+      "message": "These should be grouped under Logical Funcions instead, see ODFF. So, ID_FUNCTION_GRP_LOGIC",
+      "revId": "1cbfc3173ed207f115ac01834372b1cdb89f82b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASX///0M\u003d",
+        "filename": "sc/source/ui/src/scfuncs.src",
+        "patchSetId": 2
+      },
+      "lineNbr": 2666,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-05T03:36:54Z",
+      "side": 1,
+      "message": "The Alternative parameter is not optional, so that should be\n\n 2;  0; 0;",
+      "revId": "1cbfc3173ed207f115ac01834372b1cdb89f82b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASX///0A\u003d",
+        "filename": "sc/source/ui/src/scfuncs.src",
+        "patchSetId": 2
+      },
+      "lineNbr": 2679,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-05T03:36:54Z",
+      "side": 1,
+      "message": "Actually this is not an \"else value\", but the alternative value to be returned in the IFERROR case. I suggest naming it \"alternative value\".",
+      "revId": "1cbfc3173ed207f115ac01834372b1cdb89f82b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASX///z0\u003d",
+        "filename": "sc/source/ui/src/scfuncs.src",
+        "patchSetId": 2
+      },
+      "lineNbr": 2696,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-05T03:36:54Z",
+      "side": 1,
+      "message": "These should be grouped under Logical Funcions instead, see ODFF. So, ID_FUNCTION_GRP_LOGIC",
+      "revId": "1cbfc3173ed207f115ac01834372b1cdb89f82b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASX///z8\u003d",
+        "filename": "sc/source/ui/src/scfuncs.src",
+        "patchSetId": 2
+      },
+      "lineNbr": 2711,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-05T03:36:54Z",
+      "side": 1,
+      "message": "Actually this is not an \"else value\", but the alternative value to be returned in the IFNA case. I suggest naming it \"alternative value\".",
+      "revId": "1cbfc3173ed207f115ac01834372b1cdb89f82b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
