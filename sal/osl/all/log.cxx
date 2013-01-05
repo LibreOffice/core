@@ -56,9 +56,6 @@
 #define OSL_DETAIL_GETPID getpid()
 #endif
 
-#include <android/log.h>
-#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "log.cxx", __VA_ARGS__))
-
 #ifdef HAVE_SYSLOG_H
 #include <syslog.h>
 // sal/osl/unx/salinit.cxx::sal_detail_initialize updates this:
