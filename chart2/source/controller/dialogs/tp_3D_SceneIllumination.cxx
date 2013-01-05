@@ -149,17 +149,17 @@ void LightSourceInfo::initButtonFromSource()
 
 namespace
 {
-    rtl::OUString lcl_makeColorName( Color rColor )
+    OUString lcl_makeColorName( Color rColor )
     {
-        rtl::OUStringBuffer aStr(SVX_RESSTR(RID_SVXFLOAT3D_FIX_R));
-        aStr.append((sal_Int32)rColor.GetRed());
-        aStr.append(' ');
-        aStr.append(SVX_RESSTR(RID_SVXFLOAT3D_FIX_G));
-        aStr.append((sal_Int32)rColor.GetGreen());
-        aStr.append(' ');
-        aStr.append(SVX_RESSTR(RID_SVXFLOAT3D_FIX_B));
-        aStr.append((sal_Int32)rColor.GetBlue());
-        return aStr.makeStringAndClear();
+        OUString aStr = SVX_RESSTR(RID_SVXFLOAT3D_FIX_R) +
+                        OUString::valueOf((sal_Int32)rColor.GetRed()) +
+                        " " +
+                        SVX_RESSTR(RID_SVXFLOAT3D_FIX_G) +
+                        OUString::valueOf((sal_Int32)rColor.GetGreen()) +
+                        " " +
+                        SVX_RESSTR(RID_SVXFLOAT3D_FIX_B) +
+                        OUString::valueOf((sal_Int32)rColor.GetBlue());
+        return aStr;
     }
     void lcl_selectColor( ColorListBox& rListBox, const Color& rColor )
     {

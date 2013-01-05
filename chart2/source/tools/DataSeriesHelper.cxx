@@ -273,7 +273,6 @@ OUString lcl_getDataSequenceLabel( const Reference< chart2::data::XDataSequence 
         Sequence< OUString > aSeq( xTextSeq->getTextualData());
 
         const sal_Int32 nMax = aSeq.getLength() - 1;
-        OUString aVal;
         OUStringBuffer aBuf;
 
         for( sal_Int32 i = 0; i <= nMax; ++i )
