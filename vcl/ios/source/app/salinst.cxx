@@ -173,46 +173,7 @@ void DeInitSalData()
 
 void InitSalMain()
 {
-    rtl::OUString urlWorkDir;
-    rtl_uString *sysWorkDir = NULL;
-    if (tools::getProcessWorkingDir(urlWorkDir))
-    {
-        oslFileError err2 = osl_getSystemPathFromFileURL(urlWorkDir.pData, &sysWorkDir);
-        if (err2 == osl_File_E_None)
-        {
-            rtl::OString aPath( getenv( "PATH" ) );
-            rtl::OString aResPath( getenv( "STAR_RESOURCEPATH" ) );
-            rtl::OString aCmdPath( OUStringToOString(OUString(sysWorkDir), RTL_TEXTENCODING_UTF8).getStr() );
-            rtl::OString aTmpPath;
-            // Get absolute path of command's directory
-            if ( !aCmdPath.isEmpty() )
-            {
-                DirEntry aCmdDirEntry( aCmdPath );
-                aCmdDirEntry.ToAbs();
-                aCmdPath = rtl::OUStringToOString( aCmdDirEntry.GetPath().GetFull(), RTL_TEXTENCODING_ASCII_US );
-            }
-            // Assign to PATH environment variable
-            if ( !aCmdPath.isEmpty() )
-            {
-                aTmpPath = rtl::OString( "PATH=" );
-                aTmpPath += aCmdPath;
-                if ( !aPath.isEmpty() )
-                    aTmpPath += rtl::OUStringToOString( DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US );
-                aTmpPath += aPath;
-                putenv( (char*)aTmpPath.getStr() );
-            }
-            // Assign to STAR_RESOURCEPATH environment variable
-            if ( !aCmdPath.isEmpty() )
-            {
-                aTmpPath = rtl::OString( "STAR_RESOURCEPATH=" );
-                aTmpPath += aCmdPath;
-                if ( !aResPath.isEmpty() )
-                    aTmpPath += rtl::OUStringToOString( DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US );
-                aTmpPath += aResPath;
-                putenv( (char*)aTmpPath.getStr() );
-            }
-        }
-    }
+    // I doubt anything is needed on iOS
 }
 
 // -----------------------------------------------------------------------
