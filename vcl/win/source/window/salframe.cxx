@@ -2406,22 +2406,34 @@ static void ImplGetKeyNameText( LONG lParam, sal_Unicode* pBuf,
     int nKeyLen = 0;
     if ( lParam )
     {
-        nKeyLen = GetKeyNameTextW( lParam, aKeyBuf, nMaxKeyLen );
-        DBG_ASSERT( nKeyLen <= nMaxKeyLen, "Invalid key name length!" );
-        if( nKeyLen > nMaxKeyLen )
-            nKeyLen = 0;
-        else if( nKeyLen > 0 )
-        {
-            // Capitalize just the first letter of key names
-            CharLowerBuffW( aKeyBuf, nKeyLen );
+        rtl::OUString aLang = Application::GetSettings().GetUILanguageTag().getLanguage();
+        rtl::OUString aRet;
 
-            bool bUpper = true;
-            for( WCHAR *pW=aKeyBuf, *pE=pW+nKeyLen; pW < pE; ++pW )
+        aRet = ::vcl_sal::getKeysReplacementName( aLang, lParam );
+        if( aRet.isEmpty() )
+        {
+            nKeyLen = GetKeyNameTextW( lParam, aKeyBuf, nMaxKeyLen );
+            DBG_ASSERT( nKeyLen <= nMaxKeyLen, "Invalid key name length!" );
+            if( nKeyLen > nMaxKeyLen )
+                nKeyLen = 0;
+            else if( nKeyLen > 0 )
             {
-                if( bUpper )
-                    CharUpperBuffW( pW, 1 );
-                bUpper = (*pW=='+') || (*pW=='-') || (*pW==' ') || (*pW=='.');
+                // Capitalize just the first letter of key names
+                CharLowerBuffW( aKeyBuf, nKeyLen );
+
+                bool bUpper = true;
+                for( WCHAR *pW=aKeyBuf, *pE=pW+nKeyLen; pW < pE; ++pW )
+                {
+                    if( bUpper )
+                        CharUpperBuffW( pW, 1 );
+                    bUpper = (*pW=='+') || (*pW=='-') || (*pW==' ') || (*pW=='.');
+                }
             }
+        }
+        else
+        {
+            nKeyLen = aRet.getLength();
+            wcscpy_s( aKeyBuf, nMaxKeyLen, aRet.getStr() );
         }
     }
 

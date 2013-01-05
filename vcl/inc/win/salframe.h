@@ -137,6 +137,13 @@ public:
 
 void ImplSalGetWorkArea( HWND hWnd, RECT *pRect, const RECT *pParentRect );
 
+// get foreign key names
+namespace vcl_sal {
+    rtl::OUString getKeysReplacementName(
+        rtl::OUString pLang,
+        LONG nSymbol );
+}
+
 #endif // _SV_SALFRAME_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
