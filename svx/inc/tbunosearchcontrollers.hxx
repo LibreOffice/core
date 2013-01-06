@@ -135,6 +135,48 @@ private:
 
 };
 
+class ExitSearchToolboxController   : public svt::ToolboxController,
+                                      public css::lang::XServiceInfo
+{
+public:
+    enum Type { EXIT };
+
+    ExitSearchToolboxController( const css::uno::Reference< css::lang::XMultiServiceFactory >& rServiceManager, Type eType );
+    ~ExitSearchToolboxController();
+
+    // XInterface
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw ( css::uno::RuntimeException );
+    virtual void SAL_CALL acquire() throw ();
+    virtual void SAL_CALL release() throw ();
+
+    // XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw( css::uno::RuntimeException );
+    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException );
+
+    static ::rtl::OUString getImplementationName_Static( ) throw()
+    {
+        return ::rtl::OUString( "com.sun.star.svx.ExitFindbarToolboxController" );
+    }
+
+    static css::uno::Sequence< ::rtl::OUString >  getSupportedServiceNames_Static() throw();
+
+    // XComponent
+    virtual void SAL_CALL dispose() throw ( css::uno::RuntimeException );
+
+    // XInitialization
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw ( css::uno::Exception, css::uno::RuntimeException);
+
+    // XToolbarController
+    virtual void SAL_CALL execute( sal_Int16 KeyModifier ) throw ( css::uno::RuntimeException );
+
+    // XStatusListener
+    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) throw ( css::uno::RuntimeException );
+
+private:
+    Type meType;
+};
+
 class UpDownSearchToolboxController : public svt::ToolboxController,
                                       public css::lang::XServiceInfo
 {
@@ -231,6 +273,7 @@ private:
 css::uno::Reference< css::uno::XInterface > SAL_CALL FindTextToolbarController_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr );
 css::uno::Reference< css::uno::XInterface > SAL_CALL DownSearchToolboxController_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr );
 css::uno::Reference< css::uno::XInterface > SAL_CALL UpSearchToolboxController_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr );
+css::uno::Reference< css::uno::XInterface > SAL_CALL ExitFindbarToolboxController_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr );
 css::uno::Reference< css::uno::XInterface > SAL_CALL FindbarDispatcher_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr );
 
 }

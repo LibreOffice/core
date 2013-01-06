@@ -47,6 +47,7 @@ static const char COMMAND_EXECUTESEARCH[] = ".uno:ExecuteSearch";
 static const char COMMAND_FINDTEXT[] = ".uno:FindText";
 static const char COMMAND_DOWNSEARCH[] = ".uno:DownSearch";
 static const char COMMAND_UPSEARCH[] = ".uno:UpSearch";
+static const char COMMAND_EXITSEARCH[] = ".uno:ExitSearch";
 static const char COMMAND_APPENDSEARCHHISTORY[] = "AppendSearchHistory";
 
 static const sal_Int32       REMEMBER_SIZE = 10;
@@ -477,7 +478,7 @@ IMPL_LINK_NOARG(FindTextToolbarController, EditModifyHdl)
 UpDownSearchToolboxController::UpDownSearchToolboxController( const css::uno::Reference< css::lang::XMultiServiceFactory > & rServiceManager, Type eType )
     : svt::ToolboxController( rServiceManager,
             css::uno::Reference< css::frame::XFrame >(),
-            (eType == UP) ? rtl::OUString( COMMAND_UPSEARCH ): rtl::OUString( COMMAND_DOWNSEARCH ) ),
+            (eType == UP) ? rtl::OUString( COMMAND_UPSEARCH ):  rtl::OUString( COMMAND_DOWNSEARCH ) ),
       meType( eType )
 {
 }
@@ -597,6 +598,120 @@ void SAL_CALL UpDownSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ 
 
 // XStatusListener
 void SAL_CALL UpDownSearchToolboxController::statusChanged( const css::frame::FeatureStateEvent& /*rEvent*/ ) throw ( css::uno::RuntimeException )
+{
+    SolarMutexGuard aSolarMutexGuard;
+    if ( m_bDisposed )
+        return;
+}
+//-----------------------------------------------------------------------------------------------------------
+// class ExitSearchToolboxController
+
+ExitSearchToolboxController::ExitSearchToolboxController( const css::uno::Reference< css::lang::XMultiServiceFactory > & rServiceManager, Type eType )
+    : svt::ToolboxController( rServiceManager,
+            css::uno::Reference< css::frame::XFrame >(),
+            rtl::OUString( COMMAND_EXITSEARCH ) ),
+      meType( eType )
+{
+}
+
+ExitSearchToolboxController::~ExitSearchToolboxController()
+{
+}
+
+// XInterface
+css::uno::Any SAL_CALL ExitSearchToolboxController::queryInterface( const css::uno::Type& aType ) throw ( css::uno::RuntimeException )
+{
+    css::uno::Any a = ToolboxController::queryInterface( aType );
+    if ( a.hasValue() )
+        return a;
+
+    return ::cppu::queryInterface( aType, static_cast< css::lang::XServiceInfo* >( this ) );
+}
+
+void SAL_CALL ExitSearchToolboxController::acquire() throw ()
+{
+    ToolboxController::acquire();
+}
+
+void SAL_CALL ExitSearchToolboxController::release() throw ()
+{
+    ToolboxController::release();
+}
+
+// XServiceInfo
+::rtl::OUString SAL_CALL ExitSearchToolboxController::getImplementationName() throw( css::uno::RuntimeException )
+{
+    return getImplementationName_Static( );
+}
+
+
+sal_Bool SAL_CALL ExitSearchToolboxController::supportsService( const ::rtl::OUString& ServiceName ) throw( css::uno::RuntimeException )
+{
+    const css::uno::Sequence< ::rtl::OUString > aSNL( getSupportedServiceNames() );
+    const ::rtl::OUString * pArray = aSNL.getConstArray();
+
+    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
+        if( pArray[i] == ServiceName )
+            return true;
+
+    return false;
+
+}
+
+css::uno::Sequence< ::rtl::OUString > SAL_CALL ExitSearchToolboxController::getSupportedServiceNames() throw( css::uno::RuntimeException )
+{
+    return getSupportedServiceNames_Static();
+}
+
+css::uno::Sequence< ::rtl::OUString > ExitSearchToolboxController::getSupportedServiceNames_Static() throw()
+{
+    css::uno::Sequence< ::rtl::OUString > aSNS( 1 );
+    aSNS.getArray()[0] = ::rtl::OUString("com.sun.star.frame.ToolbarController");
+    return aSNS;
+}
+
+// XComponent
+void SAL_CALL ExitSearchToolboxController::dispose() throw ( css::uno::RuntimeException )
+{
+    SolarMutexGuard aSolarMutexGuard;
+
+    SearchToolbarControllersManager::createControllersManager().freeController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY), m_aCommandURL);
+
+    svt::ToolboxController::dispose();
+}
+
+// XInitialization
+void SAL_CALL ExitSearchToolboxController::initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw ( css::uno::Exception, css::uno::RuntimeException )
+{
+    svt::ToolboxController::initialize( aArguments );
+    SearchToolbarControllersManager::createControllersManager().registryController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY), m_aCommandURL);
+}
+
+// XToolbarController
+void SAL_CALL ExitSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ ) throw ( css::uno::RuntimeException )
+{
+    Window *pFocusWindow = Application::GetFocusWindow();
+    if ( pFocusWindow )
+        pFocusWindow->GrabFocusToDocument();
+
+    // hide the findbar
+    css::uno::Reference< css::beans::XPropertySet > xPropSet(m_xFrame, css::uno::UNO_QUERY);
+    if (xPropSet.is())
+    {
+        css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
+        css::uno::Any aValue = xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ) ) );
+        aValue >>= xLayoutManager;
+        if (xLayoutManager.is())
+        {
+            const ::rtl::OUString sResourceURL( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/findbar" ) );
+            xLayoutManager->hideElement( sResourceURL );
+            xLayoutManager->destroyElement( sResourceURL );
+        }
+    }
+}
+
+// XStatusListener
+void SAL_CALL ExitSearchToolboxController::statusChanged( const css::frame::FeatureStateEvent& /*rEvent*/ ) throw ( css::uno::RuntimeException )
 {
     SolarMutexGuard aSolarMutexGuard;
     if ( m_bDisposed )
@@ -749,7 +864,6 @@ void SAL_CALL FindbarDispatcher::dispatch( const css::util::URL& aURL, const css
                 }
             }
         }
-
     }
 }
 
@@ -785,6 +899,12 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL UpSearchToolboxController_c
     return static_cast< cppu::OWeakObject * >(
         new UpDownSearchToolboxController(
             rSMgr, UpDownSearchToolboxController::UP ) );
+}
+
+css::uno::Reference< css::uno::XInterface > SAL_CALL ExitFindbarToolboxController_createInstance(
+    const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr )
+{
+    return *new ExitSearchToolboxController( rSMgr, ExitSearchToolboxController::EXIT );
 }
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL FindbarDispatcher_createInstance(
