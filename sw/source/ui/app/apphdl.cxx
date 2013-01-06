@@ -687,9 +687,9 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 if( pWrtSh )
                 {
                     SFX_ITEMSET_ARG( pDocSh->GetMedium()->GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
-                    sal_Bool bUpdateFields = sal_True;
+                    bool bUpdateFields = true;
                     if( pUpdateDocItem &&  pUpdateDocItem->GetValue() == document::UpdateDocMode::NO_UPDATE)
-                        bUpdateFields = sal_False;
+                        bUpdateFields = false;
                     if(bUpdateFields)
                     {
                         pWrtSh->UpdateInputFlds();
@@ -768,11 +768,11 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, sal
     }
     else if ( pBrdCst == pColorConfig || pBrdCst == pAccessibilityOptions )
     {
-        sal_Bool bAccessibility = sal_False;
+        bool bAccessibility = false;
         if( pBrdCst == pColorConfig )
             SwViewOption::ApplyColorConfigValues(*pColorConfig);
         else
-            bAccessibility = sal_True;
+            bAccessibility = true;
 
         //invalidate all edit windows
         const TypeId aSwViewTypeId = TYPE(SwView);

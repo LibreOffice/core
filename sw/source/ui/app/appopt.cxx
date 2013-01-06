@@ -74,7 +74,7 @@ using namespace ::com::sun::star::lang;
 
 SfxItemSet*  SwModule::CreateItemSet( sal_uInt16 nId )
 {
-    sal_Bool bTextDialog = (nId == SID_SW_EDITOPTIONS) ? sal_True : sal_False;
+    bool bTextDialog = (nId == SID_SW_EDITOPTIONS);
 
     // the options for the Web- and Textdialog are put together here
         SwViewOption aViewOpt = *GetUsrPref(!bTextDialog);
@@ -86,7 +86,7 @@ SfxItemSet*  SwModule::CreateItemSet( sal_uInt16 nId )
         if(pAppView)
         {
         // if Text then no WebView and vice versa
-            sal_Bool bWebView = 0 != PTR_CAST(SwWebView, pAppView);
+            bool bWebView = 0 != PTR_CAST(SwWebView, pAppView);
             if( (bWebView &&  !bTextDialog) ||(!bWebView &&  bTextDialog))
             {
                 aViewOpt = *pAppView->GetWrtShell().GetViewOptions();
@@ -241,14 +241,14 @@ SfxItemSet*  SwModule::CreateItemSet( sal_uInt16 nId )
 
 void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
 {
-    sal_Bool bTextDialog = nId == SID_SW_EDITOPTIONS;
+    bool bTextDialog = nId == SID_SW_EDITOPTIONS;
     SwView* pAppView = GetView();
     if(pAppView && pAppView->GetViewFrame() != SfxViewFrame::Current())
         pAppView = 0;
     if(pAppView)
     {
         // the text dialog mustn't apply data to the web view and vice versa
-        sal_Bool bWebView = 0 != PTR_CAST(SwWebView, pAppView);
+        bool bWebView = 0 != PTR_CAST(SwWebView, pAppView);
         if(bWebView == bTextDialog)
             pAppView = 0;
     }
@@ -499,7 +499,7 @@ SfxTabPage* SwModule::CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxI
             if(pCurrView)
             {
                 // if text then not WebView and vice versa
-                sal_Bool bWebView = 0 != PTR_CAST(SwWebView, pCurrView);
+                bool bWebView = 0 != PTR_CAST(SwWebView, pCurrView);
                 if( (bWebView &&  RID_SW_TP_HTML_OPTTABLE_PAGE == nId) ||
                     (!bWebView &&  RID_SW_TP_HTML_OPTTABLE_PAGE != nId) )
                 {

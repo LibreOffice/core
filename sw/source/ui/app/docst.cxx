@@ -961,10 +961,10 @@ sal_uInt16 SwDocShell::DoWaterCan(const String &rName, sal_uInt16 nFamily)
 
     SwEditWin& rEdtWin = pView->GetEditWin();
     SwApplyTemplate* pApply = rEdtWin.GetApplyTemplate();
-    sal_Bool bWaterCan = !(pApply && pApply->eType != 0);
+    bool bWaterCan = !(pApply && pApply->eType != 0);
 
     if( !rName.Len() )
-        bWaterCan = sal_False;
+        bWaterCan = false;
 
     SwApplyTemplate aTemplate;
     aTemplate.eType = nFamily;

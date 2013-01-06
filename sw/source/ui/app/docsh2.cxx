@@ -120,7 +120,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 using namespace ::sfx2;
-extern sal_Bool FindPhyStyle( SwDoc& , const String& , SfxStyleFamily );
+extern bool FindPhyStyle( SwDoc& , const String& , SfxStyleFamily );
 
 /*--------------------------------------------------------------------
     Description:    create DocInfo (virtual)
@@ -691,7 +691,8 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
         case SID_PRINTPREVIEW:
             {
-                sal_Bool bSet = sal_False, bFound = sal_False, bOnly = sal_True;
+                sal_Bool bSet = sal_False;
+                bool bFound = false, bOnly = true;
                 SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst(this);
                 SfxViewShell* pViewShell = SfxViewShell::Current();
                 SwView* pCurrView = dynamic_cast< SwView *> ( pViewShell );
@@ -700,11 +701,11 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 while( pTmpFrm )    // search PreView
                 {
                     if( IS_TYPE( SwView, pTmpFrm->GetViewShell()) )
-                        bOnly = sal_False;
+                        bOnly = false;
                     else if( IS_TYPE( SwPagePreView, pTmpFrm->GetViewShell()))
                     {
                         pTmpFrm->GetFrame().Appear();
-                        bFound = sal_True;
+                        bFound = true;
                     }
                     if( bFound && !bOnly )
                         break;
@@ -806,7 +807,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                             }
                             pFlt = aIter.Next();
                         }
-                        sal_Bool bWeb = 0 != dynamic_cast< SwWebDocShell *>( this );
+                        bool bWeb = 0 != dynamic_cast< SwWebDocShell *>( this );
                         const SfxFilter *pOwnFlt =
                                 SwDocShell::Factory().GetFilterContainer()->
                                 GetFilter4FilterName(rtl::OUString("writer8"));
@@ -918,7 +919,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
                 // the SourceView is not the 1 for SwWebDocShell
                 sal_uInt16 nSlot = SID_VIEWSHELL1;
-                sal_Bool bSetModified = sal_False;
+                bool bSetModified = false;
                 SfxPrinter* pSavePrinter = 0;
                 if( 0 != pSrcView)
                 {
@@ -1146,9 +1147,9 @@ void SwDocShell::Execute(SfxRequest& rReq)
         case FN_NEW_GLOBAL_DOC:
             {
                 bDone = sal_False;
-                sal_Bool bCreateHtml = FN_NEW_HTML_DOC == nWhich;
+                bool bCreateHtml = FN_NEW_HTML_DOC == nWhich;
 
-                sal_Bool bCreateByOutlineLevel = false;     //#outline level,add by zhaojianwei
+                bool bCreateByOutlineLevel = false;     //#outline level,add by zhaojianwei
                 sal_Int32  nTemplateOutlineLevel = 0 ;      //#outline level,add by zhaojianwei
 
                 String aFileName, aTemplateName;
