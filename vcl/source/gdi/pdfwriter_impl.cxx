@@ -2292,14 +2292,14 @@ inline const ImplPdfBuiltinFontData* GetPdfFontData( const PhysicalFontFace* pFo
 static ImplDevFontAttributes GetDevFontAttributes( const PDFWriterImpl::BuiltinFont& rBuiltin )
 {
     ImplDevFontAttributes aDFA;
-    aDFA.maName         = rtl::OUString::createFromAscii( rBuiltin.m_pName );
-    aDFA.maStyleName    = rtl::OUString::createFromAscii( rBuiltin.m_pStyleName );
-    aDFA.meFamily       = rBuiltin.m_eFamily;
-    aDFA.mbSymbolFlag   = (rBuiltin.m_eCharSet != RTL_TEXTENCODING_MS_1252 );
-    aDFA.mePitch        = rBuiltin.m_ePitch;
-    aDFA.meWeight       = rBuiltin.m_eWeight;
-    aDFA.meItalic       = rBuiltin.m_eItalic;
-    aDFA.meWidthType    = rBuiltin.m_eWidthType;
+    aDFA.SetFamilyName( rtl::OUString::createFromAscii( rBuiltin.m_pName ) );
+    aDFA.SetStyleName( rtl::OUString::createFromAscii( rBuiltin.m_pStyleName ) );
+    aDFA.SetFamilyType( rBuiltin.m_eFamily );
+    aDFA.SetSymbolFlag( rBuiltin.m_eCharSet != RTL_TEXTENCODING_MS_1252 );
+    aDFA.SetPitch( rBuiltin.m_ePitch );
+    aDFA.SetWeight( rBuiltin.m_eWeight );
+    aDFA.SetItalic( rBuiltin.m_eItalic );
+    aDFA.SetWidthType( rBuiltin.m_eWidthType );
 
     aDFA.mbOrientation  = true;
     aDFA.mbDevice       = true;
@@ -2349,11 +2349,11 @@ void PDFWriterImpl::getFontMetric( FontSelectPattern* pSelect, ImplFontMetricDat
     const BuiltinFont* pBuiltinFont = pFD->GetBuiltinFont();
 
     pMetric->mnOrientation  = sal::static_int_cast<short>(pSelect->mnOrientation);
-    pMetric->meFamily       = pBuiltinFont->m_eFamily;
-    pMetric->mePitch        = pBuiltinFont->m_ePitch;
-    pMetric->meWeight       = pBuiltinFont->m_eWeight;
-    pMetric->meItalic       = pBuiltinFont->m_eItalic;
-    pMetric->mbSymbolFlag   = pFD->IsSymbolFont();
+    pMetric->SetFamilyType( pBuiltinFont->m_eFamily );
+    pMetric->SetPitch( pBuiltinFont->m_ePitch );
+    pMetric->SetWeight( pBuiltinFont->m_eWeight );
+    pMetric->SetItalic( pBuiltinFont->m_eItalic );
+    pMetric->SetSymbolFlag( pFD->IsSymbolFont() );
     pMetric->mnWidth        = pSelect->mnHeight;
     pMetric->mnAscent       = ( pSelect->mnHeight * +pBuiltinFont->m_nAscent + 500 ) / 1000;
     pMetric->mnDescent      = ( pSelect->mnHeight * -pBuiltinFont->m_nDescent + 500 ) / 1000;
@@ -3158,7 +3158,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const PhysicalFo
     aInfo.m_nDescent = 200;
     aInfo.m_nCapHeight = 1000;
     aInfo.m_aFontBBox = Rectangle( Point( -200, -200 ), Size( 1700, 1700 ) );
-    aInfo.m_aPSName = pFont->maName;
+    aInfo.m_aPSName = pFont->GetFamilyName();
     sal_Int32 pWidths[256];
     memset( pWidths, 0, sizeof(pWidths) );
     if( pFont->IsEmbeddable() )
@@ -3231,7 +3231,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const PhysicalFo
             aLine.append( "/BaseFont/" );
             appendName( aInfo.m_aPSName, aLine );
             aLine.append( "\n" );
-            if( !pFont->mbSymbolFlag )
+            if( !pFont->IsSymbolFont() )
                 aLine.append( "/Encoding/WinAnsiEncoding\n" );
             aLine.append( "/FirstChar 32 /LastChar 255\n"
                           "/Widths[" );
@@ -3728,7 +3728,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
                 "<</Type/Font/Subtype/Type1/BaseFont/" );
             appendName( aInfo.m_aPSName, aLine );
             aLine.append( "\n" );
-            if( !pFont->mbSymbolFlag &&  pEncoding == 0 )
+            if( !pFont->IsSymbolFont() &&  pEncoding == 0 )
                 aLine.append( "/Encoding/WinAnsiEncoding\n" );
             if( nToUnicodeStream )
             {

@@ -750,15 +750,14 @@ void Font::Merge( const Font& rFont )
 
 void Font::GetFontAttributes( ImplFontAttributes& rAttrs ) const
 {
-    // #i56788# Use members directly, don't risc config access.
-    rAttrs.maName = mpImplFont->maFamilyName;
-    rAttrs.maStyleName = mpImplFont->maStyleName;
-    rAttrs.meFamily = mpImplFont->meFamily;
-    rAttrs.mePitch = mpImplFont->mePitch;
-    rAttrs.meItalic = mpImplFont->meItalic;
-    rAttrs.meWeight = mpImplFont->meWeight;
-    rAttrs.meWidthType = WIDTH_DONTKNOW;
-    rAttrs.mbSymbolFlag= (mpImplFont->meCharSet == RTL_TEXTENCODING_SYMBOL);
+    rAttrs.SetFamilyName( mpImplFont->maFamilyName );
+    rAttrs.SetStyleName( mpImplFont->maStyleName );
+    rAttrs.SetFamilyType( mpImplFont->meFamily );
+    rAttrs.SetPitch( mpImplFont->mePitch );
+    rAttrs.SetItalic( mpImplFont->meItalic );
+    rAttrs.SetWeight( mpImplFont->meWeight );
+    rAttrs.SetWidthType( WIDTH_DONTKNOW );
+    rAttrs.SetSymbolFlag( mpImplFont->meCharSet == RTL_TEXTENCODING_SYMBOL );
 }
 
 

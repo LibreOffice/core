@@ -61,14 +61,21 @@ public: // TODO: create matching interface class
     FontPitch       GetPitch() const        { return mePitch; }
     FontWidth       GetWidthType() const    { return meWidthType; }
     bool            IsSymbolFont() const    { return mbSymbolFlag; }
-
+    void            SetFamilyName(const String sFamilyName)    { maName = sFamilyName; }
+    void            SetStyleName( const String sStyleName)           { maStyleName = sStyleName; }
+    void            SetFamilyType(const FontFamily eFontFamily)    { meFamily = eFontFamily; }
+    void            SetPitch(const FontPitch ePitch )          { mePitch = ePitch; }
+    void            SetItalic(const FontItalic eItalic )       { meItalic = eItalic; }
+    void            SetWeight(const FontWeight eWeight )       { meWeight = eWeight; }
+    void            SetWidthType(const FontWidth eWidthType)   { meWidthType = eWidthType; }
+    void            SetSymbolFlag(const bool bSymbolFlag )     { mbSymbolFlag = bSymbolFlag; }
     bool operator==(const ImplFontAttributes& rOther) const;
     bool operator!=(const ImplFontAttributes& rOther) const
     {
         return !(*this == rOther);
     }
 
-public: // TODO: hide members behind accessor methods
+private:
     String          maName;         // Font Family Name
     String          maStyleName;    // Font Style Name
     FontWeight      meWeight;       // Weight Type

@@ -614,7 +614,7 @@ Font OutputDevice::GetDefaultFont( sal_uInt16 nType, LanguageType eLang,
                     if (pEntry)
                     {
                         if( pEntry->maFontSelData.mpFontData )
-                            aFont.SetName( pEntry->maFontSelData.mpFontData->maName );
+                            aFont.SetName( pEntry->maFontSelData.mpFontData->GetFamilyName() );
                         else
                             aFont.SetName( pEntry->maFontSelData.maTargetName );
                     }
@@ -745,10 +745,10 @@ PhysicalFontFace::PhysicalFontFace( const ImplDevFontAttributes& rDFA, int nMagi
     mpNext( NULL )
 {
     // StarSymbol is a unicode font, but it still deserves the symbol flag
-    if( !mbSymbolFlag )
+    if( !IsSymbolFont() )
         if( 0 == GetFamilyName().CompareIgnoreCaseToAscii( "starsymbol", 10)
         ||  0 == GetFamilyName().CompareIgnoreCaseToAscii( "opensymbol", 10) )
-            mbSymbolFlag = true;
+            SetSymbolFlag( true );
 }
 
 // -----------------------------------------------------------------------
@@ -756,22 +756,22 @@ PhysicalFontFace::PhysicalFontFace( const ImplDevFontAttributes& rDFA, int nMagi
 StringCompare PhysicalFontFace::CompareIgnoreSize( const PhysicalFontFace& rOther ) const
 {
     // compare their width, weight, italic and style name
-    if( meWidthType < rOther.meWidthType )
+    if( GetWidthType() < rOther.GetWidthType() )
         return COMPARE_LESS;
-    else if( meWidthType > rOther.meWidthType )
+    else if( GetWidthType() > rOther.GetWidthType() )
         return COMPARE_GREATER;
 
-    if( meWeight < rOther.meWeight )
+    if( GetWeight() < rOther.GetWeight() )
         return COMPARE_LESS;
-    else if( meWeight > rOther.meWeight )
+    else if( GetWeight() > rOther.GetWeight() )
         return COMPARE_GREATER;
 
-    if( meItalic < rOther.meItalic )
+    if( GetSlant() < rOther.GetSlant() )
         return COMPARE_LESS;
-    else if( meItalic > rOther.meItalic )
+    else if( GetSlant() > rOther.GetSlant() )
         return COMPARE_GREATER;
 
-    StringCompare eCompare = maName.CompareTo( rOther.maName );
+    StringCompare eCompare = GetFamilyName().CompareTo( rOther.GetFamilyName() );
     return eCompare;
 }
 
@@ -812,34 +812,34 @@ bool PhysicalFontFace::IsBetterMatch( const FontSelectPattern& rFSD, FontMatchSt
     int nMatch = 0;
 
     const String& rFontName = rFSD.maTargetName;
-    if( (rFontName == maName) || rFontName.EqualsIgnoreCaseAscii( maName ) )
+    if( (rFontName == GetFamilyName()) || rFontName.EqualsIgnoreCaseAscii( GetFamilyName() ) )
         nMatch += 240000;
 
     if( rStatus.mpTargetStyleName
-    &&  maStyleName.EqualsIgnoreCaseAscii( rStatus.mpTargetStyleName ) )
+    &&  GetStyleName().EqualsIgnoreCaseAscii( rStatus.mpTargetStyleName ) )
         nMatch += 120000;
 
-    if( (rFSD.mePitch != PITCH_DONTKNOW) && (rFSD.mePitch == mePitch) )
+    if( (rFSD.GetPitch() != PITCH_DONTKNOW) && (rFSD.GetPitch() == GetPitch()) )
         nMatch += 20000;
 
     // prefer NORMAL font width
     // TODO: change when the upper layers can tell their width preference
-    if( meWidthType == WIDTH_NORMAL )
+    if( GetWidthType() == WIDTH_NORMAL )
         nMatch += 400;
-    else if( (meWidthType == WIDTH_SEMI_EXPANDED) || (meWidthType == WIDTH_SEMI_CONDENSED) )
+    else if( (GetWidthType() == WIDTH_SEMI_EXPANDED) || (GetWidthType() == WIDTH_SEMI_CONDENSED) )
         nMatch += 300;
 
-    if( rFSD.meWeight != WEIGHT_DONTKNOW )
+    if( rFSD.GetWeight() != WEIGHT_DONTKNOW )
     {
         // if not bold or requiring emboldening prefer light fonts to bold fonts
-        FontWeight ePatternWeight = rFSD.mbEmbolden ? WEIGHT_NORMAL : rFSD.meWeight;
+        FontWeight ePatternWeight = rFSD.mbEmbolden ? WEIGHT_NORMAL : rFSD.GetWeight();
 
         int nReqWeight = (int)ePatternWeight;
         if ( ePatternWeight > WEIGHT_MEDIUM )
             nReqWeight += 100;
 
-        int nGivenWeight = (int)meWeight;
-        if( meWeight > WEIGHT_MEDIUM )
+        int nGivenWeight = (int)GetWeight();
+        if( GetWeight() > WEIGHT_MEDIUM )
             nGivenWeight += 100;
 
         int nWeightDiff = nReqWeight - nGivenWeight;
@@ -855,29 +855,29 @@ bool PhysicalFontFace::IsBetterMatch( const FontSelectPattern& rFSD, FontMatchSt
     {
         // prefer NORMAL font weight
         // TODO: change when the upper layers can tell their weight preference
-        if( meWeight == WEIGHT_NORMAL )
+        if( GetWeight() == WEIGHT_NORMAL )
             nMatch += 450;
-        else if( meWeight == WEIGHT_MEDIUM )
+        else if( GetWeight() == WEIGHT_MEDIUM )
             nMatch += 350;
-        else if( (meWeight == WEIGHT_SEMILIGHT) || (meWeight == WEIGHT_SEMIBOLD) )
+        else if( (GetWeight() == WEIGHT_SEMILIGHT) || (GetWeight() == WEIGHT_SEMIBOLD) )
             nMatch += 200;
-        else if( meWeight == WEIGHT_LIGHT )
+        else if( GetWeight() == WEIGHT_LIGHT )
             nMatch += 150;
     }
 
     // if requiring custom matrix to fake italic, prefer upright font
-    FontItalic ePatternItalic = rFSD.maItalicMatrix != ItalicMatrix() ? ITALIC_NONE : rFSD.meItalic;
+    FontItalic ePatternItalic = rFSD.maItalicMatrix != ItalicMatrix() ? ITALIC_NONE : rFSD.GetSlant();
 
     if ( ePatternItalic == ITALIC_NONE )
     {
-        if( meItalic == ITALIC_NONE )
+        if( GetSlant() == ITALIC_NONE )
             nMatch += 900;
     }
     else
     {
-        if( ePatternItalic == meItalic )
+        if( ePatternItalic == GetSlant() )
             nMatch += 900;
-        else if( meItalic != ITALIC_NONE )
+        else if( GetSlant() != ITALIC_NONE )
             nMatch += 600;
     }
 
@@ -1051,18 +1051,18 @@ bool ImplDevFontListData::AddFontFace( PhysicalFontFace* pNewData )
 
     if( !mpFirst )
     {
-        maName         = pNewData->maName;
+        maName         = pNewData->GetFamilyName();
         maMapNames     = pNewData->maMapNames;
-        meFamily       = pNewData->meFamily;
-        mePitch        = pNewData->mePitch;
+        meFamily       = pNewData->GetFamilyType();
+        mePitch        = pNewData->GetPitch();
         mnMinQuality   = pNewData->mnQuality;
     }
     else
     {
         if( meFamily == FAMILY_DONTKNOW )
-            meFamily = pNewData->meFamily;
+            meFamily = pNewData->GetFamilyType();
         if( mePitch == PITCH_DONTKNOW )
-            mePitch = pNewData->mePitch;
+            mePitch = pNewData->GetPitch();
         if( mnMinQuality > pNewData->mnQuality )
             mnMinQuality = pNewData->mnQuality;
     }
@@ -1076,20 +1076,20 @@ bool ImplDevFontListData::AddFontFace( PhysicalFontFace* pNewData )
     else
         mnTypeFaces |= IMPL_DEVFONT_NONESYMBOL;
 
-    if( pNewData->meWeight != WEIGHT_DONTKNOW )
+    if( pNewData->GetWeight() != WEIGHT_DONTKNOW )
     {
-        if( pNewData->meWeight >= WEIGHT_SEMIBOLD )
+        if( pNewData->GetWeight() >= WEIGHT_SEMIBOLD )
             mnTypeFaces |= IMPL_DEVFONT_BOLD;
-        else if( pNewData->meWeight <= WEIGHT_SEMILIGHT )
+        else if( pNewData->GetWeight() <= WEIGHT_SEMILIGHT )
             mnTypeFaces |= IMPL_DEVFONT_LIGHT;
         else
             mnTypeFaces |= IMPL_DEVFONT_NORMAL;
     }
 
-    if( pNewData->meItalic == ITALIC_NONE )
+    if( pNewData->GetSlant() == ITALIC_NONE )
         mnTypeFaces |= IMPL_DEVFONT_NONEITALIC;
-    else if( (pNewData->meItalic == ITALIC_NORMAL)
-         ||  (pNewData->meItalic == ITALIC_OBLIQUE) )
+    else if( (pNewData->GetSlant() == ITALIC_NORMAL)
+         ||  (pNewData->GetSlant() == ITALIC_OBLIQUE) )
         mnTypeFaces |= IMPL_DEVFONT_ITALIC;
 
     if( (meMatchWeight == WEIGHT_DONTKNOW)
@@ -1106,8 +1106,8 @@ bool ImplDevFontListData::AddFontFace( PhysicalFontFace* pNewData )
     }
 
     // reassign name (sharing saves memory)
-    if( pNewData->maName == maName )
-        pNewData->maName = maName;
+    if( pNewData->GetFamilyName() == GetFamilyName() )
+        pNewData->SetFamilyName( GetFamilyName() );
 
     // insert new physical font face into linked list
     // TODO: get rid of linear search?
@@ -1480,7 +1480,7 @@ ImplDevFontListData* ImplDevFontList::GetGlyphFallbackFont( FontSelectPattern& r
 
 void ImplDevFontList::Add( PhysicalFontFace* pNewData )
 {
-    String aSearchName = pNewData->maName;
+    String aSearchName = pNewData->GetFamilyName();
     GetEnglishSearchFontName( aSearchName );
 
     DevFontList::const_iterator it = maDevFontList.find( aSearchName );
@@ -2129,7 +2129,7 @@ FontSelectPatternAttributes::FontSelectPatternAttributes( const Font& rFont,
     , mbNonAntialiased( false )
     , mbEmbolden( false )
 {
-    maTargetName = maName;
+    maTargetName = GetFamilyName();
 
     rFont.GetFontAttributes( *this );
 
@@ -2170,7 +2170,7 @@ FontSelectPatternAttributes::FontSelectPatternAttributes( const PhysicalFontFace
     , mbNonAntialiased( false )
     , mbEmbolden( false )
 {
-    maTargetName = maSearchName = maName;
+    maTargetName = maSearchName = GetFamilyName();
     // NOTE: no normalization for width/height/orientation
 }
 
@@ -2208,8 +2208,8 @@ size_t FontSelectPatternAttributes::hashCode() const
     }
 #endif
     nHash += 11 * mnHeight;
-    nHash += 19 * meWeight;
-    nHash += 29 * meItalic;
+    nHash += 19 * GetWeight();
+    nHash += 29 * GetSlant();
     nHash += 37 * mnOrientation;
     nHash += 41 * meLanguage;
     if( mbVertical )
@@ -2278,14 +2278,14 @@ bool ImplFontCache::IFSD_Equal::operator()(const FontSelectPattern& rA, const Fo
         return false;
 
     // check font face attributes
-    if( (rA.meWeight       != rB.meWeight)
-    ||  (rA.meItalic       != rB.meItalic)
+    if( (rA.GetWeight()       != rB.GetWeight())
+    ||  (rA.GetSlant()       != rB.GetSlant())
 //    ||  (rA.meFamily       != rB.meFamily) // TODO: remove this mostly obsolete member
-    ||  (rA.mePitch        != rB.mePitch) )
+    ||  (rA.GetPitch()     != rB.GetPitch()) )
         return false;
 
     // check style name
-    if( rA.maStyleName != rB.maStyleName)
+    if( rA.GetStyleName() != rB.GetStyleName() )
         return false;
 
     // Symbol fonts may recode from one type to another So they are only
@@ -2504,7 +2504,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
     String& aSearchName = rFSD.maSearchName; // TODO: get rid of reference
     for(;;)
     {
-        rFSD.maTargetName = GetNextFontToken( rFSD.maName, nTokenPos );
+        rFSD.maTargetName = GetNextFontToken( rFSD.GetFamilyName(), nTokenPos );
         aSearchName = rFSD.maTargetName;
 
 #ifdef ENABLE_GRAPHITE
@@ -2526,7 +2526,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
         ImplFontSubstitute( aSearchName, nSubstFlags, pDevSpecific );
         // #114999# special emboldening for Ricoh fonts
         // TODO: smarter check for special cases by using PreMatch infrastructure?
-        if( (rFSD.meWeight > WEIGHT_MEDIUM)
+        if( (rFSD.GetWeight() > WEIGHT_MEDIUM)
         &&  aSearchName.EqualsAscii( "hg", 0, 2) )
         {
             String aBoldName;
@@ -2548,7 +2548,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
                 // the other font is available => use it
                 aSearchName = aBoldName;
                 // prevent synthetic emboldening of bold version
-                rFSD.meWeight = WEIGHT_DONTKNOW;
+                rFSD.SetWeight(WEIGHT_DONTKNOW);
             }
         }
 
@@ -2613,7 +2613,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
     {
         if( bMultiToken )
         {
-            rFSD.maTargetName = GetNextFontToken( rFSD.maName, nTokenPos );
+            rFSD.maTargetName = GetNextFontToken( rFSD.GetFamilyName(), nTokenPos );
             aSearchName = rFSD.maTargetName;
             GetEnglishSearchFontName( aSearchName );
         }
@@ -2633,15 +2633,15 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
     if ( bMultiToken )
     {
         nTokenPos = 0;
-        rFSD.maTargetName = GetNextFontToken( rFSD.maName, nTokenPos );
+        rFSD.maTargetName = GetNextFontToken( rFSD.GetFamilyName(), nTokenPos );
         aSearchName = rFSD.maTargetName;
         GetEnglishSearchFontName( aSearchName );
     }
 
     String      aSearchShortName;
     String      aSearchFamilyName;
-    FontWeight  eSearchWeight   = rFSD.meWeight;
-    FontWidth   eSearchWidth    = rFSD.meWidthType;
+    FontWeight  eSearchWeight   = rFSD.GetWeight();
+    FontWidth   eSearchWidth    = rFSD.GetWidthType();
     sal_uLong       nSearchType     = 0;
     FontSubstConfiguration::getMapName( aSearchName, aSearchShortName, aSearchFamilyName,
                                         eSearchWeight, eSearchWidth, nSearchType );
@@ -2705,7 +2705,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
     // now try the other font name tokens
     while( nTokenPos != STRING_NOTFOUND )
     {
-        rFSD.maTargetName = GetNextFontToken( rFSD.maName, nTokenPos );
+        rFSD.maTargetName = GetNextFontToken( rFSD.GetFamilyName(), nTokenPos );
         if( !rFSD.maTargetName.Len() )
             continue;
 
@@ -2715,7 +2715,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
         String      aTempShortName;
         String      aTempFamilyName;
         sal_uLong       nTempType   = 0;
-        FontWeight  eTempWeight = rFSD.meWeight;
+        FontWeight  eTempWeight = rFSD.GetWeight();
         FontWidth   eTempWidth  = WIDTH_DONTKNOW;
         FontSubstConfiguration::getMapName( aSearchName, aTempShortName, aTempFamilyName,
                                             eTempWeight, eTempWidth, nTempType );
@@ -2769,32 +2769,32 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
         nSearchType |= IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP;
     else
     {
-        nSearchType |= ImplIsCJKFont( rFSD.maName );
+        nSearchType |= ImplIsCJKFont( rFSD.GetFamilyName() );
         if( rFSD.IsSymbolFont() )
             nSearchType |= IMPL_FONT_ATTR_SYMBOL;
     }
 
-    ImplCalcType( nSearchType, eSearchWeight, eSearchWidth, rFSD.meFamily, pFontAttr );
+    ImplCalcType( nSearchType, eSearchWeight, eSearchWidth, rFSD.GetFamilyType(), pFontAttr );
     ImplDevFontListData* pFoundData = ImplFindByAttributes( nSearchType,
-        eSearchWeight, eSearchWidth, rFSD.meItalic, aSearchFamilyName );
+        eSearchWeight, eSearchWidth, rFSD.GetSlant(), aSearchFamilyName );
 
     if( pFoundData )
     {
         // overwrite font selection attributes using info from the typeface flags
         if( (eSearchWeight >= WEIGHT_BOLD)
-        &&  (eSearchWeight > rFSD.meWeight)
+        &&  (eSearchWeight > rFSD.GetWeight())
         &&  (pFoundData->mnTypeFaces & IMPL_DEVFONT_BOLD) )
-            rFSD.meWeight = eSearchWeight;
+            rFSD.SetWeight( eSearchWeight );
         else if( (eSearchWeight < WEIGHT_NORMAL)
-        &&  (eSearchWeight < rFSD.meWeight)
+        &&  (eSearchWeight < rFSD.GetWeight())
         &&  (eSearchWeight != WEIGHT_DONTKNOW)
         &&  (pFoundData->mnTypeFaces & IMPL_DEVFONT_LIGHT) )
-            rFSD.meWeight = eSearchWeight;
+            rFSD.SetWeight( eSearchWeight );
 
         if( (nSearchType & IMPL_FONT_ATTR_ITALIC)
-        &&  ((rFSD.meItalic == ITALIC_DONTKNOW) || (rFSD.meItalic == ITALIC_NONE))
+        &&  ((rFSD.GetSlant() == ITALIC_DONTKNOW) || (rFSD.GetSlant() == ITALIC_NONE))
         &&  (pFoundData->mnTypeFaces & IMPL_DEVFONT_ITALIC) )
-            rFSD.meItalic = ITALIC_NORMAL;
+            rFSD.SetItalic( ITALIC_NORMAL );
     }
     else
     {
@@ -2833,7 +2833,7 @@ ImplFontEntry* ImplFontCache::GetGlyphFallbackFont( ImplDevFontList* pFontList,
         if( !pFallbackData  )
             return NULL;
         // override the font name
-        rFontSelData.maName = pFallbackData->GetFamilyName();
+        rFontSelData.SetFamilyName( pFallbackData->GetFamilyName() );
         // clear the cached normalized name
         rFontSelData.maSearchName = String();
     }
@@ -3399,16 +3399,16 @@ ImplFontMetricData::ImplFontMetricData( const FontSelectPattern& rFontSelData )
     // intialize the used font name
     if( rFontSelData.mpFontData )
     {
-        maName     = rFontSelData.mpFontData->maName;
-        maStyleName= rFontSelData.mpFontData->maStyleName;
+        SetFamilyName( rFontSelData.mpFontData->GetFamilyName() );
+        SetStyleName( rFontSelData.mpFontData->GetStyleName() );
         mbDevice   = rFontSelData.mpFontData->mbDevice;
         mbKernableFont = true;
     }
     else
     {
         xub_StrLen nTokenPos = 0;
-        maName     = GetNextFontToken( rFontSelData.maName, nTokenPos );
-        maStyleName= rFontSelData.maStyleName;
+        SetFamilyName( GetNextFontToken( rFontSelData.GetFamilyName(), nTokenPos ) );
+        SetStyleName( rFontSelData.GetStyleName() );
         mbDevice   = false;
         mbKernableFont = false;
     }
@@ -7304,14 +7304,14 @@ FontInfo OutputDevice::GetDevFont( int nDevFontIndex ) const
     if( nDevFontIndex < nCount )
     {
         const PhysicalFontFace& rData = *mpGetDevFontList->Get( nDevFontIndex );
-        aFontInfo.SetName( rData.maName );
-        aFontInfo.SetStyleName( rData.maStyleName );
-        aFontInfo.SetCharSet( rData.mbSymbolFlag ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE );
-        aFontInfo.SetFamily( rData.meFamily );
-        aFontInfo.SetPitch( rData.mePitch );
-        aFontInfo.SetWeight( rData.meWeight );
-        aFontInfo.SetItalic( rData.meItalic );
-        aFontInfo.SetWidthType( rData.meWidthType );
+        aFontInfo.SetName( rData.GetFamilyName() );
+        aFontInfo.SetStyleName( rData.GetStyleName() );
+        aFontInfo.SetCharSet( rData.IsSymbolFont() ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE );
+        aFontInfo.SetFamily( rData.GetFamilyType() );
+        aFontInfo.SetPitch( rData.GetPitch() );
+        aFontInfo.SetWeight( rData.GetWeight() );
+        aFontInfo.SetItalic( rData.GetSlant() );
+        aFontInfo.SetWidthType( rData.GetWidthType() );
         if( rData.IsScalable() )
             aFontInfo.mpImplMetric->mnMiscFlags |= ImplFontMetric::SCALABLE_FLAG;
         if( rData.mbDevice )
@@ -7423,14 +7423,14 @@ FontMetric OutputDevice::GetFontMetric() const
 
     // set aMetric with info from font
     aMetric.SetName( maFont.GetName() );
-    aMetric.SetStyleName( pMetric->maStyleName );
+    aMetric.SetStyleName( pMetric->GetStyleName() );
     aMetric.SetSize( PixelToLogic( Size( pMetric->mnWidth, pMetric->mnAscent+pMetric->mnDescent-pMetric->mnIntLeading ) ) );
-    aMetric.SetCharSet( pMetric->mbSymbolFlag ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE );
-    aMetric.SetFamily( pMetric->meFamily );
-    aMetric.SetPitch( pMetric->mePitch );
-    aMetric.SetWeight( pMetric->meWeight );
-    aMetric.SetItalic( pMetric->meItalic );
-    aMetric.SetWidthType( pMetric->meWidthType );
+    aMetric.SetCharSet( pMetric->IsSymbolFont() ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE );
+    aMetric.SetFamily( pMetric->GetFamilyType() );
+    aMetric.SetPitch( pMetric->GetPitch() );
+    aMetric.SetWeight( pMetric->GetWeight() );
+    aMetric.SetItalic( pMetric->GetSlant() );
+    aMetric.SetWidthType( pMetric->GetWidthType() );
     if ( pEntry->mnOwnOrientation )
         aMetric.SetOrientation( pEntry->mnOwnOrientation );
     else
