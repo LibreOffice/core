@@ -108,9 +108,13 @@ endef
 
 gb_CppunitTest_EXT := .a
 
+# No use for Cppunit targets now for Android (which would be just
+# static archives), they are just a waste of disk space.
 define gb_LinkTarget__command
 $(call gb_Output_announce,$(2),$(true),LNK,4)
-$(call gb_LinkTarget__command_staticlink,$(1))
+$(if $(filter CppunitTest,$(TARGETTYPE)), \
+	touch $(1), \
+	$(call gb_LinkTarget__command_staticlink,$(1)))
 endef
 
 endif
