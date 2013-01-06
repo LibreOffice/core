@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "AAAASX///yI\u003d",
+        "filename": "svx/source/table/tablemodel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1121,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2013-01-06T09:06:55Z",
+      "side": 1,
+      "message": "This is a fix of a clear bug, isn\u0027t it? Not related to the \"optimisation\" changes.",
+      "revId": "002d06a1a5b0b8f87530c94f7e07001e02e76344",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAASX///yQ\u003d",
         "filename": "svx/source/table/tablemodel.cxx",
         "patchSetId": 1
