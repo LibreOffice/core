@@ -248,7 +248,20 @@ Index: boost/archive/shared_ptr_helper.hpp
  typedef int ioctl_arg_type;
  typedef uint32_t u_long_type;
  typedef uint16_t u_short_type;
---- misc/boost_1_48_0/boost/pool/pool.hpp.orig	2011-12-15 18:21:40.000000000 +0300
+--- misc/boost_1_48_0/boost/lexical_cast.hpp.orig	2013-01-06 17:10:22.000000000 -0500
++++ misc/build/boost_1_48_0/boost/lexical_cast.hpp	2013-01-06 17:11:25.000000000 -0500
+@@ -648,8 +648,8 @@
+             , const CharT opening_brace, const CharT closing_brace)
+         {
+             using namespace std;
+-            const wchar_t minus = lcast_char_constants<wchar_t>::minus;
+-            const wchar_t plus = lcast_char_constants<wchar_t>::plus;
++            const CharT minus = lcast_char_constants<CharT>::minus;
++            const CharT plus = lcast_char_constants<CharT>::plus;
+             const int inifinity_size = 8;
+ 
+             bool has_minus = false;
+ --- misc/boost_1_48_0/boost/pool/pool.hpp.orig	2011-12-15 18:21:40.000000000 +0300
 +++ misc/build/boost_1_48_0/boost/pool/pool.hpp	2011-12-15 18:22:05.000000000 +0300
 @@ -346,7 +346,7 @@
        // For alignment reasons, this used to be defined to be lcm(requested_size, sizeof(void *), sizeof(size_type)),
