@@ -46,9 +46,6 @@ namespace utl
         /// retrieve the product key; uses the given default, if not found
         static rtl::OUString getProductKey(rtl::OUString const& _sDefault);
 
-        /// retrieve the product source (MWS name)
-        static rtl::OUString getProductSource(rtl::OUString const& _sDefault);
-
         /// retrieve the BUILDID information item; uses the given default, if not found
         static rtl::OUString getBuildIdData(rtl::OUString const& _sDefault);
 

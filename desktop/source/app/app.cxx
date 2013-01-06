@@ -1456,10 +1456,10 @@ int Desktop::Main()
         delete pLabelResMgr;
 
 #ifdef DBG_UTIL
-        //include version ID in non product builds
+        //include buildid in non product builds
         ::rtl::OUString aDefault("development");
         aTitle += rtl::OUString(" [");
-        String aVerId( utl::Bootstrap::getProductSource(aDefault));
+        String aVerId( utl::Bootstrap::getProductBuildIdData(aDefault));
         aTitle += aVerId;
         aTitle += ']';
 #endif

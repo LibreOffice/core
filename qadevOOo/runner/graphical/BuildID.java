@@ -163,13 +163,6 @@ public class BuildID
 //            System.exit(1);
 //        }
 
-            public static String getMaster(String _sOfficePath)
-            {
-                final String sOfficePath = getOfficePath(_sOfficePath);
-                final String sMaster = getBuildID(sOfficePath, "ProductSource");
-                return sMaster;
-            }
-
             public static String getMinor(String _sOfficePath)
             {
                 final String sOfficePath = getOfficePath(_sOfficePath);
@@ -198,10 +191,6 @@ public class BuildID
 //            String sBuildID;
 //            sBuildID = getBuildID(sApp);
 //            System.out.println("BuildID is: " + sBuildID);
-//
-//            String sMaster;
-//            sMaster = getMaster(sApp);
-//            System.out.println("Master is: " + sMaster);
 //
 //            String sMinor;
 //            sMinor = getMinor(sApp);

@@ -42,7 +42,6 @@
 #define BOOTSTRAP_DATA_NAME                 SAL_CONFIGFILE("bootstrap")
 
 #define BOOTSTRAP_ITEM_PRODUCT_KEY          "ProductKey"
-#define BOOTSTRAP_ITEM_PRODUCT_SOURCE       "ProductSource"
 #define BOOTSTRAP_ITEM_VERSIONFILE          "Location"
 #define BOOTSTRAP_ITEM_BUILDID              "buildid"
 #define BOOTSTRAP_ITEM_BUILDVERSION         "BuildVersion"
@@ -586,23 +585,12 @@ OUString Bootstrap::getProductKey(OUString const& _sDefault)
 }
 // ---------------------------------------------------------------------------------------
 
-OUString Bootstrap::getProductSource(OUString const& _sDefault)
-{
-    OUString const csProductSourceItem(RTL_CONSTASCII_USTRINGPARAM(BOOTSTRAP_ITEM_PRODUCT_SOURCE));
-
-    OUString sProductSource;
-    // read ProductSource from version.ini (versionrc)
-    data().getVersionValue( csProductSourceItem, sProductSource, _sDefault );
-    return sProductSource;
-}
-// ---------------------------------------------------------------------------------------
-
 OUString Bootstrap::getBuildVersion(OUString const& _sDefault)
 {
     OUString const csBuildVersionItem(BOOTSTRAP_ITEM_BUILDVERSION);
 
     OUString sBuildVersion;
-    // read ProductSource from version.ini (versionrc)
+    // read BuildVersion from version.ini (versionrc)
     data().getVersionValue( csBuildVersionItem, sBuildVersion, _sDefault );
     return sBuildVersion;
 }

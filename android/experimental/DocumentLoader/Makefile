@@ -126,7 +126,6 @@ copy-stuff:
 	echo 'ProductBuildid=3' >> assets/program/versionrc
 	echo 'ProductMajor=360' >> assets/program/versionrc
 	echo 'ProductMinor=1' >> assets/program/versionrc
-	echo 'ProductSource=OOO350' >> assets/program/versionrc
 	echo 'ReferenceOOoMajorMinor=3.6' >> assets/program/versionrc
 #
 # .res files
