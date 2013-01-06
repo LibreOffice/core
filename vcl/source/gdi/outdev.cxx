@@ -65,14 +65,15 @@
 using namespace ::com::sun::star;
 
 DBG_NAME( OutputDevice )
-#ifdef IOS // Static linking, these already exist in the tools
-           // library, so put them in the anonymous namespace here to
-           // avoid clash...
+#ifdef DISABLE_DYNLOADING
+// Linking all needed LO code into one .so/executable, these already
+// exist in the tools library, so put them in the anonymous namespace
+// here to avoid clash...
 namespace {
 #endif
 DBG_NAME( Polygon )
 DBG_NAME( PolyPolygon )
-#ifdef IOS
+#ifdef DISABLE_DYNLOADING
 }
 #endif
 DBG_NAMEEX( Region )
