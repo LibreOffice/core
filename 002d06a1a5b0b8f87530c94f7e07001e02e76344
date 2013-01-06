@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAASX///yA\u003d",
+        "filename": "svx/source/table/tablemodel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1031,
+      "author": {
+        "id": 1000235
+      },
+      "writtenOn": "2013-01-06T09:39:51Z",
+      "side": 1,
+      "message": "As the same function block contains another integer variable named nRow i named it like this.  Am new to libreoffice and not quite aware about the naming conventions what do you suggest for variable name.",
+      "parentUuid": "AAAASX///yU\u003d",
+      "revId": "002d06a1a5b0b8f87530c94f7e07001e02e76344",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAASX///yI\u003d",
         "filename": "svx/source/table/tablemodel.cxx",
         "patchSetId": 1
@@ -47,6 +65,24 @@
       "writtenOn": "2013-01-06T09:04:59Z",
       "side": 1,
       "message": "But as the buggy code affected only this OSL_FAIL, which expands to nothing in a production build, doesn\u0027t it, I guess the bug had no visible consequences. In wonder if that should teach us something? Like that it\u0027s pointless to use OSL_FAIL if the code in question is not built with --enable-debug and/or --enable-dbgutil *and* gets exercised in a unit test.",
+      "revId": "002d06a1a5b0b8f87530c94f7e07001e02e76344",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASX///x8\u003d",
+        "filename": "svx/source/table/tablemodel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1123,
+      "author": {
+        "id": 1000235
+      },
+      "writtenOn": "2013-01-06T09:39:51Z",
+      "side": 1,
+      "message": "I agree with your comment about OSL_FAIL",
+      "parentUuid": "AAAASX///yQ\u003d",
       "revId": "002d06a1a5b0b8f87530c94f7e07001e02e76344",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
