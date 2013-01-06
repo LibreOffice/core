@@ -2293,7 +2293,7 @@ sal_Bool ScDocShell::ConvertTo( SfxMedium &rMed )
             aImExport.SetStreamPath( rMed.GetName() );
             bRet = aImExport.ExportStream( *pStream, rMed.GetBaseURL( true ), SOT_FORMATSTR_ID_HTML );
             if ( bRet && aImExport.GetNonConvertibleChars().Len() )
-                SetError( *new StringErrorInfo(
+                SetError( StringErrorInfo(
                     SCWARN_EXPORT_NONCONVERTIBLE_CHARS,
                     aImExport.GetNonConvertibleChars(),
                     ERRCODE_BUTTON_OK | ERRCODE_MSG_INFO ), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
