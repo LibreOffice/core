@@ -85,14 +85,18 @@ public:
 
     // application members
     SfxFilterMatcher*                   pMatcher;
+#ifndef DISABLE_SCRIPTING
     ResMgr*                             pBasicResMgr;
+#endif
     ResMgr*                             pSvtResMgr;
 #ifdef DBG_UTIL
     SimpleErrorHandler *m_pSimpleErrorHdl;
 #endif
     SfxErrorHandler *m_pToolsErrorHdl;
     SfxErrorHandler *m_pSoErrorHdl;
+#ifndef DISABLE_SCRIPTING
     SfxErrorHandler *m_pSbxErrorHdl;
+#endif
     SfxStatusDispatcher*                pAppDispatch;
     SfxDocumentTemplates*               pTemplates;
 

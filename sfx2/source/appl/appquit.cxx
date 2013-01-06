@@ -146,10 +146,14 @@ void SfxApplication::Deinitialize()
     pAppData_Impl->pPool = NULL;
     NoChaos::ReleaseItemPool();
 
+#ifndef DISABLE_SCRIPTING
     DELETEZ(pAppData_Impl->pBasicResMgr);
+#endif
     DELETEZ(pAppData_Impl->pSvtResMgr);
 
+#ifndef DISABLE_SCRIPTING
     delete pAppData_Impl->m_pSbxErrorHdl;
+#endif
     delete pAppData_Impl->m_pSoErrorHdl;
     delete pAppData_Impl->m_pToolsErrorHdl;
 #ifdef DBG_UTIL

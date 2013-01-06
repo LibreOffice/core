@@ -86,7 +86,9 @@ SfxAppData_Impl::SfxAppData_Impl( SfxApplication* )
     , pFactArr(0)
     , pTopFrames( new SfxFrameArr_Impl )
     , pMatcher( 0 )
+#ifndef DISABLE_SCRIPTING
     , pBasicResMgr( 0 )
+#endif
     , pSvtResMgr( 0 )
     , pAppDispatch(NULL)
     , pTemplates( 0 )
