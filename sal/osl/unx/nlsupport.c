@@ -911,7 +911,7 @@ void _imp_getProcessLocale( rtl_Locale ** ppLocale )
     /* No locale environment variables on Android, so why even bother
      * with getenv().
      */
-   locale = "en-US.UTF-8";
+   char * locale = "en-US.UTF-8";
 #else
     /* simulate behavior off setlocale */
     char * locale = getenv( "LC_ALL" );
@@ -925,8 +925,8 @@ void _imp_getProcessLocale( rtl_Locale ** ppLocale )
     if( NULL == locale )
         locale = "C";
 
-    *ppLocale = _parse_locale( locale );
 #endif
+    *ppLocale = _parse_locale( locale );
 }
 #endif
 
