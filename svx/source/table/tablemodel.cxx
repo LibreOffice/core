@@ -1028,10 +1028,11 @@ void TableModel::optimize()
     if( !maRows.empty() && !maColumns.empty() )
     {
         sal_Int32 nCol = getColumnCountImpl() - 1;
+        sal_Int32 nRowCountImpl = getRowCountImpl();
         while( nCol > 0 )
         {
             bool bEmpty = true;
-            for( sal_Int32 nRow = 0; (nRow < getRowCountImpl()) && bEmpty; nRow++ )
+            for( sal_Int32 nRow = 0; (nRow < nRowCountImpl) && bEmpty; nRow++ )
             {
                 Reference< XMergeableCell > xCell( getCellByPosition( nCol, nRow ), UNO_QUERY );
                 if( xCell.is() && !xCell->isMerged() )
@@ -1065,10 +1066,11 @@ void TableModel::optimize()
         }
 
         sal_Int32 nRow = getRowCountImpl() - 1;
+        sal_Int32 nColumnCountImpl = getColumnCountImpl();
         while( nRow > 0 )
         {
             bool bEmpty = true;
-            for( nCol = 0; (nCol < getColumnCountImpl()) && bEmpty; nCol++ )
+            for( nCol = 0; (nCol < nColumnCountImpl) && bEmpty; nCol++ )
             {
                 Reference< XMergeableCell > xCell( getCellByPosition( nCol, nRow ), UNO_QUERY );
                 if( xCell.is() && !xCell->isMerged() )
@@ -1116,7 +1118,7 @@ void TableModel::merge( sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nColSpan, sal_
     const sal_Int32 nLastRow = nRow + nRowSpan;
     const sal_Int32 nLastCol = nCol + nColSpan;
 
-    if( (nLastRow > getRowCount()) || (nLastCol > getRowCount() ) )
+    if( (nLastRow > getRowCount()) || (nLastCol > getColumnCount() ) )
     {
         OSL_FAIL("TableModel::merge(), merge beyound the table!");
     }
