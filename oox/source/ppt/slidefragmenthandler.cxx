@@ -106,13 +106,10 @@ SlideFragmentHandler::~SlideFragmentHandler() throw()
             TextListStylePtr pTextListStyle(new TextListStyle);
             SlidePersistPtr pMasterPersistPtr = SlidePersistPtr( new SlidePersist( rFilter, sal_True, sal_True, mpSlidePersistPtr->getPage(),
                                 ShapePtr( new PPTShape( Master, "com.sun.star.drawing.GroupShape" ) ), mpSlidePersistPtr->getNotesTextStyle() ) );
-            //pMasterPersistPtr->setLayoutPath( aLayoutFragmentPath );
             pMasterPersistPtr->setPath( aNotesFragmentPath );
             rFilter.getMasterPages().push_back( pMasterPersistPtr );
             FragmentHandlerRef xMasterFragmentHandler( new SlideFragmentHandler( rFilter, aNotesFragmentPath, pMasterPersistPtr, Master ) );
             rFilter.importFragment( xMasterFragmentHandler );
-            //pMasterPersistPtr->createBackground( rFilter );
-            //pMasterPersistPtr->createXShapes( rFilter );
             mpSlidePersistPtr->setMasterPersist( pMasterPersistPtr );
         }
         return this;
@@ -213,11 +210,11 @@ void SlideFragmentHandler::finalizeImport()
     }
     catch( uno::Exception& )
     {
-        OSL_FAIL( OString(OString("oox::ppt::SlideFragmentHandler::EndElement(), "
-                    "exception caught: ") +
+        OSL_FAIL( OString("oox::ppt::SlideFragmentHandler::EndElement(), "
+                    "exception caught: " +
             OUStringToOString(
                 comphelper::anyToString( cppu::getCaughtException() ),
-                RTL_TEXTENCODING_UTF8 )).getStr() );
+                RTL_TEXTENCODING_UTF8 )).getStr());
     }
 }
 

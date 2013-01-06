@@ -44,9 +44,7 @@ namespace oox { namespace ppt {
         virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs );
 
     private:
-//      ::com::sun::star::uno::Any &         maCond;
         ::com::sun::star::animations::Event  maEvent;
-//      AnimTargetElementPtr         mpTarget;
         AnimationCondition &                 maCond;
     };
 

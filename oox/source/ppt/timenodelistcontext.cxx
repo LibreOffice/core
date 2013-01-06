@@ -347,9 +347,7 @@ namespace oox { namespace ppt {
             {
                 AttributeList attribs(xAttribs);
                 mbConcurrent = attribs.getBool( XML_concurrent, false );
-                // ST_TLNextActionType { none, seek }
                 mnNextAc = xAttribs->getOptionalValueToken( XML_nextAc, 0 );
-                // ST_TLPreviousActionType { none, skipTimed }
                 mnPrevAc = xAttribs->getOptionalValueToken( XML_prevAc, 0 );
             }
 
@@ -423,9 +421,7 @@ namespace oox { namespace ppt {
                             const Reference< XFastAttributeList >& xAttribs,
                             const TimeNodePtr & pNode ) throw()
             : TimeNodeContext( rParent, aElement, xAttribs, pNode )
-                // ST_TLAnimateColorSpace ( XML_rgb, XML_hsl }
             , mnColorSpace( xAttribs->getOptionalValueToken( XML_clrSpc, 0 ) )
-                // ST_TLAnimateColorDirection { XML_cw, XML_ccw }
             , mnDir( xAttribs->getOptionalValueToken( XML_dir, 0 ) )
             , mbHasByColor( false )
             , m_byColor( AnimationColorSpace::RGB, 0, 0, 0)
@@ -773,7 +769,6 @@ namespace oox { namespace ppt {
                     = makeAny((sal_Int16)AnimationTransformType::TRANSLATE);
 
                 AttributeList attribs( xAttribs );
-                // ST_TLAnimateMotionBehaviorOrigin { parent, layour }
                 sal_Int32 nOrigin = xAttribs->getOptionalValueToken( XML_origin, 0 );
                 if( nOrigin != 0 )
                 {
@@ -790,8 +785,6 @@ namespace oox { namespace ppt {
                 aStr = aStr.replace( 'E', ' ' );
                 aStr = aStr.trim();
                 pNode->getNodeProperties()[ NP_PATH ] = makeAny(aStr);
-
-                // ST_TLAnimateMotionPathEditMode{ fixed, relative }
                 mnPathEditMode = xAttribs->getOptionalValueToken( XML_pathEditMode, 0 );
                 msPtsTypes = xAttribs->getOptionalValue( XML_ptsTypes );
                 mnAngle = attribs.getInteger( XML_rAng, 0 );
