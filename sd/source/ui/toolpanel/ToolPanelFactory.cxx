@@ -101,7 +101,7 @@ namespace sd { namespace toolpanel
     //------------------------------------------------------------------------------------------------------------------
     Reference< XInterface > SAL_CALL ToolPanelFactory_createInstance( const Reference< XComponentContext >& i_rContext )
     {
-        return Reference< XInterface >( *new ToolPanelFactory( i_rContext ) );
+        return Reference< XInterface >( ToolPanelFactory( i_rContext ) );
     }
 
     //------------------------------------------------------------------------------------------------------------------

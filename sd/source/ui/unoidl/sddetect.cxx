@@ -515,7 +515,7 @@ rtl::OUString SdFilterDetect::impl_getStaticImplementationName()
 /* Helper for registry */
 UNOREFERENCE< UNOXINTERFACE > SAL_CALL SdFilterDetect::impl_createInstance( const UNOREFERENCE< UNOXMULTISERVICEFACTORY >& xServiceManager ) throw( UNOEXCEPTION )
 {
-    return UNOREFERENCE< UNOXINTERFACE >( *new SdFilterDetect( xServiceManager ) );
+    return UNOREFERENCE< UNOXINTERFACE >( SdFilterDetect( xServiceManager ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
