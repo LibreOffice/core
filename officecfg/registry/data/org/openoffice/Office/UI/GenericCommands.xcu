@@ -1471,6 +1471,14 @@
                     <value>1</value>
                 </prop>
             </node>
+            <node oor:name=".uno:ExitSearch" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Exit Search</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
             <node oor:name="vnd.sun.star.findbar:FocusToFindbar" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">~Find...</value>
