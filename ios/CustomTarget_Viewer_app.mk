@@ -127,6 +127,10 @@ $(SCRIPT_OUTPUT_FILE_0) : $(call gb_Executable_get_target,Viewer)
 		echo 'ProductMajor=360' && \
 		echo 'ProductMinor=1' && \
 	: ) > $(appdir)/program/versionrc
+#
+# Copy a sample document... good old test1.odt...
+#
+	cp $(SRC_ROOT)/odk/examples/java/DocumentHandling/test/test1.odt $(appdir)
 
 else
 # When run just from the command line, we don't have any app bundle to

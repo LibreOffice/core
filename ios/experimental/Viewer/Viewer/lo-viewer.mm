@@ -18,12 +18,17 @@
 #include <osl/detail/ios-bootstrap.h>
 #include <osl/process.h>
 
+#include <com/sun/star/awt/XDevice.hpp>
+#include <com/sun/star/awt/XToolkitExperimental.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/bridge/XUnoUrlResolver.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/view/XRenderable.hpp>
 
 #include <vcl/svapp.hxx>
 
@@ -31,6 +36,8 @@ using namespace com::sun::star;
 
 using ::rtl::OUString;
 using ::rtl::OUStringToOString;
+
+#define SMALLSIZE 100
 
 extern "C" {
     extern void * animcore_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
@@ -165,6 +172,9 @@ lo_initialize(void)
 
     try {
 
+        // Should start a background thread to do all this UNO
+        // initialisation crap
+
         uno::Reference< uno::XComponentContext > xContext(::cppu::defaultBootstrap_InitialComponentContext());
 
         uno::Reference< lang::XMultiComponentFactory > xFactory( xContext->getServiceManager() );
@@ -175,9 +185,37 @@ lo_initialize(void)
 
         InitVCL();
 
-        uno::Reference< uno::XInterface > xInterface =
-            xFactory->createInstanceWithContext( "com.sun.star.frame.Desktop",
-                                                 xContext );
+        // Yes, this code does of course not belong here. Once this
+        // turns into something that actually displays something and
+        // has a proper app lifecycle etc that willl be fixed. But for
+        // now this is just a test, not supposed to work in any sane
+        // way from a "user" POV, and it doesn't matter that we do
+        // this here.
+
+        uno::Reference< uno::XInterface > xDesktop =
+            xFactory->createInstanceWithContext( "com.sun.star.frame.Desktop", xContext );
+        uno::Reference< frame::XComponentLoader > xComponentLoader( xDesktop, uno::UNO_QUERY_THROW );
+
+        uno::Reference< uno::XInterface > xToolkitService =
+            xFactory->createInstanceWithContext( "com.sun.star.awt.Toolkit", xContext );
+
+        uno::Reference< awt::XToolkitExperimental > xToolkit( xToolkitService, uno::UNO_QUERY_THROW );
+
+        char *smallbb = new char[ SMALLSIZE*SMALLSIZE*4 ];
+
+        uno::Reference< awt::XDevice > xDummyDevice = xToolkit->createScreenCompatibleDeviceUsingBuffer( SMALLSIZE, SMALLSIZE, 1, 1, 0, 0, (sal_Int64) (intptr_t) smallbb);
+
+        uno::Sequence< beans::PropertyValue > loadProps(3);
+
+        loadProps[0].Name = "Hidden";
+        loadProps[0].Value <<= sal_True;
+        loadProps[1].Name = "ReadOnly";
+        loadProps[1].Value <<= sal_True;
+        loadProps[2].Name = "Preview";
+        loadProps[2].Value <<= sal_True;
+
+        OUString test1_odt( OUString( "file://" ) + OUString::createFromAscii( [[app_root_escaped stringByAppendingPathComponent: @"test1.odt"] UTF8String] ));
+        uno::Reference< lang::XComponent > xDoc = xComponentLoader->loadComponentFromURL ( test1_odt, "_blank", 0, loadProps );
     }
     catch ( uno::Exception e ) {
         SAL_WARN("Viewer", e.Message);
