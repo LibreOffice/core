@@ -26,9 +26,7 @@
 # instead of those above.
 
 # To use, add something like this to your ~/.lldbinit:
-
-# script sys.path[:0] = [os.path.expanduser('~/lo/ios/solenv/lldb/libreoffice')]
-# script import LO
+# command script import '~/lo/sim/solenv/lldb/libreoffice/LO.py'
 
 import lldb
 
