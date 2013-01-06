@@ -132,10 +132,10 @@ namespace
         return
           (
             rOrig.maTargetName == rNew.maSearchName &&
-            rOrig.meWeight == rNew.meWeight &&
-            rOrig.meItalic == rNew.meItalic &&
-            rOrig.mePitch == rNew.mePitch &&
-            rOrig.meWidthType == rNew.meWidthType
+            rOrig.GetWeight() == rNew.GetWeight() &&
+            rOrig.GetSlant() == rNew.GetSlant() &&
+            rOrig.GetPitch() == rNew.GetPitch() &&
+            rOrig.GetWidthType() == rNew.GetWidthType()
           );
     }
 

@@ -788,8 +788,8 @@ ServerFont::ServerFont( const FontSelectPattern& rFSD, FtFontInfo* pFI )
     mnLoadFlags |= FT_LOAD_IGNORE_TRANSFORM;
 #endif
 
-    mbArtItalic = (rFSD.meItalic != ITALIC_NONE && pFI->GetFontAttributes().GetSlant() == ITALIC_NONE);
-    mbArtBold = (rFSD.meWeight > WEIGHT_MEDIUM && pFI->GetFontAttributes().GetWeight() <= WEIGHT_MEDIUM);
+    mbArtItalic = (rFSD.GetSlant() != ITALIC_NONE && pFI->GetFontAttributes().GetSlant() == ITALIC_NONE);
+    mbArtBold = (rFSD.GetWeight() > WEIGHT_MEDIUM && pFI->GetFontAttributes().GetWeight() <= WEIGHT_MEDIUM);
     mbUseGamma = false;
     if( mbArtBold )
     {
@@ -934,7 +934,7 @@ void ServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor ) const
          (rTo.GetFamilyName().EqualsAscii("StarSymbol"))
        )
     {
-        rTo.mbSymbolFlag = true;
+        rTo.SetSymbolFlag( true );
     }
 
     if( maSizeFT )
@@ -964,11 +964,11 @@ void ServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor ) const
         // map the panose info from the OS2 table to their VCL counterparts
         switch( pOS2->panose[0] )
         {
-            case 1: rTo.meFamily = FAMILY_ROMAN; break;
-            case 2: rTo.meFamily = FAMILY_SWISS; break;
-            case 3: rTo.meFamily = FAMILY_MODERN; break;
-            case 4: rTo.meFamily = FAMILY_SCRIPT; break;
-            case 5: rTo.meFamily = FAMILY_DECORATIVE; break;
+            case 1: rTo.SetFamilyType( FAMILY_ROMAN ); break;
+            case 2: rTo.SetFamilyType( FAMILY_SWISS ); break;
+            case 3: rTo.SetFamilyType( FAMILY_MODERN ); break;
+            case 4: rTo.SetFamilyType( FAMILY_SCRIPT ); break;
+            case 5: rTo.SetFamilyType( FAMILY_DECORATIVE ); break;
             // TODO: is it reasonable to override the attribute with DONTKNOW?
             case 0: // fall through
             default: rTo.meFamilyType = FAMILY_DONTKNOW; break;
@@ -982,12 +982,12 @@ void ServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor ) const
             case 5: // fall through
             case 6: // fall through
             case 7: // fall through
-            case 8: rTo.mePitch = PITCH_VARIABLE; break;
-            case 9: rTo.mePitch = PITCH_FIXED; break;
+            case 8: rTo.SetPitch( PITCH_VARIABLE ); break;
+            case 9: rTo.SetPitch( PITCH_FIXED ); break;
             // TODO: is it reasonable to override the attribute with DONTKNOW?
             case 0: // fall through
             case 1: // fall through
-            default: rTo.mePitch = PITCH_DONTKNOW; break;
+            default: rTo.SetPitch( PITCH_DONTKNOW ); break;
         }
 
         const double fScale = (double)GetFontSelData().mnHeight / maFaceFT->units_per_EM;
