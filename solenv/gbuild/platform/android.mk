@@ -113,7 +113,7 @@ gb_CppunitTest_EXT := .a
 define gb_LinkTarget__command
 $(call gb_Output_announce,$(2),$(true),LNK,4)
 $(if $(filter CppunitTest,$(TARGETTYPE)), \
-	touch $(1), \
+	mkdir -p $(dir $(1)) && touch $(1), \
 	$(call gb_LinkTarget__command_staticlink,$(1)))
 endef
 
