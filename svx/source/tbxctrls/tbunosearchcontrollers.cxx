@@ -767,25 +767,25 @@ void SAL_CALL FindbarDispatcher::removeStatusListener( const css::uno::Reference
 css::uno::Reference< css::uno::XInterface > SAL_CALL FindTextToolbarController_createInstance(
     const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr )
 {
-    return *new FindTextToolbarController( rSMgr );
+    return FindTextToolbarController( rSMgr );
 }
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL DownSearchToolboxController_createInstance(
     const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr )
 {
-    return *new UpDownSearchToolboxController( rSMgr, UpDownSearchToolboxController::DOWN );
+    return UpDownSearchToolboxController( rSMgr, UpDownSearchToolboxController::DOWN );
 }
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL UpSearchToolboxController_createInstance(
     const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr )
 {
-    return *new UpDownSearchToolboxController( rSMgr, UpDownSearchToolboxController::UP );
+    return UpDownSearchToolboxController( rSMgr, UpDownSearchToolboxController::UP );
 }
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL FindbarDispatcher_createInstance(
     const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr )
 {
-    return *new FindbarDispatcher( rSMgr );
+    return FindbarDispatcher( rSMgr );
 }
 
 //-----------------------------------------------------------------------------------------------------------
