@@ -306,6 +306,13 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL svx_component_getFactory (
                 svx::UpSearchToolboxController_createInstance,
                 svx::UpDownSearchToolboxController::getSupportedServiceNames_Static() );
         }
+        else if ( svx::ExitSearchToolboxController::getImplementationName_Static().equalsAscii( pImplName ) )
+        {
+            xFactory = createSingleFactory( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
+                svx::ExitSearchToolboxController::getImplementationName_Static(),
+                svx::ExitFindbarToolboxController_createInstance,
+                svx::ExitSearchToolboxController::getSupportedServiceNames_Static() );
+        }
         else if ( svx::FindbarDispatcher::getImplementationName_Static().equalsAscii( pImplName ) )
         {
             xFactory = createSingleFactory( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
