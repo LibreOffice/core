@@ -396,6 +396,17 @@
           <value>com.sun.star.svx.DownSearchToolboxController</value>
         </prop>
       </node>
+      <node oor:name="com.sun.star.svx.ExitFindbarToolboxController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ExitSearch</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.svx.ExitFindbarToolboxController</value>
+        </prop>
+      </node>
       <node oor:name="com.sun.star.svx.UpSearchToolboxController" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:UpSearch</value>
