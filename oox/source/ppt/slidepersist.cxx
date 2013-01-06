@@ -56,15 +56,6 @@ SlidePersist::SlidePersist( XmlFilterBase& rFilter, sal_Bool bMaster, sal_Bool b
 , maNotesTextStylePtr( new oox::drawingml::TextListStyle )
 , maOtherTextStylePtr( new oox::drawingml::TextListStyle )
 {
-    if ( pDefaultTextStyle )
-    {
-    /*
-        maTitleTextStylePtr->apply( *pDefaultTextStyle.get() );
-        maBodyTextStylePtr->apply( *pDefaultTextStyle.get() );
-        maNotesTextStylePtr->apply( *pDefaultTextStyle.get() );
-        maOtherTextStylePtr->apply( *pDefaultTextStyle.get() );
-    */
-    }
 #if OSL_DEBUG_LEVEL > 0
     mxDebugPage = mxPage;
 #endif

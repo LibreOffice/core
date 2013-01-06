@@ -68,10 +68,6 @@ namespace oox { namespace ppt {
                     maSlideProperties[ PROP_SoundOn ] <<= sal_True;
                 }
             }
-//          else if( mbStopSound )
-//          {
-//              maSlideProperties[ "" ] = Any( sal_True );
-//          }
         }
     }
 

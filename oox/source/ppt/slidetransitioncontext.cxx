@@ -75,7 +75,6 @@ SlideTransitionContext::~SlideTransitionContext() throw()
         {
             mbHasTransition = true;
             maTransition.setOoxTransitionType( aElementToken, rAttribs.getToken( XML_dir, XML_horz ), 0);
-            // ST_Direction { XML_horz, XML_vert }
         }
         return this;
     case PPT_TOKEN( cover ):
@@ -84,10 +83,6 @@ SlideTransitionContext::~SlideTransitionContext() throw()
         {
             mbHasTransition = true;
             maTransition.setOoxTransitionType( aElementToken, rAttribs.getToken( XML_dir, XML_l ), 0 );
-            // ST_TransitionEightDirectionType { ST_TransitionSideDirectionType {
-            //                                   XML_d, XML_d, XML_r, XML_u },
-            //                                   ST_TransitionCornerDirectionType {
-            //                                   XML_ld, XML_lu, XML_rd, XML_ru }
         }
         return this;
     case PPT_TOKEN( cut ):
@@ -95,7 +90,6 @@ SlideTransitionContext::~SlideTransitionContext() throw()
         if (!mbHasTransition)
         {
             mbHasTransition = true;
-            // CT_OptionalBlackTransition xdb:bool
             maTransition.setOoxTransitionType( aElementToken, rAttribs.getBool( XML_thruBlk, false ), 0);
         }
         return this;
@@ -105,7 +99,6 @@ SlideTransitionContext::~SlideTransitionContext() throw()
         {
             mbHasTransition = true;
             maTransition.setOoxTransitionType( aElementToken, rAttribs.getToken( XML_dir, XML_l ), 0 );
-            // ST_TransitionSideDirectionType { XML_d, XML_l, XML_r, XML_u }
         }
         return this;
     case PPT_TOKEN( split ):
@@ -113,8 +106,6 @@ SlideTransitionContext::~SlideTransitionContext() throw()
         {
             mbHasTransition = true;
             maTransition.setOoxTransitionType( aElementToken, rAttribs.getToken( XML_orient, XML_horz ),    rAttribs.getToken( XML_dir, XML_out ) );
-            // ST_Direction { XML_horz, XML_vert }
-            // ST_TransitionInOutDirectionType { XML_out, XML_in }
         }
         return this;
     case PPT_TOKEN( zoom ):
@@ -122,7 +113,6 @@ SlideTransitionContext::~SlideTransitionContext() throw()
         {
             mbHasTransition = true;
             maTransition.setOoxTransitionType( aElementToken, rAttribs.getToken( XML_dir, XML_out ), 0 );
-            // ST_TransitionInOutDirectionType { XML_out, XML_in }
         }
         return this;
     case PPT_TOKEN( wheel ):

@@ -114,7 +114,7 @@ void ResolveTextFields( XmlFilterBase& rFilter )
                                 xDrawPage = xPresentationPage->getNotesPage();
                             }
                             Reference< container::XNamed > xNamed( xDrawPage, UNO_QUERY_THROW );
-                            aURL = OUString( "#" ).concat( xNamed->getName() );
+                            aURL = "#" + xNamed->getName();
                             xPropSet->setPropertyValue( sURL, Any( aURL ) );
                             Reference< text::XTextContent > xContent( rTextField.xTextField, UNO_QUERY);
                             Reference< text::XTextRange > xTextRange( rTextField.xTextCursor, UNO_QUERY );
@@ -285,8 +285,8 @@ void PresentationFragmentHandler::finalizeImport()
     }
     catch( uno::Exception& )
     {
-        OSL_FAIL( OString(OString("oox::ppt::PresentationFragmentHandler::EndDocument(), "
-                    "exception caught: ") +
+        OSL_FAIL( OString("oox::ppt::PresentationFragmentHandler::EndDocument(), "
+                    "exception caught: " +
             OUStringToOString(
                 comphelper::anyToString( cppu::getCaughtException() ),
                 RTL_TEXTENCODING_UTF8 )).getStr() );
