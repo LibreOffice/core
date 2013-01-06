@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "AAAASX///x0\u003d",
+        "filename": "svx/source/table/tablemodel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1031,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2013-01-06T10:10:07Z",
+      "side": 1,
+      "message": "Hmm, but that other nRow is used for the same purpose, and their uses don\u0027t overlap, do they? Can\u0027t the same variable be used in both cases? (I haven\u0027t looked at the actual source, just at what gerrit shows...)",
+      "parentUuid": "AAAASX///yA\u003d",
+      "revId": "002d06a1a5b0b8f87530c94f7e07001e02e76344",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAASX///yI\u003d",
         "filename": "svx/source/table/tablemodel.cxx",
         "patchSetId": 1
