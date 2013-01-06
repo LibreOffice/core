@@ -207,8 +207,8 @@ namespace rtl_DoubleLocking
                 nValueOK2 = p2Thread->getOK();
 
 #if OSL_DEBUG_LEVEL > 2
-                printf("Value in Thread #1 is %d\n", nValueOK);
-                printf("Value in Thread #2 is %d\n", nValueOK2);
+                printf("Value in Thread #1 is %" SAL_PRIdINT32 "\n", nValueOK);
+                printf("Value in Thread #2 is %" SAL_PRIdINT32 "\n", nValueOK2);
 #else
                 (void)nValueOK2;
 #endif
@@ -220,8 +220,8 @@ namespace rtl_DoubleLocking
                 nValueFails2 = p2Thread->getFails();
 
 #if OSL_DEBUG_LEVEL > 2
-                printf("Fails in Thread #1 is %d\n", nValueFails);
-                printf("Fails in Thread #2 is %d\n", nValueFails2);
+                printf("Fails in Thread #1 is %" SAL_PRIdINT32 "\n", nValueFails);
+                printf("Fails in Thread #2 is %" SAL_PRIdINT32 "\n", nValueFails2);
 #endif
 
                 delete pThread;
