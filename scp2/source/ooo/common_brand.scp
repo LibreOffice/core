@@ -972,15 +972,6 @@ ProfileItem gid_Brand_Profileitem_Version_Buildid
     Value = "<buildid>";
 End
 
-ProfileItem gid_Brand_Profileitem_Version_Productsource
-    ProfileID = gid_Brand_Profile_Version_Ini;
-    ModuleID = gid_Module_Root_Brand;
-    Section = "Version";
-    Order = 7;
-    Key = "ProductSource";
-    Value = "<sourceid>";
-End
-
 #ifdef WNT
 
 ProfileItem gid_Brand_Profileitem_Version_Productcode
