@@ -579,7 +579,7 @@ void TitleHelper::impl_appendModuleName (::rtl::OUStringBuffer& sTitle)
 void TitleHelper::impl_appendDebugVersion (::rtl::OUStringBuffer& sTitle)
 {
     ::rtl::OUString sDefault(RTL_CONSTASCII_USTRINGPARAM("development"));
-    ::rtl::OUString sVersion = ::utl::Bootstrap::getProductBuildIdData(sDefault);
+    ::rtl::OUString sVersion = ::utl::Bootstrap::getBuildIdData(sDefault);
     sTitle.appendAscii(RTL_CONSTASCII_STRINGPARAM(" ["));
     sTitle.append(sVersion);
     sTitle.appendAscii(RTL_CONSTASCII_STRINGPARAM("]"));

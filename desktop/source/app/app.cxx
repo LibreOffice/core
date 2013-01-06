@@ -1459,7 +1459,7 @@ int Desktop::Main()
         //include buildid in non product builds
         ::rtl::OUString aDefault("development");
         aTitle += rtl::OUString(" [");
-        String aVerId( utl::Bootstrap::getProductBuildIdData(aDefault));
+        String aVerId( utl::Bootstrap::getBuildIdData(aDefault));
         aTitle += aVerId;
         aTitle += ']';
 #endif
