@@ -64,4 +64,7 @@
   <implementation name="com.sun.star.svx.UpSearchToolboxController">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
+  <implementation name="com.sun.star.svx.ExitFindbarToolboxController">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
 </component>
