@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAASX///yU\u003d",
+        "filename": "svx/source/table/tablemodel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1031,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2013-01-06T09:04:59Z",
+      "side": 1,
+      "message": "Itr is misleading and pointless to call a variable \"Impl\". That is used only for functions that \"implement\" something. The nCol variable here isn\u0027t called nColCountImpl either, and not nColCount either, so for symmetry, surely this variable should be called nRow.",
+      "revId": "002d06a1a5b0b8f87530c94f7e07001e02e76344",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASX///yQ\u003d",
+        "filename": "svx/source/table/tablemodel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1123,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2013-01-06T09:04:59Z",
+      "side": 1,
+      "message": "But as the buggy code affected only this OSL_FAIL, which expands to nothing in a production build, doesn\u0027t it, I guess the bug had no visible consequences. In wonder if that should teach us something? Like that it\u0027s pointless to use OSL_FAIL if the code in question is not built with --enable-debug and/or --enable-dbgutil *and* gets exercised in a unit test.",
+      "revId": "002d06a1a5b0b8f87530c94f7e07001e02e76344",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
