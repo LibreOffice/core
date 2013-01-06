@@ -263,7 +263,6 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
     const SfxItemSet* pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem;
     SwWrtShell* pActShell = 0;
-    sal_Bool bSetReturn = sal_True;
     switch (nSlot)
     {
     case SID_STYLE_NEW:
@@ -487,13 +486,10 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
         }
     }
 
-    if(bSetReturn)
-    {
         if(rReq.IsAPI()) // Basic only gets TRUE or FALSE
             rReq.SetReturnValue(SfxUInt16Item(nSlot, nRet !=0));
         else
             rReq.SetReturnValue(SfxUInt16Item(nSlot, nRet));
-    }
 
 }
 
