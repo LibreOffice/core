@@ -61,23 +61,23 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 		self.connectioncontext = None
 		self.notify = EventObject()
 		if dbg:
-			print("PyMailSMPTService init", file=dbgout)
+			print("PyMailSMTPService init", file=dbgout)
 	def addConnectionListener(self, xListener):
 		if dbg:
-			print("PyMailSMPTService addConnectionListener", file=dbgout)
+			print("PyMailSMTPService addConnectionListener", file=dbgout)
 		self.listeners.append(xListener)
 	def removeConnectionListener(self, xListener):
 		if dbg:
-			print("PyMailSMPTService removeConnectionListener", file=dbgout)
+			print("PyMailSMTPService removeConnectionListener", file=dbgout)
 		self.listeners.remove(xListener)
 	def getSupportedConnectionTypes(self):
 		if dbg:
-			print("PyMailSMPTService getSupportedConnectionTypes", file=dbgout)
+			print("PyMailSMTPService getSupportedConnectionTypes", file=dbgout)
 		return self.supportedtypes
 	def connect(self, xConnectionContext, xAuthenticator):
 		self.connectioncontext = xConnectionContext
 		if dbg:
-			print("PyMailSMPTService connect", file=dbgout)
+			print("PyMailSMTPService connect", file=dbgout)
 		server = xConnectionContext.getValueByName("ServerName")
 		if dbg:
 			print(server, file=dbgout)
@@ -110,7 +110,7 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 			listener.connected(self.notify)
 	def disconnect(self):
 		if dbg:
-			print("PyMailSMPTService disconnect", file=dbgout)
+			print("PyMailSMTPService disconnect", file=dbgout)
 		if self.server:
 			self.server.quit()
 			self.server = None
@@ -118,17 +118,17 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 			listener.disconnected(self.notify)
 	def isConnected(self):
 		if dbg:
-			print("PyMailSMPTService isConnected", file=dbgout)
+			print("PyMailSMTPService isConnected", file=dbgout)
 		return self.server != None
 	def getCurrentConnectionContext(self):
 		if dbg:
-			print("PyMailSMPTService getCurrentConnectionContext", file=dbgout)
+			print("PyMailSMTPService getCurrentConnectionContext", file=dbgout)
 		return self.connectioncontext
 	def sendMailMessage(self, xMailMessage):
 		COMMASPACE = ', '
 
 		if dbg:
-			print("PyMailSMPTService sendMailMessage", file=dbgout)
+			print("PyMailSMTPService sendMailMessage", file=dbgout)
 		recipients = xMailMessage.getRecipients()
 		sendermail = xMailMessage.SenderAddress
 		sendername = xMailMessage.SenderName
@@ -136,10 +136,10 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 		ccrecipients = xMailMessage.getCcRecipients()
 		bccrecipients = xMailMessage.getBccRecipients()
 		if dbg:
-			print("PyMailSMPTService subject " + subject, file=dbgout)
-			print("PyMailSMPTService from " + sendername.encode('utf-8'), file=dbgout)
+			print("PyMailSMTPService subject " + subject, file=dbgout)
+			print("PyMailSMTPService from " + sendername.encode('utf-8'), file=dbgout)
 			print("PyMailSMTPService from " + sendermail, file=dbgout)
-			print("PyMailSMPTService send to " + recipients, file=dbgout)
+			print("PyMailSMTPService send to " + recipients, file=dbgout)
 
 		attachments = xMailMessage.getAttachments()
 
@@ -148,13 +148,13 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 		content = xMailMessage.Body
 		flavors = content.getTransferDataFlavors()
 		if dbg:
-			print("PyMailSMPTService flavors len " + len(flavors), file=dbgout)
+			print("PyMailSMTPService flavors len " + len(flavors), file=dbgout)
 
 		#Use first flavor that's sane for an email body
 		for flavor in flavors:
 			if flavor.MimeType.find('text/html') != -1 or flavor.MimeType.find('text/plain') != -1:
 				if dbg:
-					print("PyMailSMPTService mimetype is " + flavor.MimeType, file=dbgout)
+					print("PyMailSMTPService mimetype is " + flavor.MimeType, file=dbgout)
 				textbody = content.getTransferData(flavor)
 				try:
 					textbody = textbody.value
@@ -232,7 +232,7 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 		truerecipients = uniquer.keys()
 
 		if dbg:
-			print("PyMailSMPTService recipients are " + truerecipients, file=dbgout)
+			print("PyMailSMTPService recipients are " + truerecipients, file=dbgout)
 
 		self.server.sendmail(sendermail, truerecipients, msg.as_string())
 
