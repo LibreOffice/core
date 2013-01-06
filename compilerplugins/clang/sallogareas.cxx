@@ -16,8 +16,6 @@
 
 #include <fstream>
 
-#include <config_clang.h>
-
 namespace loplugin
 {
 

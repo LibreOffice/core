@@ -2906,6 +2906,7 @@ if test "$GCC" = "yes"; then
         CLANG_FULL_VERSION=`echo __clang_version__ | $CC -E -P -`
         CLANGVER=`echo $clang_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
         AC_MSG_RESULT([Clang $CLANG_FULL_VERSION, $CLANGVER])
+        AC_DEFINE_UNQUOTED(CLANG_FULL_VERSION,$CLANG_FULL_VERSION)
     fi
 fi
 AC_SUBST(COM_GCC_IS_CLANG)

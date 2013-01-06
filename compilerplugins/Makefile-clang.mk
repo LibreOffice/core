@@ -69,6 +69,6 @@ $(CLANGOUTDIR)/plugin.so: $(CLANGOBJS)
 
 # Clang most probably doesn't maintain binary compatibility, so rebuild when clang changes.
 $(CLANGOUTDIR)/clang-timestamp: $(CLANGDIR)/bin/clang
-	touch $@ -r $^
+	touch $@
 
 # vim: set noet sw=4 ts=4:
