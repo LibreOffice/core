@@ -101,8 +101,7 @@ namespace vclcanvas
         OutputDevice* pOutDev = reinterpret_cast<OutputDevice*>(nPtr);
         if( !pOutDev )
             throw lang::NoSupportException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                     "Passed OutDev invalid!")),
+                ::rtl::OUString( "Passed OutDev invalid!" ),
                 NULL);
 
         OutDevProviderSharedPtr pOutdevProvider( new OutDevHolder(*pOutDev) );
@@ -134,7 +133,7 @@ namespace vclcanvas
 
     ::rtl::OUString SAL_CALL Canvas::getServiceName(  ) throw (::com::sun::star::uno::RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CANVAS_SERVICE_NAME ) );
+        return ::rtl::OUString( CANVAS_SERVICE_NAME );
     }
 
     bool Canvas::repaint( const GraphicObjectSharedPtr& rGrf,

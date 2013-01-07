@@ -121,9 +121,9 @@ namespace vclcanvas
 #define IMPLEMENTATION_NAME "VCLCanvas.CanvasCustomSprite"
 #define SERVICE_NAME "com.sun.star.rendering.CanvasCustomSprite"
 
-    ::rtl::OUString SAL_CALL CanvasCustomSprite::getImplementationName() throw( uno::RuntimeException )
+    OUString SAL_CALL CanvasCustomSprite::getImplementationName() throw( uno::RuntimeException )
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATION_NAME ) );
+        return OUString( IMPLEMENTATION_NAME );
     }
 
     sal_Bool SAL_CALL CanvasCustomSprite::supportsService( const ::rtl::OUString& ServiceName ) throw( uno::RuntimeException )
@@ -131,10 +131,10 @@ namespace vclcanvas
         return ServiceName == SERVICE_NAME;
     }
 
-    uno::Sequence< ::rtl::OUString > SAL_CALL CanvasCustomSprite::getSupportedServiceNames()  throw( uno::RuntimeException )
+    uno::Sequence< OUString > SAL_CALL CanvasCustomSprite::getSupportedServiceNames()  throw( uno::RuntimeException )
     {
-        uno::Sequence< ::rtl::OUString > aRet(1);
-        aRet[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
+        uno::Sequence< OUString > aRet(1);
+        aRet[0] = OUString( SERVICE_NAME );
 
         return aRet;
     }

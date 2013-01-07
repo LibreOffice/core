@@ -591,15 +591,15 @@ namespace vclcanvas
         const double denominator( maLastUpdate.getElapsedTime() );
         maLastUpdate.reset();
 
-        ::rtl::OUString text( ::rtl::math::doubleToUString( denominator == 0.0 ? 100.0 : 1.0/denominator,
+        OUString text( ::rtl::math::doubleToUString( denominator == 0.0 ? 100.0 : 1.0/denominator,
                                                             rtl_math_StringFormat_F,
                                                             2,'.',NULL,' ') );
 
         // pad with leading space
         while( text.getLength() < 6 )
-            text = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM (" ")) + text;
+            text = " " + text;
 
-        text += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM (" fps"));
+        text += " fps";
 
         renderInfoText( rOutDev,
                         text,
@@ -648,9 +648,9 @@ namespace vclcanvas
 
             // pad with leading space
             while( text.getLength() < 3 )
-                text = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM (" ")) + text;
+                text = " " + text;
 
-            text = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("Sprites: ")) + text;
+            text = "Sprites: " + text;
 
             renderInfoText( rOutDev,
                             text,
@@ -684,17 +684,15 @@ namespace vclcanvas
                                     rVDevSize.Width()*rVDevSize.Height() * BYTES_PER_PIXEL +
                                     rBackBufferSize.Width()*rBackBufferSize.Height() * BYTES_PER_PIXEL );
 
-            ::rtl::OUString text( ::rtl::math::doubleToUString( nMemUsage / 1048576.0,
+            OUString text( ::rtl::math::doubleToUString( nMemUsage / 1048576.0,
                                                                 rtl_math_StringFormat_F,
                                                                 2,'.',NULL,' ') );
 
             // pad with leading space
             while( text.getLength() < 4 )
-                text = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM (" ")) + text;
+                text = " " + text;
 
-            text = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("Mem: ")) +
-                text +
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("MB"));
+            text = "Mem: " + text + "MB";
 
             renderInfoText( rOutDev,
                             text,

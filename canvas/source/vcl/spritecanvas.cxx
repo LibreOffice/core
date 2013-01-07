@@ -149,9 +149,9 @@ namespace vclcanvas
                                                                   mbSurfaceDirty);
     }
 
-    ::rtl::OUString SAL_CALL SpriteCanvas::getServiceName(  ) throw (::com::sun::star::uno::RuntimeException)
+    OUString SAL_CALL SpriteCanvas::getServiceName(  ) throw (::com::sun::star::uno::RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SPRITECANVAS_SERVICE_NAME ) );
+        return OUString( SPRITECANVAS_SERVICE_NAME );
     }
 
     bool SpriteCanvas::repaint( const GraphicObjectSharedPtr&   rGrf,

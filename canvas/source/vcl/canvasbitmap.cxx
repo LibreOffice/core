@@ -74,9 +74,9 @@ namespace vclcanvas
 #define IMPLEMENTATION_NAME "VCLCanvas.CanvasBitmap"
 #define SERVICE_NAME "com.sun.star.rendering.CanvasBitmap"
 
-    ::rtl::OUString SAL_CALL CanvasBitmap::getImplementationName(  ) throw (uno::RuntimeException)
+    OUString SAL_CALL CanvasBitmap::getImplementationName(  ) throw (uno::RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATION_NAME ) );
+        return OUString( IMPLEMENTATION_NAME );
     }
 
     sal_Bool SAL_CALL CanvasBitmap::supportsService( const ::rtl::OUString& ServiceName ) throw (uno::RuntimeException)
@@ -84,10 +84,10 @@ namespace vclcanvas
         return ServiceName == SERVICE_NAME;
     }
 
-    uno::Sequence< ::rtl::OUString > SAL_CALL CanvasBitmap::getSupportedServiceNames(  ) throw (uno::RuntimeException)
+    uno::Sequence< OUString > SAL_CALL CanvasBitmap::getSupportedServiceNames(  ) throw (uno::RuntimeException)
     {
-        uno::Sequence< ::rtl::OUString > aRet(1);
-        aRet[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
+        uno::Sequence< OUString > aRet(1);
+        aRet[0] = OUString( SERVICE_NAME );
 
         return aRet;
     }
