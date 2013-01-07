@@ -55,6 +55,7 @@
 #include <fmtrowsplt.hxx>
 #include <frmatr.hxx>
 #include <doc.hxx>
+#include <viewopt.hxx>
 #include <docary.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -232,6 +233,10 @@ static void WriteDop( WW8Export& rWrt )
         DefaultItemGet<SvxTabStopItem>(*rWrt.pDoc, RES_PARATR_TABSTOP);
     rDop.dxaTab = (sal_uInt16)rTabStop[0].GetTabPos();
 
+    // Zoom factor.
+    ViewShell *pViewShell(rWrt.pDoc->GetCurrentViewShell());
+    if (pViewShell && pViewShell->GetViewOptions()->GetZoomType() == SVX_ZOOM_PERCENT)
+        rDop.wScaleSaved = pViewShell->GetViewOptions()->GetZoom();
 
     // Werte aus der DocStatistik (werden aufjedenfall fuer die
     // DocStat-Felder benoetigt!)
