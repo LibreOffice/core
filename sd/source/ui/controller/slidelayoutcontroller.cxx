@@ -331,7 +331,8 @@ Sequence< OUString >  SlideLayoutController_getSupportedServiceNames() throw( Ru
 
 Reference< XInterface > SAL_CALL SlideLayoutController_createInstance( const Reference< XMultiServiceFactory >& rSMgr ) throw( RuntimeException )
 {
-    return SlideLayoutController( rSMgr, ".uno:AssignLayout", false );
+    return static_cast< cppu::OWeakObject * >(
+        new SlideLayoutController( rSMgr, ".uno:AssignLayout", false ));
 }
 
 // --------------------------------------------------------------------
@@ -354,7 +355,8 @@ Sequence< OUString >  InsertSlideController_getSupportedServiceNames() throw( Ru
 
 Reference< XInterface > SAL_CALL InsertSlideController_createInstance( const Reference< XMultiServiceFactory >& rSMgr ) throw( RuntimeException )
 {
-    return SlideLayoutController( rSMgr, ".uno:InsertPage" , true );
+    return static_cast< cppu::OWeakObject * >(
+        new SlideLayoutController( rSMgr, ".uno:InsertPage" , true ) );
 }
 
 //========================================================================
