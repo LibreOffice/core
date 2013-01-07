@@ -73,7 +73,7 @@ SW_DLLPUBLIC void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, sal
 //inserts a string sorted into a ListBox,
 SW_DLLPUBLIC sal_uInt16 InsertStringSorted(const String& rEntry, ListBox& rToFill, sal_uInt16 nOffset);
 
-// Tabellenbreite und Ausrichtung ermitteln
+// Get table width and alignement
 SwTwips GetTableWidth( SwFrmFmt* pFmt, SwTabCols& rCols, sal_uInt16 *pPercent,
         SwWrtShell* pSh );
 

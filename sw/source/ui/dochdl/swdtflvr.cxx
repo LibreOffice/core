@@ -583,7 +583,7 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
     {
     case SWTRANSFER_OBJECTTYPE_DRAWMODEL:
         {
-            // dont change the sequence of commands
+            // don't change the sequence of commands
             SdrModel *pModel = (SdrModel*)pObject;
             xStream->SetBufferSize( 16348 );
 
@@ -822,7 +822,7 @@ int SwTransferable::PrepareForCopy( sal_Bool bIsCut )
 
         SwDoc *const pTmpDoc = lcl_GetDoc(*pClpDocFac);
 
-        pTmpDoc->LockExpFlds();     // nie die Felder updaten - Text so belassen
+        pTmpDoc->LockExpFlds();     // Never update fields - leave text as is
         lclOverWriteDoc(*pWrtShell, *pTmpDoc);
 
         {
@@ -843,7 +843,7 @@ int SwTransferable::PrepareForCopy( sal_Bool bIsCut )
                 pMarkAccess->deleteMark(*ppMark);
         }
 
-        // a new one was created in CORE (OLE-Objekte copied!)
+        // a new one was created in CORE (OLE objects copied!)
         aDocShellRef = pTmpDoc->GetTmpDocShell();
         if( aDocShellRef.Is() )
             SwTransferable::InitOle( aDocShellRef, *pTmpDoc );
@@ -2407,7 +2407,7 @@ int SwTransferable::_PasteFileName( TransferableDataHelper& rData,
                         sFileURL, aEmptyStr );
                 if( pFlt && !rSh.GetView().GetDocShell()->ISA(SwWebDocShell) )
                 {
-    // and then pull up the insert-region-dialog by PostUser event
+                // and then pull up the insert-region-dialog by PostUser event
                     SwSectionData * pSect = new SwSectionData(
                                     FILE_LINK_SECTION,
                                     rSh.GetDoc()->GetUniqueSectionName() );
@@ -3053,7 +3053,7 @@ int SwTransferable::PrivatePaste( SwWrtShell& rShell )
 {
     // first, ask for the SelectionType, then action-bracketing !!!!
     // (otherwise it's not pasted into a TableSelection!!!)
-    OSL_ENSURE( !rShell.ActionPend(), "Paste darf nie eine Actionklammerung haben" );
+    OSL_ENSURE( !rShell.ActionPend(), "Paste must never have an ActionPend" );
     if ( !pClpDocFac )
         return sal_False; // the return value of the SwFEShell::Paste also is sal_Bool!
 
@@ -3092,7 +3092,7 @@ int SwTransferable::PrivatePaste( SwWrtShell& rShell )
 // in the buffer, word in this context means 'something with spaces at beginning
 // and end'. In this case we definitely want these spaces to be inserted here.
             bInWrd = rShell.IsInWrd();
-             bEndWrd = rShell.IsEndWrd();
+            bEndWrd = rShell.IsEndWrd();
             bSmart = bInWrd || bEndWrd;
             if( bSmart )
             {

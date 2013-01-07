@@ -145,9 +145,9 @@
 using namespace sw::mark;
 using namespace ::com::sun::star;
 
-/*--------------------------------------------------------------------
-    Description:   Globals
- --------------------------------------------------------------------*/
+/**
+ * Globals
+ */
 
 static bool bInputLanguageSwitched = false;
 extern sal_Bool bNoInterrupt;       // in mainwn.cxx
@@ -172,13 +172,13 @@ QuickHelpData* SwEditWin::pQuickHlpData = 0;
 
 long    SwEditWin::nDDStartPosY = 0;
 long    SwEditWin::nDDStartPosX = 0;
-/* Note:
-   The initial color shown on the button is set in /core/svx/source/tbxctrls/tbxcolorupdate.cxx
-   (ToolboxButtonColorUpdater::ToolboxButtonColorUpdater()) .
-   The initial color used by the button is set in /core/svx/source/tbxcntrls/tbcontrl.cxx
-   (SvxColorExtToolBoxControl::SvxColorExtToolBoxControl())
-   and in case of writer for text(background)color also in /core/sw/source/ui/docvw/edtwin.cxx
-   (SwEditWin::aTextBackColor and SwEditWin::aTextBackColor)
+/**
+ * The initial color shown on the button is set in /core/svx/source/tbxctrls/tbxcolorupdate.cxx
+ * (ToolboxButtonColorUpdater::ToolboxButtonColorUpdater()) .
+ * The initial color used by the button is set in /core/svx/source/tbxcntrls/tbcontrl.cxx
+ * (SvxColorExtToolBoxControl::SvxColorExtToolBoxControl())
+ * and in case of writer for text(background)color also in /core/sw/source/ui/docvw/edtwin.cxx
+ * (SwEditWin::aTextBackColor and SwEditWin::aTextBackColor)
  */
 Color   SwEditWin::aTextBackColor(COL_YELLOW);
 Color   SwEditWin::aTextColor(COL_RED);
@@ -283,9 +283,9 @@ struct QuickHelpData
     void SortAndFilter();
 };
 
-/*--------------------------------------------------------------------
-    Description:   avoid minimal movement shiver
- --------------------------------------------------------------------*/
+/**
+ * Avoid minimal movement shiver
+ */
 
 #define HIT_PIX  2 /* hit tolerance in pixel  */
 #define MIN_MOVE 4
@@ -296,12 +296,12 @@ inline sal_Bool IsMinMove(const Point &rStartPos, const Point &rLPt)
            Abs(rStartPos.Y() - rLPt.Y()) > MIN_MOVE;
 }
 
-/*--------------------------------------------------------------------
-                for MouseButtonDown - determine whether a DrawObject
-                an NO SwgFrame was hit! Shift/Ctrl should only result
-                in selecting, with DrawObjects; at SwgFlys to trigger
-                hyperlinks if applicable (DownLoad/NewWindow!)
- --------------------------------------------------------------------*/
+/**
+ * For MouseButtonDown - determine whether a DrawObject
+ * an NO SwgFrame was hit! Shift/Ctrl should only result
+ * in selecting, with DrawObjects; at SwgFlys to trigger
+ * hyperlinks if applicable (DownLoad/NewWindow!)
+ */
 inline sal_Bool IsDrawObjSelectable( const SwWrtShell& rSh, const Point& rPt )
 {
     sal_Bool bRet = sal_True;
@@ -319,10 +319,9 @@ inline sal_Bool IsDrawObjSelectable( const SwWrtShell& rSh, const Point& rPt )
     return bRet;
 }
 
-/*--------------------------------------------------------------------
-    Description:   switch pointer
- --------------------------------------------------------------------*/
-
+/*
+ * Switch pointer
+ */
 void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
 {
     SwWrtShell &rSh = rView.GetWrtShell();
@@ -571,10 +570,9 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
     }
 }
 
-/*--------------------------------------------------------------------
-    Description: increase timer for selection
- --------------------------------------------------------------------*/
-
+/**
+ * Increase timer for selection
+ */
 IMPL_LINK_NOARG(SwEditWin, TimerHandler)
 {
     DBG_PROFSTART(edithdl);
@@ -659,9 +657,9 @@ inline void SwEditWin::EnterArea()
     aTimer.Stop();
 }
 
-/*------------------------------------------------------------------------
- Description:  insert mode for frames
-------------------------------------------------------------------------*/
+/**
+ * Insert mode for frames
+ */
 
 void SwEditWin::InsFrm(sal_uInt16 nCols)
 {
@@ -838,10 +836,9 @@ static sal_uInt16 lcl_isNonDefaultLanguage(LanguageType eBufferLanguage, SwView&
     return bLang ? nWhich : INVALID_HINT;
 }
 
-/*--------------------------------------------------------------------
-     Description:  character buffer is inserted into the document
- --------------------------------------------------------------------*/
-
+/**
+ * Character buffer is inserted into the document
+ */
 void SwEditWin::FlushInBuffer()
 {
     if ( aInBuffer.Len() )
@@ -1284,10 +1281,9 @@ void SwEditWin::ChangeDrawing( sal_uInt8 nDir )
     rSh.EndUndo();
 }
 
-/*--------------------------------------------------------------------
-    Description:   KeyEvents
- --------------------------------------------------------------------*/
-
+/**
+ * KeyEvents
+ */
 void SwEditWin::KeyInput(const KeyEvent &rKEvt)
 {
     SwWrtShell &rSh = rView.GetWrtShell();
@@ -2701,10 +2697,9 @@ KEYINPUT_CHECKTABLE_INSDEL:
 
 }
 
-/*--------------------------------------------------------------------
-     Description:  MouseEvents
- --------------------------------------------------------------------*/
-
+/**
+ * MouseEvents
+ */
 void SwEditWin::RstMBDownFlags()
 {
     // Not on all systems a MouseButtonUp is used ahead
@@ -3238,9 +3233,10 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         if ( !bHandledFlyClick && !bIsDocReadOnly && rSh.IsInsideSelectedObj(aDocPos) &&
                              0 == rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) )
                         {
-/* this is no good, on the one hand GetSelectionType is used as flag field (take a look into the GetSelectionType method)
-   on the other hand the return value is used in a switch without proper masking (very nice), this must lead to trouble
-*/
+                        /* This is no good: on the one hand GetSelectionType is used as flag field
+                         * (take a look into the GetSelectionType method) and on the other hand the
+                         * return value is used in a switch without proper masking (very nice), this must lead to trouble
+                         */
                             switch ( rSh.GetSelectionType() &~ ( nsSelectionType::SEL_FONTWORK | nsSelectionType::SEL_EXTRUDED_CUSTOMSHAPE ) )
                             {
                             case nsSelectionType::SEL_GRF:
@@ -3250,7 +3246,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                     SFX_CALLMODE_RECORD|SFX_CALLMODE_SLOT);
                                 return;
 
-                                // double click on OLE object --> OLE-InPlace
+                            // double click on OLE object --> OLE-InPlace
                             case nsSelectionType::SEL_OLE:
                                 if (!rSh.IsSelObjProtected(FLYPROTECT_CONTENT))
                                 {
@@ -3369,7 +3365,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         return;
                 }
             }
-                /* no break */
+            /* no break */
             case MOUSE_LEFT + KEY_SHIFT:
             case MOUSE_LEFT + KEY_SHIFT + KEY_MOD1:
             {
@@ -3626,10 +3622,9 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
         Window::MouseButtonDown(rMEvt);
 }
 
-/*--------------------------------------------------------------------
-    Description:   MouseMove
- --------------------------------------------------------------------*/
-
+/**
+ * MouseMove
+ */
 void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
 {
     MouseEvent rMEvt(_rMEvt);
@@ -3901,7 +3896,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                         if( 0 != ( pFlyFmt = rSh.GetFlyFrmFmt() ) &&
                             0 != ( pMacro = pFlyFmt->GetMacro().GetMacroTable().
                             Get( nEvent )) &&
-// or notify only e.g. every 20 Twip?
+                        // or notify only e.g. every 20 Twip?
                             aRszMvHdlPt != aDocPt )
                         {
                             aRszMvHdlPt = aDocPt;
@@ -4116,10 +4111,9 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
     bWasShdwCrsr = sal_False;
 }
 
-/*--------------------------------------------------------------------
-    Description:   Button Up
- --------------------------------------------------------------------*/
-
+/**
+ * Button Up
+ */
 void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
 {
     sal_Bool bCallBase = sal_True;
@@ -4155,8 +4149,8 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
     // only process MouseButtonUp when the Down went to that windows as well.
     if ( !bMBPressed )
     {
-// Undo for the watering can is already in CommandHdl
-// that's the way it should be!
+    // Undo for the watering can is already in CommandHdl
+    // that's the way it should be!
 
         return;
     }
@@ -4277,8 +4271,9 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                             rSh.EndUndo( UNDO_UI_DRAG_AND_COPY );
                         }
                     }
-                    else
+                    else {
                         rSh.EndDrag( &aDocPt, false );
+                    }
                 }
                 else
                 {
@@ -4637,7 +4632,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                     break;
                 }
                 case SFX_STYLE_FAMILY_PAGE:
-                            // no Undo with page templates
+                    // no Undo with page templates
                     rSh.ChgCurPageDesc( *pApplyTempl->aColl.pPageDesc );
                     if ( pApplyTempl->aColl.pPageDesc )
                         aStyleName = pApplyTempl->aColl.pPageDesc->GetName();
@@ -4678,8 +4673,8 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
     // be resetted.
     bMBPressed = sal_False;
 
-    //sicherheitshalber aufrufen, da jetzt das Selektieren bestimmt zu Ende ist.
-    //Andernfalls koennte der Timeout des Timers Kummer machen.
+    // Make this call just to be sure. Selecting has finished surely by now.
+    // Otherwise the timeout's timer could give problems.
     EnterArea();
     bNoInterrupt = sal_False;
 
@@ -4687,10 +4682,9 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
         Window::MouseButtonUp(rMEvt);
 }
 
-/*--------------------------------------------------------------------
-    Description:   apply template
- --------------------------------------------------------------------*/
-
+/**
+ * Apply template
+ */
 void SwEditWin::SetApplyTemplate(const SwApplyTemplate &rTempl)
 {
     static sal_Bool bIdle = sal_False;
@@ -4741,10 +4735,9 @@ void SwEditWin::SetApplyTemplate(const SwApplyTemplate &rTempl)
     rView.GetViewFrame()->GetBindings().Invalidate(aInva);
 }
 
-/*--------------------------------------------------------------------
-    Description:   ctor
- --------------------------------------------------------------------*/
-
+/**
+ * Ctor
+ */
 SwEditWin::SwEditWin(Window *pParent, SwView &rMyView):
     Window(pParent, WinBits(WB_CLIPCHILDREN | WB_DIALOGCONTROL)),
     DropTargetHelper( this ),
@@ -4801,7 +4794,7 @@ SwEditWin::SwEditWin(Window *pParent, SwView &rMyView):
     aTemplateTimer.SetTimeoutHdl(LINK(this, SwEditWin, TemplateTimerHdl));
 
     // temporary solution!!! Should set the font of the current
-    //          insert position at every curor movement!
+    // insert position at every curor movement!
     if( !rMyView.GetDocShell()->IsReadOnly() )
     {
         Font aFont;
@@ -4825,10 +4818,9 @@ SwEditWin::~SwEditWin()
     delete pAnchorMarker;
 }
 
-/******************************************************************************
- *  Description: turn on DrawTextEditMode
- ******************************************************************************/
-
+/**
+ * Turn on DrawTextEditMode
+ */
 void SwEditWin::EnterDrawTextMode( const Point& aDocPos )
 {
     if ( rView.EnterDrawTextMode(aDocPos) == sal_True )
@@ -4844,10 +4836,9 @@ void SwEditWin::EnterDrawTextMode( const Point& aDocPos )
     }
 }
 
-/******************************************************************************
- *  Description: turn on DrawMode
- ******************************************************************************/
-
+/**
+ * Turn on DrawMode
+ */
 sal_Bool SwEditWin::EnterDrawMode(const MouseEvent& rMEvt, const Point& aDocPos)
 {
     SwWrtShell &rSh = rView.GetWrtShell();
@@ -5550,7 +5541,7 @@ sal_Bool SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
     }
     else if ( rSh.IsSelFrmMode() && bIsInsideSelectedObj )
     {
-        // ## object at the mouse cursor is already selected - do nothing
+        // Object at the mouse cursor is already selected - do nothing
         return sal_False;
     }
 
@@ -5860,7 +5851,7 @@ struct EqualIgnoreCaseAscii
 
 } // anonymous namespace
 
-// TODO - implement an i18n aware sort
+// TODO Implement an i18n aware sort
 void QuickHelpData::SortAndFilter()
 {
     std::sort( m_aHelpStrings.begin(),

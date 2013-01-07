@@ -37,12 +37,9 @@
 #include <conrect.hxx>
 
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
-
+/**
+ * Ctor
+ */
 ConstRectangle::ConstRectangle( SwWrtShell* pWrtShell, SwEditWin* pEditWin,
                                 SwView* pSwView )
     : SwDrawBase( pWrtShell, pEditWin, pSwView ),
@@ -52,12 +49,9 @@ ConstRectangle::ConstRectangle( SwWrtShell* pWrtShell, SwEditWin* pEditWin,
 {
 }
 
-/*************************************************************************
-|*
-|* MouseButtonDown-event
-|*
-\************************************************************************/
-
+/**
+ * MouseButtonDown event
+ */
 sal_Bool ConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
 {
     sal_Bool bReturn;
@@ -75,12 +69,9 @@ sal_Bool ConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
     return (bReturn);
 }
 
-/*************************************************************************
-|*
-|* MouseButtonUp-event
-|*
-\************************************************************************/
-
+/**
+ * MouseButtonUp event
+ */
 sal_Bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
 {
     sal_Bool bRet = SwDrawBase::MouseButtonUp(rMEvt);
@@ -99,7 +90,7 @@ sal_Bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
 
                 if( pObj )
                 {
-                    // die fuer das Scrollen benoetigten Attribute setzen
+                    // Set the attributes needed for scrolling
                     SfxItemSet aItemSet( pSdrView->GetModel()->GetItemPool(),
                                         SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST);
 
@@ -116,7 +107,6 @@ sal_Bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
             }
             else if(mbVertical && pObj && pObj->ISA(SdrTextObj))
             {
-                // #93382#
                 SdrTextObj* pText = (SdrTextObj*)pObj;
                 SfxItemSet aSet(pSdrView->GetModel()->GetItemPool());
 
@@ -134,7 +124,7 @@ sal_Bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
                 SdrPageView* pPV = pSdrView->GetSdrPageView();
                 m_pView->BeginTextEdit( pObj, pPV, m_pWin, sal_True );
             }
-            m_pView->LeaveDrawCreate();  // In Selektionsmode wechseln
+            m_pView->LeaveDrawCreate();  // Switch to selection mode
             m_pSh->GetView().GetViewFrame()->GetBindings().Invalidate(SID_INSERT_DRAW);
             break;
 
@@ -156,12 +146,9 @@ sal_Bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
     return bRet;
 }
 
-/*************************************************************************
-|*
-|* Function aktivieren
-|*
-\************************************************************************/
-
+/**
+ * Activate
+ */
 void ConstRectangle::Activate(const sal_uInt16 nSlotId)
 {
     bMarquee = bCapVertical = sal_False;
@@ -187,7 +174,6 @@ void ConstRectangle::Activate(const sal_uInt16 nSlotId)
         break;
 
     case SID_DRAW_TEXT_VERTICAL:
-        // #93382#
         mbVertical = sal_True;
         m_pWin->SetSdrDrawMode(OBJ_TEXT);
         break;
