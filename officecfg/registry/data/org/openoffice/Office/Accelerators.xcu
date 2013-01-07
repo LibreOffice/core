@@ -259,7 +259,7 @@
     </node>
     <node oor:name="H_MOD1" oor:op="replace" install:module="unxwnt">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-      <value xml:lang="en-US">.uno.SearchDialog</value>
+      <value xml:lang="en-US">.uno:SearchDialog</value>
      </prop>
     </node>
     <node oor:name="N_MOD1" oor:op="replace">
