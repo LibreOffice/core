@@ -36,6 +36,7 @@
 #include <com/sun/star/awt/XComboBox.hpp>
 #include <com/sun/star/awt/XListBox.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
+#include <com/sun/star/awt/TabController.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XIdentifierReplace.hpp>
@@ -107,6 +108,7 @@ namespace svxform
     using ::com::sun::star::sdb::XColumn;
     using ::com::sun::star::awt::XControl;
     using ::com::sun::star::awt::XTabController;
+    using ::com::sun::star::awt::TabController;
     using ::com::sun::star::awt::XToolkit;
     using ::com::sun::star::awt::XWindowPeer;
     using ::com::sun::star::form::XGrid;
@@ -587,17 +589,9 @@ FormController::FormController(const Reference< XMultiServiceFactory > & _rxORB 
 
     ::comphelper::increment(m_refCount);
     {
-        {
-            m_xAggregate = Reference< XAggregation >(
-                m_aContext.createComponent( "com.sun.star.awt.TabController" ),
-                UNO_QUERY
-            );
-            DBG_ASSERT( m_xAggregate.is(), "FormController::FormController : could not create my aggregate !" );
-            m_xTabController = Reference< XTabController >( m_xAggregate, UNO_QUERY );
-        }
-
-        if ( m_xAggregate.is() )
-            m_xAggregate->setDelegator( *this );
+        m_xTabController = TabController::create( m_aContext.getUNOContext() );
+        m_xAggregate = Reference< XAggregation >( m_xTabController, UNO_QUERY_THROW );
+        m_xAggregate->setDelegator( *this );
     }
     ::comphelper::decrement(m_refCount);
 
