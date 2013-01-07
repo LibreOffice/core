@@ -113,6 +113,8 @@ public:
         const rtl::OUString &rUserData, const rtl::OUString& rTypeName,
         unsigned int nFilterFlags, unsigned int nClipboardID, unsigned int nFilterVersion);
 
+    ScDocShellRef loadFile(const OUString& rBaseName, size_t nExt);
+
     void createFileURL(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath);
     void createCSVPath(const rtl::OUString& aFileBase, rtl::OUString& rFilePath);
 
@@ -261,6 +263,20 @@ ScDocShellRef ScFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUStr
     }
 
     return xDocShRef;
+}
+
+ScDocShellRef ScFiltersTest::loadFile(const OUString& rBaseName, size_t nExt)
+{
+    OUString aFileExt = OUString::createFromAscii(aFileFormats[nExt].pName);
+    OUString aFilterName = OUString::createFromAscii(aFileFormats[nExt].pFilterName);
+    OUString aFilterType = OUString::createFromAscii(aFileFormats[nExt].pTypeName);
+
+    rtl::OUString aFileName;
+    createFileURL(rBaseName, aFileExt, aFileName);
+
+    unsigned int nFormatType = aFileFormats[nExt].nFormatType;
+    unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
+    return load(aFilterName, aFileName, OUString(), aFilterType, nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
 }
 
 bool ScFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
@@ -1392,19 +1408,7 @@ void ScFiltersTest::testControlImport()
 
 void ScFiltersTest::testNumberFormatHTML()
 {
-    OUString aFileNameBase("numberformat.");
-    OUString aFileExt = OUString::createFromAscii(aFileFormats[HTML].pName);
-    OUString aFilterName = OUString::createFromAscii(aFileFormats[HTML].pFilterName);
-    OUString aFilterType = OUString::createFromAscii(aFileFormats[HTML].pTypeName);
-
-    rtl::OUString aFileName;
-    createFileURL(aFileNameBase, aFileExt, aFileName);
-
-    unsigned int nFormatType = aFileFormats[HTML].nFormatType;
-    unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
-    ScDocShellRef xDocSh = load(aFilterName, aFileName, rtl::OUString(), aFilterType,
-        nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
-
+    ScDocShellRef xDocSh = loadFile("numberformat.", HTML);
     CPPUNIT_ASSERT_MESSAGE("Failed to load numberformat.html", xDocSh.Is());
 
     ScDocument* pDoc = xDocSh->GetDocument();
@@ -1424,20 +1428,8 @@ void ScFiltersTest::testNumberFormatHTML()
 
 void ScFiltersTest::testNumberFormatCSV()
 {
-    OUString aFileNameBase("numberformat.");
-    OUString aFileExt = OUString::createFromAscii(aFileFormats[CSV].pName);
-    OUString aFilterName = OUString::createFromAscii(aFileFormats[CSV].pFilterName);
-    OUString aFilterType = OUString::createFromAscii(aFileFormats[CSV].pTypeName);
-
-    rtl::OUString aFileName;
-    createFileURL(aFileNameBase, aFileExt, aFileName);
-
-    unsigned int nFormatType = aFileFormats[CSV].nFormatType;
-    unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
-    ScDocShellRef xDocSh = load(aFilterName, aFileName, rtl::OUString(), aFilterType,
-        nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
-
-    CPPUNIT_ASSERT_MESSAGE("Failed to load numberformat.html", xDocSh.Is());
+    ScDocShellRef xDocSh = loadFile("numberformat.", CSV);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load numberformat.csv", xDocSh.Is());
 
     ScDocument* pDoc = xDocSh->GetDocument();
 
@@ -1456,19 +1448,7 @@ void ScFiltersTest::testNumberFormatCSV()
 
 void ScFiltersTest::testCellAnchoredShapesODS()
 {
-    OUString aFileNameBase("cell-anchored-shapes.");
-    OUString aFileExt = OUString::createFromAscii(aFileFormats[ODS].pName);
-    OUString aFilterName = OUString::createFromAscii(aFileFormats[ODS].pFilterName);
-    OUString aFilterType = OUString::createFromAscii(aFileFormats[ODS].pTypeName);
-
-    rtl::OUString aFileName;
-    createFileURL(aFileNameBase, aFileExt, aFileName);
-
-    unsigned int nFormatType = aFileFormats[ODS].nFormatType;
-    unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
-    ScDocShellRef xDocSh = load(aFilterName, aFileName, rtl::OUString(), aFilterType,
-        nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
-
+    ScDocShellRef xDocSh = loadFile("cell-anchored-shapes.", ODS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load cell-anchored-shapes.ods", xDocSh.Is());
 
     // There are two cell-anchored objects on the first sheet.
@@ -1516,19 +1496,7 @@ bool hasDimension(const std::vector<const ScDPSaveDimension*>& rDims, const OUSt
 
 void ScFiltersTest::testPivotTableBasicODS()
 {
-    OUString aFileNameBase("pivot-table-basic.");
-    OUString aFileExt = OUString::createFromAscii(aFileFormats[ODS].pName);
-    OUString aFilterName = OUString::createFromAscii(aFileFormats[ODS].pFilterName);
-    OUString aFilterType = OUString::createFromAscii(aFileFormats[ODS].pTypeName);
-
-    rtl::OUString aFileName;
-    createFileURL(aFileNameBase, aFileExt, aFileName);
-
-    unsigned int nFormatType = aFileFormats[ODS].nFormatType;
-    unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
-    ScDocShellRef xDocSh = load(aFilterName, aFileName, rtl::OUString(), aFilterType,
-        nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
-
+    ScDocShellRef xDocSh = loadFile("pivot-table-basic.", ODS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load pivot-table-basic.ods", xDocSh.Is());
 
     ScDocument* pDoc = xDocSh->GetDocument();
@@ -1576,18 +1544,8 @@ void ScFiltersTest::testPivotTableBasicODS()
 
 void ScFiltersTest::testRowHeightODS()
 {
-    OUString aFileNameBase("row-height-import.");
-    OUString aFileExt = OUString::createFromAscii(aFileFormats[ODS].pName);
-    OUString aFilterName = OUString::createFromAscii(aFileFormats[ODS].pFilterName);
-    OUString aFilterType = OUString::createFromAscii(aFileFormats[ODS].pTypeName);
-
-    rtl::OUString aFileName;
-    createFileURL(aFileNameBase, aFileExt, aFileName);
-
-    unsigned int nFormatType = aFileFormats[ODS].nFormatType;
-    unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
-    ScDocShellRef xDocSh = load(aFilterName, aFileName, rtl::OUString(), aFilterType,
-        nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
+    ScDocShellRef xDocSh = loadFile("row-height-import.", ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load row-height-import.ods", xDocSh.Is());
 
     SCTAB nTab = 0;
     SCROW nRow = 0;
