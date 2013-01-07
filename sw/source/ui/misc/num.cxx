@@ -45,7 +45,6 @@
 
 #include <misc.hrc>
 #include <frmui.hrc>
-#include <num.hrc>
 #include <globals.hrc>
 #include <helpid.h>
 #include <SwStyleNameMapper.hxx>
@@ -916,24 +915,20 @@ void SwNumPositionTabPage::SetModified(sal_Bool bRepaint)
 #endif
 
 SwSvxNumBulletTabDialog::SwSvxNumBulletTabDialog(Window* pParent,
-                    const SfxItemSet* pSwItemSet, SwWrtShell & rSh) :
-    SfxTabDialog(pParent, SW_RES(DLG_SVXTEST_NUM_BULLET), pSwItemSet, sal_False, &aEmptyStr),
-    rWrtSh(rSh),
-    sRemoveText(SW_RES(ST_RESET))
+                    const SfxItemSet* pSwItemSet, SwWrtShell & rSh)
+    : SfxTabDialog(pParent, "BulletsAndNumberingDialog",
+        "modules/swriter/ui/bulletsandnumbering.ui",
+        pSwItemSet, sal_False)
+    , rWrtSh(rSh)
 {
-    FreeResource();
-    GetUserButton()->SetText(sRemoveText);
-    GetUserButton()->SetHelpId(HID_NUM_RESET);
     GetUserButton()->SetClickHdl(LINK(this, SwSvxNumBulletTabDialog, RemoveNumberingHdl));
-    if(!rWrtSh.GetCurNumRule())
-        GetUserButton()->Enable(sal_False);
-    AddTabPage( RID_SVXPAGE_PICK_SINGLE_NUM );
-    AddTabPage( RID_SVXPAGE_PICK_BULLET );
-    AddTabPage( RID_SVXPAGE_PICK_NUM );
-    AddTabPage( RID_SVXPAGE_PICK_BMP );
-    AddTabPage( RID_SVXPAGE_NUM_OPTIONS );
-    AddTabPage( RID_SVXPAGE_NUM_POSITION );
-
+    GetUserButton()->Enable(rWrtSh.GetCurNumRule() != NULL);
+    m_nSingleNumPageId = AddTabPage("singlenum", RID_SVXPAGE_PICK_SINGLE_NUM );
+    m_nBulletPageId = AddTabPage("bullets", RID_SVXPAGE_PICK_BULLET );
+    AddTabPage("outlinenum", RID_SVXPAGE_PICK_NUM );
+    AddTabPage("graphics", RID_SVXPAGE_PICK_BMP );
+    m_nOptionsPageId = AddTabPage("options", RID_SVXPAGE_NUM_OPTIONS );
+    m_nPositionPageId = AddTabPage("position", RID_SVXPAGE_NUM_POSITION );
 }
 
 SwSvxNumBulletTabDialog::~SwSvxNumBulletTabDialog()
@@ -947,56 +942,48 @@ void SwSvxNumBulletTabDialog::PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage)
     SwStyleNameMapper::FillUIName( RES_POOLCHR_NUM_LEVEL, sNumCharFmt );
     SwStyleNameMapper::FillUIName( RES_POOLCHR_BUL_LEVEL, sBulletCharFmt );
 
-    switch ( nPageId )
+    if (nPageId == m_nSingleNumPageId)
     {
-    case RID_SVXPAGE_PICK_NUM:
-        {
-            SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-            aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFmt));
-            aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFmt));
-            rPage.PageCreated(aSet);
-        }
-        break;
-    case RID_SVXPAGE_PICK_BULLET :
-        {
-            SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-            aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFmt));
-            rPage.PageCreated(aSet);
-        }
-        break;
+        SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
+        aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFmt));
+        aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFmt));
+        rPage.PageCreated(aSet);
+    }
+    else if (nPageId == m_nBulletPageId)
+    {
+        SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
+        aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFmt));
+        rPage.PageCreated(aSet);
+    }
+    else if (nPageId == m_nOptionsPageId)
+    {
+        SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
+        aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFmt));
+        aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFmt));
+        // collect char styles
+        ListBox rCharFmtLB(this);
+        rCharFmtLB.Clear();
+        rCharFmtLB.InsertEntry( ViewShell::GetShellRes()->aStrNone );
+        SwDocShell* pDocShell = rWrtSh.GetView().GetDocShell();
+        ::FillCharStyleListBox(rCharFmtLB,  pDocShell);
 
-    case RID_SVXPAGE_NUM_OPTIONS:
-        {
-            SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-            aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFmt));
-            aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFmt));
-            // collect char styles
-            ListBox rCharFmtLB(this);
-            rCharFmtLB.Clear();
-            rCharFmtLB.InsertEntry( ViewShell::GetShellRes()->aStrNone );
-            SwDocShell* pDocShell = rWrtSh.GetView().GetDocShell();
-            ::FillCharStyleListBox(rCharFmtLB,  pDocShell);
+        std::vector<String> aList;
+        for(sal_uInt16 j = 0; j < rCharFmtLB.GetEntryCount(); j++)
+             aList.push_back( String(rCharFmtLB.GetEntry(j)));
 
-            std::vector<String> aList;
-            for(sal_uInt16 j = 0; j < rCharFmtLB.GetEntryCount(); j++)
-                 aList.push_back( String(rCharFmtLB.GetEntry(j)));
+        aSet.Put( SfxStringListItem( SID_CHAR_FMT_LIST_BOX,&aList ) ) ;
 
-            aSet.Put( SfxStringListItem( SID_CHAR_FMT_LIST_BOX,&aList ) ) ;
-
-            FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebDocShell, pDocShell));
-            aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM, static_cast< sal_uInt16 >(eMetric) ) );
-            rPage.PageCreated(aSet);
-        }
-        break;
-    case RID_SVXPAGE_NUM_POSITION:
-        {
-            SwDocShell* pDocShell = rWrtSh.GetView().GetDocShell();
-            FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebDocShell, pDocShell));
-            SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-            aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM, static_cast< sal_uInt16 >(eMetric)) );
-            rPage.PageCreated(aSet);
-        }
-        break;
+        FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebDocShell, pDocShell));
+        aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM, static_cast< sal_uInt16 >(eMetric) ) );
+        rPage.PageCreated(aSet);
+    }
+    else if (nPageId == m_nPositionPageId)
+    {
+        SwDocShell* pDocShell = rWrtSh.GetView().GetDocShell();
+        FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebDocShell, pDocShell));
+        SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
+        aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM, static_cast< sal_uInt16 >(eMetric)) );
+        rPage.PageCreated(aSet);
     }
 }
 

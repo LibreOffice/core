@@ -147,8 +147,10 @@ public:
 class SwSvxNumBulletTabDialog : public SfxTabDialog
 {
     SwWrtShell&         rWrtSh;
-
-    String              sRemoveText;
+    sal_uInt16 m_nSingleNumPageId;
+    sal_uInt16 m_nBulletPageId;
+    sal_uInt16 m_nOptionsPageId;
+    sal_uInt16 m_nPositionPageId;
 
     protected:
         virtual short   Ok();

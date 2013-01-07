@@ -141,7 +141,6 @@ $(eval $(call gb_SrsTarget_add_files,sw/res,\
     sw/source/ui/misc/docfnote.src \
     sw/source/ui/misc/glosbib.src \
     sw/source/ui/misc/glossary.src \
-    sw/source/ui/misc/num.src \
     sw/source/ui/misc/numberingtypelistbox.src \
     sw/source/ui/misc/outline.src \
     sw/source/ui/misc/pgfnote.src \

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
-  <object class="GtkDialog" id="Bullets And Numbering ">
+  <object class="GtkDialog" id="BulletsAndNumberingDialog">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
+    <property name="title" translatable="yes">Bullets and Numbering</property>
     <property name="window_position">mouse</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -16,10 +17,12 @@
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="button2">
+              <object class="GtkButton" id="ok">
                 <property name="label">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
               </object>
@@ -30,11 +33,12 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="button3">
-                <property name="label" translatable="yes">Remove</property>
+              <object class="GtkButton" id="user">
+                <property name="label" translatable="yes">_Remove</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="use_underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -43,7 +47,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="button4">
+              <object class="GtkButton" id="cancel">
                 <property name="label">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -57,7 +61,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="button5">
+              <object class="GtkButton" id="help">
                 <property name="label">gtk-help</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -71,7 +75,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="button6">
+              <object class="GtkButton" id="reset">
                 <property name="label" translatable="yes">Reset</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -92,14 +96,16 @@
           </packing>
         </child>
         <child>
-          <object class="GtkNotebook" id="notebook1">
+          <object class="GtkNotebook" id="tabcontrol">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
             <child>
               <placeholder/>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="label24">
+              <object class="GtkLabel" id="bullets">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Bullets</property>
@@ -112,7 +118,7 @@
               <placeholder/>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="label22">
+              <object class="GtkLabel" id="singlenum">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0.49000000953674316</property>
@@ -127,7 +133,7 @@
               <placeholder/>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="label20">
+              <object class="GtkLabel" id="outlinenum">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Outline</property>
@@ -141,7 +147,7 @@
               <placeholder/>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="label18">
+              <object class="GtkLabel" id="graphics">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Graphics</property>
@@ -155,7 +161,7 @@
               <placeholder/>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="label10">
+              <object class="GtkLabel" id="position">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Position</property>
@@ -169,7 +175,7 @@
               <placeholder/>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="label3">
+              <object class="GtkLabel" id="options">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Options</property>
@@ -181,7 +187,7 @@
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
+            <property name="expand">True</property>
             <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
@@ -189,11 +195,11 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">button2</action-widget>
-      <action-widget response="0">button3</action-widget>
-      <action-widget response="0">button4</action-widget>
-      <action-widget response="0">button5</action-widget>
-      <action-widget response="0">button6</action-widget>
+      <action-widget response="0">ok</action-widget>
+      <action-widget response="0">user</action-widget>
+      <action-widget response="0">cancel</action-widget>
+      <action-widget response="0">help</action-widget>
+      <action-widget response="0">reset</action-widget>
     </action-widgets>
   </object>
 </interface>
