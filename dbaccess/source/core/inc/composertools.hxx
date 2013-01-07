@@ -102,9 +102,7 @@ namespace dbaccess
         {
             m_aBuffer.insert( 0, (sal_Unicode)' ' );
             m_aBuffer.insert( 0, (sal_Unicode)'(' );
-            m_aBuffer.appendAscii( " ) AND ( " );
-            m_aBuffer.append( lhs );
-            m_aBuffer.appendAscii( " )" );
+            m_aBuffer.append( " ) AND ( " + lhs + " )" );
         }
     };
 
@@ -115,8 +113,7 @@ namespace dbaccess
     {
         virtual void appendNonEmptyToNonEmpty( const ::rtl::OUString& lhs )
         {
-            m_aBuffer.appendAscii( ", " );
-            m_aBuffer.append( lhs );
+            m_aBuffer.append( ", " + lhs );
         }
     };
 
