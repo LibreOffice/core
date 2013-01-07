@@ -1583,7 +1583,7 @@ public:
     sal_Int32   cLinesFtnEdn;       //      count of paragraphs in footnotes and endnotes tallied by last Word Count operation
     sal_Int32   lKeyProtDoc;        //      document protection password key, only valid if dop.fProtEnabled, dop.fLockAtn or dop.fLockRev are 1.
     sal_uInt16  wvkSaved : 3;       //      document view kind: 0 Normal view, 1 Outline view, 2 Page View
-    sal_uInt16  wScaleSaved : 9;    //
+    sal_uInt16  wScaleSaved : 9;    ///< Specifies the zoom percentage that was in use when the document was saved.
     sal_uInt16  zkSaved : 2;
     sal_uInt16  fRotateFontW6 : 1;
     sal_uInt16  iGutterPos : 1 ;

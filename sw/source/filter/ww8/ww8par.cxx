@@ -90,6 +90,7 @@
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <svl/itemiter.hxx>  //SfxItemIter
 
 #include <comphelper/processfactory.hxx>
@@ -1490,6 +1491,26 @@ void SwWW8ImplReader::ImportDop()
     ((SvxTabStop&)aNewTab[0]).GetAdjustment() = SVX_TAB_ADJUST_DEFAULT;
 
     rDoc.GetAttrPool().SetPoolDefaultItem( aNewTab );
+
+    // Import zoom factor.
+    if (pWDop->wScaleSaved)
+    {
+        uno::Sequence<beans::PropertyValue> aViewProps(3);
+        aViewProps[0].Name = "ZoomFactor";
+        aViewProps[0].Value <<= sal_Int16(pWDop->wScaleSaved);
+        aViewProps[1].Name = "VisibleBottom";
+        aViewProps[1].Value <<= sal_Int32(0);
+        aViewProps[2].Name = "ZoomType";
+        aViewProps[2].Value <<= sal_Int16(0);
+
+        uno::Reference< uno::XComponentContext > xComponentContext(comphelper::getProcessComponentContext());
+        uno::Reference<container::XIndexContainer> xBox(xComponentContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.IndexedPropertyValues",
+                    xComponentContext), uno::UNO_QUERY);
+        xBox->insertByIndex(sal_Int32(0), uno::makeAny(aViewProps));
+        uno::Reference<container::XIndexAccess> xIndexAccess(xBox, uno::UNO_QUERY);
+        uno::Reference<document::XViewDataSupplier> xViewDataSupplier(mpDocShell->GetModel(), uno::UNO_QUERY);
+        xViewDataSupplier->setViewData(xIndexAccess);
+    }
 
     rDoc.set(IDocumentSettingAccess::USE_VIRTUAL_DEVICE, !pWDop->fUsePrinterMetrics);
     rDoc.set(IDocumentSettingAccess::USE_HIRES_VIRTUAL_DEVICE, true);
