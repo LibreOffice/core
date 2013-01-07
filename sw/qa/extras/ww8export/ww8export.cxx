@@ -30,6 +30,7 @@
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/view/XViewSettingsSupplier.hpp>
 
 #include <swmodeltestbase.hxx>
 
@@ -40,6 +41,7 @@ public:
     void testFdo45724();
     void testFdo46020();
     void testFirstHeaderFooter();
+    void testZoom();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -58,6 +60,7 @@ void Test::run()
         {"fdo45724.odt", &Test::testFdo45724},
         {"fdo46020.odt", &Test::testFdo46020},
         {"first-header-footer.doc", &Test::testFirstHeaderFooter},
+        {"zoom.doc", &Test::testZoom},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -130,6 +133,16 @@ void Test::testFirstHeaderFooter()
     CPPUNIT_ASSERT_EQUAL(OUString("Odd page footer 2"), parseDump("/root/page[5]/footer/txt/text()"));
     CPPUNIT_ASSERT_EQUAL(OUString("Even page header 2"),  parseDump("/root/page[6]/header/txt/text()"));
     CPPUNIT_ASSERT_EQUAL(OUString("Even page footer 2"),  parseDump("/root/page[6]/footer/txt/text()"));
+}
+
+void Test::testZoom()
+{
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<view::XViewSettingsSupplier> xViewSettingsSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(xViewSettingsSupplier->getViewSettings());
+    sal_Int16 nValue = 0;
+    xPropertySet->getPropertyValue("ZoomValue") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(42), nValue);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
