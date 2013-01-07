@@ -55,9 +55,8 @@ bool Plugin::ignoreLocation( SourceLocation loc )
     SourceLocation expansionLoc = context.getSourceManager().getExpansionLoc( loc );
     if( context.getSourceManager().isInSystemHeader( expansionLoc ))
         return true;
-    bool invalid;
-    const char* bufferName = context.getSourceManager().getBufferName( expansionLoc, &invalid );
-    if( invalid )
+    const char* bufferName = context.getSourceManager().getPresumedLoc( expansionLoc ).getFilename();
+    if( bufferName == NULL )
         return true;
     if( strncmp( bufferName, OUTDIR, strlen( OUTDIR )) == 0
         || strncmp( bufferName, WORKDIR, strlen( WORKDIR )) == 0
