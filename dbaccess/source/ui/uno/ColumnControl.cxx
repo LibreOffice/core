@@ -23,6 +23,7 @@
 #include "apitools.hxx"
 #include <com/sun/star/awt/PosSize.hpp>
 #include "dbu_reghelper.hxx"
+#include <comphelper/processfactory.hxx>
 
 extern "C" void SAL_CALL createRegistryInfo_OColumnControl()
 {
@@ -38,12 +39,19 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 
-OColumnControl::OColumnControl(const Reference<XMultiServiceFactory>& _rxFactory)
-    :UnoControl( _rxFactory )
+OColumnControl::OColumnControl(const Reference<XComponentContext>& rxContext)
+    :UnoControl(), m_xContext(rxContext)
 {
 }
 // -----------------------------------------------------------------------------
-IMPLEMENT_SERVICE_INFO2_STATIC(OColumnControl,SERVICE_CONTROLDEFAULT.ascii,"com.sun.star.awt.UnoControl","com.sun.star.sdb.ColumnDescriptorControl")
+IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(OColumnControl, SERVICE_CONTROLDEFAULT.ascii)
+IMPLEMENT_SERVICE_INFO_SUPPORTS(OColumnControl)
+IMPLEMENT_SERVICE_INFO_GETSUPPORTED2_STATIC(OColumnControl, "com.sun.star.awt.UnoControl","com.sun.star.sdb.ColumnDescriptorControl")
+
+Reference< XInterface > SAL_CALL OColumnControl::Create(const Reference< XMultiServiceFactory >& _rxORB)
+{
+    return static_cast< XServiceInfo* >(new OColumnControl(comphelper::getComponentContext(_rxORB)));
+}
 // -----------------------------------------------------------------------------
 ::rtl::OUString OColumnControl::GetComponentServiceName()
 {
@@ -65,7 +73,7 @@ void SAL_CALL OColumnControl::createPeer(const Reference< XToolkit >& /*rToolkit
                 pParentWin = pParent->GetWindow();
         }
 
-        OColumnPeer* pPeer = new OColumnPeer( pParentWin, maContext.getUNOContext() );
+        OColumnPeer* pPeer = new OColumnPeer( pParentWin, m_xContext );
         OSL_ENSURE(pPeer != NULL, "FmXGridControl::createPeer : imp_CreatePeer didn't return a peer !");
         setPeer( pPeer );
 

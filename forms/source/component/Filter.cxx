@@ -92,10 +92,11 @@ namespace frm
     // OFilterControl
     //=====================================================================
     //---------------------------------------------------------------------
-    OFilterControl::OFilterControl( const Reference< XMultiServiceFactory >& _rxORB )
-        :UnoControl( _rxORB )
+    OFilterControl::OFilterControl( const Reference< XComponentContext >& _rxORB )
+        :UnoControl()
         ,m_aTextListeners( *this )
-        ,m_aParser( comphelper::getComponentContext(_rxORB) )
+        ,m_xContext( _rxORB )
+        ,m_aParser( _rxORB )
         ,m_nControlClass( FormComponentType::TEXTFIELD )
         ,m_bFilterList( sal_False )
         ,m_bMultiLine( sal_False )
@@ -122,11 +123,11 @@ namespace frm
         {
             // we can create one from the connection, if it's an SDB connection
 
-            Reference< XNumberFormatsSupplier > xFormatSupplier = ::dbtools::getNumberFormats( m_xConnection, sal_True, maContext.getUNOContext() );
+            Reference< XNumberFormatsSupplier > xFormatSupplier = ::dbtools::getNumberFormats( m_xConnection, sal_True, m_xContext );
 
             if ( xFormatSupplier.is() )
             {
-                m_xFormatter.set(NumberFormatter::create(maContext.getUNOContext()), UNO_QUERY_THROW );
+                m_xFormatter.set(NumberFormatter::create(m_xContext), UNO_QUERY_THROW );
                 m_xFormatter->attachNumberFormatsSupplier( xFormatSupplier );
             }
         }
@@ -342,7 +343,7 @@ namespace frm
                         sItemText = itemPos->second;
                         if ( !sItemText.isEmpty() )
                         {
-                            ::dbtools::OPredicateInputController aPredicateInput( maContext.getUNOContext(), m_xConnection, getParseContext() );
+                            ::dbtools::OPredicateInputController aPredicateInput( m_xContext, m_xConnection, getParseContext() );
                             ::rtl::OUString sErrorMessage;
                             OSL_VERIFY( aPredicateInput.normalizePredicateString( sItemText, m_xField, &sErrorMessage ) );
                         }
@@ -527,7 +528,7 @@ namespace frm
             aNewText = aNewText.trim();
             if ( !aNewText.isEmpty() )
             {
-                ::dbtools::OPredicateInputController aPredicateInput( maContext.getUNOContext(), m_xConnection, getParseContext() );
+                ::dbtools::OPredicateInputController aPredicateInput( m_xContext, m_xConnection, getParseContext() );
                 ::rtl::OUString sErrorMessage;
                 if ( !aPredicateInput.normalizePredicateString( aNewText, m_xField, &sErrorMessage ) )
                 {
@@ -743,7 +744,7 @@ namespace frm
     {
         try
         {
-            Reference< XExecutableDialog > xErrorDialog = ErrorMessageDialog::create( maContext.getUNOContext(), "",  m_xMessageParent, makeAny(_rExcept));
+            Reference< XExecutableDialog > xErrorDialog = ErrorMessageDialog::create( m_xContext, "",  m_xMessageParent, makeAny(_rExcept));
             xErrorDialog->execute();
         }
         catch( const Exception& )
@@ -897,7 +898,7 @@ namespace frm
     //---------------------------------------------------------------------
     Reference< XInterface > SAL_CALL OFilterControl::Create( const Reference< XMultiServiceFactory >& _rxFactory )
     {
-        return static_cast< XServiceInfo* >( new OFilterControl( _rxFactory ) );
+        return static_cast< XServiceInfo* >( new OFilterControl( comphelper::getComponentContext(_rxFactory) ) );
     }
 
 //.........................................................................

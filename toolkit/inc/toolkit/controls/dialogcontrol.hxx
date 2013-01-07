@@ -46,7 +46,7 @@ protected:
     // ::cppu::OPropertySetHelper
 	void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::uno::Exception);
 public:
-                        UnoControlDialogModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
+                        UnoControlDialogModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
                         UnoControlDialogModel( const UnoControlDialogModel& rModel );
                         ~UnoControlDialogModel();
 
@@ -76,7 +76,7 @@ private:
 
 public:
 
-                                UnoDialogControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
+                                UnoDialogControl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
                                 ~UnoDialogControl();
     ::rtl::OUString             GetComponentServiceName();
 
@@ -125,7 +125,7 @@ protected:
 class UnoMultiPageModel : public ControlModelContainerBase
 {
 public:
-    UnoMultiPageModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
+    UnoMultiPageModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
     ~UnoMultiPageModel();
     UnoMultiPageModel( const UnoMultiPageModel& rModel );
 
@@ -153,7 +153,7 @@ class UnoMultiPageControl :  public ControlContainerBase
     TabListenerMultiplexer maTabListeners;
     void bindPage( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl );
 public:
-    UnoMultiPageControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
+    UnoMultiPageControl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
     ~UnoMultiPageControl();
     ::rtl::OUString     GetComponentServiceName();
 
@@ -200,7 +200,7 @@ protected:
 class UnoPageModel : public ControlModelContainerBase
 {
 public:
-    UnoPageModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
+    UnoPageModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
     ~UnoPageModel();
     UnoPageModel( const UnoPageModel& rModel );
 
@@ -222,7 +222,7 @@ protected:
 class UnoPageControl :  public ControlContainerBase
 {
 public:
-    UnoPageControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
+    UnoPageControl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
     ~UnoPageControl();
     ::rtl::OUString     GetComponentServiceName();
 
@@ -234,7 +234,7 @@ public:
 class UnoFrameModel : public ControlModelContainerBase
 {
 public:
-    UnoFrameModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
+    UnoFrameModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
     ~UnoFrameModel();
     UnoFrameModel( const UnoFrameModel& rModel );
 
@@ -255,7 +255,7 @@ class UnoFrameControl :  public ControlContainerBase
 protected:
     virtual void        ImplSetPosSize( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& rxCtrl );
 public:
-    UnoFrameControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
+    UnoFrameControl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
     ~UnoFrameControl();
     ::rtl::OUString     GetComponentServiceName();
 

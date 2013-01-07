@@ -47,7 +47,7 @@ protected:
     ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper();
 
 public:
-    UnoGridModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
+    UnoGridModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_factory );
     UnoGridModel( const UnoGridModel& rModel );
 
     UnoControlModel* Clone() const;
@@ -79,7 +79,7 @@ typedef ::cppu::ImplInheritanceHelper2  <   UnoControlBase
 class UnoGridControl : public UnoGridControl_Base
 {
 public:
-    UnoGridControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
+    UnoGridControl();
     ::rtl::OUString             GetComponentServiceName();
 
     // ::com::sun::star::lang::XComponent

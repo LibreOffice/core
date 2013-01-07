@@ -60,6 +60,7 @@ namespace frm
     {
         TextListenerMultiplexer     m_aTextListeners;
 
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >            m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >               m_xField;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >            m_xFormatter;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >                 m_xConnection;
@@ -77,12 +78,10 @@ namespace frm
         sal_Bool                        m_bFilterListFilled : 1;
 
     private:
-//      OFilterControl(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
-
         void implInitFilterList();
 
     public:
-        OFilterControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB );
+        OFilterControl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB );
 
         DECLARE_UNO3_AGG_DEFAULTS(OFilterControl,OWeakAggObject);
         ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);

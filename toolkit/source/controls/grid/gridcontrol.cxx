@@ -68,8 +68,8 @@ namespace
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-UnoGridModel::UnoGridModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory )
-        :UnoControlModel( i_factory )
+UnoGridModel::UnoGridModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext )
+        :UnoControlModel( rxContext )
 {
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
     ImplRegisterProperty( BASEPROPERTY_BORDER );
@@ -89,8 +89,8 @@ UnoGridModel::UnoGridModel( const ::com::sun::star::uno::Reference< ::com::sun::
     ImplRegisterProperty( BASEPROPERTY_GRID_SHOWCOLUMNHEADER );
     ImplRegisterProperty( BASEPROPERTY_COLUMN_HEADER_HEIGHT );
     ImplRegisterProperty( BASEPROPERTY_ROW_HEIGHT );
-    ImplRegisterProperty( BASEPROPERTY_GRID_DATAMODEL, makeAny( lcl_getDefaultDataModel_throw( maContext ) ) );
-    ImplRegisterProperty( BASEPROPERTY_GRID_COLUMNMODEL, makeAny( lcl_getDefaultColumnModel_throw( maContext ) ) );
+    ImplRegisterProperty( BASEPROPERTY_GRID_DATAMODEL, makeAny( lcl_getDefaultDataModel_throw( m_xContext ) ) );
+    ImplRegisterProperty( BASEPROPERTY_GRID_COLUMNMODEL, makeAny( lcl_getDefaultColumnModel_throw( m_xContext ) ) );
     ImplRegisterProperty( BASEPROPERTY_GRID_SELECTIONMODE );
     ImplRegisterProperty( BASEPROPERTY_FONTRELIEF );
     ImplRegisterProperty( BASEPROPERTY_FONTEMPHASISMARK );
@@ -128,7 +128,7 @@ UnoGridModel::UnoGridModel( const UnoGridModel& rModel )
             DBG_UNHANDLED_EXCEPTION();
         }
         if ( !xDataModel.is() )
-            xDataModel = lcl_getDefaultDataModel_throw( maContext );
+            xDataModel = lcl_getDefaultDataModel_throw( m_xContext );
         UnoControlModel::setFastPropertyValue_NoBroadcast( BASEPROPERTY_GRID_DATAMODEL, makeAny( xDataModel ) );
             // do *not* use setFastPropertyValue here: The UnoControlModel ctor did a simple copy of all property values,
             // so before this call here, we share our data model with the own of the clone source. setFastPropertyValue,
@@ -147,7 +147,7 @@ UnoGridModel::UnoGridModel( const UnoGridModel& rModel )
             DBG_UNHANDLED_EXCEPTION();
         }
         if ( !xColumnModel.is() )
-            xColumnModel = lcl_getDefaultColumnModel_throw( maContext );
+            xColumnModel = lcl_getDefaultColumnModel_throw( m_xContext );
         UnoControlModel::setFastPropertyValue_NoBroadcast( BASEPROPERTY_GRID_COLUMNMODEL, makeAny( xColumnModel ) );
             // same comment as above: do not use our own setPropertyValue here.
     }
@@ -270,8 +270,8 @@ Reference< XPropertySetInfo > UnoGridModel::getPropertySetInfo(  ) throw(Runtime
 //======================================================================================================================
 //= UnoGridControl
 //======================================================================================================================
-UnoGridControl::UnoGridControl( const Reference< XMultiServiceFactory >& i_factory )
-    :UnoGridControl_Base( i_factory )
+UnoGridControl::UnoGridControl()
+    :UnoGridControl_Base()
     ,m_aSelectionListeners( *this )
     ,m_pEventForwarder( new GridEventForwarder( *this ) )
 {
@@ -447,14 +447,14 @@ void SAL_CALL UnoGridControl::removeSelectionListener(const ::com::sun::star::un
 
 }//namespace toolkit
 
-Reference< XInterface > SAL_CALL GridControl_CreateInstance( const Reference< XMultiServiceFactory >& i_factory )
+Reference< XInterface > SAL_CALL GridControl_CreateInstance( const Reference< XMultiServiceFactory >& )
 {
-    return Reference < XInterface >( ( ::cppu::OWeakObject* ) new ::toolkit::UnoGridControl( i_factory ) );
+    return Reference < XInterface >( ( ::cppu::OWeakObject* ) new ::toolkit::UnoGridControl() );
 }
 
 Reference< XInterface > SAL_CALL GridControlModel_CreateInstance( const Reference< XMultiServiceFactory >& i_factory )
 {
-    return Reference < XInterface >( ( ::cppu::OWeakObject* ) new ::toolkit::UnoGridModel( i_factory ) );
+    return Reference < XInterface >( ( ::cppu::OWeakObject* ) new ::toolkit::UnoGridModel( comphelper::getComponentContext(i_factory) ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

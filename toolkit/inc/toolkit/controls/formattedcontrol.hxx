@@ -59,7 +59,7 @@ namespace toolkit
                 ) throw (::com::sun::star::uno::Exception);
 
     public:
-                            UnoControlFormattedFieldModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
+                            UnoControlFormattedFieldModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
                             UnoControlFormattedFieldModel( const UnoControlFormattedFieldModel& rModel )
                                 :UnoControlModel( rModel )
                             {
@@ -105,7 +105,7 @@ namespace toolkit
     class UnoFormattedFieldControl : public UnoSpinFieldControl
     {
     public:
-                            UnoFormattedFieldControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
+                            UnoFormattedFieldControl();
         ::rtl::OUString     GetComponentServiceName();
 
         // ::com::sun::star::awt::XTextListener

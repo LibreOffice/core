@@ -46,7 +46,7 @@ using ::com::sun::star::awt::tab::XTabPageModel;
 //  ----------------------------------------------------
 //  class UnoControlTabPageContainerModel
 //  ----------------------------------------------------
-UnoControlTabPageContainerModel::UnoControlTabPageContainerModel( const Reference< XMultiServiceFactory >& i_factory )
+UnoControlTabPageContainerModel::UnoControlTabPageContainerModel( const Reference< XComponentContext >& i_factory )
     :UnoControlTabPageContainerModel_Base( i_factory )
     ,maContainerListeners( *this )
 {
@@ -97,7 +97,7 @@ Reference< ::com::sun::star::beans::XPropertySetInfo > UnoControlTabPageContaine
 
 namespace
 {
-    Reference< XTabPageModel > lcl_createTabPageModel( ::comphelper::ComponentContext const & i_context,
+    Reference< XTabPageModel > lcl_createTabPageModel( Reference<XComponentContext> const & i_context,
         Sequence< Any > const & i_initArguments, Reference< XPropertySet > const & i_parentModel )
     {
         try
@@ -108,9 +108,9 @@ namespace
 
             Reference< XInterface > xInstance;
             if ( isGeometryControlModel )
-                xInstance = *( new OGeometryControlModel< UnoControlTabPageModel >( i_context.getLegacyServiceFactory() ) );
+                xInstance = *( new OGeometryControlModel< UnoControlTabPageModel >( i_context ) );
             else
-                xInstance = *( new UnoControlTabPageModel( i_context.getLegacyServiceFactory() ) );
+                xInstance = *( new UnoControlTabPageModel( i_context ) );
 
             Reference< XTabPageModel > const xTabPageModel( xInstance, UNO_QUERY_THROW );
             Reference< XInitialization > const xInit( xTabPageModel, UNO_QUERY_THROW );
@@ -134,7 +134,7 @@ Reference< XTabPageModel > SAL_CALL UnoControlTabPageContainerModel::createTabPa
 {
     Sequence< Any > aInitArgs(1);
     aInitArgs[0] <<= i_tabPageID;
-    return lcl_createTabPageModel( maContext, aInitArgs, this );
+    return lcl_createTabPageModel( m_xContext, aInitArgs, this );
 }
 
 Reference< XTabPageModel > SAL_CALL UnoControlTabPageContainerModel::loadTabPage( ::sal_Int16 i_tabPageID, const ::rtl::OUString& i_resourceURL ) throw (RuntimeException)
@@ -142,7 +142,7 @@ Reference< XTabPageModel > SAL_CALL UnoControlTabPageContainerModel::loadTabPage
     Sequence< Any > aInitArgs(2);
     aInitArgs[0] <<= i_tabPageID;
     aInitArgs[1] <<= i_resourceURL;
-    return lcl_createTabPageModel( maContext, aInitArgs, this );
+    return lcl_createTabPageModel( m_xContext, aInitArgs, this );
 }
 
 void SAL_CALL UnoControlTabPageContainerModel::insertByIndex( ::sal_Int32 nIndex, const com::sun::star::uno::Any& aElement) throw (IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, uno::RuntimeException)
@@ -220,8 +220,8 @@ void UnoControlTabPageContainerModel::removeContainerListener( const Reference< 
 //  ----------------------------------------------------
 //  class UnoControlTabPageContainer
 //  ----------------------------------------------------
-UnoControlTabPageContainer::UnoControlTabPageContainer( const Reference< XMultiServiceFactory >& i_factory )
-    :UnoControlTabPageContainer_Base( i_factory )
+UnoControlTabPageContainer::UnoControlTabPageContainer( const uno::Reference< uno::XComponentContext >& rxContext )
+    :UnoControlTabPageContainer_Base(rxContext)
     ,m_aTabPageListeners( *this )
 {
 }

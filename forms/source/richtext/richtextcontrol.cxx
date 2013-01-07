@@ -94,8 +94,8 @@ namespace frm
     //==================================================================
     DBG_NAME( ORichTextControl )
     //------------------------------------------------------------------
-    ORichTextControl::ORichTextControl( const Reference< XMultiServiceFactory >& _rxORB )
-        :UnoEditControl( _rxORB )
+    ORichTextControl::ORichTextControl()
+        :UnoEditControl()
     {
         DBG_CTOR( ORichTextControl, NULL );
     }
@@ -294,9 +294,9 @@ namespace frm
     }
 
     //------------------------------------------------------------------
-    Reference< XInterface > SAL_CALL ORichTextControl::Create( const Reference< XMultiServiceFactory >& _rxFactory )
+    Reference< XInterface > SAL_CALL ORichTextControl::Create( const Reference< XMultiServiceFactory >& )
     {
-        return *( new ORichTextControl( _rxFactory ) );
+        return *( new ORichTextControl() );
     }
 
     //--------------------------------------------------------------------

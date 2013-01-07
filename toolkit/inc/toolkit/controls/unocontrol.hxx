@@ -86,7 +86,6 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclWindowPeer >   mxVclWindowPeer; // just to avoid the query_interface thing
 
 protected:
-    const ::comphelper::ComponentContext    maContext;
     EventListenerMultiplexer            maDisposeListeners;
     WindowListenerMultiplexer           maWindowListeners;
     FocusListenerMultiplexer            maFocusListeners;
@@ -136,11 +135,8 @@ protected:
 
     virtual sal_Bool   requiresNewPeer( const ::rtl::OUString& _rPropertyName ) const;
 
-protected:
-                UnoControl();
-
 public:
-                UnoControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
+                UnoControl();
                 ~UnoControl();
 
                 UnoControlComponentInfos&           GetComponentInfos() { return maComponentInfos; }

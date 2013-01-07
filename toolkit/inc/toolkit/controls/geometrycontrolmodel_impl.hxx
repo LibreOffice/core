@@ -24,7 +24,7 @@
 //====================================================================
 //--------------------------------------------------------------------
 template <class CONTROLMODEL>
-OGeometryControlModel<CONTROLMODEL>::OGeometryControlModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory )
+OGeometryControlModel<CONTROLMODEL>::OGeometryControlModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_factory )
     :OGeometryControlModel_Base(new CONTROLMODEL( i_factory ) )
 {
 }
@@ -78,6 +78,5 @@ OGeometryControlModel_Base* OGeometryControlModel<CONTROLMODEL>::createClone_Imp
 {
     return new OGeometryControlModel<CONTROLMODEL>(_rxAggregateInstance);
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

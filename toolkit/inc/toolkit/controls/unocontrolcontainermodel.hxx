@@ -37,7 +37,7 @@ protected:
     ::cppu::IPropertyArrayHelper&                                                   SAL_CALL getInfoHelper();
 
 public:
-                        UnoControlContainerModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
+                        UnoControlContainerModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_factory );
                         UnoControlContainerModel( const UnoControlContainerModel& rModel ) : UnoControlModel( rModel ) {}
 
     UnoControlModel*    Clone() const { return new UnoControlContainerModel( *this ); }

@@ -21,7 +21,6 @@
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/VclWindowPeerAttribute.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
 #include <toolkit/controls/unocontrol.hxx>
@@ -136,27 +135,8 @@ struct UnoControl_Data
 //  class UnoControl
 //  ----------------------------------------------------
 DBG_NAME( UnoControl )
-UnoControl::UnoControl()
-    :maContext( ::comphelper::getProcessServiceFactory() )
-    ,maDisposeListeners( *this )
-    ,maWindowListeners( *this )
-    ,maFocusListeners( *this )
-    ,maKeyListeners( *this )
-    ,maMouseListeners( *this )
-    ,maMouseMotionListeners( *this )
-    ,maPaintListeners( *this )
-    ,maModeChangeListeners( GetMutex() )
-    ,mpData( new UnoControl_Data )
-{
-    DBG_CTOR( UnoControl, NULL );
-    OSL_ENSURE( false, "UnoControl::UnoControl: not implemented. Well, not really." );
-    // just implemented to let the various FooImplInheritanceHelper compile, you should use the
-    // version taking a service factory
-}
-
-UnoControl::UnoControl( const Reference< XMultiServiceFactory >& i_factory )
-    : maContext( i_factory )
-    , maDisposeListeners( *this )
+UnoControl::UnoControl() :
+      maDisposeListeners( *this )
     , maWindowListeners( *this )
     , maFocusListeners( *this )
     , maKeyListeners( *this )

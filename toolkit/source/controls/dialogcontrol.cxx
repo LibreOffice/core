@@ -146,8 +146,8 @@ public:
 //  ----------------------------------------------------
 //  class UnoControlDialogModel
 //  ----------------------------------------------------
-UnoControlDialogModel::UnoControlDialogModel( const Reference< XMultiServiceFactory >& i_factory )
-    :ControlModelContainerBase( i_factory )
+UnoControlDialogModel::UnoControlDialogModel( const Reference< XComponentContext >& rxContext )
+    :ControlModelContainerBase( rxContext )
 {
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
 //  ImplRegisterProperty( BASEPROPERTY_BORDER );
@@ -279,8 +279,8 @@ void SAL_CALL UnoControlDialogModel::setFastPropertyValue_NoBroadcast( sal_Int32
 // = class UnoDialogControl
 // ============================================================================
 
-UnoDialogControl::UnoDialogControl( const uno::Reference< lang::XMultiServiceFactory >& i_factory )
-    :UnoDialogControl_Base( i_factory )
+UnoDialogControl::UnoDialogControl( const uno::Reference< uno::XComponentContext >& rxContext )
+    :UnoDialogControl_Base( rxContext )
     ,maTopWindowListeners( *this )
     ,mbWindowListener(false)
 {
@@ -626,7 +626,7 @@ void UnoDialogControl::ImplModelPropertiesChanged( const Sequence< PropertyChang
 //  ----------------------------------------------------
 //  class MultiPageControl
 //  ----------------------------------------------------
-UnoMultiPageControl::UnoMultiPageControl( const uno::Reference< lang::XMultiServiceFactory >& i_factory) : ControlContainerBase( i_factory ), maTabListeners( *this )
+UnoMultiPageControl::UnoMultiPageControl( const uno::Reference< uno::XComponentContext >& rxContext ) : ControlContainerBase(rxContext), maTabListeners( *this )
 {
     maComponentInfos.nWidth = 280;
     maComponentInfos.nHeight = 400;
@@ -825,7 +825,7 @@ void    UnoMultiPageControl::impl_createControlPeerIfNecessary( const uno::Refer
 
 // ------------- UnoMultiPageModel -----------------
 
-UnoMultiPageModel::UnoMultiPageModel( const Reference< XMultiServiceFactory >& i_factory ) : ControlModelContainerBase( i_factory )
+UnoMultiPageModel::UnoMultiPageModel( const Reference< XComponentContext >& rxContext ) : ControlModelContainerBase( rxContext )
 {
     ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
@@ -929,7 +929,7 @@ sal_Bool SAL_CALL UnoMultiPageModel::getGroupControl(  ) throw (RuntimeException
 //  ----------------------------------------------------
 //  class UnoPageControl
 //  ----------------------------------------------------
-UnoPageControl::UnoPageControl( const uno::Reference< lang::XMultiServiceFactory >& i_factory ) : ControlContainerBase( i_factory )
+UnoPageControl::UnoPageControl( const uno::Reference< uno::XComponentContext >& rxContext ) : ControlContainerBase(rxContext)
 {
     maComponentInfos.nWidth = 280;
     maComponentInfos.nHeight = 400;
@@ -947,7 +947,7 @@ UnoPageControl::~UnoPageControl()
 
 // ------------- UnoPageModel -----------------
 
-UnoPageModel::UnoPageModel( const Reference< XMultiServiceFactory >& i_factory ) : ControlModelContainerBase( i_factory )
+UnoPageModel::UnoPageModel( const Reference< XComponentContext >& rxContext ) : ControlModelContainerBase( rxContext )
 {
     ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
@@ -1036,7 +1036,7 @@ sal_Bool SAL_CALL UnoPageModel::getGroupControl(  ) throw (RuntimeException)
 //  ----------------------------------------------------
 //  class UnoFrameControl
 //  ----------------------------------------------------
-UnoFrameControl::UnoFrameControl( const uno::Reference< lang::XMultiServiceFactory >& i_factory ) : ControlContainerBase( i_factory )
+UnoFrameControl::UnoFrameControl( const uno::Reference< uno::XComponentContext >& rxContext ) : ControlContainerBase(rxContext)
 {
     maComponentInfos.nWidth = 280;
     maComponentInfos.nHeight = 400;
@@ -1112,7 +1112,7 @@ void UnoFrameControl::ImplSetPosSize( Reference< XControl >& rxCtrl )
 
 // ------------- UnoFrameModel -----------------
 
-UnoFrameModel::UnoFrameModel(  const Reference< XMultiServiceFactory >& i_factory ) : ControlModelContainerBase( i_factory )
+UnoFrameModel::UnoFrameModel(  const Reference< XComponentContext >& rxContext ) : ControlModelContainerBase( rxContext )
 {
     ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );

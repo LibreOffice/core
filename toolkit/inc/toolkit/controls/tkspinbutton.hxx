@@ -43,7 +43,7 @@ namespace toolkit
         ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper();
 
     public:
-                            UnoSpinButtonModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
+                            UnoSpinButtonModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_factory );
                             UnoSpinButtonModel( const UnoSpinButtonModel& rModel ) : UnoControlModel( rModel ) {;}
 
         UnoControlModel*    Clone() const { return new UnoSpinButtonModel( *this ); }
@@ -74,7 +74,7 @@ namespace toolkit
         AdjustmentListenerMultiplexer maAdjustmentListeners;
 
     public:
-                                    UnoSpinButtonControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
+                                    UnoSpinButtonControl();
         ::rtl::OUString             GetComponentServiceName();
 
         DECLARE_UNO3_AGG_DEFAULTS( UnoSpinButtonControl, UnoControlBase );

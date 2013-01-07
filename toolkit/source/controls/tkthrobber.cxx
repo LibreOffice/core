@@ -33,7 +33,7 @@ namespace toolkit
     //= UnoThrobberControlModel
     //====================================================================
     //--------------------------------------------------------------------
-    UnoThrobberControlModel::UnoThrobberControlModel( const uno::Reference< lang::XMultiServiceFactory >& i_factory )
+    UnoThrobberControlModel::UnoThrobberControlModel( const uno::Reference< uno::XComponentContext >& i_factory )
         :UnoControlModel( i_factory )
     {
         ImplRegisterProperty( BASEPROPERTY_BORDER );
@@ -109,8 +109,8 @@ namespace toolkit
     //= UnoThrobberControl
     //====================================================================
     //--------------------------------------------------------------------
-    UnoThrobberControl::UnoThrobberControl( const uno::Reference< lang::XMultiServiceFactory >& i_factory )
-        :UnoControlBase( i_factory )
+    UnoThrobberControl::UnoThrobberControl()
+        :UnoControlBase()
     {
     }
 

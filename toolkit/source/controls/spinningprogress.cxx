@@ -45,14 +45,14 @@ namespace toolkit
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Type;
     using ::com::sun::star::beans::XPropertySetInfo;
-    using ::com::sun::star::lang::XMultiServiceFactory;
+    using ::com::sun::star::uno::XComponentContext;
     /** === end UNO using === **/
 
     //==================================================================================================================
     //= SpinningProgressControlModel
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
-    SpinningProgressControlModel::SpinningProgressControlModel( Reference< XMultiServiceFactory > const & i_factory )
+    SpinningProgressControlModel::SpinningProgressControlModel( Reference< XComponentContext > const & i_factory )
         :SpinningProgressControlModel_Base( i_factory )
     {
         // default image sets

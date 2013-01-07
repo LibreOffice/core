@@ -49,9 +49,7 @@ namespace frm
                             ,public ORichTextControl_Base
     {
     public:
-        ORichTextControl(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
-        );
+        ORichTextControl();
 
     protected:
         ~ORichTextControl();

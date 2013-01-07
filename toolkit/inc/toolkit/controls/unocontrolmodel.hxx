@@ -67,7 +67,7 @@ private:
     EventListenerMultiplexer                maDisposeListeners;
 
 protected:
-    const ::comphelper::ComponentContext    maContext;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
 
 protected:
     void                                        ImplRegisterProperty( sal_uInt16 nPropType );
@@ -100,18 +100,20 @@ protected:
             ) const;
 
 protected:
+#ifdef _MSC_VER
     UnoControlModel() //do not use! needed by MSVC at compile time to satisfy WeakAggImplHelper7
         : UnoControlModel_Base()
         , MutexAndBroadcastHelper()
         , OPropertySetHelper( BrdcstHelper )
         , maDisposeListeners( *this )
-        , maContext( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >() )
+        , maContext( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >() )
     {
         assert(false);
     }
+#endif
 
 public:
-                UnoControlModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
+                UnoControlModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
                 UnoControlModel( const UnoControlModel& rModel );
 
     virtual UnoControlModel*    Clone() const = 0;

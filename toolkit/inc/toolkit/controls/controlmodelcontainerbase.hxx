@@ -99,7 +99,7 @@ protected:
 
     void updateUserFormChildren(  const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xAllChildren, const rtl::OUString& aName, ChildOperation Operation,  const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& xTarget ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 public:
-                        ControlModelContainerBase( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
+                        ControlModelContainerBase( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
                         ControlModelContainerBase( const ControlModelContainerBase& rModel );
                         ~ControlModelContainerBase();
 
@@ -218,6 +218,7 @@ class ControlContainerBase : public ContainerControl_IBase
 {
     ::Size ImplGetSizePixel( const ::Size& inSize );
 protected:
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >  m_xContext;
     bool                                                                        mbSizeModified;
     bool                                                                        mbPosModified;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController >   mxTabController;
@@ -229,10 +230,13 @@ protected:
     void        ImplUpdateResourceResolver();
     void        ImplStartListingForResourceEvents();
 
+#ifdef _MSC_VER
+    // just implemented to let the various FooImplInheritanceHelper compile
     ControlContainerBase();
+#endif
 
 public:
-    ControlContainerBase( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
+    ControlContainerBase( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
     ~ControlContainerBase();
 
     DECLIMPL_SERVICEINFO_DERIVED( ControlContainerBase, UnoControlBase, "toolkit.ControlContainerBase" )

@@ -43,7 +43,7 @@ namespace toolkit
 //  ----------------------------------------------------
 //  class UnoTreeModel
 //  ----------------------------------------------------
-UnoTreeModel::UnoTreeModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory )
+UnoTreeModel::UnoTreeModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_factory )
     :UnoControlModel( i_factory )
 {
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
@@ -129,8 +129,8 @@ Reference< XPropertySetInfo > UnoTreeModel::getPropertySetInfo(  ) throw(Runtime
 //  ----------------------------------------------------
 //  class UnoTreeControl
 //  ----------------------------------------------------
-UnoTreeControl::UnoTreeControl( const Reference< XMultiServiceFactory >& i_factory )
-: UnoTreeControl_Base( i_factory )
+UnoTreeControl::UnoTreeControl()
+: UnoTreeControl_Base()
 , maSelectionListeners( *this )
 , maTreeExpansionListeners( *this )
 , maTreeEditListeners( *this )
@@ -442,14 +442,14 @@ void UnoTreeControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolk
 
 }
 
-Reference< XInterface > SAL_CALL TreeControl_CreateInstance( const Reference< XMultiServiceFactory >& i_factory )
+Reference< XInterface > SAL_CALL TreeControl_CreateInstance( const Reference< XMultiServiceFactory >& )
 {
-    return Reference < XInterface >( ( ::cppu::OWeakObject* ) new ::toolkit::UnoTreeControl( i_factory ) );
+    return Reference < XInterface >( ( ::cppu::OWeakObject* ) new ::toolkit::UnoTreeControl() );
 }
 
 Reference< XInterface > SAL_CALL TreeControlModel_CreateInstance( const Reference< XMultiServiceFactory >& i_factory )
 {
-    return Reference < XInterface >( ( ::cppu::OWeakObject* ) new ::toolkit::UnoTreeModel( i_factory ) );
+    return Reference < XInterface >( ( ::cppu::OWeakObject* ) new ::toolkit::UnoTreeModel( comphelper::getComponentContext(i_factory) ) );
 }
 
 void SAL_CALL TreeEditListenerMultiplexer::nodeEditing( const Reference< XTreeNode >& Node ) throw (RuntimeException, ::com::sun::star::util::VetoException)

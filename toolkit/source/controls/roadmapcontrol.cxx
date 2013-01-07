@@ -54,7 +54,7 @@ static void lcl_throwIndexOutOfBoundsException( )
     // = UnoControlRoadmapModel
     // ===================================================================
     // -------------------------------------------------------------------
-    UnoControlRoadmapModel::UnoControlRoadmapModel( const Reference< XMultiServiceFactory >& i_factory )
+    UnoControlRoadmapModel::UnoControlRoadmapModel( const Reference< XComponentContext >& i_factory )
         :UnoControlRoadmapModel_Base( i_factory )
         ,maContainerListeners( *this )
     {
@@ -358,8 +358,8 @@ static void lcl_throwIndexOutOfBoundsException( )
     // = UnoRoadmapControl
     // ===================================================================
     // -------------------------------------------------------------------
-    UnoRoadmapControl::UnoRoadmapControl( const Reference< XMultiServiceFactory >& i_factory )
-        :UnoControlRoadmap_Base( i_factory )
+    UnoRoadmapControl::UnoRoadmapControl()
+        :UnoControlRoadmap_Base()
         ,maItemListeners( *this )
     {
     }

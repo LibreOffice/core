@@ -64,7 +64,7 @@ using namespace ::com::sun::star::util;
 //  ----------------------------------------------------
 //  class UnoControlTabPageModel
 //  ----------------------------------------------------
-UnoControlTabPageModel::UnoControlTabPageModel( Reference< XMultiServiceFactory > const & i_factory )
+UnoControlTabPageModel::UnoControlTabPageModel( Reference< XComponentContext > const & i_factory )
     :ControlModelContainerBase( i_factory )
 {
     ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
@@ -131,7 +131,7 @@ void SAL_CALL UnoControlTabPageModel::initialize (const Sequence<Any>& rArgument
         ::rtl::OUString sURL;
         if ( !( rArguments[ 1 ] >>= sURL ))
             throw lang::IllegalArgumentException();
-        Reference<container::XNameContainer > xDialogModel = awt::UnoControlDialogModelProvider::create( maContext.getUNOContext(),sURL);
+        Reference<container::XNameContainer > xDialogModel = awt::UnoControlDialogModelProvider::create( m_xContext, sURL );
         if ( xDialogModel.is() )
         {
             Sequence< ::rtl::OUString> aNames = xDialogModel->getElementNames();
@@ -183,8 +183,8 @@ Sequence<rtl::OUString> SAL_CALL UnoControlTabPageModel_getSupportedServiceNames
 // = class UnoControlTabPage
 // ============================================================================
 
-UnoControlTabPage::UnoControlTabPage( const Reference< XMultiServiceFactory >& i_factory )
-    :UnoControlTabPage_Base( i_factory )
+UnoControlTabPage::UnoControlTabPage( const uno::Reference< uno::XComponentContext >& rxContext )
+    :UnoControlTabPage_Base(rxContext)
     ,m_bWindowListener(false)
 {
     maComponentInfos.nWidth = 280;

@@ -112,8 +112,8 @@ namespace toolkit
     // = UnoControlFormattedFieldModel
     // ===================================================================
     // -------------------------------------------------------------------
-    UnoControlFormattedFieldModel::UnoControlFormattedFieldModel( const Reference< XMultiServiceFactory >& i_factory )
-        :UnoControlModel( i_factory )
+    UnoControlFormattedFieldModel::UnoControlFormattedFieldModel( const Reference< XComponentContext >& rxContext )
+        :UnoControlModel( rxContext )
         ,m_bRevokedAsClient( false )
         ,m_bSettingValueAndText( false )
     {
@@ -421,8 +421,8 @@ namespace toolkit
     // = UnoFormattedFieldControl
     // ===================================================================
     // -------------------------------------------------------------------
-    UnoFormattedFieldControl::UnoFormattedFieldControl( const Reference< XMultiServiceFactory >& i_factory )
-        :UnoSpinFieldControl( i_factory )
+    UnoFormattedFieldControl::UnoFormattedFieldControl()
+        :UnoSpinFieldControl()
     {
     }
 

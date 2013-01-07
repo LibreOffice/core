@@ -66,8 +66,8 @@ namespace toolkit
     //= AnimatedImagesControl
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
-    AnimatedImagesControl::AnimatedImagesControl( Reference< XMultiServiceFactory > const & i_factory )
-        :AnimatedImagesControl_Base( i_factory )
+    AnimatedImagesControl::AnimatedImagesControl()
+        :AnimatedImagesControl_Base()
     {
     }
 
@@ -229,7 +229,7 @@ namespace toolkit
     //= AnimatedImagesControlModel
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
-    AnimatedImagesControlModel::AnimatedImagesControlModel( Reference< XMultiServiceFactory > const & i_factory )
+    AnimatedImagesControlModel::AnimatedImagesControlModel( Reference< com::sun::star::uno::XComponentContext > const & i_factory )
         :AnimatedImagesControlModel_Base( i_factory )
         ,m_pData( new AnimatedImagesControlModel_Data )
     {

@@ -102,7 +102,7 @@ namespace toolkit
         ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
     public:
-        UnoControlRoadmapModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
+        UnoControlRoadmapModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_factory );
         UnoControlRoadmapModel( const UnoControlRoadmapModel& rModel ) :
             UnoControlRoadmapModel_Base( rModel ),
             UnoControlRoadmapModel_IBase( rModel ),
@@ -159,7 +159,7 @@ namespace toolkit
     private:
         ItemListenerMultiplexer                 maItemListeners;
     public:
-                            UnoRoadmapControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
+                            UnoRoadmapControl();
         ::rtl::OUString     GetComponentServiceName();
 
     void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException) { UnoControlBase::disposing( Source ); }

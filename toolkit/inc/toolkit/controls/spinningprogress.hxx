@@ -34,7 +34,7 @@ namespace toolkit
     class SpinningProgressControlModel : public SpinningProgressControlModel_Base
     {
     public:
-                                    SpinningProgressControlModel( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > const & i_factory );
+                                    SpinningProgressControlModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & i_factory );
                                     SpinningProgressControlModel( const SpinningProgressControlModel& i_copySource );
 
         virtual UnoControlModel*    Clone() const;

@@ -33,7 +33,7 @@ namespace toolkit
     //= UnoSimpleAnimationControlModel
     //====================================================================
     //--------------------------------------------------------------------
-    UnoSimpleAnimationControlModel::UnoSimpleAnimationControlModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory )
+    UnoSimpleAnimationControlModel::UnoSimpleAnimationControlModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_factory )
         :UnoControlModel( i_factory )
     {
         ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
@@ -111,8 +111,8 @@ namespace toolkit
     //= UnoSimpleAnimationControl
     //====================================================================
     //--------------------------------------------------------------------
-    UnoSimpleAnimationControl::UnoSimpleAnimationControl( const uno::Reference< lang::XMultiServiceFactory >& i_factory )
-        :UnoSimpleAnimationControl_Base( i_factory )
+    UnoSimpleAnimationControl::UnoSimpleAnimationControl()
+        :UnoSimpleAnimationControl_Base()
     {
     }
 

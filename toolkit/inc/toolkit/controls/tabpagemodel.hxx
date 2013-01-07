@@ -38,7 +38,7 @@ protected:
     ::com::sun::star::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const;
     ::cppu::IPropertyArrayHelper&       SAL_CALL getInfoHelper();
 public:
-    UnoControlTabPageModel( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > const & i_factory);
+    UnoControlTabPageModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & i_factory);
 
     // ::com::sun::star::io::XPersistObject
     ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
@@ -67,7 +67,7 @@ private:
     bool            m_bWindowListener;
 public:
 
-    UnoControlTabPage( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
+    UnoControlTabPage( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
     ~UnoControlTabPage();
     ::rtl::OUString             GetComponentServiceName();
 

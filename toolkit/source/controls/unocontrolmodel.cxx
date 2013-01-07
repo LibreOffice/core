@@ -112,12 +112,12 @@ static void lcl_ImplMergeFontProperty( FontDescriptor& rFD, sal_uInt16 nPropId, 
 //  ----------------------------------------------------
 //  class UnoControlModel
 //  ----------------------------------------------------
-UnoControlModel::UnoControlModel( const Reference< XMultiServiceFactory >& i_factory )
+UnoControlModel::UnoControlModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel_Base()
     ,MutexAndBroadcastHelper()
     ,OPropertySetHelper( BrdcstHelper )
     ,maDisposeListeners( *this )
-    ,maContext( i_factory )
+    ,m_xContext( rxContext )
 {
     // Insert properties from Model into table,
     // only existing properties are valid, even if they're VOID
@@ -129,7 +129,7 @@ UnoControlModel::UnoControlModel( const UnoControlModel& rModel )
     , OPropertySetHelper( BrdcstHelper )
     , maData( rModel.maData )
     , maDisposeListeners( *this )
-    , maContext( rModel.maContext )
+    , m_xContext( rModel.m_xContext )
 {
 }
 
@@ -330,7 +330,7 @@ sal_Bool UnoControlModel::ImplHasProperty( sal_uInt16 nPropId ) const
 
                 // the remaining is the locale
                 LanguageTag aLanguageTag( sDefaultCurrency);
-                LocaleDataWrapper aLocaleInfo( maContext.getUNOContext(), aLanguageTag );
+                LocaleDataWrapper aLocaleInfo( m_xContext, aLanguageTag );
                 if ( sBankSymbol.isEmpty() )
                     sBankSymbol = aLocaleInfo.getCurrBankSymbol();
 

@@ -43,7 +43,7 @@ namespace toolkit
         ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper();
 
     public:
-                            UnoSimpleAnimationControlModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
+                            UnoSimpleAnimationControlModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_factory );
                             UnoSimpleAnimationControlModel( const UnoSimpleAnimationControlModel& rModel ) : UnoControlModel( rModel ) {;}
 
         UnoControlModel*    Clone() const { return new UnoSimpleAnimationControlModel( *this ); }
@@ -72,7 +72,7 @@ namespace toolkit
     private:
 
     public:
-                                    UnoSimpleAnimationControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
+                                    UnoSimpleAnimationControl();
         ::rtl::OUString             GetComponentServiceName();
 
         // XSimpleAnimation

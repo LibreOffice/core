@@ -121,8 +121,8 @@ ImageHelper::getGraphicFromURL_nothrow( const ::rtl::OUString& _rURL )
 //  ----------------------------------------------------
 //  class UnoControlEditModel
 //  ----------------------------------------------------
-UnoControlEditModel::UnoControlEditModel( const Reference< XMultiServiceFactory >& i_factory )
-    :UnoControlModel( i_factory )
+UnoControlEditModel::UnoControlEditModel( const Reference< XComponentContext >& rxContext )
+    :UnoControlModel( rxContext )
 {
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXEdit );
 }
@@ -173,8 +173,8 @@ uno::Reference< beans::XPropertySetInfo > UnoControlEditModel::getPropertySetInf
 //  ----------------------------------------------------
 //  class UnoEditControl
 //  ----------------------------------------------------
-UnoEditControl::UnoEditControl( const Reference< XMultiServiceFactory >& i_factory )
-    :UnoControlBase( i_factory )
+UnoEditControl::UnoEditControl()
+    :UnoControlBase()
     ,maTextListeners( *this )
     ,mnMaxTextLen( 0 )
     ,mbSetTextInPeer( sal_False )
@@ -491,8 +491,8 @@ uno::Sequence< ::rtl::OUString > UnoEditControl::getSupportedServiceNames() thro
 //  ----------------------------------------------------
 //  class UnoControlFileControlModel
 //  ----------------------------------------------------
-UnoControlFileControlModel::UnoControlFileControlModel( const Reference< XMultiServiceFactory >& i_factory )
-    :UnoControlModel( i_factory )
+UnoControlFileControlModel::UnoControlFileControlModel( const Reference< XComponentContext >& rxContext )
+    :UnoControlModel( rxContext )
 {
     ImplRegisterProperty( BASEPROPERTY_ALIGN );
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
@@ -551,8 +551,8 @@ uno::Reference< beans::XPropertySetInfo > UnoControlFileControlModel::getPropert
 //  ----------------------------------------------------
 //  class UnoFileControl
 //  ----------------------------------------------------
-UnoFileControl::UnoFileControl( const Reference< XMultiServiceFactory >& i_factory )
-    :UnoEditControl( i_factory )
+UnoFileControl::UnoFileControl()
+    :UnoEditControl()
 {
 }
 
@@ -634,8 +634,8 @@ void SAL_CALL GraphicControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 n
 //  ----------------------------------------------------
 //  class UnoControlButtonModel
 //  ----------------------------------------------------
-UnoControlButtonModel::UnoControlButtonModel( const Reference< XMultiServiceFactory >& i_factory )
-    :GraphicControlModel( i_factory )
+UnoControlButtonModel::UnoControlButtonModel( const Reference< XComponentContext >& rxContext )
+    :GraphicControlModel( rxContext )
 {
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXButton );
 
@@ -691,8 +691,8 @@ uno::Reference< beans::XPropertySetInfo > UnoControlButtonModel::getPropertySetI
 //  ----------------------------------------------------
 //  class UnoButtonControl
 //  ----------------------------------------------------
-UnoButtonControl::UnoButtonControl( const uno::Reference< lang::XMultiServiceFactory >& i_factory )
-    :UnoButtonControl_Base( i_factory )
+UnoButtonControl::UnoButtonControl()
+    :UnoButtonControl_Base()
     ,maActionListeners( *this )
     ,maItemListeners( *this )
 {
@@ -831,8 +831,8 @@ awt::Size UnoButtonControl::calcAdjustedSize( const awt::Size& rNewSize ) throw(
 //  ----------------------------------------------------
 //  class UnoControlImageControlModel
 //  ----------------------------------------------------
-UnoControlImageControlModel::UnoControlImageControlModel( const Reference< XMultiServiceFactory >& i_factory )
-    :GraphicControlModel( i_factory )
+UnoControlImageControlModel::UnoControlImageControlModel( const Reference< XComponentContext >& rxContext )
+    :GraphicControlModel( rxContext )
     ,mbAdjustingImageScaleMode( false )
 {
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXImageControl );
@@ -913,8 +913,8 @@ void SAL_CALL UnoControlImageControlModel::setFastPropertyValue_NoBroadcast( sal
 //  ----------------------------------------------------
 //  class UnoImageControlControl
 //  ----------------------------------------------------
-UnoImageControlControl::UnoImageControlControl( const Reference< XMultiServiceFactory >& i_factory )
-    :UnoImageControlControl_Base( i_factory )
+UnoImageControlControl::UnoImageControlControl()
+    :UnoImageControlControl_Base()
     ,maActionListeners( *this )
 {
     // TODO: Where should I look for defaults?
@@ -958,8 +958,8 @@ awt::Size UnoImageControlControl::calcAdjustedSize( const awt::Size& rNewSize ) 
 //  ----------------------------------------------------
 //  class UnoControlRadioButtonModel
 //  ----------------------------------------------------
-UnoControlRadioButtonModel::UnoControlRadioButtonModel( const Reference< XMultiServiceFactory >& i_factory )
-    :GraphicControlModel( i_factory )
+UnoControlRadioButtonModel::UnoControlRadioButtonModel( const Reference< XComponentContext >& rxContext )
+    :GraphicControlModel( rxContext )
 {
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXRadioButton );
 }
@@ -1006,8 +1006,8 @@ uno::Reference< beans::XPropertySetInfo > UnoControlRadioButtonModel::getPropert
 //  ----------------------------------------------------
 //  class UnoRadioButtonControl
 //  ----------------------------------------------------
-UnoRadioButtonControl::UnoRadioButtonControl( const Reference< XMultiServiceFactory >& i_factory )
-    :UnoRadioButtonControl_Base( i_factory )
+UnoRadioButtonControl::UnoRadioButtonControl()
+    :UnoRadioButtonControl_Base()
     ,maItemListeners( *this )
     ,maActionListeners( *this )
 {
@@ -1168,8 +1168,8 @@ awt::Size UnoRadioButtonControl::calcAdjustedSize( const awt::Size& rNewSize ) t
 //  ----------------------------------------------------
 //  class UnoControlCheckBoxModel
 //  ----------------------------------------------------
-UnoControlCheckBoxModel::UnoControlCheckBoxModel( const Reference< XMultiServiceFactory >& i_factory )
-    :GraphicControlModel( i_factory )
+UnoControlCheckBoxModel::UnoControlCheckBoxModel( const Reference< XComponentContext >& rxContext )
+    :GraphicControlModel( rxContext )
 {
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXCheckBox );
 }
@@ -1216,8 +1216,8 @@ uno::Reference< beans::XPropertySetInfo > UnoControlCheckBoxModel::getPropertySe
 //  ----------------------------------------------------
 //  class UnoCheckBoxControl
 //  ----------------------------------------------------
-UnoCheckBoxControl::UnoCheckBoxControl( const uno::Reference< lang::XMultiServiceFactory >& i_factory )
-    :UnoCheckBoxControl_Base( i_factory )
+UnoCheckBoxControl::UnoCheckBoxControl()
+    :UnoCheckBoxControl_Base()
     ,maItemListeners( *this ), maActionListeners( *this )
 {
     maComponentInfos.nWidth = 100;
@@ -1353,8 +1353,8 @@ awt::Size UnoCheckBoxControl::calcAdjustedSize( const awt::Size& rNewSize ) thro
 //  ----------------------------------------------------
 //  class UnoControlFixedHyperlinkModel
 //  ----------------------------------------------------
-UnoControlFixedHyperlinkModel::UnoControlFixedHyperlinkModel( const Reference< XMultiServiceFactory >& i_factory )
-    :UnoControlModel( i_factory )
+UnoControlFixedHyperlinkModel::UnoControlFixedHyperlinkModel( const Reference< XComponentContext >& rxContext )
+    :UnoControlModel( rxContext )
 {
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXFixedHyperlink );
 }
@@ -1409,8 +1409,8 @@ uno::Reference< beans::XPropertySetInfo > UnoControlFixedHyperlinkModel::getProp
 //  ----------------------------------------------------
 //  class UnoFixedHyperlinkControl
 //  ----------------------------------------------------
-UnoFixedHyperlinkControl::UnoFixedHyperlinkControl( const Reference< XMultiServiceFactory >& i_factory )
-    :UnoControlBase( i_factory )
+UnoFixedHyperlinkControl::UnoFixedHyperlinkControl()
+    :UnoControlBase()
     ,maActionListeners( *this )
 {
     maComponentInfos.nWidth = 100;
@@ -1540,8 +1540,8 @@ void UnoFixedHyperlinkControl::removeActionListener(const uno::Reference< awt::X
 //  ----------------------------------------------------
 //  class UnoControlFixedTextModel
 //  ----------------------------------------------------
-UnoControlFixedTextModel::UnoControlFixedTextModel( const Reference< XMultiServiceFactory >& i_factory )
-    :UnoControlModel( i_factory )
+UnoControlFixedTextModel::UnoControlFixedTextModel( const Reference< XComponentContext >& rxContext )
+    :UnoControlModel( rxContext )
 {
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXFixedText );
 }
@@ -1591,8 +1591,8 @@ uno::Reference< beans::XPropertySetInfo > UnoControlFixedTextModel::getPropertyS
 //  ----------------------------------------------------
 //  class UnoFixedTextControl
 //  ----------------------------------------------------
-UnoFixedTextControl::UnoFixedTextControl( const Reference< XMultiServiceFactory >& i_factory )
-    :UnoControlBase( i_factory )
+UnoFixedTextControl::UnoFixedTextControl()
+    :UnoControlBase()
 {
     maComponentInfos.nWidth = 100;
     maComponentInfos.nHeight = 12;
@@ -1672,8 +1672,8 @@ awt::Size UnoFixedTextControl::calcAdjustedSize( const awt::Size& rNewSize ) thr
 //  ----------------------------------------------------
 //  class UnoControlGroupBoxModel
 //  ----------------------------------------------------
-UnoControlGroupBoxModel::UnoControlGroupBoxModel( const Reference< XMultiServiceFactory >& i_factory )
-    :UnoControlModel( i_factory )
+UnoControlGroupBoxModel::UnoControlGroupBoxModel( const Reference< XComponentContext >& rxContext )
+    :UnoControlModel( rxContext )
 {
     ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
     ImplRegisterProperty( BASEPROPERTY_ENABLED );
@@ -1724,8 +1724,8 @@ uno::Reference< beans::XPropertySetInfo > UnoControlGroupBoxModel::getPropertySe
 //  ----------------------------------------------------
 //  class UnoGroupBoxControl
 //  ----------------------------------------------------
-UnoGroupBoxControl::UnoGroupBoxControl( const Reference< XMultiServiceFactory >& i_factory )
-    :UnoControlBase( i_factory )
+UnoGroupBoxControl::UnoGroupBoxControl()
+    :UnoControlBase()
 {
     maComponentInfos.nWidth = 100;
     maComponentInfos.nHeight = 100;
@@ -1847,8 +1847,8 @@ private:
 // = UnoControlListBoxModel
 // =====================================================================================================================
 // ---------------------------------------------------------------------------------------------------------------------
-UnoControlListBoxModel::UnoControlListBoxModel( const Reference< XMultiServiceFactory >& i_factory, ConstructorMode const i_mode )
-    :UnoControlListBoxModel_Base( i_factory )
+UnoControlListBoxModel::UnoControlListBoxModel( const Reference< XComponentContext >& rxContext, ConstructorMode const i_mode )
+    :UnoControlListBoxModel_Base( rxContext )
     ,m_pData( new UnoControlListBoxModel_Data( *this ) )
     ,m_aItemListListeners( GetMutex() )
 {
@@ -2290,8 +2290,8 @@ void UnoControlListBoxModel::impl_notifyItemListEvent_nolck( const sal_Int32 i_n
 //  ----------------------------------------------------
 //  class UnoListBoxControl
 //  ----------------------------------------------------
-UnoListBoxControl::UnoListBoxControl( const Reference< XMultiServiceFactory >& i_factory )
-    :UnoListBoxControl_Base( i_factory )
+UnoListBoxControl::UnoListBoxControl()
+    :UnoListBoxControl_Base()
     ,maActionListeners( *this )
     ,maItemListeners( *this )
 {
@@ -2714,8 +2714,8 @@ void SAL_CALL UnoListBoxControl::itemListChanged( const lang::EventObject& i_rEv
 //  ----------------------------------------------------
 //  class UnoControlComboBoxModel
 //  ----------------------------------------------------
-UnoControlComboBoxModel::UnoControlComboBoxModel( const Reference< XMultiServiceFactory >& i_factory )
-    :UnoControlListBoxModel( i_factory, ConstructWithoutProperties )
+UnoControlComboBoxModel::UnoControlComboBoxModel( const Reference< XComponentContext >& rxContext )
+    :UnoControlListBoxModel( rxContext, ConstructWithoutProperties )
 {
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXComboBox );
 }
@@ -2790,8 +2790,8 @@ uno::Any UnoControlComboBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) cons
 //  ----------------------------------------------------
 //  class UnoComboBoxControl
 //  ----------------------------------------------------
-UnoComboBoxControl::UnoComboBoxControl( const Reference< XMultiServiceFactory >& i_factory )
-    :UnoEditControl( i_factory )
+UnoComboBoxControl::UnoComboBoxControl()
+    :UnoEditControl()
     ,maActionListeners( *this )
     ,maItemListeners( *this )
 {
@@ -3104,8 +3104,8 @@ sal_Int16 UnoComboBoxControl::getDropDownLineCount() throw(uno::RuntimeException
 //  ----------------------------------------------------
 //  UnoSpinFieldControl
 //  ----------------------------------------------------
-UnoSpinFieldControl::UnoSpinFieldControl( const Reference< XMultiServiceFactory >& i_factory )
-    :UnoEditControl( i_factory )
+UnoSpinFieldControl::UnoSpinFieldControl()
+    :UnoEditControl()
     ,maSpinListeners( *this )
 {
     mbRepeat = sal_False;
@@ -3196,8 +3196,8 @@ void UnoSpinFieldControl::enableRepeat( sal_Bool bRepeat ) throw(::com::sun::sta
 //  ----------------------------------------------------
 //  class UnoControlDateFieldModel
 //  ----------------------------------------------------
-UnoControlDateFieldModel::UnoControlDateFieldModel( const Reference< XMultiServiceFactory >& i_factory )
-    :UnoControlModel( i_factory )
+UnoControlDateFieldModel::UnoControlDateFieldModel( const Reference< XComponentContext >& rxContext )
+    :UnoControlModel( rxContext )
 {
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXDateField );
 }
@@ -3242,8 +3242,8 @@ uno::Reference< beans::XPropertySetInfo > UnoControlDateFieldModel::getPropertyS
 //  ----------------------------------------------------
 //  class UnoDateFieldControl
 //  ----------------------------------------------------
-UnoDateFieldControl::UnoDateFieldControl( const Reference< XMultiServiceFactory >& i_factory )
-    :UnoSpinFieldControl( i_factory )
+UnoDateFieldControl::UnoDateFieldControl()
+    :UnoSpinFieldControl()
 {
     mnFirst = Date( 1, 1, 1900 ).GetDate();
     mnLast = Date( 31, 12, 2200 ).GetDate();
@@ -3438,8 +3438,8 @@ sal_Bool UnoDateFieldControl::isStrictFormat() throw(uno::RuntimeException)
 //  ----------------------------------------------------
 //  class UnoControlTimeFieldModel
 //  ----------------------------------------------------
-UnoControlTimeFieldModel::UnoControlTimeFieldModel( const Reference< XMultiServiceFactory >& i_factory )
-    :UnoControlModel( i_factory )
+UnoControlTimeFieldModel::UnoControlTimeFieldModel( const Reference< XComponentContext >& rxContext )
+    :UnoControlModel( rxContext )
 {
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXTimeField );
 }
@@ -3484,8 +3484,8 @@ uno::Reference< beans::XPropertySetInfo > UnoControlTimeFieldModel::getPropertyS
 //  ----------------------------------------------------
 //  class UnoTimeFieldControl
 //  ----------------------------------------------------
-UnoTimeFieldControl::UnoTimeFieldControl( const Reference< XMultiServiceFactory >& i_factory )
-    :UnoSpinFieldControl( i_factory )
+UnoTimeFieldControl::UnoTimeFieldControl()
+    :UnoSpinFieldControl()
 {
     mnFirst = Time( 0, 0 ).GetTime();
     mnLast = Time( 23, 59, 59, 99 ).GetTime();
@@ -3639,8 +3639,8 @@ sal_Bool UnoTimeFieldControl::isStrictFormat() throw(uno::RuntimeException)
 //  ----------------------------------------------------
 //  class UnoControlNumericFieldModel
 //  ----------------------------------------------------
-UnoControlNumericFieldModel::UnoControlNumericFieldModel( const Reference< XMultiServiceFactory >& i_factory )
-    :UnoControlModel( i_factory )
+UnoControlNumericFieldModel::UnoControlNumericFieldModel( const Reference< XComponentContext >& rxContext )
+    :UnoControlModel( rxContext )
 {
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXNumericField );
 }
@@ -3685,8 +3685,8 @@ uno::Reference< beans::XPropertySetInfo > UnoControlNumericFieldModel::getProper
 //  ----------------------------------------------------
 //  class UnoNumericFieldControl
 //  ----------------------------------------------------
-UnoNumericFieldControl::UnoNumericFieldControl( const Reference< XMultiServiceFactory >& i_factory )
-    :UnoSpinFieldControl( i_factory )
+UnoNumericFieldControl::UnoNumericFieldControl()
+    :UnoSpinFieldControl()
 {
     mnFirst = 0;
     mnLast = 0x7FFFFFFF;
@@ -3837,8 +3837,8 @@ sal_Int16 UnoNumericFieldControl::getDecimalDigits() throw(uno::RuntimeException
 //  ----------------------------------------------------
 //  class UnoControlCurrencyFieldModel
 //  ----------------------------------------------------
-UnoControlCurrencyFieldModel::UnoControlCurrencyFieldModel( const Reference< XMultiServiceFactory >& i_factory )
-    :UnoControlModel( i_factory )
+UnoControlCurrencyFieldModel::UnoControlCurrencyFieldModel( const Reference< XComponentContext >& rxContext )
+    :UnoControlModel( rxContext )
 {
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXCurrencyField );
 }
@@ -3887,8 +3887,8 @@ uno::Reference< beans::XPropertySetInfo > UnoControlCurrencyFieldModel::getPrope
 //  ----------------------------------------------------
 //  class UnoCurrencyFieldControl
 //  ----------------------------------------------------
-UnoCurrencyFieldControl::UnoCurrencyFieldControl( const Reference< XMultiServiceFactory >& i_factory )
-    :UnoSpinFieldControl( i_factory )
+UnoCurrencyFieldControl::UnoCurrencyFieldControl()
+    :UnoSpinFieldControl()
 {
     mnFirst = 0;
     mnLast = 0x7FFFFFFF;
@@ -4038,8 +4038,8 @@ sal_Int16 UnoCurrencyFieldControl::getDecimalDigits() throw(uno::RuntimeExceptio
 //  ----------------------------------------------------
 //  class UnoControlPatternFieldModel
 //  ----------------------------------------------------
-UnoControlPatternFieldModel::UnoControlPatternFieldModel( const Reference< XMultiServiceFactory >& i_factory )
-    :UnoControlModel( i_factory )
+UnoControlPatternFieldModel::UnoControlPatternFieldModel( const Reference< XComponentContext >& rxContext )
+    :UnoControlModel( rxContext )
 {
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXPatternField );
 }
@@ -4082,8 +4082,8 @@ uno::Reference< beans::XPropertySetInfo > UnoControlPatternFieldModel::getProper
 //  ----------------------------------------------------
 //  class UnoPatternFieldControl
 //  ----------------------------------------------------
-UnoPatternFieldControl::UnoPatternFieldControl( const Reference< XMultiServiceFactory >& i_factory )
-    :UnoSpinFieldControl( i_factory )
+UnoPatternFieldControl::UnoPatternFieldControl()
+    :UnoSpinFieldControl()
 {
 }
 
@@ -4172,8 +4172,8 @@ sal_Bool UnoPatternFieldControl::isStrictFormat() throw(uno::RuntimeException)
 //  ----------------------------------------------------
 //  class UnoControlProgressBarModel
 //  ----------------------------------------------------
-UnoControlProgressBarModel::UnoControlProgressBarModel( const Reference< XMultiServiceFactory >& i_factory )
-    :UnoControlModel( i_factory )
+UnoControlProgressBarModel::UnoControlProgressBarModel( const Reference< XComponentContext >& rxContext )
+    :UnoControlModel( rxContext )
 {
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
     ImplRegisterProperty( BASEPROPERTY_BORDER );
@@ -4229,8 +4229,8 @@ uno::Reference< beans::XPropertySetInfo > UnoControlProgressBarModel::getPropert
 //  ----------------------------------------------------
 //  class UnoProgressBarControl
 //  ----------------------------------------------------
-UnoProgressBarControl::UnoProgressBarControl( const Reference< XMultiServiceFactory >& i_factory )
-    :UnoControlBase( i_factory )
+UnoProgressBarControl::UnoProgressBarControl()
+    :UnoControlBase()
 {
 }
 
@@ -4306,8 +4306,8 @@ sal_Int32 UnoProgressBarControl::getValue() throw(::com::sun::star::uno::Runtime
 //  ----------------------------------------------------
 //  class UnoControlFixedLineModel
 //  ----------------------------------------------------
-UnoControlFixedLineModel::UnoControlFixedLineModel( const Reference< XMultiServiceFactory >& i_factory )
-    :UnoControlModel( i_factory )
+UnoControlFixedLineModel::UnoControlFixedLineModel( const Reference< XComponentContext >& rxContext )
+    :UnoControlModel( rxContext )
 {
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
     ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
@@ -4358,8 +4358,8 @@ uno::Reference< beans::XPropertySetInfo > UnoControlFixedLineModel::getPropertyS
 //  ----------------------------------------------------
 //  class UnoFixedLineControl
 //  ----------------------------------------------------
-UnoFixedLineControl::UnoFixedLineControl( const Reference< XMultiServiceFactory >& i_factory )
-    :UnoControlBase( i_factory )
+UnoFixedLineControl::UnoFixedLineControl()
+    :UnoControlBase()
 {
     maComponentInfos.nWidth = 100;      // ??
     maComponentInfos.nHeight = 100;     // ??

@@ -472,8 +472,7 @@ class FmXAutoControl: public UnoControl
     friend Reference< XInterface > SAL_CALL FmXAutoControl_NewInstance_Impl();
 
 public:
-    FmXAutoControl( const ::comphelper::ComponentContext& i_context )
-        :UnoControl( i_context.getLegacyServiceFactory() )
+    FmXAutoControl() :UnoControl()
     {
     }
 
@@ -1447,7 +1446,7 @@ void FormController::toggleAutoFields(sal_Bool bAutoFields)
                         &&  ::comphelper::getBOOL( xField->getPropertyValue( FM_PROP_AUTOINCREMENT ) )
                         )
                     {
-                        replaceControl( xControl, new FmXAutoControl( m_aContext ) );
+                        replaceControl( xControl, new FmXAutoControl() );
                     }
                 }
             }
