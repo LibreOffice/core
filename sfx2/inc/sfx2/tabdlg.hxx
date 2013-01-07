@@ -130,22 +130,30 @@ protected:
     void SavePosAndId();
 
 public:
+    SfxTabDialog( Window* pParent,
+                  const OString& rID, const OUString& rUIXMLDescription,
+                  const SfxItemSet * = 0, sal_Bool bEditFmt = sal_False );
+    SfxTabDialog( SfxViewFrame *pViewFrame, Window* pParent,
+                  const OString& rID, const OUString& rUIXMLDescription,
+                  const SfxItemSet * = 0, sal_Bool bEditFmt = sal_False );
+
+
     SfxTabDialog( Window* pParent, const ResId &rResId, const SfxItemSet * = 0,
                   sal_Bool bEditFmt = sal_False, const String *pUserButtonText = 0 );
     SfxTabDialog( SfxViewFrame *pViewFrame, Window* pParent, const ResId &rResId,
                   const SfxItemSet * = 0, sal_Bool bEditFmt = sal_False,
                   const String *pUserButtonText = 0 );
-    SfxTabDialog( SfxViewFrame *pViewFrame, Window* pParent,
-                  const rtl::OString& rID, const rtl::OUString& rUIXMLDescription,
-                  const SfxItemSet * = 0, sal_Bool bEditFmt = sal_False,
-                  const String *pUserButtonText = 0 );
     ~SfxTabDialog();
 
-    void                AddTabPage( sal_uInt16 nId,
+    sal_uInt16          AddTabPage( const OString& rName,           // Name of the label for the page in the notebook .ui
                                     CreateTabPage pCreateFunc,      // != 0
                                     GetTabPageRanges pRangesFunc,   // can be 0
                                     sal_Bool bItemsOnDemand = sal_False);
-    sal_uInt16          AddTabPage( const OString& rName,
+
+    sal_uInt16          AddTabPage ( const OString &rName,          // Name of the label for the page in the notebook .ui
+                                     sal_uInt16 nPageCreateId );    // Identifier of the Factory Method to create the page
+
+    void                AddTabPage( sal_uInt16 nId,
                                     CreateTabPage pCreateFunc,      // != 0
                                     GetTabPageRanges pRangesFunc,   // can be 0
                                     sal_Bool bItemsOnDemand = sal_False);

@@ -434,13 +434,11 @@ SfxTabDialog::SfxTabDialog
 (
     SfxViewFrame* pViewFrame,     // Frame, to which the Dialog belongs
     Window* pParent,              // Parent Window
-    const rtl::OString& rID, const rtl::OUString& rUIXMLDescription, //Dialog Name, Dialog .ui path
+    const OString& rID, const OUString& rUIXMLDescription, //Dialog Name, Dialog .ui path
     const SfxItemSet* pItemSet,   // Itemset with the data;
                                   // can be NULL, when Pages are onDemand
-    sal_Bool bEditFmt,            // Flag: templates are processed
+    sal_Bool bEditFmt             // Flag: templates are processed
                                   // when yes -> additional Button for standard
-    const String* pUserButtonText // Text for UserButton;
-                                  // if != 0, the UserButton is created
 )
     : TabDialog(pParent, rID, rUIXMLDescription)
     , pFrame(pViewFrame)
@@ -453,7 +451,7 @@ SfxTabDialog::SfxTabDialog
     , bFmt(bEditFmt)
     , pExampleSet(0)
 {
-    Init_Impl( bFmt, pUserButtonText, NULL );
+    Init_Impl( bFmt, NULL, NULL );
 }
 
 // -----------------------------------------------------------------------
@@ -480,6 +478,36 @@ SfxTabDialog::SfxTabDialog
     , INI_LIST(pItemSet)
 {
     Init_Impl( bFmt, pUserButtonText, &rResId );
+    DBG_WARNING( "Please use the Construtor with the ViewFrame" );
+}
+
+SfxTabDialog::SfxTabDialog
+
+/*  [Description]
+
+    Constructor, temporary without Frame
+*/
+
+(
+    Window* pParent,              // Parent Window
+    const OString& rID, const OUString& rUIXMLDescription, //Dialog Name, Dialog .ui path
+    const SfxItemSet* pItemSet,   // Itemset with the data;
+                                  // can be NULL, when Pages are onDemand
+    sal_Bool bEditFmt             // Flag: templates are processed
+                                  // when yes -> additional Button for standard
+)
+    : TabDialog(pParent, rID, rUIXMLDescription)
+    , pFrame(0)
+    , pSet(pItemSet)
+    , pOutSet(0)
+    , pRanges(0)
+    , nResId(0)
+    , nAppPageId(USHRT_MAX)
+    , bItemsReset(sal_False)
+    , bFmt(bEditFmt)
+    , pExampleSet(0)
+{
+    Init_Impl(bFmt, NULL, NULL);
     DBG_WARNING( "Please use the Construtor with the ViewFrame" );
 }
 
@@ -629,7 +657,8 @@ void SfxTabDialog::Init_Impl( sal_Bool bFmtFlag, const String* pUserButtonText, 
 
     if ( m_pUserBtn )
     {
-        m_pUserBtn->SetText( *pUserButtonText );
+        if (pUserButtonText)
+            m_pUserBtn->SetText(*pUserButtonText);
         m_pUserBtn->SetClickHdl( LINK( this, SfxTabDialog, UserHdl ) );
         m_pUserBtn->Show();
     }
@@ -826,16 +855,14 @@ void SfxTabDialog::AddTabPage
         new Data_Impl( nId, pCreateFunc, pRangesFunc, bItemsOnDemand ) );
 }
 
-sal_uInt16 SfxTabDialog::AddTabPage
 
-/*  [Description]
-
-    Adding a page to the dialogue. Must correspond to a entry in the
+/*
+    Adds a page to the dialog. The Name must correspond to a entry in the
     TabControl in the dialog .ui
 */
-
+sal_uInt16 SfxTabDialog::AddTabPage
 (
-    const OString &rName,         // Page ID
+    const OString &rName,          // Page ID
     CreateTabPage pCreateFunc,     // Pointer to the Factory Method
     GetTabPageRanges pRangesFunc,  // Pointer to the Method for quering
                                    // Ranges onDemand
@@ -847,6 +874,26 @@ sal_uInt16 SfxTabDialog::AddTabPage
     pImpl->pData->Append(
         new Data_Impl( nId, pCreateFunc, pRangesFunc, bItemsOnDemand ) );
     return nId;
+}
+
+/*
+    Adds a page to the dialog. The Name must correspond to a entry in the
+    TabControl in the dialog .ui
+ */
+sal_uInt16 SfxTabDialog::AddTabPage
+(
+    const OString &rName,          // Page ID
+    sal_uInt16 nPageCreateId       // Identifier of the Factory Method to create the page
+)
+{
+    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+    assert(pFact);
+    CreateTabPage pCreateFunc = pFact->GetTabPageCreatorFunc(nPageCreateId);
+    assert(pCreateFunc);
+    GetTabPageRanges pRangesFunc = pFact->GetTabPageRangesFunc(nPageCreateId);
+    sal_uInt16 nPageId = m_pTabCtrl->GetPageId(rName);
+    pImpl->pData->Append(new Data_Impl(nPageId, pCreateFunc, pRangesFunc, false));
+    return nPageId;
 }
 
 // -----------------------------------------------------------------------
