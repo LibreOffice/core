@@ -158,9 +158,10 @@ $(foreach lang,$(3),$(call gb_UI__add_uifile_for_lang,$(1),$(2),$(lang)))
 
 endef
 
-# gb_UI__add_translations target uifile langs
+# gb_UI__add_translations target uifile langs qtz
 define gb_UI__add_translations
-$(if $(strip $(3)),$(call gb_UI__add_translations_impl,$(1),$(2),$(3)))
+$(if $(strip $(3) $(4)),$(call gb_UI__add_translations_impl,$(1),$(2),$(3)))
+$(if $(strip $(4)),$(call gb_UI__add_uifile_for_lang,$(1),$(2),$(strip $(4))))
 
 endef
 
@@ -171,7 +172,8 @@ define gb_UI__add_uifile_translations
 $(call gb_UI__add_translations,$(1),$(2),\
 	$(foreach lang,$(gb_UI_LANGS),\
 		$(if $(wildcard $(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(2))).po),$(lang)) \
-	) \
+	),\
+	$(filter qtz,$(gb_UI_LANGS)) \
 )
 
 endef
