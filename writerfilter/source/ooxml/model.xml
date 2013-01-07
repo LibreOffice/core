@@ -22798,11 +22798,6 @@
       <attribute name="element" tokenid="ooxml:CT_SmartTagRun_element"/>
     </resource>
     <resource name="EG_PContent" resource="Properties" tag="content">
-      <element name="sdtPr" tokenid="ooxml:CT_SdtPr"/>
-      <element name="sdtEndPr" tokenid="ooxml:CT_SdtEndPr"/>
-      <element name="sdtContent" tokenid="ooxml:CT_SdtContentRun"/>
-    </resource>
-    <resource name="EG_PContent" resource="Properties" tag="content">
       <element name="fldSimple" tokenid="ooxml:EG_PContent_fldSimple"/>
       <element name="hyperlink" tokenid="ooxml:EG_PContent_hyperlink"/>
       <element name="subDoc" tokenid="ooxml:EG_PContent_subDoc"/>
