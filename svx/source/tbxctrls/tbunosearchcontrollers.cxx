@@ -767,25 +767,30 @@ void SAL_CALL FindbarDispatcher::removeStatusListener( const css::uno::Reference
 css::uno::Reference< css::uno::XInterface > SAL_CALL FindTextToolbarController_createInstance(
     const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr )
 {
-    return FindTextToolbarController( rSMgr );
+    return static_cast< cppu::OWeakObject * >(
+        new FindTextToolbarController( rSMgr ) );
 }
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL DownSearchToolboxController_createInstance(
     const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr )
 {
-    return UpDownSearchToolboxController( rSMgr, UpDownSearchToolboxController::DOWN );
+    return static_cast< cppu::OWeakObject * >(
+        new UpDownSearchToolboxController(
+            rSMgr, UpDownSearchToolboxController::DOWN ) );
 }
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL UpSearchToolboxController_createInstance(
     const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr )
 {
-    return UpDownSearchToolboxController( rSMgr, UpDownSearchToolboxController::UP );
+    return static_cast< cppu::OWeakObject * >(
+        new UpDownSearchToolboxController(
+            rSMgr, UpDownSearchToolboxController::UP ) );
 }
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL FindbarDispatcher_createInstance(
     const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr )
 {
-    return FindbarDispatcher( rSMgr );
+    return static_cast< cppu::OWeakObject * >( new FindbarDispatcher( rSMgr ) );
 }
 
 //-----------------------------------------------------------------------------------------------------------
