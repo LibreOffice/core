@@ -1028,10 +1028,11 @@ void TableModel::optimize()
     if( !maRows.empty() && !maColumns.empty() )
     {
         sal_Int32 nCol = getColumnCountImpl() - 1;
+        sal_Int32 nRows = getRowCountImpl();
         while( nCol > 0 )
         {
             bool bEmpty = true;
-            for( sal_Int32 nRow = 0; (nRow < getRowCountImpl()) && bEmpty; nRow++ )
+            for( sal_Int32 nRow = 0; (nRow < nRows) && bEmpty; nRow++ )
             {
                 Reference< XMergeableCell > xCell( getCellByPosition( nCol, nRow ), UNO_QUERY );
                 if( xCell.is() && !xCell->isMerged() )
@@ -1065,10 +1066,11 @@ void TableModel::optimize()
         }
 
         sal_Int32 nRow = getRowCountImpl() - 1;
+        sal_Int32 nCols = getColumnCountImpl();
         while( nRow > 0 )
         {
             bool bEmpty = true;
-            for( nCol = 0; (nCol < getColumnCountImpl()) && bEmpty; nCol++ )
+            for( nCol = 0; (nCol < nCols) && bEmpty; nCol++ )
             {
                 Reference< XMergeableCell > xCell( getCellByPosition( nCol, nRow ), UNO_QUERY );
                 if( xCell.is() && !xCell->isMerged() )
