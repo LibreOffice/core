@@ -534,14 +534,12 @@ void SAL_CALL ODocumentDefinition::getFastPropertyValue( Any& o_rValue, sal_Int3
 {
     if ( i_nHandle == PROPERTY_ID_PERSISTENT_PATH )
     {
-        ::rtl::OUString sPersistentPath;
+        OUString sPersistentPath;
         if ( !m_pImpl->m_aProps.sPersistentName.isEmpty() )
         {
-            ::rtl::OUStringBuffer aBuffer;
-            aBuffer.append( ODatabaseModelImpl::getObjectContainerStorageName( m_bForm ? ODatabaseModelImpl::E_FORM : ODatabaseModelImpl::E_REPORT ) );
-            aBuffer.append( sal_Unicode( '/' ) );
-            aBuffer.append( m_pImpl->m_aProps.sPersistentName );
-            sPersistentPath = aBuffer.makeStringAndClear();
+            OUString aBuffer(ODatabaseModelImpl::getObjectContainerStorageName( m_bForm ? ODatabaseModelImpl::E_FORM : ODatabaseModelImpl::E_REPORT ) +
+                             "/" + m_pImpl->m_aProps.sPersistentName );
+            sPersistentPath = aBuffer;
         }
         o_rValue <<= sPersistentPath;
         return;
@@ -1973,13 +1971,9 @@ void SAL_CALL ODocumentDefinition::store(  ) throw (WrappedTargetException, Runt
     return impl_getHierarchicalName( false );
 }
 
-::rtl::OUString SAL_CALL ODocumentDefinition::composeHierarchicalName( const ::rtl::OUString& i_rRelativeName ) throw (IllegalArgumentException, NoSupportException, RuntimeException)
+OUString SAL_CALL ODocumentDefinition::composeHierarchicalName( const ::rtl::OUString& i_rRelativeName ) throw (IllegalArgumentException, NoSupportException, RuntimeException)
 {
-    ::rtl::OUStringBuffer aBuffer;
-    aBuffer.append( getHierarchicalName() );
-    aBuffer.append( sal_Unicode( '/' ) );
-    aBuffer.append( i_rRelativeName );
-    return aBuffer.makeStringAndClear();
+    return OUString( getHierarchicalName() + "/" + i_rRelativeName );
 }
 
 void SAL_CALL ODocumentDefinition::rename( const ::rtl::OUString& _rNewName ) throw (SQLException, ElementExistException, RuntimeException)

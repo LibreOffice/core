@@ -81,9 +81,9 @@ namespace dbaccess
     }
 
 // -----------------------------------------------------------------------------
-    ::rtl::OUString extractExceptionMessage( const ::comphelper::ComponentContext& _rContext, const Any& _rError )
+    OUString extractExceptionMessage( const ::comphelper::ComponentContext& _rContext, const Any& _rError )
     {
-        ::rtl::OUString sDisplayMessage;
+        OUString sDisplayMessage;
 
         try
         {
@@ -108,12 +108,7 @@ namespace dbaccess
             Exception aExcept;
             _rError >>= aExcept;
 
-            ::rtl::OUStringBuffer aBuffer;
-            aBuffer.append( _rError.getValueTypeName() );
-            aBuffer.appendAscii( ":\n" );
-            aBuffer.append( aExcept.Message );
-
-            sDisplayMessage = aBuffer.makeStringAndClear();
+            return OUString(_rError.getValueTypeName() + ":\n" + aExcept.Message);
         }
 
         return sDisplayMessage;
