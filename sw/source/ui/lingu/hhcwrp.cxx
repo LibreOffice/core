@@ -110,11 +110,8 @@ SwHHCWrapper::SwHHCWrapper(
     pView           = pSwView;
     pWin            = &pSwView->GetEditWin();
     bIsDrawObj      = sal_False;
-    bIsStart        = bStart;
     bIsOtherCntnt   = bStartChk     = bOther;
-    bIsConvSpecial  = sal_True;
     bIsSelection    = bSelection;
-    bInfoBox        = sal_False;
     bStartDone  = bOther || bStart;
     bEndDone    = sal_False;
 //    bLastRet    = sal_True;
@@ -660,7 +657,6 @@ sal_Bool SwHHCWrapper::ConvNext_impl( )
 
     if( bIsOtherCntnt && bStartDone && bEndDone ) // document completely checked?
     {
-        bInfoBox = sal_True;
         return sal_False;
     }
 
@@ -675,13 +671,11 @@ sal_Bool SwHHCWrapper::ConvNext_impl( )
     else if ( bStartDone && bEndDone )
     {
         // body region done, ask about special region
-        if( bIsConvSpecial && HasOtherCnt_impl() )
+        if( HasOtherCnt_impl() )
         {
             ConvStart_impl( pConvArgs, SVX_SPELL_OTHER );
             bIsOtherCntnt = bGoOn = sal_True;
         }
-        else
-            bInfoBox = sal_True;
     }
     else
     {
