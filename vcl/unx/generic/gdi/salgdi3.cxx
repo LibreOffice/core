@@ -552,7 +552,7 @@ bool X11SalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
 
         // inform glyph cache of new font
         ImplDevFontAttributes aDFA = GenPspGraphics::Info2DevFontAttributes( aInfo );
-        aDFA.mnQuality += 5800;
+        aDFA.SetQuality( aDFA.GetQuality() + 5800 );
 
         int nFaceNum = rMgr.getFontFaceNumber( aInfo.m_nID );
 
@@ -602,7 +602,7 @@ void X11SalGraphics::GetDevFontList( ImplDevFontList *pList )
 
         // inform GlyphCache about this font provided by the PsPrint subsystem
         ImplDevFontAttributes aDFA = GenPspGraphics::Info2DevFontAttributes( aInfo );
-        aDFA.mnQuality += 4096;
+        aDFA.SetQuality( aDFA.GetQuality() + 4096 );
         const rtl::OString& rFileName = rMgr.getFontFileSysPath( aInfo.m_nID );
         rGC.AddFontFile( rFileName, nFaceNum, aInfo.m_nID, aDFA, pExtraKernInfo );
    }

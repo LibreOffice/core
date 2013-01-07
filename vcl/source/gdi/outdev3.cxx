@@ -881,7 +881,7 @@ bool PhysicalFontFace::IsBetterMatch( const FontSelectPattern& rFSD, FontMatchSt
             nMatch += 600;
     }
 
-    if( mbDevice )
+    if( IsDeviceFont() )
         nMatch += 1;
 
     int nHeightMatch = 0;
@@ -1052,10 +1052,10 @@ bool ImplDevFontListData::AddFontFace( PhysicalFontFace* pNewData )
     if( !mpFirst )
     {
         maName         = pNewData->GetFamilyName();
-        maMapNames     = pNewData->maMapNames;
+        maMapNames     = pNewData->GetAliasNames();
         meFamily       = pNewData->GetFamilyType();
         mePitch        = pNewData->GetPitch();
-        mnMinQuality   = pNewData->mnQuality;
+        mnMinQuality   = pNewData->GetQuality();
     }
     else
     {
@@ -1063,8 +1063,8 @@ bool ImplDevFontListData::AddFontFace( PhysicalFontFace* pNewData )
             meFamily = pNewData->GetFamilyType();
         if( mePitch == PITCH_DONTKNOW )
             mePitch = pNewData->GetPitch();
-        if( mnMinQuality > pNewData->mnQuality )
-            mnMinQuality = pNewData->mnQuality;
+        if( mnMinQuality > pNewData->GetQuality() )
+            mnMinQuality = pNewData->GetQuality();
     }
 
     // set attributes for attribute based font matching
@@ -1122,12 +1122,12 @@ bool ImplDevFontListData::AddFontFace( PhysicalFontFace* pNewData )
             break;
 
         // ignore duplicate if its quality is worse
-        if( pNewData->mnQuality < pData->mnQuality )
+        if( pNewData->GetQuality() < pData->GetQuality() )
             return false;
 
         // keep the device font if its quality is good enough
-        if( (pNewData->mnQuality == pData->mnQuality)
-        &&  (pData->mbDevice || !pNewData->mbDevice) )
+        if( (pNewData->GetQuality() == pData->GetQuality())
+        &&  (pData->IsDeviceFont() || !pNewData->IsDeviceFont()) )
             return false;
 
         // replace existing font face with a better one
@@ -3401,7 +3401,7 @@ ImplFontMetricData::ImplFontMetricData( const FontSelectPattern& rFontSelData )
     {
         SetFamilyName( rFontSelData.mpFontData->GetFamilyName() );
         SetStyleName( rFontSelData.mpFontData->GetStyleName() );
-        mbDevice   = rFontSelData.mpFontData->mbDevice;
+        mbDevice   = rFontSelData.mpFontData->IsDeviceFont();
         mbKernableFont = true;
     }
     else
@@ -7314,7 +7314,7 @@ FontInfo OutputDevice::GetDevFont( int nDevFontIndex ) const
         aFontInfo.SetWidthType( rData.GetWidthType() );
         if( rData.IsScalable() )
             aFontInfo.mpImplMetric->mnMiscFlags |= ImplFontMetric::SCALABLE_FLAG;
-        if( rData.mbDevice )
+        if( rData.IsDeviceFont() )
             aFontInfo.mpImplMetric->mnMiscFlags |= ImplFontMetric::DEVICE_FLAG;
     }
 

@@ -101,8 +101,13 @@ public: // TODO: create matching interface class
     bool               IsDeviceFont() const      { return mbDevice; }
     bool               IsEmbeddable() const      { return mbEmbeddable; }
     bool               IsSubsettable() const     { return mbSubsettable; }
-
-public: // TODO: hide members behind accessor methods
+    void                SetMapNames(const String sMapNames)     { maMapNames = sMapNames; }
+    void                SetRotatable(const bool bOrientation)   { mbOrientation = bOrientation; }
+    void                SetQuality(const bool bQuality)         { mnQuality = bQuality; }
+    void                SetDevice(const bool bDevice)           { mbDevice = bDevice; }
+    void                SetSubsettable(const bool bSubsettable) { mbSubsettable = bSubsettable; }
+    void                SetEmbeddable(const bool bEmbeddable)   { mbEmbeddable = mbEmbeddable; }
+private:
     String             maMapNames;       // List of family name aliass separated with ';'
     int                mnQuality;        // Quality (used when similar fonts compete)
     bool               mbOrientation;    // true: physical font can be rotated
