@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAASn///7E\u003d",
+        "filename": "dbaccess/source/core/api/OptimisticSet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-01-07T16:29:19Z",
+      "side": 1,
+      "message": "This looks suspicious. It looks to me like qualifiedNameComponents() fills values to sCatalog etc. , which means you have reordered the calls and use variables before they have any value.",
+      "revId": "c5c078a1dce03c4dab362f87dd8803a14635a4fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASn///7A\u003d",
+        "filename": "dbaccess/source/core/api/OptimisticSet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-01-07T16:29:19Z",
+      "side": 1,
+      "message": "The same.",
+      "revId": "c5c078a1dce03c4dab362f87dd8803a14635a4fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASn///68\u003d",
+        "filename": "dbaccess/source/core/api/OptimisticSet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-01-07T16:29:19Z",
+      "side": 1,
+      "message": "Once more.",
+      "revId": "c5c078a1dce03c4dab362f87dd8803a14635a4fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASn///60\u003d",
+        "filename": "dbaccess/source/core/api/OptimisticSet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-01-07T16:29:19Z",
+      "side": 1,
+      "message": "And again. Even if you just look at the code, you use the same thing twice, you just call it sLeft or sRight.",
+      "revId": "c5c078a1dce03c4dab362f87dd8803a14635a4fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
