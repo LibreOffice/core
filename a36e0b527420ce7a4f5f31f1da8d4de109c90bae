@@ -139,6 +139,24 @@
     },
     {
       "key": {
+        "uuid": "AAAASn///8U\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3254,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-07T13:43:12Z",
+      "side": 1,
+      "message": "Even if you wanted to enter a text and Calc converted it to number during input, the result of NUMBERVALUE would still be number, not text. However, when you convert a number to text the result is locale dependent as it uses the separators of the current locale, but then in NUMBERVALUE fixed separators are used. So, the final result is locale dependent again and different on different systems, which exactly was the reason to have this function, to convert text to number in a locale independent way ...",
+      "parentUuid": "AAAASX///0o\u003d",
+      "revId": "a36e0b527420ce7a4f5f31f1da8d4de109c90bae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAASX///3U\u003d",
         "filename": "sc/source/core/tool/interpr1.cxx",
         "patchSetId": 1
