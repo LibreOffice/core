@@ -101,17 +101,6 @@
 <!-- this is were the images are -->
 <xsl:param name="imgrepos" select="''"/>
 <xsl:param name="Id" />
-<!-- (lame) distinction between OS and Commercial -->
-<xsl:param name="distrib">
-	<xsl:choose>
-		<xsl:when test="starts-with($productname,'OpenOffice')">
-			<xsl:value-of select="'OpenSource'"/>
-		</xsl:when>
-		<xsl:otherwise>
-			<xsl:value-of select="'COMMERCIAL'"/>
-		</xsl:otherwise>
-	</xsl:choose>
-</xsl:param>
 <xsl:param name="Language" select="'en-US'"/>
 <xsl:variable name="lang" select="$Language"/>
 
