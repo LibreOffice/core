@@ -765,25 +765,17 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
         bCase = m_xMetaData->supportsMixedCaseQuotedIdentifiers();
         aSelectColumns = m_aSqlIterator.getSelectColumns();
 
-        ::rtl::OUStringBuffer aSQL;
-        aSQL.append( m_aPureSelectSQL );
-        aSQL.append( STR_WHERE );
+        OUStringBuffer aSQL( m_aPureSelectSQL + STR_WHERE + " ( 0 = 1 )");
 
         // preserve the original WHERE clause
         // #i102234#
-        ::rtl::OUString sOriginalWhereClause = getSQLPart( Where, m_aSqlIterator, sal_False );
+        OUString sOriginalWhereClause = getSQLPart( Where, m_aSqlIterator, sal_False );
         if ( !sOriginalWhereClause.isEmpty() )
         {
-            aSQL.appendAscii( " ( 0 = 1 ) AND ( " );
-            aSQL.append( sOriginalWhereClause );
-            aSQL.appendAscii( " ) " );
-        }
-        else
-        {
-            aSQL.appendAscii( " ( 0 = 1 ) " );
+            aSQL.append( " AND ( " + sOriginalWhereClause + " ) " );
         }
 
-        ::rtl::OUString sGroupBy = getSQLPart( Group, m_aSqlIterator, sal_True );
+        OUString sGroupBy = getSQLPart( Group, m_aSqlIterator, sal_True );
         if ( !sGroupBy.isEmpty() )
             aSQL.append( sGroupBy );
 
