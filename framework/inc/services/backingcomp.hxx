@@ -63,7 +63,7 @@ class BackingComp : public  css::lang::XTypeProvider
                   , public  css::lang::XInitialization
                   , public  css::frame::XController  // => XComponent
                   , public  css::awt::XKeyListener // => XEventListener
-                  // attention! Must be the first base class to guarentee right initialize lock ...
+                  // attention! Must be the first base class to guarantee right initialize lock ...
                   , private ThreadHelpBase
                   , public  ::cppu::OWeakObject
 {

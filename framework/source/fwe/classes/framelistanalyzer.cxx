@@ -126,7 +126,7 @@ void FrameListAnalyzer::impl_analyze()
             css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
             css::uno::Reference< css::frame::XModuleManager2 > xModuleMgr = css::frame::ModuleManager::create(xContext);
             ::rtl::OUString sModule = xModuleMgr->identify(m_xReferenceFrame);
-            m_bReferenceIsBacking = sModule.equals(SERVICENAME_STARTMODULE);
+            m_bReferenceIsBacking = sModule.equals("com.sun.star.frame.StartModule");
         }
         catch(const css::frame::UnknownModuleException&)
         {
@@ -201,7 +201,7 @@ void FrameListAnalyzer::impl_analyze()
                     css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
                     css::uno::Reference< css::frame::XModuleManager2 > xModuleMgr = css::frame::ModuleManager::create(xContext);
                     ::rtl::OUString sModule = xModuleMgr->identify(xFrame);
-                    if (sModule.equals(SERVICENAME_STARTMODULE))
+                    if (sModule.equals("com.sun.star.frame.StartModule"))
                     {
                         m_xBackingComponent = xFrame;
                         continue;

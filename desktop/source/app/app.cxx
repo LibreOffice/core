@@ -45,6 +45,7 @@
 #include <com/sun/star/util/XFlushable.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/StartModule.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/view/XPrintable.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
@@ -121,6 +122,7 @@
 #endif
 #endif //WNT
 
+using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
@@ -2562,7 +2564,6 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
     case ApplicationEvent::TYPE_APPEAR:
         if ( !GetCommandLineArgs().IsInvisible() )
         {
-            Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
             Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 
             // find active task - the active task is always a visible task
@@ -2590,25 +2591,18 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
                     xContainerWindow = xBackingFrame->getContainerWindow();
                 if (xContainerWindow.is())
                 {
-                    Sequence< Any > lArgs(1);
-                    lArgs[0] <<= xContainerWindow;
-                    Reference< XController > xBackingComp(
-                        xSMGR->createInstanceWithArguments(OUString( "com.sun.star.frame.StartModule" ), lArgs),
-                        UNO_QUERY);
-                    if (xBackingComp.is())
-                    {
-                        Reference< ::com::sun::star::awt::XWindow > xBackingWin(xBackingComp, UNO_QUERY);
-                        // Attention: You MUST(!) call setComponent() before you call attachFrame().
-                        // Because the backing component set the property "IsBackingMode" of the frame
-                        // to true inside attachFrame(). But setComponent() reset this state everytimes ...
-                        xBackingFrame->setComponent(xBackingWin, xBackingComp);
-                        xBackingComp->attachFrame(xBackingFrame);
-                        xContainerWindow->setVisible(sal_True);
+                    Reference< XController > xStartModule = StartModule::createWithParentWindow(xContext, xContainerWindow);
+                    Reference< ::com::sun::star::awt::XWindow > xBackingWin(xStartModule, UNO_QUERY);
+                    // Attention: You MUST(!) call setComponent() before you call attachFrame().
+                    // Because the backing component set the property "IsBackingMode" of the frame
+                    // to true inside attachFrame(). But setComponent() reset this state every time ...
+                    xBackingFrame->setComponent(xBackingWin, xStartModule);
+                    xStartModule->attachFrame(xBackingFrame);
+                    xContainerWindow->setVisible(sal_True);
 
-                        Window* pCompWindow = VCLUnoHelper::GetWindow(xBackingFrame->getComponentWindow());
-                        if (pCompWindow)
-                            pCompWindow->Update();
-                    }
+                    Window* pCompWindow = VCLUnoHelper::GetWindow(xBackingFrame->getComponentWindow());
+                    if (pCompWindow)
+                        pCompWindow->Update();
                 }
             }
         }
@@ -2816,7 +2810,6 @@ void Desktop::ShowBackingComponent(Desktop * progress)
         return;
     }
     Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
-    Reference< css::lang::XMultiServiceFactory > xSMgr = ::comphelper::getProcessServiceFactory();
     Reference< XDesktop2 > xDesktop = css::frame::Desktop::create(xContext);
     if (progress != 0)
     {
@@ -2834,29 +2827,22 @@ void Desktop::ShowBackingComponent(Desktop * progress)
         {
             progress->SetSplashScreenProgress(75);
         }
-        Sequence< Any > lArgs(1);
-        lArgs[0] <<= xContainerWindow;
 
-        Reference< XController > xBackingComp(
-            xSMgr->createInstanceWithArguments(OUString( "com.sun.star.frame.StartModule" ), lArgs), UNO_QUERY);
-        if (xBackingComp.is())
+        Reference< XController > xStartModule = StartModule::createWithParentWindow( xContext, xContainerWindow);
+        // Attention: You MUST(!) call setComponent() before you call attachFrame().
+        // Because the backing component set the property "IsBackingMode" of the frame
+        // to true inside attachFrame(). But setComponent() reset this state everytimes ...
+        xBackingFrame->setComponent(Reference< XWindow >(xStartModule, UNO_QUERY), xStartModule);
+        if (progress != 0)
         {
-            Reference< ::com::sun::star::awt::XWindow > xBackingWin(xBackingComp, UNO_QUERY);
-            // Attention: You MUST(!) call setComponent() before you call attachFrame().
-            // Because the backing component set the property "IsBackingMode" of the frame
-            // to true inside attachFrame(). But setComponent() reset this state everytimes ...
-            xBackingFrame->setComponent(xBackingWin, xBackingComp);
-            if (progress != 0)
-            {
-                progress->SetSplashScreenProgress(100);
-            }
-            xBackingComp->attachFrame(xBackingFrame);
-            if (progress != 0)
-            {
-                progress->CloseSplashScreen();
-            }
-            xContainerWindow->setVisible(sal_True);
+            progress->SetSplashScreenProgress(100);
         }
+        xStartModule->attachFrame(xBackingFrame);
+        if (progress != 0)
+        {
+            progress->CloseSplashScreen();
+        }
+        xContainerWindow->setVisible(sal_True);
     }
 }
 

@@ -28,6 +28,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/CommandGroup.hpp>
+#include <com/sun/star/frame/StartModule.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/document/XActionLockable.hpp>
@@ -549,17 +550,14 @@ sal_Bool CloseDispatcher::implts_establishBackingMode()
         return sal_False;
 
     css::uno::Reference< css::awt::XWindow > xContainerWindow = xFrame->getContainerWindow();
-    css::uno::Sequence< css::uno::Any > lArgs(1);
-    lArgs[0] <<= xContainerWindow;
 
-    css::uno::Reference< css::frame::XController > xBackingComp(
-        xSMGR->createInstanceWithArguments(SERVICENAME_STARTMODULE, lArgs),
-        css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::frame::XController > xStartModule = css::frame::StartModule::createWithParentWindow(
+                        comphelper::getComponentContext(xSMGR), xContainerWindow);
 
     // Attention: You MUST(!) call setComponent() before you call attachFrame().
-    css::uno::Reference< css::awt::XWindow > xBackingWin(xBackingComp, css::uno::UNO_QUERY);
-    xFrame->setComponent(xBackingWin, xBackingComp);
-    xBackingComp->attachFrame(xFrame);
+    css::uno::Reference< css::awt::XWindow > xBackingWin(xStartModule, css::uno::UNO_QUERY);
+    xFrame->setComponent(xBackingWin, xStartModule);
+    xStartModule->attachFrame(xFrame);
     xContainerWindow->setVisible(sal_True);
 
     return sal_True;

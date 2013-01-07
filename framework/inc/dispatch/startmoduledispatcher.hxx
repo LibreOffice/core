@@ -36,6 +36,7 @@
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 
 #include <cppuhelper/weak.hxx>
@@ -64,7 +65,7 @@ class StartModuleDispatcher : public css::lang::XTypeProvider
         /** @short reference to an uno service manager,
                    which can be used to create own needed
                    uno resources. */
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
         //---------------------------------------
         /** @short  our "context" frame. */
@@ -88,8 +89,8 @@ class StartModuleDispatcher : public css::lang::XTypeProvider
 
             @descr  Such "owner frame" is used as context for all related operations.
 
-            @param  xSMGR
-                    an uno service manager, which is needed to create uno resource
+            @param  xContext
+                    an UNO service manager, which is needed to create UNO resource
                     internaly.
 
             @param  xFrame
@@ -98,7 +99,7 @@ class StartModuleDispatcher : public css::lang::XTypeProvider
             @param  sTarget
                     the original target information used for the related queryDispatch() call.
          */
-        StartModuleDispatcher(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR  ,
+        StartModuleDispatcher(const css::uno::Reference< css::uno::XComponentContext >&     rxContext,
                               const css::uno::Reference< css::frame::XFrame >&              xFrame ,
                               const ::rtl::OUString&                                        sTarget);
 

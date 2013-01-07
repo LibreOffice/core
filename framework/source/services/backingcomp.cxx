@@ -268,7 +268,7 @@ sal_Bool SAL_CALL BackingComp::supportsService( /*IN*/ const ::rtl::OUString& sS
     throw(css::uno::RuntimeException)
 {
     return (
-            sServiceName.equals(SERVICENAME_STARTMODULE    ) ||
+            sServiceName.equals("com.sun.star.frame.StartModule") ||
             sServiceName.equals(SERVICENAME_FRAMECONTROLLER)
            );
 }
@@ -326,7 +326,7 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL BackingComp::getSupportedServiceN
 css::uno::Sequence< ::rtl::OUString > BackingComp::impl_getStaticSupportedServiceNames()
 {
     css::uno::Sequence< ::rtl::OUString > lNames(1);
-    lNames[0] = SERVICENAME_STARTMODULE;
+    lNames[0] = "com.sun.star.frame.StartModule";
     return lNames;
 }
 
