@@ -869,7 +869,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         }
         else
         {
-            ListBox *pListBox = new ListBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK);
+            ListBox *pListBox = new ListBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE);
             pListBox->EnableAutoSize(true);
             if (!rItems.empty())
             {
@@ -891,7 +891,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         //   everything over to SvTreeViewBox
         //d) remove the users of makeSvTreeViewBox
         extractModel(id, rMap);
-        pWindow = new ListBox(pParent, WB_LEFT|WB_VCENTER|WB_3DLOOK);
+        pWindow = new ListBox(pParent, WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE);
     }
     else if (name == "GtkLabel")
     {
