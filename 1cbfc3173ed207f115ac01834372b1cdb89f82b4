@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "AAAASn////g\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-01-07T09:23:44Z",
+      "side": 1,
+      "message": "This is partly from the testing phase when not all went as it should go and partly a deeply engraved habit (inherited from my C-time, I guess) to check pointers before using them.\nI should have removed the code before submitting.",
+      "parentUuid": "AAAASX///zI\u003d",
+      "revId": "1cbfc3173ed207f115ac01834372b1cdb89f82b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAASX///zE\u003d",
         "filename": "sc/source/core/tool/interpr1.cxx",
         "patchSetId": 2
@@ -70,6 +88,24 @@
     },
     {
       "key": {
+        "uuid": "AAAASn////c\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-01-07T09:23:44Z",
+      "side": 1,
+      "message": "Same reply too.",
+      "parentUuid": "AAAASX///zE\u003d",
+      "revId": "1cbfc3173ed207f115ac01834372b1cdb89f82b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAASX///zU\u003d",
         "filename": "sc/source/core/tool/interpr1.cxx",
         "patchSetId": 2
@@ -81,6 +117,24 @@
       "writtenOn": "2013-01-05T03:36:54Z",
       "side": 1,
       "message": "Checking nGlobalError here means the error condition is met if there was an error anywhere in the calculation chain. We only want to check for an error within the first argument though. Weirdly enough \u003d1/0+IFERROR(2,3) results in 5 ... because 2 is still on the stack (not popped) and then code for 3 is executed which pushes that and then ocAdd adds both.",
+      "revId": "1cbfc3173ed207f115ac01834372b1cdb89f82b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASn////Y\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-01-07T09:23:44Z",
+      "side": 1,
+      "message": "It\u0027s clear you\u0027re the expert, I cannot but admire your expertise.",
+      "parentUuid": "AAAASX///zU\u003d",
       "revId": "1cbfc3173ed207f115ac01834372b1cdb89f82b4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -138,6 +192,24 @@
     },
     {
       "key": {
+        "uuid": "AAAASn////U\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-01-07T09:23:44Z",
+      "side": 1,
+      "message": "Ah, well, if I leave out this line the result of a matrix element with value 0 is shown as FALSE...\n(e.g. [ 1 0 ] and iferror( 2*matrixrange; -7) )",
+      "parentUuid": "AAAASX///zA\u003d",
+      "revId": "1cbfc3173ed207f115ac01834372b1cdb89f82b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAASX///y8\u003d",
         "filename": "sc/source/core/tool/interpr1.cxx",
         "patchSetId": 2
@@ -149,6 +221,24 @@
       "writtenOn": "2013-01-05T03:36:54Z",
       "side": 1,
       "message": "String evaluates as error here.",
+      "revId": "1cbfc3173ed207f115ac01834372b1cdb89f82b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASn////Q\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-01-07T09:23:44Z",
+      "side": 1,
+      "message": "I guess I was so narrow minded that I didn\u0027t see anything else than numeric elements in any matrix...",
+      "parentUuid": "AAAASX///y8\u003d",
       "revId": "1cbfc3173ed207f115ac01834372b1cdb89f82b4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -172,6 +262,24 @@
     },
     {
       "key": {
+        "uuid": "AAAASn////M\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-01-07T09:23:44Z",
+      "side": 1,
+      "message": "That explains the line 297...\nI copied the jump instruction from elsewhere and have not tried to understand the deeper meaning/consequences of it.",
+      "parentUuid": "AAAASX///y4\u003d",
+      "revId": "1cbfc3173ed207f115ac01834372b1cdb89f82b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAASX///0c\u003d",
         "filename": "sc/source/core/tool/parclass.cxx",
         "patchSetId": 2
@@ -183,6 +291,24 @@
       "writtenOn": "2013-01-05T03:36:54Z",
       "side": 1,
       "message": "IFERROR takes only 2 parameters, not 3.",
+      "revId": "1cbfc3173ed207f115ac01834372b1cdb89f82b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASn////I\u003d",
+        "filename": "sc/source/core/tool/parclass.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-01-07T09:23:44Z",
+      "side": 1,
+      "message": "You are completely correct, of course. This is a left-over from the testing phase when I started with an exact copy of ScIfJump() in ScIfError becuase I couldn\u0027t get it to work.\nI should have removed the second Reference.",
+      "parentUuid": "AAAASX///0c\u003d",
       "revId": "1cbfc3173ed207f115ac01834372b1cdb89f82b4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -206,6 +332,24 @@
     },
     {
       "key": {
+        "uuid": "AAAASn////E\u003d",
+        "filename": "sc/source/core/tool/parclass.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-01-07T09:23:44Z",
+      "side": 1,
+      "message": "I think that my original code was from before the bool to sal_Int8 change and that I missed it when applying my changes to a more recent version.",
+      "parentUuid": "AAAASX///0g\u003d",
+      "revId": "1cbfc3173ed207f115ac01834372b1cdb89f82b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAASX///0Y\u003d",
         "filename": "sc/source/core/tool/token.cxx",
         "patchSetId": 2
@@ -217,6 +361,24 @@
       "writtenOn": "2013-01-05T03:36:54Z",
       "side": 1,
       "message": "For these the jump count is 2 (If, Behind), not 3.",
+      "revId": "1cbfc3173ed207f115ac01834372b1cdb89f82b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASn////A\u003d",
+        "filename": "sc/source/core/tool/token.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-01-07T09:23:44Z",
+      "side": 1,
+      "message": "@#! (to myself) I thought I did a thorough check of the jump count thoughout all my code...",
+      "parentUuid": "AAAASX///0Y\u003d",
       "revId": "1cbfc3173ed207f115ac01834372b1cdb89f82b4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
