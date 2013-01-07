@@ -155,17 +155,17 @@ ImplFontAttrCache::ImplFontAttrCache( const String& rFileNameURL, const String& 
         aFontFileURL = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(aCacheFile, RTL_TEXTENCODING_UTF8);
         if( !aFontFileURL.Len() )
             break;
-        aDFA.maName = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(aCacheFile, RTL_TEXTENCODING_UTF8);
+        aDFA.SetFamilyName(read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(aCacheFile, RTL_TEXTENCODING_UTF8));
 
         short n;
-        aCacheFile >> n; aDFA.meWeight     = static_cast<FontWeight>(n);
-        aCacheFile >> n; aDFA.meItalic     = static_cast<FontItalic>(n);
-        aCacheFile >> n; aDFA.mePitch      = static_cast<FontPitch>(n);
-        aCacheFile >> n; aDFA.meWidthType  = static_cast<FontWidth>(n);
-        aCacheFile >> n; aDFA.meFamily     = static_cast<FontFamily>(n);
-        aCacheFile >> n; aDFA.mbSymbolFlag = (n != 0);
+        aCacheFile >> n; aDFA.SetWeight(static_cast<FontWeight>(n));
+        aCacheFile >> n; aDFA.SetItalic(static_cast<FontItalic>(n));
+        aCacheFile >> n; aDFA.SetPitch(static_cast<FontPitch>(n));
+        aCacheFile >> n; aDFA.SetWidthType(static_cast<FontWidth>(n));
+        aCacheFile >> n; aDFA.SetFamilyType(static_cast<FontFamily>(n));
+        aCacheFile >> n; aDFA.SetSymbolFlag(n != 0);
 
-        aCacheFile.ReadByteStringLine( aDFA.maStyleName, RTL_TEXTENCODING_UTF8 );
+        aCacheFile.ReadByteStringLine( aDFA.GetStyleName(), RTL_TEXTENCODING_UTF8 );
 
         aFontAttributes[ aFontFileURL ] = aDFA;
     }
@@ -188,16 +188,16 @@ ImplFontAttrCache::~ImplFontAttrCache()
                 const String rFontFileURL( (*aIter).first );
                 const ImplDevFontAttributes& rDFA( (*aIter).second );
                 write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(aCacheFile, rFontFileURL, RTL_TEXTENCODING_UTF8);
-                write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(aCacheFile, rDFA.maName, RTL_TEXTENCODING_UTF8);
+                write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(aCacheFile, rDFA.GetFamilyName(), RTL_TEXTENCODING_UTF8);
 
-                aCacheFile << static_cast<short>(rDFA.meWeight);
-                aCacheFile << static_cast<short>(rDFA.meItalic);
-                aCacheFile << static_cast<short>(rDFA.mePitch);
-                aCacheFile << static_cast<short>(rDFA.meWidthType);
-                aCacheFile << static_cast<short>(rDFA.meFamily);
-                aCacheFile << static_cast<short>(rDFA.mbSymbolFlag != false);
+                aCacheFile << static_cast<short>(rDFA.GetWeight());
+                aCacheFile << static_cast<short>(rDFA.GetSlant());
+                aCacheFile << static_cast<short>(rDFA.GetPitch());
+                aCacheFile << static_cast<short>(rDFA.GetWidthType());
+                aCacheFile << static_cast<short>(rDFA.GetFamilyType());
+                aCacheFile << static_cast<short>(rDFA.IsSymbolFont() != false);
 
-                write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(aCacheFile, rDFA.maStyleName, RTL_TEXTENCODING_UTF8);
+                write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(aCacheFile, rDFA.GetStyleName(), RTL_TEXTENCODING_UTF8);
 
                 ++aIter;
             }
@@ -230,7 +230,7 @@ ImplDevFontAttributes ImplFontAttrCache::GetFontAttr( const String& rFontFileNam
 void ImplFontAttrCache::AddFontAttr( const String& rFontFileName, const ImplDevFontAttributes& rDFA )
 {
     DBG_ASSERT( rFontFileName.Len() && rDFA.maName.Len(), "ImplFontNameCache::AddFontName - invalid data!" );
-    if ( rFontFileName.Len() && rDFA.maName.Len() )
+    if ( rFontFileName.Len() && rDFA.GetFamilyName().Len() )
     {
         aFontAttributes.insert( FontAttrMap::value_type( OptimizeURL( rFontFileName ), rDFA ) );
         bModified = TRUE;
@@ -574,8 +574,8 @@ bool WinGlyphFallbackSubstititution::FindFontSubstitute( FontSelectPattern& rFon
 
     // are the missing characters symbols?
     pDevFont = pDevFontList->ImplFindByAttributes( IMPL_FONT_ATTR_SYMBOL,
-                    rFontSelData.meWeight, rFontSelData.meWidthType,
-                    rFontSelData.meItalic, rFontSelData.maSearchName );
+                    rFontSelData.GetWeight(), rFontSelData.GetWidthType(),
+                    rFontSelData.GetSlant(), rFontSelData.maSearchName );
     if( pDevFont )
     {
         const PhysicalFontFace* pFace = pDevFont->FindBestFontFace( rFontSelData );
@@ -599,7 +599,7 @@ bool WinGlyphFallbackSubstititution::FindFontSubstitute( FontSelectPattern& rFon
         const PhysicalFontFace* pFace = pTestFontList->Get( i );
         if( !HasMissingChars( pFace, rMissingChars ) )
             continue;
-        rFontSelData.maSearchName = pFace->maName;
+        rFontSelData.maSearchName = pFace->GetFamilyName();
         return true;
     }
 
@@ -821,15 +821,15 @@ static ImplDevFontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXA& rE
     const LOGFONTA rLogFont = rEnumFont.elfLogFont;
 
     // get font face attributes
-    aDFA.meFamily       = ImplFamilyToSal( rLogFont.lfPitchAndFamily );
-    aDFA.meWidthType    = WIDTH_DONTKNOW;
-    aDFA.meWeight       = ImplWeightToSal( rLogFont.lfWeight );
-    aDFA.meItalic       = (rLogFont.lfItalic) ? ITALIC_NORMAL : ITALIC_NONE;
-    aDFA.mePitch        = ImplLogPitchToSal( rLogFont.lfPitchAndFamily );
-    aDFA.mbSymbolFlag   = (rLogFont.lfCharSet == SYMBOL_CHARSET);
+    aDFA.SetFamilyType(ImplFamilyToSal( rLogFont.lfPitchAndFamily ));
+    aDFA.SetWidthType(WIDTH_DONTKNOW);
+    aDFA.SetWeight(ImplWeightToSal( rLogFont.lfWeight ));
+    aDFA.SetItalic((rLogFont.lfItalic) ? ITALIC_NORMAL : ITALIC_NONE);
+    aDFA.SetPitch(ImplLogPitchToSal( rLogFont.lfPitchAndFamily ));
+    aDFA.SetSymbolFlag(rLogFont.lfCharSet == SYMBOL_CHARSET);
 
     // get the font face name
-    aDFA.maName = ImplSalGetUniString( rLogFont.lfFaceName );
+    aDFA.SetFamilyName(ImplSalGetUniString( rLogFont.lfFaceName ));
 
     // use the face's style name only if it looks reasonable
     const char* pStyleName = (const char*)rEnumFont.elfStyle;
@@ -839,7 +839,7 @@ static ImplDevFontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXA& rE
         if( (0x00 < *p) && (*p < 0x20) )
             break;
     if( p < pEnd )
-        aDFA.maStyleName = ImplSalGetUniString( pStyleName );
+        aDFA.SetStyleName(ImplSalGetUniString( pStyleName ));
 
     // get device specific font attributes
     aDFA.mbOrientation  = (nFontType & RASTER_FONTTYPE) == 0;
@@ -869,16 +869,16 @@ static ImplDevFontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXA& rE
     // #i38665# prefer Type1 versions of the standard postscript fonts
     if( aDFA.mbEmbeddable )
     {
-        if( aDFA.maName.EqualsAscii( "AvantGarde" )
-        ||  aDFA.maName.EqualsAscii( "Bookman" )
-        ||  aDFA.maName.EqualsAscii( "Courier" )
-        ||  aDFA.maName.EqualsAscii( "Helvetica" )
-        ||  aDFA.maName.EqualsAscii( "NewCenturySchlbk" )
-        ||  aDFA.maName.EqualsAscii( "Palatino" )
-        ||  aDFA.maName.EqualsAscii( "Symbol" )
-        ||  aDFA.maName.EqualsAscii( "Times" )
-        ||  aDFA.maName.EqualsAscii( "ZapfChancery" )
-        ||  aDFA.maName.EqualsAscii( "ZapfDingbats" ) )
+        if( aDFA.GetFamilyName().EqualsAscii( "AvantGarde" )
+        ||  aDFA.GetFamilyName().EqualsAscii( "Bookman" )
+        ||  aDFA.GetFamilyName().EqualsAscii( "Courier" )
+        ||  aDFA.GetFamilyName().EqualsAscii( "Helvetica" )
+        ||  aDFA.GetFamilyName().EqualsAscii( "NewCenturySchlbk" )
+        ||  aDFA.GetFamilyName().EqualsAscii( "Palatino" )
+        ||  aDFA.GetFamilyName().EqualsAscii( "Symbol" )
+        ||  aDFA.GetFamilyName().EqualsAscii( "Times" )
+        ||  aDFA.GetFamilyName().EqualsAscii( "ZapfChancery" )
+        ||  aDFA.GetFamilyName().EqualsAscii( "ZapfDingbats" ) )
             aDFA.mnQuality += 500;
     }
 
@@ -896,15 +896,15 @@ static ImplDevFontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXW& rE
     const LOGFONTW rLogFont = rEnumFont.elfLogFont;
 
     // get font face attributes
-    aDFA.meFamily       = ImplFamilyToSal( rLogFont.lfPitchAndFamily );
-    aDFA.meWidthType    = WIDTH_DONTKNOW;
-    aDFA.meWeight       = ImplWeightToSal( rLogFont.lfWeight );
-    aDFA.meItalic       = (rLogFont.lfItalic) ? ITALIC_NORMAL : ITALIC_NONE;
-    aDFA.mePitch        = ImplLogPitchToSal( rLogFont.lfPitchAndFamily );
-    aDFA.mbSymbolFlag   = (rLogFont.lfCharSet == SYMBOL_CHARSET);
+    aDFA.SetFamilyType(ImplFamilyToSal( rLogFont.lfPitchAndFamily ));
+    aDFA.SetWidthType(WIDTH_DONTKNOW);
+    aDFA.SetWeight(ImplWeightToSal( rLogFont.lfWeight ));
+    aDFA.SetItalic((rLogFont.lfItalic) ? ITALIC_NORMAL : ITALIC_NONE);
+    aDFA.SetPitch(ImplLogPitchToSal( rLogFont.lfPitchAndFamily ));
+    aDFA.SetSymbolFlag(rLogFont.lfCharSet == SYMBOL_CHARSET);
 
     // get the font face name
-    aDFA.maName = reinterpret_cast<const sal_Unicode*>(rLogFont.lfFaceName);
+    aDFA.SetFamilyName(reinterpret_cast<const sal_Unicode*>(rLogFont.lfFaceName));
 
     // use the face's style name only if it looks reasonable
     const wchar_t* pStyleName = rEnumFont.elfStyle;
@@ -914,7 +914,7 @@ static ImplDevFontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXW& rE
         if( *p < 0x0020 )
             break;
     if( p < pEnd )
-        aDFA.maStyleName = reinterpret_cast<const sal_Unicode*>(pStyleName);
+        aDFA.SetStyleName(reinterpret_cast<const sal_Unicode*>(pStyleName));
 
     // get device specific font attributes
     aDFA.mbOrientation  = (nFontType & RASTER_FONTTYPE) == 0;
@@ -944,16 +944,16 @@ static ImplDevFontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXW& rE
     // #i38665# prefer Type1 versions of the standard postscript fonts
     if( aDFA.mbEmbeddable )
     {
-        if( aDFA.maName.EqualsAscii( "AvantGarde" )
-        ||  aDFA.maName.EqualsAscii( "Bookman" )
-        ||  aDFA.maName.EqualsAscii( "Courier" )
-        ||  aDFA.maName.EqualsAscii( "Helvetica" )
-        ||  aDFA.maName.EqualsAscii( "NewCenturySchlbk" )
-        ||  aDFA.maName.EqualsAscii( "Palatino" )
-        ||  aDFA.maName.EqualsAscii( "Symbol" )
-        ||  aDFA.maName.EqualsAscii( "Times" )
-        ||  aDFA.maName.EqualsAscii( "ZapfChancery" )
-        ||  aDFA.maName.EqualsAscii( "ZapfDingbats" ) )
+        if( aDFA.GetFamilyName().EqualsAscii( "AvantGarde" )
+        ||  aDFA.GetFamilyName().EqualsAscii( "Bookman" )
+        ||  aDFA.GetFamilyName().EqualsAscii( "Courier" )
+        ||  aDFA.GetFamilyName().EqualsAscii( "Helvetica" )
+        ||  aDFA.GetFamilyName().EqualsAscii( "NewCenturySchlbk" )
+        ||  aDFA.GetFamilyName().EqualsAscii( "Palatino" )
+        ||  aDFA.GetFamilyName().EqualsAscii( "Symbol" )
+        ||  aDFA.GetFamilyName().EqualsAscii( "Times" )
+        ||  aDFA.GetFamilyName().EqualsAscii( "ZapfChancery" )
+        ||  aDFA.GetFamilyName().EqualsAscii( "ZapfDingbats" ) )
             aDFA.mnQuality += 500;
     }
 
@@ -1457,9 +1457,9 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
 {
     UniString   aName;
     if ( pFont->mpFontData )
-        aName = pFont->mpFontData->maName;
+        aName = pFont->mpFontData->GetFamilyName();
     else
-        aName = pFont->maName.GetToken( 0 );
+        aName = pFont->GetFamilyName().GetToken( 0 );
 
     UINT nNameLen = aName.Len();
     if ( nNameLen > (sizeof( rLogFont.lfFaceName )/sizeof( wchar_t ))-1 )
@@ -1470,8 +1470,8 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
     if( !pFont->mpFontData )
     {
         rLogFont.lfCharSet = pFont->IsSymbolFont() ? SYMBOL_CHARSET : DEFAULT_CHARSET;
-        rLogFont.lfPitchAndFamily = ImplPitchToWin( pFont->mePitch )
-                                  | ImplFamilyToWin( pFont->meFamily );
+        rLogFont.lfPitchAndFamily = ImplPitchToWin( pFont->GetPitch() )
+                                  | ImplFamilyToWin( pFont->GetFamilyType() );
     }
     else
     {
@@ -1480,12 +1480,12 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
         rLogFont.lfPitchAndFamily = pWinFontData->GetPitchAndFamily();
     }
 
-    rLogFont.lfWeight          = ImplWeightToWin( pFont->meWeight );
+    rLogFont.lfWeight          = ImplWeightToWin( pFont->GetWeight() );
     rLogFont.lfHeight          = (LONG)-pFont->mnHeight;
     rLogFont.lfWidth           = (LONG)pFont->mnWidth;
     rLogFont.lfUnderline       = 0;
     rLogFont.lfStrikeOut       = 0;
-    rLogFont.lfItalic          = (pFont->meItalic) != ITALIC_NONE;
+    rLogFont.lfItalic          = (pFont->GetSlant()) != ITALIC_NONE;
     rLogFont.lfEscapement      = pFont->mnOrientation;
     rLogFont.lfOrientation     = rLogFont.lfEscapement;
     rLogFont.lfClipPrecision   = CLIP_DEFAULT_PRECIS;
@@ -1679,7 +1679,7 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLe
 
     wchar_t aFaceName[LF_FACESIZE+60];
     if( ::GetTextFaceW( mhDC, sizeof(aFaceName)/sizeof(wchar_t), aFaceName ) )
-        pMetric->maName = reinterpret_cast<const sal_Unicode*>(aFaceName);
+        pMetric->SetFamilyName(reinterpret_cast<const sal_Unicode*>(aFaceName));
 
     // get the font metric
     TEXTMETRICA aWinMetric;
@@ -1690,11 +1690,11 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLe
         return;
 
     // device independent font attributes
-    pMetric->meFamily       = ImplFamilyToSal( aWinMetric.tmPitchAndFamily );
-    pMetric->mbSymbolFlag   = (aWinMetric.tmCharSet == SYMBOL_CHARSET);
-    pMetric->meWeight       = ImplWeightToSal( aWinMetric.tmWeight );
-    pMetric->mePitch        = ImplMetricPitchToSal( aWinMetric.tmPitchAndFamily );
-    pMetric->meItalic       = aWinMetric.tmItalic ? ITALIC_NORMAL : ITALIC_NONE;
+    pMetric->SetFamilyType(ImplFamilyToSal( aWinMetric.tmPitchAndFamily ));
+    pMetric->SetSymbolFlag(aWinMetric.tmCharSet == SYMBOL_CHARSET);
+    pMetric->SetWeight(ImplWeightToSal( aWinMetric.tmWeight ));
+    pMetric->SetPitch(ImplMetricPitchToSal( aWinMetric.tmPitchAndFamily ));
+    pMetric->SetItalic(aWinMetric.tmItalic ? ITALIC_NORMAL : ITALIC_NONE);
     pMetric->mnSlant        = 0;
 
     // device dependend font attributes
@@ -2037,11 +2037,11 @@ static bool ImplGetFontAttrFromFile( const String& rFontFileURL,
     // TODO: use GetTTGlobalFontInfo() to access the font directly
     rDFA.mnQuality    = 1000;
     rDFA.mbDevice     = true;
-    rDFA.meFamily     = FAMILY_DONTKNOW;
-    rDFA.meWidthType  = WIDTH_DONTKNOW;
-    rDFA.meWeight     = WEIGHT_DONTKNOW;
-    rDFA.meItalic     = ITALIC_DONTKNOW;
-    rDFA.mePitch      = PITCH_DONTKNOW;
+    rDFA.SetFamilyType(FAMILY_DONTKNOW);
+    rDFA.SetWidthType(WIDTH_DONTKNOW);
+    rDFA.SetWeight(WEIGHT_DONTKNOW);
+    rDFA.SetItalic(ITALIC_DONTKNOW);
+    rDFA.SetPitch(PITCH_DONTKNOW);
     rDFA.mbSubsettable= true;
     rDFA.mbEmbeddable = false;
 
@@ -2086,30 +2086,30 @@ static bool ImplGetFontAttrFromFile( const String& rFontFileURL,
         return false;
 
     // convert byte strings to unicode
-    rDFA.maName      = String( aBuffer + nNameOfs, osl_getThreadTextEncoding() );
-    rDFA.maStyleName = String( aBuffer + nStyleOfs, osl_getThreadTextEncoding() );
+    rDFA.SetFamilyName(String( aBuffer + nNameOfs, osl_getThreadTextEncoding() ));
+    rDFA.SetStyleName(String( aBuffer + nStyleOfs, osl_getThreadTextEncoding() ));
 
     // byte offset 0x4C7: OS2_fsSelection
     const char nFSS = aBuffer[ 0x4C7 ];
     if( nFSS & 0x01 )   // italic
-        rDFA.meItalic = ITALIC_NORMAL;
+        rDFA.SetItalic(ITALIC_NORMAL);
     //if( nFSS & 0x20 )   // bold
     //   rDFA.meWeight = WEIGHT_BOLD;
     if( nFSS & 0x40 )   // regular
     {
-        rDFA.meWeight = WEIGHT_NORMAL;
-        rDFA.meItalic = ITALIC_NONE;
+        rDFA.SetWeight(WEIGHT_NORMAL);
+        rDFA.SetItalic(ITALIC_NONE);
     }
 
     // byte offsets 0x4D7/0x4D8: wingdi's FW_WEIGHT
     int nWinWeight = (aBuffer[0x4D7] & 0xFF) + ((aBuffer[0x4D8] & 0xFF) << 8);
-    rDFA.meWeight = ImplWeightToSal( nWinWeight );
+    rDFA.SetWeight(ImplWeightToSal( nWinWeight ));
 
-    rDFA.mbSymbolFlag = false;          // TODO
-    rDFA.mePitch      = PITCH_DONTKNOW; // TODO
+    rDFA.SetSymbolFlag(false);          // TODO
+    rDFA.SetPitch(PITCH_DONTKNOW); // TODO
 
     // byte offset 0x4DE: pitch&family
-    rDFA.meFamily = ImplFamilyToSal( aBuffer[0x4DE] );
+    rDFA.SetFamilyType(ImplFamilyToSal( aBuffer[0x4DE] ));
 
     // byte offsets 0x4C8/0x4C9: emunits
     // byte offsets 0x4CE/0x4CF: winascent
@@ -2128,7 +2128,7 @@ bool WinSalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
     RTL_LOGFILE_TRACE1( "WinSalGraphics::AddTempDevFont(): %s", rtl::OUStringToOString( rFontFileURL, RTL_TEXTENCODING_UTF8 ).getStr() );
 
     ImplDevFontAttributes aDFA;
-    aDFA.maName = rFontName;
+    aDFA.SetFamilyName(rFontName);
     aDFA.mnQuality    = 1000;
     aDFA.mbDevice     = true;
 
@@ -2137,14 +2137,14 @@ bool WinSalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
         aDFA = mpFontAttrCache->GetFontAttr( rFontFileURL );
 
     // Retrieve font name from font resource
-    if( !aDFA.maName.Len() )
+    if( !aDFA.GetFamilyName().Len() )
     {
         ImplGetFontAttrFromFile( rFontFileURL, aDFA );
-        if( mpFontAttrCache && aDFA.maName.Len() )
+        if( mpFontAttrCache && aDFA.GetFamilyName().Len() )
             mpFontAttrCache->AddFontAttr( rFontFileURL, aDFA );
     }
 
-    if ( !aDFA.maName.Len() )
+    if ( !aDFA.GetFamilyName().Len() )
         return false;
 
     // remember temp font for cleanup later
@@ -2154,12 +2154,12 @@ bool WinSalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
     UINT nPreferedCharSet = DEFAULT_CHARSET;
 
     // create matching FontData struct
-    aDFA.mbSymbolFlag = false; // TODO: how to know it without accessing the font?
-    aDFA.meFamily     = FAMILY_DONTKNOW;
-    aDFA.meWidthType  = WIDTH_DONTKNOW;
-    aDFA.meWeight     = WEIGHT_DONTKNOW;
-    aDFA.meItalic     = ITALIC_DONTKNOW;
-    aDFA.mePitch      = PITCH_DONTKNOW;
+    aDFA.SetSymbolFlag(false); // TODO: how to know it without accessing the font?
+    aDFA.SetFamilyType(FAMILY_DONTKNOW);
+    aDFA.SetWidthType(WIDTH_DONTKNOW);
+    aDFA.SetWeight(WEIGHT_DONTKNOW);
+    aDFA.SetItalic(ITALIC_DONTKNOW);
+    aDFA.SetPitch(PITCH_DONTKNOW);
     aDFA.mbSubsettable= true;
     aDFA.mbEmbeddable = false;
 
