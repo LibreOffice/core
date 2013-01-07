@@ -506,6 +506,8 @@ namespace
                 pWindow = new OKButton(pParent, nBits);
             else if (sType == "gtk-cancel")
                 pWindow = new CancelButton(pParent, nBits);
+            else if (sType == "gtk-close")
+                pWindow = new CloseButton(pParent, nBits);
             else if (sType == "gtk-help")
                 pWindow = new HelpButton(pParent, nBits);
             else

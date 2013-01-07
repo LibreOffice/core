@@ -51,7 +51,7 @@ class SvxHyphenWordDialog : public SfxModalDialog
     PushButton*         m_pContBtn;
     PushButton*         m_pDelBtn;
     PushButton*         m_pHyphAll;
-    PushButton*         m_pCloseBtn;
+    CloseButton*        m_pCloseBtn;
     String              aLabel;
     SvxSpellWrapper*    pHyphWrapper;
     uno::Reference< linguistic2::XHyphenator >        xHyphenator;

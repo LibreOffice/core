@@ -142,7 +142,7 @@ protected:
     SFTreeListBox*          m_pScriptsBox;
 
     PushButton*             m_pRunButton;
-    PushButton*             m_pCloseButton;
+    CloseButton*            m_pCloseButton;
     PushButton*             m_pCreateButton;
     PushButton*             m_pEditButton;
     PushButton*             m_pRenameButton;

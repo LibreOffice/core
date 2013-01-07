@@ -135,7 +135,7 @@ private:
     PushButton* m_pPBDelete;
     PushButton* m_pPBSave;
     PushButton* m_pPBOpen;
-    PushButton* m_pPBClose;
+    CloseButton* m_pPBClose;
 
     bool m_bIsClosable;
 

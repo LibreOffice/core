@@ -58,7 +58,7 @@ private:
     SvTreeListBox*          m_pMacroBox;
 
     PushButton*             m_pRunButton;
-    PushButton*             m_pCloseButton;
+    CloseButton*            m_pCloseButton;
     PushButton*             m_pAssignButton;
     PushButton*             m_pEditButton;
     PushButton*             m_pDelButton;

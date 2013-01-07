@@ -84,7 +84,7 @@ private:
     PushButton*         m_pAddBtn;
     PushButton*         m_pRemoveBtn;
 
-    PushButton*         m_pCloseBtn;
+    CloseButton*        m_pCloseBtn;
 
     OUString m_sODFVersion;
     //Signals if the document contains already a document signature. This is only

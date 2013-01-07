@@ -80,7 +80,7 @@ class SwIndexMarkPane
 
 
     PushButton*     m_pOKBT;
-    PushButton*     m_pCloseBT;
+    CloseButton*    m_pCloseBT;
     PushButton*     m_pDelBT;
 
     PushButton*     m_pPrevSameBT;
@@ -193,7 +193,7 @@ class SwAuthorMarkPane
     ListBox*        m_pEntryLB;
 
     PushButton*     m_pActionBT;
-    PushButton*     m_pCloseBT;
+    CloseButton*    m_pCloseBT;
     PushButton*     m_pCreateEntryPB;
     PushButton*     m_pEditEntryPB;
 

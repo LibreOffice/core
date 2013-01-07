@@ -247,6 +247,13 @@ public:
     virtual void    Click();
 };
 
+class VCL_DLLPUBLIC CloseButton : public CancelButton
+{
+public:
+    CloseButton(Window* pParent, WinBits nStyle = 0);
+};
+
+
 // --------------
 // - HelpButton -
 // --------------

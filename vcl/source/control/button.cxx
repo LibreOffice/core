@@ -1866,6 +1866,13 @@ void CancelButton::Click()
     }
 }
 
+CloseButton::CloseButton( Window* pParent, WinBits nStyle )
+    : CancelButton(pParent, nStyle)
+{
+    SetText( Button::GetStandardText( BUTTON_CLOSE ) );
+    SetHelpText( Button::GetStandardHelpText( BUTTON_CLOSE ) );
+}
+
 // =======================================================================
 
 void HelpButton::ImplInit( Window* pParent, WinBits nStyle )

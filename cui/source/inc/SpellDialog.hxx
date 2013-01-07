@@ -151,7 +151,7 @@ private:
 
     PushButton*     m_pOptionsPB;
     PushButton*     m_pUndoPB;
-    PushButton*     m_pClosePB;
+    CloseButton*    m_pClosePB;
 
     OUString        m_sResumeST;
     OUString        m_sIgnoreOnceST;

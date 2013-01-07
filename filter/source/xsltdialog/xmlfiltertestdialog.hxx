@@ -79,7 +79,7 @@ private:
     PushButton* m_pPBImportBrowse;
     PushButton* m_pPBRecentFile;
     FixedText*  m_pFTNameOfRecentFile;
-    PushButton* m_pPBClose;
+    CloseButton* m_pPBClose;
 
     filter_info_impl* m_pFilterInfo;
 

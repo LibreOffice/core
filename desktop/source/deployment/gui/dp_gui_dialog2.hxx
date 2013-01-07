@@ -101,7 +101,7 @@ class ExtMgrDialog : public ModelessDialog,
     ExtBoxWithBtns_Impl *m_pExtensionBox;
     PushButton          *m_pAddBtn;
     PushButton          *m_pUpdateBtn;
-    PushButton          *m_pCloseBtn;
+    CloseButton         *m_pCloseBtn;
     CheckBox            *m_pBundledCbx;
     CheckBox            *m_pSharedCbx;
     CheckBox            *m_pUserCbx;
