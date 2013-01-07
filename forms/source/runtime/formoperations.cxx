@@ -157,7 +157,7 @@ namespace frm
     //--------------------------------------------------------------------
     Reference< XInterface > SAL_CALL FormOperations::Create(const Reference< XMultiServiceFactory >& _rxFactory )
     {
-        return *new FormOperations( _rxFactory );
+        return FormOperations( _rxFactory );
     }
 
     //--------------------------------------------------------------------

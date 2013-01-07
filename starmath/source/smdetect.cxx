@@ -461,7 +461,7 @@ rtl::OUString SmFilterDetect::impl_getStaticImplementationName()
 /* Helper for registry */
 UNOREFERENCE< UNOXINTERFACE > SAL_CALL SmFilterDetect::impl_createInstance( const UNOREFERENCE< UNOXMULTISERVICEFACTORY >& xServiceManager ) throw( UNOEXCEPTION )
 {
-    return UNOREFERENCE< UNOXINTERFACE >( *new SmFilterDetect( xServiceManager ) );
+    return UNOREFERENCE< UNOXINTERFACE >( SmFilterDetect( xServiceManager ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

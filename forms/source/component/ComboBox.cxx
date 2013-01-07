@@ -74,7 +74,7 @@ using namespace ::com::sun::star::form::binding;
 //------------------------------------------------------------------
 InterfaceRef SAL_CALL OComboBoxModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
 {
-    return (*new OComboBoxModel(_rxFactory));
+    return ( OComboBoxModel(_rxFactory) );
 }
 
 //------------------------------------------------------------------------------

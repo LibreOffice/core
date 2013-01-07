@@ -401,7 +401,7 @@ css::uno::Reference<XInterface> SAL_CALL JavaComponentLoader_CreateInstance(cons
         }
         else
         {
-            xRet = *new JavaComponentLoader(xCtx);
+            xRet = JavaComponentLoader(xCtx);
             pStaticRef = new css::uno::Reference< XInterface > ( xRet );
         }
     }

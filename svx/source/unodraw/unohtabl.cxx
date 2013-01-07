@@ -88,7 +88,7 @@ uno::Type SAL_CALL SvxUnoHatchTable::getElementType(  )
  */
 uno::Reference< uno::XInterface > SAL_CALL SvxUnoHatchTable_createInstance( SdrModel* pModel )
 {
-    return *new SvxUnoHatchTable(pModel);
+    return SvxUnoHatchTable(pModel);
 }
 
 

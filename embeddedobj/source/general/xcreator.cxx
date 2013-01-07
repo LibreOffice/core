@@ -56,7 +56,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL UNOEmbeddedObjectCreator::impl_staticG
 uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::impl_staticCreateSelfInstance(
             const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
 {
-    return uno::Reference< uno::XInterface >( *new UNOEmbeddedObjectCreator( xServiceManager ) );
+    return uno::Reference< uno::XInterface >( UNOEmbeddedObjectCreator( xServiceManager ) );
 }
 
 //-------------------------------------------------------------------------

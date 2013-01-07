@@ -103,7 +103,7 @@ namespace pcr
     //------------------------------------------------------------------------
     Reference< XInterface > SAL_CALL DefaultFormComponentInspectorModel::Create( const Reference< XComponentContext >& _rxContext )
     {
-        return *new DefaultFormComponentInspectorModel( _rxContext );
+        return DefaultFormComponentInspectorModel( _rxContext );
     }
 
     //--------------------------------------------------------------------

@@ -452,7 +452,7 @@ OUString SAL_CALL OZipFileAccess::impl_staticGetImplementationName()
 uno::Reference< uno::XInterface > SAL_CALL OZipFileAccess::impl_staticCreateSelfInstance(
             const uno::Reference< lang::XMultiServiceFactory >& rxMSF )
 {
-    return uno::Reference< uno::XInterface >( *new OZipFileAccess( comphelper::getComponentContext(rxMSF) ) );
+    return uno::Reference< uno::XInterface >( OZipFileAccess( comphelper::getComponentContext(rxMSF) ) );
 }
 
 //-------------------------------------------------------------------------

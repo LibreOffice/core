@@ -91,7 +91,7 @@ namespace pcr
     //------------------------------------------------------------------------
     Reference< XInterface > SAL_CALL DefaultHelpProvider::Create( const Reference< XComponentContext >& _rxContext )
     {
-        return *new DefaultHelpProvider( _rxContext );
+        return DefaultHelpProvider( _rxContext );
     }
 
     //--------------------------------------------------------------------

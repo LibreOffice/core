@@ -90,7 +90,7 @@ uno::Type SAL_CALL SvxUnoGradientTable::getElementType(  )
  */
 uno::Reference< uno::XInterface > SAL_CALL SvxUnoGradientTable_createInstance( SdrModel* pModel )
 {
-    return *new SvxUnoGradientTable(pModel);
+    return SvxUnoGradientTable(pModel);
 }
 
 

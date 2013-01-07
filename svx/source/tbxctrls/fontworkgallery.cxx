@@ -453,7 +453,7 @@ Sequence< OUString > SAL_CALL FontWorkAlignmentControl_getSupportedServiceNames(
 
 Reference< XInterface > SAL_CALL SAL_CALL FontWorkAlignmentControl_createInstance( const Reference< XMultiServiceFactory >& rSMgr ) throw( RuntimeException )
 {
-    return *new FontWorkAlignmentControl( rSMgr );
+    return FontWorkAlignmentControl( rSMgr );
 }
 
 // --------------------------------------------------------------------
@@ -689,7 +689,7 @@ Sequence< OUString > SAL_CALL FontWorkCharacterSpacingControl_getSupportedServic
 
 Reference< XInterface > SAL_CALL SAL_CALL FontWorkCharacterSpacingControl_createInstance( const Reference< XMultiServiceFactory >& rSMgr ) throw( RuntimeException )
 {
-    return *new FontWorkCharacterSpacingControl( rSMgr );
+    return FontWorkCharacterSpacingControl( rSMgr );
 }
 
 // --------------------------------------------------------------------

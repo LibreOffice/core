@@ -496,7 +496,7 @@ sal_Bool SfxObjectShell::Insert(SfxObjectShell &rSource,
                 bUsedOrUserDefined =
                     pExist->IsUsed() || pExist->IsUserDefined();
                 if( ErrorHandler::HandleError(
-                    *new MessageInfo( ERRCODE_SFXMSG_STYLEREPLACE, aOldName ) )
+                    MessageInfo( ERRCODE_SFXMSG_STYLEREPLACE, aOldName ) )
                     != ERRCODE_BUTTON_OK )
                     return sal_False;
                 else

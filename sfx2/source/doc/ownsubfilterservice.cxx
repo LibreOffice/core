@@ -58,7 +58,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL OwnSubFilterService::impl_getStaticSup
 uno::Reference< uno::XInterface > SAL_CALL OwnSubFilterService::impl_staticCreateSelfInstance(
             const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
 {
-    return uno::Reference< uno::XInterface >( *new OwnSubFilterService( xServiceManager ) );
+    return uno::Reference< uno::XInterface >( OwnSubFilterService( xServiceManager ) );
 }
 
 //-------------------------------------------------------------------------

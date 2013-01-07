@@ -283,7 +283,7 @@ Reference< XInterface > SAL_CALL SAL_CALL ExtrusionDirectionControl_createInstan
     const Reference< XMultiServiceFactory >& rSMgr
 )   throw( RuntimeException )
 {
-    return *new ExtrusionDirectionControl( rSMgr );
+    return ExtrusionDirectionControl( rSMgr );
 }
 
 // --------------------------------------------------------------------
@@ -547,7 +547,7 @@ Sequence< OUString > SAL_CALL ExtrusionDepthController_getSupportedServiceNames(
 
 Reference< XInterface > SAL_CALL SAL_CALL ExtrusionDepthController_createInstance( const Reference< XMultiServiceFactory >& rSMgr ) throw( RuntimeException )
 {
-    return *new ExtrusionDepthController( rSMgr );
+    return ExtrusionDepthController( rSMgr );
 }
 
 // --------------------------------------------------------------------
@@ -810,7 +810,7 @@ Reference< XInterface > SAL_CALL SAL_CALL ExtrusionLightingControl_createInstanc
     const Reference< XMultiServiceFactory >& rSMgr
 )   throw( RuntimeException )
 {
-    return *new ExtrusionLightingControl( rSMgr );
+    return ExtrusionLightingControl( rSMgr );
 }
 
 // --------------------------------------------------------------------
@@ -955,7 +955,7 @@ Reference< XInterface > SAL_CALL SAL_CALL ExtrusionSurfaceControl_createInstance
     const Reference< XMultiServiceFactory >& rSMgr
 )   throw( RuntimeException )
 {
-    return *new ExtrusionSurfaceControl( rSMgr );
+    return ExtrusionSurfaceControl( rSMgr );
 }
 
 // --------------------------------------------------------------------

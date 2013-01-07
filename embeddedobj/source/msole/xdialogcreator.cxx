@@ -121,7 +121,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL MSOLEDialogObjectCreator::impl_staticG
 uno::Reference< uno::XInterface > SAL_CALL MSOLEDialogObjectCreator::impl_staticCreateSelfInstance(
             const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
 {
-    return uno::Reference< uno::XInterface >( *new MSOLEDialogObjectCreator( xServiceManager ) );
+    return uno::Reference< uno::XInterface >( MSOLEDialogObjectCreator( xServiceManager ) );
 }
 
 //-------------------------------------------------------------------------

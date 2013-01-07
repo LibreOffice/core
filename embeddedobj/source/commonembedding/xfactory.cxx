@@ -54,7 +54,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL OOoEmbeddedObjectFactory::impl_staticG
 uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::impl_staticCreateSelfInstance(
             const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
 {
-    return uno::Reference< uno::XInterface >( *new OOoEmbeddedObjectFactory( xServiceManager ) );
+    return uno::Reference< uno::XInterface >( OOoEmbeddedObjectFactory( xServiceManager ) );
 }
 
 //-------------------------------------------------------------------------
@@ -493,7 +493,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL OOoSpecialEmbeddedObjectFactory::impl_
 uno::Reference< uno::XInterface > SAL_CALL OOoSpecialEmbeddedObjectFactory::impl_staticCreateSelfInstance(
             const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
 {
-    return uno::Reference< uno::XInterface >( *new OOoSpecialEmbeddedObjectFactory( xServiceManager ) );
+    return uno::Reference< uno::XInterface >( OOoSpecialEmbeddedObjectFactory( xServiceManager ) );
 }
 
 //-------------------------------------------------------------------------

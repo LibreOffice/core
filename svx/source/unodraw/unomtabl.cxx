@@ -455,7 +455,7 @@ sal_Bool SAL_CALL SvxUnoMarkerTable::hasElements(  )
  */
 uno::Reference< uno::XInterface > SAL_CALL SvxUnoMarkerTable_createInstance( SdrModel* pModel )
 {
-    return *new SvxUnoMarkerTable(pModel);
+    return SvxUnoMarkerTable(pModel);
 }
 
 

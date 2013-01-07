@@ -91,7 +91,7 @@ uno::Type SAL_CALL SvxUnoDashTable::getElementType(  )
  */
 uno::Reference< uno::XInterface > SAL_CALL SvxUnoDashTable_createInstance( SdrModel* pModel )
 {
-    return *new SvxUnoDashTable(pModel);
+    return SvxUnoDashTable(pModel);
 }
 
 

@@ -1464,7 +1464,7 @@ Sequence< ::rtl::OUString > SAL_CALL PasswordContainer::impl_getStaticSupportedS
 
 Reference< XInterface > SAL_CALL PasswordContainer::impl_createInstance( const Reference< XMultiServiceFactory >& xServiceManager ) throw( RuntimeException )
 {
-    return Reference< XInterface >( *new PasswordContainer( xServiceManager ) );
+    return Reference< XInterface >( PasswordContainer( xServiceManager ) );
 }
 
 //-------------------------------------------------------------------------

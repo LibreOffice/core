@@ -962,9 +962,9 @@ uno::Reference< XInterface > SAL_CALL ZipPackage::createInstanceWithArguments( c
     if ( aArguments.getLength() )
         aArguments[0] >>= bArg;
     if ( bArg )
-        xRef = *new ZipPackageFolder ( m_xFactory, m_nFormat, m_bAllowRemoveOnInsert );
+        xRef = ZipPackageFolder ( m_xFactory, m_nFormat, m_bAllowRemoveOnInsert );
     else
-        xRef = *new ZipPackageStream ( *this, m_xFactory, m_bAllowRemoveOnInsert );
+        xRef = ZipPackageStream ( *this, m_xFactory, m_bAllowRemoveOnInsert );
 
     return xRef;
 }
@@ -1605,7 +1605,7 @@ Sequence< ElementChange > SAL_CALL ZipPackage::getPendingChanges()
 uno::Reference < XInterface >SAL_CALL ZipPackage_createInstance(
     const uno::Reference< XMultiServiceFactory > & xMgr )
 {
-    return uno::Reference< XInterface >( *new ZipPackage( xMgr ) );
+    return uno::Reference< XInterface >( ZipPackage( xMgr ) );
 }
 
 //--------------------------------------------------------

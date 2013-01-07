@@ -413,7 +413,7 @@ void FontHeightToolBoxControl::dispatchCommand(
 uno::Reference< uno::XInterface > SAL_CALL FontHeightToolBoxControl_createInstance(
     const uno::Reference< lang::XMultiServiceFactory >& rSMgr )
 {
-    return *new FontHeightToolBoxControl( rSMgr );
+    return FontHeightToolBoxControl( rSMgr );
 }
 
 }

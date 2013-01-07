@@ -695,7 +695,7 @@ rtl::OUString SfxFrameLoader_Impl::impl_getStaticImplementationName()
 /* Helper for registry */
 UNOREFERENCE< UNOXINTERFACE > SAL_CALL SfxFrameLoader_Impl::impl_createInstance( const UNOREFERENCE< UNOXMULTISERVICEFACTORY >& xServiceManager ) throw( UNOEXCEPTION )
 {
-    return UNOREFERENCE< UNOXINTERFACE >( *new SfxFrameLoader_Impl( xServiceManager ) );
+    return UNOREFERENCE< UNOXINTERFACE >( SfxFrameLoader_Impl( xServiceManager ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2229,7 +2229,7 @@ sal_Bool SfxObjectShell::ImportFrom( SfxMedium& rMedium, bool bInsert )
             io::WrongFormatException e;
             if (rWrapped.TargetException >>= e)
             {
-                SetError(*new StringErrorInfo(ERRCODE_SFX_FORMAT_ROWCOL,
+                SetError( StringErrorInfo(ERRCODE_SFX_FORMAT_ROWCOL,
                     e.Message, ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR ), "");
             }
         }

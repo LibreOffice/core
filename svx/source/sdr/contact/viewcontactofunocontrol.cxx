@@ -114,10 +114,10 @@ namespace sdr { namespace contact {
         bPrintOrPreview |= ( pPageViewContact != NULL ) && pPageViewContact->GetPageWindow().GetPageView().GetView().IsPrintPreview();
 
         if ( bPrintOrPreview )
-            return *new UnoControlPrintOrPreviewContact( *pPageViewContact, *this );
+            return UnoControlPrintOrPreviewContact( *pPageViewContact, *this );
 
         // all others are nowadays served by the same implementation
-        return *new ViewObjectContactOfUnoControl( _rObjectContact, *this );
+        return ViewObjectContactOfUnoControl( _rObjectContact, *this );
     }
 
     //--------------------------------------------------------------------

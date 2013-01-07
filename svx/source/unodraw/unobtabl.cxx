@@ -107,7 +107,7 @@ uno::Type SAL_CALL SvxUnoBitmapTable::getElementType(  )
  */
 uno::Reference< uno::XInterface > SAL_CALL SvxUnoBitmapTable_createInstance( SdrModel* pModel )
 {
-    return *new SvxUnoBitmapTable(pModel);
+    return SvxUnoBitmapTable(pModel);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

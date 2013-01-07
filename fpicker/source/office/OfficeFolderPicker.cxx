@@ -198,7 +198,7 @@ Reference< XInterface > SAL_CALL SvtFolderPicker::impl_createInstance( const Ref
     throw( Exception )
 {
     Reference< XMultiServiceFactory > xServiceManager (rxContext->getServiceManager(), UNO_QUERY_THROW);
-    return Reference< XInterface >( *new SvtFolderPicker( xServiceManager ) );
+    return Reference< XInterface >( SvtFolderPicker( xServiceManager ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

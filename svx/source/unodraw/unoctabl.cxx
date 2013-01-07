@@ -212,11 +212,11 @@ sal_Bool SAL_CALL SvxUnoColorTable::hasElements()
  */
 uno::Reference< uno::XInterface > SAL_CALL SvxUnoColorTable_createInstance(const uno::Reference< lang::XMultiServiceFactory > & ) throw(uno::Exception)
 {
-    return *new SvxUnoColorTable();
+    return SvxUnoColorTable();
 }
 uno::Reference< uno::XInterface > SAL_CALL create_EnhancedCustomShapeEngine( const uno::Reference< lang::XMultiServiceFactory >& rxFact ) throw(uno::Exception)
 {
-    return *new EnhancedCustomShapeEngine( rxFact );
+    return EnhancedCustomShapeEngine( rxFact );
 }
 
 //

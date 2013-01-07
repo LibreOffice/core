@@ -1162,7 +1162,7 @@ Reference< XInterface > SAL_CALL SvtFilePicker::impl_createInstance(
     const Reference< XComponentContext >& rxContext) throw( Exception )
 {
     Reference< XMultiServiceFactory > xServiceManager (rxContext->getServiceManager(), UNO_QUERY_THROW);
-    return Reference< XInterface >( *new SvtFilePicker( xServiceManager ) );
+    return Reference< XInterface >( SvtFilePicker( xServiceManager ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

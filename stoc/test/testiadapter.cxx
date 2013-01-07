@@ -750,7 +750,7 @@ sal_Bool performTest( const Reference<XLanguageBindingTest > & xLBT )
         // this data is never ever granted access to by calls other than equals(), assign()!
         test::TestData aData; // test against this data
 
-        Reference<XInterface > xI( *new OWeakObject() );
+        Reference<XInterface > xI( OWeakObject() );
 
         assign( (test::TestElement &)aData,
                 sal_True, '@', 17, 0x1234, 0xfedc, 0x12345678, 0xfedcba98,

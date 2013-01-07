@@ -4627,7 +4627,7 @@ TYPEINIT1(FmXFilterCell, FmXGridCell);
 //------------------------------------------------------------------------------
 Reference< XInterface >  FmXFilterCell_CreateInstance(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& /*_rxFactory*/)
 {
-    return *new FmXFilterCell();
+    return FmXFilterCell();
 }
 
 DBG_NAME(FmXFilterCell);

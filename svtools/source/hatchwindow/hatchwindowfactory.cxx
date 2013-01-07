@@ -46,7 +46,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL OHatchWindowFactory::impl_staticGetSup
 uno::Reference< uno::XInterface > SAL_CALL OHatchWindowFactory::impl_staticCreateSelfInstance(
             const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
 {
-    return uno::Reference< uno::XInterface >( *new OHatchWindowFactory( xServiceManager ) );
+    return uno::Reference< uno::XInterface >( OHatchWindowFactory( xServiceManager ) );
 }
 
 

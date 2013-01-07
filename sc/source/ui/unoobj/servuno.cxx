@@ -570,14 +570,14 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
             {
                 sal_Bool bListPos = ( nType == SC_SERVICE_LISTCELLBIND );
                 uno::Reference<sheet::XSpreadsheetDocument> xDoc( pDocShell->GetBaseModel(), uno::UNO_QUERY );
-                xRet.set(*new calc::OCellValueBinding( xDoc, bListPos ));
+                xRet.set( calc::OCellValueBinding( xDoc, bListPos ));
             }
             break;
         case SC_SERVICE_LISTSOURCE:
             if (pDocShell)
             {
                 uno::Reference<sheet::XSpreadsheetDocument> xDoc( pDocShell->GetBaseModel(), uno::UNO_QUERY );
-                xRet.set(*new calc::OCellListSource( xDoc ));
+                xRet.set( calc::OCellListSource( xDoc ));
             }
             break;
         case SC_SERVICE_CELLADDRESS:
@@ -585,13 +585,13 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
             if (pDocShell)
             {
                 sal_Bool bRange = ( nType == SC_SERVICE_RANGEADDRESS );
-                xRet.set(*new ScAddressConversionObj( pDocShell, bRange ));
+                xRet.set( ScAddressConversionObj( pDocShell, bRange ));
             }
             break;
 
         case SC_SERVICE_CHDATAPROV:
             if (pDocShell && pDocShell->GetDocument())
-                xRet = *new ScChart2DataProvider( pDocShell->GetDocument() );
+                xRet = ScChart2DataProvider( pDocShell->GetDocument() );
             break;
 
         case SC_SERVICE_FORMULAPARS:

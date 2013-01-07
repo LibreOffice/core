@@ -114,7 +114,7 @@ public:
 static Reference<XInterface> SAL_CALL NamingService_Impl_create(
     SAL_UNUSED_PARAMETER const Reference<XComponentContext> & )
 {
-    return *new NamingService_Impl();
+    return NamingService_Impl();
 }
 
 //==================================================================================================
