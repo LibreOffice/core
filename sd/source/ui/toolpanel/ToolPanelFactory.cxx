@@ -91,7 +91,6 @@ namespace sd { namespace toolpanel
         // XInitialization
         virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException);
 
-    protected:
         virtual ~ToolPanelFactory();
 
     private:
