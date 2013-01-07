@@ -31,6 +31,7 @@ $(eval $(call gb_Module_Module,ooo))
 $(eval $(call gb_Module_add_moduledirs,ooo,\
 	accessibility \
 	$(call gb_Helper_optional,AFMS,afms) \
+	android \
 	animations \
 	$(call gb_Helper_optional,APACHE_COMMONS,apache-commons) \
 	apple_remote \
