@@ -314,21 +314,21 @@ sub get_downloadname_productname
 {
     my ($allvariables) = @_;
 
-    my $start = "LibO";
+    my $start = "LibreOffice";
 
-    if ( $allvariables->{'PRODUCTNAME'} eq "LibreOffice" ) { $start = "LibO"; }
+    if ( $allvariables->{'PRODUCTNAME'} eq "LibreOffice" ) { $start = "LibreOffice"; }
 
     if ( $allvariables->{'PRODUCTNAME'} eq "LOdev" ) { $start = "LibO-Dev"; }
 
-    if (( $allvariables->{'PRODUCTNAME'} eq "LibreOffice" ) && ( $allvariables->{'POSTVERSIONEXTENSION'} eq "SDK" )) { $start = "LibO-SDK"; }
+    if (( $allvariables->{'PRODUCTNAME'} eq "LibreOffice" ) && ( $allvariables->{'POSTVERSIONEXTENSION'} eq "SDK" )) { $start = "LibreOffice-SDK"; }
 
     if (( $allvariables->{'PRODUCTNAME'} eq "LOdev" ) && ( $allvariables->{'POSTVERSIONEXTENSION'} eq "SDK" )) { $start = "LibO-Dev-SDK"; }
 
-    if (( $allvariables->{'PRODUCTNAME'} eq "LibreOffice" ) && ( $allvariables->{'POSTVERSIONEXTENSION'} eq "TEST" )) { $start = "LibO-Test"; }
+    if (( $allvariables->{'PRODUCTNAME'} eq "LibreOffice" ) && ( $allvariables->{'POSTVERSIONEXTENSION'} eq "TEST" )) { $start = "LibreOffice-Test"; }
 
     if (( $allvariables->{'PRODUCTNAME'} eq "LOdev" ) && ( $allvariables->{'POSTVERSIONEXTENSION'} eq "TEST" )) { $start = "LibO-Dev-Test"; }
 
-    if ( $allvariables->{'PRODUCTNAME'} eq "URE" ) { $start = "LibO-URE"; }
+    if ( $allvariables->{'PRODUCTNAME'} eq "URE" ) { $start = "LibreOffice-URE"; }
 
     if ( $allvariables->{'PRODUCTNAME'} eq "OxygenOffice" ) { $start = "OOOP"; }
 

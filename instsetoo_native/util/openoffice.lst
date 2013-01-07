@@ -85,9 +85,9 @@ LibreOffice
         active          1
         compression     5
         script          setup_osl
-        downloadname    LibO_{productversion}_{os}_install_{languages}
-        langpackdownloadname    LibO_{productversion}_languagepack_{os}_install_{languages}
-        helppackdownloadname    LibO_{productversion}_helppack_{os}_install_{languages}
+        downloadname    LibreOffice_{productversion}_{os}_install_{languages}
+        langpackdownloadname    LibreOffice_{productversion}_languagepack_{os}_install_{languages}
+        helppackdownloadname    LibreOffice_{productversion}_helppack_{os}_install_{languages}
         include         {solarenvpath}/{os}/loader2,.,{localpath}/bin,{solarpath}/bin.{minor}/ooowoure,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
     }
 }
@@ -191,7 +191,7 @@ LibreOffice_SDK
 {
     Settings
     {
-        downloadname LibO-SDK_{packageversion}_{os}_install_{languages}
+        downloadname LibreOffice-SDK_{packageversion}_{os}_install_{languages}
         variables
         {
             PRODUCTNAME LibreOffice
