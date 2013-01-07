@@ -71,9 +71,11 @@ class SwGlTreeListBox : public SvTreeListBox
                                     sal_uLong&        rNewChildPos);
 public:
     SwGlTreeListBox(Window* pParent, const ResId& rResId);
+    SwGlTreeListBox(Window* pParent, WinBits nBits);
 
-    virtual void    RequestHelp( const HelpEvent& rHEvt );
-    void            Clear();
+    virtual void RequestHelp( const HelpEvent& rHEvt );
+    virtual Size GetOptimalSize(WindowSizeType eType) const;
+    void Clear();
 };
 
 //------------------------------------------------------------------
@@ -83,31 +85,27 @@ class SwGlossaryDlg : public SvxStandardDialog
     friend class SwNewGlosNameDlg;
     friend class SwGlTreeListBox;
 
-    CheckBox        aInsertTipCB;
-    FixedText       aNameLbl;
-    Edit            aNameED;
-    FixedText       aShortNameLbl;
-    NoSpaceEdit     aShortNameEdit;
-    SwGlTreeListBox aCategoryBox;
-    FixedLine       aRelativeFL;
-    CheckBox        aFileRelCB;
-    CheckBox        aNetRelCB;
-    Window          aExampleWIN;
-    Window          aExampleDummyWIN;
-    CheckBox        aShowExampleCB;
-    OKButton        aInsertBtn;
-    CancelButton    aCloseBtn;
-    HelpButton      aHelpBtn;
-    MenuButton      aEditBtn;
-    PushButton      aBibBtn;
-    PushButton      aPathBtn;
+    CheckBox*       m_pInsertTipCB;
+    Edit*           m_pNameED;
+    FixedText*      m_pShortNameLbl;
+    NoSpaceEdit*    m_pShortNameEdit;
+    SwGlTreeListBox* m_pCategoryBox;
+    CheckBox*       m_pFileRelCB;
+    CheckBox*       m_pNetRelCB;
+    Window*         m_pExampleWIN;
+    Window*         m_pExampleDummyWIN;
+    CheckBox*       m_pShowExampleCB;
+    PushButton*     m_pInsertBtn;
+    CloseButton*    m_pCloseBtn;
+    MenuButton*     m_pEditBtn;
+    PushButton*     m_pBibBtn;
+    PushButton*     m_pPathBtn;
 
     String          sReadonlyPath;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >        _xAutoText;
     SwOneExampleFrame*  pExampleFrame;
 
-    PopupMenu*      pMenu;
     SwGlossaryHdl*  pGlossaryHdl;
 
     String          sResumeGroup;
@@ -131,6 +129,7 @@ class SwGlossaryDlg : public SvxStandardDialog
     DECL_LINK( EnableHdl, Menu * );
     DECL_LINK(BibHdl, void *);
     DECL_LINK(EditHdl, void *);
+    DECL_LINK(InsertHdl, void *);
     DECL_LINK( PathHdl, Button * );
     DECL_LINK( CheckBoxHdl, CheckBox * );
     DECL_LINK( ShowPreviewHdl, CheckBox * );
@@ -151,23 +150,19 @@ class SwGlossaryDlg : public SvxStandardDialog
 public:
     SwGlossaryDlg(SfxViewFrame* pViewFrame, SwGlossaryHdl* pGlosHdl, SwWrtShell *pWrtShell);
     ~SwGlossaryDlg();
-    String          GetCurrGrpName() const;
-    inline String   GetCurrLongName() const;
-    inline String   GetCurrShortName() const;
+    String GetCurrGrpName() const;
+    String GetCurrLongName() const
+    {
+        return m_pNameED->GetText();
+    }
+    String GetCurrShortName() const
+    {
+        return m_pShortNameEdit->GetText();
+    }
     static String   GetCurrGroup();
     static void     SetActGroup(const String& rNewGroup);
     static String   GetExtension();
 };
-
-inline String SwGlossaryDlg::GetCurrLongName() const
-{
-    return aNameED.GetText();
-}
-inline String SwGlossaryDlg::GetCurrShortName() const
-{
-    return aShortNameEdit.GetText();
-}
-
 
 #endif
 

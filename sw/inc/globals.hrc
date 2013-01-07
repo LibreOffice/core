@@ -74,6 +74,10 @@
 #define STR_CAPTION_ABOVE           (RC_GLOBALS_BEGIN + 44)
 #define STR_CAPTION_BELOW           (RC_GLOBALS_BEGIN + 45)
 
+#define SW_STR_READONLY             (RC_GLOBALS_BEGIN + 46)
+
+#define STR_READONLY_PATH           (RC_GLOBALS_BEGIN + 47)
+
 // DIALOGS -----------------------------------------------------------
 
 #define DLG_THESAURUS               (RC_GLOBALS_BEGIN + 2)

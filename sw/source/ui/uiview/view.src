@@ -173,10 +173,6 @@ String STR_PRINT_SELECTION
 {
     Text [ en-US ] = "Selection";
 };
-String STR_READONLY_SEL
-{
-    Text [ en-US ] = "read-only";
-};
 String STR_SAVEAS_SRC
 {
     Text [ en-US ] = "~Export source..." ;

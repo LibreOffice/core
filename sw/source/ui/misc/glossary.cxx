@@ -69,10 +69,6 @@
 
 #include "access.hrc"
 
-#define LONG_LENGTH 60
-#define SHORT_LENGTH 30
-
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
@@ -166,8 +162,6 @@ SwNewGlosNameDlg::SwNewGlosNameDlg(Window* pParent,
     FreeResource();
     aOldName.SetText( rOldName );
     aOldShort.SetText( rOldShort );
-    aNewShort.SetMaxTextLen(SHORT_LENGTH);
-    aNewName.SetMaxTextLen(LONG_LENGTH);
     aNewName.SetModifyHdl(LINK(this, SwNewGlosNameDlg, Modify ));
     aNewShort.SetModifyHdl(LINK(this, SwNewGlosNameDlg, Modify ));
     aOk.SetClickHdl(LINK(this, SwNewGlosNameDlg, Rename ));
@@ -192,85 +186,74 @@ void SwGlossaryDlg::SetActGroup(const String &rGrp)
 }
 
 SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
-                            SwGlossaryHdl * pGlosHdl, SwWrtShell *pWrtShell) :
-
-    SvxStandardDialog(&pViewFrame->GetWindow(), SW_RES(DLG_GLOSSARY)),
-
-    aInsertTipCB  (this, SW_RES(CB_INSERT_TIP)),
-    aNameLbl      (this, SW_RES(FT_NAME)),
-    aNameED       (this, SW_RES(ED_NAME)),
-    aShortNameLbl (this, SW_RES(FT_SHORTNAME)),
-    aShortNameEdit(this, SW_RES(ED_SHORTNAME)),
-    aCategoryBox  (this, SW_RES(LB_BIB)),
-    aRelativeFL   (this, SW_RES(FL_RELATIVE)),
-    aFileRelCB    (this, SW_RES(CB_FILE_REL)),
-    aNetRelCB     (this, SW_RES(CB_NET_REL)),
-    aExampleWIN   (this, SW_RES(WIN_EXAMPLE )),
-    aExampleDummyWIN(this, SW_RES(WIN_EXAMPLE_DUMMY )),
-    aShowExampleCB(this, SW_RES(CB_SHOW_EXAMPLE )),
-    aInsertBtn    (this, SW_RES(PB_INSERT)),
-    aCloseBtn     (this, SW_RES(PB_CLOSE)),
-    aHelpBtn      (this, SW_RES(PB_HELP)),
-    aEditBtn      (this, SW_RES(PB_EDIT)),
-    aBibBtn       (this, SW_RES(PB_BIB)),
-    aPathBtn      (this, SW_RES(PB_PATH)),
-
-    sReadonlyPath (SW_RES(ST_READONLY_PATH)),
-    pExampleFrame(0),
-
-    pMenu         (new PopupMenu(SW_RES(MNU_EDIT))),
-    pGlossaryHdl  (pGlosHdl),
-
-    bResume(sal_False),
-
-    bSelection( pWrtShell->IsSelection() ),
-    bReadOnly( sal_False ),
-    bIsOld( sal_False ),
-    bIsDocReadOnly(sal_False),
-
-    pSh           (pWrtShell)
+                            SwGlossaryHdl * pGlosHdl, SwWrtShell *pWrtShell)
+    : SvxStandardDialog(&pViewFrame->GetWindow(), "AutoTextDialog",
+        "modules/swriter/ui/autotext.ui")
+    , sReadonlyPath(SW_RESSTR(STR_READONLY_PATH))
+    , pExampleFrame(0)
+    , pGlossaryHdl(pGlosHdl)
+    , bResume(false)
+    , bSelection(pWrtShell->IsSelection())
+    , bReadOnly(false)
+    , bIsOld(false)
+    , bIsDocReadOnly(false)
+    , pSh(pWrtShell)
 {
+    get(m_pInsertTipCB, "inserttip");
+    get(m_pNameED, "name");
+    get(m_pShortNameLbl, "shortnameft");
+    get(m_pShortNameEdit, "shortname");
+    get(m_pCategoryBox, "category");
+    get(m_pFileRelCB, "relfile");
+    get(m_pNetRelCB, "relnet");
+    get(m_pShowExampleCB, "showpreview");
+    get(m_pInsertBtn, "insert");
+    get(m_pBibBtn, "categories");
+    get(m_pPathBtn, "path");
+    get(m_pExampleWIN, "example");
+    get(m_pExampleDummyWIN, "dummy");
+    get(m_pEditBtn, "autotext");
+
     SvtLinguConfig aLocalLinguConfig;
 
     // initialise static-pointer
     if( !::GetCurrGlosGroup() )
-        ::SetCurrGlosGroup(new String);//(SwGlossaries::GetDefName());
+        ::SetCurrGlosGroup(new String);
 
+    PopupMenu *pMenu = m_pEditBtn->GetPopupMenu();
+    assert(pMenu);
     pMenu->SetActivateHdl(LINK(this,SwGlossaryDlg,EnableHdl));
     pMenu->SetSelectHdl(LINK(this,SwGlossaryDlg,MenuHdl));
-    aEditBtn.SetPopupMenu(pMenu);
-    aEditBtn.SetSelectHdl(LINK(this,SwGlossaryDlg,EditHdl));
-    aPathBtn.SetClickHdl(LINK(this, SwGlossaryDlg, PathHdl));
+    m_pEditBtn->SetSelectHdl(LINK(this,SwGlossaryDlg,EditHdl));
+    m_pPathBtn->SetClickHdl(LINK(this, SwGlossaryDlg, PathHdl));
 
-    aNameED.SetModifyHdl(LINK(this,SwGlossaryDlg,NameModify));
-    aShortNameEdit.SetModifyHdl(LINK(this,SwGlossaryDlg,NameModify));
+    m_pNameED->SetModifyHdl(LINK(this,SwGlossaryDlg,NameModify));
+    m_pShortNameEdit->SetModifyHdl(LINK(this,SwGlossaryDlg,NameModify));
 
-    aCategoryBox.SetDoubleClickHdl(LINK(this,SwGlossaryDlg, NameDoubleClick));
-    aCategoryBox.SetSelectHdl(LINK(this,SwGlossaryDlg,GrpSelect));
-    aBibBtn.SetClickHdl(LINK(this,SwGlossaryDlg,BibHdl));
-    aShowExampleCB.SetClickHdl(LINK(this, SwGlossaryDlg, ShowPreviewHdl));
+    m_pCategoryBox->SetDoubleClickHdl(LINK(this,SwGlossaryDlg, NameDoubleClick));
+    m_pCategoryBox->SetSelectHdl(LINK(this,SwGlossaryDlg,GrpSelect));
+    m_pBibBtn->SetClickHdl(LINK(this,SwGlossaryDlg,BibHdl));
+    m_pShowExampleCB->SetClickHdl(LINK(this, SwGlossaryDlg, ShowPreviewHdl));
 
-    aShortNameEdit.SetMaxTextLen(SHORT_LENGTH);
-    aNameED.SetMaxTextLen(LONG_LENGTH);
-    FreeResource();
+    m_pInsertBtn->SetClickHdl(LINK(this,SwGlossaryDlg,InsertHdl));
 
     const SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();
 
-    aShowExampleCB.Check( rCfg.IsAutoTextPreview());
-    ShowPreviewHdl(&aShowExampleCB);
+    m_pShowExampleCB->Check( rCfg.IsAutoTextPreview());
+    ShowPreviewHdl(m_pShowExampleCB);
 
     bIsDocReadOnly = pSh->GetView().GetDocShell()->IsReadOnly() ||
                       pSh->HasReadonlySel();
     if( bIsDocReadOnly )
-        aInsertBtn.Enable(sal_False);
-    aNameED.GrabFocus();
-    aCategoryBox.SetHelpId(HID_MD_GLOS_CATEGORY);
-    aCategoryBox.SetStyle(aCategoryBox.GetStyle()|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL|WB_VSCROLL|WB_CLIPCHILDREN|WB_SORT);
-    aCategoryBox.GetModel()->SetSortMode(SortAscending);
-    aCategoryBox.SetHighlightRange();   // select over full width
-    aCategoryBox.SetNodeDefaultImages( );
-    aCategoryBox.SetAccessibleName(SW_RES(STR_ACCESS_SW_CATEGORY));
-    aCategoryBox.SetAccessibleRelationLabeledBy(&aInsertTipCB);
+        m_pInsertBtn->Enable(sal_False);
+    m_pNameED->GrabFocus();
+    m_pCategoryBox->SetHelpId(HID_MD_GLOS_CATEGORY);
+    m_pCategoryBox->SetStyle(m_pCategoryBox->GetStyle()|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL|WB_VSCROLL|WB_CLIPCHILDREN|WB_SORT);
+    m_pCategoryBox->GetModel()->SetSortMode(SortAscending);
+    m_pCategoryBox->SetHighlightRange();   // select over full width
+    m_pCategoryBox->SetNodeDefaultImages( );
+    m_pCategoryBox->SetAccessibleName(SW_RES(STR_ACCESS_SW_CATEGORY));
+    m_pCategoryBox->SetAccessibleRelationLabeledBy(m_pInsertTipCB);
 
     Init();
 }
@@ -278,11 +261,9 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
 SwGlossaryDlg::~SwGlossaryDlg()
 {
     SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();
-    rCfg.SetAutoTextPreview(aShowExampleCB.IsChecked()) ;
+    rCfg.SetAutoTextPreview(m_pShowExampleCB->IsChecked()) ;
 
-    aCategoryBox.Clear();
-    aEditBtn.SetPopupMenu(0);
-    delete pMenu;
+    m_pCategoryBox->Clear();
     delete pExampleFrame;
 }
 
@@ -304,21 +285,21 @@ IMPL_LINK( SwGlossaryDlg, GrpSelect, SvTreeListBox *, pBox )
     // set current text block
     bReadOnly = pGlossaryHdl->IsReadOnly();
     EnableShortName( !bReadOnly );
-    aEditBtn.Enable(!bReadOnly);
+    m_pEditBtn->Enable(!bReadOnly);
     bIsOld = pGlossaryHdl->IsOld();
     if( pParent != pEntry)
     {
-        String aName(pBox->GetEntryText(pEntry));
-        aNameED.SetText(aName);
-        aShortNameEdit.SetText(*(String*)pEntry->GetUserData());
+        OUString aName(pBox->GetEntryText(pEntry));
+        m_pNameED->SetText(aName);
+        m_pShortNameEdit->SetText(*(String*)pEntry->GetUserData());
         pEntry = pBox->GetParent(pEntry);
-        aInsertBtn.Enable( !bIsDocReadOnly);
-        ShowAutoText(*::GetCurrGlosGroup(), aShortNameEdit.GetText());
+        m_pInsertBtn->Enable( !bIsDocReadOnly);
+        ShowAutoText(*::GetCurrGlosGroup(), m_pShortNameEdit->GetText());
     }
     else
         ShowAutoText(aEmptyStr, aEmptyStr);
     // update controls
-    NameModify(&aShortNameEdit);
+    NameModify(m_pShortNameEdit);
     if( SfxRequest::HasMacroRecorder( pSh->GetView().GetViewFrame() ) )
     {
         SfxRequest aReq( pSh->GetView().GetViewFrame(), FN_SET_ACT_GLOSSARY );
@@ -334,7 +315,7 @@ IMPL_LINK( SwGlossaryDlg, GrpSelect, SvTreeListBox *, pBox )
 
 void SwGlossaryDlg::Apply()
 {
-    const String aGlosName(aShortNameEdit.GetText());
+    const String aGlosName(m_pShortNameEdit->GetText());
     if(aGlosName.Len()) pGlossaryHdl->InsertGlossary(aGlosName);
     if( SfxRequest::HasMacroRecorder( pSh->GetView().GetViewFrame() ) )
     {
@@ -349,10 +330,10 @@ void SwGlossaryDlg::Apply()
     }
 }
 
-/* inline */ void SwGlossaryDlg::EnableShortName(sal_Bool bOn)
+void SwGlossaryDlg::EnableShortName(sal_Bool bOn)
 {
-    aShortNameLbl.Enable(bOn);
-    aShortNameEdit.Enable(bOn);
+    m_pShortNameLbl->Enable(bOn);
+    m_pShortNameEdit->Enable(bOn);
 }
 
 /* --------------------------------------------------
@@ -362,16 +343,16 @@ SvTreeListEntry* SwGlossaryDlg::DoesBlockExist(const String& rBlock,
                 const String& rShort)
 {
     // look for possible entry in TreeListBox
-    SvTreeListEntry* pEntry = aCategoryBox.FirstSelected();
+    SvTreeListEntry* pEntry = m_pCategoryBox->FirstSelected();
     if(pEntry)
     {
-        if(aCategoryBox.GetParent(pEntry))
-            pEntry = aCategoryBox.GetParent(pEntry);
-        sal_uInt32 nChildCount = aCategoryBox.GetChildCount( pEntry );
+        if(m_pCategoryBox->GetParent(pEntry))
+            pEntry = m_pCategoryBox->GetParent(pEntry);
+        sal_uInt32 nChildCount = m_pCategoryBox->GetChildCount( pEntry );
         for(sal_uInt32 i = 0; i < nChildCount; i++)
         {
-            SvTreeListEntry* pChild = aCategoryBox.GetEntry( pEntry, i );
-            if(rBlock == aCategoryBox.GetEntryText(pChild) &&
+            SvTreeListEntry* pChild = m_pCategoryBox->GetEntry( pEntry, i );
+            if(rBlock == m_pCategoryBox->GetEntryText(pChild) &&
                 (!rShort.Len() || rShort == *(String*)pChild->GetUserData()))
             {
                 return pChild;
@@ -383,13 +364,13 @@ SvTreeListEntry* SwGlossaryDlg::DoesBlockExist(const String& rBlock,
 
 IMPL_LINK( SwGlossaryDlg, NameModify, Edit *, pEdit )
 {
-    String aName(aNameED.GetText());
-    sal_Bool bNameED = pEdit == &aNameED;
+    String aName(m_pNameED->GetText());
+    sal_Bool bNameED = pEdit == m_pNameED;
     if( !aName.Len() )
     {
         if(bNameED)
-            aShortNameEdit.SetText(aName);
-        aInsertBtn.Enable(sal_False);
+            m_pShortNameEdit->SetText(aName);
+        m_pInsertBtn->Enable(sal_False);
         return 0;
     }
     String sShortSearch;
@@ -401,15 +382,15 @@ IMPL_LINK( SwGlossaryDlg, NameModify, Edit *, pEdit )
             // did the text get in to the Listbbox in the Edit with a click?
         if(bNotFound)
         {
-            aShortNameEdit.SetText( lcl_GetValidShortCut( aName ) );
+            m_pShortNameEdit->SetText( lcl_GetValidShortCut( aName ) );
             EnableShortName();
         }
         else
         {
-            aShortNameEdit.SetText(pGlossaryHdl->GetGlossaryShortName(aName));
+            m_pShortNameEdit->SetText(pGlossaryHdl->GetGlossaryShortName(aName));
             EnableShortName(!bReadOnly);
         }
-        aInsertBtn.Enable(!bNotFound && !bIsDocReadOnly);
+        m_pInsertBtn->Enable(!bNotFound && !bIsDocReadOnly);
     }
     else
     {
@@ -418,7 +399,7 @@ IMPL_LINK( SwGlossaryDlg, NameModify, Edit *, pEdit )
         {
             sal_Bool bEnable = !bNotFound;
             bEnable &= !bIsDocReadOnly;
-            aInsertBtn.Enable(bEnable);
+            m_pInsertBtn->Enable(bEnable);
         }
     }
     return 0;
@@ -435,204 +416,197 @@ IMPL_LINK_INLINE_END( SwGlossaryDlg, NameDoubleClick, SvTreeListBox*, pBox )
 
 IMPL_LINK( SwGlossaryDlg, EnableHdl, Menu *, pMn )
 {
-    SvTreeListEntry* pEntry = aCategoryBox.FirstSelected();
+    SvTreeListEntry* pEntry = m_pCategoryBox->FirstSelected();
 
-    const String aEditText(aNameED.GetText());
-    const sal_Bool bHasEntry = aEditText.Len() && aShortNameEdit.GetText().Len();
-    const sal_Bool bExists = 0 != DoesBlockExist(aEditText, aShortNameEdit.GetText());
-    const sal_Bool bIsGroup = pEntry && !aCategoryBox.GetParent(pEntry);
-    pMn->EnableItem(FN_GL_DEFINE, bSelection && bHasEntry && !bExists);
-    pMn->EnableItem(FN_GL_DEFINE_TEXT, bSelection && bHasEntry && !bExists);
-    pMn->EnableItem(FN_GL_COPY_TO_CLIPBOARD, bExists && !bIsGroup);
-    pMn->EnableItem(FN_GL_REPLACE, bSelection && bExists && !bIsGroup && !bIsOld );
-    pMn->EnableItem(FN_GL_REPLACE_TEXT, bSelection && bExists && !bIsGroup && !bIsOld );
-    pMn->EnableItem(FN_GL_EDIT, bExists && !bIsGroup );
-    pMn->EnableItem(FN_GL_RENAME, bExists && !bIsGroup );
-    pMn->EnableItem(FN_GL_DELETE, bExists && !bIsGroup );
-    pMn->EnableItem(FN_GL_MACRO, bExists && !bIsGroup && !bIsOld &&
+    const String aEditText(m_pNameED->GetText());
+    const sal_Bool bHasEntry = aEditText.Len() && m_pShortNameEdit->GetText().Len();
+    const sal_Bool bExists = 0 != DoesBlockExist(aEditText, m_pShortNameEdit->GetText());
+    const sal_Bool bIsGroup = pEntry && !m_pCategoryBox->GetParent(pEntry);
+    pMn->EnableItem("new", bSelection && bHasEntry && !bExists);
+    pMn->EnableItem("newtext", bSelection && bHasEntry && !bExists);
+    pMn->EnableItem("copy", bExists && !bIsGroup);
+    pMn->EnableItem("replace", bSelection && bExists && !bIsGroup && !bIsOld );
+    pMn->EnableItem("replacetext", bSelection && bExists && !bIsGroup && !bIsOld );
+    pMn->EnableItem("edit", bExists && !bIsGroup );
+    pMn->EnableItem("rename", bExists && !bIsGroup );
+    pMn->EnableItem("delete", bExists && !bIsGroup );
+    pMn->EnableItem("macro", bExists && !bIsGroup && !bIsOld &&
                                     !pGlossaryHdl->IsReadOnly() );
-    pMn->EnableItem( FN_GL_IMPORT, bIsGroup && !bIsOld && !pGlossaryHdl->IsReadOnly() );
+    pMn->EnableItem("import", bIsGroup && !bIsOld && !pGlossaryHdl->IsReadOnly() );
     return 1;
 }
 
 IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
 {
-    sal_Bool bNoAttr = sal_False;
+    OString sItemIdent(pMn->GetCurItemIdent());
 
-    switch(pMn->GetCurItemId())
+    if (sItemIdent == "replace")
     {
-        case FN_GL_REPLACE:
-        case FN_GL_REPLACE_TEXT:
-            pGlossaryHdl->NewGlossary(  aNameED.GetText(),
-                                        aShortNameEdit.GetText(),
-                                        sal_False,
-                                        pMn->GetCurItemId() == FN_GL_REPLACE_TEXT);
-        break;
-        case FN_GL_DEFINE_TEXT:
-            bNoAttr = sal_True;
-            // no break!!!
-        case FN_GL_DEFINE:
+        pGlossaryHdl->NewGlossary(m_pNameED->GetText(),
+                                  m_pShortNameEdit->GetText(),
+                                  false, false);
+    }
+    else if (sItemIdent == "replacetext")
+    {
+        pGlossaryHdl->NewGlossary(m_pNameED->GetText(),
+                                  m_pShortNameEdit->GetText(),
+                                  false, true);
+    }
+    else if (sItemIdent == "new" || sItemIdent == "newtext")
+    {
+        bool bNoAttr = sItemIdent == "newtext";
+
+        const String aStr(m_pNameED->GetText());
+        const String aShortName(m_pShortNameEdit->GetText());
+        if(pGlossaryHdl->HasShortName(aShortName))
         {
-            const String aStr(aNameED.GetText());
-            const String aShortName(aShortNameEdit.GetText());
-            if(pGlossaryHdl->HasShortName(aShortName))
-            {
-                InfoBox(this, SW_RES(MSG_DOUBLE_SHORTNAME)).Execute();
-                aShortNameEdit.SetSelection(Selection(0, SELECTION_MAX));
-                aShortNameEdit.GrabFocus();
-                break;
-            }
-            if(pGlossaryHdl->NewGlossary(aStr, aShortName, sal_False, bNoAttr ))
-            {
-                SvTreeListEntry* pEntry = aCategoryBox.FirstSelected();
-                if(aCategoryBox.GetParent(pEntry))
-                    pEntry = aCategoryBox.GetParent(pEntry);
+            InfoBox(this, SW_RES(MSG_DOUBLE_SHORTNAME)).Execute();
+            m_pShortNameEdit->SetSelection(Selection(0, SELECTION_MAX));
+            m_pShortNameEdit->GrabFocus();
+            return 1;
+        }
+        if(pGlossaryHdl->NewGlossary(aStr, aShortName, sal_False, bNoAttr ))
+        {
+            SvTreeListEntry* pEntry = m_pCategoryBox->FirstSelected();
+            if(m_pCategoryBox->GetParent(pEntry))
+                pEntry = m_pCategoryBox->GetParent(pEntry);
 
-                SvTreeListEntry* pChild = aCategoryBox.InsertEntry(aStr, pEntry);
-                pChild->SetUserData(new String(aShortName));
-                aNameED.SetText(aStr);
-                aShortNameEdit.SetText(aShortName);
-                NameModify(&aNameED);       // for toggling the buttons
+            SvTreeListEntry* pChild = m_pCategoryBox->InsertEntry(aStr, pEntry);
+            pChild->SetUserData(new String(aShortName));
+            m_pNameED->SetText(aStr);
+            m_pShortNameEdit->SetText(aShortName);
+            NameModify(m_pNameED);       // for toggling the buttons
 
-                if( SfxRequest::HasMacroRecorder( pSh->GetView().GetViewFrame() ) )
-                {
-                    SfxRequest aReq(pSh->GetView().GetViewFrame(), FN_NEW_GLOSSARY);
-                    String sTemp(*::GetCurrGlosGroup());
-                    // the zeroth path is not being recorded!
-                    if('0' == sTemp.GetToken(1, GLOS_DELIM).GetChar(0))
-                        sTemp = sTemp.GetToken(0, GLOS_DELIM);
-                    aReq.AppendItem(SfxStringItem(FN_NEW_GLOSSARY, sTemp));
-                    aReq.AppendItem(SfxStringItem(FN_PARAM_1, aShortName));
-                    aReq.AppendItem(SfxStringItem(FN_PARAM_2, aStr));
-                    aReq.Done();
-                }
+            if( SfxRequest::HasMacroRecorder( pSh->GetView().GetViewFrame() ) )
+            {
+                SfxRequest aReq(pSh->GetView().GetViewFrame(), FN_NEW_GLOSSARY);
+                String sTemp(*::GetCurrGlosGroup());
+                // the zeroth path is not being recorded!
+                if('0' == sTemp.GetToken(1, GLOS_DELIM).GetChar(0))
+                    sTemp = sTemp.GetToken(0, GLOS_DELIM);
+                aReq.AppendItem(SfxStringItem(FN_NEW_GLOSSARY, sTemp));
+                aReq.AppendItem(SfxStringItem(FN_PARAM_1, aShortName));
+                aReq.AppendItem(SfxStringItem(FN_PARAM_2, aStr));
+                aReq.Done();
             }
         }
-        break;
-        case FN_GL_COPY_TO_CLIPBOARD :
+    }
+    else if (sItemIdent == "copy")
+    {
+        pGlossaryHdl->CopyToClipboard(*pSh, m_pShortNameEdit->GetText());
+    }
+    else if (sItemIdent == "rename")
+    {
+        m_pShortNameEdit->SetText(pGlossaryHdl->GetGlossaryShortName(m_pNameED->GetText()));
+        SwNewGlosNameDlg* pNewNameDlg = new SwNewGlosNameDlg(this, m_pNameED->GetText(),
+                                        m_pShortNameEdit->GetText() );
+        if( RET_OK == pNewNameDlg->Execute() &&
+            pGlossaryHdl->Rename( m_pShortNameEdit->GetText(),
+                                    pNewNameDlg->GetNewShort(),
+                                    pNewNameDlg->GetNewName()))
         {
-            pGlossaryHdl->CopyToClipboard(*pSh, aShortNameEdit.GetText());
+            SvTreeListEntry* pEntry = m_pCategoryBox->FirstSelected();
+            SvTreeListEntry* pNewEntry = m_pCategoryBox->InsertEntry(
+                    pNewNameDlg->GetNewName(), m_pCategoryBox->GetParent(pEntry));
+            pNewEntry->SetUserData(new String(pNewNameDlg->GetNewShort()));
+            delete (String*)pEntry->GetUserData();
+            m_pCategoryBox->GetModel()->Remove(pEntry);
+            m_pCategoryBox->Select(pNewEntry);
+            m_pCategoryBox->MakeVisible(pNewEntry);
         }
-        break;
-        case FN_GL_EDIT:
-        break;
-        case FN_GL_RENAME:
+        GrpSelect(m_pCategoryBox);
+        delete pNewNameDlg;
+    }
+    else if (sItemIdent == "delete")
+    {
+        QueryBox aQuery(this, SW_RES(MSG_QUERY_DELETE));
+        if(RET_YES == aQuery.Execute())
         {
-            aShortNameEdit.SetText(pGlossaryHdl->GetGlossaryShortName(aNameED.GetText()));
-            SwNewGlosNameDlg* pNewNameDlg = new SwNewGlosNameDlg(this, aNameED.GetText(),
-                                            aShortNameEdit.GetText() );
-            if( RET_OK == pNewNameDlg->Execute() &&
-                pGlossaryHdl->Rename( aShortNameEdit.GetText(),
-                                        pNewNameDlg->GetNewShort(),
-                                        pNewNameDlg->GetNewName()))
+            const String aShortName(m_pShortNameEdit->GetText());
+            const String aTitle(m_pNameED->GetText());
+            if(aTitle.Len() && pGlossaryHdl->DelGlossary(aShortName))
             {
-                SvTreeListEntry* pEntry = aCategoryBox.FirstSelected();
-                SvTreeListEntry* pNewEntry = aCategoryBox.InsertEntry(
-                        pNewNameDlg->GetNewName(), aCategoryBox.GetParent(pEntry));
-                pNewEntry->SetUserData(new String(pNewNameDlg->GetNewShort()));
-                delete (String*)pEntry->GetUserData();
-                aCategoryBox.GetModel()->Remove(pEntry);
-                aCategoryBox.Select(pNewEntry);
-                aCategoryBox.MakeVisible(pNewEntry);
-            }
-            GrpSelect( &aCategoryBox );
-            delete pNewNameDlg;
-        }
-        break;
-        case FN_GL_DELETE:
-        {
-            QueryBox aQuery(this, SW_RES(MSG_QUERY_DELETE));
-            if(RET_YES == aQuery.Execute())
-            {
-                const String aShortName(aShortNameEdit.GetText());
-                const String aTitle(aNameED.GetText());
-                if(aTitle.Len() && pGlossaryHdl->DelGlossary(aShortName))
-                {
-                    SvTreeListEntry* pChild = DoesBlockExist(aTitle, aShortName);
-                    OSL_ENSURE(pChild, "entry not found!");
-                    SvTreeListEntry* pParent = aCategoryBox.GetParent(pChild);
-                    aCategoryBox.Select(pParent);
+                SvTreeListEntry* pChild = DoesBlockExist(aTitle, aShortName);
+                OSL_ENSURE(pChild, "entry not found!");
+                SvTreeListEntry* pParent = m_pCategoryBox->GetParent(pChild);
+                m_pCategoryBox->Select(pParent);
 
-                    aCategoryBox.GetModel()->Remove(pChild);
-                    aNameED.SetText( aEmptyStr );
-                    NameModify(&aNameED);
-                }
+                m_pCategoryBox->GetModel()->Remove(pChild);
+                m_pNameED->SetText(OUString());
+                NameModify(m_pNameED);
             }
         }
-        break;
-        case FN_GL_MACRO:
+    }
+    else if (sItemIdent == "macro")
+    {
+        SfxItemSet aSet( pSh->GetAttrPool(), RES_FRMMACRO, RES_FRMMACRO, SID_EVENTCONFIG, SID_EVENTCONFIG, 0 );
+
+        SvxMacro aStart(aEmptyStr, aEmptyStr, STARBASIC);
+        SvxMacro aEnd(aEmptyStr, aEmptyStr, STARBASIC);
+        pGlossaryHdl->GetMacros(m_pShortNameEdit->GetText(), aStart, aEnd );
+
+        SvxMacroItem aItem(RES_FRMMACRO);
+        if( aStart.HasMacro() )
+            aItem.SetMacro( SW_EVENT_START_INS_GLOSSARY, aStart );
+        if( aEnd.HasMacro() )
+            aItem.SetMacro( SW_EVENT_END_INS_GLOSSARY, aEnd );
+
+        aSet.Put( aItem );
+        aSet.Put( SwMacroAssignDlg::AddEvents( MACASSGN_AUTOTEXT ) );
+
+        const SfxPoolItem* pItem;
+        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+        SfxAbstractDialog* pMacroDlg = pFact->CreateSfxDialog( this, aSet,
+            pSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface(), SID_EVENTCONFIG );
+        if ( pMacroDlg && pMacroDlg->Execute() == RET_OK &&
+            SFX_ITEM_SET == pMacroDlg->GetOutputItemSet()->GetItemState( RES_FRMMACRO, sal_False, &pItem ) )
         {
-            SfxItemSet aSet( pSh->GetAttrPool(), RES_FRMMACRO, RES_FRMMACRO, SID_EVENTCONFIG, SID_EVENTCONFIG, 0 );
-
-            SvxMacro aStart(aEmptyStr, aEmptyStr, STARBASIC);
-            SvxMacro aEnd(aEmptyStr, aEmptyStr, STARBASIC);
-            pGlossaryHdl->GetMacros(aShortNameEdit.GetText(), aStart, aEnd );
-
-            SvxMacroItem aItem(RES_FRMMACRO);
-            if( aStart.HasMacro() )
-                aItem.SetMacro( SW_EVENT_START_INS_GLOSSARY, aStart );
-            if( aEnd.HasMacro() )
-                aItem.SetMacro( SW_EVENT_END_INS_GLOSSARY, aEnd );
-
-            aSet.Put( aItem );
-            aSet.Put( SwMacroAssignDlg::AddEvents( MACASSGN_AUTOTEXT ) );
-
-            const SfxPoolItem* pItem;
-            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            SfxAbstractDialog* pMacroDlg = pFact->CreateSfxDialog( this, aSet,
-                pSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface(), SID_EVENTCONFIG );
-            if ( pMacroDlg && pMacroDlg->Execute() == RET_OK &&
-                SFX_ITEM_SET == pMacroDlg->GetOutputItemSet()->GetItemState( RES_FRMMACRO, sal_False, &pItem ) )
-            {
-                const SvxMacroTableDtor& rTbl = ((SvxMacroItem*)pItem)->GetMacroTable();
-                pGlossaryHdl->SetMacros( aShortNameEdit.GetText(),
-                                            rTbl.Get( SW_EVENT_START_INS_GLOSSARY ),
-                                            rTbl.Get( SW_EVENT_END_INS_GLOSSARY ) );
-            }
-
-            delete pMacroDlg;
+            const SvxMacroTableDtor& rTbl = ((SvxMacroItem*)pItem)->GetMacroTable();
+            pGlossaryHdl->SetMacros( m_pShortNameEdit->GetText(),
+                                        rTbl.Get( SW_EVENT_START_INS_GLOSSARY ),
+                                        rTbl.Get( SW_EVENT_END_INS_GLOSSARY ) );
         }
-        break;
 
-        case FN_GL_IMPORT:
+        delete pMacroDlg;
+    }
+    else if (sItemIdent == "import")
+    {
+        // call the FileOpenDialog do find WinWord - Files with templates
+        FileDialogHelper aDlgHelper( TemplateDescription::FILEOPEN_SIMPLE, 0 );
+        uno::Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
+
+        SvtPathOptions aPathOpt;
+        xFP->setDisplayDirectory(aPathOpt.GetWorkPath() );
+
+        uno::Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
+        SfxFilterMatcher aMatcher( rtl::OUString::createFromAscii(SwDocShell::Factory().GetShortName()) );
+        SfxFilterMatcherIter aIter( aMatcher );
+        const SfxFilter* pFilter = aIter.First();
+        while ( pFilter )
         {
-            // call the FileOpenDialog do find WinWord - Files with templates
-            FileDialogHelper aDlgHelper( TemplateDescription::FILEOPEN_SIMPLE, 0 );
-            uno::Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
-
-            SvtPathOptions aPathOpt;
-            xFP->setDisplayDirectory(aPathOpt.GetWorkPath() );
-
-            uno::Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
-            SfxFilterMatcher aMatcher( rtl::OUString::createFromAscii(SwDocShell::Factory().GetShortName()) );
-            SfxFilterMatcherIter aIter( aMatcher );
-            const SfxFilter* pFilter = aIter.First();
-            while ( pFilter )
+            if( pFilter->GetUserData() == FILTER_WW8 )
             {
-                if( pFilter->GetUserData() == FILTER_WW8 )
-                {
-                    xFltMgr->appendFilter( pFilter->GetUIName(),
-                                pFilter->GetWildcard().getGlob() );
-                    xFltMgr->setCurrentFilter( pFilter->GetUIName() ) ;
-                }
-
-                pFilter = aIter.Next();
+                xFltMgr->appendFilter( pFilter->GetUIName(),
+                            pFilter->GetWildcard().getGlob() );
+                xFltMgr->setCurrentFilter( pFilter->GetUIName() ) ;
             }
 
-            if( aDlgHelper.Execute() == ERRCODE_NONE )
+            pFilter = aIter.Next();
+        }
+
+        if( aDlgHelper.Execute() == ERRCODE_NONE )
+        {
+            if( pGlossaryHdl->ImportGlossaries( xFP->getFiles().getConstArray()[0] ))
+                Init();
+            else
             {
-                if( pGlossaryHdl->ImportGlossaries( xFP->getFiles().getConstArray()[0] ))
-                    Init();
-                else
-                {
-                    InfoBox(this, SW_RES( MSG_NO_GLOSSARIES )).Execute();
-                }
+                InfoBox(this, SW_RES( MSG_NO_GLOSSARIES )).Execute();
             }
         }
-           break;
-
-        default:
-            return 0;
+    }
+    else
+    {
+        return 0;
     }
     return 1;
 }
@@ -683,10 +657,10 @@ IMPL_LINK_NOARG(SwGlossaryDlg, BibHdl)
                 Init();
                 //if new groups were created - select one of them
                 String sNewGroup = pDlg->GetCreatedGroupName();
-                SvTreeListEntry* pEntry = aCategoryBox.First();
+                SvTreeListEntry* pEntry = m_pCategoryBox->First();
                 while(sNewGroup.Len() && pEntry)
                 {
-                    if(!aCategoryBox.GetParent(pEntry))
+                    if(!m_pCategoryBox->GetParent(pEntry))
                     {
                         GroupUserData* pGroupData = (GroupUserData*)pEntry->GetUserData();
                         String sGroup = pGroupData->sGroupName;
@@ -694,13 +668,13 @@ IMPL_LINK_NOARG(SwGlossaryDlg, BibHdl)
                         sGroup += String::CreateFromInt32(pGroupData->nPathIdx);
                         if(sGroup == sNewGroup)
                         {
-                            aCategoryBox.Select(pEntry);
-                            aCategoryBox.MakeVisible(pEntry);
-                            GrpSelect(&aCategoryBox);
+                            m_pCategoryBox->Select(pEntry);
+                            m_pCategoryBox->MakeVisible(pEntry);
+                            GrpSelect(m_pCategoryBox);
                             break;
                         }
                     }
-                    pEntry = aCategoryBox.Next(pEntry);
+                    pEntry = m_pCategoryBox->Next(pEntry);
                 }
 
             }
@@ -710,7 +684,7 @@ IMPL_LINK_NOARG(SwGlossaryDlg, BibHdl)
         {
             QueryBox aBox(this, WB_YES_NO, sReadonlyPath);
             if(RET_YES == aBox.Execute())
-                PathHdl(&aPathBtn);
+                PathHdl(m_pPathBtn);
         }
     }
     return 0;
@@ -721,8 +695,8 @@ IMPL_LINK_NOARG(SwGlossaryDlg, BibHdl)
 ------------------------------------------------------------------------*/
 void SwGlossaryDlg::Init()
 {
-    aCategoryBox.SetUpdateMode( sal_False );
-    aCategoryBox.Clear();
+    m_pCategoryBox->SetUpdateMode( sal_False );
+    m_pCategoryBox->Clear();
     // display text block regions
     const sal_uInt16 nCnt = pGlossaryHdl->GetGroupCnt();
     SvTreeListEntry* pSelEntry = 0;
@@ -741,7 +715,7 @@ void SwGlossaryDlg::Init()
             sTitle = sGroupName.GetToken( 0, GLOS_DELIM );
         if(sTitle == sMyAutoTextEnglish)
             sTitle = sMyAutoTextTranslated;
-        SvTreeListEntry* pEntry = aCategoryBox.InsertEntry( sTitle );
+        SvTreeListEntry* pEntry = m_pCategoryBox->InsertEntry( sTitle );
         sal_uInt16 nPath = static_cast< sal_uInt16 >(sGroupName.GetToken( 1, GLOS_DELIM ).ToInt32());
 
         GroupUserData* pData = new GroupUserData;
@@ -760,7 +734,7 @@ void SwGlossaryDlg::Init()
             for(sal_uInt16 i = 0; i < nCount; ++i)
             {
                 String sGroupTitle(pGlossaryHdl->GetGlossaryName(i));
-                SvTreeListEntry* pChild = aCategoryBox.InsertEntry(
+                SvTreeListEntry* pChild = m_pCategoryBox->InsertEntry(
                                     sGroupTitle, pEntry);
                 pChild->SetUserData(new String(pGlossaryHdl->GetGlossaryShortName(i)));
             }
@@ -770,10 +744,10 @@ void SwGlossaryDlg::Init()
     if(!pSelEntry)
     {
         //find a non-readonly group
-        SvTreeListEntry* pSearch = aCategoryBox.First();
+        SvTreeListEntry* pSearch = m_pCategoryBox->First();
         while(pSearch)
         {
-            if(!aCategoryBox.GetParent(pSearch))
+            if(!m_pCategoryBox->GetParent(pSearch))
             {
                 GroupUserData* pData = (GroupUserData*)pSearch->GetUserData();
                 if(!pData->bReadonly)
@@ -782,41 +756,41 @@ void SwGlossaryDlg::Init()
                     break;
                 }
             }
-            pSearch = aCategoryBox.Next(pSearch);
+            pSearch = m_pCategoryBox->Next(pSearch);
         }
         if(!pSelEntry)
-            pSelEntry = aCategoryBox.GetEntry(0);
+            pSelEntry = m_pCategoryBox->GetEntry(0);
     }
     if(pSelEntry)
     {
-        aCategoryBox.Expand(pSelEntry);
-        aCategoryBox.Select(pSelEntry);
-        aCategoryBox.MakeVisible(pSelEntry);
-        GrpSelect(&aCategoryBox);
+        m_pCategoryBox->Expand(pSelEntry);
+        m_pCategoryBox->Select(pSelEntry);
+        m_pCategoryBox->MakeVisible(pSelEntry);
+        GrpSelect(m_pCategoryBox);
     }
     //JP 16.11.99: the SvxTreeListBox has a Bug. The Box dont recalc the
     //      outputsize, when all entries are insertet. The result is, that
     //      the Focus/Highlight rectangle is to large and paintet over the
     //      HScrollbar. -> Fix: call the resize
-    aCategoryBox.Resize();
+    m_pCategoryBox->Resize();
 
-    aCategoryBox.GetModel()->Resort();
-    aCategoryBox.SetUpdateMode( sal_True );
-    aCategoryBox.Update();
+    m_pCategoryBox->GetModel()->Resort();
+    m_pCategoryBox->SetUpdateMode( sal_True );
+    m_pCategoryBox->Update();
 
     const SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();
-    aFileRelCB.Check( rCfg.IsSaveRelFile() );
-    aFileRelCB.SetClickHdl(LINK(this, SwGlossaryDlg, CheckBoxHdl));
-    aNetRelCB.Check( rCfg.IsSaveRelNet() );
-    aNetRelCB.SetClickHdl(LINK(this, SwGlossaryDlg, CheckBoxHdl));
-    aInsertTipCB.Check( rCfg.IsAutoTextTip() );
-    aInsertTipCB.SetClickHdl(LINK(this, SwGlossaryDlg, CheckBoxHdl));
+    m_pFileRelCB->Check( rCfg.IsSaveRelFile() );
+    m_pFileRelCB->SetClickHdl(LINK(this, SwGlossaryDlg, CheckBoxHdl));
+    m_pNetRelCB->Check( rCfg.IsSaveRelNet() );
+    m_pNetRelCB->SetClickHdl(LINK(this, SwGlossaryDlg, CheckBoxHdl));
+    m_pInsertTipCB->Check( rCfg.IsAutoTextTip() );
+    m_pInsertTipCB->SetClickHdl(LINK(this, SwGlossaryDlg, CheckBoxHdl));
 }
 
 IMPL_LINK_NOARG_INLINE_START(SwGlossaryDlg, EditHdl)
 {
 // EndDialog must not be called in MenuHdl
-    if(aEditBtn.GetCurItemId() == FN_GL_EDIT )
+    if (m_pEditBtn->GetCurItemIdent() == "edit")
     {
         SwTextBlocks *pGroup = ::GetGlossaries()->GetGroupDoc (  GetCurrGrpName () );
         sal_Bool bRet = pGlossaryHdl->ConvertToNew ( *pGroup );
@@ -864,10 +838,10 @@ IMPL_LINK_NOARG(SwNewGlosNameDlg, Rename)
 IMPL_LINK( SwGlossaryDlg, CheckBoxHdl, CheckBox *, pBox )
 {
     SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();
-    sal_Bool bCheck = pBox->IsChecked();
-    if( pBox == &aInsertTipCB )
+    bool bCheck = pBox->IsChecked();
+    if (pBox == m_pInsertTipCB)
         rCfg.SetAutoTextTip(bCheck);
-    else if(pBox == &aFileRelCB)
+    else if(pBox == m_pFileRelCB)
         rCfg.SetSaveRelFile(bCheck);
     else
         rCfg.SetSaveRelNet(bCheck);
@@ -877,13 +851,33 @@ IMPL_LINK( SwGlossaryDlg, CheckBoxHdl, CheckBox *, pBox )
 /* --------------------------------------------------
  * TreeListBox for groups and blocks
  * --------------------------------------------------*/
-SwGlTreeListBox::SwGlTreeListBox(Window* pParent, const ResId& rResId) :
-    SvTreeListBox(pParent, rResId),
-    sReadonly     (SW_RES(ST_READONLY)),
-    pDragEntry(0)
+SwGlTreeListBox::SwGlTreeListBox(Window* pParent, const ResId& rResId)
+    : SvTreeListBox(pParent, rResId)
+    , sReadonly(SW_RESSTR(SW_STR_READONLY))
+    , pDragEntry(0)
 {
     FreeResource();
     SetDragDropMode( SV_DRAGDROP_CTRL_MOVE|SV_DRAGDROP_CTRL_COPY );
+}
+
+SwGlTreeListBox::SwGlTreeListBox(Window* pParent, WinBits nBits)
+    : SvTreeListBox(pParent, nBits)
+    , sReadonly(SW_RESSTR(SW_STR_READONLY)),
+    pDragEntry(0)
+{
+    SetDragDropMode( SV_DRAGDROP_CTRL_MOVE|SV_DRAGDROP_CTRL_COPY );
+}
+
+Size SwGlTreeListBox::GetOptimalSize(WindowSizeType eType) const
+{
+    if (eType == WINDOWSIZE_PREFERRED)
+        return LogicToPixel(Size(212, 84), MapMode(MAP_APPFONT));
+    return SvTreeListBox::GetOptimalSize(eType);
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwGlTreeListBox(Window *pParent, VclBuilder::stringmap &)
+{
+    return new SwGlTreeListBox(pParent, WB_BORDER | WB_TABSTOP);
 }
 
 void SwGlTreeListBox::Clear()
@@ -1086,12 +1080,12 @@ sal_Bool  SwGlTreeListBox::NotifyCopying(   SvTreeListEntry*  pTarget,
 
 String SwGlossaryDlg::GetCurrGrpName() const
 {
-    SvTreeListEntry* pEntry = aCategoryBox.FirstSelected();
+    SvTreeListEntry* pEntry = m_pCategoryBox->FirstSelected();
     String sRet;
     if(pEntry)
     {
         pEntry =
-            aCategoryBox.GetParent(pEntry) ? aCategoryBox.GetParent(pEntry) : pEntry;
+            m_pCategoryBox->GetParent(pEntry) ? m_pCategoryBox->GetParent(pEntry) : pEntry;
         GroupUserData* pGroupData = (GroupUserData*)pEntry->GetUserData();
         sRet = pGroupData->sGroupName;
         sRet += GLOS_DELIM;
@@ -1125,6 +1119,12 @@ IMPL_LINK( SwGlossaryDlg, PathHdl, Button *, pBtn )
     return 0;
 }
 
+IMPL_LINK_NOARG(SwGlossaryDlg, InsertHdl)
+{
+    EndDialog(true);
+    return 0;
+}
+
 IMPL_LINK( SwGlossaryDlg, ShowPreviewHdl, CheckBox *, pBox )
 {
     sal_Bool bCreated = sal_False;
@@ -1134,33 +1134,33 @@ IMPL_LINK( SwGlossaryDlg, ShowPreviewHdl, CheckBox *, pBox )
         if(!pExampleFrame)
         {
             Link aLink(LINK(this, SwGlossaryDlg, PreviewLoadedHdl));
-            pExampleFrame = new SwOneExampleFrame( aExampleWIN,
+            pExampleFrame = new SwOneExampleFrame( *m_pExampleWIN,
                             EX_SHOW_ONLINE_LAYOUT, &aLink );
             bCreated = sal_True;
         }
     }
 
     sal_Bool bShow = pBox->IsChecked() && !bCreated;
-    aExampleWIN.Show( bShow );
-    aExampleDummyWIN.Show(!bShow);
+    m_pExampleWIN->Show( bShow );
+    m_pExampleDummyWIN->Show(!bShow);
     if( ::GetCurrGlosGroup() )
-        ShowAutoText(*::GetCurrGlosGroup(), aShortNameEdit.GetText());
+        ShowAutoText(*::GetCurrGlosGroup(), m_pShortNameEdit->GetText());
 
     return 0;
 };
 
 IMPL_LINK_NOARG(SwGlossaryDlg, PreviewLoadedHdl)
 {
-    sal_Bool bShow = aShowExampleCB.IsChecked();
-    aExampleWIN.Show( bShow );
-    aExampleDummyWIN.Show(!bShow);
+    sal_Bool bShow = m_pShowExampleCB->IsChecked();
+    m_pExampleWIN->Show( bShow );
+    m_pExampleDummyWIN->Show(!bShow);
     ResumeShowAutoText();
     return 0;
 }
 
 void SwGlossaryDlg::ShowAutoText(const String& rGroup, const String& rShortName)
 {
-    if(aExampleWIN.IsVisible())
+    if(m_pExampleWIN->IsVisible())
     {
         SetResumeData(rGroup, rShortName);
         //try to make an Undo()
@@ -1171,7 +1171,7 @@ void SwGlossaryDlg::ShowAutoText(const String& rGroup, const String& rShortName)
 void    SwGlossaryDlg::ResumeShowAutoText()
 {
     String sGroup, sShortName;
-    if(GetResumeData(sGroup, sShortName) && aExampleWIN.IsVisible())
+    if(GetResumeData(sGroup, sShortName) && m_pExampleWIN->IsVisible())
     {
         if(!_xAutoText.is())
         {

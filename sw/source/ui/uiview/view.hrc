@@ -51,7 +51,6 @@
 #define STR_PRINT_MSG               (RC_VIEW_BEGIN + 27)
 #define STR_PRINT_ALL               (RC_VIEW_BEGIN + 28)
 #define STR_PRINT_SELECTION         (RC_VIEW_BEGIN + 29)
-#define STR_READONLY_SEL            (RC_VIEW_BEGIN + 30)
 
 #define RID_PVIEW_TOOLBOX           (RC_VIEW_BEGIN + 31)
 #define STR_WEBOPTIONS              (RC_VIEW_BEGIN + 32)

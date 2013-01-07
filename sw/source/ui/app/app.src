@@ -261,6 +261,16 @@ String STR_CAPTION_BELOW
     Text [ en-US ] = "Below" ;
 };
 
+String SW_STR_READONLY
+{
+    Text [ en-US ] = "read-only" ;
+};
+
+String STR_READONLY_PATH
+{
+    Text [ en-US ] = "The 'AutoText' directories are read-only. Do you want to call the path settings dialog?";
+};
+
 InfoBox MSG_ERROR_SEND_MAIL
 {
     BUTTONS = WB_OK ;

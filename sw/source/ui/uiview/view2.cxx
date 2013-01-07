@@ -1483,7 +1483,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 {
                     if( sStr.Len() )
                         sStr.InsertAscii( sStatusDelim, 0 );
-                    sStr.Insert( SW_RESSTR( STR_READONLY_SEL ), 0 );
+                    sStr.Insert( SW_RESSTR(SW_STR_READONLY), 0 );
                 }
                 if( sStr.Len() )
                     rSet.Put( SfxStringItem( SID_TABLE_CELL, sStr ));

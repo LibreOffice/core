@@ -23,8 +23,6 @@
 
 #define STR_GLOSSARY_BIB_DLG        (RC_MISC_BEGIN + 5)
 
-#define DLG_GLOSSARY                (RC_MISC_BEGIN + 11)
-
 #define DLG_DOC_FOOTNOTE            (RC_MISC_BEGIN + 13)
 #define DLG_BIB_BASE                (RC_MISC_BEGIN + 16)
 #define DLG_INSERT_BOOKMARK         (RC_MISC_BEGIN + 17)

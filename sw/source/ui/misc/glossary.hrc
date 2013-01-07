@@ -16,41 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-// Box text blocks
-#define FT_SHORTNAME        1
-#define ED_SHORTNAME        2
-#define FT_NAME             3
-#define ED_NAME             4
-#define CB_INSERT_TIP                   5
-
-#define PB_INSERT           50
-#define PB_EDIT             52
-#define PB_BIB              54
-#define PB_CLOSE            55
-#define PB_PATH             56
-#define PB_HELP             57
-
-#define MNU_EDIT            60
-#define FN_GL_DEFINE        61
-#define FN_GL_DEFINE_TEXT   62
-#define FN_GL_REPLACE       63
-#define FN_GL_EDIT          64
-#define FN_GL_DELETE        65
-#define FN_GL_RENAME        66
-#define FN_GL_MACRO         67
-#define CB_FILE_REL         68
-#define CB_NET_REL          69
-#define FL_RELATIVE         70
-#define WIN_EXAMPLE         72
-#define CB_SHOW_EXAMPLE     73
-#define FN_GL_COPY_TO_CLIPBOARD 74
-#define FN_GL_IMPORT        75
-#define ST_READONLY         76
-#define ST_READONLY_PATH    77
-#define FN_GL_REPLACE_TEXT  78
-#define WIN_EXAMPLE_DUMMY   79
-
 // Box library text blocks
 #define FL_EDIT                         1
 
