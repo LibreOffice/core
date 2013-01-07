@@ -41,7 +41,7 @@ typedef __va_list va_list;
 #include "uno/environment.h"
 #include "typelib/typedescription.h"
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
+#define OUSTR(x) OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
 
 namespace jni_uno
@@ -52,9 +52,9 @@ class JNI_info;
 //==============================================================================
 struct BridgeRuntimeError
 {
-    ::rtl::OUString m_message;
+    OUString m_message;
 
-    inline BridgeRuntimeError( ::rtl::OUString const & message )
+    inline BridgeRuntimeError( OUString const & message )
         : m_message( message )
         {}
 };
@@ -100,7 +100,7 @@ public:
     inline void ensure_no_exception() const; // throws BridgeRuntimeError
     inline bool assert_no_exception() const; // asserts and clears exception
 
-    ::rtl::OUString get_stack_trace( jobject jo_exc = 0 ) const;
+    OUString get_stack_trace( jobject jo_exc = 0 ) const;
 };
 
 //______________________________________________________________________________
@@ -275,7 +275,7 @@ inline TypeDescr::TypeDescr( typelib_TypeDescriptionReference * td_ref )
     {
         throw BridgeRuntimeError(
             OUSTR("cannot get comprehensive type description for ") +
-            ::rtl::OUString::unacquired( &td_ref->pTypeName ) );
+            OUString::unacquired( &td_ref->pTypeName ) );
     }
 }
 

@@ -586,7 +586,7 @@ namespace dxcanvas
             if(!(create(rWindow)))
             {
                 throw lang::NoSupportException(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(
                                          "Could not create DirectX device!") ),NULL);
             }
 
@@ -606,7 +606,7 @@ namespace dxcanvas
                    (aPageSize.getY() < MIN_TEXTURE_SIZE))
                 {
                     throw lang::NoSupportException(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM(
                                             "Could not create DirectX device - "
                                             "insufficient texture space!") ),NULL);
                 }
@@ -623,7 +623,7 @@ namespace dxcanvas
                                                     NULL)) )
             {
                 throw lang::NoSupportException(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(
                                          "Could not create DirectX device - out of memory!")),NULL);
             }
 
@@ -905,7 +905,7 @@ namespace dxcanvas
                            NULL)) )
             {
                 throw lang::NoSupportException(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(
                                          "Could not create offscreen surface - out of mem!") ),NULL);
             }
 
@@ -960,7 +960,7 @@ namespace dxcanvas
                                                                 NULL)) )
                         {
                             throw lang::NoSupportException(
-                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                OUString( RTL_CONSTASCII_USTRINGPARAM(
                                                      "Could not create DirectX device - out of memory!")),NULL);
                         }
                         mpVertexBuffer=COMReference<IDirect3DVertexBuffer9>(pVB);

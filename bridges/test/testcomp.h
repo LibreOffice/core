@@ -24,13 +24,13 @@
 
 
 void parseCommandLine( char *argv[] ,
-                       ::rtl::OUString *pProtocol , ::rtl::OUString *pConnection ,
+                       OUString *pProtocol , OUString *pConnection ,
                        sal_Bool *pbLatency , sal_Bool *pbReverse);
 
 
 Reference< XInterface > createComponent(
-    const ::rtl::OUString &sServiceName,
-    const ::rtl::OUString &sDllName,
+    const OUString &sServiceName,
+    const OUString &sDllName,
     const Reference < XMultiServiceFactory > & rSMgr );
 
 class OInterfaceTest :
@@ -75,16 +75,16 @@ public:
     void        SAL_CALL release()throw()                        { OWeakObject::release(); }
 public:
     // XCallMe
-    virtual void SAL_CALL call( const ::rtl::OUString& s, sal_Int32 nToDo )
+    virtual void SAL_CALL call( const OUString& s, sal_Int32 nToDo )
         throw(::com::sun::star::uno::RuntimeException,
               ::test::TestBridgeException);
-    virtual void SAL_CALL callOneway( const ::rtl::OUString& s, sal_Int32 nToDo )
+    virtual void SAL_CALL callOneway( const OUString& s, sal_Int32 nToDo )
         throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL drawLine( sal_Int32 x1, sal_Int32 y1 , sal_Int32 x2 , sal_Int32 y2 )
         throw(::com::sun::star::uno::RuntimeException);
 
-    virtual ::rtl::OUString SAL_CALL getsAttribute() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setsAttribute( const ::rtl::OUString& _sattribute ) throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getsAttribute() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setsAttribute( const OUString& _sattribute ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL callAgain( const ::com::sun::star::uno::Reference< ::test::XCallMe >& callAgain,
                                      sal_Int32 nToCall ) throw(::com::sun::star::uno::RuntimeException);
 
@@ -92,7 +92,7 @@ public:
         throw(::com::sun::star::uno::RuntimeException);
 
     ::osl::Mutex m_mutex;
-    ::rtl::OUString m_sAttribute;
+    OUString m_sAttribute;
     sal_Int32 m_nLastToDos;
 };
 
@@ -136,7 +136,7 @@ public:
 
 public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-           getInstance( const ::rtl::OUString& sObjectName )
+           getInstance( const OUString& sObjectName )
                  throw( ::com::sun::star::container::NoSuchElementException,
                         ::com::sun::star::uno::RuntimeException);
 

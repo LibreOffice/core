@@ -51,7 +51,7 @@ MediaWindowBaseImpl::~MediaWindowBaseImpl()
 
 // -------------------------------------------------------------------------
 
-uno::Reference< media::XPlayer > MediaWindowBaseImpl::createPlayer( const ::rtl::OUString& rURL )
+uno::Reference< media::XPlayer > MediaWindowBaseImpl::createPlayer( const OUString& rURL )
 {
     uno::Reference< media::XPlayer > xPlayer;
     uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );

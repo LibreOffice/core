@@ -38,11 +38,11 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL avmediaQuickTime_component_getFac
 
     if( rtl_str_compare( pImplName, AVMEDIA_QUICKTIME_MANAGER_IMPLEMENTATIONNAME ) == 0 )
     {
-        const ::rtl::OUString aServiceName( ::rtl::OUString(AVMEDIA_QUICKTIME_MANAGER_SERVICENAME ) );
+        const OUString aServiceName( OUString(AVMEDIA_QUICKTIME_MANAGER_SERVICENAME ) );
 
         xFactory = uno::Reference< lang::XSingleServiceFactory >( ::cppu::createSingleFactory(
                         reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ),
-                        ::rtl::OUString(AVMEDIA_QUICKTIME_MANAGER_IMPLEMENTATIONNAME ),
+                        OUString(AVMEDIA_QUICKTIME_MANAGER_IMPLEMENTATIONNAME ),
                         create_MediaPlayer, uno::Sequence< OUString >( &aServiceName, 1 ) ) );
     }
 

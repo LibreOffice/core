@@ -55,27 +55,27 @@ namespace basegfx2d
 class b2dsvgdimpex : public CppUnit::TestFixture
 {
 private:
-    ::rtl::OUString aPath0;
-    ::rtl::OUString aPath1;
-    ::rtl::OUString aPath2;
-    ::rtl::OUString aPath3;
+    OUString aPath0;
+    OUString aPath1;
+    OUString aPath2;
+    OUString aPath3;
 
 public:
     // initialise your test code values here.
     void setUp()
     {
         // simple rectangle
-        aPath0 = ::rtl::OUString(
+        aPath0 = OUString(
             "M 10 10-10 10-10-10 10-10Z" );
 
         // simple bezier polygon
-        aPath1 = ::rtl::OUString(
+        aPath1 = OUString(
             "m11430 0c-8890 3810 5715 6985 5715 6985 "
             "0 0-17145-1905-17145-1905 0 0 22860-10160 "
             "16510 6350-6350 16510-3810-11430-3810-11430z" );
 
         // '@' as a bezier polygon
-        aPath2 = ::rtl::OUString(
+        aPath2 = OUString(
             "m1917 1114c-89-189-233-284-430-284-167 "
             "0-306 91-419 273-113 182-170 370-170 564 "
             "0 145 33 259 98 342 65 84 150 126 257 126 "
@@ -101,7 +101,7 @@ public:
             "600-77 211-52 378-110 503-174 27 70 54 140 81 210z" );
 
         // first part of 'Hello World' as a line polygon
-        aPath3 = ::rtl::OUString(
+        aPath3 = OUString(
             "m1598 125h306v2334h-306v-1105h-1293v1105h-305v"
             "-2334h305v973h1293zm2159 1015 78-44 85 235-91 "
             "47-91 40-90 34-90 29-89 21-88 16-88 10-88 3-102"
@@ -143,7 +143,7 @@ public:
     void impex()
     {
         B2DPolyPolygon  aPoly;
-        ::rtl::OUString aExport;
+        OUString aExport;
 
         CPPUNIT_ASSERT_MESSAGE("importing simple rectangle from SVG-D",
                                tools::importFromSvgD( aPoly,

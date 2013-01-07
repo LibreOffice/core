@@ -1369,10 +1369,10 @@ namespace cairocanvas
             Matrix aMatrix;
 
             cairo_get_matrix( mpCairo.get(), &aMatrix );
-            if( ! ::rtl::math::approxEqual( aMatrix.xx, 1 ) &&
-                ! ::rtl::math::approxEqual( aMatrix.yy, 1 ) &&
-                ::rtl::math::approxEqual( aMatrix.x0, 0 ) &&
-                ::rtl::math::approxEqual( aMatrix.y0, 0 ) &&
+            if( ! math::approxEqual( aMatrix.xx, 1 ) &&
+                ! math::approxEqual( aMatrix.yy, 1 ) &&
+                math::approxEqual( aMatrix.x0, 0 ) &&
+                math::approxEqual( aMatrix.y0, 0 ) &&
                 basegfx::fround( rSize.Width * aMatrix.xx ) > 8 &&
                 basegfx::fround( rSize.Height* aMatrix.yy ) > 8 )
             {
@@ -1440,10 +1440,10 @@ namespace cairocanvas
 
             cairo_set_source_surface( mpCairo.get(), pSurface->getCairoSurface().get(), 0, 0 );
             if( !bHasAlpha &&
-                ::rtl::math::approxEqual( aMatrix.xx, 1 ) &&
-                ::rtl::math::approxEqual( aMatrix.yy, 1 ) &&
-                ::rtl::math::approxEqual( aMatrix.x0, 0 ) &&
-                ::rtl::math::approxEqual( aMatrix.y0, 0 ) )
+                math::approxEqual( aMatrix.xx, 1 ) &&
+                math::approxEqual( aMatrix.yy, 1 ) &&
+                math::approxEqual( aMatrix.x0, 0 ) &&
+                math::approxEqual( aMatrix.y0, 0 ) )
                 cairo_set_operator( mpCairo.get(), CAIRO_OPERATOR_SOURCE );
 #if CAIRO_VERSION >= 10200
             cairo_pattern_set_extend( cairo_get_source(mpCairo.get()), CAIRO_EXTEND_PAD );

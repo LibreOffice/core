@@ -32,12 +32,12 @@ namespace accessibility
 {
 
 // Both ::osl::Mutex and ParagraphBase implement acquire and release, and thus
-// ::rtl::Reference< Paragraph > does not work.  So ParagraphImpl was factored
-// out and ::rtl::Reference< ParagraphImpl > is used instead.
+// Reference< Paragraph > does not work.  So ParagraphImpl was factored
+// out and Reference< ParagraphImpl > is used instead.
 class Paragraph: private ::osl::Mutex, public ParagraphImpl
 {
 public:
-    inline Paragraph(::rtl::Reference< Document > const & rDocument,
+    inline Paragraph(Reference< Document > const & rDocument,
                      Paragraphs::size_type nNumber):
         ParagraphImpl(rDocument, nNumber, *this) {}
 };
@@ -74,7 +74,7 @@ void WindowListenerGuard::endListening()
     }
 }
 
-ParagraphImpl::ParagraphImpl(::rtl::Reference< Document > const & rDocument,
+ParagraphImpl::ParagraphImpl(Reference< Document > const & rDocument,
                              Paragraphs::size_type nNumber,
                              ::osl::Mutex & rMutex):
     ParagraphBase(rMutex),
@@ -1591,7 +1591,7 @@ IMPL_LINK(Document, WindowEventHandler, ::VclSimpleEvent *, pEvent)
 
             if (m_aFocused >= m_aVisibleBegin && m_aFocused < m_aVisibleEnd)
             {
-                ::rtl::Reference< ParagraphImpl > xParagraph(
+                Reference< ParagraphImpl > xParagraph(
                     getParagraph(m_aFocused));
                 if (xParagraph.is())
                     xParagraph->notifyEvent(
@@ -1612,7 +1612,7 @@ IMPL_LINK(Document, WindowEventHandler, ::VclSimpleEvent *, pEvent)
 
             if (m_aFocused >= m_aVisibleBegin && m_aFocused < m_aVisibleEnd)
             {
-                ::rtl::Reference< ParagraphImpl > xParagraph(
+                Reference< ParagraphImpl > xParagraph(
                     getParagraph(m_aFocused));
                 if (xParagraph.is())
                     xParagraph->notifyEvent(
@@ -1661,7 +1661,7 @@ void Document::init()
     }
 }
 
-::rtl::Reference< ParagraphImpl >
+Reference< ParagraphImpl >
 Document::getParagraph(Paragraphs::iterator const & rIt)
 {
     return static_cast< ParagraphImpl * >(
@@ -1813,7 +1813,7 @@ void Document::handleParagraphNotifications()
                     ++aIt;
                     if (aIt == m_xParagraphs->end())
                         break;
-                    ::rtl::Reference< ParagraphImpl > xParagraph(
+                    Reference< ParagraphImpl > xParagraph(
                         getParagraph(aIt));
                     if (xParagraph.is())
                         xParagraph->numberChanged(true);
@@ -1914,7 +1914,7 @@ void Document::handleParagraphNotifications()
 
                     for (; aIt != m_xParagraphs->end(); ++aIt)
                     {
-                        ::rtl::Reference< ParagraphImpl > xParagraph(
+                        Reference< ParagraphImpl > xParagraph(
                             getParagraph(aIt));
                         if (xParagraph.is())
                             xParagraph->numberChanged(false);
@@ -1958,7 +1958,7 @@ void Document::handleParagraphNotifications()
                 if (n < m_xParagraphs->size())
                 {
                     Paragraphs::iterator aIt(m_xParagraphs->begin() + n);
-                    ::rtl::Reference< ParagraphImpl > xParagraph(getParagraph(aIt));
+                    Reference< ParagraphImpl > xParagraph(getParagraph(aIt));
                     if (xParagraph.is())
                         xParagraph->textChanged();
                 }
@@ -1998,7 +1998,7 @@ void Document::handleSelectionChangeNotification()
     if (m_aFocused != m_xParagraphs->end() && m_aFocused != aIt
         && m_aFocused >= m_aVisibleBegin && m_aFocused < m_aVisibleEnd)
     {
-        ::rtl::Reference< ParagraphImpl > xParagraph(getParagraph(m_aFocused));
+        Reference< ParagraphImpl > xParagraph(getParagraph(m_aFocused));
         if (xParagraph.is())
             xParagraph->notifyEvent(
                 ::css::accessibility::AccessibleEventId::
@@ -2014,7 +2014,7 @@ void Document::handleSelectionChangeNotification()
             || nNewLastPara != m_nSelectionLastPara
             || nNewLastPos != m_nSelectionLastPos))
     {
-        ::rtl::Reference< ParagraphImpl > xParagraph(getParagraph(aIt));
+        Reference< ParagraphImpl > xParagraph(getParagraph(aIt));
         if (xParagraph.is())
         {
             if (aIt != m_aFocused)
@@ -2133,7 +2133,7 @@ void Document::notifySelectionChange( sal_Int32 nFirst, sal_Int32 nLast )
     {
         for ( Paragraphs::iterator i = iFirst; i != iLast; ++i )
         {
-            ::rtl::Reference< ParagraphImpl > xParagraph( getParagraph( i ) );
+            Reference< ParagraphImpl > xParagraph( getParagraph( i ) );
             if ( xParagraph.is() )
             {
                 xParagraph->notifyEvent(
