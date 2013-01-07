@@ -22,6 +22,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#include <com/sun/star/ui/AddressBookSourceDialog.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <tools/debug.hxx>
@@ -45,6 +46,7 @@ namespace abp
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::sdb;
+    using namespace ::com::sun::star::ui;
     using namespace ::com::sun::star::ui::dialogs;
 
     //---------------------------------------------------------------------
@@ -67,7 +69,7 @@ namespace abp
     //.....................................................................
 
         //-----------------------------------------------------------------
-        sal_Bool invokeDialog( const Reference< XMultiServiceFactory >& _rxORB, class Window* _pParent,
+        sal_Bool invokeDialog( const Reference< XComponentContext >& _rxORB, class Window* _pParent,
             const Reference< XPropertySet >& _rxDataSource, AddressSettings& _rSettings ) SAL_THROW ( ( ) )
         {
             _rSettings.aFieldMapping.clear();
@@ -80,37 +82,17 @@ namespace abp
             try
             {
                 // ........................................................
-                // the parameters for creating the dialog
-                Sequence< Any > aArguments(5);
-                Any* pArguments = aArguments.getArray();
-
-                // the parent window
-                Reference< XWindow > xDialogParent = VCLUnoHelper::GetInterface( _pParent );
-                *pArguments++ <<= PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" )), -1, makeAny( xDialogParent ), PropertyState_DIRECT_VALUE);
-
-                // the data source to use
-                *pArguments++ <<= PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "DataSource" )), -1, makeAny( _rxDataSource ), PropertyState_DIRECT_VALUE);
-                *pArguments++ <<= PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "DataSourceName" )), -1, makeAny( (sal_Bool)_rSettings.bRegisterDataSource ? _rSettings.sRegisteredDataSourceName : _rSettings.sDataSourceName ), PropertyState_DIRECT_VALUE);
-
-                // the table to use
-                *pArguments++ <<= PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Command" )), -1, makeAny( _rSettings.sSelectedTable ), PropertyState_DIRECT_VALUE);
-
-                // the title
-                ::rtl::OUString sTitle = String( ModuleRes( RID_STR_FIELDDIALOGTITLE ) );
-                *pArguments++ <<= PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Title" )), -1, makeAny( sTitle ), PropertyState_DIRECT_VALUE);
-
-                // ........................................................
                 // create an instance of the dialog service
-                static ::rtl::OUString s_sAdressBookFieldAssignmentServiceName(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.AddressBookSourceDialog" ));
-                Reference< XExecutableDialog > xDialog(
-                    _rxORB->createInstanceWithArguments( s_sAdressBookFieldAssignmentServiceName, aArguments ),
-                    UNO_QUERY
-                );
-                if ( !xDialog.is( ) )
-                {
-                    ShowServiceNotAvailableError( _pParent, s_sAdressBookFieldAssignmentServiceName, sal_True );
-                    return sal_False;
-                }
+                Reference< XWindow > xDialogParent = VCLUnoHelper::GetInterface( _pParent );
+                ::rtl::OUString sTitle = String( ModuleRes( RID_STR_FIELDDIALOGTITLE ) );
+                Reference< XExecutableDialog > xDialog = AddressBookSourceDialog::createWithDataSource(_rxORB,
+                                                           // the parent window
+                                                           xDialogParent,
+                                                           _rxDataSource,
+                                                           (sal_Bool)_rSettings.bRegisterDataSource ? _rSettings.sRegisteredDataSourceName : _rSettings.sDataSourceName,
+                                                           // the table to use
+                                                           _rSettings.sSelectedTable,
+                                                           sTitle);
 
                 // execute the dialog
                 if ( xDialog->execute() )

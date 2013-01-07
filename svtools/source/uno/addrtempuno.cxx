@@ -76,6 +76,8 @@ namespace svt
         // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 
+        void initialize(const Sequence< Any >& aArguments) throw(RuntimeException);
+
     protected:
     // OGenericUnoDialog overridables
         virtual Dialog* createDialog(Window* _pParent);
@@ -171,7 +173,32 @@ namespace svt
             if ( m_pDialog )
                 static_cast< AddressBookSourceDialog* >( m_pDialog )->getFieldMapping( m_aAliases );
     }
-
+    //------------------------------------------------------------------------------
+    void OAddressBookSourceDialogUno::initialize(const Sequence< Any >& aArguments) throw(RuntimeException)
+    {
+        if( aArguments.getLength() == 5 )
+        {
+            Reference<com::sun::star::awt::XWindow> xParentWindow;
+            Reference<com::sun::star::beans::XPropertySet> xDataSource;
+            rtl::OUString sDataSourceName;
+            rtl::OUString sCommand;
+            rtl::OUString sTitle;
+            if ( (aArguments[0] >>= xParentWindow)
+               && (aArguments[1] >>= xDataSource)
+               && (aArguments[2] >>= sDataSourceName)
+               && (aArguments[3] >>= sCommand)
+               && (aArguments[4] >>= sTitle) )
+            {
+                setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ) ), makeAny( xParentWindow ) );
+                setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DataSource" ) ), makeAny( xDataSource ) );
+                setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DataSourceName" ) ), makeAny( sDataSourceName ) );
+                setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Command" ) ), makeAny( sCommand ) );
+                setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ), makeAny( sTitle ) );
+                return;
+            }
+        }
+        OGenericUnoDialog::initialize(aArguments);
+    }
     //------------------------------------------------------------------------------
     void OAddressBookSourceDialogUno::implInitialize(const com::sun::star::uno::Any& _rValue)
     {
