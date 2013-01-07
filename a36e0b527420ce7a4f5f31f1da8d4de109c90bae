@@ -157,6 +157,24 @@
     },
     {
       "key": {
+        "uuid": "AAAASn///6s\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3254,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-01-07T16:34:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAASn///8U\u003d",
+      "revId": "a36e0b527420ce7a4f5f31f1da8d4de109c90bae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAASX///3U\u003d",
         "filename": "sc/source/core/tool/interpr1.cxx",
         "patchSetId": 1
@@ -236,6 +254,24 @@
       "writtenOn": "2013-01-03T15:08:14Z",
       "side": 1,
       "message": "If spaces etc. are not part of the group separator they are not to be removed.",
+      "revId": "a36e0b527420ce7a4f5f31f1da8d4de109c90bae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAASn///6o\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3284,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-01-07T16:34:33Z",
+      "side": 1,
+      "message": "I followed ODF v1.2 6.13.28 to the letter (symantices, rule 3). As not removing spaces does have a significant effect on the result NUMBERVALUE, I would like you to confirm that I should disregard rule 3.",
+      "parentUuid": "AAAASX///3E\u003d",
       "revId": "a36e0b527420ce7a4f5f31f1da8d4de109c90bae",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
