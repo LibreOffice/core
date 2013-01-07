@@ -121,6 +121,24 @@
     },
     {
       "key": {
+        "uuid": "AAAASX///0o\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3254,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-01-07T09:27:05Z",
+      "side": 1,
+      "message": "I did consider NUMBERVALUE( 1.234; \",\"; \".\" ) or NUMBERVALUE( A1; \",\"; \".\" ) with 1.234 (locale UK, US, or 1,234 (locale NL, D)) in cell A1.\nWhen I think I enter a string, I don\u0027t bother to enter a \u0027 first and expect calc to recognise whether it\u0027s a string or a numeric. But calc could (IMHO) be mistaken because of locale settings.\nThat is the reason why I deliberately get the content of argument or cell as a string. If you still want to have it pushed directly, I will do so. I leave it as it is till I get your \u0027verdict\u0027 ;)",
+      "parentUuid": "AAAASX///3k\u003d",
+      "revId": "a36e0b527420ce7a4f5f31f1da8d4de109c90bae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAASX///3U\u003d",
         "filename": "sc/source/core/tool/interpr1.cxx",
         "patchSetId": 1
