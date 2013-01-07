@@ -103,3 +103,7 @@
 # Khmer dictionary.
 [ language=km ]
     a22266cfa40fb23a79be27a239321a3f http://sourceforge.net/projects/aoo-extensions/files/1009/1/km_spellchecker_OOo30_V_1.0.2.oxt/download "km_spellchecker_OOo30_V_1.0.2.oxt"
+
+# Scottish Gaelic.
+[ language=gd ]
+    d645b36c5d4fc52c18ac180453b48b5c http://sourceforge.net/projects/aoo-extensions/files/4587/7/hunspell-gd-2.5.oxt/download "hunspell-gd-2.5.oxt"
