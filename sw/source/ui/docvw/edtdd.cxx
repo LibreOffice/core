@@ -77,7 +77,7 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
         if( rSh.GetDrawView()->Command( aDragEvent, this ) )
         {
             rView.GetViewFrame()->GetBindings().InvalidateAll(sal_False);
-            return; // Event von der SdrView ausgewertet
+            return; // Event evaluated by SdrView
         }
     }
 
@@ -218,13 +218,13 @@ sal_Int8 SwEditWin::ExecuteDrop( const ExecuteDropEvent& rEvt )
     }
 
 
-    //                          There's a special treatment for file lists with a single
-    //                          element, that depends on the actual content of the
-    //                          Transferable to be accessible. Since the transferable
-    //                          may only be accessed after the drop has been accepted
-    //                          (according to KA due to Java D&D), we'll have to
-    //                          reevaluate the drop action once more _with_ the
-    //                          Transferable.
+    // There's a special treatment for file lists with a single
+    // element, that depends on the actual content of the
+    // Transferable to be accessible. Since the transferable
+    // may only be accessed after the drop has been accepted
+    // (according to KA due to Java D&D), we'll have to
+    // reevaluate the drop action once more _with_ the
+    // Transferable.
     sal_uInt16 nEventAction;
     sal_Int8 nUserOpt = rEvt.mbDefault ? EXCHG_IN_ACTION_DEFAULT
                                        : rEvt.mnAction;
@@ -415,8 +415,8 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
             }
             else if( rEvt.mbDefault )
             {
-                //              internal Drag&Drop: within same Doc a Move
-                //              otherwise a Copy - Task 54974
+                // internal Drag&Drop: within same Doc a Move
+                // otherwise a Copy - Task 54974
                 nEventAction = pSrcSh->GetDoc() == rSh.GetDoc()
                                     ? DND_ACTION_MOVE
                                     : DND_ACTION_COPY;

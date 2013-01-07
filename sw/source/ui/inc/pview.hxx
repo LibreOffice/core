@@ -39,10 +39,9 @@ class SwRect;
 class DataChangedEvent;
 class CommandEvent;
 class SvtAccessibilityOptions;
-// OD 12.12.2002 #103492#
 class SwPagePreviewLayout;
 
-// OD 24.03.2003 #108282# - delete member <mnVirtPage> and its accessor.
+// Delete member <mnVirtPage> and its accessor
 class SwPagePreViewWin : public Window
 {
     ViewShell*          mpViewShell;
@@ -51,10 +50,8 @@ class SwPagePreViewWin : public Window
     Size                maPxWinSize;
     Fraction            maScale;
     SwPagePreView&      mrView;
-    // OD 02.12.2002 #103492#
     bool                mbCalcScaleForPreviewLayout;
     Rectangle           maPaintedPreviewDocRect;
-    // OD 12.12.2002 #103492#
     SwPagePreviewLayout* mpPgPrevwLayout;
 
     void SetPagePreview( sal_uInt8 nRow, sal_uInt8 nCol );
@@ -87,26 +84,18 @@ public:
 
     /** get selected page number of document preview
 
-        OD 13.12.2002 #103492#
-
-        @author OD
-
         @return selected page number
     */
     sal_uInt16 SelectedPage() const;
 
     /** set selected page number in document preview
 
-        OD 13.12.2002 #103492#
-
-        @author OD
-
         @param _nSelectedPageNum
         input parameter - physical page number of page that will be the selected one.
     */
     void SetSelectedPage( sal_uInt16 _nSelectedPageNum );
 
-    //JP 19.08.98: bei Einspaltigkeit gibt es keine 0. Seite!
+    // If we only have one column we do not have a oth page
     sal_uInt16  GetDefSttPage() const   { return 1 == mnCol ? 1 : 0; }
 
     void CalcWish( sal_uInt8 nNewRow, sal_uInt8 nNewCol );
@@ -114,24 +103,20 @@ public:
     const Size& GetWinSize() const  { return maPxWinSize; }
     void SetWinSize( const Size& rNewSize );
 
-    // OD 18.12.2002 #103492# - add <MV_SELPAGE>, <MV_SCROLL>
+    // Add <MV_SELPAGE>, <MV_SCROLL>
     enum MoveMode{ MV_CALC, MV_PAGE_UP, MV_PAGE_DOWN, MV_DOC_STT, MV_DOC_END,
                    MV_SELPAGE, MV_SCROLL, MV_NEWWINSIZE };
     int MovePage( int eMoveMode );
 
-    // erzeuge den String fuer die StatusLeiste
+    // Create the status bar's string
     OUString GetStatusStr( sal_uInt16 nPageCount ) const;
 
     void RepaintCoreRect( const SwRect& rRect );
 
-    /** method to adjust preview to a new zoom factor
-
-        OD 02.12.2002 #103492#
+    /** Method to adjust preview to a new zoom factor
         paint of preview is prepared for a new zoom factor
-        OD 24.09.2003 #i19975# - zoom type has also been considered.
+        Zoom type has also been considered.
         Thus, add new parameter <_eZoomType>
-
-        @author OD
     */
     void AdjustPreviewToNewZoom( const sal_uInt16 _nZoomFactor,
                                  const SvxZoomType _eZoomType );
@@ -143,12 +128,7 @@ public:
 
     void Scroll(long nXMove, long nYMove, sal_uInt16 nFlags = 0);
 
-    /** method to enable/disable book preview
-
-        OD 2004-03-05 #i18143#
-
-        @author OD
-
+    /** Method to enable/disable book preview
         @param _bBookPreview
         input parameter - boolean indicating, if book preview mode has to
         switch on <sal_True> or of <sal_False>
@@ -162,9 +142,9 @@ public:
                     CreateAccessible();
 };
 
-/*--------------------------------------------------------------------
-    Description:   view of a document
- --------------------------------------------------------------------*/
+/**
+ * View of a document
+ */
 class SW_DLLPUBLIC SwPagePreView: public SfxViewShell
 {
     // ViewWindow and handle to core
@@ -194,8 +174,7 @@ class SW_DLLPUBLIC SwPagePreView: public SfxViewShell
     sal_uInt16                  mnPageCount;
     sal_Bool                    bNormalPrint;
 
-    // OD 09.01.2003 #106334#
-    // new members to reset design mode at draw view for form shell on switching
+    // New members to reset design mode at draw view for form shell on switching
     // back from writer page preview to normal view.
     sal_Bool                mbResetFormDesignMode:1;
     sal_Bool                mbFormDesignModeToReset:1;
@@ -218,9 +197,7 @@ class SW_DLLPUBLIC SwPagePreView: public SfxViewShell
 
     SW_DLLPRIVATE void CalcAndSetBorderPixel( SvBorder &rToFill, sal_Bool bInner );
 
-    /** help method to execute SfxRequest FN_PAGE_UP and FN_PAGE_DOWN
-
-        OD 04.03.2003 #107369#
+    /** Helper method to execute SfxRequest FN_PAGE_UP and FN_PAGE_DOWN
 
         @param _bPgUp
         input parameter - boolean that indicates, if FN_PAGE_UP or FN_PAGE_DOWN
@@ -228,8 +205,6 @@ class SW_DLLPUBLIC SwPagePreView: public SfxViewShell
 
         @param _pReq
         optional input parameter - pointer to the <SfxRequest> instance, if existing.
-
-        @author OD
     */
     SW_DLLPRIVATE void _ExecPgUpAndPgDown( const bool  _bPgUp,
                              SfxRequest* _pReq = 0 );
@@ -279,17 +254,17 @@ public:
     sal_uInt16          GetNewPage() const {return nNewPage;}
     void            SetNewPage(sal_uInt16 nSet)  {nNewPage = nSet;}
 
-        // handler
+    // Handler
     void            Execute(SfxRequest&);
     void            GetState(SfxItemSet&);
     void            StateUndo(SfxItemSet&);
 
     SwDocShell*     GetDocShell();
 
-    //apply Accessiblity options
+    // apply Accessiblity options
     void ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOptions);
 
-    // OD 09.01.2003 #106334# - inline method to request values of new members
+    // Inline method to request values of new members
     // <mbResetFormDesignMode> and <mbFormDesignModeToReset>
     inline sal_Bool ResetFormDesignMode() const
     {
@@ -301,13 +276,10 @@ public:
         return mbFormDesignModeToReset;
     }
 
-    /** adjust position of vertical scrollbar
+    /** Adjust position of vertical scrollbar
 
-        OD 19.02.2003 #107369
         Currently used, if the complete preview layout rows fit into to the given
         window, if a new page is selected and this page is visible.
-
-        @author OD
 
         @param _nNewThumbPos
         input parameter - new position, which will be assigned to the vertical

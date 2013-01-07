@@ -29,26 +29,18 @@
 
 extern bool bNoInterrupt;       // in mainwn.cxx
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
-
-
+/**
+ * Ctor
+ */
 ConstFormControl::ConstFormControl(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* pSwView) :
     SwDrawBase(pWrtShell, pEditWin, pSwView)
 {
     m_bInsForm = sal_True;
 }
 
-/*************************************************************************
-|*
-|* MouseButtonDown-event
-|*
-\************************************************************************/
-
-
+/**
+ * MouseButtonDown event
+ */
 sal_Bool ConstFormControl::MouseButtonDown(const MouseEvent& rMEvt)
 {
     sal_Bool bReturn = sal_False;
@@ -72,7 +64,7 @@ sal_Bool ConstFormControl::MouseButtonDown(const MouseEvent& rMEvt)
     SdrViewEvent aVEvt;
     SdrHitKind eHit = pSdrView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
 
-    // Nur neues Objekt, wenn nicht im Basismode (bzw reinem Selektionsmode)
+    // Only new object; if not in base mode (or pure selection mode)
     if (rMEvt.IsLeft() && !m_pWin->IsDrawAction() &&
         (eHit == SDRHIT_UNMARKEDOBJECT || eHit == SDRHIT_NONE || m_pSh->IsDrawCreate()))
     {
@@ -93,13 +85,9 @@ sal_Bool ConstFormControl::MouseButtonDown(const MouseEvent& rMEvt)
     return (bReturn);
 }
 
-/*************************************************************************
-|*
-|* Function aktivieren
-|*
-\************************************************************************/
-
-
+/**
+ * Activate
+ */
 void ConstFormControl::Activate(const sal_uInt16 nSlotId)
 {
     m_pWin->SetSdrDrawMode( static_cast<SdrObjKind>(nSlotId) );
