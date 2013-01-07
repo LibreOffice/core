@@ -165,7 +165,9 @@ ImplFontAttrCache::ImplFontAttrCache( const String& rFileNameURL, const String& 
         aCacheFile >> n; aDFA.SetFamilyType(static_cast<FontFamily>(n));
         aCacheFile >> n; aDFA.SetSymbolFlag(n != 0);
 
-        aCacheFile.ReadByteStringLine( aDFA.GetStyleName(), RTL_TEXTENCODING_UTF8 );
+        String styleName;
+        aCacheFile.ReadByteStringLine( styleName, RTL_TEXTENCODING_UTF8 );
+        aDFA.SetStyleName( styleName );
 
         aFontAttributes[ aFontFileURL ] = aDFA;
     }
@@ -904,7 +906,7 @@ static ImplDevFontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXW& rE
     aDFA.SetSymbolFlag(rLogFont.lfCharSet == SYMBOL_CHARSET);
 
     // get the font face name
-    aDFA.SetFamilyName(reinterpret_cast<const sal_Unicode*>(rLogFont.lfFaceName));
+    aDFA.SetFamilyName( String().Assign(reinterpret_cast<const sal_Unicode*>(rLogFont.lfFaceName)));
 
     // use the face's style name only if it looks reasonable
     const wchar_t* pStyleName = rEnumFont.elfStyle;
@@ -914,7 +916,7 @@ static ImplDevFontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXW& rE
         if( *p < 0x0020 )
             break;
     if( p < pEnd )
-        aDFA.SetStyleName(reinterpret_cast<const sal_Unicode*>(pStyleName));
+        aDFA.SetStyleName( String().Assign(reinterpret_cast<const sal_Unicode*>(pStyleName)));
 
     // get device specific font attributes
     aDFA.mbOrientation  = (nFontType & RASTER_FONTTYPE) == 0;
@@ -1679,7 +1681,7 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLe
 
     wchar_t aFaceName[LF_FACESIZE+60];
     if( ::GetTextFaceW( mhDC, sizeof(aFaceName)/sizeof(wchar_t), aFaceName ) )
-        pMetric->SetFamilyName(reinterpret_cast<const sal_Unicode*>(aFaceName));
+        pMetric->SetFamilyName( String().Assign( reinterpret_cast<const sal_Unicode*>(aFaceName)));
 
     // get the font metric
     TEXTMETRICA aWinMetric;
