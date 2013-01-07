@@ -320,8 +320,7 @@ ScDocShellRef ScFiltersTest::loadDoc(const rtl::OUString& rName, sal_Int32 nForm
 
 void ScFiltersTest::testRangeNameODS()
 {
-    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("named-ranges-global."));
-    ScDocShellRef xDocSh = loadDoc(aFileNameBase, 0);
+    ScDocShellRef xDocSh = loadDoc("named-ranges-global.", ODS);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load named-ranges-globals.*", xDocSh.Is());
 
@@ -387,8 +386,7 @@ void testContentImpl(ScDocument* pDoc, sal_Int32 nFormat ) //same code for ods, 
 
 void ScFiltersTest::testContentODS()
 {
-    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("universal-content."));
-    ScDocShellRef xDocSh = loadDoc(aFileNameBase, ODS);
+    ScDocShellRef xDocSh = loadDoc("universal-content.", ODS);
     xDocSh->DoHardRecalc(true);
 
     ScDocument* pDoc = xDocSh->GetDocument();
@@ -398,8 +396,7 @@ void ScFiltersTest::testContentODS()
 
 void ScFiltersTest::testContentXLS()
 {
-    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("universal-content."));
-    ScDocShellRef xDocSh = loadDoc(aFileNameBase, XLS);
+    ScDocShellRef xDocSh = loadDoc("universal-content.", XLS);
     xDocSh->DoHardRecalc(true);
 
     ScDocument* pDoc = xDocSh->GetDocument();
@@ -409,8 +406,7 @@ void ScFiltersTest::testContentXLS()
 
 void ScFiltersTest::testContentXLSX()
 {
-    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("universal-content."));
-    ScDocShellRef xDocSh = loadDoc(aFileNameBase, XLSX);
+    ScDocShellRef xDocSh = loadDoc("universal-content.", XLSX);
     xDocSh->DoHardRecalc(true);
 
     ScDocument* pDoc = xDocSh->GetDocument();
@@ -420,8 +416,7 @@ void ScFiltersTest::testContentXLSX()
 
 void ScFiltersTest::testContentLotus123()
 {
-    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("universal-content."));
-    ScDocShellRef xDocSh = loadDoc(aFileNameBase, LOTUS123);
+    ScDocShellRef xDocSh = loadDoc("universal-content.", LOTUS123);
     xDocSh->DoHardRecalc(true);
 
     ScDocument* pDoc = xDocSh->GetDocument();
