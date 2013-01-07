@@ -1,2 +1,2 @@
-ns	nss	: solenv soltools NULL
+ns	nss	: solenv soltools PYTHON:python3 NULL
 ns	nss\prj						nmake	-	all	ns_nss NULL
