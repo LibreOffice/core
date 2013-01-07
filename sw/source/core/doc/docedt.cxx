@@ -60,7 +60,6 @@
 #include <UndoInsert.hxx>
 #include <UndoDelete.hxx>
 #include <breakit.hxx>
-#include <hhcwrp.hxx>
 #include <vcl/msgbox.hxx>
 #include "comcore.hrc"
 #include "editsh.hxx"
