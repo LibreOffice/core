@@ -74,10 +74,7 @@
 
 <!-- meta data variables from the help file -->
 <xsl:variable name="filename" select="/helpdocument/meta/topic/filename"/>
-<xsl:variable name="topic_id" select="/helpdocument/meta/topic/@id"/>
-<xsl:variable name="topic_status" select="/helpdocument/meta/topic/@status"/>
 <xsl:variable name="title" select="/helpdocument/meta/topic/title"/>
-<xsl:variable name="doclang" select="/helpdocument/meta/topic/title/@xml-lang"/>
 
 <!-- Module and the corresponding switching values-->
 <xsl:param name="Database" select="'swriter'"/>
