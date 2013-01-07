@@ -1642,9 +1642,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/awt,\
 	FontWeight \
 	FontWidth \
 	Gradient \
-	SvgGradient \
 	GradientStyle \
-	GradientSpread \
 	ImageAlign \
 	ImagePosition \
 	ImageScaleMode \

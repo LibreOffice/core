@@ -90,8 +90,6 @@ sal_Bool XMLGradientStyleImport::importXML(
     uno::Any& rValue,
     OUString& rStrName )
 {
-    SAL_INFO ("svg", "importXML");
-
     sal_Bool bRet           = sal_False;
     sal_Bool bHasName       = sal_False;
     sal_Bool bHasStyle      = sal_False;
@@ -109,7 +107,7 @@ sal_Bool XMLGradientStyleImport::importXML(
 
     {
         static SvXMLTokenMapEntry aGradientAttrTokenMap[] =
-    {
+{
     { XML_NAMESPACE_DRAW, XML_NAME, XML_TOK_GRADIENT_NAME },
     { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, XML_TOK_GRADIENT_DISPLAY_NAME },
     { XML_NAMESPACE_DRAW, XML_STYLE, XML_TOK_GRADIENT_STYLE },
@@ -128,14 +126,13 @@ sal_Bool XMLGradientStyleImport::importXML(
     SvXMLNamespaceMap& rNamespaceMap = rImport.GetNamespaceMap();
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    SAL_INFO ("svg", "nAttrCount " << nAttrCount);
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
         const OUString& rFullAttrName = xAttrList->getNameByIndex( i );
         OUString aStrAttrName;
         sal_uInt16 nPrefix = rNamespaceMap.GetKeyByAttrName( rFullAttrName, &aStrAttrName );
         const OUString& rStrValue = xAttrList->getValueByIndex( i );
-        SAL_INFO ("svg", "FullAttrName: " << rFullAttrName << " rStrValue: " << rStrValue << " aStrAttrName: " << aStrAttrName);
+
         sal_Int32 nTmpValue;
 
         switch( aTokenMap.Get( nPrefix, aStrAttrName ) )
@@ -202,8 +199,8 @@ sal_Bool XMLGradientStyleImport::importXML(
             break;
 
         default:
-            SAL_INFO("svg", "Unknown token at import gradient style");
-            DBG_WARNING( "Unknown token at import gradient style" );
+            DBG_WARNING( "Unknown token at import gradient style" )
+            ;
         }
     }
 
@@ -244,7 +241,6 @@ sal_Bool XMLGradientStyleExport::exportXML(
 {
     sal_Bool bRet = sal_False;
     awt::Gradient aGradient;
-
 
     if( !rStrName.isEmpty() )
     {

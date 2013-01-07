@@ -3443,7 +3443,6 @@ bool XFillGradientItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uI
                     {
                         if ( aPropSeq[n].Value >>= aGradient2 )
                             bGradient = true;
-
                     }
                 }
 
@@ -3484,19 +3483,11 @@ bool XFillGradientItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uI
         case MID_FILLGRADIENT:
         {
             ::com::sun::star::awt::Gradient aGradient2;
-            ::com::sun::star::awt::SvgGradient aSvgGradient2;
-            bool bIsSvgGradient(false);
-
-            if( !(rVal >>= aGradient2) )
-                {
-                    if( !(rVal >>= aSvgGradient2) )
-                        return false;
-                    bIsSvgGradient=true;
-                }
+            if(!(rVal >>= aGradient2))
+                return false;
 
             XGradient aXGradient;
 
-            if ( !bIsSvgGradient ) {
             aXGradient.SetGradientStyle( (XGradientStyle) aGradient2.Style );
             aXGradient.SetStartColor( aGradient2.StartColor );
             aXGradient.SetEndColor( aGradient2.EndColor );
@@ -3507,11 +3498,7 @@ bool XFillGradientItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uI
             aXGradient.SetStartIntens( aGradient2.StartIntensity );
             aXGradient.SetEndIntens( aGradient2.EndIntensity );
             aXGradient.SetSteps( aGradient2.StepCount );
-            }
-            else {
-                aXGradient.SetStartColor( aSvgGradient2.StopColor[0] );
-                aXGradient.SetEndColor( aSvgGradient2.StopColor[1] );
-             }
+
             SetGradientValue( aXGradient );
             break;
         }

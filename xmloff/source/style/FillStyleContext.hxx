@@ -21,12 +21,11 @@
 #define _XMLOFF_FILLSTYLECONTEXTS_HXX_
 
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/util/Color.hpp>
 #include <xmloff/xmlstyle.hxx>
-#include <rtl/ustring.hxx>
+#include<rtl/ustring.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
-// draw:gradient context
+// draw:gardient context
 
 class XMLGradientStyleContext: public SvXMLStyleContext
 {
@@ -44,68 +43,6 @@ public:
     virtual void EndElement();
 
     virtual sal_Bool IsTransient() const;
-};
-
-//////////////////////////////////////////////////////////////////////////////
-// svg:linearGradient context
-class XMLLinearGradientStyleContext: public SvXMLStyleContext
-{
-private:
-    ::com::sun::star::uno::Any  maAny;
-    rtl::OUString               maStrName;
-    ::std::vector< ::com::sun::star::util::Color > mStopColors;
-    ::std::vector< double > mStopOffsets;
-
-public:
-    TYPEINFO();
-
-    XMLLinearGradientStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const rtl::OUString& rLName,
-         const com::sun::star::uno::Reference<
-             com::sun::star::xml::sax::XAttributeList> & xAttrList );
-    virtual ~XMLLinearGradientStyleContext();
-
-    virtual void EndElement();
-
-    virtual sal_Bool IsTransient() const;
-
-    void SetGradientStop( ::com::sun::star::util::Color aColor, double aOffset);
-
-protected:
-    virtual SvXMLImportContext *CreateChildContext(
-        sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
-};
-
-//////////////////////////////////////////////////////////////////////////////
-// import svg:stop elements
-class XMLSvgGradientStopImportContext : public SvXMLImportContext
-{
-    XMLLinearGradientStyleContext& rGradientStyleContext;
-
-private:
-    ::com::sun::star::uno::Any  maAny;
-
-public:
-
-    TYPEINFO();
-
-    XMLSvgGradientStopImportContext(
-        SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLocalName,
-        XMLLinearGradientStyleContext& rGradientStyle);
-
-    ~XMLSvgGradientStopImportContext();
-
-protected:
-
-    virtual void StartElement(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
-
-    virtual void EndElement();
 };
 
 //////////////////////////////////////////////////////////////////////////////
