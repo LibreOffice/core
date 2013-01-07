@@ -649,13 +649,9 @@ void SAL_CALL ODocumentContainer::replaceByHierarchicalName( const ::rtl::OUStri
     return impl_getHierarchicalName( false );
 }
 
-::rtl::OUString SAL_CALL ODocumentContainer::composeHierarchicalName( const ::rtl::OUString& i_rRelativeName ) throw (IllegalArgumentException, NoSupportException, RuntimeException)
+OUString SAL_CALL ODocumentContainer::composeHierarchicalName( const ::rtl::OUString& i_rRelativeName ) throw (IllegalArgumentException, NoSupportException, RuntimeException)
 {
-    ::rtl::OUStringBuffer aBuffer;
-    aBuffer.append( getHierarchicalName() );
-    aBuffer.append( sal_Unicode( '/' ) );
-    aBuffer.append( i_rRelativeName );
-    return aBuffer.makeStringAndClear();
+    return OUString ( getHierarchicalName() + "/" + i_rRelativeName );
 }
 
 ::rtl::Reference<OContentHelper> ODocumentContainer::getContent(const ::rtl::OUString& _sName) const
