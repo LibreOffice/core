@@ -98,17 +98,17 @@ void SvxSmartTagsControl::FillMenu()
         PopupMenu* pSbMenu = mpMenu;
         if ( 1 < rActionComponentsSequence.getLength() )
         {
-            mpMenu->InsertItem( nMenuId, aSmartTagCaption, 0, nMenuPos++);
+            mpMenu->InsertItem(nMenuId, aSmartTagCaption, 0, OString(), nMenuPos++);
             pSbMenu = new PopupMenu;
             mpMenu->SetPopupMenu( nMenuId++, pSbMenu );
         }
         pSbMenu->SetSelectHdl( LINK( this, SvxSmartTagsControl, MenuSelect ) );
 
         // sub-menu starts with smart tag caption and separator
-        const rtl::OUString aSmartTagCaption2 = aSmartTagCaption + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(": ")) + aRangeText;
+        const rtl::OUString aSmartTagCaption2 = aSmartTagCaption + OUString(": ") + aRangeText;
         nSubMenuPos = 0;
-        pSbMenu->InsertItem( nMenuId++, aSmartTagCaption2, MIB_NOSELECT, nSubMenuPos++ );
-        pSbMenu->InsertSeparator( nSubMenuPos++ );
+        pSbMenu->InsertItem(nMenuId++, aSmartTagCaption2, MIB_NOSELECT, OString(), nSubMenuPos++);
+        pSbMenu->InsertSeparator(OString(), nSubMenuPos++);
 
         // Add subitem for every action reference for the current smart tag type:
         for ( sal_uInt16 i = 0; i < rActionComponents.getLength(); ++i )
@@ -127,7 +127,7 @@ void SvxSmartTagsControl::FillMenu()
                                                                                 xController,
                                                                                 xTextRange );
 
-                pSbMenu->InsertItem( nSubMenuId++, aActionCaption, 0, nSubMenuPos++ );
+                pSbMenu->InsertItem( nSubMenuId++, aActionCaption, 0, OString(), nSubMenuPos++ );
                 InvokeAction aEntry( xAction, xSmartTagProperties, nActionID );
                 maInvokeActions.push_back( aEntry );
             }

@@ -4156,7 +4156,8 @@ void ControlConversionMenuController::StateChanged(sal_uInt16 nSID, SfxItemState
             if (MENU_ITEM_NOTFOUND == nPrevInConversion)
                 // none of the items which precede the nSID-slot in the source menu are present in our conversion menu
                 nPrevInConversion = sal::static_int_cast< sal_uInt16 >(-1); // put the item at the first position
-            m_pConversionMenu->InsertItem(nSID, pSource->GetItemText(nSID), pSource->GetItemBits(nSID), ++nPrevInConversion);
+            m_pConversionMenu->InsertItem(nSID, pSource->GetItemText(nSID),
+                pSource->GetItemBits(nSID), OString(), ++nPrevInConversion);
             m_pConversionMenu->SetItemImage(nSID, pSource->GetItemImage(nSID));
             m_pConversionMenu->SetHelpId(nSID, pSource->GetHelpId(nSID));
 

@@ -407,7 +407,7 @@ void VCLXMenu::insertItem( sal_Int16 nItemId, const ::rtl::OUString& aText, sal_
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     if ( mpMenu )
-        mpMenu->InsertItem( nItemId, aText, (MenuItemBits)nItemStyle, nPos );
+        mpMenu->InsertItem(nItemId, aText, (MenuItemBits)nItemStyle, OString(), nPos);
 }
 
 void VCLXMenu::removeItem( sal_Int16 nPos, sal_Int16 nCount ) throw(::com::sun::star::uno::RuntimeException)
@@ -543,7 +543,7 @@ void VCLXMenu::insertSeparator( sal_Int16 nPos ) throw(::com::sun::star::uno::Ru
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     if ( mpMenu )
-        mpMenu->InsertSeparator( nPos );
+        mpMenu->InsertSeparator(OString(), nPos);
 }
 
 void VCLXMenu::setDefaultItem( sal_Int16 nItemId ) throw(::com::sun::star::uno::RuntimeException)

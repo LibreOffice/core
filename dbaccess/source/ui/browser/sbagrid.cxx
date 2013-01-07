@@ -723,15 +723,15 @@ void SbaGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rM
             case DataType::REF:
                 break;
             default:
-                rMenu.InsertItem(ID_BROWSER_COLATTRSET, aNewItems.GetItemText(ID_BROWSER_COLATTRSET), 0, nPos++);
+                rMenu.InsertItem(ID_BROWSER_COLATTRSET, aNewItems.GetItemText(ID_BROWSER_COLATTRSET), 0, OString(), nPos++);
                 rMenu.SetHelpId(ID_BROWSER_COLATTRSET, aNewItems.GetHelpId(ID_BROWSER_COLATTRSET));
-                rMenu.InsertSeparator(nPos++);
+                rMenu.InsertSeparator(OString(), nPos++);
             }
         }
 
-        rMenu.InsertItem(ID_BROWSER_COLWIDTH, aNewItems.GetItemText(ID_BROWSER_COLWIDTH), 0, nPos++);
+        rMenu.InsertItem(ID_BROWSER_COLWIDTH, aNewItems.GetItemText(ID_BROWSER_COLWIDTH), 0, OString(), nPos++);
         rMenu.SetHelpId(ID_BROWSER_COLWIDTH, aNewItems.GetHelpId(ID_BROWSER_COLWIDTH));
-        rMenu.InsertSeparator(nPos++);
+        rMenu.InsertSeparator(OString(), nPos++);
     }
 }
 
@@ -816,20 +816,20 @@ void SbaGridControl::PreExecuteRowContextMenu(sal_uInt16 nRow, PopupMenu& rMenu)
 
     if (!IsReadOnlyDB())
     {
-        rMenu.InsertItem(ID_BROWSER_TABLEATTR, aNewItems.GetItemText(ID_BROWSER_TABLEATTR), 0, nPos++);
+        rMenu.InsertItem(ID_BROWSER_TABLEATTR, aNewItems.GetItemText(ID_BROWSER_TABLEATTR), 0, OString(), nPos++);
         rMenu.SetHelpId(ID_BROWSER_TABLEATTR, aNewItems.GetHelpId(ID_BROWSER_TABLEATTR));
 
-        rMenu.InsertItem(ID_BROWSER_ROWHEIGHT, aNewItems.GetItemText(ID_BROWSER_ROWHEIGHT), 0, nPos++);
+        rMenu.InsertItem(ID_BROWSER_ROWHEIGHT, aNewItems.GetItemText(ID_BROWSER_ROWHEIGHT), 0, OString(), nPos++);
         rMenu.SetHelpId(ID_BROWSER_ROWHEIGHT, aNewItems.GetHelpId(ID_BROWSER_ROWHEIGHT));
-        rMenu.InsertSeparator(nPos++);
+        rMenu.InsertSeparator(OString(), nPos++);
     }
 
     if ( GetSelectRowCount() > 0 )
     {
-        rMenu.InsertItem(ID_BROWSER_COPY, aNewItems.GetItemText(SID_COPY), 0, nPos++);
+        rMenu.InsertItem(ID_BROWSER_COPY, aNewItems.GetItemText(SID_COPY), 0, OString(), nPos++);
         rMenu.SetHelpId(ID_BROWSER_COPY, aNewItems.GetHelpId(SID_COPY));
 
-        rMenu.InsertSeparator(nPos++);
+        rMenu.InsertSeparator(OString(), nPos++);
     }
 }
 

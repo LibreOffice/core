@@ -777,7 +777,7 @@ void MenuBarManager::CheckAndAddMenuExtension( Menu* pMenu )
         if ( nBeforePos != MENU_APPEND )
             nInsertPos = nBeforePos;
 
-        pMenu->InsertItem( nNewItemId, aMenuItem.aLabel, 0, nInsertPos );
+        pMenu->InsertItem(nNewItemId, aMenuItem.aLabel, 0, OString(), nInsertPos);
         pMenu->SetItemCommand( nNewItemId, aMenuItem.aURL );
     }
 }

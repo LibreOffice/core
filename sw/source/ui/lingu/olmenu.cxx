@@ -416,8 +416,8 @@ SwSpellPopup::SwSpellPopup(
         sal_uInt16 nItemId          = MN_SUGGESTION_START;
         for (sal_uInt16 i = 0; i < nStringCount; ++i)
         {
-            const String aEntry = aSuggestions[ i ];
-            InsertItem( nItemId, aEntry, 0, i );
+            const OUString aEntry = aSuggestions[ i ];
+            InsertItem(nItemId, aEntry, 0, OString(), i);
             SetHelpId( nItemId, HID_LINGU_REPLACE);
             if (!aSuggestionImageUrl.isEmpty())
                 SetItemImage( nItemId, aImage );
@@ -434,7 +434,7 @@ SwSpellPopup::SwSpellPopup(
     OUString aSpellingAndGrammar = RetrieveLabelFromCommand( ".uno:SpellingAndGrammarDialog" );
     SetItemText( MN_SPELLING_DLG, aSpellingAndGrammar );
     sal_uInt16 nItemPos = GetItemPos( MN_IGNORE_WORD );
-    InsertItem( MN_IGNORE_SELECTION, aIgnoreSelection, 0, nItemPos );
+    InsertItem(MN_IGNORE_SELECTION, aIgnoreSelection, 0, OString(), nItemPos);
     SetHelpId( MN_IGNORE_SELECTION, HID_LINGU_IGNORE_SELECTION);
 
     EnableItem( MN_AUTOCORR, bEnable );
@@ -581,8 +581,8 @@ aInfo16( SW_RES(IMG_INFO_16) )
 
     sal_uInt16 nPos = 0;
     OUString aMessageText( rResult.aErrors[ nErrorInResult ].aShortComment );
-    InsertSeparator( nPos++ );
-    InsertItem( MN_SHORT_COMMENT, aMessageText, MIB_NOSELECT, nPos++ );
+    InsertSeparator(OString(), nPos++);
+    InsertItem(MN_SHORT_COMMENT, aMessageText, MIB_NOSELECT, OString(), nPos++);
     if (bUseImagesInMenus)
         SetItemImage( MN_SHORT_COMMENT, aInfo16 );
 
@@ -603,12 +603,12 @@ aInfo16( SW_RES(IMG_INFO_16) )
 
     if ( !sExplanationLink.isEmpty( ) )
     {
-        InsertItem( MN_EXPLANATION_LINK, String( SW_RES( STR_EXPLANATION_LINK ) ), MIB_TEXT | MIB_HELP, nPos++ );
+        InsertItem(MN_EXPLANATION_LINK, SW_RESSTR(STR_EXPLANATION_LINK), MIB_TEXT | MIB_HELP, OString(), nPos++);
     }
 
     SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);
 
-    InsertSeparator( nPos++ );
+    InsertSeparator(OString(), nPos++);
     sal_Int32 nStringCount = aSuggestions.getLength();
     if ( nStringCount )     // suggestions available...
     {
@@ -628,22 +628,22 @@ aInfo16( SW_RES(IMG_INFO_16) )
         sal_uInt16 nItemId = MN_SUGGESTION_START;
         for (sal_uInt16 i = 0;  i < nStringCount;  ++i)
         {
-            const String aEntry = aSuggestions[ i ];
-            InsertItem( nItemId, aEntry, 0, nPos++ );
+            const OUString aEntry = aSuggestions[ i ];
+            InsertItem(nItemId, aEntry, 0, OString(), nPos++);
             SetHelpId( nItemId, HID_LINGU_REPLACE );
             if (!aSuggestionImageUrl.isEmpty())
                 SetItemImage( nItemId, aImage );
 
             ++nItemId;
         }
-        InsertSeparator( nPos++ );
+        InsertSeparator(OString(), nPos++);
     }
 
     OUString aIgnoreSelection( String( SW_RES( STR_IGNORE_SELECTION ) ) );
     OUString aSpellingAndGrammar = RetrieveLabelFromCommand( ".uno:SpellingAndGrammarDialog" );
     SetItemText( MN_SPELLING_DLG, aSpellingAndGrammar );
     sal_uInt16 nItemPos = GetItemPos( MN_IGNORE_WORD );
-    InsertItem( MN_IGNORE_SELECTION, aIgnoreSelection, 0, nItemPos );
+    InsertItem( MN_IGNORE_SELECTION, aIgnoreSelection, 0, OString(), nItemPos );
     SetHelpId( MN_IGNORE_SELECTION, HID_LINGU_IGNORE_SELECTION);
 
     EnableItem( MN_AUTOCORR, false );

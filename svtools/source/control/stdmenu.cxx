@@ -80,7 +80,7 @@ void FontNameMenu::Fill( const FontList* pList )
                 break;
             j--;
         }
-        InsertItem( i+1, rName, MIB_RADIOCHECK | MIB_AUTOCHECK, j );
+        InsertItem( i+1, rName, MIB_RADIOCHECK | MIB_AUTOCHECK, OString(), j );
     }
 
     SetCurName( maCurName );

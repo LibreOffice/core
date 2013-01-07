@@ -178,11 +178,11 @@ bool MenuBarMerger::CreateSubMenu(
         {
             if ( rMenuItem.aURL.equalsAsciiL( SEPARATOR_STRING, SEPARATOR_STRING_LEN ))
             {
-                pSubMenu->InsertSeparator( MENU_APPEND );
+                pSubMenu->InsertSeparator();
             }
             else
             {
-                pSubMenu->InsertItem( nItemId, rMenuItem.aTitle, 0, MENU_APPEND );
+                pSubMenu->InsertItem(nItemId, rMenuItem.aTitle);
                 pSubMenu->SetItemCommand( nItemId, rMenuItem.aURL );
                 if ( !rMenuItem.aSubMenu.empty() )
                 {
@@ -219,11 +219,11 @@ bool MenuBarMerger::MergeMenuItems(
         {
             if ( rMenuItem.aURL.equalsAsciiL( SEPARATOR_STRING, SEPARATOR_STRING_LEN ))
             {
-                pMenu->InsertSeparator( nPos+nModIndex+nIndex );
+                pMenu->InsertSeparator(OString(), nPos+nModIndex+nIndex);
             }
             else
             {
-                pMenu->InsertItem( nItemId, rMenuItem.aTitle, 0, nPos+nModIndex+nIndex );
+                pMenu->InsertItem(nItemId, rMenuItem.aTitle, 0, OString(), nPos+nModIndex+nIndex);
                 pMenu->SetItemCommand( nItemId, rMenuItem.aURL );
                 if ( !rMenuItem.aSubMenu.empty() )
                 {
@@ -343,10 +343,10 @@ bool MenuBarMerger::ProcessFallbackOperation(
                     if ( IsCorrectContext( rMenuItem.aContext, rModuleIdentifier ))
                     {
                         if ( rMenuItem.aURL.equalsAsciiL( SEPARATOR_STRING, SEPARATOR_STRING_LEN ))
-                            pCurrMenu->InsertSeparator( MENU_APPEND );
+                            pCurrMenu->InsertSeparator(OString(), MENU_APPEND);
                         else
                         {
-                            pCurrMenu->InsertItem( rItemId, rMenuItem.aTitle, 0, MENU_APPEND );
+                            pCurrMenu->InsertItem(rItemId, rMenuItem.aTitle);
                             pCurrMenu->SetItemCommand( rItemId, rMenuItem.aURL );
                             ++rItemId;
                         }
@@ -371,7 +371,7 @@ bool MenuBarMerger::ProcessFallbackOperation(
                 else
                 {
                     // normal case: insert a new item with popup
-                    pCurrMenu->InsertItem( rItemId, ::rtl::OUString(), 0, MENU_APPEND );
+                    pCurrMenu->InsertItem(rItemId, OUString());
                     pCurrMenu->SetItemCommand( rItemId, aCmd );
                     pCurrMenu->SetPopupMenu( rItemId, pPopupMenu );
                 }

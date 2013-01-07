@@ -174,7 +174,7 @@ void HeaderMenuController::fillPopupMenu( const Reference< ::com::sun::star::fra
                         aStrBuf.appendAscii( "false" );
 
                     pVCLPopupMenu->SetItemCommand( 1, aStrBuf.makeStringAndClear() );
-                    pVCLPopupMenu->InsertSeparator( 1 );
+                    pVCLPopupMenu->InsertSeparator(OString(), 1);
                 }
             }
         }

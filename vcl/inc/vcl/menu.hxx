@@ -212,16 +212,20 @@ public:
 
     void                InsertItem( sal_uInt16 nItemId, const XubString& rStr,
                                     MenuItemBits nItemBits = 0,
+                                    const OString &rIdent = OString(),
                                     sal_uInt16 nPos = MENU_APPEND );
     void                InsertItem( sal_uInt16 nItemId, const Image& rImage,
                                     MenuItemBits nItemBits = 0,
+                                    const OString &rIdent = OString(),
                                     sal_uInt16 nPos = MENU_APPEND );
     void                InsertItem( sal_uInt16 nItemId,
                                     const XubString& rString, const Image& rImage,
                                     MenuItemBits nItemBits = 0,
+                                    const OString &rIdent = OString(),
                                     sal_uInt16 nPos = MENU_APPEND );
     void                InsertItem( const ResId& rResId, sal_uInt16 nPos = MENU_APPEND );
-    void                InsertSeparator( sal_uInt16 nPos = MENU_APPEND );
+    void                InsertSeparator( const OString &rIdent = OString(),
+                            sal_uInt16 nPos = MENU_APPEND );
     void                RemoveItem( sal_uInt16 nPos );
     void                CopyItem( const Menu& rMenu, sal_uInt16 nPos,
                                   sal_uInt16 nNewPos = MENU_APPEND );
@@ -233,7 +237,8 @@ public:
     sal_uInt16              GetMenuFlags() const { return nMenuFlags; }
 
     sal_uInt16              GetItemCount() const;
-    sal_uInt16              GetItemId( sal_uInt16 nPos ) const;
+    sal_uInt16          GetItemId(sal_uInt16 nPos) const;
+    sal_uInt16          GetItemId(const OString &rIdent) const;
     sal_uInt16              GetItemPos( sal_uInt16 nItemId ) const;
     MenuItemType        GetItemType( sal_uInt16 nPos ) const;
     sal_uInt16              GetCurItemId() const;

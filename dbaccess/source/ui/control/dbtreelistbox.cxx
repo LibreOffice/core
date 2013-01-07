@@ -513,7 +513,7 @@ namespace
 
             const sal_uInt16 nCommandId = _rCommandController.registerCommandURL( aCommand );
             _rMenu.InsertItem( nCommandId, _rMenu.GetItemText( nId ), _rMenu.GetItemImage( nId ),
-                _rMenu.GetItemBits( nId ), pos );
+                _rMenu.GetItemBits( nId ), OString(), pos );
 
             // more things to preserve:
             // - the help command

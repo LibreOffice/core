@@ -302,7 +302,7 @@ void SAL_CALL ControlMenuController::statusChanged( const FeatureStateEvent& Eve
                 // none of the items which precede the nSID-slot in the source menu are present in our conversion menu
                 nPrevInConversion = sal::static_int_cast< sal_uInt16 >(-1); // put the item at the first position
 
-            pVCLPopupMenu->InsertItem( nMenuId, m_pResPopupMenu->GetItemText( nMenuId ), m_pResPopupMenu->GetItemBits( nMenuId ), ++nPrevInConversion );
+            pVCLPopupMenu->InsertItem( nMenuId, m_pResPopupMenu->GetItemText( nMenuId ), m_pResPopupMenu->GetItemBits( nMenuId ), OString(), ++nPrevInConversion );
             pVCLPopupMenu->SetItemImage( nMenuId, m_pResPopupMenu->GetItemImage( nMenuId ));
             pVCLPopupMenu->SetHelpId( nMenuId, m_pResPopupMenu->GetHelpId( nMenuId ));
         }

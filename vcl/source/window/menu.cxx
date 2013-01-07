@@ -109,7 +109,7 @@ static sal_Bool ImplAccelDisabled()
 
 struct MenuItemData
 {
-    sal_uInt16          nId;                    // SV Id
+    sal_uInt16      nId;                    // SV Id
     MenuItemType    eType;                  // MenuItem-Type
     MenuItemBits    nBits;                  // MenuItem-Bits
     Menu*           pSubMenu;               // Pointer to SubMenu
@@ -119,7 +119,8 @@ struct MenuItemData
     XubString       aTipHelpText;           // TipHelp-String (eg, expanded filenames)
     XubString       aCommandStr;            // CommandString
     XubString       aHelpCommandStr;        // Help command string (to reference external help)
-    rtl::OString    aHelpId;                // Help-Id
+    OString         sIdent;
+    OString         aHelpId;                // Help-Id
     sal_uLong           nUserValue;             // User value
     Image           aImage;                 // Image
     KeyCode         aAccelKey;              // Accelerator-Key
@@ -181,9 +182,10 @@ public:
                         const XubString& rStr,
                         const Image& rImage,
                         Menu* pMenu,
-                        size_t nPos
+                        size_t nPos,
+                        const OString &rIdent
                     );
-    void            InsertSeparator( size_t nPos );
+    void            InsertSeparator(const OString &rIdent, size_t nPos);
     void            Remove( size_t nPos );
 
 
@@ -228,11 +230,13 @@ MenuItemData* MenuItemList::Insert(
     const XubString& rStr,
     const Image& rImage,
     Menu* pMenu,
-    size_t nPos
+    size_t nPos,
+    const OString &rIdent
 )
 {
     MenuItemData* pData     = new MenuItemData( rStr, rImage );
     pData->nId              = nId;
+    pData->sIdent           = rIdent;
     pData->eType            = eType;
     pData->nBits            = nBits;
     pData->pSubMenu         = NULL;
@@ -264,10 +268,11 @@ MenuItemData* MenuItemList::Insert(
     return pData;
 }
 
-void MenuItemList::InsertSeparator( size_t nPos )
+void MenuItemList::InsertSeparator(const OString &rIdent, size_t nPos)
 {
     MenuItemData* pData     = new MenuItemData;
     pData->nId              = 0;
+    pData->sIdent           = rIdent;
     pData->eType            = MENUITEM_SEPARATOR;
     pData->nBits            = 0;
     pData->pSubMenu         = NULL;
@@ -1194,7 +1199,8 @@ void Menu::RemoveEventListener( const Link& rEventListener )
     maEventListeners.removeListener( rEventListener );
 }
 
-void Menu::InsertItem( sal_uInt16 nItemId, const XubString& rStr, MenuItemBits nItemBits, sal_uInt16 nPos )
+void Menu::InsertItem(sal_uInt16 nItemId, const XubString& rStr, MenuItemBits nItemBits,
+    const OString &rIdent, sal_uInt16 nPos)
 {
     DBG_ASSERT( nItemId, "Menu::InsertItem(): ItemId == 0" );
     DBG_ASSERT( GetItemPos( nItemId ) == MENU_ITEM_NOTFOUND,
@@ -1205,8 +1211,8 @@ void Menu::InsertItem( sal_uInt16 nItemId, const XubString& rStr, MenuItemBits n
         nPos = MENU_APPEND;
 
     // put Item in MenuItemList
-    MenuItemData* pData = pItemList->Insert( nItemId, MENUITEM_STRING,
-                             nItemBits, rStr, Image(), this, nPos );
+    MenuItemData* pData = pItemList->Insert(nItemId, MENUITEM_STRING,
+                             nItemBits, rStr, Image(), this, nPos, rIdent);
 
     // update native menu
     if( ImplGetSalMenu() && pData->pSalMenuItem )
@@ -1223,18 +1229,18 @@ void Menu::InsertItem( sal_uInt16 nItemId, const XubString& rStr, MenuItemBits n
     ImplCallEventListeners( VCLEVENT_MENU_INSERTITEM, nPos );
 }
 
-void Menu::InsertItem( sal_uInt16 nItemId, const Image& rImage,
-                       MenuItemBits nItemBits, sal_uInt16 nPos )
+void Menu::InsertItem(sal_uInt16 nItemId, const Image& rImage,
+    MenuItemBits nItemBits, const OString &rIdent, sal_uInt16 nPos)
 {
-    InsertItem( nItemId, ImplGetSVEmptyStr(), nItemBits, nPos );
+    InsertItem(nItemId, ImplGetSVEmptyStr(), nItemBits, rIdent, nPos);
     SetItemImage( nItemId, rImage );
 }
 
-void Menu::InsertItem( sal_uInt16 nItemId,
-                       const XubString& rStr, const Image& rImage,
-                       MenuItemBits nItemBits, sal_uInt16 nPos )
+void Menu::InsertItem(sal_uInt16 nItemId, const XubString& rStr,
+    const Image& rImage, MenuItemBits nItemBits,
+    const OString &rIdent, sal_uInt16 nPos)
 {
-    InsertItem( nItemId, rStr, nItemBits, nPos );
+    InsertItem(nItemId, rStr, nItemBits, rIdent, nPos);
     SetItemImage( nItemId, rImage );
 }
 
@@ -1272,16 +1278,16 @@ void Menu::InsertItem( const ResId& rResId, sal_uInt16 nPos )
         {
             Bitmap aBmp( ResId( (RSHEADER_TYPE*)GetClassRes(), *pMgr ) );
             if ( aText.Len() )
-                InsertItem( nItemId, aText, aBmp, nStatus, nPos );
+                InsertItem( nItemId, aText, aBmp, nStatus, OString(), nPos );
             else
-                InsertItem( nItemId, aBmp, nStatus, nPos );
+                InsertItem( nItemId, aBmp, nStatus, OString(), nPos );
         }
         IncrementRes( GetObjSizeRes( (RSHEADER_TYPE*)GetClassRes() ) );
     }
     else if ( !bSep )
-        InsertItem( nItemId, aText, nStatus, nPos );
+        InsertItem(nItemId, aText, nStatus, OString(), nPos);
     if ( bSep )
-        InsertSeparator( nPos );
+        InsertSeparator(OString(), nPos);
 
     String aHelpText;
     if ( nObjMask & RSC_MENUITEM_HELPTEXT )
@@ -1342,7 +1348,7 @@ void Menu::InsertItem( const ResId& rResId, sal_uInt16 nPos )
     delete mpLayoutData, mpLayoutData = NULL;
 }
 
-void Menu::InsertSeparator( sal_uInt16 nPos )
+void Menu::InsertSeparator(const OString &rIdent, sal_uInt16 nPos)
 {
     // do nothing if its a menu bar
     if ( bIsMenuBar )
@@ -1353,7 +1359,7 @@ void Menu::InsertSeparator( sal_uInt16 nPos )
         nPos = MENU_APPEND;
 
     // put separator in item list
-    pItemList->InsertSeparator( nPos );
+    pItemList->InsertSeparator(rIdent, nPos);
 
     // update native menu
     size_t itemPos = ( nPos != MENU_APPEND ) ? nPos : pItemList->size() - 1;
@@ -1402,7 +1408,7 @@ void ImplCopyItem( Menu* pThis, const Menu& rMenu, sal_uInt16 nPos, sal_uInt16 n
         return;
 
     if ( eType == MENUITEM_SEPARATOR )
-        pThis->InsertSeparator( nNewPos );
+        pThis->InsertSeparator( OString(), nNewPos );
     else
     {
         sal_uInt16 nId = rMenu.GetItemId( nPos );
@@ -1413,11 +1419,11 @@ void ImplCopyItem( Menu* pThis, const Menu& rMenu, sal_uInt16 nPos, sal_uInt16 n
         MenuItemData* pData = rMenu.GetItemList()->GetData( nId );
 
         if ( eType == MENUITEM_STRINGIMAGE )
-            pThis->InsertItem( nId, pData->aText, pData->aImage, pData->nBits, nNewPos );
+            pThis->InsertItem( nId, pData->aText, pData->aImage, pData->nBits, pData->sIdent, nNewPos );
         else if ( eType == MENUITEM_STRING )
-            pThis->InsertItem( nId, pData->aText, pData->nBits, nNewPos );
+            pThis->InsertItem( nId, pData->aText, pData->nBits, pData->sIdent, nNewPos );
         else
-            pThis->InsertItem( nId, pData->aImage, pData->nBits, nNewPos );
+            pThis->InsertItem( nId, pData->aImage, pData->nBits, pData->sIdent, nNewPos );
 
         if ( rMenu.IsItemChecked( nId ) )
             pThis->CheckItem( nId, sal_True );
@@ -1501,7 +1507,7 @@ sal_uInt16 Menu::ImplGetNextVisible( sal_uInt16 nPos ) const
     return ITEMPOS_INVALID;
 }
 
-sal_uInt16 Menu::GetItemId( sal_uInt16 nPos ) const
+sal_uInt16 Menu::GetItemId(sal_uInt16 nPos) const
 {
     MenuItemData* pData = pItemList->GetDataFromPos( nPos );
 
@@ -1510,6 +1516,18 @@ sal_uInt16 Menu::GetItemId( sal_uInt16 nPos ) const
     else
         return 0;
 }
+
+sal_uInt16 Menu::GetItemId(const OString &rIdent) const
+{
+    for (size_t n = 0; n < pItemList->size(); ++n)
+    {
+        MenuItemData* pData = pItemList->GetDataFromPos(n);
+        if (pData && pData->sIdent == rIdent)
+            return pData->nId;
+    }
+    return MENU_ITEM_NOTFOUND;
+}
+
 
 sal_uInt16 Menu::GetItemPos( sal_uInt16 nItemId ) const
 {
@@ -3647,7 +3665,7 @@ sal_uInt16 PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, sal_uLong
         {
             rtl::OUString aTmpEntryText( ResId( SV_RESID_STRING_NOSELECTIONPOSSIBLE, *pResMgr ) );
             MenuItemData* pData = pItemList->Insert(
-                0xFFFF, MENUITEM_STRING, 0, aTmpEntryText, Image(), NULL, 0xFFFF );
+                0xFFFF, MENUITEM_STRING, 0, aTmpEntryText, Image(), NULL, 0xFFFF, OString() );
                 pData->bIsTemporary = sal_True;
         }
     }

@@ -1690,11 +1690,11 @@ void VclBuilder::insertMenuObject(PopupMenu *pParent, const OString &rClass, con
     if (rClass == "GtkMenuItem")
     {
         OUString sLabel(OStringToOUString(convertMnemonicMarkup(extractLabel(rProps)), RTL_TEXTENCODING_UTF8));
-        pParent->InsertItem(nNewId, sLabel, MIB_TEXT);
+        pParent->InsertItem(nNewId, sLabel, MIB_TEXT, rID);
     }
     else if (rClass == "GtkSeparatorMenuItem")
     {
-        pParent->InsertSeparator();
+        pParent->InsertSeparator(rID);
     }
 
     SAL_WARN_IF(nOldCount == pParent->GetItemCount(), "vcl.layout", "probably need to implement " << rClass.getStr());

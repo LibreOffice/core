@@ -986,10 +986,10 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
             for ( sal_uInt16 nW = 0; nW < nWords; nW++ )
             {
                 String aAlternate( pAlt[nW] );
-                aPopupMenu.InsertItem( MN_ALTSTART+nW, aAlternate, 0, nW );
-                pAutoMenu->InsertItem( MN_AUTOSTART+nW, aAlternate, 0, nW );
+                aPopupMenu.InsertItem( MN_ALTSTART+nW, aAlternate, 0, OString(), nW );
+                pAutoMenu->InsertItem( MN_AUTOSTART+nW, aAlternate, 0, OString(), nW );
             }
-            aPopupMenu.InsertSeparator( nWords );
+            aPopupMenu.InsertSeparator(OString(), nWords);
         }
         else
             aPopupMenu.RemoveItem( MN_AUTOCORR );   // delete?

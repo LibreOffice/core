@@ -1981,7 +1981,8 @@ void Change( Menu* pMenu, SfxViewShell* pView )
                     const SfxSlot* pSlot = pIFace->GetSlot( aCmd );
                     if ( pSlot )
                     {
-                        pMenu->InsertItem( pSlot->GetSlotId(), pMenu->GetItemText( nId ), pMenu->GetItemBits( nId ), nPos );
+                        pMenu->InsertItem( pSlot->GetSlotId(), pMenu->GetItemText( nId ),
+                            pMenu->GetItemBits( nId ), OString(), nPos );
                         pMenu->SetItemCommand( pSlot->GetSlotId(), aCmd );
                         pMenu->RemoveItem( nPos+1 );
                         break;
