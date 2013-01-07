@@ -7415,12 +7415,18 @@ AC_MSG_CHECKING([which Python to use])
 
 case "$enable_python" in
 no|disable)
+    if test $build_os = cygwin; then
+        # Python is required to build nss. In theory we could separate the build-time Python
+        # requirement from the choice whether to include Python stuff in the installer, but why
+        # bother?
+        AC_MSG_ERROR([Python is required at build time when building on Windows])
+    fi
     enable_python=no
     AC_MSG_RESULT([none])
     DISABLE_PYTHON=TRUE
     ;;
 ""|yes|auto)
-    if test "$DISABLE_SCRIPTING" = TRUE; then
+    if test "$DISABLE_SCRIPTING" = TRUE -a $build_os != cygwin; then
         AC_MSG_RESULT([no, overridden by --disable-scripting])
         enable_python=no
         DISABLE_PYTHON=TRUE
