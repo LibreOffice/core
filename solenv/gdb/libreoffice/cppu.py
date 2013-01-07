@@ -143,6 +143,16 @@ class UnoTypePrinter(object):
         else:
             return "invalid %s" % self.typename
 
+class CppuThreadpoolThreadPoolPrinter(object):
+    '''Prints cppu_threadpool::ThreadPool objects (a hack to avoid infinite recursion through sal.RtlReferencePrinter when printing an rtl::Reference<cppu_threadpool::ThreadPool> whose std::list<cppu_threadpool::WaitingThread*> m_lstThreads member, via rtl::Reference<cppu_threadpool::ORequestThread> thread member, via rtl::Reference<cppu_threadpool::ThreadPool> m_aThreadPool member, has a circular reference back)'''
+
+    def __init__(self, typename, value):
+        self.typename = typename
+        self.value = value
+
+    def to_string(self):
+        return '%s@%s' % (self.typename, self.value.address)
+
 printer = None
 
 def build_pretty_printers():
@@ -156,6 +166,7 @@ def build_pretty_printers():
     printer.add('com::sun::star::uno::Reference', UnoReferencePrinter)
     printer.add('com::sun::star::uno::Sequence', UnoSequencePrinter)
     printer.add('com::sun::star::uno::Type', UnoTypePrinter)
+    printer.add('cppu_threadpool::ThreadPool', CppuThreadpoolThreadPoolPrinter)
 
 def register_pretty_printers(obj):
     printing.register_pretty_printer(printer, obj)
