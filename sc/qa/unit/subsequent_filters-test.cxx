@@ -170,7 +170,7 @@ public:
     void testPivotTableBasicODS();
     void testFormulaDependency();
 
-    void testRowHeight();
+    void testRowHeightODS();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testRangeNameXLS);
@@ -213,7 +213,7 @@ public:
     CPPUNIT_TEST(testCellAnchoredShapesODS);
 
     CPPUNIT_TEST(testPivotTableBasicODS);
-    CPPUNIT_TEST(testRowHeight);
+    CPPUNIT_TEST(testRowHeightODS);
     CPPUNIT_TEST(testFormulaDependency);
 
     //disable testPassword on MacOSX due to problems with libsqlite3
@@ -1574,7 +1574,7 @@ void ScFiltersTest::testPivotTableBasicODS()
     xDocSh->DoClose();
 }
 
-void ScFiltersTest::testRowHeight()
+void ScFiltersTest::testRowHeightODS()
 {
     OUString aFileNameBase("row-height-import.");
     OUString aFileExt = OUString::createFromAscii(aFileFormats[ODS].pName);
