@@ -1,5 +1,0 @@
-mkdir: %_DEST%\inc\openldap
-..\%__SRC%\inc\*.h %_DEST%\inc\openldap\*.h
-..\%__SRC%\lib\libldap.a %_DEST%\lib\libldap.a
-..\%__SRC%\lib\libldap_r.a %_DEST%\lib\libldap_r.a
-..\%__SRC%\lib\liblber.a %_DEST%\lib\liblber.a
