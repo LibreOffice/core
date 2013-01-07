@@ -2301,11 +2301,11 @@ static ImplDevFontAttributes GetDevFontAttributes( const PDFWriterImpl::BuiltinF
     aDFA.SetItalic( rBuiltin.m_eItalic );
     aDFA.SetWidthType( rBuiltin.m_eWidthType );
 
-    aDFA.mbOrientation  = true;
-    aDFA.mbDevice       = true;
-    aDFA.mnQuality      = 50000;
-    aDFA.mbSubsettable  = false;
-    aDFA.mbEmbeddable   = false;
+    aDFA.SetRotatable( true );
+    aDFA.SetDevice( true );
+    aDFA.SetQuality( 50000 );
+    aDFA.SetSubsettable( false );
+    aDFA.SetEmbeddable( false );
     return aDFA;
 }
 
@@ -3179,7 +3179,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const PhysicalFo
             }
         }
     }
-    else if( pFont->mbSubsettable )
+    else if( pFont->IsSubsettable() )
     {
         aSubType = rtl::OString( "/TrueType" );
         Int32Vector aGlyphWidths;
@@ -7258,7 +7258,7 @@ void PDFWriterImpl::registerGlyphs( int nGlyphs,
                 pGlyphWidths[i] = pBuiltinFont->m_aWidths[ nFontGlyphId & 0x00ff ];
             }
         }
-        else if( pCurrentFont->mbSubsettable )
+        else if( pCurrentFont->IsSubsettable() )
         {
             FontSubset& rSubset = m_aSubsets[ pCurrentFont ];
             // search for font specific glyphID

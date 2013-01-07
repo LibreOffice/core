@@ -932,7 +932,7 @@ void GenPspGraphics::GetFontMetric( ImplFontMetricData *pMetric, int )
     {
         ImplDevFontAttributes aDFA = Info2DevFontAttributes( aInfo );
         static_cast<ImplFontAttributes&>(*pMetric) = aDFA;
-        pMetric->mbDevice       = aDFA.mbDevice;
+        pMetric->mbDevice       = aDFA.IsDeviceFont();
         pMetric->mbScalableFont = true;
 
         pMetric->mnOrientation  = m_pPrinterGfx->GetFontAngle();
@@ -1132,42 +1132,43 @@ ImplDevFontAttributes GenPspGraphics::Info2DevFontAttributes( const psp::FastPri
     aDFA.SetWidthType( rInfo.m_eWidth );
     aDFA.SetPitch( rInfo.m_ePitch );
     aDFA.SetSymbolFlag( (rInfo.m_aEncoding == RTL_TEXTENCODING_SYMBOL) );
-    aDFA.mbSubsettable  = rInfo.m_bSubsettable;
-    aDFA.mbEmbeddable   = rInfo.m_bEmbeddable;
+    aDFA.SetSubsettable( rInfo.m_bSubsettable );
+    aDFA.SetEmbeddable( rInfo.m_bEmbeddable );
 
     switch( rInfo.m_eType )
     {
         case psp::fonttype::Builtin:
-            aDFA.mnQuality       = 1024;
-            aDFA.mbDevice        = true;
+            aDFA.SetQuality( 1024 );
+            aDFA.SetDevice( true );
             break;
         case psp::fonttype::TrueType:
-            aDFA.mnQuality       = 512;
-            aDFA.mbDevice        = false;
+            aDFA.SetQuality( 512 );
+            aDFA.SetDevice( false );
             break;
         case psp::fonttype::Type1:
-            aDFA.mnQuality       = 0;
-            aDFA.mbDevice        = false;
+            aDFA.SetQuality( 0 );
+            aDFA.SetDevice( false );
             break;
         default:
-            aDFA.mnQuality       = 0;
-            aDFA.mbDevice        = false;
+            aDFA.SetQuality( 0 );
+            aDFA.SetDevice( false );
             break;
     }
 
-    aDFA.mbOrientation   = true;
+    aDFA.SetRotatable( true );
 
     // add font family name aliases
+    String sMapNames = aDFA.GetAliasNames();
     ::std::list< OUString >::const_iterator it = rInfo.m_aAliases.begin();
     bool bHasMapNames = false;
     for(; it != rInfo.m_aAliases.end(); ++it )
     {
         if( bHasMapNames )
-            aDFA.maMapNames.Append( ';' );
-        aDFA.maMapNames.Append( (*it).getStr() );
-    bHasMapNames = true;
+            sMapNames.Append( ';' );
+        sMapNames.Append( (*it).getStr() );
+        bHasMapNames = true;
     }
-
+    aDFA.SetMapNames( sMapNames );
 #if OSL_DEBUG_LEVEL > 2
     if( bHasMapNames )
     {
@@ -1232,7 +1233,8 @@ void GenPspGraphics::AnnounceFonts( ImplDevFontList* pFontList, const psp::FastP
     }
 
     ImplPspFontData* pFD = new ImplPspFontData( aInfo );
-    pFD->mnQuality += nQuality;
+    nQuality += pFD->GetQuality();
+    pFD->SetQuality( nQuality );
     pFontList->Add( pFD );
 }
 
