@@ -771,6 +771,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::SetHostNames( LPCOLESTR szContainerApp, L
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::Close( DWORD dwSaveOption )
 {
+    HRESULT ret = S_OK;
     if ( m_pDefHandler && CheckDefHandler() )
     {
         // no need to close if there is no default handler.
@@ -781,14 +782,18 @@ STDMETHODIMP InprocEmbedDocument_Impl::Close( DWORD dwSaveOption )
         if ( SUCCEEDED( hr ) && pOleObject )
         {
             hr = pOleObject->Close( dwSaveOption );
+            if (!SUCCEEDED(hr))
+               ret = hr;
             hr = CoDisconnectObject( (IUnknown*)(IPersistStorage*)this, 0 );
+            if (!(SUCCEEDED(hr) && SUCCEEDED(ret)))
+               ret = hr;
         }
     }
 
     // if the object is closed from outside that means that it should go to uninitialized state
     Clean();
 
-    return S_OK;
+    return ret;
 }
 
 //-------------------------------------------------------------------------------
