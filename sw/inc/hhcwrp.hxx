@@ -47,12 +47,9 @@ class SwHHCWrapper : public editeng::HangulHanjaConversion
     sal_uInt16      nPageStart;     ///< first checked page
 
     sal_Bool    bIsDrawObj;
-    sal_Bool    bIsStart;
     sal_Bool    bIsOtherCntnt;
     sal_Bool    bStartChk;
     sal_Bool    bIsSelection;       ///< true if only the selected text should be converted
-    sal_Bool    bInfoBox;           ///< true if message should be displayed at the end
-    sal_Bool    bIsConvSpecial;     ///< true if special regions: header, footer, ... should be converted
     sal_Bool    bStartDone;
     sal_Bool    bEndDone;
 
