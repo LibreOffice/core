@@ -74,6 +74,7 @@
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 
 #include <vector>
+#include <utility>
 
 using rtl::OUString;
 using namespace ::com::sun::star;
@@ -1073,6 +1074,12 @@ sal_uInt16 SwTxtNode::Convert( SwConversionArgs &rArgs )
     {
         SwLanguageIterator aIter( *this, nBegin );
 
+        // Implicit changes require setting new attributes, which in turn destroys
+        // the attribute sequence on which aIter iterates. We store the necessary
+        // coordinates and apply those changes after iterating through the text.
+        typedef std::pair<xub_StrLen, xub_StrLen> ImplicitChangesRange;
+        std::vector<ImplicitChangesRange> aImplicitChanges;
+
         // find non zero length text portion of appropriate language
         do {
             nLangFound = aIter.GetLanguage();
@@ -1108,13 +1115,22 @@ sal_uInt16 SwTxtNode::Convert( SwConversionArgs &rArgs )
 
                 if (!bIsAsianScript && rArgs.bAllowImplicitChangesForNotConvertibleText)
                 {
-                    SetLanguageAndFont( aCurPaM,
-                            rArgs.nConvTargetLang, RES_CHRATR_CJK_LANGUAGE,
-                            rArgs.pTargetFont, RES_CHRATR_CJK_FONT );
+                    // Store for later use
+                    aImplicitChanges.push_back(ImplicitChangesRange(nBegin, nBegin+nLen));
                 }
                 nBegin = nChPos;    // start of next language portion
             }
         } while (!bFound && aIter.Next());  /* loop while nothing was found and still sth is left to be searched */
+
+        // Apply implicit changes, if any, now that aIter is no longer used
+        for (size_t i = 0; i < aImplicitChanges.size(); ++i)
+        {
+            SwPaM aPaM( *this, aImplicitChanges[i].first );
+            aPaM.SetMark();
+            aPaM.GetPoint()->nContent = aImplicitChanges[i].second;
+            SetLanguageAndFont( aPaM, rArgs.nConvTargetLang, RES_CHRATR_CJK_LANGUAGE, rArgs.pTargetFont, RES_CHRATR_CJK_FONT );
+        }
+
     }
 
     // keep resulting text within selection / range of text to be converted
