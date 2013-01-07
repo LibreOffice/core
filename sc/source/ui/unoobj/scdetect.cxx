@@ -930,7 +930,8 @@ OUString ScFilterDetect::impl_getStaticImplementationName()
 /* Helper for registry */
 UNOREFERENCE< UNOXINTERFACE > SAL_CALL ScFilterDetect::impl_createInstance( const UNOREFERENCE< UNOXMULTISERVICEFACTORY >& xServiceManager ) throw( UNOEXCEPTION )
 {
-    return UNOREFERENCE< UNOXINTERFACE >( ScFilterDetect( xServiceManager ) );
+    return static_cast< cppu::OWeakObject * >(
+        new ScFilterDetect( xServiceManager ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
