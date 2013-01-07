@@ -91,12 +91,12 @@ const static char sFontSize[]       = "font-size: ";
 DBG_NAME(ODatabaseImportExport)
 //======================================================================
 ODatabaseImportExport::ODatabaseImportExport(const ::svx::ODataAccessDescriptor& _aDataDescriptor,
-                                             const Reference< XMultiServiceFactory >& _rM,
+                                             const Reference< XComponentContext >& _rM,
                                              const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                                              const String& rExchange)
     :m_bBookmarkSelection( sal_False )
     ,m_xFormatter(_rxNumberF)
-    ,m_xFactory(_rM)
+    ,m_xContext(_rM)
     ,m_nCommandType(CommandType::TABLE)
     ,m_bNeedToReInitialize(sal_False)
     ,m_pReader(NULL)
@@ -124,11 +124,11 @@ ODatabaseImportExport::ODatabaseImportExport(const ::svx::ODataAccessDescriptor&
 // -----------------------------------------------------------------------------
 // import data
 ODatabaseImportExport::ODatabaseImportExport( const ::dbtools::SharedConnection& _rxConnection,
-        const Reference< XNumberFormatter >& _rxNumberF, const Reference< XMultiServiceFactory >& _rM )
+        const Reference< XNumberFormatter >& _rxNumberF, const Reference< XComponentContext >& _rM )
     :m_bBookmarkSelection( sal_False )
     ,m_xConnection(_rxConnection)
     ,m_xFormatter(_rxNumberF)
-    ,m_xFactory(_rM)
+    ,m_xContext(_rM)
     ,m_nCommandType(::com::sun::star::sdb::CommandType::TABLE)
     ,m_bNeedToReInitialize(sal_False)
     ,m_pReader(NULL)
@@ -277,11 +277,11 @@ void ODatabaseImportExport::initialize()
     if ( !m_xConnection.is() )
     {   // we need a connection
         OSL_ENSURE(!m_sDataSourceName.isEmpty(),"There must be a datsource name!");
-        Reference<XNameAccess> xDatabaseContext( DatabaseContext::create(comphelper::getComponentContext(m_xFactory)), UNO_QUERY_THROW);
+        Reference<XNameAccess> xDatabaseContext( DatabaseContext::create(m_xContext), UNO_QUERY_THROW);
         Reference< XEventListener> xEvt((::cppu::OWeakObject*)this,UNO_QUERY);
 
         Reference< XConnection > xConnection;
-        SQLExceptionInfo aInfo = ::dbaui::createConnection( m_sDataSourceName, xDatabaseContext, comphelper::getComponentContext(m_xFactory), xEvt, xConnection );
+        SQLExceptionInfo aInfo = ::dbaui::createConnection( m_sDataSourceName, xDatabaseContext, m_xContext, xEvt, xConnection );
         m_xConnection.reset( xConnection );
 
         if(aInfo.isValid() && aInfo.getType() == SQLExceptionInfo::SQL_EXCEPTION)
@@ -323,7 +323,7 @@ void ODatabaseImportExport::initialize()
             // the result set may be already set with the datadescriptor
             if ( !m_xResultSet.is() )
             {
-                m_xResultSet.set( m_xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.RowSet")) ), UNO_QUERY );
+                m_xResultSet.set( m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.sdb.RowSet", m_xContext), UNO_QUERY );
                 Reference< XPropertySet > xProp( m_xResultSet, UNO_QUERY_THROW );
                 xProp->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, makeAny( m_xConnection.getTyped() ) );
                 xProp->setPropertyValue( PROPERTY_COMMAND_TYPE, makeAny( m_nCommandType ) );
@@ -521,7 +521,6 @@ sal_Bool ORTFImportExport::Write()
         (*m_pStream) << ODatabaseImportExport::sNewLine << '}';
         (*m_pStream) << ODatabaseImportExport::sNewLine;
 
-        ::comphelper::ComponentContext aContext(m_xFactory);
         Reference< XRowSet > xRowSet(m_xRow,UNO_QUERY);
         sal_Int32 k=1;
         sal_Int32 kk=0;
@@ -587,7 +586,6 @@ void ORTFImportExport::appendRow(::rtl::OString* pHorzChar,sal_Int32 _nColumnCou
         const sal_Bool bItalic      = ( ::com::sun::star::awt::FontSlant_ITALIC     == m_aFont.Slant );
         const sal_Bool bUnderline       = ( ::com::sun::star::awt::FontUnderline::NONE  != m_aFont.Underline );
         const sal_Bool bStrikeout       = ( ::com::sun::star::awt::FontStrikeout::NONE  != m_aFont.Strikeout );
-        ::comphelper::ComponentContext aContext(m_xFactory);
         Reference< XRowSet > xRowSet(m_xRow,UNO_QUERY);
 
         (*m_pStream) << '{';
@@ -608,7 +606,7 @@ void ORTFImportExport::appendRow(::rtl::OString* pHorzChar,sal_Int32 _nColumnCou
             try
             {
                 Reference<XPropertySet> xColumn(m_xRowSetColumns->getByIndex(i-1),UNO_QUERY_THROW);
-                dbtools::FormattedColumnValue aFormatedValue(aContext,xRowSet,xColumn);
+                dbtools::FormattedColumnValue aFormatedValue(m_xContext,xRowSet,xColumn);
                 ::rtl::OUString sValue = aFormatedValue.getFormattedValue();
                 if ( !sValue.isEmpty() )
                     RTFOutFuncs::Out_String(*m_pStream,sValue,m_eDestEnc);
@@ -636,7 +634,7 @@ sal_Bool ORTFImportExport::Read()
     SvParserState eState = SVPAR_ERROR;
     if ( m_pStream )
     {
-        m_pReader = new ORTFReader((*m_pStream),m_xConnection,m_xFormatter,comphelper::getComponentContext(m_xFactory));
+        m_pReader = new ORTFReader((*m_pStream),m_xConnection,m_xFormatter,m_xContext);
         ((ORTFReader*)m_pReader)->AddRef();
         if ( isCheckEnabled() )
             m_pReader->enableCheckOnly();
@@ -672,7 +670,7 @@ const char OHTMLImportExport::sIndentSource[nIndentMax+1] = "\t\t\t\t\t\t\t\t\t\
 
 //-------------------------------------------------------------------
 OHTMLImportExport::OHTMLImportExport(const ::svx::ODataAccessDescriptor& _aDataDescriptor,
-                                     const Reference< XMultiServiceFactory >& _rM,
+                                     const Reference< XComponentContext >& _rM,
                                      const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                                      const String& rExchange)
         : ODatabaseImportExport(_aDataDescriptor,_rM,_rxNumberF,rExchange)
@@ -715,7 +713,7 @@ sal_Bool OHTMLImportExport::Read()
     SvParserState eState = SVPAR_ERROR;
     if ( m_pStream )
     {
-        m_pReader = new OHTMLReader((*m_pStream),m_xConnection,m_xFormatter,comphelper::getComponentContext(m_xFactory));
+        m_pReader = new OHTMLReader((*m_pStream),m_xConnection,m_xFormatter,m_xContext);
         ((OHTMLReader*)m_pReader)->AddRef();
         if ( isCheckEnabled() )
             m_pReader->enableCheckOnly();
@@ -732,7 +730,7 @@ void OHTMLImportExport::WriteHeader()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLImportExport::WriteHeader" );
     uno::Reference<document::XDocumentProperties> xDocProps(
-        document::DocumentProperties::create( comphelper::getComponentContext(m_xFactory) ) );
+        document::DocumentProperties::create( m_xContext ) );
     if (xDocProps.is()) {
         xDocProps->setTitle(m_sName);
     }
@@ -897,7 +895,6 @@ void OHTMLImportExport::WriteTables()
         TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_tbody );
 
         // 2. and now the data
-        ::comphelper::ComponentContext aContext(m_xFactory);
         Reference< XRowSet > xRowSet(m_xRow,UNO_QUERY);
         sal_Int32 j=1;
         sal_Int32 kk=0;
@@ -919,7 +916,7 @@ void OHTMLImportExport::WriteTables()
                     try
                     {
                         Reference<XPropertySet> xColumn(m_xRowSetColumns->getByIndex(i-1),UNO_QUERY_THROW);
-                        dbtools::FormattedColumnValue aFormatedValue(aContext,xRowSet,xColumn);
+                        dbtools::FormattedColumnValue aFormatedValue(m_xContext,xRowSet,xColumn);
                         ::rtl::OUString sValue = aFormatedValue.getFormattedValue();
                         if (!sValue.isEmpty())
                         {

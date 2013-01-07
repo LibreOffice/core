@@ -210,7 +210,7 @@ IMPL_LINK( ORelationDialog, OKClickHdl, Button*, /*pButton*/ )
     {
         ::dbaui::showError( SQLExceptionInfo( ::cppu::getCaughtException() ),
                             this,
-                            comphelper::getComponentContext(static_cast<OJoinTableView*>(GetParent())->getDesignView()->getController().getORB()));
+                            static_cast<OJoinTableView*>(GetParent())->getDesignView()->getController().getORB());
     }
     catch( const Exception& )
     {

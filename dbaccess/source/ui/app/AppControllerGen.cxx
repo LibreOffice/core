@@ -144,7 +144,7 @@ void OApplicationController::convertToView(const ::rtl::OUString& _sName)
         String aDefaultName = ::dbaui::createDefaultName(xMeta,xTables,aName);
 
         DynamicTableOrQueryNameCheck aNameChecker( xConnection, CommandType::TABLE );
-        OSaveAsDlg aDlg( getView(), CommandType::TABLE, comphelper::getComponentContext(getORB()), xConnection, aDefaultName, aNameChecker );
+        OSaveAsDlg aDlg( getView(), CommandType::TABLE, getORB(), xConnection, aDefaultName, aNameChecker );
         if ( aDlg.Execute() == RET_OK )
         {
             ::rtl::OUString sName = aDlg.getName();
@@ -244,7 +244,8 @@ void OApplicationController::openDialog( const ::rtl::OUString& _sServiceName )
         // create the dialog
         Reference< XExecutableDialog > xAdminDialog;
         xAdminDialog = Reference< XExecutableDialog >(
-            getORB()->createInstanceWithArguments(_sServiceName,aArgs), UNO_QUERY);
+            getORB()->getServiceManager()->createInstanceWithArgumentsAndContext(_sServiceName, aArgs, getORB()),
+            UNO_QUERY);
 
         // execute it
         if (xAdminDialog.is())
@@ -449,7 +450,7 @@ void OApplicationController::impl_validateObjectTypeAndName_throw( const sal_Int
     // ensure we're connected
     if ( !isConnected() )
     {
-        SQLError aError( comphelper::getComponentContext(getORB()) );
+        SQLError aError( getORB() );
         aError.raiseException( ErrorCondition::DB_NOT_CONNECTED, *this );
     }
 
@@ -667,7 +668,7 @@ sal_Bool OApplicationController::insertHierachyElement(ElementType _eType,const 
 {
     Reference<XHierarchicalNameContainer> xNames(getElements(_eType), UNO_QUERY);
     return dbaui::insertHierachyElement(getView()
-                           ,comphelper::getComponentContext(getORB())
+                           ,getORB()
                            ,xNames
                            ,_sParentFolder
                            ,_eType == E_FORM

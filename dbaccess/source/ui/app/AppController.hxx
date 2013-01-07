@@ -424,7 +424,7 @@ namespace dbaui
         virtual ~OApplicationController();
 
     public:
-        OApplicationController(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
+        OApplicationController(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB);
 
         DECLARE_XINTERFACE( )
         DECLARE_XTYPEPROVIDER( )

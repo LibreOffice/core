@@ -175,7 +175,7 @@ struct OGenericUnoController_Data
 //==========================================================================
 DBG_NAME(OGenericUnoController)
 // -------------------------------------------------------------------------
-OGenericUnoController::OGenericUnoController(const Reference< XMultiServiceFactory >& _rM)
+OGenericUnoController::OGenericUnoController(const Reference< XComponentContext >& _rM)
     :OGenericUnoController_Base( getMutex() )
     ,m_pView(NULL)
 #ifdef DBG_UTIL
@@ -183,7 +183,7 @@ OGenericUnoController::OGenericUnoController(const Reference< XMultiServiceFacto
 #endif
     ,m_aAsyncInvalidateAll(LINK(this, OGenericUnoController, OnAsyncInvalidateAll))
     ,m_aAsyncCloseTask(LINK(this, OGenericUnoController, OnAsyncCloseTask))
-    ,m_xServiceFactory(_rM)
+    ,m_xContext(_rM)
     ,m_aCurrentFrame( *this )
     ,m_bPreview(sal_False)
     ,m_bReadOnly(sal_False)
@@ -200,7 +200,7 @@ OGenericUnoController::OGenericUnoController(const Reference< XMultiServiceFacto
 
     try
     {
-        m_xUrlTransformer = URLTransformer::create(comphelper::getComponentContext(_rM));
+        m_xUrlTransformer = URLTransformer::create(_rM);
     }
     catch(Exception&)
     {
@@ -262,7 +262,7 @@ sal_Bool OGenericUnoController::Construct(Window* /*pParent*/)
     OSL_ENSURE(getORB().is(), "OGenericUnoController::Construct need a service factory!");
     try
     {
-        m_xDatabaseContext = DatabaseContext::create(comphelper::getComponentContext(getORB()));
+        m_xDatabaseContext = DatabaseContext::create(getORB());
     }
     catch(const Exception&)
     {
@@ -1052,7 +1052,7 @@ Reference< XConnection > OGenericUnoController::connect( const Reference< XDataS
 {
     WaitObject aWaitCursor( getView() );
 
-    ODatasourceConnector aConnector( comphelper::getComponentContext(getORB()), getView(), ::rtl::OUString() );
+    ODatasourceConnector aConnector( getORB(), getView(), ::rtl::OUString() );
     Reference< XConnection > xConnection = aConnector.connect( _xDataSource, _pErrorInfo );
     startConnectionListening( xConnection );
 
@@ -1064,7 +1064,7 @@ Reference< XConnection > OGenericUnoController::connect( const ::rtl::OUString& 
 {
     WaitObject aWaitCursor( getView() );
 
-    ODatasourceConnector aConnector( comphelper::getComponentContext(getORB()), getView(), _rContextInformation );
+    ODatasourceConnector aConnector( getORB(), getView(), _rContextInformation );
     Reference<XConnection> xConnection = aConnector.connect( _rDataSourceName, _pErrorInfo );
     startConnectionListening( xConnection );
 
@@ -1074,7 +1074,7 @@ Reference< XConnection > OGenericUnoController::connect( const ::rtl::OUString& 
 // -----------------------------------------------------------------------------
 void OGenericUnoController::showError(const SQLExceptionInfo& _rInfo)
 {
-    ::dbaui::showError(_rInfo,getView(),comphelper::getComponentContext(getORB()));
+    ::dbaui::showError(_rInfo,getView(),getORB());
 }
 // -----------------------------------------------------------------------------
 Reference< XLayoutManager > OGenericUnoController::getLayoutManager(const Reference< XFrame >& _xFrame) const
@@ -1386,7 +1386,7 @@ Reference< XTitle > OGenericUnoController::impl_getTitleHelper_throw()
         Reference< XUntitledNumbers > xUntitledProvider(getPrivateModel(), UNO_QUERY      );
         Reference< XController >      xThis(static_cast< XController* >(this), UNO_QUERY_THROW);
 
-        ::framework::TitleHelper* pHelper = new ::framework::TitleHelper( comphelper::getComponentContext(m_xServiceFactory) );
+        ::framework::TitleHelper* pHelper = new ::framework::TitleHelper( m_xContext );
         m_xTitleHelper.set( static_cast< ::cppu::OWeakObject* >(pHelper), UNO_QUERY_THROW);
 
         pHelper->setOwner                   (xThis            );

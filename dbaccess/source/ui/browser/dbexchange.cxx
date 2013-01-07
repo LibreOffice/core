@@ -67,7 +67,7 @@ namespace dbaui
                     const ::rtl::OUString&  _rCommand,
                     const Reference< XConnection >& _rxConnection,
                     const Reference< XNumberFormatter >& _rxFormatter,
-                    const Reference< XMultiServiceFactory >& _rxORB)
+                    const Reference< XComponentContext >& _rxORB)
                     :ODataAccessObjectTransferable( _rDatasource,::rtl::OUString(), _nCommandType, _rCommand, _rxConnection )
         ,m_pHtml(NULL)
         ,m_pRtf(NULL)
@@ -87,7 +87,7 @@ namespace dbaui
                     const sal_Int32         _nCommandType,
                     const ::rtl::OUString&  _rCommand,
                     const Reference< XNumberFormatter >& _rxFormatter,
-                    const Reference< XMultiServiceFactory >& _rxORB)
+                    const Reference< XComponentContext >& _rxORB)
         :ODataAccessObjectTransferable( _rDatasource, ::rtl::OUString(),_nCommandType, _rCommand)
         ,m_pHtml(NULL)
         ,m_pRtf(NULL)
@@ -100,7 +100,7 @@ namespace dbaui
     ODataClipboard::ODataClipboard( const Reference< XPropertySet >& i_rAliveForm,
                                     const Sequence< Any >& i_rSelectedRows,
                                     const sal_Bool i_bBookmarkSelection,
-                                    const Reference< XMultiServiceFactory >& i_rORB )
+                                    const Reference< XComponentContext >& i_rORB )
         :ODataAccessObjectTransferable( i_rAliveForm )
         ,m_pHtml(NULL)
         ,m_pRtf(NULL)
@@ -129,7 +129,7 @@ namespace dbaui
 
         if ( xConnection.is() && i_rORB.is() )
         {
-            Reference< XNumberFormatter > xFormatter( getNumberFormatter( xConnection, comphelper::getComponentContext(i_rORB) ) );
+            Reference< XNumberFormatter > xFormatter( getNumberFormatter( xConnection, i_rORB ) );
             if ( xFormatter.is() )
             {
                 m_pHtml.set( new OHTMLImportExport( getDescriptor(), i_rORB, xFormatter ) );

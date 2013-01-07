@@ -609,7 +609,7 @@ Any SAL_CALL SbaXDataBrowserController::queryInterface(const Type& _rType) throw
 
 DBG_NAME(SbaXDataBrowserController)
 //------------------------------------------------------------------------------
-SbaXDataBrowserController::SbaXDataBrowserController(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
+SbaXDataBrowserController::SbaXDataBrowserController(const Reference< ::com::sun::star::uno::XComponentContext >& _rM)
     :SbaXDataBrowserController_Base(_rM)
     ,m_nRowSetPrivileges(0)
     ,m_pClipbordNotifier( NULL )
@@ -696,7 +696,7 @@ void SbaXDataBrowserController::onStartLoading( const Reference< XLoadable >& _r
 // -----------------------------------------------------------------------------
 void SbaXDataBrowserController::impl_checkForCannotSelectUnfiltered( const SQLExceptionInfo& _rError )
 {
-    ::connectivity::SQLError aError( comphelper::getComponentContext(getORB()) );
+    ::connectivity::SQLError aError( getORB() );
     ::connectivity::ErrorCode nErrorCode( aError.getErrorCode( ErrorCondition::DATA_CANNOT_SELECT_UNFILTERED ) );
     if ( ((const SQLException*)_rError)->ErrorCode == nErrorCode )
     {
@@ -772,13 +772,13 @@ void SbaXDataBrowserController::initFormatter()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::initFormatter" );
     // ---------------------------------------------------------------
     // create a formatter working with the connections format supplier
-    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier(::dbtools::getNumberFormats(::dbtools::getConnection(m_xRowSet), sal_True, comphelper::getComponentContext(getORB())));
+    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier(::dbtools::getNumberFormats(::dbtools::getConnection(m_xRowSet), sal_True, getORB()));
 
     if(xSupplier.is())
     {
         // create a new formatter
         m_xFormatter = Reference< util::XNumberFormatter > (
-            util::NumberFormatter::create(comphelper::getComponentContext(getORB())), UNO_QUERY_THROW);
+            util::NumberFormatter::create(getORB()), UNO_QUERY_THROW);
         m_xFormatter->attachNumberFormatsSupplier(xSupplier);
     }
     else // clear the formatter
@@ -848,7 +848,7 @@ sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
 
     // ---------------
     // create the view
-    setView( * new UnoDataBrowserView( pParent, *this, comphelper::getComponentContext(getORB()) ) );
+    setView( * new UnoDataBrowserView( pParent, *this, getORB() ) );
     if (!getBrowserView())
         return sal_False;
 
@@ -949,14 +949,18 @@ void SbaXDataBrowserController::RemoveColumnListener(const Reference< XPropertyS
 Reference< XRowSet >  SbaXDataBrowserController::CreateForm()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::CreateForm" );
-    return Reference< XRowSet > (getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.Form"))), UNO_QUERY);
+    return Reference< XRowSet > (
+      getORB()->getServiceManager()->createInstanceWithContext("com.sun.star.form.component.Form", getORB()),
+      UNO_QUERY);
 }
 
 //------------------------------------------------------------------------------
 Reference< ::com::sun::star::form::XFormComponent >  SbaXDataBrowserController::CreateGridModel()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::CreateGridModel" );
-    return Reference< ::com::sun::star::form::XFormComponent > (getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.GridControl"))), UNO_QUERY);
+    return Reference< ::com::sun::star::form::XFormComponent > (
+      getORB()->getServiceManager()->createInstanceWithContext("com.sun.star.form.component.GridControl", getORB()),
+      UNO_QUERY);
 }
 
 // -------------------------------------------------------------------------
@@ -1469,7 +1473,7 @@ sal_Bool SbaXDataBrowserController::approveParameter(const ::com::sun::star::for
         pParamRequest->addContinuation(pAbort);
 
         // create the handler, let it handle the request
-        Reference< XInteractionHandler2 > xHandler( InteractionHandler::createWithParent(comphelper::getComponentContext(getORB()), 0) );
+        Reference< XInteractionHandler2 > xHandler( InteractionHandler::createWithParent(getORB(), 0) );
         xHandler->handle(xParamRequest);
 
         if (!pParamValues->wasSelected())
@@ -1921,7 +1925,7 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
         Reference< XConnection> xCon(xFormSet->getPropertyValue(PROPERTY_ACTIVE_CONNECTION),UNO_QUERY);
         if(bFilter)
         {
-            DlgFilterCrit aDlg( getBrowserView(), comphelper::getComponentContext(getORB()), xCon, xParser, xSup->getColumns() );
+            DlgFilterCrit aDlg( getBrowserView(), getORB(), xCon, xParser, xSup->getColumns() );
             String aFilter;
             if ( !aDlg.Execute() )
                 return; // if so we don't need to update the grid
@@ -2002,7 +2006,7 @@ void SbaXDataBrowserController::ExecuteSearch()
     xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AlwaysShowCursor")), ::comphelper::makeBoolAny(sal_Bool(sal_True)));
     xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CursorColor")), makeAny(sal_Int32(COL_LIGHTRED)));
 
-    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xNFS(::dbtools::getNumberFormats(::dbtools::getConnection(m_xRowSet), sal_True, comphelper::getComponentContext(getORB())));
+    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xNFS(::dbtools::getNumberFormats(::dbtools::getConnection(m_xRowSet), sal_True, getORB()));
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     AbstractFmSearchDialog* pDialog = NULL;

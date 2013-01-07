@@ -150,12 +150,12 @@ Sequence< ::rtl::OUString> SAL_CALL OTableController::getSupportedServiceNames()
 // -------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL OTableController::Create(const Reference<XMultiServiceFactory >& _rxFactory)
 {
-    return *(new OTableController(_rxFactory));
+    return *(new OTableController(comphelper::getComponentContext(_rxFactory)));
 }
 
 DBG_NAME(OTableController)
 // -----------------------------------------------------------------------------
-OTableController::OTableController(const Reference< XMultiServiceFactory >& _rM) : OTableController_BASE(_rM)
+OTableController::OTableController(const Reference< XComponentContext >& _rM) : OTableController_BASE(_rM)
     ,m_sTypeNames(ModuleRes(STR_TABLEDESIGN_DBFIELDTYPES))
     ,m_pTypeInfo()
     ,m_bAllowAutoIncrementValue(sal_False)
@@ -341,7 +341,7 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
             }
 
             DynamicTableOrQueryNameCheck aNameChecker( getConnection(), CommandType::TABLE );
-            OSaveAsDlg aDlg( getView(), CommandType::TABLE, comphelper::getComponentContext(getORB()), getConnection(), aDefaultName, aNameChecker );
+            OSaveAsDlg aDlg( getView(), CommandType::TABLE, getORB(), getConnection(), aDefaultName, aNameChecker );
             if ( aDlg.Execute() != RET_OK )
                 return sal_False;
 
@@ -406,7 +406,7 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
                 assignTable();
             }
             // now check if our datasource has set a tablefilter and if append the new table name to it
-            ::dbaui::appendToFilter(getConnection(),m_sName,comphelper::getComponentContext(getORB()),getView()); // we are not interessted in the return value
+            ::dbaui::appendToFilter(getConnection(),m_sName,getORB(),getView()); // we are not interessted in the return value
             Reference< frame::XTitleChangeListener> xEventListener(impl_getTitleHelper_throw(),UNO_QUERY);
             if ( xEventListener.is() )
             {
@@ -514,7 +514,7 @@ void OTableController::doEditIndexes()
     if (!xIndexes.is())
         return;
 
-    DbaIndexDialog aDialog(getView(), aFieldNames, xIndexes, getConnection(), comphelper::getComponentContext(getORB()), isConnected() ? getConnection()->getMetaData().is() && getConnection()->getMetaData()->getMaxColumnsInIndex() : sal_Int32(0));
+    DbaIndexDialog aDialog(getView(), aFieldNames, xIndexes, getConnection(), getORB(), isConnected() ? getConnection()->getMetaData().is() && getConnection()->getMetaData()->getMaxColumnsInIndex() : sal_Int32(0));
     if (RET_OK != aDialog.Execute())
         return;
 
@@ -565,7 +565,7 @@ void OTableController::impl_initialize()
 // -----------------------------------------------------------------------------
 sal_Bool OTableController::Construct(Window* pParent)
 {
-    setView( * new OTableDesignView( pParent, comphelper::getComponentContext(getORB()), *this ) );
+    setView( * new OTableDesignView( pParent, getORB(), *this ) );
     OTableController_BASE::Construct(pParent);
     return sal_True;
 }

@@ -116,11 +116,11 @@ Sequence< ::rtl::OUString> SAL_CALL ORelationController::getSupportedServiceName
 // -------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL ORelationController::Create(const Reference<XMultiServiceFactory >& _rxFactory)
 {
-    return *(new ORelationController(_rxFactory));
+    return *(new ORelationController(comphelper::getComponentContext(_rxFactory)));
 }
 DBG_NAME(ORelationController);
 // -----------------------------------------------------------------------------
-ORelationController::ORelationController(const Reference< XMultiServiceFactory >& _rM)
+ORelationController::ORelationController(const Reference< XComponentContext >& _rM)
     : OJoinController(_rM)
     ,m_nThreadEvent(0)
     ,m_bRelationsPossible(sal_True)
@@ -161,7 +161,7 @@ void ORelationController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue
         case ID_BROWSER_SAVEDOC:
             {
                 OSL_ENSURE(isEditable(),"Slot ID_BROWSER_SAVEDOC should not be enabled!");
-                if(!::dbaui::checkDataSourceAvailable(::comphelper::getString(getDataSource()->getPropertyValue(PROPERTY_NAME)), comphelper::getComponentContext(getORB())))
+                if(!::dbaui::checkDataSourceAvailable(::comphelper::getString(getDataSource()->getPropertyValue(PROPERTY_NAME)), getORB()))
                 {
                     String aMessage(ModuleRes(STR_DATASOURCE_DELETED));
                     OSQLWarningBox( getView(), aMessage ).Execute();
@@ -249,7 +249,7 @@ void ORelationController::impl_initialize()
 // -----------------------------------------------------------------------------
 sal_Bool ORelationController::Construct(Window* pParent)
 {
-    setView( * new ORelationDesignView( pParent, *this, comphelper::getComponentContext(getORB()) ) );
+    setView( * new ORelationDesignView( pParent, *this, getORB() ) );
     OJoinController::Construct(pParent);
     return sal_True;
 }

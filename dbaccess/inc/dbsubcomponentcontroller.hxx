@@ -163,7 +163,7 @@ namespace dbaui
         virtual ::rtl::OUString SAL_CALL getTitle(  ) throw (::com::sun::star::uno::RuntimeException);
 
     protected:
-        DBSubComponentController(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxORB);
+        DBSubComponentController(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxORB);
         virtual ~DBSubComponentController();
 
         virtual void        disconnect();

@@ -47,7 +47,7 @@ namespace dbaui
         void loadLayoutInformation();
         void loadTableData(const ::com::sun::star::uno::Any& _aTable);
     public:
-        ORelationController(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
+        ORelationController(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rM);
 
         ~ORelationController();
         // temp

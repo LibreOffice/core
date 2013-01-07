@@ -46,6 +46,7 @@ namespace dbaui
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Type;
+    using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::document::XUndoManager;
     using ::com::sun::star::lang::XMultiServiceFactory;
     using ::com::sun::star::beans::PropertyValue;
@@ -69,7 +70,7 @@ namespace dbaui
     //= OSingleDocumentController
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
-    OSingleDocumentController::OSingleDocumentController( const Reference< XMultiServiceFactory >& _rxORB )
+    OSingleDocumentController::OSingleDocumentController( const Reference< XComponentContext >& _rxORB )
         :OSingleDocumentController_Base( _rxORB )
         ,m_pData( new OSingleDocumentController_Data( *this, getMutex() ) )
     {

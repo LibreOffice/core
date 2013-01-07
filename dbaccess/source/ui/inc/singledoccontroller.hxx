@@ -44,7 +44,7 @@ namespace dbaui
     class OSingleDocumentController : public OSingleDocumentController_Base
     {
     protected:
-        OSingleDocumentController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxORB );
+        OSingleDocumentController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxORB );
         virtual ~OSingleDocumentController();
 
         // OComponentHelper

@@ -64,7 +64,7 @@ DEFINE_XTYPEPROVIDER_3(TaskCreatorService              ,
 //-----------------------------------------------
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE(TaskCreatorService                ,
                                        ::cppu::OWeakObject               ,
-                                       SERVICENAME_TASKCREATOR           ,
+                                       "com.sun.star.frame.TaskCreator",
                                        IMPLEMENTATIONNAME_FWK_TASKCREATOR)
 
 //-----------------------------------------------

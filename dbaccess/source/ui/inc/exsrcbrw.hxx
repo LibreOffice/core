@@ -44,7 +44,7 @@ namespace dbaui
             // recursion
 
     public:
-        SbaExternalSourceBrowser(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
+        SbaExternalSourceBrowser(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rM);
 
         static ::rtl::OUString getImplementationName_Static() throw( ::com::sun::star::uno::RuntimeException );
         static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );

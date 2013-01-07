@@ -129,7 +129,7 @@ namespace dbaui
         OQueryContainerWindow* getContainer() const { return static_cast< OQueryContainerWindow* >( getView() ); }
 
     public:
-        OQueryController(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
+        OQueryController(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rM);
 
         virtual ~OQueryController();
         OTableFields&   getTableFieldDesc()         { return m_vTableFieldDesc; }

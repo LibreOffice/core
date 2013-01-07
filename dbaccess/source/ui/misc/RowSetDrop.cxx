@@ -43,7 +43,7 @@ using namespace ::com::sun::star::lang;
 ORowSetImportExport::ORowSetImportExport(   Window* _pParent,
                                             const Reference< XResultSetUpdate >& _xResultSetUpdate,
                                             const ::svx::ODataAccessDescriptor& _aDataDescriptor,
-                                            const Reference< XMultiServiceFactory >& _rM,
+                                            const Reference< XComponentContext >& _rM,
                                             const String& rExchange
                                             )
                                             : ODatabaseImportExport(_aDataDescriptor,_rM,NULL,rExchange)

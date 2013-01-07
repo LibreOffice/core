@@ -62,6 +62,7 @@ namespace dbaui
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Type;
+    using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::container::XChild;
@@ -178,7 +179,7 @@ namespace dbaui
     //= DBSubComponentController
     //====================================================================
     //--------------------------------------------------------------------
-    DBSubComponentController::DBSubComponentController(const Reference< XMultiServiceFactory >& _rxORB)
+    DBSubComponentController::DBSubComponentController(const Reference< XComponentContext >& _rxORB)
         :DBSubComponentController_Base( _rxORB )
         ,m_pImpl( new DBSubComponentController_Impl( getMutex() ) )
     {
@@ -298,7 +299,7 @@ namespace dbaui
             if(xSupplier.is())
             {
                 m_pImpl->m_xFormatter = Reference< XNumberFormatter >(
-                    NumberFormatter::create(comphelper::getComponentContext(getORB())), UNO_QUERY_THROW);
+                    NumberFormatter::create(getORB()), UNO_QUERY_THROW);
                 m_pImpl->m_xFormatter->attachNumberFormatsSupplier(xSupplier);
             }
             OSL_ENSURE(m_pImpl->m_xFormatter.is(),"No NumberFormatter!");

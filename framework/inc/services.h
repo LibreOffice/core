@@ -56,7 +56,6 @@ namespace framework{
 #define SERVICENAME_STATUSBARCONTROLLERFACTORY                  DECLARE_ASCII("com.sun.star.frame.StatusbarControllerFactory"       )
 #define SERVICENAME_SESSIONLISTENER                             DECLARE_ASCII("com.sun.star.frame.SessionListener"                  )
 #define SERVICENAME_STATUSBARCONTROLLER                         DECLARE_ASCII("com.sun.star.frame.StatusbarController"              )
-#define SERVICENAME_TASKCREATOR                                 DECLARE_ASCII("com.sun.star.frame.TaskCreator"                      )
 #define SERVICENAME_TABWINFACTORY                               DECLARE_ASCII("com.sun.star.frame.TabWindowFactory"                 )
 #define SERVICENAME_TABWINDOW                                   DECLARE_ASCII("com.sun.star.frame.TabWindow"                        )
 #define SERVICENAME_STRINGABBREVIATION                          DECLARE_ASCII("com.sun.star.util.UriAbbreviation"                   )

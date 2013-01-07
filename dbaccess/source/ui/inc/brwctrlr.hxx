@@ -148,7 +148,7 @@ namespace dbaui
             getViewClipboard() const { return m_aSystemClipboard; }
 
     public:
-        SbaXDataBrowserController(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
+        SbaXDataBrowserController(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rM);
 
         UnoDataBrowserView* getBrowserView() const { return static_cast< UnoDataBrowserView*>(getView()); }
         // late construction

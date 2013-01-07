@@ -50,7 +50,7 @@ namespace dbaui
             const ::rtl::OUString&  _rCommand,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB
         );
 
         ODataClipboard(
@@ -58,14 +58,14 @@ namespace dbaui
             const sal_Int32         _nCommandType,
             const ::rtl::OUString&  _rCommand,
             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB
         );
 
         ODataClipboard(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& i_rAliveForm,
             const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& i_rSelectedRows,
             const sal_Bool i_bBookmarkSelection,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_rORB
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_rORB
         );
 
         // XEventListener

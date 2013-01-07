@@ -110,7 +110,7 @@ namespace dbaui
             return getSupportedServiceNames_Static();
         }
     public:
-        OViewController(const Reference< XMultiServiceFactory >& _rM) : OQueryController(_rM){}
+        OViewController(const Reference< XComponentContext >& _rM) : OQueryController(_rM){}
 
         // need by registration
         static OUString getImplementationName_Static() throw( RuntimeException )
@@ -125,7 +125,7 @@ namespace dbaui
         }
         static Reference< XInterface > SAL_CALL Create(const Reference< XMultiServiceFactory >& _rM)
         {
-            return *(new OViewController(_rM));
+            return *(new OViewController(comphelper::getComponentContext(_rM)));
         }
     };
 }
@@ -304,15 +304,15 @@ Sequence< OUString> SAL_CALL OQueryController::getSupportedServiceNames() throw(
 // -------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL OQueryController::Create(const Reference<XMultiServiceFactory >& _rxFactory)
 {
-    return *(new OQueryController(_rxFactory));
+    return *(new OQueryController(comphelper::getComponentContext(_rxFactory)));
 }
 DBG_NAME(OQueryController);
 // -----------------------------------------------------------------------------
-OQueryController::OQueryController(const Reference< XMultiServiceFactory >& _rM)
+OQueryController::OQueryController(const Reference< XComponentContext >& _rM)
     :OJoinController(_rM)
     ,OQueryController_PBase( getBroadcastHelper() )
     ,m_pParseContext( new svxform::OSystemParseContext )
-    ,m_aSqlParser( comphelper::getComponentContext(_rM), m_pParseContext )
+    ,m_aSqlParser( _rM, m_pParseContext )
     ,m_pSqlIterator(NULL)
     ,m_nVisibleRows(0x400)
     ,m_nSplitPos(-1)
@@ -1095,7 +1095,7 @@ sal_Bool OQueryController::Construct(Window* pParent)
 {
     // TODO: we have to check if we should create the text- or the design- view
 
-    setView( * new OQueryContainerWindow( pParent, *this, comphelper::getComponentContext(getORB()) ) );
+    setView( * new OQueryContainerWindow( pParent, *this, getORB() ) );
 
     return OJoinController::Construct(pParent);
 }
@@ -1366,7 +1366,7 @@ sal_Bool OQueryController::askForNewName(const Reference<XNameAccess>& _xElement
         OSaveAsDlg aDlg(
                 getView(),
                 m_nCommandType,
-                comphelper::getComponentContext(getORB()),
+                getORB(),
                 getConnection(),
                 aDefaultName,
                 aNameChecker,
@@ -1523,7 +1523,7 @@ bool OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
                     m_xAlterView.set( xElements->getByName( m_sName ), UNO_QUERY );
 
                 // now check if our datasource has set a tablefilter and if so, append the new table name to it
-                ::dbaui::appendToFilter( getConnection(), m_sName, comphelper::getComponentContext(getORB()), getView() );
+                ::dbaui::appendToFilter( getConnection(), m_sName, getORB(), getView() );
             }
             Reference< XTitleChangeListener> xEventListener(impl_getTitleHelper_throw(),UNO_QUERY);
             if ( xEventListener.is() )

@@ -27,7 +27,6 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -72,7 +71,7 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xResultSetMetaData;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >   m_xRowSetColumns;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xFactory;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
 
         ::rtl::OUString m_sName;
 
@@ -97,14 +96,14 @@ namespace dbaui
 
         // export data
         ODatabaseImportExport(  const ::svx::ODataAccessDescriptor& _aDataDescriptor,
-                                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
+                                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rM,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                                 const String& rExchange = String());
 
         // import data
         ODatabaseImportExport(  const SharedConnection& _rxConnection,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
-                                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
+                                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rM);
 
         virtual ~ODatabaseImportExport();
 
@@ -140,7 +139,7 @@ namespace dbaui
     public:
         // export data
         ORTFImportExport(   const ::svx::ODataAccessDescriptor& _aDataDescriptor,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rM,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                             const String& rExchange = String())
                             : ODatabaseImportExport(_aDataDescriptor,_rM,_rxNumberF,rExchange) {};
@@ -148,7 +147,7 @@ namespace dbaui
         // import data
         ORTFImportExport(   const SharedConnection& _rxConnection,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rM)
                         : ODatabaseImportExport(_rxConnection,_rxNumberF,_rM)
         {}
 
@@ -186,13 +185,13 @@ namespace dbaui
     public:
         // export data
         OHTMLImportExport(  const ::svx::ODataAccessDescriptor& _aDataDescriptor,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rM,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                             const String& rExchange = String());
         // import data
         OHTMLImportExport(  const SharedConnection& _rxConnection,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rM)
                         : ODatabaseImportExport(_rxConnection,_rxNumberF,_rM)
         {}
 
@@ -224,12 +223,12 @@ namespace dbaui
         ORowSetImportExport(Window* _pParent,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate >& _xResultSetUpdate,
                             const ::svx::ODataAccessDescriptor& _aDataDescriptor,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rM,
                             const String& rExchange = String());
 
         // import data
         ORowSetImportExport(const SharedConnection& _rxConnection,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rM)
                         : ODatabaseImportExport(_rxConnection,NULL,_rM)
         {}
 

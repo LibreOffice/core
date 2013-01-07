@@ -303,13 +303,13 @@ TTableWindowData::value_type OJoinTableView::createTableWindowData(const ::rtl::
     catch ( const SQLException& )
     {
         ::dbaui::showError( ::dbtools::SQLExceptionInfo( ::cppu::getCaughtException() ),
-            pParent, comphelper::getComponentContext(pParent->getController().getORB()) );
+            pParent, pParent->getController().getORB() );
     }
     catch( const WrappedTargetException& e )
     {
         SQLException aSql;
         if ( e.TargetException >>= aSql )
-            ::dbaui::showError( ::dbtools::SQLExceptionInfo( aSql ), pParent, comphelper::getComponentContext(pParent->getController().getORB()) );
+            ::dbaui::showError( ::dbtools::SQLExceptionInfo( aSql ), pParent, pParent->getController().getORB() );
     }
     catch( const Exception& )
     {

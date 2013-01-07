@@ -189,7 +189,7 @@ Sequence< ::rtl::OUString> SAL_CALL OApplicationController::getSupportedServiceN
 // -------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL OApplicationController::Create(const Reference<XMultiServiceFactory >& _rxFactory)
 {
-    return *(new OApplicationController(_rxFactory));
+    return *(new OApplicationController( comphelper::getComponentContext(_rxFactory)));
 }
 // -----------------------------------------------------------------------------
 
@@ -297,11 +297,11 @@ private:
 //====================================================================
 DBG_NAME(OApplicationController)
 //--------------------------------------------------------------------
-OApplicationController::OApplicationController(const Reference< XMultiServiceFactory >& _rxORB)
+OApplicationController::OApplicationController(const Reference< XComponentContext >& _rxORB)
     :OApplicationController_CBASE( _rxORB )
     ,m_aContextMenuInterceptors( getMutex() )
     ,m_pSubComponentManager( new SubComponentManager( *this, getSharedMutex() ) )
-    ,m_aTypeCollection( comphelper::getComponentContext(_rxORB) )
+    ,m_aTypeCollection( _rxORB )
     ,m_aTableCopyHelper(this)
     ,m_pClipbordNotifier(NULL)
     ,m_nAsyncDrop(0)
@@ -444,7 +444,7 @@ void SAL_CALL OApplicationController::disposing()
 //--------------------------------------------------------------------
 sal_Bool OApplicationController::Construct(Window* _pParent)
 {
-    setView( * new OApplicationView( _pParent, comphelper::getComponentContext(getORB()), *this, m_ePreviewMode ) );
+    setView( * new OApplicationView( _pParent, getORB(), *this, m_ePreviewMode ) );
     getView()->SetUniqueId(UID_APP_VIEW);
 
     // late construction
@@ -656,11 +656,11 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                                     && SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SWRITER);
                 if ( aReturn.bEnabled )
                 {
-                    Reference< XContentEnumerationAccess > xEnumAccess(m_xServiceFactory, UNO_QUERY);
+                    Reference< XContentEnumerationAccess > xEnumAccess(m_xContext->getServiceManager(), UNO_QUERY);
                     aReturn.bEnabled = xEnumAccess.is();
                     if ( aReturn.bEnabled )
                     {
-                        const ::rtl::OUString sReportEngineServiceName = ::dbtools::getDefaultReportEngineServiceName(comphelper::getComponentContext(m_xServiceFactory));
+                        const ::rtl::OUString sReportEngineServiceName = ::dbtools::getDefaultReportEngineServiceName(m_xContext);
                         aReturn.bEnabled = !sReportEngineServiceName.isEmpty();
                         if ( aReturn.bEnabled )
                         {
@@ -742,7 +742,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                     aReturn.bEnabled = eType == E_QUERY || eType == E_TABLE;
                     if ( aReturn.bEnabled && SID_APP_NEW_REPORT_PRE_SEL == _nId )
                     {
-                        Reference< XContentEnumerationAccess > xEnumAccess(m_xServiceFactory, UNO_QUERY);
+                        Reference< XContentEnumerationAccess > xEnumAccess(m_xContext->getServiceManager(), UNO_QUERY);
                         aReturn.bEnabled = xEnumAccess.is();
                         if ( aReturn.bEnabled )
                         {
@@ -2130,7 +2130,7 @@ void OApplicationController::renameEntry()
                                 }
                                 pNameChecker.reset( new HierarchicalNameCheck( xHNames.get(), String() ) );
                                 aDialog.reset( new OSaveAsDlg(
-                                    getView(), comphelper::getComponentContext(getORB()), sName, sLabel, *pNameChecker, SAD_TITLE_RENAME ) );
+                                    getView(), getORB(), sName, sLabel, *pNameChecker, SAD_TITLE_RENAME ) );
                             }
                         }
                     }
@@ -2149,7 +2149,7 @@ void OApplicationController::renameEntry()
                         ensureConnection();
                         pNameChecker.reset( new DynamicTableOrQueryNameCheck( getConnection(), nCommandType ) );
                         aDialog.reset( new OSaveAsDlg(
-                            getView(), nCommandType, comphelper::getComponentContext(getORB()), getConnection(),
+                            getView(), nCommandType, getORB(), getConnection(),
                                 *aList.begin(), *pNameChecker, SAD_TITLE_RENAME ) );
                     }
                     break;
@@ -2689,7 +2689,7 @@ IMPL_LINK( OApplicationController, OnFirstControllerConnected, void*, /**/ )
         aDetail.Message = String( ModuleRes( STR_SUB_DOCS_WITH_SCRIPTS_DETAIL ) );
         aWarning.NextException <<= aDetail;
 
-        Reference< XExecutableDialog > xDialog = ErrorMessageDialog::create( ::comphelper::getComponentContext( getORB() ), "", NULL, makeAny( aWarning ) );
+        Reference< XExecutableDialog > xDialog = ErrorMessageDialog::create( getORB(), "", NULL, makeAny( aWarning ) );
         xDialog->execute();
     }
     catch( const Exception& )

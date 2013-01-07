@@ -23,6 +23,7 @@
 #include "asyncmodaldialog.hxx"
 
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/frame/TaskCreator.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XFrames.hpp>
@@ -58,7 +59,7 @@ namespace dbaui
     //======================================================================
     //= DatabaseObjectView
     //======================================================================
-    DatabaseObjectView::DatabaseObjectView( const Reference< XMultiServiceFactory >& _rxORB,
+    DatabaseObjectView::DatabaseObjectView( const Reference< XComponentContext >& _rxORB,
             const Reference< XDatabaseDocumentUI >& _rxApplication,
             const Reference< XFrame >& _rxParentFrame,
             const ::rtl::OUString& _rComponentURL )
@@ -118,7 +119,7 @@ namespace dbaui
                 // if we have no externally provided frame, create one
                 if ( !m_xFrameLoader.is() )
                 {
-                    Reference< XSingleServiceFactory > xFact(m_xORB->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.TaskCreator"))), UNO_QUERY_THROW);
+                    Reference< XSingleServiceFactory > xFact = TaskCreator::create(m_xORB);
                     Sequence< Any > lArgs(2);
                     NamedValue      aProp;
                     sal_Int32       nArg = 0;
@@ -184,7 +185,7 @@ namespace dbaui
     //= QueryDesigner
     //======================================================================
     //----------------------------------------------------------------------
-    QueryDesigner::QueryDesigner( const Reference< XMultiServiceFactory >& _rxORB, const Reference< XDatabaseDocumentUI >& _rxApplication,
+    QueryDesigner::QueryDesigner( const Reference< XComponentContext >& _rxORB, const Reference< XDatabaseDocumentUI >& _rxApplication,
         const Reference< XFrame >& _rxParentFrame, bool _bCreateView )
         :DatabaseObjectView( _rxORB, _rxApplication, _rxParentFrame, _bCreateView ? URL_COMPONENT_VIEWDESIGN : URL_COMPONENT_QUERYDESIGN )
         ,m_nCommandType( _bCreateView ? CommandType::TABLE : CommandType::QUERY )
@@ -218,7 +219,7 @@ namespace dbaui
     //= TableDesigner
     //======================================================================
     //----------------------------------------------------------------------
-    TableDesigner::TableDesigner( const Reference< XMultiServiceFactory >& _rxORB, const Reference< XDatabaseDocumentUI >& _rxApplication, const Reference< XFrame >& _rxParentFrame )
+    TableDesigner::TableDesigner( const Reference< XComponentContext >& _rxORB, const Reference< XDatabaseDocumentUI >& _rxApplication, const Reference< XFrame >& _rxParentFrame )
         :DatabaseObjectView( _rxORB, _rxApplication, _rxParentFrame, static_cast< ::rtl::OUString >( URL_COMPONENT_TABLEDESIGN ) )
     {
     }
@@ -284,7 +285,7 @@ namespace dbaui
     //= ResultSetBrowser
     //======================================================================
     //----------------------------------------------------------------------
-    ResultSetBrowser::ResultSetBrowser( const Reference< XMultiServiceFactory >& _rxORB, const Reference< XDatabaseDocumentUI >& _rxApplication, const Reference< XFrame >& _rxParentFrame,
+    ResultSetBrowser::ResultSetBrowser( const Reference< XComponentContext >& _rxORB, const Reference< XDatabaseDocumentUI >& _rxApplication, const Reference< XFrame >& _rxParentFrame,
             sal_Bool _bTable )
         :DatabaseObjectView( _rxORB, _rxApplication, _rxParentFrame, static_cast < ::rtl::OUString >( URL_COMPONENT_DATASOURCEBROWSER ) )
         ,m_bTable(_bTable)
@@ -319,7 +320,7 @@ namespace dbaui
     //= RelationDesigner
     //======================================================================
     //----------------------------------------------------------------------
-    RelationDesigner::RelationDesigner( const Reference< XMultiServiceFactory >& _rxORB, const Reference< XDatabaseDocumentUI >& _rxApplication, const Reference< XFrame >& _rxParentFrame )
+    RelationDesigner::RelationDesigner( const Reference< XComponentContext >& _rxORB, const Reference< XDatabaseDocumentUI >& _rxApplication, const Reference< XFrame >& _rxParentFrame )
         :DatabaseObjectView( _rxORB, _rxApplication, _rxParentFrame, static_cast< ::rtl::OUString >( URL_COMPONENT_RELATIONDESIGN ) )
     {
     }

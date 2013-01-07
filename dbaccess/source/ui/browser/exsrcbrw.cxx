@@ -62,7 +62,7 @@ Any SAL_CALL SbaExternalSourceBrowser::queryInterface(const Type& _rType) throw 
 }
 DBG_NAME(SbaExternalSourceBrowser)
 //------------------------------------------------------------------------------
-SbaExternalSourceBrowser::SbaExternalSourceBrowser(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
+SbaExternalSourceBrowser::SbaExternalSourceBrowser(const Reference< ::com::sun::star::uno::XComponentContext >& _rM)
     :SbaXDataBrowserController(_rM)
     ,m_aModifyListeners(getMutex())
     ,m_pDataSourceImpl(NULL)
@@ -99,7 +99,7 @@ SbaExternalSourceBrowser::~SbaExternalSourceBrowser()
 //-------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL SbaExternalSourceBrowser::Create(const Reference<XMultiServiceFactory >& _rxFactory)
 {
-    return *(new SbaExternalSourceBrowser(_rxFactory));
+    return *(new SbaExternalSourceBrowser( comphelper::getComponentContext(_rxFactory)));
 }
 //-------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL SbaExternalSourceBrowser::getImplementationName() throw(RuntimeException)

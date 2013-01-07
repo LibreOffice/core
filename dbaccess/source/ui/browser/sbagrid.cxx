@@ -1304,7 +1304,7 @@ void SbaGridControl::implTransferSelectedRows( sal_Int16 nRowPos, bool _bTrueIfC
     Reference< XResultSet> xRowSetClone;
     try
     {
-        ODataClipboard* pTransfer = new ODataClipboard( xForm, aSelectedRows, bSelectionBookmarks, getServiceManager() );
+        ODataClipboard* pTransfer = new ODataClipboard( xForm, aSelectedRows, bSelectionBookmarks, comphelper::getComponentContext(getServiceManager()) );
 
         Reference< XTransferable > xEnsureDelete = pTransfer;
         if ( _bTrueIfClipboardFalseIfDrag )
@@ -1555,7 +1555,7 @@ IMPL_LINK(SbaGridControl, AsynchDropEvent, void*, /*EMPTY_ARG*/)
         if ( !bCountFinal )
             setDataSource(NULL); // deattach from grid control
         Reference< XResultSetUpdate > xResultSetUpdate(xDataSource,UNO_QUERY);
-        ODatabaseImportExport* pImExport = new ORowSetImportExport(this,xResultSetUpdate,m_aDataDescriptor,getServiceManager());
+        ODatabaseImportExport* pImExport = new ORowSetImportExport(this,xResultSetUpdate,m_aDataDescriptor, comphelper::getComponentContext(getServiceManager()));
         Reference<XEventListener> xHolder = pImExport;
         Hide();
         try

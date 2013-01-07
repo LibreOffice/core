@@ -163,7 +163,7 @@ OJoinTableView* AddTableDialogContext::getTableView() const
 
 DBG_NAME(OJoinController)
 // -----------------------------------------------------------------------------
-OJoinController::OJoinController(const Reference< XMultiServiceFactory >& _rM)
+OJoinController::OJoinController(const Reference< XComponentContext >& _rM)
     :OJoinController_BASE(_rM)
     ,m_pAddTableDialog(NULL)
 {

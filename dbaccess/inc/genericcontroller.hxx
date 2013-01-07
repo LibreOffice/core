@@ -42,7 +42,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/awt/XUserInputInterception.hpp>
 
 #include <comphelper/broadcasthelper.hxx>
@@ -238,7 +237,7 @@ namespace dbaui
         OAsyncronousLink        m_aAsyncCloseTask;      // called when a task shoud be closed
 
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >         m_xUrlTransformer;      // needed sometimes
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceFactory;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
         ControllerFrame                                                                     m_aCurrentFrame;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >      m_xSlaveDispatcher;     // for intercepting dispatches
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >      m_xMasterDispatcher;    // dito
@@ -260,7 +259,7 @@ namespace dbaui
 
         // ----------------------------------------------------------------
         // methods
-        OGenericUnoController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM );
+        OGenericUnoController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rM );
         const ::comphelper::NamedValueCollection&
                                     getInitParams() const   { return m_aInitParameters; }
 
@@ -401,7 +400,7 @@ namespace dbaui
         DECL_LINK(OnAsyncCloseTask, void*);
 
     public:
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  getORB() const { return m_xServiceFactory; }
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >  getORB() const { return m_xContext; }
         ODataView*  getView() const { return m_pView; }
         void        setView( ODataView& i_rView ) { m_pView = &i_rView; }
         void        clearView() { m_pView = NULL; }

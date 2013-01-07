@@ -211,12 +211,12 @@ void SafeRemovePropertyListener(const Reference< XPropertySet > & xSet, const ::
 Reference< XInterface > SAL_CALL SbaTableQueryBrowser::Create(const Reference<XMultiServiceFactory >& _rxFactory)
 {
     SolarMutexGuard aGuard;
-    return *(new SbaTableQueryBrowser(_rxFactory));
+    return *(new SbaTableQueryBrowser(comphelper::getComponentContext(_rxFactory)));
 }
 
 DBG_NAME(SbaTableQueryBrowser);
 //------------------------------------------------------------------------------
-SbaTableQueryBrowser::SbaTableQueryBrowser(const Reference< XMultiServiceFactory >& _rM)
+SbaTableQueryBrowser::SbaTableQueryBrowser(const Reference< XComponentContext >& _rM)
     :SbaXDataBrowserController(_rM)
     ,m_aSelectionListeners( getMutex() )
     ,m_aContextMenuInterceptors( getMutex() )
@@ -362,7 +362,7 @@ sal_Bool SbaTableQueryBrowser::Construct(Window* pParent)
         xDatabaseRegistrations->addDatabaseRegistrationsListener( this );
 
         // the collator for the string compares
-        m_xCollator = Collator::create( comphelper::getComponentContext( getORB() ) );
+        m_xCollator = Collator::create( getORB() );
         m_xCollator->loadDefaultCollator( Application::GetSettings().GetLanguageTag().getLocale(), 0 );
     }
     catch(const Exception&)
@@ -1753,7 +1753,7 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
             }
             else if ( nId == ID_TREE_EDIT_DATABASE )
             {
-                ::utl::OConfigurationTreeRoot aConfig( ::utl::OConfigurationTreeRoot::createWithComponentContext( comphelper::getComponentContext(getORB()),
+                ::utl::OConfigurationTreeRoot aConfig( ::utl::OConfigurationTreeRoot::createWithComponentContext( getORB(),
                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.DataAccess/Policies/Features/Common" ) ) ) );
                 sal_Bool bHaveEditDatabase( sal_True );
                 OSL_VERIFY( aConfig.getNodeValue( "EditDatabaseFromDataSourceView" ) >>= bHaveEditDatabase );
@@ -3516,7 +3516,7 @@ void SbaTableQueryBrowser::implAdministrate( SvTreeListEntry* _pApplyTo )
     {
         // get the desktop object
         sal_Int32 nFrameSearchFlag = FrameSearchFlag::ALL | FrameSearchFlag::GLOBAL ;
-        Reference< XDesktop2 > xFrameLoader = Desktop::create( comphelper::getComponentContext(getORB()) );
+        Reference< XDesktop2 > xFrameLoader = Desktop::create( getORB() );
 
         // the initial selection
         SvTreeListEntry* pTopLevelSelected = _pApplyTo;
@@ -3526,13 +3526,13 @@ void SbaTableQueryBrowser::implAdministrate( SvTreeListEntry* _pApplyTo )
         if (pTopLevelSelected)
             sInitialSelection = getDataSourceAcessor( pTopLevelSelected );
 
-        Reference< XDataSource > xDataSource( getDataSourceByName( sInitialSelection, getView(), comphelper::getComponentContext(getORB()), NULL ) );
+        Reference< XDataSource > xDataSource( getDataSourceByName( sInitialSelection, getView(), getORB(), NULL ) );
         Reference< XModel > xDocumentModel( getDataSourceOrModel( xDataSource ), UNO_QUERY );
 
         if ( xDocumentModel.is() )
         {
             Reference< XInteractionHandler2 > xInteractionHandler(
-                InteractionHandler::createWithParent(comphelper::getComponentContext(getORB()), 0) );
+                InteractionHandler::createWithParent(getORB(), 0) );
 
             ::comphelper::NamedValueCollection aLoadArgs;
             aLoadArgs.put( "Model", xDocumentModel );

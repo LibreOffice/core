@@ -1166,7 +1166,7 @@ void OAppDetailPageHelper::showPreview( const ::rtl::OUString& _sDataSourceName,
         Reference< XDatabaseDocumentUI > xApplication( getBorderWin().getView()->getAppController().getXController(), UNO_QUERY );
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr< DatabaseObjectView > pDispatcher( new ResultSetBrowser(
-            uno::Reference<lang::XMultiServiceFactory>(getBorderWin().getView()->getORB()->getServiceManager(), uno::UNO_QUERY_THROW),
+            getBorderWin().getView()->getORB(),
             xApplication, NULL, _bTable
         ) );
         SAL_WNODEPRECATED_DECLARATIONS_POP

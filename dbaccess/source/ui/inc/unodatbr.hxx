@@ -126,7 +126,7 @@ namespace dbaui
         virtual ::rtl::OUString getPrivateTitle( ) const;
     // attribute access
     public:
-        SbaTableQueryBrowser(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
+        SbaTableQueryBrowser(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rM);
         ~SbaTableQueryBrowser();
 
         enum EntryType

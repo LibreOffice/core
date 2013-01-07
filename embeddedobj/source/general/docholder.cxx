@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/embed/Aspects.hpp>
+#include <com/sun/star/frame/TaskCreator.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -449,9 +450,7 @@ sal_Bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& 
             throw uno::RuntimeException(); // TODO: can not create own window
 
         // create a frame based on the specified window
-        uno::Reference< lang::XSingleServiceFactory > xFrameFact(
-            m_xContext->getServiceManager()->createInstanceWithContext( "com.sun.star.frame.TaskCreator", m_xContext ),
-            uno::UNO_QUERY_THROW );
+        uno::Reference< lang::XSingleServiceFactory > xFrameFact = frame::TaskCreator::create(m_xContext);
 
         uno::Sequence< uno::Any > aArgs( 2 );
         beans::NamedValue aArg;
@@ -829,9 +828,7 @@ uno::Reference< frame::XFrame > DocumentHolder::GetDocFrame()
     // the frame for outplace activation
     if ( !m_xFrame.is() )
     {
-        uno::Reference< lang::XSingleServiceFactory > xFrameFact(
-            m_xContext->getServiceManager()->createInstanceWithContext( "com.sun.star.frame.TaskCreator", m_xContext ),
-            uno::UNO_QUERY_THROW );
+        uno::Reference< lang::XSingleServiceFactory > xFrameFact = frame::TaskCreator::create(m_xContext);
 
         m_xFrame.set(xFrameFact->createInstanceWithArguments( m_aOutplaceFrameProps ), uno::UNO_QUERY_THROW);
 

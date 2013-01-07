@@ -292,12 +292,11 @@ Reference< XInterface > OReportController::create(Reference< XComponentContext >
 DBG_NAME( rpt_OReportController )
 // -----------------------------------------------------------------------------
 OReportController::OReportController(Reference< XComponentContext > const & xContext)
-    :OReportController_BASE(Reference< XMultiServiceFactory >(xContext->getServiceManager(),UNO_QUERY))
+    :OReportController_BASE(xContext)
     ,OPropertyStateContainer(OGenericUnoController_Base::rBHelper)
     ,m_aSelectionListeners( getMutex() )
     ,m_pClipbordNotifier(NULL)
     ,m_pGroupsFloater(NULL)
-    ,m_xContext(xContext)
     ,m_nSplitPos(-1)
     ,m_nPageNum(-1)
     ,m_nSelectionCount(0)
@@ -2985,8 +2984,9 @@ uno::Reference< sdbc::XRowSet > OReportController::getRowSet()
 
     try
     {
-        uno::Reference< sdbc::XRowSet > xRowSet( getORB()->createInstance(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.RowSet" ) ) ), uno::UNO_QUERY );
+        uno::Reference< sdbc::XRowSet > xRowSet(
+            getORB()->getServiceManager()->createInstanceWithContext("com.sun.star.sdb.RowSet", getORB()),
+            uno::UNO_QUERY );
         uno::Reference< beans::XPropertySet> xRowSetProp( xRowSet, uno::UNO_QUERY_THROW );
 
         xRowSetProp->setPropertyValue( PROPERTY_ACTIVECONNECTION, uno::makeAny( getConnection() ) );
