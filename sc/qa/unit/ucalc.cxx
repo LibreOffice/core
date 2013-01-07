@@ -80,6 +80,9 @@
 
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
+#include <com/sun/star/sheet/DataPilotFieldReference.hpp>
+#include <com/sun/star/sheet/DataPilotFieldReferenceType.hpp>
+#include <com/sun/star/sheet/DataPilotFieldReferenceItemType.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 
 #include <iostream>
@@ -195,6 +198,12 @@ public:
      */
     void testPivotTableNumStability();
 
+    /**
+     * Test for pivot table that include field with various non-default field
+     * refrences.
+     */
+    void testPivotTableFieldReference();
+
     void testSheetCopy();
     void testSheetMove();
     void testExternalRef();
@@ -277,6 +286,7 @@ public:
     CPPUNIT_TEST(testPivotTableTextNumber);
     CPPUNIT_TEST(testPivotTableCaseInsensitiveStrings);
     CPPUNIT_TEST(testPivotTableNumStability);
+    CPPUNIT_TEST(testPivotTableFieldReference);
     CPPUNIT_TEST(testSheetCopy);
     CPPUNIT_TEST(testSheetMove);
     CPPUNIT_TEST(testExternalRef);
@@ -3390,6 +3400,174 @@ void Test::testPivotTableNumStability()
     aPos.IncRow();
     fTest = m_pDoc->GetValue(aPos);
     CPPUNIT_ASSERT_MESSAGE("Incorrect value for Sam.", rtl::math::approxEqual(fTest, fSamTotal));
+
+    pDPs->FreeTable(pDPObj);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", pDPs->GetCount(), static_cast<size_t>(0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
+                           pDPs->GetSheetCaches().size(), static_cast<size_t>(0));
+
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testPivotTableFieldReference()
+{
+    m_pDoc->InsertTab(0, OUString("Data"));
+    m_pDoc->InsertTab(1, OUString("Table"));
+
+    // Raw data
+    const char* aData[][2] = {
+        { "Name", "Value" },
+        { "A", "1" },
+        { "B", "2" },
+        { "C", "4" },
+        { "D", "8" },
+    };
+
+    // Dimension definition
+    DPFieldDef aFields[] = {
+        { "Name", sheet::DataPilotFieldOrientation_ROW, 0 },
+        { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM },
+    };
+
+    ScAddress aPos(1,1,0);
+    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    CPPUNIT_ASSERT_MESSAGE("failed to insert range data at correct position", aDataRange.aStart == aPos);
+
+    ScDPObject* pDPObj = createDPFromRange(
+        m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
+
+    ScDPCollection* pDPs = m_pDoc->GetDPCollection();
+    bool bSuccess = pDPs->InsertNewTable(pDPObj);
+
+    CPPUNIT_ASSERT_MESSAGE("failed to insert a new pivot table object into document.", bSuccess);
+    CPPUNIT_ASSERT_MESSAGE("there should be only one data pilot table.",
+                           pDPs->GetCount() == 1);
+    pDPObj->SetName(pDPs->CreateNewName());
+
+    ScRange aOutRange = refresh(pDPObj);
+
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][2] = {
+            { "Name", 0 },
+            { "A", "1" },
+            { "B", "2" },
+            { "C", "4" },
+            { "D", "8" },
+            { "Total Result", "15" },
+        };
+
+        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "Field reference (none)");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    ScDPSaveData aSaveData = *pDPObj->GetSaveData();
+    sheet::DataPilotFieldReference aFieldRef;
+    aFieldRef.ReferenceType = sheet::DataPilotFieldReferenceType::ITEM_DIFFERENCE;
+    aFieldRef.ReferenceField = "Name";
+    aFieldRef.ReferenceItemType = sheet::DataPilotFieldReferenceItemType::NAMED;
+    aFieldRef.ReferenceItemName = "A";
+    ScDPSaveDimension* pDim = aSaveData.GetDimensionByName("Value");
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve dimension 'Value'.", pDim);
+    pDim->SetReferenceValue(&aFieldRef);
+    pDPObj->SetSaveData(aSaveData);
+
+    aOutRange = refresh(pDPObj);
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][2] = {
+            { "Name", 0 },
+            { "A", 0 },
+            { "B", "1" },
+            { "C", "3" },
+            { "D", "7" },
+            { "Total Result", 0 },
+        };
+
+        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "Field reference (difference from)");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    aFieldRef.ReferenceType = sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE;
+    pDim->SetReferenceValue(&aFieldRef);
+    pDPObj->SetSaveData(aSaveData);
+
+    aOutRange = refresh(pDPObj);
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][2] = {
+            { "Name", 0 },
+            { "A", "100.00%" },
+            { "B", "200.00%" },
+            { "C", "400.00%" },
+            { "D", "800.00%" },
+            { "Total Result", 0 },
+        };
+
+        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "Field reference (% of)");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    aFieldRef.ReferenceType = sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE_DIFFERENCE;
+    pDim->SetReferenceValue(&aFieldRef);
+    pDPObj->SetSaveData(aSaveData);
+
+    aOutRange = refresh(pDPObj);
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][2] = {
+            { "Name", 0 },
+            { "A", 0 },
+            { "B", "100.00%" },
+            { "C", "300.00%" },
+            { "D", "700.00%" },
+            { "Total Result", 0 },
+        };
+
+        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "Field reference (% difference from)");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    aFieldRef.ReferenceType = sheet::DataPilotFieldReferenceType::RUNNING_TOTAL;
+    pDim->SetReferenceValue(&aFieldRef);
+    pDPObj->SetSaveData(aSaveData);
+
+    aOutRange = refresh(pDPObj);
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][2] = {
+            { "Name", 0 },
+            { "A", "1" },
+            { "B", "3" },
+            { "C", "7" },
+            { "D", "15" },
+            { "Total Result", 0 },
+        };
+
+        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "Field reference (Running total)");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    aFieldRef.ReferenceType = sheet::DataPilotFieldReferenceType::COLUMN_PERCENTAGE;
+    pDim->SetReferenceValue(&aFieldRef);
+    pDPObj->SetSaveData(aSaveData);
+
+    aOutRange = refresh(pDPObj);
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][2] = {
+            { "Name", 0 },
+            { "A", "6.67%" },
+            { "B", "13.33%" },
+            { "C", "26.67%" },
+            { "D", "53.33%" },
+            { "Total Result", "100.00%" },
+        };
+
+        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "Field reference (% of column)");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
 
     pDPs->FreeTable(pDPObj);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", pDPs->GetCount(), static_cast<size_t>(0));
