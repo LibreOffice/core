@@ -126,6 +126,8 @@ void ScRawToken::SetOpCode( OpCode e )
     switch (eOp)
     {
         case ocIf:
+        case ocIfError:
+        case ocIfNA:
             eType = svJump;
             nJump[ 0 ] = 3; // If, Else, Behind
             break;

@@ -671,6 +671,71 @@ void testFuncCOUNTIF(ScDocument* pDoc)
     CPPUNIT_ASSERT_MESSAGE("We shouldn't count empty string as valid number.", result == 0.0);
 }
 
+void testFuncIFERROR(ScDocument* pDoc)
+{
+    // IFERROR/IFNA (fdo 56124)
+
+    // Empty A1:A39 first.
+    clearRange(pDoc, ScRange(0, 0, 0, 0, 40, 0));
+
+    // Raw data (rows 1 through 9)
+    const char* aData[] = {
+        "1",
+        "e",
+        "=SQRT(4)",
+        "=SQRT(-2)",
+        "=A4",
+        "=1/0",
+        "bar",
+        "4",
+        "gee"
+    };
+
+    SCROW nRows = SAL_N_ELEMENTS(aData);
+    for (SCROW i = 0; i < nRows; ++i)
+        pDoc->SetString(0, i, 0, rtl::OUString::createFromAscii(aData[i]));
+
+    printRange(pDoc, ScRange(0, 0, 0, 0, 8, 0), "data range for IFERROR/IFNA");
+
+    // formulas and results
+    struct {
+        const char* pFormula; double fResult;
+    } aChecks[] = {
+        { "=IFERROR(A1;-7)",                       1 },
+        { "{=IFERROR(3*A1:A2;2002)}",              3 },
+        { "{=IFERROR(3*A1:A2;1998)}",           1998 },
+        { "=IFERROR(A3;9)",                        4 },
+        { "=IFERROR(A4;9)",                        9 },
+        { "=IFERROR(A5;-7",                       -7 },
+        { "=IFERROR(A6;-7)",                      -7 },
+        { "=IFERROR(A2;-7)",                      -7 },
+        { "=IFNA(VLOOKUP(\"4\",A7:A9;1;0);-2)",    4 },
+        { "=IFNA(VLOOKUP(\"fop\",A7:A9;1;0);-2)", -2 }
+    };
+
+    nRows = SAL_N_ELEMENTS(aChecks);
+    for (SCROW i = 0; i < nRows; ++i)
+    {
+        SCROW nRow = 20 + i;
+        pDoc->SetString(0, nRow, 0, rtl::OUString::createFromAscii(aChecks[i].pFormula));
+    }
+    pDoc->CalcAll();
+
+    for (SCROW i = 0; i < nRows; ++i)
+    {
+        double result;
+        SCROW nRow = 20 + i;
+        pDoc->GetValue(0, nRow, 0, result);
+        bool bGood = result == aChecks[i].fResult;
+        if (!bGood)
+        {
+            cerr << "row " << (nRow+1) << ": formula" << aChecks[i].pFormula
+                << "  expected=" << aChecks[i].fResult << "  actual=" << result << endl;
+            CPPUNIT_ASSERT_MESSAGE("Unexpected result for COUNTIF", false);
+        }
+    }
+}
+
 void testFuncVLOOKUP(ScDocument* pDoc)
 {
     // VLOOKUP
@@ -4154,6 +4219,8 @@ void Test::testFunctionLists()
         "CELL",
         "CURRENT",
         "FORMULA",
+        "IFERROR",
+        "IFNA",
         "INFO",
         "ISBLANK",
         "ISERR",

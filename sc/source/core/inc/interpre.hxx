@@ -368,6 +368,7 @@ bool LookupQueryWithCache( ScAddress & o_rResultPos,
         const ScQueryParam & rParam ) const;
 
 void ScIfJump();
+void ScIfError( bool bNAonly );
 void ScChoseJump();
 
 // Be sure to only call this if pStack[sp-nStackLevel] really contains a
