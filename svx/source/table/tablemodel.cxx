@@ -1118,7 +1118,7 @@ void TableModel::merge( sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nColSpan, sal_
     const sal_Int32 nLastRow = nRow + nRowSpan;
     const sal_Int32 nLastCol = nCol + nColSpan;
 
-    if( (nLastRow > getRowCount()) || (nLastCol > getRowCount() ) )
+    if( (nLastRow > getRowCount()) || (nLastCol > getColumnCount() ) )
     {
         OSL_FAIL("TableModel::merge(), merge beyound the table!");
     }
