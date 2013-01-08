@@ -105,6 +105,15 @@ SvxPersonalizationTabPage::SvxPersonalizationTabPage( Window *pParent, const Sfx
     get( m_pSelectBackground, "select_background" );
     m_pSelectBackground->SetClickHdl( LINK( this, SvxPersonalizationTabPage, SelectBackground ) );
 
+    // HACK for 4.0 - Background image not implemented
+    Window *pWindow;
+    get( pWindow, "background_label" );
+    pWindow->Hide();
+    m_pNoBackground->Hide();
+    m_pDefaultBackground->Hide();
+    m_pOwnBackground->Hide();
+    m_pSelectBackground->Hide();
+
     // persona
     get( m_pNoPersona, "no_persona" );
     get( m_pDefaultPersona, "default_persona" );
