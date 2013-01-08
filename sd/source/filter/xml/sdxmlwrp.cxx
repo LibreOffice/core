@@ -282,7 +282,7 @@ sal_Int32 ReadThroughComponent(
 
         if( rStreamName.Len() )
         {
-            return TwoStringErrorInfo(
+            return *new TwoStringErrorInfo(
                             (bMustBeSuccessfull ? ERR_FORMAT_FILE_ROWCOL
                                                     : WARN_FORMAT_FILE_ROWCOL),
                             rStreamName, sErr,
@@ -291,7 +291,7 @@ sal_Int32 ReadThroughComponent(
         else
         {
             DBG_ASSERT( bMustBeSuccessfull, "Warnings are not supported" );
-            return StringErrorInfo( ERR_FORMAT_ROWCOL, sErr,
+            return *new StringErrorInfo( ERR_FORMAT_ROWCOL, sErr,
                              ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR );
         }
     }

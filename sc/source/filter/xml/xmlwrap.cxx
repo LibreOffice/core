@@ -219,7 +219,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
 
             if( !sDocName.isEmpty() )
             {
-                nReturn = TwoStringErrorInfo(
+                nReturn = *new TwoStringErrorInfo(
                                 (bMustBeSuccessfull ? SCERR_IMPORT_FILE_ROWCOL
                                                         : SCWARN_IMPORT_FILE_ROWCOL),
                                 sDocName, sErr,
@@ -228,7 +228,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
             else
             {
                 OSL_ENSURE( bMustBeSuccessfull, "Warnings are not supported" );
-                nReturn = StringErrorInfo( SCERR_IMPORT_FORMAT_ROWCOL, sErr,
+                nReturn = *new StringErrorInfo( SCERR_IMPORT_FORMAT_ROWCOL, sErr,
                                  ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR );
             }
         }
