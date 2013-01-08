@@ -36,6 +36,7 @@
 #include <svtools/javacontext.hxx>
 #include <com/sun/star/frame/AutoRecovery.hpp>
 #include <com/sun/star/frame/GlobalEventBroadcaster.hpp>
+#include <com/sun/star/frame/SessionListener.hpp>
 #include <com/sun/star/frame/XSessionManagerListener.hpp>
 #include <com/sun/star/frame/XSynchronousDispatch.hpp>
 #include <com/sun/star/frame/PopupMenuControllerFactory.hpp>
@@ -2325,20 +2326,20 @@ void Desktop::OpenClients()
             }
         }
 
-        Reference< XInitialization > xSessionListener;
+        Reference< XSessionManagerListener2 > xSessionListener;
         try
         {
-            xSessionListener = Reference< XInitialization >(::comphelper::getProcessServiceFactory()->createInstance(
-                        OUString("com.sun.star.frame.SessionListener")), UNO_QUERY_THROW);
-
             // specifies whether the UI-interaction on Session shutdown is allowed
             sal_Bool bAllowUI = isUIOnSessionShutdownAllowed();
-            css::beans::NamedValue aProperty( ::rtl::OUString( "AllowUserInteractionOnQuit"  ),
-                                              css::uno::makeAny( bAllowUI ) );
-            css::uno::Sequence< css::uno::Any > aArgs( 1 );
-            aArgs[0] <<= aProperty;
 
-            xSessionListener->initialize( aArgs );
+            xSessionListener = SessionListener::createWithOnQuitFlag(::comphelper::getProcessComponentContext(), bAllowUI);
+
+//            css::beans::NamedValue aProperty( ::rtl::OUString( "AllowUserInteractionOnQuit"  ),
+ //                                             css::uno::makeAny( bAllowUI ) );
+  //          css::uno::Sequence< css::uno::Any > aArgs( 1 );
+   //         aArgs[0] <<= aProperty;
+
+     //       xSessionListener->initialize( aArgs );
         }
         catch(const com::sun::star::uno::Exception& e)
         {

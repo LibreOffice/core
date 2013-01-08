@@ -93,7 +93,7 @@ DEFINE_XTYPEPROVIDER_5(
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE(
        SessionListener,
        cppu::OWeakObject,
-       SERVICENAME_SESSIONLISTENER,
+       "com.sun.star.frame.SessionListener",
        IMPLEMENTATIONNAME_SESSIONLISTENER)
 
 DEFINE_INIT_SERVICE(SessionListener,
@@ -195,7 +195,9 @@ void SAL_CALL SessionListener::initialize(const Sequence< Any  >& args)
     SAL_INFO("fwk.session", "SessionListener::initialize");
 
     OUString aSMgr("com.sun.star.frame.SessionManagerClient");
-    if (args.getLength() > 0)
+    if ( (args.getLength() == 1) && (args[0] >>= m_bAllowUserInteractionOnQuit) )
+       ;// do nothing
+    else if (args.getLength() > 0)
     {
         NamedValue v;
         for (int i = 0; i < args.getLength(); i++)
