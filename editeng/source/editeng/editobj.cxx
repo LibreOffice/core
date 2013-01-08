@@ -44,6 +44,8 @@
 #include <unotools/fontcvt.hxx>
 #include <tools/tenccvt.hxx>
 
+using namespace com::sun::star;
+
 DBG_NAME( EE_EditTextObject )
 DBG_NAME( XEditAttribute )
 
@@ -265,12 +267,6 @@ const SvxFieldItem* EditTextObject::GetField() const
 {
     OSL_FAIL( "Virtual method direct from EditTextObject!" );
     return 0;
-}
-
-sal_Bool EditTextObject::HasField( TypeId /*aType*/ ) const
-{
-    OSL_FAIL( "Virtual method direct from EditTextObject!" );
-    return false;
 }
 
 SfxItemSet EditTextObject::GetParaAttribs(size_t /*nPara*/) const
@@ -854,30 +850,6 @@ const SvxFieldItem* BinTextObject::GetField() const
     return 0;
 }
 
-sal_Bool BinTextObject::HasField( TypeId aType ) const
-{
-    size_t nParagraphs = aContents.size();
-    for (size_t nPara = 0; nPara < nParagraphs; ++nPara)
-    {
-        const ContentInfo& rC = aContents[nPara];
-        size_t nAttrs = rC.aAttribs.size();
-        for (size_t nAttr = 0; nAttr < nAttrs; ++nAttr)
-        {
-            const XEditAttribute& rAttr = rC.aAttribs[nAttr];
-            if (rAttr.GetItem()->Which() == EE_FEATURE_FIELD)
-            {
-                if ( !aType )
-                    return true;
-
-                const SvxFieldData* pFldData = static_cast<const SvxFieldItem*>(rAttr.GetItem())->GetField();
-                if ( pFldData && pFldData->IsA( aType ) )
-                    return true;
-            }
-        }
-    }
-    return false;
-}
-
 bool BinTextObject::HasField( sal_Int32 nType ) const
 {
     size_t nParagraphs = aContents.size();
@@ -890,6 +862,10 @@ bool BinTextObject::HasField( sal_Int32 nType ) const
             const XEditAttribute& rAttr = rC.aAttribs[nAttr];
             if (rAttr.GetItem()->Which() != EE_FEATURE_FIELD)
                 continue;
+
+            if (nType == text::textfield::Type::UNSPECIFIED)
+                // Match any field type.
+                return true;
 
             const SvxFieldData* pFldData = static_cast<const SvxFieldItem*>(rAttr.GetItem())->GetField();
             if (pFldData && pFldData->GetClassId() == nType)

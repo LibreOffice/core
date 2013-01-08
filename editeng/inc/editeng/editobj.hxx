@@ -28,6 +28,8 @@
 #include <editeng/editdata.hxx>
 #include "editeng/editengdllapi.h"
 
+#include <com/sun/star/text/textfield/Type.hpp>
+
 #include <vector>
 
 DBG_NAMEEX( EE_EditTextObject )
@@ -101,8 +103,7 @@ public:
 
     virtual sal_Bool        IsFieldObject() const;
     virtual const SvxFieldItem* GetField() const;
-    virtual sal_Bool        HasField( TypeId aType = NULL ) const;
-    virtual bool HasField( sal_Int32 nType ) const = 0;
+    virtual bool HasField( sal_Int32 nType = com::sun::star::text::textfield::Type::UNSPECIFIED ) const = 0;
 
     virtual SfxItemSet GetParaAttribs(size_t nPara) const;
     virtual void SetParaAttribs(size_t nPara, const SfxItemSet& rAttribs);
