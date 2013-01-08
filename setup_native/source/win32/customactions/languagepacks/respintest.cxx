@@ -150,38 +150,7 @@ extern "C" UINT __stdcall GetUserInstallMode(MSIHANDLE handle)
         return ERROR_SUCCESS;
     }
 
-    // 3. Only for patch: Comparing "PRODUCTMINOR from property table and "ProductMinor" from InfoFile
-
-    string isPatch = GetMsiProperty(handle, TEXT("ISPATCH"));
-
-    if (isPatch=="1")
-    {
-        string ProductMinor = GetMsiProperty(handle, TEXT("PRODUCTBUILDID"));
-        int PatchProductMinor = atoi(ProductMinor.c_str());
-
-        szValue[0] = '\0';
-
-        GetPrivateProfileString(
-            TEXT("Bootstrap"),
-            TEXT("ProductBuildid"),
-            TEXT("8918"),
-            szValue,
-            SAL_N_ELEMENTS(szValue),
-            sSetupiniPath.c_str()
-            );
-
-        int InstalledProductMinor = atoi(szValue);
-
-        if ( InstalledProductMinor >= PatchProductMinor )
-        {
-            SetMsiProperty( handle, TEXT("PATCHISOLDER"), TEXT("YES") );
-            // MessageBox(NULL, "PATCHISOLDER set", "DEBUG", MB_OK);
-            SetMsiErrorCode( MSI_ERROR_PATCHISOLDER );
-            return ERROR_SUCCESS;
-        }
-    }
-
-    // 4. Setting property ALLUSERS with value from "setup.ini"
+    // 3. Setting property ALLUSERS with value from "setup.ini"
 
     szValue[0] = '\0';
 

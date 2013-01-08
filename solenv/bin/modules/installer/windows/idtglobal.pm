@@ -760,23 +760,6 @@ sub prepare_language_idt_directory
     {
         installer::systemactions::create_directory($destinationdir . $installer::globals::separator . "Binary");
         installer::systemactions::copy_directory($installer::globals::idttemplatepath . $installer::globals::separator . "Binary", $destinationdir . $installer::globals::separator . "Binary");
-
-        if ((( $installer::globals::patch ) && ( $allvariables->{'WINDOWSPATCHBITMAPDIRECTORY'} )) || ( $allvariables->{'WINDOWSBITMAPDIRECTORY'} ))
-        {
-            my $bitmapdir = "";
-            if ( $allvariables->{'WINDOWSPATCHBITMAPDIRECTORY'} ) { $bitmapdir = $allvariables->{'WINDOWSPATCHBITMAPDIRECTORY'}; }
-            if ( $allvariables->{'WINDOWSBITMAPDIRECTORY'} ) { $bitmapdir = $allvariables->{'WINDOWSBITMAPDIRECTORY'}; }
-
-            my $newsourcedir = $installer::globals::unpackpath . $installer::globals::separator . $bitmapdir; # path setting in list file dependent from unpackpath !?
-            $infoline = "\nOverwriting files in directory \"" . $destinationdir . $installer::globals::separator . "Binary" . "\" with files from directory \"" . $newsourcedir . "\".\n";
-            push( @installer::globals::logfileinfo, $infoline);
-            if ( ! -d $newsourcedir )
-            {
-                my $currentdir = cwd();
-                installer::exiter::exit_program("ERROR: Directory $newsourcedir does not exist! Current directory is: $currentdir", "prepare_language_idt_directory");
-            }
-            installer::systemactions::copy_directory($newsourcedir, $destinationdir . $installer::globals::separator . "Binary");
-        }
     }
 
     installer::systemactions::create_directory($destinationdir . $installer::globals::separator . "Icon");
@@ -1714,18 +1697,6 @@ sub addcustomactions
                 if ( $customaction->{$key} )
                 {
                     $value = $customaction->{$key};
-
-                    # in a patch the Assignment can be overwritten by a PatchAssignment
-                    if ( $installer::globals::patch )
-                    {
-                        $patchkey = "PatchAssignment" . $j;
-                        if ( $customaction->{$patchkey} )
-                        {
-                            $value = $customaction->{$patchkey};
-                            $key = $patchkey;
-                        }
-                    }
-
                 }
                 else { last; }
 

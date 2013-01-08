@@ -484,7 +484,6 @@ sub set_addsystemintegration
 
     if ( $allvariables->{'ADDSYSTEMINTEGRATION'} ) { $installer::globals::addsystemintegration = 1; }
 
-    if ( $installer::globals::patch ) { $installer::globals::addsystemintegration = 0; }
     if ( $installer::globals::languagepack ) { $installer::globals::addsystemintegration = 0; }
     if ( $installer::globals::helppack ) { $installer::globals::addsystemintegration = 0; }
     if (( $installer::globals::packageformat eq "native" ) || ( $installer::globals::packageformat eq "portable" )) { $installer::globals::addsystemintegration = 0; }

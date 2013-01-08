@@ -56,13 +56,6 @@ sub get_arpcomments_for_property_table
     if ( $installer::globals::languagepack ) { $comment = $comment . " " . "Language Pack"; }
     elsif ( $installer::globals::helppack ) { $comment = $comment . " " . "Help Pack"; }
 
-    if ( $installer::globals::patch )
-    {
-        if ( ! $allvariables->{'WINDOWSPATCHLEVEL'} ) { installer::exiter::exit_program("ERROR: No Patch level defined for Windows patch: WINDOWSPATCHLEVEL", "get_arpcomments_for_property_table"); }
-        my $patchstring = "Product Update" . " " . $allvariables->{'WINDOWSPATCHLEVEL'};
-        $comment = $comment . " " . $patchstring;
-    }
-
     my $languagestring = $$languagestringref;
     $languagestring =~ s/\_/\,/g;
 
@@ -181,13 +174,6 @@ sub get_productname_for_property_table($$)
         $productname = $name . " " . $version . " Help Pack" . " " . $langstring;
     }
 
-    if ( $installer::globals::patch )
-    {
-        if ( ! $allvariables->{'WINDOWSPATCHLEVEL'} ) { installer::exiter::exit_program("ERROR: No Patch level defined for Windows patch: WINDOWSPATCHLEVEL", "get_productname_for_property_table"); }
-        my $patchstring = "Product Update" . " " . $allvariables->{'WINDOWSPATCHLEVEL'};
-        $productname = $productname . " " . $patchstring;
-    }
-
     # Saving this name in hash $allvariables for further usage
     $allvariables->{'PROPERTYTABLEPRODUCTNAME'} = $productname;
     my $infoline = "Defined variable PROPERTYTABLEPRODUCTNAME: $productname\n";
@@ -214,23 +200,6 @@ sub get_quickstarterlinkname_for_property_table($$)
 sub get_productversion_for_property_table
 {
     return $installer::globals::msiproductversion;
-}
-
-#######################################################
-# Setting all feature names as Properties. This is
-# required for the Windows patch process.
-#######################################################
-
-sub set_featurename_properties_for_patch
-{
-    ($propertyfile) = @_;
-
-    for ( my $i = 0; $i <= $#installer::globals::featurecollector; $i++ )
-    {
-        my $onepropertyline =  $installer::globals::featurecollector[$i] . "\t" . "1" . "\n";
-        push(@{$propertyfile}, $onepropertyline);
-    }
-
 }
 
 #######################################################
@@ -326,12 +295,6 @@ sub set_important_properties
         push(@{$propertyfile}, $onepropertyline);
 
         $onepropertyline = "CREATEDESKTOPLINK" . "\t" . "1" . "\n"; # Setting the default
-        push(@{$propertyfile}, $onepropertyline);
-    }
-
-    if ( $installer::globals::patch )
-    {
-        my $onepropertyline = "ISPATCH" . "\t" . "1" . "\n";
         push(@{$propertyfile}, $onepropertyline);
     }
 
@@ -502,9 +465,6 @@ sub update_property_table
 
     # Setting variables into propertytable
     set_important_properties($propertyfile, $allvariables, $languagestringref);
-
-    # Setting feature names as properties for Windows patch mechanism
-    if ( $installer::globals::patch ) { set_featurename_properties_for_patch($propertyfile); }
 
     # Setting variables for register for ms file types
     set_ms_file_types_properties($propertyfile);

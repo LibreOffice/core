@@ -516,21 +516,6 @@ sub use_langpack_hostname
 # Using different HostName for language packs
 ################################################################################
 
-sub use_patch_hostname
-{
-    my ($dirsref) = @_;
-
-    for ( my $i = 0; $i <= $#{$dirsref}; $i++ )
-    {
-        my $onedir = ${$dirsref}[$i];
-        if (( $onedir->{'PatchHostName'} ) && ( $onedir->{'PatchHostName'} ne "" )) { $onedir->{'HostName'} = $onedir->{'PatchHostName'}; }
-    }
-}
-
-################################################################################
-# Using different HostName for language packs
-################################################################################
-
 sub use_langpack_copy_scpaction
 {
     my ($scpactionsref) = @_;
@@ -554,21 +539,6 @@ sub use_devversion_copy_scpaction
     {
         my $onescpaction = ${$scpactionsref}[$i];
         if (( $onescpaction->{'DevVersionCopy'} ) && ( $onescpaction->{'DevVersionCopy'} ne "" )) { $onescpaction->{'Copy'} = $onescpaction->{'DevVersionCopy'}; }
-    }
-}
-
-################################################################################
-# Using different HostName for language packs
-################################################################################
-
-sub use_patch_copy_scpaction
-{
-    my ($scpactionsref) = @_;
-
-    for ( my $i = 0; $i <= $#{$scpactionsref}; $i++ )
-    {
-        my $onescpaction = ${$scpactionsref}[$i];
-        if (( $onescpaction->{'PatchCopy'} ) && ( $onescpaction->{'PatchCopy'} ne "" )) { $onescpaction->{'Copy'} = $onescpaction->{'PatchCopy'}; }
     }
 }
 
@@ -728,7 +698,6 @@ sub replace_setup_variables
         $value =~ s/\<alllanguages\>/$languagesstring/;
         $value =~ s/\<productmajor\>/$localbuild/;
         $value =~ s/\<productminor\>/$localminor/;
-        $value =~ s/\<productbuildid\>/$installer::globals::buildid/;
         $value =~ s/\<sourceid\>/$installer::globals::build/;
         $value =~ s/\<updateid\>/$updateid/;
         $value =~ s/\<pkgformat\>/$installer::globals::packageformat/;
@@ -1601,42 +1570,6 @@ sub remove_Helppacklibraries_from_Installset
         if ( $styles =~ /\bHELPPACK\b/ )
         {
             $infoline = "Removing help pack file $oneitem->{'gid'} from the installation set.\n";
-            push( @installer::globals::globallogfileinfo, $infoline);
-
-            next;
-        }
-
-        push(@newitemsarray, $oneitem);
-    }
-
-    $infoline = "\n";
-    push( @installer::globals::globallogfileinfo, $infoline);
-
-    return \@newitemsarray;
-}
-
-############################################################################
-# Removing all files with flag PATCH_ONLY from installation set.
-# This function is not called during patch creation.
-############################################################################
-
-sub remove_patchonlyfiles_from_Installset
-{
-    my ($itemsarrayref) = @_;
-
-    my $infoline;
-
-    my @newitemsarray = ();
-
-    for ( my $i = 0; $i <= $#{$itemsarrayref}; $i++ )
-    {
-        my $oneitem = ${$itemsarrayref}[$i];
-        my $styles = "";
-        if ( $oneitem->{'Styles'} ) { $styles = $oneitem->{'Styles'}; }
-
-        if ( $styles =~ /\bPATCH_ONLY\b/ )
-        {
-            $infoline = "Removing file with flag PATCH_ONLY $oneitem->{'gid'} from the installation set.\n";
             push( @installer::globals::globallogfileinfo, $infoline);
 
             next;

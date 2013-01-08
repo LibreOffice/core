@@ -230,7 +230,6 @@ sub create_directories
 
         if ( $installer::globals::languagepack ) { $path = $path . $localproductname . "_languagepack" . $installer::globals::separator; }
         elsif ( $installer::globals::helppack ) { $path = $path . $localproductname . "_helppack" . $installer::globals::separator; }
-        elsif ( $installer::globals::patch ) { $path = $path . $localproductname . "_patch" . $installer::globals::separator; }
         else { $path = $path . $localproductname . $installer::globals::separator; }
 
         create_directory($path);

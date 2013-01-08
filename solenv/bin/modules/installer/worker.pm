@@ -44,57 +44,6 @@ use installer::scriptitems;
 use installer::systemactions;
 use installer::windows::language;
 
-#################################################
-# Writing some global information into
-# the list of files without flag PATCH
-#################################################
-
-sub write_nopatchlist_header
-{
-    my ( $content ) = @_;
-
-    my @header = ();
-    my $infoline = "This is a list of files, that are defined in scp-projects without\n";
-    push(@header, $infoline);
-    $infoline = "flag \"PATCH\". Important: This does not mean in any case, that \n";
-    push(@header, $infoline);
-    $infoline = "this files are included into or excluded from a patch. \n\n";
-    push(@header, $infoline);
-    $infoline = "Exception Linux: A patch rpm is a complete rpm. This means that all \n";
-    push(@header, $infoline);
-    $infoline = "files are included into a patch rpm, if only one file of the rpm has the \n";
-    push(@header, $infoline);
-    $infoline = "style \"PATCH\". \n\n";
-    push(@header, $infoline);
-
-    for ( my $i = 0; $i <= $#header; $i++ ) { push(@{$content},$header[$i]); }
-}
-
-#################################################
-# Creating the content of the list of files
-# without flag PATCH.
-# All files are saved in
-# @{$installer::globals::nopatchfilecollector}
-#################################################
-
-sub create_nopatchlist
-{
-    my @content =();
-
-    write_nopatchlist_header(\@content);
-
-    for ( my $i = 0; $i <= $#{$installer::globals::nopatchfilecollector}; $i++ )
-    {
-        my $onefile = ${$installer::globals::nopatchfilecollector}[$i];
-        my $oneline = $onefile->{'destination'};
-        if ( $onefile->{'zipfilename'} ) { $oneline = $oneline . " (" . $onefile->{'zipfilename'} . ")"; }
-        $oneline = $oneline . "\n";
-        push(@content, $oneline);
-    }
-
-    return \@content;
-}
-
 #########################################
 # Saving the patchlist file
 #########################################
@@ -108,14 +57,6 @@ sub _save_patchlist_file
     $patchlistfilename =~ s/\.log/\.txt/;
     installer::files::save_file($installpatchlistdir . $installer::globals::separator . $patchlistfilename, \@installer::globals::patchfilecollector);
     installer::logger::print_message( "... creating patchlist file $patchlistfilename \n" );
-
-    if (( $installer::globals::patch ) && ( ! $installer::globals::creating_windows_installer_patch ))  # only for non-Windows patches
-    {
-        $patchlistfilename =~ s/patchfiles\_/nopatchfiles\_/;
-        my $nopatchlist = create_nopatchlist();
-        installer::files::save_file($installpatchlistdir . $installer::globals::separator . $patchlistfilename, $nopatchlist);
-        installer::logger::print_message( "... creating patch exclusion file $patchlistfilename \n" );
-    }
 
 }
 
@@ -221,7 +162,7 @@ sub analyze_and_save_logfile
     installer::files::save_file($installlogdir . $installer::globals::separator . $numberedlogfilename, \@installer::globals::logfileinfo);
 
     # Saving the list of patchfiles in a patchlist directory in the install directory
-    if (( $installer::globals::patch ) || ( $installer::globals::creating_windows_installer_patch )) { _save_patchlist_file($installlogdir, $numberedlogfilename); }
+    if ( $installer::globals::creating_windows_installer_patch ) { _save_patchlist_file($installlogdir, $numberedlogfilename); }
 
     if ( $installer::globals::creating_windows_installer_patch ) { $installer::globals::creating_windows_installer_patch = 0; }
 
@@ -310,20 +251,6 @@ sub collect_all_items_with_special_flag
     }
 
     return \@allitems;
-}
-
-##############################################################
-# Collecting all files without patch flag in
-# $installer::globals::nopatchfilecollector
-##############################################################
-
-sub collect_all_files_without_patch_flag
-{
-    my ($filesref) = @_;
-
-    my $newfiles = collect_all_items_without_special_flag($filesref, "PATCH");
-
-    for ( my $i = 0; $i <= $#{$newfiles}; $i++ ) { push(@{$installer::globals::nopatchfilecollector}, ${$newfiles}[$i]); }
 }
 
 ##############################################################
@@ -489,63 +416,6 @@ sub install_simple ($$$$$$)
 }
 
 ###########################################################
-# Selecting patch items
-###########################################################
-
-sub select_patch_items
-{
-    my ( $itemsref, $itemname ) = @_;
-
-    installer::logger::include_header_into_logfile("Selecting items for patches. Item: $itemname");
-
-    my @itemsarray = ();
-
-    for ( my $i = 0; $i <= $#{$itemsref}; $i++ )
-    {
-        my $oneitem = ${$itemsref}[$i];
-
-        my $name = $oneitem->{'Name'};
-        if (( $name =~ /\bLICENSE/ ) || ( $name =~ /\bREADME/ ))
-        {
-            push(@itemsarray, $oneitem);
-            next;
-        }
-
-        # Items with style "PATCH" have to be included into the patch
-        my $styles = "";
-        if ( $oneitem->{'Styles'} ) { $styles = $oneitem->{'Styles'}; }
-        if ( $styles =~ /\bPATCH\b/ ) { push(@itemsarray, $oneitem); }
-    }
-
-    return \@itemsarray;
-}
-
-###########################################################
-# Selecting patch items
-###########################################################
-
-sub select_patch_items_without_name
-{
-    my ( $itemsref, $itemname ) = @_;
-
-    installer::logger::include_header_into_logfile("Selecting RegistryItems for patches");
-
-    my @itemsarray = ();
-
-    for ( my $i = 0; $i <= $#{$itemsref}; $i++ )
-    {
-        my $oneitem = ${$itemsref}[$i];
-
-        # Items with style "PATCH" have to be included into the patch
-        my $styles = "";
-        if ( $oneitem->{'Styles'} ) { $styles = $oneitem->{'Styles'}; }
-        if ( $styles =~ /\bPATCH\b/ ) { push(@itemsarray, $oneitem); }
-    }
-
-    return \@itemsarray;
-}
-
-###########################################################
 # Selecting langpack items
 ###########################################################
 
@@ -593,257 +463,6 @@ sub select_helppack_items
     }
 
     return \@itemsarray;
-}
-
-###########################################################
-# Searching if LICENSE and README, which are not removed
-# in select_patch_items are really needed for the patch.
-# If not, they are removed now.
-###########################################################
-
-sub analyze_patch_files
-{
-    my ( $filesref ) = @_;
-
-    installer::logger::include_header_into_logfile("Analyzing patch files");
-
-    my @filesarray = ();
-
-    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
-    {
-        my $onefile = ${$filesref}[$i];
-        my $styles = "";
-        if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; }
-        if ( !( $styles =~ /\bPATCH\b/) ) { next; } # removing all files without flag PATCH (LICENSE, README, ...)
-
-        if ( $installer::globals::iswindowsbuild )
-        {
-            # all files of the Windows patch belong to the root module
-            $onefile->{'modules'} = $installer::globals::rootmodulegid;
-        }
-
-        push(@filesarray, $onefile);
-    }
-
-    return \@filesarray;
-}
-
-###########################################################
-# reorganizing the patchfile content,
-# sorting for directory to decrease the file size
-###########################################################
-
-sub reorg_patchfile
-{
-    my ($patchfiles, $patchfiledirectories) = @_;
-
-    my @patchfilesarray = ();
-    my $line = "";
-    my $directory = "";
-
-    # iterating over all directories, writing content into new patchfiles list
-
-    for ( my $i = 0; $i <= $#{$patchfiledirectories}; $i++ )
-    {
-        $directory = ${$patchfiledirectories}[$i];
-        $line = "[" . $directory . "]" . "\n";
-        push(@patchfilesarray, $line);
-
-        for ( my $j = 0; $j <= $#{$patchfiles}; $j++ )
-        {
-            if ( ${$patchfiles}[$j] =~ /^\s*(.*?)\s*\tXXXXX\t\Q$directory\E\s*$/ )
-            {
-                $line = $1 . "\n";
-                push(@patchfilesarray, $line);
-            }
-        }
-    }
-
-    return \@patchfilesarray;
-}
-
-###########################################################
-# One special file has to be the last in patchfile.txt.
-# Controlling this file, guarantees, that all files were
-# patch correctly. Using version.ini makes it easy to
-# control this by looking into the about box
-# -> shifting one section to the end
-###########################################################
-
-sub shift_section_to_end
-{
-    my ($patchfilelist) = @_;
-
-    my @patchfile = ();
-    my @lastsection = ();
-    my $lastsection = "program";
-    my $notlastsection = "Basis\\program";
-    my $record = 0;
-
-    for ( my $i = 0; $i <= $#{$patchfilelist}; $i++ )
-    {
-        my $line = ${$patchfilelist}[$i];
-
-        if (( $record ) && ( $line =~ /^\s*\[/ )) { $record = 0; }
-
-        if (( $line =~ /^\s*\[\Q$lastsection\E\\\]\s*$/ ) && ( ! ( $line =~ /\Q$notlastsection\E\\\]\s*$/ ))) { $record = 1; }
-
-        if ( $record ) { push(@lastsection, $line); }
-        else { push(@patchfile, $line); }
-    }
-
-    if ( $#lastsection > -1 )
-    {
-        for ( my $i = 0; $i <= $#lastsection; $i++ )
-        {
-            push(@patchfile, $lastsection[$i]);
-        }
-    }
-
-    return \@patchfile;
-}
-
-###########################################################
-# One special file has to be the last in patchfile.txt.
-# Controlling this file, guarantees, that all files were
-# patch correctly. Using version.ini makes it easy to
-# control this by looking into the about box
-# -> shifting one file of the last section to the end
-###########################################################
-
-sub shift_file_to_end
-{
-    my ($patchfilelist) = @_;
-
-    my @patchfile = ();
-    my $lastfilename = "version.ini";
-    my $lastfileline = "";
-    my $foundfile = 0;
-
-    # Only searching this file in the last section
-    my $lastsectionname = "";
-
-    for ( my $i = 0; $i <= $#{$patchfilelist}; $i++ )
-    {
-        my $line = ${$patchfilelist}[$i];
-        if ( $line =~ /^\s*\[(.*?)\]\s*$/ ) { $lastsectionname = $1; }
-    }
-
-    my $record = 0;
-    for ( my $i = 0; $i <= $#{$patchfilelist}; $i++ )
-    {
-        my $line = ${$patchfilelist}[$i];
-
-        if ( $line =~ /^\s*\[\Q$lastsectionname\E\]\s*$/ ) { $record = 1; }
-
-        if (( $line =~ /^\s*\"\Q$lastfilename\E\"\=/ ) && ( $record ))
-        {
-            $lastfileline = $line;
-            $foundfile = 1;
-            $record = 0;
-            next;
-        }
-
-        push(@patchfile, $line);
-    }
-
-    if ( $foundfile ) { push(@patchfile, $lastfileline); }
-
-    return  \@patchfile;
-}
-
-###########################################################
-# Renaming Windows files in Patch and creating file
-# patchfiles.txt
-###########################################################
-
-sub prepare_windows_patchfiles
-{
-    my ( $filesref, $languagestringref, $allvariableshashref ) = @_;
-
-    my @patchfiles = ();
-    my %patchfiledirectories = ();
-    my $patchfilename = "patchlist.txt";
-    my $patchfilename2 = "patchmsi.dll";
-
-    if ( ! $allvariableshashref->{'WINDOWSPATCHLEVEL'} ) { installer::exiter::exit_program("ERROR: No Windows patch level defined in list file (WINDOWSPATCHLEVEL) !", "prepare_windows_patchfiles"); }
-    my $windowspatchlevel = $installer::globals::buildid;
-
-    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
-    {
-        my $onefile = ${$filesref}[$i];
-
-        my $filename = $onefile->{'Name'};
-        if (( $filename eq $patchfilename ) || ( $filename eq $patchfilename2 )) { next; }
-
-        my $styles = "";
-        if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; }
-        if ( $styles =~ /\bDONTRENAMEINPATCH\b/ ) { next; }
-
-        # special handling for files with flag DONTSHOW. This files get the extension ".dontshow" to be filtered by dialogs.
-        my $localwindowspatchlevel = $windowspatchlevel;
-        if ( $styles =~ /\bDONTSHOW\b/ ) { $localwindowspatchlevel = $localwindowspatchlevel . "\.dontshow"; }
-
-        my $olddestination = $onefile->{'destination'};
-        my $newdestination = $olddestination . "." . $localwindowspatchlevel;
-        my $localfilename = $olddestination;
-        installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$localfilename);  # file name part
-        my $line = "\"" . $localfilename . "\"" . "=" . "\"" . "\." . $localwindowspatchlevel . "\"";
-        $onefile->{'destination'} = $newdestination;
-
-        my $newfilename = $onefile->{'Name'} . "." . $localwindowspatchlevel;
-        $onefile->{'Name'} = $newfilename;
-
-        # adding section information (section is the directory)
-        my $origolddestination = $olddestination;
-        installer::pathanalyzer::get_path_from_fullqualifiedname(\$olddestination); # directory part
-        if ( ! $olddestination ) { $olddestination = "_root";  }
-        if ( ! exists($patchfiledirectories{$olddestination}) ) { $patchfiledirectories{$olddestination} = 1; }
-        $line = $line . "\tXXXXX\t" . $olddestination . "\n";
-
-        push(@patchfiles, $line);
-
-        # also collecting all files from patch in @installer::globals::patchfilecollector
-        my $patchfileline = $origolddestination . "\n";
-        push(@installer::globals::patchfilecollector, $patchfileline);
-    }
-
-    my $winpatchdirname = "winpatch";
-    my $winpatchdir = installer::systemactions::create_directories($winpatchdirname, $languagestringref);
-
-    my ($patchlistfile) = grep {$_->{Name} eq $patchfilename} @{$filesref};
-    if (! defined $patchlistfile) {
-        installer::exiter::exit_program("ERROR: Could not find file $patchfilename in list of files!", "prepare_windows_patchfiles");
-    }
-
-    # reorganizing the patchfile content, sorting for directory to decrease the file size
-    my $sorteddirectorylist = [ sort keys %patchfiledirectories ];
-    my $patchfilelist = reorg_patchfile(\@patchfiles, $sorteddirectorylist);
-
-    # shifting version.ini to the end of the list, to guarantee, that all files are patched
-    # if the correct version is shown in the about box
-    $patchfilelist = shift_section_to_end($patchfilelist);
-    $patchfilelist = shift_file_to_end($patchfilelist);
-
-    # saving the file
-    $patchfilename = $winpatchdir . $installer::globals::separator . $patchfilename;
-    installer::files::save_file($patchfilename, $patchfilelist);
-
-    my $infoline = "\nCreated list of patch files: $patchfilename\n";
-    push( @installer::globals::logfileinfo, $infoline);
-
-    # and assigning the new source
-    $patchlistfile->{'sourcepath'} = $patchfilename;
-
-    # and finally checking the file size
-    if ( -f $patchfilename )    # test of existence
-    {
-        my $filesize = ( -s $patchfilename );
-        $infoline = "Size of patch file list: $filesize\n\n";
-        push( @installer::globals::logfileinfo, $infoline);
-        installer::logger::print_message( "... size of patch list file: $filesize Byte ... \n" );
-    }
-
 }
 
 ###########################################################

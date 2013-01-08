@@ -66,8 +66,6 @@ The following parameter are needed:
 -copyproject : is set for projects that are only used for copying (optional)
 -languagepack : do create a languagepack, no product pack (optional)
 -helppack : do create a helppack, no product pack (optional)
--patch : do create a patch (optional)
--patchinc: Source for the patch include files (Solaris only)
 -strip: Stripping files (Unix only)
 -log : Logging all available information (optional)
 
@@ -137,12 +135,10 @@ sub getparameter
         elsif ($param eq "-dontcallepm") { $installer::globals::call_epm = 0; }
         elsif ($param eq "-msitemplate") { $installer::globals::idttemplatepath = shift(@ARGV); }
         elsif ($param eq "-msilanguage") { $installer::globals::idtlanguagepath = shift(@ARGV); }
-        elsif ($param eq "-patchinc") { $installer::globals::patchincludepath = shift(@ARGV); }
         elsif ($param eq "-buildid") { $installer::globals::buildid = shift(@ARGV); }
         elsif ($param eq "-copyproject") { $installer::globals::is_copy_only_project = 1; }
         elsif ($param eq "-languagepack") { $installer::globals::languagepack = 1; }
         elsif ($param eq "-helppack") { $installer::globals::helppack = 1;}
-        elsif ($param eq "-patch") { $installer::globals::patch = 1; }
         elsif ($param eq "-debian") { $installer::globals::debian = 1; }
         elsif ($param eq "-strip") { $installer::globals::strip = 1; }
         elsif ($param eq "-destdir")    # new parameter for simple installer
@@ -477,31 +473,6 @@ sub control_required_parameter
     }
 
     #######################################
-    # Patch currently only available
-    # for Solaris packages and Linux
-    #######################################
-
-    if (( $installer::globals::patch ) && ( ! $installer::globals::issolarispkgbuild ) && ( ! $installer::globals::isrpmbuild ) && ( ! $installer::globals::isdebbuild ) && ( ! $installer::globals::iswindowsbuild ) && ( ! $installer::globals::ismacdmgbuild ))
-    {
-        installer::logger::print_error( "Sorry, Patch flag currently only available for Solaris pkg, Linux RPM and Windows builds!" );
-        usage();
-        exit(-1);
-    }
-
-    if (( $installer::globals::patch ) && ( $installer::globals::issolarispkgbuild ) && ( ! $installer::globals::patchincludepath ))
-    {
-        installer::logger::print_error( "Solaris patch requires parameter -patchinc !" );
-        usage();
-        exit(-1);
-    }
-
-    if (( $installer::globals::patch ) && ( $installer::globals::issolarispkgbuild ) && ( $installer::globals::patchincludepath ))
-    {
-        make_path_absolute(\$installer::globals::patchincludepath);
-        $installer::globals::patchincludepath = installer::converter::make_path_conform($installer::globals::patchincludepath);
-    }
-
-    #######################################
     # Testing existence of files
     # also for copy-only projects
     #######################################
@@ -560,7 +531,6 @@ sub outputparameter
     if ((!($installer::globals::idtlanguagepath eq "")) && (!($installer::globals::iswindowsbuild))) { push(@output, "msi language path will be ignored for non Windows builds!\n"); }
     if ((!($installer::globals::iswindowsbuild)) && ( $installer::globals::call_epm )) { push(@output, "Calling epm\n"); }
     if ((!($installer::globals::iswindowsbuild)) && (!($installer::globals::call_epm))) { push(@output, "Not calling epm\n"); }
-    if ( $installer::globals::patchincludepath ) { push(@output, "Patch include path: $installer::globals::patchincludepath\n"); }
     if ( $installer::globals::strip ) { push(@output, "Stripping files\n"); }
     else { push(@output, "No file stripping\n"); }
     if ( $installer::globals::debian ) { push(@output, "Linux: Creating Debian packages\n"); }
@@ -578,7 +548,6 @@ sub outputparameter
     if ( $installer::globals::is_copy_only_project ) { push(@output, "This is a copy only project!\n"); }
     if ( $installer::globals::languagepack ) { push(@output, "Creating language pack!\n"); }
     if ( $installer::globals::helppack ) { push(@output, "Creating help pack!\n"); }
-    if ( $installer::globals::patch ) { push(@output, "Creating patch!\n"); }
     push(@output, "########################################################\n");
 
     # output into shell and into logfile

@@ -53,11 +53,4 @@ File gid_File_Lib_Regactivex_Msi
     Name = "regactivex.dll";
 End
 
-File gid_File_Lib_Regpatchactivex_Msi
-    LIB_FILE_BODY;
-    Styles = (PACKED,PATCH,PATCH_ONLY,BINARYTABLE,BINARYTABLE_ONLY,DONTRENAMEINPATCH);
-    Dir = SCP2_OOO_BIN_DIR;
-    Name = "regpatchactivex.dll";
-End
-
 #endif // WITH_ACTIVEX_COMPONENT

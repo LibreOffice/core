@@ -65,67 +65,64 @@ sub create_upgrade_table
     $newline = $installer::globals::upgradecode . "\t" . $installer::globals::msimajorproductversion . "\t" . $installer::globals::msiproductversion . "\t" . "\t" . "769" . "\t" . "\t" . "OLDPRODUCTSSAMEMAJOR" . "\n";
     push(@upgradetable, $newline);
 
-    if ( ! $installer::globals::patch )
-    {
-        # preventing downgrading
-        $newline = $installer::globals::upgradecode . "\t" . $installer::globals::msiproductversion . "\t" . $ooomaxnew . "\t" . "\t" . "2" . "\t" . "\t" . "NEWPRODUCTS" . "\n";
+    # preventing downgrading
+    $newline = $installer::globals::upgradecode . "\t" . $installer::globals::msiproductversion . "\t" . $ooomaxnew . "\t" . "\t" . "2" . "\t" . "\t" . "NEWPRODUCTS" . "\n";
+    push(@upgradetable, $newline);
+
+    # $newline = $installer::globals::upgradecode . "\t" . $installer::globals::msiproductversion . "\t" . $ooomaxnew . "\t" . "\t" . "258" . "\t" . "\t" . "SAMEPRODUCTS" . "\n";
+    # push(@upgradetable, $newline);
+
+    if ( $include_ooo_fix )
+      {
+        $newline = $installer::globals::upgradecode . "\t" . "35.0.0" . "\t" . "36.0.0" . "\t" . "\t" . "1" . "\t" . "\t" . "OLDPRODUCTS2" . "\n";
         push(@upgradetable, $newline);
+      }
 
-        # $newline = $installer::globals::upgradecode . "\t" . $installer::globals::msiproductversion . "\t" . $ooomaxnew . "\t" . "\t" . "258" . "\t" . "\t" . "SAMEPRODUCTS" . "\n";
-        # push(@upgradetable, $newline);
+    # if (( $allvariableshashref->{'PATCHUPGRADECODE'} ) && ( ! $installer::globals::languagepack ))
+    # {
+    #   $newline = $allvariableshashref->{'PATCHUPGRADECODE'} . "\t" . "\t" . $installer::globals::msiproductversion . "\t" . "\t" . "1" . "\t" . "\t" . "OLDPRODUCTSPATCH" . "\n";
+    #   push(@upgradetable, $newline);
+    #
+    #   $newline = $allvariableshashref->{'PATCHUPGRADECODE'} . "\t" . $installer::globals::msiproductversion . "\t" . "\t" . "\t" . "2" . "\t" . "\t" . "NEWPRODUCTSPATCH" . "\n";
+    #   push(@upgradetable, $newline);
+    #
+    #   $newline = $allvariableshashref->{'PATCHUPGRADECODE'} . "\t" . $installer::globals::msiproductversion . "\t" . "\t" . "\t" . "258" . "\t" . "\t" . "SAMEPRODUCTSPATCH" . "\n";
+    #   push(@upgradetable, $newline);
+    # }
 
-        if ( $include_ooo_fix )
-        {
-            $newline = $installer::globals::upgradecode . "\t" . "35.0.0" . "\t" . "36.0.0" . "\t" . "\t" . "1" . "\t" . "\t" . "OLDPRODUCTS2" . "\n";
-            push(@upgradetable, $newline);
-        }
+    # also searching for the beta
 
-        # if (( $allvariableshashref->{'PATCHUPGRADECODE'} ) && ( ! $installer::globals::languagepack ))
-        # {
-        #   $newline = $allvariableshashref->{'PATCHUPGRADECODE'} . "\t" . "\t" . $installer::globals::msiproductversion . "\t" . "\t" . "1" . "\t" . "\t" . "OLDPRODUCTSPATCH" . "\n";
-        #   push(@upgradetable, $newline);
-        #
-        #   $newline = $allvariableshashref->{'PATCHUPGRADECODE'} . "\t" . $installer::globals::msiproductversion . "\t" . "\t" . "\t" . "2" . "\t" . "\t" . "NEWPRODUCTSPATCH" . "\n";
-        #   push(@upgradetable, $newline);
-        #
-        #   $newline = $allvariableshashref->{'PATCHUPGRADECODE'} . "\t" . $installer::globals::msiproductversion . "\t" . "\t" . "\t" . "258" . "\t" . "\t" . "SAMEPRODUCTSPATCH" . "\n";
-        #   push(@upgradetable, $newline);
-        # }
+    if (( $allvariableshashref->{'BETAUPGRADECODE'} ) && ( ! $installer::globals::languagepack ) && ( ! $installer::globals::helppack ))
+      {
+        $newline = $allvariableshashref->{'BETAUPGRADECODE'} . "\t" . "1.0" . "\t" . "\t" . "\t" . "1" . "\t" . "\t" . "BETAPRODUCTS" . "\n";
+        push(@upgradetable, $newline);
+      }
 
-        # also searching for the beta
+    # also searching for the stub
 
-        if (( $allvariableshashref->{'BETAUPGRADECODE'} ) && ( ! $installer::globals::languagepack ) && ( ! $installer::globals::helppack ))
-        {
-            $newline = $allvariableshashref->{'BETAUPGRADECODE'} . "\t" . "1.0" . "\t" . "\t" . "\t" . "1" . "\t" . "\t" . "BETAPRODUCTS" . "\n";
-            push(@upgradetable, $newline);
-        }
+    if (( $allvariableshashref->{'STUBUPGRADECODE'} ) && ( ! $installer::globals::languagepack ) && ( ! $installer::globals::helppack ))
+      {
+        $newline = $allvariableshashref->{'STUBUPGRADECODE'} . "\t" . "1.0" . "\t" . "\t" . "\t" . "1" . "\t" . "\t" . "STUBPRODUCTS" . "\n";
+        push(@upgradetable, $newline);
+      }
 
-        # also searching for the stub
+    # searching for all older patches and languagepacks (defined in a extra file)
 
-        if (( $allvariableshashref->{'STUBUPGRADECODE'} ) && ( ! $installer::globals::languagepack ) && ( ! $installer::globals::helppack ))
-        {
-            $newline = $allvariableshashref->{'STUBUPGRADECODE'} . "\t" . "1.0" . "\t" . "\t" . "\t" . "1" . "\t" . "\t" . "STUBPRODUCTS" . "\n";
-            push(@upgradetable, $newline);
-        }
+    if (( $allvariableshashref->{'REMOVE_UPGRADE_CODE_FILE'} ) && ( ! $installer::globals::languagepack ) && ( ! $installer::globals::helppack ))
+      {
+        my $filename = $allvariableshashref->{'REMOVE_UPGRADE_CODE_FILE'};
+        my $langpackcodefilename = $installer::globals::idttemplatepath  . $installer::globals::separator . $filename;
+        if ( ! -f $langpackcodefilename ) { installer::exiter::exit_program("ERROR: Could not find file \"$langpackcodefilename\".", "create_upgrade_table"); }
 
-        # searching for all older patches and languagepacks (defined in a extra file)
+        my $filecontent = installer::files::read_file($langpackcodefilename);
+        my $newlines = analyze_file_for_upgrade_table($filecontent);
 
-        if (( $allvariableshashref->{'REMOVE_UPGRADE_CODE_FILE'} ) && ( ! $installer::globals::languagepack ) && ( ! $installer::globals::helppack ))
-        {
-            my $filename = $allvariableshashref->{'REMOVE_UPGRADE_CODE_FILE'};
-            my $langpackcodefilename = $installer::globals::idttemplatepath  . $installer::globals::separator . $filename;
-            if ( ! -f $langpackcodefilename ) { installer::exiter::exit_program("ERROR: Could not find file \"$langpackcodefilename\".", "create_upgrade_table"); }
-
-            my $filecontent = installer::files::read_file($langpackcodefilename);
-            my $newlines = analyze_file_for_upgrade_table($filecontent);
-
-            for ( my $i = 0; $i <= $#{$newlines}; $i++ ) { push(@upgradetable, ${$newlines}[$i]); }
-        }
-    }
+        for ( my $i = 0; $i <= $#{$newlines}; $i++ ) { push(@upgradetable, ${$newlines}[$i]); }
+      }
 
     # No upgrade for Beta versions!
 
-    if (( $allvariableshashref->{'PRODUCTEXTENSION'} eq "Beta" ) && ( ! $installer::globals::patch ) && ( ! $installer::globals::languagepack ) && ( ! $installer::globals::helppack ))
+    if (( $allvariableshashref->{'PRODUCTEXTENSION'} eq "Beta" ) && ( ! $installer::globals::languagepack ) && ( ! $installer::globals::helppack ))
     {
         @upgradetable = ();
         installer::windows::idtglobal::write_idt_header(\@upgradetable, "upgrade");

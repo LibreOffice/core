@@ -123,7 +123,6 @@ $(SCRIPT_OUTPUT_FILE_0) : $(call gb_Executable_get_target,Viewer)
 		echo 'AllLanguages=en-US' && \
 		echo 'BuildVersion=' && \
 		echo 'buildid=$(buildid)' && \
-		echo 'ProductBuildid=3' && \
 		echo 'ProductMajor=360' && \
 		echo 'ProductMinor=1' && \
 	: ) > $(appdir)/program/versionrc

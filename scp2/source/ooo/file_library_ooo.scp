@@ -753,17 +753,6 @@ End
 
 #endif
 
-#ifdef WNT
-
-File gid_File_Lib_Patchmsi
-    LIB_FILE_BODY;
-    Name = "patchmsi.dll";
-    Dir = SCP2_OOO_BIN_DIR;
-    Styles = (PACKED,PATCH,PATCH_ONLY,BINARYTABLE,BINARYTABLE_ONLY,DONTRENAMEINPATCH);
-End
-
-#endif
-
 STD_LIB_FILE( gid_File_Lib_Lng, lng)
 
 File gid_File_Lib_Localedata_En
@@ -1424,10 +1413,10 @@ STD_LIB_FILE( gid_File_Lib_Unoxml, unoxml )
 STD_LIB_FILE( gid_File_Lib_AVMedia, avmedia )
 
 #if defined ENABLE_GSTREAMER
-SPECIAL_LIB_FILE_PATCH( gid_File_Lib_AVMediaGStreamer, avmediagst )
+SPECIAL_LIB_FILE( gid_File_Lib_AVMediaGStreamer, avmediagst )
 #endif
 #if defined ENABLE_GSTREAMER_0_10
-SPECIAL_LIB_FILE_PATCH( gid_File_Lib_AVMediaGStreamer_0_10, avmediagst_0_10 )
+SPECIAL_LIB_FILE( gid_File_Lib_AVMediaGStreamer_0_10, avmediagst_0_10 )
 #endif
 #if defined WNT
 #ifdef ENABLE_DIRECTX
