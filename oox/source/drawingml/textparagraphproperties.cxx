@@ -39,7 +39,6 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <comphelper/genericpropertyset.hxx>
-#include <comphelper/processfactory.hxx>
 #include <oox/ppt/pptimport.hxx>
 #include <oox/ppt/slidepersist.hxx>
 #endif
@@ -486,7 +485,6 @@ float TextParagraphProperties::getCharHeightPoints( float fDefault ) const
 // debugging pptx import problems.
 void TextParagraphProperties::dump() const
 {
-    Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
     Reference< ::com::sun::star::drawing::XShape > xShape( oox::ppt::PowerPointImport::mpDebugFilterBase->getModelFactory()->createInstance( "com.sun.star.presentation.TitleTextShape" ), UNO_QUERY );
     Reference< ::com::sun::star::text::XText > xText( xShape, UNO_QUERY );
 
