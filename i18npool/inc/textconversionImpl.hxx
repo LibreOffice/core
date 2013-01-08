@@ -22,6 +22,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/i18n/XExtendedTextConversion.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase2.hxx> // helper for implementations
 
 namespace com { namespace sun { namespace star { namespace i18n {
@@ -36,7 +37,7 @@ class TextConversionImpl : public cppu::WeakImplHelper2
 >
 {
 public:
-    TextConversionImpl( const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& rxMSF ) : xMSF(rxMSF) {};
+    TextConversionImpl( const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& rxContext ) : m_xContext(rxContext) {};
 
         // Methods
         com::sun::star::i18n::TextConversionResult SAL_CALL
@@ -80,7 +81,7 @@ public:
 private :
     com::sun::star::lang::Locale aLocale;
     com::sun::star::uno::Reference < com::sun::star::i18n::XExtendedTextConversion > xTC;
-    com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > xMSF;
+    com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > m_xContext;
 
     void SAL_CALL getLocaleSpecificTextConversion( const com::sun::star::lang::Locale& rLocale )
             throw( com::sun::star::lang::NoSupportException );

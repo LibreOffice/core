@@ -273,8 +273,8 @@ static rtl::OUString transliterate_titlecase_Impl(
     OUString aRes;
     if (!aText.isEmpty())
     {
-        Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-        CharacterClassificationImpl aCharClassImpl( xMSF );
+        Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        CharacterClassificationImpl aCharClassImpl( xContext );
 
         // because aCharClassImpl.toTitle does not handle ligatures or ß but will raise
         // an exception we need to handle the first chara manually...

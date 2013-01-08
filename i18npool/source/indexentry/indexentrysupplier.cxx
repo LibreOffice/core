@@ -29,7 +29,7 @@ static const sal_Unicode under = sal_Unicode('_');
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-IndexEntrySupplier::IndexEntrySupplier( const Reference < XMultiServiceFactory >& rxMSF ) : xMSF( rxMSF )
+IndexEntrySupplier::IndexEntrySupplier( const Reference < XComponentContext >& rxContext ) : m_xContext( rxContext )
 {
 }
 
@@ -101,8 +101,8 @@ OUString SAL_CALL IndexEntrySupplier::getIndexCharacter( const OUString& rIndexE
 
 sal_Bool SAL_CALL IndexEntrySupplier::createLocaleSpecificIndexEntrySupplier(const OUString& name) throw( RuntimeException )
 {
-        Reference < XInterface > xI = xMSF->createInstance(
-            OUString("com.sun.star.i18n.IndexEntrySupplier_") + name);
+        Reference < XInterface > xI = m_xContext->getServiceManager()->createInstanceWithContext(
+            OUString("com.sun.star.i18n.IndexEntrySupplier_") + name, m_xContext);
 
         if ( xI.is() ) {
             xI->queryInterface( ::getCppuType((const Reference< com::sun::star::i18n::XExtendedIndexEntrySupplier>*)0) ) >>= xIES;
@@ -117,7 +117,7 @@ IndexEntrySupplier::getLocaleSpecificIndexEntrySupplier(const Locale& rLocale, c
         if (xIES.is() && rSortAlgorithm == aSortAlgorithm && rLocale.Language == aLocale.Language &&
                 rLocale.Country == aLocale.Country && rLocale.Variant == aLocale.Variant)
             return xIES;
-        else if (xMSF.is()) {
+        else {
             LocaleData ld;
             aLocale = rLocale;
             if (rSortAlgorithm.isEmpty())

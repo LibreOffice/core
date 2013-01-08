@@ -83,23 +83,23 @@ static inline sal_Bool operator != (const Locale& l1, const Locale& l2) {
 void SAL_CALL
 TextConversionImpl::getLocaleSpecificTextConversion(const Locale& rLocale) throw( NoSupportException )
 {
-    if (xMSF.is() && rLocale != aLocale) {
+    if (rLocale != aLocale) {
         aLocale = rLocale;
 
         Reference < XInterface > xI;
 
-        xI = xMSF->createInstance(
-            OUString("com.sun.star.i18n.TextConversion_") + aLocale.Language);
+        xI = m_xContext->getServiceManager()->createInstanceWithContext(
+            OUString("com.sun.star.i18n.TextConversion_") + aLocale.Language, m_xContext);
 
         if ( ! xI.is() )
-            xI = xMSF->createInstance(
+            xI = m_xContext->getServiceManager()->createInstanceWithContext(
                 OUString("com.sun.star.i18n.TextConversion_") + aLocale.Language +
-                OUString("_") + aLocale.Country);
+                OUString("_") + aLocale.Country, m_xContext);
         if ( ! xI.is() )
-            xI = xMSF->createInstance(
+            xI = m_xContext->getServiceManager()->createInstanceWithContext(
                 OUString("com.sun.star.i18n.TextConversion_") + aLocale.Language +
                 OUString("_") + aLocale.Country +
-                OUString("_") + aLocale.Variant);
+                OUString("_") + aLocale.Variant, m_xContext);
 
         if (xI.is())
             xI->queryInterface( getCppuType((const Reference< XTextConversion>*)0) ) >>= xTC;

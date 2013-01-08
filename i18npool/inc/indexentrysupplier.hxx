@@ -22,6 +22,7 @@
 #include <com/sun/star/i18n/XExtendedIndexEntrySupplier.hpp>
 #include <cppuhelper/implbase2.hxx> // helper for implementations
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -35,7 +36,7 @@ class IndexEntrySupplier : public cppu::WeakImplHelper2
 >
 {
 public:
-    IndexEntrySupplier( const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& rxMSF );
+    IndexEntrySupplier( const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& rxContext );
 
     // Methods
     virtual com::sun::star::uno::Sequence < com::sun::star::lang::Locale > SAL_CALL getLocaleList()
@@ -87,7 +88,7 @@ public:
 private:
     rtl::OUString aServiceName;
     com::sun::star::uno::Reference < com::sun::star::i18n::XExtendedIndexEntrySupplier > xIES;
-    com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > xMSF;
+    com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > m_xContext;
     sal_Bool SAL_CALL createLocaleSpecificIndexEntrySupplier(const rtl::OUString& name) throw( com::sun::star::uno::RuntimeException );
     com::sun::star::uno::Reference < com::sun::star::i18n::XExtendedIndexEntrySupplier > SAL_CALL getLocaleSpecificIndexEntrySupplier(
         const com::sun::star::lang::Locale& rLocale, const rtl::OUString& rSortAlgorithm) throw (com::sun::star::uno::RuntimeException);

@@ -35,11 +35,10 @@ using ::rtl::OUString;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-TextConversion_zh::TextConversion_zh( const Reference < XMultiServiceFactory >& xMSF )
+TextConversion_zh::TextConversion_zh( const Reference < XComponentContext >& xContext )
 {
-    Reference < XInterface > xI;
-    xI = xMSF->createInstance(
-        OUString("com.sun.star.linguistic2.ConversionDictionaryList"));
+    Reference < XInterface > xI = xContext->getServiceManager()->createInstanceWithContext(
+        OUString("com.sun.star.linguistic2.ConversionDictionaryList"), xContext);
     if ( xI.is() )
         xI->queryInterface( getCppuType((const Reference< XConversionDictionaryList>*)0) ) >>= xCDL;
 

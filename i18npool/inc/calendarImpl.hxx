@@ -25,6 +25,7 @@
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
 #include <cppuhelper/implbase2.hxx> // helper for implementations
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <vector>
 
 //  ----------------------------------------------------
@@ -43,7 +44,7 @@ public:
 
     // Constructors
     CalendarImpl() {};
-    CalendarImpl(const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& rxMSF);
+    CalendarImpl(const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& rxContext);
 
     /**
     * Destructor
@@ -96,7 +97,7 @@ private:
     com::sun::star::uno::Reference < com::sun::star::i18n::XCalendar3 > xCalendar;
     };
     std::vector<lookupTableItem*> lookupTable;
-    com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > xMSF;
+    com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > m_xContext;
     com::sun::star::uno::Reference < com::sun::star::i18n::XCalendar3 > xCalendar;
 };
 

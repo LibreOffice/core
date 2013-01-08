@@ -40,18 +40,18 @@ namespace com { namespace sun { namespace star { namespace i18n {
 #define SCRIPT_HANJA    1
 #define SCRIPT_HANGUL   2
 
-TextConversion_ko::TextConversion_ko( const Reference < XMultiServiceFactory >& xMSF )
+TextConversion_ko::TextConversion_ko( const Reference < XComponentContext >& xContext )
 {
     Reference < XInterface > xI;
 
-    xI = xMSF->createInstance(
-        OUString("com.sun.star.i18n.ConversionDictionary_ko"));
+    xI = xContext->getServiceManager()->createInstanceWithContext(
+        OUString("com.sun.star.i18n.ConversionDictionary_ko"), xContext);
 
     if ( xI.is() )
         xI->queryInterface( getCppuType((const Reference< XConversionDictionary>*)0) ) >>= xCD;
 
-    xI = xMSF->createInstance(
-        OUString("com.sun.star.linguistic2.ConversionDictionaryList"));
+    xI = xContext->getServiceManager()->createInstanceWithContext(
+        OUString("com.sun.star.linguistic2.ConversionDictionaryList"), xContext);
 
     if ( xI.is() )
         xI->queryInterface( getCppuType((const Reference< XConversionDictionaryList>*)0) ) >>= xCDL;

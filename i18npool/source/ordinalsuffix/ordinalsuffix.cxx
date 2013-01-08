@@ -35,9 +35,7 @@ using namespace ::rtl;
 namespace com { namespace sun { namespace star { namespace i18n {
 
 
-OrdinalSuffix::OrdinalSuffix(
-        const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& rxMSF) :
-    _xServiceManager( rxMSF )
+OrdinalSuffix::OrdinalSuffix()
 {
 }
 

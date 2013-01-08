@@ -24,6 +24,7 @@
 #include <com/sun/star/i18n/XExtendedTextConversion.hpp>
 #include <com/sun/star/linguistic2/XConversionDictionary.hpp>
 #include <com/sun/star/linguistic2/XConversionDictionaryList.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase2.hxx> // helper for implementations
 #include <osl/module.h>
 
@@ -101,7 +102,7 @@ typedef struct {
 class TextConversion_ko : public TextConversion
 {
 public:
-    TextConversion_ko( const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& rxMSF );
+    TextConversion_ko( const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& rxContext );
 
         // Methods
         com::sun::star::i18n::TextConversionResult SAL_CALL
@@ -157,7 +158,7 @@ typedef struct {
 class TextConversion_zh : public TextConversion
 {
 public:
-    TextConversion_zh( const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& rxMSF );
+    TextConversion_zh( const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& rxContext );
 
         // Methods
         com::sun::star::i18n::TextConversionResult SAL_CALL

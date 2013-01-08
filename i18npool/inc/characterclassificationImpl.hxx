@@ -24,6 +24,7 @@
 #include <vector>
 #include <com/sun/star/i18n/KCharacterType.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -35,7 +36,7 @@ class CharacterClassificationImpl : public cppu::WeakImplHelper2
 {
 public:
 
-    CharacterClassificationImpl( const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& rxMSF );
+    CharacterClassificationImpl( const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& rxContext );
     virtual ~CharacterClassificationImpl();
 
     virtual rtl::OUString SAL_CALL toUpper( const rtl::OUString& Text,
@@ -95,7 +96,7 @@ private:
     std::vector<lookupTableItem*> lookupTable;
     lookupTableItem *cachedItem;
 
-    com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > xMSF;
+    com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > m_xContext;
     com::sun::star::uno::Reference < XCharacterClassification > xUCI;
 
     com::sun::star::uno::Reference < XCharacterClassification > SAL_CALL

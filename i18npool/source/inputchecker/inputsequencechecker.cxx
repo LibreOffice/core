@@ -30,7 +30,7 @@ using namespace ::rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-InputSequenceCheckerImpl::InputSequenceCheckerImpl( const Reference < XMultiServiceFactory >& rxMSF ) : xMSF( rxMSF )
+InputSequenceCheckerImpl::InputSequenceCheckerImpl( const Reference < XComponentContext >& rxContext ) : m_xContext( rxContext )
 {
         serviceName = "com.sun.star.i18n.InputSequenceCheckerImpl";
         cachedItem = NULL;
@@ -110,16 +110,17 @@ InputSequenceCheckerImpl::getInputSequenceChecker(sal_Char* rLanguage) throw (Ru
         if (cachedItem && cachedItem->aLanguage == rLanguage) {
             return cachedItem->xISC;
         }
-        else if (xMSF.is()) {
+        else {
             for (size_t l = 0; l < lookupTable.size(); l++) {
                 cachedItem = lookupTable[l];
                 if (cachedItem->aLanguage == rLanguage)
                     return cachedItem->xISC;
             }
 
-            Reference < uno::XInterface > xI = xMSF->createInstance(
+            Reference < uno::XInterface > xI = m_xContext->getServiceManager()->createInstanceWithContext(
                         OUString("com.sun.star.i18n.InputSequenceChecker_") +
-                        OUString::createFromAscii(rLanguage));
+                            OUString::createFromAscii(rLanguage),
+                        m_xContext);
 
             if ( xI.is() ) {
                 Reference< XExtendedInputSequenceChecker > xISC;

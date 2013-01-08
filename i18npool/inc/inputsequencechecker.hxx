@@ -39,7 +39,7 @@ class InputSequenceCheckerImpl : public cppu::WeakImplHelper2
 >
 {
 public:
-    InputSequenceCheckerImpl( const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& rxMSF );
+    InputSequenceCheckerImpl( const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& rxContext );
     InputSequenceCheckerImpl();
     ~InputSequenceCheckerImpl();
 
@@ -70,7 +70,7 @@ private :
     std::vector<lookupTableItem*> lookupTable;
     lookupTableItem *cachedItem;
 
-    com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > xMSF;
+    com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > m_xContext;
 
     com::sun::star::uno::Reference< com::sun::star::i18n::XExtendedInputSequenceChecker >& SAL_CALL getInputSequenceChecker(sal_Char* rLanguage)
         throw (com::sun::star::uno::RuntimeException);

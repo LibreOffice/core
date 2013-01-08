@@ -30,7 +30,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 #define ERROR RuntimeException()
 
-CalendarImpl::CalendarImpl(const Reference< XMultiServiceFactory > &rxMSF) : xMSF(rxMSF)
+CalendarImpl::CalendarImpl(const Reference< XComponentContext > &rxContext) : m_xContext(rxContext)
 {
 }
 
@@ -71,16 +71,15 @@ CalendarImpl::loadCalendar(const OUString& uniqueID, const Locale& rLocale ) thr
     }
 
     if (i >= sal::static_int_cast<sal_Int32>(lookupTable.size())) {
-        Reference < XInterface > xI = xMSF->createInstance(
-                OUString("com.sun.star.i18n.Calendar_") + uniqueID);
+        Reference < XInterface > xI = m_xContext->getServiceManager()->createInstanceWithContext(
+                  OUString("com.sun.star.i18n.Calendar_") + uniqueID, m_xContext);
 
         if ( ! xI.is() ) {
             // check if the calendar is defined in localedata, load gregorian calendar service.
             Sequence< Calendar2 > xC = LocaleData().getAllCalendars2(rLocale);
             for (i = 0; i < xC.getLength(); i++) {
                 if (uniqueID == xC[i].Name) {
-                    xI = xMSF->createInstance(
-                        OUString("com.sun.star.i18n.Calendar_gregorian"));
+                    xI = m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.i18n.Calendar_gregorian", m_xContext);
                     break;
                 }
             }

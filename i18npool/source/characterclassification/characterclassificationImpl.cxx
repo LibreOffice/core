@@ -30,7 +30,7 @@ using ::rtl::OUStringBuffer;
 namespace com { namespace sun { namespace star { namespace i18n {
 
 CharacterClassificationImpl::CharacterClassificationImpl(
-        const Reference < lang::XMultiServiceFactory >& rxMSF ) : xMSF( rxMSF )
+        const Reference < uno::XComponentContext >& rxContext ) : m_xContext( rxContext )
 {
         if (createLocaleSpecificCharacterClassification(OUString("Unicode"), Locale()))
             xUCI = cachedItem->xCI;
@@ -140,8 +140,8 @@ sal_Bool SAL_CALL CharacterClassificationImpl::createLocaleSpecificCharacterClas
             }
         }
 
-        Reference < XInterface > xI = xMSF->createInstance(
-            OUString("com.sun.star.i18n.CharacterClassification_") + serviceName);
+        Reference < XInterface > xI = m_xContext->getServiceManager()->createInstanceWithContext(
+             OUString("com.sun.star.i18n.CharacterClassification_") + serviceName, m_xContext);
 
         Reference < XCharacterClassification > xCI;
         if ( xI.is() ) {
@@ -161,7 +161,7 @@ CharacterClassificationImpl::getLocaleSpecificCharacterClassification(const Loca
         // reuse instance if locale didn't change
         if (cachedItem && cachedItem->equals(rLocale))
             return cachedItem->xCI;
-        else if (xMSF.is()) {
+        else {
             for (size_t i = 0; i < lookupTable.size(); i++) {
                 cachedItem = lookupTable[i];
                 if (cachedItem->equals(rLocale))

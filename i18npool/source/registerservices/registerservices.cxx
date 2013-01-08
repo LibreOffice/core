@@ -80,43 +80,34 @@
 
 #include <ordinalsuffix.hxx>
 
+using namespace ::com::sun::star;
+
 #define IMPL_CREATEINSTANCE( ImplName ) \
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >   \
-        SAL_CALL ImplName##_CreateInstance(                                 \
-            SAL_UNUSED_PARAMETER const ::com::sun::star::uno::Reference<    \
-                    ::com::sun::star::lang::XMultiServiceFactory >& )       \
-{                                                                           \
-    return ::com::sun::star::uno::Reference <                               \
-            ::com::sun::star::uno::XInterface >( ( ::cppu::OWeakObject* )   \
-                                    new ImplName );                         \
+    uno::Reference< uno::XInterface >   \
+        SAL_CALL ImplName##_CreateInstance(               \
+            SAL_UNUSED_PARAMETER const uno::Reference<    \
+                    lang::XMultiServiceFactory >& )       \
+{                                                         \
+    return uno::Reference <                               \
+            uno::XInterface >( ( ::cppu::OWeakObject* )   \
+                                    new ImplName );       \
 }
 
-#define IMPL_CREATEINSTANCE_MSF( ImplName ) \
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >   \
-        SAL_CALL ImplName##_CreateInstance(                                 \
-            const ::com::sun::star::uno::Reference<                         \
-                    ::com::sun::star::lang::XMultiServiceFactory >& rxMSF ) \
-{                                                                           \
-    return ::com::sun::star::uno::Reference <                               \
-            ::com::sun::star::uno::XInterface >( ( ::cppu::OWeakObject* )   \
-                                    new ImplName( rxMSF ) );                \
+#define IMPL_CREATEINSTANCE_CTX( ImplName )               \
+    uno::Reference< uno::XInterface >                     \
+        SAL_CALL ImplName##_CreateInstance(               \
+            const uno::Reference<                         \
+                    lang::XMultiServiceFactory >& rxMSF ) \
+{                                                         \
+    return uno::Reference <                               \
+            uno::XInterface >( ( ::cppu::OWeakObject* )   \
+                                    new ImplName( comphelper::getComponentContext(rxMSF) ) );  \
 }
 
-#define IMPL_CREATEINSTANCE_CTX( ImplName ) \
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >   \
-        SAL_CALL ImplName##_CreateInstance(                                 \
-            const ::com::sun::star::uno::Reference<                         \
-                    ::com::sun::star::lang::XMultiServiceFactory >& rxMSF ) \
-{                                                                           \
-    return ::com::sun::star::uno::Reference <                               \
-            ::com::sun::star::uno::XInterface >( ( ::cppu::OWeakObject* )   \
-                                    new ImplName( comphelper::getComponentContext(rxMSF) ) );                \
-}
-
-typedef ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XInterface > (SAL_CALL *FN_CreateInstance)(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::lang::XMultiServiceFactory >& );
+typedef uno::Reference<
+        uno::XInterface > (SAL_CALL *FN_CreateInstance)(
+            const uno::Reference<
+                lang::XMultiServiceFactory >& );
 
 #define IMPL_TRANSLITERATION_ITEM( implName ) \
     {       TRLT_SERVICELNAME_L10N, \
@@ -125,20 +116,20 @@ typedef ::com::sun::star::uno::Reference<
 
 // -------------------------------------------------------------------------------------
 
-using namespace ::com::sun::star::i18n;
+using namespace i18n;
 
 IMPL_CREATEINSTANCE_CTX( NumberFormatCodeMapper )
 IMPL_CREATEINSTANCE( NativeNumberSupplier )
 IMPL_CREATEINSTANCE( LocaleData )
 IMPL_CREATEINSTANCE_CTX( DefaultNumberingProvider )
-IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier )
+IMPL_CREATEINSTANCE_CTX( IndexEntrySupplier )
 IMPL_CREATEINSTANCE_CTX( IndexEntrySupplier_asian )
 IMPL_CREATEINSTANCE_CTX( IndexEntrySupplier_ja_phonetic_alphanumeric_first_by_syllable )
 IMPL_CREATEINSTANCE_CTX( IndexEntrySupplier_ja_phonetic_alphanumeric_first_by_consonant )
 IMPL_CREATEINSTANCE_CTX( IndexEntrySupplier_ja_phonetic_alphanumeric_last_by_syllable )
 IMPL_CREATEINSTANCE_CTX( IndexEntrySupplier_ja_phonetic_alphanumeric_last_by_consonant )
 IMPL_CREATEINSTANCE_CTX( IndexEntrySupplier_Unicode )
-IMPL_CREATEINSTANCE_MSF( CalendarImpl )
+IMPL_CREATEINSTANCE_CTX( CalendarImpl )
 IMPL_CREATEINSTANCE( Calendar_gregorian )
 IMPL_CREATEINSTANCE( Calendar_hanja )
 IMPL_CREATEINSTANCE( Calendar_gengou )
@@ -157,18 +148,18 @@ IMPL_CREATEINSTANCE_CTX( ChapterCollator )
 IMPL_CREATEINSTANCE_CTX( CollatorImpl )
 IMPL_CREATEINSTANCE( Collator_Unicode )
 
-IMPL_CREATEINSTANCE_MSF( CharacterClassificationImpl )
+IMPL_CREATEINSTANCE_CTX( CharacterClassificationImpl )
 IMPL_CREATEINSTANCE_CTX( cclass_Unicode )
 IMPL_CREATEINSTANCE_CTX( TransliterationImpl )
 IMPL_CREATEINSTANCE( UnoScriptTypeDetector )
 
-IMPL_CREATEINSTANCE_MSF( InputSequenceCheckerImpl )
+IMPL_CREATEINSTANCE_CTX( InputSequenceCheckerImpl )
 IMPL_CREATEINSTANCE( InputSequenceChecker_th )
 IMPL_CREATEINSTANCE( InputSequenceChecker_hi )
 
-IMPL_CREATEINSTANCE_MSF( TextConversionImpl )
-IMPL_CREATEINSTANCE_MSF( TextConversion_ko )
-IMPL_CREATEINSTANCE_MSF( TextConversion_zh )
+IMPL_CREATEINSTANCE_CTX( TextConversionImpl )
+IMPL_CREATEINSTANCE_CTX( TextConversion_ko )
+IMPL_CREATEINSTANCE_CTX( TextConversion_zh )
 
 IMPL_CREATEINSTANCE( Transliteration_u2l )
 IMPL_CREATEINSTANCE( Transliteration_l2u )
@@ -286,7 +277,7 @@ IMPL_CREATEINSTANCE( halfwidthKatakanaToFullwidthKatakana )
 IMPL_CREATEINSTANCE( fullwidthToHalfwidthLikeASC )
 IMPL_CREATEINSTANCE( halfwidthToFullwidthLikeJIS )
 
-IMPL_CREATEINSTANCE_MSF( OrdinalSuffix )
+IMPL_CREATEINSTANCE( OrdinalSuffix )
 
 static const struct InstancesArray {
         const sal_Char* pServiceNm;
@@ -581,17 +572,15 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL i18npool_component_getFactory( const sal_Cha
 {
     void* pRet = NULL;
 
-    ::com::sun::star::lang::XMultiServiceFactory* pServiceManager =
-        reinterpret_cast< ::com::sun::star::lang::XMultiServiceFactory* >
-            ( _pServiceManager );
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XSingleServiceFactory > xFactory;
+    lang::XMultiServiceFactory* pServiceManager =
+        reinterpret_cast< lang::XMultiServiceFactory* >( _pServiceManager );
+    uno::Reference< lang::XSingleServiceFactory > xFactory;
 
     for( const InstancesArray* pArr = aInstances; pArr->pServiceNm; ++pArr )
     {
         if( 0 == rtl_str_compare( sImplementationName, pArr->pImplementationNm ) )
         {
-            ::com::sun::star::uno::Sequence< ::rtl::OUString > aServiceNames(1);
+            uno::Sequence< ::rtl::OUString > aServiceNames(1);
             aServiceNames.getArray()[0] =
                 ::rtl::OUString::createFromAscii( pArr->pServiceNm );
             xFactory = ::cppu::createSingleFactory(
