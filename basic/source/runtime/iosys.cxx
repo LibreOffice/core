@@ -547,7 +547,7 @@ void    UCBStream::SetSize( sal_uIntPtr nSize )
 {
     (void)nSize;
 
-    OSL_FAIL( "not allowed to call from basic" );
+    SAL_WARN("basic", "UCBStream::SetSize not allowed to call from basic" );
     SetError( ERRCODE_IO_GENERAL );
 }
 
