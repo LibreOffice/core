@@ -52,7 +52,7 @@ ModalDialog RID_SCDLG_DATABAR
     {
         Pos = MAP_APPFONT( 5, 5 );
         Size = MAP_APPFONT( 190, 10 );
-        Text [ en-US ] = "Bar Colors";
+        Text [ en-US ] = "Entry Values";
     };
     FixedLine FL_BAR_COLORS
     {
