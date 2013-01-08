@@ -886,6 +886,7 @@ void SwDocTest::setUp()
 
 void SwDocTest::tearDown()
 {
+    m_xDocShRef->DoClose();
     m_xDocShRef.Clear();
     delete m_pDoc;
 
