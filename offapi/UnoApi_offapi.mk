@@ -114,10 +114,13 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/drawing/fr
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/embed,\
 	DocumentCloser \
+	EmbeddedObjectCreator \
 	FileSystemStorageFactory \
 	HatchWindowFactory \
 	InstanceLocker \
 	OLESimpleStorage \
+	OLEEmbeddedObjectFactory \
+	OOoEmbeddedObjectFactory \
 	StorageFactory \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/form/inspection,\
@@ -2336,6 +2339,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/embed,\
 	XComponentSupplier \
 	XEmbedObjectClipboardCreator \
 	XEmbedObjectCreator \
+    XEmbeddedObjectCreator \
 	XEmbedObjectFactory \
 	XEmbedPersist \
 	XEmbeddedClient \

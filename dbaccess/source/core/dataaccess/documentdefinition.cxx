@@ -46,8 +46,9 @@
 #include <com/sun/star/report/XReportEngine.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/embed/XEmbedObjectFactory.hpp>
-#include <com/sun/star/embed/XEmbedObjectCreator.hpp>
+#include <com/sun/star/embed/EmbeddedObjectCreator.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
+#include <com/sun/star/embed/OOoEmbeddedObjectFactory.hpp>
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <com/sun/star/ucb/UnsupportedDataSinkException.hpp>
 #include <com/sun/star/ucb/UnsupportedOpenModeException.hpp>
@@ -1215,36 +1216,33 @@ void ODocumentDefinition::onCommandInsert( const ::rtl::OUString& _sURL, const R
         Reference< XStorage> xStorage = getContainerStorage();
         if ( xStorage.is() )
         {
-            Reference< XEmbedObjectCreator> xEmbedFactory( m_aContext.createComponent( "com.sun.star.embed.EmbeddedObjectCreator" ), UNO_QUERY );
-            if ( xEmbedFactory.is() )
+            Reference< XEmbeddedObjectCreator> xEmbedFactory = EmbeddedObjectCreator::create(m_aContext.getUNOContext());
+            Sequence<PropertyValue> aEmpty,aMediaDesc(1);
+            aMediaDesc[0].Name = PROPERTY_URL;
+            aMediaDesc[0].Value <<= _sURL;
+            m_xEmbeddedObject.set(xEmbedFactory->createInstanceInitFromMediaDescriptor( xStorage
+                                                                            ,m_pImpl->m_aProps.sPersistentName
+                                                                            ,aMediaDesc
+                                                                            ,aEmpty),UNO_QUERY);
+
+            lcl_resetFormsToEmptyDataSource( m_xEmbeddedObject );
+            // #i57669#
+
+            Reference<XEmbedPersist> xPersist(m_xEmbeddedObject,UNO_QUERY);
+            if ( xPersist.is() )
             {
-                Sequence<PropertyValue> aEmpty,aMediaDesc(1);
-                aMediaDesc[0].Name = PROPERTY_URL;
-                aMediaDesc[0].Value <<= _sURL;
-                m_xEmbeddedObject.set(xEmbedFactory->createInstanceInitFromMediaDescriptor( xStorage
-                                                                                ,m_pImpl->m_aProps.sPersistentName
-                                                                                ,aMediaDesc
-                                                                                ,aEmpty),UNO_QUERY);
-
-                lcl_resetFormsToEmptyDataSource( m_xEmbeddedObject );
-                // #i57669#
-
-                Reference<XEmbedPersist> xPersist(m_xEmbeddedObject,UNO_QUERY);
-                if ( xPersist.is() )
-                {
-                    xPersist->storeOwn();
-                }
-                try
-                {
-                    Reference< com::sun::star::util::XCloseable> xCloseable(m_xEmbeddedObject,UNO_QUERY);
-                    if ( xCloseable.is() )
-                        xCloseable->close(sal_True);
-                }
-                catch(const Exception&)
-                {
-                }
-                m_xEmbeddedObject = NULL;
-              }
+                xPersist->storeOwn();
+            }
+            try
+            {
+                Reference< com::sun::star::util::XCloseable> xCloseable(m_xEmbeddedObject,UNO_QUERY);
+                if ( xCloseable.is() )
+                    xCloseable->close(sal_True);
+            }
+            catch(const Exception&)
+            {
+            }
+            m_xEmbeddedObject = NULL;
         }
     }
 
@@ -1617,80 +1615,77 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& i_
         Reference< XStorage> xStorage = getContainerStorage();
         if ( xStorage.is() )
         {
-            Reference< XEmbedObjectFactory> xEmbedFactory( m_aContext.createComponent( "com.sun.star.embed.OOoEmbeddedObjectFactory" ), UNO_QUERY );
-            if ( xEmbedFactory.is() )
+            Reference< XEmbeddedObjectCreator> xEmbedFactory = OOoEmbeddedObjectFactory::create(m_aContext.getUNOContext());
+            ::rtl::OUString sDocumentService;
+            sal_Bool bSetSize = sal_False;
+            sal_Int32 nEntryConnectionMode = EntryInitModes::DEFAULT_INIT;
+            Sequence< sal_Int8 > aClassID = _aClassID;
+            if ( aClassID.getLength() )
             {
-                ::rtl::OUString sDocumentService;
-                sal_Bool bSetSize = sal_False;
-                sal_Int32 nEntryConnectionMode = EntryInitModes::DEFAULT_INIT;
-                Sequence< sal_Int8 > aClassID = _aClassID;
-                if ( aClassID.getLength() )
+                nEntryConnectionMode = EntryInitModes::TRUNCATE_INIT;
+                bSetSize = sal_True;
+            }
+            else
+            {
+                sDocumentService = GetDocumentServiceFromMediaType( getContentType(), m_aContext, aClassID );
+                // check if we are not a form and
+                // the com.sun.star.report.pentaho.SOReportJobFactory is not present.
+                if ( !m_bForm && !sDocumentService.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextDocument")))
                 {
-                    nEntryConnectionMode = EntryInitModes::TRUNCATE_INIT;
-                    bSetSize = sal_True;
-                }
-                else
-                {
-                    sDocumentService = GetDocumentServiceFromMediaType( getContentType(), m_aContext, aClassID );
-                    // check if we are not a form and
-                    // the com.sun.star.report.pentaho.SOReportJobFactory is not present.
-                    if ( !m_bForm && !sDocumentService.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextDocument")))
+                    // we seem to be a "new style" report, check if report extension is present.
+                    Reference< XContentEnumerationAccess > xEnumAccess( m_aContext.getLegacyServiceFactory(), UNO_QUERY );
+                    const ::rtl::OUString sReportEngineServiceName = ::dbtools::getDefaultReportEngineServiceName(m_aContext.getUNOContext());
+                    Reference< XEnumeration > xEnumDrivers = xEnumAccess->createContentEnumeration(sReportEngineServiceName);
+                    if ( !xEnumDrivers.is() || !xEnumDrivers->hasMoreElements() )
                     {
-                        // we seem to be a "new style" report, check if report extension is present.
-                        Reference< XContentEnumerationAccess > xEnumAccess( m_aContext.getLegacyServiceFactory(), UNO_QUERY );
-                        const ::rtl::OUString sReportEngineServiceName = ::dbtools::getDefaultReportEngineServiceName(m_aContext.getUNOContext());
-                        Reference< XEnumeration > xEnumDrivers = xEnumAccess->createContentEnumeration(sReportEngineServiceName);
-                        if ( !xEnumDrivers.is() || !xEnumDrivers->hasMoreElements() )
-                        {
-                            com::sun::star::io::WrongFormatException aWFE;
-                            aWFE.Message = DBACORE_RESSTRING( RID_STR_MISSING_EXTENSION );
-                            throw aWFE;
-                        }
-                    }
-                    if ( !aClassID.getLength() )
-                    {
-                        if ( m_bForm )
-                            aClassID = MimeConfigurationHelper::GetSequenceClassID(SO3_SW_CLASSID);
-                        else
-                        {
-                            aClassID = MimeConfigurationHelper::GetSequenceClassID(SO3_RPT_CLASSID_90);
-                        }
+                        com::sun::star::io::WrongFormatException aWFE;
+                        aWFE.Message = DBACORE_RESSTRING( RID_STR_MISSING_EXTENSION );
+                        throw aWFE;
                     }
                 }
-
-                OSL_ENSURE( aClassID.getLength(),"No Class ID" );
-
-                Sequence< PropertyValue > aEmbeddedObjectDescriptor;
-                Sequence< PropertyValue > aLoadArgs( fillLoadArgs(
-                    i_rConnection, _bSuppressMacros, _bReadOnly, i_rOpenCommandArguments, aEmbeddedObjectDescriptor ) );
-
-                m_xEmbeddedObject.set(xEmbedFactory->createInstanceUserInit(aClassID
-                                                                            ,sDocumentService
-                                                                            ,xStorage
-                                                                            ,m_pImpl->m_aProps.sPersistentName
-                                                                            ,nEntryConnectionMode
-                                                                            ,aLoadArgs
-                                                                            ,aEmbeddedObjectDescriptor
-                                                                            ),UNO_QUERY);
-                if ( m_xEmbeddedObject.is() )
+                if ( !aClassID.getLength() )
                 {
-                    if ( !m_pClientHelper )
+                    if ( m_bForm )
+                        aClassID = MimeConfigurationHelper::GetSequenceClassID(SO3_SW_CLASSID);
+                    else
                     {
-                        m_pClientHelper = new OEmbeddedClientHelper(this);
-                        m_pClientHelper->acquire();
-                    }
-                    Reference<XEmbeddedClient> xClient = m_pClientHelper;
-                    m_xEmbeddedObject->setClientSite(xClient);
-                    m_xEmbeddedObject->changeState(EmbedStates::RUNNING);
-                    if ( bSetSize )
-                    {
-                        LockModifiable aLockModify( impl_getComponent_throw( false ) );
-
-                        awt::Size aSize( DEFAULT_WIDTH, DEFAULT_HEIGHT );
-                        m_xEmbeddedObject->setVisualAreaSize(Aspects::MSOLE_CONTENT,aSize);
+                        aClassID = MimeConfigurationHelper::GetSequenceClassID(SO3_RPT_CLASSID_90);
                     }
                 }
-              }
+            }
+
+            OSL_ENSURE( aClassID.getLength(),"No Class ID" );
+
+            Sequence< PropertyValue > aEmbeddedObjectDescriptor;
+            Sequence< PropertyValue > aLoadArgs( fillLoadArgs(
+                i_rConnection, _bSuppressMacros, _bReadOnly, i_rOpenCommandArguments, aEmbeddedObjectDescriptor ) );
+
+            m_xEmbeddedObject.set(xEmbedFactory->createInstanceUserInit(aClassID
+                                                                        ,sDocumentService
+                                                                        ,xStorage
+                                                                        ,m_pImpl->m_aProps.sPersistentName
+                                                                        ,nEntryConnectionMode
+                                                                        ,aLoadArgs
+                                                                        ,aEmbeddedObjectDescriptor
+                                                                        ),UNO_QUERY);
+            if ( m_xEmbeddedObject.is() )
+            {
+                if ( !m_pClientHelper )
+                {
+                    m_pClientHelper = new OEmbeddedClientHelper(this);
+                    m_pClientHelper->acquire();
+                }
+                Reference<XEmbeddedClient> xClient = m_pClientHelper;
+                m_xEmbeddedObject->setClientSite(xClient);
+                m_xEmbeddedObject->changeState(EmbedStates::RUNNING);
+                if ( bSetSize )
+                {
+                    LockModifiable aLockModify( impl_getComponent_throw( false ) );
+
+                    awt::Size aSize( DEFAULT_WIDTH, DEFAULT_HEIGHT );
+                    m_xEmbeddedObject->setVisualAreaSize(Aspects::MSOLE_CONTENT,aSize);
+                }
+            }
         }
     }
     else

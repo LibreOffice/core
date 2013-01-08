@@ -20,6 +20,8 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/EntryInitModes.hpp>
 #include <com/sun/star/embed/XEmbedObjectFactory.hpp>
+#include <com/sun/star/embed/OOoEmbeddedObjectFactory.hpp>
+#include <com/sun/star/embed/OLEEmbeddedObjectFactory.hpp>
 #include <com/sun/star/embed/XLinkFactory.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -28,6 +30,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include <rtl/logfile.hxx>
+#include <comphelper/processfactory.hxx>
 
 
 #include <xcreator.hxx>
@@ -258,12 +261,8 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
     if ( !aFilterName.isEmpty() )
     {
         // the object can be loaded by one of the office application
-        uno::Reference< embed::XEmbedObjectCreator > xOOoEmbCreator(
-                            m_xFactory->createInstance(
-                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.OOoEmbeddedObjectFactory" ) )),
-                            uno::UNO_QUERY );
-        if ( !xOOoEmbCreator.is() )
-            throw uno::RuntimeException(); // TODO:
+        uno::Reference< embed::XEmbeddedObjectCreator > xOOoEmbCreator =
+                            embed::OOoEmbeddedObjectFactory::create( comphelper::getComponentContext(m_xFactory) );
 
         xResult = xOOoEmbCreator->createInstanceInitFromMediaDescriptor( xStorage,
                                                                          sEntName,
@@ -281,12 +280,8 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
         // Or for example the typename can be used to detect object type if typedetection
         // was also extended.
 
-        uno::Reference< embed::XEmbedObjectCreator > xOleEmbCreator(
-                            m_xFactory->createInstance(
-                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.OLEEmbeddedObjectFactory" ) )),
-                            uno::UNO_QUERY );
-        if ( !xOleEmbCreator.is() )
-            throw uno::RuntimeException(); // TODO:
+        uno::Reference< embed::XEmbeddedObjectCreator > xOleEmbCreator =
+                            embed::OLEEmbeddedObjectFactory::create( comphelper::getComponentContext(m_xFactory) );
 
         xResult = xOleEmbCreator->createInstanceInitFromMediaDescriptor( xStorage, sEntName, aTempMedDescr, lObjArgs );
     }
@@ -371,12 +366,8 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
     if ( !aFilterName.isEmpty() )
     {
         // the object can be loaded by one of the office application
-        uno::Reference< embed::XLinkCreator > xOOoLinkCreator(
-                            m_xFactory->createInstance(
-                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.OOoEmbeddedObjectFactory" ) )),
-                            uno::UNO_QUERY );
-        if ( !xOOoLinkCreator.is() )
-            throw uno::RuntimeException(); // TODO:
+        uno::Reference< embed::XEmbeddedObjectCreator > xOOoLinkCreator =
+                            embed::OOoEmbeddedObjectFactory::create( comphelper::getComponentContext(m_xFactory) );
 
         xResult = xOOoLinkCreator->createInstanceLink( xStorage,
                                                         sEntName,
@@ -406,12 +397,8 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
                                                     static_cast< ::cppu::OWeakObject* >(this) ),
                                                 4 );
 
-        uno::Reference< embed::XLinkCreator > xLinkCreator(
-                            m_xFactory->createInstance(
-                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.OLEEmbeddedObjectFactory" ) )),
-                            uno::UNO_QUERY );
-        if ( !xLinkCreator.is() )
-            throw uno::RuntimeException(); // TODO:
+        uno::Reference< embed::XEmbeddedObjectCreator > xLinkCreator =
+                            embed::OLEEmbeddedObjectFactory::create( comphelper::getComponentContext(m_xFactory));
 
         xResult = xLinkCreator->createInstanceLink( xStorage, sEntName, aTempMedDescr, lObjArgs );
     }

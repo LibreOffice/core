@@ -17,9 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/embed/XEmbedObjectCreator.hpp>
+#include <com/sun/star/embed/EmbeddedObjectCreator.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/EntryInitModes.hpp>
+#include <com/sun/star/embed/OLEEmbeddedObjectFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
@@ -182,12 +183,7 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
     {
         if (io.dwFlags & IOF_SELECTCREATENEW)
         {
-            uno::Reference< embed::XEmbedObjectCreator > xEmbCreator(
-                        m_xFactory->createInstance(
-                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.EmbeddedObjectCreator" ) )),
-                        uno::UNO_QUERY );
-            if ( !xEmbCreator.is() )
-                throw uno::RuntimeException();
+            uno::Reference< embed::XEmbeddedObjectCreator > xEmbCreator = embed::EmbeddedObjectCreator::create( comphelper::getComponentContext(m_xFactory) );
 
             uno::Sequence< sal_Int8 > aClassID = MimeConfigurationHelper::GetSequenceClassID( io.clsid.Data1,
                                                                      io.clsid.Data2,
@@ -221,19 +217,13 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
             aMediaDescr[0].Value <<= aFileURL;
 
             // TODO: use config helper for type detection
-            uno::Reference< embed::XEmbedObjectCreator > xEmbCreator;
+            uno::Reference< embed::XEmbeddedObjectCreator > xEmbCreator;
             ::comphelper::MimeConfigurationHelper aHelper( m_xFactory );
 
             if ( aHelper.AddFilterNameCheckOwnFile( aMediaDescr ) )
-                xEmbCreator = uno::Reference< embed::XEmbedObjectCreator >(
-                        m_xFactory->createInstance(
-                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.EmbeddedObjectCreator" ) )),
-                        uno::UNO_QUERY );
+                xEmbCreator = embed::EmbeddedObjectCreator::create( comphelper::getComponentContext(m_xFactory) );
             else
-                xEmbCreator = uno::Reference< embed::XEmbedObjectCreator >(
-                        m_xFactory->createInstance(
-                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.OLEEmbeddedObjectFactory" ) )),
-                        uno::UNO_QUERY );
+                xEmbCreator = embed::OLEEmbeddedObjectFactory::create( comphelper::getComponentContext(m_xFactory) );
 
             if ( !xEmbCreator.is() )
                 throw uno::RuntimeException();

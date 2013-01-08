@@ -20,7 +20,8 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/embed/EmbedStates.hpp>
-#include <com/sun/star/embed/XEmbedObjectCreator.hpp>
+#include <com/sun/star/embed/EmbeddedObjectCreator.hpp>
+#include <com/sun/star/embed/OOoEmbeddedObjectFactory.hpp>
 #include <com/sun/star/embed/XLinkCreator.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
@@ -279,8 +280,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
                 sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
                 ::rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM("DummyName"));
                 uno::Sequence < sal_Int8 > aClass( aClassName.GetByteSequence() );
-                uno::Reference < embed::XEmbedObjectCreator > xFactory( ::comphelper::getProcessServiceFactory()->createInstance(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.EmbeddedObjectCreator")) ), uno::UNO_QUERY );
+                uno::Reference < embed::XEmbeddedObjectCreator > xFactory = embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
                 uno::Reference < embed::XEmbeddedObject > xObj =
                     uno::Reference < embed::XEmbeddedObject >( xFactory->createInstanceInitNew(
                     aClass, ::rtl::OUString(), xStorage, aName,
@@ -568,9 +568,8 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
     {
         // create object with desired ClassId
         ::rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM("DummyName"));
-        uno::Reference < embed::XLinkCreator > xFactory( ::comphelper::getProcessServiceFactory()->createInstance(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.OOoEmbeddedObjectFactory")) ),
-                uno::UNO_QUERY_THROW );
+        uno::Reference < embed::XEmbeddedObjectCreator > xFactory =
+                embed::OOoEmbeddedObjectFactory::create(::comphelper::getProcessComponentContext());
 
         uno::Sequence< beans::PropertyValue > aMediaDescriptor( 1 );
         aMediaDescriptor[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"));
@@ -701,8 +700,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
         // create object with desired ClassId
         ::rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM("DummyName"));
         uno::Sequence < sal_Int8 > aClass( SvGlobalName( SO3_PLUGIN_CLASSID ).GetByteSequence() );
-        uno::Reference < embed::XEmbedObjectCreator > xFactory( ::comphelper::getProcessServiceFactory()->createInstance(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.EmbeddedObjectCreator")) ), uno::UNO_QUERY );
+        uno::Reference < embed::XEmbeddedObjectCreator > xFactory =  embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
         uno::Reference < embed::XEmbeddedObject > xObj =
             uno::Reference < embed::XEmbeddedObject >( xFactory->createInstanceInitNew(
             aClass, ::rtl::OUString(), xStorage, aName,
@@ -833,8 +831,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
         // create object with desired ClassId
         ::rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM("DummyName"));
         uno::Sequence < sal_Int8 > aClass( SvGlobalName( SO3_IFRAME_CLASSID ).GetByteSequence() );
-        uno::Reference < embed::XEmbedObjectCreator > xFactory( ::comphelper::getProcessServiceFactory()->createInstance(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.EmbeddedObjectCreator")) ), uno::UNO_QUERY );
+        uno::Reference < embed::XEmbeddedObjectCreator > xFactory = embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
         uno::Reference < embed::XEmbeddedObject > xObj =
             uno::Reference < embed::XEmbeddedObject >( xFactory->createInstanceInitNew(
             aClass, ::rtl::OUString(), xStorage, aName,

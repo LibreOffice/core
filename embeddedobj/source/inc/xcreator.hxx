@@ -20,21 +20,15 @@
 #ifndef __XCREATOR_HXX_
 #define __XCREATOR_HXX_
 
-#include <com/sun/star/embed/XEmbedObjectCreator.hpp>
-#include <com/sun/star/embed/XEmbedObjectFactory.hpp>
-#include <com/sun/star/embed/XLinkCreator.hpp>
-#include <com/sun/star/embed/XLinkFactory.hpp>
+#include <com/sun/star/embed/XEmbeddedObjectCreator.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 
-class UNOEmbeddedObjectCreator : public ::cppu::WeakImplHelper5<
-                                                ::com::sun::star::embed::XEmbedObjectCreator,
-                                                ::com::sun::star::embed::XEmbedObjectFactory,
-                                                ::com::sun::star::embed::XLinkCreator,
-                                                ::com::sun::star::embed::XLinkFactory,
+class UNOEmbeddedObjectCreator : public ::cppu::WeakImplHelper2<
+                                                ::com::sun::star::embed::XEmbeddedObjectCreator,
                                                 ::com::sun::star::lang::XServiceInfo >
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;

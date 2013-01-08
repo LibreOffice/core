@@ -19,7 +19,7 @@
 
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/embed/XEmbedObjectCreator.hpp>
+#include <com/sun/star/embed/EmbeddedObjectCreator.hpp>
 #include <com/sun/star/embed/XLinkCreator.hpp>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/embed/XLinkageSupport.hpp>
@@ -360,8 +360,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::Get_Impl( con
 
         // object was not added until now - should happen only by calling this method from "inside"
         //TODO/LATER: it would be good to detect an error when an object should be created already, but isn't (not an "inside" call)
-        uno::Reference < embed::XEmbedObjectCreator > xFactory( ::comphelper::getProcessServiceFactory()->createInstance(
-                OUString("com.sun.star.embed.EmbeddedObjectCreator") ), uno::UNO_QUERY_THROW );
+        uno::Reference < embed::XEmbeddedObjectCreator > xFactory = embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
         uno::Sequence< beans::PropertyValue > aObjDescr( xCopy.is() ? 2 : 1 );
         aObjDescr[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Parent" ) );
         aObjDescr[0].Value <<= pImpl->m_xModel.get();
@@ -402,8 +401,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CreateEmbedde
     uno::Reference < embed::XEmbeddedObject > xObj;
     try
     {
-        uno::Reference < embed::XEmbedObjectCreator > xFactory( ::comphelper::getProcessServiceFactory()->createInstance(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.EmbeddedObjectCreator")) ), uno::UNO_QUERY );
+        uno::Reference < embed::XEmbeddedObjectCreator > xFactory = embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
 
         uno::Sequence< beans::PropertyValue > aObjDescr( rArgs.getLength() + 1 );
         aObjDescr[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Parent" ) );
@@ -620,8 +618,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
     uno::Reference < embed::XEmbeddedObject > xObj;
     try
     {
-        uno::Reference < embed::XEmbedObjectCreator > xFactory( ::comphelper::getProcessServiceFactory()->createInstance(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.EmbeddedObjectCreator")) ), uno::UNO_QUERY );
+        uno::Reference < embed::XEmbeddedObjectCreator > xFactory = embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
         uno::Sequence< beans::PropertyValue > aObjDescr( 1 );
         aObjDescr[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Parent" ) );
         aObjDescr[0].Value <<= pImpl->m_xModel.get();
@@ -655,8 +652,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
     uno::Reference < embed::XEmbeddedObject > xObj;
     try
     {
-        uno::Reference < embed::XLinkCreator > xFactory( ::comphelper::getProcessServiceFactory()->createInstance(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.EmbeddedObjectCreator")) ), uno::UNO_QUERY );
+        uno::Reference < embed::XEmbeddedObjectCreator > xFactory = embed::EmbeddedObjectCreator::create(::comphelper::getProcessComponentContext());
         uno::Sequence< beans::PropertyValue > aObjDescr( 1 );
         aObjDescr[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Parent" ) );
         aObjDescr[0].Value <<= pImpl->m_xModel.get();
@@ -740,10 +736,8 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
                         throw uno::RuntimeException();
 
                     // create new linked object from the URL the link is based on
-                    uno::Reference < embed::XLinkCreator > xCreator(
-                        ::comphelper::getProcessServiceFactory()->createInstance(
-                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.EmbeddedObjectCreator") ) ),
-                        uno::UNO_QUERY_THROW );
+                    uno::Reference < embed::XEmbeddedObjectCreator > xCreator =
+                        embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
 
                     uno::Sequence< beans::PropertyValue > aMediaDescr( 1 );
                     aMediaDescr[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
@@ -769,10 +763,8 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
                     uno::Reference< beans::XPropertySet > xOrigProps( xObj->getComponent(), uno::UNO_QUERY_THROW );
 
                     // use object class ID to create a new one and tranfer all the properties
-                    uno::Reference < embed::XEmbedObjectCreator > xCreator(
-                        ::comphelper::getProcessServiceFactory()->createInstance(
-                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.EmbeddedObjectCreator") ) ),
-                        uno::UNO_QUERY_THROW );
+                    uno::Reference < embed::XEmbeddedObjectCreator > xCreator =
+                        embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
 
                     uno::Sequence< beans::PropertyValue > aObjDescr( 1 );
                     aObjDescr[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Parent" ) );
