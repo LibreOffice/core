@@ -45,11 +45,11 @@ namespace frm
     //---------------------------------------------------------------------
     OErrorBroadcaster::~OErrorBroadcaster( )
     {
-        OSL_ENSURE( m_rBHelper.bDisposed || m_rBHelper.bInDispose,
+        SAL_WARN_IF( !m_rBHelper.bDisposed && !m_rBHelper.bInDispose, "forms",
             "OErrorBroadcaster::~OErrorBroadcaster: not disposed!" );
         // herein, we don't have a chance to do the dispose ourself ....
 
-        OSL_ENSURE( 0 == m_aErrorListeners.getLength(),
+        SAL_WARN_IF( m_aErrorListeners.getLength(), "forms",
             "OErrorBroadcaster::~OErrorBroadcaster: still have listeners!" );
         // either we're not disposed, or the derived class did not call our dispose from within their dispose
     }

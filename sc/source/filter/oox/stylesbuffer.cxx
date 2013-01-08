@@ -773,7 +773,7 @@ void Font::importAttribs( sal_Int32 nElement, const AttributeList& rAttribs )
 
 void Font::importFont( SequenceInputStream& rStrm )
 {
-    OSL_ENSURE( !mbDxf, "Font::importFont - unexpected conditional formatting flag" );
+    SAL_WARN_IF( mbDxf, "sc", "Font::importFont - unexpected conditional formatting flag" );
 
     sal_uInt16 nHeight, nFlags, nWeight, nEscapement;
     sal_uInt8 nUnderline, nFamily, nCharSet, nScheme;
@@ -798,56 +798,56 @@ void Font::importFont( SequenceInputStream& rStrm )
 
 void Font::importDxfName( SequenceInputStream& rStrm )
 {
-    OSL_ENSURE( mbDxf, "Font::importDxfName - missing conditional formatting flag" );
+    SAL_WARN_IF( !mbDxf, "sc", "Font::importDxfName - missing conditional formatting flag" );
     maModel.maName = BiffHelper::readString( rStrm, false );
     maUsedFlags.mbColorUsed = true;
 }
 
 void Font::importDxfColor( SequenceInputStream& rStrm )
 {
-    OSL_ENSURE( mbDxf, "Font::importDxfColor - missing conditional formatting flag" );
+    SAL_WARN_IF( !mbDxf, "sc", "Font::importDxfColor - missing conditional formatting flag" );
     rStrm >> maModel.maColor;
     maUsedFlags.mbColorUsed = true;
 }
 
 void Font::importDxfScheme( SequenceInputStream& rStrm )
 {
-    OSL_ENSURE( mbDxf, "Font::importDxfScheme - missing conditional formatting flag" );
+    SAL_WARN_IF( !mbDxf, "sc", "Font::importDxfScheme - missing conditional formatting flag" );
     maModel.setBiff12Scheme( rStrm.readuInt8() );
     maUsedFlags.mbSchemeUsed = true;
 }
 
 void Font::importDxfHeight( SequenceInputStream& rStrm )
 {
-    OSL_ENSURE( mbDxf, "Font::importDxfHeight - missing conditional formatting flag" );
+    SAL_WARN_IF( !mbDxf, "sc", "Font::importDxfHeight - missing conditional formatting flag" );
     maModel.setBiffHeight( rStrm.readuInt16() );
     maUsedFlags.mbHeightUsed = true;
 }
 
 void Font::importDxfWeight( SequenceInputStream& rStrm )
 {
-    OSL_ENSURE( mbDxf, "Font::importDxfWeight - missing conditional formatting flag" );
+    SAL_WARN_IF( !mbDxf, "sc", "Font::importDxfWeight - missing conditional formatting flag" );
     maModel.setBiffWeight( rStrm.readuInt16() );
     maUsedFlags.mbWeightUsed = true;
 }
 
 void Font::importDxfUnderline( SequenceInputStream& rStrm )
 {
-    OSL_ENSURE( mbDxf, "Font::importDxfUnderline - missing conditional formatting flag" );
+    SAL_WARN_IF( !mbDxf, "sc", "Font::importDxfUnderline - missing conditional formatting flag" );
     maModel.setBiffUnderline( rStrm.readuInt16() );
     maUsedFlags.mbUnderlineUsed = true;
 }
 
 void Font::importDxfEscapement( SequenceInputStream& rStrm )
 {
-    OSL_ENSURE( mbDxf, "Font::importDxfEscapement - missing conditional formatting flag" );
+    SAL_WARN_IF( !mbDxf, "sc", "Font::importDxfEscapement - missing conditional formatting flag" );
     maModel.setBiffEscapement( rStrm.readuInt16() );
     maUsedFlags.mbEscapementUsed = true;
 }
 
 void Font::importDxfFlag( sal_Int32 nElement, SequenceInputStream& rStrm )
 {
-    OSL_ENSURE( mbDxf, "Font::importDxfFlag - missing conditional formatting flag" );
+    SAL_WARN_IF( !mbDxf, "sc", "Font::importDxfFlag - missing conditional formatting flag" );
     bool bFlag = rStrm.readuInt8() != 0;
     switch( nElement )
     {
@@ -1675,7 +1675,7 @@ void Border::importBorder( SequenceInputStream& rStrm )
 
 void Border::importDxfBorder( sal_Int32 nElement, SequenceInputStream& rStrm )
 {
-    OSL_ENSURE( mbDxf, "Border::importDxfBorder - missing conditional formatting flag" );
+    SAL_WARN_IF( !mbDxf, "sc", "Border::importDxfBorder - missing conditional formatting flag" );
     if( BorderLineModel* pBorderLine = getBorderLine( nElement ) )
     {
         sal_uInt16 nStyle;
@@ -1977,7 +1977,7 @@ void Fill::importColor( const AttributeList& rAttribs, double fPosition )
 
 void Fill::importFill( SequenceInputStream& rStrm )
 {
-    OSL_ENSURE( !mbDxf, "Fill::importFill - unexpected conditional formatting flag" );
+    SAL_WARN_IF( mbDxf, "sc", "Fill::importFill - unexpected conditional formatting flag" );
     sal_Int32 nPattern = rStrm.readInt32();
     if( nPattern == BIFF12_FILL_GRADIENT )
     {
@@ -1999,7 +1999,7 @@ void Fill::importFill( SequenceInputStream& rStrm )
 
 void Fill::importDxfPattern( SequenceInputStream& rStrm )
 {
-    OSL_ENSURE( mbDxf, "Fill::importDxfPattern - missing conditional formatting flag" );
+    SAL_WARN_IF( !mbDxf, "sc", "Fill::importDxfPattern - missing conditional formatting flag" );
     if( !mxPatternModel )
         mxPatternModel.reset( new PatternFillModel( mbDxf ) );
     mxPatternModel->setBiffPattern( rStrm.readuInt8() );
@@ -2008,7 +2008,7 @@ void Fill::importDxfPattern( SequenceInputStream& rStrm )
 
 void Fill::importDxfFgColor( SequenceInputStream& rStrm )
 {
-    OSL_ENSURE( mbDxf, "Fill::importDxfFgColor - missing conditional formatting flag" );
+    SAL_WARN_IF( !mbDxf, "sc", "Fill::importDxfFgColor - missing conditional formatting flag" );
     if( !mxPatternModel )
         mxPatternModel.reset( new PatternFillModel( mbDxf ) );
     mxPatternModel->maPatternColor.importColor( rStrm );
@@ -2017,7 +2017,7 @@ void Fill::importDxfFgColor( SequenceInputStream& rStrm )
 
 void Fill::importDxfBgColor( SequenceInputStream& rStrm )
 {
-    OSL_ENSURE( mbDxf, "Fill::importDxfBgColor - missing conditional formatting flag" );
+    SAL_WARN_IF( !mbDxf, "sc", "Fill::importDxfBgColor - missing conditional formatting flag" );
     if( !mxPatternModel )
         mxPatternModel.reset( new PatternFillModel( mbDxf ) );
     mxPatternModel->maFillColor.importColor( rStrm );
@@ -2026,7 +2026,7 @@ void Fill::importDxfBgColor( SequenceInputStream& rStrm )
 
 void Fill::importDxfGradient( SequenceInputStream& rStrm )
 {
-    OSL_ENSURE( mbDxf, "Fill::importDxfGradient - missing conditional formatting flag" );
+    SAL_WARN_IF( !mbDxf, "sc", "Fill::importDxfGradient - missing conditional formatting flag" );
     if( !mxGradientModel )
         mxGradientModel.reset( new GradientFillModel );
     mxGradientModel->readGradient( rStrm );
@@ -2034,7 +2034,7 @@ void Fill::importDxfGradient( SequenceInputStream& rStrm )
 
 void Fill::importDxfStop( SequenceInputStream& rStrm )
 {
-    OSL_ENSURE( mbDxf, "Fill::importDxfStop - missing conditional formatting flag" );
+    SAL_WARN_IF( !mbDxf, "sc", "Fill::importDxfStop - missing conditional formatting flag" );
     if( !mxGradientModel )
         mxGradientModel.reset( new GradientFillModel );
     mxGradientModel->readGradientStop( rStrm, true );
