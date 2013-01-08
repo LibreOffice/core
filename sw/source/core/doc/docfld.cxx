@@ -347,7 +347,9 @@ void SwDoc::UpdateFlds( SfxPoolItem *pNewHt, bool bCloseDB )
             if( !pNewHt )
                 break;
         default:
-            (*pFldTypes)[i]->ModifyNotification ( 0, pNewHt );
+            if( pNewHt ) {
+                (*pFldTypes)[i]->ModifyNotification ( 0, pNewHt );
+            }
         }
     }
 
