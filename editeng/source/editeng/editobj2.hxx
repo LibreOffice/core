@@ -150,7 +150,7 @@ public:
     bool isWrongListEqual(const ContentInfo& rCompare) const;
 };
 
-class BinTextObject : public EditTextObject, public SfxItemPoolUser
+class BinTextObject : public EditTextObject
 {
     using EditTextObject::operator==;
     using EditTextObject::isWrongListEqual;

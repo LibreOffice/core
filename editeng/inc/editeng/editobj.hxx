@@ -24,6 +24,7 @@
 #include <tools/debug.hxx>
 #include <rsc/rscsfx.hxx>
 #include <svl/itemset.hxx>
+#include "svl/itempool.hxx"
 #include <editeng/eeitem.hxx>
 #include <editeng/editdata.hxx>
 #include "editeng/editengdllapi.h"
@@ -44,7 +45,7 @@ class FieldUpdater;
 
 }
 
-class EDITENG_DLLPUBLIC EditTextObject
+class EDITENG_DLLPUBLIC EditTextObject : public SfxItemPoolUser
 {
 private:
     sal_uInt16              nWhich;
@@ -121,6 +122,8 @@ public:
 
     // #i102062#
     bool isWrongListEqual(const EditTextObject& rCompare) const;
+
+    virtual void ObjectInDestruction(const SfxItemPool& rSfxItemPool) = 0;
 };
 
 #endif  // _EDITOBJ_HXX

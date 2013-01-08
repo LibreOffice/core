@@ -497,8 +497,7 @@ EditEngineItemPool* getEditEngineItemPool(SfxItemPool* pPool)
 }
 
 BinTextObject::BinTextObject( SfxItemPool* pP ) :
-    EditTextObject( EE_FORMAT_BIN ),
-    SfxItemPoolUser()
+    EditTextObject( EE_FORMAT_BIN )
 {
     nVersion = 0;
     nMetric = 0xFFFF;
@@ -536,8 +535,7 @@ BinTextObject::BinTextObject( SfxItemPool* pP ) :
 }
 
 BinTextObject::BinTextObject( const BinTextObject& r ) :
-    EditTextObject( r ),
-    SfxItemPoolUser()
+    EditTextObject( r )
 {
     nVersion = r.nVersion;
     nMetric = r.nMetric;
