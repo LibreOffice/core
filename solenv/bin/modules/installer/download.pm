@@ -431,57 +431,64 @@ sub get_download_architecture
 }
 
 #########################################################
-# Setting the installation type for the download name
+# Setting the content type for the download name
 #########################################################
 
-sub get_install_type
+sub get_download_content
 {
     my ($allvariables) = @_;
 
-    my $type = "";
+    my $content = "";
 
     # content type included in the installer
     if ( $installer::globals::isrpmbuild )
     {
-        $type .= "rpm";
+        $content = "rpm";
     }
     elsif ( $installer::globals::isdebbuild )
     {
-        $type .= "deb";
+        $content = "deb";
     }
     elsif ( $installer::globals::packageformat eq "archive" )
     {
-        $type .= "archive";
+        $content = "archive";
     }
 
-    $type .= "_" if ($type);
+    return $content;
+}
 
-    # functionality type
+#########################################################
+# Setting the functionality type for the download name
+#########################################################
+
+sub get_download_functionality
+{
+    my ($allvariables) = @_;
+
+    my $functionality = "";
+
     if ( $installer::globals::languagepack )
     {
-        $type .= "langpack";
+        $functionality = "langpack";
     }
     elsif ( $installer::globals::helppack )
     {
-        $type .= "helppack";
+        $functionality = "helppack";
     }
     elsif ( $allvariables->{'POSTVERSIONEXTENSION'} eq "SDK" )
     {
-        $type .= "sdk";
+        $functionality = "sdk";
     }
     elsif ( $allvariables->{'POSTVERSIONEXTENSION'} eq "TEST" )
     {
-        $type .= "test";
+        $functionality = "test";
     }
     elsif ( $allvariables->{'PRODUCTNAME'} eq "URE" )
     {
-        $type .= "ure";
+        $functionality = "ure";
     }
 
-    # get rid of trailing _ if functionality type was not set
-    $type =~ s/\_$//;
-
-    return $type;
+    return $functionality;
 }
 
 ###############################################################################################
@@ -498,20 +505,24 @@ sub set_download_filename
     my $versionstring = get_download_version($allvariables);
     my $platform = get_download_platformname();
     my $architecture = get_download_architecture();
-    my $type = get_install_type($allvariables);
+    my $content = get_download_content($allvariables);
+    my $functionality = get_download_functionality($allvariables);
     my $language = get_downloadname_language($languagestringref);
 
     # Setting the extension happens automatically
 
-    my $filename = $start . "_" . $versionstring . "_" . "_" . $platform . "_" . $architecture . "_" . $type . "_" . $language;
+    my $filename = $start . "_" . $versionstring . "_" . $platform . "_" . $architecture . "_" . $content . "_" . $functionality . "_" . $language;
 
-    $filename =~ s/\_\_/\_/g;   # necessary, if $versionstring or $platform or $language are empty
-    $filename =~ s/\_\s*$//;    # necessary, if $language and $addon are empty
+    # get rid of duplicit "_" delimiters when some strings are empty
+    $filename =~ s/\_\_\_/\_/g;
+    $filename =~ s/\_\_/\_/g;
+    $filename =~ s/\_\s*$//;
 
     $installer::globals::ooodownloadfilename = $filename;
 
     return $filename;
 }
+
 
 #########################################################
 # Creating a tar.gz file
