@@ -1730,6 +1730,19 @@ double ScColumn::GetValue( SCROW nRow ) const
     return 0.0;
 }
 
+const EditTextObject* ScColumn::GetEditText( SCROW nRow ) const
+{
+    SCSIZE nIndex;
+    if (!Search(nRow, nIndex))
+        return NULL;
+
+    const ScBaseCell* pCell = maItems[nIndex].pCell;
+    if (pCell->GetCellType() != CELLTYPE_EDIT)
+        return NULL;
+
+    const ScEditCell* pEditCell = static_cast<const ScEditCell*>(pCell);
+    return pEditCell->GetData();
+}
 
 void ScColumn::GetFormula( SCROW nRow, rtl::OUString& rFormula ) const
 {

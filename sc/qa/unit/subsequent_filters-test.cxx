@@ -40,6 +40,10 @@
 #include <svl/stritem.hxx>
 #include "svx/svdpage.hxx"
 
+#include "editeng/wghtitem.hxx"
+#include "editeng/postitem.hxx"
+#include "editeng/udlnitem.hxx"
+#include "editeng/editobj.hxx"
 #include <editeng/brshitem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <editeng/borderline.hxx>
@@ -59,6 +63,7 @@
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/text/textfield/Type.hpp>
 
 #define CALC_DEBUG_OUTPUT 0
 #define TEST_BUG_FILES 0
@@ -171,6 +176,7 @@ public:
     void testFormulaDependency();
 
     void testRowHeightODS();
+    void testRichTextContentODS();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testRangeNameXLS);
@@ -215,6 +221,7 @@ public:
     CPPUNIT_TEST(testPivotTableBasicODS);
     CPPUNIT_TEST(testRowHeightODS);
     CPPUNIT_TEST(testFormulaDependency);
+    CPPUNIT_TEST(testRichTextContentODS);
 
     //disable testPassword on MacOSX due to problems with libsqlite3
     //also crashes on DragonFly due to problems with nss/nspr headers
@@ -1512,6 +1519,182 @@ void ScFiltersTest::testRowHeightODS()
 
     bManual = pDoc->IsManualRowHeight(MAXROW, nTab);
     CPPUNIT_ASSERT_MESSAGE("Row should have an automatic height.", !bManual);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testRichTextContentODS()
+{
+    ScDocShellRef xDocSh = loadDoc("rich-text-cells.", ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load rich-text-cells.ods", xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    OUString aTabName;
+    CPPUNIT_ASSERT_MESSAGE("Failed to get the name of the first sheet.", pDoc->GetName(0, aTabName));
+
+    // All tested cells are in the first column.
+    ScAddress aPos(0, 0, 0);
+
+    // Normal simple string with no formatting.
+    aPos.IncRow();
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, pDoc->GetCellType(aPos));
+    CPPUNIT_ASSERT_EQUAL(OUString("Normal"), pDoc->GetString(aPos.Col(), aPos.Row(), aPos.Tab()));
+
+    // Normal string with bold applied to the whole cell.
+    {
+        aPos.IncRow();
+        CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, pDoc->GetCellType(aPos));
+        CPPUNIT_ASSERT_EQUAL(OUString("All bold"), pDoc->GetString(aPos.Col(), aPos.Row(), aPos.Tab()));
+        const ScPatternAttr* pAttr = pDoc->GetPattern(aPos.Col(), aPos.Row(), aPos.Tab());
+        CPPUNIT_ASSERT_MESSAGE("Failed to get cell attribute.", pAttr);
+        const SvxWeightItem& rWeightItem =
+            static_cast<const SvxWeightItem&>(pAttr->GetItem(ATTR_FONT_WEIGHT));
+        CPPUNIT_ASSERT_EQUAL(WEIGHT_BOLD, rWeightItem.GetWeight());
+    }
+
+    // This cell has an unformatted but multi-line content. Multi-line text is
+    // stored in edit cell even if it has no formatting applied.
+    aPos.IncRow();
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_EDIT, pDoc->GetCellType(aPos));
+    const EditTextObject* pEditText = pDoc->GetEditText(aPos);
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pEditText->GetParagraphCount());
+    OUString aParaText = pEditText->GetText(0);
+    CPPUNIT_ASSERT_EQUAL(OUString("one"), aParaText);
+    aParaText = pEditText->GetText(1);
+    CPPUNIT_ASSERT_EQUAL(OUString("two"), aParaText);
+    aParaText = pEditText->GetText(2);
+    CPPUNIT_ASSERT_EQUAL(OUString("three"), aParaText);
+
+    // Cell with sheet name field item.
+    aPos.IncRow();
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_EDIT, pDoc->GetCellType(aPos));
+    pEditText = pDoc->GetEditText(aPos);
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pEditText->GetParagraphCount());
+    aParaText = pEditText->GetText(0);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected text.", aParaText.indexOf("Sheet name is ") == 0);
+    CPPUNIT_ASSERT_MESSAGE("Sheet name field item not found.", pEditText->HasField(text::textfield::Type::TABLE));
+
+    // Cell with URL field item.
+    aPos.IncRow();
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_EDIT, pDoc->GetCellType(aPos));
+    pEditText = pDoc->GetEditText(aPos);
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pEditText->GetParagraphCount());
+    aParaText = pEditText->GetText(0);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected text.", aParaText.indexOf("URL: ") == 0);
+    CPPUNIT_ASSERT_MESSAGE("URL field item not found.", pEditText->HasField(text::textfield::Type::URL));
+
+    // Cell with Date field item.
+    aPos.IncRow();
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_EDIT, pDoc->GetCellType(aPos));
+    pEditText = pDoc->GetEditText(aPos);
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pEditText->GetParagraphCount());
+    aParaText = pEditText->GetText(0);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected text.", aParaText.indexOf("Date: ") == 0);
+    CPPUNIT_ASSERT_MESSAGE("Date field item not found.", pEditText->HasField(text::textfield::Type::DATE));
+
+    // Cell with DocInfo title field item.
+    aPos.IncRow();
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_EDIT, pDoc->GetCellType(aPos));
+    pEditText = pDoc->GetEditText(aPos);
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pEditText->GetParagraphCount());
+    aParaText = pEditText->GetText(0);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected text.", aParaText.indexOf("Title: ") == 0);
+    CPPUNIT_ASSERT_MESSAGE("DocInfo title field item not found.", pEditText->HasField(text::textfield::Type::DOCINFO_TITLE));
+
+    // Cell with sentence with both bold and italic sequences.
+    aPos.IncRow();
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_EDIT, pDoc->GetCellType(aPos));
+    pEditText = pDoc->GetEditText(aPos);
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pEditText->GetParagraphCount());
+    aParaText = pEditText->GetText(0);
+    CPPUNIT_ASSERT_EQUAL(OUString("Sentence with bold and italic."), aParaText);
+    std::vector<EECharAttrib> aAttribs;
+    pEditText->GetCharAttribs(0, aAttribs);
+    std::vector<EECharAttrib>::const_iterator it = aAttribs.begin(), itEnd = aAttribs.end();
+    {
+        bool bHasBold = false, bHasItalic = false;
+        for (; it != itEnd; ++it)
+        {
+            OUString aSeg = aParaText.copy(it->nStart, it->nEnd - it->nStart);
+            const SfxPoolItem* pAttr = it->pAttr;
+            if (aSeg == "bold" && pAttr->Which() == EE_CHAR_WEIGHT && !bHasBold)
+            {
+                const SvxWeightItem& rItem = static_cast<const SvxWeightItem&>(*pAttr);
+                bHasBold = (rItem.GetWeight() == WEIGHT_BOLD);
+            }
+            else if (aSeg == "italic" && pAttr->Which() == EE_CHAR_ITALIC && !bHasItalic)
+            {
+                const SvxPostureItem& rItem = static_cast<const SvxPostureItem&>(*pAttr);
+                bHasItalic = (rItem.GetPosture() == ITALIC_NORMAL);
+
+            }
+        }
+        CPPUNIT_ASSERT_MESSAGE("This sentence is expected to have both bold and italic sequences.", bHasBold && bHasItalic);
+    }
+
+    // Cell with multi-line content with formatting applied.
+    aPos.IncRow();
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_EDIT, pDoc->GetCellType(aPos));
+    pEditText = pDoc->GetEditText(aPos);
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pEditText->GetParagraphCount());
+    aParaText = pEditText->GetText(0);
+    CPPUNIT_ASSERT_EQUAL(OUString("bold"), aParaText);
+    aParaText = pEditText->GetText(1);
+    CPPUNIT_ASSERT_EQUAL(OUString("italic"), aParaText);
+    aParaText = pEditText->GetText(2);
+    CPPUNIT_ASSERT_EQUAL(OUString("underlined"), aParaText);
+
+    // first line is bold.
+    pEditText->GetCharAttribs(0, aAttribs);
+    bool bHasBold = false;
+    for (it = aAttribs.begin(), itEnd = aAttribs.end(); it != itEnd; ++it)
+    {
+        if (it->pAttr->Which() == EE_CHAR_WEIGHT)
+        {
+            const SvxWeightItem& rItem = static_cast<const SvxWeightItem&>(*it->pAttr);
+            bHasBold = (rItem.GetWeight() == WEIGHT_BOLD);
+            if (bHasBold)
+                break;
+        }
+    }
+    CPPUNIT_ASSERT_MESSAGE("First line should be bold.", bHasBold);
+
+    // second line is italic.
+    pEditText->GetCharAttribs(1, aAttribs);
+    bool bHasItalic = false;
+    for (it = aAttribs.begin(), itEnd = aAttribs.end(); it != itEnd; ++it)
+    {
+        if (it->pAttr->Which() == EE_CHAR_ITALIC)
+        {
+            const SvxPostureItem& rItem = static_cast<const SvxPostureItem&>(*it->pAttr);
+            bHasItalic = (rItem.GetPosture() == ITALIC_NORMAL);
+            if (bHasItalic)
+                break;
+        }
+    }
+    CPPUNIT_ASSERT_MESSAGE("Second line should be italic.", bHasItalic);
+
+    // third line is underlined.
+    pEditText->GetCharAttribs(2, aAttribs);
+    bool bHasUnderline = false;
+    for (it = aAttribs.begin(), itEnd = aAttribs.end(); it != itEnd; ++it)
+    {
+        if (it->pAttr->Which() == EE_CHAR_UNDERLINE)
+        {
+            const SvxUnderlineItem& rItem = static_cast<const SvxUnderlineItem&>(*it->pAttr);
+            bHasUnderline = (rItem.GetLineStyle() == UNDERLINE_SINGLE);
+            if (bHasUnderline)
+                break;
+        }
+    }
+    CPPUNIT_ASSERT_MESSAGE("Second line should be underlined.", bHasUnderline);
 
     xDocSh->DoClose();
 }

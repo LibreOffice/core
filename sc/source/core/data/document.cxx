@@ -3015,6 +3015,14 @@ void ScDocument::GetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, double& rValue )
         rValue = 0.0;
 }
 
+const EditTextObject* ScDocument::GetEditText( const ScAddress& rPos ) const
+{
+    SCTAB nTab = rPos.Tab();
+    if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab])
+        return NULL;
+
+    return maTabs[nTab]->GetEditText(rPos.Col(), rPos.Row());
+}
 
 double ScDocument::GetValue( const ScAddress& rPos )
 {

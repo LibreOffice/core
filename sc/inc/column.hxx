@@ -228,6 +228,7 @@ public:
     void        GetString( SCROW nRow, rtl::OUString& rString ) const;
     void        GetInputString( SCROW nRow, rtl::OUString& rString ) const;
     double      GetValue( SCROW nRow ) const;
+    const EditTextObject* GetEditText( SCROW nRow ) const;
     void        GetFormula( SCROW nRow, rtl::OUString& rFormula ) const;
     CellType    GetCellType( SCROW nRow ) const;
     SCSIZE      GetCellCount() const;

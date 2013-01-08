@@ -878,6 +878,27 @@ sal_Bool BinTextObject::HasField( TypeId aType ) const
     return false;
 }
 
+bool BinTextObject::HasField( sal_Int32 nType ) const
+{
+    size_t nParagraphs = aContents.size();
+    for (size_t nPara = 0; nPara < nParagraphs; ++nPara)
+    {
+        const ContentInfo& rC = aContents[nPara];
+        size_t nAttrs = rC.aAttribs.size();
+        for (size_t nAttr = 0; nAttr < nAttrs; ++nAttr)
+        {
+            const XEditAttribute& rAttr = rC.aAttribs[nAttr];
+            if (rAttr.GetItem()->Which() != EE_FEATURE_FIELD)
+                continue;
+
+            const SvxFieldData* pFldData = static_cast<const SvxFieldItem*>(rAttr.GetItem())->GetField();
+            if (pFldData && pFldData->GetClassId() == nType)
+                return true;
+        }
+    }
+    return false;
+}
+
 SfxItemSet BinTextObject::GetParaAttribs(size_t nPara) const
 {
     const ContentInfo& rC = aContents[nPara];

@@ -144,6 +144,7 @@ class ScProgress;
 class SvtListener;
 class ScNotes;
 class ScEditDataArray;
+class EditTextObject;
 
 namespace com { namespace sun { namespace star {
     namespace lang {
@@ -772,6 +773,7 @@ public:
     SC_DLLPUBLIC double         GetValue( const ScAddress& );
     SC_DLLPUBLIC double         GetValue( const SCCOL nCol, SCROW nRow, SCTAB nTab) { ScAddress aAdr(nCol, nRow, nTab); return GetValue(aAdr);}
     SC_DLLPUBLIC void           GetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, double& rValue );
+    SC_DLLPUBLIC const EditTextObject* GetEditText( const ScAddress& rPos ) const;
     SC_DLLPUBLIC double         RoundValueAsShown( double fVal, sal_uLong nFormat );
     SC_DLLPUBLIC void           GetNumberFormat( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                      sal_uInt32& rFormat ) const;

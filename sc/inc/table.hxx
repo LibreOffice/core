@@ -310,6 +310,7 @@ public:
                             0.0;
                     }
     double      GetValue( SCCOL nCol, SCROW nRow ) const;
+    const EditTextObject* GetEditText( SCCOL nCol, SCROW nRow ) const;
     void        GetFormula( SCCOL nCol, SCROW nRow, rtl::OUString& rFormula );
 
     CellType    GetCellType( const ScAddress& rPos ) const
