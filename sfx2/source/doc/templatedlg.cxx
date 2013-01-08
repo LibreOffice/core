@@ -502,6 +502,7 @@ IMPL_LINK(SfxTemplateManagerDlg, TVFolderStateHdl, const ThumbnailViewItem*, pIt
 
 IMPL_LINK(SfxTemplateManagerDlg, TVTemplateStateHdl, const ThumbnailViewItem*, pItem)
 {
+    bool bInSelection = maSelTemplates.find(pItem) != maSelTemplates.end();
     if (pItem->isSelected())
     {
         if (!mbIsSaveMode)
@@ -512,7 +513,7 @@ IMPL_LINK(SfxTemplateManagerDlg, TVTemplateStateHdl, const ThumbnailViewItem*, p
                 mpActionBar->Show(false);
                 mpTemplateBar->Show();
             }
-            else
+            else if (maSelTemplates.size() != 1 || !bInSelection)
             {
                 mpTemplateBar->HideItem(TBI_TEMPLATE_EDIT);
                 mpTemplateBar->HideItem(TBI_TEMPLATE_PROPERTIES);
@@ -520,11 +521,12 @@ IMPL_LINK(SfxTemplateManagerDlg, TVTemplateStateHdl, const ThumbnailViewItem*, p
             }
         }
 
-        maSelTemplates.insert(pItem);
+        if (!bInSelection)
+            maSelTemplates.insert(pItem);
     }
     else
     {
-        if (maSelTemplates.find(pItem) != maSelTemplates.end())
+        if (bInSelection)
         {
             maSelTemplates.erase(pItem);
 
