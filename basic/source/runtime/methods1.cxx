@@ -44,6 +44,7 @@
 #include <iosys.hxx>
 #include "sbunoobj.hxx"
 #include "propacc.hxx"
+#include "sal/log.hxx"
 
 
 #include <comphelper/processfactory.hxx>
@@ -722,7 +723,7 @@ RTLFUNC(Trim)
     }
     else
     {
-        rtl::OUString aStr(comphelper::string::strip(rPar.Get(1)->GetOUString(), ' '));
+        OUString aStr(comphelper::string::strip(rPar.Get(1)->GetOUString(), ' '));
         rPar.Get(0)->PutString(aStr);
     }
 }
@@ -1197,7 +1198,7 @@ static sal_Bool lcl_ReadSbxVariable( SbxVariable& rVar, SvStream* pStrm,
 static sal_Bool lcl_WriteReadSbxArray( SbxDimArray& rArr, SvStream* pStrm,
     sal_Bool bBinary, short nCurDim, short* pOtherDims, sal_Bool bWrite )
 {
-    DBG_ASSERT( nCurDim > 0,"Bad Dim");
+    SAL_WARN_IF( nCurDim <= 0,"basic", "Bad Dim");
     short nLower, nUpper;
     if( !rArr.GetDim( nCurDim, nLower, nUpper ) )
         return sal_False;
@@ -1327,7 +1328,7 @@ RTLFUNC(Environ)
     const char* pEnvStr = getenv(aByteStr.getStr());
     if ( pEnvStr )
     {
-        aResult = rtl::OUString::createFromAscii( pEnvStr );
+        aResult = OUString::createFromAscii( pEnvStr );
     }
     rPar.Get(0)->PutString( aResult );
 }
@@ -2673,7 +2674,7 @@ void CallFunctionAccessFunction( const Sequence< Any >& aArgs, const rtl::OUStri
             Reference< XMultiServiceFactory > xFactory( getProcessServiceFactory() );
             if( xFactory.is() )
             {
-                xFunc.set( xFactory->createInstance(OUString("com.sun.star.sheet.FunctionAccess")), UNO_QUERY_THROW);
+                xFunc.set( xFactory->createInstance("com.sun.star.sheet.FunctionAccess"), UNO_QUERY_THROW);
             }
         }
         Any aRet = xFunc->callFunction( sFuncName, aArgs );
@@ -2708,7 +2709,7 @@ RTLFUNC(SYD)
     aParams[ 2 ] <<= makeAny( rPar.Get(3)->GetDouble() );
     aParams[ 3 ] <<= makeAny( rPar.Get(4)->GetDouble() );
 
-    CallFunctionAccessFunction( aParams, OUString( "SYD" ), rPar.Get( 0 ) );
+    CallFunctionAccessFunction( aParams, "SYD", rPar.Get( 0 ) );
 }
 
 RTLFUNC(SLN)
@@ -2731,7 +2732,7 @@ RTLFUNC(SLN)
     aParams[ 1 ] <<= makeAny( rPar.Get(2)->GetDouble() );
     aParams[ 2 ] <<= makeAny( rPar.Get(3)->GetDouble() );
 
-    CallFunctionAccessFunction( aParams, OUString( "SLN" ), rPar.Get( 0 ) );
+    CallFunctionAccessFunction( aParams, "SLN", rPar.Get( 0 ) );
 }
 
 RTLFUNC(Pmt)
@@ -2776,7 +2777,7 @@ RTLFUNC(Pmt)
     aParams[ 3 ] <<= fv;
     aParams[ 4 ] <<= type;
 
-    CallFunctionAccessFunction( aParams, OUString( "Pmt" ), rPar.Get( 0 ) );
+    CallFunctionAccessFunction( aParams, "Pmt", rPar.Get( 0 ) );
 }
 
 RTLFUNC(PPmt)
@@ -2823,7 +2824,7 @@ RTLFUNC(PPmt)
     aParams[ 4 ] <<= fv;
     aParams[ 5 ] <<= type;
 
-    CallFunctionAccessFunction( aParams, OUString( "PPmt" ), rPar.Get( 0 ) );
+    CallFunctionAccessFunction( aParams, "PPmt", rPar.Get( 0 ) );
 }
 
 RTLFUNC(PV)
@@ -2868,7 +2869,7 @@ RTLFUNC(PV)
     aParams[ 3 ] <<= fv;
     aParams[ 4 ] <<= type;
 
-    CallFunctionAccessFunction( aParams, OUString( "PV" ), rPar.Get( 0 ) );
+    CallFunctionAccessFunction( aParams, "PV", rPar.Get( 0 ) );
 }
 
 RTLFUNC(NPV)
@@ -2896,7 +2897,7 @@ RTLFUNC(NPV)
 
     aParams[ 1 ] <<= aValues;
 
-    CallFunctionAccessFunction( aParams, OUString( "NPV" ), rPar.Get( 0 ) );
+    CallFunctionAccessFunction( aParams, "NPV", rPar.Get( 0 ) );
 }
 
 RTLFUNC(NPer)
@@ -2941,7 +2942,7 @@ RTLFUNC(NPer)
     aParams[ 3 ] <<= fv;
     aParams[ 4 ] <<= type;
 
-    CallFunctionAccessFunction( aParams, OUString( "NPer" ), rPar.Get( 0 ) );
+    CallFunctionAccessFunction( aParams, "NPer", rPar.Get( 0 ) );
 }
 
 RTLFUNC(MIRR)
@@ -2972,7 +2973,7 @@ RTLFUNC(MIRR)
     aParams[ 1 ] <<= makeAny( rPar.Get(2)->GetDouble() );
     aParams[ 2 ] <<= makeAny( rPar.Get(3)->GetDouble() );
 
-    CallFunctionAccessFunction( aParams, OUString( "MIRR" ), rPar.Get( 0 ) );
+    CallFunctionAccessFunction( aParams, "MIRR", rPar.Get( 0 ) );
 }
 
 RTLFUNC(IRR)
@@ -3009,7 +3010,7 @@ RTLFUNC(IRR)
     aParams[ 0 ] <<= aValues;
     aParams[ 1 ] <<= guess;
 
-    CallFunctionAccessFunction( aParams, OUString( "IRR" ), rPar.Get( 0 ) );
+    CallFunctionAccessFunction( aParams, "IRR", rPar.Get( 0 ) );
 }
 
 RTLFUNC(IPmt)
@@ -3056,7 +3057,7 @@ RTLFUNC(IPmt)
     aParams[ 4 ] <<= fv;
     aParams[ 5 ] <<= type;
 
-    CallFunctionAccessFunction( aParams, OUString( "IPmt" ), rPar.Get( 0 ) );
+    CallFunctionAccessFunction( aParams, "IPmt", rPar.Get( 0 ) );
 }
 
 RTLFUNC(FV)
@@ -3101,7 +3102,7 @@ RTLFUNC(FV)
     aParams[ 3 ] <<= pv;
     aParams[ 4 ] <<= type;
 
-    CallFunctionAccessFunction( aParams, OUString( "FV" ), rPar.Get( 0 ) );
+    CallFunctionAccessFunction( aParams, "FV", rPar.Get( 0 ) );
 }
 
 RTLFUNC(DDB)
@@ -3140,7 +3141,7 @@ RTLFUNC(DDB)
     aParams[ 3 ] <<= period;
     aParams[ 4 ] <<= factor;
 
-    CallFunctionAccessFunction( aParams, OUString( "DDB" ), rPar.Get( 0 ) );
+    CallFunctionAccessFunction( aParams, "DDB", rPar.Get( 0 ) );
 }
 
 RTLFUNC(Rate)
@@ -3199,7 +3200,7 @@ RTLFUNC(Rate)
     aParams[ 4 ] <<= type;
     aParams[ 5 ] <<= guess;
 
-    CallFunctionAccessFunction( aParams, OUString( "Rate" ), rPar.Get( 0 ) );
+    CallFunctionAccessFunction( aParams, "Rate", rPar.Get( 0 ) );
 }
 
 RTLFUNC(StrReverse)
@@ -3220,7 +3221,7 @@ RTLFUNC(StrReverse)
         return;
     }
 
-    rtl::OUString aStr = comphelper::string::reverseString(pSbxVariable->GetOUString());
+    OUString aStr = comphelper::string::reverseString(pSbxVariable->GetOUString());
     rPar.Get(0)->PutString( aStr );
 }
 

@@ -37,6 +37,7 @@
 #include "sbunoobj.hxx"
 
 #include <svtools/syntaxhighlight.hxx>
+#include "sal/log.hxx"
 
 #include <basic/basrdll.hxx>
 #include <osl/mutex.hxx>
@@ -162,7 +163,7 @@ DocObjectWrapper::DocObjectWrapper( SbModule* pVar ) : m_pMod( pVar ), mName( pV
                 }
                 catch(const Exception& )
                 {
-                    OSL_FAIL( "DocObjectWrapper::DocObjectWrapper: Caught exception!" );
+                    SAL_WARN( "basic", "DocObjectWrapper::DocObjectWrapper: Caught exception!" );
                 }
             }
 
@@ -188,19 +189,19 @@ void SAL_CALL
 DocObjectWrapper::acquire() throw ()
 {
     osl_atomic_increment( &m_refCount );
-    OSL_TRACE("DocObjectWrapper::acquire(%s) 0x%x refcount is now %d", rtl::OUStringToOString( mName, RTL_TEXTENCODING_UTF8 ).getStr(), this, m_refCount );
+    SAL_INFO("basic","DocObjectWrapper::acquire("<< OUStringToOString( mName, RTL_TEXTENCODING_UTF8 ).getStr() << ") 0x" << this << " refcount is now " << m_refCount );
 }
 void SAL_CALL
 DocObjectWrapper::release() throw ()
 {
     if ( osl_atomic_decrement( &m_refCount ) == 0 )
     {
-        OSL_TRACE("DocObjectWrapper::release(%s) 0x%x refcount is now %d", rtl::OUStringToOString( mName, RTL_TEXTENCODING_UTF8 ).getStr(), this, m_refCount );
+        SAL_INFO("basic","DocObjectWrapper::release("<< OUStringToOString( mName, RTL_TEXTENCODING_UTF8 ).getStr() << ") 0x" << this << " refcount is now " << m_refCount );
         delete this;
     }
     else
     {
-        OSL_TRACE("DocObjectWrapper::release(%s) 0x%x refcount is now %d", rtl::OUStringToOString( mName, RTL_TEXTENCODING_UTF8 ).getStr(), this, m_refCount );
+        SAL_INFO("basic","DocObjectWrapper::release("<< OUStringToOString( mName, RTL_TEXTENCODING_UTF8 ).getStr() << ") 0x" << this << " refcount is now " << m_refCount );
     }
 }
 
@@ -266,7 +267,7 @@ DocObjectWrapper::invoke( const OUString& aFunctionName, const Sequence< Any >& 
         sal_Int32 nSbxCount = n - 1;
         if ( nParamsCount < nSbxCount - nSbxOptional )
         {
-            throw RuntimeException( OUString( "wrong number of parameters!"  ), Reference< XInterface >() );
+            throw RuntimeException( "wrong number of parameters!", Reference< XInterface >() );
         }
     }
     // set parameters
@@ -451,7 +452,7 @@ uno::Reference< vba::XVBACompatibility > getVBACompatibility( const uno::Referen
     try
     {
         uno::Reference< beans::XPropertySet > xModelProps( rxModel, uno::UNO_QUERY_THROW );
-        xVBACompat.set( xModelProps->getPropertyValue( OUString( "BasicLibraries"  ) ), uno::UNO_QUERY );
+        xVBACompat.set( xModelProps->getPropertyValue( "BasicLibraries" ), uno::UNO_QUERY );
     }
     catch(const uno::Exception& )
     {
@@ -494,7 +495,7 @@ IMPL_LINK( AsyncQuitHandler, OnAsyncQuit, void*, /*pNull*/ )
 // could be found from other module.
 
 SbModule::SbModule( const OUString& rName,  sal_Bool bVBACompat )
-         : SbxObject( OUString("StarBASICModule") ),
+         : SbxObject( "StarBASICModule" ),
            pImage( NULL ), pBreaks( NULL ), pClassData( NULL ), mbVBACompat( bVBACompat ),  pDocObject( NULL ), bIsProxyModule( false )
 {
     SetName( rName );
@@ -502,7 +503,7 @@ SbModule::SbModule( const OUString& rName,  sal_Bool bVBACompat )
     SetModuleType( script::ModuleType::NORMAL );
 
     // #i92642: Set name property to intitial name
-    SbxVariable* pNameProp = pProps->Find( OUString("Name"), SbxCLASS_PROPERTY );
+    SbxVariable* pNameProp = pProps->Find( "Name", SbxCLASS_PROPERTY );
     if( pNameProp != NULL )
     {
         pNameProp->PutString( GetName() );
@@ -511,7 +512,7 @@ SbModule::SbModule( const OUString& rName,  sal_Bool bVBACompat )
 
 SbModule::~SbModule()
 {
-    OSL_TRACE("Module named %s is destructing", rtl::OUStringToOString( GetName(), RTL_TEXTENCODING_UTF8 ).getStr() );
+    SAL_INFO("basic","Module named " << OUStringToOString( GetName(), RTL_TEXTENCODING_UTF8 ).getStr() << " is destructing");
     delete pImage;
     delete pBreaks;
     delete pClassData;
@@ -524,7 +525,7 @@ SbModule::GetUnoModule()
     if ( !mxWrapper.is() )
         mxWrapper = new DocObjectWrapper( this );
 
-    OSL_TRACE("Module named %s returning wrapper mxWrapper (0x%x)", rtl::OUStringToOString( GetName(), RTL_TEXTENCODING_UTF8 ).getStr(), mxWrapper.get() );
+    SAL_INFO("basic","Module named " << OUStringToOString( GetName(), RTL_TEXTENCODING_UTF8 ).getStr() << " returning wrapper mxWrapper (0x" << mxWrapper.get() <<")" );
     return mxWrapper;
 }
 
@@ -1097,7 +1098,7 @@ void SbModule::SetVBACompat( bool bCompat )
         {
             StarBASIC* pBasic = static_cast< StarBASIC* >( GetParent() );
             uno::Reference< lang::XMultiServiceFactory > xFactory( getDocumentModel( pBasic ), uno::UNO_QUERY_THROW );
-            xFactory->createInstance( OUString("ooo.vba.VBAGlobals") );
+            xFactory->createInstance( "ooo.vba.VBAGlobals" );
         }
         catch( Exception& )
         {
@@ -1108,7 +1109,7 @@ void SbModule::SetVBACompat( bool bCompat )
 // Run a Basic-subprogram
 sal_uInt16 SbModule::Run( SbMethod* pMeth )
 {
-    OSL_TRACE("About to run %s, vba compatmode is %d", rtl::OUStringToOString( pMeth->GetName(), RTL_TEXTENCODING_UTF8 ).getStr(), mbVBACompat );
+    SAL_INFO("basic","About to run " << OUStringToOString( pMeth->GetName(), RTL_TEXTENCODING_UTF8 ).getStr() << ", vba compatmode is " << mbVBACompat );
     static sal_uInt16 nMaxCallLevel = 0;
 
     sal_uInt16 nRes = 0;
@@ -1144,7 +1145,7 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
         // Launcher problem
         // i80726 The Find below will genarate an error in Testtool so we reset it unless there was one before already
         sal_Bool bWasError = SbxBase::GetError() != 0;
-        SbxVariable* pMSOMacroRuntimeLibVar = Find( OUString("Launcher"), SbxCLASS_OBJECT );
+        SbxVariable* pMSOMacroRuntimeLibVar = Find( "Launcher", SbxCLASS_OBJECT );
         if ( !bWasError && (SbxBase::GetError() == SbxERR_PROC_UNDEFINED) )
             SbxBase::ResetError();
         if( pMSOMacroRuntimeLibVar )
@@ -1154,7 +1155,7 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
             {
                 sal_uInt16 nGblFlag = pMSOMacroRuntimeLib->GetFlags() & SBX_GBLSEARCH;
                 pMSOMacroRuntimeLib->ResetFlag( SBX_GBLSEARCH );
-                SbxVariable* pAppSymbol = pMSOMacroRuntimeLib->Find( OUString("Application"), SbxCLASS_METHOD );
+                SbxVariable* pAppSymbol = pMSOMacroRuntimeLib->Find( "Application", SbxCLASS_METHOD );
                 pMSOMacroRuntimeLib->SetFlag( nGblFlag );
                 if( pAppSymbol )
                 {
@@ -1255,7 +1256,7 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
 
                 clearNativeObjectWrapperVector();
 
-                DBG_ASSERT(GetSbData()->pInst->nCallLvl==0,"BASIC-Call-Level > 0");
+                SAL_WARN_IF(GetSbData()->pInst->nCallLvl != 0,"basic","BASIC-Call-Level > 0");
                 delete GetSbData()->pInst, GetSbData()->pInst = NULL, bDelInst = false;
 
                 // #i30690
@@ -1547,7 +1548,7 @@ const sal_uInt8* SbModule::FindNextStmnt( const sal_uInt8* p, sal_uInt16& nLine,
         nPC++;
         if( bFollowJumps && eOp == _JUMP && pImg )
         {
-            DBG_ASSERT( pImg, "FindNextStmnt: pImg==NULL with FollowJumps option" );
+            SAL_WARN_IF( !pImg, "basic", "FindNextStmnt: pImg==NULL with FollowJumps option" );
             sal_uInt32 nOp1 = *p++; nOp1 |= *p++ << 8;
             nOp1 |= *p++ << 16; nOp1 |= *p++ << 24;
             p = (const sal_uInt8*) pImg->GetCode() + nOp1;
@@ -2108,7 +2109,7 @@ ErrCode SbMethod::Call( SbxValue* pRet, SbxVariable* pCaller )
 {
     if ( pCaller )
     {
-        OSL_TRACE("SbMethod::Call Have been passed a caller 0x%x", pCaller );
+        SAL_INFO("basic", "SbMethod::Call Have been passed a caller 0x" << pCaller );
         mCaller = pCaller;
     }
     // RefCount vom Modul hochzaehlen
@@ -2203,7 +2204,7 @@ SbObjModule::SbObjModule( const OUString& rName, const com::sun::star::script::M
     SetModuleType( mInfo.ModuleType );
     if ( mInfo.ModuleType == script::ModuleType::FORM )
     {
-        SetClassName( OUString("Form" ) );
+        SetClassName( "Form" );
     }
     else if ( mInfo.ModuleObject.is() )
     {
@@ -2224,13 +2225,13 @@ SbObjModule::SetUnoObject( const uno::Any& aObj ) throw ( uno::RuntimeException 
     pDocObject = new SbUnoObject( GetName(), uno::makeAny( aObj ) );
 
     com::sun::star::uno::Reference< com::sun::star::lang::XServiceInfo > xServiceInfo( aObj, com::sun::star::uno::UNO_QUERY_THROW );
-    if( xServiceInfo->supportsService( OUString("ooo.vba.excel.Worksheet" ) ) )
+    if( xServiceInfo->supportsService( "ooo.vba.excel.Worksheet" ) )
     {
-        SetClassName( OUString("Worksheet" ) );
+        SetClassName( "Worksheet" );
     }
-    else if( xServiceInfo->supportsService( OUString("ooo.vba.excel.Workbook" ) ) )
+    else if( xServiceInfo->supportsService( "ooo.vba.excel.Workbook" ) )
     {
-        SetClassName( OUString("Workbook" ) );
+        SetClassName( "Workbook" );
     }
 }
 
@@ -2282,7 +2283,7 @@ public:
     {
         if ( mxComponent.is() )
         {
-            OSL_TRACE("*********** Registering the listeners");
+            SAL_INFO("basic", "*********** Registering the listeners");
             try
             {
                 uno::Reference< awt::XTopWindow >( mxComponent, uno::UNO_QUERY_THROW )->addTopWindowListener( this );
@@ -2316,7 +2317,7 @@ public:
     {
         if ( mxComponent.is() && !mbDisposed )
         {
-            OSL_TRACE("*********** Removing the listeners");
+            SAL_INFO("basic", "*********** Removing the listeners");
             try
             {
                 uno::Reference< awt::XTopWindow >( mxComponent, uno::UNO_QUERY_THROW )->removeTopWindowListener( this );
@@ -2376,14 +2377,14 @@ public:
                     aParams[0] <<= nCancel;
                     aParams[1] <<= nCloseMode;
 
-                    mpUserForm->triggerMethod( OUString("Userform_QueryClose" ), aParams);
+                    mpUserForm->triggerMethod( "Userform_QueryClose", aParams);
                     return;
 
                 }
             }
         }
 
-        mpUserForm->triggerMethod( OUString("Userform_QueryClose" ) );
+        mpUserForm->triggerMethod( "Userform_QueryClose" );
 #endif
     }
 
@@ -2458,7 +2459,7 @@ public:
 
     virtual void SAL_CALL disposing( const lang::EventObject& /*Source*/ ) throw (uno::RuntimeException)
     {
-        OSL_TRACE("** Userform/Dialog disposing");
+        SAL_INFO("basic", "** Userform/Dialog disposing");
         removeListener();
         mbDisposed = true;
         if ( mpUserForm )
@@ -2480,7 +2481,7 @@ SbUserFormModule::~SbUserFormModule()
 
 void SbUserFormModule::ResetApiObj(  bool bTriggerTerminateEvent )
 {
-    OSL_TRACE(" SbUserFormModule::ResetApiObj( %s )", bTriggerTerminateEvent ? "true" : "false" );
+    SAL_INFO("basic", " SbUserFormModule::ResetApiObj( " << (bTriggerTerminateEvent ? "true )" : "false )") );
     if ( bTriggerTerminateEvent && m_xDialog.is() ) // probably someone close the dialog window
     {
         triggerTerminateEvent();
@@ -2497,7 +2498,7 @@ void SbUserFormModule::triggerMethod( const OUString& aMethodToRun )
 
 void SbUserFormModule::triggerMethod( const OUString& aMethodToRun, Sequence< Any >& aArguments )
 {
-    OSL_TRACE("*** trigger %s ***", rtl::OUStringToOString( aMethodToRun, RTL_TEXTENCODING_UTF8 ).getStr() );
+    SAL_INFO("basic", "*** trigger " << OUStringToOString( aMethodToRun, RTL_TEXTENCODING_UTF8 ).getStr() << " ***");
     // Search method
     SbxVariable* pMeth = SbObjModule::Find( aMethodToRun, SbxCLASS_METHOD );
     if( pMeth )
@@ -2538,22 +2539,22 @@ void SbUserFormModule::triggerMethod( const OUString& aMethodToRun, Sequence< An
 
 void SbUserFormModule::triggerActivateEvent( void )
 {
-    OSL_TRACE("**** entering SbUserFormModule::triggerActivate");
-    triggerMethod( OUString( "UserForm_Activate" ) );
-    OSL_TRACE("**** leaving SbUserFormModule::triggerActivate");
+    SAL_INFO("basic", "**** entering SbUserFormModule::triggerActivate");
+    triggerMethod( "UserForm_Activate" );
+    SAL_INFO("basic", "**** leaving SbUserFormModule::triggerActivate");
 }
 
 void SbUserFormModule::triggerDeactivateEvent( void )
 {
-    OSL_TRACE("**** SbUserFormModule::triggerDeactivate");
-    triggerMethod( OUString("Userform_Deactivate" ) );
+    SAL_INFO("basic", "**** SbUserFormModule::triggerDeactivate");
+    triggerMethod( "Userform_Deactivate" );
 }
 
 void SbUserFormModule::triggerInitializeEvent( void )
 {
     if ( mbInit )
         return;
-    OSL_TRACE("**** SbUserFormModule::triggerInitializeEvent");
+    SAL_INFO("basic", "**** SbUserFormModule::triggerInitializeEvent");
     static OUString aInitMethodName( "Userform_Initialize");
     triggerMethod( aInitMethodName );
     mbInit = true;
@@ -2561,7 +2562,7 @@ void SbUserFormModule::triggerInitializeEvent( void )
 
 void SbUserFormModule::triggerTerminateEvent( void )
 {
-    OSL_TRACE("**** SbUserFormModule::triggerTerminateEvent");
+    SAL_INFO("basic", "**** SbUserFormModule::triggerTerminateEvent");
     static OUString aTermMethodName( "Userform_Terminate" );
     triggerMethod( aTermMethodName );
     mbInit=false;
@@ -2608,7 +2609,7 @@ SbxVariable* SbUserFormModuleInstance::Find( const OUString& rName, SbxClassType
 
 void SbUserFormModule::Load()
 {
-    OSL_TRACE("** load() ");
+    SAL_INFO("basic", "** load() ");
     // forces a load
     if ( !pDocObject )
         InitObject();
@@ -2617,7 +2618,7 @@ void SbUserFormModule::Load()
 
 void SbUserFormModule::Unload()
 {
-    OSL_TRACE("** Unload() ");
+    SAL_INFO("basic", "** Unload() ");
 
     sal_Int8 nCancel = 0;
     sal_Int8 nCloseMode = ::ooo::vba::VbQueryClose::vbFormCode;
@@ -2627,7 +2628,7 @@ void SbUserFormModule::Unload()
     aParams[0] <<= nCancel;
     aParams[1] <<= nCloseMode;
 
-    triggerMethod( OUString("Userform_QueryClose" ), aParams);
+    triggerMethod( "Userform_QueryClose", aParams);
 
     aParams[0] >>= nCancel;
     // basic boolean ( and what the user might use ) can be ambiguous ( e.g. basic true = -1 )
@@ -2643,17 +2644,17 @@ void SbUserFormModule::Unload()
         triggerTerminateEvent();
     }
     // Search method
-    SbxVariable* pMeth = SbObjModule::Find( OUString("UnloadObject"), SbxCLASS_METHOD );
+    SbxVariable* pMeth = SbObjModule::Find( "UnloadObject", SbxCLASS_METHOD );
     if( pMeth )
     {
-        OSL_TRACE("Attempting too run the UnloadObjectMethod");
+        SAL_INFO("basic", "Attempting too run the UnloadObjectMethod");
         m_xDialog.clear(); //release ref to the uno object
         SbxValues aVals;
         bool bWaitForDispose = true; // assume dialog is showing
         if ( m_DialogListener.get() )
         {
             bWaitForDispose = m_DialogListener->isShowing();
-            OSL_TRACE("Showing %d", bWaitForDispose );
+            SAL_INFO("basic", "Showing " << bWaitForDispose );
         }
         pMeth->Get( aVals);
         if ( !bWaitForDispose )
@@ -2661,7 +2662,7 @@ void SbUserFormModule::Unload()
             // we've either already got a dispose or we'er never going to get one
             ResetApiObj();
         } // else wait for dispose
-        OSL_TRACE("UnloadObject completed ( we hope )");
+        SAL_INFO("basic", "UnloadObject completed ( we hope )");
     }
 }
 
@@ -2690,14 +2691,14 @@ void SbUserFormModule::InitObject()
             try
             {
                 Reference< beans::XPropertySet > xProps( m_xModel, UNO_QUERY_THROW );
-                uno::Reference< script::vba::XVBACompatibility > xVBAMode( xProps->getPropertyValue( OUString( "BasicLibraries" ) ), uno::UNO_QUERY_THROW );
+                uno::Reference< script::vba::XVBACompatibility > xVBAMode( xProps->getPropertyValue( "BasicLibraries" ), uno::UNO_QUERY_THROW );
                 sProjectName = xVBAMode->getProjectName();
             }
             catch(const Exception& ) {}
 
             sDialogUrl = sDialogUrl + sProjectName + "." + GetName() + "?location=document";
 
-            uno::Reference< awt::XDialogProvider > xProvider( xFactory->createInstanceWithArguments( OUString( "com.sun.star.awt.DialogProvider"), aArgs  ), uno::UNO_QUERY_THROW );
+            uno::Reference< awt::XDialogProvider > xProvider( xFactory->createInstanceWithArguments( "com.sun.star.awt.DialogProvider", aArgs  ), uno::UNO_QUERY_THROW );
             m_xDialog = xProvider->createDialog( sDialogUrl );
 
             // create vba api object
@@ -2706,7 +2707,7 @@ void SbUserFormModule::InitObject()
             aArgs[ 1 ] <<= m_xDialog;
             aArgs[ 2 ] <<= m_xModel;
             aArgs[ 3 ] <<= rtl::OUString( GetParent()->GetName() );
-            pDocObject = new SbUnoObject( GetName(), uno::makeAny( xVBAFactory->createInstanceWithArguments( rtl::OUString( "ooo.vba.msforms.UserForm"), aArgs  ) ) );
+            pDocObject = new SbUnoObject( GetName(), uno::makeAny( xVBAFactory->createInstanceWithArguments( "ooo.vba.msforms.UserForm", aArgs  ) ) );
 
             uno::Reference< lang::XComponent > xComponent( m_xDialog, uno::UNO_QUERY_THROW );
 
@@ -2721,7 +2722,7 @@ void SbUserFormModule::InitObject()
             }
             while( pParentBasic == NULL && pCurObject != NULL );
 
-            OSL_ASSERT( pParentBasic != NULL );
+            SAL_WARN_IF( pParentBasic == NULL, "basic", "pParentBasic == NULL" );
             registerComponentToBeDisposedForBasic( xComponent, pParentBasic );
 
             // if old listener object exists, remove it from dialog and document model
@@ -2739,7 +2740,7 @@ void SbUserFormModule::InitObject()
 }
 
 SbxVariable*
-SbUserFormModule::Find( const rtl::OUString& rName, SbxClassType t )
+SbUserFormModule::Find( const OUString& rName, SbxClassType t )
 {
     if ( !pDocObject && !GetSbData()->bRunInit && GetSbData()->pInst )
         InitObject();

@@ -34,6 +34,7 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include "sbunoobj.hxx"
 #include "errobject.hxx"
+#include "sal/log.hxx"
 
 #include "comenumwrapper.hxx"
 
@@ -303,7 +304,7 @@ SbiInstance::~SbiInstance()
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "SbiInstance::~SbiInstance: caught an exception while disposing the components!" );
+        SAL_WARN("basic", "SbiInstance::~SbiInstance: caught an exception while disposing the components!" );
     }
 
     ComponentVector.clear();
@@ -916,7 +917,7 @@ sal_Int32 SbiRuntime::translateErrorToVba( SbError nError, OUString& rMsg )
         // TEST, has to be vb here always
 #ifdef DBG_UTIL
         SbError nTmp = StarBASIC::GetSfxFromVBError( (sal_uInt16)nError );
-        DBG_ASSERT( nTmp, "No VB error!" );
+        SAL_WARN_IF( nTmp == 0, "basic", "No VB error!" );
 #endif
 
         StarBASIC::MakeErrorText( nError, rMsg );
@@ -964,7 +965,7 @@ SbxVariableRef SbiRuntime::PopVar()
     SbxVariableRef xVar = refExprStk->Get( --nExprLvl );
 #ifdef DBG_UTIL
     if ( xVar->GetName().equalsAscii( "Cells" ) )
-        OSL_TRACE( "" );
+        SAL_INFO("basic", "" );
 #endif
     // methods hold themselves in parameter 0
     if( xVar->IsA( TYPE(SbxMethod) ) )
