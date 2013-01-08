@@ -204,12 +204,12 @@ void lcl_insertErrorBarLSequencesToMap(
     }
 }
 
-Reference< chart2::data::XLabeledDataSequence > lcl_createAndAddSequenceToSeries( const rtl::OUString& rRole
+Reference< chart2::data::XLabeledDataSequence2 > lcl_createAndAddSequenceToSeries( const rtl::OUString& rRole
         , const rtl::OUString& rRange
         , const Reference< chart2::XChartDocument >& xChartDoc
         , const Reference< chart2::XDataSeries >& xSeries )
 {
-    Reference< chart2::data::XLabeledDataSequence > xLabeledSeq;
+    Reference< chart2::data::XLabeledDataSequence2 > xLabeledSeq;
 
     Reference< chart2::data::XDataSource > xSeriesSource( xSeries,uno::UNO_QUERY );
     Reference< chart2::data::XDataSink > xSeriesSink( xSeries, uno::UNO_QUERY );
@@ -231,7 +231,7 @@ Reference< chart2::data::XLabeledDataSequence > lcl_createAndAddSequenceToSeries
     Sequence< Reference< chart2::data::XLabeledDataSequence > > aOldSeq( xSeriesSource->getDataSequences());
     sal_Int32 nOldCount = aOldSeq.getLength();
     Sequence< Reference< chart2::data::XLabeledDataSequence > > aNewSeq( nOldCount + 1 );
-    aNewSeq[0]=xLabeledSeq;
+    aNewSeq[0] = Reference< chart2::data::XLabeledDataSequence >(xLabeledSeq, uno::UNO_QUERY_THROW);
     for( sal_Int32 nN=0; nN<nOldCount; nN++ )
         aNewSeq[nN+1] = aOldSeq[nN];
     xSeriesSink->setData( aNewSeq );
@@ -385,8 +385,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
         sal_Int32 nCoordinateSystemIndex = 0;//so far we can only import one coordinate system
         m_xSeries.set(
             mrImportHelper.GetNewDataSeries( mxNewDoc, nCoordinateSystemIndex, maSeriesChartTypeName, ! mrGlobalChartTypeUsedBySeries ));
-        Reference< chart2::data::XLabeledDataSequence > xLabeledSeq(
-            SchXMLTools::GetNewLabeledDataSequence());
+        Reference< chart2::data::XLabeledDataSequence > xLabeledSeq( SchXMLTools::GetNewLabeledDataSequence(), uno::UNO_QUERY_THROW );
 
         if( bIsCandleStick )
         {
@@ -595,14 +594,15 @@ void SchXMLSeries2Context::EndElement()
     for( std::vector< DomainInfo >::reverse_iterator aIt( aDomainInfos.rbegin() ); aIt!= aDomainInfos.rend(); ++aIt )
     {
         DomainInfo aDomainInfo( *aIt );
-        Reference< chart2::data::XLabeledDataSequence > xLabeledSeq =
+        Reference< chart2::data::XLabeledDataSequence2 > xLabeledSeq =
             lcl_createAndAddSequenceToSeries( aDomainInfo.aRole, aDomainInfo.aRange, mxNewDoc, m_xSeries );
         if( xLabeledSeq.is() )
         {
             // register for setting local data if external data provider is not present
             mrLSequencesPerIndex.insert(
                 tSchXMLLSequencesPerIndex::value_type(
-                    tSchXMLIndexWithPart( aDomainInfo.nIndexForLocalData, SCH_XML_PART_VALUES ), xLabeledSeq ));
+                    tSchXMLIndexWithPart( aDomainInfo.nIndexForLocalData, SCH_XML_PART_VALUES ),
+                    Reference< chart2::data::XLabeledDataSequence >(xLabeledSeq, uno::UNO_QUERY_THROW) ));
         }
     }
 

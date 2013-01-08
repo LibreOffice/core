@@ -26,6 +26,7 @@
 #include <com/sun/star/chart2/XRegressionCurve.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
+#include <com/sun/star/chart2/data/LabeledDataSequence.hpp>
 #include <basegfx/numeric/ftools.hxx>
 #include "oox/drawingml/chart/datasourceconverter.hxx"
 #include "oox/drawingml/chart/seriesmodel.hxx"
@@ -83,7 +84,7 @@ Reference< XLabeledDataSequence > lclCreateLabeledDataSequence(
     Reference< XLabeledDataSequence > xLabeledSeq;
     if( xValueSeq.is() || xTitleSeq.is() )
     {
-        xLabeledSeq.set( rParent.createInstance( "com.sun.star.chart2.data.LabeledDataSequence" ), UNO_QUERY );
+        xLabeledSeq.set( LabeledDataSequence::create(rParent.getComponentContext()), UNO_QUERY );
         if( xLabeledSeq.is() )
         {
             xLabeledSeq->setValues( xValueSeq );

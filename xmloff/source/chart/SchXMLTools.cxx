@@ -40,6 +40,7 @@
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/chart2/data/LabeledDataSequence.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
@@ -350,14 +351,10 @@ XMLTokenEnum getTokenByChartType(
     return eResult;
 }
 
-Reference< chart2::data::XLabeledDataSequence > GetNewLabeledDataSequence()
+Reference< chart2::data::XLabeledDataSequence2 > GetNewLabeledDataSequence()
 {
-    Reference< uno::XComponentContext > xContext(
-        comphelper::getProcessComponentContext() );
-    Reference< chart2::data::XLabeledDataSequence > xResult(
-        xContext->getServiceManager()->createInstanceWithContext(
-            "com.sun.star.chart2.data.LabeledDataSequence", xContext ),
-        uno::UNO_QUERY_THROW );
+    Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    Reference< chart2::data::XLabeledDataSequence2 > xResult = chart2::data::LabeledDataSequence::create(xContext);
     return xResult;
 }
 
@@ -443,7 +440,7 @@ void CreateCategories(
                             {
                                 chart2::ScaleData aData( xAxis->getScaleData());
                                 uno::Reference< chart2::data::XLabeledDataSequence > xLabeledSeq(
-                                    GetNewLabeledDataSequence());
+                                    GetNewLabeledDataSequence(), uno::UNO_QUERY_THROW);
                                 try
                                 {
                                     OUString aConvertedRange( rRangeAddress );

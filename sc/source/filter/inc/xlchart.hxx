@@ -57,7 +57,6 @@ class XclRoot;
 #define SERVICE_CHART2_ERRORBAR             "com.sun.star.chart2.ErrorBar"
 #define SERVICE_CHART2_EXPREGCURVE          "com.sun.star.chart2.ExponentialRegressionCurve"
 #define SERVICE_CHART2_FORMATTEDSTRING      "com.sun.star.chart2.FormattedString"
-#define SERVICE_CHART2_LABELEDDATASEQ       "com.sun.star.chart2.data.LabeledDataSequence"
 #define SERVICE_CHART2_LEGEND               "com.sun.star.chart2.Legend"
 #define SERVICE_CHART2_LINEARREGCURVE       "com.sun.star.chart2.LinearRegressionCurve"
 #define SERVICE_CHART2_LINEARSCALING        "com.sun.star.chart2.LinearScaling"

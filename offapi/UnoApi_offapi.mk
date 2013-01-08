@@ -62,6 +62,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/awt/tree,\
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/chart2/data,\
 	DatabaseDataProvider \
+    LabeledDataSequence \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/configuration,\
     ReadOnlyAccess \
@@ -546,7 +547,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/chart2/
 	DataSequence \
 	DataSink \
 	DataSource \
-	LabeledDataSequence \
 	RangeHighlighter \
 	RangeHighlightListener \
 	TabularDataProviderArguments \
@@ -1975,6 +1975,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/chart2/data,\
 	XDataSource \
 	XDatabaseDataProvider \
 	XLabeledDataSequence \
+	XLabeledDataSequence2 \
 	XNumericalDataSequence \
 	XRangeHighlighter \
 	XRangeXMLConversion \

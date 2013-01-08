@@ -41,6 +41,7 @@
 #include <vcl/svapp.hxx>
 
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
+#include <com/sun/star/chart2/data/LabeledDataSequence.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
@@ -1071,9 +1072,7 @@ Reference< chart2::data::XLabeledDataSequence > lcl_createLabeledDataSequenceFro
             Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
             if ( xContext.is() )
             {
-                xResult.set( xContext->getServiceManager()->createInstanceWithContext(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart2.data.LabeledDataSequence")),
-                        xContext ), uno::UNO_QUERY_THROW );
+                xResult.set( chart2::data::LabeledDataSequence::create(xContext), uno::UNO_QUERY_THROW );
             }
             if ( bHasValues )
             {

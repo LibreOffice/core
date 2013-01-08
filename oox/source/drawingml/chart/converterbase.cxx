@@ -33,6 +33,7 @@
 #include "basegfx/numeric/ftools.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/theme.hxx"
+#include <comphelper/processfactory.hxx>
 
 namespace oox {
 namespace drawingml {
@@ -238,6 +239,11 @@ Reference< XInterface > ConverterRoot::createInstance( const OUString& rServiceN
     }
     OSL_ENSURE( xInt.is(), "ConverterRoot::createInstance - cannot create instance" );
     return xInt;
+}
+
+Reference< XComponentContext > ConverterRoot::getComponentContext() const
+{
+    return comphelper::getComponentContext(mxData->mrFilter.getServiceFactory());
 }
 
 XmlFilterBase& ConverterRoot::getFilter() const

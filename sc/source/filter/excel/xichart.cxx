@@ -56,6 +56,7 @@
 #include <com/sun/star/chart2/TickmarkStyle.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
+#include <com/sun/star/chart2/data/LabeledDataSequence.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
@@ -124,6 +125,7 @@ using ::com::sun::star::chart2::data::XDataReceiver;
 using ::com::sun::star::chart2::data::XDataSequence;
 using ::com::sun::star::chart2::data::XDataSink;
 using ::com::sun::star::chart2::data::XLabeledDataSequence;
+using ::com::sun::star::chart2::data::LabeledDataSequence;
 
 using ::formula::FormulaToken;
 using ::formula::StackVar;
@@ -718,7 +720,7 @@ Reference< XLabeledDataSequence > lclCreateLabeledDataSequence(
     // create the labeled data sequence, if values or title are present
     Reference< XLabeledDataSequence > xLabeledSeq;
     if( xValueSeq.is() || xTitleSeq.is() )
-        xLabeledSeq.set( ScfApiHelper::CreateInstance( SERVICE_CHART2_LABELEDDATASEQ ), UNO_QUERY );
+        xLabeledSeq.set( LabeledDataSequence::create(comphelper::getProcessComponentContext()), UNO_QUERY );
     if( xLabeledSeq.is() )
     {
         if( xValueSeq.is() )

@@ -24,6 +24,7 @@
 #include "transporttypes.hxx"
 
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/chart2/data/XLabeledDataSequence2.hpp>
 
 namespace com { namespace sun { namespace star {
     namespace chart2 {
@@ -31,7 +32,6 @@ namespace com { namespace sun { namespace star {
         class XRegressionCurve;
         namespace data {
             class XDataProvider;
-            class XLabeledDataSequence;
         }
     }
 }}}
@@ -78,7 +78,7 @@ namespace SchXMLTools
     ::rtl::OUString GetNewChartTypeName( const ::rtl::OUString & rOldChartTypeName );
 
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::data::XLabeledDataSequence > GetNewLabeledDataSequence();
+        ::com::sun::star::chart2::data::XLabeledDataSequence2 > GetNewLabeledDataSequence();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence > CreateDataSequence(
         const ::rtl::OUString& rRange,

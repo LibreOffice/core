@@ -28,7 +28,7 @@
 #include <com/sun/star/chart2/data/XDataSequence.hpp>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
-#include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
+#include <com/sun/star/chart2/data/XLabeledDataSequence2.hpp>
 #include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
 #include <com/sun/star/chart2/data/DataSequenceRole.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -353,13 +353,11 @@ public:
 
 //////////////////////////////////////////////////////////////////////
 
-typedef cppu::WeakImplHelper6
+typedef cppu::WeakImplHelper4
 <
-    ::com::sun::star::chart2::data::XLabeledDataSequence,
-    ::com::sun::star::util::XCloneable,
+    ::com::sun::star::chart2::data::XLabeledDataSequence2,
     ::com::sun::star::lang::XServiceInfo,
     ::com::sun::star::util::XModifyListener,
-    ::com::sun::star::util::XModifyBroadcaster,
     ::com::sun::star::lang::XComponent
 >
 SwChartLabeledDataSequenceBaseClass;

@@ -50,6 +50,7 @@
 
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
+#include <com/sun/star/chart2/data/LabeledDataSequence.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
@@ -994,10 +995,10 @@ static void lcl_setErrorBarSequence ( const uno::Reference< chart2::XChartDocume
 
         xSeqProp->setPropertyValue("Role", uno::makeAny( aRole ));
 
-        Reference< lang::XMultiServiceFactory > xFact( comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
+        Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
 
-        Reference< chart2::data::XLabeledDataSequence > xLabelSeq(
-            xFact->createInstance("com.sun.star.chart2.data.LabeledDataSequence"), uno::UNO_QUERY );
+        Reference< chart2::data::XLabeledDataSequence > xLabelSeq( chart2::data::LabeledDataSequence::create(xContext),
+            uno::UNO_QUERY_THROW );
 
         xLabelSeq->setValues( xNewSequence );
 

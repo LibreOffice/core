@@ -1,0 +1,76 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+#ifndef com_sun_star_chart2_data_XLabeledDataSequence2_idl
+#define com_sun_star_chart2_data_XLabeledDataSequence2_idl
+
+#include <com/sun/star/util/XCloneable.idl>
+#include <com/sun/star/util/XModifyBroadcaster.idl>
+#include <com/sun/star/chart2/data/XLabeledDataSequence.idl>
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+module data
+{
+
+/**
+    @since LibreOffice 4.1
+  */
+interface XLabeledDataSequence2
+{
+    /** provides read- and write-access to the underlying data.
+     */
+    interface XLabeledDataSequence;
+
+    /** is used to broadcast when the sequence for labels or values
+        change their identity, or their content changes.
+
+        <p>The LabeledDataSequence should add itself at its
+        XDataSequences for values and labels, and forward any change
+        events coming from there.</p>
+     */
+    interface com::sun::star::util::XModifyBroadcaster;
+
+    /** Allows creating copies of data sequences.  If this interface
+        is not supported, the same object will be shared if used by
+        multiple objects.
+
+        <p>If a <type>LabeledDataSequence</type> is cloned, it has to
+        query its contents for the
+        <type scope="com::sun::star::util">XCloneable</type> interface
+        and use it if available.</p>
+    */
+    interface ::com::sun::star::util::XCloneable;
+};
+
+} ; // data
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

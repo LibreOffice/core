@@ -26,8 +26,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
+#include <com/sun/star/chart2/data/LabeledDataSequence.hpp>
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
@@ -130,22 +129,19 @@ void lcl_addSequenceToDataSource(
     const OUString & rRole )
 {
     Reference< chart2::data::XDataSink > xSink( xDataSource, uno::UNO_QUERY );
-    Reference< lang::XMultiServiceFactory > xFact( comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-    if( ! ( xFact.is() && xSink.is() ))
+    Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    if( ! xSink.is() )
         return;
 
-    Reference< chart2::data::XLabeledDataSequence > xLSeq(
-        xFact->createInstance( C2U("com.sun.star.chart2.data.LabeledDataSequence")), uno::UNO_QUERY );
-    if( xLSeq.is())
-    {
-        lcl_setRole( xNewSequence, rRole );
-        xLSeq->setValues( xNewSequence );
-        Sequence< Reference< chart2::data::XLabeledDataSequence > > aSequences(
-            xDataSource->getDataSequences());
-        aSequences.realloc( aSequences.getLength() + 1 );
-        aSequences[ aSequences.getLength() - 1 ] = xLSeq;
-        xSink->setData( aSequences );
-    }
+    Reference< chart2::data::XLabeledDataSequence > xLSeq( chart2::data::LabeledDataSequence::create(xContext), uno::UNO_QUERY_THROW );
+
+    lcl_setRole( xNewSequence, rRole );
+    xLSeq->setValues( xNewSequence );
+    Sequence< Reference< chart2::data::XLabeledDataSequence > > aSequences(
+        xDataSource->getDataSequences());
+    aSequences.realloc( aSequences.getLength() + 1 );
+    aSequences[ aSequences.getLength() - 1 ] = xLSeq;
+    xSink->setData( aSequences );
 }
 
 void lcl_setXMLRangePropertyAtDataSequence(

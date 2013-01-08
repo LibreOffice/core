@@ -21,9 +21,9 @@
 #include "ServiceMacros.hxx"
 #include "MutexContainer.hxx"
 #include <comphelper/uno3.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase2.hxx>
 
-#include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
+#include <com/sun/star/chart2/data/XLabeledDataSequence2.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -34,10 +34,8 @@ namespace chart
 
 namespace impl
 {
-typedef cppu::WeakImplHelper4<
-        ::com::sun::star::chart2::data::XLabeledDataSequence,
-        ::com::sun::star::util::XCloneable,
-        ::com::sun::star::util::XModifyBroadcaster,
+typedef cppu::WeakImplHelper2<
+        ::com::sun::star::chart2::data::XLabeledDataSequence2,
         ::com::sun::star::lang::XServiceInfo >
     LabeledDataSequence_Base;
 }
