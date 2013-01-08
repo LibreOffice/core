@@ -50,7 +50,17 @@ sub gen_x86 ($$$)
 printf (".text\n");
 
 printf ("#ifdef __arm\n");
+
+printf ("\n");
+printf ("@ Each codeSnippetX function stores pc into ip and branches to _privateSnippetExecutor\n");
+printf ("@ The branch instruction is followed by two longs (that ip thus points to):\n");
+printf ("@ - the function index, as such and with the 0x80000000 bit set\n");
+printf ("@   (to indicate a hidden parameter for returning large values)\n");
+printf ("@ - the vtable offset\n");
+printf ("\n");
+
 printf ("\t.align 4\n");
+printf ("\n");
 
 foreach my $funIndex (0 .. $nFunIndexes-1)
 {

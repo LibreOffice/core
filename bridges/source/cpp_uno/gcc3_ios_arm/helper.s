@@ -26,7 +26,6 @@
 @ Fixed by Michael Casadevall <mcasadevall@kubuntu.org>
 @ Modified for iOS by Tor Lillqvist <tml@iki.fi>
 
-	.file	"helper.S"
 	.text
 	.align	4
 

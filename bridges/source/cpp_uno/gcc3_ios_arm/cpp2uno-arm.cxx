@@ -17,14 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <malloc.h>
-#include <boost/unordered_map.hpp>
+#ifdef __arm
 
-#include <rtl/alloc.h>
-#include <osl/mutex.hxx>
+// For iOS devices (ARM). Basically a copy of n
+// ../gcc3_linux_arm/cpp2uno.cxx with some cleanups and necessary
+// changes: No dynamic code generation as that is prohibited for apps
+// in the App Store. Instead we use a set of pre-generated snippets.
 
-#include <com/sun/star/uno/genfunc.hxx>
-#include "com/sun/star/uno/RuntimeException.hpp"
+// No attempts at factoring out the large amounts of more or less
+// common code in this and cpp2uno-i386.cxx have been done. Which is
+// sad. But then the whole bridges/source/cpp_uno is full of
+// copy/paste. So I continue in that tradition...
+
+#include <com/sun/star/uno/RuntimeException.hpp>
 #include <uno/data.h>
 #include <typelib/typedescription.hxx>
 
@@ -35,14 +40,11 @@
 
 #include "share.hxx"
 
-#include <dlfcn.h>
+extern "C" {
+    extern int nFunIndexes, nVtableOffsets;
+    extern int codeSnippets[];
+}
 
-#ifdef ANDROID
-#include <unistd.h>
-#endif
-
-using namespace ::osl;
-using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 
 namespace
@@ -316,9 +318,7 @@ namespace
             "### illegal vtable index!" );
         if (nFunctionIndex >= pTypeDescr->nMapFunctionIndexToMemberIndex)
         {
-            throw RuntimeException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "illegal vtable index!" )),
-                (XInterface *)pCppI );
+            throw RuntimeException( "illegal vtable index!", (XInterface *)pCppI );
         }
 
         // determine called method
@@ -415,9 +415,7 @@ namespace
         }
         default:
         {
-            throw RuntimeException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "no member description found!" )),
-                (XInterface *)pCppI );
+            throw RuntimeException( "no member description found!", (XInterface *)pCppI );
         }
         }
 
@@ -462,30 +460,31 @@ extern "C" sal_Int64 cpp_vtable_call( long *pFunctionAndOffset,
     return nRegReturn;
 }
 
-extern "C" void privateSnippetExecutor(void);
-
 namespace
 {
-    const int codeSnippetSize = 20;
-
-    unsigned char *codeSnippet(unsigned char* code, sal_Int32 functionIndex,
+    unsigned char *codeSnippet(sal_Int32 functionIndex,
         sal_Int32 vtableOffset, bool bHasHiddenParam)
     {
-        if (bHasHiddenParam)
-            functionIndex |= 0x80000000;
+        assert(functionIndex < nFunIndexes);
+        if (!(functionIndex < nFunIndexes))
+            return NULL;
 
-        unsigned long * p = (unsigned long *)code;
+        assert(vtableOffset < nVtableOffsets);
+        if (!(vtableOffset < nVtableOffsets))
+            return NULL;
 
-        // ARM (not thumb) mode instructions
-        // mov ip, pc
-        *p++ = 0xE1A0C00F;
-        // ldr pc, [pc, #4]
-        *p++ = 0xE59FF004;
-        *p++ = (unsigned long)functionIndex;
-        *p++ = (unsigned long)vtableOffset;
-        *p++ = (unsigned long)privateSnippetExecutor;
+        // The codeSnippets table is indexed by functionIndex,
+        // vtableOffset, and the has-hidden-param flag
 
-        return code + codeSnippetSize;
+        int index = functionIndex*nVtableOffsets*2 + vtableOffset*2 + bHasHiddenParam;
+        unsigned char *result = ((unsigned char *) &codeSnippets) + codeSnippets[index];
+
+        SAL_INFO( "bridges.ios",
+                  "codeSnippet: [" <<
+                  functionIndex << "," << vtableOffset << "," << bHasHiddenParam << "]=" <<
+                  (void *) result);
+
+        return result;
     }
 }
 
@@ -500,7 +499,7 @@ bridges::cpp_uno::shared::VtableFactory::mapBlockToVtable(void * block)
 sal_Size bridges::cpp_uno::shared::VtableFactory::getBlockSize(
     sal_Int32 slotCount)
 {
-    return (slotCount + 2) * sizeof (Slot) + slotCount * codeSnippetSize;
+    return (slotCount + 2) * sizeof (Slot);
 }
 
 bridges::cpp_uno::shared::VtableFactory::Slot *
@@ -515,15 +514,9 @@ bridges::cpp_uno::shared::VtableFactory::initializeBlock(
 
 unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
     Slot ** slots, unsigned char * code,
-#ifdef USE_DOUBLE_MMAP
-    sal_PtrDiff writetoexecdiff,
-#endif
     typelib_InterfaceTypeDescription const * type, sal_Int32 functionOffset,
     sal_Int32 functionCount, sal_Int32 vtableOffset)
 {
-#ifndef USE_DOUBLE_MMAP
-    const sal_PtrDiff writetoexecdiff = 0;
-#endif
     (*slots) -= functionCount;
     Slot * s = *slots;
     for (sal_Int32 i = 0; i < type->nMembers; ++i)
@@ -539,29 +532,25 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
                     reinterpret_cast<typelib_InterfaceAttributeTypeDescription *>( member );
 
                 // Getter:
-                (s++)->fn = code + writetoexecdiff;
-                code = codeSnippet(
-                    code, functionOffset++, vtableOffset,
+                (s++)->fn = codeSnippet(
+                    functionOffset++, vtableOffset,
                     arm::return_in_hidden_param( pAttrTD->pAttributeTypeRef ));
 
                 // Setter:
                 if (!pAttrTD->bReadOnly)
                 {
-                    (s++)->fn = code + writetoexecdiff;
-                    code = codeSnippet(
-                        code, functionOffset++, vtableOffset, false);
+                    (s++)->fn = codeSnippet(
+                        functionOffset++, vtableOffset, false);
                 }
                 break;
             }
             case typelib_TypeClass_INTERFACE_METHOD:
             {
-                (s++)->fn = code + writetoexecdiff;
-
                 typelib_InterfaceMethodTypeDescription *pMethodTD =
                     reinterpret_cast<
                         typelib_InterfaceMethodTypeDescription * >(member);
 
-                code = codeSnippet(code, functionOffset++, vtableOffset,
+                (s++)->fn = codeSnippet(functionOffset++, vtableOffset,
                     arm::return_in_hidden_param(pMethodTD->pReturnTypeRef));
                 break;
             }
@@ -574,17 +563,6 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
     return code;
 }
 
-void bridges::cpp_uno::shared::VtableFactory::flushCode(
-    unsigned char const *beg, unsigned char const *end)
-{
-#ifndef ANDROID
-   static void (*clear_cache)(unsigned char const*, unsigned char const*)
-       = (void (*)(unsigned char const*, unsigned char const*))
-           dlsym(RTLD_DEFAULT, "__clear_cache");
-   (*clear_cache)(beg, end);
-#else
-   cacheflush((long) beg, (long) end, 0);
 #endif
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

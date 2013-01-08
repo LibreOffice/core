@@ -55,8 +55,12 @@ $(eval $(call gb_Library_add_asmobjects,gcc3_uno,\
 
 $(eval $(call gb_Library_add_exception_objects,gcc3_uno,\
 	bridges/source/cpp_uno/gcc3_ios_arm/cpp2uno \
+	bridges/source/cpp_uno/gcc3_ios_arm/cpp2uno-arm \
+	bridges/source/cpp_uno/gcc3_ios_arm/cpp2uno-i386 \
 	bridges/source/cpp_uno/gcc3_ios_arm/except \
 	bridges/source/cpp_uno/gcc3_ios_arm/uno2cpp \
+	bridges/source/cpp_uno/gcc3_ios_arm/uno2cpp-arm \
+	bridges/source/cpp_uno/gcc3_ios_arm/uno2cpp-i386 \
 	bridges/source/cpp_uno/shared/bridge \
 	bridges/source/cpp_uno/shared/component \
 	bridges/source/cpp_uno/shared/types \
