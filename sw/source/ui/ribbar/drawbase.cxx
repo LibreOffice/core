@@ -40,7 +40,7 @@
 
 using namespace ::com::sun::star;
 
-extern sal_Bool bNoInterrupt;       // in mainwn.cxx
+extern bool bNoInterrupt;       // in mainwn.cxx
 
 #define MINMOVE ((sal_uInt16)m_pSh->GetOut()->PixelToLogic(Size(m_pSh->GetDrawView()->GetMarkHdlSizePixel()/2,0)).Width())
 
@@ -112,7 +112,7 @@ sal_Bool SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
     {
         if (IsCreateObj() && (eHit == SDRHIT_UNMARKEDOBJECT || eHit == SDRHIT_NONE || m_pSh->IsDrawCreate()))
         {
-            bNoInterrupt = sal_True;
+            bNoInterrupt = true;
             m_pWin->CaptureMouse();
 
             m_aStartPos = m_pWin->PixelToLogic(rMEvt.GetPosPixel());
@@ -138,7 +138,7 @@ sal_Bool SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
                 /******************************************************************
                 * Handle draggen
                 ******************************************************************/
-                bNoInterrupt = sal_True;
+                bNoInterrupt = true;
                 bReturn = pSdrView->BegDragObj(m_aStartPos, (OutputDevice*) NULL, aVEvt.pHdl);
                 m_pWin->SetDrawAction(sal_True);
             }
@@ -147,7 +147,7 @@ sal_Bool SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
                 /******************************************************************
                 * Klebepunkt einfuegen
                 ******************************************************************/
-                bNoInterrupt = sal_True;
+                bNoInterrupt = true;
                 bReturn = pSdrView->BegInsObjPoint(m_aStartPos, rMEvt.IsMod1());
                 m_pWin->SetDrawAction(sal_True);
             }
@@ -198,7 +198,7 @@ sal_Bool SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
 
                     if (pHdl)
                     {
-                        bNoInterrupt = sal_True;
+                        bNoInterrupt = true;
                         pSdrView->MarkPoint(*pHdl);
                     }
                 }
@@ -213,12 +213,12 @@ sal_Bool SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
                     if (pSdrView->HasMarkablePoints())
                         pSdrView->UnmarkAllPoints();
 
-                    bNoInterrupt = sal_False;
+                    bNoInterrupt = false;
                     // Drag im edtwin verwenden
                     return sal_False;
                 }
 
-                bNoInterrupt = sal_True;
+                bNoInterrupt = true;
 
                 if (m_pSh->IsObjSelected())
                 {
@@ -514,7 +514,7 @@ void SwDrawBase::Deactivate()
     m_pWin->SetDrawAction(sal_False);
 
     m_pWin->ReleaseMouse();
-    bNoInterrupt = sal_False;
+    bNoInterrupt = false;
 
     if(m_pWin->GetApplyTemplate())
         m_pWin->SetApplyTemplate(SwApplyTemplate());

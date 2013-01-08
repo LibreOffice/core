@@ -27,7 +27,7 @@
 #include "drawbase.hxx"
 #include "conform.hxx"
 
-extern sal_Bool bNoInterrupt;       // in mainwn.cxx
+extern bool bNoInterrupt;       // in mainwn.cxx
 
 /*************************************************************************
 |*
@@ -76,7 +76,7 @@ sal_Bool ConstFormControl::MouseButtonDown(const MouseEvent& rMEvt)
     if (rMEvt.IsLeft() && !m_pWin->IsDrawAction() &&
         (eHit == SDRHIT_UNMARKEDOBJECT || eHit == SDRHIT_NONE || m_pSh->IsDrawCreate()))
     {
-        bNoInterrupt = sal_True;
+        bNoInterrupt = true;
         m_pWin->CaptureMouse();
 
         m_pWin->SetPointer(Pointer(POINTER_DRAW_RECT));

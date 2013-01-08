@@ -74,9 +74,9 @@ using namespace ::com::sun::star::lang;
 static void lcl_SetUIPrefs(const SwViewOption &rPref, SwView* pView, ViewShell* pSh )
 {
     // in FrameSets the actual visibility can differ from the ViewOption's setting
-    sal_Bool bVScrollChanged = rPref.IsViewVScrollBar() != pSh->GetViewOptions()->IsViewVScrollBar();
-    sal_Bool bHScrollChanged = rPref.IsViewHScrollBar() != pSh->GetViewOptions()->IsViewHScrollBar();
-    sal_Bool bVAlignChanged = rPref.IsVRulerRight() != pSh->GetViewOptions()->IsVRulerRight();
+    bool bVScrollChanged = rPref.IsViewVScrollBar() != pSh->GetViewOptions()->IsViewVScrollBar();
+    bool bHScrollChanged = rPref.IsViewHScrollBar() != pSh->GetViewOptions()->IsViewHScrollBar();
+    bool bVAlignChanged = rPref.IsVRulerRight() != pSh->GetViewOptions()->IsVRulerRight();
 
     pSh->SetUIOptions(rPref);
     const SwViewOption* pNewPref = pSh->GetViewOptions();
@@ -156,7 +156,7 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
                                          pCurrView && pCurrView->ISA(SwWebView) ));
 
     // with Uno, only sdbcx::View, but not the Module should be changed
-    sal_Bool bViewOnly = VIEWOPT_DEST_VIEW_ONLY == nDest;
+    bool bViewOnly = VIEWOPT_DEST_VIEW_ONLY == nDest;
     // fob PreView off
     SwPagePreView* pPPView;
     if( !pCurrView && 0 != (pPPView = PTR_CAST( SwPagePreView, SfxViewShell::Current())) )
@@ -303,11 +303,11 @@ void SwModule::ApplyUserCharUnit(sal_Bool bApplyChar, sal_Bool bWeb)
         pPref = pUsrPref;
     }
     sal_Bool bOldApplyCharUnit = pPref->IsApplyCharUnit();
-    sal_Bool bHasChanged = sal_False;
+    bool bHasChanged = false;
     if(bOldApplyCharUnit != bApplyChar)
     {
         pPref->SetApplyCharUnit(bApplyChar);
-        bHasChanged = sal_True;
+        bHasChanged = true;
     }
 
     if( !bHasChanged )
@@ -460,7 +460,7 @@ static void lcl_FillAuthorAttr( sal_uInt16 nAuthor, SfxItemSet &rSet,
                                            sizeof( aColArr[0] )) ] );
     }
 
-    sal_Bool bBackGr = COL_NONE == rAttr.nColor;
+    bool bBackGr = COL_NONE == rAttr.nColor;
 
     switch (rAttr.nItemId)
     {
@@ -503,7 +503,7 @@ static void lcl_FillAuthorAttr( sal_uInt16 nAuthor, SfxItemSet &rSet,
 
     case SID_ATTR_BRUSH:
         rSet.Put( SvxBrushItem( aCol, RES_CHRATR_BACKGROUND ));
-        bBackGr = sal_True;
+        bBackGr = true;
         break;
     }
 

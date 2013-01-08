@@ -68,12 +68,12 @@ NoSpaceEdit::~NoSpaceEdit()
 
 void NoSpaceEdit::KeyInput(const KeyEvent& rEvt)
 {
-    sal_Bool bCallParent = sal_True;
+    bool bCallParent = true;
     if(rEvt.GetCharCode())
     {
         rtl::OUString sKey(rEvt.GetCharCode());
         if( STRING_NOTFOUND != sForbiddenChars.Search(sKey))
-            bCallParent = sal_False;
+            bCallParent = false;
     }
     if(bCallParent)
         Edit::KeyInput(rEvt);

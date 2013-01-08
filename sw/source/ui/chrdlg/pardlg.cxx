@@ -104,7 +104,7 @@ SwParaDlg::SwParaDlg(Window *pParent,
         RemoveTabPage(TP_PARA_ASIAN);
 
     sal_uInt16 nWhich(rCoreSet.GetPool()->GetWhich(SID_ATTR_LRSPACE));
-    sal_Bool bLRValid = SFX_ITEM_AVAILABLE <= rCoreSet.GetItemState(nWhich);
+    bool bLRValid = SFX_ITEM_AVAILABLE <= rCoreSet.GetItemState(nWhich);
     if(bHtmlMode || !bLRValid)
         RemoveTabPage(TP_TABULATOR);
     else
