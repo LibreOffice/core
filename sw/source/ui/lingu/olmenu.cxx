@@ -410,7 +410,7 @@ SwSpellPopup::SwSpellPopup(
             }
         }
 
-        InsertSeparator(0);
+        InsertSeparator(OString(), 0);
         bEnable = sal_True;
         sal_uInt16 nAutoCorrItemId  = MN_AUTOCORR_START;
         sal_uInt16 nItemId          = MN_SUGGESTION_START;

@@ -1974,7 +1974,7 @@ void ToolBox::UpdateCustomMenu()
             if( it->IsClipped() )
             {
                 sal_uInt16 id = it->mnId + TOOLBOX_MENUITEM_START;
-                pMenu->InsertItem( id, it->maText, it->maImage, 0, 0 );
+                pMenu->InsertItem( id, it->maText, it->maImage, 0, OString(), 0 );
                 pMenu->EnableItem( id, it->mbEnabled );
                 pMenu->CheckItem( id, it->meState == STATE_CHECK );
             }

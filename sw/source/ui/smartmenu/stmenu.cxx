@@ -61,7 +61,7 @@ SwSmartTagPopup::SwSmartTagPopup( SwView* pSwView,
                                      aActionComponentsSequence,
                                      aActionIndicesSequence );
 
-    InsertSeparator(0);
+    InsertSeparator(OString(), 0);
 
     for ( sal_uInt16 j = 0; j < aActionComponentsSequence.getLength(); ++j )
     {
