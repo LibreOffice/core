@@ -112,6 +112,7 @@ public:
     void testFineTableDash();
     void testN792778();
     void testN793262();
+    void testN793998();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -176,6 +177,7 @@ void Test::run()
         {"tableborder-finedash.docx", &Test::testFineTableDash},
         {"n792778.docx", &Test::testN792778},
         {"n793262.docx", &Test::testN793262},
+        {"n793998.docx", &Test::testN793998},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1112,6 +1114,16 @@ void Test::testN793262()
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
     // Cell margins as direct formatting were ignored, this was 0.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(76), getProperty<sal_Int32>(xTable->getCellByName("A1"), "TopBorderDistance"));
+}
+
+void Test::testN793998()
+{
+    sal_Int32 nTextPortion = parseDump("/root/page/body/txt/Text[1]", "nWidth").toInt32(); // Width of the first (text) portion
+    sal_Int32 nTabPortion = parseDump("/root/page/body/txt/Text[2]", "nWidth").toInt32(); // Width of the second (tab) portion
+    sal_Int32 nParagraph = parseDump("/root/page/body/txt/infos/bounds", "width").toInt32(); // Width of the paragraph
+    sal_Int32 nRightMargin = 3000;
+    // The problem was that the tab portion didn't ignore the right margin, so text + tab width wasn't larger than body (paragraph - right margin) width.
+    CPPUNIT_ASSERT(nTextPortion + nTabPortion > nParagraph - nRightMargin);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
