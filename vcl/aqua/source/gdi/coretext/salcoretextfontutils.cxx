@@ -31,12 +31,12 @@ static bool GetDevFontAttributes( CTFontDescriptorRef font_descriptor, ImplDevFo
     int value = 0;
 
     // reset the attributes
-    rDFA.meFamily     = FAMILY_DONTKNOW;
-    rDFA.mePitch      = PITCH_VARIABLE;
-    rDFA.meWidthType  = WIDTH_NORMAL;
-    rDFA.meWeight     = WEIGHT_NORMAL;
-    rDFA.meItalic     = ITALIC_NONE;
-    rDFA.mbSymbolFlag = false;
+    rDFA.SetFamilyType( FAMILY_DONTKNOW );
+    rDFA.SetPitch( PITCH_VARIABLE );
+    rDFA.SetWidthType( WIDTH_NORMAL );
+    rDFA.SetWeight( WEIGHT_NORMAL );
+    rDFA.SetItalic( ITALIC_NONE );
+    rDFA.SetSymbolFlag( false );
     rDFA.mbOrientation = true;
     rDFA.mbDevice      = true;
     rDFA.mnQuality     = 0;
@@ -66,7 +66,7 @@ static bool GetDevFontAttributes( CTFontDescriptorRef font_descriptor, ImplDevFo
     rDFA.mbEmbeddable   = false;
 
     CFStringRef family_name = (CFStringRef)CTFontDescriptorCopyAttribute(font_descriptor, kCTFontFamilyNameAttribute);
-    rDFA.maName = GetOUString(family_name);
+    rDFA.SetFamilyName( GetOUString(family_name) );
     CFRelease(family_name);
 
     CFDictionaryRef traits = (CFDictionaryRef)CTFontDescriptorCopyAttribute(font_descriptor, kCTFontTraitsAttribute);
@@ -76,31 +76,31 @@ static bool GetDevFontAttributes( CTFontDescriptorRef font_descriptor, ImplDevFo
 
     if(value & kCTFontMonoSpaceTrait)
     {
-        rDFA.mePitch = PITCH_FIXED;
+        rDFA.SetPitch( PITCH_FIXED );
     }
 
     if(value & kCTFontItalicTrait)
     {
-        rDFA.meItalic = ITALIC_NORMAL;
+        rDFA.SetItalic( ITALIC_NORMAL );
     }
 
     if(value & kCTFontBoldTrait)
     {
-        rDFA.meWeight = WEIGHT_BOLD;
+        rDFA.SetWeight( WEIGHT_BOLD );
     }
 
     if(value & kCTFontCondensedTrait)
     {
-        rDFA.meWidthType = WIDTH_CONDENSED;
+        rDFA.SetWidthType( WIDTH_CONDENSED );
     }
     else if(value & kCTFontExpandedTrait)
     {
-        rDFA.meWidthType = WIDTH_EXPANDED;
+        rDFA.SetWidthType( WIDTH_EXPANDED );
     }
     switch(value & kCTFontClassMaskTrait)
     {
     case kCTFontOldStyleSerifsClass:
-        rDFA.meFamily = FAMILY_ROMAN;
+        rDFA.SetFamilyType( FAMILY_ROMAN );
         break;
     case kCTFontTransitionalSerifsClass:
     case kCTFontModernSerifsClass:
@@ -109,15 +109,15 @@ static bool GetDevFontAttributes( CTFontDescriptorRef font_descriptor, ImplDevFo
     case kCTFontFreeformSerifsClass:
         break;
     case kCTFontSansSerifClass:
-        rDFA.meFamily = FAMILY_SWISS;
+        rDFA.SetFamilyType( FAMILY_SWISS );
     case kCTFontOrnamentalsClass:
-        rDFA.meFamily = FAMILY_DECORATIVE;
+        rDFA.SetFamilyType( FAMILY_DECORATIVE );
         break;
     case kCTFontScriptsClass:
-        rDFA.meFamily = FAMILY_SCRIPT;
+        rDFA.SetFamilyType( FAMILY_SCRIPT );
         break;
     case kCTFontSymbolicClass:
-        rDFA.mbSymbolFlag = true;
+        rDFA.SetSymbolFlag( true );
         break;
     }
 
@@ -126,39 +126,39 @@ static bool GetDevFontAttributes( CTFontDescriptorRef font_descriptor, ImplDevFo
     CFNumberGetValue(weight, kCFNumberFloatType, &fdval);
     if(fdval > 0.6)
     {
-        rDFA.meWeight = WEIGHT_BLACK;
+        rDFA.SetWeight( WEIGHT_BLACK );
     }
     else if(fdval > 0.4)
     {
-        rDFA.meWeight = WEIGHT_ULTRABOLD;
+        rDFA.SetWeight( WEIGHT_ULTRABOLD );
     }
     else if (fdval > 0.3)
     {
-        rDFA.meWeight = WEIGHT_BOLD;
+        rDFA.SetWeight( WEIGHT_BOLD );
     }
     else if (fdval > 0.0)
     {
-        rDFA.meWeight = WEIGHT_SEMIBOLD;
+        rDFA.SetWeight( WEIGHT_SEMIBOLD );
     }
     else if (fdval <= -0.8)
     {
-        rDFA.meWeight = WEIGHT_ULTRALIGHT;
+        rDFA.SetWeight( WEIGHT_ULTRALIGHT );
     }
     else if (fdval <= -0.4)
     {
-        rDFA.meWeight = WEIGHT_LIGHT;
+        rDFA.SetWeight( WEIGHT_LIGHT );
     }
     else if (fdval <= -0.3)
     {
-        rDFA.meWeight = WEIGHT_SEMILIGHT;
+        rDFA.SetWeight( WEIGHT_SEMILIGHT );
     }
     else if (fdval <= -0.2)
     {
-        rDFA.meWeight = WEIGHT_THIN;
+        rDFA.SetWeight( WEIGHT_THIN );
     }
     else
     {
-        rDFA.meWeight = WEIGHT_NORMAL;
+        rDFA.SetWeight( WEIGHT_NORMAL );
     }
 
     CFStringRef string_ref = (CFStringRef)CTFontDescriptorCopyAttribute(font_descriptor, kCTFontStyleNameAttribute);
@@ -171,13 +171,13 @@ static bool GetDevFontAttributes( CTFontDescriptorRef font_descriptor, ImplDevFo
         (font_name_lc.indexOf("inclined") != -1) ||
         (font_name_lc.indexOf("slanted") != -1) )
     {
-        rDFA.meItalic = ITALIC_OBLIQUE;
+        rDFA.SetItalic( ITALIC_OBLIQUE );
     }
 
     // heuristics to adjust font width
     if (font_name_lc.indexOf("narrow") != -1)
     {
-        rDFA.meWidthType = WIDTH_SEMI_CONDENSED;
+        rDFA.SetWidthType( WIDTH_SEMI_CONDENSED );
     }
 
     // heuristics for font family type
@@ -185,23 +185,23 @@ static bool GetDevFontAttributes( CTFontDescriptorRef font_descriptor, ImplDevFo
         (font_name_lc.indexOf("chancery") != -1) ||
         (font_name_lc.indexOf("zapfino") != -1))
     {
-        rDFA.meFamily = FAMILY_SCRIPT;
+        rDFA.SetFamilyType( FAMILY_SCRIPT );
     }
     else if( (font_name_lc.indexOf("comic") != -1) ||
              (font_name_lc.indexOf("outline") != -1) ||
              (font_name_lc.indexOf("pinpoint") != -1) )
     {
-        rDFA.meFamily = FAMILY_DECORATIVE;
+        rDFA.SetFamilyType( FAMILY_DECORATIVE );
     }
     else if( (font_name_lc.indexOf("sans") != -1) ||
              (font_name_lc.indexOf("arial") != -1) )
     {
-        rDFA.meFamily = FAMILY_SWISS;
+        rDFA.SetFamilyType( FAMILY_SWISS );
     }
     else if( (font_name_lc.indexOf("roman") != -1) ||
              (font_name_lc.indexOf("times") != -1) )
     {
-        rDFA.meFamily = FAMILY_ROMAN;
+        rDFA.SetFamilyType( FAMILY_ROMAN );
     }
     return true;
 }
