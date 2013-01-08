@@ -150,6 +150,11 @@ bool doesOverlap( const Reference< drawing::XShape >& xShape1
     if( !xShape1.is() || !xShape2.is() )
         return false;
 
+    sal_Int32 nAngle = abs(fRotationAngleDegree);
+
+    if( ( nAngle >= 45 && nAngle <= 135 ) || ( nAngle >= 225 && nAngle <= 315 ) )
+        return false;
+
     ::basegfx::B2IRectangle aRect1( BaseGFXHelper::makeRectangle(xShape1->getPosition(),ShapeFactory::getSizeAfterRotation( xShape1, fRotationAngleDegree )));
     ::basegfx::B2IRectangle aRect2( BaseGFXHelper::makeRectangle(xShape2->getPosition(),ShapeFactory::getSizeAfterRotation( xShape2, fRotationAngleDegree )));
     return aRect1.overlaps(aRect2);
@@ -665,7 +670,7 @@ bool VCartesianAxis::createTextShapes(
                     pPREPreviousVisibleTickInfo : pPreviousVisibleTickInfo;
 
         //don't create labels which does not fit into the rhythm
-        if( nTick%rAxisLabelProperties.nRhythm != 0)
+        if( nTick%rAxisLabelProperties.nRhythm != 0 )
             continue;
 
         //don't create labels for invisible ticks
@@ -779,6 +784,15 @@ bool VCartesianAxis::createTextShapes(
                 }
                 if( bOverlapAlsoAfterSwitchingOnAutoStaggering )
                 {
+                    /* Try auto-rotating to 45 degrees */
+                    if( !rAxisLabelProperties.bOverlapAllowed && ::rtl::math::approxEqual( rAxisLabelProperties.fRotationAngleDegree, 0.0 ) )
+                    {
+                        rAxisLabelProperties.fRotationAngleDegree = 45;
+                        rAxisLabelProperties.bLineBreakAllowed = false;
+                        m_aAxisLabelProperties.fRotationAngleDegree = rAxisLabelProperties.fRotationAngleDegree;
+                        removeTextShapesFromTicks();
+                        return false;
+                    }
                     if( rAxisLabelProperties.bRhythmIsFix )
                     {
                         xTarget->remove(pTickInfo->xTextShape);
