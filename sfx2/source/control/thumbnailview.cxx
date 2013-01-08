@@ -503,7 +503,7 @@ void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
             {
                 if (!pItem->isSelected() && !rMEvt.IsMod1())
                     deselectItems( );
-                pItem->setSelection(!pItem->isSelected());
+                pItem->setSelection(true);
 
                 if (!pItem->isHighlighted())
                     DrawItem(pItem);
