@@ -51,7 +51,7 @@ namespace internal {
     }
     else
     {
-        OSL_ASSERT( ! m_fanIn );
+        SAL_WARN_IF( m_fanIn, "slideshow", "FanWipe: m_fanIn is true ?" );
         res.transform(basegfx::tools::createScaleTranslateB2DHomMatrix(0.5, 1.0, 0.5, 1.0));
     }
     return res;
