@@ -25,7 +25,7 @@
 #include <boost/scoped_ptr.hpp>
 #include <vcl/bitmap.hxx>
 
-struct Size;
+class Size;
 
 namespace sd { namespace slidesorter { namespace cache {
 
