@@ -513,7 +513,7 @@ void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
             else if ( rMEvt.GetClicks() == 2 )
             {
                 // The mouse button down event 1 click right before is pointless
-                pItem->setSelection(!pItem->isSelected());
+                pItem->setSelection(false);
                 maItemStateHdl.Call(pItem);
 
                 Rectangle aRect(pItem->getDrawArea());
