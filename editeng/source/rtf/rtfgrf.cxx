@@ -25,9 +25,9 @@
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/wmf.hxx>
 #include <svtools/rtfkeywd.hxx>
 #include <svtools/rtftoken.h>
-#include <svtools/wmf.hxx>
 
 #include <editeng/svxrtf.hxx>
 
