@@ -113,7 +113,7 @@ using namespace ::com::sun::star::scanner;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 
-extern sal_Bool bNoInterrupt;       // in mainwn.cxx
+extern bool bNoInterrupt;       // in mainwn.cxx
 
 #define SWVIEWFLAGS ( SFX_VIEW_CAN_PRINT|               \
                       SFX_VIEW_HAS_PRINTOPTIONS)
@@ -886,8 +886,8 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     // Im CTOR duerfen keine Shell wechsel erfolgen, die muessen ueber
     // den Timer "zwischen gespeichert" werden. Sonst raeumt der SFX
     // sie wieder vom Stack!
-    sal_Bool bOld = bNoInterrupt;
-    bNoInterrupt = sal_True;
+    bool bOld = bNoInterrupt;
+    bNoInterrupt = true;
 
     pHRuler->SetActive( sal_True );
     pVRuler->SetActive( sal_True );

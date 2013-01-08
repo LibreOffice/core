@@ -44,7 +44,7 @@ using namespace ::com::sun::star;
 
 // no include "dbgoutsw.hxx" here!!!!!!
 
-extern sal_Bool bNoInterrupt;
+extern bool bNoInterrupt;
 extern sal_Bool bFrmDrag;
 extern sal_Bool bDDTimerStarted;
 
@@ -160,7 +160,7 @@ void SwEditWin::DropCleanup()
     SwWrtShell &rSh =  rView.GetWrtShell();
 
     // reset statuses
-    bNoInterrupt = sal_False;
+    bNoInterrupt = false;
     if ( bOldIdleSet )
     {
         ((SwViewOption*)rSh.GetViewOptions())->SetIdle( bOldIdle );
