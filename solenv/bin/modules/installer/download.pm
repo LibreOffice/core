@@ -298,9 +298,18 @@ sub get_downloadname_language
         $languages =~ s/_en-US//;
     }
 
+    # do not list languages if there are too many
     if ( length ($languages) > $installer::globals::max_lang_length )
     {
-        $languages = 'multi';
+        $languages = '';
+    }
+
+    # do not list pure en-US, except for helppack and langpack
+    if ( ( $languages eq "en-US" ) &&
+         ( ! $installer::globals::languagepack ) &&
+         ( ! $installer::globals::helppack ) )
+    {
+        $languages = '';
     }
 
     return $languages;
@@ -320,19 +329,7 @@ sub get_downloadname_productname
 
     if ( $allvariables->{'PRODUCTNAME'} eq "LOdev" ) { $start = "LibO-Dev"; }
 
-    if (( $allvariables->{'PRODUCTNAME'} eq "LibreOffice" ) && ( $allvariables->{'POSTVERSIONEXTENSION'} eq "SDK" )) { $start = "LibreOffice-SDK"; }
-
-    if (( $allvariables->{'PRODUCTNAME'} eq "LOdev" ) && ( $allvariables->{'POSTVERSIONEXTENSION'} eq "SDK" )) { $start = "LibO-Dev-SDK"; }
-
-    if (( $allvariables->{'PRODUCTNAME'} eq "LibreOffice" ) && ( $allvariables->{'POSTVERSIONEXTENSION'} eq "TEST" )) { $start = "LibreOffice-Test"; }
-
-    if (( $allvariables->{'PRODUCTNAME'} eq "LOdev" ) && ( $allvariables->{'POSTVERSIONEXTENSION'} eq "TEST" )) { $start = "LibO-Dev-Test"; }
-
-    if ( $allvariables->{'PRODUCTNAME'} eq "URE" ) { $start = "LibreOffice-URE"; }
-
     if ( $allvariables->{'PRODUCTNAME'} eq "OxygenOffice" ) { $start = "OOOP"; }
-
-
 
     return $start;
 }
@@ -443,69 +440,46 @@ sub get_install_type
 
     my $type = "";
 
+    # content type included in the installer
+    if ( $installer::globals::isrpmbuild )
+    {
+        $type .= "rpm";
+    }
+    elsif ( $installer::globals::isdebbuild )
+    {
+        $type .= "deb";
+    }
+    elsif ( $installer::globals::packageformat eq "archive" )
+    {
+        $type .= "archive";
+    }
+
+    $type .= "_" if ($type);
+
+    # functionality type
     if ( $installer::globals::languagepack )
     {
-        $type = "langpack";
-
-        if ( $installer::globals::isrpmbuild )
-        {
-            $type = $type . "-rpm";
-        }
-
-        if ( $installer::globals::isdebbuild )
-        {
-            $type = $type . "-deb";
-        }
-
-        if ( $installer::globals::packageformat eq "archive" )
-        {
-            $type = $type . "-arc";
-        }
+        $type .= "langpack";
     }
     elsif ( $installer::globals::helppack )
     {
-        $type = "helppack";
-
-        if ( $installer::globals::isrpmbuild )
-        {
-            $type = $type . "-rpm";
-        }
-
-        if ( $installer::globals::isdebbuild )
-        {
-            $type = $type . "-deb";
-        }
-
-        if ( $installer::globals::packageformat eq "archive" )
-        {
-            $type = $type . "-arc";
-        }
+        $type .= "helppack";
     }
-    else
+    elsif ( $allvariables->{'POSTVERSIONEXTENSION'} eq "SDK" )
     {
-        $type = "install";
-
-        if ( $installer::globals::isrpmbuild )
-        {
-            $type = $type . "-rpm";
-        }
-
-        if ( $installer::globals::isdebbuild )
-        {
-            $type = $type . "-deb";
-        }
-
-        if ( $installer::globals::packageformat eq "archive" )
-        {
-            $type = $type . "-arc";
-        }
-
-        if (( $allvariables->{'WITHJREPRODUCT'} ) && ( $allvariables->{'WITHJREPRODUCT'} == 1 ))
-        {
-            $type = $type . "-wJRE";
-        }
-
+        $type .= "sdk";
     }
+    elsif ( $allvariables->{'POSTVERSIONEXTENSION'} eq "TEST" )
+    {
+        $type .= "test";
+    }
+    elsif ( $allvariables->{'PRODUCTNAME'} eq "URE" )
+    {
+        $type .= "ure";
+    }
+
+    # get rid of trailing _ if functionality type was not set
+    $type =~ s/\_$//;
 
     return $type;
 }
