@@ -60,8 +60,6 @@ public:
 
     ~SwModelTestBase()
     {
-        if (mpXmlBuffer)
-            xmlBufferFree(mpXmlBuffer);
     }
 
     virtual void setUp()
@@ -259,6 +257,11 @@ protected:
     {
         sal_uInt32 nEndTime = osl_getGlobalTimer();
         fprintf(stderr, "%" SAL_PRIuUINT32"\n", nEndTime - m_nStartTime);
+        if (mpXmlBuffer)
+        {
+            xmlBufferFree(mpXmlBuffer);
+            mpXmlBuffer = 0;
+        }
     }
 
     uno::Reference<lang::XComponent> mxComponent;
