@@ -244,26 +244,6 @@ WindowsCustomAction gid_Customaction_Patch_Regpatchactivex_Patchactivexcontrol
 	Assignment1 = ("InstallExecuteSequence", "\&FEATURETEMPLATE=3", "end");
 End
 
-WindowsCustomAction gid_Customaction_Patch_SetProductInstallModeAction
-	Name = "SetProductInstallModeAction";
-	Typ = "321";
-	Source = "patchmsi.dll";
-	Target = "SetProductInstallMode";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "Not Installed", "FindRelatedProducts");
-	Assignment2 = ("InstallUISequence", "Not Installed", "FindRelatedProducts");
-End
-
-WindowsCustomAction gid_Customaction_Patch_InstallExchangeFiles
-	Name = "InstallExchangeFiles";
-	Typ = "65";
-	Source = "patchmsi.dll";
-	Target = "InstallPatchedFiles";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "Not Installed", "behind_InstallFinalize");
-	Assignment2 = ("AdminExecuteSequence", "", "behind_InstallFinalize");
-End
-
 WindowsCustomAction gid_Customaction_Langpack_Register_Extensions
 	Name = "RegisterExtensions";
 	Typ = "65";
@@ -274,34 +254,6 @@ WindowsCustomAction gid_Customaction_Langpack_Register_Extensions
 	Assignment2 = ("AdminExecuteSequence", "", "end");
 End
 
-WindowsCustomAction gid_Customaction_Patch_SetFeatureState
-	Name = "SetFeatureState";
-	Typ = "65";
-	Source = "patchmsi.dll";
-	Target = "SetFeatureState";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "Not Installed", "SetNewFeatureState");
-End
-
-WindowsCustomAction gid_Customaction_Patch_DeinstallExchangeFiles
-	Name = "DeinstallExchangeFiles";
-	Typ = "65";
-	Source = "patchmsi.dll";
-	Target = "UninstallPatchedFiles";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "Installed", "RemoveIniValues");
-End
-
-WindowsCustomAction gid_Customaction_Patch_Shutdownquickstarter
-	Name = "ShutDownQuickstarter";
-	Typ = "65";
-	Source = "patchmsi.dll";
-	Target = "ShutDownQuickstarter";
-	Inbinarytable = 1;
-	Assignment1 = ("ControlEvent", "DestinationFolder", "Next", "DoAction", "ShutDownQuickstarter", "1", "0");
-	Assignment2 = ("InstallExecuteSequence", "", "IsolateComponents");
-End
-
 WindowsCustomAction gid_Customaction_CheckPatchList
 	Name = "CheckPatchList";
 	Typ = "65";
@@ -309,27 +261,6 @@ WindowsCustomAction gid_Customaction_CheckPatchList
 	Target = "CheckPatchList";
 	Inbinarytable = 1;
 	Assignment1 = ("InstallExecuteSequence", "PATCH", "Patch1NotInstalled");
-End
-
-WindowsCustomAction gid_Customaction_Patch_SetUserInstallMode
-	Name = "SetUserInstallMode";
-	Typ = "321";
-	Source = "patchmsi.dll";
-	Target = "GetUserInstallMode";
-	Inbinarytable = 1;
-	Assignment1 = ("ControlEvent", "InstallWelcome", "Next", "DoAction", "SetUserInstallMode", "1", "1");
-	Assignment2 = ("ControlEvent", "InstallChangeFolder", "OK", "DoAction", "SetUserInstallMode", "1", "8");
-	Assignment3 = ("ControlCondition", "DestinationFolder", "Next", "Enable", "NOT INVALIDDIRECTORY And NOT PATCHISOLDER And NOT ISWRONGPRODUCT");
-	Assignment4 = ("ControlCondition", "DestinationFolder", "Next", "Disable", "INVALIDDIRECTORY Or PATCHISOLDER Or ISWRONGPRODUCT");
-	Assignment5 = ("ControlCondition", "DestinationFolder", "LabelStartInstall", "Show", "NOT INVALIDDIRECTORY And NOT PATCHISOLDER And NOT ISWRONGPRODUCT");
-	Assignment6 = ("ControlCondition", "DestinationFolder", "LabelInvalidDir", "Show", "INVALIDDIRECTORY");
-	Assignment7 = ("ControlCondition", "DestinationFolder", "LabelPatchOlder", "Show", "PATCHISOLDER");
-	Assignment8 = ("ControlCondition", "DestinationFolder", "LabelWrongProduct", "Show", "ISWRONGPRODUCT");
-	Assignment9 = ("ControlCondition", "DestinationFolder", "LabelStartInstall2", "Show", "NOT INVALIDDIRECTORY And NOT PATCHISOLDER And NOT ISWRONGPRODUCT");
-	Assignment10 = ("ControlCondition", "DestinationFolder", "LabelInvalidDir2", "Show", "INVALIDDIRECTORY");
-	Assignment11 = ("ControlCondition", "DestinationFolder", "LabelPatchOlder2", "Show", "PATCHISOLDER");
-	Assignment12 = ("ControlCondition", "DestinationFolder", "LabelWrongProduct2", "Show", "ISWRONGPRODUCT");
-	Assignment13 = ("InstallExecuteSequence", "Not Installed", "PatchIsOlder");
 End
 
 WindowsCustomAction gid_Customaction_Langpack_SetUserInstallMode

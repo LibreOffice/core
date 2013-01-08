@@ -835,7 +835,6 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     ModuleID = gid_Module_Root;
     Name = ".fods";
     Value = "LibreOffice.CalcDocument.1";
-    Styles = (PATCH);
 End
 
 RegistryItem gid_Regitem_Fods_Contenttype

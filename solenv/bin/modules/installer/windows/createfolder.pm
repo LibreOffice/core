@@ -88,10 +88,8 @@ sub get_createfolder_component
     # containing the file $allvariableshashref->{'GLOBALFILEGID'}
 
     if ( ! $allvariableshashref->{'GLOBALFILEGID'} ) { installer::exiter::exit_program("ERROR: GLOBALFILEGID must be defined in list file!", "get_createfolder_component"); }
-    if (( $installer::globals::patch ) && ( ! $allvariableshashref->{'GLOBALFILEGID'} )) { installer::exiter::exit_program("ERROR: GLOBALPATCHFILEGID must be defined in list file!", "get_createfolder_component"); }
 
     my $globalfilegid = $allvariableshashref->{'GLOBALFILEGID'};
-    if ( $installer::globals::patch ) { $globalfilegid = $allvariableshashref->{'GLOBALPATCHFILEGID'}; }
 
     my $onefile;
     if ( $installer::globals::languagepack ) { $onefile = get_languagepack_file($filesref, $onedir); }

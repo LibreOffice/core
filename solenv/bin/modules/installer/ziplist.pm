@@ -852,8 +852,7 @@ sub add_variables_to_allvariableshashref
         $variableshashref->{'LCPRODUCTEXTENSION'} = "";
     }
 
-    if ( $installer::globals::patch ) { $variableshashref->{'PRODUCTADDON'} = $installer::globals::patchaddon; }
-    elsif ( $installer::globals::languagepack ) { $variableshashref->{'PRODUCTADDON'} = $installer::globals::languagepackaddon; }
+    if ( $installer::globals::languagepack ) { $variableshashref->{'PRODUCTADDON'} = $installer::globals::languagepackaddon; }
     elsif ( $installer::globals::helppack ) { $variableshashref->{'PRODUCTADDON'} = $installer::globals::helppackpackaddon; }
     else { $variableshashref->{'PRODUCTADDON'} = ""; }
 

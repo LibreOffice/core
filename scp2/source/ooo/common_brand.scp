@@ -529,7 +529,7 @@ End
 File gid_File_Bin_QStart_Bin
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Name = "oosplash";
 End
 
@@ -1016,15 +1016,6 @@ ProfileItem gid_Brand_Profileitem_Version_Productminor
     Value = "<productminor>";
 End
 
-ProfileItem gid_Brand_Profileitem_Version_Productbuildid
-    ProfileID = gid_Brand_Profile_Version_Ini;
-    ModuleID = gid_Module_Root_Brand;
-    Section = "Version";
-    Order = 12;
-    Key = "ProductBuildid";
-    Value = "<productbuildid>";
-End
-
 ProfileItem gid_Brand_Profileitem_Version_Alllanguages
     ProfileID = gid_Brand_Profile_Version_Ini;
     ModuleID = gid_Module_Root_Brand;
@@ -1331,15 +1322,6 @@ ProfileItem gid_Brand_Profileitem_Setup_Upgradecode
     Value = "<upgradecode>";
 End
 #endif
-
-ProfileItem gid_Brand_Profileitem_Setup_Productbuildid
-    ProfileID = gid_Brand_Profile_Setup_Ini;
-    ModuleID = gid_Module_Root_Brand;
-    Section = "Bootstrap";
-    Order = 8;
-    Key = "ProductBuildid";
-    Value = "<productbuildid>";
-End
 
 ProfileItem gid_Brand_Profileitem_Setup_Buildid
     ProfileID = gid_Brand_Profile_Setup_Ini;

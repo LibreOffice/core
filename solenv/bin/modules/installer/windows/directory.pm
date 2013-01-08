@@ -253,8 +253,7 @@ sub check_sourcedir_addon
 {
     my ( $onedir, $allvariableshashref ) = @_;
 
-    if (($installer::globals::patch) ||
-        ($installer::globals::languagepack) ||
+    if (($installer::globals::languagepack) ||
         ($installer::globals::helppack) ||
         ($allvariableshashref->{'CHANGETARGETDIR'}))
     {
@@ -407,7 +406,7 @@ sub add_root_directories
 
     my $oneline = "";
 
-    if (( ! $installer::globals::patch ) && ( ! $installer::globals::languagepack ) && ( ! $installer::globals::helppack ) && ( ! $allvariableshashref->{'DONTUSESTARTMENUFOLDER'} ))
+    if (( ! $installer::globals::languagepack ) && ( ! $installer::globals::helppack ) && ( ! $allvariableshashref->{'DONTUSESTARTMENUFOLDER'} ))
     {
         my $productname;
 

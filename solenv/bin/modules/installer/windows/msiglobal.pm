@@ -1369,19 +1369,11 @@ sub set_global_code_variables
         $installer::globals::productcode = "\{" . ${$guidref}[0] . "\}";
     }
 
-    if ( $installer::globals::patch ) # patch upgrade codes are defined in soffice.lst
-    {
-        if ( $allvariableshashref->{'PATCHUPGRADECODE'} ) { $installer::globals::upgradecode = $allvariableshashref->{'PATCHUPGRADECODE'}; }
-        else { installer::exiter::exit_program("ERROR: PATCHUPGRADECODE not defined in list file!", "set_global_code_variables"); }
-    }
-    else
-    {
-        # UpgradeCode can take english as default, if not defined in specified language
+    # UpgradeCode can take english as default, if not defined in specified language
 
-        $searchstring = "UPGRADECODE";  # searching in the codes.txt file
-        $codeblock = installer::windows::idtglobal::get_language_block_from_language_file($searchstring, $codefile);
-        $installer::globals::upgradecode = installer::windows::idtglobal::get_language_string_from_language_block($codeblock, $onelanguage, "");
-    }
+    $searchstring = "UPGRADECODE";  # searching in the codes.txt file
+    $codeblock = installer::windows::idtglobal::get_language_block_from_language_file($searchstring, $codefile);
+    $installer::globals::upgradecode = installer::windows::idtglobal::get_language_string_from_language_block($codeblock, $onelanguage, "");
 
     if ( $installer::globals::upgradecode eq "" ) { installer::exiter::exit_program("ERROR: UpgradeCode not defined in $installer::globals::codefilename !", "set_global_code_variables"); }
 

@@ -212,18 +212,6 @@ sub resolving_archive_flag
             my $select_patch_files = 0;
             my $patchlistfiles = "";
             my @keptpatchflags = ();
-            if (( $styles =~ /\bPATCH\b/ ) && ( $onefile->{'Patchfiles'} ) && ( $installer::globals::patch ))
-            {
-                $select_patch_files = 1; # special handling if a Patchlist is defined
-                $patchlistfiles = get_patch_file_list( $onefile->{'Patchfiles'} );
-                $infoline = "Patch file list defined at file: $onefile->{'Name'} :\n";
-                push( @installer::globals::logfileinfo, $infoline);
-                for ( my $k = 0; $k <= $#{$patchlistfiles}; $k++ )
-                {
-                    $infoline = "\"${$patchlistfiles}[$k]\"\n";
-                    push( @installer::globals::logfileinfo, $infoline);
-                }
-            }
 
             if ( $onefile->{'Patchfiles'} ) { $onefile->{'Patchfiles'} = ""; } # Patch file list no longer required
 
@@ -398,24 +386,6 @@ sub resolving_archive_flag
                             }
                         }
 
-                        if ( $select_patch_files )
-                        {
-                            # Is this file listed in the Patchfile list?
-                            # $zipname (filename including path in zip file has to be listed in patchfile list
-
-                            if ( ! grep {$_ eq $zipname} @{$patchlistfiles} )
-                            {
-                                $newfile{'Styles'} =~ s/\bPATCH\b//;    # removing the flag PATCH
-                                $newfile{'Styles'} =~ s/\,\s*\,/\,/;
-                                $newfile{'Styles'} =~ s/\(\s*\,/\(/;
-                                $newfile{'Styles'} =~ s/\,\s*\)/\)/;
-                            }
-                            else
-                            {
-                                push( @keptpatchflags, $zipname); # collecting all PATCH flags
-                            }
-                        }
-
                         if ( $rename_to_language )
                         {
                             my $newzipname = put_language_into_name($zipname, $onelanguage);
@@ -482,43 +452,6 @@ sub resolving_archive_flag
                         push( @installer::globals::logfileinfo, $infoline);
                     }
 
-                }
-
-                # Comparing the content of @keptpatchflags and $patchlistfiles
-                # Do all files from the patch list have a PATCH flag ?
-                # @keptpatchflags contains only files included in $patchlistfiles. But are all
-                # files from $patchlistfiles included in @keptpatchflags?
-
-                if ( $select_patch_files )
-                {
-                    my $number = $#{$patchlistfiles} + 1;
-                    $infoline = "PATCHLIST: Number of files in patch list: $number\n";
-                    push( @installer::globals::logfileinfo, $infoline);
-                    $number = $#keptpatchflags + 1;
-                    $infoline = "PATCHLIST: Number of kept PATCH flags: $number\n";
-                    push( @installer::globals::logfileinfo, $infoline);
-
-                    for ( my $k = 0; $k <= $#keptpatchflags; $k++ )
-                    {
-                        $infoline = "KEPT PATCH FLAGS: $keptpatchflags[$k]\n";
-                        push( @installer::globals::logfileinfo, $infoline);
-                    }
-
-                    my @warningfiles = ();
-
-                    for ( my $k = 0; $k <= $#{$patchlistfiles}; $k++ )
-                    {
-                        if ( ! grep {$_ eq ${$patchlistfiles}[$k]} @keptpatchflags )
-                        {
-                            push(@warningfiles, ${$patchlistfiles}[$k]);
-                        }
-                    }
-
-                    for ( my $k = 0; $k <= $#warningfiles; $k++ )
-                    {
-                        $infoline = "WARNING: $warningfiles[$k] did not keep PATCH flag (does not exist in zip file)!\n";
-                        push( @installer::globals::logfileinfo, $infoline);
-                    }
                 }
 
                 if ( $unziperror )

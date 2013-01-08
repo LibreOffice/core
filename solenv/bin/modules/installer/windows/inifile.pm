@@ -49,23 +49,6 @@ sub get_profile_for_profileitem
 }
 
 ####################################################
-# Checking whether profile is included in patch
-####################################################
-
-sub profile_has_patch_flag
-{
-    my ($profile) = @_;
-
-    my $in_patch = 0;
-
-    my $styles = "";
-    if ( $profile->{'Styles'} ) { $styles = $profile->{'Styles'}; }
-    if ( $styles =~ /\bPATCH\b/ ) { $in_patch = 1; }
-
-    return $in_patch;
-}
-
-####################################################
 # Checking whether profile is part of product
 ####################################################
 
@@ -116,8 +99,6 @@ sub create_inifile_table
         if ( ! file_is_part_of_product($profileid, $filesref) ) { next; }
 
         my $profile = get_profile_for_profileitem($profileid, $filesref);
-
-        if (( $installer::globals::patch ) && ( ! profile_has_patch_flag($profile) )) { next; }
 
         my %inifile = ();
 

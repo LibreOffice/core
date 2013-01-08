@@ -298,7 +298,6 @@ sub run {
     my $dirsinproductarrayref = installer::setupscript::get_all_items_from_script($setupscriptref, "Directory");
 
     if ( $installer::globals::languagepack ) { installer::scriptitems::use_langpack_hostname($dirsinproductarrayref); }
-    if ( $installer::globals::patch ) { installer::scriptitems::use_patch_hostname($dirsinproductarrayref); }
 
     if ( $allvariableshashref->{'SHIFT_BASIS_INTO_BRAND_LAYER'} ) { $dirsinproductarrayref = installer::scriptitems::shift_basis_directory_parents($dirsinproductarrayref); }
     if ( $allvariableshashref->{'OFFICEDIRECTORYNAME'} ) { installer::scriptitems::set_officedirectory_name($dirsinproductarrayref, $allvariableshashref->{'OFFICEDIRECTORYNAME'}); }
@@ -329,11 +328,6 @@ sub run {
         $filesinproductarrayref = installer::scriptitems::remove_Helppacklibraries_from_Installset($filesinproductarrayref);
     }
 
-    if (! $installer::globals::patch)
-    {
-        $filesinproductarrayref = installer::scriptitems::remove_patchonlyfiles_from_Installset($filesinproductarrayref);
-    }
-
     installer::logger::print_message( "... analyzing scpactions ... \n" );
 
     my $scpactionsinproductarrayref = installer::setupscript::get_all_items_from_script($setupscriptref, "ScpAction");
@@ -341,7 +335,6 @@ sub run {
     if ( $installer::globals::languagepack ) { installer::scriptitems::use_langpack_copy_scpaction($scpactionsinproductarrayref); }
     if ( $installer::globals::helppack ) { installer::scriptitems::use_langpack_copy_scpaction($scpactionsinproductarrayref); }
     if ( $allvariableshashref->{'PRODUCTNAME'} eq "LibO-dev" ) { installer::scriptitems::use_devversion_copy_scpaction($scpactionsinproductarrayref); }
-    if ( $installer::globals::patch ) { installer::scriptitems::use_patch_copy_scpaction($scpactionsinproductarrayref); }
 
     installer::scriptitems::change_keys_of_scpactions($scpactionsinproductarrayref);
 
@@ -441,12 +434,6 @@ sub run {
         my $languagestringref = installer::languages::get_language_string($languagesarrayref);
         installer::logger::print_message( "------------------------------------\n" );
         installer::logger::print_message( "... languages $$languagestringref ... \n" );
-
-        if ( $installer::globals::patch )
-        {
-            $installer::globals::addlicensefile = 0;    # no license files for patches
-            $installer::globals::makedownload = 0;
-        }
 
         if ( $installer::globals::languagepack )
         {
@@ -743,7 +730,7 @@ sub run {
         my $profilesinproductlanguageresolvedarrayref;
         my $profileitemsinproductlanguageresolvedarrayref;
 
-        if ((!($installer::globals::is_copy_only_project)) && (!($installer::globals::product =~ /ada/i )) && (!($installer::globals::languagepack)) && (!($installer::globals::helppack)))
+        if ((!($installer::globals::is_copy_only_project)) && (!($installer::globals::languagepack)) && (!($installer::globals::helppack)))
         {
             installer::logger::print_message( "... creating profiles ...\n" );
 
@@ -757,6 +744,8 @@ sub run {
 
             installer::scriptitems::replace_setup_variables($profileitemsinproductlanguageresolvedarrayref, $languagestringref, $allvariableshashref);
 
+            # Note that patch_user_dir is not related to the killed
+            # ancient (not MSP) "patch" thing, I think.
             if ( $installer::globals::patch_user_dir )
             {
                 installer::scriptitems::replace_userdir_variable($profileitemsinproductlanguageresolvedarrayref);
@@ -878,32 +867,6 @@ sub run {
 
         }
 
-        # Collecting all files without flag PATCH (for maintenance reasons)
-        if ( $installer::globals::patch ) { installer::worker::collect_all_files_without_patch_flag($filesinproductlanguageresolvedarrayref); }
-
-        # Patch projects can now start to select the required information
-        if (( $installer::globals::patch ) && (( $installer::globals::issolarispkgbuild ) || ( $installer::globals::iswindowsbuild )))
-        {
-            $filesinproductlanguageresolvedarrayref = installer::worker::select_patch_items($filesinproductlanguageresolvedarrayref, "File");
-            $scpactionsinproductlanguageresolvedarrayref = installer::worker::select_patch_items($scpactionsinproductlanguageresolvedarrayref, "ScpAction");
-            $linksinproductlanguageresolvedarrayref = installer::worker::select_patch_items($linksinproductlanguageresolvedarrayref, "Shortcut");
-            $unixlinksinproductlanguageresolvedarrayref = installer::worker::select_patch_items($unixlinksinproductlanguageresolvedarrayref, "Unixlink");
-            $folderitemsinproductlanguageresolvedarrayref = installer::worker::select_patch_items($folderitemsinproductlanguageresolvedarrayref, "FolderItem");
-            # @{$folderitemsinproductlanguageresolvedarrayref} = (); # no folderitems in languagepacks
-
-            if ( $installer::globals::iswindowsbuild )
-            {
-                $registryitemsinproductlanguageresolvedarrayref = installer::worker::select_patch_items_without_name($registryitemsinproductlanguageresolvedarrayref, "RegistryItem");
-
-                installer::worker::prepare_windows_patchfiles($filesinproductlanguageresolvedarrayref, $languagestringref, $allvariableshashref);
-
-                # For Windows patches, the directories can now be collected again
-                ($directoriesforepmarrayref, $alldirectoryhash) = installer::scriptitems::collect_directories_from_filesarray($filesinproductlanguageresolvedarrayref);
-
-                @$directoriesforepmarrayref = sort { $a->{"HostName"} cmp $b->{"HostName"} } @$directoriesforepmarrayref;
-            }
-        }
-
         #########################################################
         # Collecting all scp actions
         #########################################################
@@ -1012,8 +975,6 @@ sub run {
 
                 my $shellscriptsfilename = "";
                 if ( $onepackage->{'script'} ) { $shellscriptsfilename = $onepackage->{'script'}; }
-                # no scripts for Solaris patches!
-                if (( $installer::globals::patch ) && ( $installer::globals::issolarispkgbuild )) { $shellscriptsfilename = ""; }
 
                 ###########################
                 # package name
@@ -1101,22 +1062,6 @@ sub run {
                     next;   # next package, end of loop !
                 }
 
-                #################################################################
-                # nothing to do for Linux patches, if no file has flag PATCH
-                #################################################################
-
-                # Linux Patch: The complete RPM has to be built, if one file in the RPM has the flag PATCH (also for DEBs)
-                if (( $installer::globals::patch ) && (( $installer::globals::isrpmbuild ) || ( $installer::globals::isdebbuild )))
-                {
-                    my $patchfiles = installer::worker::collect_all_items_with_special_flag($filesinpackage ,"PATCH");
-                    if ( ! ( $#{$patchfiles} > -1 ))
-                    {
-                        $infoline = "\n\nLinux Patch: No patch file in package: $packagename \-\> Skipping\n\n";
-                        push(@installer::globals::logfileinfo, $infoline);
-                        next;
-                    }
-                }
-
                 ###########################################
                 # Stripping libraries
                 ###########################################
@@ -1151,18 +1096,6 @@ sub run {
 
                     my $epmheaderref = installer::epmfile::create_epm_header($allvariableshashref, $filesinproductlanguageresolvedarrayref, $languagesarrayref, $onepackage);
                     installer::epmfile::adding_header_to_epm_file(\@epmfile, $epmheaderref);
-
-                    if (( $installer::globals::patch ) && ( $installer::globals::issolarispkgbuild ))
-                    {
-                        $filesinpackage = installer::worker::analyze_patch_files($filesinpackage);
-
-                        if ( ! ( $#{$filesinpackage} > -1 ))
-                        {
-                            $infoline = "\nNo file in package: $packagename \-\> Skipping\n";
-                            push(@installer::globals::logfileinfo, $infoline);
-                            next;   # next package, end of loop !
-                        }
-                    }
 
                     # adding directories, files and links into epm file
 
@@ -1291,10 +1224,6 @@ sub run {
 
                 # Creating installation set for Unix help packs, that are not part of multi lingual installation sets
                 if ( ( $installer::globals::helppack ) && ( ! $installer::globals::debian ) && ( ! $installer::globals::makedownload ) ) { installer::helppack::build_installer_for_helppack($installer::globals::epmoutpath, $allvariableshashref, $includepatharrayref, $languagesarrayref, $languagestringref); }
-
-                # Finalizing patch installation sets
-                if (( $installer::globals::patch ) && ( $installer::globals::issolarispkgbuild )) { installer::epmfile::finalize_patch($installer::globals::epmoutpath, $allvariableshashref); }
-                if (( $installer::globals::patch ) && ( $installer::globals::isrpmbuild )) { installer::epmfile::finalize_linux_patch($installer::globals::epmoutpath, $allvariableshashref, $includepatharrayref); }
 
                 chdir($currentdir); # changing back into start directory
             }
@@ -1731,7 +1660,6 @@ sub run {
             my $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "downloadname");
             if ( $installer::globals::languagepack ) { $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "langpackdownloadname"); }
             if ( $installer::globals::helppack ) { $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "helppackdownloadname"); }
-            if ( $installer::globals::patch ) { $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "patchdownloadname"); }
 
             if ( $$downloadname ne "" ) { $create_download = 1; }
             if ( $installer::globals::iswindowsbuild )

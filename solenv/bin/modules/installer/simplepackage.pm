@@ -301,7 +301,7 @@ sub create_package
 
         my $localtempdir = $tempdir;
 
-        if (( $installer::globals::languagepack ) || ( $installer::globals::helppack ) || ( $installer::globals::patch ))
+        if (( $installer::globals::languagepack ) || ( $installer::globals::helppack ))
         {
             $localtempdir = "$tempdir/$packagename";
             if ( $installer::globals::helppack ) { $volume_name = "$volume_name Help Pack"; }
@@ -310,12 +310,6 @@ sub create_package
                 $volume_name = "$volume_name Language Pack";
                 $volume_name_classic = "$volume_name_classic Language Pack";
                 $volume_name_classic_app = "$volume_name_classic_app Language Pack";
-            }
-            if ( $installer::globals::patch )
-            {
-                $volume_name = "$volume_name Patch";
-                $volume_name_classic = "$volume_name_classic Patch";
-                $volume_name_classic_app = "$volume_name_classic_app Patch";
             }
 
             # Create tar ball named tarball.tar.bz2
@@ -362,7 +356,6 @@ sub create_package
             my $scriptfilename = "";
             if ( $installer::globals::languagepack ) { $scriptfilename = "osx_install_languagepack.applescript"; }
             if ( $installer::globals::helppack ) { $scriptfilename = "osx_install_helppack.applescript"; }
-            if ( $installer::globals::patch ) { $scriptfilename = "osx_install_patch.applescript"; }
             my $scripthelpersolverfilename = "mac_install.script";
             # my $scripthelperrealfilename = $volume_name;
             my $scripthelperrealfilename = $volume_name_classic_app;
@@ -508,7 +501,6 @@ sub create_simple_package
             $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "downloadname");
             if ( $installer::globals::languagepack ) { $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "langpackdownloadname"); }
             if ( $installer::globals::helppack ) { $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "helppackdownloadname"); }
-            if ( $installer::globals::patch ) { $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "patchdownloadname"); }
             $packagename = installer::download::resolve_variables_in_downloadname($allvariables, $$downloadname, \$locallanguage);
         }
     }
@@ -574,8 +566,6 @@ sub create_simple_package
         my $onefile = ${$filesref}[$i];
 
         if (( $onefile->{'Styles'} ) && ( $onefile->{'Styles'} =~ /\bBINARYTABLE_ONLY\b/ )) { next; }
-        if (( $installer::globals::patch ) && ( $onefile->{'Styles'} ) && ( ! ( $onefile->{'Styles'} =~ /\bPATCH\b/ ))) { next; }
-        if (( $installer::globals::patch ) && ( $installer::globals::packageformat eq "dmg" )) { push(@installer::globals::patchfilecollector, "$onefile->{'destination'}\n"); }
 
         my $source = $onefile->{'sourcepath'};
         my $destination = $onefile->{'destination'};
@@ -627,8 +617,6 @@ sub create_simple_package
     {
         my $onelink = ${$linksref}[$i];
 
-        if (( $installer::globals::patch ) && ( $onelink->{'Styles'} ) && ( ! ( $onelink->{'Styles'} =~ /\bPATCH\b/ ))) { next; }
-
         my $destination = $onelink->{'destination'};
         $destination = $subfolderdir . $installer::globals::separator . $destination;
         my $destinationfile = $onelink->{'destinationfile'};
@@ -643,8 +631,6 @@ sub create_simple_package
     for ( my $i = 0; $i <= $#{$unixlinksref}; $i++ )
     {
         my $onelink = ${$unixlinksref}[$i];
-
-        if (( $installer::globals::patch ) && ( $onelink->{'Styles'} ) && ( ! ( $onelink->{'Styles'} =~ /\bPATCH\b/ ))) { next; }
 
         my $target = $onelink->{'Target'};
         my $destination = $subfolderdir . $installer::globals::separator . $onelink->{'destination'};

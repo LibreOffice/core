@@ -1122,15 +1122,6 @@ File gid_File_Xsl_Import_Wordml_Wordml2ooo_Props
     Name = "/xslt/import/wordml/wordml2ooo_props.xsl";
 End
 
-#ifdef WNT
-File gid_File_Txt_Patchfiles
-    TXT_FILE_BODY;
-    Name = "patchlist.txt";
-    Dir = gid_Brand_Dir_Program;
-    Styles = (PACKED,PATCH,PATCH_ONLY,DONTRENAMEINPATCH);
-End
-#endif
-
 File gid_Starregistry_Services_Rdb
     TXT_FILE_BODY;
     Name = "services.rdb";

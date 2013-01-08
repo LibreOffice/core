@@ -192,12 +192,9 @@ BEGIN
     $patch_user_dir = 0;
     $languagepack = 0;
     $helppack = 0;
-    $patch = 0;
-    $patchincludepath = "";
     $refresh_includepaths = 0;
     $include_paths_read = 0;
     @patchfilecollector = ();
-    $nopatchfilecollector = "";
     @userregistrycollector = ();
     $addeduserregitrykeys = 0;
     $desktoplinkexists = 0;
@@ -256,9 +253,6 @@ BEGIN
     $postprocess_standardepm = 0;
     $mergemodules_analyzed = 0;
 
-    @solarispatchscripts = ("checkinstall", "copyright", "patch_checkinstall", "patch_postinstall", "postinstall", "preinstall", "i.none");
-    @solarispatchscriptsforextensions = ("checkinstall", "copyright", "patch_checkinstall", "patch_postinstall_extensions", "postinstall_extensions", "preinstall", "i.none");
-    @solarispatchfiles = (".diPatch", "patchinfo");
     @packagelistitems = ("module", "solarispackagename", "packagename", "copyright", "vendor", "description" );
     @languagepackfeature =();
     @helppackfeature =();

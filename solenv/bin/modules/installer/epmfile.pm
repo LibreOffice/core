@@ -487,16 +487,16 @@ sub create_epm_header
 
     my $replaces = "";
 
-    if (( $installer::globals::issolarispkgbuild ) && ( ! $installer::globals::patch ))
+    if ( $installer::globals::issolarispkgbuild )
     {
         $replaces = "solarisreplaces";   # the name in the packagelist
     }
-    elsif (( $installer::globals::islinuxbuild ) && ( ! $installer::globals::patch ))
+    elsif ( $installer::globals::islinuxbuild )
     {
         $replaces = "linuxreplaces";    # the name in the packagelist
     }
 
-    if (( $replaces ) && ( ! $installer::globals::patch ))
+    if ( $replaces )
     {
         if ( $onepackage->{$replaces} )
         {
@@ -548,13 +548,6 @@ sub create_epm_header
     {
         $provides = "freebsdprovides";   # the name in the packagelist
         $requires = "freebsdrequires";   # the name in the packagelist
-    }
-    elsif (( $installer::globals::isrpmbuild ) &&
-            ( $installer::globals::patch ) &&
-            ( exists($onepackage->{'linuxpatchrequires'}) ))
-    {
-        $provides = "provides";  # the name in the packagelist
-        $requires = "linuxpatchrequires";    # the name in the packagelist
     }
     else
     {
@@ -1005,124 +998,6 @@ sub set_revision_in_pkginfo
             }
         }
     }
-}
-
-########################################################
-# Setting Patch information for Respin versions
-# into pkginfo file. This prevents Respin versions
-# from patching.
-########################################################
-
-sub set_patchlist_in_pkginfo_for_respin
-{
-    my ($changefile, $filename, $allvariables, $packagename) = @_;
-
-    my $patchlistname = "SOLSPARCPATCHLISTFORRESPIN";
-    if ( $installer::globals::issolarisx86build ) { $patchlistname = "SOLIAPATCHLISTFORRESPIN"; }
-
-    if ( $allvariables->{$patchlistname} )
-    {
-        # patchlist separator is a blank
-        my $allpatchesstring = $allvariables->{$patchlistname};
-        my @usedpatches = ();
-
-        # Analyzing the patchlist
-        # Syntax: 120186-10 126411-01(+core-01) -> use 126411-01 only for core-01
-        # Syntax: 120186-10 126411-01(-core-01) -> use 126411-01 for all packages except for core-01
-        my $allpatches = installer::converter::convert_whitespace_stringlist_into_array(\$allpatchesstring);
-
-        for ( my $i = 0; $i <= $#{$allpatches}; $i++ )
-        {
-            my $patchdefinition = ${$allpatches}[$i];
-
-            my $patchid = "";
-            my $symbol = "";
-            my $constraint = "";
-            my $isusedpatch = 0;
-
-            if ( $patchdefinition =~ /^\s*(.+)\(([+-])(.+)\)\s*$/ )
-            {
-                $patchid = $1;
-                $symbol = $2;
-                $constraint = $3;
-            }
-            elsif (( $patchdefinition =~ /\(/ ) || ( $patchdefinition =~ /\)/ ))    # small syntax check
-            {
-                # if there is a bracket in the $patchdefinition, but it does not
-                # match the if-condition, this is an erroneous definition.
-                installer::exiter::exit_program("ERROR: Unknown patch string: $patchdefinition", "set_patchlist_in_pkginfo_for_respin");
-            }
-            else
-            {
-                $patchid = $patchdefinition;
-                $isusedpatch = 1; # patches without constraint are always included
-            }
-
-            if ( $symbol ne "" )
-            {
-                if ( $symbol eq "+" )
-                {
-                    if ( $packagename =~ /^.*\Q$constraint\E\s*$/ ) { $isusedpatch = 1; }
-                }
-
-                if ( $symbol eq "-" )
-                {
-                    if ( ! ( $packagename =~ /^.*\Q$constraint\E\s*$/ )) { $isusedpatch = 1; }
-                }
-            }
-
-            if ( $isusedpatch ) { push(@usedpatches, $patchid); }
-        }
-
-        if ( $#usedpatches > -1 )
-        {
-            my $patchstring = installer::converter::convert_array_to_space_separated_string(\@usedpatches);
-
-            my $newline = "PATCHLIST=" . $patchstring . "\n";
-            add_one_line_into_file($changefile, $newline, $filename);
-
-            # Adding patch info for each used patch in the patchlist
-
-            for ( my $i = 0; $i <= $#usedpatches; $i++ )
-            {
-                my $patchid = $usedpatches[$i];
-                my $key = "PATCH_INFO_" . $patchid;
-                $key =~ s/\s*$//;
-
-                if ( ! $allvariables->{$key} ) { installer::exiter::exit_program("ERROR: No Patch info available in zip list file for $key", "set_patchlist_in_pkginfo"); }
-                my $value = set_timestamp_in_patchinfo($allvariables->{$key});
-                $newline = $key . "=" . $value . "\n";
-
-                add_one_line_into_file($changefile, $newline, $filename);
-            }
-        }
-    }
-}
-
-########################################################
-# Solaris requires, that the time of patch installation
-# must not be empty.
-# Format: Mon Mar 24 11:20:56 PDT 2008
-# Log file: Tue Apr 29 23:26:19 2008 (04:31 min.)
-# Replace string: ${TIMESTAMP}
-########################################################
-
-sub set_timestamp_in_patchinfo
-{
-    my ($value) = @_;
-
-    my $currenttime = localtime();
-
-    if ( $currenttime =~ /^\s*(.+?)(\d\d\d\d)\s*$/ )
-    {
-        my $start = $1;
-        my $year = $2;
-        $currenttime = $start . "CET " . $year;
-    }
-
-    $value =~ s/\$\{TIMESTAMP\}/$currenttime/;
-
-    return $value;
 }
 
 ########################################################
@@ -1662,126 +1537,6 @@ sub contains_extension_dir
 }
 
 ############################################################
-# A Solaris patch contains 7 specific scripts
-############################################################
-
-sub add_scripts_into_prototypefile
-{
-    my ($prototypefile, $prototypefilename, $languagestringref, $staticpath) = @_;
-
-    # The files are stored in the directory $installer::globals::patchincludepath
-    # The file names are available via @installer::globals::solarispatchscripts
-
-    my $path = $installer::globals::patchincludepath;
-    $path =~ s/\/\s*$//;
-    $path = $path . $installer::globals::separator;
-
-    my @newlines = ();
-    my $is_extension_package = contains_extension_dir($prototypefile);
-
-    if ( $is_extension_package )
-    {
-        for ( my $i = 0; $i <= $#installer::globals::solarispatchscriptsforextensions; $i++ )
-        {
-            my $sourcefilename = $path . $installer::globals::solarispatchscriptsforextensions[$i];
-            my $destfile = $installer::globals::solarispatchscriptsforextensions[$i];
-
-            # If the sourcepath has "_extension" in its name, this has to be removed
-            $destfile =~ s/_extensions\s*$//;  # hard coded renaming of script name
-
-            # Creating unique directory name with $prototypefilename
-            my $extensiondir = installer::systemactions::create_directories("extensionscripts", $languagestringref);
-
-            if ( $prototypefilename =~ /\/(\S*?)\s*$/ ) { $prototypefilename = $1; }
-            $prototypefilename =~ s/\./_/g;
-            my $destdir = $extensiondir . $installer::globals::separator . $prototypefilename;
-            if ( ! -d $destdir ) { installer::systemactions::create_directory($destdir); }
-            my $destpath = $destdir . $installer::globals::separator . $destfile;
-            if ( -f $destpath ) { unlink($destpath); }
-
-            # Reading file
-            my $scriptfile = installer::files::read_file($sourcefilename);
-
-            # Replacing variables
-            my $oldstring = "PRODUCTDIRECTORYNAME";
-            replace_variables_in_shellscripts_for_patch($scriptfile, $destpath, $oldstring, $staticpath);
-
-            # Saving file
-            installer::files::save_file($destpath, $scriptfile);
-
-            # Writing file destination into prototype file
-            my $line = "i $destfile=" . $destpath . "\n";
-            push(@newlines, $line);
-        }
-    }
-    else
-    {
-        for ( my $i = 0; $i <= $#installer::globals::solarispatchscripts; $i++ )
-        {
-            my $line = "i $installer::globals::solarispatchscripts[$i]=" . $path . $installer::globals::solarispatchscripts[$i] . "\n";
-            push(@newlines, $line);
-        }
-    }
-
-    # Including the new lines after the last line starting with "i"
-
-    for ( my $i = 0; $i <= $#{$prototypefile}; $i++ )
-    {
-        if ( ${$prototypefile}[$i] =~ /^\s*i\s+copyright/ )
-        {
-            splice(@{$prototypefile}, $i, 1);   # ignoring old copyright text, using patch standard
-            next;
-        }
-        if ( ${$prototypefile}[$i] =~ /^\s*i\s+/ ) { next; }
-        splice(@{$prototypefile}, $i, 0, @newlines);
-        last;
-    }
-}
-
-############################################################
-# Adding patch infos in pkginfo file
-############################################################
-
-sub include_patchinfos_into_pkginfo
-{
-    my ( $changefile, $filename, $variableshashref ) = @_;
-
-    # SUNW_PATCHID=101998-10
-    # SUNW_OBSOLETES=114999-01 113999-01
-    # SUNW_PKGTYPE=usr
-    # SUNW_PKGVERS=1.0
-    # SUNW_REQUIRES=126411-01
-
-    my $patchidname = "SOLSPARCPATCHID";
-    if ( $installer::globals::issolarisx86build ) { $patchidname = "SOLIAPATCHID"; }
-
-    if ( ! $variableshashref->{$patchidname} ) { installer::exiter::exit_program("ERROR: Variable $patchidname not defined in zip list file!", "include_patchinfos_into_pkginfo"); }
-
-    my $newline = "SUNW_PATCHID=" . $variableshashref->{$patchidname} . "\n";
-    add_one_line_into_file($changefile, $newline, $filename);
-
-    my $patchobsoletesname = "SOLSPARCPATCHOBSOLETES";
-    if ( $installer::globals::issolarisx86build ) { $patchobsoletesname = "SOLIAPATCHOBSOLETES"; }
-
-    my $obsoletes = "";
-    if ( $variableshashref->{$patchobsoletesname} ) { $obsoletes = $variableshashref->{$patchobsoletesname}; }
-    $newline = "SUNW_OBSOLETES=" . $obsoletes . "\n";
-    add_one_line_into_file($changefile, $newline, $filename);
-
-    my $patchrequiresname = "SOLSPARCPATCHREQUIRES";
-    if ( $installer::globals::issolarisx86build ) { $patchrequiresname = "SOLIAPATCHREQUIRES"; }
-
-    if ( $variableshashref->{$patchrequiresname} )
-    {
-        my $requires = $variableshashref->{$patchrequiresname};
-        $newline = "SUNW_REQUIRES=" . $requires . "\n";
-        add_one_line_into_file($changefile, $newline, $filename);
-    }
-    $newline = "SUNW_PATCH_PROPERTIES=\n";
-    add_one_line_into_file($changefile, $newline, $filename);
-}
-
-############################################################
 # Setting the correct Solaris locales
 ############################################################
 
@@ -1845,53 +1600,6 @@ sub include_languageinfos_into_pkginfo
         $newline = "SUNW_PKGLIST=" . $packagelistentry . "\n";
         add_one_line_into_file($changefile, $newline, $filename);
     }
-}
-
-############################################################
-# Collecting all files included in patch in
-# @installer::globals::patchfilecollector
-############################################################
-
-sub collect_patch_files
-{
-    my ($file, $packagename, $prefix) = @_;
-
-    # $file is the spec file or the prototypefile
-
-    $prefix = $prefix . "/";
-    my $packagenamestring = "Package " . $packagename . " \:\n";
-    push(@installer::globals::patchfilecollector, $packagenamestring);
-
-    for ( my $i = 0; $i <= $#{$file}; $i++ )
-    {
-        my $line = ${$file}[$i];
-
-        if ( $installer::globals::isrpmbuild )
-        {
-            # %attr(0444,root,root) "/opt/openofficeorg20/program/about.bmp"
-
-            if ( $line =~ /^\s*\%attr\(.*\)\s*\"(.*?)\"\s*$/ )
-            {
-                my $filename = $1 . "\n";
-                $filename =~ s/^\s*\Q$prefix\E//;
-                push(@installer::globals::patchfilecollector, $filename);
-            }
-        }
-
-        if ( $installer::globals::issolarispkgbuild )
-        {
-            # f none program/msomrl.rdb=/ab/SRC680/unxsols4.pro/bin/msomrl.rdb 0444 root bin
-
-            if ( $line =~ /^\s*f\s+\w+\s+(.*?)\=/ )
-            {
-                my $filename = $1 . "\n";
-                push(@installer::globals::patchfilecollector, $filename);
-            }
-        }
-    }
-
-    push(@installer::globals::patchfilecollector, "\n");
-
 }
 
 ############################################################
@@ -1983,7 +1691,6 @@ sub prepare_packages
         set_license_in_specfile($changefile, $variableshashref);
         set_tab_into_datafile($changefile, $filesref);
         installer::files::save_file($completefilename, $changefile);
-        if ( $installer::globals::patch ) { collect_patch_files($changefile, $packagename, $localrelocatablepath); }
     }
 
     # removing the relocatable path in prototype file
@@ -1994,8 +1701,6 @@ sub prepare_packages
         set_maxinst_in_pkginfo($changefile, $filename);
         set_solaris_parameter_in_pkginfo($changefile, $filename, $variableshashref);
         if ( $installer::globals::issolarisx86build ) { fix_architecture_setting($changefile); }
-        if ( ! $installer::globals::patch ) { set_patchlist_in_pkginfo_for_respin($changefile, $filename, $variableshashref, $packagename); }
-        if ( $installer::globals::patch ) { include_patchinfos_into_pkginfo($changefile, $filename, $variableshashref); }
         if (( $onepackage->{'language'} ) && ( $onepackage->{'language'} ne "" ) && ( $onepackage->{'language'} ne "en-US" )) { include_languageinfos_into_pkginfo($changefile, $filename, $languagestringref, $onepackage, $variableshashref); }
         installer::files::save_file($completefilename, $changefile);
 
@@ -2012,10 +1717,7 @@ sub prepare_packages
             installer::files::save_file($completefilename, $changefile);
         }
 
-        if ( $installer::globals::patch ) { add_scripts_into_prototypefile($prototypefile, $prototypefilename, $languagestringref, $staticpath); }
-
         installer::files::save_file($prototypefilename, $prototypefile);
-        if ( $installer::globals::patch ) { collect_patch_files($prototypefile, $packagename, ""); }
 
         # Adding package names into depend files for Solaris (not supported by epm)
         my $dependfilename = $packagename . ".depend";
@@ -2815,170 +2517,6 @@ sub analyze_rootpath
         # $$staticpathref is already "/opt/openoffice.org3", no additional $rootpath required.
     }
 
-}
-
-######################################################
-# Replacing one variable in patchinfo file
-######################################################
-
-sub replace_one_variable_in_file
-{
-    my ( $file, $placeholder, $value ) = @_;
-
-    for ( my $i = 0; $i <= $#{$file}; $i++ )
-    {
-        ${$file}[$i] =~ s/$placeholder/$value/g;
-    }
-}
-
-######################################################
-# Setting variables in the patchinfo file
-######################################################
-
-sub set_patchinfo
-{
-    my ( $patchinfofile, $patchid, $allvariables ) = @_;
-
-    # Setting: PATCHIDPLACEHOLDER and ARCHITECTUREPLACEHOLDER and PATCHCORRECTSPLACEHOLDER
-
-    replace_one_variable_in_file($patchinfofile, "PATCHIDPLACEHOLDER", $patchid);
-
-    my $architecture = "";
-    if ( $installer::globals::issolarissparcbuild ) { $architecture = "sparc"; }
-    if ( $installer::globals::issolarisx86build ) { $architecture = "i386"; }
-
-    replace_one_variable_in_file($patchinfofile, "ARCHITECTUREPLACEHOLDER", $architecture);
-
-    if ( ! $allvariables->{'SOLARISPATCHCORRECTS'} ) { installer::exiter::exit_program("ERROR: No setting for PATCH_CORRECTS in zip list file!", "set_patchinfo"); }
-    my $patchcorrects = $allvariables->{'SOLARISPATCHCORRECTS'};
-
-    replace_one_variable_in_file($patchinfofile, "PATCHCORRECTSPLACEHOLDER", $patchcorrects);
-
-    # Setting also PATCH_REQUIRES in patch info file, if entry in zip list file exists
-    my $requiresstring = "";
-    if ( $installer::globals::issolarissparcbuild ) { $requiresstring = "SOLSPARCPATCHREQUIRES"; }
-    if ( $installer::globals::issolarisx86build ) { $requiresstring = "SOLIAPATCHREQUIRES"; }
-
-    if ( $allvariables->{$requiresstring} )
-    {
-        my $newline = "PATCH_REQUIRES=\"" . $allvariables->{$requiresstring} . "\"" . "\n";
-        push(@{$patchinfofile}, $newline);
-    }
-}
-
-######################################################
-# Finalizing patch: Renaming directory and
-# including additional patch files.
-######################################################
-
-sub finalize_patch
-{
-    my ( $newepmdir, $allvariables ) = @_;
-
-    my $patchidname = "SOLSPARCPATCHID";
-    if ( $installer::globals::issolarisx86build ) { $patchidname = "SOLIAPATCHID"; }
-
-    if ( ! $allvariables->{$patchidname} ) { installer::exiter::exit_program("ERROR: Variable $patchidname not defined in zip list file!", "finalize_patch"); }
-    my $patchid = $allvariables->{$patchidname};
-    installer::systemactions::rename_directory($newepmdir, $patchid);
-
-    # Copying all typical patch files into the patch directory
-    # All patch file names are stored in @installer::globals::solarispatchfiles
-    # Location of the file is $installer::globals::patchincludepath
-
-    my $sourcepath = $installer::globals::patchincludepath;
-    $sourcepath =~ s/\/\s*$//;
-
-    for ( my $i = 0; $i <= $#installer::globals::solarispatchfiles; $i++ )
-    {
-        my $sourcefile = $sourcepath . $installer::globals::separator . $installer::globals::solarispatchfiles[$i];
-        my $destfile = $patchid . $installer::globals::separator . $installer::globals::solarispatchfiles[$i];
-        installer::systemactions::copy_one_file($sourcefile, $destfile);
-    }
-
-    # And editing the patchinfo file
-
-    my $patchinfofilename = $patchid . $installer::globals::separator . "patchinfo";
-    my $patchinfofile = installer::files::read_file($patchinfofilename);
-    set_patchinfo($patchinfofile, $patchid, $allvariables);
-    installer::files::save_file($patchinfofilename, $patchinfofile);
-}
-
-######################################################
-# Finalizing Linux patch: Renaming directory and
-# including additional patch files.
-######################################################
-
-sub finalize_linux_patch
-{
-    my ( $newepmdir, $allvariables, $includepatharrayref ) = @_;
-
-    # Copying the setup into the patch directory
-    # and including the list of RPMs into it
-
-    print "... creating patch setup ...\n";
-
-    installer::logger::include_header_into_logfile("Creating Linux patch setup:");
-
-    # find and read setup script template
-
-    my $scriptfilename = "linuxpatchscript.sh";
-    my $scriptref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$scriptfilename, $includepatharrayref, 0);
-    if ($$scriptref eq "") { installer::exiter::exit_program("ERROR: Could not find patch script template $scriptfilename!", "finalize_linux_patch"); }
-    my $scriptfile = installer::files::read_file($$scriptref);
-
-    my $infoline = "Found  script file $scriptfilename: $$scriptref \n";
-    push( @installer::globals::logfileinfo, $infoline);
-
-    # Collecting all RPMs in the patch directory
-
-    my $fileextension = "rpm";
-    my $rpmfiles = installer::systemactions::find_file_with_file_extension($fileextension, $newepmdir);
-    if ( ! ( $#{$rpmfiles} > -1 )) { installer::exiter::exit_program("ERROR: Could not find rpm in directory $newepmdir!", "finalize_linux_patch"); }
-    for ( my $i = 0; $i <= $#{$rpmfiles}; $i++ ) { installer::pathanalyzer::make_absolute_filename_to_relative_filename(\${$rpmfiles}[$i]); }
-
-    # Searching packagename containing -core01
-    my $found_package = 0;
-    my $searchpackagename = "";
-    for ( my $i = 0; $i <= $#{$rpmfiles}; $i++ )
-    {
-        if ( ${$rpmfiles}[$i] =~ /-core01-/ )
-        {
-            $searchpackagename = ${$rpmfiles}[$i];
-            $found_package = 1;
-            if ( $searchpackagename =~ /^\s*(.*?-core01)-.*/ ) { $searchpackagename = $1; }
-            last;
-        }
-    }
-
-    if ( ! $found_package ) { installer::exiter::exit_program("ERROR: No package containing \"-core01\" found in directory \"$newepmdir\"", "finalize_linux_patch"); }
-
-    # Replacing the searchpackagename
-    for ( my $j = 0; $j <= $#{$scriptfile}; $j++ ) { ${$scriptfile}[$j] =~ s/SEARCHPACKAGENAMEPLACEHOLDER/$searchpackagename/; }
-
-    # Setting the PRODUCTDIRECTORYNAME to $installer::globals::officedirhostname
-    for ( my $j = 0; $j <= $#{$scriptfile}; $j++ ) { ${$scriptfile}[$j] =~ s/PRODUCTDIRECTORYNAME/$installer::globals::officedirhostname/; }
-
-    # Replacing the productname
-    my $productname = $allvariables->{'PRODUCTNAME'};
-    $productname = lc($productname);
-    $productname =~ s/ /_/g;    # abc office -> abc_office
-
-    $infoline = "Adding productname $productname into Linux patch script\n";
-    push( @installer::globals::logfileinfo, $infoline);
-
-    for ( my $j = 0; $j <= $#{$scriptfile}; $j++ ) { ${$scriptfile}[$j] =~ s/PRODUCTNAMEPLACEHOLDER/$productname/; }
-
-    # Saving the file
-
-    my $newscriptfilename = "setup";
-    installer::files::save_file($newscriptfilename, $scriptfile);
-
-    $infoline = "Saved Linux patch setup $newscriptfilename \n";
-    push( @installer::globals::logfileinfo, $infoline);
-
-    # Setting unix rights 755
-    chmod 0755, $newscriptfilename;
 }
 
 ################################################

@@ -123,7 +123,6 @@ copy-stuff:
 	echo 'AllLanguages=en-US' >> assets/program/versionrc
 	echo 'BuildVersion=' >> assets/program/versionrc
 	echo 'buildid=dead-beef' >> assets/program/versionrc
-	echo 'ProductBuildid=3' >> assets/program/versionrc
 	echo 'ProductMajor=360' >> assets/program/versionrc
 	echo 'ProductMinor=1' >> assets/program/versionrc
 	echo 'ReferenceOOoMajorMinor=3.6' >> assets/program/versionrc
