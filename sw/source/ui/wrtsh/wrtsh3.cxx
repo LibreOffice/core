@@ -51,7 +51,7 @@
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
-extern sal_Bool bNoInterrupt;       // in mainwn.cxx
+extern bool bNoInterrupt;       // in mainwn.cxx
 
 sal_Bool SwWrtShell::MoveBookMark( BookMarkMove eFuncId, const ::sw::mark::IMark* const pMark)
 {
@@ -132,8 +132,8 @@ void SwWrtShell::DrawSelChanged( )
 
     GetView().GetViewFrame()->GetBindings().Invalidate(aInval);
 
-    sal_Bool bOldVal = bNoInterrupt;
-    bNoInterrupt = sal_True;    // Trick, um AttrChangedNotify ueber Timer auszufuehren
+    bool bOldVal = bNoInterrupt;
+    bNoInterrupt = true;    // Trick, um AttrChangedNotify ueber Timer auszufuehren
     GetView().AttrChangedNotify(this);
     bNoInterrupt = bOldVal;
 }

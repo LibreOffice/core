@@ -92,7 +92,7 @@ class SwDropCapsPict : public Control
     sal_uInt16          mnDistance;
     sal_Int32       mnLeading;
     Printer*        mpPrinter;
-    sal_Bool            mbDelPrinter;
+    bool            mbDelPrinter;
     /// The _ScriptInfo structure holds information on where we change from one
     /// script to another.
     struct _ScriptInfo
@@ -127,7 +127,7 @@ public:
         , mnLineH(0)
         , mnTextH(0)
         , mpPrinter( NULL )
-        , mbDelPrinter( sal_False )
+        , mbDelPrinter( false )
     {}
     ~SwDropCapsPict();
 
@@ -514,7 +514,7 @@ void SwDropCapsPict::_InitPrinter()
     if ( !mpPrinter )
     {
         mpPrinter = new Printer;
-        mbDelPrinter = sal_True;
+        mbDelPrinter = true;
     }
 }
 
@@ -734,7 +734,7 @@ IMPL_LINK( SwDropCapsPage, ModifyHdl, Edit *, pEdit )
     if (pEdit == &aDropCapsField)
     {
         sal_uInt16 nVal;
-        sal_Bool bSetText = sal_False;
+        bool bSetText = false;
 
         if (!aWholeWordCB.IsChecked())
             nVal = (sal_uInt16)aDropCapsField.GetValue();
@@ -745,7 +745,7 @@ IMPL_LINK( SwDropCapsPage, ModifyHdl, Edit *, pEdit )
             sPreview = GetDefaultString(nVal);
         else
         {
-            bSetText = sal_True;
+            bSetText = true;
             sPreview = rSh.GetDropTxt(nVal);
         }
 
@@ -754,7 +754,7 @@ IMPL_LINK( SwDropCapsPage, ModifyHdl, Edit *, pEdit )
         if (sEdit.Len() && sPreview.CompareTo(sEdit, sEdit.Len()) != COMPARE_EQUAL)
         {
             sPreview = sEdit.Copy(0, sPreview.Len());
-            bSetText = sal_False;
+            bSetText = false;
         }
 
         if (bSetText)
