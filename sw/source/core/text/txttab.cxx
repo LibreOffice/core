@@ -656,7 +656,7 @@ void SwAutoTabDecimalPortion::Paint( const SwTxtPaintInfo & ) const
 
 void SwTabPortion::HandlePortion( SwPortionHandler& rPH ) const
 {
-    rPH.Text( GetLen(), GetWhichPor() );
+    rPH.Text( GetLen(), GetWhichPor(), Height(), Width() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
