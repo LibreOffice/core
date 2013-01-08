@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
 
+#include <algorithm>
 #include <map>
 #include <new>
 #include <set>
@@ -700,6 +702,25 @@ strings_vr MigrationImpl::getAllFiles(const OUString& baseURL) const
     return vrResult;
 }
 
+namespace {
+
+// removes elements of vector 2 in vector 1
+strings_v subtract(strings_v const & va, strings_v const & vb) {
+    strings_v a(va);
+    std::sort(a.begin(), a.end());
+    strings_v::iterator ae(std::unique(a.begin(), a.end()));
+    strings_v b(vb);
+    std::sort(b.begin(), b.end());
+    strings_v::iterator be(std::unique(b.begin(), b.end()));
+    strings_v c(ae - a.begin());
+    strings_v::iterator ce(
+        std::set_difference(a.begin(), ae, b.begin(), be, c.begin()));
+    c.resize(ce - c.begin());
+    return c;
+}
+
+}
+
 strings_vr MigrationImpl::compileFileList()
 {
 
@@ -716,8 +737,8 @@ strings_vr MigrationImpl::compileFileList()
     {
         vrInclude = applyPatterns(*vrFiles, i_migr->includeFiles);
         vrExclude = applyPatterns(*vrFiles, i_migr->excludeFiles);
-        subtract(*vrInclude, *vrExclude);
-        vrResult->insert(vrResult->end(), vrInclude->begin(), vrInclude->end());
+        strings_v sub(subtract(*vrInclude, *vrExclude));
+        vrResult->insert(vrResult->end(), sub.begin(), sub.end());
         ++i_migr;
     }
     return vrResult;
@@ -839,40 +860,6 @@ void MigrationImpl::copyConfig() {
                     i->first, RTL_TEXTENCODING_UTF8).getStr());
         }
     next:;
-    }
-}
-
-// removes elements of vector 2 in vector 1
-void MigrationImpl::subtract(strings_v& va, const strings_v& vb_c) const
-{
-    strings_v vb(vb_c);
-    // ensure uniqueness of entries
-    sort(va.begin(), va.end());
-    sort(vb.begin(), vb.end());
-    unique(va.begin(), va.end());
-    unique(vb.begin(), vb.end());
-
-    strings_v::const_iterator i_ex = vb.begin();
-    strings_v::iterator i_in;
-    strings_v::iterator i_next;
-    while (i_ex != vb.end())
-    {
-        i_in = va.begin();
-        while (i_in != va.end())
-        {
-            if ( *i_in == *i_ex)
-            {
-                i_next = i_in+1;
-                va.erase(i_in);
-                i_in = i_next;
-                // we can only find one match since we
-                // ensured uniquness of the entries. ergo:
-                break;
-            }
-            else
-                ++i_in;
-        }
-        ++i_ex;
     }
 }
 
