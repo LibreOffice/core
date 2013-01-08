@@ -522,8 +522,7 @@ namespace
                 aArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Hidden"));
                 aArgs[nLen++].Value <<= sal_True;
 
-                uno::Reference< lang::XMultiServiceFactory > xFac(m_xContext->getServiceManager(),uno::UNO_QUERY);
-                ::comphelper::MimeConfigurationHelper aHelper(xFac);
+                ::comphelper::MimeConfigurationHelper aHelper(m_xContext);
                 SvtModuleOptions aModuleOptions;
                 uno::Reference< frame::XModel > xModel(xFrameLoad->loadComponentFromURL(
                     aModuleOptions.GetFactoryEmptyDocumentURL( aModuleOptions.ClassifyFactoryByServiceName( aHelper.GetDocServiceNameFromMediaType(m_sMimeType) )),

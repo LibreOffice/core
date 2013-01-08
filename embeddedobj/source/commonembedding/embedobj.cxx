@@ -187,7 +187,8 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
                     uno::Sequence < uno::Any > aArgs(1);
                     aArgs[0] <<= uno::Reference < embed::XEmbeddedObject >( this );
                     uno::Reference< util::XCloseable > xDocument(
-                            m_xFactory->createInstanceWithArguments( GetDocumentServiceName(), aArgs ), uno::UNO_QUERY );
+                            m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( GetDocumentServiceName(), aArgs, m_xContext),
+                            uno::UNO_QUERY );
 
                     uno::Reference < container::XChild > xChild( xDocument, uno::UNO_QUERY );
                     if ( xChild.is() )
@@ -315,7 +316,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
                         uno::Reference< embed::XComponentSupplier > xCompSupl( m_xClientSite, uno::UNO_QUERY_THROW );
                         uno::Reference< uno::XInterface > xContDoc( xCompSupl->getComponent(), uno::UNO_QUERY_THROW );
 
-                        uno::Reference< frame::XModuleManager2 > xManager( frame::ModuleManager::create(comphelper::getComponentContext(m_xFactory)) );
+                        uno::Reference< frame::XModuleManager2 > xManager( frame::ModuleManager::create( m_xContext ) );
 
                         aModuleName = xManager->identify( xContDoc );
                     }

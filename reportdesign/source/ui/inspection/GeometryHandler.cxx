@@ -1678,8 +1678,7 @@ void GeometryHandler::impl_fillFormulaList_nothrow(::std::vector< ::rtl::OUStrin
 // -----------------------------------------------------------------------------
 ::rtl::OUString GeometryHandler::impl_ConvertMimeTypeToUI_nothrow(const ::rtl::OUString& _sMimetype) const
 {
-    uno::Reference<lang::XMultiServiceFactory> xServiceFactory(m_xContext->getServiceManager(),uno::UNO_QUERY_THROW);
-    ::comphelper::MimeConfigurationHelper aMimeHelper(xServiceFactory);
+    ::comphelper::MimeConfigurationHelper aMimeHelper(m_xContext);
     ::rtl::OUString sRet;
     const SfxFilter* pFilter = SfxFilter::GetDefaultFilter( aMimeHelper.GetDocServiceNameFromMediaType(_sMimetype) );
     if ( pFilter )

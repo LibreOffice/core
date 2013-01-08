@@ -41,7 +41,7 @@ uno::Sequence< beans::PropertyValue > GetValuableArgs_Impl( const uno::Sequence<
                                                             sal_Bool bCanUseDocumentBaseURL );
 
 //------------------------------------------------------
-OCommonEmbeddedObject::OCommonEmbeddedObject( const uno::Reference< lang::XMultiServiceFactory >& xFactory,
+OCommonEmbeddedObject::OCommonEmbeddedObject( const uno::Reference< uno::XComponentContext >& rxContext,
                                                 const uno::Sequence< beans::NamedValue >& aObjProps )
 : m_pDocHolder( NULL )
 , m_pInterfaceContainer( NULL )
@@ -51,7 +51,7 @@ OCommonEmbeddedObject::OCommonEmbeddedObject( const uno::Reference< lang::XMulti
 , m_nObjectState( -1 )
 , m_nTargetState( -1 )
 , m_nUpdateMode ( embed::EmbedUpdateModes::ALWAYS_UPDATE )
-, m_xFactory( xFactory )
+, m_xContext( rxContext )
 , m_nMiscStatus( 0 )
 , m_bEmbeddedScriptSupport( sal_True )
 , m_bDocumentRecoverySupport( sal_True )
@@ -66,7 +66,7 @@ OCommonEmbeddedObject::OCommonEmbeddedObject( const uno::Reference< lang::XMulti
 
 //------------------------------------------------------
 OCommonEmbeddedObject::OCommonEmbeddedObject(
-        const uno::Reference< lang::XMultiServiceFactory >& xFactory,
+        const uno::Reference< uno::XComponentContext >& rxContext,
         const uno::Sequence< beans::NamedValue >& aObjProps,
         const uno::Sequence< beans::PropertyValue >& aMediaDescr,
         const uno::Sequence< beans::PropertyValue >& aObjectDescr )
@@ -78,7 +78,7 @@ OCommonEmbeddedObject::OCommonEmbeddedObject(
 , m_nObjectState( embed::EmbedStates::LOADED )
 , m_nTargetState( -1 )
 , m_nUpdateMode ( embed::EmbedUpdateModes::ALWAYS_UPDATE )
-, m_xFactory( xFactory )
+, m_xContext( rxContext )
 , m_nMiscStatus( 0 )
 , m_bEmbeddedScriptSupport( sal_True )
 , m_bDocumentRecoverySupport( sal_True )
@@ -95,11 +95,11 @@ OCommonEmbeddedObject::OCommonEmbeddedObject(
 //------------------------------------------------------
 void OCommonEmbeddedObject::CommonInit_Impl( const uno::Sequence< beans::NamedValue >& aObjectProps )
 {
-    OSL_ENSURE( m_xFactory.is(), "No ServiceFactory is provided!\n" );
-    if ( !m_xFactory.is() )
+    OSL_ENSURE( m_xContext.is(), "No ServiceFactory is provided!\n" );
+    if ( !m_xContext.is() )
         throw uno::RuntimeException();
 
-    m_pDocHolder = new DocumentHolder( comphelper::getComponentContext(m_xFactory), this );
+    m_pDocHolder = new DocumentHolder( m_xContext, this );
     m_pDocHolder->acquire();
 
     // parse configuration entries
@@ -234,7 +234,7 @@ void OCommonEmbeddedObject::LinkInit_Impl(
     m_bReadOnly = sal_True;
     if ( m_aLinkFilterName.getLength() )
     {
-        ::comphelper::MimeConfigurationHelper aHelper( m_xFactory );
+        ::comphelper::MimeConfigurationHelper aHelper( m_xContext );
         ::rtl::OUString aExportFilterName = aHelper.GetExportFilterFromImportFilter( m_aLinkFilterName );
         m_bReadOnly = !( aExportFilterName.equals( m_aLinkFilterName ) );
     }

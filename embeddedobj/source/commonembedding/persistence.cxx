@@ -191,7 +191,7 @@ static void TransferMediaType( const uno::Reference< embed::XStorage >& i_rSourc
 }
 
 //------------------------------------------------------
-static uno::Reference< util::XCloseable > CreateDocument( const uno::Reference< lang::XMultiServiceFactory >& _rxFactory,
+static uno::Reference< util::XCloseable > CreateDocument( const uno::Reference< uno::XComponentContext >& _rxContext,
     const ::rtl::OUString& _rDocumentServiceName, bool _bEmbeddedScriptSupport, const bool i_bDocumentRecoverySupport )
 {
     ::comphelper::NamedValueCollection aArguments;
@@ -202,7 +202,8 @@ static uno::Reference< util::XCloseable > CreateDocument( const uno::Reference< 
     uno::Reference< uno::XInterface > xDocument;
     try
     {
-        xDocument = _rxFactory->createInstanceWithArguments( _rDocumentServiceName, aArguments.getWrappedPropertyValues() );
+        xDocument = _rxContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                        _rDocumentServiceName, aArguments.getWrappedPropertyValues(), _rxContext );
     }
     catch( const uno::Exception& )
     {
@@ -211,7 +212,7 @@ static uno::Reference< util::XCloseable > CreateDocument( const uno::Reference< 
         // IllegalArgumentException when we try to create the instance with arguments.
         // Okay, so we fall back to creating the instance without any arguments.
         OSL_ASSERT("Consider implementing interface XInitialization to avoid duplicate construction");
-        xDocument = _rxFactory->createInstance( _rDocumentServiceName );
+        xDocument = _rxContext->getServiceManager()->createInstanceWithContext( _rDocumentServiceName, _rxContext );
     }
 
     return uno::Reference< util::XCloseable >( xDocument, uno::UNO_QUERY );
@@ -312,7 +313,7 @@ void OCommonEmbeddedObject::EmbedAndReparentDoc_Impl( const uno::Reference< util
 //------------------------------------------------------
 uno::Reference< util::XCloseable > OCommonEmbeddedObject::InitNewDocument_Impl()
 {
-    uno::Reference< util::XCloseable > xDocument( CreateDocument( m_xFactory, GetDocumentServiceName(),
+    uno::Reference< util::XCloseable > xDocument( CreateDocument( m_xContext, GetDocumentServiceName(),
                                                 m_bEmbeddedScriptSupport, m_bDocumentRecoverySupport ) );
 
     uno::Reference< frame::XModel > xModel( xDocument, uno::UNO_QUERY );
@@ -372,7 +373,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::InitNewDocument_Impl()
 //------------------------------------------------------
 uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadLink_Impl()
 {
-    uno::Reference< util::XCloseable > xDocument( CreateDocument( m_xFactory, GetDocumentServiceName(),
+    uno::Reference< util::XCloseable > xDocument( CreateDocument( m_xContext, GetDocumentServiceName(),
                                                 m_bEmbeddedScriptSupport, m_bDocumentRecoverySupport ) );
 
     uno::Reference< frame::XLoadable > xLoadable( xDocument, uno::UNO_QUERY );
@@ -448,7 +449,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadLink_Impl()
     if ( aFilterName.isEmpty() )
     {
         try {
-            ::comphelper::MimeConfigurationHelper aHelper( m_xFactory );
+            ::comphelper::MimeConfigurationHelper aHelper( m_xContext );
             aFilterName = aHelper.GetDefaultFilterFromServiceName( GetDocumentServiceName(), nVersion );
         } catch( const uno::Exception& )
         {}
@@ -480,7 +481,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorag
 
     const uno::Reference< embed::XStorage > xSourceStorage( m_xRecoveryStorage.is() ? m_xRecoveryStorage : m_xObjectStorage );
 
-    uno::Reference< util::XCloseable > xDocument( CreateDocument( m_xFactory, GetDocumentServiceName(),
+    uno::Reference< util::XCloseable > xDocument( CreateDocument( m_xContext, GetDocumentServiceName(),
                                                 m_bEmbeddedScriptSupport, m_bDocumentRecoverySupport ) );
 
     //#i103460# ODF: take the size given from the parent frame as default
@@ -507,7 +508,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorag
     uno::Reference< io::XInputStream > xTempInpStream;
     if ( !xDoc.is() )
     {
-        xTempInpStream = createTempInpStreamFromStor( xSourceStorage, comphelper::getComponentContext(m_xFactory) );
+        xTempInpStream = createTempInpStreamFromStor( xSourceStorage, m_xContext );
         if ( !xTempInpStream.is() )
             throw uno::RuntimeException();
 
@@ -574,7 +575,7 @@ uno::Reference< io::XInputStream > OCommonEmbeddedObject::StoreDocumentToTempStr
                                                                             const ::rtl::OUString& aHierarchName )
 {
     uno::Reference < io::XOutputStream > xTempOut(
-                io::TempFile::create(comphelper::getComponentContext(m_xFactory)),
+                io::TempFile::create(m_xContext),
                 uno::UNO_QUERY_THROW );
     uno::Reference< io::XInputStream > aResult( xTempOut, uno::UNO_QUERY );
 
@@ -781,7 +782,7 @@ void OCommonEmbeddedObject::StoreDocToStorage_Impl( const uno::Reference< embed:
 
         // open storage based on document temporary file for reading
         uno::Reference < lang::XSingleServiceFactory > xStorageFactory(
-                    m_xFactory->createInstance ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.StorageFactory" )) ),
+                    m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.embed.StorageFactory", m_xContext),
                     uno::UNO_QUERY );
 
         uno::Sequence< uno::Any > aArgs(1);
@@ -800,7 +801,7 @@ void OCommonEmbeddedObject::StoreDocToStorage_Impl( const uno::Reference< embed:
 uno::Reference< util::XCloseable > OCommonEmbeddedObject::CreateDocFromMediaDescr_Impl(
                                         const uno::Sequence< beans::PropertyValue >& aMedDescr )
 {
-    uno::Reference< util::XCloseable > xDocument( CreateDocument( m_xFactory, GetDocumentServiceName(),
+    uno::Reference< util::XCloseable > xDocument( CreateDocument( m_xContext, GetDocumentServiceName(),
                                                 m_bEmbeddedScriptSupport, m_bDocumentRecoverySupport ) );
 
     uno::Reference< frame::XLoadable > xLoadable( xDocument, uno::UNO_QUERY );
@@ -1696,7 +1697,7 @@ void SAL_CALL OCommonEmbeddedObject::reload(
             }
         }
 
-        ::comphelper::MimeConfigurationHelper aHelper( m_xFactory );
+        ::comphelper::MimeConfigurationHelper aHelper( m_xContext );
         if ( m_aLinkFilterName.isEmpty() )
         {
             if ( !aNewLinkFilter.isEmpty() )

@@ -25,6 +25,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 
 #include <rtl/logfile.hxx>
+#include <comphelper/processfactory.hxx>
 
 
 #include "xfactory.hxx"
@@ -54,7 +55,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL OOoEmbeddedObjectFactory::impl_staticG
 uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::impl_staticCreateSelfInstance(
             const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
 {
-    return uno::Reference< uno::XInterface >( *new OOoEmbeddedObjectFactory( xServiceManager ) );
+    return uno::Reference< uno::XInterface >( *new OOoEmbeddedObjectFactory( comphelper::getComponentContext(xServiceManager) ) );
 }
 
 //-------------------------------------------------------------------------
@@ -125,7 +126,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
 
         xResult = uno::Reference< uno::XInterface >(
                     static_cast< ::cppu::OWeakObject* > ( new OCommonEmbeddedObject(
-                                                m_xFactory,
+                                                m_xContext,
                                                 aObject ) ),
                     uno::UNO_QUERY );
     }
@@ -189,7 +190,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
 
         xResult = uno::Reference< uno::XInterface >(
                     static_cast< ::cppu::OWeakObject* > ( new OCommonEmbeddedObject(
-                                            m_xFactory,
+                                            m_xContext,
                                             aObject ) ),
                     uno::UNO_QUERY );
     }
@@ -245,7 +246,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
 
     xResult = uno::Reference< uno::XInterface >(
                     static_cast< ::cppu::OWeakObject* > ( new OCommonEmbeddedObject(
-                                                m_xFactory,
+                                                m_xContext,
                                                 aObject ) ),
                     uno::UNO_QUERY );
 
@@ -306,7 +307,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
 
     uno::Reference< uno::XInterface > xResult = uno::Reference< uno::XInterface > (
                     static_cast< ::cppu::OWeakObject* > ( new OCommonEmbeddedObject(
-                                                m_xFactory,
+                                                m_xContext,
                                                 aObject ) ),
                     uno::UNO_QUERY );
 
@@ -366,7 +367,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
 
         xResult = uno::Reference< uno::XInterface >(
                     static_cast< ::cppu::OWeakObject* > ( new OCommonEmbeddedObject(
-                                            m_xFactory,
+                                            m_xContext,
                                             aObject,
                                             aTempMedDescr,
                                             lObjArgs ) ),
@@ -432,7 +433,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
 
         xResult = uno::Reference< uno::XInterface >(
                     static_cast< ::cppu::OWeakObject* > ( new OCommonEmbeddedObject(
-                                            m_xFactory,
+                                            m_xContext,
                                             aObject,
                                             aTempMedDescr,
                                             lObjArgs ) ),
@@ -493,7 +494,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL OOoSpecialEmbeddedObjectFactory::impl_
 uno::Reference< uno::XInterface > SAL_CALL OOoSpecialEmbeddedObjectFactory::impl_staticCreateSelfInstance(
             const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
 {
-    return uno::Reference< uno::XInterface >( *new OOoSpecialEmbeddedObjectFactory( xServiceManager ) );
+    return uno::Reference< uno::XInterface >( *new OOoSpecialEmbeddedObjectFactory( comphelper::getComponentContext(xServiceManager) ) );
 }
 
 //-------------------------------------------------------------------------
@@ -516,7 +517,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoSpecialEmbeddedObjectFactory::crea
 
     uno::Reference< uno::XInterface > xResult(
                     static_cast< ::cppu::OWeakObject* > ( new OSpecialEmbeddedObject(
-                                                m_xFactory,
+                                                m_xContext,
                                                 aObject ) ),
                     uno::UNO_QUERY );
     return xResult;

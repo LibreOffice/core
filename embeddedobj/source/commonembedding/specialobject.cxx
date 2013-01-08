@@ -43,8 +43,8 @@
 using namespace ::com::sun::star;
 
 
-OSpecialEmbeddedObject::OSpecialEmbeddedObject( const uno::Reference< lang::XMultiServiceFactory >& xFactory, const uno::Sequence< beans::NamedValue >& aObjectProps )
-: OCommonEmbeddedObject( xFactory, aObjectProps )
+OSpecialEmbeddedObject::OSpecialEmbeddedObject( const uno::Reference< uno::XComponentContext >& rxContext, const uno::Sequence< beans::NamedValue >& aObjectProps )
+: OCommonEmbeddedObject( rxContext, aObjectProps )
 {
     maSize.Width = maSize.Height = 10000;
     m_nObjectState = embed::EmbedStates::LOADED;

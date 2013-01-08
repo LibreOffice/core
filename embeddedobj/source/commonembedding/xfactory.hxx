@@ -29,17 +29,17 @@ class OOoEmbeddedObjectFactory : public ::cppu::WeakImplHelper2<
                                                 ::com::sun::star::embed::XEmbeddedObjectCreator,
                                                 ::com::sun::star::lang::XServiceInfo >
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
 
     ::comphelper::MimeConfigurationHelper m_aConfigHelper;
 
 public:
     OOoEmbeddedObjectFactory(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory )
-    : m_xFactory( xFactory )
-    , m_aConfigHelper( xFactory )
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext )
+    : m_xContext( rxContext )
+    , m_aConfigHelper( rxContext )
     {
-        OSL_ENSURE( xFactory.is(), "No service manager is provided!\n" );
+        OSL_ENSURE( rxContext.is(), "No service manager is provided!\n" );
     }
 
     static ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL impl_staticGetSupportedServiceNames();
@@ -76,17 +76,17 @@ class OOoSpecialEmbeddedObjectFactory : public ::cppu::WeakImplHelper2<
                                                 ::com::sun::star::embed::XEmbedObjectFactory,
                                                 ::com::sun::star::lang::XServiceInfo >
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
 
     ::comphelper::MimeConfigurationHelper m_aConfigHelper;
 
 public:
     OOoSpecialEmbeddedObjectFactory(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory )
-    : m_xFactory( xFactory )
-    , m_aConfigHelper( xFactory )
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext )
+    : m_xContext( rxContext )
+    , m_aConfigHelper( rxContext )
     {
-        OSL_ENSURE( xFactory.is(), "No service manager is provided!\n" );
+        OSL_ENSURE( rxContext.is(), "No service manager is provided!\n" );
     }
 
     static ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL impl_staticGetSupportedServiceNames();

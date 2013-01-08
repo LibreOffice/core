@@ -144,7 +144,7 @@ namespace dbaxml
                             aArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Hidden"));
                             aArgs[nLen++].Value <<= sal_True;
 
-                            ::comphelper::MimeConfigurationHelper aHelper(m_xFactory);
+                            ::comphelper::MimeConfigurationHelper aHelper( comphelper::getComponentContext(m_xFactory) );
                             SvtModuleOptions aModuleOptions;
                             uno::Reference< frame::XModel > xModel(xFrameLoad->loadComponentFromURL(
                                 aModuleOptions.GetFactoryEmptyDocumentURL( aModuleOptions.ClassifyFactoryByServiceName( aHelper.GetDocServiceNameFromMediaType(MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET) )),

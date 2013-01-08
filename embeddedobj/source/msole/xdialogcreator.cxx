@@ -218,7 +218,7 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
 
             // TODO: use config helper for type detection
             uno::Reference< embed::XEmbeddedObjectCreator > xEmbCreator;
-            ::comphelper::MimeConfigurationHelper aHelper( m_xFactory );
+            ::comphelper::MimeConfigurationHelper aHelper( comphelper::getComponentContext(m_xFactory) );
 
             if ( aHelper.AddFilterNameCheckOwnFile( aMediaDescr ) )
                 xEmbCreator = embed::EmbeddedObjectCreator::create( comphelper::getComponentContext(m_xFactory) );

@@ -169,8 +169,7 @@ void SAL_CALL OReportEngineJFree::setStatusIndicator( const uno::Reference< task
         static const ::rtl::OUString s_sMediaType(RTL_CONSTASCII_USTRINGPARAM("MediaType"));
         try
         {
-            const uno::Reference< lang::XMultiServiceFactory > xFactory(m_xContext->getServiceManager(),uno::UNO_QUERY_THROW);
-            MimeConfigurationHelper aConfighelper(xFactory);
+            MimeConfigurationHelper aConfighelper(m_xContext);
             const ::rtl::OUString sMimeType = m_xReport->getMimeType();
             const SfxFilter* pFilter = SfxFilter::GetDefaultFilter( aConfighelper.GetDocServiceNameFromMediaType(sMimeType) );
             String sExt;

@@ -30,7 +30,7 @@ private:
     com::sun::star::awt::Size         maSize;
 public:
     OSpecialEmbeddedObject(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aObjectProps );
 
     // XInterface

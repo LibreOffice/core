@@ -253,7 +253,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
                         ODocumentDefinition::GetDocumentServiceFromMediaType( sMediaType, m_aContext, aClassID );
                     else if ( !sDocServiceName.isEmpty() )
                     {
-                        ::comphelper::MimeConfigurationHelper aConfigHelper( m_aContext.getLegacyServiceFactory() );
+                        ::comphelper::MimeConfigurationHelper aConfigHelper( m_aContext.getUNOContext() );
                         const Sequence< NamedValue > aProps( aConfigHelper.GetObjectPropsByDocumentName( sDocServiceName ) );
                         const ::comphelper::NamedValueCollection aMediaTypeProps( aProps );
                         aClassID = aMediaTypeProps.getOrDefault( "ClassID", Sequence< sal_Int8 >() );

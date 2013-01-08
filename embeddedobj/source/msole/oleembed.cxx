@@ -331,7 +331,7 @@ sal_Bool OleEmbeddedObject::TryToConvertToOOo()
                 xTmpStorage->dispose();
 
                 // look for the related embedded object factory
-                ::comphelper::MimeConfigurationHelper aConfigHelper( m_xFactory );
+                ::comphelper::MimeConfigurationHelper aConfigHelper( comphelper::getComponentContext(m_xFactory) );
                 ::rtl::OUString aEmbedFactory;
                 if ( !aMediaType.isEmpty() )
                     aEmbedFactory = aConfigHelper.GetFactoryNameByMediaType( aMediaType );

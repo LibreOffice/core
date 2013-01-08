@@ -34,10 +34,10 @@ using namespace ::com::sun::star;
 using namespace comphelper;
 
 //-----------------------------------------------------------------------
-MimeConfigurationHelper::MimeConfigurationHelper( const uno::Reference< lang::XMultiServiceFactory >& xFactory )
-: m_xFactory( xFactory )
+MimeConfigurationHelper::MimeConfigurationHelper( const uno::Reference< uno::XComponentContext >& rxContext )
+: m_xContext( rxContext )
 {
-    if ( !m_xFactory.is() )
+    if ( !m_xContext.is() )
         throw uno::RuntimeException();
 }
 
@@ -122,8 +122,7 @@ uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetConfigurati
     try
     {
         if ( !m_xConfigProvider.is() )
-            m_xConfigProvider = configuration::theDefaultProvider::get(
-                getComponentContext( m_xFactory ) );
+            m_xConfigProvider = configuration::theDefaultProvider::get( m_xContext );
 
         uno::Sequence< uno::Any > aArgs( 1 );
         beans::PropertyValue aPathProp;
@@ -186,7 +185,7 @@ uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetFilterFacto
 
     if ( !m_xFilterFactory.is() )
         m_xFilterFactory.set(
-            m_xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.FilterFactory")) ),
+            m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.FilterFactory", m_xContext),
             uno::UNO_QUERY );
 
     return m_xFilterFactory;
@@ -222,8 +221,7 @@ uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetFilterFacto
 ::rtl::OUString MimeConfigurationHelper::GetDocServiceNameFromMediaType( const ::rtl::OUString& aMediaType )
 {
     uno::Reference< container::XContainerQuery > xTypeCFG(
-            m_xFactory->createInstance(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.TypeDetection" )) ),
+            m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.TypeDetection", m_xContext),
             uno::UNO_QUERY );
 
     if ( xTypeCFG.is() )
@@ -585,7 +583,7 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByDocu
         // filter name is not specified, so type detection should be done
 
         uno::Reference< document::XTypeDetection > xTypeDetection(
-                m_xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.TypeDetection" )) ),
+                m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.TypeDetection", m_xContext),
                 uno::UNO_QUERY );
 
         if ( !xTypeDetection.is() )

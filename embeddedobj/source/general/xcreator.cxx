@@ -59,7 +59,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL UNOEmbeddedObjectCreator::impl_staticG
 uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::impl_staticCreateSelfInstance(
             const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
 {
-    return uno::Reference< uno::XInterface >( *new UNOEmbeddedObjectCreator( xServiceManager ) );
+    return uno::Reference< uno::XInterface >( *new UNOEmbeddedObjectCreator( comphelper::getComponentContext(xServiceManager) ) );
 }
 
 //-------------------------------------------------------------------------
@@ -96,7 +96,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
         aEmbedFactory = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.OLEEmbeddedObjectFactory" ));
     }
 
-    uno::Reference < uno::XInterface > xFact( m_xFactory->createInstance( aEmbedFactory ) );
+    uno::Reference < uno::XInterface > xFact( m_xContext->getServiceManager()->createInstanceWithContext(aEmbedFactory, m_xContext) );
     uno::Reference< embed::XEmbedObjectCreator > xEmbCreator( xFact, uno::UNO_QUERY );
     if ( xEmbCreator.is() )
         return xEmbCreator->createInstanceInitNew( aClassID, aClassName, xStorage, sEntName, lObjArgs );
@@ -209,7 +209,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
 
     if ( !aEmbedFactory.isEmpty() )
     {
-        uno::Reference< uno::XInterface > xFact = m_xFactory->createInstance( aEmbedFactory );
+        uno::Reference< uno::XInterface > xFact = m_xContext->getServiceManager()->createInstanceWithContext(aEmbedFactory, m_xContext);
 
         uno::Reference< embed::XEmbedObjectCreator > xEmbCreator( xFact, uno::UNO_QUERY );
         if ( xEmbCreator.is() )
@@ -262,7 +262,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
     {
         // the object can be loaded by one of the office application
         uno::Reference< embed::XEmbeddedObjectCreator > xOOoEmbCreator =
-                            embed::OOoEmbeddedObjectFactory::create( comphelper::getComponentContext(m_xFactory) );
+                            embed::OOoEmbeddedObjectFactory::create( m_xContext );
 
         xResult = xOOoEmbCreator->createInstanceInitFromMediaDescriptor( xStorage,
                                                                          sEntName,
@@ -281,7 +281,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
         // was also extended.
 
         uno::Reference< embed::XEmbeddedObjectCreator > xOleEmbCreator =
-                            embed::OLEEmbeddedObjectFactory::create( comphelper::getComponentContext(m_xFactory) );
+                            embed::OLEEmbeddedObjectFactory::create( m_xContext );
 
         xResult = xOleEmbCreator->createInstanceInitFromMediaDescriptor( xStorage, sEntName, aTempMedDescr, lObjArgs );
     }
@@ -319,7 +319,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
 
     ::rtl::OUString aEmbedFactory = m_aConfigHelper.GetFactoryNameByClassID( aClassID );
     uno::Reference< embed::XEmbedObjectFactory > xEmbFactory(
-                        m_xFactory->createInstance( aEmbedFactory ),
+                        m_xContext->getServiceManager()->createInstanceWithContext(aEmbedFactory, m_xContext),
                         uno::UNO_QUERY );
     if ( !xEmbFactory.is() )
         throw uno::RuntimeException(); // TODO:
@@ -367,7 +367,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
     {
         // the object can be loaded by one of the office application
         uno::Reference< embed::XEmbeddedObjectCreator > xOOoLinkCreator =
-                            embed::OOoEmbeddedObjectFactory::create( comphelper::getComponentContext(m_xFactory) );
+                            embed::OOoEmbeddedObjectFactory::create( m_xContext );
 
         xResult = xOOoLinkCreator->createInstanceLink( xStorage,
                                                         sEntName,
@@ -398,7 +398,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
                                                 4 );
 
         uno::Reference< embed::XEmbeddedObjectCreator > xLinkCreator =
-                            embed::OLEEmbeddedObjectFactory::create( comphelper::getComponentContext(m_xFactory));
+                            embed::OLEEmbeddedObjectFactory::create( m_xContext);
 
         xResult = xLinkCreator->createInstanceLink( xStorage, sEntName, aTempMedDescr, lObjArgs );
     }
@@ -425,7 +425,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
 
     ::rtl::OUString aEmbedFactory = m_aConfigHelper.GetFactoryNameByClassID( aClassID );
     uno::Reference< embed::XLinkFactory > xLinkFactory(
-                        m_xFactory->createInstance( aEmbedFactory ),
+                        m_xContext->getServiceManager()->createInstanceWithContext(aEmbedFactory, m_xContext),
                         uno::UNO_QUERY );
     if ( !xLinkFactory.is() )
         throw uno::RuntimeException(); // TODO:

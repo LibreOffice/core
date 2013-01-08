@@ -386,7 +386,7 @@ namespace dbaccess
     ::rtl::OUString sResult;
     try
     {
-        ::comphelper::MimeConfigurationHelper aConfigHelper( _rContext.getLegacyServiceFactory() );
+        ::comphelper::MimeConfigurationHelper aConfigHelper( _rContext.getUNOContext() );
         sResult = aConfigHelper.GetDocServiceNameFromMediaType( _rMediaType );
         _rClassId = aConfigHelper.GetSequenceClassIDRepresentation(aConfigHelper.GetExplicitlyRegisteredObjClassID( _rMediaType ));
         if ( !_rClassId.getLength() && !sResult.isEmpty() )

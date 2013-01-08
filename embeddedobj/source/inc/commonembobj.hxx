@@ -95,7 +95,7 @@ protected:
     sal_Int32 m_nTargetState; // should be -1 exept during state changing
     sal_Int32 m_nUpdateMode;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > m_aDocMediaDescriptor;
 
@@ -228,12 +228,12 @@ private:
 
 public:
     OCommonEmbeddedObject(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aObjectProps );
 
     // no persistance for linked objects, so the descriptors are provided in constructor
     OCommonEmbeddedObject(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aObjectProps,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aMediaDescr,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aObjectDescr );
