@@ -25,8 +25,6 @@
 #include "drawbase.hxx"
 #include "dselect.hxx"
 
-extern sal_Bool bNoInterrupt;       // in mainwn.cxx
-
 /*************************************************************************
 |*
 |* Konstruktor
