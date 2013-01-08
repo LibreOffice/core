@@ -785,7 +785,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::Close( DWORD dwSaveOption )
             if (!SUCCEEDED(hr))
                ret = hr;
             hr = CoDisconnectObject( (IUnknown*)(IPersistStorage*)this, 0 );
-            if (!(SUCCEEDED(hr) && SUCCEEDED(ret)))
+            if (!SUCCEEDED(hr) && SUCCEEDED(ret))
                ret = hr;
         }
     }
