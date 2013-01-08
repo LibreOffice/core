@@ -239,9 +239,11 @@ public:
     sal_uInt16              GetItemCount() const;
     sal_uInt16          GetItemId(sal_uInt16 nPos) const;
     sal_uInt16          GetItemId(const OString &rIdent) const;
-    sal_uInt16              GetItemPos( sal_uInt16 nItemId ) const;
+    sal_uInt16          GetItemPos( sal_uInt16 nItemId ) const;
+    OString             GetItemIdent(sal_uInt16 nItemId) const;
     MenuItemType        GetItemType( sal_uInt16 nPos ) const;
-    sal_uInt16              GetCurItemId() const;
+    sal_uInt16          GetCurItemId() const;
+    OString             GetCurItemIdent() const;
 
     void                SetDefaultItem( sal_uInt16 nItemId )    { nDefaultItem = nItemId; }
     sal_uInt16              GetDefaultItem() const              { return nDefaultItem; }
@@ -265,7 +267,11 @@ public:
     void                DeSelect() { SelectItem( 0xFFFF ); } // MENUITEMPOS_INVALID
 
     void                EnableItem( sal_uInt16 nItemId, sal_Bool bEnable = sal_True );
-    sal_Bool                IsItemEnabled( sal_uInt16 nItemId ) const;
+    void                EnableItem(const OString &rIdent, bool bEnable = true)
+    {
+        EnableItem(GetItemId(rIdent), bEnable);
+    }
+    sal_Bool            IsItemEnabled( sal_uInt16 nItemId ) const;
 
     void                ShowItem( sal_uInt16 nItemId, sal_Bool bVisible = sal_True );
     void                HideItem( sal_uInt16 nItemId ) { ShowItem( nItemId, sal_False ); }

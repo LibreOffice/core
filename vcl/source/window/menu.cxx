@@ -1555,6 +1555,18 @@ sal_uInt16 Menu::GetCurItemId() const
     return nSelectedId;
 }
 
+OString Menu::GetCurItemIdent() const
+{
+    const MenuItemData* pData = pItemList->GetData(nSelectedId);
+    return pData ? pData->sIdent : OString();
+}
+
+OString Menu::GetItemIdent(sal_uInt16 nId) const
+{
+    const MenuItemData* pData = pItemList->GetData(nId);
+    return pData ? pData->sIdent : OString();
+}
+
 void Menu::SetItemBits( sal_uInt16 nItemId, MenuItemBits nBits )
 {
     MenuItemData* pData = pItemList->GetData( nItemId );

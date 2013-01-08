@@ -73,6 +73,12 @@ void MenuButton::ImplExecuteMenu()
     }
 }
 
+OString MenuButton::GetCurItemIdent() const
+{
+    return (mnCurItemId && mpMenu) ?
+        mpMenu->GetItemIdent(mnCurItemId) : OString();
+}
+
 // -----------------------------------------------------------------------
 
 MenuButton::MenuButton( Window* pParent, WinBits nWinBits )
