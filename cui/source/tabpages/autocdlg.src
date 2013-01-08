@@ -797,6 +797,7 @@ TabPage RID_OFAPAGE_AUTOCOMPLETE_OPTIONS
         Group = TRUE;
         Border = TRUE;
         Sort = TRUE;
+        SimpleMode = TRUE;
     };
     PushButton PB_ENTRIES
     {
