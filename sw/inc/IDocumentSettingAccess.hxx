@@ -77,6 +77,7 @@ namespace com { namespace sun { namespace star { namespace i18n { struct Forbidd
          UNBREAKABLE_NUMBERINGS,
          CLIPPED_PICTURES,
          BACKGROUND_PARA_OVER_DRAWINGS,
+         TAB_OVER_MARGIN,
          // COMPATIBILITY FLAGS END
 
          BROWSE_MODE,
