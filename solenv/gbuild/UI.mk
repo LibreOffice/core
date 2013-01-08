@@ -65,7 +65,7 @@ $(call gb_UILocalizeTarget_get_clean_target,%) :
 #
 # gb_UILocalizeTarget_UILocalizeTarget target
 define gb_UILocalizeTarget_UILocalizeTarget
-$(call gb_UILocalizeTarget__UILocalizeTarget_impl,$(1),$(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po))
+$(call gb_UILocalizeTarget__UILocalizeTarget_impl,$(1),$(foreach lang,$(gb_TRANS_LANGS),$(wildcard $(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po)))
 
 endef
 
@@ -79,8 +79,6 @@ $(call gb_UILocalizeTarget_get_target,$(1)) : $(SRCDIR)/$(1).ui
 $(call gb_UILocalizeTarget_get_target,$(1)) :| \
 	$(dir $(call gb_UILocalizeTarget_get_target,$(1))).dir \
 	$(call gb_UILocalizeTarget_get_workdir,$(1))/.dir
-
-$(2) :
 
 endef
 
