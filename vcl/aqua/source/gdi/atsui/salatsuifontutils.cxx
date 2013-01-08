@@ -55,50 +55,50 @@ static void UpdateAttributesFromPSName( const String& rPSName, ImplDevFontAttrib
     ||  (aPSName.indexOf("standard") != -1)
     ||  (aPSName.indexOf("std") != -1) )
     {
-       rDFA.meWidthType = WIDTH_NORMAL;
-       rDFA.meWeight    = WEIGHT_NORMAL;
-       rDFA.meItalic    = ITALIC_NONE;
+        rDFA.SetWidthType(WIDTH_NORMAL);
+        rDFA.SetWeight(WEIGHT_NORMAL);
+        rDFA.SetItalic(ITALIC_NONE);
     }
 
     // heuristics for font weight
     if (aPSName.indexOf("extrablack") != -1)
-        rDFA.meWeight = WEIGHT_BLACK;
+        rDFA.SetWeight(WEIGHT_BLACK);
     else if (aPSName.indexOf("black") != -1)
-        rDFA.meWeight = WEIGHT_BLACK;
+        rDFA.SetWeight(WEIGHT_BLACK);
     //else if (aPSName.indexOf("book") != -1)
-    //    rDFA.meWeight = WEIGHT_SEMIBOLD;
+    //    rDFA.SetWeight(WEIGHT_SEMIBOLD);
     else if( (aPSName.indexOf("semibold") != -1)
     ||  (aPSName.indexOf("smbd") != -1))
-        rDFA.meWeight = WEIGHT_SEMIBOLD;
+        rDFA.SetWeight(WEIGHT_SEMIBOLD);
     else if (aPSName.indexOf("ultrabold") != -1)
-        rDFA.meWeight = WEIGHT_ULTRABOLD;
+        rDFA.SetWeight(WEIGHT_ULTRABOLD);
     else if (aPSName.indexOf("extrabold") != -1)
-        rDFA.meWeight = WEIGHT_BLACK;
+        rDFA.SetWeight(WEIGHT_BLACK);
     else if( (aPSName.indexOf("bold") != -1)
     ||  (aPSName.indexOf("-bd") != -1))
-        rDFA.meWeight = WEIGHT_BOLD;
+        rDFA.SetWeight(WEIGHT_BOLD);
     else if (aPSName.indexOf("extralight") != -1)
-        rDFA.meWeight = WEIGHT_ULTRALIGHT;
+        rDFA.SetWeight(WEIGHT_ULTRALIGHT);
     else if (aPSName.indexOf("ultralight") != -1)
-        rDFA.meWeight = WEIGHT_ULTRALIGHT;
+        rDFA.SetWeight(WEIGHT_ULTRALIGHT);
     else if (aPSName.indexOf("light") != -1)
-        rDFA.meWeight = WEIGHT_LIGHT;
+        rDFA.SetWeight(WEIGHT_LIGHT);
     else if (aPSName.indexOf("thin") != -1)
-        rDFA.meWeight = WEIGHT_THIN;
+        rDFA.SetWeight(WEIGHT_THIN);
     else if (aPSName.indexOf("-w3") != -1)
-        rDFA.meWeight = WEIGHT_LIGHT;
+        rDFA.SetWeight(WEIGHT_LIGHT);
     else if (aPSName.indexOf("-w4") != -1)
-        rDFA.meWeight = WEIGHT_SEMILIGHT;
+        rDFA.SetWeight(WEIGHT_SEMILIGHT);
     else if (aPSName.indexOf("-w5") != -1)
-        rDFA.meWeight = WEIGHT_NORMAL;
+        rDFA.SetWeight(WEIGHT_NORMAL);
     else if (aPSName.indexOf("-w6") != -1)
-        rDFA.meWeight = WEIGHT_SEMIBOLD;
+        rDFA.SetWeight(WEIGHT_SEMIBOLD);
     else if (aPSName.indexOf("-w7") != -1)
-        rDFA.meWeight = WEIGHT_BOLD;
+        rDFA.SetWeight(WEIGHT_BOLD);
     else if (aPSName.indexOf("-w8") != -1)
-        rDFA.meWeight = WEIGHT_ULTRABOLD;
+        rDFA.SetWeight(WEIGHT_ULTRABOLD);
     else if (aPSName.indexOf("-w9") != -1)
-        rDFA.meWeight = WEIGHT_BLACK;
+        rDFA.SetWeight(WEIGHT_BLACK);
 
     // heuristics for font slant
     if( (aPSName.indexOf("italic") != -1)
@@ -114,11 +114,11 @@ static void UpdateAttributesFromPSName( const String& rPSName, ImplDevFontAttrib
     ||  (aPSName.indexOf("condit") != -1)
     ||  (aPSName.indexOf("bookit") != -1)
     ||  (aPSName.indexOf("blackit") != -1) )
-        rDFA.meItalic = ITALIC_NORMAL;
+        rDFA.SetItalic(ITALIC_NORMAL);
     if( (aPSName.indexOf("oblique") != -1)
     ||  (aPSName.indexOf("inclined") != -1)
     ||  (aPSName.indexOf("slanted") != -1) )
-        rDFA.meItalic = ITALIC_OBLIQUE;
+        rDFA.SetItalic(ITALIC_OBLIQUE);
 
     // heuristics for font width
     if( (aPSName.indexOf("condensed") != -1)
@@ -126,36 +126,36 @@ static void UpdateAttributesFromPSName( const String& rPSName, ImplDevFontAttrib
     ||  (aPSName.indexOf("boldcond") != -1)
     ||  (aPSName.indexOf("boldcn") != -1)
     ||  (aPSName.indexOf("cnit") != -1) )
-        rDFA.meWidthType = WIDTH_CONDENSED;
+        rDFA.SetWidthType(WIDTH_CONDENSED);
     else if (aPSName.indexOf("narrow") != -1)
-        rDFA.meWidthType = WIDTH_SEMI_CONDENSED;
+        rDFA.SetWidthType(WIDTH_SEMI_CONDENSED);
     else if (aPSName.indexOf("expanded") != -1)
-        rDFA.meWidthType = WIDTH_EXPANDED;
+        rDFA.SetWidthType(WIDTH_EXPANDED);
     else if (aPSName.indexOf("wide") != -1)
-        rDFA.meWidthType = WIDTH_EXPANDED;
+        rDFA.SetWidthType(WIDTH_EXPANDED);
 
     // heuristics for font pitch
     if( (aPSName.indexOf("mono") != -1)
     ||  (aPSName.indexOf("courier") != -1)
     ||  (aPSName.indexOf("monaco") != -1)
     ||  (aPSName.indexOf("typewriter") != -1) )
-        rDFA.mePitch = PITCH_FIXED;
+        rDFA.SetPitch(PITCH_FIXED);
 
     // heuristics for font family type
     if( (aPSName.indexOf("script") != -1)
     ||  (aPSName.indexOf("chancery") != -1)
     ||  (aPSName.indexOf("zapfino") != -1))
-        rDFA.meFamily = FAMILY_SCRIPT;
+        rDFA.SetFamilyType(FAMILY_SCRIPT);
     else if( (aPSName.indexOf("comic") != -1)
     ||  (aPSName.indexOf("outline") != -1)
     ||  (aPSName.indexOf("pinpoint") != -1) )
-        rDFA.meFamily = FAMILY_DECORATIVE;
+        rDFA.SetFamilyType(FAMILY_DECORATIVE);
     else if( (aPSName.indexOf("sans") != -1)
     ||  (aPSName.indexOf("arial") != -1) )
-        rDFA.meFamily = FAMILY_SWISS;
+        rDFA.SetFamilyType(FAMILY_SWISS);
     else if( (aPSName.indexOf("roman") != -1)
     ||  (aPSName.indexOf("times") != -1) )
-        rDFA.meFamily = FAMILY_ROMAN;
+        rDFA.SetFamilyType(FAMILY_ROMAN);
 
     // heuristics for codepoint semantic
     if( (aPSName.indexOf("symbol") != -1)
@@ -163,7 +163,7 @@ static void UpdateAttributesFromPSName( const String& rPSName, ImplDevFontAttrib
     ||  (aPSName.indexOf("dingbats") != -1)
     ||  (aPSName.indexOf("ornaments") != -1)
     ||  (aPSName.indexOf("embellishments") != -1) )
-        rDFA.mbSymbolFlag  = true;
+        rDFA.SetSymbolFlag(true);
 
    // #i100020# special heuristic for names with single-char styles
    // NOTE: we are checking name that hasn't been lower-cased
@@ -172,20 +172,20 @@ static void UpdateAttributesFromPSName( const String& rPSName, ImplDevFontAttrib
         int i = rPSName.Len();
         sal_Unicode c = rPSName.GetChar( --i );
         if( c == 'C' ) { // "capitals"
-            rDFA.meFamily = FAMILY_DECORATIVE;
+            rDFA.SetFamilyType(FAMILY_DECORATIVE);
             c = rPSName.GetChar( --i );
         }
         if( c == 'O' ) { // CFF-based OpenType
             c = rPSName.GetChar( --i );
         }
         if( c == 'I' ) { // "italic"
-            rDFA.meItalic = ITALIC_NORMAL;
+            rDFA.SetItalic(ITALIC_NORMAL);
             c = rPSName.GetChar( --i );
         }
         if( c == 'B' )   // "bold"
-            rDFA.meWeight = WEIGHT_BOLD;
+            rDFA.SetWeight(WEIGHT_BOLD);
         if( c == 'C' )   // "capitals"
-            rDFA.meFamily = FAMILY_DECORATIVE;
+            rDFA.SetFamilyType(FAMILY_DECORATIVE);
         // TODO: check that all single-char styles have been resolved?
     }
 }
@@ -206,12 +206,12 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
     rDFA.mnQuality     = 0;
 
     // reset the attributes
-    rDFA.meFamily     = FAMILY_DONTKNOW;
-    rDFA.mePitch      = PITCH_VARIABLE;
-    rDFA.meWidthType  = WIDTH_NORMAL;
-    rDFA.meWeight     = WEIGHT_NORMAL;
-    rDFA.meItalic     = ITALIC_NONE;
-    rDFA.mbSymbolFlag = false;
+    rDFA.SetFamilyType(FAMILY_DONTKNOW);
+    rDFA.SetPitch(PITCH_VARIABLE);
+    rDFA.SetWidthType(WIDTH_NORMAL);
+    rDFA.SetWeight(WEIGHT_NORMAL);
+    rDFA.SetItalic(ITALIC_NONE);
+    rDFA.SetSymbolFlag(false);
 
     // ignore bitmap fonts
     ATSFontRef rATSFontRef = FMGetATSFontRefFromFont( nFontID );
@@ -276,7 +276,7 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
                         eEncoding = RTL_TEXTENCODING_APPLE_ROMAN;
                         break;
             case 0x300: nNameValue =  0;            // Win Symbol encoded name!
-                        rDFA.mbSymbolFlag = true;   // (often seen for symbol fonts)
+                rDFA.SetSymbolFlag(true);   // (often seen for symbol fonts)
                         break;
             default:    nNameValue = 0;             // ignore other encodings
             break;
@@ -315,20 +315,20 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
                 // ignore font names starting with '.'
                 if( aUtf16Name.GetChar(0) == '.' )
                     nNameValue = 0;
-                else if( rDFA.maName.Len() )
+                else if( rDFA.GetFamilyName().Len() )
                 {
                     // even if a family name is not the one we are looking for
                     // it is still useful as a font name alternative
                     if( rDFA.maMapNames.Len() )
                         rDFA.maMapNames += ';';
-                    rDFA.maMapNames += (nBestNameValue < nNameValue) ? rDFA.maName : aUtf16Name;
+                    rDFA.maMapNames += (nBestNameValue < nNameValue) ? rDFA.GetFamilyName() : aUtf16Name;
                 }
                 if( nBestNameValue < nNameValue )
                 {
                     // get the best family name
                     nBestNameValue = nNameValue;
                     eBestLangCode = eFontNameLanguage;
-                    rDFA.maName = aUtf16Name;
+                    rDFA.SetFamilyName(aUtf16Name);
                 }
                 break;
             case kFontStyleName:
@@ -336,7 +336,7 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
                 if( nBestStyleValue < nNameValue )
                 {
                     nBestStyleValue = nNameValue;
-                    rDFA.maStyleName = aUtf16Name;
+                    rDFA.SetStyleName(aUtf16Name);
                 }
                 break;
             case kFontPostscriptName:
@@ -349,7 +349,7 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
         }
     }
 
-    bool bRet = (rDFA.maName.Len() > 0);
+    bool bRet = (rDFA.GetFamilyName().Len() > 0);
     return bRet;
 }
 
