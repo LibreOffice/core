@@ -129,7 +129,8 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_FLOATTABLE_NOMARGINS,
     HANDLE_BACKGROUND_PARA_OVER_DRAWINGS,
     HANDLE_CLIPPED_PICTURES,
-    HANDLE_STYLES_NODEFAULT
+    HANDLE_STYLES_NODEFAULT,
+    HANDLE_TAB_OVER_MARGIN,
 };
 
 MasterPropertySetInfo * lcl_createSettingsInfo()
@@ -196,6 +197,7 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM("BackgroundParaOverDrawings"), HANDLE_BACKGROUND_PARA_OVER_DRAWINGS, CPPUTYPE_BOOLEAN, 0, 0},
         { RTL_CONSTASCII_STRINGPARAM("ClippedPictures"), HANDLE_CLIPPED_PICTURES, CPPUTYPE_BOOLEAN, 0, 0},
         { RTL_CONSTASCII_STRINGPARAM("StylesNoDefault"), HANDLE_STYLES_NODEFAULT, CPPUTYPE_BOOLEAN, 0, 0},
+        { RTL_CONSTASCII_STRINGPARAM("TabOverMargin"), HANDLE_TAB_OVER_MARGIN, CPPUTYPE_BOOLEAN, 0, 0},
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
  * find another solution before adding them to this property set - MTG
@@ -779,6 +781,12 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             mpDoc->set(IDocumentSettingAccess::STYLES_NODEFAULT, bTmp);
         }
         break;
+        case HANDLE_TAB_OVER_MARGIN:
+        {
+            sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
+            mpDoc->set(IDocumentSettingAccess::TAB_OVER_MARGIN, bTmp);
+        }
+        break;
         default:
             throw UnknownPropertyException();
     }
@@ -1172,6 +1180,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_STYLES_NODEFAULT:
         {
             sal_Bool bTmp = mpDoc->get( IDocumentSettingAccess::STYLES_NODEFAULT );
+            rValue.setValue( &bTmp, ::getBooleanCppuType() );
+        }
+        break;
+        case HANDLE_TAB_OVER_MARGIN:
+        {
+            sal_Bool bTmp = mpDoc->get( IDocumentSettingAccess::TAB_OVER_MARGIN );
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;

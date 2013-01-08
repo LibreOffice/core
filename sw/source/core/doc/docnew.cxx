@@ -363,6 +363,7 @@ SwDoc::SwDoc()
     mbFloattableNomargins                   = false;
     mbBackgroundParaOverDrawings            = false;
     mbClippedPictures                       = false;
+    mbTabOverMargin                         = false;
 
     //
     // COMPATIBILITY FLAGS END
