@@ -31,6 +31,7 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
+#include <com/sun/star/presentation/SlideShow.hpp>
 #include <svl/aeitem.hxx>
 #include <svl/urihelper.hxx>
 
@@ -2437,13 +2438,10 @@ Reference< XSlideShow > SlideshowImpl::createSlideShow() const
 
     try
     {
-        Reference< lang::XMultiServiceFactory > xFactory(
-            ::comphelper::getProcessServiceFactory(),
-            UNO_QUERY_THROW );
+        Reference< uno::XComponentContext > xContext =
+            ::comphelper::getProcessComponentContext();
 
-        Reference< XInterface > xInt( xFactory->createInstance( "com.sun.star.presentation.SlideShow" ) );
-
-        xShow.set( xInt, UNO_QUERY_THROW );
+        xShow.set( presentation::SlideShow::create(xContext), UNO_QUERY_THROW );
     }
     catch( uno::Exception& )
     {

@@ -35,7 +35,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
-#include <com/sun/star/presentation/XSlideShow.hpp>
+#include <com/sun/star/presentation/SlideShow.hpp>
 #include <com/sun/star/presentation/XSlideShowView.hpp>
 #include "com/sun/star/animations/TransitionType.hpp"
 #include "com/sun/star/animations/TransitionSubType.hpp"
@@ -430,14 +430,10 @@ void DemoWindow::init()
     {
         if( !mxShow.is() )
         {
-            uno::Reference< lang::XMultiServiceFactory > xFactory(
-                ::comphelper::getProcessServiceFactory(),
-                uno::UNO_QUERY_THROW );
+            uno::Reference< uno::XComponentContext > xContext =(
+                ::comphelper::getProcessComponentContext();
 
-            uno::Reference< uno::XInterface > xInt( xFactory->createInstance(
-                                                        ::rtl::OUString("com.sun.star.presentation.SlideShow") ));
-
-            mxShow.set( xInt,
+            mxShow.set( presentation::SlideShow::create(xContext),
                         uno::UNO_QUERY_THROW );
 
             maLeftChild.setShow( mxShow );
