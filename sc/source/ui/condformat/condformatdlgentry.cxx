@@ -506,6 +506,7 @@ ScFormulaFrmtEntry::ScFormulaFrmtEntry( Window* pParent, ScDocument* pDoc, const
 
     FreeResource();
     maLbType.SelectEntryPos(2);
+    maLbColorFormat.SelectEntryPos(1);
 
     if(pFormat)
     {
