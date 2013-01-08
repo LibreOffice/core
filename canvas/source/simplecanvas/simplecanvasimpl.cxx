@@ -178,7 +178,7 @@ namespace
         // Ifc XServiceName
         virtual ::rtl::OUString SAL_CALL getServiceName(  ) throw (uno::RuntimeException)
         {
-            return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICE_NAME ) );
+            return OUString( SERVICE_NAME );
         }
 
         // Ifc XSimpleCanvas

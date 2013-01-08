@@ -132,9 +132,9 @@ namespace nullcanvas
             mbSurfaceDirty );
     }
 
-    ::rtl::OUString SAL_CALL SpriteCanvas::getServiceName(  ) throw (uno::RuntimeException)
+    OUString SAL_CALL SpriteCanvas::getServiceName(  ) throw (uno::RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICE_NAME ) );
+        return OUString( SERVICE_NAME );
     }
 
     static uno::Reference<uno::XInterface> initCanvas( SpriteCanvas* pCanvas )

@@ -26,22 +26,20 @@ namespace canvas
 {
     namespace
     {
-        void throwUnknown( const ::rtl::OUString& aPropertyName )
+        void throwUnknown( const OUString& aPropertyName )
         {
             throw beans::UnknownPropertyException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PropertySetHelper: property " )) +
-                aPropertyName +
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " not found." )),
+                "PropertySetHelper: property " +
+                aPropertyName + " not found.",
                 uno::Reference< uno::XInterface >()
                 );
         }
 
-        void throwVeto( const ::rtl::OUString& aPropertyName )
+        void throwVeto( const OUString& aPropertyName )
         {
             throw beans::PropertyVetoException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PropertySetHelper: property " )) +
-                aPropertyName +
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " access was vetoed." )),
+                "PropertySetHelper: property " +
+                aPropertyName + " access was vetoed.",
                 uno::Reference< uno::XInterface >() );
         }
 

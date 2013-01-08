@@ -40,12 +40,12 @@ using namespace ::com::sun::star;
 
 namespace canvas
 {
-    uno::Sequence<rtl::OUString> ParametricPolyPolygon::getAvailableServiceNames()
+    uno::Sequence<OUString> ParametricPolyPolygon::getAvailableServiceNames()
     {
-        uno::Sequence<rtl::OUString> aRet(3);
-        aRet[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LinearGradient" ));
-        aRet[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EllipticalGradient" ));
-        aRet[2] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RectangularGradient" ));
+        uno::Sequence<OUString> aRet(3);
+        aRet[0] = "LinearGradient";
+        aRet[1] = "EllipticalGradient";
+        aRet[2] = "RectangularGradient";
 
         return aRet;
     }
@@ -203,9 +203,9 @@ namespace canvas
 #define IMPLEMENTATION_NAME "Canvas::ParametricPolyPolygon"
 #define SERVICE_NAME "com.sun.star.rendering.ParametricPolyPolygon"
 
-    ::rtl::OUString SAL_CALL ParametricPolyPolygon::getImplementationName(  ) throw (uno::RuntimeException)
+    OUString SAL_CALL ParametricPolyPolygon::getImplementationName(  ) throw (uno::RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATION_NAME ) );
+        return OUString( IMPLEMENTATION_NAME );
     }
 
     sal_Bool SAL_CALL ParametricPolyPolygon::supportsService( const ::rtl::OUString& ServiceName ) throw (uno::RuntimeException)
@@ -213,10 +213,10 @@ namespace canvas
         return ServiceName == SERVICE_NAME;
     }
 
-    uno::Sequence< ::rtl::OUString > SAL_CALL ParametricPolyPolygon::getSupportedServiceNames(  ) throw (uno::RuntimeException)
+    uno::Sequence< OUString > SAL_CALL ParametricPolyPolygon::getSupportedServiceNames(  ) throw (uno::RuntimeException)
     {
-        uno::Sequence< ::rtl::OUString > aRet(1);
-        aRet[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
+        uno::Sequence< OUString > aRet(1);
+        aRet[0] = SERVICE_NAME;
 
         return aRet;
     }

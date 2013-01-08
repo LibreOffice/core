@@ -39,23 +39,22 @@
 #include <o3tl/compat_functional.hxx>
 #include <algorithm>
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using ::rtl::OUString;
+
 
 namespace
 {
 
 OUString SAL_CALL getImplName()
 {
-    return OUSTR("com.sun.star.comp.rendering.CanvasFactory");
+    return OUString("com.sun.star.comp.rendering.CanvasFactory");
 }
 
 Sequence<OUString> SAL_CALL getSuppServices()
 {
-    OUString name = OUSTR("com.sun.star.rendering.CanvasFactory");
+    OUString name("com.sun.star.rendering.CanvasFactory");
     return Sequence<OUString>(&name, 1);
 }
 
@@ -145,25 +144,25 @@ CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
 
         Any propValue(
             makeAny( beans::PropertyValue(
-                         OUSTR("nodepath"), -1,
-                         makeAny( OUSTR("/org.openoffice.Office.Canvas") ),
+                         OUString("nodepath"), -1,
+                         makeAny( OUString("/org.openoffice.Office.Canvas") ),
                          beans::PropertyState_DIRECT_VALUE ) ) );
 
         m_xCanvasConfigNameAccess.set(
             xConfigProvider->createInstanceWithArguments(
-                OUSTR("com.sun.star.configuration.ConfigurationAccess"),
+                OUString("com.sun.star.configuration.ConfigurationAccess"),
                 Sequence<Any>( &propValue, 1 ) ),
             UNO_QUERY_THROW );
 
         propValue = makeAny(
             beans::PropertyValue(
-                OUSTR("nodepath"), -1,
-                makeAny( OUSTR("/org.openoffice.Office.Canvas/CanvasServiceList") ),
+                OUString("nodepath"), -1,
+                makeAny( OUString("/org.openoffice.Office.Canvas/CanvasServiceList") ),
                 beans::PropertyState_DIRECT_VALUE ) );
 
         Reference<container::XNameAccess> xNameAccess(
             xConfigProvider->createInstanceWithArguments(
-                OUSTR("com.sun.star.configuration.ConfigurationAccess"),
+                OUString("com.sun.star.configuration.ConfigurationAccess"),
                 Sequence<Any>( &propValue, 1 ) ), UNO_QUERY_THROW );
         Reference<container::XHierarchicalNameAccess> xHierarchicalNameAccess(
             xNameAccess, UNO_QUERY_THROW);
@@ -180,11 +179,11 @@ CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
             if( xEntryNameAccess.is() )
             {
                 Sequence<OUString> implementationList;
-                if( (xEntryNameAccess->getByName( OUSTR("PreferredImplementations") ) >>= implementationList) )
+                if( (xEntryNameAccess->getByName( OUString("PreferredImplementations") ) >>= implementationList) )
                     m_aAvailableImplementations.push_back( std::make_pair(*pCurr,implementationList) );
-                if( (xEntryNameAccess->getByName( OUSTR("AcceleratedImplementations") ) >>= implementationList) )
+                if( (xEntryNameAccess->getByName( OUString("AcceleratedImplementations") ) >>= implementationList) )
                     m_aAcceleratedImplementations.push_back( std::make_pair(*pCurr,implementationList) );
-                if( (xEntryNameAccess->getByName( OUSTR("AntialiasingImplementations") ) >>= implementationList) )
+                if( (xEntryNameAccess->getByName( OUString("AntialiasingImplementations") ) >>= implementationList) )
                     m_aAAImplementations.push_back( std::make_pair(*pCurr,implementationList) );
             }
 
@@ -204,12 +203,12 @@ CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
         // Ugh. Looks like configuration is borked. Fake minimal
         // setup.
         Sequence<OUString> aServices(1);
-        aServices[0] = OUSTR("com.sun.star.comp.rendering.Canvas.VCL");
-        m_aAvailableImplementations.push_back( std::make_pair(OUSTR("com.sun.star.rendering.Canvas"),
+        aServices[0] = OUString("com.sun.star.comp.rendering.Canvas.VCL");
+        m_aAvailableImplementations.push_back( std::make_pair(OUString("com.sun.star.rendering.Canvas"),
                                                               aServices) );
 
-        aServices[0] = OUSTR("com.sun.star.comp.rendering.SpriteCanvas.VCL");
-        m_aAvailableImplementations.push_back( std::make_pair(OUSTR("com.sun.star.rendering.SpriteCanvas"),
+        aServices[0] = OUString("com.sun.star.comp.rendering.SpriteCanvas.VCL");
+        m_aAvailableImplementations.push_back( std::make_pair(OUString("com.sun.star.rendering.SpriteCanvas"),
                                                               aServices) );
     }
 }
@@ -318,19 +317,19 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
     bool bForceLastEntry(false);
     checkConfigFlag( bForceLastEntry,
                      m_bCacheHasForcedLastImpl,
-                     OUSTR("ForceSafeServiceImpl") );
+                     OUString("ForceSafeServiceImpl") );
 
     // use anti-aliasing canvas, if config flag set (or not existing)
     bool bUseAAEntry(true);
     checkConfigFlag( bUseAAEntry,
                      m_bCacheHasUseAAEntry,
-                     OUSTR("UseAntialiasingCanvas") );
+                     OUString("UseAntialiasingCanvas") );
 
     // use accelerated canvas, if config flag set (or not existing)
     bool bUseAcceleratedEntry(true);
     checkConfigFlag( bUseAcceleratedEntry,
                      m_bCacheHasUseAcceleratedEntry,
-                     OUSTR("UseAcceleratedCanvas") );
+                     OUString("UseAcceleratedCanvas") );
 
     // try to reuse last working implementation for given service name
     const CacheVector::iterator aEnd(m_aCachedImplementations.end());
