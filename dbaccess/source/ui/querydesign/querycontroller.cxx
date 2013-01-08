@@ -100,12 +100,12 @@ namespace dbaui
     class OViewController : public OQueryController
     {
         //------------------------------------------------------------------------------
-        virtual ::rtl::OUString SAL_CALL getImplementationName() throw( RuntimeException )
+        virtual OUString SAL_CALL getImplementationName() throw( RuntimeException )
         {
             return getImplementationName_Static();
         }
         //-------------------------------------------------------------------------
-        virtual Sequence< ::rtl::OUString> SAL_CALL getSupportedServiceNames() throw(RuntimeException)
+        virtual Sequence< OUString> SAL_CALL getSupportedServiceNames() throw(RuntimeException)
         {
             return getSupportedServiceNames_Static();
         }
@@ -113,14 +113,14 @@ namespace dbaui
         OViewController(const Reference< XMultiServiceFactory >& _rM) : OQueryController(_rM){}
 
         // need by registration
-        static ::rtl::OUString getImplementationName_Static() throw( RuntimeException )
+        static OUString getImplementationName_Static() throw( RuntimeException )
         {
-            return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.dbu.OViewDesign"));
+            return OUString("org.openoffice.comp.dbu.OViewDesign");
         }
-        static Sequence< ::rtl::OUString > getSupportedServiceNames_Static(void) throw( RuntimeException )
+        static Sequence< OUString > getSupportedServiceNames_Static(void) throw( RuntimeException )
         {
-            Sequence< ::rtl::OUString> aSupported(1);
-            aSupported.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.ViewDesign"));
+            Sequence< OUString> aSupported(1);
+            aSupported.getArray()[0] = "com.sun.star.sdb.ViewDesign";
             return aSupported;
         }
         static Reference< XInterface > SAL_CALL Create(const Reference< XMultiServiceFactory >& _rM)
@@ -143,15 +143,12 @@ namespace dbaui
         // -----------------------------------------------------------------------------
         void insertParseTree(SvTreeListBox* _pBox,::connectivity::OSQLParseNode* _pNode,SvTreeListEntry* _pParent = NULL)
         {
-            ::rtl::OUString rString;
+            OUString rString;
             if (!_pNode->isToken())
             {
                 // Regelnamen als rule: ...
-                rString = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RULE_ID: "));
-                rString += ::rtl::OUString::valueOf( (sal_Int32)_pNode->getRuleID());
-                rString+= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("("));
-                rString += OSQLParser::RuleIDToStr(_pNode->getRuleID());
-                rString+= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
+                rString = "RULE_ID: " + OUString::valueOf( (sal_Int32)_pNode->getRuleID() ) +
+                          "(" + OSQLParser::RuleIDToStr(_pNode->getRuleID()) + ")";
 
 
                 _pParent = _pBox->InsertEntry(rString,_pParent);
@@ -172,54 +169,45 @@ namespace dbaui
 
                 case SQL_NODE_KEYWORD:
                     {
-                        rString += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQL_KEYWORD:"));
-                        ::rtl::OString sT = OSQLParser::TokenIDToStr(_pNode->getTokenID());
-                        rString += ::rtl::OStringToOUString(sT, RTL_TEXTENCODING_UTF8);
+                        rString += "SQL_KEYWORD:";
+                        OString sT = OSQLParser::TokenIDToStr(_pNode->getTokenID());
+                        rString += OStringToOUString(sT, RTL_TEXTENCODING_UTF8);
                      break;}
 
                 case SQL_NODE_COMPARISON:
                     {
-                        rString+= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQL_COMPARISON:"));
-                        rString += _pNode->getTokenValue(); // haenge Nodevalue an
+                        rString += "SQL_COMPARISON:" + _pNode->getTokenValue(); // haenge Nodevalue an
                             // und beginne neu Zeile
                         break;}
 
                 case SQL_NODE_NAME:
                     {
-                        rString+= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQL_NAME:"));
-                        rString+= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\""));
-                        rString += _pNode->getTokenValue();
-                        rString+= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\""));
+                        rString += "SQL_NAME:" + "\"" + _pNode->getTokenValue() + "\"";
                         break;}
 
                 case SQL_NODE_STRING:
                     {
-                        rString += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQL_STRING:'"));
-                        rString += _pNode->getTokenValue();
+                        rString += "SQL_STRING:'" + _pNode->getTokenValue();
                         break;}
 
                 case SQL_NODE_INTNUM:
                     {
-                        rString += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQL_INTNUM:"));
-                        rString += _pNode->getTokenValue();
+                        rString += "SQL_INTNUM:" + _pNode->getTokenValue();
                         break;}
 
                 case SQL_NODE_APPROXNUM:
                     {
-                        rString += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQL_APPROXNUM:"));
-                        rString += _pNode->getTokenValue();
+                        rString += "SQL_APPROXNUM:" + _pNode->getTokenValue();
                         break;}
 
                 case SQL_NODE_PUNCTUATION:
                     {
-                        rString += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQL_PUNCTUATION:"));
-                        rString += _pNode->getTokenValue(); // haenge Nodevalue an
+                        rString += "SQL_PUNCTUATION:" + _pNode->getTokenValue(); // haenge Nodevalue an
                         break;}
 
                 case SQL_NODE_AMMSC:
                     {
-                        rString += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQL_AMMSC:"));
-                        rString += _pNode->getTokenValue(); // haenge Nodevalue an
+                        rString += "SQL_AMMSC:" + _pNode->getTokenValue(); // haenge Nodevalue an
                         break;}
 
                 default:
@@ -272,8 +260,8 @@ namespace
         if ( xLayoutManager.is() )
         {
             xLayoutManager->lock();
-            static ::rtl::OUString s_sDesignToolbar(RTL_CONSTASCII_USTRINGPARAM("private:resource/toolbar/designobjectbar"));
-            static ::rtl::OUString s_sSqlToolbar(RTL_CONSTASCII_USTRINGPARAM("private:resource/toolbar/sqlobjectbar"));
+            static OUString s_sDesignToolbar("private:resource/toolbar/designobjectbar");
+            static OUString s_sSqlToolbar("private:resource/toolbar/sqlobjectbar");
             if ( _bDesign )
             {
                 xLayoutManager->destroyElement( s_sSqlToolbar );
@@ -291,25 +279,25 @@ namespace
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OQueryController::getImplementationName() throw( RuntimeException )
+OUString SAL_CALL OQueryController::getImplementationName() throw( RuntimeException )
 {
     return getImplementationName_Static();
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString OQueryController::getImplementationName_Static() throw( RuntimeException )
+OUString OQueryController::getImplementationName_Static() throw( RuntimeException )
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.dbu.OQueryDesign"));
+    return OUString("org.openoffice.comp.dbu.OQueryDesign");
 }
 //------------------------------------------------------------------------------
-Sequence< ::rtl::OUString> OQueryController::getSupportedServiceNames_Static(void) throw( RuntimeException )
+Sequence< OUString> OQueryController::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
-    Sequence< ::rtl::OUString> aSupported(1);
-    aSupported.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.QueryDesign"));
+    Sequence< OUString> aSupported(1);
+    aSupported.getArray()[0] = "com.sun.star.sdb.QueryDesign";
     return aSupported;
 }
 //-------------------------------------------------------------------------
-Sequence< ::rtl::OUString> SAL_CALL OQueryController::getSupportedServiceNames() throw(RuntimeException)
+Sequence< OUString> SAL_CALL OQueryController::getSupportedServiceNames() throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
@@ -389,7 +377,7 @@ void SAL_CALL OQueryController::getFastPropertyValue( Any& o_rValue, sal_Int32 i
     {
         ::comphelper::NamedValueCollection aCurrentDesign;
         aCurrentDesign.put( "GraphicalDesign", isGraphicalDesign() );
-        aCurrentDesign.put( (::rtl::OUString)PROPERTY_ESCAPE_PROCESSING, m_bEscapeProcessing );
+        aCurrentDesign.put( (OUString)PROPERTY_ESCAPE_PROCESSING, m_bEscapeProcessing );
 
         if ( isGraphicalDesign() )
         {
@@ -428,7 +416,7 @@ void SAL_CALL OQueryController::getFastPropertyValue( Any& o_rValue, sal_Int32 i
     const sal_Int32 nLength = aProps.getLength();
     aProps.realloc( nLength + 1 );
     aProps[ nLength ] = Property(
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CurrentQueryDesign" ) ),
+        "CurrentQueryDesign",
         PROPERTY_ID_CURRENT_QUERY_DESIGN,
         ::cppu::UnoType< Sequence< PropertyValue > >::get(),
         PropertyAttribute::READONLY
@@ -600,7 +588,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
             SQLExceptionInfo aError;
             try
             {
-                ::rtl::OUString aErrorMsg;
+                OUString aErrorMsg;
                 setStatement_fireEvent( getContainer()->getStatement() );
                 if(m_sStatement.isEmpty() && m_pSqlIterator)
                 {
@@ -631,7 +619,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                                 aError = SQLException(
                                     String( ModuleRes( STR_QRY_NOSELECT ) ),
                                     NULL,
-                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "S1000" ) ),
+                                    "S1000",
                                     1000,
                                     Any()
                                 );
@@ -640,7 +628,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                             {
                                 // change the view of the data
                                 m_bGraphicalDesign = !m_bGraphicalDesign;
-                                ::rtl::OUString sNewStatement;
+                                OUString sNewStatement;
                                 pNode->parseNodeToStr( sNewStatement, getConnection() );
                                 setStatement_fireEvent( sNewStatement );
                                 getContainer()->SaveUIConfig();
@@ -654,7 +642,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                         aError = SQLException(
                             String( ModuleRes( STR_QRY_SYNTAX ) ),
                             NULL,
-                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "S1000" ) ),
+                            "S1000",
                             1000,
                             Any()
                         );
@@ -686,7 +674,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                 getContainer()->clear();
                 GetUndoManager().LeaveListAction();
 
-                setStatement_fireEvent( ::rtl::OUString() );
+                setStatement_fireEvent( OUString() );
                 if(m_bGraphicalDesign)
                     InvalidateFeature(ID_BROWSER_ADDTABLE);
             }
@@ -739,7 +727,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
         case ID_EDIT_QUERY_DESIGN:
         case ID_EDIT_QUERY_SQL:
             {
-                ::rtl::OUString aErrorMsg;
+                OUString aErrorMsg;
                 setStatement_fireEvent( getContainer()->getStatement() );
                 ::connectivity::OSQLParseNode* pNode = m_aSqlParser.parseTree( aErrorMsg, m_sStatement, m_bGraphicalDesign );
                 if ( pNode )
@@ -770,7 +758,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                                 OSQLParseNode::compress(pNodeTmp);
                                 pNodeTmp = pTemp->getChild(1);
                             }
-                            ::rtl::OUString sTemp;
+                            OUString sTemp;
                             pNode->parseNodeToStr(sTemp,getConnection());
                             getContainer()->setStatement(sTemp);
                         }
@@ -843,14 +831,14 @@ void OQueryController::impl_initialize()
 
     const NamedValueCollection& rArguments( getInitParams() );
 
-    ::rtl::OUString sCommand;
+    OUString sCommand;
     m_nCommandType = CommandType::QUERY;
 
     // �����������������������������������������������������������������������������������������������������������������
     // � reading parameters
     // �����������������������������������������������������������������������������������������������������������������
     // legacy parameters first (later overwritten by regular parameters)
-    ::rtl::OUString sIndependentSQLCommand;
+    OUString sIndependentSQLCommand;
     if ( rArguments.get_ensureType( "IndependentSQLCommand", sIndependentSQLCommand ) )
     {
         OSL_FAIL( "OQueryController::impl_initialize: IndependentSQLCommand is regognized for compatibility only!" );
@@ -858,7 +846,7 @@ void OQueryController::impl_initialize()
         m_nCommandType = CommandType::COMMAND;
     }
 
-    ::rtl::OUString sCurrentQuery;
+    OUString sCurrentQuery;
     if ( rArguments.get_ensureType( "CurrentQuery", sCurrentQuery ) )
     {
         OSL_FAIL( "OQueryController::impl_initialize: CurrentQuery is regognized for compatibility only!" );
@@ -874,8 +862,8 @@ void OQueryController::impl_initialize()
     }
 
     // non-legacy parameters which overwrite the legacy parameters
-    rArguments.get_ensureType( (::rtl::OUString)PROPERTY_COMMAND, sCommand );
-    rArguments.get_ensureType( (::rtl::OUString)PROPERTY_COMMAND_TYPE, m_nCommandType );
+    rArguments.get_ensureType( (OUString)PROPERTY_COMMAND, sCommand );
+    rArguments.get_ensureType( (OUString)PROPERTY_COMMAND_TYPE, m_nCommandType );
 
     // translate Command/Type into proper members
     // TODO/Later: all this (including those members) should be hidden behind some abstact interface,
@@ -890,7 +878,7 @@ void OQueryController::impl_initialize()
         break;
     case CommandType::COMMAND:
         setStatement_fireEvent( sCommand );
-        m_sName = ::rtl::OUString();
+        m_sName = OUString();
         break;
     default:
         OSL_FAIL( "OQueryController::impl_initialize: logic error in code!" );
@@ -899,17 +887,17 @@ void OQueryController::impl_initialize()
 
     // more legacy parameters
     sal_Bool bGraphicalDesign( sal_True );
-    if ( rArguments.get_ensureType( (::rtl::OUString)PROPERTY_QUERYDESIGNVIEW, bGraphicalDesign ) )
+    if ( rArguments.get_ensureType( (OUString)PROPERTY_QUERYDESIGNVIEW, bGraphicalDesign ) )
     {
         OSL_FAIL( "OQueryController::impl_initialize: QueryDesignView is regognized for compatibility only!" );
         m_bGraphicalDesign = bGraphicalDesign;
     }
 
     // more non-legacy
-    rArguments.get_ensureType( (::rtl::OUString)PROPERTY_GRAPHICAL_DESIGN, m_bGraphicalDesign );
+    rArguments.get_ensureType( (OUString)PROPERTY_GRAPHICAL_DESIGN, m_bGraphicalDesign );
 
     bool bEscapeProcessing( sal_True );
-    if ( rArguments.get_ensureType( (::rtl::OUString)PROPERTY_ESCAPE_PROCESSING, bEscapeProcessing ) )
+    if ( rArguments.get_ensureType( (OUString)PROPERTY_ESCAPE_PROCESSING, bEscapeProcessing ) )
     {
         setEscapeProcessing_fireEvent( bEscapeProcessing );
 
@@ -927,17 +915,17 @@ void OQueryController::impl_initialize()
     if ( aCurrentQueryDesignProps.getLength() )
     {
         ::comphelper::NamedValueCollection aCurrentQueryDesign( aCurrentQueryDesignProps );
-        if ( aCurrentQueryDesign.has( (::rtl::OUString)PROPERTY_GRAPHICAL_DESIGN ) )
+        if ( aCurrentQueryDesign.has( (OUString)PROPERTY_GRAPHICAL_DESIGN ) )
         {
-            aCurrentQueryDesign.get_ensureType( (::rtl::OUString)PROPERTY_GRAPHICAL_DESIGN, m_bGraphicalDesign );
+            aCurrentQueryDesign.get_ensureType( (OUString)PROPERTY_GRAPHICAL_DESIGN, m_bGraphicalDesign );
         }
-        if ( aCurrentQueryDesign.has( (::rtl::OUString)PROPERTY_ESCAPE_PROCESSING ) )
+        if ( aCurrentQueryDesign.has( (OUString)PROPERTY_ESCAPE_PROCESSING ) )
         {
-            aCurrentQueryDesign.get_ensureType( (::rtl::OUString)PROPERTY_ESCAPE_PROCESSING, m_bEscapeProcessing );
+            aCurrentQueryDesign.get_ensureType( (OUString)PROPERTY_ESCAPE_PROCESSING, m_bEscapeProcessing );
         }
         if ( aCurrentQueryDesign.has( "Statement" ) )
         {
-            ::rtl::OUString sStatement;
+            OUString sStatement;
             aCurrentQueryDesign.get_ensureType( "Statement", sStatement );
             aCurrentQueryDesign.remove( "Statement" );
             setStatement_fireEvent( sStatement );
@@ -990,7 +978,7 @@ void OQueryController::impl_initialize()
             if ( !( aView >>= m_xAlterView ) )
             {
                 throw IllegalArgumentException(
-                    ::rtl::OUString( String( ModuleRes( STR_NO_ALTER_VIEW_SUPPORT ) ) ),
+                    OUString( String( ModuleRes( STR_NO_ALTER_VIEW_SUPPORT ) ) ),
                     *this,
                     1
                 );
@@ -1061,9 +1049,9 @@ void OQueryController::onLoadedMenu(const Reference< ::com::sun::star::frame::XL
 }
 
 // -----------------------------------------------------------------------------
-::rtl::OUString OQueryController::getPrivateTitle( ) const
+OUString OQueryController::getPrivateTitle( ) const
 {
-    ::rtl::OUString sName = m_sName;
+    OUString sName = m_sName;
     if ( sName.isEmpty() )
     {
         if ( !editingCommand() )
@@ -1072,7 +1060,7 @@ void OQueryController::onLoadedMenu(const Reference< ::com::sun::star::frame::XL
             ::osl::MutexGuard aGuard( getMutex() );
             String aDefaultName = String( ModuleRes( editingView() ? STR_VIEW_TITLE : STR_QRY_TITLE ) );
             sName = aDefaultName.GetToken(0,' ');
-            sName += ::rtl::OUString::valueOf(getCurrentStartNumber());
+            sName += OUString::valueOf(getCurrentStartNumber());
         }
     }
     return sName;
@@ -1207,7 +1195,7 @@ void OQueryController::saveViewSettings( ::comphelper::NamedValueCollection& o_r
             aFieldData.clear();
             (*field)->Save( aFieldData, i_includingCriteria );
 
-            const ::rtl::OUString sFieldSettingName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Field" ) ) + ::rtl::OUString::valueOf( i );
+            const OUString sFieldSettingName = "Field" + OUString::valueOf( i );
             aAllFieldsData.put( sFieldSettingName, aFieldData.getPropertyValues() );
         }
     }
@@ -1268,9 +1256,9 @@ void OQueryController::executeQuery()
 {
     // we don't need to check the connection here because we already check the composer
     // which can't live without his connection
-    ::rtl::OUString sTranslatedStmt = translateStatement( false );
+    OUString sTranslatedStmt = translateStatement( false );
 
-    ::rtl::OUString sDataSourceName = getDataSourceName();
+    OUString sDataSourceName = getDataSourceName();
     if ( !(sDataSourceName.isEmpty() || sTranslatedStmt.isEmpty()) )
     {
         try
@@ -1279,9 +1267,9 @@ void OQueryController::executeQuery()
             InvalidateFeature(SID_DB_QUERY_PREVIEW);
 
             URL aWantToDispatch;
-            aWantToDispatch.Complete = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".component:DB/DataSourceBrowser"));
+            aWantToDispatch.Complete = ".component:DB/DataSourceBrowser";
 
-            ::rtl::OUString sFrameName( FRAME_NAME_QUERY_PREVIEW );
+            OUString sFrameName( FRAME_NAME_QUERY_PREVIEW );
             sal_Int32 nSearchFlags = FrameSearchFlag::CHILDREN;
 
             Reference< XDispatch> xDisp;
@@ -1415,7 +1403,7 @@ bool OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
     if ( !getContainer()->checkStatement() )
         return false;
 
-    ::rtl::OUString sTranslatedStmt = translateStatement();
+    OUString sTranslatedStmt = translateStatement();
     if ( editingCommand() )
     {
         setModified( sal_False );
@@ -1429,7 +1417,7 @@ bool OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
 
     // first we need a name for our query so ask the user
     // did we get a name
-    ::rtl::OUString sOriginalName( m_sName );
+    OUString sOriginalName( m_sName );
     if ( !askForNewName( xElements, _bSaveAs ) || m_sName.isEmpty() )
         return false;
 
@@ -1584,9 +1572,9 @@ bool OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
 namespace {
 struct CommentStrip
 {
-    ::rtl::OUString maComment;
+    OUString maComment;
     bool            mbLastOnLine;
-    CommentStrip( const ::rtl::OUString& rComment, bool bLastOnLine )
+    CommentStrip( const OUString& rComment, bool bLastOnLine )
         : maComment( rComment), mbLastOnLine( bLastOnLine) {}
 };
 }
@@ -1595,7 +1583,7 @@ struct CommentStrip
 
     See also delComment() implementation for OSQLParser::parseTree().
  */
-static ::std::vector< CommentStrip > getComment( const ::rtl::OUString& rQuery )
+static ::std::vector< CommentStrip > getComment( const OUString& rQuery )
 {
     ::std::vector< CommentStrip > aRet;
     // First a quick search if there is any "--" or "//" or "/*", if not then
@@ -1610,7 +1598,7 @@ static ::std::vector< CommentStrip > getComment( const ::rtl::OUString& rQuery )
     bool bIsText2  = false;     // 'text'
     bool bComment2 = false;     // /* comment */
     bool bComment  = false;     // -- or // comment
-    ::rtl::OUStringBuffer aBuf;
+    OUStringBuffer aBuf;
     for (sal_Int32 i=0; i < nQueryLen; ++i)
     {
         if (bComment2)
@@ -1673,7 +1661,7 @@ static ::std::vector< CommentStrip > getComment( const ::rtl::OUString& rQuery )
     recomposition. This is ugly but at least allows commented queries while
     preserving the comments _somehow_.
  */
-static ::rtl::OUString concatComment( const ::rtl::OUString& rQuery, const ::std::vector< CommentStrip >& rComments )
+static OUString concatComment( const OUString& rQuery, const ::std::vector< CommentStrip >& rComments )
 {
     // No comments => return query.
     if (rComments.empty())
@@ -1687,7 +1675,7 @@ static ::rtl::OUString concatComment( const ::rtl::OUString& rQuery, const ::std
     sal_Int32 nBufSize = nLen + nComments;
     for (::std::vector< CommentStrip >::const_iterator it( rComments.begin()); it != rComments.end(); ++it)
         nBufSize += (*it).maComment.getLength();
-    ::rtl::OUStringBuffer aBuf( nBufSize );
+    OUStringBuffer aBuf( nBufSize );
     sal_Int32 nIndBeg = 0;
     sal_Int32 nIndLF = rQuery.indexOf('\n');
     size_t i = 0;
@@ -1723,16 +1711,16 @@ static ::rtl::OUString concatComment( const ::rtl::OUString& rQuery, const ::std
     return aBuf.makeStringAndClear();
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString OQueryController::translateStatement( bool _bFireStatementChange )
+OUString OQueryController::translateStatement( bool _bFireStatementChange )
 {
     // now set the properties
     setStatement_fireEvent( getContainer()->getStatement(), _bFireStatementChange );
-    ::rtl::OUString sTranslatedStmt;
+    OUString sTranslatedStmt;
     if(!m_sStatement.isEmpty() && m_xComposer.is() && m_bEscapeProcessing)
     {
         try
         {
-            ::rtl::OUString aErrorMsg;
+            OUString aErrorMsg;
 
             ::std::vector< CommentStrip > aComments = getComment( m_sStatement);
 
@@ -1752,15 +1740,15 @@ static ::rtl::OUString concatComment( const ::rtl::OUString& rQuery, const ::std
             ::dbtools::SQLExceptionInfo aInfo(e);
             showError(aInfo);
             // an error occurred so we clear the statement
-            sTranslatedStmt = ::rtl::OUString();
+            sTranslatedStmt = OUString();
         }
     }
     else if(m_sStatement.isEmpty())
     {
         ModuleRes aModuleRes(STR_QRY_NOSELECT);
         String sTmpStr(aModuleRes);
-        ::rtl::OUString sError(sTmpStr);
-        showError(SQLException(sError,NULL,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000") ),1000,Any()));
+        OUString sError(sTmpStr);
+        showError(SQLException(sError,NULL,"S1000",1000,Any()));
     }
     else
         sTranslatedStmt = m_sStatement;
@@ -1812,7 +1800,7 @@ void OQueryController::impl_reset( const bool i_bForceCurrentControllerSettings 
                 Reference< XPropertySet > xProp;
                 if( xQueries->hasByName( m_sName ) && ( xQueries->getByName( m_sName ) >>= xProp ) && xProp.is() )
                 {
-                    ::rtl::OUString sNewStatement;
+                    OUString sNewStatement;
                     xProp->getPropertyValue( PROPERTY_COMMAND ) >>= sNewStatement;
                     setStatement_fireEvent( sNewStatement );
 
@@ -1872,7 +1860,7 @@ void OQueryController::impl_reset( const bool i_bForceCurrentControllerSettings 
             }
             else if ( m_bEscapeProcessing )
             {
-                ::rtl::OUString aErrorMsg;
+                OUString aErrorMsg;
                 ::std::auto_ptr< ::connectivity::OSQLParseNode > pNode(
                     m_aSqlParser.parseTree( aErrorMsg, m_sStatement, m_bGraphicalDesign ) );
 
@@ -1928,7 +1916,7 @@ void OQueryController::reset()
 }
 
 // -----------------------------------------------------------------------------
-void OQueryController::setStatement_fireEvent( const ::rtl::OUString& _rNewStatement, bool _bFireStatementChange )
+void OQueryController::setStatement_fireEvent( const OUString& _rNewStatement, bool _bFireStatementChange )
 {
     Any aOldValue = makeAny( m_sStatement );
     m_sStatement = _rNewStatement;
@@ -1974,7 +1962,7 @@ bool OQueryController::allowQueries() const
         return false;
 
     const NamedValueCollection& rArguments( getInitParams() );
-    sal_Int32 nCommandType = rArguments.getOrDefault( (::rtl::OUString)PROPERTY_COMMAND_TYPE, (sal_Int32)CommandType::QUERY );
+    sal_Int32 nCommandType = rArguments.getOrDefault( (OUString)PROPERTY_COMMAND_TYPE, (sal_Int32)CommandType::QUERY );
     sal_Bool bCreatingView = ( nCommandType == CommandType::TABLE );
     return !bCreatingView;
 }
