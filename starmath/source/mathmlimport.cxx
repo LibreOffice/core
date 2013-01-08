@@ -102,11 +102,7 @@ sal_uLong SmXMLImportWrapper::Import(SfxMedium &rMedium)
 {
     sal_uLong nError = ERRCODE_SFX_DOLOADFAILED;
 
-    uno::Reference<lang::XMultiServiceFactory> xServiceFactory(
-        comphelper::getProcessServiceFactory());
-    OSL_ENSURE(xServiceFactory.is(), "XMLReader::Read: got no service manager");
-    if ( !xServiceFactory.is() )
-        return nError;
+    uno::Reference<uno::XComponentContext> xContext( comphelper::getProcessComponentContext() );
 
     //Make a model component from our SmModel
     uno::Reference< lang::XComponent > xModelComp( xModel, uno::UNO_QUERY );
@@ -206,7 +202,7 @@ sal_uLong SmXMLImportWrapper::Import(SfxMedium &rMedium)
 
         sal_uLong nWarn = ReadThroughComponent(
             rMedium.GetStorage(), xModelComp, "meta.xml", "Meta.xml",
-            xServiceFactory, xInfoSet,
+            xContext, xInfoSet,
                 (bOASIS ? "com.sun.star.comp.Math.XMLOasisMetaImporter"
                         : "com.sun.star.comp.Math.XMLMetaImporter") );
 
@@ -217,7 +213,7 @@ sal_uLong SmXMLImportWrapper::Import(SfxMedium &rMedium)
 
             nWarn = ReadThroughComponent(
                 rMedium.GetStorage(), xModelComp, "settings.xml", 0,
-                xServiceFactory, xInfoSet,
+                xContext, xInfoSet,
                 (bOASIS ? "com.sun.star.comp.Math.XMLOasisSettingsImporter"
                         : "com.sun.star.comp.Math.XMLSettingsImporter" ) );
 
@@ -228,7 +224,7 @@ sal_uLong SmXMLImportWrapper::Import(SfxMedium &rMedium)
 
                 nError = ReadThroughComponent(
                     rMedium.GetStorage(), xModelComp, "content.xml", "Content.xml",
-                    xServiceFactory, xInfoSet, "com.sun.star.comp.Math.XMLImporter" );
+                    xContext, xInfoSet, "com.sun.star.comp.Math.XMLImporter" );
             }
             else
                 nError = ERRCODE_IO_BROKENPACKAGE;
@@ -245,7 +241,7 @@ sal_uLong SmXMLImportWrapper::Import(SfxMedium &rMedium)
             xStatusIndicator->setValue(nSteps++);
 
         nError = ReadThroughComponent( xInputStream, xModelComp,
-            xServiceFactory, xInfoSet, "com.sun.star.comp.Math.XMLImporter", false );
+            xContext, xInfoSet, "com.sun.star.comp.Math.XMLImporter", false );
     }
 
     if (xStatusIndicator.is())
@@ -258,7 +254,7 @@ sal_uLong SmXMLImportWrapper::Import(SfxMedium &rMedium)
 sal_uLong SmXMLImportWrapper::ReadThroughComponent(
     Reference<io::XInputStream> xInputStream,
     Reference<XComponent> xModelComponent,
-    Reference<lang::XMultiServiceFactory> & rFactory,
+    Reference<uno::XComponentContext> & rxContext,
     Reference<beans::XPropertySet> & rPropSet,
     const sal_Char* pFilterName,
     sal_Bool bEncrypted )
@@ -266,7 +262,7 @@ sal_uLong SmXMLImportWrapper::ReadThroughComponent(
     sal_uLong nError = ERRCODE_SFX_DOLOADFAILED;
     OSL_ENSURE(xInputStream.is(), "input stream missing");
     OSL_ENSURE(xModelComponent.is(), "document missing");
-    OSL_ENSURE(rFactory.is(), "factory missing");
+    OSL_ENSURE(rxContext.is(), "factory missing");
     OSL_ENSURE(NULL != pFilterName,"I need a service name for the component!");
 
     // prepare ParserInputSrouce
@@ -274,15 +270,15 @@ sal_uLong SmXMLImportWrapper::ReadThroughComponent(
     aParserInput.aInputStream = xInputStream;
 
     // get parser
-    Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(comphelper::getComponentContext(rFactory));
+    Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(rxContext);
 
     Sequence<Any> aArgs( 1 );
     aArgs[0] <<= rPropSet;
 
     // get filter
     Reference< xml::sax::XDocumentHandler > xFilter(
-        rFactory->createInstanceWithArguments(
-            OUString::createFromAscii(pFilterName), aArgs ),
+        rxContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+            OUString::createFromAscii(pFilterName), aArgs, rxContext),
         UNO_QUERY );
     OSL_ENSURE( xFilter.is(), "Can't instantiate filter component." );
     if ( !xFilter.is() )
@@ -358,7 +354,7 @@ sal_uLong SmXMLImportWrapper::ReadThroughComponent(
     Reference<XComponent> xModelComponent,
     const sal_Char* pStreamName,
     const sal_Char* pCompatibilityStreamName,
-    Reference<lang::XMultiServiceFactory> & rFactory,
+    Reference<uno::XComponentContext> & rxContext,
     Reference<beans::XPropertySet> & rPropSet,
     const sal_Char* pFilterName )
 {
@@ -397,7 +393,7 @@ sal_uLong SmXMLImportWrapper::ReadThroughComponent(
 
 
         Reference < io::XInputStream > xStream = xEventsStream->getInputStream();
-        return ReadThroughComponent( xStream, xModelComponent, rFactory, rPropSet, pFilterName, bEncrypted );
+        return ReadThroughComponent( xStream, xModelComponent, rxContext, rPropSet, pFilterName, bEncrypted );
     }
     catch ( packages::WrongPasswordException& )
     {

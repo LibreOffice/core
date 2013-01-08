@@ -50,7 +50,7 @@ public:
     sal_uLong ReadThroughComponent(
         ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xInputStream,
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xModelComponent,
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rFactory,
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rxContext,
         ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet > & rPropSet,
         const sal_Char* pFilterName,
@@ -61,7 +61,7 @@ public:
                 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xModelComponent,
         const sal_Char* pStreamName,
         const sal_Char* pCompatibilityStreamName,
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rFactory,
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rxContext,
         ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet > & rPropSet,
         const sal_Char* pFilterName );
