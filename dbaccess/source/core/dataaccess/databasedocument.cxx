@@ -324,7 +324,7 @@ namespace
         try
         {
             if ( _bStart )
-                xStatusIndicator->start( ::rtl::OUString(), (sal_Int32)1000000 );
+                xStatusIndicator->start( OUString(), (sal_Int32)1000000 );
             else
                 xStatusIndicator->end();
         }
@@ -356,7 +356,7 @@ namespace
 
         try
         {
-            _rxStatusIndicator->start( ::rtl::OUString(), (sal_Int32)1000000 );
+            _rxStatusIndicator->start( OUString(), (sal_Int32)1000000 );
 
             sal_Int32 nLength = _rCallArgs.getLength();
             _rCallArgs.realloc( nLength + 1 );
@@ -368,7 +368,7 @@ namespace
         }
     }
 
-    static Sequence< PropertyValue > lcl_appendFileNameToDescriptor( const ::comphelper::NamedValueCollection& _rDescriptor, const ::rtl::OUString _rURL )
+    static Sequence< PropertyValue > lcl_appendFileNameToDescriptor( const ::comphelper::NamedValueCollection& _rDescriptor, const OUString _rURL )
     {
         ::comphelper::NamedValueCollection aMutableDescriptor( _rDescriptor );
         if ( !_rURL.isEmpty() )
@@ -380,7 +380,7 @@ namespace
     }
 }
 
-static rtl::OUString sPictures( RTL_CONSTASCII_USTRINGPARAM("Pictures") );
+static OUString sPictures( "Pictures" );
 
 // base documents seem to have a different behaviour to other documents, the
 // root storage contents at least seem to be re-used over different saves, thus if there is a
@@ -402,28 +402,28 @@ static rtl::OUString sPictures( RTL_CONSTASCII_USTRINGPARAM("Pictures") );
 
 void lcl_uglyHackToStoreDialogeEmbedImages( const Reference< XStorageBasedLibraryContainer >& xDlgCont, const Reference< XStorage >& xStorage, const Reference< XModel >& rxModel, const ::comphelper::ComponentContext& aContext ) throw ( RuntimeException )
 {
-    Sequence< rtl::OUString > sLibraries = xDlgCont->getElementNames();
-    Reference< XStorage > xTmpPic = xStorage->openStorageElement( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("tempPictures") ), ElementModes::READWRITE  );
+    Sequence< OUString > sLibraries = xDlgCont->getElementNames();
+    Reference< XStorage > xTmpPic = xStorage->openStorageElement( "tempPictures", ElementModes::READWRITE  );
 
-    std::vector< rtl::OUString > vEmbedImgUrls;
+    std::vector< OUString > vEmbedImgUrls;
     for ( sal_Int32 i=0; i < sLibraries.getLength(); ++i )
     {
-        rtl::OUString sLibrary( sLibraries[ i ] );
+        OUString sLibrary( sLibraries[ i ] );
         xDlgCont->loadLibrary( sLibrary );
         Reference< XNameContainer > xLib;
         xDlgCont->getByName( sLibrary ) >>= xLib;
         if ( xLib.is() )
         {
-            Sequence< rtl::OUString > sDialogs = xLib->getElementNames();
+            Sequence< OUString > sDialogs = xLib->getElementNames();
             sal_Int32 nDialogs( sDialogs.getLength() );
             for ( sal_Int32 j=0; j < nDialogs; ++j )
             {
                 Reference < ::com::sun::star::awt::XDialogProvider > xDlgPrv;
                 Sequence< Any > aArgs(1);
                 aArgs[ 0 ] <<= rxModel;
-                xDlgPrv.set( aContext.createComponentWithArguments( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.DialogProvider")) , aArgs), UNO_QUERY );
-                rtl::OUString sDialogUrl = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.script:") );
-                sDialogUrl = sDialogUrl.concat( sLibraries[ i ] ).concat( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("." ) ) ).concat (  sDialogs[ j ]  ).concat( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("?location=document") ) );
+                xDlgPrv.set( aContext.createComponentWithArguments( "com.sun.star.awt.DialogProvider", aArgs), UNO_QUERY );
+                OUString sDialogUrl = "vnd.sun.star.script:";
+                sDialogUrl = sDialogUrl.concat( sLibraries[ i ] ).concat( "." ).concat (  sDialogs[ j ]  ).concat( "?location=document" );
 
                 Reference< ::com::sun::star::awt::XControl > xDialog( xDlgPrv->createDialog( sDialogUrl ), UNO_QUERY );
                 Reference< XInterface > xModel( xDialog->getModel() );
@@ -438,9 +438,9 @@ void lcl_uglyHackToStoreDialogeEmbedImages( const Reference< XStorageBasedLibrar
         Sequence< Any > aArgs( 1 );
         aArgs[ 0 ] <<= xTmpPic;
         Reference< XGraphicObjectResolver > xGraphicResolver(
-                aContext.createComponentWithArguments( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Svx.GraphicExportHelper" ) ), aArgs ), UNO_QUERY );
-        std::vector< rtl::OUString >::iterator it = vEmbedImgUrls.begin();
-        std::vector< rtl::OUString >::iterator it_end = vEmbedImgUrls.end();
+                aContext.createComponentWithArguments( "com.sun.star.comp.Svx.GraphicExportHelper", aArgs ), UNO_QUERY );
+        std::vector< OUString >::iterator it = vEmbedImgUrls.begin();
+        std::vector< OUString >::iterator it_end = vEmbedImgUrls.end();
         if ( xGraphicResolver.is() )
         {
             for ( sal_Int32 count = 0; it != it_end; ++it, ++count )
@@ -501,13 +501,13 @@ void ODatabaseDocument::impl_import_nolck_throw( const ::comphelper::ComponentCo
     /** property map for import info set */
     comphelper::PropertyMapEntry aExportInfoMap[] =
      {
-        { MAP_LEN( "BaseURI"), 0,&::getCppuType( (::rtl::OUString *)0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
-        { MAP_LEN( "StreamName"), 0,&::getCppuType( (::rtl::OUString *)0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
+        { MAP_LEN( "BaseURI"), 0,&::getCppuType( (OUString *)0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
+        { MAP_LEN( "StreamName"), 0,&::getCppuType( (OUString *)0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
           { NULL, 0, 0, NULL, 0, 0 }
      };
      uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) ) );
-    xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BaseURI")), uno::makeAny(_rResource.getOrDefault("URL",::rtl::OUString())));
-    xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StreamName")), uno::makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("content.xml"))));
+    xInfoSet->setPropertyValue("BaseURI", uno::makeAny(_rResource.getOrDefault("URL",OUString())));
+    xInfoSet->setPropertyValue("StreamName", uno::makeAny(OUString("content.xml")));
 
     const sal_Int32 nCount = aFilterCreationArgs.getLength();
     aFilterCreationArgs.realloc(nCount + 1);
@@ -674,7 +674,7 @@ namespace
     return sal_False;
 }
 
-void SAL_CALL ODatabaseDocument::storeToRecoveryFile( const ::rtl::OUString& i_TargetLocation, const Sequence< PropertyValue >& i_MediaDescriptor ) throw ( RuntimeException, IOException, WrappedTargetException )
+void SAL_CALL ODatabaseDocument::storeToRecoveryFile( const OUString& i_TargetLocation, const Sequence< PropertyValue >& i_MediaDescriptor ) throw ( RuntimeException, IOException, WrappedTargetException )
 {
     DocumentGuard aGuard( *this );
     ModifyLock aLock( *this );
@@ -706,16 +706,16 @@ void SAL_CALL ODatabaseDocument::storeToRecoveryFile( const ::rtl::OUString& i_T
             throw;
         }
 
-        throw WrappedTargetException( ::rtl::OUString(), *this, aError );
+        throw WrappedTargetException( OUString(), *this, aError );
     }
 }
 
-void SAL_CALL ODatabaseDocument::recoverFromFile( const ::rtl::OUString& i_SourceLocation, const ::rtl::OUString& i_SalvagedFile, const Sequence< PropertyValue >& i_MediaDescriptor ) throw ( RuntimeException, IOException, WrappedTargetException )
+void SAL_CALL ODatabaseDocument::recoverFromFile( const OUString& i_SourceLocation, const OUString& i_SalvagedFile, const Sequence< PropertyValue >& i_MediaDescriptor ) throw ( RuntimeException, IOException, WrappedTargetException )
 {
     DocumentGuard aGuard( *this, DocumentGuard::InitMethod );
 
     if ( i_SourceLocation.isEmpty() )
-        throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
+        throw IllegalArgumentException( OUString(), *this, 1 );
 
     try
     {
@@ -738,7 +738,7 @@ void SAL_CALL ODatabaseDocument::recoverFromFile( const ::rtl::OUString& i_Sourc
 
         // by definition (of XDocumentRecovery), we're responsible for delivering a fully-initialized document,
         // which includes an attachResource call.
-        const ::rtl::OUString sLogicalDocumentURL( i_SalvagedFile.isEmpty() ?  i_SourceLocation : i_SalvagedFile  );
+        const OUString sLogicalDocumentURL( i_SalvagedFile.isEmpty() ?  i_SourceLocation : i_SalvagedFile  );
         impl_attachResource( sLogicalDocumentURL, aMediaDescriptor.getPropertyValues(), aGuard );
         // <- SYNCHRONIZED
     }
@@ -754,18 +754,18 @@ void SAL_CALL ODatabaseDocument::recoverFromFile( const ::rtl::OUString& i_Sourc
             throw;
         }
 
-        throw WrappedTargetException( ::rtl::OUString(), *this, aError );
+        throw WrappedTargetException( OUString(), *this, aError );
     }
 }
 
 // XModel
-sal_Bool SAL_CALL ODatabaseDocument::attachResource( const ::rtl::OUString& _rURL, const Sequence< PropertyValue >& _rArguments ) throw (RuntimeException)
+sal_Bool SAL_CALL ODatabaseDocument::attachResource( const OUString& _rURL, const Sequence< PropertyValue >& _rArguments ) throw (RuntimeException)
 {
     DocumentGuard aGuard( *this, DocumentGuard::MethodUsedDuringInit );
     return impl_attachResource( _rURL, _rArguments, aGuard );
 }
 
-sal_Bool ODatabaseDocument::impl_attachResource( const ::rtl::OUString& i_rLogicalDocumentURL,
+sal_Bool ODatabaseDocument::impl_attachResource( const OUString& i_rLogicalDocumentURL,
             const Sequence< PropertyValue >& i_rMediaDescriptor, DocumentGuard& _rDocGuard )
 {
     if  (   ( i_rLogicalDocumentURL == getURL() )
@@ -781,7 +781,7 @@ sal_Bool ODatabaseDocument::impl_attachResource( const ::rtl::OUString& i_rLogic
 
     // if no URL has been provided, the caller was lazy enough to not call our getURL - which is not allowed anymore,
     // now since getURL and getLocation both return the same, so calling one of those should be simple.
-    ::rtl::OUString sDocumentURL( i_rLogicalDocumentURL );
+    OUString sDocumentURL( i_rLogicalDocumentURL );
     OSL_ENSURE( !sDocumentURL.isEmpty(), "ODatabaseDocument::impl_attachResource: invalid URL!" );
     if ( sDocumentURL.isEmpty() )
         sDocumentURL = getURL();
@@ -806,7 +806,7 @@ sal_Bool ODatabaseDocument::impl_attachResource( const ::rtl::OUString& i_rLogic
     return sal_True;
 }
 
-::rtl::OUString SAL_CALL ODatabaseDocument::getURL(  ) throw (RuntimeException)
+OUString SAL_CALL ODatabaseDocument::getURL(  ) throw (RuntimeException)
 {
     DocumentGuard aGuard( *this, DocumentGuard::MethodWithoutInit );
     return m_pImpl->getURL();
@@ -963,7 +963,7 @@ sal_Bool SAL_CALL ODatabaseDocument::hasLocation(  ) throw (RuntimeException)
     return !getLocation().isEmpty();
 }
 
-::rtl::OUString SAL_CALL ODatabaseDocument::getLocation(  ) throw (RuntimeException)
+OUString SAL_CALL ODatabaseDocument::getLocation(  ) throw (RuntimeException)
 {
     DocumentGuard aGuard( *this, DocumentGuard::MethodWithoutInit );
     return m_pImpl->getURL();
@@ -981,7 +981,7 @@ void SAL_CALL ODatabaseDocument::store(  ) throw (IOException, RuntimeException)
 {
     DocumentGuard aGuard( *this );
 
-    ::rtl::OUString sDocumentURL( m_pImpl->getURL() );
+    OUString sDocumentURL( m_pImpl->getURL() );
     if ( !sDocumentURL.isEmpty() )
     {
         if ( m_pImpl->getDocFileLocation() == m_pImpl->getURL() )
@@ -1010,13 +1010,13 @@ void SAL_CALL ODatabaseDocument::store(  ) throw (IOException, RuntimeException)
             // allowed to leave
             throw;
         }
-        impl_throwIOExceptionCausedBySave_throw( aError, ::rtl::OUString() );
+        impl_throwIOExceptionCausedBySave_throw( aError, OUString() );
     }
 }
 
-void ODatabaseDocument::impl_throwIOExceptionCausedBySave_throw( const Any& i_rError, const ::rtl::OUString& i_rTargetURL ) const
+void ODatabaseDocument::impl_throwIOExceptionCausedBySave_throw( const Any& i_rError, const OUString& i_rTargetURL ) const
 {
-    ::rtl::OUString sErrorMessage = extractExceptionMessage( m_pImpl->m_aContext, i_rError );
+    OUString sErrorMessage = extractExceptionMessage( m_pImpl->m_aContext, i_rError );
     sErrorMessage = ResourceManager::loadString(
         RID_STR_ERROR_WHILE_SAVING,
         "$location$", i_rTargetURL,
@@ -1025,7 +1025,7 @@ void ODatabaseDocument::impl_throwIOExceptionCausedBySave_throw( const Any& i_rE
     throw IOException( sErrorMessage, *const_cast< ODatabaseDocument* >( this ) );
 }
 
-void ODatabaseDocument::impl_storeAs_throw( const ::rtl::OUString& _rURL, const ::comphelper::NamedValueCollection& _rArguments,
+void ODatabaseDocument::impl_storeAs_throw( const OUString& _rURL, const ::comphelper::NamedValueCollection& _rArguments,
     const StoreType _eType, DocumentGuard& _rGuard ) throw ( IOException, RuntimeException )
 {
     OSL_PRECOND( ( _eType == SAVE ) || ( _eType == SAVE_AS ),
@@ -1127,7 +1127,7 @@ void ODatabaseDocument::impl_storeAs_throw( const ::rtl::OUString& _rURL, const 
         impl_notifyStorageChange_nolck_nothrow( xNewRootStorage );
 }
 
-Reference< XStorage > ODatabaseDocument::impl_createStorageFor_throw( const ::rtl::OUString& _rURL ) const
+Reference< XStorage > ODatabaseDocument::impl_createStorageFor_throw( const OUString& _rURL ) const
 {
     Reference< ucb::XSimpleFileAccess3 > xTempAccess(ucb::SimpleFileAccess::create(m_pImpl->m_aContext.getUNOContext()));
     Reference< io::XStream > xStream = xTempAccess->openFileReadWrite( _rURL );
@@ -1144,7 +1144,7 @@ Reference< XStorage > ODatabaseDocument::impl_createStorageFor_throw( const ::rt
     return Reference< XStorage >( xStorageFactory->createInstanceWithArguments( aParam ), UNO_QUERY_THROW );
 }
 
-void SAL_CALL ODatabaseDocument::storeAsURL( const ::rtl::OUString& _rURL, const Sequence< PropertyValue >& _rArguments ) throw (IOException, RuntimeException)
+void SAL_CALL ODatabaseDocument::storeAsURL( const OUString& _rURL, const Sequence< PropertyValue >& _rArguments ) throw (IOException, RuntimeException)
 {
     // SYNCHRONIZED ->
     DocumentGuard aGuard( *this, DocumentGuard::MethodWithoutInit );
@@ -1196,10 +1196,10 @@ void ODatabaseDocument::impl_storeToStorage_throw( const Reference< XStorage >& 
                                                    DocumentGuard& _rDocGuard ) const
 {
     if ( !_rxTargetStorage.is() )
-        throw IllegalArgumentException( ::rtl::OUString(), *const_cast< ODatabaseDocument* >( this ), 1 );
+        throw IllegalArgumentException( OUString(), *const_cast< ODatabaseDocument* >( this ), 1 );
 
     if ( !m_pImpl.is() )
-        throw DisposedException( ::rtl::OUString(), *const_cast< ODatabaseDocument* >( this ) );
+        throw DisposedException( OUString(), *const_cast< ODatabaseDocument* >( this ) );
 
     try
     {
@@ -1232,7 +1232,7 @@ void ODatabaseDocument::impl_storeToStorage_throw( const Reference< XStorage >& 
     }
 }
 
-void SAL_CALL ODatabaseDocument::storeToURL( const ::rtl::OUString& _rURL, const Sequence< PropertyValue >& _rArguments ) throw (IOException, RuntimeException)
+void SAL_CALL ODatabaseDocument::storeToURL( const OUString& _rURL, const Sequence< PropertyValue >& _rArguments ) throw (IOException, RuntimeException)
 {
     DocumentGuard aGuard( *this );
     ModifyLock aLock( *this );
@@ -1345,10 +1345,10 @@ void SAL_CALL ODatabaseDocument::removeDocumentEventListener( const Reference< X
     m_aEventNotifier.removeDocumentEventListener( _Listener );
 }
 
-void SAL_CALL ODatabaseDocument::notifyDocumentEvent( const ::rtl::OUString& _EventName, const Reference< XController2 >& _ViewController, const Any& _Supplement ) throw (IllegalArgumentException, NoSupportException, RuntimeException)
+void SAL_CALL ODatabaseDocument::notifyDocumentEvent( const OUString& _EventName, const Reference< XController2 >& _ViewController, const Any& _Supplement ) throw (IllegalArgumentException, NoSupportException, RuntimeException)
 {
     if ( _EventName.isEmpty() )
-        throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
+        throw IllegalArgumentException( OUString(), *this, 1 );
 
     // SYNCHRONIZED ->
     DocumentGuard aGuard( *this );
@@ -1413,12 +1413,12 @@ Reference< XNameAccess > ODatabaseDocument::impl_getDocumentContainer_throw( ODa
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xMy(*this);
         if ( dbtools::getDataSourceSetting(xMy,bFormsContainer ? "Forms" : "Reports",aValue) )
         {
-            ::rtl::OUString sSupportService;
+            OUString sSupportService;
             aValue >>= sSupportService;
             if ( !sSupportService.isEmpty() )
             {
                 Sequence<Any> aArgs(1);
-                aArgs[0] <<= NamedValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DatabaseDocument")),makeAny(xMy));
+                aArgs[0] <<= NamedValue("DatabaseDocument",makeAny(xMy));
                 xContainer.set(m_pImpl->m_aContext.createComponentWithArguments(sSupportService,aArgs),UNO_QUERY);
                 rContainerRef = xContainer;
             }
@@ -1555,7 +1555,7 @@ void ODatabaseDocument::WriteThroughComponent( const Reference< XComponent >& xC
     OSL_ENSURE( pServiceName, "Need service name!" );
 
     // open stream
-    ::rtl::OUString sStreamName = ::rtl::OUString::createFromAscii( pStreamName );
+    OUString sStreamName = OUString::createFromAscii( pStreamName );
     Reference< XStream > xStream = _xStorageToSaveTo->openStreamElement( sStreamName, ElementModes::READWRITE | ElementModes::TRUNCATE );
     if ( !xStream.is() )
         return;
@@ -1570,8 +1570,8 @@ void ODatabaseDocument::WriteThroughComponent( const Reference< XComponent >& xC
         xSeek->seek(0);
 
     Reference< XPropertySet > xStreamProp( xOutputStream, UNO_QUERY_THROW );
-    xStreamProp->setPropertyValue( INFO_MEDIATYPE, makeAny( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "text/xml" ) ) ) );
-    xStreamProp->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Compressed" ) ), makeAny( (sal_Bool)sal_True ) );
+    xStreamProp->setPropertyValue( INFO_MEDIATYPE, makeAny( OUString( "text/xml" ) ) );
+    xStreamProp->setPropertyValue( "Compressed", makeAny( (sal_Bool)sal_True ) );
 
     // write the stuff
     WriteThroughComponent( xOutputStream, xComponent, pServiceName, _rArguments, rMediaDesc );
@@ -1621,19 +1621,19 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
     /** property map for export info set */
     comphelper::PropertyMapEntry aExportInfoMap[] =
     {
-        { MAP_LEN( "BaseURI"), 0,&::getCppuType( (::rtl::OUString *)0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
-        { MAP_LEN( "StreamName"), 0,&::getCppuType( (::rtl::OUString *)0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
+        { MAP_LEN( "BaseURI"), 0,&::getCppuType( (OUString *)0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
+        { MAP_LEN( "StreamName"), 0,&::getCppuType( (OUString *)0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
         { MAP_LEN( "UsePrettyPrinting" ), 0, &::getCppuType((sal_Bool*)0), beans::PropertyAttribute::MAYBEVOID, 0},
         { NULL, 0, 0, NULL, 0, 0 }
     };
     uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) ) );
 
     SvtSaveOptions aSaveOpt;
-    xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UsePrettyPrinting")), uno::makeAny(aSaveOpt.IsPrettyPrinting()));
+    xInfoSet->setPropertyValue("UsePrettyPrinting", uno::makeAny(aSaveOpt.IsPrettyPrinting()));
     if ( aSaveOpt.IsSaveRelFSys() )
-        xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BaseURI")), uno::makeAny(_rMediaDescriptor.getOrDefault("URL",::rtl::OUString())));
+        xInfoSet->setPropertyValue("BaseURI", uno::makeAny(_rMediaDescriptor.getOrDefault("URL",OUString())));
 
-    ::rtl::OUString aVersion;
+    OUString aVersion;
     SvtSaveOptions::ODFDefaultVersion nDefVersion = aSaveOpt.GetODFDefaultVersion();
 
     // older versions can not have this property set, it exists only starting from ODF1.2
@@ -1644,7 +1644,7 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
     {
         try
         {
-            xInfoSet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Version" )), uno::makeAny( aVersion ) );
+            xInfoSet->setPropertyValue( "Version" , uno::makeAny( aVersion ) );
         }
         catch( const uno::Exception& )
         {
@@ -1656,18 +1656,18 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
     aDelegatorArguments[nArgsLen++] <<= xInfoSet;
 
     Reference< XPropertySet > xProp( _rxTargetStorage, UNO_QUERY_THROW );
-    xProp->setPropertyValue( INFO_MEDIATYPE, makeAny( (rtl::OUString)MIMETYPE_OASIS_OPENDOCUMENT_DATABASE ) );
+    xProp->setPropertyValue( INFO_MEDIATYPE, makeAny( (OUString)MIMETYPE_OASIS_OPENDOCUMENT_DATABASE ) );
 
     Reference< XComponent > xComponent( *const_cast< ODatabaseDocument* >( this ), UNO_QUERY_THROW );
 
     Sequence< PropertyValue > aMediaDescriptor;
     _rMediaDescriptor >>= aMediaDescriptor;
 
-    xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StreamName")), uno::makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("settings.xml"))));
+    xInfoSet->setPropertyValue("StreamName", uno::makeAny(OUString("settings.xml")));
     WriteThroughComponent( xComponent, "settings.xml", "com.sun.star.comp.sdb.XMLSettingsExporter",
         aDelegatorArguments, aMediaDescriptor, _rxTargetStorage );
 
-    xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StreamName")), uno::makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("content.xml"))));
+    xInfoSet->setPropertyValue("StreamName", uno::makeAny(OUString("content.xml")));
     WriteThroughComponent( xComponent, "content.xml", "com.sun.star.comp.sdb.DBExportFilter",
         aDelegatorArguments, aMediaDescriptor, _rxTargetStorage );
 
@@ -1702,15 +1702,15 @@ Reference< XUIConfigurationManager > SAL_CALL ODatabaseDocument::getUIConfigurat
         Reference< XUIConfigurationStorage > xUIConfigStorage( m_xUIConfigurationManager, UNO_QUERY );
         if ( xUIConfigStorage.is() )
         {
-            rtl::OUString aUIConfigFolderName( RTL_CONSTASCII_USTRINGPARAM( "Configurations2" ));
+            OUString aUIConfigFolderName( "Configurations2" );
             Reference< XStorage > xConfigStorage;
 
             // First try to open with READWRITE and then READ
             xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, ElementModes::READWRITE );
             if ( xConfigStorage.is() )
             {
-                rtl::OUString aUIConfigMediaType( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.xml.ui.configuration" ));
-                rtl::OUString aMediaType;
+                OUString aUIConfigMediaType( "application/vnd.sun.xml.ui.configuration" );
+                OUString aMediaType;
                 Reference< XPropertySet > xPropSet( xConfigStorage, UNO_QUERY );
                 Any a = xPropSet->getPropertyValue( INFO_MEDIATYPE );
                 if ( !( a >>= aMediaType ) ||  aMediaType.isEmpty() )
@@ -1730,7 +1730,7 @@ Reference< XUIConfigurationManager > SAL_CALL ODatabaseDocument::getUIConfigurat
     return m_xUIConfigurationManager;
 }
 
-Reference< XStorage > SAL_CALL ODatabaseDocument::getDocumentSubStorage( const ::rtl::OUString& aStorageName, sal_Int32 nMode ) throw (RuntimeException)
+Reference< XStorage > SAL_CALL ODatabaseDocument::getDocumentSubStorage( const OUString& aStorageName, sal_Int32 nMode ) throw (RuntimeException)
 {
     DocumentGuard aGuard( *this );
 
@@ -1738,7 +1738,7 @@ Reference< XStorage > SAL_CALL ODatabaseDocument::getDocumentSubStorage( const :
     return xStorageAccess->getDocumentSubStorage( aStorageName, nMode );
 }
 
-Sequence< ::rtl::OUString > SAL_CALL ODatabaseDocument::getDocumentSubStoragesNames(  ) throw (::com::sun::star::io::IOException, RuntimeException)
+Sequence< OUString > SAL_CALL ODatabaseDocument::getDocumentSubStoragesNames(  ) throw (::com::sun::star::io::IOException, RuntimeException)
 {
     Reference< XDocumentSubStorageSupplier > xStorageAccess( m_pImpl->getDocumentSubStorageSupplier() );
     return xStorageAccess->getDocumentSubStoragesNames();
@@ -1850,17 +1850,17 @@ void SAL_CALL ODatabaseDocument::removeEventListener( const Reference< lang::XEv
 }
 
 // XServiceInfo
-rtl::OUString ODatabaseDocument::getImplementationName(  ) throw(RuntimeException)
+OUString ODatabaseDocument::getImplementationName(  ) throw(RuntimeException)
 {
     return getImplementationName_static();
 }
 
-rtl::OUString ODatabaseDocument::getImplementationName_static(  ) throw(RuntimeException)
+OUString ODatabaseDocument::getImplementationName_static(  ) throw(RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.dba.ODatabaseDocument"));
+    return OUString("com.sun.star.comp.dba.ODatabaseDocument");
 }
 
-Sequence< ::rtl::OUString > ODatabaseDocument::getSupportedServiceNames(  ) throw (RuntimeException)
+Sequence< OUString > ODatabaseDocument::getSupportedServiceNames(  ) throw (RuntimeException)
 {
     return getSupportedServiceNames_static();
 }
@@ -1876,15 +1876,15 @@ Reference< XInterface > ODatabaseDocument::Create( const Reference< XComponentCo
     return xModel.get();
 }
 
-Sequence< ::rtl::OUString > ODatabaseDocument::getSupportedServiceNames_static(  ) throw (RuntimeException)
+Sequence< OUString > ODatabaseDocument::getSupportedServiceNames_static(  ) throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aSNS( 2 );
-    aSNS[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.OfficeDatabaseDocument"));
-    aSNS[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.OfficeDocument"));
+    Sequence< OUString > aSNS( 2 );
+    aSNS[0] = "com.sun.star.sdb.OfficeDatabaseDocument";
+    aSNS[1] = "com.sun.star.document.OfficeDocument";
     return aSNS;
 }
 
-sal_Bool ODatabaseDocument::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)
+sal_Bool ODatabaseDocument::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
 {
     return ::comphelper::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
 }
@@ -2018,28 +2018,24 @@ Reference< XEnumeration > SAL_CALL ODatabaseDocument::getControllers(  ) throw (
     return new ::comphelper::OAnyEnumeration(aController);
 }
 
-Sequence< ::rtl::OUString > SAL_CALL ODatabaseDocument::getAvailableViewControllerNames(  ) throw (RuntimeException)
+Sequence< OUString > SAL_CALL ODatabaseDocument::getAvailableViewControllerNames(  ) throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aNames(1);
+    Sequence< OUString > aNames(1);
     aNames[0] = SERVICE_SDB_APPLICATIONCONTROLLER;
     return aNames;
 }
 
 Reference< XController2 > SAL_CALL ODatabaseDocument::createDefaultViewController( const Reference< XFrame >& _Frame ) throw (IllegalArgumentException, Exception, RuntimeException)
 {
-    return createViewController(
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Default" ) ),
-        Sequence< PropertyValue >(),
-        _Frame
-    );
+    return createViewController( "Default", Sequence< PropertyValue >(), _Frame);
 }
 
-Reference< XController2 > SAL_CALL ODatabaseDocument::createViewController( const ::rtl::OUString& _ViewName, const Sequence< PropertyValue >& _Arguments, const Reference< XFrame >& _Frame ) throw (IllegalArgumentException, Exception, RuntimeException)
+Reference< XController2 > SAL_CALL ODatabaseDocument::createViewController( const OUString& _ViewName, const Sequence< PropertyValue >& _Arguments, const Reference< XFrame >& _Frame ) throw (IllegalArgumentException, Exception, RuntimeException)
 {
     if ( _ViewName != "Default" && _ViewName != "Preview" )
-        throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
+        throw IllegalArgumentException( OUString(), *this, 1 );
     if ( !_Frame.is() )
-        throw IllegalArgumentException( ::rtl::OUString(), *this, 3 );
+        throw IllegalArgumentException( OUString(), *this, 3 );
 
     DocumentGuard aGuard( *this );
     ::comphelper::ComponentContext aContext( m_pImpl->m_aContext );
@@ -2079,7 +2075,7 @@ uno::Reference< frame::XUntitledNumbers > ODatabaseDocument::impl_getUntitledHel
     if ( !m_xModuleManager.is() )
         m_xModuleManager.set( ModuleManager::create(m_pImpl->m_aContext.getUNOContext()) );
 
-    ::rtl::OUString sModuleId;
+    OUString sModuleId;
     try
     {
         sModuleId = m_xModuleManager->identify( _xComponent );
@@ -2097,7 +2093,6 @@ uno::Reference< frame::XUntitledNumbers > ODatabaseDocument::impl_getUntitledHel
         xNumberedControllers.set(static_cast< ::cppu::OWeakObject* >(pHelper), uno::UNO_QUERY_THROW);
 
         pHelper->setOwner          (xThis);
-        //pHelper->setUntitledPrefix (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" : ")));
 
         m_aNumberedControllers.insert(TNumberedController::value_type(sModuleId,xNumberedControllers));
     }
@@ -2108,7 +2103,7 @@ uno::Reference< frame::XUntitledNumbers > ODatabaseDocument::impl_getUntitledHel
 }
 
 // css.frame.XTitle
-::rtl::OUString SAL_CALL ODatabaseDocument::getTitle()
+OUString SAL_CALL ODatabaseDocument::getTitle()
     throw (uno::RuntimeException)
 {
     // SYNCHRONIZED ->
@@ -2117,7 +2112,7 @@ uno::Reference< frame::XUntitledNumbers > ODatabaseDocument::impl_getUntitledHel
 }
 
 // css.frame.XTitle
-void SAL_CALL ODatabaseDocument::setTitle( const ::rtl::OUString& sTitle )
+void SAL_CALL ODatabaseDocument::setTitle( const OUString& sTitle )
     throw (uno::RuntimeException)
 {
     // SYNCHRONIZED ->
@@ -2177,9 +2172,9 @@ void SAL_CALL ODatabaseDocument::releaseNumberForComponent( const uno::Reference
 }
 
 // css.frame.XUntitledNumbers
-::rtl::OUString SAL_CALL ODatabaseDocument::getUntitledPrefix()    throw (uno::RuntimeException)
+OUString SAL_CALL ODatabaseDocument::getUntitledPrefix()    throw (uno::RuntimeException)
 {
-    return ::rtl::OUString();/*RTL_CONSTASCII_USTRINGPARAM(" : "));*/
+    return OUString();
 }
 
 }   // namespace dbaccess
