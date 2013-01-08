@@ -301,7 +301,7 @@ static void lcl_FindValidAttribs( ItemList& rLst, ContentNode* pNode, sal_uInt16
 
 sal_uInt32 ImpEditEngine::WriteBin( SvStream& rOutput, EditSelection aSel, bool bStoreUnicodeStrings )
 {
-    boost::scoped_ptr<EditTextObject> pObj(CreateBinTextObject(aSel, NULL));
+    boost::scoped_ptr<EditTextObject> pObj(CreateTextObject(aSel, NULL));
     pObj->mpImpl->StoreUnicodeStrings(bStoreUnicodeStrings);
     pObj->Store(rOutput);
     return 0;
@@ -1017,10 +1017,10 @@ EditTextObject* ImpEditEngine::CreateTextObject()
 
 EditTextObject* ImpEditEngine::CreateTextObject( EditSelection aSel )
 {
-    return CreateBinTextObject( aSel, GetEditTextObjectPool(), aStatus.AllowBigObjects(), nBigTextObjectStart );
+    return CreateTextObject( aSel, GetEditTextObjectPool(), aStatus.AllowBigObjects(), nBigTextObjectStart );
 }
 
-EditTextObject* ImpEditEngine::CreateBinTextObject( EditSelection aSel, SfxItemPool* pPool, sal_Bool bAllowBigObjects, sal_uInt16 nBigObjectStart )
+EditTextObject* ImpEditEngine::CreateTextObject( EditSelection aSel, SfxItemPool* pPool, sal_Bool bAllowBigObjects, sal_uInt16 nBigObjectStart )
 {
     EditTextObject* pTxtObj = new EditTextObject(pPool);
     pTxtObj->SetVertical( IsVertical() );
@@ -1195,12 +1195,12 @@ EditSelection ImpEditEngine::InsertText( const EditTextObject& rTextObject, Edit
     aSel.Adjust( aEditDoc );
     if ( aSel.HasRange() )
         aSel = ImpDeleteSelection( aSel );
-    EditSelection aNewSel = InsertBinTextObject( rTextObject, aSel.Max() );
+    EditSelection aNewSel = InsertTextObject( rTextObject, aSel.Max() );
     LeaveBlockNotifications();
     return aNewSel;
 }
 
-EditSelection ImpEditEngine::InsertBinTextObject( const EditTextObject& rTextObject, EditPaM aPaM )
+EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject, EditPaM aPaM )
 {
     // Optimize: No getPos undFindParaportion, instead calculate index!
     EditSelection aSel( aPaM, aPaM );
@@ -2944,7 +2944,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                 if (bSingleNode && !bHasAttribs)
                     pUndo->SetText( aSel.Min().GetNode()->Copy( aSel.Min().GetIndex(), aSel.Max().GetIndex()-aSel.Min().GetIndex() ) );
                 else
-                    pUndo->SetText( CreateBinTextObject( aSel, NULL ) );
+                    pUndo->SetText( CreateTextObject( aSel, NULL ) );
             }
 
             // now apply the changes from end to start to leave the offsets of the
