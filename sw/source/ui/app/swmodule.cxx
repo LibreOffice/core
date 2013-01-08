@@ -139,7 +139,7 @@
 #include <app.hrc>
 #include <svx/xmlsecctrl.hxx>
 ResMgr *pSwResMgr = 0;
-sal_Bool     bNoInterrupt     = sal_False;
+bool     bNoInterrupt     = false;
 
 #include <sfx2/app.hxx>
 

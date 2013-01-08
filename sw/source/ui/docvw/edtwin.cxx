@@ -156,7 +156,7 @@ using namespace ::com::sun::star;
  --------------------------------------------------------------------*/
 
 static bool bInputLanguageSwitched = false;
-extern sal_Bool bNoInterrupt;       // in mainwn.cxx
+extern bool bNoInterrupt;       // in mainwn.cxx
 
 // Usually in MouseButtonUp a selection is revoked when the selection is
 // not currently being pulled open. Unfortunately in MouseButtonDown there
@@ -2624,7 +2624,8 @@ void SwEditWin::RstMBDownFlags()
     // of the modal dialog (like on WINDOWS).
     // So reset the statuses here and release the mouse
     // for the dialog.
-    bMBPressed = bNoInterrupt = sal_False;
+    bMBPressed = sal_False;
+    bNoInterrupt = false;
     EnterArea();
     ReleaseMouse();
 }
@@ -2849,7 +2850,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     if ( MOUSE_LEFT == rMEvt.GetButtons() )
     {
         sal_Bool bOnlyText = sal_False;
-        bMBPressed = bNoInterrupt = sal_True;
+        bMBPressed = sal_True;
+        bNoInterrupt = true;
         nKS_NUMDOWN_Count = 0;
 
         CaptureMouse();
@@ -2878,7 +2880,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                 }
                 if ( EnterDrawMode( rMEvt, aDocPos ) )
                 {
-                    bNoInterrupt = sal_False;
+                    bNoInterrupt = false;
                     return;
                 }
                 else  if ( rView.GetDrawFuncPtr() && bInsFrm )
@@ -2911,7 +2913,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 }
                                 bFrmDrag = sal_True;
                             }
-                            bNoInterrupt = sal_False;
+                            bNoInterrupt = false;
                             return;
                         }
                     }
@@ -3241,7 +3243,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                  rSh.GetDrawView()->PickHandle( aDocPos ))
                         {
                             bFrmDrag = sal_True;
-                            bNoInterrupt = sal_False;
+                            bNoInterrupt = false;
                             return;
                         }
                     }
@@ -3270,7 +3272,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                  rSh.GetDrawView()->PickHandle( aDocPos ))
                         {
                             bFrmDrag = sal_True;
-                            bNoInterrupt = sal_False;
+                            bNoInterrupt = false;
                             return;
                         }
                         else
@@ -3413,8 +3415,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
                 if ( !bOverSelect )
                 {
-                    const sal_Bool bTmpNoInterrupt = bNoInterrupt;
-                    bNoInterrupt = sal_False;
+                    const bool bTmpNoInterrupt = bNoInterrupt;
+                    bNoInterrupt = false;
 
                     if( !rSh.IsViewLocked() && bLockView )
                         rSh.LockView( sal_True );
@@ -4015,7 +4017,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
             rSh.EndDrag( &aDocPt, false );
             bFrmDrag = sal_False;
         }
-        bNoInterrupt = sal_False;
+        bNoInterrupt = false;
         ReleaseMouse();
         return;
     }
@@ -4067,7 +4069,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
         else if (rMEvt.GetButtons() == MOUSE_RIGHT && rSh.IsDrawCreate())
             rView.GetDrawFuncPtr()->BreakCreate();   // abort drawing
 
-        bNoInterrupt = sal_False;
+        bNoInterrupt = false;
         ReleaseMouse();
         return;
     }
@@ -4198,8 +4200,8 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
             {
                 if ( !rSh.IsInSelect() && rSh.ChgCurrPam( aDocPt ) )
                 {
-                    const sal_Bool bTmpNoInterrupt = bNoInterrupt;
-                    bNoInterrupt = sal_False;
+                    const bool bTmpNoInterrupt = bNoInterrupt;
+                    bNoInterrupt = false;
                     {   // create only temporary move context because otherwise
                         // the query to the content form doesn't work!!!
                         MV_KONTEXT( &rSh );
@@ -4516,7 +4518,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
     //sicherheitshalber aufrufen, da jetzt das Selektieren bestimmt zu Ende ist.
     //Andernfalls koennte der Timeout des Timers Kummer machen.
     EnterArea();
-    bNoInterrupt = sal_False;
+    bNoInterrupt = false;
 
     if (bCallBase)
         Window::MouseButtonUp(rMEvt);
@@ -4799,10 +4801,10 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                 SET_CURR_SHELL( &rSh );
                 if (!pApplyTempl)
                 {
-                    if (bNoInterrupt == sal_True)
+                    if (bNoInterrupt)
                     {
                         ReleaseMouse();
-                        bNoInterrupt = sal_False;
+                        bNoInterrupt = false;
                         bMBPressed = sal_False;
                     }
                     if ( rCEvt.IsMouseEvent() )

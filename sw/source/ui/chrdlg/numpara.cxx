@@ -174,7 +174,7 @@ sal_Bool    SwParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
 
 void    SwParagraphNumTabPage::Reset( const SfxItemSet& rSet )
 {
-    sal_Bool bHasNumberStyle = sal_False;
+    bool bHasNumberStyle = false;
 
     SfxItemState eItemState = rSet.GetItemState( GetWhich(SID_ATTR_PARA_OUTLINE_LEVEL) );
 
@@ -209,7 +209,7 @@ void    SwParagraphNumTabPage::Reset( const SfxItemSet& rSet )
         else
             aNumberStyleLB.SelectEntry( aStyle );
 
-        bHasNumberStyle = sal_True;
+        bHasNumberStyle = true;
     }
     else
     {

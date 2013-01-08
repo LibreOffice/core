@@ -81,7 +81,7 @@
 
 using namespace nsSwDocInfoSubType;
 
-extern sal_Bool bNoInterrupt;       // in mainwn.cxx
+extern bool bNoInterrupt;       // in mainwn.cxx
 
 String& lcl_AppendRedlineStr( String& rStr, sal_uInt16 nRedlId )
 {
@@ -474,7 +474,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     }
 
                     rSh.SetCareWin(pDlg->GetWindow());
-                    bNoInterrupt = sal_True;
+                    bNoInterrupt = true;
 
                     if ( pDlg->Execute() == RET_OK )
                     {
@@ -487,7 +487,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
 
                     delete pDlg;
                     rSh.SetCareWin(NULL);
-                    bNoInterrupt = sal_False;
+                    bNoInterrupt = false;
                     rSh.ClearMark();
                     GetView().AttrChangedNotify(GetShellPtr());
                 }
