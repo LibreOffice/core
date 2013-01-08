@@ -26,6 +26,7 @@
 #include <unotools/fontcvt.hxx>
 
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/noncopyable.hpp>
 
 class XEditAttribute
 {
@@ -150,15 +151,14 @@ public:
     bool isWrongListEqual(const ContentInfo& rCompare) const;
 };
 
-class EditTextObjectImpl : public EditTextObject
+class EditTextObjectImpl : boost::noncopyable
 {
-    using EditTextObject::operator==;
-    using EditTextObject::isWrongListEqual;
-
 public:
     typedef boost::ptr_vector<ContentInfo> ContentInfosType;
 
 private:
+    EditTextObject* mpFront;
+
     ContentInfosType        aContents;
     SfxItemPool*            pPool;
     XParaPortionList*       pPortionInfo;
@@ -173,21 +173,19 @@ private:
     bool                    bVertical:1;
     bool                    bStoreUnicodeStrings:1;
 
-protected:
-    virtual void            StoreData( SvStream& rOStream ) const;
-    virtual void            CreateData( SvStream& rIStream );
-    sal_Bool                    ImpChangeStyleSheets( const String& rOldName, SfxStyleFamily eOldFamily,
-                                        const String& rNewName, SfxStyleFamily eNewFamily );
+    bool ImpChangeStyleSheets( const String& rOldName, SfxStyleFamily eOldFamily,
+                               const String& rNewName, SfxStyleFamily eNewFamily );
 
 public:
-                            EditTextObjectImpl( SfxItemPool* pPool );
-                            EditTextObjectImpl( const EditTextObjectImpl& );
-    virtual                 ~EditTextObjectImpl();
+    void StoreData( SvStream& rOStream ) const;
+    void CreateData( SvStream& rIStream );
 
-    virtual EditTextObject* Clone() const;
+    EditTextObjectImpl( EditTextObject* pFront, SfxItemPool* pPool );
+    EditTextObjectImpl( EditTextObject* pFront, const EditTextObjectImpl& r );
+    ~EditTextObjectImpl();
 
-    sal_uInt16                  GetUserType() const;
-    void                    SetUserType( sal_uInt16 n );
+    sal_uInt16 GetUserType() const;
+    void SetUserType( sal_uInt16 n );
 
     sal_uLong                   GetObjectSettings() const;
     void                    SetObjectSettings( sal_uLong n );
@@ -211,57 +209,57 @@ public:
     void                    SetPortionInfo( XParaPortionList* pP )
                                 { pPortionInfo = pP; }
 
-    virtual size_t GetParagraphCount() const;
-    virtual String GetText(size_t nParagraph) const;
-    virtual void Insert(const EditTextObject& rObj, size_t nPara);
-    virtual EditTextObject* CreateTextObject(size_t nPara, size_t nParas = 1) const;
+    size_t GetParagraphCount() const;
+    String GetText(size_t nParagraph) const;
+    void Insert(const EditTextObject& rObj, size_t nPara);
+    EditTextObject* CreateTextObject(size_t nPara, size_t nParas = 1) const;
     virtual void RemoveParagraph(size_t nPara);
 
-    virtual sal_Bool            HasPortionInfo() const;
-    virtual void            ClearPortionInfo();
+    bool HasPortionInfo() const;
+    void ClearPortionInfo();
 
-    virtual sal_Bool            HasOnlineSpellErrors() const;
+    bool HasOnlineSpellErrors() const;
 
-    virtual sal_Bool            HasCharAttribs( sal_uInt16 nWhich = 0 ) const;
-    virtual void            GetCharAttribs( sal_uInt16 nPara, std::vector<EECharAttrib>& rLst ) const;
+    bool HasCharAttribs( sal_uInt16 nWhich = 0 ) const;
+    void GetCharAttribs( sal_uInt16 nPara, std::vector<EECharAttrib>& rLst ) const;
 
-    virtual sal_Bool            RemoveCharAttribs( sal_uInt16 nWhich = 0 );
-    virtual sal_Bool            RemoveParaAttribs( sal_uInt16 nWhich = 0 );
+    bool RemoveCharAttribs( sal_uInt16 nWhich = 0 );
+    bool RemoveParaAttribs( sal_uInt16 nWhich = 0 );
 
-    virtual void            MergeParaAttribs( const SfxItemSet& rAttribs, sal_uInt16 nStart, sal_uInt16 nEnd );
+    void MergeParaAttribs( const SfxItemSet& rAttribs, sal_uInt16 nStart, sal_uInt16 nEnd );
 
-    virtual sal_Bool            IsFieldObject() const;
-    virtual const SvxFieldItem* GetField() const;
-    virtual bool HasField( sal_Int32 nType = com::sun::star::text::textfield::Type::UNSPECIFIED ) const;
+    bool IsFieldObject() const;
+    const SvxFieldItem* GetField() const;
+    bool HasField( sal_Int32 nType = com::sun::star::text::textfield::Type::UNSPECIFIED ) const;
 
-    virtual SfxItemSet GetParaAttribs(size_t nPara) const;
-    virtual void SetParaAttribs(size_t nPara, const SfxItemSet& rAttribs);
+    const SfxItemSet& GetParaAttribs(size_t nPara) const;
+    void SetParaAttribs(size_t nPara, const SfxItemSet& rAttribs);
 
-    virtual sal_Bool            HasStyleSheet( const XubString& rName, SfxStyleFamily eFamily ) const;
-    virtual void GetStyleSheet(size_t nPara, String& rName, SfxStyleFamily& eFamily) const;
-    virtual void SetStyleSheet(size_t nPara, const String& rName, const SfxStyleFamily& eFamily);
-    virtual sal_Bool            ChangeStyleSheets(  const XubString& rOldName, SfxStyleFamily eOldFamily,
-                                                const String& rNewName, SfxStyleFamily eNewFamily );
+    bool HasStyleSheet( const XubString& rName, SfxStyleFamily eFamily ) const;
+    void GetStyleSheet(size_t nPara, String& rName, SfxStyleFamily& eFamily) const;
+    void SetStyleSheet(size_t nPara, const String& rName, const SfxStyleFamily& eFamily);
+    bool ChangeStyleSheets(
+        const XubString& rOldName, SfxStyleFamily eOldFamily, const String& rNewName, SfxStyleFamily eNewFamily );
     virtual void            ChangeStyleSheetName( SfxStyleFamily eFamily, const XubString& rOldName, const XubString& rNewName );
 
-    virtual editeng::FieldUpdater GetFieldUpdater();
+    editeng::FieldUpdater GetFieldUpdater();
 
     void                    CreateData300( SvStream& rIStream );
 
-    sal_Bool                    HasMetric() const           { return nMetric != 0xFFFF; }
+    bool HasMetric() const { return nMetric != 0xFFFF; }
     sal_uInt16                  GetMetric() const           { return nMetric; }
     void                    SetMetric( sal_uInt16 n )       { nMetric = n; }
 
     bool                    IsOwnerOfPool() const       { return bOwnerOfPool; }
-    void                    StoreUnicodeStrings( sal_Bool b ) { bStoreUnicodeStrings = b; }
+    void StoreUnicodeStrings( bool b ) { bStoreUnicodeStrings = b; }
 
-    bool                    operator==( const EditTextObjectImpl& rCompare ) const;
+    bool operator==( const EditTextObjectImpl& rCompare ) const;
 
     // #i102062#
     bool isWrongListEqual(const EditTextObjectImpl& rCompare) const;
 
     // from SfxItemPoolUser
-    virtual void ObjectInDestruction(const SfxItemPool& rSfxItemPool);
+    void ObjectInDestruction(const SfxItemPool& rSfxItemPool);
 };
 
 #endif  // _EDITOBJ2_HXX

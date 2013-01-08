@@ -77,6 +77,7 @@
 #include <editeng/edtdlg.hxx>
 
 #include <vector>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -298,12 +299,11 @@ static void lcl_FindValidAttribs( ItemList& rLst, ContentNode* pNode, sal_uInt16
     }
 }
 
-sal_uInt32 ImpEditEngine::WriteBin( SvStream& rOutput, EditSelection aSel, sal_Bool bStoreUnicodeStrings )
+sal_uInt32 ImpEditEngine::WriteBin( SvStream& rOutput, EditSelection aSel, bool bStoreUnicodeStrings )
 {
-    EditTextObjectImpl* pObj = (EditTextObjectImpl*)CreateBinTextObject( aSel, NULL );
-    pObj->StoreUnicodeStrings( bStoreUnicodeStrings );
-    pObj->Store( rOutput );
-    delete pObj;
+    boost::scoped_ptr<EditTextObject> pObj(CreateBinTextObject(aSel, NULL));
+    pObj->mpImpl->StoreUnicodeStrings(bStoreUnicodeStrings);
+    pObj->Store(rOutput);
     return 0;
 }
 
@@ -1022,12 +1022,12 @@ EditTextObject* ImpEditEngine::CreateTextObject( EditSelection aSel )
 
 EditTextObject* ImpEditEngine::CreateBinTextObject( EditSelection aSel, SfxItemPool* pPool, sal_Bool bAllowBigObjects, sal_uInt16 nBigObjectStart )
 {
-    EditTextObjectImpl* pTxtObj = new EditTextObjectImpl( pPool );
+    EditTextObject* pTxtObj = new EditTextObject(pPool);
     pTxtObj->SetVertical( IsVertical() );
     MapUnit eMapUnit = (MapUnit)aEditDoc.GetItemPool().GetMetric( DEF_METRIC );
-    pTxtObj->SetMetric( (sal_uInt16) eMapUnit );
-    if ( pTxtObj->IsOwnerOfPool() )
-        pTxtObj->GetPool()->SetDefaultMetric( (SfxMapUnit) eMapUnit );
+    pTxtObj->mpImpl->SetMetric( (sal_uInt16) eMapUnit );
+    if ( pTxtObj->mpImpl->IsOwnerOfPool() )
+        pTxtObj->mpImpl->GetPool()->SetDefaultMetric( (SfxMapUnit) eMapUnit );
 
     sal_uInt16 nStartNode, nEndNode;
     sal_uInt32 nTextPortions = 0;
@@ -1042,7 +1042,7 @@ EditTextObject* ImpEditEngine::CreateBinTextObject( EditSelection aSel, SfxItemP
 
     // Templates are not saved!
     // (Only the name and family, template itself must be in App!)
-    pTxtObj->SetScriptType( GetScriptType( aSel ) );
+    pTxtObj->mpImpl->SetScriptType(GetScriptType(aSel));
 
     // iterate over the paragraphs ...
     sal_uInt16 nNode;
@@ -1068,7 +1068,7 @@ EditTextObject* ImpEditEngine::CreateBinTextObject( EditSelection aSel, SfxItemP
             nEndPos = aSel.Max().GetIndex();
 
 
-        ContentInfo* pC = pTxtObj->CreateAndInsertContent();
+        ContentInfo *pC = pTxtObj->mpImpl->CreateAndInsertContent();
 
         // The paragraph attributes ...
         pC->GetParaAttribs().Set( pNode->GetContentAttribs().GetItems() );
@@ -1092,7 +1092,7 @@ EditTextObject* ImpEditEngine::CreateBinTextObject( EditSelection aSel, SfxItemP
             if ( bEmptyPara ||
                  ( ( pAttr->GetEnd() > nStartPos ) && ( pAttr->GetStart() < nEndPos ) ) )
             {
-                XEditAttribute* pX = pTxtObj->CreateAttrib( *pAttr->GetItem(), pAttr->GetStart(), pAttr->GetEnd() );
+                XEditAttribute* pX = pTxtObj->mpImpl->CreateAttrib(*pAttr->GetItem(), pAttr->GetStart(), pAttr->GetEnd());
                 // Possibly Correct ...
                 if ( ( nNode == nStartNode ) && ( nStartPos != 0 ) )
                 {
@@ -1107,7 +1107,7 @@ EditTextObject* ImpEditEngine::CreateBinTextObject( EditSelection aSel, SfxItemP
                 }
                 DBG_ASSERT( pX->GetEnd() <= (nEndPos-nStartPos), "CreateBinTextObject: Attribute too long!" );
                 if ( !pX->GetLen() && !bEmptyPara )
-                    pTxtObj->DestroyAttrib( pX );
+                    pTxtObj->mpImpl->DestroyAttrib(pX);
                 else
                     pC->GetAttribs().push_back(pX);
             }
@@ -1126,7 +1126,7 @@ EditTextObject* ImpEditEngine::CreateBinTextObject( EditSelection aSel, SfxItemP
     if ( bAllowBigObjects && bOnlyFullParagraphs && IsFormatted() && GetUpdateMode() && ( nTextPortions >= nBigObjectStart ) )
     {
         XParaPortionList* pXList = new XParaPortionList( GetRefDevice(), aPaperSize.Width(), nStretchX, nStretchY );
-        pTxtObj->SetPortionInfo( pXList );
+        pTxtObj->mpImpl->SetPortionInfo(pXList);
         for ( nNode = nStartNode; nNode <= nEndNode; nNode++  )
         {
             const ParaPortion* pParaPortion = GetParaPortions()[nNode];
@@ -1195,19 +1195,19 @@ EditSelection ImpEditEngine::InsertText( const EditTextObject& rTextObject, Edit
     aSel.Adjust( aEditDoc );
     if ( aSel.HasRange() )
         aSel = ImpDeleteSelection( aSel );
-    EditSelection aNewSel = InsertBinTextObject( (EditTextObjectImpl&)rTextObject, aSel.Max() );
+    EditSelection aNewSel = InsertBinTextObject( rTextObject, aSel.Max() );
     LeaveBlockNotifications();
     return aNewSel;
 }
 
-EditSelection ImpEditEngine::InsertBinTextObject( EditTextObjectImpl& rTextObject, EditPaM aPaM )
+EditSelection ImpEditEngine::InsertBinTextObject( const EditTextObject& rTextObject, EditPaM aPaM )
 {
     // Optimize: No getPos undFindParaportion, instead calculate index!
     EditSelection aSel( aPaM, aPaM );
     DBG_ASSERT( !aSel.DbgIsBuggy( aEditDoc ), "InsertBibTextObject: Selection broken!(1)" );
 
     sal_Bool bUsePortionInfo = sal_False;
-    XParaPortionList* pPortionInfo = rTextObject.GetPortionInfo();
+    XParaPortionList* pPortionInfo = rTextObject.mpImpl->GetPortionInfo();
 
     if ( pPortionInfo && ( (long)pPortionInfo->GetPaperWidth() == aPaperSize.Width() )
             && ( pPortionInfo->GetRefMapMode() == GetRefDevice()->GetMapMode() )
@@ -1222,20 +1222,20 @@ EditSelection ImpEditEngine::InsertBinTextObject( EditTextObjectImpl& rTextObjec
 
     sal_Bool bConvertItems = sal_False;
     MapUnit eSourceUnit = MapUnit(), eDestUnit = MapUnit();
-    if ( rTextObject.HasMetric() )
+    if (rTextObject.mpImpl->HasMetric())
     {
-        eSourceUnit = (MapUnit)rTextObject.GetMetric();
+        eSourceUnit = (MapUnit)rTextObject.mpImpl->GetMetric();
         eDestUnit = (MapUnit)aEditDoc.GetItemPool().GetMetric( DEF_METRIC );
         if ( eSourceUnit != eDestUnit )
             bConvertItems = sal_True;
     }
 
-    size_t nContents = rTextObject.GetContents().size();
+    size_t nContents = rTextObject.mpImpl->GetContents().size();
     sal_uInt16 nPara = aEditDoc.GetPos( aPaM.GetNode() );
 
     for (size_t n = 0; n < nContents; ++n, ++nPara)
     {
-        ContentInfo* pC = &rTextObject.GetContents()[n];
+        const ContentInfo* pC = &rTextObject.mpImpl->GetContents()[n];
         sal_Bool bNewContent = aPaM.GetNode()->Len() ? sal_False: sal_True;
         sal_uInt16 nStartPos = aPaM.GetIndex();
 

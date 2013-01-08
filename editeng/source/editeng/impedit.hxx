@@ -522,7 +522,7 @@ private:
     void                GetCharAttribs( sal_uInt16 nPara, std::vector<EECharAttrib>& rLst ) const;
 
     EditTextObject*     CreateBinTextObject( EditSelection aSelection, SfxItemPool*, sal_Bool bAllowBigObjects = sal_False, sal_uInt16 nBigObjStart = 0 );
-    EditSelection       InsertBinTextObject( EditTextObjectImpl&, EditPaM aPaM );
+    EditSelection       InsertBinTextObject( const EditTextObject&, EditPaM aPaM );
     EditSelection       InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rxDataObj, const String& rBaseURL, const EditPaM& rPaM, sal_Bool bUseSpecial );
 
     EditPaM             Clear();
@@ -609,7 +609,7 @@ private:
     sal_uInt32          WriteRTF( SvStream& rOutput, EditSelection aSel );
     sal_uInt32          WriteXML( SvStream& rOutput, EditSelection aSel );
     sal_uInt32          WriteHTML( SvStream& rOutput, EditSelection aSel );
-    sal_uInt32          WriteBin( SvStream& rOutput, EditSelection aSel, sal_Bool bStoreUnicode = sal_False );
+    sal_uInt32 WriteBin( SvStream& rOutput, EditSelection aSel, bool bStoreUnicode = false );
 
     void                WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput, sal_uInt16 nPara, sal_uInt16 nPos,
                         std::vector<SvxFontItem*>& rFontTable, SvxColorList& rColorList );

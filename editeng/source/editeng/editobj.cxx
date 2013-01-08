@@ -179,188 +179,180 @@ bool ContentInfo::operator!=(const ContentInfo& rCompare) const
     return !operator==(rCompare);
 }
 
-EditTextObject::EditTextObject()
+EditTextObject::EditTextObject( SfxItemPool* pPool ) :
+    mpImpl(new EditTextObjectImpl(this, pPool))
 {
-    DBG_CTOR( EE_EditTextObject, 0 );
 }
 
-EditTextObject::EditTextObject( const EditTextObject& )
+EditTextObject::EditTextObject( const EditTextObject& r ) :
+    mpImpl(new EditTextObjectImpl(this, *r.mpImpl))
 {
-    DBG_CTOR( EE_EditTextObject, 0 );
 }
 
 EditTextObject::~EditTextObject()
 {
-    DBG_DTOR( EE_EditTextObject, 0 );
+    delete mpImpl;
 }
 
 size_t EditTextObject::GetParagraphCount() const
 {
-    OSL_FAIL( "Virtual method direct from EditTextObject!" );
-    return 0;
+    return mpImpl->GetParagraphCount();
 }
 
-String EditTextObject::GetText(size_t /* nParagraph */) const
+String EditTextObject::GetText(size_t nPara) const
 {
-    OSL_FAIL( "Virtual method direct from EditTextObject!" );
-    return String();
+    return mpImpl->GetText(nPara);
 }
 
-void EditTextObject::Insert(const EditTextObject& /* rObj */, size_t /* nPara */)
+void EditTextObject::Insert(const EditTextObject& rObj, size_t nPara)
 {
-    OSL_FAIL( "Virtual method direct from EditTextObject!" );
+    mpImpl->Insert(rObj, nPara);
 }
 
-EditTextObject* EditTextObject::CreateTextObject(size_t /*nPara*/, size_t /*nParas*/) const
+EditTextObject* EditTextObject::CreateTextObject(size_t nPara, size_t nParas) const
 {
-    OSL_FAIL( "Virtual method direct from EditTextObject!" );
-    return 0;
+    return mpImpl->CreateTextObject(nPara, nParas);
 }
 
-void EditTextObject::RemoveParagraph(size_t /*nPara*/)
+void EditTextObject::RemoveParagraph(size_t nPara)
 {
-    OSL_FAIL( "Virtual method direct from EditTextObject!" );
+    mpImpl->RemoveParagraph(nPara);
 }
 
-sal_Bool EditTextObject::HasPortionInfo() const
+bool EditTextObject::HasPortionInfo() const
 {
-    OSL_FAIL( "Virtual method direct from EditTextObject!" );
-    return false;
+    return mpImpl->HasPortionInfo();
 }
 
 void EditTextObject::ClearPortionInfo()
 {
-    OSL_FAIL( "Virtual method direct from EditTextObject!" );
+    mpImpl->ClearPortionInfo();
 }
 
-sal_Bool EditTextObject::HasOnlineSpellErrors() const
+bool EditTextObject::HasOnlineSpellErrors() const
 {
-    OSL_FAIL( "Virtual method direct from EditTextObject!" );
-    return false;
+    return mpImpl->HasOnlineSpellErrors();
 }
 
-sal_Bool EditTextObject::HasCharAttribs( sal_uInt16 ) const
+bool EditTextObject::HasCharAttribs( sal_uInt16 nWhich ) const
 {
-    OSL_FAIL( "Virtual method direct from EditTextObject!" );
-    return false;
+    return mpImpl->HasCharAttribs(nWhich);
 }
 
-void EditTextObject::GetCharAttribs( sal_uInt16 /*nPara*/, std::vector<EECharAttrib>& /*rLst*/ ) const
+void EditTextObject::GetCharAttribs( sal_uInt16 nPara, std::vector<EECharAttrib>& rLst ) const
 {
-    OSL_FAIL( "Virtual method direct from EditTextObject!" );
+    mpImpl->GetCharAttribs(nPara, rLst);
 }
 
-void EditTextObject::MergeParaAttribs( const SfxItemSet& /*rAttribs*/, sal_uInt16 /*nStart*/, sal_uInt16 /*nEnd*/ )
+void EditTextObject::MergeParaAttribs( const SfxItemSet& rAttribs, sal_uInt16 nStart, sal_uInt16 nEnd )
 {
-    OSL_FAIL( "Virtual method direct from EditTextObject!" );
+    mpImpl->MergeParaAttribs(rAttribs, nStart, nEnd);
 }
 
-sal_Bool EditTextObject::IsFieldObject() const
+bool EditTextObject::IsFieldObject() const
 {
-    OSL_FAIL( "Virtual method direct from EditTextObject!" );
-    return false;
+    return mpImpl->IsFieldObject();
 }
 
 const SvxFieldItem* EditTextObject::GetField() const
 {
-    OSL_FAIL( "Virtual method direct from EditTextObject!" );
-    return 0;
+    return mpImpl->GetField();
 }
 
-SfxItemSet EditTextObject::GetParaAttribs(size_t /*nPara*/) const
+bool EditTextObject::HasField( sal_Int32 nType ) const
 {
-    OSL_FAIL( "Virtual method direct from EditTextObject!" );
-    return SfxItemSet( *(SfxItemPool*)NULL );
+    return mpImpl->HasField(nType);
 }
 
-void EditTextObject::SetParaAttribs(size_t /*nPara*/, const SfxItemSet& /*rAttribs*/)
+const SfxItemSet& EditTextObject::GetParaAttribs(size_t nPara) const
 {
-    OSL_FAIL( "Virtual method direct from EditTextObject!" );
+    return mpImpl->GetParaAttribs(nPara);
 }
 
-sal_Bool EditTextObject::RemoveCharAttribs( sal_uInt16 /*nWhich*/ )
+void EditTextObject::SetParaAttribs(size_t nPara, const SfxItemSet& rAttribs)
 {
-    OSL_FAIL( "Virtual method direct from EditTextObject!" );
-    return false;
+    mpImpl->SetParaAttribs(nPara, rAttribs);
 }
 
-sal_Bool EditTextObject::RemoveParaAttribs( sal_uInt16 /*nWhich*/ )
+bool EditTextObject::RemoveCharAttribs( sal_uInt16 nWhich )
 {
-    OSL_FAIL( "Virtual method direct from EditTextObject!" );
-    return false;
+    return mpImpl->RemoveCharAttribs(nWhich);
 }
 
-sal_Bool EditTextObject::HasStyleSheet( const XubString& /*rName*/, SfxStyleFamily /*eFamily*/ ) const
+bool EditTextObject::RemoveParaAttribs( sal_uInt16 nWhich )
 {
-    OSL_FAIL( "Virtual method direct from EditTextObject!" );
-    return false;
+    return mpImpl->RemoveParaAttribs(nWhich);
 }
 
-void EditTextObject::GetStyleSheet(size_t /*nPara*/, String& /*rName*/, SfxStyleFamily& /*eFamily*/) const
+bool EditTextObject::HasStyleSheet( const XubString& rName, SfxStyleFamily eFamily ) const
 {
-    OSL_FAIL( "Virtual method direct from EditTextObject!" );
+    return mpImpl->HasStyleSheet(rName, eFamily);
 }
 
-void EditTextObject::SetStyleSheet(size_t /*nPara*/, const String& /*rName*/, const SfxStyleFamily& /*eFamily*/)
+void EditTextObject::GetStyleSheet(size_t nPara, String& rName, SfxStyleFamily& eFamily) const
 {
-    OSL_FAIL( "Virtual method direct from EditTextObject!" );
+    mpImpl->GetStyleSheet(nPara, rName, eFamily);
 }
 
-sal_Bool EditTextObject::ChangeStyleSheets( const XubString&, SfxStyleFamily,
-                                            const XubString&, SfxStyleFamily )
+void EditTextObject::SetStyleSheet(size_t nPara, const String& rName, const SfxStyleFamily& eFamily)
 {
-    OSL_FAIL( "Virtual method direct from EditTextObject!" );
-    return false;
+    mpImpl->SetStyleSheet(nPara, rName, eFamily);
 }
 
-void EditTextObject::ChangeStyleSheetName( SfxStyleFamily /*eFamily*/,
-                const XubString& /*rOldName*/, const XubString& /*rNewName*/ )
+bool EditTextObject::ChangeStyleSheets(
+    const XubString& rOldName, SfxStyleFamily eOldFamily, const XubString& rNewName, SfxStyleFamily eNewFamily )
 {
-    OSL_FAIL( "Virtual method direct from EditTextObject!" );
+    return mpImpl->ChangeStyleSheets(rOldName, eOldFamily, rNewName, eNewFamily);
+}
+
+void EditTextObject::ChangeStyleSheetName(
+    SfxStyleFamily eFamily, const XubString& rOldName, const XubString& rNewName )
+{
+    mpImpl->ChangeStyleSheetName(eFamily, rOldName, rNewName);
+}
+
+editeng::FieldUpdater EditTextObject::GetFieldUpdater()
+{
+    return mpImpl->GetFieldUpdater();
 }
 
 sal_uInt16 EditTextObject::GetUserType() const
 {
-    OSL_FAIL( "Virtual method direct from EditTextObject!" );
-    return 0;
+    return mpImpl->GetUserType();
 }
 
-void EditTextObject::SetUserType( sal_uInt16 )
+void EditTextObject::SetUserType( sal_uInt16 n )
 {
-    OSL_FAIL( "Virtual method direct from EditTextObject!" );
+    mpImpl->SetUserType(n);
 }
 
 sal_uLong EditTextObject::GetObjectSettings() const
 {
-    OSL_FAIL( "Virtual method direct from EditTextObject!" );
-    return 0;
+    return mpImpl->GetObjectSettings();
 }
 
-void EditTextObject::SetObjectSettings( sal_uLong )
+void EditTextObject::SetObjectSettings( sal_uLong n )
 {
-    OSL_FAIL( "Virtual method direct from EditTextObject!" );
+    mpImpl->SetObjectSettings(n);
 }
 
 bool EditTextObject::IsVertical() const
 {
-    OSL_FAIL( "Virtual method direct from EditTextObject!" );
-    return false;
+    return mpImpl->IsVertical();
 }
 
 void EditTextObject::SetVertical( bool bVertical )
 {
-    OSL_FAIL( "Virtual method direct from EditTextObject!" );
-    ((EditTextObjectImpl*)this)->SetVertical( bVertical );
+    return mpImpl->SetVertical(bVertical);
 }
 
 sal_uInt16 EditTextObject::GetScriptType() const
 {
-    OSL_FAIL( "Virtual method direct from EditTextObject!" );
-    return ((const EditTextObjectImpl*)this)->GetScriptType();
+    return mpImpl->GetScriptType();
 }
 
 
-sal_Bool EditTextObject::Store( SvStream& rOStream ) const
+bool EditTextObject::Store( SvStream& rOStream ) const
 {
     if ( rOStream.GetError() )
         return false;
@@ -395,26 +387,18 @@ EditTextObject* EditTextObject::Create( SvStream& rIStream, SfxItemPool* pGlobal
     sal_uInt32 nStructSz;
     rIStream >> nStructSz;
 
-    DBG_ASSERT( ( nWhich == 0x22 /*EE_FORMAT_BIN300*/ ) || ( nWhich == EE_FORMAT_BIN ), "CreateTextObject: Unknown Object!" );
+    if (nWhich != EE_FORMAT_BIN)
+    {
+        // Unknown object we no longer support.
+        rIStream.SetError(EE_READWRITE_WRONGFORMAT);
+        return NULL;
+    }
 
     if ( rIStream.GetError() )
         return NULL;
 
-    EditTextObject* pTxtObj = NULL;
-    switch ( nWhich )
-    {
-        case 0x22 /*BIN300*/:       pTxtObj = new EditTextObjectImpl( 0 );
-                                    ((EditTextObjectImpl*)pTxtObj)->CreateData300( rIStream );
-                                    break;
-        case EE_FORMAT_BIN:         pTxtObj = new EditTextObjectImpl( pGlobalTextObjectPool );
-                                    pTxtObj->CreateData( rIStream );
-                                    break;
-        default:
-        {
-            // If I do not know the format, I overwrite the contents:
-            rIStream.SetError( EE_READWRITE_WRONGFORMAT );
-        }
-    }
+    EditTextObject* pTxtObj = new EditTextObject(pGlobalTextObjectPool);;
+    pTxtObj->CreateData(rIStream);
 
     // Make sure that the stream is left at the correct place.
     sal_Size nFullSz = sizeof( nWhich ) + sizeof( nStructSz ) + nStructSz;
@@ -422,31 +406,40 @@ EditTextObject* EditTextObject::Create( SvStream& rIStream, SfxItemPool* pGlobal
     return pTxtObj;
 }
 
-void EditTextObject::StoreData( SvStream& ) const
+void EditTextObject::StoreData( SvStream& rStrm ) const
 {
-    OSL_FAIL( "StoreData: Base class!" );
+    mpImpl->StoreData(rStrm);
 }
 
-void EditTextObject::CreateData( SvStream& )
+void EditTextObject::CreateData( SvStream& rStrm )
 {
-    OSL_FAIL( "CreateData: Base class!" );
+    mpImpl->CreateData(rStrm);
 }
 
 sal_uInt16 EditTextObject::GetVersion() const
 {
-    OSL_FAIL( "Virtual method direct from EditTextObject!" );
-    return 0;
+    return mpImpl->GetVersion();
+}
+
+EditTextObject* EditTextObject::Clone() const
+{
+    return new EditTextObject(*this);
 }
 
 bool EditTextObject::operator==( const EditTextObject& rCompare ) const
 {
-    return static_cast< const EditTextObjectImpl* >( this )->operator==( static_cast< const EditTextObjectImpl& >( rCompare ) );
+    return mpImpl->operator==(*rCompare.mpImpl);
 }
 
 // #i102062#
 bool EditTextObject::isWrongListEqual(const EditTextObject& rCompare) const
 {
-    return static_cast< const EditTextObjectImpl* >(this)->isWrongListEqual(static_cast< const EditTextObjectImpl& >(rCompare));
+    return mpImpl->isWrongListEqual(*rCompare.mpImpl);
+}
+
+void EditTextObject::ObjectInDestruction(const SfxItemPool& rSfxItemPool)
+{
+    mpImpl->ObjectInDestruction(rSfxItemPool);
 }
 
 // from SfxItemPoolUser
@@ -495,7 +488,8 @@ EditEngineItemPool* getEditEngineItemPool(SfxItemPool* pPool)
     return pRetval;
 }
 
-EditTextObjectImpl::EditTextObjectImpl( SfxItemPool* pP )
+EditTextObjectImpl::EditTextObjectImpl( EditTextObject* pFront, SfxItemPool* pP ) :
+    mpFront(pFront)
 {
     nVersion = 0;
     nMetric = 0xFFFF;
@@ -524,7 +518,7 @@ EditTextObjectImpl::EditTextObjectImpl( SfxItemPool* pP )
     if(!bOwnerOfPool && pPool)
     {
         // it is sure now that the pool is an EditEngineItemPool
-        pPool->AddSfxItemPoolUser(*this);
+        pPool->AddSfxItemPoolUser(*mpFront);
     }
 
     bVertical = false;
@@ -532,8 +526,8 @@ EditTextObjectImpl::EditTextObjectImpl( SfxItemPool* pP )
     nScriptType = 0;
 }
 
-EditTextObjectImpl::EditTextObjectImpl( const EditTextObjectImpl& r ) :
-    EditTextObject( r )
+EditTextObjectImpl::EditTextObjectImpl( EditTextObject* pFront, const EditTextObjectImpl& r ) :
+    mpFront(pFront)
 {
     nVersion = r.nVersion;
     nMetric = r.nMetric;
@@ -562,7 +556,7 @@ EditTextObjectImpl::EditTextObjectImpl( const EditTextObjectImpl& r ) :
     if(!bOwnerOfPool && pPool)
     {
         // it is sure now that the pool is an EditEngineItemPool
-        pPool->AddSfxItemPoolUser(*this);
+        pPool->AddSfxItemPoolUser(*mpFront);
     }
 
     if ( bOwnerOfPool && pPool && r.pPool )
@@ -578,7 +572,7 @@ EditTextObjectImpl::~EditTextObjectImpl()
 {
     if(!bOwnerOfPool && pPool)
     {
-        pPool->RemoveSfxItemPoolUser(*this);
+        pPool->RemoveSfxItemPoolUser(*mpFront);
     }
 
     ClearPortionInfo();
@@ -636,11 +630,6 @@ void EditTextObjectImpl::SetScriptType( sal_uInt16 nType )
     nScriptType = nType;
 }
 
-EditTextObject* EditTextObjectImpl::Clone() const
-{
-    return new EditTextObjectImpl( *this );
-}
-
 XEditAttribute* EditTextObjectImpl::CreateAttrib( const SfxPoolItem& rItem, sal_uInt16 nStart, sal_uInt16 nEnd )
 {
     return MakeXEditAttribute( *pPool, rItem, nStart, nEnd );
@@ -683,7 +672,7 @@ String EditTextObjectImpl::GetText(size_t nPara) const
 
 void EditTextObjectImpl::Insert(const EditTextObject& rObj, size_t nDestPara)
 {
-    const EditTextObjectImpl& rBinObj = (const EditTextObjectImpl&)rObj;
+    const EditTextObjectImpl& rBinObj = *rObj.mpImpl;
 
     if (nDestPara > aContents.size())
         nDestPara = aContents.size();
@@ -706,20 +695,20 @@ EditTextObject* EditTextObjectImpl::CreateTextObject(size_t nPara, size_t nParas
         return NULL;
 
     // Only split the Pool, when a the Pool is set externally.
-    EditTextObjectImpl* pObj = new EditTextObjectImpl( bOwnerOfPool ? 0 : pPool );
+    EditTextObject* pObj = new EditTextObject( bOwnerOfPool ? 0 : pPool );
     if ( bOwnerOfPool && pPool )
-        pObj->GetPool()->SetDefaultMetric( pPool->GetMetric( DEF_METRIC ) );
+        pObj->mpImpl->GetPool()->SetDefaultMetric( pPool->GetMetric( DEF_METRIC ) );
 
     // If complete text is only one ScriptType, this is valid.
     // If text contains different ScriptTypes, this shouldn't be a problem...
-    pObj->nScriptType = nScriptType;
+    pObj->mpImpl->nScriptType = nScriptType;
 
     const size_t nEndPara = nPara+nParas-1;
     for (size_t i = nPara; i <= nEndPara; ++i)
     {
         const ContentInfo& rC = aContents[i];
-        ContentInfo* pNew = new ContentInfo(rC, *pObj->GetPool());
-        pObj->aContents.push_back(pNew);
+        ContentInfo* pNew = new ContentInfo(rC, *pObj->mpImpl->GetPool());
+        pObj->mpImpl->aContents.push_back(pNew);
     }
     return pObj;
 }
@@ -736,7 +725,7 @@ void EditTextObjectImpl::RemoveParagraph(size_t nPara)
     ClearPortionInfo();
 }
 
-sal_Bool EditTextObjectImpl::HasPortionInfo() const
+bool EditTextObjectImpl::HasPortionInfo() const
 {
     return pPortionInfo ? true : false;
 }
@@ -750,7 +739,7 @@ void EditTextObjectImpl::ClearPortionInfo()
     }
 }
 
-sal_Bool EditTextObjectImpl::HasOnlineSpellErrors() const
+bool EditTextObjectImpl::HasOnlineSpellErrors() const
 {
     ContentInfosType::const_iterator it = aContents.begin(), itEnd = aContents.end();
     for (; it != itEnd; ++it)
@@ -761,7 +750,7 @@ sal_Bool EditTextObjectImpl::HasOnlineSpellErrors() const
     return false;
 }
 
-sal_Bool EditTextObjectImpl::HasCharAttribs( sal_uInt16 _nWhich ) const
+bool EditTextObjectImpl::HasCharAttribs( sal_uInt16 _nWhich ) const
 {
     for (size_t nPara = aContents.size(); nPara; )
     {
@@ -820,9 +809,9 @@ void EditTextObjectImpl::MergeParaAttribs( const SfxItemSet& rAttribs, sal_uInt1
         ClearPortionInfo();
 }
 
-sal_Bool EditTextObjectImpl::IsFieldObject() const
+bool EditTextObjectImpl::IsFieldObject() const
 {
-    return EditTextObjectImpl::GetField() ? true : false;
+    return GetField() ? true : false;
 }
 
 const SvxFieldItem* EditTextObjectImpl::GetField() const
@@ -869,7 +858,7 @@ bool EditTextObjectImpl::HasField( sal_Int32 nType ) const
     return false;
 }
 
-SfxItemSet EditTextObjectImpl::GetParaAttribs(size_t nPara) const
+const SfxItemSet& EditTextObjectImpl::GetParaAttribs(size_t nPara) const
 {
     const ContentInfo& rC = aContents[nPara];
     return rC.GetParaAttribs();
@@ -882,9 +871,9 @@ void EditTextObjectImpl::SetParaAttribs(size_t nPara, const SfxItemSet& rAttribs
     ClearPortionInfo();
 }
 
-sal_Bool EditTextObjectImpl::RemoveCharAttribs( sal_uInt16 _nWhich )
+bool EditTextObjectImpl::RemoveCharAttribs( sal_uInt16 _nWhich )
 {
-    sal_Bool bChanged = false;
+    bool bChanged = false;
 
     for ( sal_uInt16 nPara = aContents.size(); nPara; )
     {
@@ -908,7 +897,7 @@ sal_Bool EditTextObjectImpl::RemoveCharAttribs( sal_uInt16 _nWhich )
     return bChanged;
 }
 
-sal_Bool EditTextObjectImpl::RemoveParaAttribs( sal_uInt16 _nWhich )
+bool EditTextObjectImpl::RemoveParaAttribs( sal_uInt16 _nWhich )
 {
     bool bChanged = false;
 
@@ -938,7 +927,7 @@ sal_Bool EditTextObjectImpl::RemoveParaAttribs( sal_uInt16 _nWhich )
     return bChanged;
 }
 
-sal_Bool EditTextObjectImpl::HasStyleSheet( const XubString& rName, SfxStyleFamily eFamily ) const
+bool EditTextObjectImpl::HasStyleSheet( const XubString& rName, SfxStyleFamily eFamily ) const
 {
     size_t nParagraphs = aContents.size();
     for (size_t nPara = 0; nPara < nParagraphs; ++nPara)
@@ -970,7 +959,7 @@ void EditTextObjectImpl::SetStyleSheet(size_t nPara, const String& rName, const 
     rC.GetFamily() = rFamily;
 }
 
-sal_Bool EditTextObjectImpl::ImpChangeStyleSheets(
+bool EditTextObjectImpl::ImpChangeStyleSheets(
                     const XubString& rOldName, SfxStyleFamily eOldFamily,
                     const XubString& rNewName, SfxStyleFamily eNewFamily )
 {
@@ -993,7 +982,7 @@ sal_Bool EditTextObjectImpl::ImpChangeStyleSheets(
     return bChanges;
 }
 
-sal_Bool EditTextObjectImpl::ChangeStyleSheets(
+bool EditTextObjectImpl::ChangeStyleSheets(
                     const XubString& rOldName, SfxStyleFamily eOldFamily,
                     const XubString& rNewName, SfxStyleFamily eNewFamily )
 {
@@ -1012,7 +1001,7 @@ void EditTextObjectImpl::ChangeStyleSheetName( SfxStyleFamily eFamily,
 
 editeng::FieldUpdater EditTextObjectImpl::GetFieldUpdater()
 {
-    return editeng::FieldUpdater(*this);
+    return editeng::FieldUpdater(*mpFront);
 }
 
 namespace {
