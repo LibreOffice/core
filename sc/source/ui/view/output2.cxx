@@ -2258,9 +2258,7 @@ bool ScOutputData::DrawEditParam::readCellContent(
 
     if (mpCell->GetCellType() == CELLTYPE_EDIT)
     {
-        const EditTextObject* pData;
-        ((ScEditCell*)mpCell)->GetData(pData);
-
+        const EditTextObject* pData = static_cast<ScEditCell*>(mpCell)->GetData();
         if (pData)
         {
             mpEngine->SetText(*pData);
@@ -4981,9 +4979,7 @@ void ScOutputData::DrawRotated(sal_Bool bPixelToLogic)
                             {
                                 if (pCell->GetCellType() == CELLTYPE_EDIT)
                                 {
-                                    const EditTextObject* pData;
-                                    ((ScEditCell*)pCell)->GetData(pData);
-
+                                    const EditTextObject* pData = static_cast<ScEditCell*>(pCell)->GetData();
                                     if (pData)
                                         pEngine->SetText(*pData);
                                     else

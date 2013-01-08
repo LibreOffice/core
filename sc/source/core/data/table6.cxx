@@ -43,8 +43,7 @@ bool lcl_GetTextWithBreaks( const ScEditCell& rCell, ScDocument* pDoc, rtl::OUSt
 {
     //  true = more than 1 paragraph
 
-    const EditTextObject* pData = NULL;
-    rCell.GetData( pData );
+    const EditTextObject* pData = rCell.GetData();
     EditEngine& rEngine = pDoc->GetEditEngine();
     rEngine.SetText( *pData );
     rVal = rEngine.GetText( LINEEND_LF );

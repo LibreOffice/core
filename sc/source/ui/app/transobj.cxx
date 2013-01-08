@@ -271,8 +271,7 @@ sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
             {
                 if (pCell->GetCellType() == CELLTYPE_EDIT)
                 {
-                    const EditTextObject* pObj;
-                    ((ScEditCell*)pCell)->GetData(pObj);
+                    const EditTextObject* pObj = static_cast<const ScEditCell*>(pCell)->GetData();
                     aEngine.SetText( *pObj );
                 }
                 else

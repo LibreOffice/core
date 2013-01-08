@@ -104,11 +104,6 @@ void ScEditCell::SetData( const EditTextObject* pObject,
     SetTextObject( pObject, pFromPool );
 }
 
-void ScEditCell::GetData( const EditTextObject*& rpObject ) const
-{
-    rpObject = pData;
-}
-
 rtl::OUString ScEditCell::GetString() const
 {
     if ( pString )
@@ -127,6 +122,11 @@ rtl::OUString ScEditCell::GetString() const
     }
 
     return rtl::OUString();
+}
+
+const EditTextObject* ScEditCell::GetData() const
+{
+    return pData;
 }
 
 void ScEditCell::RemoveCharAttribs( const ScPatternAttr& rAttr )

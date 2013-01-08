@@ -640,7 +640,7 @@ void ScTabViewShell::UpdateInputHandler( sal_Bool bForce /* = sal_False */, sal_
             {
                 ScBaseCell* pCell;
                 pDoc->GetCell( nPosX, nPosY, nTab, pCell );
-                ((ScEditCell*)pCell)->GetData( pObject );
+                pObject = static_cast<ScEditCell*>(pCell)->GetData();
             }
             else
             {

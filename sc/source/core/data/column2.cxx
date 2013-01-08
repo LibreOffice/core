@@ -389,8 +389,7 @@ long ScColumn::GetNeededSize(
 
             if ( pCell->GetCellType() == CELLTYPE_EDIT )
             {
-                const EditTextObject* pData;
-                ((ScEditCell*)pCell)->GetData(pData);
+                const EditTextObject* pData = static_cast<ScEditCell*>(pCell)->GetData();
                 pEngine->SetTextNewDefaults(*pData, pSet);
             }
             else

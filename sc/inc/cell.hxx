@@ -242,10 +242,9 @@ public:
 
     void            SetData( const EditTextObject* pObject,
                             const SfxItemPool* pFromPool /* = NULL */ );
-    void            GetData( const EditTextObject*& rpObject ) const;
     rtl::OUString   GetString() const;
 
-    const EditTextObject* GetData() const   { return pData; }
+    const EditTextObject* GetData() const;
 
     /** Removes character attribute based on new pattern attributes. */
     void            RemoveCharAttribs( const ScPatternAttr& rAttr );

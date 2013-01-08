@@ -5099,8 +5099,7 @@ bool ScGridWindow::GetEditUrlOrError( bool bSpellErr, const Point& rPos,
     ::std::auto_ptr< EditTextObject > pTextObj;
     if(pCell->GetCellType() == CELLTYPE_EDIT)
     {
-        const EditTextObject* pData;
-        ((ScEditCell*)pCell)->GetData(pData);
+        const EditTextObject* pData = static_cast<ScEditCell*>(pCell)->GetData();
         if (pData)
             aEngine.SetText(*pData);
     }

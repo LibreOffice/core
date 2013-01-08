@@ -292,8 +292,7 @@ void ScConversionEngineBase::FillFromCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
             mrDoc.GetCell( nCol, nRow, nTab, pCell );
             if( pCell )
             {
-                const EditTextObject* pNewEditObj = NULL;
-                static_cast< ScEditCell* >( pCell )->GetData( pNewEditObj );
+                const EditTextObject* pNewEditObj = static_cast<ScEditCell*>(pCell)->GetData();
                 if( pNewEditObj )
                     SetText( *pNewEditObj );
             }

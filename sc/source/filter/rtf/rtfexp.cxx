@@ -188,8 +188,7 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
             {
                 bValueData = false;
                 EditEngine& rEngine = GetEditEngine();
-                const EditTextObject* pObj;
-                ((const ScEditCell*)pCell)->GetData( pObj );
+                const EditTextObject* pObj = static_cast<const ScEditCell*>(pCell)->GetData();
                 if ( pObj )
                 {
                     rEngine.SetText( *pObj );

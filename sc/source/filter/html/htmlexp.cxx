@@ -1206,9 +1206,8 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
 
 sal_Bool ScHTMLExport::WriteFieldText( const ScEditCell* pCell )
 {
-    sal_Bool bFields = false;
-    const EditTextObject* pData;
-    pCell->GetData( pData );
+    bool bFields = false;
+    const EditTextObject* pData = pCell->GetData();
     // text and anchor of URL fields, Doc-Engine is a ScFieldEditEngine
     EditEngine& rEngine = pDoc->GetEditEngine();
     rEngine.SetText( *pData );

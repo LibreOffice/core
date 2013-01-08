@@ -954,7 +954,7 @@ rtl::OUString getOutputString(ScDocument* pDoc, const ScAddress& aCellPos)
             {
                 //  GetString an der EditCell macht Leerzeichen aus Umbruechen,
                 //  hier werden die Umbrueche aber gebraucht
-                const EditTextObject* pData = ( static_cast< ScEditCell* >(pCell) )->GetData();
+                const EditTextObject* pData = static_cast<ScEditCell*>(pCell)->GetData();
                 if (pData)
                 {
                     EditEngine& rEngine = pDoc->GetEditEngine();

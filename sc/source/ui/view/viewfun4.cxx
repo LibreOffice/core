@@ -374,7 +374,7 @@ void ScViewFunc::DoThesaurus( sal_Bool bRecord )
         pDoc->GetCell(nCol, nRow, nTab, pCell);
         if (pCell)
         {
-            ((ScEditCell*) pCell)->GetData(pTObject);
+            pTObject = static_cast<ScEditCell*>(pCell)->GetData();
             if (pTObject)
             {
                 pOldTObj = pTObject->Clone();
@@ -732,7 +732,7 @@ void ScViewFunc::InsertBookmark( const String& rDescription, const String& rURL,
     {
         if (pCell->GetCellType() == CELLTYPE_EDIT)
         {
-            const EditTextObject* pOld = ((ScEditCell*)pCell)->GetData();
+            const EditTextObject* pOld = static_cast<ScEditCell*>(pCell)->GetData();
             if (pOld)
                 aEngine.SetText(*pOld);
         }
@@ -777,7 +777,7 @@ sal_Bool ScViewFunc::HasBookmarkAtCursor( SvxHyperlinkItem* pContent )
     ScBaseCell* pCell = pDoc->GetCell( aPos );
     if ( pCell && pCell->GetCellType() == CELLTYPE_EDIT )
     {
-        const EditTextObject* pData = ((ScEditCell*)pCell)->GetData();
+        const EditTextObject* pData = static_cast<ScEditCell*>(pCell)->GetData();
         if (pData)
         {
             sal_Bool bField = pData->IsFieldObject();
