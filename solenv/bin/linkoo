@@ -455,6 +455,7 @@ sub link_ui_files()
 
     my @modules = get_modules( $OOO_BUILD, $TARGET );
 
+    print "ui case:";
     # Search the files in the source tree
     for my $dest ( @files )
     {
@@ -500,6 +501,7 @@ sub link_ui_files()
             do_link ( $src_dir, $dest_dir, $name, $name );
         }
     }
+    print "\n";
 }
 
 evilness ('undo');
