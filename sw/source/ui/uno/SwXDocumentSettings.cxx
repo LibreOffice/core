@@ -122,7 +122,8 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_CLIPPED_PICTURES,
     HANDLE_BACKGROUND_PARA_OVER_DRAWINGS,
     HANDLE_EMBED_FONTS,
-    HANDLE_EMBED_SYSTEM_FONTS
+    HANDLE_EMBED_SYSTEM_FONTS,
+    HANDLE_TAB_OVER_MARGIN,
 };
 
 static MasterPropertySetInfo * lcl_createSettingsInfo()
@@ -191,6 +192,7 @@ static MasterPropertySetInfo * lcl_createSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM("BackgroundParaOverDrawings"), HANDLE_BACKGROUND_PARA_OVER_DRAWINGS, CPPUTYPE_BOOLEAN, 0, 0},
         { RTL_CONSTASCII_STRINGPARAM("EmbedFonts"), HANDLE_EMBED_FONTS, CPPUTYPE_BOOLEAN, 0, 0},
         { RTL_CONSTASCII_STRINGPARAM("EmbedSystemFonts"), HANDLE_EMBED_SYSTEM_FONTS, CPPUTYPE_BOOLEAN, 0, 0},
+        { RTL_CONSTASCII_STRINGPARAM("TabOverMargin"), HANDLE_TAB_OVER_MARGIN, CPPUTYPE_BOOLEAN, 0, 0},
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
  * find another solution before adding them to this property set - MTG
@@ -785,6 +787,12 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             mpDoc->set(IDocumentSettingAccess::EMBED_SYSTEM_FONTS, bTmp);
         }
         break;
+        case HANDLE_TAB_OVER_MARGIN:
+        {
+            sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
+            mpDoc->set(IDocumentSettingAccess::TAB_OVER_MARGIN, bTmp);
+        }
+        break;
         default:
             throw UnknownPropertyException();
     }
@@ -1189,6 +1197,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_EMBED_SYSTEM_FONTS:
         {
             sal_Bool bTmp = mpDoc->get( IDocumentSettingAccess::EMBED_SYSTEM_FONTS );
+            rValue.setValue( &bTmp, ::getBooleanCppuType() );
+        }
+        break;
+        case HANDLE_TAB_OVER_MARGIN:
+        {
+            sal_Bool bTmp = mpDoc->get( IDocumentSettingAccess::TAB_OVER_MARGIN );
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;

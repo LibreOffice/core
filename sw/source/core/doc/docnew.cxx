@@ -317,6 +317,7 @@ SwDoc::SwDoc()
     mbUnbreakableNumberings(false),
     mbClippedPictures(false),
     mbBackgroundParaOverDrawings(false),
+    mbTabOverMargin(false),
     mbLastBrowseMode( false ),
     n32DummyCompatabilityOptions1(0),
     n32DummyCompatabilityOptions2(0),

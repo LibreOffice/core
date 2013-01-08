@@ -578,6 +578,7 @@ private:
     bool mbUnbreakableNumberings;
     bool mbClippedPictures;
     bool mbBackgroundParaOverDrawings;
+    bool mbTabOverMargin;
 
     bool mbLastBrowseMode                           : 1;
 
