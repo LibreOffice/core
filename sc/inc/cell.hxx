@@ -136,6 +136,8 @@ public:
     bool            HasValueData() const;
     bool            HasStringData() const;
     rtl::OUString   GetStringData() const;          // only real strings
+    // default implementation, creates url object from passed url
+    static EditTextObject* CreateURLObjectFromURL( ScDocument& rDoc, const OUString& rURL, const OUString& rText );
 
     static bool     CellEqual( const ScBaseCell* pCell1, const ScBaseCell* pCell2 );
 
@@ -501,7 +503,7 @@ public:
 
     void            SetErrCode( sal_uInt16 n );
     inline bool     IsHyperLinkCell() const { return pCode && pCode->IsHyperLink(); }
-    EditTextObject* CreateURLObject() ;
+    EditTextObject* CreateURLObject();
     void            GetURLResult( rtl::OUString& rURL, rtl::OUString& rCellText );
 
     /** Determines whether or not the result string contains more than one paragraph */

@@ -24,6 +24,7 @@
 #include <vcl/outdev.hxx>
 #include <svl/aeitem.hxx>
 #include <svl/itemiter.hxx>
+#include <svl/stritem.hxx>
 #include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/bolnitem.hxx>
@@ -81,6 +82,7 @@ sal_uInt16* ScDocumentPool::pVersionMap8 = 0;
 sal_uInt16* ScDocumentPool::pVersionMap9 = 0;
 sal_uInt16* ScDocumentPool::pVersionMap10 = 0;
 sal_uInt16* ScDocumentPool::pVersionMap11 = 0;
+sal_uInt16* ScDocumentPool::pVersionMap12 = 0;
 
 // ATTR_FONT_TWOLINES (not used) was changed to ATTR_USERDEF (not saved in binary format) in 641c
 
@@ -141,6 +143,7 @@ static SfxItemInfo const  aItemInfos[] =
     { SID_ATTR_BORDER_SHADOW,       SFX_ITEM_POOLABLE },    // ATTR_SHADOW
     { 0,                            SFX_ITEM_POOLABLE },    // ATTR_VALIDDATA
     { 0,                            SFX_ITEM_POOLABLE },    // ATTR_CONDITIONAL
+    { 0,                            SFX_ITEM_POOLABLE },    // ATTR_HYPERLINK
     { 0,                            SFX_ITEM_POOLABLE },    // ATTR_PATTERN
     { SID_ATTR_LRSPACE,             SFX_ITEM_POOLABLE },    // ATTR_LRSPACE
     { SID_ATTR_ULSPACE,             SFX_ITEM_POOLABLE },    // ATTR_ULSPACE
@@ -279,6 +282,7 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, sal_Bool bLoadRefCounts )
     ppPoolDefaults[ ATTR_SHADOW          - ATTR_STARTINDEX ] = new SvxShadowItem( ATTR_SHADOW );
     ppPoolDefaults[ ATTR_VALIDDATA       - ATTR_STARTINDEX ] = new SfxUInt32Item( ATTR_VALIDDATA, 0 );
     ppPoolDefaults[ ATTR_CONDITIONAL     - ATTR_STARTINDEX ] = new ScCondFormatItem;
+    ppPoolDefaults[ ATTR_HYPERLINK       - ATTR_STARTINDEX ] = new SfxStringItem( ATTR_HYPERLINK, rtl::OUString() ) ;
 
     //  GetRscString funktioniert erst nach ScGlobal::Init, zu erkennen am EmptyBrushItem
     //! zusaetzliche Methode ScGlobal::IsInit() oder so...
@@ -366,6 +370,8 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, sal_Bool bLoadRefCounts )
 
     // ATTR_FONT_OVERLINE added in DEV300/overline2
     SetVersionMap( 11, 100, 187, pVersionMap11 );
+    // ATTR_HYERLINK added
+    SetVersionMap( 12, 100, 192, pVersionMap12 );
 }
 
 ScDocumentPool::~ScDocumentPool()
@@ -389,7 +395,7 @@ void ScDocumentPool::InitVersionMaps()
                 !pVersionMap5 && !pVersionMap6 &&
                 !pVersionMap7 && !pVersionMap8 &&
                 !pVersionMap9 && !pVersionMap10 &&
-                !pVersionMap11, "InitVersionMaps call multiple times" );
+                !pVersionMap11 && !pVersionMap12 , "InitVersionMaps call multiple times" );
 
     // alte WhichId's mappen
     // nicht mit ATTR_* zaehlen, falls die sich nochmal aendern
@@ -539,6 +545,17 @@ void ScDocumentPool::InitVersionMaps()
     // 1 entry inserted
     for ( i=nMap11New, j=nMap11Start+nMap11New+1; i < nMap11Count; i++, j++ )
         pVersionMap11[i] = j;
+
+    const sal_uInt16 nMap12Start = 100;  // ATTR_STARTINDEX
+    const sal_uInt16 nMap12End   = 192;  // ATTR_ENDINDEX
+    const sal_uInt16 nMap12Count = nMap12End - nMap12Start + 1;
+    const sal_uInt16 nMap12New   = 55;    // ATTR_HYPERLINK - ATTR_STARTINDEX
+    pVersionMap12 = new sal_uInt16 [ nMap12Count ];
+    for ( i=0, j=nMap12Start; i < nMap12New; i++, j++ )
+        pVersionMap12[i] = j;
+    // 1 entry inserted
+    for ( i=nMap12New, j=nMap12Start+nMap12New+1; i < nMap12Count; i++, j++ )
+        pVersionMap12[i] = j;
 }
 
 void ScDocumentPool::DeleteVersionMaps()
@@ -548,8 +565,10 @@ void ScDocumentPool::DeleteVersionMaps()
                 pVersionMap5 && pVersionMap6 &&
                 pVersionMap7 && pVersionMap8 &&
                 pVersionMap9 && pVersionMap10 &&
-                pVersionMap11, "DeleteVersionMaps without maps" );
+                pVersionMap11 && pVersionMap12 , "DeleteVersionMaps without maps" );
 
+    delete[] pVersionMap12;
+    pVersionMap12 = 0;
     delete[] pVersionMap11;
     pVersionMap11 = 0;
     delete[] pVersionMap10;

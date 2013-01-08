@@ -66,6 +66,8 @@
 #include "worksheetbuffer.hxx"
 #include "worksheetsettings.hxx"
 #include "formulabuffer.hxx"
+#include "scitems.hxx"
+#include <svl/stritem.hxx>
 
 namespace oox {
 namespace xls {
@@ -1039,22 +1041,21 @@ void WorksheetGlobals::insertHyperlink( const CellAddress& rAddress, const OUStr
             }
         }
         break;
-
-        // fix for #i31050# disabled, HYPERLINK is not able to return numeric value (#i91351#)
-#if 0
-        // #i31050# replace number with HYPERLINK function
-        case CellContentType_VALUE:
+        // Handle other cell types e.g. formulas ( and ? ) that have associated
+        // hyperlinks.
+        // Ideally all hyperlinks should be treated  as below. For the moment,
+        // given the current absence of ods support lets just handle what we
+        // previously didn't handle the new way.
+        // Unfortunately we won't be able to preserve such hyperlinks when
+        // saving to ods. Note: when we are able to save such hyperlinks to ods
+        // we should handle *all* imported hyperlinks as below ( e.g. as cell
+        // attribute ) for better interoperability.
+        default:
         {
-            Reference< XFormulaTokens > xTokens( xCell, UNO_QUERY );
-            ApiTokenSequence aTokens = getFormulaParser().convertNumberToHyperlink( rUrl, xCell->getValue() );
-            OSL_ENSURE( xTokens.is(), "WorksheetHelper::insertHyperlink - missing formula token interface" );
-            if( xTokens.is() && aTokens.hasElements() )
-                xTokens->setTokens( aTokens );
+            SfxStringItem aItem( ATTR_HYPERLINK, rUrl );
+            getScDocument().ApplyAttr( static_cast< SCCOL >( rAddress.Column ), static_cast< SCROW >( rAddress.Row ), static_cast< SCTAB >( rAddress.Sheet ), aItem );
+            break;
         }
-        break;
-#endif
-
-        default:;
     }
 }
 

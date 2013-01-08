@@ -610,6 +610,16 @@ bool ScBaseCell::CellEqual( const ScBaseCell* pCell1, const ScBaseCell* pCell2 )
     return false;
 }
 
+EditTextObject* ScBaseCell::CreateURLObjectFromURL( ScDocument& rDoc, const OUString& rURL, const OUString& rText )
+{
+    SvxURLField aUrlField( rURL, rText, SVXURLFORMAT_APPDEFAULT);
+    EditEngine& rEE = rDoc.GetEditEngine();
+    rEE.SetText( EMPTY_STRING );
+    rEE.QuickInsertField( SvxFieldItem( aUrlField, EE_FEATURE_FIELD ), ESelection( 0xFFFF, 0xFFFF ) );
+
+    return rEE.CreateTextObject();
+}
+
 // ============================================================================
 
 ScNoteCell::ScNoteCell( SvtBroadcaster* pBC ) :
@@ -1979,12 +1989,7 @@ EditTextObject* ScFormulaCell::CreateURLObject()
     rtl::OUString aURL;
     GetURLResult( aURL, aCellText );
 
-    SvxURLField aUrlField( aURL, aCellText, SVXURLFORMAT_APPDEFAULT);
-    EditEngine& rEE = pDocument->GetEditEngine();
-    rEE.SetText( EMPTY_STRING );
-    rEE.QuickInsertField( SvxFieldItem( aUrlField, EE_FEATURE_FIELD ), ESelection( 0xFFFF, 0xFFFF ) );
-
-    return rEE.CreateTextObject();
+    return CreateURLObjectFromURL( *pDocument, aURL, aCellText );
 }
 
 // ============================================================================
