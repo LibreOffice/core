@@ -35,13 +35,50 @@
 
 class SwOneExampleFrame;
 
-class SwFrmCtrlWindow : public Window
+//Any Commands an EventBoxHelper receives
+//are forwarded to its parent
+class EventBoxHelper : public Window
+{
+public:
+    EventBoxHelper(Window* pParent)
+        : Window(pParent, 0)
+    {
+        SetPaintTransparent(true);
+        SetSizePixel(pParent->GetSizePixel());
+        Show();
+    }
+    virtual void Command(const CommandEvent& rCEvt)
+    {
+        GetParent()->Command(rCEvt);
+    }
+};
+
+//Enforces that it is always the same size
+//as its parent. Any Commands it receives
+//it forwards to its parent
+class EventBox : public Window
+{
+private:
+    EventBoxHelper m_aEventBoxHelper;
+public:
+    EventBox(Window* pParent, WinBits nBits)
+        : Window(pParent, nBits)
+        , m_aEventBoxHelper(this)
+    {
+    }
+    virtual void Command( const CommandEvent& rCEvt ) = 0;
+    virtual void Resize();
+};
+
+class SwFrmCtrlWindow : public EventBox
 {
     SwOneExampleFrame*  pExampleFrame;
 public:
     SwFrmCtrlWindow(Window* pParent, WinBits nBits, SwOneExampleFrame*  pFrame);
 
-    virtual void    Command( const CommandEvent& rCEvt );
+    virtual void Command( const CommandEvent& rCEvt );
+    virtual Size GetOptimalSize(WindowSizeType eType) const;
+    virtual void Resize();
 };
 
 class MenuResource : public Resource
@@ -71,7 +108,6 @@ class SW_DLLPUBLIC SwOneExampleFrame
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >     _xCursor;
 
     SwFrmCtrlWindow aTopWindow;
-    Window&         rWindow;
     Timer           aLoadedTimer;
     Link            aInitializedLink;
 

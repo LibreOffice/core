@@ -65,20 +65,18 @@ SwOneExampleFrame::SwOneExampleFrame( Window& rWin,
                                         sal_uInt32 nFlags,
                                         const Link* pInitializedLink,
                                         String* pURL ) :
-    aTopWindow( rWin.GetParent(), 0, this ),
-    rWindow(rWin),
+    aTopWindow(&rWin, 0, this),
     aMenuRes(SW_RES(RES_FRMEX_MENU)),
     pModuleView(SW_MOD()->GetView()),
     nStyleFlags(nFlags),
     bIsInitialized(sal_False),
     bServiceAvailable(sal_False)
 {
-    if(pURL && pURL->Len())
+    if (pURL && pURL->Len())
         sArgumentURL = *pURL;
 
     aTopWindow.SetPaintTransparent(sal_True);
-    aTopWindow.SetPosSizePixel(rWin.GetPosPixel(), rWin.GetSizePixel());
-    aTopWindow.SetZOrder( &rWin, WINDOW_ZORDER_FIRST );
+    aTopWindow.SetPosSizePixel(Point(0, 0), rWin.GetSizePixel());
 
     if( pInitializedLink )
         aInitializedLink = *pInitializedLink;
@@ -87,7 +85,6 @@ SwOneExampleFrame::SwOneExampleFrame( Window& rWin,
     aLoadedTimer.SetTimeoutHdl(LINK(this, SwOneExampleFrame, TimeoutHdl));
     aLoadedTimer.SetTimeout(200);
 
-    rWin.Enable(sal_False);
     CreateControl();
 
     aTopWindow.Show();
@@ -109,7 +106,7 @@ SwOneExampleFrame::~SwOneExampleFrame()
     DisposeControl();
 }
 
-void    SwOneExampleFrame::CreateControl()
+void SwOneExampleFrame::CreateControl()
 {
     if(_xControl.is())
         return ;
@@ -120,15 +117,15 @@ void    SwOneExampleFrame::CreateControl()
     _xControl = uno::Reference< awt::XControl >(xInst, uno::UNO_QUERY);
     if(_xControl.is())
     {
-        uno::Reference< awt::XWindowPeer >  xParent( rWindow.GetComponentInterface() );
+        uno::Reference< awt::XWindowPeer >  xParent( aTopWindow.GetComponentInterface() );
 
         uno::Reference< awt::XToolkit >  xToolkit( awt::Toolkit::create(xContext), uno::UNO_QUERY_THROW );
 
         _xControl->createPeer( xToolkit, xParent );
 
         uno::Reference< awt::XWindow >  xWin( _xControl, uno::UNO_QUERY );
-        xWin->setVisible( sal_False );
-        Size aWinSize(rWindow.GetOutputSizePixel());
+        xWin->setVisible(sal_False);
+        Size aWinSize(aTopWindow.GetOutputSizePixel());
         xWin->setPosSize( 0, 0, aWinSize.Width(), aWinSize.Height(), awt::PosSize::SIZE );
 
         uno::Reference< beans::XPropertySet >  xPrSet(xInst, uno::UNO_QUERY);
@@ -342,24 +339,25 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
             xPProp->setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_RIGHT_MARGIN)), aZero);
         }
 
+        uno::Reference< awt::XWindow >  xWin( _xControl, uno::UNO_QUERY );
+        Size aWinSize(aTopWindow.GetOutputSizePixel());
+        fprintf(stderr, "size %ld %ld\n", aWinSize.Width(), aWinSize.Height());
+        xWin->setPosSize( 0, 0, aWinSize.Width(), aWinSize.Height(), awt::PosSize::SIZE );
+
         // can only be done here - the SFX changes the ScrollBar values
         xViewProps->setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_SHOW_HORI_SCROLL_BAR )), aFalseSet);
         xViewProps->setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_SHOW_VERT_SCROLL_BAR )), aFalseSet);
 
-        if( aInitializedLink.IsSet() )
-        {
-            rWindow.Enable(sal_False, sal_True);
-               aInitializedLink.Call(this);
-        }
+        if (aInitializedLink.IsSet())
+            aInitializedLink.Call(this);
 
         uno::Reference< text::XTextViewCursorSupplier >  xCrsrSupp(_xController, uno::UNO_QUERY);
         uno::Reference< view::XScreenCursor >  xScrCrsr(xCrsrSupp->getViewCursor(), uno::UNO_QUERY);
         if(xScrCrsr.is())
             xScrCrsr->screenUp();
 
-        uno::Reference< awt::XWindow >  xWin( _xControl, uno::UNO_QUERY );
         xWin->setVisible( sal_True );
-        rWindow.Show();
+        aTopWindow.Show();
 
         if( xTunnel.is() )
         {
@@ -497,13 +495,17 @@ IMPL_LINK(SwOneExampleFrame, PopupHdl, Menu*, pMenu )
 
 SwFrmCtrlWindow::SwFrmCtrlWindow(Window* pParent, WinBits nBits,
                                 SwOneExampleFrame*  pFrame) :
-    Window(pParent, nBits),
+    EventBox(pParent, nBits),
     pExampleFrame(pFrame)
 {
+    set_expand(true);
+    set_fill(true);
 }
 
 void SwFrmCtrlWindow::Command( const CommandEvent& rCEvt )
 {
+    fprintf(stderr, "SwFrmCtrlWindow::Command\n");
+
     switch ( rCEvt.GetCommand() )
     {
         case COMMAND_CONTEXTMENU:
@@ -519,6 +521,30 @@ void SwFrmCtrlWindow::Command( const CommandEvent& rCEvt )
         break;
         default:;
     }
+}
+
+void EventBox::Resize()
+{
+    fprintf(stderr, "EventBox::Resize\n");
+    Size aSize(GetSizePixel());
+    for (Window *pChild = GetWindow(WINDOW_FIRSTCHILD); pChild; pChild = pChild->GetWindow(WINDOW_NEXT))
+    {
+        pChild->SetSizePixel(aSize);
+        fprintf(stderr, "child %p\n", pChild);
+    }
+}
+
+Size SwFrmCtrlWindow::GetOptimalSize(WindowSizeType eType) const
+{
+    if (eType == WINDOWSIZE_PREFERRED)
+        return LogicToPixel(Size(82, 124), MapMode(MAP_APPFONT));
+    return Window::GetOptimalSize(eType);
+}
+
+void SwFrmCtrlWindow::Resize()
+{
+    EventBox::Resize();
+    pExampleFrame->ClearDocument(true);
 }
 
 MenuResource::MenuResource(const ResId& rResId) :
