@@ -300,7 +300,7 @@ static void lcl_FindValidAttribs( ItemList& rLst, ContentNode* pNode, sal_uInt16
 
 sal_uInt32 ImpEditEngine::WriteBin( SvStream& rOutput, EditSelection aSel, sal_Bool bStoreUnicodeStrings )
 {
-    BinTextObject* pObj = (BinTextObject*)CreateBinTextObject( aSel, NULL );
+    EditTextObjectImpl* pObj = (EditTextObjectImpl*)CreateBinTextObject( aSel, NULL );
     pObj->StoreUnicodeStrings( bStoreUnicodeStrings );
     pObj->Store( rOutput );
     delete pObj;
@@ -1022,7 +1022,7 @@ EditTextObject* ImpEditEngine::CreateTextObject( EditSelection aSel )
 
 EditTextObject* ImpEditEngine::CreateBinTextObject( EditSelection aSel, SfxItemPool* pPool, sal_Bool bAllowBigObjects, sal_uInt16 nBigObjectStart )
 {
-    BinTextObject* pTxtObj = new BinTextObject( pPool );
+    EditTextObjectImpl* pTxtObj = new EditTextObjectImpl( pPool );
     pTxtObj->SetVertical( IsVertical() );
     MapUnit eMapUnit = (MapUnit)aEditDoc.GetItemPool().GetMetric( DEF_METRIC );
     pTxtObj->SetMetric( (sal_uInt16) eMapUnit );
@@ -1195,12 +1195,12 @@ EditSelection ImpEditEngine::InsertText( const EditTextObject& rTextObject, Edit
     aSel.Adjust( aEditDoc );
     if ( aSel.HasRange() )
         aSel = ImpDeleteSelection( aSel );
-    EditSelection aNewSel = InsertBinTextObject( (BinTextObject&)rTextObject, aSel.Max() );
+    EditSelection aNewSel = InsertBinTextObject( (EditTextObjectImpl&)rTextObject, aSel.Max() );
     LeaveBlockNotifications();
     return aNewSel;
 }
 
-EditSelection ImpEditEngine::InsertBinTextObject( BinTextObject& rTextObject, EditPaM aPaM )
+EditSelection ImpEditEngine::InsertBinTextObject( EditTextObjectImpl& rTextObject, EditPaM aPaM )
 {
     // Optimize: No getPos undFindParaportion, instead calculate index!
     EditSelection aSel( aPaM, aPaM );

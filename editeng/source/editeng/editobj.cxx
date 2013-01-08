@@ -352,13 +352,13 @@ bool EditTextObject::IsVertical() const
 void EditTextObject::SetVertical( bool bVertical )
 {
     OSL_FAIL( "Virtual method direct from EditTextObject!" );
-    ((BinTextObject*)this)->SetVertical( bVertical );
+    ((EditTextObjectImpl*)this)->SetVertical( bVertical );
 }
 
 sal_uInt16 EditTextObject::GetScriptType() const
 {
     OSL_FAIL( "Virtual method direct from EditTextObject!" );
-    return ((const BinTextObject*)this)->GetScriptType();
+    return ((const EditTextObjectImpl*)this)->GetScriptType();
 }
 
 
@@ -404,10 +404,10 @@ EditTextObject* EditTextObject::Create( SvStream& rIStream, SfxItemPool* pGlobal
     EditTextObject* pTxtObj = NULL;
     switch ( nWhich )
     {
-        case 0x22 /*BIN300*/:       pTxtObj = new BinTextObject( 0 );
-                                    ((BinTextObject*)pTxtObj)->CreateData300( rIStream );
+        case 0x22 /*BIN300*/:       pTxtObj = new EditTextObjectImpl( 0 );
+                                    ((EditTextObjectImpl*)pTxtObj)->CreateData300( rIStream );
                                     break;
-        case EE_FORMAT_BIN:         pTxtObj = new BinTextObject( pGlobalTextObjectPool );
+        case EE_FORMAT_BIN:         pTxtObj = new EditTextObjectImpl( pGlobalTextObjectPool );
                                     pTxtObj->CreateData( rIStream );
                                     break;
         default:
@@ -441,17 +441,17 @@ sal_uInt16 EditTextObject::GetVersion() const
 
 bool EditTextObject::operator==( const EditTextObject& rCompare ) const
 {
-    return static_cast< const BinTextObject* >( this )->operator==( static_cast< const BinTextObject& >( rCompare ) );
+    return static_cast< const EditTextObjectImpl* >( this )->operator==( static_cast< const EditTextObjectImpl& >( rCompare ) );
 }
 
 // #i102062#
 bool EditTextObject::isWrongListEqual(const EditTextObject& rCompare) const
 {
-    return static_cast< const BinTextObject* >(this)->isWrongListEqual(static_cast< const BinTextObject& >(rCompare));
+    return static_cast< const EditTextObjectImpl* >(this)->isWrongListEqual(static_cast< const EditTextObjectImpl& >(rCompare));
 }
 
 // from SfxItemPoolUser
-void BinTextObject::ObjectInDestruction(const SfxItemPool& rSfxItemPool)
+void EditTextObjectImpl::ObjectInDestruction(const SfxItemPool& rSfxItemPool)
 {
     if(!bOwnerOfPool && pPool && pPool == &rSfxItemPool)
     {
@@ -496,7 +496,7 @@ EditEngineItemPool* getEditEngineItemPool(SfxItemPool* pPool)
     return pRetval;
 }
 
-BinTextObject::BinTextObject( SfxItemPool* pP ) :
+EditTextObjectImpl::EditTextObjectImpl( SfxItemPool* pP ) :
     EditTextObject( EE_FORMAT_BIN )
 {
     nVersion = 0;
@@ -534,7 +534,7 @@ BinTextObject::BinTextObject( SfxItemPool* pP ) :
     nScriptType = 0;
 }
 
-BinTextObject::BinTextObject( const BinTextObject& r ) :
+EditTextObjectImpl::EditTextObjectImpl( const EditTextObjectImpl& r ) :
     EditTextObject( r )
 {
     nVersion = r.nVersion;
@@ -576,7 +576,7 @@ BinTextObject::BinTextObject( const BinTextObject& r ) :
         aContents.push_back(new ContentInfo(*it, *pPool));
 }
 
-BinTextObject::~BinTextObject()
+EditTextObjectImpl::~EditTextObjectImpl()
 {
     if(!bOwnerOfPool && pPool)
     {
@@ -594,32 +594,32 @@ BinTextObject::~BinTextObject()
     }
 }
 
-sal_uInt16 BinTextObject::GetUserType() const
+sal_uInt16 EditTextObjectImpl::GetUserType() const
 {
     return nUserType;
 }
 
-void BinTextObject::SetUserType( sal_uInt16 n )
+void EditTextObjectImpl::SetUserType( sal_uInt16 n )
 {
     nUserType = n;
 }
 
-sal_uLong BinTextObject::GetObjectSettings() const
+sal_uLong EditTextObjectImpl::GetObjectSettings() const
 {
     return nObjSettings;
 }
 
-void BinTextObject::SetObjectSettings( sal_uLong n )
+void EditTextObjectImpl::SetObjectSettings( sal_uLong n )
 {
     nObjSettings = n;
 }
 
-bool BinTextObject::IsVertical() const
+bool EditTextObjectImpl::IsVertical() const
 {
     return bVertical;
 }
 
-void BinTextObject::SetVertical( bool b )
+void EditTextObjectImpl::SetVertical( bool b )
 {
     if ( b != bVertical )
     {
@@ -628,54 +628,54 @@ void BinTextObject::SetVertical( bool b )
     }
 }
 
-sal_uInt16 BinTextObject::GetScriptType() const
+sal_uInt16 EditTextObjectImpl::GetScriptType() const
 {
     return nScriptType;
 }
 
-void BinTextObject::SetScriptType( sal_uInt16 nType )
+void EditTextObjectImpl::SetScriptType( sal_uInt16 nType )
 {
     nScriptType = nType;
 }
 
-EditTextObject* BinTextObject::Clone() const
+EditTextObject* EditTextObjectImpl::Clone() const
 {
-    return new BinTextObject( *this );
+    return new EditTextObjectImpl( *this );
 }
 
-XEditAttribute* BinTextObject::CreateAttrib( const SfxPoolItem& rItem, sal_uInt16 nStart, sal_uInt16 nEnd )
+XEditAttribute* EditTextObjectImpl::CreateAttrib( const SfxPoolItem& rItem, sal_uInt16 nStart, sal_uInt16 nEnd )
 {
     return MakeXEditAttribute( *pPool, rItem, nStart, nEnd );
 }
 
-void BinTextObject::DestroyAttrib( XEditAttribute* pAttr )
+void EditTextObjectImpl::DestroyAttrib( XEditAttribute* pAttr )
 {
     pPool->Remove( *pAttr->GetItem() );
     delete pAttr;
 }
 
-BinTextObject::ContentInfosType& BinTextObject::GetContents()
+EditTextObjectImpl::ContentInfosType& EditTextObjectImpl::GetContents()
 {
     return aContents;
 }
 
-const BinTextObject::ContentInfosType& BinTextObject::GetContents() const
+const EditTextObjectImpl::ContentInfosType& EditTextObjectImpl::GetContents() const
 {
     return aContents;
 }
 
-ContentInfo* BinTextObject::CreateAndInsertContent()
+ContentInfo* EditTextObjectImpl::CreateAndInsertContent()
 {
     aContents.push_back(new ContentInfo(*pPool));
     return &aContents.back();
 }
 
-size_t BinTextObject::GetParagraphCount() const
+size_t EditTextObjectImpl::GetParagraphCount() const
 {
     return aContents.size();
 }
 
-String BinTextObject::GetText(size_t nPara) const
+String EditTextObjectImpl::GetText(size_t nPara) const
 {
     if (nPara >= aContents.size())
         return String();
@@ -683,11 +683,11 @@ String BinTextObject::GetText(size_t nPara) const
     return aContents[nPara].GetText();
 }
 
-void BinTextObject::Insert(const EditTextObject& rObj, size_t nDestPara)
+void EditTextObjectImpl::Insert(const EditTextObject& rObj, size_t nDestPara)
 {
     DBG_ASSERT( rObj.Which() == EE_FORMAT_BIN, "UTO: unknown Textobjekt" );
 
-    const BinTextObject& rBinObj = (const BinTextObject&)rObj;
+    const EditTextObjectImpl& rBinObj = (const EditTextObjectImpl&)rObj;
 
     if (nDestPara > aContents.size())
         nDestPara = aContents.size();
@@ -704,13 +704,13 @@ void BinTextObject::Insert(const EditTextObject& rObj, size_t nDestPara)
     ClearPortionInfo();
 }
 
-EditTextObject* BinTextObject::CreateTextObject(size_t nPara, size_t nParas) const
+EditTextObject* EditTextObjectImpl::CreateTextObject(size_t nPara, size_t nParas) const
 {
     if (nPara >= aContents.size() || !nParas)
         return NULL;
 
     // Only split the Pool, when a the Pool is set externally.
-    BinTextObject* pObj = new BinTextObject( bOwnerOfPool ? 0 : pPool );
+    EditTextObjectImpl* pObj = new EditTextObjectImpl( bOwnerOfPool ? 0 : pPool );
     if ( bOwnerOfPool && pPool )
         pObj->GetPool()->SetDefaultMetric( pPool->GetMetric( DEF_METRIC ) );
 
@@ -728,7 +728,7 @@ EditTextObject* BinTextObject::CreateTextObject(size_t nPara, size_t nParas) con
     return pObj;
 }
 
-void BinTextObject::RemoveParagraph(size_t nPara)
+void EditTextObjectImpl::RemoveParagraph(size_t nPara)
 {
     DBG_ASSERT( nPara < aContents.size(), "BinTextObject::GetText: Paragraph does not exist!" );
     if (nPara >= aContents.size())
@@ -740,12 +740,12 @@ void BinTextObject::RemoveParagraph(size_t nPara)
     ClearPortionInfo();
 }
 
-sal_Bool BinTextObject::HasPortionInfo() const
+sal_Bool EditTextObjectImpl::HasPortionInfo() const
 {
     return pPortionInfo ? true : false;
 }
 
-void BinTextObject::ClearPortionInfo()
+void EditTextObjectImpl::ClearPortionInfo()
 {
     if ( pPortionInfo )
     {
@@ -754,7 +754,7 @@ void BinTextObject::ClearPortionInfo()
     }
 }
 
-sal_Bool BinTextObject::HasOnlineSpellErrors() const
+sal_Bool EditTextObjectImpl::HasOnlineSpellErrors() const
 {
     ContentInfosType::const_iterator it = aContents.begin(), itEnd = aContents.end();
     for (; it != itEnd; ++it)
@@ -765,7 +765,7 @@ sal_Bool BinTextObject::HasOnlineSpellErrors() const
     return false;
 }
 
-sal_Bool BinTextObject::HasCharAttribs( sal_uInt16 _nWhich ) const
+sal_Bool EditTextObjectImpl::HasCharAttribs( sal_uInt16 _nWhich ) const
 {
     for (size_t nPara = aContents.size(); nPara; )
     {
@@ -785,7 +785,7 @@ sal_Bool BinTextObject::HasCharAttribs( sal_uInt16 _nWhich ) const
     return false;
 }
 
-void BinTextObject::GetCharAttribs( sal_uInt16 nPara, std::vector<EECharAttrib>& rLst ) const
+void EditTextObjectImpl::GetCharAttribs( sal_uInt16 nPara, std::vector<EECharAttrib>& rLst ) const
 {
     rLst.clear();
     const ContentInfo& rC = aContents[nPara];
@@ -801,7 +801,7 @@ void BinTextObject::GetCharAttribs( sal_uInt16 nPara, std::vector<EECharAttrib>&
     }
 }
 
-void BinTextObject::MergeParaAttribs( const SfxItemSet& rAttribs, sal_uInt16 nStart, sal_uInt16 nEnd )
+void EditTextObjectImpl::MergeParaAttribs( const SfxItemSet& rAttribs, sal_uInt16 nStart, sal_uInt16 nEnd )
 {
     bool bChanged = false;
 
@@ -824,12 +824,12 @@ void BinTextObject::MergeParaAttribs( const SfxItemSet& rAttribs, sal_uInt16 nSt
         ClearPortionInfo();
 }
 
-sal_Bool BinTextObject::IsFieldObject() const
+sal_Bool EditTextObjectImpl::IsFieldObject() const
 {
-    return BinTextObject::GetField() ? true : false;
+    return EditTextObjectImpl::GetField() ? true : false;
 }
 
-const SvxFieldItem* BinTextObject::GetField() const
+const SvxFieldItem* EditTextObjectImpl::GetField() const
 {
     if (aContents.size() == 1)
     {
@@ -848,7 +848,7 @@ const SvxFieldItem* BinTextObject::GetField() const
     return 0;
 }
 
-bool BinTextObject::HasField( sal_Int32 nType ) const
+bool EditTextObjectImpl::HasField( sal_Int32 nType ) const
 {
     size_t nParagraphs = aContents.size();
     for (size_t nPara = 0; nPara < nParagraphs; ++nPara)
@@ -873,20 +873,20 @@ bool BinTextObject::HasField( sal_Int32 nType ) const
     return false;
 }
 
-SfxItemSet BinTextObject::GetParaAttribs(size_t nPara) const
+SfxItemSet EditTextObjectImpl::GetParaAttribs(size_t nPara) const
 {
     const ContentInfo& rC = aContents[nPara];
     return rC.GetParaAttribs();
 }
 
-void BinTextObject::SetParaAttribs(size_t nPara, const SfxItemSet& rAttribs)
+void EditTextObjectImpl::SetParaAttribs(size_t nPara, const SfxItemSet& rAttribs)
 {
     ContentInfo& rC = aContents[nPara];
     rC.GetParaAttribs().Set(rAttribs);
     ClearPortionInfo();
 }
 
-sal_Bool BinTextObject::RemoveCharAttribs( sal_uInt16 _nWhich )
+sal_Bool EditTextObjectImpl::RemoveCharAttribs( sal_uInt16 _nWhich )
 {
     sal_Bool bChanged = false;
 
@@ -912,7 +912,7 @@ sal_Bool BinTextObject::RemoveCharAttribs( sal_uInt16 _nWhich )
     return bChanged;
 }
 
-sal_Bool BinTextObject::RemoveParaAttribs( sal_uInt16 _nWhich )
+sal_Bool EditTextObjectImpl::RemoveParaAttribs( sal_uInt16 _nWhich )
 {
     bool bChanged = false;
 
@@ -942,7 +942,7 @@ sal_Bool BinTextObject::RemoveParaAttribs( sal_uInt16 _nWhich )
     return bChanged;
 }
 
-sal_Bool BinTextObject::HasStyleSheet( const XubString& rName, SfxStyleFamily eFamily ) const
+sal_Bool EditTextObjectImpl::HasStyleSheet( const XubString& rName, SfxStyleFamily eFamily ) const
 {
     size_t nParagraphs = aContents.size();
     for (size_t nPara = 0; nPara < nParagraphs; ++nPara)
@@ -954,7 +954,7 @@ sal_Bool BinTextObject::HasStyleSheet( const XubString& rName, SfxStyleFamily eF
     return false;
 }
 
-void BinTextObject::GetStyleSheet(size_t nPara, String& rName, SfxStyleFamily& rFamily) const
+void EditTextObjectImpl::GetStyleSheet(size_t nPara, String& rName, SfxStyleFamily& rFamily) const
 {
     if (nPara >= aContents.size())
         return;
@@ -964,7 +964,7 @@ void BinTextObject::GetStyleSheet(size_t nPara, String& rName, SfxStyleFamily& r
     rFamily = rC.GetFamily();
 }
 
-void BinTextObject::SetStyleSheet(size_t nPara, const String& rName, const SfxStyleFamily& rFamily)
+void EditTextObjectImpl::SetStyleSheet(size_t nPara, const String& rName, const SfxStyleFamily& rFamily)
 {
     if (nPara >= aContents.size())
         return;
@@ -974,7 +974,7 @@ void BinTextObject::SetStyleSheet(size_t nPara, const String& rName, const SfxSt
     rC.GetFamily() = rFamily;
 }
 
-sal_Bool BinTextObject::ImpChangeStyleSheets(
+sal_Bool EditTextObjectImpl::ImpChangeStyleSheets(
                     const XubString& rOldName, SfxStyleFamily eOldFamily,
                     const XubString& rNewName, SfxStyleFamily eNewFamily )
 {
@@ -997,7 +997,7 @@ sal_Bool BinTextObject::ImpChangeStyleSheets(
     return bChanges;
 }
 
-sal_Bool BinTextObject::ChangeStyleSheets(
+sal_Bool EditTextObjectImpl::ChangeStyleSheets(
                     const XubString& rOldName, SfxStyleFamily eOldFamily,
                     const XubString& rNewName, SfxStyleFamily eNewFamily )
 {
@@ -1008,13 +1008,13 @@ sal_Bool BinTextObject::ChangeStyleSheets(
     return bChanges;
 }
 
-void BinTextObject::ChangeStyleSheetName( SfxStyleFamily eFamily,
+void EditTextObjectImpl::ChangeStyleSheetName( SfxStyleFamily eFamily,
                 const XubString& rOldName, const XubString& rNewName )
 {
     ImpChangeStyleSheets( rOldName, eFamily, rNewName, eFamily );
 }
 
-editeng::FieldUpdater BinTextObject::GetFieldUpdater()
+editeng::FieldUpdater EditTextObjectImpl::GetFieldUpdater()
 {
     return editeng::FieldUpdater(*this);
 }
@@ -1035,7 +1035,7 @@ public:
 
 }
 
-void BinTextObject::StoreData( SvStream& rOStream ) const
+void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
 {
     sal_uInt16 nVer = 602;
     rOStream << nVer;
@@ -1203,7 +1203,7 @@ void BinTextObject::StoreData( SvStream& rOStream ) const
     }
 }
 
-void BinTextObject::CreateData( SvStream& rIStream )
+void EditTextObjectImpl::CreateData( SvStream& rIStream )
 {
     rIStream >> nVersion;
 
@@ -1481,12 +1481,12 @@ void BinTextObject::CreateData( SvStream& rIStream )
     }
 }
 
-sal_uInt16 BinTextObject::GetVersion() const
+sal_uInt16 EditTextObjectImpl::GetVersion() const
 {
     return nVersion;
 }
 
-bool BinTextObject::operator==( const BinTextObject& rCompare ) const
+bool EditTextObjectImpl::operator==( const EditTextObjectImpl& rCompare ) const
 {
     if( this == &rCompare )
         return true;
@@ -1509,7 +1509,7 @@ bool BinTextObject::operator==( const BinTextObject& rCompare ) const
 }
 
 // #i102062#
-bool BinTextObject::isWrongListEqual(const BinTextObject& rCompare) const
+bool EditTextObjectImpl::isWrongListEqual(const EditTextObjectImpl& rCompare) const
 {
     if (aContents.size() != rCompare.aContents.size())
     {
@@ -1532,7 +1532,7 @@ bool BinTextObject::isWrongListEqual(const BinTextObject& rCompare) const
 
 #define CHARSETMARKER   0x9999
 
-void BinTextObject::CreateData300( SvStream& rIStream )
+void EditTextObjectImpl::CreateData300( SvStream& rIStream )
 {
     // For forward compatibility.
 

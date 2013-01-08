@@ -109,7 +109,7 @@ public:
 
 class ContentInfo
 {
-    friend class BinTextObject;
+    friend class EditTextObjectImpl;
 public:
     typedef boost::ptr_vector<XEditAttribute> XEditAttributesType;
 
@@ -150,7 +150,7 @@ public:
     bool isWrongListEqual(const ContentInfo& rCompare) const;
 };
 
-class BinTextObject : public EditTextObject
+class EditTextObjectImpl : public EditTextObject
 {
     using EditTextObject::operator==;
     using EditTextObject::isWrongListEqual;
@@ -180,9 +180,9 @@ protected:
                                         const String& rNewName, SfxStyleFamily eNewFamily );
 
 public:
-                            BinTextObject( SfxItemPool* pPool );
-                            BinTextObject( const BinTextObject& );
-    virtual                 ~BinTextObject();
+                            EditTextObjectImpl( SfxItemPool* pPool );
+                            EditTextObjectImpl( const EditTextObjectImpl& );
+    virtual                 ~EditTextObjectImpl();
 
     virtual EditTextObject* Clone() const;
 
@@ -255,10 +255,10 @@ public:
     bool                    IsOwnerOfPool() const       { return bOwnerOfPool; }
     void                    StoreUnicodeStrings( sal_Bool b ) { bStoreUnicodeStrings = b; }
 
-    bool                    operator==( const BinTextObject& rCompare ) const;
+    bool                    operator==( const EditTextObjectImpl& rCompare ) const;
 
     // #i102062#
-    bool isWrongListEqual(const BinTextObject& rCompare) const;
+    bool isWrongListEqual(const EditTextObjectImpl& rCompare) const;
 
     // from SfxItemPoolUser
     virtual void ObjectInDestruction(const SfxItemPool& rSfxItemPool);

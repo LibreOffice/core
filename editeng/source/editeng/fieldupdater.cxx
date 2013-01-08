@@ -38,15 +38,15 @@ namespace editeng {
 
 class FieldUpdaterImpl
 {
-    BinTextObject& mrObj;
+    EditTextObjectImpl& mrObj;
 public:
-    FieldUpdaterImpl(EditTextObject& rObj) : mrObj(static_cast<BinTextObject&>(rObj)) {}
+    FieldUpdaterImpl(EditTextObject& rObj) : mrObj(static_cast<EditTextObjectImpl&>(rObj)) {}
     FieldUpdaterImpl(const FieldUpdaterImpl& r) : mrObj(r.mrObj) {}
 
     void updateTableFields(int nTab)
     {
         SfxItemPool* pPool = mrObj.GetPool();
-        BinTextObject::ContentInfosType& rContents = mrObj.GetContents();
+        EditTextObjectImpl::ContentInfosType& rContents = mrObj.GetContents();
         for (size_t i = 0; i < rContents.size(); ++i)
         {
             ContentInfo& rContent = rContents[i];
