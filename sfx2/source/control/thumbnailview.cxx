@@ -525,6 +525,8 @@ void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
 
             return;
         }
+        else if (!pItem)
+            deselectItems( );
     }
 
     Control::MouseButtonDown( rMEvt );
