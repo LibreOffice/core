@@ -86,7 +86,6 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMgr;
 
     ::osl::Mutex                                maMutex;
-    ::cppu::OMultiTypeInterfaceContainerHelper  maListeners;
     ::com::sun::star::media::ZoomLevel          meZoomLevel;
     Player&                                     mrPlayer;
     int                                         mnPointerType;

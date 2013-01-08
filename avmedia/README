@@ -3,3 +3,8 @@ Audio/Video media implementation.
 Provides per-platform implementations of multimedia functionality.
 Currently no stream API is provided, only a URI based one, so
 streaming has to be wrapped around it via temp files.
+
+Also provides (in source/framework/mediacontrol.cxx) an implementation
+of the graphical media playback control that appears in the toolbar /
+mediaobject bar when media is selected under the .uno:AVMediaToolBox
+item.
