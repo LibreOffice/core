@@ -179,16 +179,14 @@ bool ContentInfo::operator!=(const ContentInfo& rCompare) const
     return !operator==(rCompare);
 }
 
-EditTextObject::EditTextObject( sal_uInt16 n)
+EditTextObject::EditTextObject()
 {
     DBG_CTOR( EE_EditTextObject, 0 );
-    nWhich = n;
 }
 
-EditTextObject::EditTextObject( const EditTextObject& r )
+EditTextObject::EditTextObject( const EditTextObject& )
 {
     DBG_CTOR( EE_EditTextObject, 0 );
-    nWhich = r.nWhich;
 }
 
 EditTextObject::~EditTextObject()
@@ -369,7 +367,8 @@ sal_Bool EditTextObject::Store( SvStream& rOStream ) const
 
     sal_Size nStartPos = rOStream.Tell();
 
-    rOStream << (sal_uInt16)Which();
+    sal_uInt16 nWhich = static_cast<sal_uInt16>(EE_FORMAT_BIN);
+    rOStream << nWhich;
 
     sal_uInt32 nStructSz = 0;
     rOStream << nStructSz;
@@ -496,8 +495,7 @@ EditEngineItemPool* getEditEngineItemPool(SfxItemPool* pPool)
     return pRetval;
 }
 
-EditTextObjectImpl::EditTextObjectImpl( SfxItemPool* pP ) :
-    EditTextObject( EE_FORMAT_BIN )
+EditTextObjectImpl::EditTextObjectImpl( SfxItemPool* pP )
 {
     nVersion = 0;
     nMetric = 0xFFFF;
@@ -685,8 +683,6 @@ String EditTextObjectImpl::GetText(size_t nPara) const
 
 void EditTextObjectImpl::Insert(const EditTextObject& rObj, size_t nDestPara)
 {
-    DBG_ASSERT( rObj.Which() == EE_FORMAT_BIN, "UTO: unknown Textobjekt" );
-
     const EditTextObjectImpl& rBinObj = (const EditTextObjectImpl&)rObj;
 
     if (nDestPara > aContents.size())

@@ -48,20 +48,17 @@ class FieldUpdater;
 class EDITENG_DLLPUBLIC EditTextObject : public SfxItemPoolUser
 {
 private:
-    sal_uInt16              nWhich;
     EDITENG_DLLPRIVATE EditTextObject&      operator=( const EditTextObject& );
 
 protected:
-                        EditTextObject( sal_uInt16 nWhich );
-                        EditTextObject( const EditTextObject& r );
+    EditTextObject();
+    EditTextObject( const EditTextObject& r );
 
     virtual void        StoreData( SvStream& rOStream ) const;
     virtual void        CreateData( SvStream& rIStream );
 
 public:
     virtual             ~EditTextObject();
-
-    sal_uInt16              Which() const { return nWhich; }
 
     virtual sal_uInt16      GetUserType() const;    // For OutlinerMode, it can however not save in compatible format
     virtual void        SetUserType( sal_uInt16 n );
