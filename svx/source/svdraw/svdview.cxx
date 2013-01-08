@@ -1161,16 +1161,16 @@ Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* 
 #define STR_NOTHING "nothing"
 XubString SdrView::GetStatusText()
 {
-    XubString aStr;
+    OUString aStr;
     XubString aName;
 
-    aStr.AppendAscii(STR_NOTHING);
+    aStr=STR_NOTHING;
 
     if (pAktCreate!=NULL)
     {
         aStr=pAktCreate->getSpecialDragComment(aDragStat);
 
-        if(!aStr.Len())
+        if(aStr.isEmpty())
         {
             pAktCreate->TakeObjNameSingul(aName);
             aStr = ImpGetResStr(STR_ViewCreateObj);
@@ -1180,14 +1180,16 @@ XubString SdrView::GetStatusText()
     {
         if (bInsPolyPoint || IsInsertGluePoint())
         {
-            aStr=aInsPointUndoStr;
+            aStr = aInsPointUndoStr;
         }
         else
         {
             if (aDragStat.IsMinMoved())
             {
                 OSL_TRACE("SdrView::GetStatusText(%lx) %lx", this, mpCurrentSdrDragMethod);
-                mpCurrentSdrDragMethod->TakeSdrDragComment(aStr);
+                String aTemp=aStr;
+                mpCurrentSdrDragMethod->TakeSdrDragComment(aTemp);
+                aStr = aTemp;
             }
         }
     }
@@ -1223,12 +1225,15 @@ XubString SdrView::GetStatusText()
             aStr = ImpGetResStr(STR_ViewMarkGluePoints);
         }
     }
-    else if (IsTextEdit() && pTextEditOutlinerView!=NULL) {
-        aStr=ImpGetResStr(STR_ViewTextEdit); // "TextEdit - Row y, Column x";
+    else if (IsTextEdit() && pTextEditOutlinerView!=NULL)
+    {
+        aStr = ImpGetResStr(STR_ViewTextEdit); // "TextEdit - Row y, Column x";
         ESelection aSel(pTextEditOutlinerView->GetSelection());
         long nPar=aSel.nEndPara,nLin=0,nCol=aSel.nEndPos;
-        if (aSel.nEndPara>0) {
-            for (sal_uInt16 nParaNum=0; nParaNum<aSel.nEndPara; nParaNum++) {
+        if (aSel.nEndPara>0)
+        {
+            for (sal_uInt16 nParaNum=0; nParaNum<aSel.nEndPara; nParaNum++)
+            {
                 nLin+=pTextEditOutliner->GetLineCount(nParaNum);
             }
         }
@@ -1238,54 +1243,73 @@ XubString SdrView::GetStatusText()
         sal_uInt16 nParaLine=0;
         sal_uIntPtr nParaLineAnz=pTextEditOutliner->GetLineCount(aSel.nEndPara);
         sal_Bool bBrk=sal_False;
-        while (!bBrk) {
+        while (!bBrk)
+        {
             sal_uInt16 nLen=pTextEditOutliner->GetLineLen(aSel.nEndPara,nParaLine);
             sal_Bool bLastLine=(nParaLine==nParaLineAnz-1);
-            if (nCol>nLen || (!bLastLine && nCol==nLen)) {
+            if (nCol>nLen || (!bLastLine && nCol==nLen))
+            {
                 nCol-=nLen;
                 nLin++;
                 nParaLine++;
-            } else bBrk=sal_True;
-            if (nLen==0) bBrk=sal_True; // to be sure
+            }
+            else
+            {
+                bBrk = sal_True;
+            }
+            if (nLen == 0)
+            {
+                bBrk = sal_True; // to be sure
+            }
         }
 
-        aStr.SearchAndReplaceAscii("%1", UniString::CreateFromInt32(nPar + 1));
-        aStr.SearchAndReplaceAscii("%2", UniString::CreateFromInt32(nLin + 1));
-        aStr.SearchAndReplaceAscii("%3", UniString::CreateFromInt32(nCol + 1));
+        aStr.replaceAll("%1", OUString::valueOf(nPar + 1));
+        aStr.replaceAll("%2", OUString::valueOf(nLin + 1));
+        aStr.replaceAll("%3", OUString::valueOf(nCol + 1));
 
 #ifdef DBG_UTIL
-        aStr += UniString( RTL_CONSTASCII_USTRINGPARAM( ", Level " ) );
-        aStr += UniString::CreateFromInt32( pTextEditOutliner->GetDepth( aSel.nEndPara ) );
+        aStr += ", Level ";
+        aStr += OUString::valueOf( pTextEditOutliner->GetDepth( aSel.nEndPara ) );
 #endif
     }
 
-    if(aStr.EqualsAscii(STR_NOTHING))
+    if(aStr.equals(STR_NOTHING))
     {
-        if (AreObjectsMarked()) {
-            ImpTakeDescriptionStr(STR_ViewMarked,aStr);
-            if (IsGluePointEditMode()) {
-                if (HasMarkedGluePoints()) {
-                    ImpTakeDescriptionStr(STR_ViewMarked,aStr,0,IMPSDR_GLUEPOINTSDESCRIPTION);
-                }
-            } else {
-                if (HasMarkedPoints()) {
-                    ImpTakeDescriptionStr(STR_ViewMarked,aStr,0,IMPSDR_POINTSDESCRIPTION);
+        if (AreObjectsMarked())
+        {
+            String aTemp = aStr;
+            ImpTakeDescriptionStr(STR_ViewMarked,aTemp);
+            if (IsGluePointEditMode())
+            {
+                if (HasMarkedGluePoints())
+                {
+                    ImpTakeDescriptionStr(STR_ViewMarked, aTemp, 0, IMPSDR_GLUEPOINTSDESCRIPTION);
                 }
             }
-        } else {
-            aStr.Erase();
+            else
+            {
+                if (HasMarkedPoints())
+                {
+                    ImpTakeDescriptionStr(STR_ViewMarked, aTemp, 0, IMPSDR_POINTSDESCRIPTION);
+                }
+            }
+            aStr = aTemp;
+        }
+        else
+        {
+            aStr = "";
         }
     }
     else if(aName.Len())
     {
-        aStr.SearchAndReplaceAscii("%1", aName);
+        aStr.replaceAll("%1", aName);
     }
 
-    if(aStr.Len())
+    if(!aStr.isEmpty())
     {
         // capitalize first letter
-        OUString aTmpStr(aStr.Copy(0, 1));
-        aStr.Replace(0, 1, aTmpStr.toAsciiUpperCase());
+        OUString aTmpStr(aStr.copy(0, 1));
+        aStr = aTmpStr.toAsciiUpperCase() + aStr.copy(1);
     }
     return aStr;
 }
