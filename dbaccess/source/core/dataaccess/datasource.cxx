@@ -203,7 +203,7 @@ sal_Bool SAL_CALL OAuthenticationContinuation::canSetRealm(  ) throw(RuntimeExce
     return sal_False;
 }
 
-void SAL_CALL OAuthenticationContinuation::setRealm( const ::rtl::OUString& /*Realm*/ ) throw(RuntimeException)
+void SAL_CALL OAuthenticationContinuation::setRealm( const OUString& /*Realm*/ ) throw(RuntimeException)
 {
     OSL_FAIL("OAuthenticationContinuation::setRealm: not supported!");
 }
@@ -215,7 +215,7 @@ sal_Bool SAL_CALL OAuthenticationContinuation::canSetUserName(  ) throw(RuntimeE
     return m_bCanSetUserName;
 }
 
-void SAL_CALL OAuthenticationContinuation::setUserName( const ::rtl::OUString& _rUser ) throw(RuntimeException)
+void SAL_CALL OAuthenticationContinuation::setUserName( const OUString& _rUser ) throw(RuntimeException)
 {
     m_sUser = _rUser;
 }
@@ -225,7 +225,7 @@ sal_Bool SAL_CALL OAuthenticationContinuation::canSetPassword(  ) throw(RuntimeE
     return sal_True;
 }
 
-void SAL_CALL OAuthenticationContinuation::setPassword( const ::rtl::OUString& _rPassword ) throw(RuntimeException)
+void SAL_CALL OAuthenticationContinuation::setPassword( const OUString& _rPassword ) throw(RuntimeException)
 {
     m_sPassword = _rPassword;
 }
@@ -247,7 +247,7 @@ sal_Bool SAL_CALL OAuthenticationContinuation::canSetAccount(  ) throw(RuntimeEx
     return sal_False;
 }
 
-void SAL_CALL OAuthenticationContinuation::setAccount( const ::rtl::OUString& ) throw(RuntimeException)
+void SAL_CALL OAuthenticationContinuation::setAccount( const OUString& ) throw(RuntimeException)
 {
     OSL_FAIL("OAuthenticationContinuation::setAccount: not supported!");
 }
@@ -317,9 +317,9 @@ public:
     OSharedConnectionManager(const Reference< XComponentContext >& _rxContext);
 
     void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(RuntimeException);
-    Reference<XConnection> getConnection(   const rtl::OUString& url,
-                                            const rtl::OUString& user,
-                                            const rtl::OUString& password,
+    Reference<XConnection> getConnection(   const OUString& url,
+                                            const OUString& user,
+                                            const OUString& password,
                                             const Sequence< PropertyValue >& _aInfo,
                                             ODatabaseSource* _pDataSource);
     void addEventListener(const Reference<XConnection>& _rxConnection,TConnectionMap::iterator& _rIter);
@@ -354,9 +354,9 @@ void SAL_CALL OSharedConnectionManager::disposing( const ::com::sun::star::lang:
     }
 }
 
-Reference<XConnection> OSharedConnectionManager::getConnection( const rtl::OUString& url,
-                                        const rtl::OUString& user,
-                                        const rtl::OUString& password,
+Reference<XConnection> OSharedConnectionManager::getConnection( const OUString& url,
+                                        const OUString& user,
+                                        const OUString& password,
                                         const Sequence< PropertyValue >& _aInfo,
                                         ODatabaseSource* _pDataSource)
 {
@@ -365,13 +365,13 @@ Reference<XConnection> OSharedConnectionManager::getConnection( const rtl::OUStr
     Sequence< PropertyValue > aInfoCopy(_aInfo);
     sal_Int32 nPos = aInfoCopy.getLength();
     aInfoCopy.realloc( nPos + 2 );
-    aInfoCopy[nPos].Name      = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TableFilter"));
+    aInfoCopy[nPos].Name      = "TableFilter";
     aInfoCopy[nPos++].Value <<= _pDataSource->m_pImpl->m_aTableFilter;
-    aInfoCopy[nPos].Name      = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TableTypeFilter"));
+    aInfoCopy[nPos].Name      = "TableTypeFilter";
     aInfoCopy[nPos++].Value <<= _pDataSource->m_pImpl->m_aTableTypeFilter;
 
-    ::rtl::OUString sUser = user;
-    ::rtl::OUString sPassword = password;
+    OUString sUser = user;
+    OUString sPassword = password;
     if ((sUser.isEmpty()) && (sPassword.isEmpty()) && (!_pDataSource->m_pImpl->m_sUser.isEmpty()))
     {   // ease the usage of this method. data source which are intended to have a user automatically
         // fill in the user/password combination if the caller of this method does not specify otherwise
@@ -412,7 +412,7 @@ void OSharedConnectionManager::addEventListener(const Reference<XConnection>& _r
 
 namespace
 {
-    Sequence< PropertyValue > lcl_filterDriverProperties( const Reference< XDriver >& _xDriver, const ::rtl::OUString& _sUrl,
+    Sequence< PropertyValue > lcl_filterDriverProperties( const Reference< XDriver >& _xDriver, const OUString& _sUrl,
         const Sequence< PropertyValue >& _rDataSourceSettings, const AsciiPropertyValue* _pKnownSettings )
     {
         if ( _xDriver.is() )
@@ -458,7 +458,7 @@ namespace
         return Sequence< PropertyValue >();
     }
 
-    typedef ::std::map< ::rtl::OUString, sal_Int32 > PropertyAttributeCache;
+    typedef ::std::map< OUString, sal_Int32 > PropertyAttributeCache;
 
     struct IsDefaultAndNotRemoveable : public ::std::unary_function< PropertyValue, bool >
     {
@@ -517,7 +517,7 @@ ODatabaseSource::~ODatabaseSource()
     }
 }
 
-void ODatabaseSource::setName( const Reference< XDocumentDataSource >& _rxDocument, const ::rtl::OUString& _rNewName, DBContextAccess )
+void ODatabaseSource::setName( const Reference< XDocumentDataSource >& _rxDocument, const OUString& _rNewName, DBContextAccess )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::setName" );
     ODatabaseSource& rModelImpl = dynamic_cast< ODatabaseSource& >( *_rxDocument.get() );
@@ -582,19 +582,19 @@ void SAL_CALL ODatabaseSource::disposing( const ::com::sun::star::lang::EventObj
         m_pImpl->disposing(Source);
 }
 // XServiceInfo
-rtl::OUString ODatabaseSource::getImplementationName(  ) throw(RuntimeException)
+OUString ODatabaseSource::getImplementationName(  ) throw(RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::getImplementationName" );
     return getImplementationName_static();
 }
 
-rtl::OUString ODatabaseSource::getImplementationName_static(  ) throw(RuntimeException)
+OUString ODatabaseSource::getImplementationName_static(  ) throw(RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::getImplementationName_static" );
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.dba.ODatabaseSource"));
+    return OUString("com.sun.star.comp.dba.ODatabaseSource");
 }
 
-Sequence< ::rtl::OUString > ODatabaseSource::getSupportedServiceNames(  ) throw (RuntimeException)
+Sequence< OUString > ODatabaseSource::getSupportedServiceNames(  ) throw (RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::getSupportedServiceNames" );
     return getSupportedServiceNames_static();
@@ -607,16 +607,16 @@ Reference< XInterface > ODatabaseSource::Create( const Reference< XComponentCont
     return xDBContext->createInstance();
 }
 
-Sequence< ::rtl::OUString > ODatabaseSource::getSupportedServiceNames_static(  ) throw (RuntimeException)
+Sequence< OUString > ODatabaseSource::getSupportedServiceNames_static(  ) throw (RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::getSupportedServiceNames_static" );
-    Sequence< ::rtl::OUString > aSNS( 2 );
+    Sequence< OUString > aSNS( 2 );
     aSNS[0] = SERVICE_SDB_DATASOURCE;
-    aSNS[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.DocumentDataSource"));
+    aSNS[1] = "com.sun.star.sdb.DocumentDataSource";
     return aSNS;
 }
 
-sal_Bool ODatabaseSource::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)
+sal_Bool ODatabaseSource::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::supportsService" );
     return ::comphelper::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
@@ -637,7 +637,7 @@ void ODatabaseSource::disposing()
     m_pImpl.clear();
 }
 
-Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::OUString& _rUid, const ::rtl::OUString& _rPwd)
+Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString& _rUid, const OUString& _rPwd)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::buildLowLevelConnection" );
     Reference< XConnection > xReturn;
@@ -650,8 +650,8 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::O
         // no connection pool installed, fall back to driver manager
         xManager.set( DriverManager::create(m_pImpl->m_aContext.getUNOContext() ), UNO_QUERY_THROW );
 
-    ::rtl::OUString sUser(_rUid);
-    ::rtl::OUString sPwd(_rPwd);
+    OUString sUser(_rUid);
+    OUString sPwd(_rPwd);
     if ((sUser.isEmpty()) && (sPwd.isEmpty()) && (!m_pImpl->m_sUser.isEmpty()))
     {   // ease the usage of this method. data source which are intended to have a user automatically
         // fill in the user/password combination if the caller of this method does not specify otherwise
@@ -671,13 +671,13 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::O
         sal_Int32 nArgPos = 0;
         if (sUser.getLength())
         {
-            aUserPwd[ nArgPos ].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user"));
+            aUserPwd[ nArgPos ].Name = "user";
             aUserPwd[ nArgPos ].Value <<= sUser;
             ++nArgPos;
         }
         if (!sPwd.isEmpty())
         {
-            aUserPwd[ nArgPos ].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("password"));
+            aUserPwd[ nArgPos ].Name = "password";
             aUserPwd[ nArgPos ].Value <<= sPwd;
         }
         Reference< XDriver > xDriver;
@@ -711,11 +711,11 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::O
             {
                 sal_Int32 nCount = aDriverInfo.getLength();
                 aDriverInfo.realloc(nCount + 2 );
-                aDriverInfo[nCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"));
+                aDriverInfo[nCount].Name = "URL";
                 aDriverInfo[nCount++].Value <<= m_pImpl->getURL();
-                aDriverInfo[nCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Storage"));
+                aDriverInfo[nCount].Name = "Storage";
                 Reference< css::document::XDocumentSubStorageSupplier> xDocSup( m_pImpl->getDocumentSubStorageSupplier() );
-                aDriverInfo[nCount++].Value <<= xDocSup->getDocumentSubStorage(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("database")),ElementModes::READWRITE);
+                aDriverInfo[nCount++].Value <<= xDocSup->getDocumentSubStorage("database",ElementModes::READWRITE);
             }
             if (nAdditionalArgs)
                 xReturn = xManager->getConnectionWithInfo(m_pImpl->m_sConnectURL, ::comphelper::concatSequences(aUserPwd,aDriverInfo));
@@ -737,7 +737,7 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::O
 
     if ( !xReturn.is() )
     {
-        ::rtl::OUString sMessage = DBACORE_RESSTRING( nExceptionMessageId );
+        OUString sMessage = DBACORE_RESSTRING( nExceptionMessageId );
 
         SQLContext aContext;
         aContext.Message = DBACORE_RESSTRING(RID_STR_CONNECTION_REQUEST).
@@ -765,15 +765,15 @@ Reference< XPropertySetInfo >  ODatabaseSource::getPropertySetInfo() throw (Runt
         DECL_PROP1_BOOL(ISPASSWORDREQUIRED,                                 BOUND);
         DECL_PROP1_BOOL(ISREADONLY,                                         READONLY);
         DECL_PROP1(LAYOUTINFORMATION,           Sequence< PropertyValue >,  BOUND);
-        DECL_PROP1(NAME,                        ::rtl::OUString,            READONLY);
+        DECL_PROP1(NAME,                        OUString,            READONLY);
         DECL_PROP2_IFACE(NUMBERFORMATSSUPPLIER, XNumberFormatsSupplier,     READONLY, TRANSIENT);
-        DECL_PROP1(PASSWORD,                    ::rtl::OUString,            TRANSIENT);
+        DECL_PROP1(PASSWORD,                    OUString,            TRANSIENT);
         DECL_PROP2_IFACE(SETTINGS,              XPropertySet,               BOUND, READONLY);
         DECL_PROP1_BOOL(SUPPRESSVERSIONCL,                                  BOUND);
-        DECL_PROP1(TABLEFILTER,                 Sequence< ::rtl::OUString >,BOUND);
-        DECL_PROP1(TABLETYPEFILTER,             Sequence< ::rtl::OUString >,BOUND);
-        DECL_PROP1(URL,                         ::rtl::OUString,            BOUND);
-        DECL_PROP1(USER,                        ::rtl::OUString,            BOUND);
+        DECL_PROP1(TABLEFILTER,                 Sequence< OUString >,BOUND);
+        DECL_PROP1(TABLETYPEFILTER,             Sequence< OUString >,BOUND);
+        DECL_PROP1(URL,                         OUString,            BOUND);
+        DECL_PROP1(USER,                        OUString,            BOUND);
     END_PROPERTY_HELPER();
 }
 
@@ -858,10 +858,10 @@ sal_Bool ODatabaseSource::convertFastPropertyValue(Any & rConvertedValue, Any & 
 
 namespace
 {
-    struct SelectPropertyName : public ::std::unary_function< PropertyValue, ::rtl::OUString >
+    struct SelectPropertyName : public ::std::unary_function< PropertyValue, OUString >
     {
     public:
-        const ::rtl::OUString& operator()( const PropertyValue& _lhs )
+        const OUString& operator()( const PropertyValue& _lhs )
         {
             return _lhs.Name;
         }
@@ -883,7 +883,7 @@ namespace
     void lcl_setPropertyValues_resetOrRemoveOther( const Reference< XPropertyAccess >& _rxPropertyBag, const Sequence< PropertyValue >& _rAllNewPropertyValues )
     {
         // sequences are ugly to operate on
-        typedef ::std::set< ::rtl::OUString >   StringSet;
+        typedef ::std::set< OUString >   StringSet;
         StringSet aToBeSetPropertyNames;
         ::std::transform(
             _rAllNewPropertyValues.getConstArray(),
@@ -944,7 +944,7 @@ void ODatabaseSource::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const
             case PROPERTY_ID_USER:
                 rValue >>= m_pImpl->m_sUser;
                 // if the user name has changed, reset the password
-                m_pImpl->m_aPassword = ::rtl::OUString();
+                m_pImpl->m_aPassword = OUString();
                 break;
             case PROPERTY_ID_PASSWORD:
                 rValue >>= m_pImpl->m_aPassword;
@@ -1009,7 +1009,7 @@ void ODatabaseSource::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) con
                     Reference< XPropertySet > xSettingsAsProps( m_pImpl->m_xSettings, UNO_QUERY_THROW );
                     Reference< XPropertySetInfo > xPST( xSettingsAsProps->getPropertySetInfo(), UNO_QUERY_THROW );
                     Sequence< Property > aSettings( xPST->getProperties() );
-                    ::std::map< ::rtl::OUString, sal_Int32 > aPropertyAttributes;
+                    ::std::map< OUString, sal_Int32 > aPropertyAttributes;
                     for (   const Property* pSettings = aSettings.getConstArray();
                             pSettings != aSettings.getConstArray() + aSettings.getLength();
                             ++pSettings
@@ -1082,13 +1082,13 @@ Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const 
     return connectWithCompletion(_rxHandler,sal_False);
 }
 
-Reference< XConnection > ODatabaseSource::getConnection(const rtl::OUString& user, const rtl::OUString& password) throw( SQLException, RuntimeException )
+Reference< XConnection > ODatabaseSource::getConnection(const OUString& user, const OUString& password) throw( SQLException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::getConnection" );
     return getConnection(user,password,sal_False);
 }
 
-Reference< XConnection > SAL_CALL ODatabaseSource::getIsolatedConnection( const ::rtl::OUString& user, const ::rtl::OUString& password ) throw(SQLException, RuntimeException)
+Reference< XConnection > SAL_CALL ODatabaseSource::getIsolatedConnection( const OUString& user, const OUString& password ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::getIsolatedConnection" );
     return getConnection(user,password,sal_True);
@@ -1111,7 +1111,7 @@ Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const 
         return getConnection(m_pImpl->m_sUser, m_pImpl->m_aPassword,_bIsolated);
     }
 
-    ::rtl::OUString sUser(m_pImpl->m_sUser), sPassword(m_pImpl->m_aPassword);
+    OUString sUser(m_pImpl->m_sUser), sPassword(m_pImpl->m_aPassword);
     sal_Bool bNewPasswordGiven = sal_False;
 
     if (m_pImpl->m_bPasswordRequired && sPassword.isEmpty())
@@ -1124,7 +1124,7 @@ Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const 
         OAuthenticationContinuation* pAuthenticate = new OAuthenticationContinuation;
 
         // the name which should be referred in the login dialog
-        ::rtl::OUString sServerName( m_pImpl->m_sName );
+        OUString sServerName( m_pImpl->m_sName );
         INetURLObject aURLCheck( sServerName );
         if ( aURLCheck.GetProtocol() != INET_PROT_NOT_VALID )
             sServerName = aURLCheck.getBase( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_UNAMBIGUOUS );
@@ -1166,7 +1166,7 @@ Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const 
             m_pImpl->m_aPassword = pAuthenticate->getPassword();
             bNewPasswordGiven = sal_True;
         }
-        m_pImpl->m_sFailedPassword = ::rtl::OUString();
+        m_pImpl->m_sFailedPassword = OUString();
     }
 
     try
@@ -1181,13 +1181,13 @@ Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const 
             // assume that we had an authentication problem. Without this we may, after an unsucessful connect, while
             // the user gave us a password an the order to remember it, never allow an password input again (at least
             // not without restarting the session)
-            m_pImpl->m_aPassword = ::rtl::OUString();
+            m_pImpl->m_aPassword = OUString();
         }
         throw;
     }
 }
 
-Reference< XConnection > ODatabaseSource::buildIsolatedConnection(const rtl::OUString& user, const rtl::OUString& password)
+Reference< XConnection > ODatabaseSource::buildIsolatedConnection(const OUString& user, const OUString& password)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::buildIsolatedConnection" );
     Reference< XConnection > xConn;
@@ -1202,7 +1202,7 @@ Reference< XConnection > ODatabaseSource::buildIsolatedConnection(const rtl::OUS
     return xConn;
 }
 
-Reference< XConnection > ODatabaseSource::getConnection(const rtl::OUString& user, const rtl::OUString& password,sal_Bool _bIsolated) throw( SQLException, RuntimeException )
+Reference< XConnection > ODatabaseSource::getConnection(const OUString& user, const OUString& password,sal_Bool _bIsolated) throw( SQLException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::getConnection" );
     ModelMethodGuard aGuard( *this );
@@ -1253,12 +1253,12 @@ Reference< XNameAccess > SAL_CALL ODatabaseSource::getQueryDefinitions( ) throw(
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xMy(*this);
         if ( dbtools::getDataSourceSetting(xMy,"CommandDefinitions",aValue) )
         {
-            ::rtl::OUString sSupportService;
+            OUString sSupportService;
             aValue >>= sSupportService;
             if ( !sSupportService.isEmpty() )
             {
                 Sequence<Any> aArgs(1);
-                aArgs[0] <<= NamedValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataSource")),makeAny(xMy));
+                aArgs[0] <<= NamedValue("DataSource",makeAny(xMy));
                 xContainer.set(m_pImpl->m_aContext.createComponentWithArguments(sSupportService,aArgs),UNO_QUERY);
             }
         }
