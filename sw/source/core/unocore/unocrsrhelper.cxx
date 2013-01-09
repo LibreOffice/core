@@ -302,9 +302,12 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
             break;
         case FN_UNO_DOCUMENT_INDEX_MARK:
         {
-            ::std::vector<SwTxtAttr *> const marks(
-                rPam.GetNode()->GetTxtNode()->GetTxtAttrsAt(
-                    rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_TOXMARK));
+            ::std::vector<SwTxtAttr *> marks;
+            if (rPam.GetNode()->IsTxtNode())
+            {
+                marks = rPam.GetNode()->GetTxtNode()->GetTxtAttrsAt(
+                    rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_TOXMARK);
+            }
             if (marks.size())
             {
                 if( pAny )
@@ -428,9 +431,9 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         case FN_UNO_ENDNOTE:
         case FN_UNO_FOOTNOTE:
         {
-            SwTxtAttr *const pTxtAttr =
+            SwTxtAttr *const pTxtAttr = rPam.GetNode()->IsTxtNode() ?
                 rPam.GetNode()->GetTxtNode()->GetTxtAttrForCharAt(
-                    rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN);
+                    rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN) : 0;
             if(pTxtAttr)
             {
                 const SwFmtFtn& rFtn = pTxtAttr->GetFtn();
@@ -452,9 +455,13 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         break;
         case FN_UNO_REFERENCE_MARK:
         {
-            ::std::vector<SwTxtAttr *> const marks(
+            ::std::vector<SwTxtAttr *> marks;
+            if (rPam.GetNode()->IsTxtNode())
+            {
+                marks = (
                 rPam.GetNode()->GetTxtNode()->GetTxtAttrsAt(
                     rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_REFMARK));
+            }
             if (marks.size())
             {
                 if( pAny )
@@ -470,9 +477,10 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         break;
         case FN_UNO_NESTED_TEXT_CONTENT:
         {
-            uno::Reference<XTextContent> const xRet(
-                GetNestedTextContent(*rPam.GetNode()->GetTxtNode(),
-                    rPam.GetPoint()->nContent.GetIndex(), false));
+            uno::Reference<XTextContent> const xRet(rPam.GetNode()->IsTxtNode()
+                ? GetNestedTextContent(*rPam.GetNode()->GetTxtNode(),
+                    rPam.GetPoint()->nContent.GetIndex(), false)
+                : 0);
             if (xRet.is())
             {
                 if (pAny)
@@ -721,6 +729,8 @@ void  getNumberingProperty(SwPaM& rPam, PropertyState& eState, Any * pAny )
 
 void GetCurPageStyle(SwPaM& rPaM, String &rString)
 {
+    if (!rPaM.GetCntntNode())
+        return; // TODO: is there an easy way to get it for tables/sections?
     const SwPageFrm* pPage = rPaM.GetCntntNode()->getLayoutFrm(rPaM.GetDoc()->GetCurrentLayout())->FindPageFrm();
     if(pPage)
         SwStyleNameMapper::FillProgName( pPage->GetPageDesc()->GetName(), rString, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, sal_True );
