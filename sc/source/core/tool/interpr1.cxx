@@ -135,7 +135,10 @@ void ScInterpreter::ScIfJump()
                 SCSIZE nCols, nRows;
                 pMat->GetDimensions( nCols, nRows );
                 if ( nCols == 0 || nRows == 0 )
+                {
                     PushIllegalArgument();
+                    return;
+                }
                 else if (pTokenMatrixMap && ((aMapIter = pTokenMatrixMap->find(
                                     pCur)) != pTokenMatrixMap->end()))
                     xNew = (*aMapIter).second;

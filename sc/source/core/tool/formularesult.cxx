@@ -443,6 +443,16 @@ void ScFormulaResult::SetHybridFormula( const String & rFormula )
     mbToken = true;
 }
 
+void ScFormulaResult::SetMatrix( SCCOL nCols, SCROW nRows, const ScConstMatrixRef& pMat, formula::FormulaToken* pUL )
+{
+    ResetToDefaults();
+    if (mbToken && mpToken)
+        mpToken->DecRef();
+    mpToken = new ScMatrixFormulaCellToken(nCols, nRows, pMat, pUL);
+    mpToken->IncRef();
+    mbToken = true;
+}
+
 const ScMatrixFormulaCellToken* ScFormulaResult::GetMatrixFormulaCellToken() const
 {
     return (GetType() == formula::svMatrixCell ?

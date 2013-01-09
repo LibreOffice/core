@@ -3306,7 +3306,7 @@ bool ScCompiler::IsBoolean( const String& rName )
 }
 
 
-bool ScCompiler::IsErrorConstant( const String& rName )
+bool ScCompiler::IsErrorConstant( const String& rName ) const
 {
     sal_uInt16 nError = GetErrorConstant( rName);
     if (nError)

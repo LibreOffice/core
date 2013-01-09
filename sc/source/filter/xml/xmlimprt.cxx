@@ -2809,6 +2809,9 @@ throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::R
     if (!pDoc)
         throw lang::IllegalArgumentException();
 
+    mpComp.reset(new ScCompiler(pDoc, ScAddress()));
+    mpComp->SetGrammar(formula::FormulaGrammar::GRAM_ODFF);
+
     bFromWrapper = pDoc->IsXMLFromWrapper();    // UnlockSolarMutex below still works normally
 
     uno::Reference<document::XActionLockable> xActionLockable(xDoc, uno::UNO_QUERY);
@@ -3292,6 +3295,14 @@ void ScXMLImport::ExtractFormulaNamespaceGrammar(
     rFormula = rAttrValue;
     rFormulaNmsp = OUString();  // remove any namespace string
     reGrammar = eDefaultGrammar;
+}
+
+bool ScXMLImport::IsFormulaErrorConstant( const OUString& rStr ) const
+{
+    if (!mpComp)
+        return false;
+
+    return mpComp->GetErrorConstant(rStr) > 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
