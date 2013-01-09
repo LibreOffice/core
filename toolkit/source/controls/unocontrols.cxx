@@ -85,9 +85,7 @@ ImageHelper::getGraphicAndGraphicObjectFromURL_nothrow( uno::Reference< graphic:
     {
         // graphic manager uniqueid
         rtl::OUString sID = _rURL.copy( sizeof( UNO_NAME_GRAPHOBJ_URLPREFIX ) - 1 );
-        // get the DefaultContext
-        ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-        xOutGraphicObj = graphic::GraphicObject::createWithId( aContext.getUNOContext(), sID );
+        xOutGraphicObj = graphic::GraphicObject::createWithId( ::comphelper::getProcessComponentContext(), sID );
     }
     else // linked
         xOutGraphicObj = NULL; // release the GraphicObject

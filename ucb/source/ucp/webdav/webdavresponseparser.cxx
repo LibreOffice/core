@@ -20,7 +20,7 @@
 #include <webdavresponseparser.hxx>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <cppuhelper/implbase2.hxx>
-#include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/seqstream.hxx>
@@ -819,10 +819,8 @@ namespace
                 myInputSource.aInputStream = xInputStream;
 
                 // get parser
-                uno::Reference< xml::sax::XParser > xParser(
-                    comphelper::getProcessServiceFactory()->createInstance(
-                        rtl::OUString::createFromAscii("com.sun.star.xml.sax.Parser") ),
-                    uno::UNO_QUERY_THROW );
+                uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(
+                    comphelper::getProcessComponentContext() );
 
                 // create parser; connect parser and filter
                 WebDAVResponseParser* pWebDAVResponseParser = new WebDAVResponseParser(eWebDAVResponseParserMode);
