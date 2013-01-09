@@ -123,7 +123,7 @@ void CompressGraphicsDialog::Update()
     aViewSizeString += String( " x " ) ;
     aViewSizeString += GetUnitString( m_aViewSize100mm.Height(), eFieldUnit, cSeparator );
     aViewSizeString += ( " at " ) ;
-    aViewSizeString += OUString::valueOf(aValX);
+    aViewSizeString += OUString::valueOf( static_cast< sal_Int32 >(aValX));
     aViewSizeString += ( " DPI" ) ;
     m_pFixedText3->SetText(aViewSizeString);
 
@@ -144,13 +144,13 @@ void CompressGraphicsDialog::Update()
 void CompressGraphicsDialog::UpdateNewWidthMF()
 {
     int nPixelX = (sal_Int32)( GetViewWidthInch() * m_dResolution );
-    m_pMFNewWidth->SetText( OUString::valueOf( nPixelX ) );
+    m_pMFNewWidth->SetText( OUString::valueOf( static_cast< sal_Int32 >( nPixelX ) ));
 }
 
 void CompressGraphicsDialog::UpdateNewHeightMF()
 {
     int nPixelY = (sal_Int32)( GetViewHeightInch() * m_dResolution );
-    m_pMFNewHeight->SetText( OUString::valueOf( nPixelY ) );
+    m_pMFNewHeight->SetText( OUString::valueOf( static_cast< sal_Int32 >( nPixelY ) ));
 }
 
 void CompressGraphicsDialog::UpdateResolutionLB()

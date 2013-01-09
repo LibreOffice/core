@@ -817,7 +817,7 @@ SfxItemPresentation SdrPercentItem::GetPresentation(
     SfxItemPresentation ePres, SfxMapUnit /*eCoreMetric*/,
     SfxMapUnit /*ePresMetric*/, XubString& rText, const IntlWrapper *) const
 {
-    rText = OUString::valueOf(GetValue());
+    rText = OUString::valueOf( static_cast< sal_Int32 >(GetValue()));
     rText += sal_Unicode('%');
 
     if(ePres == SFX_ITEM_PRESENTATION_COMPLETE)
@@ -1301,7 +1301,7 @@ SfxItemPresentation SdrTextAniDelayItem::GetPresentation(
     SfxItemPresentation ePres, SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/,
     XubString& rText, const IntlWrapper *) const
 {
-    rText = OUString::valueOf(GetValue());
+    rText = OUString::valueOf( static_cast< sal_Int32 >( GetValue()));
     rText += sal_Unicode('m');
     rText += sal_Unicode('s');
 
@@ -2058,7 +2058,7 @@ SfxItemPresentation SdrSignedPercentItem::GetPresentation(
     SfxItemPresentation ePres, SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/,
     XubString& rText, const IntlWrapper *) const
 {
-    rText = OUString::valueOf(GetValue());
+    rText = OUString::valueOf( static_cast< sal_Int32 >( GetValue()));
     rText += sal_Unicode('%');
 
     if(ePres == SFX_ITEM_PRESENTATION_COMPLETE)
