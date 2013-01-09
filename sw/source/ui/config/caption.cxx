@@ -66,7 +66,7 @@ InsCaptionOpt& InsCaptionOpt::operator=( const InsCaptionOpt& rOpt )
     return *this;
 }
 
-sal_Bool InsCaptionOpt::operator==( const InsCaptionOpt& rOpt ) const
+bool InsCaptionOpt::operator==( const InsCaptionOpt& rOpt ) const
 {
     return (eObjType == rOpt.eObjType &&
             aOleId == rOpt.aOleId); // So that identical Ole-IDs can't be added multiple

@@ -826,9 +826,9 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
         const SwMergeDescriptor& rMergeDescriptor)
 {
     //check if the doc is synchronized and contains at least one linked section
-    sal_Bool bSynchronizedDoc = pSourceShell->IsLabelDoc() && pSourceShell->GetSectionFmtCount() > 1;
+    bool bSynchronizedDoc = pSourceShell->IsLabelDoc() && pSourceShell->GetSectionFmtCount() > 1;
     sal_Bool bLoop = sal_True;
-    sal_Bool bEMail = rMergeDescriptor.nMergeType == DBMGR_MERGE_MAILING;
+    bool bEMail = rMergeDescriptor.nMergeType == DBMGR_MERGE_MAILING;
     const bool bAsSingleFile = rMergeDescriptor.nMergeType == DBMGR_MERGE_SINGLE_FILE;
 
     ::rtl::Reference< MailDispatcher >          xMailDispatcher;
@@ -853,7 +853,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
 
     uno::Reference< XPropertySet > xColumnProp;
     {
-        sal_Bool bColumnName = sEMailAddrFld.Len() > 0;
+        bool bColumnName = sEMailAddrFld.Len() > 0;
 
         if (bColumnName)
         {
@@ -1364,7 +1364,7 @@ sal_uLong SwNewDBMgr::GetColumnFmt( const String& rDBName,
     {
         uno::Reference< XDataSource> xSource;
         uno::Reference< XConnection> xConnection;
-        sal_Bool bUseMergeData = sal_False;
+        bool bUseMergeData = false;
         uno::Reference< XColumnsSupplier> xColsSupp;
         bool bDisposeConnection = false;
         if(pImpl->pMergeData &&
@@ -1372,7 +1372,7 @@ sal_uLong SwNewDBMgr::GetColumnFmt( const String& rDBName,
         {
             xConnection = pImpl->pMergeData->xConnection;
             xSource = SwNewDBMgr::getDataSourceAsParent(xConnection,rDBName);
-            bUseMergeData = sal_True;
+            bUseMergeData = true;
             xColsSupp = xColsSupp.query( pImpl->pMergeData->xResultSet );
         }
         if(!xConnection.is())
@@ -1765,13 +1765,13 @@ sal_Bool SwNewDBMgr::GetColumnCnt(const String& rSourceName, const String& rTabl
     {
         //the destination has to be an element of the selection
         const Any* pSelection = pFound->aSelection.getConstArray();
-        sal_Bool bFound = sal_False;
+        bool bFound = false;
         for(sal_Int32 nPos = 0; !bFound && nPos < pFound->aSelection.getLength(); nPos++)
         {
             sal_Int32 nSelection = 0;
             pSelection[nPos] >>= nSelection;
             if(nSelection == static_cast<sal_Int32>(nAbsRecordId))
-                bFound = sal_True;
+                bFound = true;
         }
         if(!bFound)
             return sal_False;
@@ -2715,7 +2715,7 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
     }
 
     SwWrtShell& rSourceShell = rSourceView.GetWrtShell();
-    sal_Bool bSynchronizedDoc = rSourceShell.IsLabelDoc() && rSourceShell.GetSectionFmtCount() > 1;
+    bool bSynchronizedDoc = rSourceShell.IsLabelDoc() && rSourceShell.GetSectionFmtCount() > 1;
     //save the settings of the first
     rSourceShell.SttEndDoc(sal_True);
     sal_uInt16 nStartingPageNo = rSourceShell.GetVirtPageNum();

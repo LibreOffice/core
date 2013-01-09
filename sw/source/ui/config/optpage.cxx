@@ -673,7 +673,7 @@ sal_Bool SwStdFontTabPage::FillItemSet( SfxItemSet& )
     {
         pWrtShell->StartAllAction();
         SfxPrinter* pPrinter = pWrtShell->getIDocumentDeviceAccess()->getPrinter( false );
-        sal_Bool bMod = sal_False;
+        bool bMod = false;
         sal_uInt16 nFontWhich = sal::static_int_cast< sal_uInt16, RES_CHRATR >(
             nFontGroup == FONT_GROUP_DEFAULT  ? RES_CHRATR_FONT :
             FONT_GROUP_CJK == nFontGroup ? RES_CHRATR_CJK_FONT : RES_CHRATR_CTL_FONT);
@@ -689,7 +689,7 @@ sal_Bool SwStdFontTabPage::FillItemSet( SfxItemSet& )
                                   aEmptyStr, aFont.GetPitch(), aFont.GetCharSet(), nFontWhich));
             SwTxtFmtColl *pColl = pWrtShell->GetTxtCollFromPool(RES_POOLCOLL_STANDARD);
             pColl->ResetFmtAttr(nFontWhich);
-            bMod = sal_True;
+            bMod = true;
         }
         if(bStandardHeightChanged)
         {
@@ -697,52 +697,52 @@ sal_Bool SwStdFontTabPage::FillItemSet( SfxItemSet& )
             pWrtShell->SetDefault(SvxFontHeightItem( CalcToUnit( fSize, SFX_MAPUNIT_TWIP ), 100, nFontHeightWhich ) );
             SwTxtFmtColl *pColl = pWrtShell->GetTxtCollFromPool(RES_POOLCOLL_STANDARD);
             pColl->ResetFmtAttr(nFontHeightWhich);
-            bMod = sal_True;
+            bMod = true;
         }
 
         if(sTitle != sShellTitle )
         {
             lcl_SetColl(pWrtShell, RES_POOLCOLL_HEADLINE_BASE, pPrinter, sTitle, nFontWhich);
-            bMod = sal_True;
+            bMod = true;
         }
         if(bTitleHeightChanged)
         {
             lcl_SetColl(pWrtShell, RES_POOLCOLL_HEADLINE_BASE,
                 sal::static_int_cast< sal_uInt16, sal_Int64 >(aTitleHeightLB.GetValue()), nFontHeightWhich);
-            bMod = sal_True;
+            bMod = true;
         }
         if(sList != sShellList && (!bListDefault || !bSetListDefault ))
         {
             lcl_SetColl(pWrtShell, RES_POOLCOLL_NUMBUL_BASE, pPrinter, sList, nFontWhich);
-            bMod = sal_True;
+            bMod = true;
         }
         if(bListHeightChanged)
         {
             lcl_SetColl(pWrtShell, RES_POOLCOLL_NUMBUL_BASE,
                 sal::static_int_cast< sal_uInt16, sal_Int64 >(aListHeightLB.GetValue()), nFontHeightWhich);
-            bMod = sal_True;
+            bMod = true;
         }
         if(sLabel != sShellLabel && (!bLabelDefault || !bSetLabelDefault))
         {
             lcl_SetColl(pWrtShell, RES_POOLCOLL_LABEL, pPrinter, sLabel, nFontWhich);
-            bMod = sal_True;
+            bMod = true;
         }
         if(bLabelHeightChanged)
         {
             lcl_SetColl(pWrtShell, RES_POOLCOLL_LABEL,
                 sal::static_int_cast< sal_uInt16, sal_Int64 >(aLabelHeightLB.GetValue()), nFontHeightWhich);
-            bMod = sal_True;
+            bMod = true;
         }
         if(sIdx != sShellIndex && (!bIdxDefault || !bSetIdxDefault))
         {
             lcl_SetColl(pWrtShell, RES_POOLCOLL_REGISTER_BASE, pPrinter, sIdx, nFontWhich);
-            bMod = sal_True;
+            bMod = true;
         }
         if(bIndexHeightChanged)
         {
             lcl_SetColl(pWrtShell, RES_POOLCOLL_REGISTER_BASE,
                 sal::static_int_cast< sal_uInt16, sal_Int64 >(aIndexHeightLB.GetValue()), nFontHeightWhich);
-            bMod = sal_True;
+            bMod = true;
         }
         if ( bMod )
             pWrtShell->SetModified();

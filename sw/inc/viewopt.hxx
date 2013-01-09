@@ -431,9 +431,9 @@ public:
     SwViewOption& operator=( const SwViewOption &rOpt );
 
     // Compare methods.
-    sal_Bool IsEqualFlags ( const SwViewOption &rOpt ) const;
-    inline sal_Bool operator == ( const SwViewOption &rOpt ) const;
-    inline sal_Bool operator != ( const SwViewOption &rOpt ) const  { return !(*this == rOpt); }
+    bool IsEqualFlags ( const SwViewOption &rOpt ) const;
+    inline bool operator == ( const SwViewOption &rOpt ) const;
+    inline bool operator != ( const SwViewOption &rOpt ) const  { return !(*this == rOpt); }
 
 
 /*---------------------------------------------------------------------------
@@ -572,7 +572,7 @@ public:
 };
 
 
-inline sal_Bool SwViewOption::operator==( const SwViewOption &rOpt ) const
+inline bool SwViewOption::operator==( const SwViewOption &rOpt ) const
 {
     return IsEqualFlags( rOpt ) && nZoom == rOpt.GetZoom();
 }

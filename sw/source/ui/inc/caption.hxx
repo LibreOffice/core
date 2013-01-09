@@ -87,9 +87,9 @@ public:
     inline sal_Bool&            CopyAttributes()                { return bCopyAttributes; }
     inline sal_Bool             CopyAttributes() const          { return bCopyAttributes; }
 
-    sal_Bool                    operator==( const InsCaptionOpt& rOpt ) const;
+    bool                    operator==( const InsCaptionOpt& rOpt ) const;
     InsCaptionOpt&          operator= ( const InsCaptionOpt& rOpt );
-    inline sal_Bool             operator< ( const InsCaptionOpt & rObj ) const
+    inline bool             operator< ( const InsCaptionOpt & rObj ) const
                                                 { return aOleId < rObj.aOleId; }
 };
 

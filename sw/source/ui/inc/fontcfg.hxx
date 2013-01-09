@@ -86,7 +86,7 @@ public:
     const String&   GetFontIndex  (sal_uInt8 nFontGroup)  const {return sDefaultFonts[FONT_INDEX + FONT_PER_GROUP * nFontGroup];}
 
     const String&   GetFontFor(sal_uInt16 nFontType)  const {return sDefaultFonts[nFontType];}
-    sal_Bool            IsFontDefault(sal_uInt16 nFontType) const;
+    bool            IsFontDefault(sal_uInt16 nFontType) const;
 
     void     SetFontStandard(const String& rSet, sal_uInt8 nFontGroup)
                     {ChangeString(FONT_STANDARD + FONT_PER_GROUP * nFontGroup, rSet);}

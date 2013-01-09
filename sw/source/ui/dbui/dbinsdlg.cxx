@@ -646,10 +646,10 @@ IMPL_LINK( SwInsertDBColAutoPilot, DblClickHdl, ListBox*, pBox )
 IMPL_LINK( SwInsertDBColAutoPilot, TblFmtHdl, PushButton*, pButton )
 {
     SwWrtShell& rSh = pView->GetWrtShell();
-    sal_Bool bNewSet = sal_False;
+    bool bNewSet = false;
     if( !pTblSet )
     {
-        bNewSet = sal_True;
+        bNewSet = true;
         pTblSet = new SfxItemSet( rSh.GetAttrPool(), SwuiGetUITableAttrRange() );
 
         // At first acquire the simple attributes
@@ -1054,7 +1054,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
 
         for( sal_Int32 i = 0 ; ; ++i )
         {
-            sal_Bool bBreak = sal_False;
+            bool bBreak = false;
             try
             {
                 if(pSelection)
@@ -1068,7 +1068,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
             }
             catch (const Exception&)
             {
-                bBreak = sal_True;
+                bBreak = true;
             }
             if(bBreak)
                 break;
@@ -1243,12 +1243,12 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                                         rtl::OUString("1"), aEmptyStr, aDBData );
 
 
-            sal_Bool bSetCrsr = sal_True;
+            bool bSetCrsr = true;
             sal_uInt16 n = 0, nCols = aColArr.size();
             ::sw::mark::IMark* pMark = NULL;
             for( sal_Int32 i = 0 ; ; ++i )
             {
-                sal_Bool bBreak = sal_False;
+                bool bBreak = false;
                 try
                 {
                     if(pSelection)
@@ -1262,7 +1262,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                 }
                 catch (const Exception&)
                 {
-                    bBreak = sal_True;
+                    bBreak = true;
                 }
 
                 if(bBreak)
@@ -1369,7 +1369,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                             ::rtl::OUString(), IDocumentMarkAccess::UNO_BOOKMARK );
                         rSh.SwCrsrShell::MovePara(
                             GetfnParaCurr(), GetfnParaEnd() );
-                        bSetCrsr = sal_False;
+                        bSetCrsr = false;
                     }
                 }
 
@@ -1526,15 +1526,15 @@ static rtl::OUString lcl_CreateUniqueName(const Sequence<rtl::OUString>& aNames)
     const rtl::OUString* pNames = aNames.getConstArray();
     rtl::OUString sTest("_");
     rtl::OUString sRet;
-    while(sal_True)
+    while(true)
     {
         sRet = sTest; sRet += rtl::OUString::valueOf(nIdx++);
-        sal_Bool bFound = sal_False;
+        bool bFound = false;
         for(sal_Int32 i = 0; i < aNames.getLength(); i++)
         {
             if(pNames[i] == sRet)
             {
-                bFound = sal_True;
+                bFound = true;
                 break;
             }
         }
@@ -1733,12 +1733,12 @@ void SwInsertDBColAutoPilot::Load()
                 rtl::OUString sColumn;
                 pSubProps[0] >>= sColumn;
                 //check for existance of the loaded column name
-                sal_Bool bFound = sal_False;
+                bool bFound = false;
                 for(sal_uInt16 nRealColumn = 0; nRealColumn < aDBColumns.size(); nRealColumn++)
                 {
                     if(aDBColumns[nRealColumn]->sColumn == sColumn)
                     {
-                        bFound = sal_True;
+                        bFound = true;
                         break;
                     }
                 }

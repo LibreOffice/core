@@ -168,9 +168,9 @@ SwStdFontConfig::~SwStdFontConfig()
 {
 }
 
-sal_Bool SwStdFontConfig::IsFontDefault(sal_uInt16 nFontType) const
+bool SwStdFontConfig::IsFontDefault(sal_uInt16 nFontType) const
 {
-    sal_Bool bSame = sal_False;
+    bool bSame = false;
     SvtLinguOptions aLinguOpt;
 
     SvtLinguConfig().GetOptions( aLinguOpt );
@@ -210,7 +210,7 @@ sal_Bool SwStdFontConfig::IsFontDefault(sal_uInt16 nFontType) const
         case FONT_CAPTION_CJK :
         case FONT_INDEX_CJK   :
         {
-            sal_Bool b1 = sDefaultFonts[FONT_STANDARD_CJK] == sDefFontCJK;
+            bool b1 = sDefaultFonts[FONT_STANDARD_CJK] == sDefFontCJK;
             bSame = b1 && sDefaultFonts[nFontType] == sDefFontCJK;
         }
         break;
@@ -218,7 +218,7 @@ sal_Bool SwStdFontConfig::IsFontDefault(sal_uInt16 nFontType) const
         case FONT_CAPTION_CTL :
         case FONT_INDEX_CTL   :
         {
-            sal_Bool b1 = sDefaultFonts[FONT_STANDARD_CJK] == sDefFontCTL;
+            bool b1 = sDefaultFonts[FONT_STANDARD_CJK] == sDefFontCTL;
             bSame = b1 && sDefaultFonts[nFontType] == sDefFontCTL;
         }
         break;

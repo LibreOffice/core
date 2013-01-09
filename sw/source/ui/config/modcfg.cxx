@@ -74,7 +74,7 @@ const InsCaptionOpt* SwModuleOptions::GetCapOption(
     }
     else
     {
-        sal_Bool bFound = sal_False;
+        bool bFound = false;
         if(eType == OLE_CAP && pOleId)
         {
             for( sal_uInt16 nId = 0; nId <= GLOB_NAME_CHART && !bFound; nId++)
@@ -96,7 +96,7 @@ sal_Bool SwModuleOptions::SetCapOption(sal_Bool bHTML, const InsCaptionOpt* pOpt
     }
     else if (pOpt)
     {
-        sal_Bool bFound = sal_False;
+        bool bFound = false;
         if(pOpt->GetObjType() == OLE_CAP && &pOpt->GetOleId())
         {
             for( sal_uInt16 nId = 0; nId <= GLOB_NAME_CHART; nId++)
@@ -161,7 +161,7 @@ String SwModuleOptions::ConvertWordDelimiter(const String& rDelim, sal_Bool bFro
                     case 'x':
                     {
                         sal_Unicode nVal, nChar;
-                        sal_Bool bValidData = sal_True;
+                        bool bValidData = true;
                         xub_StrLen n;
                         for( n = 0, nChar = 0; n < 2 && i < rDelim.Len(); ++n, ++i )
                         {
@@ -174,7 +174,7 @@ String SwModuleOptions::ConvertWordDelimiter(const String& rDelim, sal_Bool bFro
                             else
                             {
                                 OSL_FAIL("wrong hex value" );
-                                bValidData = sal_False;
+                                bValidData = false;
                                 break;
                             }
 
@@ -320,7 +320,7 @@ void SwRevisionConfig::Commit()
     PutProperties(aNames, aValues);
 }
 
-static void lcl_ConvertCfgToAttr(sal_Int32 nVal, AuthorCharAttr& rAttr, sal_Bool bDelete = sal_False)
+static void lcl_ConvertCfgToAttr(sal_Int32 nVal, AuthorCharAttr& rAttr, bool bDelete = false)
 {
     rAttr.nItemId = rAttr.nAttr = 0;
     switch(nVal)
@@ -364,7 +364,7 @@ void SwRevisionConfig::Load()
                 {
                     case 0 : lcl_ConvertCfgToAttr(nVal, aInsertAttr); break;
                     case 1 : aInsertAttr.nColor     = nVal; break;
-                    case 2 : lcl_ConvertCfgToAttr(nVal, aDeletedAttr, sal_True); break;
+                    case 2 : lcl_ConvertCfgToAttr(nVal, aDeletedAttr, true); break;
                     case 3 : aDeletedAttr.nColor    = nVal; break;
                     case 4 : lcl_ConvertCfgToAttr(nVal, aFormatAttr); break;
                     case 5 : aFormatAttr.nColor     = nVal; break;

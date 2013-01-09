@@ -67,7 +67,7 @@ sal_uInt16 SwViewOption::nPixelTwips = 0;   // one pixel on the screen
 
 static const char aPostItStr[] = "  ";
 
-sal_Bool SwViewOption::IsEqualFlags( const SwViewOption &rOpt ) const
+bool SwViewOption::IsEqualFlags( const SwViewOption &rOpt ) const
 {
     return  nCoreOptions == rOpt.nCoreOptions
             && nCore2Options == rOpt.nCore2Options
