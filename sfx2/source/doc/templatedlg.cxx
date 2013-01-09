@@ -1069,19 +1069,17 @@ void SfxTemplateManagerDlg::OnTemplateDelete ()
 
 void SfxTemplateManagerDlg::OnTemplateAsDefault ()
 {
-    assert(!maSelTemplates.empty());
-
-    const TemplateViewItem *pItem = static_cast<const TemplateViewItem*>(*(maSelTemplates.begin()));
-
-    OUString aServiceName;
-    if (lcl_getServiceName(pItem->getPath(),aServiceName))
+    if (!maSelTemplates.empty())
     {
-        SfxObjectFactory::SetStandardTemplate(aServiceName,pItem->getPath());
+        const TemplateViewItem *pItem = static_cast<const TemplateViewItem*>(*(maSelTemplates.begin()));
 
-        createDefaultTemplateMenu();
+        OUString aServiceName;
+        if (lcl_getServiceName(pItem->getPath(),aServiceName))
+        {
+            SfxObjectFactory::SetStandardTemplate(aServiceName,pItem->getPath());
 
-        // clear selection and display view/action toolbars
-        maView->deselectOverlayItem(pItem->mnId);
+            createDefaultTemplateMenu();
+        }
     }
 }
 
