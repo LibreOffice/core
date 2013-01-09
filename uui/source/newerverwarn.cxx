@@ -25,6 +25,7 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
+#include <com/sun/star/setup/UpdateCheckConfig.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
@@ -37,14 +38,7 @@
 #include <vcl/msgbox.hxx>
 #include <osl/process.h>
 
-namespace beans     = ::com::sun::star::beans;
-namespace frame     = ::com::sun::star::frame;
-namespace lang      = ::com::sun::star::lang;
-namespace uno       = ::com::sun::star::uno;
-namespace util      = ::com::sun::star::util;
-namespace container = ::com::sun::star::container;
-
-using namespace com::sun::star::system;
+using namespace com::sun::star;
 
 namespace uui
 {
@@ -91,23 +85,21 @@ IMPL_LINK_NOARG(NewerVersionWarningDialog, UpdateHdl)
 
     try
     {
+        uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
         if (  !sNotifyURL.isEmpty()  &&  !m_sVersion.isEmpty() )
         {
-            uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-            uno::Reference< XSystemShellExecute > xSystemShell( SystemShellExecute::create(xContext) );
+            uno::Reference< system::XSystemShellExecute > xSystemShell( system::SystemShellExecute::create(xContext) );
             sNotifyURL += m_sVersion;
             if ( !sNotifyURL.isEmpty() )
             {
                 xSystemShell->execute(
-                    sNotifyURL, ::rtl::OUString(), SystemShellExecuteFlags::URIS_ONLY );
+                    sNotifyURL, ::rtl::OUString(), system::SystemShellExecuteFlags::URIS_ONLY );
             }
         }
         else
         {
-            ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-
-            uno::Reference < container::XNameReplace > xUpdateConfig(
-                aContext.createComponent( "com.sun.star.setup.UpdateCheckConfig" ), uno::UNO_QUERY_THROW );
+            uno::Reference < container::XNameReplace > xUpdateConfig =
+                setup::UpdateCheckConfig::create(xContext);
 
             sal_Bool bUpdateCheckEnabled = sal_False;
             OSL_VERIFY( xUpdateConfig->getByName( OUString( "AutoCheckEnabled" ) ) >>= bUpdateCheckEnabled );
@@ -116,7 +108,7 @@ IMPL_LINK_NOARG(NewerVersionWarningDialog, UpdateHdl)
             // updates enabled", but this here is not an automatic update, but one triggered explicitly by the user.
 
             uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
-                                    aContext.getUNOContext(),
+                                    xContext,
                                     "org.openoffice.Office.Addons/",
                                     "AddonUI/OfficeHelp/UpdateCheckJob",
                                     "URL",
@@ -124,10 +116,10 @@ IMPL_LINK_NOARG(NewerVersionWarningDialog, UpdateHdl)
             util::URL aURL;
             if ( aVal >>= aURL.Complete )
             {
-                uno::Reference< util::XURLTransformer > xTransformer( util::URLTransformer::create(aContext.getUNOContext()) );
+                uno::Reference< util::XURLTransformer > xTransformer( util::URLTransformer::create(xContext) );
                 xTransformer->parseStrict( aURL );
 
-                uno::Reference < frame::XDesktop2 > xDesktop = frame::Desktop::create(aContext.getUNOContext());
+                uno::Reference < frame::XDesktop2 > xDesktop = frame::Desktop::create(xContext);
 
                 uno::Reference< frame::XDispatchProvider > xDispatchProvider(
                     xDesktop->getCurrentFrame(), uno::UNO_QUERY );

@@ -35,16 +35,11 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/setup/UpdateCheckConfig.hpp>
 #include <osl/file.hxx>
 #include <osl/security.hxx>
 
-namespace beans = ::com::sun::star::beans;
-namespace container = ::com::sun::star::container;
-namespace dialogs = ::com::sun::star::ui::dialogs;
-namespace frame = ::com::sun::star::frame;
-namespace lang = ::com::sun::star::lang;
-namespace uno = ::com::sun::star::uno;
-namespace util = ::com::sun::star::util;
+using namespace ::com::sun::star;
 
 // class SvxOnlineUpdateTabPage --------------------------------------------------
 
@@ -70,11 +65,9 @@ SvxOnlineUpdateTabPage::SvxOnlineUpdateTabPage( Window* pParent, const SfxItemSe
     m_aCheckNowButton.SetClickHdl( LINK( this, SvxOnlineUpdateTabPage, CheckNowHdl_Impl ) );
     m_aChangePathButton.SetClickHdl( LINK( this, SvxOnlineUpdateTabPage, FileDialogHdl_Impl ) );
 
-    uno::Reference < lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
+    uno::Reference < uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
 
-    m_xUpdateAccess = uno::Reference < container::XNameReplace >(
-        xFactory->createInstance( "com.sun.star.setup.UpdateCheckConfig" ),
-        uno::UNO_QUERY_THROW );
+    m_xUpdateAccess = setup::UpdateCheckConfig::create( xContext );
 
     sal_Bool bDownloadSupported = sal_False;
     m_xUpdateAccess->getByName( "DownloadSupported" ) >>= bDownloadSupported;
@@ -301,7 +294,7 @@ IMPL_LINK( SvxOnlineUpdateTabPage, AutoCheckHdl_Impl, CheckBox *, pBox )
 IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, FileDialogHdl_Impl)
 {
     uno::Reference < uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-    uno::Reference < dialogs::XFolderPicker2 >  xFolderPicker = dialogs::FolderPicker::create(xContext);
+    uno::Reference < ui::dialogs::XFolderPicker2 >  xFolderPicker = ui::dialogs::FolderPicker::create(xContext);
 
     rtl::OUString aURL;
     if( osl::FileBase::E_None != osl::FileBase::getFileURLFromSystemPath(m_aDestPath.GetText(), aURL) )
@@ -310,7 +303,7 @@ IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, FileDialogHdl_Impl)
     xFolderPicker->setDisplayDirectory( aURL );
     sal_Int16 nRet = xFolderPicker->execute();
 
-    if ( dialogs::ExecutableDialogResults::OK == nRet )
+    if ( ui::dialogs::ExecutableDialogResults::OK == nRet )
     {
         rtl::OUString aFolder;
         if( osl::FileBase::E_None == osl::FileBase::getSystemPathFromFileURL(xFolderPicker->getDirectory(), aFolder))

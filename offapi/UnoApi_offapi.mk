@@ -275,6 +275,9 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/security,\
 	DocumentDigitalSignatures \
 	SerialNumberAdapter \
 ))
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/setup,\
+	UpdateCheckConfig \
+))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/sheet,\
 	ExternalDocLink \
 	ExternalDocLinks \
