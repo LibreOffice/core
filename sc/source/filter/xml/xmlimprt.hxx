@@ -31,6 +31,7 @@
 #include "xmlsubti.hxx"
 #include "global.hxx"
 #include "formula/grammar.hxx"
+#include "compiler.hxx"
 
 #include "xmlstyle.hxx"
 #include "XMLDetectiveContext.hxx"
@@ -46,6 +47,8 @@
 #include <boost/unordered_map.hpp>
 #include <boost/ptr_container/ptr_list.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
+#include <boost/noncopyable.hpp>
+#include <boost/scoped_ptr.hpp>
 
 class ScMyStyleNumberFormats;
 class XMLNumberFormatAttributesExportHelper;
@@ -732,7 +735,7 @@ typedef std::vector<ScMyImportValidation>           ScMyImportValidations;
 typedef std::list<SvXMLImportContext*>              ScMyViewContextList;
 class ScMyStylesImportHelper;
 
-class ScXMLImport: public SvXMLImport
+class ScXMLImport: public SvXMLImport, boost::noncopyable
 {
     typedef ::boost::unordered_map< ::rtl::OUString, sal_Int16, ::rtl::OUStringHash >   CellTypeMap;
     typedef ::boost::ptr_map<SCTAB, ScMyNamedExpressions> SheetNamedExpMap;
@@ -740,6 +743,7 @@ class ScXMLImport: public SvXMLImport
     CellTypeMap             aCellTypeMap;
 
     ScDocument*             pDoc;
+    boost::scoped_ptr<ScCompiler> mpComp; // For error-checking of cached string cell values.
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
     ScMyViewContextList                 aViewContextList;
     ScMyStylesImportHelper*             pStylesImportHelper;
@@ -1141,6 +1145,8 @@ public:
             ::formula::FormulaGrammar::Grammar& reGrammar,
             const ::rtl::OUString& rAttrValue,
             bool bRestrictToExternalNmsp = false ) const;
+
+    bool IsFormulaErrorConstant( const OUString& rStr ) const;
 };
 
 #endif
