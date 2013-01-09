@@ -325,7 +325,7 @@ void RtfExport::DoFormText(const SwInputField* pFld )
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
-    ::rtl::OUString sResult = pFld->ExpandField(pDoc->IsClipBoard());
+    ::rtl::OUString sResult = pFld->ExpandField(true);
     ::rtl::OUString sHelp( pFld->GetHelp() );
     ::rtl::OUString sName = pFld->GetPar2();
     ::rtl::OUString sStatus = pFld->GetToolTip();
