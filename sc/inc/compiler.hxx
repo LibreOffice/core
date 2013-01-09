@@ -320,7 +320,7 @@ private:
     sal_Unicode cSymbol[MAXSTRLEN];                 // current Symbol
     String      aFormula;                           // formula source code
     xub_StrLen  nSrcPos;                            // tokenizer position (source code)
-    ScRawTokenRef   pRawToken;
+    mutable ScRawTokenRef pRawToken;
 
     const CharClass*    pCharClass;         // which character classification is used for parseAnyToken
     sal_uInt16      mnPredetectedReference;     // reference when reading ODF, 0 (none), 1 (single) or 2 (double)
@@ -386,7 +386,7 @@ public:
 
     // Check if it is a valid english function name
     bool IsEnglishSymbol( const String& rName );
-    bool IsErrorConstant( const String& );
+    bool IsErrorConstant( const String& ) const;
 
     //! _either_ CompileForFAP _or_ AutoCorrection, _not_ both
     // #i101512# SetCompileForFAP is in formula::FormulaCompiler

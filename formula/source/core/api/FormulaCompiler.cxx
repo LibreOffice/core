@@ -816,7 +816,7 @@ void FormulaCompiler::OpCodeMap::copyFrom( const OpCodeMap& r )
 }
 // -----------------------------------------------------------------------------
 
-sal_uInt16 FormulaCompiler::GetErrorConstant( const String& rName )
+sal_uInt16 FormulaCompiler::GetErrorConstant( const String& rName ) const
 {
     sal_uInt16 nError = 0;
     OpCodeHashMap::const_iterator iLook( mxSymbols->getHashMap()->find( rName));

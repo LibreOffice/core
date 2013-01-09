@@ -350,6 +350,10 @@ private:
             SCROW               nRows;
             SCCOL               nCols;
 public:
+    ScMatrixFormulaCellToken( SCCOL nC, SCROW nR, const ScConstMatrixRef& pMat, formula::FormulaToken* pUL ) :
+        ScMatrixCellResultToken(pMat, pUL),
+        nRows(nR), nCols(nC) {}
+
                                 ScMatrixFormulaCellToken( SCCOL nC, SCROW nR ) :
                                     ScMatrixCellResultToken( NULL, NULL ),
                                     nRows( nR ), nCols( nC ) {}

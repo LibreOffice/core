@@ -212,6 +212,8 @@ public:
      */
     OpCode GetEnglishOpCode( const String& rName ) const;
 
+    sal_uInt16 GetErrorConstant( const String& rName ) const;
+
     void            SetCompileForFAP( bool bVal )
                         { bCompileForFAP = bVal; bIgnoreErrors = bVal; }
 
@@ -265,7 +267,6 @@ protected:
     virtual void CreateStringFromIndex(rtl::OUStringBuffer& rBuffer,FormulaToken* pTokenP);
     virtual void LocalizeString( String& rName );   // modify rName - input: exact name
 
-    sal_uInt16 GetErrorConstant( const String& rName );
     void AppendErrorConstant( rtl::OUStringBuffer& rBuffer, sal_uInt16 nError );
 
     bool   GetToken();

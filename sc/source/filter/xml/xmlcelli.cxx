@@ -47,8 +47,6 @@
 #include "scerrors.hxx"
 #include "editutil.hxx"
 #include "cell.hxx"
-#include "compiler.hxx"
-
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -727,9 +725,7 @@ void ScXMLTableRowCellContext::SetFormulaCell(ScFormulaCell* pFCell) const
     {
         if( bFormulaTextResult && pOUTextValue )
         {
-            static ScCompiler aComp(NULL, ScAddress());
-            aComp.SetGrammar(formula::FormulaGrammar::GRAM_ODFF);
-            if(!aComp.IsErrorConstant(*pOUTextValue))
+            if (!GetScImport().IsFormulaErrorConstant(*pOUTextValue))
             {
                 pFCell->SetHybridString( *pOUTextValue );
                 pFCell->ResetDirty();
@@ -1086,11 +1082,29 @@ void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rCellPos )
                         std::min<SCROW>(rCellPos.Row() + nMatrixRows - 1, MAXROW),
                         pOUFormula->first, pOUFormula->second, eGrammar);
 
-                //set the value/text of the first matrix position (top-left).
-                //the value/text of the matrix reference cells will be set later.
+                // Set the value/text of the top-left matrix position in its
+                // cached result.  For import, we only need to set the correct
+                // matrix geometry and the value type of the top-left element.
+
                 ScFormulaCell* pFCell =
                     static_cast<ScFormulaCell*>( rXMLImport.GetDocument()->GetCell(rCellPos) );
-                SetFormulaCell(pFCell);
+
+                ScMatrixRef pMat(new ScMatrix(nMatrixCols, nMatrixRows));
+                if (bFormulaTextResult && pOUTextValue)
+                {
+                    if (!GetScImport().IsFormulaErrorConstant(*pOUTextValue))
+                    {
+                        pFCell->SetResultMatrix(
+                            nMatrixCols, nMatrixRows, pMat, new formula::FormulaStringToken(*pOUTextValue));
+                        pFCell->ResetDirty();
+                    }
+                }
+                else if (!rtl::math::isNan(fValue))
+                {
+                    pFCell->SetResultMatrix(
+                        nMatrixCols, nMatrixRows, pMat, new formula::FormulaDoubleToken(fValue));
+                    pFCell->ResetDirty();
+                }
             }
         }
         else
