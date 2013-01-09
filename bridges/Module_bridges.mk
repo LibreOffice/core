@@ -96,7 +96,7 @@ $(eval $(call gb_Module_add_targets,bridges,\
 	) \
 ))
 
-ifneq (showmodules,$(MAKECMDGOALS))
+ifeq ($(gb_FULL_BUILD),$(true))
 ifeq ($(strip $(bridges_SELECTED_BRIDGE)),)
 $(call gb_Output_error,no bridge selected for build: bailing out)
 endif

@@ -422,7 +422,7 @@ check: dev-install subsequentcheck
 subsequentcheck :| $(if $(filter-out subsequentcheck,$(MAKECMDGOALS)),dev-install)
 	$(GNUMAKE) -j $(CHECK_PARALLELISM) $(GMAKE_OPTIONS) -f $(SRC_ROOT)/Makefile.post $@
 
-unitcheck slowcheck debugrun:
+unitcheck slowcheck debugrun translations:
 	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f $(SRC_ROOT)/Makefile.post $@
 
 endif # not clean or distclean
