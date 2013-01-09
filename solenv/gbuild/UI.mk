@@ -17,17 +17,14 @@ gb_UILocalizeTarget_DEPS := $(call gb_Executable_get_runtime_dependencies,uiex)
 gb_UILocalizeTarget_COMMAND := $(call gb_Executable_get_command,uiex)
 
 # If translatable strings from a .ui file are not merged into the
-# respective .po file yet, the produced translated files are empty (that
-# is, they only contain the root element), but qtz is not created at all
+# respective .po file yet, the produced translated files are empty,
 # which breaks delivery. This hack avoids the problem by creating a
 # dummy translation file.
-define gb_UILocalizeTarget__fix_missing_qtz
-$(if $(filter qtz,$(gb_WITH_LANG)),\
-	&& if [ ! -f $(1)/qtz.ui ]; then \
-		echo '<?xml version="1.0"?><t></t>' > $(1)/qtz.ui; \
-	fi \
-)
-endef
+$(call gb_UILocalizeTarget_get_workdir,%).ui :
+	$(if $(wildcard $@) \
+		,touch $@ \
+		,echo '<?xml version="1.0"?><t></t>' > $@ \
+	)
 
 define gb_UILocalizeTarget__command
 $(call gb_Output_announce,$(2),$(true),UIX,1)
@@ -39,7 +36,6 @@ $(call gb_Helper_abbreviate_dirs,\
 		-o $(call gb_UILocalizeTarget_get_workdir,$(2)) \
 		-l all \
 		-m $${MERGEINPUT} \
-	$(call gb_UILocalizeTarget__fix_missing_qtz,$(call gb_UILocalizeTarget_get_workdir,$(2))) \
 	&& touch $(1) \
 ) && \
 rm -rf $${MERGEINPUT}
@@ -65,7 +61,7 @@ $(call gb_UILocalizeTarget_get_clean_target,%) :
 #
 # gb_UILocalizeTarget_UILocalizeTarget target
 define gb_UILocalizeTarget_UILocalizeTarget
-$(call gb_UILocalizeTarget__UILocalizeTarget_impl,$(1),$(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po))
+$(call gb_UILocalizeTarget__UILocalizeTarget_impl,$(1),$(wildcard $(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po)))
 
 endef
 
@@ -79,8 +75,6 @@ $(call gb_UILocalizeTarget_get_target,$(1)) : $(SRCDIR)/$(1).ui
 $(call gb_UILocalizeTarget_get_target,$(1)) :| \
 	$(dir $(call gb_UILocalizeTarget_get_target,$(1))).dir \
 	$(call gb_UILocalizeTarget_get_workdir,$(1))/.dir
-
-$(2) :
 
 endef
 
