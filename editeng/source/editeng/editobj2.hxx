@@ -213,7 +213,7 @@ public:
     String GetText(size_t nParagraph) const;
     void Insert(const EditTextObject& rObj, size_t nPara);
     EditTextObject* CreateTextObject(size_t nPara, size_t nParas = 1) const;
-    virtual void RemoveParagraph(size_t nPara);
+    void RemoveParagraph(size_t nPara);
 
     bool HasPortionInfo() const;
     void ClearPortionInfo();
@@ -240,7 +240,7 @@ public:
     void SetStyleSheet(size_t nPara, const String& rName, const SfxStyleFamily& eFamily);
     bool ChangeStyleSheets(
         const XubString& rOldName, SfxStyleFamily eOldFamily, const String& rNewName, SfxStyleFamily eNewFamily );
-    virtual void            ChangeStyleSheetName( SfxStyleFamily eFamily, const XubString& rOldName, const XubString& rNewName );
+    void ChangeStyleSheetName( SfxStyleFamily eFamily, const XubString& rOldName, const XubString& rNewName );
 
     editeng::FieldUpdater GetFieldUpdater();
 
