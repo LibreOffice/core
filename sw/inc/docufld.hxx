@@ -142,14 +142,14 @@ enum SwJumpEditFormat
 class SwPageNumberFieldType : public SwFieldType
 {
     sal_Int16   nNumberingType;
-    sal_uInt16          nNum, nMax;
     bool            bVirtuell;
 
 public:
     SwPageNumberFieldType();
 
-    String& Expand( sal_uInt32 nFmt, short nOff, const String&, String& rRet ) const;
-    void ChangeExpansion( SwDoc* pDoc, sal_uInt16 nNum, sal_uInt16 nMax,
+    String& Expand( sal_uInt32 nFmt, short nOff, sal_uInt16 const nPageNumber,
+            sal_uInt16 const nMaxPage, const String&, String& rRet ) const;
+    void ChangeExpansion( SwDoc* pDoc,
                             sal_Bool bVirtPageNum, const sal_Int16* pNumFmt = 0 );
     virtual SwFieldType* Copy() const;
 };
@@ -163,10 +163,18 @@ class SW_DLLPUBLIC SwPageNumberField : public SwField
     String  sUserStr;
     sal_uInt16  nSubType;
     short   nOffset;
+    // fdo#58074 store page number in SwField, not SwFieldType
+    sal_uInt16 m_nPageNumber;
+    sal_uInt16 m_nMaxPage;
 
 public:
     SwPageNumberField(SwPageNumberFieldType*, sal_uInt16 nSub = PG_RANDOM,
-                      sal_uInt32 nFmt = 0, short nOff = 0);
+                      sal_uInt32 nFmt = 0, short nOff = 0,
+                      sal_uInt16 const nPageNumber = 0,
+                      sal_uInt16 const nMaxPage = 0);
+
+    void ChangeExpansion(sal_uInt16 const nPageNumber,
+            sal_uInt16 const nMaxPage);
 
     virtual String      Expand() const;
     virtual SwField*    Copy() const;
