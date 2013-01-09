@@ -190,6 +190,8 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     maView->Populate();
     maView->Show();
 
+    mpCurView->filterTemplatesByApp(FILTER_APP_WRITER);
+
     FreeResource();
 }
 
