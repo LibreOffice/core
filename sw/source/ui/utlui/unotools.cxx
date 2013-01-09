@@ -168,6 +168,31 @@ void    SwOneExampleFrame::DisposeControl()
     _xController = 0;
 }
 
+static void disableScrollBars(uno::Reference< beans::XPropertySet > xViewProps,
+    bool bEnableOnlineMode)
+{
+    //the scrollbar logic is kind of busted looking in writer, when the hori scrollbar
+    //property is changed then the hori scrollbar is enabled if the property is
+    //true or browse (online) mode is enabled. So...
+    //disable online mode
+    //turn off scrollbars
+    //turn back on online mode if that's what we want
+    //which subverts the (dodgy/buggy) scrollbar setting
+    //
+    //To reproduce this problem, in edit->autotext and click through
+    //the examples and see if the preview gets a horizontal scrollbar
+    uno::Any aFalseSet(uno::makeAny(sal_False));
+    xViewProps->setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_SHOW_ONLINE_LAYOUT)), aFalseSet);
+
+    xViewProps->setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_SHOW_HORI_SCROLL_BAR )), aFalseSet);
+    xViewProps->setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_SHOW_VERT_SCROLL_BAR )), aFalseSet);
+
+    if (bEnableOnlineMode)
+    {
+        xViewProps->setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_SHOW_ONLINE_LAYOUT)), uno::makeAny(sal_True));
+    }
+}
+
 IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
 {
     if(!_xControl.is())
@@ -245,9 +270,9 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
                 aZoom <<= nZoomValue;
                 xViewProps->setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_ZOOM_VALUE)), aZoom);
             }
-            // set onlinelayout property behind setting the zoom
-            xViewProps->setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_SHOW_ONLINE_LAYOUT)),
-                    (nStyleFlags&EX_SHOW_ONLINE_LAYOUT) ? aTrueSet : aFalseSet );
+
+            // set onlinelayout property after setting the zoom
+            disableScrollBars(xViewProps, nStyleFlags&EX_SHOW_ONLINE_LAYOUT);
             bIsInitialized = sal_True;
         }
 
@@ -255,7 +280,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
         uno::Reference< text::XText >  xText = xDoc->getText();
         _xCursor = xText->createTextCursor();
 
-        //From here, a cursor is defined, which goes trough the template,
+        //From here, a cursor is defined, which goes through the template,
         //and overwrites the template words where it is necessary.
 
         uno::Reference< lang::XUnoTunnel> xTunnel( _xCursor, uno::UNO_QUERY);
@@ -345,8 +370,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
         xWin->setPosSize( 0, 0, aWinSize.Width(), aWinSize.Height(), awt::PosSize::SIZE );
 
         // can only be done here - the SFX changes the ScrollBar values
-        xViewProps->setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_SHOW_HORI_SCROLL_BAR )), aFalseSet);
-        xViewProps->setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_SHOW_VERT_SCROLL_BAR )), aFalseSet);
+        disableScrollBars(xViewProps, nStyleFlags&EX_SHOW_ONLINE_LAYOUT);
 
         if (aInitializedLink.IsSet())
             aInitializedLink.Call(this);
