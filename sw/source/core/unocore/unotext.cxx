@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <stdio.h>
-
 #include <stdlib.h>
 
 #include <memory>
@@ -1310,7 +1308,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     {
         aPam.Move( fnMoveBackward, fnGoNode );
     }
-#if 1
+#if 1 // This section should be removed in favour of the one below when it works.
     if (rProperties.getLength())
     {
         // now set the properties
