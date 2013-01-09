@@ -50,10 +50,10 @@ DockingAreaWindow::ImplData::~ImplData()
 
 static void ImplInitBackground( DockingAreaWindow* pThis )
 {
-    const BitmapEx* pPersonaBitmap = Application::GetSettings().GetStyleSettings().GetPersonaHeader();
-    if ( pPersonaBitmap != NULL && pThis->GetAlign() == WINDOWALIGN_TOP )
+    const BitmapEx& rPersonaBitmap = Application::GetSettings().GetStyleSettings().GetPersonaHeader();
+    if ( !rPersonaBitmap.IsEmpty() && pThis->GetAlign() == WINDOWALIGN_TOP )
     {
-        Wallpaper aWallpaper( *pPersonaBitmap );
+        Wallpaper aWallpaper( rPersonaBitmap );
         aWallpaper.SetStyle( WALLPAPER_TOPRIGHT );
 
         // we need to shift the bitmap vertically so that it spans over the
@@ -175,7 +175,7 @@ void DockingAreaWindow::Paint( const Rectangle& )
         }
         ControlState        nState = CTRL_STATE_ENABLED;
 
-        if ( GetAlign() == WINDOWALIGN_TOP && Application::GetSettings().GetStyleSettings().GetPersonaHeader() )
+        if ( GetAlign() == WINDOWALIGN_TOP && !Application::GetSettings().GetStyleSettings().GetPersonaHeader().IsEmpty() )
             Erase();
         else if ( !ImplGetSVData()->maNWFData.mbDockingAreaSeparateTB )
         {

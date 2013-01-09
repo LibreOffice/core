@@ -3856,10 +3856,10 @@ static void ImplInitMenuWindow( Window* pWin, sal_Bool bFont, sal_Bool bMenuBar 
         pWin->SetPointFont( rStyleSettings.GetMenuFont() );
     if( bMenuBar )
     {
-        const BitmapEx* pPersonaBitmap = Application::GetSettings().GetStyleSettings().GetPersonaHeader();
-        if ( pPersonaBitmap != NULL )
+        const BitmapEx& rPersonaBitmap = Application::GetSettings().GetStyleSettings().GetPersonaHeader();
+        if ( !rPersonaBitmap.IsEmpty() )
         {
-            Wallpaper aWallpaper( *pPersonaBitmap );
+            Wallpaper aWallpaper( rPersonaBitmap );
             aWallpaper.SetStyle( WALLPAPER_TOPRIGHT );
             pWin->SetBackground( aWallpaper );
             pWin->SetPaintTransparent( sal_False );
@@ -5503,7 +5503,7 @@ void MenuBarWindow::HighlightItem( sal_uInt16 nPos, sal_Bool bHighlight )
                         MenubarValue aControlValue;
                         aControlValue.maTopDockingAreaHeight = ImplGetTopDockingAreaHeight( this );
 
-                        if ( Application::GetSettings().GetStyleSettings().GetPersonaHeader() )
+                        if ( !Application::GetSettings().GetStyleSettings().GetPersonaHeader().IsEmpty() )
                             Erase();
                         else
                         {
@@ -5539,7 +5539,7 @@ void MenuBarWindow::HighlightItem( sal_uInt16 nPos, sal_Bool bHighlight )
                         MenubarValue aMenubarValue;
                         aMenubarValue.maTopDockingAreaHeight = ImplGetTopDockingAreaHeight( this );
 
-                        if ( Application::GetSettings().GetStyleSettings().GetPersonaHeader() )
+                        if ( !Application::GetSettings().GetStyleSettings().GetPersonaHeader().IsEmpty() )
                             Erase( aRect );
                         else
                         {
@@ -5775,7 +5775,7 @@ void MenuBarWindow::Paint( const Rectangle& )
         MenubarValue aMenubarValue;
         aMenubarValue.maTopDockingAreaHeight = ImplGetTopDockingAreaHeight( this );
 
-        if ( Application::GetSettings().GetStyleSettings().GetPersonaHeader() )
+        if ( !Application::GetSettings().GetStyleSettings().GetPersonaHeader().IsEmpty() )
             Erase();
         else
         {
