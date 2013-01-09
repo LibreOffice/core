@@ -7,7 +7,6 @@
  */
 
 #define TAB_CONTROL                 1
-#define FILTER_ALL                  2
 #define FILTER_DOCS                 3
 #define FILTER_PRESENTATIONS        4
 #define FILTER_SHEETS               5
