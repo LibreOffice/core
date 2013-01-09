@@ -163,6 +163,8 @@ class BigPtrArrayPrinter(object):
                 cur_indent = self.indent
             elif str(node.dynamic_type.target()) == "SwDummySectionNode":
                 value = "DummySctNode "
+            else: # must be currently being deleted, so has some abstract type
+                value = "~DeletedNode "
 #            return "\n[%s%4d%s] %s %s" % (cur_indent, self.pos, \
 #                                self.max_indent[len(cur_indent):], node, value)
             return "\n[%4d] %s%s%s %s" % (self.pos, cur_indent, \
