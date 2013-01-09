@@ -134,6 +134,7 @@ public:
     void testFdo57678();
     void testFdo45183();
     void testFdo54612();
+    void testFdo58933();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -218,6 +219,7 @@ void Test::run()
         {"fdo57678.rtf", &Test::testFdo57678},
         {"fdo45183.rtf", &Test::testFdo45183},
         {"fdo54612.rtf", &Test::testFdo54612},
+        {"fdo58933.rtf", &Test::testFdo58933},
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
@@ -1011,6 +1013,16 @@ void Test::testFdo54612()
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8), xDraws->getCount());
+}
+
+void Test::testFdo58933()
+{
+    // The problem was that the table had an additional cell in its first line.
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    // This was 4.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable->getCellNames().getLength());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
