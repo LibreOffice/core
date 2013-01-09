@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
@@ -57,15 +55,14 @@
 #include "sdpage.hxx"
 #include "view/SlideSorterView.hxx"
 #include "undo/undoobjects.hxx"
-
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <svtools/soerr.hxx>
-
 #include <sfx2/ipclient.hxx>
+#include <svx/svdoashp.hxx>
 #include "glob.hrc"
 
 using namespace com::sun::star;
@@ -112,8 +109,9 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
 
     if( mnAction == DND_ACTION_LINK && pPickObj && pPV )
     {
-        const bool bIsGraphic = pPickObj->ISA( SdrGrafObj );
-        if( bIsGraphic || (pObj->IsEmptyPresObj() && !bOnMaster) )
+        const bool bIsGraphic(0 != dynamic_cast< SdrGrafObj* >(pPickObj));
+
+        if(bIsGraphic || (pPickObj->IsEmptyPresObj() && !bOnMaster)) // #121603# Do not use pObj, it may be NULL
         {
             if( IsUndoEnabled() )
                 BegUndo(String(SdResId(STR_INSERTGRAPHIC)));
@@ -155,11 +153,9 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
             if( IsUndoEnabled() )
                 EndUndo();
         }
-        else if (pPickObj->IsClosedObj() && !pPickObj->ISA(SdrOle2Obj))
+        else if(pPickObj->IsClosedObj())
         {
-            /******************************************************************
-            * Das Objekt wird mit der Graphik gefuellt
-            ******************************************************************/
+            // fill object with graphic
             if( IsUndoEnabled() )
             {
                 BegUndo(String(SdResId(STR_UNDO_DRAGDROP)));
