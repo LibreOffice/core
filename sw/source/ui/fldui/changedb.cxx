@@ -39,8 +39,8 @@
 #include <changedb.hxx>
 
 #include <fldui.hrc>
+#include <globals.hrc>
 #include <utlui.hrc>
-#include <changedb.hrc>
 
 #include <unomid.h>
 
@@ -53,45 +53,36 @@ using namespace ::com::sun::star::uno;
 /*--------------------------------------------------------------------
     Description: edit insert-field
  --------------------------------------------------------------------*/
-SwChangeDBDlg::SwChangeDBDlg(SwView& rVw) :
-    SvxStandardDialog(&rVw.GetViewFrame()->GetWindow(), SW_RES(DLG_CHANGE_DB)),
-
-    aDBListFL   (this, SW_RES(FL_DBLIST     )),
-    aUsedDBFT   (this, SW_RES(FT_USEDDB     )),
-    aAvailDBFT  (this, SW_RES(FT_AVAILDB    )),
-    aUsedDBTLB  (this, SW_RES(TLB_USEDDB    )),
-    aAvailDBTLB (this, SW_RES(TLB_AVAILDB   ), 0),
-    aAddDBPB    (this, SW_RES(PB_ADDDB)),
-    aDescFT     (this, SW_RES(FT_DESC       )),
-    aDocDBTextFT(this, SW_RES(FT_DOCDBTEXT  )),
-    aDocDBNameFT(this, SW_RES(FT_DOCDBNAME  )),
-    aOKBT       (this, SW_RES(BT_OK         )),
-    aCancelBT   (this, SW_RES(BT_CANCEL     )),
-    aHelpBT     (this, SW_RES(BT_HELP       )),
-    aImageList      (SW_RES(ILIST_DB_DLG    )),
-    pSh(rVw.GetWrtShellPtr()),
-    pMgr( new SwFldMgr() )
+SwChangeDBDlg::SwChangeDBDlg(SwView& rVw)
+    : SvxStandardDialog(&rVw.GetViewFrame()->GetWindow(), "ExchangeDatabasesDialog",
+        "modules/swriter/ui/exchangedatabases.ui")
+    , aImageList(SW_RES(ILIST_DB_DLG))
+    , pSh(rVw.GetWrtShellPtr())
+    , pMgr( new SwFldMgr() )
 {
-    aAvailDBTLB.SetWrtShell(*pSh);
+    get(m_pUsedDBTLB, "inuselb");
+    get(m_pAvailDBTLB, "availablelb");
+    get(m_pAddDBPB, "browse");
+    get(m_pDocDBNameFT, "dbnameft");
+    get(m_pDefineBT, "define");
+    m_pAvailDBTLB->SetWrtShell(*pSh);
     FillDBPopup();
 
-    FreeResource();
-
     ShowDBName(pSh->GetDBData());
-    aOKBT.SetClickHdl(LINK(this, SwChangeDBDlg, ButtonHdl));
-    aAddDBPB.SetClickHdl(LINK(this, SwChangeDBDlg, AddDBHdl));
+    m_pDefineBT->SetClickHdl(LINK(this, SwChangeDBDlg, ButtonHdl));
+    m_pAddDBPB->SetClickHdl(LINK(this, SwChangeDBDlg, AddDBHdl));
 
-    aUsedDBTLB.SetSelectionMode(MULTIPLE_SELECTION);
-    aUsedDBTLB.SetStyle(aUsedDBTLB.GetStyle()|WB_HASLINES|WB_CLIPCHILDREN|WB_SORT|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
-    aUsedDBTLB.SetSpaceBetweenEntries(0);
-    aUsedDBTLB.SetNodeBitmaps( aImageList.GetImage(IMG_COLLAPSE), aImageList.GetImage(IMG_EXPAND));
+    m_pUsedDBTLB->SetSelectionMode(MULTIPLE_SELECTION);
+    m_pUsedDBTLB->SetStyle(m_pUsedDBTLB->GetStyle()|WB_HASLINES|WB_CLIPCHILDREN|WB_SORT|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
+    m_pUsedDBTLB->SetSpaceBetweenEntries(0);
+    m_pUsedDBTLB->SetNodeBitmaps( aImageList.GetImage(IMG_COLLAPSE), aImageList.GetImage(IMG_EXPAND));
 
     Link aLink = LINK(this, SwChangeDBDlg, TreeSelectHdl);
 
-    aUsedDBTLB.SetSelectHdl(aLink);
-    aUsedDBTLB.SetDeselectHdl(aLink);
-    aAvailDBTLB.SetSelectHdl(aLink);
-    aAvailDBTLB.SetDeselectHdl(aLink);
+    m_pUsedDBTLB->SetSelectHdl(aLink);
+    m_pUsedDBTLB->SetDeselectHdl(aLink);
+    m_pAvailDBTLB->SetSelectHdl(aLink);
+    m_pAvailDBTLB->SetSelectHdl(aLink);
     TreeSelectHdl();
 }
 
@@ -106,7 +97,7 @@ void SwChangeDBDlg::FillDBPopup()
     const SwDBData& rDBData = pSh->GetDBData();
     String sDBName(rDBData.sDataSource);
     String sTableName(rDBData.sCommand);
-    aAvailDBTLB.Select(sDBName, sTableName, aEmptyStr);
+    m_pAvailDBTLB->Select(sDBName, sTableName, aEmptyStr);
 
     std::vector<String> aAllDBNames;
 
@@ -122,7 +113,7 @@ void SwChangeDBDlg::FillDBPopup()
     pSh->GetAllUsedDB( aDBNameList, &aAllDBNames );
 
     size_t nCount = aDBNameList.size();
-    aUsedDBTLB.Clear();
+    m_pUsedDBTLB->Clear();
     SvTreeListEntry *pFirst = 0;
     SvTreeListEntry *pLast = 0;
 
@@ -137,8 +128,8 @@ void SwChangeDBDlg::FillDBPopup()
 
     if (pFirst)
     {
-        aUsedDBTLB.MakeVisible(pFirst);
-        aUsedDBTLB.Select(pFirst);
+        m_pUsedDBTLB->MakeVisible(pFirst);
+        m_pUsedDBTLB->Select(pFirst);
     }
 
 }
@@ -158,23 +149,23 @@ SvTreeListEntry* SwChangeDBDlg::Insert(const String& rDBName)
     Image aDBImg = aImageList.GetImage(IMG_DB);
     Image aQueryImg = aImageList.GetImage(IMG_DBQUERY);
     Image& rToInsert = nCommandType ? aQueryImg : aTableImg;
-    while ((pParent = aUsedDBTLB.GetEntry(nParent++)) != NULL)
+    while ((pParent = m_pUsedDBTLB->GetEntry(nParent++)) != NULL)
     {
-        if (sDBName == aUsedDBTLB.GetEntryText(pParent))
+        if (sDBName == m_pUsedDBTLB->GetEntryText(pParent))
         {
-            while ((pChild = aUsedDBTLB.GetEntry(pParent, nChild++)) != NULL)
+            while ((pChild = m_pUsedDBTLB->GetEntry(pParent, nChild++)) != NULL)
             {
-                if (sTableName == aUsedDBTLB.GetEntryText(pChild))
+                if (sTableName == m_pUsedDBTLB->GetEntryText(pChild))
                     return pChild;
             }
-            SvTreeListEntry* pRet = aUsedDBTLB.InsertEntry(sTableName, rToInsert, rToInsert, pParent);
+            SvTreeListEntry* pRet = m_pUsedDBTLB->InsertEntry(sTableName, rToInsert, rToInsert, pParent);
             pRet->SetUserData((void*)nCommandType);
             return pRet;
         }
     }
-    pParent = aUsedDBTLB.InsertEntry(sDBName, aDBImg, aDBImg);
+    pParent = m_pUsedDBTLB->InsertEntry(sDBName, aDBImg, aDBImg);
 
-    SvTreeListEntry* pRet = aUsedDBTLB.InsertEntry(sTableName, rToInsert, rToInsert, pParent);
+    SvTreeListEntry* pRet = m_pUsedDBTLB->InsertEntry(sTableName, rToInsert, rToInsert, pParent);
     pRet->SetUserData((void*)nCommandType);
     return pRet;
 }
@@ -198,29 +189,29 @@ void SwChangeDBDlg::Apply()
 void SwChangeDBDlg::UpdateFlds()
 {
     std::vector<String> aDBNames;
-    aDBNames.reserve(aUsedDBTLB.GetSelectionCount());
-    SvTreeListEntry* pEntry = aUsedDBTLB.FirstSelected();
+    aDBNames.reserve(m_pUsedDBTLB->GetSelectionCount());
+    SvTreeListEntry* pEntry = m_pUsedDBTLB->FirstSelected();
 
     while( pEntry )
     {
-        if( aUsedDBTLB.GetParent( pEntry ))
+        if( m_pUsedDBTLB->GetParent( pEntry ))
         {
-            String* pTmp = new String( aUsedDBTLB.GetEntryText(
-                                            aUsedDBTLB.GetParent( pEntry )));
+            String* pTmp = new String( m_pUsedDBTLB->GetEntryText(
+                                            m_pUsedDBTLB->GetParent( pEntry )));
             *pTmp += DB_DELIM;
-            *pTmp += aUsedDBTLB.GetEntryText( pEntry );
+            *pTmp += m_pUsedDBTLB->GetEntryText( pEntry );
             *pTmp += DB_DELIM;
             int nCommandType = (int)(sal_uLong)pEntry->GetUserData();
             *pTmp += String::CreateFromInt32(nCommandType);
             aDBNames.push_back(*pTmp);
         }
-        pEntry = aUsedDBTLB.NextSelected(pEntry);
+        pEntry = m_pUsedDBTLB->NextSelected(pEntry);
     }
 
     pSh->StartAllAction();
     String sTableName, sColumnName;
     sal_Bool bIsTable = sal_False;
-    String sTemp(aAvailDBTLB.GetDBName(sTableName, sColumnName, &bIsTable));
+    String sTemp(m_pAvailDBTLB->GetDBName(sTableName, sColumnName, &bIsTable));
     sTemp += DB_DELIM;
     sTemp += sTableName;
     sTemp += DB_DELIM;
@@ -234,7 +225,7 @@ IMPL_LINK_NOARG(SwChangeDBDlg, ButtonHdl)
     String sTableName, sColumnName;
     SwDBData aData;
     sal_Bool bIsTable = sal_False;
-    aData.sDataSource = aAvailDBTLB.GetDBName(sTableName, sColumnName, &bIsTable);
+    aData.sDataSource = m_pAvailDBTLB->GetDBName(sTableName, sColumnName, &bIsTable);
     aData.sCommand = sTableName;
     aData.nCommandType = bIsTable ? 0 : 1;
     pSh->ChgDBData(aData);
@@ -248,13 +239,13 @@ IMPL_LINK_NOARG(SwChangeDBDlg, TreeSelectHdl)
 {
     sal_Bool bEnable = sal_False;
 
-    SvTreeListEntry* pEntry = aAvailDBTLB.GetCurEntry();
+    SvTreeListEntry* pEntry = m_pAvailDBTLB->GetCurEntry();
 
     if (pEntry)
     {
-        if (aAvailDBTLB.GetParent(pEntry))
+        if (m_pAvailDBTLB->GetParent(pEntry))
             bEnable = sal_True;
-        aOKBT.Enable( bEnable );
+        m_pDefineBT->Enable( bEnable );
     }
     return 0;
 }
@@ -276,14 +267,17 @@ void SwChangeDBDlg::ShowDBName(const SwDBData& rDBData)
             sName += '~';
     }
 
-    aDocDBNameFT.SetText(sName);
+    if (sName.EqualsAscii(".")) //empty
+        sName = SW_RESSTR(SW_STR_NONE);
+
+    m_pDocDBNameFT->SetText(sName);
 }
 
 IMPL_LINK_NOARG(SwChangeDBDlg, AddDBHdl)
 {
-    String sNewDB = SwNewDBMgr::LoadAndRegisterDataSource();
-    if(sNewDB.Len())
-        aAvailDBTLB.AddDataSource(sNewDB);
+    OUString sNewDB = SwNewDBMgr::LoadAndRegisterDataSource();
+    if (!sNewDB.isEmpty())
+        m_pAvailDBTLB->AddDataSource(sNewDB);
     return 0;
 }
 

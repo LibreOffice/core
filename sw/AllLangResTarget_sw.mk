@@ -118,7 +118,6 @@ $(eval $(call gb_SrsTarget_add_files,sw/res,\
     sw/source/ui/envelp/labprt.src \
     sw/source/ui/envelp/mailmrge.src \
     sw/source/ui/fldui/DropDownFieldDialog.src \
-    sw/source/ui/fldui/changedb.src \
     sw/source/ui/fldui/flddb.src \
     sw/source/ui/fldui/flddinf.src \
     sw/source/ui/fldui/flddok.src \

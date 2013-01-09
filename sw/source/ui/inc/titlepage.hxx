@@ -73,8 +73,8 @@ private:
 
     sal_uInt16 GetInsertPosition() const;
 
-    DECL_LINK( OKHdl, Button * );
-    DECL_LINK( EditHdl, Button * );
+    DECL_LINK(OKHdl, void *);
+    DECL_LINK(EditHdl, void *);
     DECL_LINK(RestartNumberingHdl, void *);
     DECL_LINK(SetPageNumberHdl, void *);
     DECL_LINK(UpHdl, void *);

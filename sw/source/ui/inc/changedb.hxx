@@ -38,18 +38,11 @@ struct SwDBData;
  --------------------------------------------------------------------*/
 class SwChangeDBDlg: public SvxStandardDialog
 {
-    FixedLine       aDBListFL;
-    FixedText       aUsedDBFT;
-    FixedText       aAvailDBFT;
-    SvTreeListBox   aUsedDBTLB;
-    SwDBTreeList    aAvailDBTLB;
-    PushButton      aAddDBPB;
-    FixedInfo       aDescFT;
-    FixedText       aDocDBTextFT;
-    FixedText       aDocDBNameFT;
-    OKButton        aOKBT;
-    CancelButton    aCancelBT;
-    HelpButton      aHelpBT;
+    SvTreeListBox*  m_pUsedDBTLB;
+    SwDBTreeList*   m_pAvailDBTLB;
+    PushButton*     m_pAddDBPB;
+    FixedText*      m_pDocDBNameFT;
+    PushButton*     m_pDefineBT;
 
     ImageList       aImageList;
 

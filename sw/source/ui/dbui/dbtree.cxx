@@ -42,6 +42,7 @@
 #include <wrtsh.hxx>
 #include <dbtree.hxx>
 #include <osl/mutex.hxx>
+#include <vcl/builder.hxx>
 #include <vcl/svapp.hxx>
 #include "svtools/treelistentry.hxx"
 
@@ -187,6 +188,31 @@ SwDBTreeList::SwDBTreeList(Window *pParent, const ResId& rResId,
 
     if (IsVisible())
         InitTreeList();
+}
+
+SwDBTreeList::SwDBTreeList(Window *pParent)
+    : SvTreeListBox(pParent, WB_TABSTOP)
+    , aImageList(SW_RES(ILIST_DB_DLG))
+    , bInitialized(false)
+    , bShowColumns(false)
+    , pImpl(new SwDBTreeList_Impl(NULL))
+{
+    SetHelpId(HID_DB_SELECTION_TLB);
+
+    if (IsVisible())
+        InitTreeList();
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwDBTreeList(Window *pParent, VclBuilder::stringmap &)
+{
+    return new SwDBTreeList(pParent);
+}
+
+Size SwDBTreeList::GetOptimalSize(WindowSizeType eType) const
+{
+    if (eType == WINDOWSIZE_PREFERRED)
+        return LogicToPixel(Size(100, 62), MapMode(MAP_APPFONT));
+    return SvTreeListBox::GetOptimalSize(eType);
 }
 
 SwDBTreeList::~SwDBTreeList()

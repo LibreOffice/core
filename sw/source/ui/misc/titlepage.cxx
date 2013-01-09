@@ -269,7 +269,7 @@ SwTitlePageDlg::~SwTitlePageDlg()
     delete mpPageFmtDesc;
 }
 
-IMPL_LINK( SwTitlePageDlg, EditHdl, Button *, /*pBtn*/ )
+IMPL_LINK_NOARG(SwTitlePageDlg, EditHdl)
 {
     SwView& rView = mpSh->GetView();
     rView.GetDocShell()->FormatPage(m_pPagePropertiesLB->GetSelectEntry(), false, mpSh);
@@ -278,7 +278,7 @@ IMPL_LINK( SwTitlePageDlg, EditHdl, Button *, /*pBtn*/ )
     return 0;
 }
 
-IMPL_LINK( SwTitlePageDlg, OKHdl, Button *, /*pBtn*/ )
+IMPL_LINK_NOARG(SwTitlePageDlg, OKHdl)
 {
     lcl_PushCursor(mpSh);
 

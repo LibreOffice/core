@@ -697,24 +697,11 @@ AbstractSwBreakDlg * SwAbstractDialogFactory_Impl::CreateSwBreakDlg(Window *pPar
     return new AbstractSwBreakDlg_Impl(pDlg);
 }
 
-VclAbstractDialog   * SwAbstractDialogFactory_Impl::CreateSwChangeDBDlg( SwView& rVw, int nResId  )
+VclAbstractDialog   * SwAbstractDialogFactory_Impl::CreateSwChangeDBDlg(SwView& rVw)
 {
-    Dialog* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_CHANGE_DB :
-            pDlg = new SwChangeDBDlg( rVw );
-            break;
-
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new VclAbstractDialog_Impl( pDlg );
-    return 0;
+    Dialog* pDlg = new SwChangeDBDlg(rVw);
+    return new VclAbstractDialog_Impl(pDlg);
 }
-
 
 SfxAbstractTabDialog *  SwAbstractDialogFactory_Impl::CreateSwCharDlg(Window* pParent, SwView& pVw, const SfxItemSet& rCoreSet, int nResId, // add for SwCharDlg
                                                 const String* pFmtStr , sal_Bool bIsDrwTxtDlg )
