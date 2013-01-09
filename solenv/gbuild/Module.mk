@@ -89,7 +89,7 @@ $(call gb_Module_get_target,%) :
 		mkdir -p $(dir $@) && \
 		touch $@)
 
-.PHONY : build all clean unitcheck slowcheck subsequentcheck dev-install showmodules
+.PHONY : build all clean unitcheck slowcheck subsequentcheck dev-install showmodules translations
 .DEFAULT_GOAL := all
 
 ifeq ($(strip $(gb_PARTIALBUILD)),)
@@ -188,6 +188,17 @@ showmodules :
 	$(info $(strip $(gb_Module_ALLMODULES)))
 	@true 
 
+translations : $(WORKDIR)/pot.done
+
+$(WORKDIR)/pot.done : $(foreach exec,cfgex helpex localize transex3 \
+									propex uiex ulfex xrmex treex, \
+							$(call gb_Executable_get_target_for_build,$(exec)))
+	$(call gb_Output_announce,$(subst .pot,,$(subst $(WORKDIR)/,,$@)),$(true),POT,1)
+	$(call gb_Helper_abbreviate_dirs,\
+		mkdir -p $(dir $@) && $(call gb_Helper_execute,localize) $(SRCDIR) $(dir $@)/pot \
+		&& find $(dir $@)/pot -type f -printf "%P\n" | sed -e "s/\.pot/.po/" > $(dir $@)/LIST \
+		&& touch $@)
+
 # enable if: no "-MODULE/" defined AND ["all" defined OR "MODULE/" defined]
 gb_Module__debug_enabled = \
  $(and $(if $(filter -$(1)/,$(ENABLE_DEBUGINFO_FOR)),,$(true)),\
@@ -227,7 +238,9 @@ endif
 
 endef
 
-ifneq (showmodules,$(MAKECMDGOALS))
+gb_FULL_BUILD := $(if $(filter showmodules translations,$(MAKECMDGOALS)),$(false),$(true))
+
+ifeq ($(gb_FULL_BUILD),$(true))
 define gb_Module_add_target
 $(call gb_Module__read_targetfile,$(1),$(2),target)
 
