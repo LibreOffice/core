@@ -529,6 +529,50 @@ private:
     ScrollBar m_aHScroll;
 };
 
+//Enforces that its children are always the same size as itself.
+//Intercepts any Commands intended for its children.
+//
+//by default the Commands are discarded, inherit from this
+//and implement "Command" to get them
+class VCL_DLLPUBLIC VclEventBox : public VclBin
+{
+private:
+    //Any Commands an EventBoxHelper receives are forwarded to its parent
+    //The VclEventBox ensures that m_aEventBoxHelper is the
+    //first child and is transparent, but covers the rest of the children
+    class EventBoxHelper : public Window
+    {
+    public:
+        EventBoxHelper(Window* pParent)
+            : Window(pParent, 0)
+        {
+            SetSizePixel(pParent->GetSizePixel());
+            EnableChildTransparentMode();
+            SetPaintTransparent(true);
+            SetBackground();
+        }
+        virtual void Command(const CommandEvent& rCEvt)
+        {
+            GetParent()->Command(rCEvt);
+        }
+    };
+
+    EventBoxHelper m_aEventBoxHelper;
+public:
+    VclEventBox(Window* pParent)
+        : VclBin(pParent)
+        , m_aEventBoxHelper(this)
+    {
+        m_aEventBoxHelper.Show();
+    }
+    virtual Window *get_child();
+    virtual const Window *get_child() const;
+    virtual Size calculateRequisition() const;
+    virtual void setAllocation(const Size &rAllocation);
+
+    virtual void Command(const CommandEvent& rCEvt);
+};
+
 // retro-fitting utilities //
 
 //Get a Size which is large enough to contain all children with

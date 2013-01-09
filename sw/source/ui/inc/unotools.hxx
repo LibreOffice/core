@@ -20,10 +20,11 @@
 #define _UNOTOOLS_HXX
 
 
+#include <vcl/button.hxx>
+#include <vcl/edit.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/button.hxx>
+#include <vcl/layout.hxx>
 #include <actctrl.hxx>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
@@ -35,46 +36,11 @@
 
 class SwOneExampleFrame;
 
-//Any Commands an EventBoxHelper receives
-//are forwarded to its parent
-class EventBoxHelper : public Window
+class SwFrmCtrlWindow : public VclEventBox
 {
+    SwOneExampleFrame* pExampleFrame;
 public:
-    EventBoxHelper(Window* pParent)
-        : Window(pParent, 0)
-    {
-        SetPaintTransparent(true);
-        SetSizePixel(pParent->GetSizePixel());
-        Show();
-    }
-    virtual void Command(const CommandEvent& rCEvt)
-    {
-        GetParent()->Command(rCEvt);
-    }
-};
-
-//Enforces that it is always the same size
-//as its parent. Any Commands it receives
-//it forwards to its parent
-class EventBox : public Window
-{
-private:
-    EventBoxHelper m_aEventBoxHelper;
-public:
-    EventBox(Window* pParent, WinBits nBits)
-        : Window(pParent, nBits)
-        , m_aEventBoxHelper(this)
-    {
-    }
-    virtual void Command( const CommandEvent& rCEvt ) = 0;
-    virtual void Resize();
-};
-
-class SwFrmCtrlWindow : public EventBox
-{
-    SwOneExampleFrame*  pExampleFrame;
-public:
-    SwFrmCtrlWindow(Window* pParent, WinBits nBits, SwOneExampleFrame*  pFrame);
+    SwFrmCtrlWindow(Window* pParent, SwOneExampleFrame* pFrame);
 
     virtual void Command( const CommandEvent& rCEvt );
     virtual Size GetOptimalSize(WindowSizeType eType) const;

@@ -937,6 +937,10 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     {
         pWindow = new VclScrolledWindow(pParent);
     }
+    else if (name == "GtkEventBox")
+    {
+        pWindow = new VclEventBox(pParent);
+    }
     else if (name == "GtkEntry")
     {
         pWindow = new Edit(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK);

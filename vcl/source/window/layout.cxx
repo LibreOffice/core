@@ -17,7 +17,7 @@ VclContainer::VclContainer(Window *pParent, WinBits nStyle)
 {
     ImplInit(pParent, nStyle, NULL);
     EnableChildTransparentMode();
-    SetPaintTransparent(sal_True);
+    SetPaintTransparent(true);
     SetBackground();
 }
 
@@ -1329,6 +1329,53 @@ bool VclScrolledWindow::set_property(const rtl::OString &rKey, const rtl::OStrin
     m_aVScroll.Show(GetStyle() & WB_VERT);
     m_aHScroll.Show(GetStyle() & WB_HORZ);
     return bRet;
+}
+
+const Window *VclEventBox::get_child() const
+{
+    const WindowImpl* pWindowImpl = ImplGetWindowImpl();
+
+    assert(pWindowImpl->mpFirstChild == &m_aEventBoxHelper);
+
+    return pWindowImpl->mpFirstChild->GetWindow(WINDOW_NEXT);
+}
+
+Window *VclEventBox::get_child()
+{
+    return const_cast<Window*>(const_cast<const VclEventBox*>(this)->get_child());
+}
+
+void VclEventBox::setAllocation(const Size& rAllocation)
+{
+    Point aChildPos(0, 0);
+    for (Window *pChild = GetWindow(WINDOW_FIRSTCHILD); pChild; pChild = pChild->GetWindow(WINDOW_NEXT))
+    {
+        if (!pChild->IsVisible())
+            continue;
+        setLayoutAllocation(*pChild, aChildPos, rAllocation);
+    }
+}
+
+Size VclEventBox::calculateRequisition() const
+{
+    Size aRet(0, 0);
+
+    for (const Window* pChild = get_child(); pChild;
+        pChild = pChild->GetWindow(WINDOW_NEXT))
+    {
+        if (!pChild->IsVisible())
+            continue;
+        Size aChildSize = getLayoutRequisition(*pChild);
+        aRet.Width() = std::max(aRet.Width(), aChildSize.Width());
+        aRet.Height() = std::max(aRet.Height(), aChildSize.Height());
+    }
+
+    return aRet;
+}
+
+void VclEventBox::Command(const CommandEvent&)
+{
+    //discard events by default to block them reaching children
 }
 
 Size getLegacyBestSizeForChildren(const Window &rWindow)

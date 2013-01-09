@@ -65,7 +65,7 @@ SwOneExampleFrame::SwOneExampleFrame( Window& rWin,
                                         sal_uInt32 nFlags,
                                         const Link* pInitializedLink,
                                         String* pURL ) :
-    aTopWindow(&rWin, 0, this),
+    aTopWindow(&rWin, this),
     aMenuRes(SW_RES(RES_FRMEX_MENU)),
     pModuleView(SW_MOD()->GetView()),
     nStyleFlags(nFlags),
@@ -75,7 +75,6 @@ SwOneExampleFrame::SwOneExampleFrame( Window& rWin,
     if (pURL && pURL->Len())
         sArgumentURL = *pURL;
 
-    aTopWindow.SetPaintTransparent(sal_True);
     aTopWindow.SetPosSizePixel(Point(0, 0), rWin.GetSizePixel());
 
     if( pInitializedLink )
@@ -366,7 +365,6 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
 
         uno::Reference< awt::XWindow >  xWin( _xControl, uno::UNO_QUERY );
         Size aWinSize(aTopWindow.GetOutputSizePixel());
-        fprintf(stderr, "size %ld %ld\n", aWinSize.Width(), aWinSize.Height());
         xWin->setPosSize( 0, 0, aWinSize.Width(), aWinSize.Height(), awt::PosSize::SIZE );
 
         // can only be done here - the SFX changes the ScrollBar values
@@ -517,10 +515,9 @@ IMPL_LINK(SwOneExampleFrame, PopupHdl, Menu*, pMenu )
     return 0;
 };
 
-SwFrmCtrlWindow::SwFrmCtrlWindow(Window* pParent, WinBits nBits,
-                                SwOneExampleFrame*  pFrame) :
-    EventBox(pParent, nBits),
-    pExampleFrame(pFrame)
+SwFrmCtrlWindow::SwFrmCtrlWindow(Window* pParent, SwOneExampleFrame* pFrame)
+    : VclEventBox(pParent)
+    , pExampleFrame(pFrame)
 {
     set_expand(true);
     set_fill(true);
@@ -528,8 +525,6 @@ SwFrmCtrlWindow::SwFrmCtrlWindow(Window* pParent, WinBits nBits,
 
 void SwFrmCtrlWindow::Command( const CommandEvent& rCEvt )
 {
-    fprintf(stderr, "SwFrmCtrlWindow::Command\n");
-
     switch ( rCEvt.GetCommand() )
     {
         case COMMAND_CONTEXTMENU:
@@ -547,27 +542,16 @@ void SwFrmCtrlWindow::Command( const CommandEvent& rCEvt )
     }
 }
 
-void EventBox::Resize()
-{
-    fprintf(stderr, "EventBox::Resize\n");
-    Size aSize(GetSizePixel());
-    for (Window *pChild = GetWindow(WINDOW_FIRSTCHILD); pChild; pChild = pChild->GetWindow(WINDOW_NEXT))
-    {
-        pChild->SetSizePixel(aSize);
-        fprintf(stderr, "child %p\n", pChild);
-    }
-}
-
 Size SwFrmCtrlWindow::GetOptimalSize(WindowSizeType eType) const
 {
     if (eType == WINDOWSIZE_PREFERRED)
         return LogicToPixel(Size(82, 124), MapMode(MAP_APPFONT));
-    return Window::GetOptimalSize(eType);
+    return VclEventBox::GetOptimalSize(eType);
 }
 
 void SwFrmCtrlWindow::Resize()
 {
-    EventBox::Resize();
+    VclEventBox::Resize();
     pExampleFrame->ClearDocument(true);
 }
 
