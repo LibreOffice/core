@@ -115,7 +115,7 @@ void MapReturn(sal_uInt32 r0, sal_uInt32 r1, typelib_TypeDescriptionReference * 
             pRegisterReturn[0] = r0;
             break;
         case typelib_TypeClass_FLOAT:
-#if !defined(__ARM_PCS_VFP) && (defined(__ARM_EABI__) || defined(__SOFTFP__))
+#if !defined(__ARM_PCS_VFP) && (defined(__ARM_EABI__) || defined(__SOFTFP__) || defined(IOS))
             pRegisterReturn[0] = r0;
 #else
             register float fret asm("s0");
@@ -126,7 +126,7 @@ void MapReturn(sal_uInt32 r0, sal_uInt32 r1, typelib_TypeDescriptionReference * 
 #endif
             break;
         case typelib_TypeClass_DOUBLE:
-#if !defined(__ARM_PCS_VFP) && (defined(__ARM_EABI__) || defined(__SOFTFP__))
+#if !defined(__ARM_PCS_VFP) && (defined(__ARM_EABI__) || defined(__SOFTFP__) || defined(IOS))
             pRegisterReturn[1] = r1;
             pRegisterReturn[0] = r0;
 #else
@@ -222,7 +222,7 @@ void callVirtualMethod(
         "mov %[r1], r1\n\t"
         : [r0]"=r" (r0), [r1]"=r" (r1)
         : [pmethod]"m" (pMethod), [pgpr]"m" (pGPR), [pfpr]"m" (pFPR)
-        : "r4", "r5");
+        : "r0", "r1", "r2", "r3", "r4", "r5");
 
     MapReturn(r0, r1, pReturnType, (sal_uInt32*)pRegisterReturn);
 }
