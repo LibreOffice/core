@@ -43,7 +43,6 @@
 #include "vcl/configsettings.hxx"
 #include "vcl/gradient.hxx"
 #include "vcl/unohelp.hxx"
-#include "vcl/bitmapex.hxx"
 
 #include "unotools/fontcfg.hxx"
 #include "unotools/localedatawrapper.hxx"
@@ -213,8 +212,8 @@ sal_Bool MouseSettings::operator ==( const MouseSettings& rSet ) const
 
 ImplStyleData::ImplStyleData() :
     maPersonaHeaderFooter(),
-    mpPersonaHeaderBitmap( NULL ),
-    mpPersonaFooterBitmap( NULL )
+    mpPersonaHeaderBitmap(),
+    mpPersonaFooterBitmap()
 {
     mnRefCount                  = 1;
     mnScrollBarSize             = 16;
@@ -312,8 +311,8 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maGroupFont( rData.maGroupFont ),
     maWorkspaceGradient( rData.maWorkspaceGradient ),
     maPersonaHeaderFooter( rData.maPersonaHeaderFooter ),
-    mpPersonaHeaderBitmap( rData.mpPersonaHeaderBitmap? new BitmapEx( *rData.mpPersonaHeaderBitmap ): NULL ),
-    mpPersonaFooterBitmap( rData.mpPersonaFooterBitmap? new BitmapEx( *rData.mpPersonaFooterBitmap ): NULL )
+    mpPersonaHeaderBitmap( rData.mpPersonaHeaderBitmap ),
+    mpPersonaFooterBitmap( rData.mpPersonaFooterBitmap )
 {
     mnRefCount                  = 1;
     mnBorderSize                = rData.mnBorderSize;
@@ -689,7 +688,7 @@ sal_Bool StyleSettings::GetUseImagesInMenus() const
 
 // -----------------------------------------------------------------------
 
-static BitmapEx* readBitmapEx( const rtl::OUString& rPath )
+static BitmapEx readBitmapEx( const rtl::OUString& rPath )
 {
     rtl::OUString aPath( rPath );
     rtl::Bootstrap::expandMacros( aPath );
@@ -697,28 +696,21 @@ static BitmapEx* readBitmapEx( const rtl::OUString& rPath )
     // import the image
     Graphic aGraphic;
     if ( GraphicFilter::LoadGraphic( aPath, String(), aGraphic ) != GRFILTER_OK )
-        return NULL;
+        return BitmapEx();
 
-    const BitmapEx& rBitmap( aGraphic.GetBitmapEx() );
-    if ( rBitmap.IsEmpty() )
-        return NULL;
-
-    return new BitmapEx( rBitmap );
+    return aGraphic.GetBitmapEx();
 }
 
 enum WhichPersona { PERSONA_HEADER, PERSONA_FOOTER };
 
 /** Update the setting of the Persona header / footer in ImplStyleData */
-static void setupPersonaHeaderFooter( WhichPersona eWhich, rtl::OUString& /*rHeaderFooter*/, BitmapEx*& pHeaderFooterBitmap )
+static void setupPersonaHeaderFooter( WhichPersona eWhich, rtl::OUString& /*rHeaderFooter*/, BitmapEx& rHeaderFooterBitmap )
 {
     rtl::OUString aName;
     switch ( eWhich ) {
         case PERSONA_HEADER: aName = "header.jpg"; break;
         case PERSONA_FOOTER: aName = "footer.jpg"; break;
     }
-
-    delete pHeaderFooterBitmap;
-    pHeaderFooterBitmap = NULL;
 
     if ( !aName.isEmpty() )
     {
@@ -728,21 +720,21 @@ static void setupPersonaHeaderFooter( WhichPersona eWhich, rtl::OUString& /*rHea
         rtl::Bootstrap::expandMacros( gallery );
         gallery += "/user/gallery/personas/";
 
-        if ( !pHeaderFooterBitmap )
-            pHeaderFooterBitmap = readBitmapEx( "$BRAND_BASE_DIR/program/edition/" + aName );
+        if ( rHeaderFooterBitmap.IsEmpty() )
+            rHeaderFooterBitmap = readBitmapEx( "$BRAND_BASE_DIR/program/edition/" + aName );
 
-        if ( !pHeaderFooterBitmap )
-            pHeaderFooterBitmap = readBitmapEx( "$BRAND_BASE_DIR/program/" + aName );
+        if ( rHeaderFooterBitmap.IsEmpty() )
+            rHeaderFooterBitmap = readBitmapEx( "$BRAND_BASE_DIR/program/" + aName );
     }
 }
 
-const BitmapEx* StyleSettings::GetPersonaHeader() const
+const BitmapEx StyleSettings::GetPersonaHeader() const
 {
     setupPersonaHeaderFooter( PERSONA_HEADER, mpData->maPersonaHeaderFooter, mpData->mpPersonaHeaderBitmap );
     return mpData->mpPersonaHeaderBitmap;
 }
 
-const BitmapEx* StyleSettings::GetPersonaFooter() const
+const BitmapEx StyleSettings::GetPersonaFooter() const
 {
     setupPersonaHeaderFooter( PERSONA_FOOTER, mpData->maPersonaHeaderFooter, mpData->mpPersonaFooterBitmap );
     return mpData->mpPersonaFooterBitmap;

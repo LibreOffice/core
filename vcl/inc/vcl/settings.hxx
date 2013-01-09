@@ -32,13 +32,13 @@
 #include "vcl/sv.h"
 #include "vcl/dllapi.h"
 #include "tools/color.hxx"
+#include "vcl/bitmapex.hxx"
 #include "vcl/font.hxx"
 #include "vcl/accel.hxx"
 #include "vcl/wall.hxx"
 #include "com/sun/star/lang/Locale.hpp"
 #include <unotools/syslocale.hxx>
 
-class BitmapEx;
 class CollatorWrapper;
 class LocaleDataWrapper;
 
@@ -330,8 +330,8 @@ private:
 
     rtl::OUString                   maPersonaHeaderFooter; ///< Cache the settings to detect changes.
 
-    BitmapEx*                       mpPersonaHeaderBitmap; ///< Cache the header bitmap.
-    BitmapEx*                       mpPersonaFooterBitmap; ///< Cache the footer bitmap.
+    BitmapEx                        mpPersonaHeaderBitmap; ///< Cache the header bitmap.
+    BitmapEx                        mpPersonaFooterBitmap; ///< Cache the footer bitmap.
 };
 
 #define DEFAULT_WORKSPACE_GRADIENT_START_COLOR Color( 0xa3, 0xae, 0xb8 )
@@ -837,8 +837,8 @@ public:
     void                            SetWorkspaceGradient( const Wallpaper& rWall )
                                         { CopyData(); mpData->maWorkspaceGradient = rWall; }
 
-    const BitmapEx*                 GetPersonaHeader() const;
-    const BitmapEx*                 GetPersonaFooter() const;
+    const BitmapEx                  GetPersonaHeader() const;
+    const BitmapEx                  GetPersonaFooter() const;
 
     void                            SetStandardStyles();
 
