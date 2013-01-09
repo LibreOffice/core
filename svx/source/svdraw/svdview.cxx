@@ -1255,7 +1255,7 @@ XubString SdrView::GetStatusText()
 
 #ifdef DBG_UTIL
         aStr += UniString( RTL_CONSTASCII_USTRINGPARAM( ", Level " ) );
-        aStr += OUString::valueOf( pTextEditOutliner->GetDepth( aSel.nEndPara ) );
+        aStr += OUString::valueOf( sal_Int32( pTextEditOutliner->GetDepth( aSel.nEndPara )) );
 #endif
     }
 
