@@ -300,11 +300,15 @@ typedef void *                   sal_Handle;
    rtl/malformeduriexception.hxx.
 */
 #if defined(__GNUC__) && ! defined(__MINGW32__)
-#define SAL_EXCEPTION_DLLPUBLIC_EXPORT SAL_DLLPUBLIC_EXPORT
-#define SAL_EXCEPTION_DLLPRIVATE SAL_DLLPRIVATE
+#   if defined(DISABLE_DYNLOADING)
+#      define SAL_EXCEPTION_DLLPUBLIC_EXPORT __attribute__((visibility("default")))
+#    else
+#      define SAL_EXCEPTION_DLLPUBLIC_EXPORT SAL_DLLPUBLIC_EXPORT
+#    endif
+#    define SAL_EXCEPTION_DLLPRIVATE SAL_DLLPRIVATE
 #else
-#define SAL_EXCEPTION_DLLPUBLIC_EXPORT
-#define SAL_EXCEPTION_DLLPRIVATE
+#    define SAL_EXCEPTION_DLLPUBLIC_EXPORT
+#    define SAL_EXCEPTION_DLLPRIVATE
 #endif
 
 /** Use this as markup for functions and methods whose return value must be
