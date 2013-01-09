@@ -513,9 +513,10 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
                                  com::sun::star::awt::Point* pRefPoint /* = NULL */,
                                  SvXMLAttributeList* pAttrList /* = NULL */ )
 {
+    SAL_WARN("xmloff", xShape->getShapeType());
     if( maCurrentShapesIter == maShapesInfos.end() )
     {
-        OSL_FAIL( "XMLShapeExport::exportShape(): no auto styles where collected before export" );
+        SAL_WARN( "xmloff", "XMLShapeExport::exportShape(): no auto styles where collected before export" );
         return;
     }
     sal_Int32 nZIndex = 0;
@@ -548,7 +549,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     }
     catch(const uno::Exception&)
     {
-        OSL_FAIL("XMLShapeExport::exportShape(): exception during hyperlink export");
+        SAL_WARN("xmloff", "XMLShapeExport::exportShape(): exception during hyperlink export");
     }
 
 
@@ -559,7 +560,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
 
     if( (sal_Int32)aShapeInfoVector.size() <= nZIndex )
     {
-        OSL_FAIL( "XMLShapeExport::exportShape(): no shape info collected for a given shape" );
+        SAL_WARN( "xmloff", "XMLShapeExport::exportShape(): no shape info collected for a given shape" );
         return;
     }
 
@@ -586,7 +587,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
         XmlShapeType eShapeType(XmlShapeTypeNotYetSet);
         ImpCalcShapeType(xShape, eShapeType);
 
-        DBG_ASSERT( eShapeType == aShapeInfo.meShapeType, "exportShape callings do not correspond to collectShapeAutoStyles calls!" );
+        SAL_WARN_IF( eShapeType != aShapeInfo.meShapeType, "xmloff", "exportShape callings do not correspond to collectShapeAutoStyles calls!: " << xShape->getShapeType() );
     }
 #endif
 
@@ -915,7 +916,7 @@ void XMLShapeExport::collectShapesAutoStyles( const uno::Reference < drawing::XS
     for(sal_Int32 nShapeId = 0; nShapeId < nShapeCount; nShapeId++)
     {
         xShapes->getByIndex(nShapeId) >>= xShape;
-        DBG_ASSERT( xShape.is(), "Shape without a XShape?" );
+        SAL_WARN_IF( !xShape.is(), "xmloff", "Shape without a XShape?" );
         if(!xShape.is())
             continue;
 
@@ -938,7 +939,7 @@ void XMLShapeExport::exportShapes( const uno::Reference < drawing::XShapes >& xS
     for(sal_Int32 nShapeId = 0; nShapeId < nShapeCount; nShapeId++)
     {
         xShapes->getByIndex(nShapeId) >>= xShape;
-        DBG_ASSERT( xShape.is(), "Shape without a XShape?" );
+        SAL_WARN_IF( !xShape.is(), "xmloff", "Shape without a XShape?" );
         if(!xShape.is())
             continue;
 
@@ -1142,7 +1143,7 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                     }
                     catch(const uno::Exception&)
                     {
-                        OSL_FAIL( "XMLShapeExport::ImpCalcShapeType(), expected ole shape to have the CLSID property?" );
+                        SAL_WARN( "xmloff", "XMLShapeExport::ImpCalcShapeType(), expected ole shape to have the CLSID property?" );
                     }
                 }
                 else if(aType.match("Chart", 26)) { eShapeType = XmlShapeTypePresChartShape;  }
