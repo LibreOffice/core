@@ -154,12 +154,7 @@ endif
 ifneq ($(nodep),)
 gb_FULLDEPS := $(false)
 else
-# for clean, setuplocal and removelocal goals we switch off dependencies
-ifneq ($(filter clean setuplocal removelocal showdeliverables help debugrun,$(MAKECMDGOALS)),)
-gb_FULLDEPS := $(false)
-else
 gb_FULLDEPS := $(true)
-endif
 endif
 
 ifneq ($(strip $(patches)$(PATCHES)),)
@@ -354,10 +349,5 @@ include $(wildcard $(GBUILDDIR)/extensions/final_*.mk)
 endif
 
 endef
-
-.PHONY: help
-help:
-	@cat $(SRCDIR)/solenv/gbuild/gbuild.help.txt
-	@true
 
 # vim: set noet sw=4:

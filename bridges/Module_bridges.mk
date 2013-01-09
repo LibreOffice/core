@@ -96,7 +96,7 @@ $(eval $(call gb_Module_add_targets,bridges,\
 	) \
 ))
 
-ifeq ($(gb_FULL_BUILD),$(true))
+ifeq (,$(gb_STRIPPED_BUILD))
 ifeq ($(strip $(bridges_SELECTED_BRIDGE)),)
 $(call gb_Output_error,no bridge selected for build: bailing out)
 endif

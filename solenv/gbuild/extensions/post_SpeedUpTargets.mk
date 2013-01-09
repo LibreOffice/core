@@ -25,23 +25,31 @@
 #   in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 #   instead of those above.
 
-
-# speed up if no target need to parse all modules
-gb_SpeedUpTargets_WRAPPEDBUILD:=
 ifneq ($(strip $(MAKECMDGOALS)),)
-ifeq ($(filter-out id tags docs distro-pack-install fetch help debugrun $(SRCDIR)/config_host.mk,$(MAKECMDGOALS)),)
-gb_SpeedUpTargets_WRAPPEDBUILD:=T
+# speed up depending on the target
+gb_SpeedUpTargets_LEVEL_3 := debugrun help translations
+gb_SpeedUpTargets_LEVEL_2 := showmodules $(gb_SpeedUpTargets_LEVEL_3)
+gb_SpeedUpTargets_LEVEL_1 := clean showdeliverables $(gb_SpeedUpTargets_LEVEL_2)
+
+ifeq (T,$(if $(filter-out $(gb_SpeedUpTargets_LEVEL_1),$(MAKECMDGOALS)),,T))
+gb_FULLDEPS :=
+
+ifeq (T,$(if $(filter-out $(gb_SpeedUpTargets_LEVEL_2),$(MAKECMDGOALS)),,T))
+gb_Module_add_target :=
+gb_Module_add_check_target :=
+gb_Module_add_slowcheck_target :=
+gb_Module_add_subsequentcheck_target :=
+
+# Turns of check in bridges/Module_bridges.mk:
+gb_STRIPPED_BUILD := $(true)
+
+ifeq (T,$(if $(filter-out $(gb_SpeedUpTargets_LEVEL_3),$(MAKECMDGOALS)),,T))
+gb_Module_add_moduledir :=
+
+endif
 endif
 endif
 
-ifneq ($(strip $(gb_SpeedUpTargets_WRAPPEDBUILD)),)
-gb_Module_add_target=
-gb_Module_add_check_target=
-gb_Module_add_slowcheck_target=
-gb_Module_add_subsequentcheck_target=
-gb_Module_add_moduledir=
-gb_FULLDEPS=
 endif
 
 # vim:set shiftwidth=4 softtabstop=4 noexpandtab:
-

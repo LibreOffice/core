@@ -89,7 +89,7 @@ $(call gb_Module_get_target,%) :
 		mkdir -p $(dir $@) && \
 		touch $@)
 
-.PHONY : build all clean unitcheck slowcheck subsequentcheck showmodules translations
+.PHONY : all build unitcheck slowcheck subsequentcheck clean check debugrun help showmodules translations
 .DEFAULT_GOAL := all
 
 all : build unitcheck
@@ -129,6 +129,9 @@ check : unitcheck slowcheck
 
 debugrun :
 	$(call gb_Module_DEBUGRUNCOMMAND)
+
+help :
+	@cat $(SRCDIR)/solenv/gbuild/gbuild.help.txt
 
 showmodules :
 	$(info $(strip $(gb_Module_ALLMODULES)))
@@ -184,9 +187,6 @@ endif
 
 endef
 
-gb_FULL_BUILD := $(if $(filter showmodules translations,$(MAKECMDGOALS)),$(false),$(true))
-
-ifeq ($(gb_FULL_BUILD),$(true))
 define gb_Module_add_target
 $(call gb_Module__read_targetfile,$(1),$(2),target)
 
@@ -220,7 +220,6 @@ $(call gb_Module_get_subsequentcheck_target,$(1)) : $$(gb_Module_CURRENTTARGET)
 $(call gb_Module_get_clean_target,$(1)) : $$(gb_Module_CURRENTCLEANTARGET)
 
 endef
-endif
 
 define gb_Module_add_moduledir
 include $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Module_MODULELOCATIONS)))/$(2)/Module_$(2).mk
