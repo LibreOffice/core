@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAS3///+E\u003d",
+        "filename": "basic/source/classes/sbxmod.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-01-09T10:27:51Z",
+      "side": 1,
+      "message": "SAL_INFO does not interpret %s, %x and %d, this conversion is clearly wrong. Please run SAL_LOG\u003d+INFO.basic ./soffice.bin and trigger these code parts and make sure that the output is at least similar before/after.",
+      "revId": "97db127cdbe911c8b3ea302d6dfbbec5e0bbbb6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
