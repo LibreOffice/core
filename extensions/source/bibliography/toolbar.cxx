@@ -40,7 +40,6 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
-#define C2U(cChar) OUString::createFromAscii(cChar)
 
 
 // Konstanten -------------------------------------------------------------
@@ -256,7 +255,7 @@ void BibToolBar::InitListener()
     if( xTrans.is() )
     {
         util::URL aQueryURL;
-        aQueryURL.Complete = C2U(".uno:Bib/MenuFilter");
+        aQueryURL.Complete = ".uno:Bib/MenuFilter";
         xTrans->parseStrict( aQueryURL);
         BibToolBarListener* pQuery=new BibTBQueryMenuListener(this,aQueryURL.Complete,TBC_BT_AUTOFILTER);
         xDisp->addStatusListener(uno::Reference< frame::XStatusListener > (pQuery),aQueryURL);
@@ -315,11 +314,11 @@ void BibToolBar::Select()
     {
         Sequence<PropertyValue> aPropVal(2);
         PropertyValue* pPropertyVal = (PropertyValue*)aPropVal.getConstArray();
-        pPropertyVal[0].Name=C2U("QueryText");
+        pPropertyVal[0].Name="QueryText";
         rtl::OUString aSelection = aEdQuery.GetText();
         pPropertyVal[0].Value <<= aSelection;
 
-        pPropertyVal[1].Name=C2U("QueryField");
+        pPropertyVal[1].Name="QueryField";
         pPropertyVal[1].Value <<= aQueryField;
         SendDispatch(nId,aPropVal);
     }
@@ -443,10 +442,10 @@ long BibToolBar::PreNotify( NotifyEvent& rNEvt )
         {
             Sequence<PropertyValue> aPropVal(2);
             PropertyValue* pPropertyVal = (PropertyValue*)aPropVal.getConstArray();
-            pPropertyVal[0].Name = C2U("QueryText");
+            pPropertyVal[0].Name = "QueryText";
             rtl::OUString aSelection = aEdQuery.GetText();
             pPropertyVal[0].Value <<= aSelection;
-            pPropertyVal[1].Name=C2U("QueryField");
+            pPropertyVal[1].Name="QueryField";
             pPropertyVal[1].Value <<= aQueryField;
             SendDispatch(TBC_BT_AUTOFILTER,aPropVal);
             return nResult;
@@ -469,7 +468,7 @@ IMPL_LINK( BibToolBar, SendSelHdl, Timer*,/*pT*/)
 {
     Sequence<PropertyValue> aPropVal(1);
     PropertyValue* pPropertyVal = (PropertyValue*)aPropVal.getConstArray();
-    pPropertyVal[0].Name = C2U("DataSourceName");
+    pPropertyVal[0].Name = "DataSourceName";
     String aEntry( MnemonicGenerator::EraseAllMnemonicChars( aLBSource.GetSelectEntry() ) );
     rtl::OUString aSelection = aEntry;
     pPropertyVal[0].Value <<= aSelection;
@@ -497,10 +496,10 @@ IMPL_LINK( BibToolBar, MenuHdl, ToolBox*, /*pToolbox*/)
             aQueryField = MnemonicGenerator::EraseAllMnemonicChars( aPopupMenu.GetItemText(nId) );
             Sequence<PropertyValue> aPropVal(2);
             PropertyValue* pPropertyVal = (PropertyValue*)aPropVal.getConstArray();
-            pPropertyVal[0].Name = C2U("QueryText");
+            pPropertyVal[0].Name = "QueryText";
             rtl::OUString aSelection = aEdQuery.GetText();
             pPropertyVal[0].Value <<= aSelection;
-            pPropertyVal[1].Name=C2U("QueryField");
+            pPropertyVal[1].Name="QueryField";
             pPropertyVal[1].Value <<= aQueryField;
             SendDispatch(TBC_BT_AUTOFILTER,aPropVal);
         }

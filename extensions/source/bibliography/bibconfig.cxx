@@ -35,9 +35,7 @@ using namespace ::com::sun::star::sdb;
 
 using ::rtl::OUString;
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
-
-const char* cDataSourceHistory = "DataSourceHistory";
+const char cDataSourceHistory[] = "DataSourceHistory";
 
 Sequence<OUString> BibConfig::GetPropertyNames()
 {
@@ -46,57 +44,57 @@ Sequence<OUString> BibConfig::GetPropertyNames()
     {
         aNames.realloc(8);
         OUString* pNames = aNames.getArray();
-        pNames[0] = C2U("CurrentDataSource/DataSourceName");
-        pNames[1] = C2U("CurrentDataSource/Command");
-        pNames[2] = C2U("CurrentDataSource/CommandType");
-        pNames[3] = C2U("BeamerHeight");
-        pNames[4] = C2U("ViewHeight");
-        pNames[5] = C2U("QueryText");
-        pNames[6] = C2U("QueryField");
-        pNames[7] = C2U("ShowColumnAssignmentWarning");
+        pNames[0] = "CurrentDataSource/DataSourceName";
+        pNames[1] = "CurrentDataSource/Command";
+        pNames[2] = "CurrentDataSource/CommandType";
+        pNames[3] = "BeamerHeight";
+        pNames[4] = "ViewHeight";
+        pNames[5] = "QueryText";
+        pNames[6] = "QueryField";
+        pNames[7] = "ShowColumnAssignmentWarning";
     }
     return aNames;
 }
 
 BibConfig::BibConfig() :
-    ConfigItem(C2U("Office.DataAccess/Bibliography"), CONFIG_MODE_DELAYED_UPDATE),
+    ConfigItem("Office.DataAccess/Bibliography", CONFIG_MODE_DELAYED_UPDATE),
     pMappingsArr(new MappingArray),
     nBeamerSize(0),
     nViewSize(0),
     bShowColumnAssignmentWarning(sal_False)
 {
     //Names of the default columns
-    aColumnDefaults[0] = C2U("Identifier");
-    aColumnDefaults[1] = C2U("BibliographyType");
-    aColumnDefaults[2] = C2U("Author");
-    aColumnDefaults[3] = C2U("Title");
-    aColumnDefaults[4] = C2U("Year");
-    aColumnDefaults[5] = C2U("ISBN");
-    aColumnDefaults[6] = C2U("Booktitle");
-    aColumnDefaults[7] = C2U("Chapter");
-    aColumnDefaults[8] = C2U("Edition");
-    aColumnDefaults[9] = C2U("Editor");
-    aColumnDefaults[10] = C2U("Howpublished");
-    aColumnDefaults[11] = C2U("Institution");
-    aColumnDefaults[12] = C2U("Journal");
-    aColumnDefaults[13] = C2U("Month");
-    aColumnDefaults[14] = C2U("Note");
-    aColumnDefaults[15] = C2U("Annote");
-    aColumnDefaults[16] = C2U("Number");
-    aColumnDefaults[17] = C2U("Organizations");
-    aColumnDefaults[18] = C2U("Pages");
-    aColumnDefaults[19] = C2U("Publisher");
-    aColumnDefaults[20] = C2U("Address");
-    aColumnDefaults[21] = C2U("School");
-    aColumnDefaults[22] = C2U("Series");
-    aColumnDefaults[23] = C2U("ReportType");
-    aColumnDefaults[24] = C2U("Volume");
-    aColumnDefaults[25] = C2U("URL");
-    aColumnDefaults[26] = C2U("Custom1");
-    aColumnDefaults[27] = C2U("Custom2");
-    aColumnDefaults[28] = C2U("Custom3");
-    aColumnDefaults[29] = C2U("Custom4");
-    aColumnDefaults[30] = C2U("Custom5");
+    aColumnDefaults[0] = "Identifier";
+    aColumnDefaults[1] = "BibliographyType";
+    aColumnDefaults[2] = "Author";
+    aColumnDefaults[3] = "Title";
+    aColumnDefaults[4] = "Year";
+    aColumnDefaults[5] = "ISBN";
+    aColumnDefaults[6] = "Booktitle";
+    aColumnDefaults[7] = "Chapter";
+    aColumnDefaults[8] = "Edition";
+    aColumnDefaults[9] = "Editor";
+    aColumnDefaults[10] = "Howpublished";
+    aColumnDefaults[11] = "Institution";
+    aColumnDefaults[12] = "Journal";
+    aColumnDefaults[13] = "Month";
+    aColumnDefaults[14] = "Note";
+    aColumnDefaults[15] = "Annote";
+    aColumnDefaults[16] = "Number";
+    aColumnDefaults[17] = "Organizations";
+    aColumnDefaults[18] = "Pages";
+    aColumnDefaults[19] = "Publisher";
+    aColumnDefaults[20] = "Address";
+    aColumnDefaults[21] = "School";
+    aColumnDefaults[22] = "Series";
+    aColumnDefaults[23] = "ReportType";
+    aColumnDefaults[24] = "Volume";
+    aColumnDefaults[25] = "URL";
+    aColumnDefaults[26] = "Custom1";
+    aColumnDefaults[27] = "Custom2";
+    aColumnDefaults[28] = "Custom3";
+    aColumnDefaults[29] = "Custom4";
+    aColumnDefaults[30] = "Custom5";
 
 
     const Sequence< OUString > aPropertyNames = GetPropertyNames();
@@ -124,20 +122,20 @@ BibConfig::BibConfig() :
             }
         }
     }
-    OUString sName(C2U("DataSourceName"));
-    OUString sTable(C2U("Command"));
-    OUString sCommandType(C2U("CommandType"));
-    Sequence< OUString > aNodeNames = GetNodeNames(C2U(cDataSourceHistory));
+    OUString sName("DataSourceName");
+    OUString sTable("Command");
+    OUString sCommandType("CommandType");
+    Sequence< OUString > aNodeNames = GetNodeNames(cDataSourceHistory);
     const OUString* pNodeNames = aNodeNames.getConstArray();
     for(sal_Int32 nNode = 0; nNode < aNodeNames.getLength(); nNode++)
     {
         Sequence<OUString> aHistoryNames(3);
         OUString* pHistoryNames = aHistoryNames.getArray();
 
-        OUString sPrefix(C2U(cDataSourceHistory));
-        sPrefix += C2U("/");
+        OUString sPrefix(cDataSourceHistory);
+        sPrefix += "/";
         sPrefix += pNodeNames[nNode];
-        sPrefix += C2U("/");
+        sPrefix += "/";
         pHistoryNames[0] = sPrefix;
         pHistoryNames[0] += sName;
         pHistoryNames[1] = sPrefix;
@@ -155,7 +153,7 @@ BibConfig::BibConfig() :
             pHistoryValues[1] >>= pMapping->sTableName;
             pHistoryValues[2] >>= pMapping->nCommandType;
             //field assignment is contained in another set
-            sPrefix += C2U("Fields");
+            sPrefix += "Fields";
             Sequence< OUString > aAssignmentNodeNames = GetNodeNames(sPrefix);
             const OUString* pAssignmentNodeNames = aAssignmentNodeNames.getConstArray();
             Sequence<OUString> aAssignmentPropertyNames(aAssignmentNodeNames.getLength() * 2);
@@ -164,12 +162,12 @@ BibConfig::BibConfig() :
             for(sal_Int16 nField = 0; nField < aAssignmentNodeNames.getLength(); nField++)
             {
                 OUString sSubPrefix(sPrefix);
-                sSubPrefix += C2U("/");
+                sSubPrefix += "/";
                 sSubPrefix += pAssignmentNodeNames[nField];
                 pAssignmentPropertyNames[nFieldIdx] = sSubPrefix;
-                pAssignmentPropertyNames[nFieldIdx++] += C2U("/ProgrammaticFieldName");
+                pAssignmentPropertyNames[nFieldIdx++] += "/ProgrammaticFieldName";
                 pAssignmentPropertyNames[nFieldIdx] = sSubPrefix;
-                pAssignmentPropertyNames[nFieldIdx++]   += C2U("/AssignedFieldName");
+                pAssignmentPropertyNames[nFieldIdx++]   += "/AssignedFieldName";
             }
             Sequence<Any> aAssignmentValues = GetProperties(aAssignmentPropertyNames);
             const Any* pAssignmentValues = aAssignmentValues.getConstArray();
@@ -243,21 +241,21 @@ void    BibConfig::Commit()
         }
     }
     PutProperties(aPropertyNames, aValues);
-    ClearNodeSet( C2U(cDataSourceHistory));
+    ClearNodeSet(cDataSourceHistory);
     Sequence< PropertyValue > aNodeValues(pMappingsArr->size() * 3);
     PropertyValue* pNodeValues = aNodeValues.getArray();
 
     sal_Int32 nIndex = 0;
-    OUString sName(C2U("DataSourceName"));
-    OUString sTable(C2U("Command"));
-    OUString sCommandType(C2U("CommandType"));
+    OUString sName("DataSourceName");
+    OUString sTable("Command");
+    OUString sCommandType("CommandType");
     for(sal_Int32 i = 0; i < (sal_Int32)pMappingsArr->size(); i++)
     {
         const Mapping* pMapping = &(*pMappingsArr)[i];
-        OUString sPrefix(C2U(cDataSourceHistory));
-        sPrefix += C2U("/_");
+        OUString sPrefix(cDataSourceHistory);
+        sPrefix += "/_";
         sPrefix += OUString::valueOf(i);
-        sPrefix += C2U("/");
+        sPrefix += "/";
         pNodeValues[nIndex].Name    = sPrefix;
         pNodeValues[nIndex].Name    += sName;
         pNodeValues[nIndex++].Value <<= pMapping->sURL;
@@ -267,19 +265,19 @@ void    BibConfig::Commit()
         pNodeValues[nIndex].Name    = sPrefix;
         pNodeValues[nIndex].Name    += sCommandType;
         pNodeValues[nIndex++].Value <<= pMapping->nCommandType;
-        SetSetProperties( C2U(cDataSourceHistory), aNodeValues);
+        SetSetProperties(cDataSourceHistory, aNodeValues);
 
-        sPrefix += C2U("Fields");
+        sPrefix += "Fields";
         sal_Int32 nFieldAssignment = 0;
-        OUString sFieldName = C2U("/ProgrammaticFieldName");
-        OUString sDatabaseFieldName = C2U("/AssignedFieldName");
+        OUString sFieldName = "/ProgrammaticFieldName";
+        OUString sDatabaseFieldName = "/AssignedFieldName";
         ClearNodeSet( sPrefix );
 
         while(nFieldAssignment < COLUMN_COUNT &&
             !pMapping->aColumnPairs[nFieldAssignment].sLogicalColumnName.isEmpty())
         {
             OUString sSubPrefix(sPrefix);
-            sSubPrefix += C2U("/_");
+            sSubPrefix += "/_";
             sSubPrefix += OUString::valueOf(nFieldAssignment);
             Sequence< PropertyValue > aAssignmentValues(2);
             PropertyValue* pAssignmentValues = aAssignmentValues.getArray();

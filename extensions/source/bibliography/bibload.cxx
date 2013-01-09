@@ -72,11 +72,6 @@ using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::frame;
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
-
-
-//-----------------------------------------------------------------------------
-
 #define PROPERTY_FRAME                      1
 
 class BibliographyLoader : public cppu::WeakImplHelper4
@@ -111,7 +106,7 @@ public:
 
                             {
                                 //!
-                                return C2U("com.sun.star.extensions.Bibliography");
+                                return OUString("com.sun.star.extensions.Bibliography");
                                 //!
                             }
 
@@ -194,9 +189,9 @@ Sequence< rtl::OUString > BibliographyLoader::getSupportedServiceNames(void) thr
 Sequence< rtl::OUString > BibliographyLoader::getSupportedServiceNames_Static(void) throw(  )
 {
     Sequence< rtl::OUString > aSNS( 2 );
-    aSNS.getArray()[0] = C2U("com.sun.star.frame.FrameLoader");
+    aSNS.getArray()[0] = "com.sun.star.frame.FrameLoader";
     //!
-    aSNS.getArray()[1] = C2U("com.sun.star.frame.Bibliography");
+    aSNS.getArray()[1] = "com.sun.star.frame.Bibliography";
     //!
     return aSNS;
 }
@@ -247,7 +242,7 @@ void BibliographyLoader::load(const Reference< XFrame > & rFrame, const rtl::OUS
     {
         Any aTitle;
         aTitle <<= OUString(String(BibResId(RID_BIB_STR_FRAME_TITLE)));
-        xPrSet->setPropertyValue(C2U("Title"), aTitle);
+        xPrSet->setPropertyValue("Title", aTitle);
     }
     if(aPartName.EqualsAscii("View") || aPartName.EqualsAscii("View1"))
     {
@@ -352,22 +347,22 @@ Reference< XNameAccess >  BibliographyLoader::GetDataColumns() const
     if (!m_xColumns.is())
     {
         Reference< XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
-        Reference< XRowSet >  xRowSet(xMgr->createInstance(C2U("com.sun.star.sdb.RowSet")), UNO_QUERY);
+        Reference< XRowSet >  xRowSet(xMgr->createInstance("com.sun.star.sdb.RowSet"), UNO_QUERY);
         Reference< XPropertySet >  xResultSetProps(xRowSet, UNO_QUERY);
         DBG_ASSERT(xResultSetProps.is() , "BibliographyLoader::GetDataCursor : invalid row set (no XResultSet or no XPropertySet) !");
 
         BibDBDescriptor aBibDesc = BibModul::GetConfig()->GetBibliographyURL();
 
         Any aBibUrlAny; aBibUrlAny <<= aBibDesc.sDataSource;
-        xResultSetProps->setPropertyValue(C2U("DataSourceName"), aBibUrlAny);
+        xResultSetProps->setPropertyValue("DataSourceName", aBibUrlAny);
         Any aCommandType; aCommandType <<= aBibDesc.nCommandType;
-        xResultSetProps->setPropertyValue(C2U("CommandType"), aCommandType);
+        xResultSetProps->setPropertyValue("CommandType", aCommandType);
         Any aTableName; aTableName <<= aBibDesc.sTableOrQuery;
-        xResultSetProps->setPropertyValue(C2U("Command"), aTableName);
+        xResultSetProps->setPropertyValue("Command", aTableName);
         Any aResultSetType; aResultSetType <<= (sal_Int32)(ResultSetType::SCROLL_INSENSITIVE);
-        xResultSetProps->setPropertyValue(C2U("ResultSetType"), aResultSetType);
+        xResultSetProps->setPropertyValue("ResultSetType", aResultSetType);
         Any aResultSetCurrency; aResultSetCurrency <<= (sal_Int32)(ResultSetConcurrency::UPDATABLE);
-        xResultSetProps->setPropertyValue(C2U("ResultSetConcurrency"), aResultSetCurrency);
+        xResultSetProps->setPropertyValue("ResultSetConcurrency", aResultSetCurrency);
 
         sal_Bool bSuccess = sal_False;
         try
@@ -643,7 +638,7 @@ Any BibliographyLoader::getPropertyValue(const rtl::OUString& rPropertyName)
         CUSTOM5_POS                , // BibliographyDataField_CUSTOM5
         ISBN_POS                    //BibliographyDataField_ISBN
     };
-    if(C2U("BibliographyDataFieldNames") == rPropertyName)
+    if(rPropertyName == "BibliographyDataFieldNames")
     {
         Sequence<PropertyValue> aSeq(COLUMN_COUNT);
         PropertyValue* pArray = aSeq.getArray();

@@ -38,9 +38,6 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
-#define C2S(cChar) String::CreateFromAscii(cChar)
-
 HdlBibModul OpenBibModul()
 {
     if(pBibModul==NULL)
@@ -93,15 +90,15 @@ BibConfig*  BibModul::GetConfig()
 
 // PropertyNames
 #define STATIC_USTRING(a,b) rtl::OUString a(b)
-STATIC_USTRING(FM_PROP_LABEL,C2U("Label"));
-STATIC_USTRING(FM_PROP_CONTROLSOURCE,C2U("DataField"));
-STATIC_USTRING(FM_PROP_NAME,C2U("Name"));
-STATIC_USTRING(FM_PROP_FORMATKEY,C2U("FormatKey"));
-STATIC_USTRING(FM_PROP_EDITMODE,C2U("RecordMode"));
-STATIC_USTRING(FM_PROP_CURSORSOURCETYPE,C2U("DataSelectionType"));
-STATIC_USTRING(FM_PROP_CURSORSOURCE,C2U("DataSelection"));
-STATIC_USTRING(FM_PROP_DATASOURCE, C2U("DataSource"));
-STATIC_USTRING(FM_PROP_VALUE,C2U("Value"));
-STATIC_USTRING(FM_PROP_TEXT,C2U("Text"));
+STATIC_USTRING(FM_PROP_LABEL,"Label");
+STATIC_USTRING(FM_PROP_CONTROLSOURCE,"DataField");
+STATIC_USTRING(FM_PROP_NAME,"Name");
+STATIC_USTRING(FM_PROP_FORMATKEY,"FormatKey");
+STATIC_USTRING(FM_PROP_EDITMODE,"RecordMode");
+STATIC_USTRING(FM_PROP_CURSORSOURCETYPE,"DataSelectionType");
+STATIC_USTRING(FM_PROP_CURSORSOURCE,"DataSelection");
+STATIC_USTRING(FM_PROP_DATASOURCE, "DataSource");
+STATIC_USTRING(FM_PROP_VALUE,"Value");
+STATIC_USTRING(FM_PROP_TEXT,"Text");
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

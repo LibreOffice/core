@@ -40,8 +40,6 @@ using namespace ::com::sun::star::uno;
 
 using ::rtl::OUString;
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
-
 #define PROPERTY_FRAME                      1
 #define ID_TOOLBAR                          1
 #define ID_GRIDWIN                          2
@@ -147,7 +145,7 @@ namespace bib
 
                 if ( xPropSet.is() && m_xGridModel.is() )
                 {
-                    uno::Any aAny = xPropSet->getPropertyValue( C2U("DefaultControl") );
+                    uno::Any aAny = xPropSet->getPropertyValue( "DefaultControl" );
                     rtl::OUString aControlName;
                     aAny >>= aControlName;
 
@@ -160,7 +158,7 @@ namespace bib
                 if ( m_xControl.is() )
                 {
                     // Peer als Child zu dem FrameWindow
-                    m_xControlContainer->addControl(C2U("GridControl"), m_xControl);
+                    m_xControlContainer->addControl("GridControl", m_xControl);
                     m_xGridWin=uno::Reference< awt::XWindow > (m_xControl, UNO_QUERY );
                     // #100312# -----
                     m_xDispatchProviderInterception=uno::Reference< frame::XDispatchProviderInterception > (m_xControl, UNO_QUERY );

@@ -62,8 +62,6 @@ using namespace com::sun::star;
 
 using ::rtl::OUString;
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
-
 struct DispatchInfo
 {
     const char*   pCommand;
@@ -361,7 +359,7 @@ throw (::com::sun::star::uno::RuntimeException)
 sal_Bool canInsertRecords(const Reference< beans::XPropertySet>& _rxCursorSet)
 {
     sal_Int32 nPriv = 0;
-    _rxCursorSet->getPropertyValue(C2U("Privileges")) >>= nPriv;
+    _rxCursorSet->getPropertyValue("Privileges") >>= nPriv;
     return ((_rxCursorSet.is() && (nPriv & sdbcx::Privilege::INSERT) != 0));
 }
 
@@ -380,8 +378,8 @@ sal_Bool BibFrameController_Impl::SaveModified(const Reference< form::runtime::X
         return sal_False;
 
     // need to save?
-    sal_Bool  bIsNew        = ::comphelper::getBOOL(_xSet->getPropertyValue(C2U("IsNew")));
-    sal_Bool  bIsModified   = ::comphelper::getBOOL(_xSet->getPropertyValue(C2U("IsModified")));
+    sal_Bool  bIsNew        = ::comphelper::getBOOL(_xSet->getPropertyValue("IsNew"));
+    sal_Bool  bIsModified   = ::comphelper::getBOOL(_xSet->getPropertyValue("IsModified"));
     sal_Bool bResult = !bIsModified;
     if (bIsModified)
     {
@@ -459,7 +457,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
             for ( sal_uInt16 n=0; n<nCount; n++ )
             {
                 BibStatusDispatch *pObj = &aStatusListeners[n];
-                if ( pObj->aURL.Path == C2U("Bib/removeFilter") )
+                if ( pObj->aURL.Path == "Bib/removeFilter" )
                 {
                     FeatureStateEvent  aEvent;
                     aEvent.FeatureURL = pObj->aURL;
@@ -510,7 +508,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
             for ( sal_uInt16 n=0; n<nCount; n++ )
             {
                 BibStatusDispatch *pObj = &aStatusListeners[n];
-                if ( pObj->aURL.Path == C2U("Bib/removeFilter") && pDatMan->getParser().is())
+                if ( pObj->aURL.Path == "Bib/removeFilter" && pDatMan->getParser().is())
                 {
                     FeatureStateEvent  aEvent;
                     aEvent.FeatureURL = pObj->aURL;
@@ -555,11 +553,11 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
             Reference< ::com::sun::star::sdbc::XResultSet >  xCursor(pDatMan->getForm(), UNO_QUERY);
             Reference< XResultSetUpdate >  xUpdateCursor(xCursor, UNO_QUERY);
             Reference< beans::XPropertySet >  xSet(pDatMan->getForm(), UNO_QUERY);
-            sal_Bool  bIsNew  = ::comphelper::getBOOL(xSet->getPropertyValue(C2U("IsNew")));
+            sal_Bool  bIsNew  = ::comphelper::getBOOL(xSet->getPropertyValue("IsNew"));
             if(!bIsNew)
             {
                 sal_uInt32 nCount = 0;
-                xSet->getPropertyValue(C2U("RowCount")) >>= nCount;
+                xSet->getPropertyValue("RowCount") >>= nCount;
                 // naechste position festellen
                 sal_Bool bSuccess = sal_False;
                 sal_Bool bLeft = sal_False;
@@ -662,18 +660,18 @@ void BibFrameController_Impl::addStatusListener(
     aEvent.FeatureURL = aURL;
     aEvent.Requery    = sal_False;
     aEvent.Source     = (XDispatch *) this;
-    if ( aURL.Path == C2U("StatusBarVisible") )
+    if ( aURL.Path == "StatusBarVisible" )
     {
         aEvent.IsEnabled  = sal_False;
         aEvent.State <<= sal_Bool( sal_False );
     }
-    else if ( aURL.Path == C2U("Bib/hierarchical") )
+    else if ( aURL.Path == "Bib/hierarchical" )
     {
         aEvent.IsEnabled  = sal_True;
         const char*  pHier = bHierarchical? "" : "*" ;
         aEvent.State <<= rtl::OUString::createFromAscii(pHier);
     }
-    else if(aURL.Path == C2U("Bib/MenuFilter"))
+    else if(aURL.Path == "Bib/MenuFilter")
     {
         aEvent.IsEnabled  = sal_True;
         aEvent.FeatureDescriptor=pDatMan->getQueryField();
@@ -682,7 +680,7 @@ void BibFrameController_Impl::addStatusListener(
         aEvent.State.setValue(&aStringSeq,::getCppuType((uno::Sequence<rtl::OUString>*)0));
 
     }
-    else if ( aURL.Path == C2U("Bib/source"))
+    else if ( aURL.Path == "Bib/source")
     {
         aEvent.IsEnabled  = sal_True;
         aEvent.FeatureDescriptor=pDatMan->getActiveDataTable();
@@ -697,31 +695,31 @@ void BibFrameController_Impl::addStatusListener(
     {
         aEvent.IsEnabled  = sal_True;
     }
-    else if(aURL.Path == C2U("Bib/query"))
+    else if(aURL.Path == "Bib/query")
     {
         aEvent.IsEnabled  = sal_True;
         aEvent.State <<= pConfig->getQueryText();
     }
-    else if (aURL.Path == C2U("Bib/removeFilter") )
+    else if (aURL.Path == "Bib/removeFilter" )
     {
         rtl::OUString aFilterStr=pDatMan->getFilter();
         aEvent.IsEnabled  = !aFilterStr.isEmpty();
     }
-    else if(aURL.Path == C2U("Cut"))
+    else if(aURL.Path == "Cut")
     {
         Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
         Edit* pEdit = dynamic_cast<Edit*>( pChild );
         if( pEdit )
             aEvent.IsEnabled  = !pEdit->IsReadOnly() && pEdit->GetSelection().Len();
     }
-    if(aURL.Path == C2U("Copy"))
+    if(aURL.Path == "Copy")
     {
         Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
         Edit* pEdit = dynamic_cast<Edit*>( pChild );
         if( pEdit )
             aEvent.IsEnabled  = pEdit->GetSelection().Len() > 0;
     }
-    else if(aURL.Path == C2U("Paste") )
+    else if(aURL.Path == "Paste" )
     {
         aEvent.IsEnabled  = sal_False;
         Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
@@ -760,20 +758,20 @@ void BibFrameController_Impl::addStatusListener(
             uno::Reference< datatransfer::XTransferable > xContents = xClip->getContents(  );
         }
     }
-    else if(aURL.Path == C2U("Bib/DeleteRecord"))
+    else if(aURL.Path == "Bib/DeleteRecord")
     {
         Reference< ::com::sun::star::sdbc::XResultSet >  xCursor(pDatMan->getForm(), UNO_QUERY);
         Reference< XResultSetUpdate >  xUpdateCursor(xCursor, UNO_QUERY);
         Reference< beans::XPropertySet >  xSet(pDatMan->getForm(), UNO_QUERY);
-        sal_Bool  bIsNew  = ::comphelper::getBOOL(xSet->getPropertyValue(C2U("IsNew")));
+        sal_Bool  bIsNew  = ::comphelper::getBOOL(xSet->getPropertyValue("IsNew"));
         if(!bIsNew)
         {
             sal_uInt32 nCount = 0;
-            xSet->getPropertyValue(C2U("RowCount")) >>= nCount;
+            xSet->getPropertyValue("RowCount") >>= nCount;
             aEvent.IsEnabled  = nCount > 0;
         }
     }
-    else if (aURL.Path == C2U("Bib/InsertRecord"))
+    else if (aURL.Path == "Bib/InsertRecord")
     {
         Reference< beans::XPropertySet >  xSet(pDatMan->getForm(), UNO_QUERY);
         aEvent.IsEnabled = canInsertRecords(xSet);
@@ -817,7 +815,7 @@ void BibFrameController_Impl::RemoveFilter()
     for ( sal_uInt16 n=0; n<nCount; n++ )
     {
         BibStatusDispatch *pObj = &aStatusListeners[n];
-        if ( pObj->aURL.Path == C2U("Bib/removeFilter") )
+        if ( pObj->aURL.Path == "Bib/removeFilter" )
         {
             FeatureStateEvent  aEvent;
             aEvent.FeatureURL = pObj->aURL;
@@ -827,7 +825,7 @@ void BibFrameController_Impl::RemoveFilter()
             pObj->xListener->statusChanged( aEvent );
             bRemoveFilter=sal_True;
         }
-        else if(pObj->aURL.Path == C2U("Bib/query"))
+        else if(pObj->aURL.Path == "Bib/query")
         {
             FeatureStateEvent  aEvent;
             aEvent.FeatureURL = pObj->aURL;

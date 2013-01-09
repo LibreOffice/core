@@ -42,8 +42,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
-#define C2U( cChar ) ::rtl::OUString::createFromAscii( cChar )
-
 //.........................................................................
 namespace bib
 {
@@ -74,14 +72,14 @@ namespace bib
 
         if ( xResUpd.is() )
         {
-            Any aModified = xProps->getPropertyValue( C2U( "IsModified" ) );
+            Any aModified = xProps->getPropertyValue( "IsModified" );
             sal_Bool bFlag = sal_False;
             if ( ( aModified >>= bFlag ) && bFlag )
             {
 
                 try
                 {
-                    Any aNew = xProps->getPropertyValue( C2U( "IsNew" ) );
+                    Any aNew = xProps->getPropertyValue( "IsNew" );
                     aNew >>= bFlag;
                     if ( bFlag )
                         xResUpd->insertRow();

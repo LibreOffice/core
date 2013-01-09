@@ -80,8 +80,6 @@ using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 
-#define C2U(cChar) ::rtl::OUString::createFromAscii(cChar)
-
 Reference< XConnection > getConnection(const ::rtl::OUString& _rURL)
 {
     // first get the sdb::DataSource corresponding to the url
@@ -133,7 +131,7 @@ Reference< XConnection >    getConnection(const Reference< XInterface > & xRowSe
         if (!xFormProps.is())
             return xConn;
 
-        xConn = Reference< XConnection > (*(Reference< XInterface > *)xFormProps->getPropertyValue(C2U("ActiveConnection")).getValue(), UNO_QUERY);
+        xConn = Reference< XConnection > (*(Reference< XInterface > *)xFormProps->getPropertyValue("ActiveConnection").getValue(), UNO_QUERY);
         if (!xConn.is())
         {
             DBG_WARNING("no active connection");
@@ -165,10 +163,10 @@ Reference< XNameAccess >  getColumns(const Reference< XForm > & _rxForm)
         {
             try
             {
-                DBG_ASSERT((*(sal_Int32*)xFormProps->getPropertyValue(C2U("CommandType")).getValue()) == CommandType::TABLE,
+                DBG_ASSERT((*(sal_Int32*)xFormProps->getPropertyValue("CommandType").getValue()) == CommandType::TABLE,
                     "::getColumns : invalid form (has no table as data source) !");
                 ::rtl::OUString sTable;
-                xFormProps->getPropertyValue(C2U("Command")) >>= sTable;
+                xFormProps->getPropertyValue("Command") >>= sTable;
                 Reference< XNameAccess >  xTables = xSupplyTables->getTables();
                 if (xTables.is() && xTables->hasByName(sTable))
                     xSupplyCols = Reference< XColumnsSupplier > (
@@ -699,11 +697,11 @@ void SAL_CALL BibInterceptorHelper::setMasterDispatchProvider( const ::com::sun:
 
 //-----------------------------------------------------------------------------
 #define STR_UID "uid"
-::rtl::OUString gGridName(C2U("theGrid"));
-::rtl::OUString gViewName(C2U("theView"));
-::rtl::OUString gGlobalName(C2U("theGlobals"));
-::rtl::OUString gBeamerSize(C2U("theBeamerSize"));
-::rtl::OUString gViewSize(C2U("theViewSize"));
+::rtl::OUString gGridName("theGrid");
+::rtl::OUString gViewName("theView");
+::rtl::OUString gGlobalName("theGlobals");
+::rtl::OUString gBeamerSize("theBeamerSize");
+::rtl::OUString gViewSize("theViewSize");
 
 BibDataManager::BibDataManager()
     :BibDataManager_Base( GetMutex() )
@@ -723,7 +721,7 @@ BibDataManager::~BibDataManager()
     if ( m_xForm.is() )
     {
         Reference< XComponent >  xConnection;
-        xPrSet->getPropertyValue(C2U("ActiveConnection")) >>= xConnection;
+        xPrSet->getPropertyValue("ActiveConnection") >>= xConnection;
         RemoveMeAsUidListener();
         if (xLoad.is())
             xLoad->unload();
@@ -776,7 +774,7 @@ void BibDataManager::InsertFields(const Reference< XFormComponent > & _rxGrid)
             xFields->getByName( *pFields ) >>= xField;
 
             ::rtl::OUString sCurrentModelType;
-            const ::rtl::OUString sType(C2U("Type"));
+            const ::rtl::OUString sType("Type");
             sal_Int32 nType = 0;
             sal_Bool bIsFormatted           = sal_False;
             sal_Bool bFormattedIsNumeric    = sal_True;
@@ -785,14 +783,14 @@ void BibDataManager::InsertFields(const Reference< XFormComponent > & _rxGrid)
             {
                 case DataType::BIT:
                 case DataType::BOOLEAN:
-                    sCurrentModelType = C2U("CheckBox");
+                    sCurrentModelType = "CheckBox";
                     break;
 
                 case DataType::BINARY:
                 case DataType::VARBINARY:
                 case DataType::LONGVARBINARY:
                 case DataType::BLOB:
-                    sCurrentModelType = C2U("TextField");
+                    sCurrentModelType = "TextField";
                     break;
 
                 case DataType::VARCHAR:
@@ -802,7 +800,7 @@ void BibDataManager::InsertFields(const Reference< XFormComponent > & _rxGrid)
                     bFormattedIsNumeric = sal_False;
                     // _NO_ break !
                 default:
-                    sCurrentModelType = C2U("FormattedField");
+                    sCurrentModelType = "FormattedField";
                     bIsFormatted = sal_True;
                     break;
             }
@@ -810,10 +808,10 @@ void BibDataManager::InsertFields(const Reference< XFormComponent > & _rxGrid)
             Reference< XPropertySet >  xCurrentCol = xColFactory->createColumn(sCurrentModelType);
             if (bIsFormatted)
             {
-                ::rtl::OUString sFormatKey(C2U("FormatKey"));
+                ::rtl::OUString sFormatKey("FormatKey");
                 xCurrentCol->setPropertyValue(sFormatKey, xField->getPropertyValue(sFormatKey));
                 Any aFormatted(&bFormattedIsNumeric, ::getBooleanCppuType());
-                xCurrentCol->setPropertyValue(C2U("TreatAsNumber"), aFormatted);
+                xCurrentCol->setPropertyValue("TreatAsNumber", aFormatted);
             }
             Any aColName = makeAny( *pFields );
             xCurrentCol->setPropertyValue(FM_PROP_CONTROLSOURCE,    aColName);
@@ -839,7 +837,7 @@ Reference< awt::XControlModel > BibDataManager::updateGridModel(const Reference<
     {
         Reference< XPropertySet >  aFormPropSet( xDbForm, UNO_QUERY );
         ::rtl::OUString sName;
-        aFormPropSet->getPropertyValue(C2U("Command")) >>= sName;
+        aFormPropSet->getPropertyValue("Command") >>= sName;
 
         if ( !m_xGridModel.is() )
         {
@@ -867,7 +865,7 @@ Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
     try
     {
         Reference< XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
-        m_xForm = Reference< XForm > ( xMgr->createInstance( C2U("com.sun.star.form.component.Form") ), UNO_QUERY );
+        m_xForm = Reference< XForm > ( xMgr->createInstance( "com.sun.star.form.component.Form" ), UNO_QUERY );
 
         Reference< XPropertySet >  aPropertySet( m_xForm, UNO_QUERY );
 
@@ -876,17 +874,17 @@ Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
         {
             Any aVal;
             aVal <<= (sal_Int32)ResultSetType::SCROLL_INSENSITIVE;
-            aPropertySet->setPropertyValue(C2U("ResultSetType"),aVal );
+            aPropertySet->setPropertyValue("ResultSetType",aVal );
             aVal <<= (sal_Int32)ResultSetConcurrency::READ_ONLY;
-            aPropertySet->setPropertyValue(C2U("ResultSetConcurrency"), aVal);
+            aPropertySet->setPropertyValue("ResultSetConcurrency", aVal);
 
             //Caching for Performance
             aVal <<= (sal_Int32)50;
-            aPropertySet->setPropertyValue(C2U("FetchSize"), aVal);
+            aPropertySet->setPropertyValue("FetchSize", aVal);
 
             Reference< XConnection >    xConnection = getConnection(rDesc.sDataSource);
             aVal <<= xConnection;
-            aPropertySet->setPropertyValue(C2U("ActiveConnection"), aVal);
+            aPropertySet->setPropertyValue("ActiveConnection", aVal);
 
             Reference< XTablesSupplier >  xSupplyTables(xConnection, UNO_QUERY);
             Reference< XNameAccess >  xTables = xSupplyTables.is() ?
@@ -908,9 +906,9 @@ Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
                 }
 
                 aVal <<= aActiveDataTable;
-                aPropertySet->setPropertyValue(C2U("Command"), aVal);
+                aPropertySet->setPropertyValue("Command", aVal);
                 aVal <<= rDesc.nCommandType;
-                aPropertySet->setPropertyValue(C2U("CommandType"), aVal);
+                aPropertySet->setPropertyValue("CommandType", aVal);
 
 
                 Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
@@ -920,7 +918,7 @@ Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
                 if ( xFactory.is() )
                     m_xParser.set( xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.SingleSelectQueryComposer" ) ) ), UNO_QUERY );
 
-                ::rtl::OUString aString(C2U("SELECT * FROM "));
+                ::rtl::OUString aString("SELECT * FROM ");
 
                 ::rtl::OUString sCatalog, sSchema, sName;
                 ::dbtools::qualifiedNameComponents( xMetaData, aActiveDataTable, sCatalog, sSchema, sName, ::dbtools::eInDataManipulation );
@@ -978,8 +976,8 @@ void BibDataManager::setFilter(const ::rtl::OUString& rQuery)
         m_xParser->setFilter( rQuery );
         ::rtl::OUString aQuery = m_xParser->getFilter();
         Reference< XPropertySet >  xFormProps( m_xForm, UNO_QUERY_THROW );
-        xFormProps->setPropertyValue( C2U( "Filter" ), makeAny( aQuery ) );
-        xFormProps->setPropertyValue( C2U( "ApplyFilter" ), makeAny( sal_True ) );
+        xFormProps->setPropertyValue( "Filter", makeAny( aQuery ) );
+        xFormProps->setPropertyValue( "ApplyFilter", makeAny( sal_True ) );
         reload();
     }
     catch (const Exception&)
@@ -997,7 +995,7 @@ void BibDataManager::setFilter(const ::rtl::OUString& rQuery)
     try
     {
         Reference< XPropertySet > xFormProps( m_xForm, UNO_QUERY_THROW );
-        OSL_VERIFY( xFormProps->getPropertyValue( C2U( "Filter" ) ) >>= aQueryString );
+        OSL_VERIFY( xFormProps->getPropertyValue( "Filter"  ) >>= aQueryString );
     }
     catch (const Exception&)
     {
@@ -1045,12 +1043,12 @@ void BibDataManager::startQueryWith(const ::rtl::OUString& rQuery)
         aQueryString=aQuoteChar;
         aQueryString+=getQueryField();
         aQueryString+=aQuoteChar;
-        aQueryString+=C2U(" like '");
+        aQueryString+=" like '";
         String sQuery(rQuery);
         sQuery.SearchAndReplaceAll('?','_');
         sQuery.SearchAndReplaceAll('*','%');
         aQueryString += sQuery;
-        aQueryString+=C2U("%'");
+        aQueryString+="%'";
     }
     setFilter(aQueryString);
 }
@@ -1066,7 +1064,7 @@ void BibDataManager::setActiveDataSource(const ::rtl::OUString& rURL)
         unload();
 
         Reference< XComponent >  xOldConnection;
-        aPropertySet->getPropertyValue(C2U("ActiveConnection")) >>= xOldConnection;
+        aPropertySet->getPropertyValue("ActiveConnection") >>= xOldConnection;
 
         Reference< XConnection >    xConnection = getConnection(rURL);
         if(!xConnection.is())
@@ -1075,7 +1073,7 @@ void BibDataManager::setActiveDataSource(const ::rtl::OUString& rURL)
             return;
         }
         Any aVal; aVal <<= xConnection;
-        aPropertySet->setPropertyValue(C2U("ActiveConnection"), aVal);
+        aPropertySet->setPropertyValue("ActiveConnection", aVal);
         Reference< XMultiServiceFactory >   xFactory(xConnection, UNO_QUERY);
         if ( xFactory.is() )
             m_xParser.set( xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.SingleSelectQueryComposer" ) ) ), UNO_QUERY );
@@ -1095,12 +1093,12 @@ void BibDataManager::setActiveDataSource(const ::rtl::OUString& rURL)
             const ::rtl::OUString* pTableNames = aTableNameSeq.getConstArray();
             aActiveDataTable = pTableNames[0];
             aVal <<= aActiveDataTable;
-            aPropertySet->setPropertyValue(C2U("Command"), aVal);
-            aPropertySet->setPropertyValue(C2U("CommandType"), makeAny(CommandType::TABLE));
+            aPropertySet->setPropertyValue("Command", aVal);
+            aPropertySet->setPropertyValue("CommandType", makeAny(CommandType::TABLE));
             //Caching for Performance
             aVal <<= (sal_Int32)50;
-            aPropertySet->setPropertyValue(C2U("FetchSize"), aVal);
-            ::rtl::OUString aString(C2U("SELECT * FROM "));
+            aPropertySet->setPropertyValue("FetchSize", aVal);
+            ::rtl::OUString aString("SELECT * FROM ");
             // quote the table name which may contain catalog.schema.table
             Reference<XDatabaseMetaData> xMetaData(xConnection->getMetaData(),UNO_QUERY);
             aQuoteChar = xMetaData->getIdentifierQuoteString();
@@ -1125,7 +1123,7 @@ void BibDataManager::setActiveDataSource(const ::rtl::OUString& rURL)
 
         if(pToolbar)
         {
-            aURL.Complete =C2U(".uno:Bib/source");
+            aURL.Complete =".uno:Bib/source";
             aEvent.FeatureURL = aURL;
             pToolbar->statusChanged( aEvent );
         }
@@ -1160,7 +1158,7 @@ void BibDataManager::setActiveDataTable(const ::rtl::OUString& rTable)
                 {
                     aActiveDataTable = rTable;
                     Any aVal; aVal <<= rTable;
-                    aPropertySet->setPropertyValue( C2U("Command"), aVal );
+                    aPropertySet->setPropertyValue( "Command", aVal );
                     break;
                 }
             }
@@ -1173,7 +1171,7 @@ void BibDataManager::setActiveDataTable(const ::rtl::OUString& rTable)
                 if ( xFactory.is() )
                     m_xParser.set( xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.SingleSelectQueryComposer" ) ) ), UNO_QUERY );
 
-                ::rtl::OUString aString(C2U("SELECT * FROM "));
+                ::rtl::OUString aString("SELECT * FROM ");
 
                 ::rtl::OUString sCatalog, sSchema, sName;
                 ::dbtools::qualifiedNameComponents( xMetaData, aActiveDataTable, sCatalog, sSchema, sName, ::dbtools::eInDataManipulation );
@@ -1302,20 +1300,20 @@ Reference< awt::XControlModel > BibDataManager::createGridModel(const ::rtl::OUS
     {
         // create the control model
         Reference< XMultiServiceFactory >  xMgr = ::comphelper::getProcessServiceFactory();
-        Reference< XInterface >  xObject = xMgr->createInstance(C2U("com.sun.star.form.component.GridControl"));
+        Reference< XInterface >  xObject = xMgr->createInstance("com.sun.star.form.component.GridControl");
         xModel=Reference< awt::XControlModel > ( xObject, UNO_QUERY );
 
         // set the
         Reference< XPropertySet > xPropSet( xModel, UNO_QUERY );
-        xPropSet->setPropertyValue( C2U("Name"), makeAny( rName ) );
+        xPropSet->setPropertyValue( "Name", makeAny( rName ) );
 
         // set the name of the to-be-created control
-        ::rtl::OUString aControlName(C2U("com.sun.star.form.control.InteractionGridControl"));
+        ::rtl::OUString aControlName("com.sun.star.form.control.InteractionGridControl");
         Any aAny; aAny <<= aControlName;
-        xPropSet->setPropertyValue( C2U("DefaultControl"),aAny );
+        xPropSet->setPropertyValue( "DefaultControl",aAny );
 
         // the the helpURL
-        ::rtl::OUString uProp(C2U("HelpURL"));
+        ::rtl::OUString uProp("HelpURL");
         Reference< XPropertySetInfo > xPropInfo = xPropSet->getPropertySetInfo();
         if (xPropInfo->hasPropertyByName(uProp))
         {
@@ -1339,33 +1337,33 @@ Reference< awt::XControlModel > BibDataManager::createGridModel(const ::rtl::OUS
     {
         case DataType::BIT:
         case DataType::BOOLEAN:
-            aResStr=C2U("CheckBox");
+            aResStr="CheckBox";
             break;
         case DataType::TINYINT:
         case DataType::SMALLINT:
         case DataType::INTEGER:
-            aResStr=C2U("NumericField");   ;
+            aResStr="NumericField";   ;
             break;
         case DataType::REAL:
         case DataType::DOUBLE:
         case DataType::NUMERIC:
         case DataType::DECIMAL:
-            aResStr=C2U("FormattedField");
+            aResStr="FormattedField";
             break;
         case DataType::TIMESTAMP:
-            aResStr=C2U("FormattedField");
+            aResStr="FormattedField";
             break;
         case DataType::DATE:
-            aResStr=C2U("DateField");
+            aResStr="DateField";
             break;
         case DataType::TIME:
-            aResStr=C2U("TimeField");
+            aResStr="TimeField";
             break;
         case DataType::CHAR:
         case DataType::VARCHAR:
         case DataType::LONGVARCHAR:
         default:
-            aResStr=C2U("TextField");
+            aResStr="TextField";
             break;
     }
     return aResStr;
@@ -1375,7 +1373,7 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
                     const ::rtl::OUString& rName, sal_Bool bForceListBox)
 {
     Reference< awt::XControlModel > xModel;
-    ::rtl::OUString aName(C2U("View_"));
+    ::rtl::OUString aName("View_");
     aName += rName;
 
     try
@@ -1394,14 +1392,14 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
             Reference< XPropertySetInfo >  xInfo = xField.is() ? xField->getPropertySetInfo() : Reference< XPropertySetInfo > ();
 
             ::rtl::OUString sCurrentModelType;
-            const ::rtl::OUString sType(C2U("Type"));
+            const ::rtl::OUString sType("Type");
             sal_Int32 nFormatKey = 0;
             xField->getPropertyValue(sType) >>= nFormatKey;
 
-            ::rtl::OUString aInstanceName(C2U("com.sun.star.form.component."));
+            ::rtl::OUString aInstanceName("com.sun.star.form.component.");
 
             if (bForceListBox)
-                aInstanceName += C2U("ListBox");
+                aInstanceName += "ListBox";
             else
                 aInstanceName += getControlName(nFormatKey);
 
@@ -1647,7 +1645,7 @@ uno::Reference< form::runtime::XFormController > BibDataManager::GetFormControll
     {
         Reference< lang::XMultiServiceFactory > xMgr = comphelper::getProcessServiceFactory();
         m_xFormCtrl = uno::Reference< form::runtime::XFormController > (
-            xMgr->createInstance(C2U("com.sun.star.form.runtime.FormController")), UNO_QUERY);
+            xMgr->createInstance("com.sun.star.form.runtime.FormController"), UNO_QUERY);
         m_xFormCtrl->setModel(uno::Reference< awt::XTabControllerModel > (getForm(), UNO_QUERY));
         m_xFormDispatch = uno::Reference< frame::XDispatch > ( m_xFormCtrl, UNO_QUERY);
     }
@@ -1672,7 +1670,7 @@ sal_Bool BibDataManager::HasActiveConnection()const
     if( xPrSet.is() )
     {
         Reference< XComponent >  xConnection;
-        xPrSet->getPropertyValue(C2U("ActiveConnection")) >>= xConnection;
+        xPrSet->getPropertyValue("ActiveConnection") >>= xConnection;
         bRet = xConnection.is();
     }
     return bRet;
