@@ -78,7 +78,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="select_background">
-                        <property name="label" translatable="yes">Select Backround Image</property>
+                        <property name="label" translatable="yes">Select Background Image</property>
                         <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
