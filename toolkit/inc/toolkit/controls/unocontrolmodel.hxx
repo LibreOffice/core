@@ -106,7 +106,7 @@ protected:
         , MutexAndBroadcastHelper()
         , OPropertySetHelper( BrdcstHelper )
         , maDisposeListeners( *this )
-        , maContext( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >() )
+        , m_xContext( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >() )
     {
         assert(false);
     }
