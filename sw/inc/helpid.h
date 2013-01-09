@@ -20,7 +20,6 @@
 #include <svx/svxcommands.h>
 #include <sfx2/sfxcommands.h>
 
-#define HID_BIB_BASE                                            "SW_HID_BIB_BASE"
 #define HID_MERGE_PRINTMONITOR                                  "SW_HID_MERGE_PRINTMONITOR"
 #define HID_FLD_INPUT                                           "SW_HID_FLD_INPUT"
 #define HID_DOCINFO_EDT                                         "SW_HID_DOCINFO_EDT"

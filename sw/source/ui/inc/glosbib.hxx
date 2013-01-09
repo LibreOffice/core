@@ -35,9 +35,16 @@ class SwGlossaryHdl;
 
 class FEdit : public Edit
 {
-    public:
-        FEdit(Window * pParent, const ResId& rResId) :
-            Edit(pParent, rResId){}
+public:
+    FEdit(Window* pParent, const ResId& rResId)
+        : Edit(pParent, rResId)
+    {
+    }
+
+    FEdit(Window* pParent)
+        : Edit(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK)
+    {
+    }
 
     virtual void KeyInput( const KeyEvent& rKEvent );
 };
@@ -52,27 +59,28 @@ struct GlosBibUserData
 class SwGlossaryGroupTLB : public SvTabListBox
 {
 public:
-    SwGlossaryGroupTLB(Window* pParent, const ResId& rResId) :
-        SvTabListBox(pParent, rResId) {}
+    SwGlossaryGroupTLB(Window* pParent, const ResId& rResId)
+        : SvTabListBox(pParent, rResId)
+    {
+    }
 
-    virtual void    RequestHelp( const HelpEvent& rHEvt );
+    SwGlossaryGroupTLB(Window* pParent)
+        : SvTabListBox(pParent, WB_BORDER|WB_HSCROLL|WB_CLIPCHILDREN|WB_SORT)
+    {
+    }
+
+    virtual void RequestHelp( const HelpEvent& rHEvt );
 };
 
 class SwGlossaryGroupDlg : public SvxStandardDialog
 {
-    FixedText           aBibFT;
-    FEdit               aNameED;
-    FixedText           aPathFT;
-    ListBox             aPathLB;
-    FixedText           aSelectFT;
-    SwGlossaryGroupTLB  aGroupTLB;
+    FEdit*              m_pNameED;
+    ListBox*            m_pPathLB;
+    SwGlossaryGroupTLB* m_pGroupTLB;
 
-    OKButton        aOkPB;
-    CancelButton    aCancelPB;
-    HelpButton      aHelpPB;
-    PushButton      aNewPB;
-    PushButton      aDelPB;
-    PushButton      aRenamePB;
+    PushButton*     m_pNewPB;
+    PushButton*     m_pDelPB;
+    PushButton*     m_pRenamePB;
 
     typedef std::vector< ::rtl::OUString> OUVector_t;
     OUVector_t m_RemovedArr;
