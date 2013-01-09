@@ -23,6 +23,7 @@
 
 #include <tools/debug.hxx>
 #include "dbastrings.hrc"
+#include <com/sun/star/sdb/TableDefinition.hpp>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -78,7 +79,10 @@ Reference< XInterface > SAL_CALL OCommandContainer::createInstanceWithArguments(
 
 Reference< XInterface > SAL_CALL OCommandContainer::createInstance( ) throw (Exception, RuntimeException)
 {
-    return m_aContext.createComponent( (::rtl::OUString)( m_bTables ? SERVICE_SDB_TABLEDEFINITION : SERVICE_SDB_COMMAND_DEFINITION ) );
+    if(m_bTables)
+        return com::sun::star::sdb::TableDefinition::createDefault( m_aContext.getUNOContext() );
+    else
+        return m_aContext.createComponent( (::rtl::OUString)( SERVICE_SDB_COMMAND_DEFINITION ) );
 }
 
 OUString OCommandContainer::determineContentType() const

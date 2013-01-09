@@ -84,7 +84,7 @@ SvXMLImportContext* OXMLDocuments::CreateChildContext(
     {
         case XML_TOK_TABLE:
             GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = new OXMLTable( GetOwnImport(), nPrefix, rLocalName,xAttrList,m_xContainer,SERVICE_SDB_TABLEDEFINITION);
+            pContext = new OXMLTable( GetOwnImport(), nPrefix, rLocalName, xAttrList, m_xContainer, "com.sun.star.sdb.TableDefinition");
             break;
         case XML_TOK_QUERY:
             GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );

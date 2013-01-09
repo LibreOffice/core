@@ -91,6 +91,22 @@ OComponentDefinition_Impl::~OComponentDefinition_Impl()
 
 DBG_NAME(OComponentDefinition)
 
+void OComponentDefinition::initialize( const Sequence< Any >& aArguments ) throw(Exception)
+{
+    OUString rName;
+    if( (aArguments.getLength() == 1) && (aArguments[0] >>= rName) )
+    {
+        Sequence< Any > aNewArgs(1);
+        PropertyValue aValue;
+        aValue.Name = PROPERTY_NAME;
+        aValue.Value <<= rName;
+        aNewArgs[0] <<= aValue;
+        OContentHelper::initialize(aNewArgs);
+    }
+    else
+        OContentHelper::initialize(aArguments);
+}
+
 void OComponentDefinition::registerProperties()
 {
     m_xColumnPropertyListener = ::comphelper::ImplementationReference<OColumnPropertyListener,XPropertyChangeListener>(new OColumnPropertyListener(this));
@@ -161,7 +177,7 @@ OUString OComponentDefinition::getImplementationName_static(  ) throw(RuntimeExc
 Sequence< ::rtl::OUString > OComponentDefinition::getSupportedServiceNames_static(  ) throw(RuntimeException)
 {
     Sequence< ::rtl::OUString > aServices(2);
-    aServices.getArray()[0] = SERVICE_SDB_TABLEDEFINITION;
+    aServices.getArray()[0] = ::rtl::OUString("com.sun.star.sdb.TableDefinition");
     aServices.getArray()[1] = ::rtl::OUString("com.sun.star.ucb.Content");
 
     return aServices;

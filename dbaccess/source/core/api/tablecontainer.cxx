@@ -31,6 +31,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/sdb/TableDefinition.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
@@ -158,13 +159,8 @@ void lcl_createDefintionObject(const ::rtl::OUString& _rName
             _xTableDefinition.set(_xTableDefinitions->getByName(_rName),UNO_QUERY);
         else
         {
-            Sequence< Any > aArguments(1);
-            PropertyValue aValue;
             // set as folder
-            aValue.Name = PROPERTY_NAME;
-            aValue.Value <<= _rName;
-            aArguments[0] <<= aValue;
-            _xTableDefinition.set(::comphelper::getProcessServiceFactory()->createInstanceWithArguments(SERVICE_SDB_TABLEDEFINITION,aArguments),UNO_QUERY);
+            _xTableDefinition.set( TableDefinition::createWithName( ::comphelper::getProcessComponentContext(), _rName ), UNO_QUERY);
             _xTableDefinitions->insertByName(_rName,makeAny(_xTableDefinition));
             ::dbaccess::notifyDataSourceModified(_xTableDefinitions,_bModified);
         }

@@ -135,6 +135,9 @@ public:
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
         Create(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
 
+    // XInitialization
+    void initialize( com::sun::star::uno::Sequence< com::sun::star::uno::Any > const & rArguments) throw (com::sun::star::uno::Exception);
+
 // ::com::sun::star::beans::XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
 
