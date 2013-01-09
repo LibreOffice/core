@@ -584,6 +584,7 @@ sal_Bool PspSalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pJobSetup )
 
     if( pSetupFunction( aInfo ) )
     {
+        aInfo.resolveDefaultBackend();
         rtl_freeMemory( pJobSetup->mpDriverData );
         pJobSetup->mpDriverData = NULL;
 
