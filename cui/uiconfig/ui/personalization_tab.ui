@@ -22,7 +22,7 @@
                 <property name="can_focus">False</property>
                 <child>
                   <object class="GtkRadioButton" id="no_background">
-                    <property name="label" translatable="yes">No background image</property>
+                    <property name="label" translatable="yes">Plain look, do not use background images</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -39,7 +39,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="default_background">
-                    <property name="label" translatable="yes">Default background image</property>
+                    <property name="label" translatable="yes">Pre-installed background image (if available)</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -136,7 +136,7 @@
                 <property name="can_focus">False</property>
                 <child>
                   <object class="GtkRadioButton" id="no_persona">
-                    <property name="label" translatable="yes">Do not use Persona</property>
+                    <property name="label" translatable="yes">Plain look, do not use Personas</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -153,7 +153,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="default_persona">
-                    <property name="label" translatable="yes">Use default Persona</property>
+                    <property name="label" translatable="yes">Pre-installed Persona (if available)</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -175,7 +175,7 @@
                     <property name="homogeneous">True</property>
                     <child>
                       <object class="GtkRadioButton" id="own_persona">
-                        <property name="label" translatable="yes">Use own Persona</property>
+                        <property name="label" translatable="yes">Own Persona</property>
                         <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
