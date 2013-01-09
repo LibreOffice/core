@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAS3///9o\u003d",
+        "filename": "dbaccess/source/core/api/OptimisticSet.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-01-09T12:53:10Z",
+      "side": 1,
+      "message": "This is still incorrect and uses sLeft twice.",
+      "revId": "fe7f6c7fe014ef9617358302fbd57b6069121a33",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
