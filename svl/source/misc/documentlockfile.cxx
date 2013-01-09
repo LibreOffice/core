@@ -53,8 +53,8 @@ namespace svt {
 sal_Bool DocumentLockFile::m_bAllowInteraction = sal_True;
 
 // ----------------------------------------------------------------------
-DocumentLockFile::DocumentLockFile( const ::rtl::OUString& aOrigURL, const uno::Reference< lang::XMultiServiceFactory >& xFactory )
-: LockFileCommon( aOrigURL, xFactory, ::rtl::OUString( ".~lock."  ) )
+DocumentLockFile::DocumentLockFile( const ::rtl::OUString& aOrigURL )
+: LockFileCommon( aOrigURL, ::rtl::OUString( ".~lock."  ) )
 {
 }
 
@@ -92,7 +92,7 @@ sal_Bool DocumentLockFile::CreateOwnLockFile()
     try
     {
         uno::Reference< io::XStream > xTempFile(
-            io::TempFile::create(comphelper::getComponentContext(m_xFactory)),
+            io::TempFile::create( comphelper::getProcessComponentContext() ),
             uno::UNO_QUERY_THROW );
         uno::Reference< io::XSeekable > xSeekable( xTempFile, uno::UNO_QUERY_THROW );
 

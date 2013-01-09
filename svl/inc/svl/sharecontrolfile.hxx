@@ -27,7 +27,6 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <svl/lockfilecommon.hxx>
 
@@ -54,13 +53,13 @@ class SVL_DLLPUBLIC ShareControlFile : public LockFileCommon
     void Close();
     sal_Bool IsValid()
     {
-        return ( m_xFactory.is() && m_xStream.is() && m_xInputStream.is() && m_xOutputStream.is() && m_xSeekable.is() && m_xTruncate.is() );
+        return ( m_xStream.is() && m_xInputStream.is() && m_xOutputStream.is() && m_xSeekable.is() && m_xTruncate.is() );
     }
 
 public:
 
     // The constructor will throw exception in case the stream can not be opened
-    ShareControlFile( const ::rtl::OUString& aOrigURL, const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory = ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >() );
+    ShareControlFile( const ::rtl::OUString& aOrigURL );
     ~ShareControlFile();
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > > GetUsersData();

@@ -27,7 +27,6 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <osl/mutex.hxx>
 #include <tools/urlobj.hxx>
@@ -46,15 +45,12 @@ class SVL_DLLPUBLIC LockFileCommon
 {
 protected:
     ::osl::Mutex m_aMutex;
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
     ::rtl::OUString m_aURL;
-
 
     INetURLObject ResolveLinks( const INetURLObject& aDocURL );
 
 public:
-    LockFileCommon( const ::rtl::OUString& aOrigURL, const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory, const ::rtl::OUString& aPrefix );
+    LockFileCommon( const ::rtl::OUString& aOrigURL, const ::rtl::OUString& aPrefix );
     ~LockFileCommon();
 
     static ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > > ParseList( const ::com::sun::star::uno::Sequence< sal_Int8 >& aBuffer );

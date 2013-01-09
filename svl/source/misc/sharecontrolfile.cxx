@@ -52,8 +52,8 @@ using namespace ::com::sun::star;
 namespace svt {
 
 // ----------------------------------------------------------------------
-ShareControlFile::ShareControlFile( const ::rtl::OUString& aOrigURL, const uno::Reference< lang::XMultiServiceFactory >& xFactory )
-: LockFileCommon( aOrigURL, xFactory, ::rtl::OUString( ".~sharing."  ) )
+ShareControlFile::ShareControlFile( const ::rtl::OUString& aOrigURL )
+: LockFileCommon( aOrigURL, ::rtl::OUString( ".~sharing."  ) )
 {
     OpenStream();
 

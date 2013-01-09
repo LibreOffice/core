@@ -27,7 +27,6 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <svl/lockfilecommon.hxx>
 
@@ -43,7 +42,7 @@ class SVL_DLLPUBLIC DocumentLockFile : public LockFileCommon
     void WriteEntryToStream( ::com::sun::star::uno::Sequence< ::rtl::OUString > aEntry, ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > xStream );
 
 public:
-    DocumentLockFile( const ::rtl::OUString& aOrigURL, const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory = ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >() );
+    DocumentLockFile( const ::rtl::OUString& aOrigURL );
     ~DocumentLockFile();
 
     sal_Bool CreateOwnLockFile();

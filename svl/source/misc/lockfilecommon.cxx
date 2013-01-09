@@ -54,12 +54,8 @@ using namespace ::com::sun::star;
 namespace svt {
 
 // ----------------------------------------------------------------------
-LockFileCommon::LockFileCommon( const ::rtl::OUString& aOrigURL, const uno::Reference< lang::XMultiServiceFactory >& xFactory, const ::rtl::OUString& aPrefix )
-: m_xFactory( xFactory )
+LockFileCommon::LockFileCommon( const ::rtl::OUString& aOrigURL, const ::rtl::OUString& aPrefix )
 {
-    if ( !m_xFactory.is() )
-        m_xFactory = ::comphelper::getProcessServiceFactory();
-
     INetURLObject aDocURL = ResolveLinks( INetURLObject( aOrigURL ) );
 
     ::rtl::OUString aShareURLString = aDocURL.GetPartBeforeLastName();
