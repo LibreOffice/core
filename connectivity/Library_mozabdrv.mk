@@ -47,6 +47,7 @@ $(eval $(call gb_Library_use_libraries,mozabdrv,\
 
 $(eval $(call gb_Library_use_externals,mozabdrv,\
 	mozilla \
+	nss3 \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,mozabdrv,\
