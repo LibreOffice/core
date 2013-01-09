@@ -1095,7 +1095,7 @@ SfxItemPresentation SwRotationGrf::GetPresentation(
             rText = SW_RESSTR( STR_ROTATION );
         else if( rText.Len() )
             rText.Erase();
-        ( rText += OUString::valueOf( GetValue() )) += '\xB0';
+        ( rText += OUString::valueOf( static_cast<sal_Int32>( GetValue() ) )) += '\xB0';
         break;
 
     default:
@@ -1118,7 +1118,7 @@ SfxItemPresentation SwLuminanceGrf::GetPresentation(
             rText = SW_RESSTR( STR_LUMINANCE );
         else if( rText.Len() )
             rText.Erase();
-        ( rText += OUString::valueOf( GetValue() )) += '%';
+        ( rText += OUString::valueOf( static_cast<sal_Int32>( GetValue() ) )) += '%';
         break;
 
     default:
@@ -1141,7 +1141,7 @@ SfxItemPresentation SwContrastGrf::GetPresentation(
             rText = SW_RESSTR( STR_CONTRAST );
         else if( rText.Len() )
             rText.Erase();
-        ( rText += OUString::valueOf( GetValue() )) += '%';
+        ( rText += OUString::valueOf( static_cast<sal_Int32>( GetValue() ) )) += '%';
         break;
 
     default:
@@ -1177,7 +1177,7 @@ SfxItemPresentation SwChannelGrf::GetPresentation(
         }
         else if( rText.Len() )
             rText.Erase();
-        ( rText += OUString::valueOf( GetValue() )) += '%';
+        ( rText += OUString::valueOf( static_cast<sal_Int32>( GetValue() ) )) += '%';
         break;
 
     default:
@@ -1245,7 +1245,7 @@ SfxItemPresentation SwTransparencyGrf::GetPresentation(
             rText = SW_RESSTR( STR_TRANSPARENCY );
         else if( rText.Len() )
             rText.Erase();
-        ( rText += OUString::valueOf( GetValue() )) += '%';
+        ( rText += OUString::valueOf( static_cast<sal_Int32>( GetValue() ) )) += '%';
         break;
 
     default:
