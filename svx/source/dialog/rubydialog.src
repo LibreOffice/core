@@ -31,13 +31,6 @@ ModelessDialog RID_SVXDLG_RUBY
     Text [ en-US ] = "Asian Phonetic Guide" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
-    CheckBox CB_AUTO_DETECT
-    {
-        HelpID = "svx:CheckBox:RID_SVXDLG_RUBY:CB_AUTO_DETECT";
-        Pos = MAP_APPFONT ( 6, 6 ) ;
-        Size = MAP_APPFONT ( 186 , 12 ) ;
-        Text [ en-US ] = "Automatic detection";
-    };
     FixedText FT_LEFT
     {
         Pos = MAP_APPFONT ( 6 , 17 ) ;

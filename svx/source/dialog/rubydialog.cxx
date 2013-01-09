@@ -111,12 +111,12 @@ class SvxRubyData_Impl : public cppu::WeakImplHelper1
                                         xSelection = Reference<XRubySelection>(xController, UNO_QUERY);
                                         return xSelection;
                                     }
-    void                            UpdateRubyValues(sal_Bool bAutoUpdate)
+    void                            UpdateRubyValues()
                                     {
                                         if(!xSelection.is())
                                             aRubyValues.realloc(0);
                                         else
-                                            aRubyValues = xSelection->getRubyList(bAutoUpdate);
+                                            aRubyValues = xSelection->getRubyList(false);
                                         bHasSelectionChanged = sal_False;
                                     }
     Sequence<PropertyValues>&       GetRubyValues() {return aRubyValues;}
@@ -152,8 +152,9 @@ void    SvxRubyData_Impl::SetController(Reference<XController> xCtrl)
             if(xSelSupp.is())
                 xSelSupp->addSelectionChangeListener(this);
         }
-        catch(Exception&)
-        {}
+        catch (const Exception&)
+        {
+        }
     }
 }
 //-----------------------------------------------------------------------------
@@ -170,8 +171,9 @@ void SvxRubyData_Impl::disposing( const EventObject&) throw (RuntimeException)
         if(xSelSupp.is())
             xSelSupp->removeSelectionChangeListener(this);
     }
-    catch(Exception&)
-    {}
+    catch (const Exception&)
+    {
+    }
     xController = 0;
 }
 //-----------------------------------------------------------------------------
@@ -206,7 +208,6 @@ SvxRubyDialog::SvxRubyDialog( SfxBindings *pBind, SfxChildWindow *pCW,
     aLeft4ED(this,              ResId(ED_LEFT_4,*rResId.GetResMgr()  )),
     aRight4ED(this,             ResId(ED_RIGHT_4,*rResId.GetResMgr() )),
     aScrollSB(this,             ResId(SB_SCROLL,*rResId.GetResMgr()  )),
-    aAutoDetectionCB(this,      ResId(CB_AUTO_DETECT,*rResId.GetResMgr()    )),
     aAdjustFT(this,             ResId(FT_ADJUST,*rResId.GetResMgr()     )),
     aAdjustLB(this,             ResId(LB_ADJUST,*rResId.GetResMgr()     )),
     aPositionFT(this,           ResId(FT_POSITION,*rResId.GetResMgr()     )),
@@ -226,8 +227,6 @@ SvxRubyDialog::SvxRubyDialog( SfxBindings *pBind, SfxChildWindow *pCW,
 {
     xImpl = pImpl = new SvxRubyData_Impl;
     FreeResource();
-    // automatic detection not yet available
-    aAutoDetectionCB.Hide();
     aEditArr[0] = &aLeft1ED; aEditArr[1] = &aRight1ED;
     aEditArr[2] = &aLeft2ED; aEditArr[3] = &aRight2ED;
     aEditArr[4] = &aLeft3ED; aEditArr[5] = &aRight3ED;
@@ -236,7 +235,6 @@ SvxRubyDialog::SvxRubyDialog( SfxBindings *pBind, SfxChildWindow *pCW,
     aApplyPB.SetClickHdl(LINK(this, SvxRubyDialog, ApplyHdl_Impl));
     aClosePB.SetClickHdl(LINK(this, SvxRubyDialog, CloseHdl_Impl));
     aStylistPB.SetClickHdl(LINK(this, SvxRubyDialog, StylistHdl_Impl));
-    aAutoDetectionCB.SetClickHdl(LINK(this, SvxRubyDialog, AutomaticHdl_Impl));
     aAdjustLB.SetSelectHdl(LINK(this, SvxRubyDialog, AdjustHdl_Impl));
     aPositionLB.SetSelectHdl(LINK(this, SvxRubyDialog, PositionHdl_Impl));
     aCharStyleLB.SetSelectHdl(LINK(this, SvxRubyDialog, CharStyleHdl_Impl));
@@ -307,7 +305,7 @@ void SvxRubyDialog::Activate()
     {
 
         Reference< XRubySelection > xRubySel = pImpl->GetRubySelection();
-        pImpl->UpdateRubyValues(aAutoDetectionCB.IsChecked());
+        pImpl->UpdateRubyValues();
         EnableControls(xRubySel.is());
         if(xRubySel.is())
         {
@@ -359,7 +357,7 @@ void SvxRubyDialog::Activate()
                         }
                     }
                 }
-                catch(Exception&)
+                catch (const Exception&)
                 {
                     OSL_FAIL("exception in style access");
                 }
@@ -551,9 +549,9 @@ IMPL_LINK_NOARG(SvxRubyDialog, ApplyHdl_Impl)
     {
         try
         {
-            xSelection->setRubyList(aRubyValues, aAutoDetectionCB.IsChecked());
+            xSelection->setRubyList(aRubyValues, false);
         }
-        catch(Exception& )
+        catch (const Exception&)
         {
             OSL_FAIL("Exception caught");
         }
@@ -577,13 +575,6 @@ IMPL_LINK_NOARG(SvxRubyDialog, StylistHdl_Impl)
                               SFX_CALLMODE_ASYNCHRON |
                               SFX_CALLMODE_RECORD);
     }
-    return 0;
-}
-
-IMPL_LINK(SvxRubyDialog, AutomaticHdl_Impl, CheckBox*, pBox)
-{
-    pImpl->UpdateRubyValues(pBox->IsChecked());
-    Update();
     return 0;
 }
 

@@ -16,7 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define CB_AUTO_DETECT          1
 #define FT_CHAR_STYLE           2
 #define LB_CHAR_STYLE           3
 #define PB_STYLIST              4

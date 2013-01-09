@@ -94,8 +94,6 @@ class SvxRubyDialog : public SfxModelessDialog
     RubyEdit*               aEditArr[8];
     ScrollBar           aScrollSB;
 
-    CheckBox            aAutoDetectionCB;
-
     FixedText           aAdjustFT;
     ListBox             aAdjustLB;
 
@@ -125,7 +123,6 @@ class SvxRubyDialog : public SfxModelessDialog
     DECL_LINK(ApplyHdl_Impl, void *);
     DECL_LINK(CloseHdl_Impl, void *);
     DECL_LINK(StylistHdl_Impl, void *);
-    DECL_LINK(AutomaticHdl_Impl, CheckBox*);
     DECL_LINK(ScrollHdl_Impl, ScrollBar*);
     DECL_LINK(PositionHdl_Impl, ListBox*);
     DECL_LINK(AdjustHdl_Impl, ListBox*);
@@ -161,7 +158,6 @@ class SvxRubyDialog : public SfxModelessDialog
             aLeft4ED.Enable(bEnable);
             aRight4ED.Enable(bEnable);
             aScrollSB.Enable(bEnable);
-            aAutoDetectionCB.Enable(bEnable);
             aAdjustFT.Enable(bEnable);
             aAdjustLB.Enable(bEnable);
             aCharStyleFT.Enable(bEnable);
