@@ -1,6 +1,3 @@
-
-gb_PARTIALBUILD := T
-
 ifeq ($(SOLARENV),)
 ifeq ($(gb_Side),)
 gb_Side:=host

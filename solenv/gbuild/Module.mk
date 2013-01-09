@@ -92,50 +92,13 @@ $(call gb_Module_get_target,%) :
 .PHONY : build all clean unitcheck slowcheck subsequentcheck showmodules translations
 .DEFAULT_GOAL := all
 
-ifeq ($(strip $(gb_PARTIALBUILD)),)
-check : subsequentcheck
-
-# execute debugrun at the end
-ifneq ($(filter build all,$(MAKECMDGOALS)),)
-debugrun :| $(filter build all,$(MAKECMDGOALS))
-endif
-
-ifneq ($(OS),WNT)
-define gb_Module_BUILDHINT
-
-LibreOffice build successfully finished.
-
-To install, issue: $(MAKE) install
-Developers might prefer this way: $(MAKE) dev-install -o build
-To run smoketest, issue: $(MAKE) check
-For crosscompiles, please consult README.cross how to install it.
-
-endef
-else
-define gb_Module_BUILDHINT
-
-LibreOffice build succesfully finished.
-
-Please consult instsetoo_native/README on installing it.
-
-endef
-endif
-
-else
-gb_Module_BUILDHINT=
-
-debugrun :| build
-endif
-
 all : build unitcheck
-	$(info $(gb_Module_BUILDHINT))
 
 build : 
 	$(call gb_Output_announce,top level modules: $(foreach module,$(filter-out deliverlog $(WORKDIR)/bootstrap,$^),$(notdir $(module))),$(true),ALL,6)
 	$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),ALL,6)
 	$(call gb_Output_announce_title,build done.)
 	$(call gb_Output_announce_bell)
-	$(info $(gb_Module_BUILDHINT))
 
 unitcheck :
 	$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),CHK,6)

@@ -7,7 +7,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-gb_PARTIALBUILD := T
 ifeq ($(strip $(SOLARENV)),)
 include $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/../config_host.mk
 endif

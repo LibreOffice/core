@@ -34,14 +34,6 @@ gb_SpeedUpTargets_WRAPPEDBUILD:=T
 endif
 endif
 
-ifeq ($(strip $(gb_PARTIALBUILD)),)
-ifneq ($(strip $(MAKECMDGOALS)),)
-ifeq ($(filter-out clean distclean id tags docs distro-pack-install fetch help debugrun $(SRCDIR)/config_host.mk,$(MAKECMDGOALS)),)
-gb_SpeedUpTargets_WRAPPEDBUILD:=T
-endif
-endif
-endif
-
 ifneq ($(strip $(gb_SpeedUpTargets_WRAPPEDBUILD)),)
 gb_Module_add_target=
 gb_Module_add_check_target=
