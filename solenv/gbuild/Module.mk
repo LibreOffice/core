@@ -89,15 +89,15 @@ $(call gb_Module_get_target,%) :
 		mkdir -p $(dir $@) && \
 		touch $@)
 
-.PHONY : build all clean unitcheck slowcheck subsequentcheck dev-install showmodules translations
+.PHONY : build all clean unitcheck slowcheck subsequentcheck showmodules translations
 .DEFAULT_GOAL := all
 
 ifeq ($(strip $(gb_PARTIALBUILD)),)
 check : subsequentcheck
 
 # execute debugrun at the end
-ifneq ($(filter dev-install build all,$(MAKECMDGOALS)),)
-debugrun :| $(filter dev-install build all,$(MAKECMDGOALS))
+ifneq ($(filter build all,$(MAKECMDGOALS)),)
+debugrun :| $(filter build all,$(MAKECMDGOALS))
 endif
 
 ifneq ($(OS),WNT)
@@ -121,20 +121,8 @@ Please consult instsetoo_native/README on installing it.
 endef
 endif
 
-define gb_Module_DEVINSTALLHINT
-
-Developer installation finished, you can now execute:
-
-on Linux:
-make debugrun
-
-on Mac OS X:
-open install/LibreOffice.app
-
-endef
 else
 gb_Module_BUILDHINT=
-gb_Module_DEVINSTALLHINT=
 
 debugrun :| build
 endif
@@ -178,11 +166,6 @@ check : unitcheck slowcheck
 
 debugrun :
 	$(call gb_Module_DEBUGRUNCOMMAND)
-
-dev-install :
-	@rm -f $(SRCDIR)/install && \
-	ln -s $(DEVINSTALLDIR)/opt/ $(SRCDIR)/install
-	$(info $(gb_Module_DEVINSTALLHINT))
 
 showmodules :
 	$(info $(strip $(gb_Module_ALLMODULES)))
