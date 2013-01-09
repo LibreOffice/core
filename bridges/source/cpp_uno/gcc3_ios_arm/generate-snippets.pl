@@ -25,13 +25,13 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-my $nFunIndexes = 5;
-my $nVtableOffsets = 1;
+my $nFunIndexes = 8;
+my $nVtableOffsets = 4;
 
 sub gen_arm ($$)
 {
     my ($funIndex, $vtableOffset) = @_;
-    printf ("codeSnippet%08x%d:\n", $funIndex, $vtableOffset);
+    printf ("codeSnippet_%08x_%d:\n", $funIndex, $vtableOffset);
     printf ("\tmov ip, pc\n");
     printf ("\tb _privateSnippetExecutor\n");
     printf ("\t.long %#08x\n", $funIndex);
@@ -41,7 +41,7 @@ sub gen_arm ($$)
 sub gen_x86 ($$$)
 {
     my ($funIndex, $vtableOffset, $executor) = @_;
-    printf ("codeSnippet%08x%d%s:\n", $funIndex, $vtableOffset, $executor);
+    printf ("codeSnippet_%08x_%d_%s:\n", $funIndex, $vtableOffset, $executor);
     printf ("\tmovl \$%#08x, %%eax\n", $funIndex);
     printf ("\tmovl \$%d, %%edx\n", $vtableOffset);
     printf ("\tjmp _privateSnippetExecutor%s\n", $executor);
@@ -104,13 +104,13 @@ foreach my $funIndex (0 .. $nFunIndexes-1)
     foreach my $vtableOffset (0 .. $nVtableOffsets-1)
     {
 	printf ("#ifdef __arm\n");
-	printf ("\t.long codeSnippet%08x%d - _codeSnippets\n", $funIndex, $vtableOffset);
-	printf ("\t.long codeSnippet%08x%d - _codeSnippets\n", $funIndex|0x80000000, $vtableOffset);
+        printf ("\t.long codeSnippet_%08x_%d - _codeSnippets\n", $funIndex, $vtableOffset);
+        printf ("\t.long codeSnippet_%08x_%d - _codeSnippets\n", $funIndex|0x80000000, $vtableOffset);
 	printf ("#else\n");
 	foreach my $executor ('General', 'Void', 'Hyper', 'Float', 'Double', 'Class')
 	{
-	    printf ("\t.long codeSnippet%08x%d%s - _codeSnippets\n", $funIndex, $vtableOffset, $executor);
-	    printf ("\t.long codeSnippet%08x%d%s - _codeSnippets\n", $funIndex|0x80000000, $vtableOffset, $executor);
+            printf ("\t.long codeSnippet_%08x_%d_%s - _codeSnippets\n", $funIndex, $vtableOffset, $executor);
+            printf ("\t.long codeSnippet_%08x_%d_%s - _codeSnippets\n", $funIndex|0x80000000, $vtableOffset, $executor);
 	}
 	printf ("#endif\n");
     }
