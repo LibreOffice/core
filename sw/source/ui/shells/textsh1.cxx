@@ -1424,11 +1424,6 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 rSet.Put( SfxBoolItem( nWhich, SvxAutoCorrCfg::Get().IsAutoFmtByInput() ));
             }
             break;
-        case FN_GLOSSARY_DLG:
-            {
-                rSet.Put( SfxBoolItem( nWhich, sal_True ) );
-            }
-            break;
 
         case SID_DEC_INDENT:
         case SID_INC_INDENT:

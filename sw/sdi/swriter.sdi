@@ -1560,9 +1560,6 @@ SfxVoidItem EditGlossary FN_GLOSSARY_DLG
     RecordPerSet;
     Asynchron;
 
-    /* status: */
-    SlotType = SfxBoolItem
-
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
