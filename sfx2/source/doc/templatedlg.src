@@ -121,11 +121,6 @@ ModelessDialog DLG_TEMPLATE_MANAGER
         {
             PageItem
             {
-                Identifier = FILTER_ALL;
-                Text [ en-US ] = "All";
-            };
-            PageItem
-            {
                 Identifier = FILTER_DOCS;
                 Text [ en-US ] = "Documents";
             };
