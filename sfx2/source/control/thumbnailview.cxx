@@ -517,7 +517,6 @@ void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
                 maItemStateHdl.Call(pItem);
 
                 Rectangle aRect(pItem->getDrawArea());
-                aRect.SetSize(Size(mnItemWidth,mnThumbnailHeight));
 
                 if (aRect.IsInside(rMEvt.GetPosPixel()))
                     OnItemDblClicked(pItem);
