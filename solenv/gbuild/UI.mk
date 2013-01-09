@@ -54,7 +54,7 @@ $(call gb_UILocalizeTarget_get_target,%) : $(gb_UILocalizeTarget_DEPS)
 $(call gb_UILocalizeTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),UIX,1)
 	$(call gb_Helper_abbreviate_dirs,\
-		rm -f $(call gb_UILocalizeTarget_get_target,$*) \
+		rm -rf $(call gb_UILocalizeTarget_get_target,$*) $(call gb_UILocalizeTarget_get_workdir,$*) \
 	)
 
 # Produce translations for one .ui file
