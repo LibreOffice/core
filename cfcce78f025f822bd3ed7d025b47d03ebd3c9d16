@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAS3///8c\u003d",
+        "filename": "writerfilter/source/rtftok/rtfdocumentimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 790,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-01-09T19:18:42Z",
+      "side": 1,
+      "message": "should be \"lose\" but it was mis-spelled in the old version already :)",
+      "revId": "cfcce78f025f822bd3ed7d025b47d03ebd3c9d16",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
