@@ -75,9 +75,9 @@ SfxItemPresentation SfxPointItem::GetPresentation
 )   const
 {
     DBG_CHKTHIS(SfxPointItem, 0);
-    rText = UniString::CreateFromInt32(aVal.X());
+    rText = OUString::valueOf(aVal.X());
     rText.AppendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
-    rText += UniString::CreateFromInt32(aVal.Y());
+    rText += OUString::valueOf(aVal.Y());
     rText.AppendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }

@@ -184,24 +184,24 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
 
     // Titel setzen und
     // entsprechende Seiten zum Dialog hinzufuegen
-    String aTitle;
+    OUString aTitle;
 
     switch( ePO )
     {
         case PO_TITLE:
-            aTitle = String(SdResId( STR_PSEUDOSHEET_TITLE ));
+            aTitle = OUString(SdResId( STR_PSEUDOSHEET_TITLE ));
         break;
 
         case PO_SUBTITLE:
-            aTitle = String(SdResId( STR_PSEUDOSHEET_SUBTITLE ));
+            aTitle = OUString(SdResId( STR_PSEUDOSHEET_SUBTITLE ));
         break;
 
         case PO_BACKGROUND:
-            aTitle = String(SdResId( STR_PSEUDOSHEET_BACKGROUND ));
+            aTitle = OUString(SdResId( STR_PSEUDOSHEET_BACKGROUND ));
         break;
 
         case PO_BACKGROUNDOBJECTS:
-            aTitle = String(SdResId( STR_PSEUDOSHEET_BACKGROUNDOBJECTS ));
+            aTitle = OUString(SdResId( STR_PSEUDOSHEET_BACKGROUNDOBJECTS ));
         break;
 
         case PO_OUTLINE_1:
@@ -213,13 +213,11 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
         case PO_OUTLINE_7:
         case PO_OUTLINE_8:
         case PO_OUTLINE_9:
-            aTitle = String(SdResId( STR_PSEUDOSHEET_OUTLINE ));
-            aTitle.Append( sal_Unicode(' ') );
-            aTitle.Append( UniString::CreateFromInt32( ePO - PO_OUTLINE_1 + 1 ) );
+            aTitle = OUString(SdResId( STR_PSEUDOSHEET_OUTLINE )) + " " + OUString::valueOf( ePO - PO_OUTLINE_1 + 1 );
         break;
 
         case PO_NOTES:
-            aTitle = String(SdResId( STR_PSEUDOSHEET_NOTES ));
+            aTitle = OUString(SdResId( STR_PSEUDOSHEET_NOTES ));
         break;
     }
     SetText( aTitle );

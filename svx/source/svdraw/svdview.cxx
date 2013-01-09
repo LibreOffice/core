@@ -1249,13 +1249,13 @@ XubString SdrView::GetStatusText()
             if (nLen==0) bBrk=sal_True; // to be sure
         }
 
-        aStr.SearchAndReplaceAscii("%1", UniString::CreateFromInt32(nPar + 1));
-        aStr.SearchAndReplaceAscii("%2", UniString::CreateFromInt32(nLin + 1));
-        aStr.SearchAndReplaceAscii("%3", UniString::CreateFromInt32(nCol + 1));
+        aStr.SearchAndReplaceAscii("%1", OUString::valueOf(nPar + 1));
+        aStr.SearchAndReplaceAscii("%2", OUString::valueOf(nLin + 1));
+        aStr.SearchAndReplaceAscii("%3", OUString::valueOf(nCol + 1));
 
 #ifdef DBG_UTIL
         aStr += UniString( RTL_CONSTASCII_USTRINGPARAM( ", Level " ) );
-        aStr += UniString::CreateFromInt32( pTextEditOutliner->GetDepth( aSel.nEndPara ) );
+        aStr += OUString::valueOf( pTextEditOutliner->GetDepth( aSel.nEndPara ) );
 #endif
     }
 

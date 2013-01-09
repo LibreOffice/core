@@ -57,28 +57,26 @@ ScVbaName::getWorkSheet() throw (css::uno::RuntimeException)
     return xApplication->getActiveSheet();
 }
 
-::rtl::OUString
+OUString
 ScVbaName::getName() throw (css::uno::RuntimeException)
 {
-    String sName;
-    sName += UniString ( mxNamedRange->getName() );
-    return ::rtl::OUString( sName );
+    return mxNamedRange->getName();
 }
 
 void
-ScVbaName::setName( const ::rtl::OUString & rName ) throw (css::uno::RuntimeException)
+ScVbaName::setName( const OUString & rName ) throw (css::uno::RuntimeException)
 {
     mxNamedRange->setName( rName );
 }
 
-::rtl::OUString
+OUString
 ScVbaName::getNameLocal() throw (css::uno::RuntimeException)
 {
     return getName();
 }
 
 void
-ScVbaName::setNameLocal( const ::rtl::OUString & rName ) throw (css::uno::RuntimeException)
+ScVbaName::setNameLocal( const OUString & rName ) throw (css::uno::RuntimeException)
 {
     setName( rName );
 }
@@ -94,127 +92,127 @@ ScVbaName::setVisible( sal_Bool /*bVisible*/ ) throw (css::uno::RuntimeException
 {
 }
 
-::rtl::OUString
+OUString
 ScVbaName::getValue() throw (css::uno::RuntimeException)
 {
-    ::rtl::OUString sValue = mxNamedRange->getContent();
-    ::rtl::OUString sSheetName = getWorkSheet()->getName();
-    ::rtl::OUString sSegmentation = ::rtl::OUString::createFromAscii( ";" );
-    ::rtl::OUString sNewSegmentation = ::rtl::OUString::createFromAscii( "," );
-    ::rtl::OUString sResult;
+    OUString sValue = mxNamedRange->getContent();
+    OUString sSheetName = getWorkSheet()->getName();
+    OUString sSegmentation = OUString::createFromAscii( ";" );
+    OUString sNewSegmentation = OUString::createFromAscii( "," );
+    OUString sResult;
     sal_Int32 nFrom = 0;
     sal_Int32 nTo = 0;
     nTo = sValue.indexOf( sSegmentation, nFrom );
     while ( nTo != -1 )
     {
-        ::rtl::OUString sTmpValue = sValue.copy( nFrom, nTo - nFrom );
+        OUString sTmpValue = sValue.copy( nFrom, nTo - nFrom );
         if ( sTmpValue.toChar() == '$' )
         {
-            ::rtl::OUString sTmp = sTmpValue.copy( 1 );
-            sTmp = sTmp.replaceAt(0, OUString(sSheetName + ::rtl::OUString::createFromAscii(".")).getLength(), sSheetName + ::rtl::OUString::createFromAscii("!"));
+            OUString sTmp = sTmpValue.copy( 1 );
+            sTmp = sTmp.replaceAt(0, OUString(sSheetName + OUString::createFromAscii(".")).getLength(), sSheetName + OUString::createFromAscii("!"));
             sResult += sTmp;
             sResult += sNewSegmentation;
         }
         nFrom = nTo + 1;
         nTo = sValue.indexOf( sSegmentation, nFrom );
     }
-    ::rtl::OUString sTmpValue = sValue.copy( nFrom );
+    OUString sTmpValue = sValue.copy( nFrom );
     if ( sTmpValue.toChar() == '$' )
     {
-        ::rtl::OUString sTmp = sTmpValue.copy(1);
-        sTmp = sTmp.replaceAt(0, OUString(sSheetName + ::rtl::OUString::createFromAscii(".")).getLength(), sSheetName + ::rtl::OUString::createFromAscii("!"));
+        OUString sTmp = sTmpValue.copy(1);
+        sTmp = sTmp.replaceAt(0, OUString(sSheetName + OUString::createFromAscii(".")).getLength(), sSheetName + OUString::createFromAscii("!"));
         sResult += sTmp;
     }
     if (sResult.indexOf('=') != 0)
     {
-        sResult = ::rtl::OUString::createFromAscii("=") + sResult;
+        sResult = OUString::createFromAscii("=") + sResult;
     }
     return sResult;
 }
 
 void
-ScVbaName::setValue( const ::rtl::OUString & rValue ) throw (css::uno::RuntimeException)
+ScVbaName::setValue( const OUString & rValue ) throw (css::uno::RuntimeException)
 {
-    ::rtl::OUString sSheetName = getWorkSheet()->getName();
-    ::rtl::OUString sValue = rValue;
-    ::rtl::OUString sSegmentation = ::rtl::OUString::createFromAscii( "," );
-    ::rtl::OUString sNewSegmentation = ::rtl::OUString::createFromAscii( ";" );
-    ::rtl::OUString sResult;
+    OUString sSheetName = getWorkSheet()->getName();
+    OUString sValue = rValue;
+    OUString sSegmentation = OUString::createFromAscii( "," );
+    OUString sNewSegmentation = OUString::createFromAscii( ";" );
+    OUString sResult;
     sal_Int32 nFrom = 0;
     sal_Int32 nTo = 0;
     if (sValue.indexOf('=') == 0)
     {
-        ::rtl::OUString sTmp = sValue.copy(1);
+        OUString sTmp = sValue.copy(1);
         sValue = sTmp;
     }
     nTo = sValue.indexOf( sSegmentation, nFrom );
     while ( nTo != -1 )
     {
-        ::rtl::OUString sTmpValue = sValue.copy( nFrom, nTo - nFrom );
-        sTmpValue = sTmpValue.replaceAt(0, OUString(sSheetName + ::rtl::OUString::createFromAscii("!")).getLength(), sSheetName + ::rtl::OUString::createFromAscii("."));
+        OUString sTmpValue = sValue.copy( nFrom, nTo - nFrom );
+        sTmpValue = sTmpValue.replaceAt(0, OUString(sSheetName + OUString::createFromAscii("!")).getLength(), sSheetName + OUString::createFromAscii("."));
         if (sTmpValue.copy(0, sSheetName.getLength()).equals(sSheetName))
         {
-            sTmpValue = ::rtl::OUString::createFromAscii("$") + sTmpValue;
+            sTmpValue = OUString::createFromAscii("$") + sTmpValue;
         }
         sTmpValue += sNewSegmentation;
         sResult += sTmpValue;
         nFrom = nTo + 1;
         nTo = sValue.indexOf( sSegmentation, nFrom );
     }
-    ::rtl::OUString sTmpValue = sValue.copy( nFrom );
-    sTmpValue = sTmpValue.replaceAt(0, OUString(sSheetName + ::rtl::OUString::createFromAscii("!")).getLength(), sSheetName + ::rtl::OUString::createFromAscii("."));
+    OUString sTmpValue = sValue.copy( nFrom );
+    sTmpValue = sTmpValue.replaceAt(0, OUString(sSheetName + OUString::createFromAscii("!")).getLength(), sSheetName + OUString::createFromAscii("."));
     if (sTmpValue.copy(0, sSheetName.getLength()).equals(sSheetName))
     {
-        sTmpValue = ::rtl::OUString::createFromAscii("$") + sTmpValue;
+        sTmpValue = OUString::createFromAscii("$") + sTmpValue;
     }
     sResult += sTmpValue;
     mxNamedRange->setContent(sResult);
 }
 
-::rtl::OUString
+OUString
 ScVbaName::getRefersTo() throw (css::uno::RuntimeException)
 {
     return getValue();
 }
 
 void
-ScVbaName::setRefersTo( const ::rtl::OUString & rRefersTo ) throw (css::uno::RuntimeException)
+ScVbaName::setRefersTo( const OUString & rRefersTo ) throw (css::uno::RuntimeException)
 {
     setValue( rRefersTo );
 }
 
-::rtl::OUString
+OUString
 ScVbaName::getRefersToLocal() throw (css::uno::RuntimeException)
 {
     return getRefersTo();
 }
 
 void
-ScVbaName::setRefersToLocal( const ::rtl::OUString & rRefersTo ) throw (css::uno::RuntimeException)
+ScVbaName::setRefersToLocal( const OUString & rRefersTo ) throw (css::uno::RuntimeException)
 {
     setRefersTo( rRefersTo );
 }
 
-::rtl::OUString
+OUString
 ScVbaName::getRefersToR1C1() throw (css::uno::RuntimeException)
 {
     return getRefersTo();
 }
 
 void
-ScVbaName::setRefersToR1C1( const ::rtl::OUString & rRefersTo ) throw (css::uno::RuntimeException)
+ScVbaName::setRefersToR1C1( const OUString & rRefersTo ) throw (css::uno::RuntimeException)
 {
     setRefersTo( rRefersTo );
 }
 
-::rtl::OUString
+OUString
 ScVbaName::getRefersToR1C1Local() throw (css::uno::RuntimeException)
 {
     return getRefersTo();
 }
 
 void
-ScVbaName::setRefersToR1C1Local( const ::rtl::OUString & rRefersTo ) throw (css::uno::RuntimeException)
+ScVbaName::setRefersToR1C1Local( const OUString & rRefersTo ) throw (css::uno::RuntimeException)
 {
     setRefersTo( rRefersTo );
 }
@@ -238,20 +236,20 @@ ScVbaName::Delete() throw (css::uno::RuntimeException)
     mxNames->removeByName( mxNamedRange->getName() );
 }
 
-rtl::OUString
+OUString
 ScVbaName::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaName"));
+    return OUString( "ScVbaName" );
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 ScVbaName::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.Name" ) );
+        aServiceNames[ 0 ] = OUString( "ooo.vba.excel.Name" );
     }
     return aServiceNames;
 }

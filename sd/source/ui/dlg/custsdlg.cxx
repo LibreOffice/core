@@ -195,25 +195,21 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
             SdCustomShow* pShow = new SdCustomShow( *(*pCustomShowList)[nPos] );
-            String aStr( pShow->GetName() );
-            String aStrCopy( SdResId( STR_COPY_CUSTOMSHOW ) );
+            OUString aStr( pShow->GetName() );
+            OUString aStrCopy( SdResId( STR_COPY_CUSTOMSHOW ) );
 
-            sal_uInt16 nStrPos = aStr.Search( aStrCopy );
+            sal_uInt16 nStrPos = aStr.indexOf( aStrCopy );
             sal_uInt16 nNum = 1;
             if( nStrPos == STRING_NOTFOUND )
             {
-                aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " (" ) );
-                aStr.Append( aStrCopy );
-                aStr.Append( UniString::CreateFromInt32( nNum ) );
-                aStr.Append( sal_Unicode(')') );
-                nStrPos = aStr.Search( aStrCopy );
+                aStr = aStr + " ("  + aStrCopy + OUString::valueOf( nNum ) + ")";
+                nStrPos = aStr.indexOf( aStrCopy );
             }
-            nStrPos = nStrPos + (sal_uInt16)aStrCopy.Len();
+            nStrPos = nStrPos + (sal_uInt16)aStrCopy.getLength();
             // Um nicht ins Nirvana zu greifen (--> Endlosschleife)
-            if( nStrPos >= aStr.Len() )
+            if( nStrPos >= aStr.getLength() )
             {
-                aStr.Append( sal_Unicode(' ') );
-                aStr.Append( UniString::CreateFromInt32( nNum ) );
+                aStr = aStr + " " + OUString::valueOf( nNum );
             }
 
             // Name ueberpruefen...
@@ -226,7 +222,7 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
                      pCustomShow != NULL && bDifferent;
                      pCustomShow = (SdCustomShow*) pCustomShowList->Next() )
                 {
-                    if( aStr == pCustomShow->GetName() )
+                    if( aStr == OUString( pCustomShow->GetName() ) )
                         bDifferent = sal_False;
                 }
                 if( !bDifferent )
@@ -235,8 +231,8 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
 
                     const CharClass* pCharClass = rDoc.GetCharClass();
                     while( pCharClass->isDigit( aStr, nStrPos ) )
-                        aStr.Erase( nStrPos, 1 );
-                    aStr.Insert( UniString::CreateFromInt32( ++nNum ), nStrPos);
+                        aStr = aStr.replaceAt( nStrPos, 1, "" );
+                    aStr = aStr.copy( 0, nStrPos) + OUString::valueOf( ++nNum ) + aStr.copy( nStrPos);
                 }
 
             }
@@ -338,7 +334,7 @@ SdDefineCustomShowDlg::SdDefineCustomShowDlg( Window* pWindow,
          nPage++ )
     {
         pPage = rDoc.GetSdPage( (sal_uInt16) nPage, PK_STANDARD );
-        String aStr( pPage->GetName() );
+        OUString aStr( pPage->GetName() );
         aLbPages.InsertEntry( aStr );
     }
     //aLbPages.SelectEntryPos( 0 );
@@ -359,7 +355,7 @@ SdDefineCustomShowDlg::SdDefineCustomShowDlg( Window* pWindow,
     else
     {
         rpCustomShow = new SdCustomShow( &rDoc );
-        aEdtName.SetText( String( SdResId( STR_NEW_CUSTOMSHOW ) ) );
+        aEdtName.SetText( OUString( SdResId( STR_NEW_CUSTOMSHOW ) ) );
         aEdtName.SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
         rpCustomShow->SetName( aEdtName.GetText() );
     }
@@ -412,7 +408,7 @@ IMPL_LINK( SdDefineCustomShowDlg, ClickButtonHdl, void *, p )
 
             for( sal_uInt16 i = 0; i < nCount; i++ )
             {
-                String aStr = aLbPages.GetSelectEntry( i );
+                OUString aStr = aLbPages.GetSelectEntry( i );
                 pEntry = aLbCustomPages.InsertEntry( aStr,
                                             0, sal_False, nPosCP );
 

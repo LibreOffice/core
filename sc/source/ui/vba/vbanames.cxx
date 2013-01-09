@@ -72,10 +72,10 @@ ScVbaNames::getScDocument()
     uno::Reference< frame::XModel > xModel( getModel() , uno::UNO_QUERY_THROW );
     ScTabViewShell * pTabViewShell = excel::getBestViewShell( xModel );
     if ( !pTabViewShell )
-        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No ViewShell available")), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( "No ViewShell available", uno::Reference< uno::XInterface >() );
     ScViewData* pViewData = pTabViewShell->GetViewData();
     if ( !pViewData )
-        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No ViewData available")), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( "No ViewData available", uno::Reference< uno::XInterface >() );
     return pViewData->GetDocument();
 }
 
@@ -93,7 +93,7 @@ ScVbaNames::Add( const css::uno::Any& Name ,
                                         const css::uno::Any& RefersToR1C1,
                                         const css::uno::Any& RefersToR1C1Local ) throw (css::uno::RuntimeException)
 {
-    rtl::OUString sName;
+    OUString sName;
     uno::Reference< excel::XRange > xRange;
     if ( Name.hasValue() )
         Name >>= sName;
@@ -103,7 +103,7 @@ ScVbaNames::Add( const css::uno::Any& Name ,
     {
         if ( !ScRangeData::IsNameValid( sName , getScDocument() ) )
         {
-            ::rtl::OUString sResult ;
+            OUString sResult ;
             sal_Int32 nToken = 0;
             sal_Int32 nIndex = 0;
             sResult = sName.getToken( nToken , '!' , nIndex );
@@ -139,18 +139,14 @@ ScVbaNames::Add( const css::uno::Any& Name ,
         ScAddress aPos( static_cast< SCCOL >( aAddr.StartColumn ) , static_cast< SCROW >( aAddr.StartRow ) , static_cast< SCTAB >(aAddr.Sheet ) );
         uno::Any xAny2 ;
         String sRangeAdd = xRange->Address( xAny2, xAny2 , xAny2 , xAny2, xAny2 );
-        String sTmp;
-        sTmp += "$";
-        sTmp += UniString(xRange->getWorksheet()->getName());
-        sTmp += ".";
-        sTmp += sRangeAdd;
         if ( mxNames.is() )
         {
             RangeType nType = RT_NAME;
             table::CellAddress aCellAddr( aAddr.Sheet , aAddr.StartColumn , aAddr.StartRow );
             if ( mxNames->hasByName( sName ) )
                 mxNames->removeByName(sName);
-            mxNames->addNewByName( sName , rtl::OUString(sTmp) , aCellAddr , (sal_Int32)nType);
+            OUString sTmp = "$" + xRange->getWorksheet()->getName() + "." + sRangeAdd;
+            mxNames->addNewByName( sName , sTmp , aCellAddr , (sal_Int32)nType);
         }
     }
     return css::uno::Any();
@@ -177,20 +173,20 @@ ScVbaNames::createCollectionObject( const uno::Any& aSource )
     return uno::makeAny( uno::Reference< excel::XName > ( new ScVbaName( getParent(), mxContext, xName, mxNames , mxModel ) ) );
 }
 
-rtl::OUString
+OUString
 ScVbaNames::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaNames"));
+    return OUString( "ScVbaNames" );
 }
 
-css::uno::Sequence<rtl::OUString>
+css::uno::Sequence<OUString>
 ScVbaNames::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.NamedRanges" ) );
+        aServiceNames[ 0 ] = "ooo.vba.excel.NamedRanges";
     }
     return aServiceNames;
 }

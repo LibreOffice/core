@@ -124,28 +124,28 @@ CopyDlg::~CopyDlg()
 {
     String& rStr = GetExtraData();
 
-    rStr = rtl::OUString::valueOf(static_cast<sal_Int64>(maNumFldCopies.GetValue()));
+    rStr = OUString::valueOf(static_cast<sal_Int64>(maNumFldCopies.GetValue()));
     rStr.Append( TOKEN );
 
-    rStr += rtl::OUString::valueOf(static_cast<sal_Int64>(maMtrFldMoveX.GetValue()));
+    rStr += OUString::valueOf(static_cast<sal_Int64>(maMtrFldMoveX.GetValue()));
     rStr.Append( TOKEN );
 
-    rStr += rtl::OUString::valueOf(static_cast<sal_Int64>(maMtrFldMoveY.GetValue()));
+    rStr += OUString::valueOf(static_cast<sal_Int64>(maMtrFldMoveY.GetValue()));
     rStr.Append( TOKEN );
 
-    rStr += rtl::OUString::valueOf(static_cast<sal_Int64>(maMtrFldAngle.GetValue()));
+    rStr += OUString::valueOf(static_cast<sal_Int64>(maMtrFldAngle.GetValue()));
     rStr.Append( TOKEN );
 
-    rStr += rtl::OUString::valueOf(static_cast<sal_Int64>(maMtrFldWidth.GetValue()));
+    rStr += OUString::valueOf(static_cast<sal_Int64>(maMtrFldWidth.GetValue()));
     rStr.Append( TOKEN );
 
-    rStr += rtl::OUString::valueOf(static_cast<sal_Int64>(maMtrFldHeight.GetValue()));
+    rStr += OUString::valueOf(static_cast<sal_Int64>(maMtrFldHeight.GetValue()));
     rStr.Append( TOKEN );
 
-    rStr += UniString::CreateFromInt32( (long)maLbStartColor.GetSelectEntryColor().GetColor() );
+    rStr += OUString::valueOf( (long)maLbStartColor.GetSelectEntryColor().GetColor() );
     rStr.Append( TOKEN );
 
-    rStr += UniString::CreateFromInt32( (long)maLbEndColor.GetSelectEntryColor().GetColor() );
+    rStr += OUString::valueOf( (long)maLbEndColor.GetSelectEntryColor().GetColor() );
 }
 
 /*************************************************************************

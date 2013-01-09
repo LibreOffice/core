@@ -112,7 +112,7 @@ void FuLineEnd::DoExecute( SfxRequest& )
         {
             aName = aNewName;
             aName.Append( sal_Unicode(' ') );
-            aName.Append( UniString::CreateFromInt32( j++ ) );
+            aName.Append( OUString::valueOf( j++ ) );
             bDifferent = sal_True;
             for( long i = 0; i < nCount && bDifferent; i++ )
             {

@@ -117,20 +117,20 @@ private:
             comphelper::getProcessComponentContext() );
         static uno::Reference<lang::XMultiComponentFactory > xServiceManager(
             xContext->getServiceManager() );
-        static uno::Reference< beans::XPropertySet > xProps( xServiceManager->createInstanceWithContext( rtl::OUString(  "com.sun.star.sheet.GlobalSheetSettings"  ) ,xContext ), uno::UNO_QUERY_THROW );
+        static uno::Reference< beans::XPropertySet > xProps( xServiceManager->createInstanceWithContext( OUString(  "com.sun.star.sheet.GlobalSheetSettings"  ) ,xContext ), uno::UNO_QUERY_THROW );
         return xProps;
     }
 
     bool getReplaceCellsWarning() throw ( uno::RuntimeException )
     {
         sal_Bool res = false;
-        getGlobalSheetSettings()->getPropertyValue( rtl::OUString(REPLACE_CELLS_WARNING) ) >>= res;
+        getGlobalSheetSettings()->getPropertyValue( OUString(REPLACE_CELLS_WARNING) ) >>= res;
         return ( res == sal_True );
     }
 
     void setReplaceCellsWarning( bool bState ) throw ( uno::RuntimeException )
     {
-        getGlobalSheetSettings()->setPropertyValue( rtl::OUString(REPLACE_CELLS_WARNING), uno::makeAny( bState ) );
+        getGlobalSheetSettings()->setPropertyValue( OUString(REPLACE_CELLS_WARNING), uno::makeAny( bState ) );
     }
 public:
     PasteCellsWarningReseter() throw ( uno::RuntimeException )
@@ -260,7 +260,7 @@ getCurrentDocument() throw (uno::RuntimeException)
 
 
     uno::Any aModel;
-    SbxVariable *pCompVar = basicChosen->Find(  UniString("ThisComponent"), SbxCLASS_OBJECT );
+    SbxVariable *pCompVar = basicChosen->Find( "ThisComponent", SbxCLASS_OBJECT );
 
     if ( pCompVar )
     {
@@ -275,14 +275,14 @@ getCurrentDocument() throw (uno::RuntimeException)
             if ( !xModel.is() )
             {
                 throw uno::RuntimeException(
-                    rtl::OUString( "Can't extract model from basic ( its obviously not set yet  therefore don't know the currently selected document)" ), uno::Reference< uno::XInterface >() );
+                    "Can't extract model from basic ( its obviously not set yet  therefore don't know the currently selected document)", uno::Reference< uno::XInterface >() );
             }
             return xModel;
         }
         else
         {
             OSL_TRACE("Have model ThisComponent points to url %s",
-            ::rtl::OUStringToOString( xModel->getURL(),
+            OUStringToOString( xModel->getURL(),
                 RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         }
     }
@@ -290,7 +290,7 @@ getCurrentDocument() throw (uno::RuntimeException)
     {
         OSL_TRACE("Failed to get ThisComponent");
         throw uno::RuntimeException(
-            rtl::OUString( "Can't determine the currently selected document" ),
+            OUString( "Can't determine the currently selected document" ),
             uno::Reference< uno::XInterface >() );
     }
     return xModel;
@@ -393,15 +393,15 @@ void PrintOutHelper( const uno::Any& From, const uno::Any& To, const uno::Any& C
     if ( nCopies > 1 ) // Collate only useful when more that 1 copy
         Collate >>= bCollate;
 
-    rtl::OUString sRange(   "-"  );
-    rtl::OUString sFileName;
+    OUString sRange(   "-"  );
+    OUString sFileName;
 
     if (( nFrom || nTo ) )
     {
         if ( nFrom )
-            sRange = ( ::rtl::OUString::valueOf( nFrom ) + sRange );
+            sRange = OUString::valueOf( nFrom ) + sRange;
         if ( nTo )
-            sRange += ::rtl::OUString::valueOf( nTo );
+            sRange += OUString::valueOf( nTo );
     }
 
     if (  PrToFileName.getValue() )
@@ -471,18 +471,18 @@ void PrintOutHelper( const uno::Any& From, const uno::Any& To, const uno::Any& C
     dispatchExecute( xModel, SID_VIEWSHELL1 );
 }
 
-rtl::OUString getAnyAsString( const uno::Any& pvargItem ) throw ( uno::RuntimeException )
+OUString getAnyAsString( const uno::Any& pvargItem ) throw ( uno::RuntimeException )
 {
     uno::Type aType = pvargItem.getValueType();
     uno::TypeClass eTypeClass = aType.getTypeClass();
-    rtl::OUString sString;
+    OUString sString;
     switch ( eTypeClass )
     {
         case uno::TypeClass_BOOLEAN:
         {
             sal_Bool bBool = false;
             pvargItem >>= bBool;
-            sString = rtl::OUString::valueOf( bBool );
+            sString = OUString::valueOf( bBool );
             break;
         }
         case uno::TypeClass_STRING:
@@ -492,14 +492,14 @@ rtl::OUString getAnyAsString( const uno::Any& pvargItem ) throw ( uno::RuntimeEx
             {
                 float aFloat = 0;
                 pvargItem >>= aFloat;
-                sString = rtl::OUString::valueOf( aFloat );
+                sString = OUString::valueOf( aFloat );
                 break;
             }
         case uno::TypeClass_DOUBLE:
             {
                 double aDouble = 0;
                 pvargItem >>= aDouble;
-                sString = rtl::OUString::valueOf( aDouble );
+                sString = OUString::valueOf( aDouble );
                 break;
             }
         case uno::TypeClass_SHORT:
@@ -508,7 +508,7 @@ rtl::OUString getAnyAsString( const uno::Any& pvargItem ) throw ( uno::RuntimeEx
             {
                 sal_Int32 aNum = 0;
                 pvargItem >>= aNum;
-                sString = rtl::OUString::valueOf( aNum );
+                sString = OUString::valueOf( aNum );
                 break;
             }
 
@@ -516,27 +516,27 @@ rtl::OUString getAnyAsString( const uno::Any& pvargItem ) throw ( uno::RuntimeEx
             {
                 sal_Int64 aHyper = 0;
                 pvargItem >>= aHyper;
-                sString = rtl::OUString::valueOf( aHyper );
+                sString = OUString::valueOf( aHyper );
                 break;
             }
         default:
-                   throw uno::RuntimeException( rtl::OUString(  "Invalid type, can't convert"  ), uno::Reference< uno::XInterface >() );
+                   throw uno::RuntimeException( OUString(  "Invalid type, can't convert"  ), uno::Reference< uno::XInterface >() );
     }
     return sString;
 }
 
 
-rtl::OUString
-ContainerUtilities::getUniqueName( const uno::Sequence< ::rtl::OUString >&  _slist, const rtl::OUString& _sElementName, const ::rtl::OUString& _sSuffixSeparator)
+OUString
+ContainerUtilities::getUniqueName( const uno::Sequence< OUString >&  _slist, const OUString& _sElementName, const OUString& _sSuffixSeparator)
 {
     return getUniqueName(_slist, _sElementName, _sSuffixSeparator, sal_Int32(2));
 }
 
-rtl::OUString
-ContainerUtilities::getUniqueName( const uno::Sequence< rtl::OUString >& _slist, const rtl::OUString _sElementName, const rtl::OUString& _sSuffixSeparator, sal_Int32 _nStartSuffix)
+OUString
+ContainerUtilities::getUniqueName( const uno::Sequence< OUString >& _slist, const OUString _sElementName, const OUString& _sSuffixSeparator, sal_Int32 _nStartSuffix)
 {
     sal_Int32 a = _nStartSuffix;
-    rtl::OUString scompname = _sElementName;
+    OUString scompname = _sElementName;
     bool bElementexists = true;
     sal_Int32 nLen = _slist.getLength();
     if ( nLen == 0 )
@@ -551,13 +551,13 @@ ContainerUtilities::getUniqueName( const uno::Sequence< rtl::OUString >& _slist,
                 return scompname;
             }
         }
-        scompname = _sElementName + _sSuffixSeparator + rtl::OUString::valueOf( a++ );
+        scompname = _sElementName + _sSuffixSeparator + OUString::valueOf( a++ );
     }
-    return rtl::OUString();
+    return OUString();
 }
 
 sal_Int32
-ContainerUtilities::FieldInList( const uno::Sequence< rtl::OUString >& SearchList, const rtl::OUString& SearchString )
+ContainerUtilities::FieldInList( const uno::Sequence< OUString >& SearchList, const OUString& SearchString )
 {
     sal_Int32 FieldLen = SearchList.getLength();
     sal_Int32 retvalue = -1;
@@ -581,9 +581,9 @@ bool NeedEsc(sal_Unicode cCode)
     return (STRING_NOTFOUND != sEsc.Search(cCode));
 }
 
-rtl::OUString VBAToRegexp(const rtl::OUString &rIn, bool bForLike )
+OUString VBAToRegexp(const OUString &rIn, bool bForLike )
 {
-    rtl::OUStringBuffer sResult;
+    OUStringBuffer sResult;
     const sal_Unicode *start = rIn.getStr();
     const sal_Unicode *end = start + rIn.getLength();
 
@@ -600,11 +600,11 @@ rtl::OUString VBAToRegexp(const rtl::OUString &rIn, bool bForLike )
                 start++;
                 break;
             case '*':
-                sResult.append(rtl::OUString(".*"));
+                sResult.append(OUString(".*"));
                 start++;
                 break;
             case '#':
-                sResult.append(rtl::OUString("[0-9]"));
+                sResult.append(OUString("[0-9]"));
                 start++;
                 break;
             case '~':
@@ -698,42 +698,42 @@ UserFormGeometryHelper::UserFormGeometryHelper( const uno::Reference< uno::XComp
     double UserFormGeometryHelper::getLeft()
     {
     sal_Int32 nLeft = 0;
-    mxModel->getPropertyValue( rtl::OUString(  VBA_LEFT  ) ) >>= nLeft;
+    mxModel->getPropertyValue( OUString(  VBA_LEFT  ) ) >>= nLeft;
     return Millimeter::getInPoints( nLeft );
     }
     void UserFormGeometryHelper::setLeft( double nLeft )
     {
-        mxModel->setPropertyValue( rtl::OUString(  VBA_LEFT  ), uno::makeAny( Millimeter::getInHundredthsOfOneMillimeter( nLeft ) ) );
+        mxModel->setPropertyValue( OUString(  VBA_LEFT  ), uno::makeAny( Millimeter::getInHundredthsOfOneMillimeter( nLeft ) ) );
     }
     double UserFormGeometryHelper::getTop()
     {
     sal_Int32 nTop = 0;
-    mxModel->getPropertyValue( rtl::OUString(   VBA_TOP  ) ) >>= nTop;
+    mxModel->getPropertyValue( OUString(   VBA_TOP  ) ) >>= nTop;
     return Millimeter::getInPoints( nTop );
     }
     void UserFormGeometryHelper::setTop( double nTop )
     {
-    mxModel->setPropertyValue( rtl::OUString(   VBA_TOP  ), uno::makeAny( Millimeter::getInHundredthsOfOneMillimeter( nTop ) ) );
+    mxModel->setPropertyValue( OUString(   VBA_TOP  ), uno::makeAny( Millimeter::getInHundredthsOfOneMillimeter( nTop ) ) );
     }
     double UserFormGeometryHelper::getHeight()
     {
     sal_Int32 nHeight = 0;
-    mxModel->getPropertyValue( rtl::OUString(   SC_UNONAME_CELLHGT  ) ) >>= nHeight;
+    mxModel->getPropertyValue( OUString(   SC_UNONAME_CELLHGT  ) ) >>= nHeight;
     return Millimeter::getInPoints( nHeight );
     }
     void UserFormGeometryHelper::setHeight( double nHeight )
     {
-    mxModel->setPropertyValue( rtl::OUString(   SC_UNONAME_CELLHGT  ), uno::makeAny( Millimeter::getInHundredthsOfOneMillimeter( nHeight ) ) );
+    mxModel->setPropertyValue( OUString(   SC_UNONAME_CELLHGT  ), uno::makeAny( Millimeter::getInHundredthsOfOneMillimeter( nHeight ) ) );
     }
     double UserFormGeometryHelper::getWidth()
     {
     sal_Int32 nWidth = 0;
-    mxModel->getPropertyValue( rtl::OUString(   SC_UNONAME_CELLWID  ) ) >>= nWidth;
+    mxModel->getPropertyValue( OUString(   SC_UNONAME_CELLWID  ) ) >>= nWidth;
     return Millimeter::getInPoints( nWidth );
     }
     void UserFormGeometryHelper::setWidth( double nWidth)
     {
-    mxModel->setPropertyValue( rtl::OUString(   SC_UNONAME_CELLWID  ), uno::makeAny(  Millimeter::getInHundredthsOfOneMillimeter( nWidth ) ) );
+    mxModel->setPropertyValue( OUString(   SC_UNONAME_CELLWID  ), uno::makeAny(  Millimeter::getInHundredthsOfOneMillimeter( nWidth ) ) );
     }
 
 SfxItemSet*

@@ -177,7 +177,7 @@ rtl::OString OutputFile(const rtl::OString &rInput, const char * pExt)
     rtl::OUString aUniInput(rtl::OStringToOUString(rInput, RTL_TEXTENCODING_ASCII_US));
     DirEntry aFileName(aUniInput);
 
-    UniString aExt( pExt, RTL_TEXTENCODING_ASCII_US );
+    OUString aExt = OStringToOUString( pExt, RTL_TEXTENCODING_ASCII_US );
     aFileName.SetExtension( aExt );
 
     return rtl::OUStringToOString(aFileName.GetFull(), RTL_TEXTENCODING_ASCII_US);

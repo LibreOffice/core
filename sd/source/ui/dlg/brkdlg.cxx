@@ -120,9 +120,9 @@ IMPL_LINK( BreakDlg, UpDate, void*, nInit )
     }
 
     // Welches Oject wird gerade angezeigt?
-    String info = UniString::CreateFromInt32( pProgrInfo->GetCurObj() );
-    info.Append( sal_Unicode('/') );
-    info.Append( UniString::CreateFromInt32( pProgrInfo->GetObjCount() ) );
+    OUString info = OUString::valueOf( static_cast<sal_Int32>( pProgrInfo->GetCurObj() ) )
+            + "/"
+            + OUString::valueOf( static_cast<sal_Int32>( pProgrInfo->GetObjCount() ) );
     aFiObjInfo.SetText(info);
 
     // Wieviele Actions sind schon aufgebrochen?
@@ -132,9 +132,9 @@ IMPL_LINK( BreakDlg, UpDate, void*, nInit )
     }
     else
     {
-        info = UniString::CreateFromInt32( pProgrInfo->GetCurAction() );
-        info.Append( sal_Unicode('/') );
-        info.Append( UniString::CreateFromInt32( pProgrInfo->GetActionCount() ) );
+        info = OUString::valueOf( static_cast<sal_Int32>( pProgrInfo->GetCurAction() ) )
+            + "/"
+            + OUString::valueOf( static_cast<sal_Int32>( pProgrInfo->GetActionCount() ) );
         aFiActInfo.SetText(info);
     }
 
@@ -145,9 +145,9 @@ IMPL_LINK( BreakDlg, UpDate, void*, nInit )
     }
     else
     {
-        info = UniString::CreateFromInt32( pProgrInfo->GetCurInsert() );
-        info.Append( sal_Unicode('/') );
-        info.Append( UniString::CreateFromInt32( pProgrInfo->GetInsertCount() ) );
+        info = OUString::valueOf( static_cast<sal_Int32>( pProgrInfo->GetCurInsert() ) )
+            + "/"
+            + OUString::valueOf( static_cast<sal_Int32>( pProgrInfo->GetInsertCount() ) );
         aFiInsInfo.SetText(info);
     }
 

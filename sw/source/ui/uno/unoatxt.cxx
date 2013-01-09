@@ -194,7 +194,7 @@ uno::Reference< text::XAutoTextGroup >  SwXAutoTextContainer::insertNewByName(
     if(STRING_NOTFOUND == sGroup.Search(GLOS_DELIM))
     {
         sGroup += GLOS_DELIM;
-        sGroup += UniString::CreateFromInt32(0);
+        sGroup += OUString::valueOf(0);
     }
     pGlossaries->NewGroupDoc(sGroup, sGroup.GetToken(0, GLOS_DELIM));
 
@@ -396,7 +396,7 @@ uno::Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const 
         sal_Bool bNoAttr = !pxCursor && !pxRange;
         if(bNoAttr)
         {
-            sOnlyTxt = UniString(xTextRange->getString());
+            sOnlyTxt = OUString(xTextRange->getString());
             pOnlyTxt = &sOnlyTxt;
         }
 
@@ -494,7 +494,7 @@ void SwXAutoTextGroup::setName(const OUString& rName) throw( uno::RuntimeExcepti
     if(STRING_NOTFOUND == sNewGroup.Search(GLOS_DELIM))
     {
         sNewGroup += GLOS_DELIM;
-        sNewGroup += UniString::CreateFromInt32(0);
+        sNewGroup += OUString::valueOf(0);
     }
 
     //the name must be saved, the group may be invalidated while in RenameGroupDoc()

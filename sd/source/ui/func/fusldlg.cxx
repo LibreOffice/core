@@ -83,7 +83,7 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
         if ( !aStr.Len() )
         {
             aStr = String( SdResId( STR_PAGE ) );
-            aStr.Append( UniString::CreateFromInt32( nPage + 1 ) );
+            aStr.Append( OUString::valueOf( nPage + 1 ) );
         }
 
         aPageNameList[ nPage ] = aStr;

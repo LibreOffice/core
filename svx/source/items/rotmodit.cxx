@@ -81,7 +81,7 @@ SfxItemPresentation SvxRotateModeItem::GetPresentation(
 //          break; // DURCHFALLEN!!!
 
         case SFX_ITEM_PRESENTATION_NAMELESS:
-            rText += UniString::CreateFromInt32( GetValue() );
+            rText += OUString::valueOf( GetValue() );
             break;
         default: ;//prevent warning
     }

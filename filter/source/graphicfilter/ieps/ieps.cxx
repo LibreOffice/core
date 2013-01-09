@@ -20,7 +20,6 @@
 
 #include <stdio.h>
 
-//
 #include <tools/solar.h>
 #include <vcl/svapp.hxx>
 #include <vcl/bitmap.hxx>
@@ -480,7 +479,7 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
         if ( nCount && ( (sal_uInt32)nNumber < 10 ) )
         {
             aString.AppendAscii( " LanguageLevel:" );
-            aString.Append( UniString::CreateFromInt32( nNumber ) );
+            aString.Append( OUString::valueOf( nNumber ) );
         }
     }
     aVDev.DrawText( aRect, aString, TEXT_DRAW_CLIP | TEXT_DRAW_MULTILINE );

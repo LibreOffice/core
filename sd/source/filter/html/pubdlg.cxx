@@ -147,7 +147,7 @@ SdPublishingDesign::SdPublishingDesign()
     String  aFilterConfigPath( "Office.Common/Filter/Graphic/Export/JPG" );
     FilterConfigItem aFilterConfigItem( aFilterConfigPath );
     sal_Int32 nCompression = aFilterConfigItem.ReadInt32( OUString( KEY_QUALITY ), 75 );
-    m_aCompression = UniString::CreateFromInt32( nCompression );
+    m_aCompression = OUString::valueOf( nCompression );
     m_aCompression.Append( sal_Unicode('%') );
 
     SvtUserOptions aUserOptions;

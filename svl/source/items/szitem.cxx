@@ -71,9 +71,9 @@ SfxItemPresentation SfxSizeItem::GetPresentation
 )   const
 {
     DBG_CHKTHIS(SfxSizeItem, 0);
-    rText = UniString::CreateFromInt32(aVal.Width());
+    rText = OUString::valueOf(aVal.Width());
     rText.AppendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
-    rText += UniString::CreateFromInt32(aVal.Height());
+    rText += OUString::valueOf(aVal.Height());
     rText.AppendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }

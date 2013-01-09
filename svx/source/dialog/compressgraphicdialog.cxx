@@ -109,9 +109,9 @@ void CompressGraphicsDialog::Update()
     aBitmapSizeString += String( " x " ) ;
     aBitmapSizeString += GetUnitString( aOriginalSize100mm.Height(), eFieldUnit, cSeparator );
     aBitmapSizeString += String( " ( " ) ;
-    aBitmapSizeString += UniString::CreateFromInt32(aPixelSize.Width());
+    aBitmapSizeString += OUString::valueOf(aPixelSize.Width());
     aBitmapSizeString += String( " x " ) ;
-    aBitmapSizeString += UniString::CreateFromInt32(aPixelSize.Height());
+    aBitmapSizeString += OUString::valueOf(aPixelSize.Height());
     aBitmapSizeString += String( " px )" ) ;
     m_pFixedText2->SetText(aBitmapSizeString);
 
@@ -123,7 +123,7 @@ void CompressGraphicsDialog::Update()
     aViewSizeString += String( " x " ) ;
     aViewSizeString += GetUnitString( m_aViewSize100mm.Height(), eFieldUnit, cSeparator );
     aViewSizeString += ( " at " ) ;
-    aViewSizeString += UniString::CreateFromInt32(aValX);
+    aViewSizeString += OUString::valueOf(aValX);
     aViewSizeString += ( " DPI" ) ;
     m_pFixedText3->SetText(aViewSizeString);
 
@@ -134,7 +134,7 @@ void CompressGraphicsDialog::Update()
     sal_Int32 aNativeSize = aMemStream.Tell();
 
     String aNativeSizeString;
-    aNativeSizeString += UniString::CreateFromInt32(aNativeSize / 1024);
+    aNativeSizeString += OUString::valueOf(aNativeSize / 1024);
     aNativeSizeString += String( " kiB" ) ;
 
     m_pFixedText5->SetText(aNativeSizeString);
@@ -144,18 +144,18 @@ void CompressGraphicsDialog::Update()
 void CompressGraphicsDialog::UpdateNewWidthMF()
 {
     int nPixelX = (sal_Int32)( GetViewWidthInch() * m_dResolution );
-    m_pMFNewWidth->SetText( UniString::CreateFromInt32( nPixelX ) );
+    m_pMFNewWidth->SetText( OUString::valueOf( nPixelX ) );
 }
 
 void CompressGraphicsDialog::UpdateNewHeightMF()
 {
     int nPixelY = (sal_Int32)( GetViewHeightInch() * m_dResolution );
-    m_pMFNewHeight->SetText( UniString::CreateFromInt32( nPixelY ) );
+    m_pMFNewHeight->SetText( OUString::valueOf( nPixelY ) );
 }
 
 void CompressGraphicsDialog::UpdateResolutionLB()
 {
-    m_pResolutionLB->SetText( UniString::CreateFromInt32( (sal_Int32) m_dResolution ) );
+    m_pResolutionLB->SetText( OUString::valueOf( (sal_Int32) m_dResolution ) );
 }
 
 double CompressGraphicsDialog::GetViewWidthInch()
@@ -280,7 +280,7 @@ IMPL_LINK_NOARG( CompressGraphicsDialog, CalculateClickHdl )
     if ( aSize > 0 )
     {
         String aNewSizeString;
-        aNewSizeString += UniString::CreateFromInt32(aSize / 1024);
+        aNewSizeString += OUString::valueOf(aSize / 1024);
         aNewSizeString += String( " kiB" ) ;
         m_pFixedText6->SetText(aNewSizeString);
     }

@@ -80,8 +80,8 @@ const SwTwips lMinBorder = 1134;
 #define GAPBETWEENPAGES 284L
 
 // Constant strings.
-SW_DLLPUBLIC extern UniString aEmptyStr;    // ""
-SW_DLLPUBLIC extern rtl::OUString aDotStr;      // '.'
+SW_DLLPUBLIC extern String aEmptyStr;    // ""
+SW_DLLPUBLIC extern OUString aDotStr;      // '.'
 
 // For inserting of captions (what and where to insert).
 // It's here because it is not big enough to justify its own hxx

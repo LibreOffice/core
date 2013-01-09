@@ -72,13 +72,13 @@ SfxItemPresentation SfxRectangleItem::GetPresentation
 )   const
 {
     DBG_CHKTHIS(SfxRectangleItem, 0);
-    rText = UniString::CreateFromInt32(aVal.Top());
+    rText = OUString::valueOf(aVal.Top());
     rText.AppendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
-    rText += UniString::CreateFromInt32(aVal.Left());
+    rText += OUString::valueOf(aVal.Left());
     rText.AppendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
-    rText += UniString::CreateFromInt32(aVal.Bottom());
+    rText += OUString::valueOf(aVal.Bottom());
     rText.AppendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
-    rText += UniString::CreateFromInt32(aVal.Right());
+    rText += OUString::valueOf(aVal.Right());
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }
 

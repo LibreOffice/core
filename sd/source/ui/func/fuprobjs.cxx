@@ -138,7 +138,7 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
             String aStr(SdResId( STR_LAYOUT_OUTLINE ));
             aStyleName.Append( aStr );
             aStyleName.Append( sal_Unicode(' ') );
-            aStyleName.Append( UniString::CreateFromInt32( nDepth ) );
+            aStyleName.Append( OUString::valueOf( nDepth ) );
         }
 
         SfxStyleSheetBasePool* pStyleSheetPool = mpDocSh->GetStyleSheetPool();
