@@ -506,7 +506,6 @@ ScFormulaFrmtEntry::ScFormulaFrmtEntry( Window* pParent, ScDocument* pDoc, const
 
     FreeResource();
     maLbType.SelectEntryPos(2);
-    maLbColorFormat.SelectEntryPos(1);
 
     if(pFormat)
     {
@@ -817,6 +816,7 @@ ScColorScale3FrmtEntry::ScColorScale3FrmtEntry( Window* pParent, ScDocument* pDo
     maLbEntryTypeMin.RemoveEntry(0);
     maLbEntryTypeMiddle.RemoveEntry(0);
     maLbEntryTypeMax.RemoveEntry(0);
+    maLbColorFormat.SelectEntryPos(1);
 
     Init();
     maLbType.SelectEntryPos(0);
