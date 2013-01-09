@@ -23,6 +23,7 @@
 
 #include <sfx2/childwin.hxx>
 #include <sfx2/basedlgs.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
@@ -43,10 +44,16 @@ class RubyPreview : public Window
 {
 protected:
     virtual void Paint( const Rectangle& rRect );
-    SvxRubyDialog&  rParentDlg;
+    SvxRubyDialog* m_pParentDlg;
 
 public:
     RubyPreview(SvxRubyDialog& rParent, const ResId& rResId);
+    RubyPreview(Window *pParent);
+    void setRubyDialog(SvxRubyDialog* pParentDlg)
+    {
+        m_pParentDlg = pParentDlg;
+    }
+    virtual Size GetOptimalSize(WindowSizeType eType) const;
 };
 
 class SVX_DLLPUBLIC SvxRubyChildWindow : public SfxChildWindow
@@ -66,8 +73,14 @@ class RubyEdit  : public Edit
     virtual void        GetFocus();
     virtual long        PreNotify( NotifyEvent& rNEvt );
 public:
-    RubyEdit(Window* pParent, const ResId& rResId) :
-        Edit(pParent, rResId){}
+    RubyEdit(Window* pParent, const ResId& rResId)
+        : Edit(pParent, rResId)
+    {
+    }
+    RubyEdit(Window* pParent)
+        : Edit(pParent, WB_BORDER)
+    {
+    }
     void    SetScrollHdl(Link& rLink) {aScrollHdl = rLink;}
     void    SetJumpHdl(Link& rLink) {aJumpHdl = rLink;}
 };
@@ -80,36 +93,33 @@ class SvxRubyDialog : public SfxModelessDialog
 
     friend class RubyPreview;
 
-    FixedText               aLeftFT;
-    RubyEdit                aLeft1ED;
-    FixedText               aRightFT;
-    RubyEdit                aRight1ED;
-    RubyEdit                aLeft2ED;
-    RubyEdit                aRight2ED;
-    RubyEdit                aLeft3ED;
-    RubyEdit                aRight3ED;
-    RubyEdit                aLeft4ED;
-    RubyEdit                aRight4ED;
+    FixedText*          m_pLeftFT;
+    FixedText*          m_pRightFT;
+    RubyEdit*           m_pLeft1ED;
+    RubyEdit*           m_pRight1ED;
+    RubyEdit*           m_pLeft2ED;
+    RubyEdit*           m_pRight2ED;
+    RubyEdit*           m_pLeft3ED;
+    RubyEdit*           m_pRight3ED;
+    RubyEdit*           m_pLeft4ED;
+    RubyEdit*           m_pRight4ED;
 
-    RubyEdit*               aEditArr[8];
-    ScrollBar           aScrollSB;
+    RubyEdit*           aEditArr[8];
+    VclScrolledWindow*  m_pScrolledWindow;
+    ScrollBar*          m_pScrollSB;
 
-    FixedText           aAdjustFT;
-    ListBox             aAdjustLB;
+    ListBox*            m_pAdjustLB;
 
-    FixedText           aPositionFT;
-    ListBox             aPositionLB;
+    ListBox*            m_pPositionLB;
 
-    FixedText           aCharStyleFT;
-    ListBox             aCharStyleLB;
-    PushButton          aStylistPB;
+    FixedText*          m_pCharStyleFT;
+    ListBox*            m_pCharStyleLB;
+    PushButton*         m_pStylistPB;
 
-    FixedText           aPreviewFT;
-    RubyPreview         aPreviewWin;
+    RubyPreview*        m_pPreviewWin;
 
-    OKButton            aApplyPB;
-    PushButton          aClosePB;
-    HelpButton          aHelpPB;
+    PushButton*         m_pApplyPB;
+    PushButton*         m_pClosePB;
 
     long                nLastPos;
     long                nCurrentEdit;
@@ -145,28 +155,7 @@ class SvxRubyDialog : public SfxModelessDialog
     sal_Bool                IsModified() const {return bModified;}
     void                SetModified(sal_Bool bSet) {bModified = bSet;}
 
-    void EnableControls(sal_Bool bEnable)
-        {
-            aLeftFT.Enable(bEnable);
-            aRightFT.Enable(bEnable);
-            aLeft1ED.Enable(bEnable);
-            aRight1ED.Enable(bEnable);
-            aLeft2ED.Enable(bEnable);
-            aRight2ED.Enable(bEnable);
-            aLeft3ED.Enable(bEnable);
-            aRight3ED.Enable(bEnable);
-            aLeft4ED.Enable(bEnable);
-            aRight4ED.Enable(bEnable);
-            aScrollSB.Enable(bEnable);
-            aAdjustFT.Enable(bEnable);
-            aAdjustLB.Enable(bEnable);
-            aCharStyleFT.Enable(bEnable);
-            aCharStyleLB.Enable(bEnable);
-            aStylistPB.Enable(bEnable);
-            aPreviewFT.Enable(bEnable);
-            aPreviewWin.Enable(bEnable);
-            aApplyPB.Enable(bEnable);
-        }
+    void EnableControls(bool bEnable);
 
     void                GetCurrentText(String& rBase, String& rRuby);
 
@@ -175,8 +164,8 @@ protected:
     virtual void        DataChanged( const DataChangedEvent& rDCEvt );
 public:
 
-                        SvxRubyDialog( SfxBindings *pBindings, SfxChildWindow *pCW,
-                                    Window* pParent, const ResId& rResId );
+                        SvxRubyDialog(SfxBindings *pBindings, SfxChildWindow *pCW,
+                                    Window* pParent);
     virtual             ~SvxRubyDialog();
 
     virtual void        Activate();

@@ -181,7 +181,6 @@
 #define HID_REDLINING_VIEW_PB_REJECT                          "SVX_HID_REDLINING_VIEW_PB_REJECT"
 #define HID_REDLINING_VIEW_PB_REJECTALL                       "SVX_HID_REDLINING_VIEW_PB_REJECTALL"
 #define HID_REDLINING_VIEW_PB_UNDO                            "SVX_HID_REDLINING_VIEW_PB_UNDO"
-#define HID_RUBY_DIALOG                                       "SVX_HID_RUBY_DIALOG"
 #define HID_STYLE_LISTBOX                                     "SVX_HID_STYLE_LISTBOX"
 #define HID_SVXTBX_UNDO_REDO_CTRL                             "SVX_HID_SVXTBX_UNDO_REDO_CTRL"
 #define HID_SVX_CHINESE_DICTIONARY_CB_REVERSE                 "SVX_HID_SVX_CHINESE_DICTIONARY_CB_REVERSE"
