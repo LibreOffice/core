@@ -282,7 +282,13 @@ void DomainMapper_Impl::RemoveLastParagraph( )
         // Keep the character properties of the last but one paragraph, even if
         // it's empty. This works for headers/footers, and maybe in other cases
         // as well, but surely not in textboxes.
-        if (m_bInHeaderFooterImport && xEnumerationAccess.is())
+        // fdo#58327: also do this at the end of the document: when pasting,
+        // a table before the cursor position would be deleted
+        // (but only for paste/insert, not load; otherwise it can happen that
+        // flys anchored at the disposed paragraph are deleted (fdo47036.rtf))
+        bool const bEndOfDocument(m_aTextAppendStack.size() == 1);
+        if ((m_bInHeaderFooterImport || (bEndOfDocument && !m_bIsNewDoc))
+            && xEnumerationAccess.is())
         {
             uno::Reference<container::XEnumeration> xEnumeration = xEnumerationAccess->createEnumeration();
             uno::Reference<lang::XComponent> xParagraph(xEnumeration->nextElement(), uno::UNO_QUERY);
