@@ -185,7 +185,7 @@ sal_Bool SAL_CALL
     sal_Int16 nFailure = GetSpellFailure( rWord, rLocale );
     if (nFailure != -1)
     {
-        sal_Int16 nLang = LanguageTag( rLocale ).getLanguageType();
+        sal_Int16 nLang = LinguLocaleToLanguage( rLocale );
         // postprocess result for errors that should be ignored
         if (   (!rHelper.IsSpellUpperCase()  && IsUpper( rWord, nLang ))
             || (!rHelper.IsSpellWithDigits() && HasDigits( rWord ))
@@ -214,7 +214,7 @@ Reference< XSpellAlternatives >
     String aTmp( rWord );
     if (aTmp.Len())
     {
-        sal_Int16 nLang = LanguageTag( rLocale ).getLanguageType();
+        sal_Int16 nLang = LinguLocaleToLanguage( rLocale );
 
         if (STRING_NOTFOUND != aTmp.SearchAscii( "liss" ))
         {
