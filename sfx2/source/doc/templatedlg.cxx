@@ -254,9 +254,6 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg,ActivatePageHdl)
         case FILTER_DRAWS:
             eFilter = FILTER_APP_DRAW;
             break;
-        default:
-        case FILTER_ALL:
-            ;
     }
     mpCurView->filterTemplatesByApp(eFilter);
     return 0;
