@@ -103,7 +103,7 @@ TemplateAbstractView::TemplateAbstractView (Window *pParent, WinBits nWinStyle, 
     : ThumbnailView(pParent,nWinStyle,bDisableTransientChildren),
       mpItemView(new TemplateView(this)),
       mbFilteredResults(false),
-      meFilterOption(FILTER_APP_NONE)
+      meFilterOption(FILTER_APP_WRITER)
 {
     mpItemView->setItemStateHdl(LINK(this,TemplateAbstractView,OverlayItemStateHdl));
 }
@@ -112,7 +112,7 @@ TemplateAbstractView::TemplateAbstractView(Window *pParent, const ResId &rResId,
     : ThumbnailView(pParent,rResId,bDisableTransientChildren),
       mpItemView(new TemplateView(this)),
       mbFilteredResults(false),
-      meFilterOption(FILTER_APP_NONE)
+      meFilterOption(FILTER_APP_WRITER)
 {
     mpItemView->setItemStateHdl(LINK(this,TemplateAbstractView,OverlayItemStateHdl));
 }
@@ -186,9 +186,6 @@ void TemplateAbstractView::showOverlay (bool bVisible)
         if (mbFilteredResults)
         {
             filterItems(ViewFilter_Application(meFilterOption));
-
-            mbFilteredResults = false;
-            meFilterOption = FILTER_APP_NONE;
         }
 
         mpItemView->Clear();
