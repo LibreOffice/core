@@ -487,9 +487,9 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         case FN_UNO_CHARFMT_SEQUENCE:
         {
 
-            SwTxtNode* pTxtNode;
-            if((pTxtNode = (SwTxtNode*)rPam.GetNode( sal_True )) == rPam.GetNode(sal_False) &&
-                    pTxtNode->GetpSwpHints())
+            SwTxtNode *const pTxtNode = rPam.GetNode()->GetTxtNode();
+            if (rPam.GetNode(sal_True) == rPam.GetNode(sal_False)
+                && pTxtNode && pTxtNode->GetpSwpHints())
             {
                 sal_uInt16 nPaMStart = rPam.GetPoint()->nContent.GetIndex();
                 sal_uInt16 nPaMEnd = rPam.GetMark() ? rPam.GetMark()->nContent.GetIndex() : nPaMStart;
@@ -940,6 +940,11 @@ sal_Bool DocInsertStringSplitCR(
     xub_StrLen nStartIdx = 0;
     SwTxtNode* const pTxtNd =
         rNewCursor.GetPoint()->nNode.GetNode().GetTxtNode();
+    if (!pTxtNd)
+    {
+        SAL_INFO("sw.uno", "DocInsertStringSplitCR: need a text node");
+        return false;
+    }
     const xub_StrLen nMaxLength = ( pTxtNd )
         ? STRING_LEN - pTxtNd->GetTxt().Len()
         : STRING_LEN;

@@ -10,12 +10,16 @@
 package complex.writer;
 
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.RuntimeException;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.beans.XPropertySetInfo;
+import com.sun.star.beans.Property;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.text.XTextCursor;
+import com.sun.star.text.XTextRange;
 import com.sun.star.text.XTextTable;
 import com.sun.star.table.TableBorder;
 import com.sun.star.table.TableBorder2;
@@ -257,6 +261,34 @@ public class CheckTable
         assertEquals(90, border2.VerticalLine.LineWidth);
         assertTrue(border2.IsDistanceValid);
         assertEquals(97, border2.Distance);
+    }
+
+    @Test
+    public void test_fdo58242() throws Exception
+    {
+        // insert table
+        XMultiServiceFactory xDocF =
+            UnoRuntime.queryInterface(XMultiServiceFactory.class, m_xDoc);
+        XTextTable xTable = UnoRuntime.queryInterface(XTextTable.class,
+            xDocF.createInstance("com.sun.star.text.TextTable"));
+        xTable.initialize(3, 3);
+        XText xText = m_xDoc.getText();
+        XTextCursor xCursor = xText.createTextCursor();
+        xText.insertTextContent(xCursor, xTable, false);
+        // get anchor
+        XTextRange xAnchor = xTable.getAnchor();
+        // check all properties on the anchor - shouldn't crash despite
+        // pointing to a non-SwTxtNode
+        XPropertySet xProps = (XPropertySet)
+            UnoRuntime.queryInterface(XPropertySet.class, xAnchor);
+        XPropertySetInfo xPropsInfo = xProps.getPropertySetInfo();
+        Property[] props = xPropsInfo.getProperties();
+        for (int i = 0; i < props.length; ++i)
+        {
+            try {
+                xProps.getPropertyValue(props[i].Name);
+            } catch (RuntimeException e) { }
+        }
     }
 }
 
