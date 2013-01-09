@@ -46,7 +46,6 @@ MediaWindowBaseImpl::MediaWindowBaseImpl( MediaWindow* pMediaWindow )
 
 MediaWindowBaseImpl::~MediaWindowBaseImpl()
 {
-    uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
 }
 
 // -------------------------------------------------------------------------
@@ -54,42 +53,37 @@ MediaWindowBaseImpl::~MediaWindowBaseImpl()
 uno::Reference< media::XPlayer > MediaWindowBaseImpl::createPlayer( const ::rtl::OUString& rURL )
 {
     uno::Reference< media::XPlayer > xPlayer;
-    uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
+    uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
 
-    if( xFactory.is() )
-    {
-        static const char * aServiceManagers[] = {
-            AVMEDIA_MANAGER_SERVICE_NAME,
+    static const char * aServiceManagers[] = {
+        AVMEDIA_MANAGER_SERVICE_NAME,
 // a fallback path just for gstreamer which has
 // two significant versions deployed at once ...
 #ifdef AVMEDIA_MANAGER_SERVICE_NAME_OLD
-            AVMEDIA_MANAGER_SERVICE_NAME_OLD
+        AVMEDIA_MANAGER_SERVICE_NAME_OLD
 #endif
-        };
+    };
 
-        for( sal_uInt32 i = 0; !xPlayer.is() && i < SAL_N_ELEMENTS( aServiceManagers ); ++i )
-        {
-            const rtl::OUString aServiceName( aServiceManagers[ i ],
-                                              strlen( aServiceManagers[ i ] ),
-                                              RTL_TEXTENCODING_ASCII_US );
+    for( sal_uInt32 i = 0; !xPlayer.is() && i < SAL_N_ELEMENTS( aServiceManagers ); ++i )
+    {
+        const rtl::OUString aServiceName( aServiceManagers[ i ],
+                                          strlen( aServiceManagers[ i ] ),
+                                          RTL_TEXTENCODING_ASCII_US );
 
-            uno::Reference< ::com::sun::star::media::XManager > xManager;
-
-            try {
-                xManager = uno::Reference< ::com::sun::star::media::XManager >(
-                        xFactory->createInstance( aServiceName ), uno::UNO_QUERY );
-                if( xManager.is() )
-                    xPlayer = uno::Reference< media::XPlayer >( xManager->createPlayer( rURL ),
-                                                                uno::UNO_QUERY );
-                else
-                    SAL_WARN( "avmedia",
-                              "failed to create media player service " << aServiceName );
-            } catch ( const uno::Exception &e ) {
-                SAL_WARN(
-                         "avmedia",
-                         "couldn't create media player " AVMEDIA_MANAGER_SERVICE_NAME
-                         ", exception '" << e.Message << '\'');
-            }
+        try {
+            uno::Reference< media::XManager > xManager (
+                    xContext->getServiceManager()->createInstanceWithContext(aServiceName, xContext),
+                    uno::UNO_QUERY );
+            if( xManager.is() )
+                xPlayer = uno::Reference< media::XPlayer >( xManager->createPlayer( rURL ),
+                                                            uno::UNO_QUERY );
+            else
+                SAL_WARN( "avmedia",
+                          "failed to create media player service " << aServiceName );
+        } catch ( const uno::Exception &e ) {
+            SAL_WARN( "avmedia",
+                      "couldn't create media player " AVMEDIA_MANAGER_SERVICE_NAME
+                      ", exception '" << e.Message << '\'');
         }
     }
 
@@ -233,7 +227,7 @@ bool MediaWindowBaseImpl::setZoom( ::com::sun::star::media::ZoomLevel eLevel )
 
 ::com::sun::star::media::ZoomLevel MediaWindowBaseImpl::getZoom() const
 {
-    return( mxPlayerWindow.is() ? mxPlayerWindow->getZoomLevel() : ::com::sun::star::media::ZoomLevel_NOT_AVAILABLE );
+    return( mxPlayerWindow.is() ? mxPlayerWindow->getZoomLevel() : media::ZoomLevel_NOT_AVAILABLE );
 }
 
 // ---------------------------------------------------------------------

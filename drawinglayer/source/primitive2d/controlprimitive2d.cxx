@@ -62,19 +62,16 @@ namespace drawinglayer
                     {
                         if(!aUnoControlTypeName.isEmpty())
                         {
-                            uno::Reference< lang::XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory() );
+                            uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+                            uno::Reference< awt::XControl > xXControl(
+                                xContext->getServiceManager()->createInstanceWithContext(aUnoControlTypeName, xContext), uno::UNO_QUERY);
 
-                            if(xFactory.is())
+                            if(xXControl.is())
                             {
-                                uno::Reference< awt::XControl > xXControl(xFactory->createInstance(aUnoControlTypeName), uno::UNO_QUERY);
+                                xXControl->setModel(getControlModel());
 
-                                if(xXControl.is())
-                                {
-                                    xXControl->setModel(getControlModel());
-
-                                    // remember XControl
-                                    mxXControl = xXControl;
-                                }
+                                // remember XControl
+                                mxXControl = xXControl;
                             }
                         }
                     }

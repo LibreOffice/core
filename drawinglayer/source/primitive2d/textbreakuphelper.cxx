@@ -19,7 +19,7 @@
 
 #include <drawinglayer/primitive2d/textbreakuphelper.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <com/sun/star/i18n/BreakIterator.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/i18n/CharacterIteratorMode.hdl>
 #include <com/sun/star/i18n/WordType.hpp>
@@ -193,93 +193,90 @@ namespace drawinglayer
 
                 if(!xBreakIterator.is())
                 {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF(::comphelper::getProcessServiceFactory());
-                    xBreakIterator.set(xMSF->createInstance(rtl::OUString::createFromAscii("com.sun.star.i18n.BreakIterator")), ::com::sun::star::uno::UNO_QUERY);
+                    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+                    xBreakIterator = ::com::sun::star::i18n::BreakIterator::create(xContext);
                 }
 
-                if(xBreakIterator.is())
+                const rtl::OUString& rTxt = mrSource.getText();
+                const sal_Int32 nTextLength(mrSource.getTextLength());
+                const ::com::sun::star::lang::Locale& rLocale = mrSource.getLocale();
+                const sal_Int32 nTextPosition(mrSource.getTextPosition());
+                sal_Int32 nCurrent(nTextPosition);
+
+                switch(aBreakupUnit)
                 {
-                    const rtl::OUString& rTxt = mrSource.getText();
-                    const sal_Int32 nTextLength(mrSource.getTextLength());
-                    const ::com::sun::star::lang::Locale& rLocale = mrSource.getLocale();
-                    const sal_Int32 nTextPosition(mrSource.getTextPosition());
-                    sal_Int32 nCurrent(nTextPosition);
-
-                    switch(aBreakupUnit)
+                    case BreakupUnit_character:
                     {
-                        case BreakupUnit_character:
-                        {
-                            sal_Int32 nDone;
-                            sal_Int32 nNextCellBreak(xBreakIterator->nextCharacters(rTxt, nTextPosition, rLocale, ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL, 0, nDone));
-                            sal_Int32 a(nTextPosition);
+                        sal_Int32 nDone;
+                        sal_Int32 nNextCellBreak(xBreakIterator->nextCharacters(rTxt, nTextPosition, rLocale, ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL, 0, nDone));
+                        sal_Int32 a(nTextPosition);
 
-                            for(; a < nTextPosition + nTextLength; a++)
+                        for(; a < nTextPosition + nTextLength; a++)
+                        {
+                            if(a == nNextCellBreak)
                             {
-                                if(a == nNextCellBreak)
-                                {
-                                    breakupPortion(aTempResult, nCurrent, a - nCurrent, false);
-                                    nCurrent = a;
-                                    nNextCellBreak = xBreakIterator->nextCharacters(rTxt, a, rLocale, ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
-                                }
+                                breakupPortion(aTempResult, nCurrent, a - nCurrent, false);
+                                nCurrent = a;
+                                nNextCellBreak = xBreakIterator->nextCharacters(rTxt, a, rLocale, ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
                             }
-
-                            breakupPortion(aTempResult, nCurrent, a - nCurrent, false);
-                            break;
                         }
-                        case BreakupUnit_word:
-                        {
-                            ::com::sun::star::i18n::Boundary nNextWordBoundary(xBreakIterator->getWordBoundary(rTxt, nTextPosition, rLocale, ::com::sun::star::i18n::WordType::ANY_WORD, sal_True));
-                            sal_Int32 a(nTextPosition);
 
-                            for(; a < nTextPosition + nTextLength; a++)
+                        breakupPortion(aTempResult, nCurrent, a - nCurrent, false);
+                        break;
+                    }
+                    case BreakupUnit_word:
+                    {
+                        ::com::sun::star::i18n::Boundary nNextWordBoundary(xBreakIterator->getWordBoundary(rTxt, nTextPosition, rLocale, ::com::sun::star::i18n::WordType::ANY_WORD, sal_True));
+                        sal_Int32 a(nTextPosition);
+
+                        for(; a < nTextPosition + nTextLength; a++)
+                        {
+                            if(a == nNextWordBoundary.endPos)
                             {
-                                if(a == nNextWordBoundary.endPos)
+                                if(a > nCurrent)
                                 {
-                                    if(a > nCurrent)
+                                    breakupPortion(aTempResult, nCurrent, a - nCurrent, true);
+                                }
+
+                                nCurrent = a;
+
+                                // skip spaces (maybe enhanced with a bool later if needed)
+                                {
+                                    const sal_Int32 nEndOfSpaces(xBreakIterator->endOfCharBlock(rTxt, a, rLocale, ::com::sun::star::i18n::CharType::SPACE_SEPARATOR));
+
+                                    if(nEndOfSpaces > a)
                                     {
-                                        breakupPortion(aTempResult, nCurrent, a - nCurrent, true);
+                                        nCurrent = nEndOfSpaces;
                                     }
-
-                                    nCurrent = a;
-
-                                    // skip spaces (maybe enhanced with a bool later if needed)
-                                    {
-                                        const sal_Int32 nEndOfSpaces(xBreakIterator->endOfCharBlock(rTxt, a, rLocale, ::com::sun::star::i18n::CharType::SPACE_SEPARATOR));
-
-                                        if(nEndOfSpaces > a)
-                                        {
-                                            nCurrent = nEndOfSpaces;
-                                        }
-                                    }
-
-                                    nNextWordBoundary = xBreakIterator->getWordBoundary(rTxt, a + 1, rLocale, ::com::sun::star::i18n::WordType::ANY_WORD, sal_True);
                                 }
-                            }
 
-                            if(a > nCurrent)
-                            {
-                                breakupPortion(aTempResult, nCurrent, a - nCurrent, true);
+                                nNextWordBoundary = xBreakIterator->getWordBoundary(rTxt, a + 1, rLocale, ::com::sun::star::i18n::WordType::ANY_WORD, sal_True);
                             }
-                            break;
                         }
-                        case BreakupUnit_sentence:
+
+                        if(a > nCurrent)
                         {
-                            sal_Int32 nNextSentenceBreak(xBreakIterator->endOfSentence(rTxt, nTextPosition, rLocale));
-                            sal_Int32 a(nTextPosition);
-
-                            for(; a < nTextPosition + nTextLength; a++)
-                            {
-                                if(a == nNextSentenceBreak)
-                                {
-                                    breakupPortion(aTempResult, nCurrent, a - nCurrent, false);
-                                    nCurrent = a;
-                                    nNextSentenceBreak = xBreakIterator->endOfSentence(rTxt, a + 1, rLocale);
-                                }
-                            }
-
-                            breakupPortion(aTempResult, nCurrent, a - nCurrent, false);
-                            break;
+                            breakupPortion(aTempResult, nCurrent, a - nCurrent, true);
                         }
+                        break;
+                    }
+                    case BreakupUnit_sentence:
+                    {
+                        sal_Int32 nNextSentenceBreak(xBreakIterator->endOfSentence(rTxt, nTextPosition, rLocale));
+                        sal_Int32 a(nTextPosition);
+
+                        for(; a < nTextPosition + nTextLength; a++)
+                        {
+                            if(a == nNextSentenceBreak)
+                            {
+                                breakupPortion(aTempResult, nCurrent, a - nCurrent, false);
+                                nCurrent = a;
+                                nNextSentenceBreak = xBreakIterator->endOfSentence(rTxt, a + 1, rLocale);
+                            }
+                        }
+
+                        breakupPortion(aTempResult, nCurrent, a - nCurrent, false);
+                        break;
                     }
                 }
 
