@@ -93,8 +93,6 @@ class SwGlossaryDlg : public SvxStandardDialog
     CheckBox*       m_pFileRelCB;
     CheckBox*       m_pNetRelCB;
     Window*         m_pExampleWIN;
-    Window*         m_pExampleDummyWIN;
-    CheckBox*       m_pShowExampleCB;
     PushButton*     m_pInsertBtn;
     CloseButton*    m_pCloseBtn;
     MenuButton*     m_pEditBtn;
@@ -121,6 +119,7 @@ class SwGlossaryDlg : public SvxStandardDialog
     SwWrtShell*     pSh;
 
     void EnableShortName(sal_Bool bOn = sal_True);
+    void ShowPreview();
 
     DECL_LINK( NameModify, Edit * );
     DECL_LINK( NameDoubleClick, SvTreeListBox * );
@@ -132,7 +131,6 @@ class SwGlossaryDlg : public SvxStandardDialog
     DECL_LINK(InsertHdl, void *);
     DECL_LINK( PathHdl, Button * );
     DECL_LINK( CheckBoxHdl, CheckBox * );
-    DECL_LINK( ShowPreviewHdl, CheckBox * );
     DECL_LINK( PreviewLoadedHdl, void * );
 
 

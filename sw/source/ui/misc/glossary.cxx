@@ -206,12 +206,10 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
     get(m_pCategoryBox, "category");
     get(m_pFileRelCB, "relfile");
     get(m_pNetRelCB, "relnet");
-    get(m_pShowExampleCB, "showpreview");
     get(m_pInsertBtn, "insert");
     get(m_pBibBtn, "categories");
     get(m_pPathBtn, "path");
     get(m_pExampleWIN, "example");
-    get(m_pExampleDummyWIN, "dummy");
     get(m_pEditBtn, "autotext");
 
     SvtLinguConfig aLocalLinguConfig;
@@ -233,14 +231,10 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
     m_pCategoryBox->SetDoubleClickHdl(LINK(this,SwGlossaryDlg, NameDoubleClick));
     m_pCategoryBox->SetSelectHdl(LINK(this,SwGlossaryDlg,GrpSelect));
     m_pBibBtn->SetClickHdl(LINK(this,SwGlossaryDlg,BibHdl));
-    m_pShowExampleCB->SetClickHdl(LINK(this, SwGlossaryDlg, ShowPreviewHdl));
 
     m_pInsertBtn->SetClickHdl(LINK(this,SwGlossaryDlg,InsertHdl));
 
-    const SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();
-
-    m_pShowExampleCB->Check( rCfg.IsAutoTextPreview());
-    ShowPreviewHdl(m_pShowExampleCB);
+    ShowPreview();
 
     bIsDocReadOnly = pSh->GetView().GetDocShell()->IsReadOnly() ||
                       pSh->HasReadonlySel();
@@ -260,9 +254,6 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
 
 SwGlossaryDlg::~SwGlossaryDlg()
 {
-    SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();
-    rCfg.SetAutoTextPreview(m_pShowExampleCB->IsChecked()) ;
-
     m_pCategoryBox->Clear();
     delete pExampleFrame;
 }
@@ -1125,35 +1116,22 @@ IMPL_LINK_NOARG(SwGlossaryDlg, InsertHdl)
     return 0;
 }
 
-IMPL_LINK( SwGlossaryDlg, ShowPreviewHdl, CheckBox *, pBox )
+void SwGlossaryDlg::ShowPreview()
 {
-    sal_Bool bCreated = sal_False;
-    if(pBox->IsChecked())
+    //create example
+    if (!pExampleFrame)
     {
-        //create example
-        if(!pExampleFrame)
-        {
-            Link aLink(LINK(this, SwGlossaryDlg, PreviewLoadedHdl));
-            pExampleFrame = new SwOneExampleFrame( *m_pExampleWIN,
-                            EX_SHOW_ONLINE_LAYOUT, &aLink );
-            bCreated = sal_True;
-        }
+        Link aLink(LINK(this, SwGlossaryDlg, PreviewLoadedHdl));
+        pExampleFrame = new SwOneExampleFrame( *m_pExampleWIN,
+                        EX_SHOW_ONLINE_LAYOUT, &aLink );
     }
 
-    sal_Bool bShow = pBox->IsChecked() && !bCreated;
-    m_pExampleWIN->Show( bShow );
-    m_pExampleDummyWIN->Show(!bShow);
-    if( ::GetCurrGlosGroup() )
+    if (::GetCurrGlosGroup())
         ShowAutoText(*::GetCurrGlosGroup(), m_pShortNameEdit->GetText());
-
-    return 0;
 };
 
 IMPL_LINK_NOARG(SwGlossaryDlg, PreviewLoadedHdl)
 {
-    sal_Bool bShow = m_pShowExampleCB->IsChecked();
-    m_pExampleWIN->Show( bShow );
-    m_pExampleDummyWIN->Show(!bShow);
     ResumeShowAutoText();
     return 0;
 }
