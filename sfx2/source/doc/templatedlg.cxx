@@ -210,9 +210,9 @@ SfxTemplateManagerDlg::~SfxTemplateManagerDlg ()
     delete mpSearchView;
     delete maView;
     delete mpOnlineView;
+    delete mpTemplateDefaultMenu;
     delete mpActionMenu;
     delete mpRepositoryMenu;
-    delete mpTemplateDefaultMenu;
     delete mpToolbars;
 }
 
