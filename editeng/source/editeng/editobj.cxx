@@ -185,6 +185,7 @@ EditTextObject::EditTextObject( SfxItemPool* pPool ) :
 }
 
 EditTextObject::EditTextObject( const EditTextObject& r ) :
+    SfxItemPoolUser(),
     mpImpl(new EditTextObjectImpl(this, *r.mpImpl))
 {
 }
