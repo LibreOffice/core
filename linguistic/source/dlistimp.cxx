@@ -566,7 +566,7 @@ uno::Reference< XDictionary > SAL_CALL
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
-    sal_Int16 nLanguage = LanguageTag( rLocale ).getLanguageType();
+    sal_Int16 nLanguage = LinguLocaleToLanguage( rLocale );
     bool bIsWriteablePath = rURL.match( GetDictionaryWriteablePath(), 0 );
     return new DictionaryNeo( rName, nLanguage, eDicType, rURL, bIsWriteablePath );
 }
@@ -578,7 +578,7 @@ uno::Reference< XDictionaryEntry > SAL_CALL
         throw(RuntimeException)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
-    return SearchDicList( this, rWord, LanguageTag( rLocale ).getLanguageType(),
+    return SearchDicList( this, rWord, LinguLocaleToLanguage( rLocale ),
                             bSearchPosDics, bSearchSpellEntry );
 }
 
@@ -669,7 +669,7 @@ void DicList::_CreateDicList()
     // and add it to list
     rtl::OUString aDicName( A2OU( "IgnoreAllList" ) );
     uno::Reference< XDictionary > xIgnAll(
-            createDictionary( aDicName, LanguageTag( LANGUAGE_NONE ).getLocale(),
+            createDictionary( aDicName, LinguLanguageToLocale( LANGUAGE_NONE ),
                               DictionaryType_POSITIVE, rtl::OUString() ) );
     if (xIgnAll.is())
     {

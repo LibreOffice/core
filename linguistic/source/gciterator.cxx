@@ -1072,12 +1072,12 @@ void GrammarCheckingIterator::SetServiceList(
 {
     ::osl::Guard< ::osl::Mutex > aGuard( MyMutex::get() );
 
-    LanguageType nLanguage = LanguageTag( rLocale ).getLanguageType();
+    LanguageType nLanguage = LinguLocaleToLanguage( rLocale );
     OUString aImplName;
     if (rSvcImplNames.getLength() > 0)
         aImplName = rSvcImplNames[0];   // there is only one grammar checker per language
 
-    if (nLanguage != LANGUAGE_NONE && nLanguage != LANGUAGE_DONTKNOW)
+    if (!LinguIsUnspecified(nLanguage) && nLanguage != LANGUAGE_DONTKNOW)
     {
         if (!aImplName.isEmpty())
             m_aGCImplNamesByLang[ nLanguage ] = aImplName;
@@ -1095,7 +1095,7 @@ uno::Sequence< OUString > GrammarCheckingIterator::GetServiceList(
     uno::Sequence< OUString > aRes(1);
 
     OUString aImplName;     // there is only one grammar checker per language
-    LanguageType nLang  = LanguageTag( rLocale ).getLanguageType();
+    LanguageType nLang  = LinguLocaleToLanguage( rLocale );
     GCImplNames_t::const_iterator aIt( m_aGCImplNamesByLang.find( nLang ) );
     if (aIt != m_aGCImplNamesByLang.end())
         aImplName = aIt->second;

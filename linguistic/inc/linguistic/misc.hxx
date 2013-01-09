@@ -98,6 +98,24 @@ LocaleDataWrapper & GetLocaleDataWrapper( sal_Int16 nLang );
 
 sal_Int32 LevDistance( const rtl::OUString &rTxt1, const rtl::OUString &rTxt2 );
 
+/** Convert Locale to LanguageType for legacy handling.
+    Linguistic specific handling of an empty locale denoting LANGUAGE_NONE.
+    Does not resolve empty locale as system locale.
+ */
+LNG_DLLPUBLIC LanguageType LinguLocaleToLanguage( const ::com::sun::star::lang::Locale& rLocale );
+
+/** Convert LanguageType to Locale for legacy handling.
+    Linguistic specific handling of LANGUAGE_NONE resulting in an empty locale.
+    Avoid use!
+ */
+LNG_DLLPUBLIC ::com::sun::star::lang::Locale LinguLanguageToLocale( LanguageType nLanguage );
+
+/** Checks if a LanguageType is one of the values that denote absence of
+    language or undetermined language or multiple languages, in short all
+    values used in linguistic context that do not denote a specific language.
+ */
+LNG_DLLPUBLIC bool LinguIsUnspecified( LanguageType nLanguage );
+
 ::com::sun::star::uno::Sequence< sal_Int16 >
     LocaleSeqToLangSeq( ::com::sun::star::uno::Sequence<
         ::com::sun::star::lang::Locale > &rLocaleSeq );

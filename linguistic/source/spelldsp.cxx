@@ -220,7 +220,7 @@ sal_Bool SAL_CALL SpellCheckerDispatcher::hasLocale( const Locale& rLocale )
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    SpellSvcByLangMap_t::const_iterator aIt( aSvcMap.find( LanguageTag( rLocale ).getLanguageType() ) );
+    SpellSvcByLangMap_t::const_iterator aIt( aSvcMap.find( LinguLocaleToLanguage( rLocale ) ) );
     return aIt != aSvcMap.end();
 }
 
@@ -231,7 +231,7 @@ sal_Bool SAL_CALL
         throw(IllegalArgumentException, RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return isValid_Impl( rWord, LanguageTag( rLocale ).getLanguageType(), rProperties, sal_True );
+    return isValid_Impl( rWord, LinguLocaleToLanguage( rLocale ), rProperties, sal_True );
 }
 
 
@@ -241,7 +241,7 @@ Reference< XSpellAlternatives > SAL_CALL
         throw(IllegalArgumentException, RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return spell_Impl( rWord, LanguageTag( rLocale ).getLanguageType(), rProperties, sal_True );
+    return spell_Impl( rWord, LinguLocaleToLanguage( rLocale ), rProperties, sal_True );
 }
 
 
@@ -290,7 +290,7 @@ sal_Bool SpellCheckerDispatcher::isValid_Impl(
 
     sal_Bool bRes = sal_True;
 
-    if (nLanguage == LANGUAGE_NONE || rWord.isEmpty())
+    if (LinguIsUnspecified( nLanguage) || rWord.isEmpty())
         return bRes;
 
     // search for entry with that language
@@ -460,7 +460,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
 
     Reference< XSpellAlternatives > xRes;
 
-    if (nLanguage == LANGUAGE_NONE || rWord.isEmpty())
+    if (LinguIsUnspecified( nLanguage) || rWord.isEmpty())
         return xRes;
 
     // search for entry with that language
@@ -767,7 +767,7 @@ void SpellCheckerDispatcher::SetServiceList( const Locale &rLocale,
     if (pCache)
         pCache->Flush();    // new services may spell differently...
 
-    sal_Int16 nLanguage = LanguageTag( rLocale ).getLanguageType();
+    sal_Int16 nLanguage = LinguLocaleToLanguage( rLocale );
 
     sal_Int32 nLen = rSvcImplNames.getLength();
     if (0 == nLen)
@@ -801,7 +801,7 @@ Sequence< OUString >
     Sequence< OUString > aRes;
 
     // search for entry with that language and use data from that
-    sal_Int16 nLanguage = LanguageTag( rLocale ).getLanguageType();
+    sal_Int16 nLanguage = LinguLocaleToLanguage( rLocale );
     SpellCheckerDispatcher          *pThis = (SpellCheckerDispatcher *) this;
     const SpellSvcByLangMap_t::iterator aIt( pThis->aSvcMap.find( nLanguage ) );
     const LangSvcEntries_Spell      *pEntry = aIt != aSvcMap.end() ? aIt->second.get() : NULL;

@@ -152,7 +152,7 @@ sal_Bool IsConvDic( const String &rFileURL, sal_Int16 &nLang, sal_Int16 &nConvTy
     uno::Reference< XInterface > xRef( (document::XFilter *) pImport, UNO_QUERY );
 
     ReadThroughDic( rFileURL, *pImport );    // will implicitly add the entries
-    bRes =  pImport->GetLanguage() != LANGUAGE_NONE &&
+    bRes =  !LinguIsUnspecified( pImport->GetLanguage()) &&
             pImport->GetConversionType() != -1;
     DBG_ASSERT( bRes, "conversion dictionary corrupted?" );
 

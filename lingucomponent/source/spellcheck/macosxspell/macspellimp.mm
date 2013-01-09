@@ -296,7 +296,7 @@ sal_Bool SAL_CALL
     sal_Int16 nFailure = GetSpellFailure( rWord, rLocale );
     if (nFailure != -1)
     {
-        sal_Int16 nLang = LanguageTag( rLocale ).getLanguageType();
+        sal_Int16 nLang = LinguLocaleToLanguage( rLocale );
         // postprocess result for errors that should be ignored
         if (   (!rHelper.IsSpellUpperCase()  && IsUpper( rWord, nLang ))
             || (!rHelper.IsSpellWithDigits() && HasDigits( rWord ))
@@ -320,7 +320,7 @@ Reference< XSpellAlternatives >
     Reference< XSpellAlternatives > xRes;
         // note: mutex is held by higher up by spell which covers both
 
-    sal_Int16 nLang = LanguageTag( rLocale ).getLanguageType();
+    sal_Int16 nLang = LinguLocaleToLanguage( rLocale );
     int count;
     Sequence< OUString > aStr( 0 );
 

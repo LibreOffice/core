@@ -115,7 +115,7 @@ static uno::Sequence< lang::Locale > GetAvailLocales(
                 for (sal_Int32 k = 0;  k < nLoc;  ++k)
                 {
                     const lang::Locale *pLoc = aLoc.getConstArray();
-                    LanguageType nLang = LanguageTag( pLoc[k] ).getLanguageType();
+                    LanguageType nLang = LinguLocaleToLanguage( pLoc[k] );
 
                     // language not already added?
                     if (aLanguages.find( nLang ) == aLanguages.end())
@@ -1602,11 +1602,11 @@ uno::Sequence< OUString > SAL_CALL
         OUString *pImplName = aRes.getArray();
 
         sal_uInt16 nCnt = 0;
-        LanguageType nLanguage = LanguageTag( rLocale ).getLanguageType();
+        LanguageType nLanguage = LinguLocaleToLanguage( rLocale );
         for (size_t i = 0;  i < nMaxCnt; ++i)
         {
             const SvcInfo &rInfo = (*pInfoArray)[i];
-            if (LANGUAGE_NONE == nLanguage
+            if (LinguIsUnspecified( nLanguage )
                 || rInfo.HasLanguage( nLanguage ))
             {
                 pImplName[ nCnt++ ] = rInfo.aSvcImplName;
@@ -1689,8 +1689,8 @@ void SAL_CALL
 #if OSL_DEBUG_LEVEL > 1
 #endif
 
-    LanguageType nLanguage = LanguageTag( rLocale ).getLanguageType();
-    if (LANGUAGE_NONE != nLanguage)
+    LanguageType nLanguage = LinguLocaleToLanguage( rLocale );
+    if (!LinguIsUnspecified( nLanguage))
     {
         if (0 == rServiceName.compareToAscii( SN_SPELLCHECKER ))
         {

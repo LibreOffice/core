@@ -85,6 +85,36 @@ LocaleDataWrapper & GetLocaleDataWrapper( sal_Int16 nLang )
     return aLclDtaWrp;
 }
 
+
+LanguageType LinguLocaleToLanguage( const ::com::sun::star::lang::Locale& rLocale )
+{
+    if ( rLocale.Language.isEmpty() )
+        return LANGUAGE_NONE;
+    return LanguageTag( rLocale ).getLanguageType();
+}
+
+
+::com::sun::star::lang::Locale LinguLanguageToLocale( LanguageType nLanguage )
+{
+    if (nLanguage == LANGUAGE_NONE)
+        return ::com::sun::star::lang::Locale();
+    return LanguageTag( nLanguage).getLocale();
+}
+
+
+bool LinguIsUnspecified( LanguageType nLanguage )
+{
+    switch (nLanguage)
+    {
+        case LANGUAGE_NONE:
+        case LANGUAGE_UNDETERMINED:
+        case LANGUAGE_MULTIPLE:
+            return true;
+    }
+    return false;
+}
+
+
 static inline sal_Int32 Minimum( sal_Int32 n1, sal_Int32 n2, sal_Int32 n3 )
 {
     sal_Int32 nMin = n1 < n2 ? n1 : n2;
@@ -266,10 +296,10 @@ uno::Reference< XDictionaryEntry > SearchDicList(
         uno::Reference< XDictionary > axDic( pDic[i], UNO_QUERY );
 
         DictionaryType  eType = axDic->getDictionaryType();
-        sal_Int16           nLang = LanguageTag( axDic->getLocale() ).getLanguageType();
+        sal_Int16           nLang = LinguLocaleToLanguage( axDic->getLocale() );
 
         if ( axDic.is() && axDic->isActive()
-            && (nLang == nLanguage  ||  nLang == LANGUAGE_NONE) )
+            && (nLang == nLanguage  ||  LinguIsUnspecified( nLang)) )
         {
             DBG_ASSERT( eType != DictionaryType_MIXED,
                 "lng : unexpected dictionary type" );
@@ -373,7 +403,7 @@ uno::Sequence< sal_Int16 >
     sal_Int16 *pLang = aLangs.getArray();
     for (sal_Int32 i = 0;  i < nCount;  ++i)
     {
-        pLang[i] = LanguageTag( pLocale[i] ).getLanguageType();
+        pLang[i] = LinguLocaleToLanguage( pLocale[i] );
     }
 
     return aLangs;
@@ -554,7 +584,7 @@ uno::Reference< XHyphenatedWord > RebuildHyphensAndControlChars(
         }
         else
         {
-            sal_Int16 nLang = LanguageTag( rxHyphWord->getLocale() ).getLanguageType();
+            sal_Int16 nLang = LinguLocaleToLanguage( rxHyphWord->getLocale() );
             xRes = new HyphenatedWord(
                         rOrigWord, nLang, nOrigHyphenationPos,
                         aOrigHyphenatedWord, nOrigHyphenPos );
