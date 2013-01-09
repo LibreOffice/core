@@ -289,11 +289,11 @@ namespace
         return eErrorCode;
     }
     //------------------------------------------------------------------------------
-    ::rtl::OUString BuildJoinCriteria(  const Reference< XConnection>& _xConnection,
-                                        const OConnectionLineDataVec* pLineDataList,
-                                        const OQueryTableConnectionData* pData)
+    OUString BuildJoinCriteria(  const Reference< XConnection>& _xConnection,
+                                 const OConnectionLineDataVec* pLineDataList,
+                                 const OQueryTableConnectionData* pData)
     {
-        ::rtl::OUStringBuffer aCondition;
+        OUStringBuffer aCondition;
         if ( _xConnection.is() )
         {
             OConnectionLineDataVec::const_iterator aIter = pLineDataList->begin();
@@ -301,19 +301,19 @@ namespace
             try
             {
                 const Reference< XDatabaseMetaData >  xMetaData = _xConnection->getMetaData();
-                const ::rtl::OUString aQuote = xMetaData->getIdentifierQuoteString();
-                const ::rtl::OUString sEqual(RTL_CONSTASCII_USTRINGPARAM(" = "));
+                const OUString aQuote = xMetaData->getIdentifierQuoteString();
+                const OUString sEqual(" = ");
 
                 for(;aIter != aEnd;++aIter)
                 {
                     OConnectionLineDataRef pLineData = *aIter;
                     if(aCondition.getLength())
                         aCondition.append(C_AND);
-                    aCondition.append(quoteTableAlias(sal_True,pData->GetAliasName(JTCS_FROM),aQuote));
-                    aCondition.append(::dbtools::quoteName(aQuote, pLineData->GetFieldName(JTCS_FROM) ));
-                    aCondition.append(sEqual);
-                    aCondition.append(quoteTableAlias(sal_True,pData->GetAliasName(JTCS_TO),aQuote));
-                    aCondition.append(::dbtools::quoteName(aQuote, pLineData->GetFieldName(JTCS_TO) ));
+                    aCondition.append(quoteTableAlias(sal_True,pData->GetAliasName(JTCS_FROM),aQuote) +
+                                     ::dbtools::quoteName(aQuote, pLineData->GetFieldName(JTCS_FROM) ) +
+                                     sEqual +
+                                     quoteTableAlias(sal_True,pData->GetAliasName(JTCS_TO),aQuote) +
+                                     ::dbtools::quoteName(aQuote, pLineData->GetFieldName(JTCS_TO) ));
                 }
             }
             catch(SQLException&)
@@ -683,11 +683,7 @@ namespace
                     if  ( pEntryField->isAggreateFunction() )
                     {
                         OSL_ENSURE(!pEntryField->GetFunction().isEmpty(),"Functionname darf hier nicht leer sein! ;-(");
-                        ::rtl::OUStringBuffer aTmpStr2( pEntryField->GetFunction());
-                        aTmpStr2.appendAscii("(");
-                        aTmpStr2.append(aTmpStr.makeStringAndClear());
-                        aTmpStr2.appendAscii(")");
-                        aTmpStr = aTmpStr2;
+                        aTmpStr = pEntryField->GetFunction() + "(" + aTmpStr.makeStringAndClear() + ")";
                     }
 
                     if (!rFieldAlias.isEmpty()                         &&
@@ -695,11 +691,9 @@ namespace
                         pEntryField->isNumericOrAggreateFunction()      ||
                         pEntryField->isOtherFunction()))
                     {
-                        aTmpStr.append(s_sAs);
-                        aTmpStr.append(::dbtools::quoteName(aQuote, rFieldAlias));
+                        aTmpStr.append(s_sAs + ::dbtools::quoteName(aQuote, rFieldAlias));
                     }
-                    aFieldListStr.append(aTmpStr.makeStringAndClear());
-                    aFieldListStr.append(sFieldSeparator);
+                    aFieldListStr.append(aTmpStr.makeStringAndClear() + sFieldSeparator);
                 }
             }
             if(aFieldListStr.getLength())
@@ -2916,17 +2910,14 @@ sal_Bool OQueryDesignView::checkStatement()
         aCriteriaListStr = aTmp;
     }
     // ----------------- Statement aufbauen ----------------------
-    ::rtl::OUStringBuffer aSqlCmd(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT ")));
+    OUStringBuffer aSqlCmd("SELECT ");
     if(static_cast<OQueryController&>(getController()).isDistinct())
-        aSqlCmd.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" DISTINCT ")));
-    aSqlCmd.append(aFieldListStr);
-    aSqlCmd.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" FROM ")));
-    aSqlCmd.append(aTableListStr);
+        aSqlCmd.append(" DISTINCT ");
+    aSqlCmd.append(aFieldListStr + " FROM " + aTableListStr);
 
     if (aCriteriaListStr.getLength())
     {
-        aSqlCmd.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" WHERE ")));
-        aSqlCmd.append(aCriteriaListStr.makeStringAndClear());
+        aSqlCmd.append(" WHERE " + aCriteriaListStr.makeStringAndClear());
     }
     // ----------------- GroupBy aufbauen und Anh"angen ------------
     Reference<XDatabaseMetaData> xMeta;
@@ -2940,8 +2931,7 @@ sal_Bool OQueryDesignView::checkStatement()
     // ----------------- having Anh"angen ------------
     if(aHavingStr.getLength())
     {
-        aSqlCmd.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" HAVING ")));
-        aSqlCmd.append(aHavingStr.makeStringAndClear());
+        aSqlCmd.append(" HAVING " + aHavingStr.makeStringAndClear());
     }
     // ----------------- Sortierung aufbauen und Anh"angen ------------
     ::rtl::OUString sOrder;

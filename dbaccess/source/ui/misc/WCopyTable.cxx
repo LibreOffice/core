@@ -235,37 +235,35 @@ OFieldDescription* ObjectCopySource::createFieldDescription( const ::rtl::OUStri
     return new OFieldDescription( xColumn );
 }
 //------------------------------------------------------------------------
-::rtl::OUString ObjectCopySource::getSelectStatement() const
+OUString ObjectCopySource::getSelectStatement() const
 {
-    ::rtl::OUString sSelectStatement;
+    OUString sSelectStatement;
     if ( m_xObjectPSI->hasPropertyByName( PROPERTY_COMMAND ) )
     {   // query
         OSL_VERIFY( m_xObject->getPropertyValue( PROPERTY_COMMAND ) >>= sSelectStatement );
     }
     else
     {   // table
-        ::rtl::OUStringBuffer aSQL;
-        aSQL.appendAscii( "SELECT " );
+        OUStringBuffer aSQL( "SELECT " );
 
         // we need to create the sql stmt with column names
         // otherwise it is possible that names don't match
-        const ::rtl::OUString sQuote = m_xMetaData->getIdentifierQuoteString();
+        const OUString sQuote = m_xMetaData->getIdentifierQuoteString();
 
-        Sequence< ::rtl::OUString > aColumnNames = getColumnNames();
-        const ::rtl::OUString* pColumnName = aColumnNames.getConstArray();
-        const ::rtl::OUString* pEnd = pColumnName + aColumnNames.getLength();
+        Sequence< OUString > aColumnNames = getColumnNames();
+        const OUString* pColumnName = aColumnNames.getConstArray();
+        const OUString* pEnd = pColumnName + aColumnNames.getLength();
         for ( ; pColumnName != pEnd; )
         {
             aSQL.append( ::dbtools::quoteName( sQuote, *pColumnName++ ) );
 
             if ( pColumnName == pEnd )
-                aSQL.appendAscii( " " );
+                aSQL.append( " " );
             else
-                aSQL.appendAscii( ", " );
+                aSQL.append( ", " );
         }
 
-        aSQL.appendAscii( "FROM " );
-        aSQL.append( ::dbtools::composeTableNameForSelect( m_xConnection, m_xObject ) );
+        aSQL.append( "FROM " + ::dbtools::composeTableNameForSelect( m_xConnection, m_xObject ) );
 
         sSelectStatement = aSQL.makeStringAndClear();
     }
@@ -418,14 +416,10 @@ OFieldDescription* NamedTableCopySource::createFieldDescription( const ::rtl::OU
     return NULL;
 }
 //------------------------------------------------------------------------
-::rtl::OUString NamedTableCopySource::getSelectStatement() const
+OUString NamedTableCopySource::getSelectStatement() const
 {
-    ::rtl::OUStringBuffer aSQL;
-    aSQL.appendAscii( "SELECT * FROM " );
-
-    aSQL.append( ::dbtools::composeTableNameForSelect( m_xConnection, m_sTableCatalog, m_sTableSchema, m_sTableBareName ) );
-
-    return aSQL.makeStringAndClear();
+    return OUString( "SELECT * FROM " +
+                     ::dbtools::composeTableNameForSelect( m_xConnection, m_sTableCatalog, m_sTableSchema, m_sTableBareName ) );
 }
 
 //------------------------------------------------------------------------
