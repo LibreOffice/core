@@ -83,8 +83,10 @@ void test::ostring::StringConcat::checkConcat()
     TYPES_ASSERT_EQUAL(( typeid( OStringConcat< OString, const char* > )), typeid( OString( "foo" ) + d3 ));
     CPPUNIT_ASSERT_EQUAL( OString( "fooabc" ), OString( OString( "foo" ) + d4 ));
     TYPES_ASSERT_EQUAL(( typeid( OStringConcat< OString, char* > )), typeid( OString( "foo" ) + d4 ));
+#if __GNUC__ > 4 || ( __GNUC__ == 4 && __GNUC_MINOR__ > 1 )
     CPPUNIT_ASSERT_EQUAL( OString( "foobar" ), OString( OStringBuffer( "foo" ) + OString( "bar" )));
     TYPES_ASSERT_EQUAL(( typeid( OStringConcat< OStringBuffer, OString > )), typeid( OStringBuffer( "foo" ) + OString( "bar" )));
+#endif
 }
 #undef typeid
 
