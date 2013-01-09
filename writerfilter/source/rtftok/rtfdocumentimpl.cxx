@@ -817,15 +817,16 @@ int RTFDocumentImpl::resolvePict(bool bInline)
     writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aAttributes, aSprms));
     checkFirstRun();
     if (!m_pCurrentBuffer)
+    {
         Mapper().props(pProperties);
+        // Make sure we don't loose these properties with a too early reset.
+        m_bHadPicture = true;
+    }
     else
     {
         RTFValue::Pointer_t pValue(new RTFValue(aAttributes, aSprms));
         m_pCurrentBuffer->push_back(make_pair(BUFFER_PROPS, pValue));
     }
-
-    // Make sure we don't loose these properties with a too early reset.
-    m_bHadPicture = true;
     return 0;
 }
 
