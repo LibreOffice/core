@@ -18,7 +18,6 @@
  */
 
 
-#include <stdio.h>
 #include <dlfcn.h>
 #include <cxxabi.h>
 #include <boost/unordered_map.hpp>
@@ -52,9 +51,7 @@ void dummy_can_throw_anything( char const * )
 //==================================================================================================
 static OUString toUNOname( char const * p ) SAL_THROW(())
 {
-#if OSL_DEBUG_LEVEL > 1
     char const * start = p;
-#endif
 
     // example: N3com3sun4star4lang24IllegalArgumentExceptionE
 
@@ -77,14 +74,11 @@ static OUString toUNOname( char const * p ) SAL_THROW(())
             buf.append( (sal_Unicode)'.' );
     }
 
-#if OSL_DEBUG_LEVEL > 1
-    OUString ret( buf.makeStringAndClear() );
-    OString c_ret( OUStringToOString( ret, RTL_TEXTENCODING_ASCII_US ) );
-    fprintf( stderr, "> toUNOname(): %s => %s\n", start, c_ret.getStr() );
-    return ret;
-#else
-    return buf.makeStringAndClear();
-#endif
+    OUString result( buf.makeStringAndClear() );
+
+    SAL_INFO( "bridges.ios", "toUNOname():" << start << " => " << result );
+
+    return result;
 }
 
 //==================================================================================================
@@ -161,9 +155,9 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
                 // symbol and rtti-name is nearly identical,
                 // the symbol is prefixed with _ZTI
                 char const * rttiName = symName.getStr() +4;
-#if OSL_DEBUG_LEVEL > 1
-                fprintf( stderr,"generated rtti for %s\n", rttiName );
-#endif
+
+                SAL_INFO( "bridges.ios", "getRTTI: generating typeinfo " << rttiName );
+
                 if (pTypeDescr->pBaseTypeDescription)
                 {
                     // ensure availability of base
@@ -216,13 +210,8 @@ static void deleteException( void * pExc )
 //==================================================================================================
 void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
 {
-#if OSL_DEBUG_LEVEL > 1
-    OString cstr(
-        OUStringToOString(
-            *reinterpret_cast< OUString const * >( &pUnoExc->pType->pTypeName ),
-            RTL_TEXTENCODING_ASCII_US ) );
-    fprintf( stderr, "> uno exception occurred: %s\n", cstr.getStr() );
-#endif
+    SAL_INFO( "bridges.ios", "raiseException: " << pUnoExc->pType->pTypeName );
+
     void * pCppExc;
     type_info * rtti;
 
@@ -294,10 +283,9 @@ void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping 
 
     typelib_TypeDescription * pExcTypeDescr = 0;
     OUString unoName( toUNOname( header->exceptionType->name() ) );
-#if OSL_DEBUG_LEVEL > 1
-    OString cstr_unoName( OUStringToOString( unoName, RTL_TEXTENCODING_ASCII_US ) );
-    fprintf( stderr, "> c++ exception occurred: %s\n", cstr_unoName.getStr() );
-#endif
+
+    SAL_INFO( "bridges.ios", "fillUnoException: " << unoName );
+
     typelib_typedescription_getByName( &pExcTypeDescr, unoName.pData );
     if (0 == pExcTypeDescr)
     {
@@ -306,6 +294,7 @@ void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping 
             Reference< XInterface >() );
         Type const & rType = ::getCppuType( &aRE );
         uno_type_any_constructAndConvert( pUnoExc, &aRE, rType.getTypeLibType(), pCpp2Uno );
+
 #if OSL_DEBUG_LEVEL > 0
         OString cstr( OUStringToOString( aRE.Message, RTL_TEXTENCODING_ASCII_US ) );
         OSL_FAIL( cstr.getStr() );
