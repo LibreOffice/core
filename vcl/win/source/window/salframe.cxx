@@ -2414,7 +2414,7 @@ static void ImplGetKeyNameText( LONG lParam, sal_Unicode* pBuf,
         else
         {
             nKeyLen = aRet.getLength();
-            wcscpy_s( aKeyBuf, nMaxKeyLen, aRet.getStr() );
+            wcscpy( aKeyBuf, aRet.getStr() );
         }
     }
 
