@@ -926,8 +926,6 @@ void ScFiltersTest::testBordersOoo33()
             }
         }
     }
-
-    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testBugFixesODS()
@@ -1770,8 +1768,6 @@ void ScFiltersTest::testColorScaleODS()
     rtl::OUStringBuffer aBuffer(getSrcRootPath());
     aBuffer.append(m_aBaseString).append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/reference/")));
     testColorScale_Impl(pDoc, aBuffer.makeStringAndClear());
-
-    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testColorScaleXLSX()
@@ -1796,8 +1792,6 @@ void ScFiltersTest::testColorScaleXLSX()
     rtl::OUStringBuffer aBuffer(getSrcRootPath());
     aBuffer.append(m_aBaseString).append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/reference/")));
     testColorScale_Impl(pDoc, aBuffer.makeStringAndClear());
-
-    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testDataBarODS()
@@ -1827,8 +1821,6 @@ void ScFiltersTest::testNewCondFormat()
     rtl::OUString aCSVPath;
     createCSVPath( aCSVFile, aCSVPath );
     testCondFile(aCSVPath, pDoc, 0);
-
-    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testFormulaDependency()
@@ -1857,8 +1849,6 @@ void ScFiltersTest::testFormulaDependency()
 
     // check that the number format is implicity inherited
     // CPPUNIT_ASSERT_EQUAL(pDoc->GetString(0,4,0), pDoc->GetString(0,5,0));
-
-    xDocSh->DoClose();
 }
 
 ScFiltersTest::ScFiltersTest()
