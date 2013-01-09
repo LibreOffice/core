@@ -55,7 +55,7 @@
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
-#include <com/sun/star/document/XGraphicObjectResolver.hpp>
+#include <com/sun/star/document/GraphicObjectResolver.hpp>
 
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
@@ -700,14 +700,10 @@ void ElementDescriptor::readImageURLAttr( OUString const & rPropName, OUString c
             Reference< document::XStorageBasedDocument > xDocStorage( _xDocument, UNO_QUERY );
             if ( xDocStorage.is() )
             {
-                uno::Sequence< Any > aArgs( 1 );
-                aArgs[ 0 ] <<= xDocStorage->getDocumentStorage();
-
-                ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-                uno::Reference< document::XGraphicObjectResolver > xGraphicResolver;
-                aContext.createComponentWithArguments( "com.sun.star.comp.Svx.GraphicExportHelper" , aArgs, xGraphicResolver );
-                if ( xGraphicResolver.is() )
-                    sURL = xGraphicResolver->resolveGraphicObjectURL( sURL );
+                Reference<XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+                uno::Reference< document::XGraphicObjectResolver > xGraphicResolver =
+                    document::GraphicObjectResolver::createWithStorage( xContext, xDocStorage->getDocumentStorage() );
+                sURL = xGraphicResolver->resolveGraphicObjectURL( sURL );
             }
         }
         if ( !sURL.isEmpty() )

@@ -95,6 +95,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/deployment
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/document,\
 	DocumentProperties \
 	DocumentRevisionListPersistence \
+	GraphicObjectResolver \
 	OleEmbeddedServerRegistration \
 	OOXMLDocumentPropertiesImporter \
 ))

@@ -34,6 +34,7 @@
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
+#include <com/sun/star/document/GraphicObjectResolver.hpp>
 #include <com/sun/star/embed/EntryInitModes.hpp>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
@@ -435,10 +436,7 @@ void lcl_uglyHackToStoreDialogeEmbedImages( const Reference< XStorageBasedLibrar
     if ( !vEmbedImgUrls.empty() )
     {
         // Export the images to the storage
-        Sequence< Any > aArgs( 1 );
-        aArgs[ 0 ] <<= xTmpPic;
-        Reference< XGraphicObjectResolver > xGraphicResolver(
-                aContext.createComponentWithArguments( "com.sun.star.comp.Svx.GraphicExportHelper", aArgs ), UNO_QUERY );
+        Reference< XGraphicObjectResolver > xGraphicResolver = GraphicObjectResolver::createWithStorage(aContext.getUNOContext(), xTmpPic);
         std::vector< OUString >::iterator it = vEmbedImgUrls.begin();
         std::vector< OUString >::iterator it_end = vEmbedImgUrls.end();
         if ( xGraphicResolver.is() )

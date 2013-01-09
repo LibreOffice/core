@@ -50,7 +50,7 @@
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
-#include <com/sun/star/document/XGraphicObjectResolver.hpp>
+#include <com/sun/star/document/GraphicObjectResolver.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 
 using namespace ::com::sun::star;
@@ -619,11 +619,8 @@ sal_Int32 XMLFilter::impl_Export(
             }
         }
 
-        uno::Sequence< uno::Any > aGraphicResolverArgs(1);
-        aGraphicResolverArgs[0] <<= xStorage;
-        Reference< document::XGraphicObjectResolver > xGraphicObjectResolver(
-            xServiceFactory->createInstanceWithArguments(
-                C2U("com.sun.star.comp.Svx.GraphicExportHelper"), aGraphicResolverArgs ), uno::UNO_QUERY );
+        Reference< document::XGraphicObjectResolver > xGraphicObjectResolver = document::GraphicObjectResolver::createWithStorage(
+            m_xContext, xStorage );
 
         // property map for export info set
         comphelper::PropertyMapEntry aExportInfoMap[] =

@@ -28,9 +28,9 @@
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
-#include "com/sun/star/resource/XStringResourceWithStorage.hpp"
-#include "com/sun/star/resource/XStringResourceWithLocation.hpp"
-#include "com/sun/star/document/XGraphicObjectResolver.hpp"
+#include <com/sun/star/resource/XStringResourceWithStorage.hpp>
+#include <com/sun/star/resource/XStringResourceWithLocation.hpp>
+#include <com/sun/star/document/GraphicObjectResolver.hpp>
 #include "dlgcont.hxx"
 #include "sbmodule.hxx"
 #include <comphelper/componentcontext.hxx>
@@ -238,17 +238,15 @@ void SfxDialogLibraryContainer::storeLibrariesToStorage( const uno::Reference< e
                     Reference< io::XInputStream > xInput( xISP->createInputStream() );
                     Reference< XNameContainer > xDialogModel( mxMSF->createInstance
                         ( OUString( "com.sun.star.awt.UnoControlDialogModel" ) ) , UNO_QUERY );
-                    Reference< XComponentContext > xContext(
-                        comphelper::getComponentContext( mxMSF ) );
+                    Reference< XComponentContext > xContext( comphelper::getComponentContext( mxMSF ) );
                     ::xmlscript::importDialogModel( xInput, xDialogModel, xContext, mxOwnerDocument );
                     std::vector< OUString > vEmbeddedImageURLs;
                     GraphicObject::InspectForGraphicObjectImageURL( Reference< XInterface >( xDialogModel, UNO_QUERY ),  vEmbeddedImageURLs );
                     if ( !vEmbeddedImageURLs.empty() )
                     {
                         // Export the images to the storage
-                        Sequence< Any > aArgs( 1 );
-                        aArgs[ 0 ] <<= xStorage;
-                        Reference< document::XGraphicObjectResolver > xGraphicResolver( mxMSF->createInstanceWithArguments(  OUString("com.sun.star.comp.Svx.GraphicExportHelper" ), aArgs ), UNO_QUERY );
+                        Reference< document::XGraphicObjectResolver > xGraphicResolver =
+                            document::GraphicObjectResolver::createWithStorage( xContext, xStorage );
                         std::vector< OUString >::iterator it = vEmbeddedImageURLs.begin();
                         std::vector< OUString >::iterator it_end = vEmbeddedImageURLs.end();
                         if ( xGraphicResolver.is() )
