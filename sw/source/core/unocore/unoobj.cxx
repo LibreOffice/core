@@ -529,6 +529,10 @@ throw (lang::IllegalArgumentException)
         {
             // multi selection is not considered
             SwTxtNode *const pTxtNd = rPam.GetNode()->GetTxtNode();
+            if (!pTxtNd)
+            {
+                throw lang::IllegalArgumentException();
+            }
             if (FN_UNO_NUM_LEVEL == rEntry.nWID)
             {
                 sal_Int16 nLevel = 0;
