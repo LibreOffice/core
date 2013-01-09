@@ -107,19 +107,18 @@ using namespace nsSwDocInfoSubType;
 SwPageNumberFieldType::SwPageNumberFieldType()
     : SwFieldType( RES_PAGENUMBERFLD ),
     nNumberingType( SVX_NUM_ARABIC ),
-    nNum( 0 ),
-    nMax( USHRT_MAX ),
     bVirtuell( false )
 {
 }
 
 String& SwPageNumberFieldType::Expand( sal_uInt32 nFmt, short nOff,
+         sal_uInt16 const nPageNumber, sal_uInt16 const nMaxPage,
                                 const String& rUserStr, String& rRet ) const
 {
     sal_uInt32 nTmpFmt = (SVX_NUM_PAGEDESC == nFmt) ? (sal_uInt32)nNumberingType : nFmt;
-    long nTmp = nNum + nOff;
+    int const nTmp = nPageNumber + nOff;
 
-    if( 0 >= nTmp || SVX_NUM_NUMBER_NONE == nTmpFmt || (!bVirtuell && nTmp > nMax) )
+    if (0 >= nTmp || SVX_NUM_NUMBER_NONE == nTmpFmt || (!bVirtuell && nTmp > nMaxPage))
         rRet = aEmptyStr;
     else if( SVX_NUM_CHAR_SPECIAL == nTmpFmt )
         rRet = rUserStr;
@@ -132,8 +131,6 @@ SwFieldType* SwPageNumberFieldType::Copy() const
 {
     SwPageNumberFieldType *pTmp = new SwPageNumberFieldType();
 
-    pTmp->nNum       = nNum;
-    pTmp->nMax       = nMax;
     pTmp->nNumberingType = nNumberingType;
     pTmp->bVirtuell  = bVirtuell;
 
@@ -144,12 +141,10 @@ SwFieldType* SwPageNumberFieldType::Copy() const
     Beschreibung: Verschiedene Expandierung
  --------------------------------------------------------------------*/
 
-void SwPageNumberFieldType::ChangeExpansion( SwDoc* pDoc, sal_uInt16 nPage,
-                                            sal_uInt16 nNumPages, sal_Bool bVirt,
+void SwPageNumberFieldType::ChangeExpansion( SwDoc* pDoc,
+                                            sal_Bool bVirt,
                                             const sal_Int16* pNumFmt )
 {
-    nNum = nPage;
-    nMax = nNumPages;
     if( pNumFmt )
         nNumberingType = *pNumFmt;
 
@@ -186,9 +181,19 @@ void SwPageNumberFieldType::ChangeExpansion( SwDoc* pDoc, sal_uInt16 nPage,
  --------------------------------------------------------------------*/
 
 SwPageNumberField::SwPageNumberField(SwPageNumberFieldType* pTyp,
-                                     sal_uInt16 nSub, sal_uInt32 nFmt, short nOff)
+          sal_uInt16 nSub, sal_uInt32 nFmt, short nOff,
+          sal_uInt16 const nPageNumber, sal_uInt16 const nMaxPage)
     : SwField(pTyp, nFmt), nSubType(nSub), nOffset(nOff)
+    , m_nPageNumber(nPageNumber)
+    , m_nMaxPage(nMaxPage)
 {
+}
+
+void SwPageNumberField::ChangeExpansion(sal_uInt16 const nPageNumber,
+        sal_uInt16 const nMaxPage)
+{
+    m_nPageNumber = nPageNumber;
+    m_nMaxPage = nMaxPage;
 }
 
 String SwPageNumberField::Expand() const
@@ -198,23 +203,33 @@ String SwPageNumberField::Expand() const
 
     if( PG_NEXT == nSubType && 1 != nOffset )
     {
-        if( pFldType->Expand( GetFormat(), 1, sUserStr, sRet ).Len() )
-            pFldType->Expand( GetFormat(), nOffset, sUserStr, sRet );
+        if (pFldType->Expand(GetFormat(), 1, m_nPageNumber, m_nMaxPage,
+                    sUserStr, sRet).Len())
+        {
+            pFldType->Expand(GetFormat(), nOffset, m_nPageNumber, m_nMaxPage,
+                    sUserStr, sRet);
+        }
     }
     else if( PG_PREV == nSubType && -1 != nOffset )
     {
-        if( pFldType->Expand( GetFormat(), -1, sUserStr, sRet ).Len() )
-            pFldType->Expand( GetFormat(), nOffset, sUserStr, sRet );
+        if (pFldType->Expand(GetFormat(), -1, m_nPageNumber, m_nMaxPage,
+                    sUserStr, sRet).Len())
+        {
+            pFldType->Expand(GetFormat(), nOffset, m_nPageNumber, m_nMaxPage,
+                    sUserStr, sRet);
+        }
     }
     else
-        pFldType->Expand( GetFormat(), nOffset, sUserStr, sRet );
+        pFldType->Expand(GetFormat(), nOffset, m_nPageNumber, m_nMaxPage,
+                sUserStr, sRet);
     return sRet;
 }
 
 SwField* SwPageNumberField::Copy() const
 {
-    SwPageNumberField *pTmp =
-        new SwPageNumberField((SwPageNumberFieldType*)GetTyp(), nSubType, GetFormat(), nOffset);
+    SwPageNumberField *pTmp = new SwPageNumberField(
+                static_cast<SwPageNumberFieldType*>(GetTyp()), nSubType,
+                GetFormat(), nOffset, m_nPageNumber, m_nMaxPage);
     pTmp->SetLanguage( GetLanguage() );
     pTmp->SetUserString( sUserStr );
     return pTmp;

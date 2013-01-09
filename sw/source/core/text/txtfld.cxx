@@ -169,8 +169,9 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
                 sal_Int16 nNumFmt = -1;
                 if(SVX_NUM_PAGEDESC == pFld->GetFormat())
                     nNumFmt = pFrame->FindPageFrm()->GetPageDesc()->GetNumType().GetNumberingType();
-
-                pPageNr->ChangeExpansion( pDoc, nVirtNum, nNumPages,
+                static_cast<SwPageNumberField*>(pFld)
+                    ->ChangeExpansion(nVirtNum, nNumPages);
+                pPageNr->ChangeExpansion(pDoc,
                                             bVirt, nNumFmt > -1 ? &nNumFmt : 0);
             }
             {
