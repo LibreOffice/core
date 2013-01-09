@@ -78,10 +78,10 @@ void SearchSimilarText( const OUString &rText, sal_Int16 nLanguage,
     {
         Reference< XDictionary > xDic( pDic[i], UNO_QUERY );
 
-        sal_Int16           nLang = LanguageTag( xDic->getLocale() ).getLanguageType();
+        sal_Int16           nLang = LinguLocaleToLanguage( xDic->getLocale() );
 
         if ( xDic.is() && xDic->isActive()
-            && (nLang == nLanguage  ||  nLang == LANGUAGE_NONE) )
+            && (nLang == nLanguage  ||  LinguIsUnspecified( nLang)) )
         {
 #if OSL_DEBUG_LEVEL > 1
             DictionaryType  eType = xDic->getDictionaryType();

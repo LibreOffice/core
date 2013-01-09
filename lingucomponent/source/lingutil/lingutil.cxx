@@ -216,7 +216,7 @@ void MergeNewStyleDicsAndOldStyleDics(
         {
             LanguageType nLang = LanguageTag( aIt2->aLocaleNames[0] ).getLanguageType();
 
-            if (nLang == LANGUAGE_DONTKNOW || nLang == LANGUAGE_NONE)
+            if (nLang == LANGUAGE_DONTKNOW || linguistic::LinguIsUnspecified( nLang))
             {
                 OSL_FAIL( "old style dictionary with invalid language found!" );
                 continue;

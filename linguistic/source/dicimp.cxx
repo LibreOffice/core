@@ -419,7 +419,10 @@ sal_uLong DictionaryNeo::saveEntries(const OUString &rURL)
     pStream->WriteLine(rtl::OString(pVerOOo7));
     if (0 != (nErr = pStream->GetError()))
         return nErr;
-    if (nLanguage == LANGUAGE_NONE)
+    /* XXX: the <none> case could be differentiated, is it absence or
+     * undetermined or multiple? Earlier versions did not know about 'und' and
+     * 'mul' and 'zxx' codes. Sync with ReadDicVersion() */
+    if (LinguIsUnspecified(nLanguage))
         pStream->WriteLine(rtl::OString(RTL_CONSTASCII_STRINGPARAM("lang: <none>")));
     else
     {
@@ -773,7 +776,7 @@ void SAL_CALL DictionaryNeo::setLocale( const Locale& aLocale )
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    sal_Int16 nLanguageP = LanguageTag( aLocale ).getLanguageType();
+    sal_Int16 nLanguageP = LinguLocaleToLanguage( aLocale );
     if (!bIsReadonly  &&  nLanguage != nLanguageP)
     {
         nLanguage = nLanguageP;
