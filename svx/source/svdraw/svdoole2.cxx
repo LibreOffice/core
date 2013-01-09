@@ -770,8 +770,7 @@ SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef&  rNewObjRef, const XubStri
         SetResizeProtect(sal_True);
 
     // For math objects, set closed state to transparent
-    if( ImplIsMathObj( xObjRef.GetObject() ) )
-        SetClosedObj( false );
+    SetClosedObj(!ImplIsMathObj( xObjRef.GetObject() ));
 }
 
 // -----------------------------------------------------------------------------
@@ -1508,8 +1507,7 @@ void SdrOle2Obj::SetObjRef( const com::sun::star::uno::Reference < com::sun::sta
             SetResizeProtect(sal_True);
 
         // For math objects, set closed state to transparent
-        if( ImplIsMathObj( rNewObjRef ) )
-            SetClosedObj( false );
+        SetClosedObj(!ImplIsMathObj( rNewObjRef ));
 
         Connect();
     }
@@ -2015,8 +2013,7 @@ void SdrOle2Obj::GetObjRef_Impl()
             }
 
             // For math objects, set closed state to transparent
-            if( ImplIsMathObj( xObjRef.GetObject() ) )
-                SetClosedObj( false );
+            SetClosedObj(!ImplIsMathObj( xObjRef.GetObject() ));
         }
 
         if ( xObjRef.is() )

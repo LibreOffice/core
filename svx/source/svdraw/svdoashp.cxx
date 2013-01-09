@@ -855,6 +855,7 @@ SdrObjCustomShape::SdrObjCustomShape() :
     fObjectRotation( 0.0 ),
     mpLastShadowGeometry(0L)
 {
+    bClosedObj = true; // custom shapes may be filled
     bTextFrame = sal_True;
 }
 

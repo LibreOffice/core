@@ -53,7 +53,6 @@
 #include <vcl/metaact.hxx>
 #include <svx/svxids.hrc>
 #include <toolkit/helper/vclunohelper.hxx>
-
 #include "DrawDocShell.hxx"
 #include "fupoor.hxx"
 #include "Window.hxx"
@@ -68,13 +67,13 @@
 #include "strmname.h"
 #include "unomodel.hxx"
 #include "ViewClipboard.hxx"
-
 #include <sfx2/ipclient.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/stream.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <svx/sdrhittesthelper.hxx>
+#include <svx/xbtmpit.hxx>
 
 // --------------
 // - Namespaces -
@@ -731,6 +730,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                 BegUndo( String( SdResId( STR_UNDO_DRAGDROP ) ) );
                                 AddUndo( mrDoc.GetSdrUndoFactory().CreateUndoAttrObject( *pPickObj ) );
                             }
+
                             aSet.Put( pObj->GetMergedItemSet() );
 
                             /* Do not take over corner radius. There are
@@ -738,6 +738,16 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                radius of 0. We should not use that on the
                                object. */
                             aSet.ClearItem( SDRATTR_ECKENRADIUS );
+
+                            const SdrGrafObj* pSdrGrafObj = dynamic_cast< const SdrGrafObj* >(pObj);
+
+                            if(pSdrGrafObj)
+                            {
+                                // If we have a graphic as source object, use it's graphic
+                                // content as fill style
+                                aSet.Put(XFillStyleItem(XFILL_BITMAP));
+                                aSet.Put(XFillBitmapItem(&mrDoc.GetPool(), pSdrGrafObj->GetGraphic()));
+                            }
 
                             pPickObj->SetMergedItemSetAndBroadcast( aSet );
 
