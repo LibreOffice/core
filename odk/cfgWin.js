@@ -53,7 +53,7 @@ var oo_user_sdk_dir=WshSysEnv("APPDATA") + "\\" + oo_sdk_name;
 var oo_user_sdk_env_script=oo_user_sdk_dir + "\\setsdkenv_windows.bat";
 
 var office_home=getOfficeHome();
-var oo_sdk_ure_home=getUreHome();
+var oo_sdk_ure_home=office_home + "\\URE";
 
 var oo_sdk_make_home=getMakeHome();
 var oo_sdk_zip_home=getZipHome();
@@ -140,23 +140,6 @@ function getSdkHome()
     }   
 }
 
-function getOfficeOrUre()
-{
-    var suggestion = "Office";
-    var choice;
-    while (choice != "office" && choice != "ure") {
-        stdout.Write(
-            "\n Use an installed Office or an installed UNO Runtime"
-            + " Environment (Office/URE) [" + suggestion + "]:");
-        choice = stdin.ReadLine();
-        if (choice == "") {
-            choice = suggestion;
-        }
-        choice = choice.toLowerCase();
-    }
-    return choice;
-}
-
 function getOfficeHome()
 {
     var sSuggestedHome = WshSysEnv("OFFICE_HOME");
@@ -237,37 +220,6 @@ function searchOffice()
 	}
   
 	return "";
-}
-
-
-function getUreHome()
-{
-	var tmpure = oo_sdk_home;
-	var ure = "";
-
-    if (aFileSystemObject.FileExists(tmpure + "\\URE\\bin\\uno.exe")) {
-	   ure = tmpure + "\URE";
-	}
-
-	return ure;
-
-/*
-    var suggestion = WshSysEnv("OO_SDK_URE_HOME");
-    var choice;
-    for (;;) {
-        stdout.Write(
-            "\n Enter the URE installation directory [" + suggestion + "]:");
-        choice = stdin.ReadLine();
-        if (choice == "") {
-            choice = suggestion;
-        }
-        if (aFileSystemObject.FileExists(choice + "\\bin\\uno.exe")) {
-            break;
-        }
-        stdout.WriteLine("\n Error: A valid URE installation is required.");
-    }
-    return choice;
-*/
 }
 
 function getMakeHome()
