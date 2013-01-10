@@ -2043,6 +2043,23 @@ public:
     }
 
     /**
+      Returns the string representation of the sal_Bool argument.
+      This method is here to help with situations where overload resolution is iffy.
+
+      If the sal_Bool is true, the string "true" is returned.
+      If the sal_Bool is false, the string "false" is returned.
+      This function can't be used for language specific conversion.
+
+      @param    b   a sal_Bool.
+      @return   a string with the string representation of the argument.
+      @since LibreOffice 4.1
+    */
+    static OUString valueOfBool(bool b)
+    {
+        return valueOf( static_cast<sal_Bool>(b) );
+    }
+
+    /**
       Returns the string representation of the char argument.
 
       @param    c   a character.
@@ -2051,6 +2068,19 @@ public:
     static OUString valueOf( sal_Unicode c ) SAL_THROW(())
     {
         return OUString( &c, 1 );
+    }
+
+    /**
+      Returns the string representation of the char argument.
+      This method is here to help with situations where overload resolution is iffy.
+
+      @param    c   a character.
+      @return   a string with the string representation of the argument.
+      @since LibreOffice 4.1
+    */
+    static OUString valueOfChar(sal_Unicode c)
+    {
+        return valueOf( c );
     }
 
     /**
@@ -2088,6 +2118,23 @@ public:
     }
 
     /**
+      Returns the string representation of the long argument.
+      This is here because when choosing which conversion for overloaded
+      functions is better, the standard treats all integer conversions the same.
+
+      This function can't be used for language specific conversion.
+
+      @param    ll          a int64.
+      @param    radix       the radix (between 2 and 36)
+      @return   a string with the string representation of the argument.
+      @since LibreOffice 4.1
+    */
+    static OUString valueOfInt(sal_Int64 ll, sal_Int16 radix = 10)
+    {
+        return valueOf( ll, radix );
+    }
+
+    /**
       Returns the string representation of the float argument.
 
       This function can't be used for language specific conversion.
@@ -2104,6 +2151,20 @@ public:
     }
 
     /**
+      Returns the string representation of the float argument.
+      This method is here to help with situations where overload resolution is iffy.
+
+      This function can't be used for language specific conversion.
+
+      @param    f           a float.
+      @return   a string with the string representation of the argument.
+    */
+    static OUString valueOfFloat( float f )
+    {
+        return valueOf(f);
+    }
+
+    /**
       Returns the string representation of the double argument.
 
       This function can't be used for language specific conversion.
@@ -2117,6 +2178,20 @@ public:
         rtl_uString* pNewData = 0;
         rtl_uString_newFromStr_WithLength( &pNewData, aBuf, rtl_ustr_valueOfDouble( aBuf, d ) );
         return OUString( pNewData, (DO_NOT_ACQUIRE*)0 );
+    }
+
+    /**
+      Returns the string representation of the double argument.
+      This method is here to help with situations where overload resolution is iffy.
+
+      This function can't be used for language specific conversion.
+
+      @param    d           a double.
+      @return   a string with the string representation of the argument.
+    */
+    static OUString valueOfDouble( double d )
+    {
+        return valueOf(d);
     }
 
     /**
