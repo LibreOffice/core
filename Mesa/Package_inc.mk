@@ -35,6 +35,7 @@ $(eval $(call gb_Package_add_file,Mesa_inc,inc/GL/glxext.h,glxext.h))
 $(eval $(call gb_Package_add_file,Mesa_inc,inc/GL/glx.h,glx.h))
 $(eval $(call gb_Package_add_file,Mesa_inc,inc/GL/glx_mangle.h,glx_mangle.h))
 $(eval $(call gb_Package_add_file,Mesa_inc,inc/GL/vms_x_fix.h,vms_x_fix.h))
+$(eval $(call gb_Package_add_file,Mesa_inc,inc/GL/wglext.h,wglext.h))
 
 
 # vim: set noet sw=4:
