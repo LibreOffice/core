@@ -379,7 +379,7 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
         that->m_activePackages = "vnd.sun.star.expand:$BAK_EXTENSIONS/extensions";
         that->m_registrationData = "vnd.sun.star.expand:$BAK_EXTENSIONS";
         that->m_registryCache = "vnd.sun.star.expand:$BAK_EXTENSIONS/registry";
-        stamp = "vnd.sun.star.expand:$BAK_EXTENSIONS/stamp.sys";
+        stamp = "$BAK_EXTENSIONS";
     }
 
     else if (! context.match("vnd.sun.star.tdoc:/")) {

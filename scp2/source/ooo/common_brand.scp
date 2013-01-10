@@ -1180,6 +1180,14 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Tmp_Extensions
     Value = "${$ORIGIN/" PROFILENAME(uno) ":TMP_EXTENSIONS}";
 End
 
+ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Bak_Extensions
+    ModuleID = gid_Module_Root_Brand;
+    ProfileID = gid_Brand_Profile_Fundamental_Ini;
+    Section = "Bootstrap";
+    Key = "BAK_EXTENSIONS";
+    Value = "${$ORIGIN/" PROFILENAME(uno) ":TMP_EXTENSIONS}";
+End
+
 ProfileItem gid_Brand_Profileitem_Fundamental_Ure_More_Types
     ModuleID = gid_Module_Root_Brand;
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
