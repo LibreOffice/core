@@ -2033,8 +2033,9 @@ public:
 
       @param    b   a sal_Bool.
       @return   a string with the string representation of the argument.
+      @deprecated there is no replacement, just code your own
     */
-    static OUString valueOf( sal_Bool b ) SAL_THROW(())
+    SAL_DEPRECATED_INTERNAL("just code your own") static OUString valueOf( sal_Bool b ) SAL_THROW(())
     {
         sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFBOOLEAN];
         rtl_uString* pNewData = 0;
@@ -2047,8 +2048,9 @@ public:
 
       @param    c   a character.
       @return   a string with the string representation of the argument.
+      @deprecated just use the '+' or '+'; operator
     */
-    static OUString valueOf( sal_Unicode c ) SAL_THROW(())
+    SAL_DEPRECATED_INTERNAL("just use the '+' or '+'; operator") static OUString valueOf( sal_Unicode c ) SAL_THROW(())
     {
         return OUString( &c, 1 );
     }
@@ -2061,8 +2063,9 @@ public:
       @param    i           a int32.
       @param    radix       the radix (between 2 and 36)
       @return   a string with the string representation of the argument.
+      @deprecated use fromInt(sal_Int64,sal_Int16)
     */
-    static OUString valueOf( sal_Int32 i, sal_Int16 radix = 10 ) SAL_THROW(())
+    SAL_DEPRECATED_INTERNAL("use fromInt") static OUString valueOf( sal_Int32 i, sal_Int16 radix = 10 ) SAL_THROW(())
     {
         sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFINT32];
         rtl_uString* pNewData = 0;
@@ -2078,8 +2081,26 @@ public:
       @param    ll          a int64.
       @param    radix       the radix (between 2 and 36)
       @return   a string with the string representation of the argument.
+      @deprecated use fromInt(sal_Int64,sal_Int16)
     */
-    static OUString valueOf( sal_Int64 ll, sal_Int16 radix = 10 ) SAL_THROW(())
+    SAL_DEPRECATED_INTERNAL("use fromInt") static OUString valueOf( sal_Int64 ll, sal_Int16 radix = 10 ) SAL_THROW(())
+    {
+        return fromInt( ll, radix );
+    }
+
+    /**
+      Returns the string representation of the long argument.
+      This is here because when choosing which conversion for overloaded
+      functions is better, the standard treats all integer conversions the same.
+
+      This function can't be used for language specific conversion.
+
+      @param    ll          a int64.
+      @param    radix       the radix (between 2 and 36)
+      @return   a string with the string representation of the argument.
+      @since LibreOffice 4.1
+    */
+    static OUString fromInt(sal_Int64 ll, sal_Int16 radix = 10)
     {
         sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFINT64];
         rtl_uString* pNewData = 0;
@@ -2094,8 +2115,23 @@ public:
 
       @param    f           a float.
       @return   a string with the string representation of the argument.
+      @deprecated use fromFloat(float)
     */
-    static OUString valueOf( float f ) SAL_THROW(())
+    SAL_DEPRECATED_INTERNAL("use fromFloat") static OUString valueOf( float f ) SAL_THROW(())
+    {
+        return fromFloat(f);
+    }
+
+    /**
+      Returns the string representation of the float argument.
+
+      This function can't be used for language specific conversion.
+
+      @param    f           a float.
+      @return   a string with the string representation of the argument.
+      @since LibreOffice 4.1
+    */
+    static OUString fromFloat( float f )
     {
         sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFFLOAT];
         rtl_uString* pNewData = 0;
@@ -2110,8 +2146,23 @@ public:
 
       @param    d           a double.
       @return   a string with the string representation of the argument.
+      @deprecated use fromDouble(double)
     */
-    static OUString valueOf( double d ) SAL_THROW(())
+    SAL_DEPRECATED_INTERNAL("use fromDouble") static OUString valueOf( double d ) SAL_THROW(())
+    {
+        return fromDouble(d);
+    }
+
+    /**
+      Returns the string representation of the double argument.
+
+      This function can't be used for language specific conversion.
+
+      @param    d           a double.
+      @return   a string with the string representation of the argument.
+      @since LibreOffice 4.1
+    */
+    static OUString fromDouble( double d )
     {
         sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFDOUBLE];
         rtl_uString* pNewData = 0;
