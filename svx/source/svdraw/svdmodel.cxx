@@ -1177,17 +1177,17 @@ void SdrModel::TakeUnitStr(FieldUnit eUnit, XubString& rStr)
         }
         case FUNIT_100TH_MM:
         {
-            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("/100mm"));
+            rStr = OUString("/100mm");
             break;
         }
         case FUNIT_MM     :
         {
-            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("mm"));
+            rStr = OUString("mm");
             break;
         }
         case FUNIT_CM     :
         {
-            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("cm"));
+            rStr = OUString("cm");
             break;
         }
         case FUNIT_M      :
@@ -1198,22 +1198,22 @@ void SdrModel::TakeUnitStr(FieldUnit eUnit, XubString& rStr)
         }
         case FUNIT_KM     :
         {
-            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("km"));
+            rStr = OUString("km");
             break;
         }
         case FUNIT_TWIP   :
         {
-            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("twip"));
+            rStr = OUString("twip");
             break;
         }
         case FUNIT_POINT  :
         {
-            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("pt"));
+            rStr = OUString("pt");
             break;
         }
         case FUNIT_PICA   :
         {
-            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("pica"));
+            rStr = OUString("pica");
             break;
         }
         case FUNIT_INCH   :
@@ -1224,12 +1224,12 @@ void SdrModel::TakeUnitStr(FieldUnit eUnit, XubString& rStr)
         }
         case FUNIT_FOOT   :
         {
-            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("ft"));
+            rStr = OUString("ft");
             break;
         }
         case FUNIT_MILE   :
         {
-            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("mile(s)"));
+            rStr = OUString("mile(s)");
             break;
         }
         case FUNIT_PERCENT:
@@ -1407,7 +1407,7 @@ void SdrModel::TakePercentStr(const Fraction& rVal, XubString& rStr, bool bNoPer
     nMul += nDiv/2;
     nMul /= nDiv;
 
-    rStr = UniString::CreateFromInt32(nMul);
+    rStr = OUString::valueOf(nMul);
 
     if(bNeg)
         rStr.Insert(sal_Unicode('-'), 0);
