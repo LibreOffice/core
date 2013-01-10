@@ -48,7 +48,7 @@ import java.io.IOException;
  * org.openoffice.xmerge.converter.xml.sxw.pocketword.PluginFactoryImpl
  * PluginFactoryImpl}.</p>
  *
- * <p>This converts an OpenOffice Writer XML files to a Pocket Word file<.</p>
+ * <p>This converts an OpenOffice.org XML Writer files to a Pocket Word file<.</p>
  *
  * @author      Mark Murnane
  * @version 1.1

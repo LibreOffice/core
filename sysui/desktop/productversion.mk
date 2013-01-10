@@ -40,8 +40,9 @@ PKGDIR=$(BIN)
 .ENDIF
 
 # CAUTION! here the parsing result from openoffice.lst is NOT available, so this is hardcoded
-# but should not be. When replacing with $(UNIXBASISROOTNAME) it will be empty (!)
-PRODUCTLIST = openoffice.org
+# but should not be.
+# It has to be equal to PRODUCTNAME:l:s/\s/\_/g - see solenv/bin/modules/installer/setupscript.pm
+PRODUCTLIST = apache_openoffice
 
 # default values to minimize maintainance effort
 
@@ -65,11 +66,11 @@ ICONVERSION = $(PRODUCTVERSIONSHORT:s/.//g)
 UNIXWRAPPERNAME *= '$${{UNIXPRODUCTNAME}}$${{BRANDPACKAGEVERSION}}'
 
 # CAUTION! $(UNIXBASISROOTNAME) from openoffice.lst NOT available (!)
-PRODUCTNAME.openoffice.org = OpenOffice.org
+PRODUCTNAME.apache_openoffice = Apache OpenOffice
 
-PRODUCTVERSION.openoffice.org = $(PRODUCTVERSION)
-PRODUCTVERSIONSHORT.openoffice.org = $(PRODUCTVERSIONSHORT)
-PKGVERSION.openoffice.org = $(PKGVERSION)
-UNIXFILENAME.openoffice.org = $(PRODUCTNAME.openoffice.org:l)$(PRODUCTVERSIONSHORT.openoffice.org)
-ICONPREFIX.openoffice.org = $(UNIXFILENAME.openoffice.org:s/.//g)
+PRODUCTVERSION.apache_openoffice = $(PRODUCTVERSION)
+PRODUCTVERSIONSHORT.apache_openoffice = $(PRODUCTVERSIONSHORT)
+PKGVERSION.apache_openoffice = $(PKGVERSION)
+UNIXFILENAME.apache_openoffice = $(PRODUCTNAME.apache_openoffice:l:s/ /_/g)$(PRODUCTVERSIONSHORT.apache_openoffice)
+ICONPREFIX.apache_openoffice = $(UNIXFILENAME.apache_openoffice:s/.//g)
 

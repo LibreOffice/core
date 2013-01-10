@@ -113,6 +113,10 @@ static BOOL CheckExtensionInRegistry( LPCSTR lpSubKey )
                 bRet = true;
             }
             else if ( strncmp( szBuffer, "OpenOffice.org.", 15 ) == 0 )
+            {   // We will replace registration for our (former) own types, too
+                bRet = true;
+            }
+            else if ( strncmp( szBuffer, "Apache OpenOffice.", 18 ) == 0 )
             {   // We will replace registration for our own types, too
                 bRet = true;
             }

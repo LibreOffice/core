@@ -30,7 +30,7 @@
         <converter-description>
         Converter which performs xslt transformations
         </converter-description>
-        <converter-vendor>OpenOffice.org</converter-vendor>
+        <converter-vendor>Apache OpenOffice</converter-vendor>
         <converter-class-impl>
               org.openoffice.xmerge.converter.xml.xslt.PluginFactoryImpl
     </converter-class-impl>

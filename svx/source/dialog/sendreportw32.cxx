@@ -93,7 +93,7 @@ namespace svx{
 
             if ( ERROR_SUCCESS == RegReadValue(
                 HKEY_CURRENT_USER,
-                TEXT("SOFTWARE\\OpenOffice.org\\CrashReport"),
+                TEXT("SOFTWARE\\Apache OpenOffice\\CrashReport"),
                 TEXT("HTTPProxyServer"),
                 szBuffer,
                 sizeof(szBuffer) ) )
@@ -102,7 +102,7 @@ namespace svx{
             DWORD   dwProxyPort;
             if ( ERROR_SUCCESS == RegReadValue(
                 HKEY_CURRENT_USER,
-                TEXT("SOFTWARE\\OpenOffice.org\\CrashReport"),
+                TEXT("SOFTWARE\\Apache OpenOffice\\CrashReport"),
                 TEXT("HTTPProxyPort"),
                 &dwProxyPort,
                 sizeof(dwProxyPort) ) )
@@ -113,7 +113,7 @@ namespace svx{
 
             if ( ERROR_SUCCESS == RegReadValue(
                 HKEY_CURRENT_USER,
-                TEXT("SOFTWARE\\OpenOffice.org\\CrashReport"),
+                TEXT("SOFTWARE\\Apache OpenOffice\\CrashReport"),
                 TEXT("ReturnAddress"),
                 szBuffer,
                 sizeof(szBuffer) ) )
@@ -122,7 +122,7 @@ namespace svx{
             DWORD   fAllowContact = sal_False;
             RegReadValue(
                 HKEY_CURRENT_USER,
-                TEXT("SOFTWARE\\OpenOffice.org\\CrashReport"),
+                TEXT("SOFTWARE\\Apache OpenOffice\\CrashReport"),
                 TEXT("AllowContact"),
                 &fAllowContact,
                 sizeof(fAllowContact) );
@@ -131,7 +131,7 @@ namespace svx{
             DWORD   uInternetConnection = 0;
             RegReadValue(
                 HKEY_CURRENT_USER,
-                TEXT("SOFTWARE\\OpenOffice.org\\CrashReport"),
+                TEXT("SOFTWARE\\Apache OpenOffice\\CrashReport"),
                 TEXT("HTTPConnection"),
                 &uInternetConnection,
                 sizeof(uInternetConnection) );
@@ -145,7 +145,7 @@ namespace svx{
             const _TCHAR    *lpHTTPProxyServer = reinterpret_cast<LPCTSTR>(maParams.maHTTPProxyServer.GetBuffer());
             RegWriteValue(
                 HKEY_CURRENT_USER,
-                TEXT("SOFTWARE\\OpenOffice.org\\CrashReport"),
+                TEXT("SOFTWARE\\Apache OpenOffice\\CrashReport"),
                 TEXT("HTTPProxyServer"), REG_SZ,
                 lpHTTPProxyServer,
                 sizeof(TCHAR) * (_tcslen(lpHTTPProxyServer) + 1) );
@@ -155,7 +155,7 @@ namespace svx{
 
             RegWriteValue(
                 HKEY_CURRENT_USER,
-                TEXT("SOFTWARE\\OpenOffice.org\\CrashReport"),
+                TEXT("SOFTWARE\\Apache OpenOffice\\CrashReport"),
                 TEXT("HTTPProxyPort"), REG_DWORD,
                 &dwProxyPort,
                 sizeof(DWORD) );
@@ -163,7 +163,7 @@ namespace svx{
             DWORD   fAllowContact = IsContactAllowed();
             RegWriteValue(
                 HKEY_CURRENT_USER,
-                TEXT("SOFTWARE\\OpenOffice.org\\CrashReport"),
+                TEXT("SOFTWARE\\Apache OpenOffice\\CrashReport"),
                 TEXT("AllowContact"), REG_DWORD,
                 &fAllowContact,
                 sizeof(DWORD) );
@@ -173,7 +173,7 @@ namespace svx{
 
             RegWriteValue(
                 HKEY_CURRENT_USER,
-                TEXT("SOFTWARE\\OpenOffice.org\\CrashReport"),
+                TEXT("SOFTWARE\\Apache OpenOffice\\CrashReport"),
                 TEXT("HTTPConnection"), REG_DWORD,
                 &uInternetConnection,
                 sizeof(DWORD) );
@@ -181,7 +181,7 @@ namespace svx{
             const _TCHAR    *lpEmail = reinterpret_cast<LPCTSTR>(GetEMailAddress().GetBuffer());
             RegWriteValue(
                 HKEY_CURRENT_USER,
-                TEXT("SOFTWARE\\OpenOffice.org\\CrashReport"),
+                TEXT("SOFTWARE\\Apache OpenOffice\\CrashReport"),
                 TEXT("ReturnAddress"), REG_SZ,
                 lpEmail,
                 sizeof(TCHAR) * (_tcslen(lpEmail) + 1) );

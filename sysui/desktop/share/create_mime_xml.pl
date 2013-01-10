@@ -21,7 +21,7 @@
 # *************************************************************
 use File::Basename;
 $basedir = dirname($0);
-$productname = 'OpenOffice.org';
+$productname = 'Apache OpenOffice';
 $mimedir = $basedir.'/../mimetypes';
 
 $FS= ' ';       # field seperator (space) - for documents.ulf

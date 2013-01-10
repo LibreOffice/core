@@ -405,7 +405,7 @@ namespace /* private */ {
     };
 
     //------------------------------------------------
-    const char* GROUP_OOO         = "openoffice.org";
+    const char* GROUP_OOO         = "apacheopenoffice";
     const char* GROUP_STAR_OFFICE = "staroffice";
     const char* GROUP_STAR_SUITE  = "starsuite";
 

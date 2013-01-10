@@ -1197,7 +1197,7 @@ namespace /* private */
         std::string ClsidEntry = CLSID_GUID_ENTRY;
         SubstitutePlaceholder(ClsidEntry, GUID_PLACEHOLDER, ClsidToString(FilterGuid));
 
-        if (!SetRegistryKey(HKEY_CLASSES_ROOT, ClsidEntry.c_str(), "", "OpenOffice.org Filter"))
+        if (!SetRegistryKey(HKEY_CLASSES_ROOT, ClsidEntry.c_str(), "", "OpenOffice.org XML Filter"))
             return E_FAIL;
 
         ClsidEntry = CLSID_GUID_INPROC_ENTRY;
@@ -1225,7 +1225,7 @@ namespace /* private */
         SubstitutePlaceholder(ClsidEntry_Persist, GUID_PLACEHOLDER, ClsidToString(PersistentGuid));
 
 
-        if (!SetRegistryKey(HKEY_CLASSES_ROOT, ClsidEntry_Persist.c_str(), "", "OpenOffice.org Persistent Handler"))
+        if (!SetRegistryKey(HKEY_CLASSES_ROOT, ClsidEntry_Persist.c_str(), "", "Apache OpenOffice Persistent Handler"))
             return E_FAIL;
 
         // Add missing entry

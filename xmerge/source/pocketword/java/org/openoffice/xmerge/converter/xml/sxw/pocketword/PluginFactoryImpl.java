@@ -69,7 +69,7 @@ public final class PluginFactoryImpl extends SxwPluginFactory
 
     /**
      *  <p>The <code>DocumentSerializer</code> is used to convert
-     *  from the OpenOffice Writer <code>Document</code> format
+     *  from the OpenOffice.org XML Writer <code>Document</code> format
      *  to the Pocket Word <code>Document</code> format.</p>
      *
      *  <p>The <code>ConvertData</code> object is passed along to the
@@ -92,7 +92,7 @@ public final class PluginFactoryImpl extends SxwPluginFactory
     /**
      *  The <code>DocumentDeserializer</code> is used to convert
      *  from the Pocket Word <code>Document</code> format to
-     *  the OpenOffice Writer <code>Document</code> format.</p>
+     *  the OpenOffice.org XML Writer <code>Document</code> format.</p>
      *
      *  The <code>ConvertData</code> object is passed along to the
      *  created <code>DocumentDeserializer</code> via its constructor.

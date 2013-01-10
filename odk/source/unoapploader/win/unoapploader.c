@@ -61,7 +61,7 @@ void closeErrorFile();
  * environment variable to the program directory of the UNO installation.
  * If no installation is specified by the user, the default installation on
  * the system will be taken. The default installation is read from the
- * default value of the key "Software\OpenOffice.org\UNO\InstallPath" from the
+ * default value of the key "Software\Apache OpenOffice\UNO\InstallPath" from the
  * root key HKEY_CURRENT_USER in the Windows Registry. If this key is missing,
  * the key is read from the root key HKEY_LOCAL_MACHINE.</p>
  */

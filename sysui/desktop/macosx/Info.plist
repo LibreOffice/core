@@ -32,7 +32,7 @@
 			<key>UTTypeIdentifier</key>
 			<string>org.openoffice.text</string>
 			<key>UTTypeDescription</key>
-			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Text</string>
+			<string>${OOOXMLFILEFORMATNAME} ${OOOXMLFILEFORMATVERSION} Text</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -80,7 +80,7 @@
 			<key>UTTypeIdentifier</key>
 			<string>org.openoffice.spreadsheet</string>
 			<key>UTTypeDescription</key>
-			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Spreadsheet</string>
+			<string>${OOOXMLFILEFORMATNAME} ${OOOXMLFILEFORMATVERSION} Spreadsheet</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -128,7 +128,7 @@
 			<key>UTTypeIdentifier</key>
 			<string>org.openoffice.presentation</string>
 			<key>UTTypeDescription</key>
-			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Presentation</string>
+			<string>${OOOXMLFILEFORMATNAME} ${OOOXMLFILEFORMATVERSION} Presentation</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -178,7 +178,7 @@
 			<key>UTTypeIdentifier</key>
 			<string>org.openoffice.graphics</string>
 			<key>UTTypeDescription</key>
-			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Drawing</string>
+			<string>${OOOXMLFILEFORMATNAME} ${OOOXMLFILEFORMATVERSION} Drawing</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -226,7 +226,7 @@
 			<key>UTTypeIdentifier</key>
 			<string>org.openoffice.text-master</string>
 			<key>UTTypeDescription</key>
-			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Master</string>
+			<string>${OOOXMLFILEFORMATNAME} ${OOOXMLFILEFORMATVERSION} Master</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -272,7 +272,7 @@
 			<key>UTTypeIdentifier</key>
 			<string>org.openoffice.formula</string>
 			<key>UTTypeDescription</key>
-			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Formula</string>
+			<string>${OOOXMLFILEFORMATNAME} ${OOOXMLFILEFORMATVERSION} Formula</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -320,7 +320,7 @@
 			<key>UTTypeIdentifier</key>
 			<string>org.openoffice.text-template</string>
 			<key>UTTypeDescription</key>
-			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Text Template</string>
+			<string>${OOOXMLFILEFORMATNAME} ${OOOXMLFILEFORMATVERSION} Text Template</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -366,7 +366,7 @@
 			<key>UTTypeIdentifier</key>
 			<string>org.openoffice.spreadsheet-template</string>
 			<key>UTTypeDescription</key>
-			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Spreadsheet Template</string>
+			<string>${OOOXMLFILEFORMATNAME} ${OOOXMLFILEFORMATVERSION} Spreadsheet Template</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -412,7 +412,7 @@
 			<key>UTTypeIdentifier</key>
 			<string>org.openoffice.presentation-template</string>
 			<key>UTTypeDescription</key>
-			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Presentation Template</string>
+			<string>${OOOXMLFILEFORMATNAME} ${OOOXMLFILEFORMATVERSION} Presentation Template</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -458,7 +458,7 @@
 			<key>UTTypeIdentifier</key>
 			<string>org.openoffice.graphics-template</string>
 			<key>UTTypeDescription</key>
-			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Drawing Template</string>
+			<string>${OOOXMLFILEFORMATNAME} ${OOOXMLFILEFORMATVERSION} Drawing Template</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -868,7 +868,7 @@
 			<key>CFBundleTypeIconFile</key>
 			<string>text.icns</string>
 			<key>CFBundleTypeName</key>
-			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Text</string>
+			<string>${OOOXMLFILEFORMATNAME} ${OOOXMLFILEFORMATVERSION} Text</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSIsAppleDefaultForType</key>
@@ -906,7 +906,7 @@
 			<key>CFBundleTypeIconFile</key>
 			<string>spreadsheet.icns</string>
 			<key>CFBundleTypeName</key>
-			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Spreadsheet</string>
+			<string>${OOOXMLFILEFORMATNAME} ${OOOXMLFILEFORMATVERSION} Spreadsheet</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSIsAppleDefaultForType</key>
@@ -946,7 +946,7 @@
 			<key>CFBundleTypeIconFile</key>
 			<string>presentation.icns</string>
 			<key>CFBundleTypeName</key>
-			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Presentation</string>
+			<string>${OOOXMLFILEFORMATNAME} ${OOOXMLFILEFORMATVERSION} Presentation</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSIsAppleDefaultForType</key>
@@ -984,7 +984,7 @@
 			<key>CFBundleTypeIconFile</key>
 			<string>drawing.icns</string>
 			<key>CFBundleTypeName</key>
-			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Drawing</string>
+			<string>${OOOXMLFILEFORMATNAME} ${OOOXMLFILEFORMATVERSION} Drawing</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSIsAppleDefaultForType</key>
@@ -1020,7 +1020,7 @@
 			<key>CFBundleTypeIconFile</key>
 			<string>master-document.icns</string>
 			<key>CFBundleTypeName</key>
-			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Master</string>
+			<string>${OOOXMLFILEFORMATNAME} ${OOOXMLFILEFORMATVERSION} Master</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSIsAppleDefaultForType</key>
@@ -1058,7 +1058,7 @@
 			<key>CFBundleTypeIconFile</key>
 			<string>formula.icns</string>
 			<key>CFBundleTypeName</key>
-			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Formula</string>
+			<string>${OOOXMLFILEFORMATNAME} ${OOOXMLFILEFORMATVERSION} Formula</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSIsAppleDefaultForType</key>
@@ -1094,7 +1094,7 @@
 			<key>CFBundleTypeIconFile</key>
 			<string>text-template.icns</string>
 			<key>CFBundleTypeName</key>
-			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Text Template</string>
+			<string>${OOOXMLFILEFORMATNAME} ${OOOXMLFILEFORMATVERSION} Text Template</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSIsAppleDefaultForType</key>
@@ -1130,7 +1130,7 @@
 			<key>CFBundleTypeIconFile</key>
 			<string>spreadsheet-template.icns</string>
 			<key>CFBundleTypeName</key>
-			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Spreadsheet Template</string>
+			<string>${OOOXMLFILEFORMATNAME} ${OOOXMLFILEFORMATVERSION} Spreadsheet Template</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSIsAppleDefaultForType</key>
@@ -1166,7 +1166,7 @@
 			<key>CFBundleTypeIconFile</key>
 			<string>presentation-template.icns</string>
 			<key>CFBundleTypeName</key>
-			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Presentation Template</string>
+			<string>${OOOXMLFILEFORMATNAME} ${OOOXMLFILEFORMATVERSION} Presentation Template</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSIsAppleDefaultForType</key>
@@ -1202,7 +1202,7 @@
 			<key>CFBundleTypeIconFile</key>
 			<string>drawing-template.icns</string>
 			<key>CFBundleTypeName</key>
-			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Drawing Template</string>
+			<string>${OOOXMLFILEFORMATNAME} ${OOOXMLFILEFORMATVERSION} Drawing Template</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSIsAppleDefaultForType</key>

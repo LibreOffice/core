@@ -19,7 +19,7 @@
 #  
 #**************************************************************
 
-# OpenOffice.org @@RELEASE@@ SDK dependent settings
+# Apache OpenOffice @@RELEASE@@ SDK dependent settings
 SDKVERSION=@@RELEASE@@
 BUILDID=@@BUILDID@@
 SCM_REVISION=@@SCMREVISION@@

@@ -233,7 +233,7 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
     {
         if ( !aURL.Path.compareToAscii( RTL_CONSTASCII_STRINGPARAM( "ImageButtonCmd" ) ) )
         {
-            // open the OpenOffice.org web page
+            // open the Apache OpenOffice web page
             ::rtl::OUString sURL( RTL_CONSTASCII_USTRINGPARAM( "http://www.openoffice.org" ) );
             Reference< XSystemShellExecute > xSystemShellExecute(
                 com::sun::star::system::SystemShellExecute::create( mxContext ) );

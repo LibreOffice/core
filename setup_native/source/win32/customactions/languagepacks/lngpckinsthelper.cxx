@@ -124,8 +124,8 @@ UINT GetInstallProperty(MSIHANDLE handle, LPCTSTR name, CharacterBuffer_t* buffe
     Try to find the installation path to an already installed product.
     The installation path will be written in the Windows registry
     during the installation. There may exist different products in
-    parallel e.g. StarOffice, StarSuite, OpenOffice.org. It will be
-    searched in this order for an installed product. If a product
+    parallel e.g. StarOffice, StarSuite, OpenOffice.org, Apache OpenOffice.
+    It will be     searched in this order for an installed product. If a product
     will be found the path to the product will be set in the property
     "INSTALLLOCATION" else nothing will be done.
 */

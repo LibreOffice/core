@@ -31,6 +31,6 @@
     <name>Custom Tool Panel Example</name>
   </display-name>
   <dependencies>
-    <OpenOffice.org-minimal-version value="3.4" d:name="OpenOffice.org 3.4"/>
+    <OpenOffice.org-minimal-version value="3.4" d:name="Apache OpenOffice 3.4"/>
   </dependencies>
 </description>

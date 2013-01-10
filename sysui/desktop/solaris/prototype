@@ -21,7 +21,7 @@ d none share/mime/packages 0755 root other
 !default 0644 root bin
 e build etc/mime.types=./mime.types
 e build etc/mailcap=mailcap
-f none usr/share/mime/packages/%PREFIX.xml=%SOURCE/openoffice.org.xml
+f none usr/share/mime/packages/%PREFIX.xml=%SOURCE/apacheopenoffice.xml
 f none usr/share/application-registry/%PREFIX.applications=%SOURCE/openoffice.applications
 s none usr/share/applications/%PREFIX-writer.desktop=../../../opt/%PREFIX/share/xdg/writer.desktop
 s none usr/share/applications/%PREFIX-calc.desktop=../../../opt/%PREFIX/share/xdg/calc.desktop

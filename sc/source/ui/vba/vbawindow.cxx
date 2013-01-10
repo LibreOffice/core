@@ -310,7 +310,7 @@ ScVbaWindow::ScrollWorkbookTabs( const uno::Any& /*Sheets*/, const uno::Any& /*P
 uno::Any SAL_CALL
 ScVbaWindow::getCaption() throw (uno::RuntimeException)
 {
-    static rtl::OUString sCrud(RTL_CONSTASCII_USTRINGPARAM(" - OpenOffice.org Calc" ) );
+    static rtl::OUString sCrud(RTL_CONSTASCII_USTRINGPARAM(" - Apache OpenOffice Calc" ) );
     static sal_Int32 nCrudLen = sCrud.getLength();
 
     rtl::OUString sTitle;

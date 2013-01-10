@@ -20,7 +20,7 @@
 #**************************************************************
 
 DESCRIPTION_OOO_MIN_VER=3.5.0
-DESCRIPTION_DEP_NAME=OpenOffice.org $(DESCRIPTION_OOO_MIN_VER)
+DESCRIPTION_DEP_NAME=Apache OpenOffice $(DESCRIPTION_OOO_MIN_VER)
 
 EXTENSION_ID=org.apache.openoffice.framework.statusbar.SelectionMode
 EXTENSION_VERSION=0.0.1

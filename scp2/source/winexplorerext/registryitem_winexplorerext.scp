@@ -77,8 +77,8 @@ RegistryItem gid_Regitem_Folder_shellex_ColumnHandlers_C52AF81D_F7A0_4AAB_8E87_F
     ModuleID = gid_Module_Optional_Winexplorerext;
     Styles = (X64);
     Subkey = "Folder\shellex\ColumnHandlers\{C52AF81D-F7A0-4AAB-8E87-F80A60CCD396}";
-    Value = "OpenOffice.org Column Handler";
-    Val64 = "OpenOffice.org Column Handler";
+    Value = "Apache OpenOffice Column Handler";
+    Val64 = "Apache OpenOffice Column Handler";
 End
 
 RegistryItem gid_Regitem_Clsid_C52AF81D_F7A0_4AAB_8E87_F80A60CCD396_InProcServer32
@@ -108,8 +108,6 @@ RegistryItem gid_Regitem_Clsid_7BC0E710_5703_45BE_A29D_5D46D8B39262
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Root;
     Subkey = "CLSID\{7BC0E710-5703-45BE-A29D-5D46D8B39262}";
-// Better?: "OpenOffice.org Format Filter"
-// old:    Value = "opendocument.org Filter";
 	Styles = (X64_ONLY); // Values: X64
     Value = "OpenDocument Format Filter";
     Val64 = "OpenDocument Format Filter";
@@ -138,8 +136,6 @@ RegistryItem gid_Regitem_Clsid_7BC0E713_5703_45BE_A29D_5D46D8B39262
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Root;
     Subkey = "CLSID\{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
-//? Better: "OpenOffice.org Persistent Handler"
-// old:    Value = "opendocument.org Persistent Handler";
 	Styles = (X64); // Values: X64
     Value = "OpenDocument Format Persistent Handler";
     Val64 = "OpenDocument Format Persistent Handler";

@@ -158,7 +158,7 @@ extern "C" UINT __stdcall ShowSurveyAfter( MSIHANDLE handle )
     std::wstring prodname;
 
     GetMsiProp( handle, TEXT("ProductName"), prodname );
-    std::wstring::size_type nIndex = prodname.find( TEXT( "OpenOffice.org" ) );
+    std::wstring::size_type nIndex = prodname.find( TEXT( "Apache OpenOffice" ) );
     if( std::wstring::npos == nIndex )
         return ERROR_SUCCESS;
 
@@ -170,7 +170,8 @@ extern "C" UINT __stdcall ShowSurveyAfter( MSIHANDLE handle )
     aExecInf.cbSize = sizeof( aExecInf );
     aExecInf.fMask  = SEE_MASK_FLAG_DDEWAIT | SEE_MASK_FLAG_NO_UI;
     aExecInf.lpVerb = TEXT("open");
-    aExecInf.lpFile = TEXT("http://surveys.services.openoffice.org/deinstall");
+    //aExecInf.lpFile = TEXT("http://surveys.services.openoffice.org/deinstall");
+    aExecInf.lpFile = TEXT("http://www.openoffice.org/support/");
     aExecInf.lpDirectory = NULL;
     aExecInf.nShow = SW_SHOWNORMAL;
 

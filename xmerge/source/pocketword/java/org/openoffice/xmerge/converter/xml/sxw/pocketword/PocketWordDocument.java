@@ -41,7 +41,7 @@ import java.util.Vector;
  * <p>Class representing a Pocket Word Document.</p>
  *
  * <p><code>PocketWordDocument</code> is used to create new Pocket Word documents
- *    and to read existing data to allow for conversion to OpenOffice Writer
+ *    and to read existing data to allow for conversion to OpenOffice.org XML Writer
  *    format.</p>
  *
  * @author  Mark Murnane

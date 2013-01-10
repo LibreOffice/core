@@ -235,7 +235,7 @@ if ( $main::OFFICE_OR_URE eq "Office" )
 else
 {
     # prepare URE path
-    $main::OO_SDK_URE_HOME_SUGGESTION = "/opt/openoffice.org/ure";
+    $main::OO_SDK_URE_HOME_SUGGESTION = "/opt/apacheopenoffice/ure";
     $main::OO_SDK_URE_HOME_SUGGESTION = "" unless
         -e "$main::OO_SDK_URE_HOME_SUGGESTION/bin/uno";
     for (;;)
@@ -711,6 +711,9 @@ sub searchprog
 
 sub searchMacOffice
 {
+    if (-d "/Applications/Apache OpenOffice.app" ) {
+        return "/Applications/Apache OpenOffice.app"
+    }
     if (-d "/Applications/OpenOffice.org.app" ) {
         return "/Applications/OpenOffice.org.app"
     }
@@ -729,9 +732,9 @@ sub searchMacOffice
 
 sub searchoffice
 {
-    my $offset = rindex($main::sdkpath, "/openoffice.org");
+    my $offset = rindex($main::sdkpath, "/apacheopenoffice");
     my $tmpOffice = substr($main::sdkpath, 0, $offset);
-    my $officepath = "$tmpOffice/openoffice.org$main::OO_MAJORVERSION";
+    my $officepath = "$tmpOffice/apacheopenoffice$main::OO_MAJORVERSION";
 
 #   if ( $main::OO_MINORVERSION > 0) {
 #       $officepath = "$officepath$main::OO_MINORVERSION";

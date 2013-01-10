@@ -64,8 +64,8 @@
                          includes="**/*.properties" />
             <manifest>
                 <attribute name="Main-Class" value="org.openoffice.xmerge.test.Driver"/>
-                <attribute name="Specification-Title" value="OpenOffice XMerge Framework"/>
-                <attribute name="Specification-Vendor" value="OpenOffice.org"/>
+                <attribute name="Specification-Title" value="Apache OpenOffice XMerge Framework"/>
+                <attribute name="Specification-Vendor" value="Apache OpenOffice"/>
                 <attribute name="Specification-Version" value="0.6.0"/>
                 <attribute name="Implementation-Version" value="#IMPL-VERSION#"/>
                 <attribute name="Class-Path" value="xml-apis.jar xercesImpl.jar serializer.jar"/>

@@ -58,7 +58,7 @@ make_tempfile() {
 #
 run_in_terminal () {
 
-  TMPCMD=`make_tempfile 'OpenOffice.org-Online-Update'`
+  TMPCMD=`make_tempfile 'Apache_OpenOffice-Online-Update'`
 
   cat >> $TMPCMD
 
@@ -119,7 +119,7 @@ elevate() {
 
 
 update_pkg() {
-  ADMINFILE=`make_tempfile 'OpenOffice.org-Online-Update-admin'`
+  ADMINFILE=`make_tempfile 'Apache_OpenOffice-Online-Update-admin'`
 
 cat >> $ADMINFILE << EOF
 action=nocheck

@@ -1022,7 +1022,7 @@ public abstract class OfficeDocument
 
     /**
      *  <p>Creates a new DOM <code>Document</code> containing minimum
-     *  OpenOffice XML tags.</p>
+     *  OpenOffice.org XML tags.</p>
      *
      *  <p>This method uses the subclass
      *  <code>getOfficeClassAttribute</code> method to get the
@@ -1061,7 +1061,7 @@ public abstract class OfficeDocument
 
     /**
      *  <p>Creates a new DOM <code>Document</code> containing minimum
-     *  OpenOffice XML tags.</p>
+     *  OpenOffice.org XML tags.</p>
      *
      *  <p>This method uses the subclass
      *  <code>getOfficeClassAttribute</code> method to get the

@@ -53,7 +53,7 @@ import org.w3c.dom.Element;
  * org.openoffice.xmerge.converter.xml.sxw.pocketword.PluginFactoryImpl
  * PluginFactoryImpl}.</p>
  *
- * <p>This converts a Pocket Word file to an OpenOffice Writer XML DOM.</p>
+ * <p>This converts a Pocket Word file to an OpenOffice.org XML Writer DOM.</p>
  *
  * @author  Mark Murnane
  * @version 1.1
@@ -94,7 +94,7 @@ public final class DocumentDeserializerImpl
 
     /**
      *  <p>Convert the data passed into the <code>DocumentDeserializer</code>
-     *  constructor into the OpenOffice Writer <code>Document</code>
+     *  constructor into the OpenOffice.org XML Writer <code>Document</code>
      *  format.</p>
      *
      *  <p>This method may or may not be thread-safe.  It is expected
@@ -120,7 +120,7 @@ public final class DocumentDeserializerImpl
         }
         catch (Exception e) {
             e.printStackTrace();
-            throw new ConvertException("Error building OpenOffice Writer DOM: "
+            throw new ConvertException("Error building OpenOffice.org XML Writer DOM: "
                                         + e.toString());
 
         }

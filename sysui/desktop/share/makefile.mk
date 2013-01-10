@@ -157,8 +157,8 @@ $(LAUNCHERFLAGFILE) : $(LAUNCHERDEPN)
 #
 # Create shared mime info xml file
 #
-$(COMMONMISC)$/{$(PRODUCTLIST)}$/openoffice.org.xml : ../mimetypes/{$(MIMELIST)}.desktop create_mime_xml.pl
-$(COMMONMISC)$/{$(PRODUCTLIST)}$/openoffice.org.xml : $(ULFDIR)$/documents.ulf
+$(COMMONMISC)$/{$(PRODUCTLIST)}$/apacheopenoffice.xml : ../mimetypes/{$(MIMELIST)}.desktop create_mime_xml.pl
+$(COMMONMISC)$/{$(PRODUCTLIST)}$/apacheopenoffice.xml : $(ULFDIR)$/documents.ulf
     @echo Create shared mime info xml file ..
     @echo ---------------------------------
     @$(PERL) create_mime_xml.pl $< > $@.$(INPATH)
@@ -173,8 +173,8 @@ $(COMMONMISC)$/{$(PRODUCTLIST)}$/openoffice.keys : ../mimetypes/{$(MIMELIST)}.ke
     @@-$(MKDIRHIER) $(@:d)
     @echo Creating GNOME .keys file for $(@:d:d:f) ..
     @echo ---------------------------------
-    @$(PERL) brand.pl -p $(PRODUCTNAME.$(@:d:d:f)) -u $(UNIXFILENAME.$(@:d:d:f)) --iconprefix "$(ICONPREFIX.$(@:d:d:f))-" $< $(MISC)/$(@:d:d:f)
-    @$(PERL) translate.pl -p $(PRODUCTNAME.$(@:d:d:f)) -d $(MISC)/$(@:d:d:f) --ext "keys" --key "description" $(ULFDIR)$/documents.ulf
+    @$(PERL) brand.pl -p "$(PRODUCTNAME.$(@:d:d:f))" -u $(UNIXFILENAME.$(@:d:d:f)) --iconprefix "$(ICONPREFIX.$(@:d:d:f))-" $< $(MISC)/$(@:d:d:f)
+    @$(PERL) translate.pl -p "$(PRODUCTNAME.$(@:d:d:f))" -d $(MISC)/$(@:d:d:f) --ext "keys" --key "description" $(ULFDIR)$/documents.ulf
     @cat $(MISC)/$(@:d:d:f)/{$(MIMELIST)}.keys > $@.$(INPATH)
     @mv -f $@.$(INPATH) $@
 
@@ -249,7 +249,7 @@ $(COMMONMISC)$/{$(PRODUCTLIST)}$/build.flag : $(ICONDEPN) \
     $(COMMONMISC)$/{$(PRODUCTLIST)}$/create_tree.sh \
     $(COMMONMISC)$/{$(PRODUCTLIST)}$/openoffice.keys \
     $(COMMONMISC)$/{$(PRODUCTLIST)}$/openoffice.mime \
-    $(COMMONMISC)$/{$(PRODUCTLIST)}$/openoffice.org.xml	\
+    $(COMMONMISC)$/{$(PRODUCTLIST)}$/apacheopenoffice.xml	\
     $(COMMONMISC)$/{$(PRODUCTLIST)}$/openoffice.applications \
     $(COMMONMISC)$/{$(PRODUCTLIST)}$/{openoffice printeradmin}.sh
     @touch $@

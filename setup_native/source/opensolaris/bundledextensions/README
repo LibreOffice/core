@@ -9,7 +9,7 @@ installed
 ooo_bundled_extensions.xml
 svc-ooo_bundled_extensions
 
-are part of the OpenOffice.org IPS package. They must be added to the package
+are part of the Apache OpenOffice IPS package. They must be added to the package
 after all other files have been added. Those other files are the SVR4 packages
 of OOo which can be imported by pkg (pkg import).
 The files have to be uploaded this way:
@@ -26,7 +26,7 @@ bundled extensions. This path changes with every major release of OOo because of
 the version number which is part of a folder name. The
 current value is:
 
-EXTENSIONPATH=/opt/openoffice.org3/share/extension/install
+EXTENSIONPATH=/opt/apacheopenoffice3/share/extension/install
 
 The service was tested with OpenSolaris release 2009.6 and may not work with a
 previous release. 
@@ -38,7 +38,7 @@ What do these files do
 
 The three files constitute a SMF service. When this service is started, then it
 installes the bundled extensions which are contained in
-/opt/openoffice.org3/share/extension/install. To install them, the service calls
+/opt/apacheopenoffice3/share/extension/install. To install them, the service calls
 "unopkg add --shared ..." with the appropriate arguments.
 
 The service is started initially after the installation of
@@ -58,7 +58,7 @@ file in every release. Otherwise IPS would not replace the installed version of
 The update procedure of OOo will replace 'installed'. 'installed' is associated
 with a restart_fmri of the service ooo_bundled_extensions. That is after
 copying 'installed' the service will be restarted. It then installes all
-extensions contained in /opt/openoffice.org3/share/extension/install, because
+extensions contained in /opt/apacheopenoffice3/share/extension/install, because
 the newly installed 'installed' file does not contain any entries yet, except
 for the version string.
 

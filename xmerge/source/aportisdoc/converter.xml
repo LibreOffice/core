@@ -29,7 +29,7 @@
         <converter-description>
             StarWriter XML to/from AportisDoc conversion
         </converter-description>
-        <converter-vendor>OpenOffice.org</converter-vendor>
+        <converter-vendor>Apache OpenOffice</converter-vendor>
         <converter-class-impl>
             org.openoffice.xmerge.converter.xml.sxw.aportisdoc.PluginFactoryImpl
         </converter-class-impl>

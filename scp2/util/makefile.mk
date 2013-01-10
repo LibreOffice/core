@@ -187,7 +187,7 @@ SCP1FILES += \
 .ENDIF
 
 # ------------------------------------------------------------------------
-# OpenOffice.org with JRE
+# Apache OpenOffice with JRE
 
 SCP2LINK_PRODUCT_TYPE=osl
 SCP2TARGET = setup_osljre

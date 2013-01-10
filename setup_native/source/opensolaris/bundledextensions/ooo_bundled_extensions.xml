@@ -71,7 +71,7 @@
   <template>
     <common_name>
       <loctext xml:lang="C">
-    Installation of OpenOffice.org's bundled extensions.
+          Installation of Apache OpenOffice's bundled extensions.
       </loctext>
     </common_name>
   </template>

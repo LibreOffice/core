@@ -21,7 +21,7 @@
 
     <node oor:name="StarOffice XML (Impress)">
         <prop oor:name="UIName">
-            <value xml:lang="en-US">%productname% %formatversion% Presentation</value>
-                        <value xml:lang="x-translate">%productname% %formatversion% Presentation</value>
+            <value xml:lang="en-US">%oooxmlformatname% %oooxmlformatversion% Presentation</value>
+                        <value xml:lang="x-translate">%oooxmlformatname% %oooxmlformatversion% Presentation</value>
         </prop>
     </node>

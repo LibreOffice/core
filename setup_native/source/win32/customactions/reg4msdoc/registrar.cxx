@@ -77,10 +77,10 @@ namespace /* private */
 
 Registrar::Registrar(const RegistrationContextInformation& RegContext) :
     m_ContextInformation(RegContext),
-    FORWARD_KEY_PREFIX(L"OpenOffice.org"),//FORWARD_KEY_PREFIX(L"soffice6"),
+    FORWARD_KEY_PREFIX(L"Apache OpenOffice"),
     DEFAULT_VALUE_NAME(L""),
     BACKUP_VALUE_NAME(L"Backup"),
-    PRIVATE_BACKUP_KEY_NAME(L"OpenOffice.org.reg4msdocmsi"),//PRIVATE_BACKUP_KEY_NAME(L"soffice6.bak"),
+    PRIVATE_BACKUP_KEY_NAME(L"Apache OpenOffice.reg4msdocmsi"),//PRIVATE_BACKUP_KEY_NAME(L"soffice6.bak"),
     REGISTRATION_STATE(L"Reg4MsDocState")
 {
     m_RootKey = WindowsRegistry().GetClassesRootKey();

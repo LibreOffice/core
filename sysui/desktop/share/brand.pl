@@ -34,8 +34,8 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 $destdir = pop @ARGV;
 mkdir $destdir,0777;
 
-$productname = "OpenOffice.org";
-$productfilename = "openoffice";
+$productname = "Apache OpenOffice";
+$productfilename = "apacheopenoffice";
 $prefix = "";
 $iconprefix = "";
 

@@ -39,11 +39,11 @@
     <status value="beta"/>
     <supported-service>com.sun.star.xml.XMLExportFilter</supported-service>
     <reference-docu xlink:href="http://xml.openoffice.org/"
-        xlink:title="general OpenOffice.org xml information" />
+        xlink:title="general OpenOffice.org XML information" />
     <reference-docu xlink:title="XML File Format Specification (draft)"
         xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
     <reference-docu xlink:href="http://xml.openoffice.org/filter/"
-        xlink:title="Guide to implement XML-based filters in OpenOffice.org" />
+        xlink:title="Guide to implement XML-based filters in Apache OpenOffice" />
   </component-description>
 
   <component-description>
@@ -57,11 +57,11 @@
     <status value="beta"/>
     <supported-service>com.sun.star.xml.XMLExportFilter</supported-service>
     <reference-docu xlink:href="http://xml.openoffice.org/"
-        xlink:title="general OpenOffice.org xml information" />
+        xlink:title="general OpenOffice.org XML information" />
     <reference-docu xlink:title="XML File Format Specification (draft)"
         xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
     <reference-docu xlink:href="http://xml.openoffice.org/filter/"
-        xlink:title="Guide to implement XML-based filters in OpenOffice.org" />
+        xlink:title="Guide to implement XML-based filters in Apache OpenOffice" />
   </component-description>
 
   <component-description>
@@ -75,11 +75,11 @@
     <status value="beta"/>
     <supported-service>com.sun.star.xml.XMLExportFilter</supported-service>
     <reference-docu xlink:href="http://xml.openoffice.org/"
-        xlink:title="general OpenOffice.org xml information" />
+        xlink:title="general OpenOffice.org XML information" />
     <reference-docu xlink:title="XML File Format Specification (draft)"
         xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
     <reference-docu xlink:href="http://xml.openoffice.org/filter/"
-        xlink:title="Guide to implement XML-based filters in OpenOffice.org" />
+        xlink:title="Guide to implement XML-based filters in Apache OpenOffice" />
   </component-description>
 
   <component-description>
@@ -93,11 +93,11 @@
     <status value="beta"/>
     <supported-service>com.sun.star.xml.XMLExportFilter</supported-service>
     <reference-docu xlink:href="http://xml.openoffice.org/"
-        xlink:title="general OpenOffice.org xml information" />
+        xlink:title="general OpenOffice.org XML information" />
     <reference-docu xlink:title="XML File Format Specification (draft)"
         xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
     <reference-docu xlink:href="http://xml.openoffice.org/filter/"
-        xlink:title="Guide to implement XML-based filters in OpenOffice.org" />
+        xlink:title="Guide to implement XML-based filters in Apache OpenOffice" />
   </component-description>
 
   <component-description>
@@ -111,11 +111,11 @@
     <status value="beta"/>
     <supported-service>com.sun.star.xml.XMLExportFilter</supported-service>
     <reference-docu xlink:href="http://xml.openoffice.org/"
-        xlink:title="general OpenOffice.org xml information" />
+        xlink:title="general OpenOffice.org XML information" />
     <reference-docu xlink:title="XML File Format Specification (draft)"
         xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
     <reference-docu xlink:href="http://xml.openoffice.org/filter/"
-        xlink:title="Guide to implement XML-based filters in OpenOffice.org" />
+        xlink:title="Guide to implement XML-based filters in Apache OpenOffice" />
   </component-description>
   <project-build-dependency>cppu</project-build-dependency>
   <project-build-dependency>cppuhelper</project-build-dependency>

@@ -193,7 +193,7 @@ extern rtl::OUString pFilterStrings[];
 /** @short  some default values.
  */
 #define  DEFAULT_OFFICELOCALE       _FILTER_CONFIG_FROM_ASCII_("en-US")
-#define  DEFAULT_FORMATNAME         _FILTER_CONFIG_FROM_ASCII_("OpenOffice")
+#define  DEFAULT_FORMATNAME         _FILTER_CONFIG_FROM_ASCII_("OpenOffice.org XML")
 #define  DEFAULT_FORMATVERSION      _FILTER_CONFIG_FROM_ASCII_("1.0")
 
 /** @short  used for the queries of the FilterFactory service.
