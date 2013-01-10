@@ -1399,8 +1399,9 @@ public:
 
       @param    b   a sal_Bool.
       @return   a string with the string representation of the argument.
+      @deprecated there is no replacement, just code your own
     */
-    static OString valueOf( sal_Bool b ) SAL_THROW(())
+    SAL_DEPRECATED_INTERNAL("just code your own") static OString valueOf( sal_Bool b ) SAL_THROW(())
     {
         sal_Char aBuf[RTL_STR_MAX_VALUEOFBOOLEAN];
         rtl_String* pNewData = 0;
@@ -1413,8 +1414,9 @@ public:
 
       @param    c   a character.
       @return   a string with the string representation of the argument.
+      @deprecated just use the "+" or "+=" operator
     */
-    static OString valueOf( sal_Char c ) SAL_THROW(())
+    SAL_DEPRECATED_INTERNAL("use the + or += operator") static OString valueOf( sal_Char c ) SAL_THROW(())
     {
         return OString( &c, 1 );
     }
@@ -1427,8 +1429,43 @@ public:
       @param    i           a int32.
       @param    radix       the radix (between 2 and 36)
       @return   a string with the string representation of the argument.
+      @deprecated use number(sal_Int64,sal_Int16)
     */
-    static OString valueOf( sal_Int32 i, sal_Int16 radix = 10 ) SAL_THROW(())
+    SAL_DEPRECATED_INTERNAL("use number") static OString valueOf( sal_Int32 i, sal_Int16 radix = 10 ) SAL_THROW(())
+    {
+        sal_Char aBuf[RTL_STR_MAX_VALUEOFINT32];
+        rtl_String* pNewData = 0;
+        rtl_string_newFromStr_WithLength( &pNewData, aBuf, rtl_str_valueOfInt32( aBuf, i, radix ) );
+        return OString( pNewData, (DO_NOT_ACQUIRE*)0 );
+    }
+
+    /**
+      Returns the string representation of the int argument.
+
+      This function can't be used for language specific conversion.
+
+      @param    i           a int32.
+      @param    radix       the radix (between 2 and 36)
+      @return   a string with the string representation of the argument.
+    */
+    static OString number( sal_Int32 i, sal_Int16 radix = 10 )
+    {
+        sal_Char aBuf[RTL_STR_MAX_VALUEOFINT32];
+        rtl_String* pNewData = 0;
+        rtl_string_newFromStr_WithLength( &pNewData, aBuf, rtl_str_valueOfInt32( aBuf, i, radix ) );
+        return OString( pNewData, (DO_NOT_ACQUIRE*)0 );
+    }
+
+    /**
+      Returns the string representation of the int argument.
+
+      This function can't be used for language specific conversion.
+
+      @param    i           a int32.
+      @param    radix       the radix (between 2 and 36)
+      @return   a string with the string representation of the argument.
+    */
+    static OString number( sal_uInt32 i, sal_Int16 radix = 10 )
     {
         sal_Char aBuf[RTL_STR_MAX_VALUEOFINT32];
         rtl_String* pNewData = 0;
@@ -1444,8 +1481,46 @@ public:
       @param    ll          a int64.
       @param    radix       the radix (between 2 and 36)
       @return   a string with the string representation of the argument.
+      @deprecated use number(sal_Int64,sal_Int16)
     */
-    static OString valueOf( sal_Int64 ll, sal_Int16 radix = 10 ) SAL_THROW(())
+    SAL_DEPRECATED_INTERNAL("use number") static OString valueOf( sal_Int64 ll, sal_Int16 radix = 10 ) SAL_THROW(())
+    {
+        return number( ll, radix );
+    }
+
+    /**
+      Returns the string representation of the long argument.
+      This is here because when choosing which conversion for overloaded
+      functions is better, the standard treats all integer conversions the same.
+
+      This function can't be used for language specific conversion.
+
+      @param    ll          a int64.
+      @param    radix       the radix (between 2 and 36)
+      @return   a string with the string representation of the argument.
+      @since LibreOffice 4.1
+    */
+    static OString number( sal_Int64 ll, sal_Int16 radix = 10 )
+    {
+        sal_Char aBuf[RTL_STR_MAX_VALUEOFINT64];
+        rtl_String* pNewData = 0;
+        rtl_string_newFromStr_WithLength( &pNewData, aBuf, rtl_str_valueOfInt64( aBuf, ll, radix ) );
+        return OString( pNewData, (DO_NOT_ACQUIRE*)0 );
+    }
+
+    /**
+      Returns the string representation of the long argument.
+      This is here because when choosing which conversion for overloaded
+      functions is better, the standard treats all integer conversions the same.
+
+      This function can't be used for language specific conversion.
+
+      @param    ll          a int64.
+      @param    radix       the radix (between 2 and 36)
+      @return   a string with the string representation of the argument.
+      @since LibreOffice 4.1
+    */
+    static OString number( sal_uInt64 ll, sal_Int16 radix = 10 )
     {
         sal_Char aBuf[RTL_STR_MAX_VALUEOFINT64];
         rtl_String* pNewData = 0;
@@ -1460,8 +1535,23 @@ public:
 
       @param    f           a float.
       @return   a string with the string representation of the argument.
+      @deprecated use number(float)
     */
-    static OString valueOf( float f ) SAL_THROW(())
+    SAL_DEPRECATED_INTERNAL("use number") static OString valueOf( float f ) SAL_THROW(())
+    {
+        return number(f);
+    }
+
+    /**
+      Returns the string representation of the float argument.
+
+      This function can't be used for language specific conversion.
+
+      @param    f           a float.
+      @return   a string with the string representation of the argument.
+      @since LibreOffice 4.1
+    */
+    static OString number( float f )
     {
         sal_Char aBuf[RTL_STR_MAX_VALUEOFFLOAT];
         rtl_String* pNewData = 0;
@@ -1476,8 +1566,23 @@ public:
 
       @param    d           a double.
       @return   a string with the string representation of the argument.
+      @deprecated use number(double)
     */
-    static OString valueOf( double d ) SAL_THROW(())
+    SAL_DEPRECATED_INTERNAL("use number") static OString valueOf( double d ) SAL_THROW(())
+    {
+        return number(d);
+    }
+
+    /**
+      Returns the string representation of the double argument.
+
+      This function can't be used for language specific conversion.
+
+      @param    d           a double.
+      @return   a string with the string representation of the argument.
+      @since LibreOffice 4.1
+    */
+    static OString number( double d )
     {
         sal_Char aBuf[RTL_STR_MAX_VALUEOFDOUBLE];
         rtl_String* pNewData = 0;
