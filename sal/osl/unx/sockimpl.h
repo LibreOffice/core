@@ -33,8 +33,6 @@ typedef void* (*oslCloseCallback) (void*);
 struct oslSocketImpl {
     int                 m_Socket;
     int                 m_nLastError;
-    oslCloseCallback    m_CloseCallback;
-    void*               m_CallbackArg;
     oslInterlockedCount m_nRefCount;
 #if defined(LINUX)
     sal_Bool            m_bIsAccepting;
