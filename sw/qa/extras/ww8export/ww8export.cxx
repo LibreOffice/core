@@ -42,6 +42,7 @@ public:
     void testFdo46020();
     void testFirstHeaderFooter();
     void testZoom();
+    void test56513();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -61,6 +62,7 @@ void Test::run()
         {"fdo46020.odt", &Test::testFdo46020},
         {"first-header-footer.doc", &Test::testFirstHeaderFooter},
         {"zoom.doc", &Test::testZoom},
+        {"fdo56513.doc", &Test::test56513},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -143,6 +145,13 @@ void Test::testZoom()
     sal_Int16 nValue = 0;
     xPropertySet->getPropertyValue("ZoomValue") >>= nValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(42), nValue);
+}
+
+void Test::test56513()
+{
+    CPPUNIT_ASSERT_EQUAL(OUString("This is the header of the first section"),  parseDump("/root/page[1]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("This is the first page header of the second section"),   parseDump("/root/page[2]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("This is the non-first-page header of the second section"),  parseDump("/root/page[3]/header/txt/text()"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
