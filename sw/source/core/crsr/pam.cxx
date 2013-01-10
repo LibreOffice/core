@@ -685,6 +685,7 @@ sal_Bool SwPaM::HasReadonlySel( bool bFormView ) const
     sw::mark::IMark* pA = NULL;
     sw::mark::IMark* pB = NULL;
     bool bUnhandledMark = false;
+    bool bCommentrangeMark = false;
     if ( pDoc )
     {
         const IDocumentMarkAccess* pMarksAccess = pDoc->getIDocumentMarkAccess( );
@@ -693,7 +694,11 @@ sal_Bool SwPaM::HasReadonlySel( bool bFormView ) const
 
         sw::mark::IFieldmark* pFieldmark = pMarksAccess->getFieldmarkFor( *GetPoint() );
         if ( pFieldmark )
+        {
             bUnhandledMark = pFieldmark->GetFieldname( ) == ODF_UNHANDLED;
+            if (!bUnhandledMark)
+                bCommentrangeMark = pFieldmark->GetFieldname() == ODF_COMMENTRANGE;
+        }
     }
 
     if (!bRet)
@@ -701,7 +706,8 @@ sal_Bool SwPaM::HasReadonlySel( bool bFormView ) const
         // Unhandled fieldmarks case shouldn't be edited manually to avoid breaking anything
         if ( ( pA == pB ) && bUnhandledMark )
             bRet = sal_True;
-        else
+        // Allow editing of commented ranges.
+        else if (!((pA == pB) && bCommentrangeMark))
         {
             // Form protection case
             bool bAtStartA = pA != NULL && pA->GetMarkStart() == *GetPoint();
