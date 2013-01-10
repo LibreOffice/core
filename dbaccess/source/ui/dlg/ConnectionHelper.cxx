@@ -49,6 +49,7 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/mozilla/MozillaBootstrap.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #include "UITools.hxx"
@@ -290,42 +291,34 @@ DBG_NAME(OConnectionHelper)
                 if (eType ==  ::dbaccess::DST_THUNDERBIRD)
                     profileType = MozillaProductType_Thunderbird;
 
-                Reference<XMultiServiceFactory> xFactory = ::comphelper::getProcessServiceFactory();
-                OSL_ENSURE( xFactory.is(), "can't get service factory" );
+                Reference<XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+                Reference<XMozillaBootstrap> xMozillaBootstrap = MozillaBootstrap::create(xContext);
 
-                Reference<XInterface> xInstance = xFactory->createInstance(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.mozilla.MozillaBootstrap")) );
-                OSL_ENSURE( xInstance.is(), "failed to create instance" );
-                Reference<XMozillaBootstrap> xMozillaBootstrap =  Reference<XMozillaBootstrap>(xInstance,UNO_QUERY);
-                OSL_ENSURE( xMozillaBootstrap.is(), "failed to create instance" );
+                // collect all Mozilla Profiles
+                ::com::sun::star::uno::Sequence< ::rtl::OUString > list;
 
-                if (xMozillaBootstrap.is())
-                {
-                    // collect all Mozilla Profiles
-                    ::com::sun::star::uno::Sequence< ::rtl::OUString > list;
+                xMozillaBootstrap->getProfileList( profileType, list );
+                const ::rtl::OUString * pArray = list.getConstArray();
 
-                    xMozillaBootstrap->getProfileList( profileType, list );
-                    const ::rtl::OUString * pArray = list.getConstArray();
+                sal_Int32 count = list.getLength();
 
-                    sal_Int32 count = list.getLength();
-
-                    StringBag aProfiles;
-                    for (sal_Int32 index=0; index < count; index++)
-                        aProfiles.insert(pArray[index]);
+                StringBag aProfiles;
+                for (sal_Int32 index=0; index < count; index++)
+                    aProfiles.insert(pArray[index]);
 
 
-                    // execute the select dialog
-                    ODatasourceSelectDialog aSelector(GetParent(), aProfiles);
-                    ::rtl::OUString sOldProfile=getURLNoPrefix();
+                // execute the select dialog
+                ODatasourceSelectDialog aSelector(GetParent(), aProfiles);
+                ::rtl::OUString sOldProfile=getURLNoPrefix();
 
-                    if (!sOldProfile.isEmpty())
-                        aSelector.Select(sOldProfile);
-                    else
-                        aSelector.Select(xMozillaBootstrap->getDefaultProfile(profileType));
+                if (!sOldProfile.isEmpty())
+                    aSelector.Select(sOldProfile);
+                else
+                    aSelector.Select(xMozillaBootstrap->getDefaultProfile(profileType));
 
-                    if ( RET_OK == aSelector.Execute() )
-                        setURLNoPrefix(aSelector.GetSelected());
-                    break;
-                }
+                if ( RET_OK == aSelector.Execute() )
+                    setURLNoPrefix(aSelector.GetSelected());
+                break;
             }
             default:
                 break;
