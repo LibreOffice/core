@@ -33,58 +33,49 @@
 
 #include "PictToBmpFlt.hxx"
 
-bool PICTtoBMP(com::sun::star::uno::Sequence<sal_Int8>& aPict,
-               com::sun::star::uno::Sequence<sal_Int8>& aBmp)
+bool PICTtoPNG( com::sun::star::uno::Sequence<sal_Int8>& rPictData,
+            com::sun::star::uno::Sequence<sal_Int8>& rPngData)
 {
-
-  bool result = false;
-
 #ifdef __LP64__
-  // FIXME
-  (void) aPict;
-  (void) aBmp;
+    // FIXME
+    (void) rPictData;
+    (void) rPngData;
+    return false;
 #else
-  ComponentInstance bmpExporter;
-  if (OpenADefaultComponent(GraphicsExporterComponentType,
-                            kQTFileTypeBMP,
-                            &bmpExporter) != noErr)
+    ComponentInstance pngExporter = NULL;
+    if( OpenADefaultComponent( GraphicsExporterComponentType, kQTFileTypePNG, &pngExporter) != noErr)
+        return false;
+
+    Handle hPict = NULL;
+    if( PtrToHand( rPictData.getArray(), &hPict, rPictData.getLength()) != noErr)
+        hPict = NULL;
+
+    Handle hPng = NULL;
+    if( hPict && GraphicsExportSetInputPicture( pngExporter, (PicHandle)hPict) == noErr)
+        hPng = NewHandleClear(0);
+
+    size_t nPngSize = 0;
+    if( hPng
+    && (GraphicsExportSetOutputHandle( pngExporter, hPng) == noErr)
+    && (GraphicsExportDoExport( pngExporter, NULL) == noErr))
     {
-      return result;
+        nPngSize = GetHandleSize( hPng);
+        rPngData.realloc( nPngSize);
+
+        HLock( hPng);
+        rtl_copyMemory( rPngData.getArray(), ((sal_Int8*)*hPng), nPngSize);
+        HUnlock( hPng);
     }
 
-  Handle hPict;
-  if (PtrToHand(aPict.getArray(), &hPict, aPict.getLength()) != noErr)
-    {
-      return result;
-    }
+    if( hPict)
+        DisposeHandle( hPict);
+    if( hPng)
+        DisposeHandle( hPng);
+    if( pngExporter)
+        CloseComponent( pngExporter);
 
-  Handle hBmp;
-  if ((GraphicsExportSetInputPicture(bmpExporter, (PicHandle)hPict) != noErr) ||
-      ((hBmp = NewHandleClear(0)) == NULL))
-    {
-      CloseComponent(bmpExporter);
-      DisposeHandle(hPict);
-      return result;
-    }
-
-  if ((GraphicsExportSetOutputHandle(bmpExporter, hBmp) == noErr) &&
-      (GraphicsExportDoExport(bmpExporter, NULL) == noErr))
-    {
-      size_t sz = GetHandleSize(hBmp);
-      aBmp.realloc(sz);
-
-      HLock(hBmp);
-      memcpy(aBmp.getArray(), ((sal_Int8*)*hBmp), sz);
-      HUnlock(hBmp);
-
-      result = true;
-    }
-
-  DisposeHandle(hPict);
-  DisposeHandle(hBmp);
-  CloseComponent(bmpExporter);
+    return (nPngSize > 0);
 #endif
-  return result;
 }
 
 #if MACOSX_SDK_VERSION >= 1070
@@ -102,118 +93,99 @@ extern void KillPicture(PicHandle myPicture);
 
 #endif
 
-bool BMPtoPICT(com::sun::star::uno::Sequence<sal_Int8>& aBmp,
-               com::sun::star::uno::Sequence<sal_Int8>& aPict)
+bool PNGtoPICT( com::sun::star::uno::Sequence<sal_Int8>& rPngData,
+               com::sun::star::uno::Sequence<sal_Int8>& rPictData)
 {
-  bool result = false;
-
-  Handle hBmp;
-  if ((PtrToHand(aBmp.getArray(), &hBmp, aBmp.getLength()) != noErr))
-    {
-      return result;
-    }
-
 #ifdef __LP64__
-  // FIXME
-  (void) aPict;
+    // FIXME
+    (void) rPngData;
+    (void) rPictData;
+    return false;
 #else
-  ComponentInstance pictExporter;
+    ComponentInstance pictExporter;
+    if( OpenADefaultComponent( GraphicsImporterComponentType, kQTFileTypePNG, &pictExporter) != noErr)
+        return false;
 
-  if (OpenADefaultComponent(GraphicsImporterComponentType,
-                            kQTFileTypeBMP,
-                            &pictExporter) != noErr)
+    Handle hPng = NULL;
+    if( PtrToHand( rPngData.getArray(), &hPng, rPngData.getLength()) != noErr)
+        hPng = NULL;
+
+    size_t nPictSize = 0;
+    PicHandle hPict = NULL;
+    if( hPng
+    && (GraphicsImportSetDataHandle( pictExporter, hPng) == noErr)
+    && (GraphicsImportGetAsPicture( pictExporter, &hPict) == noErr))
     {
-      DisposeHandle(hBmp);
-      return result;
+        nPictSize = GetHandleSize( (Handle)hPict);
+        rPictData.realloc( nPictSize);
+
+        HLock( (Handle)hPict);
+        rtl_copyMemory( rPictData.getArray(), ((sal_Int8*)*hPict), nPictSize);
+        HUnlock( (Handle)hPict);
+
+        // Release the data associated with the picture
+        // Note: This function is deprecated in Mac OSX 10.4
+        KillPicture( hPict);
     }
 
-  if (GraphicsImportSetDataHandle(pictExporter, hBmp) != noErr)
-    {
-      DisposeHandle(hBmp);
-      CloseComponent(pictExporter);
-      return result;
-    }
+    if( hPng)
+        DisposeHandle( hPng);
+    if( pictExporter)
+        CloseComponent( pictExporter);
 
-  PicHandle hPict;
-  if (GraphicsImportGetAsPicture(pictExporter, &hPict) == noErr)
-    {
-      size_t sz = GetHandleSize((Handle)hPict);
-      aPict.realloc(sz);
-
-      HLock((Handle)hPict);
-      memcpy(aPict.getArray(), ((sal_Int8*)*hPict), sz);
-      HUnlock((Handle)hPict);
-
-      // Release the data associated with the picture
-      // Note: This function is deprecated in Mac OS X
-      // 10.4.
-
-      KillPicture(hPict);
-
-      result = true;
-    }
-
-  DisposeHandle(hBmp);
-  CloseComponent(pictExporter);
+    return (nPictSize > 512);
 #endif
-  return result;
 }
 
-bool ImageToBMP( com::sun::star::uno::Sequence<sal_Int8>& aPict,
-                 com::sun::star::uno::Sequence<sal_Int8>& aBmp,
+bool ImageToPNG( com::sun::star::uno::Sequence<sal_Int8>& rImgData,
+                 com::sun::star::uno::Sequence<sal_Int8>& rPngData,
                  NSBitmapImageFileType eInFormat)
 {
-    if( eInFormat == PICTImageFileType )
-        return PICTtoBMP( aPict, aBmp );
+    if( eInFormat == PICTImageFileType)
+        return PICTtoPNG( rImgData, rPngData);
 
-    bool bResult = false;
+    NSData* pData = [NSData dataWithBytesNoCopy: (void*)rImgData.getConstArray() length: rImgData.getLength() freeWhenDone: 0];
+    if( !pData)
+        return false;
 
-    NSData* pData = [NSData dataWithBytesNoCopy: (void*)aPict.getConstArray() length: aPict.getLength() freeWhenDone: 0];
-    if( pData )
-    {
-        NSBitmapImageRep* pRep = [NSBitmapImageRep imageRepWithData: pData];
-        if( pRep )
-        {
-            NSData* pOut = [pRep representationUsingType: NSBMPFileType properties: nil];
-            if( pOut )
-            {
-                aBmp.realloc( [pOut length] );
-                [pOut getBytes: aBmp.getArray() length: aBmp.getLength()];
-                bResult = (aBmp.getLength() != 0);
-            }
-        }
-    }
+    NSBitmapImageRep* pRep =[NSBitmapImageRep imageRepWithData: pData];
+        if( !pRep)
+        return false;
 
-    return bResult;
+    NSData* pOut = [pRep representationUsingType: NSPNGFileType properties: nil];
+    if( !pOut)
+        return false;
+
+    const size_t nPngSize = [pOut length];
+    rPngData.realloc( nPngSize);
+    [pOut getBytes: rPngData.getArray() length: nPngSize];
+    return (nPngSize > 0);
 }
 
-bool BMPToImage( com::sun::star::uno::Sequence<sal_Int8>& aBmp,
-                 com::sun::star::uno::Sequence<sal_Int8>& aPict,
+bool PNGToImage( com::sun::star::uno::Sequence<sal_Int8>& rPngData,
+                 com::sun::star::uno::Sequence<sal_Int8>& rImgData,
                  NSBitmapImageFileType eOutFormat
                 )
 {
-    if( eOutFormat == PICTImageFileType )
-        return BMPtoPICT( aBmp, aPict );
+    if( eOutFormat == PICTImageFileType)
+        return PNGtoPICT( rPngData, rImgData);
 
-    bool bResult = false;
+    NSData* pData = [NSData dataWithBytesNoCopy: const_cast<sal_Int8*>(rPngData.getConstArray()) length: rPngData.getLength() freeWhenDone: 0];
+    if( !pData)
+        return false;
 
-    NSData* pData = [NSData dataWithBytesNoCopy: const_cast<sal_Int8*>(aBmp.getConstArray()) length: aBmp.getLength() freeWhenDone: 0];
-    if( pData )
-    {
         NSBitmapImageRep* pRep = [NSBitmapImageRep imageRepWithData: pData];
-        if( pRep )
-        {
-            NSData* pOut = [pRep representationUsingType: eOutFormat properties: nil];
-            if( pOut )
-            {
-                aPict.realloc( [pOut length] );
-                [pOut getBytes: aPict.getArray() length: aPict.getLength()];
-                bResult = (aPict.getLength() != 0);
-            }
-        }
-    }
+        if( !pRep)
+        return false;
 
-    return bResult;
+    NSData* pOut = [pRep representationUsingType: eOutFormat properties: nil];
+    if( !pOut)
+        return false;
+
+    const size_t nImgSize = [pOut length];
+    rImgData.realloc( nImgSize);
+    [pOut getBytes: rImgData.getArray() length: nImgSize];
+    return (nImgSize > 0);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -114,6 +114,7 @@
 #include "svx/gallery.hxx"
 #include <com/sun/star/drawing/ShadeMode.hpp>
 #include <svl/itempool.hxx>
+#include <vcl/dibtools.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/svx3ditems.hxx>
 #include <svx/svdoashp.hxx>
@@ -6325,7 +6326,7 @@ sal_Bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, 
         if( ( nInst & 0xFFFE ) == 0x7A8 )
         {   // getting the DIBs immediately
             Bitmap aNew;
-            if( aNew.Read( *pGrStream, sal_False ) )
+            if( ReadDIB(aNew, *pGrStream, false) )
             {
                 rData = Graphic( aNew );
                 nRes = GRFILTER_OK;

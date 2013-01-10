@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <vcl/wrkwin.hxx>
 #include <vcl/msgbox.hxx>
 #include <tools/urlobj.hxx>
@@ -41,6 +40,7 @@
 #include "sfx2/sfxresid.hxx"
 #include "fileobj.hxx"
 #include "app.hrc"
+#include <vcl/dibtools.hxx>
 
 #define FILETYPE_TEXT       1
 #define FILETYPE_GRF        2
@@ -170,9 +170,16 @@ sal_Bool SvFileObject::GetData( ::com::sun::star::uno::Any & rData,
                     break;
 
                 case  FORMAT_BITMAP:
-                    if( !aGrf.GetBitmap().IsEmpty())
-                        aMemStm << aGrf.GetBitmap();
+                {
+                    const Bitmap aBitmap(aGrf.GetBitmap());
+
+                    if(!aBitmap.IsEmpty())
+                    {
+                        WriteDIB(aBitmap, aMemStm, false, true);
+                    }
+
                     break;
+                }
 
                 default:
                     if( aGrf.GetGDIMetaFile().GetActionSize() )

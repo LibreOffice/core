@@ -1209,9 +1209,9 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
     }
     else if( ( !bLink || pPickObj ) && CHECK_FORMAT_TRANS( FORMAT_BITMAP ) )
     {
-        Bitmap aBmp;
+        BitmapEx aBmpEx;
 
-        if( aDataHelper.GetBitmap( FORMAT_BITMAP, aBmp ) )
+        if( aDataHelper.GetBitmapEx( FORMAT_BITMAP, aBmpEx ) )
         {
             Point aInsertPos( rPos );
 
@@ -1232,10 +1232,10 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
             }
 
             // restrict movement to WorkArea
-            Size aImageMapSize(aBmp.GetPrefSize());
+            Size aImageMapSize(aBmpEx.GetPrefSize());
             ImpCheckInsertPos(aInsertPos, aImageMapSize, GetWorkArea());
 
-            InsertGraphic( aBmp, mnAction, aInsertPos, NULL, pImageMap );
+            InsertGraphic( aBmpEx, mnAction, aInsertPos, NULL, pImageMap );
             bReturn = sal_True;
         }
     }

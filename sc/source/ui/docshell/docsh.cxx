@@ -3169,6 +3169,4 @@ bool ScDocShell::GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal
     return bRes;
 }
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

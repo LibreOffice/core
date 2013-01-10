@@ -18,18 +18,17 @@
  */
 
 #include <ctype.h>
-
 #include <rtl/crc.h>
 #include <rtl/strbuf.hxx>
 
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
 #include <tools/rc.h>
-
 #include <vcl/salbtype.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/bitmapex.hxx>
+#include <vcl/dibtools.hxx>
 #include <vcl/pngread.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/bmpacc.hxx>
@@ -779,104 +778,6 @@ sal_uInt8 BitmapEx::GetTransparency(sal_Int32 nX, sal_Int32 nY) const
     }
 
     return nTransparency;
-}
-
-SvStream& operator<<( SvStream& rOStm, const BitmapEx& rBitmapEx )
-{
-    rBitmapEx.aBitmap.Write( rOStm );
-
-    rOStm << (sal_uInt32) 0x25091962;
-    rOStm << (sal_uInt32) 0xACB20201;
-    rOStm << (sal_uInt8) rBitmapEx.eTransparent;
-
-    if( rBitmapEx.eTransparent == TRANSPARENT_BITMAP )
-        rBitmapEx.aMask.Write( rOStm );
-    else if( rBitmapEx.eTransparent == TRANSPARENT_COLOR )
-        rOStm << rBitmapEx.aTransparentColor;
-
-    return rOStm;
-}
-
-SvStream& operator>>( SvStream& rIStm, BitmapEx& rBitmapEx )
-{
-    Bitmap aBmp;
-
-    rIStm >> aBmp;
-
-    if( !rIStm.GetError() )
-    {
-        const sal_uLong nStmPos = rIStm.Tell();
-        sal_uInt32      nMagic1 = 0;
-        sal_uInt32      nMagic2 = 0;
-
-        rIStm >> nMagic1 >> nMagic2;
-
-        if( ( nMagic1 != 0x25091962 ) || ( nMagic2 != 0xACB20201 ) || rIStm.GetError() )
-        {
-            rIStm.ResetError();
-            rIStm.Seek( nStmPos );
-            rBitmapEx = aBmp;
-        }
-        else
-        {
-            sal_uInt8 bTransparent = 0;
-
-            rIStm >> bTransparent;
-
-            if( bTransparent == (sal_uInt8) TRANSPARENT_BITMAP )
-            {
-                Bitmap aMask;
-
-                rIStm >> aMask;
-
-                if( !!aMask)
-                {
-                    // fdo#59616 enforce same size for both mask and content
-                    if( aMask.GetSizePixel() != aBmp.GetSizePixel() )
-                    {
-                        Bitmap aNewMask;
-                        const Size aNominalSize=aBmp.GetSizePixel();
-                        BitmapReadAccess aAcc(aMask);
-                        if( aAcc.HasPalette() )
-                            aNewMask = Bitmap(aNominalSize,
-                                              aMask.GetBitCount(),
-                                              &aAcc.GetPalette());
-                        else
-                            aNewMask = Bitmap(aNominalSize,
-                                              aMask.GetBitCount());
-                        const Rectangle aCopyArea(Point(0,0), aNominalSize);
-                        aNewMask.CopyPixel(aCopyArea, aCopyArea, &aMask);
-                        aMask = aNewMask;
-                    }
-
-                    // do we have an alpha mask?
-                    if( ( 8 == aMask.GetBitCount() ) && aMask.HasGreyPalette() )
-                    {
-                        AlphaMask aAlpha;
-
-                        // create alpha mask quickly (without greyscale conversion)
-                        aAlpha.ImplSetBitmap( aMask );
-                        rBitmapEx = BitmapEx( aBmp, aAlpha );
-                    }
-                    else
-                        rBitmapEx = BitmapEx( aBmp, aMask );
-                }
-                else
-                    rBitmapEx = aBmp;
-            }
-            else if( bTransparent == (sal_uInt8) TRANSPARENT_COLOR )
-            {
-                Color aTransparentColor;
-
-                rIStm >> aTransparentColor;
-                rBitmapEx = BitmapEx( aBmp, aTransparentColor );
-            }
-            else
-                rBitmapEx = aBmp;
-        }
-    }
-
-    return rIStm;
 }
 
 // Shift alpha transparent pixels between cppcanvas/ implementations

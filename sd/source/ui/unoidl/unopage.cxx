@@ -51,7 +51,6 @@
 #include <osl/mutex.hxx>
 #include <svl/style.hxx>
 #include <comphelper/serviceinfohelper.hxx>
-
 #include <comphelper/extract.hxx>
 #include <list>
 #include <svx/svditer.hxx>
@@ -68,6 +67,7 @@
 #include "unokywds.hxx"
 #include "unopback.hxx"
 #include "unohelp.hxx"
+#include <vcl/dibtools.hxx>
 
 using ::com::sun::star::animations::XAnimationNode;
 using ::com::sun::star::animations::XAnimationNodeSupplier;
@@ -1122,7 +1122,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
                                                                   aBitmap ) )
                     {
                         SvMemoryStream aMemStream;
-                        aBitmap.GetBitmap().Write( aMemStream, sal_False, sal_False );
+                        WriteDIB(aBitmap.GetBitmap(), aMemStream, false, false);
                         uno::Sequence<sal_Int8> aSeq( (sal_Int8*)aMemStream.GetData(), aMemStream.Tell() );
                         aAny <<= aSeq;
                     }

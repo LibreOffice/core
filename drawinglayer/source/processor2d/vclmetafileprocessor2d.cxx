@@ -54,6 +54,7 @@
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
 #include <drawinglayer/primitive2d/epsprimitive2d.hxx>
 #include <basegfx/polygon/b2dlinegeometry.hxx>
+#include <vcl/dibtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // for PDFExtOutDevData Graphic support

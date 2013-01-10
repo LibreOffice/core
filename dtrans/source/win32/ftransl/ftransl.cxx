@@ -254,6 +254,7 @@ void SAL_CALL CDataFormatTranslator::initTranslationTable()
     //SOT_FORMATSTR_ID_DIF
     m_TranslTable.push_back(FormatEntry("application/x-openoffice-dif;windows_formatname=\"DIF\"", "DIF", "DIF", CF_DIF, CPPUTYPE_DEFAULT));
     // SOT_FORMAT_BITMAP
+    m_TranslTable.push_back(FormatEntry("application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"", "Bitmap", "Bitmap", CF_DIBV5, CPPUTYPE_DEFAULT));
     m_TranslTable.push_back(FormatEntry("application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"", "Bitmap", "Bitmap", CF_DIB, CPPUTYPE_DEFAULT));
     m_TranslTable.push_back(FormatEntry("application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"", "Bitmap", "Bitmap", CF_BITMAP, CPPUTYPE_DEFAULT));
     // SOT_FORMAT_STRING
@@ -485,6 +486,8 @@ void SAL_CALL CDataFormatTranslator::initTranslationTable()
     m_TranslTable.push_back(FormatEntry("application/vnd.sun.xml.dialog", "Dialog 6.0", NULL, CF_INVALID, CPPUTYPE_DEFAULT));
     //SOT_FORMATSTR_ID_BMP
     m_TranslTable.push_back(FormatEntry("image/bmp", "Windows Bitmap", NULL, CF_INVALID, CPPUTYPE_DEFAULT));
+    //SOT_FORMATSTR_ID_PNG
+    m_TranslTable.push_back(FormatEntry("image/png", "PNG", NULL, CF_INVALID, CPPUTYPE_DEFAULT));
     //SOT_FORMATSTR_ID_DUMMY3
     m_TranslTable.push_back(FormatEntry("application/x-openoffice-dummy3;windows_formatname=\"SO_DUMMYFORMAT_3\"", "SO_DUMMYFORMAT_3", NULL, CF_INVALID, CPPUTYPE_DEFAULT));
     //SOT_FORMATSTR_ID_DUMMY4

@@ -30,7 +30,7 @@
 #include <tools/stream.hxx>
 #include <cppuhelper/weak.hxx>
 #include <comphelper/processfactory.hxx>
-
+#include <vcl/dibtools.hxx>
 
 const sal_uInt16 START_ITEMID = 1000;
 
@@ -183,7 +183,7 @@ void InsertSubMenuItems( Menu* pSubMenu, sal_uInt16& nItemId, Reference< XIndexC
                                     {
                                         aDIBSeq = xBitmap->getDIB();
                                         SvMemoryStream aMem( (void *)aDIBSeq.getConstArray(), aDIBSeq.getLength(), STREAM_READ );
-                                        aMem >> aBitmap;
+                                        ReadDIB(aBitmap, aMem, true);
                                     }
 
                                     aDIBSeq = xBitmap->getMaskDIB();
@@ -191,7 +191,7 @@ void InsertSubMenuItems( Menu* pSubMenu, sal_uInt16& nItemId, Reference< XIndexC
                                     {
                                         Bitmap aMaskBitmap;
                                         SvMemoryStream aMem( (void *)aDIBSeq.getConstArray(), aDIBSeq.getLength(), STREAM_READ );
-                                        aMem >> aMaskBitmap;
+                                        ReadDIB(aMaskBitmap, aMem, true);
                                         aImage = Image( aBitmap, aMaskBitmap );
                                     }
                                     else

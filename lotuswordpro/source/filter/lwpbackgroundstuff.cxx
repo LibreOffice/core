@@ -64,6 +64,7 @@
 #include "xfilter/xfbgimage.hxx"
 
 #include "tools/stream.hxx"
+#include "vcl/dibtools.hxx"
 #include "vcl/bmpacc.hxx"
 #include "svx/xbitmap.hxx"
 
@@ -159,7 +160,7 @@ XFBGImage* LwpBackgroundStuff::GetFillPattern()
     // transfer image data from XOBitmap->SvStream->BYTE-Array
     SvMemoryStream aPicMemStream;
     aXOBitmap.Array2Bitmap();
-    aXOBitmap.GetBitmap().Write(aPicMemStream);
+    WriteDIB(aXOBitmap.GetBitmap(), aPicMemStream, true, true);
     sal_uInt32 nSize = aPicMemStream.GetEndOfData();
     sal_uInt8* pImageBuff = new sal_uInt8 [nSize];
     memcpy(pImageBuff, aPicMemStream.GetData(), nSize);

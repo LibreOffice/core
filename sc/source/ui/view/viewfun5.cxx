@@ -454,9 +454,9 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
     }
     else if (nFormatId == SOT_FORMAT_BITMAP)
     {
-        Bitmap aBmp;
-        if( aDataHelper.GetBitmap( FORMAT_BITMAP, aBmp ) )
-            bRet = PasteBitmap( aPos, aBmp );
+        BitmapEx aBmpEx;
+        if( aDataHelper.GetBitmapEx( FORMAT_BITMAP, aBmpEx ) )
+            bRet = PasteBitmapEx( aPos, aBmpEx );
     }
     else if (nFormatId == SOT_FORMAT_GDIMETAFILE)
     {

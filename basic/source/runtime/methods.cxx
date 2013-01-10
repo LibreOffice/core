@@ -20,6 +20,7 @@
 #include <tools/date.hxx>
 #include <basic/sbxvar.hxx>
 #include <osl/process.h>
+#include <vcl/dibtools.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/sound.hxx>
@@ -4331,8 +4332,8 @@ RTLFUNC(LoadPicture)
     if( pStream != NULL )
     {
         Bitmap aBmp;
-        *pStream >> aBmp;
-        Graphic aGraphic( aBmp );
+        ReadDIB(aBmp, *pStream, true);
+        Graphic aGraphic(aBmp);
 
         SbxObjectRef xRef = new SbStdPicture;
         ((SbStdPicture*)(SbxObject*)xRef)->SetGraphic( aGraphic );

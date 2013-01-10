@@ -17,11 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <tools/config.hxx>
-
+#include <vcl/dibtools.hxx>
 #include <vcl/msgbox.hxx>
 #include <sanedlg.hxx>
 #include <sanedlg.hrc>
@@ -734,7 +733,7 @@ void SaneDlg::AcquirePreview()
         fprintf( stderr, "Previewbitmapstream contains %d bytes\n", (int)aTransporter.getStream().Tell() );
 #endif
         aTransporter.getStream().Seek( STREAM_SEEK_TO_BEGIN );
-        maPreviewBitmap.Read( aTransporter.getStream(), sal_True );
+        ReadDIB(maPreviewBitmap, aTransporter.getStream(), true);
     }
 
     SetAdjustedNumericalValue( "resolution", fResl );

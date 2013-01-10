@@ -130,7 +130,7 @@ public:
 
     sal_Bool            PasteFile( const Point&, const String&, sal_Bool bLink=false );
     sal_Bool            PasteObject( const Point&, const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >&, const Size* = NULL, const Graphic* = NULL, const OUString& = OUString(), sal_Int64 nAspect = ::com::sun::star::embed::Aspects::MSOLE_CONTENT );
-    sal_Bool            PasteBitmap( const Point&, const Bitmap& );
+    sal_Bool            PasteBitmapEx( const Point&, const BitmapEx& );
     sal_Bool            PasteMetaFile( const Point&, const GDIMetaFile& );
     sal_Bool            PasteGraphic( const Point& rPos, const Graphic& rGraphic,
                                     const String& rFile, const String& rFilter );

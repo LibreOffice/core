@@ -48,9 +48,9 @@ enum TransparentType
 
 class VCL_DLLPUBLIC BitmapEx
 {
-    friend class ImpGraphic;
-
 private:
+    friend class ImpGraphic;
+    friend bool VCL_DLLPUBLIC WriteDIBBitmapEx(const BitmapEx& rSource, SvStream& rOStm);
 
     Bitmap              aBitmap;
     Bitmap              aMask;
@@ -64,8 +64,6 @@ public:
 
     SAL_DLLPRIVATE  ImpBitmap*  ImplGetBitmapImpBitmap() const { return aBitmap.ImplGetImpBitmap(); }
     SAL_DLLPRIVATE  ImpBitmap*  ImplGetMaskImpBitmap() const { return aMask.ImplGetImpBitmap(); }
-
-public:
 
                         BitmapEx();
                         BitmapEx( const ResId& rResId );
@@ -385,8 +383,6 @@ public:
 
 public:
 
-    friend VCL_DLLPUBLIC SvStream&  operator<<( SvStream& rOStm, const BitmapEx& rBitmapEx );
-    friend VCL_DLLPUBLIC SvStream&  operator>>( SvStream& rIStm, BitmapEx& rBitmapEx );
     static BitmapEx AutoScaleBitmap(BitmapEx & aBitmap, const long aStandardSize);
 
     /// populate from a canvas implementation

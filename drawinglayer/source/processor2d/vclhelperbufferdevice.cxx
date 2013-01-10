@@ -25,6 +25,7 @@
 #include <vcl/timer.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <vcl/lazydelete.hxx>
+#include <vcl/dibtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // buffered VDev usage
@@ -292,7 +293,7 @@ namespace drawinglayer
             if(bDoSaveForVisualControl)
             {
                 SvFileStream aNew((const String&)String( "c:\\content.bmp" ), STREAM_WRITE|STREAM_TRUNC);
-                aNew << aContent;
+                WriteDIB(aContent, aNew, false, true);
             }
 
             if(mpAlpha)
@@ -303,7 +304,7 @@ namespace drawinglayer
                 if(bDoSaveForVisualControl)
                 {
                     SvFileStream aNew((const String&)String( "c:\\transparence.bmp" ), STREAM_WRITE|STREAM_TRUNC);
-                    aNew << aAlphaMask.GetBitmap();
+                    WriteDIB(aAlphaMask.GetBitmap(), aNew, false, true);
                 }
 
                 mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent, aAlphaMask));
@@ -316,7 +317,7 @@ namespace drawinglayer
                 if(bDoSaveForVisualControl)
                 {
                     SvFileStream aNew((const String&)String( "c:\\mask.bmp" ), STREAM_WRITE|STREAM_TRUNC);
-                    aNew << aMask;
+                    WriteDIB(aMask, aNew, false, true);
                 }
 
                 mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent, aMask));

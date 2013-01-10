@@ -21,6 +21,7 @@
 #include <vcl/svapp.hxx>
 #include <com/sun/star/graphic/GraphicType.hpp>
 #include <com/sun/star/graphic/XGraphicTransformer.hpp>
+#include <vcl/dibtools.hxx>
 #include <vcl/graph.hxx>
 #include "graphic.hxx"
 #include <comphelper/servicehelper.hxx>
@@ -239,7 +240,8 @@ uno::Sequence< ::sal_Int8 > SAL_CALL Graphic::getDIB(  ) throw (uno::RuntimeExce
     if( mpGraphic && ( mpGraphic->GetType() != GRAPHIC_NONE ) )
     {
         SvMemoryStream aMem;
-        aMem << mpGraphic->GetBitmapEx().GetBitmap();
+
+        WriteDIB(mpGraphic->GetBitmapEx().GetBitmap(), aMem, false, true);
         return ::com::sun::star::uno::Sequence<sal_Int8>( (sal_Int8*) aMem.GetData(), aMem.Tell() );
     }
     else
@@ -257,7 +259,8 @@ uno::Sequence< ::sal_Int8 > SAL_CALL Graphic::getMaskDIB(  ) throw (uno::Runtime
     if( mpGraphic && ( mpGraphic->GetType() != GRAPHIC_NONE ) )
     {
         SvMemoryStream aMem;
-        aMem << mpGraphic->GetBitmapEx().GetMask();
+
+        WriteDIB(mpGraphic->GetBitmapEx().GetMask(), aMem, false, true);
         return ::com::sun::star::uno::Sequence<sal_Int8>( (sal_Int8*) aMem.GetData(), aMem.Tell() );
     }
     else

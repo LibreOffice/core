@@ -29,6 +29,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/uri.hxx>
 #include <comphelper/processfactory.hxx>
+#include <vcl/dibtools.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 
@@ -1661,7 +1662,7 @@ sal_Bool AddonsOptions_Impl::CreateImageFromSequence( Image& rImage, sal_Bool bB
         SvMemoryStream  aMemStream( rBitmapDataSeq.getArray(), rBitmapDataSeq.getLength(), STREAM_STD_READ );
         BitmapEx        aBitmapEx;
 
-        aMemStream >> aBitmapEx;
+        ReadDIBBitmapEx(aBitmapEx, aMemStream);
 
         // Scale bitmap to fit the correct size for the menu/toolbar. Use best quality
         if ( aBitmapEx.GetSizePixel() != aSize )

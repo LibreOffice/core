@@ -294,9 +294,9 @@ void ChartController::executeDispatch_Paste()
             else if( aDataHelper.HasFormat( FORMAT_BITMAP ))
             {
                 // bitmap (non-graphic-manager)
-                Bitmap aBmp;
-                if( aDataHelper.GetBitmap( FORMAT_BITMAP, aBmp ))
-                    aGraphic = Graphic( aBmp );
+                BitmapEx aBmpEx;
+                if( aDataHelper.GetBitmapEx( FORMAT_BITMAP, aBmpEx ))
+                    aGraphic = Graphic( aBmpEx );
             }
             else if( aDataHelper.HasFormat( FORMAT_STRING ))
             {

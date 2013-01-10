@@ -22,6 +22,7 @@
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <tools/helpers.hxx>
+#include <vcl/dibtools.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/lineinfo.hxx>
@@ -930,7 +931,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 {
                     Bitmap aBmp;
 
-                    rIStm >> aPt >> aBmp;
+                    rIStm >> aPt;
+                    ReadDIB(aBmp, rIStm, true);
                     rMtf.AddAction( new MetaBmpAction( aPt, aBmp ) );
                 }
                 break;
@@ -939,7 +941,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 {
                     Bitmap aBmp;
 
-                    rIStm >> aPt >> aSz >> aBmp;
+                    rIStm >> aPt >> aSz;
+                    ReadDIB(aBmp, rIStm, true);
                     rMtf.AddAction( new MetaBmpScaleAction( aPt, aSz, aBmp ) );
                 }
                 break;
@@ -949,7 +952,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     Bitmap  aBmp;
                     Size    aSz2;
 
-                    rIStm >> aPt >> aSz >> aPt1 >> aSz2 >> aBmp;
+                    rIStm >> aPt >> aSz >> aPt1 >> aSz2;
+                    ReadDIB(aBmp, rIStm, true);
                     rMtf.AddAction( new MetaBmpScalePartAction( aPt, aSz, aPt1, aSz2, aBmp ) );
                 }
                 break;
@@ -1769,7 +1773,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 rOStm << (sal_Int16) GDI_BITMAP_ACTION;
                 rOStm << (sal_Int32) 12;
                 rOStm << pAct->GetPoint();
-                rOStm << pAct->GetBitmap();
+                WriteDIB(pAct->GetBitmap(), rOStm, false, true);
                 nCount++;
             }
             break;
@@ -1782,7 +1786,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 rOStm << (sal_Int32) 20;
                 rOStm << pAct->GetPoint();
                 rOStm << pAct->GetSize();
-                rOStm << pAct->GetBitmap();
+                WriteDIB(pAct->GetBitmap(), rOStm, false, true);
                 nCount++;
             }
             break;
@@ -1797,7 +1801,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 rOStm << pAct->GetDestSize();
                 rOStm << pAct->GetSrcPoint();
                 rOStm << pAct->GetSrcSize();
-                rOStm << pAct->GetBitmap();
+                WriteDIB(pAct->GetBitmap(), rOStm, false, true);
                 nCount++;
             }
             break;
@@ -1810,7 +1814,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 rOStm << (sal_Int16) GDI_BITMAP_ACTION;
                 rOStm << (sal_Int32) 12;
                 rOStm << pAct->GetPoint();
-                rOStm << aBmp;
+                WriteDIB(aBmp, rOStm, false, true);
                 nCount++;
             }
             break;
@@ -1824,7 +1828,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 rOStm << (sal_Int32) 20;
                 rOStm << pAct->GetPoint();
                 rOStm << pAct->GetSize();
-                rOStm << aBmp;
+                WriteDIB(aBmp, rOStm, false, true);
                 nCount++;
             }
             break;
@@ -1840,7 +1844,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 rOStm << pAct->GetDestSize();
                 rOStm << pAct->GetSrcPoint();
                 rOStm << pAct->GetSrcSize();
-                rOStm << aBmp;
+                WriteDIB(aBmp, rOStm, false, true);
                 nCount++;
             }
             break;

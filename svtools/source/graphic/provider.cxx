@@ -39,6 +39,7 @@
 #include "graphic.hxx"
 #include <svtools/grfmgr.hxx>
 #include "provider.hxx"
+#include <vcl/dibtools.hxx>
 
 using namespace com::sun::star;
 
@@ -244,15 +245,16 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadBitmap( const uno
     uno::Sequence< sal_Int8 > aMaskSeq( xBtm->getMaskDIB() );
     SvMemoryStream aBmpStream( aBmpSeq.getArray(), aBmpSeq.getLength(), STREAM_READ );
     Bitmap aBmp;
-    aBmpStream >> aBmp;
-
     BitmapEx aBmpEx;
+
+    ReadDIB(aBmp, aBmpStream, true);
 
     if( aMaskSeq.getLength() )
     {
         SvMemoryStream aMaskStream( aMaskSeq.getArray(), aMaskSeq.getLength(), STREAM_READ );
         Bitmap aMask;
-        aMaskStream >> aMask;
+
+        ReadDIB(aMask, aMaskStream, true);
         aBmpEx = BitmapEx( aBmp, aMask );
     }
     else

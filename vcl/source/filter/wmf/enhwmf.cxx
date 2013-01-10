@@ -22,6 +22,7 @@
 #include <osl/endian.h>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <boost/bind.hpp>
+#include <vcl/dibtools.hxx>
 
 using namespace std;
 
@@ -993,7 +994,8 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                             pWMF->Seek( nStart + offBitsSrc );
                             pWMF->Read( pBuf + 14 + cbBmiSrc, cbBitsSrc );
                             aTmp.Seek( 0 );
-                            aBitmap.Read( aTmp, sal_True );
+                            ReadDIB(aBitmap, aTmp, true);
+
                             // test if it is sensible to crop
                             if ( ( cxSrc > 0 ) && ( cySrc > 0 ) &&
                                 ( xSrc >= 0 ) && ( ySrc >= 0 ) &&
@@ -1055,7 +1057,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                             pWMF->Seek( nStart + offBitsSrc );
                             pWMF->Read( pBuf + 14 + cbBmiSrc, cbBitsSrc );
                             aTmp.Seek( 0 );
-                            aBitmap.Read( aTmp, sal_True );
+                            ReadDIB(aBitmap, aTmp, true);
 
                             // test if it is sensible to crop
                             if ( ( cxSrc > 0 ) && ( cySrc > 0 ) &&
@@ -1125,7 +1127,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                             pWMF->Seek( nStart + offBitsSrc );
                             pWMF->Read( pBuf + 14 + cbBmiSrc, cbBitsSrc );
                             aTmp.Seek( 0 );
-                            aBitmap.Read( aTmp, sal_True );
+                            ReadDIB(aBitmap, aTmp, true);
 
                             // test if it is sensible to crop
                             if ( ( cxSrc > 0 ) && ( cySrc > 0 ) &&
@@ -1357,7 +1359,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                                 pWMF->Seek( nStart + offBits );
                                 pWMF->Read( pBuf + 14 + cbBmi, cbBits );
                                 aTmp.Seek( 0 );
-                                aBitmap.Read( aTmp, sal_True );
+                                ReadDIB(aBitmap, aTmp, true);
                             }
                         }
                     }

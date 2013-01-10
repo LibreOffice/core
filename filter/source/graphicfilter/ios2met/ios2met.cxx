@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <vcl/graph.hxx>
 #include <tools/poly.hxx>
+#include <vcl/dibtools.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/lineinfo.hxx>
 
@@ -2362,7 +2362,7 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
             }
             pBitmapList->pBMP->Seek(0);
 
-            pBitmapList->aBitmap.Read( *( pBitmapList->pBMP ), sal_False );
+            ReadDIB(pBitmapList->aBitmap, *(pBitmapList->pBMP), false);
 
             if (pBitmapList->pBMP->GetError()!=0) {
                 pOS2MET->SetError(SVSTREAM_FILEFORMAT_ERROR);

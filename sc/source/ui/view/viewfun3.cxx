@@ -719,9 +719,9 @@ sal_Bool ScViewFunc::PasteOnDrawObject( const uno::Reference<datatransfer::XTran
         }
         else if ( aDataHelper.HasFormat( SOT_FORMAT_BITMAP ) )
         {
-            Bitmap aBmp;
-            if( aDataHelper.GetBitmap( FORMAT_BITMAP, aBmp ) )
-                bRet = ApplyGraphicToObject( pHitObj, Graphic(aBmp) );
+            BitmapEx aBmpEx;
+            if( aDataHelper.GetBitmapEx( FORMAT_BITMAP, aBmpEx ) )
+                bRet = ApplyGraphicToObject( pHitObj, Graphic(aBmpEx) );
         }
     }
     else

@@ -23,6 +23,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <vcl/lineinfo.hxx>
+#include <vcl/dibtools.hxx>
 
 #define WIN_EMR_POLYGON                     3
 #define WIN_EMR_POLYLINE                    4
@@ -841,7 +842,7 @@ void EMFWriter::ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt,
         m_rStm << (sal_uInt32) 0 << sal_Int32( ( ROP_XOR == maVDev.GetRasterOp() && WIN_SRCCOPY == nROP ) ? WIN_SRCINVERT : nROP );
         ImplWriteSize( rSz );
 
-        rBmp.Write( aMemStm, sal_True, sal_False );
+        WriteDIB(rBmp, aMemStm, true, false);
 
         sal_uInt32  nDIBSize = aMemStm.Tell(), nHeaderSize, nCompression, nColsUsed, nPalCount, nImageSize;
         sal_uInt16  nBitCount;

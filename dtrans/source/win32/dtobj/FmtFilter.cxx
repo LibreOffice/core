@@ -190,28 +190,31 @@ HENHMETAFILE SAL_CALL OOMFPictToWinENHMFPict( Sequence< sal_Int8 >& aOOMetaFileP
 
 Sequence< sal_Int8 > SAL_CALL WinDIBToOOBMP( const Sequence< sal_Int8 >& aWinDIB )
 {
-    OSL_ASSERT( aWinDIB.getLength( ) > sizeof( BITMAPINFOHEADER ) );
-
+    OSL_ENSURE(aWinDIB.getLength() > sizeof(BITMAPINFOHEADER), "CF_DIBV5/CF_DIB too small (!)");
     Sequence< sal_Int8 > ooBmpStream;
 
-    ooBmpStream.realloc( aWinDIB.getLength( ) + sizeof(BITMAPFILEHEADER) );
+    ooBmpStream.realloc(aWinDIB.getLength( ) + sizeof(BITMAPFILEHEADER));
+    const BITMAPINFOHEADER* pBmpInfoHdr = reinterpret_cast< const BITMAPINFOHEADER* >(aWinDIB.getConstArray());
+    BITMAPFILEHEADER* pBmpFileHdr = reinterpret_cast< BITMAPFILEHEADER* >(ooBmpStream.getArray());
+    const DWORD nSizeInfoOrV5(pBmpInfoHdr->biSize > sizeof(BITMAPINFOHEADER) ? sizeof(BITMAPV5HEADER) : sizeof(BITMAPINFOHEADER));
+    DWORD nOffset(sizeof(BITMAPFILEHEADER) + nSizeInfoOrV5);
 
-    const BITMAPINFOHEADER  *pBmpInfoHdr = (const BITMAPINFOHEADER*)aWinDIB.getConstArray();
-    BITMAPFILEHEADER        *pBmpFileHdr = reinterpret_cast< BITMAPFILEHEADER* >( ooBmpStream.getArray() );
-    DWORD                   nOffset      = sizeof( BITMAPFILEHEADER ) + sizeof( BITMAPINFOHEADER );
+    memcpy(pBmpFileHdr + 1, pBmpInfoHdr, aWinDIB.getLength());
 
-    memcpy( pBmpFileHdr + 1, pBmpInfoHdr, aWinDIB.getLength( ) );
-
-    if( pBmpInfoHdr->biBitCount <= 8 )
-        nOffset += ( pBmpInfoHdr->biClrUsed ? pBmpInfoHdr->biClrUsed : ( 1 << pBmpInfoHdr->biBitCount ) ) << 2;
-    else if( ( BI_BITFIELDS == pBmpInfoHdr->biCompression ) && ( ( 16 == pBmpInfoHdr->biBitCount ) || ( 32 == pBmpInfoHdr->biBitCount ) ) )
+    if(pBmpInfoHdr->biBitCount <= 8)
+    {
+        nOffset += (pBmpInfoHdr->biClrUsed ? pBmpInfoHdr->biClrUsed : (1 << pBmpInfoHdr->biBitCount)) << 2;
+    }
+    else if((BI_BITFIELDS == pBmpInfoHdr->biCompression ) && ((16 == pBmpInfoHdr->biBitCount ) || (32 == pBmpInfoHdr->biBitCount )))
+    {
         nOffset += 12;
+    }
 
-    pBmpFileHdr->bfType      = ('M' << 8) | 'B';
-    pBmpFileHdr->bfSize      = 0; // maybe: nMemSize + sizeof(BITMAPFILEHEADER)
+    pBmpFileHdr->bfType = ('M' << 8) | 'B';
+    pBmpFileHdr->bfSize = 0; // maybe: nMemSize + sizeof(BITMAPFILEHEADER)
     pBmpFileHdr->bfReserved1 = 0;
     pBmpFileHdr->bfReserved2 = 0;
-    pBmpFileHdr->bfOffBits   = nOffset;
+    pBmpFileHdr->bfOffBits = nOffset;
 
     return ooBmpStream;
 }
@@ -222,9 +225,6 @@ Sequence< sal_Int8 > SAL_CALL WinDIBToOOBMP( const Sequence< sal_Int8 >& aWinDIB
 
 Sequence< sal_Int8 > SAL_CALL OOBmpToWinDIB( Sequence< sal_Int8 >& aOOBmp )
 {
-    OSL_ASSERT( aOOBmp.getLength( ) >
-                ( sizeof( BITMAPFILEHEADER ) + sizeof( BITMAPINFOHEADER ) ) );
-
     Sequence< sal_Int8 > winDIBStream( aOOBmp.getLength( ) - sizeof( BITMAPFILEHEADER ) );
 
     memcpy( winDIBStream.getArray( ),

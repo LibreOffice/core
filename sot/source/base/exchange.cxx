@@ -202,6 +202,7 @@ namespace
             /*138 SOT_FORMATSTR_ID_STARMATH_8_TEMPLATE*/            { MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_TEMPLATE_ASCII, "Math 8 Template", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
             /*139 SOT_FORMATSTR_ID_STARBASE_8*/             { MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII, "StarBase 8", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
             /*140 SOT_FORMAT_GDIMETAFILE*/                  { "application/x-openoffice-highcontrast-gdimetafile;windows_formatname=\"GDIMetaFile\"", "High Contrast GDIMetaFile", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+            /*141 SOT_FORMATSTR_ID_PNG*/                    { "image/png", "Windows Bitmap", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
             };
         return &aInstance[0];
         }

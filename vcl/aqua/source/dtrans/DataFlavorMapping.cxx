@@ -124,8 +124,8 @@ namespace // private
     {
       { NSStringPboardType, "text/plain;charset=utf-16", "Unicode Text (UTF-16)", true },
       { NSRTFPboardType, "text/richtext", "Rich Text Format", false },
-      { NSTIFFPboardType, "image/bmp", "Windows Bitmap", false },
-      { NSPICTPboardType, "image/bmp", "Windows Bitmap", false },
+      { NSTIFFPboardType, "image/png", "Portable Network Graphics", false },
+      { NSPICTPboardType, "image/png", "Portable Network Graphics", false },
       { NSHTMLPboardType, "text/html", "Plain Html", false },
       { NSFilenamesPboardType, "application/x-openoffice-filelist;windows_formatname=\"FileList\"", "FileList", false },
       { PBTYPE_SESX, FLAVOR_SESX, "Star Embed Source (XML)", false },
@@ -370,73 +370,65 @@ Any HTMLFormatDataProvider::getOOoData()
 
 //###########################
 
-class BMPDataProvider : public DataProviderBaseImpl
+class PNGDataProvider : public DataProviderBaseImpl
 {
     NSBitmapImageFileType meImageType;
 public:
-  BMPDataProvider(const Any& data, NSBitmapImageFileType eImageType );
+    PNGDataProvider( const Any&, NSBitmapImageFileType);
 
-  BMPDataProvider(NSData* data, NSBitmapImageFileType eImageType);
+    PNGDataProvider( NSData*, NSBitmapImageFileType);
 
-  virtual NSData* getSystemData();
+    virtual NSData* getSystemData();
 
-  virtual Any getOOoData();
+    virtual Any getOOoData();
 };
 
-BMPDataProvider::BMPDataProvider(const Any& data, NSBitmapImageFileType eImageType) :
+PNGDataProvider::PNGDataProvider( const Any& data, NSBitmapImageFileType eImageType) :
   DataProviderBaseImpl(data),
   meImageType( eImageType )
 {
 }
 
-BMPDataProvider::BMPDataProvider(NSData* data, NSBitmapImageFileType eImageType) :
+PNGDataProvider::PNGDataProvider( NSData* data, NSBitmapImageFileType eImageType) :
   DataProviderBaseImpl(data),
   meImageType( eImageType )
 {
 }
 
-NSData* BMPDataProvider::getSystemData()
+NSData* PNGDataProvider::getSystemData()
 {
-  Sequence<sal_Int8> bmpData;
-  mData >>= bmpData;
+    Sequence<sal_Int8> pngData;
+    mData >>= pngData;
 
-  Sequence<sal_Int8> pictData;
-  NSData* sysData = NULL;
+    Sequence<sal_Int8> imgData;
+    NSData* sysData = NULL;
+    if( PNGToImage( pngData, imgData, meImageType))
+        sysData = [NSData dataWithBytes: imgData.getArray() length: imgData.getLength()];
 
-  if (BMPToImage(bmpData, pictData, meImageType))
-    {
-      sysData = [NSData dataWithBytes: pictData.getArray() length: pictData.getLength()];
-    }
-
-  return sysData;
+    return sysData;
 }
 
-/* At the moment the OOo 'PCT' filter is not good enough to be used
-   and there is no flavor defined for exchanging 'PCT' with OOo so
-   we will at the moment convert 'PCT' to a Windows BMP and provide
-   this to OOo
+/* The AOO 'PCT' filter is not yet good enough to be used
+   and there is no flavor defined for exchanging 'PCT' with AOO
+   so we convert 'PCT' to a PNG and provide this to AOO
 */
-Any BMPDataProvider::getOOoData()
+Any PNGDataProvider::getOOoData()
 {
-  Any oOOData;
+    Any oOOData;
 
-  if (mSystemData)
+    if( mSystemData)
     {
-      unsigned int flavorDataLength = [mSystemData length];
-      Sequence<sal_Int8> pictData(flavorDataLength);
+        const unsigned int flavorDataLength = [mSystemData length];
+        Sequence<sal_Int8> imgData( flavorDataLength);
+        memcpy( imgData.getArray(), [mSystemData bytes], flavorDataLength);
 
-      memcpy(pictData.getArray(), [mSystemData bytes], flavorDataLength);
-
-      Sequence<sal_Int8> bmpData;
-
-      if (ImageToBMP(pictData, bmpData, meImageType))
-        {
-          oOOData = makeAny(bmpData);
-        }
+        Sequence<sal_Int8> pngData;
+        if( ImageToPNG( imgData, pngData, meImageType))
+            oOOData = makeAny( pngData);
     }
-  else
+    else
     {
-      oOOData = mData;
+        oOOData = mData;
     }
 
   return oOOData;
@@ -612,11 +604,11 @@ DataProviderPtr_t DataFlavorMapper::getDataProvider(NSString* systemFlavor, Refe
           */
           if ([systemFlavor caseInsensitiveCompare: NSPICTPboardType] == NSOrderedSame)
             {
-              dp = DataProviderPtr_t(new BMPDataProvider(data, PICTImageFileType));
+              dp = DataProviderPtr_t( new PNGDataProvider( data, PICTImageFileType));
             }
           else if ([systemFlavor caseInsensitiveCompare: NSTIFFPboardType] == NSOrderedSame)
             {
-              dp = DataProviderPtr_t(new BMPDataProvider(data, NSTIFFFileType));
+              dp = DataProviderPtr_t( new PNGDataProvider( data, NSTIFFFileType));
             }
           else if ([systemFlavor caseInsensitiveCompare: NSFilenamesPboardType] == NSOrderedSame)
             {
@@ -663,11 +655,11 @@ DataProviderPtr_t DataFlavorMapper::getDataProvider(const NSString* systemFlavor
     }
   else if ([systemFlavor caseInsensitiveCompare: NSPICTPboardType] == NSOrderedSame)
     {
-      dp = DataProviderPtr_t(new BMPDataProvider(systemData, PICTImageFileType));
+      dp = DataProviderPtr_t( new PNGDataProvider(systemData, PICTImageFileType));
     }
   else if ([systemFlavor caseInsensitiveCompare: NSTIFFPboardType] == NSOrderedSame)
     {
-      dp = DataProviderPtr_t(new BMPDataProvider(systemData, NSTIFFFileType));
+      dp = DataProviderPtr_t( new PNGDataProvider(systemData, NSTIFFFileType));
     }
   else if ([systemFlavor caseInsensitiveCompare: NSFilenamesPboardType] == NSOrderedSame)
     {

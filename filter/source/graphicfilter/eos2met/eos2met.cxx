@@ -35,6 +35,7 @@
 #include <vcl/msgbox.hxx>
 #include <svl/solar.hrc>
 #include <vcl/gdimetafiletools.hxx>
+#include <vcl/dibtools.hxx>
 
 // -----------------------------Field Types-------------------------------
 
@@ -562,7 +563,7 @@ void METWriter::WriteImageObject(const Bitmap & rBitmap)
     WriteFieldId(nActBitmapId);
 
     // generate Windows-BMP file
-    aTemp << rBitmap;
+    WriteDIB(rBitmap, aTemp, false, true);
 
     // read header of the Windows-BMP file:
     aTemp.SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);

@@ -45,6 +45,7 @@
 #include <sfx2/objsh.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/fltrcfg.hxx>
+#include <vcl/dibtools.hxx>
 #include <vcl/wmf.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/classids.hxx>
@@ -745,7 +746,7 @@ void XclImpDrawObjBase::ConvertFillStyle( SdrObject& rSdrObj, const XclObjFillDa
                 aMemStrm << sal_uInt32( pnPattern[ nIdx ] ); // 32-bit little-endian
             aMemStrm.Seek( STREAM_SEEK_TO_BEGIN );
             Bitmap aBitmap;
-            aBitmap.Read( aMemStrm, sal_False );
+            ReadDIB(aBitmap, aMemStrm, false);
 
             XOBitmap aXOBitmap( aBitmap );
             aXOBitmap.Bitmap2Array();
@@ -4054,7 +4055,7 @@ void XclImpDrawing::ReadBmp( Graphic& rGraphic, const XclImpRoot& rRoot, XclImpS
     // import the graphic from memory stream
     aMemStrm.Seek( STREAM_SEEK_TO_BEGIN );
     Bitmap aBitmap;
-    if( aBitmap.Read( aMemStrm, false ) )   // read DIB without file header
+    if( ReadDIB(aBitmap, aMemStrm, false) )   // read DIB without file header
         rGraphic = aBitmap;
 }
 

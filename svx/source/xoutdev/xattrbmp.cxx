@@ -38,6 +38,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <vcl/salbtype.hxx>
 #include <vcl/bmpacc.hxx>
+#include <vcl/dibtools.hxx>
 
 using namespace ::com::sun::star;
 
@@ -357,7 +358,7 @@ XFillBitmapItem::XFillBitmapItem(SvStream& rIn, sal_uInt16 nVer)
             // Behandlung der alten Bitmaps
             Bitmap aBmp;
 
-            rIn >> aBmp;
+            ReadDIB(aBmp, rIn, true);
             maGraphicObject = Graphic(aBmp);
         }
         else if(1 == nVer)
@@ -371,7 +372,7 @@ XFillBitmapItem::XFillBitmapItem(SvStream& rIn, sal_uInt16 nVer)
             {
                 Bitmap aBmp;
 
-                rIn >> aBmp;
+                ReadDIB(aBmp, rIn, true);
                 maGraphicObject = Graphic(aBmp);
             }
             else if(XBITMAP_8X8 == iTmp)
@@ -398,7 +399,7 @@ XFillBitmapItem::XFillBitmapItem(SvStream& rIn, sal_uInt16 nVer)
         {
             BitmapEx aBmpEx;
 
-            rIn >> aBmpEx;
+            ReadDIBBitmapEx(aBmpEx, rIn);
             maGraphicObject = Graphic(aBmpEx);
         }
     }
@@ -442,7 +443,7 @@ SvStream& XFillBitmapItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) cons
 
     if(!IsIndex())
     {
-        rOut << maGraphicObject.GetGraphic().GetBitmapEx();
+        WriteDIBBitmapEx(maGraphicObject.GetGraphic().GetBitmapEx(), rOut);
     }
 
     return rOut;

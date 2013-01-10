@@ -15,6 +15,7 @@
 #include <com/sun/star/ui/ItemStyle.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <fstream>
+#include <vcl/dibtools.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/image.hxx>
@@ -712,7 +713,7 @@ bool TBCBitMap::Read( SvStream& rS)
     nOffSet = rS.Tell();
     rS >> cbDIB;
     // cbDIB = sizeOf(biHeader) + sizeOf(colors) + sizeOf(bitmapData) + 10
-    return mBitMap.Read( rS, sal_False, sal_True );
+    return ReadDIB(mBitMap, rS, false);
 }
 
 void TBCBitMap::Print( FILE* fp )

@@ -17,18 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/debug.hxx>
-
 #include <vcl/bitmapex.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/wall.hxx>
 #include <vcl/svapp.hxx>
-
 #include <wall2.hxx>
-
+#include <vcl/dibtools.hxx>
 
 DBG_NAME( Wallpaper )
 
@@ -141,7 +138,7 @@ SvStream& operator>>( SvStream& rIStm, ImplWallpaper& rImplWallpaper )
         if( bBmp )
         {
             rImplWallpaper.mpBitmap = new BitmapEx;
-            rIStm >> *rImplWallpaper.mpBitmap;
+            ReadDIBBitmapEx(*rImplWallpaper.mpBitmap, rIStm);
         }
 
         // version 3 (new color format)
@@ -177,7 +174,7 @@ SvStream& operator<<( SvStream& rOStm, const ImplWallpaper& rImplWallpaper )
         rOStm << *rImplWallpaper.mpGradient;
 
     if( bBmp )
-        rOStm << *rImplWallpaper.mpBitmap;
+        WriteDIBBitmapEx(*rImplWallpaper.mpBitmap, rOStm);
 
     // version 3 (new color format)
     ( (Color&) rImplWallpaper.maColor ).Write( rOStm, sal_True );

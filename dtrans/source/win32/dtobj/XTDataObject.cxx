@@ -298,8 +298,22 @@ void SAL_CALL CXTDataObject::renderAnyDataAndSetupStgMedium(
         nRequiredMemSize = sizeof( sal_Int8 ) * clipDataStream.getLength( ) + 1;
 
     // prepare data for transmision
-    if ( CF_DIB == fetc.cfFormat )
+    if ( CF_DIBV5 == fetc.cfFormat || CF_DIB == fetc.cfFormat )
+    {
+#ifdef DBG_UTIL
+        if(CF_DIBV5 == fetc.cfFormat)
+        {
+            OSL_ENSURE(clipDataStream.getLength( ) > (sizeof(BITMAPFILEHEADER) + sizeof(BITMAPV5HEADER)), "Wrong size on CF_DIBV5 data (!)");
+        }
+        else // CF_DIB == fetc.cfFormat
+        {
+            OSL_ENSURE(clipDataStream.getLength( ) > (sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER)), "Wrong size on CF_DIB data (!)");
+        }
+#endif
+
+        // remove BITMAPFILEHEADER
         clipDataStream = OOBmpToWinDIB( clipDataStream );
+    }
 
     if ( CF_METAFILEPICT == fetc.cfFormat )
     {

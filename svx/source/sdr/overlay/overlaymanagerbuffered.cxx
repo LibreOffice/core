@@ -26,6 +26,7 @@
 #include <tools/stream.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <vcl/cursor.hxx>
+#include <vcl/dibtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 

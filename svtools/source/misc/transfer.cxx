@@ -55,6 +55,9 @@
 #include <svtools/transfer.hxx>
 #include <rtl/strbuf.hxx>
 #include <cstdio>
+#include <vcl/dibtools.hxx>
+#include <vcl/pngread.hxx>
+#include <vcl/pngwrite.hxx>
 
 // --------------
 // - Namespaces -
@@ -358,9 +361,9 @@ Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor ) th
                 GetData( aSubstFlavor );
                 bDone = maAny.hasValue();
             }
-            else if( SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_BMP, aSubstFlavor ) &&
-                     TransferableDataHelper::IsEqual( aSubstFlavor, rFlavor ) &&
-                     SotExchange::GetFormatDataFlavor( FORMAT_BITMAP, aSubstFlavor ) )
+            else if(SotExchange::GetFormatDataFlavor(SOT_FORMATSTR_ID_BMP, aSubstFlavor )
+                && TransferableDataHelper::IsEqual( aSubstFlavor, rFlavor )
+                && SotExchange::GetFormatDataFlavor(FORMAT_BITMAP, aSubstFlavor))
             {
                 GetData( aSubstFlavor );
                 bDone = sal_True;
@@ -672,6 +675,7 @@ void TransferableHelper::AddFormat( const DataFlavor& rFlavor )
         if( FORMAT_BITMAP == aFlavorEx.mnSotId )
         {
             AddFormat( SOT_FORMATSTR_ID_BMP );
+            AddFormat( SOT_FORMATSTR_ID_PNG );
         }
         else if( FORMAT_GDIMETAFILE == aFlavorEx.mnSotId )
         {
@@ -765,13 +769,37 @@ sal_Bool TransferableHelper::SetString( const OUString& rString, const DataFlavo
 
 // -----------------------------------------------------------------------------
 
-sal_Bool TransferableHelper::SetBitmap( const Bitmap& rBitmap, const DataFlavor& )
+sal_Bool TransferableHelper::SetBitmapEx( const BitmapEx& rBitmapEx, const DataFlavor& rFlavor )
 {
-    if( !rBitmap.IsEmpty() )
+    if( !rBitmapEx.IsEmpty() )
     {
         SvMemoryStream aMemStm( 65535, 65535 );
 
-        aMemStm << rBitmap;
+        if(rFlavor.MimeType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("image/png")))
+        {
+            // write a PNG
+            ::vcl::PNGWriter aPNGWriter(rBitmapEx);
+
+            aPNGWriter.Write(aMemStm);
+        }
+        else
+        {
+            const Bitmap aBitmap(rBitmapEx.GetBitmap());
+
+            if(rBitmapEx.IsTransparent())
+            {
+                const Bitmap aMask(rBitmapEx.GetAlpha().GetBitmap());
+
+                // explicitely use Bitmap::Write with bCompressed = sal_False and bFileHeader = sal_True
+                WriteDIBV5(aBitmap, aMask, aMemStm);
+            }
+            else
+            {
+                // explicitely use Bitmap::Write with bCompressed = sal_False and bFileHeader = sal_True
+                WriteDIB(aBitmap, aMemStm, false, true);
+            }
+        }
+
         maAny <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.Seek( STREAM_SEEK_TO_END ) );
     }
 
@@ -1358,7 +1386,7 @@ void TransferableDataHelper::FillDataFlavorExVector( const Sequence< DataFlavor 
             rDataFlavorExVector.push_back( aFlavorEx );
 
             // add additional formats for special mime types
-            if( SOT_FORMATSTR_ID_BMP == aFlavorEx.mnSotId )
+            if(SOT_FORMATSTR_ID_BMP == aFlavorEx.mnSotId || SOT_FORMATSTR_ID_PNG == aFlavorEx.mnSotId)
             {
                 if( SotExchange::GetFormatDataFlavor( SOT_FORMAT_BITMAP, aFlavorEx ) )
                 {
@@ -1663,24 +1691,74 @@ sal_Bool TransferableDataHelper::GetString( const DataFlavor& rFlavor, OUString&
 
 // -----------------------------------------------------------------------------
 
-sal_Bool TransferableDataHelper::GetBitmap( SotFormatStringId nFormat, Bitmap& rBmp )
+sal_Bool TransferableDataHelper::GetBitmapEx( SotFormatStringId nFormat, BitmapEx& rBmpEx )
 {
+    if(FORMAT_BITMAP == nFormat)
+    {
+        // try to get PNG first
+        DataFlavor aFlavor;
+
+        if(SotExchange::GetFormatDataFlavor(SOT_FORMATSTR_ID_PNG, aFlavor))
+        {
+            if(GetBitmapEx(aFlavor, rBmpEx))
+            {
+                return true;
+            }
+        }
+    }
+
     DataFlavor aFlavor;
-    return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetBitmap( aFlavor, rBmp ) );
+    return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetBitmapEx( aFlavor, rBmpEx ) );
 }
 
 // -----------------------------------------------------------------------------
 
-sal_Bool TransferableDataHelper::GetBitmap( const DataFlavor& rFlavor, Bitmap& rBmp )
+sal_Bool TransferableDataHelper::GetBitmapEx( const DataFlavor& rFlavor, BitmapEx& rBmpEx )
 {
     SotStorageStreamRef xStm;
-    DataFlavor          aSubstFlavor;
-    sal_Bool            bRet = GetSotStorageStream( rFlavor, xStm );
+    DataFlavor aSubstFlavor;
+    bool bRet(GetSotStorageStream(rFlavor, xStm));
 
-    if( bRet )
+    if(!bRet && HasFormat(SOT_FORMATSTR_ID_PNG) && SotExchange::GetFormatDataFlavor(SOT_FORMATSTR_ID_PNG, aSubstFlavor))
     {
-        *xStm >> rBmp;
-        bRet = ( xStm->GetError() == ERRCODE_NONE );
+        // when no direct success, try if PNG is available
+        bRet = GetSotStorageStream(aSubstFlavor, xStm);
+    }
+
+    if(!bRet && HasFormat(SOT_FORMATSTR_ID_BMP) && SotExchange::GetFormatDataFlavor(SOT_FORMATSTR_ID_BMP, aSubstFlavor))
+    {
+        // when no direct success, try if BMP is available
+        bRet = GetSotStorageStream(aSubstFlavor, xStm);
+    }
+
+    if(bRet)
+    {
+        if(rFlavor.MimeType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("image/png")))
+        {
+            // it's a PNG, import to BitmapEx
+            ::vcl::PNGReader aPNGReader(*xStm);
+
+            rBmpEx = aPNGReader.Read();
+        }
+        else
+        {
+            Bitmap aBitmap;
+            Bitmap aMask;
+
+            // explicitely use Bitmap::Read with bFileHeader = sal_True
+            ReadDIBV5(aBitmap, aMask, *xStm);
+
+            if(aMask.IsEmpty())
+            {
+                rBmpEx = aBitmap;
+            }
+            else
+            {
+                rBmpEx = BitmapEx(aBitmap, aMask);
+            }
+        }
+
+        bRet = (ERRCODE_NONE == xStm->GetError());
 
         /* SJ: #110748# At the moment we are having problems with DDB inserted as DIB. The
            problem is, that some graphics are inserted much too big because the nXPelsPerMeter
@@ -1691,26 +1769,20 @@ sal_Bool TransferableDataHelper::GetBitmap( const DataFlavor& rFlavor, Bitmap& r
            The following code should be removed if DDBs and DIBs are supported via clipboard
            properly.
         */
-        if ( bRet )
+        if(bRet)
         {
-            MapMode aMapMode = rBmp.GetPrefMapMode();
-            if ( aMapMode.GetMapUnit() != MAP_PIXEL )
+            const MapMode aMapMode(rBmpEx.GetPrefMapMode());
+
+            if(MAP_PIXEL != aMapMode.GetMapUnit())
             {
-                Size aSize = OutputDevice::LogicToLogic( rBmp.GetPrefSize(), aMapMode, MAP_100TH_MM );
-                if ( ( aSize.Width() > 5000 ) || ( aSize.Height() > 5000 ) )
-                    rBmp.SetPrefMapMode( MAP_PIXEL );
+                const Size aSize(OutputDevice::LogicToLogic(rBmpEx.GetPrefSize(), aMapMode, MAP_100TH_MM));
+
+                if((aSize.Width() > 5000) || (aSize.Height() > 5000))
+                {
+                    rBmpEx.SetPrefMapMode(MAP_PIXEL);
+                }
             }
         }
-    }
-
-    if( !bRet &&
-        HasFormat( SOT_FORMATSTR_ID_BMP ) &&
-        SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_BMP, aSubstFlavor ) &&
-        GetSotStorageStream( aSubstFlavor, xStm ) )
-    {
-        xStm->ResetError();
-        *xStm >> rBmp;
-        bRet = ( xStm->GetError() == ERRCODE_NONE );
     }
 
     return bRet;
@@ -1773,6 +1845,20 @@ sal_Bool TransferableDataHelper::GetGDIMetaFile( const DataFlavor& rFlavor, GDIM
 
 sal_Bool TransferableDataHelper::GetGraphic( SotFormatStringId nFormat, Graphic& rGraphic )
 {
+    if(FORMAT_BITMAP == nFormat)
+    {
+        // try to get PNG first
+        DataFlavor aFlavor;
+
+        if(SotExchange::GetFormatDataFlavor(SOT_FORMATSTR_ID_PNG, aFlavor))
+        {
+            if(GetGraphic(aFlavor, rGraphic))
+            {
+                return true;
+            }
+        }
+    }
+
     DataFlavor aFlavor;
     return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetGraphic( aFlavor, rGraphic ) );
 }
@@ -1784,13 +1870,22 @@ sal_Bool TransferableDataHelper::GetGraphic( const ::com::sun::star::datatransfe
     DataFlavor  aFlavor;
     sal_Bool    bRet = sal_False;
 
-    if( SotExchange::GetFormatDataFlavor( SOT_FORMAT_BITMAP, aFlavor ) &&
+    if(SotExchange::GetFormatDataFlavor(SOT_FORMATSTR_ID_PNG, aFlavor) &&
+        TransferableDataHelper::IsEqual(aFlavor, rFlavor))
+    {
+        // try to get PNG first
+        BitmapEx aBmpEx;
+
+        if( ( bRet = GetBitmapEx( aFlavor, aBmpEx ) ) == sal_True )
+            rGraphic = aBmpEx;
+    }
+    else if(SotExchange::GetFormatDataFlavor( SOT_FORMAT_BITMAP, aFlavor ) &&
         TransferableDataHelper::IsEqual( aFlavor, rFlavor ) )
     {
-        Bitmap aBmp;
+        BitmapEx aBmpEx;
 
-        if( ( bRet = GetBitmap( aFlavor, aBmp ) ) == sal_True )
-            rGraphic = aBmp;
+        if( ( bRet = GetBitmapEx( aFlavor, aBmpEx ) ) == sal_True )
+            rGraphic = aBmpEx;
     }
     else if( SotExchange::GetFormatDataFlavor( SOT_FORMAT_GDIMETAFILE, aFlavor ) &&
              TransferableDataHelper::IsEqual( aFlavor, rFlavor ) )

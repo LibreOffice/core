@@ -64,6 +64,8 @@ com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL WinBITMAPToOOBMP( HBITMAP );
 /*------------------------------------------------------------------------
     input:
     aOOBmp - sequence of bytes containing a openoffice bitmap
+    May contain CF_DIBV5 or CF_DIB, but removing the BITMAPFILEHEADER
+    is always the same size
 ------------------------------------------------------------------------*/
 com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL OOBmpToWinDIB( com::sun::star::uno::Sequence< sal_Int8 >& aOOBmp );
 

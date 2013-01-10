@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <sot/factory.hxx>
 #include <tools/poly.hxx>
 #include <vcl/bmpacc.hxx>
@@ -27,6 +26,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/app.hxx>
 #include "svx/xoutbmp.hxx"
+#include <vcl/dibtools.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/graphicfilter.hxx>
 
@@ -363,8 +363,8 @@ Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold )
                 const long          nHeight = aSize.Height();
                 const long          nHeight2 = nHeight - 2L;
                 const long          lThres2 = (long) cThreshold * cThreshold;
-                const sal_uInt8 nWhitePalIdx = pWriteAcc->GetBestPaletteIndex( Color( COL_WHITE ) );
-                const sal_uInt8 nBlackPalIdx = pWriteAcc->GetBestPaletteIndex( Color( COL_BLACK ) );
+                const sal_uInt8 nWhitePalIdx(static_cast< sal_uInt8 >(pWriteAcc->GetBestPaletteIndex(Color(COL_WHITE))));
+                const sal_uInt8 nBlackPalIdx(static_cast< sal_uInt8 >(pWriteAcc->GetBestPaletteIndex(Color(COL_BLACK))));
                 long                nSum1;
                 long                nSum2;
                 long                lGray;

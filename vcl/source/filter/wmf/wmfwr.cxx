@@ -27,7 +27,7 @@
 #include <tools/tenccvt.hxx>
 #include <osl/endian.h>
 #include <i18nutil/unicode.hxx> //unicode::getUnicodeScriptType
-
+#include <vcl/dibtools.hxx>
 #include <vcl/metric.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -778,7 +778,10 @@ void WMFWriter::WMFRecord_StretchDIB( const Point & rPoint, const Size & rSize,
     *pWMF << (sal_Int32)0 << (sal_Int32)0; // 8 bytes auffuellen (diese 8 bytes +
                                            // 14 bytes ueberfluessigen FILEHEADER
                                            // = 22 bytes Parameter)
-    *pWMF << rBitmap; // Bitmap schreiben
+
+    // write bitmap
+    WriteDIB(rBitmap, *pWMF, false, true);
+
 
     // Parameter schreiben:
     nPosEnd=pWMF->Tell();

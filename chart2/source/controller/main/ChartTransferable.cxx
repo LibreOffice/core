@@ -94,7 +94,7 @@ sal_Bool ChartTransferable::GetData( const ::com::sun::star::datatransfer::DataF
         else if( nFormat == FORMAT_BITMAP )
         {
             Graphic aGraphic( m_xMetaFileGraphic );
-            bResult = SetBitmap( aGraphic.GetBitmap(), rFlavor );
+            bResult = SetBitmapEx( aGraphic.GetBitmapEx(), rFlavor );
         }
     }
 

@@ -40,7 +40,7 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 
-class Bitmap;
+class BitmapEx;
 class GDIMetaFile;
 class Graphic;
 class ImageMap;
@@ -224,7 +224,7 @@ protected:
 
     sal_Bool            SetAny( const ::com::sun::star::uno::Any& rAny, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
     sal_Bool            SetString( const OUString& rString, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    sal_Bool            SetBitmap( const Bitmap& rBitmap, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    sal_Bool            SetBitmapEx( const BitmapEx& rBitmap, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
     sal_Bool            SetGDIMetaFile( const GDIMetaFile& rMtf, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
     sal_Bool            SetGraphic( const Graphic& rGraphic, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
     sal_Bool            SetImageMap( const ImageMap& rIMap, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
@@ -321,8 +321,8 @@ public:
     sal_Bool                    GetString( SotFormatStringId nFormat, OUString& rStr );
     sal_Bool                    GetString( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, OUString& rStr );
 
-    sal_Bool                    GetBitmap( SotFormatStringId nFormat, Bitmap& rBmp );
-    sal_Bool                    GetBitmap( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, Bitmap& rBmp );
+    sal_Bool                    GetBitmapEx( SotFormatStringId nFormat, BitmapEx& rBmp );
+    sal_Bool                    GetBitmapEx( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, BitmapEx& rBmp );
 
     sal_Bool                    GetGDIMetaFile( SotFormatStringId nFormat, GDIMetaFile& rMtf );
     sal_Bool                    GetGDIMetaFile( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, GDIMetaFile& rMtf );

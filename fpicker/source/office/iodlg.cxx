@@ -71,6 +71,7 @@
 #include <comphelper/string.hxx>
 
 #include <osl/file.h>
+#include <vcl/dibtools.hxx>
 #include <vcl/waitobj.hxx>
 
 #include <com/sun/star/task/InteractionHandler.hpp>
@@ -3024,7 +3025,7 @@ void SvtFileDialog::setImage( sal_Int16 /*aImageFormat*/, const Any& rImage )
         SvMemoryStream  aData( aBmpSequence.getArray(),
                                aBmpSequence.getLength(),
                                STREAM_READ );
-        aData >> aBmp;
+        ReadDIB(aBmp, aData, true);
 
         _pPrevBmp->SetBitmap( aBmp );
     }

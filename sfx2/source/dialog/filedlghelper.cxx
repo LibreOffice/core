@@ -67,6 +67,7 @@
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
+#include <vcl/dibtools.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <unotools/viewoptions.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -742,7 +743,7 @@ IMPL_LINK_NOARG(FileDialogHelper_Impl, TimeOutHdl_Impl)
                 // and copy it into the Any
                 SvMemoryStream aData;
 
-                aData << aBmp;
+                WriteDIB(aBmp, aData, false, true);
 
                 const Sequence < sal_Int8 > aBuffer(
                     static_cast< const sal_Int8* >(aData.GetData()),

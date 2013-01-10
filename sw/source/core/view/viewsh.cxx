@@ -18,7 +18,6 @@
  */
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
-
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/progress.hxx>
 #include <svx/srchdlg.hxx>
@@ -61,10 +60,9 @@
 
 #include "../../ui/inc/view.hxx"
 #include <PostItMgr.hxx>
+#include <vcl/dibtools.hxx>
 #include <vcl/virdev.hxx>
-
 #include <vcl/svapp.hxx>
-
 #include <svx/sdrpaintwindow.hxx>
 
 sal_Bool ViewShell::mbLstAct = sal_False;

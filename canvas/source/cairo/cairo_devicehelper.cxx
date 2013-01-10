@@ -32,6 +32,7 @@
 #include <basegfx/tools/unopolypolygon.hxx>
 
 #include <vcl/canvastools.hxx>
+#include <vcl/dibtools.hxx>
 
 #include <tools/stream.hxx>
 
@@ -261,8 +262,9 @@ namespace cairocanvas
             const ::Point aEmptyPoint;
             bool bOldMap( mpRefDevice->IsMapModeEnabled() );
             mpRefDevice->EnableMapMode( sal_False );
-            aStream << mpRefDevice->GetBitmap(aEmptyPoint,
-                                              mpRefDevice->GetOutputSizePixel());
+            WriteDIB(mpRefDevice->GetBitmap(aEmptyPoint,
+                                              mpRefDevice->GetOutputSizePixel()), aStream, false, true);
+
             mpRefDevice->EnableMapMode( bOldMap );
 
             ++nFilePostfixCount;

@@ -350,7 +350,7 @@ sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
 
             aVirtDev.SetMapMode( MapMode( MAP_PIXEL ) );
             Bitmap aBmp = aVirtDev.GetBitmap( Point(), aVirtDev.GetOutputSize() );
-            bOK = SetBitmap( aBmp, rFlavor );
+            bOK = SetBitmapEx( aBmp, rFlavor );
         }
         else if ( nFormat == SOT_FORMAT_GDIMETAFILE )
         {

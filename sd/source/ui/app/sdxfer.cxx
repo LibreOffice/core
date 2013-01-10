@@ -505,10 +505,10 @@ sal_Bool SdTransferable::GetData( const DataFlavor& rFlavor )
             if( mpSdViewIntern )
                 bOK = SetGDIMetaFile( mpSdViewIntern->GetMarkedObjMetaFile( true ), rFlavor );
         }
-        else if( nFormat == FORMAT_BITMAP )
+        else if( FORMAT_BITMAP == nFormat || SOT_FORMATSTR_ID_PNG == nFormat )
         {
             if( mpSdViewIntern )
-                bOK = SetBitmap( mpSdViewIntern->GetMarkedObjBitmapEx( true ).GetBitmap(), rFlavor );
+                bOK = SetBitmapEx( mpSdViewIntern->GetMarkedObjBitmapEx(true), rFlavor );
         }
         else if( ( nFormat == FORMAT_STRING ) && mpBookmark )
         {

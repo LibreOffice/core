@@ -23,6 +23,7 @@
 #include <ucbhelper/content.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <tools/urlobj.hxx>
+#include <vcl/dibtools.hxx>
 #include <vcl/salctype.hxx>
 #include <vcl/pngread.hxx>
 #include <vcl/pngwrite.hxx>
@@ -1880,7 +1881,8 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
                 }
                 sal_Bool    bRleCoding = aConfigItem.ReadBool( "RLE_Coding", sal_True );
                 // save RLE encoded?
-                aBmp.Write( rOStm, bRleCoding );
+                WriteDIB(aBmp, rOStm, bRleCoding, true);
+
 
                 if( rOStm.GetError() )
                     nStatus = GRFILTER_IOERROR;

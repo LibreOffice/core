@@ -74,7 +74,7 @@ Any SAL_CALL OSXTransferable::getTransferData( const DataFlavor& aFlavor )
     }
 
   NSString* sysFormat =
-      (aFlavor.MimeType.startsWith("image/bmp"))
+      (aFlavor.MimeType.startsWith("image/png"))
       ? mDataFlavorMapper->openOfficeImageToSystemFlavor( mPasteboard )
       : mDataFlavorMapper->openOfficeToSystemFlavor(aFlavor);
   DataProviderPtr_t dp;

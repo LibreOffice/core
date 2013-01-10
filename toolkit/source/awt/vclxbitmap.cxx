@@ -22,6 +22,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <tools/stream.hxx>
 #include <rtl/uuid.h>
+#include <vcl/dibtools.hxx>
 
 //  ----------------------------------------------------
 //  class VCLXBitmap
@@ -62,7 +63,7 @@ IMPL_XTYPEPROVIDER_END
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     SvMemoryStream aMem;
-    aMem << maBitmap.GetBitmap();
+    WriteDIB(maBitmap.GetBitmap(), aMem, false, true);
     return ::com::sun::star::uno::Sequence<sal_Int8>( (sal_Int8*) aMem.GetData(), aMem.Tell() );
 }
 
@@ -71,11 +72,8 @@ IMPL_XTYPEPROVIDER_END
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     SvMemoryStream aMem;
-    aMem << maBitmap.GetMask();
+    WriteDIB(maBitmap.GetMask(), aMem, false, true);
     return ::com::sun::star::uno::Sequence<sal_Int8>( (sal_Int8*) aMem.GetData(), aMem.Tell() );
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

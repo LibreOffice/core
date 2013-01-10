@@ -36,6 +36,7 @@
 #include <unotools/localfilehelper.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <sfx2/request.hxx>
+#include <vcl/dibtools.hxx>
 
 #include "fileobj.hxx"
 #include "impldde.hxx"
@@ -570,7 +571,7 @@ sal_Bool LinkManager::GetGraphicFromAny( const String& rMimeType,
         case FORMAT_BITMAP:
             {
                 Bitmap aBmp;
-                aMemStm >> aBmp;
+                ReadDIB(aBmp, aMemStm, true);
                 rGrf = aBmp;
                 bRet = sal_True;
             }

@@ -549,11 +549,10 @@ sal_Bool SwTransferable::GetData( const DataFlavor& rFlavor )
                 bOK = SetGDIMetaFile( pClpGraphic->GetGDIMetaFile(), rFlavor );
             break;
         case SOT_FORMAT_BITMAP:
+        case SOT_FORMATSTR_ID_PNG:
             // Neither pClpBitmap nor pClpGraphic are necessarily set
             if( (eBufferType & TRNSFR_GRAPHIC) && (pClpBitmap != 0 || pClpGraphic != 0))
-                bOK = SetBitmap( (pClpBitmap ? pClpBitmap
-                                             : pClpGraphic)->GetBitmap(),
-                                 rFlavor );
+                bOK = SetBitmapEx( (pClpBitmap ? pClpBitmap : pClpGraphic)->GetBitmapEx(), rFlavor );
             break;
 
         case SOT_FORMATSTR_ID_SVIM:
@@ -800,6 +799,7 @@ int SwTransferable::PrepareForCopy( sal_Bool bIsCut )
         if( pGrf && pGrf->IsSupportedGraphic() )
         {
             AddFormat( FORMAT_GDIMETAFILE );
+            AddFormat( SOT_FORMATSTR_ID_PNG );
             AddFormat( FORMAT_BITMAP );
         }
         eBufferType = TRNSFR_GRAPHIC;
@@ -905,6 +905,7 @@ int SwTransferable::PrepareForCopy( sal_Bool bIsCut )
             if ( nSelection & nsSelectionType::SEL_DRW )
             {
                 AddFormat( FORMAT_GDIMETAFILE );
+                AddFormat( SOT_FORMATSTR_ID_PNG );
                 AddFormat( FORMAT_BITMAP );
             }
             eBufferType = (TransferBufferType)( TRNSFR_GRAPHIC | eBufferType );
@@ -2889,6 +2890,7 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
         if ( pGrf && pGrf->IsSupportedGraphic() )
         {
             AddFormat( FORMAT_GDIMETAFILE );
+            AddFormat( SOT_FORMATSTR_ID_PNG );
             AddFormat( FORMAT_BITMAP );
         }
         eBufferType = TRNSFR_GRAPHIC;
@@ -2937,6 +2939,7 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
             if ( nSelection & nsSelectionType::SEL_DRW )
             {
                 AddFormat( FORMAT_GDIMETAFILE );
+                AddFormat( SOT_FORMATSTR_ID_PNG );
                 AddFormat( FORMAT_BITMAP );
             }
             eBufferType = (TransferBufferType)( TRNSFR_GRAPHIC | eBufferType );

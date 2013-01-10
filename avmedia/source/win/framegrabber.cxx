@@ -38,6 +38,7 @@
 #include <tools/stream.hxx>
 #include <vcl/graph.hxx>
 #include <unotools/localfilehelper.hxx>
+#include <vcl/dibtools.hxx>
 
 #define AVMEDIA_WIN_FRAMEGRABBER_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.FrameGrabber_DirectX"
 #define AVMEDIA_WIN_FRAMEGRABBER_SERVICENAME "com.sun.star.media.FrameGrabber_DirectX"
@@ -182,7 +183,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
                         SvMemoryStream  aMemStm( pBuffer, nSize, STREAM_READ | STREAM_WRITE );
                         Bitmap          aBmp;
 
-                        if( aBmp.Read( aMemStm, false ) && !aBmp.IsEmpty() )
+                        if( ReadDIB(aBmp, aMemStm, false ) && !aBmp.IsEmpty() )
                         {
                             const Graphic aGraphic( aBmp );
                             xRet = aGraphic.GetXGraphic();

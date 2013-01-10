@@ -31,23 +31,20 @@
 #include "com/sun/star/uno/Exception.hpp"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
-
 #include "comphelper/processfactory.hxx"
-
 #include "osl/file.hxx"
 #include "osl/diagnose.h"
-
 #include "rtl/bootstrap.hxx"
 
 #include "tools/stream.hxx"
 #include "tools/urlobj.hxx"
-
 #include "vcl/bitmapex.hxx"
+#include <vcl/dibtools.hxx>
 #include "vcl/pngread.hxx"
 #include "vcl/settings.hxx"
 #include "vcl/svapp.hxx"
-
 #include "impimagetree.hxx"
+#include <vcl/dibtools.hxx>
 
 namespace {
 
@@ -109,7 +106,7 @@ static void loadImageFromStream(
         aPNGReader.SetIgnoreGammaChunk( true );
         rBitmap = aPNGReader.Read();
     } else {
-        *pStream >> rBitmap;
+        ReadDIBBitmapEx(rBitmap, *pStream);
     }
 }
 

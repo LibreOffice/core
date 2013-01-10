@@ -18,7 +18,6 @@
  */
 
 #include <hintids.hxx>
-
 #include <tools/solar.h>
 #include <comphelper/string.hxx>
 #include <editeng/paperinf.hxx>
@@ -54,17 +53,14 @@
 #include <section.hxx>          // class SwSection
 #include <fltini.hxx>
 #include <w1par.hxx>
-
 #include <docsh.hxx>
 #include <swerror.h>
 #include <mdiexp.hxx>
 #include <statstr.hrc>
-#if OSL_DEBUG_LEVEL > 0
 #include <stdio.h>
-#endif
-
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
+#include <vcl/dibtools.hxx>
 
 #define MAX_FIELDLEN 64000
 
@@ -1909,7 +1905,7 @@ void Ww1Picture::Out(Ww1Shell& rOut, Ww1Manager& /*rMan*/)
         SvMemoryStream aOut(nSiz, 8192);
         WriteBmp(aOut);
         Bitmap aBmp;
-        aOut >> aBmp;
+        ReadDIB(aBmp, aOut, true);
         pGraphic = new Graphic(aBmp);
     }
     default:

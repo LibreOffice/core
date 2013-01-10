@@ -92,7 +92,7 @@ public:
                     Wallpaper();
                     Wallpaper( const Wallpaper& rWallpaper );
                     Wallpaper( const Color& rColor );
-                    Wallpaper( const BitmapEx& rBmpEx );
+                    explicit Wallpaper( const BitmapEx& rBmpEx );
                     Wallpaper( const Gradient& rGradient );
                     ~Wallpaper();
 

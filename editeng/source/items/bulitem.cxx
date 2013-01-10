@@ -24,6 +24,7 @@
 #include <editeng/editrids.hrc>
 
 #include <tools/tenccvt.hxx>
+#include <vcl/dibtools.hxx>
 
 #define BULITEM_VERSION     ((sal_uInt16)2)
 
@@ -126,7 +127,8 @@ SvxBulletItem::SvxBulletItem( SvStream& rStrm, sal_uInt16 _nWhich ) :
         // Ignore Errorcode when reading Bitmap,
         // see comment in SvxBulletItem::Store()
         sal_Bool bOldError = rStrm.GetError() ? sal_True : sal_False;
-        rStrm >> aBmp;
+        ReadDIB(aBmp, rStrm, true);
+
         if ( !bOldError && rStrm.GetError() )
         {
             rStrm.ResetError();
@@ -332,7 +334,9 @@ SvStream& SvxBulletItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) c
         const Bitmap aBmp( pGraphicObject->GetGraphic().GetBitmap() );
         sal_uLong nBytes = aBmp.GetSizeBytes();
         if ( nBytes < sal_uLong(0xFF00*nFac) )
-            rStrm << aBmp;
+        {
+            WriteDIB(aBmp, rStrm, false, true);
+        }
 
         sal_uLong nEnd = rStrm.Tell();
         // Item can not write with an overhead more than 64K or SfxMultiRecord

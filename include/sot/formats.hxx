@@ -175,7 +175,8 @@
 #define SOT_FORMATSTR_ID_STARMATH_8_TEMPLATE    ((sal_uLong)138)
 #define SOT_FORMATSTR_ID_STARBASE_8             ((sal_uLong)139)
 #define SOT_FORMATSTR_ID_HC_GDIMETAFILE         ((sal_uLong)140)
-#define SOT_FORMATSTR_ID_USER_END               SOT_FORMATSTR_ID_HC_GDIMETAFILE
+#define SOT_FORMATSTR_ID_PNG                    ((sal_uLong)141)
+#define SOT_FORMATSTR_ID_USER_END               SOT_FORMATSTR_ID_PNG
 
 #endif // _SOT_FORMATS_HXX
 
