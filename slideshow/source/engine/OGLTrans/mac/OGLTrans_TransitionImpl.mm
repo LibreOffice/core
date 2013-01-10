@@ -35,11 +35,7 @@ typedef int NSColorRenderingIntent;
 
 #include "OGLTrans_TransitionImpl.hxx"
 #include "OGLTrans_Shaders.h"
-#ifdef QUARTZ
 #include <OpenGL/gl.h>
-#else
-#include <GL/gl.h>
-#endif
 #include <math.h>
 
 void OGLTransitionImpl::clear()
