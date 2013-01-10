@@ -693,7 +693,10 @@ void ScXMLExport::CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCo
             {
                 ScMyShape aMyShape;
                 aMyShape.aAddress = pAnchor->maStart;
+                SAL_WARN_IF(aMyShape.aAddress.Tab() != nTable, "sc", "not anchored to current sheet!");
+                aMyShape.aAddress.SetTab(nTable);
                 aMyShape.aEndAddress = pAnchor->maEnd;
+                aMyShape.aEndAddress.SetTab( nTable );
                 aMyShape.nEndX = pAnchor->maEndOffset.X();
                 aMyShape.nEndY = pAnchor->maEndOffset.Y();
                 aMyShape.xShape = xShape;
