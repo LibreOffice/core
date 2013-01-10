@@ -469,8 +469,6 @@ oslSocket __osl_createSocketImpl(int Socket)
 
     pSocket->m_Socket = Socket;
     pSocket->m_nLastError = 0;
-    pSocket->m_CloseCallback = 0;
-    pSocket->m_CallbackArg = 0;
     pSocket->m_nRefCount = 1;
 
 #if defined(LINUX)
@@ -1466,10 +1464,6 @@ oslSocket SAL_CALL osl_createSocket(oslAddrFamily   Family,
         {
             pSocket->m_nLastError=errno;
         }
-
-
-        pSocket->m_CloseCallback    = NULL;
-        pSocket->m_CallbackArg  = NULL;
     }
 
     return pSocket;
@@ -1559,12 +1553,6 @@ void SAL_CALL osl_closeSocket(oslSocket pSocket)
         pSocket->m_bIsAccepting = sal_False;
     }
 #endif /* LINUX */
-
-    /* registrierten Callback ausfuehren */
-    if (pSocket->m_CloseCallback != NULL)
-    {
-        pSocket->m_CloseCallback(pSocket->m_CallbackArg);
-    }
 
     nRet=close(nFD);
     if ( nRet != 0 )
@@ -1905,8 +1893,6 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket(oslSocket pSocket,
 
     pConnectionSockImpl->m_Socket           = Connection;
     pConnectionSockImpl->m_nLastError       = 0;
-    pConnectionSockImpl->m_CloseCallback    = NULL;
-    pConnectionSockImpl->m_CallbackArg      = NULL;
 #if defined(LINUX)
     pConnectionSockImpl->m_bIsAccepting     = sal_False;
 
