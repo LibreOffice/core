@@ -97,3 +97,8 @@ String SV_BUTTONTEXT_EDIT
 {
     Text [ en-US ] = "~Edit";
 };
+
+String SV_BUTTONTEXT_APPLY
+{
+    Text [ en-US ] = "~Apply";
+};
