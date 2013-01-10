@@ -251,6 +251,11 @@ protected:
         uno::Reference<lang::XComponent> xComponent(xStorable, uno::UNO_QUERY);
         xComponent->dispose();
         mxComponent = loadFromDesktop(aTempFile.GetURL());
+        if (mpXmlBuffer)
+        {
+            xmlBufferFree(mpXmlBuffer);
+            mpXmlBuffer = 0;
+        }
     }
 
     void finish()
