@@ -43,6 +43,7 @@ public:
     void testFirstHeaderFooter();
     void testZoom();
     void test56513();
+    void testNewPageStylesTable();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -63,6 +64,7 @@ void Test::run()
         {"first-header-footer.doc", &Test::testFirstHeaderFooter},
         {"zoom.doc", &Test::testZoom},
         {"fdo56513.doc", &Test::test56513},
+        {"new-page-styles.doc", &Test::testNewPageStylesTable},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -152,6 +154,13 @@ void Test::test56513()
     CPPUNIT_ASSERT_EQUAL(OUString("This is the header of the first section"),  parseDump("/root/page[1]/header/txt/text()"));
     CPPUNIT_ASSERT_EQUAL(OUString("This is the first page header of the second section"),   parseDump("/root/page[2]/header/txt/text()"));
     CPPUNIT_ASSERT_EQUAL(OUString("This is the non-first-page header of the second section"),  parseDump("/root/page[3]/header/txt/text()"));
+}
+
+void Test::testNewPageStylesTable()
+{
+    CPPUNIT_ASSERT_EQUAL(OUString("Sigma Space Performance Goals and Results (Page 1)*"),  parseDump("/root/page[1]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Sigma Space Performance Assessment (Page 2)****"),   parseDump("/root/page[2]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Sigma Space Performance Goals: Next Year (Page 3)*******"),  parseDump("/root/page[3]/header/txt/text()"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
