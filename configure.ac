@@ -8293,9 +8293,9 @@ if test "$with_system_nss" = "yes"; then
     libo_MINGW_CHECK_DLL([SSL3], [ssl3])
 else
     SYSTEM_NSS="NO"
-	NSS_MAJOR="3"
-	NSS_MINOR="13"
-	NSS_PATCH="5"
+    NSS_MAJOR="3"
+    NSS_MINOR="13"
+    NSS_PATCH="5"
     BUILD_TYPE="$BUILD_TYPE NSS"
     AC_MSG_RESULT([internal])
 fi # system nss
