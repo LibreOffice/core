@@ -1409,6 +1409,23 @@ public:
     }
 
     /**
+      Returns the string representation of the sal_Bool argument.
+      This method is here to help with situations where overload resolution is iffy.
+
+      If the sal_Bool is true, the string "true" is returned.
+      If the sal_Bool is false, the string "false" is returned.
+      This function can't be used for language specific conversion.
+
+      @param    b   a sal_Bool.
+      @return   a string with the string representation of the argument.
+      @since LibreOffice 4.1
+    */
+    static OString valueOfBool( bool b )
+    {
+        return valueOf( static_cast<sal_Bool>(b) );
+    }
+
+    /**
       Returns the string representation of the char argument.
 
       @param    c   a character.
@@ -1417,6 +1434,19 @@ public:
     static OString valueOf( sal_Char c ) SAL_THROW(())
     {
         return OString( &c, 1 );
+    }
+
+    /**
+      Returns the string representation of the char argument.
+      This method is here to help with situations where overload resolution is iffy.
+
+      @param    c   a character.
+      @return   a string with the string representation of the argument.
+      @since LibreOffice 4.1
+    */
+    static OString valueOfChar( sal_Char c )
+    {
+        return valueOf( c );
     }
 
     /**
@@ -1451,6 +1481,23 @@ public:
         rtl_String* pNewData = 0;
         rtl_string_newFromStr_WithLength( &pNewData, aBuf, rtl_str_valueOfInt64( aBuf, ll, radix ) );
         return OString( pNewData, (DO_NOT_ACQUIRE*)0 );
+    }
+
+    /**
+      Returns the string representation of the long argument.
+      This is here because when choosing which conversion for overloaded
+      functions is better, the standard treats all integer conversions the same.
+
+      This function can't be used for language specific conversion.
+
+      @param    ll          a int64.
+      @param    radix       the radix (between 2 and 36)
+      @return   a string with the string representation of the argument.
+      @since LibreOffice 4.1
+    */
+    static OString valueOfInt( sal_Int64 ll, sal_Int16 radix = 10 )
+    {
+        return valueOf( ll, radix );
     }
 
     /**
