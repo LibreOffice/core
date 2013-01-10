@@ -38,6 +38,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <vcl/canvastools.hxx>
@@ -61,6 +62,7 @@
 #define EmfPlusRecordTypeFillRects 16394
 #define EmfPlusRecordTypeFillPolygon 16396
 #define EmfPlusRecordTypeDrawLines 16397
+#define EmfPlusRecordTypeFillPie 16400
 #define EmfPlusRecordTypeFillPath 16404
 #define EmfPlusRecordTypeDrawPath 16405
 #define EmfPlusRecordTypeDrawImagePoints 16411
@@ -101,6 +103,7 @@
 #endif
 
 using namespace ::com::sun::star;
+using namespace ::basegfx;
 
 namespace cppcanvas
 {
@@ -1260,6 +1263,48 @@ namespace cppcanvas
                     break;
                 case EmfPlusRecordTypeObject:
                     processObjectRecord (rMF, flags);
+                    break;
+                case EmfPlusRecordTypeFillPie:
+                    {
+                        sal_uInt32 brushIndexOrColor;
+                        float startAngle, sweepAngle;
+
+                        rMF >> brushIndexOrColor >> startAngle >> sweepAngle;
+
+                        EMFP_DEBUG (printf ("EMF+ FillPie colorOrIndex: %x startAngle: %f sweepAngle: %f\n", (unsigned int)brushIndexOrColor, startAngle, sweepAngle));
+
+                        float dx, dy, dw, dh;
+
+                        ReadRectangle (rMF, dx, dy, dw, dh, flags & 0x4000);
+
+                        EMFP_DEBUG (printf ("EMF+ RectData: %f,%f %fx%f\n", dx, dy, dw, dh));
+
+                        startAngle = 2*M_PI*startAngle/360;
+                        sweepAngle = 2*M_PI*sweepAngle/360;
+
+                        B2DPoint mappedCenter (Map (dx + dw/2, dy + dh/2));
+                        B2DSize mappedSize( MapSize (dw/2, dh/2));
+
+                        double endAngle = startAngle + sweepAngle;
+                        if (endAngle < 0)
+                            endAngle += M_PI*2;
+                        endAngle = fmod (endAngle, M_PI*2);
+
+                        if (sweepAngle < 0) {
+                            double tmp = startAngle;
+                            startAngle = endAngle;
+                            endAngle = tmp;
+                        }
+
+                        EMFP_DEBUG (printf ("EMF+ angles: %f,%f  ---> %f,%f\n", startAngle, sweepAngle, startAngle, endAngle));
+
+                        B2DPolygon polygon = tools::createPolygonFromEllipseSegment (mappedCenter, mappedSize.getX (), mappedSize.getY (), startAngle, endAngle);
+                        polygon.append (mappedCenter);
+                        polygon.setClosed (true);
+
+                        B2DPolyPolygon polyPolygon (polygon);
+                        EMFPPlusFillPolygon (polyPolygon, rFactoryParms, rState, rCanvas, flags & 0x8000, brushIndexOrColor);
+                    }
                     break;
                 case EmfPlusRecordTypeFillPath:
                     {
