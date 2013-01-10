@@ -398,7 +398,7 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
             "vnd.sun.star.expand:$BAK_EXTENSIONS");
         that->m_registryCache = OUSTR(
             "vnd.sun.star.expand:$BAK_EXTENSIONS/registry");
-        stamp = OUSTR("vnd.sun.star.expand:$BAK_EXTENSIONS/stamp.sys");
+        stamp = OUSTR("$BAK_EXTENSIONS");
     }
 
     else if (! context.matchAsciiL(
