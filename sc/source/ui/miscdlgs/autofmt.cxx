@@ -75,7 +75,7 @@ ScAutoFmtPreview::ScAutoFmtPreview( Window* pParent, const ResId& rRes, ScDocume
         aStrMid         ( ScResId( STR_MID ) ),
         aStrSouth       ( ScResId( STR_SOUTH ) ),
         aStrSum         ( ScResId( STR_SUM ) ),
-        pNumFmt         ( new SvNumberFormatter( ::comphelper::getProcessServiceFactory(), ScGlobal::eLnge ) )
+        pNumFmt         ( new SvNumberFormatter( ::comphelper::getProcessComponentContext(), ScGlobal::eLnge ) )
 {
     Init();
 }

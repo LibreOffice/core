@@ -381,7 +381,7 @@ void SvXMLImport::_InitCtor()
     msPackageProtocol = "vnd.sun.star.Package:";
 
     if (mxNumberFormatsSupplier.is())
-        mpNumImport = new SvXMLNumFmtHelper(mxNumberFormatsSupplier, getServiceFactory());
+        mpNumImport = new SvXMLNumFmtHelper(mxNumberFormatsSupplier, comphelper::getComponentContext(getServiceFactory()));
 
     if (mxModel.is() && !mxEventListener.is())
     {
@@ -1649,7 +1649,7 @@ void SvXMLImport::_CreateDataStylesImport()
     uno::Reference<util::XNumberFormatsSupplier> xNum =
         GetNumberFormatsSupplier();
     if ( xNum.is() )
-        mpNumImport = new SvXMLNumFmtHelper(xNum, getServiceFactory());
+        mpNumImport = new SvXMLNumFmtHelper(xNum, comphelper::getComponentContext(getServiceFactory()));
 }
 
 

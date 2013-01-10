@@ -111,7 +111,7 @@ void SAL_CALL SvNumberFormatsSupplierServiceObject::initialize( const Sequence< 
 #endif
     }
 
-    m_pOwnFormatter = new SvNumberFormatter(m_xORB, eNewFormatterLanguage);
+    m_pOwnFormatter = new SvNumberFormatter( comphelper::getComponentContext(m_xORB), eNewFormatterLanguage);
     m_pOwnFormatter->SetEvalDateFormat( NF_EVALDATEFORMAT_FORMAT_INTL );
     SetNumberFormatter(m_pOwnFormatter);
 }

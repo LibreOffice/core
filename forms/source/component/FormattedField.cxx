@@ -92,13 +92,13 @@ protected:
     static  WeakReference< XNumberFormatsSupplier >  s_xDefaultFormatsSupplier;
 
 public:
-    static Reference< XNumberFormatsSupplier > get( const Reference< XMultiServiceFactory >& _rxORB );
+    static Reference< XNumberFormatsSupplier > get( const Reference< XComponentContext >& _rxORB );
 
     using SvNumberFormatsSupplierObj::operator new;
     using SvNumberFormatsSupplierObj::operator delete;
 
 protected:
-    StandardFormatsSupplier(const Reference<XMultiServiceFactory>& _rxFactory,LanguageType _eSysLanguage);
+    StandardFormatsSupplier(const Reference< XComponentContext >& _rxFactory,LanguageType _eSysLanguage);
     ~StandardFormatsSupplier();
 
 protected:
@@ -110,9 +110,9 @@ protected:
 WeakReference< XNumberFormatsSupplier > StandardFormatsSupplier::s_xDefaultFormatsSupplier;
 
 //------------------------------------------------------------------
-StandardFormatsSupplier::StandardFormatsSupplier(const Reference< XMultiServiceFactory > & _rxFactory,LanguageType _eSysLanguage)
+StandardFormatsSupplier::StandardFormatsSupplier(const Reference< XComponentContext > & _rxContext,LanguageType _eSysLanguage)
     :SvNumberFormatsSupplierObj()
-    ,m_pMyPrivateFormatter(new SvNumberFormatter(_rxFactory, _eSysLanguage))
+    ,m_pMyPrivateFormatter(new SvNumberFormatter(_rxContext, _eSysLanguage))
 {
     SetNumberFormatter(m_pMyPrivateFormatter);
 
@@ -129,7 +129,7 @@ StandardFormatsSupplier::~StandardFormatsSupplier()
 }
 
 //------------------------------------------------------------------
-Reference< XNumberFormatsSupplier > StandardFormatsSupplier::get( const Reference< XMultiServiceFactory >& _rxORB )
+Reference< XNumberFormatsSupplier > StandardFormatsSupplier::get( const Reference< XComponentContext >& _rxORB )
 {
     LanguageType eSysLanguage = LANGUAGE_SYSTEM;
     {
@@ -661,7 +661,7 @@ Reference<XNumberFormatsSupplier>  OFormattedModel::calcFormFormatsSupplier() co
 //------------------------------------------------------------------------------
 Reference< XNumberFormatsSupplier > OFormattedModel::calcDefaultFormatsSupplier() const
 {
-    return StandardFormatsSupplier::get( getContext().getLegacyServiceFactory() );
+    return StandardFormatsSupplier::get( getContext().getUNOContext() );
 }
 
 // XBoundComponent

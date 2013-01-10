@@ -98,10 +98,7 @@ double ImpGetDate( const SbxValues* p )
         {
             LanguageType eLangType = GetpApp()->GetSettings().GetLanguageTag().getLanguageType();
 
-            SvNumberFormatter* pFormatter;
-            com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
-                xFactory = comphelper::getProcessServiceFactory();
-            pFormatter = new SvNumberFormatter( xFactory, eLangType );
+            SvNumberFormatter* pFormatter = new SvNumberFormatter( comphelper::getProcessComponentContext(), eLangType );
 
             sal_uInt32 nIndex;
             sal_Int32 nCheckPos = 0;
@@ -271,10 +268,7 @@ start:
             Color* pColor;
 
             LanguageType eLangType = GetpApp()->GetSettings().GetLanguageTag().getLanguageType();
-            SvNumberFormatter* pFormatter;
-            com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
-                xFactory = comphelper::getProcessServiceFactory();
-            pFormatter = new SvNumberFormatter( xFactory, eLangType );
+            SvNumberFormatter* pFormatter = new SvNumberFormatter( comphelper::getProcessComponentContext(), eLangType );
 
             sal_uInt32 nIndex;
             sal_Int32 nCheckPos = 0;

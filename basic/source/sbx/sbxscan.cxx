@@ -717,9 +717,7 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
         }
 
         LanguageType eLangType = GetpApp()->GetSettings().GetLanguageTag().getLanguageType();
-        com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
-            xFactory = comphelper::getProcessServiceFactory();
-        SvNumberFormatter aFormatter( xFactory, eLangType );
+        SvNumberFormatter aFormatter( comphelper::getProcessComponentContext(), eLangType );
 
         sal_uInt32 nIndex;
         double nNumber;

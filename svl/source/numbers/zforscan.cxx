@@ -225,7 +225,7 @@ void ImpSvNumberformatScan::SetDependentKeywords()
     // requested Locale, otherwise number format codes might not match
     const LanguageTag& rLoadedLocale = pLocaleData->getLoadedLanguageTag();
     LanguageType eLang = rLoadedLocale.getLanguageType( false);
-    NumberFormatCodeWrapper aNumberFormatCode( comphelper::getComponentContext(pFormatter->GetServiceManager()),
+    NumberFormatCodeWrapper aNumberFormatCode( pFormatter->GetComponentContext(),
             rLoadedLocale.getLocale() );
 
     i18n::NumberFormatCode aFormat = aNumberFormatCode.getFormatCode( NF_NUMBER_STANDARD );

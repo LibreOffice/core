@@ -1712,7 +1712,7 @@ CustomPropertiesWindow::CustomPropertiesWindow(Window* pParent,
     m_aYesNoButton  ( this, SfxResId( SFX_WIN_PROPERTY_YESNO ) ),
     m_aRemoveButton ( this, SfxResId( SFX_PB_PROPERTY_REMOVE ) ),
     m_nScrollPos (0),
-    m_aNumberFormatter( ::comphelper::getProcessServiceFactory(),
+    m_aNumberFormatter( ::comphelper::getProcessComponentContext(),
                         Application::GetSettings().GetLanguageTag().getLanguageType() )
 
 {

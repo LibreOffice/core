@@ -245,7 +245,7 @@ SvStorageStreamRef SdModule::GetOptionStream( const String& rOptionName,
 SvNumberFormatter* SdModule::GetNumberFormatter()
 {
     if( !pNumberFormatter )
-        pNumberFormatter = new SvNumberFormatter( ::comphelper::getProcessServiceFactory(), LANGUAGE_SYSTEM );
+        pNumberFormatter = new SvNumberFormatter( ::comphelper::getProcessComponentContext(), LANGUAGE_SYSTEM );
 
     return pNumberFormatter;
 }

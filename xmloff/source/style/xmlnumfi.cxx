@@ -93,12 +93,12 @@ class SvXMLNumImpData
     LocaleDataWrapper*  pLocaleData;
     SvXMLNumFmtEntryArr aNameEntries;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxServiceFactory;
+    uno::Reference< uno::XComponentContext > m_xContext;
 
 public:
     SvXMLNumImpData(
         SvNumberFormatter* pFmt,
-        const uno::Reference<lang::XMultiServiceFactory>& xServiceFactory );
+        const uno::Reference<uno::XComponentContext>& rxContext );
     ~SvXMLNumImpData();
 
     SvNumberFormatter*      GetNumberFormatter() const  { return pFormatter; }
@@ -381,17 +381,16 @@ static SvXMLDefaultDateFormat aDefaultDateFormats[] =
 
 SvXMLNumImpData::SvXMLNumImpData(
     SvNumberFormatter* pFmt,
-    const uno::Reference<lang::XMultiServiceFactory>& xServiceFactory )
+    const uno::Reference<uno::XComponentContext>& rxContext )
 :   pFormatter(pFmt),
     pStylesElemTokenMap(NULL),
     pStyleElemTokenMap(NULL),
     pStyleAttrTokenMap(NULL),
     pStyleElemAttrTokenMap(NULL),
     pLocaleData(NULL),
-
-    mxServiceFactory(xServiceFactory)
+    m_xContext(rxContext)
 {
-    DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
+    DBG_ASSERT( rxContext.is(), "got no service manager" );
 }
 
 SvXMLNumImpData::~SvXMLNumImpData()
@@ -600,8 +599,7 @@ const LocaleDataWrapper& SvXMLNumImpData::GetLocaleData( LanguageType nLang )
 {
     if ( !pLocaleData )
         pLocaleData = new LocaleDataWrapper(
-            comphelper::getComponentContext(
-               pFormatter ? pFormatter->GetServiceManager() : mxServiceFactory),
+               pFormatter ? pFormatter->GetComponentContext() : m_xContext,
             LanguageTag( nLang ) );
     else
         pLocaleData->setLanguageTag( LanguageTag( nLang ) );
@@ -2150,10 +2148,9 @@ sal_Bool SvXMLNumFormatContext::IsSystemLanguage()
 
 SvXMLNumFmtHelper::SvXMLNumFmtHelper(
     const uno::Reference<util::XNumberFormatsSupplier>& rSupp,
-    const uno::Reference<lang::XMultiServiceFactory>& xServiceFactory )
-:   mxServiceFactory(xServiceFactory)
+    const uno::Reference<uno::XComponentContext>& rxContext )
 {
-    DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
+    DBG_ASSERT( rxContext.is(), "got no service manager" );
 
     SvNumberFormatter* pFormatter = NULL;
     SvNumberFormatsSupplierObj* pObj =
@@ -2161,17 +2158,16 @@ SvXMLNumFmtHelper::SvXMLNumFmtHelper(
     if (pObj)
         pFormatter = pObj->GetNumberFormatter();
 
-    pData = new SvXMLNumImpData( pFormatter, mxServiceFactory );
+    pData = new SvXMLNumImpData( pFormatter, rxContext );
 }
 
 SvXMLNumFmtHelper::SvXMLNumFmtHelper(
     SvNumberFormatter* pNumberFormatter,
-    const uno::Reference<lang::XMultiServiceFactory>& xServiceFactory )
-:   mxServiceFactory(xServiceFactory)
+    const uno::Reference<uno::XComponentContext>& rxContext )
 {
-    DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
+    DBG_ASSERT( rxContext.is(), "got no service manager" );
 
-    pData = new SvXMLNumImpData( pNumberFormatter, mxServiceFactory );
+    pData = new SvXMLNumImpData( pNumberFormatter, rxContext );
 }
 
 SvXMLNumFmtHelper::~SvXMLNumFmtHelper()

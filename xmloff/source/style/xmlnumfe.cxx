@@ -237,9 +237,9 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
 
     if ( pFormatter )
     {
-        pCharClass = new CharClass( comphelper::getComponentContext(pFormatter->GetServiceManager()),
+        pCharClass = new CharClass( pFormatter->GetComponentContext(),
             pFormatter->GetLanguageTag() );
-        pLocaleData = new LocaleDataWrapper( comphelper::getComponentContext(pFormatter->GetServiceManager()),
+        pLocaleData = new LocaleDataWrapper( pFormatter->GetComponentContext(),
             pFormatter->GetLanguageTag() );
     }
     else
@@ -272,9 +272,9 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
 
     if ( pFormatter )
     {
-        pCharClass = new CharClass( comphelper::getComponentContext(pFormatter->GetServiceManager()),
+        pCharClass = new CharClass( pFormatter->GetComponentContext(),
             pFormatter->GetLanguageTag() );
-        pLocaleData = new LocaleDataWrapper( comphelper::getComponentContext(pFormatter->GetServiceManager()),
+        pLocaleData = new LocaleDataWrapper( pFormatter->GetComponentContext(),
             pFormatter->GetLanguageTag() );
     }
     else

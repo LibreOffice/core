@@ -349,9 +349,6 @@ void SbiInstance::PrepareNumberFormatter( SvNumberFormatter*& rpNumberFormatter,
     sal_uInt32 &rnStdDateIdx, sal_uInt32 &rnStdTimeIdx, sal_uInt32 &rnStdDateTimeIdx,
     LanguageType* peFormatterLangType, DateFormat* peFormatterDateFormat )
 {
-    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
-        xFactory = comphelper::getProcessServiceFactory();
-
     LanguageType eLangType;
     if( peFormatterLangType )
     {
@@ -372,7 +369,7 @@ void SbiInstance::PrepareNumberFormatter( SvNumberFormatter*& rpNumberFormatter,
         eDate = aSysLocale.GetLocaleData().getDateFormat();
     }
 
-    rpNumberFormatter = new SvNumberFormatter( xFactory, eLangType );
+    rpNumberFormatter = new SvNumberFormatter( comphelper::getProcessComponentContext(), eLangType );
 
     sal_Int32 nCheckPos = 0; short nType;
     rnStdTimeIdx = rpNumberFormatter->GetStandardFormat( NUMBERFORMAT_TIME, eLangType );

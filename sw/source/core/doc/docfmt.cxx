@@ -2311,8 +2311,7 @@ void SwDoc::_CreateNumberFormatter()
 
     LanguageType eLang = LANGUAGE_SYSTEM;
 
-    Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-    pNumberFormatter = new SvNumberFormatter( xMSF, eLang );
+    pNumberFormatter = new SvNumberFormatter( comphelper::getProcessComponentContext(), eLang );
     pNumberFormatter->SetEvalDateFormat( NF_EVALDATEFORMAT_FORMAT_INTL );
     pNumberFormatter->SetYear2000(static_cast<sal_uInt16>(::utl::MiscCfg().GetYear2000()));
 

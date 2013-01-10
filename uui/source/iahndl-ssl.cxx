@@ -114,8 +114,7 @@ getLocalizedDatTimeStr(
     aTime = Time( rDateTime.Hours, rDateTime.Minutes, rDateTime.Seconds );
 
     LanguageType eUILang = Application::GetSettings().GetUILanguageTag().getLanguageType();
-    SvNumberFormatter *pNumberFormatter
-        = new SvNumberFormatter( uno::Reference<lang::XMultiServiceFactory>(xContext->getServiceManager(), uno::UNO_QUERY_THROW), eUILang );
+    SvNumberFormatter *pNumberFormatter = new SvNumberFormatter( xContext, eUILang );
     String      aTmpStr;
     Color*      pColor = NULL;
     Date*       pNullDate = pNumberFormatter->GetNullDate();

@@ -1360,7 +1360,7 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     ScRange aRange;
                     // HTML macht eigenes ColWidth/RowHeight
                     CalcOutputFactor();
-                    SvNumberFormatter aNumFormatter(aDocument.GetServiceManager(), eLang);
+                    SvNumberFormatter aNumFormatter( comphelper::getComponentContext(aDocument.GetServiceManager()), eLang);
                     eError = ScFormatFilter::Get().ScImportHTML( *pInStream, rMedium.GetBaseURL(), &aDocument, aRange,
                                             GetOutputFactor(), !bWebQuery, &aNumFormatter, bDateConvert );
                     if (eError != eERR_OK)

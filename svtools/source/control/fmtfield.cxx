@@ -286,7 +286,7 @@ SvNumberFormatter* FormattedField::StaticFormatter::GetFormatter()
         // get the Office's locale and translate
         LanguageType eSysLanguage = SvtSysLocale().GetLanguageTag().getLanguageType( false);
         s_cFormatter = new SvNumberFormatter(
-            ::comphelper::getProcessServiceFactory(),
+            ::comphelper::getProcessComponentContext(),
             eSysLanguage);
     }
     return s_cFormatter;

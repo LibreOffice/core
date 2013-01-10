@@ -47,8 +47,8 @@ class ImpSvNumberInputScan;
 class SvNumberformat;
 
 namespace com { namespace sun { namespace star {
-    namespace lang {
-        class XMultiServiceFactory;
+    namespace uno {
+        class XComponentContext;
     }
 }}}
 
@@ -325,7 +325,7 @@ public:
 
     /// Preferred ctor with service manager and language/country enum
     SvNumberFormatter(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xSMgr,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
         LanguageType eLang
         );
 
@@ -788,7 +788,7 @@ public:
     static bool IsLocaleInstalled( LanguageType eLang );
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceManager;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
     LanguageTag maLanguageTag;
     SvNumberFormatTable aFTable;            // Table of format keys to format entries
     typedef std::map<sal_uInt32, sal_uInt32> DefaultFormatKeysMap;
@@ -936,9 +936,9 @@ public:
     // new format codes are appended.
     void ReplaceSystemCL( LanguageType eOldLanguage );
 
-    inline ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > GetServiceManager() const
+    inline ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > GetComponentContext() const
         {
-            return xServiceManager;
+            return m_xContext;
         }
 
 

@@ -74,21 +74,14 @@ class SvXMLNumFmtHelper
 {
     SvXMLNumImpData* pData;
 
-    // #110680#
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxServiceFactory;
-
 public:
-    // #110680#
-    //SvXMLNumFmtHelper( const ::com::sun::star::uno::Reference<
-    //      ::com::sun::star::util::XNumberFormatsSupplier >& rSupp );
-    //SvXMLNumFmtHelper( SvNumberFormatter* pNumberFormatter );
     SvXMLNumFmtHelper(
         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& rSupp,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory );
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
 
     SvXMLNumFmtHelper(
         SvNumberFormatter* pNumberFormatter,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory );
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
 
     ~SvXMLNumFmtHelper();
 

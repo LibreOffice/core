@@ -78,7 +78,6 @@ private:
     const String            aStrSum;
     SvNumberFormatter*      pNumFmt;
 
-    uno::Reference< lang::XMultiServiceFactory > m_xMSF;
     uno::Reference< i18n::XBreakIterator >       m_xBreak;
 
     //-------------------------------------------
@@ -544,15 +543,11 @@ AutoFmtPreview::AutoFmtPreview(Window* pParent) :
         aStrNorth       ( SW_RES( STR_NORTH ) ),
         aStrMid         ( SW_RES( STR_MID ) ),
         aStrSouth       ( SW_RES( STR_SOUTH ) ),
-        aStrSum         ( SW_RES( STR_SUM ) ),
-        m_xMSF          ( comphelper::getProcessServiceFactory() )
+        aStrSum         ( SW_RES( STR_SUM ) )
 {
-    OSL_ENSURE( m_xMSF.is(), "AutoFmtPreview: no MultiServiceFactory");
-    if ( m_xMSF.is() )
-    {
-        m_xBreak = i18n::BreakIterator::create(comphelper::getComponentContext(m_xMSF));
-    }
-    pNumFmt = new SvNumberFormatter( m_xMSF, LANGUAGE_SYSTEM );
+    uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+    m_xBreak = i18n::BreakIterator::create(xContext);
+    pNumFmt = new SvNumberFormatter( xContext, LANGUAGE_SYSTEM );
 
     Init();
 }

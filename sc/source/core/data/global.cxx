@@ -208,7 +208,7 @@ SvNumberFormatter* ScGlobal::GetEnglishFormatter()
     if ( !pEnglishFormatter )
     {
         pEnglishFormatter = new SvNumberFormatter(
-            ::comphelper::getProcessServiceFactory(), LANGUAGE_ENGLISH_US );
+            ::comphelper::getProcessComponentContext(), LANGUAGE_ENGLISH_US );
         pEnglishFormatter->SetEvalDateFormat( NF_EVALDATEFORMAT_INTL_FORMAT );
     }
     return pEnglishFormatter;

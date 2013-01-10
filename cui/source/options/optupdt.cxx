@@ -127,7 +127,7 @@ void SvxOnlineUpdateTabPage::UpdateLastCheckedText()
         }
 
         LanguageType eUILang = Application::GetSettings().GetUILanguageTag().getLanguageType();
-        SvNumberFormatter *pNumberFormatter = new SvNumberFormatter( ::comphelper::getProcessServiceFactory(), eUILang );
+        SvNumberFormatter *pNumberFormatter = new SvNumberFormatter( ::comphelper::getProcessComponentContext(), eUILang );
         String      aTmpStr;
         Color*      pColor = NULL;
         Date*       pNullDate = pNumberFormatter->GetNullDate();

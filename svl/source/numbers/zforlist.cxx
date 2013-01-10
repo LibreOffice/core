@@ -188,9 +188,9 @@ sal_uInt16 SvNumberFormatter::nSystemCurrencyPosition = 0;
 const sal_uInt16 SvNumberFormatter::UNLIMITED_PRECISION   = ::std::numeric_limits<sal_uInt16>::max();
 const sal_uInt16 SvNumberFormatter::INPUTSTRING_PRECISION = ::std::numeric_limits<sal_uInt16>::max()-1;
 
-SvNumberFormatter::SvNumberFormatter( const Reference< XMultiServiceFactory >& xSMgr,
+SvNumberFormatter::SvNumberFormatter( const Reference< XComponentContext >& rxContext,
                                       LanguageType eLang )
-    : xServiceManager( xSMgr )
+    : m_xContext( rxContext )
     , maLanguageTag( eLang)
 {
     ImpConstruct( eLang );
@@ -234,12 +234,12 @@ void SvNumberFormatter::ImpConstruct( LanguageType eLang )
     nDefaultSystemCurrencyFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
 
     maLanguageTag.reset( eLang );
-    pCharClass = new CharClass( comphelper::getComponentContext(xServiceManager), maLanguageTag );
-    xLocaleData.init( comphelper::getComponentContext(xServiceManager), maLanguageTag );
-    xCalendar.init( comphelper::getComponentContext(xServiceManager), maLanguageTag.getLocale() );
-    xTransliteration.init( comphelper::getComponentContext(xServiceManager), eLang,
+    pCharClass = new CharClass( m_xContext, maLanguageTag );
+    xLocaleData.init( m_xContext, maLanguageTag );
+    xCalendar.init( m_xContext, maLanguageTag.getLocale() );
+    xTransliteration.init( m_xContext, eLang,
                            ::com::sun::star::i18n::TransliterationModules_IGNORE_CASE );
-    xNatNum.init( comphelper::getComponentContext(xServiceManager) );
+    xNatNum.init( m_xContext );
 
     // cached locale data items
     const LocaleDataWrapper* pLoc = GetLocaleData();
@@ -474,7 +474,7 @@ void SvNumberFormatter::ReplaceSystemCL( LanguageType eOldLanguage )
     pStdFormat->SetLastInsertKey( sal_uInt16(nLastKey - nCLOffset) );
 
     // append new system additional formats
-    NumberFormatCodeWrapper aNumberFormatCode( comphelper::getComponentContext(xServiceManager),
+    NumberFormatCodeWrapper aNumberFormatCode( m_xContext,
                                                GetLanguageTag().getLocale() );
     ImpGenerateAdditionalFormats( nCLOffset, aNumberFormatCode, true );
 }
@@ -736,7 +736,7 @@ bool SvNumberFormatter::Load( SvStream& rStream )
                 // different SYSTEM locale
                 if ( !pConverter )
                 {
-                    pConverter = new SvNumberFormatter( xServiceManager, eSysLang );
+                    pConverter = new SvNumberFormatter( m_xContext, eSysLang );
                 }
                 pEntry->ConvertLanguage( *pConverter, eSaveSysLang, eLoadSysLang, true );
             }
@@ -781,7 +781,7 @@ bool SvNumberFormatter::Load( SvStream& rStream )
 
     // generate additional i18n standard formats for all used locales
     LanguageType eOldLanguage = ActLnge;
-    NumberFormatCodeWrapper aNumberFormatCode( comphelper::getComponentContext(xServiceManager),
+    NumberFormatCodeWrapper aNumberFormatCode( m_xContext,
                                                GetLanguageTag().getLocale() );
     std::vector<sal_uInt16> aList;
     GetUsedLanguages( aList );
@@ -2247,7 +2247,7 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
         pFormatScanner->SetConvertMode(false);      // switch off for this function
     }
 
-    NumberFormatCodeWrapper aNumberFormatCode( comphelper::getComponentContext(xServiceManager),
+    NumberFormatCodeWrapper aNumberFormatCode( m_xContext,
             GetLanguageTag().getLocale() );
     SvNumberformat* pNewFormat = NULL;
     sal_Int32 nIdx;

@@ -97,9 +97,8 @@ void NumFormatListBox::Init(short nFormatType, sal_Bool bUsrFmts)
         eCurLanguage = SvtSysLocale().GetLanguageTag().getLanguageType();
 
     if (bUsrFmts == sal_False)
-       {
-        Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-        pOwnFormatter = new SvNumberFormatter(xMSF, eCurLanguage);
+    {
+        pOwnFormatter = new SvNumberFormatter(comphelper::getProcessComponentContext(), eCurLanguage);
     }
 
     SetFormatType(nFormatType);

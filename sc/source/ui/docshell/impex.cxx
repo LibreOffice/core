@@ -1279,7 +1279,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
     long nSkipLines             = pExtOptions->GetStartRow();
 
     LanguageType eDocLang = pExtOptions->GetLanguage();
-    SvNumberFormatter aNumFormatter(pDoc->GetServiceManager(), eDocLang);
+    SvNumberFormatter aNumFormatter( comphelper::getComponentContext(pDoc->GetServiceManager()), eDocLang);
     bool bDetectNumFormat = pExtOptions->IsDetectSpecialNumber();
 
     // For date recognition
@@ -2175,7 +2175,7 @@ bool ScImportExport::HTML2Doc( SvStream& rStrm, const String& rBaseURL )
         {
             // Pick up import options if available.
             LanguageType eLang = pExtOptions->GetLanguage();
-            SvNumberFormatter aNumFormatter(pDoc->GetServiceManager(), eLang);
+            SvNumberFormatter aNumFormatter( comphelper::getComponentContext(pDoc->GetServiceManager()), eLang);
             bool bSpecialNumber = pExtOptions->IsDetectSpecialNumber();
             pImp->WriteToDocument(false, 1.0, &aNumFormatter, bSpecialNumber);
         }

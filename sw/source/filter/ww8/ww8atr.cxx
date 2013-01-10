@@ -2308,7 +2308,7 @@ bool MSWordExportBase::GetNumberFmt(const SwField& rFld, String& rStr)
     if( pNumFmt )
     {
         sal_uInt16 nLng = rFld.GetLanguage();
-        LocaleDataWrapper aLocDat(comphelper::getComponentContext(pNFmtr->GetServiceManager()),
+        LocaleDataWrapper aLocDat(pNFmtr->GetComponentContext(),
                                   LanguageTag(nLng));
 
         String sFmt(pNumFmt->GetMappedFormatstring(GetNfKeywordTable(),

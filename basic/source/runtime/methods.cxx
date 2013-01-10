@@ -1966,9 +1966,7 @@ RTLFUNC(DateValue)
         if( !bSuccess && ( eLangType != LANGUAGE_ENGLISH_US ) )
         {
             // Create a new SvNumberFormatter by using LANGUAGE_ENGLISH to get the date value;
-            uno::Reference< lang::XMultiServiceFactory >
-                xFactory = comphelper::getProcessServiceFactory();
-            SvNumberFormatter aFormatter( xFactory, LANGUAGE_ENGLISH_US );
+            SvNumberFormatter aFormatter( comphelper::getProcessComponentContext(), LANGUAGE_ENGLISH_US );
             bSuccess = aFormatter.IsNumberFormat( aStr, nIndex, fResult );
             nType = aFormatter.GetType( nIndex );
         }
