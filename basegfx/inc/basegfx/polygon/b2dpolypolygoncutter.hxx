@@ -29,44 +29,76 @@ namespace basegfx
 {
     namespace tools
     {
-        // Solve all crossovers in a polyPolygon. This re-layouts all contained polygons so that the
-        // result will contain only non-cutting polygons. For that reason, points will be added at
-        // crossover and touch points and the single Polygons may be re-combined. The orientations
-        // of the contained polygons in not changed but used as topological information.
-        // Self crossovers of the contained sub-polygons are implicitely handled, but to not lose
-        // the topological information, it may be necessary to remove self-intersections of the
-        // contained sub-polygons in a preparing step and to explicitly correct their orientations.
+        /** Solve all crossovers (aka self-intersections) in a polyPolygon.
+
+            This re-layouts all contained polygons so that the result
+            will contain only non-cutting polygons. For that reason,
+            points will be added at crossover and touch points and the
+            single Polygons may be re-combined. The orientations of
+            the contained polygons in not changed but used as
+            topological information.  Self crossovers of the contained
+            sub-polygons are implicitely handled, but to not lose the
+            topological information, it may be necessary to remove
+            self-intersections of the contained sub-polygons in a
+            preparing step and to explicitly correct their
+            orientations.
+        */
         BASEGFX_DLLPUBLIC B2DPolyPolygon solveCrossovers(const B2DPolyPolygon& rCandidate);
 
-        // Version for single polygons. This is for solving self-intersections. Result will be free of
-        // crossovers. When result contains multiple polygons, it may be necessary to rearrange their
-        // orientations since holes may have been created (use correctOrientations eventually).
+        /** Solve all crossovers (aka self-intersections) in a Polygon
+
+            Same as above, but for single polygons. Result will be
+            free of self-intersections. When result contains multiple
+            polygons, it may be necessary to rearrange their
+            orientations since holes may have been created (use
+            correctOrientations eventually).
+        */
         BASEGFX_DLLPUBLIC B2DPolyPolygon solveCrossovers(const B2DPolygon& rCandidate);
 
-        // Neutral polygons will be stripped. Neutral polygons are ones who's orientation is
-        // neutral, so normally they have no volume -> just closed paths. A polygon with the same
-        // positive and negative oriented volume is also neutral, so this may not be wanted. It is
-        // safe to call with crossover-free polygons, though (that's where it's mostly used).
+        /** Strip neutral polygons from PolyPolygon.
+
+            Neutral polygons are ones who's orientation is neutral, so
+            normally they have no volume -> just closed paths. A
+            polygon with the same positive and negative oriented
+            volume is also neutral, so this may not be wanted. It is
+            safe to call with self-intersection-free polygons, though
+            (that's where it's mostly used).
+        */
         BASEGFX_DLLPUBLIC B2DPolyPolygon stripNeutralPolygons(const B2DPolyPolygon& rCandidate);
 
-        // Remove not necessary polygons. Works only correct with crossover-free polygons. For each
-        // polygon, the depth for the PolyPolygon is calculated. The orientation is used to identify holes.
-        // Start value for holes is -1, for polygons it's zero. Ech time a polygon is contained in another one,
-        // it's depth is increased when inside a polygon, decreased when inside a hole. The result is a depth
-        // which e.g. is -1 for holes outside everything, 1 for a polygon covered by another polygon and zero
-        // for e.g. holes in a polygon or polygons outside everythig else.
-        // In the 2nd step, all polygons with depth other than zero are removed. If bKeepAboveZero is used,
-        // all polygons < 1 are removed. The bKeepAboveZero mode is useful for clipping, e.g. just append
-        // one polygon to another and use this mode -> only parts where two polygons overlapped will be kept.
-        // In combination with correct orientation of the input orientations and the SolveCrossover calls this
-        // can be combined for logical polygon operations or polygon clipping.
+        /** Remove unnecessary/non-displayed polygons.
+
+            Works only correct with self-intersection-free
+            polygons. For each polygon, the depth for the PolyPolygon
+            is calculated. The orientation is used to identify holes.
+            Start value for holes is -1, for polygons it's zero. Ech
+            time a polygon is contained in another one, it's depth is
+            increased when inside a polygon, decreased when inside a
+            hole. The result is a depth which e.g. is -1 for holes
+            outside everything, 1 for a polygon covered by another
+            polygon and zero for e.g. holes in a polygon or polygons
+            outside everythig else.  In the 2nd step, all polygons
+            with depth other than zero are removed. If bKeepAboveZero
+            is used, all polygons < 1 are removed. The bKeepAboveZero
+            mode is useful for clipping, e.g. just append one polygon
+            to another and use this mode -> only parts where two
+            polygons overlapped will be kept.  In combination with
+            correct orientation of the input orientations and the
+            SolveCrossover calls this can be combined for logical
+            polygon operations or polygon clipping.
+        */
         BASEGFX_DLLPUBLIC B2DPolyPolygon stripDispensablePolygons(const B2DPolyPolygon& rCandidate, bool bKeepAboveZero = false);
 
-        // geometrically convert PolyPolygons which are proposed to use nonzero fill rule
-        // to a representation where evenodd paint will give the same result. To do this
-        // all intersections and self-intersections get solved (the polygons will be rearranged
-        // if needed). Then all polygons which are inside another one with the same orientation
-        // get deleted
+        /** Emulate nonzero winding rule filling.
+
+            Geometrically convert PolyPolygons which are proposed to
+            use nonzero fill rule to a representation where evenodd
+            paint will give the same result. To do this all
+            intersections and self-intersections get solved (the
+            polygons will be rearranged if needed). Then all polygons
+            which are inside another one with the same orientation get
+            deleted
+        */
         BASEGFX_DLLPUBLIC B2DPolyPolygon createNonzeroConform(const B2DPolyPolygon& rCandidate);
 
         // For convenience: The four basic operations OR, XOR, AND and DIFF for
@@ -84,21 +116,21 @@ namespace basegfx
         // different since the simple concatenation will be seen as XOR. To work correctly, You
         // may need to OR those polygons.
 
-        // Preparations: solve self-intersections and intersections, remove neutral
-        // parts and correct orientations.
+        /// prep for ops - solve self-intersections and intersections, remove neutral parts and check orientations.
         BASEGFX_DLLPUBLIC B2DPolyPolygon prepareForPolygonOperation(const B2DPolygon& rCandidate);
+        /// prep for ops - solve self-intersections and intersections, remove neutral parts and check orientations.
         BASEGFX_DLLPUBLIC B2DPolyPolygon prepareForPolygonOperation(const B2DPolyPolygon& rCandidate);
 
-        // OR: Return all areas where CandidateA or CandidateB exist
+        /// OR: Return all areas where CandidateA or CandidateB exist
         BASEGFX_DLLPUBLIC B2DPolyPolygon solvePolygonOperationOr(const B2DPolyPolygon& rCandidateA, const B2DPolyPolygon& rCandidateB);
 
-        // XOR: Return all areas where CandidateA or CandidateB exist, but not both
+        /// XOR: Return all areas where CandidateA or CandidateB exist, but not both
         BASEGFX_DLLPUBLIC B2DPolyPolygon solvePolygonOperationXor(const B2DPolyPolygon& rCandidateA, const B2DPolyPolygon& rCandidateB);
 
-        // AND: Return all areas where CandidateA and CandidateB exist
+        /// AND: Return all areas where CandidateA and CandidateB exist
         BASEGFX_DLLPUBLIC B2DPolyPolygon solvePolygonOperationAnd(const B2DPolyPolygon& rCandidateA, const B2DPolyPolygon& rCandidateB);
 
-        // DIFF: Return all areas where CandidateA is not covered by CandidateB (cut B out of A)
+        /// DIFF: Return all areas where CandidateA is not covered by CandidateB (cut B out of A)
         BASEGFX_DLLPUBLIC B2DPolyPolygon solvePolygonOperationDiff(const B2DPolyPolygon& rCandidateA, const B2DPolyPolygon& rCandidateB);
 
         /** merge all single PolyPolygons to a single, OR-ed PolyPolygon
