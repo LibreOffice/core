@@ -30,16 +30,26 @@
 
 #include "OGLTrans_Shaders.hxx"
 
+#ifdef _WIN32
+
+#elif defined(MACOSX)
+
+#else // UNX == X11
+
 namespace unx
 {
+#define GLX_GLXEXT_PROTOTYPES 1
 #include <GL/glx.h>
 #include <GL/glxext.h>
 }
+
+#endif
 
 bool OGLShaders::cbInitialized = false;
 
 #ifdef GL_VERSION_2_0
 
+PFNGLACTIVETEXTUREPROC OGLShaders::glActiveTexture = NULL;
 PFNGLCREATESHADERPROC OGLShaders::glCreateShader = NULL;
 PFNGLSHADERSOURCEPROC OGLShaders::glShaderSource = NULL;
 PFNGLCOMPILESHADERPROC OGLShaders::glCompileShader = NULL;
@@ -62,6 +72,28 @@ bool OGLShaders::Initialize()
 {
 #ifdef GL_VERSION_2_0
     if( !cbInitialized ) {
+#ifdef _WIN32
+        glActiveTexture = (PFNGLACTIVETEXTUREPROC) wglGetProcAddress( "glActiveTexture" );
+        glCreateShader = (PFNGLCREATESHADERPROC) wglGetProcAddress( "glCreateShader" );
+        glShaderSource = (PFNGLSHADERSOURCEPROC) wglGetProcAddress( "glShaderSource" );
+        glCompileShader = (PFNGLCOMPILESHADERPROC) wglGetProcAddress( "glCompileShader" );
+        glGetShaderiv = (PFNGLGETSHADERIVPROC) wglGetProcAddress( "glGetShaderiv" );
+        glGetShaderInfoLog = (PFNGLGETSHADERINFOLOGPROC) wglGetProcAddress( "glGetShaderInfoLog" );
+        glDeleteShader = (PFNGLDELETESHADERPROC) wglGetProcAddress( "glDeleteShader" );
+        glCreateProgram = (PFNGLCREATEPROGRAMPROC) wglGetProcAddress( "glCreateProgram" );
+        glAttachShader = (PFNGLATTACHSHADERPROC) wglGetProcAddress( "glAttachShader" );
+        glLinkProgram = (PFNGLLINKPROGRAMPROC) wglGetProcAddress( "glLinkProgram" );
+        glGetProgramiv = (PFNGLGETPROGRAMIVPROC) wglGetProcAddress( "glGetProgramiv" );
+        glGetProgramInfoLog = (PFNGLGETPROGRAMINFOLOGPROC) wglGetProcAddress( "glGetProgramInfoLog" );
+        glUseProgram = (PFNGLUSEPROGRAMPROC) wglGetProcAddress( "glUseProgram" );
+        glDeleteProgram = (PFNGLDELETEPROGRAMPROC) wglGetProcAddress( "glDeleteProgram" );
+        glGetUniformLocation = (PFNGLGETUNIFORMLOCATIONPROC) wglGetProcAddress( "glGetUniformLocation" );
+        glUniform1i = (PFNGLUNIFORM1IPROC) wglGetProcAddress( "glUniform1i" );
+        glUniform1f = (PFNGLUNIFORM1FPROC) wglGetProcAddress( "glUniform1f" );
+        cbInitialized = true;
+#elif defined(MACOSX)
+#else
+        glActiveTexture = (PFNGLCREATESHADERPROC) unx::glXGetProcAddress( (unsigned char *) "glActiveTexture" );
         glCreateShader = (PFNGLCREATESHADERPROC) unx::glXGetProcAddress( (unsigned char *) "glCreateShader" );
         glShaderSource = (PFNGLSHADERSOURCEPROC) unx::glXGetProcAddress( (unsigned char *) "glShaderSource" );
         glCompileShader = (PFNGLCOMPILESHADERPROC) unx::glXGetProcAddress( (unsigned char *) "glCompileShader" );
@@ -79,6 +111,7 @@ bool OGLShaders::Initialize()
         glUniform1i = (PFNGLUNIFORM1IPROC) unx::glXGetProcAddress( (unsigned char *) "glUniform1i" );
         glUniform1f = (PFNGLUNIFORM1FPROC) unx::glXGetProcAddress( (unsigned char *) "glUniform1f" );
         cbInitialized = true;
+#endif
     }
 
     return glCreateShader != NULL;

@@ -1419,9 +1419,9 @@ void ShaderTransition::displaySlides_( double nTime, ::sal_Int32 glLeavingSlideT
         }
     }
 
-    glActiveTexture( GL_TEXTURE2 );
+    OGLShaders::glActiveTexture( GL_TEXTURE2 );
     glBindTexture( GL_TEXTURE_2D, glEnteringSlideTex );
-    glActiveTexture( GL_TEXTURE0 );
+    OGLShaders::glActiveTexture( GL_TEXTURE0 );
 #endif
 
     displaySlide( nTime, glLeavingSlideTex, getScene().getLeavingSlide(), SlideWidthScale, SlideHeightScale );
@@ -1517,10 +1517,10 @@ void ShaderTransition::impl_preparePermShader()
             OGLShaders::glUniform1i( location, 0 );  // texture unit 0
         }
 
-        glActiveTexture(GL_TEXTURE1);
+        OGLShaders::glActiveTexture(GL_TEXTURE1);
         if( !m_nHelperTexture )
             initPermTexture( &m_nHelperTexture );
-        glActiveTexture(GL_TEXTURE0);
+        OGLShaders::glActiveTexture(GL_TEXTURE0);
 
         location = OGLShaders::glGetUniformLocation( m_nProgramObject, "permTexture" );
         if( location != -1 ) {

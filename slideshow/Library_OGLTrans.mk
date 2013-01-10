@@ -46,6 +46,7 @@ endif
 $(eval $(call gb_Library_use_sdk_api,OGLTrans))
 
 $(eval $(call gb_Library_use_libraries,OGLTrans,\
+	basegfx \
     canvastools \
     comphelper \
     cppu \
@@ -87,8 +88,8 @@ $(eval $(call gb_Library_use_system_win32_libs,OGLTrans,\
 
 $(eval $(call gb_Library_add_exception_objects,OGLTrans,\
     slideshow/source/engine/OGLTrans/unx/OGLTrans_Shaders \
-    slideshow/source/engine/OGLTrans/win/OGLTrans_TransitionerImpl \
-    slideshow/source/engine/OGLTrans/win/OGLTrans_TransitionImpl \
+    slideshow/source/engine/OGLTrans/unx/OGLTrans_TransitionerImpl \
+    slideshow/source/engine/OGLTrans/unx/OGLTrans_TransitionImpl \
 ))
 
 else

@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#define GLX_GLXEXT_PROTOTYPES 1
+// Includes <GL/gl.h>
 #include "OGLTrans_TransitionImpl.hxx"
 
 #include <sal/types.h>
@@ -38,6 +38,8 @@
 #include <com/sun/star/rendering/RenderingIntent.hpp>
 #include <com/sun/star/util/Endianness.hpp>
 #include <com/sun/star/animations/TransitionType.hpp>
+#undef IN
+#undef OUT
 #include <com/sun/star/animations/TransitionSubType.hpp>
 #include <com/sun/star/presentation/XTransitionFactory.hpp>
 #include <com/sun/star/presentation/XTransition.hpp>
@@ -63,26 +65,29 @@
 
 #include <boost/noncopyable.hpp>
 
-#include <GL/gl.h>
-#include <GL/glu.h>
-
-
-#if defined( WNT )
-    #define GL_TEXTURE_MAX_ANISOTROPY_EXT 0x84FE
-    #define GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT 0x84FF
-#elif defined( QUARTZ )
+#if defined( _WIN32 )
+    // OGLTrans_TransitionImpl.hxx already included <prewin.h> and thus <windows.h>
+    #include <GL/glu.h>
+    #include <GL/glext.h>
+    #include <GL/wglext.h>
+#elif defined( MACOSX )
     #include "premac.h"
     #include <Cocoa/Cocoa.h>
     #include "postmac.h"
 #elif defined( UNX )
-namespace unx
-{
-#include <X11/keysym.h>
-#include <X11/X.h>
-#include <GL/glx.h>
-#include <GL/glxext.h>
-}
+    #include <GL/glu.h>
+    #include <GL/glext.h>
+
+    namespace unx
+    {
+        #include <X11/keysym.h>
+        #include <X11/X.h>
+        #define GLX_GLXEXT_PROTOTYPES 1
+        #include <GL/glx.h>
+        #include <GL/glxext.h>
+    }
 #endif
+
 #include <vcl/sysdata.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
@@ -163,6 +168,8 @@ int calcComponentOrderIndex(const uno::Sequence<sal_Int8>& rTags)
     return -1;
 }
 
+#ifdef UNX
+
 // not thread safe
 static bool errorTriggered;
 int oglErrorHandler( unx::Display* /*dpy*/, unx::XErrorEvent* /*evnt*/ )
@@ -171,6 +178,8 @@ int oglErrorHandler( unx::Display* /*dpy*/, unx::XErrorEvent* /*evnt*/ )
 
     return 0;
 }
+
+#endif
 
 /** This is the Transitioner class for OpenGL 3D transitions in
  * slideshow. At the moment, it's Linux only. This class is implicitly
@@ -236,29 +245,30 @@ private:
     /// Holds the information of our new child window
     struct GLWindow
     {
-#if defined( WNT )
-    HWND                    hWnd;
-    HDC                     hDC;
-    HGLRC                   hRC;
-#elif defined( QUARTZ )
+#if defined( _WIN32 )
+        HWND                    hWnd;
+        HDC                     hDC;
+        HGLRC                   hRC;
+#elif defined( MACOSX )
 #elif defined( UNX )
-    unx::Display*           dpy;
-    int                     screen;
-    unx::Window             win;
+        unx::Display*           dpy;
+        int                     screen;
+        unx::Window             win;
 #if defined( GLX_VERSION_1_3 ) && defined( GLX_EXT_texture_from_pixmap )
-    unx::GLXFBConfig        fbc;
+        unx::GLXFBConfig        fbc;
 #endif
-    unx::XVisualInfo*       vi;
-    unx::GLXContext         ctx;
+        unx::XVisualInfo*       vi;
+        unx::GLXContext         ctx;
+
+        bool HasGLXExtension( const char* name ) { return gluCheckExtension( (const GLubyte*) name, (const GLubyte*) GLXExtensions ); }
+        const char*             GLXExtensions;
 #endif
         unsigned int            bpp;
         unsigned int            Width;
         unsigned int            Height;
-        const char*             GLXExtensions;
-    const GLubyte*          GLExtensions;
+        const GLubyte*          GLExtensions;
 
-        bool HasGLXExtension( const char* name ) { return gluCheckExtension( (const GLubyte*) name, (const GLubyte*) GLXExtensions ); }
-    bool HasGLExtension( const char* name ) { return gluCheckExtension( (const GLubyte*) name, GLExtensions ); }
+        bool HasGLExtension( const char* name ) { return gluCheckExtension( (const GLubyte*) name, GLExtensions ); }
     } GLWin;
 
     /** OpenGL handle to the leaving slide's texture
@@ -293,8 +303,10 @@ private:
     bool mbUseEnteringPixmap;
     bool mbFreeLeavingPixmap;
     bool mbFreeEnteringPixmap;
+#ifdef UNX
     unx::Pixmap maLeavingPixmap;
     unx::Pixmap maEnteringPixmap;
+#endif
 
     /** the form the raw bytes are in for the bitmaps
     */
@@ -316,16 +328,19 @@ public:
     /** GL version
      */
     static float cnGLVersion;
+
+#ifdef UNX
     float mnGLXVersion;
+#endif
+
+    /**
+       Whether the display has GLX extension on X11, always true otherwise (?)
+     */
+    static bool cbGLXPresent;
 
     /** Whether Mesa is the OpenGL vendor
      */
     static bool cbMesa;
-
-    /**
-       whether the display has GLX extension
-     */
-    static bool cbGLXPresent;
 
     /**
        whether texture from pixmap extension is available
@@ -426,7 +441,7 @@ lcl_createSystemWindow(
 bool OGLTransitionerImpl::createWindow( Window* pPWindow )
 {
     const SystemEnvData* sysData(pPWindow->GetSystemData());
-#if defined( WNT )
+#if defined( _WIN32 )
     GLWin.hWnd = sysData->hWnd;
 #elif defined( UNX )
     GLWin.dpy = reinterpret_cast<unx::Display*>(sysData->pDisplay);
@@ -573,7 +588,7 @@ bool OGLTransitionerImpl::createWindow( Window* pPWindow )
     }
 #endif
 
-#if defined( WNT )
+#if defined( _WIN32 )
     SystemWindowData winData;
     winData.nSize = sizeof(winData);
     pWindow=new SystemChildWindow(pPWindow, 0, &winData, sal_False);
@@ -588,7 +603,7 @@ bool OGLTransitionerImpl::createWindow( Window* pPWindow )
         pWindow->SetControlForeground();
         pWindow->SetControlBackground();
         pWindow->EnablePaint(sal_False);
-#if defined( WNT )
+#if defined( _WIN32 )
         GLWin.hWnd = sysData->hWnd;
 #elif defined( UNX )
         GLWin.dpy = reinterpret_cast<unx::Display*>(pChildSysData->pDisplay);
@@ -642,7 +657,7 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
     GLWin.Height = aCanvasArea.Height;
     SAL_INFO("slideshow.opengl", "canvas area: " << aCanvasArea.X << "," << aCanvasArea.Y << " - " << aCanvasArea.Width << "x" << aCanvasArea.Height);
 
-#if defined( WNT )
+#if defined( _WIN32 )
     GLWin.hDC = GetDC(GLWin.hWnd);
 #elif defined( UNX )
     GLWin.ctx = glXCreateContext(GLWin.dpy,
@@ -655,7 +670,7 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
     }
 #endif
 
-#if defined( WNT )
+#if defined( _WIN32 )
     PIXELFORMATDESCRIPTOR PixelFormatFront =                    // PixelFormat Tells Windows How We Want Things To Be
     {
         sizeof(PIXELFORMATDESCRIPTOR),
@@ -679,7 +694,7 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
     };
     int WindowPix = ChoosePixelFormat(GLWin.hDC,&PixelFormatFront);
     SetPixelFormat(GLWin.hDC,WindowPix,&PixelFormatFront);
-    GLWin.hRC  = wglCreateContext(GLWin.hDC);
+    GLWin.hRC = wglCreateContext(GLWin.hDC);
     wglMakeCurrent(GLWin.hDC,GLWin.hRC);
 #elif defined( UNX )
     if( !glXMakeCurrent( GLWin.dpy, GLWin.win, GLWin.ctx ) ) {
@@ -732,7 +747,7 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
     glCullFace(GL_BACK);
     glClearColor (0, 0, 0, 0);
     glClear(GL_COLOR_BUFFER_BIT);
-#if defined( WNT )
+#if defined( _WIN32 )
     SwapBuffers(GLWin.hDC);
 #elif defined( UNX )
     unx::glXSwapBuffers(GLWin.dpy, GLWin.win);
@@ -786,7 +801,6 @@ void OGLTransitionerImpl::impl_prepareSlides()
     mbUseLeavingPixmap = false;
     mbUseEnteringPixmap = false;
 
-#ifdef UNX
 #if defined( GLX_VERSION_1_3 ) && defined( GLX_EXT_texture_from_pixmap )
 
     if( mnGLXVersion >= 1.2999 && mbTextureFromPixmap && xLeavingSet.is() && xEnteringSet.is() && mbHasTFPVisual ) {
@@ -861,7 +875,6 @@ void OGLTransitionerImpl::impl_prepareSlides()
         }
     }
 
-#endif
 #endif
     if( !mbUseLeavingPixmap )
         LeavingBytes = mxLeavingBitmap->getData(SlideBitmapLayout,SlideRect);
@@ -1229,7 +1242,7 @@ namespace
                 *pColors++ = vcl::unotools::toByteColor(pIn->Red);
                 *pColors++ = vcl::unotools::toByteColor(pIn->Green);
                 *pColors++ = vcl::unotools::toByteColor(pIn->Blue);
-                *pColors++ = 255;
+                *pColors++ = -127;
                 ++pIn;
             }
             return aRes;
@@ -1554,7 +1567,7 @@ void SAL_CALL OGLTransitionerImpl::update( double nTime ) throw (uno::RuntimeExc
     if (isDisposed() || !cbGLXPresent || mpTransition->getSettings().mnRequiredGLVersion > cnGLVersion)
         return;
 
-#ifdef WNT
+#ifdef _WIN32
     wglMakeCurrent(GLWin.hDC,GLWin.hRC);
 #endif
 #ifdef UNX
@@ -1570,7 +1583,7 @@ void SAL_CALL OGLTransitionerImpl::update( double nTime ) throw (uno::RuntimeExc
                               static_cast<double>(GLWin.Width),
                               static_cast<double>(GLWin.Height) );
 
-#if defined( WNT )
+#if defined( _WIN32 )
     SwapBuffers(GLWin.hDC);
 #elif defined( UNX )
     unx::glXSwapBuffers(GLWin.dpy, GLWin.win);
@@ -1612,7 +1625,7 @@ void SAL_CALL OGLTransitionerImpl::viewChanged( const Reference< presentation::X
 
 void OGLTransitionerImpl::disposeContextAndWindow()
 {
-#if defined( WNT )
+#if defined( _WIN32 )
     if (GLWin.hRC)
     {
         wglMakeCurrent( GLWin.hDC, 0 );     // kill Device Context
@@ -1628,18 +1641,18 @@ void OGLTransitionerImpl::disposeContextAndWindow()
         }
         glXDestroyContext(GLWin.dpy, GLWin.ctx);
         GLWin.ctx = NULL;
+        GLWin.win = 0;
     }
 #endif
     if( pWindow ) {
         delete pWindow;
         pWindow = NULL;
-        GLWin.win = 0;
     }
 }
 
 void OGLTransitionerImpl::disposeTextures()
 {
-#ifdef WNT
+#ifdef _WIN32
     wglMakeCurrent(GLWin.hDC,GLWin.hRC);
 #endif
 #ifdef UNX
@@ -1743,7 +1756,7 @@ OGLTransitionerImpl::OGLTransitionerImpl() :
     SlideBitmapLayout(),
     SlideSize()
 {
-#if defined( WNT )
+#if defined( _WIN32 )
     GLWin.hWnd = 0;
 #elif defined( UNX )
     GLWin.ctx = 0;

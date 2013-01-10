@@ -45,6 +45,8 @@ public:
      */
 #ifdef GL_VERSION_2_0
 
+    static PFNGLACTIVETEXTUREPROC glActiveTexture;
+
     static PFNGLCREATESHADERPROC glCreateShader;
     static PFNGLSHADERSOURCEPROC glShaderSource;
     static PFNGLCOMPILESHADERPROC glCompileShader;
