@@ -2717,6 +2717,7 @@ bool ScCompiler::IsDoubleReference( const String& rName )
             const OUString* pRealTab = pRefMgr->getRealTableName(aExtInfo.mnFileId, aExtInfo.maTabName);
             aToken.SetExternalDoubleRef(
                 aExtInfo.mnFileId, pRealTab ? *pRealTab : aExtInfo.maTabName, aRef);
+            maExternalFiles.push_back(aExtInfo.mnFileId);
         }
         else
         {
@@ -2765,6 +2766,7 @@ bool ScCompiler::IsSingleReference( const String& rName )
             const OUString* pRealTab = pRefMgr->getRealTableName(aExtInfo.mnFileId, aExtInfo.maTabName);
             aToken.SetExternalSingleRef(
                 aExtInfo.mnFileId, pRealTab ? *pRealTab : aExtInfo.maTabName, aRef);
+            maExternalFiles.push_back(aExtInfo.mnFileId);
         }
         else
             aToken.SetSingleReference(aRef);
@@ -2973,6 +2975,7 @@ bool ScCompiler::IsExternalNamedRange( const String& rSymbol )
     const OUString* pRealName = pRefMgr->getRealRangeName(nFileId, aName);
     aToken.SetExternalName(nFileId, pRealName ? *pRealName : OUString(aTmp));
     pRawToken = aToken.Clone();
+    maExternalFiles.push_back(nFileId);
     return true;
 }
 
@@ -3736,6 +3739,24 @@ void ScCompiler::CreateStringFromXMLTokenArray( rtl::OUString& rFormula, rtl::OU
     rFormulaNmsp = aFormulaNmsp;
 }
 
+namespace {
+
+class ExternalFileInserter : std::unary_function<sal_uInt16, void>
+{
+    ScAddress maPos;
+    ScExternalRefManager& mrRefMgr;
+public:
+    ExternalFileInserter(const ScAddress& rPos, ScExternalRefManager& rRefMgr) :
+        maPos(rPos), mrRefMgr(rRefMgr) {}
+
+    void operator() (sal_uInt16 nFileId) const
+    {
+        mrRefMgr.insertRefCell(nFileId, maPos);
+    }
+};
+
+}
+
 ScTokenArray* ScCompiler::CompileString( const String& rFormula )
 {
     OSL_ENSURE( meGrammar != FormulaGrammar::GRAM_EXTERNAL, "ScCompiler::CompileString - unexpected grammar GRAM_EXTERNAL" );
@@ -3942,6 +3963,16 @@ ScTokenArray* ScCompiler::CompileString( const String& rFormula )
     // remember pArr, in case a subsequent CompileTokenArray() is executed.
     ScTokenArray* pNew = new ScTokenArray( aArr );
     pArr = pNew;
+
+    if (!maExternalFiles.empty())
+    {
+        // Remove duplicates, and register all external files found in this cell.
+        std::sort(maExternalFiles.begin(), maExternalFiles.end());
+        std::vector<sal_uInt16>::iterator itEnd = std::unique(maExternalFiles.begin(), maExternalFiles.end());
+        std::for_each(maExternalFiles.begin(), itEnd, ExternalFileInserter(aPos, *pDoc->GetExternalRefManager()));
+        maExternalFiles.erase(itEnd, maExternalFiles.end());
+    }
+
     return pNew;
 }
 
