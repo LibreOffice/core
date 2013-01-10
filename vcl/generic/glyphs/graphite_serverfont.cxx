@@ -89,7 +89,7 @@ GraphiteServerFontLayout::GraphiteServerFontLayout(ServerFont& rServerFont) thro
 #ifdef DEBUG
         if (mpFeatures)
             printf("GraphiteServerFontLayout %s/%s/%s %x language %d features %d errors\n",
-                rtl::OUStringToOString( rServerFont.GetFontSelData().maName,
+                rtl::OUStringToOString( rServerFont.GetFontSelData().GetFamilyName(),
                 RTL_TEXTENCODING_UTF8 ).getStr(),
                 rtl::OUStringToOString( rServerFont.GetFontSelData().maTargetName,
                 RTL_TEXTENCODING_UTF8 ).getStr(),
