@@ -93,7 +93,7 @@ bool OGLShaders::Initialize()
         cbInitialized = true;
 #elif defined(MACOSX)
 #else
-        glActiveTexture = (PFNGLCREATESHADERPROC) unx::glXGetProcAddress( (unsigned char *) "glActiveTexture" );
+        glActiveTexture = (PFNGLACTIVETEXTUREPROC) unx::glXGetProcAddress( (unsigned char *) "glActiveTexture" );
         glCreateShader = (PFNGLCREATESHADERPROC) unx::glXGetProcAddress( (unsigned char *) "glCreateShader" );
         glShaderSource = (PFNGLSHADERSOURCEPROC) unx::glXGetProcAddress( (unsigned char *) "glShaderSource" );
         glCompileShader = (PFNGLCOMPILESHADERPROC) unx::glXGetProcAddress( (unsigned char *) "glCompileShader" );
