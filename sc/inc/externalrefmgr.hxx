@@ -679,13 +679,13 @@ public:
      */
     bool containsUnsavedReferences() { return !maUnsavedDocShells.empty(); }
 
+    void insertRefCell(sal_uInt16 nFileId, const ScAddress& rCell);
+
 private:
     ScExternalRefManager();
     ScExternalRefManager(const ScExternalRefManager&);
 
     void refreshAllRefCells(sal_uInt16 nFileId);
-
-    void insertRefCell(sal_uInt16 nFileId, const ScAddress& rCell);
 
     void fillCellFormat(sal_uLong nFmtIndex, ScExternalRefCache::CellFormat* pFmt) const;
 
