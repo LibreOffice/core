@@ -4575,6 +4575,8 @@ if test -z "$GNUMAKE"; then
     AC_MSG_ERROR([not found. install GNU make.])
 fi
 
+TAB=`printf '\t'`
+
 AC_MSG_CHECKING([the GNU make version])
 _make_version=`$GNUMAKE --version | grep GNU | $GREP -v GPL | $SED -e 's@^[[^0-9]]*@@' -e 's@ .*@@' -e 's@,.*@@'`
 _make_longver=`echo $_make_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
@@ -4596,16 +4598,16 @@ elif test "$_make_longver" -ge "038100"; then
     fi
     AC_MSG_CHECKING([for GNU make bug 20033])
     TESTGMAKEBUG20033=`mktemp -d tmp.XXXXXX`
-    cat > $TESTGMAKEBUG20033/Makefile << EOF
+    $SED -e "s/<TAB>/$TAB/" > $TESTGMAKEBUG20033/Makefile << EOF
 A := \$(wildcard *.a)
 
 .PHONY: all
 all: \$(A:.a=.b)
-	@echo survived bug20033. #dont kill these tabs, you will break the Makefile!!!!
+<TAB>@echo survived bug20033. #dont kill these tabs, you will break the Makefile!!!!
 
 .PHONY: setup
 setup:
-	@touch 1.a 2.a 3.a 4.a 5.a 6.a
+<TAB>@touch 1.a 2.a 3.a 4.a 5.a 6.a
 
 define d1
 @echo lala \$(1)
@@ -4618,9 +4620,9 @@ define d2
 endef
 
 %.b : %.a
-	\$(eval CHECKSUM := \$(word 1,\$(shell cat \$^ | $SHA1SUM))) \$(if \$(wildcard \$(CACHEDIR)/\$(CHECKSUM)),\
-	\$(call d1,\$(CHECKSUM)),\
-	\$(call d2,\$(CHECKSUM)))
+<TAB>\$(eval CHECKSUM := \$(word 1,\$(shell cat \$^ | $SHA1SUM))) \$(if \$(wildcard \$(CACHEDIR)/\$(CHECKSUM)),\
+<TAB>\$(call d1,\$(CHECKSUM)),\
+<TAB>\$(call d2,\$(CHECKSUM)))
 EOF
     if test -z "`(cd $TESTGMAKEBUG20033 && $GNUMAKE setup && $GNUMAKE -j)|grep survived`"; then
         no_parallelism_make="YES"
@@ -4636,12 +4638,12 @@ fi
 # find if gnumake support file function
 AC_MSG_CHECKING([whether GNU make supports the 'file' function])
 TESTGMAKEFILEFUNC="`mktemp -d -t tst.XXXXXX`"
-cat > $TESTGMAKEFILEFUNC/Makefile << EOF
+$SED -e "s/<TAB>/$TAB/" > $TESTGMAKEFILEFUNC/Makefile << EOF
 \$(file >test.txt,Success )
 
 .PHONY: all
 all:
-	@cat test.txt
+<TAB>@cat test.txt
 
 EOF
 $GNUMAKE -C $TESTGMAKEFILEFUNC 2>/dev/null 1>&2
