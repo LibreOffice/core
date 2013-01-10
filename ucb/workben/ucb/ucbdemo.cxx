@@ -141,7 +141,7 @@ public:
 //-------------------------------------------------------------------------
 void MessagePrinter::print( const sal_Char* pText )
 {
-    print( UniString::CreateFromAscii( pText ) );
+    print( OUString::valueOf( static_cast<sal_Int32>(pText) ) );
 }
 
 //-------------------------------------------------------------------------
@@ -444,7 +444,7 @@ sal_Bool Ucb::init()
             for (sal_Int32 i = 0; i < aInfos.getLength(); ++i)
             {
                 String aText("    ");
-                aText += UniString(aInfos[i].Scheme);
+                aText += OUString(aInfos[i].Scheme);
                 print(aText);
             }
         }
@@ -650,10 +650,7 @@ uno::Any UcbCommandProcessor::executeCommand( const rtl::OUString& rName,
 
         if ( bPrint )
         {
-            UniString aText( UniString::CreateFromAscii(
-                                RTL_CONSTASCII_STRINGPARAM(
-                                    "Executing command: " ) ) );
-            aText += UniString( rName );
+            OUString aText = "Executing command: " + rName;
             print( aText );
         }
 
@@ -1028,9 +1025,9 @@ void UcbContent::open( const rtl::OUString & rName, const UniString& rInput,
             if ( bPrint )
             {
                 print( "Folder object opened - iterating:" );
-                print( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM(
+                print( OUString(
                     "Content-ID : Title : Size : IsFolder : IsDocument\n"
-                    "-------------------------------------------------" ) ) );
+                    "-------------------------------------------------" ) );
             }
 
             if (nFetchSize > 0)
@@ -1063,31 +1060,24 @@ void UcbContent::open( const rtl::OUString & rName, const UniString& rInput,
 
                 while ( xResultSet->next() )
                 {
-                    UniString aText;
+                    OUString aText;
 
                     if ( bPrint )
                     {
-                        rtl::OUString aId( xContentAccess->
+                        OUString aId( xContentAccess->
                                           queryContentIdentifierString() );
-                        aText += UniString::CreateFromInt32( ++n );
-                        aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM(
-                                               ") " ) );
-                        aText += UniString( aId );
-                        aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM(
-                                               " : " ) );
+                        aText = OUString::valueOf( static_cast<sal_Int64>(++n) ) + ") " + aId + " : ";
                     }
 
                     // Title:
-                    UniString aTitle( xRow->getString( 1 ) );
+                    OUString aTitle( xRow->getString( 1 ) );
                     if ( bPrint )
                     {
                         if ( aTitle.Len() == 0 && xRow->wasNull() )
-                            aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM(
-                                                   "<null>" ) );
+                            aText += "<null>";
                         else
                             aText += aTitle;
-                        aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM(
-                                               " : " ) );
+                        aText += " : ";
                     }
 
                     // Size:
@@ -1095,12 +1085,10 @@ void UcbContent::open( const rtl::OUString & rName, const UniString& rInput,
                     if ( bPrint )
                     {
                         if ( nSize == 0 && xRow->wasNull() )
-                            aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM(
-                                                   "<null>" ) );
+                            aText += "<null>";
                         else
-                            aText += UniString::CreateFromInt32( nSize );
-                        aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM(
-                                               " : " ) );
+                            aText += OUString::valueOf( nSize );
+                        aText += " : ";
                     }
 
                     // IsFolder:
@@ -1111,14 +1099,7 @@ void UcbContent::open( const rtl::OUString & rName, const UniString& rInput,
                             aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM(
                                                    "<null>" ) );
                         else
-                            aText
-                                += bFolder ?
-                                       UniString::CreateFromAscii(
-                                           RTL_CONSTASCII_STRINGPARAM(
-                                               "true" ) ) :
-                                       UniString::CreateFromAscii(
-                                           RTL_CONSTASCII_STRINGPARAM(
-                                               "false" ) );
+                            aText += bFolder ? "true" : "false";
                         aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM(
                                                " : " ) );
                     }
@@ -1132,13 +1113,7 @@ void UcbContent::open( const rtl::OUString & rName, const UniString& rInput,
                                 "<null>" ) );
                         else
                             aText
-                                += bDocument ?
-                                       UniString::CreateFromAscii(
-                                           RTL_CONSTASCII_STRINGPARAM(
-                                               "true" ) ) :
-                                       UniString::CreateFromAscii(
-                                           RTL_CONSTASCII_STRINGPARAM(
-                                               "false" ) ); //  IsDocument
+                                += bDocument ? "true" : "false"; //  IsDocument
                     }
 
                     if ( bPrint )
@@ -1175,11 +1150,7 @@ void UcbContent::open( const rtl::OUString & rName, const UniString& rInput,
     if ( bTiming )
     {
         nTime = Time::GetSystemTicks() - nTime;
-        UniString
-            aText( UniString::CreateFromAscii(
-                       RTL_CONSTASCII_STRINGPARAM( "Operation took " ) ) );
-        aText += rtl::OUString::valueOf(static_cast<sal_Int64>(nTime));
-        aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " ms." ) );
+        OUString aText = "Operation took " + OUString::valueOf(static_cast<sal_Int64>(nTime)) + " ms.";
         print( aText );
     }
 }
@@ -1202,11 +1173,10 @@ void UcbContent::openAll( Ucb& rUCB, bool bPrint, bool bTiming, bool bSort,
 
         if ( bPrint )
         {
-            UniString aText;
+            OUString aText;
             for ( sal_uInt32 i = aEntry.m_nLevel; i != 0; --i )
                 aText += '=';
-            aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "LEVEL " ) );
-            aText += rtl::OUString::valueOf(static_cast<sal_Int64>(aEntry.m_nLevel));
+            aText = aText + "LEVEL " + OUString::valueOf(static_cast<sal_Int64>(aEntry.m_nLevel));
 
             uno::Reference< ucb::XContentIdentifier > xID;
             if ( aEntry.m_bUseIdentifier )
@@ -1215,8 +1185,7 @@ void UcbContent::openAll( Ucb& rUCB, bool bPrint, bool bTiming, bool bSort,
                 xID = aEntry.m_xContent->getIdentifier();
             if ( xID.is() )
             {
-                aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-                aText += UniString( xID->getContentIdentifier() );
+                aText = aText + ": " + xID->getContentIdentifier();
             }
 
             print( aText );
@@ -1248,20 +1217,15 @@ void UcbContent::openAll( Ucb& rUCB, bool bPrint, bool bTiming, bool bSort,
         }
 
         UcbContent( m_rUCB, xChild, m_pOutEdit ).
-            open( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM(
-                                                  "open" ) ),
-                  UniString(), bPrint, false, bSort, &aStack,
+            open( "open",
+                  OUString(), bPrint, false, bSort, &aStack,
                   aEntry.m_nLevel, nFetchSize );
     }
 
     if ( bTiming )
     {
         nTime = Time::GetSystemTicks() - nTime;
-        UniString
-            aText( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM(
-                                                   "Operation took " ) ) );
-        aText += rtl::OUString::valueOf(static_cast<sal_Int64>(nTime));
-        aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " ms." ) );
+        OUString aText = "Operation took "  + OUString::valueOf(static_cast<sal_Int64>(nTime)) + " ms.";
         print( aText );
     }
 }
@@ -1354,14 +1318,11 @@ uno::Sequence< ucb::CommandInfo > UcbContent::getCommands()
             xInfo->getCommands() );
         const ucb::CommandInfo* pCommands = aCommands.getConstArray();
 
-        String aText( UniString::CreateFromAscii(
-                        RTL_CONSTASCII_STRINGPARAM( "Commands:\n" ) ) );
+        String aText("Commands:\n");
         sal_uInt32 nCount = aCommands.getLength();
         for ( sal_uInt32 n = 0; n < nCount; ++n )
         {
-            aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "    " ) );
-            aText += String( pCommands[ n ].Name );
-            aText += '\n';
+            aText = aText + "    " + String( pCommands[ n ].Name ) + "\n";
         }
         print( aText );
 
@@ -1384,14 +1345,11 @@ uno::Sequence< beans::Property > UcbContent::getProperties()
         uno::Sequence< beans::Property > aProps( xInfo->getProperties() );
         const beans::Property* pProps = aProps.getConstArray();
 
-        String aText( UniString::CreateFromAscii(
-                        RTL_CONSTASCII_STRINGPARAM( "Properties:\n" ) ) );
+        OUString aText("Properties:\n");
         sal_uInt32 nCount = aProps.getLength();
         for ( sal_uInt32 n = 0; n < nCount; ++n )
         {
-            aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "    " ) );
-            aText += UniString( pProps[ n ].Name );
-            aText += '\n';
+            aText = aText + "    " + pProps[ n ].Name + "\n";
         }
         print( aText );
 
@@ -1437,10 +1395,7 @@ rtl::OUString UcbContent::getStringPropertyValue( const rtl::OUString& rName )
         const rtl::OUString aValue(
             * static_cast< const rtl::OUString * >( aAny.getValue() ) );
 
-        UniString aText( rName );
-        aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " value: '" ) );
-        aText += UniString( aValue );
-        aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "'" ) );
+        OUString aText = rName + " value: '" + aValue + "'";
         print( aText );
 
         return aValue;
@@ -1479,10 +1434,7 @@ void UcbContent::setStringPropertyValue( const rtl::OUString& rName,
     aAny <<= rValue;
     setPropertyValue( rName, aAny );
 
-    UniString aText( rName );
-    aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " value set to: '" ) );
-    aText += UniString( rValue );
-    aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "'" ) );
+    OUString aText = rName + " value set to: '" + rValue + "'";
     print( aText );
 }
 
@@ -1494,10 +1446,7 @@ void UcbContent::addProperty( const rtl::OUString& rName,
                                                             uno::UNO_QUERY );
     if ( xContainer.is() )
     {
-        UniString aText( UniString::CreateFromAscii(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "Adding property: " ) ) );
-        aText += UniString( rName );
+        OUString aText = "Adding property: " + rName;
         print( aText );
 
         try
@@ -1543,10 +1492,7 @@ void UcbContent::removeProperty( const rtl::OUString& rName )
                                                             uno::UNO_QUERY );
     if ( xContainer.is() )
     {
-        UniString aText( UniString::CreateFromAscii(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "Removing property: " ) ) );
-        aText += UniString( rName );
+        OUString aText = "Removing property: " + rName;
         print( aText );
 
         try
@@ -1628,16 +1574,12 @@ void SAL_CALL UcbContent::contentEvent( const ucb::ContentEvent& evt )
     {
         case ucb::ContentAction::INSERTED:
         {
-            UniString aText( UniString::CreateFromAscii(
-                                RTL_CONSTASCII_STRINGPARAM(
-                                    "contentEvent: INSERTED: " ) ) );
+            OUString aText = "contentEvent: INSERTED: ";
             if ( evt.Content.is() )
             {
                 uno::Reference< ucb::XContentIdentifier > xId(
                                            evt.Content->getIdentifier() );
-                aText += UniString( xId->getContentIdentifier() );
-                aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " - " ) );
-                aText += UniString( evt.Content->getContentType() );
+                aText = aText + xId->getContentIdentifier() + " - " + evt.Content->getContentType();
             }
 
             print( aText );
@@ -1699,9 +1641,7 @@ void SAL_CALL UcbContent::propertiesChange(
         const beans::PropertyChangeEvent* pEvents = evt.getConstArray();
         for ( sal_uInt32 n = 0; n < nCount; ++n )
         {
-            UniString aText( UniString::CreateFromAscii(
-                                RTL_CONSTASCII_STRINGPARAM( "    " ) ) );
-            aText += UniString( pEvents[ n ].PropertyName );
+            OUString aText = "    " + pEvents[ n ].PropertyName;
             print( aText );
         }
     }
@@ -1786,236 +1726,146 @@ MyWin::MyWin( Window *pParent, WinBits nWinStyle,
     m_pTool = new ToolBox( this, WB_3DLOOK | WB_BORDER  | WB_SCROLL );
 
     m_pTool->InsertItem ( MYWIN_ITEMID_CLEAR,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
-                                  "Clear" ) ) );
+                          OUString( "Clear" );
     m_pTool->SetHelpText( MYWIN_ITEMID_CLEAR,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
-                                  "Clear the Output Window" ) ) );
+                          OUString( "Clear the Output Window" );
     m_pTool->InsertSeparator();
     m_pTool->InsertItem ( MYWIN_ITEMID_CREATE,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
-                                "Create" ) ) );
+                          OUString( "Create" );
     m_pTool->SetHelpText( MYWIN_ITEMID_CREATE,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
-                                "Create a content" ) ) );
+                          OUString( "Create a content" );
     m_pTool->InsertItem ( MYWIN_ITEMID_RELEASE,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
-                                "Release" ) ) );
+                          OUString( "Release" ) );
     m_pTool->SetHelpText( MYWIN_ITEMID_RELEASE,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
-                                "Release current content" ) ) );
+                          OUString( "Release current content" );
     m_pTool->InsertSeparator();
     m_pTool->InsertItem ( MYWIN_ITEMID_COMMANDS,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
-                                "Commands" ) ) );
+                          OUString( "Commands" );
     m_pTool->SetHelpText( MYWIN_ITEMID_COMMANDS,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
-                                  "Get Commands supported by the content" ) ) );
+                          OUString( "Get Commands supported by the content" ) );
     m_pTool->InsertItem ( MYWIN_ITEMID_PROPS,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
-                                "Properties" ) ) );
+                          OUString( "Properties" ) ) );
     m_pTool->SetHelpText( MYWIN_ITEMID_PROPS,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
-                                "Get Properties supported by the content" ) ) );
+                          OUString( "Get Properties supported by the content" ) );
     m_pTool->InsertSeparator();
     m_pTool->InsertItem ( MYWIN_ITEMID_ADD_PROP,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
-                                "addProperty" ) ) );
+                          OUString( "addProperty" );
     m_pTool->SetHelpText( MYWIN_ITEMID_ADD_PROP,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
+                          OUString(
                                   "Add a new string(!) property to the content. "
                                   "Type the property name in the entry field and "
                                   "push this button. The default value for the "
-                                  "property will be set to the string 'DefaultValue'" ) ) );
+                                  "property will be set to the string 'DefaultValue'" ) );
     m_pTool->InsertItem ( MYWIN_ITEMID_REMOVE_PROP,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
-                                "removeProperty" ) ) );
+                          OUString( "removeProperty" ) );
     m_pTool->SetHelpText( MYWIN_ITEMID_REMOVE_PROP,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
+                          OUString(
                                   "Removes a property from the content. "
                                   "Type the property name in the entry field and "
-                                  "push this button." ) ) );
+                                  "push this button." ) );
     m_pTool->InsertItem ( MYWIN_ITEMID_GET_PROP,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
-                                "getPropertyValue" ) ) );
+                          OUString( "getPropertyValue" ) );
     m_pTool->SetHelpText( MYWIN_ITEMID_GET_PROP,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
+                          OUString(
                                   "Get a string(!) property value from the content. "
                                   "Type the property name in the entry field and "
-                                  "push this button to obtain the value" ) ) );
+                                  "push this button to obtain the value" ) );
     m_pTool->InsertItem ( MYWIN_ITEMID_SET_PROP,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
-                                "setPropertyValue" ) ) );
+                          OUString( "setPropertyValue" ) );
     m_pTool->SetHelpText( MYWIN_ITEMID_SET_PROP,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
+                          OUString(
                                   "Set a string(!) property value of the content."
                                   "Type the property name in the entry field and "
                                   "push this button to set the value to the string "
-                                  "'NewValue'" ) ) );
+                                  "'NewValue'" ) );
     m_pTool->InsertSeparator();
     m_pTool->InsertItem ( MYWIN_ITEMID_OPEN,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
-                                "Open" ) ) );
+                          OUString( "Open" ) );
     m_pTool->SetHelpText( MYWIN_ITEMID_OPEN,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
-                                "Open the content" ) ) );
+                          OUString( "Open the content" ) );
     m_pTool->InsertItem ( MYWIN_ITEMID_OPEN_ALL,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
-                                "Open All" ) ) );
+                          OUString( "Open All" ) );
     m_pTool->SetHelpText( MYWIN_ITEMID_OPEN_ALL,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
+                          OUString(
                                 "Open the content and all of its"
-                                    " children" ) ) );
+                                    " children" ) );
     m_pTool->InsertItem ( MYWIN_ITEMID_UPDATE,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
-                                "Update" ) ) );
+                          OUString( "Update" ) );
     m_pTool->SetHelpText( MYWIN_ITEMID_UPDATE,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
-                                "Update the content" ) ) );
+                          OUString( "Update the content" ) );
     m_pTool->InsertItem ( MYWIN_ITEMID_SYNCHRONIZE,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
-                                "Synchronize" ) ) );
+                          OUString( "Synchronize" ) );
     m_pTool->SetHelpText( MYWIN_ITEMID_SYNCHRONIZE,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
-                                "Synchronize the content" ) ) );
+                          OUString( "Synchronize the content" ) );
     m_pTool->InsertItem ( MYWIN_ITEMID_SEARCH,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
-                                "Search" ) ) );
+                          OUString( "Search" ) );
     m_pTool->SetHelpText( MYWIN_ITEMID_SEARCH,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
-                                "Search the content" ) ) );
+                          OUString( "Search the content" ) );
 
     m_pTool->InsertItem ( MYWIN_ITEMID_REORGANIZE,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
-                                "Reorganize" ) ) );
+                          OUString( "Reorganize" ) );
     m_pTool->SetHelpText( MYWIN_ITEMID_REORGANIZE,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
-                                "Reorganize the content storage" ) ) );
+                          OUString( "Reorganize the content storage" ) );
 
     m_pTool->InsertSeparator();
     m_pTool->InsertItem ( MYWIN_ITEMID_COPY,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
-                                "Copy" ) ) );
+                          OUString( "Copy" ) );
     m_pTool->SetHelpText( MYWIN_ITEMID_COPY,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
+                          OUString(
                                 "Copy a content. Type the URL of the source "
-                                "content into the entry field." ) ) );
+                                "content into the entry field." ) );
     m_pTool->InsertItem ( MYWIN_ITEMID_MOVE,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
-                                "Move" ) ) );
+                          OUString( "Move" ) );
     m_pTool->SetHelpText( MYWIN_ITEMID_MOVE,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
+                          OUString(
                                 "Move a content. Type the URL of the source "
-                                "content into the entry field." ) ) );
+                                "content into the entry field." ) );
     m_pTool->InsertItem ( MYWIN_ITEMID_DELETE,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
-                                "Delete" ) ) );
+                          OUString( "Delete" ) );
     m_pTool->SetHelpText( MYWIN_ITEMID_DELETE,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
-                                "Delete the content." ) ) );
+                          OUString( "Delete the content." ) );
 
     m_pTool->InsertSeparator();
     m_pTool->InsertItem ( MYWIN_ITEMID_TIMING,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
-                                "Timing" ) ),
+                          OUString( "Timing" ) ),
                           TIB_CHECKABLE | TIB_AUTOCHECK );
     m_pTool->SetHelpText( MYWIN_ITEMID_TIMING,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
+                          OUString(
                                 "Display execution times instead of"
-                                    " output" ) ) );
+                                    " output" ) );
     m_pTool->InsertItem ( MYWIN_ITEMID_SORT,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
-                                "Sort" ) ),
+                          OUString( "Sort" ) ),
                           TIB_CHECKABLE | TIB_AUTOCHECK );
     m_pTool->SetHelpText( MYWIN_ITEMID_SORT,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
-                                "Sort result sets" ) ) );
+                          OUString( "Sort result sets" ) );
     m_pTool->InsertItem ( MYWIN_ITEMID_FETCHSIZE,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
-                                "Fetch Size" ) ) );
+                          OUString( "Fetch Size" ) );
     m_pTool->SetHelpText( MYWIN_ITEMID_FETCHSIZE,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
-                                "Set cached cursor fetch size to positive value" ) ) );
+                          OUString( "Set cached cursor fetch size to positive value" ) );
 
     m_pTool->InsertSeparator();
     m_pTool->InsertItem ( MYWIN_ITEMID_SYS2URI,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
-                                "UNC>URI" ) ) );
+                          OUString( "UNC>URI" ) );
     m_pTool->SetHelpText( MYWIN_ITEMID_SYS2URI,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
+                          OUString(
                                 "Translate 'System File Path' to URI,"
-                                    " if possible" ) ) );
+                                    " if possible" ) );
     m_pTool->InsertItem ( MYWIN_ITEMID_URI2SYS,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
-                                "URI>UNC" ) ) );
+                          OUString( "URI>UNC" ) );
     m_pTool->SetHelpText( MYWIN_ITEMID_URI2SYS,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
+                          OUString(
                                 "Translate URI to 'System File Path',"
-                                    " if possible" ) ) );
+                                    " if possible" ) );
 
     m_pTool->InsertSeparator();
     m_pTool->InsertItem ( MYWIN_ITEMID_OFFLINE,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
-                                "Offline" ) ) );
+                          OUString( "Offline" ) );
     m_pTool->SetHelpText( MYWIN_ITEMID_OFFLINE,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
-                                "Go offline" ) ) );
+                          OUString( "Go offline" ) );
     m_pTool->InsertItem ( MYWIN_ITEMID_ONLINE,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
-                                "Online" ) ) );
+                          OUString( "Online" ) );
     m_pTool->SetHelpText( MYWIN_ITEMID_ONLINE,
-                          UniString::CreateFromAscii(
-                              RTL_CONSTASCII_STRINGPARAM(
-                                "Go back online" ) ) );
+                          OUString( "Go back online" ) );
 
     m_pTool->SetSelectHdl( LINK( this, MyWin, ToolBarHandler ) );
     m_pTool->Show();
@@ -2023,8 +1873,7 @@ MyWin::MyWin( Window *pParent, WinBits nWinStyle,
     // Edit.
     m_pCmdEdit = new Edit( this );
     m_pCmdEdit->SetReadOnly( FALSE );
-    m_pCmdEdit->SetText( UniString::CreateFromAscii(
-                            RTL_CONSTASCII_STRINGPARAM( "file:///" ) ) );
+    m_pCmdEdit->SetText( OUString( "file:///" ) );
     m_pCmdEdit->Show();
 
     // MyOutWindow.
@@ -2069,7 +1918,7 @@ void MyWin::Resize()
 //-------------------------------------------------------------------------
 void MyWin::print( const sal_Char* pText )
 {
-    print( UniString::CreateFromAscii( pText ) );
+    print( OUString( pText ) );
 }
 
 //-------------------------------------------------------------------------
@@ -2088,7 +1937,7 @@ void MyWin::print( const UniString& rText )
 IMPL_LINK( MyWin, ToolBarHandler, ToolBox*, pToolBox )
 {
     USHORT nItemId   = pToolBox->GetCurItemId();
-    UniString aCmdLine = m_pCmdEdit->GetText();
+    OUString aCmdLine = m_pCmdEdit->GetText();
 
     ULONG n = Application::ReleaseSolarMutex();
 
@@ -2106,10 +1955,7 @@ IMPL_LINK( MyWin, ToolBarHandler, ToolBox*, pToolBox )
         case MYWIN_ITEMID_CREATE:
             if ( m_pContent )
             {
-                UniString aText( UniString::CreateFromAscii(
-                                    RTL_CONSTASCII_STRINGPARAM(
-                                        "Content released: " ) ) );
-                aText += m_pContent->getURL();
+                OUString aText = "Content released: " + m_pContent->getURL();
 
                 m_pContent->dispose();
                 m_pContent->release();
@@ -2121,20 +1967,12 @@ IMPL_LINK( MyWin, ToolBarHandler, ToolBox*, pToolBox )
             m_pContent = UcbContent::create( m_aUCB, aCmdLine, m_pOutEdit );
             if ( m_pContent )
             {
-                String aText( UniString::CreateFromAscii(
-                                RTL_CONSTASCII_STRINGPARAM(
-                                    "Created content: " ) ) );
-                aText += String( m_pContent->getURL() );
-                aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " - " ) );
-                aText += String( m_pContent->getType() );
+                OUString aText = "Created content: " + m_pContent->getURL() + " - " + m_pContent->getType();
                 print( aText );
             }
             else
             {
-                String aText( UniString::CreateFromAscii(
-                                RTL_CONSTASCII_STRINGPARAM(
-                                    "Creation failed for content: " ) ) );
-                aText += String( aCmdLine );
+                OUString aText = "Creation failed for content: " + aCmdLine;
                 print( aText );
             }
             break;
@@ -2142,10 +1980,7 @@ IMPL_LINK( MyWin, ToolBarHandler, ToolBox*, pToolBox )
         case MYWIN_ITEMID_RELEASE:
             if ( m_pContent )
             {
-                UniString aText( UniString::CreateFromAscii(
-                                    RTL_CONSTASCII_STRINGPARAM(
-                                        "Content released: " ) ) );
-                aText += m_pContent->getURL();
+                OUString aText = "Content released: " + m_pContent->getURL();
 
                 m_pContent->dispose();
                 m_pContent->release();
@@ -2497,10 +2332,7 @@ void MyApp::Main()
     MyWin *pMyWin = new MyWin( NULL, WB_APP | WB_STDWORK, xFac,
                                aConfigurationKey1, aConfigurationKey2 );
 
-    pMyWin->
-        SetText(
-            UniString::CreateFromAscii(
-                RTL_CONSTASCII_STRINGPARAM( "UCB Demo/Test Application" ) ) );
+    pMyWin->SetText( OUString( "UCB Demo/Test Application" ) );
 
     pMyWin->SetPosSizePixel( 0, 0, 1024, 768 );
 

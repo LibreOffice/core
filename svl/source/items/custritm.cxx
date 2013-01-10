@@ -111,7 +111,7 @@ bool CntUnencodedStringItem::PutValue(const com::sun::star::uno::Any& rVal,
     rtl::OUString aTheValue;
     if (rVal >>= aTheValue)
     {
-        m_aValue = UniString(aTheValue);
+        m_aValue = OUString(aTheValue);
         return true;
     }
     OSL_FAIL("CntUnencodedStringItem::PutValue(): Wrong type");

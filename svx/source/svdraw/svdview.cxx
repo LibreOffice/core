@@ -1254,7 +1254,7 @@ XubString SdrView::GetStatusText()
         aStr.SearchAndReplaceAscii("%3", OUString::valueOf(nCol + 1));
 
 #ifdef DBG_UTIL
-        aStr += UniString( RTL_CONSTASCII_USTRINGPARAM( ", Level " ) );
+        aStr += OUString( ", Level " );
         aStr += OUString::valueOf( sal_Int32( pTextEditOutliner->GetDepth( aSel.nEndPara )) );
 #endif
     }

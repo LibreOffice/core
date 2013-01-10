@@ -497,7 +497,7 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
         nMaxWidth /= nTickUnit;
     else
         nMaxWidth /= aImplRulerUnitTab[mnUnitIndex].nTickUnit;
-    UniString aNumStr(rtl::OUString::valueOf(static_cast<sal_Int32>(nMaxWidth)));
+    OUString aNumStr = OUString::valueOf(static_cast<sal_Int32>(nMaxWidth));
     long nTxtWidth = GetTextWidth( aNumStr );
     const long nTextOff   = 4;
     if ( nTickWidth < nTxtWidth+nTextOff )
@@ -552,7 +552,7 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
                     // 0 is only painted when Margin1 is not equal to zero
                     if ( (mpData->nMargin1Style & RULER_STYLE_INVISIBLE) || (mpData->nMargin1 != 0) )
                     {
-                        aNumStr = (sal_Unicode)'0';
+                        aNumStr = "0";
                         ImplVDrawText( nStart, nCenter, aNumStr );
                     }
                 }
@@ -570,9 +570,9 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
                 if ( !(nTick % nTick3) )
                 {
                     if ( ( mnUnitIndex == RULER_UNIT_CHAR ) || ( mnUnitIndex == RULER_UNIT_LINE ) )
-                        aNumStr = UniString::CreateFromInt32( nTick / nTickUnit );
+                        aNumStr = OUString::valueOf( static_cast<sal_Int64>( nTick / nTickUnit ) );
                     else
-                        aNumStr = UniString::CreateFromInt32( nTick / aImplRulerUnitTab[mnUnitIndex].nTickUnit );
+                        aNumStr = OUString::valueOf( static_cast<sal_Int64>( nTick / aImplRulerUnitTab[mnUnitIndex].nTickUnit ) );
 
                     ImplVDrawText( nStart + n, nCenter, aNumStr, nMin, nMax );
                     ImplVDrawText( nStart - n, nCenter, aNumStr, nMin, nMax );

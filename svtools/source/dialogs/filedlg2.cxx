@@ -67,21 +67,18 @@ KbdListBox::PreNotify( NotifyEvent& rNEvt )
 
             for ( sal_uInt16 i = 1; i < nEntries; i++ )
             {
-                UniString aEntry = GetEntry ( (i + nCurrentPos) % nEntries );
-                aEntry = comphelper::string::stripStart(aEntry, ' ');
-                aEntry.ToUpperAscii();
-                UniString aCompare = rtl::OUString(cCharCode);
-                aCompare.ToUpperAscii();
+                OUString aEntry = GetEntry ( (i + nCurrentPos) % nEntries );
+                aEntry = comphelper::string::stripStart(aEntry, ' ').toAsciiUpperCase();
+                OUString aCompare = OUString(cCharCode).toAsciiUpperCase();
 
-                if ( aEntry.CompareTo( aCompare, 1 ) == COMPARE_EQUAL )
+                if ( aEntry.compareTo( aCompare, 1 ) == COMPARE_EQUAL )
                 {
                     SelectEntryPos ( (i + nCurrentPos) % nEntries );
                     break;
                 }
             }
         }
-        else
-        if ( aKeyEvt.GetKeyCode().GetCode() == KEY_RETURN )
+        else if ( aKeyEvt.GetKeyCode().GetCode() == KEY_RETURN )
         {
             DoubleClick();
         }
@@ -136,7 +133,7 @@ void ImpPathDialog::InitControls()
     Point aPnt( a6Siz.Width(), a6Siz.Height() );
     long nLbH1 = pDlg->LogicToPixel( Size( 0, 93 ), MAP_APPFONT ).Height();
     long nH = 0;
-    UniString aEmptyStr;
+    OUString aEmptyStr;
 
     INITCONTROL( pDirTitel, FixedText, 0,
                  aPnt, aFTSiz, SVT_RESSTR( STR_FILEDLG_DIR ), HID_FILEDLG_DIR );
@@ -243,8 +240,7 @@ IMPL_LINK( ImpPathDialog, SelectHdl, ListBox *, p )
 {
     if( p == pDriveList )
     {
-        UniString aDrive( pDriveList->GetSelectEntry(), 0, 2);
-        aDrive += '\\';
+        OUString aDrive = OUString( pDriveList->GetSelectEntry().Copy(0, 2) ) + "\\";
         SetPath( aDrive );
     }
     else
@@ -252,11 +248,11 @@ IMPL_LINK( ImpPathDialog, SelectHdl, ListBox *, p )
     {
         // isolate the pure name of the entry
         // removing trainling stuff and leading spaces
-        UniString aEntry( pDirList->GetSelectEntry() );
+        OUString aEntry( pDirList->GetSelectEntry() );
         aEntry = comphelper::string::stripStart(aEntry, ' ');
 
-        sal_uInt16 nPos = aEntry.Search( '/' );
-        aEntry.Erase( nPos );
+        sal_uInt16 nPos = aEntry.indexOf( '/' );
+        aEntry.replaceAt( nPos, aEntry.getLength(), "" );
 
         // build the absolute path to the selected item
         DirEntry aNewPath;
@@ -268,7 +264,7 @@ IMPL_LINK( ImpPathDialog, SelectHdl, ListBox *, p )
         if( nCurPos < nDirCount )
             aNewPath = aNewPath[nDirCount-nCurPos-1];
         else
-            aNewPath += aEntry;
+            aNewPath += String(aEntry);
 
         pEdit->SetText( aNewPath.GetFull() );
     }
@@ -342,11 +338,11 @@ IMPL_LINK( ImpPathDialog, DblClickHdl, ListBox*, pBox )
 {
     // isolate the pure name of the entry
     // removing trainling stuff and leading spaces
-    UniString aEntry( pBox->GetSelectEntry() );
+    OUString aEntry( pBox->GetSelectEntry() );
 
     aEntry = comphelper::string::stripStart(aEntry, ' ');
-    sal_uInt16 nPos = aEntry.Search( '/' );
-    aEntry.Erase( nPos );
+    sal_uInt16 nPos = aEntry.indexOf( '/' );
+    aEntry.replaceAt( nPos, aEntry.getLength(), "" );
 
     // build the absolute path to the selected item
     DirEntry aNewPath;
@@ -363,10 +359,10 @@ IMPL_LINK( ImpPathDialog, DblClickHdl, ListBox*, pBox )
         if( nCurPos < nDirCount )
             aNewPath = aNewPath[nDirCount-nCurPos-1];
         else
-            aNewPath += aEntry;
+            aNewPath += String(aEntry);
     }
     else
-        aNewPath += aEntry;
+        aNewPath += String(aEntry);
 
     pSvPathDialog->EnterWait();
 
@@ -391,7 +387,7 @@ IMPL_LINK( ImpPathDialog, DblClickHdl, ListBox*, pBox )
 
 void ImpPathDialog::UpdateEntries( const sal_Bool )
 {
-    UniString aTabString;
+    OUString aTabString;
     DirEntry aTmpPath;
     aTmpPath.ToAbs();
 
@@ -402,10 +398,9 @@ void ImpPathDialog::UpdateEntries( const sal_Bool )
 
     for( sal_uInt16 i = nDirCount; i > 0; i-- )
     {
-        UniString aName( aTabString );
-        aName += aTmpPath[i-1].GetName();
+        OUString aName = aTabString + aTmpPath[i-1].GetName();
         pDirList->InsertEntry( aName );
-        aTabString.AppendAscii( "  ", 2 );
+        aTabString += "  ";
     }
 
     // scan the directory
@@ -465,7 +460,7 @@ void ImpPathDialog::UpdateDirs( const DirEntry& rTmpPath )
     pDirList->Invalidate();
     pDirList->Update();
 
-    UniString aDirName = rTmpPath.GetFull();
+    OUString aDirName = rTmpPath.GetFull();
     if( pDirPath )
         pDirPath->SetText( aDirName );
     else
@@ -481,8 +476,8 @@ sal_Bool ImpPathDialog::IsFileOk( const DirEntry& rDirEntry )
         // Datei vorhanden ?
         if( ! rDirEntry.Exists() )
         {
-            UniString aQueryTxt( SVT_RESSTR( STR_FILEDLG_ASKNEWDIR ) );
-            aQueryTxt.SearchAndReplaceAscii( "%s", rDirEntry.GetFull() );
+            OUString aQueryTxt( SVT_RESSTR( STR_FILEDLG_ASKNEWDIR ) );
+            aQueryTxt = aQueryTxt.replaceFirst( "%s", rDirEntry.GetFull() );
             QueryBox aQuery( GetPathDialog(),
                              WB_YES_NO | WB_DEF_YES,
                              aQueryTxt  );
@@ -493,10 +488,7 @@ sal_Bool ImpPathDialog::IsFileOk( const DirEntry& rDirEntry )
         }
         if( !FileStat( rDirEntry ).IsKind( FSYS_KIND_DIR ) )
         {
-            UniString aBoxText( SVT_RESSTR( STR_FILEDLG_CANTOPENDIR ) );
-            aBoxText.AppendAscii( "\n[" );
-            aBoxText += rDirEntry.GetFull();
-            aBoxText.AppendAscii( "]" );
+            OUString aBoxText = SVT_RESSTR( STR_FILEDLG_CANTOPENDIR ) + "\n[" + rDirEntry.GetFull() + "]" ;
             InfoBox aBox( GetPathDialog(), aBoxText );
             aBox.Execute();
             return sal_False;
@@ -598,26 +590,25 @@ void ImpPathDialog::PreExecute()
         for( i = 0; i < nCount; ++i )
         {
             DirEntry& rEntry = aDir[i];
-            UniString aStr    = rEntry.GetFull( FSYS_STYLE_HOST, sal_False );
+            OUString aStr    = rEntry.GetFull( FSYS_STYLE_HOST, sal_False );
 
-            UniString aVolume = rEntry.GetVolume() ;
-            aStr.ToUpperAscii();
-            if ( aVolume.Len() )
+            OUString aVolume = rEntry.GetVolume() ;
+            aStr = aStr.toAsciiUpperCase();
+            if ( aVolume.getLength() )
             {
-                aStr += ' ';
-                aStr += aVolume;
+                aStr = aStr + " " + aVolume;
             }
-            pDriveList->InsertEntry( aStr );
+            pDriveList->InsertEntry( String(aStr) );
 
         }
-        UniString aPathStr = aPath.GetFull();
+        OUString aPathStr = aPath.GetFull();
 
         for ( i = 0; i < pDriveList->GetEntryCount(); ++i )
         {
-            UniString aEntry = pDriveList->GetEntry(i);
-            xub_StrLen nLen   = aEntry.Len();
+            OUString aEntry = pDriveList->GetEntry(i);
+            xub_StrLen nLen   = aEntry.getLength();
             nLen = nLen > 2 ? 2 : nLen;
-            if ( aEntry.CompareIgnoreCaseToAscii( aPathStr, nLen ) == COMPARE_EQUAL )
+            if ( aEntry.compareTo( aPathStr, nLen ) == COMPARE_EQUAL )
             {
                 pDriveList->SelectEntryPos(i);
                 break;
