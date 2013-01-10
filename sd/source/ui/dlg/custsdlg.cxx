@@ -199,7 +199,7 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
             OUString aStrCopy( SdResId( STR_COPY_CUSTOMSHOW ) );
 
             sal_uInt16 nStrPos = aStr.indexOf( aStrCopy );
-            sal_uInt16 nNum = 1;
+            sal_Int32 nNum = 1;
             if( nStrPos == STRING_NOTFOUND )
             {
                 aStr = aStr + " ("  + aStrCopy + OUString::valueOf( nNum ) + ")";
