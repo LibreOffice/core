@@ -218,7 +218,7 @@ void Calendar::ImplInit( WinBits nWinStyle )
 
     // Tagestexte anlegen
     for (sal_Int32 i = 0; i < 31; ++i)
-        mpDayText[i] = new UniString(rtl::OUString::valueOf(i+1));
+        mpDayText[i] = new String(OUString::valueOf(i+1));
 
     maDragScrollTimer.SetTimeoutHdl( STATIC_LINK( this, Calendar, ScrollHdl ) );
     maDragScrollTimer.SetTimeout( GetSettings().GetMouseSettings().GetScrollRepeat() );
@@ -1289,7 +1289,7 @@ void Calendar::ImplShowMenu( const Point& rPos, const Date& rDate )
             pYearPopupMenus[i]->InsertItem( nYearIdCount+j,
                     maCalendarWrapper.getDisplayName(
                         i18n::CalendarDisplayIndex::MONTH, j-1, 1));
-        aPopupMenu.InsertItem( 10+i, UniString::CreateFromInt32( nYear+i ) );
+        aPopupMenu.InsertItem( 10+i, OUString::valueOf( static_cast<sal_Int32>(nYear+i) ) );
         aPopupMenu.SetPopupMenu( 10+i, pYearPopupMenus[i] );
         nYearIdCount += 1000;
     }

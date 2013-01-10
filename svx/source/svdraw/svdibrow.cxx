@@ -321,7 +321,7 @@ String _SdrItemBrowserControl::GetCellText(long _nRow, sal_uInt16 _nColId) const
                 switch (_nColId)
                 {
                     case ITEMBROWSER_WHICHCOL_ID:
-                        sRet = UniString::CreateFromInt32(pEntry->nWhichId); break;
+                        sRet = OUString::valueOf( static_cast<sal_Int32>(pEntry->nWhichId) ); break;
                     case ITEMBROWSER_STATECOL_ID:
                     {
                         switch (pEntry->eState)
@@ -518,9 +518,9 @@ bool _SdrItemBrowserControl::BegChangeEntry(sal_uIntPtr nPos)
         aNeuNam += pEntry->GetItemTypeStr();
         if (pEntry->bCanNum) {
             aNeuNam.AppendAscii(": ");
-            aNeuNam += UniString::CreateFromInt32(pEntry->nMin);
+            aNeuNam += OUString::valueOf(pEntry->nMin);
             aNeuNam.AppendAscii("..");
-            aNeuNam += UniString::CreateFromInt32(pEntry->nMax);
+            aNeuNam += OUString::valueOf(pEntry->nMax);
         }
         aNeuNam.AppendAscii(" - Type 'del' to reset to default.");
         pParent->SetText(aNeuNam);
@@ -1019,7 +1019,7 @@ void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItem
                         if (aEntry.bCanNum)
                         {
                             aEntry.aValue.InsertAscii(": ",0);
-                            aEntry.aValue.Insert(UniString::CreateFromInt32(aEntry.nVal),0);
+                            aEntry.aValue.Insert(OUString::valueOf(aEntry.nVal),0);
                         }
                     }
                     else

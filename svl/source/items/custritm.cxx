@@ -99,7 +99,7 @@ CntUnencodedStringItem::GetPresentation(SfxItemPresentation, SfxMapUnit,
 bool CntUnencodedStringItem::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8)
     const
 {
-    rVal <<= rtl::OUString(m_aValue);
+    rVal <<= OUString(m_aValue);
     return true;
 }
 
@@ -108,10 +108,10 @@ bool CntUnencodedStringItem::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt
 bool CntUnencodedStringItem::PutValue(const com::sun::star::uno::Any& rVal,
                                          sal_uInt8)
 {
-    rtl::OUString aTheValue;
+    OUString aTheValue;
     if (rVal >>= aTheValue)
     {
-        m_aValue = UniString(aTheValue);
+        m_aValue = aTheValue;
         return true;
     }
     OSL_FAIL("CntUnencodedStringItem::PutValue(): Wrong type");
