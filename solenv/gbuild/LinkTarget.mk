@@ -632,9 +632,9 @@ endif
 endef
 
 define gb_LinkTarget_add_cflags
-$(call gb_LinkTarget_get_target,$(1)) : T_CFLAGS += $(2)
+$(call gb_LinkTarget_get_target,$(1)) : T_CFLAGS_APPEND += $(2)
 ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_LinkTarget_get_dep_target,$(1)) : T_CFLAGS += $(2)
+$(call gb_LinkTarget_get_dep_target,$(1)) : T_CFLAGS_APPEND += $(2)
 endif
 
 endef
@@ -648,11 +648,11 @@ endef
 
 define gb_LinkTarget_add_cxxflags
 $(call gb_LinkTarget_get_headers_target,$(1)) \
-$(call gb_LinkTarget_get_target,$(1)) : T_CXXFLAGS += $(2)
+$(call gb_LinkTarget_get_target,$(1)) : T_CXXFLAGS_APPEND += $(2)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : PCH_CXXFLAGS += $(2)
 ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_LinkTarget_get_dep_target,$(1)) : T_CXXFLAGS += $(2)
+$(call gb_LinkTarget_get_dep_target,$(1)) : T_CXXFLAGS_APPEND += $(2)
 $(call gb_LinkTarget_get_dep_target,$(1)) : PCH_CXXFLAGS += $(2)
 endif
 endef
@@ -664,9 +664,9 @@ $$(call gb_Output_error,\
 endef
 
 define gb_LinkTarget_add_objcxxflags
-$(call gb_LinkTarget_get_target,$(1)) : T_OBJCXXFLAGS += $(2)
+$(call gb_LinkTarget_get_target,$(1)) : T_OBJCXXFLAGS_APPEND += $(2)
 ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_LinkTarget_get_dep_target,$(1)) : T_OBJCXXFLAGS += $(2)
+$(call gb_LinkTarget_get_dep_target,$(1)) : T_OBJCXXFLAGS_APPEND += $(2)
 endif
 endef
 
@@ -683,9 +683,9 @@ $$(call gb_Output_error,\
 endef
 
 define gb_LinkTarget_add_objcflags
-$(call gb_LinkTarget_get_target,$(1)) : T_OBJCFLAGS += $(2)
+$(call gb_LinkTarget_get_target,$(1)) : T_OBJCFLAGS_APPEND += $(2)
 ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_LinkTarget_get_dep_target,$(1)) : T_OBJCFLAGS += $(2)
+$(call gb_LinkTarget_get_dep_target,$(1)) : T_OBJCFLAGS_APPEND += $(2)
 endif
 
 endef
