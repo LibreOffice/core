@@ -22,11 +22,9 @@
 #include "comphelper/string.hxx"
 #include "cppuhelper/implementationentry.hxx"
 #include "osl/diagnose.h"
-#include "osl/module.hxx"
 #include "rtl/ustring.hxx"
 #include "sal/config.h"
 #include "sal/types.h"
-#include "stdio.h"
 #include "svl/filenotation.hxx"
 #include "svl/inettype.hxx"
 #include "svl/urihelper.hxx"
@@ -52,14 +50,10 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/range/b2drange.hxx>
-#include <boost/bind.hpp>
 #include <boost/optional.hpp>
 #include <boost/ptr_container/ptr_set.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
-#include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/static_assert.hpp>
@@ -101,7 +95,6 @@
 #include <com/sun/star/chart2/XDefaultSizeTransmitter.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -182,7 +175,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
@@ -199,7 +191,6 @@
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 #include <com/sun/star/sheet/XCellRangeReferrer.hpp>
-#include <com/sun/star/svg/XSVGWriter.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
@@ -235,15 +226,10 @@
 #include <com/sun/star/ui/dialogs/XWizardController.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Exception.hpp>
-#include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/uno/XWeak.hpp>
 #include <com/sun/star/util/Color.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
@@ -257,7 +243,6 @@
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
-#include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
@@ -266,8 +251,6 @@
 #include <com/sun/star/view/SelectionType.hpp>
 #include <com/sun/star/view/XPrintable.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <com/sun/star/xml/sax/Writer.hpp>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <comphelper/accimplaccess.hxx>
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/configurationhelper.hxx>
@@ -279,7 +262,6 @@
 #include <comphelper/property.hxx>
 #include <comphelper/propertysethelper.hxx>
 #include <comphelper/propertysetinfo.hxx>
-#include <comphelper/scopeguard.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicedecl.hxx>
@@ -317,7 +299,6 @@
 #include <org/freedesktop/PackageKit/SyncDbusSessionHelper.hpp>
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>
-#include <osl/endian.h>
 #include <osl/file.h>
 #include <osl/file.hxx>
 #include <osl/module.h>
@@ -328,7 +309,6 @@
 #include <rtl/crc.h>
 #include <rtl/instance.hxx>
 #include <rtl/logfile.hxx>
-#include <rtl/math.h>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
@@ -376,7 +356,6 @@
 #include <toolkit/helper/property.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/unohlp.hxx>
-#include <tools/bigint.hxx>
 #include <tools/color.hxx>
 #include <tools/config.hxx>
 #include <tools/date.hxx>
@@ -415,7 +394,6 @@
 #include <unotools/configpaths.hxx>
 #include <unotools/dynamicmenuoptions.hxx>
 #include <unotools/extendedsecurityoptions.hxx>
-#include <unotools/fontcvt.hxx>
 #include <unotools/historyoptions.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -428,6 +406,7 @@
 #include <unotools/ucbhelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/viewoptions.hxx>
+#include <vcl/FilterConfigItem.hxx>
 #include <vcl/accel.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/animate.hxx>
@@ -436,7 +415,6 @@
 #include <vcl/bmpacc.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/button.hxx>
-#include <vcl/canvastools.hxx>
 #include <vcl/controllayout.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/cvtgrf.hxx>
@@ -453,7 +431,7 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/graphictools.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <vcl/help.hxx>
 #include <vcl/helper.hxx>
 #include <vcl/i18nhelp.hxx>
@@ -470,12 +448,9 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
-#include <vcl/pngread.hxx>
-#include <vcl/pngwrite.hxx>
 #include <vcl/prgsbar.hxx>
 #include <vcl/print.hxx>
 #include <vcl/salbtype.hxx>
-#include <vcl/salctype.hxx>
 #include <vcl/salgtype.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/scrbar.hxx>
@@ -486,7 +461,6 @@
 #include <vcl/status.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/svgdata.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/textview.hxx>
@@ -498,6 +472,7 @@
 #include <vcl/waitobj.hxx>
 #include <vcl/wall.hxx>
 #include <vcl/window.hxx>
+#include <vcl/wmf.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/xtextedt.hxx>
 #include <vector>

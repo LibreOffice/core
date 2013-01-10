@@ -277,6 +277,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/macros.h>
+#include <sal/types.h>
 #include <set>
 #include <sfx2/app.hxx>
 #include <sfx2/basedlgs.hxx>
@@ -330,7 +331,6 @@
 #include <svtools/ctrlbox.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/ehdl.hxx>
-#include <svtools/filter.hxx>
 #include <svtools/imagemgr.hxx>
 #include <svtools/imapcirc.hxx>
 #include <svtools/imappoly.hxx>
@@ -388,10 +388,12 @@
 #include <vcl/fixed.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <vcl/group.hxx>
 #include <vcl/hatch.hxx>
 #include <vcl/help.hxx>
 #include <vcl/image.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/metaact.hxx>

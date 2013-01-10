@@ -197,17 +197,19 @@
 #include <string>
 #include <svl/lngmisc.hxx>
 #include <svtools/grfmgr.hxx>
-#include <svtools/wmf.hxx>
 #include <tools/color.hxx>
 #include <tools/globname.hxx>
 #include <tools/resmgr.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
+#include <unotools/localfilehelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/temporaryfonts.hxx>
+#include <vcl/wmf.hxx>
 #include <vector>
 #include <xmloff/odffields.hxx>
 

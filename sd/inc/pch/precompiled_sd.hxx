@@ -539,14 +539,12 @@
 #include <svl/visitem.hxx>
 #include <svl/whiter.hxx>
 #include <svl/zforlist.hxx>
-#include <svtools/FilterConfigItem.hxx>
 #include <svtools/cliplistener.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/embedtransfer.hxx>
-#include <svtools/filter.hxx>
 #include <svtools/htmlout.hxx>
 #include <svtools/imapcirc.hxx>
 #include <svtools/imapobj.hxx>
@@ -567,7 +565,6 @@
 #include <svtools/unoevent.hxx>
 #include <svtools/unoimap.hxx>
 #include <svtools/valueset.hxx>
-#include <svtools/wmf.hxx>
 #include <svx/AccessibleShape.hxx>
 #include <svx/AccessibleShapeInfo.hxx>
 #include <svx/DescriptionGenerator.hxx>
@@ -774,6 +771,7 @@
 #include <tools/diagnose_ex.h>
 #include <tools/errinf.hxx>
 #include <tools/fsys.hxx>
+#include <tools/gen.hxx>
 #include <tools/globname.hxx>
 #include <tools/helpers.hxx>
 #include <tools/link.hxx>
@@ -809,6 +807,7 @@
 #include <unotools/useroptions.hxx>
 #include <unotools/viewoptions.hxx>
 #include <utility>
+#include <vcl/FilterConfigItem.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bmpacc.hxx>
@@ -828,6 +827,7 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <vcl/group.hxx>
 #include <vcl/help.hxx>
 #include <vcl/image.hxx>
@@ -861,6 +861,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/window.hxx>
+#include <vcl/wmf.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vector>
 #include <xmloff/settingsstore.hxx>

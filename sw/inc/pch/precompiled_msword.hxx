@@ -26,6 +26,7 @@
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
+#include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/drawing/XConnectableShape.hpp>
 #include <com/sun/star/drawing/XConnectorShape.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
@@ -193,7 +194,6 @@
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <svtools/embedhlp.hxx>
-#include <svtools/filter.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/imapobj.hxx>
 #include <svtools/miscopt.hxx>
@@ -244,12 +244,14 @@
 #include <vcl/cvtgrf.hxx>
 #include <vcl/font.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/salbtype.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/temporaryfonts.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/wmf.hxx>
 #include <vector>
 #include <writerfilter/doctok/sprmids.hxx>
 #include <xmloff/odffields.hxx>

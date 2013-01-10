@@ -730,7 +730,6 @@
 #include <svtools/ehdl.hxx>
 #include <svtools/embedhlp.hxx>
 #include <svtools/embedtransfer.hxx>
-#include <svtools/filter.hxx>
 #include <svtools/grfmgr.hxx>
 #include <svtools/htmlcfg.hxx>
 #include <svtools/htmlkywd.hxx>
@@ -1008,6 +1007,7 @@
 #include <vcl/font.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <vcl/help.hxx>
 #include <vcl/image.hxx>
 #include <vcl/inputctx.hxx>
@@ -1039,6 +1039,7 @@
 #include <vcl/vclenum.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
+#include <vcl/wmf.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vector>
 #include <xmloff/DocumentSettingsContext.hxx>

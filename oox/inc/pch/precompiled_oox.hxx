@@ -342,7 +342,6 @@
 #include <string.h>
 #include <svl/languageoptions.hxx>
 #include <svtools/grfmgr.hxx>
-#include <svtools/wmf.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdotext.hxx>
@@ -360,6 +359,7 @@
 #include <vcl/cvtgrf.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/wmf.hxx>
 #include <vector>
 #include <xmlscript/xmldlg_imexp.hxx>
 

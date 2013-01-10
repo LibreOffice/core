@@ -648,7 +648,6 @@
 #include <svtools/ehdl.hxx>
 #include <svtools/embedhlp.hxx>
 #include <svtools/embedtransfer.hxx>
-#include <svtools/filter.hxx>
 #include <svtools/imapobj.hxx>
 #include <svtools/insdlg.hxx>
 #include <svtools/langtab.hxx>
@@ -872,6 +871,7 @@
 #include <vcl/field.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <vcl/hatch.hxx>
 #include <vcl/help.hxx>
 #include <vcl/image.hxx>

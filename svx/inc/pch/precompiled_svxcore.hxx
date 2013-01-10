@@ -31,7 +31,6 @@
 #include "osl/diagnose.h"
 #include "sal/config.h"
 #include "sal/types.h"
-#include "svtools/filter.hxx"
 #include "svtools/treelistentry.hxx"
 #include "toolkit/unohlp.hxx"
 #include "uno/lbnames.h"
@@ -500,7 +499,6 @@
 #include <svl/urlbmk.hxx>
 #include <svl/whiter.hxx>
 #include <svl/zforlist.hxx>
-#include <svtools/FilterConfigItem.hxx>
 #include <svtools/accessibilityoptions.hxx>
 #include <svtools/borderhelper.hxx>
 #include <svtools/colorcfg.hxx>
@@ -508,7 +506,6 @@
 #include <svtools/ctrltool.hxx>
 #include <svtools/embedhlp.hxx>
 #include <svtools/filechangedchecker.hxx>
-#include <svtools/filter.hxx>
 #include <svtools/fltcall.hxx>
 #include <svtools/grfmgr.hxx>
 #include <svtools/langtab.hxx>
@@ -521,7 +518,6 @@
 #include <svtools/unoevent.hxx>
 #include <svtools/unoimap.hxx>
 #include <svtools/valueset.hxx>
-#include <svtools/wmf.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -559,6 +555,7 @@
 #include <unotools/syslocale.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <vcl/FilterConfigItem.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bmpacc.hxx>
@@ -572,6 +569,7 @@
 #include <vcl/gfxlink.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <vcl/graphictools.hxx>
 #include <vcl/hatch.hxx>
 #include <vcl/jobset.hxx>
@@ -592,6 +590,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
+#include <vcl/wmf.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vector>
 #include <xmloff/xmlictxt.hxx>
