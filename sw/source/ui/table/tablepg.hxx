@@ -38,34 +38,28 @@ struct TColumn
 
 class SwFormatTablePage : public SfxTabPage
 {
-    FixedLine        aOptionsFL;
-    FixedText       aNameFT;
-    TableNameEdit   aNameED;
-    FixedText       aWidthFT;
-    PercentField    aWidthMF;
-    CheckBox        aRelWidthCB;
+    TableNameEdit*  m_pNameED;
+    FixedText*      m_pWidthFT;
+    PercentFieldWrap m_aWidthMF;
+    CheckBox*       m_pRelWidthCB;
 
-    FixedLine        aPosFL;
-    RadioButton     aFullBtn;
-    RadioButton     aLeftBtn;
-    RadioButton     aFromLeftBtn;
-    RadioButton     aRightBtn;
-    RadioButton     aCenterBtn;
-    RadioButton     aFreeBtn;
+    RadioButton*    m_pFullBtn;
+    RadioButton*    m_pLeftBtn;
+    RadioButton*    m_pFromLeftBtn;
+    RadioButton*    m_pRightBtn;
+    RadioButton*    m_pCenterBtn;
+    RadioButton*    m_pFreeBtn;
 
-    FixedLine       aDistFL;
-    FixedText       aLeftFT;
-    PercentField    aLeftMF;
-    FixedText       aRightFT;
-    PercentField    aRightMF;
-    FixedText       aTopFT;
-    MetricField     aTopMF;
-    FixedText       aBottomFT;
-    MetricField     aBottomMF;
+    FixedText*      m_pLeftFT;
+    PercentFieldWrap m_aLeftMF;
+    FixedText*      m_pRightFT;
+    PercentFieldWrap m_aRightMF;
+    FixedText*      m_pTopFT;
+    MetricField*    m_pTopMF;
+    FixedText*      m_pBottomFT;
+    MetricField*    m_pBottomMF;
 
-    FixedLine       aPropertiesFL;
-    FixedText       aTextDirectionFT;
-    ListBox         aTextDirectionLB;
+    ListBox*        m_pTextDirectionLB;
 
     SwTableRep*     pTblData;
     SwTwips         nSaveWidth;
@@ -76,7 +70,7 @@ class SwFormatTablePage : public SfxTabPage
     sal_Bool            bHtmlMode : 1;
 
     void        Init();
-    void        ModifyHdl( Edit* pEdit );
+    void        ModifyHdl(const Edit* pEdit);
 
     DECL_LINK( AutoClickHdl, CheckBox * );
     DECL_LINK( RelWidthClickHdl, CheckBox * );

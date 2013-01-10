@@ -46,17 +46,24 @@ public:
 
     PercentFieldWrap();
     void set(MetricField *pField);
+    const MetricField* get() const { return m_pField; }
     void SetUpHdl(const Link& rLink) { m_pField->SetUpHdl(rLink); }
     void SetDownHdl(const Link& rLink) { m_pField->SetDownHdl(rLink); }
     void SetLoseFocusHdl(const Link& rLink) { m_pField->SetLoseFocusHdl(rLink); }
     void SetMetric(FieldUnit eUnit) { ::SetMetric(*m_pField, eUnit); }
     void Enable(bool bEnable = true, bool bChild = true) { m_pField->Enable(bEnable, bChild); }
+    bool HasFocus() const { return m_pField->HasFocus(); }
     void SetAccessibleName(const OUString& rName) { m_pField->SetAccessibleName(rName); }
     void SetText(const OUString& rStr) { m_pField->SetText(rStr); }
+    void SaveValue() { m_pField->SaveValue(); }
+    OUString GetSavedValue() const { return m_pField->GetSavedValue(); }
+    OUString GetText() const { return m_pField->GetText(); }
     void SetMetricFieldMin(sal_Int64 nNewMin) { m_pField->SetMin(nNewMin); }
     void SetMetricFieldMax(sal_Int64 nNewMax) { m_pField->SetMax(nNewMax); }
 
     void SetValue(sal_Int64 nNewValue, FieldUnit eInUnit = FUNIT_NONE);
+
+    void SetLast(sal_Int64 nNewLast) { m_pField->SetLast(nNewLast); }
 
     void SetPrcntValue(sal_Int64 nNewValue, FieldUnit eInUnit = FUNIT_NONE);
 
