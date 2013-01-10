@@ -594,7 +594,7 @@ const XubString& SdrMarkList::GetMarkDescription() const
             }
 
             aNam.Insert(sal_Unicode(' '), 0);
-            aNam.Insert(UniString::CreateFromInt32(nAnz), 0);
+            aNam.Insert(OUString::valueOf( static_cast<sal_Int32>(nAnz) ), 0);
         }
 
         ((SdrMarkList*)(this))->maMarkName = aNam;
@@ -694,7 +694,7 @@ const XubString& SdrMarkList::GetPointMarkDescription(sal_Bool bGlue) const
             }
 
             aNam.Insert(sal_Unicode(' '), 0);
-            aNam.Insert(UniString::CreateFromInt32(nMarkPtObjAnz), 0);
+            aNam.Insert(OUString::valueOf( static_cast<sal_Int32>(nMarkPtObjAnz) ), 0);
         }
 
         XubString aStr1;
@@ -706,7 +706,7 @@ const XubString& SdrMarkList::GetPointMarkDescription(sal_Bool bGlue) const
         else
         {
             aStr1 = (ImpGetResStr(bGlue ? STR_ViewMarkedGluePoints : STR_ViewMarkedPoints));
-            aStr1.SearchAndReplaceAscii("%2", UniString::CreateFromInt32(nMarkPtAnz));
+            aStr1.SearchAndReplaceAscii("%2", OUString::valueOf( static_cast<sal_Int32>(nMarkPtAnz) ));
         }
 
         aStr1.SearchAndReplaceAscii("%1", aNam);

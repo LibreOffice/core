@@ -648,8 +648,7 @@ SfxItemPresentation SdrFractionItem::GetPresentation(
     }
     else
     {
-        rText = UniString();
-        rText += sal_Unicode('?');
+        rText = OUString("?");
     }
 
     if(ePresentation == SFX_ITEM_PRESENTATION_COMPLETE)
@@ -701,8 +700,7 @@ SfxItemPresentation SdrScaleItem::GetPresentation(
     }
     else
     {
-        rText = UniString();
-        rText += sal_Unicode('?');
+        rText = OUString("?");
     }
 
     if(ePresentation == SFX_ITEM_PRESENTATION_COMPLETE)
@@ -1351,8 +1349,7 @@ SfxItemPresentation SdrTextAniAmountItem::GetPresentation(
 
     if(nValue < 0)
     {
-        rText = OUString::valueOf(-nValue);
-        rText += UniString(RTL_CONSTASCII_USTRINGPARAM("pixel"));
+        rText = OUString::valueOf(-nValue) + "pixel";
     }
     else
     {

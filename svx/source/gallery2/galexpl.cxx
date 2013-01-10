@@ -150,7 +150,6 @@ bool GalleryExplorer::FillObjList( const sal_uInt32 nThemeId, std::vector<rtl::O
     if (!FillObjList(nThemeId, aObjList))
         return false;
 
-    // Convert UniString to rtl::OUString.
     std::vector<rtl::OUString> aList;
     aList.reserve(aObjList.size());
     std::vector<String>::const_iterator it = aObjList.begin(), itEnd = aObjList.end();
