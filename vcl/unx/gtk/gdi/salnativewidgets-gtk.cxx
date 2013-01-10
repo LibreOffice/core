@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_version.h>
 
 #include "vcl/svapp.hxx"
 
@@ -4173,6 +4174,9 @@ static void NWAddWidgetToCacheWindow( GtkWidget* widget, SalX11Screen nScreen )
         if ( !rData.gCacheWindow )
         {
             rData.gCacheWindow = gtk_window_new( GTK_WINDOW_TOPLEVEL );
+            g_object_set_data( G_OBJECT( rData.gCacheWindow ), "libo-version",
+                               (gpointer)LIBO_VERSION_DOTTED );
+
             GdkScreen* pScreen = gdk_display_get_screen( gdk_display_get_default(),
                                                          nScreen.getXScreen() );
             if( pScreen )

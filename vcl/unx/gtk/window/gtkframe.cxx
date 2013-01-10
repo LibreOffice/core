@@ -1071,11 +1071,7 @@ void GtkSalFrame::Init( SalFrame* pParent, sal_uLong nStyle )
         m_pWindow = gtk_widget_new( GTK_TYPE_WINDOW, "type", eWinType,
                                     "visible", FALSE, NULL );
     g_object_set_data( G_OBJECT( m_pWindow ), "SalFrame", this );
-
-    static char pVersion[16] = "";
-    if( pVersion[0] == '\0' )
-        g_sprintf( pVersion, "%d", SUPD );
-    g_object_set_data( G_OBJECT( m_pWindow ), "libo-version", pVersion );
+    g_object_set_data( G_OBJECT( m_pWindow ), "libo-version", (gpointer)LIBO_VERSION_DOTTED);
 
     // force wm class hint
     m_nExtStyle = ~0;

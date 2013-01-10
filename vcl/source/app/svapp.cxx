@@ -205,6 +205,10 @@ Application* GetpApp()
 
 Application::Application()
 {
+    // useful for themes at least, perhaps extensions too
+    rtl::OUString aVar("LIBO_VERSION"), aValue(LIBO_VERSION_DOTTED);
+    osl_setEnvironment(aVar.pData, aValue.pData);
+
     if( ! ImplGetSVData() )
         ImplInitSVData();
     ImplGetSVData()->mpApp = this;
