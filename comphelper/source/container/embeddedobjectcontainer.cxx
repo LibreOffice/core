@@ -722,7 +722,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
         rName = CreateUniqueObjectName();
 
     // objects without persistance are not really stored by the method
-       if ( xObj.is() && StoreEmbeddedObject( xObj, rName, sal_True ) )
+    if ( xObj.is() && StoreEmbeddedObject( xObj, rName, sal_True ) )
     {
         xResult = Get_Impl( rName, xObj);
         if ( !xResult.is() )
