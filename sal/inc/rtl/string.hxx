@@ -1413,8 +1413,9 @@ public:
 
       @param    c   a character.
       @return   a string with the string representation of the argument.
+      @deprecated just use the "+" or "+=" operator
     */
-    static OString valueOf( sal_Char c ) SAL_THROW(())
+    SAL_DEPRECATED_INTERNAL("use the + or += operator") static OString valueOf( sal_Char c ) SAL_THROW(())
     {
         return OString( &c, 1 );
     }
@@ -1427,8 +1428,9 @@ public:
       @param    i           a int32.
       @param    radix       the radix (between 2 and 36)
       @return   a string with the string representation of the argument.
+      @deprecated use fromInt(sal_Int64,sal_Int16)
     */
-    static OString valueOf( sal_Int32 i, sal_Int16 radix = 10 ) SAL_THROW(())
+    SAL_DEPRECATED_INTERNAL("use fromInt") static OString valueOf( sal_Int32 i, sal_Int16 radix = 10 ) SAL_THROW(())
     {
         sal_Char aBuf[RTL_STR_MAX_VALUEOFINT32];
         rtl_String* pNewData = 0;
@@ -1444,8 +1446,26 @@ public:
       @param    ll          a int64.
       @param    radix       the radix (between 2 and 36)
       @return   a string with the string representation of the argument.
+      @deprecated use fromInt(sal_Int64,sal_Int16)
     */
-    static OString valueOf( sal_Int64 ll, sal_Int16 radix = 10 ) SAL_THROW(())
+    SAL_DEPRECATED_INTERNAL("use fromInt") static OString valueOf( sal_Int64 ll, sal_Int16 radix = 10 ) SAL_THROW(())
+    {
+        return fromInt( ll, radix );
+    }
+
+    /**
+      Returns the string representation of the long argument.
+      This is here because when choosing which conversion for overloaded
+      functions is better, the standard treats all integer conversions the same.
+
+      This function can't be used for language specific conversion.
+
+      @param    ll          a int64.
+      @param    radix       the radix (between 2 and 36)
+      @return   a string with the string representation of the argument.
+      @since LibreOffice 4.1
+    */
+    static OString fromInt( sal_Int64 ll, sal_Int16 radix = 10 )
     {
         sal_Char aBuf[RTL_STR_MAX_VALUEOFINT64];
         rtl_String* pNewData = 0;
@@ -1460,8 +1480,23 @@ public:
 
       @param    f           a float.
       @return   a string with the string representation of the argument.
+      @deprecated use fromFloat(float)
     */
-    static OString valueOf( float f ) SAL_THROW(())
+    SAL_DEPRECATED_INTERNAL("use fromFloat") static OString valueOf( float f ) SAL_THROW(())
+    {
+        return fromFloat(f);
+    }
+
+    /**
+      Returns the string representation of the float argument.
+
+      This function can't be used for language specific conversion.
+
+      @param    f           a float.
+      @return   a string with the string representation of the argument.
+      @since LibreOffice 4.1
+    */
+    static OString fromFloat( float f )
     {
         sal_Char aBuf[RTL_STR_MAX_VALUEOFFLOAT];
         rtl_String* pNewData = 0;
@@ -1476,8 +1511,23 @@ public:
 
       @param    d           a double.
       @return   a string with the string representation of the argument.
+      @deprecated use fromDouble(double)
     */
-    static OString valueOf( double d ) SAL_THROW(())
+    SAL_DEPRECATED_INTERNAL("use fromDouble") static OString valueOf( double d ) SAL_THROW(())
+    {
+        return fromDouble(d);
+    }
+
+    /**
+      Returns the string representation of the double argument.
+
+      This function can't be used for language specific conversion.
+
+      @param    d           a double.
+      @return   a string with the string representation of the argument.
+      @since LibreOffice 4.1
+    */
+    static OString fromDouble( double d )
     {
         sal_Char aBuf[RTL_STR_MAX_VALUEOFDOUBLE];
         rtl_String* pNewData = 0;
