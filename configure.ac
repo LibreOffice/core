@@ -867,8 +867,7 @@ AC_ARG_ENABLE(cairo-canvas,
 
 AC_ARG_ENABLE(opengl,
     AS_HELP_STRING([--disable-opengl],
-        [Determines whether to build the OpenGL 3D slide transitions component.]),
-,enable_opengl=yes)
+        [Determines whether to build the OpenGL 3D slide transitions component.]))
 
 AC_ARG_ENABLE(dbus,
     AS_HELP_STRING([--disable-dbus],
@@ -9702,47 +9701,59 @@ dnl ===================================================================
 AC_MSG_CHECKING([whether to build the OpenGL Transitions component])
 ENABLE_OPENGL=
 
-if test "$_os" = "Darwin"; then
+if test -z "$enable_opengl"; then
+    if test $_os = WINNT; then
+        # By default disable the OpenGL transitions for Windows (the code doesn't even compile
+        # currently). In other words, use --enable-opengl only if you plan to hack on that code for
+        # Windows.
+        enable_opengl=no
+    else
+        enable_opengl=yes
+    fi
+fi
+
+if test "x$enable_opengl" = "xno"; then
+    AC_MSG_RESULT([no])
+elif test "$_os" = "Darwin"; then
     # We use frameworks on Mac OS X, no need for detail checks
     ENABLE_OPENGL=TRUE
     SYSTEM_MESA_HEADERS=YES
     AC_MSG_RESULT([yes])
+elif test $_os = WINNT; then
+    # Experimental: try to use OpenGL on Windows
+    ENABLE_OPENGL=TRUE
+    # We need the internal "Mesa" headers.
+    SYSTEM_MESA_HEADERS=NO
+    BUILD_TYPE="$BUILD_TYPE MESA"
+    AC_MSG_RESULT([yes])
 else
-    if test "x$enable_opengl" != "xno"; then
-        if test "$_os" != "WINNT"; then
-            save_LDFLAGS=$LDFLAGS
-            LDFLAGS="$LDFLAGS -lm"
-            AC_MSG_RESULT([yes])
-            AC_CHECK_LIB([GL], [main], [:],
-                      [AC_MSG_ERROR(libGL not installed or functional)], [])
-            AC_CHECK_LIB([GLU], [main], [:],
-                      [AC_MSG_ERROR(libGLU not installed or functional)], [])
-            ENABLE_OPENGL=TRUE
-            LDFLAGS=$save_LDFLAGS
+    save_LDFLAGS=$LDFLAGS
+    LDFLAGS="$LDFLAGS -lm"
+    AC_MSG_RESULT([yes])
+    AC_CHECK_LIB([GL], [main], [:],
+              [AC_MSG_ERROR(libGL not installed or functional)], [])
+    AC_CHECK_LIB([GLU], [main], [:],
+              [AC_MSG_ERROR(libGLU not installed or functional)], [])
+    ENABLE_OPENGL=TRUE
+    LDFLAGS=$save_LDFLAGS
 
-            dnl ===================================================================
-            dnl Check for system Mesa
-            dnl ===================================================================
-            AC_MSG_CHECKING([which Mesa headers to use])
-            if test "$with_system_mesa_headers" = "yes"; then
-                AC_MSG_RESULT([external])
-                SYSTEM_MESA_HEADERS=YES
-                AC_LANG_PUSH(C)
-                AC_CHECK_HEADER(GL/glxext.h, [],
-                   [ AC_MSG_ERROR(mesa headers not found.)], [#include <GL/glx.h>])
-                AC_MSG_CHECKING([whether GL/glxext.h defines PFNGLXBINDTEXIMAGEEXTPROC])
-                AC_EGREP_HEADER(PFNGLXBINDTEXIMAGEEXTPROC, GL/glxext.h, [AC_MSG_RESULT([yes])], AC_MSG_ERROR(no))
-                AC_LANG_POP(C)
-            else
-                AC_MSG_RESULT([internal])
-                SYSTEM_MESA_HEADERS=NO
-                BUILD_TYPE="$BUILD_TYPE MESA"
-            fi
-        else
-            AC_MSG_RESULT([not on Windows])
-        fi
+    dnl ===================================================================
+    dnl Check for system Mesa
+    dnl ===================================================================
+    AC_MSG_CHECKING([which Mesa headers to use])
+    if test "$with_system_mesa_headers" = "yes"; then
+        AC_MSG_RESULT([external])
+        SYSTEM_MESA_HEADERS=YES
+        AC_LANG_PUSH(C)
+        AC_CHECK_HEADER(GL/glxext.h, [],
+           [ AC_MSG_ERROR(mesa headers not found.)], [#include <GL/glx.h>])
+        AC_MSG_CHECKING([whether GL/glxext.h defines PFNGLXBINDTEXIMAGEEXTPROC])
+        AC_EGREP_HEADER(PFNGLXBINDTEXIMAGEEXTPROC, GL/glxext.h, [AC_MSG_RESULT([yes])], AC_MSG_ERROR(no))
+        AC_LANG_POP(C)
     else
-       AC_MSG_RESULT([no])
+        AC_MSG_RESULT([internal])
+        SYSTEM_MESA_HEADERS=NO
+        BUILD_TYPE="$BUILD_TYPE MESA"
     fi
 fi
 
