@@ -65,7 +65,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
 		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \
 		$(if $(COMPILER_PLUGINS),$(gb_COMPILER_PLUGINS)) \
-		$(T_CFLAGS) \
+		$(T_CFLAGS) $(T_CFLAGS_APPEND) \
 		-c $(3) \
 		-o $(1) \
 		$(call gb_cxx_dep_generation_options,$(1),$(4)) \
@@ -83,7 +83,7 @@ $(call gb_Helper_abbreviate_dirs,\
         ICECC=no CCACHE_DISABLE=1 \
 	$(gb_CC) \
 		$(DEFS) \
-		$(T_CFLAGS) \
+		$(T_CFLAGS) $(T_CFLAGS_APPEND) \
 		-c $(2) \
 		-I$(dir $(2)) \
 		$(INCLUDE) \
@@ -105,7 +105,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
 		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CXXFLAGS_WERROR)) \
 		$(if $(COMPILER_PLUGINS),$(gb_COMPILER_PLUGINS)) \
-		$(T_CXXFLAGS) \
+		$(T_CXXFLAGS) $(T_CXXFLAGS_APPEND) \
 		-c $(3) \
 		-o $(1) \
 		$(call gb_cxx_dep_generation_options,$(1),$(4)) \
@@ -124,7 +124,7 @@ $(call gb_Helper_abbreviate_dirs,\
         ICECC=no CCACHE_DISABLE=1 \
 	$(gb_CXX) \
 		$(DEFS) \
-		$(T_CXXFLAGS) \
+		$(T_CXXFLAGS) $(T_CXXFLAGS_APPEND) \
 		-c $(2) \
 		-I$(dir $(2)) \
 		$(INCLUDE) \
@@ -142,7 +142,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(DEFS) \
 		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
 		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CXXFLAGS_WERROR)) \
-		$(T_OBJCXXFLAGS) \
+		$(T_OBJCXXFLAGS) $(T_OBJCXXFLAGS_APPEND) \
 		-c $(3) \
 		-o $(1) \
 		-MMD -MT $(1) \
@@ -161,7 +161,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(DEFS) \
 		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
 		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \
-		$(T_OBJCFLAGS) \
+		$(T_OBJCFLAGS) $(T_OBJCFLAGS_APPEND) \
 		-c $(3) \
 		-o $(1) \
 		-MMD -MT $(1) \
