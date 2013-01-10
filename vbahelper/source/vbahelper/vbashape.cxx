@@ -329,11 +329,11 @@ ScVbaShape::TextFrame() throw (uno::RuntimeException)
     uno::Reference< lang::XServiceInfo > xServiceInfo( m_xModel, uno::UNO_QUERY_THROW );
     if( xServiceInfo->supportsService( "com.sun.star.sheet.SpreadsheetDocument" ) )
     {
-        uno::Reference< lang::XMultiServiceFactory > xSF( comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
+        uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
         uno::Sequence< uno::Any > aArgs(2);
         aArgs[0] = uno::makeAny( getParent() );
         aArgs[1] <<= m_xShape;
-        uno::Reference< uno::XInterface > xTextFrame( xSF->createInstanceWithArguments( "ooo.vba.excel.TextFrame" , aArgs ) , uno::UNO_QUERY_THROW );
+        uno::Reference< uno::XInterface > xTextFrame = xContext->getServiceManager()->createInstanceWithArgumentsAndContext( "ooo.vba.excel.TextFrame" , aArgs, xContext );
         return uno::makeAny( xTextFrame );
     }
 
@@ -666,11 +666,11 @@ ScVbaShape::WrapFormat() throw (uno::RuntimeException)
     uno::Reference< lang::XServiceInfo > xServiceInfo( m_xModel, uno::UNO_QUERY_THROW );
     if( xServiceInfo->supportsService( "com.sun.star.text.TextDocument" ))
     {
-        uno::Reference< lang::XMultiServiceFactory > xSF( comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
+        uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
         uno::Sequence< uno::Any > aArgs(2);
         aArgs[0] = uno::makeAny( getParent() );
         aArgs[1] <<= m_xShape;
-        uno::Reference< uno::XInterface > xWrapFormat( xSF->createInstanceWithArguments( "ooo.vba.word.WrapFormat" , aArgs ) , uno::UNO_QUERY_THROW );
+        uno::Reference< uno::XInterface > xWrapFormat = xContext->getServiceManager()->createInstanceWithArgumentsAndContext( "ooo.vba.word.WrapFormat" , aArgs, xContext );
         return uno::makeAny( xWrapFormat );
     }
     throw uno::RuntimeException( "Not implemented" , uno::Reference< uno::XInterface >() );
