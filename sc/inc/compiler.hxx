@@ -331,6 +331,7 @@ private:
     ExtendedErrorDetection  meExtendedErrorDetection;
     bool        mbCloseBrackets;            // whether to close open brackets automatically, default TRUE
     bool        mbRewind;                   // whether symbol is to be rewound to some step during lexical analysis
+    std::vector<sal_uInt16> maExternalFiles;
 
     bool   NextNewToken(bool bInArray = false);
 
