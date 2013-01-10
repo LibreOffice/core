@@ -2368,9 +2368,7 @@ void MSWordExportBase::WriteText()
         }
         else if ( pNd->IsTableNode() )
         {
-            SwTable * pTable = &pNd->GetTableNode()->GetTable();
-            OutputSectionBreaks( &pTable->GetTableFmt()->GetAttrSet(), *pNd );
-            mpTableInfo->processSwTable( pTable );
+            mpTableInfo->processSwTable( &pNd->GetTableNode()->GetTable() );
         }
         else if ( pNd->IsSectionNode() && TXT_MAINTEXT == nTxtTyp )
             OutputSectionNode( *pNd->GetSectionNode() );
