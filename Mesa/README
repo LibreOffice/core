@@ -1,1 +1,2 @@
-A copy of OpenGL headers from Mesa, needed on older Linux distros
+A copy of OpenGL headers from Mesa and Khronos. Needed on older Linux
+distros and for Windows.
