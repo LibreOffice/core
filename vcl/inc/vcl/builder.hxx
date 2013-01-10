@@ -250,6 +250,9 @@ private:
     PackingData get_window_packing_data(const Window *pWindow) const;
     void set_window_packing_position(const Window *pWindow, sal_Int32 nPosition);
 
+    Window* prepareWidgetOwnScrolling(Window *pParent, WinBits &rWinStyle);
+    void cleanupWidgetOwnScrolling(Window *pScrollParent, Window *pWindow, stringmap &rMap);
+
     //Helpers to retrofit all the existing code to the builder
     static void reorderWithinParent(Window &rWindow, sal_uInt16 nNewPosition);
 };

@@ -702,6 +702,33 @@ bool VclBuilder::extractImage(const OString &id, stringmap &rMap)
     return false;
 }
 
+Window* VclBuilder::prepareWidgetOwnScrolling(Window *pParent, WinBits &rWinStyle)
+{
+    //For Widgets that manage their own scrolling, if one appears as a child of
+    //a scrolling window shoehorn that scrolling settings to this widget and
+    //return the real parent to use
+    if (pParent && pParent->GetType() == WINDOW_SCROLLWINDOW)
+    {
+        WinBits nScrollBits = pParent->GetStyle();
+        nScrollBits &= (WB_AUTOHSCROLL|WB_HSCROLL|WB_AUTOVSCROLL|WB_VSCROLL);
+        rWinStyle |= nScrollBits;
+        pParent = pParent->GetParent();
+    }
+
+    return pParent;
+}
+
+void VclBuilder::cleanupWidgetOwnScrolling(Window *pScrollParent, Window *pWindow, stringmap &rMap)
+{
+    //remove the redundant scrolling parent
+    sal_Int32 nWidthReq = pScrollParent->get_width_request();
+    rMap[OString("width-request")] = OString::valueOf(nWidthReq);
+    sal_Int32 nHeightReq = pScrollParent->get_height_request();
+    rMap[OString("height-request")] = OString::valueOf(nHeightReq);
+
+    m_pParserState->m_aRedundantParentWidgets[pScrollParent] = pWindow;
+}
+
 #ifndef DISABLE_DYNLOADING
 extern "C" { static void SAL_CALL thisModule() {} }
 #endif
@@ -895,7 +922,12 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         //   everything over to SvTreeViewBox
         //d) remove the users of makeSvTreeViewBox
         extractModel(id, rMap);
-        pWindow = new ListBox(pParent, WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE);
+        WinBits nWinStyle = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
+        //ListBox manages its own scrolling,
+        Window *pRealParent = prepareWidgetOwnScrolling(pParent, nWinStyle);
+        pWindow = new ListBox(pRealParent, nWinStyle);
+        if (pRealParent != pParent)
+            cleanupWidgetOwnScrolling(pParent, pWindow, rMap);
     }
     else if (name == "GtkLabel")
     {
@@ -957,32 +989,11 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         extractBuffer(id, rMap);
 
         WinBits nWinStyle = WB_LEFT | WB_BORDER;
-        //VclMultiLineEdit manage their own scrolling,
-        //so if it appears as a child of a scrolling window
-        //shoehorn that scrolling settings to this
-        //widget and remove the parent
-        Window *pScrollParent = NULL;
-        if (pParent && pParent->GetType() == WINDOW_SCROLLWINDOW)
-        {
-            WinBits nScrollBits = pParent->GetStyle();
-            nScrollBits &= (WB_AUTOHSCROLL|WB_HSCROLL|WB_AUTOVSCROLL|WB_VSCROLL);
-            nWinStyle |= nScrollBits;
-
-            pScrollParent = pParent;
-            pParent = pParent->GetParent();
-        }
-
-        pWindow = new VclMultiLineEdit(pParent, nWinStyle);
-
-        if (pScrollParent)
-        {
-            sal_Int32 nWidthReq = pScrollParent->get_width_request();
-            rMap[OString("width-request")] = OString::valueOf(nWidthReq);
-            sal_Int32 nHeightReq = pScrollParent->get_height_request();
-            rMap[OString("height-request")] = OString::valueOf(nHeightReq);
-
-            m_pParserState->m_aRedundantParentWidgets[pScrollParent] = pWindow;
-        }
+        //VclMultiLineEdit manages its own scrolling,
+        Window *pRealParent = prepareWidgetOwnScrolling(pParent, nWinStyle);
+        pWindow = new VclMultiLineEdit(pRealParent, nWinStyle);
+        if (pRealParent != pParent)
+            cleanupWidgetOwnScrolling(pParent, pWindow, rMap);
     }
     else
     {
@@ -1892,8 +1903,12 @@ void VclBuilder::applyPackingProperty(Window *pCurrent,
 
     if (pCurrent->GetType() == WINDOW_SCROLLWINDOW)
     {
-        pCurrent = m_pParserState->m_aRedundantParentWidgets[pCurrent];
-        assert(pCurrent);
+        std::map<Window*, Window*>::iterator aFind = m_pParserState->m_aRedundantParentWidgets.find(pCurrent);
+        if (aFind != m_pParserState->m_aRedundantParentWidgets.end())
+        {
+            pCurrent = aFind->second;
+            assert(pCurrent);
+        }
     }
 
     while (reader.nextAttribute(&nsId, &name))
