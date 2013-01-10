@@ -88,6 +88,7 @@ private:
         // create the dump
         SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
         SwDoc* pDoc = pTxtDoc->GetDocShell()->GetDoc();
+        pDoc->GetCurrentViewShell()->CalcLayout();
         SwRootFrm* pLayout = pDoc->GetCurrentLayout();
         pLayout->dumpAsXml(pXmlWriter);
 
