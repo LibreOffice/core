@@ -198,14 +198,14 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
             OUString aStr( pShow->GetName() );
             OUString aStrCopy( SdResId( STR_COPY_CUSTOMSHOW ) );
 
-            sal_uInt16 nStrPos = aStr.indexOf( aStrCopy );
+            sal_Int32 nStrPos = aStr.indexOf( aStrCopy );
             sal_Int32 nNum = 1;
-            if( nStrPos == STRING_NOTFOUND )
+            if( nStrPos < 0 )
             {
                 aStr = aStr + " ("  + aStrCopy + OUString::valueOf( nNum ) + ")";
                 nStrPos = aStr.indexOf( aStrCopy );
             }
-            nStrPos = nStrPos + (sal_uInt16)aStrCopy.getLength();
+            nStrPos = nStrPos + aStrCopy.getLength();
             // Um nicht ins Nirvana zu greifen (--> Endlosschleife)
             if( nStrPos >= aStr.getLength() )
             {
