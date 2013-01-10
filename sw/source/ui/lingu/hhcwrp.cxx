@@ -103,21 +103,21 @@ SwHHCWrapper::SwHHCWrapper(
                                 pTargetFont,
                                 nConvOptions,
                                 bIsInteractive ),
-    mrWrtShell( pSwView->GetWrtShell() )
+    mpView( pSwView ),
+    mpWin( &pSwView->GetEditWin() ),
+    mrWrtShell( pSwView->GetWrtShell() ),
+    mpConvArgs( 0 ),
+    mnLastPos( 0 ),
+    mnUnitOffset( 0 ),
+    mnPageCount( 0 ),
+    mnPageStart( 0 ),
+    mbIsDrawObj( sal_False ),
+    mbIsOtherCntnt( bOther ),
+    mbStartChk( bOther ),
+    mbIsSelection( bSelection ),
+    mbStartDone( bOther || bStart ),
+    mbEndDone( sal_False )
 {
-    mpConvArgs      = 0;
-    mnLastPos       = 0;
-    mnUnitOffset    = 0;
-
-    mpView          = pSwView;
-    mpWin           = &pSwView->GetEditWin();
-    mbIsDrawObj     = sal_False;
-    mbIsOtherCntnt  = mbStartChk     = bOther;
-    mbIsSelection   = bSelection;
-    mbStartDone  = bOther || bStart;
-    mbEndDone    = sal_False;
-//    bLastRet    = sal_True;
-    mnPageCount = mnPageStart = 0;
 }
 
 
