@@ -1326,8 +1326,8 @@ Size VclScrolledWindow::getVisibleChildSize() const
 bool VclScrolledWindow::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
 {
     bool bRet = VclBin::set_property(rKey, rValue);
-    m_aVScroll.Show(GetStyle() & WB_VERT);
-    m_aHScroll.Show(GetStyle() & WB_HORZ);
+    m_aVScroll.Show((GetStyle() & WB_VSCROLL) != 0);
+    m_aHScroll.Show((GetStyle() & WB_HSCROLL) != 0);
     return bRet;
 }
 
