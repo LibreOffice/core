@@ -1,0 +1,4 @@
+These source files are not built, but let's keep them until somebody
+has verified whether there is some Windows-specific code in them that
+is useful and isn't present in the code in ../generic, which now is
+for both X11 and Windows.
