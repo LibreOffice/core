@@ -23,7 +23,7 @@
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
@@ -63,10 +63,6 @@ class BaseContainer : public BaseLock
     // member
 
     protected:
-
-        /** @short  reference to an uno service manager, which can be used
-                    to create own needed services. */
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
 
         // TODO
         css::uno::WeakReference< css::util::XRefreshable > m_xRefreshBroadcaster;
@@ -144,7 +140,7 @@ class BaseContainer : public BaseLock
                     by this special method. Of course this method must be called first before
                     any other interface method is used.
 
-            @param  xSMGR
+            @param  rxContext
                     reference to the uno service manager, which created this service instance.
 
             @param  sImplementationName
@@ -159,7 +155,7 @@ class BaseContainer : public BaseLock
                     specify, which sub container of the used filter cache
                     must be wrapped by this container interface.
          */
-        virtual void init(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR              ,
+        virtual void init(const css::uno::Reference< css::uno::XComponentContext >&     rxContext          ,
                           const ::rtl::OUString&                                        sImplementationName,
                           const css::uno::Sequence< ::rtl::OUString >&                  lServiceNames      ,
                                 FilterCache::EItemType                                  eType              );

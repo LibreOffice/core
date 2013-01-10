@@ -41,6 +41,8 @@ class FilterFactory : public ::cppu::ImplInheritanceHelper1< BaseContainer      
     //-------------------------------------------
     // native interface
 
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+
     public:
 
         //---------------------------------------
@@ -49,10 +51,10 @@ class FilterFactory : public ::cppu::ImplInheritanceHelper1< BaseContainer      
         /** @short  standard ctor to connect this interface wrapper to
                     the global filter cache instance ...
 
-            @param  xSMGR
+            @param  rxContext
                     reference to the uno service manager, which created this service instance.
          */
-        FilterFactory(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
+        FilterFactory(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
 
         //---------------------------------------
 

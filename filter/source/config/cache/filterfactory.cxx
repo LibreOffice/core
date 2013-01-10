@@ -49,9 +49,10 @@ namespace filter{
             case_sensitive                  compare "sort_prop" case sensitive              false
  */
 
-FilterFactory::FilterFactory(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
+FilterFactory::FilterFactory(const css::uno::Reference< css::uno::XComponentContext >& rxContext)
+    : m_xContext(rxContext)
 {
-    BaseContainer::init(xSMGR                                         ,
+    BaseContainer::init(rxContext                                         ,
                         FilterFactory::impl_getImplementationName()   ,
                         FilterFactory::impl_getSupportedServiceNames(),
                         FilterCache::E_FILTER                         );
@@ -127,7 +128,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstan
     // create service instance
     css::uno::Reference< css::uno::XInterface > xFilter;
     if (!sFilterService.isEmpty())
-        xFilter = m_xSMGR->createInstance(sFilterService);
+        xFilter = m_xContext->getServiceManager()->createInstanceWithContext(sFilterService, m_xContext);
 
     // initialize filter
     css::uno::Reference< css::lang::XInitialization > xInit(xFilter, css::uno::UNO_QUERY);
@@ -478,14 +479,14 @@ OUStringList FilterFactory::impl_getListOfInstalledModules() const
 {
     // SAFE -> ----------------------
     ::osl::ResettableMutexGuard aLock(m_aLock);
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aLock.clear();
     // <- SAFE ----------------------
 
     try
     {
         css::uno::Reference< css::container::XNameAccess > xModuleConfig(
-            ::comphelper::ConfigurationHelper::openConfig( comphelper::getComponentContext(xSMGR),
+            ::comphelper::ConfigurationHelper::openConfig( xContext,
                                                           CFGPACKAGE_OOO_MODULES,
                                                           ::comphelper::ConfigurationHelper::E_READONLY),
             css::uno::UNO_QUERY_THROW);
@@ -561,14 +562,14 @@ OUStringList FilterFactory::impl_readSortedFilterListFromConfig(const ::rtl::OUS
 {
     // SAFE -> ----------------------
     ::osl::ResettableMutexGuard aLock(m_aLock);
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aLock.clear();
     // <- SAFE ----------------------
 
     try
     {
         css::uno::Reference< css::container::XNameAccess > xUISortConfig(
-            ::comphelper::ConfigurationHelper::openConfig( comphelper::getComponentContext(xSMGR),
+            ::comphelper::ConfigurationHelper::openConfig( xContext,
                                                           CFGPACKAGE_TD_UISORT,
                                                           ::comphelper::ConfigurationHelper::E_READONLY),
             css::uno::UNO_QUERY_THROW);
@@ -614,7 +615,7 @@ css::uno::Sequence< ::rtl::OUString > FilterFactory::impl_getSupportedServiceNam
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::impl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
 {
-    FilterFactory* pNew = new FilterFactory(xSMGR);
+    FilterFactory* pNew = new FilterFactory( comphelper::getComponentContext(xSMGR) );
     return css::uno::Reference< css::uno::XInterface >(static_cast< css::lang::XMultiServiceFactory* >(pNew), css::uno::UNO_QUERY);
 }
 

@@ -20,7 +20,6 @@
 #define __FILTER_CONFIG_CACHEUPDATELISTENER_HXX_
 
 #include "filtercache.hxx"
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/util/XChangesListener.hpp>
 #include <salhelper/singletonref.hxx>
@@ -44,10 +43,6 @@ class CacheUpdateListener : public BaseLock // must be the first one to guarante
     // member
 
     private:
-
-        /** @short  reference to an uno service manager, which can be used
-                    to create own needed services. */
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
 
         /** @short  reference to the singleton(!) filter cache implementation,
                     which should be updated by this thread. */
@@ -77,18 +72,13 @@ class CacheUpdateListener : public BaseLock // must be the first one to guarante
 
             @see    startListening()
 
-            @param  xSMGR
-                    reference to a service manager, which can be used to create
-                    own needed uno services.
-
             @param  xConfigAccess
                     the configuration access, where this instance should listen for changes.
 
             @param  eConfigType
                     specify the type of configuration.
          */
-        CacheUpdateListener(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR,
-                            FilterCache &rFilterCache,
+        CacheUpdateListener(FilterCache &rFilterCache,
                             const css::uno::Reference< css::uno::XInterface >& xConfigAccess,
                             FilterCache::EItemType eConfigType);
 

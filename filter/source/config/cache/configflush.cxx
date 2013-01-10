@@ -134,7 +134,7 @@ void SAL_CALL ConfigFlush::removeRefreshListener(const css::uno::Reference< css:
 css::uno::Sequence< ::rtl::OUString > ConfigFlush::impl_getSupportedServiceNames()
 {
     css::uno::Sequence< ::rtl::OUString > lServiceNames(1);
-    lServiceNames[0] = SERVICE_FILTERCONFIGREFRESH;
+    lServiceNames[0] = "com.sun.star.document.FilterConfigRefresh";
     return lServiceNames;
 }
 

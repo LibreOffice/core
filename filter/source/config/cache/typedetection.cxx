@@ -38,9 +38,10 @@
 namespace filter{
     namespace config{
 
-TypeDetection::TypeDetection(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
+TypeDetection::TypeDetection(const css::uno::Reference< css::uno::XComponentContext >& rxContext)
+   : m_xContext(rxContext)
 {
-    BaseContainer::init(xSMGR                                         ,
+    BaseContainer::init(rxContext                                     ,
                         TypeDetection::impl_getImplementationName()   ,
                         TypeDetection::impl_getSupportedServiceNames(),
                         FilterCache::E_TYPE                           );
@@ -64,7 +65,7 @@ TypeDetection::~TypeDetection()
 
     css::util::URL  aURL;
     aURL.Complete = sURL;
-    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(comphelper::getComponentContext(m_xSMGR)));
+    css::uno::Reference< css::util::XURLTransformer > xParser( css::util::URLTransformer::create(m_xContext) );
     xParser->parseStrict(aURL);
 
     // set std types as minimum requirement first!
@@ -248,7 +249,7 @@ struct EqualByName : public std::binary_function<FlatDetectionInfo, FlatDetectio
 
     css::util::URL  aURL;
     aURL.Complete = sURL;
-    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(comphelper::getComponentContext(m_xSMGR)));
+    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(m_xContext));
     xParser->parseStrict(aURL);
 
     rtl::OUString aSelectedFilter = stlDescriptor.getUnpackedValueOrDefault(
@@ -1033,11 +1034,11 @@ void TypeDetection::impl_seekStreamToZero(comphelper::MediaDescriptor& rDescript
     impl_seekStreamToZero(rDescriptor);
 
     css::uno::Reference< css::document::XExtendedFilterDetection > xDetector;
-    css::uno::Reference< css::lang::XMultiServiceFactory >         xSMGR;
+    css::uno::Reference< css::uno::XComponentContext >         xContext;
 
     // SAFE ->
     ::osl::ResettableMutexGuard aLock(m_aLock);
-    xSMGR = m_xSMGR;
+    xContext = m_xContext;
     aLock.clear();
     // <- SAFE
 
@@ -1050,7 +1051,7 @@ void TypeDetection::impl_seekStreamToZero(comphelper::MediaDescriptor& rDescript
         // should handle errors during creation of such services more
         // gracefully .-)
         xDetector = css::uno::Reference< css::document::XExtendedFilterDetection >(
-                xSMGR->createInstance(sDetectService),
+                xContext->getServiceManager()->createInstanceWithContext(sDetectService, xContext),
                 css::uno::UNO_QUERY_THROW);
     }
     catch (...)
@@ -1107,12 +1108,6 @@ void TypeDetection::impl_seekStreamToZero(comphelper::MediaDescriptor& rDescript
 
 ::rtl::OUString TypeDetection::impl_askUserForTypeAndFilterIfAllowed(::comphelper::MediaDescriptor& rDescriptor)
 {
-    // SAFE ->
-    ::osl::ResettableMutexGuard aLock(m_aLock);
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
-    aLock.clear();
-    // <- SAFE
-
     css::uno::Reference< css::task::XInteractionHandler > xInteraction =
         rDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_INTERACTIONHANDLER(),
         css::uno::Reference< css::task::XInteractionHandler >());
@@ -1281,7 +1276,7 @@ css::uno::Sequence< OUString > TypeDetection::impl_getSupportedServiceNames()
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL TypeDetection::impl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
 {
-    TypeDetection* pNew = new TypeDetection(xSMGR);
+    TypeDetection* pNew = new TypeDetection( comphelper::getComponentContext(xSMGR) );
     return css::uno::Reference< css::uno::XInterface >(static_cast< css::document::XTypeDetection* >(pNew), css::uno::UNO_QUERY);
 }
 

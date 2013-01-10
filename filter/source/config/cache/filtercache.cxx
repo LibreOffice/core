@@ -58,7 +58,6 @@ namespace filter{
 
 FilterCache::FilterCache()
     : BaseLock    (                                        )
-    , m_xSMGR     (::comphelper::getProcessServiceFactory())
     , m_eFillState(E_CONTAINS_NOTHING                      )
 {
     RTL_LOGFILE_TRACE("{ (as96863) FilterCache lifetime");
@@ -87,8 +86,6 @@ FilterCache* FilterCache::clone() const
     // Dont copy the configuration access points here.
     // They will be created on demand inside the cloned instance,
     // if they are needed.
-
-    pClone->m_xSMGR                      = m_xSMGR;
 
     pClone->m_lTypes                     = m_lTypes;
     pClone->m_lDetectServices            = m_lDetectServices;
@@ -238,7 +235,7 @@ void FilterCache::load(EFillState eRequired,
         // and starts a thread, which calls loadAll() at this filter cache.
         // Note: Its not a leak to create this listener with new here.
         // It kills itself after working!
-        /* LateInitListener* pLateInit = */ new LateInitListener(comphelper::getComponentContext(m_xSMGR));
+        /* LateInitListener* pLateInit = */ new LateInitListener(comphelper::getProcessComponentContext());
     }
 
     // ------------------------------------------
@@ -875,13 +872,13 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfig
     {
         case E_PROVIDER_TYPES:
         {
-            m_xTypesChglisteners.set(new CacheUpdateListener(m_xSMGR, *this, *pConfig, FilterCache::E_TYPE));
+            m_xTypesChglisteners.set(new CacheUpdateListener(*this, *pConfig, FilterCache::E_TYPE));
             m_xTypesChglisteners->startListening();
         }
         break;
         case E_PROVIDER_FILTERS:
         {
-            m_xFiltersChgListener.set(new CacheUpdateListener(m_xSMGR, *this, *pConfig, FilterCache::E_FILTER));
+            m_xFiltersChgListener.set(new CacheUpdateListener(*this, *pConfig, FilterCache::E_FILTER));
             m_xFiltersChgListener->startListening();
         }
         break;
@@ -952,8 +949,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_createConfigAccess
     try
     {
         css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider(
-            css::configuration::theDefaultProvider::get(
-                comphelper::getComponentContext(m_xSMGR)));
+            css::configuration::theDefaultProvider::get( comphelper::getProcessComponentContext() ) );
 
         ::comphelper::SequenceAsVector< css::uno::Any > lParams;
         css::beans::NamedValue aParam;
@@ -2460,7 +2456,7 @@ sal_Bool FilterCache::impl_isModuleInstalled(const ::rtl::OUString& sModule)
     {
         m_xModuleCfg = css::uno::Reference< css::container::XNameAccess >(
                             ::comphelper::ConfigurationHelper::openConfig(
-                                comphelper::getComponentContext(m_xSMGR),
+                                comphelper::getProcessComponentContext(),
                                 "org.openoffice.Setup/Office/Factories",
                                 ::comphelper::ConfigurationHelper::E_READONLY),
                             css::uno::UNO_QUERY_THROW);

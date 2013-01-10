@@ -23,20 +23,20 @@
 
 #include <com/sun/star/util/XChangesNotifier.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
+#include <com/sun/star/document/FilterConfigRefresh.hpp>
 #include <salhelper/singletonref.hxx>
 #include <unotools/configpaths.hxx>
 #include <rtl/ustring.hxx>
+#include <comphelper/processfactory.hxx>
 
 
 namespace filter{
     namespace config{
 
-CacheUpdateListener::CacheUpdateListener(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR,
-                                         FilterCache &rFilterCache,
+CacheUpdateListener::CacheUpdateListener(FilterCache &rFilterCache,
                                          const css::uno::Reference< css::uno::XInterface >& xConfigAccess,
                                          FilterCache::EItemType eConfigType)
     : BaseLock()
-    , m_xSMGR(xSMGR)
     , m_rCache(rFilterCache)
     , m_xConfig(xConfigAccess)
     , m_eConfigType(eConfigType)
@@ -91,8 +91,7 @@ void SAL_CALL  CacheUpdateListener::changesOccurred(const css::util::ChangesEven
     if ( ! m_xConfig.is())
         return;
 
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
-    FilterCache::EItemType                                 eType = m_eConfigType;
+    FilterCache::EItemType                             eType = m_eConfigType;
 
     aLock.clear();
     // <- SAFE
@@ -173,11 +172,10 @@ void SAL_CALL  CacheUpdateListener::changesOccurred(const css::util::ChangesEven
     // notify sfx cache about the changed filter cache .-)
     if (bNotifyRefresh)
     {
-        css::uno::Reference< css::util::XRefreshable > xRefreshBroadcaster(
-            xSMGR->createInstance(SERVICE_FILTERCONFIGREFRESH),
-            css::uno::UNO_QUERY);
-        if (xRefreshBroadcaster.is())
-            xRefreshBroadcaster->refresh();
+        css::uno::Reference< css::uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+        css::uno::Reference< css::util::XRefreshable > xRefreshBroadcaster =
+            css::document::FilterConfigRefresh::create(xContext);
+        xRefreshBroadcaster->refresh();
     }
 }
 

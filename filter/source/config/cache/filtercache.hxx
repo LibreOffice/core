@@ -23,7 +23,6 @@
 #include "cacheitem.hxx"
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/util/URL.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -169,11 +168,6 @@ class FilterCache : public BaseLock
     // member
 
     private:
-
-        //---------------------------------------
-        /** @short  reference to an uno service manager, which can be used
-                    to create own needed services. */
-        mutable css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
 
         //---------------------------------------
         /** @short  holds the used configuration provider alive, which

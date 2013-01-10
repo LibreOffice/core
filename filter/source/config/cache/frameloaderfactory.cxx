@@ -25,14 +25,16 @@
 
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <comphelper/enumhelper.hxx>
+#include <comphelper/processfactory.hxx>
 
 
 namespace filter{
     namespace config{
 
-FrameLoaderFactory::FrameLoaderFactory(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
+FrameLoaderFactory::FrameLoaderFactory(const css::uno::Reference< css::uno::XComponentContext >& rxContext)
+    : m_xContext(rxContext)
 {
-    BaseContainer::init(xSMGR                                              ,
+    BaseContainer::init(rxContext                                              ,
                         FrameLoaderFactory::impl_getImplementationName()   ,
                         FrameLoaderFactory::impl_getSupportedServiceNames(),
                         FilterCache::E_FRAMELOADER                         );
@@ -106,7 +108,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createI
     CacheItem aLoader = m_rCache->getItem(m_eType, sRealLoader);
 
     // create service instance
-    css::uno::Reference< css::uno::XInterface > xLoader = m_xSMGR->createInstance(sRealLoader);
+    css::uno::Reference< css::uno::XInterface > xLoader = m_xContext->getServiceManager()->createInstanceWithContext(sRealLoader, m_xContext);
 
     // initialize filter
     css::uno::Reference< css::lang::XInitialization > xInit(xLoader, css::uno::UNO_QUERY);
@@ -161,7 +163,7 @@ css::uno::Sequence< OUString > FrameLoaderFactory::impl_getSupportedServiceNames
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::impl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
 {
-    FrameLoaderFactory* pNew = new FrameLoaderFactory(xSMGR);
+    FrameLoaderFactory* pNew = new FrameLoaderFactory( comphelper::getComponentContext(xSMGR) );
     return css::uno::Reference< css::uno::XInterface >(static_cast< css::lang::XMultiServiceFactory* >(pNew), css::uno::UNO_QUERY);
 }
 

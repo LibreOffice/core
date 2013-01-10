@@ -26,14 +26,16 @@
 
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <comphelper/enumhelper.hxx>
+#include <comphelper/processfactory.hxx>
 
 
 namespace filter{
     namespace config{
 
-ContentHandlerFactory::ContentHandlerFactory(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
+ContentHandlerFactory::ContentHandlerFactory(const css::uno::Reference< css::uno::XComponentContext >& rxContext)
+ : m_xContext(rxContext)
 {
-    BaseContainer::init(xSMGR                                                 ,
+    BaseContainer::init(rxContext                                             ,
                         ContentHandlerFactory::impl_getImplementationName()   ,
                         ContentHandlerFactory::impl_getSupportedServiceNames(),
                         FilterCache::E_CONTENTHANDLER                         );
@@ -109,7 +111,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::crea
     CacheItem aHandler = m_rCache->getItem(FilterCache::E_CONTENTHANDLER, sRealHandler);
 
     // create service instance
-    xHandler = m_xSMGR->createInstance(sRealHandler);
+    xHandler = m_xContext->getServiceManager()->createInstanceWithContext(sRealHandler, m_xContext);
 
     // initialize filter
     css::uno::Reference< css::lang::XInitialization > xInit(xHandler, css::uno::UNO_QUERY);
@@ -164,7 +166,7 @@ css::uno::Sequence< OUString > ContentHandlerFactory::impl_getSupportedServiceNa
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::impl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
 {
-    ContentHandlerFactory* pNew = new ContentHandlerFactory(xSMGR);
+    ContentHandlerFactory* pNew = new ContentHandlerFactory( comphelper::getComponentContext(xSMGR) );
     return css::uno::Reference< css::uno::XInterface >(static_cast< css::lang::XMultiServiceFactory* >(pNew), css::uno::UNO_QUERY);
 }
 

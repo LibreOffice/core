@@ -22,6 +22,7 @@
 #include "constant.hxx"
 
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
+#include <com/sun/star/document/FilterConfigRefresh.hpp>
 #include <com/sun/star/uno/Type.h>
 #include <comphelper/enumhelper.hxx>
 #include <osl/diagnose.h>
@@ -65,7 +66,7 @@ BaseContainer::~BaseContainer()
 
 
 
-void BaseContainer::init(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR              ,
+void BaseContainer::init(const css::uno::Reference< css::uno::XComponentContext >&     rxContext              ,
                          const ::rtl::OUString&                                        sImplementationName,
                          const css::uno::Sequence< ::rtl::OUString >&                  lServiceNames      ,
                                FilterCache::EItemType                                  eType              )
@@ -75,11 +76,8 @@ void BaseContainer::init(const css::uno::Reference< css::lang::XMultiServiceFact
 
     m_sImplementationName = sImplementationName;
     m_lServiceNames       = lServiceNames      ;
-    m_xSMGR               = xSMGR              ;
     m_eType               = eType              ;
-    m_xRefreshBroadcaster = css::uno::Reference< css::util::XRefreshable >(
-                                xSMGR->createInstance(SERVICE_FILTERCONFIGREFRESH),
-                                css::uno::UNO_QUERY);
+    m_xRefreshBroadcaster = css::document::FilterConfigRefresh::create(rxContext);
     // <- SAFE
 }
 
