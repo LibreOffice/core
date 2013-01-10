@@ -166,6 +166,15 @@ ProfileItem gid_Profileitem_Uno_Uno_Bundled_Tmp_Extensions
     Value = "${$BRAND_BASE_DIR/program/" PROFILENAME(bootstrap) ":UserInstallation}/user/extensions/tmp";
 End
 
+ProfileItem gid_Profileitem_Uno_Uno_Bundled_Bak_Extensions
+    ProfileID = gid_Profile_Uno_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 1;
+    Key = "BAK_EXTENSIONS";
+    Value = "${$BRAND_BASE_DIR/program/" PROFILENAME(bootstrap) ":UserInstallation}/user/extensions/bak";
+End
+
 ProfileItem gid_Profileitem_Uno_Uno_User_Packages_Cache
     ProfileID = gid_Profile_Uno_Ini;
     ModuleID = gid_Module_Root;
