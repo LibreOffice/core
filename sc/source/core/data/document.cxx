@@ -402,6 +402,17 @@ void ScDocument::SetTabNameOnLoad(SCTAB nTab, const rtl::OUString& rName)
     maTabs[nTab]->SetName(rName);
 }
 
+void ScDocument::InvalidateStreamOnSave()
+{
+    TableContainer::iterator it = maTabs.begin(), itEnd = maTabs.end();
+    for (; it != itEnd; ++it)
+    {
+        ScTable* pTab = *it;
+        if (pTab)
+            pTab->SetStreamValid(false);
+    }
+}
+
 bool ScDocument::InsertTab( SCTAB nPos, const rtl::OUString& rName,
             bool bExternalDocument )
 {

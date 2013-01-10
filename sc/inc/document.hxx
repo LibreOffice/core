@@ -571,6 +571,7 @@ public:
 
     void AppendTabOnLoad(const rtl::OUString& rName);
     void SetTabNameOnLoad(SCTAB nTab, const rtl::OUString& rName);
+    void InvalidateStreamOnSave();
 
     SC_DLLPUBLIC bool           InsertTab( SCTAB nPos, const rtl::OUString& rName,
                                         bool bExternalDocument = false );
