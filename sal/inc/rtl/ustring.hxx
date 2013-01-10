@@ -2088,6 +2088,36 @@ public:
     }
 
     /**
+      Returns the string representation of the long argument.
+      This is here because when choosing
+      which conversion for overloaded functions is better, the standard treats all
+      integer conversions the same.
+
+      This function can't be used for language specific conversion.
+
+      @param    ll          a int64.
+      @param    radix       the radix (between 2 and 36)
+      @return   a string with the string representation of the argument.
+    */
+    template< typename T >
+    static OUString valueInt(T i, sal_Int16 radix = 10) SAL_THROW(())
+    {
+        return valueOf( static_cast<sal_Int32>(i), radix );
+    }
+
+    template< typename T >
+    static OUString valueBool(T i) SAL_THROW(())
+    {
+        return valueOf( static_cast<sal_Bool>(i) );
+    }
+
+    template< typename T >
+    static OUString valueChar(T i) SAL_THROW(())
+    {
+        return valueOf( static_cast<sal_Unicode>(i) );
+    }
+
+    /**
       Returns the string representation of the float argument.
 
       This function can't be used for language specific conversion.
