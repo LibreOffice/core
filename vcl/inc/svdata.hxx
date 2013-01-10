@@ -44,6 +44,11 @@
 
 #include <boost/unordered_map.hpp>
 
+#include <config_version.h>
+
+#define LIBO_VERSION_DOTTED  (LIBO_VERSION_MAJOR "." LIBO_VERSION_MINOR "." \
+                              LIBO_VERSION_MICRO "." LIBO_VERSION_PATCH)
+
 struct ImplTimerData;
 struct ImplConfigData;
 class ImplDirectFontSubstitution;
