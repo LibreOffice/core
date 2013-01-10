@@ -87,16 +87,16 @@ $(eval $(call gb_Library_use_system_win32_libs,OGLTrans,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,OGLTrans,\
-    slideshow/source/engine/OGLTrans/unx/OGLTrans_Shaders \
-    slideshow/source/engine/OGLTrans/unx/OGLTrans_TransitionerImpl \
-    slideshow/source/engine/OGLTrans/unx/OGLTrans_TransitionImpl \
+    slideshow/source/engine/OGLTrans/generic/OGLTrans_Shaders \
+    slideshow/source/engine/OGLTrans/generic/OGLTrans_TransitionerImpl \
+    slideshow/source/engine/OGLTrans/generic/OGLTrans_TransitionImpl \
 ))
 
 else
 $(eval $(call gb_Library_add_exception_objects,OGLTrans,\
-    slideshow/source/engine/OGLTrans/unx/OGLTrans_Shaders \
-    slideshow/source/engine/OGLTrans/unx/OGLTrans_TransitionerImpl \
-    slideshow/source/engine/OGLTrans/unx/OGLTrans_TransitionImpl \
+    slideshow/source/engine/OGLTrans/generic/OGLTrans_Shaders \
+    slideshow/source/engine/OGLTrans/generic/OGLTrans_TransitionerImpl \
+    slideshow/source/engine/OGLTrans/generic/OGLTrans_TransitionImpl \
 ))
 
 $(eval $(call gb_Library_add_libs,OGLTrans,\
