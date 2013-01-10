@@ -34,6 +34,7 @@
 #include <sfx2/objface.hxx>
 #include <svl/documentlockfile.hxx>
 #include <svl/sharecontrolfile.hxx>
+#include "svl/urihelper.hxx"
 #include "chgtrack.hxx"
 #include "chgviset.hxx"
 #include <com/sun/star/awt/Key.hpp>
@@ -1528,10 +1529,45 @@ sal_Bool ScDocShell::Save()
     return bRet;
 }
 
+namespace {
+
+/**
+ * Remove the file name from the full path, to keep only the directory path.
+ */
+void popFileName(OUString& rPath)
+{
+    if (!rPath.isEmpty())
+    {
+        INetURLObject aURLObj(rPath);
+        aURLObj.removeSegment();
+        rPath = aURLObj.GetMainURL(INetURLObject::NO_DECODE);
+    }
+}
+
+}
 
 sal_Bool ScDocShell::SaveAs( SfxMedium& rMedium )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::SaveAs" );
+    OUString aCurPath; // empty for new document that hasn't been saved.
+    const SfxMedium* pCurMedium = GetMedium();
+    if (pCurMedium)
+    {
+        aCurPath = pCurMedium->GetName();
+        popFileName(aCurPath);
+    }
+
+    if (!aCurPath.isEmpty())
+    {
+        // current document has a path -> not a brand-new document.
+        OUString aNewPath = rMedium.GetName();
+        popFileName(aNewPath);
+        OUString aRel = URIHelper::simpleNormalizedMakeRelative(aCurPath, aNewPath);
+        if (!aRel.isEmpty())
+        {
+            // Directory path will change before and after the save.
+            aDocument.InvalidateStreamOnSave();
+        }
+    }
 
     ScTabViewShell* pViewShell = GetBestViewShell();
     bool bNeedsRehash = ScPassHashHelper::needsPassHashRegen(aDocument, PASSHASH_SHA1);
