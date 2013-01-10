@@ -127,6 +127,7 @@ void ScSortKeyCtrl::setScrollRange()
     sal_Int32 nVisibleItems = m_rScrolledWindow.getVisibleChildSize().Height() / nScrollOffset;
     m_rVertScroll.SetPageSize( nVisibleItems - 1 );
     m_rVertScroll.SetVisibleSize( nVisibleItems );
+    m_rVertScroll.Scroll();
 }
 
 // -----------------------------------------------------------------------
