@@ -4231,7 +4231,22 @@ SOURCEVERSION="OOO$UPD"
 AC_SUBST(UPD)
 AC_SUBST(SOURCEVERSION)
 
-
+dnl ===================================================================
+dnl Grim-ness to export version number of LibreOffice to code
+dnl this needs to be turned around and to be driven by configure
+dnl ===================================================================
+LIBO_VERSION_MAJOR="`$GREP VERSIONMAJOR solenv/inc/minor.mk | sed "s/^.*=//"`"
+LIBO_VERSION_MINOR="`$GREP VERSIONMINOR solenv/inc/minor.mk | sed "s/^.*=//"`"
+LIBO_VERSION_MICRO="`$GREP VERSIONMICRO solenv/inc/minor.mk | sed "s/^.*=//"`"
+LIBO_VERSION_PATCH="`$GREP BUILD solenv/inc/minor.mk | sed "s/^.*=//"`"
+AC_SUBST(LIBO_VERSION_MAJOR)
+AC_SUBST(LIBO_VERSION_MINOR)
+AC_SUBST(LIBO_VERSION_MICRO)
+AC_SUBST(LIBO_VERSION_PATCH)
+AC_DEFINE_UNQUOTED(LIBO_VERSION_MAJOR,"$LIBO_VERSION_MAJOR")
+AC_DEFINE_UNQUOTED(LIBO_VERSION_MINOR,"$LIBO_VERSION_MINOR")
+AC_DEFINE_UNQUOTED(LIBO_VERSION_MICRO,"$LIBO_VERSION_MICRO")
+AC_DEFINE_UNQUOTED(LIBO_VERSION_PATCH,"$LIBO_VERSION_PATCH")
 
 dnl ===================================================================
 dnl Set the ENABLE_CRASHDUMP variable.
@@ -12160,6 +12175,7 @@ else
 fi
 
 AC_CONFIG_FILES([config_host.mk])
+AC_CONFIG_HEADERS([config/config_version.h])
 AC_OUTPUT
 
 # touch the config timestamp file

@@ -1,0 +1,14 @@
+/*
+Version settings
+  version 4.0.0.1 is Major.Minor.Micro.Patch
+*/
+
+#ifndef CONFIG_VERSION_H
+#define CONFIG_VERSION_H
+
+#undef LIBO_VERSION_MAJOR
+#undef LIBO_VERSION_MINOR
+#undef LIBO_VERSION_MICRO
+#undef LIBO_VERSION_PATCH
+
+#endif
