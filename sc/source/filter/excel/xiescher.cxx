@@ -86,6 +86,7 @@
 #include <svx/xlinjoit.hxx>
 #include <svx/xlntrit.hxx>
 #include <svx/xbtmpit.hxx>
+#include <vcl/dibtools.hxx>
 
 #include "document.hxx"
 #include "drwlayer.hxx"
@@ -747,7 +748,7 @@ void XclImpDrawObjBase::ConvertFillStyle( SdrObject& rSdrObj, const XclObjFillDa
                 aMemStrm << sal_uInt32( pnPattern[ nIdx ] ); // 32-bit little-endian
             aMemStrm.Seek( STREAM_SEEK_TO_BEGIN );
             Bitmap aBitmap;
-            aBitmap.Read( aMemStrm, sal_False );
+            ReadDIB(aBitmap, aMemStrm, false);
             rSdrObj.SetMergedItem(XFillStyleItem(XFILL_BITMAP));
             rSdrObj.SetMergedItem(XFillBitmapItem(EMPTY_STRING, Graphic(aBitmap)));
         }
@@ -3943,7 +3944,7 @@ void XclImpDrawing::ReadBmp( Graphic& rGraphic, const XclImpRoot& rRoot, XclImpS
     // import the graphic from memory stream
     aMemStrm.Seek( STREAM_SEEK_TO_BEGIN );
     Bitmap aBitmap;
-    if( aBitmap.Read( aMemStrm, sal_False ) )   // read DIB without file header
+    if( ReadDIB(aBitmap, aMemStrm, false) )   // read DIB without file header
         rGraphic = aBitmap;
 }
 

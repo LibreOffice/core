@@ -343,8 +343,6 @@ class   BitmapWriteAccess;
 class   BitmapPalette;
 class   ImpBitmap;
 class   Color;
-class   SvStream;
-struct  DIBInfoHeader;
 class   ResId;
 class   GDIMetaFile;
 class   AlphaMask;
@@ -382,20 +380,6 @@ public:
                    ImpBitmap*           ImplGetImpBitmap() const;
     SAL_DLLPRIVATE void                 ImplSetImpBitmap( ImpBitmap* pImpBmp );
     SAL_DLLPRIVATE void                 ImplAssignWithSize( const Bitmap& rBitmap );
-
-    SAL_DLLPRIVATE static sal_Bool          ImplReadDIB( SvStream& rIStm, Bitmap& rBmp, sal_uLong nOffset );
-    SAL_DLLPRIVATE static sal_Bool          ImplReadDIBFileHeader( SvStream& rIStm, sal_uLong& rOffset );
-    SAL_DLLPRIVATE static sal_Bool          ImplReadDIBInfoHeader( SvStream& rIStm, DIBInfoHeader& rHeader, sal_Bool& bTopDown );
-    SAL_DLLPRIVATE static sal_Bool          ImplReadDIBPalette( SvStream& rIStm, BitmapWriteAccess& rAcc, sal_Bool bQuad );
-    SAL_DLLPRIVATE static sal_Bool          ImplReadDIBBits( SvStream& rIStm, DIBInfoHeader& rHeader, BitmapWriteAccess& rAcc, sal_Bool bTopDown );
-    SAL_DLLPRIVATE sal_Bool                 ImplWriteDIB( SvStream& rOStm, BitmapReadAccess& rAcc, sal_Bool bCompressed ) const;
-    SAL_DLLPRIVATE static sal_Bool          ImplWriteDIBFileHeader( SvStream& rOStm, BitmapReadAccess& rAcc );
-    SAL_DLLPRIVATE static sal_Bool          ImplWriteDIBPalette( SvStream& rOStm, BitmapReadAccess& rAcc );
-    SAL_DLLPRIVATE static sal_Bool          ImplWriteDIBBits( SvStream& rOStm, BitmapReadAccess& rAcc,
-                                                             sal_uLong nCompression, sal_uInt32& rImageSize );
-    SAL_DLLPRIVATE static void          ImplDecodeRLE( sal_uInt8* pBuffer, DIBInfoHeader& rHeader,
-                                           BitmapWriteAccess& rAcc, sal_Bool bRLE4 );
-    SAL_DLLPRIVATE static sal_Bool          ImplWriteRLE( SvStream& rOStm, BitmapReadAccess& rAcc, sal_Bool bRLE4 );
 
     SAL_DLLPRIVATE void                     ImplAdaptBitCount(Bitmap& rNew) const;
     SAL_DLLPRIVATE sal_Bool                 ImplScaleFast( const double& rScaleX, const double& rScaleY );
@@ -878,18 +862,9 @@ public:
                                     const BmpFilterParam* pFilterParam = NULL,
                                     const Link* pProgress = NULL );
 
-public:
     BitmapReadAccess*       AcquireReadAccess();
     BitmapWriteAccess*      AcquireWriteAccess();
     void                    ReleaseAccess( BitmapReadAccess* pAccess );
-
-public:
-
-    sal_Bool                    Read( SvStream& rIStm, sal_Bool bFileHeader = sal_True );
-    sal_Bool                    Write( SvStream& rOStm, sal_Bool bCompressed = sal_True, sal_Bool bFileHeader = sal_True ) const;
-
-    friend VCL_DLLPUBLIC SvStream&        operator>>( SvStream& rIStm, Bitmap& rBitmap );
-    friend VCL_DLLPUBLIC SvStream&        operator<<( SvStream& rOStm, const Bitmap& rBitmap );
 };
 
 // -----------

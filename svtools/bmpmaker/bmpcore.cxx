@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
@@ -31,7 +29,7 @@
 #include <vcl/pngread.hxx>
 #include <vcl/pngwrite.hxx>
 #include "bmpcore.hxx"
-
+#include <vcl/dibtools.hxx>
 #include <vector>
 #include <algorithm>
 
@@ -188,7 +186,9 @@ void BmpCreator::ImplCreate( const ::std::vector< DirEntry >& rInDirs,
                             aBmpEx = aPNGReader.Read();
                         }
                         else
-                            aIStm >> aBmpEx;
+                        {
+                            ReadDIBBitmapEx(aBmpEx, aIStm);
+                        }
 
                         if( pCollectStm && !aBmpEx.IsEmpty() )
                         {
@@ -293,7 +293,9 @@ void BmpCreator::ImplCreate( const ::std::vector< DirEntry >& rInDirs,
                         aPNGWriter.Write( aOutStream );
                     }
                     else
-                        aOutStream << aTotalBmpEx;
+                    {
+                        WriteDIBBitmapEx(aTotalBmpEx, aOutStream);
+                    }
 
                     if( aOutStream.GetError()  )
                         Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: Could not write to output file: " ) ).Append( aOutFileName ), EXIT_IOERROR );

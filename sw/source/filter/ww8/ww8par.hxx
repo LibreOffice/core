@@ -192,7 +192,7 @@ public:
     SwNumRule* CreateNextRule(bool bSimple);
     ~WW8ListManager();
     SwNumRule* GetNumRule(sal_uInt16 i);
-    sal_uInt16 GetWW8LSTInfoNum() const{return maLSTInfos.size();}
+    sal_uInt16 GetWW8LSTInfoNum() const{return static_cast< sal_uInt16 >(maLSTInfos.size());}
 private:
     wwSprmParser maSprmParser;
     SwWW8ImplReader& rReader;

@@ -140,6 +140,7 @@ using namespace vos;
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include "svx/EnhancedCustomShape2d.hxx"
+#include <vcl/dibtools.hxx>
 
 using namespace ::com::sun::star    ;
 using namespace ::com::sun::star::drawing;
@@ -6650,7 +6651,7 @@ sal_Bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, 
         if( ( nInst & 0xFFFE ) == 0x7A8 )
         {   // DIBs direkt holen
             Bitmap aNew;
-            if( aNew.Read( *pGrStream, sal_False ) )
+            if( ReadDIB(aNew, *pGrStream, false) )
             {
                 rData = Graphic( aNew );
                 nRes = GRFILTER_OK;

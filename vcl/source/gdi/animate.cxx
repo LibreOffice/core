@@ -32,6 +32,8 @@
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 #include <impanmvw.hxx>
+#include <vcl/dibtools.hxx>
+
 DBG_NAME( Animation )
 
 // -----------
@@ -830,9 +832,9 @@ SvStream& operator<<( SvStream& rOStm, const Animation& rAnimation )
         // Falls keine BitmapEx gesetzt wurde, schreiben wir
         // einfach die erste Bitmap der Animation
         if( !rAnimation.GetBitmapEx().GetBitmap() )
-            rOStm << rAnimation.Get( 0 ).aBmpEx;
+            WriteDIBBitmapEx(rAnimation.Get( 0 ).aBmpEx, rOStm);
         else
-            rOStm << rAnimation.GetBitmapEx();
+            WriteDIBBitmapEx(rAnimation.GetBitmapEx(), rOStm);
 
         // Kennung schreiben ( SDANIMA1 )
         rOStm << (sal_uInt32) 0x5344414e << (sal_uInt32) 0x494d4931;
@@ -843,7 +845,7 @@ SvStream& operator<<( SvStream& rOStm, const Animation& rAnimation )
             const sal_uInt16            nRest = nCount - i - 1;
 
             // AnimationBitmap schreiben
-            rOStm << rAnimBmp.aBmpEx;
+            WriteDIBBitmapEx(rAnimBmp.aBmpEx, rOStm);
             rOStm << rAnimBmp.aPosPix;
             rOStm << rAnimBmp.aSizePix;
             rOStm << rAnimation.maGlobalSize;
@@ -886,7 +888,7 @@ SvStream& operator>>( SvStream& rIStm, Animation& rAnimation )
     else
     {
         rIStm.Seek( nStmPos );
-        rIStm >> rAnimation.maBitmapEx;
+        ReadDIBBitmapEx(rAnimation.maBitmapEx, rIStm);
         nStmPos = rIStm.Tell();
         rIStm >> nAnimMagic1 >> nAnimMagic2;
 
@@ -908,7 +910,7 @@ SvStream& operator>>( SvStream& rIStm, Animation& rAnimation )
 
         do
         {
-            rIStm >> aAnimBmp.aBmpEx;
+            ReadDIBBitmapEx(aAnimBmp.aBmpEx, rIStm);
             rIStm >> aAnimBmp.aPosPix;
             rIStm >> aAnimBmp.aSizePix;
             rIStm >> rAnimation.maGlobalSize;

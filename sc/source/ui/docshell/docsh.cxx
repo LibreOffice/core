@@ -2999,7 +2999,7 @@ bool ScDocShell::GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal
     return bRes;
 }
 
-void ScDocShell::BeforeLoading( SfxMedium& rMedium, const ::rtl::OUString & rstrTypeName, const ::rtl::OUString & rstrFilterName )
+void ScDocShell::BeforeLoading( SfxMedium& /*rMedium*/, const ::rtl::OUString & rstrTypeName, const ::rtl::OUString & /*rstrFilterName*/ )
 {
     const sal_uInt8 nMediumFlag = GetMediumFlag<false>( rstrTypeName );
 
@@ -3012,7 +3012,7 @@ void ScDocShell::BeforeLoading( SfxMedium& rMedium, const ::rtl::OUString & rstr
     }
 }
 
-void ScDocShell::AfterLoading( SfxMedium& rMedium, const ::rtl::OUString & rstrTypeName, const ::rtl::OUString & rstrFilterName )
+void ScDocShell::AfterLoading( SfxMedium& /*rMedium*/, const ::rtl::OUString & rstrTypeName, const ::rtl::OUString & /*rstrFilterName*/ )
 {
     const sal_uInt8 nMediumFlag = GetMediumFlag<false>( rstrTypeName );
 

@@ -19,26 +19,23 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_canvas.hxx"
 
 #include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <canvas/canvastools.hxx>
-
 #include <rtl/instance.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/canvastools.hxx>
 #include <basegfx/tools/canvastools.hxx>
 #include <basegfx/tools/unopolypolygon.hxx>
+#include <vcl/dibtools.hxx>
 
 #include "devicehelper.hxx"
 #include "spritecanvas.hxx"
 #include "spritecanvashelper.hxx"
 #include "canvasbitmap.hxx"
-
 
 using namespace ::com::sun::star;
 
@@ -227,8 +224,7 @@ namespace vclcanvas
             OutputDevice& rOutDev = mpOutDev->getOutDev();
             bool bOldMap( rOutDev.IsMapModeEnabled() );
             rOutDev.EnableMapMode( sal_False );
-            aStream << rOutDev.GetBitmap(aEmptyPoint,
-                                         rOutDev.GetOutputSizePixel());
+            WriteDIB(rOutDev.GetBitmap(aEmptyPoint, rOutDev.GetOutputSizePixel()), aStream, false, true);
             rOutDev.EnableMapMode( bOldMap );
 
             ++nFilePostfixCount;

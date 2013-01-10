@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
 
@@ -44,7 +42,7 @@
 #include <comphelper/processfactory.hxx>
 #include <vcl/graph.hxx>
 #include <svtools/filter.hxx>
-
+#include <vcl/dibtools.hxx>
 #include <hash_map>
 #include <algorithm>
 #include <vector>
@@ -1785,7 +1783,7 @@ sal_Bool AddonsOptions_Impl::CreateImageFromSequence( Image& rImage, sal_Bool bB
         SvMemoryStream  aMemStream( rBitmapDataSeq.getArray(), rBitmapDataSeq.getLength(), STREAM_STD_READ );
         BitmapEx        aBitmapEx;
 
-        aMemStream >> aBitmapEx;
+        ReadDIBBitmapEx(aBitmapEx, aMemStream);
 
         // Scale bitmap to fit the correct size for the menu/toolbar. Use best quality
         if ( aBitmapEx.GetSizePixel() != aSize )

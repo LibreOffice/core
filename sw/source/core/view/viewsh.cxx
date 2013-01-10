@@ -19,25 +19,18 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
 
 #define _SVX_PARAITEM_HXX
 #define _SVX_TEXTITEM_HXX
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
-
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/progress.hxx>
 #include <svx/srchdlg.hxx>
 #include <svx/svdobj.hxx>
 #include <sfx2/viewsh.hxx>
-#ifndef _SHL_HXX
-//#include <tools/shl.hxx>
-#endif
 #include <swwait.hxx>
 #include <swmodule.hxx>
 #include <fesh.hxx>
@@ -59,9 +52,7 @@
 #include <fntcache.hxx>
 #include <ptqueue.hxx>
 #include <tabfrm.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <pagedesc.hxx>
 #include <ndole.hxx>
 #include <ndindex.hxx>
@@ -69,27 +60,17 @@
 #include <svtools/colorcfg.hxx>
 #include <svtools/accessibilityoptions.hxx>
 #include <accessibilityoptions.hxx>
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>
-#endif
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
-// OD 14.01.2003 #103492#
 #include <pagepreviewlayout.hxx>
-// --> OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
 #include <anchoredobject.hxx>
-// <--
-
 #include "../../ui/inc/view.hxx"
 #include <PostItMgr.hxx>
 #include <vcl/virdev.hxx>
-
 #include <vcl/svapp.hxx>
-
-// #i74769#
 #include <svx/sdrpaintwindow.hxx>
+#include <vcl/dibtools.hxx>
 
 sal_Bool ViewShell::bLstAct = sal_False;
 ShellResource *ViewShell::pShellRes = 0;
@@ -1447,7 +1428,7 @@ sal_Bool ViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRe
                     const Bitmap aBitmap(pVout->GetBitmap(Point(), pVout->GetOutputSizePixel()));
                     const String aTmpString(ByteString( "c:\\test.bmp" ), RTL_TEXTENCODING_UTF8);
                     SvFileStream aNew(aTmpString, STREAM_WRITE|STREAM_TRUNC);
-                    aNew << aBitmap;
+                    WriteDIB(aBitmap, aNew, false, true);
                     pVout->EnableMapMode(bMapModeWasEnabledVDev);
                 }
             }

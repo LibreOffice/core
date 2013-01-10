@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_fpicker.hxx"
 
@@ -97,6 +95,7 @@
 #include "fpinteraction.hxx"
 #include <osl/process.h>
 #include <comphelper/interaction.hxx>
+#include <vcl/dibtools.hxx>
 
 #include <algorithm>
 #include <functional>
@@ -3123,7 +3122,7 @@ void SvtFileDialog::setImage( sal_Int16 /*aImageFormat*/, const Any& rImage )
         SvMemoryStream  aData( aBmpSequence.getArray(),
                                aBmpSequence.getLength(),
                                STREAM_READ );
-        aData >> aBmp;
+        ReadDIB(aBmp, aData, true);
 
         _pPrevBmp->SetBitmap( aBmp );
     }

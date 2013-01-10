@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
@@ -32,7 +30,7 @@
 #include "com/sun/star/script/XInvocation.hpp"
 #include "com/sun/star/awt/XBitmap.hpp"
 #include "cppuhelper/compbase1.hxx"
-
+#include <vcl/dibtools.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::script;
@@ -149,7 +147,9 @@ Any SAL_CALL BmpConverter::invoke(
 
         SvMemoryStream aStream( aDIB.getArray(), aDIB.getLength(), STREAM_READ | STREAM_WRITE );
         Bitmap aBM;
-        aBM.Read( aStream, sal_True );
+
+        ReadDIB(aBM, aStream, true);
+
         if( nTargetDepth < 4 )
             nTargetDepth = 1;
         else if( nTargetDepth < 8 )
@@ -183,8 +183,11 @@ BmpTransporter::BmpTransporter( const Bitmap& rBM )
 {
     m_aSize.Width = rBM.GetSizePixel().Width();
     m_aSize.Height = rBM.GetSizePixel().Height();
+
     SvMemoryStream aStream;
-    rBM.Write( aStream, sal_False, sal_True );
+
+    WriteDIB(rBM, aStream, false, true);
+
     m_aBM = Sequence<sal_Int8>(static_cast<const sal_Int8*>(aStream.GetData()),
                 aStream.GetEndOfData());
 }

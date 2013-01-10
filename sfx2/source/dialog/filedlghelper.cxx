@@ -19,10 +19,9 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
+
 #include <sfx2/filedlghelper.hxx>
 #include <sal/types.h>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -95,6 +94,7 @@
 #include "filedlgimpl.hxx"
 #include <helpid.hrc>
 #include <sfxlocal.hrc>
+#include <vcl/dibtools.hxx>
 
 //-----------------------------------------------------------------------------
 
@@ -771,7 +771,7 @@ IMPL_LINK( FileDialogHelper_Impl, TimeOutHdl_Impl, Timer*, EMPTYARG )
                 // and copy it into the Any
                 SvMemoryStream aData;
 
-                aData << aBmp;
+                WriteDIB(aBmp, aData, false, true);
 
                 const Sequence < sal_Int8 > aBuffer(
                     static_cast< const sal_Int8* >(aData.GetData()),

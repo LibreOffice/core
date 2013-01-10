@@ -19,10 +19,9 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
+
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <com/sun/star/presentation/FadeEffect.hpp>
@@ -59,7 +58,6 @@
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
 #include <comphelper/serviceinfohelper.hxx>
-
 #include <comphelper/extract.hxx>
 #include <list>
 #include <svx/svditer.hxx>
@@ -81,6 +79,7 @@
 #include "unokywds.hxx"
 #include "unopback.hxx"
 #include "unohelp.hxx"
+#include <vcl/dibtools.hxx>
 
 using ::com::sun::star::animations::XAnimationNode;
 using ::com::sun::star::animations::XAnimationNodeSupplier;
@@ -1143,7 +1142,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
                                                                   aBitmap ) )
                     {
                         SvMemoryStream aMemStream;
-                        aBitmap.GetBitmap().Write( aMemStream, sal_False, sal_False );
+                        WriteDIB(aBitmap.GetBitmap(), aMemStream, false, false);
                         uno::Sequence<sal_Int8> aSeq( (sal_Int8*)aMemStream.GetData(), aMemStream.Tell() );
                         aAny <<= aSeq;
                     }

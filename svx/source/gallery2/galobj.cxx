@@ -29,10 +29,8 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfac.hxx>
-
 #include <comphelper/classids.hxx>
 #include <unotools/pathoptions.hxx>
-
 #include <tools/rcid.h>
 #include <tools/vcompat.hxx>
 #include <vcl/virdev.hxx>
@@ -45,7 +43,7 @@
 #include "galobj.hxx"
 #include <vcl/salbtype.hxx>     // FRound
 #include <vcl/svapp.hxx>
-
+#include <vcl/dibtools.hxx>
 #include "gallerydrawmodel.hxx"
 
 using namespace ::com::sun::star;
@@ -160,7 +158,7 @@ void SgaObject::WriteData( SvStream& rOut, const String& rDestDir ) const
         rOut.SetCompressMode( COMPRESSMODE_ZBITMAP );
         rOut.SetVersion( SOFFICE_FILEFORMAT_50 );
 
-        rOut << aThumbBmp;
+        WriteDIBBitmapEx(aThumbBmp, rOut);
 
         rOut.SetVersion( nOldVersion );
         rOut.SetCompressMode( nOldCompressMode );
@@ -184,9 +182,13 @@ void SgaObject::ReadData(SvStream& rIn, sal_uInt16& rReadVersion )
     rIn >> nTmp32 >> nTmp16 >> rReadVersion >> nTmp16 >> bIsThumbBmp;
 
     if( bIsThumbBmp )
-        rIn >> aThumbBmp;
+    {
+        ReadDIBBitmapEx(aThumbBmp, rIn);
+    }
     else
+    {
         rIn >> aThumbMtf;
+    }
 
     rIn >> aTmpStr; aURL = INetURLObject( String( aTmpStr.GetBuffer(), RTL_TEXTENCODING_UTF8 ) );
 }

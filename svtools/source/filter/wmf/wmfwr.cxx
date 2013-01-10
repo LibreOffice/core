@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
@@ -32,13 +30,11 @@
 #include <rtl/tencinfo.h>
 #include <tools/tenccvt.hxx>
 #include <osl/endian.h>
-#ifndef INCLUDED_I18NUTIL_UNICODE_HXX
 #include <i18nutil/unicode.hxx> //unicode::getUnicodeScriptType
-#endif
-
 #include <vcl/metric.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <vcl/dibtools.hxx>
 
 //====================== MS-Windows-defines ===============================
 
@@ -937,7 +933,9 @@ void WMFWriter::WMFRecord_StretchDIB( const Point & rPoint, const Size & rSize,
     *pWMF << (long)0 << (long)0; // 8 bytes auffuellen (diese 8 bytes +
                                  // 14 bytes ueberfluessigen FILEHEADER
                                  // = 22 bytes Parameter)
-    *pWMF << rBitmap; // Bitmap schreiben
+
+    // write bitmap
+    WriteDIB(rBitmap, *pWMF, false, true);
 
     // Parameter schreiben:
     nPosEnd=pWMF->Tell();

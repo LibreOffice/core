@@ -1590,7 +1590,7 @@ sal_uInt16 SotExchange::GetExchangeAction(
 
                 aVector.push_back( aFlavorEx );
 
-                if( ( SOT_FORMATSTR_ID_BMP == aFlavorEx.mnSotId ) &&
+                if( (( SOT_FORMATSTR_ID_BMP == aFlavorEx.mnSotId ) || (SOT_FORMATSTR_ID_PNG == aFlavorEx.mnSotId)) &&
                     !IsFormatSupported( aVector, SOT_FORMAT_BITMAP ) )
                 {
                     if( SotExchange::GetFormatDataFlavor( SOT_FORMAT_BITMAP, aFlavorEx ) )

@@ -32,6 +32,7 @@
 
 #ifdef DBG_UTIL
 #include <tools/stream.hxx>
+#include <vcl/pngwrite.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -129,7 +130,8 @@ namespace drawinglayer
             if(bDoSaveForVisualControl)
             {
                 SvFileStream aNew((const String&)String(ByteString( "c:\\test.png" ), RTL_TEXTENCODING_UTF8), STREAM_WRITE|STREAM_TRUNC);
-                aNew << aRetval;
+                ::vcl::PNGWriter aPNGWriter(aRetval);
+                aPNGWriter.Write(aNew);
             }
 #endif
 

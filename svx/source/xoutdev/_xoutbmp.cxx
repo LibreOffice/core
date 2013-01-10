@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
@@ -37,6 +35,7 @@
 #include "svx/xoutbmp.hxx"
 #include <svtools/FilterConfigItem.hxx>
 #include <svtools/filter.hxx>
+#include <vcl/dibtools.hxx>
 
 // -----------
 // - Defines -
@@ -52,186 +51,6 @@
 // --------------
 
 GraphicFilter* XOutBitmap::pGrfFilter = NULL;
-
-// -----------------------------------------------------------------------------
-
-BitmapEx XOutBitmap::CreateQuickDrawBitmapEx( const Graphic& rGraphic, const OutputDevice& rCompDev,
-                                              const MapMode& rMapMode, const Size& rLogSize,
-                                              const Point& rPoint, const Size& rSize )
-{
-    BitmapEx aRetBmp;
-
-    if( rGraphic.IsAlpha() )
-        aRetBmp = rGraphic.GetBitmapEx();
-    else
-    {
-        VirtualDevice   aVDev( rCompDev );
-        MapMode         aMap( rMapMode );
-
-        aMap.SetOrigin( Point() );
-        aVDev.SetMapMode( aMap );
-
-        Point   aPoint( aVDev.LogicToPixel( rPoint ) );
-        Size    aOldSize( aVDev.LogicToPixel( rSize ) );
-        Size    aAbsSize( aOldSize );
-        Size    aQSizePix( aVDev.LogicToPixel( rLogSize ) );
-
-        aVDev.SetMapMode( MapMode() );
-
-        if( aOldSize.Width() < 0 )
-            aAbsSize.Width() = -aAbsSize.Width();
-
-        if( aOldSize.Height() < 0 )
-            aAbsSize.Height() = -aAbsSize.Height();
-
-        if( aVDev.SetOutputSizePixel( aAbsSize ) )
-        {
-            Point       aNewOrg( -aPoint.X(), -aPoint.Y() );
-            const Point aNullPoint;
-
-            // horizontale Spiegelung ggf. beruecksichtigen
-            if( aOldSize.Width() < 0 )
-            {
-                aNewOrg.X() -= aOldSize.Width();
-
-                // und jetzt noch einen abziehen
-                aNewOrg.X()--;
-            }
-
-            // vertikale Spiegelung ggf. beruecksichtigen
-            if( rSize.Height() < 0 )
-            {
-                aNewOrg.Y() -= aOldSize.Height();
-
-                // und jetzt noch einen abziehen
-                aNewOrg.Y()--;
-            }
-
-            if( rGraphic.GetType() != GRAPHIC_BITMAP )
-            {
-                rGraphic.Draw( &aVDev, aNewOrg, aQSizePix );
-
-                const Bitmap    aBmp( aVDev.GetBitmap( aNullPoint, aAbsSize ) );
-                Bitmap          aMask;
-
-                Graphic( rGraphic.GetGDIMetaFile().GetMonochromeMtf( COL_BLACK ) ).Draw( &aVDev, aNewOrg, aQSizePix );
-                aMask = aVDev.GetBitmap( aNullPoint, aAbsSize );
-                aRetBmp = BitmapEx( aBmp, aMask );
-            }
-            else
-            {
-                Bitmap  aBmp( rGraphic.GetBitmap() );
-
-// UNX has got problems with 1x1 bitmaps which are transparent (KA 02.11.1998)
-#ifdef UNX
-                const Size  aBmpSize( aBmp.GetSizePixel() );
-                sal_Bool        bFullTrans = sal_False;
-
-                if( aBmpSize.Width() == 1 && aBmpSize.Height() == 1 && rGraphic.IsTransparent() )
-                {
-                    Bitmap              aTrans( rGraphic.GetBitmapEx().GetMask() );
-                    BitmapReadAccess*   pMAcc = aBmp.AcquireReadAccess();
-
-                    if( pMAcc )
-                    {
-                        if( pMAcc->GetColor( 0, 0 ) == BitmapColor( Color( COL_WHITE ) ) )
-                            bFullTrans = sal_True;
-
-                        aTrans.ReleaseAccess( pMAcc );
-                    }
-                }
-
-                if( !bFullTrans )
-#endif // UNX
-
-                {
-                    DitherBitmap( aBmp );
-                    aVDev.DrawBitmap( aNewOrg, aQSizePix, aBmp );
-                    aBmp = aVDev.GetBitmap( aNullPoint, aAbsSize );
-
-                    if( !rGraphic.IsTransparent() )
-                        aRetBmp = BitmapEx( aBmp );
-                    else
-                    {
-                        Bitmap  aTrans( rGraphic.GetBitmapEx().GetMask() );
-
-                        if( !aTrans )
-                            aRetBmp = BitmapEx( aBmp, rGraphic.GetBitmapEx().GetTransparentColor() );
-                        else
-                        {
-                            aVDev.DrawBitmap( aNewOrg, aQSizePix, aTrans );
-                            aRetBmp = BitmapEx( aBmp, aVDev.GetBitmap( Point(), aAbsSize ) );
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    return aRetBmp;
-}
-
-// ------------------------------------------------------------------------
-
-void XOutBitmap::DrawQuickDrawBitmapEx( OutputDevice* pOutDev, const Point& rPt,
-                                        const Size& rSize, const BitmapEx& rBmpEx )
-{
-    const Size      aBmpSizePix( rBmpEx.GetSizePixel() );
-    const Size      aSizePix( pOutDev->LogicToPixel( rSize ) );
-
-    if ( ( aSizePix.Width() - aBmpSizePix.Width() ) || ( aSizePix.Height() - aBmpSizePix.Height() ) )
-        rBmpEx.Draw( pOutDev, rPt, rSize );
-    else
-        rBmpEx.Draw( pOutDev, rPt );
-}
-
-// ------------------------------------------------------------------------
-
-void XOutBitmap::DrawTiledBitmapEx( OutputDevice* pOutDev,
-                                    const Point& rStartPt, const Size& rGrfSize,
-                                    const Rectangle& rTileRect, const BitmapEx& rBmpEx )
-{
-    Rectangle       aClipRect( pOutDev->LogicToPixel( pOutDev->GetClipRegion().GetBoundRect() ) );
-    Rectangle       aPixRect( pOutDev->LogicToPixel( rTileRect ) );
-    const Size      aPixSize( pOutDev->LogicToPixel( rGrfSize ) );
-    const Point     aPixPoint( pOutDev->LogicToPixel( rStartPt ) );
-    Point           aOrg;
-    const long      nWidth = aPixSize.Width();
-    const long      nHeight = aPixSize.Height();
-    long            nXPos = aPixPoint.X() + ( ( aPixRect.Left() - aPixPoint.X() ) / nWidth ) * nWidth;
-    long            nYPos = aPixPoint.Y() + ( ( aPixRect.Top() - aPixPoint.Y() ) / nHeight ) * nHeight;
-    const long      nBottom = aPixRect.Bottom();
-    const long      nRight = aPixRect.Right();
-    const long      nLeft = nXPos;
-    const sal_Bool      bNoSize = ( aPixSize == rBmpEx.GetSizePixel() );
-
-    pOutDev->Push();
-    pOutDev->SetMapMode( MapMode() );
-
-    // ggf. neue ClipRegion berechnen und setzen
-    if ( pOutDev->IsClipRegion() )
-        aPixRect.Intersection( aClipRect );
-
-    pOutDev->SetClipRegion( aPixRect );
-
-    while( nYPos <= nBottom )
-    {
-        while( nXPos <= nRight )
-        {
-            if ( bNoSize )
-                rBmpEx.Draw( pOutDev, Point( nXPos, nYPos ) );
-            else
-                rBmpEx.Draw( pOutDev, Point( nXPos, nYPos ), aPixSize );
-
-            nXPos += nWidth;
-        }
-
-        nXPos = nLeft;
-        nYPos += nHeight;
-    }
-
-    pOutDev->Pop();
-}
 
 // ------------------------------------------------------------------------
 
@@ -577,8 +396,8 @@ Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold )
                 const long          nHeight = aSize.Height();
                 const long          nHeight2 = nHeight - 2L;
                 const long          lThres2 = (long) cThreshold * cThreshold;
-                const sal_uInt8 nWhitePalIdx = pWriteAcc->GetBestPaletteIndex( Color( COL_WHITE ) );
-                const sal_uInt8 nBlackPalIdx = pWriteAcc->GetBestPaletteIndex( Color( COL_BLACK ) );
+                const sal_uInt8 nWhitePalIdx(static_cast< sal_uInt8 >(pWriteAcc->GetBestPaletteIndex(Color(COL_WHITE))));
+                const sal_uInt8 nBlackPalIdx(static_cast< sal_uInt8 >(pWriteAcc->GetBestPaletteIndex(Color(COL_BLACK))));
                 long                nSum1;
                 long                nSum2;
                 long                lGray;

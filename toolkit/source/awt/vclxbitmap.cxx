@@ -19,11 +19,8 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_toolkit.hxx"
-
 
 #include <toolkit/awt/vclxbitmap.hxx>
 #include <toolkit/helper/macros.hxx>
@@ -31,6 +28,7 @@
 #include <tools/stream.hxx>
 #include <rtl/memory.h>
 #include <rtl/uuid.h>
+#include <vcl/dibtools.hxx>
 
 //  ----------------------------------------------------
 //  class VCLXBitmap
@@ -71,7 +69,7 @@ IMPL_XTYPEPROVIDER_END
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     SvMemoryStream aMem;
-    aMem << maBitmap.GetBitmap();
+    WriteDIB(maBitmap.GetBitmap(), aMem, false, true);
     return ::com::sun::star::uno::Sequence<sal_Int8>( (sal_Int8*) aMem.GetData(), aMem.Tell() );
 }
 
@@ -80,10 +78,8 @@ IMPL_XTYPEPROVIDER_END
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     SvMemoryStream aMem;
-    aMem << maBitmap.GetMask();
+    WriteDIB(maBitmap.GetMask(), aMem, false, true);
     return ::com::sun::star::uno::Sequence<sal_Int8>( (sal_Int8*) aMem.GetData(), aMem.Tell() );
 }
 
-
-
-
+// eof

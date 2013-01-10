@@ -36,11 +36,10 @@ class BitmapEx;
 
 class VCL_DLLPUBLIC AlphaMask : private Bitmap
 {
+private:
     friend class BitmapEx;
     friend class OutputDevice;
-    friend VCL_DLLPUBLIC SvStream& operator<<( SvStream&, const ImageList& );
-
-private:
+    friend bool VCL_DLLPUBLIC ReadDIBBitmapEx(BitmapEx& rTarget, SvStream& rIStm);
 
     SAL_DLLPRIVATE const Bitmap&    ImplGetBitmap() const;
     SAL_DLLPRIVATE void             ImplSetBitmap( const Bitmap& rBitmap );
@@ -97,14 +96,7 @@ public:
     BitmapReadAccess*       AcquireReadAccess() { return Bitmap::AcquireReadAccess(); }
     BitmapWriteAccess*      AcquireWriteAccess() { return Bitmap::AcquireWriteAccess(); }
     void                    ReleaseAccess( BitmapReadAccess* pAccess );
-
-public:
-
-    sal_Bool                    Read( SvStream& rIStm, sal_Bool bFileHeader = sal_True ) { return Bitmap::Read( rIStm, bFileHeader ); }
-    sal_Bool                    Write( SvStream& rOStm, sal_Bool bCompressed = sal_True, sal_Bool bFileHeader = sal_True ) const { return Bitmap::Write( rOStm, bCompressed, bFileHeader ); }
-
-    friend VCL_DLLPUBLIC SvStream& operator<<( SvStream& rOStm, const BitmapEx& rBitmapEx );
-    friend VCL_DLLPUBLIC SvStream& operator>>( SvStream& rIStm, BitmapEx& rBitmapEx );
 };
 
 #endif // _SV_ALPHA_HXX
+// eof

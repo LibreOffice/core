@@ -46,9 +46,9 @@ enum TransparentType
 
 class VCL_DLLPUBLIC BitmapEx
 {
-    friend class ImpGraphic;
-
 private:
+    friend class ImpGraphic;
+    friend bool VCL_DLLPUBLIC WriteDIBBitmapEx(const BitmapEx& rSource, SvStream& rOStm);
 
     Bitmap              aBitmap;
     Bitmap              aMask;
@@ -59,14 +59,8 @@ private:
 
 public:
 
-//#if 0 // _SOLAR__PRIVATE
-
     SAL_DLLPRIVATE  ImpBitmap*  ImplGetBitmapImpBitmap() const { return aBitmap.ImplGetImpBitmap(); }
     SAL_DLLPRIVATE  ImpBitmap*  ImplGetMaskImpBitmap() const { return aMask.ImplGetImpBitmap(); }
-
-//#endif // PRIVATE
-
-public:
 
                         BitmapEx();
                         BitmapEx( const ResId& rResId );
@@ -386,11 +380,6 @@ public:
                 0 is not transparent, 255 is fully transparent
      */
     sal_uInt8 GetTransparency(sal_Int32 nX, sal_Int32 nY) const;
-
-public:
-
-    friend VCL_DLLPUBLIC SvStream&  operator<<( SvStream& rOStm, const BitmapEx& rBitmapEx );
-    friend VCL_DLLPUBLIC SvStream&  operator>>( SvStream& rIStm, BitmapEx& rBitmapEx );
 };
 
 #endif // _SV_BITMAPEX_HXX
