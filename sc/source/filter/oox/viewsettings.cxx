@@ -24,7 +24,9 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/document/IndexedPropertyValues.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
+#include <com/sun/star/document/NamedPropertyValues.hpp>
 #include <comphelper/mediadescriptor.hxx>
 #include "oox/core/filterbase.hxx"
 #include "oox/helper/attributelist.hxx"
@@ -579,7 +581,7 @@ void ViewSettings::finalizeImport()
     sal_Int16 nShowMode = getWorkbookSettings().getApiShowObjectMode();
 
     // view settings for all sheets
-    Reference< XNameContainer > xSheetsNC = ContainerHelper::createNameContainer( getBaseFilter().getComponentContext() );
+    Reference< XNameContainer > xSheetsNC = NamedPropertyValues::create( getBaseFilter().getComponentContext() );
     if( !xSheetsNC.is() ) return;
     for( SheetPropertiesMap::const_iterator aIt = maSheetProps.begin(), aEnd = maSheetProps.end(); aIt != aEnd; ++aIt )
         ContainerHelper::insertByName( xSheetsNC, rWorksheets.getCalcSheetName( aIt->first ), aIt->second );
@@ -591,7 +593,7 @@ void ViewSettings::finalizeImport()
     if( !rxActiveSheetView )
         rxActiveSheetView.reset( new SheetViewModel );
 
-    Reference< XIndexContainer > xContainer = ContainerHelper::createIndexContainer( getBaseFilter().getComponentContext() );
+    Reference< XIndexContainer > xContainer = IndexedPropertyValues::create( getBaseFilter().getComponentContext() );
     if( xContainer.is() ) try
     {
         PropertyMap aPropMap;

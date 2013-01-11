@@ -82,36 +82,6 @@ void ValueRangeSet::insert( const ValueRange& rRange )
 
 // ============================================================================
 
-Reference< XIndexContainer > ContainerHelper::createIndexContainer( const Reference< XComponentContext >& rxContext )
-{
-    Reference< XIndexContainer > xContainer;
-    if( rxContext.is() ) try
-    {
-        Reference< XMultiServiceFactory > xFactory( rxContext->getServiceManager(), UNO_QUERY_THROW );
-        xContainer.set( xFactory->createInstance( "com.sun.star.document.IndexedPropertyValues" ), UNO_QUERY_THROW );
-    }
-    catch( Exception& )
-    {
-    }
-    OSL_ENSURE( xContainer.is(), "ContainerHelper::createIndexContainer - cannot create container" );
-    return xContainer;
-}
-
-Reference< XNameContainer > ContainerHelper::createNameContainer( const Reference< XComponentContext >& rxContext )
-{
-    Reference< XNameContainer > xContainer;
-    if( rxContext.is() ) try
-    {
-        Reference< XMultiServiceFactory > xFactory( rxContext->getServiceManager(), UNO_QUERY_THROW );
-        xContainer.set( xFactory->createInstance( "com.sun.star.document.NamedPropertyValues" ), UNO_QUERY_THROW );
-    }
-    catch( Exception& )
-    {
-    }
-    OSL_ENSURE( xContainer.is(), "ContainerHelper::createNameContainer - cannot create container" );
-    return xContainer;
-}
-
 OUString ContainerHelper::getUnusedName(
         const Reference< XNameAccess >& rxNameAccess, const OUString& rSuggestedName,
         sal_Unicode cSeparator, sal_Int32 nFirstIndexToAppend )

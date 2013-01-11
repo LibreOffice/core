@@ -23,6 +23,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
+#include <com/sun/star/document/IndexedPropertyValues.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/xforms/XFormsSupplier.hpp>
 
@@ -367,25 +368,14 @@ void SwXMLExport::_ExportFontDecls()
 #define NUM_EXPORTED_VIEW_SETTINGS 11
 void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
 {
-    Reference< XMultiServiceFactory > xServiceFactory =
-            comphelper::getProcessServiceFactory();
-    OSL_ENSURE( xServiceFactory.is(),
-            "XMLReader::Read: got no service manager" );
-    if( !xServiceFactory.is() )
-        return;
-
     aProps.realloc( NUM_EXPORTED_VIEW_SETTINGS );
      // Currently exporting 9 properties
     PropertyValue *pValue = aProps.getArray();
     sal_Int32 nIndex = 0;
 
-    Reference < XIndexContainer > xBox (xServiceFactory->createInstance
-            (OUString( RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.document.IndexedPropertyValues") ) ), UNO_QUERY);
-    if (xBox.is() )
-    {
-        pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "Views") );
-        pValue[nIndex++].Value <<= Reference < XIndexAccess > ( xBox, UNO_QUERY );
-    }
+    Reference < XIndexContainer > xBox = IndexedPropertyValues::create( comphelper::getProcessComponentContext() );
+    pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "Views") );
+    pValue[nIndex++].Value <<= Reference < XIndexAccess > ( xBox, UNO_QUERY );
 
     Reference < XText > xText;
     SwXText *pText = 0;

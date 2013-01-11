@@ -157,17 +157,6 @@ private:
 class OOX_DLLPUBLIC ContainerHelper
 {
 public:
-    // com.sun.star.container.XIndexContainer ---------------------------------
-
-    /** Creates a new index container object from scratch. */
-    static ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >
-                        createIndexContainer( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
-
-    // com.sun.star.container.XNameContainer ----------------------------------
-
-    /** Creates a new name container object from scratch. */
-    static ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
-                        createNameContainer( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
 
     /** Returns a name that is not used in the passed name container.
 

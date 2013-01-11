@@ -62,6 +62,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/document/NamedPropertyValues.hpp>
 
 using namespace com::sun::star;
 
@@ -2628,44 +2629,35 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
                 static_cast<sal_Int32>(nViewID));
         pSettings[SC_VIEW_ID].Value <<= sBuffer.makeStringAndClear();
 
-        uno::Reference<lang::XMultiServiceFactory> xServiceFactory =
-                                        comphelper::getProcessServiceFactory();
-        OSL_ENSURE( xServiceFactory.is(), "got no service manager" );
-        if( xServiceFactory.is() )
+        uno::Reference<container::XNameContainer> xNameContainer =
+             document::NamedPropertyValues::create( comphelper::getProcessComponentContext() );
+        for (SCTAB nTab=0; nTab<static_cast<SCTAB>(maTabData.size()); nTab++)
         {
-            rtl::OUString sName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.NamedPropertyValues"));
-            uno::Reference<container::XNameContainer> xNameContainer = uno::Reference<container::XNameContainer>(xServiceFactory->createInstance(sName), uno::UNO_QUERY);
-            if (xNameContainer.is())
+            if (maTabData[nTab])
             {
-                for (SCTAB nTab=0; nTab<static_cast<SCTAB>(maTabData.size()); nTab++)
+                uno::Sequence <beans::PropertyValue> aTableViewSettings;
+                maTabData[nTab]->WriteUserDataSequence(aTableViewSettings, *this, nTab);
+                rtl::OUString sTabName;
+                GetDocument()->GetName( nTab, sTabName );
+                uno::Any aAny;
+                aAny <<= aTableViewSettings;
+                try
                 {
-                    if (maTabData[nTab])
-                    {
-                        uno::Sequence <beans::PropertyValue> aTableViewSettings;
-                        maTabData[nTab]->WriteUserDataSequence(aTableViewSettings, *this, nTab);
-                        rtl::OUString sTabName;
-                        GetDocument()->GetName( nTab, sTabName );
-                        uno::Any aAny;
-                        aAny <<= aTableViewSettings;
-                        try
-                        {
-                            xNameContainer->insertByName(sTabName, aAny);
-                        }
-                        //#101739#; two tables with the same name are possible
-                        catch ( container::ElementExistException& )
-                        {
-                            OSL_FAIL("seems there are two tables with the same name");
-                        }
-                        catch ( uno::RuntimeException& )
-                        {
-                            OSL_FAIL("something went wrong");
-                        }
-                    }
+                    xNameContainer->insertByName(sTabName, aAny);
                 }
-                pSettings[SC_TABLE_VIEWSETTINGS].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_TABLES));
-                pSettings[SC_TABLE_VIEWSETTINGS].Value <<= xNameContainer;
+                //#101739#; two tables with the same name are possible
+                catch ( container::ElementExistException& )
+                {
+                    OSL_FAIL("seems there are two tables with the same name");
+                }
+                catch ( uno::RuntimeException& )
+                {
+                    OSL_FAIL("something went wrong");
+                }
             }
         }
+        pSettings[SC_TABLE_VIEWSETTINGS].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_TABLES));
+        pSettings[SC_TABLE_VIEWSETTINGS].Value <<= xNameContainer;
 
         rtl::OUString sName;
         GetDocument()->GetName( nTabNo, sName );

@@ -20,7 +20,7 @@
 #ifndef XML_SETTINGS_EXPORT_CONTEXT_HXX
 #define XML_SETTINGS_EXPORT_CONTEXT_HXX
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include "xmloff/xmltoken.hxx"
 
@@ -46,8 +46,8 @@ namespace xmloff
 
         virtual void    Characters( const ::rtl::OUString& i_rCharacters ) = 0;
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                        GetServiceFactory() const = 0;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+                        GetComponentContext() const = 0;
 
     protected:
         ~XMLSettingsExportContext() {}

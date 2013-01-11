@@ -38,6 +38,7 @@
 #include <tools/diagnose_ex.h>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/document/NamedPropertyValues.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/form/binding/XValueBinding.hpp>
 #include <com/sun/star/form/binding/XBindableValue.hpp>
@@ -794,10 +795,7 @@ void getXFormsSettings( const Reference< XNameAccess >& _rXForms, Sequence< Prop
 
         Sequence< ::rtl::OUString > aModelNames( _rXForms->getElementNames() );
 
-        ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-        Reference< XNameContainer > xModelSettings(
-            aContext.createComponent( "com.sun.star.document.NamedPropertyValues" ),
-            UNO_QUERY_THROW );
+        Reference< XNameContainer > xModelSettings = document::NamedPropertyValues::create( comphelper::getProcessComponentContext() );
 
         for (   const ::rtl::OUString* pModelName = aModelNames.getConstArray();
                 pModelName != aModelNames.getConstArray() + aModelNames.getLength();

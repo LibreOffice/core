@@ -166,8 +166,8 @@ public:
 
     virtual void    Characters( const ::rtl::OUString& i_rCharacters );
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                    GetServiceFactory() const;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+                    GetComponentContext() const;
 private:
     SvXMLExport&                    m_rExport;
     ::std::stack< ::rtl::OUString > m_aElements;
@@ -202,9 +202,9 @@ void SettingsExportFacade::Characters( const ::rtl::OUString& i_rCharacters )
     m_rExport.GetDocHandler()->characters( i_rCharacters );
 }
 
-Reference< XMultiServiceFactory > SettingsExportFacade::GetServiceFactory() const
+Reference< XComponentContext > SettingsExportFacade::GetComponentContext() const
 {
-    return m_rExport.getServiceFactory();
+    return comphelper::getComponentContext( m_rExport.getServiceFactory() );
 }
 
 //==============================================================================

@@ -91,6 +91,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
+#include <com/sun/star/document/IndexedPropertyValues.hpp>
 #include <svl/itemiter.hxx>  //SfxItemIter
 
 #include <comphelper/processfactory.hxx>
@@ -1504,8 +1505,7 @@ void SwWW8ImplReader::ImportDop()
         aViewProps[2].Value <<= sal_Int16(0);
 
         uno::Reference< uno::XComponentContext > xComponentContext(comphelper::getProcessComponentContext());
-        uno::Reference<container::XIndexContainer> xBox(xComponentContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.IndexedPropertyValues",
-                    xComponentContext), uno::UNO_QUERY);
+        uno::Reference<container::XIndexContainer> xBox = document::IndexedPropertyValues::create(xComponentContext);
         xBox->insertByIndex(sal_Int32(0), uno::makeAny(aViewProps));
         uno::Reference<container::XIndexAccess> xIndexAccess(xBox, uno::UNO_QUERY);
         uno::Reference<document::XViewDataSupplier> xViewDataSupplier(mpDocShell->GetModel(), uno::UNO_QUERY);

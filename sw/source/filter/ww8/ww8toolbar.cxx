@@ -32,6 +32,7 @@
 #include "ww8scan.hxx"
 #include <rtl/ustrbuf.hxx>
 #include <stdarg.h>
+#include <com/sun/star/document/IndexedPropertyValues.hpp>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
 #include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -731,9 +732,7 @@ SwTBC::ImportToolBarControl( SwCTBWrapper& rWrapper, const css::uno::Reference< 
             SwCTB* pCustTB = rWrapper.GetCustomizationData( pMenu->Name() );
             if ( pCustTB )
             {
-                 uno::Reference< container::XIndexContainer > xMenuDesc;
-                 uno::Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-                 xMenuDesc.set( xMSF->createInstance( "com.sun.star.document.IndexedPropertyValues" ), uno::UNO_QUERY_THROW );
+                 uno::Reference< container::XIndexContainer > xMenuDesc = document::IndexedPropertyValues::create( comphelper::getProcessComponentContext() );
                 if ( !pCustTB->ImportMenuTB( rWrapper,xMenuDesc, helper ) )
                     return false;
                 if ( !bIsMenuBar )

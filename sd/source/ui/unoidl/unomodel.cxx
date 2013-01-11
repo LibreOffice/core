@@ -25,6 +25,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
+#include <com/sun/star/document/IndexedPropertyValues.hpp>
 
 #include <com/sun/star/embed/Aspects.hpp>
 
@@ -607,7 +608,7 @@ uno::Reference < container::XIndexAccess > SAL_CALL SdXImpressDocument::getViewD
 
         if( !rList.empty() )
         {
-            xRet = uno::Reference < container::XIndexAccess >::query(::comphelper::getProcessServiceFactory()->createInstance("com.sun.star.document.IndexedPropertyValues"));
+            xRet = uno::Reference< container::XIndexAccess >(document::IndexedPropertyValues::create( ::comphelper::getProcessComponentContext() ), uno::UNO_QUERY);
 
 
             uno::Reference < container::XIndexContainer > xCont( xRet, uno::UNO_QUERY );

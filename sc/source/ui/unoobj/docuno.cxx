@@ -51,6 +51,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
+#include <com/sun/star/document/IndexedPropertyValues.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <comphelper/processfactory.hxx>
@@ -1560,21 +1561,17 @@ uno::Reference< container::XIndexAccess > SAL_CALL ScModelObj::getViewData(  )
         SolarMutexGuard aGuard;
         if (pDocShell && pDocShell->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED)
         {
-            xRet.set(uno::Reference < container::XIndexAccess >::query(::comphelper::getProcessServiceFactory()->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.IndexedPropertyValues")))));
+            uno::Reference < container::XIndexContainer > xCont = document::IndexedPropertyValues::create( ::comphelper::getProcessComponentContext() );
+            xRet.set( xCont, uno::UNO_QUERY_THROW );
 
-            uno::Reference < container::XIndexContainer > xCont( xRet, uno::UNO_QUERY );
-            OSL_ENSURE( xCont.is(), "ScModelObj::getViewData() failed for OLE object" );
-            if( xCont.is() )
-            {
-                uno::Sequence< beans::PropertyValue > aSeq;
-                aSeq.realloc(1);
-                rtl::OUString sName;
-                pDocShell->GetDocument()->GetName( pDocShell->GetDocument()->GetVisibleTab(), sName );
-                rtl::OUString sOUName(sName);
-                aSeq[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ACTIVETABLE));
-                aSeq[0].Value <<= sOUName;
-                xCont->insertByIndex( 0, uno::makeAny( aSeq ) );
-            }
+            uno::Sequence< beans::PropertyValue > aSeq;
+            aSeq.realloc(1);
+            rtl::OUString sName;
+            pDocShell->GetDocument()->GetName( pDocShell->GetDocument()->GetVisibleTab(), sName );
+            rtl::OUString sOUName(sName);
+            aSeq[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ACTIVETABLE));
+            aSeq[0].Value <<= sOUName;
+            xCont->insertByIndex( 0, uno::makeAny( aSeq ) );
         }
     }
 

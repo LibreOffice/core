@@ -28,6 +28,7 @@
 #include <com/sun/star/io/XActiveDataControl.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/document/NamedPropertyValues.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -514,10 +515,8 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
     // Get service factory
     uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
             comphelper::getProcessServiceFactory();
-    OSL_ENSURE( xServiceFactory.is(),
-            "XMLReader::Read: got no service manager" );
-    if( !xServiceFactory.is() )
-        return ERR_SWG_READ_ERROR;
+    uno::Reference< uno::XComponentContext > xContext =
+            comphelper::getProcessComponentContext();
 
     uno::Reference< io::XActiveDataSource > xSource;
     uno::Reference< XInterface > xPipe;
@@ -696,9 +695,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
     OUString sProgressRange(RTL_CONSTASCII_USTRINGPARAM("ProgressRange"));
     xInfoSet->setPropertyValue(sProgressRange, aProgRange);
 
-    ::comphelper::ComponentContext aContext( xServiceFactory );
-    Reference< container::XNameAccess > xLateInitSettings(
-        aContext.createComponent( "com.sun.star.document.NamedPropertyValues" ), UNO_QUERY_THROW );
+    Reference< container::XNameAccess > xLateInitSettings( document::NamedPropertyValues::create(xContext), UNO_QUERY_THROW );
     beans::NamedValue aLateInitSettings(
         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LateInitSettings" ) ),
         makeAny( xLateInitSettings )
@@ -872,7 +869,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
             const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(xModelComp,
                 uno::UNO_QUERY_THROW);
             const uno::Reference<rdf::XURI> xBaseURI( ::sfx2::createBaseURI(
-                aContext.getUNOContext(), xStorage, aBaseURL, StreamPath) );
+                xContext, xStorage, aBaseURL, StreamPath) );
             const uno::Reference<task::XInteractionHandler> xHandler(
                 pDocSh->GetMedium()->GetInteractionHandler() );
             xDMA->loadMetadataFromStorage(xStorage, xBaseURI, xHandler);
@@ -1054,10 +1051,8 @@ size_t XMLReader::GetSectionList( SfxMedium& rMedium,
             comphelper::getProcessServiceFactory();
     uno::Reference< uno::XComponentContext > xContext =
             comphelper::getProcessComponentContext();
-    OSL_ENSURE( xServiceFactory.is(),
-            "XMLReader::Read: got no service manager" );
     uno::Reference < embed::XStorage > xStg2;
-    if( xServiceFactory.is() && ( xStg2 = rMedium.GetStorage() ).is() )
+    if( ( xStg2 = rMedium.GetStorage() ).is() )
     {
         try
         {

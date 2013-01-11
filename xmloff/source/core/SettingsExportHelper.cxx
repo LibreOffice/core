@@ -38,6 +38,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/formula/SymbolDescriptor.hpp>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
+#include <com/sun/star/document/IndexedPropertyValues.hpp>
 #include <xmloff/XMLSettingsExportContext.hxx>
 #include <xmlenums.hxx>
 
@@ -291,63 +292,53 @@ void XMLSettingsExportHelper::exportSymbolDescriptors(
                     const uno::Sequence < formula::SymbolDescriptor > &rProps,
                     const rtl::OUString rName) const
 {
-    // #110680#
-    uno::Reference< lang::XMultiServiceFactory > xServiceFactory( m_rContext.GetServiceFactory() );
-    DBG_ASSERT( xServiceFactory.is(), "XMLSettingsExportHelper::exportSymbolDescriptors: got no service manager" );
+    uno::Reference< container::XIndexContainer > xBox = document::IndexedPropertyValues::create(m_rContext.GetComponentContext());
 
-    if( xServiceFactory.is() )
+    const rtl::OUString sName     ( "Name" );
+    const rtl::OUString sExportName ( "ExportName" );
+    const rtl::OUString sSymbolSet ( "SymbolSet" );
+    const rtl::OUString sCharacter ( "Character" );
+    const rtl::OUString sFontName ( "FontName" );
+    const rtl::OUString sCharSet  ( "CharSet" );
+    const rtl::OUString sFamily   ( "Family" );
+    const rtl::OUString sPitch    ( "Pitch" );
+    const rtl::OUString sWeight   ( "Weight" );
+    const rtl::OUString sItalic   ( "Italic" );
+
+    sal_Int32 nCount = rProps.getLength();
+    const formula::SymbolDescriptor *pDescriptor = rProps.getConstArray();
+
+    for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++, pDescriptor++ )
     {
-        uno::Reference< container::XIndexContainer > xBox(xServiceFactory->createInstance( "com.sun.star.document.IndexedPropertyValues" ), uno::UNO_QUERY);
-        DBG_ASSERT( xBox.is(), "could not create service com.sun.star.document.IndexedPropertyValues" );
-        if (xBox.is() )
-        {
-            const rtl::OUString sName     ( "Name" );
-            const rtl::OUString sExportName ( "ExportName" );
-            const rtl::OUString sSymbolSet ( "SymbolSet" );
-            const rtl::OUString sCharacter ( "Character" );
-            const rtl::OUString sFontName ( "FontName" );
-            const rtl::OUString sCharSet  ( "CharSet" );
-            const rtl::OUString sFamily   ( "Family" );
-            const rtl::OUString sPitch    ( "Pitch" );
-            const rtl::OUString sWeight   ( "Weight" );
-            const rtl::OUString sItalic   ( "Italic" );
+        uno::Sequence < beans::PropertyValue > aSequence ( XML_SYMBOL_DESCRIPTOR_MAX );
+        beans::PropertyValue *pSymbol = aSequence.getArray();
 
-            sal_Int32 nCount = rProps.getLength();
-            const formula::SymbolDescriptor *pDescriptor = rProps.getConstArray();
+        pSymbol[XML_SYMBOL_DESCRIPTOR_NAME].Name         = sName;
+        pSymbol[XML_SYMBOL_DESCRIPTOR_NAME].Value       <<= pDescriptor->sName;
+        pSymbol[XML_SYMBOL_DESCRIPTOR_EXPORT_NAME].Name  = sExportName;
+        pSymbol[XML_SYMBOL_DESCRIPTOR_EXPORT_NAME].Value<<= pDescriptor->sExportName;
+        pSymbol[XML_SYMBOL_DESCRIPTOR_FONT_NAME].Name    = sFontName;
+        pSymbol[XML_SYMBOL_DESCRIPTOR_FONT_NAME].Value  <<= pDescriptor->sFontName;
+        pSymbol[XML_SYMBOL_DESCRIPTOR_CHAR_SET].Name      = sCharSet;
+        pSymbol[XML_SYMBOL_DESCRIPTOR_CHAR_SET].Value   <<= pDescriptor->nCharSet;
+        pSymbol[XML_SYMBOL_DESCRIPTOR_FAMILY].Name       = sFamily;
+        pSymbol[XML_SYMBOL_DESCRIPTOR_FAMILY].Value <<= pDescriptor->nFamily;
+        pSymbol[XML_SYMBOL_DESCRIPTOR_PITCH].Name        = sPitch;
+        pSymbol[XML_SYMBOL_DESCRIPTOR_PITCH].Value      <<= pDescriptor->nPitch;
+        pSymbol[XML_SYMBOL_DESCRIPTOR_WEIGHT].Name       = sWeight;
+        pSymbol[XML_SYMBOL_DESCRIPTOR_WEIGHT].Value <<= pDescriptor->nWeight;
+        pSymbol[XML_SYMBOL_DESCRIPTOR_ITALIC].Name       = sItalic;
+        pSymbol[XML_SYMBOL_DESCRIPTOR_ITALIC].Value <<= pDescriptor->nItalic;
+        pSymbol[XML_SYMBOL_DESCRIPTOR_SYMBOL_SET].Name       = sSymbolSet;
+        pSymbol[XML_SYMBOL_DESCRIPTOR_SYMBOL_SET].Value <<= pDescriptor->sSymbolSet;
+        pSymbol[XML_SYMBOL_DESCRIPTOR_CHARACTER].Name       = sCharacter;
+        pSymbol[XML_SYMBOL_DESCRIPTOR_CHARACTER].Value  <<= pDescriptor->nCharacter;
 
-            for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++, pDescriptor++ )
-            {
-                uno::Sequence < beans::PropertyValue > aSequence ( XML_SYMBOL_DESCRIPTOR_MAX );
-                beans::PropertyValue *pSymbol = aSequence.getArray();
-
-                pSymbol[XML_SYMBOL_DESCRIPTOR_NAME].Name         = sName;
-                pSymbol[XML_SYMBOL_DESCRIPTOR_NAME].Value       <<= pDescriptor->sName;
-                pSymbol[XML_SYMBOL_DESCRIPTOR_EXPORT_NAME].Name  = sExportName;
-                pSymbol[XML_SYMBOL_DESCRIPTOR_EXPORT_NAME].Value<<= pDescriptor->sExportName;
-                pSymbol[XML_SYMBOL_DESCRIPTOR_FONT_NAME].Name    = sFontName;
-                pSymbol[XML_SYMBOL_DESCRIPTOR_FONT_NAME].Value  <<= pDescriptor->sFontName;
-                pSymbol[XML_SYMBOL_DESCRIPTOR_CHAR_SET].Name      = sCharSet;
-                pSymbol[XML_SYMBOL_DESCRIPTOR_CHAR_SET].Value   <<= pDescriptor->nCharSet;
-                pSymbol[XML_SYMBOL_DESCRIPTOR_FAMILY].Name       = sFamily;
-                pSymbol[XML_SYMBOL_DESCRIPTOR_FAMILY].Value <<= pDescriptor->nFamily;
-                pSymbol[XML_SYMBOL_DESCRIPTOR_PITCH].Name        = sPitch;
-                pSymbol[XML_SYMBOL_DESCRIPTOR_PITCH].Value      <<= pDescriptor->nPitch;
-                pSymbol[XML_SYMBOL_DESCRIPTOR_WEIGHT].Name       = sWeight;
-                pSymbol[XML_SYMBOL_DESCRIPTOR_WEIGHT].Value <<= pDescriptor->nWeight;
-                pSymbol[XML_SYMBOL_DESCRIPTOR_ITALIC].Name       = sItalic;
-                pSymbol[XML_SYMBOL_DESCRIPTOR_ITALIC].Value <<= pDescriptor->nItalic;
-                pSymbol[XML_SYMBOL_DESCRIPTOR_SYMBOL_SET].Name       = sSymbolSet;
-                pSymbol[XML_SYMBOL_DESCRIPTOR_SYMBOL_SET].Value <<= pDescriptor->sSymbolSet;
-                pSymbol[XML_SYMBOL_DESCRIPTOR_CHARACTER].Name       = sCharacter;
-                pSymbol[XML_SYMBOL_DESCRIPTOR_CHARACTER].Value  <<= pDescriptor->nCharacter;
-
-                xBox->insertByIndex(nIndex, uno::makeAny( aSequence ));
-            }
-
-            uno::Reference< container::XIndexAccess > xIA( xBox, uno::UNO_QUERY );
-            exportIndexAccess( xIA, rName );
-        }
+        xBox->insertByIndex(nIndex, uno::makeAny( aSequence ));
     }
+
+    uno::Reference< container::XIndexAccess > xIA( xBox, uno::UNO_QUERY );
+    exportIndexAccess( xIA, rName );
 }
 void XMLSettingsExportHelper::exportbase64Binary(
                     const uno::Sequence<sal_Int8>& aProps,
@@ -440,56 +431,45 @@ void XMLSettingsExportHelper::exportForbiddenCharacters(
     if( !xForbChars.is() || !xLocales.is() )
         return;
 
-    // #110680#
-    uno::Reference< lang::XMultiServiceFactory > xServiceFactory( m_rContext.GetServiceFactory() );
-    DBG_ASSERT( xServiceFactory.is(), "XMLSettingsExportHelper::exportForbiddenCharacters: got no service manager" );
+    uno::Reference< container::XIndexContainer > xBox = document::IndexedPropertyValues::create(m_rContext.GetComponentContext());
+    const uno::Sequence< lang::Locale > aLocales( xLocales->getLocales() );
+    const lang::Locale* pLocales = aLocales.getConstArray();
 
-    if( xServiceFactory.is() )
+    const sal_Int32 nCount = aLocales.getLength();
+
+    const rtl::OUString sLanguage  ( "Language" );
+    const rtl::OUString sCountry   ( "Country" );
+    const rtl::OUString sVariant   ( "Variant" );
+    const rtl::OUString sBeginLine ( "BeginLine" );
+    const rtl::OUString sEndLine   ( "EndLine" );
+
+    sal_Int32 nPos = 0;
+    for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++, pLocales++ )
     {
-        uno::Reference< container::XIndexContainer > xBox(xServiceFactory->createInstance( "com.sun.star.document.IndexedPropertyValues" ), uno::UNO_QUERY);
-        DBG_ASSERT( xBox.is(), "could not create service com.sun.star.document.IndexedPropertyValues" );
-        if (xBox.is() )
+        if( xForbChars->hasForbiddenCharacters( *pLocales ) )
         {
-            const uno::Sequence< lang::Locale > aLocales( xLocales->getLocales() );
-            const lang::Locale* pLocales = aLocales.getConstArray();
-
-            const sal_Int32 nCount = aLocales.getLength();
-
-            const rtl::OUString sLanguage  ( "Language" );
-            const rtl::OUString sCountry   ( "Country" );
-            const rtl::OUString sVariant   ( "Variant" );
-            const rtl::OUString sBeginLine ( "BeginLine" );
-            const rtl::OUString sEndLine   ( "EndLine" );
-
-            sal_Int32 nPos = 0;
-            for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++, pLocales++ )
-            {
-                if( xForbChars->hasForbiddenCharacters( *pLocales ) )
-                {
-                    const i18n::ForbiddenCharacters aChars( xForbChars->getForbiddenCharacters( *pLocales ) );
+            const i18n::ForbiddenCharacters aChars( xForbChars->getForbiddenCharacters( *pLocales ) );
 
 
-                    uno::Sequence < beans::PropertyValue > aSequence ( XML_FORBIDDEN_CHARACTER_MAX );
-                    beans::PropertyValue *pForChar = aSequence.getArray();
+            uno::Sequence < beans::PropertyValue > aSequence ( XML_FORBIDDEN_CHARACTER_MAX );
+            beans::PropertyValue *pForChar = aSequence.getArray();
 
-                    pForChar[XML_FORBIDDEN_CHARACTER_LANGUAGE].Name    = sLanguage;
-                    pForChar[XML_FORBIDDEN_CHARACTER_LANGUAGE].Value <<= pLocales->Language;
-                    pForChar[XML_FORBIDDEN_CHARACTER_COUNTRY].Name    = sCountry;
-                    pForChar[XML_FORBIDDEN_CHARACTER_COUNTRY].Value <<= pLocales->Country;
-                    pForChar[XML_FORBIDDEN_CHARACTER_VARIANT].Name    = sVariant;
-                    pForChar[XML_FORBIDDEN_CHARACTER_VARIANT].Value <<= pLocales->Variant;
-                    pForChar[XML_FORBIDDEN_CHARACTER_BEGIN_LINE].Name    = sBeginLine;
-                    pForChar[XML_FORBIDDEN_CHARACTER_BEGIN_LINE].Value <<= aChars.beginLine;
-                    pForChar[XML_FORBIDDEN_CHARACTER_END_LINE].Name    = sEndLine;
-                    pForChar[XML_FORBIDDEN_CHARACTER_END_LINE].Value <<= aChars.endLine;
-                    xBox->insertByIndex(nPos++, uno::makeAny( aSequence ));
-                }
-            }
-
-            uno::Reference< container::XIndexAccess > xIA( xBox, uno::UNO_QUERY );
-            exportIndexAccess( xIA, rName );
+            pForChar[XML_FORBIDDEN_CHARACTER_LANGUAGE].Name    = sLanguage;
+            pForChar[XML_FORBIDDEN_CHARACTER_LANGUAGE].Value <<= pLocales->Language;
+            pForChar[XML_FORBIDDEN_CHARACTER_COUNTRY].Name    = sCountry;
+            pForChar[XML_FORBIDDEN_CHARACTER_COUNTRY].Value <<= pLocales->Country;
+            pForChar[XML_FORBIDDEN_CHARACTER_VARIANT].Name    = sVariant;
+            pForChar[XML_FORBIDDEN_CHARACTER_VARIANT].Value <<= pLocales->Variant;
+            pForChar[XML_FORBIDDEN_CHARACTER_BEGIN_LINE].Name    = sBeginLine;
+            pForChar[XML_FORBIDDEN_CHARACTER_BEGIN_LINE].Value <<= aChars.beginLine;
+            pForChar[XML_FORBIDDEN_CHARACTER_END_LINE].Name    = sEndLine;
+            pForChar[XML_FORBIDDEN_CHARACTER_END_LINE].Value <<= aChars.endLine;
+            xBox->insertByIndex(nPos++, uno::makeAny( aSequence ));
         }
     }
+
+    uno::Reference< container::XIndexAccess > xIA( xBox, uno::UNO_QUERY );
+    exportIndexAccess( xIA, rName );
 }
 
 void XMLSettingsExportHelper::exportAllSettings(
@@ -525,11 +505,10 @@ void XMLSettingsExportHelper::ManipulateSetting( uno::Any& rAny, const rtl::OUSt
     {
         if( !mxStringSubsitution.is() )
         {
-            if( m_rContext.GetServiceFactory().is() ) try
+            try
             {
-                uno::Reference< uno::XComponentContext > xContext( comphelper::getComponentContext(m_rContext.GetServiceFactory()) );
                 const_cast< XMLSettingsExportHelper* >(this)->mxStringSubsitution =
-                    util::PathSubstitution::create(xContext);
+                    util::PathSubstitution::create( m_rContext.GetComponentContext() );
             }
             catch( uno::Exception& )
             {

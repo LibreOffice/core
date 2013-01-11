@@ -35,6 +35,7 @@
 #include <com/sun/star/embed/EmbedMapUnits.hpp>
 #include <com/sun/star/document/XStorageChangeListener.hpp>
 #include <com/sun/star/document/XActionLockable.hpp>
+#include <com/sun/star/document/IndexedPropertyValues.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
@@ -3197,8 +3198,8 @@ uno::Reference < container::XIndexAccess > SAL_CALL SfxBaseModel::getViewData() 
             return uno::Reference < container::XIndexAccess >();
 
         m_pData->m_contViewData = Reference < container::XIndexAccess >(
-                ::comphelper::getProcessServiceFactory()->createInstance(
-                DEFINE_CONST_UNICODE("com.sun.star.document.IndexedPropertyValues") ),
+                document::IndexedPropertyValues::create(
+                   ::comphelper::getProcessComponentContext() ),
                 uno::UNO_QUERY );
 
         if ( !m_pData->m_contViewData.is() )

@@ -41,6 +41,8 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
+#include <com/sun/star/document/IndexedPropertyValues.hpp>
+#include <com/sun/star/document/NamedPropertyValues.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <xmlenums.hxx>
 
@@ -52,13 +54,10 @@ class XMLMyList
     std::list<beans::PropertyValue> aProps;
     sal_uInt32                      nCount;
 
-    // #110680#
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxServiceFactory;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
 
 public:
-    // #110680#
-    XMLMyList(const uno::Reference<lang::XMultiServiceFactory>& xServiceFactory);
-    ~XMLMyList();
+    XMLMyList(const uno::Reference<uno::XComponentContext>& rxContext);
 
     void push_back(beans::PropertyValue& aProp) { aProps.push_back(aProp); nCount++; }
     uno::Sequence<beans::PropertyValue> GetSequence();
@@ -66,17 +65,11 @@ public:
     uno::Reference<container::XIndexContainer> GetIndexContainer();
 };
 
-// #110680#
-XMLMyList::XMLMyList(const uno::Reference<lang::XMultiServiceFactory>& xServiceFactory)
+XMLMyList::XMLMyList(const uno::Reference<uno::XComponentContext>& rxContext)
 :   nCount(0),
-    mxServiceFactory(xServiceFactory)
+    m_xContext(rxContext)
 {
-    DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
-}
-
-// #110680#
-XMLMyList::~XMLMyList()
-{
+    DBG_ASSERT( rxContext.is(), "got no service manager" );
 }
 
 uno::Sequence<beans::PropertyValue> XMLMyList::GetSequence()
@@ -100,48 +93,29 @@ uno::Sequence<beans::PropertyValue> XMLMyList::GetSequence()
 
 uno::Reference<container::XNameContainer> XMLMyList::GetNameContainer()
 {
-    uno::Reference<container::XNameContainer> xNameContainer;
-
-    // #110680#
-
-    if( mxServiceFactory.is() )
+    uno::Reference<container::XNameContainer> xNameContainer = document::NamedPropertyValues::create(m_xContext);
+    std::list<beans::PropertyValue>::iterator aItr = aProps.begin();
+    while (aItr != aProps.end())
     {
-        rtl::OUString sName("com.sun.star.document.NamedPropertyValues");
-        xNameContainer = uno::Reference<container::XNameContainer>(mxServiceFactory->createInstance(sName), uno::UNO_QUERY);
-        if (xNameContainer.is())
-        {
-            std::list<beans::PropertyValue>::iterator aItr = aProps.begin();
-            while (aItr != aProps.end())
-            {
-                xNameContainer->insertByName(aItr->Name, aItr->Value);
-                ++aItr;
-            }
-        }
+        xNameContainer->insertByName(aItr->Name, aItr->Value);
+        ++aItr;
     }
+
     return xNameContainer;
 }
 
 uno::Reference<container::XIndexContainer> XMLMyList::GetIndexContainer()
 {
-    uno::Reference<container::XIndexContainer> xIndexContainer;
-    // #110680#
-
-    if( mxServiceFactory.is() )
+    uno::Reference<container::XIndexContainer> xIndexContainer = document::IndexedPropertyValues::create(m_xContext);
+    std::list<beans::PropertyValue>::iterator aItr = aProps.begin();
+    sal_uInt32 i(0);
+    while (aItr != aProps.end())
     {
-        rtl::OUString sName("com.sun.star.document.IndexedPropertyValues");
-        xIndexContainer = uno::Reference<container::XIndexContainer>(mxServiceFactory->createInstance(sName), uno::UNO_QUERY);
-        if (xIndexContainer.is())
-        {
-            std::list<beans::PropertyValue>::iterator aItr = aProps.begin();
-            sal_uInt32 i(0);
-            while (aItr != aProps.end())
-            {
-                xIndexContainer->insertByIndex(i, aItr->Value);
-                ++aItr;
-                ++i;
-            }
-        }
+        xIndexContainer->insertByIndex(i, aItr->Value);
+        ++aItr;
+        ++i;
     }
+
     return xIndexContainer;
 }
 
@@ -488,7 +462,7 @@ XMLConfigBaseContext::XMLConfigBaseContext(SvXMLImport& rImport, sal_uInt16 nPrf
         XMLConfigBaseContext* pTempBaseContext)
     : SvXMLImportContext( rImport, nPrfx, rLName ),
     // #110680#
-    maProps(rImport.getServiceFactory()),
+    maProps( comphelper::getComponentContext(rImport.getServiceFactory())),
     maProp(),
     mrAny(rTempAny),
     mpBaseContext(pTempBaseContext)

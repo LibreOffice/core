@@ -213,8 +213,8 @@ namespace dbaccess
         virtual void    EndElement  ( const sal_Bool i_bIgnoreWhitespace );
         virtual void    Characters( const ::rtl::OUString& i_rCharacters );
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                        GetServiceFactory() const;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+                        GetComponentContext() const;
 
     private:
         ::rtl::OUString impl_prefix( const ::xmloff::token::XMLTokenEnum i_eToken )
@@ -267,9 +267,9 @@ namespace dbaccess
     }
 
     //--------------------------------------------------------------------
-    Reference< XMultiServiceFactory > SettingsExportContext::GetServiceFactory() const
+    Reference< com::sun::star::uno::XComponentContext > SettingsExportContext::GetComponentContext() const
     {
-        return m_rContext.getLegacyServiceFactory();
+        return m_rContext.getUNOContext();
     }
 
     //==================================================================================================================
