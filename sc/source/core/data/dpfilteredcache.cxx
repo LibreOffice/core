@@ -437,7 +437,7 @@ void ScDPFilteredCache::dumpRowFlag(const RowFlagType& rFlag) const
 
 void ScDPFilteredCache::dump() const
 {
-    cout << "--- pivot cache filter dump" << endl;
+    cout << "--- pivot filtered cache dump" << endl;
 
     cout << endl;
     cout << "* show by filter" << endl;
@@ -447,6 +447,16 @@ void ScDPFilteredCache::dump() const
     cout << "* show by page dimensions" << endl;
     dumpRowFlag(maShowByPage);
 
+    cout << endl;
+    cout << "* field entries" << endl;
+    size_t nFieldCount = maFieldEntries.size();
+    for (size_t i = 0; i < nFieldCount; ++i)
+    {
+        const vector<SCROW>& rField = maFieldEntries[i];
+        cout << "  * field " << i << endl;
+        for (size_t j = 0, n = rField.size(); j < n; ++j)
+            cout << "    ID: " << rField[j] << endl;
+    }
     cout << "---" << endl;
 }
 
