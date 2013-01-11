@@ -89,26 +89,35 @@ char const * toString(sal_detail_LogLevel level) {
     }
 }
 
-// getenv is not thread safe, so minimize use of result:
+// getenv is not thread safe, so minimize use of result; except on Android and
+// iOS, see 60628799633ffde502cb105b98d3f254f93115aa "Notice if SAL_LOG is
+// changed while the process is running":
+#if defined ANDROID || defined IOS
+
 char const * getEnvironmentVariable() {
-    static char const * cached_value = NULL;
+    return std::getenv("SAL_LOG");
+}
+
+#else
+
+char const * getEnvironmentVariable_() {
     char const * p1 = std::getenv("SAL_LOG");
     if (p1 == 0) {
-        return "+WARN";
+        return 0;
     }
-    char * p2 = strdup(p1); // leaked whenever it has changed
+    char const * p2 = strdup(p1); // leaked
     if (p2 == 0) {
         std::abort(); // cannot do much here
     }
-    if (cached_value == NULL) {
-        cached_value = p2;
-    } else if (strcmp(cached_value, p2) == 0) {
-        free(p2);
-    } else {
-        cached_value = p2;
-    }
-    return cached_value;
+    return p2;
 }
+
+char const * getEnvironmentVariable() {
+    static char const * env = getEnvironmentVariable_();
+    return env;
+}
+
+#endif
 
 #ifdef HAVE_SYSLOG_H
 int toSyslogPriority(sal_detail_LogLevel level) {
@@ -131,6 +140,9 @@ bool report(sal_detail_LogLevel level, char const * area) {
         return true;
     assert(area != 0);
     char const * env = getEnvironmentVariable();
+    if (env == 0) {
+        env = "+WARN";
+    }
     std::size_t areaLen = std::strlen(area);
     enum Sense { POSITIVE = 0, NEGATIVE = 1 };
     std::size_t senseLen[2] = { 0, 1 };
