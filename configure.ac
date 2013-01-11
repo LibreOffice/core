@@ -4615,7 +4615,7 @@ elif test "$_make_longver" -ge "038100"; then
     fi
     AC_MSG_CHECKING([for GNU make bug 20033])
     TESTGMAKEBUG20033=`mktemp -d tmp.XXXXXX`
-    $SED -e "s/<TAB>/$TAB/" > $TESTGMAKEBUG20033/Makefile << EOF
+    $SED -e "s/<TAB>/$TAB/g" > $TESTGMAKEBUG20033/Makefile << EOF
 A := \$(wildcard *.a)
 
 .PHONY: all
