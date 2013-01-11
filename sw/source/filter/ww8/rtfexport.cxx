@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_version.h>
 #include "rtfexportfilter.hxx"
 #include "rtfsdrexport.hxx"
 #include "rtfattributeoutput.hxx"
@@ -412,7 +413,7 @@ void RtfExport::WriteInfo()
 
     Strm() << '{' << OOO_STRING_SVTOOLS_RTF_COMMENT << " ";
     Strm() << OUStringToOString( utl::ConfigManager::getProductName(), eCurrentEncoding).getStr() << "}{" << OOO_STRING_SVTOOLS_RTF_VERN;
-    OutULong( SUPD*10 ) << '}';
+    Strm() << LIBO_VERSION_MAJOR LIBO_VERSION_MINOR LIBO_VERSION_MICRO "0" << '}';
     Strm() << '}';
 }
 
