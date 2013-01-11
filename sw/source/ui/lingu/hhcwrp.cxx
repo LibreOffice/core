@@ -94,27 +94,27 @@ SwHHCWrapper::SwHHCWrapper(
         const Font *pTargetFont,
         sal_Int32 nConvOptions,
         sal_Bool bIsInteractive,
-        sal_Bool bStart, sal_Bool bOther, sal_Bool bSelection ) :
-    editeng::HangulHanjaConversion( &pSwView->GetEditWin(), rxContext,
+        sal_Bool bStart, sal_Bool bOther, sal_Bool bSelection )
+    : editeng::HangulHanjaConversion( &pSwView->GetEditWin(), rxContext,
                                 LanguageTag( nSourceLanguage ).getLocale(),
                                 LanguageTag( nTargetLanguage ).getLocale(),
                                 pTargetFont,
                                 nConvOptions,
-                                bIsInteractive ),
-    m_pView( pSwView ),
-    m_pWin( &pSwView->GetEditWin() ),
-    m_rWrtShell( pSwView->GetWrtShell() ),
-    m_pConvArgs( 0 ),
-    m_nLastPos( 0 ),
-    m_nUnitOffset( 0 ),
-    m_nPageCount( 0 ),
-    m_nPageStart( 0 ),
-    m_bIsDrawObj( sal_False ),
-    m_bIsOtherCntnt( bOther ),
-    m_bStartChk( bOther ),
-    m_bIsSelection( bSelection ),
-    m_bStartDone( bOther || bStart ),
-    m_bEndDone( sal_False )
+                                bIsInteractive )
+    , m_pView( pSwView )
+    , m_pWin( &pSwView->GetEditWin() )
+    , m_rWrtShell( pSwView->GetWrtShell() )
+    , m_pConvArgs( 0 )
+    , m_nLastPos( 0 )
+    , m_nUnitOffset( 0 )
+    , m_nPageCount( 0 )
+    , m_nPageStart( 0 )
+    , m_bIsDrawObj( sal_False )
+    , m_bIsOtherCntnt( bOther )
+    , m_bStartChk( bOther )
+    , m_bIsSelection( bSelection )
+    , m_bStartDone( bOther || bStart )
+    , m_bEndDone( sal_False )
 {
 }
 
