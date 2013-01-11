@@ -101,7 +101,7 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 
 		user = xAuthenticator.getUserName().encode('ascii')
 		password = xAuthenticator.getPassword().encode('ascii')
-		if user != '':
+		if user != b'':
 			if dbg:
 				print("Logging in, username of" + user, file=dbgout)
 			self.server.login(user, password)
@@ -281,7 +281,7 @@ class PyMailIMAPService(unohelper.Base, XMailService):
 			
 		user = xAuthenticator.getUserName().encode('ascii')
 		password = xAuthenticator.getPassword().encode('ascii')
-		if user != '':
+		if user != b'':
 			if dbg:
 				print("Logging in, username of" + user, file=dbgout)
 			self.server.login(user, password)
