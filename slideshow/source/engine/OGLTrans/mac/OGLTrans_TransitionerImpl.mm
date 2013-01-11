@@ -398,7 +398,7 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
     awt::Rectangle aCanvasArea = mxView->getCanvasArea();
 
     // needed in windowed mode only ?
-    if( (aCanvasArea.X != 0) && (aCanvasArea.Y != 0) )
+    if( (pWindow != NULL) && (aCanvasArea.X != 0) && (aCanvasArea.Y != 0) )
         pWindow->setPosSizePixel(aCanvasArea.X, aCanvasArea.Y, aCanvasArea.Width, aCanvasArea.Height);
 
     GLWin.Width = aCanvasArea.Width;
