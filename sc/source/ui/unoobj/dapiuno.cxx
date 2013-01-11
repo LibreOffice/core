@@ -440,7 +440,7 @@ void SAL_CALL ScDataPilotTablesObj::insertNewByName( const OUString& aNewName,
     // todo: handle double fields (for more information see ScDPObject
 
             ScDBDocFunc aFunc(*pDocShell);
-            bDone = aFunc.DataPilotUpdate( NULL, pNewObj, sal_True, sal_True );
+            bDone = aFunc.CreatePivotTable(*pNewObj, true, true);
         }
     }
 

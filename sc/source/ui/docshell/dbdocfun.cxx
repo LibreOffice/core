@@ -1196,6 +1196,14 @@ static sal_Bool lcl_EmptyExcept( ScDocument* pDoc, const ScRange& rRange, const 
 bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewObj,
                                    bool bRecord, bool bApi, bool bAllowMove )
 {
+    if (!pOldObj)
+    {
+        if (!pNewObj)
+            return false;
+
+        return CreatePivotTable(*pNewObj, bRecord, bApi);
+    }
+
     ScDocShellModificator aModificator( rDocShell );
     WaitObject aWait( rDocShell.GetActiveDialogParent() );
 
@@ -1445,6 +1453,135 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
         rDocShell.ErrorMessage( nErrId );
 
     return bDone;
+}
+
+bool ScDBDocFunc::CreatePivotTable(const ScDPObject& rDPObj, bool bRecord, bool bApi)
+{
+    ScDocShellModificator aModificator(rDocShell);
+    WaitObject aWait(rDocShell.GetActiveDialogParent());
+
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
+    std::auto_ptr<ScDocument> pNewUndoDoc;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
+
+    ScDocument* pDoc = rDocShell.GetDocument();
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = false;
+
+    if (!rDocShell.IsEditable() || pDoc->GetChangeTrack())
+    {
+        //  not recorded -> disallow
+        if (!bApi)
+            rDocShell.ErrorMessage(STR_PROTECTIONERR);
+
+        return false;
+    }
+
+    {
+        //  at least one cell at the output position must be editable
+        //  -> check in advance
+        //  (start of output range in pNewObj is valid)
+        ScEditableTester aTester(pDoc, rDPObj.GetOutRange().aStart);
+        if (!aTester.IsEditable())
+        {
+            if (!bApi)
+                rDocShell.ErrorMessage(aTester.GetMessageId());
+
+            return false;
+        }
+    }
+
+    //  output range must be set at pNewObj
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
+    std::auto_ptr<ScDPObject> pDestObj(new ScDPObject(rDPObj));
+    SAL_WNODEPRECATED_DECLARATIONS_POP
+
+    ScDPObject& rDestObj = *pDestObj;
+
+    // #i94570# When changing the output position in the dialog, a new table is created
+    // with the settings from the old table, including the name.
+    // So we have to check for duplicate names here (before inserting).
+    if (pDoc->GetDPCollection()->GetByName(rDestObj.GetName()))
+        rDestObj.SetName(OUString());      // ignore the invalid name, create a new name below
+
+    if (!pDoc->GetDPCollection()->InsertNewTable(pDestObj.release()))
+        // Insertion into collection failed.
+        return false;
+
+    rDestObj.ReloadGroupTableData();
+    rDestObj.SyncAllDimensionMembers();
+    rDestObj.InvalidateData();             // before getting the new output area
+
+    //  make sure the table has a name (not set by dialog)
+    if (rDestObj.GetName().isEmpty())
+        rDestObj.SetName(pDoc->GetDPCollection()->CreateNewName());
+
+    bool bOverflow = false;
+    ScRange aNewOut = rDestObj.GetNewOutputRange(bOverflow);
+
+    if (bOverflow)
+    {
+        if (!bApi)
+            rDocShell.ErrorMessage(STR_PIVOT_ERROR);
+
+        return false;
+    }
+
+    {
+        ScEditableTester aTester(pDoc, aNewOut);
+        if (!aTester.IsEditable())
+        {
+            //  destination area isn't editable
+            if (!bApi)
+                rDocShell.ErrorMessage(aTester.GetMessageId());
+
+            return false;
+        }
+    }
+
+    //  test if new output area is empty except for old area
+    if (!bApi)
+    {
+        bool bEmpty = pDoc->IsBlockEmpty(
+            aNewOut.aStart.Tab(), aNewOut.aStart.Col(), aNewOut.aStart.Row(),
+            aNewOut.aEnd.Col(), aNewOut.aEnd.Row());
+
+        if (!bEmpty)
+        {
+            QueryBox aBox(
+                rDocShell.GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
+                ScGlobal::GetRscString(STR_PIVOT_NOTEMPTY));
+
+            if (aBox.Execute() == RET_NO)
+            {
+                //! like above (not editable)
+                return false;
+            }
+        }
+    }
+
+    if (bRecord)
+    {
+        SCTAB nTab = aNewOut.aStart.Tab();
+        pNewUndoDoc.reset(new ScDocument(SCDOCMODE_UNDO));
+        pNewUndoDoc->InitUndo( pDoc, nTab, nTab );
+        pDoc->CopyToDocument(aNewOut, IDF_ALL, false, pNewUndoDoc.get());
+    }
+
+    rDestObj.Output(aNewOut.aStart);
+    rDocShell.PostPaintGridAll();           //! only necessary parts
+
+    if (bRecord)
+    {
+        rDocShell.GetUndoManager()->AddUndoAction(
+            new ScUndoDataPilot(&rDocShell, NULL, pNewUndoDoc.release(), NULL, &rDestObj, false));
+    }
+
+    // notify API objects
+    pDoc->BroadcastUno(ScDataPilotModifiedHint(rDestObj.GetName()));
+    aModificator.SetDocumentModified();
+
+    return true;
 }
 
 bool ScDBDocFunc::UpdatePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
