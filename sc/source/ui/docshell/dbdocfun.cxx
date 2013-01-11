@@ -1453,8 +1453,10 @@ bool ScDBDocFunc::UpdatePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
     ScDocShellModificator aModificator( rDocShell );
     WaitObject aWait( rDocShell.GetActiveDialogParent() );
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr<ScDocument> pOldUndoDoc;
     std::auto_ptr<ScDocument> pNewUndoDoc;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     ScDPObject aUndoDPObj(rDPObj); // For undo or revert on failure.
 
@@ -1573,11 +1575,11 @@ bool ScDBDocFunc::UpdatePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
 
     if (bRecord)
     {
-        std::auto_ptr<SfxUndoAction> pAction(
+        SfxUndoAction *const pAction(
             new ScUndoDataPilot(
                 &rDocShell, pOldUndoDoc.release(), pNewUndoDoc.release(), &aUndoDPObj, &rDPObj, false));
 
-        rDocShell.GetUndoManager()->AddUndoAction(pAction.release());
+        rDocShell.GetUndoManager()->AddUndoAction(pAction);
     }
 
     // notify API objects
