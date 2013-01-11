@@ -20,12 +20,12 @@
 #define _HHCWRP_HXX
 
 #include <editeng/hangulhanja.hxx>
-#include <pam.hxx>
 
 class SwView;
 class Window;
 class SwWrtShell;
 struct SwConversionArgs;
+class SwPaM;
 
 //////////////////////////////////////////////////////////////////////
 
