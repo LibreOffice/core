@@ -1662,7 +1662,13 @@ void DbgPrintMsgBox( const char* pLine )
     }
 
     strcpy( aDbgOutBuf, pLine );
+#if defined UNX && !(defined ANDROID || defined IOS)
     strcat( aDbgOutBuf, "\nAbort ? (Yes=abort / No=ignore / Cancel=core dump)" );
+#elif defined _WIN32
+    strcat( aDbgOutBuf, "\nAbort ? (Yes=abort / No=ignore / Cancel=try to invoke debugger)" );
+#else
+    strcat( aDbgOutBuf, "\nAbort ? (Yes=abort / No=ignore / Cancel=crash)" );
+#endif
 
     SolarMessageBoxExecutor aMessageBox( String( aDbgOutBuf, RTL_TEXTENCODING_UTF8 ) );
     TimeValue aTimeout; aTimeout.Seconds = 2; aTimeout.Nanosec = 0;
