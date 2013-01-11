@@ -35,6 +35,7 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
+#include <com/sun/star/text/XPageCursor.hpp>
 
 #include <unotools/tempfile.hxx>
 #include <swmodeltestbase.hxx>
@@ -66,6 +67,7 @@ public:
     void testTableBorders();
     void testFdo51550();
     void testN789482();
+    void test1Table1Page();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -104,6 +106,7 @@ void Test::run()
         {"table-borders.docx", &Test::testTableBorders},
         {"fdo51550.odt", &Test::testFdo51550},
         {"n789482.docx", &Test::testN789482},
+        {"1-table-1-page.docx", &Test::test1Table1Page},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -492,6 +495,18 @@ void Test::testN789482()
     CPPUNIT_ASSERT_EQUAL(sal_False, getProperty<sal_Bool>(getRun(xParagraph, 4), "IsStart"));
 
     getRun(xParagraph, 5, " After.");
+}
+
+void Test::test1Table1Page()
+{
+    // 2 problem for this document after export:
+    //   - invalid sectPr inserted at the beginning of the page
+    //   - font of empty cell is not preserved, leading to change in rows height
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+    xCursor->jumpToLastPage();
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xCursor->getPage());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
