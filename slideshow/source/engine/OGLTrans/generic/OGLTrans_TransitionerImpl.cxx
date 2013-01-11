@@ -1242,7 +1242,7 @@ namespace
                 *pColors++ = vcl::unotools::toByteColor(pIn->Red);
                 *pColors++ = vcl::unotools::toByteColor(pIn->Green);
                 *pColors++ = vcl::unotools::toByteColor(pIn->Blue);
-                *pColors++ = -127;
+                *pColors++ = -1;
                 ++pIn;
             }
             return aRes;
