@@ -102,6 +102,7 @@
 #include <officecfg/Office/Calc.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
+#include <unotools/configmgr.hxx>
 #include "uiitems.hxx"
 #include "cellsuno.hxx"
 #include "dpobject.hxx"
@@ -438,7 +439,8 @@ sal_Bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const ::com::sun::star::un
     bool bHardRecalc = false;
     if (nRecalcMode == RECALC_ASK)
     {
-        if (aDocument.IsUserInteractionEnabled() && xDocProps->getGenerator().indexOf("LibreOffice") == -1)
+        OUString sProductName(utl::ConfigManager::getProductName());
+        if (aDocument.IsUserInteractionEnabled() && xDocProps->getGenerator().indexOf(sProductName) == -1)
         {
             // Generator is not LibreOffice.  Ask if the user wants to perform
             // full re-calculation.

@@ -1953,7 +1953,7 @@ Resource RID_GLOBSTR
 
     String STR_QUERY_FORMULA_RECALC_ONLOAD_ODS
     {
-        Text [ en-US ] = "This document was last saved by application other than LibreOffice.  Some formula cells may produce different results when recalculated.\n\nDo you want to recalculate all formula cells in this document now?";
+        Text [ en-US ] = "This document was last saved by an application other than %PRODUCTNAME.  Some formula cells may produce different results when recalculated.\n\nDo you want to recalculate all formula cells in this document now?";
     };
 
     String STR_QUERY_FORMULA_RECALC_ONLOAD_XLS
