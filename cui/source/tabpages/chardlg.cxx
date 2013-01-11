@@ -237,7 +237,6 @@ struct SvxCharNamePage_Impl
 {
     Timer           m_aUpdateTimer;
     String          m_aNoStyleText;
-    String          m_aTransparentText;
     const FontList* m_pFontList;
     sal_uInt16          m_nExtraEntryPos;
     sal_Bool            m_bMustDelete;
@@ -282,7 +281,6 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet )
     , m_pImpl(new SvxCharNamePage_Impl)
 {
     m_pImpl->m_aNoStyleText = String( CUI_RES( RID_SVXSTR_CHARNAME_NOSTYLE ) );
-    m_pImpl->m_aTransparentText = String( CUI_RES( RID_SVXSTR_CHARNAME_TRANSPARENT ) );
 
     SvtLanguageOptions aLanguageOptions;
     sal_Bool bShowCJK = aLanguageOptions.IsCJKFontEnabled();
