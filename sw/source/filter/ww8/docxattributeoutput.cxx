@@ -2141,9 +2141,35 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
             XML_cx, aWidth.getStr(),
             XML_cy, aHeight.getStr(),
             FSEND );
-    // TODO - the right effectExtent, extent including the effect
+
+    // effectExtent, extent including the effect (shadow only for now)
+    SvxShadowItem aShadowItem = pFrmFmt->GetShadow();
+    OString aLeftExt("0"), aRightExt("0"), aTopExt("0"), aBottomExt("0");
+    if ( aShadowItem.GetLocation() != SVX_SHADOW_NONE )
+    {
+        OString aShadowWidth( OString::valueOf( TwipsToEMU( aShadowItem.GetWidth() ) ) );
+        switch ( aShadowItem.GetLocation() )
+        {
+            case SVX_SHADOW_TOPLEFT:
+                aTopExt = aLeftExt = aShadowWidth;
+                break;
+            case SVX_SHADOW_TOPRIGHT:
+                aTopExt = aRightExt = aShadowWidth;
+                break;
+            case SVX_SHADOW_BOTTOMLEFT:
+                aBottomExt = aLeftExt = aShadowWidth;
+                break;
+            case SVX_SHADOW_BOTTOMRIGHT:
+                aBottomExt = aRightExt = aShadowWidth;
+                break;
+            case SVX_SHADOW_NONE:
+            case SVX_SHADOW_END:
+                break;
+        }
+    }
+
     m_pSerializer->singleElementNS( XML_wp, XML_effectExtent,
-            XML_l, "0", XML_t, "0", XML_r, "0", XML_b, "0",
+            XML_l, aLeftExt, XML_t, aTopExt, XML_r, aRightExt, XML_b, aBottomExt,
             FSEND );
 
     if( isAnchor )
@@ -2275,7 +2301,6 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     m_pSerializer->endElementNS( XML_a, XML_ln );
 
     // Output effects
-    SvxShadowItem aShadowItem = pFrmFmt->GetShadow();
     if ( aShadowItem.GetLocation() != SVX_SHADOW_NONE )
     {
         // Distance is measured diagonally from corner
