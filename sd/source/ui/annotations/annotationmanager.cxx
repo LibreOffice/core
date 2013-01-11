@@ -264,7 +264,7 @@ void AnnotationManagerImpl::ShowAnnotations( bool bShow )
         mbShowAnnotations = bShow;
 
         SdOptions* pOptions = SD_MOD()->GetSdOptions(mpDoc->GetDocumentType());
-           if( pOptions )
+        if( pOptions )
             pOptions->SetShowComments( mbShowAnnotations ? sal_True : sal_False );
 
         UpdateTags();
@@ -368,49 +368,49 @@ void AnnotationManagerImpl::InsertAnnotation()
         // find free space for new annotation
         int y = 0, x = 0;
 
-           AnnotationVector aAnnotations( pPage->getAnnotations() );
-           if( !aAnnotations.empty() )
-           {
-               const int page_width = pPage->GetSize().Width();
+        AnnotationVector aAnnotations( pPage->getAnnotations() );
+        if( !aAnnotations.empty() )
+        {
+            const int page_width = pPage->GetSize().Width();
             const int width = 1000;
             const int height = 800;
             Rectangle aTagRect;
 
-               while( true )
-               {
+            while( true )
+            {
                 Rectangle aNewRect( x, y, x + width - 1, y + height - 1 );
-                   bool bFree = true;
+                bool bFree = true;
 
-                   for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); ++iter )
-                   {
-                       RealPoint2D aPoint( (*iter)->getPosition() );
-                       aTagRect.Left()   = sal::static_int_cast< long >( aPoint.X * 100.0 );
-                       aTagRect.Top()    = sal::static_int_cast< long >( aPoint.Y * 100.0 );
-                       aTagRect.Right()  = aTagRect.Left() + width - 1;
-                       aTagRect.Bottom() = aTagRect.Top() + height - 1;
+                for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); ++iter )
+                {
+                    RealPoint2D aPoint( (*iter)->getPosition() );
+                    aTagRect.Left()   = sal::static_int_cast< long >( aPoint.X * 100.0 );
+                    aTagRect.Top()    = sal::static_int_cast< long >( aPoint.Y * 100.0 );
+                    aTagRect.Right()  = aTagRect.Left() + width - 1;
+                    aTagRect.Bottom() = aTagRect.Top() + height - 1;
 
-                       if( aNewRect.IsOver( aTagRect ) )
-                       {
-                           bFree = false;
-                           break;
-                       }
-                   }
+                    if( aNewRect.IsOver( aTagRect ) )
+                    {
+                        bFree = false;
+                        break;
+                    }
+                }
 
-                   if( bFree == false)
-                   {
-                       x += width;
-                       if( x > page_width )
-                       {
-                           x = 0;
-                           y += height;
-                       }
-                   }
-                   else
-                   {
-                       break;
-                   }
-               }
-           }
+                if( bFree == false)
+                {
+                    x += width;
+                    if( x > page_width )
+                    {
+                        x = 0;
+                        y += height;
+                    }
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
 
         Reference< XAnnotation > xAnnotation;
         pPage->createAnnotation( xAnnotation );
@@ -547,7 +547,7 @@ void AnnotationManagerImpl::DeleteAnnotationsByAuthor( const rtl::OUString& sAut
                     pPage->removeAnnotation( xAnnotation );
                 }
             }
-         }
+        }
     } while( pPage );
 
     if( mpDoc->IsUndoEnabled() )
@@ -572,7 +572,7 @@ void AnnotationManagerImpl::DeleteAllAnnotations()
             {
                 pPage->removeAnnotation( (*iter) );
             }
-         }
+        }
     }
     while( pPage );
 
@@ -640,25 +640,25 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForeward)
     if( !pPage )
         return;
 
-       AnnotationVector aAnnotations( pPage->getAnnotations() );
+    AnnotationVector aAnnotations( pPage->getAnnotations() );
 
     if( bForeward )
     {
         if( xCurrent.is() )
         {
-               for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); ++iter )
-               {
-                   if( (*iter) == xCurrent )
-                   {
-                       ++iter;
-                       if( iter != aAnnotations.end() )
-                       {
-                           SelectAnnotation( (*iter) );
-                           return;
-                       }
-                       break;
-                   }
-               }
+            for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); ++iter )
+            {
+                if( (*iter) == xCurrent )
+                {
+                    ++iter;
+                    if( iter != aAnnotations.end() )
+                    {
+                        SelectAnnotation( (*iter) );
+                        return;
+                    }
+                    break;
+                }
+            }
         }
         else if( !aAnnotations.empty() )
         {
@@ -728,10 +728,7 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForeward)
 
         // Pop up question box that asks the user whether to wrap arround.
         // The dialog is made modal with respect to the whole application.
-        QueryBox aQuestionBox (
-            NULL,
-            WB_YES_NO | WB_DEF_YES,
-            String(SdResId(nStringId)));
+        QueryBox aQuestionBox ( NULL, (WB_YES_NO | WB_DEF_YES), String(SdResId(nStringId)));
         aQuestionBox.SetImage (QueryBox::GetStandardImage());
         sal_uInt16 nBoxResult = aQuestionBox.Execute();
         if(nBoxResult != BUTTONID_YES)
@@ -742,7 +739,7 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForeward)
 
 // --------------------------------------------------------------------
 
-void AnnotationManagerImpl::onTagSelected(  AnnotationTag& rTag )
+void AnnotationManagerImpl::onTagSelected( AnnotationTag& rTag )
 {
     mxSelectedAnnotation = rTag.GetAnnotation();
     invalidateSlots();
@@ -769,7 +766,7 @@ void AnnotationManagerImpl::SelectAnnotation( ::com::sun::star::uno::Reference< 
     {
         if( (*iter)->GetAnnotation() == xAnnotation )
         {
-               SmartTagReference xTag( (*iter).get() );
+            SmartTagReference xTag( (*iter).get() );
             mrBase.GetMainViewShell()->GetView()->getSmartTags().select( xTag );
             (*iter)->OpenPopup( bEdit );
             break;
@@ -827,7 +824,7 @@ void AnnotationManagerImpl::UpdateTags( bool bSynchron )
         if( mnUpdateTagsEvent )
             Application::RemoveUserEvent( mnUpdateTagsEvent );
 
-            UpdateTagsHdl(0);
+        UpdateTagsHdl(0);
     }
     else
     {
@@ -844,7 +841,7 @@ IMPL_LINK_NOARG(AnnotationManagerImpl, UpdateTagsHdl)
     if( mbShowAnnotations )
         CreateTags();
 
-    if(  mrBase.GetDrawView() )
+    if( mrBase.GetDrawView() )
         static_cast< ::sd::View* >( mrBase.GetDrawView() )->updateHandles();
 
     invalidateSlots();
@@ -867,7 +864,7 @@ void AnnotationManagerImpl::CreateTags()
         {
             Reference< XAnnotation > xAnnotation( xEnum->nextElement() );
             Color aColor( GetColorLight( mpDoc->GetAnnotationAuthorIndex( xAnnotation->getAuthor() ) ) );
-            rtl::Reference< AnnotationTag > xTag( new AnnotationTag( *this, *mrBase.GetMainViewShell()->GetView(), xAnnotation, aColor, nIndex++, maFont  ) );
+            rtl::Reference< AnnotationTag > xTag( new AnnotationTag( *this, *mrBase.GetMainViewShell()->GetView(), xAnnotation, aColor, nIndex++, maFont ) );
             maTagVector.push_back(xTag);
 
             if( xAnnotation == mxSelectedAnnotation )
@@ -878,7 +875,7 @@ void AnnotationManagerImpl::CreateTags()
 
         if( xSelectedTag.is() )
         {
-               SmartTagReference xTag( xSelectedTag.get() );
+            SmartTagReference xTag( xSelectedTag.get() );
             mrBase.GetMainViewShell()->GetView()->getSmartTags().select( xTag );
         }
         else
