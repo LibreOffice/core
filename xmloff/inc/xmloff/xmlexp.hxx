@@ -526,9 +526,6 @@ public:
     // #110680#
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getServiceFactory();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
-    GetComponentContext() const;
-
     // Shapes in Writer cannot be named via context menu (#i51726#)
     SvtModuleOptions::EFactory GetModelType() const
     {

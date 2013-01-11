@@ -265,8 +265,6 @@ public:
     /// relative path of stream in package, e.g. "someobject/content.xml"
     ::rtl::OUString mStreamPath;
 
-    const uno::Reference< uno::XComponentContext > mxComponentContext;
-
     /// name of stream in package, e.g., "content.xml"
     ::rtl::OUString mStreamName;
 
@@ -293,7 +291,6 @@ SvXMLExport_Impl::SvXMLExport_Impl()
     // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
     : mbOutlineStyleAsNormalListStyle( false )
         ,mbSaveBackwardCompatibleODF( sal_True )
-        ,mxComponentContext( ::comphelper::getProcessComponentContext() )
         ,mStreamName()
         ,mNamespaceMaps()
         ,mDepth(0)
@@ -301,10 +298,7 @@ SvXMLExport_Impl::SvXMLExport_Impl()
         ,mbExportTextNumberElement( sal_False )
         ,mbNullDateInitialized( sal_False )
 {
-    OSL_ENSURE(mxComponentContext.is(), "SvXMLExport: no ComponentContext");
-    if (!mxComponentContext.is()) throw uno::RuntimeException();
-    mxUriReferenceFactory = uri::UriReferenceFactory::create(
-        mxComponentContext );
+    mxUriReferenceFactory = uri::UriReferenceFactory::create( comphelper::getProcessComponentContext() );
 }
 
 //==============================================================================
@@ -430,8 +424,7 @@ void SvXMLExport::_InitCtor()
     {
         mpImpl->mbSaveBackwardCompatibleODF =
             officecfg::Office::Common::Save::Document::
-            SaveBackwardCompatibleODF::get(
-                mpImpl->mxComponentContext);
+            SaveBackwardCompatibleODF::get( comphelper::getProcessComponentContext() );
     }
 }
 
@@ -2375,12 +2368,6 @@ void SvXMLExport::DisposingModel()
 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > SvXMLExport::getServiceFactory()
 {
     return mxServiceFactory;
-}
-
-uno::Reference< uno::XComponentContext >
-SvXMLExport::GetComponentContext() const
-{
-    return mpImpl->mxComponentContext;
 }
 
 ::comphelper::UnoInterfaceToUniqueIdentifierMapper& SvXMLExport::getInterfaceToIdentifierMapper()

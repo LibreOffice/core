@@ -27,6 +27,7 @@
 
 #include <comphelper/stlunosequence.hxx>
 #include <comphelper/stl_types.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/uri/XUriReference.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
@@ -86,8 +87,7 @@ getRelativeReference(SvXMLExport const& rExport, ::rtl::OUString const& rURI)
         rExport.GetModel(), uno::UNO_QUERY_THROW );
     ::rtl::OUString const baseURI( xModelURI->getStringValue() );
 
-    uno::Reference<uno::XComponentContext> const xContext(
-        rExport.GetComponentContext());
+    uno::Reference<uno::XComponentContext> xContext( comphelper::getProcessComponentContext() );
     uno::Reference<uri::XUriReferenceFactory> const xUriFactory =
         uri::UriReferenceFactory::create( xContext );
 
