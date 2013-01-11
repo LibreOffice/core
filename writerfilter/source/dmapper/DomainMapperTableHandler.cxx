@@ -416,7 +416,9 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         {
             aTableBorder.LeftLine = aLeftBorder;
             aTableBorder.IsLeftLineValid = sal_True;
-            rInfo.nLeftBorderDistance += aLeftBorder.LineWidth * 0.5;
+            // Only top level table position depends on border width
+            if (rInfo.nNestLevel == 1)
+                rInfo.nLeftBorderDistance += aLeftBorder.LineWidth * 0.5;
         }
         if (lcl_extractTableBorderProperty(m_aTableProperties, PROP_RIGHT_BORDER, rInfo, aBorderLine))
         {
