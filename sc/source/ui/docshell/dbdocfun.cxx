@@ -1465,8 +1465,7 @@ sal_uLong ScDBDocFunc::RefreshPivotTables(ScDPObject* pDPObj, bool bApi)
         ScDPObject* pObj = *it;
 
         // This action is intentionally not undoable since it modifies cache.
-        if (!DataPilotUpdate(pObj, pObj, false, bApi))
-            continue;
+        DataPilotUpdate(pObj, pObj, false, bApi);
     }
 
     return 0;
