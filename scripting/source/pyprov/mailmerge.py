@@ -103,7 +103,7 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 		password = xAuthenticator.getPassword().encode('ascii')
 		if user != b'':
 			if dbg:
-				print("Logging in, username of" + user, file=dbgout)
+				print("Logging in, username of", user, file=dbgout)
 			self.server.login(user, password)
 
 		for listener in self.listeners:
@@ -381,7 +381,7 @@ class PyMailServiceProvider(unohelper.Base, XMailServiceProvider):
 		self.ctx = ctx
 	def create(self, aType):
 		if dbg:
-			print("PyMailServiceProvider create with " + aType, file=dbgout)
+			print("PyMailServiceProvider create with", aType, file=dbgout)
 		if aType == SMTP:
 			return PyMailSMTPService(self.ctx);
 		elif aType == POP3:
