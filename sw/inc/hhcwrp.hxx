@@ -31,27 +31,27 @@ class SwPaM;
 
 class SwHHCWrapper : public editeng::HangulHanjaConversion
 {
-    SwView *    mpView;
-    Window*     mpWin;
-    SwWrtShell &mrWrtShell;
+    SwView *    m_pView;
+    Window*     m_pWin;
+    SwWrtShell &m_rWrtShell;
 
-    SwConversionArgs *mpConvArgs;    /**< object for arguments (and results) needed
+    SwConversionArgs *m_pConvArgs;    /**< object for arguments (and results) needed
                                        to find of next convertible text portion */
 
-    xub_StrLen      mnLastPos;       /**< starting position of the last found text part
+    xub_StrLen      m_nLastPos;       /**< starting position of the last found text part
                                        (needs to be sth that gets not moved like
                                        SwPaM or SwPosition by replace operations!) */
-    sal_Int32       mnUnitOffset;
+    sal_Int32       m_nUnitOffset;
 
-    sal_uInt16      mnPageCount;     ///< page count for progress bar
-    sal_uInt16      mnPageStart;     ///< first checked page
+    sal_uInt16      m_nPageCount;     ///< page count for progress bar
+    sal_uInt16      m_nPageStart;     ///< first checked page
 
-    sal_Bool    mbIsDrawObj;
-    sal_Bool    mbIsOtherCntnt;
-    sal_Bool    mbStartChk;
-    sal_Bool    mbIsSelection;       ///< true if only the selected text should be converted
-    sal_Bool    mbStartDone;
-    sal_Bool    mbEndDone;
+    sal_Bool    m_bIsDrawObj;
+    sal_Bool    m_bIsOtherCntnt;
+    sal_Bool    m_bStartChk;
+    sal_Bool    m_bIsSelection;       ///< true if only the selected text should be converted
+    sal_Bool    m_bStartDone;
+    sal_Bool    m_bEndDone;
 
     /// from SvxSpellWrapper copied and modified
     sal_Bool    ConvNext_impl();        ///< former SpellNext
@@ -71,8 +71,8 @@ class SwHHCWrapper : public editeng::HangulHanjaConversion
                             SwPaM *pCrsr );
     void        ChangeText_impl( const String &rNewText, sal_Bool bKeepAttributes );
 
-    inline sal_Bool IsDrawObj()             { return mbIsDrawObj; }
-    inline void SetDrawObj( sal_Bool bNew ) { mbIsDrawObj = bNew; }
+    inline sal_Bool IsDrawObj()             { return m_bIsDrawObj; }
+    inline void SetDrawObj( sal_Bool bNew ) { m_bIsDrawObj = bNew; }
 
 protected:
     virtual void    GetNextPortion( ::rtl::OUString& rNextPortion,
