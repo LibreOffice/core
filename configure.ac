@@ -1803,20 +1803,6 @@ AC_ARG_WITH(windows-sdk,
     ],
 ,)
 
-AC_ARG_WITH(nss-build-tools,
-    AS_HELP_STRING([--with-nss-build-tools],
-        [For Windows users, please supply the path to the nss build tools.])
-    [
-                          Usage:     --with-nss-build-tools=<absolute path to
-                                                          nss build tools>
-
-                          At the moment of this writing, an installer for the
-                          mozilla build tools can be obtained from http://ftp.
-                          mozilla.org/pub/mozilla.org/mozilla/libraries/win32.
-    ],
-    NSSBUILDTOOLS=$withval ,
-) # NSSBUILDTOOLS
-
 AC_ARG_WITH(lang,
     AS_HELP_STRING([--with-lang],
         [Use this option to build LibreOffice with additional language support.
