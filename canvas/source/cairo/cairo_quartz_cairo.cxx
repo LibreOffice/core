@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if defined QUARTZ || defined IOS
+#if defined MACOSX || defined IOS
 /************************************************************************
  * Mac OS X/Quartz and iOS surface backend for OpenOffice.org Cairo Canvas      *
  ************************************************************************/

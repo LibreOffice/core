@@ -271,7 +271,7 @@ OUString SAL_CALL Clipboard_getImplementationName()
 {
     #if defined UNX
     return OUString(
-    #if ! defined QUARTZ
+    #if ! defined MACOSX
     "com.sun.star.datatransfer.X11ClipboardSupport"
     #else
     "com.sun.star.datatransfer.clipboard.AquaClipboard"
@@ -361,7 +361,7 @@ Sequence< OUString > SAL_CALL DragSource_getSupportedServiceNames()
 {
     #if defined UNX
     OUString aServiceName(
-    #if ! defined QUARTZ
+    #if ! defined MACOSX
     "com.sun.star.datatransfer.dnd.X11DragSource"
     #else
     "com.sun.star.datatransfer.dnd.OleDragSource"
@@ -377,7 +377,7 @@ OUString SAL_CALL DragSource_getImplementationName()
 {
     #if defined UNX
     return OUString(
-    #if ! defined QUARTZ
+    #if ! defined MACOSX
     "com.sun.star.datatransfer.dnd.XdndSupport"
     #else
     "com.sun.star.comp.datatransfer.dnd.OleDragSource_V1"
@@ -475,7 +475,7 @@ Sequence< OUString > SAL_CALL DropTarget_getSupportedServiceNames()
 {
     #if defined UNX
     OUString aServiceName(
-    #if ! defined QUARTZ
+    #if ! defined MACOSX
     "com.sun.star.datatransfer.dnd.X11DropTarget"
     #else
     "com.sun.star.datatransfer.dnd.OleDropTarget"
@@ -491,7 +491,7 @@ OUString SAL_CALL DropTarget_getImplementationName()
 {
     #if defined UNX
     return OUString(
-    #if ! defined QUARTZ
+    #if ! defined MACOSX
     "com.sun.star.datatransfer.dnd.XdndDropTarget"
     #else
     "com.sun.star.comp.datatransfer.dnd.OleDropTarget_V1"

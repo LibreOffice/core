@@ -563,7 +563,7 @@ NPError SAL_CALL NP_LOADDS  NPN_GetValue( NPP instance, NPNVariable variable, vo
          default:
             aResult = NPERR_INVALID_PARAM;
             break;
-        #ifdef QUARTZ
+        #ifdef MACOSX
         case 2000: // NPNVsupportsQuickDrawBool
             *(NPBool*)value = false;
             break;
@@ -600,7 +600,7 @@ NPError SAL_CALL NP_LOADDS  NPN_SetValue( NPP instance,
 {
     NPError nError = NPERR_NO_ERROR;
     TRACEN( "NPN_SetValue ", variable );
-    #ifdef QUARTZ
+    #ifdef MACOSX
     NPN_SetValue_Impl(instance, variable, value);
     #else
     (void)instance;
@@ -614,7 +614,7 @@ void SAL_CALL NP_LOADDS  NPN_InvalidateRect(NPP instance, NPRect* /*invalidRect*
 {
     TRACE( "NPN_InvalidateRect" );
 
-    #ifdef QUARTZ
+    #ifdef MACOSX
     NPN_ForceRedraw( instance );
     #else
     (void)instance;
@@ -625,7 +625,7 @@ void SAL_CALL NP_LOADDS  NPN_InvalidateRegion(NPP instance, NPRegion /*invalidRe
 {
     TRACE( "NPN_InvalidateRegion" );
 
-    #ifdef QUARTZ
+    #ifdef MACOSX
     NPN_ForceRedraw( instance );
     #else
     (void)instance;
@@ -635,7 +635,7 @@ void SAL_CALL NP_LOADDS  NPN_InvalidateRegion(NPP instance, NPRegion /*invalidRe
 void SAL_CALL NP_LOADDS  NPN_ForceRedraw(NPP instance)
 {
     TRACE( "NPN_ForceRedraw" );
-    #ifdef QUARTZ
+    #ifdef MACOSX
     NPN_ForceRedraw_Impl(instance);
     #else
     (void)instance;

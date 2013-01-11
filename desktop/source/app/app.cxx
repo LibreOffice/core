@@ -1839,10 +1839,10 @@ sal_Bool Desktop::InitializeQuickstartMode( Reference< XMultiServiceFactory >& r
         // do nothing if service is not available
 
         // #i105753# the following if was invented for performance
-        // unfortunately this broke the QUARTZ behavior which is to always run
+        // unfortunately this broke the Mac behavior which is to always run
         // in quickstart mode since Mac applications do not usually quit
         // when the last document closes
-        #ifndef QUARTZ
+        #ifndef MACOSX
         if ( bQuickstart )
         #endif
         {

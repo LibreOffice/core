@@ -321,7 +321,7 @@ struct BitmapSystemData
     #if defined( WNT )
     void* pDIB; // device independent byte buffer
     void* pDDB; // if not NULL then this is actually an HBITMAP
-    #elif defined( QUARTZ ) || defined( IOS )
+    #elif defined( MACOSX ) || defined( IOS )
     void* rImageContext;     //Image context (CGContextRef)
     #else
     void* aPixmap;

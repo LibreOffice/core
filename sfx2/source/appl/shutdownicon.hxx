@@ -172,7 +172,7 @@ extern "C" {
     // builtin win32 systray
     void win32_init_sys_tray();
     void win32_shutdown_sys_tray();
-#  elif defined QUARTZ
+#  elif defined MACOSX
     void aqua_init_systray();
     void aqua_shutdown_systray();
 #  endif

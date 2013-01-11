@@ -22,7 +22,7 @@
 
 #ifdef WNT
 #include "win/svsys.h"
-#elif defined QUARTZ
+#elif defined MACOSX
 #include "aqua/svsys.h"
 #elif defined OS2
 #include "os2/svsys.h"

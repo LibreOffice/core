@@ -76,7 +76,7 @@ using namespace ::rtl;
 using namespace ::sfx2;
 
 #ifdef ENABLE_QUICKSTART_APPLET
-# if !defined(WIN32) && !defined(QUARTZ)
+# if !defined(WIN32) && !defined(MACOSX)
 extern "C" { static void SAL_CALL thisModule() {} }
 # endif
 #endif
@@ -137,7 +137,7 @@ bool ShutdownIcon::LoadModule( osl::Module **pModule,
         *pDeInit = win32_shutdown_sys_tray;
     }
     return true;
-#  elif defined QUARTZ
+#  elif defined MACOSX
     *pInit = aqua_init_systray;
     *pDeInit = aqua_shutdown_systray;
     return true;
@@ -749,7 +749,7 @@ void ShutdownIcon::LeaveModalMode()
 
 #ifdef WNT
 // defined in shutdowniconw32.cxx
-#elif defined QUARTZ
+#elif defined MACOSX
 // defined in shutdowniconaqua.cxx
 #else
 bool ShutdownIcon::IsQuickstarterInstalled()
@@ -828,7 +828,7 @@ rtl::OUString ShutdownIcon::getShortcutName()
 
 bool ShutdownIcon::GetAutostart( )
 {
-#if defined QUARTZ
+#if defined MACOSX
     return true;
 #else
     bool bRet = false;

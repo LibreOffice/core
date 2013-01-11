@@ -2601,7 +2601,7 @@ namespace {
             // step back two positions for smoother repaint
             nReformat -= 2;
 
-    #ifndef QUARTZ
+    #ifndef MACOSX
     #ifndef ENABLE_GRAPHITE
             // #i28795#, #i34607#, #i38388#
             // step back six(!) more characters for complex scripts

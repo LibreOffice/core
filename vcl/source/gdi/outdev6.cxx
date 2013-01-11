@@ -259,7 +259,7 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
     // try hard to draw it directly, because the emulation layers are slower
     if( !pDisableNative
         && mpGraphics->supportsOperation( OutDevSupport_B2DDraw )
-#if defined UNX && ! defined QUARTZ
+#if defined UNX && ! defined MACOSX
             && GetBitCount() > 8
 #endif
 #ifdef WIN32

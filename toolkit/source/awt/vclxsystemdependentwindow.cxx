@@ -19,7 +19,7 @@
 
 #include <com/sun/star/lang/SystemDependent.hpp>
 
-#if defined UNX && ! defined QUARTZ && ! defined _COM_SUN_STAR_AWT_SYSTEMDEPENDENTXWINDOW_HPP_
+#if defined UNX && ! defined MACOSX && ! defined _COM_SUN_STAR_AWT_SYSTEMDEPENDENTXWINDOW_HPP_
 #include <com/sun/star/awt/SystemDependentXWindow.hpp>
 #endif
 
@@ -27,7 +27,7 @@
 #include <toolkit/helper/macros.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
-#ifdef QUARTZ
+#ifdef MACOSX
 #include "premac.h"
 #include <Cocoa/Cocoa.h>
 #include "postmac.h"
@@ -85,7 +85,7 @@ IMPL_XTYPEPROVIDER_END
             {
                  aRet <<= (sal_Int32)pSysData->hWnd;
             }
-#elif (defined QUARTZ)
+#elif (defined MACOSX)
             if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_MAC )
             {
                  aRet <<= (sal_IntPtr)pSysData->pView;

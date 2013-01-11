@@ -148,7 +148,7 @@ End
 
 #endif
 
-#if defined ENABLE_NPAPI_FROM_BROWSER && defined UNX && !defined QUARTZ
+#if defined ENABLE_NPAPI_FROM_BROWSER && defined UNX && !defined MACOSX
 
 File gid_File_Bin_Pluginapp
     BIN_FILE_BODY;
@@ -232,7 +232,7 @@ File gid_File_Bin_Senddoc
   #endif
 End
 
-#if defined(UNX) && !defined(QUARTZ) && !defined(LIBO_HEADLESS)
+#if defined(UNX) && !defined(MACOSX) && !defined(LIBO_HEADLESS)
 
 File gid_File_Bin_Spadmin_Bin
     BIN_FILE_BODY;

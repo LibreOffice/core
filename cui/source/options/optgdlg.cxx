@@ -141,7 +141,7 @@ namespace
             }
             #if defined WNT
             return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.SystemFilePicker") );
-            #elif (defined MACOSX && defined QUARTZ)
+            #elif defined MACOSX
             return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.AquaFilePicker") );
             #else
             return rtl::OUString();
@@ -212,7 +212,7 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
         aFileDlgCB.Hide();
     }
 
-#if !defined(QUARTZ) && !defined(ENABLE_GTK)
+#if !defined(MACOSX) && !defined(ENABLE_GTK)
     aPrintDlgFL.Hide();
     aPrintDlgCB.Hide();
 #endif

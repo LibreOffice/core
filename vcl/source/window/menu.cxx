@@ -1142,7 +1142,7 @@ void Menu::Select()
     }
 }
 
-#if defined(QUARTZ)
+#if defined(MACOSX)
 void Menu::ImplSelectWithStart( Menu* pSMenu )
 {
     Menu* pOldStartedFrom = pStartedFrom;

@@ -1223,7 +1223,7 @@ sal_Bool ViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRe
     const bool bOnlyYScroll(!lXDiff && Abs(lYDiff) != 0 && Abs(lYDiff) < lMax);
     const bool bAllowedWithChildWindows(GetWin()->GetWindowClipRegionPixel(WINDOW_GETCLIPREGION_NOCHILDREN|WINDOW_GETCLIPREGION_NULL).IsNull());
 // --> OD 2009-08-12 #i98766# - disable smooth scrolling for Mac port builds
-#ifdef QUARTZ
+#ifdef MACOSX
     const bool bSmoothScrollAllowed(false);
     (void) bOnlyYScroll;
     (void) bAllowedWithChildWindows;

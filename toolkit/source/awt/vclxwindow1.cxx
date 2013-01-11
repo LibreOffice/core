@@ -28,7 +28,7 @@
 #ifdef WNT
 #include <prewin.h>
 #include <postwin.h>
-#elif defined ( QUARTZ )
+#elif defined ( MACOSX )
 #include "premac.h"
 #include <Cocoa/Cocoa.h>
 #include "postmac.h"
@@ -87,7 +87,7 @@ void VCLXWindow::SetSystemParent_Impl( const com::sun::star::uno::Any& rHandle )
     aSysParentData.nSize = sizeof ( SystemParentData );
 #if defined( WNT )
     aSysParentData.hWnd = (HWND) nHandle;
-#elif defined( QUARTZ )
+#elif defined( MACOSX )
     aSysParentData.pView = reinterpret_cast<NSView*>(nHandle);
 #elif defined( IOS )
     aSysParentData.pView = reinterpret_cast<UIView*>(nHandle);

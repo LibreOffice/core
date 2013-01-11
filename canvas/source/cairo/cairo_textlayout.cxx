@@ -320,7 +320,7 @@ namespace cairocanvas
    **/
     bool TextLayout::isCairoRenderable(SystemFontData aSysFontData) const
     {
-#if defined UNX && !defined QUARTZ && !defined IOS
+#if defined UNX && !defined MACOSX && !defined IOS
         // is font usable?
         if (!aSysFontData.nFontId)
             return false;
@@ -473,7 +473,7 @@ namespace cairocanvas
             cairo_font_face_t* font_face = NULL;
 
 #ifdef CAIRO_HAS_QUARTZ_SURFACE
-# ifdef QUARTZ
+# ifdef MACOSX
             // TODO: use cairo_quartz_font_face_create_for_cgfont(cgFont)
             //       when CGFont (Mac OS X 10.5 API) is provided by the AQUA VCL backend.
             font_face = cairo_quartz_font_face_create_for_atsu_font_id((ATSUFontID) rSysFontData.aATSUFontID);

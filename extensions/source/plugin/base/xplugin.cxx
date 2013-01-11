@@ -523,7 +523,7 @@ void XPlugin_Impl::loadPlugin()
         }
     }
     const SystemEnvData* pEnvData = getSysChildSysData();
-#if defined( UNX ) && !(defined(QUARTZ))
+#if defined( UNX ) && !(defined(MACOSX))
     if (pEnvData->pDisplay) // headless?
     {
         XSync( (Display*)pEnvData->pDisplay, False );
@@ -533,7 +533,7 @@ void XPlugin_Impl::loadPlugin()
     {
         if( !m_aDescription.PluginName.isEmpty() )
         {
-#if defined QUARTZ
+#if defined MACOSX
             PluginComm* pComm = new MacPluginComm( m_aDescription.Mimetype,
                                                    m_aDescription.PluginName,
                                                    pEnvData->pView );
@@ -568,7 +568,7 @@ void XPlugin_Impl::loadPlugin()
                  (char**)(m_nArgs ? m_pArgn : NULL),
                  (char**)(m_nArgs ? m_pArgv : NULL),
                  NULL );
-#ifdef QUARTZ
+#ifdef MACOSX
     // m_aNPWindow is set up in the MacPluginComm from the view
     SetSysPlugDataParentView(*pEnvData);
 #elif defined( UNX )

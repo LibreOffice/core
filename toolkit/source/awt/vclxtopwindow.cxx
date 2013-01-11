@@ -20,7 +20,7 @@
 #include <com/sun/star/lang/SystemDependent.hpp>
 #include <com/sun/star/awt/SystemDependentXWindow.hpp>
 
-#if defined ( QUARTZ )
+#if defined ( MACOSX )
 #include "premac.h"
 #include <Cocoa/Cocoa.h>
 #include "postmac.h"
@@ -97,7 +97,7 @@ Sequence< Type > VCLXTopWindow_Base::getTypes() throw(RuntimeException)
             {
                  aRet <<= (sal_Int32)pSysData->hWnd;
             }
-#elif (defined QUARTZ)
+#elif (defined MACOSX)
             if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_MAC )
             {
                  aRet <<= (sal_IntPtr)pSysData->pView;

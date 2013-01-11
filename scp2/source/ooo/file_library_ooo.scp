@@ -498,7 +498,7 @@ End
 #endif
 #endif
 
-#ifdef QUARTZ
+#ifdef MACOSX
 File gid_File_Lib_Fps_Aqua
     LIB_FILE_BODY;
     Styles = (PACKED);
@@ -898,7 +898,7 @@ STD_LIB_FILE(gid_File_Lib_DeploymentMisc, deploymentmisc)
 STD_LIB_FILE( gid_File_Lib_Pl , pl)
 #endif
 
-#if defined(UNX) && ! defined(QUARTZ) && ! defined(LIBO_HEADLESS)
+#if defined(UNX) && ! defined(MACOSX) && ! defined(LIBO_HEADLESS)
 File gid_File_Lib_Desktop_Detector
     Name = LIBNAME(desktop_detector);
     LIB_FILE_BODY;
@@ -913,7 +913,7 @@ File gid_File_Lib_Vclplug_Gen
 End
 #endif
 
-#if defined(UNX) && ! defined(QUARTZ)
+#if defined(UNX) && ! defined(MACOSX)
 #ifdef ENABLE_GTK
 File gid_File_Lib_Vclplug_Gtk
     Name = LIBNAME(vclplug_gtk);
@@ -962,7 +962,7 @@ End
 #endif
 #endif
 
-#if defined(QUARTZ)
+#if defined(MACOSX)
 File gid_File_Lib_AppleRemote
     Name = LIBNAME(AppleRemote);
     LIB_FILE_BODY;
@@ -971,7 +971,7 @@ File gid_File_Lib_AppleRemote
 End
 #endif
 
-#if defined(QUARTZ)
+#if defined(MACOSX)
 File gid_File_Lib_Basebmp
     Name = LIBNAME(basebmp);
     LIB_FILE_BODY;
@@ -980,7 +980,7 @@ File gid_File_Lib_Basebmp
 End
 #endif
 
-#if defined UNX && ! defined QUARTZ
+#if defined UNX && ! defined MACOSX
 #if ! defined LIBO_HEADLESS
 STD_LIB_FILE( gid_File_Lib_Vclplug_Svp, vclplug_svp )
 #endif
@@ -1136,7 +1136,7 @@ End
 
 STD_LIB_FILE( gid_File_Lib_Sot, sot )
 
-#if defined(UNX) && !defined(QUARTZ) && !defined(LIBO_HEADLESS)
+#if defined(UNX) && !defined(MACOSX) && !defined(LIBO_HEADLESS)
 
 File gid_File_Lib_Spa
     Name = LIBNAME(spa);

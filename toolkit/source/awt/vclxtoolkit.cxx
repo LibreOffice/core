@@ -47,7 +47,7 @@
 #include <rtl/uuid.h>
 #include <rtl/process.h>
 
-#ifdef QUARTZ
+#ifdef MACOSX
 #include "premac.h"
 #include <Cocoa/Cocoa.h>
 #include "postmac.h"
@@ -129,7 +129,7 @@ using org::libreoffice::touch::ByteBufferWrapper;
 
 #if (defined WNT)
 #define SYSTEM_DEPENDENT_TYPE ::com::sun::star::lang::SystemDependent::SYSTEM_WIN32
-#elif (defined QUARTZ)
+#elif (defined MACOSX)
 #define SYSTEM_DEPENDENT_TYPE ::com::sun::star::lang::SystemDependent::SYSTEM_MAC
 #elif (defined UNX)
 #define SYSTEM_DEPENDENT_TYPE ::com::sun::star::lang::SystemDependent::SYSTEM_XWINDOW
@@ -939,7 +939,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                                 {
                                     SystemParentData aParentData;
                                     aParentData.nSize   = sizeof( aParentData );
-                                    #if defined QUARTZ
+                                    #if defined MACOSX
                                     aParentData.pView   = reinterpret_cast<NSView*>(nWindowHandle);
                                     #elif defined IOS
                                     aParentData.pView   = reinterpret_cast<UIView*>(nWindowHandle);
@@ -1186,7 +1186,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
         {
             SystemParentData aParentData;
             aParentData.nSize   = sizeof( aParentData );
-            #if defined QUARTZ
+            #if defined MACOSX
             aParentData.pView   = reinterpret_cast<NSView*>(nWindowHandle);
             #elif defined IOS
             aParentData.pView   = reinterpret_cast<UIView*>(nWindowHandle);

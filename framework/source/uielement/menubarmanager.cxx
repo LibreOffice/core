@@ -285,7 +285,7 @@ Any SAL_CALL MenuBarManager::getMenuHandle( const Sequence< sal_Int8 >& /*Proces
         aSystemMenuData.nSize = sizeof( SystemMenuData );
 
         m_pVCLMenu->GetSystemMenuData( &aSystemMenuData );
-#ifdef QUARTZ
+#ifdef MACOSX
         if( SystemType == SystemDependent::SYSTEM_MAC )
         {
         }

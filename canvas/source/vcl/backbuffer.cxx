@@ -31,7 +31,7 @@ namespace vclcanvas
         if( !bMonochromeBuffer )
         {
             // #i95645#
-#if defined( QUARTZ )
+#if defined( MACOSX )
             // use AA on VCLCanvas for Mac
             maVDev->SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW | maVDev->GetAntialiasing() );
 #else

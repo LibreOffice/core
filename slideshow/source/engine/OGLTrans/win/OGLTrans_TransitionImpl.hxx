@@ -32,14 +32,14 @@
 #include <basegfx/vector/b3dvector.hxx>
 
 #if defined( WNT )
-#elif defined( QUARTZ )
+#elif defined( MACOSX )
 #include <OpenGL/gl.h>
-#elif defined( UNX ) && !defined( QUARTZ )
+#elif defined( UNX ) && !defined( MACOSX )
 #endif
 
 #include <vector>
 
-#if !defined( QUARTZ )
+#if !defined( MACOSX )
 #include <GL/gl.h>
 #endif
 

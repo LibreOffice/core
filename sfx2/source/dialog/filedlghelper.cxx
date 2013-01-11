@@ -1242,7 +1242,7 @@ void FileDialogHelper_Impl::preExecute()
 
     implInitializeFileName( );
 
-#if !(defined(MACOSX) && defined(QUARTZ)) && !defined(WNT)
+#if !(defined(MACOSX) && defined(MACOSX)) && !defined(WNT)
     // allow for dialog implementations which need to be executed before they return valid values for
     // current filter and such
 

@@ -23,7 +23,7 @@
 #include <vector>
 #include <cstddef>
 
-#ifdef QUARTZ
+#ifdef MACOSX
 // predeclare the native classes to avoid header/include problems
 typedef struct CGContext *CGContextRef;
 typedef struct CGLayer   *CGLayerRef;
@@ -65,7 +65,7 @@ struct SystemEnvData
     unsigned long       nSize;          // size in bytes of this structure
 #if defined( WNT )
     HWND                hWnd;           // the window hwnd
-#elif defined( QUARTZ )
+#elif defined( MACOSX )
     NSView*               pView;          // the cocoa (NSView *) implementing this object
 #elif defined( IOS )
     UIView*               pView;          // the CocoaTouch (UIView *) implementing this object
@@ -95,7 +95,7 @@ struct SystemParentData
     unsigned long   nSize;            // size in bytes of this structure
 #if defined( WNT )
     HWND            hWnd;             // the window hwnd
-#elif defined( QUARTZ )
+#elif defined( MACOSX )
     NSView*         pView;            // the cocoa (NSView *) implementing this object
 #elif defined( IOS )
     UIView*         pView;            // the CocoaTouch (UIView *) implementing this object
@@ -115,7 +115,7 @@ struct SystemMenuData
     unsigned long   nSize;          // size in bytes of this structure
 #if defined( WNT )
     HMENU           hMenu;          // the menu handle of the menu bar
-#elif defined( QUARTZ )
+#elif defined( MACOSX )
     //not defined
 #elif defined( UNX )
     long            aMenu;          // ???
@@ -131,7 +131,7 @@ struct SystemGraphicsData
     unsigned long   nSize;          // size in bytes of this structure
 #if defined( WNT )
     HDC             hDC;            // handle to a device context
-#elif defined( QUARTZ ) || defined( IOS )
+#elif defined( MACOSX ) || defined( IOS )
     CGContextRef    rCGContext;     // CoreGraphics graphic context
 #elif defined( UNX )
     void*           pDisplay;       // the relevant display connection
@@ -146,7 +146,7 @@ struct SystemGraphicsData
         : nSize( sizeof( SystemGraphicsData ) )
 #if defined( WNT )
         , hDC( 0 )
-#elif defined( QUARTZ ) || defined( IOS )
+#elif defined( MACOSX ) || defined( IOS )
 #elif defined( UNX )
         , pDisplay( NULL )
         , hDrawable( 0 )
@@ -168,7 +168,7 @@ struct SystemWindowData
 {
     unsigned long   nSize;          // size in bytes of this structure
 #if defined( WNT )                  // meaningless on Windows
-#elif defined( QUARTZ )             // meaningless on Mac OS X / Quartz
+#elif defined( MACOSX )             // meaningless on Mac OS X
 #elif defined( IOS )                // and maybe on iOS, too, then
 #elif defined( UNX )
     void*           pVisual;        // the visual to be used
@@ -197,7 +197,7 @@ struct SystemFontData
     unsigned long   nSize;          // size in bytes of this structure
 #if defined( WNT )
     HFONT           hFont;          // native font object
-#elif defined( QUARTZ )
+#elif defined( MACOSX )
 #ifdef ENABLE_CORETEXT
     void*           rCTFont;
 #else
@@ -218,7 +218,7 @@ struct SystemFontData
         : nSize( sizeof( SystemFontData ) )
 #if defined( WNT )
         , hFont( 0 )
-#elif defined( QUARTZ )
+#elif defined( MACOSX )
 #ifdef ENABLE_CORETEXT
 #else
         , aATSUFontID( NULL )

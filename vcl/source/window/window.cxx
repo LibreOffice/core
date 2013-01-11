@@ -8355,7 +8355,7 @@ uno::Reference< XDragSource > Window::GetDragSource()
                     aDropTargetSN = OUString("com.sun.star.datatransfer.dnd.OleDropTarget");
                     aDragSourceAL[ 1 ] = makeAny( (sal_uInt32) pEnvData->hWnd );
                     aDropTargetAL[ 0 ] = makeAny( (sal_uInt32) pEnvData->hWnd );
-#elif defined QUARTZ
+#elif defined MACOSX
             /* FIXME: Mac OS X specific dnd interface does not exist! *
              * Using Windows based dnd as a temporary solution        */
                     aDragSourceSN = OUString("com.sun.star.datatransfer.dnd.OleDragSource");
@@ -8433,7 +8433,7 @@ uno::Reference< XClipboard > Window::GetClipboard()
                 if( !mpWindowImpl->mpFrameData->mxClipboard.is() )
                     mpWindowImpl->mpFrameData->mxClipboard = uno::Reference< XClipboard >( xFactory->createInstance( OUString("com.sun.star.datatransfer.clipboard.SystemClipboard") ), UNO_QUERY );
 
-#if defined(UNX) && !defined(QUARTZ)          // unix clipboard needs to be initialized
+#if defined(UNX) && !defined(MACOSX)          // unix clipboard needs to be initialized
                 if( mpWindowImpl->mpFrameData->mxClipboard.is() )
                 {
                     uno::Reference< XInitialization > xInit = uno::Reference< XInitialization >( mpWindowImpl->mpFrameData->mxClipboard, UNO_QUERY );
@@ -8479,7 +8479,7 @@ uno::Reference< XClipboard > Window::GetPrimarySelection()
             {
                 uno::Reference< XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory() );
 
-#if defined(UNX) && !defined(QUARTZ)
+#if defined(UNX) && !defined(MACOSX)
                 Sequence< Any > aArgumentList( 3 );
                 aArgumentList[ 0 ] = makeAny( Application::GetDisplayConnection() );
                 aArgumentList[ 1 ] = makeAny( OUString("PRIMARY") );

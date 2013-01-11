@@ -220,7 +220,7 @@ sal_IntPtr SystemChildWindow::GetParentWindowHandle( sal_Bool bUseJava )
 #if defined WNT
     nRet = reinterpret_cast< sal_IntPtr >( GetSystemData()->hWnd );
     (void)bUseJava;
-#elif defined QUARTZ
+#elif defined MACOSX
     // FIXME: this is wrong
     nRet = reinterpret_cast< sal_IntPtr >( GetSystemData()->pView );
     (void)bUseJava;
@@ -313,7 +313,6 @@ sal_IntPtr SystemChildWindow::GetParentWindowHandle( sal_Bool bUseJava )
         }
     }
 #endif // SOLAR_JAVA
-#else // WNT || QUARTZ || UNX
 #endif
 
     return nRet;

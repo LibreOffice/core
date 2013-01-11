@@ -1113,7 +1113,7 @@ void TransferableHelper::StartDrag( Window* pWindow, sal_Int8 nDnDSourceActions,
         // contrary to the XDragSource interface specification because
         // we can receive drag events from the system only in the main
         // thread
-#if !defined(QUARTZ)
+#if !defined(MACOSX)
         const sal_uInt32 nRef = Application::ReleaseSolarMutex();
 #endif
 
@@ -1132,7 +1132,7 @@ void TransferableHelper::StartDrag( Window* pWindow, sal_Int8 nDnDSourceActions,
         }
 
         // See above for the reason of this define
-#if !defined(QUARTZ)
+#if !defined(MACOSX)
         Application::AcquireSolarMutex( nRef );
 #endif
     }

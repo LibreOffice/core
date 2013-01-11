@@ -73,7 +73,7 @@
 
 #ifdef WNT
 #include <plugin/win/sysplug.hxx>
-#elif defined(QUARTZ)
+#elif defined(MACOSX)
 #include "plugin/aqua/sysplug.hxx"
 #elif defined(UNX)
 #include "plugin/unx/sysplug.hxx"
@@ -152,7 +152,7 @@ private:
 
     sal_Bool                        m_bIsDisposed;
 
-#ifdef QUARTZ
+#ifdef MACOSX
     void SetSysPlugDataParentView(SystemEnvData const& rEnvData);
 #endif
 

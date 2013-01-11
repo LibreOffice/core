@@ -90,7 +90,7 @@ namespace cairocanvas
 
         OutputDevice* pOutDev=getOutputDevice();
 
-#if defined (UNX) && !defined (QUARTZ)
+#if defined (UNX) && !defined (MACOSX)
         // X11 only
         if( mpSurface )
             mpSurface->Resize( rSize.getX() + pOutDev->GetOutOffXPixel(),

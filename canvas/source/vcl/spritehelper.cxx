@@ -153,7 +153,7 @@ namespace vclcanvas
 
                     // bitmasks are much faster than alphamasks on some platforms
                     // so convert to bitmask if useful
-#ifndef QUARTZ
+#ifndef MACOSX
                     if( aMask.GetBitCount() != 1 )
                     {
                         OSL_FAIL("CanvasCustomSprite::redraw(): Mask bitmap is not "
@@ -253,7 +253,7 @@ namespace vclcanvas
                         // the final sprite output position.
                         aClipPoly.transform( aTransform );
 
-#if ! defined WNT && ! defined QUARTZ
+#if ! defined WNT && ! defined MACOSX
                         // non-Windows only - bAtLeastOnePolygon is
                         // only used in non-WNT code below
 
@@ -287,7 +287,7 @@ namespace vclcanvas
                             rTargetSurface.DrawPolyPolygon(PolyPolygon(aClipPoly)); // #i76339#
                         }
 
-#if ! defined WNT && ! defined QUARTZ
+#if ! defined WNT && ! defined MACOSX
                         // as a matter of fact, this fast path only
                         // performs well for X11 - under Windows, the
                         // clip via SetTriangleClipRegion is faster.

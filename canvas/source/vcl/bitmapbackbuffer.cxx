@@ -120,7 +120,7 @@ namespace vclcanvas
             mpVDev->SetOutputSizePixel( maBitmap->GetSizePixel() );
 
             // #i95645#
-#if defined( QUARTZ )
+#if defined( MACOSX )
             // use AA on VCLCanvas for Mac
             mpVDev->SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW | mpVDev->GetAntialiasing() );
 #else

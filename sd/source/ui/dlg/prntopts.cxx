@@ -86,7 +86,7 @@ SdPrintOptions::SdPrintOptions( Window* pParent, const SfxItemSet& rInAttrs ) :
     aCbxHandout.SetClickHdl( aLink );
     aCbxOutline.SetClickHdl( aLink );
 
-#ifndef QUARTZ
+#ifndef MACOSX
     SetDrawMode();
 #endif
 
@@ -281,12 +281,12 @@ void    SdPrintOptions::SetDrawMode()
 }
 
 void SdPrintOptions::PageCreated (SfxAllItemSet
-#ifdef QUARTZ
+#ifdef MACOSX
                                   aSet
 #endif
                                   )
 {
-#ifdef QUARTZ
+#ifdef MACOSX
     SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_SDMODE_FLAG,sal_False);
     if (pFlagItem)
     {

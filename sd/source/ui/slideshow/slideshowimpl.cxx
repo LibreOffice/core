@@ -2079,7 +2079,7 @@ IMPL_LINK( SlideshowImpl, EventListenerHdl, VclSimpleEvent*, pEvent )
         {
             switch( rEvent.GetMediaCommand() )
             {
-#if defined( QUARTZ )
+#if defined( MACOSX )
             case MEDIA_COMMAND_MENU:
                 if( !mnContextMenuEvent )
                 {

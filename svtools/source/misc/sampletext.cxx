@@ -81,7 +81,7 @@ rtl::OUString makeShortRepresentativeSymbolTextForSelectedFont(OutputDevice &rDe
 
             // start just above the PUA used by most symbol fonts
             sal_uInt32 cNewChar = 0xFF00;
-#ifdef QUARTZ
+#ifdef MACOSX
             // on MacOSX there are too many non-presentable symbols above the codepoint 0x0192
             if( !bOpenSymbol )
                 cNewChar = 0x0192;

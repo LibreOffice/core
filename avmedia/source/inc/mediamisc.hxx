@@ -24,7 +24,7 @@ class ResMgr;
 #ifdef WNT
 #define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.comp.avmedia.Manager_DirectX"
 #else
-#ifdef QUARTZ
+#ifdef MACOSX
 #define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.comp.avmedia.Manager_QuickTime"
 #else
 #define AVMEDIA_MANAGER_SERVICE_NAME_OLD "com.sun.star.comp.avmedia.Manager_GStreamer_0_10"

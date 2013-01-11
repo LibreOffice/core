@@ -50,7 +50,7 @@ namespace vclcanvas
         mpBackBuffer->setSize( rOutDev.GetOutputSizePixel() );
 
         // #i95645#
-#if defined( QUARTZ )
+#if defined( MACOSX )
         // use AA on VCLCanvas for Mac
         mpBackBuffer->getOutDev().SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW | mpBackBuffer->getOutDev().GetAntialiasing() );
 #else
