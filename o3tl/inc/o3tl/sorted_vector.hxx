@@ -155,6 +155,16 @@ public:
         clear();
     }
 
+    // fdo#58793: some existing code in Writer (SwpHintsArray)
+    // routinely modifies the members of the vector in a way that
+    // violates the sort order, and then re-sorts the array.
+    // This is a kludge to enable that code to work.
+    // If you are calling this function, you are Doing It Wrong!
+    void Resort()
+    {
+        std::stable_sort(begin_nonconst(), end_nonconst(), Compare());
+    }
+
 private:
 
     typename base_t::iterator begin_nonconst() { return base_t::begin(); }
@@ -191,7 +201,7 @@ struct find_unique
     }
 };
 
-/** the elments are partially ordered by Compare,
+/** the elements are partially ordered by Compare,
     2 elements are allowed if they are not the same element (pointer equal)
   */
 template<class Value, class Compare>
