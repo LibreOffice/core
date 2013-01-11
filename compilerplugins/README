@@ -7,7 +7,7 @@ This directory contains code for compiler plugins. These are used to perform
 additional actions during compilation (such as additional warnings) and
 also to perform mass code refactoring.
 
-Currently only the Clang compiler is supported (http://clang.llvm.org).
+Currently only the Clang compiler is supported (http://wiki.documentfoundation.org/Development/Clang).
 
 
 == Usage ==
