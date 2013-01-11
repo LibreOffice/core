@@ -597,50 +597,10 @@ void ComboBox::Resize()
     Size aOutSz = GetOutputSizePixel();
     if( IsDropDownBox() )
     {
-        long    nTop = 0;
-        long    nBottom = aOutSz.Height();
-
-        Window *pBorder = GetWindow( WINDOW_BORDER );
-        ImplControlValue aControlValue;
-        Point aPoint;
-        Rectangle aContent, aBound;
-
-        // use the full extent of the control
-        Rectangle aArea( aPoint, pBorder->GetOutputSizePixel() );
-
-        if ( GetNativeControlRegion(CTRL_COMBOBOX, PART_BUTTON_DOWN,
-                aArea, 0, aControlValue, rtl::OUString(), aBound, aContent) )
-        {
-            // convert back from border space to local coordinates
-            aPoint = pBorder->ScreenToOutputPixel( OutputToScreenPixel( aPoint ) );
-            aContent.Move(-aPoint.X(), -aPoint.Y());
-
-            mpBtn->setPosSizePixel( aContent.Left(), nTop, aContent.getWidth(), (nBottom-nTop) );
-
-            // adjust the size of the edit field
-            if ( GetNativeControlRegion(CTRL_COMBOBOX, PART_SUB_EDIT,
-                        aArea, 0, aControlValue, rtl::OUString(), aBound, aContent) )
-            {
-                // convert back from border space to local coordinates
-                aContent.Move(-aPoint.X(), -aPoint.Y());
-
-                // use the themes drop down size
-                mpSubEdit->SetPosSizePixel( aContent.TopLeft(), aContent.GetSize() );
-            }
-            else
-            {
-                // use the themes drop down size for the button
-                aOutSz.Width() -= aContent.getWidth();
-                mpSubEdit->SetSizePixel( aOutSz );
-            }
-        }
-        else
-        {
-            long nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
-            nSBWidth = CalcZoom( nSBWidth );
-            mpSubEdit->SetPosSizePixel( Point( 0, 0 ), Size( aOutSz.Width() - nSBWidth, aOutSz.Height() ) );
-            mpBtn->setPosSizePixel( aOutSz.Width() - nSBWidth, nTop, nSBWidth, (nBottom-nTop) );
-        }
+        ComboBoxBounds aBounds(calcComboBoxDropDownComponentBounds(aOutSz,
+            GetWindow(WINDOW_BORDER)->GetOutputSizePixel()));
+        mpSubEdit->SetPosSizePixel(aBounds.aSubEditPos, aBounds.aSubEditSize);
+        mpBtn->SetPosSizePixel(aBounds.aButtonPos, aBounds.aButtonSize);
     }
     else
     {
@@ -1106,12 +1066,15 @@ Size ComboBox::CalcMinimumSize() const
     else
     {
         aSz.Height() = Edit::CalcMinimumSizeForText(GetText()).Height();
+
         aSz.Width() = mpImplLB->GetMaxEntryWidth();
         aSz.Width() += getMaxWidthScrollBarAndDownButton();
+        ComboBoxBounds aBounds(calcComboBoxDropDownComponentBounds(
+            Size(0xFFFF, 0xFFFF), Size(0xFFFF, 0xFFFF)));
+        aSz.Width() += aBounds.aSubEditPos.X()*2;
     }
 
     aSz.Width() += ImplGetExtraOffset() * 2;
-    aSz.Width() += mpSubEdit->GetPosPixel().X();
 
     aSz = CalcWindowSize( aSz );
     return aSz;
@@ -1527,6 +1490,60 @@ long ComboBox::GetIndexForPoint( const Point& rPoint, sal_uInt16& rPos ) const
         nIndex = ToRelativeLineIndex( nIndex );
 
     return nIndex;
+}
+
+ComboBox::ComboBoxBounds ComboBox::calcComboBoxDropDownComponentBounds(const Size &rOutSz,
+    const Size &rBorderOutSz) const
+{
+    ComboBoxBounds aBounds;
+
+    long    nTop = 0;
+    long    nBottom = rOutSz.Height();
+
+    Window *pBorder = GetWindow( WINDOW_BORDER );
+    ImplControlValue aControlValue;
+    Point aPoint;
+    Rectangle aContent, aBound;
+
+    // use the full extent of the control
+    Rectangle aArea( aPoint, rBorderOutSz );
+
+    if ( GetNativeControlRegion(CTRL_COMBOBOX, PART_BUTTON_DOWN,
+            aArea, 0, aControlValue, rtl::OUString(), aBound, aContent) )
+    {
+        // convert back from border space to local coordinates
+        aPoint = pBorder->ScreenToOutputPixel( OutputToScreenPixel( aPoint ) );
+        aContent.Move(-aPoint.X(), -aPoint.Y());
+
+        aBounds.aButtonPos = Point(aContent.Left(), nTop);
+        aBounds.aButtonSize = Size(aContent.getWidth(), (nBottom-nTop));
+
+        // adjust the size of the edit field
+        if ( GetNativeControlRegion(CTRL_COMBOBOX, PART_SUB_EDIT,
+                    aArea, 0, aControlValue, rtl::OUString(), aBound, aContent) )
+        {
+            // convert back from border space to local coordinates
+            aContent.Move(-aPoint.X(), -aPoint.Y());
+
+            // use the themes drop down size
+            aBounds.aSubEditPos = aContent.TopLeft();
+            aBounds.aSubEditSize = aContent.GetSize();
+        }
+        else
+        {
+            // use the themes drop down size for the button
+            aBounds.aSubEditSize = Size(rOutSz.Width() - aContent.getWidth(), rOutSz.Height());
+        }
+    }
+    else
+    {
+        long nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
+        nSBWidth = CalcZoom( nSBWidth );
+        aBounds.aSubEditSize = Size(rOutSz.Width() - nSBWidth, rOutSz.Height());
+        aBounds.aButtonPos = Point(rOutSz.Width() - nSBWidth, nTop);
+        aBounds.aButtonSize = Size(nSBWidth, (nBottom-nTop));
+    }
+    return aBounds;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
