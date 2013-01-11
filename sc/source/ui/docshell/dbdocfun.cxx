@@ -1320,8 +1320,7 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
             if ( pDestObj )
             {
                 pDestObj->ReloadGroupTableData();
-                if (!pDestObj->SyncAllDimensionMembers())
-                    return false;
+                pDestObj->SyncAllDimensionMembers();
                 pDestObj->InvalidateData();             // before getting the new output area
 
                 //  make sure the table has a name (not set by dialog)
