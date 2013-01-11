@@ -700,7 +700,7 @@ void testFuncIFERROR(ScDocument* pDoc)
 
     // formulas and results
     struct {
-        const char* pFormula; OUString aResult;
+        const char* pFormula; const char* pResult;
     } aChecks[] = {
         { "=IFERROR(A1;9)",                         "1" },
      // { "{=IFERROR(3*A1:A2;2002)}",               "3" },
@@ -731,7 +731,7 @@ void testFuncIFERROR(ScDocument* pDoc)
         SCROW nRow = 20 + i;
         pDoc->GetString(0, nRow, 0, aResult);
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            aChecks[i].pFormula, aChecks[i].aResult, aResult);
+            aChecks[i].pFormula, OUString::createFromAscii( aChecks[i].pResult), aResult);
     }
 }
 
