@@ -442,6 +442,9 @@ void DocxAttributeOutput::EndParagraphProperties()
 {
     WriteCollectedParagraphProperties();
 
+    // insert copy of <rPr>
+    m_pSerializer->copyTopMarkPop();
+
     m_pSerializer->endElementNS( XML_w, XML_pPr );
 
     if ( m_nColBreakStatus == COLBRK_WRITE )
@@ -972,6 +975,9 @@ void DocxAttributeOutput::EndRunProperties( const SwRedlineData* /*pRedlineData*
     WriteCollectedRunProperties();
 
     m_pSerializer->endElementNS( XML_w, XML_rPr );
+
+    // Clone <rPr>...</rPr> for later re-use, in pPr
+    m_pSerializer->copyTopMarkPush();
 
     // write footnotes/endnotes if we have any
     FootnoteEndnoteReference();
