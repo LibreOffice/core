@@ -50,9 +50,20 @@ private:
     Link                        maSelectHdl;
     Link                        maDoubleClickHdl;
 
+    struct ComboBoxBounds
+    {
+        Point aSubEditPos;
+        Size aSubEditSize;
+
+        Point aButtonPos;
+        Size aButtonSize;
+    };
+
 private:
     SAL_DLLPRIVATE void     ImplInitComboBoxData();
     SAL_DLLPRIVATE void     ImplUpdateFloatSelection();
+    SAL_DLLPRIVATE ComboBoxBounds calcComboBoxDropDownComponentBounds(
+        const Size &rOutSize, const Size &rBorderOutSize) const;
 
     DECL_DLLPRIVATE_LINK(   ImplSelectHdl, void* );
     DECL_DLLPRIVATE_LINK(   ImplCancelHdl, void* );
