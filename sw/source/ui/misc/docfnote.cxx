@@ -117,14 +117,6 @@ SwEndNoteOptionPage::SwEndNoteOptionPage(Window *pParent, sal_Bool bEN,
     get(m_pPageTemplBox, "pagestylelb");
     get(m_pFtnCharAnchorTemplBox, "charanchorstylelb");
     get(m_pFtnCharTextTemplBox, "charstylelb");
-
-    long nWidth = std::max(std::max(
-        m_pPrefixED->get_preferred_size().Width(),
-        m_pSuffixED->get_preferred_size().Width()),
-        m_pNumViewBox->get_preferred_size().Width());
-    m_pPrefixED->set_width_request(nWidth);
-    m_pSuffixED->set_width_request(nWidth);
-    m_pNumViewBox->set_width_request(nWidth);
 }
 
 void SwEndNoteOptionPage::Reset( const SfxItemSet& )

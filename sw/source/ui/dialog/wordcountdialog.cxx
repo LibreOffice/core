@@ -102,17 +102,6 @@ SwWordCountFloatDlg::SwWordCountFloatDlg(SfxBindings* _pBindings,
 
     get(m_pClosePB, "close");
 
-    long nPrefWidth = m_pCurrentWordFT->get_preferred_size().Width();
-
-    m_pCurrentWordFT->set_width_request(nPrefWidth);
-    m_pCurrentCharacterFT->set_width_request(nPrefWidth);
-    m_pCurrentCharacterExcludingSpacesFT->set_width_request(nPrefWidth);
-    m_pCurrentCjkcharsFT->set_width_request(nPrefWidth);
-    m_pDocWordFT->set_width_request(nPrefWidth);
-    m_pDocCharacterFT->set_width_request(nPrefWidth);
-    m_pDocCharacterExcludingSpacesFT->set_width_request(nPrefWidth);
-    m_pDocCjkcharsFT->set_width_request(nPrefWidth);
-
     showCJK(SvtCJKOptions().IsAnyEnabled());
 
     Initialize(pInfo);

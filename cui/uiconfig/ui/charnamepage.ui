@@ -784,4 +784,36 @@
       </packing>
     </child>
   </object>
+  <object class="GtkSizeGroup" id="sizegroup1">
+    <property name="ignore_hidden">True</property>
+    <widgets>
+      <widget name="westlanglb-cjk"/>
+      <widget name="eastlanglb"/>
+      <widget name="ctllanglb"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup2">
+    <property name="ignore_hidden">True</property>
+    <widgets>
+      <widget name="westfontnameft-cjk"/>
+      <widget name="eastfontnameft"/>
+      <widget name="ctlfontnameft"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup3">
+    <property name="ignore_hidden">True</property>
+    <widgets>
+      <widget name="weststylelb-cjk"/>
+      <widget name="eaststylelb"/>
+      <widget name="ctlstylelb"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup4">
+    <property name="ignore_hidden">True</property>
+    <widgets>
+      <widget name="westsizelb-cjk"/>
+      <widget name="eastsizelb"/>
+      <widget name="ctlsizelb"/>
+    </widgets>
+  </object>
 </interface>

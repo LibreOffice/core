@@ -156,18 +156,6 @@ XMLFilterTestDialog::XMLFilterTestDialog(Window* pParent,
     get(m_pPBRecentFile, "recentfile");
     get(m_pFTNameOfRecentFile, "recentfilename");
 
-    long nWidth =
-        std::max(m_pPBExportBrowse->get_preferred_size().Width(),
-        std::max(m_pPBCurrentDocument->get_preferred_size().Width(),
-        std::max(m_pPBImportBrowse->get_preferred_size().Width(),
-                 m_pPBRecentFile->get_preferred_size().Width())));
-
-    //make sure that the second columns of the two disconnected
-    //grids are of equal width by ensuring that the widest
-    //entry in each equals
-    m_pPBExportBrowse->set_width_request(nWidth);
-    m_pPBImportBrowse->set_width_request(nWidth);
-
     get(m_pPBClose, "close");
 
     m_pPBExportBrowse->SetClickHdl(LINK( this, XMLFilterTestDialog, ClickHdl_Impl ) );

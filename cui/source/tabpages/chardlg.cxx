@@ -260,20 +260,6 @@ struct SvxCharNamePage_Impl
     }
 };
 
-namespace
-{
-    void equalize_width_requests(Window *pA, Window *pB, Window *pC)
-    {
-        long nWidthWest = pA->get_preferred_size().Width();
-        long nWidthEast = pB->get_preferred_size().Width();
-        long nWidthCTL = pC->get_preferred_size().Width();
-        long nLargest = std::max(nWidthWest, std::max(nWidthEast, nWidthCTL));
-        pA->set_width_request(nLargest);
-        pB->set_width_request(nLargest);
-        pC->set_width_request(nLargest);
-    }
-}
-
 // class SvxCharNamePage -------------------------------------------------
 
 SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet )
@@ -379,10 +365,6 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet )
         m_pWestFontNameLB->set_height_request(nHeight);
         m_pWestFontStyleLB->set_height_request(nHeight);
         m_pWestFontSizeLB->set_height_request(nHeight);
-    }
-    else
-    {
-        equalize_width_requests(m_pWestFontLanguageLB, m_pEastFontLanguageLB, m_pCTLFontLanguageLB);
     }
 
     Initialize();
@@ -1191,10 +1173,6 @@ void SvxCharNamePage::Reset( const SfxItemSet& rSet )
     Reset_Impl( rSet, Western );
     Reset_Impl( rSet, Asian );
     Reset_Impl( rSet, Ctl );
-
-    equalize_width_requests(m_pWestFontNameLB, m_pEastFontNameLB, m_pCTLFontNameLB);
-    equalize_width_requests(m_pWestFontStyleLB, m_pEastFontStyleLB, m_pCTLFontStyleLB);
-    equalize_width_requests(m_pWestFontSizeLB, m_pEastFontSizeLB, m_pCTLFontSizeLB);
 
     SetPrevFontWidthScale( rSet );
     UpdatePreview_Impl();

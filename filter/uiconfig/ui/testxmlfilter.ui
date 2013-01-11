@@ -18,13 +18,11 @@
             <child>
               <object class="GtkButton" id="close">
                 <property name="label">gtk-close</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -36,11 +34,9 @@
             <child>
               <object class="GtkButton" id="help">
                 <property name="label">gtk-help</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -115,11 +111,9 @@
                         <child>
                           <object class="GtkButton" id="exportbrowse">
                             <property name="label" translatable="yes">Browse...</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="use_action_appearance">False</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -131,11 +125,9 @@
                         <child>
                           <object class="GtkButton" id="currentdocument">
                             <property name="label" translatable="yes">Current Document</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="use_action_appearance">False</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -232,11 +224,9 @@
                         <child>
                           <object class="GtkButton" id="importbrowse">
                             <property name="label" translatable="yes">Browse...</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="use_action_appearance">False</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -248,11 +238,9 @@
                         <child>
                           <object class="GtkButton" id="recentfile">
                             <property name="label" translatable="yes">Recent File</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="use_action_appearance">False</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -292,11 +280,9 @@
                         <child>
                           <object class="GtkCheckButton" id="displaysource">
                             <property name="label" translatable="yes">Display source</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
@@ -390,5 +376,13 @@
       <action-widget response="0">close</action-widget>
       <action-widget response="0">help</action-widget>
     </action-widgets>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup1">
+    <widgets>
+      <widget name="exportbrowse"/>
+      <widget name="currentdocument"/>
+      <widget name="importbrowse"/>
+      <widget name="recentfile"/>
+    </widgets>
   </object>
 </interface>

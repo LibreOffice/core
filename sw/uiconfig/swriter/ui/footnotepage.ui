@@ -117,11 +117,9 @@
                 <child>
                   <object class="GtkRadioButton" id="pospagecb">
                     <property name="label" translatable="yes">End of page</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">posdoccb</property>
@@ -136,11 +134,9 @@
                 <child>
                   <object class="GtkRadioButton" id="posdoccb">
                     <property name="label" translatable="yes">End of document</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">pospagecb</property>
@@ -578,5 +574,12 @@
         <col id="0" translatable="yes">Per document</col>
       </row>
     </data>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup1">
+    <widgets>
+      <widget name="prefix"/>
+      <widget name="suffix"/>
+      <widget name="numberinglb"/>
+    </widgets>
   </object>
 </interface>
