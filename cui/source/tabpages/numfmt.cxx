@@ -258,16 +258,6 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage(Window* pParent,
     Init_Impl();
     SetExchangeSupport(); // this page needs ExchangeSupport
     nFixedCategory=-1;
-
-    VclFrame *pCategoryFrame = get<VclFrame>("categoryframe");
-    long nHeight = pCategoryFrame->get_preferred_size().Height();
-    //force the other frames to shrink to height of this frame
-    //i.e. there are a gadzillion currency formats so show
-    //eight of them at a time
-    VclFrame *pFormatFrame = get<VclFrame>("formatframe");
-    VclFrame *pLanguageFrame = get<VclFrame>("languageframe");
-    pFormatFrame->set_height_request(nHeight);
-    pLanguageFrame->set_height_request(nHeight);
 }
 
 SvxNumberFormatTabPage::~SvxNumberFormatTabPage()

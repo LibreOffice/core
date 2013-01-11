@@ -48,7 +48,6 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="add">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -56,7 +55,6 @@
                     <property name="tooltip_markup" translatable="yes">Add</property>
                     <property name="tooltip_text" translatable="yes">Add</property>
                     <property name="valign">center</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="image">image2</property>
                   </object>
                   <packing>
@@ -68,7 +66,6 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="edit">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -76,7 +73,6 @@
                     <property name="tooltip_markup" translatable="yes">Edit Comment</property>
                     <property name="tooltip_text" translatable="yes">Edit Comment</property>
                     <property name="valign">center</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="image">image3</property>
                   </object>
                   <packing>
@@ -88,7 +84,6 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="delete">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -96,7 +91,6 @@
                     <property name="tooltip_markup" translatable="yes">Remove</property>
                     <property name="tooltip_text" translatable="yes">Remove</property>
                     <property name="valign">center</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="image">image1</property>
                   </object>
                   <packing>
@@ -235,11 +229,9 @@
                 <child>
                   <object class="GtkCheckButton" id="negnumred">
                     <property name="label" translatable="yes">_Negative numbers red</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
@@ -254,11 +246,9 @@
                 <child>
                   <object class="GtkCheckButton" id="thousands">
                     <property name="label" translatable="yes">_Thousands separator</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
@@ -353,6 +343,7 @@
         </child>
         <child>
           <object class="GtkFrame" id="formatframe">
+            <property name="height_request">0</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
@@ -424,6 +415,7 @@
         </child>
         <child>
           <object class="GtkFrame" id="languageframe">
+            <property name="height_request">0</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="vexpand">True</property>
@@ -472,11 +464,9 @@
                     <child>
                       <object class="GtkCheckButton" id="sourceformat">
                         <property name="label" translatable="yes">So_urce Format</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="no_show_all">True</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
@@ -586,5 +576,14 @@
         <col id="0" translatable="yes">Automatically</col>
       </row>
     </data>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup1">
+    <property name="mode">vertical</property>
+    <property name="ignore_hidden">True</property>
+    <widgets>
+      <widget name="categoryframe"/>
+      <widget name="formatframe"/>
+      <widget name="languageframe"/>
+    </widgets>
   </object>
 </interface>
