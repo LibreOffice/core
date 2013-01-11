@@ -145,6 +145,8 @@ public:
         @see mark()
      */
     void mergeTopMarks( sax_fastparser::MergeMarksEnum eMergeType = sax_fastparser::MERGE_MARKS_APPEND );
+    void copyTopMarkPush();
+    void copyTopMarkPop();
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > mxOutputStream;
@@ -203,6 +205,7 @@ private:
     };
 
     ::std::stack< boost::shared_ptr< ForMerge > > maMarkStack;
+    ::std::stack< boost::shared_ptr< ForMerge > > maSavedMarkStack;
 
     void writeFastAttributeList( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs );
     void write( const ::rtl::OUString& s );
