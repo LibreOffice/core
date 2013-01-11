@@ -2,7 +2,11 @@ dnl -*- Mode: Autoconf; tab-width: 4; indent-tabs-mode: nil; fill-column: 102 -*
 dnl configure.ac serves as input for the GNU autoconf package
 dnl in order to create a configure script.
 
-AC_INIT([LibreOffice],[4.1],[],[],[http://documentfoundation.org/])
+# The version number in the second argumemnt to AC_INIT should be four numbers separated by
+# periods. Some parts of the code requires the first one to be less than 128 and the others to be less
+# than 256.
+AC_INIT([LibreOffice],[4.1.0.0],[],[],[http://documentfoundation.org/])
+
 AC_PREREQ([2.59])
 save_CC=$CC
 save_CXX=$CXX
@@ -4200,6 +4204,7 @@ if test "$cross_compiling" = "yes"; then
         solenv/bin/getcompver.awk \
         solenv/inc/langlist.mk \
         solenv/inc/postset.mk \
+        solenv/inc/minor.mk.in \
     | (cd CONF-FOR-BUILD && tar xf -)
     (
     unset COM GUI GUIBASE OS CPU CPUNAME
@@ -4314,27 +4319,38 @@ AC_SUBST([PYTHON_FOR_BUILD])
 AC_SUBST(OUTDIR_FOR_BUILD)
 AC_SUBST(WORKDIR_FOR_BUILD)
 
-UPD="`echo AC_PACKAGE_VERSION | sed "s/\.//"`0"
-SOURCEVERSION="OOO$UPD"
-AC_SUBST(UPD)
-AC_SUBST(SOURCEVERSION)
+dnl ===================================================================
+dnl Our version is defined by the AC_INIT() at the top of this script.
+dnl ===================================================================
 
-dnl ===================================================================
-dnl Grim-ness to export version number of LibreOffice to code
-dnl this needs to be turned around and to be driven by configure
-dnl ===================================================================
-LIBO_VERSION_MAJOR="`$GREP VERSIONMAJOR solenv/inc/minor.mk | sed "s/^.*=//"`"
-LIBO_VERSION_MINOR="`$GREP VERSIONMINOR solenv/inc/minor.mk | sed "s/^.*=//"`"
-LIBO_VERSION_MICRO="`$GREP VERSIONMICRO solenv/inc/minor.mk | sed "s/^.*=//"`"
-LIBO_VERSION_PATCH="`$GREP BUILD solenv/inc/minor.mk | sed "s/^.*=//"`"
+set `echo AC_PACKAGE_VERSION | sed "s/\./ /g"`
+
+LIBO_VERSION_MAJOR=$1
+LIBO_VERSION_MINOR=$2
+LIBO_VERSION_MICRO=$3
+LIBO_VERSION_PATCH=$4
+
 AC_SUBST(LIBO_VERSION_MAJOR)
 AC_SUBST(LIBO_VERSION_MINOR)
 AC_SUBST(LIBO_VERSION_MICRO)
 AC_SUBST(LIBO_VERSION_PATCH)
+
 AC_DEFINE_UNQUOTED(LIBO_VERSION_MAJOR,$LIBO_VERSION_MAJOR)
 AC_DEFINE_UNQUOTED(LIBO_VERSION_MINOR,$LIBO_VERSION_MINOR)
 AC_DEFINE_UNQUOTED(LIBO_VERSION_MICRO,$LIBO_VERSION_MICRO)
 AC_DEFINE_UNQUOTED(LIBO_VERSION_PATCH,$LIBO_VERSION_PATCH)
+
+LIBO_THIS_YEAR=`date +%Y`
+AC_SUBST(LIBO_THIS_YEAR)
+
+
+# This UPD silly thing must go away soon
+UPD="${LIBO_VERSION_MAJOR}${LIBO_VERSION_MINOR}0"
+AC_SUBST(UPD)
+
+# This too should go away
+SOURCEVERSION="OOO$UPD"
+AC_SUBST(SOURCEVERSION)
 
 dnl ===================================================================
 dnl Check for syslog header
@@ -12440,7 +12456,7 @@ else
     echo > config_host.mk.last
 fi
 
-AC_CONFIG_FILES([config_host.mk Makefile])
+AC_CONFIG_FILES([config_host.mk Makefile solenv/inc/minor.mk])
 AC_CONFIG_HEADERS([config/config_clang.h])
 AC_CONFIG_HEADERS([config/config_global.h])
 AC_CONFIG_HEADERS([config/config_graphite.h])

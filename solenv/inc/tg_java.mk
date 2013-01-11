@@ -34,10 +34,10 @@ $(MISC)/java/com/sun/star/upd/$(VERSIONINFOFILE)_updversion.java .PHONY:
     @-$(MKDIRHIER) $(MISC)/java/com/sun/star/upd
 .IF "$(OS)"!="WNT"
     @echo package com.sun.star.upd\; > $@
-    @echo 'public class $(VERSIONINFOFILE)_updversion { public static String Version = "$(RSCREVISION)";}' >> $@
+    @echo 'public class $(VERSIONINFOFILE)_updversion { public static String Version = "$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)";}' >> $@
 .ELSE			# "$(OS)"!="WNT"
     @echo package com.sun.star.upd; > $@
-    @echo public class $(VERSIONINFOFILE)_updversion { public static String Version = "$(RSCREVISION)";} >> $@
+    @echo public class $(VERSIONINFOFILE)_updversion { public static String Version = "$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)";} >> $@
 .ENDIF			# "$(OS)"!="WNT"
 
 .IF "$(JAVATARGET)"!=""

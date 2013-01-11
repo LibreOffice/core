@@ -56,8 +56,6 @@ CLASSPATH!:=$(CLASSPATH)$(PATH_SEPERATOR)$(ANT_CLASSPATH)$(PATH_SEPERATOR)$(JAVA
 $(CLASSDIR)/solar.properties : $(SOLARVERSION)/$(INPATH)/inc/minormkchanged.flg $(SOLARENV)/inc/ant.properties
     @echo "Making:   " $@
     @echo solar.build=$(BUILD) > $@
-    @echo solar.rscversion=$(USQ)$(RSCVERSION)$(USQ) >> $@
-    @echo solar.rscrevision=$(USQ)$(RSCREVISION)$(USQ) >> $@
     @echo solar.minor=$(LAST_MINOR) >> $@
     @echo solar.sourceversion=$(SOURCEVERSION) >> $@
     @echo solar.udkstamp=$(UDKSTAMP) >> $@

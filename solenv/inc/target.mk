@@ -1829,7 +1829,6 @@ $(INCCOM)/%_version.h : $(SOLARVERSION)/$(INPATH)/inc/minormkchanged.flg
     @echo $(EMQ)#define _BUILD $(EMQ)"$(BUILD)$(EMQ)" > $(VERSIONTMP)
     @echo $(EMQ)#define _UPD $(EMQ)"$(UPD)$(EMQ)"                 >> $(VERSIONTMP)
     @echo $(EMQ)#define _LAST_MINOR $(EMQ)"$(LAST_MINOR)$(EMQ)"   >> $(VERSIONTMP)
-    @echo $(EMQ)#define _RSCREVISION $(EMQ)"$(USQ)$(RSCREVISION)$(USQ)$(EMQ)" >> $(VERSIONTMP)
     @echo $(EMQ)#define _INPATH $(EMQ)"$(INPATH)$(EMQ)"           >> $(VERSIONTMP)
     @@-$(RM) $(@)_$(VERSIONTMP:b)
     @$(TYPE) $(VERSIONTMP) > $(@)_$(VERSIONTMP:b)

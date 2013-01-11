@@ -224,7 +224,7 @@ $(DESTDIRBIN)/addsym-macosx.sh : addsym-macosx.sh
 $(DESTDIRSETTINGS)/dk.mk : dk.mk
     @@-rm -f $@
     -$(MKDIRHIER) $(@:d)
-    tr -d "\015" < dk.mk | sed -e 's/@@RELEASE@@/$(PRODUCT_RELEASE)/' -e 's/@@BUILDID@@/$(RSCREVISION)/'> $@
+    tr -d "\015" < dk.mk | sed -e 's/@@RELEASE@@/$(PRODUCT_RELEASE)/' -e 's/@@BUILDID@@/$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)/'> $@
 
 $(IDL_DOCU_CLEANUP_FLAG) : $(IDL_CHAPTER_REFS) $(PRJ)/docs/common/ref/idl.css $(DESTIDLLIST)
     @@-$(MY_DELETE_RECURSIVE) $(DESTDIRGENIDLREF)

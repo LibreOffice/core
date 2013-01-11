@@ -7,9 +7,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-# for RSCREVISION
-include $(SOLARENV)/inc/minor.mk
-
 $(eval $(call gb_ExternalProject_ExternalProject,apache_commons_httpclient))
 
 $(eval $(call gb_ExternalProject_use_unpacked,apache_commons_codec,apache_commons_httpclient))
@@ -27,7 +24,7 @@ $(call gb_ExternalProject_get_state_target,apache_commons_httpclient,build) :
 	$(ICECREAM_RUN) "$(ANT)" \
 		-q \
 		-f build.xml \
-		-Dbuild.label="build-$(RSCREVISION)" \
+		-Dbuild.label="build-$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)" \
 		-Dcommons-logging.jar="$(call gb_UnpackedTarball_get_dir,apache_commons_logging)/target/commons-logging-1.1.1-SNAPSHOT.jar" \
 		-Dcommons-codec.jar="$(call gb_UnpackedTarball_get_dir,apache_commons_codec)/dist/commons-codec-1.3.jar" \
 		$(if $(filter yes,$(JAVACISGCJ))\

@@ -7,9 +7,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-# for RSCREVISION
-include $(SOLARENV)/inc/minor.mk
-
 $(eval $(call gb_ExternalProject_ExternalProject,apache_commons_lang))
 
 $(eval $(call gb_ExternalProject_use_unpacked,apache_commons_lang,apache_commons_lang))
@@ -24,7 +21,7 @@ $(call gb_ExternalProject_get_state_target,apache_commons_lang,build) :
 	$(ICECREAM_RUN) "$(ANT)" \
 		-q \
 		-f build.xml \
-		-Dbuild.label="build-$(RSCREVISION)" \
+		-Dbuild.label="build-$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)" \
 		$(if $(filter yes,$(JAVACISGCJ))\
 			,-Dbuild.compiler=gcj \
 			,-Dant.build.javac.source=$(JAVA_SOURCE_VER) \

@@ -56,8 +56,7 @@ $(JARMANIFEST) .PHONY : $(CUSTOMMANIFESTFILEDEP)
 .IF "$(JARCLASSPATH)" != ""
     $(COMMAND_ECHO)echo $(USQ)Class-Path: $(JARCLASSPATH)$(USQ) >> $@
 .ENDIF
-# $(RSCREVISION) contains chars that must be quoted (for *NIX shells)
-    $(COMMAND_ECHO)echo $(USQ)Solar-Version: $(RSCREVISION)$(USQ) >> $@
+    $(COMMAND_ECHO)echo $(USQ)Solar-Version: $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)$(USQ) >> $@
 .IF "$(CUSTOMMANIFESTFILE)"!=""
     $(COMMAND_ECHO)$(TYPE) $(MISC)/$(TARGET)_$(CUSTOMMANIFESTFILE:f) >> $@
 .ENDIF			# "$(CUSTOMMANIFESTFILE)"!=""

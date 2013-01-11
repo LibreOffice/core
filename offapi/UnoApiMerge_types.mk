@@ -32,6 +32,6 @@ $(eval $(call gb_UnoApiMerge_set_reference_rdbfile,types,\
 statistic : $(gb_Helper_MISC)/api_statistic
 
 $(gb_Helper_MISC)/api_statistic: $(call gb_UnoApiMerge_get_target,types)
-	$(PERL) util/checknewapi.pl $(call gb_UnoApiMerge_get_target,types) $(UNOAPI_REFERENCE_types) "$(RSCREVISION)" "$(gb_UnoApiMerge_REGVIEWTARGET)" > $@
+	$(PERL) util/checknewapi.pl $(call gb_UnoApiMerge_get_target,types) $(UNOAPI_REFERENCE_types) "$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)" "$(gb_UnoApiMerge_REGVIEWTARGET)" > $@
 
 # vim: set noet sw=4 ts=4:
