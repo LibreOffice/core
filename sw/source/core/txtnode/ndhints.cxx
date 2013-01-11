@@ -310,50 +310,16 @@ bool SwpHintsArray::Check() const
  *                          SwpHintsArray::Resort()
  *************************************************************************/
 
-// Resort() wird vor jedem Insert und Delete gerufen.
-// Wenn Textmasse geloescht wird, so werden die Indizes in
-// ndtxt.cxx angepasst. Leider erfolgt noch keine Neusortierung
-// auf gleichen Positionen.
+// Resort() is called before every Insert and Delete.
+// Various SwTxtNode methods modify hints in a way that violates the
+// sort order of the m_HintStarts, m_HintEnds arrays, so this method is needed
+// to restore the order.
 
 bool SwpHintsArray::Resort()
 {
-    bool bResort = false;
-    const SwTxtAttr *pLast = 0;
-    sal_uInt16 i;
-
-    for ( i = 0; i < m_HintStarts.size(); ++i )
-    {
-        SwTxtAttr *pHt = m_HintStarts[i];
-        if( pLast && !lcl_IsLessStart( *pLast, *pHt ) )
-        {
-            m_HintStarts.erase( m_HintStarts.begin() + i );
-            m_HintStarts.insert( pHt );
-            pHt = m_HintStarts[i];
-            if ( pHt != pLast )
-                --i;
-            bResort = true;
-        }
-        pLast = pHt;
-    }
-
-    pLast = 0;
-    for ( i = 0; i < m_HintEnds.size(); ++i )
-    {
-        SwTxtAttr *pHt = m_HintEnds[i];
-        if( pLast && !lcl_IsLessEnd( *pLast, *pHt ) )
-        {
-            m_HintEnds.erase( m_HintEnds.begin() + i );
-            m_HintEnds.insert( pHt );
-            pHt = m_HintEnds[i]; // normalerweise == pLast
-            // Wenn die Unordnung etwas groesser ist (24200),
-            // muessen wir Position i erneut vergleichen.
-            if ( pLast != pHt )
-                --i;
-            bResort = true;
-        }
-        pLast = pHt;
-    }
-    return bResort;
+    m_HintStarts.Resort();
+    m_HintEnds.Resort();
+    return false; // TODO: probably unused return value?
 }
 
 
