@@ -408,12 +408,22 @@ void RtfExport::WriteInfo()
         OutUnicode(OOO_STRING_SVTOOLS_RTF_AUTHOR,xDocProps->getModifiedBy());
         OutDateTime(OOO_STRING_SVTOOLS_RTF_REVTIM, xDocProps->getModificationDate());
 
+
         OutDateTime(OOO_STRING_SVTOOLS_RTF_PRINTIM, xDocProps->getPrintDate());
     }
 
     Strm() << '{' << OOO_STRING_SVTOOLS_RTF_COMMENT << " ";
     Strm() << OUStringToOString( utl::ConfigManager::getProductName(), eCurrentEncoding).getStr() << "}{" << OOO_STRING_SVTOOLS_RTF_VERN;
-    Strm() << LIBO_VERSION_MAJOR LIBO_VERSION_MINOR LIBO_VERSION_MICRO "0" << '}';
+
+// The convention that we follow is that the version number
+// should be a non-negative 32-bit int
+#if LIBO_VERSION_MAJOR > 127
+#error Major version number must be less than 128
+#elif LIBO_VERSION_MINOR > 255 || LIBO_VERSION_MICRO > 255 || LIBO_VERSION_PATCH > 255
+#error Minor, micro and patchlevel version numbers must be less than 256
+#endif
+
+    Strm() << (sal_Int32) LIBO_VERSION_ENCODED_IN_32BITS << '}';
     Strm() << '}';
 }
 
