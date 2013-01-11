@@ -1310,7 +1310,6 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
                 if ( pDoc->GetDPCollection()->GetByName(pDestObj->GetName()) )
                     pDestObj->SetName( String() );      // ignore the invalid name, create a new name below
 
-                pDestObj->SetAlive(sal_True);
                 if ( !pDoc->GetDPCollection()->InsertNewTable(pDestObj) )
                 {
                     OSL_FAIL("cannot insert DPObject");

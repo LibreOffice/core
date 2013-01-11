@@ -133,7 +133,6 @@ ScPivotLayoutDlg::ScPivotLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window
     mnOffset(0),
     mbRefInputMode( false )
 {
-    mxDlgDPObject->SetAlive( true );     // needed to get structure information
     mxDlgDPObject->FillOldParam( maPivotData );
     mxDlgDPObject->FillLabelData( maPivotData );
 

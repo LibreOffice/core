@@ -1413,7 +1413,6 @@ ScDataPilotDescriptor::ScDataPilotDescriptor(ScDocShell* pDocSh) :
     ScDataPilotDescriptorBase( pDocSh ),
     mpDPObject(new ScDPObject(pDocSh ? pDocSh->GetDocument() : NULL) )
 {
-    mpDPObject->SetAlive(sal_True);
     ScDPSaveData aSaveData;
     // set defaults like in ScPivotParam constructor
      aSaveData.SetColumnGrand( sal_True );

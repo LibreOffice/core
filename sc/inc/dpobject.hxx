@@ -100,7 +100,6 @@ private:
     long                    nHeaderRows;    // page fields plus filter button
     bool                    mbHeaderLayout:1;  // true : grid, false : standard
     bool                    bAllowMove:1;
-    bool                    bAlive:1;         // false if only used to hold settings
     bool                    bSettingsChanged:1;
     bool                    mbEnableGetPivotData:1;
 
@@ -120,12 +119,6 @@ public:
 
     void EnableGetPivotData(bool b);
 
-    /**
-     * When a DP object is "alive", it has table output on a sheet.  This flag
-     * doesn't really change the behavior of the object, but is used only for
-     * testing purposes.
-     */
-    void                SetAlive(bool bSet);
     void                SetAllowMove(bool bSet);
 
     void                InvalidateData();

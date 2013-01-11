@@ -1640,7 +1640,6 @@ void ScUndoDataPilot::Undo()
         //  re-insert deleted object
 
         ScDPObject* pDestObj = new ScDPObject( *pOldDPObject );
-        pDestObj->SetAlive(sal_True);
         if ( !pDoc->GetDPCollection()->InsertNewTable(pDestObj) )
         {
             OSL_FAIL("cannot insert DPObject");

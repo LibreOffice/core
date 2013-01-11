@@ -1817,7 +1817,6 @@ ScDPObject* createDPFromSourceDesc(
     pDim->SetShowEmpty(true);
 
     pDPObj->SetSaveData(aSaveData);
-    pDPObj->SetAlive(true);
     pDPObj->InvalidateData();
 
     return pDPObj;

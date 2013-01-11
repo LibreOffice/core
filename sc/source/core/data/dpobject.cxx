@@ -315,7 +315,6 @@ ScDPObject::ScDPObject( ScDocument* pD ) :
     nHeaderRows( 0 ),
     mbHeaderLayout(false),
     bAllowMove(false),
-    bAlive(false),
     bSettingsChanged(false),
     mbEnableGetPivotData(true)
 {
@@ -336,7 +335,6 @@ ScDPObject::ScDPObject(const ScDPObject& r) :
     nHeaderRows( r.nHeaderRows ),
     mbHeaderLayout( r.mbHeaderLayout ),
     bAllowMove(false),
-    bAlive(false),
     bSettingsChanged(false),
     mbEnableGetPivotData(r.mbEnableGetPivotData)
 {
@@ -364,11 +362,6 @@ ScDPObject::~ScDPObject()
 void ScDPObject::EnableGetPivotData(bool b)
 {
     mbEnableGetPivotData = b;
-}
-
-void ScDPObject::SetAlive(bool bSet)
-{
-    bAlive = bSet;
 }
 
 void ScDPObject::SetAllowMove(bool bSet)
@@ -628,10 +621,6 @@ void ScDPObject::CreateObjects()
 {
     if (!xSource.is())
     {
-        //! cache DPSource and/or Output?
-
-        OSL_ENSURE( bAlive, "CreateObjects on non-inserted DPObject" );
-
         DELETEZ( pOutput );     // not valid when xSource is changed
 
         if ( pServDesc )
@@ -3295,7 +3284,6 @@ void ScDPCollection::WriteRefsTo( ScDPCollection& r ) const
                 // none found, re-insert deleted object (see ScUndoDataPilot::Undo)
 
                 ScDPObject* pDestObj = new ScDPObject(rSrcObj);
-                pDestObj->SetAlive(true);
                 r.InsertNewTable(pDestObj);
             }
         }

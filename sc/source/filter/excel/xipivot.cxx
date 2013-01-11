@@ -1438,7 +1438,6 @@ void XclImpPivotTable::Convert()
     pDPObj->SetSaveData( aSaveData );
     pDPObj->SetSheetDesc( aDesc );
     pDPObj->SetOutRange( aOutRange );
-    pDPObj->SetAlive(true);
     pDPObj->SetHeaderLayout( maPTViewEx9Info.mnGridLayout == 0 );
 
     GetDoc().GetDPCollection()->InsertNewTable(pDPObj);

@@ -551,7 +551,6 @@ void ScXMLDataPilotTableContext::EndElement()
         if ( pDPCollection->GetByName(pDPObject->GetName()) )
             pDPObject->SetName( String() );     // ignore the invalid name, create a new name in AfterXMLLoading
 
-        pDPObject->SetAlive(sal_True);
         pDPCollection->InsertNewTable(pDPObject);
     }
     SetButtons();
