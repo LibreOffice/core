@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAS3///2I\u003d",
+        "filename": "basic/source/classes/sbxmod.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2112,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-01-11T08:26:49Z",
+      "side": 1,
+      "message": "This still souds problematic -- in general, if a SAL_INFO string uses %x, %d or %s, that is rarely correct.",
+      "revId": "39b5ae12c903d9e7b3b9216781ab68d1d1389955",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
