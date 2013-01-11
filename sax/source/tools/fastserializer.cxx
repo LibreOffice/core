@@ -265,6 +265,20 @@ namespace sax_fastparser {
         }
     }
 
+    void FastSaxSerializer::copyTopMarkPush()
+    {
+        assert (!maMarkStack.empty());
+        maSavedMarkStack.push(boost::shared_ptr< ForMerge > ( new ForMerge(*maMarkStack.top())));
+    }
+
+    void FastSaxSerializer::copyTopMarkPop()
+    {
+        assert (!maSavedMarkStack.empty());
+        maMarkStack.push(maSavedMarkStack.top());
+        mergeTopMarks();
+        maSavedMarkStack.pop();
+    }
+
     void FastSaxSerializer::writeBytes( const Sequence< ::sal_Int8 >& aData ) throw ( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException )
     {
         if ( maMarkStack.empty() )
