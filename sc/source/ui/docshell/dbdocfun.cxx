@@ -1330,6 +1330,8 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
             if ( pDestObj )
             {
                 pDestObj->ReloadGroupTableData();
+                if (!pDestObj->SyncAllDimensionMembers())
+                    return false;
                 pDestObj->InvalidateData();             // before getting the new output area
 
                 //  make sure the table has a name (not set by dialog)
@@ -1472,8 +1474,6 @@ sal_uLong ScDBDocFunc::RefreshPivotTables(ScDPObject* pDPObj, bool bApi)
     for (; it != itEnd; ++it)
     {
         ScDPObject* pObj = *it;
-        if (!pObj->SyncAllDimensionMembers())
-            continue;
 
         // This action is intentionally not undoable since it modifies cache.
         DataPilotUpdate(pObj, pObj, false, bApi);
