@@ -167,7 +167,8 @@ sal_uInt16 SwpHintsArray::GetPos( const SwTxtAttr *pHt ) const
         { \
             SAL_WARN("sw.core", text); \
             DumpHints(m_HintStarts, m_HintEnds); \
-            return !(const_cast<SwpHintsArray*>(this))->Resort(); \
+            (const_cast<SwpHintsArray*>(this))->Resort(); \
+            return false; \
         }
 
 bool SwpHintsArray::Check() const
@@ -315,11 +316,10 @@ bool SwpHintsArray::Check() const
 // sort order of the m_HintStarts, m_HintEnds arrays, so this method is needed
 // to restore the order.
 
-bool SwpHintsArray::Resort()
+void SwpHintsArray::Resort()
 {
     m_HintStarts.Resort();
     m_HintEnds.Resort();
-    return false; // TODO: probably unused return value?
 }
 
 

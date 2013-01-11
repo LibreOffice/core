@@ -91,7 +91,7 @@ protected:
 public:
     void Insert( const SwTxtAttr *pHt );
     void DeleteAtPos( const sal_uInt16 nPosInStart );
-    bool Resort();
+    void Resort();
     SwTxtAttr * Cut( const sal_uInt16 nPosInStart );
 
     inline const SwTxtAttr * GetStart( const sal_uInt16 nPos ) const
