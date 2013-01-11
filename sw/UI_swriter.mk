@@ -41,6 +41,7 @@ $(eval $(call gb_UI_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/splittable \
 	sw/uiconfig/swriter/ui/statisticsinfopage \
 	sw/uiconfig/swriter/ui/stringinput \
+	sw/uiconfig/swriter/ui/tabletextflowpage \
 	sw/uiconfig/swriter/ui/titlepage \
 	sw/uiconfig/swriter/ui/wordcount \
 ))

@@ -38,9 +38,6 @@
 #define FT_WIDTH        25
 #define FT_POS          32
 #define CB_HEADLINE         40
-#define FT_REPEAT_HEADER    40
-#define NF_REPEAT_HEADER    40
-#define WIN_REPEAT_HEADER   40
 #define FL_PROPERTIES       42
 #define FT_TEXTORIENTATION    43
 #define LB_TEXTORIENTATION    44
@@ -73,23 +70,4 @@
 #define FT_SPACE        125
 #define ED_SPACE        126
 
-#define FL_FLOW                         130
-#define CB_PAGEBREAK        131
-#define RB_BREAKPAGE        132
-#define RB_BREAKCOLUMN      133
-#define RB_PAGEBREAKBEFORE  134
-#define RB_PAGEBREAKAFTER   135
-#define CB_PAGECOLL         136
-#define LB_PAGECOLL         137
-#define FT_PAGENUM          138
-#define NF_PAGENUM          139
-#define CB_KEEP             144
-#define CB_SPLIT            145
-#define CB_SPLIT_ROW                    146
-
-#define FL_VERT_ORIENT          140
-#define RB_FROM_LEFT        144
-
-#define FT_VERTORIENT       150
-#define LB_VERTORIENT       151
-
+#define RB_FROM_LEFT    127

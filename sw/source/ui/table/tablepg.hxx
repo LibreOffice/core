@@ -158,31 +158,27 @@ public:
 
 class SwTextFlowPage : public SfxTabPage
 {
-    FixedLine       aFlowFL;
-    CheckBox        aPgBrkCB;
-    RadioButton     aPgBrkRB;
-    RadioButton     aColBrkRB;
-    RadioButton     aPgBrkBeforeRB;
-    RadioButton     aPgBrkAfterRB;
-    CheckBox        aPageCollCB;
-    ListBox         aPageCollLB;
-    FixedText       aPageNoFT;
-    NumericField    aPageNoNF;
-    CheckBox        aSplitCB;
-    TriStateBox     aSplitRowCB;
-    CheckBox        aKeepCB;
-    CheckBox        aHeadLineCB;
-    FixedText       aRepeatHeaderFT;    // "dummy" to build before and after FT
-    FixedText       aRepeatHeaderBeforeFT;
-    NumericField    aRepeatHeaderNF;
-    FixedText       aRepeatHeaderAfterFT;
-    TextControlCombo    aRepeatHeaderCombo;
-    FixedText       aTextDirectionFT;
-    ListBox         aTextDirectionLB;
+    CheckBox*       m_pPgBrkCB;
 
-    FixedLine       aVertOrientFL;
-    FixedText       aVertOrientFT;
-    ListBox         aVertOrientLB;
+    RadioButton*    m_pPgBrkRB;
+    RadioButton*    m_pColBrkRB;
+
+    RadioButton*    m_pPgBrkBeforeRB;
+    RadioButton*    m_pPgBrkAfterRB;
+
+    CheckBox*       m_pPageCollCB;
+    ListBox*        m_pPageCollLB;
+    FixedText*      m_pPageNoFT;
+    NumericField*   m_pPageNoNF;
+    CheckBox*       m_pSplitCB;
+    TriStateBox*    m_pSplitRowCB;
+    CheckBox*       m_pKeepCB;
+    CheckBox*       m_pHeadLineCB;
+    NumericField*   m_pRepeatHeaderNF;
+    VclContainer*   m_pRepeatHeaderCombo;
+    ListBox*        m_pTextDirectionLB;
+
+    ListBox*        m_pVertOrientLB;
 
     SwWrtShell*     pShell;
 
