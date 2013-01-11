@@ -1378,6 +1378,64 @@ void VclEventBox::Command(const CommandEvent&)
     //discard events by default to block them reaching children
 }
 
+void VclSizeGroup::trigger_queue_resize()
+{
+    //sufficient to trigger one widget to trigger all of them
+    if (!m_aWindows.empty())
+    {
+        Window *pWindow = *m_aWindows.begin();
+        pWindow->queue_resize();
+    }
+}
+
+void VclSizeGroup::set_ignore_hidden(bool bIgnoreHidden)
+{
+    if (bIgnoreHidden != m_bIgnoreHidden)
+    {
+        m_bIgnoreHidden = bIgnoreHidden;
+        trigger_queue_resize();
+    }
+}
+
+void VclSizeGroup::set_mode(VclSizeGroupMode eMode)
+{
+    if (eMode != m_eMode)
+    {
+        m_eMode = eMode;
+        trigger_queue_resize();
+    }
+
+}
+
+bool VclSizeGroup::set_property(const OString &rKey, const OString &rValue)
+{
+    if (rKey == "ignore-hidden")
+        set_ignore_hidden(toBool(rValue));
+    else if (rKey == "mode")
+    {
+        VclSizeGroupMode eMode = VCL_SIZE_GROUP_HORIZONTAL;
+        if (rValue.equalsL(RTL_CONSTASCII_STRINGPARAM("none")))
+            eMode = VCL_SIZE_GROUP_NONE;
+        else if (rValue.equalsL(RTL_CONSTASCII_STRINGPARAM("horizontal")))
+            eMode = VCL_SIZE_GROUP_HORIZONTAL;
+        else if (rValue.equalsL(RTL_CONSTASCII_STRINGPARAM("vertical")))
+            eMode = VCL_SIZE_GROUP_VERTICAL;
+        else if (rValue.equalsL(RTL_CONSTASCII_STRINGPARAM("both")))
+            eMode = VCL_SIZE_GROUP_BOTH;
+        else
+        {
+            SAL_WARN("vcl.layout", "unknown size group mode" << rValue.getStr());
+        }
+        set_mode(eMode);
+    }
+    else
+    {
+        SAL_INFO("vcl.layout", "unhandled property: " << rKey.getStr());
+        return false;
+    }
+    return true;
+}
+
 Size getLegacyBestSizeForChildren(const Window &rWindow)
 {
     Rectangle aBounds;

@@ -1735,33 +1735,60 @@ void Window::SetOutputSizePixel( const Size& rNewSize )
 //When a widget wants to renegotiate layout, get toplevel parent dialog and call
 //resize on it. Mark all intermediate containers (or container-alike) widgets
 //as dirty for the size remains unchanged, but layout changed circumstances
+namespace
+{
+    bool queue_ungrouped_resize(Window *pOrigWindow)
+    {
+        bool bSomeoneCares = false;
+
+        Dialog *pDialog = NULL;
+
+        Window *pWindow = pOrigWindow;
+
+        while (pWindow)
+        {
+            if (isContainerWindow(*pWindow))
+            {
+                VclContainer *pContainer = static_cast<VclContainer*>(pWindow);
+                pContainer->markLayoutDirty();
+                bSomeoneCares = true;
+            }
+            else if (pWindow->GetType() == WINDOW_TABCONTROL)
+            {
+                TabControl *pTabControl = static_cast<TabControl*>(pWindow);
+                pTabControl->markLayoutDirty();
+                bSomeoneCares = true;
+            }
+            else if (pWindow->IsDialog())
+            {
+                pDialog = dynamic_cast<Dialog*>(pWindow);
+                break;
+            }
+            pWindow = pWindow->GetParent();
+        }
+
+        if (pDialog && pDialog != pOrigWindow)
+            pDialog->queue_layout();
+        return bSomeoneCares;
+    }
+}
+
 void Window::queue_resize()
 {
-    bool bSomeoneCares = false;
+    bool bSomeoneCares = queue_ungrouped_resize(this);
 
-    Dialog *pDialog = NULL;
-
-    Window *pWindow = this;
-
-    while( pWindow )
+    WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
+    if (pWindowImpl->m_xSizeGroup && pWindowImpl->m_xSizeGroup->get_mode() != VCL_SIZE_GROUP_NONE)
     {
-        if (isContainerWindow(*pWindow))
+        std::set<Window*> &rWindows = pWindowImpl->m_xSizeGroup->get_widgets();
+        for (std::set<Window*>::iterator aI = rWindows.begin(),
+            aEnd = rWindows.end(); aI != aEnd; ++aI)
         {
-            VclContainer *pContainer = static_cast<VclContainer*>(pWindow);
-            pContainer->markLayoutDirty();
-            bSomeoneCares = true;
+            Window *pOther = *aI;
+            if (pOther == this)
+                continue;
+            queue_ungrouped_resize(pOther);
         }
-        else if (pWindow->GetType() == WINDOW_TABCONTROL)
-        {
-            TabControl *pTabControl = static_cast<TabControl*>(pWindow);
-            pTabControl->markLayoutDirty();
-        }
-        else if (pWindow->IsDialog())
-        {
-            pDialog = dynamic_cast<Dialog*>(pWindow);
-            break;
-        }
-        pWindow = pWindow->GetParent();
     }
 
     if (bSomeoneCares)
@@ -1772,10 +1799,6 @@ void Window::queue_resize()
         if (pBorderWindow)
             pBorderWindow->Resize();
     }
-
-    if (!pDialog || pDialog == this)
-        return;
-    pDialog->queue_layout();
 }
 
 namespace
@@ -1988,17 +2011,52 @@ void Window::set_width_request(sal_Int32 nWidthRequest)
     }
 }
 
+namespace
+{
+    Size get_ungrouped_preferred_size(const Window &rWindow)
+    {
+        Size aRet(rWindow.get_width_request(), rWindow.get_height_request());
+        if (aRet.Width() == -1 || aRet.Height() == -1)
+        {
+            Size aOptimal = rWindow.GetOptimalSize(WINDOWSIZE_PREFERRED);
+            if (aRet.Width() == -1)
+                aRet.Width() = aOptimal.Width();
+            if (aRet.Height() == -1)
+                aRet.Height() = aOptimal.Height();
+        }
+        return aRet;
+    }
+}
+
 Size Window::get_preferred_size() const
 {
-    Size aRet(get_width_request(), get_height_request());
-    if (aRet.Width() == -1 || aRet.Height() == -1)
+    Size aRet(get_ungrouped_preferred_size(*this));
+
+    WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
+    if (pWindowImpl->m_xSizeGroup)
     {
-        Size aOptimal = GetOptimalSize(WINDOWSIZE_PREFERRED);
-        if (aRet.Width() == -1)
-            aRet.Width() = aOptimal.Width();
-        if (aRet.Height() == -1)
-            aRet.Height() = aOptimal.Height();
+        const VclSizeGroupMode eMode = pWindowImpl->m_xSizeGroup->get_mode();
+        if (eMode != VCL_SIZE_GROUP_NONE)
+        {
+            const bool bIgnoreInHidden = pWindowImpl->m_xSizeGroup->get_ignore_hidden();
+            const std::set<Window*> &rWindows = pWindowImpl->m_xSizeGroup->get_widgets();
+            for (std::set<Window*>::const_iterator aI = rWindows.begin(),
+                aEnd = rWindows.end(); aI != aEnd; ++aI)
+            {
+                const Window *pOther = *aI;
+                if (pOther == this)
+                    continue;
+                if (bIgnoreInHidden && !pOther->IsVisible())
+                    continue;
+                Size aOtherSize = get_ungrouped_preferred_size(*pOther);
+                if (eMode == VCL_SIZE_GROUP_BOTH || eMode == VCL_SIZE_GROUP_HORIZONTAL)
+                    aRet.Width() = std::max(aRet.Width(), aOtherSize.Width());
+                if (eMode == VCL_SIZE_GROUP_BOTH || eMode == VCL_SIZE_GROUP_VERTICAL)
+                    aRet.Height() = std::max(aRet.Height(), aOtherSize.Height());
+            }
+        }
     }
+
     return aRet;
 }
 
@@ -2228,6 +2286,29 @@ void Window::set_secondary(bool bSecondary)
 {
     WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
     pWindowImpl->mbSecondary = bSecondary;
+}
+
+void Window::add_to_size_group(boost::shared_ptr< VclSizeGroup > xGroup)
+{
+    WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
+    //To-Do, multiple groups
+    pWindowImpl->m_xSizeGroup = xGroup;
+    pWindowImpl->m_xSizeGroup->insert(this);
+    if (VCL_SIZE_GROUP_NONE != pWindowImpl->m_xSizeGroup->get_mode())
+        queue_resize();
+}
+
+void Window::remove_from_all_size_groups()
+{
+    WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
+    //To-Do, multiple groups
+    if (pWindowImpl->m_xSizeGroup)
+    {
+        if (VCL_SIZE_GROUP_NONE != pWindowImpl->m_xSizeGroup->get_mode())
+            queue_resize();
+        pWindowImpl->m_xSizeGroup->erase(this);
+        pWindowImpl->m_xSizeGroup.reset();
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

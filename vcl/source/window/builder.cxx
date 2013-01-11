@@ -215,6 +215,28 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
             mungeScrollAdjustment(*pTarget, *pAdjustment);
     }
 
+    //Set size-groups when all widgets have been imported
+    for (std::vector<SizeGroup>::iterator aI = m_pParserState->m_aSizeGroups.begin(),
+        aEnd = m_pParserState->m_aSizeGroups.end(); aI != aEnd; ++aI)
+    {
+        boost::shared_ptr< VclSizeGroup > xGroup(new VclSizeGroup);
+
+        for (stringmap::iterator aP = aI->m_aProperties.begin(),
+            aEndP = aI->m_aProperties.end(); aP != aEndP; ++aP)
+        {
+            const OString &rKey = aP->first;
+            const OString &rValue = aP->second;
+            xGroup->set_property(rKey, rValue);
+        }
+
+        for (std::vector<OString>::iterator aW = aI->m_aWidgets.begin(),
+            aEndW = aI->m_aWidgets.end(); aW != aEndW; ++aW)
+        {
+            Window* pWindow = get<Window>(aW->getStr());
+            pWindow->add_to_size_group(xGroup);
+        }
+    }
+
     //Set button images when everything has been imported
     std::set<OString> aImagesToBeRemoved;
     for (std::vector<ButtonImageWidgetMap>::iterator aI = m_pParserState->m_aButtonImageWidgetMaps.begin(),
@@ -1660,6 +1682,59 @@ void VclBuilder::handleMenuObject(PopupMenu *pParent, xmlreader::XmlReader &read
     insertMenuObject(pParent, sClass, sID, aProperties, aAccelerators);
 }
 
+void VclBuilder::handleSizeGroup(xmlreader::XmlReader &reader, const OString &rID)
+{
+    m_pParserState->m_aSizeGroups.push_back(SizeGroup(rID));
+    SizeGroup &rSizeGroup = m_pParserState->m_aSizeGroups.back();
+
+    int nLevel = 1;
+
+    while(1)
+    {
+        xmlreader::Span name;
+        int nsId;
+
+        xmlreader::XmlReader::Result res = reader.nextItem(
+            xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+
+        if (res == xmlreader::XmlReader::RESULT_DONE)
+            break;
+
+        if (res == xmlreader::XmlReader::RESULT_BEGIN)
+        {
+            ++nLevel;
+            if (name.equals(RTL_CONSTASCII_STRINGPARAM("widget")))
+            {
+                while (reader.nextAttribute(&nsId, &name))
+                {
+                    if (name.equals(RTL_CONSTASCII_STRINGPARAM("name")))
+                    {
+                        name = reader.getAttributeValue(false);
+                        OString sWidget = OString(name.begin, name.length);
+                        sal_Int32 nDelim = sWidget.indexOf(':');
+                        if (nDelim != -1)
+                            sWidget = sWidget.copy(0, nDelim);
+                        rSizeGroup.m_aWidgets.push_back(sWidget);
+                    }
+                }
+            }
+            else
+            {
+                if (name.equals(RTL_CONSTASCII_STRINGPARAM("property")))
+                    collectProperty(reader, rID, rSizeGroup.m_aProperties);
+            }
+        }
+
+        if (res == xmlreader::XmlReader::RESULT_END)
+        {
+            --nLevel;
+        }
+
+        if (!nLevel)
+            break;
+    }
+}
+
 OString VclBuilder::convertMnemonicMarkup(const OString &rIn)
 {
     OStringBuffer aRet(rIn);
@@ -1791,6 +1866,11 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
     else if (sClass == "GtkMenu")
     {
         handleMenu(reader, sID);
+        return NULL;
+    }
+    else if (sClass == "GtkSizeGroup")
+    {
+        handleSizeGroup(reader, sID);
         return NULL;
     }
 

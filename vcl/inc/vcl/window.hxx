@@ -334,6 +334,7 @@ const char* ImplDbgCheckWindow( const void* pObj );
 class Dialog;
 class WindowImpl;
 class VclBuilder;
+class VclSizeGroup;
 
 struct WindowResHeader
 {
@@ -574,9 +575,6 @@ protected:
             void        ImplCallEventListeners( sal_uLong nEvent, void* pData = NULL );
             void        CallEventListeners( sal_uLong nEvent, void* pData = NULL );
             void        FireVclEvent( VclSimpleEvent* pEvent );
-
-    sal_Int32 get_height_request() const;
-    sal_Int32 get_width_request() const;
 
     // FIXME: this is a hack to workaround missing layout functionality
     SAL_DLLPRIVATE void ImplAdjustNWFSizes();
@@ -1086,6 +1084,7 @@ public:
      * @see get_preferred_size, set_width_request
      */
     void set_height_request(sal_Int32 nHeightRequest);
+    sal_Int32 get_height_request() const;
 
     /*
      * Sets the "height-request" property
@@ -1096,6 +1095,7 @@ public:
      * @see get_preferred_size, set_height_request
      */
     void set_width_request(sal_Int32 nWidthRequest);
+    sal_Int32 get_width_request() const;
 
     /*
      * Retrieves the preferred size of a widget taking
@@ -1219,6 +1219,13 @@ public:
      * @return false if attribute is unknown
      */
     bool set_font_attribute(const rtl::OString &rKey, const rtl::OString &rValue);
+
+    /*
+     * Adds this widget to the xGroup VclSizeGroup
+     *
+     */
+    void add_to_size_group(boost::shared_ptr< VclSizeGroup > xGroup);
+    void remove_from_all_size_groups();
 
     /*
      * Move this widget to be the nNewPosition'd child of its parent

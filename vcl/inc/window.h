@@ -44,6 +44,7 @@ struct ImplDelData;
 struct ImplAccessibleInfos;
 
 class Window;
+class VclSizeGroup;
 class VirtualDevice;
 class Cursor;
 class ImplDevFontList;
@@ -283,6 +284,7 @@ public:
     InputContext        maInputContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > mxWindowPeer;
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > mxAccessible;
+    ::boost::shared_ptr< VclSizeGroup > m_xSizeGroup;
     ImplAccessibleInfos* mpAccessibleInfos;
     VCLXWindow*         mpVCLXWindow;
     Region              maWinRegion;        // region to 'shape' the VCL window (frame coordinates)

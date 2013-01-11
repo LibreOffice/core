@@ -128,6 +128,17 @@ private:
 
     typedef std::map<OString, stockinfo> StockMap;
 
+    struct SizeGroup
+    {
+        OString m_sID;
+        std::vector<OString> m_aWidgets;
+        stringmap m_aProperties;
+        SizeGroup(const OString &rId)
+            : m_sID(rId)
+        {
+        }
+    };
+
     struct ParserState
     {
         std::vector<RadioButtonGroupMap> m_aGroupMaps;
@@ -150,6 +161,8 @@ private:
         Translations m_aTranslations;
 
         std::map<Window*, Window*> m_aRedundantParentWidgets;
+
+        std::vector<SizeGroup> m_aSizeGroups;
     };
 
     void loadTranslations(const com::sun::star::lang::Locale &rLocale, const OUString &rUri);
@@ -246,6 +259,8 @@ private:
     void handleTabChild(Window *pParent, xmlreader::XmlReader &reader);
     void handleMenu(xmlreader::XmlReader &reader, const OString &rID);
     std::vector<OString> handleItems(xmlreader::XmlReader &reader, const OString &rID);
+
+    void handleSizeGroup(xmlreader::XmlReader &reader, const OString &rID);
 
     PackingData get_window_packing_data(const Window *pWindow) const;
     void set_window_packing_position(const Window *pWindow, sal_Int32 nPosition);

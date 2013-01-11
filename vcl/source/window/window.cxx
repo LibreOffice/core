@@ -4481,13 +4481,16 @@ Window::~Window()
         }
     }
 
+    // remove from size-group if necessary
+    remove_from_all_size_groups();
+
     // hide window in order to trigger the Paint-Handling
     Hide();
 
     // announce the window is to be destroyed
     {
-    NotifyEvent aNEvt( EVENT_DESTROY, this );
-    Notify( aNEvt );
+        NotifyEvent aNEvt( EVENT_DESTROY, this );
+        Notify( aNEvt );
     }
 
     // EndExtTextInputMode

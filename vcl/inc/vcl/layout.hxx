@@ -15,6 +15,7 @@
 #include <vcl/scrbar.hxx>
 #include <vcl/window.hxx>
 #include <boost/multi_array.hpp>
+#include <set>
 
 class VCL_DLLPUBLIC VclContainer : public Window
 {
@@ -571,6 +572,57 @@ public:
     virtual void setAllocation(const Size &rAllocation);
 
     virtual void Command(const CommandEvent& rCEvt);
+};
+
+enum VclSizeGroupMode
+{
+    VCL_SIZE_GROUP_NONE,
+    VCL_SIZE_GROUP_HORIZONTAL,
+    VCL_SIZE_GROUP_VERTICAL,
+    VCL_SIZE_GROUP_BOTH
+};
+
+class VCL_DLLPUBLIC VclSizeGroup
+{
+private:
+    std::set<Window*> m_aWindows;
+    bool m_bIgnoreHidden;
+    VclSizeGroupMode m_eMode;
+
+    void trigger_queue_resize();
+public:
+    VclSizeGroup()
+        : m_bIgnoreHidden(false)
+        , m_eMode(VCL_SIZE_GROUP_HORIZONTAL)
+    {
+    }
+    void insert(Window *pWindow)
+    {
+        m_aWindows.insert(pWindow);
+    }
+    void erase(Window *pWindow)
+    {
+        m_aWindows.erase(pWindow);
+    }
+    const std::set<Window*>& get_widgets() const
+    {
+        return m_aWindows;
+    }
+    std::set<Window*>& get_widgets()
+    {
+        return m_aWindows;
+    }
+    void set_ignore_hidden(bool bIgnoreHidden);
+    bool get_ignore_hidden() const
+    {
+        return m_bIgnoreHidden;
+    }
+    void set_mode(VclSizeGroupMode eMode);
+    VclSizeGroupMode get_mode() const
+    {
+        return m_eMode;
+    }
+    bool set_property(const OString &rKey, const OString &rValue);
 };
 
 // retro-fitting utilities //
