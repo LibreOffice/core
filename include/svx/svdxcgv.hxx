@@ -58,6 +58,7 @@ protected:
 
 public:
     // Alle markierten Objekte auf dem angegebenen OutputDevice ausgeben.
+    ::std::vector< SdrObject* > GetMarkedObjects() const;
     virtual void        DrawMarkedObj(OutputDevice& rOut) const;
 
     // Z.B. fuer's Clipboard, Drag&Drop, ...

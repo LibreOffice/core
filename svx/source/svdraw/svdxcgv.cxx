@@ -48,6 +48,12 @@
 #include <svl/style.hxx>
 #include <fmobj.hxx>
 #include <vcl/svgdata.hxx>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <drawinglayer/primitive2d/groupprimitive2d.hxx>
+#include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <svx/sdr/contact/viewcontact.hxx>
+#include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
+#include <svx/sdr/contact/displayinfo.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -469,14 +475,42 @@ BitmapEx SdrExchangeView::GetMarkedObjBitmapEx(bool bNoVDevIfOneBmpMarked) const
 
         if( !aBmp )
         {
-            const GDIMetaFile aGDIMetaFile(GetMarkedObjMetaFile(bNoVDevIfOneBmpMarked));
-            const Rectangle aBound(GetMarkedObjBoundRect());
+            // choose conversion directly using primitives to bitmap to avoid
+            // rendering errors with tiled bitmap fills (these will be tiled in a
+            // in-between metafile, but tend to show 'gaps' since the target is *no*
+            // bitmap rendering)
+            ::std::vector< SdrObject* > aSdrObjects(GetMarkedObjects());
+            const sal_uInt32 nCount(aSdrObjects.size());
 
-            aBmp = convertMetafileToBitmapEx(
-                aGDIMetaFile,
-                basegfx::B2DRange(
-                    aBound.Left(), aBound.Top(),
-                    aBound.Right(), aBound.Bottom()));
+            if(nCount)
+            {
+                // collect sub-primitives as group objects, thus no expensive append
+                // to existing sequence is needed
+                drawinglayer::primitive2d::Primitive2DSequence xPrimitives(nCount);
+
+                for(sal_uInt32 a(0); a < nCount; a++)
+                {
+                    xPrimitives[a] = new drawinglayer::primitive2d::GroupPrimitive2D(
+                        aSdrObjects[a]->GetViewContact().getViewIndependentPrimitive2DSequence());
+                }
+
+                // get logic range
+                const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+                const basegfx::B2DRange aRange(
+                    drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(
+                        xPrimitives,
+                        aViewInformation2D));
+
+                if(!aRange.isEmpty())
+                {
+                    // if we have geometry and it has a range, convert to BitmapEx using
+                    // common tooling
+                    aBmp = convertPrimitive2DSequenceToBitmapEx(
+                        xPrimitives,
+                        aRange,
+                        500000);
+                }
+            }
         }
     }
 
@@ -632,9 +666,10 @@ Graphic SdrExchangeView::GetObjGraphic( const SdrModel* pModel, const SdrObject*
 
 // -----------------------------------------------------------------------------
 
-void SdrExchangeView::DrawMarkedObj(OutputDevice& rOut) const
+::std::vector< SdrObject* > SdrExchangeView::GetMarkedObjects() const
 {
     SortMarkedObjects();
+    ::std::vector< SdrObject* > aRetval;
 
     ::std::vector< ::std::vector< SdrMark* > >  aObjVectors( 2 );
     ::std::vector< SdrMark* >&                  rObjVector1 = aObjVectors[ 0 ];
@@ -661,8 +696,26 @@ void SdrExchangeView::DrawMarkedObj(OutputDevice& rOut) const
         for( sal_uInt32 i = 0; i < rObjVector.size(); i++ )
         {
             SdrMark*    pMark = rObjVector[ i ];
-            pMark->GetMarkedSdrObj()->SingleObjectPainter( rOut );
+            aRetval.push_back(pMark->GetMarkedSdrObj());
         }
+    }
+
+    return aRetval;
+}
+
+// -----------------------------------------------------------------------------
+
+void SdrExchangeView::DrawMarkedObj(OutputDevice& rOut) const
+{
+    ::std::vector< SdrObject* > aSdrObjects(GetMarkedObjects());
+
+    if(aSdrObjects.size())
+    {
+        sdr::contact::ObjectContactOfObjListPainter aPainter(rOut, aSdrObjects, aSdrObjects[0]->GetPage());
+        sdr::contact::DisplayInfo aDisplayInfo;
+
+        // do processing
+        aPainter.ProcessDisplay(aDisplayInfo);
     }
 }
 
@@ -679,64 +732,43 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
 
     if( !mxSelectionController.is() || !mxSelectionController->GetMarkedObjModel( pNeuPag ) )
     {
-        ::std::vector< ::std::vector< SdrMark* > >  aObjVectors( 2 );
-        ::std::vector< SdrMark* >&                  rObjVector1 = aObjVectors[ 0 ];
-        ::std::vector< SdrMark* >&                  rObjVector2 = aObjVectors[ 1 ];
-        const SdrLayerAdmin&                        rLayerAdmin = pMod->GetLayerAdmin();
-        const sal_uInt32                            nControlLayerId = rLayerAdmin.GetLayerID( rLayerAdmin.GetControlLayerName(), sal_False );
-        sal_uInt32                                  n, nCount, nCloneErrCnt = 0;
-
-        for( n = 0, nCount = GetMarkedObjectCount(); n < nCount; n++ )
-        {
-            SdrMark* pMark = GetSdrMarkByIndex( n );
-
-            // paint objects on control layer on top of all otherobjects
-            if( nControlLayerId == pMark->GetMarkedSdrObj()->GetLayer() )
-                rObjVector2.push_back( pMark );
-            else
-                rObjVector1.push_back( pMark );
-        }
+        ::std::vector< SdrObject* > aSdrObjects(GetMarkedObjects());
 
         // #i13033#
         // New mechanism to re-create the connections of cloned connectors
         CloneList aCloneList;
+        sal_uInt32 nCloneErrCnt(0);
 
-        for( n = 0, nCount = aObjVectors.size(); n < nCount; n++ )
+        for( sal_uInt32 i(0); i < aSdrObjects.size(); i++ )
         {
-            ::std::vector< SdrMark* >& rObjVector = aObjVectors[ n ];
+            const SdrObject*    pObj = aSdrObjects[i];
+            SdrObject*          pNeuObj;
 
-            for( sal_uInt32 i = 0; i < rObjVector.size(); i++ )
+            if( pObj->ISA( SdrPageObj ) )
             {
-                   const SdrMark*      pMark = rObjVector[ i ];
-                const SdrObject*    pObj = pMark->GetMarkedSdrObj();
-                SdrObject*          pNeuObj;
-
-                if( pObj->ISA( SdrPageObj ) )
-                {
-                    // convert SdrPageObj's to a graphic representation, because
-                    // virtual connection to referenced page gets lost in new model
-                    pNeuObj = new SdrGrafObj( GetObjGraphic( pMod, pObj ), pObj->GetLogicRect() );
-                    pNeuObj->SetPage( pNeuPag );
-                    pNeuObj->SetModel( pNeuMod );
-                }
-                else
-                {
-                    pNeuObj = pObj->Clone();
-                    pNeuObj->SetPage( pNeuPag );
-                    pNeuObj->SetModel( pNeuMod );
-                }
-
-                if( pNeuObj )
-                {
-                    SdrInsertReason aReason(SDRREASON_VIEWCALL);
-                    pNeuPag->InsertObject(pNeuObj,CONTAINER_APPEND,&aReason);
-
-                    // #i13033#
-                    aCloneList.AddPair(pObj, pNeuObj);
-                }
-                else
-                    nCloneErrCnt++;
+                // convert SdrPageObj's to a graphic representation, because
+                // virtual connection to referenced page gets lost in new model
+                pNeuObj = new SdrGrafObj( GetObjGraphic( pMod, pObj ), pObj->GetLogicRect() );
+                pNeuObj->SetPage( pNeuPag );
+                pNeuObj->SetModel( pNeuMod );
             }
+            else
+            {
+                pNeuObj = pObj->Clone();
+                pNeuObj->SetPage( pNeuPag );
+                pNeuObj->SetModel( pNeuMod );
+            }
+
+            if( pNeuObj )
+            {
+                SdrInsertReason aReason(SDRREASON_VIEWCALL);
+                pNeuPag->InsertObject(pNeuObj,CONTAINER_APPEND,&aReason);
+
+                // #i13033#
+                aCloneList.AddPair(pObj, pNeuObj);
+            }
+            else
+                nCloneErrCnt++;
         }
 
         // #i13033#
