@@ -24,8 +24,8 @@
 Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
 {
     String SC_OPCODE_IF { Text = "IF" ; };
-    String SC_OPCODE_IF_NA { Text = "IFERROR" ; };
-    String SC_OPCODE_IF_ERROR { Text = "IFNA" ; };
+    String SC_OPCODE_IF_ERROR { Text = "IFERROR" ; };
+    String SC_OPCODE_IF_NA { Text = "IFNA" ; };
     String SC_OPCODE_CHOSE { Text = "CHOOSE" ; };
     String SC_OPCODE_OPEN { Text = "(" ; };
     String SC_OPCODE_CLOSE { Text = ")" ; };
