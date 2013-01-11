@@ -18,42 +18,21 @@
  */
 
 
-#include <string.h>         // for strchr()
-#include <hintids.hxx>
-
-#include <editeng/cscoitem.hxx>
-#include <editeng/brkitem.hxx>
-#include <linguistic/lngprops.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/i18n/WordType.hpp>
-#include <unotools/charclass.hxx>
-#include <unotools/transliterationwrapper.hxx>
 #include <fmtanchr.hxx>
 #include <fmtcntnt.hxx>
-#include <fmtpdsc.hxx>
 #include <txtftn.hxx>
 #include <acorrect.hxx>     // AutoCorrect
-#include <IMark.hxx>        // for SwBookmark
-#include <cntfrm.hxx>       // for Spell
-#include <crsrsh.hxx>
-#include <doc.hxx>
 #include <UndoManager.hxx>
 #include <docsh.hxx>
 #include <docary.hxx>
 #include <doctxm.hxx>       // when moving: correct indexes
 #include <ftnidx.hxx>
-#include <ftninfo.hxx>
 #include <mdiexp.hxx>       // status bar
 #include <mvsave.hxx>       // structures to save when moving/deleting
-#include <ndtxt.hxx>
-#include <pam.hxx>
 #include <redline.hxx>
 #include <rootfrm.hxx>      // for UpdateFtn
 #include <splargs.hxx>      // for Spell
-#include <swtable.hxx>
-#include <swundo.hxx>       // for the UndoIds
 #include <txtfrm.hxx>
-#include <hints.hxx>
 #include <UndoSplitMove.hxx>
 #include <UndoRedline.hxx>
 #include <UndoOverwrite.hxx>
@@ -63,7 +42,6 @@
 #include <vcl/msgbox.hxx>
 #include "comcore.hrc"
 #include "editsh.hxx"
-#include <fldbas.hxx>
 #include <fmtfld.hxx>
 #include <docufld.hxx>
 #include <unoflatpara.hxx>
@@ -71,14 +49,9 @@
 
 #include <vector>
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::i18n;
-
-#ifndef S2U
-#define S2U(rString) OUString::createFromAscii(rString)
-#endif
 
 struct _SaveRedline
 {
