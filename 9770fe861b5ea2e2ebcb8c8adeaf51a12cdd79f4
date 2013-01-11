@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAS3///1U\u003d",
+        "filename": "sw/source/ui/lingu/hhcwrp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-01-11T09:31:50Z",
+      "side": 1,
+      "message": "the preferred syntax for initializer lists is to put the \":\" and \",\" at the start of the line, not at the end",
+      "revId": "9770fe861b5ea2e2ebcb8c8adeaf51a12cdd79f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
