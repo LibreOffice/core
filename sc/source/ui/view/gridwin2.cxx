@@ -591,7 +591,7 @@ void ScGridWindow::UpdateDPFromFieldPopupMenu()
     pDim->UpdateMemberVisibility(aResult);
 
     ScDBDocFunc aFunc(*pViewData->GetDocShell());
-    aFunc.DataPilotUpdate(pDPObj, pDPObj, true, false);
+    aFunc.UpdatePivotTable(*pDPObj, true, false);
 }
 
 void ScGridWindow::UpdateVisibleRange()

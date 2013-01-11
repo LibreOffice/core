@@ -92,6 +92,8 @@ public:
     bool DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewObj,
                           bool bRecord, bool bApi, bool bAllowMove = false );
 
+    bool UpdatePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi);
+
     /**
      * Reload the referenced pivot cache, and refresh all pivot tables that
      * reference the cache.

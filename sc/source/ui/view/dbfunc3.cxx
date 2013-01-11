@@ -1596,7 +1596,7 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const rtl::OUString& rStri
         // apply changes
         ScDBDocFunc aFunc( *GetViewData()->GetDocShell() );
         pDPObj->SetSaveData( aData );
-        aFunc.DataPilotUpdate( pDPObj, pDPObj, true, false );
+        aFunc.UpdatePivotTable(*pDPObj, true, false);
     }
     else
     {
