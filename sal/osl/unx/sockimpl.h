@@ -28,8 +28,6 @@
 extern "C" {
 #endif
 
-typedef void* (*oslCloseCallback) (void*);
-
 struct oslSocketImpl {
     int                 m_Socket;
     int                 m_nLastError;

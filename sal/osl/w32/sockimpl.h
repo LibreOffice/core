@@ -32,14 +32,10 @@ extern "C" {
 /*****************************************************************************/
 #define OSL_SOCKET_FLAGS_NONBLOCKING    0x0001
 
-typedef void* (SAL_CALL * oslCloseCallback) (void*);
-
 struct oslSocketImpl {
     oslInterlockedCount m_nRefCount;
     SOCKET              m_Socket;
     int                 m_Flags;
-    oslCloseCallback    m_CloseCallback;
-    void*               m_CallbackArg;
 };
 
 struct oslSocketAddrImpl

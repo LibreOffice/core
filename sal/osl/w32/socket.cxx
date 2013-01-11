@@ -1126,8 +1126,6 @@ oslSocket SAL_CALL osl_createSocket (
     else
     {
         pSocket->m_Flags            = 0;
-        pSocket->m_CloseCallback    = NULL;
-        pSocket->m_CallbackArg  = NULL;
     }
 
     return pSocket;
@@ -1160,12 +1158,6 @@ void SAL_CALL osl_closeSocket(oslSocket pSocket)
     closesocket(pSocket->m_Socket);
 
     pSocket->m_Socket = OSL_INVALID_SOCKET;
-
-    /* registrierten Callback ausfuehren */
-    if (pSocket->m_CloseCallback != NULL)
-    {
-        pSocket->m_CloseCallback(pSocket->m_CallbackArg);
-    }
 }
 
 /*****************************************************************************/
@@ -1423,8 +1415,6 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket (
     pConnectionSocket= __osl_createSocketImpl(Connection);
 
     pConnectionSocket->m_Flags          = 0;
-    pConnectionSocket->m_CloseCallback  = NULL;
-    pConnectionSocket->m_CallbackArg    = NULL;
 
     return pConnectionSocket;
 }
