@@ -4620,7 +4620,7 @@ A := \$(wildcard *.a)
 
 .PHONY: all
 all: \$(A:.a=.b)
-<TAB>@echo survived bug20033. #dont kill these tabs, you will break the Makefile!!!!
+<TAB>@echo survived bug20033.
 
 .PHONY: setup
 setup:
