@@ -56,8 +56,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::i18n;
 
-#define CHAR_PAR_BRK    ((sal_Char) 0x0D)
-
 //////////////////////////////////////////////////////////////////////
 //     Description: Turn off frame/object shell if applicable
 
