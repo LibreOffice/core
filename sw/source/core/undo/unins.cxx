@@ -25,6 +25,7 @@
 #include <sot/storage.hxx>
 #include <editeng/keepitem.hxx>
 #include <svx/svdobj.hxx>
+#include <xmloff/odffields.hxx>
 
 #include <docsh.hxx>
 #include <fmtcntnt.hxx>
@@ -242,6 +243,26 @@ void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
                 RemoveIdxFromRange( aPaM, sal_False );
                 pTxt = new String( pTxtNode->GetTxt().Copy(nCntnt-nLen, nLen) );
                 pTxtNode->EraseText( aPaM.GetPoint()->nContent, nLen );
+
+                // Undo deletes fieldmarks in two step: first the end then the start position.
+                // Once the start position is deleted, make sure the fieldmark itself is deleted as well.
+                if (nLen == 1)
+                {
+                    IDocumentMarkAccess* const pMarkAccess = pTmpDoc->getIDocumentMarkAccess();
+                    for ( IDocumentMarkAccess::const_iterator_t i = pMarkAccess->getMarksBegin(); i != pMarkAccess->getMarksEnd(); ++i)
+                    {
+                        sw::mark::IMark* pMark = i->get();
+                        if (pMark->GetMarkStart() == *aPaM.GetPoint() && pMark->GetMarkStart().nContent == aPaM.GetPoint()->nContent)
+                        {
+                            sw::mark::IFieldmark* pFieldmark = dynamic_cast<sw::mark::IFieldmark*>(pMark);
+                            if (pFieldmark && pFieldmark->GetFieldname() == ODF_COMMENTRANGE)
+                            {
+                                pTmpDoc->getIDocumentMarkAccess()->deleteMark(pMark);
+                                break;
+                            }
+                        }
+                    }
+                }
             }
             else                // otherwise Graphics/OLE/Text/...
             {
