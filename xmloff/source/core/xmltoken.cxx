@@ -965,6 +965,7 @@ namespace xmloff { namespace token {
         TOKEN( "howpublished",                    XML_HOWPUBLISHED ),
         TOKEN( "href",                            XML_HREF ),
         TOKEN( "html",                            XML_HTML ),
+        TOKEN( "hyperlink",                       XML_HYPERLINK ),
         TOKEN( "hyperlink-behaviour",             XML_HYPERLINK_BEHAVIOUR ),
         TOKEN( "hyphenate",                       XML_HYPHENATE ),
         TOKEN( "hyphenation-keep",                XML_HYPHENATION_KEEP ),

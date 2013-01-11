@@ -960,6 +960,7 @@ namespace xmloff { namespace token {
         XML_HOWPUBLISHED,
         XML_HREF,
         XML_HTML,
+        XML_HYPERLINK,
         XML_HYPERLINK_BEHAVIOUR,
         XML_HYPHENATE,
         XML_HYPHENATION_KEEP,

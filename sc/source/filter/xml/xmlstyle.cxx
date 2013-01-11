@@ -79,6 +79,7 @@ const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
     MAP( "HoriJustify", XML_NAMESPACE_FO, XML_TEXT_ALIGN, XML_TYPE_PROP_PARAGRAPH|XML_SC_TYPE_HORIJUSTIFY|MID_FLAG_MERGE_PROPERTY, 0 ),
     MAP( "HoriJustify", XML_NAMESPACE_STYLE, XML_TEXT_ALIGN_SOURCE, XML_TYPE_PROP_TABLE_CELL|XML_SC_TYPE_HORIJUSTIFYSOURCE|MID_FLAG_MERGE_PROPERTY, 0 ),
     MAP( "HoriJustify", XML_NAMESPACE_STYLE, XML_REPEAT_CONTENT, XML_TYPE_PROP_TABLE_CELL|XML_SC_TYPE_HORIJUSTIFYREPEAT|MID_FLAG_MERGE_PROPERTY, 0 ),
+    MAP_EXT( SC_UNONAME_HYPERLINK, XML_NAMESPACE_STYLE, XML_HYPERLINK, XML_TYPE_PROP_TABLE_CELL | XML_TYPE_STRING | MID_FLAG_ELEMENT_ITEM, CTF_SC_HYPERLINK ),
     MAP_EXT( SC_UNONAME_CELLHJUS_METHOD, XML_NAMESPACE_CSS3TEXT, XML_TEXT_JUSTIFY, XML_TYPE_PROP_PARAGRAPH|XML_SC_TYPE_HORIJUSTIFY_METHOD, 0 ),
     MAP( "IsCellBackgroundTransparent", XML_NAMESPACE_FO, XML_BACKGROUND_COLOR, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_ISTRANSPARENT|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
     MAP( "IsTextWrapped", XML_NAMESPACE_FO, XML_WRAP_OPTION, XML_TYPE_PROP_TABLE_CELL|XML_SC_ISTEXTWRAPPED, 0 ),
@@ -107,7 +108,6 @@ const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
     MAP( "ValidationXML", XML_NAMESPACE_TABLE, XML_CONTENT_VALIDATION, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_BUILDIN_CMP_ONLY, CTF_SC_VALIDATION ),
     MAP( "VertJustify", XML_NAMESPACE_STYLE, XML_VERTICAL_ALIGN, XML_TYPE_PROP_TABLE_CELL|XML_SC_TYPE_VERTJUSTIFY, 0),
     MAP_EXT( SC_UNONAME_CELLVJUS_METHOD, XML_NAMESPACE_STYLE, XML_VERTICAL_JUSTIFY, XML_TYPE_PROP_TABLE_CELL|XML_SC_TYPE_VERTJUSTIFY_METHOD, 0 ),
-
     MAP_END()
 };
 
@@ -519,6 +519,28 @@ void ScXMLCellExportPropertyMapper::handleSpecialItem(
     // the SpecialItem NumberFormat must not be handled by this method
     // the SpecialItem ConditionlaFormat must not be handled by this method
     // the SpecialItem CharBackColor must not be handled by this method
+}
+void ScXMLCellExportPropertyMapper::handleElementItem(
+            SvXMLExport& rExport,
+            const XMLPropertyState& rProperty,
+            sal_uInt16 nFlags,
+            const ::std::vector< XMLPropertyState > *pProperties,
+            sal_uInt32 nIdx ) const
+{
+    sal_uInt32 nContextId = getPropertySetMapper()->GetEntryContextId( rProperty.mnIndex );
+    OUString sURL;
+    if ( ( nContextId == CTF_SC_HYPERLINK ) &&
+        ( rProperty.maValue >>= sURL ) &&
+        !sURL.isEmpty() )
+    {
+        rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sURL );
+        rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE,
+                                      XML_SIMPLE );
+        sal_uInt32 nPropIndex = rProperty.mnIndex;
+        sal_uInt16 nPrefix = getPropertySetMapper()->GetEntryNameSpace( nPropIndex );
+        OUString sLocalName = getPropertySetMapper()->GetEntryXMLName( nPropIndex );
+        SvXMLElementExport aElem( rExport, nPrefix, sLocalName, sal_True, sal_True );
+    }
 }
 
 ScXMLRowExportPropertyMapper::ScXMLRowExportPropertyMapper(

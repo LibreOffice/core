@@ -245,6 +245,7 @@ static const SfxItemPropertySet* lcl_GetCellsPropertySet()
         {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS), ATTR_VER_JUSTIFY,   &getCppuType((sal_Int32*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS_METHOD), ATTR_VER_JUSTIFY_METHOD, &::getCppuType((const sal_Int32*)0),   0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_WRITING),  ATTR_WRITINGDIR,    &getCppuType((sal_Int16*)0),            0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_HYPERLINK),  ATTR_HYPERLINK, &getCppuType((rtl::OUString*)0),        0, 0 },
         {0,0,0,0,0,0}
     };
     static SfxItemPropertySet aCellsPropertySet( aCellsPropertyMap_Impl );
@@ -468,6 +469,7 @@ static const SfxItemPropertySet* lcl_GetCellPropertySet()
         {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS_METHOD), ATTR_VER_JUSTIFY_METHOD, &::getCppuType((const sal_Int32*)0),   0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_WRITING),  ATTR_WRITINGDIR,    &getCppuType((sal_Int16*)0),            0, 0 },
         {MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_ESCAPEMENT),   EE_CHAR_ESCAPEMENT, &getCppuType((sal_Int32*)0),            0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_HYPERLINK),  ATTR_HYPERLINK, &getCppuType((rtl::OUString*)0),        0, 0 },
         {0,0,0,0,0,0}
     };
     static SfxItemPropertySet aCellPropertySet( aCellPropertyMap_Impl );

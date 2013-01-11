@@ -276,6 +276,75 @@ void ScXMLRowImportPropertyMapper::finished(::std::vector< XMLPropertyState >& r
     // don't access pointers to rProperties elements after push_back!
 }
 
+class XMLTableCellPropsContext : public SvXMLPropertySetContext
+{
+    using SvXMLPropertySetContext::CreateChildContext;
+    public:
+        XMLTableCellPropsContext(
+             SvXMLImport& rImport, sal_uInt16 nPrfx,
+             const OUString& rLName,
+             const uno::Reference< xml::sax::XAttributeList >& xAttrList,
+             sal_uInt32 nFamily,
+             ::std::vector< XMLPropertyState > &rProps,
+             const UniReference < SvXMLImportPropertyMapper > &rMap);
+
+        virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+            const OUString& rLocalName,
+            const uno::Reference< xml::sax::XAttributeList >& xAttrList,
+           ::std::vector< XMLPropertyState > &rProperties,
+           const XMLPropertyState& rProp );
+};
+
+XMLTableCellPropsContext::XMLTableCellPropsContext(
+             SvXMLImport& rImport, sal_uInt16 nPrfx,
+             const OUString& rLName,
+             const uno::Reference< xml::sax::XAttributeList >& xAttrList,
+             sal_uInt32 nFamily,
+             ::std::vector< XMLPropertyState > &rProps,
+             const UniReference < SvXMLImportPropertyMapper > &rMap)
+          : SvXMLPropertySetContext( rImport, nPrfx, rLName, xAttrList, nFamily,
+               rProps, rMap )
+{
+}
+
+SvXMLImportContext* XMLTableCellPropsContext::CreateChildContext( sal_uInt16 nPrefix,
+            const OUString& rLocalName,
+            const uno::Reference< xml::sax::XAttributeList >& xAttrList,
+           ::std::vector< XMLPropertyState > &rProperties,
+           const XMLPropertyState& rProp )
+{
+    // no need for a custom context or indeed a SvXMLTokenMap to grab just the
+    // single attribute ( href ) that we are interested in.
+    // still though, we will check namesspaces etc.
+    if ( ( XML_NAMESPACE_STYLE == nPrefix) &&
+        IsXMLToken(rLocalName, XML_HYPERLINK ) )
+    {
+        OUString sURL;
+        for ( int i=0; i<xAttrList->getLength(); ++i )
+        {
+            OUString aLocalName;
+            OUString sName = xAttrList->getNameByIndex(i);
+            sal_uInt16 nPrfx = GetImport().GetNamespaceMap().GetKeyByAttrName( sName,
+                                                            &aLocalName );
+            if ( nPrfx == XML_NAMESPACE_XLINK )
+            {
+                if ( IsXMLToken( aLocalName, XML_HREF ) )
+                {
+                    sURL = xAttrList->getValueByIndex(i);
+                    break;
+                }
+            }
+        }
+        if ( !sURL.isEmpty() )
+        {
+            XMLPropertyState aProp( rProp );
+            aProp.maValue <<=  sURL;
+            rProperties.push_back( aProp );
+        }
+    }
+    return SvXMLPropertySetContext::CreateChildContext( nPrefix, rLocalName, xAttrList, rProperties, rProp );
+}
+
 class ScXMLMapContext : public SvXMLImportContext
 {
     rtl::OUString msApplyStyle;
@@ -407,6 +476,20 @@ SvXMLImportContext *XMLTableStyleContext::CreateChildContext(
         pContext = pMapContext;
         mpCondFormat->AddEntry(pMapContext->CreateConditionEntry());
     }
+    else if ( ( XML_NAMESPACE_STYLE == nPrefix) &&
+        IsXMLToken(rLocalName, XML_TABLE_CELL_PROPERTIES ) )
+    {
+        UniReference < SvXMLImportPropertyMapper > xImpPrMap =
+            ((SvXMLStylesContext *)GetStyles())->GetImportPropertyMapper(
+                GetFamily() );
+        if( xImpPrMap.is() )
+            pContext = new XMLTableCellPropsContext( GetImport(), nPrefix,
+                rLocalName, xAttrList,
+                XML_TYPE_PROP_TABLE_CELL,
+                GetProperties(),
+                xImpPrMap );
+    }
+
     if (!pContext)
         pContext = XMLPropStyleContext::CreateChildContext( nPrefix, rLocalName,
                                                            xAttrList );

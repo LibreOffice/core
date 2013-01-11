@@ -94,6 +94,7 @@ extern const XMLPropertyMapEntry aXMLScTableStylesImportProperties[];
 #define CTF_SC_ISVISIBLE                            (XML_SC_CTF_START + 53)
 
 #define CTF_SC_MASTERPAGENAME                       (XML_SC_CTF_START + 53)
+#define CTF_SC_HYPERLINK                            (XML_SC_CTF_START + 54)
 
 //ColumnStyles
 #define XML_SC_TYPE_BREAKBEFORE                     (XML_SC_TYPES_START + 50)
@@ -112,6 +113,12 @@ public:
     ScXMLCellExportPropertyMapper(
             const UniReference< XMLPropertySetMapper >& rMapper );
     virtual ~ScXMLCellExportPropertyMapper();
+    virtual void handleElementItem(
+            SvXMLExport& rExport,
+            const XMLPropertyState& rProperty,
+            sal_uInt16 nFlags,
+            const ::std::vector< XMLPropertyState > *pProperties = 0,
+            sal_uInt32 nIdx = 0 ) const;
 
     /** this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_EXPORT flag set */
     virtual void handleSpecialItem(

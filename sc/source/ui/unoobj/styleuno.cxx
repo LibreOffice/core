@@ -159,6 +159,7 @@ static const SfxItemPropertySet* lcl_GetCellStyleSet()
         {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS_METHOD), ATTR_VER_JUSTIFY_METHOD, &::getCppuType((const sal_Int32*)0),   0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_WRITING),  ATTR_WRITINGDIR,    &getCppuType((sal_Int16*)0),            0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_HIDDEN),   ATTR_HIDDEN,        &getCppuType((sal_Bool*)0),             0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_HYPERLINK),  ATTR_HYPERLINK, &getCppuType((rtl::OUString*)0),        0, 0 },
         {0,0,0,0,0,0}
     };
     static SfxItemPropertySet aCellStyleSet_Impl( aCellStyleMap_Impl );

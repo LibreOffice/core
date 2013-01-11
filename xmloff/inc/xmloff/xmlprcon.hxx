@@ -29,7 +29,7 @@ namespace rtl { class OUString; }
 
 class SvXMLImportPropertyMapper;
 
-class SvXMLPropertySetContext : public SvXMLImportContext
+class XMLOFF_DLLPUBLIC SvXMLPropertySetContext : public SvXMLImportContext
 {
 protected:
     sal_Int32 mnStartIdx;
