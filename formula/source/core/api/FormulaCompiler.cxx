@@ -1179,12 +1179,21 @@ void FormulaCompiler::Factor()
         {
             // the PC counters are -1
             pFacToken = mpToken;
-            if ( eOp == ocIf )
-                pFacToken->GetJump()[ 0 ] = 3;  // if, else, behind
-            else if ( eOp == ocChose )
-                pFacToken->GetJump()[ 0 ] = MAXJUMPCOUNT+1;
-            else
-                pFacToken->GetJump()[ 0 ] = 2;  // if, else
+            switch (eOp)
+            {
+                case ocIf:
+                    pFacToken->GetJump()[ 0 ] = 3;  // if, else, behind
+                    break;
+                case ocChose:
+                    pFacToken->GetJump()[ 0 ] = MAXJUMPCOUNT+1;
+                    break;
+                case ocIfError:
+                case ocIfNA:
+                    pFacToken->GetJump()[ 0 ] = 2;  // if, behind
+                    break;
+                default:
+                    SAL_WARN( "formula.core", "FormulaCompiler::Factor: forgot to add a jump count case?");
+            }
             eOp = NextToken();
             if (eOp == ocOpen)
             {
@@ -1193,15 +1202,30 @@ void FormulaCompiler::Factor()
             }
             else
                 SetError(errPairExpected);
-            short nJumpCount = 0;
             PutCode( pFacToken );
-            // during AutoCorrect (since pArr->GetCodeError() is
+            // During AutoCorrect (since pArr->GetCodeError() is
             // ignored) an unlimited ocIf would crash because
             // ScRawToken::Clone() allocates the JumpBuffer according to
             // nJump[0]*2+2, which is 3*2+2 on ocIf and 2*2+2 ocIfError and ocIfNA.
+            short nJumpMax;
             OpCode eFacOpCode = pFacToken->GetOpCode();
-            const short nJumpMax = ( eFacOpCode == ocIf ? 3 :
-                                       ( eFacOpCode == ocChose ? MAXJUMPCOUNT : 2 ) );
+            switch (eFacOpCode)
+            {
+                case ocIf:
+                    nJumpMax = 3;
+                    break;
+                case ocChose:
+                    nJumpMax = MAXJUMPCOUNT;
+                    break;
+                case ocIfError:
+                case ocIfNA:
+                    nJumpMax = 2;
+                    break;
+                default:
+                    nJumpMax = 0;
+                    SAL_WARN( "formula.core", "FormulaCompiler::Factor: forgot to add a jump max case?");
+            }
+            short nJumpCount = 0;
             while ( (nJumpCount < (MAXJUMPCOUNT - 1)) && (eOp == ocSep)
                     && (!pArr->GetCodeError() || bIgnoreErrors) )
             {
@@ -1221,12 +1245,27 @@ void FormulaCompiler::Factor()
                 if ( ++nJumpCount <= nJumpMax )
                     pFacToken->GetJump()[ nJumpCount ] = pc-1;
                 eFacOpCode = pFacToken->GetOpCode();
-                if ( ( eFacOpCode == ocIf && nJumpCount > 3) ||
-                     ( ( eFacOpCode == ocIfError || eFacOpCode == ocIfNA ) && nJumpCount > 2 ) ||
-                     ( nJumpCount >= MAXJUMPCOUNT ) )
-                    SetError(errIllegalParameter);
-                else
+                bool bLimitOk;
+                switch (eFacOpCode)
+                {
+                    case ocIf:
+                        bLimitOk = (nJumpCount <= 3);
+                        break;
+                    case ocChose:
+                        bLimitOk = (nJumpCount < MAXJUMPCOUNT); /* TODO: check, really <, not <=? */
+                        break;
+                    case ocIfError:
+                    case ocIfNA:
+                        bLimitOk = (nJumpCount <= 2);
+                        break;
+                    default:
+                        bLimitOk = false;
+                        SAL_WARN( "formula.core", "FormulaCompiler::Factor: forgot to add a jump limit case?");
+                }
+                if (bLimitOk)
                     pFacToken->GetJump()[ 0 ] = nJumpCount;
+                else
+                    SetError(errIllegalParameter);
             }
         }
         else if ( eOp == ocMissing )

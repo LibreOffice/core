@@ -2661,9 +2661,9 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         ExtraData =
         {
             0;
-            ID_FUNCTION_GRP_INFO;
+            ID_FUNCTION_GRP_LOGIC;
             U2S( HID_FUNC_IFERROR );
-            2;  0;  1;
+            2;  0;  0;
             0;
         };
         String 2 // Name of Parameter 1
@@ -2676,7 +2676,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 4 // Name of Parameter 2
         {
-            Text [ en-US ] = "else value" ;
+            Text [ en-US ] = "alternative value" ;
         };
         String 5 // Description of Parameter 2
         {
@@ -2688,12 +2688,12 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            Text [ en-US ] = "Returns value if not an NA, else alternative." ;
+            Text [ en-US ] = "Returns value if not a #N/A error, else alternative." ;
         };
         ExtraData =
         {
             0;
-            ID_FUNCTION_GRP_INFO;
+            ID_FUNCTION_GRP_LOGIC;
             U2S( HID_FUNC_IFNA );
             2;  0;  0;
             0;
@@ -2708,11 +2708,11 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 4 // Name of Parameter 2
         {
-            Text [ en-US ] = "else value" ;
+            Text [ en-US ] = "alternative value" ;
         };
         String 5 // Description of Parameter 2
         {
-            Text [ en-US ] = "The alternative to be returned, should value be an NA." ;
+            Text [ en-US ] = "The alternative to be returned, should value be a #N/A error." ;
       };
     };
      // -=*# Resource for function ODER #*=-

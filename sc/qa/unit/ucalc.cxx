@@ -673,12 +673,12 @@ void testFuncCOUNTIF(ScDocument* pDoc)
 
 void testFuncIFERROR(ScDocument* pDoc)
 {
-    // IFERROR/IFNA (fdo 56124)
+    // IFERROR/IFNA (fdo#56124)
 
     // Empty A1:A39 first.
     clearRange(pDoc, ScRange(0, 0, 0, 0, 40, 0));
 
-    // Raw data (rows 1 through 9)
+    // Raw data (rows 1 through 10)
     const char* aData[] = {
         "1",
         "e",
@@ -686,6 +686,7 @@ void testFuncIFERROR(ScDocument* pDoc)
         "=SQRT(-2)",
         "=A4",
         "=1/0",
+        "=NA()",
         "bar",
         "4",
         "gee"
@@ -699,18 +700,21 @@ void testFuncIFERROR(ScDocument* pDoc)
 
     // formulas and results
     struct {
-        const char* pFormula; double fResult;
+        const char* pFormula; const char* pResult;
     } aChecks[] = {
-        { "=IFERROR(A1;-7)",                       1 },
-        { "{=IFERROR(3*A1:A2;2002)}",              3 },
-        { "{=IFERROR(3*A1:A2;1998)}",           1998 },
-        { "=IFERROR(A3;9)",                        4 },
-        { "=IFERROR(A4;9)",                        9 },
-        { "=IFERROR(A5;-7",                       -7 },
-        { "=IFERROR(A6;-7)",                      -7 },
-        { "=IFERROR(A2;-7)",                      -7 },
-        { "=IFNA(VLOOKUP(\"4\",A7:A9;1;0);-2)",    4 },
-        { "=IFNA(VLOOKUP(\"fop\",A7:A9;1;0);-2)", -2 }
+        { "=IFERROR(A1;9)",                         "1" },
+        { "{=IFERROR(3*A1:A2;2002)}",               "3" },
+        { "{=IFERROR(3*A1:A2;1998)}",            "1998" },
+        { "=IFERROR(A2;-7)",                       "-7" },
+        { "=IFERROR(A3;9)",                         "4" },
+        { "=IFERROR(A4;-7)",                       "-7" },
+        { "=IFERROR(A5;-7)",                       "-7" },
+        { "=IFERROR(A6;-7)",                       "-7" },
+        { "=IFERROR(A7;-7)",                       "-7" },
+        { "=IFNA(A6;9)",                      "#DIV/0!" },
+        { "=IFNA(A7;-7)",                          "-7" },
+        { "=IFNA(VLOOKUP(\"4\",A8:A10;1;0);-2)",    "4" },
+        { "=IFNA(VLOOKUP(\"fop\",A8:A10;1;0);-2)", "-2" }
     };
 
     nRows = SAL_N_ELEMENTS(aChecks);
@@ -723,15 +727,15 @@ void testFuncIFERROR(ScDocument* pDoc)
 
     for (SCROW i = 0; i < nRows; ++i)
     {
-        double result;
+        rtl::OUString aResult;
         SCROW nRow = 20 + i;
-        pDoc->GetValue(0, nRow, 0, result);
-        bool bGood = result == aChecks[i].fResult;
+        pDoc->GetString(0, nRow, 0, aResult);
+        bool bGood = (aResult == rtl::OUString::createFromAscii( aChecks[i].pResult));
         if (!bGood)
         {
             cerr << "row " << (nRow+1) << ": formula" << aChecks[i].pFormula
-                << "  expected=" << aChecks[i].fResult << "  actual=" << result << endl;
-            CPPUNIT_ASSERT_MESSAGE("Unexpected result for COUNTIF", false);
+                << "  expected=" << aChecks[i].pResult << "  actual=" << aResult << endl;
+            CPPUNIT_ASSERT_MESSAGE("Unexpected result for IFERROR/IFNA", false);
         }
     }
 }
@@ -4219,8 +4223,6 @@ void Test::testFunctionLists()
         "CELL",
         "CURRENT",
         "FORMULA",
-        "IFERROR",
-        "IFNA",
         "INFO",
         "ISBLANK",
         "ISERR",
@@ -4242,6 +4244,8 @@ void Test::testFunctionLists()
         "AND",
         "FALSE",
         "IF",
+        "IFERROR",
+        "IFNA",
         "NOT",
         "OR",
         "TRUE",

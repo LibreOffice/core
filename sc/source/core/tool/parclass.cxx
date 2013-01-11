@@ -55,8 +55,8 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     // created inside those functions and ConvertMatrixParameters() is not
     // called for them.
     { ocIf,              {{ Array, Reference, Reference                          }, 0 }},
-    { ocIfError,         {{ Array, Reference, Reference                          }, false }},
-    { ocIfNA,            {{ Array, Reference                                     }, false }},
+    { ocIfError,         {{ Array, Reference                                     }, 0 }},
+    { ocIfNA,            {{ Array, Reference                                     }, 0 }},
     { ocChose,           {{ Array, Reference                                     }, 1 }},
     // Other specials.
     { ocOpen,            {{ Bounds                                               }, 0 }},

@@ -54,6 +54,7 @@
 #include <math.h>
 #include <vector>
 #include <memory>
+#include <limits>
 #include "cellkeytranslator.hxx"
 #include "lookupcache.hxx"
 #include "rangenam.hxx"
@@ -243,135 +244,185 @@ void ScInterpreter::ScIfJump()
 }
 
 
+/** Store a matrix value in another matrix in the context of that other matrix
+    is the result matrix of a jump matrix. All arguments must be valid and are
+    not checked. */
+static void lcl_storeJumpMatResult( const ScMatrix* pMat, ScMatrix* pResMat, SCSIZE nC, SCSIZE nR )
+{
+    if ( pMat->IsValue( nC, nR ) )
+    {
+        double fVal = pMat->GetDouble( nC, nR );
+        pResMat->PutDouble( fVal, nC, nR );
+    }
+    else if ( pMat->IsEmpty( nC, nR ) )
+    {
+        pResMat->PutEmpty( nC, nR );
+    }
+    else
+    {
+        const String& rStr = pMat->GetString( nC, nR );
+        pResMat->PutString( rStr, nC, nR );
+    }
+}
+
+
 void ScInterpreter::ScIfError( bool bNAonly )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScIfError" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Donkers/erAck", "ScInterpreter::ScIfError" );
     const short* pJump = pCur->GetJump();
-    if ( !pJump )
-    {
-        PushIllegalParameter();
-        return;
-    }
     short nJumpCount = pJump[ 0 ];
-    if ( nJumpCount != 2 )
+    if (!sp)
     {
-        PushIllegalArgument();
+        PushError( errUnknownStackVariable);
+        aCode.Jump( pJump[ nJumpCount  ], pJump[ nJumpCount ] );
         return;
     }
 
-    if ( nGlobalError == 0 || ( bNAonly && nGlobalError != NOTAVAILABLE ) )
+    FormulaTokenRef xToken( pStack[ sp - 1 ] );
+    bool bError = false;
+    sal_uInt16 nOldGlobalError = nGlobalError;
+    nGlobalError = 0;
+
+    MatrixDoubleRefToMatrix();
+    switch (GetStackType())
     {
-        MatrixDoubleRefToMatrix();
-        switch ( GetStackType() )
-        {
-            case svDoubleRef:
-            case svSingleRef:
+        default:
+            Pop();
+            break;
+        case svError:
+            PopError();
+            bError = true;
+            break;
+        case svDoubleRef:
+        case svSingleRef:
             {
                 ScAddress aAdr;
-                if ( !PopDoubleRefOrSingleRef( aAdr ) )
+                if (!PopDoubleRefOrSingleRef( aAdr))
+                    bError = true;
+                else
                 {
-                    PushIllegalArgument();
-                    return;
-                }
-                ScBaseCell* pCell = GetCell( aAdr );
-                sal_uInt16 nErr = GetCellErrCode( pCell );
-                if ( nErr == 0 || ( bNAonly && nErr != NOTAVAILABLE ) )
-                {
-                    // no error, return 1st argument
-                    if ( pCell && pCell->HasValueData() )
-                    {
-                        PushDouble( GetCellValue(aAdr, pCell) );
-                        aCode.Jump( pJump[ nJumpCount  ], pJump[ nJumpCount ] );
-                        return;
-                    }
-                    else
-                    {
-                        String aInputString;
-                        GetCellString( aInputString, pCell );
-                        PushString( aInputString );
-                        aCode.Jump( pJump[ nJumpCount  ], pJump[ nJumpCount ] );
-                        return;
-                    }
+                    ScBaseCell* pCell = GetCell( aAdr);
+                    nGlobalError = GetCellErrCode( pCell);
+                    if (nGlobalError)
+                        bError = true;
                 }
             }
             break;
-            case svMatrix:
+        case svExternalSingleRef:
+        case svExternalDoubleRef:
             {
-                nFuncFmtType = NUMBERFORMAT_NUMBER;
-                ScMatrixRef pMat = PopMatrix();
-                if ( pMat && ( !nGlobalError || ( bNAonly && nGlobalError != NOTAVAILABLE ) ) )
+                double fVal;
+                String aStr;
+                // Handles also existing jump matrix case and sets error on
+                // elements.
+                GetDoubleOrStringFromMatrix( fVal, aStr);
+                if (nGlobalError)
+                    bError = true;
+            }
+            break;
+        case svMatrix:
+            {
+                const ScMatrixRef pMat = PopMatrix();
+                if (!pMat || (nGlobalError && (!bNAonly || nGlobalError == NOTAVAILABLE)))
                 {
-                    FormulaTokenRef xNew;
-                    ScTokenMatrixMap::const_iterator aMapIter;
-                    SCSIZE nCols, nRows;
-                    pMat->SetErrorInterpreter( NULL );
-                    pMat->GetDimensions( nCols, nRows );
-                    if ( nCols > 0 && nRows > 0 )
+                    bError = true;
+                    break;  // switch
+                }
+                // If the matrix has no queried error at all we can simply use
+                // it as result and don't need to bother with jump matrix.
+                SCSIZE nErrorCol = ::std::numeric_limits<SCSIZE>::max(),
+                       nErrorRow = ::std::numeric_limits<SCSIZE>::max();
+                SCSIZE nCols, nRows;
+                pMat->GetDimensions( nCols, nRows );
+                if (nCols == 0 || nRows == 0)
+                {
+                    bError = true;
+                    break;  // switch
+                }
+                for (SCSIZE nC=0; nC < nCols && !bError; ++nC)
+                {
+                    for (SCSIZE nR=0; nR < nRows && !bError; ++nR)
                     {
-                        if ( pTokenMatrixMap &&
-                             ( ( aMapIter = pTokenMatrixMap->find( pCur ) ) != pTokenMatrixMap->end() ) )
+                        sal_uInt16 nErr = pMat->GetError( nC, nR );
+                        if (nErr && (!bNAonly || nErr == NOTAVAILABLE))
                         {
-                            xNew = (*aMapIter).second;
+                            bError = true;
+                            nErrorCol = nC;
+                            nErrorRow = nR;
                         }
-                        else
-                        {
-                            ScJumpMatrix* pJumpMat = new ScJumpMatrix( nCols, nRows );
-                            for ( SCSIZE nC = 0; nC < nCols; ++nC )
-                            {
-                                for ( SCSIZE nR = 0; nR < nRows; ++nR )
-                                {
-                                    double fVal;
-                                    sal_uInt16 nErr;
-                                    bool bIsValue = pMat->IsValue(nC, nR);
-                                    if ( bIsValue )
-                                    {
-                                        fVal = pMat->GetDouble( nC, nR );
-                                        nErr = !( pMat->GetError( nC, nR ) == 0 ||
-                                                  ( bNAonly &&
-                                                    pMat->GetError( nC, nR )!= NOTAVAILABLE ) );
-                                    }
-                                    else
-                                    {
-                                        fVal = 0.0;
-                                        nErr = 1;
-                                    }
+                    }
+                }
+                if (!bError)
+                    break;  // switch, we're done and have the result
 
-                                    if ( nErr == 0 )
-                                    {   // no error, return 1st argument
-                                        pJumpMat->SetJump( nC, nR, fVal,
-                                                pJump[ nJumpCount ], pJump[ nJumpCount ] );
-                                    }
-                                    else
-                                    {
-                                        // error, return 2nd argument
-                                        pJumpMat->SetJump( nC, nR, fVal,
-                                                pJump[ 1 ], pJump[ nJumpCount ] );
-                                    }
-                                }
+                FormulaTokenRef xNew;
+                ScTokenMatrixMap::const_iterator aMapIter;
+                if (pTokenMatrixMap && ((aMapIter = pTokenMatrixMap->find( pCur)) != pTokenMatrixMap->end()))
+                {
+                    xNew = (*aMapIter).second;
+                }
+                else
+                {
+                    const ScMatrix* pMatPtr = pMat.get();
+                    ScJumpMatrix* pJumpMat = new ScJumpMatrix( nCols, nRows );
+                    ScMatrix* pResMatPtr = pJumpMat->GetResultMatrix();
+                    // Init all jumps to no error to save single calls. Error
+                    // is the exceptional condition.
+                    const double fFlagResult = CreateDoubleError( errJumpMatHasResult);
+                    pJumpMat->SetAllJumps( fFlagResult, pJump[ nJumpCount ], pJump[ nJumpCount ] );
+                    // Up to first error position simply store results, no need
+                    // to evaluate error conditions again.
+                    SCSIZE nC = 0, nR = 0;
+                    for ( ; nC < nCols && (nC != nErrorCol || nR != nErrorRow); /*nop*/ )
+                    {
+                        for ( ; nR < nRows && (nC != nErrorCol || nR != nErrorRow); ++nR)
+                        {
+                            lcl_storeJumpMatResult( pMatPtr, pResMatPtr, nC, nR);
+                        }
+                        if (nC != nErrorCol || nR != nErrorRow)
+                            ++nC;
+                    }
+                    // Now the mixed cases.
+                    for ( ; nC < nCols; ++nC)
+                    {
+                        for ( ; nR < nRows; ++nR)
+                        {
+                            sal_uInt16 nErr = pMat->GetError( nC, nR );
+                            if (nErr && (!bNAonly || nErr == NOTAVAILABLE))
+                            {   // TRUE, THEN path
+                                pJumpMat->SetJump( nC, nR, 1.0, pJump[ 1 ], pJump[ nJumpCount ] );
                             }
-                            xNew = new ScJumpMatrixToken( pJumpMat );
-                            GetTokenMatrixMap().insert( ScTokenMatrixMap::value_type( pCur, xNew ));
+                            else
+                            {   // FALSE, EMPTY path, store result instead
+                                lcl_storeJumpMatResult( pMatPtr, pResMatPtr, nC, nR);
+                            }
                         }
                     }
-                    PushTempToken( xNew.get() );
-                    // set endpoint of path for main code line
-                    aCode.Jump( pJump[ nJumpCount ], pJump[ nJumpCount ] );
-                    return;
+                    xNew = new ScJumpMatrixToken( pJumpMat );
+                    GetTokenMatrixMap().insert( ScTokenMatrixMap::value_type( pCur, xNew ));
                 }
-            }
-            break;
-            default:
-            {
-                //other stacktypes, no error, return 1st argument
-                aCode.Jump( pJump[ nJumpCount  ], pJump[ nJumpCount ] );
+                nGlobalError = nOldGlobalError;
+                PushTempToken( xNew.get() );
+                // set endpoint of path for main code line
+                aCode.Jump( pJump[ nJumpCount ], pJump[ nJumpCount ] );
                 return;
             }
-        }
+            break;
     }
 
-    // error, return 2nd argument
-    nGlobalError = 0;
-    aCode.Jump( pJump[ 1 ], pJump[ nJumpCount ] );
+    if (bError && (!bNAonly || nGlobalError == NOTAVAILABLE))
+    {
+        // error, calculate 2nd argument
+        nGlobalError = 0;
+        aCode.Jump( pJump[ 1 ], pJump[ nJumpCount ] );
+    }
+    else
+    {
+        // no error, push 1st argument and continue
+        nGlobalError = nOldGlobalError;
+        PushTempToken( xToken.get());
+        aCode.Jump( pJump[ nJumpCount ], pJump[ nJumpCount ] );
+    }
 }
 
 
@@ -692,18 +743,7 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                         }
                         else
                         {
-                            if ( pMat->IsValue( nC, nR ) )
-                            {
-                                fVal = pMat->GetDouble( nC, nR );
-                                pResMat->PutDouble( fVal, nC, nR );
-                            }
-                            else if ( pMat->IsEmpty( nC, nR ) )
-                                pResMat->PutEmpty( nC, nR );
-                            else
-                            {
-                                const String& rStr = pMat->GetString( nC, nR );
-                                pResMat->PutString( rStr, nC, nR );
-                            }
+                            lcl_storeJumpMatResult( pMat.get(), pResMat.get(), nC, nR);
                         }
                         lcl_AdjustJumpMatrix( pJumpMatrix, pResMat, nCols, nRows );
                     }
@@ -734,7 +774,7 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
         pJumpMatrix->GetJump( nC, nR, fBool, nStart, nNext, nStop );
         while ( bCont && nStart == nNext )
         {   // push all results that have no jump path
-            if ( pResMat )
+            if ( pResMat && (GetDoubleErrorValue( fBool) != errJumpMatHasResult) )
             {
                 // a false without path results in an empty path value
                 if ( fBool == 0.0 )
