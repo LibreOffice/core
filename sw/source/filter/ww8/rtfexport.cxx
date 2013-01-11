@@ -423,7 +423,7 @@ void RtfExport::WriteInfo()
 #error Minor, micro and patchlevel version numbers must be less than 256
 #endif
 
-    Strm() << (sal_Int32) LIBO_VERSION_ENCODED_IN_32BITS << '}';
+    Strm().WriteNumber((sal_Int32) LIBO_VERSION_ENCODED_IN_32BITS) << '}';
     Strm() << '}';
 }
 
