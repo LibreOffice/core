@@ -1231,6 +1231,49 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     pDoc->CopyToDocument(rRange, IDF_ALL, false, pUndoDoc.get());
 }
 
+bool checkNewOutputRange(ScDPObject& rDPObj, ScDocShell& rDocShell, ScRange& rNewOut, bool bApi)
+{
+    ScDocument* pDoc = rDocShell.GetDocument();
+
+    bool bOverflow = false;
+    rNewOut = rDPObj.GetNewOutputRange(bOverflow);
+
+    // Test for overlap with source data range.
+    // TODO: Check with other pivot tables as well.
+    const ScSheetSourceDesc* pSheetDesc = rDPObj.GetSheetDesc();
+    if (pSheetDesc && pSheetDesc->GetSourceRange().Intersects(rNewOut))
+    {
+        // New output range intersepts with the source data. Move it up to
+        // where the old range is and see if that works.
+        ScRange aOldRange = rDPObj.GetOutRange();
+        SCsROW nDiff = aOldRange.aStart.Row() - rNewOut.aStart.Row();
+        rNewOut.aStart.SetRow(aOldRange.aStart.Row());
+        rNewOut.aEnd.IncRow(nDiff);
+        if (!ValidRow(rNewOut.aStart.Row()) || !ValidRow(rNewOut.aEnd.Row()))
+            bOverflow = true;
+    }
+
+    if (bOverflow)
+    {
+        if (!bApi)
+            rDocShell.ErrorMessage(STR_PIVOT_ERROR);
+
+        return false;
+    }
+
+    ScEditableTester aTester(pDoc, rNewOut);
+    if (!aTester.IsEditable())
+    {
+        //  destination area isn't editable
+        if (!bApi)
+            rDocShell.ErrorMessage(aTester.GetMessageId());
+
+        return false;
+    }
+
+    return true;
+}
+
 }
 
 bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewObj,
@@ -1294,42 +1337,11 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
     if (pOldObj->GetName().isEmpty())
         pOldObj->SetName( pDoc->GetDPCollection()->CreateNewName() );
 
-    bool bOverflow = false;
-    ScRange aNewOut = pOldObj->GetNewOutputRange(bOverflow);
-
-    //! test for overlap with other data pilot tables
-    const ScSheetSourceDesc* pSheetDesc = pOldObj->GetSheetDesc();
-    if (pSheetDesc && pSheetDesc->GetSourceRange().Intersects(aNewOut))
-    {
-        ScRange aOldRange = pOldObj->GetOutRange();
-        SCsROW nDiff = aOldRange.aStart.Row() - aNewOut.aStart.Row();
-        aNewOut.aStart.SetRow(aOldRange.aStart.Row());
-        aNewOut.aEnd.SetRow(aNewOut.aEnd.Row() + nDiff);
-        if (!ValidRow(aNewOut.aStart.Row()) || !ValidRow(aNewOut.aEnd.Row()))
-            bOverflow = true;
-    }
-
-    if (bOverflow)
+    ScRange aNewOut;
+    if (!checkNewOutputRange(*pOldObj, rDocShell, aNewOut, bApi))
     {
         *pOldObj = aUndoDPObj;
-
-        if (!bApi)
-            rDocShell.ErrorMessage(STR_PIVOT_ERROR);
-
         return false;
-    }
-
-    {
-        ScEditableTester aTester(pDoc, aNewOut);
-        if (!aTester.IsEditable())
-        {
-            //  destination area isn't editable
-            //! reverse everything done so far, don't proceed
-            if (!bApi)
-                rDocShell.ErrorMessage(aTester.GetMessageId());
-
-            return false;
-        }
     }
 
     //  test if new output area is empty except for old area
@@ -1350,12 +1362,7 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
     }
 
     if (bRecord)
-    {
-        SCTAB nTab = aNewOut.aStart.Tab();
-        pNewUndoDoc.reset(new ScDocument(SCDOCMODE_UNDO));
-        pNewUndoDoc->InitUndo(pDoc, nTab, nTab);
-        pDoc->CopyToDocument(aNewOut, IDF_ALL, false, pNewUndoDoc.get());
-    }
+        createUndoDoc(pNewUndoDoc, pDoc, aNewOut);
 
     pOldObj->Output(aNewOut.aStart);
     rDocShell.PostPaintGridAll();           //! only necessary parts
@@ -1514,12 +1521,7 @@ bool ScDBDocFunc::CreatePivotTable(const ScDPObject& rDPObj, bool bRecord, bool 
     }
 
     if (bRecord)
-    {
-        SCTAB nTab = aNewOut.aStart.Tab();
-        pNewUndoDoc.reset(new ScDocument(SCDOCMODE_UNDO));
-        pNewUndoDoc->InitUndo( pDoc, nTab, nTab );
-        pDoc->CopyToDocument(aNewOut, IDF_ALL, false, pNewUndoDoc.get());
-    }
+        createUndoDoc(pNewUndoDoc, pDoc, aNewOut);
 
     rDestObj.Output(aNewOut.aStart);
     rDocShell.PostPaintGridAll();           //! only necessary parts
@@ -1570,43 +1572,11 @@ bool ScDBDocFunc::UpdatePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
     if (rDPObj.GetName().isEmpty())
         rDPObj.SetName( pDoc->GetDPCollection()->CreateNewName() );
 
-    bool bOverflow = false;
-    ScRange aNewOut = rDPObj.GetNewOutputRange(bOverflow);
-
-    //! test for overlap with other data pilot tables
-    const ScSheetSourceDesc* pSheetDesc = rDPObj.GetSheetDesc();
-    if (pSheetDesc && pSheetDesc->GetSourceRange().Intersects(aNewOut))
+    ScRange aNewOut;
+    if (!checkNewOutputRange(rDPObj, rDocShell, aNewOut, bApi))
     {
-        ScRange aOldRange = rDPObj.GetOutRange();
-        SCsROW nDiff = aOldRange.aStart.Row()-aNewOut.aStart.Row();
-        aNewOut.aStart.SetRow( aOldRange.aStart.Row() );
-        aNewOut.aEnd.SetRow( aNewOut.aEnd.Row()+nDiff );
-        if (!ValidRow(aNewOut.aStart.Row()) || !ValidRow(aNewOut.aEnd.Row()))
-            bOverflow = true;
-    }
-
-    if (bOverflow)
-    {
-        if (!bApi)
-            rDocShell.ErrorMessage(STR_PIVOT_ERROR);
-
         rDPObj = aUndoDPObj;
         return false;
-    }
-
-    {
-        ScEditableTester aTester(pDoc, aNewOut);
-        if (!aTester.IsEditable())
-        {
-            //  destination area isn't editable
-            //! reverse everything done so far, don't proceed
-
-            if (!bApi)
-                rDocShell.ErrorMessage(aTester.GetMessageId());
-
-            rDPObj = aUndoDPObj;
-            return false;
-        }
     }
 
     //  test if new output area is empty except for old area
@@ -1625,12 +1595,7 @@ bool ScDBDocFunc::UpdatePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
     }
 
     if (bRecord)
-    {
-        SCTAB nTab = aNewOut.aStart.Tab();
-        pNewUndoDoc.reset(new ScDocument(SCDOCMODE_UNDO));
-        pNewUndoDoc->InitUndo( pDoc, nTab, nTab );
-        pDoc->CopyToDocument(aNewOut, IDF_ALL, false, pNewUndoDoc.get());
-    }
+        createUndoDoc(pNewUndoDoc, pDoc, aNewOut);
 
     rDPObj.Output(aNewOut.aStart);
     rDocShell.PostPaintGridAll();           //! only necessary parts
