@@ -1223,13 +1223,13 @@ bool isEditable(ScDocShell& rDocShell, const ScRangeList& rRanges, bool bApi)
 
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
 void createUndoDoc(std::auto_ptr<ScDocument>& pUndoDoc, ScDocument* pDoc, const ScRange& rRange)
-SAL_WNODEPRECATED_DECLARATIONS_POP
 {
     SCTAB nTab = rRange.aStart.Tab();
     pUndoDoc.reset(new ScDocument(SCDOCMODE_UNDO));
     pUndoDoc->InitUndo(pDoc, nTab, nTab);
     pDoc->CopyToDocument(rRange, IDF_ALL, false, pUndoDoc.get());
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 bool checkNewOutputRange(ScDPObject& rDPObj, ScDocShell& rDocShell, ScRange& rNewOut, bool bApi)
 {
