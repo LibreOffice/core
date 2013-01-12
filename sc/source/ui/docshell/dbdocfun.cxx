@@ -1248,6 +1248,12 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
     ScDocShellModificator aModificator( rDocShell );
     WaitObject aWait( rDocShell.GetActiveDialogParent() );
 
+    ScRangeList aRanges;
+    aRanges.Append(pOldObj->GetOutRange());
+    aRanges.Append(pNewObj->GetOutRange().aStart); // at least one cell in the output position must be editable.
+    if (!isEditable(rDocShell, aRanges, bApi))
+        return false;
+
     bool bDone = false;
     bool bUndoSelf = false;
     sal_uInt16 nErrId = 0;
@@ -1261,12 +1267,6 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
     ScDocument* pDoc = rDocShell.GetDocument();
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = false;
-
-    ScRangeList aRanges;
-    aRanges.Append(pOldObj->GetOutRange());
-    aRanges.Append(pNewObj->GetOutRange().aStart); // at least one cell in the output position must be editable.
-    if (!isEditable(rDocShell, aRanges, bApi))
-        return false;
 
     ScDPObject* pDestObj = NULL;
     if ( !nErrId )
