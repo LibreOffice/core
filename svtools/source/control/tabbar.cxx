@@ -2356,7 +2356,7 @@ sal_Bool TabBar::StartEditMode( sal_uInt16 nPageId )
         mpEdit->SetControlForeground( aForegroundColor );
         mpEdit->SetControlBackground( aBackgroundColor );
         mpEdit->GrabFocus();
-        mpEdit->SetSelection( Selection( 0, mpEdit->GetText().Len() ) );
+        mpEdit->SetSelection( Selection( 0, mpEdit->GetText().getLength() ) );
         mpEdit->Show();
         return sal_True;
     }

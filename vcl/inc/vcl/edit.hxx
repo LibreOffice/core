@@ -206,9 +206,9 @@ public:
     virtual void        Paste();
     void                Undo();
 
-    virtual void        SetText( const XubString& rStr );
-    virtual void        SetText( const XubString& rStr, const Selection& rNewSelection );
-    virtual XubString   GetText() const;
+    virtual void        SetText( const OUString& rStr );
+    virtual void        SetText( const OUString& rStr, const Selection& rNewSelection );
+    virtual OUString   GetText() const;
 
     virtual void        SetPlaceholderText( const OUString& rStr );
     virtual OUString    GetPlaceholderText() const;

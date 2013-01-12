@@ -112,7 +112,7 @@ void Button::Click()
 
 // -----------------------------------------------------------------------
 
-XubString Button::GetStandardText( StandardButtonType eButton )
+OUString Button::GetStandardText( StandardButtonType eButton )
 {
     static struct
     {
@@ -156,7 +156,7 @@ XubString Button::GetStandardText( StandardButtonType eButton )
         rtl::OString aT( aResIdAry[(sal_uInt16)eButton].pDefText );
         aText = rtl::OStringToOUString(aT, RTL_TEXTENCODING_ASCII_US);
     }
-    return aText;
+    return OUString(aText);
 }
 
 // -----------------------------------------------------------------------

@@ -123,8 +123,8 @@ public:
 
     void            EnableDDAutoWidth( sal_Bool b );
 
-    void            SetText( const XubString& rStr );
-    void            SetText( const XubString& rStr, const Selection& rNewSelection );
+    void            SetText( const OUString& rStr );
+    void            SetText( const OUString& rStr, const Selection& rNewSelection );
 
     sal_uInt16          InsertEntry( const XubString& rStr, sal_uInt16 nPos = COMBOBOX_APPEND );
     sal_uInt16          InsertEntry( const XubString& rStr, const Image& rImage, sal_uInt16 nPos = COMBOBOX_APPEND );

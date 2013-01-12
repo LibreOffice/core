@@ -168,7 +168,7 @@ public:
     void                EndProgressMode();
     sal_Bool                IsProgressMode() const { return mbProgressMode; }
 
-    void                SetText( const XubString& rText );
+    void                SetText( const OUString& rText );
 
     void                SetHelpText( const XubString& rText )
                             { Window::SetHelpText( rText ); }

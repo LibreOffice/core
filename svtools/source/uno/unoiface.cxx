@@ -1246,7 +1246,7 @@ void SVTXFormattedField::SetTreatAsNumber(sal_Bool bSet)
     }
     else
     {
-        if (pField->GetText().Len())    // empty wird erst mal standardmaessig als void nach draussen gereicht
+        if (!pField->GetText().isEmpty())    // empty wird erst mal standardmaessig als void nach draussen gereicht
             aReturn <<= pField->GetValue();
     }
 

@@ -71,7 +71,7 @@ public:
     void                SetClickHdl( const Link& rLink ) { maClickHdl = rLink; }
     const Link&         GetClickHdl() const { return maClickHdl; }
 
-    static XubString    GetStandardText( StandardButtonType eButton );
+    static OUString     GetStandardText( StandardButtonType eButton );
     static XubString    GetStandardHelpText( StandardButtonType eButton );
 
     sal_Bool            SetModeImage( const Image& rImage );

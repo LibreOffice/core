@@ -916,12 +916,12 @@ public:
     sal_Bool                IsZoom() const;
     long                CalcZoom( long n ) const;
 
-    virtual void      SetText( const XubString& rStr );
-    virtual String      GetText() const;
+    virtual void        SetText( const OUString& rStr );
+    virtual OUString    GetText() const;
     // return the actual text displayed
     // this may have e.g. accellerators removed or portions
     // replaced by ellipsis
-    virtual String      GetDisplayText() const;
+    virtual OUString      GetDisplayText() const;
     // gets the visible background color. for transparent windows
     // this may be the parent's background color; for controls
     // this may be a child's background color (e.g. ListBox)

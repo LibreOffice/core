@@ -569,7 +569,7 @@ public:
     // accessibility helpers
 
     // gets the displayed text
-    String GetDisplayText() const;
+    OUString GetDisplayText() const;
     // returns the bounding box for the character at index nIndex
     // where nIndex is relative to the starting index of the item
     // with id nItemId (in coordinates of the displaying window)

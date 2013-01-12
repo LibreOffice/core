@@ -223,9 +223,9 @@ public:
                         TextEngine();
                         ~TextEngine();
 
-    void                SetText( const String& rStr );
-    String              GetText( LineEnd aSeparator = LINEEND_LF ) const;
-    String              GetText( const TextSelection& rSel, LineEnd aSeparator = LINEEND_LF ) const;
+    void                SetText( const OUString& rStr );
+    OUString            GetText( LineEnd aSeparator = LINEEND_LF ) const;
+    OUString            GetText( const TextSelection& rSel, LineEnd aSeparator = LINEEND_LF ) const;
     String              GetTextLines( LineEnd aSeparator = LINEEND_LF ) const;
     void                ReplaceText(const TextSelection& rSel, const String& rText);
 

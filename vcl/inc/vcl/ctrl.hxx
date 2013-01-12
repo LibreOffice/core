@@ -136,9 +136,9 @@ public:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
     // invalidates layout data
-    virtual void    SetText( const String& rStr );
+    virtual void    SetText( const OUString& rStr );
     // gets the displayed text
-    virtual String GetDisplayText() const;
+    virtual OUString GetDisplayText() const;
     // returns the bounding box for the character at index nIndex (in control coordinates)
     Rectangle GetCharacterBounds( long nIndex ) const;
     // returns the character index for corresponding to rPoint (in control coordinates)

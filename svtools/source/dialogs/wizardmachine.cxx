@@ -227,14 +227,13 @@ namespace svt
     //---------------------------------------------------------------------
     void OWizardMachine::implUpdateTitle()
     {
-        String sCompleteTitle(m_pImpl->sTitleBase);
+        OUString sCompleteTitle(m_pImpl->sTitleBase);
 
         // append the page title
         TabPage* pCurrentPage = GetPage(getCurrentState());
-        if ( pCurrentPage && pCurrentPage->GetText().Len() )
+        if ( pCurrentPage && !pCurrentPage->GetText().isEmpty() )
         {
-            sCompleteTitle += rtl::OUString(" - ");
-            sCompleteTitle += pCurrentPage->GetText();
+            sCompleteTitle += rtl::OUString(" - ") + pCurrentPage->GetText();
         }
 
         SetText(sCompleteTitle);

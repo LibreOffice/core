@@ -482,8 +482,8 @@ public:
                         PopupMenu( const ResId& rResId );
                         ~PopupMenu();
 
-    void                SetText( const XubString& rTitle )  { aTitleText = rTitle; }
-    const XubString&    GetText() const                     { return aTitleText; }
+    void                SetText( const String& rTitle )  { aTitleText = rTitle; }
+    const String&    GetText() const                     { return aTitleText; }
 
     sal_uInt16              Execute( Window* pWindow, const Point& rPopupPos );
     sal_uInt16              Execute( Window* pWindow, const Rectangle& rRect, sal_uInt16 nFlags = 0 );

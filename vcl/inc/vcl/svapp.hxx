@@ -177,12 +177,12 @@ public:
     virtual void                InitFinished();
     virtual void                DeInit();
 
-    static sal_uInt16               GetCommandLineParamCount();
-    static XubString            GetCommandLineParam( sal_uInt16 nParam );
-    static const XubString&     GetAppFileName();
+    static sal_uInt16           GetCommandLineParamCount();
+    static OUString             GetCommandLineParam( sal_uInt16 nParam );
+    static const OUString&      GetAppFileName();
 
     virtual sal_uInt16              Exception( sal_uInt16 nError );
-    static void                 Abort( const XubString& rErrorText );
+    static void                 Abort( const OUString& rErrorText );
 
     static void                 Execute();
     static void                 Quit();
@@ -264,14 +264,14 @@ public:
     static Window*              GetTopWindow( long nIndex );
     static Window*              GetActiveTopWindow();
 
-    static void                 SetAppName( const String& rUniqueName );
-    static String               GetAppName();
+    static void                 SetAppName( const OUString& rUniqueName );
+    static OUString             GetAppName();
     static bool                 LoadBrandBitmap (const char* pName, BitmapEx &rBitmap);
     static bool                 LoadBrandSVG( const char *pName, BitmapEx &rBitmap );
 
     // default name of the application for message dialogs and printing
-    static void                 SetDisplayName( const UniString& rDisplayName );
-    static UniString            GetDisplayName();
+    static void                 SetDisplayName( const OUString& rDisplayName );
+    static OUString             GetDisplayName();
 
 
     static unsigned int         GetScreenCount();
@@ -346,8 +346,8 @@ public:
     static bool IsHeadlessModeRequested();
         ///< check command line arguments for --headless
 
-    static void                 ShowNativeErrorBox(const String& sTitle  ,
-                                                   const String& sMessage);
+    static void                 ShowNativeErrorBox(const OUString& sTitle  ,
+                                                   const OUString& sMessage);
 
     // IME Status Window Control:
 

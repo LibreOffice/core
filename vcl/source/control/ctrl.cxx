@@ -131,7 +131,7 @@ bool Control::HasLayoutData() const
 
 // -----------------------------------------------------------------------
 
-void Control::SetText( const String& rStr )
+void Control::SetText( const OUString& rStr )
 {
     ImplClearLayoutData();
     Window::SetText( rStr );

@@ -66,10 +66,10 @@ public:
 
     using PushButton::SetState;
     void                SetState( sal_Bool bNewState = sal_True );
-    sal_Bool                GetState() const { return mbState; }
+    sal_Bool            GetState() const { return mbState; }
 
-    void                SetText( const XubString& rNewText );
-    XubString           GetText() const;
+    void                SetText( const OUString& rNewText );
+    OUString            GetText() const;
 
     void                SetMoreText( const XubString& rNewText );
     void                SetLessText( const XubString& rNewText );

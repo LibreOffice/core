@@ -1161,7 +1161,7 @@ void VclMultiLineEdit::Paste()
     pImpVclMEdit->Paste();
 }
 
-void VclMultiLineEdit::SetText( const String& rStr )
+void VclMultiLineEdit::SetText( const OUString& rStr )
 {
     pImpVclMEdit->SetText( rStr );
 }

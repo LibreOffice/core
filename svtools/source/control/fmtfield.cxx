@@ -368,7 +368,7 @@ FormattedField::~FormattedField()
 }
 
 //------------------------------------------------------------------------------
-void FormattedField::SetText(const XubString& rStr)
+void FormattedField::SetText(const OUString& rStr)
 {
     DBG_CHKTHIS(FormattedField, NULL);
 
@@ -377,7 +377,7 @@ void FormattedField::SetText(const XubString& rStr)
 }
 
 //------------------------------------------------------------------------------
-void FormattedField::SetText( const XubString& rStr, const Selection& rNewSelection )
+void FormattedField::SetText( const OUString& rStr, const Selection& rNewSelection )
 {
     DBG_CHKTHIS(FormattedField, NULL);
 
@@ -397,7 +397,7 @@ void FormattedField::SetTextFormatted(const OUString& rStr)
 
     m_sCurrentTextValue = rStr;
 
-    String sFormatted;
+    OUString sFormatted;
     double dNumber = 0.0;
     // IsNumberFormat changes the format key parameter
     sal_uInt32 nTempFormatKey = static_cast< sal_uInt32 >( m_nFormatKey );
@@ -419,8 +419,8 @@ void FormattedField::SetTextFormatted(const OUString& rStr)
     Selection aSel(GetSelection());
     Selection aNewSel(aSel);
     aNewSel.Justify();
-    sal_uInt16 nNewLen = sFormatted.Len();
-    sal_uInt16 nCurrentLen = GetText().Len();
+    sal_Int32 nNewLen = sFormatted.getLength();
+    sal_Int32 nCurrentLen = GetText().getLength();
     if ((nNewLen > nCurrentLen) && (aNewSel.Max() == nCurrentLen))
     {   // the new text is longer and the cursor was behind the last char (of the old text)
         if (aNewSel.Min() == 0)
@@ -514,7 +514,7 @@ void FormattedField::Modify()
 }
 
 //------------------------------------------------------------------------------
-void FormattedField::ImplSetTextImpl(const XubString& rNew, Selection* pNewSel)
+void FormattedField::ImplSetTextImpl(const OUString& rNew, Selection* pNewSel)
 {
     DBG_CHKTHIS(FormattedField, NULL);
 
@@ -533,8 +533,8 @@ void FormattedField::ImplSetTextImpl(const XubString& rNew, Selection* pNewSel)
         Selection aSel(GetSelection());
         aSel.Justify();
 
-        sal_uInt16 nNewLen = rNew.Len();
-        sal_uInt16 nCurrentLen = GetText().Len();
+        sal_Int32 nNewLen = rNew.getLength();
+        sal_Int32 nCurrentLen = GetText().getLength();
 
         if ((nNewLen > nCurrentLen) && (aSel.Max() == nCurrentLen))
         {   // new new text is longer and the cursor is behind the last char
@@ -782,7 +782,7 @@ void FormattedField::FormatChanged( FORMAT_CHANGE_TYPE _nWhat )
 void FormattedField::Commit()
 {
     // remember the old text
-    String sOld( GetText() );
+    OUString sOld( GetText() );
 
     // do the reformat
     ReFormat();
@@ -799,7 +799,7 @@ void FormattedField::Commit()
 //------------------------------------------------------------------------------
 void FormattedField::ReFormat()
 {
-    if (!IsEmptyFieldEnabled() || GetText().Len())
+    if (!IsEmptyFieldEnabled() || !GetText().isEmpty())
     {
         if (TreatingAsNumber())
         {
@@ -856,7 +856,7 @@ long FormattedField::Notify(NotifyEvent& rNEvt)
     if (rNEvt.GetType() == EVENT_LOSEFOCUS)
     {
         // Sonderbehandlung fuer leere Texte
-        if (GetText().Len() == 0)
+        if (GetText().isEmpty())
         {
             if (!IsEmptyFieldEnabled())
             {
@@ -925,7 +925,7 @@ void FormattedField::EnableEmptyField(sal_Bool bEnable)
         return;
 
     m_bEnableEmptyField = bEnable;
-    if (!m_bEnableEmptyField && GetText().Len()==0)
+    if (!m_bEnableEmptyField && GetText().isEmpty())
         ImplSetValue(m_dCurrentValue, sal_True);
 }
 

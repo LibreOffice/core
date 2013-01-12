@@ -206,7 +206,7 @@ void MoreButton::AddWindow( Window* pWindow )
 
 // -----------------------------------------------------------------------
 
-void MoreButton::SetText( const XubString& rText )
+void MoreButton::SetText( const OUString& rText )
 {
     PushButton::SetText( rText );
 }

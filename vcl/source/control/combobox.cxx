@@ -358,8 +358,8 @@ IMPL_LINK( ComboBox, ImplAutocompleteHdl, Edit*, pEdit )
 
         if ( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
-            XubString aText = mpImplLB->GetEntryList()->GetEntryText( nPos );
-            Selection aSelection( aText.Len(), aStartText.Len() );
+            OUString aText = mpImplLB->GetEntryList()->GetEntryText( nPos );
+            Selection aSelection( aText.getLength(), aStartText.Len() );
             pEdit->SetText( aText, aSelection );
         }
     }
@@ -824,7 +824,7 @@ long ComboBox::Notify( NotifyEvent& rNEvt )
 
 // -----------------------------------------------------------------------
 
-void ComboBox::SetText( const XubString& rStr )
+void ComboBox::SetText( const OUString& rStr )
 {
     ImplCallEventListeners( VCLEVENT_COMBOBOX_SETTEXT );
 
@@ -834,7 +834,7 @@ void ComboBox::SetText( const XubString& rStr )
 
 // -----------------------------------------------------------------------
 
-void ComboBox::SetText( const XubString& rStr, const Selection& rNewSelection )
+void ComboBox::SetText( const OUString& rStr, const Selection& rNewSelection )
 {
     ImplCallEventListeners( VCLEVENT_COMBOBOX_SETTEXT );
 

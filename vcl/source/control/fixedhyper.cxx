@@ -115,7 +115,7 @@ OUString FixedHyperlink::GetURL() const
     return m_sURL;
 }
 
-void FixedHyperlink::SetText(const String& rNewDescription)
+void FixedHyperlink::SetText(const OUString& rNewDescription)
 {
     FixedText::SetText(rNewDescription);
     m_nTextLen = GetCtrlTextWidth(GetText());

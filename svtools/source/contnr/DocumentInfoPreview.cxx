@@ -126,10 +126,10 @@ void ODocumentInfoPreview::fill(
 void ODocumentInfoPreview::insertEntry(
     rtl::OUString const & title, rtl::OUString const & value)
 {
-    if (m_pEditWin.GetText().Len() != 0) {
+    if (m_pEditWin.GetText().getLength() != 0) {
         m_pEditWin.InsertText(rtl::OUString("\n\n"));
     }
-    rtl::OUString caption(title + rtl::OUString(":\n"));
+    rtl::OUString caption(title + ":\n");
     m_pEditWin.InsertText(caption);
     m_pEditWin.SetAttrib(
         TextAttribFontWeight(WEIGHT_BOLD), m_pEditWin.GetParagraphCount() - 2,

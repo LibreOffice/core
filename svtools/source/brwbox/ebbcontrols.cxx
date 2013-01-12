@@ -98,7 +98,7 @@ namespace svt
             case KEY_RIGHT:
             {
                 Selection aSel = rBox.GetSelection();
-                return !aSel && aSel.Max() == rBox.GetText().Len();
+                return !aSel && aSel.Max() == rBox.GetText().getLength();
             }
             case KEY_HOME:
             case KEY_LEFT:
@@ -129,7 +129,7 @@ namespace svt
     //------------------------------------------------------------------
     sal_Bool ComboBoxCellController::IsModified() const
     {
-        return GetComboBox().GetSavedValue() != GetComboBox().GetText();
+        return OUString(GetComboBox().GetSavedValue()) != GetComboBox().GetText();
     }
 
     //------------------------------------------------------------------
@@ -488,7 +488,7 @@ namespace svt
             case KEY_RIGHT:
             {
                 Selection aSel = GetSpinWindow().GetSelection();
-                bResult = !aSel && aSel.Max() == GetSpinWindow().GetText().Len();
+                bResult = !aSel && aSel.Max() == GetSpinWindow().GetText().getLength();
             }   break;
             case KEY_HOME:
             case KEY_LEFT:
