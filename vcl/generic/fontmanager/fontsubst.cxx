@@ -199,13 +199,13 @@ bool FcPreMatchSubstititution::FindFontSubstitute( FontSelectPattern &rFontSelDa
     const rtl::OString aSubstName(rtl::OUStringToOString(aOut.maSearchName,
         RTL_TEXTENCODING_UTF8));
     printf( "FcPreMatchSubstititution \"%s\" bipw=%d%d%d%d -> ",
-        aOrigName.getStr(), rFontSelData.meWeight, rFontSelData.meItalic,
-        rFontSelData.mePitch, rFontSelData.meWidthType );
+        aOrigName.getStr(), rFontSelData.GetWeight(), rFontSelData.GetSlant(),
+        rFontSelData.GetPitch(), rFontSelData.GetWidthType() );
     if( !bHaveSubstitute )
         printf( "no substitute available\n" );
     else
         printf( "\"%s\" bipw=%d%d%d%d\n", aSubstName.getStr(),
-        aOut.meWeight, aOut.meItalic, aOut.mePitch, aOut.meWidthType );
+        aOut.GetWeight(), aOut.GetSlant(), aOut.GetPitch(), aOut.GetWidthType() );
 #endif
 
     if( bHaveSubstitute )
@@ -250,13 +250,13 @@ bool FcGlyphFallbackSubstititution::FindFontSubstitute( FontSelectPattern& rFont
     const rtl::OString aSubstName(rtl::OUStringToOString(aOut.maSearchName,
         RTL_TEXTENCODING_UTF8));
     printf( "FcGFSubstititution \"%s\" bipw=%d%d%d%d ->",
-        aOrigName.getStr(), rFontSelData.meWeight, rFontSelData.meItalic,
-        rFontSelData.mePitch, rFontSelData.meWidthType );
+        aOrigName.getStr(), rFontSelData.GetWeight(), rFontSelData.GetSlant(),
+        rFontSelData.GetPitch(), rFontSelData.GetWidthType() );
     if( !bHaveSubstitute )
         printf( "no substitute available\n" );
     else
         printf( "\"%s\" bipw=%d%d%d%d\n", aSubstName.getStr(),
-        aOut.meWeight, aOut.meItalic, aOut.mePitch, aOut.meWidthType );
+        aOut.GetWeight(), aOut.GetSlant(), aOut.GetPitch(), aOut.GetWidthType() );
 #endif
 
     if( bHaveSubstitute )
