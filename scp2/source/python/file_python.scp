@@ -68,21 +68,21 @@ End
 File gid_File_Py_Unohelper
     TXT_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
-    Name = "unohelper.py";
+    Name = "pyuno/unohelper.py";
     Styles = (PACKED);
 End
 
 File gid_File_Py_Uno
     TXT_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
-    Name = "uno.py";
+    Name = "pyuno/uno.py";
     Styles = (PACKED);
 End
 
 File gid_File_Py_Pythonloader
     TXT_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
-    Name = "pythonloader.py";
+    Name = "pyuno/pythonloader.py";
     Styles = (PACKED);
 End
 
