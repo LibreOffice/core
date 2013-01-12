@@ -724,57 +724,39 @@ int  SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
 /*------------------------------------------------------------------------
     Beschreibung: Seite Spaltenkonfiguration
 ------------------------------------------------------------------------*/
-SwTableColumnPage::SwTableColumnPage( Window* pParent,
-            const SfxItemSet& rSet ) :
-    SfxTabPage(pParent, SW_RES( TP_TABLE_COLUMN ), rSet ),
-    aModifyTableCB(this,    SW_RES(CB_MOD_TBL)),
-    aProportionalCB(this,   SW_RES(CB_PROP)),
-    aSpaceFT(this,          SW_RES(FT_SPACE)),
-    aSpaceED(this,          SW_RES(ED_SPACE)),
-
-    aColFL(this,            SW_RES(COL_FL_LAYOUT)),
-    aUpBtn(this,            SW_RES(COL_BTN_UP)),
-    aFT1(this,              SW_RES(COL_FT_1)),
-    aMF1(this,              SW_RES(COL_MF_1)),
-    aFT2(this,              SW_RES(COL_FT_2)),
-    aMF2(this,              SW_RES(COL_MF_2)),
-    aFT3(this,              SW_RES(COL_FT_3)),
-    aMF3(this,              SW_RES(COL_MF_3)),
-    aFT4(this,              SW_RES(COL_FT_4)),
-    aMF4(this,              SW_RES(COL_MF_4)),
-    aFT5(this,              SW_RES(COL_FT_5)),
-    aMF5(this,              SW_RES(COL_MF_5)),
-    aFT6(this,              SW_RES(COL_FT_6)),
-    aMF6(this,              SW_RES(COL_MF_6)),
-    aDownBtn(this,          SW_RES(COL_BTN_DOWN)),
-
-    nTableWidth(0),
-    nMinWidth( MINLAY ),
-    nNoOfCols( 0 ),
-    nNoOfVisibleCols( 0 ),
-    bModified(sal_False),
-    bModifyTbl(sal_False),
-    bPercentMode(sal_False)
+SwTableColumnPage::SwTableColumnPage(Window* pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "TableColumnPage",
+        "modules/swriter/ui/tablecolumnpage.ui", rSet)
+    , nTableWidth(0)
+    , nMinWidth(MINLAY)
+    , nNoOfCols(0)
+    , nNoOfVisibleCols(0)
+    , bModified(false)
+    , bModifyTbl(false)
+    , bPercentMode(false)
 {
-    FreeResource();
+    get(m_pModifyTableCB, "adaptwidth");
+    get(m_pProportionalCB, "adaptcolumns");
+    get(m_pSpaceFT, "spaceft");
+    get(m_pSpaceED, "space-nospin");
+    get(m_pUpBtn, "next");
+    get(m_pDownBtn, "back");
+
+    m_aFieldArr[0].set(get<MetricField>("width1"));
+    m_aFieldArr[1].set(get<MetricField>("width2"));
+    m_aFieldArr[2].set(get<MetricField>("width3"));
+    m_aFieldArr[3].set(get<MetricField>("width4"));
+    m_aFieldArr[4].set(get<MetricField>("width5"));
+    m_aFieldArr[5].set(get<MetricField>("width6"));
+
+    m_pTextArr[0] = get<FixedText>("1");
+    m_pTextArr[1] = get<FixedText>("2");
+    m_pTextArr[2] = get<FixedText>("3");
+    m_pTextArr[3] = get<FixedText>("4");
+    m_pTextArr[4] = get<FixedText>("5");
+    m_pTextArr[5] = get<FixedText>("6");
+
     SetExchangeSupport();
-
-    aDownBtn.SetAccessibleRelationMemberOf(&aColFL);
-    aUpBtn.SetAccessibleRelationMemberOf(&aColFL);
-
-    pFieldArr[0] = &aMF1;
-    pFieldArr[1] = &aMF2;
-    pFieldArr[2] = &aMF3;
-    pFieldArr[3] = &aMF4;
-    pFieldArr[4] = &aMF5;
-    pFieldArr[5] = &aMF6;
-
-    pTextArr[0] = &aFT1;
-    pTextArr[1] = &aFT2;
-    pTextArr[2] = &aFT3;
-    pTextArr[3] = &aFT4;
-    pTextArr[4] = &aFT5;
-    pTextArr[5] = &aFT6;
 
     const SfxPoolItem* pItem;
     Init((SFX_ITEM_SET == rSet.GetItemState( SID_HTML_MODE, sal_False,&pItem )
@@ -816,25 +798,25 @@ void  SwTableColumnPage::Reset( const SfxItemSet& )
             if( pTblData->GetColumns()[i].nWidth  < nMinWidth )
                     nMinWidth = pTblData->GetColumns()[i].nWidth;
         }
-        sal_Int64 nMinTwips = pFieldArr[0]->NormalizePercent( nMinWidth );
-        sal_Int64 nMaxTwips = pFieldArr[0]->NormalizePercent( nTableWidth );
+        sal_Int64 nMinTwips = m_aFieldArr[0].NormalizePercent( nMinWidth );
+        sal_Int64 nMaxTwips = m_aFieldArr[0].NormalizePercent( nTableWidth );
         for( i = 0; (i < MET_FIELDS) && (i < nNoOfVisibleCols); i++ )
         {
-            pFieldArr[i]->SetPrcntValue( pFieldArr[i]->NormalizePercent(
+            m_aFieldArr[i].SetPrcntValue( m_aFieldArr[i].NormalizePercent(
                                                 GetVisibleWidth(i) ), FUNIT_TWIP );
-            pFieldArr[i]->SetMin( nMinTwips , FUNIT_TWIP );
-            pFieldArr[i]->SetMax( nMaxTwips , FUNIT_TWIP );
-            pFieldArr[i]->Enable();
-            pTextArr[i]->Enable();
+            m_aFieldArr[i].SetMin( nMinTwips , FUNIT_TWIP );
+            m_aFieldArr[i].SetMax( nMaxTwips , FUNIT_TWIP );
+            m_aFieldArr[i].Enable();
+            m_pTextArr[i]->Enable();
         }
 
         if( nNoOfVisibleCols > MET_FIELDS )
-            aUpBtn.Enable();
+            m_pUpBtn->Enable();
         i = nNoOfVisibleCols;
         while( i < MET_FIELDS )
         {
-            pFieldArr[i]->SetText( aEmptyStr );
-            pTextArr[i]->Hide();
+            m_aFieldArr[i].SetText( aEmptyStr );
+            m_pTextArr[i]->Disable();
             i++;
         }
     }
@@ -852,28 +834,27 @@ void  SwTableColumnPage::Init(sal_Bool bWeb)
     for( sal_uInt16 i = 0; i < MET_FIELDS; i++ )
     {
         aValueTbl[i] = i;
-        SetMetric(*pFieldArr[i], aMetric);
-        pFieldArr[i]->SetUpHdl( aLkUp );
-        pFieldArr[i]->SetDownHdl( aLkDown );
-        pFieldArr[i]->SetLoseFocusHdl( aLkLF );
-
+        m_aFieldArr[i].SetMetric(aMetric);
+        m_aFieldArr[i].SetUpHdl( aLkUp );
+        m_aFieldArr[i].SetDownHdl( aLkDown );
+        m_aFieldArr[i].SetLoseFocusHdl( aLkLF );
     }
-    SetMetric(aSpaceED, aMetric);
+    SetMetric(*m_pSpaceED, aMetric);
 
     Link aLk = LINK( this, SwTableColumnPage, AutoClickHdl );
-    aUpBtn.SetClickHdl( aLk );
-    aDownBtn.SetClickHdl( aLk );
+    m_pUpBtn->SetClickHdl( aLk );
+    m_pDownBtn->SetClickHdl( aLk );
 
     aLk = LINK( this, SwTableColumnPage, ModeHdl );
-    aModifyTableCB .SetClickHdl( aLk );
-    aProportionalCB.SetClickHdl( aLk );
+    m_pModifyTableCB->SetClickHdl( aLk );
+    m_pProportionalCB->SetClickHdl( aLk );
 };
 
 
 IMPL_LINK( SwTableColumnPage, AutoClickHdl, CheckBox *, pBox )
 {
     //Anzeigefenster verschieben
-    if(pBox == (CheckBox *)&aDownBtn)
+    if(pBox == (CheckBox *)m_pDownBtn)
     {
         if(aValueTbl[0] > 0)
         {
@@ -881,7 +862,7 @@ IMPL_LINK( SwTableColumnPage, AutoClickHdl, CheckBox *, pBox )
                 aValueTbl[i] -= 1;
         }
     }
-    if(pBox == (CheckBox *)&aUpBtn)
+    if (pBox == (CheckBox *)m_pUpBtn)
     {
         if( aValueTbl[ MET_FIELDS -1 ] < nNoOfVisibleCols -1  )
         {
@@ -894,59 +875,59 @@ IMPL_LINK( SwTableColumnPage, AutoClickHdl, CheckBox *, pBox )
         String sEntry = rtl::OUString('~');
         String sIndex = String::CreateFromInt32( aValueTbl[i] + 1 );
         sEntry += sIndex;
-        pTextArr[i]->SetText( sEntry );
+        m_pTextArr[i]->SetText( sEntry );
 
         //added by menghu for SODC_5143,12/12/2006
         String sColumnWidth = SW_RESSTR( STR_ACCESS_COLUMN_WIDTH);
         sColumnWidth.SearchAndReplace( DEFINE_CONST_UNICODE("%1"), sIndex );
-        pFieldArr[i]->SetAccessibleName( sColumnWidth );
+        m_aFieldArr[i].SetAccessibleName( sColumnWidth );
     }
 
-    aDownBtn.Enable(aValueTbl[0] > 0);
-    aUpBtn.Enable(aValueTbl[ MET_FIELDS -1 ] < nNoOfVisibleCols -1 );
+    m_pDownBtn->Enable(aValueTbl[0] > 0);
+    m_pUpBtn->Enable(aValueTbl[ MET_FIELDS -1 ] < nNoOfVisibleCols -1 );
     UpdateCols(0);
     return 0;
 };
 
 
-IMPL_LINK_INLINE_START( SwTableColumnPage, UpHdl, PercentField *, pEdit )
+IMPL_LINK_INLINE_START( SwTableColumnPage, UpHdl, MetricField*, pEdit )
 {
     bModified = sal_True;
     ModifyHdl( pEdit );
     return 0;
 };
-IMPL_LINK_INLINE_END( SwTableColumnPage, UpHdl, PercentField *, pEdit )
+IMPL_LINK_INLINE_END( SwTableColumnPage, UpHdl, MetricField*, pEdit )
 
 
-IMPL_LINK_INLINE_START( SwTableColumnPage, DownHdl, PercentField *, pEdit )
+IMPL_LINK_INLINE_START( SwTableColumnPage, DownHdl, MetricField*, pEdit )
 {
     bModified = sal_True;
     ModifyHdl( pEdit );
     return 0;
 };
-IMPL_LINK_INLINE_END( SwTableColumnPage, DownHdl, PercentField *, pEdit )
+IMPL_LINK_INLINE_END( SwTableColumnPage, DownHdl, MetricField*, pEdit )
 
 
-IMPL_LINK_INLINE_START( SwTableColumnPage, LoseFocusHdl, PercentField *, pEdit )
+IMPL_LINK_INLINE_START( SwTableColumnPage, LoseFocusHdl, MetricField*, pEdit )
 {
-    if(pEdit->IsModified())
+    if (pEdit->IsModified())
     {
         bModified = sal_True;
         ModifyHdl( pEdit );
     }
     return 0;
 };
-IMPL_LINK_INLINE_END( SwTableColumnPage, LoseFocusHdl, PercentField *, pEdit )
+IMPL_LINK_INLINE_END( SwTableColumnPage, LoseFocusHdl, MetricField*, pEdit )
 
 
 IMPL_LINK( SwTableColumnPage, ModeHdl, CheckBox*, pBox )
 {
     sal_Bool bCheck = pBox->IsChecked();
-    if(pBox == &aProportionalCB)
+    if (pBox == m_pProportionalCB)
     {
         if(bCheck)
-            aModifyTableCB.Check();
-        aModifyTableCB.Enable(!bCheck && bModifyTbl);
+            m_pModifyTableCB->Check();
+        m_pModifyTableCB->Enable(!bCheck && bModifyTbl);
     }
     return 0;
 };
@@ -956,9 +937,9 @@ sal_Bool  SwTableColumnPage::FillItemSet( SfxItemSet& )
 {
     for( sal_uInt16 i = 0; i < MET_FIELDS; i++ )
     {
-        if(pFieldArr[i]->HasFocus())
+        if (m_aFieldArr[i].HasFocus())
         {
-            LoseFocusHdl(pFieldArr[i]);
+            LoseFocusHdl(m_aFieldArr[i].get());
             break;
         }
     }
@@ -971,16 +952,22 @@ sal_Bool  SwTableColumnPage::FillItemSet( SfxItemSet& )
 };
 
 
-void   SwTableColumnPage::ModifyHdl( PercentField* pEdit )
+void   SwTableColumnPage::ModifyHdl( MetricField* pField )
 {
+        PercentFieldWrap *pEdit = NULL;
         sal_uInt16 nAktPos;
         sal_uInt16 i;
 
         for( i = 0; i < MET_FIELDS; i++)
-            if(pEdit == pFieldArr[i])
+        {
+            if (pField == m_aFieldArr[i].get())
+            {
+                pEdit = &m_aFieldArr[i];
                 break;
+            }
+        }
 
-        if (MET_FIELDS <= i)
+        if (MET_FIELDS <= i || !pEdit)
         {
             OSL_ENSURE(false, "cannot happen.");
             return;
@@ -1004,8 +991,8 @@ void   SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
     }
     SwTwips nDiff = nSum - nTableWidth;
 
-    sal_Bool bModifyTable = aModifyTableCB.IsChecked();
-    sal_Bool bProp =    aProportionalCB.IsChecked();
+    sal_Bool bModifyTable = m_pModifyTableCB->IsChecked();
+    sal_Bool bProp =    m_pProportionalCB->IsChecked();
 
     if(!bModifyTable && !bProp )
     {
@@ -1097,25 +1084,23 @@ void   SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
     }
 
     if(!bPercentMode)
-        aSpaceED.SetValue(aSpaceED.Normalize( pTblData->GetSpace() - nTableWidth) , FUNIT_TWIP);
+        m_pSpaceED->SetValue(m_pSpaceED->Normalize( pTblData->GetSpace() - nTableWidth) , FUNIT_TWIP);
 
     for( i = 0; ( i < nNoOfVisibleCols ) && ( i < MET_FIELDS ); i++)
     {
-        pFieldArr[i]->SetPrcntValue(pFieldArr[i]->NormalizePercent(
+        m_aFieldArr[i].SetPrcntValue(m_aFieldArr[i].NormalizePercent(
                         GetVisibleWidth(aValueTbl[i]) ), FUNIT_TWIP);
-        pFieldArr[i]->ClearModifyFlag();
+        m_aFieldArr[i].ClearModifyFlag();
     }
-
 }
-
 
 void    SwTableColumnPage::ActivatePage( const SfxItemSet& )
 {
     bPercentMode = pTblData->GetWidthPercent() != 0;
     for( sal_uInt16 i = 0; (i < MET_FIELDS) && (i < nNoOfVisibleCols); i++ )
     {
-        pFieldArr[i]->SetRefValue(pTblData->GetWidth());
-        pFieldArr[i]->ShowPercent( bPercentMode );
+        m_aFieldArr[i].SetRefValue(pTblData->GetWidth());
+        m_aFieldArr[i].ShowPercent( bPercentMode );
     }
 
     sal_uInt16 nTblAlign = pTblData->GetAlign();
@@ -1134,20 +1119,20 @@ void    SwTableColumnPage::ActivatePage( const SfxItemSet& )
         bModifyTbl = sal_False;
     if(bPercentMode)
     {
-        aModifyTableCB  .Check(sal_False);
-        aProportionalCB .Check(sal_False);
+        m_pModifyTableCB->Check(sal_False);
+        m_pProportionalCB->Check(sal_False);
     }
     else if( !bModifyTbl )
     {
-        aProportionalCB.Check(sal_False);
-        aModifyTableCB.Check(sal_False);
+        m_pProportionalCB->Check(sal_False);
+        m_pModifyTableCB->Check(sal_False);
     }
-    aSpaceFT.Enable(!bPercentMode);
-    aSpaceED.Enable(!bPercentMode);
-    aModifyTableCB.Enable( !bPercentMode && bModifyTbl );
-    aProportionalCB.Enable(!bPercentMode && bModifyTbl );
+    m_pSpaceFT->Enable(!bPercentMode);
+    m_pSpaceED->Enable(!bPercentMode);
+    m_pModifyTableCB->Enable( !bPercentMode && bModifyTbl );
+    m_pProportionalCB->Enable(!bPercentMode && bModifyTbl );
 
-    aSpaceED.SetValue(aSpaceED.Normalize(
+    m_pSpaceED->SetValue(m_pSpaceED->Normalize(
                 pTblData->GetSpace() - nTableWidth) , FUNIT_TWIP);
 
 }

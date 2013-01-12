@@ -37,7 +37,6 @@
 #define FL_DIST                 24
 #define FT_WIDTH        25
 #define FT_POS          32
-#define CB_HEADLINE         40
 #define FL_PROPERTIES       42
 #define FT_TEXTORIENTATION    43
 #define LB_TEXTORIENTATION    44
@@ -49,25 +48,5 @@
 #define FT_NAME         104
 #define FL_OPTIONS              105
 #define FL_NAME                 106
-#define COL_FT_1        107
-#define COL_MF_1        108
-#define COL_FT_2        109
-#define COL_MF_2        110
-#define COL_FT_3        111
-#define COL_MF_3        112
-#define COL_FT_4        113
-#define COL_MF_4        114
-#define COL_FT_5        115
-#define COL_MF_5        116
-#define COL_FT_6        117
-#define COL_MF_6        118
-#define COL_FL_LAYOUT   119
-#define COL_BTN_UP      120
-#define COL_BTN_DOWN    121
-#define CB_MOD_TBL      122
-#define CB_PROP         123
-
-#define FT_SPACE        125
-#define ED_SPACE        126
 
 #define RB_FROM_LEFT    127

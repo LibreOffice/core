@@ -97,29 +97,16 @@ public:
 
 class SwTableColumnPage : public SfxTabPage
 {
-    CheckBox        aModifyTableCB;
-    CheckBox        aProportionalCB;
-    FixedText       aSpaceFT;
-    MetricField     aSpaceED;
-     FixedLine        aColFL;
-    ImageButton     aUpBtn;
-    FixedText       aFT1;
-    PercentField    aMF1;
-    FixedText       aFT2;
-    PercentField    aMF2;
-    FixedText       aFT3;
-    PercentField    aMF3;
-    FixedText       aFT4;
-    PercentField    aMF4;
-    FixedText       aFT5;
-    PercentField    aMF5;
-    FixedText       aFT6;
-    PercentField    aMF6;
-    ImageButton     aDownBtn;
+    CheckBox*       m_pModifyTableCB;
+    CheckBox*       m_pProportionalCB;
+    FixedText*      m_pSpaceFT;
+    MetricField*    m_pSpaceED;
+    PushButton*     m_pUpBtn;
+    PushButton*     m_pDownBtn;
 
     SwTableRep*     pTblData;
-    PercentField*   pFieldArr[MET_FIELDS];
-    FixedText*      pTextArr[MET_FIELDS];
+    PercentFieldWrap  m_aFieldArr[MET_FIELDS];
+    FixedText*      m_pTextArr[MET_FIELDS];
     SwTwips         nTableWidth;
     SwTwips         nMinWidth;
     sal_uInt16          nNoOfCols;
@@ -132,10 +119,10 @@ class SwTableColumnPage : public SfxTabPage
 
     void        Init(sal_Bool bWeb);
     DECL_LINK( AutoClickHdl, CheckBox * );
-    void        ModifyHdl( PercentField* pEdit );
-    DECL_LINK( UpHdl, PercentField * );
-    DECL_LINK( DownHdl, PercentField * );
-    DECL_LINK( LoseFocusHdl, PercentField * );
+    void        ModifyHdl( MetricField* pEdit );
+    DECL_LINK( UpHdl, MetricField * );
+    DECL_LINK( DownHdl, MetricField * );
+    DECL_LINK( LoseFocusHdl, MetricField * );
     DECL_LINK( ModeHdl, CheckBox * );
     void        UpdateCols( sal_uInt16 nAktPos );
     SwTwips     GetVisibleWidth(sal_uInt16 nPos);
