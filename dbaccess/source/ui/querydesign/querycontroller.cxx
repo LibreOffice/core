@@ -182,7 +182,7 @@ namespace dbaui
 
                 case SQL_NODE_NAME:
                     {
-                        rString += "SQL_NAME:" + "\"" + _pNode->getTokenValue() + "\"";
+                        rString += "SQL_NAME:\"" + _pNode->getTokenValue() + "\"";
                         break;}
 
                 case SQL_NODE_STRING:
