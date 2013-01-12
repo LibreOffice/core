@@ -2874,7 +2874,7 @@ sal_Int16 SfxObjectShell::QueryHiddenInformation( HiddenWarningFact eFact, Windo
 {
     sal_Int16 nRet = RET_YES;
     sal_uInt16 nResId = 0;
-    SvtSecurityOptions::EOption eOption = static_cast< SvtSecurityOptions::EOption >( -1 );
+    SvtSecurityOptions::EOption eOption;
 
     switch ( eFact )
     {
@@ -2903,12 +2903,10 @@ sal_Int16 SfxObjectShell::QueryHiddenInformation( HiddenWarningFact eFact, Windo
             break;
         }
         default:
-        {
-            SAL_WARN( "sfx2.doc", "SfxObjectShell::DetectHiddenInformation(): what fact?" );
-        }
+            assert(false); // this cannot happen
     }
 
-    if ( eOption != -1 && SvtSecurityOptions().IsOptionSet( eOption ) )
+    if ( SvtSecurityOptions().IsOptionSet( eOption ) )
     {
         String sMessage( SfxResId(STR_HIDDENINFO_CONTAINS).toString() );
         sal_uInt16 nWantedStates = HIDDENINFORMATION_RECORDEDCHANGES | HIDDENINFORMATION_NOTES;
