@@ -281,7 +281,7 @@ IMPL_LINK_NOARG(XIMStatusWindow, DelayedShowHdl)
 
 void XIMStatusWindow::show( bool bShow, I18NStatus::ShowReason eReason )
 {
-    if( bShow && ! m_aStatusText.GetText().Len() )
+    if( bShow && m_aStatusText.GetText().isEmpty() )
         bShow = false;
 
     m_bDelayedShow = bShow;

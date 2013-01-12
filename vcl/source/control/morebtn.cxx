@@ -213,7 +213,7 @@ void MoreButton::SetText( const XubString& rText )
 
 // -----------------------------------------------------------------------
 
-XubString MoreButton::GetText() const
+OUString MoreButton::GetText() const
 {
     return PushButton::GetText();
 }

@@ -48,7 +48,7 @@ protected:
                         DECL_LINK( TimerHdl, Timer* );
     virtual void        Paint( const Rectangle& );
     virtual void        RequestHelp( const HelpEvent& rHEvt );
-    virtual String      GetText() const;
+    virtual OUString    GetText() const;
     void                ImplShow();
 
 public:

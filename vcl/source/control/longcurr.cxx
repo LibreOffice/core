@@ -413,7 +413,7 @@ void LongCurrencyFormatter::Reformat()
     if ( !GetField() )
         return;
 
-    if ( !GetField()->GetText().Len() && ImplGetEmptyFieldValue() )
+    if ( GetField()->GetText().isEmpty() && ImplGetEmptyFieldValue() )
         return;
 
     XubString aStr;

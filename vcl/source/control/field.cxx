@@ -425,7 +425,7 @@ void FormatterBase::SetEmptyFieldValue()
 
 sal_Bool FormatterBase::IsEmptyFieldValue() const
 {
-    return (!mpField || !mpField->GetText().Len());
+    return (!mpField || mpField->GetText().isEmpty());
 }
 
 // -----------------------------------------------------------------------
@@ -688,7 +688,7 @@ void NumericFormatter::Reformat()
     if ( !GetField() )
         return;
 
-    if ( !GetField()->GetText().Len() && ImplGetEmptyFieldValue() )
+    if ( GetField()->GetText().isEmpty() && ImplGetEmptyFieldValue() )
         return;
 
     XubString aStr;
@@ -756,9 +756,9 @@ void NumericFormatter::ImplNewFieldValue( sal_Int64 nNewValue )
 
         Selection aSelection = GetField()->GetSelection();
         aSelection.Justify();
-        XubString aText = GetField()->GetText();
+        OUString aText = GetField()->GetText();
         // leave it as is if selected until end
-        if ( (xub_StrLen)aSelection.Max() == aText.Len() )
+        if ( (xub_StrLen)aSelection.Max() == aText.getLength() )
         {
             if ( !aSelection.Len() )
                 aSelection.Min() = SELECTION_MAX;
@@ -858,7 +858,7 @@ long NumericField::Notify( NotifyEvent& rNEvt )
         MarkToBeReformatted( sal_False );
     else if ( rNEvt.GetType() == EVENT_LOSEFOCUS )
     {
-        if ( MustBeReformatted() && (GetText().Len() || !IsEmptyFieldValueEnabled()) )
+        if ( MustBeReformatted() && (!GetText().isEmpty() || !IsEmptyFieldValueEnabled()) )
             Reformat();
     }
 
@@ -1016,7 +1016,7 @@ long NumericBox::Notify( NotifyEvent& rNEvt )
         MarkToBeReformatted( sal_False );
     else if ( rNEvt.GetType() == EVENT_LOSEFOCUS )
     {
-        if ( MustBeReformatted() && (GetText().Len() || !IsEmptyFieldValueEnabled()) )
+        if ( MustBeReformatted() && (!GetText().isEmpty() || !IsEmptyFieldValueEnabled()) )
             Reformat();
     }
 
@@ -1833,7 +1833,7 @@ long MetricField::Notify( NotifyEvent& rNEvt )
         MarkToBeReformatted( sal_False );
     else if ( rNEvt.GetType() == EVENT_LOSEFOCUS )
     {
-        if ( MustBeReformatted() && (GetText().Len() || !IsEmptyFieldValueEnabled()) )
+        if ( MustBeReformatted() && (!GetText().isEmpty() || !IsEmptyFieldValueEnabled()) )
             Reformat();
     }
 
@@ -1959,7 +1959,7 @@ long MetricBox::Notify( NotifyEvent& rNEvt )
         MarkToBeReformatted( sal_False );
     else if ( rNEvt.GetType() == EVENT_LOSEFOCUS )
     {
-        if ( MustBeReformatted() && (GetText().Len() || !IsEmptyFieldValueEnabled()) )
+        if ( MustBeReformatted() && (!GetText().isEmpty() || !IsEmptyFieldValueEnabled()) )
             Reformat();
     }
 
@@ -2245,7 +2245,7 @@ long CurrencyField::Notify( NotifyEvent& rNEvt )
         MarkToBeReformatted( sal_False );
     else if ( rNEvt.GetType() == EVENT_LOSEFOCUS )
     {
-        if ( MustBeReformatted() && (GetText().Len() || !IsEmptyFieldValueEnabled()) )
+        if ( MustBeReformatted() && (!GetText().isEmpty() || !IsEmptyFieldValueEnabled()) )
             Reformat();
     }
 
@@ -2347,7 +2347,7 @@ long CurrencyBox::Notify( NotifyEvent& rNEvt )
         MarkToBeReformatted( sal_False );
     else if ( rNEvt.GetType() == EVENT_LOSEFOCUS )
     {
-        if ( MustBeReformatted() && (GetText().Len() || !IsEmptyFieldValueEnabled()) )
+        if ( MustBeReformatted() && (!GetText().isEmpty() || !IsEmptyFieldValueEnabled()) )
             Reformat();
     }
 

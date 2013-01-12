@@ -606,7 +606,7 @@ void ComboBox::Resize()
     {
         mpSubEdit->SetSizePixel( Size( aOutSz.Width(), mnDDHeight ) );
         mpImplLB->setPosSizePixel( 0, mnDDHeight, aOutSz.Width(), aOutSz.Height() - mnDDHeight );
-        if ( GetText().Len() )
+        if ( !GetText().isEmpty() )
             ImplUpdateFloatSelection();
     }
 

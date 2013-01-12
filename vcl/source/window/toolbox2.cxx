@@ -1817,7 +1817,7 @@ void ToolBox::ImplFillLayoutData() const
 
 // -----------------------------------------------------------------------
 
-String ToolBox::GetDisplayText() const
+OUString ToolBox::GetDisplayText() const
 {
     if( ! mpData->m_pLayoutData )
         ImplFillLayoutData();

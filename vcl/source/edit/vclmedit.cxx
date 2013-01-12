@@ -1166,12 +1166,12 @@ void VclMultiLineEdit::SetText( const String& rStr )
     pImpVclMEdit->SetText( rStr );
 }
 
-String VclMultiLineEdit::GetText() const
+OUString VclMultiLineEdit::GetText() const
 {
     return pImpVclMEdit->GetText();
 }
 
-String VclMultiLineEdit::GetText( LineEnd aSeparator ) const
+OUString VclMultiLineEdit::GetText( LineEnd aSeparator ) const
 {
     return pImpVclMEdit->GetText( aSeparator );
 }

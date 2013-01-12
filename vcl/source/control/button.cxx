@@ -976,7 +976,7 @@ void PushButton::ImplDrawPushButton( bool bLayout )
             break;
     }
 
-    sal_Bool bDropDown = ( IsSymbol() && (GetSymbol()==SYMBOL_SPIN_DOWN) && !GetText().Len() );
+    sal_Bool bDropDown = ( IsSymbol() && (GetSymbol()==SYMBOL_SPIN_DOWN) && GetText().isEmpty() );
 
     if( bDropDown && (aCtrlType == CTRL_COMBOBOX || aCtrlType == CTRL_LISTBOX ) )
     {
@@ -1556,7 +1556,7 @@ long PushButton::PreNotify( NotifyEvent& rNEvt )
                     break;
             }
 
-            sal_Bool bDropDown = ( IsSymbol() && (GetSymbol()==SYMBOL_SPIN_DOWN) && !GetText().Len() );
+            sal_Bool bDropDown = ( IsSymbol() && (GetSymbol()==SYMBOL_SPIN_DOWN) && GetText().isEmpty() );
 
             if( bDropDown && GetParent()->IsNativeControlSupported( aCtrlType, PART_ENTIRE_CONTROL) &&
                    !GetParent()->IsNativeControlSupported( aCtrlType, PART_BUTTON_DOWN) )
@@ -1688,7 +1688,7 @@ Size PushButton::CalcMinimumSize( long nMaxWidth ) const
     }
     else if ( IsImage() && ! (ImplGetButtonState() & BUTTON_DRAW_NOIMAGE) )
         aSize = GetModeImage().GetSizePixel();
-    if ( PushButton::GetText().Len() && ! (ImplGetButtonState() & BUTTON_DRAW_NOTEXT) )
+    if ( !PushButton::GetText().isEmpty() && ! (ImplGetButtonState() & BUTTON_DRAW_NOTEXT) )
     {
         sal_uLong nDrawFlags = 0;
         Size textSize = GetTextRect( Rectangle( Point(), Size( nMaxWidth ? nMaxWidth : 0x7fffffff, 0x7fffffff ) ),
@@ -3640,7 +3640,7 @@ void CheckBox::Resize()
 
 void CheckBox::GetFocus()
 {
-    if ( !GetText().Len() || (ImplGetButtonState() & BUTTON_DRAW_NOTEXT) )
+    if ( GetText().isEmpty() || (ImplGetButtonState() & BUTTON_DRAW_NOTEXT) )
     {
         // increase button size to have space for focus rect
         // checkboxes without text will draw focusrect around the check
@@ -3673,7 +3673,7 @@ void CheckBox::LoseFocus()
     HideFocus();
     Button::LoseFocus();
 
-    if ( !GetText().Len() || (ImplGetButtonState() & BUTTON_DRAW_NOTEXT) )
+    if ( GetText().isEmpty() || (ImplGetButtonState() & BUTTON_DRAW_NOTEXT) )
     {
         // decrease button size again (see GetFocus())
         // checkboxes without text will draw focusrect around the check

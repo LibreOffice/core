@@ -442,7 +442,7 @@ Size MessBox::GetOptimalSize(WindowSizeType eType) const
 void InfoBox::ImplInitInfoBoxData()
 {
     // Default Text is the display title from the application
-    if ( !GetText().Len() )
+    if ( GetText().isEmpty() )
         SetText( Application::GetDisplayName() );
 
     SetImage( InfoBox::GetStandardImage() );
@@ -477,7 +477,7 @@ Image InfoBox::GetStandardImage()
 void WarningBox::ImplInitWarningBoxData()
 {
     // Default Text is the display title from the application
-    if ( !GetText().Len() )
+    if ( GetText().isEmpty() )
         SetText( Application::GetDisplayName() );
 
     SetImage( WarningBox::GetStandardImage() );
@@ -522,7 +522,7 @@ Image WarningBox::GetStandardImage()
 void ErrorBox::ImplInitErrorBoxData()
 {
     // Default Text is the display title from the application
-    if ( !GetText().Len() )
+    if ( GetText().isEmpty() )
         SetText( Application::GetDisplayName() );
 
     SetImage( ErrorBox::GetStandardImage() );
@@ -567,7 +567,7 @@ Image ErrorBox::GetStandardImage()
 void QueryBox::ImplInitQueryBoxData()
 {
     // Default Text is the display title from the application
-    if ( !GetText().Len() )
+    if ( GetText().isEmpty() )
         SetText( Application::GetDisplayName() );
 
     SetImage( QueryBox::GetStandardImage() );

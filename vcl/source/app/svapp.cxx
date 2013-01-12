@@ -294,16 +294,16 @@ sal_uInt16 Application::GetCommandLineParamCount()
 
 // -----------------------------------------------------------------------
 
-XubString Application::GetCommandLineParam( sal_uInt16 nParam )
+OUString Application::GetCommandLineParam( sal_uInt16 nParam )
 {
-    rtl::OUString aParam;
+    OUString aParam;
     osl_getCommandArg( nParam, &aParam.pData );
     return aParam;
 }
 
 // -----------------------------------------------------------------------
 
-const XubString& Application::GetAppFileName()
+const OUString& Application::GetAppFileName()
 {
     ImplSVData* pSVData = ImplGetSVData();
     DBG_ASSERT( pSVData->maAppData.mpAppFileName, "AppFileName vor SVMain ?!" );
@@ -314,14 +314,14 @@ const XubString& Application::GetAppFileName()
      *  #91147# provide a fallback for people without initialized
      *  vcl here (like setup in responsefile mode)
      */
-    static String aAppFileName;
-    if( !aAppFileName.Len() )
+    static OUString aAppFileName;
+    if( aAppFileName.isEmpty() )
     {
-        rtl::OUString aExeFileName;
+        OUString aExeFileName;
         osl_getExecutableFile( &aExeFileName.pData );
 
         // convert path to native file format
-        rtl::OUString aNativeFileName;
+        OUString aNativeFileName;
         osl::FileBase::getSystemPathFromFileURL( aExeFileName, aNativeFileName );
         aAppFileName = aNativeFileName;
     }
@@ -365,7 +365,7 @@ sal_uInt16 Application::Exception( sal_uInt16 nError )
 
 // -----------------------------------------------------------------------
 
-void Application::Abort( const XubString& rErrorText )
+void Application::Abort( const OUString& rErrorText )
 {
     //HACK: Dump core iff --norestore command line argument is given (assuming
     // this process is run by developers who are interested in cores, vs. end
@@ -373,7 +373,7 @@ void Application::Abort( const XubString& rErrorText )
     bool dumpCore = false;
     sal_uInt16 n = GetCommandLineParamCount();
     for (sal_uInt16 i = 0; i != n; ++i) {
-        if (GetCommandLineParam(i).EqualsAscii("--norestore")) {
+        if (GetCommandLineParam(i) == "--norestore") {
             dumpCore = true;
             break;
         }
@@ -1168,20 +1168,20 @@ Window* Application::GetActiveTopWindow()
 
 // -----------------------------------------------------------------------
 
-void Application::SetAppName( const XubString& rUniqueName )
+void Application::SetAppName( const OUString& rUniqueName )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
     // create if not existing
     if ( !pSVData->maAppData.mpAppName )
-        pSVData->maAppData.mpAppName = new XubString( rUniqueName );
+        pSVData->maAppData.mpAppName = new String( rUniqueName );
     else
         *(pSVData->maAppData.mpAppName) = rUniqueName;
 }
 
 // -----------------------------------------------------------------------
 
-XubString Application::GetAppName()
+OUString Application::GetAppName()
 {
     ImplSVData* pSVData = ImplGetSVData();
     if ( pSVData->maAppData.mpAppName )
@@ -1192,7 +1192,7 @@ XubString Application::GetAppName()
 
 // -----------------------------------------------------------------------
 
-void Application::SetDisplayName( const UniString& rName )
+void Application::SetDisplayName( const OUString& rName )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -1205,7 +1205,7 @@ void Application::SetDisplayName( const UniString& rName )
 
 // -----------------------------------------------------------------------
 
-UniString Application::GetDisplayName()
+OUString Application::GetDisplayName()
 {
     ImplSVData* pSVData = ImplGetSVData();
     if ( pSVData->maAppData.mpDisplayName )
@@ -1728,8 +1728,8 @@ bool Application::IsHeadlessModeRequested()
 
 // -----------------------------------------------------------------------
 
-void Application::ShowNativeErrorBox(const String& sTitle  ,
-                                     const String& sMessage)
+void Application::ShowNativeErrorBox(const OUString& sTitle  ,
+                                     const OUString& sMessage)
 {
     int btn = ImplGetSalSystem()->ShowNativeMessageBox (
             sTitle,
