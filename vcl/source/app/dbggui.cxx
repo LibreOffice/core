@@ -510,7 +510,7 @@ DbgWindow::DbgWindow() :
         SetWindowState( aState );
     }
 
-    SetText("StarView Debug Window");
+    SetText(OUString("StarView Debug Window"));
     Show();
     Update();
 }
@@ -686,7 +686,7 @@ DbgDialog::DbgDialog() :
 
     {
     maXtorThis.Show();
-    maXtorThis.SetText("T~his");
+    maXtorThis.SetText(OUString("T~his"));
     if ( pData->nTestFlags & DBG_TEST_XTOR_THIS )
         maXtorThis.Check( sal_True );
     maXtorThis.SetPosSizePixel( LogicToPixel( Point( 10, 15 ), aAppMap ),
@@ -695,7 +695,7 @@ DbgDialog::DbgDialog() :
 
     {
     maXtorFunc.Show();
-    maXtorFunc.SetText("~Function");
+    maXtorFunc.SetText(OUString("~Function"));
     if ( pData->nTestFlags & DBG_TEST_XTOR_FUNC )
         maXtorFunc.Check( sal_True );
     maXtorFunc.SetPosSizePixel( LogicToPixel( Point( 75, 15 ), aAppMap ),
@@ -704,7 +704,7 @@ DbgDialog::DbgDialog() :
 
     {
     maXtorExit.Show();
-    maXtorExit.SetText("E~xit");
+    maXtorExit.SetText(OUString("E~xit"));
     if ( pData->nTestFlags & DBG_TEST_XTOR_EXIT )
         maXtorExit.Check( sal_True );
     maXtorExit.SetPosSizePixel( LogicToPixel( Point( 140, 15 ), aAppMap ),
@@ -713,7 +713,7 @@ DbgDialog::DbgDialog() :
 
     {
     maXtorReport.Show();
-    maXtorReport.SetText("~Report");
+    maXtorReport.SetText(OUString("~Report"));
     if ( pData->nTestFlags & DBG_TEST_XTOR_REPORT )
         maXtorReport.Check( sal_True );
     maXtorReport.SetPosSizePixel( LogicToPixel( Point( 205, 15 ), aAppMap ),
@@ -722,7 +722,7 @@ DbgDialog::DbgDialog() :
 
     {
     maXtorTrace.Show();
-    maXtorTrace.SetText("~Trace");
+    maXtorTrace.SetText(OUString("~Trace"));
     if ( pData->nTestFlags & DBG_TEST_XTOR_TRACE )
         maXtorTrace.Check( sal_True );
     maXtorTrace.SetPosSizePixel( LogicToPixel( Point( 270, 15 ), aAppMap ),
@@ -731,14 +731,14 @@ DbgDialog::DbgDialog() :
 
     {
     maBox1.Show();
-    maBox1.SetText("Object Tests");
+    maBox1.SetText(OUString("Object Tests"));
     maBox1.SetPosSizePixel( LogicToPixel( Point( 5, 5 ), aAppMap ),
                             LogicToPixel( Size( 330, 30 ), aAppMap ) );
     }
 
     {
     maProf.Show();
-    maProf.SetText("~Profiling");
+    maProf.SetText(OUString("~Profiling"));
     if ( pData->nTestFlags & DBG_TEST_PROFILING )
         maProf.Check( sal_True );
     maProf.SetPosSizePixel( LogicToPixel( Point( 10, 95 ), aAppMap ),
@@ -747,7 +747,7 @@ DbgDialog::DbgDialog() :
 
     {
     maRes.Show();
-    maRes.SetText("~Resourcen");
+    maRes.SetText(OUString("~Resourcen"));
     if ( pData->nTestFlags & DBG_TEST_RESOURCE )
         maRes.Check( sal_True );
     maRes.SetPosSizePixel( LogicToPixel( Point( 75, 95 ), aAppMap ),
@@ -756,7 +756,7 @@ DbgDialog::DbgDialog() :
 
     {
     maDialog.Show();
-    maDialog.SetText("~Dialog");
+    maDialog.SetText(OUString("~Dialog"));
     if ( pData->nTestFlags & DBG_TEST_DIALOG )
         maDialog.Check( sal_True );
     maDialog.SetPosSizePixel( LogicToPixel( Point( 140, 95 ), aAppMap ),
@@ -765,7 +765,7 @@ DbgDialog::DbgDialog() :
 
     {
     maBoldAppFont.Show();
-    maBoldAppFont.SetText("~Bold AppFont");
+    maBoldAppFont.SetText(OUString("~Bold AppFont"));
     if ( pData->nTestFlags & DBG_TEST_BOLDAPPFONT )
         maBoldAppFont.Check( sal_True );
     maBoldAppFont.SetPosSizePixel( LogicToPixel( Point( 205, 95 ), aAppMap ),
@@ -775,7 +775,7 @@ DbgDialog::DbgDialog() :
 
     {
     maBox3.Show();
-    maBox3.SetText("Test Options");
+    maBox3.SetText(OUString("Test Options"));
     maBox3.SetPosSizePixel( LogicToPixel( Point( 5, 85 ), aAppMap ),
                             LogicToPixel( Size( 330, 30 ), aAppMap ) );
     }
@@ -790,7 +790,7 @@ DbgDialog::DbgDialog() :
 
     {
     maOverwrite.Show();
-    maOverwrite.SetText("Overwrite ~File");
+    maOverwrite.SetText(OUString("Overwrite ~File"));
     if ( pData->bOverwrite )
         maOverwrite.Check( sal_True );
     maOverwrite.SetPosSizePixel( LogicToPixel( Point( 205, 130 ), aAppMap ),
@@ -799,7 +799,7 @@ DbgDialog::DbgDialog() :
 
     {
     maHookOSLBox.Show();
-    maHookOSLBox.SetText("Reroute osl debug ~messages");
+    maHookOSLBox.SetText(OUString("Reroute osl debug ~messages"));
     if ( pData->bHookOSLAssert )
         maHookOSLBox.Check( sal_True );
     maHookOSLBox.SetPosSizePixel( LogicToPixel( Point( 10, 240 ), aAppMap ),
@@ -808,7 +808,7 @@ DbgDialog::DbgDialog() :
 
     {
     maInclClassText.Show();
-    maInclClassText.SetText("~Include-ObjectTest-Filter");
+    maInclClassText.SetText(OUString("~Include-ObjectTest-Filter"));
     maInclClassText.SetPosSizePixel( LogicToPixel( Point( 10, 150 ), aAppMap ),
                                      LogicToPixel( Size( 95, 9 ), aAppMap ) );
     }
@@ -823,7 +823,7 @@ DbgDialog::DbgDialog() :
 
     {
     maExclClassText.Show();
-    maExclClassText.SetText("~Exclude-ObjectTest-Filter");
+    maExclClassText.SetText(OUString("~Exclude-ObjectTest-Filter"));
     maExclClassText.SetPosSizePixel( LogicToPixel( Point( 115, 150 ), aAppMap ),
                                      LogicToPixel( Size( 95, 9 ), aAppMap ) );
     }
@@ -838,7 +838,7 @@ DbgDialog::DbgDialog() :
 
     {
     maInclText.Show();
-    maInclText.SetText("~Include-Filter");
+    maInclText.SetText(OUString("~Include-Filter"));
     maInclText.SetPosSizePixel( LogicToPixel( Point( 10, 180 ), aAppMap ),
                                 LogicToPixel( Size( 95, 9 ), aAppMap ) );
     }
@@ -853,7 +853,7 @@ DbgDialog::DbgDialog() :
 
     {
     maExclText.Show();
-    maExclText.SetText("~Exclude-Filter");
+    maExclText.SetText(OUString("~Exclude-Filter"));
     maExclText.SetPosSizePixel( LogicToPixel( Point( 115, 180 ), aAppMap ),
                                 LogicToPixel( Size( 95, 9 ), aAppMap ) );
     }
@@ -868,7 +868,7 @@ DbgDialog::DbgDialog() :
 
     {
     maTraceText.Show();
-    maTraceText.SetText("~Trace");
+    maTraceText.SetText(OUString("~Trace"));
     maTraceText.SetPosSizePixel( LogicToPixel( Point( 10, 210 ), aAppMap ),
                                  LogicToPixel( Size( 95, 9 ), aAppMap ) );
     }
@@ -891,7 +891,7 @@ DbgDialog::DbgDialog() :
 
     {
     maWarningText.Show();
-    maWarningText.SetText("~Warning");
+    maWarningText.SetText(OUString("~Warning"));
     maWarningText.SetPosSizePixel( LogicToPixel( Point( 115, 210 ), aAppMap ),
                                    LogicToPixel( Size( 95, 9 ), aAppMap ) );
     }
@@ -914,7 +914,7 @@ DbgDialog::DbgDialog() :
 
     {
     maErrorText.Show();
-    maErrorText.SetText( "~Error");
+    maErrorText.SetText( OUString("~Error"));
     maErrorText.SetPosSizePixel( LogicToPixel( Point( 220, 210 ), aAppMap ),
                                  LogicToPixel( Size( 95, 9 ), aAppMap ) );
     }
@@ -943,7 +943,7 @@ DbgDialog::DbgDialog() :
 
     {
     maBox4.Show();
-    maBox4.SetText( "Output" );
+    maBox4.SetText( OUString("Output") );
     maBox4.SetPosSizePixel( LogicToPixel( Point( 5, 120 ), aAppMap ),
                             LogicToPixel( Size( 330, 135 ), aAppMap ) );
     }
@@ -962,7 +962,7 @@ DbgDialog::DbgDialog() :
     {
     maInfoButton.Show();
     maInfoButton.SetClickHdl( LINK( this, DbgDialog, ClickHdl ) );
-    maInfoButton.SetText( "~Info..." );
+    maInfoButton.SetText( OUString("~Info...") );
     maInfoButton.SetPosSizePixel( LogicToPixel( Point( 130, 260 ), aAppMap ),
                                   LogicToPixel( Size( 50, 15 ), aAppMap ) );
     }
@@ -973,7 +973,7 @@ DbgDialog::DbgDialog() :
     }
 
     {
-    SetText( "VCL Debug Options" );
+        SetText( OUString("VCL Debug Options") );
     SetOutputSizePixel( LogicToPixel( Size( 340, 280 ), aAppMap ) );
     }
 }
@@ -1080,7 +1080,7 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
         aDbgInfoBuf[0] = '\0';
         DbgXtorInfo( aDbgInfoBuf );
         XubString aInfoText( aDbgInfoBuf, RTL_TEXTENCODING_UTF8 );
-        aInfoDialog.SetText( "Debug InfoReport" );
+        aInfoDialog.SetText( OUString("Debug InfoReport") );
         aInfoDialog.SetInfoText( aInfoText );
         aInfoDialog.Execute();
     }
@@ -1102,7 +1102,7 @@ void DbgDialog::RequestHelp( const HelpEvent& rHEvt )
             aHelpText.AppendAscii( *pHelpStrs );
             pHelpStrs++;
         }
-        aInfoDialog.SetText( "Debug Hilfe" );
+        aInfoDialog.SetText( OUString("Debug Hilfe") );
         aInfoDialog.SetInfoText( aHelpText );
         aInfoDialog.Execute();
     }
