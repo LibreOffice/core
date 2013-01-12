@@ -306,9 +306,9 @@ ReadState XBMReader::ReadXBM( Graphic& rGraphic )
                     {
                         XBMFormat eFormat = XBM10;
 
-                        if (aLine.indexOfL(RTL_CONSTASCII_STRINGPARAM("short")) != -1)
+                        if (aLine.indexOf("short") != -1)
                             eFormat = XBM10;
-                        else if (aLine.indexOfL(RTL_CONSTASCII_STRINGPARAM("char")) != -1)
+                        else if (aLine.indexOf("char") != -1)
                             eFormat = XBM11;
                         else
                             bStatus = sal_False;

@@ -61,7 +61,7 @@ static sal_Bool ImpIsTreeAvailable( Reference< XMultiServiceFactory >& rXCfgProv
 
         // creation arguments: nodepath
         PropertyValue aPathArgument;
-        aPathArgument.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
+        aPathArgument.Name = OUString( "nodepath" );
         aPathArgument.Value = aAny;
 
         Sequence< Any > aArguments( 1 );
@@ -71,7 +71,7 @@ static sal_Bool ImpIsTreeAvailable( Reference< XMultiServiceFactory >& rXCfgProv
         try
         {
             xReadAccess = rXCfgProv->createInstanceWithArguments(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationAccess" ) ),
+                OUString( "com.sun.star.configuration.ConfigurationAccess" ),
                     aArguments );
         }
         catch (const ::com::sun::star::uno::Exception&)
@@ -119,23 +119,21 @@ void FilterConfigItem::ImpInitTree( const String& rSubTree )
 
     Reference< XMultiServiceFactory > xCfgProv = theDefaultProvider::get( xContext );
 
-    OUString sTree(
-        OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.")) +
-        rSubTree);
+    OUString sTree(OUString("/org.openoffice.") + rSubTree);
     if ( ImpIsTreeAvailable(xCfgProv, sTree) )
     {
         Any aAny;
         // creation arguments: nodepath
         PropertyValue aPathArgument;
         aAny <<= sTree;
-        aPathArgument.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
+        aPathArgument.Name = OUString( "nodepath" );
         aPathArgument.Value = aAny;
 
         // creation arguments: commit mode
         PropertyValue aModeArgument;
         sal_Bool bAsyncron = sal_True;
         aAny <<= bAsyncron;
-        aModeArgument.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "lazywrite" ) );
+        aModeArgument.Name = OUString( "lazywrite" );
         aModeArgument.Value = aAny;
 
         Sequence< Any > aArguments( 2 );
@@ -145,7 +143,7 @@ void FilterConfigItem::ImpInitTree( const String& rSubTree )
         try
         {
             xUpdatableView = xCfgProv->createInstanceWithArguments(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationUpdateAccess" ) ),
+                OUString( "com.sun.star.configuration.ConfigurationUpdateAccess" ),
                     aArguments );
             if ( xUpdatableView.is() )
                 xPropSet = Reference< XPropertySet >( xUpdatableView, UNO_QUERY );
@@ -422,7 +420,7 @@ Sequence< PropertyValue > FilterConfigItem::GetFilterData() const
 Reference< XStatusIndicator > FilterConfigItem::GetStatusIndicator() const
 {
     Reference< XStatusIndicator > xStatusIndicator;
-    const rtl::OUString sStatusIndicator( RTL_CONSTASCII_USTRINGPARAM( "StatusIndicator" ) );
+    const rtl::OUString sStatusIndicator( "StatusIndicator" );
 
     sal_Int32 i, nCount = aFilterData.getLength();
     for ( i = 0; i < nCount; i++ )

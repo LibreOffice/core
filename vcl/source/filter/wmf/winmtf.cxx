@@ -275,12 +275,10 @@ void WinMtfAssertHandler( const sal_Char* pAction, sal_uInt32 nFlags )
     {
         if ( ( nAssertCount == 0 ) || ( bOnlyOnce == sal_False ) )
         {
-            rtl::OStringBuffer aText(RTL_CONSTASCII_STRINGPARAM(
-                "WMF/EMF Import: "));
+            rtl::OStringBuffer aText("WMF/EMF Import: ");
             if (pAction)
                 aText.append(pAction);
-            aText.append(RTL_CONSTASCII_STRINGPARAM(
-                " needs to be implemented"));
+            aText.append(" needs to be implemented");
             DBG_ASSERT( 0, aText.getStr() );
         }
         nAssertCount++;
@@ -911,7 +909,7 @@ WinMtfOutput::WinMtfOutput( GDIMetaFile& rGDIMetaFile ) :
                                                                             // this is necessary to be able to support
                                                                             // SetClipRgn( NULL ) and similar ClipRgn actions (SJ)
 
-    maFont.SetName( String( RTL_CONSTASCII_USTRINGPARAM( "Arial" )) );  // sj: #i57205#, we do have some scaling problems if using
+    maFont.SetName( "Arial" );  // sj: #i57205#, we do have some scaling problems if using
     maFont.SetCharSet( RTL_TEXTENCODING_MS_1252 );                      // the default font then most times a x11 font is used, we
     maFont.SetHeight( 423 );                                                // will prevent this defining a font
 

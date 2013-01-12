@@ -1614,8 +1614,8 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             break;
 
             default:
-                OSL_FAIL(rtl::OStringBuffer(RTL_CONSTASCII_STRINGPARAM(
-                    "EMFWriter::ImplWriteActions: unsupported MetaAction #" )).
+                OSL_FAIL(rtl::OStringBuffer(
+                    "EMFWriter::ImplWriteActions: unsupported MetaAction #" ).
                      append(static_cast<sal_Int32>(nType)).getStr());
             break;
         }

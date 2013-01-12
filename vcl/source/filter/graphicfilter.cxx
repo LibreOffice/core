@@ -146,7 +146,7 @@ static void KillDirEntry( const String& rMainUrl )
                              ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
                              comphelper::getProcessComponentContext() );
 
-        aCnt.executeCommand( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" )),
+        aCnt.executeCommand( "delete",
                              ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
     }
     catch(const ::com::sun::star::ucb::CommandAbortedException&)
@@ -833,9 +833,9 @@ sal_uInt16 GraphicFilter::ImpTestOrFindFormat( const String& rPath, SvStream& rS
                 nBase = 1;
             else if ( pConfig->GetImportFilterType( rFormat ).EqualsIgnoreCaseAscii( "pcd_Photo_CD_Base16" ) )
                 nBase = 0;
-            String aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Import/PCD" ) );
+            String aFilterConfigPath( "Office.Common/Filter/Graphic/Import/PCD" );
             FilterConfigItem aFilterConfigItem( aFilterConfigPath );
-            aFilterConfigItem.WriteInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Resolution" ) ), nBase );
+            aFilterConfigItem.WriteInt32( "Resolution", nBase );
         }
     }
 
@@ -852,12 +852,12 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
 
     ResMgr*     pResMgr = ResMgr::CreateResMgr( "svt", Application::GetSettings().GetUILanguageTag().getLocale() );
 
-    sal_Int32 nLogicalWidth = rConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "LogicalWidth" ) ), 0 );
-    sal_Int32 nLogicalHeight = rConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "LogicalHeight" ) ), 0 );
+    sal_Int32 nLogicalWidth = rConfigItem.ReadInt32( "LogicalWidth", 0 );
+    sal_Int32 nLogicalHeight = rConfigItem.ReadInt32( "LogicalHeight", 0 );
 
     if ( rGraphic.GetType() != GRAPHIC_NONE )
     {
-        sal_Int32 nMode = rConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "ExportMode" ) ), -1 );
+        sal_Int32 nMode = rConfigItem.ReadInt32( "ExportMode", -1 );
 
         if ( nMode == -1 )  // the property is not there, this is possible, if the graphic filter
         {                   // is called via UnoGraphicExporter and not from a graphic export Dialog
@@ -887,7 +887,7 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
                 Bitmap      aBitmap( rGraphic.GetBitmap() );
                 MapMode     aMap( MAP_100TH_INCH );
 
-                sal_Int32   nDPI = rConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Resolution" ) ), 75 );
+                sal_Int32   nDPI = rConfigItem.ReadInt32( "Resolution", 75 );
                 Fraction    aFrac( 1, Min( Max( nDPI, sal_Int32( 75 ) ), sal_Int32( 600 ) ) );
 
                 aMap.SetScaleX( aFrac );
@@ -909,7 +909,7 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
             else
                 aGraphic = rGraphic;
 
-            sal_Int32 nColors = rConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Color" ) ), 0 ); // #92767#
+            sal_Int32 nColors = rConfigItem.ReadInt32( "Color", 0 ); // #92767#
             if ( nColors )  // graphic conversion necessary ?
             {
                 BitmapEx aBmpEx( aGraphic.GetBitmapEx() );
@@ -1192,7 +1192,7 @@ void GraphicFilter::ImplInit()
 
     if( bUseConfig )
     {
-        rtl::OUString url(RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program"));
+        rtl::OUString url("$BRAND_BASE_DIR/program");
         rtl::Bootstrap::expandMacros(url); //TODO: detect failure
         utl::LocalFileHelper::ConvertURLToPhysicalName(url, aFilterPath);
     }
@@ -1782,7 +1782,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath,
                     aShortName = GetImportFormatShortName( nFormat ).ToUpperAscii();
                     if ( ( pFilterConfigItem == NULL ) && aShortName.EqualsAscii( "PCD" ) )
                     {
-                        String aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Import/PCD" ) );
+                        String aFilterConfigPath( "Office.Common/Filter/Graphic/Import/PCD" );
                         pFilterConfigItem = new FilterConfigItem( aFilterConfigPath );
                     }
                 }
@@ -2001,15 +2001,15 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
             if( aFilterName.EqualsIgnoreCaseAscii( EXP_BMP ) )
             {
                 Bitmap aBmp( aGraphic.GetBitmap() );
-                sal_Int32 nColorRes = aConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Colors" ) ), 0 );
+                sal_Int32 nColorRes = aConfigItem.ReadInt32( "Colors", 0 );
                 if ( nColorRes && ( nColorRes <= (sal_uInt16)BMP_CONVERSION_24BIT) )
                 {
                     if( !aBmp.Convert( (BmpConversion) nColorRes ) )
                         aBmp = aGraphic.GetBitmap();
                 }
                 ResMgr*     pResMgr = CREATERESMGR( svt );
-                sal_Bool    bRleCoding = aConfigItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "RLE_Coding" ) ), sal_True );
-                // Wollen wir RLE-Kodiert speichern?
+                sal_Bool    bRleCoding = aConfigItem.ReadBool( "RLE_Coding", sal_True );
+                // save RLE encoded?
                 aBmp.Write( rOStm, bRleCoding );
                 delete pResMgr;
 
@@ -2018,7 +2018,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
             }
             else if( aFilterName.EqualsIgnoreCaseAscii( EXP_SVMETAFILE ) )
             {
-                sal_Int32 nVersion = aConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Version" ) ), 0 ) ;
+                sal_Int32 nVersion = aConfigItem.ReadInt32( "Version", 0 ) ;
                 if ( nVersion )
                     rOStm.SetVersion( nVersion );
                 GDIMetaFile aMTF;
@@ -2185,7 +2185,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
                                 xml::sax::Writer::create( xContext ), uno::UNO_QUERY_THROW);
 
                             ::com::sun::star::uno::Reference< ::com::sun::star::svg::XSVGWriter > xSVGWriter( xMgr->createInstance(
-                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.svg.SVGWriter" )) ), ::com::sun::star::uno::UNO_QUERY );
+                                OUString( "com.sun.star.svg.SVGWriter" ) ), ::com::sun::star::uno::UNO_QUERY );
 
                             if( xSaxWriter.is() && xSVGWriter.is() )
                             {

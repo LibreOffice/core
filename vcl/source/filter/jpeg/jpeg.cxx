@@ -593,8 +593,8 @@ JPEGWriter::JPEGWriter( SvStream& rStm, const uno::Sequence< beans::PropertyValu
         pExpWasGrey ( pExportWasGrey )
 {
     FilterConfigItem aConfigItem( (uno::Sequence< beans::PropertyValue >*)pFilterData );
-    bGreys = aConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "ColorMode" ) ), 0 ) != 0;
-    nQuality = aConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Quality" ) ), 75 );
+    bGreys = aConfigItem.ReadInt32( "ColorMode", 0 ) != 0;
+    nQuality = aConfigItem.ReadInt32( "Quality", 75 );
 
     if ( pFilterData )
     {

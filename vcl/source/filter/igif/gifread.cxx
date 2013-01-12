@@ -271,7 +271,7 @@ sal_Bool GIFReader::ReadExtension()
                         rIStm >> cSize;
 
                         // NetScape-Extension
-                        if( aAppId.equalsL(RTL_CONSTASCII_STRINGPARAM("NETSCAPE")) && aAppCode.equalsL(RTL_CONSTASCII_STRINGPARAM("2.0")) && cSize == 3 )
+                        if( aAppId == "NETSCAPE" && aAppCode == "2.0" && cSize == 3 )
                         {
                             rIStm >> cByte;
 
@@ -298,7 +298,7 @@ sal_Bool GIFReader::ReadExtension()
                             else
                                 rIStm.SeekRel( -1 );
                         }
-                        else if ( aAppId.equalsL(RTL_CONSTASCII_STRINGPARAM("STARDIV ")) && aAppCode.equalsL(RTL_CONSTASCII_STRINGPARAM("5.0")) && cSize == 9 )
+                        else if ( aAppId == "STARDIV " && aAppCode == "5.0" && cSize == 9 )
                         {
                             rIStm >> cByte;
 
