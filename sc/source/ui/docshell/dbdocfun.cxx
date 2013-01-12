@@ -1174,9 +1174,9 @@ sal_Bool ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
     return bRet;
 }
 
-//==================================================================
+namespace {
 
-static sal_Bool lcl_EmptyExcept( ScDocument* pDoc, const ScRange& rRange, const ScRange& rExcept )
+bool lcl_EmptyExcept( ScDocument* pDoc, const ScRange& rRange, const ScRange& rExcept )
 {
     ScCellIterator aIter( pDoc, rRange );
     ScBaseCell* pCell = aIter.GetFirst();
@@ -1190,7 +1190,37 @@ static sal_Bool lcl_EmptyExcept( ScDocument* pDoc, const ScRange& rRange, const 
         pCell = aIter.GetNext();
     }
 
-    return sal_True;        // nothing found - empty
+    return true;        // nothing found - empty
+}
+
+bool isEditable(ScDocShell& rDocShell, const ScRangeList& rRanges, bool bApi)
+{
+    ScDocument* pDoc = rDocShell.GetDocument();
+    if (!rDocShell.IsEditable() || pDoc->GetChangeTrack())
+    {
+        //  not recorded -> disallow
+        if (!bApi)
+            rDocShell.ErrorMessage(STR_PROTECTIONERR);
+
+        return false;
+    }
+
+    for (size_t i = 0, n = rRanges.size(); i < n; ++i)
+    {
+        const ScRange* p = rRanges[i];
+        ScEditableTester aTester(pDoc, *p);
+        if (!aTester.IsEditable())
+        {
+            if (!bApi)
+                rDocShell.ErrorMessage(aTester.GetMessageId());
+
+            return false;
+        }
+    }
+
+    return true;
+}
+
 }
 
 bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewObj,
@@ -1231,31 +1261,12 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
     ScDocument* pDoc = rDocShell.GetDocument();
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = false;
-    if ( !rDocShell.IsEditable() || pDoc->GetChangeTrack() )
-    {
-        //  not recorded -> disallow
-        //! different error messages?
 
-        nErrId = STR_PROTECTIONERR;
-    }
-    if (!nErrId)
-    {
-        ScRange aOldOut = pOldObj->GetOutRange();
-        ScEditableTester aTester( pDoc, aOldOut );
-        if ( !aTester.IsEditable() )
-            nErrId = aTester.GetMessageId();
-    }
-    if (!nErrId)
-    {
-        //  at least one cell at the output position must be editable
-        //  -> check in advance
-        //  (start of output range in pNewObj is valid)
-
-        ScRange aNewStart( pNewObj->GetOutRange().aStart );
-        ScEditableTester aTester( pDoc, aNewStart );
-        if ( !aTester.IsEditable() )
-            nErrId = aTester.GetMessageId();
-    }
+    ScRangeList aRanges;
+    aRanges.Append(pOldObj->GetOutRange());
+    aRanges.Append(pNewObj->GetOutRange().aStart); // at least one cell in the output position must be editable.
+    if (!isEditable(rDocShell, aRanges, bApi))
+        return false;
 
     ScDPObject* pDestObj = NULL;
     if ( !nErrId )
@@ -1411,25 +1422,9 @@ bool ScDBDocFunc::RemovePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
     ScDocument* pDoc = rDocShell.GetDocument();
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = false;
-    if ( !rDocShell.IsEditable() || pDoc->GetChangeTrack() )
-    {
-        //  not recorded -> disallow
-        if (!bApi)
-            rDocShell.ErrorMessage(STR_PROTECTIONERR);
 
+    if (!isEditable(rDocShell, rDPObj.GetOutRange(), bApi))
         return false;
-    }
-
-    {
-        ScEditableTester aTester(pDoc, rDPObj.GetOutRange());
-        if (!aTester.IsEditable())
-        {
-            if (!bApi)
-                rDocShell.ErrorMessage(aTester.GetMessageId());
-
-            return false;
-        }
-    }
 
     //  delete table
 
@@ -1481,28 +1476,9 @@ bool ScDBDocFunc::CreatePivotTable(const ScDPObject& rDPObj, bool bRecord, bool 
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = false;
 
-    if (!rDocShell.IsEditable() || pDoc->GetChangeTrack())
-    {
-        //  not recorded -> disallow
-        if (!bApi)
-            rDocShell.ErrorMessage(STR_PROTECTIONERR);
-
+    // At least one cell in the output range should be editable. Check in advance.
+    if (!isEditable(rDocShell, ScRange(rDPObj.GetOutRange().aStart), bApi))
         return false;
-    }
-
-    {
-        //  at least one cell at the output position must be editable
-        //  -> check in advance
-        //  (start of output range in pNewObj is valid)
-        ScEditableTester aTester(pDoc, rDPObj.GetOutRange().aStart);
-        if (!aTester.IsEditable())
-        {
-            if (!bApi)
-                rDocShell.ErrorMessage(aTester.GetMessageId());
-
-            return false;
-        }
-    }
 
     //  output range must be set at pNewObj
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -1613,26 +1589,8 @@ bool ScDBDocFunc::UpdatePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = false;
 
-    if (!rDocShell.IsEditable() || pDoc->GetChangeTrack())
-    {
-        //  not recorded -> disallow
-        //! different error messages?
-        if (!bApi)
-            rDocShell.ErrorMessage(STR_PROTECTIONERR);
-
+    if (!isEditable(rDocShell, rDPObj.GetOutRange(), bApi))
         return false;
-    }
-
-    {
-        ScEditableTester aTester(pDoc, rDPObj.GetOutRange());
-        if (!aTester.IsEditable())
-        {
-            if (!bApi)
-                rDocShell.ErrorMessage(aTester.GetMessageId());
-
-            return false;
-        }
-    }
 
     if (bRecord)
     {
