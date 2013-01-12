@@ -431,30 +431,20 @@ void ScDocShell::UpdatePendingRowHeights( SCTAB nUpdateTab, bool bBefore )
 
 void ScDocShell::RefreshPivotTables( const ScRange& rSource )
 {
-    //! rename to RefreshDataPilotTables?
-
     ScDPCollection* pColl = aDocument.GetDPCollection();
-    if ( pColl )
-    {
-        //  DataPilotUpdate doesn't modify the collection order like PivotUpdate did,
-        //  so a simple loop can be used.
+    if (!pColl)
+        return;
 
-        sal_uInt16 nCount = pColl->GetCount();
-        for ( sal_uInt16 i=0; i<nCount; i++ )
-        {
-            ScDPObject* pOld = (*pColl)[i];
-            if ( pOld )
-            {
-                const ScSheetSourceDesc* pSheetDesc = pOld->GetSheetDesc();
-                if ( pSheetDesc && pSheetDesc->GetSourceRange().Intersects( rSource ) )
-                {
-                    ScDPObject* pNew = new ScDPObject( *pOld );
-                    ScDBDocFunc aFunc( *this );
-                    aFunc.DataPilotUpdate( pOld, pNew, sal_True, false );
-                    delete pNew;    // DataPilotUpdate copies settings from "new" object
-                }
-            }
-        }
+    ScDBDocFunc aFunc(*this);
+    for (size_t i = 0, n = pColl->GetCount(); i < n; ++i)
+    {
+        ScDPObject* pOld = (*pColl)[i];
+        if (!pOld)
+            continue;
+
+        const ScSheetSourceDesc* pSheetDesc = pOld->GetSheetDesc();
+        if (pSheetDesc && pSheetDesc->GetSourceRange().Intersects(rSource))
+            aFunc.UpdatePivotTable(*pOld, true, false);
     }
 }
 
