@@ -884,7 +884,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
 
         FieldUnit eUnit = detectMetricUnit(sUnit);
 
-        WinBits nBits = WB_RIGHT|WB_BORDER|WB_3DLOOK;
+        WinBits nBits = WB_LEFT|WB_BORDER|WB_3DLOOK;
         if (!id.endsWith("-nospin"))
             nBits |= WB_SPIN;
 

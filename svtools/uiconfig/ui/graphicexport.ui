@@ -37,11 +37,9 @@
             <child>
               <object class="GtkButton" id="help">
                 <property name="label">gtk-help</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -53,13 +51,11 @@
             <child>
               <object class="GtkButton" id="ok">
                 <property name="label">gtk-ok</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -71,11 +67,9 @@
             <child>
               <object class="GtkButton" id="cancel">
                 <property name="label">gtk-cancel</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -161,6 +155,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="invisible_char">●</property>
+                            <property name="xalign">1</property>
                             <property name="adjustment">adjustment3</property>
                             <property name="digits">2</property>
                           </object>
@@ -176,6 +171,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="invisible_char">●</property>
+                            <property name="xalign">1</property>
                             <property name="invisible_char_set">True</property>
                             <property name="adjustment">adjustment3</property>
                             <property name="digits">2</property>
@@ -192,6 +188,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="invisible_char">●</property>
+                            <property name="xalign">1</property>
                             <property name="invisible_char_set">True</property>
                             <property name="adjustment">adjustment3</property>
                           </object>
@@ -336,6 +333,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="invisible_char">●</property>
+                            <property name="xalign">1</property>
                             <property name="invisible_char_set">True</property>
                             <property name="adjustment">adjustment1</property>
                           </object>
@@ -403,6 +401,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="invisible_char">●</property>
+                            <property name="xalign">1</property>
                             <property name="invisible_char_set">True</property>
                             <property name="adjustment">adjustment2</property>
                           </object>
@@ -490,11 +489,9 @@
                     <child>
                       <object class="GtkCheckButton" id="rlecb">
                         <property name="label" translatable="yes">RLE Encoding</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
@@ -532,11 +529,9 @@
                     <child>
                       <object class="GtkCheckButton" id="interlacedcb">
                         <property name="label" translatable="yes">Interlaced</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
@@ -574,11 +569,9 @@
                     <child>
                       <object class="GtkCheckButton" id="savetransparencycb">
                         <property name="label" translatable="yes">Save transparency</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
@@ -620,11 +613,9 @@
                         <child>
                           <object class="GtkRadioButton" id="binarycb">
                             <property name="label" translatable="yes">Binary</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">textcb</property>
@@ -639,11 +630,9 @@
                         <child>
                           <object class="GtkRadioButton" id="textcb">
                             <property name="label" translatable="yes">Text</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
@@ -698,11 +687,9 @@
                             <child>
                               <object class="GtkCheckButton" id="tiffpreviewcb">
                                 <property name="label" translatable="yes">Image Preview (TIFF)</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="xalign">0</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
@@ -717,11 +704,9 @@
                             <child>
                               <object class="GtkCheckButton" id="epsipreviewcb">
                                 <property name="label" translatable="yes">Interchange (EPSI)</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                               </object>
@@ -772,11 +757,9 @@
                             <child>
                               <object class="GtkRadioButton" id="color1rb">
                                 <property name="label" translatable="yes">Color</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">color2rb</property>
@@ -791,11 +774,9 @@
                             <child>
                               <object class="GtkRadioButton" id="color2rb">
                                 <property name="label" translatable="yes">Grayscale</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="xalign">0</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
@@ -848,11 +829,9 @@
                             <child>
                               <object class="GtkRadioButton" id="level1rb">
                                 <property name="label" translatable="yes">Level 1</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">level2rb</property>
@@ -867,11 +846,9 @@
                             <child>
                               <object class="GtkRadioButton" id="level2rb">
                                 <property name="label" translatable="yes">Level 2</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="xalign">0.059999998658895493</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
@@ -924,11 +901,9 @@
                             <child>
                               <object class="GtkRadioButton" id="compresslzw">
                                 <property name="label" translatable="yes">LZW encoding</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">compressnone</property>
@@ -943,11 +918,9 @@
                             <child>
                               <object class="GtkRadioButton" id="compressnone">
                                 <property name="label" translatable="yes">None</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="xalign">0</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
