@@ -1411,6 +1411,9 @@ bool ScDBDocFunc::RemovePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
     ScDocShellModificator aModificator(rDocShell);
     WaitObject aWait(rDocShell.GetActiveDialogParent());
 
+    if (!isEditable(rDocShell, rDPObj.GetOutRange(), bApi))
+        return false;
+
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr<ScDocument> pOldUndoDoc;
     std::auto_ptr<ScDPObject> pUndoDPObj;
@@ -1422,9 +1425,6 @@ bool ScDBDocFunc::RemovePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
     ScDocument* pDoc = rDocShell.GetDocument();
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = false;
-
-    if (!isEditable(rDocShell, rDPObj.GetOutRange(), bApi))
-        return false;
 
     //  delete table
 
@@ -1468,6 +1468,10 @@ bool ScDBDocFunc::CreatePivotTable(const ScDPObject& rDPObj, bool bRecord, bool 
     ScDocShellModificator aModificator(rDocShell);
     WaitObject aWait(rDocShell.GetActiveDialogParent());
 
+    // At least one cell in the output range should be editable. Check in advance.
+    if (!isEditable(rDocShell, ScRange(rDPObj.GetOutRange().aStart), bApi))
+        return false;
+
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr<ScDocument> pNewUndoDoc;
     SAL_WNODEPRECATED_DECLARATIONS_POP
@@ -1475,10 +1479,6 @@ bool ScDBDocFunc::CreatePivotTable(const ScDPObject& rDPObj, bool bRecord, bool 
     ScDocument* pDoc = rDocShell.GetDocument();
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = false;
-
-    // At least one cell in the output range should be editable. Check in advance.
-    if (!isEditable(rDocShell, ScRange(rDPObj.GetOutRange().aStart), bApi))
-        return false;
 
     //  output range must be set at pNewObj
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -1578,6 +1578,9 @@ bool ScDBDocFunc::UpdatePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
     ScDocShellModificator aModificator( rDocShell );
     WaitObject aWait( rDocShell.GetActiveDialogParent() );
 
+    if (!isEditable(rDocShell, rDPObj.GetOutRange(), bApi))
+        return false;
+
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr<ScDocument> pOldUndoDoc;
     std::auto_ptr<ScDocument> pNewUndoDoc;
@@ -1588,9 +1591,6 @@ bool ScDBDocFunc::UpdatePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
     ScDocument* pDoc = rDocShell.GetDocument();
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = false;
-
-    if (!isEditable(rDocShell, rDPObj.GetOutRange(), bApi))
-        return false;
 
     if (bRecord)
     {
