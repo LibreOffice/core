@@ -1238,14 +1238,14 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
 
         nErrId = STR_PROTECTIONERR;
     }
-    if ( pOldObj && !nErrId )
+    if (!nErrId)
     {
         ScRange aOldOut = pOldObj->GetOutRange();
         ScEditableTester aTester( pDoc, aOldOut );
         if ( !aTester.IsEditable() )
             nErrId = aTester.GetMessageId();
     }
-    if ( pNewObj && !nErrId )
+    if (!nErrId)
     {
         //  at least one cell at the output position must be editable
         //  -> check in advance
@@ -1260,171 +1260,101 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
     ScDPObject* pDestObj = NULL;
     if ( !nErrId )
     {
-        if ( pOldObj && !pNewObj )
+        if ( bRecord )
         {
-            //  delete table
-
             ScRange aRange = pOldObj->GetOutRange();
             SCTAB nTab = aRange.aStart.Tab();
-
-            if ( bRecord )
-            {
-                pOldUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-                pOldUndoDoc->InitUndo( pDoc, nTab, nTab );
-                pDoc->CopyToDocument( aRange, IDF_ALL, false, pOldUndoDoc );
-            }
-
-            pDoc->DeleteAreaTab( aRange.aStart.Col(), aRange.aStart.Row(),
-                                 aRange.aEnd.Col(),   aRange.aEnd.Row(),
-                                 nTab, IDF_ALL );
-            pDoc->RemoveFlagsTab( aRange.aStart.Col(), aRange.aStart.Row(),
-                                  aRange.aEnd.Col(),   aRange.aEnd.Row(),
-                                  nTab, SC_MF_AUTO );
-
-            pDoc->GetDPCollection()->FreeTable( pOldObj );  // object is deleted here
-
-            rDocShell.PostPaintGridAll();   //! only necessary parts
-            rDocShell.PostPaint(aRange, PAINT_GRID);
-            bDone = true;
+            pOldUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+            pOldUndoDoc->InitUndo( pDoc, nTab, nTab );
+            pDoc->CopyToDocument( aRange, IDF_ALL, false, pOldUndoDoc );
         }
-        else if ( pNewObj )
+
+        pNewObj->WriteSourceDataTo( *pOldObj );     // copy source data
+
+        ScDPSaveData* pData = pNewObj->GetSaveData();
+        OSL_ENSURE( pData, "no SaveData from living DPObject" );
+        if ( pData )
+            pOldObj->SetSaveData( *pData );     // copy SaveData
+
+        pDestObj = pOldObj;
+        pDestObj->SetAllowMove(bAllowMove);
+        pDestObj->ReloadGroupTableData();
+        pDestObj->SyncAllDimensionMembers();
+        pDestObj->InvalidateData();             // before getting the new output area
+
+        //  make sure the table has a name (not set by dialog)
+        if (pDestObj->GetName().isEmpty())
+            pDestObj->SetName( pDoc->GetDPCollection()->CreateNewName() );
+
+        bool bOverflow = false;
+        ScRange aNewOut = pDestObj->GetNewOutputRange( bOverflow );
+
+        //! test for overlap with other data pilot tables
+        const ScSheetSourceDesc* pSheetDesc = pOldObj->GetSheetDesc();
+        if( pSheetDesc && pSheetDesc->GetSourceRange().Intersects( aNewOut ) )
         {
-            if ( pOldObj )
+            ScRange aOldRange = pOldObj->GetOutRange();
+            SCsROW nDiff = aOldRange.aStart.Row()-aNewOut.aStart.Row();
+            aNewOut.aStart.SetRow( aOldRange.aStart.Row() );
+            aNewOut.aEnd.SetRow( aNewOut.aEnd.Row()+nDiff );
+            if( !ValidRow( aNewOut.aStart.Row() ) || !ValidRow( aNewOut.aEnd.Row() ) )
+                bOverflow = sal_True;
+        }
+
+        if ( bOverflow )
+        {
+            //  like with STR_PROTECTIONERR, use undo to reverse everything
+            OSL_ENSURE( bRecord, "DataPilotUpdate: can't undo" );
+            bUndoSelf = true;
+            nErrId = STR_PIVOT_ERROR;
+        }
+        else
+        {
+            ScEditableTester aTester( pDoc, aNewOut );
+            if ( !aTester.IsEditable() )
             {
-                if ( bRecord )
-                {
-                    ScRange aRange = pOldObj->GetOutRange();
-                    SCTAB nTab = aRange.aStart.Tab();
-                    pOldUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-                    pOldUndoDoc->InitUndo( pDoc, nTab, nTab );
-                    pDoc->CopyToDocument( aRange, IDF_ALL, false, pOldUndoDoc );
-                }
+                //  destination area isn't editable
+                //! reverse everything done so far, don't proceed
 
-                if ( pNewObj == pOldObj )
-                {
-                    //  refresh only - no settings modified
-                }
-                else
-                {
-                    pNewObj->WriteSourceDataTo( *pOldObj );     // copy source data
-
-                    ScDPSaveData* pData = pNewObj->GetSaveData();
-                    OSL_ENSURE( pData, "no SaveData from living DPObject" );
-                    if ( pData )
-                        pOldObj->SetSaveData( *pData );     // copy SaveData
-                }
-
-                pDestObj = pOldObj;
-                pDestObj->SetAllowMove( bAllowMove );
+                //  quick solution: proceed to end, use undo action
+                //  to reverse everything:
+                OSL_ENSURE( bRecord, "DataPilotUpdate: can't undo" );
+                bUndoSelf = sal_True;
+                nErrId = aTester.GetMessageId();
             }
-            else
+        }
+
+        //  test if new output area is empty except for old area
+        if ( !bApi )
+        {
+            // OutRange of pOldObj (pDestObj) is still old area
+            bool bEmpty = lcl_EmptyExcept( pDoc, aNewOut, pOldObj->GetOutRange() );
+
+            if ( !bEmpty )
             {
-                //  output range must be set at pNewObj
-
-                pDestObj = new ScDPObject( *pNewObj );
-
-                // #i94570# When changing the output position in the dialog, a new table is created
-                // with the settings from the old table, including the name.
-                // So we have to check for duplicate names here (before inserting).
-                if ( pDoc->GetDPCollection()->GetByName(pDestObj->GetName()) )
-                    pDestObj->SetName( String() );      // ignore the invalid name, create a new name below
-
-                if ( !pDoc->GetDPCollection()->InsertNewTable(pDestObj) )
+                QueryBox aBox( rDocShell.GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
+                                 ScGlobal::GetRscString(STR_PIVOT_NOTEMPTY) );
+                if (aBox.Execute() == RET_NO)
                 {
-                    OSL_FAIL("cannot insert DPObject");
-                    DELETEZ( pDestObj );
-                }
-            }
-            if ( pDestObj )
-            {
-                pDestObj->ReloadGroupTableData();
-                pDestObj->SyncAllDimensionMembers();
-                pDestObj->InvalidateData();             // before getting the new output area
-
-                //  make sure the table has a name (not set by dialog)
-                if (pDestObj->GetName().isEmpty())
-                    pDestObj->SetName( pDoc->GetDPCollection()->CreateNewName() );
-
-                bool bOverflow = false;
-                ScRange aNewOut = pDestObj->GetNewOutputRange( bOverflow );
-
-                //! test for overlap with other data pilot tables
-                if( pOldObj )
-                {
-                    const ScSheetSourceDesc* pSheetDesc = pOldObj->GetSheetDesc();
-                    if( pSheetDesc && pSheetDesc->GetSourceRange().Intersects( aNewOut ) )
-                    {
-                        ScRange aOldRange = pOldObj->GetOutRange();
-                        SCsROW nDiff = aOldRange.aStart.Row()-aNewOut.aStart.Row();
-                        aNewOut.aStart.SetRow( aOldRange.aStart.Row() );
-                        aNewOut.aEnd.SetRow( aNewOut.aEnd.Row()+nDiff );
-                        if( !ValidRow( aNewOut.aStart.Row() ) || !ValidRow( aNewOut.aEnd.Row() ) )
-                            bOverflow = sal_True;
-                    }
-                }
-
-                if ( bOverflow )
-                {
-                    //  like with STR_PROTECTIONERR, use undo to reverse everything
+                    //! like above (not editable), use undo to reverse everything
                     OSL_ENSURE( bRecord, "DataPilotUpdate: can't undo" );
                     bUndoSelf = true;
-                    nErrId = STR_PIVOT_ERROR;
                 }
-                else
-                {
-                    ScEditableTester aTester( pDoc, aNewOut );
-                    if ( !aTester.IsEditable() )
-                    {
-                        //  destination area isn't editable
-                        //! reverse everything done so far, don't proceed
-
-                        //  quick solution: proceed to end, use undo action
-                        //  to reverse everything:
-                        OSL_ENSURE( bRecord, "DataPilotUpdate: can't undo" );
-                        bUndoSelf = sal_True;
-                        nErrId = aTester.GetMessageId();
-                    }
-                }
-
-                //  test if new output area is empty except for old area
-                if ( !bApi )
-                {
-                    bool bEmpty;
-                    if ( pOldObj )  // OutRange of pOldObj (pDestObj) is still old area
-                        bEmpty = lcl_EmptyExcept( pDoc, aNewOut, pOldObj->GetOutRange() );
-                    else
-                        bEmpty = pDoc->IsBlockEmpty( aNewOut.aStart.Tab(),
-                                            aNewOut.aStart.Col(), aNewOut.aStart.Row(),
-                                            aNewOut.aEnd.Col(), aNewOut.aEnd.Row() );
-
-                    if ( !bEmpty )
-                    {
-                        QueryBox aBox( rDocShell.GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
-                                         ScGlobal::GetRscString(STR_PIVOT_NOTEMPTY) );
-                        if (aBox.Execute() == RET_NO)
-                        {
-                            //! like above (not editable), use undo to reverse everything
-                            OSL_ENSURE( bRecord, "DataPilotUpdate: can't undo" );
-                            bUndoSelf = true;
-                        }
-                    }
-                }
-
-                if ( bRecord )
-                {
-                    SCTAB nTab = aNewOut.aStart.Tab();
-                    pNewUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-                    pNewUndoDoc->InitUndo( pDoc, nTab, nTab );
-                    pDoc->CopyToDocument( aNewOut, IDF_ALL, false, pNewUndoDoc );
-                }
-
-                pDestObj->Output( aNewOut.aStart );
-
-                rDocShell.PostPaintGridAll();           //! only necessary parts
-                bDone = true;
             }
         }
-        // else nothing (no old, no new)
+
+        if ( bRecord )
+        {
+            SCTAB nTab = aNewOut.aStart.Tab();
+            pNewUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+            pNewUndoDoc->InitUndo( pDoc, nTab, nTab );
+            pDoc->CopyToDocument( aNewOut, IDF_ALL, false, pNewUndoDoc );
+        }
+
+        pDestObj->Output( aNewOut.aStart );
+
+        rDocShell.PostPaintGridAll();           //! only necessary parts
+        bDone = true;
     }
 
     if ( bRecord && bDone )
@@ -1455,8 +1385,7 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
     if (bDone)
     {
         // notify API objects
-        if (pDestObj)
-            pDoc->BroadcastUno( ScDataPilotModifiedHint( pDestObj->GetName() ) );
+        pDoc->BroadcastUno( ScDataPilotModifiedHint( pDestObj->GetName() ) );
         aModificator.SetDocumentModified();
     }
 
