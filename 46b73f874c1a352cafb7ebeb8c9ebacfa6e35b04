@@ -104,6 +104,23 @@
     },
     {
       "key": {
+        "uuid": "AAAATH////I\u003d",
+        "filename": "svtools/source/dialogs/filedlg2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1000025
+      },
+      "writtenOn": "2013-01-12T18:38:50Z",
+      "side": 1,
+      "message": "and it should be compareToIgnoreAsciiCase",
+      "revId": "46b73f874c1a352cafb7ebeb8c9ebacfa6e35b04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAATH////g\u003d",
         "filename": "ucb/workben/ucb/ucbdemo.cxx",
         "patchSetId": 2
