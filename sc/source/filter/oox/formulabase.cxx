@@ -505,7 +505,7 @@ static const FunctionData saFuncTableBiff4[] =
     { "ODD",                    "ODD",                  298,    298,    1,  1,  V, { VR }, 0 },
     { "PERMUT",                 "PERMUT",               299,    299,    2,  2,  V, { VR }, 0 },
     { "POISSON",                "POISSON",              300,    300,    3,  3,  V, { VR }, 0 },
-    { "TDIST",                  "TDIST",                301,    301,    3,  3,  V, { VR }, 0 },
+    { "LEGACY.TDIST",           "TDIST",                301,    301,    3,  3,  V, { VR }, 0 },
     { "WEIBULL",                "WEIBULL",              302,    302,    4,  4,  V, { VR }, 0 },
     { "SUMXMY2",                "SUMXMY2",              303,    303,    2,  2,  V, { VA }, 0 },
     { "SUMX2MY2",               "SUMX2MY2",             304,    304,    2,  2,  V, { VA }, 0 },
