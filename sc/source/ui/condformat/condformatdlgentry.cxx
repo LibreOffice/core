@@ -1304,6 +1304,8 @@ void ScIconSetFrmtEntry::ScIconSetFrmtDataEntry::SetLastEntry()
     maEdEntry.Hide();
     maLbEntryType.Hide();
     maFtEntry.Hide();
+    maLbEntryType.SelectEntryPos(1);
+    maEdEntry.SetText(OUString("100"));
 }
 
 ScIconSetFrmtEntry::ScIconSetFrmtEntry( Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScIconSetFormat* pFormat ):
