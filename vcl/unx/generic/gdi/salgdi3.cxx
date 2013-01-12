@@ -687,14 +687,15 @@ X11SalGraphics::GetKernPairs( sal_uLong nPairs, ImplKernPairData *pKernPairs )
 
 sal_Bool X11SalGraphics::GetGlyphBoundRect( sal_GlyphId nGlyphIndex, Rectangle& rRect )
 {
+    static int i = -1;
     int nLevel = nGlyphIndex >> GF_FONTSHIFT;
-    if( nLevel >= MAX_FALLBACK )
-        return sal_False;
 
     ServerFont* pSF = mpServerFont[ nLevel ];
     if( !pSF )
+    {
+        i = -1;
         return sal_False;
-
+    }
     nGlyphIndex &= GF_IDXMASK;
     const GlyphMetric& rGM = pSF->GetGlyphMetric( nGlyphIndex );
     Rectangle aRect( rGM.GetOffset(), rGM.GetSize() );
@@ -712,7 +713,18 @@ sal_Bool X11SalGraphics::GetGlyphBoundRect( sal_GlyphId nGlyphIndex, Rectangle& 
     else
         rRect = aRect;
 
-    return sal_True;
+    if ( rRect.IsEmpty() )
+    {
+        i++;
+        sal_GlyphId nFontTag = i << GF_FONTSHIFT;
+// Check all fallback font levels, start from level zero
+        GetGlyphBoundRect( nGlyphIndex | nFontTag, rRect );
+    }
+    else
+    {
+        i = -1;
+        return sal_True;
+    }
 }
 
 // ---------------------------------------------------------------------------
