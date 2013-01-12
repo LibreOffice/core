@@ -1204,6 +1204,17 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
         return CreatePivotTable(*pNewObj, bRecord, bApi);
     }
 
+    if (pOldObj)
+    {
+        if (!pNewObj)
+            return RemovePivotTable(*pOldObj, bRecord, bApi);
+
+        if (pOldObj == pNewObj)
+            return UpdatePivotTable(*pOldObj, bRecord, bApi);
+    }
+
+    OSL_ASSERT(pOldObj && pNewObj && pOldObj != pNewObj);
+
     ScDocShellModificator aModificator( rDocShell );
     WaitObject aWait( rDocShell.GetActiveDialogParent() );
 
@@ -1453,6 +1464,79 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
         rDocShell.ErrorMessage( nErrId );
 
     return bDone;
+}
+
+bool ScDBDocFunc::RemovePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
+{
+    ScDocShellModificator aModificator(rDocShell);
+    WaitObject aWait(rDocShell.GetActiveDialogParent());
+
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
+    std::auto_ptr<ScDocument> pOldUndoDoc;
+    std::auto_ptr<ScDPObject> pUndoDPObj;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
+
+    if (bRecord)
+        pUndoDPObj.reset(new ScDPObject(rDPObj));    // copy old settings for undo
+
+    ScDocument* pDoc = rDocShell.GetDocument();
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = false;
+    if ( !rDocShell.IsEditable() || pDoc->GetChangeTrack() )
+    {
+        //  not recorded -> disallow
+        if (!bApi)
+            rDocShell.ErrorMessage(STR_PROTECTIONERR);
+
+        return false;
+    }
+
+    {
+        ScEditableTester aTester(pDoc, rDPObj.GetOutRange());
+        if (!aTester.IsEditable())
+        {
+            if (!bApi)
+                rDocShell.ErrorMessage(aTester.GetMessageId());
+
+            return false;
+        }
+    }
+
+    //  delete table
+
+    ScRange aRange = rDPObj.GetOutRange();
+    SCTAB nTab = aRange.aStart.Tab();
+
+    if (bRecord)
+    {
+        pOldUndoDoc.reset(new ScDocument(SCDOCMODE_UNDO));
+        pOldUndoDoc->InitUndo(pDoc, nTab, nTab);
+        pDoc->CopyToDocument(aRange, IDF_ALL, false, pOldUndoDoc.get());
+    }
+
+    pDoc->DeleteAreaTab( aRange.aStart.Col(), aRange.aStart.Row(),
+                         aRange.aEnd.Col(),   aRange.aEnd.Row(),
+                         nTab, IDF_ALL );
+    pDoc->RemoveFlagsTab( aRange.aStart.Col(), aRange.aStart.Row(),
+                          aRange.aEnd.Col(),   aRange.aEnd.Row(),
+                          nTab, SC_MF_AUTO );
+
+    pDoc->GetDPCollection()->FreeTable(&rDPObj);  // object is deleted here
+
+    rDocShell.PostPaintGridAll();   //! only necessary parts
+    rDocShell.PostPaint(aRange, PAINT_GRID);
+
+    if (bRecord)
+    {
+        rDocShell.GetUndoManager()->AddUndoAction(
+            new ScUndoDataPilot(
+                &rDocShell, pOldUndoDoc.release(), NULL, pUndoDPObj.get(), NULL, false));
+
+        // pUndoDPObj is copied
+    }
+
+    aModificator.SetDocumentModified();
+    return true;
 }
 
 bool ScDBDocFunc::CreatePivotTable(const ScDPObject& rDPObj, bool bRecord, bool bApi)

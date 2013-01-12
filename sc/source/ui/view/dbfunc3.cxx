@@ -661,7 +661,7 @@ void ScDBFunc::DeletePivotTable()
     if ( pDPObj )
     {
         ScDBDocFunc aFunc( *pDocSh );
-        aFunc.DataPilotUpdate( pDPObj, NULL, sal_True, false );
+        aFunc.RemovePivotTable(*pDPObj, true, false);
         CursorPosChanged();     // shells may be switched
     }
     else

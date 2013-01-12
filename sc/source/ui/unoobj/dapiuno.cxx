@@ -457,7 +457,7 @@ void SAL_CALL ScDataPilotTablesObj::removeByName( const OUString& aName )
     if (pDPObj && pDocShell)
     {
         ScDBDocFunc aFunc(*pDocShell);
-        aFunc.DataPilotUpdate( pDPObj, NULL, sal_True, sal_True );  // remove - incl. undo etc.
+        aFunc.RemovePivotTable(*pDPObj, true, true);  // remove - incl. undo etc.
     }
     else
         throw RuntimeException();       // no other exceptions specified
