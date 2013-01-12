@@ -9745,9 +9745,9 @@ ENABLE_OPENGL=
 
 if test -z "$enable_opengl"; then
     if test $_os = WINNT; then
-        # By default disable the OpenGL transitions for Windows (the code doesn't even compile
-        # currently). In other words, use --enable-opengl only if you plan to hack on that code for
-        # Windows.
+        # By default disable the OpenGL transitions for Windows (the code compiles but works very
+        # badly and crashes). In other words, use --enable-opengl only if you plan to hack on that
+        # code for Windows.
         enable_opengl=no
     else
         enable_opengl=yes
