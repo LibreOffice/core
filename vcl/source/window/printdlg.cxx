@@ -76,8 +76,8 @@ PrintDialog::PrintPreviewWindow::PrintPreviewWindow( Window* i_pParent )
     maHorzDim.Show();
     maVertDim.Show();
 
-    maHorzDim.SetText( String( RTL_CONSTASCII_USTRINGPARAM( "2.0in" ) ) );
-    maVertDim.SetText( String( RTL_CONSTASCII_USTRINGPARAM( "2.0in" ) ) );
+    maHorzDim.SetText( String( "2.0in" ) );
+    maVertDim.SetText( String( "2.0in" ) );
 }
 
 PrintDialog::PrintPreviewWindow::~PrintPreviewWindow()
@@ -498,7 +498,7 @@ void PrintDialog::JobTabPage::readFromSettings()
 
     aValue = pItem->getValue( rtl::OUString( "PrintDialog"  ),
                               rtl::OUString( "CollateBox"  ) );
-    if( aValue.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("alwaysoff")) )
+    if( aValue.equalsIgnoreAsciiCase("alwaysoff") )
     {
         mnCollateUIMode = 1;
         mpCollateBox->Check( sal_False );
@@ -509,7 +509,7 @@ void PrintDialog::JobTabPage::readFromSettings()
         mnCollateUIMode = 0;
         aValue = pItem->getValue( rtl::OUString( "PrintDialog"  ),
                                   rtl::OUString( "Collate"  ) );
-        mpCollateBox->Check( aValue.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) );
+        mpCollateBox->Check( aValue.equalsIgnoreAsciiCase("true") );
     }
 }
 
@@ -537,7 +537,7 @@ void PrintDialog::OutputOptPage::readFromSettings()
     rtl::OUString aValue;
     aValue = pItem->getValue( rtl::OUString( "PrintDialog"  ),
                               rtl::OUString( "CollateSingleJobs"  ) );
-    if ( aValue.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) )
+    if ( aValue.equalsIgnoreAsciiCase("true") )
     {
         mpCollateSingleJobsBox->Check( sal_True );
     }
@@ -1122,7 +1122,7 @@ void PrintDialog::setupOptionalUI()
         else
         {
             rtl::OStringBuffer sMessage;
-            sMessage.append(RTL_CONSTASCII_STRINGPARAM("Unsupported UI option: \""));
+            sMessage.append("Unsupported UI option: \"");
             sMessage.append(rtl::OUStringToOString(aCtrlType, RTL_TEXTENCODING_UTF8));
             sMessage.append('"');
             OSL_FAIL( sMessage.getStr() );

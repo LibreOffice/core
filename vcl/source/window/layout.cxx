@@ -289,9 +289,9 @@ void VclBox::setAllocation(const Size &rAllocation)
 
 bool VclBox::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
 {
-    if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("spacing")))
+    if (rKey == "spacing")
         set_spacing(rValue.toInt32());
-    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("homogeneous")))
+    else if (rKey == "homogeneous")
         set_homogeneous(toBool(rValue));
     else
         return VclContainer::set_property(rKey, rValue);
@@ -386,20 +386,20 @@ Size VclButtonBox::calculateRequisition() const
 
 bool VclButtonBox::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
 {
-    if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("layout-style")))
+    if (rKey == "layout-style")
     {
         VclButtonBoxStyle eStyle = VCL_BUTTONBOX_DEFAULT_STYLE;
-        if (rValue.equalsL(RTL_CONSTASCII_STRINGPARAM("start")))
+        if (rValue == "start")
             eStyle = VCL_BUTTONBOX_START;
-        else if (rValue.equalsL(RTL_CONSTASCII_STRINGPARAM("spread")))
+        else if (rValue == "spread")
             eStyle = VCL_BUTTONBOX_SPREAD;
-        else if (rValue.equalsL(RTL_CONSTASCII_STRINGPARAM("edge")))
+        else if (rValue == "edge")
             eStyle = VCL_BUTTONBOX_EDGE;
-        else if (rValue.equalsL(RTL_CONSTASCII_STRINGPARAM("start")))
+        else if (rValue == "start")
             eStyle = VCL_BUTTONBOX_START;
-        else if (rValue.equalsL(RTL_CONSTASCII_STRINGPARAM("end")))
+        else if (rValue == "end")
             eStyle = VCL_BUTTONBOX_END;
-        else if (rValue.equalsL(RTL_CONSTASCII_STRINGPARAM("center")))
+        else if (rValue == "center")
             eStyle = VCL_BUTTONBOX_CENTER;
         else
         {
@@ -407,7 +407,7 @@ bool VclButtonBox::set_property(const rtl::OString &rKey, const rtl::OString &rV
         }
         set_layout(eStyle);
     }
-    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("homogeneous")))
+    else if (rKey == "homogeneous")
         m_bHomogeneousGroups = toBool(rValue);
     else
         return VclBox::set_property(rKey, rValue);
@@ -933,15 +933,15 @@ bool toBool(const rtl::OString &rValue)
 
 bool VclGrid::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
 {
-    if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("row-spacing")))
+    if (rKey == "row-spacing")
         set_row_spacing(rValue.toInt32());
-    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("column-spacing")))
+    else if (rKey == "column-spacing")
         set_column_spacing(rValue.toInt32());
-    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("row-homogeneous")))
+    else if (rKey == "row-homogeneous")
         set_row_homogeneous(toBool(rValue));
-    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("column-homogeneous")))
+    else if (rKey == "column-homogeneous")
         set_column_homogeneous(toBool(rValue));
-    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("n-rows")))
+    else if (rKey == "n-rows")
         /*nothing to do*/;
     else
         return VclContainer::set_property(rKey, rValue);
@@ -1096,21 +1096,21 @@ void VclAlignment::setAllocation(const Size &rAllocation)
 
 bool VclAlignment::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
 {
-    if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("bottom-padding")))
+    if (rKey == "bottom-padding")
         m_nBottomPadding = rValue.toInt32();
-    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("left-padding")))
+    else if (rKey == "left-padding")
         m_nLeftPadding = rValue.toInt32();
-    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("right-padding")))
+    else if (rKey == "right-padding")
         m_nRightPadding = rValue.toInt32();
-    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("top-padding")))
+    else if (rKey == "top-padding")
         m_nTopPadding = rValue.toInt32();
-    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("xalign")))
+    else if (rKey == "xalign")
         m_fXAlign = rValue.toFloat();
-    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("xscale")))
+    else if (rKey == "xscale")
         m_fXScale = rValue.toFloat();
-    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("yalign")))
+    else if (rKey == "yalign")
         m_fYAlign = rValue.toFloat();
-    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("yscale")))
+    else if (rKey == "yscale")
         m_fYScale = rValue.toFloat();
     else
         return VclBin::set_property(rKey, rValue);
@@ -1221,9 +1221,9 @@ void VclExpander::setAllocation(const Size &rAllocation)
 
 bool VclExpander::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
 {
-    if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("expanded")))
+    if (rKey == "expanded")
         m_aDisclosureButton.Check(toBool(rValue));
-    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("resize-toplevel")))
+    else if (rKey == "resize-toplevel")
         m_bResizeTopLevel = toBool(rValue);
     else
         return VclBin::set_property(rKey, rValue);

@@ -4373,11 +4373,10 @@ Window::~Window()
             if ( bError )
             {
                 rtl::OStringBuffer aTempStr;
-                aTempStr.append(RTL_CONSTASCII_STRINGPARAM("Window ("));
+                aTempStr.append("Window (");
                 aTempStr.append(rtl::OUStringToOString(GetText(),
                                                        RTL_TEXTENCODING_UTF8));
-                aTempStr.append(RTL_CONSTASCII_STRINGPARAM(
-                                    ") with living SystemWindow(s) destroyed: "));
+                aTempStr.append(") with living SystemWindow(s) destroyed: ");
                 aTempStr.append(aErrorStr.toString());
                 OSL_FAIL(aTempStr.getStr());
                 // abort in non-pro version, this must be fixed!

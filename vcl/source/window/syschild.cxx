@@ -242,7 +242,7 @@ sal_IntPtr SystemChildWindow::GetParentWindowHandle( sal_Bool bUseJava )
             try
             {
                     ::rtl::Reference< ::jvmaccess::VirtualMachine > xVM;
-                    uno::Reference< java::XJavaVM >                 xJavaVM( xFactory->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.java.JavaVirtualMachine") ) ), uno::UNO_QUERY );
+                    uno::Reference< java::XJavaVM >                 xJavaVM( xFactory->createInstance( rtl::OUString("com.sun.star.java.JavaVirtualMachine") ), uno::UNO_QUERY );
                     uno::Sequence< sal_Int8 >                       aProcessID( 17 );
 
                     rtl_getGlobalProcessId( (sal_uInt8*) aProcessID.getArray() );

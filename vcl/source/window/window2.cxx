@@ -1807,13 +1807,13 @@ namespace
     {
         VclAlign eRet = VCL_ALIGN_FILL;
 
-        if (rValue.equalsL(RTL_CONSTASCII_STRINGPARAM("fill")))
+        if (rValue == "fill")
             eRet = VCL_ALIGN_FILL;
-        else if (rValue.equalsL(RTL_CONSTASCII_STRINGPARAM("start")))
+        else if (rValue == "start")
             eRet = VCL_ALIGN_START;
-        else if (rValue.equalsL(RTL_CONSTASCII_STRINGPARAM("end")))
+        else if (rValue == "end")
             eRet = VCL_ALIGN_END;
-        else if (rValue.equalsL(RTL_CONSTASCII_STRINGPARAM("center")))
+        else if (rValue == "center")
             eRet = VCL_ALIGN_CENTER;
         return eRet;
     }
@@ -1868,19 +1868,15 @@ bool Window::set_font_attribute(const OString &rKey, const OString &rValue)
 
 bool Window::set_property(const OString &rKey, const OString &rValue)
 {
-    if (
-         (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("label"))) ||
-         (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("title"))) ||
-         (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("text")))
-       )
+    if ((rKey == "label") || (rKey == "title") || (rKey == "text") )
     {
         SetText(OStringToOUString(VclBuilder::convertMnemonicMarkup(rValue), RTL_TEXTENCODING_UTF8));
     }
-    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("visible")))
+    else if (rKey == "visible")
         Show(toBool(rValue));
-    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("sensitive")))
+    else if (rKey == "sensitive")
         Enable(toBool(rValue));
-    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("resizable")))
+    else if (rKey == "resizable")
     {
         WinBits nBits = GetStyle();
         nBits &= ~(WB_SIZEABLE);
@@ -1888,7 +1884,7 @@ bool Window::set_property(const OString &rKey, const OString &rValue)
             nBits |= WB_SIZEABLE;
         SetStyle(nBits);
     }
-    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("xalign")))
+    else if (rKey == "xalign")
     {
         WinBits nBits = GetStyle();
         nBits &= ~(WB_LEFT | WB_CENTER | WB_RIGHT);
@@ -1903,7 +1899,7 @@ bool Window::set_property(const OString &rKey, const OString &rValue)
 
         SetStyle(nBits);
     }
-    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("yalign")))
+    else if (rKey == "yalign")
     {
         WinBits nBits = GetStyle();
         nBits &= ~(WB_TOP | WB_VCENTER | WB_BOTTOM);
@@ -1918,7 +1914,7 @@ bool Window::set_property(const OString &rKey, const OString &rValue)
 
         SetStyle(nBits);
     }
-    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("wrap")))
+    else if (rKey == "wrap")
     {
         WinBits nBits = GetStyle();
         nBits &= ~(WB_WORDBREAK);
@@ -1926,33 +1922,33 @@ bool Window::set_property(const OString &rKey, const OString &rValue)
             nBits |= WB_WORDBREAK;
         SetStyle(nBits);
     }
-    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("height-request")))
+    else if (rKey == "height-request")
         set_height_request(rValue.toInt32());
-    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("width-request")))
+    else if (rKey == "width-request")
         set_width_request(rValue.toInt32());
-    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("hexpand")))
+    else if (rKey == "hexpand")
         set_hexpand(toBool(rValue));
-    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("vexpand")))
+    else if (rKey == "vexpand")
         set_vexpand(toBool(rValue));
-    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("halign")))
+    else if (rKey == "halign")
         set_halign(toAlign(rValue));
-    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("valign")))
+    else if (rKey == "valign")
         set_valign(toAlign(rValue));
-    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("tooltip-markup")))
+    else if (rKey == "tooltip-markup")
         SetQuickHelpText(OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
-    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("tooltip-text")))
+    else if (rKey == "tooltip-text")
         SetQuickHelpText(OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
-    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("border-width")))
+    else if (rKey == "border-width")
         set_border_width(rValue.toInt32());
-    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("margin-left")))
+    else if (rKey == "margin-left")
         set_margin_left(rValue.toInt32());
-    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("margin-right")))
+    else if (rKey == "margin-right")
         set_margin_right(rValue.toInt32());
-    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("margin-top")))
+    else if (rKey == "margin-top")
         set_margin_top(rValue.toInt32());
-    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("margin-bottom")))
+    else if (rKey == "margin-bottom")
         set_margin_bottom(rValue.toInt32());
-    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("hscrollbar-policy")))
+    else if (rKey == "hscrollbar-policy")
     {
         WinBits nBits = GetStyle();
         nBits &= ~(WB_AUTOHSCROLL|WB_HSCROLL);
@@ -1962,7 +1958,7 @@ bool Window::set_property(const OString &rKey, const OString &rValue)
             nBits |= WB_AUTOHSCROLL;
         SetStyle(nBits);
     }
-    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("vscrollbar-policy")))
+    else if (rKey == "vscrollbar-policy")
     {
         WinBits nBits = GetStyle();
         nBits &= ~(WB_AUTOVSCROLL|WB_VSCROLL);
@@ -1972,7 +1968,7 @@ bool Window::set_property(const OString &rKey, const OString &rValue)
             nBits |= WB_AUTOVSCROLL;
         SetStyle(nBits);
     }
-    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("use-markup")))
+    else if (rKey == "use-markup")
     {
         //https://live.gnome.org/GnomeGoals/RemoveMarkupInMessages
         SAL_WARN_IF(toBool(rValue), "vcl.layout", "Use pango attributes instead of mark-up");

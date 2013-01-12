@@ -478,9 +478,9 @@ Dialog::Dialog( WindowType nType )
     ImplInitDialogData();
 }
 
-#define BASEPATH_SHARE_LAYER rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UIConfig"))
-#define RELPATH_SHARE_LAYER rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("soffice.cfg"))
-#define SERVICENAME_PATHSETTINGS rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.PathSettings"))
+#define BASEPATH_SHARE_LAYER rtl::OUString("UIConfig")
+#define RELPATH_SHARE_LAYER rtl::OUString("soffice.cfg")
+#define SERVICENAME_PATHSETTINGS rtl::OUString("com.sun.star.util.PathSettings")
 
 rtl::OUString VclBuilderContainer::getUIRootDir()
 {
@@ -500,10 +500,10 @@ rtl::OUString VclBuilderContainer::getUIRootDir()
     // Note: May be an user uses URLs without a final slash! Check it ...
     nPos = sShareLayer.lastIndexOf('/');
     if (nPos != sShareLayer.getLength()-1)
-        sShareLayer += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+        sShareLayer += "/";
 
     sShareLayer += RELPATH_SHARE_LAYER; // folder
-    sShareLayer += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    sShareLayer += "/";
     /*to-do, can we merge all this foo with existing soffice.cfg finding code, etc*/
     return sShareLayer;
 }
@@ -779,7 +779,7 @@ sal_Bool Dialog::ImplStartExecuteModal()
     {
 #ifdef DBG_UTIL
         rtl::OStringBuffer aErrorStr;
-        aErrorStr.append(RTL_CONSTASCII_STRINGPARAM("Dialog::StartExecuteModal() is called in Dialog::StartExecuteModal(): "));
+        aErrorStr.append("Dialog::StartExecuteModal() is called in Dialog::StartExecuteModal(): ");
         aErrorStr.append(ImplGetDialogText(this));
         OSL_FAIL(aErrorStr.getStr());
 #endif
@@ -1228,7 +1228,7 @@ void Dialog::Resize()
 
 bool Dialog::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
 {
-    if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("border-width")))
+    if (rKey == "border-width")
         set_border_width(rValue.toInt32());
     else
         return SystemWindow::set_property(rKey, rValue);
