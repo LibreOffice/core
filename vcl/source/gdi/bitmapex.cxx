@@ -94,8 +94,8 @@ BitmapEx::BitmapEx( const ResId& rResId ) :
     if( !aImageTree->loadImage( aFileName, aCurrentSymbolsStyle, *this, true ) )
     {
 #ifdef DBG_UTIL
-        rtl::OStringBuffer aErrorStr(RTL_CONSTASCII_STRINGPARAM(
-            "BitmapEx::BitmapEx( const ResId& rResId ): could not load image <"));
+        rtl::OStringBuffer aErrorStr(
+            "BitmapEx::BitmapEx( const ResId& rResId ): could not load image <");
         aErrorStr.append(rtl::OUStringToOString(aFileName, RTL_TEXTENCODING_ASCII_US)).append('>');
         OSL_FAIL(aErrorStr.getStr());
 #endif

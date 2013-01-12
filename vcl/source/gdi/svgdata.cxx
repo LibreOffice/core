@@ -44,7 +44,7 @@ void SvgData::ensureReplacement()
         // create replacement graphic from maSequence
         // create XPrimitive2DRenderer
         uno::Reference< lang::XMultiServiceFactory > xFactory(::comphelper::getProcessServiceFactory());
-        const rtl::OUString aServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.graphic.Primitive2DTools"));
+        const rtl::OUString aServiceName("com.sun.star.graphic.Primitive2DTools");
 
         try
         {
@@ -108,7 +108,7 @@ void SvgData::ensureSequenceAndRange()
         {
             // create SVG interpreter
             uno::Reference< lang::XMultiServiceFactory > xFactory(::comphelper::getProcessServiceFactory());
-            const rtl::OUString aServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.graphic.SvgTools"));
+            const rtl::OUString aServiceName("com.sun.star.graphic.SvgTools");
 
             try
             {

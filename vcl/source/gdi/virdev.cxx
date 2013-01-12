@@ -64,7 +64,7 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
     {
         // do not abort but throw an exception, may be the current thread terminates anyway (plugin-scenario)
         throw ::com::sun::star::uno::RuntimeException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "Could not create system bitmap!" ) ),
+            OUString( "Could not create system bitmap!" ),
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() );
         //GetpApp()->Exception( EXC_SYSOBJNOTCREATED );
     }

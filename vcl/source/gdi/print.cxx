@@ -128,17 +128,17 @@ PrinterOptions::~PrinterOptions()
 {
 }
 
-#define PROPERTYNAME_REDUCETRANSPARENCY                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReduceTransparency"))
-#define PROPERTYNAME_REDUCEDTRANSPARENCYMODE            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReducedTransparencyMode"))
-#define PROPERTYNAME_REDUCEGRADIENTS                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReduceGradients"))
-#define PROPERTYNAME_REDUCEDGRADIENTMODE                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReducedGradientMode"))
-#define PROPERTYNAME_REDUCEDGRADIENTSTEPCOUNT           rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReducedGradientStepCount"))
-#define PROPERTYNAME_REDUCEBITMAPS                      rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReduceBitmaps"))
-#define PROPERTYNAME_REDUCEDBITMAPMODE                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReducedBitmapMode"))
-#define PROPERTYNAME_REDUCEDBITMAPRESOLUTION            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReducedBitmapResolution"))
-#define PROPERTYNAME_REDUCEDBITMAPINCLUDESTRANSPARENCY  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReducedBitmapIncludesTransparency"))
-#define PROPERTYNAME_CONVERTTOGREYSCALES                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ConvertToGreyscales"))
-#define PROPERTYNAME_PDFASSTANDARDPRINTJOBFORMAT        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PDFAsStandardPrintJobFormat"))
+#define PROPERTYNAME_REDUCETRANSPARENCY                 OUString("ReduceTransparency")
+#define PROPERTYNAME_REDUCEDTRANSPARENCYMODE            OUString("ReducedTransparencyMode")
+#define PROPERTYNAME_REDUCEGRADIENTS                    OUString("ReduceGradients")
+#define PROPERTYNAME_REDUCEDGRADIENTMODE                OUString("ReducedGradientMode")
+#define PROPERTYNAME_REDUCEDGRADIENTSTEPCOUNT           OUString("ReducedGradientStepCount")
+#define PROPERTYNAME_REDUCEBITMAPS                      OUString("ReduceBitmaps")
+#define PROPERTYNAME_REDUCEDBITMAPMODE                  OUString("ReducedBitmapMode")
+#define PROPERTYNAME_REDUCEDBITMAPRESOLUTION            OUString("ReducedBitmapResolution")
+#define PROPERTYNAME_REDUCEDBITMAPINCLUDESTRANSPARENCY  OUString("ReducedBitmapIncludesTransparency")
+#define PROPERTYNAME_CONVERTTOGREYSCALES                OUString("ConvertToGreyscales")
+#define PROPERTYNAME_PDFASSTANDARDPRINTJOBFORMAT        OUString("PDFAsStandardPrintJobFormat")
 
 bool PrinterOptions::ReadFromConfig( bool i_bFile )
 {
@@ -160,15 +160,15 @@ bool PrinterOptions::ReadFromConfig( bool i_bFile )
 
             Sequence< Any > aArgs(1);
             PropertyValue aVal;
-            aVal.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
+            aVal.Name = rtl::OUString( "nodepath" );
             if( i_bFile )
-                aVal.Value <<= rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common/Print/Option/File" ) );
+                aVal.Value <<= rtl::OUString( "/org.openoffice.Office.Common/Print/Option/File" );
             else
-                aVal.Value <<= rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common/Print/Option/Printer" ) );
+                aVal.Value <<= rtl::OUString( "/org.openoffice.Office.Common/Print/Option/Printer" );
             aArgs.getArray()[0] <<= aVal;
             xConfigAccess = Reference< XNameAccess >(
                     xConfigProvider->createInstanceWithArguments(
-                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationAccess" )), aArgs ),
+                        rtl::OUString( "com.sun.star.configuration.ConfigurationAccess" ), aArgs ),
                         UNO_QUERY );
             if( xConfigAccess.is() )
             {

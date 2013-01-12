@@ -2012,7 +2012,7 @@ ImplDevFontListData* ImplDevFontList::FindDefaultFont() const
     // try to find one of the default fonts of the
     // UNICODE, SANSSERIF, SERIF or FIXED default font lists
     const DefaultFontConfiguration& rDefaults = DefaultFontConfiguration::get();
-    com::sun::star::lang::Locale aLocale( OUString( RTL_CONSTASCII_USTRINGPARAM("en") ), OUString(), OUString() );
+    com::sun::star::lang::Locale aLocale( OUString( "en" ), OUString(), OUString() );
     String aFontname = rDefaults.getDefaultFont( aLocale, DEFAULTFONT_SANS_UNICODE );
     ImplDevFontListData* pFoundData = ImplFindByTokenNames( aFontname );
     if( pFoundData )
@@ -2531,17 +2531,17 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
         {
             String aBoldName;
             if( aSearchName.EqualsAscii( "hggothicb", 0, 9) )
-                aBoldName = String(RTL_CONSTASCII_USTRINGPARAM("hggothice"));
+                aBoldName = String("hggothice");
             else if( aSearchName.EqualsAscii( "hgpgothicb", 0, 10) )
-                aBoldName = String(RTL_CONSTASCII_USTRINGPARAM("hgpgothice"));
+                aBoldName = String("hgpgothice");
             else if( aSearchName.EqualsAscii( "hgminchol", 0, 9) )
-                aBoldName = String(RTL_CONSTASCII_USTRINGPARAM("hgminchob"));
+                aBoldName = String("hgminchob");
             else if( aSearchName.EqualsAscii( "hgpminchol", 0, 10) )
-                aBoldName = String(RTL_CONSTASCII_USTRINGPARAM("hgpminchob"));
+                aBoldName = String("hgpminchob");
             else if( aSearchName.EqualsAscii( "hgminchob" ) )
-                aBoldName = String(RTL_CONSTASCII_USTRINGPARAM("hgminchoe"));
+                aBoldName = String("hgminchoe");
             else if( aSearchName.EqualsAscii( "hgpminchob" ) )
-                aBoldName = String(RTL_CONSTASCII_USTRINGPARAM("hgpminchoe"));
+                aBoldName = String("hgpminchoe");
 
             if( aBoldName.Len() && ImplFindBySearchName( aBoldName ) )
             {
@@ -2659,8 +2659,8 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
             a korean bitmap font that is not suitable here. Use the font replacement table,
             that automatically leads to the desired "HG Mincho Light J". Same story for
             MS Gothic, there are thai and korean "Gothic" fonts, so we even prefer Andale */
-            static String aMS_Mincho( RTL_CONSTASCII_USTRINGPARAM("msmincho") );
-            static String aMS_Gothic( RTL_CONSTASCII_USTRINGPARAM("msgothic") );
+            static String aMS_Mincho( "msmincho" );
+            static String aMS_Gothic( "msgothic" );
             if ((aSearchName != aMS_Mincho) && (aSearchName != aMS_Gothic))
                 // TODO: add heuristic to only throw out the fake ms* fonts
 #endif
@@ -2695,7 +2695,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
     // if a target symbol font is not available use a default symbol font
     if( rFSD.IsSymbolFont() )
     {
-        com::sun::star::lang::Locale aDefaultLocale( OUString( RTL_CONSTASCII_USTRINGPARAM("en") ), OUString(), OUString() );
+        com::sun::star::lang::Locale aDefaultLocale( OUString( "en" ), OUString(), OUString() );
         aSearchName = DefaultFontConfiguration::get().getDefaultFont( aDefaultLocale, DEFAULTFONT_SYMBOL );
         ImplDevFontListData* pFoundData = ImplFindByTokenNames( aSearchName );
         if( pFoundData )
@@ -2826,7 +2826,7 @@ ImplFontEntry* ImplFontCache::GetGlyphFallbackFont( ImplDevFontList* pFontList,
         //sufficient heavy-weight code that's likely to undo the value of the
         //optimization
         if (nFallbackLevel == 1)
-            pFallbackData = pFontList->FindFontFamily(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EUDC")));
+            pFallbackData = pFontList->FindFontFamily(OUString("EUDC"));
         if (!pFallbackData)
             pFallbackData = pFontList->GetGlyphFallbackFont(rFontSelData, rMissingCodes, nFallbackLevel-1);
         // escape when there are no font candidates
@@ -2995,7 +2995,7 @@ void OutputDevice::ImplInitFontList() const
     }
     if( meOutDevType == OUTDEV_WINDOW && ! mpFontList->Count() )
     {
-        String aError( RTL_CONSTASCII_USTRINGPARAM( "Application error: no fonts and no vcl resource found on your system" ) );
+        String aError( "Application error: no fonts and no vcl resource found on your system" );
         ResMgr* pMgr = ImplGetResMgr();
         if( pMgr )
         {
@@ -7017,7 +7017,7 @@ String OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice, c
                 nLastContent--;
 
             XubString aLastStr( aStr, nLastContent, aStr.Len() );
-            XubString aTempLastStr1( RTL_CONSTASCII_USTRINGPARAM( "..." ) );
+            XubString aTempLastStr1( "..." );
             aTempLastStr1 += aLastStr;
             if ( _rLayout.GetTextWidth( aTempLastStr1, 0, aTempLastStr1.Len() ) > nMaxWidth )
                 aStr = OutputDevice::ImplGetEllipsisString( rTargetDevice, aStr, nMaxWidth, nStyle | TEXT_DRAW_ENDELLIPSIS, _rLayout );

@@ -87,7 +87,7 @@ int  OldStylePrintAdaptor::getPageCount() const
 Sequence< PropertyValue > OldStylePrintAdaptor::getPageParameters( int i_nPage ) const
 {
     Sequence< PropertyValue > aRet( 1 );
-    aRet[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("PageSize") );
+    aRet[0].Name = OUString( "PageSize" );
     if( i_nPage < int(mpData->maPages.size() ) )
         aRet[0].Value = makeAny( mpData->maPages[i_nPage].maPageSize );
     else

@@ -4014,8 +4014,8 @@ void MetaCommentAction::Move( long nXMove, long nYMove )
     {
         if ( mnDataSize && mpData )
         {
-            sal_Bool bPathStroke = maComment.equalsL(RTL_CONSTASCII_STRINGPARAM("XPATHSTROKE_SEQ_BEGIN"));
-            if ( bPathStroke || maComment.equalsL(RTL_CONSTASCII_STRINGPARAM("XPATHFILL_SEQ_BEGIN")) )
+            sal_Bool bPathStroke = (maComment == "XPATHSTROKE_SEQ_BEGIN");
+            if ( bPathStroke || maComment == "XPATHFILL_SEQ_BEGIN" )
             {
                 SvMemoryStream  aMemStm( (void*)mpData, mnDataSize, STREAM_READ );
                 SvMemoryStream  aDest;
@@ -4057,8 +4057,8 @@ void MetaCommentAction::Scale( double fXScale, double fYScale )
     {
         if ( mnDataSize && mpData )
         {
-            sal_Bool bPathStroke = maComment.equalsL(RTL_CONSTASCII_STRINGPARAM("XPATHSTROKE_SEQ_BEGIN"));
-            if ( bPathStroke || maComment.equalsL(RTL_CONSTASCII_STRINGPARAM("XPATHFILL_SEQ_BEGIN")) )
+            sal_Bool bPathStroke = (maComment == "XPATHSTROKE_SEQ_BEGIN");
+            if ( bPathStroke || maComment == "XPATHFILL_SEQ_BEGIN" )
             {
                 SvMemoryStream  aMemStm( (void*)mpData, mnDataSize, STREAM_READ );
                 SvMemoryStream  aDest;
@@ -4084,7 +4084,7 @@ void MetaCommentAction::Scale( double fXScale, double fYScale )
                 }
                 delete[] mpData;
                 ImplInitDynamicData( static_cast<const sal_uInt8*>( aDest.GetData() ), aDest.Tell() );
-            } else if( maComment.equalsL(RTL_CONSTASCII_STRINGPARAM("EMF_PLUS_HEADER_INFO")) ){
+            } else if( maComment == "EMF_PLUS_HEADER_INFO" ){
                 SvMemoryStream  aMemStm( (void*)mpData, mnDataSize, STREAM_READ );
                 SvMemoryStream  aDest;
 

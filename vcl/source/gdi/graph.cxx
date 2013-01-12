@@ -460,10 +460,10 @@ uno::Reference< graphic::XGraphic > Graphic::GetXGraphic() const
         uno::Reference< graphic::XGraphicProvider > xProv( graphic::GraphicProvider::create( xContext ) );
 
         uno::Sequence< beans::PropertyValue >   aLoadProps( 1 );
-        ::rtl::OUString                         aURL( RTL_CONSTASCII_USTRINGPARAM( "private:memorygraphic/" ) );
+        OUString                                aURL( "private:memorygraphic/" );
 
-        aLoadProps[ 0 ].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
-        aLoadProps[ 0 ].Value <<= ( aURL += ::rtl::OUString::valueOf( reinterpret_cast< sal_Int64 >( this ) ) );
+        aLoadProps[ 0 ].Name = OUString( "URL" );
+        aLoadProps[ 0 ].Value <<= ( aURL += OUString::valueOf( reinterpret_cast< sal_Int64 >( this ) ) );
 
         xRet = xProv->queryGraphic( aLoadProps );
     }

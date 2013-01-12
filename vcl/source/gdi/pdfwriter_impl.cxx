@@ -155,57 +155,57 @@ void doTestCode()
     aWriter.SetLineColor( Color( COL_LIGHTGREEN ) );
     aWriter.DrawRect( Rectangle( Point( 2000, 200 ), Size( 8000, 3000 ) ), 5000, 2000 );
 
-    aWriter.SetFont( Font( String( RTL_CONSTASCII_USTRINGPARAM( "Times" ) ), Size( 0, 500 ) ) );
+    aWriter.SetFont( Font( String( "Times" ), Size( 0, 500 ) ) );
     aWriter.SetTextColor( Color( COL_BLACK ) );
     aWriter.SetLineColor( Color( COL_BLACK ) );
     aWriter.SetFillColor( Color( COL_LIGHTBLUE ) );
 
     Rectangle aRect( Point( 5000, 5000 ), Size( 6000, 3000 ) );
     aWriter.DrawRect( aRect );
-    aWriter.DrawText( aRect, String( RTL_CONSTASCII_USTRINGPARAM( "Link annot 1" ) ) );
+    aWriter.DrawText( aRect, String( "Link annot 1" ) );
     sal_Int32 nFirstLink = aWriter.CreateLink( aRect );
     PDFNote aNote;
-    aNote.Title = String( RTL_CONSTASCII_USTRINGPARAM( "A small test note" ) );
-    aNote.Contents = String( RTL_CONSTASCII_USTRINGPARAM( "There is no business like show business like no business i know. Everything about it is appealing." ) );
+    aNote.Title = String( "A small test note" );
+    aNote.Contents = String( "There is no business like show business like no business i know. Everything about it is appealing." );
     aWriter.CreateNote( Rectangle( Point( aRect.Right(), aRect.Top() ), Size( 6000, 3000 ) ), aNote );
 
     Rectangle aTargetRect( Point( 3000, 23000 ), Size( 12000, 6000 ) );
     aWriter.SetFillColor( Color( COL_LIGHTGREEN ) );
     aWriter.DrawRect( aTargetRect );
-    aWriter.DrawText( aTargetRect, String( RTL_CONSTASCII_USTRINGPARAM( "Dest second link" ) ) );
+    aWriter.DrawText( aTargetRect, String( "Dest second link" ) );
     sal_Int32 nSecondDest = aWriter.CreateDest( aTargetRect );
 
     aWriter.BeginStructureElement( PDFWriter::Section );
     aWriter.BeginStructureElement( PDFWriter::Heading );
-    aWriter.DrawText( Point(4500, 9000), String( RTL_CONSTASCII_USTRINGPARAM( "A small structure test" ) ) );
+    aWriter.DrawText( Point(4500, 9000), String( "A small structure test" ) );
     aWriter.EndStructureElement();
     aWriter.BeginStructureElement( PDFWriter::Paragraph );
     aWriter.SetStructureAttribute( PDFWriter::WritingMode, PDFWriter::LrTb );
     aWriter.SetStructureAttribute( PDFWriter::TextDecorationType, PDFWriter::Underline );
     aWriter.DrawText( Rectangle( Point( 4500, 10000 ), Size( 12000, 6000 ) ),
-                      String( RTL_CONSTASCII_USTRINGPARAM( "It was the best of PDF, it was the worst of PDF ... or so. This is a pretty nonsensical text to denote a paragraph. I suggest you stop reading it. Because if you read on you might get bored. So continue on your on risk. Hey, you're still here ? Why do you continue to read this as it is of no use at all ? OK, it's your time, but still... . Woah, i even get bored writing this, so let's end this here and now." ) ),
+                      String( "It was the best of PDF, it was the worst of PDF ... or so. This is a pretty nonsensical text to denote a paragraph. I suggest you stop reading it. Because if you read on you might get bored. So continue on your on risk. Hey, you're still here ? Why do you continue to read this as it is of no use at all ? OK, it's your time, but still... . Woah, i even get bored writing this, so let's end this here and now." ),
                       TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK
                       );
-    aWriter.SetActualText( String( RTL_CONSTASCII_USTRINGPARAM( "It was the best of PDF, it was the worst of PDF ... or so. This is a pretty nonsensical text to denote a paragraph. I suggest you stop reading it. Because if you read on you might get bored. So continue on your on risk. Hey, you're still here ? Why do you continue to read this as it is of no use at all ? OK, it's your time, but still... . Woah, i even get bored writing this, so let's end this here and now." ) ) );
-    aWriter.SetAlternateText( String( RTL_CONSTASCII_USTRINGPARAM( "This paragraph contains some lengthy nonsense to test structural element emission of PDFWriter." ) ) );
+    aWriter.SetActualText( String( "It was the best of PDF, it was the worst of PDF ... or so. This is a pretty nonsensical text to denote a paragraph. I suggest you stop reading it. Because if you read on you might get bored. So continue on your on risk. Hey, you're still here ? Why do you continue to read this as it is of no use at all ? OK, it's your time, but still... . Woah, i even get bored writing this, so let's end this here and now." ) );
+    aWriter.SetAlternateText( String( "This paragraph contains some lengthy nonsense to test structural element emission of PDFWriter." ) );
     aWriter.EndStructureElement();
     aWriter.BeginStructureElement( PDFWriter::Paragraph );
     aWriter.SetStructureAttribute( PDFWriter::WritingMode, PDFWriter::LrTb );
     aWriter.DrawText( Rectangle( Point( 4500, 19000 ), Size( 12000, 1000 ) ),
-                      String( RTL_CONSTASCII_USTRINGPARAM( "This paragraph is nothing special either but ends on the next page structurewise" ) ),
+                      String( "This paragraph is nothing special either but ends on the next page structurewise" ),
                       TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK
                       );
 
     aWriter.NewPage( 595, 842 );
     // test AddStream interface
-    aWriter.AddStream( String( RTL_CONSTASCII_USTRINGPARAM( "text/plain" ) ), new PDFTestOutputStream(), true );
+    aWriter.AddStream( String( "text/plain" ), new PDFTestOutputStream(), true );
     // set transitional mode
     aWriter.SetPageTransition( PDFWriter::WipeRightToLeft, 1500 );
     aWriter.SetMapMode( MapMode( MAP_100TH_MM ) );
     aWriter.SetTextColor( Color( COL_BLACK ) );
-    aWriter.SetFont( Font( String( RTL_CONSTASCII_USTRINGPARAM( "Times" ) ), Size( 0, 500 ) ) );
+    aWriter.SetFont( Font( String( "Times" ), Size( 0, 500 ) ) );
     aWriter.DrawText( Rectangle( Point( 4500, 1500 ), Size( 12000, 3000 ) ),
-                      String( RTL_CONSTASCII_USTRINGPARAM( "Here's where all things come to an end ... well at least the paragaph from the last page." ) ),
+                      String( "Here's where all things come to an end ... well at least the paragaph from the last page." ),
                       TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK
                       );
     aWriter.EndStructureElement();
@@ -215,13 +215,13 @@ void doTestCode()
     aWriter.BeginStructureElement( PDFWriter::NonStructElement );
     aWriter.DrawRect( aRect );
     aWriter.BeginStructureElement( PDFWriter::Paragraph );
-    aWriter.DrawText( aRect, String( RTL_CONSTASCII_USTRINGPARAM( "Link annot 2" ) ) );
+    aWriter.DrawText( aRect, String( "Link annot 2" ) );
     sal_Int32 nSecondLink = aWriter.CreateLink( aRect );
 
     aWriter.SetFillColor( Color( COL_LIGHTGREEN ) );
     aWriter.BeginStructureElement( PDFWriter::ListItem );
     aWriter.DrawRect( aTargetRect );
-    aWriter.DrawText( aTargetRect, String( RTL_CONSTASCII_USTRINGPARAM( "Dest first link" ) ) );
+    aWriter.DrawText( aTargetRect, String( "Dest first link" ) );
     sal_Int32 nFirstDest = aWriter.CreateDest( aTargetRect );
     // enable structure
     aWriter.EndStructureElement();
@@ -242,7 +242,7 @@ void doTestCode()
     aWriter.EndStructureElement();
     aWriter.BeginStructureElement( PDFWriter::Figure );
     aWriter.BeginStructureElement( PDFWriter::Caption );
-    aWriter.DrawText( Point( 4500, 9000 ), String( RTL_CONSTASCII_USTRINGPARAM( "Some drawing stuff inside the structure" ) ) );
+    aWriter.DrawText( Point( 4500, 9000 ), String( "Some drawing stuff inside the structure" ) );
     aWriter.EndStructureElement();
 
     // test clipping
@@ -274,7 +274,7 @@ void doTestCode()
     aWriter.DrawEllipse( aTranspRect );
     aWriter.SetTextColor( Color( COL_LIGHTBLUE ) );
     aWriter.DrawText( aTranspRect,
-                      String( RTL_CONSTASCII_USTRINGPARAM( "Some transparent text" ) ),
+                      String( "Some transparent text" ),
                       TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
 
     aWriter.EndTransparencyGroup( aTranspRect, 50 );
@@ -298,7 +298,7 @@ void doTestCode()
     aWriter.DrawEllipse( aTranspRect );
     aWriter.SetTextColor( Color( COL_LIGHTBLUE ) );
     aWriter.DrawText( aTranspRect,
-                      String( RTL_CONSTASCII_USTRINGPARAM( "Some transparent text" ) ),
+                      String( "Some transparent text" ),
                       TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
     aTranspRect = Rectangle( Point( 1500, 16500 ), Size( 4800, 3000 ) );
     aWriter.SetFillColor( Color( COL_LIGHTRED ) );
@@ -379,13 +379,13 @@ void doTestCode()
 
     aWriter.NewPage( 595, 842 );
     aWriter.SetMapMode( MapMode( MAP_100TH_MM ) );
-    aWriter.SetFont( Font( String( RTL_CONSTASCII_USTRINGPARAM( "Times" ) ), Size( 0, 500 ) ) );
+    aWriter.SetFont( Font( String( "Times" ), Size( 0, 500 ) ) );
     aWriter.SetTextColor( Color( COL_BLACK ) );
     aRect = Rectangle( Point( 4500, 6000 ), Size( 6000, 1500 ) );
     aWriter.DrawRect( aRect );
-    aWriter.DrawText( aRect, String( RTL_CONSTASCII_USTRINGPARAM( "www.heise.de" ) ) );
+    aWriter.DrawText( aRect, String( "www.heise.de" ) );
     sal_Int32 nURILink = aWriter.CreateLink( aRect );
-    aWriter.SetLinkURL( nURILink, OUString( "http://www.heise.de"  ) );
+    aWriter.SetLinkURL( nURILink, OUString( "http://www.heise.de" ) );
 
     aWriter.SetLinkDest( nFirstLink, nFirstDest );
     aWriter.SetLinkDest( nSecondLink, nSecondDest );
@@ -450,7 +450,7 @@ void doTestCode()
     aRB1.BorderColor = Color( COL_LIGHTGREEN );
     aRB1.BackgroundColor = Color( COL_LIGHTBLUE );
     aRB1.TextColor = Color( COL_LIGHTRED );
-    aRB1.TextFont = Font( String( RTL_CONSTASCII_USTRINGPARAM( "Courier" ) ), Size( 0, 800 ) );
+    aRB1.TextFont = Font( String( "Courier" ), Size( 0, 800 ) );
     aWriter.CreateControl( aRB1 );
 
     PDFWriter::RadioButtonWidget aRB2;
@@ -1811,7 +1811,7 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
     m_aStructure[0].m_nParentElement    = 0;
 
     Font aFont;
-    aFont.SetName( String( RTL_CONSTASCII_USTRINGPARAM( "Times" ) ) );
+    aFont.SetName( String( "Times" ) );
     aFont.SetSize( Size( 0, 12 ) );
 
     GraphicsState aState;
@@ -2537,7 +2537,7 @@ void PDFWriterImpl::endPage()
 
         // reset the default font
         Font aFont;
-        aFont.SetName( String( RTL_CONSTASCII_USTRINGPARAM( "Times" ) ) );
+        aFont.SetName( String( "Times" ) );
         aFont.SetSize( Size( 0, 12 ) );
 
         m_aCurrentPDFState = m_aGraphicsStack.front();
@@ -4941,7 +4941,7 @@ void PDFWriterImpl::createDefaultPushButtonAppearance( PDFWidget& rButton, const
     // (that is before endRedirect())
     OStringBuffer aDA( 256 );
     appendNonStrokingColor( replaceColor( rWidget.TextColor, rSettings.GetButtonTextColor() ), aDA );
-    Font aDummyFont( String( RTL_CONSTASCII_USTRINGPARAM( "Helvetica" ) ), aFont.GetSize() );
+    Font aDummyFont( String( "Helvetica" ), aFont.GetSize() );
     sal_Int32 nDummyBuiltin = getBestBuiltinFont( aDummyFont );
     aDA.append( ' ' );
     aDA.append( m_aBuiltinFonts[nDummyBuiltin].getNameObject() );
@@ -5203,7 +5203,7 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
 
     OStringBuffer aDA( 256 );
     appendNonStrokingColor( replaceColor( rWidget.TextColor, rSettings.GetRadioCheckTextColor() ), aDA );
-    sal_Int32 nBest = getBestBuiltinFont( Font( String( RTL_CONSTASCII_USTRINGPARAM( "ZapfDingbats" ) ), aFont.GetSize() ) );
+    sal_Int32 nBest = getBestBuiltinFont( Font( String( "ZapfDingbats" ), aFont.GetSize() ) );
     aDA.append( ' ' );
     aDA.append( m_aBuiltinFonts[nBest].getNameObject() );
     aDA.append( " 0 Tf" );
@@ -5328,7 +5328,7 @@ void PDFWriterImpl::createDefaultRadioButtonAppearance( PDFWidget& rBox, const P
 
     OStringBuffer aDA( 256 );
     appendNonStrokingColor( replaceColor( rWidget.TextColor, rSettings.GetRadioCheckTextColor() ), aDA );
-    sal_Int32 nBest = getBestBuiltinFont( Font( String( RTL_CONSTASCII_USTRINGPARAM( "ZapfDingbats" ) ), aFont.GetSize() ) );
+    sal_Int32 nBest = getBestBuiltinFont( Font( String( "ZapfDingbats" ), aFont.GetSize() ) );
     aDA.append( ' ' );
     aDA.append( m_aBuiltinFonts[nBest].getNameObject() );
     aDA.append( " 0 Tf" );

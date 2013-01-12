@@ -97,7 +97,7 @@ void loadFromFile(
     rtl::OUString const & path, BitmapEx & bitmap)
 {
     boost::shared_ptr< SvStream > s(wrapFile(file));
-    if (path.endsWithAsciiL(RTL_CONSTASCII_STRINGPARAM(".png")))
+    if (path.endsWith(".png"))
     {
         vcl::PNGReader aPNGReader( *s );
         aPNGReader.SetIgnoreGammaChunk( sal_True );
@@ -134,7 +134,7 @@ void loadFromStream(
     rtl::OUString const & path, BitmapEx & bitmap)
 {
     boost::shared_ptr< SvStream > s(wrapStream(stream));
-    if (path.endsWithAsciiL(RTL_CONSTASCII_STRINGPARAM(".png")))
+    if (path.endsWith(".png"))
     {
         vcl::PNGReader aPNGReader( *s );
         aPNGReader.SetIgnoreGammaChunk( sal_True );
@@ -308,9 +308,9 @@ void ImplImageTree::resetPaths() {
         INetURLObject u(url);
         OSL_ASSERT(!u.HasError());
         rtl::OUStringBuffer b;
-        b.appendAscii(RTL_CONSTASCII_STRINGPARAM("images_"));
+        b.appendAscii("images_");
         b.append(m_style);
-        b.appendAscii(RTL_CONSTASCII_STRINGPARAM("_brand"));
+        b.appendAscii("_brand");
         bool ok = u.Append(b.makeStringAndClear(), INetURLObject::ENCODE_ALL);
         OSL_ASSERT(ok); (void) ok;
         m_paths.push_back(
@@ -332,7 +332,7 @@ void ImplImageTree::resetPaths() {
         INetURLObject u(url);
         OSL_ASSERT(!u.HasError());
         rtl::OUStringBuffer b;
-        b.appendAscii(RTL_CONSTASCII_STRINGPARAM("images_"));
+        b.appendAscii("images_");
         b.append(m_style);
         bool ok = u.Append(b.makeStringAndClear(), INetURLObject::ENCODE_ALL);
         OSL_ASSERT(ok); (void) ok;

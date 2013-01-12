@@ -222,7 +222,7 @@ static rtl::OUString queryFile( Printer* pPrinter )
         aTempl.getArray()[0] <<= ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION;
         uno::Reference< ui::dialogs::XFilePicker > xFilePicker(
             xFactory->createInstanceWithArguments(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ) ),
+                ::rtl::OUString( "com.sun.star.ui.dialogs.FilePicker" ),
                 aTempl ), uno::UNO_QUERY );
         DBG_ASSERT( xFilePicker.is(), "could not get FilePicker service" );
 
@@ -242,9 +242,9 @@ static rtl::OUString queryFile( Printer* pPrinter )
                         bPDF = false;
                 }
                 if( bPS )
-                    xFilterMgr->appendFilter( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PostScript" ) ), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*.ps" ) ) );
+                    xFilterMgr->appendFilter( OUString( "PostScript" ), OUString( "*.ps" ) );
                 if( bPDF )
-                    xFilterMgr->appendFilter( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Portable Document Format" ) ), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*.pdf" ) ) );
+                    xFilterMgr->appendFilter( OUString( "Portable Document Format" ), OUString( "*.pdf" ) );
 #elif defined WNT
         (void)pPrinter;
                 xFilterMgr->appendFilter( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*.PRN" ) ), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*.prn" ) ) );
@@ -297,7 +297,7 @@ void Printer::PrintJob( const boost::shared_ptr<PrinterController>& i_pControlle
                         )
 {
     sal_Bool bSynchronous = sal_False;
-    beans::PropertyValue* pVal = i_pController->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Wait" ) ) );
+    beans::PropertyValue* pVal = i_pController->getValue( rtl::OUString( "Wait" ) );
     if( pVal )
         pVal->Value >>= bSynchronous;
 
@@ -326,7 +326,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
             ErrorBox aBox( NULL, VclResId( SV_PRINT_NOPRINTERWARNING ) );
             aBox.Execute();
         }
-        pController->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDirect" ) ),
+        pController->setValue( rtl::OUString( "IsDirect" ),
                                makeAny( sal_False ) );
     }
 
@@ -355,12 +355,12 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
     // "Pages" attribute from API is now equivalent to "PageRange"
     // AND "PrintContent" = 1 except calc where it is "PrintRange" = 1
     // Argh ! That sure needs cleaning up
-    beans::PropertyValue* pContentVal = i_pController->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintRange" ) ) );
+    beans::PropertyValue* pContentVal = i_pController->getValue( OUString( "PrintRange" ) );
     if( ! pContentVal )
-        pContentVal = i_pController->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintContent" ) ) );
+        pContentVal = i_pController->getValue( OUString( "PrintContent" ) );
 
     // case 1: UNO API has set "Pages"
-    beans::PropertyValue* pPagesVal = i_pController->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Pages" ) ) );
+    beans::PropertyValue* pPagesVal = i_pController->getValue( OUString( "Pages" ) );
     if( pPagesVal )
     {
         rtl::OUString aPagesVal;
@@ -373,7 +373,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
             if( pContentVal )
             {
                 pContentVal->Value = makeAny( sal_Int32( 1 ) );
-                i_pController->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ), pPagesVal->Value );
+                i_pController->setValue( OUString( "PageRange" ), pPagesVal->Value );
             }
         }
     }
@@ -386,7 +386,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
             if( nContent == 0 )
             {
                 // do not overwrite PageRange if it is already set
-                beans::PropertyValue* pRangeVal = i_pController->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ) );
+                beans::PropertyValue* pRangeVal = i_pController->getValue( OUString( "PageRange" ) );
                 rtl::OUString aRange;
                 if( pRangeVal )
                     pRangeVal->Value >>= aRange;
@@ -402,14 +402,14 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
                             aBuf.appendAscii( "-" );
                             aBuf.append( nPages );
                         }
-                        i_pController->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ), makeAny( aBuf.makeStringAndClear() ) );
+                        i_pController->setValue( OUString( "PageRange" ), makeAny( aBuf.makeStringAndClear() ) );
                     }
                 }
             }
         }
     }
 
-    beans::PropertyValue* pReverseVal = i_pController->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintReverse" ) ) );
+    beans::PropertyValue* pReverseVal = i_pController->getValue( OUString( "PrintReverse" ) );
     if( pReverseVal )
     {
         sal_Bool bReverse = sal_False;
@@ -418,35 +418,35 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
     }
 
     // setup NUp printing from properties
-    sal_Int32 nRows = i_pController->getIntProperty( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpRows" ) ), 1 );
-    sal_Int32 nCols = i_pController->getIntProperty( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpColumns" ) ), 1 );
+    sal_Int32 nRows = i_pController->getIntProperty( rtl::OUString( "NUpRows" ), 1 );
+    sal_Int32 nCols = i_pController->getIntProperty( rtl::OUString( "NUpColumns" ), 1 );
     if( nRows > 1 || nCols > 1 )
     {
         PrinterController::MultiPageSetup aMPS;
         aMPS.nRows         = nRows > 1 ? nRows : 1;
         aMPS.nColumns      = nCols > 1 ? nCols : 1;
-        sal_Int32 nValue = i_pController->getIntProperty( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpPageMarginLeft" ) ), aMPS.nLeftMargin );
+        sal_Int32 nValue = i_pController->getIntProperty( rtl::OUString( "NUpPageMarginLeft" ), aMPS.nLeftMargin );
         if( nValue >= 0 )
             aMPS.nLeftMargin = nValue;
-        nValue = i_pController->getIntProperty( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpPageMarginRight" ) ), aMPS.nRightMargin );
+        nValue = i_pController->getIntProperty( rtl::OUString( "NUpPageMarginRight" ), aMPS.nRightMargin );
         if( nValue >= 0 )
             aMPS.nRightMargin = nValue;
-        nValue = i_pController->getIntProperty( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpPageMarginTop" ) ), aMPS.nTopMargin );
+        nValue = i_pController->getIntProperty( rtl::OUString( "NUpPageMarginTop" ), aMPS.nTopMargin );
         if( nValue >= 0 )
             aMPS.nTopMargin = nValue;
-        nValue = i_pController->getIntProperty( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpPageMarginBottom" ) ), aMPS.nBottomMargin );
+        nValue = i_pController->getIntProperty( rtl::OUString( "NUpPageMarginBottom" ), aMPS.nBottomMargin );
         if( nValue >= 0 )
             aMPS.nBottomMargin = nValue;
-        nValue = i_pController->getIntProperty( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpHorizontalSpacing" ) ), aMPS.nHorizontalSpacing );
+        nValue = i_pController->getIntProperty( rtl::OUString( "NUpHorizontalSpacing" ), aMPS.nHorizontalSpacing );
         if( nValue >= 0 )
             aMPS.nHorizontalSpacing = nValue;
-        nValue = i_pController->getIntProperty( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpVerticalSpacing" ) ), aMPS.nVerticalSpacing );
+        nValue = i_pController->getIntProperty( rtl::OUString( "NUpVerticalSpacing" ), aMPS.nVerticalSpacing );
         if( nValue >= 0 )
             aMPS.nVerticalSpacing = nValue;
-        aMPS.bDrawBorder = i_pController->getBoolProperty( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpDrawBorder" ) ), aMPS.bDrawBorder );
-        aMPS.nOrder = static_cast<PrinterController::NupOrderType>(i_pController->getIntProperty( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpSubPageOrder" ) ), aMPS.nOrder ));
+        aMPS.bDrawBorder = i_pController->getBoolProperty( rtl::OUString( "NUpDrawBorder" ), aMPS.bDrawBorder );
+        aMPS.nOrder = static_cast<PrinterController::NupOrderType>(i_pController->getIntProperty( OUString( "NUpSubPageOrder" ), aMPS.nOrder ));
         aMPS.aPaperSize = i_pController->getPrinter()->PixelToLogic( i_pController->getPrinter()->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) );
-        beans::PropertyValue* pPgSizeVal = i_pController->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpPaperSize" ) ) );
+        beans::PropertyValue* pPgSizeVal = i_pController->getValue( rtl::OUString( "NUpPaperSize" ) );
         awt::Size aSizeVal;
         if( pPgSizeVal && (pPgSizeVal->Value >>= aSizeVal) )
         {
@@ -492,12 +492,12 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
                     i_pController->abortJob();
                     return;
                 }
-                pController->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LocalFileName" ) ),
+                pController->setValue( rtl::OUString( "LocalFileName" ),
                                        makeAny( aFile ) );
             }
             else if( aDlg.isSingleJobs() )
             {
-                pController->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintCollateAsSingleJobs" ) ),
+                pController->setValue( rtl::OUString( "PrintCollateAsSingleJobs" ),
                                        makeAny( sal_True ) );
             }
         }
@@ -509,7 +509,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
     pController->pushPropertiesToPrinter();
 
     rtl::OUString aJobName;
-    beans::PropertyValue* pJobNameVal = pController->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "JobName" ) ) );
+    beans::PropertyValue* pJobNameVal = pController->getValue( rtl::OUString( "JobName" ) );
     if( pJobNameVal )
         pJobNameVal->Value >>= aJobName;
 
@@ -560,13 +560,13 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
         return sal_False;
 
     sal_Bool bSinglePrintJobs = sal_False;
-    beans::PropertyValue* pSingleValue = i_pController->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintCollateAsSingleJobs" ) ) );
+    beans::PropertyValue* pSingleValue = i_pController->getValue( rtl::OUString( "PrintCollateAsSingleJobs" ) );
     if( pSingleValue )
     {
         pSingleValue->Value >>= bSinglePrintJobs;
     }
 
-    beans::PropertyValue* pFileValue = i_pController->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LocalFileName" ) ) );
+    beans::PropertyValue* pFileValue = i_pController->getValue( rtl::OUString( "LocalFileName" ) );
     if( pFileValue )
     {
         rtl::OUString aFile;
@@ -734,8 +734,8 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
     if( i_pController->isShowDialogs() && ! i_pController->isDirectPrint() )
     {
         SettingsConfigItem* pItem = SettingsConfigItem::get();
-        pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
-                         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LastPrinterUsed" ) ),
+        pItem->setValue( rtl::OUString( "PrintDialog" ),
+                         rtl::OUString( "LastPrinterUsed" ),
                          GetName()
                          );
     }
@@ -766,7 +766,7 @@ const boost::shared_ptr<Printer>& PrinterController::getPrinter() const
 void PrinterController::setPrinter( const boost::shared_ptr<Printer>& i_rPrinter )
 {
     mpImplData->mpPrinter = i_rPrinter;
-    setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" ) ),
+    setValue( rtl::OUString( "Name" ),
               makeAny( rtl::OUString( i_rPrinter->GetName() ) ) );
     mpImplData->mnDefaultPaperBin = mpImplData->mpPrinter->GetPaperBin();
     mpImplData->mnFixedPaperBin = -1;
@@ -804,7 +804,7 @@ bool PrinterController::setupPrinter( Window* i_pParent )
                 awt::Size aOverrideSize;
                 aOverrideSize.Width = aNewPaperSize.Width();
                 aOverrideSize.Height = aNewPaperSize.Height();
-                setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OverridePageSize" ) ),
+                setValue( rtl::OUString( "OverridePageSize" ),
                           makeAny( aOverrideSize ) );
                 mpImplData->mnFixedPaperBin = nNewPaperBin;
             }
@@ -1314,26 +1314,26 @@ Sequence< PropertyValue > PrinterController::getJobProperties( const Sequence< P
             aResult[nCur++] = mpImplData->maUIProperties[i];
     }
     // append IsFirstPage
-    if( aMergeSet.find( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFirstPage" ) ) ) == aMergeSet.end() )
+    if( aMergeSet.find( rtl::OUString( "IsFirstPage" ) ) == aMergeSet.end() )
     {
         PropertyValue aVal;
-        aVal.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFirstPage" ) );
+        aVal.Name = rtl::OUString( "IsFirstPage" );
         aVal.Value <<= mpImplData->mbFirstPage;
         aResult[nCur++] = aVal;
     }
     // append IsLastPage
-    if( aMergeSet.find( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsLastPage" ) ) ) == aMergeSet.end() )
+    if( aMergeSet.find( rtl::OUString( "IsLastPage" ) ) == aMergeSet.end() )
     {
         PropertyValue aVal;
-        aVal.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsLastPage" ) );
+        aVal.Name = rtl::OUString( "IsLastPage" );
         aVal.Value <<= mpImplData->mbLastPage;
         aResult[nCur++] = aVal;
     }
     // append IsPrinter
-    if( aMergeSet.find( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsPrinter" ) ) ) == aMergeSet.end() )
+    if( aMergeSet.find( rtl::OUString( "IsPrinter" ) ) == aMergeSet.end() )
     {
         PropertyValue aVal;
-        aVal.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsPrinter" ) );
+        aVal.Name = rtl::OUString( "IsPrinter" );
         aVal.Value <<= sal_True;
         aResult[nCur++] = aVal;
     }
@@ -1578,12 +1578,12 @@ void PrinterController::createProgressDialog()
     if( ! mpImplData->mpProgress )
     {
         sal_Bool bShow = sal_True;
-        beans::PropertyValue* pMonitor = getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MonitorVisible" ) ) );
+        beans::PropertyValue* pMonitor = getValue( rtl::OUString( "MonitorVisible" ) );
         if( pMonitor )
             pMonitor->Value >>= bShow;
         else
         {
-            const com::sun::star::beans::PropertyValue* pVal = getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsApi" ) ) );
+            const com::sun::star::beans::PropertyValue* pVal = getValue( rtl::OUString( "IsApi" ) );
             if( pVal )
             {
                 sal_Bool bApi = sal_False;
@@ -1621,17 +1621,17 @@ void PrinterController::pushPropertiesToPrinter()
 {
     sal_Int32 nCopyCount = 1;
     // set copycount and collate
-    const beans::PropertyValue* pVal = getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CopyCount" ) ) );
+    const beans::PropertyValue* pVal = getValue( rtl::OUString( "CopyCount" ) );
     if( pVal )
         pVal->Value >>= nCopyCount;
     sal_Bool bCollate = sal_False;
-    pVal = getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Collate" ) ) );
+    pVal = getValue( rtl::OUString( "Collate" ) );
     if( pVal )
         pVal->Value >>= bCollate;
     mpImplData->mpPrinter->SetCopyCount( static_cast<sal_uInt16>(nCopyCount), bCollate );
 
     // duplex mode
-    pVal = getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DuplexMode" ) ) );
+    pVal = getValue( rtl::OUString( "DuplexMode" ) );
     if( pVal )
     {
         sal_Int16 nDuplex = view::DuplexMode::UNKNOWN;
@@ -1647,13 +1647,13 @@ void PrinterController::pushPropertiesToPrinter()
 
 bool PrinterController::isShowDialogs() const
 {
-    sal_Bool bApi = getBoolProperty( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsApi" ) ), sal_False );
+    sal_Bool bApi = getBoolProperty( rtl::OUString( "IsApi" ), sal_False );
     return ! bApi && ! Application::IsHeadlessModeEnabled();
 }
 
 bool PrinterController::isDirectPrint() const
 {
-    sal_Bool bDirect = getBoolProperty( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDirect" ) ), sal_False );
+    sal_Bool bDirect = getBoolProperty( rtl::OUString( "IsDirect" ), sal_False );
     return bDirect == sal_True;
 }
 
@@ -1751,7 +1751,7 @@ void PrinterOptionsHelper::appendPrintUIOptions( uno::Sequence< beans::PropertyV
         sal_Int32 nIndex = io_rProps.getLength();
         io_rProps.realloc( nIndex+1 );
         PropertyValue aVal;
-        aVal.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ExtraPrintUIOptions" ) );
+        aVal.Name = rtl::OUString( "ExtraPrintUIOptions" );
         aVal.Value = makeAny( m_aUIProperties );
         io_rProps[ nIndex ] = aVal;
     }
@@ -1787,51 +1787,51 @@ Any PrinterOptionsHelper::setUIControlOpt(const com::sun::star::uno::Sequence< r
     sal_Int32 nUsed = 0;
     if( !i_rTitle.isEmpty() )
     {
-        aCtrl[nUsed  ].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" ) );
+        aCtrl[nUsed  ].Name  = rtl::OUString( "Text" );
         aCtrl[nUsed++].Value = makeAny( i_rTitle );
     }
     if( i_rHelpIds.getLength() )
     {
-        aCtrl[nUsed  ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HelpId" ) );
+        aCtrl[nUsed  ].Name = rtl::OUString( "HelpId" );
         aCtrl[nUsed++].Value = makeAny( i_rHelpIds );
     }
-    aCtrl[nUsed  ].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlType" ) );
+    aCtrl[nUsed  ].Name  = rtl::OUString( "ControlType" );
     aCtrl[nUsed++].Value = makeAny( i_rType );
-    aCtrl[nUsed  ].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ID" ) );
+    aCtrl[nUsed  ].Name  = rtl::OUString( "ID" );
     aCtrl[nUsed++].Value = makeAny( i_rIDs );
     if( i_pVal )
     {
-        aCtrl[nUsed  ].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Property" ) );
+        aCtrl[nUsed  ].Name  = rtl::OUString( "Property" );
         aCtrl[nUsed++].Value = makeAny( *i_pVal );
     }
     if( !i_rControlOptions.maDependsOnName.isEmpty() )
     {
-        aCtrl[nUsed  ].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DependsOnName" ) );
+        aCtrl[nUsed  ].Name  = rtl::OUString( "DependsOnName" );
         aCtrl[nUsed++].Value = makeAny( i_rControlOptions.maDependsOnName );
         if( i_rControlOptions.mnDependsOnEntry != -1 )
         {
-            aCtrl[nUsed  ].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DependsOnEntry" ) );
+            aCtrl[nUsed  ].Name  = rtl::OUString( "DependsOnEntry" );
             aCtrl[nUsed++].Value = makeAny( i_rControlOptions.mnDependsOnEntry );
         }
         if( i_rControlOptions.mbAttachToDependency )
         {
-            aCtrl[nUsed  ].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AttachToDependency" ) );
+            aCtrl[nUsed  ].Name  = rtl::OUString( "AttachToDependency" );
             aCtrl[nUsed++].Value = makeAny( i_rControlOptions.mbAttachToDependency );
         }
     }
     if( !i_rControlOptions.maGroupHint.isEmpty() )
     {
-        aCtrl[nUsed  ].Name    = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "GroupingHint" ) );
+        aCtrl[nUsed  ].Name    = rtl::OUString( "GroupingHint" );
         aCtrl[nUsed++].Value <<= i_rControlOptions.maGroupHint;
     }
     if( i_rControlOptions.mbInternalOnly )
     {
-        aCtrl[nUsed  ].Name    = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InternalUIOnly" ) );
+        aCtrl[nUsed  ].Name    = rtl::OUString( "InternalUIOnly" );
         aCtrl[nUsed++].Value <<= sal_True;
     }
     if( ! i_rControlOptions.mbEnabled )
     {
-        aCtrl[nUsed  ].Name    = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Enabled" ) );
+        aCtrl[nUsed  ].Name    = rtl::OUString( "Enabled" );
         aCtrl[nUsed++].Value <<= sal_False;
     }
 
@@ -1908,11 +1908,11 @@ Any PrinterOptionsHelper::setChoiceRadiosControlOpt(const com::sun::star::uno::S
     UIControlOptions aOpt( i_rControlOptions );
     sal_Int32 nUsed = aOpt.maAddProps.getLength();
     aOpt.maAddProps.realloc( nUsed + 1 + (i_rDisabledChoices.getLength() ? 1 : 0) );
-    aOpt.maAddProps[nUsed].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Choices" ) );
+    aOpt.maAddProps[nUsed].Name = rtl::OUString( "Choices" );
     aOpt.maAddProps[nUsed].Value = makeAny( i_rChoices );
     if( i_rDisabledChoices.getLength() )
     {
-        aOpt.maAddProps[nUsed+1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ChoicesDisabled" ) );
+        aOpt.maAddProps[nUsed+1].Name = rtl::OUString( "ChoicesDisabled" );
         aOpt.maAddProps[nUsed+1].Value = makeAny( i_rDisabledChoices );
     }
 
@@ -1934,11 +1934,11 @@ Any PrinterOptionsHelper::setChoiceListControlOpt(const rtl::OUString& i_rID,
     UIControlOptions aOpt( i_rControlOptions );
     sal_Int32 nUsed = aOpt.maAddProps.getLength();
     aOpt.maAddProps.realloc( nUsed + 1 + (i_rDisabledChoices.getLength() ? 1 : 0) );
-    aOpt.maAddProps[nUsed].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Choices" ) );
+    aOpt.maAddProps[nUsed].Name = rtl::OUString( "Choices" );
     aOpt.maAddProps[nUsed].Value = makeAny( i_rChoices );
     if( i_rDisabledChoices.getLength() )
     {
-        aOpt.maAddProps[nUsed+1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ChoicesDisabled" ) );
+        aOpt.maAddProps[nUsed+1].Name = rtl::OUString( "ChoicesDisabled" );
         aOpt.maAddProps[nUsed+1].Value = makeAny( i_rDisabledChoices );
     }
 
@@ -1964,9 +1964,9 @@ Any PrinterOptionsHelper::setRangeControlOpt(const rtl::OUString& i_rID,
     {
         sal_Int32 nUsed = aOpt.maAddProps.getLength();
         aOpt.maAddProps.realloc( nUsed + 2 );
-        aOpt.maAddProps[nUsed  ].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MinValue" ) );
+        aOpt.maAddProps[nUsed  ].Name  = rtl::OUString( "MinValue" );
         aOpt.maAddProps[nUsed++].Value = makeAny( i_nMinValue );
-        aOpt.maAddProps[nUsed  ].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MaxValue" ) );
+        aOpt.maAddProps[nUsed  ].Name  = rtl::OUString( "MaxValue" );
         aOpt.maAddProps[nUsed++].Value = makeAny( i_nMaxValue );
     }
 

@@ -175,9 +175,9 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
                 sal_Int32       nColorMode = 0;
 
                 Sequence< PropertyValue > aFilterData( 2 );
-                aFilterData[ 0 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Quality" ) );
+                aFilterData[ 0 ].Name = OUString( "Quality" );
                 aFilterData[ 0 ].Value <<= sal_Int32(i_rContext.m_nJPEGQuality);
-                aFilterData[ 1 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "ColorMode" ) );
+                aFilterData[ 1 ].Name = OUString( "ColorMode" );
                 aFilterData[ 1 ].Value <<= nColorMode;
 
                 try
@@ -188,13 +188,13 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
                     uno::Reference< graphic::XGraphicProvider > xGraphicProvider( graphic::GraphicProvider::create(xContext) );
                     uno::Reference< graphic::XGraphic > xGraphic( aGraphic.GetXGraphic() );
                     uno::Reference < io::XOutputStream > xOut( xStream->getOutputStream() );
-                    rtl::OUString aMimeType(RTL_CONSTASCII_USTRINGPARAM("image/jpeg"));
+                    OUString aMimeType("image/jpeg");
                     uno::Sequence< beans::PropertyValue > aOutMediaProperties( 3 );
-                    aOutMediaProperties[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OutputStream"));
+                    aOutMediaProperties[0].Name = OUString("OutputStream");
                     aOutMediaProperties[0].Value <<= xOut;
-                    aOutMediaProperties[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MimeType"));
+                    aOutMediaProperties[1].Name = OUString("MimeType");
                     aOutMediaProperties[1].Value <<= aMimeType;
-                    aOutMediaProperties[2].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FilterData"));
+                    aOutMediaProperties[2].Name = OUString("FilterData");
                     aOutMediaProperties[2].Value <<= aFilterData;
                     xGraphicProvider->storeGraphic( xGraphic, aOutMediaProperties );
                     xOut->flush();
@@ -208,13 +208,13 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
 
                         xSeekable->seek( 0 );
                         Sequence< PropertyValue > aArgs( 1 );
-                        aArgs[ 0 ].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InputStream"));
+                        aArgs[ 0 ].Name = OUString("InputStream");
                         aArgs[ 0 ].Value <<= xStream;
                         uno::Reference< XPropertySet > xPropSet( xGraphicProvider->queryGraphicDescriptor( aArgs ) );
                         if ( xPropSet.is() )
                         {
                             sal_Int16 nBitsPerPixel = 24;
-                            if ( xPropSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BitsPerPixel")) ) >>= nBitsPerPixel )
+                            if ( xPropSet->getPropertyValue( OUString("BitsPerPixel") ) >>= nBitsPerPixel )
                             {
                                 bTrueColorJPG = nBitsPerPixel != 8;
                             }
@@ -510,7 +510,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                     const MetaCommentAction*    pA = (const MetaCommentAction*) pAction;
                     String                      aSkipComment;
 
-                    if( pA->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XGRAD_SEQ_BEGIN")))
+                    if( pA->GetComment().equalsIgnoreAsciiCase("XGRAD_SEQ_BEGIN"))
                     {
                         const MetaGradientExAction* pGradAction = NULL;
                         sal_Bool                    bDone = sal_False;
@@ -522,7 +522,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                             if( pAction->GetType() == META_GRADIENTEX_ACTION )
                                 pGradAction = (const MetaGradientExAction*) pAction;
                             else if( ( pAction->GetType() == META_COMMENT_ACTION ) &&
-                                    ( ( (const MetaCommentAction*) pAction )->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XGRAD_SEQ_END"))) )
+                                     ( ( (const MetaCommentAction*) pAction )->GetComment().equalsIgnoreAsciiCase("XGRAD_SEQ_END")) )
                             {
                                 bDone = sal_True;
                             }
@@ -546,9 +546,9 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                             sal_Bool        bSkipSequence = sal_False;
                             rtl::OString sSeqEnd;
 
-                            if( pA->GetComment().equalsL(RTL_CONSTASCII_STRINGPARAM("XPATHSTROKE_SEQ_BEGIN")) )
+                            if( pA->GetComment() == "XPATHSTROKE_SEQ_BEGIN" )
                             {
-                                sSeqEnd = rtl::OString(RTL_CONSTASCII_STRINGPARAM("XPATHSTROKE_SEQ_END"));
+                                sSeqEnd = OString("XPATHSTROKE_SEQ_END");
                                 SvtGraphicStroke aStroke;
                                 aMemStm >> aStroke;
 
@@ -631,9 +631,9 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                     }
                                 }
                             }
-                            else if ( pA->GetComment().equalsL(RTL_CONSTASCII_STRINGPARAM("XPATHFILL_SEQ_BEGIN")) )
+                            else if ( pA->GetComment() == "XPATHFILL_SEQ_BEGIN" )
                             {
-                                sSeqEnd = rtl::OString(RTL_CONSTASCII_STRINGPARAM("XPATHFILL_SEQ_END"));
+                                sSeqEnd = OString("XPATHFILL_SEQ_END");
                                 SvtGraphicFill aFill;
                                 aMemStm >> aFill;
 

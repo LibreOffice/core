@@ -55,7 +55,7 @@ SettingsConfigItem* SettingsConfigItem::get()
 
 SettingsConfigItem::SettingsConfigItem()
         :
-        ConfigItem( OUString( RTL_CONSTASCII_USTRINGPARAM( SETTINGS_CONFIGNODE ) ),
+        ConfigItem( OUString( SETTINGS_CONFIGNODE ),
                     CONFIG_MODE_DELAYED_UPDATE ),
     m_aSettings( 0 )
 {

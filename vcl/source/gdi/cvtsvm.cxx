@@ -2454,8 +2454,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 #ifdef DBG_UTIL
             default:
             {
-                rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
-                    "Missing implementation for Action#: "));
+                rtl::OStringBuffer aStr("Missing implementation for Action#: ");
                 aStr.append(static_cast<sal_Int32>(pAction->GetType()));
                 aStr.append('!');
                 OSL_FAIL(aStr.getStr());
