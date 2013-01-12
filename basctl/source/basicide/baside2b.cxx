@@ -666,8 +666,8 @@ void EditorWindow::DataChanged(DataChangedEvent const & rDCEvt)
         && (rDCEvt.GetFlags() & SETTINGS_STYLE) != 0)
     {
         Color aColor(GetSettings().GetStyleSettings().GetFieldColor());
-        if (aColor
-            != rDCEvt.GetOldSettings()->GetStyleSettings().GetFieldColor())
+        const AllSettings* pOldSettings = rDCEvt.GetOldSettings();
+        if (!pOldSettings || aColor != pOldSettings->GetStyleSettings().GetFieldColor())
         {
             SetBackground(Wallpaper(aColor));
             Invalidate();
@@ -675,8 +675,8 @@ void EditorWindow::DataChanged(DataChangedEvent const & rDCEvt)
         if (pEditEngine != 0)
         {
             aColor = GetSettings().GetStyleSettings().GetFieldTextColor();
-            if (aColor != rDCEvt.GetOldSettings()->
-                GetStyleSettings().GetFieldTextColor())
+            if (!pOldSettings || aColor !=
+                    pOldSettings-> GetStyleSettings().GetFieldTextColor())
             {
                 Font aFont(pEditEngine->GetFont());
                 aFont.SetColor(aColor);
@@ -1166,8 +1166,8 @@ void BreakPointWindow::DataChanged(DataChangedEvent const & rDCEvt)
         && (rDCEvt.GetFlags() & SETTINGS_STYLE) != 0)
     {
         Color aColor(GetSettings().GetStyleSettings().GetFieldColor());
-        if (aColor
-            != rDCEvt.GetOldSettings()->GetStyleSettings().GetFieldColor())
+        const AllSettings* pOldSettings = rDCEvt.GetOldSettings();
+        if (!pOldSettings || aColor != pOldSettings->GetStyleSettings().GetFieldColor())
         {
             setBackgroundColor(aColor);
             Invalidate();
@@ -1690,8 +1690,8 @@ void ComplexEditorWindow::DataChanged(DataChangedEvent const & rDCEvt)
         && (rDCEvt.GetFlags() & SETTINGS_STYLE) != 0)
     {
         Color aColor(GetSettings().GetStyleSettings().GetFaceColor());
-        if (aColor
-            != rDCEvt.GetOldSettings()->GetStyleSettings().GetFaceColor())
+        const AllSettings* pOldSettings = rDCEvt.GetOldSettings();
+        if (!pOldSettings || aColor != pOldSettings->GetStyleSettings().GetFaceColor())
         {
             SetBackground(Wallpaper(aColor));
             Invalidate();
