@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAATH////k\u003d",
+        "filename": "svx/source/gallery2/galexpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000025
+      },
+      "writtenOn": "2013-01-12T18:34:57Z",
+      "side": 0,
+      "message": "why remove this?",
+      "revId": "3201c72db76fb1baabe9becf32e7788a88fe66ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

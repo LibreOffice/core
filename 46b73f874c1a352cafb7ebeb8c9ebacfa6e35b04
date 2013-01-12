@@ -1,0 +1,191 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAATH////8\u003d",
+        "filename": "svl/source/items/custritm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000025
+      },
+      "writtenOn": "2013-01-12T18:34:57Z",
+      "side": 1,
+      "message": "aTheValue is already an OUString",
+      "revId": "46b73f874c1a352cafb7ebeb8c9ebacfa6e35b04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH////4\u003d",
+        "filename": "svtools/source/dialogs/filedlg2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1000025
+      },
+      "writtenOn": "2013-01-12T18:34:57Z",
+      "side": 1,
+      "message": "sal_uInt16 -\u003e sal_Int32",
+      "revId": "46b73f874c1a352cafb7ebeb8c9ebacfa6e35b04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH////0\u003d",
+        "filename": "svtools/source/dialogs/filedlg2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1000025
+      },
+      "writtenOn": "2013-01-12T18:34:57Z",
+      "side": 1,
+      "message": "1. should be aEntry \u003d aEntry.replaceAt(..)\n\n2. the second parameter is a count, so we should pass aEntry.getLength()-nPos.\n\n3. Search returns STRING_NOTFOUND \u003d 0xFFFF if the character does not occur and Erase(0xFFFF) does nothing, while indexOf returns -1 and replaceAt(-1, length+1, \"\") returns an empty string, so in theory it is necessary to check if nPos \u003e\u003d 0.",
+      "revId": "46b73f874c1a352cafb7ebeb8c9ebacfa6e35b04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH////w\u003d",
+        "filename": "svtools/source/dialogs/filedlg2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1000025
+      },
+      "writtenOn": "2013-01-12T18:34:57Z",
+      "side": 1,
+      "message": "see the comments above",
+      "revId": "46b73f874c1a352cafb7ebeb8c9ebacfa6e35b04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH////s\u003d",
+        "filename": "svtools/source/dialogs/filedlg2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 609,
+      "author": {
+        "id": 1000025
+      },
+      "writtenOn": "2013-01-12T18:34:57Z",
+      "side": 1,
+      "message": "xub_StrLen -\u003e sal_Int32",
+      "revId": "46b73f874c1a352cafb7ebeb8c9ebacfa6e35b04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH////o\u003d",
+        "filename": "svtools/source/dialogs/filedlg2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1000025
+      },
+      "writtenOn": "2013-01-12T18:34:57Z",
+      "side": 1,
+      "message": "COMPARE_EQUAL -\u003e 0",
+      "revId": "46b73f874c1a352cafb7ebeb8c9ebacfa6e35b04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH////g\u003d",
+        "filename": "ucb/workben/ucb/ucbdemo.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000025
+      },
+      "writtenOn": "2013-01-12T18:34:57Z",
+      "side": 1,
+      "message": "should be createFromAscii(pText)  :)",
+      "revId": "46b73f874c1a352cafb7ebeb8c9ebacfa6e35b04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH////Y\u003d",
+        "filename": "ucb/workben/ucb/ucbdemo.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1102,
+      "author": {
+        "id": 1000025
+      },
+      "writtenOn": "2013-01-12T18:34:57Z",
+      "side": 1,
+      "message": "MSVC can\u0027t compile this, use:\n\nbFolder ? OUString(\"true\") : OUString(\"false\")",
+      "revId": "46b73f874c1a352cafb7ebeb8c9ebacfa6e35b04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH////c\u003d",
+        "filename": "ucb/workben/ucb/ucbdemo.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1116,
+      "author": {
+        "id": 1000025
+      },
+      "writtenOn": "2013-01-12T18:34:57Z",
+      "side": 1,
+      "message": "bDocument ? OUString(\"true\") : OUString(\"false\")",
+      "revId": "46b73f874c1a352cafb7ebeb8c9ebacfa6e35b04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH////U\u003d",
+        "filename": "ucb/workben/ucb/ucbdemo.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1321,
+      "author": {
+        "id": 1000025
+      },
+      "writtenOn": "2013-01-12T18:34:57Z",
+      "side": 1,
+      "message": "String -\u003e OUString",
+      "revId": "46b73f874c1a352cafb7ebeb8c9ebacfa6e35b04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH////Q\u003d",
+        "filename": "ucb/workben/ucb/ucbdemo.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1921,
+      "author": {
+        "id": 1000025
+      },
+      "writtenOn": "2013-01-12T18:34:57Z",
+      "side": 1,
+      "message": "should be OUString::createFromAscii( pText )",
+      "revId": "46b73f874c1a352cafb7ebeb8c9ebacfa6e35b04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
