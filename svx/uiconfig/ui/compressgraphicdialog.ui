@@ -205,7 +205,7 @@
                             </child>
                             <child>
                               <object class="GtkButton" id="calculate">
-                                <property name="label">Calculate</property>
+                                <property name="label" translatable="yes">Calculate</property>
                                 <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
