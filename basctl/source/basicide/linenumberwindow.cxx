@@ -98,7 +98,8 @@ void LineNumberWindow::DataChanged(DataChangedEvent const & rDCEvt)
         && (rDCEvt.GetFlags() & SETTINGS_STYLE) != 0)
     {
         Color aColor(GetSettings().GetStyleSettings().GetFieldColor());
-        if (aColor != rDCEvt.GetOldSettings()->GetStyleSettings().GetFieldColor())
+        const AllSettings* pOldSettings = rDCEvt.GetOldSettings();
+        if (!pOldSettings || aColor != pOldSettings->GetStyleSettings().GetFieldColor())
         {
             SetBackground(Wallpaper(aColor));
             Invalidate();

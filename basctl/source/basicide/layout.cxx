@@ -135,13 +135,14 @@ void Layout::DataChanged (DataChangedEvent const& rDCEvt)
     {
         bool bInvalidate = false;
         Color aColor = GetSettings().GetStyleSettings().GetWindowColor();
-        if (aColor != rDCEvt.GetOldSettings()->GetStyleSettings().GetWindowColor())
+        const AllSettings* pOldSettings = rDCEvt.GetOldSettings();
+        if (!pOldSettings || aColor != pOldSettings->GetStyleSettings().GetWindowColor())
         {
             SetBackground(Wallpaper(aColor));
             bInvalidate = true;
         }
         aColor = GetSettings().GetStyleSettings().GetWindowTextColor();
-        if (aColor != rDCEvt.GetOldSettings()->GetStyleSettings().GetWindowTextColor())
+        if (!pOldSettings || aColor != pOldSettings->GetStyleSettings().GetWindowTextColor())
         {
             Font aFont(GetFont());
             aFont.SetColor(aColor);
