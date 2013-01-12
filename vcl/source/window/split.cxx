@@ -729,7 +729,7 @@ void Splitter::DataChanged( const DataChangedEvent& rDCEvt )
     Window::DataChanged( rDCEvt );
     if( rDCEvt.GetType() == DATACHANGED_SETTINGS )
     {
-        AllSettings* pOldSettings = static_cast<AllSettings*>(rDCEvt.GetData());
+        const AllSettings* pOldSettings = rDCEvt.GetOldSettings();
         if(!pOldSettings)
             return;
 
