@@ -1677,7 +1677,7 @@ void DbgPrintMsgBox( const char* pLine )
     if ( aMessageBox.didTimeout() )
         DbgPrintShell( pLine );
     else if ( nResult == RET_YES )
-        GetpApp()->Abort( "Debug-Utilities-Error" );
+        GetpApp()->Abort( OUString("Debug-Utilities-Error") );
     else if ( nResult == RET_CANCEL )
         DbgCoreDump();
 }
@@ -1791,7 +1791,7 @@ void DbgGUIStart()
     }
     else
     {
-        ErrorBox( 0, WB_OK, "TOOLS Library has no Debug-Routines" ).Execute();
+        ErrorBox( 0, WB_OK, OUString("TOOLS Library has no Debug-Routines") ).Execute();
     }
 }
 
