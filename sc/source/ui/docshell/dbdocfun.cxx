@@ -1221,6 +1221,16 @@ bool isEditable(ScDocShell& rDocShell, const ScRangeList& rRanges, bool bApi)
     return true;
 }
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
+void createUndoDoc(std::auto_ptr<ScDocument>& pUndoDoc, ScDocument* pDoc, const ScRange& rRange)
+SAL_WNODEPRECATED_DECLARATIONS_POP
+{
+    SCTAB nTab = rRange.aStart.Tab();
+    pUndoDoc.reset(new ScDocument(SCDOCMODE_UNDO));
+    pUndoDoc->InitUndo(pDoc, nTab, nTab);
+    pDoc->CopyToDocument(rRange, IDF_ALL, false, pUndoDoc.get());
+}
+
 }
 
 bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewObj,
@@ -1266,13 +1276,7 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
         bRecord = false;
 
     if (bRecord)
-    {
-        ScRange aRange = pOldObj->GetOutRange();
-        SCTAB nTab = aRange.aStart.Tab();
-        pOldUndoDoc.reset(new ScDocument(SCDOCMODE_UNDO));
-        pOldUndoDoc->InitUndo(pDoc, nTab, nTab);
-        pDoc->CopyToDocument(aRange, IDF_ALL, false, pOldUndoDoc.get());
-    }
+        createUndoDoc(pOldUndoDoc, pDoc, pOldObj->GetOutRange());
 
     pNewObj->WriteSourceDataTo(*pOldObj);     // copy source data
 
@@ -1396,11 +1400,7 @@ bool ScDBDocFunc::RemovePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
     SCTAB nTab = aRange.aStart.Tab();
 
     if (bRecord)
-    {
-        pOldUndoDoc.reset(new ScDocument(SCDOCMODE_UNDO));
-        pOldUndoDoc->InitUndo(pDoc, nTab, nTab);
-        pDoc->CopyToDocument(aRange, IDF_ALL, false, pOldUndoDoc.get());
-    }
+        createUndoDoc(pOldUndoDoc, pDoc, aRange);
 
     pDoc->DeleteAreaTab( aRange.aStart.Col(), aRange.aStart.Row(),
                          aRange.aEnd.Col(),   aRange.aEnd.Row(),
@@ -1557,13 +1557,7 @@ bool ScDBDocFunc::UpdatePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
         bRecord = false;
 
     if (bRecord)
-    {
-        ScRange aRange = rDPObj.GetOutRange();
-        SCTAB nTab = aRange.aStart.Tab();
-        pOldUndoDoc.reset(new ScDocument(SCDOCMODE_UNDO));
-        pOldUndoDoc->InitUndo( pDoc, nTab, nTab );
-        pDoc->CopyToDocument(aRange, IDF_ALL, false, pOldUndoDoc.get());
-    }
+        createUndoDoc(pOldUndoDoc, pDoc, rDPObj.GetOutRange());
 
     rDPObj.SetAllowMove(false);
     rDPObj.ReloadGroupTableData();
