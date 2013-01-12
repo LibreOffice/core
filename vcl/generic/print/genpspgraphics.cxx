@@ -1283,9 +1283,9 @@ bool GenPspGraphics::filterText( const rtl::OUString& rOrig, rtl::OUString& rNew
         if( ! m_bPhoneCollectionActive )
         {
             rtl::OUStringBuffer aPhoneNr;
-            aPhoneNr.appendAscii( RTL_CONSTASCII_STRINGPARAM( "<Fax#>" ) );
+            aPhoneNr.append( "<Fax#>" );
             aPhoneNr.append( m_aPhoneCollection );
-            aPhoneNr.appendAscii( RTL_CONSTASCII_STRINGPARAM( "</Fax#>" ) );
+            aPhoneNr.append( "</Fax#>" );
             *m_pPhoneNr = aPhoneNr.makeStringAndClear();
             m_aPhoneCollection = rtl::OUString();
         }

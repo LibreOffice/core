@@ -103,7 +103,7 @@ static void getPaLib()
 #if defined( UNX ) && !( defined( MACOSX ) || defined( IOS )  || defined( ANDROID ) )
     if( ! driverLib )
     {
-        OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( _XSALSET_LIBNAME ) );
+        OUString aLibName( _XSALSET_LIBNAME );
         driverLib   = osl_loadModuleRelative( (oslGenericFunction)getPaLib, aLibName.pData, SAL_LOADMODULE_DEFAULT );
         if ( !driverLib )
         {
@@ -162,7 +162,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
 
     pJobSetup->mnPaperBin = 0;
     if( rData.m_pParser )
-        pKey                    = rData.m_pParser->getKey( OUString( RTL_CONSTASCII_USTRINGPARAM( "InputSlot" ) ) );
+        pKey                    = rData.m_pParser->getKey( OUString("InputSlot") );
     if( pKey )
         pValue                  = rData.m_aContext.getValue( pKey );
     if( pKey && pValue )
@@ -182,7 +182,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
 
     pJobSetup->meDuplexMode = DUPLEX_UNKNOWN;
     if( rData.m_pParser )
-        pKey = rData.m_pParser->getKey( OUString( RTL_CONSTASCII_USTRINGPARAM( "Duplex" ) ) );
+        pKey = rData.m_pParser->getKey( OUString("Duplex") );
     if( pKey )
         pValue = rData.m_aContext.getValue( pKey );
     if( pKey && pValue )
@@ -326,8 +326,8 @@ static bool sendAFax( const OUString& rFaxNumber, const OUString& rFileName, con
     {
         sal_Int32 nIndex = 0;
         OUString aFaxes( rFaxNumber );
-        OUString aBeginToken( RTL_CONSTASCII_USTRINGPARAM("<Fax#>") );
-        OUString aEndToken( RTL_CONSTASCII_USTRINGPARAM("</Fax#>") );
+        OUString aBeginToken( "<Fax#>" );
+        OUString aEndToken( "</Fax#>" );
         while( nIndex != -1 )
         {
             nIndex = aFaxes.indexOf( aBeginToken, nIndex );
@@ -467,7 +467,7 @@ void SalGenericInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
         while( nIndex != -1 )
         {
             rtl::OUString aToken( rInfo.m_aFeatures.getToken( 0, ',', nIndex ) );
-            if( aToken.matchAsciiL( RTL_CONSTASCII_STRINGPARAM("pdf=") ) )
+            if( aToken.match( "pdf=" ) )
             {
                 pInfo->maLocation = getPdfDir( rInfo );
                 break;
@@ -516,7 +516,7 @@ void PspSalInfoPrinter::InitPaperFormats( const ImplJobSetup* )
 
     if( m_aJobData.m_pParser )
     {
-        const PPDKey* pKey = m_aJobData.m_pParser->getKey( OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) );
+        const PPDKey* pKey = m_aJobData.m_pParser->getKey( OUString("PageSize") );
         if( pKey )
         {
             int nValues = pKey->countValues();
@@ -645,7 +645,7 @@ sal_Bool PspSalInfoPrinter::SetData(
             else
                 aPaper = rtl::OStringToOUString(PaperInfo::toPSName(pJobSetup->mePaperFormat), RTL_TEXTENCODING_ISO_8859_1);
 
-            pKey = aData.m_pParser->getKey( OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) );
+            pKey = aData.m_pParser->getKey( OUString("PageSize") );
             pValue = pKey ? pKey->getValueCaseInsensitive( aPaper ) : NULL;
 
             // some PPD files do not specify the standard paper names (e.g. C5 instead of EnvC5)
@@ -666,7 +666,7 @@ sal_Bool PspSalInfoPrinter::SetData(
         // merge paperbin if necessary
         if( nSetDataFlags & SAL_JOBSET_PAPERBIN )
         {
-            pKey = aData.m_pParser->getKey( OUString( RTL_CONSTASCII_USTRINGPARAM( "InputSlot" ) ) );
+            pKey = aData.m_pParser->getKey( OUString("InputSlot") );
             if( pKey )
             {
                 int nPaperBin = pJobSetup->mnPaperBin;
@@ -690,22 +690,22 @@ sal_Bool PspSalInfoPrinter::SetData(
         // merge duplex if necessary
         if( nSetDataFlags & SAL_JOBSET_DUPLEXMODE )
         {
-            pKey = aData.m_pParser->getKey( OUString( RTL_CONSTASCII_USTRINGPARAM( "Duplex" ) ) );
+            pKey = aData.m_pParser->getKey( OUString("Duplex") );
             if( pKey )
             {
                 pValue = NULL;
                 switch( pJobSetup->meDuplexMode )
                 {
                 case DUPLEX_OFF:
-                    pValue = pKey->getValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "None" ) ) );
+                    pValue = pKey->getValue( OUString("None") );
                     if( pValue == NULL )
-                        pValue = pKey->getValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "SimplexNoTumble" ) ) );
+                        pValue = pKey->getValue( OUString("SimplexNoTumble") );
                     break;
                 case DUPLEX_SHORTEDGE:
-                    pValue = pKey->getValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DuplexTumble" ) ) );
+                    pValue = pKey->getValue( OUString("DuplexTumble") );
                     break;
                 case DUPLEX_LONGEDGE:
-                    pValue = pKey->getValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DuplexNoTumble" ) ) );
+                    pValue = pKey->getValue( OUString("DuplexNoTumble") );
                     break;
                 case DUPLEX_UNKNOWN:
                 default:
@@ -776,7 +776,7 @@ sal_uLong PspSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* pJobSetup )
     JobData aData;
     JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, aData );
 
-    const PPDKey* pKey = aData.m_pParser ? aData.m_pParser->getKey( OUString( RTL_CONSTASCII_USTRINGPARAM( "InputSlot" ) ) ): NULL;
+    const PPDKey* pKey = aData.m_pParser ? aData.m_pParser->getKey( OUString("InputSlot") ): NULL;
     return pKey ? pKey->countValues() : 0;
 }
 
@@ -788,7 +788,7 @@ rtl::OUString PspSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pJobSetup,
     OUString aRet;
     if( aData.m_pParser )
     {
-        const PPDKey* pKey = aData.m_pParser ? aData.m_pParser->getKey( OUString( RTL_CONSTASCII_USTRINGPARAM( "InputSlot" ) ) ): NULL;
+        const PPDKey* pKey = aData.m_pParser ? aData.m_pParser->getKey( OUString("InputSlot") ): NULL;
         if( ! pKey || nPaperBin >= (sal_uLong)pKey->countValues() )
             aRet = aData.m_pParser->getDefaultInputSlot();
         else
@@ -816,8 +816,8 @@ sal_uLong PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, sal
             JobData aData;
             JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, aData );
 
-            const PPDKey* pKey = aData.m_pParser ? aData.m_pParser->getKey( OUString( RTL_CONSTASCII_USTRINGPARAM( "Collate" ) ) ) : NULL;
-            const PPDValue* pVal = pKey ? pKey->getValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "True" ) ) ) : NULL;
+            const PPDKey* pKey = aData.m_pParser ? aData.m_pParser->getKey( OUString("Collate") ) : NULL;
+            const PPDValue* pVal = pKey ? pKey->getValue(OUString("True")) : NULL;
 
             // PPDs don't mention the number of possible collated copies.
             // so let's guess as many as we want ?
@@ -931,8 +931,8 @@ sal_Bool PspSalPrinter::StartJob(
             m_aTmpFile = getTmpName();
             nMode = S_IRUSR | S_IWUSR;
 
-            ::boost::unordered_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash >::const_iterator it;
-            it = pJobSetup->maValueMap.find( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FAX#")) );
+            ::boost::unordered_map< OUString, OUString, ::rtl::OUStringHash >::const_iterator it;
+            it = pJobSetup->maValueMap.find( OUString("FAX#") );
             if( it != pJobSetup->maValueMap.end() )
                 m_aFaxNr = it->second;
 
@@ -952,7 +952,7 @@ sal_Bool PspSalPrinter::StartJob(
                 rtl::OUStringBuffer aFileName( getPdfDir( rInfo ) );
                 aFileName.append( '/' );
                 aFileName.append( rJobName );
-                aFileName.appendAscii( RTL_CONSTASCII_STRINGPARAM( ".pdf" ) );
+                aFileName.appendAscii( ".pdf" );
                 m_aFileName = aFileName.makeStringAndClear();
             }
             break;
@@ -1088,7 +1088,7 @@ sal_Bool PspSalPrinter::StartJob( const rtl::OUString* i_pFileName, const rtl::O
 
     // possibly create one job for collated output
     sal_Bool bSinglePrintJobs = sal_False;
-    beans::PropertyValue* pSingleValue = i_rController.getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintCollateAsSingleJobs" ) ) );
+    beans::PropertyValue* pSingleValue = i_rController.getValue( OUString( "PrintCollateAsSingleJobs" ) );
     if( pSingleValue )
     {
         pSingleValue->Value >>= bSinglePrintJobs;

@@ -52,11 +52,11 @@ OUString getOfficePath( enum whichOfficePath ePath )
     {
         bOnce = true;
         OUString aIni;
-        Bootstrap::get( OUString( RTL_CONSTASCII_USTRINGPARAM( "BRAND_BASE_DIR" ) ), aInstallationRootPath );
-        aIni = aInstallationRootPath + OUString( RTL_CONSTASCII_USTRINGPARAM( "/program/" SAL_CONFIGFILE( "bootstrap" ) ) );
+        Bootstrap::get( "BRAND_BASE_DIR", aInstallationRootPath );
+        aIni = aInstallationRootPath + "/program/" + SAL_CONFIGFILE( "bootstrap" );
         Bootstrap aBootstrap( aIni );
-        aBootstrap.getFrom( OUString( RTL_CONSTASCII_USTRINGPARAM( "CustomDataUrl" ) ), aConfigPath );
-        aBootstrap.getFrom( OUString( RTL_CONSTASCII_USTRINGPARAM( "UserInstallation" ) ), aUserPath );
+        aBootstrap.getFrom( "CustomDataUrl", aConfigPath );
+        aBootstrap.getFrom( "UserInstallation", aUserPath );
         OUString aUPath = aUserPath;
 
         if( ! aConfigPath.compareToAscii( "file://", 7 ) )
@@ -78,7 +78,7 @@ OUString getOfficePath( enum whichOfficePath ePath )
                 aUserPath = aSysPath;
         }
         // ensure user path exists
-        aUPath += OUString( RTL_CONSTASCII_USTRINGPARAM( "/user/psprint" ) );
+        aUPath += "/user/psprint";
         #if OSL_DEBUG_LEVEL > 1
         oslFileError eErr =
         #endif
@@ -363,7 +363,7 @@ void psp::normPath( OString& rPath )
     if( !aPath.isEmpty() && aPath[aPath.getLength()-1] == '/' )
         aPath = aPath.copy(0, aPath.getLength()-1);
 
-    if( ( aPath.indexOfL(RTL_CONSTASCII_STRINGPARAM("./")) != -1 ||
+    if( ( aPath.indexOf("./") != -1 ||
           aPath.indexOf( '~' ) != -1 )
         && realpath( aPath.getStr(), buf ) )
     {

@@ -109,7 +109,7 @@ void FontCache::flush()
     }
 
     aStream.SetLineDelimiter( LINEEND_LF );
-    aStream.WriteLine(rtl::OString(RTL_CONSTASCII_STRINGPARAM(CACHE_MAGIC)));
+    aStream.WriteLine( CACHE_MAGIC );
 
     PrintFontManager& rManager( PrintFontManager::get() );
     MultiAtomProvider* pAtoms = rManager.m_pAtoms;
@@ -119,13 +119,12 @@ void FontCache::flush()
         const FontDirMap& rDir( dir_it->second.m_aEntries );
 
         rtl::OString aDirectory(rManager.getDirectory(dir_it->first));
-        rtl::OStringBuffer aLine(
-            RTL_CONSTASCII_STRINGPARAM("FontCacheDirectory:"));
+        rtl::OStringBuffer aLine("FontCacheDirectory:");
         aLine.append(dir_it->second.m_nTimestamp);
         aLine.append(':');
         aLine.append(aDirectory);
         if( rDir.empty() && dir_it->second.m_bNoFiles )
-            aLine.insert(0, RTL_CONSTASCII_STRINGPARAM("Empty"));
+            aLine.insert(0, "Empty");
         aStream.WriteLine(aLine.makeStringAndClear());
 
         for( FontDirMap::const_iterator entry_it = rDir.begin(); entry_it != rDir.end(); ++entry_it )
@@ -135,7 +134,7 @@ void FontCache::flush()
             if( rEntry.begin() == rEntry.end() )
                 continue;
 
-            aLine.append(RTL_CONSTASCII_STRINGPARAM("File:"));
+            aLine.append("File:");
             aLine.append(entry_it->first);
             aStream.WriteLine(aLine.makeStringAndClear());
 
@@ -254,7 +253,7 @@ void FontCache::read()
 
     OString aLine;
     aStream.ReadLine( aLine );
-    if (!aLine.equalsL(RTL_CONSTASCII_STRINGPARAM(CACHE_MAGIC)))
+    if ( !(aLine == CACHE_MAGIC) )
     {
         #if OSL_DEBUG_LEVEL >1
         fprintf( stderr, "FontCache::read: cache file %s fails magic test\n", rtl::OUStringToOString(m_aCacheFile, osl_getThreadTextEncoding()).getStr() );
@@ -268,10 +267,10 @@ void FontCache::read()
     do
     {
         aStream.ReadLine( aLine );
-        if( aLine.compareTo( RTL_CONSTASCII_STRINGPARAM( "FontCacheDirectory:" ) ) == 0 ||
-            aLine.compareTo( RTL_CONSTASCII_STRINGPARAM( "EmptyFontCacheDirectory:" ) ) == 0 )
+        if( aLine.compareTo( "FontCacheDirectory:" ) == 0 ||
+            aLine.compareTo( "EmptyFontCacheDirectory:" ) == 0 )
         {
-            bool bEmpty = (aLine.compareTo( RTL_CONSTASCII_STRINGPARAM ("Empty" ) ) == 0);
+            bool bEmpty = (aLine.compareTo( "Empty" ) == 0);
             sal_Int32 nSearchIndex = bEmpty ? 24 : 19;
 
             OString aDir;
@@ -313,7 +312,7 @@ void FontCache::read()
                 m_aCache[ nDir ].m_bUserOverrideOnly = bKeepOnlyUserOverridden;
             }
         }
-        else if( pDir && aLine.compareTo( RTL_CONSTASCII_STRINGPARAM( "File:" ) ) == 0 )
+        else if( pDir && aLine.compareTo( "File:" ) == 0 )
         {
             OString aFile( aLine.copy( 5 ) );
             aStream.ReadLine( aLine );

@@ -1179,7 +1179,7 @@ PrinterGfx::DrawEPS( const Rectangle& rBoundingBox, void* pPtr, sal_uInt32 nSize
             char cChar = aLine[1];
             if( cChar == '%' )
             {
-                if( aLine.matchIgnoreAsciiCase( rtl::OString( RTL_CONSTASCII_STRINGPARAM("%%BoundingBox:") ) ) )
+                if( aLine.matchIgnoreAsciiCase( rtl::OString( "%%BoundingBox:") ) )
                 {
                     aLine = WhitespaceToSpace( aLine.getToken(1, ':') );
                     if( !aLine.isEmpty() && aLine.indexOf( "atend" ) == -1 )
@@ -1190,9 +1190,9 @@ PrinterGfx::DrawEPS( const Rectangle& rBoundingBox, void* pPtr, sal_uInt32 nSize
                         fTop    = StringToDouble( GetCommandLineToken( 3, aLine ) );
                     }
                 }
-                else if( aLine.matchIgnoreAsciiCase( rtl::OString( RTL_CONSTASCII_STRINGPARAM("%%Title:") ) ) )
+                else if( aLine.matchIgnoreAsciiCase( "%%Title:" ) )
                     aDocTitle = WhitespaceToSpace( aLine.copy( 8 ) );
-                else if( aLine.matchIgnoreAsciiCase( rtl::OString( RTL_CONSTASCII_STRINGPARAM("%%EndComments") ) ) )
+                else if( aLine.matchIgnoreAsciiCase( "%%EndComments" ) )
                     bEndComments = true;
             }
             else if( cChar == ' ' || cChar == '\t' || cChar == '\r' || cChar == '\n' )

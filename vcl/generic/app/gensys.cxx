@@ -86,12 +86,12 @@ SalGenericSystem::~SalGenericSystem()
 {
 }
 
-int SalGenericSystem::ShowNativeMessageBox( const rtl::OUString& rTitle, const rtl::OUString& rMessage,
+int SalGenericSystem::ShowNativeMessageBox( const OUString& rTitle, const OUString& rMessage,
                                             int nButtonCombination, int nDefaultButton,
                                             bool bUseResources )
 {
     int nDefButton = 0;
-    std::list< rtl::OUString > aButtons;
+    std::list< OUString > aButtons;
     int nButtonIds[5], nBut = 0;
 
     ImplHideSplash();
@@ -157,18 +157,18 @@ const char* SalGenericSystem::getFrameResName()
      *  then try RESOURCE_NAME environment variable
      *  then use argv[0] stripped by directories
      */
-    static rtl::OStringBuffer aResName;
+    static OStringBuffer aResName;
     if( !aResName.getLength() )
     {
         int nArgs = osl_getCommandArgCount();
         for( int n = 0; n < nArgs-1; n++ )
         {
-            rtl::OUString aArg;
+            OUString aArg;
             if( ! osl_getCommandArg( n, &aArg.pData ) &&
-                aArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-name")) &&
+                aArg.equalsIgnoreAsciiCase("-name") &&
                 ! osl_getCommandArg( n+1, &aArg.pData ) )
             {
-                aResName.append( rtl::OUStringToOString( aArg, osl_getThreadTextEncoding() ) );
+                aResName.append( OUStringToOString( aArg, osl_getThreadTextEncoding() ) );
                 break;
             }
         }
@@ -186,26 +186,26 @@ const char* SalGenericSystem::getFrameResName()
 
 const char* SalGenericSystem::getFrameClassName()
 {
-    static rtl::OStringBuffer aClassName;
+    static OStringBuffer aClassName;
     if( !aClassName.getLength() )
     {
-        rtl::OUString aIni, aProduct;
-        rtl::Bootstrap::get( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BRAND_BASE_DIR" ) ), aIni );
-        aIni += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/program/" SAL_CONFIGFILE( "bootstrap" ) ) );
+        OUString aIni, aProduct;
+        rtl::Bootstrap::get( "BRAND_BASE_DIR", aIni );
+        aIni += OUString("/program/") + SAL_CONFIGFILE( "bootstrap" );
         rtl::Bootstrap aBootstrap( aIni );
-        aBootstrap.getFrom( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ProductKey" ) ), aProduct );
+        aBootstrap.getFrom( "ProductKey", aProduct );
 
         if( !aProduct.isEmpty() )
-            aClassName.append( rtl::OUStringToOString( aProduct, osl_getThreadTextEncoding() ) );
+            aClassName.append( OUStringToOString( aProduct, osl_getThreadTextEncoding() ) );
         else
             aClassName.append( "VCLSalFrame" );
     }
     return aClassName.getStr();
 }
 
-rtl::OString SalGenericSystem::getFrameResName( SalExtStyle nStyle )
+OString SalGenericSystem::getFrameResName( SalExtStyle nStyle )
 {
-    rtl::OStringBuffer aBuf( 64 );
+    OStringBuffer aBuf( 64 );
     aBuf.append( getFrameResName() );
     if( (nStyle & SAL_FRAME_EXT_STYLE_DOCUMENT) )
         aBuf.append( ".DocumentWindow" );

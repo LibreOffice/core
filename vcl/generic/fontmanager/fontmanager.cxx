@@ -124,34 +124,34 @@ inline sal_uInt32 getUInt32BE( const sal_uInt8*& pBuffer )
 static FontWeight parseWeight( const rtl::OString& rWeight )
 {
     FontWeight eWeight = WEIGHT_DONTKNOW;
-    if (rWeight.indexOfL(RTL_CONSTASCII_STRINGPARAM("bold") ) != -1)
+    if (rWeight.indexOf("bold") != -1)
     {
-        if (rWeight.indexOfL(RTL_CONSTASCII_STRINGPARAM("emi")) != -1) // semi, demi
+        if (rWeight.indexOf("emi") != -1) // semi, demi
             eWeight = WEIGHT_SEMIBOLD;
-        else if (rWeight.indexOfL(RTL_CONSTASCII_STRINGPARAM("ultra")) != -1)
+        else if (rWeight.indexOf("ultra") != -1)
             eWeight = WEIGHT_ULTRABOLD;
         else
             eWeight = WEIGHT_BOLD;
     }
-    else if (rWeight.indexOfL(RTL_CONSTASCII_STRINGPARAM("heavy")) != -1)
+    else if (rWeight.indexOf("heavy") != -1)
         eWeight = WEIGHT_BOLD;
-    else if (rWeight.indexOfL(RTL_CONSTASCII_STRINGPARAM("light")) != -1)
+    else if (rWeight.indexOf("light") != -1)
     {
-        if (rWeight.indexOfL(RTL_CONSTASCII_STRINGPARAM("emi")) != -1) // semi, demi
+        if (rWeight.indexOf("emi") != -1) // semi, demi
             eWeight = WEIGHT_SEMILIGHT;
-        else if (rWeight.indexOfL(RTL_CONSTASCII_STRINGPARAM("ultra")) != -1)
+        else if (rWeight.indexOf("ultra") != -1)
             eWeight = WEIGHT_ULTRALIGHT;
         else
             eWeight = WEIGHT_LIGHT;
     }
-    else if (rWeight.indexOfL(RTL_CONSTASCII_STRINGPARAM("black")) != -1)
+    else if (rWeight.indexOf("black") != -1)
         eWeight = WEIGHT_BLACK;
-    else if (rWeight.equalsL(RTL_CONSTASCII_STRINGPARAM("demi")))
+    else if (rWeight == "demi")
         eWeight = WEIGHT_SEMIBOLD;
-    else if (rWeight.equalsL(RTL_CONSTASCII_STRINGPARAM("book")) ||
-             rWeight.equalsL(RTL_CONSTASCII_STRINGPARAM("semicondensed")))
+    else if ((rWeight == "book") ||
+             (rWeight == "semicondensed"))
         eWeight = WEIGHT_LIGHT;
-    else if (rWeight.equalsL(RTL_CONSTASCII_STRINGPARAM("medium")) || rWeight.equalsL(RTL_CONSTASCII_STRINGPARAM("roman")))
+    else if ((rWeight == "medium") || (rWeight == "roman"))
         eWeight = WEIGHT_MEDIUM;
     else
         eWeight = WEIGHT_NORMAL;
@@ -544,14 +544,10 @@ static bool familyNameOverride( const OUString& i_rPSname, OUString& o_rFamilyNa
     static boost::unordered_map< OUString, OUString, OUStringHash > aPSNameToFamily( 16 );
     if( aPSNameToFamily.empty() ) // initialization
     {
-        aPSNameToFamily[ OUString( RTL_CONSTASCII_USTRINGPARAM( "Helvetica-Narrow" ) ) ] =
-                         OUString( RTL_CONSTASCII_USTRINGPARAM( "Helvetica Narrow" ) );
-        aPSNameToFamily[ OUString( RTL_CONSTASCII_USTRINGPARAM( "Helvetica-Narrow-Bold" ) ) ] =
-                         OUString( RTL_CONSTASCII_USTRINGPARAM( "Helvetica Narrow" ) );
-        aPSNameToFamily[ OUString( RTL_CONSTASCII_USTRINGPARAM( "Helvetica-Narrow-BoldOblique" ) ) ] =
-                         OUString( RTL_CONSTASCII_USTRINGPARAM( "Helvetica Narrow" ) );
-        aPSNameToFamily[ OUString( RTL_CONSTASCII_USTRINGPARAM( "Helvetica-Narrow-Oblique" ) ) ] =
-                         OUString( RTL_CONSTASCII_USTRINGPARAM( "Helvetica Narrow" ) );
+        aPSNameToFamily[ "Helvetica-Narrow" ] = "Helvetica Narrow";
+        aPSNameToFamily[ "Helvetica-Narrow-Bold" ] = "Helvetica Narrow";
+        aPSNameToFamily[ "Helvetica-Narrow-BoldOblique" ] = "Helvetica Narrow";
+        aPSNameToFamily[ "Helvetica-Narrow-Oblique" ] = "Helvetica Narrow";
     }
     boost::unordered_map<OUString,OUString,OUStringHash>::const_iterator it =
        aPSNameToFamily.find( i_rPSname );
@@ -1110,15 +1106,15 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, ::
     if (eFormat == UNKNOWN)
     {
         rtl::OString aExt( rFontFile.copy( rFontFile.lastIndexOf( '.' )+1 ) );
-        if( aExt.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("pfb")) || aExt.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("pfa")) )
+        if( aExt.equalsIgnoreAsciiCase("pfb") || aExt.equalsIgnoreAsciiCase("pfa") )
             eFormat = TYPE1;
-        else if( aExt.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("afm")))
+        else if( aExt.equalsIgnoreAsciiCase("afm"))
             eFormat = AFM;
-        else if( aExt.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("ttf"))
-             ||  aExt.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("ttc"))
-             ||  aExt.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("tte")) ) // #i33947# for Gaiji support
+        else if( aExt.equalsIgnoreAsciiCase("ttf")
+             ||  aExt.equalsIgnoreAsciiCase("ttc")
+             ||  aExt.equalsIgnoreAsciiCase("tte") ) // #i33947# for Gaiji support
             eFormat = TRUETYPE;
-        else if( aExt.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("otf")) ) // check for TTF- and PS-OpenType too
+        else if( aExt.equalsIgnoreAsciiCase("otf") ) // check for TTF- and PS-OpenType too
             eFormat = CFF;
     }
 
@@ -1134,17 +1130,17 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, ::
                 rFontFile.copy(0, rFontFile.getLength() - 4)).
                 append(pSuffix[i]).makeStringAndClear();
 
-            rtl::OStringBuffer aFilePath(aDir);
+            OStringBuffer aFilePath(aDir);
             aFilePath.append('/').append(aName);
 
-            rtl::OString aAfmFile;
+            OString aAfmFile;
             if( access( aFilePath.makeStringAndClear().getStr(), R_OK ) )
             {
                 // try in subdirectory afm instead
-                aFilePath.append(aDir).append(RTL_CONSTASCII_STRINGPARAM("/afm/")).append(aName);
+                aFilePath.append(aDir).append("/afm/").append(aName);
 
                 if (!access(aFilePath.getStr(), R_OK))
-                    aAfmFile = rtl::OString(RTL_CONSTASCII_STRINGPARAM("afm/")) + aName;
+                    aAfmFile = OString("afm/") + aName;
             }
             else
                 aAfmFile = aName;
@@ -1407,7 +1403,7 @@ namespace
         if ( rName == "Berling Antiqua" )
         {
             ::std::set< OUString >::iterator aEnd = rSet.end();
-            ::std::set< OUString >::iterator aI = rSet.find(OUString(RTL_CONSTASCII_USTRINGPARAM("Times New Roman")));
+            ::std::set< OUString >::iterator aI = rSet.find("Times New Roman");
             if (aI != aEnd)
             {
                 bRet = true;
@@ -2891,7 +2887,7 @@ bool PrintFontManager::readOverrideMetrics()
     if( !xFact.is() )
         return false;
     css::uno::Reference< XMaterialHolder > xMat(
-                xFact->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.psprint.CompatMetricOverride" ) ) ),
+                xFact->createInstance( "com.sun.star.psprint.CompatMetricOverride" ),
                 UNO_QUERY );
     if( !xMat.is() )
         return false;
