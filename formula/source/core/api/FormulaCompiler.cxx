@@ -433,6 +433,8 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
             // Additional functions not within range of functions.
             static const sal_uInt16 aOpCodes[] = {
                 SC_OPCODE_IF,
+                SC_OPCODE_IF_ERROR,
+                SC_OPCODE_IF_NA,
                 SC_OPCODE_CHOSE,
                 SC_OPCODE_AND,
                 SC_OPCODE_OR,

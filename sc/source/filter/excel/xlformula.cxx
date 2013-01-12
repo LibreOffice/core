@@ -365,7 +365,16 @@ static const XclFunctionInfo saFuncTable_Oox[] =
     { ocAverageIf,          NOID,   2,  3,  V, { RO, VR, RO }, EXC_FUNCFLAG_IMPORTONLY, EXC_FUNCNAME( "AVERAGEIF" ) },
     { ocAverageIf,          255,    3,  4,  V, { RO_E, RO, VR, RO }, EXC_FUNCFLAG_EXPORTONLY, EXC_FUNCNAME( "AVERAGEIF" ) },
     { ocAverageIfs,         NOID,   3,  MX, V, { RO, RO, VR }, EXC_FUNCFLAG_IMPORTONLY|EXC_FUNCFLAG_PARAMPAIRS, EXC_FUNCNAME( "AVERAGEIFS" ) },
-    { ocAverageIfs,         255,    4,  MX, V, { RO_E, RO, RO, VR }, EXC_FUNCFLAG_EXPORTONLY|EXC_FUNCFLAG_PARAMPAIRS, EXC_FUNCNAME( "AVERAGEIFS" ) }
+    { ocAverageIfs,         255,    4,  MX, V, { RO_E, RO, RO, VR }, EXC_FUNCFLAG_EXPORTONLY|EXC_FUNCFLAG_PARAMPAIRS, EXC_FUNCNAME( "AVERAGEIFS" ) },
+    { ocIfError,            NOID,   2,  2,  V, { VO, RO }, EXC_FUNCFLAG_IMPORTONLY, EXC_FUNCNAME( "IFERROR" ) },
+    { ocIfError,            255,    3,  3,  V, { RO_E, VO, RO }, EXC_FUNCFLAG_EXPORTONLY, EXC_FUNCNAME( "IFERROR" ) }
+};
+
+/** Functions new in Excel 2013. */
+static const XclFunctionInfo saFuncTable_2013[] =
+{
+    { ocIfNA,               NOID,   2,  2,  V, { VO, RO }, EXC_FUNCFLAG_IMPORTONLY, EXC_FUNCNAME( "IFNA" ) },
+    { ocIfNA,               255,    3,  3,  V, { RO_E, VO, RO }, EXC_FUNCFLAG_EXPORTONLY, EXC_FUNCNAME( "IFNA" ) }
 };
 
 #define EXC_FUNCENTRY_ODF( opcode, minparam, maxparam, flags, asciiname ) \
@@ -393,7 +402,6 @@ static const XclFunctionInfo saFuncTable_Odf[] =
     EXC_FUNCENTRY_ODF( ocFormula,       1,  1,  0,  "FORMULA" ),
     EXC_FUNCENTRY_ODF( ocGamma,         1,  1,  0,  "GAMMA" ),
     EXC_FUNCENTRY_ODF( ocGauss,         1,  1,  0,  "GAUSS" ),
-    EXC_FUNCENTRY_ODF( ocNoName,        2,  2,  0,  "IFNA" ),
     EXC_FUNCENTRY_ODF( ocIsFormula,     1,  1,  0,  "ISFORMULA" ),
     EXC_FUNCENTRY_ODF( ocWeek,          1,  2,  0,  "ISOWEEKNUM" ),
     EXC_FUNCENTRY_ODF( ocMatrixUnit,    1,  1,  0,  "MUNIT" ),
@@ -434,6 +442,7 @@ XclFunctionProvider::XclFunctionProvider( const XclRoot& rRoot )
     if( eBiff >= EXC_BIFF8 )
         (this->*pFillFunc)( saFuncTable_8, STATIC_ARRAY_END( saFuncTable_8 ) );
     (this->*pFillFunc)( saFuncTable_Oox, STATIC_ARRAY_END( saFuncTable_Oox ) );
+    (this->*pFillFunc)( saFuncTable_2013, STATIC_ARRAY_END( saFuncTable_2013 ) );
     (this->*pFillFunc)( saFuncTable_Odf, STATIC_ARRAY_END( saFuncTable_Odf ) );
 }
 

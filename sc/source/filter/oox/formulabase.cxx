@@ -711,11 +711,18 @@ static const FunctionData saFuncTableOox[] =
     { 0,                        "CUBEKPIMEMBER",        477,    NOID,   3,  4,  V, { VR }, 0 },
     { 0,                        "CUBESET",              478,    NOID,   2,  5,  V, { VR, RX, VR }, 0 },
     { 0,                        "CUBESETCOUNT",         479,    NOID,   1,  1,  V, { VR }, 0 },
-    { 0,                        "IFERROR",              480,    NOID,   2,  2,  V, { VO, RO }, 0 },
+    { "IFERROR",                "IFERROR",              480,    NOID,   2,  2,  V, { VO, RO }, FUNCFLAG_MACROCALL },
     { "COUNTIFS",               "COUNTIFS",             481,    NOID,   2,  MX, V, { RO, VR }, FUNCFLAG_MACROCALL | FUNCFLAG_PARAMPAIRS },
     { "SUMIFS",                 "SUMIFS",               482,    NOID,   3,  MX, V, { RO, RO, VR }, FUNCFLAG_MACROCALL | FUNCFLAG_PARAMPAIRS },
     { "AVERAGEIF",              "AVERAGEIF",            483,    NOID,   2,  3,  V, { RO, VR, RO }, FUNCFLAG_MACROCALL },
     { "AVERAGEIFS",             "AVERAGEIFS",           484,    NOID,   3,  MX, V, { RO, RO, VR }, FUNCFLAG_MACROCALL | FUNCFLAG_PARAMPAIRS }
+};
+
+/** Functions new in Excel 2013. */
+/* FIXME: BIFF12 function identifer available? Where to obtain? */
+static const FunctionData saFuncTable2013[] =
+{
+    { "IFNA",                   "IFNA",                 NOID,   NOID,   2,  2,  V, { VO, RO }, FUNCFLAG_MACROCALL },
 };
 
 /** Functions defined by OpenFormula, but not supported by Calc or by Excel. */
@@ -739,7 +746,6 @@ static const FunctionData saFuncTableOdf[] =
     { "FORMULA",                0,                      NOID,   NOID,   1,  1,  V, { RO }, FUNCFLAG_MACROCALLODF },
     { "GAMMA",                  0,                      NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALLODF },
     { "GAUSS",                  0,                      NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALLODF },
-    { "IFNA",                   0,                      NOID,   NOID,   2,  2,  V, { VR, RO }, FUNCFLAG_MACROCALLODF },
     { "ISFORMULA",              0,                      NOID,   NOID,   1,  1,  V, { RO }, FUNCFLAG_MACROCALLODF },
     { "ISOWEEKNUM",             0,                      NOID,   NOID,   1,  2,  V, { VR }, FUNCFLAG_MACROCALLODF },
     { "MUNIT",                  0,                      NOID,   NOID,   1,  1,  A, { VR }, FUNCFLAG_MACROCALLODF },
@@ -866,6 +872,7 @@ FunctionProviderImpl::FunctionProviderImpl( FilterType eFilter, BiffType eBiff, 
     if( eBiff >= BIFF8 )
         initFuncs( saFuncTableBiff8, STATIC_ARRAY_END( saFuncTableBiff8 ), nMaxParam, bImportFilter );
     initFuncs( saFuncTableOox, STATIC_ARRAY_END( saFuncTableOox ), nMaxParam, bImportFilter );
+    initFuncs( saFuncTable2013, STATIC_ARRAY_END( saFuncTable2013 ), nMaxParam, bImportFilter );
     initFuncs( saFuncTableOdf, STATIC_ARRAY_END( saFuncTableOdf ), nMaxParam, bImportFilter );
 }
 
