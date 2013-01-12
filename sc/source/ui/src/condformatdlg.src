@@ -113,9 +113,10 @@ Control RID_COND_ENTRY
     ListBox LB_TYPE
     {
         Pos = MAP_APPFONT( 5, 15 );
-        Size = MAP_APPFONT( 80, 40 );
+        Size = MAP_APPFONT( 80, 60 );
         Border = TRUE;
         DropDown = TRUE;
+        DDExtraWidth = TRUE;
         StringList [ en-US ] =
         {
             "All Cells";
@@ -130,6 +131,7 @@ Control RID_COND_ENTRY
         Size = MAP_APPFONT( 80, 80 );
         Border = TRUE;
         DropDown = TRUE;
+        DDExtraWidth = TRUE;
         StringList [ en-US ] =
         {
             "equal to";
