@@ -33,6 +33,7 @@
 #include <com/sun/star/sheet/XFormulaParser.hpp>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include "oox/core/filterbase.hxx"
 #include "oox/helper/containerhelper.hxx"
 #include "oox/token/properties.hxx"
@@ -1228,6 +1229,9 @@ bool OpCodeProviderImpl::initFuncOpCode( FunctionInfo& orFuncInfo, const ApiToke
         {
             // ignore entries for functions unknown by Calc *and* by Excel
             bIsValid = orFuncInfo.maOoxFuncName.isEmpty();
+            SAL_WARN_IF( !bIsValid, "sc",
+                    "OpCodeProviderImpl::initFuncOpCode - no opcode mapping for function ODF '" <<
+                    orFuncInfo.maOdfFuncName << "' <-> OOXML '" << orFuncInfo.maOoxFuncName << "'");
         }
     }
     else if( orFuncInfo.mnBiffFuncId == BIFF_FUNC_EXTERNCALL )
