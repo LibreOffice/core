@@ -874,14 +874,14 @@ DbgDialog::DbgDialog() :
     }
 
     {
-    maTraceBox.InsertEntry("None");
-    maTraceBox.InsertEntry("File");
-    maTraceBox.InsertEntry("Window");
-    maTraceBox.InsertEntry("Shell");
-    maTraceBox.InsertEntry("MessageBox");
-    maTraceBox.InsertEntry("TestTool");
-    maTraceBox.InsertEntry("Debugger");
-    maTraceBox.InsertEntry("Abort");
+    maTraceBox.InsertEntry(OUString("None"));
+    maTraceBox.InsertEntry(OUString("File"));
+    maTraceBox.InsertEntry(OUString("Window"));
+    maTraceBox.InsertEntry(OUString("Shell"));
+    maTraceBox.InsertEntry(OUString("MessageBox"));
+    maTraceBox.InsertEntry(OUString("TestTool"));
+    maTraceBox.InsertEntry(OUString("Debugger"));
+    maTraceBox.InsertEntry(OUString("Abort"));
     ImplAppendUserDefinedChannels( maTraceBox );
     ImplSelectChannel( maTraceBox, pData->nTraceOut, 0 );
     maTraceBox.Show();
@@ -897,14 +897,14 @@ DbgDialog::DbgDialog() :
     }
 
     {
-    maWarningBox.InsertEntry("None");
-    maWarningBox.InsertEntry("File");
-    maWarningBox.InsertEntry("Window");
-    maWarningBox.InsertEntry("Shell");
-    maWarningBox.InsertEntry("MessageBox");
-    maWarningBox.InsertEntry("TestTool");
-    maWarningBox.InsertEntry("Debugger");
-    maWarningBox.InsertEntry("Abort");
+    maWarningBox.InsertEntry(OUString("None"));
+    maWarningBox.InsertEntry(OUString("File"));
+    maWarningBox.InsertEntry(OUString("Window"));
+    maWarningBox.InsertEntry(OUString("Shell"));
+    maWarningBox.InsertEntry(OUString("MessageBox"));
+    maWarningBox.InsertEntry(OUString("TestTool"));
+    maWarningBox.InsertEntry(OUString("Debugger"));
+    maWarningBox.InsertEntry(OUString("Abort"));
     ImplAppendUserDefinedChannels( maWarningBox );
     ImplSelectChannel( maWarningBox, pData->nWarningOut, 0 );
     maWarningBox.Show();
@@ -922,18 +922,18 @@ DbgDialog::DbgDialog() :
     {
     if ( DbgIsAllErrorOut() )
     {
-        maErrorBox.InsertEntry( "None" );
-        maErrorBox.InsertEntry( "File" );
-        maErrorBox.InsertEntry( "Window" );
-        maErrorBox.InsertEntry( "Shell" );
+        maErrorBox.InsertEntry( OUString("None") );
+        maErrorBox.InsertEntry( OUString("File") );
+        maErrorBox.InsertEntry( OUString("Window") );
+        maErrorBox.InsertEntry( OUString("Shell") );
         mnErrorOff = 0;
     }
     else
         mnErrorOff = 4;
-    maErrorBox.InsertEntry( "MessageBox" );
-    maErrorBox.InsertEntry( "TestTool" );
-    maErrorBox.InsertEntry( "Debugger" );
-    maErrorBox.InsertEntry( "Abort" );
+    maErrorBox.InsertEntry( OUString("MessageBox") );
+    maErrorBox.InsertEntry( OUString("TestTool") );
+    maErrorBox.InsertEntry( OUString("Debugger") );
+    maErrorBox.InsertEntry( OUString("Abort") );
     ImplAppendUserDefinedChannels( maErrorBox );
     ImplSelectChannel( maErrorBox, pData->nErrorOut, mnErrorOff );
     maErrorBox.Show();
