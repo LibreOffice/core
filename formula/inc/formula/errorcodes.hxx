@@ -72,6 +72,9 @@ const sal_uInt16 errNestedArray          = 533;
 // be used to distinguish that condition from all other (inherited) errors. Do
 // not use for anything else! Never push or inherit the error otherwise!
 const sal_uInt16 errNotNumericString     = 534;
+// ScInterpreter internal:  jump matrix already has a result at this position,
+// do not overwrite in case of empty code path.
+const sal_uInt16 errJumpMatHasResult     = 535;
 
 // Interpreter: NA() not available condition, not a real error
 const sal_uInt16 NOTAVAILABLE            = 0x7fff;

@@ -2651,6 +2651,70 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The result of the function if the logical test returns FALSE." ;
         };
     };
+     // -=*# Resource for function IFERROR #*=-
+    Resource SC_OPCODE_IF_ERROR
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Returns value if not an error value, else alternative." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_LOGIC;
+            U2S( HID_FUNC_IFERROR );
+            2;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "value" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The value to be calculated." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "alternative value" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The alternative to be returned, should value be an error value." ;
+        };
+    };
+     // -=*# Resource for function IFNA #*=-
+    Resource SC_OPCODE_IF_NA
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Returns value if not a #N/A error, else alternative." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_LOGIC;
+            U2S( HID_FUNC_IFNA );
+            2;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "value" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The value to be calculated." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "alternative value" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The alternative to be returned, should value be a #N/A error." ;
+      };
+    };
      // -=*# Resource for function ODER #*=-
     Resource SC_OPCODE_OR
     {

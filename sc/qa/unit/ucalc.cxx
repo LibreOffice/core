@@ -671,6 +671,79 @@ void testFuncCOUNTIF(ScDocument* pDoc)
     CPPUNIT_ASSERT_MESSAGE("We shouldn't count empty string as valid number.", result == 0.0);
 }
 
+void testFuncIFERROR(ScDocument* pDoc)
+{
+    // IFERROR/IFNA (fdo#56124)
+
+    // Empty A1:A39 first.
+    clearRange(pDoc, ScRange(0, 0, 0, 0, 40, 0));
+
+    // Raw data (rows 1 through 12)
+    const char* aData[] = {
+        "1",
+        "e",
+        "=SQRT(4)",
+        "=SQRT(-2)",
+        "=A4",
+        "=1/0",
+        "=NA()",
+        "bar",
+        "4",
+        "gee",
+        "=1/0",
+        "23"
+    };
+
+    SCROW nRows = SAL_N_ELEMENTS(aData);
+    for (SCROW i = 0; i < nRows; ++i)
+        pDoc->SetString(0, i, 0, rtl::OUString::createFromAscii(aData[i]));
+
+    printRange(pDoc, ScRange(0, 0, 0, 0, nRows-1, 0), "data range for IFERROR/IFNA");
+
+    // formulas and results
+    struct {
+        const char* pFormula; const char* pResult;
+    } aChecks[] = {
+        { "=IFERROR(A1;9)",                         "1" },
+        { "=IFERROR(A2;9)",                         "e" },
+        { "=IFERROR(A3;9)",                         "2" },
+        { "=IFERROR(A4;-7)",                       "-7" },
+        { "=IFERROR(A5;-7)",                       "-7" },
+        { "=IFERROR(A6;-7)",                       "-7" },
+        { "=IFERROR(A7;-7)",                       "-7" },
+        { "=IFNA(A6;9)",                      "#DIV/0!" },
+        { "=IFNA(A7;-7)",                          "-7" },
+        { "=IFNA(VLOOKUP(\"4\";A8:A10;1;0);-2)",    "4" },
+        { "=IFNA(VLOOKUP(\"fop\";A8:A10;1;0);-2)", "-2" },
+        { "{=IFERROR(3*A11:A12;1998)}[0]",       "1998" },  // um.. this is not the correct way to insert a
+        { "{=IFERROR(3*A11:A12;1998)}[1]",         "69" }   // matrix formula, just a place holder, see below
+    };
+
+    nRows = SAL_N_ELEMENTS(aChecks);
+    for (SCROW i = 0; i < nRows-2; ++i)
+    {
+        SCROW nRow = 20 + i;
+        pDoc->SetString(0, nRow, 0, rtl::OUString::createFromAscii(aChecks[i].pFormula));
+    }
+
+    // Create a matrix range in last two rows of the range above, actual data
+    // of the placeholders.
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+    pDoc->InsertMatrixFormula(0, 20 + nRows-2, 0, 20 + nRows-1, aMark, "=IFERROR(3*A11:A12;1998)", NULL);
+
+    pDoc->CalcAll();
+
+    for (SCROW i = 0; i < nRows; ++i)
+    {
+        rtl::OUString aResult;
+        SCROW nRow = 20 + i;
+        pDoc->GetString(0, nRow, 0, aResult);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+            aChecks[i].pFormula, OUString::createFromAscii( aChecks[i].pResult), aResult);
+    }
+}
+
 void testFuncVLOOKUP(ScDocument* pDoc)
 {
     // VLOOKUP
@@ -1063,6 +1136,7 @@ void Test::testCellFunctions()
     testFuncPRODUCT(m_pDoc);
     testFuncN(m_pDoc);
     testFuncCOUNTIF(m_pDoc);
+    testFuncIFERROR(m_pDoc);
     testFuncVLOOKUP(m_pDoc);
     testFuncMATCH(m_pDoc);
     testFuncCELL(m_pDoc);
@@ -4175,6 +4249,8 @@ void Test::testFunctionLists()
         "AND",
         "FALSE",
         "IF",
+        "IFERROR",
+        "IFNA",
         "NOT",
         "OR",
         "TRUE",

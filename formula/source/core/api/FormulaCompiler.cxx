@@ -433,6 +433,8 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
             // Additional functions not within range of functions.
             static const sal_uInt16 aOpCodes[] = {
                 SC_OPCODE_IF,
+                SC_OPCODE_IF_ERROR,
+                SC_OPCODE_IF_NA,
                 SC_OPCODE_CHOSE,
                 SC_OPCODE_AND,
                 SC_OPCODE_OR,
@@ -824,7 +826,7 @@ sal_uInt16 FormulaCompiler::GetErrorConstant( const String& rName ) const
     {
         switch ((*iLook).second)
         {
-            // Not all may make sense in a formula, but these we know as 
+            // Not all may make sense in a formula, but these we know as
             // opcodes.
             case ocErrNull:
                 nError = errNoCode;
@@ -1125,7 +1127,8 @@ void FormulaCompiler::Factor()
                 || eOp == ocOr
                 || eOp == ocBad
                 || ( eOp >= ocInternalBegin && eOp <= ocInternalEnd )
-                || (bCompileForFAP && ((eOp == ocIf) || (eOp == ocChose)))
+                || ( bCompileForFAP
+                     && ( eOp == ocIf || eOp == ocIfError || eOp == ocIfNA || eOp == ocChose ) )
             )
         {
             pFacToken = mpToken;
@@ -1174,14 +1177,25 @@ void FormulaCompiler::Factor()
                 pFacToken->SetByte( nSepCount );
             PutCode( pFacToken );
         }
-        else if (eOp == ocIf || eOp == ocChose)
+        else if (eOp == ocIf || eOp == ocIfError || eOp == ocIfNA || eOp == ocChose)
         {
             // the PC counters are -1
             pFacToken = mpToken;
-            if ( eOp == ocIf )
-                pFacToken->GetJump()[ 0 ] = 3;  // if, else, behind
-            else
-                pFacToken->GetJump()[ 0 ] = MAXJUMPCOUNT+1;
+            switch (eOp)
+            {
+                case ocIf:
+                    pFacToken->GetJump()[ 0 ] = 3;  // if, else, behind
+                    break;
+                case ocChose:
+                    pFacToken->GetJump()[ 0 ] = MAXJUMPCOUNT+1;
+                    break;
+                case ocIfError:
+                case ocIfNA:
+                    pFacToken->GetJump()[ 0 ] = 2;  // if, behind
+                    break;
+                default:
+                    SAL_WARN( "formula.core", "FormulaCompiler::Factor: forgot to add a jump count case?");
+            }
             eOp = NextToken();
             if (eOp == ocOpen)
             {
@@ -1190,14 +1204,30 @@ void FormulaCompiler::Factor()
             }
             else
                 SetError(errPairExpected);
-            short nJumpCount = 0;
             PutCode( pFacToken );
-            // during AutoCorrect (since pArr->GetCodeError() is
+            // During AutoCorrect (since pArr->GetCodeError() is
             // ignored) an unlimited ocIf would crash because
             // ScRawToken::Clone() allocates the JumpBuffer according to
-            // nJump[0]*2+2, which is 3*2+2 on ocIf.
-            const short nJumpMax =
-                (pFacToken->GetOpCode() == ocIf ? 3 : MAXJUMPCOUNT);
+            // nJump[0]*2+2, which is 3*2+2 on ocIf and 2*2+2 ocIfError and ocIfNA.
+            short nJumpMax;
+            OpCode eFacOpCode = pFacToken->GetOpCode();
+            switch (eFacOpCode)
+            {
+                case ocIf:
+                    nJumpMax = 3;
+                    break;
+                case ocChose:
+                    nJumpMax = MAXJUMPCOUNT;
+                    break;
+                case ocIfError:
+                case ocIfNA:
+                    nJumpMax = 2;
+                    break;
+                default:
+                    nJumpMax = 0;
+                    SAL_WARN( "formula.core", "FormulaCompiler::Factor: forgot to add a jump max case?");
+            }
+            short nJumpCount = 0;
             while ( (nJumpCount < (MAXJUMPCOUNT - 1)) && (eOp == ocSep)
                     && (!pArr->GetCodeError() || bIgnoreErrors) )
             {
@@ -1216,11 +1246,28 @@ void FormulaCompiler::Factor()
                 // always limit to nJumpMax, no arbitrary overwrites
                 if ( ++nJumpCount <= nJumpMax )
                     pFacToken->GetJump()[ nJumpCount ] = pc-1;
-                if ((pFacToken->GetOpCode() == ocIf && (nJumpCount > 3)) ||
-                                 (nJumpCount >= MAXJUMPCOUNT))
-                    SetError(errIllegalParameter);
-                else
+                eFacOpCode = pFacToken->GetOpCode();
+                bool bLimitOk;
+                switch (eFacOpCode)
+                {
+                    case ocIf:
+                        bLimitOk = (nJumpCount <= 3);
+                        break;
+                    case ocChose:
+                        bLimitOk = (nJumpCount < MAXJUMPCOUNT); /* TODO: check, really <, not <=? */
+                        break;
+                    case ocIfError:
+                    case ocIfNA:
+                        bLimitOk = (nJumpCount <= 2);
+                        break;
+                    default:
+                        bLimitOk = false;
+                        SAL_WARN( "formula.core", "FormulaCompiler::Factor: forgot to add a jump limit case?");
+                }
+                if (bLimitOk)
                     pFacToken->GetJump()[ 0 ] = nJumpCount;
+                else
+                    SetError(errIllegalParameter);
             }
         }
         else if ( eOp == ocMissing )
