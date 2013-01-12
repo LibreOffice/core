@@ -795,10 +795,10 @@ void SmXMLContext_Helper::ApplyAttrs()
             //StarMath for now.
             const SvXMLTokenMap& rTokenMap =
                 rContext.GetSmImport().GetColorTokenMap();
-            aToken.eType = static_cast<SmTokenType>(rTokenMap.Get(
-                XML_NAMESPACE_MATH, sColor));
-            if (aToken.eType != -1)
+            sal_uInt16 tok = rTokenMap.Get(XML_NAMESPACE_MATH, sColor);
+            if (tok != XML_TOK_UNKNOWN)
             {
+                aToken.eType = static_cast<SmTokenType>(tok);
                 SmFontNode *pFontNode = new SmFontNode(aToken);
                 pFontNode->SetSubNodes(0,lcl_popOrZero(rNodeStack));
                 rNodeStack.push(pFontNode);
