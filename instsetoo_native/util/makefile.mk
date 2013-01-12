@@ -166,8 +166,6 @@ lotest: $(foreach,i,$(alllangiso) lotest_$i)
 
 lodevtest: $(foreach,i,$(alllangiso) lodevtest_$i)
 
-ure: $(foreach,i,$(alllangiso) ure_$i)
-
 oxygenoffice: $(foreach,i,$(alllangiso) oxygenoffice_$i)
 
 oxygenofficelanguagepack : $(foreach,i,$(alllangiso) oxygenofficelanguagepack_$i)
@@ -177,7 +175,6 @@ oxygenofficehelppack : $(foreach,i,$(allhelplangiso) oxygenofficehelppack_$i)
 MSIOFFICETEMPLATESOURCE=$(PRJ)$/inc_openoffice$/windows$/msi_templates
 MSILANGPACKTEMPLATESOURCE=$(PRJ)$/inc_ooolangpack$/windows$/msi_templates
 MSIHELPPACKTEMPLATESOURCE=$(PRJ)$/inc_ooohelppack$/windows$/msi_templates
-MSIURETEMPLATESOURCE=$(PRJ)$/inc_ure$/windows$/msi_templates
 MSISDKOOTEMPLATESOURCE=$(PRJ)$/inc_sdkoo$/windows$/msi_templates
 MSITESTTEMPLATESOURCE=$(PRJ)$/inc_lotest$/windows$/msi_templates
 MSICOMMONTEMPLATESOURCE=$(PRJ)$/inc_common$/windows$/msi_templates
@@ -187,7 +184,6 @@ DEVNOLOGOSPLASH:=$(BIN)$/dev$/intro.zip
 MSIOFFICETEMPLATEDIR=$(MISC)$/openoffice$/msi_templates
 MSILANGPACKTEMPLATEDIR=$(MISC)$/ooolangpack$/msi_templates
 MSIHELPPACKTEMPLATEDIR=$(MISC)$/ooohelppack$/msi_templates
-MSIURETEMPLATEDIR=$(MISC)$/ure$/msi_templates
 MSISDKOOTEMPLATEDIR=$(MISC)$/sdkoo$/msi_templates
 MSITESTTEMPLATEDIR=$(MISC)$/lotest$/msi_templates
 
@@ -216,8 +212,6 @@ $(foreach,i,$(alllangiso) sdkoodev_$i) : $(ADDDEPS)
 $(foreach,i,$(alllangiso) lotest_$i) : $(ADDDEPS)
 
 $(foreach,i,$(alllangiso) lodevtest_$i) : $(ADDDEPS)
-
-$(foreach,i,$(alllangiso) ure_$i) : $(ADDDEPS)
 
 $(foreach,i,$(alllangiso) oxygenoffice_$i) : $(ADDDEPS)
 
@@ -278,17 +272,6 @@ lodevtest_%{$(PKGFORMAT:^".")} :
     $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p LibreOffice_Dev_Test -u $(OUT) -buildid $(BUILD) -msitemplate $(MSITESTTEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -format $(@:e:s/.//) $(VERBOSESWITCH)
 
 
-$(foreach,i,$(alllangiso) ure_$i) : $$@{$(PKGFORMAT:^".")}
-ure_%{$(PKGFORMAT:^".")} :
-.IF "$(OS)" == "MACOSX"
-    @echo 'for now, there is no standalone URE for Mac OS X'
-.ELSE
-    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst \
-        -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p URE -u $(OUT) -buildid $(BUILD) -format $(@:e:s/.//) $(VERBOSESWITCH) \
-        -msitemplate $(MSIURETEMPLATEDIR) \
-        -msilanguage $(COMMONMISC)$/win_ulffiles
-.ENDIF
-
 $(foreach,i,$(alllangiso) oxygenoffice_$i) : $$@{$(PKGFORMAT:^".")}
 .IF "$(MAKETARGETS)"!=""
 .IF "$(MAKETARGETS:e)"=="" && "$(MAKETARGETS:s/_//)"!="$(MAKETARGETS)"
@@ -339,36 +322,30 @@ hack_msitemplates .PHONY:
     -$(MKDIRHIER) $(MSIOFFICETEMPLATEDIR)
     -$(MKDIRHIER) $(MSILANGPACKTEMPLATEDIR)
     -$(MKDIRHIER) $(MSIHELPPACKTEMPLATEDIR)
-    -$(MKDIRHIER) $(MSIURETEMPLATEDIR)
     -$(MKDIRHIER) $(MSISDKOOTEMPLATEDIR)
     -$(MKDIRHIER) $(MSITESTTEMPLATEDIR)
     -$(MKDIRHIER) $(MSIOFFICETEMPLATEDIR)$/Binary
     -$(MKDIRHIER) $(MSILANGPACKTEMPLATEDIR)$/Binary
     -$(MKDIRHIER) $(MSIHELPPACKTEMPLATEDIR)$/Binary
-    -$(MKDIRHIER) $(MSIURETEMPLATEDIR)$/Binary
     -$(MKDIRHIER) $(MSISDKOOTEMPLATEDIR)$/Binary
     -$(MKDIRHIER) $(MSITESTTEMPLATEDIR)$/Binary
     $(GNUCOPY) -u $(MSIOFFICETEMPLATESOURCE)$/*.* $(MSIOFFICETEMPLATEDIR)
     $(GNUCOPY) -u $(MSILANGPACKTEMPLATESOURCE)$/*.* $(MSILANGPACKTEMPLATEDIR)
     $(GNUCOPY) -u $(MSIHELPPACKTEMPLATESOURCE)$/*.* $(MSIHELPPACKTEMPLATEDIR)
-    $(GNUCOPY) -u $(MSIURETEMPLATESOURCE)$/*.* $(MSIURETEMPLATEDIR)
     $(GNUCOPY) -u $(MSISDKOOTEMPLATESOURCE)$/*.* $(MSISDKOOTEMPLATEDIR)
     $(GNUCOPY) -u $(MSICOMMONTEMPLATESOURCE)$/Binary$/*.* $(MSIOFFICETEMPLATEDIR)$/Binary
     $(GNUCOPY) -u $(MSICOMMONTEMPLATESOURCE)$/Binary$/*.* $(MSILANGPACKTEMPLATEDIR)$/Binary
     $(GNUCOPY) -u $(MSICOMMONTEMPLATESOURCE)$/Binary$/*.* $(MSIHELPPACKTEMPLATEDIR)$/Binary
-    $(GNUCOPY) -u $(MSICOMMONTEMPLATESOURCE)$/Binary$/*.* $(MSIURETEMPLATEDIR)$/Binary
     $(GNUCOPY) -u $(MSICOMMONTEMPLATESOURCE)$/Binary$/*.* $(MSISDKOOTEMPLATEDIR)$/Binary
     $(GNUCOPY) -u $(MSICOMMONTEMPLATESOURCE)$/Binary$/*.* $(MSITESTTEMPLATEDIR)$/Binary
     $(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSIOFFICETEMPLATEDIR)$/Binary$/Image.bmp
     $(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSILANGPACKTEMPLATEDIR)$/Binary$/Image.bmp
     $(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSIHELPPACKTEMPLATEDIR)$/Binary$/Image.bmp
-    $(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSIURETEMPLATEDIR)$/Binary$/Image.bmp
     $(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSISDKOOTEMPLATEDIR)$/Binary$/Image.bmp
     $(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSITESTTEMPLATEDIR)$/Binary$/Image.bmp
     $(COPY) $(PRJ)$/res$/nologobanner.bmp $(MSIOFFICETEMPLATEDIR)$/Binary$/Banner.bmp
     $(COPY) $(PRJ)$/res$/nologobanner.bmp $(MSILANGPACKTEMPLATEDIR)$/Binary$/Banner.bmp
     $(COPY) $(PRJ)$/res$/nologobanner.bmp $(MSIHELPPACKTEMPLATEDIR)$/Binary$/Banner.bmp
-    $(COPY) $(PRJ)$/res$/nologobanner.bmp $(MSIURETEMPLATEDIR)$/Binary$/Banner.bmp
     $(COPY) $(PRJ)$/res$/nologobanner.bmp $(MSISDKOOTEMPLATEDIR)$/Binary$/Banner.bmp
     $(COPY) $(PRJ)$/res$/nologobanner.bmp $(MSITESTTEMPLATEDIR)$/Binary$/Banner.bmp
 

@@ -44,7 +44,6 @@ $(eval $(call gb_Module_add_targets,scp2,\
 	InstallModule_sdkoo \
 	InstallModule_smoketest \
 	InstallModule_ure \
-	InstallModule_ure_standalone \
 	InstallModule_writer \
 	InstallModule_xsltfilter \
 	InstallScript_sdkoo \
@@ -75,9 +74,6 @@ $(eval $(call gb_Module_add_targets,scp2,\
 	) \
 	$(if $(filter-out YES,$(SYSTEM_STDLIBS)),\
 		InstallModule_stdlibs \
-	) \
-	$(if $(filter-out MACOSX,$(OS)),\
-		InstallScript_ure \
 	) \
 ))
 

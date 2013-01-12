@@ -148,40 +148,6 @@ LibreOffice_Dev
     }
 }
 
-URE
-{
-    Settings
-    {
-        downloadname URE_{productversion}_{os}_install_{languages}
-        variables
-        {
-            PRODUCTNAME URE
-            PRODUCTVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
-            PACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
-            PACKAGEREVISION 1
-            PRODUCTEXTENSION
-            BRANDPACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
-            SHORT_PRODUCTEXTENSION .@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
-            LICENSENAME LGPL
-            NOVERSIONINDIRNAME 1
-            PCPFILENAME ure.pcp
-            GLOBALFILEGID gid_File_Dl_Cppu
-            DONTUSESTARTMENUFOLDER 1
-            STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
-            STARTCENTER_INFO_URL http://www.libreoffice.org/
-            STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
-            ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk
-            PACKAGEMAP package_names_ext.txt
-            DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
-            STARTCENTER_HIDE_EXTERNAL_LINKS 0
-        }
-        active 1
-        compression 5
-        script ure
-        include {solarenvpath}/{os}/loader2,{solarpath}/bin.{minor}/ure,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/xml.{minor},{solarenvpath}/{os}/MS
-    }
-}
-
 LibreOffice_SDK
 {
     Settings
@@ -347,60 +313,5 @@ LibreOffice_Dev_Test
         compression 5
         script test
         include {solarenvpath}/{os}/loader2,{solarpath}/bin.{minor}/cppunit,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor}
-    }
-}
-
-OxygenOffice
-{
-    Settings
-    {
-        variables
-        {
-            PRODUCTNAME OxygenOffice
-            PRODUCTVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
-            PRODUCTEXTENSION
-            SHORT_PRODUCTEXTENSION .@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
-            POSTVERSIONEXTENSION
-            BRANDPACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
-            USERDIRPRODUCTVERSION @LIBO_VERSION_MAJOR@
-            ABOUTBOXPRODUCTVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
-            ABOUTBOXPRODUCTVERSIONSUFFIX @LIBO_VERSION_SUFFIX_SUFFIX@
-            BASEPRODUCTVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
-            PCPFILENAME openoffice.pcp
-            UPDATEURL http://update.libreoffice.org/check.php
-            ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk
-            ADDSYSTEMINTEGRATION 1
-            FILEFORMATNAME OpenOffice.org
-            FILEFORMATVERSION 1.0
-            WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
-            PACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
-            PACKAGEREVISION {buildid}
-            LICENSENAME LGPL
-            SERVICESPROJEKT 1
-            GLOBALFILEGID gid_File_Lib_Vcl
-            GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
-            SPELLCHECKERFILE spellchecker_selection.txt
-            OOODOWNLOADNAME 1
-            BETAUPGRADECODE
-            STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
-            CHANGETARGETDIR 1
-            PATCHCODEFILE ooo_patchcodes.txt
-            PROGRESSBARCOLOR 126,170,23
-            PROGRESSSIZE 430,5
-            PROGRESSPOSITION 5,230
-            PROGRESSFRAMECOLOR 207,208,211
-            STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
-            STARTCENTER_INFO_URL http://www.libreoffice.org/
-            STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
-            DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
-            STARTCENTER_HIDE_EXTERNAL_LINKS 0
-        }
-        active          1
-        compression     5
-        script          setup_osl
-        downloadname    OOOP_{productversion}_{os}_install_{languages}
-        langpackdownloadname    OOOP_{productversion}_languagepack_{os}_install_{languages}
-        helppackdownloadname    OOOP_{productversion}_helppack_{os}_install_{languages}
-        include         {solarenvpath}/{os}/loader2,.,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/ooowoure,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor}/osl,{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external,{solarpath}/pck.{minor}/brand
     }
 }
