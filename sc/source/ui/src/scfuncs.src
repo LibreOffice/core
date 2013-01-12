@@ -9172,7 +9172,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            Text [ en-US ] = "Converts a value according to a conversion table in the configuration (calc.xcu).";
+            Text [ en-US ] = "Converts a value according to a conversion table in the configuration (main.xcd).";
         };
         ExtraData =
         {
