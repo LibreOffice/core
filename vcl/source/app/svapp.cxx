@@ -1563,7 +1563,7 @@ UnoWrapperBase* Application::GetUnoWrapper( sal_Bool bCreateIfNotExist )
             &thisModule, aLibName.pData, SAL_LOADMODULE_DEFAULT );
         if ( hTkLib )
         {
-            ::rtl::OUString aFunctionName( RTL_CONSTASCII_USTRINGPARAM( "CreateUnoWrapper" ) );
+            OUString aFunctionName( "CreateUnoWrapper" );
             FN_TkCreateUnoWrapper fnCreateWrapper = (FN_TkCreateUnoWrapper)osl_getFunctionSymbol( hTkLib, aFunctionName.pData );
             if ( fnCreateWrapper )
             {

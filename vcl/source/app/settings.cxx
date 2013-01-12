@@ -624,10 +624,10 @@ sal_uLong StyleSettings::GetAutoSymbolsStyle() const
     rtl::OUString const & env = Application::GetDesktopEnvironment();
 
     sal_uLong nRet;
-    if ( env.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("tde")) ||
-         env.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("kde")) )
+    if ( env.equalsIgnoreAsciiCase("tde") ||
+         env.equalsIgnoreAsciiCase("kde") )
         nRet = STYLE_SYMBOLS_CRYSTAL;
-    else if ( env.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("kde4")) )
+    else if ( env.equalsIgnoreAsciiCase("kde4") )
         nRet = STYLE_SYMBOLS_OXYGEN;
     else
         nRet = STYLE_SYMBOLS_TANGO;
@@ -1057,7 +1057,7 @@ sal_Bool MiscSettings::GetDisablePrinting() const
             vcl::SettingsConfigItem::get()->
             getValue( rtl::OUString( "DesktopManagement"  ),
                       rtl::OUString( "DisablePrinting"  ) );
-        mpData->mnDisablePrinting = aEnable.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) ? 1 : 0;
+        mpData->mnDisablePrinting = aEnable.equalsIgnoreAsciiCase("true") ? 1 : 0;
     }
 
     return (sal_Bool)mpData->mnDisablePrinting;
@@ -1113,7 +1113,7 @@ sal_Bool MiscSettings::GetEnableATToolSupport() const
                 vcl::SettingsConfigItem::get()->
                 getValue( rtl::OUString( "Accessibility"  ),
                           rtl::OUString( "EnableATToolSupport"  ) );
-            mpData->mnEnableATT = aEnable.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) ? 1 : 0;
+            mpData->mnEnableATT = aEnable.equalsIgnoreAsciiCase("true") ? 1 : 0;
         }
         else
         {

@@ -805,7 +805,7 @@ NumericField::NumericField( Window* pParent, const ResId& rResId ) :
 
 bool NumericField::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
 {
-    if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("digits")))
+    if (rKey == "digits")
         SetDecimalDigits(rValue.toInt32());
     else
         return SpinField::set_property(rKey, rValue);
@@ -1721,12 +1721,12 @@ Size MetricField::CalcMinimumSize() const
 
 bool MetricField::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
 {
-    if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("format")))
+    if (rKey == "format")
     {
         maCustomUnitText = rtl::OStringToOUString(rValue, RTL_TEXTENCODING_UTF8);
         meUnit = FUNIT_CUSTOM;
     }
-    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("digits")))
+    else if (rKey == "digits")
         SetDecimalDigits(rValue.toInt32());
     else
         return SpinField::set_property(rKey, rValue);

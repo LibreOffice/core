@@ -2479,9 +2479,9 @@ sal_Bool TimeFormatter::ImplTimeReformat( const XubString& rStr, XubString& rOut
             }
             // Don't use LocaleDataWrapper, we want AM/PM
             if ( aTempTime.GetHour() < 12 )
-                rOutStr += String( RTL_CONSTASCII_USTRINGPARAM( "AM" ) ); // ImplGetLocaleDataWrapper().getTimeAM();
+                rOutStr += "AM"; // ImplGetLocaleDataWrapper().getTimeAM();
             else
-                rOutStr += String( RTL_CONSTASCII_USTRINGPARAM( "PM" ) ); // ImplGetLocaleDataWrapper().getTimePM();
+                rOutStr += "PM"; // ImplGetLocaleDataWrapper().getTimePM();
         }
     }
 
@@ -2777,9 +2777,9 @@ void TimeFormatter::ImplSetUserTime( const Time& rNewTime, Selection* pNewSelect
                 }
                 // Don't use LocaleDataWrapper, we want AM/PM
                 if ( aNewTime.GetHour() < 12 )
-                    aStr += String( RTL_CONSTASCII_USTRINGPARAM( "AM" ) ); // ImplGetLocaleDataWrapper().getTimeAM();
+                    aStr += "AM"; // ImplGetLocaleDataWrapper().getTimeAM();
                 else
-                    aStr += String( RTL_CONSTASCII_USTRINGPARAM( "PM" ) ); // ImplGetLocaleDataWrapper().getTimePM();
+                    aStr += "PM"; // ImplGetLocaleDataWrapper().getTimePM();
             }
         }
 

@@ -158,14 +158,14 @@ Any SAL_CALL FontIdentificator::getMaterial() throw(RuntimeException)
 
 Sequence< OUString > FontIdentificator_getSupportedServiceNames()
 {
-    static OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.FontIdentificator" ) );
+    static OUString aServiceName( "com.sun.star.awt.FontIdentificator" );
     static Sequence< OUString > aServiceNames( &aServiceName, 1 );
     return aServiceNames;
 }
 
 OUString FontIdentificator_getImplementationName()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "vcl::FontIdentificator" ) );
+    return OUString( "vcl::FontIdentificator" );
 }
 
 Reference< XInterface > SAL_CALL FontIdentificator_createInstance( const Reference< XMultiServiceFactory >&  )

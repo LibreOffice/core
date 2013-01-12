@@ -72,14 +72,14 @@ public:
 
 Sequence< OUString > StringMirror_getSupportedServiceNames()
 {
-    static OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.StringMirror" ) );
+    static OUString aServiceName( "com.sun.star.awt.StringMirror" );
     static Sequence< OUString > aServiceNames( &aServiceName, 1 );
     return aServiceNames;
 }
 
 OUString StringMirror_getImplementationName()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "vcl::StringMirror" ) );
+    return OUString( "vcl::StringMirror" );
 }
 
 Reference< XInterface > SAL_CALL StringMirror_createInstance( const Reference< XMultiServiceFactory >&  )

@@ -86,12 +86,12 @@ Throbber::~Throbber()
 namespace
 {
     //..................................................................................................................
-    ::rtl::OUString lcl_getHighContrastURL( ::rtl::OUString const& i_imageURL )
+    ::rtl::OUString lcl_getHighContrastURL( OUString const& i_imageURL )
     {
         INetURLObject aURL( i_imageURL );
         if ( aURL.GetProtocol() != INET_PROT_PRIV_SOFFICE )
         {
-            OSL_VERIFY( aURL.insertName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "hicontrast" ) ), false, 0 ) );
+            OSL_VERIFY( aURL.insertName( "hicontrast", false, 0 ) );
             return aURL.GetMainURL( INetURLObject::NO_DECODE );
         }
         // the private: scheme is not considered to be hierarchical by INetURLObject, so manually insert the

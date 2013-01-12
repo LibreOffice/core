@@ -1567,7 +1567,7 @@ void VclMultiLineEdit::EnableCursor( sal_Bool bEnable )
 
 bool VclMultiLineEdit::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
 {
-    if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("cursor-visible")))
+    if (rKey == "cursor-visible")
         EnableCursor(toBool(rValue));
     else
         return Edit::set_property(rKey, rValue);

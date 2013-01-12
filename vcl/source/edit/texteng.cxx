@@ -638,7 +638,7 @@ uno::Reference < i18n::XExtendedInputSequenceChecker > TextEngine::GetInputSeque
 //    if ( !xISC.is() )
     {
         uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-        uno::Reference< uno::XInterface > xI = xMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.InputSequenceChecker" )) );
+        uno::Reference< uno::XInterface > xI = xMSF->createInstance( OUString( "com.sun.star.i18n.InputSequenceChecker" ) );
         if ( xI.is() )
         {
             Any x = xI->queryInterface( ::getCppuType((const uno::Reference< i18n::XExtendedInputSequenceChecker >*)0) );
@@ -2625,12 +2625,12 @@ sal_Bool TextEngine::Write( SvStream& rOutput, const TextSelection* pSel, sal_Bo
         }
         else
         {
-            aText.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "<P STYLE=\"margin-bottom: 0cm\">" ) );
+            aText.AssignAscii( "<P STYLE=\"margin-bottom: 0cm\">" );
 
             if ( nStartPos == nEndPos )
             {
-                // Leerzeilen werden von Writer wegoptimiert
-                aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "<BR>" ) );
+                // Empty lines will be removed by Writer
+                aText.AppendAscii( "<BR>" );
             }
             else
             {
@@ -2649,19 +2649,19 @@ sal_Bool TextEngine::Write( SvStream& rOutput, const TextSelection* pSel, sal_Bo
                         nTmpEnd = Min( pAttr->GetEnd(), nEndPos );
 
                         // z.B. <A HREF="http://www.mopo.de/">Morgenpost</A>
-                        aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "<A HREF=\"" ) );
+                        aText.AppendAscii( "<A HREF=\"" );
                         aText += ((const TextAttribHyperLink&) pAttr->GetAttr() ).GetURL();
-                        aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "\">" ) );
+                        aText.AppendAscii( "\">" );
                         nTmpStart = pAttr->GetStart();
                         aText += pNode->GetText().Copy( nTmpStart, nTmpEnd-nTmpStart );
-                        aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "</A>" ) );
+                        aText.AppendAscii( "</A>" );
 
                         nTmpStart = pAttr->GetEnd();
                     }
                 } while ( nTmpEnd < nEndPos );
             }
 
-            aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "</P>" ) );
+            aText.AppendAscii( "</P>" );
         }
         rOutput.WriteLine(rtl::OUStringToOString(aText,
             rOutput.GetStreamCharSet()));
