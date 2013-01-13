@@ -74,9 +74,9 @@ const InsCaptionOpt* SwModuleOptions::GetCapOption(
     }
     else
     {
-        bool bFound = false;
         if(eType == OLE_CAP && pOleId)
         {
+            bool bFound = false;
             for( sal_uInt16 nId = 0; nId <= GLOB_NAME_CHART && !bFound; nId++)
                 bFound = *pOleId == aInsertConfig.aGlobalNames[nId  ];
             if(!bFound)
@@ -96,9 +96,9 @@ sal_Bool SwModuleOptions::SetCapOption(sal_Bool bHTML, const InsCaptionOpt* pOpt
     }
     else if (pOpt)
     {
-        bool bFound = false;
         if(pOpt->GetObjType() == OLE_CAP && &pOpt->GetOleId())
         {
+            bool bFound = false;
             for( sal_uInt16 nId = 0; nId <= GLOB_NAME_CHART; nId++)
                 bFound = pOpt->GetOleId() == aInsertConfig.aGlobalNames[nId  ];
             if(!bFound)
