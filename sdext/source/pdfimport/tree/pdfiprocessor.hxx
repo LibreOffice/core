@@ -242,19 +242,19 @@ namespace pdfi
     class CharGlyph
     {
         public:
-            CharGlyph(){};
+            CharGlyph(double fXPrevGlyphPosition, double fYPrevGlyphPosition, double fPrevGlyphHeight, double fPrevGlyphWidth,
+               Element* pCurElement, const GraphicsContext& rCurrentContext, const com::sun::star::geometry::Matrix2D& rFontMatrix,
+               const com::sun::star::geometry::RealRectangle2D& rRect, const rtl::OUString& rGlyphs  )
+               : m_fXPrevGlyphPosition(fXPrevGlyphPosition), m_fYPrevGlyphPosition(fYPrevGlyphPosition), m_fPrevGlyphHeight(fPrevGlyphHeight),
+                 m_fPrevGlyphWidth(fPrevGlyphWidth), m_pCurElement(pCurElement), m_rCurrentContext(rCurrentContext),
+                 m_rFontMatrix(rFontMatrix), m_rRect(rRect), m_rGlyphs(rGlyphs) {};
+
             virtual ~CharGlyph(){};
             rtl::OUString& getGlyph(){ return m_rGlyphs; }
             com::sun::star::geometry::RealRectangle2D& getRect(){ return m_rRect; }
             com::sun::star::geometry::Matrix2D&  getFontMatrix(){ return m_rFontMatrix; }
             GraphicsContext&  getGC(){ return m_rCurrentContext; }
             Element*  getCurElement(){ return m_pCurElement; }
-
-            void  setGlyph (const rtl::OUString& rGlyphs ){ m_rGlyphs=rGlyphs; }
-            void  setRect  (const ::com::sun::star::geometry::RealRectangle2D& rRect ){ m_rRect=rRect; }
-            void  setFontMatrix (const ::com::sun::star::geometry::Matrix2D& rFontMatrix ){ m_rFontMatrix= rFontMatrix; }
-            void  setGraphicsContext (GraphicsContext&  rCurrentContext ){ m_rCurrentContext= rCurrentContext; }
-            void  setCurElement( Element* pCurElement ){ m_pCurElement= pCurElement; }
 
             double getYPrevGlyphPosition() const { return m_fYPrevGlyphPosition; }
             double getXPrevGlyphPosition() const { return m_fXPrevGlyphPosition; }
@@ -268,15 +268,10 @@ namespace pdfi
                     return m_rRect.X1-m_fXPrevGlyphPosition;
             }
 
-            void setYPrevGlyphPosition( double fYPrevTextPosition ){ m_fYPrevGlyphPosition= fYPrevTextPosition; }
-            void setXPrevGlyphPosition( double fXPrevTextPosition ){ m_fXPrevGlyphPosition= fXPrevTextPosition; }
-            void setPrevGlyphHeight   ( double fPrevTextHeight ){ m_fPrevGlyphHeight= fPrevTextHeight; }
-            void setPrevGlyphWidth    ( double fPrevTextWidth ){ m_fPrevGlyphWidth= fPrevTextWidth; }
-
         private:
 
-            double                      m_fYPrevGlyphPosition ;
             double                      m_fXPrevGlyphPosition ;
+            double                      m_fYPrevGlyphPosition ;
             double                      m_fPrevGlyphHeight ;
             double                      m_fPrevGlyphWidth ;
             Element*                    m_pCurElement ;
@@ -286,8 +281,6 @@ namespace pdfi
             rtl::OUString               m_rGlyphs ;
     };
 }
-
-#define USTR(x) rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
 
 #endif
 
