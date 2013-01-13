@@ -59,46 +59,37 @@ private:
     ~SvxBorderTabPage();
 
     // Controls
-    FixedLine           aFlBorder;
-    FixedText           aDefaultFT;
-    ValueSet            aWndPresets;
-    FixedText           aUserDefFT;
-    svx::FrameSelector  aFrameSel;
+    ValueSet*           m_pWndPresets;
+    FixedText*          m_pUserDefFT;
+    svx::FrameSelector* m_pFrameSel;
 
-    FixedLine           aFlSep1;
-    FixedLine           aFlLine;
-    FixedText           aStyleFT;
-    LineListBox    aLbLineStyle;
-    FixedText           aColorFT;
-    ColorListBox        aLbLineColor;
-    FixedText           aWidthFT;
-    MetricField         aLineWidthMF;
+    LineListBox*        m_pLbLineStyle;
+    ColorListBox*       m_pLbLineColor;
+    MetricField*        m_pLineWidthMF;
 
-    FixedLine           aFlSep2;
-    FixedLine           aDistanceFL;
-    FixedText           aLeftFT;
-    MetricField         aLeftMF;
-    FixedText           aRightFT;
-    MetricField         aRightMF;
-    FixedText           aTopFT;
-    MetricField         aTopMF;
-    FixedText           aBottomFT;
-    MetricField         aBottomMF;
-    CheckBox            aSynchronizeCB;
+    VclContainer*       m_pSpacingFrame;
+    FixedText*          m_pLeftFT;
+    MetricField*        m_pLeftMF;
+    FixedText*          m_pRightFT;
+    MetricField*        m_pRightMF;
+    FixedText*          m_pTopFT;
+    MetricField*        m_pTopMF;
+    FixedText*          m_pBottomFT;
+    MetricField*        m_pBottomMF;
+    CheckBox*           m_pSynchronizeCB;
 
-    FixedLine           aFlShadow;
-    FixedText           aFtShadowPos;
-    ValueSet            aWndShadows;
-    FixedText           aFtShadowSize;
-    MetricField         aEdShadowSize;
-    FixedText           aFtShadowColor;
-    ColorListBox        aLbShadowColor;
+    VclContainer*       m_pShadowFrame;
+    ValueSet*           m_pWndShadows;
+    FixedText*          m_pFtShadowSize;
+    MetricField*        m_pEdShadowSize;
+    FixedText*          m_pFtShadowColor;
+    ColorListBox*       m_pLbShadowColor;
 
 
-    FixedLine           aPropertiesFL;///< properties - "Merge with next paragraph" in Writer
-    CheckBox            aMergeWithNextCB;
+    VclContainer*       m_pPropertiesFrame;///< properties - "Merge with next paragraph" in Writer
+    CheckBox*           m_pMergeWithNextCB;
     // #i29550#
-    CheckBox            aMergeAdjacentBordersCB;
+    CheckBox*           m_pMergeAdjacentBordersCB;
 
     ImageList           aShadowImgLstH;
     ImageList           aShadowImgLst;
@@ -115,7 +106,6 @@ private:
     bool                mbUseMarginItem;
     bool                mbSync;
 
-#ifdef _SVX_BORDER_CXX
     // Handler
     DECL_LINK( SelStyleHdl_Impl, ListBox* pLb );
     DECL_LINK( SelColHdl_Impl, ListBox* pLb );
@@ -140,7 +130,6 @@ private:
     void                ResetFrameLine_Impl( svx::FrameBorderType eBorder,
                                              const editeng::SvxBorderLine* pCurLine,
                                              bool bValid );
-#endif
 };
 
 

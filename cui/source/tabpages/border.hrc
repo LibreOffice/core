@@ -18,46 +18,6 @@
 #ifndef _SVX_BORDER_HRC
 #define _SVX_BORDER_HRC
 
-// defines ------------------------------------------------------------------
-
-#define FL_BORDER               10
-#define WIN_PRESETS             11
-#define WIN_FRAMESEL            12
-
-#define FL_SEPARATOR1           19
-#define FL_LINE                 20
-#define LB_LINESTYLE            21
-#define LB_LINECOLOR            22
-#define MF_LINEWIDTH            23
-
-#define FL_SEPARATOR2           29
-#define FL_SHADOW               30
-#define FT_SHADOWPOS            31
-#define WIN_SHADOWS             32
-#define FT_SHADOWSIZE           33
-#define ED_SHADOWSIZE           34
-#define FT_SHADOWCOLOR          35
-#define LB_SHADOWCOLOR          36
-
-#define FL_DISTANCE             50
-#define FT_LEFT                 51
-#define MF_LEFT                 52
-#define FT_RIGHT                53
-#define MF_RIGHT                54
-#define FT_TOP                  55
-#define MF_TOP                  56
-#define FT_BOTTOM               57
-#define MF_BOTTOM               58
-#define CB_SYNC                 59
-#define FT_DEFAULT              60
-#define FT_USERDEF              61
-#define FT_STYLE                62
-#define FT_COLOR                63
-#define FL_PROPERTIES           64
-#define CB_MERGEWITHNEXT        65
-#define CB_MERGEADJACENTBORDERS 66
-#define FT_WIDTH                67
-
 // ImageList for ValueSets:
 #define IL_PRE_BITMAPS          1400
 #define IID_PRE_CELL_NONE       1
@@ -88,7 +48,6 @@
 #define IID_SHADOW_BOT_LEFT     3
 #define IID_SHADOW_TOP_RIGHT    4
 #define IID_SHADOW_TOP_LEFT     5
-
 
 #endif
 
