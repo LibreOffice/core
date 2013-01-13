@@ -102,7 +102,6 @@ namespace cairocanvas
         SurfaceProviderRef                         mpRefDevice;
         sal_Int8                                   mnTextDirection;
 
-        void useFont( ::cairo::Cairo* pCairo );
         bool isCairoRenderable(SystemFontData aSysFontData) const;
     };
 

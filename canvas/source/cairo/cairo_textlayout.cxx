@@ -301,15 +301,6 @@ namespace cairocanvas
         return maText;
     }
 
-    void TextLayout::useFont( Cairo* pCairo )
-    {
-        rendering::FontRequest aFontRequest = mpFont->getFontRequest();
-        rendering::FontInfo aFontInfo = aFontRequest.FontDescription;
-
-        cairo_select_font_face( pCairo, OUStringToOString( aFontInfo.FamilyName, RTL_TEXTENCODING_UTF8 ).getStr(), CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL );
-        cairo_set_font_size( pCairo, aFontRequest.CellSize );
-    }
-
   /**
    * TextLayout::isCairoRenderable
    *
