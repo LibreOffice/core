@@ -23,7 +23,6 @@
 #include <vcl/button.hxx>
 #include <vcl/edit.hxx>
 #include <sfx2/basedlgs.hxx>
-#include <textcontrolcombo.hxx>
 
 class SwTableAutoFmt;
 class SwView;

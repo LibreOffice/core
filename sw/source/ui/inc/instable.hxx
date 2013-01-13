@@ -25,7 +25,6 @@
 #include <vcl/layout.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <actctrl.hxx>
-#include <textcontrolcombo.hxx>
 
 class SwWrtShell;
 class SwTableAutoFmt;

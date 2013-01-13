@@ -692,7 +692,6 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/ui/utlui/numfmtlb \
     sw/source/ui/utlui/prcntfld \
     sw/source/ui/utlui/shdwcrsr \
-    sw/source/ui/utlui/textcontrolcombo \
     sw/source/ui/utlui/tmplctrl \
     sw/source/ui/utlui/uiitems \
     sw/source/ui/utlui/uitool \

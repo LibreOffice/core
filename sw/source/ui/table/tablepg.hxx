@@ -25,7 +25,6 @@
 #include <actctrl.hxx>
 #include "prcntfld.hxx"
 #include "swtypes.hxx"
-#include "textcontrolcombo.hxx"
 
 class SwWrtShell;
 class SwTableRep;
