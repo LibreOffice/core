@@ -71,7 +71,7 @@ KbdListBox::PreNotify( NotifyEvent& rNEvt )
                 aEntry = comphelper::string::stripStart(aEntry, ' ').toAsciiUpperCase();
                 OUString aCompare = OUString(cCharCode).toAsciiUpperCase();
 
-                if ( aEntry.compareTo( aCompare, 1 ) == COMPARE_EQUAL )
+                if ( aEntry.compareTo( aCompare, 1 ) == 0 )
                 {
                     SelectEntryPos ( (i + nCurrentPos) % nEntries );
                     break;
@@ -603,13 +603,15 @@ void ImpPathDialog::PreExecute()
 
         }
         OUString aPathStr = aPath.GetFull();
+        aPathStr = aPathStr.toAsciiUpperCase();
 
         for ( i = 0; i < pDriveList->GetEntryCount(); ++i )
         {
             OUString aEntry = pDriveList->GetEntry(i);
-            xub_StrLen nLen   = aEntry.getLength();
+            aEntry = aEntry.toAsciiUpperCase();
+            sal_Int32 nLen = aEntry.getLength();
             nLen = nLen > 2 ? 2 : nLen;
-            if ( aEntry.compareTo( aPathStr, nLen ) == COMPARE_EQUAL )
+            if ( aEntry.compareTo( aPathStr, nLen ) == 0 )
             {
                 pDriveList->SelectEntryPos(i);
                 break;
