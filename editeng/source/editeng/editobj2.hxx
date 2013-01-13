@@ -187,16 +187,11 @@ public:
     sal_uInt16 GetUserType() const;
     void SetUserType( sal_uInt16 n );
 
-    sal_uLong                   GetObjectSettings() const;
-    void                    SetObjectSettings( sal_uLong n );
-
     bool                    IsVertical() const;
     void                    SetVertical( bool b );
 
     sal_uInt16                  GetScriptType() const;
     void                    SetScriptType( sal_uInt16 nType );
-
-    sal_uInt16                  GetVersion() const; // As long as the outliner does not store any record length
 
     ContentInfo*            CreateAndInsertContent();
     XEditAttribute*         CreateAttrib( const SfxPoolItem& rItem, sal_uInt16 nStart, sal_uInt16 nEnd );
@@ -211,22 +206,15 @@ public:
 
     size_t GetParagraphCount() const;
     String GetText(size_t nParagraph) const;
-    void Insert(const EditTextObject& rObj, size_t nPara);
-    EditTextObject* CreateTextObject(size_t nPara, size_t nParas = 1) const;
-    void RemoveParagraph(size_t nPara);
 
-    bool HasPortionInfo() const;
     void ClearPortionInfo();
 
     bool HasOnlineSpellErrors() const;
 
-    bool HasCharAttribs( sal_uInt16 nWhich = 0 ) const;
     void GetCharAttribs( sal_uInt16 nPara, std::vector<EECharAttrib>& rLst ) const;
 
     bool RemoveCharAttribs( sal_uInt16 nWhich = 0 );
     bool RemoveParaAttribs( sal_uInt16 nWhich = 0 );
-
-    void MergeParaAttribs( const SfxItemSet& rAttribs, sal_uInt16 nStart, sal_uInt16 nEnd );
 
     bool IsFieldObject() const;
     const SvxFieldItem* GetField() const;
@@ -235,7 +223,6 @@ public:
     const SfxItemSet& GetParaAttribs(size_t nPara) const;
     void SetParaAttribs(size_t nPara, const SfxItemSet& rAttribs);
 
-    bool HasStyleSheet( const XubString& rName, SfxStyleFamily eFamily ) const;
     void GetStyleSheet(size_t nPara, String& rName, SfxStyleFamily& eFamily) const;
     void SetStyleSheet(size_t nPara, const String& rName, const SfxStyleFamily& eFamily);
     bool ChangeStyleSheets(
@@ -243,8 +230,6 @@ public:
     void ChangeStyleSheetName( SfxStyleFamily eFamily, const XubString& rOldName, const XubString& rNewName );
 
     editeng::FieldUpdater GetFieldUpdater();
-
-    void                    CreateData300( SvStream& rIStream );
 
     bool HasMetric() const { return nMetric != 0xFFFF; }
     sal_uInt16                  GetMetric() const           { return nMetric; }

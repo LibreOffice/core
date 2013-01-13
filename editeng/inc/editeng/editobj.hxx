@@ -72,15 +72,10 @@ public:
     sal_uInt16 GetUserType() const;    // For OutlinerMode, it can however not save in compatible format
     void SetUserType( sal_uInt16 n );
 
-    sal_uLong GetObjectSettings() const;
-    void SetObjectSettings( sal_uLong n );
-
     bool IsVertical() const;
     void SetVertical( bool bVertical );
 
     sal_uInt16 GetScriptType() const;
-
-    sal_uInt16 GetVersion() const; // As long as the outliner does not store any record length.
 
     EditTextObject* Clone() const;
 
@@ -92,22 +87,15 @@ public:
     size_t GetParagraphCount() const;
 
     String GetText(size_t nPara) const;
-    void Insert(const EditTextObject& rObj, size_t nPara);
-    void RemoveParagraph(size_t nPara);
-    EditTextObject* CreateTextObject(size_t nPara, size_t nParas = 1) const;
 
-    bool HasPortionInfo() const;
     void ClearPortionInfo();
 
     bool HasOnlineSpellErrors() const;
 
-    bool HasCharAttribs( sal_uInt16 nWhich = 0 ) const;
     void GetCharAttribs( sal_uInt16 nPara, std::vector<EECharAttrib>& rLst ) const;
 
     bool RemoveCharAttribs( sal_uInt16 nWhich = 0 );
     bool RemoveParaAttribs( sal_uInt16 nWhich = 0 );
-
-    void MergeParaAttribs( const SfxItemSet& rAttribs, sal_uInt16 nStart = EE_CHAR_START, sal_uInt16 nEnd = EE_CHAR_END );
 
     bool IsFieldObject() const;
     const SvxFieldItem* GetField() const;
@@ -116,7 +104,6 @@ public:
     const SfxItemSet& GetParaAttribs(size_t nPara) const;
     void SetParaAttribs(size_t nPara, const SfxItemSet& rAttribs);
 
-    bool HasStyleSheet( const XubString& rName, SfxStyleFamily eFamily ) const;
     void GetStyleSheet(size_t nPara, String& rName, SfxStyleFamily& eFamily) const;
     void SetStyleSheet(size_t nPara, const String& rName, const SfxStyleFamily& eFamily);
     bool ChangeStyleSheets(

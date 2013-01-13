@@ -99,11 +99,6 @@ public:
     static bool convertColor( sal_Int32& rColor,
                               const ::rtl::OUString&rValue );
 
-    /** convert string to argb color */
-    static bool convertColor( sal_Int32& rColor,
-                              const ::rtl::OUString&rValue,
-                              const double alpha);
-
     /** convert color to string */
     static void convertColor( ::rtl::OUStringBuffer &rBuffer,
                               sal_Int32 nColor );

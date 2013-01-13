@@ -495,26 +495,6 @@ bool Converter::convertColor( sal_Int32& rColor, const OUString& rValue )
     return true;
 }
 
-/** convert string to rgba color */
-bool Converter::convertColor( sal_Int32& rColor, const OUString& rValue, const double alpha)
-{
-    if( rValue.getLength() != 7 || rValue[0] != '#' )
-        return false;
-
-    rColor = (int) (alpha * 255);
-    rColor <<= 8;
-
-    rColor |= lcl_gethex( rValue[1] ) * 16 + lcl_gethex( rValue[2] );
-    rColor <<= 8;
-
-    rColor |= ( lcl_gethex( rValue[3] ) * 16 + lcl_gethex( rValue[4] ) );
-    rColor <<= 8;
-
-    rColor |= ( lcl_gethex( rValue[5] ) * 16 + lcl_gethex( rValue[6] ) );
-
-    return true;
-}
-
 static sal_Char aHexTab[] = "0123456789abcdef";
 
 /** convert color to string */

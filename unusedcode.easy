@@ -1,4 +1,6 @@
 Application::GetDisplayScreenName(unsigned int)
+EditTextObject::RemoveParaAttribs(unsigned short)
+EditTextObject::SetParaAttribs(unsigned long, SfxItemSet const&)
 FontSelectPattern::FontSelectPattern(PhysicalFontFace const&, Size const&, float, int, bool)
 Line::Intersection(Rectangle const&, Line&) const
 PoHeader::PoHeader()
@@ -7,9 +9,9 @@ ScFiltersTest::testColorScaleODS()
 ScFiltersTest::testColorScaleXLSX()
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
 ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any const&)
+StyleSettings::GetPersonaFooter() const
+TemplateAbstractView::deselectOverlayItem(unsigned short)
 TextEngine::GetLeftMargin() const
-UnoControl::UnoControl()
-VirtualDevice::SetOutputSizePixelScaleOffsetAndBuffer(Size const&, Fraction const&, Point const&, boost::shared_array<unsigned char> const&)
 Window::PostUserEvent(unsigned long&, unsigned long, void*)
 XclExpPivotCache::GetFieldAcc(rtl::OUString const&)
 apitest::XCellRangesQuery::testQueryFormulaCells()

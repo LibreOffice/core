@@ -70,7 +70,6 @@ class SwGlTreeListBox : public SvTreeListBox
                                     SvTreeListEntry*& rpNewParent,
                                     sal_uLong&        rNewChildPos);
 public:
-    SwGlTreeListBox(Window* pParent, const ResId& rResId);
     SwGlTreeListBox(Window* pParent, WinBits nBits);
 
     virtual void RequestHelp( const HelpEvent& rHEvt );

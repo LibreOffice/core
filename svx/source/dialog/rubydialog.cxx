@@ -754,14 +754,6 @@ void SvxRubyDialog::EnableControls(bool bEnable)
     m_pApplyPB->Enable(bEnable);
 }
 
-RubyPreview::RubyPreview(SvxRubyDialog& rParent, const ResId& rResId)
-    : Window(&rParent, rResId)
-    , m_pParentDlg(&rParent)
-{
-    SetMapMode(MAP_TWIP);
-    SetBorderStyle( WINDOW_BORDER_MONO );
-}
-
 RubyPreview::RubyPreview(Window *pParent)
     : Window(pParent, WB_BORDER)
     , m_pParentDlg(NULL)

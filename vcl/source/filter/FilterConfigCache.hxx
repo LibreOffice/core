@@ -49,7 +49,6 @@ class FilterConfigCache
 
         // user data
         String          sFilterName;
-        sal_Bool        bHasDialog          : 1;
         sal_Bool        bIsInternalFilter   : 1;
         sal_Bool        bIsPixelFormat      : 1;
 
@@ -119,7 +118,6 @@ public:
 
     sal_Bool    IsExportInternalFilter( sal_uInt16 nFormat );
     sal_Bool    IsExportPixelFormat( sal_uInt16 nFormat );
-    sal_Bool    IsExportDialog( sal_uInt16 nFormat );
 
                 FilterConfigCache( sal_Bool bUseConfig );
                 ~FilterConfigCache();

@@ -2284,13 +2284,6 @@ static sal_uInt16 lcl_DrawBullet(VirtualDevice* pVDev,
     return nRet;
 }
 
-SvxNumberingPreview::SvxNumberingPreview(Window* pParent, const ResId& rResId )
-    : Window(pParent, rResId), pActNum(0),nPageWidth(0), pOutlineNames(0)
-    , bPosition(sal_False), nActLevel(USHRT_MAX)
-{
-    SetBorderStyle( WINDOW_BORDER_MONO );
-}
-
 SvxNumberingPreview::SvxNumberingPreview(Window* pParent, WinBits nWinBits)
     : Window(pParent, nWinBits)
     , pActNum(0)

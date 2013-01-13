@@ -51,7 +51,6 @@ class SvxNumberingPreview : public Window
         virtual void        Paint( const Rectangle& rRect );
 
     public:
-        SvxNumberingPreview(Window* pParent, const ResId& rResId );
         SvxNumberingPreview(Window* pParent, WinBits nWinBits = WB_BORDER);
 
         void    SetNumRule(const SvxNumRule* pNum)

@@ -205,26 +205,6 @@ String EditTextObject::GetText(size_t nPara) const
     return mpImpl->GetText(nPara);
 }
 
-void EditTextObject::Insert(const EditTextObject& rObj, size_t nPara)
-{
-    mpImpl->Insert(rObj, nPara);
-}
-
-EditTextObject* EditTextObject::CreateTextObject(size_t nPara, size_t nParas) const
-{
-    return mpImpl->CreateTextObject(nPara, nParas);
-}
-
-void EditTextObject::RemoveParagraph(size_t nPara)
-{
-    mpImpl->RemoveParagraph(nPara);
-}
-
-bool EditTextObject::HasPortionInfo() const
-{
-    return mpImpl->HasPortionInfo();
-}
-
 void EditTextObject::ClearPortionInfo()
 {
     mpImpl->ClearPortionInfo();
@@ -235,19 +215,9 @@ bool EditTextObject::HasOnlineSpellErrors() const
     return mpImpl->HasOnlineSpellErrors();
 }
 
-bool EditTextObject::HasCharAttribs( sal_uInt16 nWhich ) const
-{
-    return mpImpl->HasCharAttribs(nWhich);
-}
-
 void EditTextObject::GetCharAttribs( sal_uInt16 nPara, std::vector<EECharAttrib>& rLst ) const
 {
     mpImpl->GetCharAttribs(nPara, rLst);
-}
-
-void EditTextObject::MergeParaAttribs( const SfxItemSet& rAttribs, sal_uInt16 nStart, sal_uInt16 nEnd )
-{
-    mpImpl->MergeParaAttribs(rAttribs, nStart, nEnd);
 }
 
 bool EditTextObject::IsFieldObject() const
@@ -285,11 +255,6 @@ bool EditTextObject::RemoveParaAttribs( sal_uInt16 nWhich )
     return mpImpl->RemoveParaAttribs(nWhich);
 }
 
-bool EditTextObject::HasStyleSheet( const XubString& rName, SfxStyleFamily eFamily ) const
-{
-    return mpImpl->HasStyleSheet(rName, eFamily);
-}
-
 void EditTextObject::GetStyleSheet(size_t nPara, String& rName, SfxStyleFamily& eFamily) const
 {
     mpImpl->GetStyleSheet(nPara, rName, eFamily);
@@ -325,16 +290,6 @@ sal_uInt16 EditTextObject::GetUserType() const
 void EditTextObject::SetUserType( sal_uInt16 n )
 {
     mpImpl->SetUserType(n);
-}
-
-sal_uLong EditTextObject::GetObjectSettings() const
-{
-    return mpImpl->GetObjectSettings();
-}
-
-void EditTextObject::SetObjectSettings( sal_uLong n )
-{
-    mpImpl->SetObjectSettings(n);
 }
 
 bool EditTextObject::IsVertical() const
@@ -415,11 +370,6 @@ void EditTextObject::StoreData( SvStream& rStrm ) const
 void EditTextObject::CreateData( SvStream& rStrm )
 {
     mpImpl->CreateData(rStrm);
-}
-
-sal_uInt16 EditTextObject::GetVersion() const
-{
-    return mpImpl->GetVersion();
 }
 
 EditTextObject* EditTextObject::Clone() const
@@ -597,16 +547,6 @@ void EditTextObjectImpl::SetUserType( sal_uInt16 n )
     nUserType = n;
 }
 
-sal_uLong EditTextObjectImpl::GetObjectSettings() const
-{
-    return nObjSettings;
-}
-
-void EditTextObjectImpl::SetObjectSettings( sal_uLong n )
-{
-    nObjSettings = n;
-}
-
 bool EditTextObjectImpl::IsVertical() const
 {
     return bVertical;
@@ -671,66 +611,6 @@ String EditTextObjectImpl::GetText(size_t nPara) const
     return aContents[nPara].GetText();
 }
 
-void EditTextObjectImpl::Insert(const EditTextObject& rObj, size_t nDestPara)
-{
-    const EditTextObjectImpl& rBinObj = *rObj.mpImpl;
-
-    if (nDestPara > aContents.size())
-        nDestPara = aContents.size();
-
-    const ContentInfosType& rCIs = rBinObj.aContents;
-    for (size_t i = 0, n = rCIs.size(); i < n; ++i)
-    {
-        const ContentInfo& rC = rCIs[i];
-        size_t nPos = nDestPara + i;
-        aContents.insert(
-            aContents.begin()+nPos, new ContentInfo(rC, *GetPool()));
-    }
-
-    ClearPortionInfo();
-}
-
-EditTextObject* EditTextObjectImpl::CreateTextObject(size_t nPara, size_t nParas) const
-{
-    if (nPara >= aContents.size() || !nParas)
-        return NULL;
-
-    // Only split the Pool, when a the Pool is set externally.
-    EditTextObject* pObj = new EditTextObject( bOwnerOfPool ? 0 : pPool );
-    if ( bOwnerOfPool && pPool )
-        pObj->mpImpl->GetPool()->SetDefaultMetric( pPool->GetMetric( DEF_METRIC ) );
-
-    // If complete text is only one ScriptType, this is valid.
-    // If text contains different ScriptTypes, this shouldn't be a problem...
-    pObj->mpImpl->nScriptType = nScriptType;
-
-    const size_t nEndPara = nPara+nParas-1;
-    for (size_t i = nPara; i <= nEndPara; ++i)
-    {
-        const ContentInfo& rC = aContents[i];
-        ContentInfo* pNew = new ContentInfo(rC, *pObj->mpImpl->GetPool());
-        pObj->mpImpl->aContents.push_back(pNew);
-    }
-    return pObj;
-}
-
-void EditTextObjectImpl::RemoveParagraph(size_t nPara)
-{
-    DBG_ASSERT( nPara < aContents.size(), "BinTextObject::GetText: Paragraph does not exist!" );
-    if (nPara >= aContents.size())
-        return;
-
-    ContentInfosType::iterator it = aContents.begin();
-    std::advance(it, nPara);
-    aContents.erase(it);
-    ClearPortionInfo();
-}
-
-bool EditTextObjectImpl::HasPortionInfo() const
-{
-    return pPortionInfo ? true : false;
-}
-
 void EditTextObjectImpl::ClearPortionInfo()
 {
     if ( pPortionInfo )
@@ -751,26 +631,6 @@ bool EditTextObjectImpl::HasOnlineSpellErrors() const
     return false;
 }
 
-bool EditTextObjectImpl::HasCharAttribs( sal_uInt16 _nWhich ) const
-{
-    for (size_t nPara = aContents.size(); nPara; )
-    {
-        const ContentInfo& rC = aContents[--nPara];
-
-        size_t nAttribs = rC.aAttribs.size();
-        if ( nAttribs && !_nWhich )
-            return true;
-
-        for (size_t nAttr = nAttribs; nAttr; )
-        {
-            const XEditAttribute& rX = rC.aAttribs[--nAttr];
-            if (rX.GetItem()->Which() == _nWhich)
-                return true;
-        }
-    }
-    return false;
-}
-
 void EditTextObjectImpl::GetCharAttribs( sal_uInt16 nPara, std::vector<EECharAttrib>& rLst ) const
 {
     rLst.clear();
@@ -785,29 +645,6 @@ void EditTextObjectImpl::GetCharAttribs( sal_uInt16 nPara, std::vector<EECharAtt
         aEEAttr.nEnd = rAttr.GetEnd();
         rLst.push_back(aEEAttr);
     }
-}
-
-void EditTextObjectImpl::MergeParaAttribs( const SfxItemSet& rAttribs, sal_uInt16 nStart, sal_uInt16 nEnd )
-{
-    bool bChanged = false;
-
-    for (size_t nPara = aContents.size(); nPara; )
-    {
-        ContentInfo& rC = aContents[--nPara];
-
-        for ( sal_uInt16 nW = nStart; nW <= nEnd; nW++ )
-        {
-            if ( ( rC.GetParaAttribs().GetItemState( nW, false ) != SFX_ITEM_ON )
-                    && ( rAttribs.GetItemState( nW, false ) == SFX_ITEM_ON ) )
-            {
-                rC.GetParaAttribs().Put( rAttribs.Get( nW ) );
-                bChanged = true;
-            }
-        }
-    }
-
-    if ( bChanged )
-        ClearPortionInfo();
 }
 
 bool EditTextObjectImpl::IsFieldObject() const
@@ -926,18 +763,6 @@ bool EditTextObjectImpl::RemoveParaAttribs( sal_uInt16 _nWhich )
         ClearPortionInfo();
 
     return bChanged;
-}
-
-bool EditTextObjectImpl::HasStyleSheet( const XubString& rName, SfxStyleFamily eFamily ) const
-{
-    size_t nParagraphs = aContents.size();
-    for (size_t nPara = 0; nPara < nParagraphs; ++nPara)
-    {
-        const ContentInfo& rC = aContents[nPara];
-        if (rC.GetFamily() == eFamily && rC.GetStyle() == rName)
-            return true;
-    }
-    return false;
 }
 
 void EditTextObjectImpl::GetStyleSheet(size_t nPara, String& rName, SfxStyleFamily& rFamily) const
@@ -1467,11 +1292,6 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
     }
 }
 
-sal_uInt16 EditTextObjectImpl::GetVersion() const
-{
-    return nVersion;
-}
-
 bool EditTextObjectImpl::operator==( const EditTextObjectImpl& rCompare ) const
 {
     if( this == &rCompare )
@@ -1514,72 +1334,6 @@ bool EditTextObjectImpl::isWrongListEqual(const EditTextObjectImpl& rCompare) co
     }
 
     return true;
-}
-
-#define CHARSETMARKER   0x9999
-
-void EditTextObjectImpl::CreateData300( SvStream& rIStream )
-{
-    // For forward compatibility.
-
-    // First load the Pool...
-    // Is always saved in the 300!
-    GetPool()->Load( rIStream );
-
-    // The number of paragraphs ...
-    sal_uInt32 nParagraphs;
-    rIStream >> nParagraphs;
-
-    // The individual paragraphs...
-    for ( sal_uLong nPara = 0; nPara < nParagraphs; nPara++ )
-    {
-        ContentInfo* pC = CreateAndInsertContent();
-
-        // The Text...
-        pC->GetText() = rIStream.ReadUniOrByteString(rIStream.GetStreamCharSet());
-
-        // StyleName and Family...
-        pC->GetStyle() = rIStream.ReadUniOrByteString(rIStream.GetStreamCharSet());
-        sal_uInt16 nStyleFamily;
-        rIStream >> nStyleFamily;
-        pC->GetFamily() = (SfxStyleFamily)nStyleFamily;
-
-        // Paragraph attributes ...
-        pC->GetParaAttribs().Load( rIStream );
-
-        // The number of attributes ...
-        sal_uInt32 nAttribs;
-        rIStream >> nAttribs;
-
-        // And the individual attributes
-        // Items as Surregate => always 8 bytes per Attribute
-        // Which = 2; Surregat = 2; Start = 2; End = 2;
-        for ( sal_uLong nAttr = 0; nAttr < nAttribs; nAttr++ )
-        {
-            sal_uInt16 _nWhich, nStart, nEnd;
-            const SfxPoolItem* pItem;
-
-            rIStream >> _nWhich;
-            _nWhich = pPool->GetNewWhich( _nWhich );
-            pItem = pPool->LoadSurrogate( rIStream, _nWhich, 0 );
-            rIStream >> nStart;
-            rIStream >> nEnd;
-            if ( pItem )
-            {
-                XEditAttribute* pAttr = new XEditAttribute( *pItem, nStart, nEnd );
-                pC->aAttribs.push_back(pAttr);
-            }
-        }
-    }
-
-    // Check whether a font was saved
-    sal_uInt16 nCharSetMarker;
-    rIStream >> nCharSetMarker;
-    if ( nCharSetMarker == CHARSETMARKER )
-    {
-        sal_uInt16 nCharSet;
-        rIStream >> nCharSet;
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

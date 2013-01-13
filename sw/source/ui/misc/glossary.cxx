@@ -842,15 +842,6 @@ IMPL_LINK( SwGlossaryDlg, CheckBoxHdl, CheckBox *, pBox )
 /* --------------------------------------------------
  * TreeListBox for groups and blocks
  * --------------------------------------------------*/
-SwGlTreeListBox::SwGlTreeListBox(Window* pParent, const ResId& rResId)
-    : SvTreeListBox(pParent, rResId)
-    , sReadonly(SW_RESSTR(SW_STR_READONLY))
-    , pDragEntry(0)
-{
-    FreeResource();
-    SetDragDropMode( SV_DRAGDROP_CTRL_MOVE|SV_DRAGDROP_CTRL_COPY );
-}
-
 SwGlTreeListBox::SwGlTreeListBox(Window* pParent, WinBits nBits)
     : SvTreeListBox(pParent, nBits)
     , sReadonly(SW_RESSTR(SW_STR_READONLY)),

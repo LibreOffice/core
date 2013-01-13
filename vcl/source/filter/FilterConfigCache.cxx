@@ -156,7 +156,6 @@ void FilterConfigCache::ImplInit()
 {
     OUString STYPE                ( "Type"                );
     OUString SUINAME              ( "UIName"              );
-    OUString SUICOMPONENT         ( "UIComponent"         );
     OUString SFLAGS               ( "Flags"               );
     OUString SMEDIATYPE           ( "MediaType"           );
     OUString SEXTENSIONS          ( "Extensions"          );
@@ -195,10 +194,6 @@ void FilterConfigCache::ImplInit()
             else
             if (lFlags[0].equalsIgnoreAsciiCase("export"))
                 aEntry.nFlags = 2;
-
-            OUString sUIComponent;
-            xFilterSet->getPropertyValue(SUICOMPONENT) >>= sUIComponent;
-            aEntry.bHasDialog = sUIComponent.getLength();
 
             ::rtl::OUString sFormatName;
             xFilterSet->getPropertyValue(SFORMATNAME) >>= sFormatName;
@@ -550,11 +545,6 @@ sal_Bool FilterConfigCache::IsExportInternalFilter( sal_uInt16 nFormat )
 sal_Bool FilterConfigCache::IsExportPixelFormat( sal_uInt16 nFormat )
 {
     return (nFormat < aExport.size()) && aExport[ nFormat ].bIsPixelFormat;
-}
-
-sal_Bool FilterConfigCache::IsExportDialog( sal_uInt16 nFormat )
-{
-    return (nFormat < aExport.size()) && aExport[ nFormat ].bHasDialog;
 }
 
 // ------------------------------------------------------------------------

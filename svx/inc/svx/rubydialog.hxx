@@ -47,7 +47,6 @@ protected:
     SvxRubyDialog* m_pParentDlg;
 
 public:
-    RubyPreview(SvxRubyDialog& rParent, const ResId& rResId);
     RubyPreview(Window *pParent);
     void setRubyDialog(SvxRubyDialog* pParentDlg)
     {
