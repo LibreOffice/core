@@ -440,19 +440,11 @@ void PDFIProcessor::drawGlyphLine( const rtl::OUString&             rGlyphs,
         processGlyphLine();
     }
 
-    CharGlyph aGlyph;
+    CharGlyph aGlyph(fXPrevTextPosition, fYPrevTextPosition, fPrevTextHeight, fPrevTextWidth,
+               m_pCurElement, getCurrentContext(), rFontMatrix, rRect, rGlyphs);
 
-    aGlyph.setGlyph ( rGlyphs );
-    aGlyph.setRect  ( rRect );
-    aGlyph.setFontMatrix ( rFontMatrix );
-    aGlyph.setGraphicsContext ( getCurrentContext() );
+
     getGCId(getCurrentContext());
-    aGlyph.setCurElement( m_pCurElement );
-
-    aGlyph.setYPrevGlyphPosition( fYPrevTextPosition );
-    aGlyph.setXPrevGlyphPosition( fXPrevTextPosition );
-    aGlyph.setPrevGlyphHeight  ( fPrevTextHeight );
-    aGlyph.setPrevGlyphWidth   ( fPrevTextWidth );
 
     m_GlyphsList.push_back( aGlyph );
 
