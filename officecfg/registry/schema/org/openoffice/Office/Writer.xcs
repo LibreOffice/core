@@ -4647,6 +4647,11 @@
                 <desc>KeyRight</desc>
               </info>
             </enumeration>
+            <enumeration oor:value="1282"> <!-- 0x502 -->
+              <info>
+                <desc>KeyTab</desc>
+              </info>
+            </enumeration>
             <enumeration oor:value="1284">
               <!-- 0x504 -->
               <info>
