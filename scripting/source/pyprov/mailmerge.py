@@ -140,7 +140,7 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 		bccrecipients = xMailMessage.getBccRecipients()
 		if dbg:
 			print("PyMailSMTPService subject " + subject, file=dbgout)
-			print("PyMailSMTPService from " + sendername.encode('utf-8'), file=dbgout)
+			print("PyMailSMTPService from " + sendername, file=dbgout)
 			print("PyMailSMTPService from " + sendermail, file=dbgout)
 			print("PyMailSMTPService send to " + recipients, file=dbgout)
 
@@ -289,7 +289,7 @@ class PyMailIMAPService(unohelper.Base, XMailService):
 				user = user.encode('ascii')
 				password = password.encode('ascii')
 			if dbg:
-				print("Logging in, username of" + user, file=dbgout)
+				print("Logging in, username of", user, file=dbgout)
 			self.server.login(user, password)
 
 		for listener in self.listeners:
@@ -360,7 +360,7 @@ class PyMailPOP3Service(unohelper.Base, XMailService):
 			user = user.encode('ascii')
 			password = password.encode('ascii')
 		if dbg:
-			print("Logging in, username of" + user, file=dbgout)
+			print("Logging in, username of", user, file=dbgout)
 		self.server.user(user)
 		self.server.pass_(user, password)
 
