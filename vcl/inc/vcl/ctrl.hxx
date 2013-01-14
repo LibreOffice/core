@@ -173,7 +173,7 @@ public:
 
     void            SetLayoutDataParent( const Control* pParent ) const;
 
-    virtual Size    GetOptimalSize(WindowSizeType eType) const;
+    virtual Size    GetOptimalSize() const;
 
     /** sets a reference device used for rendering control text
         @seealso DrawControlText

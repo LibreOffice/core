@@ -1020,10 +1020,10 @@ namespace svt
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Size PanelTabBar::GetOptimalSize( WindowSizeType i_eType ) const
+    Size PanelTabBar::GetOptimalSize() const
     {
         m_pImpl->EnsureItemsCache();
-        Size aOptimalSize( m_pImpl->m_aGeometry.getOptimalSize( m_pImpl->m_aItems, i_eType == WINDOWSIZE_MINIMUM ) );
+        Size aOptimalSize(m_pImpl->m_aGeometry.getOptimalSize(m_pImpl->m_aItems));
         if ( m_pImpl->IsVertical() )
             ::std::swap( aOptimalSize.Width(), aOptimalSize.Height() );
         return aOptimalSize;

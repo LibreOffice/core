@@ -124,13 +124,10 @@ namespace svt
         if ( lcl_checkDisposed( *m_pData ) )
             return i_rDeckPlayground;
 
-        const Size aPreferredSize( m_pData->pTabBar->GetOptimalSize( WINDOWSIZE_PREFERRED ) );
+        const Size aPreferredSize(m_pData->pTabBar->GetOptimalSize());
         if ( lcl_isVerticalTabBar( m_pData->eAlignment ) )
         {
-            Size aTabBarSize =  ( aPreferredSize.Width() < i_rDeckPlayground.GetWidth() )
-                            ?   aPreferredSize
-                            :   m_pData->pTabBar->GetOptimalSize( WINDOWSIZE_MINIMUM );
-            aTabBarSize.Height() = i_rDeckPlayground.GetHeight();
+            Size aTabBarSize(aPreferredSize.Width(), i_rDeckPlayground.GetHeight());
 
             Rectangle aPanelRect( i_rDeckPlayground );
             if ( m_pData->eAlignment == TABS_RIGHT )
@@ -151,10 +148,7 @@ namespace svt
             return aPanelRect;
         }
 
-        Size aTabBarSize =  ( aPreferredSize.Height() < i_rDeckPlayground.GetHeight() )
-                        ?   aPreferredSize
-                        :   m_pData->pTabBar->GetOptimalSize( WINDOWSIZE_MINIMUM );
-        aTabBarSize.Width() = i_rDeckPlayground.GetWidth();
+        Size aTabBarSize(i_rDeckPlayground.GetWidth(), aPreferredSize.Height());
 
         Rectangle aPanelRect( i_rDeckPlayground );
         if ( m_pData->eAlignment == TABS_TOP )

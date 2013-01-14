@@ -2219,7 +2219,7 @@ Size TabControl::calculateRequisition() const
         if (!pPage)
             continue;
 
-        Size aPageSize(pPage->GetOptimalSize(WINDOWSIZE_PREFERRED));
+        Size aPageSize(pPage->GetOptimalSize());
 
         if (aPageSize.Width() > aOptimalPageSize.Width())
             aOptimalPageSize.Width() = aPageSize.Width();
@@ -2251,10 +2251,8 @@ Size TabControl::calculateRequisition() const
     return aOptimalSize;
 }
 
-Size TabControl::GetOptimalSize(WindowSizeType eType) const
+Size TabControl::GetOptimalSize() const
 {
-    if (eType == WINDOWSIZE_MINIMUM)
-        return Size();
     return calculateRequisition();
 }
 

@@ -93,7 +93,7 @@ public:
     void                SetCheckBoxState( sal_Bool bCheck );
     sal_Bool                GetCheckBoxState() const;
 
-    virtual Size        GetOptimalSize(WindowSizeType eType) const;
+    virtual Size        GetOptimalSize() const;
 };
 
 // -----------

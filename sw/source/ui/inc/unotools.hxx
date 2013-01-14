@@ -43,7 +43,7 @@ public:
     SwFrmCtrlWindow(Window* pParent, SwOneExampleFrame* pFrame);
 
     virtual void Command( const CommandEvent& rCEvt );
-    virtual Size GetOptimalSize(WindowSizeType eType) const;
+    virtual Size GetOptimalSize() const;
     virtual void Resize();
 };
 

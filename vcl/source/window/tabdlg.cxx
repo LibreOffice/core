@@ -56,7 +56,7 @@ void TabDialog::ImplPosControls()
                 pTabControl = pChild;
             else if ( pTabControl )
             {
-                Size aOptimalSize( pChild->GetOptimalSize( WINDOWSIZE_PREFERRED ) );
+                Size aOptimalSize(pChild->GetOptimalSize());
                 long nTxtWidth = aOptimalSize.Width();
                 if ( nTxtWidth > aCtrlSize.Width() )
                     aCtrlSize.Width() = nTxtWidth;
@@ -86,7 +86,7 @@ void TabDialog::ImplPosControls()
         Point   aTabOffset( IMPL_DIALOG_OFFSET, IMPL_DIALOG_OFFSET+nOffY );
 
         if (isContainerWindow(*pTabControl))
-            pTabControl->SetSizePixel(pTabControl->GetOptimalSize(WINDOWSIZE_PREFERRED));
+            pTabControl->SetSizePixel(pTabControl->GetOptimalSize());
 
         Size    aTabSize = pTabControl->GetSizePixel();
 

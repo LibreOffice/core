@@ -2360,16 +2360,12 @@ Rectangle ImplBorderWindow::GetMenuRect() const
     return mpBorderView->GetMenuRect();
 }
 
-Size ImplBorderWindow::GetOptimalSize(WindowSizeType eType) const
+Size ImplBorderWindow::GetOptimalSize() const
 {
-    if (eType == WINDOWSIZE_MAXIMUM)
-        return Size(mnMaxWidth, mnMaxHeight);
-    if (eType == WINDOWSIZE_MINIMUM)
-        return Size(mnMinWidth, mnMinHeight);
-    Window* pClientWindow = ImplGetClientWindow();
+    const Window* pClientWindow = ImplGetClientWindow();
     if (pClientWindow)
-        return pClientWindow->GetOptimalSize(eType);
-    return Size(0, 0);
+        return pClientWindow->GetOptimalSize();
+    return Size(mnMinWidth, mnMinHeight);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

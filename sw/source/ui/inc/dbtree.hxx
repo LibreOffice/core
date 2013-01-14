@@ -58,7 +58,7 @@ public:
                     const sal_Bool bShowCol = sal_False );
     SwDBTreeList(Window* pParent);
     virtual ~SwDBTreeList();
-    virtual Size GetOptimalSize(WindowSizeType eType) const;
+    virtual Size GetOptimalSize() const;
 
     String  GetDBName( String& rTableName, String& rColumnName, sal_Bool* pbIsTable = 0);
 

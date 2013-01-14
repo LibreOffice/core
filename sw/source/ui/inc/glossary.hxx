@@ -73,7 +73,7 @@ public:
     SwGlTreeListBox(Window* pParent, WinBits nBits);
 
     virtual void RequestHelp( const HelpEvent& rHEvt );
-    virtual Size GetOptimalSize(WindowSizeType eType) const;
+    virtual Size GetOptimalSize() const;
     void Clear();
 };
 

@@ -118,7 +118,7 @@ SfxCommonPrintOptionsTabPage::SfxCommonPrintOptionsTabPage( Window* pParent, con
     // #i89164# calculate dynamically the width of radiobutton and listbox
     const long nOffset = 10;
     Size aOldSize = aReduceBitmapsResolutionRB.GetSizePixel();
-    Size aNewSize = aReduceBitmapsResolutionRB.GetOptimalSize( WINDOWSIZE_PREFERRED );
+    Size aNewSize = aReduceBitmapsResolutionRB.GetOptimalSize();
     aNewSize.Width() += nOffset;
     aNewSize.Height() = aOldSize.Height();
     long nDelta = aOldSize.Width() - aNewSize.Width();
@@ -126,7 +126,7 @@ SfxCommonPrintOptionsTabPage::SfxCommonPrintOptionsTabPage( Window* pParent, con
     Point aPos = aReduceBitmapsResolutionLB.GetPosPixel();
     aPos.X() -= nDelta;
     aOldSize = aReduceBitmapsResolutionLB.GetSizePixel();
-    aNewSize = aReduceBitmapsResolutionLB.GetOptimalSize( WINDOWSIZE_PREFERRED );
+    aNewSize = aReduceBitmapsResolutionLB.GetOptimalSize();
     aNewSize.Width() += nOffset;
     aNewSize.Height() = aOldSize.Height();
     aReduceBitmapsResolutionLB.SetPosSizePixel( aPos, aNewSize );

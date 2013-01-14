@@ -762,7 +762,7 @@ public:
 
     long getPreferredDimensions(std::vector<long> &rWidths) const;
 
-    virtual Size GetOptimalSize(WindowSizeType i_eType) const;
+    virtual Size GetOptimalSize() const;
 };
 
 #define SV_LBOX_DD_FORMAT "SV_LBOX_DD_FORMAT"

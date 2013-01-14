@@ -348,7 +348,7 @@ void OSelectionBrowseBox::Init()
 
     for (sal_Size i = 0; i < sizeof (pControls) / sizeof (pControls[0]); ++i)
     {
-        const Size aTemp( pControls[i]->GetOptimalSize(WINDOWSIZE_PREFERRED) );
+        const Size aTemp(pControls[i]->GetOptimalSize());
         if ( aTemp.Height() > aHeight.Height() )
             aHeight.Height() = aTemp.Height();
     }

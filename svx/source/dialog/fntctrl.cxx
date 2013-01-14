@@ -1489,11 +1489,8 @@ void SvxFontPrevWindow::SetFontEscapement( sal_uInt8 nProp, sal_uInt8 nEscProp, 
     Invalidate();
 }
 
-Size SvxFontPrevWindow::GetOptimalSize(WindowSizeType eType) const
+Size SvxFontPrevWindow::GetOptimalSize() const
 {
-    if (eType == WINDOWSIZE_MAXIMUM)
-        return Window::GetOptimalSize(eType);
-
     return m_aInitialSize;
 }
 

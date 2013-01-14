@@ -197,7 +197,7 @@ IMPL_LINK( PlaceEditDialog, SelectTypeHdl, void*, EMPTYARG )
 
     m_pCurrentDetails->show( true );
 
-    SetSizePixel( GetOptimalSize( WINDOWSIZE_MINIMUM ) );
+    SetSizePixel(GetOptimalSize());
     return 0;
 }
 

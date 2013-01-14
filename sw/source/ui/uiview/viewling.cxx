@@ -861,7 +861,7 @@ SwFieldDialog::SwFieldDialog( SwEditWin* parent, IFieldmark *fieldBM ) :
         }
     }
 
-    Size lbSize=aListBox.GetOptimalSize(WINDOWSIZE_PREFERRED);
+    Size lbSize(aListBox.GetOptimalSize());
     lbSize.Width()+=50;
     lbSize.Height()+=20;
     aListBox.SetSizePixel(lbSize);

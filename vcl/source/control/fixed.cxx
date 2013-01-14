@@ -417,34 +417,26 @@ Size FixedText::CalcMinimumSize( long nMaxWidth ) const
 }
 // -----------------------------------------------------------------------
 
-Size FixedText::GetOptimalSize(WindowSizeType eType) const
+Size FixedText::GetOptimalSize() const
 {
-    switch (eType)
+    sal_Int32 nMaxAvailWidth = 0x7fffffff;
+    const OUString &rTxt = GetText();
+    if (m_nMaxWidthChars != -1 && m_nMaxWidthChars < rTxt.getLength())
     {
-        case WINDOWSIZE_MINIMUM:
-        {
-            sal_Int32 nMaxAvailWidth = 0x7fffffff;
-            const OUString &rTxt = GetText();
-            if (m_nMaxWidthChars != -1 && m_nMaxWidthChars < rTxt.getLength())
-            {
-                nMaxAvailWidth = getTextDimensions(this,
-                    rTxt.copy(0, m_nMaxWidthChars), 0x7fffffff).Width();
-            }
-            Size aRet = CalcMinimumSize(nMaxAvailWidth);
-            if (m_nMinWidthChars != -1)
-            {
-                OUStringBuffer aBuf;
-                comphelper::string::padToLength(aBuf, m_nMinWidthChars, 'x');
-                Size aMinAllowed = getTextDimensions(this,
-                    aBuf.makeStringAndClear(), 0x7fffffff);
-                if (aMinAllowed.Width() > aRet.Width())
-                    aRet = aMinAllowed;
-            }
-            return aRet;
-        }
-        default:
-            return Control::GetOptimalSize( eType );
+        nMaxAvailWidth = getTextDimensions(this,
+            rTxt.copy(0, m_nMaxWidthChars), 0x7fffffff).Width();
     }
+    Size aRet = CalcMinimumSize(nMaxAvailWidth);
+    if (m_nMinWidthChars != -1)
+    {
+        OUStringBuffer aBuf;
+        comphelper::string::padToLength(aBuf, m_nMinWidthChars, 'x');
+        Size aMinAllowed = getTextDimensions(this,
+            aBuf.makeStringAndClear(), 0x7fffffff);
+        if (aMinAllowed.Width() > aRet.Width())
+            aRet = aMinAllowed;
+    }
+    return aRet;
 }
 
 // -----------------------------------------------------------------------
@@ -753,14 +745,9 @@ void FixedLine::DataChanged( const DataChangedEvent& rDCEvt )
 
 // -----------------------------------------------------------------------
 
-Size FixedLine::GetOptimalSize(WindowSizeType eType) const
+Size FixedLine::GetOptimalSize() const
 {
-    switch (eType) {
-    case WINDOWSIZE_MINIMUM:
-        return CalcWindowSize( FixedText::CalcMinimumTextSize ( this, 0x7fffffff ) );
-    default:
-        return Control::GetOptimalSize( eType );
-    }
+    return CalcWindowSize( FixedText::CalcMinimumTextSize ( this, 0x7fffffff ) );
 }
 
 // =======================================================================
@@ -1106,10 +1093,9 @@ void FixedImage::Paint( const Rectangle& )
 
 // -----------------------------------------------------------------------
 
-Size FixedImage::GetOptimalSize( WindowSizeType ) const
+Size FixedImage::GetOptimalSize() const
 {
-    const Image* pImage = &maImage;
-    return pImage->GetSizePixel();
+    return maImage.GetSizePixel();
 }
 
 // -----------------------------------------------------------------------

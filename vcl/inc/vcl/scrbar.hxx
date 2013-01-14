@@ -140,7 +140,7 @@ public:
     void            SetEndScrollHdl( const Link& rLink ) { maEndScrollHdl = rLink; }
     const Link&     GetEndScrollHdl() const { return maEndScrollHdl; }
 
-    virtual Size    GetOptimalSize(WindowSizeType eType) const;
+    virtual Size    GetOptimalSize() const;
 };
 
 // ----------------

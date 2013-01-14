@@ -59,7 +59,7 @@ public:
     virtual void    SetPosSizePixel(const Point& rNewPos, const Size& rNewSize);
     virtual void    SetPosPixel(const Point& rNewPos);
     virtual void    SetSizePixel(const Size& rNewSize);
-    virtual Size    GetOptimalSize(WindowSizeType eType) const;
+    virtual Size    GetOptimalSize() const;
 };
 
 #endif  // _SV_TABPAGE_HXX

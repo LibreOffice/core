@@ -167,7 +167,7 @@ public:
     const Link&     GetDoubleClickHdl() const               { return maDoubleClickHdl; }
 
     Size            CalcMinimumSize() const;
-    virtual Size    GetOptimalSize(WindowSizeType eType) const;
+    virtual Size    GetOptimalSize() const;
     Size            CalcAdjustedSize( const Size& rPrefSize ) const;
     using Edit::CalcSize;
     Size            CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const;

@@ -189,7 +189,7 @@ public:
 
     Size            CalcSubEditSize() const;    //size of area inside lstbox, i.e. no scrollbar/dropdown
     Size            CalcMinimumSize() const;    //size of lstbox area, i.e. including scrollbar/dropdown
-    virtual Size    GetOptimalSize(WindowSizeType eType) const;
+    virtual Size    GetOptimalSize() const;
     Size            CalcAdjustedSize( const Size& rPrefSize ) const;
     Size            CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const;
     void            GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const;

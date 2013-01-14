@@ -82,7 +82,7 @@ namespace vcl
             ShowNupOrderWindow( Window* pParent );
             virtual ~ShowNupOrderWindow();
 
-            virtual Size GetOptimalSize(WindowSizeType eType) const;
+            virtual Size GetOptimalSize() const;
 
             virtual void Paint( const Rectangle& );
 

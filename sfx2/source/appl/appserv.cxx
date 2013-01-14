@@ -258,9 +258,9 @@ namespace
         aText.SetText( aLicensing );
 
         // positions and sizes are computed to always fit the language
-        Size aTextSize( aText.GetOptimalSize( WINDOWSIZE_PREFERRED ) );
-        Size aShowSize( aShow.GetOptimalSize( WINDOWSIZE_PREFERRED ) );
-        Size aCloseSize( aClose.GetOptimalSize( WINDOWSIZE_PREFERRED ) );
+        Size aTextSize(aText.GetOptimalSize());
+        Size aShowSize(aShow.GetOptimalSize());
+        Size aCloseSize(aClose.GetOptimalSize());
 
         long nDelimX = 12;
         long nDelimY = 12;

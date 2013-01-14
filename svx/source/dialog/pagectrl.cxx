@@ -129,7 +129,7 @@ SvxPageWindow::SvxPageWindow( Window* pParent ) :
 
     // Count in Twips by default
     SetMapMode( MapMode( MAP_TWIP ) );
-    aWinSize = GetOptimalSize(WINDOWSIZE_PREFERRED);
+    aWinSize = GetOptimalSize();
     aWinSize.Height() -= 4;
     aWinSize.Width() -= 4;
 
@@ -437,11 +437,9 @@ void SvxPageWindow::ResetBackground()
     pImpl->bResetBackground = sal_True;
 }
 
-Size SvxPageWindow::GetOptimalSize(WindowSizeType eType) const
+Size SvxPageWindow::GetOptimalSize() const
 {
-    if (eType == WINDOWSIZE_PREFERRED)
-        return LogicToPixel(Size(75, 46), MapMode(MAP_APPFONT));
-    return Window::GetOptimalSize(eType);
+    return LogicToPixel(Size(75, 46), MapMode(MAP_APPFONT));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

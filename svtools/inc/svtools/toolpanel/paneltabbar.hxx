@@ -65,7 +65,7 @@ namespace svt
         PushButton&                 GetScrollButton( const bool i_bForward );
 
         // Window overridables
-        virtual Size    GetOptimalSize( WindowSizeType i_eType ) const;
+        virtual Size    GetOptimalSize() const;
 
     protected:
         // Window overridables

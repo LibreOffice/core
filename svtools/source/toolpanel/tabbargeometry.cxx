@@ -256,7 +256,7 @@ namespace svt
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Size TabBarGeometry::getOptimalSize( ItemDescriptors& io_rItems, const bool i_bMinimalSize ) const
+    Size TabBarGeometry::getOptimalSize(ItemDescriptors& io_rItems) const
     {
         if ( io_rItems.empty() )
             return Size(
@@ -265,7 +265,7 @@ namespace svt
             );
 
         // the rect of the last item
-        const Rectangle& rLastItemRect( i_bMinimalSize ? io_rItems.rbegin()->aIconOnlyArea : io_rItems.rbegin()->aCompleteArea );
+        const Rectangle& rLastItemRect(io_rItems.rbegin()->aCompleteArea);
         return Size(
                     rLastItemRect.Left() + 1 + m_aItemsInset.Right(),
                     rLastItemRect.Top() + 1 + rLastItemRect.Bottom() + m_aItemsInset.Bottom()

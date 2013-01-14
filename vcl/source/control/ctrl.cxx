@@ -455,18 +455,10 @@ ControlLayoutData::~ControlLayoutData()
 
 // -----------------------------------------------------------------
 
-Size Control::GetOptimalSize(WindowSizeType eType) const
+Size Control::GetOptimalSize() const
 {
-    switch (eType) {
-    case WINDOWSIZE_MINIMUM:
-        return Size( GetTextWidth( GetText() ) + 2 * 12,
-                     GetTextHeight() + 2 * 6 );
-    case WINDOWSIZE_PREFERRED:
-        return GetOptimalSize( WINDOWSIZE_MINIMUM );
-    case WINDOWSIZE_MAXIMUM:
-    default:
-        return Size( LONG_MAX, LONG_MAX );
-    }
+    return Size( GetTextWidth( GetText() ) + 2 * 12,
+                 GetTextHeight() + 2 * 6 );
 }
 
 // -----------------------------------------------------------------

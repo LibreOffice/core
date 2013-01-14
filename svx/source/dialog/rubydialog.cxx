@@ -878,11 +878,9 @@ void RubyPreview::Paint( const Rectangle& /* rRect */ )
     SetFont(aSaveFont);
 }
 
-Size RubyPreview::GetOptimalSize(WindowSizeType eType) const
+Size RubyPreview::GetOptimalSize() const
 {
-    if (eType == WINDOWSIZE_PREFERRED)
-        return LogicToPixel(Size(215, 50), MapMode(MAP_APPFONT));
-    return Window::GetOptimalSize(eType);
+    return LogicToPixel(Size(215, 50), MapMode(MAP_APPFONT));
 }
 
 void RubyEdit::GetFocus()

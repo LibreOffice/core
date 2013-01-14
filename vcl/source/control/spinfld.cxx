@@ -995,14 +995,9 @@ Size SpinField::CalcMinimumSize() const
 
 // -----------------------------------------------------------------------
 
-Size SpinField::GetOptimalSize(WindowSizeType eType) const
+Size SpinField::GetOptimalSize() const
 {
-    switch (eType) {
-    case WINDOWSIZE_MINIMUM:
-        return CalcMinimumSize();
-    default:
-        return Edit::GetOptimalSize( eType );
-    }
+    return CalcMinimumSize();
 }
 
 // -----------------------------------------------------------------------

@@ -21,10 +21,8 @@ VclContainer::VclContainer(Window *pParent, WinBits nStyle)
     SetBackground();
 }
 
-Size VclContainer::GetOptimalSize(WindowSizeType eType) const
+Size VclContainer::GetOptimalSize() const
 {
-    if (eType == WINDOWSIZE_MAXIMUM)
-        return Window::GetOptimalSize(eType);
     return calculateRequisition();
 }
 

@@ -208,11 +208,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwDBTreeList(Window *pParen
     return new SwDBTreeList(pParent);
 }
 
-Size SwDBTreeList::GetOptimalSize(WindowSizeType eType) const
+Size SwDBTreeList::GetOptimalSize() const
 {
-    if (eType == WINDOWSIZE_PREFERRED)
-        return LogicToPixel(Size(100, 62), MapMode(MAP_APPFONT));
-    return SvTreeListBox::GetOptimalSize(eType);
+    return LogicToPixel(Size(100, 62), MapMode(MAP_APPFONT));
 }
 
 SwDBTreeList::~SwDBTreeList()

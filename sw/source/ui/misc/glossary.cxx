@@ -850,11 +850,9 @@ SwGlTreeListBox::SwGlTreeListBox(Window* pParent, WinBits nBits)
     SetDragDropMode( SV_DRAGDROP_CTRL_MOVE|SV_DRAGDROP_CTRL_COPY );
 }
 
-Size SwGlTreeListBox::GetOptimalSize(WindowSizeType eType) const
+Size SwGlTreeListBox::GetOptimalSize() const
 {
-    if (eType == WINDOWSIZE_PREFERRED)
-        return LogicToPixel(Size(212, 84), MapMode(MAP_APPFONT));
-    return SvTreeListBox::GetOptimalSize(eType);
+    return LogicToPixel(Size(212, 84), MapMode(MAP_APPFONT));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwGlTreeListBox(Window *pParent, VclBuilder::stringmap &)

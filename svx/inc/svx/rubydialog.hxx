@@ -52,7 +52,7 @@ public:
     {
         m_pParentDlg = pParentDlg;
     }
-    virtual Size GetOptimalSize(WindowSizeType eType) const;
+    virtual Size GetOptimalSize() const;
 };
 
 class SVX_DLLPUBLIC SvxRubyChildWindow : public SfxChildWindow

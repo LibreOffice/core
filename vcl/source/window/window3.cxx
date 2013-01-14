@@ -32,18 +32,9 @@ WaitObject::~WaitObject()
 
 // -----------------------------------------------------------------------
 
-Size Window::GetOptimalSize(WindowSizeType eType) const
+Size Window::GetOptimalSize() const
 {
-    switch (eType)
-    {
-        case WINDOWSIZE_MINIMUM:
-            return Size();
-        case WINDOWSIZE_PREFERRED:
-            return GetOptimalSize( WINDOWSIZE_MINIMUM );
-        case WINDOWSIZE_MAXIMUM:
-        default:
-            return Size( LONG_MAX, LONG_MAX );
-    }
+    return Size();
 }
 
 // -----------------------------------------------------------------------

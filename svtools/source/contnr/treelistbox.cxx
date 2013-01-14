@@ -3408,24 +3408,12 @@ long SvTreeListBox::getPreferredDimensions(std::vector<long> &rWidths) const
     return nHeight;
 }
 
-Size SvTreeListBox::GetOptimalSize(WindowSizeType eType) const
+Size SvTreeListBox::GetOptimalSize() const
 {
-    Size aRet;
-    switch (eType)
-    {
-        case WINDOWSIZE_MINIMUM:
-        case WINDOWSIZE_PREFERRED:
-        {
-            std::vector<long> aWidths;
-            aRet.Height() = getPreferredDimensions(aWidths);
-            for (size_t i = 0; i < aWidths.size(); ++i)
-                aRet.Width() += aWidths[i];
-            break;
-        }
-        default:
-            aRet = Control::GetOptimalSize(eType);
-            break;
-    }
+    std::vector<long> aWidths;
+    Size aRet(0, getPreferredDimensions(aWidths));
+    for (size_t i = 0; i < aWidths.size(); ++i)
+        aRet.Width() += aWidths[i];
     return aRet;
 }
 

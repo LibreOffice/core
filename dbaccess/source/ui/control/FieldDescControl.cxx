@@ -470,7 +470,7 @@ sal_Int32 OFieldDescControl::GetMaxControlHeight() const
     {
         if ( ppAggregates[i] )
         {
-            const Size aTemp( ppAggregates[i]->GetOptimalSize(WINDOWSIZE_PREFERRED) );
+            const Size aTemp(ppAggregates[i]->GetOptimalSize());
             if ( aTemp.Height() > aHeight.Height() )
                 aHeight.Height() = aTemp.Height();
         }

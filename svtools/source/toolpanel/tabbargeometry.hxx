@@ -100,7 +100,7 @@ namespace svt
 
         /** calculates the optimal size of the tab bar, depending on the item's sizes
         */
-        Size    getOptimalSize( ItemDescriptors& io_rItems, const bool i_bMinimalSize ) const;
+        Size    getOptimalSize(ItemDescriptors& io_rItems) const;
 
         /** retrieves the position where the first item should start, relative to the item rect
         */

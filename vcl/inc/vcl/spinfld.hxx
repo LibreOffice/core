@@ -102,7 +102,7 @@ public:
 
     virtual Size    CalcMinimumSize() const;
     virtual Size    CalcMinimumSizeForText(const rtl::OUString &rString) const;
-    virtual Size    GetOptimalSize(WindowSizeType eType) const;
+    virtual Size    GetOptimalSize() const;
     virtual Size    CalcSize( sal_uInt16 nChars ) const;
 };
 

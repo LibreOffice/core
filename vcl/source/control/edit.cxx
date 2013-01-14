@@ -2954,14 +2954,9 @@ Size Edit::GetMinimumEditSize()
 
 // -----------------------------------------------------------------------
 
-Size Edit::GetOptimalSize(WindowSizeType eType) const
+Size Edit::GetOptimalSize() const
 {
-    switch (eType) {
-    case WINDOWSIZE_MINIMUM:
-        return CalcMinimumSize();
-    default:
-        return Control::GetOptimalSize( eType );
-    }
+    return CalcMinimumSize();
 }
 
 // -----------------------------------------------------------------------

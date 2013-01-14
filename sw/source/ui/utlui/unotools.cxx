@@ -542,11 +542,9 @@ void SwFrmCtrlWindow::Command( const CommandEvent& rCEvt )
     }
 }
 
-Size SwFrmCtrlWindow::GetOptimalSize(WindowSizeType eType) const
+Size SwFrmCtrlWindow::GetOptimalSize() const
 {
-    if (eType == WINDOWSIZE_PREFERRED)
-        return LogicToPixel(Size(82, 124), MapMode(MAP_APPFONT));
-    return VclEventBox::GetOptimalSize(eType);
+    return LogicToPixel(Size(82, 124), MapMode(MAP_APPFONT));
 }
 
 void SwFrmCtrlWindow::Resize()

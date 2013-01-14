@@ -1188,10 +1188,10 @@ bool Dialog::isLayoutEnabled() const
     return pChild && isContainerWindow(*pChild) && !pChild->GetWindow(WINDOW_NEXT);
 }
 
-Size Dialog::GetOptimalSize(WindowSizeType eType) const
+Size Dialog::GetOptimalSize() const
 {
-    if (eType == WINDOWSIZE_MAXIMUM || !isLayoutEnabled())
-        return SystemWindow::GetOptimalSize(eType);
+    if (!isLayoutEnabled())
+        return SystemWindow::GetOptimalSize();
 
     Size aSize = VclContainer::getLayoutRequisition(*GetWindow(WINDOW_FIRSTCHILD));
 

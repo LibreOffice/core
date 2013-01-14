@@ -1707,15 +1707,9 @@ Size PushButton::CalcMinimumSize( long nMaxWidth ) const
     return CalcWindowSize( aSize );
 }
 
-Size PushButton::GetOptimalSize(WindowSizeType eType) const
+Size PushButton::GetOptimalSize() const
 {
-    switch (eType) {
-    case WINDOWSIZE_MINIMUM: {
-        return CalcMinimumSize();
-    }
-    default:
-        return Button::GetOptimalSize( eType );
-    }
+    return CalcMinimumSize();
 }
 
 bool PushButton::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
@@ -3077,14 +3071,9 @@ Size RadioButton::CalcMinimumSize( long nMaxWidth ) const
 
 // -----------------------------------------------------------------------
 
-Size RadioButton::GetOptimalSize(WindowSizeType eType) const
+Size RadioButton::GetOptimalSize() const
 {
-    switch (eType) {
-    case WINDOWSIZE_MINIMUM:
-        return CalcMinimumSize();
-    default:
-        return Button::GetOptimalSize( eType );
-    }
+    return CalcMinimumSize();
 }
 
 // =======================================================================
@@ -3992,14 +3981,9 @@ Size CheckBox::CalcMinimumSize( long nMaxWidth ) const
 
 // -----------------------------------------------------------------------
 
-Size CheckBox::GetOptimalSize(WindowSizeType eType) const
+Size CheckBox::GetOptimalSize() const
 {
-    switch (eType) {
-    case WINDOWSIZE_MINIMUM:
-        return CalcMinimumSize();
-    default:
-        return Button::GetOptimalSize( eType );
-    }
+    return CalcMinimumSize();
 }
 
 // =======================================================================

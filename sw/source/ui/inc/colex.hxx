@@ -112,7 +112,7 @@ public:
 
     void        SetColumns(const SwFmtCol& rCol);
 
-    virtual Size GetOptimalSize(WindowSizeType eType) const;
+    virtual Size GetOptimalSize() const;
 };
 
 #endif // _COLEX_HXX

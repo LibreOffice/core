@@ -89,7 +89,7 @@ public:
     void                SetFromItemSet( const SfxItemSet &rSet,
                                         bool bPreviewBackgroundToCharacter = false );
 
-    virtual Size GetOptimalSize(WindowSizeType eType) const;
+    virtual Size GetOptimalSize() const;
 };
 
 #endif // #ifndef _SVX_FNTCTRL_HXX

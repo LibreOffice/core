@@ -178,7 +178,7 @@ public:
 
     Rectangle               GetMenuRect() const;
 
-    virtual Size            GetOptimalSize(WindowSizeType eType) const;
+    virtual Size            GetOptimalSize() const;
 };
 
 // =======================================================================

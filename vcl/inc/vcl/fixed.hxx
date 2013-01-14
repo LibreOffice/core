@@ -73,7 +73,7 @@ public:
     static Size     CalcMinimumTextSize(Control const* pControl, long nMaxWidth = 0x7fffffff);
     static Size     getTextDimensions(Control const *pControl, const OUString &rTxt, long nMaxWidth);
     Size            CalcMinimumSize(long nMaxWidth = 0x7fffffff) const;
-    virtual Size    GetOptimalSize(WindowSizeType eType) const;
+    virtual Size    GetOptimalSize() const;
     virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
 };
 
@@ -116,7 +116,7 @@ public:
     virtual void    StateChanged( StateChangedType nType );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
-    virtual Size    GetOptimalSize(WindowSizeType eType) const;
+    virtual Size    GetOptimalSize() const;
 };
 
 // ---------------
@@ -188,7 +188,7 @@ public:
     virtual void    StateChanged( StateChangedType nType );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );
-    virtual Size    GetOptimalSize(WindowSizeType eType) const;
+    virtual Size    GetOptimalSize() const;
 
     void            SetImage( const Image& rImage );
     const Image&    GetImage() const { return maImage; }

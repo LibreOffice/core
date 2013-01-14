@@ -155,7 +155,7 @@ public:
 
     void        ResetBackground();
 
-    virtual Size GetOptimalSize(WindowSizeType eType) const;
+    virtual Size GetOptimalSize() const;
 };
 
 #endif // #ifndef _SVX_PAGECTRL_HXX

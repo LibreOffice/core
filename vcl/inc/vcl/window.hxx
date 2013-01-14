@@ -316,13 +316,6 @@ typedef sal_uInt16 StateChangedType;
 #define DLGWINDOW_NEXT                  1
 #define DLGWINDOW_FIRST                 2
 
-enum WindowSizeType
-{
-    WINDOWSIZE_MINIMUM,
-    WINDOWSIZE_PREFERRED,
-    WINDOWSIZE_MAXIMUM
-};
-
 // ----------
 // - Window -
 // ----------
@@ -1064,7 +1057,7 @@ public:
      * Implement this in sub-classes to tell layout
      * the preferred widget size.
      */
-    virtual Size GetOptimalSize(WindowSizeType eType) const;
+    virtual Size GetOptimalSize() const;
 
     /*
      * Widgets call this to inform their owner container that the widget wants

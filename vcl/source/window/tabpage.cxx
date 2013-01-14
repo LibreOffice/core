@@ -207,16 +207,11 @@ bool TabPage::isLayoutEnabled() const
     return pChild && isContainerWindow(*pChild) && !pChild->GetWindow(WINDOW_NEXT);
 }
 
-Size TabPage::GetOptimalSize(WindowSizeType eType) const
+Size TabPage::GetOptimalSize() const
 {
-    if (eType == WINDOWSIZE_MAXIMUM)
-        return Window::GetOptimalSize(eType);
-    Size aSize;
     if (isLayoutEnabled())
-        aSize = GetWindow(WINDOW_FIRSTCHILD)->GetOptimalSize(eType);
-    else
-        aSize = getLegacyBestSizeForChildren(*this);
-    return Window::CalcWindowSize(aSize);
+        return GetWindow(WINDOW_FIRSTCHILD)->GetOptimalSize();
+    return getLegacyBestSizeForChildren(*this);
 }
 
 void TabPage::SetPosSizePixel(const Point& rAllocPos, const Size& rAllocation)

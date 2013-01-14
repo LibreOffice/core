@@ -1016,14 +1016,9 @@ long ComboBox::CalcWindowSizePixel( sal_uInt16 nLines ) const
 
 // -----------------------------------------------------------------------
 
-Size ComboBox::GetOptimalSize(WindowSizeType eType) const
+Size ComboBox::GetOptimalSize() const
 {
-    switch (eType) {
-    case WINDOWSIZE_MINIMUM:
-        return CalcMinimumSize();
-    default:
-        return Edit::GetOptimalSize( eType );
-    }
+    return CalcMinimumSize();
 }
 
 // -----------------------------------------------------------------------

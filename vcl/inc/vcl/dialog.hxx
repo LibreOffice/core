@@ -91,7 +91,7 @@ public:
     virtual void    StateChanged( StateChangedType nStateChange );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
-    virtual Size    GetOptimalSize(WindowSizeType eType) const;
+    virtual Size    GetOptimalSize() const;
     virtual void    Resize();
     bool            isLayoutEnabled() const;
     void            setInitialLayoutSize();

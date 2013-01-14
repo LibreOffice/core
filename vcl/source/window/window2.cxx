@@ -2014,7 +2014,7 @@ namespace
         Size aRet(rWindow.get_width_request(), rWindow.get_height_request());
         if (aRet.Width() == -1 || aRet.Height() == -1)
         {
-            Size aOptimal = rWindow.GetOptimalSize(WINDOWSIZE_PREFERRED);
+            Size aOptimal = rWindow.GetOptimalSize();
             if (aRet.Width() == -1)
                 aRet.Width() = aOptimal.Width();
             if (aRet.Height() == -1)

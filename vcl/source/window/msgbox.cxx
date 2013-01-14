@@ -426,15 +426,10 @@ void MessBox::SetCheckBoxState( sal_Bool bCheck )
 
 // -----------------------------------------------------------------------
 
-Size MessBox::GetOptimalSize(WindowSizeType eType) const
+Size MessBox::GetOptimalSize() const
 {
-    switch( eType ) {
-    case WINDOWSIZE_MINIMUM:
-        // FIXME: base me on the font size ?
-        return Size( 250, 100 );
-    default:
-        return Window::GetOptimalSize( eType );
-    }
+    // FIXME: base me on the font size ?
+    return Size( 250, 100 );
 }
 
 // ============================================================================

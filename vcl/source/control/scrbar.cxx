@@ -1507,7 +1507,7 @@ void ScrollBar::SetVisibleSize( long nNewSize )
     }
 }
 
-Size ScrollBar::GetOptimalSize(WindowSizeType) const
+Size ScrollBar::GetOptimalSize() const
 {
     if (mbCalcSize)
         const_cast<ScrollBar*>(this)->ImplCalc(sal_False);

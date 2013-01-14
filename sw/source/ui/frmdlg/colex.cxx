@@ -300,7 +300,7 @@ SwColumnOnlyExample::SwColumnOnlyExample(Window* pParent)
     , m_aFrmSize(1,1)
 {
     SetMapMode( MapMode( MAP_TWIP ) );
-    m_aWinSize = GetOptimalSize(WINDOWSIZE_PREFERRED);
+    m_aWinSize = GetOptimalSize();
     m_aWinSize.Height() -= 4;
     m_aWinSize.Width() -= 4;
 
@@ -456,11 +456,9 @@ void  SwColumnOnlyExample::SetColumns(const SwFmtCol& rCol)
     }
 }
 
-Size SwColumnOnlyExample::GetOptimalSize(WindowSizeType eType) const
+Size SwColumnOnlyExample::GetOptimalSize() const
 {
-    if (eType == WINDOWSIZE_PREFERRED)
-        return LogicToPixel(Size(75, 46), MapMode(MAP_APPFONT));
-    return Window::GetOptimalSize(eType);
+    return LogicToPixel(Size(75, 46), MapMode(MAP_APPFONT));
 }
 
 SwPageGridExample::~SwPageGridExample()

@@ -21,7 +21,7 @@ class VCL_DLLPUBLIC VclContainer : public Window
 {
 public:
     VclContainer(Window *pParent, WinBits nStyle = WB_HIDE);
-    virtual Size GetOptimalSize(WindowSizeType eType) const;
+    virtual Size GetOptimalSize() const;
     virtual void SetPosSizePixel(const Point& rNewPos, const Size& rNewSize);
     virtual void SetPosPixel(const Point& rAllocPos);
     virtual void SetSizePixel(const Size& rAllocation);

@@ -301,7 +301,7 @@ void PrintDialog::ShowNupOrderWindow::ImplInitSettings()
     SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetFieldColor() ) );
 }
 
-Size PrintDialog::ShowNupOrderWindow::GetOptimalSize(WindowSizeType) const
+Size PrintDialog::ShowNupOrderWindow::GetOptimalSize() const
 {
     return Size(70, 70);
 }

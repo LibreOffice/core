@@ -186,7 +186,7 @@ public:
     TriState        GetSavedValue() const { return meSaveValue; }
 
     Size            CalcMinimumSize( long nMaxWidth = 0 ) const;
-    virtual Size    GetOptimalSize(WindowSizeType eType) const;
+    virtual Size    GetOptimalSize() const;
 
     void            SetToggleHdl( const Link& rLink ) { maToggleHdl = rLink; }
     const Link&     GetToggleHdl() const { return maToggleHdl; }
@@ -379,7 +379,7 @@ public:
     static Image    GetRadioImage( const AllSettings& rSettings, sal_uInt16 nFlags );
 
     Size            CalcMinimumSize( long nMaxWidth = 0 ) const;
-    virtual Size    GetOptimalSize(WindowSizeType eType) const;
+    virtual Size    GetOptimalSize() const;
 
     void            SetToggleHdl( const Link& rLink ) { maToggleHdl = rLink; }
     const Link&     GetToggleHdl() const { return maToggleHdl; }
@@ -493,7 +493,7 @@ public:
     static Image    GetCheckImage( const AllSettings& rSettings, sal_uInt16 nFlags );
 
     Size            CalcMinimumSize( long nMaxWidth = 0 ) const;
-    virtual Size    GetOptimalSize(WindowSizeType eType) const;
+    virtual Size    GetOptimalSize() const;
 
     void            SetToggleHdl( const Link& rLink ) { maToggleHdl = rLink; }
     const Link&     GetToggleHdl() const { return maToggleHdl; }
