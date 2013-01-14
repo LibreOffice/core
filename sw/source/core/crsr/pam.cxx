@@ -700,6 +700,13 @@ sal_Bool SwPaM::HasReadonlySel( bool bFormView ) const
             if (!bUnhandledMark)
                 bCommentrangeMark = pFieldmark->GetFieldname() == ODF_COMMENTRANGE;
         }
+        // Allow editing selection right before a commented range.
+        if (!bCommentrangeMark && GetMark())
+        {
+            pFieldmark = pMarksAccess->getFieldmarkFor(*GetMark());
+            if (pFieldmark)
+                bCommentrangeMark = pFieldmark->GetFieldname() == ODF_COMMENTRANGE;
+        }
     }
 
     if (!bRet)
@@ -708,7 +715,7 @@ sal_Bool SwPaM::HasReadonlySel( bool bFormView ) const
         if ( ( pA == pB ) && bUnhandledMark )
             bRet = sal_True;
         // Allow editing of commented ranges.
-        else if (!((pA == pB) && bCommentrangeMark))
+        else if (!bCommentrangeMark)
         {
             // Form protection case
             bool bAtStartA = pA != NULL && pA->GetMarkStart() == *GetPoint();
