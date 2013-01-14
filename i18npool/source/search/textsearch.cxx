@@ -717,7 +717,7 @@ SearchResult TextSearch::RESrchFrwrd( const OUString& searchStr,
 
     // use the ICU RegexMatcher to find the matches
     UErrorCode nIcuErr = U_ZERO_ERROR;
-    const IcuUniString aSearchTargetStr( (const UChar*)searchStr.getStr(), searchStr.getLength());
+    const IcuUniString aSearchTargetStr( (const UChar*)searchStr.getStr(), endPos);
     pRegexMatcher->reset( aSearchTargetStr);
     // search until there is a valid match
     for(;;)
