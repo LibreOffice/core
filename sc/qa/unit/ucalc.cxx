@@ -3658,8 +3658,8 @@ void Test::testPivotTableFieldReference()
 
 void Test::testPivotTableDocFunc()
 {
-    m_pDoc->InsertTab(0, OUString("Data"));
-    m_pDoc->InsertTab(1, OUString("Table"));
+    m_pDoc->InsertTab(0, "Data");
+    m_pDoc->InsertTab(1, "Table");
 
     // Raw data
     const char* aData[][2] = {
