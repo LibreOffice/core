@@ -208,6 +208,7 @@ public:
     inline bool IsInFrontOfLabel() const        { return m_bIsInFrontOfLabel; }
     inline void _SetInFrontOfLabel( bool bNew ) { m_bIsInFrontOfLabel = bNew; }
 
+    /// Unless this is called, the getter method of Mark will return Point.
     virtual void SetMark();
 
     void DeleteMark()
