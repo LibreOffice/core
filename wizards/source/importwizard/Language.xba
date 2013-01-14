@@ -21,8 +21,6 @@
 
 Public sMSTemplateCheckbox(2) As String
 Public sMSDocumentCheckbox(2) As String
-Public sSODocumentCheckbox(4) As String
-Public sSOHelperdocuments(1,1) As String
 Public sTemplateCheckbox(SBMAXAPPLCOUNT-1) As String
 Public sDocumentCheckbox(SBMAXAPPLCOUNT-1) As String
 Public sTemplateGroupName As String
@@ -51,8 +49,6 @@ Public sReady as String, sTitle as String
 Public sCloseButton as String
 Public sSourceDocuments as String
 Public sTargetDocuments as String
-Public sSumSODocuments(4) as String
-Public sSumSOTemplates(4) as String
 Public sSumMSDocuments(3) as String
 Public sSumMSTemplates(3) as String
 Public ModuleList(3) as String
@@ -83,21 +79,9 @@ Sub LoadLanguage()
 		&apos; DocumentCheckbox- Captions
 		GetApplResourceArray(1012, 3, sMSDocumentCheckBox())
 
-		&apos; DocumentCheckbox- Captions
-		GetApplResourceArray(2013, 5, sSODocumentCheckBox())
-
 		&apos;StarOffice Applicationnames
 
-		sSOHelperDocuments(0,0) = GetResText(2017)
-		sSOHelperDocuments(0,1) = &quot;com.sun.star.text.GlobalDocument&quot;
-		sSOHelperDocuments(1,0) = GetResText(2018)
-		sSOHelperDocuments(1,1) = &quot;com.sun.star.formula.FormulaProperties&quot;
-		
-		GetApplResourceArray(2017,2, sSOHelperDocuments())		
-		
 		sContainerName(0) = GetResText(1030)
-		&apos; Note: for the version 5.2 there was no Productname &quot;StarSuite&quot;
-		sContainerName(1) = &quot;StarOffice&quot;
 	
 		sSummaryHeader = GetResText(1031)
 
@@ -132,9 +116,6 @@ Sub LoadLanguage()
 		sLogSummary = GetResText(2034)
 		sSumInclusiveSubDir = GetResText(3000)
 		sSumSaveDocuments = GetResText(3001)
-		&apos;StarOffice Applicationnames
-		GetApplResourceArray(3100, 4, sSumSODocuments())
-		GetApplResourceArray(3110, 4, sSumSOTemplates())
 		GetApplResourceArray(3200, 3, sSumMSDocuments())
 		GetApplResourceArray(3210, 3, sSumMSTemplates())
 		With ImportDialog

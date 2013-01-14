@@ -238,9 +238,6 @@ Dim	XMLTemplateContentString as String
 	XMLTemplateCount = 0
 	XMLTemplateContentString = &quot;&quot;
 	For i = 0 To ApplCount-1
-		If WizardMode = SBXMLMODE Then
-			XMLTemplateCount = XMLTemplateCount + 1
-		End If
 		CheckIfToAddPathToCollection(i, SBTEMPLCONVERT, SBTEMPLSOURCE, SBTEMPLRECURSIVE, sFilterName(), MaxApplCount)
 	Next i
 End Sub
@@ -470,13 +467,6 @@ Function GetTargetTemplatePath(Index as Integer)
 	Select Case WizardMode
 		Case SBMICROSOFTMODE
 			GetTargetTemplatePath() = SOTemplatePath &amp; &quot;/&quot; &amp; sTemplateGroupName
-		Case SBXMLMODE
-			If Index = 3 Then
-				&apos; Helper Application
-				GetTargetTemplatePath = SOWorkPath
-			Else
-				GetTargetTemplatePath = SOTemplatePath
-			End If
 	End Select
 End Function
 

@@ -25,7 +25,6 @@ Public ImportDialog as Object
 Public ImportDialogArea as Object
 Public oFactoryKey as Object
 Public bShowLogFile as Boolean
-Public oBinFilterComp as Object
 
 &apos; If the ProgressPage ist already on Top The Dialog will be immediately closed when this flag is
 &apos; set to False
@@ -54,14 +53,13 @@ Sub Main()
 	ImportDialogArea = LoadDialog(&quot;ImportWizard&quot;,&quot;ImportDialog&quot;)
 	ImportDialog = ImportDialogArea.Model
 	LoadLanguage()
-	WizardMode = SBXMLMODE
-	MaxApplCount = 4
+	WizardMode = SBMICROSOFTMODE
+	MaxApplCount = 3
 	FillStep_Welcome()
 	RepaintHeaderPreview()
 	ImportDialog.ImportPreview.BackGroundColor = RGB(0,60,126)	
 	ImportDialog.cmdGoOn.DefaultButton = True
 	ImportDialogArea.GetControl(&quot;optMSDocuments&quot;).SetFocus()
-	oBinFilterComp = createBF_MigrateFilterIfPossible()
 	ToggleCheckboxesWithBoolean(True)
 
 	RetValue = ImportDialogArea.Execute()
@@ -106,8 +104,6 @@ Dim iCurStep as Integer
 			Select Case WizardMode
 				Case SBMICROSOFTMODE
 					Call ConvertAllDocuments(MSFilterName())
-				CASE SBXMLMODE
-					Call ConvertAllDocuments(XMLFilterName())
 			End Select
 		Case 4
 			CancelTask(True)
@@ -203,17 +199,6 @@ Dim i as Integer
 End Sub
 
 
-Function createBF_MigrateFilterIfPossible()
-Dim oService
-    On Error Goto RTError
-    oService = createUnoService(&quot;com.sun.star.comp.office.BF_MigrateFilter&quot;)
-    getBinFilterCompIfItExists = oService
-    Exit Function
-RTError:
-    createBF_MigrateFilterIfPossible = Nothing
-End Function
-
-
 Function CheckInstalledModule(Index as Integer) as Boolean
 Dim ModuleName as String
 Dim NameList() as String
@@ -247,22 +232,9 @@ Sub ToggleCheckboxesWithBoolean(bMSEnable as Boolean)
 		WizardMode = SBMICROSOFTMODE
 		MaxApplCount = 3
 	Else
-		WizardMode = SBXMLMODE
-		MaxApplCount = 4
+		&apos;Not supposed to happen - is there an assert in BASIC...
 	End If
 	With ImportDialogArea
-		If (isNull(oBinFilterComp)) Then
-			.GetControl(&quot;optSODocuments&quot;).Visible = False
-			.GetControl(&quot;chkSOApplication1&quot;).Visible = False
-			.GetControl(&quot;chkSOApplication2&quot;).Visible = False
-			.GetControl(&quot;chkSOApplication3&quot;).Visible = False
-			.GetControl(&quot;chkSOApplication4&quot;).Visible = False
-		Else
-			.GetControl(&quot;chkSOApplication1&quot;).Model.Enabled = Not bMSEnable
-			.GetControl(&quot;chkSOApplication2&quot;).Model.Enabled = Not bMSEnable
-			.GetControl(&quot;chkSOApplication3&quot;).Model.Enabled = Not bMSEnable
-			.GetControl(&quot;chkSOApplication4&quot;).Model.Enabled = Not bMSEnable
-		End if 
 		.GetControl(&quot;chkMSApplication1&quot;).Model.Enabled = bMSEnable
 		.GetControl(&quot;chkMSApplication2&quot;).Model.Enabled = bMSEnable
 		.GetControl(&quot;chkMSApplication3&quot;).Model.Enabled = bMSEnable
@@ -283,8 +255,6 @@ Dim i as Integer
 			With ImportDialog
 				If .optMSDocuments.State = 1 Then
           			bDoEnable = .chkMSApplication1.State = 1 Or .chkMSApplication2.State = 1 Or .chkMSApplication3.State = 1
-				Else
-          			bDoEnable = .chkSOApplication1.State = 1 Or .chkSOApplication2.State = 1 Or .chkSOApplication3.State = 1 Or .chkSOApplication4.State = 1
 				End If
 			End With
 			bDoKeepApplValues = False
@@ -301,13 +271,8 @@ Sub TakeOverPathSettings()
 	If Applications(CurOffice,SBDOCSOURCE) = &quot;&quot; Then
 		Applications(CurOffice,SBDOCSOURCE) = Applications(0,SBDOCSOURCE)
 		Applications(CurOffice,SBDOCTARGET) = Applications(0,SBDOCTARGET)
-		If WizardMode = SBXMLMODE AND Applications(CurOffice,SBAPPLKEY) = 3 Then
-			Applications(CurOffice,SBTEMPLSOURCE) = Applications(CurOffice,SBDOCSOURCE)
-			Applications(CurOffice,SBTEMPLTARGET) = Applications(CurOffice,SBDOCTARGET)											
-		Else
-			Applications(CurOffice,SBTEMPLSOURCE) = Applications(0,SBTEMPLSOURCE)
-			Applications(CurOffice,SBTEMPLTARGET) = Applications(0,SBTEMPLTARGET)
-		End If
+		Applications(CurOffice,SBTEMPLSOURCE) = Applications(0,SBTEMPLSOURCE)
+		Applications(CurOffice,SBTEMPLTARGET) = Applications(0,SBTEMPLTARGET)
 	End If
 End Sub
 

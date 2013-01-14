@@ -70,9 +70,6 @@
    <dlg:radio dlg:id="optMSDocuments" dlg:tab-index="27" dlg:left="6" dlg:top="72" dlg:width="258" dlg:height="9" dlg:page="1" dlg:tag="MS" dlg:help-url="HID:WIZARDS_HID_DLGIMPORT_0_OPTMSDOCUMENTS" dlg:value="optMSDocuments" dlg:checked="true">
     <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:ImportWizard.Main.ToggleCheckboxes?language=Basic&amp;location=application" script:language="Script"/>
    </dlg:radio>
-   <dlg:radio dlg:id="optSODocuments" dlg:tab-index="28" dlg:left="6" dlg:top="113" dlg:width="258" dlg:height="9" dlg:page="1" dlg:tag="SO" dlg:help-url="HID:WIZARDS_HID_DLGIMPORT_0_OPTSODOCUMENTS" dlg:value="optSODocuments">
-    <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:ImportWizard.Main.ToggleCheckboxes?language=Basic&amp;location=application" script:language="Script"/>
-   </dlg:radio>
   </dlg:radiogroup>
   <dlg:checkbox dlg:id="chkMSApplication1" dlg:tab-index="29" dlg:disabled="true" dlg:left="12" dlg:top="85" dlg:width="141" dlg:height="9" dlg:page="1" dlg:help-url="HID:WIZARDS_HID_DLGIMPORT_2_CHKWORD" dlg:value="chkMSApplication1" dlg:checked="false">
    <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:ImportWizard.Main.ToggleNextButton?language=Basic&amp;location=application" script:language="Script"/>
@@ -81,18 +78,6 @@
    <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:ImportWizard.Main.ToggleNextButton?language=Basic&amp;location=application" script:language="Script"/>
   </dlg:checkbox>
   <dlg:checkbox dlg:id="chkMSApplication3" dlg:tab-index="31" dlg:disabled="true" dlg:left="12" dlg:top="98" dlg:width="141" dlg:height="9" dlg:page="1" dlg:help-url="HID:WIZARDS_HID_DLGIMPORT_2_CHKPOWERPOINT" dlg:value="chkMSApplication3" dlg:checked="false">
-   <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:ImportWizard.Main.ToggleNextButton?language=Basic&amp;location=application" script:language="Script"/>
-  </dlg:checkbox>
-  <dlg:checkbox dlg:id="chkSOApplication1" dlg:tab-index="32" dlg:left="12" dlg:top="126" dlg:width="141" dlg:height="9" dlg:page="1" dlg:help-url="HID:WIZARDS_HID_DLGIMPORT_0_CHKWRITER" dlg:value="chkSOApplication1" dlg:checked="false">
-   <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:ImportWizard.Main.ToggleNextButton?language=Basic&amp;location=application" script:language="Script"/>
-  </dlg:checkbox>
-  <dlg:checkbox dlg:id="chkSOApplication2" dlg:tab-index="33" dlg:left="155" dlg:top="126" dlg:width="109" dlg:height="9" dlg:page="1" dlg:help-url="HID:WIZARDS_HID_DLGIMPORT_0_CHKCALC" dlg:value="chkSOApplication2" dlg:checked="false">
-   <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:ImportWizard.Main.ToggleNextButton?language=Basic&amp;location=application" script:language="Script"/>
-  </dlg:checkbox>
-  <dlg:checkbox dlg:id="chkSOApplication3" dlg:tab-index="34" dlg:left="12" dlg:top="139" dlg:width="141" dlg:height="9" dlg:page="1" dlg:help-url="HID:WIZARDS_HID_DLGIMPORT_0_CHKIMPRESS" dlg:value="chkSOApplication3" dlg:checked="false">
-   <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:ImportWizard.Main.ToggleNextButton?language=Basic&amp;location=application" script:language="Script"/>
-  </dlg:checkbox>
-  <dlg:checkbox dlg:id="chkSOApplication4" dlg:tab-index="35" dlg:left="155" dlg:top="139" dlg:width="109" dlg:height="9" dlg:page="1" dlg:help-url="HID:WIZARDS_HID_DLGIMPORT_0_CHKMATHGLOBAL" dlg:value="chkSOApplication4" dlg:checked="false">
    <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:ImportWizard.Main.ToggleNextButton?language=Basic&amp;location=application" script:language="Script"/>
   </dlg:checkbox>
   <dlg:checkbox dlg:id="chkTemplatePath" dlg:tab-index="36" dlg:left="12" dlg:top="48" dlg:width="240" dlg:height="10" dlg:page="2" dlg:tag="Template" dlg:help-url="HID:WIZARDS_HID_DLGIMPORT_2_CBTEMPLATE" dlg:value="chkTemplatePath" dlg:checked="true">

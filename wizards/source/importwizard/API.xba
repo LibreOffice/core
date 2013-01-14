@@ -102,8 +102,6 @@ Dim Index as Integer
 				sPath = SOWorkPath
 			End If
 			GetDefaultPath = sPath
-		Case SBXMLMODE
-			GetDefaultPath = SOWorkPath
 	End Select
 End Function
 
@@ -157,13 +155,6 @@ Dim sTemplateValueName as String
 				GetTemplateDefaultPath = ConvertToUrl(sLocTemplatePath)
 			Else
 				GetTemplateDefaultPath = SOWorkPath
-			End If
-		Case SBXMLMODE
-			If Index = 3 Then
-				&apos; Helper Application with no templates
-				GetTemplateDefaultPath = SOWorkPath
-			Else
-				GetTemplateDefaultPath = SOTemplatePath
 			End If
 	End Select
 NOVALIDSYSTEMPATH:

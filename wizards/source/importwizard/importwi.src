@@ -56,9 +56,6 @@
 #define sPathErrorDocument_1_   1062
 #define sPathErrorDocument_2_   1063
 #define sPathErrorDocument_3_   1064
-#define sPathErrorStarDoc_1_    1065
-#define sPathErrorStarDoc_2_    1066
-#define sPathErrorStarDoc_3_    1067
 #define sOverwriteallFiles 	1070
 #define sreeditMacro 	1071
 #define scouldNotsaveDocument 1072
@@ -71,16 +68,6 @@
 #define sProgressFound 1093
 #define sProgressPage5 1094
 #define sReady 1100
-#define sXMLTemplateCheckbox_1_    2009
-#define sXMLTemplateCheckbox_2_    2010
-#define sXMLTemplateCheckbox_3_    2011
-#define sXMLTemplateCheckbox_4_    2012
-#define sXMLDocumentCheckbox_1_    2013
-#define sXMLDocumentCheckbox_2_    2014
-#define sXMLDocumentCheckbox_3_    2015
-#define sXMLDocumentCheckbox_4_    2016
-#define sXMLHelperApplications_1    2017
-#define sXMLHelperApplications_2    2018
 
 #define sSourceDocuments         2030
 #define sTargetDocuments         2031
@@ -91,16 +78,6 @@
 
 #define sSumInclusiveSubDir     3000
 #define sSumSaveDokumente       3001
-
-#define sSumSOTextDocuments       3100
-#define sSumSOTableDocuments      3101
-#define sSumSODrawDocuments       3102
-#define sSumSOMathDocuments       3103
-
-#define sSumSOTextTemplates       3110
-#define sSumSOTableTemplates      3111
-#define sSumSODrawTemplates       3112
-#define sSumSOGlobalDocuments     3113
 
 #define sSumMSTextDocuments       3200
 #define sSumMSTableDocuments      3201
@@ -361,59 +338,6 @@ String sReady
 };
 
 
-String sXMLTemplateCheckbox_1_
-{
-    Text [ en-US ] = "Text templates";
-};
-
-String sXMLTemplateCheckbox_2_
-{
-    Text [ en-US ] = "Spreadsheet templates";
-};
-
-String sXMLTemplateCheckbox_3_
-{
-    Text [ en-US ] = "Drawing/presentation templates";
-};
-
-String sXMLTemplateCheckbox_4_
-{
-    Text [ en-US ] = "Master documents";
-};
-
-
-String sXMLDocumentCheckbox_1_
-{
-    Text [ en-US ] = "Text documents";
-};
-
-String sXMLDocumentCheckbox_2_
-{
-    Text [ en-US ] = "Spreadsheets";
-};
-
-String sXMLDocumentCheckbox_3_
-{
-    Text [ en-US ] = "Drawing/presentation documents";
-};
-
-
-String sXMLDocumentCheckbox_4_
-{
-    Text [ en-US ] = "Master documents/formulas";
-};
-
-String sXMLHelperApplications_1
-{
-    Text [ en-US ] = "Master documents";
-};
-
-String sXMLHelperApplications_2
-{
-    Text [ en-US ] = "Formulas";
-};
-
-
 String sSourceDocuments
 {
     Text [ en-US ] = "Source documents";
@@ -458,53 +382,6 @@ String sSumInclusiveSubDir
 String sSumSaveDokumente
 {
     Text [ en-US ] = "These will be exported to the following directory:";
-};
-
-
-String sSumSOTextDocuments
-{
-    Text [ en-US ] = "All StarOffice text documents contained in the following directory will be imported:";
-};
-
-
-String sSumSOTableDocuments
-{
-    Text [ en-US ] = "All StarOffice spreadsheets contained in the following directory will be imported:";
-};
-
-
-String sSumSODrawDocuments
-{
-    Text [ en-US ] = "All StarOffice drawing and presentation documents contained in the following directory will be imported:";
-};
-
-
-String sSumSOMathDocuments
-{
-    Text [ en-US ] = "All StarOffice formula documents contained in the following directory will be imported:";
-};
-
-
-String sSumSOTextTemplates
-{
-    Text [ en-US ] = "All StarOffice text templates contained in the following directory will be imported:";
-};
-
-
-String sSumSOTableTemplates
-{
-    Text [ en-US ] = "All StarOffice table templates contained in the following directory will be imported:";
-};
-
-
-String sSumSODrawTemplates
-{
-    Text [ en-US ] = "All StarOffice drawing and presentation templates contained in the following directory will be imported:";
-};
-
-String sSumSOGlobalDocuments
-{
-    Text [ en-US ] = "All StarOffice master documents contained in the following directory will be imported:";
 };
 
 
