@@ -590,9 +590,9 @@ static const SwFrm* lcl_FindEditInReadonlyFrm( const SwFrm& rFrm )
 }
 
 /// is in protected section or selection surrounds something protected
-sal_Bool SwPaM::HasReadonlySel( bool bFormView ) const
+bool SwPaM::HasReadonlySel( bool bFormView ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = sal_False;
     Point aTmpPt;
     const SwCntntNode *pNd;
     const SwCntntFrm *pFrm;

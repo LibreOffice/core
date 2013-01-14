@@ -893,7 +893,7 @@ void SwDocTest::testFdo57938()
     aPaM.GetPoint()->nContent = 0;
     aPaM.GetMark()->nContent = 1;
     // The problem was that "a" was considered read-only, so could not be deleted.
-    CPPUNIT_ASSERT_EQUAL(false, bool(aPaM.HasReadonlySel(false)));
+    CPPUNIT_ASSERT_EQUAL(false, aPaM.HasReadonlySel(false));
 }
 
 void SwDocTest::setUp()
