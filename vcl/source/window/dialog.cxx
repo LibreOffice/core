@@ -637,6 +637,29 @@ long Dialog::Notify( NotifyEvent& rNEvt )
     return nRet;
 }
 
+Size bestmaxFrameSizeForScreenSize(const Size &rScreenSize)
+{
+    long w = rScreenSize.Width();
+    long h = rScreenSize.Height();
+
+    // fill in holy default values brought to us by product management
+    if (rScreenSize.Width() >= 800)
+        w = 785;
+    if (rScreenSize.Width() >= 1024)
+        w = 920;
+    if (rScreenSize.Width() >= 1280)
+        w = 1050;
+
+    if (rScreenSize.Height() >= 600)
+        h = 550;
+    if (rScreenSize.Height() >= 768)
+        h = 630;
+    if (rScreenSize.Height() >= 1024)
+        h = 875;
+
+    return Size(w, h);
+}
+
 void Dialog::setInitialLayoutSize()
 {
     maLayoutTimer.Stop();
@@ -658,7 +681,8 @@ void Dialog::setInitialLayoutSize()
 
     Size aSize = get_preferred_size();
 
-    Size aMax = GetOptimalSize(WINDOWSIZE_MAXIMUM);
+    Size aMax(bestmaxFrameSizeForScreenSize(GetDesktopRectPixel().GetSize()));
+
     aSize.Width() = std::min(aMax.Width(), aSize.Width());
     aSize.Height() = std::min(aMax.Height(), aSize.Height());
 

@@ -625,6 +625,8 @@ public:
     bool set_property(const OString &rKey, const OString &rValue);
 };
 
+VCL_DLLPUBLIC Size bestmaxFrameSizeForScreenSize(const Size &rScreenSize);
+
 // retro-fitting utilities //
 
 //Get a Size which is large enough to contain all children with

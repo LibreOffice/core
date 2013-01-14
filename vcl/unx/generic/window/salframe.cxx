@@ -31,6 +31,7 @@
 #include "vcl/floatwin.hxx"
 #include "vcl/svapp.hxx"
 #include "vcl/keycodes.hxx"
+#include "vcl/layout.hxx"
 #include "vcl/printerinfomanager.hxx"
 #include "vcl/settings.hxx"
 
@@ -331,20 +332,9 @@ void X11SalFrame::Init( sal_uLong nSalFrameStyle, SalX11Screen nXScreen, SystemP
             if( nSalFrameStyle & SAL_FRAME_STYLE_SIZEABLE &&
                 nSalFrameStyle & SAL_FRAME_STYLE_MOVEABLE )
             {
-                // fill in holy default values brought to us by product management
-                if( aScreenSize.Width() >= 800 )
-                    w = 785;
-                if( aScreenSize.Width() >= 1024 )
-                    w = 920;
-                if( aScreenSize.Width() >= 1280 )
-                    w = 1050;
-
-                if( aScreenSize.Height() >= 600 )
-                    h = 550;
-                if( aScreenSize.Height() >= 768 )
-                    h = 630;
-                if( aScreenSize.Height() >= 1024 )
-                    h = 875;
+                Size aBestFitSize(bestmaxFrameSizeForScreenSize(aScreenSize));
+                w = aBestFitSize.Width();
+                h = aBestFitSize.Height();
             }
             if( ! mpParent )
             {
