@@ -442,7 +442,6 @@ namespace drawinglayer
             if(!bPainted)
             {
                 static bool bForceUseOfOwnTransformer(false);
-                static bool bUseGraphicManager(true);
 
                 // decompose matrix to check for shear, rotate and mirroring
                 basegfx::B2DVector aScale, aTranslate;
@@ -452,19 +451,12 @@ namespace drawinglayer
                 // #i121387# when mirrored and rotated, avoid the GraphicManager output which has low quality
                 const bool bRotated(!basegfx::fTools::equalZero(fRotate));
                 const bool bSheared(!basegfx::fTools::equalZero(fShearX));
-                const bool bMirrored(aScale.getX() < 0.0 || aScale.getY() < 0.0);
-                const bool bMirroredAndRotated(bRotated && bMirrored);
+                //const bool bMirrored(aScale.getX() < 0.0 || aScale.getY() < 0.0);
+                // const bool bMirroredAndRotated(bRotated && bMirrored);
 
-                if(!bForceUseOfOwnTransformer && !bSheared && !bMirroredAndRotated)
+                if(!bForceUseOfOwnTransformer && !bRotated && !bSheared) // && !bMirrored)
                 {
-                    if(!bUseGraphicManager && !bRotated)
-                    {
-                        RenderBitmapPrimitive2D_BitmapEx(*mpOutputDevice, aBitmapEx, aLocalTransform);
-                    }
-                    else
-                    {
-                        RenderBitmapPrimitive2D_GraphicManager(*mpOutputDevice, aBitmapEx, aLocalTransform);
-                    }
+                    RenderBitmapPrimitive2D_BitmapEx(*mpOutputDevice, aBitmapEx, aLocalTransform);
                 }
                 else
                 {

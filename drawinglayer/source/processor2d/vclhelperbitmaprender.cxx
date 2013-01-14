@@ -18,95 +18,19 @@
  */
 
 #include <vclhelperbitmaprender.hxx>
-#include <svtools/grfmgr.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <vcl/outdev.hxx>
 #include <vclhelperbitmaptransform.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <vcl/gdimtf.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // support for different kinds of bitmap rendering using vcl
 
 namespace drawinglayer
 {
-    void RenderBitmapPrimitive2D_GraphicManager(
-        OutputDevice& rOutDev,
-        const BitmapEx& rBitmapEx,
-        const basegfx::B2DHomMatrix& rTransform)
-    {
-        // prepare attributes
-        GraphicAttr aAttributes;
-
-        // decompose matrix to check for shear, rotate and mirroring
-        basegfx::B2DVector aScale, aTranslate;
-        double fRotate, fShearX;
-        rTransform.decompose(aScale, aTranslate, fRotate, fShearX);
-
-        // mirror flags
-        const bool bMirrorX(basegfx::fTools::less(aScale.getX(), 0.0));
-        const bool bMirrorY(basegfx::fTools::less(aScale.getY(), 0.0));
-        aAttributes.SetMirrorFlags((bMirrorX ? BMP_MIRROR_HORZ : 0)|(bMirrorY ? BMP_MIRROR_VERT : 0));
-
-        // rotation
-        if(!basegfx::fTools::equalZero(fRotate))
-        {
-            double fRotation(fmod(3600.0 - (fRotate * (10.0 / F_PI180)), 3600.0));
-            aAttributes.SetRotation((sal_uInt16)(fRotation));
-        }
-
-        // prepare Bitmap
-        basegfx::B2DRange aOutlineRange(0.0, 0.0, 1.0, 1.0);
-
-        if(basegfx::fTools::equalZero(fRotate))
-        {
-            aOutlineRange.transform(rTransform);
-        }
-        else
-        {
-            // if rotated, create the unrotated output rectangle for the GraphicManager paint
-            // #118824# Caution! When mirrored, adapt transformation accordingly
-            // #i121387# Also need to adapt position when mirror and rotation is combined
-            if(bMirrorX || bMirrorY)
-            {
-                const basegfx::B2DHomMatrix aRot(basegfx::tools::createRotateB2DHomMatrix(fRotate));
-
-                if(bMirrorX)
-                {
-                    aTranslate += aRot * basegfx::B2DVector(aScale.getX(), 0.0);
-                }
-
-                if(bMirrorY)
-                {
-                    aTranslate += aRot * basegfx::B2DVector(0.0, aScale.getY());
-                }
-            }
-
-            const basegfx::B2DHomMatrix aSimpleObjectMatrix(
-                basegfx::tools::createScaleTranslateB2DHomMatrix(
-                    fabs(aScale.getX()),
-                    fabs(aScale.getY()),
-                    aTranslate.getX(),
-                    aTranslate.getY()));
-
-            aOutlineRange.transform(aSimpleObjectMatrix);
-        }
-
-        // prepare dest coordinates
-        const Point aPoint(
-                basegfx::fround(aOutlineRange.getMinX()),
-                basegfx::fround(aOutlineRange.getMinY()));
-        const Size aSize(
-                basegfx::fround(aOutlineRange.getWidth()),
-                basegfx::fround(aOutlineRange.getHeight()));
-
-        // paint it using GraphicManager
-        Graphic aGraphic(rBitmapEx);
-        GraphicObject aGraphicObject(aGraphic);
-        aGraphicObject.Draw(&rOutDev, aPoint, aSize, &aAttributes);
-    }
-
     void RenderBitmapPrimitive2D_BitmapEx(
         OutputDevice& rOutDev,
         const BitmapEx& rBitmapEx,

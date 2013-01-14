@@ -57,7 +57,7 @@ namespace drawinglayer
                 const sal_Int32 nQuarter((getBitmapEx().GetSizePixel().Width() - 3) >> 2);
                 const_cast< DiscreteShadow* >(this)->maTopLeft = getBitmapEx();
                 const_cast< DiscreteShadow* >(this)->maTopLeft.Crop(
-                    Rectangle(Point(0,0),Size(nQuarter*2+1,nQuarter*2+1)));
+                    Rectangle(Point(0, 0), Size((nQuarter * 2) + 1, (nQuarter * 2) + 1)));
             }
 
             return maTopLeft;
@@ -70,7 +70,7 @@ namespace drawinglayer
                 const sal_Int32 nQuarter((getBitmapEx().GetSizePixel().Width() - 3) >> 2);
                 const_cast< DiscreteShadow* >(this)->maTop = getBitmapEx();
                 const_cast< DiscreteShadow* >(this)->maTop.Crop(
-                    Rectangle(Point(nQuarter*2+1,0),Size(1,nQuarter+1)));
+                    Rectangle(Point((nQuarter * 2) + 1, 0), Size(1, nQuarter)));
             }
 
             return maTop;
@@ -83,7 +83,7 @@ namespace drawinglayer
                 const sal_Int32 nQuarter((getBitmapEx().GetSizePixel().Width() - 3) >> 2);
                 const_cast< DiscreteShadow* >(this)->maTopRight = getBitmapEx();
                 const_cast< DiscreteShadow* >(this)->maTopRight.Crop(
-                    Rectangle(Point(nQuarter*2+2,0),Size(nQuarter*2+1,nQuarter*2+1)));
+                    Rectangle(Point((nQuarter * 2) + 2, 0), Size((nQuarter * 2) + 1, (nQuarter * 2) + 1)));
             }
 
             return maTopRight;
@@ -96,7 +96,7 @@ namespace drawinglayer
                 const sal_Int32 nQuarter((getBitmapEx().GetSizePixel().Width() - 3) >> 2);
                 const_cast< DiscreteShadow* >(this)->maRight = getBitmapEx();
                 const_cast< DiscreteShadow* >(this)->maRight.Crop(
-                    Rectangle(Point(nQuarter*3+2,nQuarter*2+1),Size(nQuarter+1,1)));
+                    Rectangle(Point((nQuarter * 3) + 3, (nQuarter * 2) + 1), Size(nQuarter, 1)));
             }
 
             return maRight;
@@ -109,7 +109,7 @@ namespace drawinglayer
                 const sal_Int32 nQuarter((getBitmapEx().GetSizePixel().Width() - 3) >> 2);
                 const_cast< DiscreteShadow* >(this)->maBottomRight = getBitmapEx();
                 const_cast< DiscreteShadow* >(this)->maBottomRight.Crop(
-                    Rectangle(Point(nQuarter*2+2,nQuarter*2+2),Size(nQuarter*2+1,nQuarter*2+1)));
+                    Rectangle(Point((nQuarter * 2) + 2, (nQuarter * 2) + 2), Size((nQuarter * 2) + 1, (nQuarter * 2) + 1)));
             }
 
             return maBottomRight;
@@ -122,7 +122,7 @@ namespace drawinglayer
                 const sal_Int32 nQuarter((getBitmapEx().GetSizePixel().Width() - 3) >> 2);
                 const_cast< DiscreteShadow* >(this)->maBottom = getBitmapEx();
                 const_cast< DiscreteShadow* >(this)->maBottom.Crop(
-                    Rectangle(Point(nQuarter*2+1,nQuarter*3+2),Size(1,nQuarter+1)));
+                    Rectangle(Point((nQuarter * 2) + 1, (nQuarter * 3) + 3), Size(1, nQuarter)));
             }
 
             return maBottom;
@@ -135,7 +135,7 @@ namespace drawinglayer
                 const sal_Int32 nQuarter((getBitmapEx().GetSizePixel().Width() - 3) >> 2);
                 const_cast< DiscreteShadow* >(this)->maBottomLeft = getBitmapEx();
                 const_cast< DiscreteShadow* >(this)->maBottomLeft.Crop(
-                    Rectangle(Point(0,nQuarter*2+2),Size(nQuarter*2+1,nQuarter*2+1)));
+                    Rectangle(Point(0, (nQuarter * 2) + 2), Size((nQuarter * 2) + 1, (nQuarter * 2) + 1)));
             }
 
             return maBottomLeft;
@@ -148,7 +148,7 @@ namespace drawinglayer
                 const sal_Int32 nQuarter((getBitmapEx().GetSizePixel().Width() - 3) >> 2);
                 const_cast< DiscreteShadow* >(this)->maLeft = getBitmapEx();
                 const_cast< DiscreteShadow* >(this)->maLeft.Crop(
-                    Rectangle(Point(0,nQuarter*2+1),Size(nQuarter+1,1)));
+                    Rectangle(Point(0, (nQuarter * 2) + 1), Size(nQuarter, 1)));
             }
 
             return maLeft;
@@ -195,8 +195,8 @@ namespace drawinglayer
                     new BitmapPrimitive2D(
                         getDiscreteShadow().getTop(),
                         basegfx::tools::createScaleTranslateB2DHomMatrix(
-                            1.0 - (2.0 * fBorderX) - fSingleX,
-                            fBorderY + fSingleY,
+                            1.0 - (2.0 * (fBorderX + fSingleX)) + fSingleX,
+                            fBorderY,
                             fBorderX + fSingleX,
                             -fBorderY)));
 
@@ -215,9 +215,9 @@ namespace drawinglayer
                     new BitmapPrimitive2D(
                         getDiscreteShadow().getRight(),
                         basegfx::tools::createScaleTranslateB2DHomMatrix(
-                            fBorderX + fSingleX,
-                            1.0 - (2.0 * fBorderY) - fSingleY,
-                            1.0,
+                            fBorderX,
+                            1.0 - (2.0 * (fBorderY + fSingleY)) + fSingleY,
+                            1.0 + fSingleX,
                             fBorderY + fSingleY)));
 
                 // BottomRight
@@ -227,18 +227,18 @@ namespace drawinglayer
                         basegfx::tools::createScaleTranslateB2DHomMatrix(
                             fBigLenX,
                             fBigLenY,
-                            1.0 - fBorderX,
-                            1.0 - fBorderY)));
+                            1.0 - (fBorderX + fSingleX) + fSingleX,
+                            1.0 - (fBorderY + fSingleY) + fSingleY)));
 
                 // Bottom
                 xRetval[5] = Primitive2DReference(
                     new BitmapPrimitive2D(
                         getDiscreteShadow().getBottom(),
                         basegfx::tools::createScaleTranslateB2DHomMatrix(
-                            1.0 - (2.0 * fBorderX) - fSingleX,
-                            fBorderY + fSingleY,
+                            1.0 - (2.0 * (fBorderX + fSingleX)) + fSingleX,
+                            fBorderY,
                             fBorderX + fSingleX,
-                            1.0)));
+                            1.0 + fSingleY)));
 
                 // BottomLeft
                 xRetval[6] = Primitive2DReference(
@@ -255,8 +255,8 @@ namespace drawinglayer
                     new BitmapPrimitive2D(
                         getDiscreteShadow().getLeft(),
                         basegfx::tools::createScaleTranslateB2DHomMatrix(
-                            fBorderX + fSingleX,
-                            1.0 - (2.0 * fBorderY) - fSingleY,
+                            fBorderX,
+                            1.0 - (2.0 * (fBorderY + fSingleY)) + fSingleY,
                             -fBorderX,
                             fBorderY + fSingleY)));
 
