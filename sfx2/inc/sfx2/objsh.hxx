@@ -292,6 +292,12 @@ public:
     void                        AddLog( const ::rtl::OUString& aMessage );
     void                        StoreLog();
 
+    /**
+     * Initialize bare minimum just enough for unit test runs.
+     *
+     * @return true if the initialization is successful, false otherwise.
+     */
+    bool                        DoInitUnitTest();
     sal_Bool                    DoInitNew( SfxMedium* pMedium=0 );
     sal_Bool                    DoLoad( SfxMedium* pMedium );
     bool                        DoLoadExternal(SfxMedium* pMed, const rtl::OUString& rProvider);

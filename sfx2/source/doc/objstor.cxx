@@ -447,6 +447,12 @@ sal_Bool SfxObjectShell::Load( SfxMedium& rMedium )
     return GeneralInit_Impl( rMedium.GetStorage(), sal_True );
 }
 
+bool SfxObjectShell::DoInitUnitTest()
+{
+    pMedium = new SfxMedium;
+    return true; // always a success!
+}
+
 sal_Bool SfxObjectShell::DoInitNew( SfxMedium* pMed )
 /*  [Description]
 
