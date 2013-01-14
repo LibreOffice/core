@@ -19,7 +19,6 @@ import uno
 import traceback
 import time
 from datetime import date as dateTimeObject
-from .ViewHandler import ViewHandler
 from .TextFieldHandler import TextFieldHandler
 from ..document.OfficeDocument import OfficeDocument
 from ..common.Desktop import Desktop
@@ -142,10 +141,8 @@ class TextDocument(object):
 
         self.DocSize = self.getPageSize()
 
-        myViewHandler = ViewHandler(self.xTextDocument, self.xTextDocument)
         try:
-            myViewHandler.setViewSetting(
-                "ZoomType", ENTIRE_PAGE)
+            self.xTextDocument.CurrentController.ViewSettings.ZoomType = ENTIRE_PAGE
         except Exception:
             traceback.print_exc()
         myFieldHandler = TextFieldHandler(self.xMSF, self.xTextDocument)
