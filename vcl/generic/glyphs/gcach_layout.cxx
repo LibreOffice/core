@@ -299,6 +299,16 @@ static bool lcl_CharIsJoiner(sal_Unicode cChar)
     return ((cChar == 0x200C) || (cChar == 0x200D));
 }
 
+static bool needPreviousCode(sal_Unicode cChar)
+{
+    return lcl_CharIsJoiner(cChar) || U16_IS_LEAD(cChar);
+}
+
+static bool needNextCode(sal_Unicode cChar)
+{
+    return lcl_CharIsJoiner(cChar) || U16_IS_TRAIL(cChar);
+}
+
 //See https://bugs.freedesktop.org/show_bug.cgi?id=31016
 #define ARABIC_BANDAID
 
@@ -439,9 +449,9 @@ bool IcuLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
                 if( nCharPos >= 0 )
                 {
                     rArgs.NeedFallback( nCharPos, bRightToLeft );
-                    if ( (nCharPos > 0) && lcl_CharIsJoiner(rArgs.mpStr[nCharPos-1]) )
+                    if ( (nCharPos > 0) && needPreviousCode(rArgs.mpStr[nCharPos-1]) )
                         rArgs.NeedFallback( nCharPos-1, bRightToLeft );
-                    else if ( (nCharPos + 1 < nEndRunPos) && lcl_CharIsJoiner(rArgs.mpStr[nCharPos+1]) )
+                    else if ( (nCharPos + 1 < nEndRunPos) && needNextCode(rArgs.mpStr[nCharPos+1]) )
                         rArgs.NeedFallback( nCharPos+1, bRightToLeft );
                 }
 
