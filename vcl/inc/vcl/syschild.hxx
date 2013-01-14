@@ -47,11 +47,11 @@ private:
     SAL_DLLPRIVATE          SystemChildWindow & operator= (const SystemChildWindow &);
 
 public:
-                            SystemChildWindow( Window* pParent, WinBits nStyle = 0 );
+    explicit                SystemChildWindow( Window* pParent, WinBits nStyle = 0 );
                             // create a SystemChildWindow using the given SystemWindowData
-                            SystemChildWindow( Window* pParent, WinBits nStyle, SystemWindowData *pData, sal_Bool bShow = sal_True );
-                            SystemChildWindow( Window* pParent, const ResId& rResId );
-                            ~SystemChildWindow();
+    explicit                SystemChildWindow( Window* pParent, WinBits nStyle, SystemWindowData* pData, sal_Bool bShow = sal_True );
+    explicit                SystemChildWindow( Window* pParent, const ResId& );
+    virtual                 ~SystemChildWindow();
 
     const SystemEnvData*    GetSystemData() const;
 

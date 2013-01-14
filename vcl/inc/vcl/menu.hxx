@@ -104,7 +104,7 @@ struct ImplMenuDelData
     ImplMenuDelData* mpNext;
     const Menu* mpMenu;
 
-    ImplMenuDelData( const Menu* pMenu );
+    explicit ImplMenuDelData( const Menu* );
     ~ImplMenuDelData();
 
     bool isDeleted() const { return mpMenu == 0; }
@@ -201,7 +201,7 @@ public:
     SAL_DLLPRIVATE Menu*            ImplGetStartedFrom() const;
 
                             Menu();
-                            Menu( sal_Bool bMenuBar );
+    explicit                Menu( sal_Bool bMenuBar );
     SAL_DLLPRIVATE Window*  ImplGetWindow() const { return pWindow; }
 
 
@@ -410,9 +410,9 @@ class VCL_DLLPUBLIC MenuBar : public Menu
 
 public:
                         MenuBar();
-                        MenuBar( const ResId& rResId );
+    explicit            MenuBar( const ResId& );
                         MenuBar( const MenuBar& rMenu );
-                        ~MenuBar();
+    virtual             ~MenuBar();
 
     MenuBar&            operator =( const MenuBar& rMenu );
 
@@ -500,8 +500,8 @@ protected:
 public:
                         PopupMenu();
                         PopupMenu( const PopupMenu& rMenu );
-                        PopupMenu( const ResId& rResId );
-                        ~PopupMenu();
+    explicit            PopupMenu( const ResId& );
+    virtual             ~PopupMenu();
 
     void                SetText( const XubString& rTitle )  { aTitleText = rTitle; }
     const XubString&    GetText() const                     { return aTitleText; }

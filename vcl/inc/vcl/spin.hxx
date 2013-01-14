@@ -60,9 +60,9 @@ private:
     DECL_DLLPRIVATE_LINK(     ImplTimeout, Timer* );
 
 public:
-                    SpinButton( Window* pParent, WinBits nStyle = 0 );
-                    SpinButton( Window* pParent, const ResId& rResId );
-                    ~SpinButton();
+    explicit        SpinButton( Window* pParent, WinBits nStyle = 0 );
+    explicit        SpinButton( Window* pParent, const ResId& );
+    virtual         ~SpinButton();
 
     virtual void    Up();
     virtual void    Down();
@@ -111,3 +111,4 @@ private:
 };
 
 #endif  // _SV_SPIN_HXX
+

@@ -63,7 +63,7 @@ private:
     SAL_DLLPRIVATE void   ImplCalcButtonAreas( OutputDevice* pDev, const Size& rOutSz, Rectangle& rDDArea, Rectangle& rSpinUpArea, Rectangle& rSpinDownArea );
 
 protected:
-                    SpinField( WindowType nTyp );
+    explicit        SpinField( WindowType nTyp );
 
     virtual long    Notify( NotifyEvent& rNEvt );
     virtual void    Command( const CommandEvent& rCEvt );
@@ -73,9 +73,9 @@ protected:
     virtual void    FillLayoutData() const;
     Rectangle *     ImplFindPartRect( const Point& rPt );
 public:
-                    SpinField( Window* pParent, WinBits nWinStyle = 0 );
-                    SpinField( Window* pParent, const ResId& rResId );
-                    ~SpinField();
+    explicit        SpinField( Window* pParent, WinBits nWinStyle = 0 );
+    explicit        SpinField( Window* pParent, const ResId& );
+    virtual         ~SpinField();
 
     virtual sal_Bool    ShowDropDown( sal_Bool bShow );
 
@@ -109,3 +109,4 @@ public:
 };
 
 #endif // _SV_SPINFLD_HXX
+

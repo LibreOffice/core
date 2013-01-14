@@ -130,9 +130,9 @@ public:
 //#endif
 
 public:
-                    Control( Window* pParent, WinBits nWinStyle = 0 );
-                    Control( Window* pParent, const ResId& rResId );
-                    ~Control();
+    explicit        Control( Window* pParent, WinBits nWinStyle = 0 );
+    explicit        Control( Window* pParent, const ResId& );
+    virtual         ~Control();
 
     virtual void    GetFocus();
     virtual void    LoseFocus();

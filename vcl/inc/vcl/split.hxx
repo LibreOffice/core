@@ -70,9 +70,9 @@ protected:
     SAL_DLLPRIVATE void      ImplInit( Window* pParent, WinBits nWinStyle );
 
 public:
-                        Splitter( Window* pParent, WinBits nStyle = WB_VSCROLL );
-                        Splitter( Window* pParent, const ResId& rResId );
-                        ~Splitter();
+    explicit            Splitter( Window* pParent, WinBits nStyle = WB_VSCROLL );
+    explicit            Splitter( Window* pParent, const ResId& );
+    virtual             ~Splitter();
 
     virtual void        StartSplit();
     virtual void        EndSplit();
@@ -120,3 +120,4 @@ public:
 };
 
 #endif  // _SV_SPLIT_HXX
+

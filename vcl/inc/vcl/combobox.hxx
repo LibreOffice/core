@@ -77,14 +77,14 @@ protected:
 //#endif
 
 protected:
-                    ComboBox( WindowType nType );
+    explicit            ComboBox( WindowType nType );
     sal_Bool            IsDropDownBox() const { return mpFloatWin ? sal_True : sal_False; }
 
     virtual void  FillLayoutData() const;
 public:
-                    ComboBox( Window* pParent, WinBits nStyle = 0 );
-                    ComboBox( Window* pParent, const ResId& rResId );
-                    ~ComboBox();
+    explicit        ComboBox( Window* pParent, WinBits nStyle = 0 );
+    explicit        ComboBox( Window* pParent, const ResId& );
+    virtual         ~ComboBox();
 
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
     virtual void    Resize();
@@ -224,3 +224,4 @@ public:
 };
 
 #endif  // _COMBOBOX_HXX
+

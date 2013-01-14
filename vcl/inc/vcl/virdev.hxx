@@ -68,8 +68,8 @@ private:
     SAL_DLLPRIVATE bool ForceZeroExtleadBug() const
         { return ((meRefDevMode & REFDEV_FORCE_ZERO_EXTLEAD) != 0); }
 public:
-                        VirtualDevice( sal_uInt16 nBitCount = 0 );
-                        VirtualDevice( const OutputDevice& rCompDev,
+    explicit            VirtualDevice( sal_uInt16 nBitCount = 0 );
+    explicit            VirtualDevice( const OutputDevice& rCompDev,
                                        sal_uInt16 nBitCount = 0 );
     /** Create a virtual device with alpha channel
 
@@ -94,7 +94,7 @@ public:
         Any rendering will happen directly on the context and not on any intermediate bitmap.
         Note: This might not be suported on all platforms !
     */
-                        VirtualDevice( const SystemGraphicsData *pData, sal_uInt16 nBitCount );
+    explicit            VirtualDevice( const SystemGraphicsData *pData, sal_uInt16 nBitCount );
 
     virtual             ~VirtualDevice();
 
@@ -123,3 +123,4 @@ private:
 };
 
 #endif // _SV_VIRDEV_HXX
+
