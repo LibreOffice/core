@@ -4,7 +4,7 @@ FullName: OpenSymbol
 FamilyName: OpenSymbol
 Weight: Book
 Copyright: (c) 2009 Sun Microsystems Inc.\nTHERE DOES NOT EXIST (c) 2011 Julien Nabet\nPRECEDES <-> DOES NOT SUCCEED (c) 2011 Olivier Hallot
-Version: 102.2
+Version: 102.3
 ItalicAngle: 0
 UnderlinePosition: -143
 UnderlineWidth: 20
@@ -19,7 +19,7 @@ OS2Version: 0
 OS2_WeightWidthSlopeOnly: 0
 OS2_UseTypoMetrics: 1
 CreationTime: 1144938807
-ModificationTime: 1321359108
+ModificationTime: 1358186116
 PfmFamily: 81
 TTFWeight: 400
 TTFWidth: 5
@@ -773,18 +773,18 @@ ShortTable: maxp 16
   0
   0
 EndShort
-LangName: 1033 "" "" "Regular" "OpenSymbol" "" "Version 102.2" 
-GaspTable: 1 65535 2
+LangName: 1033 "" "" "Regular" "OpenSymbol" "" "Version 102.3" 
+GaspTable: 1 65535 2 0
 Encoding: Custom
 UnicodeInterp: none
 NameList: Adobe Glyph List
 DisplaySize: -24
 AntiAlias: 1
 FitToEm: 1
-WinInfo: 360 45 15
+WinInfo: 0 45 15
 BeginPrivate: 0
 EndPrivate
-BeginChars: 1001 1001
+BeginChars: 8834 1004
 
 StartChar: Alpha
 Encoding: 909 913 0
@@ -107627,6 +107627,68 @@ SplineSet
  751 511 l 1,23,24
  841 546 841 546 928 572 c 1,25,26
  859 592 859 592 795 615 c 1,22,-1
+EndSplineSet
+EndChar
+
+StartChar: prime
+Encoding: 2032 8242 1001
+Width: 681
+Flags: WO
+HStem: 1110 346
+VStem: 236 329
+LayerCount: 2
+Fore
+SplineSet
+565 1456 m 5,0,-1
+ 270 1110 l 5,1,-1
+ 236 1110 l 5,2,-1
+ 342 1456 l 5,3,-1
+ 565 1456 l 5,0,-1
+EndSplineSet
+EndChar
+
+StartChar: primedbl
+Encoding: 2033 8243 1002
+Width: 957
+Flags: W
+LayerCount: 2
+Fore
+SplineSet
+565 1456 m 1,0,-1
+ 270 1110 l 1,1,-1
+ 236 1110 l 1,2,-1
+ 342 1456 l 1,3,-1
+ 565 1456 l 1,0,-1
+841 1456 m 1,4,-1
+ 546 1110 l 1,5,-1
+ 512 1110 l 1,6,-1
+ 618 1456 l 1,7,-1
+ 841 1456 l 1,4,-1
+EndSplineSet
+EndChar
+
+StartChar: primetriple
+Encoding: 2034 8244 1003
+Width: 1233
+Flags: W
+LayerCount: 2
+Fore
+SplineSet
+565 1456 m 1,0,-1
+ 270 1110 l 1,1,-1
+ 236 1110 l 1,2,-1
+ 342 1456 l 1,3,-1
+ 565 1456 l 1,0,-1
+841 1456 m 1,4,-1
+ 546 1110 l 1,5,-1
+ 512 1110 l 1,6,-1
+ 618 1456 l 1,7,-1
+ 841 1456 l 1,4,-1
+1117 1456 m 1,8,-1
+ 822 1110 l 1,9,-1
+ 788 1110 l 1,10,-1
+ 894 1456 l 1,11,-1
+ 1117 1456 l 1,8,-1
 EndSplineSet
 EndChar
 EndChars
