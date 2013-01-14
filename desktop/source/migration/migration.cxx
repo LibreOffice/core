@@ -20,6 +20,7 @@
 #include "sal/config.h"
 
 #include <algorithm>
+#include <iterator>
 #include <map>
 #include <new>
 #include <set>
@@ -712,10 +713,8 @@ strings_v subtract(strings_v const & va, strings_v const & vb) {
     strings_v b(vb);
     std::sort(b.begin(), b.end());
     strings_v::iterator be(std::unique(b.begin(), b.end()));
-    strings_v c(ae - a.begin());
-    strings_v::iterator ce(
-        std::set_difference(a.begin(), ae, b.begin(), be, c.begin()));
-    c.resize(ce - c.begin());
+    strings_v c;
+    std::set_difference(a.begin(), ae, b.begin(), be, std::back_inserter(c));
     return c;
 }
 
