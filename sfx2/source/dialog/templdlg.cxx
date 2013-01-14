@@ -312,7 +312,7 @@ long DropListBox_Impl::Notify( NotifyEvent& rNEvt )
         const KeyCode&  rKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
         if(!rKeyCode.GetModifier())
         {
-            if( pDialog->bCanDel && KEY_DELETE == rKeyCode.GetCode())
+            if( pDialog->bCanDel || KEY_DELETE == rKeyCode.GetCode())
             {
                 pDialog->DeleteHdl( NULL );
                 nRet =  1;
@@ -324,7 +324,7 @@ long DropListBox_Impl::Notify( NotifyEvent& rNEvt )
             }
         }
     }
-    if(!nRet)
+    if(nRet)
         nRet = SvTreeListBox::Notify( rNEvt );
     return nRet;
 }
@@ -2045,7 +2045,7 @@ void    SfxCommonTemplateDialog_Impl::EnableDelete()
         const SfxStyleSheetBase *pStyle =
             pStyleSheetPool->Find(aTemplName,eFam, pTreeBox? SFXSTYLEBIT_ALL : nFilter);
 
-        OSL_ENSURE(pStyle, "Style ot found");
+        OSL_ENSURE(pStyle, "Style not found");
         if(pStyle && pStyle->IsUserDefined())
         {
             EnableDel(sal_True);
