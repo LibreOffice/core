@@ -1273,18 +1273,15 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                     {
                                         SCCOL nPosX = pData->GetCurX();
                                         SCROW nPosY = pData->GetCurY();
-                                        SCCOL nClipStartX, nClipSizeX;
-                                        SCROW  nClipStartY, nClipSizeY;
-                                        pOwnClip->GetDocument()->GetClipStart( nClipStartX, nClipStartY );
+                                        SCCOL nClipSizeX;
+                                        SCROW  nClipSizeY;
                                         // for CutMode, filtered rows can always be included
                                         pOwnClip->GetDocument()->GetClipArea( nClipSizeX, nClipSizeY, sal_True );
                                         int nDisableShift = 0;
-                                        if ( nClipStartX <= nPosX + nClipSizeX &&
-                                                nPosX <= nClipStartX + nClipSizeX )
+                                        if ( nPosX + 2 * nClipSizeX + 1 > MAXCOL )  // fdo#56098
+                                             nDisableShift |= SC_CELL_SHIFT_DISABLE_RIGHT;
+                                        if ( nPosY + 2 * nClipSizeY + 1 > MAXROW )  // fdo#56098
                                             nDisableShift |= SC_CELL_SHIFT_DISABLE_DOWN;
-                                        if ( nClipStartY <= nPosY + nClipSizeY &&
-                                                nPosY <= nClipStartY + nClipSizeY )
-                                            nDisableShift |= SC_CELL_SHIFT_DISABLE_RIGHT;
                                         if ( nDisableShift )
                                             pDlg->SetCellShiftDisabled( nDisableShift );
                                     }
