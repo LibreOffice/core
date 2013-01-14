@@ -194,6 +194,8 @@ endif
         $(BUILDDIR)/config_host.mk.last \
         $(BUILDDIR)/config_host.mk.stamp \
         $(BUILDDIR)/configure \
+        $(BUILDDIR)/instsetoo_native/util/openoffice.lst \
+        $(BUILDDIR)/solenv/inc/minor.mk \
         $(BUILDDIR)/warn
 	find $(SOLARENV)/gdb -name "*.pyc" -exec rm {} \;
 
