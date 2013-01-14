@@ -46,8 +46,8 @@ private:
                     GetCanonicalTextColor( const StyleSettings& _rStyle ) const;
 
 public:
-                    GroupBox( Window* pParent, WinBits nStyle = 0 );
-                    GroupBox( Window* pParent, const ResId& rResId );
+    explicit        GroupBox( Window* pParent, WinBits nStyle = 0 );
+    explicit        GroupBox( Window* pParent, const ResId& );
 
     virtual void    Paint( const Rectangle& rRect );
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );

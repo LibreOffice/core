@@ -81,8 +81,8 @@ public:
     SAL_DLLPRIVATE bool isDeferredInit() const { return mbIsDefferedInit; }
 
 protected:
-                    Dialog( WindowType nType );
-                    Dialog( Window* pParent, const OString& rID, const OUString& rUIXMLDescription, WindowType nType );
+    explicit        Dialog( WindowType nType );
+    explicit        Dialog( Window* pParent, const OString& rID, const OUString& rUIXMLDescription, WindowType nType );
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
 
 protected:
@@ -91,8 +91,8 @@ protected:
     void set_content_area(VclBox *pBox);
 
 public:
-                    Dialog( Window* pParent, WinBits nStyle = WB_STDDIALOG );
-                    Dialog( Window* pParent, const OString& rID, const OUString& rUIXMLDescription );
+    explicit        Dialog( Window* pParent, WinBits nStyle = WB_STDDIALOG );
+    explicit        Dialog( Window* pParent, const OString& rID, const OUString& rUIXMLDescription );
     virtual         ~Dialog();
 
     virtual long    Notify( NotifyEvent& rNEvt );
@@ -152,8 +152,8 @@ class VCL_DLLPUBLIC ModelessDialog : public Dialog
     SAL_DLLPRIVATE         ModelessDialog & operator= (const ModelessDialog &);
 
 public:
-                    ModelessDialog( Window* pParent, const ResId& rResId );
-                    ModelessDialog( Window* pParent, const OString& rID, const OUString& rUIXMLDescription );
+    explicit        ModelessDialog( Window* pParent, const ResId& rResId );
+    explicit        ModelessDialog( Window* pParent, const OString& rID, const OUString& rUIXMLDescription );
 };
 
 // ---------------
@@ -163,9 +163,9 @@ public:
 class VCL_DLLPUBLIC ModalDialog : public Dialog
 {
 public:
-                    ModalDialog( Window* pParent, WinBits nStyle = WB_STDMODAL );
-                    ModalDialog( Window* pParent, const OString& rID, const OUString& rUIXMLDescription );
-                    ModalDialog( Window* pParent, const ResId& rResId );
+    explicit        ModalDialog( Window* pParent, WinBits nStyle = WB_STDMODAL );
+    explicit        ModalDialog( Window* pParent, const OString& rID, const OUString& rUIXMLDescription );
+    explicit        ModalDialog( Window* pParent, const ResId& rResId );
 
 protected:
     using Window::Show;

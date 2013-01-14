@@ -39,10 +39,10 @@ private:
     SAL_DLLPRIVATE void ImplInitSettings();
 
 public:
-                    TabPage( Window* pParent, WinBits nStyle = 0 );
-                    TabPage(Window *pParent, const OString& rID, const OUString& rUIXMLDescription);
+    explicit        TabPage( Window* pParent, WinBits nStyle = 0 );
+    explicit        TabPage( Window *pParent, const OString& rID, const OUString& rUIXMLDescription );
 
-                    TabPage( Window* pParent, const ResId& rResId );
+    explicit        TabPage( Window* pParent, const ResId& rResId );
 
     virtual void    Paint( const Rectangle& rRect );
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );

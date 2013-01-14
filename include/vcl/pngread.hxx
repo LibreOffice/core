@@ -40,7 +40,7 @@ namespace vcl
 
         /* the PNG chunks are read within the c'tor, so the stream will
         be positioned at the end of the PNG */
-        PNGReader( SvStream& rStm );
+        explicit PNGReader( SvStream& rStm );
         ~PNGReader();
 
         /* an empty preview size hint (=default) will read the whole image

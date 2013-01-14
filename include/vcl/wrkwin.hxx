@@ -57,15 +57,15 @@ private:
     SAL_DLLPRIVATE WorkWindow&  operator =( const WorkWindow& rWin );
 
 protected:
-                        WorkWindow( WindowType nType );
+    explict         WorkWindow( WindowType nType );
     SAL_DLLPRIVATE void ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData = NULL );
     SAL_DLLPRIVATE void ImplSetFrameState( sal_uLong aFrameState );
 
 public:
-                    WorkWindow( Window* pParent, WinBits nStyle = WB_STDWORK );
-                    WorkWindow( Window* pParent, const ::com::sun::star::uno::Any& aSystemWorkWindowToken, WinBits nStyle = WB_STDWORK );
-                    WorkWindow( SystemParentData* pParent ); // Not in the REMOTE-Version
-                    ~WorkWindow();
+    explicit        WorkWindow( Window* pParent, WinBits nStyle = WB_STDWORK );
+    explicit        WorkWindow( Window* pParent, const ::com::sun::star::uno::Any& aSystemWorkWindowToken, WinBits nStyle = WB_STDWORK );
+    explicit        WorkWindow( SystemParentData* pParent ); // Not in the REMOTE-Version
+    virtual         ~WorkWindow();
 
     virtual sal_Bool    Close();
 

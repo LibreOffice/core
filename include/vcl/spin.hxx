@@ -56,8 +56,8 @@ private:
     DECL_DLLPRIVATE_LINK(     ImplTimeout, Timer* );
 
 public:
-                    SpinButton( Window* pParent, WinBits nStyle = 0 );
-                    ~SpinButton();
+    explicit        SpinButton( Window* pParent, WinBits nStyle = 0 );
+    virtual         ~SpinButton();
 
     virtual void    Up();
     virtual void    Down();

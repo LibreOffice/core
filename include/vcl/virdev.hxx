@@ -72,7 +72,7 @@ public:
         indicate: take default screen depth. Only 0, 1 and 8
         are allowed here, with 1 denoting binary mask and 8 a graylevel mask.
      */
-                        VirtualDevice( sal_uInt16 nBitCount = 0 );
+    explicit            VirtualDevice( sal_uInt16 nBitCount = 0 );
 
     /** Create a virtual device of size 1x1
 
@@ -84,7 +84,7 @@ public:
         indicate: take default screen depth. Only 0 and 1
         are allowed here, with 1 denoting binary mask.
      */
-                        VirtualDevice( const OutputDevice& rCompDev,
+     explicit           VirtualDevice( const OutputDevice& rCompDev,
                                        sal_uInt16 nBitCount = 0 );
 
     /** Create a virtual device  of size 1x1 with alpha channel
@@ -102,14 +102,14 @@ public:
         indicate: take default screen depth. Only 0 and 1
         are allowed here, with 1 denoting binary mask.
      */
-                        VirtualDevice( const OutputDevice& rCompDev,
+     explicit           VirtualDevice( const OutputDevice& rCompDev,
                                        sal_uInt16 nBitCount, sal_uInt16 nAlphaBitCount );
 
     /** Create a virtual device using an existing system dependent device or graphics context
         Any rendering will happen directly on the context and not on any intermediate bitmap.
         Note: This might not be suported on all platforms !
     */
-                        VirtualDevice( const SystemGraphicsData *pData, sal_uInt16 nBitCount );
+    explicit            VirtualDevice( const SystemGraphicsData *pData, sal_uInt16 nBitCount );
 
     virtual             ~VirtualDevice();
 

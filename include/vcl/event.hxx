@@ -118,8 +118,8 @@ private:
     sal_uInt16          mnCode;
 
 public:
-                    MouseEvent();
-                    MouseEvent( const Point& rPos, sal_uInt16 nClicks = 1,
+    explicit        MouseEvent();
+    explicit        MouseEvent( const Point& rPos, sal_uInt16 nClicks = 1,
                                 sal_uInt16 nMode = 0, sal_uInt16 nButtons = 0,
                                 sal_uInt16 nModifier = 0 );
 
@@ -254,9 +254,9 @@ private:
     sal_Bool            mbKeyboardActivated;
 
 public:
-                    HelpEvent();
-                    HelpEvent( sal_uInt16 nHelpMode );
-                    HelpEvent( const Point& rMousePos, sal_uInt16 nHelpMode );
+    explicit        HelpEvent();
+    explicit        HelpEvent( sal_uInt16 nHelpMode );
+    explicit        HelpEvent( const Point& rMousePos, sal_uInt16 nHelpMode );
 
     const Point&    GetMousePosPixel() const;
     sal_uInt16          GetMode() const { return mnMode; }
@@ -347,8 +347,8 @@ private:
     sal_uInt16              mnFlags;
 
 public:
-                        TrackingEvent();
-                        TrackingEvent( const MouseEvent& rMEvt,
+    explicit            TrackingEvent();
+    explicit            TrackingEvent( const MouseEvent&,
                                        sal_uInt16 nTrackFlags = 0 );
 
     const MouseEvent&   GetMouseEvent() const { return maMEvt; }
@@ -481,8 +481,8 @@ private:
     sal_uInt16                  mnType;
 
 public:
-                            DataChangedEvent();
-                            DataChangedEvent( sal_uInt16 nType,
+    explicit                DataChangedEvent();
+    explicit                DataChangedEvent( sal_uInt16 nType,
                                               const void* pData = NULL,
                                               sal_uLong nFlags = 0 );
 

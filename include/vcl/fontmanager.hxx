@@ -216,7 +216,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
         std::map< sal_Unicode, sal_Int32 >          m_aEncodingVector;
         std::map< sal_Unicode, OString >       m_aNonEncoded;
 
-        PrintFont( fonttype::type eType );
+        explicit PrintFont( fonttype::type eType );
         virtual ~PrintFont();
         virtual bool queryMetricPage( int nPage, utl::MultiAtomProvider* pProvider ) = 0;
 

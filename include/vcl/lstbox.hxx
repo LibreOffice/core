@@ -69,14 +69,14 @@ protected:
     sal_Bool                IsDropDownBox() const { return mpFloatWin ? sal_True : sal_False; }
 
 protected:
-                        ListBox( WindowType nType );
+    explicit            ListBox( WindowType nType );
 
     virtual void        FillLayoutData() const;
 
 public:
-                        ListBox( Window* pParent, WinBits nStyle = WB_BORDER );
-                        ListBox( Window* pParent, const ResId& rResId );
-                        ~ListBox();
+    explicit            ListBox( Window* pParent, WinBits nStyle = WB_BORDER );
+    explicit            ListBox( Window* pParent, const ResId& );
+    virtual             ~ListBox();
 
     virtual void        Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
     virtual void        Resize();
@@ -241,8 +241,8 @@ private:
     sal_uInt16          GetSavedValue();
 
 public:
-                    MultiListBox( Window* pParent, WinBits nStyle = 0 );
-                    MultiListBox( Window* pParent, const ResId& rResId );
+    explicit        MultiListBox( Window* pParent, WinBits nStyle = 0 );
+    explicit        MultiListBox( Window* pParent, const ResId& rResId );
 };
 
 #endif  // _SV_LSTBOX_HXX

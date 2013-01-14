@@ -115,9 +115,9 @@ public:
     SAL_DLLPRIVATE sal_Bool             ImplIsInPrivatePopupMode() const { return mbInPopupMode; }
 
 public:
-                    FloatingWindow( Window* pParent, WinBits nStyle = WB_STDFLOATWIN );
-                    FloatingWindow( Window* pParent, const ResId& rResId );
-                    ~FloatingWindow();
+    explicit        FloatingWindow( Window* pParent, WinBits nStyle = WB_STDFLOATWIN );
+    explicit        FloatingWindow( Window* pParent, const ResId& );
+    virtual         ~FloatingWindow();
 
     virtual long    Notify( NotifyEvent& rNEvt );
     virtual void    StateChanged( StateChangedType nType );

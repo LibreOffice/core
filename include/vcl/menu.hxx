@@ -80,7 +80,7 @@ struct ImplMenuDelData
     ImplMenuDelData* mpNext;
     const Menu* mpMenu;
 
-    ImplMenuDelData( const Menu* pMenu );
+    explicit ImplMenuDelData( const Menu* );
     ~ImplMenuDelData();
 
     bool isDeleted() const { return mpMenu == 0; }
@@ -181,7 +181,7 @@ public:
     SAL_DLLPRIVATE Menu*            ImplGetStartedFrom() const { return pStartedFrom; }
 
                             Menu();
-                            Menu( sal_Bool bMenuBar );
+    explicit                Menu( sal_Bool bMenuBar );
     SAL_DLLPRIVATE Window*  ImplGetWindow() const { return pWindow; }
     void ImplSelectWithStart( Menu* pStartMenu = NULL );
 
@@ -463,8 +463,8 @@ protected:
 public:
                         PopupMenu();
                         PopupMenu( const PopupMenu& rMenu );
-                        PopupMenu( const ResId& rResId );
-                        ~PopupMenu();
+    explicit            PopupMenu( const ResId& );
+    virtual             ~PopupMenu();
 
     void                SetText( const OUString& rTitle )  { aTitleText = rTitle; }
     const OUString&     GetText() const                     { return aTitleText; }

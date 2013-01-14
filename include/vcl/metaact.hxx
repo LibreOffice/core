@@ -141,7 +141,7 @@ protected:
 
 public:
                         MetaAction();
-                        MetaAction( sal_uInt16 nType );
+    explicit            MetaAction( sal_uInt16 nType );
 
     virtual void        Execute( OutputDevice* pOut );
 
@@ -193,7 +193,7 @@ private:
 public:
                         DECL_META_ACTION( Point, META_POINT_ACTION )
 
-                        MetaPointAction( const Point& rPt );
+    explicit            MetaPointAction( const Point& );
 
     virtual void        Move( long nHorzMove, long nVertMove );
     virtual void        Scale( double fScaleX, double fScaleY );
@@ -236,7 +236,7 @@ private:
 public:
                         DECL_META_ACTION( Rect, META_RECT_ACTION )
 
-                        MetaRectAction( const Rectangle& rRect );
+    explicit            MetaRectAction( const Rectangle& );
 
     virtual void        Move( long nHorzMove, long nVertMove );
     virtual void        Scale( double fScaleX, double fScaleY );
@@ -279,7 +279,7 @@ private:
 public:
                         DECL_META_ACTION( Ellipse, META_ELLIPSE_ACTION )
 
-                        MetaEllipseAction( const Rectangle& rRect );
+    explicit            MetaEllipseAction( const Rectangle& );
 
     virtual void        Move( long nHorzMove, long nVertMove );
     virtual void        Scale( double fScaleX, double fScaleY );
@@ -371,8 +371,8 @@ private:
 public:
                         DECL_META_ACTION( PolyLine, META_POLYLINE_ACTION )
 
-                        MetaPolyLineAction( const Polygon& rPoly );
-                        MetaPolyLineAction( const Polygon& rPoly, const LineInfo& rLineInfo );
+    explicit            MetaPolyLineAction( const Polygon& );
+    explicit            MetaPolyLineAction( const Polygon&, const LineInfo& );
 
     virtual void        Move( long nHorzMove, long nVertMove );
     virtual void        Scale( double fScaleX, double fScaleY );
@@ -392,7 +392,7 @@ private:
 public:
                         DECL_META_ACTION( Polygon, META_POLYGON_ACTION )
 
-                        MetaPolygonAction( const Polygon& rPoly );
+    explicit            MetaPolygonAction( const Polygon& );
 
     virtual void        Move( long nHorzMove, long nVertMove );
     virtual void        Scale( double fScaleX, double fScaleY );
@@ -411,7 +411,7 @@ private:
 public:
                         DECL_META_ACTION( PolyPolygon, META_POLYPOLYGON_ACTION )
 
-                        MetaPolyPolygonAction( const PolyPolygon& rPolyPoly );
+    explicit            MetaPolyPolygonAction( const PolyPolygon& );
 
     virtual void        Move( long nHorzMove, long nVertMove );
     virtual void        Scale( double fScaleX, double fScaleY );
@@ -915,7 +915,7 @@ private:
 public:
                         DECL_META_ACTION( ISectRectClipRegion, META_ISECTRECTCLIPREGION_ACTION )
 
-                        MetaISectRectClipRegionAction( const Rectangle& rRect );
+    explicit            MetaISectRectClipRegionAction( const Rectangle& );
 
     virtual void        Move( long nHorzMove, long nVertMove );
     virtual void        Scale( double fScaleX, double fScaleY );
@@ -934,7 +934,7 @@ private:
 public:
                         DECL_META_ACTION( ISectRegionClipRegion, META_ISECTREGIONCLIPREGION_ACTION )
 
-                        MetaISectRegionClipRegionAction( const Region& rRegion );
+    explicit            MetaISectRegionClipRegionAction( const Region& );
 
     virtual void        Move( long nHorzMove, long nVertMove );
     virtual void        Scale( double fScaleX, double fScaleY );
@@ -1009,7 +1009,7 @@ private:
 public:
                         DECL_META_ACTION( TextColor, META_TEXTCOLOR_ACTION )
 
-                        MetaTextColorAction( const Color& rColor );
+    explicit            MetaTextColorAction( const Color& );
 
     const Color&        GetColor() const { return maColor; }
 };
@@ -1079,7 +1079,7 @@ private:
 public:
                         DECL_META_ACTION( TextAlign, META_TEXTALIGN_ACTION )
 
-                        MetaTextAlignAction( TextAlign aAlign );
+    explicit            MetaTextAlignAction( TextAlign eAlign );
 
     TextAlign           GetTextAlign() const { return maAlign; }
 };
@@ -1095,7 +1095,7 @@ private:
 public:
                         DECL_META_ACTION( MapMode, META_MAPMODE_ACTION )
 
-                        MetaMapModeAction( const MapMode& rMapMode );
+    explicit            MetaMapModeAction( const MapMode& );
 
     virtual void        Scale( double fScaleX, double fScaleY );
 
@@ -1113,7 +1113,7 @@ private:
 public:
                         DECL_META_ACTION( Font, META_FONT_ACTION )
 
-                        MetaFontAction( const Font& rFont );
+    explicit            MetaFontAction( const Font& );
 
     virtual void        Scale( double fScaleX, double fScaleY );
 
@@ -1131,7 +1131,7 @@ private:
 public:
                         DECL_META_ACTION( Push, META_PUSH_ACTION )
 
-                        MetaPushAction( sal_uInt16 nFlags );
+    explicit            MetaPushAction( sal_uInt16 nFlags );
 
     sal_uInt16              GetFlags() const { return mnFlags; }
 };
@@ -1154,7 +1154,7 @@ private:
 public:
                         DECL_META_ACTION( RasterOp, META_RASTEROP_ACTION )
 
-                        MetaRasterOpAction( RasterOp eRasterOp );
+    explicit            MetaRasterOpAction( RasterOp eRasterOp );
 
     RasterOp            GetRasterOp() const { return meRasterOp; }
 };
@@ -1263,12 +1263,12 @@ private:
     virtual sal_Bool    Compare( const MetaAction& ) const;
 
 protected:
-                        ~MetaCommentAction();
+    virtual             ~MetaCommentAction();
 
 public:
-                        MetaCommentAction( sal_Int32 nValue = 0L );
-                        MetaCommentAction( const MetaCommentAction& rAct );
-                        MetaCommentAction( const OString& rComment, sal_Int32 nValue = 0L, const sal_uInt8* pData = NULL, sal_uInt32 nDataSize = 0UL );
+    explicit            MetaCommentAction( sal_Int32 nValue = 0L );
+    explicit            MetaCommentAction( const MetaCommentAction& rAct );
+    explicit            MetaCommentAction( const OString& rComment, sal_Int32 nValue = 0L, const sal_uInt8* pData = NULL, sal_uInt32 nDataSize = 0UL );
 
     virtual void        Move( long nHorzMove, long nVertMove );
     virtual void        Scale( double fScaleX, double fScaleY );
@@ -1294,7 +1294,7 @@ private:
 public:
                         DECL_META_ACTION( LayoutMode, META_LAYOUTMODE_ACTION )
 
-                        MetaLayoutModeAction( sal_uInt32 nLayoutMode );
+    explicit            MetaLayoutModeAction( sal_uInt32 nLayoutMode );
 
     sal_uInt32          GetLayoutMode() const { return mnLayoutMode; }
 };
@@ -1309,7 +1309,7 @@ private:
 public:
                         DECL_META_ACTION( TextLanguage, META_TEXTLANGUAGE_ACTION )
 
-                        MetaTextLanguageAction( LanguageType );
+    explicit            MetaTextLanguageAction( LanguageType );
 
     LanguageType        GetTextLanguage() const { return meTextLanguage; }
 };

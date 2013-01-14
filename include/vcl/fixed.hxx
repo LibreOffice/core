@@ -59,9 +59,9 @@ protected:
     virtual Window* getAccessibleRelationLabelFor() const;
 
 public:
-                    FixedText( Window* pParent, WinBits nStyle = 0 );
-                    FixedText( Window* pParent, const ResId& rResId );
-                    ~FixedText();
+    explicit        FixedText( Window* pParent, WinBits nStyle = 0 );
+    explicit        FixedText( Window* pParent, const ResId& rResId );
+    virtual         ~FixedText();
 
     virtual void    Paint( const Rectangle& rRect );
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
@@ -85,7 +85,7 @@ public:
 class VCL_DLLPUBLIC SelectableFixedText : public Edit
 {
 public:
-    SelectableFixedText( Window* pParent, WinBits nStyle = 0 );
+    explicit SelectableFixedText( Window* pParent, WinBits nStyle = 0 );
 
     virtual void    LoseFocus();
 };
@@ -112,8 +112,8 @@ protected:
                     GetCanonicalTextColor( const StyleSettings& _rStyle ) const;
 
 public:
-                    FixedLine( Window* pParent, WinBits nStyle = WB_HORZ );
-                    FixedLine( Window* pParent, const ResId& rResId );
+    explicit        FixedLine( Window* pParent, WinBits nStyle = WB_HORZ );
+    explicit        FixedLine( Window* pParent, const ResId& );
 
     virtual void    Paint( const Rectangle& rRect );
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
@@ -145,9 +145,9 @@ protected:
     SAL_DLLPRIVATE void    ImplLoadRes( const ResId& rResId );
 
 public:
-                    FixedBitmap( Window* pParent, WinBits nStyle = 0 );
-                    FixedBitmap( Window* pParent, const ResId& rResId );
-                    ~FixedBitmap();
+    explicit        FixedBitmap( Window* pParent, WinBits nStyle = 0 );
+    explicit        FixedBitmap( Window* pParent, const ResId& );
+    virtual         ~FixedBitmap();
 
     virtual void    Paint( const Rectangle& rRect );
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
@@ -183,9 +183,9 @@ protected:
     SAL_DLLPRIVATE void    ImplLoadRes( const ResId& rResId );
 
 public:
-                    FixedImage( Window* pParent, WinBits nStyle = 0 );
-                    FixedImage( Window* pParent, const ResId& rResId );
-                    ~FixedImage();
+    explicit        FixedImage( Window* pParent, WinBits nStyle = 0 );
+    explicit        FixedImage( Window* pParent, const ResId& );
+    virtual         ~FixedImage();
 
     virtual void    Paint( const Rectangle& rRect );
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );

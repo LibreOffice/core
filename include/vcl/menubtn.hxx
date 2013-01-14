@@ -67,9 +67,9 @@ protected:
     SAL_DLLPRIVATE void    ImplLoadRes( const ResId& rResId );
 
 public:
-                    MenuButton( Window* pParent, WinBits nStyle = 0 );
-                    MenuButton( Window* pParent, const ResId& rResId );
-                    ~MenuButton();
+    explicit        MenuButton( Window* pParent, WinBits nStyle = 0 );
+    explicit        MenuButton( Window* pParent, const ResId& );
+    virtual         ~MenuButton();
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
     virtual void    KeyInput( const KeyEvent& rKEvt );

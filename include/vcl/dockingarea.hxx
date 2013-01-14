@@ -40,8 +40,8 @@ private:
     SAL_DLLPRIVATE  DockingAreaWindow & operator= (const DockingAreaWindow &);
 
 public:
-                    DockingAreaWindow( Window *pParent );
-                    ~DockingAreaWindow();
+    explicit        DockingAreaWindow( Window* pParent );
+    virtual         ~DockingAreaWindow();
 
     void            SetAlign( WindowAlign eNewAlign );
     WindowAlign     GetAlign() const;
