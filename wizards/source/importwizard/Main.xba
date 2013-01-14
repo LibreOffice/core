@@ -190,7 +190,7 @@ Function createBF_MigrateFilterIfPossible()
 Dim oService
     On Error Goto RTError
     oService = createUnoService(&quot;com.sun.star.comp.office.BF_MigrateFilter&quot;)
-    getBinFilterCompIfItExists = oService
+    createBF_MigrateFilterIfPossible = oService
     Exit Function
 RTError:
     createBF_MigrateFilterIfPossible = Nothing
