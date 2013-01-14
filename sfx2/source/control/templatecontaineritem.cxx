@@ -8,6 +8,7 @@
  */
 
 #include <sfx2/templatecontaineritem.hxx>
+#include <sfx2/templateabstractview.hxx>
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -35,16 +36,31 @@ TemplateContainerItem::~TemplateContainerItem ()
 {
 }
 
+void TemplateContainerItem::calculateItemsPosition (const long nThumbnailHeight, const long nDisplayHeight,
+                                     const long nPadding, sal_uInt32 nMaxTextLenght,
+                                     const ThumbnailItemAttributes *pAttrs)
+{
+    ThumbnailViewItem::calculateItemsPosition( nThumbnailHeight, nDisplayHeight, nPadding, nMaxTextLenght, pAttrs);
+    Point aPos (maDrawArea.getX() + nPadding, maDrawArea.getY() + nPadding);
+    maThumbnailArea = Rectangle(aPos, Size(maDrawArea.GetWidth() - 2 * nPadding, nThumbnailHeight));
+}
+
 void TemplateContainerItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProcessor,
                                     const ThumbnailItemAttributes *pAttrs)
 {
     int nCount = 0;
-    int nSeqSize = 2;
+    int nSeqSize = 3;
 
     if (!maPreview1.IsEmpty())
         nSeqSize += 3;
 
     if (!maPreview2.IsEmpty())
+        nSeqSize += 3;
+
+    if (!maPreview3.IsEmpty())
+        nSeqSize += 3;
+
+    if (!maPreview4.IsEmpty())
         nSeqSize += 3;
 
     BColor aFillColor = pAttrs->aFillColor;
@@ -58,70 +74,83 @@ void TemplateContainerItem::Paint (drawinglayer::processor2d::BaseProcessor2D *p
                                                B2DPolyPolygon(Polygon(maDrawArea,5,5).getB2DPolygon()),
                                                aFillColor));
 
+    // Create rounded rectangle border
+    aSeq[nCount++] = Primitive2DReference( new PolygonStrokePrimitive2D(
+                                              Polygon(maThumbnailArea,5,5).getB2DPolygon(),
+                                              LineAttribute(BColor(0.8, 0.8, 0.8), 2.0)));
+
+    // Paint the thumbnails side by side on a 2x2 grid
+    long nThumbPadding = 4;
+    Size aThumbSize( ( maThumbnailArea.getWidth() - 3 * nThumbPadding ) / 2, ( maThumbnailArea.getHeight() - 3* nThumbPadding ) / 2 );
+
     // Draw thumbnail
     Point aPos = maPrev1Pos;
-    Size aImageSize = maPreview1.GetSizePixel();
 
-    float fScaleX = 1.0f;
-    float fScaleY = 1.0f;
-
-    if (!maPreview2.IsEmpty())
+    for (int i=0; i<4; ++i)
     {
-        fScaleX = 0.8f;
-        fScaleY = 0.8f;
+        long nPosX = 0;
+        long nPosY = 0;
+        BitmapEx* pImage = NULL;
 
-        float fWidth = aImageSize.Width()*fScaleX;
-        float fHeight = aImageSize.Height()*fScaleY;
-        float fPosX = aPos.getX()+35*fScaleX;
-        float fPosY = aPos.getY()+20*fScaleY;
+        switch (i)
+        {
+            case 0:
+                pImage = &maPreview1;
+                break;
+            case 1:
+                pImage = &maPreview2;
+                nPosX = aThumbSize.getWidth() + nThumbPadding;
+                break;
+            case 2:
+                pImage = &maPreview3;
+                nPosY = aThumbSize.getHeight() + nThumbPadding;
+                break;
+            case 3:
+                pImage = &maPreview4;
+                nPosX = aThumbSize.getWidth() + nThumbPadding;
+                nPosY = aThumbSize.getHeight() + nThumbPadding;
+                break;
+        }
 
-        B2DPolygon aBounds;
-        aBounds.append(B2DPoint(fPosX,fPosY));
-        aBounds.append(B2DPoint(fPosX+fWidth,fPosY));
-        aBounds.append(B2DPoint(fPosX+fWidth,fPosY+fHeight));
-        aBounds.append(B2DPoint(fPosX,fPosY+fHeight));
-        aBounds.setClosed(true);
+        if (!pImage->IsEmpty())
+        {
+            // Check the size of the picture and resize if needed
+            Size aImageSize = pImage->GetSizePixel();
+            if (aImageSize.getWidth() > aThumbSize.getWidth() || aImageSize.getHeight() > aThumbSize.getHeight())
+            {
+                // Resize the picture and store it for next times
+                *pImage = TemplateAbstractView::scaleImg( *pImage, aThumbSize.getWidth(), aThumbSize.getHeight() );
+                aImageSize = pImage->GetSizePixel();
+            }
 
-        aSeq[nCount++] = Primitive2DReference( new PolyPolygonColorPrimitive2D(
-                                            B2DPolyPolygon(aBounds), Color(COL_WHITE).getBColor()));
-        aSeq[nCount++] = Primitive2DReference( new FillBitmapPrimitive2D(
-                                            createScaleTranslateB2DHomMatrix(fScaleX,fScaleY,aPos.X(),aPos.Y()),
-                                            FillBitmapAttribute(maPreview2,
-                                                                B2DPoint(35,20),
-                                                                B2DVector(aImageSize.Width(),aImageSize.Height()),
-                                                                false)
-                                            ));
+            float nOffX = (aThumbSize.getWidth() - aImageSize.getWidth()) / 2;
+            float nOffY = (aThumbSize.getHeight() - aImageSize.getHeight()) / 2;
 
-        // draw thumbnail borders
-        aSeq[nCount++] = Primitive2DReference(createBorderLine(aBounds));
-    }
+            float fWidth = aImageSize.Width();
+            float fHeight = aImageSize.Height();
+            float fPosX = maThumbnailArea.Left() + nThumbPadding + nPosX + nOffX;
+            float fPosY = maThumbnailArea.Top() + nThumbPadding + nPosY + nOffY;
 
-    if (!maPreview1.IsEmpty())
-    {
-        // draw thumbnail borders
-        float fWidth = aImageSize.Width()*fScaleX;
-        float fHeight = aImageSize.Height()*fScaleY;
-        float fPosX = aPos.getX();
-        float fPosY = aPos.getY();
+            B2DPolygon aBounds;
+            aBounds.append(B2DPoint(fPosX,fPosY));
+            aBounds.append(B2DPoint(fPosX+fWidth,fPosY));
+            aBounds.append(B2DPoint(fPosX+fWidth,fPosY+fHeight));
+            aBounds.append(B2DPoint(fPosX,fPosY+fHeight));
+            aBounds.setClosed(true);
 
-        B2DPolygon aBounds;
-        aBounds.append(B2DPoint(fPosX,fPosY));
-        aBounds.append(B2DPoint(fPosX+fWidth,fPosY));
-        aBounds.append(B2DPoint(fPosX+fWidth,fPosY+fHeight));
-        aBounds.append(B2DPoint(fPosX,fPosY+fHeight));
-        aBounds.setClosed(true);
+            aSeq[nCount++] = Primitive2DReference( new PolyPolygonColorPrimitive2D(
+                                                B2DPolyPolygon(aBounds), Color(COL_WHITE).getBColor()));
+            aSeq[nCount++] = Primitive2DReference( new FillBitmapPrimitive2D(
+                                                createScaleTranslateB2DHomMatrix(1.0,1.0,fPosX,fPosY),
+                                                FillBitmapAttribute(*pImage,
+                                                                    B2DPoint(0.0,0.0),
+                                                                    B2DVector(aImageSize.Width(),aImageSize.Height()),
+                                                                    false)
+                                                ));
 
-        aSeq[nCount++] = Primitive2DReference( new PolyPolygonColorPrimitive2D(
-                                            B2DPolyPolygon(aBounds), Color(COL_WHITE).getBColor()));
-        aSeq[nCount++] = Primitive2DReference( new FillBitmapPrimitive2D(
-                                            createScaleTranslateB2DHomMatrix(fScaleX,fScaleY,aPos.X(),aPos.Y()),
-                                            FillBitmapAttribute(maPreview1,
-                                                                B2DPoint(0,0),
-                                                                B2DVector(aImageSize.Width(),aImageSize.Height()),
-                                                                false)
-                                            ));
-
-        aSeq[nCount++] = Primitive2DReference(createBorderLine(aBounds));
+            // draw thumbnail borders
+            aSeq[nCount++] = Primitive2DReference(createBorderLine(aBounds));
+        }
     }
 
     // Draw centered text below thumbnail
@@ -141,6 +170,11 @@ void TemplateContainerItem::Paint (drawinglayer::processor2d::BaseProcessor2D *p
                                                  Color(COL_BLACK).getBColor() ) );
 
     pProcessor->process(aSeq);
+}
+
+bool TemplateContainerItem::HasMissingPreview( )
+{
+    return maPreview1.IsEmpty() || maPreview2.IsEmpty() || maPreview3.IsEmpty() || maPreview4.IsEmpty();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

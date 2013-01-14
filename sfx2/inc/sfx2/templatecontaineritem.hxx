@@ -18,19 +18,26 @@ class TemplateContainerItem : public ThumbnailViewItem
 public:
 
     BitmapEx maPreview2;
+    BitmapEx maPreview3;
+    BitmapEx maPreview4;
     std::vector<TemplateItemProperties> maTemplates;
 
     TemplateContainerItem (ThumbnailView &rView);
 
     virtual ~TemplateContainerItem ();
 
-    const Point& getPrev2Pos () const { return maPrev2Pos; }
-
     virtual void Paint (drawinglayer::processor2d::BaseProcessor2D *pProcessor,
                         const ThumbnailItemAttributes *pAttrs);
+
+    virtual void calculateItemsPosition (const long nThumbnailHeight, const long nDisplayHeight,
+                                         const long nPadding, sal_uInt32 nMaxTextLenght,
+                                         const ThumbnailItemAttributes *pAttrs);
+
+    bool HasMissingPreview( );
+
 private:
 
-    Point maPrev2Pos;
+    Rectangle maThumbnailArea;
 };
 
 #endif // TEMPLATEFOLDERVIEWITEM_HXX

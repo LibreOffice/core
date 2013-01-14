@@ -626,9 +626,11 @@ static void lcl_updateThumbnails (TemplateContainerItem *pItem)
 {
     pItem->maPreview1.Clear();
     pItem->maPreview2.Clear();
+    pItem->maPreview3.Clear();
+    pItem->maPreview4.Clear();
 
     // Update folder thumbnails
-    for (size_t i = 0, n = pItem->maTemplates.size(); i < n && ( pItem->maPreview1.IsEmpty() || pItem->maPreview2.IsEmpty( ) ); ++i)
+    for (size_t i = 0, n = pItem->maTemplates.size(); i < n && pItem->HasMissingPreview(); ++i)
     {
         if ( pItem->maPreview1.IsEmpty( ) )
         {
@@ -636,9 +638,21 @@ static void lcl_updateThumbnails (TemplateContainerItem *pItem)
                                                                TEMPLATE_THUMBNAIL_MAX_WIDTH*0.75,
                                                                TEMPLATE_THUMBNAIL_MAX_HEIGHT*0.75);
         }
-        else
+        else if ( pItem->maPreview2.IsEmpty() )
         {
             pItem->maPreview2 = TemplateAbstractView::scaleImg(pItem->maTemplates[i].aThumbnail,
+                                                               TEMPLATE_THUMBNAIL_MAX_WIDTH*0.75,
+                                                               TEMPLATE_THUMBNAIL_MAX_HEIGHT*0.75);
+        }
+        else if ( pItem->maPreview3.IsEmpty() )
+        {
+            pItem->maPreview3 = TemplateAbstractView::scaleImg(pItem->maTemplates[i].aThumbnail,
+                                                               TEMPLATE_THUMBNAIL_MAX_WIDTH*0.75,
+                                                               TEMPLATE_THUMBNAIL_MAX_HEIGHT*0.75);
+        }
+        else if ( pItem->maPreview4.IsEmpty() )
+        {
+            pItem->maPreview4 = TemplateAbstractView::scaleImg(pItem->maTemplates[i].aThumbnail,
                                                                TEMPLATE_THUMBNAIL_MAX_WIDTH*0.75,
                                                                TEMPLATE_THUMBNAIL_MAX_HEIGHT*0.75);
         }
