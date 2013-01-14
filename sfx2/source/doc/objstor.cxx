@@ -2873,8 +2873,8 @@ sal_uInt16 SfxObjectShell::GetHiddenInformationState( sal_uInt16 nStates )
 sal_Int16 SfxObjectShell::QueryHiddenInformation( HiddenWarningFact eFact, Window* pParent )
 {
     sal_Int16 nRet = RET_YES;
-    sal_uInt16 nResId = 0;
-    SvtSecurityOptions::EOption eOption;
+    sal_uInt16 nResId = sal_uInt16();
+    SvtSecurityOptions::EOption eOption = SvtSecurityOptions::EOption();
 
     switch ( eFact )
     {
