@@ -121,37 +121,20 @@ extern "C" rtl_Locale* rtl_hashtable_add(RTL_HASHTABLE** table, rtl_Locale* valu
 
     key = rtl_hashfunc(*table, value->HashCode);
 
-    if (!(*table)->Table[key])
+    RTL_HASHENTRY **pEntry = &(*table)->Table[key];
+    while (*pEntry)
     {
-        RTL_HASHENTRY *newEntry = (RTL_HASHENTRY*)rtl_allocateMemory( sizeof(RTL_HASHENTRY) );
-        newEntry->Entry = value;
-        newEntry->Next = NULL;
-        (*table)->Table[key] = newEntry;
-        (*table)->Elements++;
-        return NULL;
-    } else
-    {
-        RTL_HASHENTRY *pEntry = (*table)->Table[key];
-        RTL_HASHENTRY *newEntry = NULL;
-
-        while (pEntry)
-        {
-            if (value->HashCode == pEntry->Entry->HashCode)
-                return pEntry->Entry;
-
-            if (!pEntry->Next)
-                break;
-
-            pEntry = pEntry->Next;
-        }
-
-        newEntry = (RTL_HASHENTRY*)rtl_allocateMemory( sizeof(RTL_HASHENTRY) );
-        newEntry->Entry = value;
-        newEntry->Next = NULL;
-        pEntry->Next = newEntry;
-        (*table)->Elements++;
-        return NULL;
+        if (value->HashCode == (*pEntry)->Entry->HashCode)
+            return (*pEntry)->Entry;
+        pEntry = &(*pEntry)->Next;
     }
+
+    RTL_HASHENTRY *newEntry = (RTL_HASHENTRY*)rtl_allocateMemory( sizeof(RTL_HASHENTRY) );
+    newEntry->Entry = value;
+    newEntry->Next = NULL;
+    *pEntry = newEntry;
+    (*table)->Elements++;
+    return NULL;
 }
 
 sal_Bool rtl_hashtable_grow(RTL_HASHTABLE** table)
