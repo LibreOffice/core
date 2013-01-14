@@ -774,9 +774,15 @@ SearchResult TextSearch::RESrchBkwrd( const OUString& searchStr,
 
     // find the last match
     int nLastPos = 0;
+    int nFoundEnd = 0;
     do {
         nLastPos = pRegexMatcher->start( nIcuErr);
-    } while( pRegexMatcher->find( nLastPos + 1, nIcuErr));
+        nFoundEnd = pRegexMatcher->end( nIcuErr);
+        if( nFoundEnd >= startPos)
+            break;
+        if( nFoundEnd == nLastPos)
+            ++nFoundEnd;
+    } while( pRegexMatcher->find( nFoundEnd, nIcuErr));
 
     // find last match again to get its details
     pRegexMatcher->find( nLastPos, nIcuErr);
