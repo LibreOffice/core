@@ -31,7 +31,6 @@ from ..common.Desktop import Desktop
 from ..common.HelpIds import HelpIds
 from ..common.Configuration import Configuration
 from ..document.OfficeDocument import OfficeDocument
-from ..text.ViewHandler import ViewHandler
 
 from com.sun.star.view.DocumentZoomType import OPTIMAL
 from com.sun.star.awt.VclWindowPeerAttribute import YES_NO, DEF_NO
@@ -384,8 +383,7 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
                 oDoc = OfficeDocument.load(
                     Desktop.getDesktop(self.xMSF),
                     self.sPath, "_default", loadValues)
-                myViewHandler = ViewHandler(self.xMSF, oDoc)
-                myViewHandler.setViewSetting("ZoomType", OPTIMAL)
+                oDoc.CurrentController.ViewSettings.ZoomType = OPTIMAL
             else:
                 pass
 
