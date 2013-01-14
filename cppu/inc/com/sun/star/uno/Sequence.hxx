@@ -89,6 +89,7 @@ inline Sequence< E >::Sequence( const E * pElements, sal_Int32 len )
 template< class E >
 inline Sequence< E >::Sequence( sal_Int32 len )
 {
+    assert( len >= 0 );
     const Type & rType = ::cppu::getTypeFavourUnsigned( this );
 #if ! defined EXCEPTIONS_OFF
     sal_Bool success =
