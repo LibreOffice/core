@@ -23,9 +23,9 @@
 #include <X11_selection.hxx>
 
 #include <com/sun/star/datatransfer/clipboard/XClipboardEx.hpp>
-
 #include <com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp>
-#include <cppuhelper/compbase4.hxx>
+#include <com/sun/star/datatransfer/clipboard/XSystemClipboard.hpp>
+#include <cppuhelper/compbase2.hxx>
 
 // ------------------------------------------------------------------------
 
@@ -34,11 +34,9 @@
 namespace x11 {
 
     class X11Clipboard :
-        public ::cppu::WeakComponentImplHelper4 <
-        ::com::sun::star::datatransfer::clipboard::XClipboardEx,
-        ::com::sun::star::datatransfer::clipboard::XClipboardNotifier,
-        ::com::sun::star::lang::XServiceInfo,
-        ::com::sun::star::lang::XInitialization
+        public ::cppu::WeakComponentImplHelper2 <
+        ::com::sun::star::datatransfer::clipboard::XSystemClipboard,
+        ::com::sun::star::lang::XServiceInfo
         >,
         public SelectionAdaptor
     {

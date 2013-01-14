@@ -42,6 +42,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <osl/conditn.hxx>
 #include <rtl/uuid.h>
@@ -1334,13 +1335,10 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     {
         if( !mxClipboard.is() )
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-            if ( xFactory.is() )
-            {
-                // remember clipboard here
-                mxClipboard = ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > (
-                    xFactory->createInstance( ::rtl::OUString("com.sun.star.datatransfer.clipboard.SystemClipboard") ), ::com::sun::star::uno::UNO_QUERY );
-            }
+            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+            // remember clipboard here
+            mxClipboard = ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > (
+                ::com::sun::star::datatransfer::clipboard::SystemClipboard::createDefault(xContext), ::com::sun::star::uno::UNO_QUERY );
         }
 
         return mxClipboard;

@@ -47,11 +47,9 @@ using namespace x11;
 using ::rtl::OUString;
 
 X11Clipboard::X11Clipboard( SelectionManager& rManager, Atom aSelection ) :
-        ::cppu::WeakComponentImplHelper4<
-    ::com::sun::star::datatransfer::clipboard::XClipboardEx,
-    ::com::sun::star::datatransfer::clipboard::XClipboardNotifier,
-    ::com::sun::star::lang::XServiceInfo,
-    ::com::sun::star::lang::XInitialization
+        ::cppu::WeakComponentImplHelper2<
+    ::com::sun::star::datatransfer::clipboard::XSystemClipboard,
+    ::com::sun::star::lang::XServiceInfo
     >( rManager.getMutex() ),
 
         m_rSelectionManager( rManager ),

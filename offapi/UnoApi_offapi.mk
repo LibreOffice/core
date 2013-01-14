@@ -73,6 +73,9 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/datatransf
 	DataFormatTranslator \
 	MimeContentTypeFactory \
 ))
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/datatransfer/clipboard,\
+	SystemClipboard \
+))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/deployment,\
 	ExtensionManager \
 	PackageInformationProvider \
@@ -615,7 +618,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/configu
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/datatransfer/clipboard,\
 	ClipboardManager \
 	GenericClipboard \
-	SystemClipboard \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/datatransfer/dnd,\
 	OleDragSource \
@@ -2049,6 +2051,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/datatransfer/cli
 	XClipboardNotifier \
 	XClipboardOwner \
 	XFlushableClipboard \
+	XSystemClipboard \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/datatransfer/dnd,\
 	DNDConstants \

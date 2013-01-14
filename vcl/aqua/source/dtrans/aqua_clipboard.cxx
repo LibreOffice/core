@@ -82,7 +82,7 @@ Sequence<OUString> clipboard_getSupportedServiceNames()
 
 
 AquaClipboard::AquaClipboard(NSPasteboard* pasteboard, bool bUseSystemPasteboard) :
-  WeakComponentImplHelper4<XClipboardEx, XClipboardNotifier, XFlushableClipboard, XServiceInfo>(m_aMutex),
+  WeakComponentImplHelper3<XSystemClipboard, XFlushableClipboard, XServiceInfo>(m_aMutex),
   mIsSystemPasteboard(bUseSystemPasteboard)
 {
     Reference<XMultiServiceFactory> mrServiceMgr = comphelper::getProcessServiceFactory();

@@ -20,16 +20,13 @@
 #ifndef __com_sun_star_datatransfer_clipboard_SystemClipboard_idl__
 #define __com_sun_star_datatransfer_clipboard_SystemClipboard_idl__
 
-#include <com/sun/star/lang/XComponent.idl>
-#include <com/sun/star/lang/XInitialization.idl>
+#include <com/sun/star/awt/XDisplayConnection.idl>
+#include <com/sun/star/datatransfer/clipboard/XSystemClipboard.idl>
+#include <com/sun/star/script/XInvocation.idl>
 
 
 module com { module sun { module star { module datatransfer { module clipboard {
 
-
- published interface XClipboardEx;
- published interface XClipboardNotifier;
- published interface XFlushableClipboard;
 
 /** The system clipboard service builds a bridge to the OS specific clipboard
     interfaces.
@@ -42,30 +39,14 @@ module com { module sun { module star { module datatransfer { module clipboard {
     </ul>
     It is possible to use clipboards for different selections simultaneously.</p>
 */
-published service SystemClipboard
+published service SystemClipboard : XSystemClipboard
 {
-    /** Provides access to the clipboard content.
-    */
-    interface XClipboardEx;
+    createDefault();
 
-    /** Provides the ability to request notifications on content changes.
-    */
-    interface XClipboardNotifier;
-
-    /** Provides the ability to render the complete clipboard content. This
-        interface is only available if the method
-        <member scope="com::sun::star::datatransfer::clipboard">XClipboardEx::getRenderingCapabilities()</member>
-        returns Persistant
-    */
-    [optional] interface XFlushableClipboard;
-
-    /** Provides the ability to initialize the clipboard
-    */
-    [optional] interface com::sun::star::lang::XInitialization;
-
-    /** For shutdown and listener support.
-    */
-    interface com::sun::star::lang::XComponent;
+    /** This method is only valid for unix systems (excluding MacOS) */
+    createUnix([in] com::sun::star::awt::XDisplayConnection DisplayConnection,
+               [in] string ClipboardName,
+               [in] com::sun::star::script::XInvocation BmpConverter);
 };
 
 
