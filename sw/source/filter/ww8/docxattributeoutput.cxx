@@ -4419,7 +4419,7 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
         m_pSerializer->startElementNS( XML_w, XML_pBdr, FSEND );
     }
 
-    impl_pageBorders( m_pSerializer, rBox, false, false );
+    impl_pageBorders( m_pSerializer, rBox, XML_pBdr, false, false );
 
     if ( m_bOpenedSectPr )
     {
