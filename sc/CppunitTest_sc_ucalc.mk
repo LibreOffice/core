@@ -95,8 +95,10 @@ $(eval $(call gb_CppunitTest_use_ure,sc_ucalc))
 
 $(eval $(call gb_CppunitTest_use_components,sc_ucalc,\
     configmgr/source/configmgr \
+    fileaccess/source/fileacc \
     framework/util/fwk \
     i18npool/util/i18npool \
+    sax/source/expatwrap/expwrap \
     sfx2/util/sfx \
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \

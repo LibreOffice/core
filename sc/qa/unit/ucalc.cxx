@@ -1145,7 +1145,7 @@ void Test::testCellFunctions()
     testFuncCOUNTIF(m_pDoc);
     testFuncIFERROR(m_pDoc);
     testFuncVLOOKUP(m_pDoc);
-//  testFuncMATCH(m_pDoc);  // TODO: Fix this and re-enable it.
+    testFuncMATCH(m_pDoc);
     testFuncCELL(m_pDoc);
     testFuncDATEDIF(m_pDoc);
     testFuncINDIRECT(m_pDoc);
