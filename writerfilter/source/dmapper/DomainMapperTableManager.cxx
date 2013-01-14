@@ -41,7 +41,7 @@ using namespace ::com::sun::star;
 using namespace ::std;
 
 
-DomainMapperTableManager::DomainMapperTableManager(bool bOOXML, bool bImplicitMerges) :
+DomainMapperTableManager::DomainMapperTableManager(bool bOOXML) :
     m_nRow(0),
     m_nCell(),
     m_nGridSpan(1),
@@ -51,7 +51,6 @@ DomainMapperTableManager::DomainMapperTableManager(bool bOOXML, bool bImplicitMe
     m_nHeaderRepeat(0),
     m_nTableWidth(0),
     m_bOOXML( bOOXML ),
-    m_bImplicitMerges(bImplicitMerges),
     m_bPushCurrentWidth(false),
     m_pTablePropsHandler( new TablePropertiesHandler( bOOXML ) )
 {
@@ -525,34 +524,6 @@ void DomainMapperTableManager::endOfRowAction()
         TablePropertyMapPtr pPropMap( new TablePropertyMap );
         pPropMap->Insert( PROP_TABLE_COLUMN_SEPARATORS, false, uno::makeAny( aSeparators ) );
 
-#ifdef DEBUG_DOMAINMAPPER
-        dmapper_logger->startElement("rowProperties");
-        pPropMap->dumpXml( dmapper_logger );
-        dmapper_logger->endElement();
-#endif
-        insertRowProps(pPropMap);
-    }
-    else if (m_bImplicitMerges && pTableGrid->size())
-    {
-        // More grid than cells definitions? Then take the last ones.
-        // This feature is used by the RTF implicit horizontal cell merges.
-        uno::Sequence< text::TableColumnSeparator > aSeparators(m_nCell.back( ) - 1);
-        text::TableColumnSeparator* pSeparators = aSeparators.getArray();
-
-        sal_Int16 nSum = 0;
-        sal_uInt32 nPos = 0;
-        sal_uInt32 nSizeTableGrid = pTableGrid->size();
-        // Ignoring the i=0 case means we assume that the width of the last cell matches the table width
-        for (sal_uInt32 i = m_nCell.back( ); i > 1 && nSizeTableGrid >= i; i--)
-        {
-            nSum += (*pTableGrid.get())[pTableGrid->size() - i]; // Size of the current cell
-            pSeparators[nPos].Position = nSum * nFullWidthRelative / nFullWidth; // Relative position
-            pSeparators[nPos].IsVisible = sal_True;
-            nPos++;
-        }
-
-        TablePropertyMapPtr pPropMap( new TablePropertyMap );
-        pPropMap->Insert( PROP_TABLE_COLUMN_SEPARATORS, false, uno::makeAny( aSeparators ) );
 #ifdef DEBUG_DOMAINMAPPER
         dmapper_logger->startElement("rowProperties");
         pPropMap->dumpXml( dmapper_logger );

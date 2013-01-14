@@ -136,6 +136,7 @@ public:
     void testFdo45183();
     void testFdo54612();
     void testFdo58933();
+    void testFdo44053();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -222,6 +223,7 @@ void Test::run()
         {"fdo45183.rtf", &Test::testFdo45183},
         {"fdo54612.rtf", &Test::testFdo54612},
         {"fdo58933.rtf", &Test::testFdo58933},
+        {"fdo44053.rtf", &Test::testFdo44053},
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
@@ -1050,6 +1052,17 @@ void Test::testFdo58933()
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
     // This was 4.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable->getCellNames().getLength());
+}
+
+void Test::testFdo44053()
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows(xTextTable->getRows(), uno::UNO_QUERY);
+    // The with of the table's A1 and A2 cell should equal.
+    CPPUNIT_ASSERT_EQUAL(getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), "TableColumnSeparators")[0].Position,
+            getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(1), "TableColumnSeparators")[0].Position);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
