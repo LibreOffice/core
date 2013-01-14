@@ -88,7 +88,7 @@ void ThumbnailViewItem::setDrawArea (const Rectangle &area)
     maDrawArea = area;
 }
 
-void ThumbnailViewItem::calculateItemsPosition (const long nThumbnailHeight, const long nDisplayHeight,
+void ThumbnailViewItem::calculateItemsPosition (const long nThumbnailHeight, const long,
                                                 const long nPadding, sal_uInt32 nMaxTextLenght,
                                                 const ThumbnailItemAttributes *pAttrs)
 {
@@ -107,8 +107,7 @@ void ThumbnailViewItem::calculateItemsPosition (const long nThumbnailHeight, con
     maPrev1Pos = aPos;
 
     // Calculate text position
-    aPos.Y() = maDrawArea.getY() + nThumbnailHeight + nPadding;
-    aPos.Y() = aPos.Y() + aTextDev.getTextHeight() + (nDisplayHeight - aTextDev.getTextHeight())/2;
+    aPos.Y() = maDrawArea.getY() + nThumbnailHeight + nPadding + aTextDev.getTextHeight();
     aPos.X() = maDrawArea.Left() + (aRectSize.Width() - aTextDev.getTextWidth(maTitle,0,nMaxTextLenght))/2;
     maTextPos = aPos;
 }
