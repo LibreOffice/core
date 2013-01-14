@@ -66,8 +66,10 @@ bool ViewFilter_Application::operator () (const ThumbnailViewItem *pItem)
         // Clear thumbnails
         pContainerItem->maPreview1.Clear();
         pContainerItem->maPreview2.Clear();
+        pContainerItem->maPreview3.Clear();
+        pContainerItem->maPreview4.Clear();
 
-        for (size_t i = 0, n = rTemplates.size(); i < n; ++i)
+        for (size_t i = 0, n = rTemplates.size(); i < n && pContainerItem->HasMissingPreview(); ++i)
         {
             if (isValid(rTemplates[i].aPath))
             {
@@ -81,6 +83,18 @@ bool ViewFilter_Application::operator () (const ThumbnailViewItem *pItem)
                 else if ( pContainerItem->maPreview2.IsEmpty() )
                 {
                     pContainerItem->maPreview2 = TemplateAbstractView::scaleImg(rTemplates[i].aThumbnail,
+                                                                       TEMPLATE_THUMBNAIL_MAX_WIDTH*0.75,
+                                                                       TEMPLATE_THUMBNAIL_MAX_HEIGHT*0.75);
+                }
+                else if ( pContainerItem->maPreview3.IsEmpty() )
+                {
+                    pContainerItem->maPreview3 = TemplateAbstractView::scaleImg(rTemplates[i].aThumbnail,
+                                                                       TEMPLATE_THUMBNAIL_MAX_WIDTH*0.75,
+                                                                       TEMPLATE_THUMBNAIL_MAX_HEIGHT*0.75);
+                }
+                else if ( pContainerItem->maPreview4.IsEmpty() )
+                {
+                    pContainerItem->maPreview4 = TemplateAbstractView::scaleImg(rTemplates[i].aThumbnail,
                                                                        TEMPLATE_THUMBNAIL_MAX_WIDTH*0.75,
                                                                        TEMPLATE_THUMBNAIL_MAX_HEIGHT*0.75);
                 }
