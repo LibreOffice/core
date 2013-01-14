@@ -811,7 +811,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_uInt16 nPara, sal_uInt32 nStartPosY )
             {
                 SeekCursor( pNode, nTmpPos+1, aTmpFont );
                 aTmpFont.SetPhysFont( GetRefDevice() );
-                ImplInitDigitMode( GetRefDevice(), 0, 0, 0, aTmpFont.GetLanguage() );
+                ImplInitDigitMode(GetRefDevice(), aTmpFont.GetLanguage());
 
                 if ( IsFixedCellHeight() )
                     nTextLineHeight = ImplCalculateFontIndependentLineSpacing( aTmpFont.GetHeight() );
@@ -994,7 +994,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_uInt16 nPara, sal_uInt32 nStartPosY )
                         SeekCursor( pNode, nTmpPos+1, aTmpFont );
                         sal_Unicode cChar = 0;  // later: NBS?
                         aTmpFont.SetPhysFont( GetRefDevice() );
-                        ImplInitDigitMode( GetRefDevice(), 0, 0, 0, aTmpFont.GetLanguage() );
+                        ImplInitDigitMode(GetRefDevice(), aTmpFont.GetLanguage());
 
                         rtl::OUString aFieldValue = cChar ? rtl::OUString(cChar) : ((EditCharAttribField*)pNextFeature)->GetFieldValue();
                         if ( bCalcCharPositions || !pPortion->HasValidSize() )
@@ -1056,7 +1056,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_uInt16 nPara, sal_uInt32 nStartPosY )
                 (void)bProcessingEmptyLine;
                 SeekCursor( pNode, nTmpPos+1, aTmpFont );
                 aTmpFont.SetPhysFont( GetRefDevice() );
-                ImplInitDigitMode( GetRefDevice(), 0, 0, 0, aTmpFont.GetLanguage() );
+                ImplInitDigitMode(GetRefDevice(), aTmpFont.GetLanguage());
 
                 if ( bCalcCharPositions || !pPortion->HasValidSize() )
                 {
@@ -1280,7 +1280,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_uInt16 nPara, sal_uInt32 nStartPosY )
         {
             SeekCursor( pNode, pLine->GetStart()+1, aTmpFont );
             aTmpFont.SetPhysFont( pRefDev );
-            ImplInitDigitMode( pRefDev, 0, 0, 0, aTmpFont.GetLanguage() );
+            ImplInitDigitMode(pRefDev, aTmpFont.GetLanguage());
 
             if ( IsFixedCellHeight() )
                 aTextSize.Height() = ImplCalculateFontIndependentLineSpacing( aTmpFont.GetHeight() );
@@ -1302,7 +1302,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_uInt16 nPara, sal_uInt32 nStartPosY )
             {
                 SeekCursor( pNode, nTPos+1, aTmpFont );
                 aTmpFont.SetPhysFont( GetRefDevice() );
-                ImplInitDigitMode( GetRefDevice(), 0, 0, 0, aTmpFont.GetLanguage() );
+                ImplInitDigitMode(GetRefDevice(), aTmpFont.GetLanguage());
                 RecalcFormatterFontMetrics( aFormatterMetrics, aTmpFont );
             }
             nTPos = nTPos + pTP->GetLen();
@@ -2264,7 +2264,7 @@ sal_uInt16 ImpEditEngine::SplitTextPortion( ParaPortion* pPortion, sal_uInt16 nP
             SeekCursor( pPortion->GetNode(), nTxtPortionStart+1, aTmpFont );
             aTmpFont.SetPhysFont( GetRefDevice() );
             GetRefDevice()->Push( PUSH_TEXTLANGUAGE );
-            ImplInitDigitMode( GetRefDevice(), 0, 0, 0, aTmpFont.GetLanguage() );
+            ImplInitDigitMode(GetRefDevice(), aTmpFont.GetLanguage());
             Size aSz = aTmpFont.QuickGetTextSize( GetRefDevice(), pPortion->GetNode()->GetString(), nTxtPortionStart, pTextPortion->GetLen(), NULL );
             GetRefDevice()->Pop();
             pTextPortion->GetExtraInfos()->nOrgWidth = aSz.Width();
@@ -3033,9 +3033,9 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                 // potentially changing both)
                                 pOutDev->Push( PUSH_TEXTLAYOUTMODE|PUSH_TEXTLANGUAGE );
                                 ImplInitLayoutMode( pOutDev, n, nIndex );
-                                ImplInitDigitMode( pOutDev, 0, 0, 0, aTmpFont.GetLanguage() );
+                                ImplInitDigitMode(pOutDev, aTmpFont.GetLanguage());
 
-                                XubString aText;
+                                OUString aText;
                                 sal_uInt16 nTextStart = 0;
                                 sal_uInt16 nTextLen = 0;
                                 const sal_Int32* pDXArray = 0;
@@ -3057,8 +3057,8 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
 
                                         for ( nTmpIdx = nTextStart; nTmpIdx <= nTmpEnd ; ++nTmpIdx )
                                         {
-                                            const sal_Unicode cChar = ( nTmpIdx != aText.Len() && ( nTmpIdx != nTextStart || 0 == nTextStart ) ) ?
-                                                                        aText.GetChar( nTmpIdx ) :
+                                            const sal_Unicode cChar = ( nTmpIdx != aText.getLength() && ( nTmpIdx != nTextStart || 0 == nTextStart ) ) ?
+                                                                        aText[nTmpIdx] :
                                                                         0;
 
                                             if ( 0x200B == cChar || 0x2060 == cChar )
@@ -3145,7 +3145,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                     DBG_ASSERT( pAttr && pAttr->GetItem()->ISA( SvxFieldItem ), "Field of the wrong type! ");
                                     aText = ((EditCharAttribField*)pAttr)->GetFieldValue();
                                     nTextStart = 0;
-                                    nTextLen = aText.Len();
+                                    nTextLen = aText.getLength();
                                     ExtraPortionInfo *pExtraInfo = pTextPortion->GetExtraInfos();
                                     // Do not split the Fields into different lines while editing
                                     if( bStripOnly && !bParsingFields && pExtraInfo && pExtraInfo->lineBreaksList.size() )
@@ -3183,7 +3183,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                         }
                                     }
 
-                                    pTmpDXArray = new sal_Int32[ aText.Len() ];
+                                    pTmpDXArray = new sal_Int32[ aText.getLength() ];
                                     pDXArray = pTmpDXArray;
                                     Font _aOldFont( GetRefDevice()->GetFont() );
                                     aTmpFont.SetPhysFont( GetRefDevice() );
@@ -3207,17 +3207,17 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                 else if ( pTextPortion->GetKind() == PORTIONKIND_HYPHENATOR )
                                 {
                                     if ( pTextPortion->GetExtraValue() )
-                                        aText = pTextPortion->GetExtraValue();
-                                    aText += CH_HYPH;
+                                        aText = OUString(pTextPortion->GetExtraValue());
+                                    aText += OUString(CH_HYPH);
                                     nTextStart = 0;
-                                    nTextLen = aText.Len();
+                                    nTextLen = aText.getLength();
 
                                     // crash when accessing 0 pointer in pDXArray
-                                    pTmpDXArray = new sal_Int32[ aText.Len() ];
+                                    pTmpDXArray = new sal_Int32[ aText.getLength() ];
                                     pDXArray = pTmpDXArray;
                                     Font _aOldFont( GetRefDevice()->GetFont() );
                                     aTmpFont.SetPhysFont( GetRefDevice() );
-                                    aTmpFont.QuickGetTextSize( GetRefDevice(), aText, 0, aText.Len(), pTmpDXArray );
+                                    aTmpFont.QuickGetTextSize( GetRefDevice(), aText, 0, aText.getLength(), pTmpDXArray );
                                     if ( aStatus.DoRestoreFont() )
                                         GetRefDevice()->SetFont( _aOldFont );
                                 }
@@ -3312,7 +3312,8 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                     const Color aTextLineColor(pOutDev->GetTextLineColor());
 
                                     // Unicode code points conversion according to ctl text numeral setting
-                                    ImplInitDigitMode( 0, &aText, nTextStart, nTextLen, aTmpFont.GetLanguage() );
+                                    aText = convertDigits(aText, nTextStart, nTextLen,
+                                        ImplCalcDigitLang(aTmpFont.GetLanguage()));
 
                                     // StripPortions() data callback
                                     GetEditEnginePtr()->DrawingText( aOutPos, aText, nTextStart, nTextLen, pDXArray,
@@ -3412,7 +3413,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                         if ( pTextPortion->IsRightToLeft() && nTextLen >= 2 &&
                                              pDXArray[ nTextLen - 1 ] ==
                                              pDXArray[ nTextLen - 2 ] &&
-                                             ' ' == aText.GetChar( nTextStart + nTextLen - 1 ) )
+                                             ' ' == aText[nTextStart + nTextLen - 1] )
                                             --nTextLen;
 
                                         // output directly
@@ -3523,8 +3524,8 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
 
                                     rtl::OUStringBuffer aBuf;
                                     comphelper::string::padToLength(aBuf, nChars, pTextPortion->GetExtraValue());
-                                    String aText(aBuf.makeStringAndClear());
-                                    aTmpFont.QuickDrawText( pOutDev, aTmpPos, aText, 0, aText.Len(), NULL );
+                                    OUString aText(aBuf.makeStringAndClear());
+                                    aTmpFont.QuickDrawText( pOutDev, aTmpPos, aText, 0, aText.getLength(), NULL );
                                     pOutDev->DrawStretchText( aTmpPos, pTextPortion->GetSize().Width(), aText );
 
                                     if ( bStripOnly )
@@ -4229,9 +4230,9 @@ const SvxLRSpaceItem& ImpEditEngine::GetLRSpaceItem( ContentNode* pNode )
     return (const SvxLRSpaceItem&)pNode->GetContentAttribs().GetItem( aStatus.IsOutliner() ? EE_PARA_OUTLLRSPACE : EE_PARA_LRSPACE );
 }
 
-// Either sets the digit mode at the output device or
-// modifies the passed string according to the text numeral setting:
-void ImpEditEngine::ImplInitDigitMode( OutputDevice* pOutDev, String* pString, xub_StrLen nStt, xub_StrLen nLen, LanguageType eCurLang )
+// select a representative text language for the digit type according to the
+// text numeral setting:
+LanguageType ImpEditEngine::ImplCalcDigitLang(LanguageType eCurLang) const
 {
     // #114278# Also setting up digit language from Svt options
     // (cannot reliably inherit the outdev's setting)
@@ -4248,41 +4249,27 @@ void ImpEditEngine::ImplInitDigitMode( OutputDevice* pOutDev, String* pString, x
     else if ( SvtCTLOptions::NUMERALS_SYSTEM == nCTLTextNumerals )
         eLang = (LanguageType) Application::GetSettings().GetLanguageTag().getLanguageType();
 
-    if(pOutDev)
+    return eLang;
+}
+
+OUString ImpEditEngine::convertDigits(const OUString &rString, sal_Int32 nStt, sal_Int32 nLen, LanguageType eDigitLang) const
+{
+    OUStringBuffer aBuf(rString);
+    for (sal_Int32 nIdx = nStt, nEnd = nStt + nLen; nIdx < nEnd; ++nIdx)
     {
-        pOutDev->SetDigitLanguage( eLang );
+        sal_Unicode cChar = aBuf[nIdx];
+        if (cChar >= '0' && cChar <= '9')
+            aBuf[nIdx] = GetLocalizedChar(cChar, eDigitLang);
     }
-    else if (pString)
-    {
-        // see sallayout.cxx in vcl
-        int nOffset;
-        switch( eLang & LANGUAGE_MASK_PRIMARY )
-        {
-            default:
-                nOffset = 0;
-                break;
-            case LANGUAGE_ARABIC_SAUDI_ARABIA  & LANGUAGE_MASK_PRIMARY:
-                nOffset = 0x0660 - '0';  // arabic-indic digits
-                break;
-            case LANGUAGE_URDU          & LANGUAGE_MASK_PRIMARY:
-            case LANGUAGE_PUNJABI       & LANGUAGE_MASK_PRIMARY: //???
-            case LANGUAGE_SINDHI        & LANGUAGE_MASK_PRIMARY:
-                nOffset = 0x06F0 - '0';  // eastern arabic-indic digits
-                break;
-        }
-        if (nOffset)
-        {
-            const xub_StrLen nEnd = nStt + nLen;
-            for( xub_StrLen nIdx = nStt; nIdx < nEnd; ++nIdx )
-            {
-                sal_Unicode nChar = pString->GetChar( nIdx );
-                if( (nChar < '0') || ('9' < nChar) )
-                    continue;
-                nChar = (sal_Unicode)(nChar + nOffset);
-                pString->SetChar( nIdx, nChar );
-            }
-        }
-    }
+    return aBuf.makeStringAndClear();
+}
+
+// Either sets the digit mode at the output device
+void ImpEditEngine::ImplInitDigitMode(OutputDevice* pOutDev, LanguageType eCurLang)
+{
+    assert(pOutDev); //persumably there isn't any case where pOutDev should be NULL ?
+    if (pOutDev)
+        pOutDev->SetDigitLanguage(ImplCalcDigitLang(eCurLang));
 }
 
 void ImpEditEngine::ImplInitLayoutMode( OutputDevice* pOutDev, sal_uInt16 nPara, sal_uInt16 nIndex )

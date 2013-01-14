@@ -148,7 +148,7 @@ VCL_DLLPUBLIC sal_UCS4 GetMirroredChar( sal_UCS4 nChar )
 
 // -----------------------------------------------------------------------
 
-sal_UCS4 GetLocalizedChar( sal_UCS4 nChar, LanguageType eLang )
+VCL_DLLPUBLIC sal_UCS4 GetLocalizedChar( sal_UCS4 nChar, LanguageType eLang )
 {
     // currently only conversion from ASCII digits is interesting
     if( (nChar < '0') || ('9' < nChar) )

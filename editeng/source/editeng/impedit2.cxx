@@ -3197,7 +3197,7 @@ sal_uInt32 ImpEditEngine::CalcLineWidth( ParaPortion* pPortion, EditLine* pLine,
                     SvxFont aTmpFont( pPortion->GetNode()->GetCharAttribs().GetDefFont() );
                     SeekCursor( pPortion->GetNode(), nPos+1, aTmpFont );
                     aTmpFont.SetPhysFont( GetRefDevice() );
-                    ImplInitDigitMode( GetRefDevice(), 0, 0, 0, aTmpFont.GetLanguage() );
+                    ImplInitDigitMode(GetRefDevice(), aTmpFont.GetLanguage());
                     nWidth += aTmpFont.QuickGetTextSize( GetRefDevice(), pPortion->GetNode()->GetString(), nPos, pTextPortion->GetLen(), NULL ).Width();
                 }
             }
