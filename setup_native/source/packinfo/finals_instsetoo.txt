@@ -12,4 +12,4 @@
 # OpenOffice	pro		de			\\<server>\<path>\msi\OOO300_m6_native_packed-1_de.9352\openofficeorg30.msi
 # OpenOfficeLanguagePack	pro	es	\\<server>\<path>\msi\OOO300_m6_native_packed-1_es.9352\openofficeorg30.msi
 # URE			pro		en-US		\\<server>\<path>\msi\OOO300_m6_native_packed-1_en-US.9352\ure14.msi
-LibreOffice		pro		en-US,af,ar,bn,ca,cs,da,de,el,en-GB,es,fi,fr,gu,he,hi,hu,it,ja,ko,mr,nb,nl,nn,pl,pt,pt-BR,ru,sk,sl,sv,ta,tr,xh,zh-CN,zh-TW,zu		c:\libo\suse-3.6\src\first_build\LibreOffice-3.6-3.msi
+LibreOffice		pro		en-US,af,ar,bn,ca,cs,da,de,el,en-GB,es,fi,fr,gu,he,hi,hu,it,ja,ko,mr,nb,nl,nn,pl,pt,pt-BR,ru,sk,sl,sv,ta,tr,xh,zh-CN,zh-TW,zu		c:\libo\suse-3.6\src\first_build\LibreOffice-3.6-4.msi
