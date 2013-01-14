@@ -70,7 +70,6 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     stringex \
     transex3 \
     treex \
-    typesconfig \
     $(if $(filter UCPP,$(BUILD_TYPE)),\
             ucpp \
     ) \

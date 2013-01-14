@@ -27,7 +27,6 @@
 #include <config_global.h>
 #endif
 
-/* Grab __SIZEOFxxx constants from typesconfig tool on Unix */
 #if defined UNX
   #include <sal/typesizes.h>
 #elif defined(WNT)
