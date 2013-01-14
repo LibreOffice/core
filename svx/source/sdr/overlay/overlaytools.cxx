@@ -67,8 +67,8 @@ namespace drawinglayer
                 // and unrotated, more like a marker
                 const double fLeft(((0.0 - getCenterX()) * getDiscreteUnit()) + getBasePosition().getX());
                 const double fTop(((0.0 - getCenterY()) * getDiscreteUnit()) + getBasePosition().getY());
-                const double fRight((((aBitmapSize.getWidth() - 1.0) - getCenterX()) * getDiscreteUnit()) + getBasePosition().getX());
-                const double fBottom((((aBitmapSize.getHeight() - 1.0) - getCenterY()) * getDiscreteUnit()) + getBasePosition().getY());
+                const double fRight(((aBitmapSize.getWidth() - getCenterX()) * getDiscreteUnit()) + getBasePosition().getX());
+                const double fBottom(((aBitmapSize.getHeight() - getCenterY()) * getDiscreteUnit()) + getBasePosition().getY());
 
                 // create a BitmapPrimitive2D using those positions
                 basegfx::B2DHomMatrix aTransform;
