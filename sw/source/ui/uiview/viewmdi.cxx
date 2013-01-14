@@ -73,10 +73,11 @@ using namespace ::com::sun::star::frame;
 
 void SwView::SetZoom( SvxZoomType eZoomType, short nFactor, sal_Bool bViewOnly )
 {
+    bool const bCrsrIsVisible(pWrtShell->IsCrsrVisible());
     _SetZoom( GetEditWin().GetOutputSizePixel(), eZoomType, nFactor, bViewOnly );
-
-    //fdo40465 force the cursor to stay in view whilst zooming
-    pWrtShell->ShowCrsr();
+    // fdo#40465 force the cursor to stay in view whilst zooming
+    if (bCrsrIsVisible)
+        pWrtShell->ShowCrsr();
 }
 
 void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
