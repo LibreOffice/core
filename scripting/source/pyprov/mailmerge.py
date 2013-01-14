@@ -99,9 +99,12 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 			self.server.starttls()
 			self.server.ehlo()
 
-		user = xAuthenticator.getUserName().encode('ascii')
-		password = xAuthenticator.getPassword().encode('ascii')
-		if user != b'':
+		user = xAuthenticator.getUserName()
+		password = xAuthenticator.getPassword()
+		if user != '':
+			if sys.version < '3': # fdo#59249 i#105669 Python 2 needs "ascii"
+				user = user.encode('ascii')
+				password = password.encode('ascii')
 			if dbg:
 				print("Logging in, username of" + user, file=dbgout)
 			self.server.login(user, password)
@@ -279,9 +282,12 @@ class PyMailIMAPService(unohelper.Base, XMailService):
 			self.server = imaplib.IMAP4(server, port)
 		print("AFTER", file=dbgout)
 			
-		user = xAuthenticator.getUserName().encode('ascii')
-		password = xAuthenticator.getPassword().encode('ascii')
-		if user != b'':
+		user = xAuthenticator.getUserName()
+		password = xAuthenticator.getPassword()
+		if user != '':
+			if sys.version < '3': # fdo#59249 i#105669 Python 2 needs "ascii"
+				user = user.encode('ascii')
+				password = password.encode('ascii')
 			if dbg:
 				print("Logging in, username of" + user, file=dbgout)
 			self.server.login(user, password)
@@ -348,8 +354,11 @@ class PyMailPOP3Service(unohelper.Base, XMailService):
 			self.server = poplib.POP3(server, port)
 		print("AFTER", file=dbgout)
 			
-		user = xAuthenticator.getUserName().encode('ascii')
-		password = xAuthenticator.getPassword().encode('ascii')
+		user = xAuthenticator.getUserName()
+		password = xAuthenticator.getPassword()
+		if sys.version < '3': # fdo#59249 i#105669 Python 2 needs "ascii"
+			user = user.encode('ascii')
+			password = password.encode('ascii')
 		if dbg:
 			print("Logging in, username of" + user, file=dbgout)
 		self.server.user(user)
