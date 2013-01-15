@@ -21,6 +21,9 @@
 #define _CTRLBOX_HXX
 
 #include "svtools/svtdllapi.h"
+#include <window.h>
+#include <window.hxx>  
+#include <dockwin.hxx>
 
 #include <tools/string.hxx>
 #include <vcl/lstbox.hxx>
@@ -29,6 +32,9 @@
 #include <vcl/virdev.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/field.hxx>
+#include <vcl/dockingarea.hxx>
+#include <vcl/floatwin.hxx>
+
 
 class FontList;
 class ImplColorListData;

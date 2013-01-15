@@ -38,6 +38,7 @@
 
 #include <vcl/i18nhelp.hxx>
 #include <vcl/fontcapabilities.hxx>
+#include <vcl/floatwin.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
@@ -1670,6 +1671,9 @@ FontSizeBox::FontSizeBox( Window* pParent, const ResId& rResId ) :
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeFontSizeBox(Window *pParent, VclBuilder::stringmap &rMap)
 {
     bool bDropdown = extractDropdown(rMap);
+    if(pParent->IsPined() && !(pParent->IsHorizontal()))
+    bDropdown = true;
+    
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
     if (bDropdown)
         nWinBits |= WB_DROPDOWN;
