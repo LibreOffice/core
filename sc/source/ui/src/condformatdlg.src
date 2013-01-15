@@ -382,7 +382,7 @@ Control RID_ICON_SET_ENTRY
     {
         Pos = MAP_APPFONT( 40, 0 );
         Size = MAP_APPFONT(40, 14);
-        Text [en-US] = " <= ";
+        Text [en-US] = " >= ";
     };
     Edit ED_ICON_SET_ENTRY_VALUE
     {
