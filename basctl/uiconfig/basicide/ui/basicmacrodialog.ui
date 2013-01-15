@@ -17,7 +17,7 @@
             <property name="layout_style">start</property>
             <child>
               <object class="GtkButton" id="run">
-                <property name="label">Run</property>
+                <property name="label" translatable="yes">Run</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -35,7 +35,7 @@
             </child>
             <child>
               <object class="GtkButton" id="assign">
-                <property name="label">Assign...</property>
+                <property name="label" translatable="yes">Assign...</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -51,7 +51,7 @@
             </child>
             <child>
               <object class="GtkButton" id="edit">
-                <property name="label">Edit</property>
+                <property name="label" translatable="yes">Edit</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -84,7 +84,7 @@
             </child>
             <child>
               <object class="GtkButton" id="organize">
-                <property name="label">Organizer...</property>
+                <property name="label" translatable="yes">Organizer...</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -100,7 +100,7 @@
             </child>
             <child>
               <object class="GtkButton" id="newlibrary">
-                <property name="label">New Library</property>
+                <property name="label" translatable="yes">New Library</property>
                 <property name="use_action_appearance">False</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -116,7 +116,7 @@
             </child>
             <child>
               <object class="GtkButton" id="newmodule">
-                <property name="label">New Module</property>
+                <property name="label" translatable="yes">New Module</property>
                 <property name="use_action_appearance">False</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
