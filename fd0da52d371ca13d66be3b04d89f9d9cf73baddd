@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAATH///4M\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-15T16:56:24Z",
+      "side": 0,
+      "message": "Seems that somehow another applied commit was reverted in your patch, this should not be removed.",
+      "revId": "fd0da52d371ca13d66be3b04d89f9d9cf73baddd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,310 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAATH///2Q\u003d",
+        "filename": "formula/inc/formula/opcode.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-15T16:56:24Z",
+      "side": 1,
+      "message": "If moving at all I\u0027d rather move that after ocValue where it semantically belongs.",
+      "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH///2c\u003d",
+        "filename": "sc/qa/unit/ucalc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-15T16:56:24Z",
+      "side": 1,
+      "message": "Nitpick: currently there are only 4 rows ;-)",
+      "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH///2U\u003d",
+        "filename": "sc/qa/unit/ucalc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 683,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-15T16:56:24Z",
+      "side": 1,
+      "message": "To test the \"only one group separator used of the sequence passed\" case that currently does not work, another testcase would be needed, e.g.\n\n \"1g99b9\"\n\nto be tested with\n\n { \"\u003dNUMBERVALUE( ..., \\\"b\\\";\\\"ag\\\")\", 199.9 },\n\nAlso some combinations of no separators passed as arguments and error cases to be detected would be good as testcases.",
+      "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH///2Y\u003d",
+        "filename": "sc/qa/unit/ucalc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 693,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-15T16:56:24Z",
+      "side": 1,
+      "message": "Instead of having to manually adapt the end row in case we added testcases, simply use nRows-1 instead of 3",
+      "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH///4E\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3212,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-15T16:56:24Z",
+      "side": 1,
+      "message": "In general, functions should check first if the number of arguments passed matches the number of parameters expected, so in this case something like\n\n if (!MustHaveParamCount( nParamCount, 1, 3))\n     return;\n\nNote: do not push a value before the return, as the MustHaveParamCount...() functions already push an error if indicated.",
+      "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH///4A\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3232,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-15T16:56:24Z",
+      "side": 1,
+      "message": "ODFF does not specify a default value if DecimalSeparator is omitted. In that case only integer values are to be parsed. Set cDecimalSeparator to 0, rtl::math::stringToDouble() handles that.",
+      "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH///30\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3234,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-15T16:56:24Z",
+      "side": 1,
+      "message": "Then this condition should be\n\n if ( cDecimalSeparator \u0026\u0026 aGroupSeparator.indexOf( cDecimalSeparator ) \u003e\u003d 0 )",
+      "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH///3o\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3263,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-15T16:56:24Z",
+      "side": 1,
+      "message": "This entire switch probably can be simplified:\n\n switch (GetStackType())\n {\n     case svDouble:\n         return;    // leave on stack\n     default:\n         aInputString \u003d GetString();\n }\n if (nGlobalError || (aInputString.isEmpty() \u0026\u0026 !GetGlobalConfig().mbEmptyStringAsZero))\n {\n     PushNoValue();\n     return;\n }\n\nNote PushNoValue() here that results in the usual #VALUE! error, unless nGlobalError was set to something different before.",
+      "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH///3A\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3266,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-15T16:56:24Z",
+      "side": 1,
+      "message": "Please use sal_Int32 instead of int, it may matter on 64-bit platforms.",
+      "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH///3k\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3268,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-15T16:56:24Z",
+      "side": 1,
+      "message": "This works only if GroupSeparator is one character, not if multiple group separators were given. Replacement has to be done for each character in aGroupSeparator. Use OUString::iterateCodePoints() both for obtaining one group separator and for checking its occurrence in aInputString.\n\nAlso, the removal of group separators is only needed if there actually was a group separator passed, otherwise the loop does not need to be executed at all.",
+      "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH///3U\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3274,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-15T16:56:24Z",
+      "side": 1,
+      "message": "Instead of i\u003e\u003d0 the check would have to be i\u003e0 as you start with string length (not last character) and the first loop run would actually access the character behind the actual string. However, the loop can be rewritten as\n\n for (i \u003d aInputString.getLength(); --i \u003e\u003d 0; )\n\nNote pre-decrement in the condition and no operation in the increment expression.",
+      "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH///3I\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3281,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-15T16:56:24Z",
+      "side": 1,
+      "message": "We can omit that insertion of a leading 0, rtl::math::stringToDouble() handles the leading decimal separator case fine.",
+      "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH///3E\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3282,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-15T16:56:24Z",
+      "side": 1,
+      "message": "Please use sal_Int32 instead of int, it may matter on 64-bit platforms.\n\nAnd, when using prefixes use n for integer values, so nPercentCount",
+      "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH///20\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3293,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-15T16:56:24Z",
+      "side": 1,
+      "message": "That instead should be\n\n const sal_Unicode* pParseEnd;\n\nbecause rtl::math::stringToDouble() expects\n\n sal_Unicode const ** pParsedEnd\n\nat that place. Code probably shouldn\u0027t even compile like it is.",
+      "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH///2o\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3294,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-15T16:56:24Z",
+      "side": 1,
+      "message": "Here then pass \u0026pParseEnd",
+      "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH///2w\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3295,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-15T16:56:24Z",
+      "side": 1,
+      "message": "Given the pParseEnd from above, this condition then should be\n\n if (eStatus \u003d\u003d rtl_math_ConversionStatus_Ok \u0026\u0026 pParseEnd \u003d\u003d (aInputString.getStr() + aInputString.getLength()))",
+      "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH///2k\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3298,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-15T16:56:24Z",
+      "side": 1,
+      "message": "Instead of a repeated loop this could simply be\n\n if (nPercentCount)\n     fVal *\u003d pow( 10.0, -(nPercentCount * 2));",
+      "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH///2g\u003d",
+        "filename": "sc/source/filter/oox/formulabase.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 746,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-15T16:56:24Z",
+      "side": 1,
+      "message": "Please note that the Excel import/export currently always needs to be adapted at two places, here in sc/source/filter/oox/formulabase.cxx and in sc/source/filter/excel/xlformula.cxx\n\nActually Excel 2013 now implements NUMBERVALUE, so the entry can be moved and adapted to the new saFuncTable2013[] respectively saFuncTable_2013[] structs I created for IFNA.\n\nPlease rebase your code base to a recent revision.",
+      "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
