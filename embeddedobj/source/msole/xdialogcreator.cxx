@@ -32,6 +32,7 @@
 
 #include "platform.h"
 #include <comphelper/mimeconfighelper.hxx>
+#include <comphelper/procesfactory.hxx>
 
 #include "xdialogcreator.hxx"
 #include "oleembobj.hxx"

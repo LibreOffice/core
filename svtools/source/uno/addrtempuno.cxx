@@ -76,7 +76,7 @@ namespace svt
         // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 
-        void initialize(const Sequence< Any >& aArguments) throw(RuntimeException);
+        virtual void SAL_CALL initialize(const Sequence< Any >& aArguments) throw(Exception, RuntimeException);
 
     protected:
     // OGenericUnoDialog overridables
@@ -174,7 +174,7 @@ namespace svt
                 static_cast< AddressBookSourceDialog* >( m_pDialog )->getFieldMapping( m_aAliases );
     }
     //------------------------------------------------------------------------------
-    void OAddressBookSourceDialogUno::initialize(const Sequence< Any >& aArguments) throw(RuntimeException)
+    void SAL_CALL OAddressBookSourceDialogUno::initialize(const Sequence< Any >& aArguments) throw(Exception, RuntimeException)
     {
         if( aArguments.getLength() == 5 )
         {
