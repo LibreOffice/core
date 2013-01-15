@@ -118,7 +118,7 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 				user = user.encode('ascii')
 				password = password.encode('ascii')
 			if dbg:
-				print("Logging in, username of", user, file=dbgout)
+				print("Logging in, username of: " + user, file=dbgout)
 			self.server.login(user, password)
 
 		for listener in self.listeners:
@@ -151,10 +151,10 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 		ccrecipients = xMailMessage.getCcRecipients()
 		bccrecipients = xMailMessage.getBccRecipients()
 		if dbg:
-			print("PyMailSMTPService subject " + subject, file=dbgout)
-			print("PyMailSMTPService from " + sendername, file=dbgout)
-			print("PyMailSMTPService from " + sendermail, file=dbgout)
-			print("PyMailSMTPService send to %s" % (recipients,), file=dbgout)
+			print("PyMailSMTPService subject: " + subject, file=dbgout)
+			print("PyMailSMTPService from:  " + sendername, file=dbgout)
+			print("PyMailSMTPService from:  " + sendermail, file=dbgout)
+			print("PyMailSMTPService send to: %s" % (recipients,), file=dbgout)
 
 		attachments = xMailMessage.getAttachments()
 
@@ -163,13 +163,13 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 		content = xMailMessage.Body
 		flavors = content.getTransferDataFlavors()
 		if dbg:
-			print("PyMailSMTPService flavors len %d" % (len(flavors),), file=dbgout)
+			print("PyMailSMTPService flavors len: %d" % (len(flavors),), file=dbgout)
 
 		#Use first flavor that's sane for an email body
 		for flavor in flavors:
 			if flavor.MimeType.find('text/html') != -1 or flavor.MimeType.find('text/plain') != -1:
 				if dbg:
-					print("PyMailSMTPService mimetype is " + flavor.MimeType, file=dbgout)
+					print("PyMailSMTPService mimetype is: " + flavor.MimeType, file=dbgout)
 				textbody = content.getTransferData(flavor)
 				#http://stackoverflow.com/questions/9403265/how-do-i-use-python-3-2-email-module-to-send-unicode-messages-encoded-in-utf-8-w
 				textbody = textbody.encode('utf-8').decode('iso8859-1')
@@ -251,7 +251,7 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 		truerecipients = uniquer.keys()
 
 		if dbg:
-			print(("PyMailSMTPService recipients are ", truerecipients), file=dbgout)
+			print(("PyMailSMTPService recipients are: ", truerecipients), file=dbgout)
 
 		self.server.sendmail(sendermail, truerecipients, msg.as_string())
 
@@ -305,7 +305,7 @@ class PyMailIMAPService(unohelper.Base, XMailService):
 				user = user.encode('ascii')
 				password = password.encode('ascii')
 			if dbg:
-				print("Logging in, username of", user, file=dbgout)
+				print("Logging in, username of: " + user, file=dbgout)
 			self.server.login(user, password)
 
 		for listener in self.listeners:
@@ -383,7 +383,7 @@ class PyMailPOP3Service(unohelper.Base, XMailService):
 			user = user.encode('ascii')
 			password = password.encode('ascii')
 		if dbg:
-			print("Logging in, username of", user, file=dbgout)
+			print("Logging in, username of: " + user, file=dbgout)
 		self.server.user(user)
 		self.server.pass_(password)
 
@@ -444,27 +444,27 @@ class PyMailMessage(unohelper.Base, XMailMessage):
 			print("post PyMailMessage init", file=dbgout)
 	def addRecipient( self, recipient ):
 		if dbg:
-			print("PyMailMessage.addRecipient " + recipient, file=dbgout)
+			print("PyMailMessage.addRecipient: " + recipient, file=dbgout)
 		self.recipients.append(recipient)
 	def addCcRecipient( self, ccrecipient ):
 		if dbg:
-			print("PyMailMessage.addCcRecipient " + ccrecipient, file=dbgout)
+			print("PyMailMessage.addCcRecipient: " + ccrecipient, file=dbgout)
 		self.ccrecipients.append(ccrecipient)
 	def addBccRecipient( self, bccrecipient ):
 		if dbg:
-			print("PyMailMessage.addBccRecipient " + bccrecipient, file=dbgout)
+			print("PyMailMessage.addBccRecipient: " + bccrecipient, file=dbgout)
 		self.bccrecipients.append(bccrecipient)
 	def getRecipients( self ):
 		if dbg:
-			print("PyMailMessage.getRecipients " + self.recipients, file=dbgout)
+			print("PyMailMessage.getRecipients: " + self.recipients, file=dbgout)
 		return tuple(self.recipients)
 	def getCcRecipients( self ):
 		if dbg:
-			print("PyMailMessage.getCcRecipients " + self.ccrecipients, file=dbgout)
+			print("PyMailMessage.getCcRecipients: " + self.ccrecipients, file=dbgout)
 		return tuple(self.ccrecipients)
 	def getBccRecipients( self ):
 		if dbg:
-			print("PyMailMessage.getBccRecipients " + self.bccrecipients, file=dbgout)
+			print("PyMailMessage.getBccRecipients: " + self.bccrecipients, file=dbgout)
 		return tuple(self.bccrecipients)
 	def addAttachment( self, aMailAttachment ):
 		if dbg:
