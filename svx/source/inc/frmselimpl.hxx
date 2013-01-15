@@ -163,6 +163,9 @@ struct FrameSelectorImpl : public Resource
     void                InitClickAreas();
     /** Draws the entire control into the internal virtual device. */
     void                InitVirtualDevice();
+    /** call this to recalculate based on parent size */
+    void                sizeChanged();
+
 
     // frame border access ----------------------------------------------------
 

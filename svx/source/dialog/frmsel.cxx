@@ -18,6 +18,7 @@
  */
 
 #include <svx/frmsel.hxx>
+#include <vcl/builder.hxx>
 
 #include <algorithm>
 #include <math.h>
@@ -374,6 +375,13 @@ void FrameSelectorImpl::InitBorderGeometry()
     /*  Width for focus rectangles from center of frame borders. */
     mnFocusOffs = FRAMESEL_GEOM_WIDTH / 2 + 1;
 
+    maLeft.ClearFocusArea();
+    maVer.ClearFocusArea();
+    maRight.ClearFocusArea();
+    maTop.ClearFocusArea();
+    maHor.ClearFocusArea();
+    maBottom.ClearFocusArea();
+
     maLeft.AddFocusPolygon(   Rectangle( mnLine1 - mnFocusOffs, mnLine1 - mnFocusOffs, mnLine1 + mnFocusOffs, mnLine3 + mnFocusOffs ) );
     maVer.AddFocusPolygon(    Rectangle( mnLine2 - mnFocusOffs, mnLine1 - mnFocusOffs, mnLine2 + mnFocusOffs, mnLine3 + mnFocusOffs ) );
     maRight.AddFocusPolygon(  Rectangle( mnLine3 - mnFocusOffs, mnLine1 - mnFocusOffs, mnLine3 + mnFocusOffs, mnLine3 + mnFocusOffs ) );
@@ -477,6 +485,11 @@ void FrameSelectorImpl::InitVirtualDevice()
     InitColors();
     InitArrowImageList();
 
+    sizeChanged();
+}
+
+void FrameSelectorImpl::sizeChanged()
+{
     // initialize geometry
     InitGlobalGeometry();
     InitBorderGeometry();
@@ -771,6 +784,19 @@ FrameSelector::FrameSelector( Window* pParent, const ResId& rResId ) :
     // not in c'tor init list (avoid warning about usage of *this)
     mxImpl.reset( new FrameSelectorImpl( *this ) );
     EnableRTL( false ); // #107808# don't mirror the mouse handling
+}
+
+FrameSelector::FrameSelector(Window* pParent)
+    : Control(pParent, WB_BORDER|WB_TABSTOP)
+{
+    // not in c'tor init list (avoid warning about usage of *this)
+    mxImpl.reset( new FrameSelectorImpl( *this ) );
+    EnableRTL( false ); // #107808# don't mirror the mouse handling
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxFrameSelector(Window *pParent, VclBuilder::stringmap &)
+{
+    return new FrameSelector(pParent);
 }
 
 FrameSelector::~FrameSelector()
@@ -1179,6 +1205,17 @@ void FrameSelector::DataChanged( const DataChangedEvent& rDCEvt )
     Control::DataChanged( rDCEvt );
     if( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
         mxImpl->InitVirtualDevice();
+}
+
+void FrameSelector::Resize()
+{
+    Control::Resize();
+    mxImpl->sizeChanged();
+}
+
+Size FrameSelector::GetOptimalSize() const
+{
+    return LogicToPixel(Size(61, 65), MAP_APPFONT);
 }
 
 // ============================================================================

@@ -84,6 +84,7 @@ class SVX_DLLPUBLIC FrameSelector : public Control
 {
 public:
     explicit            FrameSelector( Window* pParent, const ResId& rResId );
+    FrameSelector(Window* pParent);
     virtual             ~FrameSelector();
 
     /** Initializes the control, enables/disables frame borders according to flags. */
@@ -186,6 +187,8 @@ protected:
     virtual void        GetFocus();
     virtual void        LoseFocus();
     virtual void        DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void        Resize();
+    virtual Size        GetOptimalSize() const;
 
 private:
     std::auto_ptr< FrameSelectorImpl > mxImpl;
