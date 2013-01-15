@@ -39,12 +39,10 @@
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::uno;
-using ::rtl::OUString;
 using namespace ::std;
 
-#define ASCII_STR(s)        OUString( RTL_CONSTASCII_USTRINGPARAM( s ) )
 #define DEFAULT_ENTRY       COMPATIBILITY_DEFAULT_NAME
-#define USER_ENTRY          ASCII_STR( "_user" )
+#define USER_ENTRY          "_user"
 #define BUTTON_BORDER       2
 
 // struct CompatibilityItem ----------------------------------------------
