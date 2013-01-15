@@ -17,7 +17,7 @@
             <property name="layout_style">start</property>
             <child>
               <object class="GtkButton" id="run">
-                <property name="label">Run</property>
+                <property name="label" translatable="yes">Run</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -50,7 +50,7 @@
             </child>
             <child>
               <object class="GtkButton" id="create">
-                <property name="label">Create...</property>
+                <property name="label" translatable="yes">Create...</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -84,7 +84,7 @@
             </child>
             <child>
               <object class="GtkButton" id="rename">
-                <property name="label">Rename...</property>
+                <property name="label" translatable="yes">Rename...</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -100,7 +100,7 @@
             </child>
             <child>
               <object class="GtkButton" id="delete">
-                <property name="label">Delete...</property>
+                <property name="label" translatable="yes">Delete...</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
