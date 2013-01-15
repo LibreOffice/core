@@ -14,15 +14,22 @@
 
 #include "com/sun/star/uno/Reference.hxx"
 
-namespace com { namespace sun { namespace star { namespace uno {
-    class XSimpleRegistry;
-} } } }
+namespace com { namespace sun { namespace star {
+     namespace lang { class XMultiComponentFactory; }
+     namespace uno {
+         class XComponentContext;
+         class XInterface;
+     }
+} } }
 namespace rtl { class OUString; }
 
 namespace cppuhelper {
 
-css::uno::Reference< css::registry::XSimpleRegistry > createTypeRegistry(
-    rtl::OUString const & uris, rtl::OUString const & libraryDirectoryUri);
+css::uno::Reference< css::uno::XInterface > createTypeDescriptionProvider(
+    rtl::OUString const & uris,
+    css::uno::Reference< css::lang::XMultiComponentFactory > const &
+        serviceManager,
+    css::uno::Reference< css::uno::XComponentContext > const & context);
 
 }
 

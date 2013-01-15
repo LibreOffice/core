@@ -12,17 +12,17 @@
 #include <cassert>
 
 #include "com/sun/star/lang/XInitialization.hpp"
-#include "com/sun/star/lang/XSingleServiceFactory.hpp"
+#include "com/sun/star/lang/XMultiComponentFactory.hpp"
 #include "com/sun/star/registry/InvalidRegistryException.hpp"
 #include "com/sun/star/registry/XSimpleRegistry.hpp"
 #include "com/sun/star/uno/DeploymentException.hpp"
 #include "com/sun/star/uno/Reference.hxx"
-#include "cppuhelper/shlib.hxx"
+#include "com/sun/star/uno/XComponentContext.hpp"
+#include "com/sun/star/uno/XInterface.hpp"
 #include "osl/file.hxx"
 #include "rtl/ustring.hxx"
 
 #include "paths.hxx"
-#include "servicefactory_detail.hxx"
 #include "typedescriptionprovider.hxx"
 
 namespace {
@@ -30,19 +30,21 @@ namespace {
 css::uno::Reference< css::registry::XSimpleRegistry > readTypeRdbFile(
     rtl::OUString const & uri, bool optional,
     css::uno::Reference< css::registry::XSimpleRegistry > const & lastRegistry,
-    css::uno::Reference< css::lang::XSingleServiceFactory > const &
-        simpleRegistryFactory,
-    css::uno::Reference< css::lang::XSingleServiceFactory > const &
-        nestedRegistryFactory)
+    css::uno::Reference< css::lang::XMultiComponentFactory > const &
+        serviceManager,
+    css::uno::Reference< css::uno::XComponentContext > const & context)
 {
-    assert(simpleRegistryFactory.is() && nestedRegistryFactory.is());
+    assert(serviceManager.is());
     try {
         css::uno::Reference< css::registry::XSimpleRegistry > simple(
-            simpleRegistryFactory->createInstance(), css::uno::UNO_QUERY_THROW);
+            serviceManager->createInstanceWithContext(
+                "com.sun.star.comp.stoc.SimpleRegistry", context),
+            css::uno::UNO_QUERY_THROW);
         simple->open(uri, true, false);
         if (lastRegistry.is()) {
             css::uno::Reference< css::registry::XSimpleRegistry > nested(
-                nestedRegistryFactory->createInstance(),
+                serviceManager->createInstanceWithContext(
+                    "com.sun.star.comp.stoc.NestedRegistry", context),
                 css::uno::UNO_QUERY_THROW);
             css::uno::Sequence< css::uno::Any > args(2);
             args[0] <<= lastRegistry;
@@ -68,12 +70,10 @@ css::uno::Reference< css::registry::XSimpleRegistry > readTypeRdbFile(
 css::uno::Reference< css::registry::XSimpleRegistry > readTypeRdbDirectory(
     rtl::OUString const & uri, bool optional,
     css::uno::Reference< css::registry::XSimpleRegistry > const & lastRegistry,
-    css::uno::Reference< css::lang::XSingleServiceFactory > const &
-        simpleRegistryFactory,
-    css::uno::Reference< css::lang::XSingleServiceFactory > const &
-        nestedRegistryFactory)
+    css::uno::Reference< css::lang::XMultiComponentFactory > const &
+        serviceManager,
+    css::uno::Reference< css::uno::XComponentContext > const & context)
 {
-    assert(simpleRegistryFactory.is() && nestedRegistryFactory.is());
     osl::Directory dir(uri);
     switch (dir.open()) {
     case osl::FileBase::E_None:
@@ -96,36 +96,17 @@ css::uno::Reference< css::registry::XSimpleRegistry > readTypeRdbDirectory(
             break;
         }
         last = readTypeRdbFile(
-            fileUri, optional, last, simpleRegistryFactory,
-            nestedRegistryFactory);
+            fileUri, optional, last, serviceManager, context);
     }
     return last;
 }
 
-}
-
-css::uno::Reference< css::registry::XSimpleRegistry >
-cppuhelper::createTypeRegistry(
-    rtl::OUString const & uris, rtl::OUString const & libraryDirectoryUri)
+css::uno::Reference< css::registry::XSimpleRegistry > createTypeRegistry(
+    rtl::OUString const & uris,
+    css::uno::Reference< css::lang::XMultiComponentFactory > const &
+        serviceManager,
+    css::uno::Reference< css::uno::XComponentContext > const & context)
 {
-    css::uno::Reference< css::lang::XMultiComponentFactory > factory(
-        cppu::bootstrapInitialSF(libraryDirectoryUri));
-    css::uno::Reference< css::lang::XSingleServiceFactory > simpleRegs(
-        cppu::loadSharedLibComponentFactory(
-            "bootstrap.uno" SAL_DLLEXTENSION, libraryDirectoryUri,
-            "com.sun.star.comp.stoc.SimpleRegistry",
-            css::uno::Reference< css::lang::XMultiServiceFactory >(
-                factory, css::uno::UNO_QUERY_THROW),
-            css::uno::Reference< css::registry::XRegistryKey >()),
-        css::uno::UNO_QUERY_THROW);
-    css::uno::Reference< css::lang::XSingleServiceFactory > nestedRegs(
-        cppu::loadSharedLibComponentFactory(
-            "bootstrap.uno" SAL_DLLEXTENSION, libraryDirectoryUri,
-            "com.sun.star.comp.stoc.NestedRegistry",
-            css::uno::Reference< css::lang::XMultiServiceFactory >(
-                factory, css::uno::UNO_QUERY_THROW),
-            css::uno::Reference< css::registry::XRegistryKey >()),
-        css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::registry::XSimpleRegistry > reg;
     for (sal_Int32 i = 0; i != -1;) {
         rtl::OUString uri(uris.getToken(0, ' ', i));
@@ -136,10 +117,34 @@ cppuhelper::createTypeRegistry(
         bool directory;
         cppu::decodeRdbUri(&uri, &optional, &directory);
         reg = directory
-            ? readTypeRdbDirectory(uri, optional, reg, simpleRegs, nestedRegs)
-            : readTypeRdbFile(uri, optional, reg, simpleRegs, nestedRegs);
+            ? readTypeRdbDirectory(uri, optional, reg, serviceManager, context)
+            : readTypeRdbFile(uri, optional, reg, serviceManager, context);
     }
     return reg;
+}
+
+}
+
+css::uno::Reference< css::uno::XInterface >
+cppuhelper::createTypeDescriptionProvider(
+    rtl::OUString const & uris,
+    css::uno::Reference< css::lang::XMultiComponentFactory > const &
+        serviceManager,
+    css::uno::Reference< css::uno::XComponentContext > const & context)
+{
+    assert(serviceManager.is());
+    css::uno::Sequence< css::uno::Any > args;
+    css::uno::Reference< css::registry::XSimpleRegistry > typereg(
+        createTypeRegistry(uris, serviceManager, context));
+    if (typereg.is()) {
+        args.realloc(1);
+        args[0] <<= typereg;
+    }
+    return css::uno::Reference< css::uno::XInterface >(
+        serviceManager->createInstanceWithArgumentsAndContext(
+            "com.sun.star.comp.stoc.RegistryTypeDescriptionProvider",
+            args, context),
+        css::uno::UNO_SET_THROW);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
