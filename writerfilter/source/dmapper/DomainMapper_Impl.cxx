@@ -228,9 +228,12 @@ uno::Reference< container::XNameContainer >    DomainMapper_Impl::GetPageStyles(
 
 uno::Reference< text::XText > DomainMapper_Impl::GetBodyText()
 {
-    if(!m_xBodyText.is() && m_xTextDocument.is())
+    if(!m_xBodyText.is())
     {
-        m_xBodyText = m_xTextDocument->getText();
+        if (m_xInsertTextRange.is())
+            m_xBodyText = m_xInsertTextRange->getText();
+        else if (m_xTextDocument.is())
+            m_xBodyText = m_xTextDocument->getText();
     }
     return m_xBodyText;
 }
