@@ -1472,15 +1472,6 @@ static void impl_pageBorders( FSHelperPtr pSerializer, const SvxBoxItem& rBox, s
     for( int i = 0; i < 4; ++i, ++pBrd )
     {
         const SvxBorderLine* pLn = rBox.GetLine( *pBrd );
-        if ( pDefaultBorders && pLn )
-        {
-            const SvxBorderLine* pRefLn = pDefaultBorders->GetLine( *pBrd );
-
-            // If border is equal to default border: do not output
-            if ( pRefLn && *pLn == *pRefLn) {
-                continue;
-            }
-        }
 
         if (!tagWritten && bWriteTag) {
             pSerializer->startElementNS( XML_w, tag, FSEND );
