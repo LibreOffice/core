@@ -301,6 +301,7 @@ public:
     virtual void    GetFocus();
     virtual void    LoseFocus();
     virtual void    Resize();
+    virtual Size    GetOptimalSize() const;
     virtual void    RequestHelp( const HelpEvent& rHEvt );
     virtual void    StateChanged( StateChangedType nStateChange );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
@@ -373,7 +374,7 @@ public:
 
     Size            CalcWindowSizePixel( const Size& rItemSize,
                                          sal_uInt16 nCalcCols = 0,
-                                         sal_uInt16 nCalcLines = 0 );
+                                         sal_uInt16 nCalcLines = 0 ) const;
     Size            CalcItemSizePixel( const Size& rSize, bool bOut = true ) const;
     long            GetScrollWidth() const;
 

@@ -1702,6 +1702,8 @@ void ValueSet::ImplInsertItem( ValueSetItem *const pItem, const size_t nPos )
         mItemList.push_back( pItem );
     }
 
+    queue_resize();
+
     mbFormat = true;
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
@@ -1753,6 +1755,8 @@ void ValueSet::RemoveItem( sal_uInt16 nItemId )
         mnSelItemId     = 0;
         mbNoSelection   = true;
     }
+
+    queue_resize();
 
     mbFormat = true;
     if ( IsReallyVisible() && IsUpdateMode() )
@@ -1841,6 +1845,7 @@ void ValueSet::SetColCount( sal_uInt16 nNewCols )
     {
         mnUserCols = nNewCols;
         mbFormat = true;
+        queue_resize();
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate();
     }
@@ -1854,6 +1859,7 @@ void ValueSet::SetLineCount( sal_uInt16 nNewLines )
     {
         mnUserVisLines = nNewLines;
         mbFormat = true;
+        queue_resize();
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate();
     }
@@ -1867,6 +1873,7 @@ void ValueSet::SetItemWidth( long nNewItemWidth )
     {
         mnUserItemWidth = nNewItemWidth;
         mbFormat = true;
+        queue_resize();
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate();
     }
@@ -1880,6 +1887,7 @@ void ValueSet::SetItemHeight( long nNewItemHeight )
     {
         mnUserItemHeight = nNewItemHeight;
         mbFormat = true;
+        queue_resize();
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate();
     }
@@ -2199,6 +2207,7 @@ void ValueSet::SetExtraSpacing( sal_uInt16 nNewSpacing )
         mnSpacing = nNewSpacing;
 
         mbFormat = true;
+        queue_resize();
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate();
     }
@@ -2271,7 +2280,7 @@ bool ValueSet::StartDrag( const CommandEvent& rCEvt, Region& rRegion )
 // -----------------------------------------------------------------------
 
 Size ValueSet::CalcWindowSizePixel( const Size& rItemSize, sal_uInt16 nDesireCols,
-                                    sal_uInt16 nDesireLines )
+                                    sal_uInt16 nDesireLines ) const
 {
     size_t nCalcCols = nDesireCols;
     size_t nCalcLines = nDesireLines;
@@ -2395,6 +2404,30 @@ long ValueSet::GetScrollWidth() const
 void ValueSet::SetHighlightHdl( const Link& rLink )
 {
     maHighlightHdl = rLink;
+}
+
+Size ValueSet::GetOptimalSize() const
+{
+    Size aLargestItemSize;
+
+    for (size_t i = 0, n = mItemList.size(); i < n; ++i)
+    {
+        const ValueSetItem* pItem = mItemList[i];
+        if (!pItem->mbVisible)
+            continue;
+
+        if (pItem->meType != VALUESETITEM_IMAGE)
+        {
+            //handle determining an optimal size for this case
+            continue;
+        }
+
+        Size aImageSize = pItem->maImage.GetSizePixel();
+        aLargestItemSize.Width() = std::max(aLargestItemSize.Width(), aImageSize.Width());
+        aLargestItemSize.Height() = std::max(aLargestItemSize.Height(), aImageSize.Height());
+    }
+
+    return CalcWindowSizePixel(aLargestItemSize);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
