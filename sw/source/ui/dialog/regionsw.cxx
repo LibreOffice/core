@@ -218,8 +218,6 @@ void SwBaseShell::EditRegionDialog(SfxRequest& rReq)
         case FN_EDIT_REGION:
         {
             Window* pParentWin = &GetView().GetViewFrame()->GetWindow();
-            sal_Bool bStart = sal_True;
-            if(bStart)
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
@@ -233,8 +231,6 @@ void SwBaseShell::EditRegionDialog(SfxRequest& rReq)
                 pEditRegionDlg->Execute();
                 delete pEditRegionDlg;
             }
-            else
-                InfoBox(pParentWin, SW_RES(REG_WRONG_PASSWORD)).Execute();
         }
         break;
     }
