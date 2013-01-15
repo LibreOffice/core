@@ -334,6 +334,7 @@ void IconSetRule::importCfvo( const AttributeList& rAttribs )
 void IconSetRule::importAttribs( const AttributeList& rAttribs )
 {
     maIconSetType = rAttribs.getString( XML_iconSet, rtl::OUString("3TrafficLights1") );
+    mpFormatData->mbShowValue = rAttribs.getBool( XML_showValue, true );
 }
 
 void IconSetRule::SetData( ScIconSetFormat* pFormat, ScDocument* pDoc, const ScAddress& rPos )

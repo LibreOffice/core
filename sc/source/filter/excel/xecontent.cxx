@@ -1362,6 +1362,7 @@ void XclExpIconSet::SaveXml( XclExpXmlStream& rStrm )
     const char* pIconSetName = getIconSetName(mrFormat.GetIconSetData()->eIconSetType);
     rWorksheet->startElement( XML_iconSet,
             XML_iconSet, pIconSetName,
+            XML_showValue, mrFormat.GetIconSetData()->mbShowValue ? NULL : "0",
             FSEND );
 
     maCfvoList.SaveXml( rStrm );
