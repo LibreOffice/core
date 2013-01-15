@@ -103,7 +103,7 @@ static BOOL isPopupMenuOpen = NO;
         /* #i102033# NSAccessibility does not seemt to know an equivalent for transient children.
            That means we need to cache this, else e.g. tree list boxes are not accessible (moreover
            it crashes by notifying dead objects - which would seemt o be another bug)
-           
+
            FIXME:
            Unfortunately this can increase memory consumption drastically until the non transient parent
            is destroyed an finally all the transients are released.
@@ -157,9 +157,9 @@ static BOOL isPopupMenuOpen = NO;
         NSRange aRange = { 2, 1 };
         NSString * firstChar = [ attribute substringWithRange: aRange ]; // drop leading "AX" and get first char
         if ( asGetter ) {
-            [ methodName appendString: [ firstChar lowercaseString ] ]; 
+            [ methodName appendString: [ firstChar lowercaseString ] ];
         } else {
-            [ methodName appendString: firstChar ]; 
+            [ methodName appendString: firstChar ];
         }
         [ methodName appendString: [ attribute substringFromIndex: 3 ] ]; // append rest of attribute name
         // append rest of method name
@@ -203,9 +203,9 @@ static BOOL isPopupMenuOpen = NO;
 
 /*
     Radiobutton grouping is done differently in NSAccessibility and the UNO-API. In UNO related radio buttons share an entry in their
-    RelationSet. In NSAccessibility the relationship is axpressed through the hierarchy. A AXRadioGroup contains two or more AXRadioButton 
-    objects. Since this group is not available in the UNO hierarchy, an extra wrapper is used for it. This wrapper shares almost all 
-    attributes with the first radio button of the group, except for the role, subrole, role description, parent and children attributes. 
+    RelationSet. In NSAccessibility the relationship is axpressed through the hierarchy. A AXRadioGroup contains two or more AXRadioButton
+    objects. Since this group is not available in the UNO hierarchy, an extra wrapper is used for it. This wrapper shares almost all
+    attributes with the first radio button of the group, except for the role, subrole, role description, parent and children attributes.
     So in this five methods there is a special treatment for radio buttons and groups.
 */
 
@@ -295,7 +295,7 @@ static BOOL isPopupMenuOpen = NO;
         }
     } catch (const Exception&) {
     }
-    
+
     OSL_ASSERT( 0 );
     return nil;
 }
@@ -327,7 +327,7 @@ static BOOL isPopupMenuOpen = NO;
         try {
             NSMutableArray * children = [ [ NSMutableArray alloc ] init ];
             Reference< XAccessibleContext > xContext( [ self accessibleContext ] );
-            
+
             sal_Int32 cnt = xContext -> getAccessibleChildCount();
             for ( sal_Int32 i = 0; i < cnt; i++ ) {
                 Reference< XAccessible > xChild( xContext -> getAccessibleChild( i ) );
@@ -341,7 +341,7 @@ static BOOL isPopupMenuOpen = NO;
                     }
                 }
             }
-            
+
             // if not already acting as RadioGroup now is the time to replace RadioButtons with RadioGroups and remove RadioButtons
             if ( ! mActsAsRadioGroup ) {
                 NSEnumerator * enumerator = [ children objectEnumerator ];
@@ -443,8 +443,8 @@ static BOOL isPopupMenuOpen = NO;
 		[ children release ];
 		return value;
     } else {
-        return [ AquaA11yRoleHelper getRoleDescriptionFrom: 
-                [ AquaA11yRoleHelper getNativeRoleFrom: [ self accessibleContext ] ] 
+        return [ AquaA11yRoleHelper getRoleDescriptionFrom:
+                [ AquaA11yRoleHelper getNativeRoleFrom: [ self accessibleContext ] ]
                 with: [ AquaA11yRoleHelper getNativeSubroleFrom: [ self accessibleContext ] -> getAccessibleRole() ] ];
     }
 }
@@ -670,7 +670,7 @@ static BOOL isPopupMenuOpen = NO;
     if ( isPopupMenuOpen ) {
         return nil;
     }
-    
+
     id value = nil;
     // if we are no longer in the wrapper repository, we have been disposed
     AquaA11yWrapper * theWrapper = [ AquaA11yFactory wrapperForAccessibleContext: [ self accessibleContext ] createIfNotExists: NO ];
@@ -710,7 +710,7 @@ static BOOL isPopupMenuOpen = NO;
         case AccessibleRole::DIALOG:
             ignored = YES;
             break;
-        default: 
+        default:
             ignored = ! ( [ self accessibleContext ] -> getAccessibleStateSet() -> contains ( AccessibleStateType::VISIBLE ) );
             break;
     }
@@ -728,14 +728,14 @@ static BOOL isPopupMenuOpen = NO;
     sal_Int32 nAccessibleChildren = 0;
     try {
         // Default Attributes
-        attributeNames = [ NSMutableArray arrayWithObjects: 
-            NSAccessibilityRoleAttribute, 
-            NSAccessibilityDescriptionAttribute, 
-            NSAccessibilityParentAttribute, 
-            NSAccessibilityWindowAttribute, 
-            NSAccessibilityHelpAttribute, 
-            NSAccessibilityTopLevelUIElementAttribute, 
-            NSAccessibilityRoleDescriptionAttribute, 
+        attributeNames = [ NSMutableArray arrayWithObjects:
+            NSAccessibilityRoleAttribute,
+            NSAccessibilityDescriptionAttribute,
+            NSAccessibilityParentAttribute,
+            NSAccessibilityWindowAttribute,
+            NSAccessibilityHelpAttribute,
+            NSAccessibilityTopLevelUIElementAttribute,
+            NSAccessibilityRoleDescriptionAttribute,
             nil ];
         nativeSubrole = (NSString *) [ AquaA11yRoleHelper getNativeSubroleFrom: [ self accessibleContext ] -> getAccessibleRole() ];
         title = (NSString *) [ self titleAttribute ];
@@ -753,7 +753,7 @@ static BOOL isPopupMenuOpen = NO;
         }
         catch( DisposedException& ) {}
         catch( RuntimeException& ) {}
-        
+
         if ( title != nil && ! [ title isEqualToString: @"" ] ) {
             [ attributeNames addObject: NSAccessibilityTitleAttribute ];
         }
@@ -862,19 +862,19 @@ static BOOL isPopupMenuOpen = NO;
 
     // as this seems to be the first API call on a newly created SalFrameView object,
     // make sure self gets registered in the repository ..
-    [ self accessibleContext ]; 
+    [ self accessibleContext ];
 
     AquaA11yWrapper * focusedUIElement = AquaA11yFocusListener::get()->getFocusedUIElement();
 //    AquaA11yWrapper * ancestor = focusedUIElement;
-            
+
       // Make sure the focused object is a descendant of self
 //    do  {
 //       if( self == ancestor )
              return focusedUIElement;
-        
+
 //       ancestor = [ ancestor accessibilityAttributeValue: NSAccessibilityParentAttribute ];
 //    }  while( nil != ancestor );
-        
+
     return self;
 }
 
@@ -916,9 +916,9 @@ static BOOL isPopupMenuOpen = NO;
     }
     NSString * parentRole = (NSString *) [ parent accessibilityAttributeValue: NSAccessibilityRoleAttribute ];
     // if we are a textarea inside a combobox, then the combobox is the action responder
-    if ( enabled 
-      && [ role isEqualToString: NSAccessibilityTextAreaRole ] 
-      && [ parentRole isEqualToString: NSAccessibilityComboBoxRole ] 
+    if ( enabled
+      && [ role isEqualToString: NSAccessibilityTextAreaRole ]
+      && [ parentRole isEqualToString: NSAccessibilityComboBoxRole ]
       && parentAsWrapper != nil ) {
         wrapper = parentAsWrapper;
     } else if ( enabled && [ self accessibleAction ] != nil ) {
@@ -1027,7 +1027,7 @@ Reference < XAccessibleContext > hitTestRunner ( com::sun::star::awt::Point poin
     }
     Reference < XAccessibleContext > hitChild;
     NSRect screenRect = [ [ NSScreen mainScreen ] frame ];
-    com::sun::star::awt::Point hitPoint ( static_cast<long>(point.x) , static_cast<long>(screenRect.size.height - point.y) ); 
+    com::sun::star::awt::Point hitPoint ( static_cast<long>(point.x) , static_cast<long>(screenRect.size.height - point.y) );
     // check child windows first
     NSWindow * window = (NSWindow *) [ self accessibilityAttributeValue: NSAccessibilityWindowAttribute ];
     NSArray * childWindows = [ window childWindows ];
