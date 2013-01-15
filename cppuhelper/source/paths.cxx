@@ -32,7 +32,9 @@
 
 #include "paths.hxx"
 
-rtl::OUString cppu::get_this_libpath() {
+namespace {
+
+rtl::OUString get_this_libpath() {
     static rtl::OUString s_uri;
     if (s_uri.isEmpty()) {
         rtl::OUString uri;
@@ -51,6 +53,8 @@ rtl::OUString cppu::get_this_libpath() {
         }
     }
     return s_uri;
+}
+
 }
 
 rtl::OUString cppu::getUnoIniUri() {

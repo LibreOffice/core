@@ -27,8 +27,6 @@ namespace rtl { class OUString; }
 
 namespace cppu {
 
-rtl::OUString get_this_libpath();
-
 rtl::OUString getUnoIniUri();
 
 bool nextDirectoryItem(osl::Directory & directory, rtl::OUString * url);
