@@ -1120,10 +1120,7 @@ void SAL_CALL SfxBaseModel::connectController( const uno::Reference< frame::XCon
     {
         SfxViewFrame* pViewFrame = SfxViewFrame::Get( xController, GetObjectShell() );
         ENSURE_OR_THROW( pViewFrame, "SFX document without SFX view!?" );
-        bool bOldLock = pViewFrame->GetDispatcher()->IsLocked();
-        pViewFrame->GetDispatcher()->Lock(sal_True);
         pViewFrame->UpdateDocument_Impl();
-        pViewFrame->GetDispatcher()->Lock(bOldLock);
         const String sDocumentURL = GetObjectShell()->GetMedium()->GetName();
         if ( sDocumentURL.Len() )
             SFX_APP()->Broadcast( SfxStringHint( SID_OPENURL, sDocumentURL ) );
