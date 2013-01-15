@@ -52,12 +52,33 @@
 
 namespace {
 
-css::uno::Reference< css::uno::XComponentContext > bootstrapComponentContext(
-    css::uno::Reference< css::registry::XSimpleRegistry > const & typeRegistry,
-    rtl::OUString const & serviceUris, rtl::Bootstrap const & bootstrap)
+rtl::OUString getBootstrapVariable(
+    rtl::Bootstrap const & bootstrap, rtl::OUString const & name)
 {
+    rtl::OUString v;
+    if (!bootstrap.getFrom(name, v)) {
+        throw css::uno::DeploymentException(
+            "Cannot obtain " + name + " from uno ini",
+            css::uno::Reference< css::uno::XInterface >());
+    }
+    return v;
+}
+
+}
+
+css::uno::Reference< css::uno::XComponentContext >
+cppu::defaultBootstrap_InitialComponentContext(rtl::OUString const & iniUri)
+    SAL_THROW((css::uno::Exception))
+{
+    rtl::Bootstrap bs(iniUri);
+    if (bs.getHandle() == 0) {
+        throw css::uno::DeploymentException(
+            "Cannot open uno ini " + iniUri,
+            css::uno::Reference< css::uno::XInterface >());
+    }
     rtl::Reference< cppuhelper::ServiceManager > smgr(
-        new cppuhelper::ServiceManager(serviceUris));
+        new cppuhelper::ServiceManager(
+            getBootstrapVariable(bs, "UNO_SERVICES")));
     cppu::ContextEntry_Init entry;
     std::vector< cppu::ContextEntry_Init > context_values;
     context_values.push_back(
@@ -95,7 +116,7 @@ css::uno::Reference< css::uno::XComponentContext > bootstrapComponentContext(
                 "/singletons/" + i->first,
                 css::uno::makeAny(i->second[0]->info->name), true));
     }
-    cppu::add_access_control_entries(&context_values, bootstrap);
+    cppu::add_access_control_entries(&context_values, bs);
     assert(!context_values.empty());
     css::uno::Reference< css::uno::XComponentContext > context(
         createComponentContext(
@@ -106,9 +127,13 @@ css::uno::Reference< css::uno::XComponentContext > bootstrapComponentContext(
         context->getValueByName(
             "/singletons/com.sun.star.reflection.theTypeDescriptionManager"),
         css::uno::UNO_QUERY_THROW);
-    if (typeRegistry.is()) {
+    css::uno::Reference< css::registry::XSimpleRegistry > typereg(
+        cppuhelper::createTypeRegistry(
+            getBootstrapVariable(bs, "UNO_TYPES"),
+            getBootstrapVariable(bs, "URE_INTERNAL_LIB_DIR")));
+    if (typereg.is()) {
         css::uno::Sequence< css::uno::Any > arg(1);
-        arg[0] <<= typeRegistry;
+        arg[0] <<= typereg;
         css::uno::Reference< css::container::XSet >(
             tdmgr, css::uno::UNO_QUERY_THROW)->
             insert(
@@ -120,37 +145,6 @@ css::uno::Reference< css::uno::XComponentContext > bootstrapComponentContext(
     }
     cppu::installTypeDescriptionManager(tdmgr);
     return context;
-}
-
-rtl::OUString getBootstrapVariable(
-    rtl::Bootstrap const & bootstrap, rtl::OUString const & name)
-{
-    rtl::OUString v;
-    if (!bootstrap.getFrom(name, v)) {
-        throw css::uno::DeploymentException(
-            "Cannot obtain " + name + " from uno ini",
-            css::uno::Reference< css::uno::XInterface >());
-    }
-    return v;
-}
-
-}
-
-css::uno::Reference< css::uno::XComponentContext >
-cppu::defaultBootstrap_InitialComponentContext(rtl::OUString const & iniUri)
-    SAL_THROW((css::uno::Exception))
-{
-    rtl::Bootstrap bs(iniUri);
-    if (bs.getHandle() == 0) {
-        throw css::uno::DeploymentException(
-            "Cannot open uno ini " + iniUri,
-            css::uno::Reference< css::uno::XInterface >());
-    }
-    return bootstrapComponentContext(
-        cppuhelper::createTypeRegistry(
-            getBootstrapVariable(bs, "UNO_TYPES"),
-            getBootstrapVariable(bs, "URE_INTERNAL_LIB_DIR")),
-        getBootstrapVariable(bs, "UNO_SERVICES"), bs);
 }
 
 css::uno::Reference< css::uno::XComponentContext >
