@@ -251,7 +251,7 @@ void DffPropertyReader::ReadPropSet( SvStream& rIn, void* pClientData ) const
 
     rtl::OUString aURLStr;
 
-    if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("d:\\ashape.dbg")), aURLStr ) )
+    if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( rtl::OUString("d:\\ashape.dbg"), aURLStr ) )
     {
         SvStream* pOut = ::utl::UcbStreamHelper::CreateStream( aURLStr, STREAM_WRITE );
 
@@ -262,19 +262,16 @@ void DffPropertyReader::ReadPropSet( SvStream& rIn, void* pClientData ) const
             if ( IsProperty( DFF_Prop_adjustValue ) || IsProperty( DFF_Prop_pVertices ) )
             {
                 pOut->WriteLine( "" );
-                rtl::OStringBuffer aString(RTL_CONSTASCII_STRINGPARAM("ShapeId: "));
-                aString.append(static_cast<sal_Int32>(nShapeId));
-                pOut->WriteLine(aString.makeStringAndClear());
+                OString aString("ShapeId: " + OString::valueOf(static_cast<sal_Int32>(nShapeId)));
+                pOut->WriteLine(aString);
             }
             for ( sal_uInt32 i = DFF_Prop_adjustValue; i <= DFF_Prop_adjust10Value; i++ )
             {
                 if ( IsProperty( i ) )
                 {
-                    rtl::OStringBuffer aString(RTL_CONSTASCII_STRINGPARAM("Prop_adjustValue"));
-                    aString.append(static_cast<sal_Int32>( ( i - DFF_Prop_adjustValue ) + 1 ) );
-                    aString.append(':');
-                    aString.append(static_cast<sal_Int32>(GetPropertyValue(i)));
-                    pOut->WriteLine(aString.makeStringAndClear());
+                    OString aString("Prop_adjustValue" + OString::valueOf((static_cast<sal_Int32>( ( i - DFF_Prop_adjustValue ) + 1 ) )) +
+                                    ":" + OString::valueOf(static_cast<sal_Int32>(GetPropertyValue(i))));
+                    pOut->WriteLine(aString);
                 }
             }
             sal_Int32 i;
@@ -290,17 +287,13 @@ void DffPropertyReader::ReadPropSet( SvStream& rIn, void* pClientData ) const
                         if ( nLen )
                         {
                             pOut->WriteLine( "" );
-                            rtl::OStringBuffer aDesc(RTL_CONSTASCII_STRINGPARAM("Property:"));
-                            aDesc.append(static_cast<sal_Int32>(i));
-                            aDesc.append(RTL_CONSTASCII_STRINGPARAM("  Size:"));
-                            aDesc.append(nLen);
+                            OStringBuffer aDesc("Property:" + OString::valueOf(static_cast<sal_Int32>(i)) +
+                                                "  Size:" + OString::valueOf(nLen));
                             pOut->WriteLine(aDesc.makeStringAndClear());
                             sal_Int16   nNumElem, nNumElemMem, nNumSize;
                             rIn >> nNumElem >> nNumElemMem >> nNumSize;
-                            aDesc.append(RTL_CONSTASCII_STRINGPARAM("Entries: "));
-                            aDesc.append(static_cast<sal_Int32>(nNumElem));
-                            aDesc.append(RTL_CONSTASCII_STRINGPARAM("  Size:"));
-                            aDesc.append(static_cast<sal_Int32>(nNumSize));
+                            aDesc.append("Entries: " + OString::valueOf(static_cast<sal_Int32>(nNumElem)) +
+                                         "  Size:" + OString::valueOf(static_cast<sal_Int32>(nNumSize)));
                             pOut->WriteLine(aDesc.makeStringAndClear());
                             if ( nNumSize < 0 )
                                 nNumSize = ( ( -nNumSize ) >> 2 );
@@ -338,11 +331,9 @@ void DffPropertyReader::ReadPropSet( SvStream& rIn, void* pClientData ) const
                     }
                     else
                     {
-                        rtl::OStringBuffer aString(RTL_CONSTASCII_STRINGPARAM("Property"));
-                        aString.append(static_cast<sal_Int32>(i));
-                        aString.append(':');
-                        aString.append(static_cast<sal_Int32>(GetPropertyValue(i)));
-                        pOut->WriteLine(aString.makeStringAndClear());
+                        OString aString("Property" + OString::valueOf(static_cast<sal_Int32>(i)) +
+                                        ":" + OString::valueOf(static_cast<sal_Int32>(GetPropertyValue(i))));
+                        pOut->WriteLine(aString);
                     }
                 }
             }
@@ -578,15 +569,15 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                             case OBJ_CUSTOMSHAPE :
                             {
                                 SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)((SdrObjCustomShape*)pO)->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
-                                const rtl::OUString sPath( RTL_CONSTASCII_USTRINGPARAM ( "Path" ) );
-                                const rtl::OUString sGluePointType( RTL_CONSTASCII_USTRINGPARAM ( "GluePointType" ) );
+                                const rtl::OUString sPath( "Path" );
+                                const rtl::OUString sGluePointType( "GluePointType" );
                                 sal_Int16 nGluePointType = EnhancedCustomShapeGluePointType::SEGMENTS;
                                 com::sun::star::uno::Any* pAny = aGeometryItem.GetPropertyValueByName( sPath, sGluePointType );
                                 if ( pAny )
                                     *pAny >>= nGluePointType;
                                 else
                                 {
-                                    const rtl::OUString sType( RTL_CONSTASCII_USTRINGPARAM ( "Type" ) );
+                                    const rtl::OUString sType( "Type" );
                                     rtl::OUString sShapeType;
                                     pAny = aGeometryItem.GetPropertyValueByName( sType );
                                     if ( pAny )
@@ -634,8 +625,8 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                 }
                                 else if ( nGluePointType == EnhancedCustomShapeGluePointType::SEGMENTS )
                                 {
-                                    const rtl::OUString sSegments( RTL_CONSTASCII_USTRINGPARAM ( "Segments" ) );
-                                    const rtl::OUString sCoordinates( RTL_CONSTASCII_USTRINGPARAM ( "Coordinates" ) );
+                                    const rtl::OUString sSegments( "Segments" );
+                                    const rtl::OUString sCoordinates( "Coordinates" );
 
                                     sal_uInt32 k, nPt = nC;
                                     com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeSegment > aSegments;
@@ -707,7 +698,7 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                             sal_Int32 nX = 0, nY = 0;
                                             if ( ( rPara.First.Value >>= nX ) && ( rPara.Second.Value >>= nY ) )
                                             {
-                                                const rtl::OUString sGluePoints( RTL_CONSTASCII_USTRINGPARAM ( "GluePoints" ) );
+                                                const rtl::OUString sGluePoints( "GluePoints" );
                                                 com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair > aGluePoints;
                                                 pAny = aGeometryItem.GetPropertyValueByName( sPath, sGluePoints );
                                                 if ( pAny )
@@ -739,19 +730,19 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                             {
                                 if ( nN )
                                 {
-                                    rtl::OUString aPropName( RTL_CONSTASCII_USTRINGPARAM( "EndShape" ) );
+                                    OUString aPropName( "EndShape" );
                                     aAny <<= aXShape;
                                     SetPropValue( aAny, xPropSet, aPropName, sal_True );
-                                    aPropName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EndGluePointIndex" ) );
+                                    aPropName = "EndGluePointIndex";
                                     aAny <<= nId;
                                     SetPropValue( aAny, xPropSet, aPropName, sal_True );
                                 }
                                 else
                                 {
-                                    rtl::OUString aPropName( RTL_CONSTASCII_USTRINGPARAM( "StartShape" ) );
+                                    OUString aPropName( "StartShape" );
                                     aAny <<= aXShape;
                                     SetPropValue( aAny, xPropSet, aPropName, sal_True );
-                                    aPropName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StartGluePointIndex" ) );
+                                    aPropName = "StartGluePointIndex";
                                     aAny <<= nId;
                                     SetPropValue( aAny, xPropSet, aPropName, sal_True );
                                 }
@@ -814,7 +805,7 @@ static basegfx::B2DPolyPolygon GetLineArrow( const sal_Int32 nLineWidth, const M
             aTriangle.append(basegfx::B2DPoint( 0.0, fLenghtMul * fLineWidth ));
             aTriangle.setClosed(true);
             aRetPolyPoly = basegfx::B2DPolyPolygon(aTriangle);
-            aArrowName.appendAscii(RTL_CONSTASCII_STRINGPARAM("msArrowEnd "));
+            aArrowName.append("msArrowEnd ");
         }
         break;
 
@@ -843,7 +834,7 @@ static basegfx::B2DPolyPolygon GetLineArrow( const sal_Int32 nLineWidth, const M
             aTriangle.append(basegfx::B2DPoint( 0.0, fLenghtMul * fLineWidth * 0.91 ));
             aTriangle.setClosed(true);
             aRetPolyPoly = basegfx::B2DPolyPolygon(aTriangle);
-            aArrowName.appendAscii(RTL_CONSTASCII_STRINGPARAM("msArrowOpenEnd "));
+            aArrowName.append("msArrowOpenEnd ");
         }
         break;
         case mso_lineArrowStealthEnd :
@@ -855,7 +846,7 @@ static basegfx::B2DPolyPolygon GetLineArrow( const sal_Int32 nLineWidth, const M
             aTriangle.append(basegfx::B2DPoint( 0.0, fLenghtMul * fLineWidth ));
             aTriangle.setClosed(true);
             aRetPolyPoly = basegfx::B2DPolyPolygon(aTriangle);
-            aArrowName.appendAscii(RTL_CONSTASCII_STRINGPARAM("msArrowStealthEnd "));
+            aArrowName.append("msArrowStealthEnd ");
         }
         break;
         case mso_lineArrowDiamondEnd :
@@ -868,7 +859,7 @@ static basegfx::B2DPolyPolygon GetLineArrow( const sal_Int32 nLineWidth, const M
             aTriangle.setClosed(true);
             aRetPolyPoly = basegfx::B2DPolyPolygon(aTriangle);
             rbArrowCenter = sal_True;
-            aArrowName.appendAscii(RTL_CONSTASCII_STRINGPARAM("msArrowDiamondEnd "));
+            aArrowName.append("msArrowDiamondEnd ");
         }
         break;
         case mso_lineArrowOvalEnd :
@@ -877,7 +868,7 @@ static basegfx::B2DPolyPolygon GetLineArrow( const sal_Int32 nLineWidth, const M
                                 (sal_Int32)( fWidthMul * fLineWidth * 0.50 ),
                                     (sal_Int32)( fLenghtMul * fLineWidth * 0.50 ), 0, 3600 ).getB2DPolygon() );
             rbArrowCenter = sal_True;
-            aArrowName.appendAscii(RTL_CONSTASCII_STRINGPARAM("msArrowOvalEnd "));
+            aArrowName.append("msArrowOvalEnd ");
         }
         break;
         default: break;
@@ -1590,7 +1581,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
     /////////////////////////////////////////////////////////////////////
     // "Type" property, including the predefined CustomShape type name //
     /////////////////////////////////////////////////////////////////////
-    const rtl::OUString sType( RTL_CONSTASCII_USTRINGPARAM ( "Type" ) );
+    const rtl::OUString sType( "Type" );
     aProp.Name  = sType;
     aProp.Value <<= EnhancedCustomShapeTypeNames::Get( rObjData.eShapeType );
     aPropVec.push_back( aProp );
@@ -1604,7 +1595,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
     if ( IsProperty( DFF_Prop_geoLeft ) || IsProperty( DFF_Prop_geoTop ) || IsProperty( DFF_Prop_geoRight ) || IsProperty( DFF_Prop_geoBottom ) )
     {
         com::sun::star::awt::Rectangle aViewBox;
-        const rtl::OUString sViewBox( RTL_CONSTASCII_USTRINGPARAM ( "ViewBox" ) );
+        const rtl::OUString sViewBox( "ViewBox" );
         aViewBox.X = GetPropertyValue( DFF_Prop_geoLeft, 0 );
         aViewBox.Y = GetPropertyValue( DFF_Prop_geoTop, 0 );
         aViewBox.Width = nCoordWidth = ((sal_Int32)GetPropertyValue( DFF_Prop_geoRight, 21600 ) ) - aViewBox.X;
@@ -1643,7 +1634,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         if ( nTextRotateAngle )
         {
             double fTextRotateAngle = nTextRotateAngle;
-            const rtl::OUString sTextRotateAngle( RTL_CONSTASCII_USTRINGPARAM ( "TextRotateAngle" ) );
+            const rtl::OUString sTextRotateAngle( "TextRotateAngle" );
             aProp.Name = sTextRotateAngle;
             aProp.Value <<= fTextRotateAngle;
             aPropVec.push_back( aProp );
@@ -1658,7 +1649,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         PropVec aExtrusionPropVec;
 
         // "Extrusion"
-        const rtl::OUString sExtrusionOn( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
+        const rtl::OUString sExtrusionOn( "Extrusion" );
         aProp.Name = sExtrusionOn;
         aProp.Value <<= bExtrusionOn;
         aExtrusionPropVec.push_back( aProp );
@@ -1666,7 +1657,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         // "Brightness"
         if ( IsProperty( DFF_Prop_c3DAmbientIntensity ) )
         {
-            const rtl::OUString sExtrusionBrightness( RTL_CONSTASCII_USTRINGPARAM ( "Brightness" ) );
+            const rtl::OUString sExtrusionBrightness( "Brightness" );
             double fBrightness = (sal_Int32)GetPropertyValue( DFF_Prop_c3DAmbientIntensity );
             fBrightness /= 655.36;
             aProp.Name = sExtrusionBrightness;
@@ -1676,7 +1667,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         // "Depth" in 1/100mm
         if ( IsProperty( DFF_Prop_c3DExtrudeBackward ) || IsProperty( DFF_Prop_c3DExtrudeForward ) )
         {
-            const rtl::OUString sDepth( RTL_CONSTASCII_USTRINGPARAM ( "Depth" ) );
+            const rtl::OUString sDepth( "Depth" );
             double fBackDepth = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DExtrudeBackward, 1270 * 360 )) / 360.0;
             double fForeDepth = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DExtrudeForward, 0 )) / 360.0;
             double fDepth = fBackDepth + fForeDepth;
@@ -1693,7 +1684,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         // "Diffusion"
         if ( IsProperty( DFF_Prop_c3DDiffuseAmt ) )
         {
-            const rtl::OUString sExtrusionDiffusion( RTL_CONSTASCII_USTRINGPARAM ( "Diffusion" ) );
+            const rtl::OUString sExtrusionDiffusion( "Diffusion" );
             double fDiffusion = (sal_Int32)GetPropertyValue( DFF_Prop_c3DDiffuseAmt );
             fDiffusion /= 655.36;
             aProp.Name = sExtrusionDiffusion;
@@ -1703,25 +1694,25 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         // "NumberOfLineSegments"
         if ( IsProperty( DFF_Prop_c3DTolerance ) )
         {
-            const rtl::OUString sExtrusionNumberOfLineSegments( RTL_CONSTASCII_USTRINGPARAM ( "NumberOfLineSegments" ) );
+            const rtl::OUString sExtrusionNumberOfLineSegments( "NumberOfLineSegments" );
             aProp.Name = sExtrusionNumberOfLineSegments;
             aProp.Value <<= (sal_Int32)GetPropertyValue( DFF_Prop_c3DTolerance );
             aExtrusionPropVec.push_back( aProp );
         }
         // "LightFace"
-        const rtl::OUString sExtrusionLightFace( RTL_CONSTASCII_USTRINGPARAM ( "LightFace" ) );
+        const rtl::OUString sExtrusionLightFace( "LightFace" );
         sal_Bool bExtrusionLightFace = ( GetPropertyValue( DFF_Prop_fc3DLightFace ) & 1 ) != 0;
         aProp.Name = sExtrusionLightFace;
         aProp.Value <<= bExtrusionLightFace;
         aExtrusionPropVec.push_back( aProp );
         // "FirstLightHarsh"
-        const rtl::OUString sExtrusionFirstLightHarsh( RTL_CONSTASCII_USTRINGPARAM ( "FirstLightHarsh" ) );
+        const rtl::OUString sExtrusionFirstLightHarsh( "FirstLightHarsh" );
         sal_Bool bExtrusionFirstLightHarsh = ( GetPropertyValue( DFF_Prop_fc3DFillHarsh ) & 2 ) != 0;
         aProp.Name = sExtrusionFirstLightHarsh;
         aProp.Value <<= bExtrusionFirstLightHarsh;
         aExtrusionPropVec.push_back( aProp );
         // "SecondLightHarsh"
-        const rtl::OUString sExtrusionSecondLightHarsh( RTL_CONSTASCII_USTRINGPARAM ( "SecondLightHarsh" ) );
+        const rtl::OUString sExtrusionSecondLightHarsh( "SecondLightHarsh" );
         sal_Bool bExtrusionSecondLightHarsh = ( GetPropertyValue( DFF_Prop_fc3DFillHarsh ) & 1 ) != 0;
         aProp.Name = sExtrusionSecondLightHarsh;
         aProp.Value <<= bExtrusionSecondLightHarsh;
@@ -1729,7 +1720,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         // "FirstLightLevel"
         if ( IsProperty( DFF_Prop_c3DKeyIntensity ) )
         {
-            const rtl::OUString sExtrusionFirstLightLevel( RTL_CONSTASCII_USTRINGPARAM ( "FirstLightLevel" ) );
+            const rtl::OUString sExtrusionFirstLightLevel( "FirstLightLevel" );
             double fFirstLightLevel = (sal_Int32)GetPropertyValue( DFF_Prop_c3DKeyIntensity );
             fFirstLightLevel /= 655.36;
             aProp.Name = sExtrusionFirstLightLevel;
@@ -1739,7 +1730,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         // "SecondLightLevel"
         if ( IsProperty( DFF_Prop_c3DFillIntensity ) )
         {
-            const rtl::OUString sExtrusionSecondLightLevel( RTL_CONSTASCII_USTRINGPARAM ( "SecondLightLevel" ) );
+            const rtl::OUString sExtrusionSecondLightLevel( "SecondLightLevel" );
             double fSecondLightLevel = (sal_Int32)GetPropertyValue( DFF_Prop_c3DFillIntensity );
             fSecondLightLevel /= 655.36;
             aProp.Name = sExtrusionSecondLightLevel;
@@ -1753,7 +1744,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             double fLightY = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DKeyY, 0 ));
             double fLightZ = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DKeyZ, 10000 ));
             ::com::sun::star::drawing::Direction3D aExtrusionFirstLightDirection( fLightX, fLightY, fLightZ );
-            const rtl::OUString sExtrusionFirstLightDirection( RTL_CONSTASCII_USTRINGPARAM ( "FirstLightDirection" ) );
+            const rtl::OUString sExtrusionFirstLightDirection( "FirstLightDirection" );
             aProp.Name = sExtrusionFirstLightDirection;
             aProp.Value <<= aExtrusionFirstLightDirection;
             aExtrusionPropVec.push_back( aProp );
@@ -1765,14 +1756,14 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             double fLight2Y = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DFillY, 0 ));
             double fLight2Z = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DFillZ, 10000 ));
             ::com::sun::star::drawing::Direction3D aExtrusionSecondLightDirection( fLight2X, fLight2Y, fLight2Z );
-            const rtl::OUString sExtrusionSecondLightDirection( RTL_CONSTASCII_USTRINGPARAM ( "SecondLightDirection" ) );
+            const rtl::OUString sExtrusionSecondLightDirection( "SecondLightDirection" );
             aProp.Name = sExtrusionSecondLightDirection;
             aProp.Value <<= aExtrusionSecondLightDirection;
             aExtrusionPropVec.push_back( aProp );
         }
 
         // "Metal"
-        const rtl::OUString sExtrusionMetal( RTL_CONSTASCII_USTRINGPARAM ( "Metal" ) );
+        const rtl::OUString sExtrusionMetal( "Metal" );
         sal_Bool bExtrusionMetal = ( GetPropertyValue( DFF_Prop_fc3DLightFace ) & 4 ) != 0;
         aProp.Name = sExtrusionMetal;
         aProp.Value <<= bExtrusionMetal;
@@ -1780,7 +1771,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         // "ShadeMode"
         if ( IsProperty( DFF_Prop_c3DRenderMode ) )
         {
-            const rtl::OUString sExtrusionShadeMode( RTL_CONSTASCII_USTRINGPARAM ( "ShadeMode" ) );
+            const rtl::OUString sExtrusionShadeMode( "ShadeMode" );
             sal_uInt32 nExtrusionRenderMode = GetPropertyValue( DFF_Prop_c3DRenderMode );
             com::sun::star::drawing::ShadeMode eExtrusionShadeMode( com::sun::star::drawing::ShadeMode_FLAT );
             if ( nExtrusionRenderMode == mso_Wireframe )
@@ -1793,7 +1784,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         // "RotateAngle" in Grad
         if ( IsProperty( DFF_Prop_c3DXRotationAngle ) || IsProperty( DFF_Prop_c3DYRotationAngle ) )
         {
-            const rtl::OUString sExtrusionAngle( RTL_CONSTASCII_USTRINGPARAM ( "RotateAngle" ) );
+            const rtl::OUString sExtrusionAngle( "RotateAngle" );
             double fAngleX = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DXRotationAngle, 0 )) / 65536.0;
             double fAngleY = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DYRotationAngle, 0 )) / 65536.0;
             EnhancedCustomShapeParameterPair aRotateAnglePair;
@@ -1817,7 +1808,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                     (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DRotationCenterY, 0 )) / 360.0,
                     (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DRotationCenterZ, 0 )) / 360.0 );
 
-                const rtl::OUString sExtrusionRotationCenter( RTL_CONSTASCII_USTRINGPARAM ( "RotationCenter" ) );
+                const rtl::OUString sExtrusionRotationCenter( "RotationCenter" );
                 aProp.Name = sExtrusionRotationCenter;
                 aProp.Value <<= aRotationCenter;
                 aExtrusionPropVec.push_back( aProp );
@@ -1826,7 +1817,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         // "Shininess"
         if ( IsProperty( DFF_Prop_c3DShininess ) )
         {
-            const rtl::OUString sExtrusionShininess( RTL_CONSTASCII_USTRINGPARAM ( "Shininess" ) );
+            const rtl::OUString sExtrusionShininess( "Shininess" );
             double fShininess = (sal_Int32)GetPropertyValue( DFF_Prop_c3DShininess );
             fShininess /= 655.36;
             aProp.Name = sExtrusionShininess;
@@ -1836,7 +1827,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         // "Skew"
         if ( IsProperty( DFF_Prop_c3DSkewAmount ) || IsProperty( DFF_Prop_c3DSkewAngle ) )
         {
-            const rtl::OUString sExtrusionSkew( RTL_CONSTASCII_USTRINGPARAM ( "Skew" ) );
+            const rtl::OUString sExtrusionSkew( "Skew" );
             double fSkewAmount = (sal_Int32)GetPropertyValue( DFF_Prop_c3DSkewAmount, 50 );
             double fSkewAngle = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DSkewAngle, sal::static_int_cast< sal_uInt32 >(-135 * 65536) )) / 65536.0;
 
@@ -1852,7 +1843,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         // "Specularity"
         if ( IsProperty( DFF_Prop_c3DSpecularAmt ) )
         {
-            const rtl::OUString sExtrusionSpecularity( RTL_CONSTASCII_USTRINGPARAM ( "Specularity" ) );
+            const rtl::OUString sExtrusionSpecularity( "Specularity" );
             double fSpecularity = (sal_Int32)GetPropertyValue( DFF_Prop_c3DSpecularAmt );
             fSpecularity /= 1333;
             aProp.Name = sExtrusionSpecularity;
@@ -1860,7 +1851,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             aExtrusionPropVec.push_back( aProp );
         }
         // "ProjectionMode"
-        const rtl::OUString sExtrusionProjectionMode( RTL_CONSTASCII_USTRINGPARAM ( "ProjectionMode" ) );
+        const rtl::OUString sExtrusionProjectionMode( "ProjectionMode" );
         ProjectionMode eProjectionMode = GetPropertyValue( DFF_Prop_fc3DFillHarsh ) & 4 ? ProjectionMode_PARALLEL : ProjectionMode_PERSPECTIVE;
         aProp.Name = sExtrusionProjectionMode;
         aProp.Value <<= eProjectionMode;
@@ -1873,7 +1864,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             double fViewY = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DYViewpoint, (sal_uInt32)-1249920 ))/ 360.0;
             double fViewZ = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DZViewpoint, 9000000 )) / 360.0;
             ::com::sun::star::drawing::Position3D aExtrusionViewPoint( fViewX, fViewY, fViewZ );
-            const rtl::OUString sExtrusionViewPoint( RTL_CONSTASCII_USTRINGPARAM ( "ViewPoint" ) );
+            const rtl::OUString sExtrusionViewPoint( "ViewPoint" );
             aProp.Name = sExtrusionViewPoint;
             aProp.Value <<= aExtrusionViewPoint;
             aExtrusionPropVec.push_back( aProp );
@@ -1881,7 +1872,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         // "Origin"
         if ( IsProperty( DFF_Prop_c3DOriginX ) || IsProperty( DFF_Prop_c3DOriginY ) )
         {
-            const rtl::OUString sExtrusionOrigin( RTL_CONSTASCII_USTRINGPARAM ( "Origin" ) );
+            const rtl::OUString sExtrusionOrigin( "Origin" );
             double fOriginX = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DOriginX, 0 ));
             double fOriginY = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DOriginY, 0 ));
             fOriginX /= 65536;
@@ -1896,7 +1887,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             aExtrusionPropVec.push_back( aProp );
         }
         // "ExtrusionColor"
-        const rtl::OUString sExtrusionColor( RTL_CONSTASCII_USTRINGPARAM ( "Color" ) );
+        const rtl::OUString sExtrusionColor( "Color" );
         sal_Bool bExtrusionColor = IsProperty( DFF_Prop_c3DExtrusionColor );    // ( GetPropertyValue( DFF_Prop_fc3DLightFace ) & 2 ) != 0;
         aProp.Name = sExtrusionColor;
         aProp.Value <<= bExtrusionColor;
@@ -1905,7 +1896,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             rSet.Put( XSecondaryFillColorItem( String(), rManager.MSO_CLR_ToColor(
                 GetPropertyValue( DFF_Prop_c3DExtrusionColor ), DFF_Prop_c3DExtrusionColor ) ) );
         // pushing the whole Extrusion element
-        const rtl::OUString sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
+        const rtl::OUString sExtrusion( "Extrusion" );
         PropSeq aExtrusionPropSeq( aExtrusionPropVec.size() );
         aIter = aExtrusionPropVec.begin();
         aEnd = aExtrusionPropVec.end();
@@ -1940,7 +1931,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             aEquations[ i ] = EnhancedCustomShape2d::GetEquation( nFlags, nP1, nP2, nP3 );
         }
         // pushing the whole Equations element
-        const rtl::OUString sEquations( RTL_CONSTASCII_USTRINGPARAM ( "Equations" ) );
+        const rtl::OUString sEquations( "Equations" );
         aProp.Name = sEquations;
         aProp.Value <<= aEquations;
         aPropVec.push_back( aProp );
@@ -1984,7 +1975,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                 EnhancedCustomShapeParameterPair aPosition;
                 EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aPosition.First,  nPositionX, sal_True, sal_True  );
                 EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aPosition.Second, nPositionY, sal_True, sal_False );
-                const rtl::OUString sHandlePosition( RTL_CONSTASCII_USTRINGPARAM ( "Position" ) );
+                const rtl::OUString sHandlePosition( "Position" );
                 aProp.Name = sHandlePosition;
                 aProp.Value <<= aPosition;
                 aHandlePropVec.push_back( aProp );
@@ -1992,7 +1983,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                 if ( nFlags & MSDFF_HANDLE_FLAGS_MIRRORED_X )
                 {
                     sal_Bool bMirroredX = sal_True;
-                    const rtl::OUString sHandleMirroredX( RTL_CONSTASCII_USTRINGPARAM ( "MirroredX" ) );
+                    const rtl::OUString sHandleMirroredX( "MirroredX" );
                     aProp.Name = sHandleMirroredX;
                     aProp.Value <<= bMirroredX;
                     aHandlePropVec.push_back( aProp );
@@ -2000,7 +1991,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                 if ( nFlags & MSDFF_HANDLE_FLAGS_MIRRORED_Y )
                 {
                     sal_Bool bMirroredY = sal_True;
-                    const rtl::OUString sHandleMirroredY( RTL_CONSTASCII_USTRINGPARAM ( "MirroredY" ) );
+                    const rtl::OUString sHandleMirroredY( "MirroredY" );
                     aProp.Name = sHandleMirroredY;
                     aProp.Value <<= bMirroredY;
                     aHandlePropVec.push_back( aProp );
@@ -2008,7 +1999,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                 if ( nFlags & MSDFF_HANDLE_FLAGS_SWITCHED )
                 {
                     sal_Bool bSwitched = sal_True;
-                    const rtl::OUString sHandleSwitched( RTL_CONSTASCII_USTRINGPARAM ( "Switched" ) );
+                    const rtl::OUString sHandleSwitched( "Switched" );
                     aProp.Name = sHandleSwitched;
                     aProp.Value <<= bSwitched;
                     aHandlePropVec.push_back( aProp );
@@ -2024,7 +2015,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                     EnhancedCustomShapeParameterPair aPolar;
                     EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aPolar.First,  nCenterX, ( nFlags & 0x800  ) != 0, sal_True  );
                     EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aPolar.Second, nCenterY, ( nFlags & 0x1000 ) != 0, sal_False );
-                    const rtl::OUString sHandlePolar( RTL_CONSTASCII_USTRINGPARAM ( "Polar" ) );
+                    const rtl::OUString sHandlePolar( "Polar" );
                     aProp.Name = sHandlePolar;
                     aProp.Value <<= aPolar;
                     aHandlePropVec.push_back( aProp );
@@ -2038,7 +2029,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                     EnhancedCustomShapeParameterPair aMap;
                     EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aMap.First,  nCenterX, ( nFlags & 0x800  ) != 0, sal_True  );
                     EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aMap.Second, nCenterY, ( nFlags & 0x1000 ) != 0, sal_False );
-                    const rtl::OUString sHandleMap( RTL_CONSTASCII_USTRINGPARAM ( "Map" ) );
+                    const rtl::OUString sHandleMap( "Map" );
                     aProp.Name = sHandleMap;
                     aProp.Value <<= aMap;
                     aHandlePropVec.push_back( aProp );
@@ -2052,7 +2043,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                         EnhancedCustomShapeParameter aRangeXMinimum;
                         EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRangeXMinimum,  nRangeXMin,
                             ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL ) != 0, sal_True  );
-                        const rtl::OUString sHandleRangeXMinimum( RTL_CONSTASCII_USTRINGPARAM ( "RangeXMinimum" ) );
+                        const rtl::OUString sHandleRangeXMinimum( "RangeXMinimum" );
                         aProp.Name = sHandleRangeXMinimum;
                         aProp.Value <<= aRangeXMinimum;
                         aHandlePropVec.push_back( aProp );
@@ -2064,7 +2055,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                         EnhancedCustomShapeParameter aRangeXMaximum;
                         EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRangeXMaximum, nRangeXMax,
                             ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL ) != 0, sal_False );
-                        const rtl::OUString sHandleRangeXMaximum( RTL_CONSTASCII_USTRINGPARAM ( "RangeXMaximum" ) );
+                        const rtl::OUString sHandleRangeXMaximum( "RangeXMaximum" );
                         aProp.Name = sHandleRangeXMaximum;
                         aProp.Value <<= aRangeXMaximum;
                         aHandlePropVec.push_back( aProp );
@@ -2076,7 +2067,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                         EnhancedCustomShapeParameter aRangeYMinimum;
                         EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRangeYMinimum, nRangeYMin,
                             ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL ) != 0, sal_True );
-                        const rtl::OUString sHandleRangeYMinimum( RTL_CONSTASCII_USTRINGPARAM ( "RangeYMinimum" ) );
+                        const rtl::OUString sHandleRangeYMinimum( "RangeYMinimum" );
                         aProp.Name = sHandleRangeYMinimum;
                         aProp.Value <<= aRangeYMinimum;
                         aHandlePropVec.push_back( aProp );
@@ -2088,7 +2079,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                         EnhancedCustomShapeParameter aRangeYMaximum;
                         EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRangeYMaximum, nRangeYMax,
                             ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL ) != 0, sal_False );
-                        const rtl::OUString sHandleRangeYMaximum( RTL_CONSTASCII_USTRINGPARAM ( "RangeYMaximum" ) );
+                        const rtl::OUString sHandleRangeYMaximum( "RangeYMaximum" );
                         aProp.Name = sHandleRangeYMaximum;
                         aProp.Value <<= aRangeYMaximum;
                         aHandlePropVec.push_back( aProp );
@@ -2103,7 +2094,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                         EnhancedCustomShapeParameter aRadiusRangeMinimum;
                         EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRadiusRangeMinimum, nRangeXMin,
                             ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL ) != 0, sal_True  );
-                        const rtl::OUString sHandleRadiusRangeMinimum( RTL_CONSTASCII_USTRINGPARAM ( "RadiusRangeMinimum" ) );
+                        const rtl::OUString sHandleRadiusRangeMinimum( "RadiusRangeMinimum" );
                         aProp.Name = sHandleRadiusRangeMinimum;
                         aProp.Value <<= aRadiusRangeMinimum;
                         aHandlePropVec.push_back( aProp );
@@ -2115,7 +2106,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                         EnhancedCustomShapeParameter aRadiusRangeMaximum;
                         EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRadiusRangeMaximum, nRangeXMax,
                             ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL ) != 0, sal_False );
-                        const rtl::OUString sHandleRadiusRangeMaximum( RTL_CONSTASCII_USTRINGPARAM ( "RadiusRangeMaximum" ) );
+                        const rtl::OUString sHandleRadiusRangeMaximum( "RadiusRangeMaximum" );
                         aProp.Name = sHandleRadiusRangeMaximum;
                         aProp.Value <<= aRadiusRangeMaximum;
                         aHandlePropVec.push_back( aProp );
@@ -2133,7 +2124,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                 }
             }
             // pushing the whole Handles element
-            const rtl::OUString sHandles( RTL_CONSTASCII_USTRINGPARAM ( "Handles" ) );
+            const rtl::OUString sHandles( "Handles" );
             aProp.Name = sHandles;
             aProp.Value <<= aHandles;
             aPropVec.push_back( aProp );
@@ -2165,7 +2156,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         // "Path/ExtrusionAllowed"
         if ( IsHardAttribute( DFF_Prop_f3DOK ) )
         {
-            const rtl::OUString sExtrusionAllowed( RTL_CONSTASCII_USTRINGPARAM ( "ExtrusionAllowed" ) );
+            const rtl::OUString sExtrusionAllowed( "ExtrusionAllowed" );
             sal_Bool bExtrusionAllowed = ( GetPropertyValue( DFF_Prop_fFillOK ) & 16 ) != 0;
             aProp.Name = sExtrusionAllowed;
             aProp.Value <<= bExtrusionAllowed;
@@ -2174,7 +2165,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         // "Path/ConcentricGradientFillAllowed"
         if ( IsHardAttribute( DFF_Prop_fFillShadeShapeOK ) )
         {
-            const rtl::OUString sConcentricGradientFillAllowed( RTL_CONSTASCII_USTRINGPARAM ( "ConcentricGradientFillAllowed" ) );
+            const rtl::OUString sConcentricGradientFillAllowed( "ConcentricGradientFillAllowed" );
             sal_Bool bConcentricGradientFillAllowed = ( GetPropertyValue( DFF_Prop_fFillOK ) & 2 ) != 0;
             aProp.Name = sConcentricGradientFillAllowed;
             aProp.Value <<= bConcentricGradientFillAllowed;
@@ -2183,7 +2174,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         // "Path/TextPathAllowed"
         if ( IsHardAttribute( DFF_Prop_fGtextOK ) || ( GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 ) & 0x4000 ) )
         {
-            const rtl::OUString sTextPathAllowed( RTL_CONSTASCII_USTRINGPARAM ( "TextPathAllowed" ) );
+            const rtl::OUString sTextPathAllowed( "TextPathAllowed" );
             sal_Bool bTextPathAllowed = ( GetPropertyValue( DFF_Prop_fFillOK ) & 4 ) != 0;
             aProp.Name = sTextPathAllowed;
             aProp.Value <<= bTextPathAllowed;
@@ -2225,7 +2216,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                     EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aCoordinates[ i ].Second, nY );
                 }
             }
-            const rtl::OUString sCoordinates( RTL_CONSTASCII_USTRINGPARAM ( "Coordinates" ) );
+            const rtl::OUString sCoordinates( "Coordinates" );
             aProp.Name = sCoordinates;
             aProp.Value <<= aCoordinates;
             aPathPropVec.push_back( aProp );
@@ -2336,7 +2327,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                     aSegments[ i ].Count = nCnt;
                 }
             }
-            const rtl::OUString sSegments( RTL_CONSTASCII_USTRINGPARAM ( "Segments" ) );
+            const rtl::OUString sSegments( "Segments" );
             aProp.Name = sSegments;
             aProp.Value <<= aSegments;
             aPathPropVec.push_back( aProp );
@@ -2344,7 +2335,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         // Path/StretchX
         if ( IsProperty( DFF_Prop_stretchPointX ) )
         {
-            const rtl::OUString sStretchX( RTL_CONSTASCII_USTRINGPARAM ( "StretchX" ) );
+            const rtl::OUString sStretchX( "StretchX" );
             sal_Int32 nStretchX = GetPropertyValue( DFF_Prop_stretchPointX, 0 );
             aProp.Name = sStretchX;
             aProp.Value <<= nStretchX;
@@ -2353,7 +2344,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         // Path/StretchX
         if ( IsProperty( DFF_Prop_stretchPointY ) )
         {
-            const rtl::OUString sStretchY( RTL_CONSTASCII_USTRINGPARAM ( "StretchY" ) );
+            const rtl::OUString sStretchY( "StretchY" );
             sal_Int32 nStretchY = GetPropertyValue( DFF_Prop_stretchPointY, 0 );
             aProp.Name = sStretchY;
             aProp.Value <<= nStretchY;
@@ -2386,7 +2377,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                     EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aTextFrames[ i ].BottomRight.First,  nRight );
                     EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aTextFrames[ i ].BottomRight.Second, nBottom);
                 }
-                const rtl::OUString sTextFrames( RTL_CONSTASCII_USTRINGPARAM ( "TextFrames" ) );
+                const rtl::OUString sTextFrames( "TextFrames" );
                 aProp.Name = sTextFrames;
                 aProp.Value <<= aTextFrames;
                 aPathPropVec.push_back( aProp );
@@ -2424,7 +2415,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                 EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aGluePoints[ i ].First,  nX );
                 EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aGluePoints[ i ].Second, nY );
             }
-            const rtl::OUString sGluePoints( RTL_CONSTASCII_USTRINGPARAM ( "GluePoints" ) );
+            const rtl::OUString sGluePoints( "GluePoints" );
             aProp.Name = sGluePoints;
             aProp.Value <<= aGluePoints;
             aPathPropVec.push_back( aProp );
@@ -2432,7 +2423,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         if ( IsProperty( DFF_Prop_connectorType ) )
         {
             sal_Int16 nGluePointType = (sal_uInt16)GetPropertyValue( DFF_Prop_connectorType );
-            const rtl::OUString sGluePointType( RTL_CONSTASCII_USTRINGPARAM ( "GluePointType" ) );
+            const rtl::OUString sGluePointType( "GluePointType" );
             aProp.Name = sGluePointType;
             aProp.Value <<= nGluePointType;
             aPathPropVec.push_back( aProp );
@@ -2440,7 +2431,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         // pushing the whole Path element
         if ( !aPathPropVec.empty() )
         {
-            const rtl::OUString sPath( RTL_CONSTASCII_USTRINGPARAM ( "Path" ) );
+            const rtl::OUString sPath( "Path" );
             PropSeq aPathPropSeq( aPathPropVec.size() );
             aIter = aPathPropVec.begin();
             aEnd = aPathPropVec.end();
@@ -2461,13 +2452,13 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         PropVec aTextPathPropVec;
 
         // TextPath
-        const rtl::OUString sTextPathOn( RTL_CONSTASCII_USTRINGPARAM ( "TextPath" ) );
+        const rtl::OUString sTextPathOn( "TextPath" );
         aProp.Name = sTextPathOn;
         aProp.Value <<= bTextPathOn;
         aTextPathPropVec.push_back( aProp );
 
         // TextPathMode
-        const rtl::OUString sTextPathMode( RTL_CONSTASCII_USTRINGPARAM ( "TextPathMode" ) );
+        const rtl::OUString sTextPathMode( "TextPathMode" );
         sal_Bool bTextPathFitPath = ( GetPropertyValue( DFF_Prop_gtextFStrikethrough ) & 0x100 ) != 0;
 
         sal_Bool bTextPathFitShape;
@@ -2496,20 +2487,20 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         aTextPathPropVec.push_back( aProp );
 
         // ScaleX
-        const rtl::OUString sTextPathScaleX( RTL_CONSTASCII_USTRINGPARAM ( "ScaleX" ) );
+        const rtl::OUString sTextPathScaleX( "ScaleX" );
         sal_Bool bTextPathScaleX = ( GetPropertyValue( DFF_Prop_gtextFStrikethrough ) & 0x40 ) != 0;
         aProp.Name = sTextPathScaleX;
         aProp.Value <<= bTextPathScaleX;
         aTextPathPropVec.push_back( aProp );
         // SameLetterHeights
-        const rtl::OUString sSameLetterHeight( RTL_CONSTASCII_USTRINGPARAM ( "SameLetterHeights" ) );
+        const rtl::OUString sSameLetterHeight( "SameLetterHeights" );
         sal_Bool bSameLetterHeight = ( GetPropertyValue( DFF_Prop_gtextFStrikethrough ) & 0x80 ) != 0;
         aProp.Name = sSameLetterHeight;
         aProp.Value <<= bSameLetterHeight;
         aTextPathPropVec.push_back( aProp );
 
         // pushing the whole TextPath element
-        const rtl::OUString sTextPath( RTL_CONSTASCII_USTRINGPARAM ( "TextPath" ) );
+        const rtl::OUString sTextPath( "TextPath" );
         PropSeq aTextPathPropSeq( aTextPathPropVec.size() );
         aIter = aTextPathPropVec.begin();
         aEnd = aTextPathPropVec.end();
@@ -2552,7 +2543,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             aAdjustmentSeq[ nAdjustmentValues ].State = ePropertyState;
             i--;
         }
-        const rtl::OUString sAdjustmentValues( RTL_CONSTASCII_USTRINGPARAM ( "AdjustmentValues" ) );
+        const rtl::OUString sAdjustmentValues( "AdjustmentValues" );
         aProp.Name = sAdjustmentValues;
         aProp.Value <<= aAdjustmentSeq;
         aPropVec.push_back( aProp );
@@ -2709,12 +2700,12 @@ void DffPropertyReader::CheckAndCorrectExcelTextRotation( SvStream& rIn, SfxItem
                             OFOPXML_STORAGE_FORMAT_STRING, xInputStream, xContext, sal_True ) );
                     if ( xStorage.is() )
                     {
-                        const rtl::OUString sDRS( RTL_CONSTASCII_USTRINGPARAM ( "drs" ) );
+                        const rtl::OUString sDRS( "drs" );
                         ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
                             xStorageDRS( xStorage->openStorageElement( sDRS, ::com::sun::star::embed::ElementModes::SEEKABLEREAD ) );
                         if ( xStorageDRS.is() )
                         {
-                            const rtl::OUString sShapeXML( RTL_CONSTASCII_USTRINGPARAM ( "shapexml.xml" ) );
+                            const rtl::OUString sShapeXML( "shapexml.xml" );
                             ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > xShapeXMLStream( xStorageDRS->openStreamElement( sShapeXML, ::com::sun::star::embed::ElementModes::SEEKABLEREAD ) );
                             if ( xShapeXMLStream.is() )
                             {
@@ -2758,7 +2749,7 @@ void DffPropertyReader::CheckAndCorrectExcelTextRotation( SvStream& rIn, SfxItem
     {
         const com::sun::star::uno::Any* pAny, aAny;
         SdrCustomShapeGeometryItem aGeometryItem((SdrCustomShapeGeometryItem&)rSet.Get( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
-        const rtl::OUString sTextRotateAngle( RTL_CONSTASCII_USTRINGPARAM ( "TextRotateAngle" ) );
+        const rtl::OUString sTextRotateAngle( "TextRotateAngle" );
         pAny = aGeometryItem.GetPropertyValueByName( sTextRotateAngle );
         double fExtraTextRotateAngle = 0.0;
         if ( pAny )
@@ -3498,7 +3489,7 @@ void SvxMSDffManager::ReadObjText( const String& rText, SdrObject* pObj ) const
             ESelection aSelection( nParaIndex, 0, nParaIndex, 0 );
             rtl::OUString aParagraph( pCurrent, nParaSize );
             if ( !nParaIndex && aParagraph.isEmpty() )              // SJ: we are crashing if the first paragraph is empty ?
-                aParagraph += rtl::OUString(' ');                   // otherwise these two lines can be removed.
+                aParagraph += " ";                   // otherwise these two lines can be removed.
             rOutliner.Insert( aParagraph, nParaIndex, 0 );
             rOutliner.SetParaAttribs( nParaIndex, rOutliner.GetEmptyItemSet() );
 
@@ -4263,13 +4254,13 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                     // We will change the shape type, so this code applys only if importing arcs from msoffice.
                     if ( aObjData.eShapeType == mso_sptArc )
                     {
-                        const rtl::OUString sAdjustmentValues( RTL_CONSTASCII_USTRINGPARAM ( "AdjustmentValues" ) );
-                        const rtl::OUString sCoordinates( RTL_CONSTASCII_USTRINGPARAM ( "Coordinates" ) );
-                        const rtl::OUString sHandles( RTL_CONSTASCII_USTRINGPARAM ( "Handles" ) );
-                        const rtl::OUString sEquations( RTL_CONSTASCII_USTRINGPARAM ( "Equations" ) );
-                        const rtl::OUString sViewBox( RTL_CONSTASCII_USTRINGPARAM ( "ViewBox" ) );
-                        const rtl::OUString sPath( RTL_CONSTASCII_USTRINGPARAM ( "Path" ) );
-                        const rtl::OUString sTextFrames( RTL_CONSTASCII_USTRINGPARAM ( "TextFrames" ) );
+                        const rtl::OUString sAdjustmentValues( "AdjustmentValues" );
+                        const rtl::OUString sCoordinates( "Coordinates" );
+                        const rtl::OUString sHandles( "Handles" );
+                        const rtl::OUString sEquations( "Equations" );
+                        const rtl::OUString sViewBox( "ViewBox" );
+                        const rtl::OUString sPath( "Path" );
+                        const rtl::OUString sTextFrames( "TextFrames" );
                         SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)((SdrObjCustomShape*)pRet)->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
                         com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair> seqCoordinates;
                         com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue > seqAdjustmentValues;
@@ -4420,8 +4411,8 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
 
                         // now setting a new name, so the above correction is only done once when importing from ms
                         SdrCustomShapeGeometryItem aGeoName( (SdrCustomShapeGeometryItem&)((SdrObjCustomShape*)pRet)->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
-                        const rtl::OUString sType( RTL_CONSTASCII_USTRINGPARAM ( "Type" ) );
-                        const rtl::OUString sName( RTL_CONSTASCII_USTRINGPARAM ( "mso-spt100" ) );
+                        const rtl::OUString sType( "Type" );
+                        const rtl::OUString sName( "mso-spt100" );
                         PropertyValue aPropVal;
                         aPropVal.Name = sType;
                         aPropVal.Value <<= sName;
@@ -6135,16 +6126,16 @@ sal_Bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, 
         // extract graphics from ole storage into "dbggfxNNN.*"
         static sal_Int32 nGrfCount;
 
-        String aFileName( String( RTL_CONSTASCII_USTRINGPARAM( "dbggfx" ) ) );
+        String aFileName( "dbggfx" );
         aFileName.Append( String::CreateFromInt32( nGrfCount++ ) );
         switch( nInst &~ 1 )
         {
-            case 0x216 : aFileName.Append( String( RTL_CONSTASCII_USTRINGPARAM( ".wmf" ) ) ); break;
-            case 0x3d4 : aFileName.Append( String( RTL_CONSTASCII_USTRINGPARAM( ".emf" ) ) ); break;
-            case 0x542 : aFileName.Append( String( RTL_CONSTASCII_USTRINGPARAM( ".pct" ) ) ); break;
-            case 0x46a : aFileName.Append( String( RTL_CONSTASCII_USTRINGPARAM( ".jpg" ) ) ); break;
-            case 0x6e0 : aFileName.Append( String( RTL_CONSTASCII_USTRINGPARAM( ".png" ) ) ); break;
-            case 0x7a8 : aFileName.Append( String( RTL_CONSTASCII_USTRINGPARAM( ".bmp" ) ) ); break;
+            case 0x216 : aFileName.Append( ".wmf" ); break;
+            case 0x3d4 : aFileName.Append( ".emf" ); break;
+            case 0x542 : aFileName.Append( ".pct" ); break;
+            case 0x46a : aFileName.Append( ".jpg" ); break;
+            case 0x6e0 : aFileName.Append( ".png" ); break;
+            case 0x7a8 : aFileName.Append( ".bmp" ); break;
         }
 
         rtl::OUString aURLStr;
@@ -6591,40 +6582,40 @@ const char* GetInternalServerName_Impl( const SvGlobalName& aGlobName )
 ::rtl::OUString GetFilterNameFromClassID_Impl( const SvGlobalName& aGlobName )
 {
     if ( aGlobName == SvGlobalName( SO3_SW_OLE_EMBED_CLASSID_60 ) )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StarOffice XML (Writer)" ) );
+        return ::rtl::OUString( "StarOffice XML (Writer)" );
 
     if ( aGlobName == SvGlobalName( SO3_SW_OLE_EMBED_CLASSID_8 ) )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "writer8" ) );
+        return ::rtl::OUString( "writer8" );
 
     if ( aGlobName == SvGlobalName( SO3_SC_OLE_EMBED_CLASSID_60 ) )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StarOffice XML (Calc)" ) );
+        return ::rtl::OUString( "StarOffice XML (Calc)" );
 
     if ( aGlobName == SvGlobalName( SO3_SC_OLE_EMBED_CLASSID_8 ) )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "calc8" ) );
+        return ::rtl::OUString( "calc8" );
 
     if ( aGlobName == SvGlobalName( SO3_SIMPRESS_OLE_EMBED_CLASSID_60 ) )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StarOffice XML (Impress)" ) );
+        return ::rtl::OUString( "StarOffice XML (Impress)" );
 
     if ( aGlobName == SvGlobalName( SO3_SIMPRESS_OLE_EMBED_CLASSID_8 ) )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "impress8" ) );
+        return ::rtl::OUString( "impress8" );
 
     if ( aGlobName == SvGlobalName( SO3_SDRAW_OLE_EMBED_CLASSID_60 ) )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StarOffice XML (Draw)" ) );
+        return ::rtl::OUString( "StarOffice XML (Draw)" );
 
     if ( aGlobName == SvGlobalName( SO3_SDRAW_OLE_EMBED_CLASSID_8 ) )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "draw8" ) );
+        return ::rtl::OUString( "draw8" );
 
     if ( aGlobName == SvGlobalName( SO3_SM_OLE_EMBED_CLASSID_60 ) )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StarOffice XML (Math)" ) );
+        return ::rtl::OUString( "StarOffice XML (Math)" );
 
     if ( aGlobName == SvGlobalName( SO3_SM_OLE_EMBED_CLASSID_8 ) )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "math8" ) );
+        return ::rtl::OUString( "math8" );
 
     if ( aGlobName == SvGlobalName( SO3_SCH_OLE_EMBED_CLASSID_60 ) )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StarOffice XML (Chart)" ) );
+        return ::rtl::OUString( "StarOffice XML (Chart)" );
 
     if ( aGlobName == SvGlobalName( SO3_SCH_OLE_EMBED_CLASSID_8 ) )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "chart8" ) );
+        return ::rtl::OUString( "chart8" );
 
     return ::rtl::OUString();
 }
@@ -6706,7 +6697,7 @@ com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >  SvxMS
         if ( pName )
         {
             // TODO/LATER: perhaps we need to retrieve VisArea and Metafile from the storage also
-            SotStorageStreamRef xStr = rSrcStg.OpenSotStream( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "package_stream" ) ), STREAM_STD_READ );
+            SotStorageStreamRef xStr = rSrcStg.OpenSotStream( ::rtl::OUString( "package_stream" ), STREAM_STD_READ );
             *xStr >> *pStream;
         }
         else
@@ -6724,7 +6715,7 @@ com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >  SvxMS
 #if OSL_DEBUG_LEVEL > 2
         // extract embedded ole streams into "/tmp/embedded_stream_NNN"
         static sal_Int32 nOleCount(0);
-        String aTmpName(RTL_CONSTASCII_USTRINGPARAM("/tmp/embedded_stream_"));
+        String aTmpName("/tmp/embedded_stream_");
         aTmpName += String::CreateFromInt32(nOleCount++);
         aTmpName += rtl::OUString(".bin");
         SvFileStream aTmpStream(aTmpName,STREAM_READ|STREAM_WRITE|STREAM_TRUNC);
@@ -6745,15 +6736,15 @@ com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >  SvxMS
                 aFilterName = GetFilterNameFromClassID_Impl( aStgNm );
 
             uno::Sequence < beans::PropertyValue > aMedium( aFilterName.isEmpty() ? 2 : 3);
-            aMedium[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InputStream" ) );
+            aMedium[0].Name = ::rtl::OUString( "InputStream" );
             uno::Reference < io::XInputStream > xStream = new ::utl::OSeekableInputStreamWrapper( *pStream );
             aMedium[0].Value <<= xStream;
-            aMedium[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
-            aMedium[1].Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:stream" ) );
+            aMedium[1].Name = ::rtl::OUString( "URL" );
+            aMedium[1].Value <<= ::rtl::OUString( "private:stream" );
 
             if ( !aFilterName.isEmpty() )
             {
-                aMedium[2].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ) );
+                aMedium[2].Name = ::rtl::OUString( "FilterName" );
                 aMedium[2].Value <<= aFilterName;
             }
 
@@ -6852,16 +6843,14 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                 {
                     sal_uInt8 aTestA[10];   // exist the \1CompObj-Stream ?
                     SvStorageStreamRef xSrcTst = xObjStg->OpenSotStream(
-                                String(RTL_CONSTASCII_STRINGPARAM("\1CompObj"),
-                                        RTL_TEXTENCODING_MS_1252 ));
+                                String("\1CompObj", RTL_TEXTENCODING_MS_1252 ));
                     bValidStorage = xSrcTst.Is() && sizeof( aTestA ) ==
                                     xSrcTst->Read( aTestA, sizeof( aTestA ) );
                     if( !bValidStorage )
                     {
                         // or the \1Ole-Stream ?
                         xSrcTst = xObjStg->OpenSotStream(
-                                    String(RTL_CONSTASCII_STRINGPARAM("\1Ole"),
-                                            RTL_TEXTENCODING_MS_1252 ));
+                                    String("\1Ole", RTL_TEXTENCODING_MS_1252 ));
                         bValidStorage = xSrcTst.Is() && sizeof(aTestA) ==
                                         xSrcTst->Read(aTestA, sizeof(aTestA));
                     }
@@ -6877,8 +6866,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                         // TODO/LATER: should the caller be notified if the aspect changes in future?
 
                         SvStorageStreamRef xObjInfoSrc = xObjStg->OpenSotStream(
-                            String( RTL_CONSTASCII_USTRINGPARAM( "\3ObjInfo" ) ),
-                            STREAM_STD_READ | STREAM_NOCREATE );
+                            String( "\3ObjInfo" ), STREAM_STD_READ | STREAM_NOCREATE );
                         if ( xObjInfoSrc.Is() && !xObjInfoSrc->GetError() )
                         {
                             sal_uInt8 nByte = 0;
