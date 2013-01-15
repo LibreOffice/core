@@ -17,7 +17,7 @@
             <property name="layout_style">start</property>
             <child>
               <object class="GtkButton" id="insert">
-                <property name="label">Insert</property>
+                <property name="label" translatable="yes">Insert</property>
                 <property name="use_action_appearance">False</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
