@@ -2394,3 +2394,16 @@
  {
  	bool fRet = true;
  
+--- misc/silgraphite-2.3.1/engine/include/graphite/GrFeature.h		2009-01-21 17:36:40.000000000 -0500
++++ misc/build/silgraphite-2.3.1/engine/include/graphite/GrFeature.h	2013-01-15 15:38:54.000000000 -0500
+@@ -21,6 +21,10 @@
+ 
+ //:End Ignore
+ 
++#ifdef __FreeBSD__
++#define wstring basic_string<wchar_t> //quick dirty hack for not finding _STL::wstring
++#endif
++
+ #include "GrAppData.h"
+ 
+ namespace gr
