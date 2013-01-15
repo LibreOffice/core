@@ -11,6 +11,8 @@
 #include "conditio.hxx"
 #include <formula/funcutl.hxx>
 
+class ScIconSetFrmtDataEntry;
+
 namespace condformat {
 
 namespace entry {
@@ -248,21 +250,6 @@ class ScIconSetFrmtEntry : public ScCondFrmtEntry
     // icon set ui elements
     ListBox maLbIconSetType;
 
-    class ScIconSetFrmtDataEntry : public Control
-    {
-    private:
-        FixedImage maImgIcon;
-        FixedText maFtEntry;
-        Edit maEdEntry;
-        ListBox maLbEntryType;
-
-    public:
-        ScIconSetFrmtDataEntry( Window* pParent, ScIconSetType eType, sal_Int32 i, const ScColorScaleEntry* pEntry = NULL );
-
-        ScColorScaleEntry* CreateEntry(ScDocument* pDoc, const ScAddress& rPos) const;
-
-        void SetFirstEntry();
-    };
     typedef boost::ptr_vector<ScIconSetFrmtDataEntry> ScIconSetFrmtDateEntriesType;
     ScIconSetFrmtDateEntriesType maEntries;
 

@@ -1224,7 +1224,23 @@ IMPL_LINK_NOARG( ScDateFrmtEntry, StyleSelectHdl )
     return 0;
 }
 
-ScIconSetFrmtEntry::ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry( Window* pParent, ScIconSetType eType, sal_Int32 i, const ScColorScaleEntry* pEntry ):
+class ScIconSetFrmtDataEntry : public Control
+{
+    private:
+        FixedImage maImgIcon;
+        FixedText maFtEntry;
+        Edit maEdEntry;
+        ListBox maLbEntryType;
+
+    public:
+        ScIconSetFrmtDataEntry( Window* pParent, ScIconSetType eType, sal_Int32 i, const ScColorScaleEntry* pEntry = NULL );
+
+        ScColorScaleEntry* CreateEntry(ScDocument* pDoc, const ScAddress& rPos) const;
+
+        void SetFirstEntry();
+};
+
+ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry( Window* pParent, ScIconSetType eType, sal_Int32 i, const ScColorScaleEntry* pEntry ):
     Control( pParent, ScResId( RID_ICON_SET_ENTRY ) ),
     maImgIcon( this, ScResId( IMG_ICON ) ),
     maFtEntry( this, ScResId( FT_ICON_SET_ENTRY_TEXT ) ),
@@ -1263,7 +1279,7 @@ ScIconSetFrmtEntry::ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry( Window* pPar
     FreeResource();
 }
 
-ScColorScaleEntry* ScIconSetFrmtEntry::ScIconSetFrmtDataEntry::CreateEntry(ScDocument* pDoc, const ScAddress& rPos) const
+ScColorScaleEntry* ScIconSetFrmtDataEntry::CreateEntry(ScDocument* pDoc, const ScAddress& rPos) const
 {
     sal_Int32 nPos = maLbEntryType.GetSelectEntryPos();
     rtl::OUString aText = maEdEntry.GetText();
@@ -1297,7 +1313,7 @@ ScColorScaleEntry* ScIconSetFrmtEntry::ScIconSetFrmtDataEntry::CreateEntry(ScDoc
     return pEntry;
 }
 
-void ScIconSetFrmtEntry::ScIconSetFrmtDataEntry::SetFirstEntry()
+void ScIconSetFrmtDataEntry::SetFirstEntry()
 {
     maEdEntry.Hide();
     maLbEntryType.Hide();
