@@ -303,17 +303,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         exit( 1 );
     }
 
-    Reference< XComponentContext > xContext;
-    try
-    {
-        xContext = defaultBootstrap_InitialComponentContext();
-    }
-    catch ( const Exception &e )
-    {
-        printf( "Exception bootstrapping UNO: %s\n",
-            OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).getStr() );
-        exit(1);
-    }
+    Reference< XComponentContext > xContext(
+        defaultBootstrap_InitialComponentContext());
 
     //--------------------------------
     // parser demo
