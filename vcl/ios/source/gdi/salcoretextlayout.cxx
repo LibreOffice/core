@@ -61,32 +61,32 @@ void CoreTextLayout::AdjustLayout( ImplLayoutArgs& /*rArgs*/ )
 void CoreTextLayout::Clean()
 {
     msgs_debug(layout,"-->");
-    if (m_glyphs)
+    if(m_glyphs)
     {
         delete[] m_glyphs;
         m_glyphs = NULL;
     }
-    if (m_chars2glyphs)
+    if(m_chars2glyphs)
     {
         delete[] m_chars2glyphs;
         m_chars2glyphs = NULL;
     }
-    if (m_glyphs2chars)
+    if(m_glyphs2chars)
     {
         delete[] m_glyphs2chars;
         m_glyphs2chars = NULL;
     }
-    if (m_char_widths)
+    if(m_char_widths)
     {
         delete[] m_char_widths;
         m_char_widths = NULL;
     }
-    if (m_glyph_advances)
+    if(m_glyph_advances)
     {
         delete[] m_glyph_advances;
         m_glyph_advances = NULL;
     }
-    if (m_glyph_positions)
+    if(m_glyph_positions)
     {
         delete[] m_glyph_positions;
         m_glyph_positions = NULL;
@@ -101,7 +101,7 @@ void CoreTextLayout::DrawText( SalGraphics& rGraphics ) const
 {
     msgs_debug(layout,"-->");
     IosSalGraphics& gr = static_cast<IosSalGraphics&>(rGraphics);
-    if (m_chars_count <= 0 || !gr.CheckContext())
+    if(m_chars_count <= 0 || !gr.CheckContext())
     {
         return;
     }
@@ -115,13 +115,19 @@ void CoreTextLayout::DrawText( SalGraphics& rGraphics ) const
     CTLineDraw(m_line, gr.mrContext);
 #else
     InitGIA();
-    msgs_debug(layout,"at- pos (%ld, %ld)", pos.X(), pos.Y());
+    msgs_debug(layout,"at- pos (%ld, %ld) ctfont=%p", pos.X(), pos.Y(),
+               m_style->GetFont());
     CGFontRef cg_font = CTFontCopyGraphicsFont(m_style->GetFont(), NULL);
+    if(!cg_font)
+    {
+        msgs_debug(layout, "Error cg_font is %s", "NULL");
+        return;
+    }
     CGContextSetFont(gr.mrContext, cg_font);
     CGContextSetFontSize(gr.mrContext, CTFontGetSize(m_style->GetFont()));
     CGContextSetTextDrawingMode(gr.mrContext, kCGTextFill);
     CGContextSetShouldAntialias( gr.mrContext, true );
-    if (m_style->GetColor())
+    if(m_style->GetColor())
     {
         CGContextSetFillColorWithColor(gr.mrContext, m_style->GetColor());
         CGContextSetStrokeColorWithColor(gr.mrContext, m_style->GetColor());
@@ -131,20 +137,10 @@ void CoreTextLayout::DrawText( SalGraphics& rGraphics ) const
         CGContextSetRGBFillColor(gr.mrContext, 0.0, 0.0, 0.0, 1.0);
     }
     CFRelease(cg_font);
-//    CGContextSetTextPosition(gr.mrContext, pos.X(), pos.Y());
     CGContextSetTextMatrix(gr.mrContext, CGAffineTransformMakeScale(1.0, -1.0));
     CGContextSetShouldAntialias( gr.mrContext, !gr.mbNonAntialiasedText );
     CGContextTranslateCTM(gr.mrContext, pos.X(), pos.Y());
-//    for(int i = 0; i < m_glyphs_count ; ++i)
-//    {
-//        msgs_debug(layout,"m_glyph=%p m_glyph_positions=%p count=%d", m_glyphs, m_glyph_positions, m_glyphs_count);
-//        msgs_debug(layout,"glyph[%d]=0x%x position(%g,%g)", i, m_glyphs[i], m_glyph_positions[i].x, m_glyph_positions[i].y);
-        CGContextShowGlyphs(gr.mrContext, m_glyphs, m_glyphs_count);
-//        CGContextShowGlyphsAtPositions(gr.mrContext, m_glyphs, m_glyph_positions, m_glyphs_count);
-//        CGContextShowGlyphsWidthAdvances(gr.mrContext, m_glyphs, m_glyph_advances, m_glyphs_count);
-
-//        CGContextShowGlyphsAtPoint(gr.mrContext, pos.X(), pos.Y(), m_glyphs, m_glyphs_count);
-//    }
+    CGContextShowGlyphs(gr.mrContext, m_glyphs, m_glyphs_count);
 #endif
     // restore the original graphic context transformations
     CGContextRestoreGState( gr.mrContext );
@@ -159,7 +155,7 @@ long CoreTextLayout::FillDXArray( long* pDXArray ) const
 {
     msgs_debug(layout,"-->");
     // short circuit requests which don't need full details
-    if ( !pDXArray )
+    if( !pDXArray )
     {
         return GetTextWidth();
     }
@@ -186,10 +182,11 @@ long CoreTextLayout::FillDXArray( long* pDXArray ) const
 
 bool CoreTextLayout::GetBoundRect( SalGraphics &rGraphics, Rectangle& rVCLRect ) const
 {
+
     msgs_debug(layout,"-->");
-    IosSalGraphics& gr = static_cast<IosSalGraphics&>(rGraphics);
     if ( !m_has_bound_rec )
     {
+        IosSalGraphics& gr = static_cast<IosSalGraphics&>(rGraphics);
         CGRect bound_rect = CTLineGetImageBounds( m_line, gr.mrContext );
         if ( !CGRectIsNull( bound_rect ) )
         {
@@ -234,21 +231,21 @@ int CoreTextLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos
     // get glyph measurements
     InitGIA();
 
-    if ( nStart < 0 )                // first glyph requested?
+    if( nStart < 0 )                // first glyph requested?
     {
         nStart = 0;
         m_current_run_index = 0;
         m_current_glyph_index = 0;
         m_current_glyphrun_index = 0;
     }
-    else if (nStart >= m_glyphs_count)
+    else if(nStart >= m_glyphs_count)
     {
         m_current_run_index = 0;
         m_current_glyph_index = 0;
         m_current_glyphrun_index = 0;
         return 0;
     }
-    if (!m_runs)
+    if(!m_runs)
     {
         m_runs = CTLineGetGlyphRuns(m_line);
     }
@@ -260,10 +257,10 @@ int CoreTextLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos
     bool first = true;
     while(i < nLen)
     {
-        if (m_current_glyphrun_index >= nb_glyphs)
+        if(m_current_glyphrun_index >= nb_glyphs)
         {
             m_current_run_index += 1;
-            if (m_current_run_index >= nb_runs)
+            if(m_current_run_index >= nb_runs)
             {
                 break;
             }
@@ -271,7 +268,7 @@ int CoreTextLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos
             nb_glyphs = CTRunGetGlyphCount( run );
             m_current_glyphrun_index = 0;
         }
-        if (first)
+        if(first)
         {
             CGPoint first_pos;
             CTRunGetPositions(run, CFRangeMake(m_current_glyphrun_index,1), &first_pos);
@@ -281,11 +278,11 @@ int CoreTextLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos
             first = false;
         }
         pGlyphIDs[i] = m_glyphs[m_current_glyph_index];
-        if (pGlyphAdvances)
+        if(pGlyphAdvances)
         {
             pGlyphAdvances[i] = m_glyph_advances[m_current_glyph_index];
         }
-        if (pCharIndexes)
+        if(pCharIndexes)
         {
             pCharIndexes[i] = m_glyphs2chars[m_current_glyph_index];
         }
@@ -317,17 +314,18 @@ long CoreTextLayout::GetTextWidth() const
 // not needed. CoreText manage fallback directly
 void CoreTextLayout::InitFont()  const
 {
+    msgs_debug(layout,"<-->");
 }
 
 bool CoreTextLayout::InitGIA() const
 {
     msgs_debug(layout,"count=%d <--",  m_chars_count);
 
-    if ( m_chars_count <= 0)
+    if( m_chars_count <= 0)
     {
         return false;
     }
-    if (m_glyphs)
+    if(m_glyphs)
     {
         return true;
     }
@@ -351,13 +349,13 @@ bool CoreTextLayout::InitGIA() const
     for( CFIndex i = 0; i < nb_runs; ++i )
     {
         CTRunRef run = (CTRunRef)CFArrayGetValueAtIndex( runs, i );
-        if ( run )
+        if( run )
         {
 			CFIndex nb_glyphs = CTRunGetGlyphCount( run );
-            if (nb_glyphs)
+            if(nb_glyphs)
             {
                 CFRange text_range = CTRunGetStringRange( run );
-                if ( text_range.location != kCFNotFound && text_range.length > 0 )
+                if( text_range.location != kCFNotFound && text_range.length > 0 )
                 {
                     CFIndex indices[ nb_glyphs ];
                     CGGlyph glyphs[ nb_glyphs ];
@@ -375,6 +373,8 @@ bool CoreTextLayout::InitGIA() const
                     for (CFIndex j = 0 ; j < nb_glyphs; ++p, ++j )
                     {
                         m_glyphs[ p ] = glyphs[ j ];
+                        msgs_debug(layout,"m_glyphys[%d]=glyphs[%d] run %d : 0x%x\n",
+                                   p,(int)j, (int)i, glyphs[j]);
                         CFIndex k = indices[ j ];
                         m_glyphs2chars[p] = k;
                         m_chars2glyphs[k] = p;
@@ -383,7 +383,7 @@ bool CoreTextLayout::InitGIA() const
                         {
                             m_char_widths[ k ] += m_glyph_positions[ p + 1 ].x - m_glyph_positions[ p ].x;
                         }
-                        if ( p > 0)
+                        if( p > 0)
                         {
                             m_glyph_advances[p - 1] = m_glyph_positions[ p ].x - m_glyph_positions[p - 1].x;
                         }
@@ -398,7 +398,8 @@ bool CoreTextLayout::InitGIA() const
 
 bool CoreTextLayout::LayoutText(ImplLayoutArgs& args)
 {
-    msgs_debug(layout,"-->");
+    msgs_debug(layout,"-->(m_style=%p font=%p",
+               m_style, m_style->GetFont());
     Clean();
     m_style->SetColor();
     /* retreive MinCharPos EndCharPos Flags and Orientation */
@@ -406,7 +407,7 @@ bool CoreTextLayout::LayoutText(ImplLayoutArgs& args)
     m_chars_count = mnEndCharPos - mnMinCharPos;
 
     /* don't layout emptty (or worse negative size) strings */
-    if (m_chars_count <= 0)
+    if(m_chars_count <= 0)
     {
         return false;
     }
@@ -457,13 +458,13 @@ bool CoreTextLayout::LayoutText(ImplLayoutArgs& args)
     }
     m_typesetter = CTTypesetterCreateWithAttributedString(string);
     CFRelease(string);
-    if (!m_typesetter)
+    if(!m_typesetter)
     {
         Clean();
         return false;
     }
     m_line = CTTypesetterCreateLine(m_typesetter, CFRangeMake(0, 0));
-    if (!m_line)
+    if(!m_line)
     {
         Clean();
         return false;

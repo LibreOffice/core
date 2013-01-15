@@ -28,24 +28,24 @@
 
 static bool GetDevFontAttributes( CTFontDescriptorRef font_descriptor, ImplDevFontAttributes& rDFA  )
 {
+    int value = 0;
 
     // reset the attributes
-    rDFA.meFamily     = FAMILY_DONTKNOW;
-    rDFA.mePitch      = PITCH_VARIABLE;
-    rDFA.meWidthType  = WIDTH_NORMAL;
-    rDFA.meWeight     = WEIGHT_NORMAL;
-    rDFA.meItalic     = ITALIC_NONE;
-    rDFA.mbSymbolFlag = false;
+    rDFA.SetFamilyType( FAMILY_DONTKNOW );
+    rDFA.SetPitch( PITCH_VARIABLE );
+    rDFA.SetWidthType( WIDTH_NORMAL );
+    rDFA.SetWeight( WEIGHT_NORMAL );
+    rDFA.SetItalic( ITALIC_NONE );
+    rDFA.SetSymbolFlag( false );
     rDFA.mbOrientation = true;
     rDFA.mbDevice      = true;
     rDFA.mnQuality     = 0;
 
     CFNumberRef format = (CFNumberRef)CTFontDescriptorCopyAttribute(font_descriptor, kCTFontFormatAttribute);
-    int value = 0;
     CFNumberGetValue(format, kCFNumberIntType, &value);
     CFRelease(format);
 
-    if (value == kCTFontFormatBitmap)
+    if(value == kCTFontFormatBitmap)
     {
         /* we don't want bitmap fonts */
         return false;
@@ -54,43 +54,41 @@ static bool GetDevFontAttributes( CTFontDescriptorRef font_descriptor, ImplDevFo
     rDFA.mbEmbeddable   = false;
 
     CFStringRef family_name = (CFStringRef)CTFontDescriptorCopyAttribute(font_descriptor, kCTFontFamilyNameAttribute);
-    rDFA.maName = GetOUString(family_name);
+    rDFA.SetFamilyName( GetOUString(family_name) );
     CFRelease(family_name);
 
     CFDictionaryRef traits = (CFDictionaryRef)CTFontDescriptorCopyAttribute(font_descriptor, kCTFontTraitsAttribute);
     CFNumberRef symbolics = (CFNumberRef)CFDictionaryGetValue(traits, kCTFontSymbolicTrait);
-
-    value = 0;
     CFNumberGetValue(symbolics, kCFNumberIntType, &value);
     CFRelease(symbolics);
 
-    if (value & kCTFontMonoSpaceTrait)
+    if(value & kCTFontMonoSpaceTrait)
     {
-        rDFA.mePitch = PITCH_FIXED;
+        rDFA.SetPitch( PITCH_FIXED );
     }
 
-    if (value & kCTFontItalicTrait)
+    if(value & kCTFontItalicTrait)
     {
-        rDFA.meItalic = ITALIC_NORMAL;
+        rDFA.SetItalic( ITALIC_NORMAL );
     }
 
-    if (value & kCTFontBoldTrait)
+    if(value & kCTFontBoldTrait)
     {
-        rDFA.meWeight = WEIGHT_BOLD;
+        rDFA.SetWeight( WEIGHT_BOLD );
     }
 
-    if (value & kCTFontCondensedTrait)
+    if(value & kCTFontCondensedTrait)
     {
-        rDFA.meWidthType = WIDTH_CONDENSED;
+        rDFA.SetWidthType( WIDTH_CONDENSED );
     }
-    else if (value & kCTFontExpandedTrait)
+    else if(value & kCTFontExpandedTrait)
     {
-        rDFA.meWidthType = WIDTH_EXPANDED;
+        rDFA.SetWidthType( WIDTH_EXPANDED );
     }
     switch(value & kCTFontClassMaskTrait)
     {
     case kCTFontOldStyleSerifsClass:
-        rDFA.meFamily = FAMILY_ROMAN;
+        rDFA.SetFamilyType( FAMILY_ROMAN );
         break;
     case kCTFontTransitionalSerifsClass:
     case kCTFontModernSerifsClass:
@@ -99,56 +97,56 @@ static bool GetDevFontAttributes( CTFontDescriptorRef font_descriptor, ImplDevFo
     case kCTFontFreeformSerifsClass:
         break;
     case kCTFontSansSerifClass:
-        rDFA.meFamily = FAMILY_SWISS;
+        rDFA.SetFamilyType( FAMILY_SWISS );
     case kCTFontOrnamentalsClass:
-        rDFA.meFamily = FAMILY_DECORATIVE;
+        rDFA.SetFamilyType( FAMILY_DECORATIVE );
         break;
     case kCTFontScriptsClass:
-        rDFA.meFamily = FAMILY_SCRIPT;
+        rDFA.SetFamilyType( FAMILY_SCRIPT );
         break;
     case kCTFontSymbolicClass:
-        rDFA.mbSymbolFlag = true;
+        rDFA.SetSymbolFlag( true );
         break;
     }
 
     CFNumberRef weight = (CFNumberRef)CFDictionaryGetValue(traits, kCTFontWeightTrait);
     float fdval = 0.0;
     CFNumberGetValue(weight, kCFNumberFloatType, &fdval);
-    if (fdval > 0.6)
+    if(fdval > 0.6)
     {
-        rDFA.meWeight = WEIGHT_BLACK;
+        rDFA.SetWeight( WEIGHT_BLACK );
     }
-    else if (fdval > 0.4)
+    else if(fdval > 0.4)
     {
-        rDFA.meWeight = WEIGHT_ULTRABOLD;
+        rDFA.SetWeight( WEIGHT_ULTRABOLD );
     }
     else if (fdval > 0.3)
     {
-        rDFA.meWeight = WEIGHT_BOLD;
+        rDFA.SetWeight( WEIGHT_BOLD );
     }
     else if (fdval > 0.0)
     {
-        rDFA.meWeight = WEIGHT_SEMIBOLD;
+        rDFA.SetWeight( WEIGHT_SEMIBOLD );
     }
     else if (fdval <= -0.8)
     {
-        rDFA.meWeight = WEIGHT_ULTRALIGHT;
+        rDFA.SetWeight( WEIGHT_ULTRALIGHT );
     }
     else if (fdval <= -0.4)
     {
-        rDFA.meWeight = WEIGHT_LIGHT;
+        rDFA.SetWeight( WEIGHT_LIGHT );
     }
     else if (fdval <= -0.3)
     {
-        rDFA.meWeight = WEIGHT_SEMILIGHT;
+        rDFA.SetWeight( WEIGHT_SEMILIGHT );
     }
     else if (fdval <= -0.2)
     {
-        rDFA.meWeight = WEIGHT_THIN;
+        rDFA.SetWeight( WEIGHT_THIN );
     }
     else
     {
-        rDFA.meWeight = WEIGHT_NORMAL;
+        rDFA.SetWeight( WEIGHT_NORMAL );
     }
 
     CFStringRef string_ref = (CFStringRef)CTFontDescriptorCopyAttribute(font_descriptor, kCTFontStyleNameAttribute);
@@ -157,41 +155,41 @@ static bool GetDevFontAttributes( CTFontDescriptorRef font_descriptor, ImplDevFo
     CFRelease(string_ref);
 
     // heuristics to adjust font slant
-    if ( (font_name_lc.indexOf("oblique") != -1) ||
+    if( (font_name_lc.indexOf("oblique") != -1) ||
         (font_name_lc.indexOf("inclined") != -1) ||
         (font_name_lc.indexOf("slanted") != -1) )
     {
-        rDFA.meItalic = ITALIC_OBLIQUE;
+        rDFA.SetItalic( ITALIC_OBLIQUE );
     }
 
     // heuristics to adjust font width
     if (font_name_lc.indexOf("narrow") != -1)
     {
-        rDFA.meWidthType = WIDTH_SEMI_CONDENSED;
+        rDFA.SetWidthType( WIDTH_SEMI_CONDENSED );
     }
 
     // heuristics for font family type
-    if ( (font_name_lc.indexOf("script") != -1) ||
+    if( (font_name_lc.indexOf("script") != -1) ||
         (font_name_lc.indexOf("chancery") != -1) ||
         (font_name_lc.indexOf("zapfino") != -1))
     {
-        rDFA.meFamily = FAMILY_SCRIPT;
+        rDFA.SetFamilyType( FAMILY_SCRIPT );
     }
-    else if ( (font_name_lc.indexOf("comic") != -1) ||
+    else if( (font_name_lc.indexOf("comic") != -1) ||
              (font_name_lc.indexOf("outline") != -1) ||
              (font_name_lc.indexOf("pinpoint") != -1) )
     {
-        rDFA.meFamily = FAMILY_DECORATIVE;
+        rDFA.SetFamilyType( FAMILY_DECORATIVE );
     }
-    else if ( (font_name_lc.indexOf("sans") != -1) ||
+    else if( (font_name_lc.indexOf("sans") != -1) ||
              (font_name_lc.indexOf("arial") != -1) )
     {
-        rDFA.meFamily = FAMILY_SWISS;
+        rDFA.SetFamilyType( FAMILY_SWISS );
     }
-    else if ( (font_name_lc.indexOf("roman") != -1) ||
+    else if( (font_name_lc.indexOf("roman") != -1) ||
              (font_name_lc.indexOf("times") != -1) )
     {
-        rDFA.meFamily = FAMILY_ROMAN;
+        rDFA.SetFamilyType( FAMILY_ROMAN );
     }
     return true;
 }
@@ -199,28 +197,35 @@ static bool GetDevFontAttributes( CTFontDescriptorRef font_descriptor, ImplDevFo
 SystemFontList::SystemFontList()
 {
 	CTFontCollectionRef font_collection = CTFontCollectionCreateFromAvailableFonts(NULL);
-    if (font_collection)
+    if(font_collection)
     {
         CFArrayRef font_descriptors = CTFontCollectionCreateMatchingFontDescriptors(font_collection);
 
-        for(int i = 0; i < CFArrayGetCount(font_descriptors); i++)
+        if(font_descriptors)
         {
-            CTFontDescriptorRef font_descriptor = (CTFontDescriptorRef)CFArrayGetValueAtIndex(font_descriptors, i);
-            CTFontRef font = CTFontCreateWithFontDescriptor(font_descriptor, 0, NULL);
-            ImplDevFontAttributes devfont_attr;
-            if (GetDevFontAttributes( font_descriptor, devfont_attr ) )
+            for(int i = 0; i < CFArrayGetCount(font_descriptors); i++)
             {
-                ImplCoreTextFontData* font_data = new ImplCoreTextFontData(devfont_attr, font);
-                if (font_data && font_data->GetCTFont())
+                CTFontDescriptorRef font_descriptor = (CTFontDescriptorRef)CFArrayGetValueAtIndex(font_descriptors, i);
+                CTFontRef font = CTFontCreateWithFontDescriptor(font_descriptor, 0, NULL);
+                if(font)
                 {
-                    m_aFontContainer [ font_data->GetCTFont() ] = font_data;
+                    ImplDevFontAttributes devfont_attr;
+                    if(GetDevFontAttributes( font_descriptor, devfont_attr ) )
+                    {
+                        CoreTextPhysicalFontFace* font_face = new CoreTextPhysicalFontFace(devfont_attr, font);
+                        if(font_face && font_face->GetCTFont())
+                        {
+                            m_aFontContainer [ font_face->GetCTFont() ] = font_face;
+                        }
+                    }
+                    CFRelease(font);
                 }
             }
-            CFRelease(font);
+            CFRelease(font_descriptors);
         }
-        CFRelease(font_descriptors);
+        CFRelease(font_collection);
     }
-    CFRelease(font_collection);
+
 }
 
 SystemFontList::~SystemFontList()
@@ -231,7 +236,7 @@ SystemFontList::~SystemFontList()
     m_aFontContainer.clear();
 }
 
-ImplCoreTextFontData* SystemFontList::GetFontDataFromRef( CTFontRef font ) const
+CoreTextPhysicalFontFace* SystemFontList::GetFontDataFromRef( CTFontRef font ) const
 {
     CoreTextFontContainer::const_iterator it = m_aFontContainer.find( font );
     return it == m_aFontContainer.end() ? NULL : (*it).second;
@@ -247,7 +252,7 @@ void SystemFontList::AnnounceFonts( ImplDevFontList& rFontList ) const
     }
 }
 
-ImplCoreTextFontData::ImplCoreTextFontData( const ImplDevFontAttributes& rDFA, CTFontRef font )
+CoreTextPhysicalFontFace::CoreTextPhysicalFontFace( const ImplDevFontAttributes& rDFA, CTFontRef font )
 :   PhysicalFontFace( rDFA, 0 )
 ,   m_CTFontRef((CTFontRef)CFRetain(font))
 ,   m_pCharMap( NULL )
@@ -257,43 +262,43 @@ ImplCoreTextFontData::ImplCoreTextFontData( const ImplDevFontAttributes& rDFA, C
 ,   m_bHasCJKSupport( false )
 ,   m_bFontCapabilitiesRead( false )
 {
+    msgs_debug(font,"retain %p as %p",font, m_CTFontRef);
 }
 
-ImplCoreTextFontData::~ImplCoreTextFontData()
+CoreTextPhysicalFontFace::~CoreTextPhysicalFontFace()
 {
-    if ( m_pCharMap )
+    if( m_pCharMap )
     {
         m_pCharMap->DeReference();
     }
-    if ( m_CTFontRef )
-    {
-        CFRelease(m_CTFontRef);
-    }
+    msgs_debug(font,"release font %p", m_CTFontRef);
+    SafeCFRelease(m_CTFontRef);
 }
 
-PhysicalFontFace* ImplCoreTextFontData::Clone() const
+PhysicalFontFace* CoreTextPhysicalFontFace::Clone() const
 {
-    ImplCoreTextFontData* pClone = new ImplCoreTextFontData(*this);
-    if ( m_pCharMap )
+    CoreTextPhysicalFontFace* pClone = new CoreTextPhysicalFontFace(*this);
+    if( m_pCharMap )
     {
         m_pCharMap->AddReference();
     }
-    if ( m_CTFontRef )
+    if( m_CTFontRef )
     {
         pClone->m_CTFontRef = (CTFontRef)CFRetain(m_CTFontRef);
+        msgs_debug(font,"clone ref %p into %p", m_CTFontRef, pClone->m_CTFontRef);
     }
     return pClone;
 }
 
-ImplFontEntry* ImplCoreTextFontData::CreateFontInstance(FontSelectPattern& rFSD) const
+ImplFontEntry* CoreTextPhysicalFontFace::CreateFontInstance(FontSelectPattern& rFSD) const
 {
     return new ImplFontEntry(rFSD);
 }
 
-const ImplFontCharMap* ImplCoreTextFontData::GetImplFontCharMap()
+const ImplFontCharMap* CoreTextPhysicalFontFace::GetImplFontCharMap()
 {
     // return the cached charmap
-    if ( m_pCharMap )
+    if( m_pCharMap )
     {
         return m_pCharMap;
     }
@@ -303,18 +308,18 @@ const ImplFontCharMap* ImplCoreTextFontData::GetImplFontCharMap()
 
     // get the CMAP byte size
     CFDataRef rCmapTable = CTFontCopyTable( m_CTFontRef, kCTFontTableCmap, kCTFontTableOptionNoOptions);
-    if (!rCmapTable)
+    if(!rCmapTable)
     {
         return m_pCharMap;
     }
-    if (!m_bCmapTableRead)
+    if(!m_bCmapTableRead)
     {
         m_bCmapTableRead = true;
         DetermineCJKSupport_cmap(rCmapTable);
     }
     // parse the CMAP
     CmapResult aCmapResult;
-    if (ParseCMAP( CFDataGetBytePtr(rCmapTable), CFDataGetLength(rCmapTable), aCmapResult ) )
+    if(ParseCMAP( CFDataGetBytePtr(rCmapTable), CFDataGetLength(rCmapTable), aCmapResult ) )
     {
         m_pCharMap = new ImplFontCharMap( aCmapResult );
         m_pCharMap->AddReference();
@@ -323,10 +328,10 @@ const ImplFontCharMap* ImplCoreTextFontData::GetImplFontCharMap()
     return m_pCharMap;
 }
 
-bool ImplCoreTextFontData::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities)
+bool CoreTextPhysicalFontFace::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities)
 {
     // read this only once per font
-    if ( m_bFontCapabilitiesRead )
+    if( m_bFontCapabilitiesRead )
     {
         rFontCapabilities = m_aFontCapabilities;
         return !rFontCapabilities.maUnicodeRange.empty() || !rFontCapabilities.maCodePageRange.empty();
@@ -335,7 +340,7 @@ bool ImplCoreTextFontData::GetImplFontCapabilities(vcl::FontCapabilities &rFontC
 
     // get the GSUB table raw data
     CFDataRef rGSUBTable = CTFontCopyTable( m_CTFontRef, kCTFontTableGSUB, kCTFontTableOptionNoOptions);
-    if (rGSUBTable)
+    if(rGSUBTable)
     {
 
         vcl::getTTScripts(m_aFontCapabilities.maGSUBScriptTags,
@@ -343,14 +348,14 @@ bool ImplCoreTextFontData::GetImplFontCapabilities(vcl::FontCapabilities &rFontC
         CFRelease(rGSUBTable);
     }
     CFDataRef OS2_Table = CTFontCopyTable( m_CTFontRef, kCTFontTableOS2, kCTFontTableOptionNoOptions);
-    if (OS2_Table)
+    if(OS2_Table)
     {
         vcl::getTTCoverage(
                 m_aFontCapabilities.maUnicodeRange,
                 m_aFontCapabilities.maCodePageRange,
                 CFDataGetBytePtr(OS2_Table), CFDataGetLength(OS2_Table));
         /* while we are at it let's solve HasCJK for the same price */
-        if (!m_bOs2TableRead )
+        if(!m_bOs2TableRead )
         {
             m_bOs2TableRead = true;
             m_bHasOs2Table = true;
@@ -371,7 +376,7 @@ struct font_table
 
 void addTable(struct font_table* table, CTFontTableTag tag, CFDataRef data)
 {
-    if (data && CFDataGetLength(data) > 0)
+    if(data && CFDataGetLength(data) > 0)
     {
         *(uint32_t*)table->dir_entry = CFSwapInt32HostToBig(tag);
         table->dir_entry += 4;
@@ -387,20 +392,17 @@ void addTable(struct font_table* table, CTFontTableTag tag, CFDataRef data)
     }
 }
 
-bool ImplCoreTextFontData::GetRawFontData( std::vector<unsigned char>& rBuffer, bool* pJustCFF ) const
+bool CoreTextPhysicalFontFace::GetRawFontData( std::vector<unsigned char>& rBuffer, bool* pJustCFF ) const
 {
     bool rc;
     int table_count = 0;
 
     CFDataRef CFF_table = CTFontCopyTable( m_CTFontRef, kCTFontTableCFF, kCTFontTableOptionNoOptions);
-    if (pJustCFF)
+    if(pJustCFF)
     {
-        if (CFF_table)
+        if(CFF_table)
         {
             *pJustCFF = CFDataGetLength(CFF_table) ? true : false;
-        }
-        if (CFF_table)
-        {
             CFRelease(CFF_table);
             return true;
         }
@@ -417,9 +419,9 @@ bool ImplCoreTextFontData::GetRawFontData( std::vector<unsigned char>& rBuffer, 
     CFDataRef hhea_table = CTFontCopyTable( m_CTFontRef, kCTFontTableHhea, kCTFontTableOptionNoOptions);
     CFDataRef hmtx_table = CTFontCopyTable( m_CTFontRef, kCTFontTableHmtx, kCTFontTableOptionNoOptions);
     rc = false;
-    if (head_table && maxp_table && cmap_table && name_table && hhea_table && hmtx_table)
+    if(head_table && maxp_table && cmap_table && name_table && hhea_table && hmtx_table)
     {
-        if (CFDataGetLength(head_table) &&
+        if(CFDataGetLength(head_table) &&
            CFDataGetLength(maxp_table) &&
            CFDataGetLength(name_table) &&
            CFDataGetLength(hhea_table) &&
@@ -440,13 +442,13 @@ bool ImplCoreTextFontData::GetRawFontData( std::vector<unsigned char>& rBuffer, 
     CFDataRef prep_table = NULL;
     CFDataRef cvt_table = NULL;
     CFDataRef fpgm_table = NULL;
-    if (rc)
+    if(rc)
     {
-        if (!CFF_table || CFDataGetLength(CFF_table) == 0)
+        if(!CFF_table || CFDataGetLength(CFF_table) == 0)
         {
             loca_table = CTFontCopyTable( m_CTFontRef, kCTFontTableLoca, kCTFontTableOptionNoOptions);
             glyf_table = CTFontCopyTable( m_CTFontRef, kCTFontTableGlyf, kCTFontTableOptionNoOptions);
-            if (!loca_table  || !glyf_table || !CFDataGetLength(loca_table) || !CFDataGetLength(glyf_table))
+            if(!loca_table  || !glyf_table || !CFDataGetLength(loca_table) || !CFDataGetLength(glyf_table))
             {
                 rc = false;
             }
@@ -457,17 +459,17 @@ bool ImplCoreTextFontData::GetRawFontData( std::vector<unsigned char>& rBuffer, 
                 prep_table = CTFontCopyTable( m_CTFontRef, kCTFontTablePrep, kCTFontTableOptionNoOptions);
                 cvt_table = CTFontCopyTable( m_CTFontRef, kCTFontTableCvt, kCTFontTableOptionNoOptions);
                 fpgm_table = CTFontCopyTable( m_CTFontRef, kCTFontTableFpgm, kCTFontTableOptionNoOptions);
-                if (prep_table || CFDataGetLength(prep_table) > 0)
+                if(prep_table || CFDataGetLength(prep_table) > 0)
                 {
                     table_count += 1;
                     total_len += CFDataGetLength(prep_table);
                 }
-                if (cvt_table || CFDataGetLength(cvt_table) > 0)
+                if(cvt_table || CFDataGetLength(cvt_table) > 0)
                 {
                     table_count += 1;
                     total_len += CFDataGetLength(cvt_table);
                 }
-                if (fpgm_table || CFDataGetLength(fpgm_table) > 0)
+                if(fpgm_table || CFDataGetLength(fpgm_table) > 0)
                 {
                     table_count += 1;
                     total_len += CFDataGetLength(fpgm_table);
@@ -480,7 +482,7 @@ bool ImplCoreTextFontData::GetRawFontData( std::vector<unsigned char>& rBuffer, 
             total_len += CFDataGetLength(CFF_table);
         }
     }
-    if (rc)
+    if(rc)
     {
         total_len += 12 + 16 * table_count;
         rBuffer.resize(total_len);
@@ -535,16 +537,16 @@ bool ImplCoreTextFontData::GetRawFontData( std::vector<unsigned char>& rBuffer, 
     return rc;
 }
 
-void ImplCoreTextFontData::DetermineCJKSupport_OS2(CFDataRef rOS2Table)
+void CoreTextPhysicalFontFace::DetermineCJKSupport_OS2(CFDataRef rOS2Table)
 {
-    if (CFDataGetLength(rOS2Table) >= 48)
+    if(CFDataGetLength(rOS2Table) >= 48)
     {
         const unsigned short* pOS2buffer = (const unsigned short*)CFDataGetBytePtr(rOS2Table);
         const unsigned short version = CFSwapInt16BigToHost(pOS2buffer[0]);
-        if ( version >= 1)
+        if( version >= 1)
         {
             const unsigned short unicode_range = CFSwapInt16BigToHost(pOS2buffer[23]);
-            if ( unicode_range & 0x2DF0)
+            if( unicode_range & 0x2DF0)
             {
                 m_bHasCJKSupport = true;
             }
@@ -552,22 +554,22 @@ void ImplCoreTextFontData::DetermineCJKSupport_OS2(CFDataRef rOS2Table)
     }
 }
 
-void ImplCoreTextFontData::DetermineCJKSupport_cmap(CFDataRef rCmapTable)
+void CoreTextPhysicalFontFace::DetermineCJKSupport_cmap(CFDataRef rCmapTable)
 {
     int table_len = CFDataGetLength(rCmapTable) / 2;
-    if (table_len >= 12)
+    if(table_len >= 12)
     {
         const unsigned short* pCmap = (const unsigned short*)CFDataGetBytePtr(rCmapTable);
-        if (pCmap[0] == 0)
+        if(pCmap[0] == 0)
         {
             short nb_sub_tables = CFSwapInt16BigToHost(pCmap[1]);
             for(int i = 2; --nb_sub_tables >= 0 && i < table_len; i += 4)
             {
                 short platform = CFSwapInt16BigToHost(pCmap[i]);
-                if ( platform == kFontMacintoshPlatform )
+                if( platform == kFontMacintoshPlatform )
                 {
                     short encoding = CFSwapInt16BigToHost(pCmap[i+1]);
-                    if ( encoding == kFontJapaneseScript ||
+                    if( encoding == kFontJapaneseScript ||
                         encoding == kFontTraditionalChineseScript ||
                         encoding == kFontKoreanScript ||
                         encoding == kFontSimpleChineseScript )
@@ -581,25 +583,25 @@ void ImplCoreTextFontData::DetermineCJKSupport_cmap(CFDataRef rCmapTable)
     }
 }
 
-bool ImplCoreTextFontData::HasCJKSupport( void )
+bool CoreTextPhysicalFontFace::HasCJKSupport( void )
 {
     // read this only once per font
-    if (!m_bOs2TableRead )
+    if(!m_bOs2TableRead )
     {
         m_bOs2TableRead = true;
         CFDataRef rOS2Table = CTFontCopyTable( m_CTFontRef, kCTFontTableOS2, kCTFontTableOptionNoOptions);
-        if (rOS2Table)
+        if(rOS2Table)
         {
             m_bHasOs2Table = true;
             DetermineCJKSupport_OS2(rOS2Table);
             CFRelease(rOS2Table);
         }
     }
-    if ( !m_bCmapTableRead && !m_bHasOs2Table && !m_bHasCJKSupport )
+    if( !m_bCmapTableRead && !m_bHasOs2Table && !m_bHasCJKSupport )
     {
         m_bCmapTableRead = true;
         CFDataRef rCmapTable = CTFontCopyTable( m_CTFontRef, kCTFontTableCmap, kCTFontTableOptionNoOptions);
-        if (rCmapTable)
+        if(rCmapTable)
         {
             DetermineCJKSupport_cmap(rCmapTable);
             CFRelease(rCmapTable);

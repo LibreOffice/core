@@ -40,7 +40,6 @@ IosSalGraphics::IosSalGraphics()
     , mxClipPath( NULL )
     , maLineColor( COL_WHITE )
     , maFillColor( COL_BLACK )
-    , m_pCoreTextFontData( NULL )
     , mbNonAntialiasedText( false )
     , mbPrinter( false )
     , mbVirDev( false )
@@ -169,28 +168,38 @@ sal_uLong IosSalGraphics::GetKernPairs( sal_uLong, ImplKernPairData* )
 
 bool IosSalGraphics::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
 {
-    if( !m_pCoreTextFontData )
+    if( !m_style )
     {
         return false;
     }
-    return m_pCoreTextFontData->GetImplFontCapabilities(rFontCapabilities);
+    CoreTextPhysicalFontFace* font_face = m_style->GetFontFace();
+    if( !font_face)
+    {
+        return false;
+    }
+    return font_face->GetImplFontCapabilities(rFontCapabilities);
 }
 
 const ImplFontCharMap* IosSalGraphics::GetImplFontCharMap() const
 {
-    if( !m_pCoreTextFontData )
+    if( !m_style )
+    {
+        return NULL;
+    }
+    CoreTextPhysicalFontFace* font_face = m_style->GetFontFace();
+    if( !font_face)
     {
         return ImplFontCharMap::GetDefaultMap();
     }
-    return m_pCoreTextFontData->GetImplFontCharMap();
+    return font_face->GetImplFontCharMap();
 }
 
-bool IosSalGraphics::GetRawFontData( const PhysicalFontFace* pFontData,
+bool IosSalGraphics::GetRawFontData( const PhysicalFontFace* pFontFace,
                      std::vector<unsigned char>& rBuffer, bool* pJustCFF )
 {
-    const ImplCoreTextFontData* font_data = static_cast<const ImplCoreTextFontData*>(pFontData);
+    const CoreTextPhysicalFontFace* font_face = static_cast<const CoreTextPhysicalFontFace*>(pFontFace);
 
-    return font_data->GetRawFontData(rBuffer, pJustCFF);
+    return font_face->GetRawFontData(rBuffer, pJustCFF);
 }
 
 SystemFontData IosSalGraphics::GetSysFontData( int /* nFallbacklevel */ ) const

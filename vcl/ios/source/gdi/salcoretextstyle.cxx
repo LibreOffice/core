@@ -30,7 +30,7 @@ CoreTextStyleInfo::CoreTextStyleInfo() :
     m_CTParagraphStyle(NULL),
     m_CTFont(NULL),
     m_color(NULL),
-    m_font_data(NULL)
+    m_font_face(NULL)
 {
     msgs_debug(style,"create <-->");
 }
@@ -52,27 +52,27 @@ long CoreTextStyleInfo::GetFontStretchedSize() const
 void CoreTextStyleInfo::SetFont(FontSelectPattern* requested_font)
 {
     msgs_debug(style,"req(%p) release font %p -->", requested_font, m_CTFont);
-    SafeCFRelease(m_CTFont);
-    if (!requested_font)
+
+    if(!requested_font)
     {
-        m_font_data = NULL;
+        SafeCFRelease(m_CTFont);
+        m_font_face = NULL;
         return;
     }
-    const ImplCoreTextFontData* font_data = static_cast<const ImplCoreTextFontData*>(requested_font->mpFontData);
+    m_font_face = (CoreTextPhysicalFontFace*)(requested_font->mpFontData);
 
-    m_font_data = (ImplCoreTextFontData*)font_data;
     m_matrix = CGAffineTransformIdentity;
     CGFloat font_size = (CGFloat)requested_font->mfExactHeight;
 
     // enable bold-emulation if needed
-    if ( (requested_font->GetWeight() >= WEIGHT_BOLD) &&
-        (font_data->GetWeight() < WEIGHT_SEMIBOLD) )
+    if( (requested_font->GetWeight() >= WEIGHT_BOLD) &&
+        (m_font_face->GetWeight() < WEIGHT_SEMIBOLD) )
     {
         /* FIXME: add support for fake bold */
         m_fake_bold = true;
     }
-    if ( ((requested_font->GetSlant() == ITALIC_NORMAL) || (requested_font->GetSlant() == ITALIC_OBLIQUE)) &&
-        !((font_data->GetSlant() == ITALIC_NORMAL) || (font_data->GetSlant() == ITALIC_OBLIQUE)) )
+    if( ((requested_font->GetSlant() == ITALIC_NORMAL) || (requested_font->GetSlant() == ITALIC_OBLIQUE)) &&
+        !((m_font_face->GetSlant() == ITALIC_NORMAL) || (m_font_face->GetSlant() == ITALIC_OBLIQUE)) )
     {
 #define kRotationForItalicText 10
         m_fake_italic = true;
@@ -81,15 +81,17 @@ void CoreTextStyleInfo::SetFont(FontSelectPattern* requested_font)
     }
 
     // prepare font stretching
-    if ( (requested_font->mnWidth != 0) && (requested_font->mnWidth != requested_font->mnHeight) )
+    if( (requested_font->mnWidth != 0) && (requested_font->mnWidth != requested_font->mnHeight) )
     {
         m_stretch_factor = (float)requested_font->mnWidth / requested_font->mnHeight;
         m_matrix = CGAffineTransformScale(m_matrix, m_stretch_factor, 1.0F );
     }
 
+    SafeCFRelease(m_CTFont);
+
     /* FIXME: pass attribute to take into accout 'VerticalStyle' */
     /* FIXME: how to deal with 'rendering options' i.e anti-aliasing, does it even matter in CoreText ? */
-    m_CTFont = CTFontCreateCopyWithAttributes(font_data->GetCTFont(), font_size, &m_matrix, NULL);
+    m_CTFont = CTFontCreateCopyWithAttributes(m_font_face->GetCTFont(), font_size, &m_matrix, NULL);
     msgs_debug(style,"font %p <--", m_CTFont);
 }
 
@@ -97,10 +99,15 @@ void CoreTextStyleInfo::SetColor(SalColor color)
 {
     msgs_debug(style, "r:%d g:%d b:%d -->", SALCOLOR_RED(color), SALCOLOR_GREEN(color), SALCOLOR_BLUE(color));
     SafeCFRelease(m_color);
+#ifdef IOS
+    // No CGColorCreateGenericRGB on iOS
     CGColorSpaceRef rgb_space = CGColorSpaceCreateDeviceRGB();
     CGFloat c[] = { SALCOLOR_RED(color) / 255.0f, SALCOLOR_GREEN(color) / 255.0f, SALCOLOR_BLUE(color) / 255.0f, 1.0 };
     m_color = CGColorCreate(rgb_space, c);
     CGColorSpaceRelease(rgb_space);
+#else
+    m_color = CGColorCreateGenericRGB(SALCOLOR_RED(color) / 255.0, SALCOLOR_GREEN(color) / 255.0, SALCOLOR_BLUE(color) / 255.0, 1.0);
+#endif
     msgs_debug(style,"color=%p <--", m_color);
 }
 
