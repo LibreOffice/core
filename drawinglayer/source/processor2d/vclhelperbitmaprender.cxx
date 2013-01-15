@@ -74,7 +74,14 @@ namespace drawinglayer
         }
 
         // draw bitmap
-        rOutDev.DrawBitmapEx(aPoint, aSize, aContent);
+        if(aSize == aContent.GetSizePixel())
+        {
+            rOutDev.DrawBitmapEx(aPoint, aContent);
+        }
+        else
+        {
+            rOutDev.DrawBitmapEx(aPoint, aSize, aContent);
+        }
     }
 
     void RenderBitmapPrimitive2D_self(
