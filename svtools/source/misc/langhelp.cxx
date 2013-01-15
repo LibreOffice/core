@@ -30,13 +30,20 @@
 #include <vcl/svapp.hxx>
 #include <rtl/ustring.hxx>
 
-void localizeWebserviceURI( ::rtl::OUString& rURI )
+void localizeWebserviceURI( OUString& rURI )
 {
-    ::rtl::OUString aLang = Application::GetSettings().GetUILanguageTag().getLanguage();
-    if ( aLang.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("pt"))
-         && Application::GetSettings().GetUILanguageTag().getCountry().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("br")) )
+    OUString aLang = Application::GetSettings().GetUILanguageTag().getLanguage();
+    if ( aLang.equalsIgnoreAsciiCase("pt")
+         && Application::GetSettings().GetUILanguageTag().getCountry().equalsIgnoreAsciiCase("br") )
     {
-        aLang = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "pt-br" ));
+        aLang = OUString("pt-br");
+    }
+    if ( aLang.equalsIgnoreAsciiCase("zh") )
+    {
+        if ( Application::GetSettings().GetUILanguageTag().getCountry().equalsIgnoreAsciiCase("cn") )
+            aLang = OUString("zh-cn");
+        if ( Application::GetSettings().GetUILanguageTag().getCountry().equalsIgnoreAsciiCase("tw") )
+            aLang = OUString("zh-tw");
     }
 
     rURI += aLang;
