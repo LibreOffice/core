@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAATH///2A\u003d",
+        "filename": "shell/source/backends/localebe/localebackend.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-01-15T18:17:17Z",
+      "side": 1,
+      "message": "Note that equals() can be simply written as \u003d\u003d .",
+      "revId": "5d78fae00e52e913e7afb603cdcc91bd3f5eb8d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
