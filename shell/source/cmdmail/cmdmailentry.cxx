@@ -62,11 +62,11 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL cmdmail_component_getFactory(
 
     if (0 == ::rtl_str_compare( pImplName, COMP_IMPL_NAME ))
     {
-        OUString serviceName( RTL_CONSTASCII_USTRINGPARAM(COMP_SERVICE_NAME) );
+        OUString serviceName(COMP_SERVICE_NAME);
 
         xFactory = ::cppu::createSingleComponentFactory(
             createInstance,
-            OUString( RTL_CONSTASCII_USTRINGPARAM(COMP_IMPL_NAME) ),
+            OUString( COMP_IMPL_NAME ),
             Sequence< OUString >( &serviceName, 1 ) );
     }
 

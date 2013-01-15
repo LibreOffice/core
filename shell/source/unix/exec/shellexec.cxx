@@ -216,13 +216,11 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
             OString aDesktopEnvironment(m_aDesktopEnvironment.toAsciiLowerCase());
             OStringBuffer aCopy(aTmp);
 
-            aCopy.append(aDesktopEnvironment);
-            aCopy.append("-open-url");
+            aCopy.append(aDesktopEnvironment + "-open-url");
 
             if ( 0 == access( aCopy.getStr(), X_OK) )
             {
-                aBuffer.append(aDesktopEnvironment);
-                aBuffer.append("-");
+                aBuffer.append(aDesktopEnvironment + "-");
             }
         }
 
@@ -233,8 +231,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
 
         if ( pDesktopLaunch && *pDesktopLaunch )
         {
-            aLaunchBuffer.append( pDesktopLaunch );
-            aLaunchBuffer.append(" ");
+            aLaunchBuffer.append( OString(pDesktopLaunch) + " ");
             escapeForShell(aLaunchBuffer, OUStringToOString(aURL, osl_getThreadTextEncoding()));
         }
     } else if ((nFlags & css::system::SystemShellExecuteFlags::URIS_ONLY) != 0)
@@ -270,7 +267,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
     OString cmd =
 #ifdef LINUX
         // avoid blocking (call it in background)
-        OStringBuffer().append( "( " ).append( aBuffer.makeStringAndClear() ).append( " ) &" ).makeStringAndClear();
+        "( " + aBuffer.makeStringAndClear() +  " ) &";
 #else
         aBuffer.makeStringAndClear();
 #endif

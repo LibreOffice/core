@@ -57,13 +57,12 @@ GConfClient* getGconfClient()
         GError* aError = NULL;
         if (!gconf_init(0, NULL, &aError))
         {
-            rtl::OUStringBuffer msg;
-            msg.appendAscii("GconfBackend:GconfLayer: Cannot Initialize Gconf connection - " );
-            msg.appendAscii(aError->message);
+            OUString msg("GconfBackend:GconfLayer: Cannot Initialize Gconf connection - " +
+                         OUString::createFromAscii(aError->message));
 
             g_error_free(aError);
             aError = NULL;
-            throw uno::RuntimeException(msg.makeStringAndClear(),NULL);
+            throw uno::RuntimeException(msg, NULL);
         }
 
         mClient = gconf_client_get_default();
@@ -116,13 +115,11 @@ static OUString xdg_user_dir_lookup (const char *type)
     config_home = getenv ("XDG_CONFIG_HOME");
     if (config_home == NULL || config_home[0] == 0)
     {
-        aConfigFileURL = OUString(aHomeDirURL);
-        aConfigFileURL += OUString("/.config/user-dirs.dirs");
+        aConfigFileURL = aHomeDirURL + "/.config/user-dirs.dirs";
     }
     else
     {
-        aConfigFileURL = OUString::createFromAscii(config_home);
-        aConfigFileURL += OUString("/user-dirs.dirs");
+        aConfigFileURL = OUString::createFromAscii(config_home) + "/user-dirs.dirs";
     }
 
     if(osl_File_E_None == osl_openFile(aConfigFileURL.pData, &handle, osl_File_OpenFlag_Read))
@@ -167,8 +164,7 @@ static OUString xdg_user_dir_lookup (const char *type)
                 continue;
             if (relative)
             {
-                aUserDirBuf = OUStringBuffer(aHomeDirURL);
-                aUserDirBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "/" ) );
+                aUserDirBuf = OUStringBuffer(aHomeDirURL + "/");
             }
             else
             {
@@ -195,15 +191,11 @@ static OUString xdg_user_dir_lookup (const char *type)
     /* Special case desktop for historical compatibility */
     if (strcmp (type, "DESKTOP") == 0)
     {
-        aUserDirBuf = OUStringBuffer(aHomeDirURL);
-        aUserDirBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "/Desktop" ) );
-        return aUserDirBuf.makeStringAndClear();
+        return aHomeDirURL + "/Desktop";
     }
     else
     {
-        aUserDirBuf = OUStringBuffer(aHomeDirURL);
-        aUserDirBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "/Documents" ) );
-        return aUserDirBuf.makeStringAndClear();
+        return aHomeDirURL + "/Documents";
     }
 }
 
@@ -277,8 +269,7 @@ uno::Any translateToOOo( const ConfigurationValue &rValue, GConfValue *pGconfVal
                 GSList * list = gconf_value_get_list(pGconfValue);
                 for(; list; list = g_slist_next(list))
                 {
-                    aBuffer.append(gconf_value_get_string((GConfValue *) list->data));
-                    aBuffer.append(";");
+                    aBuffer.append(gconf_value_get_string((GConfValue *) list->data) + OString(";"));
                 }
                 // Remove trailing ";"
                 aBuffer.setLength(aBuffer.getLength()-1);

@@ -71,7 +71,7 @@ namespace // private
     Sequence< OUString > SAL_CALL Component_getSupportedServiceNames()
     {
         Sequence< OUString > aRet(1);
-        aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.system.SimpleCommandMail"));
+        aRet[0] = "com.sun.star.system.SimpleCommandMail";
         return aRet;
     }
 
@@ -114,45 +114,38 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
 {
     if ( ! xSimpleMailMessage.is() )
     {
-        throw ::com::sun::star::lang::IllegalArgumentException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM( "No message specified" )),
+        throw ::com::sun::star::lang::IllegalArgumentException( "No message specified" ,
             static_cast < XSimpleMailClient * > (this), 1 );
     }
 
     if( ! m_xConfigurationProvider.is() )
     {
-        throw ::com::sun::star::uno::Exception(
-            OUString(RTL_CONSTASCII_USTRINGPARAM( "Can not access configuration" )),
+        throw ::com::sun::star::uno::Exception( "Can not access configuration" ,
             static_cast < XSimpleMailClient * > (this) );
     }
 
-    OStringBuffer aBuffer;
-    aBuffer.append("\"");
 
-    OUString aProgramURL(RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program/senddoc"));
+    OUString aProgramURL("$BRAND_BASE_DIR/program/senddoc");
     rtl::Bootstrap::expandMacros(aProgramURL);
 
     OUString aProgram;
     if ( FileBase::E_None != FileBase::getSystemPathFromFileURL(aProgramURL, aProgram))
     {
-        throw ::com::sun::star::uno::Exception(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("Cound not convert executable path")),
+        throw ::com::sun::star::uno::Exception("Cound not convert executable path",
             static_cast < XSimpleMailClient * > (this));
     }
 
-    aBuffer.append(OUStringToOString(aProgram, osl_getThreadTextEncoding()));
-    aBuffer.append("\" ");
+    OStringBuffer aBuffer("\"" + OUStringToOString(aProgram, osl_getThreadTextEncoding()) + "\" ");
 
     try
     {
         // Query XNameAccess interface of the org.openoffice.Office.Common/ExternalMailer
         // configuration node to retriece the users preferred email application. This may
         // transparently by redirected to e.g. the corresponding GConf setting in GNOME.
-        OUString aConfigRoot = OUString(
-            RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Office.Common/ExternalMailer" ) );
+        OUString aConfigRoot = "org.openoffice.Office.Common/ExternalMailer";
 
         PropertyValue aProperty;
-        aProperty.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath"));
+        aProperty.Name = OUString("nodepath");
         aProperty.Value = makeAny( aConfigRoot );
 
         Sequence< Any > aArgumentList( 1 );
@@ -161,7 +154,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
         Reference< XNameAccess > xNameAccess =
             Reference< XNameAccess > (
                 m_xConfigurationProvider->createInstanceWithArguments(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess")),
+                    OUString("com.sun.star.configuration.ConfigurationAccess"),
                     aArgumentList ),
                 UNO_QUERY );
 
@@ -171,16 +164,15 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
 
             // Retrieve the value for "Program" node and append it feed senddoc with it
             // using the (undocumented) --mailclient switch
-            xNameAccess->getByName( OUString(RTL_CONSTASCII_USTRINGPARAM("Program")) ) >>= aMailer;
+            xNameAccess->getByName( OUString("Program") ) >>= aMailer;
 
             if( !aMailer.isEmpty() )
             {
                 // make sure we have a system path
                 FileBase::getSystemPathFromFileURL( aMailer, aMailer );
 
-                aBuffer.append("--mailclient ");
-                aBuffer.append(OUStringToOString( aMailer, osl_getThreadTextEncoding() ));
-                aBuffer.append(" ");
+                aBuffer.append("--mailclient " + OUStringToOString( aMailer, osl_getThreadTextEncoding() ) +
+                               " ");
             }
 #ifdef MACOSX
             else
@@ -201,17 +193,17 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
     // Append originator if set in the message
     if ( !xSimpleMailMessage->getOriginator().isEmpty() )
     {
-        aBuffer.append("--from \"");
-        aBuffer.append(OUStringToOString(xSimpleMailMessage->getOriginator(), osl_getThreadTextEncoding()));
-        aBuffer.append("\" ");
+        aBuffer.append("--from \"" +
+                        OUStringToOString(xSimpleMailMessage->getOriginator(), osl_getThreadTextEncoding()) +
+                       "\" ");
     }
 
     // Append receipient if set in the message
     if ( !xSimpleMailMessage->getRecipient().isEmpty() )
     {
-        aBuffer.append("--to \"");
-        aBuffer.append(OUStringToOString(xSimpleMailMessage->getRecipient(), osl_getThreadTextEncoding()));
-        aBuffer.append("\" ");
+        aBuffer.append("--to \"" +
+                       OUStringToOString(xSimpleMailMessage->getRecipient(), osl_getThreadTextEncoding()) +
+                       "\" ");
     }
 
     // Append carbon copy receipients set in the message
@@ -219,9 +211,9 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
     sal_Int32 n, nmax = aStringList.getLength();
     for ( n = 0; n < nmax; n++ )
     {
-        aBuffer.append("--cc \"");
-        aBuffer.append(OUStringToOString(aStringList[n], osl_getThreadTextEncoding()));
-        aBuffer.append("\" ");
+        aBuffer.append("--cc \"" +
+                       OUStringToOString(aStringList[n], osl_getThreadTextEncoding()) +
+                       "\" ");
     }
 
     // Append blind carbon copy receipients set in the message
@@ -229,17 +221,17 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
     nmax = aStringList.getLength();
     for ( n = 0; n < nmax; n++ )
     {
-        aBuffer.append("--bcc \"");
-        aBuffer.append(OUStringToOString(aStringList[n], osl_getThreadTextEncoding()));
-        aBuffer.append("\" ");
+        aBuffer.append("--bcc \"" +
+                       OUStringToOString(aStringList[n], osl_getThreadTextEncoding()) +
+                       "\" ");
     }
 
     // Append subject if set in the message
     if ( !xSimpleMailMessage->getSubject().isEmpty() )
     {
-        aBuffer.append("--subject \"");
-        aBuffer.append(OUStringToOString(xSimpleMailMessage->getSubject(), osl_getThreadTextEncoding()));
-        aBuffer.append("\" ");
+        aBuffer.append("--subject \"" +
+                       OUStringToOString(xSimpleMailMessage->getSubject(), osl_getThreadTextEncoding()) +
+                       "\" ");
     }
 
     // Append attachments set in the message
@@ -250,17 +242,16 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
         OUString aSystemPath;
         if ( FileBase::E_None == FileBase::getSystemPathFromFileURL(aStringList[n], aSystemPath) )
         {
-            aBuffer.append("--attach \"");
-            aBuffer.append(OUStringToOString(aSystemPath, osl_getThreadTextEncoding()));
-            aBuffer.append("\" ");
+            aBuffer.append("--attach \"" +
+                           OUStringToOString(aSystemPath, osl_getThreadTextEncoding()) +
+                           "\" ");
         }
     }
 
     OString cmd = aBuffer.makeStringAndClear();
     if ( 0 != pclose(popen(cmd.getStr(), "w")) )
     {
-        throw ::com::sun::star::uno::Exception(
-            OUString(RTL_CONSTASCII_USTRINGPARAM( "No mail client configured" )),
+        throw ::com::sun::star::uno::Exception("No mail client configured",
             static_cast < XSimpleMailClient * > (this) );
     }
 }
@@ -272,7 +263,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
 OUString SAL_CALL CmdMailSuppl::getImplementationName(  )
     throw( RuntimeException )
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( COMP_IMPL_NAME ));
+    return OUString(COMP_IMPL_NAME);
 }
 
 // -------------------------------------------------
