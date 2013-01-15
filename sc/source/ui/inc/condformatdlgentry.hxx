@@ -261,7 +261,7 @@ class ScIconSetFrmtEntry : public ScCondFrmtEntry
 
         ScColorScaleEntry* CreateEntry(ScDocument* pDoc, const ScAddress& rPos) const;
 
-        void SetLastEntry();
+        void SetFirstEntry();
     };
     typedef boost::ptr_vector<ScIconSetFrmtDataEntry> ScIconSetFrmtDateEntriesType;
     ScIconSetFrmtDateEntriesType maEntries;
