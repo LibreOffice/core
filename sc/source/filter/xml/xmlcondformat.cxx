@@ -310,7 +310,7 @@ ScXMLIconSetFormatContext::ScXMLIconSetFormatContext(ScXMLImport& rImport, sal_u
                         ScConditionalFormat* pFormat):
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
-    rtl::OUString aIconSetType;
+    rtl::OUString aIconSetType, sShowValue;
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetIconSetAttrMap();
     for( sal_Int16 i=0; i < nAttrCount; ++i )
@@ -325,6 +325,9 @@ ScXMLIconSetFormatContext::ScXMLIconSetFormatContext(ScXMLImport& rImport, sal_u
         {
             case XML_TOK_ICONSET_TYPE:
                 aIconSetType = sValue;
+                break;
+            case XML_TOK_ICONSET_SHOWVALUE:
+                sShowValue = sValue;
                 break;
             default:
                 break;
@@ -345,6 +348,14 @@ ScXMLIconSetFormatContext::ScXMLIconSetFormatContext(ScXMLImport& rImport, sal_u
 
     ScIconSetFormat* pIconSetFormat = new ScIconSetFormat(GetScImport().GetDocument());
     ScIconSetFormatData* pIconSetFormatData = new ScIconSetFormatData;
+
+    if(!sShowValue.isEmpty())
+    {
+        bool bShowValue = true;
+        sax::Converter::convertBool( bShowValue, sShowValue );
+        pIconSetFormatData->mbShowValue = !bShowValue;
+    }
+
     pIconSetFormatData->eIconSetType = eType;
     pIconSetFormat->SetIconSetData(pIconSetFormatData);
     pFormat->AddEntry(pIconSetFormat);

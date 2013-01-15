@@ -1545,10 +1545,12 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                 if ( bDoCell && bEditMode && nCellX == nEditCol && nCellY == nEditRow )
                     bDoCell = false;
 
-                // skip text in cell if data bar is set and only value selected
+                // skip text in cell if data bar/icon set is set and only value selected
                 if ( bDoCell )
                 {
                     if(pInfo->pDataBar && !pInfo->pDataBar->mbShowValue)
+                        bDoCell = false;
+                    if(pInfo->pIconSet && !pInfo->pIconSet->mbShowValue)
                         bDoCell = false;
                 }
 

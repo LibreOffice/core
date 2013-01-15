@@ -205,7 +205,8 @@ enum ScXMLDataBarEntryAttrTokens
 
 enum ScXMLIconSetAttrTokens
 {
-    XML_TOK_ICONSET_TYPE
+    XML_TOK_ICONSET_TYPE,
+    XML_TOK_ICONSET_SHOWVALUE
 };
 
 enum ScXMLLabelRangesElemTokens

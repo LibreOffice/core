@@ -909,6 +909,7 @@ ScIconSetInfo* ScIconSetFormat::GetIconSetInfo(const ScAddress& rAddr) const
 
     pInfo->nIconIndex = nIndex;
     pInfo->eIconSetType = mpFormatData->eIconSetType;
+    pInfo->mbShowValue = mpFormatData->mbShowValue;
     return pInfo;
 }
 

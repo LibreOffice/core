@@ -733,6 +733,7 @@ const SvXMLTokenMap& ScXMLImport::GetIconSetAttrMap()
         static SvXMLTokenMapEntry aIconSetAttrTokenMap[] =
         {
             { XML_NAMESPACE_CALC_EXT, XML_ICON_SET_TYPE, XML_TOK_ICONSET_TYPE },
+            { XML_NAMESPACE_CALC_EXT, XML_SHOW_VALUE, XML_TOK_ICONSET_SHOWVALUE },
             XML_TOKEN_MAP_END
         };
 

@@ -87,6 +87,7 @@ struct ScIconSetInfo
 {
     sal_Int32 nIconIndex;
     ScIconSetType eIconSetType;
+    bool mbShowValue;
 };
 
 struct CellInfo
