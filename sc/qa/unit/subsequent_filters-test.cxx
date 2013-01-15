@@ -475,11 +475,13 @@ void ScFiltersTest::testCachedMatrixFormulaResultsODS()
 
     //test matrix
     rtl::OUString aCSVFileName;
-    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("matrix.")), aCSVFileName);
+    createCSVPath("matrix.", aCSVFileName);
     testFile(aCSVFileName, pDoc, 0);
     //test matrices with special cases
-    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("matrix2.")), aCSVFileName);
+    createCSVPath("matrix2.", aCSVFileName);
     testFile(aCSVFileName, pDoc, 1);
+    createCSVPath("matrix3.", aCSVFileName);
+    testFile(aCSVFileName, pDoc, 2);
     //The above testFile() does not catch the below case.
     //If a matrix formula has a matrix reference cell that is intended to have
     //a blank text result, the matrix reference cell is actually saved(export)
@@ -487,7 +489,13 @@ void ScFiltersTest::testCachedMatrixFormulaResultsODS()
     //Import works around this by setting these cells as text cells so that
     //the blank text is used for display instead of the number 0.
     //If this is working properly, the following cell should NOT have value data.
-    //CPPUNIT_ASSERT(!pDoc->GetCell(ScAddress(3,5,1))->HasValueData());
+    // CPPUNIT_ASSERT(!pDoc->GetCell(ScAddress(3,0,2))->HasValueData());
+
+    // fdo#59293 with cached value import error formulas require special
+    // treatment
+    pDoc->SetString(2, 5, 2, "=ISERROR(A6)");
+    double nVal = pDoc->GetValue(2,5,2);
+    CPPUNIT_ASSERT_EQUAL(1.0, nVal);
 
     xDocSh->DoClose();
 }
