@@ -151,7 +151,7 @@
                     <value>false</value>
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
-                    <value xml:lang="en-US">Align</value>
+                    <value xml:lang="en-US">Align Objects</value>
                     <value xml:lang="de">Ausrichten</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
