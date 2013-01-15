@@ -293,7 +293,7 @@ IMPL_LINK(SwMailMergeAddressBlockPage, InsertDataHdl_Impl, ImageButton*, pButton
     }
     else
     {
-        sal_Bool bNext = pButton == &m_aNextSetIB;
+        bool bNext = pButton == &m_aNextSetIB;
         sal_Int32 nPos = rConfig.GetResultSetPosition();
         rConfig.MoveResultSet( bNext ? ++nPos : --nPos);
     }
@@ -504,12 +504,12 @@ SwRestrictedComboBox::~SwRestrictedComboBox()
 
 void SwRestrictedComboBox::KeyInput(const KeyEvent& rEvt)
 {
-    sal_Bool bCallParent = sal_True;
+    bool bCallParent = true;
     if(rEvt.GetCharCode())
     {
         rtl::OUString sKey(rEvt.GetCharCode());
         if( STRING_NOTFOUND != sForbiddenChars.Search(sKey))
-            bCallParent = sal_False;
+            bCallParent = false;
     }
     if(bCallParent)
         ComboBox::KeyInput(rEvt);

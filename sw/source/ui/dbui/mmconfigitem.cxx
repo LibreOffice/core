@@ -1265,7 +1265,7 @@ void SwMailMergeConfigItem::SetColumnAssignment( const SwDBData& rDBData,
                             const Sequence< ::rtl::OUString>& rList)
 {
     ::std::vector<DBAddressDataAssignment>::iterator aAssignIter;
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
     for(aAssignIter = m_pImpl->aAddressDataAssignments.begin();
                 aAssignIter != m_pImpl->aAddressDataAssignments.end(); ++aAssignIter)
     {
@@ -1276,7 +1276,7 @@ void SwMailMergeConfigItem::SetColumnAssignment( const SwDBData& rDBData,
                 aAssignIter->aDBColumnAssignments = rList;
                 aAssignIter->bColumnAssignmentsChanged = true;
             }
-            bFound = sal_True;
+            bFound = true;
             break;
         }
     }

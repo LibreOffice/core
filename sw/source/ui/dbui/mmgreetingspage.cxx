@@ -412,7 +412,7 @@ IMPL_LINK(SwMailMergeGreetingsPage, InsertDataHdl_Impl, ImageButton*, pButton)
     }
     else
     {
-        sal_Bool bNext = pButton == &m_aNextSetIB;
+        bool bNext = pButton == &m_aNextSetIB;
         sal_Int32 nPos = rConfig.GetResultSetPosition();
         rConfig.MoveResultSet( bNext ? ++nPos : --nPos);
     }

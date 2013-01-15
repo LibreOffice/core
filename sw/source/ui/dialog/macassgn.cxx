@@ -46,7 +46,7 @@ SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )
     SfxEventNamesItem aItem(SID_EVENTCONFIG);
 
     sal_uInt16 nHtmlMode = ::GetHtmlMode((const SwDocShell*)SfxObjectShell::Current());
-    sal_Bool bHtmlMode = nHtmlMode & HTMLMODE_ON ? sal_True : sal_False;
+    bool bHtmlMode = nHtmlMode & HTMLMODE_ON;
 
     switch( eType )
     {

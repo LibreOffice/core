@@ -105,13 +105,13 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
             aBuffer[ nBytesRead+1 ] = '0';
         }
 
-        sal_Bool bCR = sal_False, bLF = sal_False, bNullChar = sal_False;
+        bool bCR = false, bLF = false, bNullChar = false;
         for( sal_uInt16 nCnt = 0; nCnt < nBytesRead; ++nCnt )
             switch( aBuffer[ nCnt ] )
             {
-                case 0x0:   bNullChar = sal_True; break;
-                case 0xA:   bLF = sal_True; break;
-                case 0xD:   bCR = sal_True; break;
+                case 0x0:   bNullChar = true; break;
+                case 0xA:   bLF = true; break;
+                case 0xD:   bCR = true; break;
                 case 0xC:
                 case 0x1A:
                 case 0x9:   break;

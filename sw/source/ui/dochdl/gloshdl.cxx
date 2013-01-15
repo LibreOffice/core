@@ -116,7 +116,7 @@ void SwGlossaryHdl::SetCurGroup(const String &rGrp, sal_Bool bApi, sal_Bool bAlw
     }
     if(pCurGrp)
     {
-        sal_Bool bPathEqual = sal_False;
+        bool bPathEqual = false;
         if(!bAlwaysCreateNew)
         {
             INetURLObject aTemp( pCurGrp->GetFileName() );
@@ -138,7 +138,7 @@ void SwGlossaryHdl::SetCurGroup(const String &rGrp, sal_Bool bApi, sal_Bool bAlw
             sal_uInt16 nComparePath = (sal_uInt16)sPath.ToInt32();
             if(nCurrentPath == nComparePath &&
                 sGroup.GetToken(0, GLOS_DELIM) == sCurBase)
-                bPathEqual = sal_True;
+                bPathEqual = true;
         }
 
         // When path changed, the name is not reliable

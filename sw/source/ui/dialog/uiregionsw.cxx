@@ -610,10 +610,10 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
         bool bHidden            = true;
         bool bProtect           = true;
         String sCondition;
-        sal_Bool bFirst             = sal_True;
-        sal_Bool bFileValid         = sal_True;
-        sal_Bool bFile              = sal_True;
-        sal_Bool bPasswdValid       = sal_True;
+        bool bFirst             = true;
+        bool bFileValid         = true;
+        bool bFile              = true;
+        bool bPasswdValid       = true;
 
         while( pEntry )
         {
@@ -646,7 +646,7 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
                 bPasswdValid      = (aCurPasswd == rData.GetPassword());
             }
             pEntry = pBox->NextSelected(pEntry);
-            bFirst = sal_False;
+            bFirst = false;
         }
 
         aHideCB.SetState( !bHiddenValid ? STATE_DONTKNOW :
@@ -956,14 +956,14 @@ IMPL_LINK_NOARG(SwEditRegionDlg, ChangeDismissHdl)
     {
         const SectReprPtr pSectRepr = (SectRepr*)pEntry->GetUserData();
         SvTreeListEntry* pRemove = 0;
-        sal_Bool bRestart = sal_False;
+        bool bRestart = false;
         if(pSectRepr->IsSelected())
         {
             aSectReprArr.insert( pSectRepr );
             while( (pChild = aTree.FirstChild(pEntry) )!= 0 )
             {
                 // because of the repositioning we have to start at the beginning again
-                bRestart = sal_True;
+                bRestart = true;
                 pParent=aTree.GetParent(pEntry);
                 aTree.GetModel()->Move(pChild, pParent, aTree.GetModel()->GetRelPos(pEntry));
             }
@@ -1292,7 +1292,7 @@ IMPL_LINK( SwEditRegionDlg, DDEHdl, CheckBox*, pBox )
 
 IMPL_LINK( SwEditRegionDlg, ChangePasswdHdl, Button *, pBox )
 {
-    sal_Bool bChange = pBox == &aPasswdPB;
+    bool bChange = pBox == &aPasswdPB;
     if(!CheckPasswd(0))
     {
         if(!bChange)
@@ -1300,7 +1300,7 @@ IMPL_LINK( SwEditRegionDlg, ChangePasswdHdl, Button *, pBox )
         return 0;
     }
     SvTreeListEntry* pEntry=aTree.FirstSelected();
-    sal_Bool bSet = bChange ? bChange : aPasswdCB.IsChecked();
+    bool bSet = bChange ? bChange : aPasswdCB.IsChecked();
     OSL_ENSURE(pEntry,"no entry found");
     while( pEntry )
     {
@@ -1492,7 +1492,7 @@ SwInsertSectionTabDialog::SwInsertSectionTabDialog(
     SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
     long nHtmlMode = rHtmlOpt.GetExportMode();
 
-    sal_Bool bWeb = 0 != PTR_CAST( SwWebDocShell, rSh.GetView().GetDocShell() );
+    bool bWeb = 0 != PTR_CAST( SwWebDocShell, rSh.GetView().GetDocShell() );
     if(bWeb)
     {
         RemoveTabPage(TP_SECTION_FTNENDNOTES);
@@ -1631,7 +1631,7 @@ void    SwInsertSectionTabPage::SetWrtShell(SwWrtShell& rSh)
 {
     m_pWrtSh = &rSh;
 
-    sal_Bool bWeb = 0 != PTR_CAST(SwWebDocShell, m_pWrtSh->GetView().GetDocShell());
+    bool bWeb = 0 != PTR_CAST(SwWebDocShell, m_pWrtSh->GetView().GetDocShell());
     if(bWeb)
     {
         aHideCB         .Hide();
@@ -2171,7 +2171,7 @@ SwSectionPropertyTabDialog::SwSectionPropertyTabDialog(
 
     SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
     long nHtmlMode = rHtmlOpt.GetExportMode();
-    sal_Bool bWeb = 0 != PTR_CAST( SwWebDocShell, rSh.GetView().GetDocShell() );
+    bool bWeb = 0 != PTR_CAST( SwWebDocShell, rSh.GetView().GetDocShell() );
     if(bWeb)
     {
         RemoveTabPage(TP_SECTION_FTNENDNOTES);
