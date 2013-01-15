@@ -1297,11 +1297,13 @@ ScColorScaleEntry* ScIconSetFrmtEntry::ScIconSetFrmtDataEntry::CreateEntry(ScDoc
     return pEntry;
 }
 
-void ScIconSetFrmtEntry::ScIconSetFrmtDataEntry::SetLastEntry()
+void ScIconSetFrmtEntry::ScIconSetFrmtDataEntry::SetFirstEntry()
 {
     maEdEntry.Hide();
     maLbEntryType.Hide();
     maFtEntry.Hide();
+    maEdEntry.SetText(OUString("0"));
+    maLbEntryType.SelectEntryPos(1);
 }
 
 ScIconSetFrmtEntry::ScIconSetFrmtEntry( Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScIconSetFormat* pFormat ):
@@ -1328,7 +1330,7 @@ ScIconSetFrmtEntry::ScIconSetFrmtEntry( Window* pParent, ScDocument* pDoc, const
             aPos.Y() += maEntries[0].GetSizePixel().Height() * i * 1.2;
             maEntries[i].SetPosPixel( aPos );
         }
-        maEntries.back().SetLastEntry();
+        maEntries.begin()->SetFirstEntry();
     }
     else
         IconSetTypeHdl(NULL);
@@ -1359,7 +1361,7 @@ IMPL_LINK_NOARG( ScIconSetFrmtEntry, IconSetTypeHdl )
         maEntries[i].SetPosPixel( aPos );
         maEntries[i].Show();
     }
-    maEntries.back().SetLastEntry();
+    maEntries.begin()->SetFirstEntry();
 
     SetHeight();
     static_cast<ScCondFormatList*>(GetParent())->RecalcAll();
