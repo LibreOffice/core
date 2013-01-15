@@ -19,9 +19,12 @@
 
 #include "sal/config.h"
 
+#include <cassert>
+
 #include "com/sun/star/uno/DeploymentException.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/XInterface.hpp"
+#include "osl/file.hxx"
 #include "osl/module.hxx"
 #include "osl/mutex.hxx"
 #include "rtl/ustring.hxx"
@@ -64,6 +67,54 @@ rtl::OUString cppu::getUnoIniUri() {
     rtl::OUString uri(get_this_libpath());
 #endif
     return uri + "/" SAL_CONFIGFILE("uno");
+}
+
+bool cppu::nextDirectoryItem(osl::Directory & directory, rtl::OUString * url) {
+    assert(url != 0);
+    for (;;) {
+        osl::DirectoryItem i;
+        switch (directory.getNextItem(i, SAL_MAX_UINT32)) {
+        case osl::FileBase::E_None:
+            break;
+        case osl::FileBase::E_NOENT:
+            return false;
+        default:
+            throw css::uno::DeploymentException(
+                "Cannot iterate directory",
+                css::uno::Reference< css::uno::XInterface >());
+        }
+        osl::FileStatus stat(
+            osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileName |
+            osl_FileStatus_Mask_FileURL);
+        if (i.getFileStatus(stat) != osl::FileBase::E_None) {
+            throw css::uno::DeploymentException(
+                "Cannot stat in directory",
+                css::uno::Reference< css::uno::XInterface >());
+        }
+        if (stat.getFileType() != osl::FileStatus::Directory) { //TODO: symlinks
+            // Ignore backup files:
+            rtl::OUString name(stat.getFileName());
+            if (!(name.match(".") || name.endsWith("~"))) {
+                *url = stat.getFileURL();
+                return true;
+            }
+        }
+    }
+}
+
+void cppu::decodeRdbUri(rtl::OUString * uri, bool * optional, bool * directory)
+{
+    assert(uri != 0 && optional != 0 && directory != 0);
+    *optional = (*uri)[0] == '?';
+    if (*optional) {
+        *uri = uri->copy(1);
+    }
+    *directory = uri->getLength() >= 3 && (*uri)[0] == '<'
+        && (*uri)[uri->getLength() - 2] == '>'
+        && (*uri)[uri->getLength() - 1] == '*';
+    if (*directory) {
+        *uri = uri->copy(1, uri->getLength() - 3);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

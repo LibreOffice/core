@@ -22,6 +22,7 @@
 
 #include "sal/config.h"
 
+namespace osl { class Directory; }
 namespace rtl { class OUString; }
 
 namespace cppu {
@@ -29,6 +30,10 @@ namespace cppu {
 rtl::OUString get_this_libpath();
 
 rtl::OUString getUnoIniUri();
+
+bool nextDirectoryItem(osl::Directory & directory, rtl::OUString * url);
+
+void decodeRdbUri(rtl::OUString * uri, bool * optional, bool * directory);
 
 }
 
