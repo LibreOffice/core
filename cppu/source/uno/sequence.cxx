@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
+
+#include <cassert>
 #include <string.h>
 
 #include <rtl/alloc.h>
@@ -771,6 +774,7 @@ sal_Bool SAL_CALL uno_type_sequence_construct(
     uno_AcquireFunc acquire )
     SAL_THROW_EXTERN_C()
 {
+    assert( len >= 0 );
     bool ret;
     if (len)
     {
