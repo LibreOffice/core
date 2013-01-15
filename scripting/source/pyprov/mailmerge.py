@@ -11,6 +11,8 @@
 #   <value>true</value>
 #  </prop>
 
+from __future__ import print_function
+
 import unohelper
 import uno
 import re
@@ -171,8 +173,6 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 				if dbg:
 					print("PyMailSMTPService mimetype is: " + flavor.MimeType, file=dbgout)
 				textbody = content.getTransferData(flavor)
-				#http://stackoverflow.com/questions/9403265/how-do-i-use-python-3-2-email-module-to-send-unicode-messages-encoded-in-utf-8-w
-				textbody = textbody.encode('utf-8').decode('iso8859-1')
 
 				if len(textbody):
 					mimeEncoding = re.sub("charset=.*", "charset=UTF-8", flavor.MimeType)
@@ -180,9 +180,16 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 						mimeEncoding = mimeEncoding + "; charset=UTF-8"
 					textmsg['Content-Type'] = mimeEncoding
 					textmsg['MIME-Version'] = '1.0'
-					c = Charset('utf-8')
-					c.body_encoding = QP
-					textmsg.set_payload(textbody, c)
+
+					textbody = textbody.encode('utf-8')
+					if sys.version >= '3':
+						#http://stackoverflow.com/questions/9403265/how-do-i-use-python-3-2-email-module-to-send-unicode-messages-encoded-in-utf-8-w
+						textbody = textbody.decode('iso8859-1')
+						c = Charset('utf-8')
+						c.body_encoding = QP
+						textmsg.set_payload(textbody, c)
+					else:
+						textmsg.set_payload(textbody)
 
 				break
 
