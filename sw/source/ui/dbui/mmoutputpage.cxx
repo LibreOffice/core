@@ -1084,7 +1084,11 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         }
         break;
         case MM_DOCTYPE_TEXT:
+        {
             bAsBody = true;
+            pSfxFlt = pFilterContainer->GetFilter4FilterName(
+                OUString("Text (encoded)"), SFX_FILTER_EXPORT);
+        }
         break;
     }
     if(!pSfxFlt)
