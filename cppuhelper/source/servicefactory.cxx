@@ -20,35 +20,13 @@
 
 #include <vector>
 
-#include "rtl/string.hxx"
 #include "rtl/bootstrap.hxx"
-#include "rtl/strbuf.hxx"
 #include "osl/diagnose.h"
-#include "osl/file.h"
-#include "osl/module.h"
 #include "osl/process.h"
-#include "cppuhelper/shlib.hxx"
-#include "cppuhelper/factory.hxx"
 #include "cppuhelper/component_context.hxx"
-#include "cppuhelper/bootstrap.hxx"
 
-#include "com/sun/star/uno/DeploymentException.hpp"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/lang/XInitialization.hpp"
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include "com/sun/star/lang/XSingleServiceFactory.hpp"
-#include "com/sun/star/lang/XSingleComponentFactory.hpp"
-#include "com/sun/star/beans/XPropertySet.hpp"
-#include "com/sun/star/container/XSet.hpp"
-#include "com/sun/star/container/XHierarchicalNameAccess.hpp"
-#include "com/sun/star/registry/XSimpleRegistry.hpp"
 #include "com/sun/star/uno/SecurityException.hpp"
-#if OSL_DEBUG_LEVEL > 1
-#include <stdio.h>
-#endif
 
-#include "macro_expander.hxx"
-#include "paths.hxx"
 #include "servicefactory_detail.hxx"
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
@@ -61,30 +39,6 @@ using namespace ::com::sun::star::uno;
 
 namespace cppu
 {
-
-static Reference< XInterface > SAL_CALL createInstance(
-    Reference< XInterface > const & xFactory,
-    Reference< XComponentContext > const & xContext =
-    Reference< XComponentContext >() )
-{
-    Reference< lang::XSingleComponentFactory > xFac( xFactory, UNO_QUERY );
-    if (xFac.is())
-    {
-        return xFac->createInstanceWithContext( xContext );
-    }
-    else
-    {
-        Reference< lang::XSingleServiceFactory > xFac2( xFactory, UNO_QUERY );
-        if (xFac2.is())
-        {
-            OSL_ENSURE( !xContext.is(), "### ignoring context!" );
-            return xFac2->createInstance();
-        }
-    }
-    throw RuntimeException(
-        OUSTR("no factory object given!"),
-        Reference< XInterface >() );
-}
 
 /** bootstrap variables:
 
@@ -232,103 +186,6 @@ void add_access_control_entries(
     entry.name = OUSTR("/singletons/com.sun.star.security.theAccessController");
     entry.value <<= ac_service;
     context_values.push_back( entry );
-}
-
-namespace {
-void addFactories(
-    char const * const * ppNames /* implname, ..., 0 */,
-    OUString const & bootstrapPath,
-    Reference< lang::XMultiComponentFactory > const & xMgr,
-    Reference< registry::XRegistryKey > const & xKey )
-    SAL_THROW( (Exception) )
-{
-    Reference< container::XSet > xSet( xMgr, UNO_QUERY );
-    OSL_ASSERT( xSet.is() );
-    Reference< lang::XMultiServiceFactory > xSF( xMgr, UNO_QUERY );
-
-    while (*ppNames)
-    {
-        OUString implName( OUString::createFromAscii( *ppNames++ ) );
-
-        Any aFac( makeAny( loadSharedLibComponentFactory(
-                               OUSTR("bootstrap.uno" SAL_DLLEXTENSION),
-                               bootstrapPath, implName, xSF, xKey ) ) );
-        xSet->insert( aFac );
-#if OSL_DEBUG_LEVEL > 1
-        if (xSet->has( aFac ))
-        {
-            Reference< lang::XServiceInfo > xInfo;
-            if (aFac >>= xInfo)
-            {
-                ::fprintf(
-                    stderr, "> implementation %s supports: ", ppNames[ -1 ] );
-                Sequence< OUString > supported(
-                    xInfo->getSupportedServiceNames() );
-                for ( sal_Int32 nPos = supported.getLength(); nPos--; )
-                {
-                    OString str( OUStringToOString(
-                        supported[ nPos ], RTL_TEXTENCODING_ASCII_US ) );
-                    ::fprintf( stderr, nPos ? "%s, " : "%s\n", str.getStr() );
-                }
-            }
-            else
-            {
-                ::fprintf(
-                    stderr,
-                    "> implementation %s provides NO lang::XServiceInfo!!!\n",
-                    ppNames[ -1 ] );
-            }
-        }
-#endif
-#if OSL_DEBUG_LEVEL > 0
-        if (! xSet->has( aFac ))
-        {
-            OStringBuffer buf( 64 );
-            buf.append( "### failed inserting shared lib \"" );
-            buf.append( "bootstrap.uno" SAL_DLLEXTENSION );
-            buf.append( "\"!!!" );
-            OString str( buf.makeStringAndClear() );
-            OSL_FAIL( str.getStr() );
-        }
-#endif
-    }
-}
-
-} // namespace
-
-Reference< lang::XMultiComponentFactory > bootstrapInitialSF(
-    OUString const & rBootstrapPath )
-    SAL_THROW( (Exception) )
-{
-    OUString const & bootstrap_path =
-        rBootstrapPath.isEmpty() ? get_this_libpath() : rBootstrapPath;
-
-    Reference< lang::XMultiComponentFactory > xMgr(
-        createInstance(
-            loadSharedLibComponentFactory(
-                OUSTR("bootstrap.uno" SAL_DLLEXTENSION), bootstrap_path,
-                OUSTR("com.sun.star.comp.stoc.ORegistryServiceManager"),
-                Reference< lang::XMultiServiceFactory >(),
-                Reference< registry::XRegistryKey >() ) ),
-        UNO_QUERY );
-
-    // add initial bootstrap services
-    static char const * ar[] = {
-        "com.sun.star.comp.stoc.OServiceManagerWrapper",
-        "com.sun.star.comp.stoc.DLLComponentLoader",
-        "com.sun.star.comp.stoc.SimpleRegistry",
-        "com.sun.star.comp.stoc.NestedRegistry",
-        "com.sun.star.comp.stoc.TypeDescriptionManager",
-        "com.sun.star.comp.stoc.ImplementationRegistration",
-        "com.sun.star.security.comp.stoc.AccessController",
-        "com.sun.star.security.comp.stoc.FilePolicy",
-        0
-    };
-    addFactories(
-        ar, bootstrap_path,
-        xMgr, Reference< registry::XRegistryKey >() );
-
-    return xMgr;
 }
 
 }

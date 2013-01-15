@@ -27,7 +27,10 @@
 #include "sal/types.h"
 
 namespace com { namespace sun { namespace star {
-    namespace lang { class XMultiServiceFactory; }
+    namespace lang {
+        class XMultiComponentFactory;
+        class XMultiServiceFactory;
+    }
     namespace reflection { class XIdlClass; }
     namespace registry { class XSimpleRegistry; }
     namespace uno { class XComponentContext; }
@@ -35,6 +38,17 @@ namespace com { namespace sun { namespace star {
 namespace rtl { class OUString; }
 
 // Stubs for removed functionality, to be killed when we bump cppuhelper SONAME
+
+namespace cppu {
+
+SAL_DLLPUBLIC_EXPORT
+css::uno::Reference< css::lang::XMultiComponentFactory > bootstrapInitialSF(
+    rtl::OUString const &) SAL_THROW((com::sun::star::uno::Exception))
+{
+    for (;;) { std::abort(); } // avoid "must return a value" warnings
+}
+
+}
 
 SAL_DLLPUBLIC_EXPORT css::uno::Reference< css::uno::XComponentContext > SAL_CALL
 bootstrap_InitialComponentContext(

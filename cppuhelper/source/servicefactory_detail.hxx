@@ -25,28 +25,16 @@
 #include <vector>
 
 #include "com/sun/star/uno/Exception.hpp"
-#include "com/sun/star/uno/Reference.hxx"
 #include "sal/types.h"
 
-namespace com { namespace sun { namespace star { namespace lang {
-    class XMultiComponentFactory;
-} } } }
 namespace cppu { struct ContextEntry_Init; }
-namespace rtl {
-    class Bootstrap;
-    class OUString;
-}
+namespace rtl { class Bootstrap; }
 
 namespace cppu {
 
 void add_access_control_entries(
     std::vector< cppu::ContextEntry_Init > * values,
     rtl::Bootstrap const & bootstrap)
-    SAL_THROW((com::sun::star::uno::Exception));
-
-SAL_DLLPUBLIC_EXPORT
-com::sun::star::uno::Reference< com::sun::star::lang::XMultiComponentFactory >
-bootstrapInitialSF(rtl::OUString const & rBootstrapPath)
     SAL_THROW((com::sun::star::uno::Exception));
 
 }
