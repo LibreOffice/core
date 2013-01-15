@@ -148,6 +148,27 @@ private:
     void run();
     /// Get page count.
     int getPages();
+    /// Copy&paste helper.
+    void paste(OUString aFilename, uno::Reference<text::XTextRange> xTextRange = uno::Reference<text::XTextRange>())
+    {
+        uno::Reference<document::XFilter> xFilter(m_xSFactory->createInstance("com.sun.star.comp.Writer.RtfFilter"), uno::UNO_QUERY_THROW);
+        uno::Reference<document::XImporter> xImporter(xFilter, uno::UNO_QUERY_THROW);
+        xImporter->setTargetDocument(mxComponent);
+        uno::Sequence<beans::PropertyValue> aDescriptor(xTextRange.is() ? 3 : 2);
+        aDescriptor[0].Name = "InputStream";
+        SvStream* pStream = utl::UcbStreamHelper::CreateStream(getURLFromSrc("/sw/qa/extras/rtfimport/data/") + aFilename, STREAM_WRITE);
+        uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
+        aDescriptor[0].Value <<= xStream;
+        aDescriptor[1].Name = "IsNewDoc";
+        aDescriptor[1].Value <<= sal_False;
+        if (xTextRange.is())
+        {
+            aDescriptor[2].Name = "TextInsertModeRange";
+            aDescriptor[2].Value <<= xTextRange;
+        }
+        xFilter->filter(aDescriptor);
+    }
+
 };
 
 void Test::run()
@@ -849,18 +870,7 @@ void Test::testCopyPastePageStyle()
 {
     // The problem was that RTF import during copy&paste did not ignore page styles.
     // Once we have more copy&paste tests, makes sense to refactor this to some helper method.
-    uno::Reference<uno::XInterface> xInterface(m_xSFactory->createInstance("com.sun.star.comp.Writer.RtfFilter"), uno::UNO_QUERY_THROW);
-    uno::Reference<document::XImporter> xImporter(xInterface, uno::UNO_QUERY_THROW);
-    xImporter->setTargetDocument(mxComponent);
-    uno::Reference<document::XFilter> xFilter(xInterface, uno::UNO_QUERY_THROW);
-    uno::Sequence<beans::PropertyValue> aDescriptor(2);
-    aDescriptor[0].Name = "InputStream";
-    SvStream* pStream = utl::UcbStreamHelper::CreateStream(getURLFromSrc("/sw/qa/extras/rtfimport/data/") + "copypaste-pagestyle-paste.rtf", STREAM_WRITE);
-    uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
-    aDescriptor[0].Value <<= xStream;
-    aDescriptor[1].Name = "IsNewDoc";
-    aDescriptor[1].Value <<= sal_False;
-    xFilter->filter(aDescriptor);
+    paste("copypaste-pagestyle-paste.rtf");
 
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(21001), getProperty<sal_Int32>(xPropertySet, "Width")); // Was letter, i.e. 21590
@@ -872,21 +882,7 @@ void Test::testCopyPasteFootnote()
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xFootnotes(xFootnotesSupplier->getFootnotes(), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xTextRange(xFootnotes->getByIndex(0), uno::UNO_QUERY);
-
-    uno::Reference<uno::XInterface> xInterface(m_xSFactory->createInstance("com.sun.star.comp.Writer.RtfFilter"), uno::UNO_QUERY_THROW);
-    uno::Reference<document::XImporter> xImporter(xInterface, uno::UNO_QUERY_THROW);
-    xImporter->setTargetDocument(mxComponent);
-    uno::Reference<document::XFilter> xFilter(xInterface, uno::UNO_QUERY_THROW);
-    uno::Sequence<beans::PropertyValue> aDescriptor(3);
-    aDescriptor[0].Name = "InputStream";
-    SvStream* pStream = utl::UcbStreamHelper::CreateStream(getURLFromSrc("/sw/qa/extras/rtfimport/data/") + "copypaste-footnote-paste.rtf", STREAM_WRITE);
-    uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
-    aDescriptor[0].Value <<= xStream;
-    aDescriptor[1].Name = "IsNewDoc";
-    aDescriptor[1].Value <<= sal_False;
-    aDescriptor[2].Name = "TextInsertModeRange";
-    aDescriptor[2].Value <<= xTextRange;
-    xFilter->filter(aDescriptor);
+    paste("copypaste-footnote-paste.rtf", xTextRange);
 
     CPPUNIT_ASSERT_EQUAL(OUString("bbb"), xTextRange->getString());
 }
