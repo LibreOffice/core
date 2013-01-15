@@ -128,13 +128,23 @@ bool TableLayouter::getCellArea( const CellPos& rPos, basegfx::B2IRectangle& rAr
         if( xCell.is() && !xCell->isMerged() && isValid(rPos) )
         {
             const basegfx::B2ITuple aCellSize( getCellSize( rPos ) );
+            const bool bRTL = meWritingMode == WritingMode_RL_TB;
 
             if( (rPos.mnCol < ((sal_Int32)maColumns.size()) && (rPos.mnRow < ((sal_Int32)maRows.size()) ) ) )
             {
-                const sal_Int32 x = maColumns[rPos.mnCol].mnPos;
                 const sal_Int32 y = maRows[rPos.mnRow].mnPos;
 
-                rArea = basegfx::B2IRectangle( x, y, x + aCellSize.getX(), y + aCellSize.getY()  );
+                if(bRTL)
+                {
+                    ///For RTL Table Calculate the Right End of cell instead of Left
+                    const sal_Int32 x = maColumns[rPos.mnCol].mnPos + maColumns[rPos.mnCol].mnSize;
+                    rArea = basegfx::B2IRectangle( x-aCellSize.getX(), y, x, y + aCellSize.getY()  );
+                }
+                else
+                {
+                    const sal_Int32 x = maColumns[rPos.mnCol].mnPos;
+                    rArea = basegfx::B2IRectangle( x, y, x + aCellSize.getX(), y + aCellSize.getY()  );
+                }
                 return true;
             }
         }
