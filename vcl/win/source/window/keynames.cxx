@@ -83,9 +83,21 @@ namespace vcl_sal {
         { KEY_SHIFT, "Maj" },
     };
 
+    static const struct KeysNameReplacement aImplReplacements_Estonian[] =
+    {
+        { KEY_RIGHT, "Nool paremale" },
+        { KEY_LEFT, "Nool vasakule" },
+        { KEY_UP, "Nool üles" },
+        { KEY_DOWN, "Nool alla" },
+        { KEY_BACK, "Tagasilüke" },
+        { KEY_ENTER, "Enter" },
+        { KEY_SPACEBAR, "Tühik" },
+    };
+
     static const struct KeyboardReplacements aKeyboards[] =
     {
         { "ca", aImplReplacements_Catalan, SAL_N_ELEMENTS(aImplReplacements_Catalan) },
+        { "et", aImplReplacements_Estonian, SAL_N_ELEMENTS(aImplReplacements_Estonian) },
     };
 
     // translate keycodes, used within the displayed menu shortcuts
