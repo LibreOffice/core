@@ -117,6 +117,7 @@ public:
     void testFdo52475();
     void testFdo55493();
     void testCopyPastePageStyle();
+    void testCopyPasteFootnote();
     void testShptxtPard();
     void testDoDhgt();
     void testDplinehollow();
@@ -202,6 +203,7 @@ void Test::run()
         {"fdo52475.rtf", &Test::testFdo52475},
         {"fdo55493.rtf", &Test::testFdo55493},
         {"copypaste-pagestyle.rtf", &Test::testCopyPastePageStyle},
+        {"copypaste-footnote.rtf", &Test::testCopyPasteFootnote},
         {"shptxt-pard.rtf", &Test::testShptxtPard},
         {"do-dhgt.rtf", &Test::testDoDhgt},
         {"dplinehollow.rtf", &Test::testDplinehollow},
@@ -859,6 +861,31 @@ void Test::testCopyPastePageStyle()
 
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(21001), getProperty<sal_Int32>(xPropertySet, "Width")); // Was letter, i.e. 21590
+}
+
+void Test::testCopyPasteFootnote()
+{
+    // The RTF import did not handle the case when the position wasn't the main document XText, but something different, e.g. a footnote.
+    uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFootnotes(xFootnotesSupplier->getFootnotes(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xTextRange(xFootnotes->getByIndex(0), uno::UNO_QUERY);
+
+    uno::Reference<uno::XInterface> xInterface(m_xSFactory->createInstance("com.sun.star.comp.Writer.RtfFilter"), uno::UNO_QUERY_THROW);
+    uno::Reference<document::XImporter> xImporter(xInterface, uno::UNO_QUERY_THROW);
+    xImporter->setTargetDocument(mxComponent);
+    uno::Reference<document::XFilter> xFilter(xInterface, uno::UNO_QUERY_THROW);
+    uno::Sequence<beans::PropertyValue> aDescriptor(3);
+    aDescriptor[0].Name = "InputStream";
+    SvStream* pStream = utl::UcbStreamHelper::CreateStream(getURLFromSrc("/sw/qa/extras/rtfimport/data/") + "copypaste-footnote-paste.rtf", STREAM_WRITE);
+    uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
+    aDescriptor[0].Value <<= xStream;
+    aDescriptor[1].Name = "IsNewDoc";
+    aDescriptor[1].Value <<= sal_False;
+    aDescriptor[2].Name = "TextInsertModeRange";
+    aDescriptor[2].Value <<= xTextRange;
+    xFilter->filter(aDescriptor);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("bbb"), xTextRange->getString());
 }
 
 void Test::testShptxtPard()
