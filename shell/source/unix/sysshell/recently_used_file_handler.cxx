@@ -148,19 +148,15 @@ namespace /* private */ {
             rtl::OStringBuffer aBuf;
             for (sal_uInt32 i = 0; i < text.length(); i++)
             {
-#               define MAP(a,b) case a: aBuf.append(b); break
                 switch (text[i])
                 {
-                    MAP ('&',  "&amp;");
-                    MAP ('<',  "&lt;");
-                    MAP ('>',  "&gt;");
-                    MAP ('\'', "&apos;");
-                    MAP ('"',  "&quot;");
-                default:
-                    aBuf.append(text[i]);
-                    break;
+                    case '&':  aBuf.append("&amp;");  break;
+                    case '<':  aBuf.append("&lt;");   break;
+                    case '>':  aBuf.append("&gt;");   break;
+                    case '\'': aBuf.append("&apos;"); break;
+                    case '"':  aBuf.append("&quot;"); break;
+                    default:   aBuf.append(text[i]);  break;
                 }
-#               undef MAP
             }
             return aBuf.makeStringAndClear();
         }
