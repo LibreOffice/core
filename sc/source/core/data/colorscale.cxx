@@ -907,7 +907,13 @@ ScIconSetInfo* ScIconSetFormat::GetIconSetInfo(const ScAddress& rAddr) const
     if(nVal > nValMax)
         ++nIndex;
 
-    pInfo->nIconIndex = nIndex;
+    if(mpFormatData->mbReverse)
+    {
+        sal_Int32 nMaxIndex = mpFormatData->maEntries.size() - 1;
+        pInfo->nIconIndex = nMaxIndex - nIndex;
+    }
+    else
+        pInfo->nIconIndex = nIndex;
     pInfo->eIconSetType = mpFormatData->eIconSetType;
     pInfo->mbShowValue = mpFormatData->mbShowValue;
     return pInfo;

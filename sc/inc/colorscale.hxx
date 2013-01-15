@@ -313,10 +313,15 @@ struct ScIconSetFormatData
 {
     ScIconSetType eIconSetType;
     bool mbShowValue;
+    /**
+     * Specifies whether the icons should be shown in reverse order
+     */
+    bool mbReverse;
     boost::ptr_vector<ScColorScaleEntry> maEntries;
 
     ScIconSetFormatData():
-        mbShowValue(true) {}
+        mbShowValue(true),
+        mbReverse(false) {}
 };
 
 class SC_DLLPUBLIC ScIconSetFormat : public ScColorFormat
