@@ -894,6 +894,7 @@ ScIconSetInfo* ScIconSetFormat::GetIconSetInfo(const ScAddress& rAddr) const
 
     sal_Int32 nIndex = 0;
     const_iterator itr = begin();
+    ++itr;
     double nValMax = CalcValue(nMin, nMax, itr);
 
     ++itr;
