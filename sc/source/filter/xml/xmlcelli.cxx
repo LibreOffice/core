@@ -736,7 +736,7 @@ void ScXMLTableRowCellContext::SetFormulaCell(ScFormulaCell* pFCell) const
             pFCell->SetHybridDouble(fValue);
             pFCell->ResetDirty();
         }
-
+        pFCell->StartListeningTo(rXMLImport.GetDocument());
         // Leave the cell dirty when the cached result is not given.
     }
 }
@@ -754,15 +754,36 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
         if ( bDoIncrement )
         {
             ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
+            OUString aCellString;
             if (pOUTextValue && !pOUTextValue->isEmpty())
-                pFCell->SetHybridString( *pOUTextValue );
+                aCellString = *pOUTextValue;
             else if (pOUTextContent && !pOUTextContent->isEmpty())
-                pFCell->SetHybridString( *pOUTextContent );
+                aCellString = *pOUTextContent;
             else if ( nCurrentCol > 0 && pOUText && !pOUText->isEmpty() )
-                pFCell->SetHybridString( *pOUText );
+                aCellString = *pOUText;
             else
                 bDoIncrement = false;
-            pFCell->ResetDirty();
+
+            if(!aCellString.isEmpty())
+            {
+                if (bDoIncrement && !GetScImport().IsFormulaErrorConstant(aCellString))
+                {
+                    pFCell->SetHybridString( aCellString );
+                    pFCell->ResetDirty();
+                }
+                else
+                {
+                    ScAddress aTopLeftMatrixCell;
+                    if(pFCell->GetMatrixOrigin(aTopLeftMatrixCell))
+                    {
+                        ScBaseCell* pMatrixCell = rXMLImport.GetDocument()->GetCell( aTopLeftMatrixCell );
+                        static_cast<ScFormulaCell*>(pMatrixCell)->SetDirty();
+                    }
+                    else
+                        SAL_WARN("sc", "matrix cell without matrix");
+                }
+            }
+            pFCell->StartListeningTo(rXMLImport.GetDocument());
         }
     }
     else //regular text cells
@@ -800,6 +821,7 @@ void ScXMLTableRowCellContext::PutValueCell( const ScAddress& rCurrentPos )
             ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
             SetFormulaCell(pFCell);
         }
+
     }
     else  //regular value cell
     {
@@ -1036,7 +1058,6 @@ void ScXMLTableRowCellContext::PutFormulaCell( const ScAddress& rCellPos )
             pNewCell = new ScFormulaCell( pDoc, rCellPos, pCode.get(), eGrammar, MM_NONE );
 
             ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pNewCell);
-            pFCell->StartListeningTo(pDoc);
             SetFormulaCell(pFCell);
         }
         else if ( aText[0] == '\'' && aText.getLength() > 1 )
@@ -1105,6 +1126,7 @@ void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rCellPos )
                         nMatrixCols, nMatrixRows, pMat, new formula::FormulaDoubleToken(fValue));
                     pFCell->ResetDirty();
                 }
+                pFCell->StartListeningTo(rXMLImport.GetDocument());
             }
         }
         else
