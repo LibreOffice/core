@@ -5,7 +5,7 @@ Globals
     {
         variables
         {
-            UREPACKAGEVERSION 3.6.5.0
+            UREPACKAGEVERSION 3.6.5.1
             URELAYERVERSION 1
             REFERENCEOOOMAJORMINOR 3.4
             UNIXBASISROOTNAME libreoffice3.6
@@ -56,8 +56,8 @@ LibreOffice
             POSTVERSIONEXTENSIONUNIX
             BRANDPACKAGEVERSION 3.6
             USERDIRPRODUCTVERSION 3
-            ABOUTBOXPRODUCTVERSION 3.6.5.0
-            ABOUTBOXPRODUCTVERSIONSUFFIX +
+            ABOUTBOXPRODUCTVERSION 3.6.5.1
+            ABOUTBOXPRODUCTVERSIONSUFFIX 
             BASEPRODUCTVERSION 3.6
             PCPFILENAME libreoffice.pcp
             UPDATEURL http://update.libreoffice.org/check.php
@@ -66,7 +66,7 @@ LibreOffice
             FILEFORMATNAME OpenOffice.org
             FILEFORMATVERSION 1.0
             WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
-            PACKAGEVERSION 3.6.5.0
+            PACKAGEVERSION 3.6.5.1
             PACKAGEREVISION {buildid}
             LICENSENAME LGPL
             GLOBALFILEGID gid_File_Lib_Vcl
@@ -109,8 +109,8 @@ LibreOffice_Dev
             POSTVERSIONEXTENSIONUNIX
             BRANDPACKAGEVERSION 3.6
             USERDIRPRODUCTVERSION 3
-            ABOUTBOXPRODUCTVERSION 3.6.5.0
-            ABOUTBOXPRODUCTVERSIONSUFFIX +
+            ABOUTBOXPRODUCTVERSION 3.6.5.1
+            ABOUTBOXPRODUCTVERSIONSUFFIX 
             BASEPRODUCTVERSION 3.6
             DEVELOPMENTPRODUCT 1
             BASISPACKAGEPREFIX lodevbasis
@@ -124,7 +124,7 @@ LibreOffice_Dev
             FILEFORMATNAME OpenOffice.org
             FILEFORMATVERSION 1.0
             WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
-            PACKAGEVERSION 3.6.5.0
+            PACKAGEVERSION 3.6.5.1
             PACKAGEREVISION {buildid}
             LICENSENAME LGPL
             GLOBALFILEGID gid_File_Lib_Vcl
@@ -162,7 +162,7 @@ URE
         {
             PRODUCTNAME URE
             PRODUCTVERSION 3.6
-            PACKAGEVERSION 3.6.5.0
+            PACKAGEVERSION 3.6.5.1
             PACKAGEREVISION 1
             PRODUCTEXTENSION
             BRANDPACKAGEVERSION 3.6
@@ -203,7 +203,7 @@ LibreOffice_SDK
             POSTVERSIONEXTENSION SDK
             POSTVERSIONEXTENSIONUNIX sdk
             BRANDPACKAGEVERSION 3.6
-            PACKAGEVERSION 3.6.5.0
+            PACKAGEVERSION 3.6.5.1
             PACKAGEREVISION {buildid}
             PACK_INSTALLED 1
             DMG_VOLUMEEXTENSION SDK
@@ -245,7 +245,7 @@ LibreOffice_Dev_SDK
             POSTVERSIONEXTENSION SDK
             POSTVERSIONEXTENSIONUNIX sdk
             BRANDPACKAGEVERSION 3.6
-            PACKAGEVERSION 3.6.5.0
+            PACKAGEVERSION 3.6.5.1
             PACKAGEREVISION {buildid}
             BASISPACKAGEPREFIX lodevbasis
             UREPACKAGEPREFIX lodev
@@ -291,7 +291,7 @@ LibreOffice_Test
             POSTVERSIONEXTENSION TEST
             POSTVERSIONEXTENSIONUNIX test
             BRANDPACKAGEVERSION 3.6
-            PACKAGEVERSION 3.6.5.0
+            PACKAGEVERSION 3.6.5.1
             PACKAGEREVISION {buildid}
             PACK_INSTALLED 1
             DMG_VOLUMEEXTENSION TEST
@@ -333,7 +333,7 @@ LibreOffice_Dev_Test
             POSTVERSIONEXTENSION TEST
             POSTVERSIONEXTENSIONUNIX test
             BRANDPACKAGEVERSION 3.6
-            PACKAGEVERSION 3.6.5.0
+            PACKAGEVERSION 3.6.5.1
             PACKAGEREVISION {buildid}
             BASISPACKAGEPREFIX lodevbasis
             UREPACKAGEPREFIX lodev
@@ -379,8 +379,8 @@ OxygenOffice
             POSTVERSIONEXTENSIONUNIX
             BRANDPACKAGEVERSION 3.6
             USERDIRPRODUCTVERSION 3
-            ABOUTBOXPRODUCTVERSION 3.6.5.0
-            ABOUTBOXPRODUCTVERSIONSUFFIX +
+            ABOUTBOXPRODUCTVERSION 3.6.5.1
+            ABOUTBOXPRODUCTVERSIONSUFFIX 
             BASEPRODUCTVERSION 3.6
             PCPFILENAME openoffice.pcp
             UPDATEURL http://update.libreoffice.org/check.php
@@ -389,7 +389,7 @@ OxygenOffice
             FILEFORMATNAME OpenOffice.org
             FILEFORMATVERSION 1.0
             WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
-            PACKAGEVERSION 3.6.5.0
+            PACKAGEVERSION 3.6.5.1
             PACKAGEREVISION {buildid}
             LICENSENAME LGPL
             SERVICESPROJEKT 1
