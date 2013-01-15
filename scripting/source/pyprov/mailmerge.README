@@ -1,0 +1,18 @@
+Easiest way I find to test this is to...
+
+1)
+
+a) install fakemail and run it
+b) tools->options->writer->mail merge email
+c) localhost 8025
+
+2)
+
+a) type some text into writer that will exercise utf-8, e.g. "Caolán's test"
+b) tools->mail merge wizard->next->email message->select address book
+c) create, add one user with your own email address, ok
+d) next, next, text, send merged document as email
+e) and test all of plain text, html and the various attachment options
+
+fake mail will dump the mail it gets into its pwd, if all that works, you can
+then try with your own normal mail server.

@@ -36,6 +36,8 @@ from com.sun.star.mail import SendMailMessageFailedException
 
 from email.mime.base import MIMEBase
 from email.message import Message
+from email.charset import Charset
+from email.charset import QP
 from email.encoders import encode_base64
 from email.header import Header
 from email.mime.multipart import MIMEMultipart
@@ -152,7 +154,7 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 			print("PyMailSMTPService subject " + subject, file=dbgout)
 			print("PyMailSMTPService from " + sendername, file=dbgout)
 			print("PyMailSMTPService from " + sendermail, file=dbgout)
-			print("PyMailSMTPService send to " + recipients, file=dbgout)
+			print("PyMailSMTPService send to %s" % (recipients,), file=dbgout)
 
 		attachments = xMailMessage.getAttachments()
 
@@ -161,7 +163,7 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 		content = xMailMessage.Body
 		flavors = content.getTransferDataFlavors()
 		if dbg:
-			print("PyMailSMTPService flavors len " + len(flavors), file=dbgout)
+			print("PyMailSMTPService flavors len %d" % (len(flavors),), file=dbgout)
 
 		#Use first flavor that's sane for an email body
 		for flavor in flavors:
@@ -169,11 +171,8 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 				if dbg:
 					print("PyMailSMTPService mimetype is " + flavor.MimeType, file=dbgout)
 				textbody = content.getTransferData(flavor)
-				try:
-					textbody = textbody.value
-				except:
-					pass
-				textbody = textbody.encode('utf-8')
+				#http://stackoverflow.com/questions/9403265/how-do-i-use-python-3-2-email-module-to-send-unicode-messages-encoded-in-utf-8-w
+				textbody = textbody.encode('utf-8').decode('iso8859-1')
 
 				if len(textbody):
 					mimeEncoding = re.sub("charset=.*", "charset=UTF-8", flavor.MimeType)
@@ -181,7 +180,9 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 						mimeEncoding = mimeEncoding + "; charset=UTF-8"
 					textmsg['Content-Type'] = mimeEncoding
 					textmsg['MIME-Version'] = '1.0'
-					textmsg.set_payload(textbody)
+					c = Charset('utf-8')
+					c.body_encoding = QP
+					textmsg.set_payload(textbody, c)
 
 				break
 
@@ -227,7 +228,7 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 			maintype, subtype = ctype.split('/', 1)
 			msgattachment = MIMEBase(maintype, subtype)
 			data = content.getTransferData(flavor)
-			msgattachment.set_payload(data)
+			msgattachment.set_payload(data.value)
 			encode_base64(msgattachment)
 			fname = attachment.ReadableName
 			try:
@@ -250,7 +251,7 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 		truerecipients = uniquer.keys()
 
 		if dbg:
-			print("PyMailSMTPService recipients are " + truerecipients, file=dbgout)
+			print(("PyMailSMTPService recipients are ", truerecipients), file=dbgout)
 
 		self.server.sendmail(sendermail, truerecipients, msg.as_string())
 
