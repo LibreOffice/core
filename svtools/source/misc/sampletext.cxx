@@ -634,6 +634,11 @@ namespace
 #if OSL_DEBUG_LEVEL > 2
     void lcl_dump_unicode_coverage(const boost::dynamic_bitset<sal_uInt32> &rIn)
     {
+        if (rIn.none())
+        {
+            fprintf(stderr, "<NONE>\n");
+            return;
+        }
         if (rIn[vcl::UnicodeCoverage::BASIC_LATIN])
             fprintf(stderr, "BASIC_LATIN\n");
         if (rIn[vcl::UnicodeCoverage::LATIN_1_SUPPLEMENT])
@@ -894,6 +899,11 @@ namespace
 
     void lcl_dump_codepage_coverage(const boost::dynamic_bitset<sal_uInt32> &rIn)
     {
+        if (rIn.none())
+        {
+            fprintf(stderr, "<NONE>\n");
+            return;
+        }
         if (rIn[vcl::CodePageCoverage::CP1252])
             fprintf(stderr, "CP1252\n");
         if (rIn[vcl::CodePageCoverage::CP1250])
@@ -1065,7 +1075,7 @@ namespace
         aMasked.set(vcl::UnicodeCoverage::PHAGS_PA, false);
 
         //So, possibly a CJK font
-        if (!aMasked.count())
+        if (!aMasked.count() && !rFontCapabilities.maCodePageRange.empty())
         {
             boost::dynamic_bitset<sal_uInt32> aCJKCodePageMask(vcl::CodePageCoverage::MAX_CP_ENUM);
             aCJKCodePageMask.set(vcl::CodePageCoverage::CP932);
@@ -1517,8 +1527,7 @@ rtl::OUString makeRepresentativeTextForFont(sal_Int16 nScriptType, const Font &r
             if (nScriptType != com::sun::star::i18n::ScriptType::ASIAN)
             {
                 aFontCapabilities.maUnicodeRange &= getCJKMask();
-                aFontCapabilities.maCodePageRange =
-                    boost::dynamic_bitset<sal_uInt32>(aFontCapabilities.maCodePageRange.size());
+                aFontCapabilities.maCodePageRange.clear();
             }
             if (nScriptType != com::sun::star::i18n::ScriptType::LATIN)
                 aFontCapabilities.maUnicodeRange &= getLatinMask();
