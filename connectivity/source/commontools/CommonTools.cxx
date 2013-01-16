@@ -30,7 +30,7 @@
 #include <cppuhelper/interfacecontainer.h>
 #include "TConnection.hxx"
 #include <comphelper/types.hxx>
-#include <com/sun/star/java/XJavaVM.hpp>
+#include <com/sun/star/java/JavaVirtualMachine.hpp>
 #include <rtl/process.h>
 
 using namespace ::comphelper;
@@ -44,8 +44,8 @@ namespace connectivity
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
+    using namespace ::com::sun::star::java;
     using namespace dbtools;
-    namespace starjava  = com::sun::star::java;
     //------------------------------------------------------------------------------
     const sal_Unicode CHAR_PLACE = '_';
     const sal_Unicode CHAR_WILD  = '%';
@@ -153,21 +153,16 @@ namespace connectivity
     }
 
     // -----------------------------------------------------------------------------
-    ::rtl::Reference< jvmaccess::VirtualMachine > getJavaVM(const Reference<XMultiServiceFactory >& _rxFactory)
+    ::rtl::Reference< jvmaccess::VirtualMachine > getJavaVM(const Reference<XComponentContext >& _rxContext)
     {
         ::rtl::Reference< jvmaccess::VirtualMachine > aRet;
-        OSL_ENSURE(_rxFactory.is(),"No XMultiServiceFactory a.v.!");
-        if(!_rxFactory.is())
+        OSL_ENSURE(_rxContext.is(),"No XMultiServiceFactory a.v.!");
+        if(!_rxContext.is())
             return aRet;
 
         try
         {
-            Reference< starjava::XJavaVM > xVM(_rxFactory->createInstance(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.java.JavaVirtualMachine"))), UNO_QUERY);
-
-            OSL_ENSURE(_rxFactory.is(),"InitJava: I have no factory!");
-            if (!xVM.is() || !_rxFactory.is())
-                throw Exception(); // -2;
+            Reference< XJavaVM > xVM = JavaVirtualMachine::create(_rxContext);
 
             Sequence<sal_Int8> processID(16);
             rtl_getGlobalProcessId( (sal_uInt8*) processID.getArray() );

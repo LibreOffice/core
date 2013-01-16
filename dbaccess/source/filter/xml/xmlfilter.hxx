@@ -124,7 +124,6 @@ public:
     virtual void SetViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps);
     virtual void SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aConfigProps);
 
-    inline Reference< XMultiServiceFactory > getORB() { return getServiceFactory(); }
     inline Reference<XPropertySet> getDataSource() const { return m_xDataSource; }
 
     inline const TPropertyNameMap& getQuerySettings() const { return m_aQuerySettings;}

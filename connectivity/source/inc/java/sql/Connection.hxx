@@ -43,6 +43,7 @@ namespace connectivity
                                 public OAutoRetrievingBase
     {
         friend class OSubComponent<java_sql_Connection, java_sql_Connection_BASE>;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
         const java_sql_Driver*  m_pDriver;
         jobject                 m_pDriverobject;
         jdbc::GlobalRef< jobject >

@@ -23,6 +23,7 @@
 #include <osl/thread.h>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <osl/diagnose.h>
 #include <jvmaccess/virtualmachine.hxx>
 #include <memory>
@@ -72,9 +73,6 @@ namespace connectivity
         java_lang_Object& operator= (java_lang_Object&);
         java_lang_Object(java_lang_Object&);
 
-        // Only to destroy the C++ pointer of Java objects derived from JSbxObject
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
-
     protected:
         // The Java handle to this class
         jobject object;
@@ -90,7 +88,7 @@ namespace connectivity
         java_lang_Object( JNIEnv * pEnv, jobject myObj );
 
         // The actual ctor
-        java_lang_Object(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory=NULL);
+        java_lang_Object();
 
         virtual ~java_lang_Object();
 
@@ -101,7 +99,6 @@ namespace connectivity
         void clearObject();
 
         virtual ::rtl::OUString toString() const;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() { return m_xFactory; }
 
         static void ThrowSQLException(JNIEnv * pEnv,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> & _rContext);
         static void ThrowLoggedSQLException(
@@ -110,7 +107,7 @@ namespace connectivity
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext
         );
 
-        static ::rtl::Reference< jvmaccess::VirtualMachine > getVM(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory=NULL);
+        static ::rtl::Reference< jvmaccess::VirtualMachine > getVM(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext=NULL);
 
         static jclass   findMyClass(const char* _pClassName);
         void            obtainMethodId(JNIEnv* _pEnv, const char* _pMethodName, const char* _pSignature, jmethodID& _inout_MethodID) const;

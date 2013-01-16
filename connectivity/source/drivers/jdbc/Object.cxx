@@ -50,11 +50,11 @@ using namespace ::com::sun::star::lang;
     return s_VM;
 }
 // -----------------------------------------------------------------------------
-::rtl::Reference< jvmaccess::VirtualMachine > java_lang_Object::getVM(const Reference<XMultiServiceFactory >& _rxFactory)
+::rtl::Reference< jvmaccess::VirtualMachine > java_lang_Object::getVM(const Reference<XComponentContext >& _rxContext)
 {
     ::rtl::Reference< jvmaccess::VirtualMachine > xVM = getJavaVM2();
-    if ( !xVM.is() && _rxFactory.is() )
-        xVM = getJavaVM2(::connectivity::getJavaVM(_rxFactory));
+    if ( !xVM.is() && _rxContext.is() )
+        xVM = getJavaVM2(::connectivity::getJavaVM(_rxContext));
 
     return xVM;
 }
@@ -101,8 +101,8 @@ jclass java_lang_Object::getMyClass() const
     return theClass;
 }
 // the actual constructor
-java_lang_Object::java_lang_Object(const Reference<XMultiServiceFactory >& _rxFactory)
-            : m_xFactory(_rxFactory),object( 0 )
+java_lang_Object::java_lang_Object()
+            : object( 0 )
 {
     SDBThreadAttach::addRef();
 }

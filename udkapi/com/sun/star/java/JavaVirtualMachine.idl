@@ -19,30 +19,19 @@
 #ifndef __com_sun_star_java_JavaVirtualMachine_idl__
 #define __com_sun_star_java_JavaVirtualMachine_idl__
 
+#include <com/sun/star/java/XJavaVM.idl>
 
 module com {  module sun {  module star {  module java {
 
- published interface XJavaVM;
- published interface XJavaThreadRegister_11;
 
-
-// DocMerge from xml: service com::sun::star::java::JavaVirtualMachine
-/** exports interfaces to handle a JavaVM and Java threads.
+/** Exports interfaces to handle a Java VM.
 
     @deprecated
     A UNO service seems to be at the wrong abstraction level for this
     functionality.  This should probably be replaced by an appropriate C/C++
     API.
  */
-published service JavaVirtualMachine
-{
-    // DocMerge: empty anyway
-    interface XJavaVM;
-
-    // DocMerge: empty anyway
-    interface XJavaThreadRegister_11;
-
-};
+published service JavaVirtualMachine : XJavaVM;
 
 
 }; }; }; };

@@ -83,8 +83,8 @@ namespace dbaxml
         {
         public:
             typedef enum { E_JAVA, E_CALC } StartType;
-            FastLoader(uno::Reference< lang::XMultiServiceFactory > const & _xFactory,StartType _eType)
-                :m_xFactory(_xFactory)
+            FastLoader(uno::Reference< uno::XComponentContext > const & _xContext,StartType _eType)
+                :m_xContext(_xContext)
                 ,m_eWhat(_eType)
             {}
 
@@ -95,7 +95,7 @@ namespace dbaxml
             virtual void SAL_CALL run();
             virtual void SAL_CALL onTerminated();
         private:
-            uno::Reference< lang::XMultiServiceFactory > m_xFactory;
+            uno::Reference< uno::XComponentContext > m_xContext;
             StartType m_eWhat;
         };
 
@@ -109,7 +109,7 @@ namespace dbaxml
                     s_bFirstTime = false;
                     try
                     {
-                        ::rtl::Reference< jvmaccess::VirtualMachine > xJVM = ::connectivity::getJavaVM(m_xFactory);
+                        ::rtl::Reference< jvmaccess::VirtualMachine > xJVM = ::connectivity::getJavaVM(m_xContext);
                     }
                     catch (const uno::Exception&)
                     {
@@ -125,7 +125,7 @@ namespace dbaxml
                     s_bFirstTime = false;
                     try
                     {
-                        uno::Reference<frame::XDesktop2> xDesktop = frame::Desktop::create( comphelper::getComponentContext(m_xFactory) );
+                        uno::Reference<frame::XDesktop2> xDesktop = frame::Desktop::create( m_xContext );
                         const ::rtl::OUString sTarget(RTL_CONSTASCII_USTRINGPARAM("_blank"));
                         sal_Int32 nFrameSearchFlag = frame::FrameSearchFlag::TASKS | frame::FrameSearchFlag::CREATE;
                         uno::Reference< frame::XFrame> xFrame = xDesktop->findFrame(sTarget,nFrameSearchFlag);
@@ -144,7 +144,7 @@ namespace dbaxml
                             aArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Hidden"));
                             aArgs[nLen++].Value <<= sal_True;
 
-                            ::comphelper::MimeConfigurationHelper aHelper( comphelper::getComponentContext(m_xFactory) );
+                            ::comphelper::MimeConfigurationHelper aHelper( m_xContext );
                             SvtModuleOptions aModuleOptions;
                             uno::Reference< frame::XModel > xModel(xFrameLoad->loadComponentFromURL(
                                 aModuleOptions.GetFactoryEmptyDocumentURL( aModuleOptions.ClassifyFactoryByServiceName( aHelper.GetDocServiceNameFromMediaType(MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET) )),
@@ -169,14 +169,14 @@ namespace dbaxml
 
         class DatasourceURLListener : public ::cppu::WeakImplHelper1< beans::XPropertyChangeListener >
         {
-            uno::Reference< lang::XMultiServiceFactory > m_xFactory;
+            uno::Reference< uno::XComponentContext > m_xContext;
             ::dbaccess::ODsnTypeCollection m_aTypeCollection;
             DatasourceURLListener(const DatasourceURLListener&);
             void operator =(const DatasourceURLListener&);
         protected:
             virtual ~DatasourceURLListener(){}
         public:
-            DatasourceURLListener(uno::Reference< lang::XMultiServiceFactory > const & _xFactory) : m_xFactory(_xFactory),m_aTypeCollection(comphelper::getComponentContext(_xFactory)){}
+            DatasourceURLListener(uno::Reference< uno::XComponentContext > const & _xContext) : m_xContext(_xContext), m_aTypeCollection(_xContext){}
             // XPropertyChangeListener
             virtual void SAL_CALL propertyChange( const beans::PropertyChangeEvent& _rEvent ) throw (uno::RuntimeException)
             {
@@ -186,11 +186,11 @@ namespace dbaxml
 
                 if ( m_aTypeCollection.needsJVM(sURL) )
                 {
-                    pCreatorThread = new FastLoader(m_xFactory,FastLoader::E_JAVA);
+                    pCreatorThread = new FastLoader(m_xContext, FastLoader::E_JAVA);
                 }
                 else if ( sURL.matchIgnoreAsciiCaseAsciiL("sdbc:calc:",10,0) )
                 {
-                    pCreatorThread = new FastLoader(m_xFactory,FastLoader::E_CALC);
+                    pCreatorThread = new FastLoader(m_xContext, FastLoader::E_CALC);
                 }
                 if ( pCreatorThread )
                 {
@@ -446,7 +446,7 @@ sal_Bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
 
         uno::Reference<sdb::XOfficeDatabaseDocument> xOfficeDoc(GetModel(),UNO_QUERY_THROW);
         m_xDataSource.set(xOfficeDoc->getDataSource(),UNO_QUERY_THROW);
-        uno::Reference<beans::XPropertyChangeListener> xListener = new DatasourceURLListener(getServiceFactory());
+        uno::Reference<beans::XPropertyChangeListener> xListener = new DatasourceURLListener( comphelper::getComponentContext(getServiceFactory()));
         m_xDataSource->addPropertyChangeListener(PROPERTY_URL,xListener);
         uno::Reference< XNumberFormatsSupplier > xNum(m_xDataSource->getPropertyValue(PROPERTY_NUMBERFORMATSSUPPLIER),UNO_QUERY);
         SetNumberFormatsSupplier(xNum);

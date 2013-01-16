@@ -31,7 +31,7 @@
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <osl/interlck.h>
 #include <jvmaccess/virtualmachine.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include "connectivity/dbtoolsdllapi.hxx"
 
 namespace com { namespace sun { namespace star { namespace util {
@@ -158,12 +158,12 @@ namespace connectivity
 
 
     /** creates a java virtual machine
-        @param  _rxFactory
+        @param  _rxContext
             The ORB.
         @return
             The JavaVM.
     */
-    OOO_DLLPUBLIC_DBTOOLS ::rtl::Reference< jvmaccess::VirtualMachine > getJavaVM(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
+    OOO_DLLPUBLIC_DBTOOLS ::rtl::Reference< jvmaccess::VirtualMachine > getJavaVM(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);
 
     /** return <TRUE/> if the java class exists, otherwise <FALSE/>.
         @param  _pJVM

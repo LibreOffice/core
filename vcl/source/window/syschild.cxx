@@ -43,8 +43,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <jvmaccess/virtualmachine.hxx>
-#include <com/sun/star/java/XJavaVM.hpp>
-#include <com/sun/star/java/XJavaThreadRegister_11.hpp>
+#include <com/sun/star/java/JavaVirtualMachine.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 using namespace ::com::sun::star;
@@ -235,14 +234,14 @@ sal_IntPtr SystemChildWindow::GetParentWindowHandle( sal_Bool bUseJava )
 #ifdef SOLAR_JAVA
     else
     {
-        uno::Reference< lang::XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory() );
+        uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
         if( GetSystemData()->aWindow > 0 )
         {
             try
             {
                     ::rtl::Reference< ::jvmaccess::VirtualMachine > xVM;
-                    uno::Reference< java::XJavaVM >                 xJavaVM( xFactory->createInstance( rtl::OUString("com.sun.star.java.JavaVirtualMachine") ), uno::UNO_QUERY );
+                    uno::Reference< java::XJavaVM >                 xJavaVM = java::JavaVirtualMachine::create(xContext);;
                     uno::Sequence< sal_Int8 >                       aProcessID( 17 );
 
                     rtl_getGlobalProcessId( (sal_uInt8*) aProcessID.getArray() );

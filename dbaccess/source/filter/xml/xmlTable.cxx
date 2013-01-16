@@ -99,7 +99,7 @@ OXMLTable::OXMLTable( ODBFilter& _rImport
     aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Parent"));
     aValue.Value <<= m_xParentContainer;
     aArguments[1] <<= aValue;
-    m_xTable.set(GetOwnImport().getORB()->createInstanceWithArguments(m_sServiceName,aArguments),UNO_QUERY);
+    m_xTable.set(GetOwnImport().getServiceFactory()->createInstanceWithArguments(m_sServiceName,aArguments),UNO_QUERY);
 }
 // -----------------------------------------------------------------------------
 

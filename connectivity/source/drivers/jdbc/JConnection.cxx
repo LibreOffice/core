@@ -257,8 +257,9 @@ IMPLEMENT_SERVICE_INFO(java_sql_Connection,"com.sun.star.sdbcx.JConnection","com
 jclass java_sql_Connection::theClass = 0;
 
 java_sql_Connection::java_sql_Connection( const java_sql_Driver& _rDriver )
-    :java_lang_Object( _rDriver.getContext().getLegacyServiceFactory() )
+    :java_lang_Object()
     ,OSubComponent<java_sql_Connection, java_sql_Connection_BASE>((::cppu::OWeakObject*)(&_rDriver), this)
+    ,m_xContext( _rDriver.getContext().getUNOContext() )
     ,m_pDriver( &_rDriver )
     ,m_pDriverobject(NULL)
     ,m_pDriverClassLoader()
@@ -772,7 +773,7 @@ sal_Bool java_sql_Connection::construct(const ::rtl::OUString& url,
                                     const Sequence< PropertyValue >& info)
 {
     { // initialize the java vm
-        ::rtl::Reference< jvmaccess::VirtualMachine > xTest = java_lang_Object::getVM(getORB());
+        ::rtl::Reference< jvmaccess::VirtualMachine > xTest = java_lang_Object::getVM(m_xContext);
         if ( !xTest.is() )
             throwGenericSQLException(STR_NO_JAVA,*this);
     }

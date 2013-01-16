@@ -68,9 +68,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/io,\
 	TextInputStream \
 	TextOutputStream \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/java,\
-	JavaVirtualMachine \
-))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/lang,\
 	MultiServiceFactory \
 	RegistryServiceManager \
@@ -121,6 +118,9 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/io,\
 	SequenceInputStream \
 	SequenceOutputStream \
 	TempFile \
+))
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/java,\
+	JavaVirtualMachine \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/reflection,\
 	theCoreReflection \

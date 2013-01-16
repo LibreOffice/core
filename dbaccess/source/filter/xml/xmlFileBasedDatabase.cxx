@@ -100,7 +100,7 @@ OXMLFileBasedDatabase::OXMLFileBasedDatabase( ODBFilter& rImport,
     }
     if ( !(sLocation.isEmpty() || sMediaType.isEmpty()) )
     {
-        ::dbaccess::ODsnTypeCollection aTypeCollection(comphelper::getComponentContext(rImport.getORB()));
+        ::dbaccess::ODsnTypeCollection aTypeCollection(comphelper::getComponentContext(rImport.getServiceFactory()));
         ::rtl::OUString sURL(aTypeCollection.getDatasourcePrefixFromMediaType(sMediaType,sFileTypeExtension));
         sURL += sLocation;
         try
