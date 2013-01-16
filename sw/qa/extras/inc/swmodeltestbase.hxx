@@ -88,13 +88,19 @@ private:
         // create the dump
         SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
         SwDoc* pDoc = pTxtDoc->GetDocShell()->GetDoc();
-        pDoc->GetCurrentViewShell()->CalcLayout();
         SwRootFrm* pLayout = pDoc->GetCurrentLayout();
         pLayout->dumpAsXml(pXmlWriter);
 
         // delete xml writer
         xmlTextWriterEndDocument(pXmlWriter);
         xmlFreeTextWriter(pXmlWriter);
+    }
+
+    void calcLayout()
+    {
+        SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+        SwDoc* pDoc = pTxtDoc->GetDocShell()->GetDoc();
+        pDoc->GetCurrentViewShell()->CalcLayout();
     }
 
 
@@ -238,6 +244,7 @@ protected:
         fprintf(stderr, "%s,", pName);
         m_nStartTime = osl_getGlobalTimer();
         mxComponent = loadFromDesktop(getURLFromSrc(pDir) + OUString::createFromAscii(pName));
+        calcLayout();
     }
     
     void reload(OUString aFilter)
@@ -257,6 +264,7 @@ protected:
             xmlBufferFree(mpXmlBuffer);
             mpXmlBuffer = 0;
         }
+        calcLayout();
     }
 
     void finish()
