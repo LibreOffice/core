@@ -104,9 +104,6 @@ CDEFS += -DCPPCONN_LIB=\"$(DLLPRE)mysqlcppconn$(DLLPOST)\"
     .ELSE
       MYSQL_LIBFILE=$(MYSQL_LIBDIR)$/$(DLLPRE)mysql$(DLLPOST).16
     .ENDIF
-
-    # checkdll will complain if we do not point it to the libmysql lib
-    EXTRALIBPATHS=-L$(MYSQL_LIBDIR)
   .ENDIF
 
   .IF "$(SYSTEM_MYSQL_CPPCONN)" != "YES"

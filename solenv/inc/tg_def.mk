@@ -92,10 +92,6 @@ $(DEF$(TNR)TARGETN) .PHONY :
     $(COMMAND_ECHO)echo HEAPSIZE	  0 											>>$@.tmpfile
 .ENDIF
     $(COMMAND_ECHO)echo EXPORTS													>>$@.tmpfile
-.IF "$(VERSIONOBJ)"!=""
-#	getversioninfo fuer alle!!
-    $(COMMAND_ECHO)echo GetVersionInfo		>>$@.tmpfile
-.ENDIF
 .IF "$(DEFLIB$(TNR)NAME)"!=""
 .IF "$(COM)"=="GCC"
     $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL$(TNR)TARGET).exp

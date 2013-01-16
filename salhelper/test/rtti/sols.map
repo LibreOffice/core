@@ -17,7 +17,6 @@
 #
 UDK_3_0_0 {
     global:
-GetVersionInfo;
 _fini;
 _init;
 

@@ -18,7 +18,6 @@
 
 UDK_3_0_0 { # should have been UDK_3.0
     global:
-    GetVersionInfo;
     _ZN9salhelper18ORealDynamicLoader11newInstanceEPPS0_RKN3rtl8OUStringES6_;
     _ZN9salhelper18ORealDynamicLoader7acquireEv;
     _ZN9salhelper18ORealDynamicLoader7releaseEv;

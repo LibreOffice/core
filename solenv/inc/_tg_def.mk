@@ -63,10 +63,6 @@ $(DEF1TARGETN) .PHONY :
     $(COMMAND_ECHO)echo HEAPSIZE	  0 											>>$@.tmpfile
 .ENDIF
     $(COMMAND_ECHO)echo EXPORTS													>>$@.tmpfile
-.IF "$(VERSIONOBJ)"!=""
-#	getversioninfo fuer alle!!
-    $(COMMAND_ECHO)echo GetVersionInfo		>>$@.tmpfile
-.ENDIF
 .IF "$(DEFLIB1NAME)"!=""
 .IF "$(COM)"=="GCC"
     $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL1TARGET).exp
@@ -232,10 +228,6 @@ $(DEF2TARGETN) .PHONY :
     $(COMMAND_ECHO)echo HEAPSIZE	  0 											>>$@.tmpfile
 .ENDIF
     $(COMMAND_ECHO)echo EXPORTS													>>$@.tmpfile
-.IF "$(VERSIONOBJ)"!=""
-#	getversioninfo fuer alle!!
-    $(COMMAND_ECHO)echo GetVersionInfo		>>$@.tmpfile
-.ENDIF
 .IF "$(DEFLIB2NAME)"!=""
 .IF "$(COM)"=="GCC"
     $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL2TARGET).exp
@@ -401,10 +393,6 @@ $(DEF3TARGETN) .PHONY :
     $(COMMAND_ECHO)echo HEAPSIZE	  0 											>>$@.tmpfile
 .ENDIF
     $(COMMAND_ECHO)echo EXPORTS													>>$@.tmpfile
-.IF "$(VERSIONOBJ)"!=""
-#	getversioninfo fuer alle!!
-    $(COMMAND_ECHO)echo GetVersionInfo		>>$@.tmpfile
-.ENDIF
 .IF "$(DEFLIB3NAME)"!=""
 .IF "$(COM)"=="GCC"
     $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL3TARGET).exp
@@ -570,10 +558,6 @@ $(DEF4TARGETN) .PHONY :
     $(COMMAND_ECHO)echo HEAPSIZE	  0 											>>$@.tmpfile
 .ENDIF
     $(COMMAND_ECHO)echo EXPORTS													>>$@.tmpfile
-.IF "$(VERSIONOBJ)"!=""
-#	getversioninfo fuer alle!!
-    $(COMMAND_ECHO)echo GetVersionInfo		>>$@.tmpfile
-.ENDIF
 .IF "$(DEFLIB4NAME)"!=""
 .IF "$(COM)"=="GCC"
     $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL4TARGET).exp
@@ -739,10 +723,6 @@ $(DEF5TARGETN) .PHONY :
     $(COMMAND_ECHO)echo HEAPSIZE	  0 											>>$@.tmpfile
 .ENDIF
     $(COMMAND_ECHO)echo EXPORTS													>>$@.tmpfile
-.IF "$(VERSIONOBJ)"!=""
-#	getversioninfo fuer alle!!
-    $(COMMAND_ECHO)echo GetVersionInfo		>>$@.tmpfile
-.ENDIF
 .IF "$(DEFLIB5NAME)"!=""
 .IF "$(COM)"=="GCC"
     $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL5TARGET).exp
@@ -908,10 +888,6 @@ $(DEF6TARGETN) .PHONY :
     $(COMMAND_ECHO)echo HEAPSIZE	  0 											>>$@.tmpfile
 .ENDIF
     $(COMMAND_ECHO)echo EXPORTS													>>$@.tmpfile
-.IF "$(VERSIONOBJ)"!=""
-#	getversioninfo fuer alle!!
-    $(COMMAND_ECHO)echo GetVersionInfo		>>$@.tmpfile
-.ENDIF
 .IF "$(DEFLIB6NAME)"!=""
 .IF "$(COM)"=="GCC"
     $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL6TARGET).exp
@@ -1077,10 +1053,6 @@ $(DEF7TARGETN) .PHONY :
     $(COMMAND_ECHO)echo HEAPSIZE	  0 											>>$@.tmpfile
 .ENDIF
     $(COMMAND_ECHO)echo EXPORTS													>>$@.tmpfile
-.IF "$(VERSIONOBJ)"!=""
-#	getversioninfo fuer alle!!
-    $(COMMAND_ECHO)echo GetVersionInfo		>>$@.tmpfile
-.ENDIF
 .IF "$(DEFLIB7NAME)"!=""
 .IF "$(COM)"=="GCC"
     $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL7TARGET).exp
@@ -1246,10 +1218,6 @@ $(DEF8TARGETN) .PHONY :
     $(COMMAND_ECHO)echo HEAPSIZE	  0 											>>$@.tmpfile
 .ENDIF
     $(COMMAND_ECHO)echo EXPORTS													>>$@.tmpfile
-.IF "$(VERSIONOBJ)"!=""
-#	getversioninfo fuer alle!!
-    $(COMMAND_ECHO)echo GetVersionInfo		>>$@.tmpfile
-.ENDIF
 .IF "$(DEFLIB8NAME)"!=""
 .IF "$(COM)"=="GCC"
     $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL8TARGET).exp
@@ -1415,10 +1383,6 @@ $(DEF9TARGETN) .PHONY :
     $(COMMAND_ECHO)echo HEAPSIZE	  0 											>>$@.tmpfile
 .ENDIF
     $(COMMAND_ECHO)echo EXPORTS													>>$@.tmpfile
-.IF "$(VERSIONOBJ)"!=""
-#	getversioninfo fuer alle!!
-    $(COMMAND_ECHO)echo GetVersionInfo		>>$@.tmpfile
-.ENDIF
 .IF "$(DEFLIB9NAME)"!=""
 .IF "$(COM)"=="GCC"
     $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL9TARGET).exp
@@ -1584,10 +1548,6 @@ $(DEF10TARGETN) .PHONY :
     $(COMMAND_ECHO)echo HEAPSIZE	  0 											>>$@.tmpfile
 .ENDIF
     $(COMMAND_ECHO)echo EXPORTS													>>$@.tmpfile
-.IF "$(VERSIONOBJ)"!=""
-#	getversioninfo fuer alle!!
-    $(COMMAND_ECHO)echo GetVersionInfo		>>$@.tmpfile
-.ENDIF
 .IF "$(DEFLIB10NAME)"!=""
 .IF "$(COM)"=="GCC"
     $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL10TARGET).exp

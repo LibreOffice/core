@@ -34,26 +34,6 @@ EXTRALIBPATHS1=$(EXTRALIBPATHS)
 EXTRALIBPATHS1+=-L$(SOLAR_STLLIBPATH)
 .ENDIF
 .ENDIF				# "$(SHL1NOCHECK)"!=""
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-.IF "$(L10N_framework)"==""
-.IF "$(VERSIONOBJ)"!=""
-SHL1VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL1TARGET))}$(VERSIONOBJ:f)
-USE_VERSIONH:=$(INCCOM)/$(SHL1VERSIONOBJ:b).h
-.IF "$(OS)" != "WNT"
-SHL1VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL1TARGET))}$(VERSIONOBJ:f:s/.o/.obj/)
-.ELSE           # "$(OS)" != "WNT"
-SHL1VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL1TARGET))}$(VERSIONOBJ:f)
-.ENDIF          # "$(OS)" != "WNT"
-$(MISC)/$(SHL1VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL1VERSIONOBJ:b).h
-#    $(COPY) $(SOLARENV)/src/version.c $@
-    $(COMMAND_ECHO)$(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL1VERSIONOBJ:b).h/ > $@
-
-.INIT : $(SHL1VERSIONOBJDEP)
-.ENDIF			# "$(VERSIONOBJ)"!=""
-.ENDIF
 
 .IF "$(OS)" == "WNT"
 .IF "$(OS)" == "WNT"
@@ -288,7 +268,7 @@ $(SHL1TARGETN) : \
         $(SHL1DEF) \
         $(USE_1IMPLIB) \
         $(STDOBJ) \
-        $(SHL1VERSIONOBJ) $(SHL1OBJS) \
+        $(SHL1OBJS) \
         $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL1LIBS))) \
         -Wl,--exclude-libs,ALL,--start-group $(SHL1STDLIBS) -Wl,--end-group \
         $(SHL1STDSHL) $(STDSHL1) \
@@ -310,7 +290,7 @@ $(SHL1TARGETN) : \
         $(SHL1DEF) \
         $(USE_1IMPLIB) \
         $(STDOBJ) \
-        $(SHL1VERSIONOBJ) $(SHL1OBJS) \
+        $(SHL1OBJS) \
         $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL1LIBS))) \
         -Wl,--exclude-libs,ALL,--start-group $(SHL1STDLIBS) -Wl,--end-group \
         $(SHL1STDSHL) $(STDSHL1) \
@@ -330,7 +310,7 @@ $(SHL1TARGETN) : \
         -def:$(SHL1DEF) \
         $(USE_1IMPLIB) \
         $(STDOBJ) \
-        $(SHL1VERSIONOBJ) $(SHL1OBJS) \
+        $(SHL1OBJS) \
         $(SHL1LIBS) \
         $(SHL1STDLIBS) \
         $(SHL1STDSHL) $(STDSHL1) \
@@ -354,7 +334,7 @@ $(SHL1TARGETN) : \
         -map:$(MISC)/$(@:B).map				\
         $(LB)/$(SHL1IMPLIB).exp				\
         $(STDOBJ)							\
-        $(SHL1OBJS) $(SHL1VERSIONOBJ) \
+        $(SHL1OBJS) \
         $(SHL1LIBS)                         \
         $(SHL1STDLIBS)                      \
         $(SHL1STDSHL) $(STDSHL1)                           \
@@ -379,7 +359,7 @@ $(SHL1TARGETN) : \
         -map:$(MISC)/$(@:B).map				\
         $(USE_1IMPLIB) \
         $(STDOBJ)							\
-        $(SHL1OBJS) $(SHL1VERSIONOBJ))   \
+        $(SHL1OBJS) )   \
         $(SHL1LIBS) \
         @$(mktmp $(SHL1STDLIBS)                      \
         $(SHL1STDSHL) $(STDSHL1)                           \
@@ -429,7 +409,6 @@ $(SHL1TARGETN) : \
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_1.cmd
     @echo $(STDSLO) $(SHL1OBJS:s/.obj/.o/) \
-    $(SHL1VERSIONOBJ) \
     `cat /dev/null $(SHL1LIBS) | sed s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)/$(@:b).list
     @/bin/echo -n $(SHL1LINKER) $(SHL1LINKFLAGS) $(SHL1VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) -o $@ \
     $(SHL1STDLIBS) $(SHL1ARCHIVES) $(SHL1STDSHL) $(STDSHL1) -filelist $(MISC)/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)/$(TARGET).$(@:b)_1.cmd
@@ -446,16 +425,13 @@ $(SHL1TARGETN) : \
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
 .ENDIF          # "$(SHL1CREATEJNILIB)"!=""
-.IF "$(SHL1NOCHECK)"==""
-    $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS1) $(SHL1TARGETN)
-.ENDIF				# "$(SHL1NOCHECK)"!=""
 .ELIF "$(DISABLE_DYNLOADING)"=="TRUE"
     $(COMMAND_ECHO)$(AR) $(LIB1FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL1OBJS)) $(shell cat /dev/null $(LIB1TARGET) $(SHL1LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
     $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_1.cmd
     @echo $(SHL1LINKER) $(SHL1LINKFLAGS) $(SHL1SONAME) $(LINKFLAGSSHL) $(SHL1VERSIONMAPPARA) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) $(STDSLO) $(SHL1OBJS:s/.obj/.o/) \
-    $(SHL1VERSIONOBJ) -o $@ \
+    -o $@ \
     `cat /dev/null $(SHL1LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
     $(SHL1STDLIBS) $(SHL1ARCHIVES) $(SHL1STDSHL) $(STDSHL1) $(LINKOUTPUT_FILTER) > $(MISC)/$(TARGET).$(@:b)_1.cmd
   .IF "$(VERBOSE)" == "TRUE"
@@ -465,11 +441,6 @@ $(SHL1TARGETN) : \
 .IF "$(SHL1NOCHECK)"==""
     $(COMMAND_ECHO)-$(RM) $(SHL1TARGETN:d)check_$(SHL1TARGETN:f)
     $(COMMAND_ECHO)$(RENAME) $(SHL1TARGETN) $(SHL1TARGETN:d)check_$(SHL1TARGETN:f)
-.IF "$(VERBOSE)"=="TRUE"
-    $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS1) $(SHL1TARGETN:d)check_$(SHL1TARGETN:f)
-.ELSE
-    $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS1) -- -s $(SHL1TARGETN:d)check_$(SHL1TARGETN:f)
-.ENDIF
 .ENDIF				# "$(SHL1NOCHECK)"!=""
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
@@ -519,26 +490,6 @@ EXTRALIBPATHS2=$(EXTRALIBPATHS)
 EXTRALIBPATHS2+=-L$(SOLAR_STLLIBPATH)
 .ENDIF
 .ENDIF				# "$(SHL2NOCHECK)"!=""
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-.IF "$(L10N_framework)"==""
-.IF "$(VERSIONOBJ)"!=""
-SHL2VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL2TARGET))}$(VERSIONOBJ:f)
-USE_VERSIONH:=$(INCCOM)/$(SHL2VERSIONOBJ:b).h
-.IF "$(OS)" != "WNT"
-SHL2VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL2TARGET))}$(VERSIONOBJ:f:s/.o/.obj/)
-.ELSE           # "$(OS)" != "WNT"
-SHL2VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL2TARGET))}$(VERSIONOBJ:f)
-.ENDIF          # "$(OS)" != "WNT"
-$(MISC)/$(SHL2VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL2VERSIONOBJ:b).h
-#    $(COPY) $(SOLARENV)/src/version.c $@
-    $(COMMAND_ECHO)$(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL2VERSIONOBJ:b).h/ > $@
-
-.INIT : $(SHL2VERSIONOBJDEP)
-.ENDIF			# "$(VERSIONOBJ)"!=""
-.ENDIF
 
 .IF "$(OS)" == "WNT"
 .IF "$(OS)" == "WNT"
@@ -773,7 +724,7 @@ $(SHL2TARGETN) : \
         $(SHL2DEF) \
         $(USE_2IMPLIB) \
         $(STDOBJ) \
-        $(SHL2VERSIONOBJ) $(SHL2OBJS) \
+        $(SHL2OBJS) \
         $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL2LIBS))) \
         -Wl,--exclude-libs,ALL,--start-group $(SHL2STDLIBS) -Wl,--end-group \
         $(SHL2STDSHL) $(STDSHL2) \
@@ -795,7 +746,7 @@ $(SHL2TARGETN) : \
         $(SHL2DEF) \
         $(USE_2IMPLIB) \
         $(STDOBJ) \
-        $(SHL2VERSIONOBJ) $(SHL2OBJS) \
+        $(SHL2OBJS) \
         $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL2LIBS))) \
         -Wl,--exclude-libs,ALL,--start-group $(SHL2STDLIBS) -Wl,--end-group \
         $(SHL2STDSHL) $(STDSHL2) \
@@ -815,7 +766,7 @@ $(SHL2TARGETN) : \
         -def:$(SHL2DEF) \
         $(USE_2IMPLIB) \
         $(STDOBJ) \
-        $(SHL2VERSIONOBJ) $(SHL2OBJS) \
+        $(SHL2OBJS) \
         $(SHL2LIBS) \
         $(SHL2STDLIBS) \
         $(SHL2STDSHL) $(STDSHL2) \
@@ -839,7 +790,7 @@ $(SHL2TARGETN) : \
         -map:$(MISC)/$(@:B).map				\
         $(LB)/$(SHL2IMPLIB).exp				\
         $(STDOBJ)							\
-        $(SHL2OBJS) $(SHL2VERSIONOBJ) \
+        $(SHL2OBJS) \
         $(SHL2LIBS)                         \
         $(SHL2STDLIBS)                      \
         $(SHL2STDSHL) $(STDSHL2)                           \
@@ -864,7 +815,7 @@ $(SHL2TARGETN) : \
         -map:$(MISC)/$(@:B).map				\
         $(USE_2IMPLIB) \
         $(STDOBJ)							\
-        $(SHL2OBJS) $(SHL2VERSIONOBJ))   \
+        $(SHL2OBJS) )   \
         $(SHL2LIBS) \
         @$(mktmp $(SHL2STDLIBS)                      \
         $(SHL2STDSHL) $(STDSHL2)                           \
@@ -914,7 +865,6 @@ $(SHL2TARGETN) : \
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_2.cmd
     @echo $(STDSLO) $(SHL2OBJS:s/.obj/.o/) \
-    $(SHL2VERSIONOBJ) \
     `cat /dev/null $(SHL2LIBS) | sed s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)/$(@:b).list
     @/bin/echo -n $(SHL2LINKER) $(SHL2LINKFLAGS) $(SHL2VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) -o $@ \
     $(SHL2STDLIBS) $(SHL2ARCHIVES) $(SHL2STDSHL) $(STDSHL2) -filelist $(MISC)/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)/$(TARGET).$(@:b)_2.cmd
@@ -931,16 +881,13 @@ $(SHL2TARGETN) : \
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
 .ENDIF          # "$(SHL2CREATEJNILIB)"!=""
-.IF "$(SHL2NOCHECK)"==""
-    $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS2) $(SHL2TARGETN)
-.ENDIF				# "$(SHL2NOCHECK)"!=""
 .ELIF "$(DISABLE_DYNLOADING)"=="TRUE"
     $(COMMAND_ECHO)$(AR) $(LIB2FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL2OBJS)) $(shell cat /dev/null $(LIB2TARGET) $(SHL2LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
     $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_2.cmd
     @echo $(SHL2LINKER) $(SHL2LINKFLAGS) $(SHL2SONAME) $(LINKFLAGSSHL) $(SHL2VERSIONMAPPARA) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) $(STDSLO) $(SHL2OBJS:s/.obj/.o/) \
-    $(SHL2VERSIONOBJ) -o $@ \
+    -o $@ \
     `cat /dev/null $(SHL2LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
     $(SHL2STDLIBS) $(SHL2ARCHIVES) $(SHL2STDSHL) $(STDSHL2) $(LINKOUTPUT_FILTER) > $(MISC)/$(TARGET).$(@:b)_2.cmd
   .IF "$(VERBOSE)" == "TRUE"
@@ -950,11 +897,6 @@ $(SHL2TARGETN) : \
 .IF "$(SHL2NOCHECK)"==""
     $(COMMAND_ECHO)-$(RM) $(SHL2TARGETN:d)check_$(SHL2TARGETN:f)
     $(COMMAND_ECHO)$(RENAME) $(SHL2TARGETN) $(SHL2TARGETN:d)check_$(SHL2TARGETN:f)
-.IF "$(VERBOSE)"=="TRUE"
-    $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS2) $(SHL2TARGETN:d)check_$(SHL2TARGETN:f)
-.ELSE
-    $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS2) -- -s $(SHL2TARGETN:d)check_$(SHL2TARGETN:f)
-.ENDIF
 .ENDIF				# "$(SHL2NOCHECK)"!=""
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
@@ -1004,26 +946,6 @@ EXTRALIBPATHS3=$(EXTRALIBPATHS)
 EXTRALIBPATHS3+=-L$(SOLAR_STLLIBPATH)
 .ENDIF
 .ENDIF				# "$(SHL3NOCHECK)"!=""
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-.IF "$(L10N_framework)"==""
-.IF "$(VERSIONOBJ)"!=""
-SHL3VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL3TARGET))}$(VERSIONOBJ:f)
-USE_VERSIONH:=$(INCCOM)/$(SHL3VERSIONOBJ:b).h
-.IF "$(OS)" != "WNT"
-SHL3VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL3TARGET))}$(VERSIONOBJ:f:s/.o/.obj/)
-.ELSE           # "$(OS)" != "WNT"
-SHL3VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL3TARGET))}$(VERSIONOBJ:f)
-.ENDIF          # "$(OS)" != "WNT"
-$(MISC)/$(SHL3VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL3VERSIONOBJ:b).h
-#    $(COPY) $(SOLARENV)/src/version.c $@
-    $(COMMAND_ECHO)$(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL3VERSIONOBJ:b).h/ > $@
-
-.INIT : $(SHL3VERSIONOBJDEP)
-.ENDIF			# "$(VERSIONOBJ)"!=""
-.ENDIF
 
 .IF "$(OS)" == "WNT"
 .IF "$(OS)" == "WNT"
@@ -1258,7 +1180,7 @@ $(SHL3TARGETN) : \
         $(SHL3DEF) \
         $(USE_3IMPLIB) \
         $(STDOBJ) \
-        $(SHL3VERSIONOBJ) $(SHL3OBJS) \
+        $(SHL3OBJS) \
         $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL3LIBS))) \
         -Wl,--exclude-libs,ALL,--start-group $(SHL3STDLIBS) -Wl,--end-group \
         $(SHL3STDSHL) $(STDSHL3) \
@@ -1280,7 +1202,7 @@ $(SHL3TARGETN) : \
         $(SHL3DEF) \
         $(USE_3IMPLIB) \
         $(STDOBJ) \
-        $(SHL3VERSIONOBJ) $(SHL3OBJS) \
+        $(SHL3OBJS) \
         $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL3LIBS))) \
         -Wl,--exclude-libs,ALL,--start-group $(SHL3STDLIBS) -Wl,--end-group \
         $(SHL3STDSHL) $(STDSHL3) \
@@ -1300,7 +1222,7 @@ $(SHL3TARGETN) : \
         -def:$(SHL3DEF) \
         $(USE_3IMPLIB) \
         $(STDOBJ) \
-        $(SHL3VERSIONOBJ) $(SHL3OBJS) \
+        $(SHL3OBJS) \
         $(SHL3LIBS) \
         $(SHL3STDLIBS) \
         $(SHL3STDSHL) $(STDSHL3) \
@@ -1324,7 +1246,7 @@ $(SHL3TARGETN) : \
         -map:$(MISC)/$(@:B).map				\
         $(LB)/$(SHL3IMPLIB).exp				\
         $(STDOBJ)							\
-        $(SHL3OBJS) $(SHL3VERSIONOBJ) \
+        $(SHL3OBJS) \
         $(SHL3LIBS)                         \
         $(SHL3STDLIBS)                      \
         $(SHL3STDSHL) $(STDSHL3)                           \
@@ -1349,7 +1271,7 @@ $(SHL3TARGETN) : \
         -map:$(MISC)/$(@:B).map				\
         $(USE_3IMPLIB) \
         $(STDOBJ)							\
-        $(SHL3OBJS) $(SHL3VERSIONOBJ))   \
+        $(SHL3OBJS) )   \
         $(SHL3LIBS) \
         @$(mktmp $(SHL3STDLIBS)                      \
         $(SHL3STDSHL) $(STDSHL3)                           \
@@ -1399,7 +1321,6 @@ $(SHL3TARGETN) : \
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_3.cmd
     @echo $(STDSLO) $(SHL3OBJS:s/.obj/.o/) \
-    $(SHL3VERSIONOBJ) \
     `cat /dev/null $(SHL3LIBS) | sed s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)/$(@:b).list
     @/bin/echo -n $(SHL3LINKER) $(SHL3LINKFLAGS) $(SHL3VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) -o $@ \
     $(SHL3STDLIBS) $(SHL3ARCHIVES) $(SHL3STDSHL) $(STDSHL3) -filelist $(MISC)/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)/$(TARGET).$(@:b)_3.cmd
@@ -1416,16 +1337,13 @@ $(SHL3TARGETN) : \
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
 .ENDIF          # "$(SHL3CREATEJNILIB)"!=""
-.IF "$(SHL3NOCHECK)"==""
-    $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS3) $(SHL3TARGETN)
-.ENDIF				# "$(SHL3NOCHECK)"!=""
 .ELIF "$(DISABLE_DYNLOADING)"=="TRUE"
     $(COMMAND_ECHO)$(AR) $(LIB3FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL3OBJS)) $(shell cat /dev/null $(LIB3TARGET) $(SHL3LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
     $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_3.cmd
     @echo $(SHL3LINKER) $(SHL3LINKFLAGS) $(SHL3SONAME) $(LINKFLAGSSHL) $(SHL3VERSIONMAPPARA) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) $(STDSLO) $(SHL3OBJS:s/.obj/.o/) \
-    $(SHL3VERSIONOBJ) -o $@ \
+    -o $@ \
     `cat /dev/null $(SHL3LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
     $(SHL3STDLIBS) $(SHL3ARCHIVES) $(SHL3STDSHL) $(STDSHL3) $(LINKOUTPUT_FILTER) > $(MISC)/$(TARGET).$(@:b)_3.cmd
   .IF "$(VERBOSE)" == "TRUE"
@@ -1435,11 +1353,6 @@ $(SHL3TARGETN) : \
 .IF "$(SHL3NOCHECK)"==""
     $(COMMAND_ECHO)-$(RM) $(SHL3TARGETN:d)check_$(SHL3TARGETN:f)
     $(COMMAND_ECHO)$(RENAME) $(SHL3TARGETN) $(SHL3TARGETN:d)check_$(SHL3TARGETN:f)
-.IF "$(VERBOSE)"=="TRUE"
-    $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS3) $(SHL3TARGETN:d)check_$(SHL3TARGETN:f)
-.ELSE
-    $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS3) -- -s $(SHL3TARGETN:d)check_$(SHL3TARGETN:f)
-.ENDIF
 .ENDIF				# "$(SHL3NOCHECK)"!=""
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
@@ -1489,26 +1402,6 @@ EXTRALIBPATHS4=$(EXTRALIBPATHS)
 EXTRALIBPATHS4+=-L$(SOLAR_STLLIBPATH)
 .ENDIF
 .ENDIF				# "$(SHL4NOCHECK)"!=""
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-.IF "$(L10N_framework)"==""
-.IF "$(VERSIONOBJ)"!=""
-SHL4VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL4TARGET))}$(VERSIONOBJ:f)
-USE_VERSIONH:=$(INCCOM)/$(SHL4VERSIONOBJ:b).h
-.IF "$(OS)" != "WNT"
-SHL4VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL4TARGET))}$(VERSIONOBJ:f:s/.o/.obj/)
-.ELSE           # "$(OS)" != "WNT"
-SHL4VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL4TARGET))}$(VERSIONOBJ:f)
-.ENDIF          # "$(OS)" != "WNT"
-$(MISC)/$(SHL4VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL4VERSIONOBJ:b).h
-#    $(COPY) $(SOLARENV)/src/version.c $@
-    $(COMMAND_ECHO)$(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL4VERSIONOBJ:b).h/ > $@
-
-.INIT : $(SHL4VERSIONOBJDEP)
-.ENDIF			# "$(VERSIONOBJ)"!=""
-.ENDIF
 
 .IF "$(OS)" == "WNT"
 .IF "$(OS)" == "WNT"
@@ -1743,7 +1636,7 @@ $(SHL4TARGETN) : \
         $(SHL4DEF) \
         $(USE_4IMPLIB) \
         $(STDOBJ) \
-        $(SHL4VERSIONOBJ) $(SHL4OBJS) \
+        $(SHL4OBJS) \
         $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL4LIBS))) \
         -Wl,--exclude-libs,ALL,--start-group $(SHL4STDLIBS) -Wl,--end-group \
         $(SHL4STDSHL) $(STDSHL4) \
@@ -1765,7 +1658,7 @@ $(SHL4TARGETN) : \
         $(SHL4DEF) \
         $(USE_4IMPLIB) \
         $(STDOBJ) \
-        $(SHL4VERSIONOBJ) $(SHL4OBJS) \
+        $(SHL4OBJS) \
         $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL4LIBS))) \
         -Wl,--exclude-libs,ALL,--start-group $(SHL4STDLIBS) -Wl,--end-group \
         $(SHL4STDSHL) $(STDSHL4) \
@@ -1785,7 +1678,7 @@ $(SHL4TARGETN) : \
         -def:$(SHL4DEF) \
         $(USE_4IMPLIB) \
         $(STDOBJ) \
-        $(SHL4VERSIONOBJ) $(SHL4OBJS) \
+        $(SHL4OBJS) \
         $(SHL4LIBS) \
         $(SHL4STDLIBS) \
         $(SHL4STDSHL) $(STDSHL4) \
@@ -1809,7 +1702,7 @@ $(SHL4TARGETN) : \
         -map:$(MISC)/$(@:B).map				\
         $(LB)/$(SHL4IMPLIB).exp				\
         $(STDOBJ)							\
-        $(SHL4OBJS) $(SHL4VERSIONOBJ) \
+        $(SHL4OBJS) \
         $(SHL4LIBS)                         \
         $(SHL4STDLIBS)                      \
         $(SHL4STDSHL) $(STDSHL4)                           \
@@ -1834,7 +1727,7 @@ $(SHL4TARGETN) : \
         -map:$(MISC)/$(@:B).map				\
         $(USE_4IMPLIB) \
         $(STDOBJ)							\
-        $(SHL4OBJS) $(SHL4VERSIONOBJ))   \
+        $(SHL4OBJS) )   \
         $(SHL4LIBS) \
         @$(mktmp $(SHL4STDLIBS)                      \
         $(SHL4STDSHL) $(STDSHL4)                           \
@@ -1884,7 +1777,6 @@ $(SHL4TARGETN) : \
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_4.cmd
     @echo $(STDSLO) $(SHL4OBJS:s/.obj/.o/) \
-    $(SHL4VERSIONOBJ) \
     `cat /dev/null $(SHL4LIBS) | sed s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)/$(@:b).list
     @/bin/echo -n $(SHL4LINKER) $(SHL4LINKFLAGS) $(SHL4VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) -o $@ \
     $(SHL4STDLIBS) $(SHL4ARCHIVES) $(SHL4STDSHL) $(STDSHL4) -filelist $(MISC)/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)/$(TARGET).$(@:b)_4.cmd
@@ -1901,16 +1793,13 @@ $(SHL4TARGETN) : \
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
 .ENDIF          # "$(SHL4CREATEJNILIB)"!=""
-.IF "$(SHL4NOCHECK)"==""
-    $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS4) $(SHL4TARGETN)
-.ENDIF				# "$(SHL4NOCHECK)"!=""
 .ELIF "$(DISABLE_DYNLOADING)"=="TRUE"
     $(COMMAND_ECHO)$(AR) $(LIB4FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL4OBJS)) $(shell cat /dev/null $(LIB4TARGET) $(SHL4LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
     $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_4.cmd
     @echo $(SHL4LINKER) $(SHL4LINKFLAGS) $(SHL4SONAME) $(LINKFLAGSSHL) $(SHL4VERSIONMAPPARA) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) $(STDSLO) $(SHL4OBJS:s/.obj/.o/) \
-    $(SHL4VERSIONOBJ) -o $@ \
+    -o $@ \
     `cat /dev/null $(SHL4LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
     $(SHL4STDLIBS) $(SHL4ARCHIVES) $(SHL4STDSHL) $(STDSHL4) $(LINKOUTPUT_FILTER) > $(MISC)/$(TARGET).$(@:b)_4.cmd
   .IF "$(VERBOSE)" == "TRUE"
@@ -1920,11 +1809,6 @@ $(SHL4TARGETN) : \
 .IF "$(SHL4NOCHECK)"==""
     $(COMMAND_ECHO)-$(RM) $(SHL4TARGETN:d)check_$(SHL4TARGETN:f)
     $(COMMAND_ECHO)$(RENAME) $(SHL4TARGETN) $(SHL4TARGETN:d)check_$(SHL4TARGETN:f)
-.IF "$(VERBOSE)"=="TRUE"
-    $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS4) $(SHL4TARGETN:d)check_$(SHL4TARGETN:f)
-.ELSE
-    $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS4) -- -s $(SHL4TARGETN:d)check_$(SHL4TARGETN:f)
-.ENDIF
 .ENDIF				# "$(SHL4NOCHECK)"!=""
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
@@ -1974,26 +1858,6 @@ EXTRALIBPATHS5=$(EXTRALIBPATHS)
 EXTRALIBPATHS5+=-L$(SOLAR_STLLIBPATH)
 .ENDIF
 .ENDIF				# "$(SHL5NOCHECK)"!=""
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-.IF "$(L10N_framework)"==""
-.IF "$(VERSIONOBJ)"!=""
-SHL5VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL5TARGET))}$(VERSIONOBJ:f)
-USE_VERSIONH:=$(INCCOM)/$(SHL5VERSIONOBJ:b).h
-.IF "$(OS)" != "WNT"
-SHL5VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL5TARGET))}$(VERSIONOBJ:f:s/.o/.obj/)
-.ELSE           # "$(OS)" != "WNT"
-SHL5VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL5TARGET))}$(VERSIONOBJ:f)
-.ENDIF          # "$(OS)" != "WNT"
-$(MISC)/$(SHL5VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL5VERSIONOBJ:b).h
-#    $(COPY) $(SOLARENV)/src/version.c $@
-    $(COMMAND_ECHO)$(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL5VERSIONOBJ:b).h/ > $@
-
-.INIT : $(SHL5VERSIONOBJDEP)
-.ENDIF			# "$(VERSIONOBJ)"!=""
-.ENDIF
 
 .IF "$(OS)" == "WNT"
 .IF "$(OS)" == "WNT"
@@ -2228,7 +2092,7 @@ $(SHL5TARGETN) : \
         $(SHL5DEF) \
         $(USE_5IMPLIB) \
         $(STDOBJ) \
-        $(SHL5VERSIONOBJ) $(SHL5OBJS) \
+        $(SHL5OBJS) \
         $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL5LIBS))) \
         -Wl,--exclude-libs,ALL,--start-group $(SHL5STDLIBS) -Wl,--end-group \
         $(SHL5STDSHL) $(STDSHL5) \
@@ -2250,7 +2114,7 @@ $(SHL5TARGETN) : \
         $(SHL5DEF) \
         $(USE_5IMPLIB) \
         $(STDOBJ) \
-        $(SHL5VERSIONOBJ) $(SHL5OBJS) \
+        $(SHL5OBJS) \
         $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL5LIBS))) \
         -Wl,--exclude-libs,ALL,--start-group $(SHL5STDLIBS) -Wl,--end-group \
         $(SHL5STDSHL) $(STDSHL5) \
@@ -2270,7 +2134,7 @@ $(SHL5TARGETN) : \
         -def:$(SHL5DEF) \
         $(USE_5IMPLIB) \
         $(STDOBJ) \
-        $(SHL5VERSIONOBJ) $(SHL5OBJS) \
+        $(SHL5OBJS) \
         $(SHL5LIBS) \
         $(SHL5STDLIBS) \
         $(SHL5STDSHL) $(STDSHL5) \
@@ -2294,7 +2158,7 @@ $(SHL5TARGETN) : \
         -map:$(MISC)/$(@:B).map				\
         $(LB)/$(SHL5IMPLIB).exp				\
         $(STDOBJ)							\
-        $(SHL5OBJS) $(SHL5VERSIONOBJ) \
+        $(SHL5OBJS) \
         $(SHL5LIBS)                         \
         $(SHL5STDLIBS)                      \
         $(SHL5STDSHL) $(STDSHL5)                           \
@@ -2319,7 +2183,7 @@ $(SHL5TARGETN) : \
         -map:$(MISC)/$(@:B).map				\
         $(USE_5IMPLIB) \
         $(STDOBJ)							\
-        $(SHL5OBJS) $(SHL5VERSIONOBJ))   \
+        $(SHL5OBJS) )   \
         $(SHL5LIBS) \
         @$(mktmp $(SHL5STDLIBS)                      \
         $(SHL5STDSHL) $(STDSHL5)                           \
@@ -2369,7 +2233,6 @@ $(SHL5TARGETN) : \
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_5.cmd
     @echo $(STDSLO) $(SHL5OBJS:s/.obj/.o/) \
-    $(SHL5VERSIONOBJ) \
     `cat /dev/null $(SHL5LIBS) | sed s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)/$(@:b).list
     @/bin/echo -n $(SHL5LINKER) $(SHL5LINKFLAGS) $(SHL5VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) -o $@ \
     $(SHL5STDLIBS) $(SHL5ARCHIVES) $(SHL5STDSHL) $(STDSHL5) -filelist $(MISC)/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)/$(TARGET).$(@:b)_5.cmd
@@ -2386,16 +2249,13 @@ $(SHL5TARGETN) : \
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
 .ENDIF          # "$(SHL5CREATEJNILIB)"!=""
-.IF "$(SHL5NOCHECK)"==""
-    $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS5) $(SHL5TARGETN)
-.ENDIF				# "$(SHL5NOCHECK)"!=""
 .ELIF "$(DISABLE_DYNLOADING)"=="TRUE"
     $(COMMAND_ECHO)$(AR) $(LIB5FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL5OBJS)) $(shell cat /dev/null $(LIB5TARGET) $(SHL5LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
     $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_5.cmd
     @echo $(SHL5LINKER) $(SHL5LINKFLAGS) $(SHL5SONAME) $(LINKFLAGSSHL) $(SHL5VERSIONMAPPARA) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) $(STDSLO) $(SHL5OBJS:s/.obj/.o/) \
-    $(SHL5VERSIONOBJ) -o $@ \
+    -o $@ \
     `cat /dev/null $(SHL5LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
     $(SHL5STDLIBS) $(SHL5ARCHIVES) $(SHL5STDSHL) $(STDSHL5) $(LINKOUTPUT_FILTER) > $(MISC)/$(TARGET).$(@:b)_5.cmd
   .IF "$(VERBOSE)" == "TRUE"
@@ -2405,11 +2265,6 @@ $(SHL5TARGETN) : \
 .IF "$(SHL5NOCHECK)"==""
     $(COMMAND_ECHO)-$(RM) $(SHL5TARGETN:d)check_$(SHL5TARGETN:f)
     $(COMMAND_ECHO)$(RENAME) $(SHL5TARGETN) $(SHL5TARGETN:d)check_$(SHL5TARGETN:f)
-.IF "$(VERBOSE)"=="TRUE"
-    $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS5) $(SHL5TARGETN:d)check_$(SHL5TARGETN:f)
-.ELSE
-    $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS5) -- -s $(SHL5TARGETN:d)check_$(SHL5TARGETN:f)
-.ENDIF
 .ENDIF				# "$(SHL5NOCHECK)"!=""
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
@@ -2459,26 +2314,6 @@ EXTRALIBPATHS6=$(EXTRALIBPATHS)
 EXTRALIBPATHS6+=-L$(SOLAR_STLLIBPATH)
 .ENDIF
 .ENDIF				# "$(SHL6NOCHECK)"!=""
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-.IF "$(L10N_framework)"==""
-.IF "$(VERSIONOBJ)"!=""
-SHL6VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL6TARGET))}$(VERSIONOBJ:f)
-USE_VERSIONH:=$(INCCOM)/$(SHL6VERSIONOBJ:b).h
-.IF "$(OS)" != "WNT"
-SHL6VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL6TARGET))}$(VERSIONOBJ:f:s/.o/.obj/)
-.ELSE           # "$(OS)" != "WNT"
-SHL6VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL6TARGET))}$(VERSIONOBJ:f)
-.ENDIF          # "$(OS)" != "WNT"
-$(MISC)/$(SHL6VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL6VERSIONOBJ:b).h
-#    $(COPY) $(SOLARENV)/src/version.c $@
-    $(COMMAND_ECHO)$(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL6VERSIONOBJ:b).h/ > $@
-
-.INIT : $(SHL6VERSIONOBJDEP)
-.ENDIF			# "$(VERSIONOBJ)"!=""
-.ENDIF
 
 .IF "$(OS)" == "WNT"
 .IF "$(OS)" == "WNT"
@@ -2713,7 +2548,7 @@ $(SHL6TARGETN) : \
         $(SHL6DEF) \
         $(USE_6IMPLIB) \
         $(STDOBJ) \
-        $(SHL6VERSIONOBJ) $(SHL6OBJS) \
+        $(SHL6OBJS) \
         $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL6LIBS))) \
         -Wl,--exclude-libs,ALL,--start-group $(SHL6STDLIBS) -Wl,--end-group \
         $(SHL6STDSHL) $(STDSHL6) \
@@ -2735,7 +2570,7 @@ $(SHL6TARGETN) : \
         $(SHL6DEF) \
         $(USE_6IMPLIB) \
         $(STDOBJ) \
-        $(SHL6VERSIONOBJ) $(SHL6OBJS) \
+        $(SHL6OBJS) \
         $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL6LIBS))) \
         -Wl,--exclude-libs,ALL,--start-group $(SHL6STDLIBS) -Wl,--end-group \
         $(SHL6STDSHL) $(STDSHL6) \
@@ -2755,7 +2590,7 @@ $(SHL6TARGETN) : \
         -def:$(SHL6DEF) \
         $(USE_6IMPLIB) \
         $(STDOBJ) \
-        $(SHL6VERSIONOBJ) $(SHL6OBJS) \
+        $(SHL6OBJS) \
         $(SHL6LIBS) \
         $(SHL6STDLIBS) \
         $(SHL6STDSHL) $(STDSHL6) \
@@ -2779,7 +2614,7 @@ $(SHL6TARGETN) : \
         -map:$(MISC)/$(@:B).map				\
         $(LB)/$(SHL6IMPLIB).exp				\
         $(STDOBJ)							\
-        $(SHL6OBJS) $(SHL6VERSIONOBJ) \
+        $(SHL6OBJS) \
         $(SHL6LIBS)                         \
         $(SHL6STDLIBS)                      \
         $(SHL6STDSHL) $(STDSHL6)                           \
@@ -2804,7 +2639,7 @@ $(SHL6TARGETN) : \
         -map:$(MISC)/$(@:B).map				\
         $(USE_6IMPLIB) \
         $(STDOBJ)							\
-        $(SHL6OBJS) $(SHL6VERSIONOBJ))   \
+        $(SHL6OBJS) )   \
         $(SHL6LIBS) \
         @$(mktmp $(SHL6STDLIBS)                      \
         $(SHL6STDSHL) $(STDSHL6)                           \
@@ -2854,7 +2689,6 @@ $(SHL6TARGETN) : \
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_6.cmd
     @echo $(STDSLO) $(SHL6OBJS:s/.obj/.o/) \
-    $(SHL6VERSIONOBJ) \
     `cat /dev/null $(SHL6LIBS) | sed s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)/$(@:b).list
     @/bin/echo -n $(SHL6LINKER) $(SHL6LINKFLAGS) $(SHL6VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) -o $@ \
     $(SHL6STDLIBS) $(SHL6ARCHIVES) $(SHL6STDSHL) $(STDSHL6) -filelist $(MISC)/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)/$(TARGET).$(@:b)_6.cmd
@@ -2871,16 +2705,13 @@ $(SHL6TARGETN) : \
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
 .ENDIF          # "$(SHL6CREATEJNILIB)"!=""
-.IF "$(SHL6NOCHECK)"==""
-    $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS6) $(SHL6TARGETN)
-.ENDIF				# "$(SHL6NOCHECK)"!=""
 .ELIF "$(DISABLE_DYNLOADING)"=="TRUE"
     $(COMMAND_ECHO)$(AR) $(LIB6FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL6OBJS)) $(shell cat /dev/null $(LIB6TARGET) $(SHL6LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
     $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_6.cmd
     @echo $(SHL6LINKER) $(SHL6LINKFLAGS) $(SHL6SONAME) $(LINKFLAGSSHL) $(SHL6VERSIONMAPPARA) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) $(STDSLO) $(SHL6OBJS:s/.obj/.o/) \
-    $(SHL6VERSIONOBJ) -o $@ \
+    -o $@ \
     `cat /dev/null $(SHL6LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
     $(SHL6STDLIBS) $(SHL6ARCHIVES) $(SHL6STDSHL) $(STDSHL6) $(LINKOUTPUT_FILTER) > $(MISC)/$(TARGET).$(@:b)_6.cmd
   .IF "$(VERBOSE)" == "TRUE"
@@ -2890,11 +2721,6 @@ $(SHL6TARGETN) : \
 .IF "$(SHL6NOCHECK)"==""
     $(COMMAND_ECHO)-$(RM) $(SHL6TARGETN:d)check_$(SHL6TARGETN:f)
     $(COMMAND_ECHO)$(RENAME) $(SHL6TARGETN) $(SHL6TARGETN:d)check_$(SHL6TARGETN:f)
-.IF "$(VERBOSE)"=="TRUE"
-    $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS6) $(SHL6TARGETN:d)check_$(SHL6TARGETN:f)
-.ELSE
-    $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS6) -- -s $(SHL6TARGETN:d)check_$(SHL6TARGETN:f)
-.ENDIF
 .ENDIF				# "$(SHL6NOCHECK)"!=""
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
@@ -2944,26 +2770,6 @@ EXTRALIBPATHS7=$(EXTRALIBPATHS)
 EXTRALIBPATHS7+=-L$(SOLAR_STLLIBPATH)
 .ENDIF
 .ENDIF				# "$(SHL7NOCHECK)"!=""
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-.IF "$(L10N_framework)"==""
-.IF "$(VERSIONOBJ)"!=""
-SHL7VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL7TARGET))}$(VERSIONOBJ:f)
-USE_VERSIONH:=$(INCCOM)/$(SHL7VERSIONOBJ:b).h
-.IF "$(OS)" != "WNT"
-SHL7VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL7TARGET))}$(VERSIONOBJ:f:s/.o/.obj/)
-.ELSE           # "$(OS)" != "WNT"
-SHL7VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL7TARGET))}$(VERSIONOBJ:f)
-.ENDIF          # "$(OS)" != "WNT"
-$(MISC)/$(SHL7VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL7VERSIONOBJ:b).h
-#    $(COPY) $(SOLARENV)/src/version.c $@
-    $(COMMAND_ECHO)$(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL7VERSIONOBJ:b).h/ > $@
-
-.INIT : $(SHL7VERSIONOBJDEP)
-.ENDIF			# "$(VERSIONOBJ)"!=""
-.ENDIF
 
 .IF "$(OS)" == "WNT"
 .IF "$(OS)" == "WNT"
@@ -3198,7 +3004,7 @@ $(SHL7TARGETN) : \
         $(SHL7DEF) \
         $(USE_7IMPLIB) \
         $(STDOBJ) \
-        $(SHL7VERSIONOBJ) $(SHL7OBJS) \
+        $(SHL7OBJS) \
         $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL7LIBS))) \
         -Wl,--exclude-libs,ALL,--start-group $(SHL7STDLIBS) -Wl,--end-group \
         $(SHL7STDSHL) $(STDSHL7) \
@@ -3220,7 +3026,7 @@ $(SHL7TARGETN) : \
         $(SHL7DEF) \
         $(USE_7IMPLIB) \
         $(STDOBJ) \
-        $(SHL7VERSIONOBJ) $(SHL7OBJS) \
+        $(SHL7OBJS) \
         $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL7LIBS))) \
         -Wl,--exclude-libs,ALL,--start-group $(SHL7STDLIBS) -Wl,--end-group \
         $(SHL7STDSHL) $(STDSHL7) \
@@ -3240,7 +3046,7 @@ $(SHL7TARGETN) : \
         -def:$(SHL7DEF) \
         $(USE_7IMPLIB) \
         $(STDOBJ) \
-        $(SHL7VERSIONOBJ) $(SHL7OBJS) \
+        $(SHL7OBJS) \
         $(SHL7LIBS) \
         $(SHL7STDLIBS) \
         $(SHL7STDSHL) $(STDSHL7) \
@@ -3264,7 +3070,7 @@ $(SHL7TARGETN) : \
         -map:$(MISC)/$(@:B).map				\
         $(LB)/$(SHL7IMPLIB).exp				\
         $(STDOBJ)							\
-        $(SHL7OBJS) $(SHL7VERSIONOBJ) \
+        $(SHL7OBJS) \
         $(SHL7LIBS)                         \
         $(SHL7STDLIBS)                      \
         $(SHL7STDSHL) $(STDSHL7)                           \
@@ -3289,7 +3095,7 @@ $(SHL7TARGETN) : \
         -map:$(MISC)/$(@:B).map				\
         $(USE_7IMPLIB) \
         $(STDOBJ)							\
-        $(SHL7OBJS) $(SHL7VERSIONOBJ))   \
+        $(SHL7OBJS) )   \
         $(SHL7LIBS) \
         @$(mktmp $(SHL7STDLIBS)                      \
         $(SHL7STDSHL) $(STDSHL7)                           \
@@ -3339,7 +3145,6 @@ $(SHL7TARGETN) : \
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_7.cmd
     @echo $(STDSLO) $(SHL7OBJS:s/.obj/.o/) \
-    $(SHL7VERSIONOBJ) \
     `cat /dev/null $(SHL7LIBS) | sed s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)/$(@:b).list
     @/bin/echo -n $(SHL7LINKER) $(SHL7LINKFLAGS) $(SHL7VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) -o $@ \
     $(SHL7STDLIBS) $(SHL7ARCHIVES) $(SHL7STDSHL) $(STDSHL7) -filelist $(MISC)/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)/$(TARGET).$(@:b)_7.cmd
@@ -3356,16 +3161,13 @@ $(SHL7TARGETN) : \
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
 .ENDIF          # "$(SHL7CREATEJNILIB)"!=""
-.IF "$(SHL7NOCHECK)"==""
-    $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS7) $(SHL7TARGETN)
-.ENDIF				# "$(SHL7NOCHECK)"!=""
 .ELIF "$(DISABLE_DYNLOADING)"=="TRUE"
     $(COMMAND_ECHO)$(AR) $(LIB7FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL7OBJS)) $(shell cat /dev/null $(LIB7TARGET) $(SHL7LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
     $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_7.cmd
     @echo $(SHL7LINKER) $(SHL7LINKFLAGS) $(SHL7SONAME) $(LINKFLAGSSHL) $(SHL7VERSIONMAPPARA) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) $(STDSLO) $(SHL7OBJS:s/.obj/.o/) \
-    $(SHL7VERSIONOBJ) -o $@ \
+    -o $@ \
     `cat /dev/null $(SHL7LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
     $(SHL7STDLIBS) $(SHL7ARCHIVES) $(SHL7STDSHL) $(STDSHL7) $(LINKOUTPUT_FILTER) > $(MISC)/$(TARGET).$(@:b)_7.cmd
   .IF "$(VERBOSE)" == "TRUE"
@@ -3375,11 +3177,6 @@ $(SHL7TARGETN) : \
 .IF "$(SHL7NOCHECK)"==""
     $(COMMAND_ECHO)-$(RM) $(SHL7TARGETN:d)check_$(SHL7TARGETN:f)
     $(COMMAND_ECHO)$(RENAME) $(SHL7TARGETN) $(SHL7TARGETN:d)check_$(SHL7TARGETN:f)
-.IF "$(VERBOSE)"=="TRUE"
-    $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS7) $(SHL7TARGETN:d)check_$(SHL7TARGETN:f)
-.ELSE
-    $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS7) -- -s $(SHL7TARGETN:d)check_$(SHL7TARGETN:f)
-.ENDIF
 .ENDIF				# "$(SHL7NOCHECK)"!=""
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
@@ -3429,26 +3226,6 @@ EXTRALIBPATHS8=$(EXTRALIBPATHS)
 EXTRALIBPATHS8+=-L$(SOLAR_STLLIBPATH)
 .ENDIF
 .ENDIF				# "$(SHL8NOCHECK)"!=""
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-.IF "$(L10N_framework)"==""
-.IF "$(VERSIONOBJ)"!=""
-SHL8VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL8TARGET))}$(VERSIONOBJ:f)
-USE_VERSIONH:=$(INCCOM)/$(SHL8VERSIONOBJ:b).h
-.IF "$(OS)" != "WNT"
-SHL8VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL8TARGET))}$(VERSIONOBJ:f:s/.o/.obj/)
-.ELSE           # "$(OS)" != "WNT"
-SHL8VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL8TARGET))}$(VERSIONOBJ:f)
-.ENDIF          # "$(OS)" != "WNT"
-$(MISC)/$(SHL8VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL8VERSIONOBJ:b).h
-#    $(COPY) $(SOLARENV)/src/version.c $@
-    $(COMMAND_ECHO)$(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL8VERSIONOBJ:b).h/ > $@
-
-.INIT : $(SHL8VERSIONOBJDEP)
-.ENDIF			# "$(VERSIONOBJ)"!=""
-.ENDIF
 
 .IF "$(OS)" == "WNT"
 .IF "$(OS)" == "WNT"
@@ -3683,7 +3460,7 @@ $(SHL8TARGETN) : \
         $(SHL8DEF) \
         $(USE_8IMPLIB) \
         $(STDOBJ) \
-        $(SHL8VERSIONOBJ) $(SHL8OBJS) \
+        $(SHL8OBJS) \
         $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL8LIBS))) \
         -Wl,--exclude-libs,ALL,--start-group $(SHL8STDLIBS) -Wl,--end-group \
         $(SHL8STDSHL) $(STDSHL8) \
@@ -3705,7 +3482,7 @@ $(SHL8TARGETN) : \
         $(SHL8DEF) \
         $(USE_8IMPLIB) \
         $(STDOBJ) \
-        $(SHL8VERSIONOBJ) $(SHL8OBJS) \
+        $(SHL8OBJS) \
         $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL8LIBS))) \
         -Wl,--exclude-libs,ALL,--start-group $(SHL8STDLIBS) -Wl,--end-group \
         $(SHL8STDSHL) $(STDSHL8) \
@@ -3725,7 +3502,7 @@ $(SHL8TARGETN) : \
         -def:$(SHL8DEF) \
         $(USE_8IMPLIB) \
         $(STDOBJ) \
-        $(SHL8VERSIONOBJ) $(SHL8OBJS) \
+        $(SHL8OBJS) \
         $(SHL8LIBS) \
         $(SHL8STDLIBS) \
         $(SHL8STDSHL) $(STDSHL8) \
@@ -3749,7 +3526,7 @@ $(SHL8TARGETN) : \
         -map:$(MISC)/$(@:B).map				\
         $(LB)/$(SHL8IMPLIB).exp				\
         $(STDOBJ)							\
-        $(SHL8OBJS) $(SHL8VERSIONOBJ) \
+        $(SHL8OBJS) \
         $(SHL8LIBS)                         \
         $(SHL8STDLIBS)                      \
         $(SHL8STDSHL) $(STDSHL8)                           \
@@ -3774,7 +3551,7 @@ $(SHL8TARGETN) : \
         -map:$(MISC)/$(@:B).map				\
         $(USE_8IMPLIB) \
         $(STDOBJ)							\
-        $(SHL8OBJS) $(SHL8VERSIONOBJ))   \
+        $(SHL8OBJS) )   \
         $(SHL8LIBS) \
         @$(mktmp $(SHL8STDLIBS)                      \
         $(SHL8STDSHL) $(STDSHL8)                           \
@@ -3824,7 +3601,6 @@ $(SHL8TARGETN) : \
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_8.cmd
     @echo $(STDSLO) $(SHL8OBJS:s/.obj/.o/) \
-    $(SHL8VERSIONOBJ) \
     `cat /dev/null $(SHL8LIBS) | sed s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)/$(@:b).list
     @/bin/echo -n $(SHL8LINKER) $(SHL8LINKFLAGS) $(SHL8VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) -o $@ \
     $(SHL8STDLIBS) $(SHL8ARCHIVES) $(SHL8STDSHL) $(STDSHL8) -filelist $(MISC)/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)/$(TARGET).$(@:b)_8.cmd
@@ -3841,16 +3617,13 @@ $(SHL8TARGETN) : \
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
 .ENDIF          # "$(SHL8CREATEJNILIB)"!=""
-.IF "$(SHL8NOCHECK)"==""
-    $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS8) $(SHL8TARGETN)
-.ENDIF				# "$(SHL8NOCHECK)"!=""
 .ELIF "$(DISABLE_DYNLOADING)"=="TRUE"
     $(COMMAND_ECHO)$(AR) $(LIB8FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL8OBJS)) $(shell cat /dev/null $(LIB8TARGET) $(SHL8LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
     $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_8.cmd
     @echo $(SHL8LINKER) $(SHL8LINKFLAGS) $(SHL8SONAME) $(LINKFLAGSSHL) $(SHL8VERSIONMAPPARA) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) $(STDSLO) $(SHL8OBJS:s/.obj/.o/) \
-    $(SHL8VERSIONOBJ) -o $@ \
+    -o $@ \
     `cat /dev/null $(SHL8LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
     $(SHL8STDLIBS) $(SHL8ARCHIVES) $(SHL8STDSHL) $(STDSHL8) $(LINKOUTPUT_FILTER) > $(MISC)/$(TARGET).$(@:b)_8.cmd
   .IF "$(VERBOSE)" == "TRUE"
@@ -3860,11 +3633,6 @@ $(SHL8TARGETN) : \
 .IF "$(SHL8NOCHECK)"==""
     $(COMMAND_ECHO)-$(RM) $(SHL8TARGETN:d)check_$(SHL8TARGETN:f)
     $(COMMAND_ECHO)$(RENAME) $(SHL8TARGETN) $(SHL8TARGETN:d)check_$(SHL8TARGETN:f)
-.IF "$(VERBOSE)"=="TRUE"
-    $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS8) $(SHL8TARGETN:d)check_$(SHL8TARGETN:f)
-.ELSE
-    $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS8) -- -s $(SHL8TARGETN:d)check_$(SHL8TARGETN:f)
-.ENDIF
 .ENDIF				# "$(SHL8NOCHECK)"!=""
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
@@ -3914,26 +3682,6 @@ EXTRALIBPATHS9=$(EXTRALIBPATHS)
 EXTRALIBPATHS9+=-L$(SOLAR_STLLIBPATH)
 .ENDIF
 .ENDIF				# "$(SHL9NOCHECK)"!=""
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-.IF "$(L10N_framework)"==""
-.IF "$(VERSIONOBJ)"!=""
-SHL9VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL9TARGET))}$(VERSIONOBJ:f)
-USE_VERSIONH:=$(INCCOM)/$(SHL9VERSIONOBJ:b).h
-.IF "$(OS)" != "WNT"
-SHL9VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL9TARGET))}$(VERSIONOBJ:f:s/.o/.obj/)
-.ELSE           # "$(OS)" != "WNT"
-SHL9VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL9TARGET))}$(VERSIONOBJ:f)
-.ENDIF          # "$(OS)" != "WNT"
-$(MISC)/$(SHL9VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL9VERSIONOBJ:b).h
-#    $(COPY) $(SOLARENV)/src/version.c $@
-    $(COMMAND_ECHO)$(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL9VERSIONOBJ:b).h/ > $@
-
-.INIT : $(SHL9VERSIONOBJDEP)
-.ENDIF			# "$(VERSIONOBJ)"!=""
-.ENDIF
 
 .IF "$(OS)" == "WNT"
 .IF "$(OS)" == "WNT"
@@ -4168,7 +3916,7 @@ $(SHL9TARGETN) : \
         $(SHL9DEF) \
         $(USE_9IMPLIB) \
         $(STDOBJ) \
-        $(SHL9VERSIONOBJ) $(SHL9OBJS) \
+        $(SHL9OBJS) \
         $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL9LIBS))) \
         -Wl,--exclude-libs,ALL,--start-group $(SHL9STDLIBS) -Wl,--end-group \
         $(SHL9STDSHL) $(STDSHL9) \
@@ -4190,7 +3938,7 @@ $(SHL9TARGETN) : \
         $(SHL9DEF) \
         $(USE_9IMPLIB) \
         $(STDOBJ) \
-        $(SHL9VERSIONOBJ) $(SHL9OBJS) \
+        $(SHL9OBJS) \
         $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL9LIBS))) \
         -Wl,--exclude-libs,ALL,--start-group $(SHL9STDLIBS) -Wl,--end-group \
         $(SHL9STDSHL) $(STDSHL9) \
@@ -4210,7 +3958,7 @@ $(SHL9TARGETN) : \
         -def:$(SHL9DEF) \
         $(USE_9IMPLIB) \
         $(STDOBJ) \
-        $(SHL9VERSIONOBJ) $(SHL9OBJS) \
+        $(SHL9OBJS) \
         $(SHL9LIBS) \
         $(SHL9STDLIBS) \
         $(SHL9STDSHL) $(STDSHL9) \
@@ -4234,7 +3982,7 @@ $(SHL9TARGETN) : \
         -map:$(MISC)/$(@:B).map				\
         $(LB)/$(SHL9IMPLIB).exp				\
         $(STDOBJ)							\
-        $(SHL9OBJS) $(SHL9VERSIONOBJ) \
+        $(SHL9OBJS) \
         $(SHL9LIBS)                         \
         $(SHL9STDLIBS)                      \
         $(SHL9STDSHL) $(STDSHL9)                           \
@@ -4259,7 +4007,7 @@ $(SHL9TARGETN) : \
         -map:$(MISC)/$(@:B).map				\
         $(USE_9IMPLIB) \
         $(STDOBJ)							\
-        $(SHL9OBJS) $(SHL9VERSIONOBJ))   \
+        $(SHL9OBJS) )   \
         $(SHL9LIBS) \
         @$(mktmp $(SHL9STDLIBS)                      \
         $(SHL9STDSHL) $(STDSHL9)                           \
@@ -4309,7 +4057,6 @@ $(SHL9TARGETN) : \
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_9.cmd
     @echo $(STDSLO) $(SHL9OBJS:s/.obj/.o/) \
-    $(SHL9VERSIONOBJ) \
     `cat /dev/null $(SHL9LIBS) | sed s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)/$(@:b).list
     @/bin/echo -n $(SHL9LINKER) $(SHL9LINKFLAGS) $(SHL9VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) -o $@ \
     $(SHL9STDLIBS) $(SHL9ARCHIVES) $(SHL9STDSHL) $(STDSHL9) -filelist $(MISC)/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)/$(TARGET).$(@:b)_9.cmd
@@ -4326,16 +4073,13 @@ $(SHL9TARGETN) : \
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
 .ENDIF          # "$(SHL9CREATEJNILIB)"!=""
-.IF "$(SHL9NOCHECK)"==""
-    $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS9) $(SHL9TARGETN)
-.ENDIF				# "$(SHL9NOCHECK)"!=""
 .ELIF "$(DISABLE_DYNLOADING)"=="TRUE"
     $(COMMAND_ECHO)$(AR) $(LIB9FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL9OBJS)) $(shell cat /dev/null $(LIB9TARGET) $(SHL9LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
     $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_9.cmd
     @echo $(SHL9LINKER) $(SHL9LINKFLAGS) $(SHL9SONAME) $(LINKFLAGSSHL) $(SHL9VERSIONMAPPARA) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) $(STDSLO) $(SHL9OBJS:s/.obj/.o/) \
-    $(SHL9VERSIONOBJ) -o $@ \
+    -o $@ \
     `cat /dev/null $(SHL9LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
     $(SHL9STDLIBS) $(SHL9ARCHIVES) $(SHL9STDSHL) $(STDSHL9) $(LINKOUTPUT_FILTER) > $(MISC)/$(TARGET).$(@:b)_9.cmd
   .IF "$(VERBOSE)" == "TRUE"
@@ -4345,11 +4089,6 @@ $(SHL9TARGETN) : \
 .IF "$(SHL9NOCHECK)"==""
     $(COMMAND_ECHO)-$(RM) $(SHL9TARGETN:d)check_$(SHL9TARGETN:f)
     $(COMMAND_ECHO)$(RENAME) $(SHL9TARGETN) $(SHL9TARGETN:d)check_$(SHL9TARGETN:f)
-.IF "$(VERBOSE)"=="TRUE"
-    $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS9) $(SHL9TARGETN:d)check_$(SHL9TARGETN:f)
-.ELSE
-    $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS9) -- -s $(SHL9TARGETN:d)check_$(SHL9TARGETN:f)
-.ENDIF
 .ENDIF				# "$(SHL9NOCHECK)"!=""
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
@@ -4399,26 +4138,6 @@ EXTRALIBPATHS10=$(EXTRALIBPATHS)
 EXTRALIBPATHS10+=-L$(SOLAR_STLLIBPATH)
 .ENDIF
 .ENDIF				# "$(SHL10NOCHECK)"!=""
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-.IF "$(L10N_framework)"==""
-.IF "$(VERSIONOBJ)"!=""
-SHL10VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL10TARGET))}$(VERSIONOBJ:f)
-USE_VERSIONH:=$(INCCOM)/$(SHL10VERSIONOBJ:b).h
-.IF "$(OS)" != "WNT"
-SHL10VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL10TARGET))}$(VERSIONOBJ:f:s/.o/.obj/)
-.ELSE           # "$(OS)" != "WNT"
-SHL10VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL10TARGET))}$(VERSIONOBJ:f)
-.ENDIF          # "$(OS)" != "WNT"
-$(MISC)/$(SHL10VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL10VERSIONOBJ:b).h
-#    $(COPY) $(SOLARENV)/src/version.c $@
-    $(COMMAND_ECHO)$(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL10VERSIONOBJ:b).h/ > $@
-
-.INIT : $(SHL10VERSIONOBJDEP)
-.ENDIF			# "$(VERSIONOBJ)"!=""
-.ENDIF
 
 .IF "$(OS)" == "WNT"
 .IF "$(OS)" == "WNT"
@@ -4653,7 +4372,7 @@ $(SHL10TARGETN) : \
         $(SHL10DEF) \
         $(USE_10IMPLIB) \
         $(STDOBJ) \
-        $(SHL10VERSIONOBJ) $(SHL10OBJS) \
+        $(SHL10OBJS) \
         $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL10LIBS))) \
         -Wl,--exclude-libs,ALL,--start-group $(SHL10STDLIBS) -Wl,--end-group \
         $(SHL10STDSHL) $(STDSHL10) \
@@ -4675,7 +4394,7 @@ $(SHL10TARGETN) : \
         $(SHL10DEF) \
         $(USE_10IMPLIB) \
         $(STDOBJ) \
-        $(SHL10VERSIONOBJ) $(SHL10OBJS) \
+        $(SHL10OBJS) \
         $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL10LIBS))) \
         -Wl,--exclude-libs,ALL,--start-group $(SHL10STDLIBS) -Wl,--end-group \
         $(SHL10STDSHL) $(STDSHL10) \
@@ -4695,7 +4414,7 @@ $(SHL10TARGETN) : \
         -def:$(SHL10DEF) \
         $(USE_10IMPLIB) \
         $(STDOBJ) \
-        $(SHL10VERSIONOBJ) $(SHL10OBJS) \
+        $(SHL10OBJS) \
         $(SHL10LIBS) \
         $(SHL10STDLIBS) \
         $(SHL10STDSHL) $(STDSHL10) \
@@ -4719,7 +4438,7 @@ $(SHL10TARGETN) : \
         -map:$(MISC)/$(@:B).map				\
         $(LB)/$(SHL10IMPLIB).exp				\
         $(STDOBJ)							\
-        $(SHL10OBJS) $(SHL10VERSIONOBJ) \
+        $(SHL10OBJS) \
         $(SHL10LIBS)                         \
         $(SHL10STDLIBS)                      \
         $(SHL10STDSHL) $(STDSHL10)                           \
@@ -4744,7 +4463,7 @@ $(SHL10TARGETN) : \
         -map:$(MISC)/$(@:B).map				\
         $(USE_10IMPLIB) \
         $(STDOBJ)							\
-        $(SHL10OBJS) $(SHL10VERSIONOBJ))   \
+        $(SHL10OBJS) )   \
         $(SHL10LIBS) \
         @$(mktmp $(SHL10STDLIBS)                      \
         $(SHL10STDSHL) $(STDSHL10)                           \
@@ -4794,7 +4513,6 @@ $(SHL10TARGETN) : \
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_10.cmd
     @echo $(STDSLO) $(SHL10OBJS:s/.obj/.o/) \
-    $(SHL10VERSIONOBJ) \
     `cat /dev/null $(SHL10LIBS) | sed s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)/$(@:b).list
     @/bin/echo -n $(SHL10LINKER) $(SHL10LINKFLAGS) $(SHL10VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) -o $@ \
     $(SHL10STDLIBS) $(SHL10ARCHIVES) $(SHL10STDSHL) $(STDSHL10) -filelist $(MISC)/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)/$(TARGET).$(@:b)_10.cmd
@@ -4811,16 +4529,13 @@ $(SHL10TARGETN) : \
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
 .ENDIF          # "$(SHL10CREATEJNILIB)"!=""
-.IF "$(SHL10NOCHECK)"==""
-    $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS10) $(SHL10TARGETN)
-.ENDIF				# "$(SHL10NOCHECK)"!=""
 .ELIF "$(DISABLE_DYNLOADING)"=="TRUE"
     $(COMMAND_ECHO)$(AR) $(LIB10FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL10OBJS)) $(shell cat /dev/null $(LIB10TARGET) $(SHL10LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
     $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_10.cmd
     @echo $(SHL10LINKER) $(SHL10LINKFLAGS) $(SHL10SONAME) $(LINKFLAGSSHL) $(SHL10VERSIONMAPPARA) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) $(STDSLO) $(SHL10OBJS:s/.obj/.o/) \
-    $(SHL10VERSIONOBJ) -o $@ \
+    -o $@ \
     `cat /dev/null $(SHL10LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
     $(SHL10STDLIBS) $(SHL10ARCHIVES) $(SHL10STDSHL) $(STDSHL10) $(LINKOUTPUT_FILTER) > $(MISC)/$(TARGET).$(@:b)_10.cmd
   .IF "$(VERBOSE)" == "TRUE"
@@ -4830,11 +4545,6 @@ $(SHL10TARGETN) : \
 .IF "$(SHL10NOCHECK)"==""
     $(COMMAND_ECHO)-$(RM) $(SHL10TARGETN:d)check_$(SHL10TARGETN:f)
     $(COMMAND_ECHO)$(RENAME) $(SHL10TARGETN) $(SHL10TARGETN:d)check_$(SHL10TARGETN:f)
-.IF "$(VERBOSE)"=="TRUE"
-    $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS10) $(SHL10TARGETN:d)check_$(SHL10TARGETN:f)
-.ELSE
-    $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS10) -- -s $(SHL10TARGETN:d)check_$(SHL10TARGETN:f)
-.ENDIF
 .ENDIF				# "$(SHL10NOCHECK)"!=""
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID"

@@ -133,8 +133,6 @@ $(DEF1TARGETN_X64) : \
     @echo LIBRARY	  $(EMQ)"$(SHL1TARGETN:f)$(EMQ)" 								 >$@.tmpfile
     @echo HEAPSIZE	  0 											>>$@.tmpfile
     @echo EXPORTS													>>$@.tmpfile
-#	getversioninfo fuer alle!!
-    @echo GetVersionInfo		>>$@.tmpfile
 .IF "$(DEFLIB1NAME_X64)"!=""
 .IF "$(SHL1USE_EXPORTS_X64)"==""
     @-$(EXPORT1_PROTECT) $(RMHACK1) $(MISC_X64)/$(SHL1TARGET_X64).exp
@@ -170,8 +168,6 @@ $(DEF2TARGETN_X64) : \
     @echo LIBRARY	  $(EMQ)"$(SHL2TARGETN:f)$(EMQ)" 								 >$@.tmpfile
     @echo HEAPSIZE	  0 											>>$@.tmpfile
     @echo EXPORTS													>>$@.tmpfile
-#	getversioninfo fuer alle!!
-    @echo GetVersionInfo		>>$@.tmpfile
 .IF "$(DEFLIB2NAME_X64)"!=""
 .IF "$(SHL2USE_EXPORTS_X64)"==""
     @-$(EXPORT2_PROTECT) $(RMHACK1) $(MISC_X64)/$(SHL2TARGET_X64).exp
@@ -201,15 +197,6 @@ $(DEF2TARGETN_X64) : \
 # -------------------------------- shl -----------------------------------------
 
 .IF "$(SHL1TARGET_X64)"!=""
-.IF "$(VERSIONOBJ_X64)"!=""
-SHL1VERSIONOBJ_X64:=$(VERSIONOBJ_X64:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET_X64))}$(VERSIONOBJ_X64:f)
-USE_VERSIONH_X64:=$(INCCOM)/$(SHL1VERSIONOBJ_X64:b).h
-SHL1VERSIONOBJDEP_X64:=$(VERSIONOBJ_X64:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET_X64))}$(VERSIONOBJ_X64:f)
-$(MISC_X64)/$(SHL1VERSIONOBJ_X64:b).c : make_x64_dirs $(SOLARENV)/src/version.c $(INCCOM)/$(SHL1VERSIONOBJ_X64:b).h
-    $(COMMAND_ECHO)$(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL1VERSIONOBJ_X64:b).h/ > $@
-.INIT : $(SHL1VERSIONOBJDEP_X64)
-.ENDIF
-
 .IF "$(USE_DEFFILE_X64)"==""
 USE_1IMPLIB_DEPS_X64=$(LB_X64)/$(SHL1IMPLIB_X64).lib
 .ENDIF			# "$(USE_DEFFILE_X64)"==""
@@ -271,7 +258,7 @@ $(SHL1TARGETN_X64) : \
         -def:$(SHL1DEF_X64) \
         $(USE_1IMPLIB_X64) \
         $(STDOBJ_X64) \
-        $(SHL1VERSIONOBJ_X64) $(SHL1OBJS_X64) \
+        $(SHL1OBJS_X64) \
         $(SHL1LIBS_X64) \
         $(SHL1STDLIBS_X64) \
         $(SHL1STDSHL_X64) $(STDSHL1_X64) \
@@ -295,7 +282,7 @@ $(SHL1TARGETN_X64) : \
         -map:$(MISC_X64)/$(@:B).map				\
         $(LB_X64)/$(SHL1IMPLIB_X64).exp				\
         $(STDOBJ_X64)							\
-        $(SHL1OBJS_X64) $(SHL1VERSIONOBJ_X64) \
+        $(SHL1OBJS_X64) \
         $(SHL1LIBS_X64)                         \
         $(SHL1STDLIBS_X64)                      \
         $(SHL1STDSHL_X64) $(STDSHL1_X64)                           \
@@ -346,15 +333,6 @@ ALLTAR : $(SHL2IMPLIBN_X64)
 .ENDIF # "$(LIBTARGET)" == ""
 
 .IF "$(SHL2TARGET_X64)"!=""
-.IF "$(VERSIONOBJ_X64)"!=""
-SHL2VERSIONOBJ_X64:=$(VERSIONOBJ_X64:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET_X64))}$(VERSIONOBJ_X64:f)
-USE_VERSIONH_X64:=$(INCCOM)/$(SHL2VERSIONOBJ_X64:b).h
-SHL2VERSIONOBJDEP_X64:=$(VERSIONOBJ_X64:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET_X64))}$(VERSIONOBJ_X64:f)
-$(MISC_X64)/$(SHL2VERSIONOBJ_X64:b).c : make_x64_dirs $(SOLARENV)/src/version.c $(INCCOM)/$(SHL2VERSIONOBJ_X64:b).h
-    $(COMMAND_ECHO)$(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL2VERSIONOBJ_X64:b).h/ > $@
-.INIT : $(SHL2VERSIONOBJDEP_X64)
-.ENDIF
-
 .IF "$(USE_DEFFILE_X64)"==""
 USE_2IMPLIB_DEPS_X64=$(LB_X64)/$(SHL2IMPLIB_X64).lib
 .ENDIF			# "$(USE_DEFFILE_X64)"==""
@@ -416,7 +394,7 @@ $(SHL2TARGETN_X64) : \
         -def:$(SHL2DEF_X64) \
         $(USE_2IMPLIB_X64) \
         $(STDOBJ_X64) \
-        $(SHL2VERSIONOBJ_X64) $(SHL2OBJS_X64) \
+        $(SHL2OBJS_X64) \
         $(SHL2LIBS_X64) \
         $(SHL2STDLIBS_X64) \
         $(SHL2STDSHL_X64) $(STDSHL2_X64) \
@@ -440,7 +418,7 @@ $(SHL2TARGETN_X64) : \
         -map:$(MISC_X64)/$(@:B).map				\
         $(LB_X64)/$(SHL2IMPLIB_X64).exp				\
         $(STDOBJ_X64)							\
-        $(SHL2OBJS_X64) $(SHL2VERSIONOBJ_X64) \
+        $(SHL2OBJS_X64) \
         $(SHL2LIBS_X64)                         \
         $(SHL2STDLIBS_X64)                      \
         $(SHL2STDSHL_X64) $(STDSHL2_X64)                           \

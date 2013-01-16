@@ -34,7 +34,6 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     bmp \
     bmpsum \
     cfgex \
-    checkdll \
     cpp \
     cppunit/cppunittester \
     g2g \

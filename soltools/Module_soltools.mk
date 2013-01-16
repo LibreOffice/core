@@ -16,12 +16,6 @@ $(eval $(call gb_Module_add_targets,soltools,\
     Executable_makedepend \
 ))
 
-ifneq ($(OS),WNT)
-$(eval $(call gb_Module_add_targets,soltools,\
-    Executable_checkdll \
-))
-endif # UNX
-
 ifeq ($(OS)$(COM),SOLARISC52)
 $(eval $(call gb_Module_add_targets,soltools,\
     Executable_adjustvisibility \
