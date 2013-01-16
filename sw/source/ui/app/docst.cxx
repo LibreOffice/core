@@ -22,6 +22,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 
+#include <comphelper/flagguard.hxx>
+
 #include <hintids.hxx>
 #include <sfx2/app.hxx>
 #include <svl/whiter.hxx>
@@ -76,6 +78,8 @@
 #include <list.hxx>
 
 #include <paratr.hxx>   //#outline level,add by zhaojianwei
+
+extern bool bNoInterrupt;       // in mainwn.cxx
 
 using namespace ::com::sun::star;
 
@@ -1276,6 +1280,11 @@ void SwDocShell::_LoadStyles( SfxObjectShell& rSource, sal_Bool bPreserveCurrent
             ((SwDocShell&)rSource).pDoc->SetFixFields(false, NULL);
         if( pWrtShell )
         {
+            // rhbz#818557, fdo#58893: EndAllAction will call SelectShell(),
+            // which pushes a bunch of SfxShells that are not cleared
+            // (for unknown reasons) when closing the document, causing crash;
+            // setting bNoInterrupt appears to avoid the problem.
+            ::comphelper::FlagRestorationGuard g(bNoInterrupt, true);
             pWrtShell->StartAllAction();
             pDoc->ReplaceStyles( *((SwDocShell&)rSource).pDoc );
             pWrtShell->EndAllAction();
