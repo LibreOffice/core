@@ -69,7 +69,7 @@ namespace dbaccess
         try
         {
             Reference<XMultiServiceFactory> xFac(_rxConnection,UNO_QUERY_THROW);
-            static const ::rtl::OUString s_sViewAccess(RTL_CONSTASCII_USTRINGPARAM("ViewAccessServiceName"));
+            static const ::rtl::OUString s_sViewAccess("ViewAccessServiceName");
             m_xViewAccess.set(xFac->createInstance(lcl_getServiceNameForSetting(_rxConnection,s_sViewAccess)),UNO_QUERY);
         }
         catch(const Exception& )

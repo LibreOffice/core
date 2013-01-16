@@ -362,9 +362,9 @@ void OQuery::registerProperties()
                     &m_aLayoutInformation, ::getCppuType(&m_aLayoutInformation));
 }
 
-::rtl::OUString OQuery::determineContentType() const
+OUString OQuery::determineContentType() const
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.org.openoffice.DatabaseQuery" ) );
+    return OUString( "application/vnd.org.openoffice.DatabaseQuery" );
 }
 
 }   // namespace dbaccess

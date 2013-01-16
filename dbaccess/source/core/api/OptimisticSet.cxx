@@ -74,12 +74,12 @@ namespace
     {
         ::rtl::OUStringBuffer& rKeyCondition = io_aKeyConditions[i_sTableName];
         if ( rKeyCondition.getLength() )
-            rKeyCondition.appendAscii(" AND ");
+            rKeyCondition.append(" AND ");
         rKeyCondition.append(i_sQuotedColumnName);
         if ( i_aValue.isNull() )
-            rKeyCondition.appendAscii(" IS NULL");
+            rKeyCondition.append(" IS NULL");
         else
-            rKeyCondition.appendAscii(" = ?");
+            rKeyCondition.append(" = ?");
     }
 }
 
@@ -214,9 +214,8 @@ void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORow
             }
             ::rtl::OUStringBuffer& rPart = aSql[aIter->second.sTableName];
             if ( rPart.getLength() )
-                rPart.appendAscii(", ");
-            rPart.append(sQuotedColumnName);
-            rPart.append(s_sPara);
+                rPart.append(", ");
+            rPart.append(sQuotedColumnName + s_sPara);
         }
     }
 
@@ -238,18 +237,14 @@ void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORow
         if ( aSqlIter->second.getLength() )
         {
             m_bResultSetChanged = m_bResultSetChanged || aResultSetChanged[aSqlIter->first];
-            ::rtl::OUStringBuffer sSql(s_sUPDATE);
             ::rtl::OUString sCatalog,sSchema,sTable;
             ::dbtools::qualifiedNameComponents(xMetaData,aSqlIter->first,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
-            sSql.append( ::dbtools::composeTableNameForSelect( m_xConnection, sCatalog, sSchema, sTable ) );
-            sSql.append(s_sSET);
-            sSql.append(aSqlIter->second.toString());
+            ::rtl::OUStringBuffer sSql(s_sUPDATE + ::dbtools::composeTableNameForSelect( m_xConnection, sCatalog, sSchema, sTable ) +
+                                       s_sSET + aSqlIter->second.toString());
             ::rtl::OUStringBuffer& rCondition = aKeyConditions[aSqlIter->first];
             if ( rCondition.getLength() )
-            {
-                sSql.appendAscii(" WHERE ");
-                sSql.append( rCondition.toString() );
-            }
+                sSql.append(" WHERE " + rCondition.toString() );
+
             executeUpdate(_rInsertRow ,_rOrginalRow,sSql.makeStringAndClear(),aSqlIter->first);
         }
     }
@@ -287,12 +282,12 @@ void SAL_CALL OptimisticSet::insertRow( const ORowSetRow& _rInsertRow,const conn
             }
             ::rtl::OUStringBuffer& rPart = aSql[aIter->second.sTableName];
             if ( rPart.getLength() )
-                rPart.appendAscii(", ");
+                rPart.append(", ");
             rPart.append(sQuotedColumnName);
             ::rtl::OUStringBuffer& rParam = aParameter[aIter->second.sTableName];
             if ( rParam.getLength() )
-                rParam.appendAscii(", ");
-            rParam.appendAscii("?");
+                rParam.append(", ");
+            rParam.append("?");
         }
     }
     if ( aParameter.empty() )
@@ -308,31 +303,21 @@ void SAL_CALL OptimisticSet::insertRow( const ORowSetRow& _rInsertRow,const conn
         if ( aSqlIter->second.getLength() )
         {
             m_bResultSetChanged = m_bResultSetChanged || aResultSetChanged[aSqlIter->first];
-            ::rtl::OUStringBuffer sSql(s_sINSERT);
             ::rtl::OUString sCatalog,sSchema,sTable;
             ::dbtools::qualifiedNameComponents(xMetaData,aSqlIter->first,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
             ::rtl::OUString sComposedTableName = ::dbtools::composeTableNameForSelect( m_xConnection, sCatalog, sSchema, sTable );
-            sSql.append(sComposedTableName);
-            sSql.appendAscii(" ( ");
-            sSql.append(aSqlIter->second.toString());
-            sSql.append(s_sVALUES);
-            sSql.append(aParameter[aSqlIter->first].toString());
-            sSql.appendAscii(" )");
+            ::rtl::OUString sSql(s_sINSERT + sComposedTableName + " ( " + aSqlIter->second.toString() +
+                                 s_sVALUES + aParameter[aSqlIter->first].toString() + " )");
 
             ::rtl::OUStringBuffer& rCondition = aKeyConditions[aSqlIter->first];
             if ( rCondition.getLength() )
             {
-                ::rtl::OUStringBuffer sQuery;
-                sQuery.appendAscii("SELECT ");
-                sQuery.append(aSqlIter->second.toString());
-                sQuery.appendAscii(" FROM ");
-                sQuery.append(sComposedTableName);
-                sQuery.appendAscii(" WHERE ");
-                sQuery.append(rCondition.toString());
+                ::rtl::OUString sQuery("SELECT " + aSqlIter->second.toString() + " FROM " + sComposedTableName +
+                                       " WHERE " + rCondition.toString());
 
                 try
                 {
-                    Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(sQuery.makeStringAndClear()));
+                    Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(sQuery));
                     Reference< XParameters > xParameter(xPrep,UNO_QUERY);
                     // and then the values of the where condition
                     SelectColumnsMetaData::iterator aKeyCol = m_pKeyColumnNames->begin();
@@ -358,7 +343,7 @@ void SAL_CALL OptimisticSet::insertRow( const ORowSetRow& _rInsertRow,const conn
                 }
             }
 
-            executeInsert(_rInsertRow,sSql.makeStringAndClear(),aSqlIter->first);
+            executeInsert(_rInsertRow,sSql,aSqlIter->first);
         }
     }
 }
@@ -393,14 +378,11 @@ void SAL_CALL OptimisticSet::deleteRow(const ORowSetRow& _rDeleteRow,const conne
         ::rtl::OUStringBuffer& rCondition = aSqlIter->second;
         if ( rCondition.getLength() )
         {
-            ::rtl::OUStringBuffer sSql;
-            sSql.appendAscii("DELETE FROM ");
             ::rtl::OUString sCatalog,sSchema,sTable;
             ::dbtools::qualifiedNameComponents(xMetaData,aSqlIter->first,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
-            sSql.append( ::dbtools::composeTableNameForSelect( m_xConnection, sCatalog, sSchema, sTable ) );
-            sSql.appendAscii(" WHERE ");
-            sSql.append( rCondition.toString() );
-            executeDelete(_rDeleteRow,sSql.makeStringAndClear(),aSqlIter->first);
+            ::rtl::OUString sSql("DELETE FROM " + ::dbtools::composeTableNameForSelect( m_xConnection, sCatalog, sSchema, sTable ) +
+                                 " WHERE " + rCondition.toString() );
+            executeDelete(_rDeleteRow, sSql, aSqlIter->first);
         }
     }
 }
@@ -440,15 +422,10 @@ void OptimisticSet::fillJoinedColumns_throw(const ::std::vector< TNodePair >& i_
     {
         ::rtl::OUString sColumnName,sTableName;
         m_aSqlIterator.getColumnRange(aIter->first,sColumnName,sTableName);
-        ::rtl::OUStringBuffer sLeft,sRight;
-        sLeft.append(sTableName);
-        sLeft.appendAscii(".");
-        sLeft.append(sColumnName);
+        ::rtl::OUString sLeft(sTableName + "." + sColumnName);
         m_aSqlIterator.getColumnRange(aIter->second,sColumnName,sTableName);
-        sRight.append(sTableName);
-        sRight.appendAscii(".");
-        sRight.append(sColumnName);
-        fillJoinedColumns_throw(sLeft.makeStringAndClear(),sRight.makeStringAndClear());
+        ::rtl::OUString sRight(sTableName + "." + sColumnName);
+        fillJoinedColumns_throw(sLeft, sRight);
     }
 }
 
@@ -645,7 +622,7 @@ void OptimisticSet::fillMissingValues(ORowSetValueVector::Vector& io_aRow) const
         }
         ::rtl::OUStringBuffer& rPart = aSql[aColIter->second.sTableName];
         if ( rPart.getLength() )
-            rPart.appendAscii(", ");
+            rPart.append(", ");
         rPart.append(sQuotedColumnName);
     }
     Reference<XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
@@ -661,17 +638,12 @@ void OptimisticSet::fillMissingValues(ORowSetValueVector::Vector& io_aRow) const
                 ::rtl::OUString sCatalog,sSchema,sTable;
                 ::dbtools::qualifiedNameComponents(xMetaData,aSqlIter->first,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
                 ::rtl::OUString sComposedTableName = ::dbtools::composeTableNameForSelect( m_xConnection, sCatalog, sSchema, sTable );
-                ::rtl::OUStringBuffer sQuery;
-                sQuery.appendAscii("SELECT ");
-                sQuery.append(aSqlIter->second.toString());
-                sQuery.appendAscii(" FROM ");
-                sQuery.append(sComposedTableName);
-                sQuery.appendAscii(" WHERE ");
-                sQuery.append(rCondition.makeStringAndClear());
+                ::rtl::OUString sQuery("SELECT " + aSqlIter->second.toString() + " FROM " + sComposedTableName + " WHERE " +
+                                       rCondition.makeStringAndClear());
 
                 try
                 {
-                    Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(sQuery.makeStringAndClear()));
+                    Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(sQuery));
                     Reference< XParameters > xParameter(xPrep,UNO_QUERY);
                     // and then the values of the where condition
                     SelectColumnsMetaData::iterator aKeyIter = m_pKeyColumnNames->begin();

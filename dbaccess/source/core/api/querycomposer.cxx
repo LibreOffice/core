@@ -131,10 +131,10 @@ Any SAL_CALL OQueryComposer::queryInterface( const Type & rType ) throw(RuntimeE
 }
 
 // XServiceInfo
-rtl::OUString OQueryComposer::getImplementationName(  ) throw(RuntimeException)
+OUString OQueryComposer::getImplementationName(  ) throw(RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OQueryComposer::getImplementationName" );
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.dbaccess.OQueryComposer"));
+    return OUString("com.sun.star.sdb.dbaccess.OQueryComposer");
 }
 
 sal_Bool OQueryComposer::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)

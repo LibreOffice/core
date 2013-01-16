@@ -135,42 +135,42 @@ namespace dbaui
         aProps.realloc( nProp + 6 );
 
         aProps[ nProp++ ] = Property(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HeaderLine" ) ),
+            ::rtl::OUString( "HeaderLine" ),
             PROPERTY_ID_HEADER_LINE,
             ::cppu::UnoType< sal_Bool >::get(),
             PropertyAttribute::TRANSIENT
         );
 
         aProps[ nProp++ ] = Property(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FieldDelimiter" ) ),
+            ::rtl::OUString( "FieldDelimiter" ),
             PROPERTY_ID_FIELD_DELIMITER,
             ::cppu::UnoType< ::rtl::OUString >::get(),
             PropertyAttribute::TRANSIENT
         );
 
         aProps[ nProp++ ] = Property(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StringDelimiter" ) ),
+            ::rtl::OUString( "StringDelimiter" ),
             PROPERTY_ID_STRING_DELIMITER,
             ::cppu::UnoType< ::rtl::OUString >::get(),
             PropertyAttribute::TRANSIENT
         );
 
         aProps[ nProp++ ] = Property(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DecimalDelimiter" ) ),
+            ::rtl::OUString( "DecimalDelimiter" ),
             PROPERTY_ID_DECIMAL_DELIMITER,
             ::cppu::UnoType< ::rtl::OUString >::get(),
             PropertyAttribute::TRANSIENT
         );
 
         aProps[ nProp++ ] = Property(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ThousandDelimiter" ) ),
+            ::rtl::OUString( "ThousandDelimiter" ),
             PROPERTY_ID_THOUSAND_DELIMITER,
             ::cppu::UnoType< ::rtl::OUString >::get(),
             PropertyAttribute::TRANSIENT
         );
 
         aProps[ nProp++ ] = Property(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharSet" ) ),
+            ::rtl::OUString( "CharSet" ),
             PROPERTY_ID_ENCODING,
             ::cppu::UnoType< ::rtl::OUString >::get(),
             PropertyAttribute::TRANSIENT
