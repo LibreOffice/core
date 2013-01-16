@@ -1515,8 +1515,10 @@ oslFileError SAL_CALL osl_getVolumeInformation(
 
     if (uFieldMask & osl_VolumeInfo_Mask_DeviceHandle)
     {
+        error = osl_getFileURLFromSystemPath(volume_root.pData, (rtl_uString**)&pInfo->pDeviceHandle);
+        if (error != osl_File_E_None)
+            return error;
         pInfo->uValidFields |= osl_VolumeInfo_Mask_DeviceHandle;
-        osl_getFileURLFromSystemPath(volume_root.pData, (rtl_uString**)&pInfo->pDeviceHandle);
     }
 
     return osl_File_E_None;
@@ -1612,8 +1614,10 @@ static oslFileError SAL_CALL osl_getDriveInfo(
         rtl_uString *ustrSystemPath = NULL;
 
         rtl_uString_newFromStr( &ustrSystemPath, reinterpret_cast<const sal_Unicode*>(pItemImpl->cDriveString) );
-        osl_getFileURLFromSystemPath( ustrSystemPath, &pStatus->ustrFileURL );
+        oslFileError error = osl_getFileURLFromSystemPath( ustrSystemPath, &pStatus->ustrFileURL );
         rtl_uString_release( ustrSystemPath );
+        if (error != osl_File_E_None)
+            return error;
         pStatus->uValidFields |= osl_FileStatus_Mask_FileURL;
     }
     return osl_File_E_None;
@@ -1641,7 +1645,9 @@ static oslFileError SAL_CALL osl_getServerInfo(
 
     if ( uFieldMask & osl_FileStatus_Mask_FileURL )
     {
-        osl_getFileURLFromSystemPath( pItemImpl->m_pFullPath, &pStatus->ustrFileURL );
+        oslFileError error = osl_getFileURLFromSystemPath( pItemImpl->m_pFullPath, &pStatus->ustrFileURL );
+        if (error != osl_File_E_None)
+            return error;
         pStatus->uValidFields |= osl_FileStatus_Mask_FileURL;
     }
     return osl_File_E_None;
@@ -1730,7 +1736,9 @@ oslFileError SAL_CALL osl_getFileStatus(
 
     if ( uFieldMask & osl_FileStatus_Mask_LinkTargetURL )
     {
-        osl_getFileURLFromSystemPath( pItemImpl->m_pFullPath, &pStatus->ustrLinkTargetURL );
+        oslFileError error = osl_getFileURLFromSystemPath( pItemImpl->m_pFullPath, &pStatus->ustrLinkTargetURL );
+        if (error != osl_File_E_None)
+            return error;
 
         pStatus->uValidFields |= osl_FileStatus_Mask_LinkTargetURL;
     }
@@ -1752,7 +1760,9 @@ oslFileError SAL_CALL osl_getFileStatus(
             }
         }
 
-        osl_getFileURLFromSystemPath( pItemImpl->m_pFullPath, &pStatus->ustrFileURL );
+        oslFileError error = osl_getFileURLFromSystemPath( pItemImpl->m_pFullPath, &pStatus->ustrFileURL );
+        if (error != osl_File_E_None)
+            return error;
         pStatus->uValidFields |= osl_FileStatus_Mask_FileURL;
     }
 
