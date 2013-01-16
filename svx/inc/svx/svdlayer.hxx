@@ -31,17 +31,18 @@ class SdrModel;
 
 class SVX_DLLPUBLIC SdrLayer
 {
-friend class SdrLayerAdmin;
-protected:
+    friend class SdrLayerAdmin;
+
     String     aName;
     String      maTitle;
     String      maDescription;
     SdrModel*  pModel; // zum Broadcasten
     sal_uInt16     nType;  // 0=Userdefined,1=Standardlayer
     SdrLayerID nID;
-protected:
+
     SdrLayer(SdrLayerID nNewID, const String& rNewName)       { nID=nNewID; aName=rNewName; nType=0; pModel=NULL; }
     void SetID(SdrLayerID nNewID)                             { nID=nNewID; }
+
 public:
     SdrLayer(): pModel(NULL),nType(0),nID(0)                  {}
     bool      operator==(const SdrLayer& rCmpLayer) const;
