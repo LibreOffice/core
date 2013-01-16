@@ -24,6 +24,7 @@
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <com/sun/star/linguistic2/ConversionDirection.hpp>
 #include <com/sun/star/linguistic2/ConversionDictionaryType.hpp>
+#include <com/sun/star/linguistic2/ConversionDictionaryList.hpp>
 #include <comphelper/string.hxx>
 
 using namespace com::sun::star::lang;
@@ -37,10 +38,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 TextConversion_zh::TextConversion_zh( const Reference < XComponentContext >& xContext )
 {
-    Reference < XInterface > xI = xContext->getServiceManager()->createInstanceWithContext(
-        OUString("com.sun.star.linguistic2.ConversionDictionaryList"), xContext);
-    if ( xI.is() )
-        xI->queryInterface( getCppuType((const Reference< XConversionDictionaryList>*)0) ) >>= xCDL;
+    xCDL = ConversionDictionaryList::create(xContext);
 
     implementationName = "com.sun.star.i18n.TextConversion_zh";
 }

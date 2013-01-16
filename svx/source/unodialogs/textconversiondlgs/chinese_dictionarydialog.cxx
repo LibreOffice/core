@@ -25,7 +25,7 @@
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <com/sun/star/linguistic2/ConversionDictionaryType.hpp>
 #include <com/sun/star/linguistic2/ConversionPropertyType.hpp>
-#include <com/sun/star/linguistic2/XConversionDictionaryList.hpp>
+#include <com/sun/star/linguistic2/ConversionDictionaryList.hpp>
 #include <com/sun/star/linguistic2/XConversionPropertyType.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 #include <com/sun/star/lang/Locale.hpp>
@@ -469,7 +469,6 @@ ChineseDictionaryDialog::ChineseDictionaryDialog( Window* pParent )
     , m_aBP_Cancel( this, TextConversionDlgs_ResId( PB_CANCEL ) )
     , m_aBP_Help( this, TextConversionDlgs_ResId( PB_HELP ) )
     , m_xContext( 0 )
-    , m_xFactory( 0 )
 {
     FreeResource();
 
@@ -497,58 +496,50 @@ ChineseDictionaryDialog::ChineseDictionaryDialog( Window* pParent )
         if(!m_xContext.is())
             m_xContext = Reference< XComponentContext >( ::cppu::defaultBootstrap_InitialComponentContext() );
         if(m_xContext.is())
-            m_xFactory = Reference< lang::XMultiComponentFactory >( m_xContext->getServiceManager() );
-        if(m_xFactory.is())
         {
-            Reference< linguistic2::XConversionDictionaryList > xDictionaryList(
-                                m_xFactory->createInstanceWithContext(
-                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.linguistic2.ConversionDictionaryList"))
-                                    , m_xContext), uno::UNO_QUERY);
-            if( xDictionaryList.is() )
+            Reference< linguistic2::XConversionDictionaryList > xDictionaryList = linguistic2::ConversionDictionaryList::create(m_xContext);
+            Reference< container::XNameContainer > xContainer( xDictionaryList->getDictionaryContainer() );
+            if(xContainer.is())
             {
-                Reference< container::XNameContainer > xContainer( xDictionaryList->getDictionaryContainer() );
-                if(xContainer.is())
+                try
                 {
-                    try
+                    rtl::OUString aNameTo_Simplified( RTL_CONSTASCII_USTRINGPARAM("ChineseT2S") );
+                    rtl::OUString aNameTo_Traditional( RTL_CONSTASCII_USTRINGPARAM("ChineseS2T") );
+                    lang::Locale aLocale;
+                    aLocale.Language = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("zh") );
+
+                    if( xContainer->hasByName( aNameTo_Simplified ) )
+                        xDictionary_To_Simplified = Reference< linguistic2::XConversionDictionary >(
+                                xContainer->getByName( aNameTo_Simplified ), UNO_QUERY );
+                    else
                     {
-                        rtl::OUString aNameTo_Simplified( RTL_CONSTASCII_USTRINGPARAM("ChineseT2S") );
-                        rtl::OUString aNameTo_Traditional( RTL_CONSTASCII_USTRINGPARAM("ChineseS2T") );
-                        lang::Locale aLocale;
-                        aLocale.Language = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("zh") );
-
-                        if( xContainer->hasByName( aNameTo_Simplified ) )
-                            xDictionary_To_Simplified = Reference< linguistic2::XConversionDictionary >(
-                                    xContainer->getByName( aNameTo_Simplified ), UNO_QUERY );
-                        else
-                        {
-                            aLocale.Country = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("TW") );
-                            xDictionary_To_Simplified = Reference< linguistic2::XConversionDictionary >(
-                                    xDictionaryList->addNewDictionary( aNameTo_Simplified
-                                    , aLocale, linguistic2::ConversionDictionaryType::SCHINESE_TCHINESE
-                                        ), UNO_QUERY );
-                        }
-                        if (xDictionary_To_Simplified.is())
-                            xDictionary_To_Simplified->setActive( sal_True );
-
-
-                        if( xContainer->hasByName( aNameTo_Traditional ) )
-                            xDictionary_To_Traditional = Reference< linguistic2::XConversionDictionary >(
-                                    xContainer->getByName( aNameTo_Traditional ), UNO_QUERY );
-                        else
-                        {
-                            aLocale.Country = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CN") );
-                            xDictionary_To_Traditional = Reference< linguistic2::XConversionDictionary >(
-                                    xDictionaryList->addNewDictionary( aNameTo_Traditional
-                                    , aLocale, linguistic2::ConversionDictionaryType::SCHINESE_TCHINESE
-                                        ), UNO_QUERY );
-                        }
-                        if (xDictionary_To_Traditional.is())
-                            xDictionary_To_Traditional->setActive( sal_True );
-
+                        aLocale.Country = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("TW") );
+                        xDictionary_To_Simplified = Reference< linguistic2::XConversionDictionary >(
+                                xDictionaryList->addNewDictionary( aNameTo_Simplified
+                                , aLocale, linguistic2::ConversionDictionaryType::SCHINESE_TCHINESE
+                                    ), UNO_QUERY );
                     }
-                    catch( uno::Exception& )
+                    if (xDictionary_To_Simplified.is())
+                        xDictionary_To_Simplified->setActive( sal_True );
+
+
+                    if( xContainer->hasByName( aNameTo_Traditional ) )
+                        xDictionary_To_Traditional = Reference< linguistic2::XConversionDictionary >(
+                                xContainer->getByName( aNameTo_Traditional ), UNO_QUERY );
+                    else
                     {
+                        aLocale.Country = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CN") );
+                        xDictionary_To_Traditional = Reference< linguistic2::XConversionDictionary >(
+                                xDictionaryList->addNewDictionary( aNameTo_Traditional
+                                , aLocale, linguistic2::ConversionDictionaryType::SCHINESE_TCHINESE
+                                    ), UNO_QUERY );
                     }
+                    if (xDictionary_To_Traditional.is())
+                        xDictionary_To_Traditional->setActive( sal_True );
+
+                }
+                catch( uno::Exception& )
+                {
                 }
             }
         }
@@ -605,7 +596,6 @@ ChineseDictionaryDialog::ChineseDictionaryDialog( Window* pParent )
 ChineseDictionaryDialog::~ChineseDictionaryDialog()
 {
     m_xContext=0;
-    m_xFactory=0;
     delete m_pHeaderBar;
 }
 

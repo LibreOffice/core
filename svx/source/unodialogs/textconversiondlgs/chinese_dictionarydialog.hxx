@@ -32,7 +32,6 @@
 // header for class SvHeaderTabListBox
 #include <svtools/svtabbx.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/linguistic2/XConversionDictionary.hpp>
 
 #include <vector>
@@ -181,8 +180,6 @@ private:
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::uno::XComponentContext >              m_xContext;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::lang::XMultiComponentFactory>         m_xFactory;
 };
 
 //.............................................................................

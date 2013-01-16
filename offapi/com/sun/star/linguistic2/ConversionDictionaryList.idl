@@ -20,7 +20,6 @@
 #define __com_sun_star_linguistic2_ConversionDictionaryList_idl__
 
 #include <com/sun/star/linguistic2/XConversionDictionaryList.idl>
-#include <com/sun/star/lang/XComponent.idl>
 
 
 module com { module sun { module star { module linguistic2 {
@@ -42,11 +41,7 @@ module com { module sun { module star { module linguistic2 {
 
      @since OOo 1.1.2
 */
-published service ConversionDictionaryList
-{
-    interface com::sun::star::linguistic2::XConversionDictionaryList;
-    interface com::sun::star::lang::XComponent;
-};
+published service ConversionDictionaryList : XConversionDictionaryList;
 
 
 }; }; }; };

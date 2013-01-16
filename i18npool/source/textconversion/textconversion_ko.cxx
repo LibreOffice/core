@@ -23,6 +23,7 @@
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <com/sun/star/linguistic2/ConversionDirection.hpp>
 #include <com/sun/star/linguistic2/ConversionDictionaryType.hpp>
+#include <com/sun/star/linguistic2/ConversionDictionaryList.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <unicode/uchar.h>
 
@@ -50,11 +51,7 @@ TextConversion_ko::TextConversion_ko( const Reference < XComponentContext >& xCo
     if ( xI.is() )
         xI->queryInterface( getCppuType((const Reference< XConversionDictionary>*)0) ) >>= xCD;
 
-    xI = xContext->getServiceManager()->createInstanceWithContext(
-        OUString("com.sun.star.linguistic2.ConversionDictionaryList"), xContext);
-
-    if ( xI.is() )
-        xI->queryInterface( getCppuType((const Reference< XConversionDictionaryList>*)0) ) >>= xCDL;
+    xCDL = ConversionDictionaryList::create(xContext);
 
     maxLeftLength = maxRightLength = 1;
 

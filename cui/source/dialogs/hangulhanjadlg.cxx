@@ -32,7 +32,7 @@
 #include <unotools/linguprops.hxx>
 #include <com/sun/star/linguistic2/ConversionDictionaryType.hpp>
 #include <com/sun/star/linguistic2/ConversionDirection.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/linguistic2/ConversionDictionaryList.hpp>
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 
@@ -932,41 +932,32 @@ namespace svx
     {
         if( !m_xConversionDictionaryList.is() )
         {
-            Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-            if( xMgr.is() )
-            {
-                m_xConversionDictionaryList = Reference< XConversionDictionaryList >( xMgr->createInstance(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.linguistic2.ConversionDictionaryList")) ),
-                    UNO_QUERY );
-            }
+            m_xConversionDictionaryList = ConversionDictionaryList::create( ::comphelper::getProcessComponentContext() );
         }
 
         m_aDictList.clear();
         m_aDictsLB.Clear();
 
-        if( m_xConversionDictionaryList.is() )
+        Reference< XNameContainer > xNameCont = m_xConversionDictionaryList->getDictionaryContainer();
+        Reference< XNameAccess >    xNameAccess = Reference< XNameAccess >( xNameCont, UNO_QUERY );
+        if( xNameAccess.is() )
         {
-            Reference< XNameContainer > xNameCont = m_xConversionDictionaryList->getDictionaryContainer();
-            Reference< XNameAccess >    xNameAccess = Reference< XNameAccess >( xNameCont, UNO_QUERY );
-            if( xNameAccess.is() )
+            Sequence< ::rtl::OUString >     aDictNames( xNameAccess->getElementNames() );
+
+            const ::rtl::OUString*          pDic = aDictNames.getConstArray();
+            sal_Int32                       nCount = aDictNames.getLength();
+
+            sal_Int32                       i;
+            for( i = 0 ; i < nCount ; ++i )
             {
-                Sequence< ::rtl::OUString >     aDictNames( xNameAccess->getElementNames() );
-
-                const ::rtl::OUString*          pDic = aDictNames.getConstArray();
-                sal_Int32                       nCount = aDictNames.getLength();
-
-                sal_Int32                       i;
-                for( i = 0 ; i < nCount ; ++i )
+                Any                                 aAny( xNameAccess->getByName( pDic[ i ] ) );
+                Reference< XConversionDictionary >  xDic;
+                if( ( aAny >>= xDic ) && xDic.is() )
                 {
-                    Any                                 aAny( xNameAccess->getByName( pDic[ i ] ) );
-                    Reference< XConversionDictionary >  xDic;
-                    if( ( aAny >>= xDic ) && xDic.is() )
+                    if( LANGUAGE_KOREAN == LanguageTag( xDic->getLocale() ).getLanguageType() )
                     {
-                        if( LANGUAGE_KOREAN == LanguageTag( xDic->getLocale() ).getLanguageType() )
-                        {
-                            m_aDictList.push_back( xDic );
-                            AddDict( xDic->getName(), xDic->isActive() );
-                        }
+                        m_aDictList.push_back( xDic );
+                        AddDict( xDic->getName(), xDic->isActive() );
                     }
                 }
             }
