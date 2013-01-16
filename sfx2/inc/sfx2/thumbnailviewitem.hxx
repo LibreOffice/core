@@ -22,6 +22,7 @@
 
 #include <basegfx/vector/b2dvector.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/bitmapex.hxx>
 #include "sfx2/dllapi.h"
@@ -106,6 +107,7 @@ public:
 
     virtual void Paint (drawinglayer::processor2d::BaseProcessor2D *pProcessor,
                         const ThumbnailItemAttributes *pAttrs);
+    void addTextPrimitives (const rtl::OUString& rText, const ThumbnailItemAttributes *pAttrs, Point aPos, drawinglayer::primitive2d::Primitive2DSequence& rSeq);
 
     static drawinglayer::primitive2d::PolygonHairlinePrimitive2D*
         createBorderLine (const basegfx::B2DPolygon &rPolygon);

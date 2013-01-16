@@ -108,34 +108,11 @@ void TemplateViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProces
     // draw thumbnail borders
     aSeq[3] = Primitive2DReference(createBorderLine(aBounds));
 
-    // Draw centered text below thumbnail
-
-    // Create the text primitive
-    basegfx::B2DHomMatrix aTitleMatrix( createScaleTranslateB2DHomMatrix(
-                pAttrs->aFontSize.getX(), pAttrs->aFontSize.getY(),
-                double( maTextPos.X() ), double( maTextPos.Y() ) ) );
-
-    aSeq[4] = Primitive2DReference(
-                new TextSimplePortionPrimitive2D(aTitleMatrix,
-                                                 maTitle,0,pAttrs->nMaxTextLenght,
-                                                 std::vector< double >( ),
-                                                 pAttrs->aFontAttr,
-                                                 com::sun::star::lang::Locale(),
-                                                 Color(COL_BLACK).getBColor() ) );
+    addTextPrimitives(maTitle, pAttrs, maTextPos, aSeq);
 
     if (!maSubTitle.isEmpty())
     {
-        basegfx::B2DHomMatrix aSubTitleMatrix( createScaleTranslateB2DHomMatrix(
-                    pAttrs->aFontSize.getX()*SUBTITLE_SCALE_FACTOR, pAttrs->aFontSize.getY()*SUBTITLE_SCALE_FACTOR,
-                    double( maSubTitlePos.X() ), double( maSubTitlePos.Y() ) ) );
-
-        aSeq[5] = Primitive2DReference(
-                    new TextSimplePortionPrimitive2D(aSubTitleMatrix,
-                                                     maSubTitle,0,pAttrs->nMaxTextLenght,
-                                                     std::vector< double >( ),
-                                                     pAttrs->aFontAttr,
-                                                     com::sun::star::lang::Locale(),
-                                                     Color(COL_BLACK).getBColor() ) );
+        addTextPrimitives(maSubTitle, pAttrs, maSubTitlePos, aSeq);
     }
 
     pProcessor->process(aSeq);

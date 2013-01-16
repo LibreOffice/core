@@ -84,8 +84,6 @@ void TemplateContainerItem::Paint (drawinglayer::processor2d::BaseProcessor2D *p
     Size aThumbSize( ( maThumbnailArea.getWidth() - 3 * nThumbPadding ) / 2, ( maThumbnailArea.getHeight() - 3* nThumbPadding ) / 2 );
 
     // Draw thumbnail
-    Point aPos = maPrev1Pos;
-
     for (int i=0; i<4; ++i)
     {
         long nPosX = 0;
@@ -153,21 +151,7 @@ void TemplateContainerItem::Paint (drawinglayer::processor2d::BaseProcessor2D *p
         }
     }
 
-    // Draw centered text below thumbnail
-    aPos = maTextPos;
-
-    // Create the text primitive
-    basegfx::B2DHomMatrix aTextMatrix( createScaleTranslateB2DHomMatrix(
-                pAttrs->aFontSize.getX(), pAttrs->aFontSize.getY(),
-                double( aPos.X() ), double( aPos.Y() ) ) );
-
-    aSeq[nCount++] = Primitive2DReference(
-                new TextSimplePortionPrimitive2D(aTextMatrix,
-                                                 maTitle,0,maTitle.getLength(),
-                                                 std::vector< double >( ),
-                                                 pAttrs->aFontAttr,
-                                                 com::sun::star::lang::Locale(),
-                                                 Color(COL_BLACK).getBColor() ) );
+    addTextPrimitives(maTitle, pAttrs, maTextPos, aSeq);
 
     pProcessor->process(aSeq);
 }
