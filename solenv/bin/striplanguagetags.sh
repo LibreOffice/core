@@ -44,6 +44,12 @@ cat > $XSL << EOF
 
 <xsl:template match="@fo:language"/>
 <xsl:template match="@fo:country"/>
+<xsl:template match="@fo:script"/>
+<xsl:template match="@number:rfc-language-tag"/>
+<xsl:template match="@style:rfc-language-tag"/>
+<xsl:template match="@table:rfc-language-tag"/>
+<xsl:template match="@style:rfc-language-tag-asian"/>
+<xsl:template match="@style:rfc-language-tag-complex"/>
 
 </xsl:stylesheet>
 EOF
