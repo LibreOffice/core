@@ -155,6 +155,11 @@ public:
         css::uno::Reference< css::lang::XSingleComponentFactory > * factory1,
         css::uno::Reference< css::lang::XSingleServiceFactory > * factory2);
 
+private:
+    virtual ~ServiceManager() {}
+
+    virtual void SAL_CALL disposing();
+
     virtual rtl::OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException);
 
@@ -277,11 +282,6 @@ public:
 
     virtual void SAL_CALL disposing(css::lang::EventObject const & Source)
         throw (css::uno::RuntimeException);
-
-private:
-    virtual ~ServiceManager() {}
-
-    virtual void SAL_CALL disposing();
 
     // needs to be called with rBHelper.rMutex locked:
     bool isDisposed() { return rBHelper.bDisposed || rBHelper.bInDispose; }

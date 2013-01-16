@@ -656,6 +656,34 @@ void cppuhelper::ServiceManager::loadImplementation(
     }
 }
 
+void cppuhelper::ServiceManager::disposing() {
+    std::vector< css::uno::Reference< css::lang::XComponent > > comps;
+    Data clear;
+    {
+        osl::MutexGuard g(rBHelper.rMutex);
+        for (Data::DynamicImplementations::const_iterator i(
+                 data_.dynamicImplementations.begin());
+             i != data_.dynamicImplementations.end(); ++i)
+        {
+            assert(i->second.get() != 0);
+            if (i->second->component.is()) {
+                comps.push_back(i->second->component);
+            }
+        }
+        data_.namedImplementations.swap(clear.namedImplementations);
+        data_.dynamicImplementations.swap(clear.dynamicImplementations);
+        data_.services.swap(clear.services);
+        data_.singletons.swap(clear.singletons);
+    }
+    for (std::vector<
+             css::uno::Reference< css::lang::XComponent > >::const_iterator i(
+                 comps.begin());
+         i != comps.end(); ++i)
+    {
+        removeEventListenerFromComponent(*i);
+    }
+}
+
 rtl::OUString cppuhelper::ServiceManager::getImplementationName()
     throw (css::uno::RuntimeException)
 {
@@ -1100,34 +1128,6 @@ void cppuhelper::ServiceManager::disposing(
         css::uno::Reference< css::lang::XServiceInfo >(
             Source.Source, css::uno::UNO_QUERY_THROW),
         false);
-}
-
-void cppuhelper::ServiceManager::disposing() {
-    std::vector< css::uno::Reference< css::lang::XComponent > > comps;
-    Data clear;
-    {
-        osl::MutexGuard g(rBHelper.rMutex);
-        for (Data::DynamicImplementations::const_iterator i(
-                 data_.dynamicImplementations.begin());
-             i != data_.dynamicImplementations.end(); ++i)
-        {
-            assert(i->second.get() != 0);
-            if (i->second->component.is()) {
-                comps.push_back(i->second->component);
-            }
-        }
-        data_.namedImplementations.swap(clear.namedImplementations);
-        data_.dynamicImplementations.swap(clear.dynamicImplementations);
-        data_.services.swap(clear.services);
-        data_.singletons.swap(clear.singletons);
-    }
-    for (std::vector<
-             css::uno::Reference< css::lang::XComponent > >::const_iterator i(
-                 comps.begin());
-         i != comps.end(); ++i)
-    {
-        removeEventListenerFromComponent(*i);
-    }
 }
 
 void cppuhelper::ServiceManager::removeEventListenerFromComponent(
