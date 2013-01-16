@@ -83,7 +83,6 @@ public:
     virtual SdrModel*   GetMarkedObjModel() const;
 
     Graphic         GetAllMarkedGraphic() const;
-    SdrModel*       GetAllMarkedModel() const { return GetMarkedObjModel(); }
 
     /** Generate a Graphic for the given draw object in the given model
 

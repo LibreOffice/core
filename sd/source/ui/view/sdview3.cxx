@@ -591,7 +591,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     // model is owned by from AllocModel() created DocShell
                     SdDrawDocument* pSourceDoc = (SdDrawDocument*) pSourceView->GetModel();
                     pSourceDoc->CreatingDataObj( pOwnData );
-                    SdDrawDocument* pModel = (SdDrawDocument*) pSourceView->GetAllMarkedModel();
+                    SdDrawDocument* pModel = (SdDrawDocument*) pSourceView->GetMarkedObjModel();
                     bReturn = Paste( *pModel, maDropPos, pPage, nPasteOptions );
 
                     if( !pPage )

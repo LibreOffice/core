@@ -286,7 +286,7 @@ void SdTransferable::CreateData()
 
         if( mpSourceDoc )
             mpSourceDoc->CreatingDataObj(this);
-        mpSdDrawDocumentIntern = (SdDrawDocument*) mpSdView->GetAllMarkedModel();
+        mpSdDrawDocumentIntern = (SdDrawDocument*) mpSdView->GetMarkedObjModel();
         if( mpSourceDoc )
             mpSourceDoc->CreatingDataObj(0);
 
@@ -509,7 +509,7 @@ sal_Bool SdTransferable::GetData( const DataFlavor& rFlavor )
             {
                 SdDrawDocument& rInternDoc = mpSdViewIntern->GetDoc();
                 rInternDoc.CreatingDataObj(this);
-                SdDrawDocument* pDoc = dynamic_cast< SdDrawDocument* >( mpSdViewIntern->GetAllMarkedModel() );
+                SdDrawDocument* pDoc = dynamic_cast< SdDrawDocument* >( mpSdViewIntern->GetMarkedObjModel() );
                 rInternDoc.CreatingDataObj(0);
 
                 bOK = SetObject( pDoc, SDTRANSFER_OBJECTTYPE_DRAWMODEL, rFlavor );

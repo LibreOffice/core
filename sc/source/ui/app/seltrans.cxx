@@ -340,7 +340,7 @@ void ScSelectionTransferObj::CreateDrawData()
             //---------------------------------------------------------
 
             ScDrawLayer::SetGlobalDrawPersist(aDragShellRef);
-            SdrModel* pModel = pDrawView->GetAllMarkedModel();
+            SdrModel* pModel = pDrawView->GetMarkedObjModel();
             ScDrawLayer::SetGlobalDrawPersist(NULL);
 
             ScViewData* pViewData = pView->GetViewData();

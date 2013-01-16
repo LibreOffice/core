@@ -107,7 +107,7 @@ sal_Bool ScDrawView::BeginDrag( Window* pWindow, const Point& rStartPos )
             aDragShellRef->DoInitNew(NULL);
         }
         ScDrawLayer::SetGlobalDrawPersist(aDragShellRef);
-        SdrModel* pModel = GetAllMarkedModel();
+        SdrModel* pModel = GetMarkedObjModel();
         ScDrawLayer::SetGlobalDrawPersist(NULL);
 
         //  Charts now always copy their data in addition to the source reference, so
@@ -144,7 +144,7 @@ void ScDrawView::DoCopy()
 
     // update ScGlobal::pDrawClipDocShellRef
     ScDrawLayer::SetGlobalDrawPersist( ScTransferObj::SetDrawClipDoc( bAnyOle ) );
-    SdrModel* pModel = GetAllMarkedModel();
+    SdrModel* pModel = GetMarkedObjModel();
     ScDrawLayer::SetGlobalDrawPersist(NULL);
 
     //  Charts now always copy their data in addition to the source reference, so
@@ -180,7 +180,7 @@ uno::Reference<datatransfer::XTransferable> ScDrawView::CopyToTransferable()
 
     // update ScGlobal::pDrawClipDocShellRef
     ScDrawLayer::SetGlobalDrawPersist( ScTransferObj::SetDrawClipDoc( bAnyOle ) );
-    SdrModel* pModel = GetAllMarkedModel();
+    SdrModel* pModel = GetMarkedObjModel();
     ScDrawLayer::SetGlobalDrawPersist(NULL);
 
     //  Charts now always copy their data in addition to the source reference, so

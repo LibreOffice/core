@@ -58,7 +58,7 @@ ChartTransferable::ChartTransferable( SdrModel* pDrawModel, SdrObject* pSelected
     m_xMetaFileGraphic.set( aGraphic.GetXGraphic());
     if ( m_bDrawing )
     {
-        m_pMarkedObjModel = ( pExchgView ? pExchgView->GetAllMarkedModel() : NULL );
+        m_pMarkedObjModel = ( pExchgView ? pExchgView->GetMarkedObjModel() : NULL );
     }
     delete pExchgView;
 }

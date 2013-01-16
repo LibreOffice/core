@@ -107,7 +107,7 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
     SD_MOD()->pTransferClip = pTransferable;
 
     mrDoc.CreatingDataObj( pTransferable );
-    pTransferable->SetWorkDocument( (SdDrawDocument*) GetAllMarkedModel() );
+    pTransferable->SetWorkDocument( (SdDrawDocument*) GetMarkedObjModel() );
     mrDoc.CreatingDataObj( NULL );
 
     // #112978# need to use GetAllMarkedBoundRect instead of GetAllMarkedRect to get

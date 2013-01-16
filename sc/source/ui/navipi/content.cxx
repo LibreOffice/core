@@ -1049,7 +1049,7 @@ static void lcl_DoDragObject( ScDocShell* pSrcShell, const String& rName, sal_uI
             SdrPageView* pPV = aEditView.GetSdrPageView();
             aEditView.MarkObj(pObject, pPV);
 
-            SdrModel* pDragModel = aEditView.GetAllMarkedModel();
+            SdrModel* pDragModel = aEditView.GetMarkedObjModel();
 
             TransferableObjectDescriptor aObjDesc;
             pSrcShell->FillTransferableObjectDescriptor( aObjDesc );
