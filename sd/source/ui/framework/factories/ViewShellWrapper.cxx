@@ -95,6 +95,7 @@ void SAL_CALL ViewShellWrapper::disposing (void)
         xWindow->removeWindowListener(this);
     }
 
+    mpSlideSorterViewShell.reset();
     mpViewShell.reset();
 }
 
@@ -145,6 +146,9 @@ sal_Bool SAL_CALL ViewShellWrapper::isAnchorOnly (void)
 
 sal_Bool SAL_CALL ViewShellWrapper::select( const ::com::sun::star::uno::Any& aSelection ) throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
+    if (!mpSlideSorterViewShell)
+        return false;
+
     bool bOk = true;
 
     ::sd::slidesorter::controller::SlideSorterController& rSlideSorterController
@@ -179,6 +183,9 @@ sal_Bool SAL_CALL ViewShellWrapper::select( const ::com::sun::star::uno::Any& aS
 uno::Any SAL_CALL ViewShellWrapper::getSelection() throw(uno::RuntimeException)
 {
     Any aResult;
+
+    if (!mpSlideSorterViewShell)
+        return aResult;
 
     slidesorter::model::PageEnumeration aSelectedPages (
         slidesorter::model::PageEnumerationProvider::CreateSelectedPagesEnumeration(
