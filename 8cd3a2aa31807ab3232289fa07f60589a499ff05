@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAATH///0Y\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-01-16T09:40:33Z",
+      "side": 1,
+      "message": "Please use your real name as it helps identifying you to the license statement your sent to the mailing list.",
+      "revId": "8cd3a2aa31807ab3232289fa07f60589a499ff05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH///0c\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-01-16T09:40:33Z",
+      "side": 1,
+      "message": "Please add a proper summary for the commit. If it fixes a bug in bugzilla, adding fdo#12345 where 12345 is the id of the fixed bug is needed to keep a link between bug and commit.",
+      "revId": "8cd3a2aa31807ab3232289fa07f60589a499ff05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH///0o\u003d",
+        "filename": "svtools/inc/svtools/ctrlbox.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-01-16T09:40:33Z",
+      "side": 1,
+      "message": "How comes you added those includes in that file if they aren\u0027t used directly in it? If you need those includes for the implementation, please add them in the corresponding cxx file (or remove them if they aren\u0027t needed)",
+      "revId": "8cd3a2aa31807ab3232289fa07f60589a499ff05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH///0k\u003d",
+        "filename": "svtools/source/control/ctrlbox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1675,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-01-16T09:40:33Z",
+      "side": 1,
+      "message": "Proper indentation or brackets would help code reading",
+      "revId": "8cd3a2aa31807ab3232289fa07f60589a499ff05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH///0g\u003d",
+        "filename": "svtools/source/control/ctrlbox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1676,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-01-16T09:40:33Z",
+      "side": 1,
+      "message": "The commit hook should have told you there is a problem here: please remove the trailing spaces in this line.",
+      "revId": "8cd3a2aa31807ab3232289fa07f60589a499ff05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
