@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAATH///1M\u003d",
+        "filename": "dbaccess/source/core/api/CacheSet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1000243
+      },
+      "writtenOn": "2013-01-16T08:34:56Z",
+      "side": 1,
+      "message": "Am I right in thinking that like in Java this is creating one OUString for this:\n\"::dbtools::quoteName( aQuote,m_xSetMetaData-\u003egetColumnName(i++)) + aComma\"\nthen appending it to aSql, resulting in one array creation too much?\n\nOUStringBuffer is growable so I do not really see the problem with using append() twice here?\n\nAgain, I am just comparing the usage of OUString and OUStringBuffer with java.lang.String and java.lang.StringBuffer where such practice is deprecated. I know nothing of the internals of the LibreOffice datatypes.\n\nThere are other such changes that look suspicious to me.",
+      "revId": "f1c43a9a1b458ccfb3d123be63ba7c7edd51bdf3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
