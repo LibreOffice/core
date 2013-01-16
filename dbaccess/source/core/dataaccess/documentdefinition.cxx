@@ -401,8 +401,7 @@ namespace dbaccess
                     ::rtl::OUString aEntryDocName;
 
                     if (    ( xObjConfig->getByName( aClassIDs[nInd] ) >>= xObjectProps ) && xObjectProps.is()
-                         && ( xObjectProps->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ObjectDocumentServiceName"))
-                                      ) >>= aEntryDocName )
+                         && ( xObjectProps->getByName("ObjectDocumentServiceName") >>= aEntryDocName )
                          && aEntryDocName.equals( sResult ) )
                     {
                         _rClassId = aConfigHelper.GetSequenceClassIDRepresentation(aClassIDs[nInd]);
@@ -713,7 +712,7 @@ namespace
             {
                 Reference< XPropertySet > xPropSet( xFrame, UNO_QUERY_THROW );
                 m_xLayoutManager.set(
-                    xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ) ) ),
+                    xPropSet->getPropertyValue( "LayoutManager" ),
                     UNO_QUERY_THROW );
                 m_xLayoutManager->lock();
 
@@ -759,14 +758,14 @@ void ODocumentDefinition::impl_initFormEditView( const Reference< XController >&
         LayoutManagerLock aLockLayout( _rxController );
 
         // setting of the visual properties
-        xViewSettings->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShowRulers")),makeAny(sal_True));
-        xViewSettings->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShowVertRuler")),makeAny(sal_True));
-        xViewSettings->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShowHoriRuler")),makeAny(sal_True));
-        xViewSettings->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsRasterVisible")),makeAny(sal_True));
-        xViewSettings->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsSnapToRaster")),makeAny(sal_True));
-        xViewSettings->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShowOnlineLayout")),makeAny(sal_True));
-        xViewSettings->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RasterSubdivisionX")),makeAny(sal_Int32(5)));
-        xViewSettings->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RasterSubdivisionY")),makeAny(sal_Int32(5)));
+        xViewSettings->setPropertyValue("ShowRulers",makeAny(sal_True));
+        xViewSettings->setPropertyValue("ShowVertRuler",makeAny(sal_True));
+        xViewSettings->setPropertyValue("ShowHoriRuler",makeAny(sal_True));
+        xViewSettings->setPropertyValue("IsRasterVisible",makeAny(sal_True));
+        xViewSettings->setPropertyValue("IsSnapToRaster",makeAny(sal_True));
+        xViewSettings->setPropertyValue("ShowOnlineLayout",makeAny(sal_True));
+        xViewSettings->setPropertyValue("RasterSubdivisionX",makeAny(sal_Int32(5)));
+        xViewSettings->setPropertyValue("RasterSubdivisionY",makeAny(sal_Int32(5)));
     }
     catch( const Exception& )
     {
@@ -950,9 +949,9 @@ Any ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, cons
     if ( xModule.is() )
     {
         if ( m_bForm )
-            xModule->setIdentifier( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.FormDesign" ) ) );
+            xModule->setIdentifier( "com.sun.star.sdb.FormDesign" );
         else if ( !xReportDefinition.is() )
-            xModule->setIdentifier( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.TextReportDesign" ) ) );
+            xModule->setIdentifier( "com.sun.star.sdb.TextReportDesign" );
 
         updateDocumentTitle();
     }
@@ -993,9 +992,9 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
 {
     Any aRet;
 
-    sal_Bool bOpen = aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "open" ) );
-    sal_Bool bOpenInDesign = aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "openDesign" ) );
-    sal_Bool bOpenForMail = aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "openForMail" ) );
+    sal_Bool bOpen = aCommand.Name == "open";
+    sal_Bool bOpenInDesign = aCommand.Name == "openDesign";
+    sal_Bool bOpenForMail = aCommand.Name == "openForMail";
     if ( bOpen || bOpenInDesign || bOpenForMail )
     {
         // opening the document involves a lot of VCL code, which is not thread-safe, but needs the SolarMutex locked.
@@ -1091,9 +1090,8 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
         aIni[0] >>= sURL;
         onCommandInsert( sURL, Environment );
     }
-    else if (   aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "getdocumentinfo" ) )   // compatibility
-            ||  aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "getDocumentInfo" ) )
-            )
+    else if (   aCommand.Name == "getdocumentinfo"   // compatibility
+            ||  aCommand.Name == "getDocumentInfo" )
     {
         onCommandGetDocumentProperties( aRet );
     }
@@ -1390,7 +1388,7 @@ sal_Bool ODocumentDefinition::saveAs()
                         try
                         {
                             Reference< XStorage> xStorage = getContainerStorage();
-                            const static ::rtl::OUString sBaseName(RTL_CONSTASCII_USTRINGPARAM("Obj"));
+                            const static ::rtl::OUString sBaseName("Obj");
 
                             Reference<XNameAccess> xElements(xStorage,UNO_QUERY_THROW);
                             ::rtl::OUString sPersistentName = ::dbtools::createUniqueName(xElements,sBaseName);
@@ -1630,7 +1628,7 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& i_
                 sDocumentService = GetDocumentServiceFromMediaType( getContentType(), m_aContext, aClassID );
                 // check if we are not a form and
                 // the com.sun.star.report.pentaho.SOReportJobFactory is not present.
-                if ( !m_bForm && !sDocumentService.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextDocument")))
+                if ( !m_bForm && !(sDocumentService == "com.sun.star.text.TextDocument"))
                 {
                     // we seem to be a "new style" report, check if report extension is present.
                     Reference< XContentEnumerationAccess > xEnumAccess( m_aContext.getLegacyServiceFactory(), UNO_QUERY );
@@ -1779,8 +1777,8 @@ void ODocumentDefinition::onCommandPreview(Any& _rImage)
             if ( xTransfer.is() )
             {
                 DataFlavor aFlavor;
-                aFlavor.MimeType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("image/png"));
-                aFlavor.HumanPresentableName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Portable Network Graphics"));
+                aFlavor.MimeType = "image/png";
+                aFlavor.HumanPresentableName = "Portable Network Graphics";
                 aFlavor.DataType = ::getCppuType(static_cast< const Sequence < sal_Int8 >* >(NULL));
 
                 _rImage = xTransfer->getTransferData( aFlavor );
@@ -2085,10 +2083,10 @@ void ODocumentDefinition::fillReportData( const ::comphelper::ComponentContext& 
 {
     Sequence< Any > aArgs(2);
     PropertyValue aValue;
-    aValue.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TextDocument" ) );
+    aValue.Name =  "TextDocument";
     aValue.Value <<= _rxComponent;
     aArgs[0] <<= aValue;
-       aValue.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ActiveConnection" ) );
+       aValue.Name = "ActiveConnection";
        aValue.Value <<= _rxActiveConnection;
        aArgs[1] <<= aValue;
 
@@ -2096,7 +2094,7 @@ void ODocumentDefinition::fillReportData( const ::comphelper::ComponentContext& 
     {
         Reference< XJobExecutor > xExecuteable(
             _rContext.createComponentWithArguments( "com.sun.star.wizards.report.CallReportWizard", aArgs ), UNO_QUERY_THROW );
-        xExecuteable->trigger( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "fill" ) ) );
+        xExecuteable->trigger( "fill" );
     }
     catch( const Exception& )
     {
@@ -2122,7 +2120,7 @@ void ODocumentDefinition::updateDocumentTitle()
 
         Reference< XTitle > xDatabaseDocumentModel(m_pImpl->m_pDataSource->getModel_noCreate(),uno::UNO_QUERY);
         if ( xDatabaseDocumentModel.is() )
-            sName = xDatabaseDocumentModel->getTitle() + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" : ")) + sName;
+            sName = xDatabaseDocumentModel->getTitle() + " : " + sName;
     }
     Reference< XTitle> xTitle(getComponent(),UNO_QUERY);
     if ( xTitle.is() )
