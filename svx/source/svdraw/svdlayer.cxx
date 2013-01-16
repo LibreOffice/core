@@ -24,10 +24,6 @@
 #include "svx/svdglob.hxx"  // StringCache
 #include "svx/svdstr.hrc"   // names taken from the resource
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// SetOfByte
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 sal_Bool SetOfByte::IsEmpty() const
 {
     for(sal_uInt16 i(0); i < 32; i++)
@@ -104,15 +100,21 @@ void SetOfByte::QueryValue( com::sun::star::uno::Any & rAny ) const
     rAny <<= aSeq;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// SdrLayer
-////////////////////////////////////////////////////////////////////////////////////////////////////
+SdrLayer::SdrLayer() : pModel(NULL), nType(0), nID(0) {}
+
+SdrLayer::SdrLayer(SdrLayerID nNewID, const OUString& rNewName) :
+    maName(rNewName), pModel(NULL), nType(0), nID(nNewID) {}
+
+void SdrLayer::SetID(SdrLayerID nNewID)
+{
+    nID = nNewID;
+}
 
 void SdrLayer::SetStandardLayer(bool bStd)
 {
     nType=(sal_uInt16)bStd;
     if (bStd) {
-        aName=ImpGetResStr(STR_StandardLayerName);
+        maName = ImpGetResStr(STR_StandardLayerName);
     }
     if (pModel!=NULL) {
         SdrHint aHint(HINT_LAYERCHG);
@@ -121,20 +123,19 @@ void SdrLayer::SetStandardLayer(bool bStd)
     }
 }
 
-void SdrLayer::SetName(const XubString& rNewName)
+void SdrLayer::SetName(const OUString& rNewName)
 {
-    if(!rNewName.Equals(aName))
+    if (rNewName == maName)
+        return;
+
+    maName = rNewName;
+    nType = 0; // user defined
+
+    if (pModel)
     {
-        aName = rNewName;
-        nType = 0; // user defined
-
-        if(pModel)
-        {
-            SdrHint aHint(HINT_LAYERCHG);
-
-            pModel->Broadcast(aHint);
-            pModel->SetChanged();
-        }
+        SdrHint aHint(HINT_LAYERCHG);
+        pModel->Broadcast(aHint);
+        pModel->SetChanged();
     }
 }
 
@@ -142,7 +143,7 @@ bool SdrLayer::operator==(const SdrLayer& rCmpLayer) const
 {
     return (nID == rCmpLayer.nID
         && nType == rCmpLayer.nType
-        && aName.Equals(rCmpLayer.aName));
+        && maName == rCmpLayer.maName);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -33,29 +33,29 @@ class SVX_DLLPUBLIC SdrLayer
 {
     friend class SdrLayerAdmin;
 
-    String     aName;
-    String      maTitle;
-    String      maDescription;
+    OUString maName;
+    OUString maTitle;
+    OUString maDescription;
     SdrModel*  pModel; // zum Broadcasten
     sal_uInt16     nType;  // 0=Userdefined,1=Standardlayer
     SdrLayerID nID;
 
-    SdrLayer(SdrLayerID nNewID, const String& rNewName)       { nID=nNewID; aName=rNewName; nType=0; pModel=NULL; }
-    void SetID(SdrLayerID nNewID)                             { nID=nNewID; }
+    SdrLayer(SdrLayerID nNewID, const OUString& rNewName);
+    void SetID(SdrLayerID nNewID);
 
 public:
-    SdrLayer(): pModel(NULL),nType(0),nID(0)                  {}
+    SdrLayer();
     bool      operator==(const SdrLayer& rCmpLayer) const;
     bool      operator!=(const SdrLayer& rCmpLayer) const { return !operator==(rCmpLayer); }
 
-    void          SetName(const String& rNewName);
-    const String& GetName() const                             { return aName; }
+    void SetName(const OUString& rNewName);
+    const OUString& GetName() const { return maName; }
 
-    void          SetTitle(const String& rTitle) { maTitle = rTitle; }
-    const String& GetTitle() const { return maTitle; }
+    void SetTitle(const OUString& rTitle) { maTitle = rTitle; }
+    const OUString& GetTitle() const { return maTitle; }
 
-    void          SetDescription(const String& rDesc) { maDescription = rDesc; }
-    const String& GetDescription() const { return maDescription; }
+    void SetDescription(const OUString& rDesc) { maDescription = rDesc; }
+    const OUString& GetDescription() const { return maDescription; }
 
     SdrLayerID    GetID() const                               { return nID; }
     void          SetModel(SdrModel* pNewModel)               { pModel=pNewModel; }
