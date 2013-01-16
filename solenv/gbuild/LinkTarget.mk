@@ -165,16 +165,16 @@ gb_CxxObject_get_source = $(1)/$(2).cxx
 define gb_CxxObject__set_pchflags
 ifeq ($(gb_ENABLE_PCH),$(true))
 ifneq ($(strip $$(PCH_NAME)),)
-ifeq ($$(sort $$(PCH_CXXFLAGS) $$(PCH_DEFS) $$(gb_LinkTarget_EXCEPTIONFLAGS)),$$(sort $$(T_CXXFLAGS) $$(DEFS)))
+ifeq ($$(sort $$(PCH_CXXFLAGS) $$(PCH_DEFS) $$(gb_LinkTarget_EXCEPTIONFLAGS)),$$(sort $$(T_CXXFLAGS) $$(T_CXXFLAGS_APPEND) $$(DEFS)))
 $$@ : PCHFLAGS := $$(call gb_PrecompiledHeader_get_enableflags,$$(PCH_NAME))
 else
-ifeq ($$(sort $$(PCH_CXXFLAGS) $$(PCH_DEFS) $$(gb_LinkTarget_NOEXCEPTIONFLAGS)),$$(sort $$(T_CXXFLAGS) $$(DEFS)))
+ifeq ($$(sort $$(PCH_CXXFLAGS) $$(PCH_DEFS) $$(gb_LinkTarget_NOEXCEPTIONFLAGS)),$$(sort $$(T_CXXFLAGS) $$(T_CXXFLAGS_APPEND) $$(DEFS)))
 $$@ : PCHFLAGS := $$(call gb_NoexPrecompiledHeader_get_enableflags,$$(PCH_NAME))
 else
 $$(info No precompiled header available for $$*.cxx .)
 $$(info precompiled header flags (  ex) : $$(sort $$(PCH_CXXFLAGS) $$(PCH_DEFS) $$(gb_LinkTarget_EXCEPTIONFLAGS)))
 $$(info precompiled header flags (noex) : $$(sort $$(PCH_CXXFLAGS) $$(PCH_DEFS) $$(gb_LinkTarget_NOEXCEPTIONFLAGS)))
-$$(info .           object flags        : $$(sort $$(T_CXXFLAGS) $$(DEFS)))
+$$(info .           object flags        : $$(sort $$(T_CXXFLAGS) $$(T_CXXFLAGS_APPEND) $$(DEFS)))
 $$@ : PCHFLAGS :=
 endif
 endif
@@ -542,11 +542,17 @@ $(call gb_LinkTarget_get_target,$(1)) : GENCXXOBJECTS :=
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : T_CFLAGS := $$(gb_LinkTarget_CFLAGS)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
+$(call gb_LinkTarget_get_target,$(1)) : T_CFLAGS_APPEND :=
+$(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : T_CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS)
+$(call gb_LinkTarget_get_headers_target,$(1)) \
+$(call gb_LinkTarget_get_target,$(1)) : T_CXXFLAGS_APPEND :=
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : PCH_CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS)
 $(call gb_LinkTarget_get_target,$(1)) : T_OBJCXXFLAGS := $$(gb_LinkTarget_OBJCXXFLAGS)
+$(call gb_LinkTarget_get_target,$(1)) : T_OBJCXXFLAGS_APPEND :=
 $(call gb_LinkTarget_get_target,$(1)) : T_OBJCFLAGS := $$(gb_LinkTarget_OBJCFLAGS)
+$(call gb_LinkTarget_get_target,$(1)) : T_OBJCFLAGS_APPEND :=
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : DEFS := $$(gb_LinkTarget_DEFAULTDEFS) $$(call gb_LinkTarget_rtl_defs,$(1)) $(CPPFLAGS)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
