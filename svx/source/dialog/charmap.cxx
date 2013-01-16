@@ -54,8 +54,6 @@ sal_uInt32& SvxShowCharSet::getSelectedChar()
 
 // class SvxShowCharSet ==================================================
 
-#define SBWIDTH 16
-
 SvxShowCharSet::SvxShowCharSet(Window* pParent, const ResId& rResId)
     : Control(pParent, rResId)
     , m_pAccessible(NULL)
@@ -376,7 +374,7 @@ void SvxShowCharSet::DrawChars_Impl( int n1, int n2 )
 
     Size aOutputSize = GetOutputSizePixel();
     if (aVscrollSB.IsVisible())
-        aOutputSize.Width() -= SBWIDTH;
+        aOutputSize.Width() -= aVscrollSB.GetOptimalSize().Width();
 
     int i;
     for ( i = 1; i < COLUMN_COUNT; ++i )
@@ -523,7 +521,8 @@ void SvxShowCharSet::SetFont( const Font& rFont )
         getSelectedChar() = maFontCharMap.GetCharFromIndex( nSelectedIndex );
 
     Size aSize = GetOutputSizePixel();
-    aSize.Width() -= SBWIDTH;
+    long nSBWidth = aVscrollSB.GetOptimalSize().Width();
+    aSize.Width() -= nSBWidth;
 
     Font aFont = rFont;
     aFont.SetWeight( WEIGHT_LIGHT );
@@ -537,7 +536,7 @@ void SvxShowCharSet::SetFont( const Font& rFont )
     nX = aSize.Width() / COLUMN_COUNT;
     nY = aSize.Height() / ROW_COUNT;
 
-    aVscrollSB.setPosSizePixel( aSize.Width(), 0, SBWIDTH, aSize.Height() );
+    aVscrollSB.setPosSizePixel( aSize.Width(), 0, nSBWidth, aSize.Height() );
     aVscrollSB.SetRangeMin( 0 );
     int nLastRow = (maFontCharMap.GetCharCount() - 1 + COLUMN_COUNT) / COLUMN_COUNT;
     aVscrollSB.SetRangeMax( nLastRow );
@@ -613,7 +612,7 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, sal_Bool bFocus )
         aOldPixel.Move( +1, +1);
         Size aOutputSize = GetOutputSizePixel();
         if (aVscrollSB.IsVisible())
-            aOutputSize.Width() -= SBWIDTH;
+            aOutputSize.Width() -= aVscrollSB.GetOptimalSize().Width();
         DrawRect( getGridRectangle(aOldPixel, aOutputSize) );
         SetLineColor( aLineCol );
         SetFillColor( aFillCol );
