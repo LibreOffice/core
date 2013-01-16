@@ -241,6 +241,14 @@ void SvxShowText::SetFont( const Font& rFont )
     Invalidate();
 }
 
+Size SvxShowText::GetOptimalSize() const
+{
+    const Font &rFont = GetFont();
+    const Size rFontSize = rFont.GetSize();
+    long nWinHeight = LogicToPixel(rFontSize).Height() * 2;
+    return Size( GetTextWidth( GetText() ) + 2 * 12, nWinHeight );
+}
+
 void SvxShowText::Resize()
 {
     Control::Resize();

@@ -49,6 +49,8 @@ public:
 
     virtual void    Resize();
 
+    virtual Size    GetOptimalSize() const;
+
 protected:
     virtual void    Paint( const Rectangle& );
 
