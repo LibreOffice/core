@@ -159,7 +159,7 @@ String AbstractTabDialog_Impl::GetText() const
 
 IMPL_LINK_NOARG(AbstractApplyTabDialog_Impl, ApplyHdl)
 {
-    if (pDlg->OK_Impl())
+    if (pDlg->Apply())
         m_aHandler.Call(NULL);
     return 0;
 }
