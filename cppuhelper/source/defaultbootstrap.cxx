@@ -115,7 +115,7 @@ cppu::defaultBootstrap_InitialComponentContext(rtl::OUString const & iniUri)
                 "/singletons/" + i->first,
                 css::uno::makeAny(i->second[0]->info->name), true));
     }
-    cppu::add_access_control_entries(&context_values, bs);
+    cppu::add_access_control_entries(&context_values);
     assert(!context_values.empty());
     css::uno::Reference< css::uno::XComponentContext > context(
         createComponentContext(

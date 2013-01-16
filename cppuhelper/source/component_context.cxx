@@ -59,7 +59,6 @@
 #define SMGR_SINGLETON "/singletons/com.sun.star.lang.theServiceManager"
 #define TDMGR_SINGLETON "/singletons/com.sun.star.reflection.theTypeDescriptionManager"
 #define AC_SINGLETON "/singletons/com.sun.star.security.theAccessController"
-#define AC_POLICY "/singletons/com.sun.star.security.thePolicy"
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
 
@@ -694,7 +693,7 @@ void ComponentContext::disposing()
     ::fprintf( stderr, "> disposing context %p\n", this );
 #endif
 
-    Reference< lang::XComponent > xTDMgr, xAC, xPolicy; // to be disposed separately
+    Reference< lang::XComponent > xTDMgr, xAC; // to be disposed separately
 
     // dispose all context objects
     t_map::const_iterator iPos( m_map.begin() );
@@ -731,10 +730,6 @@ void ComponentContext::disposing()
                 {
                     xAC = xComp;
                 }
-                else if ( iPos->first == AC_POLICY )
-                {
-                    xPolicy = xComp;
-                }
                 else // dispose immediately
                 {
                     xComp->dispose();
@@ -748,8 +743,6 @@ void ComponentContext::disposing()
     m_xSMgr.clear();
     // dispose ac
     try_dispose( xAC );
-    // dispose policy
-    try_dispose( xPolicy );
     // dispose tdmgr; revokes callback from cppu runtime
     try_dispose( xTDMgr );
 

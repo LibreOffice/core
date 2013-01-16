@@ -472,6 +472,10 @@ AccessController::AccessController( Reference< XComponentContext > const & xComp
 {
     g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
 
+    // The .../mode value had originally been set in
+    // cppu::add_access_control_entries (cppuhelper/source/servicefactory.cxx)
+    // to something other than "off" depending on various UNO_AC* bootstrap
+    // variables that are no longer supported, so this is mostly dead code now:
     OUString mode;
     if (m_xComponentContext->getValueByName( OUSTR("/services/" SERVICE_NAME "/mode") ) >>= mode)
     {

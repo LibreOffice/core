@@ -28,13 +28,10 @@
 #include "sal/types.h"
 
 namespace cppu { struct ContextEntry_Init; }
-namespace rtl { class Bootstrap; }
 
 namespace cppu {
 
-void add_access_control_entries(
-    std::vector< cppu::ContextEntry_Init > * values,
-    rtl::Bootstrap const & bootstrap)
+void add_access_control_entries(std::vector< cppu::ContextEntry_Init > * values)
     SAL_THROW((com::sun::star::uno::Exception));
 
 }

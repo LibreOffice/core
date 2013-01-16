@@ -438,7 +438,10 @@ PolicyReader::~PolicyReader()
 void FilePolicy::refresh()
     throw (RuntimeException)
 {
-    // read out file
+    // read out file (the .../file-name value had originally been set in
+    // cppu::add_access_control_entries (cppuhelper/source/servicefactory.cxx)
+    // depending on various UNO_AC* bootstrap variables that are no longer
+    // supported, so this is effectively dead code):
     OUString fileName;
     m_xComponentContext->getValueByName(
         OUSTR("/implementations/" IMPL_NAME "/file-name") ) >>= fileName;
