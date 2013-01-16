@@ -419,7 +419,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
     Orientation eOrient = pRefPage->GetOrientation();
 
     SdPage* pNPage = GetSdPage(0, PK_NOTES);
-    Size aNSize(GetSdPage(0, PK_NOTES)->GetSize());
+    Size aNSize(pNPage->GetSize());
     sal_Int32 nNLeft  = pNPage->GetLftBorder();
     sal_Int32 nNRight = pNPage->GetRgtBorder();
     sal_Int32 nNUpper = pNPage->GetUppBorder();
