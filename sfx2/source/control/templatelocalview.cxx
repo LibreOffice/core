@@ -51,12 +51,6 @@ void TemplateLocalView::Populate ()
     {
         OUString aRegionName(mpDocTemplates->GetFullRegionName(i));
 
-        if ((sal_uInt32)aRegionName.getLength() > mpItemAttrs->nMaxTextLenght)
-        {
-            aRegionName = aRegionName.copy(0,mpItemAttrs->nMaxTextLenght-3);
-            aRegionName += "...";
-        }
-
         TemplateContainerItem* pItem = new TemplateContainerItem( *this );
         pItem->mnId = i+1;
         pItem->maTitle = aRegionName;
@@ -68,12 +62,6 @@ void TemplateLocalView::Populate ()
         {
             OUString aName = mpDocTemplates->GetName(i,j);
             OUString aURL = mpDocTemplates->GetPath(i,j);
-
-            if ((sal_uInt32)aName.getLength() > mpItemAttrs->nMaxTextLenght)
-            {
-                aName = aName.copy(0,mpItemAttrs->nMaxTextLenght-3);
-                aName += "...";
-            }
 
             TemplateItemProperties aProperties;;
             aProperties.nId = j+1;
@@ -161,12 +149,6 @@ sal_uInt16 TemplateLocalView::createRegion(const OUString &rName)
         return false;
 
     OUString aRegionName = rName;
-
-    if ((sal_uInt32)aRegionName.getLength() > mpItemAttrs->nMaxTextLenght)
-    {
-        aRegionName = aRegionName.copy(0,mpItemAttrs->nMaxTextLenght-3);
-        aRegionName += "...";
-    }
 
     TemplateContainerItem* pItem = new TemplateContainerItem( *this );
     pItem->mnId = nRegionId+1;
