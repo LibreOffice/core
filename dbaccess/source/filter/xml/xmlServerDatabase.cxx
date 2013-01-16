@@ -80,62 +80,49 @@ OXMLServerDatabase::OXMLServerDatabase( ODBFilter& rImport,
     }
     if ( !sType.isEmpty() )
     {
-        ::rtl::OUStringBuffer sURL;
+        OUStringBuffer sURL;
         if  ( sType == "sdbc:mysql:jdbc" || sType == "sdbc:mysqlc" || sType == "sdbc:mysql:mysqlc" )
         {
-            sURL.append( sType );
-            sURL.append( sal_Unicode( ':' ) );
-            sURL.append(sHostName);
+            sURL.append( sType + ":" + sHostName);
             if ( !sPortNumber.isEmpty() )
             {
-                sURL.appendAscii(":");
-                sURL.append(sPortNumber);
+                sURL.append(":" + sPortNumber);
             }
             if ( !sDatabaseName.isEmpty() )
             {
-                sURL.appendAscii("/");
-                sURL.append(sDatabaseName);
+                sURL.append("/" + sDatabaseName);
             }
         }
         else if ( sType == "jdbc:oracle:thin" )
         {
-            sURL.appendAscii("jdbc:oracle:thin:@");
-            sURL.append(sHostName);
+            sURL.append("jdbc:oracle:thin:@" + sHostName);
             if ( !sPortNumber.isEmpty() )
             {
-                sURL.appendAscii(":");
-                sURL.append(sPortNumber);
+                sURL.append(":" + sPortNumber);
             }
             if ( !sDatabaseName.isEmpty() )
             {
-                sURL.appendAscii(":");
-                sURL.append(sDatabaseName);
+                sURL.append(":" + sDatabaseName);
             }
         }
         else if ( sType == "sdbc:address:ldap" )
         {
-            sURL.appendAscii("sdbc:address:ldap:");
-            sURL.append(sHostName);
+            sURL.append("sdbc:address:ldap:" + sHostName);
             if ( !sPortNumber.isEmpty() )
             {
-                sURL.appendAscii(":");
-                sURL.append(sPortNumber);
+                sURL.append(":" + sPortNumber);
             }
         }
         else
         {
-            sURL.append(sType);
-            sURL.appendAscii(":");
-            sURL.append(sHostName);
+            sURL.append(sType + ":" + sHostName);
             if ( !sPortNumber.isEmpty() )
             {
-                sURL.appendAscii(":");
-                sURL.append(sPortNumber);
+                sURL.append(":" + sPortNumber);
             }
             if ( !sDatabaseName.isEmpty() )
             {
-                sURL.appendAscii(":");
-                sURL.append(sDatabaseName);
+                sURL.append(":" + sDatabaseName);
             }
         }
         try

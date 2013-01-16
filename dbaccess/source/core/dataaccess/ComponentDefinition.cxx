@@ -148,9 +148,9 @@ IMPLEMENT_IMPLEMENTATION_ID(OComponentDefinition);
 IMPLEMENT_GETTYPES3(OComponentDefinition,ODataSettings,OContentHelper,OComponentDefinition_BASE);
 IMPLEMENT_FORWARD_XINTERFACE3( OComponentDefinition,OContentHelper,ODataSettings,OComponentDefinition_BASE)
 
-::rtl::OUString OComponentDefinition::getImplementationName_static(  ) throw(RuntimeException)
+OUString OComponentDefinition::getImplementationName_static(  ) throw(RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.dba.OComponentDefinition"));
+    return OUString("com.sun.star.comp.dba.OComponentDefinition");
 }
 
 ::rtl::OUString SAL_CALL OComponentDefinition::getImplementationName(  ) throw(RuntimeException)
@@ -162,7 +162,7 @@ Sequence< ::rtl::OUString > OComponentDefinition::getSupportedServiceNames_stati
 {
     Sequence< ::rtl::OUString > aServices(2);
     aServices.getArray()[0] = SERVICE_SDB_TABLEDEFINITION;
-    aServices.getArray()[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.Content"));
+    aServices.getArray()[1] = ::rtl::OUString("com.sun.star.ucb.Content");
 
     return aServices;
 }
@@ -208,8 +208,8 @@ Reference< XPropertySetInfo > SAL_CALL OComponentDefinition::getPropertySetInfo(
 ::rtl::OUString OComponentDefinition::determineContentType() const
 {
     return m_bTable
-        ?   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.org.openoffice.DatabaseTable" ) )
-        :   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.org.openoffice.DatabaseCommandDefinition" ) );
+        ?   ::rtl::OUString( "application/vnd.org.openoffice.DatabaseTable" )
+        :   ::rtl::OUString( "application/vnd.org.openoffice.DatabaseCommandDefinition" );
 }
 
 Reference< XNameAccess> OComponentDefinition::getColumns() throw (RuntimeException)

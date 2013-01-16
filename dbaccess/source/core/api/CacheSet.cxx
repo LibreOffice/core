@@ -156,14 +156,12 @@ void OCacheSet::fillTableName(const Reference<XPropertySet>& _xTable)  throw(SQL
 void SAL_CALL OCacheSet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::insertRow" );
-    ::rtl::OUStringBuffer aSql(::rtl::OUString("INSERT INTO "));
+    OUStringBuffer aSql("INSERT INTO " + m_aComposedTableName + " ( ");
     Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
     fillTableName(xSet);
 
-    aSql.append(m_aComposedTableName);
-    aSql.append(::rtl::OUString(" ( "));
     // set values and column names
-    ::rtl::OUStringBuffer aValues = ::rtl::OUString(" VALUES ( ");
+    ::rtl::OUStringBuffer aValues(" VALUES ( ");
     static ::rtl::OUString aPara("?,");
     ::rtl::OUString aQuote = getIdentifierQuoteString();
     static ::rtl::OUString aComma(",");
@@ -172,8 +170,7 @@ void SAL_CALL OCacheSet::insertRow( const ORowSetRow& _rInsertRow,const connecti
     connectivity::ORowVector< ORowSetValue > ::Vector::iterator aEnd = _rInsertRow->get().end();
     for(; aIter != aEnd;++aIter)
     {
-        aSql.append(::dbtools::quoteName( aQuote,m_xSetMetaData->getColumnName(i++)));
-        aSql.append(aComma);
+        aSql.append(::dbtools::quoteName( aQuote,m_xSetMetaData->getColumnName(i++)) + aComma);
         aValues.append(aPara);
     }
 
@@ -280,8 +277,7 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
         }
         if(aIter->isModified())
         {
-            _sParameter.append(::dbtools::quoteName( aQuote,aColumnName));
-            _sParameter.append(aPara);
+            _sParameter.append(::dbtools::quoteName( aQuote,aColumnName) + aPara);
         }
     }
 }
@@ -292,9 +288,7 @@ void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetR
     Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
     fillTableName(xSet);
 
-    ::rtl::OUStringBuffer aSql = ::rtl::OUString("UPDATE ");
-    aSql.append(m_aComposedTableName);
-    aSql.append(::rtl::OUString(" SET "));
+    OUStringBuffer aSql("UPDATE " + m_aComposedTableName + " SET ");
     // list all cloumns that should be set
 
     ::rtl::OUStringBuffer aCondition;
@@ -305,8 +299,7 @@ void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetR
     {
         aCondition.setLength(aCondition.getLength()-5);
 
-        aSql.append(::rtl::OUString(" WHERE "));
-        aSql.append(aCondition.makeStringAndClear());
+        aSql.append(" WHERE " + aCondition.makeStringAndClear());
     }
     else
         ::dbtools::throwSQLException(
@@ -340,9 +333,7 @@ void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connecti
     Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
     fillTableName(xSet);
 
-    ::rtl::OUStringBuffer aSql = ::rtl::OUString("DELETE FROM ");
-    aSql.append(m_aComposedTableName);
-    aSql.append(::rtl::OUString(" WHERE "));
+    OUStringBuffer aSql("DELETE FROM " + m_aComposedTableName + " WHERE ");
 
     // list all cloumns that should be set
     ::rtl::OUString aQuote  = getIdentifierQuoteString();

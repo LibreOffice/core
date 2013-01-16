@@ -160,9 +160,9 @@ namespace dbaui
             aArguments[1] >>= xRowSet;
             Reference<com::sun::star::awt::XWindow> xParentWindow;
             aArguments[2] >>= xParentWindow;
-            setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "QueryComposer" ) ), makeAny( xQueryComposer ) );
-            setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RowSet" ) ),        makeAny( xRowSet ) );
-            setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ) ),  makeAny( xParentWindow ) );
+            setPropertyValue( "QueryComposer", makeAny( xQueryComposer ) );
+            setPropertyValue( "RowSet",        makeAny( xRowSet ) );
+            setPropertyValue( "ParentWindow",  makeAny( xParentWindow ) );
         }
         else
             ComposerDialog::initialize(aArguments);
@@ -204,8 +204,8 @@ namespace dbaui
             aArguments[0] >>= xQueryComposer;
             Reference<com::sun::star::beans::XPropertySet> xRowSet;
             aArguments[1] >>= xRowSet;
-            setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "QueryComposer" ) ), makeAny( xQueryComposer ) );
-            setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RowSet" ) ),        makeAny( xRowSet ) );
+            setPropertyValue( "QueryComposer", makeAny( xQueryComposer ) );
+            setPropertyValue( "RowSet",        makeAny( xRowSet ) );
         }
         else
             ComposerDialog::initialize(aArguments);
