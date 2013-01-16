@@ -921,7 +921,6 @@ sal_uInt16 SvxBorderTabPage::GetPresetStringId( sal_uInt16 nValueSetIdx ) const
 void SvxBorderTabPage::FillPresetVS()
 {
     ImageList& rImgList = aBorderImgLst;
-    Size aImgSize( rImgList.GetImage( IID_PRE_CELL_NONE ).GetSizePixel() );
 
     // basic initialization of the ValueSet
     m_pWndPresets->SetStyle( m_pWndPresets->GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER );
@@ -945,7 +944,6 @@ void SvxBorderTabPage::FillPresetVS()
 void SvxBorderTabPage::FillShadowVS()
 {
     ImageList& rImgList = aShadowImgLst;
-    Size aImgSize( rImgList.GetImage( IID_SHADOWNONE ).GetSizePixel() );
 
     // basic initialization of the ValueSet
     m_pWndShadows->SetStyle( m_pWndShadows->GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER );
