@@ -1996,13 +1996,13 @@ SvxNumType SdrModel::GetPageNumType() const
 const SdrPage* SdrModel::GetPage(sal_uInt16 nPgNum) const
 {
     DBG_ASSERT(nPgNum < maPages.size(), "SdrModel::GetPage: Access out of range (!)");
-    return maPages[nPgNum];
+    return nPgNum < maPages.size() ? maPages[nPgNum] : NULL;
 }
 
 SdrPage* SdrModel::GetPage(sal_uInt16 nPgNum)
 {
     DBG_ASSERT(nPgNum < maPages.size(), "SdrModel::GetPage: Access out of range (!)");
-    return maPages[nPgNum];
+    return nPgNum < maPages.size() ? maPages[nPgNum] : NULL;
 }
 
 sal_uInt16 SdrModel::GetPageCount() const
