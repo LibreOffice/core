@@ -77,9 +77,8 @@ SvxShowCharSet::SvxShowCharSet(Window* pParent)
 void SvxShowCharSet::init()
 {
     nSelectedIndex = -1;    // TODO: move into init list when it is no longer static
-
-    aOrigSize = GetOutputSizePixel();
-    aOrigPos = GetPosPixel();
+    m_nXGap = 0;
+    m_nYGap = 0;
 
     SetStyle( GetStyle() | WB_CLIPCHILDREN );
     aVscrollSB.SetScrollHdl( LINK( this, SvxShowCharSet, VscrollHdl ) );
@@ -91,11 +90,7 @@ void SvxShowCharSet::init()
 
 void SvxShowCharSet::Resize()
 {
-    aOrigSize = GetOutputSizePixel();
-    aOrigPos = GetPosPixel();
-
     Control::Resize();
-
     SetFont(GetFont()); //force recalculation of correct fontsize
 }
 
@@ -252,14 +247,14 @@ inline Point SvxShowCharSet::MapIndexToPixel( int nIndex ) const
     const int nBase = FirstInView();
     int x = ((nIndex - nBase) % COLUMN_COUNT) * nX;
     int y = ((nIndex - nBase) / COLUMN_COUNT) * nY;
-    return Point( x, y );
+    return Point( x + m_nXGap, y + m_nYGap );
 }
 // -----------------------------------------------------------------------------
 
 int SvxShowCharSet::PixelToMapIndex( const Point& point) const
 {
     int nBase = FirstInView();
-    return (nBase + (point.X()/nX) + (point.Y()/nY) * COLUMN_COUNT);
+    return (nBase + ((point.X() - m_nXGap)/nX) + ((point.Y() - m_nYGap)/nY) * COLUMN_COUNT);
 }
 
 // -----------------------------------------------------------------------
@@ -342,7 +337,37 @@ void SvxShowCharSet::DeSelect()
 {
     DrawChars_Impl(nSelectedIndex,nSelectedIndex);
 }
-// -----------------------------------------------------------------------
+
+// stretch a grid rectangle if its at the edge to fill unused space
+Rectangle SvxShowCharSet::getGridRectangle(const Point &rPointUL, const Size &rOutputSize)
+{
+    long x = rPointUL.X() - 1;
+    long y = rPointUL.Y() - 1;
+    Point aPointUL(x+1, y+1);
+    Size aGridSize(nX-1, nY-1);
+
+    long nXDistFromLeft = x - m_nXGap;
+    if (nXDistFromLeft <= 1)
+    {
+        aPointUL.X() = 1;
+        aGridSize.Width() += m_nXGap + nXDistFromLeft;
+    }
+    long nXDistFromRight = rOutputSize.Width() - m_nXGap - nX - x;
+    if (nXDistFromRight <= 1)
+        aGridSize.Width() += m_nXGap + nXDistFromRight;
+
+    long nXDistFromTop = y - m_nYGap;
+    if (nXDistFromTop <= 1)
+    {
+        aPointUL.Y() = 1;
+        aGridSize.Height() += m_nYGap + nXDistFromTop;
+    }
+    long nXDistFromBottom = rOutputSize.Height() - m_nYGap - nY - y;
+    if (nXDistFromBottom <= 1)
+        aGridSize.Height() += m_nYGap + nXDistFromBottom;
+
+    return Rectangle(aPointUL, aGridSize);
+}
 
 void SvxShowCharSet::DrawChars_Impl( int n1, int n2 )
 {
@@ -350,14 +375,14 @@ void SvxShowCharSet::DrawChars_Impl( int n1, int n2 )
         return;
 
     Size aOutputSize = GetOutputSizePixel();
-    if( aVscrollSB.IsVisible() )
-        aOutputSize.setWidth( aOutputSize.Width() - SBWIDTH );
+    if (aVscrollSB.IsVisible())
+        aOutputSize.Width() -= SBWIDTH;
 
     int i;
     for ( i = 1; i < COLUMN_COUNT; ++i )
-        DrawLine( Point( nX * i, 0 ), Point( nX * i, aOutputSize.Height() ) );
+        DrawLine( Point( nX * i + m_nXGap, 0 ), Point( nX * i + m_nXGap, aOutputSize.Height() ) );
     for ( i = 1; i < ROW_COUNT; ++i )
-        DrawLine( Point( 0, nY * i ), Point( aOutputSize.Width(), nY * i ) );
+        DrawLine( Point( 0, nY * i + m_nYGap ), Point( aOutputSize.Width(), nY * i + m_nYGap) );
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     const Color aWindowTextColor( rStyleSettings.GetFieldTextColor() );
@@ -427,7 +452,7 @@ void SvxShowCharSet::DrawChars_Impl( int n1, int n2 )
             if( HasFocus() )
             {
                 SetFillColor( aHighlightColor );
-                DrawRect( Rectangle( aPointUL, Size(nX-1,nY-1) ) );
+                DrawRect( getGridRectangle(aPointUL, aOutputSize) );
 
                 SetTextColor( aHighlightTextColor );
                 DrawText( aPointTxTy, aCharStr );
@@ -435,7 +460,7 @@ void SvxShowCharSet::DrawChars_Impl( int n1, int n2 )
             else
             {
                 SetFillColor( aFaceColor );
-                DrawRect( Rectangle( aPointUL, Size( nX-1, nY-1) ) );
+                DrawRect( getGridRectangle(aPointUL, aOutputSize) );
 
                 SetLineColor( aLightColor );
                 DrawLine( aPointUL, Point( x+nX-1, y+1) );
@@ -497,42 +522,39 @@ void SvxShowCharSet::SetFont( const Font& rFont )
     if( nSelectedIndex >= 0 )
         getSelectedChar() = maFontCharMap.GetCharFromIndex( nSelectedIndex );
 
+    Size aSize = GetOutputSizePixel();
+    aSize.Width() -= SBWIDTH;
+
     Font aFont = rFont;
     aFont.SetWeight( WEIGHT_LIGHT );
     aFont.SetAlign( ALIGN_TOP );
-    int nFontHeight = (aOrigSize.Height() - 5) * 2 / (3 * ROW_COUNT);
+    int nFontHeight = (aSize.Height() - 5) * 2 / (3 * ROW_COUNT);
     aFont.SetSize( PixelToLogic( Size( 0, nFontHeight ) ) );
     aFont.SetTransparent( sal_True );
     Control::SetFont( aFont );
     GetFontCharMap( maFontCharMap );
 
-    // hide scrollbar when there is nothing to scroll
-    sal_Bool bNeedVscroll = (maFontCharMap.GetCharCount() > ROW_COUNT*COLUMN_COUNT);
+    nX = aSize.Width() / COLUMN_COUNT;
+    nY = aSize.Height() / ROW_COUNT;
 
-    nX = (aOrigSize.Width() - (bNeedVscroll ? SBWIDTH : 0)) / COLUMN_COUNT;
-    nY = aOrigSize.Height() / ROW_COUNT;
-
-    if( bNeedVscroll)
-    {
-        aVscrollSB.setPosSizePixel( nX * COLUMN_COUNT, 0, SBWIDTH, nY * ROW_COUNT );
-        aVscrollSB.SetRangeMin( 0 );
-        int nLastRow = (maFontCharMap.GetCharCount() - 1 + COLUMN_COUNT) / COLUMN_COUNT;
-        aVscrollSB.SetRangeMax( nLastRow );
-        aVscrollSB.SetPageSize( ROW_COUNT-1 );
-        aVscrollSB.SetVisibleSize( ROW_COUNT );
-    }
+    aVscrollSB.setPosSizePixel( aSize.Width(), 0, SBWIDTH, aSize.Height() );
+    aVscrollSB.SetRangeMin( 0 );
+    int nLastRow = (maFontCharMap.GetCharCount() - 1 + COLUMN_COUNT) / COLUMN_COUNT;
+    aVscrollSB.SetRangeMax( nLastRow );
+    aVscrollSB.SetPageSize( ROW_COUNT-1 );
+    aVscrollSB.SetVisibleSize( ROW_COUNT );
 
     // restore last selected unicode
     int nMapIndex = maFontCharMap.GetIndexFromChar( getSelectedChar() );
     SelectIndex( nMapIndex );
 
-    // rearrange CharSet element in sync with nX- and nY-multiples
-    Size aNewSize( nX * COLUMN_COUNT + (bNeedVscroll ? SBWIDTH : 0), nY * ROW_COUNT );
-    Point aNewPos = aOrigPos + Point( (aOrigSize.Width() - aNewSize.Width()) / 2, 0 );
-    SetPosPixel( aNewPos );
-    SetOutputSizePixel( aNewSize );
+    aVscrollSB.Show();
 
-    aVscrollSB.Show( bNeedVscroll );
+    // rearrange CharSet element in sync with nX- and nY-multiples
+    Size aDrawSize(nX * COLUMN_COUNT, nY * ROW_COUNT);
+    m_nXGap = (aSize.Width() - aDrawSize.Width()) / 2;
+    m_nYGap = (aSize.Height() - aDrawSize.Height()) / 2;
+
     Invalidate();
 }
 
@@ -589,7 +611,10 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, sal_Bool bFocus )
 
         Point aOldPixel = MapIndexToPixel( nSelectedIndex );
         aOldPixel.Move( +1, +1);
-        DrawRect( Rectangle( aOldPixel, Size( nX-1, nY-1 ) ) );
+        Size aOutputSize = GetOutputSizePixel();
+        if (aVscrollSB.IsVisible())
+            aOutputSize.Width() -= SBWIDTH;
+        DrawRect( getGridRectangle(aOldPixel, aOutputSize) );
         SetLineColor( aLineCol );
         SetFillColor( aFillCol );
 

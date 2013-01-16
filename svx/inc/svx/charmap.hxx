@@ -109,14 +109,14 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > m_xAccessible;
     long            nX;
     long            nY;
+    long            m_nXGap;
+    long            m_nYGap;
     sal_Bool            bDrag;
 
     sal_Int32       nSelectedIndex;
 
     FontCharMap     maFontCharMap;
     ScrollBar       aVscrollSB;
-    Size            aOrigSize;
-    Point           aOrigPos;
 
 private:
     void            DrawChars_Impl( int n1, int n2);
@@ -126,6 +126,7 @@ private:
     DECL_LINK(VscrollHdl, void *);
 
     void            init();
+    Rectangle       getGridRectangle(const Point &rPointUL, const Size &rOutputSize);
 };
 
 #endif
