@@ -162,7 +162,6 @@ struct TabDlg_Impl
 {
     sal_Bool                bModified       : 1,
                         bModal          : 1,
-                        bInOK           : 1,
                         bHideResetBtn   : 1;
     SfxTabDlgData_Impl* pData;
 
@@ -172,7 +171,6 @@ struct TabDlg_Impl
 
         bModified       ( sal_False ),
         bModal          ( sal_True ),
-        bInOK           ( sal_False ),
         bHideResetBtn   ( sal_False ),
         pData           ( new SfxTabDlgData_Impl( nCnt ) ),
         pController     ( NULL )
@@ -1073,8 +1071,6 @@ short SfxTabDialog::Ok()
 {
     SavePosAndId(); //See fdo#38828 "Apply" resetting window position
 
-    pImpl->bInOK = sal_True;
-
     if ( !pOutSet )
     {
         if ( !pExampleSet && pSet )
@@ -1173,8 +1169,6 @@ IMPL_LINK_NOARG(SfxTabDialog, OkHdl)
 */
 
 {
-    pImpl->bInOK = sal_True;
-
     if (PrepareLeaveCurrentPage())
     {
         if ( pImpl->bModal )
