@@ -51,6 +51,7 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <set>
 #include <boost/shared_ptr.hpp>
 #include <boost/bind.hpp>
@@ -61,7 +62,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
-using ::rtl::OUString;
 using namespace ::std;
 
 typedef ::std::pair< TextRangeList_t * const, SwTxtAttr const * const > PortionList_t;
@@ -226,7 +226,7 @@ sal_Bool
 SwXTextPortionEnumeration::supportsService(const OUString& rServiceName)
 throw( RuntimeException )
 {
-    return rServiceName == "com.sun.star.text.TextPortionEnumeration";
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SwXTextPortionEnumeration::getSupportedServiceNames()

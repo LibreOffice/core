@@ -68,6 +68,7 @@
 #include <numrule.hxx>
 
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <boost/shared_ptr.hpp>
 
@@ -104,7 +105,6 @@ const IStyleAccess::SwAutoStyleFamily aAutoStyleByIndex[] =
 };
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 //convert FN_... to RES_ in header and footer itemset
 static sal_uInt16 lcl_ConvertFNToRES(sal_uInt16 nFNId)
@@ -193,7 +193,7 @@ OUString SwXStyleFamilies::getImplementationName(void) throw( uno::RuntimeExcept
 
 sal_Bool SwXStyleFamilies::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    return rServiceName == "com.sun.star.style.StyleFamilies";
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SwXStyleFamilies::getSupportedServiceNames(void) throw( uno::RuntimeException )
@@ -442,7 +442,7 @@ OUString SwXStyleFamily::getImplementationName(void) throw( uno::RuntimeExceptio
 
 sal_Bool SwXStyleFamily::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    return rServiceName == "com.sun.star.style.StyleFamily";
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SwXStyleFamily::getSupportedServiceNames(void) throw( uno::RuntimeException )
@@ -1192,22 +1192,7 @@ OUString SwXStyle::getImplementationName(void) throw( uno::RuntimeException )
 
 sal_Bool SwXStyle::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    sal_Bool bRet = rServiceName == "com.sun.star.style.Style";
-    if(!bRet && SFX_STYLE_FAMILY_CHAR == eFamily)
-        bRet = !rServiceName.compareToAscii("com.sun.star.style.CharacterStyle")||
-               !rServiceName.compareToAscii("com.sun.star.style.CharacterProperties")||
-               !rServiceName.compareToAscii("com.sun.star.style.CharacterPropertiesAsian")||
-               !rServiceName.compareToAscii("com.sun.star.style.CharacterPropertiesComplex");
-    if(!bRet && SFX_STYLE_FAMILY_PARA == eFamily)
-        bRet = (rServiceName == "com.sun.star.style.ParagraphStyle")||
-               (rServiceName == "com.sun.star.style.ParagraphProperties") ||
-               (rServiceName == "com.sun.star.style.ParagraphPropertiesAsian") ||
-               (rServiceName == "com.sun.star.style.ParagraphPropertiesComplex");
-    if(!bRet && SFX_STYLE_FAMILY_PAGE == eFamily)
-        bRet = (rServiceName == "com.sun.star.style.PageStyle")||
-               (rServiceName == "com.sun.star.style.PageProperties");
-
-    return  bRet;
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SwXStyle::getSupportedServiceNames(void) throw( uno::RuntimeException )

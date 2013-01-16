@@ -33,9 +33,9 @@
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 class SwSearchProperties_Impl
 {
@@ -692,8 +692,7 @@ OUString SwXTextSearch::getImplementationName(void) throw( uno::RuntimeException
 
 sal_Bool SwXTextSearch::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    return rServiceName == "com.sun.star.util.SearchDescriptor" ||
-            rServiceName == "com.sun.star.util.ReplaceDescriptor";
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SwXTextSearch::getSupportedServiceNames(void) throw( uno::RuntimeException )

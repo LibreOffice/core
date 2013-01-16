@@ -42,10 +42,10 @@
 #include <com/sun/star/beans/GetPropertyTolerantResult.hpp>
 #include <com/sun/star/beans/TolerantPropertySetResultType.hpp>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 /******************************************************************
  * SwXTextPortion
@@ -918,24 +918,7 @@ throw( uno::RuntimeException )
 
 sal_Bool SwXTextPortion::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    SolarMutexGuard aGuard;
-    SwUnoCrsr* pUnoCrsr = GetCursor();
-    if(!pUnoCrsr)
-        throw uno::RuntimeException();
-
-    sal_Bool bRet = sal_False;
-    if(!rServiceName.compareToAscii("com.sun.star.text.TextPortion") ||
-            !rServiceName.compareToAscii("com.sun.star.style.CharacterProperties") ||
-            !rServiceName.compareToAscii("com.sun.star.style.CharacterPropertiesAsian") ||
-            !rServiceName.compareToAscii("com.sun.star.style.CharacterPropertiesComplex") ||
-            !rServiceName.compareToAscii("com.sun.star.style.ParagraphProperties") ||
-            !rServiceName.compareToAscii("com.sun.star.style.ParagraphPropertiesAsian") ||
-            !rServiceName.compareToAscii("com.sun.star.style.ParagraphPropertiesComplex"))
-    {
-        bRet = sal_True;
-    }
-
-    return bRet;
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SwXTextPortion::getSupportedServiceNames()

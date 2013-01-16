@@ -96,9 +96,9 @@
 #include <switerator.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 using ::editeng::SvxBorderLine;
 
 // from swtable.cxx
@@ -1253,8 +1253,7 @@ OUString SwXCell::getImplementationName(void) throw( uno::RuntimeException )
 
 sal_Bool SwXCell::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    String sServiceName(rServiceName);
-    return sServiceName.EqualsAscii("com.sun.star.text.CellProperties");
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SwXCell::getSupportedServiceNames(void) throw( uno::RuntimeException )
@@ -1275,7 +1274,7 @@ OUString SwXTextTableRow::getImplementationName(void) throw( uno::RuntimeExcepti
 
 sal_Bool SwXTextTableRow::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    return rServiceName == "com.sun.star.text.TextTableRow";
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SwXTextTableRow::getSupportedServiceNames(void) throw( uno::RuntimeException )
@@ -1462,7 +1461,7 @@ OUString SwXTextTableCursor::getImplementationName(void) throw( uno::RuntimeExce
 
 sal_Bool SwXTextTableCursor::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    return rServiceName == "com.sun.star.text.TextTableCursor";
+    return cppu::supportsService(this, rServiceName);
 }
 
 IMPLEMENT_FORWARD_XINTERFACE2(SwXTextTableCursor,SwXTextTableCursor_Base,OTextCursorHelper)
@@ -3613,11 +3612,7 @@ OUString SAL_CALL SwXTextTable::getImplementationName(void) throw( uno::RuntimeE
 
 sal_Bool SwXTextTable::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    String sServiceName(rServiceName);
-    return (sServiceName.EqualsAscii("com.sun.star.document.LinkTarget")  ||
-            sServiceName.EqualsAscii("com.sun.star.text.TextTable")  ||
-            sServiceName.EqualsAscii("com.sun.star.text.TextContent") ||
-            sServiceName.EqualsAscii("com.sun.star.text.TextSortable"));
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SwXTextTable::getSupportedServiceNames(void) throw( uno::RuntimeException )
@@ -3662,11 +3657,7 @@ OUString SwXCellRange::getImplementationName(void) throw( uno::RuntimeException 
 
 sal_Bool SwXCellRange::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    return
-        rServiceName == "com.sun.star.text.CellRange" || rServiceName == "com.sun.star.style.CharacterProperties"
-     || rServiceName == "com.sun.star.style.CharacterPropertiesAsian" || rServiceName == "com.sun.star.style.CharacterPropertiesComplex"
-     || rServiceName == "com.sun.star.style.ParagraphProperties" || rServiceName == "com.sun.star.style.ParagraphPropertiesAsian"
-     || rServiceName == "com.sun.star.style.ParagraphPropertiesComplex";
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SwXCellRange::getSupportedServiceNames(void) throw( uno::RuntimeException )
@@ -4622,7 +4613,7 @@ OUString SwXTableRows::getImplementationName(void) throw( uno::RuntimeException 
 
 sal_Bool SwXTableRows::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    return rServiceName == "com.sun.star.text.TableRows";
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SwXTableRows::getSupportedServiceNames(void) throw( uno::RuntimeException )
@@ -4838,7 +4829,7 @@ OUString SwXTableColumns::getImplementationName(void) throw( uno::RuntimeExcepti
 
 sal_Bool SwXTableColumns::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    return rServiceName == "com.sun.star.text.TableColumns";
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SwXTableColumns::getSupportedServiceNames(void) throw( uno::RuntimeException )

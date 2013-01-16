@@ -65,17 +65,15 @@
 #include <com/sun/star/text/LabelFollow.hpp>
 #include <numrule.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <paratr.hxx>
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::style;
-
-using rtl::OUString;
 
 struct PropValData
 {
@@ -294,7 +292,7 @@ OUString SwXFootnoteProperties::getImplementationName(void) throw( RuntimeExcept
 
 sal_Bool SwXFootnoteProperties::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return rServiceName == "com.sun.star.text.FootnoteSettings";
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SwXFootnoteProperties::getSupportedServiceNames(void) throw( RuntimeException )
@@ -604,7 +602,7 @@ OUString SwXEndnoteProperties::getImplementationName(void) throw( RuntimeExcepti
 
 sal_Bool SwXEndnoteProperties::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return rServiceName == "com.sun.star.text.FootnoteSettings";
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SwXEndnoteProperties::getSupportedServiceNames(void) throw( RuntimeException )
@@ -835,7 +833,7 @@ OUString SwXLineNumberingProperties::getImplementationName(void) throw( RuntimeE
 
 sal_Bool SwXLineNumberingProperties::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return rServiceName == "com.sun.star.text.LineNumberingProperties";
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SwXLineNumberingProperties::getSupportedServiceNames(void) throw( RuntimeException )
@@ -1148,7 +1146,7 @@ OUString SwXNumberingRules::getImplementationName(void) throw( RuntimeException 
 
 sal_Bool SwXNumberingRules::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return rServiceName == "com.sun.star.text.NumberingRules";
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SwXNumberingRules::getSupportedServiceNames(void) throw( RuntimeException )
@@ -2335,9 +2333,7 @@ OUString SwXChapterNumbering::getImplementationName(void) throw( RuntimeExceptio
 
 sal_Bool SwXChapterNumbering::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    String sServiceName(rServiceName);
-    return sServiceName.EqualsAscii("com.sun.star.text.ChapterNumbering") ||
-            sServiceName.EqualsAscii("com.sun.star.text.NumberingRules");
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SwXChapterNumbering::getSupportedServiceNames(void) throw( RuntimeException )
@@ -2368,7 +2364,7 @@ OUString SwXTextColumns::getImplementationName(void) throw( RuntimeException )
 
 sal_Bool SwXTextColumns::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return rServiceName == "com.sun.star.text.TextColumns";
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SwXTextColumns::getSupportedServiceNames(void) throw( RuntimeException )
