@@ -781,9 +781,7 @@ void OCommonEmbeddedObject::StoreDocToStorage_Impl( const uno::Reference< embed:
         OSL_ENSURE( xTempIn.is(), "The stream reference can not be empty!\n" );
 
         // open storage based on document temporary file for reading
-        uno::Reference < lang::XSingleServiceFactory > xStorageFactory(
-                    m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.embed.StorageFactory", m_xContext),
-                    uno::UNO_QUERY );
+        uno::Reference < lang::XSingleServiceFactory > xStorageFactory = embed::StorageFactory::create(m_xContext);
 
         uno::Sequence< uno::Any > aArgs(1);
         aArgs[0] <<= xTempIn;
