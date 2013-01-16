@@ -49,6 +49,8 @@ public:
 
     virtual void    Resize();
 
+    virtual Size    GetOptimalSize(WindowSizeType eType) const;
+
 protected:
     virtual void    Paint( const Rectangle& );
 
@@ -89,6 +91,8 @@ private:
     DECL_LINK(CharHighlightHdl, void *);
     DECL_LINK(CharPreSelectHdl, void *);
     DECL_LINK(DeleteHdl, void *);
+
+    void fillAllSubsets(ListBox &rListBox);
 
 public:
                     SvxCharacterMap( Window* pParent, sal_Bool bOne=sal_True, const SfxItemSet* pSet=0 );
