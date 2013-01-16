@@ -47,7 +47,7 @@ public:
     AlphaMask( const Bitmap& rBitmap );
     AlphaMask( const AlphaMask& rAlphaMask );
     AlphaMask( const Size& rSizePixel, sal_uInt8* pEraseTransparency = NULL );
-    ~AlphaMask();
+    virtual ~AlphaMask();
 
     AlphaMask&  operator=( const Bitmap& rBitmap );
     AlphaMask&  operator=( const AlphaMask& rAlphaMask )

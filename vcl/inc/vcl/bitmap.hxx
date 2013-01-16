@@ -379,7 +379,7 @@ public:
     Bitmap( const Size& rSizePixel, sal_uInt16 nBitCount, const BitmapPalette* pPal = NULL );
     Bitmap( const ResId& rResId );
     Bitmap( SalBitmap* pSalBitmap );
-    ~Bitmap();
+    virtual ~Bitmap();
 
     Bitmap&                 operator=( const Bitmap& rBitmap );
     inline sal_Bool             operator!() const;
