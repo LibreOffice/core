@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "AAAATH///w8\u003d",
+        "filename": "formula/inc/formula/opcode.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-16T17:48:21Z",
+      "side": 1,
+      "message": "Ah, sorry, the one parameter condition slipped my attention. Yes, you are right, keep it here.",
+      "parentUuid": "AAAATH///yU\u003d",
+      "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAATH///2c\u003d",
         "filename": "sc/qa/unit/ucalc.cxx",
         "patchSetId": 2
@@ -346,6 +364,24 @@
       "side": 1,
       "message": "I don\u0027t understand what you mean. It looks as if there is a difference of interpretation: I regard the groupseparator as one separator consisting of 0..n characters and I understand from your comment that the groupseparator can be a set of o..n different separators.\nI think/thought that the indexOf function searches for a string (aGroupSeparator), not for just a character.\nCould you please verify/explain the definition of groupseparator in NUMBERVALUE?",
       "parentUuid": "AAAATH///3k\u003d",
+      "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH///w4\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3268,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-16T17:48:21Z",
+      "side": 1,
+      "message": "GroupSeparator is a sequence of characters that shall be regarded as group separators. I agree the wording in ODFF is not clear enough about this. So, the check needs to iterate over all characters in GroupSeparator, using OUString::iterateCodePoint() and constructing an OUString of the sal_uInt32 value obtained, and for each of these use indexOf() and replace occurrences. Note also that the replacement must not be done over the entire input string, but only up to the first occurrence of DecimalSeparator.",
+      "parentUuid": "AAAATH///1c\u003d",
       "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
