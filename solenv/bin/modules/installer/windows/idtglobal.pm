@@ -662,6 +662,7 @@ sub get_language_string_from_language_block
         if ( ${$language_block}[$i] =~ /^\s*$language\s*\=\s*\"(.*)\"\s*$/ )
         {
             $newstring = $1;
+            $newstring =~ s/\\\"/\"/g; #un-escape quotes, fdo#59321
             last;
         }
     }
