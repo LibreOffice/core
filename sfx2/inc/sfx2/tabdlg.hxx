@@ -219,13 +219,9 @@ public:
     void                SetApplyHandler(const Link& _rHdl);
 
     SAL_DLLPRIVATE void Start_Impl();
-    bool OK_Impl()
-    {
-        bool bRet = PrepareLeaveCurrentPage();
-        if (bRet)
-            Ok();
-        return bRet;
-    }
+
+    //calls Ok without closing dialog
+    bool Apply();
 };
 
 namespace sfx { class ItemConnectionBase; }

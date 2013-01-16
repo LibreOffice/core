@@ -1175,7 +1175,7 @@ IMPL_LINK_NOARG(SfxTabDialog, OkHdl)
 {
     pImpl->bInOK = sal_True;
 
-    if ( OK_Impl() )
+    if (PrepareLeaveCurrentPage())
     {
         if ( pImpl->bModal )
             EndDialog( Ok() );
@@ -1186,6 +1186,14 @@ IMPL_LINK_NOARG(SfxTabDialog, OkHdl)
         }
     }
     return 0;
+}
+
+bool SfxTabDialog::Apply()
+{
+    bool bApplied = false;
+    if (PrepareLeaveCurrentPage())
+         bApplied = (Ok() == RET_OK);
+    return bApplied;
 }
 
 // -----------------------------------------------------------------------
