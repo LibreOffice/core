@@ -7541,8 +7541,15 @@ else
             PYTHON_CFLAGS="-I/Developer/SDKs/MacOSX${with_macosx_sdk}.sdk/System/Library/Frameworks/Python.framework/Versions/${python_version}/include/python${python_version}"
             PYTHON_LIBS="-framework Python"
         else
-            # This causes an error if no python command is found
-            AM_PATH_PYTHON([3.3])
+            # This allows a lack of system Python 3.3 with no error, we check below for a system Python of
+            # earlier version.
+            AM_PATH_PYTHON([3.3],, [:])
+            if test "$PYTHON" = :; then
+                # Unset variables set by the above AM_PATH_PYTHON so that we acutally do check anew
+                unset PYTHON am_cv_pathless_PYTHON ac_cv_path_PYTHON
+                # This causes an error if no python command is found
+                AM_PATH_PYTHON([2.6])
+            fi
         fi
     elif test $enable_python = auto; then
         # We should not come here in a MSVC build, I think?
