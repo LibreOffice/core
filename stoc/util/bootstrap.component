@@ -43,6 +43,7 @@
   </implementation>
   <implementation name="com.sun.star.comp.stoc.TypeDescriptionManager">
     <service name="com.sun.star.reflection.TypeDescriptionManager"/>
+    <singleton name="com.sun.star.reflection.theTypeDescriptionManager"/>
   </implementation>
   <implementation name="com.sun.star.security.comp.stoc.AccessController">
     <service name="com.sun.star.security.AccessController"/>

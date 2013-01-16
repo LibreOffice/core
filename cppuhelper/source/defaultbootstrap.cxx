@@ -88,12 +88,6 @@ cppu::defaultBootstrap_InitialComponentContext(rtl::OUString const & iniUri)
             false));
     context_values.push_back( //TODO: from services.rdb?
         cppu::ContextEntry_Init(
-            "/singletons/com.sun.star.reflection.theTypeDescriptionManager",
-            css::uno::makeAny(
-                rtl::OUString("com.sun.star.comp.stoc.TypeDescriptionManager")),
-            true /*TODO: false?*/));
-    context_values.push_back( //TODO: from services.rdb?
-        cppu::ContextEntry_Init(
             "/singletons/com.sun.star.util.theMacroExpander",
             css::uno::makeAny(
                 cppuhelper::detail::create_bootstrap_macro_expander_factory()),
