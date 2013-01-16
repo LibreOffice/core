@@ -34,6 +34,7 @@
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <vcl/button.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/texteng.hxx>
 
 using namespace basegfx;
 using namespace basegfx::tools;
@@ -127,7 +128,8 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
     if ( mbSelected || mbHover )
         aFillColor = pAttrs->aHighlightColor;
 
-    aSeq[0] = Primitive2DReference( new PolyPolygonColorPrimitive2D(
+    sal_uInt32 nPrimitive = 0;
+    aSeq[nPrimitive++] = Primitive2DReference( new PolyPolygonColorPrimitive2D(
                                                B2DPolyPolygon(Polygon(maDrawArea,5,5).getB2DPolygon()),
                                                aFillColor));
 
@@ -135,7 +137,7 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
     Point aPos = maPrev1Pos;
     Size aImageSize = maPreview1.GetSizePixel();
 
-    aSeq[1] = Primitive2DReference( new FillBitmapPrimitive2D(
+    aSeq[nPrimitive++] = Primitive2DReference( new FillBitmapPrimitive2D(
                                         createTranslateB2DHomMatrix(aPos.X(),aPos.Y()),
                                         FillBitmapAttribute(maPreview1,
                                                             B2DPoint(0,0),
@@ -156,25 +158,72 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
     aBounds.append(B2DPoint(fPosX,fPosY+fHeight));
     aBounds.setClosed(true);
 
-    aSeq[2] = Primitive2DReference(createBorderLine(aBounds));
+    aSeq[nPrimitive++] = Primitive2DReference(createBorderLine(aBounds));
 
-    // Draw centered text below thumbnail
+    // Draw text below thumbnail
     aPos = maTextPos;
 
-    // Create the text primitive
-    basegfx::B2DHomMatrix aTextMatrix( createScaleTranslateB2DHomMatrix(
-                pAttrs->aFontSize.getX(), pAttrs->aFontSize.getY(),
-                double( aPos.X() ), double( aPos.Y() ) ) );
-
-    aSeq[3] = Primitive2DReference(
-                new TextSimplePortionPrimitive2D(aTextMatrix,
-                                                 maTitle,0,pAttrs->nMaxTextLenght,
-                                                 std::vector< double >( ),
-                                                 pAttrs->aFontAttr,
-                                                 com::sun::star::lang::Locale(),
-                                                 Color(COL_BLACK).getBColor() ) );
+    addTextPrimitives( maTitle, pAttrs, maTextPos, aSeq );
 
     pProcessor->process(aSeq);
+}
+
+void ThumbnailViewItem::addTextPrimitives (const rtl::OUString& rText, const ThumbnailItemAttributes *pAttrs, Point aPos, Primitive2DSequence& rSeq)
+{
+    drawinglayer::primitive2d::TextLayouterDevice aTextDev;
+
+    rtl::OUString aText (rText);
+
+    TextEngine aTextEngine;
+    aTextEngine.SetMaxTextWidth(maDrawArea.getWidth());
+    aTextEngine.SetText(rText);
+
+    sal_Int32 nPrimitives = rSeq.getLength();
+    rSeq.realloc(nPrimitives + aTextEngine.GetLineCount(0));
+
+    // Create the text primitives
+    sal_uInt16 nLineStart = 0;
+    for (sal_uInt16 i=0; i<aTextEngine.GetLineCount(0); ++i)
+    {
+        sal_uInt16 nLineLength = aTextEngine.GetLineLen(0, i);
+        double nLineWidth = aTextDev.getTextWidth (aText, nLineStart, nLineLength);
+
+        bool bTooLong = (aPos.getY() + aTextEngine.GetCharHeight()) > maDrawArea.Bottom();
+        if (bTooLong && (nLineLength + nLineStart) < rText.getLength())
+        {
+            // Add the '...' to the last line to show, even though it may require to shorten the line
+            double nDotsWidth = aTextDev.getTextWidth(rtl::OUString("..."),0,3);
+
+            sal_uInt16 nLength = nLineLength - 1;
+            while ( nDotsWidth + aTextDev.getTextWidth(aText, nLineStart, nLength) > maDrawArea.getWidth() && nLength > 0)
+            {
+                --nLength;
+            }
+
+            aText = aText.copy(0, nLineStart+nLength);
+            aText += "...";
+            nLineLength = nLength + 3;
+        }
+
+        double nLineX = maDrawArea.Left() + (maDrawArea.getWidth() - nLineWidth) / 2.0;
+
+        basegfx::B2DHomMatrix aTextMatrix( createScaleTranslateB2DHomMatrix(
+                    pAttrs->aFontSize.getX(), pAttrs->aFontSize.getY(),
+                    nLineX, double( aPos.Y() ) ) );
+
+        rSeq[nPrimitives++] = Primitive2DReference(
+                    new TextSimplePortionPrimitive2D(aTextMatrix,
+                                                     aText,nLineStart,nLineLength,
+                                                     std::vector< double >( ),
+                                                     pAttrs->aFontAttr,
+                                                     com::sun::star::lang::Locale(),
+                                                     Color(COL_BLACK).getBColor() ) );
+        nLineStart += nLineLength;
+        aPos.setY(aPos.getY() + aTextEngine.GetCharHeight());
+
+        if (bTooLong)
+            break;
+    }
 }
 
 drawinglayer::primitive2d::PolygonHairlinePrimitive2D*
