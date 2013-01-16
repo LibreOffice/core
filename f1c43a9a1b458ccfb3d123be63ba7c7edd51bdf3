@@ -16,6 +16,24 @@
       "revId": "f1c43a9a1b458ccfb3d123be63ba7c7edd51bdf3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATX////0\u003d",
+        "filename": "dbaccess/source/core/api/CacheSet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-01-16T19:00:12Z",
+      "side": 1,
+      "message": "No, in fact this can sometimes result in one less reallocation.\n\nAlthough originally these classes sadly were indeed modelled after the Java classes, that was IMNSHO a poor design choice and the classes have already moved to some idioms that fit C++ better, so it\u0027s better not to judge anything just based on Java.",
+      "parentUuid": "AAAATH///1M\u003d",
+      "revId": "f1c43a9a1b458ccfb3d123be63ba7c7edd51bdf3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
