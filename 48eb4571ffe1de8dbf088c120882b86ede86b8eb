@@ -172,6 +172,24 @@
     },
     {
       "key": {
+        "uuid": "AAAATH///1c\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3268,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-01-16T07:28:30Z",
+      "side": 1,
+      "message": "I don\u0027t understand what you mean. It looks as if there is a difference of interpretation: I regard the groupseparator as one separator consisting of 0..n characters and I understand from your comment that the groupseparator can be a set of o..n different separators.\nI think/thought that the indexOf function searches for a string (aGroupSeparator), not for just a character.\nCould you please verify/explain the definition of groupseparator in NUMBERVALUE?",
+      "parentUuid": "AAAATH///3k\u003d",
+      "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAATH///3U\u003d",
         "filename": "sc/source/core/tool/interpr1.cxx",
         "patchSetId": 2
@@ -285,6 +303,24 @@
       "writtenOn": "2013-01-15T16:56:24Z",
       "side": 1,
       "message": "Instead of a repeated loop this could simply be\n\n if (nPercentCount)\n     fVal *\u003d pow( 10.0, -(nPercentCount * 2));",
+      "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH///1Y\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3298,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-01-16T07:28:30Z",
+      "side": 1,
+      "message": "You\u0027re right of course.\nMy code merely reflects my step by step approach :-)",
+      "parentUuid": "AAAATH///2k\u003d",
       "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
