@@ -182,9 +182,9 @@ Any OXMLDataSourceSetting::convertString(const ::com::sun::star::uno::Type& _rEx
             sal_Bool bSuccess =
         #endif
                 ::sax::Converter::convertBool(bValue, _rReadCharacters);
-            OSL_ENSURE(bSuccess, OString("OXMLDataSourceSetting::convertString: could not convert \"") +
+            OSL_ENSURE(bSuccess, OString(OString("OXMLDataSourceSetting::convertString: could not convert \"") +
                                  OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US) +
-                                 OString("\" into a boolean!"));
+                                 OString("\" into a boolean!")).getStr());
             aReturn <<= bValue;
         }
         break;
