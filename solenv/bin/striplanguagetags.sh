@@ -14,6 +14,12 @@
 #
 # All a bit hacky, but it should work
 
+if [ -z "$CALLXSLTPROC" ]; then
+    echo "$0: \$CALLXSLTPROC not defined!"
+    echo "$0: Apparently we are not called from the build process, bailing out."
+    exit 1
+fi
+
 tempfoo=`basename $0`
 
 XSL=`mktemp /tmp/${tempfoo}.XXXXXX`
