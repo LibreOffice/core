@@ -178,13 +178,11 @@ Any OXMLDataSourceSetting::convertString(const ::com::sun::star::uno::Type& _rEx
         case TypeClass_BOOLEAN:     // sal_Bool
         {
             bool bValue(false);
-        #if OSL_DEBUG_LEVEL > 0
-            sal_Bool bSuccess =
-        #endif
+            bool const bSuccess =
                 ::sax::Converter::convertBool(bValue, _rReadCharacters);
-            OSL_ENSURE(bSuccess, OString(OString("OXMLDataSourceSetting::convertString: could not convert \"") +
-                                 OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US) +
-                                 OString("\" into a boolean!")).getStr());
+            SAL_WARN_IF(!bSuccess, "dbaccess",
+                "OXMLDataSourceSetting::convertString: could not convert \""
+                << _rReadCharacters << "\" into a boolean!");
             aReturn <<= bValue;
         }
         break;
@@ -192,14 +190,11 @@ Any OXMLDataSourceSetting::convertString(const ::com::sun::star::uno::Type& _rEx
         case TypeClass_LONG:        // sal_Int32
             {   // it's a real int32/16 property
                 sal_Int32 nValue(0);
-        #if OSL_DEBUG_LEVEL > 0
-                sal_Bool bSuccess =
-        #endif
+                bool const bSuccess =
                     ::sax::Converter::convertNumber(nValue, _rReadCharacters);
-                OSL_ENSURE(bSuccess,
-                        ::rtl::OStringBuffer("OXMLDataSourceSetting::convertString: could not convert \"")
-                    .append(::rtl::OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US))
-                    .append("\" into an integer!").getStr());
+                SAL_WARN_IF(!bSuccess, "dbaccess",
+                    "OXMLDataSourceSetting::convertString: could not convert \""
+                    << _rReadCharacters << "\" into an integer!");
                 if (TypeClass_SHORT == _rExpectedType.getTypeClass())
                     aReturn <<= (sal_Int16)nValue;
                 else
@@ -214,14 +209,11 @@ Any OXMLDataSourceSetting::convertString(const ::com::sun::star::uno::Type& _rEx
         case TypeClass_DOUBLE:
         {
             double nValue = 0.0;
-        #if OSL_DEBUG_LEVEL > 0
-            sal_Bool bSuccess =
-        #endif
+            bool const bSuccess =
                 ::sax::Converter::convertDouble(nValue, _rReadCharacters);
-            OSL_ENSURE(bSuccess,
-                    ::rtl::OStringBuffer("OXMLDataSourceSetting::convertString: could not convert \"")
-                .append(rtl::OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US))
-                .append("\" into a double!").getStr());
+            SAL_WARN_IF(!bSuccess, "dbaccess",
+                "OXMLDataSourceSetting::convertString: could not convert \""
+                << _rReadCharacters << "\" into a double!");
             aReturn <<= (double)nValue;
         }
         break;
@@ -229,7 +221,8 @@ Any OXMLDataSourceSetting::convertString(const ::com::sun::star::uno::Type& _rEx
             aReturn <<= _rReadCharacters;
             break;
         default:
-            OSL_FAIL("OXMLDataSourceSetting::convertString: invalid type class!");
+            SAL_WARN("dbaccess",
+                "OXMLDataSourceSetting::convertString: invalid type class!");
     }
 
     return aReturn;
