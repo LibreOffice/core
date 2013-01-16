@@ -45,7 +45,6 @@
 
 #include "macro_expander.hxx"
 #include "paths.hxx"
-#include "servicefactory_detail.hxx"
 #include "servicemanager.hxx"
 #include "typedescriptionprovider.hxx"
 
@@ -115,7 +114,16 @@ cppu::defaultBootstrap_InitialComponentContext(rtl::OUString const & iniUri)
                 "/singletons/" + i->first,
                 css::uno::makeAny(i->second[0]->info->name), true));
     }
-    cppu::add_access_control_entries(&context_values);
+    context_values.push_back(
+        cppu::ContextEntry_Init(
+            "/services/com.sun.star.security.AccessController/mode",
+            css::uno::makeAny(rtl::OUString("off")), false));
+    context_values.push_back(
+        cppu::ContextEntry_Init(
+            "/singletons/com.sun.star.security.theAccessController",
+            css::uno::makeAny(
+                rtl::OUString("com.sun.star.security.AccessController")),
+            true));
     assert(!context_values.empty());
     css::uno::Reference< css::uno::XComponentContext > context(
         createComponentContext(
