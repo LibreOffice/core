@@ -185,7 +185,7 @@ protected:
     virtual                 ~ORptExport(){};
 public:
 
-    ORptExport(const Reference< XMultiServiceFactory >& _rxMSF, sal_uInt16 nExportFlag = (EXPORT_CONTENT | EXPORT_AUTOSTYLES | EXPORT_FONTDECLS));
+    ORptExport(const Reference< XComponentContext >& _rxContext, sal_uInt16 nExportFlag = (EXPORT_CONTENT | EXPORT_AUTOSTYLES | EXPORT_FONTDECLS));
     // XServiceInfo
     virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);

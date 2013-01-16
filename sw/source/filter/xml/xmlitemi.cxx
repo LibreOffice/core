@@ -38,6 +38,7 @@
 #include <editeng/memberids.hrc>
 
 #include <svx/unomid.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <hintids.hxx>
 #include <paratr.hxx>
@@ -335,7 +336,7 @@ SvXMLImportContext *SwXMLItemSetContext_Impl::CreateChildContext(
 
 void SwXMLImport::_InitItemImport()
 {
-    pTwipUnitConv = new SvXMLUnitConverter( getServiceFactory(),
+    pTwipUnitConv = new SvXMLUnitConverter( comphelper::getComponentContext(getServiceFactory()),
             util::MeasureUnit::TWIP, util::MeasureUnit::TWIP );
 
     xTableItemMap = new SvXMLItemMapEntries( aXMLTableItemMap );

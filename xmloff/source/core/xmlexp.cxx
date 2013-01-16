@@ -81,6 +81,7 @@
 #include <unotools/configmgr.hxx>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/document/XMLOasisBasicExporter.hpp>
 #include <com/sun/star/embed/XEncryptionProtectedSource2.hpp>
 #include <com/sun/star/rdf/XMetadatable.hpp>
 #include "RDFaExportHelper.hxx"
@@ -204,7 +205,7 @@ void SettingsExportFacade::Characters( const ::rtl::OUString& i_rCharacters )
 
 Reference< XComponentContext > SettingsExportFacade::GetComponentContext() const
 {
-    return comphelper::getComponentContext( m_rExport.getServiceFactory() );
+    return m_rExport.getComponentContext();
 }
 
 //==============================================================================
@@ -441,13 +442,13 @@ void SvXMLExport::_DetermineModelType()
 
 SvXMLExport::SvXMLExport(
     sal_Int16 const eDefaultMeasureUnit /*css::util::MeasureUnit*/,
-    const uno::Reference< lang::XMultiServiceFactory >& xServiceFactory,
+    const uno::Reference< uno::XComponentContext >& xContext,
     const enum XMLTokenEnum eClass, sal_uInt16 nExportFlags )
 :   mpImpl( new SvXMLExport_Impl ),
-    mxServiceFactory(xServiceFactory),
+    m_xContext(xContext),
     mpAttrList( new SvXMLAttributeList ),
     mpNamespaceMap( new SvXMLNamespaceMap ),
-    mpUnitConv( new SvXMLUnitConverter(getServiceFactory(),
+    mpUnitConv( new SvXMLUnitConverter( xContext,
                 util::MeasureUnit::MM_100TH, eDefaultMeasureUnit) ),
     mpNumExport(0L),
     mpProgressBarHelper( NULL ),
@@ -461,23 +462,23 @@ SvXMLExport::SvXMLExport(
     msWS( GetXMLToken(XML_WS) ),
     mbSaveLinkedSections(sal_True)
 {
-    DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
+    DBG_ASSERT( xContext.is(), "got no service manager" );
     _InitCtor();
 }
 
 SvXMLExport::SvXMLExport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
     const OUString &rFileName,
     sal_Int16 const eDefaultMeasureUnit /*css::util::MeasureUnit*/,
     const uno::Reference< xml::sax::XDocumentHandler > & rHandler)
 :   mpImpl( new SvXMLExport_Impl ),
-    mxServiceFactory(xServiceFactory),
+    m_xContext(xContext),
     mxHandler( rHandler ),
     mxExtHandler( rHandler, uno::UNO_QUERY ),
     mpAttrList( new SvXMLAttributeList ),
     msOrigFileName( rFileName ),
     mpNamespaceMap( new SvXMLNamespaceMap ),
-    mpUnitConv( new SvXMLUnitConverter(getServiceFactory(),
+    mpUnitConv( new SvXMLUnitConverter( xContext,
                 util::MeasureUnit::MM_100TH, eDefaultMeasureUnit) ),
     mpNumExport(0L),
     mpProgressBarHelper( NULL ),
@@ -491,8 +492,8 @@ SvXMLExport::SvXMLExport(
     msWS( GetXMLToken(XML_WS) ),
     mbSaveLinkedSections(sal_True)
 {
+    DBG_ASSERT( xContext.is(), "got no service manager" );
     mpImpl->SetSchemeOf( msOrigFileName );
-    DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
     _InitCtor();
 
     if (mxNumberFormatsSupplier.is())
@@ -500,13 +501,13 @@ SvXMLExport::SvXMLExport(
 }
 
 SvXMLExport::SvXMLExport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
     const OUString &rFileName,
     const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
     const Reference< XModel >& rModel,
     sal_Int16 const eDefaultFieldUnit)
 :   mpImpl( new SvXMLExport_Impl ),
-    mxServiceFactory(xServiceFactory),
+    m_xContext(xContext),
     mxModel( rModel ),
     mxHandler( rHandler ),
     mxExtHandler( rHandler, uno::UNO_QUERY ),
@@ -514,7 +515,7 @@ SvXMLExport::SvXMLExport(
     mpAttrList( new SvXMLAttributeList ),
     msOrigFileName( rFileName ),
     mpNamespaceMap( new SvXMLNamespaceMap ),
-    mpUnitConv( new SvXMLUnitConverter(getServiceFactory(),
+    mpUnitConv( new SvXMLUnitConverter( xContext,
                     util::MeasureUnit::MM_100TH,
                     SvXMLUnitConverter::GetMeasureUnit(eDefaultFieldUnit)) ),
     mpNumExport(0L),
@@ -529,8 +530,8 @@ SvXMLExport::SvXMLExport(
     msWS( GetXMLToken(XML_WS) ),
     mbSaveLinkedSections(sal_True)
 {
+    DBG_ASSERT( xContext.is(), "got no service manager" );
     mpImpl->SetSchemeOf( msOrigFileName );
-    DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
     _InitCtor();
 
     if (mxNumberFormatsSupplier.is())
@@ -1262,54 +1263,49 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
     }
     if( (getExportFlags() & EXPORT_OASIS) == 0 )
     {
-        Reference< lang::XMultiServiceFactory > xFactory = getServiceFactory();
-        if( xFactory.is() )
+        try
         {
-            try
+            ::comphelper::PropertyMapEntry aInfoMap[] =
             {
-                ::comphelper::PropertyMapEntry aInfoMap[] =
-                {
-                    { "Class", sizeof("Class")-1, 0,
-                        &::getCppuType((::rtl::OUString*)0),
-                          PropertyAttribute::MAYBEVOID, 0},
-                    { NULL, 0, 0, NULL, 0, 0 }
-                };
-                Reference< XPropertySet > xConvPropSet(
-                    ::comphelper::GenericPropertySet_CreateInstance(
-                            new ::comphelper::PropertySetInfo( aInfoMap ) ) );
+                { "Class", sizeof("Class")-1, 0,
+                    &::getCppuType((::rtl::OUString*)0),
+                      PropertyAttribute::MAYBEVOID, 0},
+                { NULL, 0, 0, NULL, 0, 0 }
+            };
+            Reference< XPropertySet > xConvPropSet(
+                ::comphelper::GenericPropertySet_CreateInstance(
+                        new ::comphelper::PropertySetInfo( aInfoMap ) ) );
 
-                Any aAny;
-                aAny <<= GetXMLToken( eClass );
-                xConvPropSet->setPropertyValue(
-                        OUString("Class"), aAny );
+            Any aAny;
+            aAny <<= GetXMLToken( eClass );
+            xConvPropSet->setPropertyValue(
+                    OUString("Class"), aAny );
 
-                Reference< XPropertySet > xPropSet =
-                    mxExportInfo.is()
-                    ?  PropertySetMerger_CreateInstance( mxExportInfo,
-                                                         xConvPropSet )
-                    : xConvPropSet;
+            Reference< XPropertySet > xPropSet =
+                mxExportInfo.is()
+                ?  PropertySetMerger_CreateInstance( mxExportInfo,
+                                                     xConvPropSet )
+                : xConvPropSet;
 
-                Sequence<Any> aArgs( 3 );
-                aArgs[0] <<= mxHandler;
-                aArgs[1] <<= xPropSet;
-                aArgs[2] <<= mxModel;
+            Sequence<Any> aArgs( 3 );
+            aArgs[0] <<= mxHandler;
+            aArgs[1] <<= xPropSet;
+            aArgs[2] <<= mxModel;
 
-                // get filter component
-                Reference< xml::sax::XDocumentHandler > xTmpDocHandler(
-                    xFactory->createInstanceWithArguments(
-                    OUString("com.sun.star.comp.Oasis2OOoTransformer"),
-                                aArgs), UNO_QUERY);
-                OSL_ENSURE( xTmpDocHandler.is(),
-                    "can't instantiate OASIS transformer component" );
-                if( xTmpDocHandler.is() )
-                {
-                    mxHandler = xTmpDocHandler;
-                    mxExtHandler = uno::Reference<xml::sax::XExtendedDocumentHandler>( mxHandler, UNO_QUERY );
-                }
-            }
-            catch(const com::sun::star::uno::Exception&)
+            // get filter component
+            Reference< xml::sax::XDocumentHandler > xTmpDocHandler(
+                m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.comp.Oasis2OOoTransformer", aArgs, m_xContext),
+                UNO_QUERY);
+            OSL_ENSURE( xTmpDocHandler.is(),
+                "can't instantiate OASIS transformer component" );
+            if( xTmpDocHandler.is() )
             {
+                mxHandler = xTmpDocHandler;
+                mxExtHandler = uno::Reference<xml::sax::XExtendedDocumentHandler>( mxHandler, UNO_QUERY );
             }
+        }
+        catch(const com::sun::star::uno::Exception&)
+        {
         }
     }
 
@@ -1501,32 +1497,13 @@ void SvXMLExport::_ExportScripts()
                 xPSet->getPropertyValue( ::rtl::OUString(  "BasicLibraries"  ) );
         }
 
-        Reference< document::XExporter > xExporter;
-        Reference< lang::XMultiServiceFactory > xMSF( getServiceFactory() );
-        if ( xMSF.is() )
-        {
-            Reference < XDocumentHandler > xHdl( new XMLBasicExportFilter( mxHandler ) );
-            Sequence < Any > aArgs( 1 );
-            aArgs[0] <<= xHdl;
-            xExporter.set( xMSF->createInstanceWithArguments(
-                OUString(  "com.sun.star.document.XMLOasisBasicExporter"  ), aArgs ),
-                UNO_QUERY );
-        }
+        Reference < XDocumentHandler > xHdl( new XMLBasicExportFilter( mxHandler ) );
+        Reference< document::XXMLBasicExporter > xExporter = document::XMLOasisBasicExporter::createWithHandler( m_xContext, xHdl );
 
-        OSL_ENSURE( xExporter.is(),
-            "SvXMLExport::_ExportScripts: can't instantiate export filter component for Basic macros" );
-
-        if ( xExporter.is() )
-        {
-            Reference< XComponent > xComp( mxModel, UNO_QUERY );
-            xExporter->setSourceDocument( xComp );
-            Reference< XFilter > xFilter( xExporter, UNO_QUERY );
-            if ( xFilter.is() )
-            {
-                Sequence < PropertyValue > aMediaDesc( 0 );
-                xFilter->filter( aMediaDesc );
-            }
-        }
+        Reference< XComponent > xComp( mxModel, UNO_QUERY );
+        xExporter->setSourceDocument( xComp );
+        Sequence< PropertyValue > aMediaDesc( 0 );
+        xExporter->filter( aMediaDesc );
     }
 
     // export document events
@@ -2144,13 +2121,9 @@ sal_Bool SvXMLExport::ExportEmbeddedOwnObject( Reference< XComponent >& rComp )
     }
     aArgs[0] <<= xHdl;
 
-    // #110680#
-    // Reference< lang::XMultiServiceFactory > xServiceFactory = comphelper::getProcessServiceFactory();
-    Reference< lang::XMultiServiceFactory > xServiceFactory = getServiceFactory();
-
     Reference< document::XExporter > xExporter(
-        xServiceFactory->createInstanceWithArguments( sFilterService, aArgs),
-                                               UNO_QUERY);
+        m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(sFilterService, aArgs, m_xContext),
+        UNO_QUERY);
     OSL_ENSURE( xExporter.is(),
                 "can't instantiate export filter component for own object" );
     if( !xExporter.is() )
@@ -2365,9 +2338,9 @@ void SvXMLExport::DisposingModel()
     mxEventListener.clear();
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > SvXMLExport::getServiceFactory()
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > SvXMLExport::getComponentContext()
 {
-    return mxServiceFactory;
+    return m_xContext;
 }
 
 ::comphelper::UnoInterfaceToUniqueIdentifierMapper& SvXMLExport::getInterfaceToIdentifierMapper()

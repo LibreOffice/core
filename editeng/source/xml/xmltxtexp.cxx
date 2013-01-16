@@ -348,7 +348,7 @@ class SvxXMLTextExportComponent : public SvXMLExport
 {
 public:
     SvxXMLTextExportComponent(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
         EditEngine* pEditEngine,
         const ESelection& rSel,
         const ::rtl::OUString& rFileName,
@@ -369,12 +369,12 @@ private:
 ///////////////////////////////////////////////////////////////////////
 
 SvxXMLTextExportComponent::SvxXMLTextExportComponent(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
     EditEngine* pEditEngine,
     const ESelection& rSel,
     const ::rtl::OUString& rFileName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler > & xHandler)
-:   SvXMLExport( xServiceFactory, rFileName, xHandler, ((frame::XModel*)new SvxSimpleUnoModel()), MAP_CM ),
+:   SvXMLExport( xContext, rFileName, xHandler, ((frame::XModel*)new SvxSimpleUnoModel()), MAP_CM ),
     maSelection( rSel )
 {
     SvxEditEngineSource aEditSource( pEditEngine );
@@ -410,15 +410,7 @@ void SvxWriteXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& 
         do
         {
             // create service factory
-
-            uno::Reference< lang::XMultiServiceFactory> xServiceFactory( ::comphelper::getProcessServiceFactory() );
             uno::Reference<uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
-
-            if( !xServiceFactory.is() )
-            {
-                OSL_FAIL( "got no service manager" );
-                break;
-            }
 
             // create document handler
             uno::Reference< xml::sax::XWriter > xWriter = xml::sax::Writer::create( xContext );
@@ -441,7 +433,7 @@ void SvxWriteXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& 
 
             // SvxXMLTextExportComponent aExporter( &rEditEngine, rSel, aName, xHandler );
             uno::Reference< xml::sax::XDocumentHandler > xHandler(xWriter, UNO_QUERY_THROW);
-            SvxXMLTextExportComponent aExporter( xServiceFactory, &rEditEngine, rSel, aName, xHandler );
+            SvxXMLTextExportComponent aExporter( xContext, &rEditEngine, rSel, aName, xHandler );
 
             aExporter.exportDoc();
 

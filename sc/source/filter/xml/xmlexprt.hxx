@@ -223,9 +223,8 @@ protected:
     virtual XMLShapeExport* CreateShapeExport();
     virtual XMLFontAutoStylePool* CreateFontAutoStylePool();
 public:
-    // #110680#
     ScXMLExport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
         const sal_uInt16 nExportFlag);
 
     virtual ~ScXMLExport();

@@ -30,10 +30,8 @@ class XMLMetaExportComponent : public SvXMLExport
         ::com::sun::star::document::XDocumentProperties > mxDocProps;
 
 public:
-    // #110680#
-    // XMLMetaExportComponent();
     XMLMetaExportComponent(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
         sal_uInt16 nFlags
         );
 

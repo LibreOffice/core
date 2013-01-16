@@ -400,7 +400,7 @@ SvXMLImport::SvXMLImport(
 :   mpImpl( new SvXMLImport_Impl() ),
     mpNamespaceMap( new SvXMLNamespaceMap ),
 
-    mpUnitConv( new SvXMLUnitConverter( xServiceFactory,
+    mpUnitConv( new SvXMLUnitConverter( comphelper::getComponentContext(xServiceFactory),
                 util::MeasureUnit::MM_100TH, util::MeasureUnit::MM_100TH) ),
 
     mpContexts( new SvXMLImportContexts_Impl ),

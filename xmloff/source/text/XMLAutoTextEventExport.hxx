@@ -57,7 +57,7 @@ class XMLAutoTextEventExport : public SvXMLExport
 public:
 
     XMLAutoTextEventExport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory, sal_uInt16 nFlags
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext, sal_uInt16 nFlags
         );
 
     ~XMLAutoTextEventExport();

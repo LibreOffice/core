@@ -55,7 +55,7 @@ protected:
 public:
     // #110680#
     SchXMLExport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
         sal_uInt16 nExportFlags = EXPORT_ALL );
     virtual ~SchXMLExport();
 

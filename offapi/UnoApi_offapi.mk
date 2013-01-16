@@ -101,6 +101,8 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/document,\
 	NamedPropertyValues \
 	OleEmbeddedServerRegistration \
 	OOXMLDocumentPropertiesImporter \
+	XMLBasicExporter \
+	XMLOasisBasicExporter \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/drawing,\
 	ShapeCollection \
@@ -654,9 +656,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/documen
 	PDFDialog \
 	Settings \
 	TypeDetection \
-	XMLBasicExporter \
 	XMLBasicImporter \
-	XMLOasisBasicExporter \
 	XMLOasisBasicImporter \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/drawing,\
@@ -2171,6 +2171,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/document,\
 	XUndoManagerListener \
 	XUndoManagerSupplier \
 	XViewDataSupplier \
+	XXMLBasicExporter \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/drawing,\
 	Alignment \

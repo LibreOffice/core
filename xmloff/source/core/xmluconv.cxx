@@ -37,7 +37,6 @@
 #include <com/sun/star/text/DefaultNumberingProvider.hpp>
 #include <com/sun/star/text/XDefaultNumberingProvider.hpp>
 #include <com/sun/star/text/XNumberingTypeInfo.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/i18n/CharacterClassification.hpp>
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <basegfx/vector/b3dvector.hxx>
@@ -66,19 +65,19 @@ struct SvXMLUnitConverter::Impl
     sal_Int16 m_eCoreMeasureUnit;
     sal_Int16 m_eXMLMeasureUnit;
     util::Date m_aNullDate;
-    uno::Reference< text::XNumberingTypeInfo > m_xNumTypeInfo;
-    uno::Reference< i18n::XCharacterClassification > m_xCharClass;
-    uno::Reference< lang::XMultiServiceFactory > m_xServiceFactory;
+    mutable uno::Reference< text::XNumberingTypeInfo > m_xNumTypeInfo;
+    mutable uno::Reference< i18n::XCharacterClassification > m_xCharClass;
+    uno::Reference< uno::XComponentContext > m_xContext;
 
-    Impl(uno::Reference<lang::XMultiServiceFactory> const& xServiceFactory,
+    Impl(uno::Reference<uno::XComponentContext> const& xContext,
             sal_Int16 const eCoreMeasureUnit,
             sal_Int16 const eXMLMeasureUnit)
         : m_eCoreMeasureUnit(eCoreMeasureUnit)
         , m_eXMLMeasureUnit(eXMLMeasureUnit)
         , m_aNullDate(30, 12, 1899)
-        , m_xServiceFactory(xServiceFactory)
+        , m_xContext(xContext)
     {
-        OSL_ENSURE( m_xServiceFactory.is(), "got no service manager" );
+        OSL_ENSURE( m_xContext.is(), "got no service manager" );
     }
 
     void createNumTypeInfo() const;
@@ -87,13 +86,8 @@ struct SvXMLUnitConverter::Impl
 
 void SvXMLUnitConverter::Impl::createNumTypeInfo() const
 {
-    if (m_xServiceFactory.is())
-    {
-        Reference<XComponentContext>         xContext( comphelper::getComponentContext(m_xServiceFactory) );
-        Reference<XDefaultNumberingProvider> xDefNum = DefaultNumberingProvider::create(xContext);
-        const_cast<Impl*>(this)->m_xNumTypeInfo =
-            Reference<XNumberingTypeInfo>(xDefNum, uno::UNO_QUERY);
-    }
+    Reference<XDefaultNumberingProvider> xDefNum = DefaultNumberingProvider::create(m_xContext);
+    m_xNumTypeInfo = Reference<XNumberingTypeInfo>(xDefNum, uno::UNO_QUERY);
 }
 
 const uno::Reference< text::XNumberingTypeInfo >&
@@ -127,10 +121,10 @@ sal_Int16 SvXMLUnitConverter::GetXMLMeasureUnit() const
 */
 
 SvXMLUnitConverter::SvXMLUnitConverter(
-    const uno::Reference<lang::XMultiServiceFactory>& xServiceFactory,
+    const uno::Reference<uno::XComponentContext>& xContext,
     sal_Int16 const eCoreMeasureUnit,
     sal_Int16 const eXMLMeasureUnit)
-: m_pImpl(new Impl(xServiceFactory, eCoreMeasureUnit, eXMLMeasureUnit))
+: m_pImpl(new Impl(xContext, eCoreMeasureUnit, eXMLMeasureUnit))
 {
 }
 
@@ -799,34 +793,26 @@ OUString SvXMLUnitConverter::encodeStyleName(
             {
                 if (!m_pImpl->m_xCharClass.is())
                 {
-                    if (m_pImpl->m_xServiceFactory.is())
-                    {
-                        const_cast < SvXMLUnitConverter * >(this)
-                            ->m_pImpl->m_xCharClass = CharacterClassification::create(
-                              comphelper::getComponentContext(m_pImpl->m_xServiceFactory) );
-                    }
+                    this->m_pImpl->m_xCharClass = CharacterClassification::create( m_pImpl->m_xContext );
                 }
-                if (m_pImpl->m_xCharClass.is())
-                {
-                    sal_Int16 nType = m_pImpl->m_xCharClass->getType(rName, i);
+                sal_Int16 nType = m_pImpl->m_xCharClass->getType(rName, i);
 
-                    switch( nType )
-                    {
-                    case UnicodeType::UPPERCASE_LETTER:     // Lu
-                    case UnicodeType::LOWERCASE_LETTER:     // Ll
-                    case UnicodeType::TITLECASE_LETTER:     // Lt
-                    case UnicodeType::OTHER_LETTER:         // Lo
-                    case UnicodeType::LETTER_NUMBER:        // Nl
-                        bValidChar = sal_True;
-                        break;
-                    case UnicodeType::NON_SPACING_MARK:     // Ms
-                    case UnicodeType::ENCLOSING_MARK:       // Me
-                    case UnicodeType::COMBINING_SPACING_MARK:   //Mc
-                    case UnicodeType::MODIFIER_LETTER:      // Lm
-                    case UnicodeType::DECIMAL_DIGIT_NUMBER: // Nd
-                        bValidChar = i > 0;
-                        break;
-                    }
+                switch( nType )
+                {
+                case UnicodeType::UPPERCASE_LETTER:     // Lu
+                case UnicodeType::LOWERCASE_LETTER:     // Ll
+                case UnicodeType::TITLECASE_LETTER:     // Lt
+                case UnicodeType::OTHER_LETTER:         // Lo
+                case UnicodeType::LETTER_NUMBER:        // Nl
+                    bValidChar = sal_True;
+                    break;
+                case UnicodeType::NON_SPACING_MARK:     // Ms
+                case UnicodeType::ENCLOSING_MARK:       // Me
+                case UnicodeType::COMBINING_SPACING_MARK:   //Mc
+                case UnicodeType::MODIFIER_LETTER:      // Lm
+                case UnicodeType::DECIMAL_DIGIT_NUMBER: // Nd
+                    bValidChar = i > 0;
+                    break;
                 }
             }
         }

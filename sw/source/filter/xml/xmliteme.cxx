@@ -41,6 +41,7 @@
 #include "swrect.hxx"
 #include "xmlexp.hxx"
 #include <editeng/memberids.hrc>
+#include <comphelper/processfactory.hxx>
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -222,7 +223,7 @@ inline void SwXMLTableItemMapper_Impl::SetAbsWidth( sal_uInt32 nAbs )
 
 void SwXMLExport::_InitItemExport()
 {
-    pTwipUnitConv = new SvXMLUnitConverter(getServiceFactory(),
+    pTwipUnitConv = new SvXMLUnitConverter(getComponentContext(),
         util::MeasureUnit::TWIP, GetMM100UnitConverter().GetXMLMeasureUnit());
 
     xTableItemMap = new SvXMLItemMapEntries( aXMLTableItemMap );

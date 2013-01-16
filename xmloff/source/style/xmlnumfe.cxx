@@ -246,8 +246,8 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
     {
         LanguageTag aLanguageTag( MsLangId::getSystemLanguage() );
 
-        pCharClass = new CharClass( comphelper::getComponentContext(rExport.getServiceFactory()), aLanguageTag );
-        pLocaleData = new LocaleDataWrapper( comphelper::getComponentContext(rExport.getServiceFactory()), aLanguageTag );
+        pCharClass = new CharClass( rExport.getComponentContext(), aLanguageTag );
+        pLocaleData = new LocaleDataWrapper( rExport.getComponentContext(), aLanguageTag );
     }
 
     pUsedList = new SvXMLNumUsedList_Impl;
@@ -281,8 +281,8 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
     {
         LanguageTag aLanguageTag( MsLangId::getSystemLanguage() );
 
-        pCharClass = new CharClass( comphelper::getComponentContext(rExport.getServiceFactory()), aLanguageTag );
-        pLocaleData = new LocaleDataWrapper( comphelper::getComponentContext(rExport.getServiceFactory()), aLanguageTag );
+        pCharClass = new CharClass( rExport.getComponentContext(), aLanguageTag );
+        pLocaleData = new LocaleDataWrapper( rExport.getComponentContext(), aLanguageTag );
     }
 
     pUsedList = new SvXMLNumUsedList_Impl;

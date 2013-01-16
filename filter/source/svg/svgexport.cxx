@@ -310,11 +310,11 @@ sal_Bool operator==( const TextField & aLhsTextField, const TextField & aRhsText
 // -------------
 
 SVGExport::SVGExport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
     const Reference< XDocumentHandler >& rxHandler,
     const Sequence< PropertyValue >& rFilterData )
     : SvXMLExport( util::MeasureUnit::MM_100TH,
-                   xServiceFactory,
+                   xContext,
                    xmloff::token::XML_TOKEN_INVALID,
                    EXPORT_META|EXPORT_PRETTY )
         , mrFilterData( rFilterData )
@@ -547,7 +547,7 @@ bool EqualityBitmap::operator()( const ObjectRepresentation& rObjRep1,
 sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
     throw (RuntimeException)
 {
-    Reference< XMultiServiceFactory >    xServiceFactory( ::comphelper::getProcessServiceFactory() ) ;
+    Reference< XComponentContext >      xContext( ::comphelper::getProcessComponentContext() ) ;
     Reference< XOutputStream >          xOStm;
     SvStream*                           pOStm = NULL;
     sal_Int32                            nLength = rDescriptor.getLength();
@@ -618,7 +618,7 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
         maFilterData[ 5 ].Value <<= (sal_Bool) sal_False;
     }
 
-    if( xOStm.is() && xServiceFactory.is() )
+    if( xOStm.is() )
     {
         if( mSelectedPages.hasElements() && mMasterPageTargets.hasElements() )
         {
@@ -631,7 +631,7 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
 
                 // #110680#
                 // mpSVGExport = new SVGExport( xDocHandler );
-                mpSVGExport = new SVGExport( xServiceFactory, xDocHandler, maFilterData );
+                mpSVGExport = new SVGExport( xContext, xDocHandler, maFilterData );
 
                 if( mpSVGExport != NULL )
                 {

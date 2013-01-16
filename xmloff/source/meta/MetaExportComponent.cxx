@@ -27,6 +27,7 @@
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <comphelper/genericpropertyset.hxx>
+#include <comphelper/processfactory.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
@@ -41,9 +42,9 @@ using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
 XMLMetaExportComponent::XMLMetaExportComponent(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
         sal_uInt16 nFlags )
-:   SvXMLExport( util::MeasureUnit::CM, xServiceFactory, XML_TEXT, nFlags )
+:   SvXMLExport( util::MeasureUnit::CM, xContext, XML_TEXT, nFlags )
 {
 }
 
@@ -74,51 +75,47 @@ sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
 
     if( (getExportFlags() & EXPORT_OASIS) == 0 )
     {
-        uno::Reference< lang::XMultiServiceFactory > xFactory = getServiceFactory();
-        if( xFactory.is() )
+        uno::Reference< uno::XComponentContext > xContext = getComponentContext();
+        try
         {
-            try
+            ::comphelper::PropertyMapEntry aInfoMap[] =
             {
-                ::comphelper::PropertyMapEntry aInfoMap[] =
-                {
-                    { "Class", sizeof("Class")-1, 0,
-                        &::getCppuType((::rtl::OUString*)0),
-                        beans::PropertyAttribute::MAYBEVOID, 0},
-                    { NULL, 0, 0, NULL, 0, 0 }
-                };
-                uno::Reference< beans::XPropertySet > xConvPropSet(
-                    ::comphelper::GenericPropertySet_CreateInstance(
-                            new ::comphelper::PropertySetInfo( aInfoMap ) ) );
+                { "Class", sizeof("Class")-1, 0,
+                    &::getCppuType((::rtl::OUString*)0),
+                    beans::PropertyAttribute::MAYBEVOID, 0},
+                { NULL, 0, 0, NULL, 0, 0 }
+            };
+            uno::Reference< beans::XPropertySet > xConvPropSet(
+                ::comphelper::GenericPropertySet_CreateInstance(
+                        new ::comphelper::PropertySetInfo( aInfoMap ) ) );
 
-                uno::Any aAny;
-                aAny <<= GetXMLToken( XML_TEXT );
-                xConvPropSet->setPropertyValue(
-                        ::rtl::OUString("Class"), aAny );
+            uno::Any aAny;
+            aAny <<= GetXMLToken( XML_TEXT );
+            xConvPropSet->setPropertyValue(
+                    ::rtl::OUString("Class"), aAny );
 
-                uno::Reference< beans::XPropertySet > xPropSet =
-                    getExportInfo().is()
-                        ?  PropertySetMerger_CreateInstance( getExportInfo(),
-                                                          xConvPropSet )
-                        : getExportInfo();
+            uno::Reference< beans::XPropertySet > xPropSet =
+                getExportInfo().is()
+                    ?  PropertySetMerger_CreateInstance( getExportInfo(),
+                                                      xConvPropSet )
+                    : getExportInfo();
 
-                uno::Sequence< uno::Any > aArgs( 3 );
-                aArgs[0] <<= xDocHandler;
-                aArgs[1] <<= xPropSet;
-                aArgs[2] <<= GetModel();
+            uno::Sequence< uno::Any > aArgs( 3 );
+            aArgs[0] <<= xDocHandler;
+            aArgs[1] <<= xPropSet;
+            aArgs[2] <<= GetModel();
 
-                // get filter component
-                xDocHandler = uno::Reference< xml::sax::XDocumentHandler >(
-                    xFactory->createInstanceWithArguments(
-                        ::rtl::OUString("com.sun.star.comp.Oasis2OOoTransformer"),
-                        aArgs),
-                    uno::UNO_QUERY_THROW );
+            // get filter component
+            xDocHandler = uno::Reference< xml::sax::XDocumentHandler >(
+                xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                    "com.sun.star.comp.Oasis2OOoTransformer", aArgs, xContext),
+                uno::UNO_QUERY_THROW );
 
-                SetDocHandler( xDocHandler );
-            }
-            catch( com::sun::star::uno::Exception& )
-            {
-                OSL_FAIL( "Cannot instantiate com.sun.star.comp.Oasis2OOoTransformer!\n");
-            }
+            SetDocHandler( xDocHandler );
+        }
+        catch( com::sun::star::uno::Exception& )
+        {
+            OSL_FAIL( "Cannot instantiate com.sun.star.comp.Oasis2OOoTransformer!\n");
         }
     }
 
@@ -202,7 +199,7 @@ uno::Reference< uno::XInterface > SAL_CALL XMLMetaExportComponent_createInstance
         const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new XMLMetaExportComponent(rSMgr, EXPORT_META|EXPORT_OASIS);
+    return (cppu::OWeakObject*)new XMLMetaExportComponent( comphelper::getComponentContext(rSMgr), EXPORT_META|EXPORT_OASIS);
 }
 
 uno::Sequence< rtl::OUString > SAL_CALL XMLMetaExportOOO_getSupportedServiceNames()
@@ -223,7 +220,7 @@ uno::Reference< uno::XInterface > SAL_CALL XMLMetaExportOOO_createInstance(
         const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new XMLMetaExportComponent(rSMgr, EXPORT_META);
+    return (cppu::OWeakObject*)new XMLMetaExportComponent( comphelper::getComponentContext(rSMgr), EXPORT_META);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

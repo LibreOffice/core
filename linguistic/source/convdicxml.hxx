@@ -47,7 +47,7 @@ public:
     ConvDicXMLExport( ConvDic &rConvDic,
         const rtl::OUString &rFileName,
         com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler > &rHandler) :
-        SvXMLExport ( comphelper::getProcessServiceFactory(), rFileName,
+        SvXMLExport ( comphelper::getProcessComponentContext(), rFileName,
                       ::com::sun::star::util::MeasureUnit::CM, rHandler ),
         rDic        ( rConvDic ),
         bSuccess    ( sal_False )

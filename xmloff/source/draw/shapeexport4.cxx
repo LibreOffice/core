@@ -1234,7 +1234,7 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
             uno::Reference< graphic::XGraphic > xGraphic( xPropSet->getPropertyValue( OUString( "ReplacementGraphic" ) ), uno::UNO_QUERY );
             if( xGraphic.is() ) try
             {
-                Reference< lang::XMultiServiceFactory > xSM( GetExport().getServiceFactory(), UNO_QUERY_THROW );
+                Reference< uno::XComponentContext > xContext = GetExport().getComponentContext();
 
                 uno::Reference< embed::XStorage > xPictureStorage;
                 uno::Reference< embed::XStorage > xStorage;
@@ -1243,7 +1243,7 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
                 OUString sPictureName;
                 if( bExportEmbedded )
                 {
-                    xPictureStream.set( xSM->createInstance( OUString( "com.sun.star.comp.MemoryStream" ) ), UNO_QUERY_THROW );
+                    xPictureStream.set( xContext->getServiceManager()->createInstanceWithContext( "com.sun.star.comp.MemoryStream", xContext), UNO_QUERY_THROW );
                 }
                 else
                 {
@@ -1265,7 +1265,7 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
                     xPictureStream.set( xPictureStorage->openStreamElement( sPictureName, ::embed::ElementModes::READWRITE ), UNO_QUERY_THROW );
                 }
 
-                Reference< graphic::XGraphicProvider > xProvider( graphic::GraphicProvider::create(comphelper::getComponentContext(xSM)) );
+                Reference< graphic::XGraphicProvider > xProvider( graphic::GraphicProvider::create(xContext) );
                 Sequence< beans::PropertyValue > aArgs( 2 );
                 aArgs[ 0 ].Name = OUString( "MimeType" );
                 aArgs[ 0 ].Value <<= OUString( "image/x-vclgraphic" );

@@ -35,6 +35,7 @@
 #include <xmloff/XMLEventExport.hxx>
 #include <tools/debug.hxx>
 #include <tools/fldunit.hxx>
+#include <comphelper/processfactory.hxx>
 
 
 using namespace ::com::sun::star;
@@ -63,10 +64,10 @@ const sal_Char sAPI_AutoText[] = "com.sun.star.text.AutoTextContainer";
 
 
 XMLAutoTextEventExport::XMLAutoTextEventExport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
         sal_uInt16 nFlags
     )
-:   SvXMLExport(util::MeasureUnit::INCH, xServiceFactory, XML_AUTO_TEXT, nFlags)
+:   SvXMLExport(util::MeasureUnit::INCH, xContext, XML_AUTO_TEXT, nFlags)
 ,
         sEventType("EventType"),
         sNone("None")
@@ -115,30 +116,29 @@ sal_uInt32 XMLAutoTextEventExport::exportDoc( enum XMLTokenEnum )
 {
     if( (getExportFlags() & EXPORT_OASIS) == 0 )
     {
-        Reference< lang::XMultiServiceFactory > xFactory = getServiceFactory();
-        if( xFactory.is() )
+        Reference< uno::XComponentContext> xContext = getComponentContext();
+        try
         {
-            try
-            {
 
-                Sequence<Any> aArgs( 1 );
-                aArgs[0] <<= GetDocHandler();
+            Sequence<Any> aArgs( 1 );
+            aArgs[0] <<= GetDocHandler();
 
-                // get filter component
-                Reference< xml::sax::XDocumentHandler > xTmpDocHandler(
-                    xFactory->createInstanceWithArguments(
-                    OUString("com.sun.star.comp.Oasis2OOoTransformer"),
-                                aArgs), UNO_QUERY);
-                OSL_ENSURE( xTmpDocHandler.is(),
-                    "can't instantiate OASIS transformer component" );
-                if( xTmpDocHandler.is() )
-                {
-                    SetDocHandler( xTmpDocHandler );
-                }
-            }
-            catch( com::sun::star::uno::Exception& )
+            // get filter component
+            Reference< xml::sax::XDocumentHandler > xTmpDocHandler(
+                xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                    "com.sun.star.comp.Oasis2OOoTransformer",
+                    aArgs,
+                    xContext),
+                UNO_QUERY);
+            OSL_ENSURE( xTmpDocHandler.is(),
+                "can't instantiate OASIS transformer component" );
+            if( xTmpDocHandler.is() )
             {
+                SetDocHandler( xTmpDocHandler );
             }
+        }
+        catch( com::sun::star::uno::Exception& )
+        {
         }
     }
     if (hasEvents())
@@ -235,7 +235,7 @@ Reference< XInterface > SAL_CALL XMLAutoTextEventExport_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    return (cppu::OWeakObject*)new XMLAutoTextEventExport(rSMgr, EXPORT_ALL|EXPORT_OASIS);
+    return (cppu::OWeakObject*)new XMLAutoTextEventExport( comphelper::getComponentContext(rSMgr), EXPORT_ALL|EXPORT_OASIS);
 }
 
 // methods to support the component registration
@@ -257,7 +257,7 @@ Reference< XInterface > SAL_CALL XMLAutoTextEventExportOOO_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    return (cppu::OWeakObject*)new XMLAutoTextEventExport(rSMgr,EXPORT_ALL);
+    return (cppu::OWeakObject*)new XMLAutoTextEventExport( comphelper::getComponentContext(rSMgr),EXPORT_ALL);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

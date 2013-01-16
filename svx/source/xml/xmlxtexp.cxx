@@ -146,12 +146,12 @@ private:
 
 // #110680#
 SvxXMLXTableExportComponent::SvxXMLXTableExportComponent(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
     const OUString& rFileName,
     const uno::Reference<xml::sax::XDocumentHandler> & rHandler,
     const uno::Reference<container::XNameContainer >& xTable,
     uno::Reference<document::XGraphicObjectResolver >& xGrfResolver )
-:   SvXMLExport( xServiceFactory, rFileName, rHandler, NULL, MAP_100TH_MM),
+:   SvXMLExport( xContext, rFileName, rHandler, NULL, MAP_100TH_MM),
     mxTable( xTable )
 {
 
@@ -227,13 +227,7 @@ bool SvxXMLXTableExportComponent::save(
 
     try
     {
-        uno::Reference< lang::XMultiServiceFactory> xServiceFactory( ::comphelper::getProcessServiceFactory() );
         uno::Reference< uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
-        if( !xServiceFactory.is() )
-        {
-            OSL_FAIL( "got no service manager" );
-            return false;
-        }
 
         uno::Reference< xml::sax::XWriter > xWriter = xml::sax::Writer::create( xContext );
 
@@ -306,7 +300,7 @@ bool SvxXMLXTableExportComponent::save(
 
         // Finally do the export
         const OUString aName;
-        SvxXMLXTableExportComponent aExporter( xServiceFactory, aName, xHandler, xTable, xGrfResolver );
+        SvxXMLXTableExportComponent aExporter( xContext, aName, xHandler, xTable, xGrfResolver );
         bRet = aExporter.exportTable();
 
         if( pGraphicHelper )

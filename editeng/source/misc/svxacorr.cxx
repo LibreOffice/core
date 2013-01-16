@@ -2046,8 +2046,6 @@ void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
                 xStrm->SetProperty( rtl::OUString("MediaType"), aAny );
 
 
-                uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
-                    comphelper::getProcessServiceFactory();
                 uno::Reference< uno::XComponentContext > xContext =
                     comphelper::getProcessComponentContext();
 
@@ -2056,7 +2054,7 @@ void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
                 xWriter->setOutputStream(xOut);
 
                 uno::Reference < xml::sax::XDocumentHandler > xHandler(xWriter, UNO_QUERY_THROW);
-                SvXMLExceptionListExport aExp( xServiceFactory, rLst, sStrmName, xHandler );
+                SvXMLExceptionListExport aExp( xContext, rLst, sStrmName, xHandler );
 
                 aExp.exportDoc( XML_BLOCK_LIST );
 
@@ -2409,8 +2407,6 @@ sal_Bool SvxAutoCorrectLanguageLists::MakeBlocklist_Imp( SvStorage& rStg )
             aAny <<= aMime;
             refList->SetProperty( aPropName, aAny );
 
-            uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
-                comphelper::getProcessServiceFactory();
             uno::Reference< uno::XComponentContext > xContext =
                 comphelper::getProcessComponentContext();
 
@@ -2419,7 +2415,7 @@ sal_Bool SvxAutoCorrectLanguageLists::MakeBlocklist_Imp( SvStorage& rStg )
             xWriter->setOutputStream(xOut);
 
             uno::Reference<xml::sax::XDocumentHandler> xHandler(xWriter, uno::UNO_QUERY);
-            SvXMLAutoCorrectExport aExp( xServiceFactory, pAutocorr_List, sStrmName, xHandler );
+            SvXMLAutoCorrectExport aExp( xContext, pAutocorr_List, sStrmName, xHandler );
 
             aExp.exportDoc( XML_BLOCK_LIST );
 

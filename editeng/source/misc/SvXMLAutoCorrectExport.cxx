@@ -28,11 +28,11 @@ using namespace ::xmloff::token;
 using namespace ::rtl;
 
 SvXMLAutoCorrectExport::SvXMLAutoCorrectExport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
     const SvxAutocorrWordList *  pNewAutocorr_List,
     const rtl::OUString &rFileName,
     com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler> &rHandler)
-:   SvXMLExport( xServiceFactory, rFileName, util::MeasureUnit::CM, rHandler ),
+:   SvXMLExport( xContext, rFileName, util::MeasureUnit::CM, rHandler ),
     pAutocorr_List( pNewAutocorr_List )
 {
     _GetNamespaceMap().Add( GetXMLToken ( XML_NP_BLOCK_LIST),
@@ -72,11 +72,11 @@ sal_uInt32 SvXMLAutoCorrectExport::exportDoc(enum XMLTokenEnum /*eClass*/)
 }
 
 SvXMLExceptionListExport::SvXMLExceptionListExport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
     const SvStringsISortDtor &rNewList,
     const rtl::OUString &rFileName,
     com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler> &rHandler)
-:   SvXMLExport( xServiceFactory, rFileName, util::MeasureUnit::CM, rHandler ),
+:   SvXMLExport( xContext, rFileName, util::MeasureUnit::CM, rHandler ),
     rList( rNewList )
 {
     _GetNamespaceMap().Add( GetXMLToken ( XML_NP_BLOCK_LIST ),

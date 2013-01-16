@@ -50,6 +50,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 
 #include <unotools/saveopt.hxx>
@@ -75,7 +76,6 @@ class XMLErrors;
 
 namespace rtl { class OUString; }
 namespace com { namespace sun { namespace star {
-    namespace uno { class XComponentContext; }
     namespace frame { class XModel; }
     namespace container { class XIndexContainer; }
 } } }
@@ -106,8 +106,7 @@ class XMLOFF_DLLPUBLIC SvXMLExport : public ::cppu::WeakImplHelper6<
 {
     SvXMLExport_Impl            *mpImpl;            // dummy
 
-    // #110680#
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxServiceFactory;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > mxModel;
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >            mxHandler;      // the handlers
@@ -264,36 +263,20 @@ protected:
 
 public:
 
-    // #110680#
-    //SvXMLExport( MapUnit eDfltUnit,
-    //             const enum ::xmloff::token::XMLTokenEnum eClass = xmloff::token::XML_TOKEN_INVALID,
-    //             sal_uInt16 nExportFlag = EXPORT_ALL );
     SvXMLExport(
         sal_Int16 const eDefaultMeasureUnit /*css::util::MeasureUnit*/,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
         const enum ::xmloff::token::XMLTokenEnum eClass = xmloff::token::XML_TOKEN_INVALID,
         sal_uInt16 nExportFlag = EXPORT_ALL );
 
-    // #110680#
-    //SvXMLExport( const ::rtl::OUString& rFileName,
-    //           const ::com::sun::star::uno::Reference<
-    //              ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
-    //           MapUnit eDfltUnit = MAP_INCH );
     SvXMLExport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
         const ::rtl::OUString& rFileName,
         sal_Int16 const eDefaultMeasureUnit /*css::util::MeasureUnit*/,
 		const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler);
 
-    // #110680#
-    //SvXMLExport( const ::rtl::OUString& rFileName,
-    //           const ::com::sun::star::uno::Reference<
-    //              ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
-    //           const ::com::sun::star::uno::Reference<
-    //              ::com::sun::star::frame::XModel > &,
-    //           sal_Int16 eDfltUnit );
     SvXMLExport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
         const ::rtl::OUString& rFileName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > &,
@@ -523,8 +506,7 @@ public:
 
     ::comphelper::UnoInterfaceToUniqueIdentifierMapper& getInterfaceToIdentifierMapper();
 
-    // #110680#
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getServiceFactory();
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getComponentContext();
 
     // Shapes in Writer cannot be named via context menu (#i51726#)
     SvtModuleOptions::EFactory GetModelType() const

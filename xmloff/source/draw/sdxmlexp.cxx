@@ -64,6 +64,7 @@
 
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/extract.hxx>
+#include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include "PropertySetMerger.hxx"
 #include "layerexp.hxx"
@@ -396,9 +397,9 @@ ImpXMLAutoLayoutInfo::ImpXMLAutoLayoutInfo(sal_uInt16 nTyp, ImpXMLEXPPageMasterI
 
 // #110680#
 SdXMLExport::SdXMLExport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
     sal_Bool bIsDraw, sal_uInt16 nExportFlags )
-:   SvXMLExport( util::MeasureUnit::CM, xServiceFactory,
+:   SvXMLExport( util::MeasureUnit::CM, xContext,
         (bIsDraw) ? XML_GRAPHICS : XML_PRESENTATION, nExportFlags ),
     mnDocMasterPageCount(0L),
     mnDocDrawPageCount(0L),
@@ -2802,7 +2803,7 @@ OUString SAL_CALL classname##_getImplementationName() throw()\
 }\
 uno::Reference< uno::XInterface > SAL_CALL classname##_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )\
 {\
-    return (cppu::OWeakObject*)new SdXMLExport( rSMgr, draw, flags );\
+    return (cppu::OWeakObject*)new SdXMLExport( comphelper::getComponentContext(rSMgr), draw, flags );\
 }
 
 SERVICE( XMLImpressExportOasis, "com.sun.star.comp.Impress.XMLOasisExporter", "XMLImpressExportOasis", sal_False, EXPORT_OASIS|EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS|EXPORT_FONTDECLS|EXPORT_EMBEDDED );

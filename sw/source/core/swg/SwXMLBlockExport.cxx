@@ -29,11 +29,11 @@ using ::rtl::OUString;
 
 // #110680#
 SwXMLBlockListExport::SwXMLBlockListExport(
-    const uno::Reference< lang::XMultiServiceFactory > xServiceFactory,
+    const uno::Reference< uno::XComponentContext > xContext,
     SwXMLTextBlocks & rBlocks,
     const rtl::OUString &rFileName,
     uno::Reference< xml::sax::XDocumentHandler> &rHandler)
-:   SvXMLExport( xServiceFactory, rFileName, util::MeasureUnit::CM, rHandler ),
+:   SvXMLExport( xContext, rFileName, util::MeasureUnit::CM, rHandler ),
     rBlockList(rBlocks)
 {
     _GetNamespaceMap().Add( GetXMLToken ( XML_NP_BLOCK_LIST ),
@@ -80,11 +80,11 @@ sal_uInt32 SwXMLBlockListExport::exportDoc(enum XMLTokenEnum )
 
 // #110680#
 SwXMLTextBlockExport::SwXMLTextBlockExport(
-    const uno::Reference< lang::XMultiServiceFactory > xServiceFactory,
+    const uno::Reference< uno::XComponentContext > xContext,
     SwXMLTextBlocks & rBlocks,
     const rtl::OUString &rFileName,
     uno::Reference< xml::sax::XDocumentHandler> &rHandler)
-:   SvXMLExport( xServiceFactory, rFileName, util::MeasureUnit::CM, rHandler ),
+:   SvXMLExport( xContext, rFileName, util::MeasureUnit::CM, rHandler ),
     rBlockList(rBlocks)
 {
     _GetNamespaceMap().Add( GetXMLToken ( XML_NP_BLOCK_LIST ),

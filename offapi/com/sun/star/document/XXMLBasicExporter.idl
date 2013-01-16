@@ -16,29 +16,32 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_document_XMLBasicExporter_idl__
-#define __com_sun_star_document_XMLBasicExporter_idl__
+#ifndef __com_sun_star_document_XXMLBasicExporter_idl__
+#define __com_sun_star_document_XXMLBasicExporter_idl__
 
-#include <com/sun/star/xml/sax/XDocumentHandler.idl>
-#include <com/sun/star/document/XXMLBasicExporter.idl>
+#include <com/sun/star/document/XExporter.idl>
+#include <com/sun/star/document/XFilter.idl>
 
 
 
 module com { module sun { module star { module document {
 
 
-/** Filter for exporting Basic macros to the OpenOffice.org file format.
-
-    <p>First the <method>XExporter::setSourceDocument</method> method must be
-    called in order to provide the export component with the source document
-    from which the data should be exported. After that, the export is started
-    by calling the <method>XFilter::filter</method> method.</p>
-
-    @since OOo 2.0
+/** Provides unified interface for XMLOasisBasicExporter and XMLBasicExporter services.
+    @since LibreOffice 4.1
  */
-published service XMLBasicExporter : XXMLBasicExporter
+published interface XXMLBasicExporter
 {
-    createWithHandler([in] com::sun::star::xml::sax::XDocumentHandler DocumentHandler);
+
+    /** sets the source document for this filter.
+     */
+    interface com::sun::star::document::XExporter;
+
+
+    /** filters the document.
+     */
+    interface com::sun::star::document::XFilter;
+
 };
 
 

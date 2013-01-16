@@ -766,7 +766,7 @@ namespace xmloff
                                                  ::rtl::OUString("US"),
                                                  ::rtl::OUString()
                                              );
-                xFormatsSupplier = NumberFormatsSupplier::createWithLocale( comphelper::getComponentContext(m_rContext.getServiceFactory()), aLocale );
+                xFormatsSupplier = NumberFormatsSupplier::createWithLocale( m_rContext.getComponentContext(), aLocale );
                 m_xControlNumberFormats = xFormatsSupplier->getNumberFormats();
             }
             catch(const Exception&)

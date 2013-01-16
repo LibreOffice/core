@@ -36,8 +36,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/Position3D.hpp>
 
-// #110680#
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
@@ -95,7 +94,7 @@ public:
         the default unit for textual measures */
     SvXMLUnitConverter(
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+            ::com::sun::star::uno::XComponentContext >& xContext,
         sal_Int16 eCoreMeasureUnit,
         sal_Int16 eXMLMeasureUnit);
 

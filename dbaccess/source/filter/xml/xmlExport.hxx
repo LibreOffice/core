@@ -176,7 +176,7 @@ protected:
     virtual                 ~ODBExport(){};
 public:
 
-    ODBExport(const Reference< XMultiServiceFactory >& _rxMSF, sal_uInt16 nExportFlag = EXPORT_CONTENT | EXPORT_AUTOSTYLES | EXPORT_PRETTY | EXPORT_FONTDECLS | EXPORT_SCRIPTS );
+    ODBExport(const Reference< XComponentContext >& _rxContext, sal_uInt16 nExportFlag = EXPORT_CONTENT | EXPORT_AUTOSTYLES | EXPORT_PRETTY | EXPORT_FONTDECLS | EXPORT_SCRIPTS );
     // XServiceInfo
     DECLARE_SERVICE_INFO_STATIC( );
 

@@ -21,13 +21,12 @@
 #define XMLSCRIPT_XMLBAS_EXPORT_HXX
 
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <com/sun/star/document/XExporter.hpp>
-#include <com/sun/star/document/XFilter.hpp>
+#include <com/sun/star/document/XXMLBasicExporter.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <osl/mutex.hxx>
 
 
@@ -40,11 +39,10 @@ namespace xmlscript
     // class XMLBasicExporterBase
     // =============================================================================
 
-    typedef ::cppu::WeakImplHelper4<
+    typedef ::cppu::WeakImplHelper3<
         ::com::sun::star::lang::XServiceInfo,
         ::com::sun::star::lang::XInitialization,
-        ::com::sun::star::document::XExporter,
-        ::com::sun::star::document::XFilter > XMLBasicExporterBase_BASE;
+        ::com::sun::star::document::XXMLBasicExporter > XMLBasicExporterBase_BASE;
 
     class XMLBasicExporterBase : public XMLBasicExporterBase_BASE
     {

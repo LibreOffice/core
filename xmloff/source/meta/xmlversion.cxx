@@ -46,11 +46,11 @@ const char XMLN_VERSIONSLIST[] = "VersionList.xml";
 // ------------------------------------------------------------------------
 // #110897#
 XMLVersionListExport::XMLVersionListExport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
     const com::sun::star::uno::Sequence < com::sun::star::util::RevisionTag >& rVersions,
     const OUString &rFileName,
     Reference< XDocumentHandler > &rHandler )
-:   SvXMLExport( xServiceFactory, rFileName, util::MeasureUnit::CM, rHandler ),
+:   SvXMLExport( xContext, rFileName, util::MeasureUnit::CM, rHandler ),
     maVersions( rVersions )
 {
     _GetNamespaceMap().AddAtIndex( XML_NAMESPACE_DC_IDX, xmloff::token::GetXMLToken(xmloff::token::XML_NP_DC),
@@ -345,9 +345,6 @@ void SAL_CALL XMLVersionListPersistence::store( const uno::Reference< embed::XSt
     if ( xRoot.is() )
     {
         // get the services needed for writing the xml data
-        Reference< lang::XMultiServiceFactory > xServiceFactory =
-                comphelper::getProcessServiceFactory();
-        DBG_ASSERT( xServiceFactory.is(), "XMLReader::Read: got no service manager" );
         Reference< uno::XComponentContext > xContext =
                 comphelper::getProcessComponentContext();
 
@@ -374,7 +371,7 @@ void SAL_CALL XMLVersionListPersistence::store( const uno::Reference< embed::XSt
 
             Reference< XDocumentHandler > xHandler( xWriter, uno::UNO_QUERY );
 
-            XMLVersionListExport aExp( xServiceFactory, rVersions, sVerName, xHandler );
+            XMLVersionListExport aExp( xContext, rVersions, sVerName, xHandler );
 
             aExp.exportDoc( ::xmloff::token::XML_VERSION );
 

@@ -370,16 +370,8 @@ sal_uLong SwXMLTextBlocks::PutBlockText( const String& rShort, const String& ,
     String aFolderName( rPackageName );
     String aStreamName = aFolderName + rtl::OUString(".xml");
 
-    uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
-        comphelper::getProcessServiceFactory();
     uno::Reference< uno::XComponentContext > xContext =
         comphelper::getProcessComponentContext();
-    OSL_ENSURE( xServiceFactory.is(),
-            "XMLReader::Read: got no service manager" );
-    if( !xServiceFactory.is() )
-    {
-        // Throw an exception ?
-    }
 
     uno::Reference < xml::sax::XWriter > xWriter = xml::sax::Writer::create(xContext);
     sal_uLong nRes = 0;
@@ -402,9 +394,7 @@ sal_uLong SwXMLTextBlocks::PutBlockText( const String& rShort, const String& ,
        uno::Reference<xml::sax::XDocumentHandler> xHandler(xWriter,
         uno::UNO_QUERY);
 
-    // #110680#
-       // SwXMLTextBlockExport aExp(*this, GetXMLToken ( XML_UNFORMATTED_TEXT ), xHandler);
-       SwXMLTextBlockExport aExp( xServiceFactory, *this, GetXMLToken ( XML_UNFORMATTED_TEXT ), xHandler);
+   SwXMLTextBlockExport aExp( xContext, *this, GetXMLToken ( XML_UNFORMATTED_TEXT ), xHandler);
 
     aExp.exportDoc( rText );
 
@@ -453,12 +443,6 @@ void SwXMLTextBlocks::ReadInfo( void )
                 comphelper::getProcessServiceFactory();
         uno::Reference< uno::XComponentContext > xContext =
                 comphelper::getProcessComponentContext();
-        OSL_ENSURE( xServiceFactory.is(),
-                "XMLReader::Read: got no service manager" );
-        if( !xServiceFactory.is() )
-        {
-            // Throw an exception ?
-        }
 
         xml::sax::InputSource aParserInput;
         aParserInput.sSystemId = sDocName;
@@ -467,8 +451,6 @@ void SwXMLTextBlocks::ReadInfo( void )
         aParserInput.aInputStream = xDocStream->getInputStream();
 
         // get filter
-        // #110680#
-        // uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLBlockListImport( *this );
         uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLBlockListImport( xServiceFactory, *this );
 
         // connect parser and filter
@@ -502,16 +484,8 @@ void SwXMLTextBlocks::WriteInfo( void )
 {
     if ( xBlkRoot.is() || 0 == OpenFile ( sal_False ) )
     {
-        uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
-            comphelper::getProcessServiceFactory();
         uno::Reference< uno::XComponentContext > xContext =
             comphelper::getProcessComponentContext();
-        OSL_ENSURE( xServiceFactory.is(),
-                "XMLReader::Read: got no service manager" );
-        if( !xServiceFactory.is() )
-        {
-            // Throw an exception ?
-        }
 
         uno::Reference < xml::sax::XWriter > xWriter = xml::sax::Writer::create(xContext);
         OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( XMLN_BLOCKLIST ) );
@@ -540,7 +514,7 @@ void SwXMLTextBlocks::WriteInfo( void )
 
         uno::Reference<xml::sax::XDocumentHandler> xHandler(xWriter, uno::UNO_QUERY);
 
-        SwXMLBlockListExport aExp( xServiceFactory, *this, OUString(RTL_CONSTASCII_USTRINGPARAM(XMLN_BLOCKLIST)), xHandler);
+        SwXMLBlockListExport aExp( xContext, *this, OUString(RTL_CONSTASCII_USTRINGPARAM(XMLN_BLOCKLIST)), xHandler);
 
         aExp.exportDoc( XML_BLOCK_LIST );
 

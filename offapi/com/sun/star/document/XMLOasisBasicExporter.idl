@@ -19,9 +19,8 @@
 #ifndef __com_sun_star_document_XMLOasisBasicExporter_idl__
 #define __com_sun_star_document_XMLOasisBasicExporter_idl__
 
-#include <com/sun/star/document/XExporter.idl>
-#include <com/sun/star/document/XFilter.idl>
-#include <com/sun/star/lang/XInitialization.idl>
+#include <com/sun/star/xml/sax/XDocumentHandler.idl>
+#include <com/sun/star/document/XXMLBasicExporter.idl>
 
 
 
@@ -37,23 +36,9 @@ module com { module sun { module star { module document {
 
     @since OOo 2.0
  */
-published service XMLOasisBasicExporter
+published service XMLOasisBasicExporter : XXMLBasicExporter
 {
-
-    /** sets the source document for this filter.
-     */
-    interface com::sun::star::document::XExporter;
-
-
-    /** filters the document.
-     */
-    interface com::sun::star::document::XFilter;
-
-
-    /** initializes the component.
-     */
-    [optional] interface com::sun::star::lang::XInitialization;
-
+    createWithHandler([in] com::sun::star::xml::sax::XDocumentHandler DocumentHandler);
 };
 
 

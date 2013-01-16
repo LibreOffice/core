@@ -102,7 +102,7 @@ namespace dbaxml
     //---------------------------------------------------------------------
     Reference< XInterface > SAL_CALL ODBExportHelper::Create(const Reference< XMultiServiceFactory >& _rxORB)
     {
-        return static_cast< XServiceInfo* >(new ODBExport(_rxORB,EXPORT_SETTINGS | EXPORT_PRETTY ));
+        return static_cast< XServiceInfo* >(new ODBExport(comphelper::getComponentContext(_rxORB),EXPORT_SETTINGS | EXPORT_PRETTY ));
     }
     //---------------------------------------------------------------------
     ::rtl::OUString SAL_CALL ODBExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
@@ -121,7 +121,7 @@ namespace dbaxml
     //---------------------------------------------------------------------
     Reference< XInterface > SAL_CALL ODBFullExportHelper::Create(const Reference< XMultiServiceFactory >& _rxORB)
     {
-        return static_cast< XServiceInfo* >(new ODBExport(_rxORB,EXPORT_ALL));
+        return static_cast< XServiceInfo* >(new ODBExport(comphelper::getComponentContext(_rxORB),EXPORT_ALL));
     }
     //---------------------------------------------------------------------
     ::rtl::OUString SAL_CALL ODBFullExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
@@ -193,10 +193,10 @@ namespace dbaxml
         }
     };
 // -----------------------------------------------------------------------------
-ODBExport::ODBExport(const Reference< XMultiServiceFactory >& _rxMSF,sal_uInt16 nExportFlag)
-: SvXMLExport( util::MeasureUnit::MM_10TH, _rxMSF, XML_DATABASE,
+ODBExport::ODBExport(const Reference< XComponentContext >& _rxContext,sal_uInt16 nExportFlag)
+: SvXMLExport( util::MeasureUnit::MM_10TH, _rxContext, XML_DATABASE,
         EXPORT_OASIS | nExportFlag)
-,m_aTypeCollection(comphelper::getComponentContext(_rxMSF))
+,m_aTypeCollection(_rxContext)
 ,m_bAllreadyFilled(sal_False)
 {
     GetMM100UnitConverter().SetCoreMeasureUnit(util::MeasureUnit::MM_10TH);
@@ -259,7 +259,16 @@ ODBExport::ODBExport(const Reference< XMultiServiceFactory >& _rxMSF,sal_uInt16 
         rtl::OUString(XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX ));
 }
 // -----------------------------------------------------------------------------
-IMPLEMENT_SERVICE_INFO1_STATIC( ODBExport, "com.sun.star.comp.sdb.DBExportFilter", "com.sun.star.document.ExportFilter")
+IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(ODBExport, "com.sun.star.comp.sdb.DBExportFilter")
+IMPLEMENT_SERVICE_INFO_SUPPORTS(ODBExport)
+IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(ODBExport, "com.sun.star.document.ExportFilter")
+
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+    SAL_CALL ODBExport::Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB)
+{
+    return static_cast< XServiceInfo* >(new ODBExport( comphelper::getComponentContext(_rxORB)));
+}
+
 // -----------------------------------------------------------------------------
 void ODBExport::exportDataSource()
 {
@@ -281,7 +290,7 @@ void ODBExport::exportDataSource()
         xSettingsState->getPropertyDefault( INFO_DECIMALDELIMITER ) >>= aDelimiter.sDecimal;
         xSettingsState->getPropertyDefault( INFO_THOUSANDSDELIMITER ) >>= aDelimiter.sThousand;
 
-        ::connectivity::DriversConfig aDriverConfig(comphelper::getComponentContext(getServiceFactory()));
+        ::connectivity::DriversConfig aDriverConfig(getComponentContext());
         const ::rtl::OUString sURL = ::comphelper::getString(xProp->getPropertyValue(PROPERTY_URL));
         ::comphelper::NamedValueCollection aDriverSupportedProperties( aDriverConfig.getProperties( sURL ) );
 
