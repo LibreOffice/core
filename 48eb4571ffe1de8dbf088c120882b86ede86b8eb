@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAATH///yU\u003d",
+        "filename": "formula/inc/formula/opcode.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-01-16T17:25:20Z",
+      "side": 1,
+      "message": "I placed it where it is now as it looks to be the place for string functions with more than one parameter.\nocValue is under functions with one parameter.\nI won\u0027t move from present position unless you still want me too.",
+      "parentUuid": "AAAATH///2Q\u003d",
+      "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAATH///2c\u003d",
         "filename": "sc/qa/unit/ucalc.cxx",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2013-01-15T16:56:24Z",
       "side": 1,
       "message": "Nitpick: currently there are only 4 rows ;-)",
+      "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH///yQ\u003d",
+        "filename": "sc/qa/unit/ucalc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-01-16T17:25:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAATH///2c\u003d",
       "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "AAAATH///yM\u003d",
+        "filename": "sc/qa/unit/ucalc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 683,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-01-16T17:25:20Z",
+      "side": 1,
+      "message": "See my question in inline comment on interpr1.cxx, line 3268\n\nAdded some other combinations.",
+      "parentUuid": "AAAATH///2U\u003d",
+      "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAATH///2Y\u003d",
         "filename": "sc/qa/unit/ucalc.cxx",
         "patchSetId": 2
@@ -64,6 +118,24 @@
       "writtenOn": "2013-01-15T16:56:24Z",
       "side": 1,
       "message": "Instead of having to manually adapt the end row in case we added testcases, simply use nRows-1 instead of 3",
+      "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH///yI\u003d",
+        "filename": "sc/qa/unit/ucalc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 693,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-01-16T17:25:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAATH///2Y\u003d",
       "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "AAAATH///xw\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3212,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-01-16T17:25:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAATH///4E\u003d",
+      "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAATH///4A\u003d",
         "filename": "sc/source/core/tool/interpr1.cxx",
         "patchSetId": 2
@@ -98,6 +188,24 @@
       "writtenOn": "2013-01-15T16:56:24Z",
       "side": 1,
       "message": "ODFF does not specify a default value if DecimalSeparator is omitted. In that case only integer values are to be parsed. Set cDecimalSeparator to 0, rtl::math::stringToDouble() handles that.",
+      "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH///xs\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3232,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-01-16T17:25:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAATH///4A\u003d",
       "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "AAAATH///xo\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3234,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-01-16T17:25:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAATH///30\u003d",
+      "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAATH///3o\u003d",
         "filename": "sc/source/core/tool/interpr1.cxx",
         "patchSetId": 2
@@ -138,6 +264,24 @@
     },
     {
       "key": {
+        "uuid": "AAAATH///xk\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3263,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-01-16T17:25:20Z",
+      "side": 1,
+      "message": "Done with a small change, I return either PushNoValue() or PushIllegalArgument(), depending on (aInputString.isEmpty() \u0026\u0026 !GetGlobalConfig().mbEmptyStringAsZero)",
+      "parentUuid": "AAAATH///3o\u003d",
+      "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAATH///3A\u003d",
         "filename": "sc/source/core/tool/interpr1.cxx",
         "patchSetId": 2
@@ -149,6 +293,24 @@
       "writtenOn": "2013-01-15T16:56:24Z",
       "side": 1,
       "message": "Please use sal_Int32 instead of int, it may matter on 64-bit platforms.",
+      "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH///xg\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3266,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-01-16T17:25:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAATH///3A\u003d",
       "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -207,6 +369,24 @@
     },
     {
       "key": {
+        "uuid": "AAAATH///xc\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3274,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-01-16T17:25:20Z",
+      "side": 1,
+      "message": "What a silly error did I make!\nDone, of course.",
+      "parentUuid": "AAAATH///3U\u003d",
+      "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAATH///3I\u003d",
         "filename": "sc/source/core/tool/interpr1.cxx",
         "patchSetId": 2
@@ -218,6 +398,24 @@
       "writtenOn": "2013-01-15T16:56:24Z",
       "side": 1,
       "message": "We can omit that insertion of a leading 0, rtl::math::stringToDouble() handles the leading decimal separator case fine.",
+      "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH///xY\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3281,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-01-16T17:25:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAATH///3I\u003d",
       "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -241,6 +439,24 @@
     },
     {
       "key": {
+        "uuid": "AAAATH///xU\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3282,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-01-16T17:25:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAATH///3E\u003d",
+      "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAATH///20\u003d",
         "filename": "sc/source/core/tool/interpr1.cxx",
         "patchSetId": 2
@@ -252,6 +468,24 @@
       "writtenOn": "2013-01-15T16:56:24Z",
       "side": 1,
       "message": "That instead should be\n\n const sal_Unicode* pParseEnd;\n\nbecause rtl::math::stringToDouble() expects\n\n sal_Unicode const ** pParsedEnd\n\nat that place. Code probably shouldn\u0027t even compile like it is.",
+      "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH///xQ\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3293,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-01-16T17:25:20Z",
+      "side": 1,
+      "message": "It did compile and run, I tested this code.\nDone.",
+      "parentUuid": "AAAATH///20\u003d",
       "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -275,6 +509,24 @@
     },
     {
       "key": {
+        "uuid": "AAAATH///xM\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3294,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-01-16T17:25:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAATH///2o\u003d",
+      "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAATH///2w\u003d",
         "filename": "sc/source/core/tool/interpr1.cxx",
         "patchSetId": 2
@@ -286,6 +538,24 @@
       "writtenOn": "2013-01-15T16:56:24Z",
       "side": 1,
       "message": "Given the pParseEnd from above, this condition then should be\n\n if (eStatus \u003d\u003d rtl_math_ConversionStatus_Ok \u0026\u0026 pParseEnd \u003d\u003d (aInputString.getStr() + aInputString.getLength()))",
+      "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH///xI\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3295,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-01-16T17:25:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAATH///2w\u003d",
       "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -327,6 +597,24 @@
     },
     {
       "key": {
+        "uuid": "AAAATH///xE\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3298,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-01-16T17:25:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAATH///1Y\u003d",
+      "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAATH///2g\u003d",
         "filename": "sc/source/filter/oox/formulabase.cxx",
         "patchSetId": 2
@@ -338,6 +626,24 @@
       "writtenOn": "2013-01-15T16:56:24Z",
       "side": 1,
       "message": "Please note that the Excel import/export currently always needs to be adapted at two places, here in sc/source/filter/oox/formulabase.cxx and in sc/source/filter/excel/xlformula.cxx\n\nActually Excel 2013 now implements NUMBERVALUE, so the entry can be moved and adapted to the new saFuncTable2013[] respectively saFuncTable_2013[] structs I created for IFNA.\n\nPlease rebase your code base to a recent revision.",
+      "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH///x4\u003d",
+        "filename": "sc/source/filter/oox/formulabase.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 746,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-01-16T17:25:20Z",
+      "side": 1,
+      "message": "Moved in formulabase.cxx - incidentally the \",\" after your IFNA item now is functional ;-)\nModified in xlformula.cxx, but not moved, as IFNA wasn\u0027t moved there either.",
+      "parentUuid": "AAAATH///2g\u003d",
       "revId": "48eb4571ffe1de8dbf088c120882b86ede86b8eb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false

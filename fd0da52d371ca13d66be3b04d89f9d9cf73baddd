@@ -16,6 +16,24 @@
       "revId": "fd0da52d371ca13d66be3b04d89f9d9cf73baddd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATH///x0\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-01-16T17:25:20Z",
+      "side": 0,
+      "message": "Done by rebasing",
+      "parentUuid": "AAAATH///4M\u003d",
+      "revId": "fd0da52d371ca13d66be3b04d89f9d9cf73baddd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
