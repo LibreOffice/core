@@ -42,6 +42,7 @@
 #include <svtools/ehdl.hxx>
 #include <tools/datetime.hxx>
 #include <rtl/logfile.hxx>
+#include <rtl/uri.hxx>
 #include <math.h>
 
 #include <unotools/saveopt.hxx>
@@ -736,11 +737,14 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
         // an error if the template filename points not to a valid file
         SfxDocumentTemplates aTempl;
         aTempl.Construct();
-        if ( !aTemplURL.isEmpty() )
+        if (!aTemplURL.isEmpty())
         {
-            String aURL;
-            if( ::utl::LocalFileHelper::ConvertSystemPathToURL( aTemplURL, GetMedium()->GetName(), aURL ) )
-                aFoundName = aURL;
+            try {
+                aFoundName = ::rtl::Uri::convertRelToAbs(GetMedium()->GetName(),
+                            aTemplURL);
+            } catch (::rtl::MalformedUriException const&) {
+                assert(false); // don't think that's supposed to happen?
+            }
         }
 
         if( !aFoundName.Len() && !aTemplName.isEmpty() )
