@@ -103,7 +103,9 @@ void SetOfByte::QueryValue( com::sun::star::uno::Any & rAny ) const
 SdrLayer::SdrLayer() : pModel(NULL), nType(0), nID(0) {}
 
 SdrLayer::SdrLayer(SdrLayerID nNewID, const OUString& rNewName) :
-    maName(rNewName), pModel(NULL), nType(0), nID(nNewID) {}
+    maName(rNewName), pModel(NULL), nType(0), nID(nNewID)
+{
+}
 
 void SdrLayer::SetID(SdrLayerID nNewID)
 {
@@ -152,18 +154,18 @@ bool SdrLayer::operator==(const SdrLayer& rCmpLayer) const
 
 SdrLayerAdmin::SdrLayerAdmin(SdrLayerAdmin* pNewParent):
     aLayer(),
-    pModel(NULL)
+    pParent(pNewParent),
+    pModel(NULL),
+    maControlLayerName("Controls")
 {
-    aControlLayerName = String(RTL_CONSTASCII_USTRINGPARAM("Controls"));
-    pParent=pNewParent;
 }
 
 SdrLayerAdmin::SdrLayerAdmin(const SdrLayerAdmin& rSrcLayerAdmin):
     aLayer(),
     pParent(NULL),
-    pModel(NULL)
+    pModel(NULL),
+    maControlLayerName("Controls")
 {
-    aControlLayerName = String(RTL_CONSTASCII_USTRINGPARAM("Controls"));
     *this = rSrcLayerAdmin;
 }
 
@@ -235,7 +237,7 @@ SdrLayer* SdrLayerAdmin::RemoveLayer(sal_uInt16 nPos)
     return pRetLayer;
 }
 
-SdrLayer* SdrLayerAdmin::NewLayer(const XubString& rName, sal_uInt16 nPos)
+SdrLayer* SdrLayerAdmin::NewLayer(const OUString& rName, sal_uInt16 nPos)
 {
     SdrLayerID nID=GetUniqueLayerID();
     SdrLayer* pLay=new SdrLayer(nID,rName);
@@ -276,14 +278,19 @@ sal_uInt16 SdrLayerAdmin::GetLayerPos(SdrLayer* pLayer) const
     return sal_uInt16(nRet);
 }
 
-const SdrLayer* SdrLayerAdmin::GetLayer(const XubString& rName, bool /*bInherited*/) const
+SdrLayer* SdrLayerAdmin::GetLayer(const OUString& rName, bool bInherited)
+{
+    return (SdrLayer*)(((const SdrLayerAdmin*)this)->GetLayer(rName, bInherited));
+}
+
+const SdrLayer* SdrLayerAdmin::GetLayer(const OUString& rName, bool /*bInherited*/) const
 {
     sal_uInt16 i(0);
     const SdrLayer* pLay = NULL;
 
     while(i < GetLayerCount() && !pLay)
     {
-        if(rName.Equals(GetLayer(i)->GetName()))
+        if (rName == GetLayer(i)->GetName())
             pLay = GetLayer(i);
         else
             i++;
@@ -297,7 +304,7 @@ const SdrLayer* SdrLayerAdmin::GetLayer(const XubString& rName, bool /*bInherite
     return pLay;
 }
 
-SdrLayerID SdrLayerAdmin::GetLayerID(const XubString& rName, bool bInherited) const
+SdrLayerID SdrLayerAdmin::GetLayerID(const OUString& rName, bool bInherited) const
 {
     SdrLayerID nRet=SDRLAYER_NOTFOUND;
     const SdrLayer* pLay=GetLayer(rName,bInherited);
@@ -347,6 +354,11 @@ SdrLayerID SdrLayerAdmin::GetUniqueLayerID() const
             i=0;
     }
     return i;
+}
+
+void SdrLayerAdmin::SetControlLayerName(const OUString& rNewName)
+{
+    maControlLayerName = rNewName;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

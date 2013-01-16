@@ -20,7 +20,6 @@
 #ifndef _SVDLAYER_HXX
 #define _SVDLAYER_HXX
 
-#include <tools/string.hxx>
 #include <tools/stream.hxx>
 #include <svx/svdsob.hxx>
 #include <svx/svdtypes.hxx> // fuer typedef SdrLayerID
@@ -79,7 +78,7 @@ protected:
     std::vector<SdrLayer*> aLayer;
     SdrLayerAdmin* pParent; // Der Admin der Seite kennt den Admin des Docs
     SdrModel*      pModel; // zum Broadcasten
-    String         aControlLayerName;
+    OUString       maControlLayerName;
 protected:
     // Eine noch nicht verwendete LayerID raussuchen. Sind bereits alle
     // verbraucht, so gibt's 'ne 0. Wer sicher gehen will, muss vorher
@@ -117,7 +116,7 @@ public:
     // Alle Layer loeschen
     void               ClearLayer();
     // Neuer Layer wird angelegt und eingefuegt
-    SdrLayer*          NewLayer(const String& rName, sal_uInt16 nPos=0xFFFF);
+    SdrLayer*          NewLayer(const OUString& rName, sal_uInt16 nPos=0xFFFF);
     void               DeleteLayer(SdrLayer* pLayer)
     {
         std::vector<SdrLayer*>::iterator it = std::find(aLayer.begin(), aLayer.end(), pLayer);
@@ -137,14 +136,14 @@ public:
 
     sal_uInt16             GetLayerPos(SdrLayer* pLayer) const;
 
-    SdrLayer*          GetLayer(const String& rName, bool bInherited)            { return (SdrLayer*)(((const SdrLayerAdmin*)this)->GetLayer(rName,bInherited)); }
-    const SdrLayer*    GetLayer(const String& rName, bool bInherited) const;
-          SdrLayerID   GetLayerID(const String& rName, bool bInherited) const;
+    SdrLayer* GetLayer(const OUString& rName, bool bInherited);
+    const SdrLayer* GetLayer(const OUString& rName, bool bInherited) const;
+    SdrLayerID GetLayerID(const OUString& rName, bool bInherited) const;
           SdrLayer*    GetLayerPerID(sal_uInt16 nID)                                     { return (SdrLayer*)(((const SdrLayerAdmin*)this)->GetLayerPerID(nID)); }
     const SdrLayer*    GetLayerPerID(sal_uInt16 nID) const;
 
-    void               SetControlLayerName(const String& rNewName) { aControlLayerName=rNewName; }
-    const String&      GetControlLayerName() const                 { return aControlLayerName; }
+    void SetControlLayerName(const OUString& rNewName);
+    const OUString& GetControlLayerName() const { return maControlLayerName; }
 };
 
 /*
