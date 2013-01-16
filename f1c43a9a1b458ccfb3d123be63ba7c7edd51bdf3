@@ -34,6 +34,24 @@
       "revId": "f1c43a9a1b458ccfb3d123be63ba7c7edd51bdf3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATX////M\u003d",
+        "filename": "dbaccess/source/core/api/CacheSet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1000243
+      },
+      "writtenOn": "2013-01-16T20:33:07Z",
+      "side": 1,
+      "message": "Thanks for clarifying.",
+      "parentUuid": "AAAATX////0\u003d",
+      "revId": "f1c43a9a1b458ccfb3d123be63ba7c7edd51bdf3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
