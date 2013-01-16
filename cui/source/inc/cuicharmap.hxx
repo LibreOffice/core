@@ -92,6 +92,8 @@ private:
     DECL_LINK(CharPreSelectHdl, void *);
     DECL_LINK(DeleteHdl, void *);
 
+    void fillAllSubsets(ListBox &rListBox);
+
 public:
                     SvxCharacterMap( Window* pParent, sal_Bool bOne=sal_True, const SfxItemSet* pSet=0 );
                     ~SvxCharacterMap();

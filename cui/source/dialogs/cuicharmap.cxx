@@ -59,8 +59,15 @@ SvxCharacterMap::SvxCharacterMap( Window* pParent, sal_Bool bOne_, const SfxItem
     m_pFontLB->SetStyle(m_pFontLB->GetStyle() | WB_SORT);
     get(m_pSubsetText, "subsetft");
     get(m_pSubsetLB, "subsetlb");
+    //lock the size request of this widget to the width of all possible entries
+    fillAllSubsets(*m_pSubsetLB);
+    m_pSubsetLB->set_width_request(m_pSubsetLB->get_preferred_size().Width());
     get(m_pCharCodeText, "charcodeft");
+    //lock the size request of this widget to the width of the original .ui string
+    m_pCharCodeText->set_width_request(m_pCharCodeText->get_preferred_size().Width());
     get(m_pSymbolText, "symboltext");
+    //lock the size request of this widget to double the height of the label
+    m_pShowText->set_height_request(m_pSymbolText->get_preferred_size().Height() * 3);
 
     SFX_ITEMSET_ARG( pSet, pItem, SfxBoolItem, FN_PARAM_1, sal_False );
     if ( pItem )
@@ -375,6 +382,18 @@ IMPL_LINK_NOARG(SvxCharacterMap, OKHdl)
     return 0;
 }
 
+void SvxCharacterMap::fillAllSubsets(ListBox &rListBox)
+{
+    SubsetMap aAll(NULL);
+    rListBox.Clear();
+    bool bFirst = true;
+    while (const Subset *s = aAll.GetNextSubset(bFirst))
+    {
+        rListBox.InsertEntry( s->GetName() );
+        bFirst = false;
+    }
+}
+
 // -----------------------------------------------------------------------
 
 IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl)
@@ -398,6 +417,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl)
     // TODO: get info from the Font once it provides it
     delete pSubsetMap;
     pSubsetMap = NULL;
+    m_pSubsetLB->Clear();
 
     sal_Bool bNeedSubset = (aFont.GetCharSet() != RTL_TEXTENCODING_SYMBOL);
     if( bNeedSubset )
@@ -407,7 +427,6 @@ IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl)
         pSubsetMap = new SubsetMap( &aFontCharMap );
 
         // update subset listbox for new font's unicode subsets
-        m_pSubsetLB->Clear();
         // TODO: is it worth to improve the stupid linear search?
         bool bFirst = true;
         const Subset* s;
@@ -424,8 +443,8 @@ IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl)
             bNeedSubset = sal_False;
     }
 
-    m_pSubsetText->Show( bNeedSubset);
-    m_pSubsetLB->Show( bNeedSubset);
+    m_pSubsetText->Enable(bNeedSubset);
+    m_pSubsetLB->Enable(bNeedSubset);
 
     return 0;
 }
