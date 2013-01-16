@@ -4,9 +4,12 @@ dnl in order to create a configure script.
 
 # The version number in the second argumemnt to AC_INIT should be four numbers separated by
 # periods. Some parts of the code requires the first one to be less than 128 and the others to be less
-# than 256. The four numbers can optionally be followed by a period and a free-form string containing no
-# spaces or periods, like "frobozz-mumble-42" or "alpha0".
-AC_INIT([LibreOffice],[4.1.0.0.alpha0],[],[],[http://documentfoundation.org/])
+# than 256. The four numbers can optionally be followed by a period and a free-form string containing
+# no spaces or periods, like "frobozz-mumble-42" or "alpha0". If the free-form string ends with one or
+# several non-alphanumeric characters, those are split off and used only for the
+# ABOUTBOXPRODUCTVERSIONSUFFIX in openoffice.lst. Why that is necessary, no idea.
+
+AC_INIT([LibreOffice],[4.1.0.0.alpha0+],[],[],[http://documentfoundation.org/])
 
 AC_PREREQ([2.59])
 save_CC=$CC
@@ -4332,8 +4335,13 @@ LIBO_VERSION_MINOR=$2
 LIBO_VERSION_MICRO=$3
 LIBO_VERSION_PATCH=$4
 
-# Note that LIBO_VERSION_SUFFIX, if non-empty, includes the period separator
 LIBO_VERSION_SUFFIX=$5
+# Split out LIBO_VERSION_SUFFIX_SUFFIX... horrible crack. But apparently wanted separately in
+# openoffice.lst as ABOUTBOXPRODUCTVERSIONSUFFIX. Note that the double brackets are for m4's sake,
+# they get undoubled before actually passed to sed.
+LIBO_VERSION_SUFFIX_SUFFIX=`echo "$LIBO_VERSION_SUFFIX" | sed -e 's/.*[[a-zA-Z0-9]]\([[^a-zA-Z0-9]]*\)$/\1/'`
+test -n "$LIBO_VERSION_SUFFIX_SUFFIX" && LIBO_VERSION_SUFFIX="${LIBO_VERSION_SUFFIX%${LIBO_VERSION_SUFFIX_SUFFIX}}"
+# LIBO_VERSION_SUFFIX, if non-empty, should include the period separator
 test -n "$LIBO_VERSION_SUFFIX" && LIBO_VERSION_SUFFIX=".$LIBO_VERSION_SUFFIX"
 
 AC_SUBST(LIBO_VERSION_MAJOR)
@@ -4341,6 +4349,7 @@ AC_SUBST(LIBO_VERSION_MINOR)
 AC_SUBST(LIBO_VERSION_MICRO)
 AC_SUBST(LIBO_VERSION_PATCH)
 AC_SUBST(LIBO_VERSION_SUFFIX)
+AC_SUBST(LIBO_VERSION_SUFFIX_SUFFIX)
 
 AC_DEFINE_UNQUOTED(LIBO_VERSION_MAJOR,$LIBO_VERSION_MAJOR)
 AC_DEFINE_UNQUOTED(LIBO_VERSION_MINOR,$LIBO_VERSION_MINOR)
