@@ -74,6 +74,7 @@ void applyLineAttributes( const ::oox::core::XmlFilterBase& rFilterBase,
         aBorderLine.Color = aColor.getColor( rFilterBase.getGraphicHelper() );
         aBorderLine.OuterLineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.get( 0 ) ) / 4 );
         aBorderLine.InnerLineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.get( 0 ) ) / 4 );
+        aBorderLine.LineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.get( 0 ) ) / 2 );
         aBorderLine.LineDistance = 0;
     }
 
