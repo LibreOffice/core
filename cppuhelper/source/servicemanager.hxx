@@ -34,6 +34,8 @@
 #include "registry/registry.hxx"
 #include "rtl/ustring.hxx"
 
+namespace cppu { struct ContextEntry_Init; }
+
 namespace cppuhelper {
 
 typedef cppu::WeakComponentImplHelper8<
@@ -142,12 +144,13 @@ public:
         context_ = context;
     }
 
+    void addSingletonContextEntries(
+        std::vector< cppu::ContextEntry_Init > * entries) const;
+
     css::uno::Reference< css::uno::XComponentContext > getContext() const {
         assert(context_.is());
         return context_;
     }
-
-    Data const & getData() const { return data_; }
 
     void loadImplementation(
         css::uno::Reference< css::uno::XComponentContext > const & context,

@@ -92,22 +92,7 @@ cppu::defaultBootstrap_InitialComponentContext(rtl::OUString const & iniUri)
             css::uno::makeAny(
                 cppuhelper::detail::create_bootstrap_macro_expander_factory()),
             true));
-    cppuhelper::ServiceManager::Data const & data = smgr->getData();
-    for (cppuhelper::ServiceManager::Data::ImplementationMap::const_iterator i(
-             data.singletons.begin());
-         i != data.singletons.end(); ++i)
-    {
-        assert(!i->second.empty());
-        assert(i->second[0].get() != 0);
-        SAL_INFO_IF(
-            i->second.size() > 1, "cppuhelper",
-            "Arbitrarily chosing " << i->second[0]->info->name
-                << " among multiple implementations for " << i->first);
-        context_values.push_back(
-            cppu::ContextEntry_Init(
-                "/singletons/" + i->first,
-                css::uno::makeAny(i->second[0]->info->name), true));
-    }
+    smgr->addSingletonContextEntries(&context_values);
     context_values.push_back(
         cppu::ContextEntry_Init(
             "/services/com.sun.star.security.AccessController/mode",

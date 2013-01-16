@@ -29,6 +29,7 @@
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "cppuhelper/bootstrap.hxx"
+#include "cppuhelper/component_context.hxx"
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/implbase3.hxx"
 #include "cppuhelper/shlib.hxx"
@@ -38,6 +39,7 @@
 #include "rtl/ref.hxx"
 #include "rtl/uri.hxx"
 #include "rtl/ustring.hxx"
+#include "sal/log.hxx"
 #include "xmlreader/xmlreader.hxx"
 
 #include "paths.hxx"
@@ -594,6 +596,26 @@ void FactoryWrapper::loadImplementation(
     }
 }
 
+}
+
+void cppuhelper::ServiceManager::addSingletonContextEntries(
+    std::vector< cppu::ContextEntry_Init > * entries) const
+{
+    assert(entries != 0);
+    for (Data::ImplementationMap::const_iterator i(data_.singletons.begin());
+         i != data_.singletons.end(); ++i)
+    {
+        assert(!i->second.empty());
+        assert(i->second[0].get() != 0);
+        SAL_INFO_IF(
+            i->second.size() > 1, "cppuhelper",
+            "Arbitrarily chosing " << i->second[0]->info->name
+                << " among multiple implementations for " << i->first);
+        entries->push_back(
+            cppu::ContextEntry_Init(
+                "/singletons/" + i->first,
+                css::uno::makeAny(i->second[0]->info->name), true));
+    }
 }
 
 void cppuhelper::ServiceManager::loadImplementation(
