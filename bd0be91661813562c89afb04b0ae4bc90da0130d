@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAATn///+g\u003d",
+        "filename": "writerfilter/source/dmapper/StyleSheetTable.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-01-17T12:06:42Z",
+      "side": 1,
+      "message": "Forgot to remove this debugging leftover?",
+      "revId": "bd0be91661813562c89afb04b0ae4bc90da0130d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATn///+c\u003d",
+        "filename": "writerfilter/source/dmapper/StyleSheetTable.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 599,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-01-17T12:06:42Z",
+      "side": 1,
+      "message": "Please s/Office/Word/, Office can refer to OpenOffice.org or LibreOffice as well.",
+      "revId": "bd0be91661813562c89afb04b0ae4bc90da0130d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATn///+Y\u003d",
+        "filename": "writerfilter/source/dmapper/StyleSheetTable.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-01-17T12:06:42Z",
+      "side": 1,
+      "message": "Uhm, why 20? Posibly this value is specific to your test document; would be better to get the real previous value.",
+      "revId": "bd0be91661813562c89afb04b0ae4bc90da0130d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
