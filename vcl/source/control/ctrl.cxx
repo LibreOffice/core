@@ -444,16 +444,17 @@ void Control::DataChanged( const DataChangedEvent& rDCEvt)
          (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        AllSettings     aSettings = GetSettings();
-        StyleSettings   aStyleSettings = aSettings.GetStyleSettings();
-        sal_uLong           nOldOptions = rDCEvt.GetOldSettings()->GetStyleSettings().GetOptions();
-        sal_uLong           nNewOptions = aStyleSettings.GetOptions();
+        const AllSettings* pOldSettings = rDCEvt.GetOldSettings();
 
-        if ( !(nNewOptions & STYLE_OPTION_MONO) && ( nOldOptions & STYLE_OPTION_MONO ) )
+        AllSettings aSettings = GetSettings();
+        StyleSettings aStyleSettings = aSettings.GetStyleSettings();
+        sal_uLong nNewOptions = aStyleSettings.GetOptions();
+
+        if ( pOldSettings && !(nNewOptions & STYLE_OPTION_MONO) && ( pOldSettings->GetStyleSettings().GetOptions() & STYLE_OPTION_MONO ) )
         {
             nNewOptions |= STYLE_OPTION_MONO;
             aStyleSettings.SetOptions( nNewOptions );
-            aStyleSettings.SetMonoColor( rDCEvt.GetOldSettings()->GetStyleSettings().GetMonoColor() );
+            aStyleSettings.SetMonoColor( pOldSettings->GetStyleSettings().GetMonoColor() );
             aSettings.SetStyleSettings( aStyleSettings );
             SetSettings( aSettings );
         }
