@@ -198,8 +198,6 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
         const SvxPageItem& rPageItem = (const SvxPageItem&)rSet.Get(SID_ATTR_PAGE);
 
         sal_uInt16 nUse = (sal_uInt16)rPageItem.GetPageUsage();
-        if(nUse & 0x04)
-            nUse |= 0x03;
         if(nUse)
             rPageDesc.SetUseOn( lcl_convertUseFromSvx((UseOnPage) nUse) );
         rPageDesc.SetLandscape(rPageItem.IsLandscape());
