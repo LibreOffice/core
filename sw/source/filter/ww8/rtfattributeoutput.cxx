@@ -1872,6 +1872,16 @@ void RtfAttributeOutput::CharEscapement( const SvxEscapementItem& rEsc )
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
+    short nEsc = rEsc.GetEsc();
+    if (rEsc.GetProp() == DFLT_ESC_PROP)
+    {
+        if ( DFLT_ESC_SUB == nEsc || DFLT_ESC_AUTO_SUB == nEsc )
+            m_aStyles.append(OOO_STRING_SVTOOLS_RTF_SUB);
+        else if ( DFLT_ESC_SUPER == nEsc || DFLT_ESC_AUTO_SUPER == nEsc )
+            m_aStyles.append(OOO_STRING_SVTOOLS_RTF_SUPER);
+        return;
+    }
+
     const char * pUpDn;
 
     SwTwips nH = ((SvxFontHeightItem&)m_rExport.GetItem( RES_CHRATR_FONTSIZE )).GetHeight();
@@ -1886,7 +1896,6 @@ void RtfAttributeOutput::CharEscapement( const SvxEscapementItem& rEsc )
     else
         return;
 
-    short nEsc = rEsc.GetEsc();
     short nProp = rEsc.GetProp() * 100;
     if( DFLT_ESC_AUTO_SUPER == nEsc )
     {

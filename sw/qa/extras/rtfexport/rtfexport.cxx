@@ -49,6 +49,7 @@ public:
     void testFdo44174();
     void testFdo50087();
     void testFdo50831();
+    void testFdo52286();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -58,6 +59,7 @@ public:
     CPPUNIT_TEST(testFdo44174);
     CPPUNIT_TEST(testFdo50087);
     CPPUNIT_TEST(testFdo50831);
+    CPPUNIT_TEST(testFdo52286);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -142,6 +144,27 @@ void Test::testFdo50831()
     float fValue = 0;
     xPropertySet->getPropertyValue("CharHeight") >>= fValue;
     CPPUNIT_ASSERT_EQUAL(10.f, fValue);
+}
+
+void Test::testFdo52286()
+{
+    // The problem was that font size wasn't reduced in sub/super script.
+    roundtrip("fdo52286.odt");
+
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParaEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
+    xRunEnum->nextElement();
+    uno::Reference<beans::XPropertySet> xPropertySet(xRunEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(58), xPropertySet->getPropertyValue("CharEscapementHeight").get<sal_Int32>());
+
+    xRunEnumAccess.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    xRunEnum = xRunEnumAccess->createEnumeration();
+    xRunEnum->nextElement();
+    xPropertySet.set(xRunEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(58), xPropertySet->getPropertyValue("CharEscapementHeight").get<sal_Int32>());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
