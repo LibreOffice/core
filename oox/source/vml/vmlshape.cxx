@@ -360,7 +360,7 @@ void ShapeBase::convertShapeProperties( const Reference< XShape >& rxShape ) con
     maTypeModel.maStrokeModel.pushToPropMap( aPropMap, rGraphicHelper );
     maTypeModel.maFillModel.pushToPropMap( aPropMap, rGraphicHelper );
 
-    // TextFrames have FillColor, not BackColor
+    // TextFrames have BackColor, not FillColor
     uno::Reference<lang::XServiceInfo> xSInfo(rxShape, uno::UNO_QUERY_THROW);
     if (xSInfo->supportsService("com.sun.star.text.TextFrame") && aPropMap.hasProperty(PROP_FillColor))
     {
