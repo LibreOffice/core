@@ -136,6 +136,7 @@ protected:
     SfxTemplateItem*            pFamilyState[MAX_FAMILIES];
     SfxStyleSheetBasePool*      pStyleSheetPool;
     SvTreeListBox*              pTreeBox;
+    pTreeBox.SetSelectionMode(MULTIPLE_SELECTION);
     SfxObjectShell*             pCurObjShell;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager2 >
                                 xModuleManager;

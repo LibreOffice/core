@@ -1991,7 +1991,12 @@ void SfxCommonTemplateDialog_Impl::DeleteHdl(void *)
 
                 if ( pTreeBox )
                 {
-                    pTreeBox->RemoveParentKeepChildren( pTreeBox->FirstSelected() );
+                    while(pTreeBox->FirstSelected)
+                    {      
+                        SvTreeListEntry* temp = pTreeBox->NextSelected();                        
+                        pTreeBox->RemoveParentKeepChildren( pTreeBox->FirstSelected() );
+                        pTreeBox->FirstSelected() = temp ;
+                    }
                     bDontUpdate = sal_False;
                 }
             }
@@ -2038,6 +2043,7 @@ void    SfxCommonTemplateDialog_Impl::EnableDelete()
         const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
         const SfxStyleFamily eFam = pItem->GetFamily();
         sal_uInt16 nFilter = 0;
+        sal_bool DelFlag = sal_false;
         if(pItem->GetFilterList().size() > nActFilter)
             nFilter = pItem->GetFilterList()[ nActFilter ]->nFlags;
         if(!nFilter)    // automatic
@@ -2045,14 +2051,29 @@ void    SfxCommonTemplateDialog_Impl::EnableDelete()
         const SfxStyleSheetBase *pStyle =
             pStyleSheetPool->Find(aTemplName,eFam, pTreeBox? SFXSTYLEBIT_ALL : nFilter);
 
-        OSL_ENSURE(pStyle, "Style ot found");
-        if(pStyle && pStyle->IsUserDefined())
+        OSL_ENSURE(pStyle, "Style not found");
+        if(pStyle)
         {
-            EnableDel(sal_True);
-        }
-        else
-        {
-            EnableDel(sal_False);
+           while(pTreeBox->FirstSelected)
+           {        
+                SfxStyleSheetBase *pcheck = GetSelectedStyle();
+                if(!(pcheck->UserDefined()))
+                {   
+                    sal_bool=false;      
+                    break;
+                }                
+                SvTreeListEntry* temp = pTreeBox->NextSelected();
+                if(pTreeBox->FirstSelected)                       
+                pTreeBox->FirstSelected() = temp ;
+            }
+            if(DelFlag)
+            {
+                EnableDel(sal_True);
+            }
+            else
+            {
+                EnableDel(sal_False);
+            }
         }
     }
     else
