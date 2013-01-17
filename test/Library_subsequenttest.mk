@@ -81,6 +81,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
     test/source/sheet/xspreadsheetdocument \
     test/source/sheet/xspreadsheets2 \
     test/source/sheet/xsheetannotation \
+    test/source/sheet/xsheetannotations \
     test/source/text/xtext \
     test/source/text/xtextfield \
     test/source/text/xtextcontent \
