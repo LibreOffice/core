@@ -485,6 +485,7 @@ Java_org_libreoffice_android_Bootstrap_putenv(JNIEnv* env,
 
     putenv(s);
 
+#if 0
     {
         static int beenhere=0;
         if (!beenhere) {
@@ -493,6 +494,7 @@ Java_org_libreoffice_android_Bootstrap_putenv(JNIEnv* env,
             beenhere = 1;
         }
     }
+#endif
 
     (*env)->ReleaseStringUTFChars(env, string, s);
 }
