@@ -5501,6 +5501,16 @@
                     <value xml:lang="en-US">E-mail as ~OpenDocument Format...</value>
                 </prop>
             </node>
+            <node oor:name=".uno:TemplateManager" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Template Manager</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:ExternalEdit" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Edit with External Tool</value>
+                </prop>
+            </node>
         </node>
     </node>
 </oor:component-data>

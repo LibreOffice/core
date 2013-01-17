@@ -1704,6 +1704,51 @@
                     <value xml:lang="en-US">Insert Current Time</value>
                 </prop>
             </node>
+            <node oor:name=".uno:ExportAsGraphic" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Export as graphic</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:EditShapeHyperlink" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Edit Hyperlink</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DeleteShapeHyperlink" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Remove Hyperlink</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:ColorScaleDialog" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Color Scale...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DataBarDialog" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Data Bar...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:PasteOnly" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Paste Only</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:PasteOnlyFormula" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Paste Only Formula</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:PasteOnlyText" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Paste Only Text</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:PasteOnlyValue" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Paste Only Value</value>
+                </prop>
+            </node>
         </node>
     </node>
 </oor:component-data>
