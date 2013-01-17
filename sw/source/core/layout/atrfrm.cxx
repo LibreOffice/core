@@ -1514,8 +1514,11 @@ SwFmtAnchor::~SwFmtAnchor()
 
 void SwFmtAnchor::SetAnchor( const SwPosition *pPos )
 {
-    // anchor only to paragraphs
-    assert(!pPos || dynamic_cast<SwTxtNode*>(&pPos->nNode.GetNode()));
+    // anchor only to paragraphs, or start nodes in case of FLY_AT_FLY
+    assert(!pPos
+            || ((FLY_AT_FLY == nAnchorId) &&
+                    dynamic_cast<SwStartNode*>(&pPos->nNode.GetNode()))
+            || dynamic_cast<SwTxtNode*>(&pPos->nNode.GetNode()));
     m_pCntntAnchor .reset( (pPos) ? new SwPosition( *pPos ) : 0 );
     // Flys anchored AT paragraph should not point into the paragraph content
     if (m_pCntntAnchor &&
