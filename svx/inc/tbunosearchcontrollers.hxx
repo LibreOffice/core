@@ -139,9 +139,7 @@ class ExitSearchToolboxController   : public svt::ToolboxController,
                                       public css::lang::XServiceInfo
 {
 public:
-    enum Type { EXIT };
-
-    ExitSearchToolboxController( const css::uno::Reference< css::lang::XMultiServiceFactory >& rServiceManager, Type eType );
+    ExitSearchToolboxController( const css::uno::Reference< css::lang::XMultiServiceFactory >& rServiceManager );
     ~ExitSearchToolboxController();
 
     // XInterface
@@ -172,9 +170,6 @@ public:
 
     // XStatusListener
     virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) throw ( css::uno::RuntimeException );
-
-private:
-    Type meType;
 };
 
 class UpDownSearchToolboxController : public svt::ToolboxController,

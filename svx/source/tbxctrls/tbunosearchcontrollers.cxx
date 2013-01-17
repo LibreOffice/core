@@ -606,11 +606,10 @@ void SAL_CALL UpDownSearchToolboxController::statusChanged( const css::frame::Fe
 //-----------------------------------------------------------------------------------------------------------
 // class ExitSearchToolboxController
 
-ExitSearchToolboxController::ExitSearchToolboxController( const css::uno::Reference< css::lang::XMultiServiceFactory > & rServiceManager, Type eType )
+ExitSearchToolboxController::ExitSearchToolboxController( const css::uno::Reference< css::lang::XMultiServiceFactory > & rServiceManager )
     : svt::ToolboxController( rServiceManager,
             css::uno::Reference< css::frame::XFrame >(),
-            rtl::OUString( COMMAND_EXITSEARCH ) ),
-      meType( eType )
+            rtl::OUString( COMMAND_EXITSEARCH ) )
 {
 }
 
@@ -904,7 +903,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL UpSearchToolboxController_c
 css::uno::Reference< css::uno::XInterface > SAL_CALL ExitFindbarToolboxController_createInstance(
     const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr )
 {
-    return *new ExitSearchToolboxController( rSMgr, ExitSearchToolboxController::EXIT );
+    return *new ExitSearchToolboxController( rSMgr );
 }
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL FindbarDispatcher_createInstance(
