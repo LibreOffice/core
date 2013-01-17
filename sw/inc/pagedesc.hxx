@@ -292,6 +292,7 @@ inline UseOnPage SwPageDesc::GetUseOn() const
     UseOnPage eRet = eUse;
     eRet = (UseOnPage) (eRet & nsUseOnPage::PD_NOHEADERSHARE);
     eRet = (UseOnPage) (eRet & nsUseOnPage::PD_NOFOOTERSHARE);
+    eRet = (UseOnPage) (eRet & nsUseOnPage::PD_NOFIRSTSHARE);
     return eRet;
 }
 
