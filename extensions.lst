@@ -116,3 +116,21 @@
 # Asturian.
 [ language=ast ]
     ed5702f25c8f5e36f97cafc606470c42 http://sourceforge.net/projects/aoo-extensions/files/3932/1/asturianu.oxt/download "asturianu.oxt"
+
+# Norwegian.
+[ language=nb ]
+    18bbb57caee07d276ef21a0e88859664 http://sourceforge.net/projects/aoo-extensions/files/5955/0/dict-no-ooo330.oxt/download "dict-no-ooo330.oxt"
+
+# Swedish.
+[ language=sv ]
+    249b3bd3d9de4928ab8c809623dc9c4f http://sourceforge.net/projects/aoo-extensions/files/5959/0/dict-sv.oxt/download "dict-sv.oxt"
+
+# Korean.
+[ language=ko ]
+    c20c155c47174c1b0ec0a53618044ac3 http://sourceforge.net/projects/aoo-extensions/files/5968/0/Korean_spell-checker-0.5.6_OOo.oxt/download "Korean_spell-checker-0.5.6_OOo.oxt"
+
+# Polish.
+[ language=pl ]
+    a69f9221864b1360e38ff3f0b0cc9222 http://sourceforge.net/projects/aoo-extensions/files/806/4/pl-dict.oxt/download "pl-dict.oxt"
+
+
