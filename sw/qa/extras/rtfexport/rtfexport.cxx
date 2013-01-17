@@ -69,6 +69,7 @@ public:
     void testFdo55939();
     void testTextFrames();
     void testFdo53604();
+    void testFdo52286();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -112,6 +113,7 @@ void Test::run()
         {"fdo55939.odt", &Test::testFdo55939},
         {"textframes.odt", &Test::testTextFrames},
         {"fdo53604.odt", &Test::testFdo53604},
+        {"fdo52286.odt", &Test::testFdo52286},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -458,6 +460,13 @@ void Test::testFdo53604()
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xFootnotes(xFootnotesSupplier->getFootnotes(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xFootnotes->getCount());
+}
+
+void Test::testFdo52286()
+{
+    // The problem was that font size wasn't reduced in sub/super script.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(58), getProperty<sal_Int32>(getRun(getParagraph(1), 2), "CharEscapementHeight"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(58), getProperty<sal_Int32>(getRun(getParagraph(2), 2), "CharEscapementHeight"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
