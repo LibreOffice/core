@@ -212,8 +212,8 @@ sal_Bool MouseSettings::operator ==( const MouseSettings& rSet ) const
 
 ImplStyleData::ImplStyleData() :
     maPersonaHeaderFooter(),
-    mpPersonaHeaderBitmap(),
-    mpPersonaFooterBitmap()
+    maPersonaHeaderBitmap(),
+    maPersonaFooterBitmap()
 {
     mnRefCount                  = 1;
     mnScrollBarSize             = 16;
@@ -311,8 +311,8 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maGroupFont( rData.maGroupFont ),
     maWorkspaceGradient( rData.maWorkspaceGradient ),
     maPersonaHeaderFooter( rData.maPersonaHeaderFooter ),
-    mpPersonaHeaderBitmap( rData.mpPersonaHeaderBitmap ),
-    mpPersonaFooterBitmap( rData.mpPersonaFooterBitmap )
+    maPersonaHeaderBitmap( rData.maPersonaHeaderBitmap ),
+    maPersonaFooterBitmap( rData.maPersonaFooterBitmap )
 {
     mnRefCount                  = 1;
     mnBorderSize                = rData.mnBorderSize;
@@ -730,14 +730,14 @@ static void setupPersonaHeaderFooter( WhichPersona eWhich, rtl::OUString& /*rHea
 
 const BitmapEx StyleSettings::GetPersonaHeader() const
 {
-    setupPersonaHeaderFooter( PERSONA_HEADER, mpData->maPersonaHeaderFooter, mpData->mpPersonaHeaderBitmap );
-    return mpData->mpPersonaHeaderBitmap;
+    setupPersonaHeaderFooter( PERSONA_HEADER, mpData->maPersonaHeaderFooter, mpData->maPersonaHeaderBitmap );
+    return mpData->maPersonaHeaderBitmap;
 }
 
 const BitmapEx StyleSettings::GetPersonaFooter() const
 {
-    setupPersonaHeaderFooter( PERSONA_FOOTER, mpData->maPersonaHeaderFooter, mpData->mpPersonaFooterBitmap );
-    return mpData->mpPersonaFooterBitmap;
+    setupPersonaHeaderFooter( PERSONA_FOOTER, mpData->maPersonaHeaderFooter, mpData->maPersonaFooterBitmap );
+    return mpData->maPersonaFooterBitmap;
 }
 
 // -----------------------------------------------------------------------

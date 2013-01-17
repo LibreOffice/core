@@ -330,8 +330,8 @@ private:
 
     rtl::OUString                   maPersonaHeaderFooter; ///< Cache the settings to detect changes.
 
-    BitmapEx                        mpPersonaHeaderBitmap; ///< Cache the header bitmap.
-    BitmapEx                        mpPersonaFooterBitmap; ///< Cache the footer bitmap.
+    BitmapEx                        maPersonaHeaderBitmap; ///< Cache the header bitmap.
+    BitmapEx                        maPersonaFooterBitmap; ///< Cache the footer bitmap.
 };
 
 #define DEFAULT_WORKSPACE_GRADIENT_START_COLOR Color( 0xa3, 0xae, 0xb8 )
