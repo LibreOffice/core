@@ -35,6 +35,7 @@
 #include <svl/smplhint.hxx>
 #include <svl/itemset.hxx>
 
+#include <svx/sdr/properties/attributeproperties.hxx>
 #include <svx/xflbmtit.hxx>
 #include <svx/xflbstit.hxx>
 #include <editeng/bulitem.hxx>
@@ -349,13 +350,16 @@ bool SdStyleSheet::IsUsed() const
                 continue;
 
             // NULL-Pointer ist im Listener-Array erlaubt
-            if (pListener && pListener->ISA(SdrAttrObj))
+            if (pListener)
             {
-                bResult = ((SdrAttrObj*)pListener)->IsInserted();
-            }
-            else if (pListener && pListener->ISA(SfxStyleSheet))
-            {
-                bResult = ((SfxStyleSheet*)pListener)->IsUsed();
+                if (pListener->ISA(sdr::properties::AttributeProperties))
+                {
+                    bResult = true;
+                }
+                else if (pListener->ISA(SfxStyleSheet))
+                {
+                    bResult = ((SfxStyleSheet*)pListener)->IsUsed();
+                }
             }
             if (bResult)
                 break;
