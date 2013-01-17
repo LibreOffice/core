@@ -387,9 +387,7 @@ bool VclButtonBox::set_property(const rtl::OString &rKey, const rtl::OString &rV
     if (rKey == "layout-style")
     {
         VclButtonBoxStyle eStyle = VCL_BUTTONBOX_DEFAULT_STYLE;
-        if (rValue == "start")
-            eStyle = VCL_BUTTONBOX_START;
-        else if (rValue == "spread")
+        if (rValue == "spread")
             eStyle = VCL_BUTTONBOX_SPREAD;
         else if (rValue == "edge")
             eStyle = VCL_BUTTONBOX_EDGE;
