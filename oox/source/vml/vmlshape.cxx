@@ -30,6 +30,7 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/SizeType.hpp>
@@ -360,12 +361,30 @@ void ShapeBase::convertShapeProperties( const Reference< XShape >& rxShape ) con
     maTypeModel.maStrokeModel.pushToPropMap( aPropMap, rGraphicHelper );
     maTypeModel.maFillModel.pushToPropMap( aPropMap, rGraphicHelper );
 
-    // TextFrames have BackColor, not FillColor
     uno::Reference<lang::XServiceInfo> xSInfo(rxShape, uno::UNO_QUERY_THROW);
-    if (xSInfo->supportsService("com.sun.star.text.TextFrame") && aPropMap.hasProperty(PROP_FillColor))
+    if (xSInfo->supportsService("com.sun.star.text.TextFrame"))
     {
-        aPropMap.setProperty(PROP_BackColor, aPropMap[PROP_FillColor]);
-        aPropMap.erase(PROP_FillColor);
+        // TextFrames have BackColor, not FillColor
+        if (aPropMap.hasProperty(PROP_FillColor))
+        {
+            aPropMap.setProperty(PROP_BackColor, aPropMap[PROP_FillColor]);
+            aPropMap.erase(PROP_FillColor);
+        }
+        // And no LineColor property; individual borders can have colors
+        if (aPropMap.hasProperty(PROP_LineColor))
+        {
+            uno::Reference<beans::XPropertySet> xPropertySet(rxShape, uno::UNO_QUERY);
+            static sal_Int32 aBorders[] = {
+                PROP_TopBorder, PROP_LeftBorder, PROP_BottomBorder, PROP_RightBorder
+            };
+            for (unsigned int i = 0; i < SAL_N_ELEMENTS(aBorders); ++i)
+            {
+                table::BorderLine2 aBorderLine = xPropertySet->getPropertyValue(PropertyMap::getPropertyName(aBorders[i])).get<table::BorderLine2>();
+                aBorderLine.Color = aPropMap[PROP_LineColor].get<sal_Int32>();
+                aPropMap.setProperty(aBorders[i], uno::makeAny(aBorderLine));
+            }
+            aPropMap.erase(PROP_LineColor);
+        }
     }
 
     PropertySet( rxShape ).setProperties( aPropMap );
