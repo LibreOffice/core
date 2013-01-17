@@ -367,6 +367,26 @@ sal_Bool SdDrawDocument::InsertBookmark(
     return bOK;
 }
 
+namespace
+{
+
+void
+lcl_removeUnusedStyles(SfxStyleSheetBasePool* const pStyleSheetPool, SdStyleSheetVector& rStyles)
+{
+    SdStyleSheetVector aUsedStyles;
+    aUsedStyles.reserve(rStyles.size());
+    for (SdStyleSheetVector::const_iterator aIt(rStyles.begin()), aLast(rStyles.end()); aIt != aLast; ++aIt)
+    {
+        if ((*aIt)->IsUsed())
+            aUsedStyles.push_back(*aIt);
+        else
+            pStyleSheetPool->Remove((*aIt).get());
+    }
+    rStyles = aUsedStyles;
+}
+
+}
+
 sal_Bool SdDrawDocument::InsertBookmarkAsPage(
     const std::vector<rtl::OUString> &rBookmarkList,
     std::vector<rtl::OUString> *pExchangeList,            // Liste der zu verwendenen Namen
@@ -494,8 +514,8 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
     /**************************************************************************
     * Die tatsaechlich benoetigten Vorlagen kopieren
     **************************************************************************/
-    SdStyleSheetPool* pBookmarkStyleSheetPool =
-    (SdStyleSheetPool*) pBookmarkDoc->GetStyleSheetPool();
+    SdStyleSheetPool* pBookmarkStyleSheetPool = dynamic_cast<SdStyleSheetPool*>(pBookmarkDoc->GetStyleSheetPool());
+    SdStyleSheetPool* pStyleSheetPool = dynamic_cast<SdStyleSheetPool*>(GetStyleSheetPool());
 
     // Wenn Vorlagen kopiert werden muessen, dann muessen auch die
     // MasterPages kopiert werden!
@@ -508,7 +528,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
         SdStyleSheetVector aCreatedStyles;
         String layoutName = *pIter;
 
-        ((SdStyleSheetPool*)GetStyleSheetPool())->CopyLayoutSheets(layoutName, *pBookmarkStyleSheetPool,aCreatedStyles);
+        pStyleSheetPool->CopyLayoutSheets(layoutName, *pBookmarkStyleSheetPool,aCreatedStyles);
 
         if(!aCreatedStyles.empty())
         {
@@ -519,6 +539,18 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
             }
         }
     }
+
+    // Copy styles. This unconditionally copies all styles, even those
+    // that are not used in any of the inserted pages. The unused styles
+    // are then removed at the end of the function, where we also create
+    // undo records for the inserted styles.
+    SdStyleSheetVector aNewGraphicStyles;
+    pStyleSheetPool->CopyGraphicSheets(*pBookmarkStyleSheetPool, aNewGraphicStyles);
+    SdStyleSheetVector aNewCellStyles;
+    pStyleSheetPool->CopyCellSheets(*pBookmarkStyleSheetPool, aNewCellStyles);
+
+    // TODO handle undo of table styles too
+    pStyleSheetPool->CopyTableStyles(*pBookmarkStyleSheetPool);
 
     /**************************************************************************
     * Dokument einfuegen
@@ -919,6 +951,17 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
 
     // Make absolutely sure no double masterpages are there
     RemoveUnnecessaryMasterPages(NULL, sal_True, sal_True);
+
+    // remove copied styles not used on any inserted page and create
+    // undo records
+    // WARNING: SdMoveStyleSheetsUndoAction clears the passed list of
+    // styles, so it cannot be used after this point
+    lcl_removeUnusedStyles(GetStyleSheetPool(), aNewGraphicStyles);
+    if (!aNewGraphicStyles.empty() && pUndoMgr)
+        pUndoMgr->AddUndoAction(new SdMoveStyleSheetsUndoAction(this, aNewGraphicStyles, sal_True));
+    lcl_removeUnusedStyles(GetStyleSheetPool(), aNewCellStyles);
+    if (!aNewCellStyles.empty() && pUndoMgr)
+        pUndoMgr->AddUndoAction(new SdMoveStyleSheetsUndoAction(this, aNewCellStyles, sal_True));
 
     if( bUndo )
         EndUndo();

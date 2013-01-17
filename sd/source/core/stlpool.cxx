@@ -594,7 +594,23 @@ void SdStyleSheetPool::CopyTableStyles(SdStyleSheetPool& rSourcePool)
     }
 }
 
+void SdStyleSheetPool::CopyGraphicSheets(SdStyleSheetPool& rSourcePool, SdStyleSheetVector& rCreatedSheets)
+{
+    CopySheets( rSourcePool, SD_STYLE_FAMILY_GRAPHICS, rCreatedSheets );
+}
+
+void SdStyleSheetPool::CopyCellSheets(SdStyleSheetPool& rSourcePool, SdStyleSheetVector& rCreatedSheets)
+{
+    CopySheets( rSourcePool, SD_STYLE_FAMILY_CELL, rCreatedSheets );
+}
+
 void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily )
+{
+    SdStyleSheetVector aTmpSheets;
+    CopySheets(rSourcePool, eFamily, aTmpSheets);
+}
+
+void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily, SdStyleSheetVector& rCreatedSheets)
 {
     String aHelpFile;
 
@@ -622,6 +638,8 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
 
                 xNewSheet->SetHelpId( aHelpFile, xSheet->GetHelpId( aHelpFile ) );
                 xNewSheet->GetItemSet().Put( xSheet->GetItemSet() );
+
+                rCreatedSheets.push_back( SdStyleSheetRef( static_cast< SdStyleSheet* >( xNewSheet.get() ) ) );
             }
         }
     }
