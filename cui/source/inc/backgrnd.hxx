@@ -71,36 +71,37 @@ private:
     SvxBackgroundTabPage( Window* pParent, const SfxItemSet& rCoreSet );
     ~SvxBackgroundTabPage();
 
-    FixedText               aSelectTxt;
-    ListBox                 aLbSelect;
-    const String            aStrBrowse;
-    const String            aStrUnlinked;
-     FixedText               aTblDesc;
-     ListBox                 aTblLBox;
-     ListBox                 aParaLBox;
-    Control                 aBorderWin;
-    ValueSet                aBackgroundColorSet;
-    FixedLine               aBackgroundColorBox;
-    BackgroundPreviewImpl*  pPreviewWin1;
+    FixedText*              m_pSelectTxt;
+    ListBox*                m_pLbSelect;
+    FixedText*              m_pTblDesc;
+    ListBox*                m_pTblLBox;
+    ListBox*                m_pParaLBox;
 
-    FixedText               aColTransFT;///<color transparency
-    MetricField             aColTransMF;
-    CheckBox                aBtnPreview;
+    VclFrame*               m_pBackGroundColorFrame;
+    ValueSet*               m_pBackgroundColorSet;
+    BackgroundPreviewImpl*  m_pPreviewWin1;
+
+    FixedText*              m_pColTransFT;///<color transparency
+    MetricField*            m_pColTransMF;
+    CheckBox*               m_pBtnPreview;
+
     // Background Bitmap ----------------------------------
-     FixedLine               aGbFile;
-    PushButton              aBtnBrowse;
-    CheckBox                aBtnLink;
-      FixedLine               aGbPosition;
-    RadioButton             aBtnPosition;
-    RadioButton             aBtnArea;
-    RadioButton             aBtnTile;
-    SvxRectCtl              aWndPosition;
-    FixedInfo               aFtFile;
+    VclContainer*           m_pFileFrame;
+    PushButton*             m_pBtnBrowse;
+    CheckBox*               m_pBtnLink;
+    FixedText*              m_pFtUnlinked;
+    FixedText*              m_pFtFile;
 
-    FixedLine               aGraphTransFL;///<transparency of graphics
-    MetricField             aGraphTransMF;
+    VclContainer*           m_pTypeFrame;
+    RadioButton*            m_pBtnPosition;
+    RadioButton*            m_pBtnArea;
+    RadioButton*            m_pBtnTile;
+    SvxRectCtl*             m_pWndPosition;
 
-    BackgroundPreviewImpl*  pPreviewWin2;
+    VclContainer*           m_pGraphTransFrame;///<transparency of graphics
+    MetricField*            m_pGraphTransMF;
+
+    BackgroundPreviewImpl*  m_pPreviewWin2;
 
     // DDListBox for Writer -------------------------------
     //------------------------------------------------------

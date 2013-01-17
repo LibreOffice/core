@@ -42,9 +42,14 @@ class SvxTabPage : public SfxTabPage
 {
 
 public:
-    SvxTabPage( Window* pParent, ResId Id, const SfxItemSet& rInAttrs  ) :
-        SfxTabPage( pParent, Id, rInAttrs ) {}
-
+    SvxTabPage(Window* pParent, ResId Id, const SfxItemSet& rInAttrs)
+        : SfxTabPage(pParent, Id, rInAttrs)
+    {
+    }
+    SvxTabPage(Window *pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet &rAttrSet)
+        : SfxTabPage(pParent, rID, rUIXMLDescription, rAttrSet)
+    {
+    }
     virtual void PointChanged( Window* pWindow, RECT_POINT eRP ) = 0;
 };
 
@@ -94,6 +99,8 @@ protected:
     Point               GetApproxLogPtFromPixPt( const Point& rRoughPixelPoint ) const;
 public:
     SvxRectCtl( Window* pParent, const ResId& rResId, RECT_POINT eRpt = RP_MM,
+                sal_uInt16 nBorder = 200, sal_uInt16 nCircle = 80, CTL_STYLE eStyle = CS_RECT );
+    SvxRectCtl( Window* pParent, RECT_POINT eRpt = RP_MM,
                 sal_uInt16 nBorder = 200, sal_uInt16 nCircle = 80, CTL_STYLE eStyle = CS_RECT );
     virtual ~SvxRectCtl();
 
