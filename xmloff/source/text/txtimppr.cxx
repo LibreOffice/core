@@ -257,6 +257,26 @@ void XMLTextImportPropertyMapper::FontDefaultsCheck(
     }
 }
 
+//fdo#58730 The [UL|LR]Space class has a deficiency where "100%" also serves as
+//a flag that the value is an absolute value so we can't truly handle an
+//up/lower space property which wants to specify its 200% upper but 100% lower
+//of its parent (try typing 100% vs 200% into the edit style dialog and revisit
+//your style). So on xml load that ends up meaning 200%, 0 lower. This is a
+//crock.
+//
+//On import clear 100% all-margins relative sizes.
+static bool
+isNotDefaultRelSize(const XMLPropertyState* pRelState, const UniReference<XMLPropertySetMapper>& rPrMap)
+{
+    if (rPrMap->GetEntryContextId(pRelState->mnIndex) == CTF_PARAMARGINALL_REL)
+    {
+        sal_Int32 nTemp = 0;
+        pRelState->maValue >>= nTemp;
+        return nTemp != 100;
+    }
+    return true;
+}
+
 void XMLTextImportPropertyMapper::finished(
             ::std::vector< XMLPropertyState >& rProperties,
             sal_Int32 /*nStartIndex*/, sal_Int32 /*nEndIndex*/ ) const
@@ -425,7 +445,7 @@ void XMLTextImportPropertyMapper::finished(
 
     for (sal_uInt16 i = 0; i < 4; i++)
     {
-        if (pAllParaMargin && !pParaMargins[i])
+        if (pAllParaMargin && !pParaMargins[i] && isNotDefaultRelSize(pAllParaMargin, getPropertySetMapper()))
         {
 #if OSL_DEBUG_LEVEL > 0
             sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(

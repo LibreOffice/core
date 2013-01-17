@@ -295,6 +295,29 @@ void XMLTextExportPropertySetMapper::ContextFontHeightFilter(
 // helper method; implementation below
 static bool lcl_IsOutlineStyle(const SvXMLExport&, const OUString&);
 
+//fdo#58730 The [UL|LR]Space class has a deficiency where "100%" also serves as
+//a flag that the value is an absolute value so we can't truly handle an
+//up/lower space property which wants to specify its 200% upper but 100% lower
+//of its parent (try typing 100% vs 200% into the edit style dialog and revisit
+//your style). So on xml load that ends up meaning 200%, 0 lower. This is a
+//crock.
+//
+//On export clear 100% relative sizes.
+static void
+lcl_clearDefaultRelSize(XMLPropertyState *const pRelState)
+{
+    if (pRelState)
+    {
+        sal_Int32 nTemp = 0;
+        pRelState->maValue >>= nTemp;
+        if (100 == nTemp)
+        {
+            pRelState->mnIndex = -1;
+            pRelState->maValue.clear();
+        }
+    }
+}
+
 static void
 lcl_checkMultiProperty(XMLPropertyState *const pState,
                        XMLPropertyState *const pRelState)
@@ -458,6 +481,9 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     XMLPropertyState* pAllParaMargin = NULL;
     XMLPropertyState* pAllMargin = NULL;
 
+    // filter fo:margins
+    XMLPropertyState* pAllParaMarginRel = NULL;
+
     sal_Bool bNeedsAnchor = sal_False;
 
     for( ::std::vector< XMLPropertyState >::iterator aIter = rProperties.begin();
@@ -574,6 +600,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         case CTF_TEXT_CLIP:             pClipState = propertie; break;
         case CTF_PARAMARGINALL:         pAllParaMargin = propertie; break;
         case CTF_MARGINALL:             pAllMargin = propertie; break;
+        case CTF_PARAMARGINALL_REL:     pAllParaMarginRel = propertie; break;
         }
     }
 
@@ -635,6 +662,8 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         pAllMargin->mnIndex = -1; // just export individual attributes...
         pAllMargin->maValue.clear();
     }
+
+    lcl_clearDefaultRelSize(pAllParaMarginRel);
 
     if( pAllBorderWidthState )
     {
