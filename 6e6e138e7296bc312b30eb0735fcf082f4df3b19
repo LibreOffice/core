@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAATn///8s\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3442,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-01-17T17:27:45Z",
+      "side": 1,
+      "message": "I reversed the way to remove group separators. Instead of looking for each group separator if it exists in aInputString, I look for each character in aInputString if it exists in aGroupSeparator. IMHO it looked better this way.",
+      "revId": "6e6e138e7296bc312b30eb0735fcf082f4df3b19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATn///8w\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3462,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-01-17T17:27:45Z",
+      "side": 1,
+      "message": "I kept my ::rtl::math::stringToDouble(..) as changing it caused some compiler complaints and in interpr4.cxx this function is also used in ScInterpreter::ConvertStringToValue(...)",
+      "revId": "6e6e138e7296bc312b30eb0735fcf082f4df3b19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
