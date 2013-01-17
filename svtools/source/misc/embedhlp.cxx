@@ -48,8 +48,7 @@
 
 using namespace com::sun::star;
 
-namespace svt
-{
+namespace svt {
 
 class EmbedEventListener_Impl : public ::cppu::WeakImplHelper4 < embed::XStateChangeListener,
                                                                  document::XEventListener,
@@ -339,7 +338,7 @@ void EmbeddedObjectRef::Clear()
                 try
                 {
                     mpImpl->mxObj->changeState(embed::EmbedStates::LOADED);
-                    xClose->close( sal_True );
+                    xClose->close( true );
                 }
                 catch (const util::CloseVetoException&)
                 {
@@ -360,12 +359,12 @@ void EmbeddedObjectRef::Clear()
         }
 
         mpImpl->mxObj = NULL;
-        mpImpl->bNeedUpdate = sal_False;
+        mpImpl->bNeedUpdate = false;
     }
 
     mpImpl->pContainer = 0;
-    mpImpl->bIsLocked = sal_False;
-    mpImpl->bNeedUpdate = sal_False;
+    mpImpl->bIsLocked = false;
+    mpImpl->bNeedUpdate = false;
 }
 
 bool EmbeddedObjectRef::is() const
@@ -397,17 +396,17 @@ void EmbeddedObjectRef::SetViewAspect( sal_Int64 nAspect )
     mpImpl->nViewAspect = nAspect;
 }
 
-void EmbeddedObjectRef::Lock( sal_Bool bLock )
+void EmbeddedObjectRef::Lock( bool bLock )
 {
     mpImpl->bIsLocked = bLock;
 }
 
-sal_Bool EmbeddedObjectRef::IsLocked() const
+bool EmbeddedObjectRef::IsLocked() const
 {
     return mpImpl->bIsLocked;
 }
 
-void EmbeddedObjectRef::GetReplacement( sal_Bool bUpdate )
+void EmbeddedObjectRef::GetReplacement( bool bUpdate )
 {
     if ( bUpdate )
     {
@@ -442,9 +441,9 @@ Graphic* EmbeddedObjectRef::GetGraphic( ::rtl::OUString* pMediaType ) const
 {
     if ( mpImpl->bNeedUpdate )
         // bNeedUpdate will be set to false while retrieving new replacement
-        const_cast < EmbeddedObjectRef* >(this)->GetReplacement( sal_True );
+        const_cast < EmbeddedObjectRef* >(this)->GetReplacement( true );
     else if ( !mpImpl->pGraphic )
-        const_cast < EmbeddedObjectRef* >(this)->GetReplacement( sal_False );
+        const_cast < EmbeddedObjectRef* >(this)->GetReplacement( false );
 
     if ( mpImpl->pGraphic && pMediaType )
         *pMediaType = mpImpl->aMediaType;
@@ -538,7 +537,7 @@ void EmbeddedObjectRef::SetGraphicStream( const uno::Reference< io::XInputStream
         delete pGraphicStream;
     }
 
-    mpImpl->bNeedUpdate = sal_False;
+    mpImpl->bNeedUpdate = false;
 
 }
 
@@ -553,10 +552,10 @@ void EmbeddedObjectRef::SetGraphic( const Graphic& rGraphic, const ::rtl::OUStri
     if ( mpImpl->pContainer )
         SetGraphicToContainer( rGraphic, *mpImpl->pContainer, mpImpl->aPersistName, rMediaType );
 
-    mpImpl->bNeedUpdate = sal_False;
+    mpImpl->bNeedUpdate = false;
 }
 
-SvStream* EmbeddedObjectRef::GetGraphicStream( sal_Bool bUpdate ) const
+SvStream* EmbeddedObjectRef::GetGraphicStream( bool bUpdate ) const
 {
     RTL_LOGFILE_CONTEXT( aLog, "svtools (mv76033) svt::EmbeddedObjectRef::GetGraphicStream" );
     DBG_ASSERT( bUpdate || mpImpl->pContainer, "Can't retrieve current graphic!" );
@@ -605,7 +604,7 @@ SvStream* EmbeddedObjectRef::GetGraphicStream( sal_Bool bUpdate ) const
 
             SvStream* pResult = ::utl::UcbStreamHelper::CreateStream( xStream );
             if ( pResult && bUpdate )
-                mpImpl->bNeedUpdate = sal_False;
+                mpImpl->bNeedUpdate = false;
 
             return pResult;
         }
@@ -619,7 +618,7 @@ void EmbeddedObjectRef::DrawPaintReplacement( const Rectangle &rRect, const OUSt
     MapMode aMM( MAP_APPFONT );
     Size aAppFontSz = pOut->LogicToLogic( Size( 0, 8 ), &aMM, NULL );
     Font aFnt( rtl::OUString("Helvetica"), aAppFontSz );
-    aFnt.SetTransparent( sal_True );
+    aFnt.SetTransparent( true );
     aFnt.SetColor( Color( COL_LIGHTRED ) );
     aFnt.SetWeight( WEIGHT_BOLD );
     aFnt.SetFamily( FAMILY_SWISS );
@@ -636,9 +635,9 @@ void EmbeddedObjectRef::DrawPaintReplacement( const Rectangle &rRect, const OUSt
         aPt.X() = (rRect.GetWidth()  - pOut->GetTextWidth( rText )) / 2;
         aPt.Y() = (rRect.GetHeight() - pOut->GetTextHeight()) / 2;
 
-        sal_Bool bTiny = sal_False;
-        if( aPt.X() < 0 ) bTiny = sal_True, aPt.X() = 0;
-        if( aPt.Y() < 0 ) bTiny = sal_True, aPt.Y() = 0;
+        bool bTiny = false;
+        if( aPt.X() < 0 ) bTiny = true, aPt.X() = 0;
+        if( aPt.Y() < 0 ) bTiny = true, aPt.Y() = 0;
         if( bTiny )
         {
             // heruntergehen bei kleinen Bildern
@@ -720,10 +719,10 @@ void EmbeddedObjectRef::DrawShading( const Rectangle &rRect, OutputDevice *pOut 
 
 }
 
-sal_Bool EmbeddedObjectRef::TryRunningState( const uno::Reference < embed::XEmbeddedObject >& xEmbObj )
+bool EmbeddedObjectRef::TryRunningState( const uno::Reference < embed::XEmbeddedObject >& xEmbObj )
 {
     if ( !xEmbObj.is() )
-        return sal_False;
+        return false;
 
     try
     {
@@ -732,10 +731,10 @@ sal_Bool EmbeddedObjectRef::TryRunningState( const uno::Reference < embed::XEmbe
     }
     catch (const uno::Exception&)
     {
-        return sal_False;
+        return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 void EmbeddedObjectRef::SetGraphicToContainer( const Graphic& rGraphic,
@@ -767,13 +766,13 @@ uno::Reference< io::XInputStream > EmbeddedObjectRef::GetGraphicReplacementStrea
 
 void EmbeddedObjectRef::UpdateReplacement()
 {
-    GetReplacement( sal_True );
+    GetReplacement( true );
 }
 
 void EmbeddedObjectRef::UpdateReplacementOnDemand()
 {
     DELETEZ( mpImpl->pGraphic );
-    mpImpl->bNeedUpdate = sal_True;
+    mpImpl->bNeedUpdate = true;
     mpImpl->mnGraphicVersion++;
 
     if( mpImpl->pContainer )
@@ -783,7 +782,7 @@ void EmbeddedObjectRef::UpdateReplacementOnDemand()
     }
 }
 
-sal_Bool EmbeddedObjectRef::IsChart() const
+bool EmbeddedObjectRef::IsChart() const
 {
     //todo maybe for 3.0:
     //if the changes work good for chart
@@ -802,10 +801,10 @@ sal_Bool EmbeddedObjectRef::IsChart() const
         || SvGlobalName(SO3_SCH_CLASSID_50) == aObjClsId
         || SvGlobalName(SO3_SCH_CLASSID_60) == aObjClsId)
     {
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 // #i104867#

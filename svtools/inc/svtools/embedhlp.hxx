@@ -47,15 +47,15 @@ class SVT_DLLPUBLIC EmbeddedObjectRef
 {
     EmbeddedObjectRef_Impl* mpImpl;
 
-    SVT_DLLPRIVATE SvStream*   GetGraphicStream( sal_Bool bUpdate ) const;
-    SVT_DLLPRIVATE void        GetReplacement( sal_Bool bUpdate );
+    SVT_DLLPRIVATE SvStream* GetGraphicStream( bool bUpdate ) const;
+    SVT_DLLPRIVATE void GetReplacement( bool bUpdate );
 
     EmbeddedObjectRef& operator = ( const EmbeddedObjectRef& );
 
 public:
     static void DrawPaintReplacement( const Rectangle &rRect, const OUString &rText, OutputDevice *pOut );
     static void DrawShading( const Rectangle &rRect, OutputDevice *pOut );
-    static sal_Bool TryRunningState( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& );
+    static bool TryRunningState( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& );
     static void SetGraphicToContainer( const Graphic& rGraphic,
                                         comphelper::EmbeddedObjectContainer& aContainer,
                                         const ::rtl::OUString& aName,
@@ -101,12 +101,12 @@ public:
 
     void            UpdateReplacement();
     void            UpdateReplacementOnDemand();
-    void            Lock( sal_Bool bLock = sal_True );
-    sal_Bool            IsLocked() const;
+    void Lock( bool bLock = true );
     void            Clear();
     bool is() const;
 
-    sal_Bool            IsChart() const;
+    bool IsLocked() const;
+    bool IsChart() const;
 
     // #i104867#
     // Provides a graphic version number for the fetchable Graphic during this object's lifetime. Internally,
