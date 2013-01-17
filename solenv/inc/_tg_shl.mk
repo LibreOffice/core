@@ -438,10 +438,6 @@ $(SHL1TARGETN) : \
     @cat $(MISC)/$(TARGET).$(@:b)_1.cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_1.cmd
-.IF "$(SHL1NOCHECK)"==""
-    $(COMMAND_ECHO)-$(RM) $(SHL1TARGETN:d)check_$(SHL1TARGETN:f)
-    $(COMMAND_ECHO)$(RENAME) $(SHL1TARGETN) $(SHL1TARGETN:d)check_$(SHL1TARGETN:f)
-.ENDIF				# "$(SHL1NOCHECK)"!=""
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL1TARGETN:b)
@@ -894,10 +890,6 @@ $(SHL2TARGETN) : \
     @cat $(MISC)/$(TARGET).$(@:b)_2.cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_2.cmd
-.IF "$(SHL2NOCHECK)"==""
-    $(COMMAND_ECHO)-$(RM) $(SHL2TARGETN:d)check_$(SHL2TARGETN:f)
-    $(COMMAND_ECHO)$(RENAME) $(SHL2TARGETN) $(SHL2TARGETN:d)check_$(SHL2TARGETN:f)
-.ENDIF				# "$(SHL2NOCHECK)"!=""
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL2TARGETN:b)
@@ -1350,10 +1342,6 @@ $(SHL3TARGETN) : \
     @cat $(MISC)/$(TARGET).$(@:b)_3.cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_3.cmd
-.IF "$(SHL3NOCHECK)"==""
-    $(COMMAND_ECHO)-$(RM) $(SHL3TARGETN:d)check_$(SHL3TARGETN:f)
-    $(COMMAND_ECHO)$(RENAME) $(SHL3TARGETN) $(SHL3TARGETN:d)check_$(SHL3TARGETN:f)
-.ENDIF				# "$(SHL3NOCHECK)"!=""
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL3TARGETN:b)
@@ -1806,10 +1794,6 @@ $(SHL4TARGETN) : \
     @cat $(MISC)/$(TARGET).$(@:b)_4.cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_4.cmd
-.IF "$(SHL4NOCHECK)"==""
-    $(COMMAND_ECHO)-$(RM) $(SHL4TARGETN:d)check_$(SHL4TARGETN:f)
-    $(COMMAND_ECHO)$(RENAME) $(SHL4TARGETN) $(SHL4TARGETN:d)check_$(SHL4TARGETN:f)
-.ENDIF				# "$(SHL4NOCHECK)"!=""
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL4TARGETN:b)
@@ -2262,10 +2246,6 @@ $(SHL5TARGETN) : \
     @cat $(MISC)/$(TARGET).$(@:b)_5.cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_5.cmd
-.IF "$(SHL5NOCHECK)"==""
-    $(COMMAND_ECHO)-$(RM) $(SHL5TARGETN:d)check_$(SHL5TARGETN:f)
-    $(COMMAND_ECHO)$(RENAME) $(SHL5TARGETN) $(SHL5TARGETN:d)check_$(SHL5TARGETN:f)
-.ENDIF				# "$(SHL5NOCHECK)"!=""
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL5TARGETN:b)
@@ -2718,10 +2698,6 @@ $(SHL6TARGETN) : \
     @cat $(MISC)/$(TARGET).$(@:b)_6.cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_6.cmd
-.IF "$(SHL6NOCHECK)"==""
-    $(COMMAND_ECHO)-$(RM) $(SHL6TARGETN:d)check_$(SHL6TARGETN:f)
-    $(COMMAND_ECHO)$(RENAME) $(SHL6TARGETN) $(SHL6TARGETN:d)check_$(SHL6TARGETN:f)
-.ENDIF				# "$(SHL6NOCHECK)"!=""
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL6TARGETN:b)
@@ -3174,10 +3150,6 @@ $(SHL7TARGETN) : \
     @cat $(MISC)/$(TARGET).$(@:b)_7.cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_7.cmd
-.IF "$(SHL7NOCHECK)"==""
-    $(COMMAND_ECHO)-$(RM) $(SHL7TARGETN:d)check_$(SHL7TARGETN:f)
-    $(COMMAND_ECHO)$(RENAME) $(SHL7TARGETN) $(SHL7TARGETN:d)check_$(SHL7TARGETN:f)
-.ENDIF				# "$(SHL7NOCHECK)"!=""
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL7TARGETN:b)
@@ -3630,10 +3602,6 @@ $(SHL8TARGETN) : \
     @cat $(MISC)/$(TARGET).$(@:b)_8.cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_8.cmd
-.IF "$(SHL8NOCHECK)"==""
-    $(COMMAND_ECHO)-$(RM) $(SHL8TARGETN:d)check_$(SHL8TARGETN:f)
-    $(COMMAND_ECHO)$(RENAME) $(SHL8TARGETN) $(SHL8TARGETN:d)check_$(SHL8TARGETN:f)
-.ENDIF				# "$(SHL8NOCHECK)"!=""
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL8TARGETN:b)
@@ -4086,10 +4054,6 @@ $(SHL9TARGETN) : \
     @cat $(MISC)/$(TARGET).$(@:b)_9.cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_9.cmd
-.IF "$(SHL9NOCHECK)"==""
-    $(COMMAND_ECHO)-$(RM) $(SHL9TARGETN:d)check_$(SHL9TARGETN:f)
-    $(COMMAND_ECHO)$(RENAME) $(SHL9TARGETN) $(SHL9TARGETN:d)check_$(SHL9TARGETN:f)
-.ENDIF				# "$(SHL9NOCHECK)"!=""
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL9TARGETN:b)
@@ -4542,10 +4506,6 @@ $(SHL10TARGETN) : \
     @cat $(MISC)/$(TARGET).$(@:b)_10.cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_10.cmd
-.IF "$(SHL10NOCHECK)"==""
-    $(COMMAND_ECHO)-$(RM) $(SHL10TARGETN:d)check_$(SHL10TARGETN:f)
-    $(COMMAND_ECHO)$(RENAME) $(SHL10TARGETN) $(SHL10TARGETN:d)check_$(SHL10TARGETN:f)
-.ENDIF				# "$(SHL10NOCHECK)"!=""
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL10TARGETN:b)

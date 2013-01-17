@@ -467,10 +467,6 @@ $(SHL$(TNR)TARGETN) : \
     @cat $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
-.IF "$(SHL$(TNR)NOCHECK)"==""
-    $(COMMAND_ECHO)-$(RM) $(SHL$(TNR)TARGETN:d)check_$(SHL$(TNR)TARGETN:f)
-    $(COMMAND_ECHO)$(RENAME) $(SHL$(TNR)TARGETN) $(SHL$(TNR)TARGETN:d)check_$(SHL$(TNR)TARGETN:f)
-.ENDIF				# "$(SHL$(TNR)NOCHECK)"!=""
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL$(TNR)TARGETN:b)
