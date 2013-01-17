@@ -76,10 +76,6 @@
     b38cba04b6513dd42b031199d617cce6 http://sourceforge.net/projects/aoo-extensions/files/1388/12/DanskeSynonymer.oxt/download "DanskeSynonymer.oxt"
     6ee1e24fb17e44577d8e3200f3e44adc http://sourceforge.net/projects/aoo-extensions/files/1429/6/dict-da-current.oxt/download "dict-da-current.oxt"
 
-# Norwegian dictionary.
-[ language=no ]
-    b4971332a09292af069783b089b9014b http://svn.skolelinux.org/websvn/filedetails.php?repname=skolelinux&path=%2Ftrunk%2Fi18n%2Fopenoffice%2Futils%2Fdictionary-no-NO-1.0.oxt&rev=0&sc=0 "dictionary-no-NO-1.0.oxt"
-
 # Romanian dictionary.
 [ language=ro ]
     b05941b975afc0321df0cd48a4d295c8 http://sourceforge.net/projects/aoo-extensions/files/1392/8/dict-ro.1.5.oxt/download "dict-ro.1.5.oxt"
