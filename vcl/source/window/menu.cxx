@@ -3870,6 +3870,8 @@ static void ImplInitMenuWindow( Window* pWin, sal_Bool bFont, sal_Bool bMenuBar 
         {
             Wallpaper aWallpaper( rPersonaBitmap );
             aWallpaper.SetStyle( WALLPAPER_TOPRIGHT );
+            aWallpaper.SetColor( Application::GetSettings().GetStyleSettings().GetWorkspaceColor() );
+
             pWin->SetBackground( aWallpaper );
             pWin->SetPaintTransparent( sal_False );
             pWin->SetParentClipMode( 0 );
