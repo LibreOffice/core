@@ -53,6 +53,7 @@ $(eval $(call gb_Package_add_file,test_inc,inc/test/sheet/xprintareas.hxx,test/s
 $(eval $(call gb_Package_add_file,test_inc,inc/test/sheet/xspreadsheetdocument.hxx,test/sheet/xspreadsheetdocument.hxx))
 $(eval $(call gb_Package_add_file,test_inc,inc/test/sheet/xspreadsheets2.hxx,test/sheet/xspreadsheets2.hxx))
 $(eval $(call gb_Package_add_file,test_inc,inc/test/sheet/xsheetannotation.hxx,test/sheet/xsheetannotation.hxx))
+$(eval $(call gb_Package_add_file,test_inc,inc/test/sheet/xsheetannotations.hxx,test/sheet/xsheetannotations.hxx))
 $(eval $(call gb_Package_add_file,test_inc,inc/test/text/xtext.hxx,test/text/xtext.hxx))
 $(eval $(call gb_Package_add_file,test_inc,inc/test/text/xtextfield.hxx,test/text/xtextfield.hxx))
 $(eval $(call gb_Package_add_file,test_inc,inc/test/text/xtextcontent.hxx,test/text/xtextcontent.hxx))
