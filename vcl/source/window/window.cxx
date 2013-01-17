@@ -5328,29 +5328,6 @@ sal_uLong Window::PostUserEvent( const Link& rLink, void* pCaller )
 
 // -----------------------------------------------------------------------
 
-sal_Bool Window::PostUserEvent( sal_uLong& rEventId, sal_uLong nEvent, void* pEventData )
-{
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
-    ImplSVEvent* pSVEvent = new ImplSVEvent;
-    pSVEvent->mnEvent   = nEvent;
-    pSVEvent->mpData    = pEventData;
-    pSVEvent->mpLink    = NULL;
-    pSVEvent->mpWindow  = this;
-    pSVEvent->mbCall    = sal_True;
-    ImplAddDel( &(pSVEvent->maDelData) );
-    rEventId = (sal_uLong)pSVEvent;
-    if ( mpWindowImpl->mpFrame->PostEvent( pSVEvent ) )
-        return sal_True;
-    else
-    {
-        rEventId = 0;
-        ImplRemoveDel( &(pSVEvent->maDelData) );
-        delete pSVEvent;
-        return sal_False;
-    }
-}
-
 // -----------------------------------------------------------------------
 
 sal_Bool Window::PostUserEvent( sal_uLong& rEventId, const Link& rLink, void* pCaller )

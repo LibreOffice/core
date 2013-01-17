@@ -12,7 +12,6 @@ ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any cons
 StyleSettings::GetPersonaFooter() const
 TemplateAbstractView::deselectOverlayItem(unsigned short)
 TextEngine::GetLeftMargin() const
-Window::PostUserEvent(unsigned long&, unsigned long, void*)
 XclExpPivotCache::GetFieldAcc(rtl::OUString const&)
 apitest::XCellRangesQuery::testQueryFormulaCells()
 apitest::XDataPilotDescriptor::testGetHiddenFields()

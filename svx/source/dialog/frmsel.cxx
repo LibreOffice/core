@@ -778,14 +778,6 @@ bool FrameSelectorImpl::SelectedBordersEqual() const
 // FrameSelector
 // ============================================================================
 
-FrameSelector::FrameSelector( Window* pParent, const ResId& rResId ) :
-    Control( pParent, rResId )
-{
-    // not in c'tor init list (avoid warning about usage of *this)
-    mxImpl.reset( new FrameSelectorImpl( *this ) );
-    EnableRTL( false ); // #107808# don't mirror the mouse handling
-}
-
 FrameSelector::FrameSelector(Window* pParent)
     : Control(pParent, WB_BORDER|WB_TABSTOP)
 {

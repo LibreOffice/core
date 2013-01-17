@@ -83,7 +83,6 @@ enum FrameBorderState
 class SVX_DLLPUBLIC FrameSelector : public Control
 {
 public:
-    explicit            FrameSelector( Window* pParent, const ResId& rResId );
     FrameSelector(Window* pParent);
     virtual             ~FrameSelector();
 

@@ -40,10 +40,8 @@ class SVX_DLLPUBLIC SdrLayer
     SdrLayerID nID;
 
     SdrLayer(SdrLayerID nNewID, const OUString& rNewName);
-    void SetID(SdrLayerID nNewID);
 
 public:
-    SdrLayer();
     bool      operator==(const SdrLayer& rCmpLayer) const;
     bool      operator!=(const SdrLayer& rCmpLayer) const { return !operator==(rCmpLayer); }
 

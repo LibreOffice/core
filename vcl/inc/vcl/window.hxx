@@ -610,7 +610,6 @@ public:
     /*virtual*/ void    RemoveChildEventListener( const Link& rEventListener );
 
     sal_uLong               PostUserEvent( const Link& rLink, void* pCaller = NULL );
-    sal_Bool                PostUserEvent( sal_uLong& rEventId, sal_uLong nEvent, void* pEventData = NULL );
     sal_Bool                PostUserEvent( sal_uLong& rEventId, const Link& rLink, void* pCaller = NULL );
     void                RemoveUserEvent( sal_uLong nUserEvent );
 

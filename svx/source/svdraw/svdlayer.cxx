@@ -100,16 +100,9 @@ void SetOfByte::QueryValue( com::sun::star::uno::Any & rAny ) const
     rAny <<= aSeq;
 }
 
-SdrLayer::SdrLayer() : pModel(NULL), nType(0), nID(0) {}
-
 SdrLayer::SdrLayer(SdrLayerID nNewID, const OUString& rNewName) :
     maName(rNewName), pModel(NULL), nType(0), nID(nNewID)
 {
-}
-
-void SdrLayer::SetID(SdrLayerID nNewID)
-{
-    nID = nNewID;
 }
 
 void SdrLayer::SetStandardLayer(bool bStd)
