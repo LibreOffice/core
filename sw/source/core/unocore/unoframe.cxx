@@ -3085,7 +3085,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL SwXTextEmbeddedObject::getReplaceme
                        pDoc->GetNodes()[ pCnt->GetCntntIdx()->
                                         GetIndex() + 1 ]->GetOLENode(), "kein OLE-Node?");
 
-        Graphic* pGraphic = pDoc->GetNodes()[ pCnt->GetCntntIdx()->GetIndex() + 1 ]->GetOLENode()->GetGraphic();
+        const Graphic* pGraphic = pDoc->GetNodes()[ pCnt->GetCntntIdx()->GetIndex() + 1 ]->GetOLENode()->GetGraphic();
         if ( pGraphic )
             return pGraphic->GetXGraphic();
     }

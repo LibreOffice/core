@@ -866,7 +866,7 @@ namespace sw
             rtl::OUString msOrigPersistName;
             com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > mxIPRef;
             SfxObjectShell& mrPers;
-            Graphic* mpGraphic;
+            const Graphic* mpGraphic;
         public:
             /** Take ownership of a SdrOle2Objs OLE object
 

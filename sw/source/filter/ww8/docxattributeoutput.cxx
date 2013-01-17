@@ -2025,7 +2025,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     else
     {
         // inline, we also have to write the image itself
-        Graphic* pGraphic = 0;
+        const Graphic* pGraphic = 0;
         if (pGrfNode)
             pGraphic = &const_cast< Graphic& >( pGrfNode->GetGrf() );
         else

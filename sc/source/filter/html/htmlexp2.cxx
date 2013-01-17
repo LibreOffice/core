@@ -160,7 +160,7 @@ void ScHTMLExport::WriteGraphEntry( ScHTMLGraphEntry* pE )
         break;
         case OBJ_OLE2:
         {
-            Graphic* pGraphic = ((SdrOle2Obj*)pObject)->GetGraphic();
+            const Graphic* pGraphic = static_cast<SdrOle2Obj*>(pObject)->GetGraphic();
             if ( pGraphic )
             {
                 String aLinkName;

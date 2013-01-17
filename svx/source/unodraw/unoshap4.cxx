@@ -220,7 +220,7 @@ bool SvxOle2Shape::getPropertyValueImpl( const ::rtl::OUString& rName, const Sfx
         SdrOle2Obj* pObj = dynamic_cast<SdrOle2Obj*>(mpObj.get());
         if( pObj )
         {
-            Graphic* pGraphic = pObj->GetGraphic();
+            const Graphic* pGraphic = pObj->GetGraphic();
             if( pGraphic )
             {
                 sal_Bool bIsWMF = sal_False;
@@ -326,7 +326,7 @@ bool SvxOle2Shape::getPropertyValueImpl( const ::rtl::OUString& rName, const Sfx
     case OWN_ATTR_VALUE_GRAPHIC:
     {
         uno::Reference< graphic::XGraphic > xGraphic;
-        Graphic* pGraphic = static_cast<SdrOle2Obj*>( mpObj.get() )->GetGraphic();
+        const Graphic* pGraphic = static_cast<SdrOle2Obj*>( mpObj.get() )->GetGraphic();
         if( pGraphic )
             xGraphic = pGraphic->GetXGraphic();
         rValue <<= xGraphic;
@@ -339,7 +339,7 @@ bool SvxOle2Shape::getPropertyValueImpl( const ::rtl::OUString& rName, const Sfx
         SdrOle2Obj* pOle = dynamic_cast< SdrOle2Obj* >( mpObj.get() );
         if( pOle )
         {
-            Graphic* pGraphic = pOle->GetGraphic();
+            const Graphic* pGraphic = pOle->GetGraphic();
 
             // if there isn't already a preview graphic set, check if we need to generate
             // one if model says so

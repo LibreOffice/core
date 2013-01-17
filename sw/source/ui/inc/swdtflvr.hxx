@@ -79,7 +79,7 @@ class SwTransferable : public TransferableHelper
 
     // helper methods for the copy
     com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > FindOLEObj( sal_Int64& nAspect ) const;
-    Graphic* FindOLEReplacementGraphic() const;
+    const Graphic* FindOLEReplacementGraphic() const;
     void DeleteSelection();
 
     // helper methods for the paste

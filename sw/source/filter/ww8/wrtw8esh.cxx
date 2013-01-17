@@ -1552,7 +1552,7 @@ sal_Int32 SwBasicEscherEx::WriteOLEFlyFrame(const SwFrmFmt& rFmt, sal_uInt32 nSh
         instead ==> allows unicode text to be preserved
         */
 #ifdef OLE_PREVIEW_AS_EMF
-        Graphic* pGraphic = rOLENd.GetGraphic();
+        const Graphic* pGraphic = rOLENd.GetGraphic();
 #endif
         OpenContainer(ESCHER_SpContainer);
 

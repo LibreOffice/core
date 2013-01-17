@@ -183,7 +183,7 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
 
                     // TODO/LATER: the standalone handling of the graphic should not be used any more in future
                     // The EmbedDataHelper should bring the graphic in future
-                    Graphic* pObjGr = static_cast< SdrOle2Obj* >( pObj )->GetGraphic();
+                    const Graphic* pObjGr = static_cast< SdrOle2Obj* >( pObj )->GetGraphic();
                     if ( pObjGr )
                         mpGraphic = new Graphic( *pObjGr );
                 }

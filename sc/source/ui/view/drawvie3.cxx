@@ -214,7 +214,7 @@ void ScDrawView::UpdateIMap( SdrObject* pObj )
             aGraphic = ( (SdrGrafObj*) pObj )->GetGraphic();
         else
         {
-            Graphic* pGraphic = ((const SdrOle2Obj*) pObj )->GetGraphic();
+            const Graphic* pGraphic = static_cast<const SdrOle2Obj*>(pObj)->GetGraphic();
             if ( pGraphic )
                 aGraphic = *pGraphic;
         }

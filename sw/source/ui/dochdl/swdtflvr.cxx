@@ -327,7 +327,7 @@ uno::Reference < embed::XEmbeddedObject > SwTransferable::FindOLEObj( sal_Int64&
     return xObj;
 }
 
-Graphic* SwTransferable::FindOLEReplacementGraphic() const
+const Graphic* SwTransferable::FindOLEReplacementGraphic() const
 {
     if( pClpDocFac )
     {
@@ -456,7 +456,7 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
         // get OLE-Object from ClipDoc and get the data from that.
         sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT; // will be set in the next statement
         uno::Reference < embed::XEmbeddedObject > xObj = FindOLEObj( nAspect );
-        Graphic* pOLEGraph = FindOLEReplacementGraphic();
+        const Graphic* pOLEGraph = FindOLEReplacementGraphic();
         if( xObj.is() )
         {
             TransferableDataHelper aD( new SvEmbedTransferHelper( xObj, pOLEGraph, nAspect ) );

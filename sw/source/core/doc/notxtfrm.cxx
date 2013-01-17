@@ -1114,7 +1114,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
             //TODO/LATER: is it a problem that the JobSetup isn't used?
             //xRef->DoDraw( pOut, aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(), *pJobSetup );
 
-            Graphic* pGraphic = pOLENd->GetGraphic();
+            const Graphic* pGraphic = pOLENd->GetGraphic();
             if ( pGraphic && pGraphic->GetType() != GRAPHIC_NONE )
             {
                 pGraphic->Draw( pOut, aPosition, aSize );

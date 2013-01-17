@@ -62,7 +62,7 @@ public:
 protected:
     sal_Int32           mnShapeIdMax, mnPictureIdMax;
 
-    void WriteGraphicObjectShapePart( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape, Graphic *pGraphic=NULL );
+    void WriteGraphicObjectShapePart( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape, const Graphic *pGraphic=NULL );
 
 private:
     sal_Int32           mnXmlNamespace;

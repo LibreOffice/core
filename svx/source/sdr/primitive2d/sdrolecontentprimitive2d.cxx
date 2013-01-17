@@ -43,7 +43,7 @@ namespace drawinglayer
 
             if(pSource)
             {
-                Graphic* pOLEGraphic = pSource->GetGraphic();
+                const Graphic* pOLEGraphic = pSource->GetGraphic();
 
                 if(pOLEGraphic)
                 {

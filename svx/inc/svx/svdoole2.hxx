@@ -97,7 +97,7 @@ public:
     // Ein OLE-Zeichenobjekt kann eine StarView-Grafik beinhalten.
     // Diese wird angezeigt, wenn das OLE-Objekt leer ist.
     void        SetGraphic(const Graphic* pGrf);
-    Graphic*    GetGraphic() const;
+    const Graphic* GetGraphic() const;
     void        GetNewReplacement();
 
     // the original size of the object ( size of the icon for iconified object )

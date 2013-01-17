@@ -816,7 +816,7 @@ ShapeExport& ShapeExport::WriteGraphicObjectShape( Reference< XShape > xShape )
     return *this;
 }
 
-void ShapeExport::WriteGraphicObjectShapePart( Reference< XShape > xShape, Graphic* pGraphic )
+void ShapeExport::WriteGraphicObjectShapePart( Reference< XShape > xShape, const Graphic* pGraphic )
 {
     DBG(printf("write graphic object shape\n"));
 
@@ -1382,7 +1382,7 @@ ShapeExport& ShapeExport::WriteOLE2Shape( Reference< XShape > xShape )
                         SdrObject* pSdrOLE2( GetSdrObjectFromXShape( xShape ) );
                         if ( pSdrOLE2 && pSdrOLE2->ISA( SdrOle2Obj ) )
                         {
-                            Graphic* pGraphic = ((SdrOle2Obj*)pSdrOLE2)->GetGraphic();
+                            const Graphic* pGraphic = ((SdrOle2Obj*)pSdrOLE2)->GetGraphic();
                             if ( pGraphic )
                                 WriteGraphicObjectShapePart( xShape, pGraphic );
                         }

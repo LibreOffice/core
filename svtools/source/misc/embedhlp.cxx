@@ -431,13 +431,13 @@ void EmbeddedObjectRef::GetReplacement( bool bUpdate )
     {
         GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
         if( mpImpl->pGraphic )
-            rGF.ImportGraphic( *mpImpl->pGraphic, String(), *pGraphicStream, GRFILTER_FORMAT_DONTKNOW );
+            rGF.ImportGraphic( *mpImpl->pGraphic, OUString(), *pGraphicStream, GRFILTER_FORMAT_DONTKNOW );
         mpImpl->mnGraphicVersion++;
         delete pGraphicStream;
     }
 }
 
-Graphic* EmbeddedObjectRef::GetGraphic( ::rtl::OUString* pMediaType ) const
+const Graphic* EmbeddedObjectRef::GetGraphic( OUString* pMediaType ) const
 {
     if ( mpImpl->bNeedUpdate )
         // bNeedUpdate will be set to false while retrieving new replacement
@@ -457,7 +457,7 @@ Size EmbeddedObjectRef::GetSize( MapMode* pTargetMapMode ) const
 
     if ( mpImpl->nViewAspect == embed::Aspects::MSOLE_ICON )
     {
-        Graphic* pGraphic = GetGraphic();
+        const Graphic* pGraphic = GetGraphic();
         if ( pGraphic )
         {
             aSourceMapMode = pGraphic->GetPrefMapMode();

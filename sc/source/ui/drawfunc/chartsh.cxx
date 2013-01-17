@@ -90,7 +90,7 @@ void ScChartShell::ExecuteExportAsGraphic( SfxRequest& )
         {
             SdrOle2Obj* aOle2Object = ((SdrOle2Obj*) pObject)->Clone();
             aOle2Object->NbcResize(Point(), Fraction(1,1), Fraction(1,1));
-            Graphic* pGraphic = aOle2Object->GetGraphic();
+            const Graphic* pGraphic = aOle2Object->GetGraphic();
             if( pGraphic != NULL )
             {
                 String sGrfNm, sFilterNm;

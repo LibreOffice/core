@@ -3336,7 +3336,7 @@ void RtfAttributeOutput::FlyFrameOLEReplacement(const SwFlyFrmFmt* pFlyFrmFmt, S
     Size aRendered(aSize);
     aRendered.Width() = rSize.Width();
     aRendered.Height() = rSize.Height();
-    Graphic* pGraphic = rOLENode.GetGraphic();
+    const Graphic* pGraphic = rOLENode.GetGraphic();
     Size aMapped(pGraphic->GetPrefSize());
     const SwCropGrf &rCr = (const SwCropGrf &)rOLENode.GetAttr(RES_GRFATR_CROPGRF);
     const sal_Char* pBLIPType = OOO_STRING_SVTOOLS_RTF_PNGBLIP;

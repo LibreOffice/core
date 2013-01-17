@@ -110,7 +110,7 @@ public:
 
     virtual Size GetTwipSize() const;
 
-    Graphic* GetGraphic();
+    const Graphic* GetGraphic();
 
     void GetNewReplacement();
 

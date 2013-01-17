@@ -42,13 +42,13 @@ protected:
 public:
     // object, replacement image, and the aspect
     SvEmbedTransferHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject >& xObj,
-                            Graphic* pGraphic,
+                           const Graphic* pGraphic,
                             sal_Int64 nAspect );
     ~SvEmbedTransferHelper();
 
     static void         FillTransferableObjectDescriptor( TransferableObjectDescriptor& rDesc,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject >& xObj,
-                            Graphic* pGraphic,
+                            const Graphic* pGraphic,
                             sal_Int64 nAspect );
 };
 

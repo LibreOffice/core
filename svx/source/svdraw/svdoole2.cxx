@@ -1291,7 +1291,7 @@ void SdrOle2Obj::Disconnect_Impl()
 
 SdrObject* SdrOle2Obj::createSdrGrafObjReplacement(bool bAddText, bool /* bUseHCGraphic */) const
 {
-    Graphic* pOLEGraphic = GetGraphic();
+    const Graphic* pOLEGraphic = GetGraphic();
 
     if(pOLEGraphic)
     {
@@ -1855,7 +1855,7 @@ void SdrOle2Obj::NbcSetLogicRect(const Rectangle& rRect)
         ImpSetVisAreaSize();
 }
 
-Graphic* SdrOle2Obj::GetGraphic() const
+const Graphic* SdrOle2Obj::GetGraphic() const
 {
     if ( xObjRef.is() )
         return xObjRef.GetGraphic();

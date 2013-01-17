@@ -490,7 +490,7 @@ static void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SwDoc& _rDoc )
                 // get its graphic
                 Graphic aGraphic;
                 pOle2Obj->Connect();
-                Graphic* pGraphic = pOle2Obj->GetGraphic();
+                const Graphic* pGraphic = pOle2Obj->GetGraphic();
                 if( pGraphic )
                     aGraphic = *pGraphic;
                 pOle2Obj->Disconnect();

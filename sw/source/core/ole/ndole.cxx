@@ -262,7 +262,7 @@ SwOLENode::~SwOLENode()
     delete pGraphic;
 }
 
-Graphic* SwOLENode::GetGraphic()
+const Graphic* SwOLENode::GetGraphic()
 {
     if ( aOLEObj.GetOleRef().is() )
         return aOLEObj.xOLERef.GetGraphic();

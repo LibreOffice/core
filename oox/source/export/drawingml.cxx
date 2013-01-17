@@ -526,7 +526,7 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic )
     return sRelId;
 }
 
-OUString DrawingML::WriteBlip( Reference< XPropertySet > rXPropSet, OUString& rURL, Graphic *pGraphic )
+OUString DrawingML::WriteBlip( Reference< XPropertySet > rXPropSet, OUString& rURL, const Graphic *pGraphic )
 {
     OUString sRelId = pGraphic ? WriteImage( *pGraphic ) : WriteImage( rURL );
     sal_Int16 nBright = 0;

@@ -39,7 +39,7 @@
 using namespace ::com::sun::star;
 
 SvEmbedTransferHelper::SvEmbedTransferHelper( const uno::Reference< embed::XEmbeddedObject >& xObj,
-                                                Graphic* pGraphic,
+                                              const Graphic* pGraphic,
                                                 sal_Int64 nAspect )
 : m_xObj( xObj )
 , m_pGraphic( pGraphic ? new Graphic( *pGraphic ) : NULL )
@@ -190,7 +190,7 @@ void SvEmbedTransferHelper::ObjectReleased()
 
 void SvEmbedTransferHelper::FillTransferableObjectDescriptor( TransferableObjectDescriptor& rDesc,
     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject >& xObj,
-    Graphic* pGraphic,
+    const Graphic* pGraphic,
     sal_Int64 nAspect )
 {
     //TODO/LATER: need TypeName to fill it into the Descriptor (will be shown in listbox)

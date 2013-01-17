@@ -1132,7 +1132,7 @@ sal_Bool EscherPropertyContainer::CreateOLEGraphicProperties(
         SdrObject* pSdrOLE2( GetSdrObjectFromXShape( rXShape ) );   // SJ: leaving unoapi, because currently there is
         if ( pSdrOLE2 && pSdrOLE2->ISA( SdrOle2Obj ) )              // no access to the native graphic object
         {
-            Graphic* pGraphic = ((SdrOle2Obj*)pSdrOLE2)->GetGraphic();
+            const Graphic* pGraphic = static_cast<SdrOle2Obj*>(pSdrOLE2)->GetGraphic();
             if ( pGraphic )
             {
                 GraphicObject aGraphicObject( *pGraphic );

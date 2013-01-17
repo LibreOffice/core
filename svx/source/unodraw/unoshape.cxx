@@ -2928,7 +2928,7 @@ bool SvxShape::getPropertyValueImpl( const ::rtl::OUString&, const SfxItemProper
         SdrOle2Obj* pObj = dynamic_cast<SdrOle2Obj*>(mpObj.get());
         if( pObj )
         {
-            Graphic* pGraphic = pObj->GetGraphic();
+            const Graphic* pGraphic = pObj->GetGraphic();
             if( pGraphic )
             {
                 sal_Bool bIsWMF = sal_False;
