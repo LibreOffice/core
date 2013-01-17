@@ -565,7 +565,8 @@ void ToolBox::ImplDrawBackground( ToolBox* pThis, const Rectangle &rRect )
 
         if( !bNativeOk )
         {
-            if( !pThis->IsBackground() )
+            if( !pThis->IsBackground() ||
+                ( pThis->GetAlign() == WINDOWALIGN_TOP && !Application::GetSettings().GetStyleSettings().GetPersonaHeader().IsEmpty() ) )
             {
                 if( !pThis->IsInPaint() )
                     ImplDrawTransparentBackground( pThis, aPaintRegion );
@@ -1546,7 +1547,8 @@ void ToolBox::ImplInitSettings( sal_Bool bFont,
         }
         else
         {
-            if( IsNativeControlSupported( CTRL_TOOLBAR, PART_ENTIRE_CONTROL ) )
+            if( IsNativeControlSupported( CTRL_TOOLBAR, PART_ENTIRE_CONTROL ) ||
+                ( GetAlign() == WINDOWALIGN_TOP && !Application::GetSettings().GetStyleSettings().GetPersonaHeader().IsEmpty() ) )
             {
                 SetBackground();
                 SetPaintTransparent( sal_True );

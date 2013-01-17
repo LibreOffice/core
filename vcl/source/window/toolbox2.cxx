@@ -936,6 +936,9 @@ void ToolBox::SetAlign( WindowAlign eNewAlign )
             else
                 mbHorz = sal_True;
 
+            // Update the background according to Persona if necessary
+            ImplInitSettings( sal_False, sal_False, sal_True );
+
             // Hier alles neu ausgeben, da sich Border auch aendert
             mbCalc = sal_True;
             mbFormat = sal_True;
