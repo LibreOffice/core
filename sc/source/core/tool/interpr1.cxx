@@ -3378,6 +3378,99 @@ void ScInterpreter::ScValue()
 }
 
 
+// fdo#57180
+void ScInterpreter::ScNumberValue()
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScNumberValue" );
+
+    sal_uInt8 nParamCount = GetByte();
+    if ( !MustHaveParamCount( nParamCount, 1, 3 ) )
+        return;
+
+    OUString aInputString;
+    OUString aDecimalSeparator, aGroupSeparator;
+    sal_Unicode cDecimalSeparator;
+
+    if ( nParamCount == 3 )
+        aGroupSeparator = GetString();
+
+    if ( nParamCount >= 2 )
+    {
+        aDecimalSeparator = GetString();
+        if ( aDecimalSeparator.getLength() == 1  )
+            cDecimalSeparator = aDecimalSeparator[ 0 ];
+        else
+        {
+            PushIllegalArgument();  //if given, separator length must be 1
+            return;
+        }
+    }
+
+    if ( cDecimalSeparator && aGroupSeparator.indexOf( cDecimalSeparator ) != -1 )
+    {
+        PushIllegalArgument(); //decimal separator cannot appear in group separator
+        return;
+    }
+
+    switch (GetStackType())
+    {
+        case svDouble:
+        return; // leave on stack
+        default:
+        aInputString = GetString();
+    }
+    if ( nGlobalError )
+    {
+        if ( aInputString.isEmpty() && !GetGlobalConfig().mbEmptyStringAsZero )
+        {
+            PushNoValue();
+            return;
+        }
+        if ( !aInputString.isEmpty() )
+        {
+            PushIllegalArgument();
+            return;
+        }
+    }
+    sal_Int32 i = aInputString.indexOf( cDecimalSeparator );
+    if ( i < 0 )
+        i = aInputString.getLength();
+    while ( --i >= 0 )
+    {
+        if ( aGroupSeparator.indexOf( aInputString[ i ] ) != -1 )
+            aInputString = aInputString.replaceAt( i, 1, "" ); // remove group separators
+    }
+
+    for ( i = aInputString.getLength(); --i >= 0; )
+    {
+        sal_Unicode c = aInputString[ i ];
+        if ( c == 0x0020 || c == 0x0009 || c == 0x000A || c == 0x000D )
+            aInputString = aInputString.replaceAt( i, 1, "" ); // remove spaces etc.
+    }
+    sal_Int32 nPercentCount = 0;
+    for ( i = aInputString.getLength() - 1; aInputString[ i ] == 0x0025 && i >= 0; i-- )
+    {
+        if ( aInputString[ i ] == 0x0025 )
+        {
+            aInputString = aInputString.replaceAt( i, 1, "" );  // remove and count trailing '%'
+            nPercentCount++;
+        }
+    }
+
+    rtl_math_ConversionStatus eStatus;
+    sal_Int32 nParseEnd;
+    double fVal = ::rtl::math::stringToDouble( aInputString, cDecimalSeparator, 0, &eStatus, &nParseEnd );
+    if ( eStatus == rtl_math_ConversionStatus_Ok && nParseEnd == aInputString.getLength() )
+    {
+        if (nPercentCount)
+            fVal *= pow( 10.0, -(nPercentCount * 2));    // process '%' from input string
+        PushDouble(fVal);
+        return;
+    }
+    PushIllegalArgument();
+}
+
+
 //2do: this should be a proper unicode string method
 static inline bool lcl_ScInterpreter_IsPrintable( sal_Unicode c )
 {

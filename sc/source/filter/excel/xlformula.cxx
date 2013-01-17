@@ -402,10 +402,11 @@ static const XclFunctionInfo saFuncTable_Odf[] =
     EXC_FUNCENTRY_ODF( ocFormula,       1,  1,  0,  "FORMULA" ),
     EXC_FUNCENTRY_ODF( ocGamma,         1,  1,  0,  "GAMMA" ),
     EXC_FUNCENTRY_ODF( ocGauss,         1,  1,  0,  "GAUSS" ),
+    EXC_FUNCENTRY_ODF( ocNoName,        2,  2,  0,  "IFNA" ),
     EXC_FUNCENTRY_ODF( ocIsFormula,     1,  1,  0,  "ISFORMULA" ),
     EXC_FUNCENTRY_ODF( ocWeek,          1,  2,  0,  "ISOWEEKNUM" ),
     EXC_FUNCENTRY_ODF( ocMatrixUnit,    1,  1,  0,  "MUNIT" ),
-    EXC_FUNCENTRY_ODF( ocNumberValue,   2,  2,  0,  "NUMBERVALUE" ),
+    EXC_FUNCENTRY_ODF( ocNumberValue,   1,  3,  0,  "NUMBERVALUE" ),
     EXC_FUNCENTRY_ODF( ocLaufz,         3,  3,  0,  "PDURATION" ),
     EXC_FUNCENTRY_ODF( ocVariationen2,  2,  2,  0,  "PERMUTATIONA" ),
     EXC_FUNCENTRY_ODF( ocPhi,           1,  1,  0,  "PHI" ),
@@ -442,7 +443,6 @@ XclFunctionProvider::XclFunctionProvider( const XclRoot& rRoot )
     if( eBiff >= EXC_BIFF8 )
         (this->*pFillFunc)( saFuncTable_8, STATIC_ARRAY_END( saFuncTable_8 ) );
     (this->*pFillFunc)( saFuncTable_Oox, STATIC_ARRAY_END( saFuncTable_Oox ) );
-    (this->*pFillFunc)( saFuncTable_2013, STATIC_ARRAY_END( saFuncTable_2013 ) );
     (this->*pFillFunc)( saFuncTable_Odf, STATIC_ARRAY_END( saFuncTable_Odf ) );
 }
 

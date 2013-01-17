@@ -724,6 +724,7 @@ static const FunctionData saFuncTableOox[] =
 static const FunctionData saFuncTable2013[] =
 {
     { "IFNA",                   "IFNA",                 NOID,   NOID,   2,  2,  V, { VO, RO }, FUNCFLAG_MACROCALL },
+    { "NUMBERVALUE",            0,                      NOID,   NOID,   1,  3,  V, { VR }, FUNCFLAG_MACROCALLODF }
 };
 
 /** Functions defined by OpenFormula, but not supported by Calc or by Excel. */
@@ -750,7 +751,6 @@ static const FunctionData saFuncTableOdf[] =
     { "ISFORMULA",              0,                      NOID,   NOID,   1,  1,  V, { RO }, FUNCFLAG_MACROCALLODF },
     { "ISOWEEKNUM",             0,                      NOID,   NOID,   1,  2,  V, { VR }, FUNCFLAG_MACROCALLODF },
     { "MUNIT",                  0,                      NOID,   NOID,   1,  1,  A, { VR }, FUNCFLAG_MACROCALLODF },
-    { "NUMBERVALUE",            0,                      NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALLODF },
     { "PDURATION",              0,                      NOID,   NOID,   3,  3,  V, { VR }, FUNCFLAG_MACROCALLODF },
     { "PERMUTATIONA",           0,                      NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALLODF },
     { "PHI",                    0,                      NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALLODF },

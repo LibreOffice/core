@@ -301,6 +301,7 @@ enum OpCodeEnum
         ocSubstitute        = SC_OPCODE_SUBSTITUTE,
         ocRept              = SC_OPCODE_REPT,
         ocConcat            = SC_OPCODE_CONCAT,
+        ocNumberValue       = SC_OPCODE_NUMBERVALUE,
     // Matrix functions
         ocMatValue          = SC_OPCODE_MAT_VALUE,
         ocMatDet            = SC_OPCODE_MAT_DET,
@@ -395,7 +396,6 @@ enum OpCodeEnum
         ocHyperLink         = SC_OPCODE_HYPERLINK,
         ocGetPivotData      = SC_OPCODE_GET_PIVOT_DATA,
         ocEuroConvert       = SC_OPCODE_EUROCONVERT,
-        ocNumberValue       = SC_OPCODE_NUMBERVALUE,
     // internal stuff
         ocInternalBegin     = SC_OPCODE_INTERNAL_BEGIN,
         ocTTT               = SC_OPCODE_TTT,
