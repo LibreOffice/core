@@ -2111,6 +2111,16 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:TextAutoFitToSize" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Autofit Text</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:TaskPaneInsertPage" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Insert Slide</value>
+        </prop>
+      </node>
     </node>
   </node>
 </oor:component-data>
