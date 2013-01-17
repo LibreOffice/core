@@ -17,8 +17,13 @@ extern "C"
     extern void * dba_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * dbaxml_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * dlgprov_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * embobj_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * emboleobj_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * evtatt_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * expwrap_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * fastsax_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * fileacc_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * filterconfig1_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * frm_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * fsstorage_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * fwk_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
@@ -38,6 +43,8 @@ extern "C"
     extern void * scriptframe_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * sot_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * svt_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * svx_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * svxcore_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * sd_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * sdd_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * sm_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
@@ -49,6 +56,7 @@ extern "C"
     extern void * swd_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * t602filter_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * textfd_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * tk_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * ucppkg1_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * unoxml_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * unordf_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
@@ -75,8 +83,13 @@ lo_get_libmap(void)
         { "libdlgprov.uno.a", dlgprov_component_getFactory },
         { "libdbalo.a", dba_component_getFactory },
         { "libdbaxmllo.a", dbaxml_component_getFactory },
+        { "libembobj.a", embobj_component_getFactory },
+        { "libemboleobj.a", emboleobj_component_getFactory },
         { "libevtattlo.a", evtatt_component_getFactory },
+        { "libexpwrap.uno.a", expwrap_component_getFactory },
+        { "libfastsax.uno.a", fastsax_component_getFactory },
         { "libfileacc.a", fileacc_component_getFactory },
+        { "libfilterconfiglo.a", filterconfig1_component_getFactory },
         { "libfrmlo.a", frm_component_getFactory },
         { "libfsstorage.uno.a", fsstorage_component_getFactory },
         { "libfwklo.a", fwk_component_getFactory },
@@ -88,7 +101,7 @@ lo_get_libmap(void)
         { "liblnthlo.a", lnth_component_getFactory },
         { "liblwpftlo.a", lotuswordpro_component_getFactory },
         { "libooxlo.a", oox_component_getFactory },
-        { "libprotocolhandlerli.a", protocolhandler_component_getFactory },
+        { "libprotocolhandlerlo.a", protocolhandler_component_getFactory },
         { "libscdlo.a", scd_component_getFactory },
         { "libscfiltlo.a", scfilt_component_getFactory },
         { "libscriptframe.a", scriptframe_component_getFactory },
@@ -103,10 +116,13 @@ lo_get_libmap(void)
         { "libstringresource.uno.a", stringresource_component_getFactory },
         { "libsvgfilterlo.a", svgfilter_component_getFactory },
         { "libsvtlo.a", svt_component_getFactory },
+        { "libsvxlo.a", svx_component_getFactory },
+        { "libsvxcorelo.a", svxcore_component_getFactory },
         { "libswdlo.a", swd_component_getFactory },
         { "libswlo.a", sw_component_getFactory },
         { "libt602filterlo.a", t602filter_component_getFactory },
         { "libtextfdlo.a", textfd_component_getFactory },
+        { "libtklo.a", tk_component_getFactory },
         { "libucppkg1.a", ucppkg1_component_getFactory },
         { "libunordflo.a", unordf_component_getFactory },
         { "libunoxmllo.a", unoxml_component_getFactory },
