@@ -20,6 +20,7 @@
 #include <svtools/embedhlp.hxx>
 #include <tools/globname.hxx>
 #include <sot/clsids.hxx>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>

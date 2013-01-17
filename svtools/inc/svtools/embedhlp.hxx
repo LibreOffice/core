@@ -22,8 +22,6 @@
 
 #include "svtools/svtdllapi.h"
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/embed/XEmbeddedObject.hpp>
-#include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <vcl/graph.hxx>
 #include <tools/mapunit.hxx>
@@ -34,27 +32,27 @@ namespace comphelper
     class EmbeddedObjectContainer;
 }
 
+namespace com { namespace sun { namespace star { namespace embed {
+    class XEmbeddedObject;
+}}}}
+
 class Rectangle;
 class OutputDevice;
 
 namespace svt {
 
 struct EmbeddedObjectRef_Impl;
+
 class SVT_DLLPUBLIC EmbeddedObjectRef
 {
-    EmbeddedObjectRef_Impl*  mpImp;
-    ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject > mxObj;
+    EmbeddedObjectRef_Impl* mpImpl;
 
     SVT_DLLPRIVATE SvStream*   GetGraphicStream( sal_Bool bUpdate ) const;
     SVT_DLLPRIVATE void        GetReplacement( sal_Bool bUpdate );
-    SVT_DLLPRIVATE void        Construct_Impl();
 
     EmbeddedObjectRef& operator = ( const EmbeddedObjectRef& );
 
 public:
-    const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& operator ->() const { return mxObj; }
-    const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& GetObject() const { return mxObj; }
-
     static void DrawPaintReplacement( const Rectangle &rRect, const OUString &rText, OutputDevice *pOut );
     static void DrawShading( const Rectangle &rRect, OutputDevice *pOut );
     static sal_Bool TryRunningState( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& );
@@ -68,6 +66,9 @@ public:
                                         const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&,
                                         ::rtl::OUString* pMediaType )
                             throw();
+
+    const com::sun::star::uno::Reference <com::sun::star::embed::XEmbeddedObject>& operator->() const;
+    const com::sun::star::uno::Reference <com::sun::star::embed::XEmbeddedObject>& GetObject() const;
 
     // default constructed object; needs further assignment before it can be used
     EmbeddedObjectRef();
@@ -98,12 +99,12 @@ public:
                         const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInGrStream,
                         const ::rtl::OUString& rMediaType );
 
-    void            UpdateReplacement() { GetReplacement( sal_True ); }
+    void            UpdateReplacement();
     void            UpdateReplacementOnDemand();
     void            Lock( sal_Bool bLock = sal_True );
     sal_Bool            IsLocked() const;
     void            Clear();
-    sal_Bool            is() const { return mxObj.is(); }
+    bool is() const;
 
     sal_Bool            IsChart() const;
 

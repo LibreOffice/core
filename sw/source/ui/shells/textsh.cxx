@@ -56,6 +56,7 @@
 #include <svtools/htmlcfg.hxx>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
+#include <com/sun/star/embed/Aspects.hpp>
 
 #include <sot/clsids.hxx>
 #include <editeng/acorrcfg.hxx>

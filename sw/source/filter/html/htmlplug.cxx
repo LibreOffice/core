@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/embed/EmbedStates.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-
 #include "hintids.hxx"
 #include <rtl/strbuf.hxx>
 #include <svl/urihelper.hxx>
@@ -53,6 +50,10 @@
 #include "htmlfly.hxx"
 #include "swcss1.hxx"
 #include <com/sun/star/embed/XClassifiedObject.hpp>
+#include <com/sun/star/embed/EmbedStates.hpp>
+#include <com/sun/star/embed/Aspects.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <sot/clsids.hxx>
 

@@ -27,6 +27,8 @@
 #include "document.hxx"
 #include "drwlayer.hxx"
 
+#include <com/sun/star/embed/XComponentSupplier.hpp>
+
 using namespace com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::WeakReference;

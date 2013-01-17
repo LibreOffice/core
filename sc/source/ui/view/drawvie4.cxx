@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
-
 #include <svx/svditer.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdogrp.hxx>
@@ -41,6 +39,9 @@
 #include "scmod.hxx"
 #include "globstr.hrc"
 #include "chartarr.hxx"
+
+#include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
+#include <com/sun/star/embed/Aspects.hpp>
 
 using namespace com::sun::star;
 

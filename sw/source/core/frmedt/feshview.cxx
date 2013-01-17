@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include <com/sun/star/embed/EmbedMisc.hpp>
-
 #include "hintids.hxx"
 
 #include <svx/sdrobjectfilter.hxx>
@@ -80,6 +77,9 @@
 #include <HandleAnchorNodeChg.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <switerator.hxx>
+
+#include <com/sun/star/embed/EmbedMisc.hpp>
+#include <com/sun/star/embed/Aspects.hpp>
 
 #define SCROLLVAL 75
 

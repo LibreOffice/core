@@ -20,6 +20,7 @@
 #include <doc.hxx>
 #include "writerhelper.hxx"
 #include <com/sun/star/embed/XClassifiedObject.hpp>
+#include <com/sun/star/embed/Aspects.hpp>
 
 #include <algorithm>
 #include <functional>

@@ -29,6 +29,7 @@
 #include <svx/svdmodel.hxx>
 #include <com/sun/star/report/XFixedLine.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/embed/Aspects.hpp>
 
 #include <tools/diagnose_ex.h>
 #include <svx/unoshape.hxx>

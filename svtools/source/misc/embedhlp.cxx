@@ -33,10 +33,12 @@
 #include <sot/clsids.hxx>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
-#include <com/sun/star/embed/EmbedStates.hpp>
+#include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/EmbedMisc.hpp>
-#include <com/sun/star/embed/XStateChangeListener.hpp>
+#include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <com/sun/star/embed/XStateChangeListener.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/chart2/XDefaultSizeTransmitter.hpp>
 #include <cppuhelper/implbase4.hxx>
@@ -218,81 +220,93 @@ void SAL_CALL EmbedEventListener_Impl::disposing( const lang::EventObject& aEven
 
 struct EmbeddedObjectRef_Impl
 {
+    uno::Reference <embed::XEmbeddedObject> mxObj;
+
     EmbedEventListener_Impl*                    xListener;
     ::rtl::OUString                             aPersistName;
     ::rtl::OUString                             aMediaType;
     comphelper::EmbeddedObjectContainer*        pContainer;
     Graphic*                                    pGraphic;
     sal_Int64                                   nViewAspect;
-    sal_Bool                                        bIsLocked;
-    sal_Bool                                    bNeedUpdate;
+    bool                                        bIsLocked:1;
+    bool                                        bNeedUpdate:1;
 
     // #i104867#
     sal_uInt32                                  mnGraphicVersion;
     awt::Size                                   aDefaultSizeForChart_In_100TH_MM;//#i103460# charts do not necessaryly have an own size within ODF files, in this case they need to use the size settings from the surrounding frame, which is made available with this member
+
+    EmbeddedObjectRef_Impl() :
+        pContainer(NULL),
+        pGraphic(NULL),
+        nViewAspect(embed::Aspects::MSOLE_CONTENT),
+        bIsLocked(false),
+        bNeedUpdate(false),
+        mnGraphicVersion(0),
+        aDefaultSizeForChart_In_100TH_MM(awt::Size(8000,7000))
+    {}
+
+    EmbeddedObjectRef_Impl( const EmbeddedObjectRef_Impl& r ) :
+        mxObj(r.mxObj),
+        aPersistName(r.aPersistName),
+        aMediaType(r.aMediaType),
+        pContainer(r.pContainer),
+        pGraphic(NULL),
+        nViewAspect(r.nViewAspect),
+        bIsLocked(r.bIsLocked),
+        bNeedUpdate(r.bNeedUpdate),
+        mnGraphicVersion(0),
+        aDefaultSizeForChart_In_100TH_MM(r.aDefaultSizeForChart_In_100TH_MM)
+    {
+        if (r.pGraphic && !r.bNeedUpdate)
+            pGraphic = new Graphic(*r.pGraphic);
+    }
+
+    ~EmbeddedObjectRef_Impl()
+    {
+        delete pGraphic;
+    }
 };
 
-void EmbeddedObjectRef::Construct_Impl()
+const uno::Reference <embed::XEmbeddedObject>& EmbeddedObjectRef::operator->() const
 {
-    mpImp = new EmbeddedObjectRef_Impl;
-    mpImp->pContainer = 0;
-    mpImp->pGraphic = 0;
-    mpImp->nViewAspect = embed::Aspects::MSOLE_CONTENT;
-    mpImp->bIsLocked = sal_False;
-    mpImp->bNeedUpdate = sal_False;
-    mpImp->mnGraphicVersion = 0;
-    mpImp->aDefaultSizeForChart_In_100TH_MM = awt::Size(8000,7000);
+    return mpImpl->mxObj;
 }
 
-EmbeddedObjectRef::EmbeddedObjectRef()
+const uno::Reference <embed::XEmbeddedObject>& EmbeddedObjectRef::GetObject() const
 {
-    Construct_Impl();
+    return mpImpl->mxObj;
 }
 
-EmbeddedObjectRef::EmbeddedObjectRef( const uno::Reference < embed::XEmbeddedObject >& xObj, sal_Int64 nAspect )
+EmbeddedObjectRef::EmbeddedObjectRef() : mpImpl(new EmbeddedObjectRef_Impl) {}
+
+EmbeddedObjectRef::EmbeddedObjectRef( const uno::Reference < embed::XEmbeddedObject >& xObj, sal_Int64 nAspect ) :
+    mpImpl(new EmbeddedObjectRef_Impl)
 {
-    Construct_Impl();
-    mpImp->nViewAspect = nAspect;
-    mxObj = xObj;
-    mpImp->xListener = EmbedEventListener_Impl::Create( this );
+    mpImpl->nViewAspect = nAspect;
+    mpImpl->mxObj = xObj;
+    mpImpl->xListener = EmbedEventListener_Impl::Create( this );
 }
 
-EmbeddedObjectRef::EmbeddedObjectRef( const EmbeddedObjectRef& rObj )
+EmbeddedObjectRef::EmbeddedObjectRef( const EmbeddedObjectRef& rObj ) :
+    mpImpl(new EmbeddedObjectRef_Impl(*rObj.mpImpl))
 {
-    mpImp = new EmbeddedObjectRef_Impl;
-    mpImp->pContainer = rObj.mpImp->pContainer;
-    mpImp->nViewAspect = rObj.mpImp->nViewAspect;
-    mpImp->bIsLocked = rObj.mpImp->bIsLocked;
-    mxObj = rObj.mxObj;
-    mpImp->xListener = EmbedEventListener_Impl::Create( this );
-    mpImp->aPersistName = rObj.mpImp->aPersistName;
-    mpImp->aMediaType = rObj.mpImp->aMediaType;
-    mpImp->bNeedUpdate = rObj.mpImp->bNeedUpdate;
-    mpImp->aDefaultSizeForChart_In_100TH_MM = rObj.mpImp->aDefaultSizeForChart_In_100TH_MM;
-
-    if ( rObj.mpImp->pGraphic && !rObj.mpImp->bNeedUpdate )
-        mpImp->pGraphic = new Graphic( *rObj.mpImp->pGraphic );
-    else
-        mpImp->pGraphic = 0;
-
-    mpImp->mnGraphicVersion = 0;
+    mpImpl->xListener = EmbedEventListener_Impl::Create( this );
 }
 
 EmbeddedObjectRef::~EmbeddedObjectRef()
 {
-    delete mpImp->pGraphic;
     Clear();
-    delete mpImp;
+    delete mpImpl;
 }
 
 void EmbeddedObjectRef::Assign( const uno::Reference < embed::XEmbeddedObject >& xObj, sal_Int64 nAspect )
 {
-    DBG_ASSERT( !mxObj.is(), "Never assign an already assigned object!" );
+    DBG_ASSERT(!mpImpl->mxObj.is(), "Never assign an already assigned object!");
 
     Clear();
-    mpImp->nViewAspect = nAspect;
-    mxObj = xObj;
-    mpImp->xListener = EmbedEventListener_Impl::Create( this );
+    mpImpl->nViewAspect = nAspect;
+    mpImpl->mxObj = xObj;
+    mpImpl->xListener = EmbedEventListener_Impl::Create( this );
 
     //#i103460#
     if ( IsChart() )
@@ -300,31 +314,31 @@ void EmbeddedObjectRef::Assign( const uno::Reference < embed::XEmbeddedObject >&
         uno::Reference < chart2::XDefaultSizeTransmitter > xSizeTransmitter( xObj, uno::UNO_QUERY );
         DBG_ASSERT( xSizeTransmitter.is(), "Object does not support XDefaultSizeTransmitter -> will cause #i103460#!" );
         if( xSizeTransmitter.is() )
-            xSizeTransmitter->setDefaultSize( mpImp->aDefaultSizeForChart_In_100TH_MM );
+            xSizeTransmitter->setDefaultSize( mpImpl->aDefaultSizeForChart_In_100TH_MM );
     }
 }
 
 void EmbeddedObjectRef::Clear()
 {
-    if ( mxObj.is() && mpImp->xListener )
+    if (mpImpl->mxObj.is() && mpImpl->xListener)
     {
-        mxObj->removeStateChangeListener( mpImp->xListener );
+        mpImpl->mxObj->removeStateChangeListener(mpImpl->xListener);
 
-        uno::Reference < util::XCloseable > xClose( mxObj, uno::UNO_QUERY );
+        uno::Reference<util::XCloseable> xClose(mpImpl->mxObj, uno::UNO_QUERY);
         if ( xClose.is() )
-            xClose->removeCloseListener( mpImp->xListener );
+            xClose->removeCloseListener( mpImpl->xListener );
 
-        uno::Reference < document::XEventBroadcaster > xBrd( mxObj, uno::UNO_QUERY );
+        uno::Reference<document::XEventBroadcaster> xBrd(mpImpl->mxObj, uno::UNO_QUERY);
         if ( xBrd.is() )
-            xBrd->removeEventListener( mpImp->xListener );
+            xBrd->removeEventListener( mpImpl->xListener );
 
-        if ( mpImp->bIsLocked )
+        if ( mpImpl->bIsLocked )
         {
             if ( xClose.is() )
             {
                 try
                 {
-                    mxObj->changeState( embed::EmbedStates::LOADED );
+                    mpImpl->mxObj->changeState(embed::EmbedStates::LOADED);
                     xClose->close( sal_True );
                 }
                 catch (const util::CloseVetoException&)
@@ -338,69 +352,74 @@ void EmbeddedObjectRef::Clear()
             }
         }
 
-        if ( mpImp->xListener )
+        if ( mpImpl->xListener )
         {
-            mpImp->xListener->pObject = 0;
-            mpImp->xListener->release();
-            mpImp->xListener = 0;
+            mpImpl->xListener->pObject = 0;
+            mpImpl->xListener->release();
+            mpImpl->xListener = 0;
         }
 
-        mxObj = 0;
-        mpImp->bNeedUpdate = sal_False;
+        mpImpl->mxObj = NULL;
+        mpImpl->bNeedUpdate = sal_False;
     }
 
-    mpImp->pContainer = 0;
-    mpImp->bIsLocked = sal_False;
-    mpImp->bNeedUpdate = sal_False;
+    mpImpl->pContainer = 0;
+    mpImpl->bIsLocked = sal_False;
+    mpImpl->bNeedUpdate = sal_False;
+}
+
+bool EmbeddedObjectRef::is() const
+{
+    return mpImpl->mxObj.is();
 }
 
 void EmbeddedObjectRef::AssignToContainer( comphelper::EmbeddedObjectContainer* pContainer, const ::rtl::OUString& rPersistName )
 {
-    mpImp->pContainer = pContainer;
-    mpImp->aPersistName = rPersistName;
+    mpImpl->pContainer = pContainer;
+    mpImpl->aPersistName = rPersistName;
 
-    if ( mpImp->pGraphic && !mpImp->bNeedUpdate && pContainer )
-        SetGraphicToContainer( *mpImp->pGraphic, *pContainer, mpImp->aPersistName, ::rtl::OUString() );
+    if ( mpImpl->pGraphic && !mpImpl->bNeedUpdate && pContainer )
+        SetGraphicToContainer( *mpImpl->pGraphic, *pContainer, mpImpl->aPersistName, ::rtl::OUString() );
 }
 
 comphelper::EmbeddedObjectContainer* EmbeddedObjectRef::GetContainer() const
 {
-    return mpImp->pContainer;
+    return mpImpl->pContainer;
 }
 
 sal_Int64 EmbeddedObjectRef::GetViewAspect() const
 {
-    return mpImp->nViewAspect;
+    return mpImpl->nViewAspect;
 }
 
 void EmbeddedObjectRef::SetViewAspect( sal_Int64 nAspect )
 {
-    mpImp->nViewAspect = nAspect;
+    mpImpl->nViewAspect = nAspect;
 }
 
 void EmbeddedObjectRef::Lock( sal_Bool bLock )
 {
-    mpImp->bIsLocked = bLock;
+    mpImpl->bIsLocked = bLock;
 }
 
 sal_Bool EmbeddedObjectRef::IsLocked() const
 {
-    return mpImp->bIsLocked;
+    return mpImpl->bIsLocked;
 }
 
 void EmbeddedObjectRef::GetReplacement( sal_Bool bUpdate )
 {
     if ( bUpdate )
     {
-        DELETEZ( mpImp->pGraphic );
-        mpImp->aMediaType = ::rtl::OUString();
-        mpImp->pGraphic = new Graphic;
-        mpImp->mnGraphicVersion++;
+        DELETEZ( mpImpl->pGraphic );
+        mpImpl->aMediaType = ::rtl::OUString();
+        mpImpl->pGraphic = new Graphic;
+        mpImpl->mnGraphicVersion++;
     }
-    else if ( !mpImp->pGraphic )
+    else if ( !mpImpl->pGraphic )
     {
-        mpImp->pGraphic = new Graphic;
-        mpImp->mnGraphicVersion++;
+        mpImpl->pGraphic = new Graphic;
+        mpImpl->mnGraphicVersion++;
     }
     else
     {
@@ -412,24 +431,24 @@ void EmbeddedObjectRef::GetReplacement( sal_Bool bUpdate )
     if ( pGraphicStream )
     {
         GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
-        if( mpImp->pGraphic )
-            rGF.ImportGraphic( *mpImp->pGraphic, String(), *pGraphicStream, GRFILTER_FORMAT_DONTKNOW );
-        mpImp->mnGraphicVersion++;
+        if( mpImpl->pGraphic )
+            rGF.ImportGraphic( *mpImpl->pGraphic, String(), *pGraphicStream, GRFILTER_FORMAT_DONTKNOW );
+        mpImpl->mnGraphicVersion++;
         delete pGraphicStream;
     }
 }
 
 Graphic* EmbeddedObjectRef::GetGraphic( ::rtl::OUString* pMediaType ) const
 {
-    if ( mpImp->bNeedUpdate )
+    if ( mpImpl->bNeedUpdate )
         // bNeedUpdate will be set to false while retrieving new replacement
         const_cast < EmbeddedObjectRef* >(this)->GetReplacement( sal_True );
-    else if ( !mpImp->pGraphic )
+    else if ( !mpImpl->pGraphic )
         const_cast < EmbeddedObjectRef* >(this)->GetReplacement( sal_False );
 
-    if ( mpImp->pGraphic && pMediaType )
-        *pMediaType = mpImp->aMediaType;
-    return mpImp->pGraphic;
+    if ( mpImpl->pGraphic && pMediaType )
+        *pMediaType = mpImpl->aMediaType;
+    return mpImpl->pGraphic;
 }
 
 Size EmbeddedObjectRef::GetSize( MapMode* pTargetMapMode ) const
@@ -437,7 +456,7 @@ Size EmbeddedObjectRef::GetSize( MapMode* pTargetMapMode ) const
     MapMode aSourceMapMode( MAP_100TH_MM );
     Size aResult;
 
-    if ( mpImp->nViewAspect == embed::Aspects::MSOLE_ICON )
+    if ( mpImpl->nViewAspect == embed::Aspects::MSOLE_ICON )
     {
         Graphic* pGraphic = GetGraphic();
         if ( pGraphic )
@@ -452,11 +471,11 @@ Size EmbeddedObjectRef::GetSize( MapMode* pTargetMapMode ) const
     {
         awt::Size aSize;
 
-        if ( mxObj.is() )
+        if (mpImpl->mxObj.is())
         {
             try
             {
-                aSize = mxObj->getVisualAreaSize( mpImp->nViewAspect );
+                aSize = mpImpl->mxObj->getVisualAreaSize(mpImpl->nViewAspect);
             }
             catch(const embed::NoVisualAreaSizeException&)
             {
@@ -468,7 +487,7 @@ Size EmbeddedObjectRef::GetSize( MapMode* pTargetMapMode ) const
 
             try
             {
-                aSourceMapMode = VCLUnoHelper::UnoEmbed2VCLMapUnit( mxObj->getMapUnit( mpImp->nViewAspect ) );
+                aSourceMapMode = VCLUnoHelper::UnoEmbed2VCLMapUnit(mpImpl->mxObj->getMapUnit(mpImpl->nViewAspect));
             }
             catch(const uno::Exception&)
             {
@@ -494,59 +513,59 @@ Size EmbeddedObjectRef::GetSize( MapMode* pTargetMapMode ) const
 void EmbeddedObjectRef::SetGraphicStream( const uno::Reference< io::XInputStream >& xInGrStream,
                                             const ::rtl::OUString& rMediaType )
 {
-    if ( mpImp->pGraphic )
-        delete mpImp->pGraphic;
-    mpImp->pGraphic = new Graphic();
-    mpImp->aMediaType = rMediaType;
-    mpImp->mnGraphicVersion++;
+    if ( mpImpl->pGraphic )
+        delete mpImpl->pGraphic;
+    mpImpl->pGraphic = new Graphic();
+    mpImpl->aMediaType = rMediaType;
+    mpImpl->mnGraphicVersion++;
 
     SvStream* pGraphicStream = ::utl::UcbStreamHelper::CreateStream( xInGrStream );
 
     if ( pGraphicStream )
     {
         GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
-        rGF.ImportGraphic( *mpImp->pGraphic, String(), *pGraphicStream, GRFILTER_FORMAT_DONTKNOW );
-        mpImp->mnGraphicVersion++;
+        rGF.ImportGraphic( *mpImpl->pGraphic, String(), *pGraphicStream, GRFILTER_FORMAT_DONTKNOW );
+        mpImpl->mnGraphicVersion++;
 
-        if ( mpImp->pContainer )
+        if ( mpImpl->pContainer )
         {
             pGraphicStream->Seek( 0 );
             uno::Reference< io::XInputStream > xInSeekGrStream = new ::utl::OSeekableInputStreamWrapper( pGraphicStream );
 
-            mpImp->pContainer->InsertGraphicStream( xInSeekGrStream, mpImp->aPersistName, rMediaType );
+            mpImpl->pContainer->InsertGraphicStream( xInSeekGrStream, mpImpl->aPersistName, rMediaType );
         }
 
         delete pGraphicStream;
     }
 
-    mpImp->bNeedUpdate = sal_False;
+    mpImpl->bNeedUpdate = sal_False;
 
 }
 
 void EmbeddedObjectRef::SetGraphic( const Graphic& rGraphic, const ::rtl::OUString& rMediaType )
 {
-    if ( mpImp->pGraphic )
-        delete mpImp->pGraphic;
-    mpImp->pGraphic = new Graphic( rGraphic );
-    mpImp->aMediaType = rMediaType;
-    mpImp->mnGraphicVersion++;
+    if ( mpImpl->pGraphic )
+        delete mpImpl->pGraphic;
+    mpImpl->pGraphic = new Graphic( rGraphic );
+    mpImpl->aMediaType = rMediaType;
+    mpImpl->mnGraphicVersion++;
 
-    if ( mpImp->pContainer )
-        SetGraphicToContainer( rGraphic, *mpImp->pContainer, mpImp->aPersistName, rMediaType );
+    if ( mpImpl->pContainer )
+        SetGraphicToContainer( rGraphic, *mpImpl->pContainer, mpImpl->aPersistName, rMediaType );
 
-    mpImp->bNeedUpdate = sal_False;
+    mpImpl->bNeedUpdate = sal_False;
 }
 
 SvStream* EmbeddedObjectRef::GetGraphicStream( sal_Bool bUpdate ) const
 {
     RTL_LOGFILE_CONTEXT( aLog, "svtools (mv76033) svt::EmbeddedObjectRef::GetGraphicStream" );
-    DBG_ASSERT( bUpdate || mpImp->pContainer, "Can't retrieve current graphic!" );
+    DBG_ASSERT( bUpdate || mpImpl->pContainer, "Can't retrieve current graphic!" );
     uno::Reference < io::XInputStream > xStream;
-    if ( mpImp->pContainer && !bUpdate )
+    if ( mpImpl->pContainer && !bUpdate )
     {
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "getting stream from container" );
         // try to get graphic stream from container storage
-        xStream = mpImp->pContainer->GetGraphicStream( mxObj, &mpImp->aMediaType );
+        xStream = mpImpl->pContainer->GetGraphicStream(mpImpl->mxObj, &mpImpl->aMediaType);
         if ( xStream.is() )
         {
             const sal_Int32 nConstBufferSize = 32000;
@@ -577,16 +596,16 @@ SvStream* EmbeddedObjectRef::GetGraphicStream( sal_Bool bUpdate ) const
     {
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "getting stream from object" );
         // update wanted or no stream in container storage available
-        xStream = GetGraphicReplacementStream( mpImp->nViewAspect, mxObj, &mpImp->aMediaType );
+        xStream = GetGraphicReplacementStream(mpImpl->nViewAspect, mpImpl->mxObj, &mpImpl->aMediaType);
 
         if ( xStream.is() )
         {
-            if ( mpImp->pContainer )
-                mpImp->pContainer->InsertGraphicStream( xStream, mpImp->aPersistName, mpImp->aMediaType );
+            if ( mpImpl->pContainer )
+                mpImpl->pContainer->InsertGraphicStream( xStream, mpImpl->aPersistName, mpImpl->aMediaType );
 
             SvStream* pResult = ::utl::UcbStreamHelper::CreateStream( xStream );
             if ( pResult && bUpdate )
-                mpImp->bNeedUpdate = sal_False;
+                mpImpl->bNeedUpdate = sal_False;
 
             return pResult;
         }
@@ -746,16 +765,21 @@ uno::Reference< io::XInputStream > EmbeddedObjectRef::GetGraphicReplacementStrea
     return ::comphelper::EmbeddedObjectContainer::GetGraphicReplacementStream(nViewAspect,xObj,pMediaType);
 }
 
+void EmbeddedObjectRef::UpdateReplacement()
+{
+    GetReplacement( sal_True );
+}
+
 void EmbeddedObjectRef::UpdateReplacementOnDemand()
 {
-    DELETEZ( mpImp->pGraphic );
-    mpImp->bNeedUpdate = sal_True;
-    mpImp->mnGraphicVersion++;
+    DELETEZ( mpImpl->pGraphic );
+    mpImpl->bNeedUpdate = sal_True;
+    mpImpl->mnGraphicVersion++;
 
-    if( mpImp->pContainer )
+    if( mpImpl->pContainer )
     {
         //remove graphic from container thus a new up to date one is requested on save
-        mpImp->pContainer->RemoveGraphicStream( mpImp->aPersistName );
+        mpImpl->pContainer->RemoveGraphicStream( mpImpl->aPersistName );
     }
 }
 
@@ -768,10 +792,10 @@ sal_Bool EmbeddedObjectRef::IsChart() const
     //#i83708# #i81857# #i79578# request an ole replacement image only if really necessary
     //as this call can be very expensive and does block the user interface as long at it takes
 
-    if ( !mxObj.is() )
+    if (!mpImpl->mxObj.is())
         return false;
 
-    SvGlobalName aObjClsId( mxObj->getClassID() );
+    SvGlobalName aObjClsId(mpImpl->mxObj->getClassID());
     if(
         SvGlobalName(SO3_SCH_CLASSID_30) == aObjClsId
         || SvGlobalName(SO3_SCH_CLASSID_40) == aObjClsId
@@ -787,7 +811,7 @@ sal_Bool EmbeddedObjectRef::IsChart() const
 // #i104867#
 sal_uInt32 EmbeddedObjectRef::getGraphicVersion() const
 {
-    return mpImp->mnGraphicVersion;
+    return mpImpl->mnGraphicVersion;
 }
 
 void EmbeddedObjectRef::SetDefaultSizeForChart( const Size& rSizeIn_100TH_MM )
@@ -796,12 +820,12 @@ void EmbeddedObjectRef::SetDefaultSizeForChart( const Size& rSizeIn_100TH_MM )
     //for this case they need to use the size settings from the surrounding frame,
     //which is made available with this method
 
-    mpImp->aDefaultSizeForChart_In_100TH_MM = awt::Size( rSizeIn_100TH_MM.getWidth(), rSizeIn_100TH_MM.getHeight() );
+    mpImpl->aDefaultSizeForChart_In_100TH_MM = awt::Size( rSizeIn_100TH_MM.getWidth(), rSizeIn_100TH_MM.getHeight() );
 
-    uno::Reference < chart2::XDefaultSizeTransmitter > xSizeTransmitter( mxObj, uno::UNO_QUERY );
+    uno::Reference<chart2::XDefaultSizeTransmitter> xSizeTransmitter(mpImpl->mxObj, uno::UNO_QUERY);
     DBG_ASSERT( xSizeTransmitter.is(), "Object does not support XDefaultSizeTransmitter -> will cause #i103460#!" );
     if( xSizeTransmitter.is() )
-        xSizeTransmitter->setDefaultSize( mpImp->aDefaultSizeForChart_In_100TH_MM );
+        xSizeTransmitter->setDefaultSize( mpImpl->aDefaultSizeForChart_In_100TH_MM );
 }
 
 } // namespace svt

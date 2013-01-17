@@ -70,6 +70,7 @@
 
 #include <com/sun/star/sheet/XCellAddressable.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
+#include <com/sun/star/embed/Aspects.hpp>
 #include <oox/token/tokens.hxx>
 #include <oox/export/shapes.hxx>
 #include <oox/export/utils.hxx>

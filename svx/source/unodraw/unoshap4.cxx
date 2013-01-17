@@ -20,6 +20,7 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/embed/XLinkageSupport.hpp>
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
+#include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
 #include <vcl/virdev.hxx>
