@@ -595,7 +595,7 @@ SvStream* EmbeddedObjectRef::GetGraphicStream( sal_Bool bUpdate ) const
     return NULL;
 }
 
-void EmbeddedObjectRef::DrawPaintReplacement( const Rectangle &rRect, const String &rText, OutputDevice *pOut )
+void EmbeddedObjectRef::DrawPaintReplacement( const Rectangle &rRect, const OUString &rText, OutputDevice *pOut )
 {
     MapMode aMM( MAP_APPFONT );
     Size aAppFontSz = pOut->LogicToLogic( Size( 0, 8 ), &aMM, NULL );

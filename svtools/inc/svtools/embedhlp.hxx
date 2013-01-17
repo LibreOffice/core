@@ -36,7 +36,7 @@ namespace comphelper
 
 class Rectangle;
 class OutputDevice;
-class String;
+
 namespace svt
 {
     struct EmbeddedObjectRef_Impl;
@@ -55,7 +55,7 @@ namespace svt
         const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& operator ->() const { return mxObj; }
         const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& GetObject() const { return mxObj; }
 
-        static void DrawPaintReplacement( const Rectangle &rRect, const String &rText, OutputDevice *pOut );
+        static void DrawPaintReplacement( const Rectangle &rRect, const OUString &rText, OutputDevice *pOut );
         static void DrawShading( const Rectangle &rRect, OutputDevice *pOut );
         static sal_Bool TryRunningState( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& );
         static void SetGraphicToContainer( const Graphic& rGraphic,
