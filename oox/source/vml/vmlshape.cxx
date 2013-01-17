@@ -18,6 +18,7 @@
  */
 
 #include <algorithm>
+#include <boost/optional.hpp>
 
 #include "oox/vml/vmlshape.hxx"
 
@@ -370,7 +371,10 @@ void ShapeBase::convertShapeProperties( const Reference< XShape >& rxShape ) con
             aPropMap.setProperty(PROP_BackColor, aPropMap[PROP_FillColor]);
             aPropMap.erase(PROP_FillColor);
         }
-        // And no LineColor property; individual borders can have colors
+        // And no LineColor property; individual borders can have colors and widths
+        boost::optional<sal_Int32> oLineWidth;
+        if (maTypeModel.maStrokeModel.moWeight.has())
+            oLineWidth.reset(ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maTypeModel.maStrokeModel.moWeight.get(), 0, false, false));
         if (aPropMap.hasProperty(PROP_LineColor))
         {
             uno::Reference<beans::XPropertySet> xPropertySet(rxShape, uno::UNO_QUERY);
@@ -381,6 +385,8 @@ void ShapeBase::convertShapeProperties( const Reference< XShape >& rxShape ) con
             {
                 table::BorderLine2 aBorderLine = xPropertySet->getPropertyValue(PropertyMap::getPropertyName(aBorders[i])).get<table::BorderLine2>();
                 aBorderLine.Color = aPropMap[PROP_LineColor].get<sal_Int32>();
+                if (oLineWidth)
+                    aBorderLine.LineWidth = *oLineWidth;
                 aPropMap.setProperty(aBorders[i], uno::makeAny(aBorderLine));
             }
             aPropMap.erase(PROP_LineColor);
