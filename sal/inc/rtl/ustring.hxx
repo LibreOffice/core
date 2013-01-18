@@ -2156,7 +2156,9 @@ public:
     */
     static OUString number( unsigned long ll, sal_Int16 radix = 10 )
     {
+#if SAL_TYPES_SIZEOFLONG == 8
         assert( ll <= SAL_MAX_INT64 ); // valueOfInt64 may not be able to handle the highest bit
+#endif
         sal_Unicode aBuf[RTL_STR_MAX_VALUEOFINT64];
         rtl_uString* pNewData = 0;
         rtl_uString_newFromStr_WithLength( &pNewData, aBuf, rtl_ustr_valueOfInt64( aBuf, ll, radix ) );
