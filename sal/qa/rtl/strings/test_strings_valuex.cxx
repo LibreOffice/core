@@ -70,7 +70,6 @@ void testInt() {
     assert( sizeof( long ) <= sizeof( sal_Int64 ));
     assert( sizeof( long long ) <= sizeof( sal_Int64 ));
     assert( sizeof( unsigned int ) < sizeof( sal_Int64 ));
-    assert( sizeof( unsigned long ) < sizeof( sal_Int64 ));
 }
 
 void test::strings::valueX::testOUInt() {

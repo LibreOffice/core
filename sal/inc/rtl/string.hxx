@@ -1522,6 +1522,7 @@ public:
     */
     static OString number( unsigned long ll, sal_Int16 radix = 10 )
     {
+        assert( ll <= SAL_MAX_INT64 ); // valueOfInt64 may not be able to handle the highest bit
         sal_Char aBuf[RTL_STR_MAX_VALUEOFINT64];
         rtl_String* pNewData = 0;
         rtl_string_newFromStr_WithLength( &pNewData, aBuf, rtl_str_valueOfInt64( aBuf, ll, radix ) );
