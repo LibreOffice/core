@@ -97,9 +97,7 @@ class CGMImpressOutAct : public CGMOutAct
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPages >               maXDrawPages;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >                maXDrawPage;
 
-//  ::com::sun::star::uno::Reference< XServiceRegistry >            maXServiceRegistry;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >        maXMultiServiceFactory;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >        maXServiceManagerSC;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >                   maXShape;
     sal_Bool                        ImplCreateShape( const ::rtl::OUString& rType );
 

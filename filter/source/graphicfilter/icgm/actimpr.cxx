@@ -63,16 +63,12 @@ CGMImpressOutAct::CGMImpressOutAct( CGM& rCGM, const uno::Reference< frame::XMod
             maXDrawPages = aDrawPageSup->getDrawPages();
             if ( maXDrawPages.is() )
             {
-                maXServiceManagerSC = comphelper::getProcessServiceFactory();
-                if ( maXServiceManagerSC.is() )
+                maXMultiServiceFactory.set( rModel, uno::UNO_QUERY);
+                if( maXMultiServiceFactory.is() )
                 {
-                    uno::Any aAny( rModel->queryInterface( ::getCppuType((const uno::Reference< lang::XMultiServiceFactory >*)0) ));
-                    if( aAny >>= maXMultiServiceFactory )
-                    {
-                        maXDrawPage = *(uno::Reference< drawing::XDrawPage > *)maXDrawPages->getByIndex( 0 ).getValue();
-                        if ( ImplInitPage() )
-                            bStatRet = sal_True;
-                    }
+                    maXDrawPage = *(uno::Reference< drawing::XDrawPage > *)maXDrawPages->getByIndex( 0 ).getValue();
+                    if ( ImplInitPage() )
+                        bStatRet = sal_True;
                 }
             }
         }
@@ -437,11 +433,10 @@ void CGMImpressOutAct::EndGroup()
         if ( ( mnCurrentCount - mnFirstIndex ) > 1 )
         {
             uno::Reference< drawing::XShapeGrouper > aXShapeGrouper;
-            uno::Any aAny( maXDrawPage->queryInterface( ::getCppuType(((const uno::Reference< drawing::XShapeGrouper >*)0) )));
-            if( aAny >>= aXShapeGrouper )
+            aXShapeGrouper.set( maXDrawPage, uno::UNO_QUERY );
+            if( aXShapeGrouper.is() )
             {
-                uno::Reference< drawing::XShapes >  aXShapes(
-                         drawing::ShapeCollection::create(comphelper::getComponentContext(maXServiceManagerSC)) );
+                uno::Reference< drawing::XShapes >  aXShapes = drawing::ShapeCollection::create(comphelper::getProcessComponentContext());
                 for ( sal_uInt32 i = mnFirstIndex; i < mnCurrentCount; i++ )
                 {
                     uno::Reference< drawing::XShape >  aXShape = *(uno::Reference< drawing::XShape > *)maXShapes->getByIndex( i ).getValue();
