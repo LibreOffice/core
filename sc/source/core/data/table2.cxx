@@ -653,6 +653,19 @@ void ScTable::CopyToClip(const ScRangeList& rRanges, ScTable* pTable,
     }
 }
 
+void ScTable::CopyStaticToDocument(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScTable* pDestTab)
+{
+    if (nCol1 > nCol2)
+        return;
+
+    for (SCCOL i = nCol1; i <= nCol2; ++i)
+    {
+        ScColumn& rSrcCol = aCol[i];
+        ScColumn& rDestCol = pDestTab->aCol[i];
+        rSrcCol.CopyStaticToDocument(nRow1, nRow2, rDestCol);
+    }
+}
+
 void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         SCsCOL nDx, SCsROW nDy, ScTable* pTable)
 {
