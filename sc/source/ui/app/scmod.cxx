@@ -2317,6 +2317,11 @@ void ScModule::PushNewAnyRefDlg( ScAnyRefModalDlg* pNewDlg )
 {
     maAnyRefDlgStack.push( pNewDlg );
 
+    // prevent mismatch between calls to
+    // SetInRefMode(true) and SetInRefMode(false)
+    if(maAnyRefDlgStack.size() != 1)
+        return;
+
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while(pViewShell)
     {
