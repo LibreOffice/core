@@ -158,6 +158,7 @@ static AquaSalFrame* getMouseContainerFrame()
     NSWindow* pNSWindow = [super initWithContentRect: aRect styleMask: mpFrame->getStyleMask() backing: NSBackingStoreBuffered defer: NO ];
     [pNSWindow useOptimizedDrawing: YES]; // OSX recommendation when there are no overlapping subviews within the receiver
 
+    // enable OSX>=10.7 fullscreen options if available and useful
     bool bAllowFullScreen = (0 == (mpFrame->mnStyle & (SAL_FRAME_STYLE_DIALOG | SAL_FRAME_STYLE_TOOLTIP | SAL_FRAME_STYLE_SYSTEMCHILD | SAL_FRAME_STYLE_FLOAT | SAL_FRAME_STYLE_TOOLWINDOW | SAL_FRAME_STYLE_INTRO)));
     bAllowFullScreen &= (0 == (~mpFrame->mnStyle & (SAL_FRAME_STYLE_SIZEABLE)));
     bAllowFullScreen &= (mpFrame->mpParent == NULL);
