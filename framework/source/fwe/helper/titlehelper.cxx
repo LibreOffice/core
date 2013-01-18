@@ -490,7 +490,6 @@ void TitleHelper::impl_updateTitleForFrame (const css::uno::Reference< css::fram
     impl_appendComponentTitle   (sTitle, xComponent);
     impl_appendProductName      (sTitle);
     impl_appendModuleName       (sTitle);
-    impl_appendProductExtension (sTitle);
     impl_appendDebugVersion     (sTitle);
 
     // SYNCHRONIZED ->
@@ -531,17 +530,6 @@ void TitleHelper::impl_appendProductName (::rtl::OUStringBuffer& sTitle)
 }
 
 //*****************************************************************************************************************
-void TitleHelper::impl_appendProductExtension (::rtl::OUStringBuffer& sTitle)
-{
-    rtl::OUString ext(utl::ConfigManager::getProductExtension());
-    if (!ext.isEmpty())
-    {
-        sTitle.append(' ');
-        sTitle.append(ext);
-    }
-}
-
-//*****************************************************************************************************************
 void TitleHelper::impl_appendModuleName (::rtl::OUStringBuffer& sTitle)
 {
     // SYNCHRONIZED ->
@@ -578,6 +566,9 @@ void TitleHelper::impl_appendModuleName (::rtl::OUStringBuffer& sTitle)
 #ifdef DBG_UTIL
 void TitleHelper::impl_appendDebugVersion (::rtl::OUStringBuffer& sTitle)
 {
+    rtl::OUString version(utl::ConfigManager::getProductVersion());
+    sTitle.append(' ');
+    sTitle.append(version);
     ::rtl::OUString sDefault(RTL_CONSTASCII_USTRINGPARAM("development"));
     ::rtl::OUString sVersion = ::utl::Bootstrap::getBuildIdData(sDefault);
     sTitle.appendAscii(RTL_CONSTASCII_STRINGPARAM(" ["));
