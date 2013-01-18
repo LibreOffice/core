@@ -843,9 +843,9 @@ sub add_variables_to_allvariableshashref
     my $lcvariable = lc($variableshashref->{'PRODUCTNAME'});
     $variableshashref->{'LCPRODUCTNAME'} = $lcvariable;
 
-    if ($variableshashref->{'SHORT_PRODUCTEXTENSION'})
+    if ($variableshashref->{'PRODUCTEXTENSION'})
     {
-        $variableshashref->{'LCPRODUCTEXTENSION'} = "\-" . lc($variableshashref->{'SHORT_PRODUCTEXTENSION'}); # including the "-" !
+        $variableshashref->{'LCPRODUCTEXTENSION'} = "\-" . lc($variableshashref->{'PRODUCTEXTENSION'}); # including the "-" !
     }
     else
     {
