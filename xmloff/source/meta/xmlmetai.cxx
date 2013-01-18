@@ -268,12 +268,13 @@ void SvXMLMetaDocumentContext::setBuildId(::rtl::OUString const& i_rBuildId, con
 
     if ( sBuildId.isEmpty() )
     {
-        if ( i_rBuildId == "StarOffice 7" || i_rBuildId == "StarSuite 7" ||
-             i_rBuildId == "OpenOffice.org 1" )
+        if (    i_rBuildId.startsWith("StarOffice 7")
+            ||  i_rBuildId.startsWith("StarSuite 7")
+            ||  i_rBuildId.startsWith("OpenOffice.org 1"))
         {
             sBuildId = OUString("645$8687");
         }
-        else if ( i_rBuildId == "NeoOffice/2" )
+        else if (i_rBuildId.startsWith("NeoOffice/2"))
         {
             sBuildId = OUString("680$9134"); // fake NeoOffice as OpenOffice.org 2.2 release
         }
@@ -282,7 +283,7 @@ void SvXMLMetaDocumentContext::setBuildId(::rtl::OUString const& i_rBuildId, con
 #ifdef FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
     else
     {
-        if ( i_rBuildId == "LibreOffice/3" )
+        if (i_rBuildId.startsWith("LibreOffice/3"))
         {
             // #118558# fake LibreOffice3 as OpenOffice.org 3.3 release
             sBuildId = OUString::createFromAscii( "330$9567" );
