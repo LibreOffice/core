@@ -9,8 +9,8 @@ that the most recent font can be detected and favoured.
 Bumping the font version is easiest done manually by bumping the two places in
 the .sfd where the version is mentioned, e.g.
 
--Version: 102.2
-+Version: 102.3
+-Version: 102.3
++Version: 102.4
 
--LangName: 1033 "" "" "Regular" "OpenSymbol" "" "Version 102.2"
-+LangName: 1033 "" "" "Regular" "OpenSymbol" "" "Version 102.3"
+-LangName: 1033 "" "" "Regular" "OpenSymbol" "" "Version 102.3"
++LangName: 1033 "" "" "Regular" "OpenSymbol" "" "Version 102.4"

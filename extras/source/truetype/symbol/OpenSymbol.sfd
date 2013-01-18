@@ -3,7 +3,7 @@ FontName: OpenSymbol
 FullName: OpenSymbol
 FamilyName: OpenSymbol
 Weight: Book
-Copyright: (c) 2009 Sun Microsystems Inc.\nTHERE DOES NOT EXIST (c) 2011 Julien Nabet\nPRECEDES <-> DOES NOT SUCCEED (c) 2011 Olivier Hallot
+Copyright: (c) 2009 Sun Microsystems Inc.\nTHERE DOES NOT EXIST (c) 2011 Julien Nabet\nPRECEDES <-> DOES NOT SUCCEED (c) 2011 Olivier Hallot\nPRIME <-> TRIPLE PRIME (c) 2013 Mathias Hasselmann
 Version: 102.3
 ItalicAngle: 0
 UnderlinePosition: -143
@@ -774,7 +774,7 @@ ShortTable: maxp 16
   0
 EndShort
 LangName: 1033 "" "" "Regular" "OpenSymbol" "" "Version 102.3" 
-GaspTable: 1 65535 2 0
+GaspTable: 1 65535 2
 Encoding: Custom
 UnicodeInterp: none
 NameList: Adobe Glyph List
