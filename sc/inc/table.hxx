@@ -350,6 +350,7 @@ public:
                             bool bKeepScenarioFlags, bool bCloneNoteCaptions);
     void        CopyToClip(const ScRangeList& rRanges, ScTable* pTable,
                            bool bKeepScenarioFlags, bool bCloneNoteCaptions);
+    void CopyStaticToDocument(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScTable* pDestTab);
     void        CopyFromClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SCsCOL nDx, SCsROW nDy,
                                 sal_uInt16 nInsFlag, bool bAsLink, bool bSkipAttrForEmpty, ScTable* pTable);
     void        StartListeningInArea( SCCOL nCol1, SCROW nRow1,

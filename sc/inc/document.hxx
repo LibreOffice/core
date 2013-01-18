@@ -1027,6 +1027,16 @@ public:
                                const ScMarkData* pMarks = NULL, bool bAllTabs = false, bool bKeepScenarioFlags = false,
                                bool bIncludeObjects = false, bool bCloneNoteCaptions = true, bool bUseRangeForVBA = false );
 
+    /**
+     * Copy only raw cell values to another document.  Formula cells are
+     * converted to raw cells.  No formatting info are copied.
+     *
+     * @param rSrcRange source range in the source document
+     * @param nDestTab table in the clip document to copy to.
+     * @param pDestDoc document to copy to
+     */
+    void CopyStaticToDocument(const ScRange& rSrcRange, SCTAB nDestTab, ScDocument* pDestDoc);
+
     void            CopyTabToClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 SCTAB nTab, ScDocument* pClipDoc = NULL);
     void            CopyBlockFromClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
