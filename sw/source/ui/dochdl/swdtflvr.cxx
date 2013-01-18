@@ -114,9 +114,9 @@
 #include <swserv.hxx>
 #include <switerator.hxx>
 
-extern sal_Bool bFrmDrag;
-extern sal_Bool bDDINetAttr;
-extern sal_Bool bExecuteDrag;
+extern bool bFrmDrag;
+extern bool bDDINetAttr;
+extern bool bExecuteDrag;
 
 
 #define OLESIZE 11905 - 2 * lMinBorder, 6 * MM50
@@ -1940,7 +1940,7 @@ void SwTransferable::SetSelInShell( SwWrtShell& rSh, sal_Bool bSelectFrm,
             {
                 rSh.HideCrsr();
                 rSh.EnterSelFrmMode( pPt );
-                bFrmDrag = sal_True;
+                bFrmDrag = true;
             }
         }
     }
@@ -1951,7 +1951,7 @@ void SwTransferable::SetSelInShell( SwWrtShell& rSh, sal_Bool bSelectFrm,
             rSh.UnSelectFrm();
             rSh.LeaveSelFrmMode();
             rSh.GetView().GetEditWin().StopInsFrm();
-            bFrmDrag = sal_False;
+            bFrmDrag = false;
         }
         else if( rSh.GetView().GetDrawFuncPtr() )
             rSh.GetView().GetEditWin().StopInsFrm();
@@ -3142,7 +3142,7 @@ int SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
             {
                 rSh.HideCrsr();
                 rSh.EnterSelFrmMode( &rDragPt );
-                bFrmDrag = sal_True;
+                bFrmDrag = true;
             }
 
             const int nSelection = rSh.GetSelectionType();
@@ -3164,7 +3164,7 @@ int SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
                 rSh.LeaveSelFrmMode();
                 rSh.UnSelectFrm();
                 rSh.ShowCrsr();
-                bFrmDrag = sal_False;
+                bFrmDrag = false;
             }
         }
     }
@@ -3270,7 +3270,7 @@ int SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
         // is there an URL attribute at the insert point? Then replace that,
         // so simply put up a selection?
         rSh.DelINetAttrWithText();
-        bDDINetAttr = sal_True;
+        bDDINetAttr = true;
     }
 
     if ( rSrcSh.IsSelFrmMode() )

@@ -539,9 +539,9 @@ sal_uInt16 Application::GetDispatchLevel()
 
 // -----------------------------------------------------------------------
 
-sal_Bool Application::AnyInput( sal_uInt16 nType )
+bool Application::AnyInput( sal_uInt16 nType )
 {
-    return (sal_Bool)ImplGetSVData()->mpDefInst->AnyInput( nType );
+    return ImplGetSVData()->mpDefInst->AnyInput( nType );
 }
 
 // -----------------------------------------------------------------------

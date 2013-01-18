@@ -74,7 +74,7 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
     static  long    nDDStartPosX, nDDStartPosY;
 
     static  Color   aTextColor;     // text color; for the watering can
-    static  sal_Bool    bTransparentBackColor; // transparent background
+    static  bool    bTransparentBackColor; // transparent background
     static  Color   aTextBackColor; // text background; for the watering can
 
     /*
@@ -265,9 +265,9 @@ public:
                                             { return aTextBackColor; }
     void            SetTextBackColor(const Color& rCol )
                                             { aTextBackColor = rCol; }
-    void            SetTextBackColorTransparent(sal_Bool bSet)
+    void            SetTextBackColorTransparent(bool bSet)
                                     { bTransparentBackColor = bSet; }
-    sal_Bool            IsTextBackColorTransparent()
+    bool            IsTextBackColorTransparent()
                                     { return bTransparentBackColor; }
     void            LockKeyInput(sal_Bool bSet){bLockInput = bSet;}
 

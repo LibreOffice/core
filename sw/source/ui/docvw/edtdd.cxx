@@ -45,24 +45,24 @@ using namespace ::com::sun::star;
 // no include "dbgoutsw.hxx" here!!!!!!
 
 extern bool bNoInterrupt;
-extern sal_Bool bFrmDrag;
-extern sal_Bool bDDTimerStarted;
+extern bool bFrmDrag;
+extern bool bDDTimerStarted;
 
-sal_Bool bExecuteDrag = sal_False;
+bool bExecuteDrag = false;
 
 void SwEditWin::StartDDTimer()
 {
     aTimer.SetTimeoutHdl(LINK(this, SwEditWin, DDHandler));
     aTimer.SetTimeout(480);
     aTimer.Start();
-    bDDTimerStarted = sal_True;
+    bDDTimerStarted = true;
 }
 
 
 void SwEditWin::StopDDTimer(SwWrtShell *pSh, const Point &rPt)
 {
     aTimer.Stop();
-    bDDTimerStarted = sal_False;
+    bDDTimerStarted = false;
     if(!pSh->IsSelFrmMode())
         pSh->SetCursor(&rPt, false);
     aTimer.SetTimeoutHdl(LINK(this,SwEditWin, TimerHandler));
@@ -118,8 +118,8 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
         {
             bMBPressed = sal_False;
             ReleaseMouse();
-            bFrmDrag = sal_False;
-            bExecuteDrag = sal_True;
+            bFrmDrag = false;
+            bExecuteDrag = true;
             SwEditWin::nDDStartPosY = aDocPos.Y();
             SwEditWin::nDDStartPosX = aDocPos.X();
             aMovePos = aDocPos;
@@ -483,16 +483,16 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
 
 IMPL_LINK_NOARG(SwEditWin, DDHandler)
 {
-    bDDTimerStarted = sal_False;
+    bDDTimerStarted = false;
     aTimer.Stop();
     aTimer.SetTimeout(240);
     bMBPressed = sal_False;
     ReleaseMouse();
-    bFrmDrag = sal_False;
+    bFrmDrag = false;
 
     if ( rView.GetViewFrame() )
     {
-        bExecuteDrag = sal_True;
+        bExecuteDrag = true;
         StartExecuteDrag();
     }
     return 0;

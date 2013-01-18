@@ -118,7 +118,7 @@ void SwView::Activate(sal_Bool bMDIActivate)
 
 void SwView::Deactivate(sal_Bool bMDIActivate)
 {
-    extern sal_Bool bFlushCharBuffer ;
+    extern bool bFlushCharBuffer ;
         // Befinden sich noch Zeichen im Input Buffer?
     if( bFlushCharBuffer )
         GetEditWin().FlushInBuffer();
