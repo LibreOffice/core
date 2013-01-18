@@ -134,7 +134,6 @@
 #define HID_DLG_FLDEDT_PREV                                     "SW_HID_DLG_FLDEDT_PREV"
 #define HID_DLG_FLDEDT_ADDRESS                                  "SW_HID_DLG_FLDEDT_ADDRESS"
 
-#define HID_FILEDLG_CHARDLG                                     "SW_HID_FILEDLG_CHARDLG"
 #define HID_FILEDLG_LOADTEMPLATE                                "SW_HID_FILEDLG_LOADTEMPLATE"
 #define HID_FILEDLG_MAILMRGE1                                   "SW_HID_FILEDLG_MAILMRGE1"
 #define HID_FILEDLG_MAILMRGE2                                   "SW_HID_FILEDLG_MAILMRGE2"

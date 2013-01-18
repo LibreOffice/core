@@ -718,24 +718,13 @@ VclAbstractDialog   * SwAbstractDialogFactory_Impl::CreateSwChangeDBDlg(SwView& 
     return new VclAbstractDialog_Impl(pDlg);
 }
 
-SfxAbstractTabDialog *  SwAbstractDialogFactory_Impl::CreateSwCharDlg(Window* pParent, SwView& pVw, const SfxItemSet& rCoreSet, int nResId, // add for SwCharDlg
-                                                const String* pFmtStr , sal_Bool bIsDrwTxtDlg )
+ // add for SwCharDlg
+SfxAbstractTabDialog *  SwAbstractDialogFactory_Impl::CreateSwCharDlg(Window* pParent, SwView& pVw,
+    const SfxItemSet& rCoreSet, const String* pFmtStr, sal_Bool bIsDrwTxtDlg)
 {
 
-    SfxTabDialog* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_CHAR :
-            pDlg = new SwCharDlg( pParent, pVw, rCoreSet, pFmtStr, bIsDrwTxtDlg );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractTabDialog_Impl( pDlg );
-    return 0;
-
+    SfxTabDialog* pDlg = new SwCharDlg(pParent, pVw, rCoreSet, pFmtStr, bIsDrwTxtDlg);
+    return new AbstractTabDialog_Impl(pDlg);
 }
 
 AbstractSwConvertTableDlg* SwAbstractDialogFactory_Impl::CreateSwConvertTableDlg(SwView& rView, bool bToTable)

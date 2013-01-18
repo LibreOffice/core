@@ -58,13 +58,12 @@ using namespace ::com::sun::star::uno;
 using namespace ::sfx2;
 
 SwCharDlg::SwCharDlg(Window* pParent, SwView& rVw, const SfxItemSet& rCoreSet,
-                     const String* pStr, sal_Bool bIsDrwTxtDlg) :
-    SfxTabDialog(pParent, SW_RES(DLG_CHAR), &rCoreSet, pStr != 0),
-    rView(rVw),
-    bIsDrwTxtMode(bIsDrwTxtDlg)
+    const String* pStr, bool bIsDrwTxtDlg)
+    : SfxTabDialog(0, pParent, "CharacterPropertiesDialog",
+        "modules/swriter/ui/characterproperties.ui", &rCoreSet, pStr != 0)
+    , rView(rVw)
+    , bIsDrwTxtMode(bIsDrwTxtDlg)
 {
-    FreeResource();
-
     if(pStr)
     {
         String aTmp( GetText() );
@@ -75,22 +74,22 @@ SwCharDlg::SwCharDlg(Window* pParent, SwView& rVw, const SfxItemSet& rCoreSet,
     }
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialogdiet fail!");
-    AddTabPage(TP_CHAR_STD, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), 0 );
-    AddTabPage(TP_CHAR_EXT, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), 0 );
-    AddTabPage(TP_CHAR_POS, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), 0 );
-    AddTabPage(TP_CHAR_TWOLN, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), 0 );
-    AddTabPage(TP_CHAR_URL, SwCharURLPage::Create, 0);
-    AddTabPage(TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0 );
+    m_nCharStdId = AddTabPage("font", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_NAME), 0);
+    m_nCharExtId = AddTabPage("fonteffects", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_EFFECTS), 0);
+    m_nCharPosId = AddTabPage("position", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), 0 );
+    m_nCharTwoId = AddTabPage("asianlayout", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), 0 );
+    m_nCharUrlId = AddTabPage("hyperlink", SwCharURLPage::Create, 0);
+    m_nCharBgdId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0 );
 
     SvtCJKOptions aCJKOptions;
     if(bIsDrwTxtMode)
     {
-        RemoveTabPage( TP_CHAR_URL );
-        RemoveTabPage( TP_BACKGROUND );
-        RemoveTabPage( TP_CHAR_TWOLN );
+        RemoveTabPage(m_nCharUrlId);
+        RemoveTabPage(m_nCharBgdId);
+        RemoveTabPage(m_nCharTwoId);
     }
     else if(!aCJKOptions.IsDoubleLinesEnabled())
-        RemoveTabPage( TP_CHAR_TWOLN );
+        RemoveTabPage(m_nCharTwoId);
 }
 
 SwCharDlg::~SwCharDlg()
@@ -104,36 +103,35 @@ SwCharDlg::~SwCharDlg()
 void SwCharDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-    switch( nId )
+    if (nId == m_nCharStdId)
     {
-        case TP_CHAR_STD:
-            {
-            SvxFontListItem aFontListItem( *( (SvxFontListItem*)
-               ( rView.GetDocShell()->GetItem( SID_ATTR_CHAR_FONTLIST ) ) ) );
-            aSet.Put (SvxFontListItem( aFontListItem.GetFontList(), SID_ATTR_CHAR_FONTLIST));
-                if(!bIsDrwTxtMode)
-                    aSet.Put (SfxUInt32Item(SID_FLAG_TYPE,SVX_PREVIEW_CHARACTER));
-            rPage.PageCreated(aSet);
-            }
-            break;
-        case TP_CHAR_EXT:
-            if(bIsDrwTxtMode)
-                aSet.Put (SfxUInt16Item(SID_DISABLE_CTL,DISABLE_CASEMAP));
+        SvxFontListItem aFontListItem( *( (SvxFontListItem*)
+           ( rView.GetDocShell()->GetItem( SID_ATTR_CHAR_FONTLIST ) ) ) );
+        aSet.Put (SvxFontListItem( aFontListItem.GetFontList(), SID_ATTR_CHAR_FONTLIST));
+            if(!bIsDrwTxtMode)
+                aSet.Put (SfxUInt32Item(SID_FLAG_TYPE,SVX_PREVIEW_CHARACTER));
+        rPage.PageCreated(aSet);
+    }
+    else if (nId == m_nCharExtId)
+    {
+        if(bIsDrwTxtMode)
+            aSet.Put (SfxUInt16Item(SID_DISABLE_CTL,DISABLE_CASEMAP));
 
-            else
-            {
-                aSet.Put (SfxUInt32Item(SID_FLAG_TYPE,SVX_PREVIEW_CHARACTER|SVX_ENABLE_FLASH));
-            }
-            rPage.PageCreated(aSet);
-            break;
-        case TP_CHAR_POS:
-            aSet.Put (SfxUInt32Item(SID_FLAG_TYPE,SVX_PREVIEW_CHARACTER));
-            rPage.PageCreated(aSet);
-        break;
-        case TP_CHAR_TWOLN:
-            aSet.Put (SfxUInt32Item(SID_FLAG_TYPE,SVX_PREVIEW_CHARACTER));
-            rPage.PageCreated(aSet);
-        break;
+        else
+        {
+            aSet.Put (SfxUInt32Item(SID_FLAG_TYPE,SVX_PREVIEW_CHARACTER|SVX_ENABLE_FLASH));
+        }
+        rPage.PageCreated(aSet);
+    }
+    else if (nId == m_nCharPosId)
+    {
+        aSet.Put (SfxUInt32Item(SID_FLAG_TYPE,SVX_PREVIEW_CHARACTER));
+        rPage.PageCreated(aSet);
+    }
+    else if (nId == m_nCharTwoId)
+    {
+        aSet.Put (SfxUInt32Item(SID_FLAG_TYPE,SVX_PREVIEW_CHARACTER));
+        rPage.PageCreated(aSet);
     }
 }
 

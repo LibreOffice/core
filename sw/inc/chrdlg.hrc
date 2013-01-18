@@ -21,7 +21,6 @@
 
 #include "rcid.hrc"
 
-#define DLG_CHAR                (RC_CHRDLG_BEGIN +  1)
 #define DLG_PARA                (RC_CHRDLG_BEGIN +  2)
 #define DLG_DROPCAPS            (RC_CHRDLG_BEGIN +  8)
 #define DLG_DRAWCHAR            (RC_CHRDLG_BEGIN +  9)

@@ -20,56 +20,6 @@
 #include "chrdlg.hrc"
 #include "helpid.h"
 
-TabDialog DLG_CHAR
-{
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Text [ en-US ] = "Character" ;
-    Moveable = TRUE ;
-    Sizeable = TRUE ;
-    TabControl 1
-    {
-        OutputSize = TRUE ;
-        PageList =
-        {
-            PageItem
-            {
-                Identifier = TP_CHAR_STD ;
-                Text [ en-US ] = "Font" ;
-                PageResID = TP_CHAR_STD ;
-            };
-            PageItem
-            {
-                Identifier = TP_CHAR_EXT ;
-                Text [ en-US ] = "Font Effects" ;
-                PageResID = TP_CHAR_EXT ;
-            };
-            PageItem
-            {
-                Identifier = TP_CHAR_POS ;
-                PageResID = TP_CHAR_POS ;
-                Text [ en-US ] = "Position";
-            };
-            PageItem
-            {
-                Identifier = TP_CHAR_TWOLN ;
-                PageResID = TP_CHAR_TWOLN;
-                Text [ en-US ] = "Asian Layout";
-            };
-            PageItem
-            {
-                Identifier = TP_CHAR_URL ;
-                Text [ en-US ] = "Hyperlink" ;
-            };
-            PageItem
-            {
-                Identifier = TP_BACKGROUND ;
-                Text [ en-US ] = "Background" ;
-                PageResID = TP_BACKGROUND ;
-            };
-        };
-    };
-};
 TabDialog DLG_DRAWCHAR
 {
     OutputSize = TRUE ;

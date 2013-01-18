@@ -168,10 +168,10 @@ void sw_CharDialog( SwWrtShell &rWrtSh, sal_Bool bUseDialog, sal_uInt16 nSlot,co
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-        pDlg = pFact->CreateSwCharDlg( rWrtSh.GetView().GetWindow(), rWrtSh.GetView(), aCoreSet, DLG_CHAR );
+        pDlg = pFact->CreateSwCharDlg(rWrtSh.GetView().GetWindow(), rWrtSh.GetView(), aCoreSet);
         OSL_ENSURE(pDlg, "Dialogdiet fail!");
         if( FN_INSERT_HYPERLINK == nSlot )
-            pDlg->SetCurPageId(TP_CHAR_URL);
+            pDlg->SetCurPageId("hyperlink");
     }
 
     const SfxItemSet* pSet = NULL;

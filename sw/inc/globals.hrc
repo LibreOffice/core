@@ -157,7 +157,6 @@
 
 #define TP_MACRO_ASSIGN             (RC_GLOBALS_BEGIN +  40)
 #define TP_FRM_URL                  (RC_GLOBALS_BEGIN +  42)
-#define TP_CHAR_URL                 (RC_GLOBALS_BEGIN +  43)
 
 #define TP_CONTENT_OPT              (RC_GLOBALS_BEGIN +  45)
 #define TP_STD_FONT                 (RC_GLOBALS_BEGIN +  47)
