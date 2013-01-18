@@ -19,7 +19,6 @@ import uno
 import traceback
 from ..text.TextElement import TextElement
 from ..text.TextDocument import TextDocument
-from ..common.FileAccess import FileAccess
 from ..text.TextSectionHandler import TextSectionHandler
 
 from datetime import date as dateTimeObject
@@ -71,7 +70,7 @@ Many methods here are synchronized, in order to avoid colission made by
 events fired too often.
 @author rpiterman
 '''
-class AgendaTemplate(TextDocument):
+class AgendaDocument(TextDocument):
 
     '''
     constructor. The document is *not* loaded here.
@@ -79,7 +78,7 @@ class AgendaTemplate(TextDocument):
     '''
 
     def __init__(self,  xmsf, agenda, resources, templateConsts, listener):
-        super(AgendaTemplate,self).__init__(xmsf,listener, None,
+        super(AgendaDocument,self).__init__(xmsf,listener, None,
             "WIZARD_LIVE_PREVIEW")
         self.agenda = agenda
         self.templateConsts = templateConsts
@@ -88,23 +87,12 @@ class AgendaTemplate(TextDocument):
         self.allItems = []
 
     def load(self, templateURL, topics):
-        self.template = self.calcTemplateName(templateURL)
         self.loadAsPreview(templateURL, False)
         self.xFrame.ComponentWindow.Enable = False
         self.xTextDocument.lockControllers()
         self.initialize()
         self.initializeData(topics)
         self.xTextDocument.unlockControllers()
-
-    '''
-    The agenda templates are in format of aw-XXX.ott
-    the templates name is then XXX.ott.
-    This method calculates it.
-    '''
-
-    def calcTemplateName(self, url):
-        return FileAccess.connectURLs(
-            FileAccess.getParentDir(url), FileAccess.getFilename(url)[3:])
 
     '''synchronize the document to the model.<br/>
     this method rewrites all titles, item tables , and the topics table-
@@ -279,13 +267,13 @@ class AgendaTemplate(TextDocument):
         Get the default locale of the document,
         and create the date and time formatters.
         '''
-        AgendaTemplate.dateUtils = self.DateUtils(
+        AgendaDocument.dateUtils = self.DateUtils(
             self.xMSF, self.xTextDocument)
-        AgendaTemplate.formatter = AgendaTemplate.dateUtils.formatter
-        AgendaTemplate.dateFormat = \
-            AgendaTemplate.dateUtils.getFormat(DATE_SYSTEM_LONG)
-        AgendaTemplate.timeFormat = \
-            AgendaTemplate.dateUtils.getFormat(TIME_HHMM)
+        AgendaDocument.formatter = AgendaDocument.dateUtils.formatter
+        AgendaDocument.dateFormat = \
+            AgendaDocument.dateUtils.getFormat(DATE_SYSTEM_LONG)
+        AgendaDocument.timeFormat = \
+            AgendaDocument.dateUtils.getFormat(TIME_HHMM)
 
         self.initItemsCache()
         self.allItems = self.searchFillInItems(0)
@@ -305,29 +293,29 @@ class AgendaTemplate(TextDocument):
         for i in self.allItems:
             text = i.String.lstrip().lower()
             if text == self.templateConsts.FILLIN_TITLE:
-                AgendaTemplate.teTitle = PlaceholderTextElement(
+                AgendaDocument.teTitle = PlaceholderTextElement(
                     i, self.resources.resPlaceHolderTitle,
                     self.resources.resPlaceHolderHint,
                     self.xTextDocument)
-                AgendaTemplate.trTitle = i
+                AgendaDocument.trTitle = i
             elif text == self.templateConsts.FILLIN_DATE:
-                AgendaTemplate.teDate = PlaceholderTextElement(
+                AgendaDocument.teDate = PlaceholderTextElement(
                     i, self.resources.resPlaceHolderDate,
                     self.resources.resPlaceHolderHint,
                     self.xTextDocument)
-                AgendaTemplate.trDate = i
+                AgendaDocument.trDate = i
             elif text == self.templateConsts.FILLIN_TIME:
-                AgendaTemplate.teTime = PlaceholderTextElement(
+                AgendaDocument.teTime = PlaceholderTextElement(
                     i, self.resources.resPlaceHolderTime,
                     self.resources.resPlaceHolderHint,
                     self.xTextDocument)
-                AgendaTemplate.trTime = i
+                AgendaDocument.trTime = i
             elif text == self.templateConsts.FILLIN_LOCATION:
-                AgendaTemplate.teLocation = PlaceholderTextElement(
+                AgendaDocument.teLocation = PlaceholderTextElement(
                     i, self.resources.resPlaceHolderLocation,
                     self.resources.resPlaceHolderHint,
                     self.xTextDocument)
-                AgendaTemplate.trLocation = i
+                AgendaDocument.trLocation = i
             else:
                 auxList.append(i)
         self.allItems = auxList
@@ -367,19 +355,19 @@ class AgendaTemplate(TextDocument):
         try:
             if controlName == "txtTitle":
                 self.writeTitle(
-                    AgendaTemplate.teTitle, AgendaTemplate.trTitle,
+                    AgendaDocument.teTitle, AgendaDocument.trTitle,
                     self.agenda.cp_Title)
             elif controlName == "txtDate":
                 self.writeTitle(
-                    AgendaTemplate.teDate, AgendaTemplate.trDate,
+                    AgendaDocument.teDate, AgendaDocument.trDate,
                     self.getDateString(self.agenda.cp_Date))
             elif controlName == "txtTime":
                 self.writeTitle(
-                    AgendaTemplate.teTime, AgendaTemplate.trTime,
+                    AgendaDocument.teTime, AgendaDocument.trTime,
                     self.getTimeString(self.agenda.cp_Time))
             elif controlName == "cbLocation":
                 self.writeTitle(
-                    AgendaTemplate.teLocation, AgendaTemplate.trLocation,
+                    AgendaDocument.teLocation, AgendaDocument.trLocation,
                     self.agenda.cp_Location)
             else:
                 raise IllegalArgumentException ("No such title control...")
@@ -403,8 +391,8 @@ class AgendaTemplate(TextDocument):
         month = int((date % 10000) / 100)
         day = int(date % 100)
         dateObject = dateTimeObject(year, month, day)
-        return AgendaTemplate.dateUtils.format(
-            AgendaTemplate.dateFormat, dateObject)
+        return AgendaDocument.dateUtils.format(
+            AgendaDocument.dateFormat, dateObject)
 
     @classmethod
     def getTimeString(self, s):
@@ -414,7 +402,7 @@ class AgendaTemplate(TextDocument):
         t = ((time / float(1000000)) / float(24)) \
             + ((time % 1000000) / float(1000000)) / float(35)
         return self.formatter.convertNumberToString(
-            AgendaTemplate.timeFormat, t)
+            AgendaDocument.timeFormat, t)
 
     def finish(self, topics):
         self.createMinutes(topics)
@@ -739,8 +727,8 @@ class ItemsTable(object):
         if cellName == cursor.RangeName:
             return
 
-        rowIndex = AgendaTemplate.getRowIndex(cursor)
-        rowsCount = AgendaTemplate.getRowCount(ItemsTable.table)
+        rowIndex = AgendaDocument.getRowIndex(cursor)
+        rowsCount = AgendaDocument.getRowCount(ItemsTable.table)
         '''
         now before deleteing i move the cursor up so it
         does not disappear, because it will crash office.
@@ -756,7 +744,7 @@ the update is done programttically.<br/>
 The decision to make this class a class by its own
 was done out of logic reasons and not design/functionality reasons,
 since there is anyway only one instance of this class at runtime
-it could have also be implemented in the AgendaTemplate class
+it could have also be implemented in the AgendaDocument class
 but for clarity and separation I decided to make a sub class for it.
 
 @author rp143992
@@ -1093,7 +1081,7 @@ class PlaceholderTextElement(TextElement):
         textRange.String = self.placeHolderText
         if self.placeHolderText is None or self.placeHolderText == "":
             try:
-                xTextContent = AgendaTemplate.createPlaceHolder(
+                xTextContent = AgendaDocument.createPlaceHolder(
                     self.xmsf, self.text, self.hint)
                 textRange.Text.insertTextContent(
                     textRange.Start, xTextContent, True)
@@ -1115,7 +1103,7 @@ class PlaceholderElement(object):
 
     def write(self, textRange):
         try:
-            xTextContent = AgendaTemplate.createPlaceHolder(
+            xTextContent = AgendaDocument.createPlaceHolder(
                 self.textDocument, self.placeHolderText, self.hint)
             textRange.Text.insertTextContent(
                 textRange.Start, xTextContent, True)

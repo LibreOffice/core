@@ -18,7 +18,7 @@
 import traceback
 from .AgendaWizardDialog import AgendaWizardDialog, uno
 from .AgendaWizardDialogConst import HID
-from .AgendaDocument import AgendaTemplate, FileAccess
+from .AgendaDocument import AgendaDocument
 from .TemplateConsts import TemplateConsts
 from .TopicsControl import TopicsControl
 from .CGAgenda import CGAgenda
@@ -30,6 +30,7 @@ from ..common.SystemDialog import SystemDialog
 from ..common.Desktop import Desktop
 from ..common.HelpIds import HelpIds
 from ..common.Configuration import Configuration
+from ..common.FileAccess import FileAccess
 from ..document.OfficeDocument import OfficeDocument
 
 from com.sun.star.view.DocumentZoomType import OPTIMAL
@@ -74,7 +75,7 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
             self.agenda = CGAgenda()
             
             self.templateConsts = TemplateConsts
-            self.agendaTemplate = AgendaTemplate(
+            self.agendaTemplate = AgendaDocument(
                 self.xMSF, self.agenda, self.resources,
                 self.templateConsts, self)
 
