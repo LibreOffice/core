@@ -2696,10 +2696,8 @@ void SdXMLObjectShapeContext::StartElement( const ::com::sun::star::uno::Referen
 
 void SdXMLObjectShapeContext::EndElement()
 {
-    // #i67705#
-    const sal_uInt16 nGeneratorVersion(GetImport().getGeneratorVersion());
-
-    if(nGeneratorVersion < SvXMLImport::OOo_34x)
+    if (GetImport().isGeneratorVersionOlderThan(
+                SvXMLImport::OOo_34x, SvXMLImport::LO_4x))
     {
         // #i118485#
         // If it's an old file from us written before OOo3.4, we need to correct
