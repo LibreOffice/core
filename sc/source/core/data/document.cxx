@@ -1956,6 +1956,21 @@ void ScDocument::CopyToClip(const ScClipParam& rClipParam,
     pClipDoc->ExtendMerge(aClipRange, true);
 }
 
+void ScDocument::CopyStaticToDocument(const ScRange& rSrcRange, SCTAB nDestTab, ScDocument* pDestDoc)
+{
+    if (!pDestDoc)
+        return;
+
+    ScTable* pSrcTab = rSrcRange.aStart.Tab() < static_cast<SCTAB>(maTabs.size()) ? maTabs[rSrcRange.aStart.Tab()] : NULL;
+    ScTable* pDestTab = nDestTab < static_cast<SCTAB>(pDestDoc->maTabs.size()) ? pDestDoc->maTabs[nDestTab] : NULL;
+
+    if (!pSrcTab || !pDestTab)
+        return;
+
+    pSrcTab->CopyStaticToDocument(
+        rSrcRange.aStart.Col(), rSrcRange.aStart.Row(), rSrcRange.aEnd.Col(), rSrcRange.aEnd.Row(), pDestTab);
+}
+
 void ScDocument::CopyTabToClip(SCCOL nCol1, SCROW nRow1,
                                 SCCOL nCol2, SCROW nRow2,
                                 SCTAB nTab, ScDocument* pClipDoc)

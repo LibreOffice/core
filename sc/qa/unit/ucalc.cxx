@@ -117,7 +117,7 @@ public:
     void testRangeList();
     void testInput();
     void testCellFunctions();
-
+    void testCopyToDocument();
     /**
      * Make sure the SHEETS function gets properly updated during sheet
      * insertion and removal.
@@ -268,6 +268,7 @@ public:
     CPPUNIT_TEST(testRangeList);
     CPPUNIT_TEST(testInput);
     CPPUNIT_TEST(testCellFunctions);
+    CPPUNIT_TEST(testCopyToDocument);
     CPPUNIT_TEST(testSheetsFunc);
     CPPUNIT_TEST(testVolatileFunc);
     CPPUNIT_TEST(testFormulaDepTracking);
@@ -1149,6 +1150,34 @@ void Test::testCellFunctions()
     testFuncCELL(m_pDoc);
     testFuncDATEDIF(m_pDoc);
     testFuncINDIRECT(m_pDoc);
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testCopyToDocument()
+{
+    CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet", m_pDoc->InsertTab (0, "src"));
+
+    m_pDoc->SetString(0, 0, 0, "Header");
+    m_pDoc->SetString(0, 1, 0, "1");
+    m_pDoc->SetString(0, 2, 0, "2");
+    m_pDoc->SetString(0, 3, 0, "3");
+    m_pDoc->SetString(0, 4, 0, "=4/2");
+    m_pDoc->CalcAll();
+
+    // Copy statically to another document.
+
+    ScDocument aDestDoc(SCDOCMODE_DOCUMENT);
+    aDestDoc.InsertTab(0, "src");
+    m_pDoc->CopyStaticToDocument(ScRange(0,1,0,0,3,0), 0, &aDestDoc); // Copy A2:A4
+    m_pDoc->CopyStaticToDocument(ScAddress(0,0,0), 0, &aDestDoc); // Copy A1
+    m_pDoc->CopyStaticToDocument(ScRange(0,4,0,0,7,0), 0, &aDestDoc); // Copy A5:A8
+
+    CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(0,0,0), aDestDoc.GetString(0,0,0));
+    CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(0,1,0), aDestDoc.GetString(0,1,0));
+    CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(0,2,0), aDestDoc.GetString(0,2,0));
+    CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(0,3,0), aDestDoc.GetString(0,3,0));
+    CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(0,4,0), aDestDoc.GetString(0,4,0));
 
     m_pDoc->DeleteTab(0);
 }

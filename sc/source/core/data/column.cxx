@@ -1191,6 +1191,111 @@ void ScColumn::CopyToClip(SCROW nRow1, SCROW nRow2, ScColumn& rColumn, bool bKee
     }
 }
 
+namespace {
+
+class FindInRows : std::unary_function<ColEntry, bool>
+{
+    SCROW mnRow1;
+    SCROW mnRow2;
+public:
+    FindInRows(SCROW nRow1, SCROW nRow2) : mnRow1(nRow1), mnRow2(nRow2) {}
+    bool operator() (const ColEntry& rEntry)
+    {
+        return mnRow1 <= rEntry.nRow && rEntry.nRow <= mnRow2;
+    }
+};
+
+class FindAboveRow : std::unary_function<ColEntry, bool>
+{
+    SCROW mnRow;
+public:
+    FindAboveRow(SCROW nRow) : mnRow(nRow) {}
+    bool operator() (const ColEntry& rEntry)
+    {
+        return mnRow < rEntry.nRow;
+    }
+};
+
+}
+
+void ScColumn::CopyStaticToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol)
+{
+    if (nRow1 > nRow2)
+        return;
+
+    // First, clear the destination column for the row range specified.
+    std::vector<ColEntry>::iterator it, itEnd;
+
+    it = std::find_if(rDestCol.maItems.begin(), rDestCol.maItems.end(), FindInRows(nRow1, nRow2));
+    if (it != rDestCol.maItems.end())
+    {
+        itEnd = std::find_if(it, rDestCol.maItems.end(), FindAboveRow(nRow2));
+        rDestCol.maItems.erase(it, itEnd);
+    }
+
+    // Determine the range of cells in the original column that need to be copied.
+    it = std::find_if(maItems.begin(), maItems.end(), FindInRows(nRow1, nRow2));
+    if (it != maItems.end())
+        itEnd = std::find_if(it, maItems.end(), FindAboveRow(nRow2));
+
+    // Clone and staticize all cells that need to be copied.
+    std::vector<ColEntry> aCopied;
+    aCopied.reserve(std::distance(it, itEnd));
+    for (; it != itEnd; ++it)
+    {
+        ColEntry aEntry;
+        aEntry.nRow = it->nRow;
+        switch (it->pCell->GetCellType())
+        {
+            case CELLTYPE_VALUE:
+            {
+                const ScValueCell& rCell = static_cast<const ScValueCell&>(*it->pCell);
+                aEntry.pCell = new ScValueCell(rCell.GetValue());
+                aCopied.push_back(aEntry);
+            }
+            break;
+            case CELLTYPE_STRING:
+            {
+                const ScStringCell& rCell = static_cast<const ScStringCell&>(*it->pCell);
+                aEntry.pCell = new ScStringCell(rCell.GetString());
+                aCopied.push_back(aEntry);
+            }
+            break;
+            case CELLTYPE_EDIT:
+            {
+                // Convert to a simple string cell.
+                const ScEditCell& rCell = static_cast<const ScEditCell&>(*it->pCell);
+                aEntry.pCell = new ScStringCell(rCell.GetString());
+                aCopied.push_back(aEntry);
+            }
+            break;
+            case CELLTYPE_FORMULA:
+            {
+                ScFormulaCell& rCell = static_cast<ScFormulaCell&>(*it->pCell);
+                if (rCell.GetDirty() && pDocument->GetAutoCalc())
+                    rCell.Interpret();
+
+                if (rCell.GetErrorCode())
+                    // Skip cells with error.
+                    break;
+
+                if (rCell.IsValue())
+                    aEntry.pCell = new ScValueCell(rCell.GetValue());
+                else
+                    aEntry.pCell = new ScStringCell(rCell.GetString());
+                aCopied.push_back(aEntry);
+            }
+            break;
+            default:
+                ; // ignore the rest.
+        }
+    }
+
+    // Insert the cells into destination column.  At this point the
+    // destination column shouldn't have any cells within the specified range.
+    it = std::find_if(rDestCol.maItems.begin(), rDestCol.maItems.end(), FindAboveRow(nRow2));
+    rDestCol.maItems.insert(it, aCopied.begin(), aCopied.end());
+}
 
 void ScColumn::CopyToColumn(
     SCROW nRow1, SCROW nRow2, sal_uInt16 nFlags, bool bMarked, ScColumn& rColumn,

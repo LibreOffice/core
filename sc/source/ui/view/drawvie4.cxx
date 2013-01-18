@@ -42,6 +42,8 @@
 
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <com/sun/star/embed/XComponentSupplier.hpp>
 
 using namespace com::sun::star;
 
@@ -137,14 +139,183 @@ sal_Bool ScDrawView::BeginDrag( Window* pWindow, const Point& rStartPos )
     return bReturn;
 }
 
+namespace {
+
+void getRangeFromOle2Object(const SdrOle2Obj& rObj, std::vector<OUString>& rRangeRep)
+{
+    if (!rObj.IsChart())
+        // not a chart object.
+        return;
+
+    uno::Reference<embed::XEmbeddedObject> xObj = rObj.GetObjRef();
+    if (!xObj.is())
+        return;
+
+    uno::Reference<embed::XComponentSupplier> xCompSupp(xObj, uno::UNO_QUERY);
+    if (!xCompSupp.is())
+        return;
+
+    uno::Reference<chart2::XChartDocument> xChartDoc(xCompSupp->getComponent(), uno::UNO_QUERY);
+    if (!xChartDoc.is())
+        return;
+
+    uno::Reference<chart2::data::XDataSource> xDataSource(xChartDoc, uno::UNO_QUERY);
+    if (!xDataSource.is())
+        return;
+
+    // Get all data sources used in this chart.
+    uno::Sequence<uno::Reference<chart2::data::XLabeledDataSequence> > xSeqs = xDataSource->getDataSequences();
+    for (sal_Int32 i = 0, n = xSeqs.getLength(); i < n; ++i)
+    {
+        uno::Reference<chart2::data::XLabeledDataSequence> xLS = xSeqs[i];
+        uno::Reference<chart2::data::XDataSequence> xSeq = xLS->getValues();
+        if (xSeq.is())
+        {
+            OUString aRep = xSeq->getSourceRangeRepresentation();
+            rRangeRep.push_back(aRep);
+        }
+        xSeq = xLS->getLabel();
+        if (xSeq.is())
+        {
+            OUString aRep = xSeq->getSourceRangeRepresentation();
+            rRangeRep.push_back(aRep);
+        }
+    }
+}
+
+/**
+ * Get all cell ranges that are referenced by the selected chart objects.
+ */
+void getChartSourceRanges(ScDocument* pDoc, const SdrMarkList& rObjs, std::vector<ScRange>& rRanges)
+{
+    std::vector<OUString> aRangeReps;
+    for (size_t i = 0, n = rObjs.GetMarkCount(); i < n; ++i)
+    {
+        const SdrMark* pMark = rObjs.GetMark(i);
+        if (!pMark)
+            continue;
+
+        const SdrObject* pObj = pMark->GetMarkedSdrObj();
+        if (!pObj)
+            continue;
+
+        switch (pObj->GetObjIdentifier())
+        {
+            case OBJ_OLE2:
+                getRangeFromOle2Object(static_cast<const SdrOle2Obj&>(*pObj), aRangeReps);
+            break;
+            case OBJ_GRUP:
+            {
+                SdrObjListIter aIter(*pObj, IM_DEEPNOGROUPS);
+                for (SdrObject* pSubObj = aIter.Next(); pSubObj; pSubObj = aIter.Next())
+                {
+                    if (pSubObj->GetObjIdentifier() != OBJ_OLE2)
+                        continue;
+
+                    getRangeFromOle2Object(static_cast<const SdrOle2Obj&>(*pSubObj), aRangeReps);
+                }
+
+            }
+            break;
+            default:
+                ;
+        }
+    }
+
+    // Compile all range representation strings into ranges.
+    std::vector<OUString>::const_iterator it = aRangeReps.begin(), itEnd = aRangeReps.end();
+    for (; it != itEnd; ++it)
+    {
+        ScRange aRange;
+        ScAddress aAddr;
+        if (aRange.Parse(*it, pDoc, pDoc->GetAddressConvention()) & SCA_VALID)
+            rRanges.push_back(aRange);
+        else if (aAddr.Parse(*it, pDoc, pDoc->GetAddressConvention()) & SCA_VALID)
+            rRanges.push_back(aAddr);
+    }
+}
+
+class InsertTabIndex : std::unary_function<ScRange, void>
+{
+    std::vector<SCTAB>& mrTabs;
+public:
+    InsertTabIndex(std::vector<SCTAB>& rTabs) : mrTabs(rTabs) {}
+    void operator() (const ScRange& rRange)
+    {
+        mrTabs.push_back(rRange.aStart.Tab());
+    }
+};
+
+class CopyRangeData : std::unary_function<ScRange, void>
+{
+    ScDocument* mpSrc;
+    ScDocument* mpDest;
+public:
+    CopyRangeData(ScDocument* pSrc, ScDocument* pDest) : mpSrc(pSrc), mpDest(pDest) {}
+
+    void operator() (const ScRange& rRange)
+    {
+        OUString aTabName;
+        mpSrc->GetName(rRange.aStart.Tab(), aTabName);
+
+        SCTAB nTab;
+        if (!mpDest->GetTable(aTabName, nTab))
+            // Sheet by this name doesn't exist.
+            return;
+
+        mpSrc->CopyStaticToDocument(rRange, nTab, mpDest);
+    }
+};
+
+void copyChartRefDataToClipDoc(ScDocument* pSrcDoc, ScDocument* pClipDoc, const std::vector<ScRange>& rRanges)
+{
+    // Get a list of referenced table indices.
+    std::vector<SCTAB> aTabs;
+    std::for_each(rRanges.begin(), rRanges.end(), InsertTabIndex(aTabs));
+    std::sort(aTabs.begin(), aTabs.end());
+    aTabs.erase(std::unique(aTabs.begin(), aTabs.end()), aTabs.end());
+
+    // Get table names.
+    if (aTabs.empty())
+        return;
+
+    // Create sheets only for referenced source sheets.
+    OUString aName;
+    std::vector<SCTAB>::const_iterator it = aTabs.begin(), itEnd = aTabs.end();
+    if (!pSrcDoc->GetName(*it, aName))
+        return;
+
+    pClipDoc->SetTabNameOnLoad(0, aName); // document initially has one sheet.
+
+    for (++it; it != itEnd; ++it)
+    {
+        if (!pSrcDoc->GetName(*it, aName))
+            return;
+
+        pClipDoc->AppendTabOnLoad(aName);
+    }
+
+    std::for_each(rRanges.begin(), rRanges.end(), CopyRangeData(pSrcDoc, pClipDoc));
+}
+
+}
+
 void ScDrawView::DoCopy()
 {
-    sal_Bool bAnyOle, bOneOle;
     const SdrMarkList& rMarkList = GetMarkedObjectList();
-    CheckOle( rMarkList, bAnyOle, bOneOle );
+    std::vector<ScRange> aRanges;
+    getChartSourceRanges(pDoc, rMarkList, aRanges);
 
     // update ScGlobal::pDrawClipDocShellRef
-    ScDrawLayer::SetGlobalDrawPersist( ScTransferObj::SetDrawClipDoc( bAnyOle ) );
+    ScDrawLayer::SetGlobalDrawPersist( ScTransferObj::SetDrawClipDoc(!aRanges.empty()) );
+    if (ScGlobal::pDrawClipDocShellRef)
+    {
+        // Copy data referenced by the chart objects to the draw clip
+        // document. We need to do this before GetMarkedObjModel() below.
+        ScDocShellRef xDocSh = *ScGlobal::pDrawClipDocShellRef;
+        ScDocument* pClipDoc = xDocSh->GetDocument();
+        copyChartRefDataToClipDoc(pDoc, pClipDoc, aRanges);
+    }
     SdrModel* pModel = GetMarkedObjModel();
     ScDrawLayer::SetGlobalDrawPersist(NULL);
 
@@ -152,7 +323,6 @@ void ScDrawView::DoCopy()
     //  there's no need to call SchDLL::Update for the charts in the clipboard doc.
     //  Update with the data (including NumberFormatter) from the live document would
     //  also store the NumberFormatter in the clipboard chart (#88749#)
-    // lcl_RefreshChartData( pModel, pViewData->GetDocument() );
 
     ScDocShell* pDocSh = pViewData->GetDocShell();
 
