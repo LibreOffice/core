@@ -21,6 +21,7 @@
 #define _UNICODE
 
 #include <cstddef>
+#include <cwchar>
 
 #define WIN32_LEAN_AND_MEAN
 #if defined _MSC_VER
@@ -290,7 +291,12 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
                         }
                         for ( int argn = 1; fSuccess && argn < argc2; argn++ )
                         {
-                            fSuccess = writeArgument(hPipe, ',', argv2[argn]);
+                            if (std::wcsncmp(
+                                    argv2[argn], L"-env:", std::wcslen(L"-env:"))
+                                != 0)
+                            {
+                                fSuccess = writeArgument(hPipe, ',', argv2[argn]);
+                            }
                         }
 
                         if ( fSuccess )

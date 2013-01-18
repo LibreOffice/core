@@ -45,6 +45,7 @@
 #include <osl/thread.h>
 #include <rtl/bootstrap.h>
 #include <rtl/digest.h>
+#include <rtl/process.h>
 #include <rtl/ustrbuf.h>
 #include <sal/main.h>
 
@@ -454,7 +455,7 @@ send_args( int fd, rtl_uString *pCwdPath )
     size_t nLen;
     rtl_uString *pEscapedCwdPath = escape_path( pCwdPath );
     sal_uInt32 nArg = 0;
-    sal_uInt32 nArgCount = osl_getCommandArgCount();
+    sal_uInt32 nArgCount = rtl_getAppCommandArgCount();
 
     rtl_uString_new_WithLength( &pBuffer, nCapacity );
     rtl_uString_new( &pTmp );
@@ -487,7 +488,7 @@ send_args( int fd, rtl_uString *pCwdPath )
                 rtl_uString_getLength( pBuffer ),
                 ",", 1 );
 
-        osl_getCommandArg( nArg, &pTmp );
+        rtl_getAppCommandArg( nArg, &pTmp );
 
         pEscapedTmp = escape_path( pTmp );
 
