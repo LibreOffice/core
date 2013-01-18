@@ -423,7 +423,15 @@ public:
     static const sal_uInt16 OOo_32x = 32;
     static const sal_uInt16 OOo_33x = 33;
     static const sal_uInt16 OOo_34x = 34;
+    static const sal_uInt16 LO_flag = 0x100;
+    static const sal_uInt16 LO_3x = 30 | LO_flag;
+    static const sal_uInt16 LO_4x = 40 | LO_flag;
     static const sal_uInt16 ProductVersionUnknown = SAL_MAX_UINT16;
+
+    /** depending on whether the generator version indicates LO, compare
+        against either the given LO or given OOo version */
+    bool isGeneratorVersionOlderThan(
+            sal_uInt16 const nOOoVersion, sal_uInt16 const nLOVersion);
 
     /** this checks the build ID and returns
 

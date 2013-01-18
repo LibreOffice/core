@@ -157,6 +157,31 @@ void SAL_CALL SvXMLImportEventListener::disposing( const lang::EventObject& )
 
 namespace
 {
+
+static OUString
+getBuildIdsProperty(uno::Reference<beans::XPropertySet> const& xImportInfo)
+{
+    if (xImportInfo.is())
+    {
+        try
+        {
+            Reference< XPropertySetInfo > const xSetInfo(
+                    xImportInfo->getPropertySetInfo());
+            if (xSetInfo.is() && xSetInfo->hasPropertyByName("BuildId"))
+            {
+                OUString aBuildId;
+                xImportInfo->getPropertyValue("BuildId") >>= aBuildId;
+                return aBuildId;
+            }
+        }
+        catch (Exception const& e)
+        {
+            SAL_WARN("xmloff", "exception getting BuildId" << e.Message);
+        }
+    }
+    return OUString();
+}
+
     class DocumentInfo
     {
         private:
@@ -166,6 +191,30 @@ namespace
             DocumentInfo( const SvXMLImport& rImport )
                 : mnGeneratorVersion( SvXMLImport::ProductVersionUnknown )
             {
+                OUString const buildIds(
+                        getBuildIdsProperty(rImport.getImportInfo()));
+                if (!buildIds.isEmpty())
+                {
+                    sal_Int32 const ix = buildIds.indexOf(';');
+                    if (-1 != ix)
+                    {
+                        OUString const loVersion(buildIds.copy(ix + 1));
+                        if (!loVersion.isEmpty())
+                        {
+                            if ('3' == loVersion[0])
+                            {
+                                mnGeneratorVersion = SvXMLImport::LO_3x;
+                            }
+                            else
+                            {
+                                SAL_INFO_IF('4' != loVersion[0], "xmloff",
+                                        "unknown LO version: " << loVersion);
+                                mnGeneratorVersion = SvXMLImport::LO_4x;
+                            }
+                            return; // ignore buildIds
+                        }
+                    }
+                }
                 sal_Int32 nUPD, nBuild;
                 if ( rImport.getBuildIds( nUPD, nBuild ) )
                 {
@@ -1769,28 +1818,19 @@ void SvXMLImport::initXForms()
 bool SvXMLImport::getBuildIds( sal_Int32& rUPD, sal_Int32& rBuild ) const
 {
     bool bRet = false;
-    if( mxImportInfo.is() ) try
+    OUString const aBuildId(getBuildIdsProperty(mxImportInfo));
+    if (!aBuildId.isEmpty())
     {
-        const OUString aPropName( "BuildId" );
-        Reference< XPropertySetInfo > xSetInfo( mxImportInfo->getPropertySetInfo() );
-        if( xSetInfo.is() && xSetInfo->hasPropertyByName( aPropName ) )
+        sal_Int32 nIndex = aBuildId.indexOf('$');
+        if (nIndex != -1)
         {
-            OUString aBuildId;
-            mxImportInfo->getPropertyValue( aPropName ) >>= aBuildId;
-            if( !aBuildId.isEmpty() )
-            {
-                sal_Int32 nIndex = aBuildId.indexOf('$');
-                if( nIndex != -1 )
-                {
-                    rUPD = aBuildId.copy( 0, nIndex ).toInt32();
-                    rBuild = aBuildId.copy( nIndex+1 ).toInt32();
-                    bRet = true;
-                }
-            }
+            rUPD = aBuildId.copy( 0, nIndex ).toInt32();
+            sal_Int32 nIndexEnd = aBuildId.indexOf(';', nIndex);
+            rBuild = (nIndexEnd == -1)
+                ? aBuildId.copy(nIndex + 1).toInt32()
+                : aBuildId.copy(nIndex + 1, nIndexEnd - nIndex - 1).toInt32();
+            bRet = true;
         }
-    }
-    catch( Exception& )
-    {
     }
     return bRet;
 }
@@ -1800,6 +1840,17 @@ sal_uInt16 SvXMLImport::getGeneratorVersion() const
     // --> ORW
     return mpImpl->getGeneratorVersion( *this );
     // <--
+}
+
+bool SvXMLImport::isGeneratorVersionOlderThan(
+        sal_uInt16 const nOOoVersion, sal_uInt16 const nLOVersion)
+{
+    assert( (nLOVersion  & LO_flag));
+    assert(!(nOOoVersion & LO_flag));
+    const sal_uInt16 nGeneratorVersion(getGeneratorVersion());
+    return (nGeneratorVersion & LO_flag)
+        ?   nGeneratorVersion < nLOVersion
+        :   nGeneratorVersion < nOOoVersion;
 }
 
 bool SvXMLImport::isGraphicLoadOnDemandSupported() const
