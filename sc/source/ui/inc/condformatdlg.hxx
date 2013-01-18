@@ -58,7 +58,9 @@ enum ScCondFormatDialogType
     NONE,
     CONDITION,
     COLORSCALE,
-    DATABAR
+    DATABAR,
+    ICONSET,
+    DATE
 };
 
 }

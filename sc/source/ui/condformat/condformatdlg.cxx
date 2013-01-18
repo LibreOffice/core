@@ -119,7 +119,13 @@ ScCondFormatList::ScCondFormatList(Window* pParent, const ResId& rResId, ScDocum
             case condformat::dialog::DATABAR:
                 maEntries.push_back(new ScDataBarFrmtEntry( this, mpDoc, maPos ));
                 break;
-            default:
+            case condformat::dialog::ICONSET:
+                maEntries.push_back(new ScIconSetFrmtEntry( this, mpDoc, maPos ));
+                break;
+            case condformat::dialog::DATE:
+                maEntries.push_back(new ScDateFrmtEntry( this, mpDoc ));
+                break;
+            case condformat::dialog::NONE:
                 break;
         }
     }

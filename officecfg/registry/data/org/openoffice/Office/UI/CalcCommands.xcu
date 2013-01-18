@@ -459,6 +459,16 @@
                     <value xml:lang="en-US">Data Bar...</value>
                 </prop>
             </node>
+            <node oor:name=".uno:IconSetFormatDialog" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Icon Set...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:CondDateFormatDialog" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Date...</value>
+                </prop>
+            </node>
             <node oor:name=".uno:ConditionalFormatManagerDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Manage...</value>

@@ -1759,6 +1759,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case SID_OPENDLG_CONDFRMT:
         case SID_OPENDLG_COLORSCALE:
         case SID_OPENDLG_DATABAR:
+        case SID_OPENDLG_ICONSET:
+        case SID_OPENDLG_CONDDATE:
             {
 
                 ScRangeList aRangeList;
@@ -1865,7 +1867,14 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         case SID_OPENDLG_DATABAR:
                             eType = condformat::dialog::DATABAR;
                             break;
+                        case SID_OPENDLG_ICONSET:
+                            eType = condformat::dialog::ICONSET;
+                            break;
+                        case SID_OPENDLG_CONDDATE:
+                            eType = condformat::dialog::DATE;
+                            break;
                         default:
+                            assert(false);
                             break;
                     }
                     pCondFormatDlg.reset( new ScCondFormatDlg( pTabViewShell->GetDialogParent(), pDoc, NULL, aRangeList, aRangeList.GetTopLeftCorner(), eType ) );
