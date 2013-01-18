@@ -358,6 +358,8 @@ void ScTabPageSortFields::FillFieldLists( sal_uInt16 nStartField )
             SCROW   nFirstSortRow   = aSortData.nRow1;
             SCTAB   nTab        = pViewData->GetTabNo();
             sal_uInt16  i           = 1;
+            nFieldArr.clear();
+            nFieldArr.push_back(0);
 
             if ( bSortByRows )
             {
