@@ -463,12 +463,20 @@ void ScCondFormatDlg::SetReference(const ScRange& rRef, ScDocument*)
 ScConditionalFormat* ScCondFormatDlg::GetConditionalFormat() const
 {
     rtl::OUString aRangeStr = maEdRange.GetText();
+    if(aRangeStr.isEmpty())
+        return NULL;
+
     ScRangeList aRange;
     sal_uInt16 nFlags = aRange.Parse(aRangeStr, mpDoc, SCA_VALID, mpDoc->GetAddressConvention(), maPos.Tab());
     ScConditionalFormat* pFormat = maCondFormList.GetConditionalFormat();
 
     if(nFlags & SCA_VALID && !aRange.empty() && pFormat)
         pFormat->AddRange(aRange);
+    else
+    {
+        delete pFormat;
+        pFormat = NULL;
+    }
 
     return pFormat;
 }
