@@ -31,6 +31,8 @@ Makefile: $(BUILDDIR)/config_host.mk force-restart
 $(BUILDDIR)/config_host.mk : \
 		$(SRCDIR)/config_host.mk.in \
 		$(SRCDIR)/Makefile.in \
+		$(SRCDIR)/solenv/inc/minor.mk.in \
+		$(SRCDIR)/instsetoo_native/util/openoffice.lst.in \
 		$(SRCDIR)/configure.ac \
 		$(BUILDDIR)/autogen.lastrun
 	$(SRCDIR)/autogen.sh
