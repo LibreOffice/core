@@ -14,6 +14,7 @@ extern "C"
     extern void * animcore_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * avmedia_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * basprov_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * chartcore_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * dba_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * dbaxml_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * dlgprov_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
@@ -80,6 +81,7 @@ lo_get_libmap(void)
         { "libanimcorelo.a", animcore_component_getFactory },
         { "libavmedialo.a", avmedia_component_getFactory },
         { "libbasprov.uno.a", basprov_component_getFactory },
+        { "libchartcorelo.a", chartcore_component_getFactory },
         { "libdlgprov.uno.a", dlgprov_component_getFactory },
         { "libdbalo.a", dba_component_getFactory },
         { "libdbaxmllo.a", dbaxml_component_getFactory },
