@@ -2184,6 +2184,30 @@ public:
         return OUString( pNewData, (DO_NOT_ACQUIRE*)0 );
     }
 
+    /// @overload
+    /// @since LibreOffice 4.1
+    static OUString number( short i, sal_Int16 radix = 10 )
+    {
+        return number( static_cast< long long >( i ), radix );
+    }
+    /// @overload
+    /// @since LibreOffice 4.1
+    static OUString number( unsigned short i, sal_Int16 radix = 10 )
+    {
+        return number( static_cast< long long >( i ), radix );
+    }
+    /// @overload
+    /// @since LibreOffice 4.1
+    static OUString number( signed char i, sal_Int16 radix = 10 )
+    {
+        return number( static_cast< long long >( i ), radix );
+    }
+    /// @overload
+    /// @since LibreOffice 4.1
+    static OUString number( unsigned char i, sal_Int16 radix = 10 )
+    {
+        return number( static_cast< long long >( i ), radix );
+    }
     /**
       Returns the string representation of the float argument.
 
