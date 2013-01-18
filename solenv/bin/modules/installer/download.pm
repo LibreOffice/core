@@ -345,7 +345,7 @@ sub get_download_version
     my $version = "";
 
     $version = $allvariables->{'PRODUCTVERSION'};
-    if (( $allvariables->{'SHORT_PRODUCTEXTENSION'} ) && ( $allvariables->{'SHORT_PRODUCTEXTENSION'} ne "" )) { $version = $version . $allvariables->{'SHORT_PRODUCTEXTENSION'}; }
+    if (( $allvariables->{'PRODUCTEXTENSION'} ) && ( $allvariables->{'PRODUCTEXTENSION'} ne "" )) { $version = $version . $allvariables->{'PRODUCTEXTENSION'}; }
 
     return $version;
 }
@@ -586,7 +586,7 @@ sub resolve_variables_in_downloadname
     $downloadname =~ s/\{packageversion\}/$packageversion/;
 
     my $extension = "";
-    if ( $allvariables->{'SHORT_PRODUCTEXTENSION'} ) { $extension = $allvariables->{'SHORT_PRODUCTEXTENSION'}; }
+    if ( $allvariables->{'PRODUCTEXTENSION'} ) { $extension = $allvariables->{'PRODUCTEXTENSION'}; }
     $extension = lc($extension);
     $downloadname =~ s/\{extension\}/$extension/;
 
