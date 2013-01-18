@@ -107,7 +107,6 @@ $(eval $(call gb_SrsTarget_add_files,cui/res,\
     cui/source/options/webconninfo.src \
     cui/source/tabpages/align.src \
     cui/source/tabpages/autocdlg.src \
-    cui/source/tabpages/backgrnd.src \
     cui/source/tabpages/bbdlg.src \
     cui/source/tabpages/border.src \
     cui/source/tabpages/connect.src \

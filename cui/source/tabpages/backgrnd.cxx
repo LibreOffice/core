@@ -31,7 +31,6 @@
 #define _SVX_BACKGRND_CXX
 
 #include <cuires.hrc>
-#include "backgrnd.hrc"
 #include <svx/dialmgr.hxx>
 #include <editeng/memberids.hrc>
 #include <editeng/editrids.hrc>
