@@ -85,7 +85,7 @@ using namespace com::sun::star::script;
 
 
 #include <com/sun/star/script/XLibraryContainer.hpp>
-#include <com/sun/star/awt/XDialogProvider.hpp>
+#include <com/sun/star/awt/DialogProvider.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XControl.hpp>
@@ -2680,11 +2680,8 @@ void SbUserFormModule::InitObject()
             // broadcast INITIALIZE_USERFORM script event before the dialog is created
             Reference< script::vba::XVBACompatibility > xVBACompat( getVBACompatibility( m_xModel ), uno::UNO_SET_THROW );
             xVBACompat->broadcastVBAScriptEvent( script::vba::VBAScriptEventId::INITIALIZE_USERFORM, GetName() );
-
             uno::Reference< lang::XMultiServiceFactory > xVBAFactory( pGlobs->getUnoAny(), uno::UNO_QUERY_THROW );
-            uno::Reference< lang::XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
-            uno::Sequence< uno::Any > aArgs(1);
-            aArgs[ 0 ] <<= m_xModel;
+            uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
             OUString sDialogUrl( "vnd.sun.star.script:"  );
             OUString sProjectName( "Standard" );
 
@@ -2698,11 +2695,11 @@ void SbUserFormModule::InitObject()
 
             sDialogUrl = sDialogUrl + sProjectName + "." + GetName() + "?location=document";
 
-            uno::Reference< awt::XDialogProvider > xProvider( xFactory->createInstanceWithArguments( "com.sun.star.awt.DialogProvider", aArgs  ), uno::UNO_QUERY_THROW );
+            uno::Reference< awt::XDialogProvider > xProvider = awt::DialogProvider::createWithModel( xContext, m_xModel  );
             m_xDialog = xProvider->createDialog( sDialogUrl );
 
             // create vba api object
-            aArgs.realloc( 4 );
+            uno::Sequence< uno::Any > aArgs(4);
             aArgs[ 0 ] = uno::Any();
             aArgs[ 1 ] <<= m_xDialog;
             aArgs[ 2 ] <<= m_xModel;

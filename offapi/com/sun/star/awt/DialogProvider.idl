@@ -20,22 +20,21 @@
 #ifndef __com_sun_star_awt_DialogProvider_idl__
 #define __com_sun_star_awt_DialogProvider_idl__
 
-#include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/awt/XDialogProvider.idl>
+#include <com/sun/star/frame/XModel.idl>
 
 
 
 module com { module sun { module star { module awt {
 
 
-/** specifies a provider for dialogs implementing the
+/** Sspecifies a provider for dialogs implementing the
     <type scope="com::sun::star::awt">XDialog</type> interface.
  */
-service DialogProvider : com::sun::star::awt::XDialogProvider;
-
-// service DialogProvider {
-    // interface com::sun::star::awt::XDialogProvider;
-// };
+service DialogProvider : com::sun::star::awt::XDialogProvider
+{
+    createWithModel([in] com::sun::star::frame::XModel Model);
+};
 
 
 }; }; }; };

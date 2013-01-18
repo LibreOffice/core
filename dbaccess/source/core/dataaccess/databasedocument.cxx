@@ -60,7 +60,7 @@
 
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <com/sun/star/awt/XControl.hpp>
-#include <com/sun/star/awt/XDialogProvider.hpp>
+#include <com/sun/star/awt/DialogProvider.hpp>
 #include <com/sun/star/document/XGraphicObjectResolver.hpp>
 
 
@@ -401,7 +401,7 @@ static OUString sPictures( "Pictures" );
 // document for anything, I believe this is a valid assumption ( as much as
 // I could check anyway )
 
-void lcl_uglyHackToStoreDialogeEmbedImages( const Reference< XStorageBasedLibraryContainer >& xDlgCont, const Reference< XStorage >& xStorage, const Reference< XModel >& rxModel, const ::comphelper::ComponentContext& aContext ) throw ( RuntimeException )
+void lcl_uglyHackToStoreDialogeEmbedImages( const Reference< XStorageBasedLibraryContainer >& xDlgCont, const Reference< XStorage >& xStorage, const Reference< XModel >& rxModel, const Reference<XComponentContext >& rxContext ) throw ( RuntimeException )
 {
     Sequence< OUString > sLibraries = xDlgCont->getElementNames();
     Reference< XStorage > xTmpPic = xStorage->openStorageElement( "tempPictures", ElementModes::READWRITE  );
@@ -419,10 +419,7 @@ void lcl_uglyHackToStoreDialogeEmbedImages( const Reference< XStorageBasedLibrar
             sal_Int32 nDialogs( sDialogs.getLength() );
             for ( sal_Int32 j=0; j < nDialogs; ++j )
             {
-                Reference < ::com::sun::star::awt::XDialogProvider > xDlgPrv;
-                Sequence< Any > aArgs(1);
-                aArgs[ 0 ] <<= rxModel;
-                xDlgPrv.set( aContext.createComponentWithArguments( "com.sun.star.awt.DialogProvider", aArgs), UNO_QUERY );
+                Reference < awt::XDialogProvider > xDlgPrv = awt::DialogProvider::createWithModel(rxContext, rxModel);
                 OUString sDialogUrl = "vnd.sun.star.script:";
                 sDialogUrl = sDialogUrl.concat( sLibraries[ i ] ).concat( "." ).concat (  sDialogs[ j ]  ).concat( "?location=document" );
 
@@ -436,7 +433,7 @@ void lcl_uglyHackToStoreDialogeEmbedImages( const Reference< XStorageBasedLibrar
     if ( !vEmbedImgUrls.empty() )
     {
         // Export the images to the storage
-        Reference< XGraphicObjectResolver > xGraphicResolver = GraphicObjectResolver::createWithStorage(aContext.getUNOContext(), xTmpPic);
+        Reference< XGraphicObjectResolver > xGraphicResolver = GraphicObjectResolver::createWithStorage(rxContext, xTmpPic);
         std::vector< OUString >::iterator it = vEmbedImgUrls.begin();
         std::vector< OUString >::iterator it_end = vEmbedImgUrls.end();
         if ( xGraphicResolver.is() )
@@ -1679,7 +1676,7 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
            if ( xDlgs.is() )
            {
                Reference< XModel > xModel(const_cast< ODatabaseDocument*>(this));
-               lcl_uglyHackToStoreDialogeEmbedImages( m_pImpl->getLibraryContainer(false), _rxTargetStorage, xModel, m_pImpl->m_aContext );
+               lcl_uglyHackToStoreDialogeEmbedImages( m_pImpl->getLibraryContainer(false), _rxTargetStorage, xModel, m_pImpl->m_aContext.getUNOContext() );
            }
        }
        catch ( const Exception& )
