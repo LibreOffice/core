@@ -714,9 +714,14 @@ void FillModel::pushToPropMap( ShapePropertyMap& rPropMap, const GraphicHelper& 
 
 // ============================================================================
 
+ShadowModel::ShadowModel()
+        : mbHasShadow(false)
+{
+}
+
 void ShadowModel::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelper& rGraphicHelper) const
 {
-    if (moHasShadow.has() && !moHasShadow.get())
+    if (!mbHasShadow || (moShadowOn.has() && !moShadowOn.get()))
         return;
 
     drawingml::Color aColor = ConversionHelper::decodeColor(rGraphicHelper, moColor, moOpacity, API_RGB_GRAY);

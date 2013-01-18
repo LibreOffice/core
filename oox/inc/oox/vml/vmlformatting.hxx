@@ -228,10 +228,13 @@ struct FillModel
 /** The shadow model structure contains all shape shadow properties. */
 struct ShadowModel
 {
-    OptValue<bool>     moHasShadow;               ///< Specifies whether to show a shadow.
+    bool               mbHasShadow;               ///< Is a v:shadow element seen?
+    OptValue<bool>     moShadowOn;                ///< Is the element turned on?
     OptValue<OUString> moColor;                   ///< Specifies the color of the shadow.
     OptValue<OUString> moOffset;                  ///< Specifies the shadow's offset from the shape's location.
     OptValue<double>   moOpacity;                 ///< Specifies the opacity of the shadow.
+
+    ShadowModel();
 
     /** Writes the properties to the passed property map. */
     void pushToPropMap(oox::drawingml::ShapePropertyMap& rPropMap, const GraphicHelper& rGraphicHelper) const;
