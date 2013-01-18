@@ -57,7 +57,8 @@ PATCH_FILES=libxslt-configure.patch \
             libxslt-mingw.patch \
             libxslt-internal-symbols.patch \
             libxslt-aix.patch \
-            libxslt-vc10.patch
+            libxslt-vc10.patch \
+            libxslt-1.1.26-memdump.patch
 
 .IF "$(OS)"=="ANDROID"
 PATCH_FILES+= libxslt-android.patch
