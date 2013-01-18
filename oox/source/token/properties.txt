@@ -414,6 +414,7 @@ SelectedItems
 SelectedPage
 Shadow
 ShadowColor
+ShadowFormat
 ShadowTransparence
 ShadowXDistance
 ShadowYDistance

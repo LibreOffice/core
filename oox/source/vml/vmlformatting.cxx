@@ -18,6 +18,7 @@
  */
 #include "oox/vml/vmlformatting.hxx"
 
+#include <com/sun/star/table/ShadowFormat.hpp>
 #include <rtl/strbuf.hxx>
 #include "oox/drawingml/color.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
@@ -32,6 +33,7 @@ namespace vml {
 
 // ============================================================================
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::geometry;
 
 using ::oox::drawingml::Color;
@@ -711,6 +713,32 @@ void FillModel::pushToPropMap( ShapePropertyMap& rPropMap, const GraphicHelper& 
 }
 
 // ============================================================================
+
+void ShadowModel::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelper& rGraphicHelper) const
+{
+    if (moHasShadow.has() && !moHasShadow.get())
+        return;
+
+    drawingml::Color aColor = ConversionHelper::decodeColor(rGraphicHelper, moColor, moOpacity, API_RGB_GRAY);
+    // nOffset* is in mm100, default value is 35 twips, see DffPropertyReader::ApplyAttributes() in msfilter.
+    sal_Int32 nOffsetX = 62, nOffsetY = 62;
+    if (moOffset.has())
+    {
+        OUString aOffsetX, aOffsetY;
+        ConversionHelper::separatePair(aOffsetX, aOffsetY, moOffset.get(), ',');
+        if (!aOffsetX.isEmpty())
+            nOffsetX = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, aOffsetX, 0, false, false );
+        if (!aOffsetY.isEmpty())
+            nOffsetY = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, aOffsetY, 0, false, false );
+    }
+
+    table::ShadowFormat aFormat;
+    aFormat.Color = aColor.getColor(rGraphicHelper);
+    aFormat.Location = table::ShadowLocation_BOTTOM_RIGHT;
+    // The width of the shadow is the average of the x and y values, see SwWW8ImplReader::MatchSdrItemsIntoFlySet().
+    aFormat.ShadowWidth = ((nOffsetX + nOffsetY) / 2);
+    rPropMap.setProperty(PROP_ShadowFormat, uno::makeAny(aFormat));
+}
 
 } // namespace vml
 } // namespace oox

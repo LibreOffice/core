@@ -333,6 +333,14 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
             mrTypeModel.moWrapAnchorX = rAttribs.getString(XML_anchorx);
             mrTypeModel.moWrapAnchorY = rAttribs.getString(XML_anchory);
         break;
+        case VML_TOKEN( shadow ):
+        {
+            mrTypeModel.maShadowModel.moHasShadow.assignIfUsed(lclDecodeBool(rAttribs, XML_on));
+            mrTypeModel.maShadowModel.moColor.assignIfUsed(rAttribs.getString(XML_color));
+            mrTypeModel.maShadowModel.moOffset.assignIfUsed(rAttribs.getString(XML_offset));
+            mrTypeModel.maShadowModel.moOpacity = lclDecodePercent(rAttribs, XML_opacity, 1.0);
+        }
+        break;
     }
     return 0;
 }

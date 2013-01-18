@@ -365,6 +365,8 @@ void ShapeBase::convertShapeProperties( const Reference< XShape >& rxShape ) con
     uno::Reference<lang::XServiceInfo> xSInfo(rxShape, uno::UNO_QUERY_THROW);
     if (xSInfo->supportsService("com.sun.star.text.TextFrame"))
     {
+        // Any other service supporting the ShadowFormat property?
+        maTypeModel.maShadowModel.pushToPropMap(aPropMap, rGraphicHelper);
         // TextFrames have BackColor, not FillColor
         if (aPropMap.hasProperty(PROP_FillColor))
         {
