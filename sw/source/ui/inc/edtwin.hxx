@@ -71,7 +71,6 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
 
     static  QuickHelpData* pQuickHlpData;
 
-    static  sal_Bool    bReplaceQuote;
     static  long    nDDStartPosX, nDDStartPosY;
 
     static  Color   aTextColor;     // text color; for the watering can
@@ -249,10 +248,6 @@ public:
 
     void            FlushInBuffer();
     sal_Bool            IsInputSequenceCheckingRequired( const String &rText, const SwPaM& rCrsr ) const;
-
-
-    static  void    SetReplaceQuote(sal_Bool bOn = sal_True) { bReplaceQuote = bOn; }
-    static  sal_Bool    IsReplaceQuote() { return bReplaceQuote; }
 
     void             SetApplyTemplate(const SwApplyTemplate &);
     SwApplyTemplate* GetApplyTemplate() const { return pApplyTempl; }

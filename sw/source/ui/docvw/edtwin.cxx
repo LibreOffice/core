@@ -164,7 +164,6 @@ sal_Bool bValidCrsrPos              = sal_False;
 sal_Bool bModePushed                = sal_False;
 sal_Bool bDDTimerStarted            = sal_False;
 sal_Bool bFlushCharBuffer           = sal_False;
-sal_Bool SwEditWin::bReplaceQuote   = sal_False;
 sal_Bool bDDINetAttr                = sal_False;
 SdrHdlKind eSdrMoveHdl          = HDL_USER;
 
