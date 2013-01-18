@@ -279,17 +279,27 @@ void SvXMLMetaDocumentContext::setBuildId(::rtl::OUString const& i_rBuildId, con
             sBuildId = OUString("680$9134"); // fake NeoOffice as OpenOffice.org 2.2 release
         }
     }
-// Is this really what we want / correct ?
-#ifdef FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
-    else
+
+    if (i_rBuildId.startsWith("LibreOffice/"))
     {
-        if (i_rBuildId.startsWith("LibreOffice/3"))
+        OUStringBuffer sNumber;
+        for (sal_Int32 i = sizeof("LibreOffice/") - 1;
+                i < i_rBuildId.getLength(); ++i)
         {
-            // #118558# fake LibreOffice3 as OpenOffice.org 3.3 release
-            sBuildId = OUString::createFromAscii( "330$9567" );
+            if (isdigit(i_rBuildId[i]))
+            {
+                sNumber.append(i_rBuildId[i]);
+            }
+            else if ('.' != i_rBuildId[i])
+            {
+                break;
+            }
+        }
+        if (sNumber.getLength())
+        {
+            sBuildId += (";" + sNumber.makeStringAndClear());
         }
     }
-#endif
 
     if ( !sBuildId.isEmpty() ) try
     {
