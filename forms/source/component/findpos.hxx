@@ -30,7 +30,7 @@
 
 namespace rtl { class OUString; }
 
-namespace detail {
+namespace forms_detail {
 
 sal_Int32 findPos(
     const ::rtl::OUString& aStr,
