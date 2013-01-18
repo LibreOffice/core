@@ -18,7 +18,7 @@
 import traceback
 from .AgendaWizardDialog import AgendaWizardDialog, uno
 from .AgendaWizardDialogConst import HID
-from .AgendaTemplate import AgendaTemplate, FileAccess
+from .AgendaDocument import AgendaTemplate, FileAccess
 from .TemplateConsts import TemplateConsts
 from .TopicsControl import TopicsControl
 from .CGAgenda import CGAgenda
