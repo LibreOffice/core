@@ -18,8 +18,6 @@
 
 #include "rcid.hrc"
 
-#define DLG_FORMAT_TABLE        (RC_TABLE_BEGIN + 1)
-
 #define DLG_ROW_HEIGHT          (RC_TABLE_BEGIN + 4)
 
 
@@ -27,7 +25,6 @@
 
 
 
-#define TP_TABLE_COLUMN         (RC_TABLE_BEGIN + 11)
 #define DLG_INSERT_CHART        (RC_TABLE_BEGIN + 12)
 #define MSG_WRONG_TABLENAME     (RC_TABLE_BEGIN + 13)
 

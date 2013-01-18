@@ -50,7 +50,6 @@
 #include <SwStyleNameMapper.hxx>
 
 #include <cmdid.h>
-#include <tabledlg.hrc>
 #include <table.hrc>
 #include "swtablerep.hxx"
 

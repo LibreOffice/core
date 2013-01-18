@@ -149,7 +149,6 @@
 
 #define TP_FRM_STD                  (RC_GLOBALS_BEGIN +  31)
 
-#define TP_FORMAT_TABLE             (RC_GLOBALS_BEGIN +  34)
 #define TP_GRF_EXT                  (RC_GLOBALS_BEGIN +  35)
 
 #define DLG_FRM_STD                 (RC_GLOBALS_BEGIN +  36)
@@ -166,8 +165,6 @@
 
 #define TP_FRM_WRAP                 (RC_GLOBALS_BEGIN +  49)
 #define TP_FRM_ADD                  (RC_GLOBALS_BEGIN +  51)
-
-#define TP_TABLE_TEXTFLOW           (RC_GLOBALS_BEGIN +  52)
 
 #define TP_PARA_ALIGN               (RC_GLOBALS_BEGIN +  55)
 #define TP_OPTTABLE_PAGE            (RC_GLOBALS_BEGIN +  56)

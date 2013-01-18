@@ -53,7 +53,6 @@
 #include <SwStyleNameMapper.hxx>
 
 #include <cmdid.h>
-#include <tabledlg.hrc>
 #include <table.hrc>
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
@@ -1236,42 +1235,40 @@ void SwTableColumnPage::SetVisibleWidth(sal_uInt16 nPos, SwTwips nNewWidth)
 
 }
 
-
-SwTableTabDlg::SwTableTabDlg(Window* pParent, SfxItemPool& ,
-                    const SfxItemSet* pItemSet, SwWrtShell* pSh ) :
-        SfxTabDialog(pParent, SW_RES(DLG_FORMAT_TABLE), pItemSet,0),
-        pShell(pSh),
-        nHtmlMode(::GetHtmlMode(pSh->GetView().GetDocShell()))
+SwTableTabDlg::SwTableTabDlg(Window* pParent, SfxItemPool&,
+    const SfxItemSet* pItemSet, SwWrtShell* pSh)
+    : SfxTabDialog(0, pParent, "TablePropertiesDialog",
+        "modules/swriter/ui/tableproperties.ui", pItemSet, 0)
+    , pShell(pSh)
+    , m_nHtmlMode(::GetHtmlMode(pSh->GetView().GetDocShell()))
 {
-    FreeResource();
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialogdiet fail!");
-    AddTabPage(TP_FORMAT_TABLE, &SwFormatTablePage::Create, 0 );
-    AddTabPage(TP_TABLE_TEXTFLOW, &SwTextFlowPage::Create, 0 );
-    AddTabPage(TP_TABLE_COLUMN, &SwTableColumnPage::Create, 0 );
-    AddTabPage(TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0 );
-    AddTabPage(TP_BORDER, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), 0 );
+    AddTabPage("table", &SwFormatTablePage::Create, 0);
+    m_nTextFlowId = AddTabPage("textflow", &SwTextFlowPage::Create, 0);
+    AddTabPage("columns", &SwTableColumnPage::Create, 0);
+    m_nBackgroundId = AddTabPage("background", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BACKGROUND), 0);
+    m_nBorderId = AddTabPage("borders", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BORDER), 0);
 }
-
 
 void  SwTableTabDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-    if( TP_BACKGROUND == nId )
+    if (nId == m_nBackgroundId)
     {
         sal_Int32 nFlagType = SVX_SHOW_TBLCTL;
-        if(!( nHtmlMode & HTMLMODE_ON ) ||
-            nHtmlMode & HTMLMODE_SOME_STYLES)
+        if(!( m_nHtmlMode & HTMLMODE_ON ) ||
+            m_nHtmlMode & HTMLMODE_SOME_STYLES)
             nFlagType |= SVX_SHOW_SELECTOR;
         aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, nFlagType));
         rPage.PageCreated(aSet);
     }
-    else if(TP_BORDER == nId)
+    else if (nId == m_nBorderId)
     {
         aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE,SW_BORDER_MODE_TABLE));
         rPage.PageCreated(aSet);
     }
-    else if(TP_TABLE_TEXTFLOW == nId)
+    else if (nId == m_nTextFlowId)
     {
         ((SwTextFlowPage&)rPage).SetShell(pShell);
         const sal_uInt16 eType = pShell->GetFrmType(0,sal_True);

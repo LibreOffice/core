@@ -57,6 +57,7 @@
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <editeng/brkitem.hxx>
 #include <sfx2/dispatch.hxx>
+#include <svl/stritem.hxx>
 #include <vcl/svapp.hxx>
 
 
@@ -248,7 +249,7 @@ void SwPageBreakWin::Select( )
                         SwCntntNode* pNd = pCnt->GetNode();
                         rSh.SetSelection( *pNd );
 
-                        SfxUInt16Item aItem( pEditWin->GetView().GetPool( ).GetWhich( FN_FORMAT_TABLE_DLG ), TP_TABLE_TEXTFLOW );
+                        SfxStringItem aItem(pEditWin->GetView().GetPool().GetWhich(FN_FORMAT_TABLE_DLG), "textflow");
                         pEditWin->GetView().GetViewFrame()->GetDispatcher()->Execute(
                                 FN_FORMAT_TABLE_DLG, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD, &aItem, NULL );
 

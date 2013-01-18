@@ -569,11 +569,11 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                pDlg = pFact->CreateSwTableTabDlg( GetView().GetWindow(), GetPool(), &aCoreSet, &rSh, DLG_FORMAT_TABLE );
+                pDlg = pFact->CreateSwTableTabDlg(GetView().GetWindow(), GetPool(), &aCoreSet, &rSh);
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
-                if( pItem )
-                    pDlg->SetCurPageId( ((SfxUInt16Item *)pItem)->GetValue() );
+                if (pItem)
+                    pDlg->SetCurPageId(OUStringToOString(((SfxStringItem *)pItem)->GetValue(), RTL_TEXTENCODING_UTF8));
             }
             aCoreSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(GetView().GetDocShell())));
             rSh.GetTblAttr(aCoreSet);

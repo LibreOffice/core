@@ -985,23 +985,11 @@ VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateSwTableWidthDlg(Window *
     return new VclAbstractDialog_Impl( pDlg );
 }
 
-SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateSwTableTabDlg( Window* pParent, SfxItemPool& Pool,
-                                                        const SfxItemSet* pItemSet, SwWrtShell* pSh,int nResId )
+SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateSwTableTabDlg(Window* pParent, SfxItemPool& Pool,
+    const SfxItemSet* pItemSet, SwWrtShell* pSh)
 {
-    SfxTabDialog* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_FORMAT_TABLE :
-            pDlg = new SwTableTabDlg( pParent, Pool, pItemSet,pSh );
-            break;
-
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractTabDialog_Impl( pDlg );
-    return 0;
+    SfxTabDialog* pDlg = new SwTableTabDlg(pParent, Pool, pItemSet, pSh);
+    return new AbstractTabDialog_Impl(pDlg);
 }
 
 AbstractSwFldDlg * SwAbstractDialogFactory_Impl::CreateSwFldDlg ( SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent, int nResId )
