@@ -67,6 +67,7 @@ class SfxAbstractTabDialog : virtual public SfxAbstractDialog
 {
 public:
     virtual void                SetCurPageId( sal_uInt16 nId ) = 0;
+    virtual void                SetCurPageId( const OString &rName ) = 0;
     virtual const sal_uInt16*   GetInputRanges( const SfxItemPool& ) = 0;
     virtual void                SetInputSet( const SfxItemSet* pInSet ) = 0;
 };

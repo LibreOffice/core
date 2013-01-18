@@ -123,6 +123,7 @@ class CuiAbstractTabDialog_Impl : public SfxAbstractTabDialog
 {
     DECL_ABSTDLG_BASE(CuiAbstractTabDialog_Impl,SfxTabDialog)
     virtual void                SetCurPageId( sal_uInt16 nId );
+    virtual void                SetCurPageId( const OString& rName );
     virtual const SfxItemSet*   GetOutputItemSet() const;
     virtual const sal_uInt16*       GetInputRanges( const SfxItemPool& pItem );
     virtual void                SetInputSet( const SfxItemSet* pInSet );
@@ -341,6 +342,7 @@ class AbstractSvxTransformTabDialog_Impl : public AbstractSvxTransformTabDialog
     DECL_ABSTDLG_BASE(AbstractSvxTransformTabDialog_Impl,SvxTransformTabDialog)
     virtual void SetValidateFramePosLink( const Link& rLink );
     virtual void                SetCurPageId( sal_uInt16 nId );
+    virtual void                SetCurPageId( const OString& rName );
     virtual const SfxItemSet*   GetOutputItemSet() const;
     virtual const sal_uInt16*       GetInputRanges( const SfxItemPool& pItem );
     virtual void                SetInputSet( const SfxItemSet* pInSet );
@@ -352,6 +354,7 @@ class AbstractSvxCaptionDialog_Impl : public AbstractSvxCaptionDialog
     DECL_ABSTDLG_BASE(AbstractSvxCaptionDialog_Impl,SvxCaptionTabDialog)
     virtual void SetValidateFramePosLink( const Link& rLink );
     virtual void                SetCurPageId( sal_uInt16 nId );
+    virtual void                SetCurPageId( const OString& rName );
     virtual const SfxItemSet*   GetOutputItemSet() const;
     virtual const sal_uInt16*       GetInputRanges( const SfxItemPool& pItem );
     virtual void                SetInputSet( const SfxItemSet* pInSet );
@@ -498,6 +501,7 @@ class AbstractSvxAreaTabDialog_Impl :public AbstractSvxAreaTabDialog
 {
     DECL_ABSTDLG_BASE(AbstractSvxAreaTabDialog_Impl,SvxAreaTabDialog)
     virtual void                SetCurPageId( sal_uInt16 nId );
+    virtual void                SetCurPageId( const OString& rName );
     virtual const SfxItemSet*   GetOutputItemSet() const;
     virtual const sal_uInt16*       GetInputRanges( const SfxItemPool& pItem );
     virtual void                SetInputSet( const SfxItemSet* pInSet );

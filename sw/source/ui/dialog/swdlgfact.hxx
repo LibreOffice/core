@@ -133,6 +133,7 @@ class AbstractTabDialog_Impl : virtual public SfxAbstractTabDialog
 {
     DECL_ABSTDLG_BASE( AbstractTabDialog_Impl,SfxTabDialog )
     virtual void                SetCurPageId( sal_uInt16 nId );
+    virtual void                SetCurPageId( const OString &rName );
     virtual const SfxItemSet*   GetOutputItemSet() const;
     virtual const sal_uInt16*       GetInputRanges( const SfxItemPool& pItem );
     virtual void                SetInputSet( const SfxItemSet* pInSet );
@@ -189,6 +190,7 @@ class AbstractSwLabDlg_Impl  : public AbstractSwLabDlg
 {
     DECL_ABSTDLG_BASE(AbstractSwLabDlg_Impl,SwLabDlg)
     virtual void                SetCurPageId( sal_uInt16 nId );
+    virtual void                SetCurPageId( const OString &rName );
     virtual const SfxItemSet*   GetOutputItemSet() const;
     virtual const sal_uInt16*       GetInputRanges( const SfxItemPool& pItem );
     virtual void                SetInputSet( const SfxItemSet* pInSet );
@@ -224,6 +226,7 @@ class AbstractSwFldDlg_Impl : public AbstractSwFldDlg //add for SwFldDlg
 {
     DECL_ABSTDLG_BASE(AbstractSwFldDlg_Impl,SwFldDlg )
     virtual void                SetCurPageId( sal_uInt16 nId );
+    virtual void                SetCurPageId( const OString &rName );
     virtual const SfxItemSet*   GetOutputItemSet() const;
     virtual const sal_uInt16*       GetInputRanges( const SfxItemPool& pItem );
     virtual void                SetInputSet( const SfxItemSet* pInSet );

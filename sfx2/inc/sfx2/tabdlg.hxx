@@ -185,9 +185,18 @@ public:
 
     void                RemoveTabPage( sal_uInt16 nId );
 
-    void                SetCurPageId( sal_uInt16 nId ) { nAppPageId = nId; }
-    sal_uInt16              GetCurPageId() const
-                            { return m_pTabCtrl->GetCurPageId(); }
+    void                SetCurPageId(sal_uInt16 nId)
+    {
+        nAppPageId = nId;
+    }
+    void                SetCurPageId(const OString& rName)
+    {
+        nAppPageId = m_pTabCtrl->GetPageId(rName);
+    }
+    sal_uInt16          GetCurPageId() const
+    {
+        return m_pTabCtrl->GetCurPageId();
+    }
     void                ShowPage( sal_uInt16 nId );
 
     // may provide local slots converted by Map

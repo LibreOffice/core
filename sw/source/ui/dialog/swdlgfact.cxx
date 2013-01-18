@@ -131,6 +131,11 @@ void AbstractTabDialog_Impl::SetCurPageId( sal_uInt16 nId )
     pDlg->SetCurPageId( nId );
 }
 
+void AbstractTabDialog_Impl::SetCurPageId( const OString &rName )
+{
+    pDlg->SetCurPageId( rName );
+}
+
 const SfxItemSet* AbstractTabDialog_Impl::GetOutputItemSet() const
 {
     return pDlg->GetOutputItemSet();
@@ -249,6 +254,11 @@ void AbstractSwLabDlg_Impl::SetCurPageId( sal_uInt16 nId )
     pDlg->SetCurPageId( nId );
 }
 
+void AbstractSwLabDlg_Impl::SetCurPageId( const OString &rName )
+{
+    pDlg->SetCurPageId( rName );
+}
+
 const SfxItemSet* AbstractSwLabDlg_Impl::GetOutputItemSet() const
 {
     return pDlg->GetOutputItemSet();
@@ -307,6 +317,11 @@ void AbstractSwAutoFormatDlg_Impl::FillAutoFmtOfIndex( SwTableAutoFmt*& rToFill 
 void AbstractSwFldDlg_Impl::SetCurPageId( sal_uInt16 nId )
 {
     pDlg->SetCurPageId( nId );
+}
+
+void AbstractSwFldDlg_Impl::SetCurPageId( const OString &rName )
+{
+    pDlg->SetCurPageId( rName );
 }
 
 const SfxItemSet* AbstractSwFldDlg_Impl::GetOutputItemSet() const

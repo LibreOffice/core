@@ -196,6 +196,11 @@ void CuiAbstractTabDialog_Impl::SetCurPageId( sal_uInt16 nId )
     pDlg->SetCurPageId( nId );
 }
 
+void CuiAbstractTabDialog_Impl::SetCurPageId( const OString& rName )
+{
+    pDlg->SetCurPageId( rName );
+}
+
 const SfxItemSet* CuiAbstractTabDialog_Impl::GetOutputItemSet() const
 {
     return pDlg->GetOutputItemSet();
@@ -617,6 +622,12 @@ void AbstractSvxTransformTabDialog_Impl::SetCurPageId( sal_uInt16 nId )
 {
     pDlg->SetCurPageId( nId );
 }
+
+void AbstractSvxTransformTabDialog_Impl::SetCurPageId( const OString& rName )
+{
+    pDlg->SetCurPageId( rName );
+}
+
 const SfxItemSet* AbstractSvxTransformTabDialog_Impl::GetOutputItemSet() const
 {
     return pDlg->GetOutputItemSet();
@@ -650,6 +661,12 @@ void AbstractSvxCaptionDialog_Impl::SetCurPageId( sal_uInt16 nId )
 {
     pDlg->SetCurPageId( nId );
 }
+
+void AbstractSvxCaptionDialog_Impl::SetCurPageId( const OString& rName )
+{
+    pDlg->SetCurPageId( rName );
+}
+
 const SfxItemSet* AbstractSvxCaptionDialog_Impl::GetOutputItemSet() const
 {
     return pDlg->GetOutputItemSet();
@@ -868,6 +885,11 @@ Graphic AbstractGraphicFilterDialog_Impl::GetFilteredGraphic( const Graphic& rGr
 void AbstractSvxAreaTabDialog_Impl::SetCurPageId( sal_uInt16 nId )
 {
     pDlg->SetCurPageId( nId );
+}
+
+void AbstractSvxAreaTabDialog_Impl::SetCurPageId( const OString& rName )
+{
+    pDlg->SetCurPageId( rName );
 }
 
 const SfxItemSet* AbstractSvxAreaTabDialog_Impl::GetOutputItemSet() const

@@ -121,6 +121,11 @@ void ScAbstractTabDialog_Impl::SetCurPageId( sal_uInt16 nId )
     pDlg->SetCurPageId( nId );
 }
 
+void ScAbstractTabDialog_Impl::SetCurPageId( const OString& rName )
+{
+    pDlg->SetCurPageId( rName );
+}
+
 const SfxItemSet* ScAbstractTabDialog_Impl::GetOutputItemSet() const
 {
     return pDlg->GetOutputItemSet();
