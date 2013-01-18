@@ -79,6 +79,7 @@ namespace frm
 
     private:
         void implInitFilterList();
+        void initControlModel(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xControlModel);
 
     public:
         OFilterControl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB );

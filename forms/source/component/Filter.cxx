@@ -763,8 +763,16 @@ namespace frm
         NamedValue aValue;
         const ::rtl::OUString* pName = NULL;
         const Any* pValue = NULL;
+        Reference< XPropertySet > xControlModel;
 
-        for ( ; pArguments != pArgumentsEnd; ++pArguments )
+        if (aArguments.getLength() == 3
+            && (aArguments[0] >>= m_xMessageParent)
+            && (aArguments[1] >>= m_xFormatter)
+            && (aArguments[2] >>= xControlModel))
+        {
+            initControlModel(xControlModel);
+        }
+        else for ( ; pArguments != pArgumentsEnd; ++pArguments )
         {
             // we recognize PropertyValues and NamedValues
             if ( *pArguments >>= aProp )
@@ -798,63 +806,71 @@ namespace frm
             else if ( 0 == pName->compareToAscii( "ControlModel" ) )
             {
                 // the control model for which we act as filter control
-                Reference< XPropertySet > xControlModel;
-                if ( !(*pValue >>= xControlModel ) || !xControlModel.is() )
+                if ( !(*pValue >>= xControlModel ) )
                 {
                     OSL_FAIL( "OFilterControl::initialize: invalid control model argument!" );
                     continue;
                 }
-
-                // some properties which are "derived" from the control model we're working for
-                // ...................................................
-                // the field
-                m_xField.clear();
-                OSL_ENSURE( ::comphelper::hasProperty( PROPERTY_BOUNDFIELD, xControlModel ), "OFilterControl::initialize: control model needs a bound field property!" );
-                xControlModel->getPropertyValue( PROPERTY_BOUNDFIELD ) >>= m_xField;
-
-                // ...................................................
-                // filter list and control class
-                m_bFilterList = ::comphelper::hasProperty( PROPERTY_FILTERPROPOSAL, xControlModel ) && ::comphelper::getBOOL( xControlModel->getPropertyValue( PROPERTY_FILTERPROPOSAL ) );
-                if ( m_bFilterList )
-                    m_nControlClass = FormComponentType::COMBOBOX;
-                else
-                {
-                    sal_Int16 nClassId = ::comphelper::getINT16( xControlModel->getPropertyValue( PROPERTY_CLASSID ) );
-                    switch (nClassId)
-                    {
-                        case FormComponentType::CHECKBOX:
-                        case FormComponentType::RADIOBUTTON:
-                        case FormComponentType::LISTBOX:
-                        case FormComponentType::COMBOBOX:
-                            m_nControlClass = nClassId;
-                            if ( FormComponentType::LISTBOX == nClassId )
-                            {
-                                Sequence< ::rtl::OUString > aDisplayItems;
-                                OSL_VERIFY( xControlModel->getPropertyValue( PROPERTY_STRINGITEMLIST ) >>= aDisplayItems );
-                                Sequence< ::rtl::OUString > aValueItems;
-                                OSL_VERIFY( xControlModel->getPropertyValue( PROPERTY_VALUE_SEQ ) >>= aValueItems );
-                                OSL_ENSURE( aDisplayItems.getLength() == aValueItems.getLength(), "OFilterControl::initialize: inconsistent item lists!" );
-                                for ( sal_Int32 i=0; i < ::std::min( aDisplayItems.getLength(), aValueItems.getLength() ); ++i )
-                                    m_aDisplayItemToValueItem[ aDisplayItems[i] ] = aValueItems[i];
-                            }
-                            break;
-                        default:
-                            m_bMultiLine = ::comphelper::hasProperty( PROPERTY_MULTILINE, xControlModel ) && ::comphelper::getBOOL( xControlModel->getPropertyValue( PROPERTY_MULTILINE ) );
-                            m_nControlClass = FormComponentType::TEXTFIELD;
-                            break;
-                    }
-                }
-
-                // ...................................................
-                // the connection meta data for the form which we're working for
-                Reference< XChild > xModel( xControlModel, UNO_QUERY );
-                Reference< XRowSet > xForm;
-                if ( xModel.is() )
-                    xForm = xForm.query( xModel->getParent() );
-                m_xConnection = ::dbtools::getConnection( xForm );
-                OSL_ENSURE( m_xConnection.is(), "OFilterControl::initialize: unable to determine the form's connection!" );
+                initControlModel(xControlModel);
             }
         }
+    }
+
+    void OFilterControl::initControlModel(Reference< XPropertySet >& xControlModel)
+    {
+        if ( !xControlModel.is() )
+        {
+            OSL_FAIL( "OFilterControl::initialize: invalid control model argument!" );
+            return;
+        }
+        // some properties which are "derived" from the control model we're working for
+        // ...................................................
+        // the field
+        m_xField.clear();
+        OSL_ENSURE( ::comphelper::hasProperty( PROPERTY_BOUNDFIELD, xControlModel ), "OFilterControl::initialize: control model needs a bound field property!" );
+        xControlModel->getPropertyValue( PROPERTY_BOUNDFIELD ) >>= m_xField;
+
+        // ...................................................
+        // filter list and control class
+        m_bFilterList = ::comphelper::hasProperty( PROPERTY_FILTERPROPOSAL, xControlModel ) && ::comphelper::getBOOL( xControlModel->getPropertyValue( PROPERTY_FILTERPROPOSAL ) );
+        if ( m_bFilterList )
+            m_nControlClass = FormComponentType::COMBOBOX;
+        else
+        {
+            sal_Int16 nClassId = ::comphelper::getINT16( xControlModel->getPropertyValue( PROPERTY_CLASSID ) );
+            switch (nClassId)
+            {
+                case FormComponentType::CHECKBOX:
+                case FormComponentType::RADIOBUTTON:
+                case FormComponentType::LISTBOX:
+                case FormComponentType::COMBOBOX:
+                    m_nControlClass = nClassId;
+                    if ( FormComponentType::LISTBOX == nClassId )
+                    {
+                        Sequence< ::rtl::OUString > aDisplayItems;
+                        OSL_VERIFY( xControlModel->getPropertyValue( PROPERTY_STRINGITEMLIST ) >>= aDisplayItems );
+                        Sequence< ::rtl::OUString > aValueItems;
+                        OSL_VERIFY( xControlModel->getPropertyValue( PROPERTY_VALUE_SEQ ) >>= aValueItems );
+                        OSL_ENSURE( aDisplayItems.getLength() == aValueItems.getLength(), "OFilterControl::initialize: inconsistent item lists!" );
+                        for ( sal_Int32 i=0; i < ::std::min( aDisplayItems.getLength(), aValueItems.getLength() ); ++i )
+                            m_aDisplayItemToValueItem[ aDisplayItems[i] ] = aValueItems[i];
+                    }
+                    break;
+                default:
+                    m_bMultiLine = ::comphelper::hasProperty( PROPERTY_MULTILINE, xControlModel ) && ::comphelper::getBOOL( xControlModel->getPropertyValue( PROPERTY_MULTILINE ) );
+                    m_nControlClass = FormComponentType::TEXTFIELD;
+                    break;
+            }
+        }
+
+        // ...................................................
+        // the connection meta data for the form which we're working for
+        Reference< XChild > xModel( xControlModel, UNO_QUERY );
+        Reference< XRowSet > xForm;
+        if ( xModel.is() )
+            xForm = xForm.query( xModel->getParent() );
+        m_xConnection = ::dbtools::getConnection( xForm );
+        OSL_ENSURE( m_xConnection.is(), "OFilterControl::initialize: unable to determine the form's connection!" );
     }
 
     //---------------------------------------------------------------------

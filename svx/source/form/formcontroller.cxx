@@ -47,6 +47,7 @@
 #include <com/sun/star/form/XGridControl.hpp>
 #include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/form/XReset.hpp>
+#include <com/sun/star/form/control/FilterControl.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/sdb/ParametersRequest.hpp>
 #include <com/sun/star/sdb/RowChangeAction.hpp>
@@ -3377,15 +3378,11 @@ void FormController::startFiltering()
                     )
                 {
                     // create a filter control
-                    Sequence< Any > aCreationArgs( 3 );
-                    aCreationArgs[ 0 ] <<= NamedValue( ::rtl::OUString("MessageParent"), makeAny( VCLUnoHelper::GetInterface( getDialogParentWindow() ) ) );
-                    aCreationArgs[ 1 ] <<= NamedValue( ::rtl::OUString("NumberFormatter"), makeAny( xFormatter ) );
-                    aCreationArgs[ 2 ] <<= NamedValue( ::rtl::OUString("ControlModel"), makeAny( xModel ) );
-                    Reference< XControl > xFilterControl(
-                        m_aContext.createComponentWithArguments( "com.sun.star.form.control.FilterControl", aCreationArgs ),
-                        UNO_QUERY
-                    );
-                    DBG_ASSERT( xFilterControl.is(), "FormController::startFiltering: could not create a filter control!" );
+                    Reference< XControl > xFilterControl = form::control::FilterControl::createWithFormat(
+                        m_aContext.getUNOContext(),
+                        VCLUnoHelper::GetInterface( getDialogParentWindow() ),
+                        xFormatter,
+                        xModel);
 
                     if ( replaceControl( xControl, xFilterControl ) )
                     {

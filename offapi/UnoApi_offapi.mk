@@ -129,6 +129,9 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/embed,\
 	OOoEmbeddedObjectFactory \
 	StorageFactory \
 ))
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/form/control,\
+	FilterControl \
+))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/form/inspection,\
 	DefaultFormComponentInspectorModel \
 ))
