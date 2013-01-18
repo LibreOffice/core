@@ -50,7 +50,6 @@ namespace utl
             aValue = utl::ConfigManager::getProductExtension();
             if ( !aValue.isEmpty() )
             {
-                aResult.append( (sal_Unicode)'_' );
                 aResult.append( aValue.replace( ' ', '_' ) );
             }
         }
