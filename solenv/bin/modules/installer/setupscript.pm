@@ -37,7 +37,6 @@ use installer::scriptitems;
 use installer::ziplist;
 
 our @EXPORT_OK = qw(
-    add_forced_properties
     add_installationobject_to_variables
     add_lowercase_productname_setupscriptvariable
     add_predefined_folder
@@ -458,30 +457,6 @@ sub add_installationobject_to_variables
             my $value = $2;
 
             $allvariables->{$key} = $value; # overwrite existing values from zip.lst
-        }
-    }
-}
-
-#####################################################################################
-# Adding all variables, that must be defined, but are not defined until now.
-#####################################################################################
-
-sub add_forced_properties
-{
-    my ($allvariables) = @_;
-
-    my @forced_properties = qw(
-        SERVICETAG_PRODUCTNAME
-        SERVICETAG_PRODUCTVERSION
-        SERVICETAG_PARENTNAME
-        SERVICETAG_SOURCE
-        SERVICETAG_URN
-    );
-
-    for my $property (@forced_properties)
-    {
-        if ( ! exists($allvariables->{$property}) ) {
-            $allvariables->{$property} = "";
         }
     }
 }

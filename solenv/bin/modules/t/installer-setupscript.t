@@ -32,7 +32,6 @@ use lib '.';
 
 BEGIN {
     use_ok('installer::setupscript', qw(
-        add_forced_properties
         add_installationobject_to_variables
         add_lowercase_productname_setupscriptvariable
         add_predefined_folder

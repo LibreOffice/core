@@ -280,9 +280,6 @@ sub run {
 
     installer::setupscript::add_installationobject_to_variables($allvariableshashref, $allscriptvariablesref);
 
-    # Adding also all variables, that must be included into the $allvariableshashref.
-    installer::setupscript::add_forced_properties($allvariableshashref);
-
     # Replacing preset properties, not using the default mechanisms (for example for UNIXPRODUCTNAME)
     installer::setupscript::replace_preset_properties($allvariableshashref);
 

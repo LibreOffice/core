@@ -8,11 +8,6 @@ Globals
             URELAYERVERSION 1
             REFERENCEOOOMAJORMINOR 3.4
             UNIXBASISROOTNAME libreoffice@LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
-            SERVICETAG_PRODUCTNAME LibreOffice @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
-            SERVICETAG_PRODUCTVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
-            SERVICETAG_PARENTNAME LibreOffice @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
-            SERVICETAG_SOURCE {buildsource}{minor}(Build:{buildid})
-            SERVICETAG_URN urn:uuid:0187debd-e458-11de-82d6-080020a9ed93
             HIDELICENSEDIALOG 1
             PACKAGEPREFIX
             BASISPACKAGEPREFIX libobasis
@@ -112,7 +107,6 @@ LibreOffice_Dev
             UREPACKAGEPREFIX lodev
             SOLSUREPACKAGEPREFIX lodev
             REGISTRYLAYERNAME LayerDev
-            SERVICETAG_URN urn:uuid:1680b00d-e45c-11de-82d6-080020a9ed93
             UPDATEURL http://update.libreoffice.org/check.php
             ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk
             ADDSYSTEMINTEGRATION 1
