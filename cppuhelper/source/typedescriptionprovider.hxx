@@ -13,19 +13,20 @@
 #include "sal/config.h"
 
 #include "com/sun/star/uno/Reference.hxx"
+#include "com/sun/star/uno/Sequence.hxx"
 
 namespace com { namespace sun { namespace star {
+     namespace container { class XHierarchicalNameAccess; }
      namespace lang { class XMultiComponentFactory; }
-     namespace uno {
-         class XComponentContext;
-         class XInterface;
-     }
+     namespace uno { class XComponentContext; }
 } } }
 namespace rtl { class OUString; }
 
 namespace cppuhelper {
 
-css::uno::Reference< css::uno::XInterface > createTypeDescriptionProvider(
+css::uno::Sequence<
+    css::uno::Reference< css::container::XHierarchicalNameAccess > >
+createTypeDescriptionProviders(
     rtl::OUString const & uris,
     css::uno::Reference< css::lang::XMultiComponentFactory > const &
         serviceManager,

@@ -392,112 +392,133 @@ sal_Bool SAL_CALL ManagerImpl::has( const Any & rElement )
 void SAL_CALL ManagerImpl::insert( const Any & rElement )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException)
 {
-    Reference< XHierarchicalNameAccess > xElem;
-    if (! (rElement >>= xElem) || !xElem.is())
-    {
-        throw IllegalArgumentException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("no valid type description provider given!") ),
-            (XWeak *)(OWeakObject *)this, 0 );
+    // Passing in a sequence of type providers instead of a single one bypasses
+    // the consistency checks; it is used during bootstrap:
+    bool doCheck = false;
+    css::uno::Sequence<
+        css::uno::Reference< css::container::XHierarchicalNameAccess > > provs;
+    if (!(rElement >>= provs)) {
+        css::uno::Reference< css::container::XHierarchicalNameAccess > prov;
+        if (!(rElement >>= prov)) {
+            throw css::lang::IllegalArgumentException(
+                "no type description provider (or sequence thereof)",
+                static_cast< cppu::OWeakObject * >(this), 0);
+        }
+        doCheck = true;
+        provs.realloc(1);
+        provs[0] = prov;
     }
 
     MutexGuard aGuard( _aComponentMutex );
-    if (find( _aProviders.begin(), _aProviders.end(), xElem ) != _aProviders.end())
-    {
-        throw ElementExistException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("provider already inserted!") ),
-            (XWeak *)(OWeakObject *)this );
-    }
+    ProviderVector newProvs(_aProviders);
+    for (sal_Int32 i = 0; i != provs.getLength(); ++i) {
+        Reference< XHierarchicalNameAccess > xElem(provs[i]);
+        if (!xElem.is()) {
+            throw css::lang::IllegalArgumentException(
+                "null type description provider",
+                static_cast< cppu::OWeakObject * >(this), 0);
+        }
 
-    if (! _aProviders.empty())
-    {
-        // check whether all types are compatible, if possible:
-        Reference<reflection::XTypeDescriptionEnumerationAccess> xTDEnumAccess(
-            xElem, UNO_QUERY );
-        OSL_ENSURE( xTDEnumAccess.is(),
-                    "### providers ought to implement "
-                    "reflection::XTypeDescriptionEnumerationAccess!" );
-        if (xTDEnumAccess.is())
-        {
-            try
+        if (doCheck) {
+            if (find( newProvs.begin(), newProvs.end(), xElem ) != newProvs.end())
             {
-                TypeClass ar [] = {
-                    TypeClass_ENUM, TypeClass_TYPEDEF, TypeClass_SEQUENCE,
-                    TypeClass_STRUCT, TypeClass_EXCEPTION,
-                    /* TypeClass_UNION, TypeClass_ARRAY not supported */
-                    TypeClass_INTERFACE,
-                    TypeClass_SERVICE,
-                    TypeClass_INTERFACE_METHOD, TypeClass_INTERFACE_ATTRIBUTE,
-                    TypeClass_PROPERTY, TypeClass_CONSTANT, TypeClass_CONSTANTS,
-                    TypeClass_SINGLETON
-                };
-                Reference<reflection::XTypeDescriptionEnumeration> xTDEnum(
-                    xTDEnumAccess->createTypeDescriptionEnumeration(
-                        OUString() /* all modules */,
-                        Sequence<TypeClass>( ar, ARLEN(ar) ),
-                        reflection::TypeDescriptionSearchDepth_INFINITE ) );
+                throw ElementExistException(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM("provider already inserted!") ),
+                    (XWeak *)(OWeakObject *)this );
+            }
 
-                while (xTDEnum->hasMoreElements())
+            // check whether all types are compatible, if possible:
+            Reference<reflection::XTypeDescriptionEnumerationAccess> xTDEnumAccess(
+                xElem, UNO_QUERY );
+            OSL_ENSURE( xTDEnumAccess.is(),
+                        "### providers ought to implement "
+                        "reflection::XTypeDescriptionEnumerationAccess!" );
+            if (xTDEnumAccess.is())
+            {
+                try
                 {
-                    Reference<reflection::XTypeDescription> xNewTD;
-                    try
-                    {
-                        xNewTD = xTDEnum->nextTypeDescription();
-                    }
-                    catch (const container::NoSuchElementException & exc)
-                    {
-                        throw lang::IllegalArgumentException(
-                            OUSTR("NoSuchElementException occurred: ") +
-                            exc.Message, static_cast<OWeakObject *>(this),
-                            -1 /* unknown */ );
-                    }
+                    TypeClass ar [] = {
+                        TypeClass_ENUM, TypeClass_TYPEDEF, TypeClass_SEQUENCE,
+                        TypeClass_STRUCT, TypeClass_EXCEPTION,
+                        /* TypeClass_UNION, TypeClass_ARRAY not supported */
+                        TypeClass_INTERFACE,
+                        TypeClass_SERVICE,
+                        TypeClass_INTERFACE_METHOD, TypeClass_INTERFACE_ATTRIBUTE,
+                        TypeClass_PROPERTY, TypeClass_CONSTANT, TypeClass_CONSTANTS,
+                        TypeClass_SINGLETON
+                    };
+                    Reference<reflection::XTypeDescriptionEnumeration> xTDEnum(
+                        xTDEnumAccess->createTypeDescriptionEnumeration(
+                            OUString() /* all modules */,
+                            Sequence<TypeClass>( ar, ARLEN(ar) ),
+                            reflection::TypeDescriptionSearchDepth_INFINITE ) );
 
-                    try
+                    while (xTDEnum->hasMoreElements())
                     {
-                        OUString newName( xNewTD->getName() );
-                        Reference<reflection::XTypeDescription> xExistingTD(
-                            getByHierarchicalName( newName ), UNO_QUERY );
-                        OSL_ASSERT( xExistingTD.is() );
-                        // existing, check whether compatible:
-                        if (xExistingTD.is())
+                        Reference<reflection::XTypeDescription> xNewTD;
+                        try
                         {
-                            try
+                            xNewTD = xTDEnum->nextTypeDescription();
+                        }
+                        catch (const container::NoSuchElementException & exc)
+                        {
+                            throw lang::IllegalArgumentException(
+                                OUSTR("NoSuchElementException occurred: ") +
+                                exc.Message, static_cast<OWeakObject *>(this),
+                                -1 /* unknown */ );
+                        }
+
+                        try
+                        {
+                            OUString newName( xNewTD->getName() );
+                            Reference<reflection::XTypeDescription> xExistingTD(
+                                getByHierarchicalName( newName ), UNO_QUERY );
+                            OSL_ASSERT( xExistingTD.is() );
+                            // existing, check whether compatible:
+                            if (xExistingTD.is())
                             {
-                                check( xNewTD, xExistingTD );
-                            }
-                            catch (const IncompatibleTypeException & exc)
-                            {
-                                throw lang::IllegalArgumentException(
-                                    OUSTR("Rejecting types due to "
-                                          "incompatibility!  ") + exc.m_cause,
-                                    static_cast<OWeakObject *>(this), 0 );
+                                try
+                                {
+                                    check( xNewTD, xExistingTD );
+                                }
+                                catch (const IncompatibleTypeException & exc)
+                                {
+                                    throw lang::IllegalArgumentException(
+                                        OUSTR("Rejecting types due to "
+                                              "incompatibility!  ") + exc.m_cause,
+                                        static_cast<OWeakObject *>(this), 0 );
+                                }
                             }
                         }
-                    }
-                    catch (container::NoSuchElementException &)
-                    {
-                        // type not in: ok
+                        catch (container::NoSuchElementException &)
+                        {
+                            // type not in: ok
+                        }
                     }
                 }
+                catch (const reflection::NoSuchTypeNameException & exc)
+                {
+                    throw lang::IllegalArgumentException(
+                        OUSTR("NoSuchTypeNameException occurred: ") + exc.Message,
+                        static_cast<OWeakObject *>(this), -1 /* unknown */ );
             }
-            catch (const reflection::NoSuchTypeNameException & exc)
-            {
-                throw lang::IllegalArgumentException(
-                    OUSTR("NoSuchTypeNameException occurred: ") + exc.Message,
-                    static_cast<OWeakObject *>(this), -1 /* unknown */ );
-            }
-            catch (const reflection::InvalidTypeNameException & exc)
-            {
-                throw lang::IllegalArgumentException(
-                    OUSTR("InvalidTypeNameException occurred: ") + exc.Message,
-                    static_cast<OWeakObject *>(this), -1 /* unknown */ );
+                catch (const reflection::InvalidTypeNameException & exc)
+                {
+                    throw lang::IllegalArgumentException(
+                        OUSTR("InvalidTypeNameException occurred: ") + exc.Message,
+                        static_cast<OWeakObject *>(this), -1 /* unknown */ );
+                }
             }
         }
+        newProvs.push_back( xElem );
     }
 
-    _aProviders.push_back( xElem );
-    Reference< XComponent > xComp( xElem, UNO_QUERY );
-    if (xComp.is())
-        xComp->addEventListener( &_aEventListener );
+    _aProviders = newProvs;
+    for (sal_Int32 i = 0; i != provs.getLength(); ++i) {
+        Reference< XComponent > xComp( provs[i], UNO_QUERY );
+        if (xComp.is())
+            xComp->addEventListener( &_aEventListener );
+    }
 }
 //__________________________________________________________________________________________________
 void SAL_CALL ManagerImpl::remove( const Any & rElement )

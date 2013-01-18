@@ -35,6 +35,7 @@
 #include "com/sun/star/container/XHierarchicalNameAccess.hpp"
 #include "com/sun/star/container/XSet.hpp"
 #include "com/sun/star/uno/DeploymentException.hpp"
+#include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "cppuhelper/bootstrap.hxx"
@@ -117,7 +118,7 @@ cppu::defaultBootstrap_InitialComponentContext(rtl::OUString const & iniUri)
         tdmgr, css::uno::UNO_QUERY_THROW)->
         insert(
             css::uno::makeAny(
-                cppuhelper::createTypeDescriptionProvider(
+                cppuhelper::createTypeDescriptionProviders(
                     getBootstrapVariable(bs, "UNO_TYPES"), smgr.get(),
                     context)));
     cppu::installTypeDescriptionManager(tdmgr);
