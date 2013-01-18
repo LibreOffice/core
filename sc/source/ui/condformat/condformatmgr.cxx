@@ -275,14 +275,14 @@ IMPL_LINK_NOARG(ScCondFormatManagerDlg, AddBtnHdl)
     if(pDlg->Execute() == RET_OK)
     {
         ScConditionalFormat* pNewFormat = pDlg->GetConditionalFormat();
-        if(!pNewFormat)
-            return 0;
+        if(pNewFormat)
+        {
+            mpFormatList->InsertNew(pNewFormat);
+            pNewFormat->SetKey(FindKey(mpFormatList));
+            maCtrlManager.Update();
 
-        mpFormatList->InsertNew(pNewFormat);
-        pNewFormat->SetKey(FindKey(mpFormatList));
-        maCtrlManager.Update();
-
-        mbModified = true;
+            mbModified = true;
+        }
     }
     Show(true, 0);
     pScMod->SetRefDialog( nId, false );

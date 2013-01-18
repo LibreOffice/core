@@ -1886,7 +1886,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 if( pCondFormatDlg->Execute() == RET_OK )
                 {
                     ScConditionalFormat* pFormat = pCondFormatDlg->GetConditionalFormat();
-                    pData->GetDocShell()->GetDocFunc().ReplaceConditionalFormat(nKey, pFormat, aPos.Tab(), pFormat->GetRange());
+                    if(pFormat)
+                        pData->GetDocShell()->GetDocFunc().ReplaceConditionalFormat(nKey, pFormat, aPos.Tab(), pFormat->GetRange());
+                    else
+                        pData->GetDocShell()->GetDocFunc().ReplaceConditionalFormat(nKey, NULL, aPos.Tab(), ScRangeList());
                 }
 
                 pScMod->SetRefDialog( nId, false );
