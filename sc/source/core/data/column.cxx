@@ -1216,6 +1216,14 @@ public:
     }
 };
 
+struct DeleteCell : std::unary_function<ColEntry, void>
+{
+    void operator() (ColEntry& rEntry)
+    {
+        rEntry.pCell->Delete();
+    }
+};
+
 }
 
 void ScColumn::CopyStaticToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol)
@@ -1230,6 +1238,7 @@ void ScColumn::CopyStaticToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol
     if (it != rDestCol.maItems.end())
     {
         itEnd = std::find_if(it, rDestCol.maItems.end(), FindAboveRow(nRow2));
+        std::for_each(it, itEnd, DeleteCell());
         rDestCol.maItems.erase(it, itEnd);
     }
 
