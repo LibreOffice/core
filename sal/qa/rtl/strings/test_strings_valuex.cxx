@@ -21,16 +21,12 @@ public:
     void testOInt();
     void testOUFloat();
     void testOFloat();
-    void testOUDouble();
-    void testODouble();
 
     CPPUNIT_TEST_SUITE(valueX);
     CPPUNIT_TEST(testOUInt);
     CPPUNIT_TEST(testOInt);
     CPPUNIT_TEST(testOUFloat);
     CPPUNIT_TEST(testOFloat);
-    CPPUNIT_TEST(testOUDouble);
-    CPPUNIT_TEST(testODouble);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -82,11 +78,9 @@ void test::strings::valueX::testOInt() {
 
 template< typename T >
 void testFloat() {
-    T val1 = T::valueOf( 30039062.0f );
-    T val2 = T::number( 30039062.0f );
-    CPPUNIT_ASSERT_EQUAL( val1, val2 );
-
     CPPUNIT_ASSERT_EQUAL( T( "39062.2" ), T::number( 39062.2f ));
+    CPPUNIT_ASSERT_EQUAL( T( "30039062.2" ), T::number( 30039062.2 ));
+    // long double not supported
 }
 
 void test::strings::valueX::testOUFloat() {
@@ -95,22 +89,5 @@ void test::strings::valueX::testOUFloat() {
 
 void test::strings::valueX::testOFloat() {
     testFloat<rtl::OString>();
-}
-
-template< typename T >
-void testDouble() {
-    T val1 = T::valueOf( 30039062.0 );
-    T val2 = T::number( 30039062.0 );
-    CPPUNIT_ASSERT_EQUAL( val1, val2 );
-
-    CPPUNIT_ASSERT_EQUAL( T( "30039062.2" ), T::number( 30039062.2 ));
-}
-
-void test::strings::valueX::testOUDouble() {
-    testDouble<rtl::OUString>();
-}
-
-void test::strings::valueX::testODouble() {
-    testDouble<rtl::OString>();
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
