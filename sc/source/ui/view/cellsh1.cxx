@@ -1803,6 +1803,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             // found a matching range, edit this conditional format
                             nKey = pCondFormat->GetKey();
                             pCondFormatDlg.reset( new ScCondFormatDlg( pTabViewShell->GetDialogParent(), pDoc, pCondFormat, rCondFormatRange, aPos, condformat::dialog::NONE ) );
+                            break;
                         }
                     }
 
