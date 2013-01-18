@@ -102,9 +102,19 @@ ValueSet::ValueSet( Window* pParent, WinBits nWinStyle, bool bDisableTransientCh
     mbIsTransientChildrenDisabled = bDisableTransientChildren;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeValueSet(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeValueSet(Window *pParent, VclBuilder::stringmap &rMap)
 {
-    return new ValueSet(pParent, WB_TABSTOP);
+    WinBits nWinBits = WB_TABSTOP;
+
+    VclBuilder::stringmap::iterator aFind = rMap.find(rtl::OString("border"));
+    if (aFind != rMap.end())
+    {
+        if (toBool(aFind->second))
+            nWinBits |= WB_BORDER;
+        rMap.erase(aFind);
+    }
+
+    return new ValueSet(pParent, nWinBits);
 }
 
 // -----------------------------------------------------------------------
