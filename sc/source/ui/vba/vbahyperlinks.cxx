@@ -109,7 +109,7 @@ bool EqualAnchorFunctor::operator()( const uno::Reference< excel::XHyperlink >& 
 
 // ============================================================================
 
-namespace detail {
+namespace vba_detail {
 
 class ScVbaHlinkContainer : public ::cppu::WeakImplHelper1< container::XIndexAccess >
 {
@@ -201,13 +201,13 @@ ScVbaHlinkContainerMember::~ScVbaHlinkContainerMember()
 {
 }
 
-} // namespace detail
+} // namespace vba_detail
 
 // ============================================================================
 
 ScVbaHyperlinks::ScVbaHyperlinks( const uno::Reference< XHelperInterface >& rxParent,
         const uno::Reference< uno::XComponentContext >& rxContext ) throw (uno::RuntimeException) :
-    detail::ScVbaHlinkContainerMember( new detail::ScVbaHlinkContainer ),
+    vba_detail::ScVbaHlinkContainerMember( new vba_detail::ScVbaHlinkContainer ),
     ScVbaHyperlinks_BASE( rxParent, rxContext, uno::Reference< container::XIndexAccess >( mxContainer.get() ) )
 {
 }
@@ -215,7 +215,7 @@ ScVbaHyperlinks::ScVbaHyperlinks( const uno::Reference< XHelperInterface >& rxPa
 ScVbaHyperlinks::ScVbaHyperlinks( const uno::Reference< XHelperInterface >& rxParent,
         const uno::Reference< uno::XComponentContext >& rxContext,
         const ScVbaHyperlinksRef& rxSheetHlinks, const ScRangeList& rScRanges ) throw (uno::RuntimeException) :
-    detail::ScVbaHlinkContainerMember( new detail::ScVbaHlinkContainer( rxSheetHlinks->mxContainer, rScRanges ) ),
+    vba_detail::ScVbaHlinkContainerMember( new vba_detail::ScVbaHlinkContainer( rxSheetHlinks->mxContainer, rScRanges ) ),
     ScVbaHyperlinks_BASE( rxParent, rxContext, uno::Reference< container::XIndexAccess >( mxContainer.get() ) ),
     mxSheetHlinks( rxSheetHlinks )
 {

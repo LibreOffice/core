@@ -32,7 +32,7 @@ class ScRangeList;
 
 // ============================================================================
 
-namespace detail {
+namespace vba_detail {
 
 class ScVbaHlinkContainer;
 typedef ::rtl::Reference< ScVbaHlinkContainer > ScVbaHlinkContainerRef;
@@ -48,7 +48,7 @@ struct ScVbaHlinkContainerMember
     ~ScVbaHlinkContainerMember();
 };
 
-} // namespace detail
+} // namespace vba_detail
 
 // ============================================================================
 
@@ -103,7 +103,7 @@ typedef CollTestImplHelper< ov::excel::XHyperlinks > ScVbaHyperlinks_BASE;
 
     End With
  */
-class ScVbaHyperlinks : private detail::ScVbaHlinkContainerMember, public ScVbaHyperlinks_BASE
+class ScVbaHyperlinks : private vba_detail::ScVbaHlinkContainerMember, public ScVbaHyperlinks_BASE
 {
 public:
     explicit ScVbaHyperlinks(
