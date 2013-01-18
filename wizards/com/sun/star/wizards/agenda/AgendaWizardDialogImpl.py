@@ -153,9 +153,8 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
             self.xMSF, "/org.openoffice.Office.Writer/Wizards/Agenda", False)
         self.agenda.readConfiguration(root, "cp_")
 
-        self.setControlProperty(
-            "listPageDesign", "StringItemList",
-            tuple(self.agendaTemplates[0]))
+        self.xDialogModel.listPageDesign.StringItemList = \
+            tuple(self.agendaTemplates[0])
         UnoDataAware.attachListBox(
             self.agenda, "cp_AgendaType", self.listPageDesign, True).updateUI()
         UnoDataAware.attachCheckBox(
