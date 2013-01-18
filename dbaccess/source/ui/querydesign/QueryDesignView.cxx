@@ -485,10 +485,29 @@ namespace
         return BuildJoin(_xConnection, rRh, BuildTable(_xConnection,pLh), &data);
     }
     //------------------------------------------------------------------------------
+    typedef ::std::map< ::rtl::OUString,sal_Bool,::comphelper::UStringMixLess> tableNames_t;
+    //------------------------------------------------------------------------------
+    void addConnectionTableNames( const Reference< XConnection>& _xConnection,
+                                  const OQueryTableConnection* const pEntryConn,
+                                  tableNames_t &_rTableNames )
+    {
+            // insert tables into table list to avoid double entries
+            const OQueryTableWindow* const pEntryTabFrom = static_cast<OQueryTableWindow*>(pEntryConn->GetSourceWin());
+            const OQueryTableWindow* const pEntryTabTo = static_cast<OQueryTableWindow*>(pEntryConn->GetDestWin());
+
+            ::rtl::OUString sTabName(BuildTable(_xConnection,pEntryTabFrom));
+            if(_rTableNames.find(sTabName) == _rTableNames.end())
+                _rTableNames[sTabName] = sal_True;
+            sTabName = BuildTable(_xConnection,pEntryTabTo);
+            if(_rTableNames.find(sTabName) == _rTableNames.end())
+                _rTableNames[sTabName] = sal_True;
+    }
+    //------------------------------------------------------------------------------
     void GetNextJoin(   const Reference< XConnection>& _xConnection,
                         OQueryTableConnection* pEntryConn,
                         OQueryTableWindow* pEntryTabTo,
-                        ::rtl::OUString &aJoin)
+                        ::rtl::OUString &aJoin,
+                        tableNames_t &_rTableNames)
     {
         OQueryTableConnectionData* pEntryConnData = static_cast<OQueryTableConnectionData*>(pEntryConn->GetData().get());
         if ( pEntryConnData->GetJoinType() == INNER_JOIN && !pEntryConnData->isNatural() )
@@ -496,15 +515,18 @@ namespace
 
         if(aJoin.isEmpty())
         {
+            addConnectionTableNames(_xConnection, pEntryConn, _rTableNames);
             OQueryTableWindow* pEntryTabFrom = static_cast<OQueryTableWindow*>(pEntryConn->GetSourceWin());
             aJoin = BuildJoin(_xConnection,pEntryTabFrom,pEntryTabTo,pEntryConnData);
         }
         else if(pEntryTabTo == pEntryConn->GetDestWin())
         {
+            addConnectionTableNames(_xConnection, pEntryConn, _rTableNames);
             aJoin = BuildJoin(_xConnection,aJoin,pEntryTabTo,pEntryConnData);
         }
         else if(pEntryTabTo == pEntryConn->GetSourceWin())
         {
+            addConnectionTableNames(_xConnection, pEntryConn, _rTableNames);
             aJoin = BuildJoin(_xConnection,pEntryTabTo,aJoin,pEntryConnData);
         }
 
@@ -523,7 +545,7 @@ namespace
                 // exists there a connection to a OQueryTableWindow that holds a connection that has been already visited
                 JoinCycle(_xConnection,pNext,pEntryTab,aJoin);
                 if(!pNext->IsVisited())
-                    GetNextJoin(_xConnection,pNext,pEntryTab,aJoin);
+                    GetNextJoin(_xConnection, pNext, pEntryTab, aJoin, _rTableNames);
             }
         }
 
@@ -541,7 +563,7 @@ namespace
                     // exists there a connection to a OQueryTableWindow that holds a connection that has been already visited
                     JoinCycle(_xConnection,pNext,pEntryTab,aJoin);
                     if(!pNext->IsVisited())
-                        GetNextJoin(_xConnection,pNext,pEntryTab,aJoin);
+                        GetNextJoin(_xConnection, pNext, pEntryTab, aJoin, _rTableNames);
                 }
             }
         }
@@ -1024,7 +1046,7 @@ namespace
     //------------------------------------------------------------------------------
     void searchAndAppendName(const Reference< XConnection>& _xConnection,
                              const OQueryTableWindow* _pTableWindow,
-                             ::std::map< ::rtl::OUString,sal_Bool,::comphelper::UStringMixLess>& _rTableNames,
+                             tableNames_t& _rTableNames,
                              ::rtl::OUString& _rsTableListStr
                              )
     {
@@ -1045,8 +1067,8 @@ namespace
     {
 
         ::rtl::OUString aTableListStr;
-        // wird gebraucht um sicher zustelllen das eine Tabelle nicht doppelt vorkommt
-        ::std::map< ::rtl::OUString,sal_Bool,::comphelper::UStringMixLess> aTableNames;
+        // used to avoid putting a table twice in FROM clause
+        tableNames_t aTableNames;
 
         // generate outer join clause in from
         if(!pConnList->empty())
@@ -1086,21 +1108,14 @@ namespace
                     if(!pEntryConn->IsVisited() && pEntryConn->GetSourceWin() == aRIter->second )
                     {
                         ::rtl::OUString aJoin;
-                        GetNextJoin(_xConnection,pEntryConn,static_cast<OQueryTableWindow*>(pEntryConn->GetDestWin()),aJoin);
+                        GetNextJoin(_xConnection,
+                                    pEntryConn,
+                                    static_cast<OQueryTableWindow*>(pEntryConn->GetDestWin()),
+                                    aJoin,
+                                    aTableNames);
 
                         if(!aJoin.isEmpty())
                         {
-                            // insert tables into table list to avoid double entries
-                            OQueryTableWindow* pEntryTabFrom = static_cast<OQueryTableWindow*>(pEntryConn->GetSourceWin());
-                            OQueryTableWindow* pEntryTabTo = static_cast<OQueryTableWindow*>(pEntryConn->GetDestWin());
-
-                            ::rtl::OUString sTabName(BuildTable(_xConnection,pEntryTabFrom));
-                            if(aTableNames.find(sTabName) == aTableNames.end())
-                                aTableNames[sTabName] = sal_True;
-                            sTabName = BuildTable(_xConnection,pEntryTabTo);
-                            if(aTableNames.find(sTabName) == aTableNames.end())
-                                aTableNames[sTabName] = sal_True;
-
                             ::rtl::OUString aStr;
                             switch(static_cast<OQueryTableConnectionData*>(pEntryConn->GetData().get())->GetJoinType())
                             {
