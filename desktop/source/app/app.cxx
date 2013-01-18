@@ -467,7 +467,7 @@ rtl::OUString ReplaceStringHookProc( const rtl::OUString& rStr )
 {
     rtl::OUString sRet(rStr);
 
-    if ( sRet.indexOf( "%PRODUCT" ) != -1 )
+    if (sRet.indexOf("%PRODUCT") != -1 || sRet.indexOf("%ABOUTBOX") != -1)
     {
         rtl::OUString sBrandName = BrandName::get();
         rtl::OUString sVersion = Version::get();
