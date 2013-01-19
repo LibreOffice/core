@@ -422,6 +422,10 @@ sub get_download_architecture
     {
         $arch = "x86";
     }
+    elsif ( $installer::globals::compiler =~ /^unxmacxx/ )
+    {
+        $arch = "x86-64";
+    }
     elsif ( $installer::globals::compiler =~ /^unxmacxp/ )
     {
         $arch = "PPC";
@@ -596,6 +600,7 @@ sub resolve_variables_in_downloadname
     elsif ( $installer::globals::issolarisx86build ) { $os = "solia"; }
     elsif ( $installer::globals::islinuxbuild ) { $os = "linux"; }
     elsif ( $installer::globals::compiler =~ /unxmacxi/ ) { $os = "macosxi"; }
+    elsif ( $installer::globals::compiler =~ /unxmacxx/ ) { $os = "macosxx"; }
     elsif ( $installer::globals::compiler =~ /unxmacxp/ ) { $os = "macosxp"; }
     else { $os = ""; }
     $downloadname =~ s/\{os\}/$os/;
