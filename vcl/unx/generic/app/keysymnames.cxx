@@ -371,6 +371,42 @@ namespace vcl_sal {
         { SunXK_Cut,   "Retalla" },
     };
 
+    static const struct KeysymNameReplacement aImplReplacements_Lithuanian[] =
+    {
+        { XK_Control_L, "Vald" },
+        { XK_Control_R, "Vald" },
+        { XK_Shift_L, "Lyg2" },
+        { XK_Shift_R, "Lyg2" },
+        { XK_Alt_L, "Alt" },
+        { XK_Alt_R, "Lyg3" },
+        { XK_Page_Up, "Psl↑" },
+        { XK_Page_Down, "Psl↓" },
+        { XK_End, "Pab" },
+        { XK_Home, "Prad" },
+        { XK_Insert, "Įterpti" },
+        { XK_Delete, "Šal" },
+        { XK_Escape, "Gr" },
+        { XK_Right, "Dešinėn" },
+        { XK_Left, "Kairėn" },
+        { XK_Up, "Aukštyn" },
+        { XK_Down, "Žemyn" },
+        { XK_BackSpace, "Naikinti" },
+        { XK_Return, "Įvesti" },
+        { XK_asterisk, "Žvaigždutė" },
+        { XK_slash, "Dešininis brūkšnys" },
+        { XK_space, "Tarpas" },
+        { SunXK_Stop,  "Stabdyti" },
+        { SunXK_Again, "Kartoti" },
+        { SunXK_Props, "Savybės" },
+        { SunXK_Undo,  "Atšaukti" },
+        { SunXK_Front, "Priekinis planas" },
+        { SunXK_Copy,  "Kopijuoti" },
+        { SunXK_Open,  "Atverti" },
+        { SunXK_Paste, "Įdėti" },
+        { SunXK_Find,  "Ieškoti" },
+        { SunXK_Cut,   "Iškirpti" },
+    };
+
     static const struct KeyboardReplacements aKeyboards[] =
     {
         { "ca", aImplReplacements_Catalan, SAL_N_ELEMENTS(aImplReplacements_Catalan) },
@@ -379,6 +415,7 @@ namespace vcl_sal {
         { "et", aImplReplacements_Estonian, SAL_N_ELEMENTS(aImplReplacements_Estonian) },
         { "fr", aImplReplacements_French, SAL_N_ELEMENTS(aImplReplacements_French) },
         { "it", aImplReplacements_Italian, SAL_N_ELEMENTS(aImplReplacements_Italian) },
+        { "lt", aImplReplacements_Lithuanian, SAL_N_ELEMENTS(aImplReplacements_Lithuanian) },
         { "nl", aImplReplacements_Dutch, SAL_N_ELEMENTS(aImplReplacements_Dutch) },
         { "no", aImplReplacements_Norwegian, SAL_N_ELEMENTS(aImplReplacements_Norwegian) },
         { "pt", aImplReplacements_Portuguese, SAL_N_ELEMENTS(aImplReplacements_Portuguese) },
