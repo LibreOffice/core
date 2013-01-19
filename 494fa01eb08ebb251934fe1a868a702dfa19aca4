@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAATn///5A\u003d",
+        "filename": "connectivity/source/commontools/FDatabaseMetaDataResultSetMetaData.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-01-19T14:05:06Z",
+      "side": 1,
+      "message": "Just a small note, OUString() can be also simply written as \"\" here.",
+      "revId": "494fa01eb08ebb251934fe1a868a702dfa19aca4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
