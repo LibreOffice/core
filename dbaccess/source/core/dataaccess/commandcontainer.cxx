@@ -81,9 +81,9 @@ Reference< XInterface > SAL_CALL OCommandContainer::createInstance( ) throw (Exc
     return m_aContext.createComponent( (::rtl::OUString)( m_bTables ? SERVICE_SDB_TABLEDEFINITION : SERVICE_SDB_COMMAND_DEFINITION ) );
 }
 
-::rtl::OUString OCommandContainer::determineContentType() const
+OUString OCommandContainer::determineContentType() const
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.org.openoffice.DatabaseCommandDefinitionContainer" ) );
+    return OUString( "application/vnd.org.openoffice.DatabaseCommandDefinitionContainer" );
 }
 
 }   // namespace dbaccess

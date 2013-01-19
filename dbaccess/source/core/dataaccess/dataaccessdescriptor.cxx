@@ -182,9 +182,9 @@ namespace dbaccess
 
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( DataAccessDescriptor, DataAccessDescriptor_TypeBase, DataAccessDescriptor_PropertyBase );
 
-    ::rtl::OUString SAL_CALL DataAccessDescriptor::getImplementationName() throw (RuntimeException)
+    OUString SAL_CALL DataAccessDescriptor::getImplementationName() throw (RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.dba.DataAccessDescriptor" ) );
+        return OUString( "com.sun.star.comp.dba.DataAccessDescriptor" );
     }
 
     ::sal_Bool SAL_CALL DataAccessDescriptor::supportsService( const ::rtl::OUString& rServiceName ) throw (RuntimeException)
@@ -195,10 +195,10 @@ namespace dbaccess
         return ::std::find( pStart, pEnd, rServiceName ) != pEnd;
     }
 
-    Sequence< ::rtl::OUString > SAL_CALL DataAccessDescriptor::getSupportedServiceNames(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL DataAccessDescriptor::getSupportedServiceNames(  ) throw (RuntimeException)
     {
-        Sequence< ::rtl::OUString > aServices(1);
-        aServices[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.DataAccessDescriptor" ) );
+        Sequence< OUString > aServices(1);
+        aServices[0] = "com.sun.star.sdb.DataAccessDescriptor";
         return aServices;
     }
 
@@ -260,9 +260,9 @@ namespace dbaccess
     {
     }
 
-    ::rtl::OUString DataAccessDescriptorFactory::getSingletonName_static()
+    OUString DataAccessDescriptorFactory::getSingletonName_static()
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.DataAccessDescriptorFactory" ) );
+        return OUString( "com.sun.star.sdb.DataAccessDescriptorFactory" );
     }
 
     Sequence< ::rtl::OUString > DataAccessDescriptorFactory::getSupportedServiceNames_static() throw( RuntimeException )
@@ -272,9 +272,9 @@ namespace dbaccess
         return aServices;
     }
 
-    ::rtl::OUString DataAccessDescriptorFactory::getImplementationName_static() throw( RuntimeException )
+    OUString DataAccessDescriptorFactory::getImplementationName_static() throw( RuntimeException )
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.dba.DataAccessDescriptorFactory" ) );
+        return OUString( "com.sun.star.comp.dba.DataAccessDescriptorFactory" );
     }
 
     Reference< XInterface > DataAccessDescriptorFactory::Create( const Reference< XComponentContext >& _rxContext )
