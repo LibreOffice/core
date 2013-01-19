@@ -35,9 +35,7 @@
 #include "vcl/sysdata.hxx"
 #include "vcl/svapp.hxx"
 
-#include "aqua/salconst.h"
 #include "aqua/atsui/salgdi.h"
-#include "aqua/salbmp.h"
 #include "aqua/salframe.h"
 #include "aqua/salcolorutils.hxx"
 #include "aqua/atsui/salatsuifontutils.hxx"
