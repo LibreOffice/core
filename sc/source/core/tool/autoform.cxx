@@ -1099,13 +1099,19 @@ bool ScAutoFormat::Save()
                     osl_getThreadTextEncoding() );
         m_aVersions.Write(rStream, fileVersion);
 
-        bRet = (rStream.GetError() == 0);
+        bRet &= (rStream.GetError() == 0);
+
         //-----------------------------------------------------------
         rStream << (sal_uInt16)(maData.size() - 1);
-        bRet = (rStream.GetError() == 0);
+        bRet &= (rStream.GetError() == 0);
         MapType::iterator it = maData.begin(), itEnd = maData.end();
-        for (++it; bRet && it != itEnd; ++it) // Skip the first item.
-            bRet = it->second->Save(rStream, fileVersion);
+        if (it != itEnd)
+        {
+            for (++it; bRet && it != itEnd; ++it) // Skip the first item.
+            {
+                bRet &= it->second->Save(rStream, fileVersion);
+            }
+        }
 
         rStream.Flush();
 
