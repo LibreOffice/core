@@ -42,17 +42,3 @@
 #define ED_FORM         107
 #define FT_ALL_LEVEL    108
 #define NF_ALL_LEVEL    109
-
-#define MN_FORM     110
-#define MN_FORM1        111
-#define MN_FORMBASE     MN_FORM1
-#define MN_FORM2        112
-#define MN_FORM3        113
-#define MN_FORM4        114
-#define MN_FORM5        115
-#define MN_FORM6        116
-#define MN_FORM7        117
-#define MN_FORM8        118
-#define MN_FORM9        119
-#define MN_SAVE         120
-#define ST_FORM         121

@@ -160,31 +160,23 @@ static sal_uInt16 lcl_BitToLevel(sal_uInt16 nActLevel)
 }
 
 sal_uInt16 SwOutlineTabDialog::nNumLevel = 1;
-SwOutlineTabDialog::SwOutlineTabDialog(Window* pParent,
-                    const SfxItemSet* pSwItemSet,
-                    SwWrtShell &rSh) :
-                                    // the UserString is set correctly afterwards
-        SfxTabDialog(pParent, SW_RES(DLG_TAB_OUTLINE), pSwItemSet, sal_False, &aEmptyStr),
-        aNullStr(rtl::OUString("____")),
-        aFormMenu(SW_RES(MN_FORM)),
-        rWrtSh(rSh),
-        pChapterNumRules(SW_MOD()->GetChapterNumRules()),
-        bModified(rWrtSh.IsModified())
+SwOutlineTabDialog::SwOutlineTabDialog(Window* pParent, const SfxItemSet* pSwItemSet,
+    SwWrtShell &rSh)
+    : SfxTabDialog(pParent, "OutlineNumberingDialog",
+        "modules/swriter/ui/outlinenumbering.ui", pSwItemSet)
+    , rWrtSh(rSh)
+    , pChapterNumRules(SW_MOD()->GetChapterNumRules())
+    , bModified(rWrtSh.IsModified())
 {
-    // --> OD 2008-04-14 #outlinelevel#
-    SetText( SW_RES( STR_OUTLINE_NUMBERING ) );
     PushButton* pUserButton = GetUserButton();
-    pUserButton->SetText(SW_RES(ST_FORM));
-    pUserButton->SetHelpId(HID_OUTLINE_FORM);
     pUserButton->SetClickHdl(LINK(this, SwOutlineTabDialog, FormHdl));
     pUserButton->SetAccessibleRole( com::sun::star::accessibility::AccessibleRole::BUTTON_MENU );
 
-    FreeResource();
     pNumRule = new SwNumRule( *rSh.GetOutlineNumRule() );
     GetCancelButton().SetClickHdl(LINK(this, SwOutlineTabDialog, CancelHdl));
 
-    AddTabPage(TP_NUM_POSITION   , &SwNumPositionTabPage::Create, 0);
-    AddTabPage(TP_OUTLINE_NUM    , &SwOutlineSettingsTabPage::Create, 0);
+    m_nNumPosId = AddTabPage("position", &SwNumPositionTabPage::Create, 0);
+    m_nOutlineId = AddTabPage("numbering", &SwOutlineSettingsTabPage::Create, 0);
 
     String sHeadline;
     sal_uInt16 i;
@@ -221,17 +213,16 @@ SwOutlineTabDialog::~SwOutlineTabDialog()
     delete pNumRule;
 }
 
-void    SwOutlineTabDialog::PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage)
+void SwOutlineTabDialog::PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage)
 {
-    switch ( nPageId )
+    if (nPageId == m_nNumPosId)
     {
-        case TP_NUM_POSITION:
-                ((SwNumPositionTabPage&)rPage).SetWrtShell(&rWrtSh);
-                ((SwNumPositionTabPage&)rPage).SetOutlineTabDialog(this);
-        break;
-        case TP_OUTLINE_NUM:
-                ((SwOutlineSettingsTabPage&)rPage).SetWrtShell(&rWrtSh);
-        break;
+        ((SwNumPositionTabPage&)rPage).SetWrtShell(&rWrtSh);
+        ((SwNumPositionTabPage&)rPage).SetOutlineTabDialog(this);
+    }
+    else if (nPageId == m_nOutlineId)
+    {
+        ((SwOutlineSettingsTabPage&)rPage).SetWrtShell(&rWrtSh);
     }
 }
 
@@ -245,60 +236,67 @@ IMPL_LINK_NOARG(SwOutlineTabDialog, CancelHdl)
 
 IMPL_LINK( SwOutlineTabDialog, FormHdl, Button *, pBtn )
 {
+    PopupMenu *pFormMenu = get_menu("form");
     // fill PopupMenu
     for( sal_uInt16 i = 0; i < SwChapterNumRules::nMaxRules; ++i )
     {
         const SwNumRulesWithName *pRules = pChapterNumRules->GetRules(i);
         if( pRules )
-            aFormMenu.SetItemText(i + MN_FORMBASE, pRules->GetName());
+            pFormMenu->SetItemText(pFormMenu->GetItemId(i), pRules->GetName());
     }
-    aFormMenu.SetSelectHdl(LINK(this, SwOutlineTabDialog, MenuSelectHdl));
-    aFormMenu.Execute(pBtn, Rectangle(Point(0,0), pBtn->GetSizePixel()), POPUPMENU_EXECUTE_DOWN);
+    pFormMenu->SetSelectHdl(LINK(this, SwOutlineTabDialog, MenuSelectHdl));
+    pFormMenu->Execute(pBtn, Rectangle(Point(0,0), pBtn->GetSizePixel()), POPUPMENU_EXECUTE_DOWN);
     return 0;
 }
 
 IMPL_LINK( SwOutlineTabDialog, MenuSelectHdl, Menu *, pMenu )
 {
     sal_uInt8 nLevelNo = 0;
-    switch(pMenu->GetCurItemId())
+    OString sIdent = pMenu->GetCurItemIdent();
+
+    if (sIdent == "form1")
+        nLevelNo = 1;
+    else if (sIdent == "form2")
+        nLevelNo = 2;
+    else if (sIdent == "form3")
+        nLevelNo = 3;
+    else if (sIdent == "form4")
+        nLevelNo = 4;
+    else if (sIdent == "form5")
+        nLevelNo = 5;
+    else if (sIdent == "form6")
+        nLevelNo = 6;
+    else if (sIdent == "form7")
+        nLevelNo = 7;
+    else if (sIdent == "form8")
+        nLevelNo = 8;
+    else if (sIdent == "form9")
+        nLevelNo = 9;
+    else if (sIdent == "saveas")
     {
-        case MN_FORM1: nLevelNo = 1;    break;
-        case MN_FORM2: nLevelNo = 2;    break;
-        case MN_FORM3: nLevelNo = 3;    break;
-        case MN_FORM4: nLevelNo = 4;    break;
-        case MN_FORM5: nLevelNo = 5;    break;
-        case MN_FORM6: nLevelNo = 6;    break;
-        case MN_FORM7: nLevelNo = 7;    break;
-        case MN_FORM8: nLevelNo = 8;    break;
-        case MN_FORM9: nLevelNo = 9;    break;
-
-        case MN_SAVE:
+        SwNumNamesDlg *pDlg = new SwNumNamesDlg(this);
+        const String *aStrArr[SwChapterNumRules::nMaxRules];
+        for(sal_uInt16 i = 0; i < SwChapterNumRules::nMaxRules; ++i)
         {
-            SwNumNamesDlg *pDlg = new SwNumNamesDlg(this);
-            const String *aStrArr[SwChapterNumRules::nMaxRules];
-            for(sal_uInt16 i = 0; i < SwChapterNumRules::nMaxRules; ++i)
-            {
-                const SwNumRulesWithName *pRules = pChapterNumRules->GetRules(i);
-                if(pRules)
-                    aStrArr[i] = &pRules->GetName();
-                else
-                    aStrArr[i] = 0;
-            }
-            pDlg->SetUserNames(aStrArr);
-            if(RET_OK == pDlg->Execute())
-            {
-                const String aName(pDlg->GetName());
-                pChapterNumRules->ApplyNumRules( SwNumRulesWithName(
-                        *pNumRule, aName ), pDlg->GetCurEntryPos() );
-                pMenu->SetItemText(
-                        pDlg->GetCurEntryPos() + MN_FORMBASE, aName);
-            }
-            delete pDlg;
-            return 0;
-
+            const SwNumRulesWithName *pRules = pChapterNumRules->GetRules(i);
+            if(pRules)
+                aStrArr[i] = &pRules->GetName();
+            else
+                aStrArr[i] = 0;
         }
+        pDlg->SetUserNames(aStrArr);
+        if(RET_OK == pDlg->Execute())
+        {
+            const String aName(pDlg->GetName());
+            pChapterNumRules->ApplyNumRules( SwNumRulesWithName(
+                    *pNumRule, aName ), pDlg->GetCurEntryPos() );
+            pMenu->SetItemText(pMenu->GetItemId(pDlg->GetCurEntryPos()), aName);
+        }
+        delete pDlg;
+        return 0;
 
     }
+
     if( nLevelNo-- )
     {
         const SwNumRulesWithName *pRules = pChapterNumRules->GetRules( nLevelNo );

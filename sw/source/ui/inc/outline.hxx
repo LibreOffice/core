@@ -47,9 +47,10 @@ class SwOutlineTabDialog : public SfxTabDialog
 {
     static     sal_uInt16    nNumLevel;
 
-    String              aNullStr;
+    sal_uInt16 m_nNumPosId;
+    sal_uInt16 m_nOutlineId;
+
     String              aCollNames[MAXLEVEL];
-    PopupMenu           aFormMenu;
 
     SwWrtShell&         rWrtSh;
     SwNumRule*          pNumRule;

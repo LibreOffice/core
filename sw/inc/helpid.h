@@ -114,9 +114,6 @@
 #define HID_GLBLTREE_UPD_IDX                                    "SW_HID_GLBLTREE_UPD_IDX"
 #define HID_GLBLTREE_UPD_LINK                                   "SW_HID_GLBLTREE_UPD_LINK"
 #define HID_GLBLTREEUPD_ALL                                     "SW_HID_GLBLTREEUPD_ALL"
-#define HID_NUM_OUTL_NAMED_NUMS                                 "SW_HID_NUM_OUTL_NAMED_NUMS"
-#define HID_NUM_OUTL_NUM_SAVEAS                                 "SW_HID_NUM_OUTL_NUM_SAVEAS"
-#define HID_NUM_NAMED_NUMS                                      "SW_HID_NUM_NAMED_NUMS"
 #define HID_NAVI_CONTENT                                        "SW_HID_NAVI_CONTENT"
 #define HID_NAVI_GLOBAL                                         "SW_HID_NAVI_GLOBAL"
 #define HID_LTEMPL_NUMBERING                                    "SW_HID_LTEMPL_NUMBERING"
@@ -355,7 +352,6 @@
 #define HID_SELECT_TEMPLATE                                     "SW_HID_SELECT_TEMPLATE"
 
 #define HID_AP_INSERT_DB_SEL                                    "SW_HID_AP_INSERT_DB_SEL"
-#define HID_OUTLINE_FORM                                        "SW_HID_OUTLINE_FORM"
 #define HID_NUM_RESET                                           "SW_HID_NUM_RESET"
 
 #define HID_AUTOFORMAT_REJECT                                   "SW_HID_AUTOFORMAT_REJECT"
