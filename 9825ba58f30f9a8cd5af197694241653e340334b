@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAATn///5s\u003d",
+        "filename": "basctl/source/basicide/baside2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-01-19T10:08:17Z",
+      "side": 1,
+      "message": "It is better to use !rLine.isEmpty().",
+      "revId": "9825ba58f30f9a8cd5af197694241653e340334b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATn///5o\u003d",
+        "filename": "basctl/source/basicide/baside2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-01-19T10:08:17Z",
+      "side": 1,
+      "message": "These two lines are technically ok, but since OUString doesn\u0027t allow modifications and OUStringBuffer is expected to be used for that, for future changes it\u0027d be probably simpler use OUStringBuffer for these changes.",
+      "revId": "9825ba58f30f9a8cd5af197694241653e340334b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATn///5k\u003d",
+        "filename": "basctl/source/basicide/moduldl2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 575,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-01-19T10:08:17Z",
+      "side": 1,
+      "message": "This is incorrect, operator\u003d\u003d does case insensitive comparison. This has to stay the way it is.",
+      "revId": "9825ba58f30f9a8cd5af197694241653e340334b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATn///5g\u003d",
+        "filename": "connectivity/source/drivers/dbase/DTable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-01-19T10:08:17Z",
+      "side": 1,
+      "message": "Note that the rtl:: prefix removal is planned to be done by a scripted change somewhen in the near future, so while this change is ok, it should be less work for both you and the review if you do not specifically aim for these changes.",
+      "revId": "9825ba58f30f9a8cd5af197694241653e340334b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATn///5c\u003d",
+        "filename": "cui/source/dialogs/insdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-01-19T10:08:17Z",
+      "side": 1,
+      "message": "These using declarations for rtl string classes are not necessary anymore and can be removed completely (but that will be removed by a script somewhen later too).",
+      "revId": "9825ba58f30f9a8cd5af197694241653e340334b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATn///5Y\u003d",
+        "filename": "cui/source/options/cfgchart.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-01-19T10:08:17Z",
+      "side": 1,
+      "message": "Note that there is copy() overload that takes only the starting index and returns everything until the end.",
+      "revId": "9825ba58f30f9a8cd5af197694241653e340334b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATn///5U\u003d",
+        "filename": "cui/source/options/dbregister.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-01-19T10:08:17Z",
+      "side": 1,
+      "message": "This unfortunately doesn\u0027t work with MSVC, OUString( \"1\" ) etc. is needed, see https://wiki.documentfoundation.org/Development/String_Classes#Favored_Methods_Utilizing_String_Literals .",
+      "revId": "9825ba58f30f9a8cd5af197694241653e340334b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATn///5Q\u003d",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-01-19T10:08:17Z",
+      "side": 1,
+      "message": "The OUString API is kind of broken here and replaceAt() in fact returns a modified copy instead of doing the replace in aStr . This needs to be aStr \u003d aStr.replaceAt() ... (and I think this gives a warning when compiling).",
+      "revId": "9825ba58f30f9a8cd5af197694241653e340334b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
