@@ -94,10 +94,32 @@ namespace vcl_sal {
         { KEY_SPACEBAR, "Tühik" },
     };
 
+    static const struct KeysNameReplacement aImplReplacements_Lithuanian[] =
+    {
+        { KEY_ESC, "Gr" },
+        { KEY_BACK, "Naikinti" },
+        { KEY_ENTER, "Įvesti" },
+        { KEY_SPACEBAR, "Tarpas" },
+        { KEY_HOME, "Prad" },
+        { KEY_UP, "Aukštyn" },
+        { KEY_PAGEUP, "Psl↑" },
+        { KEY_LEFT, "Kairėn" },
+        { KEY_RIGHT, "Dešinėn" },
+        { KEY_END, "Pab" },
+        { KEY_DOWN, "Žemyn" },
+        { KEY_PAGEDOWN, "Psl↓" },
+        { KEY_INSERT, "Įterpti" },
+        { KEY_DELETE, "Šal" },
+        { KEY_CONTROL, "Vald" },
+        { KEY_SHIFT, "Lyg2" },
+        { KEY_ALT, "Alt" },
+    };
+
     static const struct KeyboardReplacements aKeyboards[] =
     {
         { "ca", aImplReplacements_Catalan, SAL_N_ELEMENTS(aImplReplacements_Catalan) },
         { "et", aImplReplacements_Estonian, SAL_N_ELEMENTS(aImplReplacements_Estonian) },
+        { "lt", aImplReplacements_Lithuanian, SAL_N_ELEMENTS(aImplReplacements_Lithuanian) },
     };
 
     // translate keycodes, used within the displayed menu shortcuts
