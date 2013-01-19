@@ -290,7 +290,7 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
          aEnd = m_pParserState->m_aButtonMenuMaps.end(); aI != aEnd; ++aI)
     {
         MenuButton *pTarget = get<MenuButton>(aI->m_sID);
-        PopupMenu *pMenu = get_menu_by_name(aI->m_sValue);
+        PopupMenu *pMenu = get_menu(aI->m_sValue);
         SAL_WARN_IF(!pTarget || !pMenu,
             "vcl", "missing elements of button/menu");
         if (!pTarget || !pMenu)
@@ -2148,7 +2148,7 @@ Window *VclBuilder::get_by_name(OString sID)
     return NULL;
 }
 
-PopupMenu *VclBuilder::get_menu_by_name(OString sID)
+PopupMenu *VclBuilder::get_menu(OString sID)
 {
     for (std::vector<MenuAndId>::iterator aI = m_aMenus.begin(),
          aEnd = m_aMenus.end(); aI != aEnd; ++aI)

@@ -179,8 +179,6 @@ private:
     Window *get_by_name(OString sID);
     void delete_by_name(OString sID);
 
-    PopupMenu *get_menu_by_name(OString sID);
-
     class sortIntoBestTabTraversalOrder
         : public std::binary_function<const Window*, const Window*, bool>
     {
@@ -207,6 +205,13 @@ public:
         ret = static_cast<T*>(w);
         return ret;
     }
+    PopupMenu* get_menu(PopupMenu*& ret, OString sID)
+    {
+        ret = get_menu(sID);
+        SAL_WARN_IF(!ret, "vcl.layout", "menu \"" << sID.getStr() << "\" not found in .ui");
+        assert(ret);
+        return ret;
+    }
     //sID may not exist, but must be of type T if it does
     template <typename T /*=Window if we had c++11*/> T* get(OString sID)
     {
@@ -216,6 +221,9 @@ public:
         assert(!w || dynamic_cast<T*>(w));
         return static_cast<T*>(w);
     }
+    //sID may not exist
+    PopupMenu* get_menu(OString sID);
+
     OString get_by_window(const Window *pWindow) const;
     void delete_by_window(const Window *pWindow);
 
@@ -299,6 +307,14 @@ public:
     template <typename T /*=Window if we had c++11*/> T* get(OString sID)
     {
         return m_pUIBuilder->get<T>(sID);
+    }
+    PopupMenu* get_menu(PopupMenu*& ret, OString sID)
+    {
+        return m_pUIBuilder->get_menu(ret, sID);
+    }
+    PopupMenu* get_menu(OString sID)
+    {
+        return m_pUIBuilder->get_menu(sID);
     }
 };
 
