@@ -67,17 +67,14 @@ namespace svgio
                 default: /* StrokeLinecap_notset, StrokeLinecap_butt */
                 {
                     return com::sun::star::drawing::LineCap_BUTT;
-                    break;
                 }
                 case StrokeLinecap_round:
                 {
                     return com::sun::star::drawing::LineCap_ROUND;
-                    break;
                 }
                 case StrokeLinecap_square:
                 {
                     return com::sun::star::drawing::LineCap_SQUARE;
-                    break;
                 }
             }
         }

@@ -66,7 +66,6 @@ ContextHandlerRef LayoutFragmentHandler::onCreateContext( sal_Int32 aElementToke
         }
         case PPT_TOKEN( hf ):               // CT_HeaderFooter
             return new HeaderFooterContext( *this, rAttribs, mpSlidePersistPtr->getHeaderFooter() );
-        break;
         default:
             return SlideFragmentHandler::onCreateContext( aElementToken, rAttribs );
     }

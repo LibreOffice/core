@@ -147,7 +147,6 @@ namespace oox { namespace ppt {
                 {
                 case PPT_TOKEN( cBhvr ):
                     return new CommonBehaviorContext ( *this, rAttribs.getFastAttributeList(), mpNode );
-                    break;
                 default:
                     break;
                 }
@@ -602,10 +601,8 @@ namespace oox { namespace ppt {
                 {
                 case PPT_TOKEN( cBhvr ):
                     return new CommonBehaviorContext ( *this, rAttribs.getFastAttributeList(), mpNode );
-                    break;
                 case PPT_TOKEN( tavLst ):
                     return new TimeAnimValueListContext ( *this, rAttribs.getFastAttributeList(), maTavList );
-                    break;
                 default:
                     break;
                 }

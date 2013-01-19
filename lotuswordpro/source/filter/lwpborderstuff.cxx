@@ -167,16 +167,12 @@ sal_uInt16  LwpBorderStuff::GetSideType(sal_uInt16 side)
     {
     case LEFT:
         return m_nBoderGroupIDLeft;
-        break;
     case RIGHT:
         return m_nBoderGroupIDRight;
-        break;
     case TOP:
         return m_nBoderGroupIDTop;
-        break;
     case BOTTOM:
         return m_nBoderGroupIDBottom;
-        break;
     }
     // FIXME: this is needed to avoid warning: control reaches end of non-void function
     //        a better solution would be to enum value for the parameter side
@@ -189,16 +185,12 @@ LwpColor    LwpBorderStuff::GetSideColor(sal_uInt16 side)
     {
     case LEFT:
         return m_aColorLeft;
-        break;
     case RIGHT:
         return m_aColorRight;
-        break;
     case TOP:
         return m_aColorTop;
-        break;
     case BOTTOM:
         return m_aColorBottom;
-        break;
     }
     // FIXME: this is needed to avoid warning: control reaches end of non-void function
     //        a better solution would be to enum value for the parameter side
@@ -211,16 +203,12 @@ float   LwpBorderStuff::GetSideWidth(sal_uInt16 side)
     {
     case LEFT:
         return LwpTools::ConvertToMetric(LwpTools::ConvertFromUnits(m_nWidthLeft));
-        break;
     case RIGHT:
         return LwpTools::ConvertToMetric(LwpTools::ConvertFromUnits(m_nWidthRight));
-        break;
     case TOP:
         return LwpTools::ConvertToMetric(LwpTools::ConvertFromUnits(m_nWidthTop));
-        break;
     case BOTTOM:
         return LwpTools::ConvertToMetric(LwpTools::ConvertFromUnits(m_nWidthBottom));
-        break;
     }
     // FIXME: this is needed to avoid warning: control reaches end of non-void function
     //        a better solution would be to enum value for the parameter side

@@ -185,7 +185,6 @@ SlideFragmentHandler::~SlideFragmentHandler() throw()
         return this;
     case PPT_TOKEN( txStyles ):         // CT_SlideMasterTextStyles
         return new SlideMasterTextStylesContext( *this, mpSlidePersistPtr );
-        break;
     case PPT_TOKEN( custDataLst ):      // CT_CustomerDataList
     case PPT_TOKEN( tagLst ):           // CT_TagList
         return this;

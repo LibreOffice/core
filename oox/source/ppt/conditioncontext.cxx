@@ -178,7 +178,6 @@ namespace oox { namespace ppt {
             // add a condition to the list
             maConditions.push_back( AnimationCondition() );
             return new CondContext( *this, rAttribs.getFastAttributeList(), mpNode, maConditions.back() );
-            break;
         default:
             break;
         }
