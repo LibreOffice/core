@@ -72,9 +72,6 @@
 using osl::MutexGuard;
 using osl::Mutex;
 
-using rtl::OUString;
-using rtl::OUStringBuffer;
-
 using com::sun::star::container::XNameAccess;
 using com::sun::star::container::XIndexAccess;
 using com::sun::star::container::ElementExistException;
@@ -108,8 +105,6 @@ using com::sun::star::sdbc::SQLException;
 
 namespace pq_sdbc_driver
 {
-
-#define ASCII_STR(x) OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
 
 User::User( const ::rtl::Reference< RefCountedMutex > & refMutex,
             const Reference< com::sun::star::sdbc::XConnection > & connection,
@@ -173,9 +168,9 @@ void User::changePassword(
 {
     (void) oldPassword;
     rtl::OUStringBuffer buf(128);
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "ALTER USER " ) );
+    buf.append( "ALTER USER " );
     bufferQuoteIdentifier( buf, extractStringProperty( this, getStatics().NAME ), m_pSettings );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " PASSWORD " ) );
+    buf.append( " PASSWORD " );
     bufferQuoteConstant( buf, newPassword, m_pSettings );
     Reference< XStatement > stmt = m_conn->createStatement();
     DisposeGuard guard( stmt );
@@ -192,13 +187,9 @@ sal_Int32 User::getPrivileges( const ::rtl::OUString& objName, sal_Int32 objType
         rtl::OUString user = extractStringProperty( this, st.NAME );
 
         rtl::OUStringBuffer buf( 128 );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("User::getPrivileges[") );
-        buf.append( extractStringProperty( this, st.NAME ) );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "] got called for " ) );
-        buf.append( objName );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "(type=" ) );
-        buf.append( objType );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( ")" ) );
+        buf.append( "User::getPrivileges[" + extractStringProperty( this, st.NAME ) +
+                    "] got called for " + objName + "(type=" +
+                    OUString::number(objType) + ")");
         log( m_pSettings, LogLevel::INFO, buf.makeStringAndClear() );
     }
     // all privileges
@@ -217,18 +208,16 @@ void User::grantPrivileges( const ::rtl::OUString& objName, sal_Int32 objType, s
     throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     (void) objName; (void) objType; (void) objPrivileges;
-    throw com::sun::star::sdbc::SQLException(
-        ASCII_STR( "pq_driver: privilege change not implemented yet" ),
-        *this, OUString(), 1, Any() );
+    throw com::sun::star::sdbc::SQLException("pq_driver: privilege change not implemented yet",
+                                             *this, OUString(), 1, Any() );
 }
 
 void User::revokePrivileges( const ::rtl::OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges )
     throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     (void) objName; (void) objType; (void) objPrivileges;
-    throw com::sun::star::sdbc::SQLException(
-        ASCII_STR( "pq_driver: privilege change not implemented yet" ),
-        *this, OUString(), 1, Any() );
+    throw com::sun::star::sdbc::SQLException("pq_driver: privilege change not implemented yet",
+                                             *this, OUString(), 1, Any() );
 }
 
 //______________________________________________________________________________________
