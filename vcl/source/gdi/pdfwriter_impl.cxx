@@ -3190,17 +3190,14 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const PhysicalFo
         osl_createTempFile( NULL, NULL, &aTmpName.pData );
         sal_Int32 pGlyphIDs[ 256 ];
         sal_uInt8 pEncoding[ 256 ];
-        sal_Ucs   pUnicodes[ 256 ];
         sal_Int32 pDuWidths[ 256 ];
 
         memset( pGlyphIDs, 0, sizeof( pGlyphIDs ) );
         memset( pEncoding, 0, sizeof( pEncoding ) );
-        memset( pUnicodes, 0, sizeof( pUnicodes ) );
         memset( pDuWidths, 0, sizeof( pDuWidths ) );
 
         for( sal_Ucs c = 32; c < 256; c++ )
         {
-            pUnicodes[c] = c;
             pEncoding[c] = c;
             pGlyphIDs[c] = 0;
             if( aUnicodeMap.find( c ) != aUnicodeMap.end() )
