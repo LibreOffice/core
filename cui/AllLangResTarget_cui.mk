@@ -73,7 +73,6 @@ $(eval $(call gb_SrsTarget_add_files,cui/res,\
     cui/source/dialogs/scriptdlg.src \
     cui/source/dialogs/sdrcelldlg.src \
     cui/source/dialogs/showcols.src \
-    cui/source/dialogs/splitcelldlg.src \
     cui/source/dialogs/srchxtra.src \
     cui/source/dialogs/svuidlg.src \
     cui/source/dialogs/tbxform.src \

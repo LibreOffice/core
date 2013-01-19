@@ -23,40 +23,33 @@
 #include "dialmgr.hxx"
 #include "splitcelldlg.hxx"
 #include "cuires.hrc"
-#include "splitcelldlg.hrc"
 
-SvxSplitTableDlg::SvxSplitTableDlg( Window *pParent, bool bIsTableVertical, long nMaxVertical, long nMaxHorizontal )
-: SvxStandardDialog(pParent, CUI_RES(RID_SVX_SPLITCELLDLG))
-, maCountFL(this, CUI_RES(FL_COUNT))
-, maCountLbl(this, CUI_RES(FT_COUNT))
-, maCountEdit(this, CUI_RES(ED_COUNT))
-, maDirFL(this, CUI_RES(FL_DIR))
-, maHorzBox(this, CUI_RES(RB_HORZ))
-, maVertBox(this, CUI_RES(RB_VERT))
-, maPropCB(this, CUI_RES(CB_PROP))
-, maOKBtn(this, CUI_RES(BT_OK))
-, maCancelBtn(this, CUI_RES(BT_CANCEL))
-, maHelpBtn( this, CUI_RES( BT_HELP ) )
-, mnMaxVertical( nMaxVertical )
-, mnMaxHorizontal( nMaxHorizontal )
+SvxSplitTableDlg::SvxSplitTableDlg( Window *pParent, bool bIsTableVertical,
+    long nMaxVertical, long nMaxHorizontal )
+    : SvxStandardDialog(pParent, "SplitCellsDialog", "cui/ui/splitcellsdialog.ui")
+    , mnMaxVertical(nMaxVertical)
+    , mnMaxHorizontal(nMaxHorizontal)
 {
-    FreeResource();
-    maHorzBox.SetClickHdl( LINK( this, SvxSplitTableDlg, ClickHdl ));
-    maPropCB.SetClickHdl( LINK( this, SvxSplitTableDlg, ClickHdl ));
-    maVertBox.SetClickHdl( LINK( this, SvxSplitTableDlg, ClickHdl ));
+    get(m_pCountEdit, "countnf");
+    get(m_pHorzBox, "hori");
+    get(m_pVertBox, "vert");
+    get(m_pPropCB, "prop");
+    m_pHorzBox->SetClickHdl( LINK( this, SvxSplitTableDlg, ClickHdl ));
+    m_pPropCB->SetClickHdl( LINK( this, SvxSplitTableDlg, ClickHdl ));
+    m_pVertBox->SetClickHdl( LINK( this, SvxSplitTableDlg, ClickHdl ));
 
     if( mnMaxVertical < 2 )
-        maVertBox.Enable(sal_False);
+        m_pVertBox->Enable(sal_False);
 
     //exchange the meaning of horizontal and vertical for vertical text
     if(bIsTableVertical)
     {
-        Image aTmpImg(maHorzBox.GetModeRadioImage());
-        String sTmp(maHorzBox.GetText());
-        maHorzBox.SetText(maVertBox.GetText());
-        maHorzBox.SetModeRadioImage(maVertBox.GetModeRadioImage());
-        maVertBox.SetText(sTmp);
-        maVertBox.SetModeRadioImage(aTmpImg);
+        Image aTmpImg(m_pHorzBox->GetModeRadioImage());
+        String sTmp(m_pHorzBox->GetText());
+        m_pHorzBox->SetText(m_pVertBox->GetText());
+        m_pHorzBox->SetModeRadioImage(m_pVertBox->GetModeRadioImage());
+        m_pVertBox->SetText(sTmp);
+        m_pVertBox->SetModeRadioImage(aTmpImg);
     }
 }
 
@@ -66,26 +59,26 @@ SvxSplitTableDlg::~SvxSplitTableDlg()
 
 IMPL_LINK( SvxSplitTableDlg, ClickHdl, Button *, pButton )
 {
-    const bool bIsVert =  pButton == &maVertBox ;
+    const bool bIsVert =  pButton == m_pVertBox ;
     long nMax = bIsVert ? mnMaxVertical : mnMaxHorizontal;
-    maPropCB.Enable(!bIsVert);
-    maCountEdit.SetMax( nMax );
+    m_pPropCB->Enable(!bIsVert);
+    m_pCountEdit->SetMax( nMax );
     return 0;
 }
 
 bool SvxSplitTableDlg::IsHorizontal() const
 {
-    return maHorzBox.IsChecked();
+    return m_pHorzBox->IsChecked();
 }
 
 bool SvxSplitTableDlg::IsProportional() const
 {
-    return maPropCB.IsChecked() && maHorzBox.IsChecked();
+    return m_pPropCB->IsChecked() && m_pHorzBox->IsChecked();
 }
 
 long SvxSplitTableDlg::GetCount() const
 {
-    return sal::static_int_cast<long>( maCountEdit.GetValue() );
+    return sal::static_int_cast<long>( m_pCountEdit->GetValue() );
 }
 
 short SvxSplitTableDlg::Execute()
