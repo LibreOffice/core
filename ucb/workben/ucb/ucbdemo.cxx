@@ -1726,30 +1726,30 @@ MyWin::MyWin( Window *pParent, WinBits nWinStyle,
     m_pTool = new ToolBox( this, WB_3DLOOK | WB_BORDER  | WB_SCROLL );
 
     m_pTool->InsertItem ( MYWIN_ITEMID_CLEAR,
-                          OUString( "Clear" );
+                          OUString("Clear"));
     m_pTool->SetHelpText( MYWIN_ITEMID_CLEAR,
-                          OUString( "Clear the Output Window" );
+                          OUString("Clear the Output Window"));
     m_pTool->InsertSeparator();
     m_pTool->InsertItem ( MYWIN_ITEMID_CREATE,
-                          OUString( "Create" );
+                          OUString("Create") );
     m_pTool->SetHelpText( MYWIN_ITEMID_CREATE,
-                          OUString( "Create a content" );
+                          OUString("Create a content") );
     m_pTool->InsertItem ( MYWIN_ITEMID_RELEASE,
-                          OUString( "Release" ) );
+                          OUString("Release") );
     m_pTool->SetHelpText( MYWIN_ITEMID_RELEASE,
-                          OUString( "Release current content" );
+                          OUString("Release current content") );
     m_pTool->InsertSeparator();
     m_pTool->InsertItem ( MYWIN_ITEMID_COMMANDS,
-                          OUString( "Commands" );
+                          OUString("Commands") );
     m_pTool->SetHelpText( MYWIN_ITEMID_COMMANDS,
-                          OUString( "Get Commands supported by the content" ) );
+                          OUString("Get Commands supported by the content") );
     m_pTool->InsertItem ( MYWIN_ITEMID_PROPS,
-                          OUString( "Properties" ) ) );
+                          OUString("Properties") );
     m_pTool->SetHelpText( MYWIN_ITEMID_PROPS,
-                          OUString( "Get Properties supported by the content" ) );
+                          OUString("Get Properties supported by the content") );
     m_pTool->InsertSeparator();
     m_pTool->InsertItem ( MYWIN_ITEMID_ADD_PROP,
-                          OUString( "addProperty" );
+                          OUString("addProperty") );
     m_pTool->SetHelpText( MYWIN_ITEMID_ADD_PROP,
                           OUString(
                                   "Add a new string(!) property to the content. "
@@ -1757,21 +1757,21 @@ MyWin::MyWin( Window *pParent, WinBits nWinStyle,
                                   "push this button. The default value for the "
                                   "property will be set to the string 'DefaultValue'" ) );
     m_pTool->InsertItem ( MYWIN_ITEMID_REMOVE_PROP,
-                          OUString( "removeProperty" ) );
+                          OUString("removeProperty") );
     m_pTool->SetHelpText( MYWIN_ITEMID_REMOVE_PROP,
                           OUString(
                                   "Removes a property from the content. "
                                   "Type the property name in the entry field and "
                                   "push this button." ) );
     m_pTool->InsertItem ( MYWIN_ITEMID_GET_PROP,
-                          OUString( "getPropertyValue" ) );
+                          OUString("getPropertyValue") );
     m_pTool->SetHelpText( MYWIN_ITEMID_GET_PROP,
                           OUString(
                                   "Get a string(!) property value from the content. "
                                   "Type the property name in the entry field and "
                                   "push this button to obtain the value" ) );
     m_pTool->InsertItem ( MYWIN_ITEMID_SET_PROP,
-                          OUString( "setPropertyValue" ) );
+                          OUString("setPropertyValue") );
     m_pTool->SetHelpText( MYWIN_ITEMID_SET_PROP,
                           OUString(
                                   "Set a string(!) property value of the content."
@@ -1780,78 +1780,78 @@ MyWin::MyWin( Window *pParent, WinBits nWinStyle,
                                   "'NewValue'" ) );
     m_pTool->InsertSeparator();
     m_pTool->InsertItem ( MYWIN_ITEMID_OPEN,
-                          OUString( "Open" ) );
+                          OUString("Open") );
     m_pTool->SetHelpText( MYWIN_ITEMID_OPEN,
-                          OUString( "Open the content" ) );
+                          OUString("Open the content") );
     m_pTool->InsertItem ( MYWIN_ITEMID_OPEN_ALL,
-                          OUString( "Open All" ) );
+                          OUString("Open All") );
     m_pTool->SetHelpText( MYWIN_ITEMID_OPEN_ALL,
                           OUString(
                                 "Open the content and all of its"
                                     " children" ) );
     m_pTool->InsertItem ( MYWIN_ITEMID_UPDATE,
-                          OUString( "Update" ) );
+                          OUString("Update") );
     m_pTool->SetHelpText( MYWIN_ITEMID_UPDATE,
-                          OUString( "Update the content" ) );
+                          OUString("Update the content") );
     m_pTool->InsertItem ( MYWIN_ITEMID_SYNCHRONIZE,
-                          OUString( "Synchronize" ) );
+                          OUString("Synchronize") );
     m_pTool->SetHelpText( MYWIN_ITEMID_SYNCHRONIZE,
-                          OUString( "Synchronize the content" ) );
+                          OUString("Synchronize the content") );
     m_pTool->InsertItem ( MYWIN_ITEMID_SEARCH,
-                          OUString( "Search" ) );
+                          OUString("Search") );
     m_pTool->SetHelpText( MYWIN_ITEMID_SEARCH,
-                          OUString( "Search the content" ) );
+                          OUString("Search the content") );
 
     m_pTool->InsertItem ( MYWIN_ITEMID_REORGANIZE,
-                          OUString( "Reorganize" ) );
+                          OUString("Reorganize") );
     m_pTool->SetHelpText( MYWIN_ITEMID_REORGANIZE,
-                          OUString( "Reorganize the content storage" ) );
+                          OUString("Reorganize the content storage") );
 
     m_pTool->InsertSeparator();
     m_pTool->InsertItem ( MYWIN_ITEMID_COPY,
-                          OUString( "Copy" ) );
+                          OUString("Copy") );
     m_pTool->SetHelpText( MYWIN_ITEMID_COPY,
                           OUString(
                                 "Copy a content. Type the URL of the source "
                                 "content into the entry field." ) );
     m_pTool->InsertItem ( MYWIN_ITEMID_MOVE,
-                          OUString( "Move" ) );
+                          OUString("Move") );
     m_pTool->SetHelpText( MYWIN_ITEMID_MOVE,
                           OUString(
                                 "Move a content. Type the URL of the source "
                                 "content into the entry field." ) );
     m_pTool->InsertItem ( MYWIN_ITEMID_DELETE,
-                          OUString( "Delete" ) );
+                          OUString("Delete") );
     m_pTool->SetHelpText( MYWIN_ITEMID_DELETE,
-                          OUString( "Delete the content." ) );
+                          OUString("Delete the content.") );
 
     m_pTool->InsertSeparator();
     m_pTool->InsertItem ( MYWIN_ITEMID_TIMING,
-                          OUString( "Timing" ) ),
+                          OUString("Timing"),
                           TIB_CHECKABLE | TIB_AUTOCHECK );
     m_pTool->SetHelpText( MYWIN_ITEMID_TIMING,
                           OUString(
                                 "Display execution times instead of"
                                     " output" ) );
     m_pTool->InsertItem ( MYWIN_ITEMID_SORT,
-                          OUString( "Sort" ) ),
+                          OUString("Sort"),
                           TIB_CHECKABLE | TIB_AUTOCHECK );
     m_pTool->SetHelpText( MYWIN_ITEMID_SORT,
-                          OUString( "Sort result sets" ) );
+                          OUString("Sort result sets") );
     m_pTool->InsertItem ( MYWIN_ITEMID_FETCHSIZE,
-                          OUString( "Fetch Size" ) );
+                          OUString("Fetch Size") );
     m_pTool->SetHelpText( MYWIN_ITEMID_FETCHSIZE,
-                          OUString( "Set cached cursor fetch size to positive value" ) );
+                          OUString("Set cached cursor fetch size to positive value") );
 
     m_pTool->InsertSeparator();
     m_pTool->InsertItem ( MYWIN_ITEMID_SYS2URI,
-                          OUString( "UNC>URI" ) );
+                          OUString("UNC>URI") );
     m_pTool->SetHelpText( MYWIN_ITEMID_SYS2URI,
                           OUString(
                                 "Translate 'System File Path' to URI,"
                                     " if possible" ) );
     m_pTool->InsertItem ( MYWIN_ITEMID_URI2SYS,
-                          OUString( "URI>UNC" ) );
+                          OUString("URI>UNC") );
     m_pTool->SetHelpText( MYWIN_ITEMID_URI2SYS,
                           OUString(
                                 "Translate URI to 'System File Path',"
@@ -1859,13 +1859,13 @@ MyWin::MyWin( Window *pParent, WinBits nWinStyle,
 
     m_pTool->InsertSeparator();
     m_pTool->InsertItem ( MYWIN_ITEMID_OFFLINE,
-                          OUString( "Offline" ) );
+                          OUString("Offline") );
     m_pTool->SetHelpText( MYWIN_ITEMID_OFFLINE,
-                          OUString( "Go offline" ) );
+                          OUString("Go offline") );
     m_pTool->InsertItem ( MYWIN_ITEMID_ONLINE,
-                          OUString( "Online" ) );
+                          OUString("Online") );
     m_pTool->SetHelpText( MYWIN_ITEMID_ONLINE,
-                          OUString( "Go back online" ) );
+                          OUString("Go back online") );
 
     m_pTool->SetSelectHdl( LINK( this, MyWin, ToolBarHandler ) );
     m_pTool->Show();
