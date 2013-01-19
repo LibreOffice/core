@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAATn///54\u003d",
+        "filename": "xmloff/source/meta/xmlmetai.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2013-01-19T06:04:52Z",
+      "side": 1,
+      "message": "Is this style of putting || (or \u0026\u0026) at the start of lines really the norm in these parts of the code? I am not saying it is ugly, just that consistency is nice.",
+      "revId": "3c10e12bd1040706576532b2f41c748df85304be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
