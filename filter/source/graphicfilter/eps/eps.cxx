@@ -298,26 +298,21 @@ sal_Bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Fi
 
         if( pResMgr )
         {
-            String aPreviewStr( "Preview" );
-            String aVersionStr( "Version" );
-            String aColorStr( "ColorFormat" );
-            String aComprStr( "CompressionMode" );
 #ifdef UNX // don't put binary tiff preview ahead of postscript code by default on unix as ghostscript is unable to read it
-            mnPreview = pFilterConfigItem->ReadInt32( aPreviewStr, 0 );
+            mnPreview = pFilterConfigItem->ReadInt32( "Preview", 0 );
 #else
-            mnPreview = pFilterConfigItem->ReadInt32( aPreviewStr, 1 );
+            mnPreview = pFilterConfigItem->ReadInt32( "Preview", 1 );
 #endif
-            mnLevel = pFilterConfigItem->ReadInt32( aVersionStr, 2 );
+            mnLevel = pFilterConfigItem->ReadInt32( "Version", 2 );
             if ( mnLevel != 1 )
                 mnLevel = 2;
-            mbGrayScale = pFilterConfigItem->ReadInt32( aColorStr, 1 ) == 2;
+            mbGrayScale = pFilterConfigItem->ReadInt32( "ColorFormat", 1 ) == 2;
 #ifdef UNX // don't compress by default on unix as ghostscript is unable to read LZW compressed eps
-            mbCompression = pFilterConfigItem->ReadInt32( aComprStr, 0 ) != 0;
+            mbCompression = pFilterConfigItem->ReadInt32( "CompressionMode", 0 ) != 0;
 #else
-            mbCompression = pFilterConfigItem->ReadInt32( aComprStr, 1 ) == 1;
+            mbCompression = pFilterConfigItem->ReadInt32( "CompressionMode", 1 ) == 1;
 #endif
-            String sTextMode( "TextMode" );
-            mnTextMode = pFilterConfigItem->ReadInt32( sTextMode, 0 );
+            mnTextMode = pFilterConfigItem->ReadInt32( "TextMode", 0 );
             if ( mnTextMode > 2 )
                 mnTextMode = 0;
             delete pResMgr;
