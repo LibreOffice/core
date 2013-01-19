@@ -22,7 +22,7 @@
 
 #include "basegfx/polygon/b2dpolygon.hxx"
 
-#include "aqua/salbmp.h"
+#include "quartz/salbmp.h"
 #include "aqua/salgdi.h"
 
 #include "fontsubset.hxx"
@@ -510,8 +510,8 @@ bool AquaSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
         return false;
     }
 
-    const AquaSalBitmap& rSrcSalBmp = static_cast<const AquaSalBitmap&>(rSrcBitmap);
-    const AquaSalBitmap& rMaskSalBmp = static_cast<const AquaSalBitmap&>(rAlphaBmp);
+    const QuartzSalBitmap& rSrcSalBmp = static_cast<const QuartzSalBitmap&>(rSrcBitmap);
+    const QuartzSalBitmap& rMaskSalBmp = static_cast<const QuartzSalBitmap&>(rAlphaBmp);
     CGImageRef xMaskedImage = rSrcSalBmp.CreateWithMask( rMaskSalBmp, rTR.mnSrcX,
                                                          rTR.mnSrcY, rTR.mnSrcWidth,
                                                          rTR.mnSrcHeight );
@@ -564,7 +564,7 @@ void AquaSalGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rS
     {
         return;
     }
-    const AquaSalBitmap& rBitmap = static_cast<const AquaSalBitmap&>(rSalBitmap);
+    const QuartzSalBitmap& rBitmap = static_cast<const QuartzSalBitmap&>(rSalBitmap);
     CGImageRef xImage = rBitmap.CreateCroppedImage( (int)pPosAry->mnSrcX, (int)pPosAry->mnSrcY,
                                                     (int)pPosAry->mnSrcWidth, (int)pPosAry->mnSrcHeight );
     if( !xImage )
@@ -591,8 +591,8 @@ void AquaSalGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rS
     {
         return;
     }
-    const AquaSalBitmap& rBitmap = static_cast<const AquaSalBitmap&>(rSalBitmap);
-    const AquaSalBitmap& rMask = static_cast<const AquaSalBitmap&>(rTransparentBitmap);
+    const QuartzSalBitmap& rBitmap = static_cast<const QuartzSalBitmap&>(rSalBitmap);
+    const QuartzSalBitmap& rMask = static_cast<const QuartzSalBitmap&>(rTransparentBitmap);
     CGImageRef xMaskedImage( rBitmap.CreateWithMask( rMask, pPosAry->mnSrcX, pPosAry->mnSrcY,
                                                      pPosAry->mnSrcWidth, pPosAry->mnSrcHeight ) );
     if( !xMaskedImage )
@@ -680,7 +680,7 @@ void AquaSalGraphics::drawMask( const SalTwoRect* pPosAry,
     {
         return;
     }
-    const AquaSalBitmap& rBitmap = static_cast<const AquaSalBitmap&>(rSalBitmap);
+    const QuartzSalBitmap& rBitmap = static_cast<const QuartzSalBitmap&>(rSalBitmap);
     CGImageRef xImage = rBitmap.CreateColorMask( pPosAry->mnSrcX, pPosAry->mnSrcY,
                                                  pPosAry->mnSrcWidth, pPosAry->mnSrcHeight,
                                                  nMaskColor );
@@ -1083,7 +1083,7 @@ SalBitmap* AquaSalGraphics::getBitmap( long  nX, long  nY, long  nDX, long  nDY 
 
     ApplyXorContext();
 
-    AquaSalBitmap* pBitmap = new AquaSalBitmap;
+    QuartzSalBitmap* pBitmap = new QuartzSalBitmap;
     if( !pBitmap->Create( mxLayer, mnBitmapDepth, nX, nY, nDX, nDY, !mbWindow ) )
     {
         delete pBitmap;

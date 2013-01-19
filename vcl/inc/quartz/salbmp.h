@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SALBMP_H
-#define _SV_SALBMP_H
+#ifndef _VCL_QUARTZ_SALBMP_H
+#define _VCL_QUARTZ_SALBMP_H
 
 #include "tools/gen.hxx"
 
@@ -26,27 +26,24 @@
 
 #include "vcl/salbtype.hxx"
 
-#include "aqua/salconst.h"
+#ifdef MACOSX
 #include "aqua/salgdi.h"
+#else
+#include "coretext/salgdi.h"
+#endif
 
-#include "saldata.hxx"
 #include "salinst.hxx"
 #include "salvd.hxx"
 #include "salbmp.hxx"
-
-#include "salcolorutils.hxx"
-
 
 // --------------
 // - SalBitmap  -
 // --------------
 
 struct  BitmapBuffer;
-class   BitmapColor;
 class   BitmapPalette;
-class   AquaSalVirtualDevice;
 
-class AquaSalBitmap : public SalBitmap
+class QuartzSalBitmap : public SalBitmap
 {
 public:
     CGContextRef                    mxGraphicContext;
@@ -60,8 +57,8 @@ public:
     sal_uInt32                      mnBytesPerRow;
 
 public:
-    AquaSalBitmap();
-    virtual ~AquaSalBitmap();
+    QuartzSalBitmap();
+    virtual ~QuartzSalBitmap();
 
 public:
 
@@ -98,11 +95,11 @@ public:
     bool            Create( CGLayerRef xLayer, int nBitCount, int nX, int nY, int nWidth, int nHeight, bool bMirrorVert = true );
 
 public:
-    CGImageRef      CreateWithMask( const AquaSalBitmap& rMask, int nX, int nY, int nWidth, int nHeight ) const;
+    CGImageRef      CreateWithMask( const QuartzSalBitmap& rMask, int nX, int nY, int nWidth, int nHeight ) const;
     CGImageRef      CreateColorMask( int nX, int nY, int nWidth, int nHeight, SalColor nMaskColor ) const;
     CGImageRef      CreateCroppedImage( int nX, int nY, int nWidth, int nHeight ) const;
 };
 
-#endif // _SV_SALBMP_HXX
+#endif // _VCL_QUARTZ_SALBMP_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

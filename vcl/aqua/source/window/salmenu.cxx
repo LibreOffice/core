@@ -31,7 +31,6 @@
 #include "aqua/salmenu.h"
 #include "aqua/salnsmenu.h"
 #include "aqua/salframe.h"
-#include "aqua/salbmp.h"
 #include "aqua/aqua11ywrapper.h"
 
 #include "svids.hrc"

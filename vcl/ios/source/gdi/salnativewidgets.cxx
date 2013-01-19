@@ -22,7 +22,6 @@
 #include "vcl/svapp.hxx"
 #include "vcl/timer.hxx"
 
-#include "ios/salconst.h"
 #include "coretext/salgdi.h"
 #include "ios/saldata.hxx"
 #include "ios/salframe.h"

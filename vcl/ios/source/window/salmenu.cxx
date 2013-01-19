@@ -28,7 +28,6 @@
 #include "ios/salinst.h"
 #include "ios/salmenu.h"
 #include "ios/salframe.h"
-#include "ios/salbmp.h"
 
 #include "svids.hrc"
 #include "window.h"

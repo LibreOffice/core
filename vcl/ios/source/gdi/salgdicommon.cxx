@@ -22,7 +22,7 @@
 
 #include "basegfx/polygon/b2dpolygon.hxx"
 
-#include "ios/salbmp.h"
+#include "quartz/salbmp.h"
 #include "coretext/salgdi.h"
 
 #include "fontsubset.hxx"
@@ -501,8 +501,8 @@ bool QuartzSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
         return false;
     }
 
-    const IosSalBitmap& rSrcSalBmp = static_cast<const IosSalBitmap&>(rSrcBitmap);
-    const IosSalBitmap& rMaskSalBmp = static_cast<const IosSalBitmap&>(rAlphaBmp);
+    const QuartzSalBitmap& rSrcSalBmp = static_cast<const QuartzSalBitmap&>(rSrcBitmap);
+    const QuartzSalBitmap& rMaskSalBmp = static_cast<const QuartzSalBitmap&>(rAlphaBmp);
     CGImageRef xMaskedImage = rSrcSalBmp.CreateWithMask( rMaskSalBmp, rTR.mnSrcX,
                                                          rTR.mnSrcY, rTR.mnSrcWidth,
                                                          rTR.mnSrcHeight );
@@ -555,7 +555,7 @@ void QuartzSalGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& 
     {
         return;
     }
-    const IosSalBitmap& rBitmap = static_cast<const IosSalBitmap&>(rSalBitmap);
+    const QuartzSalBitmap& rBitmap = static_cast<const QuartzSalBitmap&>(rSalBitmap);
     CGImageRef xImage = rBitmap.CreateCroppedImage( (int)pPosAry->mnSrcX, (int)pPosAry->mnSrcY,
                                                     (int)pPosAry->mnSrcWidth, (int)pPosAry->mnSrcHeight );
     if( !xImage )
@@ -582,8 +582,8 @@ void QuartzSalGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& 
     {
         return;
     }
-    const IosSalBitmap& rBitmap = static_cast<const IosSalBitmap&>(rSalBitmap);
-    const IosSalBitmap& rMask = static_cast<const IosSalBitmap&>(rTransparentBitmap);
+    const QuartzSalBitmap& rBitmap = static_cast<const QuartzSalBitmap&>(rSalBitmap);
+    const QuartzSalBitmap& rMask = static_cast<const QuartzSalBitmap&>(rTransparentBitmap);
     CGImageRef xMaskedImage( rBitmap.CreateWithMask( rMask, pPosAry->mnSrcX, pPosAry->mnSrcY,
                                                      pPosAry->mnSrcWidth, pPosAry->mnSrcHeight ) );
     if( !xMaskedImage )
@@ -632,7 +632,7 @@ void QuartzSalGraphics::drawMask( const SalTwoRect* pPosAry,
     {
         return;
     }
-    const IosSalBitmap& rBitmap = static_cast<const IosSalBitmap&>(rSalBitmap);
+    const QuartzSalBitmap& rBitmap = static_cast<const QuartzSalBitmap&>(rSalBitmap);
     CGImageRef xImage = rBitmap.CreateColorMask( pPosAry->mnSrcX, pPosAry->mnSrcY,
                                                  pPosAry->mnSrcWidth, pPosAry->mnSrcHeight,
                                                  nMaskColor );
@@ -1036,7 +1036,7 @@ SalBitmap* QuartzSalGraphics::getBitmap( long  nX, long  nY, long  nDX, long  nD
 
     ApplyXorContext();
 
-    IosSalBitmap* pBitmap = new IosSalBitmap;
+    QuartzSalBitmap* pBitmap = new QuartzSalBitmap;
     if( !pBitmap->Create( mxLayer, mnBitmapDepth, nX, nY, nDX, nDY, !mbWindow ) )
     {
         delete pBitmap;

@@ -28,10 +28,18 @@
 #include "vcl/bitmap.hxx" // for BitmapSystemData
 #include "vcl/salbtype.hxx"
 
-#include "ios/salbmp.h"
-#include "ios/salinst.h"
+#include "quartz/salbmp.h"
+//#include "aqua/salinst.h"
 
 #include "bmpfast.hxx"
+
+static const unsigned long k16BitRedColorMask   = 0x00007c00;
+static const unsigned long k16BitGreenColorMask = 0x000003e0;
+static const unsigned long k16BitBlueColorMask  = 0x0000001f;
+
+static const unsigned long k32BitRedColorMask   = 0x00ff0000;
+static const unsigned long k32BitGreenColorMask = 0x0000ff00;
+static const unsigned long k32BitBlueColorMask  = 0x000000ff;
 
 // =======================================================================
 
@@ -42,7 +50,7 @@ static bool isValidBitCount( sal_uInt16 nBitCount )
 
 // =======================================================================
 
-IosSalBitmap::IosSalBitmap()
+QuartzSalBitmap::QuartzSalBitmap()
 : mxGraphicContext( NULL )
 , mxCachedImage( NULL )
 , mnBits(0)
@@ -54,17 +62,17 @@ IosSalBitmap::IosSalBitmap()
 
 // ------------------------------------------------------------------
 
-IosSalBitmap::~IosSalBitmap()
+QuartzSalBitmap::~QuartzSalBitmap()
 {
     Destroy();
 }
 
 // ------------------------------------------------------------------
 
-bool IosSalBitmap::Create( CGLayerRef xLayer, int nBitmapBits,
+bool QuartzSalBitmap::Create( CGLayerRef xLayer, int nBitmapBits,
     int nX, int nY, int nWidth, int nHeight, bool /*bMirrorVert*/ )
 {
-    DBG_ASSERT( xLayer, "IosSalBitmap::Create() from non-layered context" );
+    DBG_ASSERT( xLayer, "QuartzSalBitmap::Create() from non-layered context" );
 
     // sanitize input parameters
     if( nX < 0 )
@@ -95,7 +103,7 @@ bool IosSalBitmap::Create( CGLayerRef xLayer, int nBitmapBits,
 
 // ------------------------------------------------------------------
 
-bool IosSalBitmap::Create( const Size& rSize, sal_uInt16 nBits, const BitmapPalette& rBitmapPalette )
+bool QuartzSalBitmap::Create( const Size& rSize, sal_uInt16 nBits, const BitmapPalette& rBitmapPalette )
 {
     if( !isValidBitCount( nBits ) )
         return false;
@@ -108,23 +116,23 @@ bool IosSalBitmap::Create( const Size& rSize, sal_uInt16 nBits, const BitmapPale
 
 // ------------------------------------------------------------------
 
-bool IosSalBitmap::Create( const SalBitmap& rSalBmp )
+bool QuartzSalBitmap::Create( const SalBitmap& rSalBmp )
 {
     return Create( rSalBmp, rSalBmp.GetBitCount() );
 }
 
 // ------------------------------------------------------------------
 
-bool IosSalBitmap::Create( const SalBitmap& rSalBmp, SalGraphics* pGraphics )
+bool QuartzSalBitmap::Create( const SalBitmap& rSalBmp, SalGraphics* pGraphics )
 {
     return Create( rSalBmp, pGraphics ? pGraphics->GetBitCount() : rSalBmp.GetBitCount() );
 }
 
 // ------------------------------------------------------------------
 
-bool IosSalBitmap::Create( const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount )
+bool QuartzSalBitmap::Create( const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount )
 {
-    const IosSalBitmap& rSourceBitmap = static_cast<const IosSalBitmap&>(rSalBmp);
+    const QuartzSalBitmap& rSourceBitmap = static_cast<const QuartzSalBitmap&>(rSalBmp);
 
     if( isValidBitCount( nNewBitCount ) &&  rSourceBitmap.maUserBuffer.get() )
     {
@@ -144,14 +152,14 @@ bool IosSalBitmap::Create( const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount )
 
 // ------------------------------------------------------------------
 
-bool IosSalBitmap::Create( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > /*xBitmapCanvas*/, Size& /*rSize*/, bool /*bMask*/ )
+bool QuartzSalBitmap::Create( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > /*xBitmapCanvas*/, Size& /*rSize*/, bool /*bMask*/ )
 {
     return false;
 }
 
 // ------------------------------------------------------------------
 
-void IosSalBitmap::Destroy()
+void QuartzSalBitmap::Destroy()
 {
     DestroyContext();
     maUserBuffer.reset();
@@ -159,7 +167,7 @@ void IosSalBitmap::Destroy()
 
 // ------------------------------------------------------------------
 
-void IosSalBitmap::DestroyContext()
+void QuartzSalBitmap::DestroyContext()
 {
     CGImageRelease( mxCachedImage );
     mxCachedImage = NULL;
@@ -174,7 +182,7 @@ void IosSalBitmap::DestroyContext()
 
 // ------------------------------------------------------------------
 
-bool IosSalBitmap::CreateContext()
+bool QuartzSalBitmap::CreateContext()
 {
     DestroyContext();
 
@@ -238,7 +246,7 @@ bool IosSalBitmap::CreateContext()
 
 // ------------------------------------------------------------------
 
-bool IosSalBitmap::AllocateUserData()
+bool QuartzSalBitmap::AllocateUserData()
 {
     Destroy();
 
@@ -255,7 +263,7 @@ bool IosSalBitmap::AllocateUserData()
         case 24:    mnBytesPerRow = (mnWidth << 1) + mnWidth; break;
         case 32:    mnBytesPerRow = mnWidth << 2; break;
         default:
-            OSL_FAIL("vcl::IosSalBitmap::AllocateUserData(), illegal bitcount!");
+            OSL_FAIL("vcl::QuartzSalBitmap::AllocateUserData(), illegal bitcount!");
         }
     }
 
@@ -266,7 +274,7 @@ bool IosSalBitmap::AllocateUserData()
     }
     catch( const std::bad_alloc& )
     {
-        OSL_FAIL( "vcl::IosSalBitmap::AllocateUserData: bad alloc" );
+        OSL_FAIL( "vcl::QuartzSalBitmap::AllocateUserData: bad alloc" );
         maUserBuffer.reset( NULL );
         mnBytesPerRow = 0;
     }
@@ -281,13 +289,13 @@ class ImplPixelFormat
 protected:
     sal_uInt8* pData;
 public:
-    virtual ~ImplPixelFormat() { }
     static ImplPixelFormat* GetFormat( sal_uInt16 nBits, const BitmapPalette& rPalette );
 
     virtual void StartLine( sal_uInt8* pLine ) { pData = pLine; }
     virtual void SkipPixel( sal_uInt32 nPixel ) = 0;
     virtual ColorData ReadPixel() = 0;
     virtual void WritePixel( ColorData nColor ) = 0;
+    virtual ~ImplPixelFormat() { }
 };
 
 class ImplPixelFormat32 : public ImplPixelFormat
@@ -482,7 +490,7 @@ ImplPixelFormat* ImplPixelFormat::GetFormat( sal_uInt16 nBits, const BitmapPalet
     return 0;
 }
 
-void IosSalBitmap::ConvertBitmapData( sal_uInt32 nWidth, sal_uInt32 nHeight,
+void QuartzSalBitmap::ConvertBitmapData( sal_uInt32 nWidth, sal_uInt32 nHeight,
                                        sal_uInt16 nDestBits, sal_uInt32 nDestBytesPerRow, const BitmapPalette& rDestPalette, sal_uInt8* pDestData,
                                        sal_uInt16 nSrcBits, sal_uInt32 nSrcBytesPerRow, const BitmapPalette& rSrcPalette, sal_uInt8* pSrcData )
 
@@ -552,14 +560,14 @@ void IosSalBitmap::ConvertBitmapData( sal_uInt32 nWidth, sal_uInt32 nHeight,
 
 // ------------------------------------------------------------------
 
-Size IosSalBitmap::GetSize() const
+Size QuartzSalBitmap::GetSize() const
 {
     return Size( mnWidth, mnHeight );
 }
 
 // ------------------------------------------------------------------
 
-sal_uInt16 IosSalBitmap::GetBitCount() const
+sal_uInt16 QuartzSalBitmap::GetBitCount() const
 {
     return mnBits;
 }
@@ -654,7 +662,7 @@ const BitmapPalette& GetDefaultPalette( int mnBits, bool bMonochrome )
     return aEmptyPalette;
 }
 
-BitmapBuffer* IosSalBitmap::AcquireBuffer( bool /*bReadOnly*/ )
+BitmapBuffer* QuartzSalBitmap::AcquireBuffer( bool /*bReadOnly*/ )
 {
     if( !maUserBuffer.get() )
 //  || maContextBuffer.get() && (maUserBuffer.get() != maContextBuffer.get()) )
@@ -695,7 +703,7 @@ BitmapBuffer* IosSalBitmap::AcquireBuffer( bool /*bReadOnly*/ )
 
 // ------------------------------------------------------------------
 
-void IosSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly )
+void QuartzSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly )
 {
     // invalidate graphic context if we have different data
     if( !bReadOnly )
@@ -710,12 +718,12 @@ void IosSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly )
 
 // ------------------------------------------------------------------
 
-CGImageRef IosSalBitmap::CreateCroppedImage( int nX, int nY, int nNewWidth, int nNewHeight ) const
+CGImageRef QuartzSalBitmap::CreateCroppedImage( int nX, int nY, int nNewWidth, int nNewHeight ) const
 {
     if( !mxCachedImage )
     {
         if( !mxGraphicContext )
-            if( !const_cast<IosSalBitmap*>(this)->CreateContext() )
+            if( !const_cast<QuartzSalBitmap*>(this)->CreateContext() )
                 return NULL;
 
         mxCachedImage = CGBitmapContextCreateImage( mxGraphicContext );
@@ -731,7 +739,7 @@ CGImageRef IosSalBitmap::CreateCroppedImage( int nX, int nY, int nNewWidth, int 
     else
     {
         nY = mnHeight - (nY + nNewHeight); // adjust for y-mirrored context
-        const CGRect aCropRect = { { static_cast<CGFloat>(nX), static_cast<CGFloat>(nY)}, { static_cast<CGFloat>(nNewWidth), static_cast<CGFloat>(nNewHeight) } };
+        const CGRect aCropRect = { { static_cast<CGFloat>(nX), static_cast<CGFloat>(nY) }, { static_cast<CGFloat>(nNewWidth), static_cast<CGFloat>(nNewHeight) } };
         xCroppedImage = CGImageCreateWithImageInRect( mxCachedImage, aCropRect );
     }
 
@@ -745,7 +753,7 @@ static void CFRTLFree(void* /*info*/, const void* data, size_t /*size*/)
     rtl_freeMemory( const_cast<void*>(data) );
 }
 
-CGImageRef IosSalBitmap::CreateWithMask( const IosSalBitmap& rMask,
+CGImageRef QuartzSalBitmap::CreateWithMask( const QuartzSalBitmap& rMask,
     int nX, int nY, int nWidth, int nHeight ) const
 {
     CGImageRef xImage( CreateCroppedImage( nX, nY, nWidth, nHeight ) );
@@ -772,7 +780,7 @@ CGImageRef IosSalBitmap::CreateWithMask( const IosSalBitmap& rMask,
         CFRelease( xMask );
         CGDataProviderRef xDataProvider( CGDataProviderCreateWithData( NULL,
         pMaskMem, nHeight * nMaskBytesPerRow, &CFRTLFree ) );
-        static const float* pDecode = NULL;
+        static const CGFloat* pDecode = NULL;
         xMask = CGImageMaskCreate( nWidth, nHeight, 8, 8, nMaskBytesPerRow, xDataProvider, pDecode, false );
         CFRelease( xDataProvider );
         CFRelease( xMaskContext );
@@ -791,7 +799,7 @@ CGImageRef IosSalBitmap::CreateWithMask( const IosSalBitmap& rMask,
 // ------------------------------------------------------------------
 
 /** creates an image from the given rectangle, replacing all black pixels with nMaskColor and make all other full transparent */
-CGImageRef IosSalBitmap::CreateColorMask( int nX, int nY, int nWidth, int nHeight, SalColor nMaskColor ) const
+CGImageRef QuartzSalBitmap::CreateColorMask( int nX, int nY, int nWidth, int nHeight, SalColor nMaskColor ) const
 {
     CGImageRef xMask = 0;
     if( maUserBuffer.get() && (nX + nWidth <= mnWidth) && (nY + nHeight <= mnHeight) )
@@ -843,12 +851,12 @@ CGImageRef IosSalBitmap::CreateColorMask( int nX, int nY, int nWidth, int nHeigh
 
 // =======================================================================
 
-/** IosSalBitmap::GetSystemData Get platform native image data from existing image
+/** QuartzSalBitmap::GetSystemData Get platform native image data from existing image
  *
  *  @param rData struct BitmapSystemData, defined in vcl/inc/bitmap.hxx
  *  @return true if successful
 **/
-bool IosSalBitmap::GetSystemData( BitmapSystemData& rData )
+bool QuartzSalBitmap::GetSystemData( BitmapSystemData& rData )
 {
     bool bRet = false;
 
@@ -864,7 +872,7 @@ bool IosSalBitmap::GetSystemData( BitmapSystemData& rData )
             /**
              * We need to hack things because VCL does not use kCGBitmapByteOrder32Host, while Cairo requires it.
              */
-            OSL_TRACE("IosSalBitmap::%s(): kCGBitmapByteOrder32Host not found => inserting it.",__func__);
+            OSL_TRACE("QuartzSalBitmap::%s(): kCGBitmapByteOrder32Host not found => inserting it.",__func__);
 
             CGImageRef xImage = CGBitmapContextCreateImage (mxGraphicContext);
 

@@ -39,7 +39,7 @@
 #include "ios/salobj.h"
 #include "ios/salsys.h"
 #include "ios/salvd.h"
-#include "ios/salbmp.h"
+#include "quartz/salbmp.h"
 #include "ios/salprn.h"
 #include "ios/saltimer.h"
 #include "ios/vcluiapp.h"
@@ -670,7 +670,7 @@ SalSystem* IosSalInstance::CreateSalSystem()
 
 SalBitmap* IosSalInstance::CreateSalBitmap()
 {
-    return new IosSalBitmap();
+    return new QuartzSalBitmap();
 }
 
 // -----------------------------------------------------------------------
@@ -772,7 +772,7 @@ CGImageRef CreateCGImage( const Image& rImage )
         return NULL;
 
     // simple case, no transparency
-    IosSalBitmap* pSalBmp = static_cast<IosSalBitmap*>(aBmp.ImplGetImpBitmap()->ImplGetSalBitmap());
+    QuartzSalBitmap* pSalBmp = static_cast<QuartzSalBitmap*>(aBmp.ImplGetImpBitmap()->ImplGetSalBitmap());
 
     if( ! pSalBmp )
         return NULL;
@@ -784,7 +784,7 @@ CGImageRef CreateCGImage( const Image& rImage )
     {
         AlphaMask aAlphaMask( aBmpEx.GetAlpha() );
         Bitmap aMask( aAlphaMask.GetBitmap() );
-        IosSalBitmap* pMaskBmp = static_cast<IosSalBitmap*>(aMask.ImplGetImpBitmap()->ImplGetSalBitmap());
+        QuartzSalBitmap* pMaskBmp = static_cast<QuartzSalBitmap*>(aMask.ImplGetImpBitmap()->ImplGetSalBitmap());
         if( pMaskBmp )
             xImage = pSalBmp->CreateWithMask( *pMaskBmp, 0, 0, pSalBmp->mnWidth, pSalBmp->mnHeight );
         else
@@ -793,7 +793,7 @@ CGImageRef CreateCGImage( const Image& rImage )
     else if( aBmpEx.GetTransparentType() == TRANSPARENT_BITMAP )
     {
         Bitmap aMask( aBmpEx.GetMask() );
-        IosSalBitmap* pMaskBmp = static_cast<IosSalBitmap*>(aMask.ImplGetImpBitmap()->ImplGetSalBitmap());
+        QuartzSalBitmap* pMaskBmp = static_cast<QuartzSalBitmap*>(aMask.ImplGetImpBitmap()->ImplGetSalBitmap());
         if( pMaskBmp )
             xImage = pSalBmp->CreateWithMask( *pMaskBmp, 0, 0, pSalBmp->mnWidth, pSalBmp->mnHeight );
         else

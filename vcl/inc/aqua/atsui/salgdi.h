@@ -38,7 +38,6 @@
 #include "aqua/salgdicommon.hxx"
 
 class AquaSalFrame;
-class AquaSalBitmap;
 class ImplDevFontAttributes;
 
 struct CGRect;

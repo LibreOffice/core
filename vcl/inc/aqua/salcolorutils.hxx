@@ -30,7 +30,6 @@
 
 #include "vcl/salbtype.hxx"
 #include "vcl/salgtype.hxx"
-#include "salconst.h"
 #include "salmathutils.hxx"
 
 // ------------------------------------------------------------------

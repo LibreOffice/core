@@ -439,7 +439,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/aqua/source/dtrans/PictToBmpFlt \
     vcl/aqua/source/dtrans/aqua_clipboard \
     vcl/aqua/source/dtrans/service_entry \
-    vcl/aqua/source/gdi/salbmp \
+    vcl/quartz/salbmp \
     vcl/aqua/source/gdi/salcolorutils \
     vcl/aqua/source/gdi/salgdicommon \
     vcl/aqua/source/gdi/salgdiutils \
@@ -605,7 +605,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/coretext/salcoretextfontutils \
     vcl/coretext//salcoretextlayout \
     vcl/coretext//salcoretextstyle \
-    vcl/ios/source/gdi/salbmp \
+    vcl/quartz/salbmp \
     vcl/coretext/salgdi \
     vcl/ios/source/gdi/salgdicommon \
     vcl/ios/source/gdi/salnativewidgets \

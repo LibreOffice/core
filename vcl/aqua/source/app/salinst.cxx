@@ -39,7 +39,7 @@
 #include "aqua/salobj.h"
 #include "aqua/salsys.h"
 #include "aqua/salvd.h"
-#include "aqua/salbmp.h"
+#include "quartz/salbmp.h"
 #include "aqua/salprn.h"
 #include "aqua/saltimer.h"
 #include "aqua/vclnsapp.h"
@@ -1149,7 +1149,7 @@ SalSystem* AquaSalInstance::CreateSalSystem()
 
 SalBitmap* AquaSalInstance::CreateSalBitmap()
 {
-    return new AquaSalBitmap();
+    return new QuartzSalBitmap();
 }
 
 // -----------------------------------------------------------------------
@@ -1249,7 +1249,7 @@ CGImageRef CreateCGImage( const Image& rImage )
         return NULL;
 
     // simple case, no transparency
-    AquaSalBitmap* pSalBmp = static_cast<AquaSalBitmap*>(aBmp.ImplGetImpBitmap()->ImplGetSalBitmap());
+    QuartzSalBitmap* pSalBmp = static_cast<QuartzSalBitmap*>(aBmp.ImplGetImpBitmap()->ImplGetSalBitmap());
 
     if( ! pSalBmp )
         return NULL;
@@ -1261,7 +1261,7 @@ CGImageRef CreateCGImage( const Image& rImage )
     {
         AlphaMask aAlphaMask( aBmpEx.GetAlpha() );
         Bitmap aMask( aAlphaMask.GetBitmap() );
-        AquaSalBitmap* pMaskBmp = static_cast<AquaSalBitmap*>(aMask.ImplGetImpBitmap()->ImplGetSalBitmap());
+        QuartzSalBitmap* pMaskBmp = static_cast<QuartzSalBitmap*>(aMask.ImplGetImpBitmap()->ImplGetSalBitmap());
         if( pMaskBmp )
             xImage = pSalBmp->CreateWithMask( *pMaskBmp, 0, 0, pSalBmp->mnWidth, pSalBmp->mnHeight );
         else
@@ -1270,7 +1270,7 @@ CGImageRef CreateCGImage( const Image& rImage )
     else if( aBmpEx.GetTransparentType() == TRANSPARENT_BITMAP )
     {
         Bitmap aMask( aBmpEx.GetMask() );
-        AquaSalBitmap* pMaskBmp = static_cast<AquaSalBitmap*>(aMask.ImplGetImpBitmap()->ImplGetSalBitmap());
+        QuartzSalBitmap* pMaskBmp = static_cast<QuartzSalBitmap*>(aMask.ImplGetImpBitmap()->ImplGetSalBitmap());
         if( pMaskBmp )
             xImage = pSalBmp->CreateWithMask( *pMaskBmp, 0, 0, pSalBmp->mnWidth, pSalBmp->mnHeight );
         else
