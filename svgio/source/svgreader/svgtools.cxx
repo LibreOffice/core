@@ -160,17 +160,14 @@ namespace svgio
                     case Unit_em:
                     {
                         return mfNumber * rInfoProvider.getCurrentFontSize();
-                        break;
                     }
                     case Unit_ex:
                     {
                         return mfNumber * rInfoProvider.getCurrentXHeight() * 0.5;
-                        break;
                     }
                     case Unit_px:
                     {
                         return mfNumber;
-                        break;
                     }
                     case Unit_pt:
                     case Unit_pc:
@@ -235,7 +232,6 @@ namespace svgio
                         }
 
                         return fRetval;
-                        break;
                     }
                     default:
                     {
