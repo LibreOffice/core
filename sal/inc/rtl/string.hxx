@@ -205,7 +205,10 @@ public:
     {
         assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
         pData = 0;
-        rtl_string_newFromLiteral( &pData, literal, internal::ConstCharArrayDetector< T, void >::size - 1, 0 );
+        if( internal::ConstCharArrayDetector< T, void >::size - 1 == 0 ) // empty string
+            rtl_string_new( &pData );
+        else
+            rtl_string_newFromLiteral( &pData, literal, internal::ConstCharArrayDetector< T, void >::size - 1, 0 );
 #ifdef RTL_STRING_UNITTEST
         rtl_string_unittest_const_literal = true;
 #endif
@@ -304,7 +307,10 @@ public:
     {
         RTL_STRING_CONST_FUNCTION
         assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
-        rtl_string_newFromLiteral( &pData, literal, internal::ConstCharArrayDetector< T, void >::size - 1, 0 );
+        if( internal::ConstCharArrayDetector< T, void >::size - 1 == 0 ) // empty string
+            rtl_string_new( &pData );
+        else
+            rtl_string_newFromLiteral( &pData, literal, internal::ConstCharArrayDetector< T, void >::size - 1, 0 );
         return *this;
     }
 
