@@ -65,7 +65,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::ui::dialogs;
-using ::rtl::OUString;
+using rtl::OUString;
 
 
 static String impl_getSvtResString( sal_uInt32 nId )
@@ -86,7 +86,7 @@ sal_Bool InsertObjectDialog_Impl::IsCreateNew() const
     return sal_False;
 }
 
-uno::Reference< io::XInputStream > InsertObjectDialog_Impl::GetIconIfIconified( ::rtl::OUString* /*pGraphicMediaType*/ )
+uno::Reference< io::XInputStream > InsertObjectDialog_Impl::GetIconIfIconified( OUString* /*pGraphicMediaType*/ )
 {
     return uno::Reference< io::XInputStream >();
 }
@@ -116,7 +116,7 @@ IMPL_LINK_NOARG(SvInsertOleDlg, BrowseHdl)
     Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
     if( xFactory.is() )
     {
-        Reference< XFilePicker > xFilePicker( xFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ) ) ), UNO_QUERY );
+        Reference< XFilePicker > xFilePicker( xFactory->createInstance( "com.sun.star.ui.dialogs.FilePicker" ), UNO_QUERY );
         DBG_ASSERT( xFilePicker.is(), "could not get FilePicker service" );
 
         Reference< XInitialization > xInit( xFilePicker, UNO_QUERY );
@@ -132,7 +132,7 @@ IMPL_LINK_NOARG(SvInsertOleDlg, BrowseHdl)
             {
                 xFilterMgr->appendFilter(
                      OUString(),
-                     OUString( RTL_CONSTASCII_USTRINGPARAM( "*.*" ) )
+                     OUString( "*.*" )
                      );
             }
             catch( IllegalArgumentException& )
@@ -222,7 +222,7 @@ short SvInsertOleDlg::Execute()
         rBox.InsertEntry( (*m_pServers)[i].GetHumanName() );
     rBox.SetUpdateMode( sal_True );
     SelectDefault();
-    ::rtl::OUString aName;
+    OUString aName;
 
     DBG_ASSERT( m_xStorage.is(), "No storage!");
     if ( m_xStorage.is() && ( nRet = Dialog::Execute() ) == RET_OK )
@@ -243,7 +243,7 @@ short SvInsertOleDlg::Execute()
                     {
                         uno::Reference < embed::XInsertObjectDialog > xDialogCreator(
                             ::comphelper::getProcessServiceFactory()->createInstance(
-                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.MSOLEObjectSystemCreator")) ),
+                                "com.sun.star.embed.MSOLEObjectSystemCreator" ),
                             uno::UNO_QUERY );
 
                         if ( xDialogCreator.is() )
@@ -319,14 +319,14 @@ short SvInsertOleDlg::Execute()
             {
                 // create MediaDescriptor for file to create object from
                 uno::Sequence < beans::PropertyValue > aMedium( 2 );
-                aMedium[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
-                aMedium[0].Value <<= ::rtl::OUString( aFileName );
+                aMedium[0].Name = "URL";
+                aMedium[0].Value <<= OUString( aFileName );
 
                 uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
                 uno::Reference< task::XInteractionHandler2 > xInteraction(
                     task::InteractionHandler::createWithParent(xContext, 0) );
 
-               aMedium[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InteractionHandler" ) );
+               aMedium[1].Name = "InteractionHandler";
                aMedium[1].Value <<= xInteraction;
 
                 // create object from media descriptor
@@ -351,7 +351,7 @@ short SvInsertOleDlg::Execute()
     return nRet;
 }
 
-uno::Reference< io::XInputStream > SvInsertOleDlg::GetIconIfIconified( ::rtl::OUString* pGraphicMediaType )
+uno::Reference< io::XInputStream > SvInsertOleDlg::GetIconIfIconified( OUString* pGraphicMediaType )
 {
     if ( m_aIconMetaFile.getLength() )
     {
@@ -373,7 +373,7 @@ IMPL_LINK_NOARG(SvInsertPlugInDialog, BrowseHdl)
     Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
     if( xFactory.is() )
     {
-        Reference< XFilePicker > xFilePicker( xFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ) ) ), UNO_QUERY );
+        Reference< XFilePicker > xFilePicker( xFactory->createInstance( "com.sun.star.ui.dialogs.FilePicker" ), UNO_QUERY );
         DBG_ASSERT( xFilePicker.is(), "could not get FilePicker service" );
 
         Reference< XInitialization > xInit( xFilePicker, UNO_QUERY );
@@ -466,7 +466,7 @@ short SvInsertPlugInDialog::Execute()
         if ( !aURL.Len() || m_pURL->SetSmartURL( aURL ) )
         {
             // create a plugin object
-            ::rtl::OUString aName;
+            OUString aName;
             SvGlobalName aClassId( SO3_PLUGIN_CLASSID );
             m_xObj = aCnt.CreateEmbeddedObject( aClassId.GetByteSequence(), aName );
         }
@@ -480,11 +480,11 @@ short SvInsertPlugInDialog::Execute()
             uno::Reference < beans::XPropertySet > xSet( m_xObj->getComponent(), uno::UNO_QUERY );
             if ( xSet.is() )
             {
-                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginURL") ),
-                        makeAny( ::rtl::OUString( m_pURL->GetMainURL( INetURLObject::NO_DECODE ) ) ) );
+                xSet->setPropertyValue( "PluginURL",
+                        makeAny( OUString( m_pURL->GetMainURL( INetURLObject::NO_DECODE ) ) ) );
                 uno::Sequence< beans::PropertyValue > aCommandSequence;
                 Plugin_ImplFillCommandSequence( m_aCommands, aCommandSequence );
-                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginCommands") ), makeAny( aCommandSequence ) );
+                xSet->setPropertyValue( "PluginCommands", makeAny( aCommandSequence ) );
             }
         }
         else
@@ -559,51 +559,51 @@ short SfxInsertFloatingFrameDialog::Execute()
             if ( m_xObj->getCurrentState() == embed::EmbedStates::LOADED )
                 m_xObj->changeState( embed::EmbedStates::RUNNING );
             xSet = uno::Reference < beans::XPropertySet >( m_xObj->getComponent(), uno::UNO_QUERY );
-            ::rtl::OUString aStr;
-            uno::Any aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameURL") ) );
+            OUString aStr;
+            uno::Any aAny = xSet->getPropertyValue( "FrameURL" );
             if ( aAny >>= aStr )
                 m_pEDURL->SetText( aStr );
-            aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameName") ) );
+            aAny = xSet->getPropertyValue( "FrameName" );
             if ( aAny >>= aStr )
                 m_pEDName->SetText( aStr );
 
             sal_Int32 nSize = SIZE_NOT_SET;
-            aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameMarginWidth") ) );
+            aAny = xSet->getPropertyValue( "FrameMarginWidth" );
             aAny >>= nSize;
 
             if ( nSize == SIZE_NOT_SET )
             {
                 m_pCBMarginWidthDefault->Check( sal_True );
-                m_pNMMarginWidth->SetText( String::CreateFromInt32( DEFAULT_MARGIN_WIDTH )  );
+                m_pNMMarginWidth->SetText( OUString::number(DEFAULT_MARGIN_WIDTH) );
                 m_pFTMarginWidth->Enable( sal_False );
                 m_pNMMarginWidth->Enable( sal_False );
             }
             else
-                m_pNMMarginWidth->SetText( String::CreateFromInt32( nSize ) );
+                m_pNMMarginWidth->SetText( OUString::number( nSize ) );
 
-            aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameMarginHeight") ) );
+            aAny = xSet->getPropertyValue( "FrameMarginHeight" );
             aAny >>= nSize;
 
             if ( nSize == SIZE_NOT_SET )
             {
                 m_pCBMarginHeightDefault->Check( sal_True );
-                m_pNMMarginHeight->SetText( String::CreateFromInt32( DEFAULT_MARGIN_HEIGHT )  );
+                m_pNMMarginHeight->SetText( OUString::number(DEFAULT_MARGIN_HEIGHT) );
                 m_pFTMarginHeight->Enable( sal_False );
                 m_pNMMarginHeight->Enable( sal_False );
             }
             else
-                m_pNMMarginHeight->SetText( String::CreateFromInt32( nSize ) );
+                m_pNMMarginHeight->SetText( OUString::number( nSize ) );
 
             sal_Bool bScrollOn = sal_False;
             sal_Bool bScrollOff = sal_False;
             sal_Bool bScrollAuto = sal_False;
 
             sal_Bool bSet = sal_False;
-            aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsAutoScroll") ) );
+            aAny = xSet->getPropertyValue( "FrameIsAutoScroll" );
             aAny >>= bSet;
             if ( !bSet )
             {
-                aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsScrollingMode") ) );
+                aAny = xSet->getPropertyValue( "FrameIsScrollingMode" );
                 aAny >>= bSet;
                 bScrollOn = bSet;
                 bScrollOff = !bSet;
@@ -616,11 +616,11 @@ short SfxInsertFloatingFrameDialog::Execute()
             m_pRBScrollingAuto->Check( bScrollAuto );
 
             bSet = sal_False;
-            aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsAutoBorder") ) );
+            aAny = xSet->getPropertyValue( "FrameIsAutoBorder" );
             aAny >>= bSet;
             if ( !bSet )
             {
-                aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsBorder") ) );
+                aAny = xSet->getPropertyValue( "FrameIsBorder" );
                 aAny >>= bSet;
                 m_pRBFrameBorderOn->Check( bSet );
                 m_pRBFrameBorderOff->Check( !bSet );
@@ -642,7 +642,7 @@ short SfxInsertFloatingFrameDialog::Execute()
 
     if ( bOK && ( nRet = Dialog::Execute() ) == RET_OK )
     {
-        ::rtl::OUString aURL;
+        OUString aURL;
         if ( m_pEDURL->GetText().Len() )
         {
             // URL can be a valid and absolute URL or a system file name
@@ -655,7 +655,7 @@ short SfxInsertFloatingFrameDialog::Execute()
         if ( !m_xObj.is() && !aURL.isEmpty() )
         {
             // create the object
-            ::rtl::OUString aName;
+            OUString aName;
             SvGlobalName aClassId( SO3_IFRAME_CLASSID );
             m_xObj = aCnt.CreateEmbeddedObject( aClassId.GetByteSequence(), aName );
             if ( m_xObj->getCurrentState() == embed::EmbedStates::LOADED )
@@ -671,7 +671,7 @@ short SfxInsertFloatingFrameDialog::Execute()
                 if ( bIPActive )
                     m_xObj->changeState( embed::EmbedStates::RUNNING );
 
-                ::rtl::OUString aName = m_pEDName->GetText();
+                OUString aName = m_pEDName->GetText();
                 ScrollingMode eScroll = ScrollingNo;
                 if ( m_pRBScrollingOn->IsChecked() )
                     eScroll = ScrollingYes;
@@ -694,24 +694,19 @@ short SfxInsertFloatingFrameDialog::Execute()
                 else
                     lMarginHeight = SIZE_NOT_SET;
 
-                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameURL") ), makeAny( aURL ) );
-                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameName") ), makeAny( aName ) );
+                xSet->setPropertyValue( "FrameURL", makeAny( aURL ) );
+                xSet->setPropertyValue( "FrameName", makeAny( aName ) );
 
                 if ( eScroll == ScrollingAuto )
-                    xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsAutoScroll") ),
-                        makeAny( sal_True ) );
+                    xSet->setPropertyValue( "FrameIsAutoScroll", makeAny( sal_True ) );
                 else
-                    xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsScrollingMode") ),
-                        makeAny( (sal_Bool) ( eScroll == ScrollingYes) ) );
+                    xSet->setPropertyValue( "FrameIsScrollingMode", makeAny( (sal_Bool) ( eScroll == ScrollingYes) ) );
 
-                    xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsBorder") ),
-                        makeAny( bHasBorder ) );
+                    xSet->setPropertyValue( "FrameIsBorder", makeAny( bHasBorder ) );
 
-                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameMarginWidth") ),
-                    makeAny( sal_Int32( lMarginWidth ) ) );
+                xSet->setPropertyValue( "FrameMarginWidth", makeAny( sal_Int32( lMarginWidth ) ) );
 
-                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameMarginHeight") ),
-                    makeAny( sal_Int32( lMarginHeight ) ) );
+                xSet->setPropertyValue( "FrameMarginHeight", makeAny( sal_Int32( lMarginHeight ) ) );
 
                 if ( bIPActive )
                     m_xObj->changeState( embed::EmbedStates::INPLACE_ACTIVE );
@@ -733,7 +728,7 @@ IMPL_STATIC_LINK( SfxInsertFloatingFrameDialog, CheckHdl, CheckBox*, pCB )
     if ( pCB == pThis->m_pCBMarginWidthDefault )
     {
         if ( pCB->IsChecked() )
-            pThis->m_pNMMarginWidth->SetText( String::CreateFromInt32( DEFAULT_MARGIN_WIDTH ) );
+            pThis->m_pNMMarginWidth->SetText( OUString::number(DEFAULT_MARGIN_WIDTH) );
         pThis->m_pFTMarginWidth->Enable( !pCB->IsChecked() );
         pThis->m_pNMMarginWidth->Enable( !pCB->IsChecked() );
     }
@@ -741,7 +736,7 @@ IMPL_STATIC_LINK( SfxInsertFloatingFrameDialog, CheckHdl, CheckBox*, pCB )
     if ( pCB == pThis->m_pCBMarginHeightDefault )
     {
         if ( pCB->IsChecked() )
-            pThis->m_pNMMarginHeight->SetText( String::CreateFromInt32( DEFAULT_MARGIN_HEIGHT ) );
+            pThis->m_pNMMarginHeight->SetText( OUString::number(DEFAULT_MARGIN_HEIGHT) );
         pThis->m_pFTMarginHeight->Enable( !pCB->IsChecked() );
         pThis->m_pNMMarginHeight->Enable( !pCB->IsChecked() );
     }

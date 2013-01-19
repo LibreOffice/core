@@ -135,15 +135,15 @@ SvxFontSubstTabPage::SvxFontSubstTabPage( Window* pParent,
 
     sal_uInt16 nHeight;
     for(nHeight = 6; nHeight <= 16; nHeight++)
-        aFontHeightLB.InsertEntry(String::CreateFromInt32(nHeight));
+        aFontHeightLB.InsertEntry(OUString::number(nHeight));
     for(nHeight = 18; nHeight <= 28; nHeight+= 2)
-        aFontHeightLB.InsertEntry(String::CreateFromInt32(nHeight));
+        aFontHeightLB.InsertEntry(OUString::number(nHeight));
     for(nHeight = 32; nHeight <= 48; nHeight+= 4)
-        aFontHeightLB.InsertEntry(String::CreateFromInt32(nHeight));
+        aFontHeightLB.InsertEntry(OUString::number(nHeight));
     for(nHeight = 54; nHeight <= 72; nHeight+= 6)
-        aFontHeightLB.InsertEntry(String::CreateFromInt32(nHeight));
+        aFontHeightLB.InsertEntry(OUString::number(nHeight));
     for(nHeight = 80; nHeight <= 96; nHeight+= 8)
-        aFontHeightLB.InsertEntry(String::CreateFromInt32(nHeight));
+        aFontHeightLB.InsertEntry(OUString::number(nHeight));
 }
 
 SvTreeListEntry* SvxFontSubstTabPage::CreateEntry(String& rFont1, String& rFont2)
@@ -262,7 +262,7 @@ void  SvxFontSubstTabPage::Reset( const SfxItemSet& )
     else
         aFontNameLB.SelectEntryPos(0);
     aFontHeightLB.SelectEntry(
-        String::CreateFromInt32(
+        OUString::number(
             officecfg::Office::Common::Font::SourceViewFont::FontHeight::
             get()));
     aNonPropFontsOnlyCB.SaveValue();

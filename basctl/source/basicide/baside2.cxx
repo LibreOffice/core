@@ -149,22 +149,22 @@ void lcl_PrintHeader( Printer* pPrinter, sal_uInt16 nPages, sal_uInt16 nCurPage,
     pPrinter->SetLineColor( aOldLineColor );
 }
 
-void lcl_ConvertTabsToSpaces( String& rLine )
+void lcl_ConvertTabsToSpaces( OUString& rLine )
 {
-    if ( rLine.Len() )
+    if ( rLine.getLength() )
     {
-        sal_uInt16 nPos = 0;
-        sal_uInt16 nMax = rLine.Len();
+        sal_Int32 nPos = 0;
+        sal_Int32 nMax = rLine.getLength();
         while ( nPos < nMax )
         {
-            if ( rLine.GetChar( nPos ) == '\t' )
+            if ( rLine[nPos] == '\t' )
             {
                 // not 4 Blanks, but at 4 TabPos:
-                rtl::OUStringBuffer aBlanker;
+                OUStringBuffer aBlanker;
                 string::padToLength(aBlanker, ( 4 - ( nPos % 4 ) ), ' ');
-                rLine.Erase( nPos, 1 );
-                rLine.Insert( aBlanker.makeStringAndClear(), nPos );
-                nMax = rLine.Len();
+                rLine = rLine.replaceAt( nPos, 1, "" );
+                rLine = rLine.copy(0, nPos) + aBlanker.makeStringAndClear() + rLine.copy(nPos, rLine.getLength()-nPos);
+                nMax = rLine.getLength();
             }
             ++nPos;
         }
@@ -756,7 +756,6 @@ long ModulWindow::BasicBreakHdl( StarBASIC* pBasic )
 void ModulWindow::BasicAddWatch()
 {
     DBG_CHKTHIS( ModulWindow, 0 );
-    String aWatchStr;
     AssertValidEditEngine();
     bool bAdd = true;
     if ( !GetEditView()->HasSelection() )
@@ -903,7 +902,7 @@ sal_Int32 ModulWindow::FormatAndPrint( Printer* pPrinter, sal_Int32 nPrintPage )
     pPrinter->SetFont( aFont );
     pPrinter->SetMapMode( MAP_100TH_MM );
 
-    String aTitle( CreateQualifiedName() );
+    OUString aTitle( CreateQualifiedName() );
 
     sal_uInt16 nLineHeight = (sal_uInt16) pPrinter->GetTextHeight(); // etwas mehr.
     sal_uInt16 nParaSpace = 10;
@@ -924,12 +923,12 @@ sal_Int32 ModulWindow::FormatAndPrint( Printer* pPrinter, sal_Int32 nPrintPage )
     Point aPos( Print::nLeftMargin, Print::nTopMargin );
     for ( sal_uLong nPara = 0; nPara < nParas; nPara++ )
     {
-        String aLine( GetEditEngine()->GetText( nPara ) );
+        OUString aLine( GetEditEngine()->GetText( nPara ) );
         lcl_ConvertTabsToSpaces( aLine );
-        sal_uInt16 nLines = aLine.Len()/nCharspLine+1;
+        sal_uInt16 nLines = aLine.getLength()/nCharspLine+1;
         for ( sal_uInt16 nLine = 0; nLine < nLines; nLine++ )
         {
-            String aTmpLine( aLine, nLine*nCharspLine, nCharspLine );
+            OUString aTmpLine = aLine.copy(nLine*nCharspLine, nCharspLine );
             aPos.Y() += nLineHeight;
             if ( aPos.Y() > ( aPaperSz.Height() + Print::nTopMargin ) )
             {
@@ -1154,13 +1153,13 @@ void ModulWindow::GetState( SfxItemSet &rSet )
                 if ( pView )
                 {
                     TextSelection aSel = pView->GetSelection();
-                    String aPos( IDEResId( RID_STR_LINE ) );
-                    aPos += ' ';
-                    aPos += String::CreateFromInt32( aSel.GetEnd().GetPara()+1 );
-                    aPos += String( ", " );
-                    aPos += String( IDEResId( RID_STR_COLUMN ) );
-                    aPos += ' ';
-                    aPos += String::CreateFromInt32( aSel.GetEnd().GetIndex()+1 );
+                    OUString aPos = OUString( IDEResId( RID_STR_LINE ) ) +
+                                   " " +
+                                   OUString::number(aSel.GetEnd().GetPara()+1) +
+                                   ", " +
+                                   OUString( IDEResId( RID_STR_COLUMN ) ) +
+                                   " " +
+                                   OUString::number(aSel.GetEnd().GetIndex()+1);
                     SfxStringItem aItem( SID_BASICIDE_STAT_POS, aPos );
                     rSet.Put( aItem );
                 }

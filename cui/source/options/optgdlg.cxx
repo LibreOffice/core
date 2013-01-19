@@ -407,19 +407,19 @@ IMPL_LINK( OfaMiscTabPage, TwoFigureHdl, NumericField*, pEd )
 {
     (void)pEd;
 
-    String aOutput( aStrDateInfo );
-    String aStr( aYearValueField.GetText() );
-    String sSep( SvtSysLocale().GetLocaleData().getNumThousandSep() );
-    xub_StrLen nIndex = 0;
-    while ((nIndex = aStr.Search( sSep, nIndex)) != STRING_NOTFOUND)
-        aStr.Erase( nIndex, sSep.Len());
-    long nNum = aStr.ToInt32();
-    if ( aStr.Len() != 4 || nNum < aYearValueField.GetMin() || nNum > aYearValueField.GetMax() )
-        aOutput.AppendAscii("????");
+    OUString aOutput( aStrDateInfo );
+    OUString aStr( aYearValueField.GetText() );
+    OUString sSep( SvtSysLocale().GetLocaleData().getNumThousandSep() );
+    sal_Int32 nIndex = 0;
+    while ((nIndex = aStr.indexOf( sSep, nIndex)) != -1)
+        aStr.replaceAt( nIndex, sSep.getLength(), "");
+    sal_Int32 nNum = aStr.toInt32();
+    if ( aStr.getLength() != 4 || nNum < aYearValueField.GetMin() || nNum > aYearValueField.GetMax() )
+        aOutput += "????";
     else
     {
         nNum += 99;
-        aOutput += String::CreateFromInt32( nNum );
+        aOutput += OUString::number( nNum );
     }
     aToYearFT.SetText( aOutput );
     return 0;
@@ -430,7 +430,7 @@ IMPL_LINK( OfaMiscTabPage, TwoFigureHdl, NumericField*, pEd )
 IMPL_LINK( OfaMiscTabPage, TwoFigureConfigHdl, NumericField*, pEd )
 {
     sal_Int64 nNum = aYearValueField.GetValue();
-    rtl::OUString aOutput(rtl::OUString::valueOf(nNum));
+    rtl::OUString aOutput(rtl::OUString::number(nNum));
     aYearValueField.SetText(aOutput);
     aYearValueField.SetSelection( Selection( 0, aOutput.getLength() ) );
     TwoFigureHdl( pEd );
@@ -1185,11 +1185,11 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
 
     // initialize user interface language selection
     SvtLanguageTable* pLanguageTable = new SvtLanguageTable;
-    const String aStr( pLanguageTable->GetString( LANGUAGE_SYSTEM ) );
+    const OUString aStr( pLanguageTable->GetString( LANGUAGE_SYSTEM ) );
 
-    String aUILang(aStr);
-    aUILang += rtl::OUString(" - ");
-    aUILang += pLanguageTable->GetString( Application::GetSettings().GetUILanguageTag().getLanguageType(), true );
+    OUString aUILang = aStr +
+                       " - " +
+                       pLanguageTable->GetString( Application::GetSettings().GetUILanguageTag().getLanguageType(), true );
 
     aUserInterfaceLB.InsertEntry(aUILang);
     aUserInterfaceLB.SetEntryData(0, 0);
@@ -1214,7 +1214,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
             if (aLang != LANGUAGE_DONTKNOW)
             {
                 //sal_uInt16 p = aUserInterfaceLB.InsertLanguage(aLang);
-                String aLangStr( pLanguageTable->GetString( aLang, true ) );
+                OUString aLangStr( pLanguageTable->GetString( aLang, true ) );
                 sal_uInt16 p = aUserInterfaceLB.InsertEntry(aLangStr);
                 aUserInterfaceLB.SetEntryData(p, (void*)(i+1));
             }
@@ -1261,23 +1261,21 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
     const NfCurrencyTable& rCurrTab = SvNumberFormatter::GetTheCurrencyTable();
     const NfCurrencyEntry& rCurr = SvNumberFormatter::GetCurrencyEntry( LANGUAGE_SYSTEM );
     // insert SYSTEM entry
-    String aDefaultCurr(aStr);
-    aDefaultCurr += rtl::OUString(" - ");
-    aDefaultCurr += rCurr.GetBankSymbol();
+    OUString aDefaultCurr = aStr + " - " + rCurr.GetBankSymbol();
     aCurrencyLB.InsertEntry( aDefaultCurr );
     // all currencies
-    String aTwoSpace( RTL_CONSTASCII_USTRINGPARAM( "  " ) );
+    OUString aTwoSpace( "  " );
     sal_uInt16 nCurrCount = rCurrTab.size();
     // first entry is SYSTEM, skip it
     for ( sal_uInt16 j=1; j < nCurrCount; ++j )
     {
         const NfCurrencyEntry* pCurr = &rCurrTab[j];
-        String aStr_( pCurr->GetBankSymbol() );
-        aStr_ += aTwoSpace;
-        aStr_ += pCurr->GetSymbol();
-        aStr_ = ApplyLreOrRleEmbedding( aStr_ );
-        aStr_ += aTwoSpace;
-        aStr_ += ApplyLreOrRleEmbedding( pLanguageTable->GetString( pCurr->GetLanguage() ) );
+        OUString aStr_ = pCurr->GetBankSymbol() +
+                         aTwoSpace +
+                         pCurr->GetSymbol();
+        aStr_ = ApplyLreOrRleEmbedding( aStr_ ) +
+                aTwoSpace +
+                ApplyLreOrRleEmbedding( pLanguageTable->GetString( pCurr->GetLanguage() ) );
         sal_uInt16 nPos = aCurrencyLB.InsertEntry( aStr_ );
         aCurrencyLB.SetEntryData( nPos, (void*) pCurr );
     }
@@ -1840,8 +1838,8 @@ IMPL_LINK( OfaLanguagesTabPage, LocaleSettingHdl, SvxLanguageBox*, pBox )
     LocaleDataWrapper aLocaleWrapper( aLanguageTag );
 
     // update the decimal separator key of the related CheckBox
-    String sTempLabel(sDecimalSeparatorLabel);
-    sTempLabel.SearchAndReplaceAscii("%1", aLocaleWrapper.getNumDecimalSep() );
+    OUString sTempLabel(sDecimalSeparatorLabel);
+    sTempLabel = sTempLabel.replaceFirst("%1", aLocaleWrapper.getNumDecimalSep() );
     aDecimalSeparatorCB.SetText(sTempLabel);
 
     // update the date acceptance patterns
