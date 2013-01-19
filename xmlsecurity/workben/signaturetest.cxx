@@ -288,7 +288,7 @@ IMPL_LINK_NOARG(MyWin, DigitalSignaturesWithServiceHdl)
             aDocFileName, embed::ElementModes::READWRITE, comphelper::getProcessServiceFactory() );
 
     uno::Reference< security::XDocumentDigitalSignatures > xD(
-        security::DocumentDigitalSignatures::createDefault(comphelper::getProcessComponentContext() );
+        security::DocumentDigitalSignatures::createDefault(comphelper::getProcessComponentContext()) );
     xD->signDocumentContent( xStore, NULL );
 
 
