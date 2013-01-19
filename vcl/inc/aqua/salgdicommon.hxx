@@ -20,6 +20,8 @@
 #ifndef _VCL_AQUA_SALGDICOMMON_H
 #define _VCL_AQUA_SALGDICOMMON_H
 
+#include <vcl/salgtype.hxx>
+
 // abstracting quartz color instead of having to use an CGFloat[] array
 class RGBAColor
 {

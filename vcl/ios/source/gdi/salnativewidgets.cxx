@@ -23,7 +23,7 @@
 #include "vcl/timer.hxx"
 
 #include "ios/salconst.h"
-#include "ios/salgdi.h"
+#include "coretext/salgdi.h"
 #include "ios/saldata.hxx"
 #include "ios/salframe.h"
 
@@ -39,7 +39,7 @@
  * drawing of the control defined by nPart.
  *
  */
-sal_Bool IosSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nPart )
+sal_Bool QuartzSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nPart )
 {
     bool bOk = sal_False;
 
@@ -173,7 +173,7 @@ sal_Bool IosSalGraphics::IsNativeControlSupported( ControlType nType, ControlPar
  *  aPos was or was not inside the native widget specified by the
  *  nType/nPart combination.
  */
-sal_Bool IosSalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
+sal_Bool QuartzSalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                         const Point& rPos, sal_Bool& rIsInside )
 {
     (void) nType;
@@ -184,13 +184,13 @@ sal_Bool IosSalGraphics::hitTestNativeControl( ControlType nType, ControlPart nP
     return sal_False;
 }
 
-UInt32 IosSalGraphics::getState( ControlState nState )
+UInt32 QuartzSalGraphics::getState( ControlState nState )
 {
     (void) nState;
     return 0;
 }
 
-UInt32 IosSalGraphics::getTrackState( ControlState nState )
+UInt32 QuartzSalGraphics::getTrackState( ControlState nState )
 {
     (void) nState;
     return 0;
@@ -205,7 +205,7 @@ UInt32 IosSalGraphics::getTrackState( ControlState nState )
  *  aValue:     An optional value (tristate/numerical/string)
  *  aCaption:   A caption or title string (like button text etc)
  */
-sal_Bool IosSalGraphics::drawNativeControl(ControlType nType,
+sal_Bool QuartzSalGraphics::drawNativeControl(ControlType nType,
                     ControlPart nPart,
                     const Rectangle& rControlRegion,
                     ControlState nState,
@@ -233,9 +233,9 @@ sal_Bool IosSalGraphics::drawNativeControl(ControlType nType,
  *  aValue:     An optional value (tristate/numerical/string)
  *  aCaption:       A caption or title string (like button text etc)
  */
-sal_Bool IosSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState /*nState*/,
-                                               const ImplControlValue& aValue, const rtl::OUString&,
-                                                Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion )
+sal_Bool QuartzSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState /*nState*/,
+                                                    const ImplControlValue& aValue, const rtl::OUString&,
+                                                    Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion )
 
 {
     (void) nType;

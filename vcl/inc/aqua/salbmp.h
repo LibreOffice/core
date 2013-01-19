@@ -45,7 +45,6 @@ struct  BitmapBuffer;
 class   BitmapColor;
 class   BitmapPalette;
 class   AquaSalVirtualDevice;
-class   AquaSalGraphics;
 
 class AquaSalBitmap : public SalBitmap
 {

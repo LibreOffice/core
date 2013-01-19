@@ -17,13 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_AQUA_COMMON_H
-#define _VCL_AQUA_COMMON_H
+#ifndef _VCL_CORETEXT_COMMON_H
+#define _VCL_CORETEXT_COMMON_H
 
 #include <sal/types.h>
 #include <premac.h>
+
+#ifdef MACOSX
 #include <ApplicationServices/ApplicationServices.h>
+#else
+#include <CoreGraphics/CoreGraphics.h>
+#include <CoreText/CoreText.h>
+#endif
+
 #include <postmac.h>
+
 #include <tools/debug.hxx>
 
 // CoreFoundation designers, in their wisdom, decided that CFRelease of NULL
@@ -33,11 +41,10 @@
 // this macro hide the mess
 #define SafeCFRelease(a) do { if(a) { CFRelease(a); (a)=NULL; } } while(false)
 
-
 #define round_to_long(a) ((a) >= 0 ? ((long)((a) + 0.5)) : ((long)((a) - 0.5)))
 
 #include "vcl/salgtype.hxx"
 
-#endif /* _VCL_AQUA_COMMON_H */
+#endif /* _VCL_CORETEXT_COMMON_H */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

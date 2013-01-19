@@ -17,13 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_AQUA_CORETEXT_SALCORETEXTSTYLE_HXX
-#define _VCL_AQUA_CORETEXT_SALCORETEXTSTYLE_HXX
+#ifndef _VCL_CORETEXT_SALCORETEXTSTYLE_HXX
+#define _VCL_CORETEXT_SALCORETEXTSTYLE_HXX
 
+#ifdef MACOSX
 #include "aqua/salgdicommon.hxx"
+#else // IOS
+#include "ios/salgdicommon.hxx"
+#endif
 
-class FontSelectPattern;
-class CoreTextPhysicalFontFace;
+#include "coretext/salcoretextfontutils.hxx"
+#include "outfont.hxx"
 
 class CoreTextStyleInfo
 {

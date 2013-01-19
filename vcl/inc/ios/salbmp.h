@@ -27,7 +27,7 @@
 #include "vcl/salbtype.hxx"
 
 #include "ios/salconst.h"
-#include "ios/salgdi.h"
+#include "coretext/salgdi.h"
 
 #include "saldata.hxx"
 #include "salinst.hxx"
@@ -45,7 +45,6 @@ struct  BitmapBuffer;
 class   BitmapColor;
 class   BitmapPalette;
 class   IosSalVirtualDevice;
-class   IosSalGraphics;
 
 class IosSalBitmap : public SalBitmap
 {

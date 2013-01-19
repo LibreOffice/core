@@ -17,28 +17,52 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_IOS_SALGDI_H
-#define _VCL_IOS_SALGDI_H
+#ifndef _VCL_CORETEXT_SALGDI_H
+#define _VCL_CORETEXT_SALGDI_H
 
-#include "basegfx/polygon/b2dpolypolygon.hxx"
+#ifdef MACOSX
+#include "premac.h"
+#include <ApplicationServices/ApplicationServices.h>
+#include "postmac.h"
+#endif
 
+#ifdef MACOSX
+#include "aqua/aquavcltypes.h"
+#else
 #include "ios/iosvcltypes.h"
-#include "ios/salcoretextfontutils.hxx"
-#include "ios/salframe.h"
-#include "salgdi.hxx"
+#endif
 
+#include "coretext/salcoretextfontutils.hxx"
+
+#ifdef MACOSX
+#include "aqua/salframe.h"
+#include "aqua/salgdicommon.hxx"
+#else
+#include "ios/salframe.h"
 #include "ios/salgdicommon.hxx"
+#endif
+
+#include "salgdi.hxx"
 
 class CoreTextStyleInfo;
 
 // -------------------
-// - IosSalGraphics -
+// - QuartzSalGraphics -
 // -------------------
-class IosSalGraphics : public SalGraphics
+
+#ifdef MACOSX
+#define QuartzSalGraphics AquaSalGraphics
+#endif
+
+class QuartzSalGraphics : public SalGraphics
 {
     friend class CoreTextLayout;
 protected:
+#ifdef MACOSX
+    AquaSalFrame* mpFrame;
+#else
     IosSalFrame* mpFrame;
+#endif
     CGLayerRef mxLayer;    //< Quartz graphics layer
     CGContextRef mrContext;  //< Quartz drawing context
     class XorEmulation* mpXorEmulation;
@@ -49,12 +73,11 @@ protected:
     long mnRealDPIX; //< device X-resolution of this graphics
     long mnRealDPIY; //< device Y-resolution of this graphics
 
-    /// some graphics implementations (e.g. IosSalInfoPrinter) scale
+    /// some graphics implementations (e.g. AquaSalInfoPrinter) scale
     /// everything down by a factor (see SetupPrinterGraphics for details)
     /// so we have to compensate for it with the inverse factor
     double mfFakeDPIScale;
     double mfFontScale;
-
 
     CGMutablePathRef mxClipPath; //< path representing current clip region
 
@@ -70,35 +93,57 @@ protected:
     bool mbVirDev; //< is this a virtual device graphics
     bool mbWindow; //< is this a window graphics
 
-    CoreTextStyleInfo* m_style;
+#ifdef MACOSX
+    RGBColor m_TextColor;
+#endif
 
 public:
-    IosSalGraphics();
-    virtual ~IosSalGraphics();
+    QuartzSalGraphics();
+    virtual ~QuartzSalGraphics();
 
     bool IsPenVisible() const { return maLineColor.IsVisible(); }
     bool IsBrushVisible() const { return maFillColor.IsVisible(); }
 
+#ifdef MACOSX
+    void SetWindowGraphics( AquaSalFrame* pFrame );
+    AquaSalFrame* getGraphicsFrame() const { return mpFrame; }
+    void setGraphicsFrame( AquaSalFrame* pFrame ) { mpFrame = pFrame; }
+    void initResolution( NSWindow* );
+#else
     void SetWindowGraphics( IosSalFrame* pFrame );
+    IosSalFrame* getGraphicsFrame() const { return mpFrame; }
+    void setGraphicsFrame( IosSalFrame* pFrame ) { mpFrame = pFrame; }
+    void initResolution( UIWindow* );
+#endif
+
     void SetPrinterGraphics( CGContextRef, long nRealDPIX, long nRealDPIY, double fFakeScale );
     void SetVirDevGraphics( CGLayerRef, CGContextRef, int nBitDepth = 0 );
 
-    void initResolution( UIWindow* );
-    void copyResolution( IosSalGraphics& );
+    void copyResolution( QuartzSalGraphics& );
     void updateResolution();
 
     bool IsWindowGraphics() const { return mbWindow; }
     bool IsPrinterGraphics() const { return mbPrinter; }
     bool IsVirDevGraphics() const { return mbVirDev; }
-    IosSalFrame* getGraphicsFrame() const { return mpFrame; }
-    void setGraphicsFrame( IosSalFrame* pFrame ) { mpFrame = pFrame; }
 
     void ImplDrawPixel( long nX, long nY, const RGBAColor& ); // helper to draw single pixels
 
     bool CheckContext();
     CGContextRef GetContext();
+
+#ifdef MACOSX
+    void UpdateWindow( NSRect& ); // delivered in NSView coordinates
+#else
     void UpdateWindow( CGRect& ); // delivered in UIView coordinates
+#endif
+
+#if (defined(MACOSX) && !defined(__LP64__) && !defined(NS_BUILD_32_LIKE_64)) || defined(IOS)
     void RefreshRect( const CGRect& );
+#endif
+
+#ifdef MACOSX
+    void RefreshRect( const NSRect& );
+#endif
     void RefreshRect(float lX, float lY, float lWidth, float lHeight);
 
     void SetState();
@@ -115,13 +160,13 @@ public:
     virtual void drawRect( long nX, long nY, long nWidth, long nHeight );
     virtual void drawPolyLine( sal_uLong nPoints, const SalPoint* pPtAry );
     virtual void drawPolygon( sal_uLong nPoints, const SalPoint* pPtAry );
-    virtual void drawPolyPolygon( sal_uLong nPoly, const sal_uLong* pPoints, PCONSTSALPOINT* pPtAry );
+    virtual void drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, PCONSTSALPOINT* pPtAry );
     virtual bool drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency );
     virtual sal_Bool drawPolyLineBezier( sal_uLong nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry );
     virtual sal_Bool drawPolygonBezier( sal_uLong nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry );
-    virtual sal_Bool drawPolyPolygonBezier( sal_uLong nPoly, const sal_uLong* pPoints,
+    virtual sal_Bool drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints,
                                             const SalPoint* const* pPtAry, const sal_uInt8* const* pFlgAry );
-    virtual bool     drawPolyLine(
+    virtual bool        drawPolyLine(
         const ::basegfx::B2DPolygon&,
         double fTransparency,
         const ::basegfx::B2DVector& rLineWidths,
@@ -176,7 +221,7 @@ public:
                                              Rectangle &rNativeContentRegion );
 
     // get device resolution
-    virtual void GetResolution( long& rDPIX, long& rDPIY );
+    virtual void GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY );
     // get the depth of the device
     virtual sal_uInt16 GetBitCount() const;
     // get the width of the device
@@ -235,7 +280,7 @@ public:
     // as "undefined character"
     virtual sal_Bool CreateFontSubset( const rtl::OUString& rToFile,
                                        const PhysicalFontFace* pFont,
-                                       long* pGlyphIDs,
+                                       sal_Int32* pGlyphIDs,
                                        sal_uInt8* pEncoding,
                                        sal_Int32* pWidths,
                                        int nGlyphs,
@@ -284,6 +329,8 @@ public:
     virtual SystemFontData GetSysFontData( int /* nFallbacklevel */ ) const;
 
 private:
+    CoreTextStyleInfo* m_style;
+
     // differences between VCL, Quartz and kHiThemeOrientation coordinate systems
     // make some graphics seem to be vertically-mirrored from a VCL perspective
     bool IsFlipped() const { return mbWindow; };
@@ -297,11 +344,24 @@ private:
                          bool* pJustCFF );
 };
 
-inline void IosSalGraphics::RefreshRect( const CGRect& rRect )
+#if (defined(MACOSX) && !defined(__LP64__) && !defined(NS_BUILD_32_LIKE_64)) || defined(IOS)
+
+inline void QuartzSalGraphics::RefreshRect( const CGRect& rRect )
 {
     RefreshRect( rRect.origin.x, rRect.origin.y, rRect.size.width, rRect.size.height );
 }
 
-#endif // _VCL_IOS_SALGDI_H
+#endif
+
+#ifdef MACOSX
+
+inline void QuartzSalGraphics::RefreshRect( const NSRect& rRect )
+{
+    RefreshRect( rRect.origin.x, rRect.origin.y, rRect.size.width, rRect.size.height );
+}
+
+#endif
+
+#endif /*  _VCL_CORETEXT_SALGDI_H */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

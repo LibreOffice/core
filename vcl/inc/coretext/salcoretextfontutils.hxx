@@ -17,11 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_IOS_CORETEXT_SALCORETEXTFONTUTILS_HXX
-#define _VCL_IOS_CORETEXT_SALCORETEXTFONTUTILS_HXX
-
-class CoreTextPhysicalFontFace;
-class ImplDevFontList;
+#ifndef _VCL_CORETEXT_SALCORETEXTFONTUTILS_HXX
+#define _VCL_CORETEXT_SALCORETEXTFONTUTILS_HXX
 
 #include <boost/unordered_map.hpp>
 
@@ -79,6 +76,6 @@ private:
     void InitGlyphFallbacks();
 };
 
-#endif  // _VCL_IOS_CORETEXT_SALCORETEXTFONTUTILS_HXX
+#endif  // _VCL_CORETEXT_SALCORETEXTFONTUTILS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

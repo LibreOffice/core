@@ -29,13 +29,13 @@
 
 #include "vcl/svapp.hxx"
 
-#include "ios/salgdi.h"
+#include "coretext/salgdi.h"
 #include "ios/salframe.h"
 #include "ios/saldata.hxx"
 
 // ----------------------------------------------------------------------
 
-void IosSalGraphics::SetWindowGraphics( IosSalFrame* pFrame )
+void QuartzSalGraphics::SetWindowGraphics( IosSalFrame* pFrame )
 {
     mpFrame     = pFrame;
 
@@ -44,7 +44,7 @@ void IosSalGraphics::SetWindowGraphics( IosSalFrame* pFrame )
     mbVirDev    = false;
 }
 
-void IosSalGraphics::SetPrinterGraphics( CGContextRef xContext, long nDPIX, long nDPIY, double fScale )
+void QuartzSalGraphics::SetPrinterGraphics( CGContextRef xContext, long nDPIX, long nDPIY, double fScale )
 {
     mbWindow    = false;
     mbPrinter   = true;
@@ -71,7 +71,7 @@ void IosSalGraphics::SetPrinterGraphics( CGContextRef xContext, long nDPIX, long
     }
 }
 
-void IosSalGraphics::SetVirDevGraphics( CGLayerRef xLayer, CGContextRef xContext,
+void QuartzSalGraphics::SetVirDevGraphics( CGLayerRef xLayer, CGContextRef xContext,
     int nBitmapDepth )
 {
     mbWindow    = false;
@@ -120,7 +120,7 @@ void IosSalGraphics::SetVirDevGraphics( CGLayerRef xLayer, CGContextRef xContext
 
 // ----------------------------------------------------------------------
 
-void IosSalGraphics::InvalidateContext()
+void QuartzSalGraphics::InvalidateContext()
 {
     UnsetState();
     mrContext = 0;
@@ -128,7 +128,7 @@ void IosSalGraphics::InvalidateContext()
 
 // ----------------------------------------------------------------------
 
-void IosSalGraphics::UnsetState()
+void QuartzSalGraphics::UnsetState()
 {
     if( mrContext )
     {
@@ -142,7 +142,7 @@ void IosSalGraphics::UnsetState()
     }
 }
 
-void IosSalGraphics::SetState()
+void QuartzSalGraphics::SetState()
 {
     CGContextRestoreGState( mrContext );
     CGContextSaveGState( mrContext );
@@ -165,7 +165,7 @@ void IosSalGraphics::SetState()
 
 // ----------------------------------------------------------------------
 
-bool IosSalGraphics::CheckContext()
+bool QuartzSalGraphics::CheckContext()
 {
     if( mbWindow && mpFrame != NULL )
     {
@@ -222,11 +222,11 @@ bool IosSalGraphics::CheckContext()
             CGContextRelease( rReleaseContext );
     }
 
-    DBG_ASSERT( mrContext || mbPrinter, "<<<WARNING>>> IosSalGraphics::CheckContext() FAILED!!!!\n" );
+    DBG_ASSERT( mrContext || mbPrinter, "<<<WARNING>>> QuartzSalGraphics::CheckContext() FAILED!!!!\n" );
     return (mrContext != NULL);
 }
 
-CGContextRef IosSalGraphics::GetContext()
+CGContextRef QuartzSalGraphics::GetContext()
 {
     if(!mrContext)
     {
@@ -235,7 +235,7 @@ CGContextRef IosSalGraphics::GetContext()
     return mrContext;
 }
 
-void IosSalGraphics::RefreshRect(float lX, float lY, float lWidth, float lHeight)
+void QuartzSalGraphics::RefreshRect(float lX, float lY, float lWidth, float lHeight)
 {
     if( ! mbWindow ) // view only on Window graphics
         return;
@@ -252,7 +252,7 @@ void IosSalGraphics::RefreshRect(float lX, float lY, float lWidth, float lHeight
     }
 }
 
-CGPoint* IosSalGraphics::makeCGptArray(sal_uLong nPoints, const SalPoint*  pPtAry)
+CGPoint* QuartzSalGraphics::makeCGptArray(sal_uLong nPoints, const SalPoint*  pPtAry)
 {
     CGPoint *CGpoints = new CGPoint[nPoints];
     if ( CGpoints )
@@ -268,7 +268,7 @@ CGPoint* IosSalGraphics::makeCGptArray(sal_uLong nPoints, const SalPoint*  pPtAr
 
 // -----------------------------------------------------------------------
 
-void IosSalGraphics::UpdateWindow( CGRect& )
+void QuartzSalGraphics::UpdateWindow( CGRect& )
 {
 #if 0 // Sigh, this is just basically a copy of the "aqua" code and not
       // applicable to iOS.

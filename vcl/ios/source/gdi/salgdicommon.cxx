@@ -23,7 +23,7 @@
 #include "basegfx/polygon/b2dpolygon.hxx"
 
 #include "ios/salbmp.h"
-#include "ios/salgdi.h"
+#include "coretext/salgdi.h"
 
 #include "fontsubset.hxx"
 #include "region.h"
@@ -134,7 +134,7 @@ static void AddPolyPolygonToPath( CGMutablePathRef xPath,
     }
 }
 
-sal_Bool IosSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
+sal_Bool QuartzSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
                                             const PhysicalFontFace* pFontData,
                                             long* pGlyphIDs, sal_uInt8* pEncoding,
                                             sal_Int32* pGlyphWidths, int nGlyphCount,
@@ -275,7 +275,7 @@ static inline void alignLinePoint( const SalPoint* i_pIn, float& o_fX, float& o_
     o_fY = static_cast<float>(i_pIn->mnY ) + 0.5;
 }
 
-void IosSalGraphics::copyBits( const SalTwoRect *pPosAry, SalGraphics *pSrcGraphics )
+void QuartzSalGraphics::copyBits( const SalTwoRect *pPosAry, SalGraphics *pSrcGraphics )
 {
     if( !pSrcGraphics )
     {
@@ -292,7 +292,7 @@ void IosSalGraphics::copyBits( const SalTwoRect *pPosAry, SalGraphics *pSrcGraph
     }
 
     // accelerate trivial operations
-    /*const*/ IosSalGraphics* pSrc = static_cast<IosSalGraphics*>(pSrcGraphics);
+    /*const*/ QuartzSalGraphics* pSrc = static_cast<QuartzSalGraphics*>(pSrcGraphics);
     const bool bSameGraphics = (this == pSrc) ||
         (mbWindow && mpFrame && pSrc->mbWindow && (mpFrame == pSrc->mpFrame));
     if( bSameGraphics &&
@@ -312,7 +312,7 @@ void IosSalGraphics::copyBits( const SalTwoRect *pPosAry, SalGraphics *pSrcGraph
     ApplyXorContext();
     pSrc->ApplyXorContext();
 
-    DBG_ASSERT( pSrc->mxLayer!=NULL, "IosSalGraphics::copyBits() from non-layered graphics" );
+    DBG_ASSERT( pSrc->mxLayer!=NULL, "QuartzSalGraphics::copyBits() from non-layered graphics" );
 
     const CGPoint aDstPoint = { static_cast<CGFloat>(+pPosAry->mnDestX - pPosAry->mnSrcX), static_cast<CGFloat>(pPosAry->mnDestY - pPosAry->mnSrcY) };
     if( (pPosAry->mnSrcWidth == pPosAry->mnDestWidth &&
@@ -414,7 +414,7 @@ static SalColor ImplGetROPSalColor( SalROPColor nROPColor )
 }
 
 // apply the XOR mask to the target context if active and dirty
-void IosSalGraphics::ApplyXorContext()
+void QuartzSalGraphics::ApplyXorContext()
 {
     if( !mpXorEmulation )
     {
@@ -426,12 +426,12 @@ void IosSalGraphics::ApplyXorContext()
     }
 }
 
-void IosSalGraphics::copyArea( long nDstX, long nDstY,long nSrcX, long nSrcY,
+void QuartzSalGraphics::copyArea( long nDstX, long nDstY,long nSrcX, long nSrcY,
                                 long nSrcWidth, long nSrcHeight, sal_uInt16 /*nFlags*/ )
 {
     ApplyXorContext();
 
-    DBG_ASSERT( mxLayer!=NULL, "IosSalGraphics::copyArea() for non-layered graphics" );
+    DBG_ASSERT( mxLayer!=NULL, "QuartzSalGraphics::copyArea() for non-layered graphics" );
 
     // in XOR mode the drawing context is redirected to the XOR mask
     // copyArea() always works on the target context though
@@ -474,7 +474,7 @@ void IosSalGraphics::copyArea( long nDstX, long nDstY,long nSrcX, long nSrcY,
 
 }
 
-void IosSalGraphics::copyResolution( IosSalGraphics& rGraphics )
+void QuartzSalGraphics::copyResolution( QuartzSalGraphics& rGraphics )
 {
     if( !rGraphics.mnRealDPIY && rGraphics.mbWindow && rGraphics.mpFrame )
     {
@@ -485,7 +485,7 @@ void IosSalGraphics::copyResolution( IosSalGraphics& rGraphics )
     mfFakeDPIScale = rGraphics.mfFakeDPIScale;
 }
 
-bool IosSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
+bool QuartzSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
                                        const SalBitmap& rSrcBitmap,
                                        const SalBitmap& rAlphaBmp )
 {
@@ -521,7 +521,7 @@ bool IosSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
     return true;
 }
 
-bool IosSalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
+bool QuartzSalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
                                      long nHeight, sal_uInt8 nTransparency )
 {
     if( !CheckContext() )
@@ -549,7 +549,7 @@ bool IosSalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
     return true;
 }
 
-void IosSalGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap )
+void QuartzSalGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap )
 {
     if( !CheckContext() )
     {
@@ -569,13 +569,13 @@ void IosSalGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSa
     RefreshRect( aDstRect );
 }
 
-void IosSalGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap,SalColor )
+void QuartzSalGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap,SalColor )
 {
     OSL_FAIL("not implemented for color masking!");
     drawBitmap( pPosAry, rSalBitmap );
 }
 
-void IosSalGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap,
+void QuartzSalGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap,
                                   const SalBitmap& rTransparentBitmap )
 {
     if( !CheckContext() )
@@ -597,13 +597,13 @@ void IosSalGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSa
     RefreshRect( aDstRect );
 }
 
-sal_Bool IosSalGraphics::drawEPS( long /*nX*/, long /*nY*/, long /*nWidth*/, long /*nHeight*/,
+sal_Bool QuartzSalGraphics::drawEPS( long /*nX*/, long /*nY*/, long /*nWidth*/, long /*nHeight*/,
     void* /*pEpsData*/, sal_uLong /*nByteCount*/ )
 {
   return sal_False;
 }
 
-void IosSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
+void QuartzSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
 {
     if( nX1 == nX2 && nY1 == nY2 )
     {
@@ -624,7 +624,7 @@ void IosSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
     Rectangle aRefreshRect( nX1, nY1, nX2, nY2 );
 }
 
-void IosSalGraphics::drawMask( const SalTwoRect* pPosAry,
+void QuartzSalGraphics::drawMask( const SalTwoRect* pPosAry,
                                 const SalBitmap& rSalBitmap,
                                 SalColor nMaskColor )
 {
@@ -647,19 +647,19 @@ void IosSalGraphics::drawMask( const SalTwoRect* pPosAry,
     RefreshRect( aDstRect );
 }
 
-void IosSalGraphics::drawPixel( long nX, long nY )
+void QuartzSalGraphics::drawPixel( long nX, long nY )
 {
     // draw pixel with current line color
     ImplDrawPixel( nX, nY, maLineColor );
 }
 
-void IosSalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
+void QuartzSalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
 {
     const RGBAColor aPixelColor( nSalColor );
     ImplDrawPixel( nX, nY, aPixelColor );
 }
 
-bool IosSalGraphics::drawPolyLine(
+bool QuartzSalGraphics::drawPolyLine(
     const ::basegfx::B2DPolygon& rPolyLine,
     double fTransparency,
     const ::basegfx::B2DVector& rLineWidths,
@@ -750,12 +750,12 @@ bool IosSalGraphics::drawPolyLine(
     return true;
 }
 
-sal_Bool IosSalGraphics::drawPolyLineBezier( sal_uLong, const SalPoint*, const sal_uInt8* )
+sal_Bool QuartzSalGraphics::drawPolyLineBezier( sal_uLong, const SalPoint*, const sal_uInt8* )
 {
     return sal_False;
 }
 
-bool IosSalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly,
+bool QuartzSalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly,
     double fTransparency )
 {
     // short circuit if there is nothing to do
@@ -803,7 +803,7 @@ bool IosSalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly
     return true;
 }
 
-void IosSalGraphics::drawPolyPolygon( sal_uLong nPolyCount, const sal_uLong *pPoints, PCONSTSALPOINT  *ppPtAry )
+void QuartzSalGraphics::drawPolyPolygon( sal_uLong nPolyCount, const sal_uLong *pPoints, PCONSTSALPOINT  *ppPtAry )
 {
     if( nPolyCount <= 0 )
         return;
@@ -902,7 +902,7 @@ void IosSalGraphics::drawPolyPolygon( sal_uLong nPolyCount, const sal_uLong *pPo
     RefreshRect( leftX, topY, maxWidth, maxHeight );
 }
 
-void IosSalGraphics::drawPolygon( sal_uLong nPoints, const SalPoint *pPtAry )
+void QuartzSalGraphics::drawPolygon( sal_uLong nPoints, const SalPoint *pPtAry )
 {
     if( nPoints <= 1 )
         return;
@@ -957,18 +957,18 @@ void IosSalGraphics::drawPolygon( sal_uLong nPoints, const SalPoint *pPtAry )
     RefreshRect( nX, nY, nWidth, nHeight );
 }
 
-sal_Bool IosSalGraphics::drawPolygonBezier( sal_uLong, const SalPoint*, const sal_uInt8* )
+sal_Bool QuartzSalGraphics::drawPolygonBezier( sal_uLong, const SalPoint*, const sal_uInt8* )
 {
     return sal_False;
 }
 
-sal_Bool IosSalGraphics::drawPolyPolygonBezier( sal_uLong, const sal_uLong*,
+sal_Bool QuartzSalGraphics::drawPolyPolygonBezier( sal_uLong, const sal_uLong*,
                                                  const SalPoint* const*, const sal_uInt8* const* )
 {
     return sal_False;
 }
 
-void IosSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
+void QuartzSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
 {
     if( !CheckContext() )
     {
@@ -995,7 +995,7 @@ void IosSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
 }
 
 
-void IosSalGraphics::drawPolyLine( sal_uLong nPoints, const SalPoint *pPtAry )
+void QuartzSalGraphics::drawPolyLine( sal_uLong nPoints, const SalPoint *pPtAry )
 {
     if( nPoints < 1 )
     {
@@ -1024,15 +1024,15 @@ void IosSalGraphics::drawPolyLine( sal_uLong nPoints, const SalPoint *pPtAry )
     RefreshRect( nX, nY, nWidth, nHeight );
 }
 
-sal_uInt16 IosSalGraphics::GetBitCount() const
+sal_uInt16 QuartzSalGraphics::GetBitCount() const
 {
     sal_uInt16 nBits = mnBitmapDepth ? mnBitmapDepth : 32;//24;
     return nBits;
 }
 
-SalBitmap* IosSalGraphics::getBitmap( long  nX, long  nY, long  nDX, long  nDY )
+SalBitmap* QuartzSalGraphics::getBitmap( long  nX, long  nY, long  nDX, long  nDY )
 {
-    DBG_ASSERT( mxLayer, "IosSalGraphics::getBitmap() with no layer" );
+    DBG_ASSERT( mxLayer, "QuartzSalGraphics::getBitmap() with no layer" );
 
     ApplyXorContext();
 
@@ -1046,7 +1046,7 @@ SalBitmap* IosSalGraphics::getBitmap( long  nX, long  nY, long  nDX, long  nDY )
     return pBitmap;
 }
 
-SystemGraphicsData IosSalGraphics::GetGraphicsData() const
+SystemGraphicsData QuartzSalGraphics::GetGraphicsData() const
 {
     SystemGraphicsData aRes;
     aRes.nSize = sizeof(aRes);
@@ -1054,7 +1054,7 @@ SystemGraphicsData IosSalGraphics::GetGraphicsData() const
     return aRes;
 }
 
-long IosSalGraphics::GetGraphicsWidth() const
+long QuartzSalGraphics::GetGraphicsWidth() const
 {
     long w = 0;
     if( mrContext && (mbWindow || mbVirDev) )
@@ -1072,7 +1072,7 @@ long IosSalGraphics::GetGraphicsWidth() const
     return w;
 }
 
-SalColor IosSalGraphics::getPixel( long nX, long nY )
+SalColor QuartzSalGraphics::getPixel( long nX, long nY )
 {
     // return default value on printers or when out of bounds
     if( !mxLayer || (nX < 0) || (nX >= mnWidth) ||
@@ -1111,7 +1111,7 @@ SalColor IosSalGraphics::getPixel( long nX, long nY )
     return nSalColor;
 }
 
-void IosSalGraphics::GetResolution( long& rDPIX, long& rDPIY )
+void QuartzSalGraphics::GetResolution( long& rDPIX, long& rDPIY )
 {
     if( !mnRealDPIY )
     {
@@ -1122,7 +1122,7 @@ void IosSalGraphics::GetResolution( long& rDPIX, long& rDPIY )
     rDPIY = static_cast<long>(mfFakeDPIScale * mnRealDPIY);
 }
 
-void IosSalGraphics::ImplDrawPixel( long nX, long nY, const RGBAColor& rColor )
+void QuartzSalGraphics::ImplDrawPixel( long nX, long nY, const RGBAColor& rColor )
 {
     if( !CheckContext() )
     {
@@ -1138,7 +1138,7 @@ void IosSalGraphics::ImplDrawPixel( long nX, long nY, const RGBAColor& rColor )
     CGContextSetFillColor( mrContext, maFillColor.AsArray() );
 }
 
-void IosSalGraphics::initResolution( UIWindow* )
+void QuartzSalGraphics::initResolution( UIWindow* )
 {
     // #i100617# read DPI only once; there is some kind of weird caching going on
     // if the main screen changes
@@ -1172,7 +1172,7 @@ void IosSalGraphics::initResolution( UIWindow* )
     mfFakeDPIScale = 1.0;
 }
 
-void IosSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags )
+void QuartzSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags )
 {
     if ( CheckContext() )
     {
@@ -1206,7 +1206,7 @@ void IosSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInv
     }
 }
 
-void IosSalGraphics::invert( sal_uLong nPoints, const SalPoint*  pPtAry, SalInvert nSalFlags )
+void QuartzSalGraphics::invert( sal_uLong nPoints, const SalPoint*  pPtAry, SalInvert nSalFlags )
 {
     CGPoint* CGpoints ;
     if ( CheckContext() )
@@ -1241,7 +1241,7 @@ void IosSalGraphics::invert( sal_uLong nPoints, const SalPoint*  pPtAry, SalInve
     }
 }
 
-void IosSalGraphics::Pattern50Fill()
+void QuartzSalGraphics::Pattern50Fill()
 {
     static const float aFillCol[4] = { 1,1,1,1 };
     static const CGPatternCallbacks aCallback = { 0, &DrawPattern50, NULL };
@@ -1262,7 +1262,7 @@ void IosSalGraphics::Pattern50Fill()
 }
 
 
-void IosSalGraphics::ResetClipRegion()
+void QuartzSalGraphics::ResetClipRegion()
 {
     // release old path and indicate no clipping
     if( mxClipPath )
@@ -1276,7 +1276,7 @@ void IosSalGraphics::ResetClipRegion()
     }
 }
 
-void IosSalGraphics::SetLineColor()
+void QuartzSalGraphics::SetLineColor()
 {
     maLineColor.SetAlpha( 0.0 );   // transparent
     if( CheckContext() )
@@ -1285,7 +1285,7 @@ void IosSalGraphics::SetLineColor()
     }
 }
 
-void IosSalGraphics::SetLineColor( SalColor nSalColor )
+void QuartzSalGraphics::SetLineColor( SalColor nSalColor )
 {
     maLineColor = RGBAColor( nSalColor );
     if( CheckContext() )
@@ -1294,7 +1294,7 @@ void IosSalGraphics::SetLineColor( SalColor nSalColor )
     }
 }
 
-void IosSalGraphics::SetFillColor()
+void QuartzSalGraphics::SetFillColor()
 {
     maFillColor.SetAlpha( 0.0 );   // transparent
     if( CheckContext() )
@@ -1303,7 +1303,7 @@ void IosSalGraphics::SetFillColor()
     }
 }
 
-void IosSalGraphics::SetFillColor( SalColor nSalColor )
+void QuartzSalGraphics::SetFillColor( SalColor nSalColor )
 {
     maFillColor = RGBAColor( nSalColor );
     if( CheckContext() )
@@ -1312,7 +1312,7 @@ void IosSalGraphics::SetFillColor( SalColor nSalColor )
     }
 }
 
-bool IosSalGraphics::supportsOperation( OutDevSupportType eType ) const
+bool QuartzSalGraphics::supportsOperation( OutDevSupportType eType ) const
 {
     bool bRet = false;
     switch( eType )
@@ -1327,7 +1327,7 @@ bool IosSalGraphics::supportsOperation( OutDevSupportType eType ) const
     return bRet;
 }
 
-bool IosSalGraphics::setClipRegion( const Region& i_rClip )
+bool QuartzSalGraphics::setClipRegion( const Region& i_rClip )
 {
     // release old clip path
     if( mxClipPath )
@@ -1366,19 +1366,19 @@ bool IosSalGraphics::setClipRegion( const Region& i_rClip )
     return true;
 }
 
-void IosSalGraphics::SetROPFillColor( SalROPColor nROPColor )
+void QuartzSalGraphics::SetROPFillColor( SalROPColor nROPColor )
 {
     if( ! mbPrinter )
         SetFillColor( ImplGetROPSalColor( nROPColor ) );
 }
 
-void IosSalGraphics::SetROPLineColor( SalROPColor nROPColor )
+void QuartzSalGraphics::SetROPLineColor( SalROPColor nROPColor )
 {
     if( ! mbPrinter )
         SetLineColor( ImplGetROPSalColor( nROPColor ) );
 }
 
-void IosSalGraphics::SetXORMode( bool bSet, bool bInvertOnly )
+void QuartzSalGraphics::SetXORMode( bool bSet, bool bInvertOnly )
 {
     // return early if XOR mode remains unchanged
     if( mbPrinter )
@@ -1433,7 +1433,7 @@ void IosSalGraphics::SetXORMode( bool bSet, bool bInvertOnly )
     }
 }
 
-void IosSalGraphics::updateResolution()
+void QuartzSalGraphics::updateResolution()
 {
     DBG_ASSERT( mbWindow, "updateResolution on inappropriate graphics" );
 

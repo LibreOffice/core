@@ -17,13 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ios/common.h"
-#include "ios/salcoretextstyle.hxx"
-#include "ios/salcoretextlayout.hxx"
-#include "ios/salgdi.h"
+#include "coretext/common.h"
+#include "coretext/salcoretextstyle.hxx"
+#include "coretext/salcoretextlayout.hxx"
+#include "coretext/salgdi.h"
 
-
-CoreTextLayout::CoreTextLayout(IosSalGraphics* graphics, CoreTextStyleInfo* style) :
+CoreTextLayout::CoreTextLayout(QuartzSalGraphics* graphics, CoreTextStyleInfo* style) :
     m_graphics(graphics),
     m_style(style),
     m_glyphs_count(-1),
@@ -100,7 +99,7 @@ void CoreTextLayout::Clean()
 void CoreTextLayout::DrawText( SalGraphics& rGraphics ) const
 {
     SAL_INFO( "vcl.coretext.layout", "-->" );
-    IosSalGraphics& gr = static_cast<IosSalGraphics&>(rGraphics);
+    QuartzSalGraphics& gr = static_cast<QuartzSalGraphics&>(rGraphics);
     if(m_chars_count <= 0 || !gr.CheckContext())
     {
         return;
@@ -150,7 +149,7 @@ void CoreTextLayout::DrawText( SalGraphics& rGraphics ) const
 // not needed. CoreText manage fallback directly
 void CoreTextLayout::DropGlyph( int /*nStart*/ ) {}
 
-long CoreTextLayout::FillDXArray( long* pDXArray ) const
+long CoreTextLayout::FillDXArray( sal_Int32* pDXArray ) const
 {
     SAL_INFO( "vcl.coretext.layout", "-->" );
     // short circuit requests which don't need full details
@@ -179,13 +178,13 @@ long CoreTextLayout::FillDXArray( long* pDXArray ) const
     return width;
 }
 
-bool CoreTextLayout::GetBoundRect( SalGraphics &rGraphics, Rectangle& rVCLRect ) const
+bool CoreTextLayout::GetBoundRect( SalGraphics& rGraphics, Rectangle& rVCLRect ) const
 {
 
     SAL_INFO( "vcl.coretext.layout", "-->" );
     if ( !m_has_bound_rec )
     {
-        IosSalGraphics& gr = static_cast<IosSalGraphics&>(rGraphics);
+        QuartzSalGraphics& gr = static_cast<QuartzSalGraphics&>(rGraphics);
         CGRect bound_rect = CTLineGetImageBounds( m_line, gr.mrContext );
         if ( !CGRectIsNull( bound_rect ) )
         {
@@ -202,7 +201,7 @@ bool CoreTextLayout::GetBoundRect( SalGraphics &rGraphics, Rectangle& rVCLRect )
     return true;
 }
 
-void CoreTextLayout::GetCaretPositions( int max_index, long* caret_position) const
+void CoreTextLayout::GetCaretPositions( int max_index, sal_Int32* caret_position) const
 {
     SAL_INFO( "vcl.coretext.layout", "max_index " << max_index << " -->" );
     int local_max = max_index < m_chars_count * 2 ? max_index : m_chars_count;
@@ -311,7 +310,7 @@ long CoreTextLayout::GetTextWidth() const
 }
 
 // not needed. CoreText manage fallback directly
-void CoreTextLayout::InitFont()  const
+void CoreTextLayout::InitFont() const
 {
     SAL_INFO( "vcl.coretext.layout", "<-->" );
 }
@@ -409,17 +408,22 @@ bool CoreTextLayout::LayoutText(ImplLayoutArgs& args)
         return false;
     }
 
+#ifdef IOS
+    // This might be caused by some red herring and be unnecessary
+    // once the CoreText code actually works;)
+
     // If the string contains U+FFFD ("REPLACEMENT CHARACTER"), which
     // happens at least for the ooo80484-1.slk document in
     // sc_filters_test, the CTTypesetterCreateWithAttributedString()
     // call below crashes, at least in the iOS simulator. Go figure.
     // (In that case the string consists of *only* such characters,
-    // but play it safe.
+    // but play it safe.)
     for (int i = 0; i < m_chars_count; i++)
     {
         if (args.mpStr[args.mnMinCharPos+i] == 0xFFFD)
             return false;
     }
+#endif
 
     /* c0 and c1 are construction objects */
     CFStringRef c0 = CFStringCreateWithCharactersNoCopy( NULL, &(args.mpStr[args.mnMinCharPos]), m_chars_count, kCFAllocatorNull );

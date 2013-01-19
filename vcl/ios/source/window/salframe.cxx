@@ -29,7 +29,7 @@
 #include "vcl/timer.hxx"
 
 #include "ios/saldata.hxx"
-#include "ios/salgdi.h"
+#include "coretext/salgdi.h"
 #include "ios/salframe.h"
 #include "ios/salmenu.h"
 #include "ios/saltimer.h"
@@ -205,7 +205,7 @@ SalGraphics* IosSalFrame::GetGraphics()
 
     if ( !mpGraphics )
     {
-        mpGraphics = new IosSalGraphics;
+        mpGraphics = new QuartzSalGraphics;
         mpGraphics->SetWindowGraphics( this );
     }
 

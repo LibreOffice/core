@@ -21,7 +21,7 @@
 #define _SV_SALVD_H
 
 #include "ios/salcolorutils.hxx"
-#include "ios/salgdi.h"
+#include "coretext/salgdi.h"
 
 #include "salvd.hxx"
 
@@ -39,8 +39,6 @@ typedef SalVirDevDataPtr      *SalVirDevDataHandle;
 
 // =======================================================================
 
-class IosSalGraphics;
-
 class IosSalVirtualDevice : public SalVirtualDevice
 {
 private:
@@ -49,12 +47,12 @@ private:
     CGContextRef mxBitmapContext;
     int mnBitmapDepth;
     CGLayerRef mxLayer;              // Quartz layer
-    IosSalGraphics* mpGraphics;     // current VirDev graphics
+    QuartzSalGraphics* mpGraphics;   // current VirDev graphics
 
     void Destroy();
 
 public:
-    IosSalVirtualDevice( IosSalGraphics* pGraphic, long nDX, long nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData );
+    IosSalVirtualDevice( QuartzSalGraphics* pGraphic, long nDX, long nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData );
     virtual ~IosSalVirtualDevice();
 
     virtual SalGraphics*            GetGraphics();

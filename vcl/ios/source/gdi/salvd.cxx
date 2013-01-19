@@ -23,7 +23,7 @@
 
 #include "ios/salvd.h"
 #include "ios/salinst.h"
-#include "ios/salgdi.h"
+#include "coretext/salgdi.h"
 #include "ios/saldata.hxx"
 #include "ios/salframe.h"
 
@@ -35,7 +35,7 @@ SalVirtualDevice* IosSalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
     // #i92075# can be called first in a thread
     SalData::ensureThreadAutoreleasePool();
 
-    return new IosSalVirtualDevice( static_cast< IosSalGraphics* >( pGraphics ), nDX, nDY, nBitCount, pData );
+    return new IosSalVirtualDevice( static_cast< QuartzSalGraphics* >( pGraphics ), nDX, nDY, nBitCount, pData );
 }
 
 // -----------------------------------------------------------------------
@@ -47,7 +47,7 @@ void IosSalInstance::DestroyVirtualDevice( SalVirtualDevice* pDevice )
 
 // =======================================================================
 
-IosSalVirtualDevice::IosSalVirtualDevice( IosSalGraphics* pGraphic, long nDX, long nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData )
+IosSalVirtualDevice::IosSalVirtualDevice( QuartzSalGraphics* pGraphic, long nDX, long nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData )
 :   mbGraphicsUsed( false )
 ,   mxBitmapContext( NULL )
 ,   mnBitmapDepth( 0 )
@@ -58,14 +58,14 @@ IosSalVirtualDevice::IosSalVirtualDevice( IosSalGraphics* pGraphic, long nDX, lo
         // Create virtual device based on existing SystemGraphicsData
         // We ignore nDx and nDY, as the desired size comes from the SystemGraphicsData
         mbForeignContext = true;        // the mxContext is from pData
-        mpGraphics = new IosSalGraphics( /*pGraphic*/ );
+        mpGraphics = new QuartzSalGraphics( /*pGraphic*/ );
         mpGraphics->SetVirDevGraphics( mxLayer, pData->rCGContext );
     }
     else
     {
         // create empty new virtual device
         mbForeignContext = false;           // the mxContext is created within VCL
-        mpGraphics = new IosSalGraphics(); // never fails
+        mpGraphics = new QuartzSalGraphics(); // never fails
         mnBitmapDepth = nBitCount;
 
         // inherit resolution from reference device

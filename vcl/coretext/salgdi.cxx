@@ -17,15 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "aqua/common.h"
+#include "coretext/common.h"
 
+#ifdef MACOSX
 #include "aqua/salframe.h"
+#else
+#include "ios/salframe.h"
+#endif
 
-#include "aqua/coretext/salgdi.h"
-#include "aqua/coretext/salcoretextstyle.hxx"
-#include "aqua/coretext/salcoretextlayout.hxx"
+#include "coretext/salgdi.h"
+#include "coretext/salcoretextstyle.hxx"
+#include "coretext/salcoretextlayout.hxx"
 
-AquaSalGraphics::AquaSalGraphics()
+QuartzSalGraphics::QuartzSalGraphics()
     : mpFrame( NULL )
     , mxLayer( NULL )
     , mrContext( NULL )
@@ -50,7 +54,7 @@ AquaSalGraphics::AquaSalGraphics()
     SAL_INFO( "vcl.coretext.gr", "m_style=" << m_style << " <--" );
 }
 
-AquaSalGraphics::~AquaSalGraphics()
+QuartzSalGraphics::~QuartzSalGraphics()
 {
     SAL_INFO( "vcl.coretext.gr", "-->" );
     if(m_style)
@@ -61,7 +65,7 @@ AquaSalGraphics::~AquaSalGraphics()
     SAL_INFO( "vcl.coretext.gr", "<--" );
 }
 
-inline bool AquaSalGraphics::AddTempDevFont( ImplDevFontList*,
+inline bool QuartzSalGraphics::AddTempDevFont( ImplDevFontList*,
                                              const rtl::OUString& ,
                                              const rtl::OUString& )
 {
@@ -69,21 +73,21 @@ inline bool AquaSalGraphics::AddTempDevFont( ImplDevFontList*,
     return false;
 }
 
-void AquaSalGraphics::DrawServerFontLayout( const ServerFontLayout& )
+void QuartzSalGraphics::DrawServerFontLayout( const ServerFontLayout& )
 {
 }
 
-void AquaSalGraphics::FreeEmbedFontData( const void* pData, long /*nDataLen*/ )
+void QuartzSalGraphics::FreeEmbedFontData( const void* pData, long /*nDataLen*/ )
 {
     // TODO: implementing this only makes sense when the implementation of
-    //      AquaSalGraphics::GetEmbedFontData() returns non-NULL
+    //      QuartzSalGraphics::GetEmbedFontData() returns non-NULL
     (void)pData;
-    DBG_ASSERT( (pData!=NULL), "AquaSalGraphics::FreeEmbedFontData() is not implemented\n");
+    DBG_ASSERT( (pData!=NULL), "QuartzSalGraphics::FreeEmbedFontData() is not implemented\n");
 }
 
-void AquaSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
+void QuartzSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
 {
-    DBG_ASSERT( pFontList, "AquaSalGraphics::GetDevFontList(NULL) !");
+    DBG_ASSERT( pFontList, "QuartzSalGraphics::GetDevFontList(NULL) !");
 
     SalData* pSalData = GetSalData();
     if (pSalData->mpFontList == NULL)
@@ -94,19 +98,19 @@ void AquaSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
     pSalData->mpFontList->AnnounceFonts( *pFontList );
 }
 
-void AquaSalGraphics::ClearDevFontCache()
+void QuartzSalGraphics::ClearDevFontCache()
 {
     SalData* pSalData = GetSalData();
     delete pSalData->mpFontList;
     pSalData->mpFontList = NULL;
 }
 
-void AquaSalGraphics::GetDevFontSubstList( OutputDevice* )
+void QuartzSalGraphics::GetDevFontSubstList( OutputDevice* )
 {
     // nothing to do since there are no device-specific fonts on Aqua
 }
 
-const void* AquaSalGraphics::GetEmbedFontData( const PhysicalFontFace*,
+const void* QuartzSalGraphics::GetEmbedFontData( const PhysicalFontFace*,
                               const sal_Ucs* /*pUnicodes*/,
                               sal_Int32* /*pWidths*/,
                               FontSubsetInfo&,
@@ -115,13 +119,13 @@ const void* AquaSalGraphics::GetEmbedFontData( const PhysicalFontFace*,
     return NULL;
 }
 
-const Ucs2SIntMap* AquaSalGraphics::GetFontEncodingVector(const PhysicalFontFace*,
+const Ucs2SIntMap* QuartzSalGraphics::GetFontEncodingVector(const PhysicalFontFace*,
                                                           const Ucs2OStrMap** /*ppNonEncoded*/ )
 {
     return NULL;
 }
 
-void AquaSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLevel )
+void QuartzSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLevel )
 {
     (void)nFallbackLevel; // glyph-fallback on CoreText is done differently -> no fallback level
 
@@ -140,29 +144,29 @@ void AquaSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackL
     SAL_INFO( "vcl.coretext.gr", "ascent=" << pMetric->mnAscent<< ", descent=" << pMetric->mnDescent << ", extleading=" << pMetric->mnExtLeading << ", intleading=" << pMetric->mnIntLeading << ", w=" << pMetric->mnWidth );
 }
 
-sal_Bool AquaSalGraphics::GetGlyphBoundRect( sal_GlyphId /*nGlyphId*/, Rectangle& /*rRect*/ )
+sal_Bool QuartzSalGraphics::GetGlyphBoundRect( sal_GlyphId /*nGlyphId*/, Rectangle& /*rRect*/ )
 {
     /* TODO: create a Ghyph iterator to keep track ot 'state' between call */
     return false;
 }
 
-sal_Bool AquaSalGraphics::GetGlyphOutline( sal_GlyphId /*nGlyphId*/, basegfx::B2DPolyPolygon& /*rPolyPoly*/ )
+sal_Bool QuartzSalGraphics::GetGlyphOutline( sal_GlyphId /*nGlyphId*/, basegfx::B2DPolyPolygon& /*rPolyPoly*/ )
 {
     /* TODO */
     return false;
 }
 
-void AquaSalGraphics::GetGlyphWidths( const PhysicalFontFace* /*pFontData*/, bool /*bVertical*/,
+void QuartzSalGraphics::GetGlyphWidths( const PhysicalFontFace* /*pFontData*/, bool /*bVertical*/,
                                       Int32Vector& /*rGlyphWidths*/, Ucs2UIntMap& /*rUnicodeEnc*/ )
 {
 }
 
-sal_uLong AquaSalGraphics::GetKernPairs( sal_uLong, ImplKernPairData* )
+sal_uLong QuartzSalGraphics::GetKernPairs( sal_uLong, ImplKernPairData* )
 {
     return 0;
 }
 
-bool AquaSalGraphics::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
+bool QuartzSalGraphics::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
 {
     if( !m_style )
     {
@@ -176,7 +180,7 @@ bool AquaSalGraphics::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabi
     return font_face->GetImplFontCapabilities(rFontCapabilities);
 }
 
-const ImplFontCharMap* AquaSalGraphics::GetImplFontCharMap() const
+const ImplFontCharMap* QuartzSalGraphics::GetImplFontCharMap() const
 {
     if( !m_style )
     {
@@ -190,7 +194,7 @@ const ImplFontCharMap* AquaSalGraphics::GetImplFontCharMap() const
     return font_face->GetImplFontCharMap();
 }
 
-bool AquaSalGraphics::GetRawFontData( const PhysicalFontFace* pFontFace,
+bool QuartzSalGraphics::GetRawFontData( const PhysicalFontFace* pFontFace,
                      std::vector<unsigned char>& rBuffer, bool* pJustCFF )
 {
     const CoreTextPhysicalFontFace* font_face = static_cast<const CoreTextPhysicalFontFace*>(pFontFace);
@@ -198,7 +202,7 @@ bool AquaSalGraphics::GetRawFontData( const PhysicalFontFace* pFontFace,
     return font_face->GetRawFontData(rBuffer, pJustCFF);
 }
 
-SystemFontData AquaSalGraphics::GetSysFontData( int /* nFallbacklevel */ ) const
+SystemFontData QuartzSalGraphics::GetSysFontData( int /* nFallbacklevel */ ) const
 {
     SAL_INFO( "vcl.coretext.gr", "-->" );
     SystemFontData aSysFontData;
@@ -207,7 +211,7 @@ SystemFontData AquaSalGraphics::GetSysFontData( int /* nFallbacklevel */ ) const
 
     CTFontRef font = CTFontCreateUIFontForLanguage(kCTFontSystemFontType, 0.0, NULL);
     font = (CTFontRef)CFRetain(font);
-    aSysFontData.rCTFont = (void*)font;
+    aSysFontData.rCTFont = font;
 
     CTFontRef italic_font = CTFontCreateCopyWithSymbolicTraits( font,
                                                                 0.0,
@@ -237,7 +241,7 @@ SystemFontData AquaSalGraphics::GetSysFontData( int /* nFallbacklevel */ ) const
     return aSysFontData;
 }
 
-SalLayout* AquaSalGraphics::GetTextLayout( ImplLayoutArgs&, int /*nFallbackLevel*/ )
+SalLayout* QuartzSalGraphics::GetTextLayout( ImplLayoutArgs&, int /*nFallbackLevel*/ )
 {
     SAL_INFO( "vcl.coretext.gr", "-->" );
     CoreTextLayout* layout = new CoreTextLayout( this, m_style );
@@ -245,7 +249,7 @@ SalLayout* AquaSalGraphics::GetTextLayout( ImplLayoutArgs&, int /*nFallbackLevel
     return layout;
 }
 
-sal_uInt16 AquaSalGraphics::SetFont( FontSelectPattern* pReqFont, int /*nFallbackLevel*/ )
+sal_uInt16 QuartzSalGraphics::SetFont( FontSelectPattern* pReqFont, int /*nFallbackLevel*/ )
 {
     SAL_INFO( "vcl.coretext.gr", "m_style=" << m_style << " -->" );
     m_style->SetFont(pReqFont);
@@ -253,7 +257,7 @@ sal_uInt16 AquaSalGraphics::SetFont( FontSelectPattern* pReqFont, int /*nFallbac
     return 0;
 }
 
-void AquaSalGraphics::SetTextColor( SalColor nSalColor )
+void QuartzSalGraphics::SetTextColor( SalColor nSalColor )
 {
     SAL_INFO( "vcl.coretext.gr", "m_style=" << m_style << " -->" );
     m_style->SetColor(nSalColor);

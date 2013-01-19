@@ -17,14 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ios/common.h"
+#include "coretext/common.h"
 
-#include "ios/salcoretextfontutils.hxx"
-#include "ios/salgdi.h"
+#include "coretext/salcoretextfontutils.hxx"
+#include "coretext/salgdi.h"
 
 #include "sft.hxx"
-#include "ios/salinst.h"
 
+#ifdef MACOSX
+#include "aqua/salinst.h"
+#else // IOS
+#include "ios/salinst.h"
+#endif
 
 static bool GetDevFontAttributes( CTFontDescriptorRef font_descriptor, ImplDevFontAttributes& rDFA  )
 {
@@ -41,6 +45,17 @@ static bool GetDevFontAttributes( CTFontDescriptorRef font_descriptor, ImplDevFo
     rDFA.mbDevice      = true;
     rDFA.mnQuality     = 0;
 
+#if defined(MACOSX) && MAC_OS_X_VERSION_MIN_REQUIRED < 1060
+    CTFontRef font = CTFontCreateWithFontDescriptor(font_descriptor, 0.0, NULL);
+    CFDataRef rHeadTable = CTFontCopyTable(font, kCTFontTableHead, kCTFontTableOptionNoOptions);
+    CFRelease(font);
+    if(!rHeadTable || CFDataGetLength(rHeadTable) == 0)
+    {
+        SafeCFRelease(rHeadTable);
+        return false;
+    }
+    CFRelease(rHeadTable);
+#else
     CFNumberRef format = (CFNumberRef)CTFontDescriptorCopyAttribute(font_descriptor, kCTFontFormatAttribute);
     CFNumberGetValue(format, kCFNumberIntType, &value);
     CFRelease(format);
@@ -50,6 +65,7 @@ static bool GetDevFontAttributes( CTFontDescriptorRef font_descriptor, ImplDevFo
         /* we don't want bitmap fonts */
         return false;
     }
+#endif
     rDFA.mbSubsettable  = true;
     rDFA.mbEmbeddable   = false;
 

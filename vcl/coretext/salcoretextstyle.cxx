@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "aqua/common.h"
+#include "coretext/common.h"
 #include "outfont.hxx"
-#include "aqua/coretext/salcoretextfontutils.hxx"
-#include "aqua/coretext/salcoretextstyle.hxx"
+#include "coretext/salcoretextfontutils.hxx"
+#include "coretext/salcoretextstyle.hxx"
 
 CoreTextStyleInfo::CoreTextStyleInfo() :
     m_fake_bold(false),
@@ -99,7 +99,15 @@ void CoreTextStyleInfo::SetColor(SalColor color)
 {
     SAL_INFO( "vcl.coretext.style", "r:" << SALCOLOR_RED(color) << ",g:" << SALCOLOR_GREEN(color) << ",b:" << SALCOLOR_BLUE(color) );
     SafeCFRelease(m_color);
+#ifdef IOS
+    // No CGColorCreateGenericRGB on iOS
+    CGColorSpaceRef rgb_space = CGColorSpaceCreateDeviceRGB();
+    CGFloat c[] = { SALCOLOR_RED(color) / 255.0f, SALCOLOR_GREEN(color) / 255.0f, SALCOLOR_BLUE(color) / 255.0f, 1.0 };
+    m_color = CGColorCreate(rgb_space, c);
+    CGColorSpaceRelease(rgb_space);
+#else
     m_color = CGColorCreateGenericRGB(SALCOLOR_RED(color) / 255.0, SALCOLOR_GREEN(color) / 255.0, SALCOLOR_BLUE(color) / 255.0, 1.0);
+#endif
     SAL_INFO( "vcl.coretext.style", "color=" << m_color << " <--" );
 }
 
@@ -109,4 +117,5 @@ void CoreTextStyleInfo::SetColor(void)
     SafeCFRelease(m_color);
     SAL_INFO( "vcl.coretext.style", "color=" << m_color << " <--" );
 }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -361,10 +361,10 @@ $(eval $(call gb_Library_add_defs,vcl,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/aqua/source/gdi/coretext/salcoretextfontutils \
-    vcl/aqua/source/gdi/coretext/salcoretextlayout \
-    vcl/aqua/source/gdi/coretext/salcoretextstyle \
-    vcl/aqua/source/gdi/coretext/salgdi \
+    vcl/coretext/salcoretextfontutils \
+    vcl/coretext/salcoretextlayout \
+    vcl/coretext/salcoretextstyle \
+    vcl/coretext/salgdi \
 ))
 
 ifeq ($(MACOSX_SDK_VERSION),1070)
@@ -602,11 +602,11 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/ios/source/dtrans/iOSTransferable \
     vcl/ios/source/dtrans/ios_clipboard \
     vcl/ios/source/dtrans/service_entry \
-    vcl/ios/source/gdi/salcoretextfontutils \
-    vcl/ios/source/gdi/salcoretextlayout \
-    vcl/ios/source/gdi/salcoretextstyle \
+    vcl/coretext/salcoretextfontutils \
+    vcl/coretext//salcoretextlayout \
+    vcl/coretext//salcoretextstyle \
     vcl/ios/source/gdi/salbmp \
-    vcl/ios/source/gdi/salgdi \
+    vcl/coretext/salgdi \
     vcl/ios/source/gdi/salgdicommon \
     vcl/ios/source/gdi/salnativewidgets \
     vcl/ios/source/gdi/salgdiutils \

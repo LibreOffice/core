@@ -25,7 +25,7 @@
 #include "vcl/svapp.hxx"
 
 #include "ios/salinst.h"
-#include "ios/salgdi.h"
+#include "coretext/salgdi.h"
 #include "ios/salframe.h"
 #include "ios/salframeview.h"
 
@@ -238,7 +238,7 @@ private:
 	{
 		// NOTE: the mpFrame access below is not guarded yet!
 		// TODO: mpFrame et al need to be guarded by an independent mutex
-		IosSalGraphics* pGraphics = (mpFrame && IosSalFrame::isAlive(mpFrame)) ? mpFrame->mpGraphics : NULL;
+		QuartzSalGraphics* pGraphics = (mpFrame && IosSalFrame::isAlive(mpFrame)) ? mpFrame->mpGraphics : NULL;
 		if( pGraphics )
 		{
 			pGraphics->RefreshRect( aRect );

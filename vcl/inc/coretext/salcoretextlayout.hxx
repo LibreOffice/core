@@ -17,20 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_AQUA_CORETEXT_SALCORETEXTLAYOUT_HXX
-#define _VCL_AQUA_CORETEXT_SALCORETEXTLAYOUT_HXX
+#ifndef _VCL_CORETEXT_SALCORETEXTLAYOUT_HXX
+#define _VCL_CORETEXT_SALCORETEXTLAYOUT_HXX
 
 #include <tools/poly.hxx>
 
 #include "sallayout.hxx"
-
-class AquaSalGraphics;
-class CoreTextStyleInfo;
+#include "coretext/salgdi.h"
+#include "coretext/salcoretextstyle.hxx"
 
 class CoreTextLayout : public SalLayout
 {
 public:
-    CoreTextLayout( AquaSalGraphics* graphics, CoreTextStyleInfo* style);
+    CoreTextLayout( QuartzSalGraphics* graphics, CoreTextStyleInfo* style);
     virtual         ~CoreTextLayout();
 
     virtual void AdjustLayout( ImplLayoutArgs& );
@@ -53,7 +52,7 @@ private:
     void Clean();
     bool InitGIA() const;
 
-    AquaSalGraphics* m_graphics;
+    QuartzSalGraphics* m_graphics;
     CoreTextStyleInfo* m_style;
     mutable int m_glyphs_count;
     mutable int m_chars_count;
@@ -76,6 +75,6 @@ private:
 
 };
 
-#endif // _VCL_AQUA_CORETEXT_SALCORETEXTLAYOUT_HXX
+#endif // _VCL_CORETEXT_SALCORETEXTLAYOUT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

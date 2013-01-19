@@ -34,7 +34,7 @@
 
 #include <boost/shared_ptr.hpp>
 
-class IosSalGraphics;
+class QuartzSalGraphics;
 class IosSalFrame;
 class IosSalTimer;
 class IosSalInstance;
@@ -53,7 +53,7 @@ public:
     UIWindow*                       mpWindow;
     UIView*                         mpView;
     CGRect                          maScreenRect;           // for mirroring purposes
-    IosSalGraphics*         mpGraphics;
+    QuartzSalGraphics*      mpGraphics;
     IosSalFrame*            mpParent;
     SystemEnvData           maSysData;
     int                             mnMinWidth;             // min. client width in pixels
