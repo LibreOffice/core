@@ -5282,7 +5282,7 @@ void SvNumberformat::impTransliterateImpl(OUStringBuffer& rStr,
     com::sun::star::lang::Locale aLocale( LanguageTag( rNum.GetLang() ).getLocale() );
 
     OUString sTemp(rStr.makeStringAndClear());
-    GetFormatter().GetNatNum()->getNativeNumberString( sTemp, aLocale, rNum.GetNatNum() );
+    sTemp = GetFormatter().GetNatNum()->getNativeNumberString( sTemp, aLocale, rNum.GetNatNum() );
     rStr.append(sTemp);
 }
 
