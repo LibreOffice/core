@@ -278,13 +278,11 @@ sub create_package
             $folder = $packagename;
         }
 
-        # my $volume_name = $allvariables->{'PRODUCTNAME'} . ' ' . $allvariables->{'PRODUCTVERSION'}; # Adding PRODUCTVERSION makes this difficult to maintain!
         my $volume_name = $allvariables->{'PRODUCTNAME'};
         my $volume_name_classic = $allvariables->{'PRODUCTNAME'} . ' ' . $allvariables->{'PRODUCTVERSION'};
         my $volume_name_classic_app = $volume_name;  # "app" should not contain version number
-        # $volume_name = $volume_name . ' ' . $allvariables->{'PRODUCTEXTENSION'} if $allvariables->{'PRODUCTEXTENSION'}; # Adding PRODUCTEXTENSION makes this difficult to maintain!
-        $volume_name_classic = $volume_name_classic . ' ' . $allvariables->{'PRODUCTEXTENSION'} if $allvariables->{'PRODUCTEXTENSION'};
-        $volume_name_classic_app = $volume_name_classic_app . ' ' . $allvariables->{'PRODUCTEXTENSION'} if $allvariables->{'PRODUCTEXTENSION'};
+        $volume_name_classic = $volume_name_classic;
+        $volume_name_classic_app = $volume_name_classic_app;
         if ( $allvariables->{'DMG_VOLUMEEXTENSION'} ) {
             $volume_name = $volume_name . ' ' . $allvariables->{'DMG_VOLUMEEXTENSION'};
             $volume_name_classic = $volume_name_classic . ' ' . $allvariables->{'DMG_VOLUMEEXTENSION'};
