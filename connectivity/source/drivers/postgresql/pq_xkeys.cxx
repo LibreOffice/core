@@ -98,7 +98,6 @@ using com::sun::star::sdbc::XDatabaseMetaData;
 
 namespace pq_sdbc_driver
 {
-#define ASCII_STR(x) OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
 
 Keys::Keys(
         const ::rtl::Reference< RefCountedMutex > & refMutex,
@@ -127,57 +126,16 @@ static sal_Int32 string2keytype( const rtl::OUString &type )
 static sal_Int32 string2keyrule( const rtl::OUString & rule )
 {
     sal_Int32 ret = com::sun::star::sdbc::KeyRule::NO_ACTION;
-    if( rule.compareToAscii( RTL_CONSTASCII_STRINGPARAM( "r" ) ) == 0 )
+    if( rule == "r" )
         ret = com::sun::star::sdbc::KeyRule::RESTRICT;
-    else if( rule.compareToAscii( RTL_CONSTASCII_STRINGPARAM( "c" ) ) == 0 )
+    else if( rule == "c" )
         ret = com::sun::star::sdbc::KeyRule::CASCADE;
-    else if( rule.compareToAscii( RTL_CONSTASCII_STRINGPARAM( "n" ) ) == 0 )
+    else if( rule == "n" )
         ret = com::sun::star::sdbc::KeyRule::SET_NULL;
-    else if( rule.compareToAscii( RTL_CONSTASCII_STRINGPARAM( "d" ) ) == 0 )
+    else if( rule == "d" )
         ret = com::sun::star::sdbc::KeyRule::SET_DEFAULT;
     return ret;
 }
-
-
-
-// static void fillAttnum2attnameMap(
-//     Int2StringMap &map,
-//     const Reference< com::sun::star::sdbc::XConnection > &conn,
-//     const rtl::OUString &schema,
-//     const rtl::OUString &table )
-// {
-//     Reference< XPreparedStatement > prep = conn->prepareStatement(
-//         ASCII_STR( "SELECT attname,attnum "
-//                    "FROM pg_attribute "
-//                          "INNER JOIN pg_class ON attrelid = pg_class.oid "
-//                          "INNER JOIN pg_namespace ON pg_class.relnamespace = pg_namespace.oid "
-//                    "WHERE relname=? AND nspname=?" ) );
-
-//     Reference< XParameters > paras( prep, UNO_QUERY );
-//     paras->setString( 1 , table );
-//     paras->setString( 2 , schema );
-//     Reference< XResultSet > rs = prep->executeQuery();
-
-//     Reference< XRow > xRow( rs , UNO_QUERY );
-//     while( rs->next() )
-//     {
-//         map[ xRow->getInt(2) ] = xRow->getString(1);
-//     }
-// }
-
-// static Sequence< rtl::OUString > resolveColumnNames(
-//     const Int2StringMap &map, const rtl::OUString &array )
-// {
-//     Sequence< sal_Int32 > intArray = string2intarray( array );
-//     Sequence< ::rtl::OUString > ret( intArray.getLength() );
-//     for( int i = 0; i < intArray.getLength() ; i ++ )
-//     {
-//         Int2StringMap::const_iterator ii = map.find( intArray[i] );
-//         if( ii != map.end() )
-//             ret[i] = ii->second;
-//     }
-//     return ret;
-// }
 
 void Keys::refresh()
     throw (::com::sun::star::uno::RuntimeException)
@@ -186,12 +144,10 @@ void Keys::refresh()
     {
         if( isLog( m_pSettings, LogLevel::INFO ) )
         {
-            rtl::OStringBuffer buf;
-            buf.append( "sdbcx.Keys get refreshed for table " );
-            buf.append( OUStringToOString( m_schemaName, m_pSettings->encoding ) );
-            buf.append( "." );
-            buf.append( OUStringToOString( m_tableName,m_pSettings->encoding ) );
-            log( m_pSettings, LogLevel::INFO, buf.makeStringAndClear().getStr() );
+            OString buf( "sdbcx.Keys get refreshed for table " +
+                         OUStringToOString( m_schemaName, m_pSettings->encoding ) +
+                         "." + OUStringToOString( m_tableName,m_pSettings->encoding ));
+            log( m_pSettings, LogLevel::INFO, buf.getStr() );
         }
 
         osl::MutexGuard guard( m_refMutex->mutex );
@@ -201,7 +157,6 @@ void Keys::refresh()
         fillAttnum2attnameMap( mainMap, m_origin, m_schemaName, m_tableName );
 
         Reference< XPreparedStatement > stmt = m_origin->prepareStatement(
-            ASCII_STR(
                 "SELECT  conname, "            // 1
                         "contype, "            // 2
                         "confupdtype, "        // 3
@@ -214,7 +169,7 @@ void Keys::refresh()
                       "INNER JOIN pg_namespace ON pg_class.relnamespace = pg_namespace.oid "
                       "LEFT JOIN pg_class AS class2 ON confrelid = class2.oid "
                       "LEFT JOIN pg_namespace AS nmsp2 ON class2.relnamespace=nmsp2.oid "
-                "WHERE pg_class.relname = ? AND pg_namespace.nspname = ?" ) );
+                "WHERE pg_class.relname = ? AND pg_namespace.nspname = ?" );
 
         Reference< XParameters > paras( stmt, UNO_QUERY );
         paras->setString( 1 , m_tableName );
@@ -250,9 +205,7 @@ void Keys::refresh()
             if( com::sun::star::sdbcx::KeyType::FOREIGN == keyType )
             {
                 OUStringBuffer buf( 128 );
-                buf.append( xRow->getString( 6 ) );
-                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "." ) );
-                buf.append( xRow->getString( 5 ) );
+                buf.append( xRow->getString( 6 ) + "." + xRow->getString( 5 ) );
                 pKey->setPropertyValue_NoBroadcast_public(
                     st.REFERENCED_TABLE, makeAny( buf.makeStringAndClear() ) );
 
@@ -295,9 +248,9 @@ void Keys::appendByDescriptor(
     osl::MutexGuard guard( m_refMutex->mutex );
 
     OUStringBuffer buf( 128 );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "ALTER TABLE " ) );
+    buf.append( "ALTER TABLE " );
     bufferQuoteQualifiedIdentifier( buf, m_schemaName, m_tableName, m_pSettings );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " ADD " ) );
+    buf.append( " ADD " );
     bufferKey2TableConstraint( buf, descriptor, m_pSettings );
 
     Reference< XStatement > stmt =
@@ -315,11 +268,8 @@ void Keys::dropByIndex( sal_Int32 index )
     if( index < 0 ||  index >= m_values.getLength() )
     {
         OUStringBuffer buf( 128 );
-        buf.appendAscii( "TABLES: Index out of range (allowed 0 to " );
-        buf.append( (sal_Int32)(m_values.getLength() -1) );
-        buf.appendAscii( ", got " );
-        buf.append( index );
-        buf.appendAscii( ")" );
+        buf.append( "TABLES: Index out of range (allowed 0 to " + OUString::number(m_values.getLength() -1) +
+                    ", got " + OUString::number( index ) + ")" );
         throw com::sun::star::lang::IndexOutOfBoundsException(
             buf.makeStringAndClear(), *this );
     }
@@ -329,9 +279,9 @@ void Keys::dropByIndex( sal_Int32 index )
     m_values[index] >>= set;
 
     OUStringBuffer buf( 128 );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "ALTER TABLE " ) );
+    buf.append( "ALTER TABLE " );
     bufferQuoteQualifiedIdentifier( buf, m_schemaName, m_tableName, m_pSettings );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " DROP CONSTRAINT " ) );
+    buf.append( " DROP CONSTRAINT " );
     bufferQuoteIdentifier( buf, extractStringProperty( set , getStatics().NAME ), m_pSettings );
     m_origin->createStatement()->executeUpdate( buf.makeStringAndClear() );
 

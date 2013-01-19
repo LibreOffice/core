@@ -73,10 +73,6 @@
 using osl::MutexGuard;
 using osl::Mutex;
 
-using rtl::OUString;
-using rtl::OUStringBuffer;
-using rtl::OUStringToOString;
-
 using com::sun::star::container::XNameAccess;
 using com::sun::star::container::XIndexAccess;
 using com::sun::star::container::ElementExistException;
@@ -110,7 +106,6 @@ using com::sun::star::sdbc::SQLException;
 
 namespace pq_sdbc_driver
 {
-#define ASCII_STR(x) OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
 
 View::View( const ::rtl::Reference< RefCountedMutex > & refMutex,
             const Reference< com::sun::star::sdbc::XConnection > & connection,
@@ -167,9 +162,9 @@ void View::rename( const ::rtl::OUString& newName )
         try
         {
             OUStringBuffer buf(128);
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "ALTER TABLE" ) );
+            buf.append( "ALTER TABLE" );
             bufferQuoteQualifiedIdentifier(buf, schema, oldName, m_pSettings );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("SET SCHEMA" ) );
+            buf.append( "SET SCHEMA" );
             bufferQuoteIdentifier( buf, newSchemaName, m_pSettings );
             Reference< XStatement > statement = m_conn->createStatement();
             statement->executeUpdate( buf.makeStringAndClear() );
@@ -179,9 +174,8 @@ void View::rename( const ::rtl::OUString& newName )
         }
         catch( com::sun::star::sdbc::SQLException &e )
         {
-            OUStringBuffer buf( e.Message );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "(NOTE: Only postgresql server >= V8.1 support changing a table's schema)" ) );
-            e.Message = buf.makeStringAndClear();
+            OUString buf( e.Message + "(NOTE: Only postgresql server >= V8.1 support changing a table's schema)" );
+            e.Message = buf;
             throw;
         }
 
@@ -189,9 +183,9 @@ void View::rename( const ::rtl::OUString& newName )
     if( ! oldName.equals( newTableName ) )
     {
         OUStringBuffer buf(128);
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "ALTER TABLE" ) );
+        buf.appendAscii( "ALTER TABLE" );
         bufferQuoteQualifiedIdentifier( buf, schema, oldName, m_pSettings );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("RENAME TO" ) );
+        buf.appendAscii( "RENAME TO" );
         bufferQuoteIdentifier( buf, newTableName, m_pSettings );
         Reference< XStatement > statement = m_conn->createStatement();
         statement->executeUpdate( buf.makeStringAndClear() );

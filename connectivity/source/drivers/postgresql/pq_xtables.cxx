@@ -72,10 +72,6 @@
 
 using osl::MutexGuard;
 
-using rtl::OUString;
-using rtl::OUStringBuffer;
-using rtl::OUStringToOString;
-
 using com::sun::star::beans::XPropertySet;
 
 using com::sun::star::uno::Any;
@@ -93,7 +89,6 @@ using com::sun::star::container::XEnumeration;
 using com::sun::star::lang::WrappedTargetException;
 
 using com::sun::star::sdbc::XRow;
-//  using com::sun::star::sdbc::DataType;
 using com::sun::star::sdbc::XCloseable;
 using com::sun::star::sdbc::XStatement;
 using com::sun::star::sdbc::XResultSet;
@@ -103,7 +98,6 @@ using com::sun::star::sdbc::XDatabaseMetaData;
 using com::sun::star::sdbcx::XColumnsSupplier;
 using com::sun::star::sdbcx::XKeysSupplier;
 using com::sun::star::sdbcx::XViewsSupplier;
-//  using com::sun::star::sdbcx::Privilege;
 
 namespace pq_sdbc_driver
 {
@@ -173,7 +167,7 @@ void Tables::refresh()
                 m_values.realloc( tableIndex );
                 m_values[currentTableIndex] = makeAny( prop );
                 OUStringBuffer buf( name.getLength() + schema.getLength() + 1);
-                buf.append( schema ).appendAscii( "." ).append( name );
+                buf.append( schema + "." + name );
                 map[ buf.makeStringAndClear() ] = currentTableIndex;
             }
         }
@@ -208,7 +202,7 @@ static void appendColumnList(
                 }
                 else
                 {
-                    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( ", " ) );
+                    buf.append( ", " );
                 }
                 Reference< XPropertySet > column( xEnum->nextElement(), UNO_QUERY );
                 OUString name = extractStringProperty( column, st.NAME );
@@ -225,12 +219,12 @@ static void appendColumnList(
                     column->getPropertyValue( st.TYPE ) >>= dataType;
                     if( com::sun::star::sdbc::DataType::INTEGER == dataType )
                     {
-                        buf.appendAscii( " serial  ");
+                        buf.append( " serial  ");
                         isNullable = sal_False;
                     }
                     else if( com::sun::star::sdbc::DataType::BIGINT == dataType )
                     {
-                        buf.appendAscii( " serial8 " );
+                        buf.append( " serial8 " );
                         isNullable = sal_False;
                     }
                     else
@@ -246,9 +240,7 @@ static void appendColumnList(
                 }
 
                 if( ! isNullable )
-//                     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " NULL " ) );
-//                 else
-                    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " NOT NULL " ) );
+                    buf.append( " NOT NULL " );
 
             }
         }
@@ -266,7 +258,7 @@ static void appendKeyList(
             Reference< XEnumeration > xEnum = keys->createEnumeration();
             while( xEnum.is() && xEnum->hasMoreElements() )
             {
-                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( ", " ) );
+                buf.append( ", " );
                 Reference< XPropertySet > key( xEnum->nextElement(), UNO_QUERY );
                 bufferKey2TableConstraint( buf, key, settings );
             }
@@ -292,9 +284,9 @@ void Tables::appendByDescriptor(
     TransactionGuard transaction( stmt );
 
     OUStringBuffer buf( 128 );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("CREATE TABLE" ) );
+    buf.append( "CREATE TABLE" );
     bufferQuoteQualifiedIdentifier( buf, schema, name , m_pSettings);
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "(" ) );
+    buf.append( "(" );
 
     // columns
     Reference< XColumnsSupplier > supplier( descriptor, UNO_QUERY );
@@ -302,7 +294,7 @@ void Tables::appendByDescriptor(
 
     appendKeyList( buf, Reference< XKeysSupplier >( descriptor, UNO_QUERY ), m_pSettings );
 
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( ") " ) );
+    buf.append( ") " );
     // execute the creation !
     transaction.executeUpdate( buf.makeStringAndClear() );
 
@@ -311,9 +303,9 @@ void Tables::appendByDescriptor(
     if( description.getLength() )
     {
         buf = OUStringBuffer( 128 );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "COMMENT ON TABLE" ) );
+        buf.append( "COMMENT ON TABLE" );
         bufferQuoteQualifiedIdentifier( buf, schema, name, m_pSettings );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "IS " ) );
+        buf.append( "IS " );
         bufferQuoteConstant( buf, description, m_pSettings);
 
         transaction.executeUpdate( buf.makeStringAndClear() );
@@ -335,10 +327,10 @@ void Tables::appendByDescriptor(
                 if( description.getLength() )
                 {
                     buf = OUStringBuffer( 128 );
-                    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "COMMENT ON COLUMN " ) );
+                    buf.append( "COMMENT ON COLUMN " );
                     bufferQuoteQualifiedIdentifier(
                         buf, schema, name, extractStringProperty( column, st.NAME ), m_pSettings );
-                    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "IS " ) );
+                    buf.append( "IS " );
                     bufferQuoteConstant( buf, description, m_pSettings );
                     transaction.executeUpdate( buf.makeStringAndClear() );
                 }
@@ -352,38 +344,7 @@ void Tables::appendByDescriptor(
         // TODO: cheaper recalculate
 //        Container::append( concatQualified( schema, name ), descriptor ); // maintain the lists
     refresh();
-
-    // increase the vector
-//     sal_Int32 index = m_values.getLength();
-//     m_values.realloc( index + 1 );
-
-//     Table * pTable =
-//         new Table( m_refMutex, m_origin, m_pSettings, false /*modifiable*/ );
-//     Reference< com::sun::star::beans::XPropertySet > prop = pTable;
-//     copyProperties( pTable, descriptor );
-//     m_values[index] = makeAny( prop );
-//     OUStringBuffer buf( name.getLength() + 1 + schema.getLength() );
-//     buf.append( schema ).appendAscii( "." ).append( name );
-//     m_name2index[ buf.makeStringAndClear() ] = index;
 }
-
-// void Tables::dropByName( const ::rtl::OUString& elementName )
-//     throw (::com::sun::star::sdbc::SQLException,
-//            ::com::sun::star::container::NoSuchElementException,
-//            ::com::sun::star::uno::RuntimeException)
-// {
-//     String2IntMap::const_iterator ii = m_name2index.find( elementName );
-//     if( ii == m_name2index.end() )
-//     {
-//         OUStringBuffer buf( 128 );
-//         buf.appendAscii( "Table " );
-//         buf.append( elementName );
-//         buf.appendAscii( " is unknown, so it can't be dropped" );
-//         throw com::sun::star::container::NoSuchElementException(
-//             buf.makeStringAndClear(), *this );
-//     }
-//     dropByIndex( ii->second );
-// }
 
 void Tables::dropByIndex( sal_Int32 index )
     throw (::com::sun::star::sdbc::SQLException,
@@ -394,13 +355,9 @@ void Tables::dropByIndex( sal_Int32 index )
     if( index < 0 ||  index >= m_values.getLength() )
     {
         OUStringBuffer buf( 128 );
-        buf.appendAscii( "TABLES: Index out of range (allowed 0 to " );
-        buf.append( (sal_Int32) (m_values.getLength() -1) );
-        buf.appendAscii( ", got " );
-        buf.append( index );
-        buf.appendAscii( ")" );
-        throw com::sun::star::lang::IndexOutOfBoundsException(
-            buf.makeStringAndClear(), *this );
+        buf.append( "TABLES: Index out of range (allowed 0 to " + OUString::number(m_values.getLength() -1) +
+                    ", got " + OUString::number( index ) + ")" );
+        throw com::sun::star::lang::IndexOutOfBoundsException( buf.makeStringAndClear(), *this );
     }
 
     Reference< XPropertySet > set;
@@ -416,11 +373,11 @@ void Tables::dropByIndex( sal_Int32 index )
     else
     {
         OUStringBuffer update( 128 );
-        update.appendAscii( RTL_CONSTASCII_STRINGPARAM( "DROP " ) );
+        update.append( "DROP " );
         if( extractStringProperty( set, st.TYPE ).equals( st.VIEW ) )
-            update.appendAscii( RTL_CONSTASCII_STRINGPARAM( "VIEW " ) );
+            update.append( "VIEW " );
         else
-            update.appendAscii( RTL_CONSTASCII_STRINGPARAM( "TABLE " ) );
+            update.append( "TABLE " );
         bufferQuoteQualifiedIdentifier( update, schema, name, m_pSettings );
         Reference< XStatement > stmt = m_origin->createStatement( );
         DisposeGuard dispGuard( stmt );

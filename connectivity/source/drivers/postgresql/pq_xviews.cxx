@@ -99,7 +99,6 @@ using com::sun::star::sdbc::XDatabaseMetaData;
 
 namespace pq_sdbc_driver
 {
-#define ASCII_STR(x) OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
 Views::Views(
         const ::rtl::Reference< RefCountedMutex > & refMutex,
         const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection >  & origin,
@@ -120,16 +119,15 @@ void Views::refresh()
 
         Reference< XStatement > stmt = m_origin->createStatement();
 
-        Reference< XResultSet > rs = stmt->executeQuery(
-            ASCII_STR( "SELECT "
-                              "DISTINCT ON( pg_namespace.nspname, relname) " // needed because of duplicates
-                              "pg_namespace.nspname,"     // 1
-                              "relname,"                  // 2
-                              "pg_get_viewdef(ev_class) " // 3
-                       "FROM pg_namespace, pg_class, pg_rewrite "
-                       "WHERE pg_namespace.oid = relnamespace "
-                             "AND pg_class.oid = ev_class "
-                       "AND relkind='v'" ) );
+        Reference< XResultSet > rs = stmt->executeQuery("SELECT "
+                                                        "DISTINCT ON( pg_namespace.nspname, relname) " // needed because of duplicates
+                                                        "pg_namespace.nspname,"    // 1
+                                                        "relname,"                 // 2
+                                                        "pg_get_viewdef(ev_class) " // 3
+                                                        "FROM pg_namespace, pg_class, pg_rewrite "
+                                                       "WHERE pg_namespace.oid = relnamespace "
+                                                         "AND pg_class.oid = ev_class "
+                                                         "AND relkind=\'v\'" );
 
         Reference< XRow > xRow( rs , UNO_QUERY );
 
@@ -157,7 +155,7 @@ void Views::refresh()
                 m_values.realloc( viewIndex );
                 m_values[currentViewIndex] = makeAny( prop );
                 OUStringBuffer buf( table.getLength() + schema.getLength() + 1);
-                buf.append( schema ).appendAscii( "." ).append( table );
+                buf.append( schema + "." + table );
                 map[ buf.makeStringAndClear() ] = currentViewIndex;
             }
         }
@@ -189,10 +187,9 @@ void Views::appendByDescriptor(
 
     OUStringBuffer buf( 128 );
 
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "CREATE VIEW " ) );
+    buf.append( "CREATE VIEW ");
     bufferQuoteQualifiedIdentifier( buf, schema, name, m_pSettings );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " AS " ) );
-    buf.append( command );
+    buf.append(" AS " + command );
 
     stmt->executeUpdate( buf.makeStringAndClear() );
 
@@ -202,18 +199,6 @@ void Views::appendByDescriptor(
     {
         m_pSettings->pTablesImpl->refresh();
     }
-    // increase the vector
-//     sal_Int32 index = m_values.getLength();
-//     m_values.realloc( index + 1 );
-
-//     View * pView =
-//         new View( m_refMutex, m_origin, m_pSettings, false /*modifiable*/ );
-//     Reference< com::sun::star::beans::XPropertySet > prop = pTable;
-//     copyProperties( pTable, descriptor );
-//     m_values[index] = makeAny( prop );
-//     OUStringBuffer buf( name.getLength() + 1 + schema.getLength() );
-//     buf.append( schema ).appendAscii( "." ).append( name );
-//     m_name2index[ buf.makeStringAndClear() ] = index;
 }
 
 void Views::dropByName( const ::rtl::OUString& elementName )
@@ -225,9 +210,7 @@ void Views::dropByName( const ::rtl::OUString& elementName )
     if( ii == m_name2index.end() )
     {
         OUStringBuffer buf( 128 );
-        buf.appendAscii( "View " );
-        buf.append( elementName );
-        buf.appendAscii( " is unknown, so it can't be dropped" );
+        buf.append( "View " + elementName + " is unknown, so it can't be dropped" );
         throw com::sun::star::container::NoSuchElementException(
             buf.makeStringAndClear(), *this );
     }
@@ -239,17 +222,12 @@ void Views::dropByIndex( sal_Int32 index )
            ::com::sun::star::lang::IndexOutOfBoundsException,
            ::com::sun::star::uno::RuntimeException)
 {
-//     throw SQLException(
-//         ASCII_STR( "view deletion not supported" ), *this, OUString(), 1, Any() );
     osl::MutexGuard guard( m_refMutex->mutex );
     if( index < 0 ||  index >= m_values.getLength() )
     {
         OUStringBuffer buf( 128 );
-        buf.appendAscii( "VIEWS: Index out of range (allowed 0 to " );
-        buf.append( (sal_Int32) (m_values.getLength() -1) );
-        buf.appendAscii( ", got " );
-        buf.append( index );
-        buf.appendAscii( ")" );
+        buf.append( "VIEWS: Index out of range (allowed 0 to " + OUString::number(m_values.getLength() -1) +
+                    ", got " + OUString::number( index ) + ")");
         throw com::sun::star::lang::IndexOutOfBoundsException(
             buf.makeStringAndClear(), *this );
     }
@@ -262,8 +240,7 @@ void Views::dropByIndex( sal_Int32 index )
     set->getPropertyValue( st.NAME ) >>= name;
 
     OUStringBuffer update( 128 );
-    update.appendAscii( "DROP VIEW \"" ).append( schema ).appendAscii( "\".\"" );
-    update.append( name ).appendAscii( "\"" );
+    update.append( "DROP VIEW \"" + schema + "\".\"" + name + "\"" );
 
     Reference< XStatement > stmt = m_origin->createStatement( );
 

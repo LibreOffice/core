@@ -96,7 +96,6 @@ using com::sun::star::sdbc::XDatabaseMetaData;
 
 namespace pq_sdbc_driver
 {
-#define ASCII_STR(x) OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
 Users::Users(
         const ::rtl::Reference< RefCountedMutex > & refMutex,
         const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection >  & origin,
@@ -117,8 +116,7 @@ void Users::refresh()
 
         Reference< XStatement > stmt = m_origin->createStatement();
 
-        Reference< XResultSet > rs =
-            stmt->executeQuery( ASCII_STR( "SELECT usename FROM pg_shadow" ) );
+        Reference< XResultSet > rs = stmt->executeQuery( "SELECT usename FROM pg_shadow" );
 
         Reference< XRow > xRow( rs , UNO_QUERY );
 
@@ -164,9 +162,9 @@ void Users::appendByDescriptor(
     osl::MutexGuard guard( m_refMutex->mutex );
 
     OUStringBuffer update( 128 );
-    update.appendAscii( RTL_CONSTASCII_STRINGPARAM( "CREATE USER " ) );
+    update.append( "CREATE USER " );
     bufferQuoteIdentifier( update, extractStringProperty( descriptor, getStatics().NAME ), m_pSettings );
-    update.appendAscii( RTL_CONSTASCII_STRINGPARAM( " PASSWORD " ) );
+    update.append( " PASSWORD " );
     bufferQuoteConstant( update, extractStringProperty( descriptor, getStatics().PASSWORD ), m_pSettings );
 
     Reference< XStatement > stmt = m_origin->createStatement( );
