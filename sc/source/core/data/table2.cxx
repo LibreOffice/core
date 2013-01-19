@@ -658,6 +658,7 @@ void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
 {
     ScRange aOldRange( nCol1 - nDx, nRow1 - nDy, pTable->nTab, nCol2 - nDx, nRow2 - nDy, pTable->nTab);
     ScRange aNewRange( nCol1, nRow1, nTab, nCol2, nRow2, nTab );
+    bool bSameDoc = pDocument == pTable->pDocument;
 
     for(ScConditionalFormatList::const_iterator itr = pTable->mpCondFormatList->begin(),
             itrEnd = pTable->mpCondFormatList->end(); itr != itrEnd; ++itr)
@@ -681,6 +682,29 @@ void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
         }
         pNewFormat->SetKey(nMax + 1);
         mpCondFormatList->InsertNew(pNewFormat);
+
+        if(!bSameDoc)
+        {
+            for(size_t i = 0, n = pNewFormat->size();
+                    i < n; ++i)
+            {
+                OUString aStyleName;
+                const ScFormatEntry* pEntry = pNewFormat->GetEntry(i);
+                if(pEntry->GetType() == condformat::CONDITION)
+                    aStyleName = static_cast<const ScCondFormatEntry*>(pEntry)->GetStyle();
+                else if(pEntry->GetType() == condformat::DATE)
+                    aStyleName = static_cast<const ScCondDateFormatEntry*>(pEntry)->GetStyleName();
+
+                if(!aStyleName.isEmpty())
+                {
+                    if(pDocument->GetStyleSheetPool()->Find(aStyleName, SFX_STYLE_FAMILY_PARA))
+                        continue;
+
+                    pDocument->GetStyleSheetPool()->CopyStyleFrom(
+                            pTable->pDocument->GetStyleSheetPool(), aStyleName, SFX_STYLE_FAMILY_PARA );
+                }
+            }
+        }
 
         pDocument->AddCondFormatData( pNewFormat->GetRange(), nTab, pNewFormat->GetKey() );
     }
@@ -967,7 +991,9 @@ void ScTable::CopyToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     }
 
     if(pDestTab->pDocument->IsUndo() && (nFlags & IDF_ATTRIB))
+    {
         pDestTab->mpCondFormatList.reset(new ScConditionalFormatList(pDestTab->pDocument, *mpCondFormatList));
+    }
 
     if (pDBDataNoName)
     {
