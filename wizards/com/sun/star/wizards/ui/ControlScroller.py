@@ -139,8 +139,7 @@ class ControlScroller(object):
     def toggleComponent(self, _bdoenable):
         bdoenable = _bdoenable and \
             (self.ntotfieldcount > ControlScroller.nblockincrement)
-        ControlScroller.CurUnoDialog.setControlProperty(
-                "TitleScrollBar" + self.sincSuffix,
+        setattr("TitleScrollBar" + self.sincSuffix,
                 PropertyNames.PROPERTY_ENABLED, bdoenable)
 
     def toggleControls(self, _bdoenable):
@@ -150,8 +149,8 @@ class ControlScroller(object):
             m = 0
             while m < curproperties.length:
                 curproperty = curproperties[m]
-                ControlScroller.CurUnoDialog.setControlProperty(
-                curproperty.Name, PropertyNames.PROPERTY_ENABLED, _bdoenable)
+                setattr(curproperty.Name, PropertyNames.PROPERTY_ENABLED,
+                    _bdoenable)
                 m += 1
             n += 1
 
@@ -209,18 +208,16 @@ class ControlScroller(object):
         oControlModel = ControlScroller.CurUnoDialog.xUnoDialog.getControl(
             controlname).Model
         propertyname = UnoDialog.getDisplayProperty(oControlModel)
-        if propertyname != "":
-            ControlScroller.CurUnoDialog.setControlProperty(
-                controlname, propertyname, newvalue)
+        if propertyname:
+            setattr(controlname, propertyname, newvalue)
 
     @classmethod
     def getControlData(self, controlname):
         oControlModel = ControlScroller.CurUnoDialog.xUnoDialog.getControl(
             controlname).Model
         propertyname = UnoDialog.getDisplayProperty(oControlModel)
-        if propertyname != "":
-            return ControlScroller.CurUnoDialog.getControlProperty(
-                controlname, propertyname)
+        if propertyname:
+            return getattr(controlname, propertyname)
         else:
             return None
 

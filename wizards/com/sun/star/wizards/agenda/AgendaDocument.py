@@ -20,6 +20,7 @@ import traceback
 from ..text.TextElement import TextElement
 from ..text.TextDocument import TextDocument
 from ..text.TextSectionHandler import TextSectionHandler
+from ..common.FileAccess import FileAccess
 
 from datetime import date as dateTimeObject
 
@@ -87,6 +88,9 @@ class AgendaDocument(TextDocument):
         self.allItems = []
 
     def load(self, templateURL, topics):
+        #Each template is duplicated. aw-XXX.ott is the template itself
+        #and XXX.ott is a section link.
+        self.template = self.calcTemplateName(templateURL)
         self.loadAsPreview(templateURL, False)
         self.xFrame.ComponentWindow.Enable = False
         self.xTextDocument.lockControllers()
@@ -94,6 +98,16 @@ class AgendaDocument(TextDocument):
         self.initializeData(topics)
         self.xTextDocument.unlockControllers()
 
+    '''
+    The agenda templates are in format of aw-XXX.ott
+    the templates name is then XXX.ott.
+    This method calculates it.
+    '''
+
+    def calcTemplateName(self, url):
+        return FileAccess.connectURLs(
+            FileAccess.getParentDir(url), FileAccess.getFilename(url)[3:])
+        
     '''synchronize the document to the model.<br/>
     this method rewrites all titles, item tables , and the topics table-
     thus synchronizing the document to the data model (CGAgenda).
@@ -104,7 +118,7 @@ class AgendaDocument(TextDocument):
     def initializeData(self, topicsData):
         for i in self.itemsTables:
             try:
-                i.write("")
+                i.write()
             except Exception:
                 traceback.print_exc()
 
@@ -125,7 +139,7 @@ class AgendaDocument(TextDocument):
             # get the table in which the item is...
             itemsTable = self.itemsMap[itemName]
             # rewrite the table.
-            itemsTable.write(None)
+            itemsTable.write()
         except Exception:
             traceback.print_exc()
         self.xTextDocument.unlockControllers()
@@ -346,10 +360,10 @@ class AgendaDocument(TextDocument):
         return self.getNamesWhichStartWith(allSections, s)
 
     def getSection(self, name):
-        return getattr(self.xTextDocument.TextSections, name)
+        return self.xTextDocument.TextSections.getByName(name)
 
     def getTable(self, name):
-        return getattr(self.xTextDocument.TextTables, name)
+        return self.xTextDocument.TextTables.getByName(name)
 
     def redrawTitle(self, controlName):
         try:
@@ -652,19 +666,17 @@ class ItemsTable(object):
     then, starting at cell one, write all items that should be visible.
     then clear the rest and remove obsolete rows.
     If no items are visible, hide the section.
-    @param dummy we need a param to make this an Implementation
-    of AgendaElement.
-    @throws Exception
     '''
 
-    def write(self, dummy):
+    def write(self):
         name = self.section.Name
         # link and unlink the section to the template.
         self.agenda.textSectionHandler.linkSectiontoTemplate(
             self.agenda.template, name, self.section)
         self.agenda.textSectionHandler.breakLinkOfTextSection(
             self.section)
-        # we need to get a instance after linking.
+        # we need to get a instance after linking
+        
         ItemsTable.table = self.agenda.getTable(name)
         self.section = self.agenda.getSection(name)
         cursor = ItemsTable.table.createCursorByCellName("A1")

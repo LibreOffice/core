@@ -85,22 +85,23 @@ class TextSectionHandler(object):
             oSectionLink = \
                 uno.createUnoStruct('com.sun.star.text.SectionFileLink')
             oSectionLink.FileURL = ""
-            oTextSection.FileLink = oSectionLink
-            oTextSection.LinkRegion =  ""
+            uno.invoke(oTextSection, "setPropertyValues",
+                (("FileLink", "LinkRegion"), (oSectionLink, "")))
         except Exception:
             traceback.print_exc()
 
     def linkSectiontoTemplate(
             self, TemplateName, SectionName, oTextSection=None):
         try:
-            if oTextSection is not None:
+            if not oTextSection:
                 oTextSection = self.xTextDocument.TextSections.getByName(
                     SectionName)
             oSectionLink = \
                 uno.createUnoStruct('com.sun.star.text.SectionFileLink')
             oSectionLink.FileURL = TemplateName
-            oTextSection.FileLink = oSectionLink
-            oTextSection.LinkRegion = SectionName
+            uno.invoke(oTextSection, "setPropertyValues",
+                (("FileLink", "LinkRegion"), (oSectionLink, SectionName)))
+
             NewSectionName = oTextSection.Name
             if NewSectionName is not SectionName:
                 oTextSection.Name = SectionName

@@ -251,3 +251,13 @@ class FileAccess(object):
         while url[-1] == "/":
             url = hello[:-1]
         return url[:url.rfind("/")]
+
+    @classmethod
+    def connectURLs(self, urlFolder, urlFilename):
+        stringFolder = ""
+        stringFileName = urlFilename
+        if not urlFolder.endswith("/"):
+            stringFolder = "/"
+        if urlFilename.startswith("/"):
+            stringFileName = urlFilename[1:]
+        return urlFolder + stringFolder + stringFileName
