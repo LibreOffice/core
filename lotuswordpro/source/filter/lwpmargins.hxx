@@ -101,16 +101,12 @@ inline double LwpMargins::GetMarginsValue(const sal_uInt8& nWhichSide)
     {
     case MARGIN_LEFT://left
         return LwpTools::ConvertFromUnitsToMetric(m_nLeft);
-        break;
     case MARGIN_RIGHT://right
         return LwpTools::ConvertFromUnitsToMetric(m_nRight);
-        break;
     case MARGIN_TOP://top
         return LwpTools::ConvertFromUnitsToMetric(m_nTop);
-        break;
     case MARGIN_BOTTOM://bottom
         return LwpTools::ConvertFromUnitsToMetric(m_nBottom);
-        break;
     }
     // FIXME: this is needed to avoid warning: control reaches end of non-void function
     //        a better solution would be to enum value for the parameter side
