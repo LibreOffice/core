@@ -262,7 +262,7 @@ CoreTextPhysicalFontFace::CoreTextPhysicalFontFace( const ImplDevFontAttributes&
 ,   m_bHasCJKSupport( false )
 ,   m_bFontCapabilitiesRead( false )
 {
-    msgs_debug(font,"retain %p as %p",font, m_CTFontRef);
+    SAL_INFO( "vcl.coretext.font", "retain " << font << " as " << m_CTFontRef );
 }
 
 CoreTextPhysicalFontFace::~CoreTextPhysicalFontFace()
@@ -271,7 +271,7 @@ CoreTextPhysicalFontFace::~CoreTextPhysicalFontFace()
     {
         m_pCharMap->DeReference();
     }
-    msgs_debug(font,"release font %p", m_CTFontRef);
+    SAL_INFO( "vcl.coretext.font", "release " << m_CTFontRef );
     SafeCFRelease(m_CTFontRef);
 }
 
@@ -285,7 +285,7 @@ PhysicalFontFace* CoreTextPhysicalFontFace::Clone() const
     if( m_CTFontRef )
     {
         pClone->m_CTFontRef = (CTFontRef)CFRetain(m_CTFontRef);
-        msgs_debug(font,"clone ref %p into %p", m_CTFontRef, pClone->m_CTFontRef);
+        SAL_INFO( "vcl.coretext.font", "clone " << m_CTFontRef << " into " << pClone->m_CTFontRef );
     }
     return pClone;
 }

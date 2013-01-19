@@ -45,20 +45,20 @@ AquaSalGraphics::AquaSalGraphics()
     , mbVirDev( false )
     , mbWindow( false )
 {
-    msgs_debug(gr,"-->");
+    SAL_INFO( "vcl.coretext.gr", "-->" );
     m_style = new CoreTextStyleInfo();
-    msgs_debug(gr,"m_style=%p <--", m_style);
+    SAL_INFO( "vcl.coretext.gr", "m_style=" << m_style << " <--" );
 }
 
 AquaSalGraphics::~AquaSalGraphics()
 {
-    msgs_debug(gr,"-->");
+    SAL_INFO( "vcl.coretext.gr", "-->" );
     if(m_style)
     {
         delete m_style;
         m_style = NULL;
     }
-    msgs_debug(gr,"<--");
+    SAL_INFO( "vcl.coretext.gr", "<--" );
 }
 
 inline bool AquaSalGraphics::AddTempDevFont( ImplDevFontList*,
@@ -137,11 +137,7 @@ void AquaSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackL
     pMetric->mnExtLeading   = nExtDescent + pMetric->mnDescent;
     pMetric->mnIntLeading   = 0;
     pMetric->mnWidth = m_style->GetFontStretchedSize();
-    msgs_debug(gr,"ascent=%ld, descent=%ld, extleading=%ld, intleading=%ld,w=%ld",
-               pMetric->mnAscent, pMetric->mnDescent,
-               pMetric->mnExtLeading,
-               pMetric->mnIntLeading,
-               pMetric->mnWidth);
+    SAL_INFO( "vcl.coretext.gr", "ascent=" << pMetric->mnAscent<< ", descent=" << pMetric->mnDescent << ", extleading=" << pMetric->mnExtLeading << ", intleading=" << pMetric->mnIntLeading << ", w=" << pMetric->mnWidth );
 }
 
 sal_Bool AquaSalGraphics::GetGlyphBoundRect( sal_GlyphId /*nGlyphId*/, Rectangle& /*rRect*/ )
@@ -204,7 +200,7 @@ bool AquaSalGraphics::GetRawFontData( const PhysicalFontFace* pFontFace,
 
 SystemFontData AquaSalGraphics::GetSysFontData( int /* nFallbacklevel */ ) const
 {
-    msgs_debug(gr,"-->");
+    SAL_INFO( "vcl.coretext.gr", "-->" );
     SystemFontData aSysFontData;
     aSysFontData.nSize = sizeof( SystemFontData );
     aSysFontData.bAntialias = true;
@@ -237,31 +233,31 @@ SystemFontData AquaSalGraphics::GetSysFontData( int /* nFallbacklevel */ ) const
     aSysFontData.bVerticalCharacterType = vertical_font ? true : false;
     SafeCFRelease(vertical_font);
 
-    msgs_debug(gr,"<--");
+    SAL_INFO( "vcl.coretext.gr", "<--" );
     return aSysFontData;
 }
 
 SalLayout* AquaSalGraphics::GetTextLayout( ImplLayoutArgs&, int /*nFallbackLevel*/ )
 {
-    msgs_debug(gr,"-->");
+    SAL_INFO( "vcl.coretext.gr", "-->" );
     CoreTextLayout* layout = new CoreTextLayout( this, m_style );
-    msgs_debug(gr,"layout:%p <--", layout);
+    SAL_INFO( "vcl.coretext.gr", "layout:" << layout << " <--" );
     return layout;
 }
 
 sal_uInt16 AquaSalGraphics::SetFont( FontSelectPattern* pReqFont, int /*nFallbackLevel*/ )
 {
-    msgs_debug(gr,"m_style=%p -->", m_style);
+    SAL_INFO( "vcl.coretext.gr", "m_style=" << m_style << " -->" );
     m_style->SetFont(pReqFont);
-    msgs_debug(gr,"<--");
+    SAL_INFO( "vcl.coretext.gr", "<--" );
     return 0;
 }
 
 void AquaSalGraphics::SetTextColor( SalColor nSalColor )
 {
-    msgs_debug(gr,"m_style=%p -->", m_style);
+    SAL_INFO( "vcl.coretext.gr", "m_style=" << m_style << " -->" );
     m_style->SetColor(nSalColor);
-    msgs_debug(gr,"<--");
+    SAL_INFO( "vcl.coretext.gr", "<--" );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
