@@ -242,7 +242,21 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
     for (std::vector<ButtonImageWidgetMap>::iterator aI = m_pParserState->m_aButtonImageWidgetMaps.begin(),
          aEnd = m_pParserState->m_aButtonImageWidgetMaps.end(); aI != aEnd; ++aI)
     {
-        PushButton *pTarget = get<PushButton>(aI->m_sID);
+        PushButton *pTargetButton = NULL;
+        RadioButton *pTargetRadio = NULL;
+        Button *pTarget = NULL;
+
+        if (!aI->m_bRadio)
+        {
+            pTargetButton = get<PushButton>(aI->m_sID);
+            pTarget = pTargetButton;
+        }
+        else
+        {
+            pTargetRadio = get<RadioButton>(aI->m_sID);
+            pTarget = pTargetRadio;
+        }
+
         FixedImage *pImage = get<FixedImage>(aI->m_sValue);
         SAL_WARN_IF(!pTarget || !pImage,
             "vcl", "missing elements of button/image/stock");
@@ -252,7 +266,12 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
 
         VclBuilder::StockMap::iterator aFind = m_pParserState->m_aStockMap.find(aI->m_sValue);
         if (aFind == m_pParserState->m_aStockMap.end())
-            pTarget->SetModeImage(pImage->GetImage());
+        {
+            if (!aI->m_bRadio)
+                pTargetButton->SetModeImage(pImage->GetImage());
+            else
+                pTargetRadio->SetModeRadioImage(pImage->GetImage());
+        }
         else
         {
             const stockinfo &rImageInfo = aFind->second;
@@ -260,9 +279,18 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
             SAL_WARN_IF(eType == SYMBOL_NOSYMBOL, "vcl", "missing stock image element for button");
             if (eType == SYMBOL_NOSYMBOL)
                 continue;
-            pTarget->SetSymbol(eType);
+            if (!aI->m_bRadio)
+                pTargetButton->SetSymbol(eType);
+            else
+                SAL_WARN_IF(eType != SYMBOL_IMAGE, "vcl.layout", "inimplemented symbol type for radiobuttons");
             if (eType == SYMBOL_IMAGE)
-                pTarget->SetModeImage(Bitmap(VclResId(mapStockToImageResource(rImageInfo.m_sStock))));
+            {
+                Bitmap aBitmap(VclResId(mapStockToImageResource(rImageInfo.m_sStock)));
+                if (!aI->m_bRadio)
+                    pTargetButton->SetModeImage(aBitmap);
+                else
+                    pTargetRadio->SetModeRadioImage(aBitmap);
+            }
             switch (rImageInfo.m_nSize)
             {
                 case 1:
@@ -712,12 +740,12 @@ bool VclBuilder::extractStock(const OString &id, stringmap &rMap)
     return false;
 }
 
-bool VclBuilder::extractImage(const OString &id, stringmap &rMap)
+bool VclBuilder::extractButtonImage(const OString &id, stringmap &rMap, bool bRadio)
 {
     VclBuilder::stringmap::iterator aFind = rMap.find(OString("image"));
     if (aFind != rMap.end())
     {
-        m_pParserState->m_aButtonImageWidgetMaps.push_back(ButtonImageWidgetMap(id, aFind->second));
+        m_pParserState->m_aButtonImageWidgetMaps.push_back(ButtonImageWidgetMap(id, aFind->second, bRadio));
         rMap.erase(aFind);
         return true;
     }
@@ -841,7 +869,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         pWindow = new VclAlignment(pParent);
     else if (name == "GtkButton")
     {
-        extractImage(id, rMap);
+        extractButtonImage(id, rMap, false);
         OString sMenu = extractCustomProperty(rMap);
         if (sMenu.isEmpty())
             pWindow = extractStockAndBuildPushButton(pParent, rMap);
@@ -854,6 +882,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     else if (name == "GtkRadioButton")
     {
         extractGroup(id, rMap);
+        extractButtonImage(id, rMap, true);
         pWindow = new RadioButton(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK);
     }
     else if (name == "GtkCheckButton")

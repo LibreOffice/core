@@ -166,14 +166,15 @@ XubString Button::GetStandardHelpText( StandardButtonType /* eButton */ )
     XubString aHelpText;
     return aHelpText;
 }
+
 // -----------------------------------------------------------------------
 sal_Bool Button::SetModeImage( const Image& rImage )
 {
     if ( rImage != mpButtonData->maImage )
     {
         mpButtonData->maImage = rImage;
-
         StateChanged( STATE_CHANGE_DATA );
+        queue_resize();
     }
     return sal_True;
 }
@@ -2815,6 +2816,7 @@ sal_Bool RadioButton::SetModeRadioImage( const Image& rImage )
     {
         maImage = rImage;
         StateChanged( STATE_CHANGE_DATA );
+        queue_resize();
     }
     return sal_True;
 }

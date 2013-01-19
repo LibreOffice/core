@@ -81,7 +81,20 @@ private:
     };
 
     typedef StringPair RadioButtonGroupMap;
-    typedef StringPair ButtonImageWidgetMap;
+
+    struct ButtonImageWidgetMap
+    {
+        OString m_sID;
+        OString m_sValue;
+        bool m_bRadio;
+        ButtonImageWidgetMap(const OString &rId, const OString &rValue, bool bRadio)
+            : m_sID(rId)
+            , m_sValue(rValue)
+            , m_bRadio(bRadio)
+        {
+        }
+    };
+
     typedef StringPair TextBufferMap;
     typedef StringPair WidgetAdjustmentMap;
     typedef StringPair ButtonMenuMap;
@@ -242,7 +255,7 @@ private:
     bool extractBuffer(const OString &id, stringmap &rVec);
     bool extractSpinAdjustment(const OString &id, stringmap &rVec);
     bool extractScrollAdjustment(const OString &id, stringmap &rVec);
-    bool extractImage(const OString &id, stringmap &rMap);
+    bool extractButtonImage(const OString &id, stringmap &rMap, bool bRadio);
     bool extractStock(const OString &id, stringmap &rMap);
 
     void handleTranslations(xmlreader::XmlReader &reader);
