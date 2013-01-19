@@ -242,7 +242,7 @@ struct EqualByName : public std::binary_function<FlatDetectionInfo, FlatDetectio
     ::rtl::OUString sURL = stlDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_URL(), ::rtl::OUString());
 
 #if OSL_DEBUG_LEVEL > 0
-    if (stlDescriptor.find(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FileName" ))) != stlDescriptor.end())
+    if (stlDescriptor.find( "FileName" ) != stlDescriptor.end())
         OSL_FAIL("Detect using of deprecated and already unsupported MediaDescriptor property \"FileName\"!");
 #endif
 
@@ -1136,7 +1136,7 @@ void TypeDetection::impl_seekStreamToZero(comphelper::MediaDescriptor& rDescript
     if (
         (sURL.isEmpty()                                     ) || // "non existing file" ?
         (!xStream.is()                                         ) || // non existing file !
-        (sURL.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("private:stream")))    // not a good idea .-)
+        (sURL.equalsIgnoreAsciiCase("private:stream"))    // not a good idea .-)
        )
         return ::rtl::OUString();
 
@@ -1263,17 +1263,17 @@ sal_Bool TypeDetection::impl_validateAndSetFilterOnDescriptor(      ::comphelper
 
 
 
-::rtl::OUString TypeDetection::impl_getImplementationName()
+OUString TypeDetection::impl_getImplementationName()
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.filter.config.TypeDetection" ));
+    return OUString( "com.sun.star.comp.filter.config.TypeDetection" );
 }
 
 
 
-css::uno::Sequence< ::rtl::OUString > TypeDetection::impl_getSupportedServiceNames()
+css::uno::Sequence< OUString > TypeDetection::impl_getSupportedServiceNames()
 {
-    css::uno::Sequence< ::rtl::OUString > lServiceNames(1);
-    lServiceNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.TypeDetection" ));
+    css::uno::Sequence< OUString > lServiceNames(1);
+    lServiceNames[0] = OUString( "com.sun.star.document.TypeDetection" );
     return lServiceNames;
 }
 

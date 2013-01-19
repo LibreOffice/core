@@ -671,8 +671,8 @@ void FilterCache::impl_flushByList(const css::uno::Reference< css::container::XN
                 // special case. no exception - but not a valid item => set must be finalized or mandatory!
                 // Reject flush operation by throwing an exception. At least one item couldnt be flushed.
                 if (!xItem.is())
-                    throw css::uno::Exception(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Cant add item. Set is finalized or mandatory!" )),
-                                              css::uno::Reference< css::uno::XInterface >()                                   );
+                    throw css::uno::Exception("Cant add item. Set is finalized or mandatory!",
+                                              css::uno::Reference< css::uno::XInterface >());
 
                 CacheItemList::const_iterator pItem = rCache.find(sItem);
                 impl_saveItem(xItem, eType, pItem->second);
@@ -688,8 +688,8 @@ void FilterCache::impl_flushByList(const css::uno::Reference< css::container::XN
                 // special case. no exception - but not a valid item => it must be finalized or mandatory!
                 // Reject flush operation by throwing an exception. At least one item couldnt be flushed.
                 if (!xItem.is())
-                    throw css::uno::Exception(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Cant change item. Its finalized or mandatory!" )),
-                                              css::uno::Reference< css::uno::XInterface >()                                    );
+                    throw css::uno::Exception("Cant change item. Its finalized or mandatory!",
+                                              css::uno::Reference< css::uno::XInterface >());
 
                 CacheItemList::const_iterator pItem = rCache.find(sItem);
                 impl_saveItem(xItem, eType, pItem->second);
@@ -782,8 +782,8 @@ const CacheItemList& FilterCache::impl_getItemList(EItemType eType) const
 
     }
 
-    throw css::uno::Exception(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "unknown sub container requested." )),
-                                            css::uno::Reference< css::uno::XInterface >()                      );
+    throw css::uno::Exception("unknown sub container requested.",
+                                            css::uno::Reference< css::uno::XInterface >());
     // <- SAFE ----------------------------------
 }
 
@@ -802,8 +802,8 @@ CacheItemList& FilterCache::impl_getItemList(EItemType eType)
 
     }
 
-    throw css::uno::Exception(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "unknown sub container requested." )),
-                                            css::uno::Reference< css::uno::XInterface >()                      );
+    throw css::uno::Exception("unknown sub container requested.",
+                                            css::uno::Reference< css::uno::XInterface >());
     // <- SAFE ----------------------------------
 }
 
@@ -825,7 +825,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfig
                 return m_xConfigTypes;
             sPath           = CFGPACKAGE_TD_TYPES;
             pConfig         = &m_xConfigTypes;
-            sRtlLog         = ::rtl::OString("framework (as96863) ::FilterCache::impl_openconfig(E_PROVIDER_TYPES)");
+            sRtlLog         = "framework (as96863) ::FilterCache::impl_openconfig(E_PROVIDER_TYPES)";
         }
         break;
 
@@ -835,7 +835,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfig
                 return m_xConfigFilters;
             sPath           = CFGPACKAGE_TD_FILTERS;
             pConfig         = &m_xConfigFilters;
-            sRtlLog         = ::rtl::OString("framework (as96863) ::FilterCache::impl_openconfig(E_PROVIDER_FILTERS)");
+            sRtlLog         = "framework (as96863) ::FilterCache::impl_openconfig(E_PROVIDER_FILTERS)";
         }
         break;
 
@@ -845,7 +845,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfig
                 return m_xConfigOthers;
             sPath   = CFGPACKAGE_TD_OTHERS;
             pConfig = &m_xConfigOthers;
-            sRtlLog = ::rtl::OString("framework (as96863) ::FilterCache::impl_openconfig(E_PROVIDER_OTHERS)");
+            sRtlLog = "framework (as96863) ::FilterCache::impl_openconfig(E_PROVIDER_OTHERS)";
         }
         break;
 
@@ -855,11 +855,11 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfig
             // the old configuration format only. Its not cached!
             sPath   = CFGPACKAGE_TD_OLD;
             pConfig = &xOld;
-            sRtlLog = ::rtl::OString("framework (as96863) ::FilterCache::impl_openconfig(E_PROVIDER_OLD)");
+            sRtlLog = "framework (as96863) ::FilterCache::impl_openconfig(E_PROVIDER_OLD)";
         }
         break;
 
-        default : throw css::uno::Exception(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "These configuration node isnt supported here for open!" )), 0);
+        default : throw css::uno::Exception("These configuration node isnt supported here for open!", 0);
     }
 
     {
@@ -1035,7 +1035,7 @@ void FilterCache::impl_validateAndOptimize()
         throw css::document::CorruptedFilterConfigurationException(
                 "filter configuration: the list of types or filters is empty",
                 css::uno::Reference< css::uno::XInterface >(),
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "The list of types or filters is empty." )));
+                "The list of types or filters is empty." );
     }
 
     // Create a log for all detected problems, which
@@ -1334,7 +1334,7 @@ void FilterCache::impl_addItem2FlushList(      EItemType        eType,
                 pList = &m_lChangedDetectServices;
                 break;
 
-        default : throw css::uno::Exception(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "unsupported item type" )), 0);
+        default : throw css::uno::Exception("unsupported item type", 0);
     }
 
     OUStringList::const_iterator pItem = ::std::find(pList->begin(), pList->end(), sItem);
@@ -2343,9 +2343,7 @@ CacheItem FilterCache::impl_readOldItem(const css::uno::Reference< css::containe
     css::uno::Reference< css::container::XNameAccess > xItem;
     xSet->getByName(sItem) >>= xItem;
     if (!xItem.is())
-        throw css::uno::Exception(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Cant read old item." )),
-                css::uno::Reference< css::uno::XInterface >());
+        throw css::uno::Exception("Cant read old item.", css::uno::Reference< css::uno::XInterface >());
 
     CacheItem aItem;
     aItem[PROPNAME_NAME] <<= sItem;
@@ -2359,16 +2357,14 @@ CacheItem FilterCache::impl_readOldItem(const css::uno::Reference< css::containe
     // Data
     ::rtl::OUString sData;
     OUStringList    lData;
-    xItem->getByName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Data" ))) >>= sData;
+    xItem->getByName( "Data" ) >>= sData;
     lData = impl_tokenizeString(sData, (sal_Unicode)',');
     if (
         (sData.isEmpty()) ||
         (lData.size()<1    )
        )
     {
-        throw css::uno::Exception(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Cant read old item property DATA." )),
-                css::uno::Reference< css::uno::XInterface >());
+        throw css::uno::Exception( "Cant read old item property DATA.", css::uno::Reference< css::uno::XInterface >());
     }
 
     sal_Int32 nProp = 0;
@@ -2465,7 +2461,7 @@ sal_Bool FilterCache::impl_isModuleInstalled(const ::rtl::OUString& sModule)
         m_xModuleCfg = css::uno::Reference< css::container::XNameAccess >(
                             ::comphelper::ConfigurationHelper::openConfig(
                                 comphelper::getComponentContext(m_xSMGR),
-                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Setup/Office/Factories" )),
+                                "org.openoffice.Setup/Office/Factories",
                                 ::comphelper::ConfigurationHelper::E_READONLY),
                             css::uno::UNO_QUERY_THROW);
     }

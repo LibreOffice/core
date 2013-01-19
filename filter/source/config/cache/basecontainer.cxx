@@ -133,8 +133,7 @@ void BaseContainer::impl_initFlushMode()
     if (!m_pFlushCache)
         m_pFlushCache = m_rCache->clone();
     if (!m_pFlushCache)
-        throw css::uno::RuntimeException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Cant create write copy of internal used cache on demand." )),
+        throw css::uno::RuntimeException( "Cant create write copy of internal used cache on demand.",
                 dynamic_cast< css::container::XNameAccess* >(this));
     // <- SAFE
 }
@@ -203,8 +202,7 @@ void SAL_CALL BaseContainer::insertByName(const ::rtl::OUString& sItem ,
            css::uno::RuntimeException           )
 {
     if (sItem.isEmpty())
-        throw css::lang::IllegalArgumentException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "empty value not allowed as item name." )),
+        throw css::lang::IllegalArgumentException("empty value not allowed as item name.",
             static_cast< css::container::XNameContainer* >(this),
             1);
 
@@ -267,8 +265,7 @@ void SAL_CALL BaseContainer::replaceByName(const ::rtl::OUString& sItem ,
            css::uno::RuntimeException            )
 {
     if (sItem.isEmpty())
-        throw css::lang::IllegalArgumentException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "empty value not allowed as item name." )),
+        throw css::lang::IllegalArgumentException("empty value not allowed as item name.",
             static_cast< css::container::XNameContainer* >(this),
             1);
 
@@ -307,8 +304,7 @@ css::uno::Any SAL_CALL BaseContainer::getByName(const ::rtl::OUString& sItem)
            css::uno::RuntimeException            )
 {
     if (sItem.isEmpty())
-        throw css::container::NoSuchElementException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "An empty item cant be part of this cache!" )),
+        throw css::container::NoSuchElementException( "An empty item cant be part of this cache!",
                 css::uno::Reference< css::uno::XInterface >(static_cast< css::container::XNameAccess* >(this), css::uno::UNO_QUERY));
 
     css::uno::Any aValue;
@@ -506,7 +502,7 @@ void SAL_CALL BaseContainer::flush()
 
     if (!m_pFlushCache)
         throw css::lang::WrappedTargetRuntimeException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Cant guarantee cache consistency. Special flush container does not exists!" )),
+                "Cant guarantee cache consistency. Special flush container does not exists!",
                 dynamic_cast< css::container::XNameAccess* >(this),
                 css::uno::Any());
 
@@ -528,8 +524,7 @@ void SAL_CALL BaseContainer::flush()
         // user whish to repair it now and calls flush()
         // later again ...
 
-        throw css::lang::WrappedTargetRuntimeException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Flush rejected by internal container." )),
+        throw css::lang::WrappedTargetRuntimeException( "Flush rejected by internal container.",
                 dynamic_cast< css::container::XNameAccess* >(this),
                 css::uno::makeAny(ex));
     }
