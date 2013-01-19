@@ -112,6 +112,27 @@ namespace vcl_sal {
         { KEY_SPACEBAR, "Tühik" },
     };
 
+    static const struct KeysNameReplacement aImplReplacements_Lithuanian[] =
+    {
+        { KEY_ESC, "Gr" },
+        { KEY_BACK, "Naikinti" },
+        { KEY_ENTER, "Įvesti" },
+        { KEY_SPACEBAR, "Tarpas" },
+        { KEY_HOME, "Prad" },
+        { KEY_UP, "Aukštyn" },
+        { KEY_PAGEUP, "Psl↑" },
+        { KEY_LEFT, "Kairėn" },
+        { KEY_RIGHT, "Dešinėn" },
+        { KEY_END, "Pab" },
+        { KEY_DOWN, "Žemyn" },
+        { KEY_PAGEDOWN, "Psl↓" },
+        { KEY_INSERT, "Įterpti" },
+        { KEY_DELETE, "Šal" },
+        { KEY_CONTROL, "Vald" },
+        { KEY_SHIFT, "Lyg2" },
+        { KEY_ALT, "Alt" },
+    };
+
     static const struct KeysNameReplacement aImplReplacements_Slovenian[] =
     {
         { KEY_ESC, "Ubežnica" },
@@ -156,6 +177,7 @@ namespace vcl_sal {
         { "ast",aImplReplacements_Asturian, SAL_N_ELEMENTS(aImplReplacements_Asturian) },
         { "ca", aImplReplacements_Catalan, SAL_N_ELEMENTS(aImplReplacements_Catalan) },
         { "et", aImplReplacements_Estonian, SAL_N_ELEMENTS(aImplReplacements_Estonian) },
+        { "lt", aImplReplacements_Lithuanian, SAL_N_ELEMENTS(aImplReplacements_Lithuanian) },
         { "sl", aImplReplacements_Slovenian, SAL_N_ELEMENTS(aImplReplacements_Slovenian) },
         { "es", aImplReplacements_Spanish, SAL_N_ELEMENTS(aImplReplacements_Spanish) },
     };
