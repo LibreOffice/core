@@ -110,7 +110,6 @@ private:
     sal_Bool        bAllowShowSelector  : 1;
     sal_Bool        bIsGraphicValid     : 1;
     sal_Bool        bLinkOnly           : 1;
-    sal_Bool        bResized            : 1;
     sal_Bool        bColTransparency    : 1;
     sal_Bool        bGraphTransparency  : 1;
     Graphic     aBgdGraphic;

@@ -347,7 +347,6 @@ SvxBackgroundTabPage::SvxBackgroundTabPage(Window* pParent, const SfxItemSet& rC
     , bAllowShowSelector(true)
     , bIsGraphicValid(false)
     , bLinkOnly(false)
-    , bResized(false)
     , bColTransparency(false)
     , bGraphTransparency(false)
     , pPageImpl(new SvxBackgroundPage_Impl)
