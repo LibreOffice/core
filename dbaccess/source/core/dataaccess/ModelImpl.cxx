@@ -294,7 +294,7 @@ bool DocumentStorageAccess::commitEmbeddedStorage( bool _bPreventRootCommits )
     bool bSuccess = false;
     try
     {
-        NamedStorages::const_iterator pos = m_aExposedStorages.find( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "database" ) ) );
+        NamedStorages::const_iterator pos = m_aExposedStorages.find( "database" );
         if ( pos != m_aExposedStorages.end() )
             bSuccess = tools::stor::commitStorageIfWriteable( pos->second );
     }
@@ -360,7 +360,7 @@ void SAL_CALL DocumentStorageAccess::commited( const css::lang::EventObject& aEv
         Reference< XStorage > xStorage( aEvent.Source, UNO_QUERY );
 
         // check if this is the dedicated "database" sub storage
-        NamedStorages::const_iterator pos = m_aExposedStorages.find( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "database" ) ) );
+        NamedStorages::const_iterator pos = m_aExposedStorages.find( "database" );
         if  (   ( pos != m_aExposedStorages.end() )
             &&  ( pos->second == xStorage )
             )
@@ -430,9 +430,9 @@ ODatabaseModelImpl::ODatabaseModelImpl( const Reference< XMultiServiceFactory >&
 {
     // some kind of default
     DBG_CTOR(ODatabaseModelImpl,NULL);
-    m_sConnectURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("jdbc:"));
+    m_sConnectURL = "jdbc:";
     m_aTableFilter.realloc(1);
-    m_aTableFilter[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%"));
+    m_aTableFilter[0] = "%";
     impl_construct_nothrow();
 }
 
@@ -490,14 +490,8 @@ void ODatabaseModelImpl::impl_construct_nothrow()
         *pAllowedType++ = ::getCppuType( static_cast< Sequence< Any >* >( NULL ) );
 
         Sequence< Any > aInitArgs( 2 );
-        aInitArgs[0] <<= NamedValue(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AutomaticAddition" ) ),
-            makeAny( (sal_Bool)sal_True )
-        );
-        aInitArgs[1] <<= NamedValue(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AllowedTypes" ) ),
-            makeAny( aAllowedTypes )
-        );
+        aInitArgs[0] <<= NamedValue("AutomaticAddition", makeAny( (sal_Bool)sal_True ));
+        aInitArgs[1] <<= NamedValue("AllowedTypes", makeAny( aAllowedTypes ));
 
         m_xSettings.set( m_aContext.createComponentWithArguments( "com.sun.star.beans.PropertyBag", aInitArgs ), UNO_QUERY_THROW );
 
@@ -1050,9 +1044,9 @@ const AsciiPropertyValue* ODatabaseModelImpl::getDefaultDataSourceSettings()
         AsciiPropertyValue( "Extension",                  makeAny( ::rtl::OUString() ) ),
         AsciiPropertyValue( "CharSet",                    makeAny( ::rtl::OUString() ) ),
         AsciiPropertyValue( "HeaderLine",                 makeAny( (sal_Bool)sal_True ) ),
-        AsciiPropertyValue( "FieldDelimiter",             makeAny( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "," ) ) ) ),
-        AsciiPropertyValue( "StringDelimiter",            makeAny( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "\"" ) ) ) ),
-        AsciiPropertyValue( "DecimalDelimiter",           makeAny( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "." ) ) ) ),
+        AsciiPropertyValue( "FieldDelimiter",             makeAny( OUString( "," ) ) ),
+        AsciiPropertyValue( "StringDelimiter",            makeAny( OUString( "\"" ) ) ),
+        AsciiPropertyValue( "DecimalDelimiter",           makeAny( OUString( "." ) ) ),
         AsciiPropertyValue( "ThousandDelimiter",          makeAny( ::rtl::OUString() ) ),
         AsciiPropertyValue( "ShowDeleted",                makeAny( (sal_Bool)sal_False ) ),
         // known ODBC settings

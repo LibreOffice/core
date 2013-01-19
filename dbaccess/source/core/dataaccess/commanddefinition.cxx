@@ -102,9 +102,9 @@ IMPLEMENT_GETTYPES2(OCommandDefinition,OCommandDefinition_Base,OComponentDefinit
 IMPLEMENT_FORWARD_XINTERFACE2( OCommandDefinition,OComponentDefinition,OCommandDefinition_Base)
 IMPLEMENT_PROPERTYCONTAINER_DEFAULTS2(OCommandDefinition,OCommandDefinition_PROP)
 
-::rtl::OUString OCommandDefinition::getImplementationName_static(  ) throw(RuntimeException)
+OUString OCommandDefinition::getImplementationName_static(  ) throw(RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.dba.OCommandDefinition"));
+    return OUString("com.sun.star.comp.dba.OCommandDefinition");
 }
 
 ::rtl::OUString SAL_CALL OCommandDefinition::getImplementationName(  ) throw(RuntimeException)
@@ -112,12 +112,12 @@ IMPLEMENT_PROPERTYCONTAINER_DEFAULTS2(OCommandDefinition,OCommandDefinition_PROP
     return getImplementationName_static();
 }
 
-Sequence< ::rtl::OUString > OCommandDefinition::getSupportedServiceNames_static(  ) throw(RuntimeException)
+Sequence< OUString > OCommandDefinition::getSupportedServiceNames_static(  ) throw(RuntimeException)
 {
-    Sequence< ::rtl::OUString > aServices(3);
+    Sequence< OUString > aServices(3);
     aServices.getArray()[0] = SERVICE_SDB_QUERYDEFINITION;
     aServices.getArray()[1] = SERVICE_SDB_COMMAND_DEFINITION;
-    aServices.getArray()[2] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.Content"));
+    aServices.getArray()[2] = "com.sun.star.ucb.Content";
     return aServices;
 }
 

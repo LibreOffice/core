@@ -85,9 +85,9 @@ OBookmarkContainer::~OBookmarkContainer()
 }
 
 // XServiceInfo
-::rtl::OUString SAL_CALL OBookmarkContainer::getImplementationName(  ) throw(RuntimeException)
+OUString SAL_CALL OBookmarkContainer::getImplementationName(  ) throw(RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.dba.OBookmarkContainer"));
+    return OUString("com.sun.star.comp.dba.OBookmarkContainer");
 }
 
 sal_Bool SAL_CALL OBookmarkContainer::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)
@@ -97,10 +97,10 @@ sal_Bool SAL_CALL OBookmarkContainer::supportsService( const ::rtl::OUString& _r
     return findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
 }
 
-Sequence< ::rtl::OUString > SAL_CALL OBookmarkContainer::getSupportedServiceNames(  ) throw(RuntimeException)
+Sequence< OUString > SAL_CALL OBookmarkContainer::getSupportedServiceNames(  ) throw(RuntimeException)
 {
-    Sequence< ::rtl::OUString > aReturn(1);
-    aReturn.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.DefinitionContainer"));
+    Sequence< OUString > aReturn(1);
+    aReturn.getArray()[0] = "com.sun.star.sdb.DefinitionContainer";
     return aReturn;
 }
 
