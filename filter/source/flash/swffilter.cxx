@@ -329,7 +329,7 @@ sal_Bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue 
 
     const sal_Int32 nPageCount = xDrawPages->getCount();
     if ( mxStatusIndicator.is() )
-        mxStatusIndicator->start(OUString( RTL_CONSTASCII_USTRINGPARAM( "Saving :" )), nPageCount);
+        mxStatusIndicator->start( "Saving :", nPageCount);
 
     for(sal_Int32 nPage = 0; nPage < nPageCount; nPage++)
     {
@@ -451,7 +451,7 @@ void SAL_CALL FlashExportFilter::initialize( const ::com::sun::star::uno::Sequen
 OUString FlashExportFilter_getImplementationName ()
     throw (RuntimeException)
 {
-    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Impress.FlashExportFilter" ) );
+    return OUString ( "com.sun.star.comp.Impress.FlashExportFilter" );
 }
 
 // -----------------------------------------------------------------------------
@@ -471,7 +471,7 @@ Sequence< OUString > SAL_CALL FlashExportFilter_getSupportedServiceNames(  )
 {
     Sequence < OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
+    pArray[0] =  OUString ( SERVICE_NAME );
     return aRet;
 }
 #undef SERVICE_NAME

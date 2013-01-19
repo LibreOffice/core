@@ -866,12 +866,12 @@ sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQuali
     Sequence< PropertyValue > aFilterData(nJPEGQualityLevel != -1);
     if( nJPEGQualityLevel != -1 )
     {
-        aFilterData[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("Quality"));
+        aFilterData[0].Name = "Quality";
         aFilterData[0].Value <<= nJPEGQualityLevel;
     }
 
     if( aFilter.ExportGraphic( aGraphic, String(), aDstStm,
-                                aFilter.GetExportFormatNumberForShortName( OUString( RTL_CONSTASCII_USTRINGPARAM( JPG_SHORTNAME ) ) ), &aFilterData ) == ERRCODE_NONE )
+                                aFilter.GetExportFormatNumberForShortName( OUString(JPG_SHORTNAME) ), &aFilterData ) == ERRCODE_NONE )
     {
         pJpgData = reinterpret_cast<const sal_uInt8*>(aDstStm.GetData());
         nJpgDataLength = aDstStm.Seek( STREAM_SEEK_TO_END );
@@ -1640,7 +1640,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                 const sal_uInt8*                pData = pA->GetData();
                 String                      aSkipComment;
 
-                if( pA->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XGRAD_SEQ_BEGIN")) )
+                if( pA->GetComment().equalsIgnoreAsciiCase("XGRAD_SEQ_BEGIN") )
                 {
                     const MetaGradientExAction* pGradAction = NULL;
                     sal_Bool                    bDone = sal_False;
@@ -1652,7 +1652,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                         if( pAction->GetType() == META_GRADIENTEX_ACTION )
                             pGradAction = (const MetaGradientExAction*) pAction;
                         else if( ( pAction->GetType() == META_COMMENT_ACTION ) &&
-                                 ( ( (const MetaCommentAction*) pAction )->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XGRAD_SEQ_END")) ) )
+                                 ( ( (const MetaCommentAction*) pAction )->GetComment().equalsIgnoreAsciiCase("XGRAD_SEQ_END") ) )
                         {
                             bDone = sal_True;
                         }
@@ -1661,8 +1661,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                     if( pGradAction )
                         Impl_writeGradientEx( pGradAction->GetPolyPolygon(), pGradAction->GetGradient());
                 }
-                else if( pA->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XPATHFILL_SEQ_BEGIN")) &&
-                         pData )
+                else if( pA->GetComment().equalsIgnoreAsciiCase("XPATHFILL_SEQ_BEGIN") &&  pData )
                 {
 
                     // this comment encapsulates all high level information for a filling that caused
@@ -1685,15 +1684,14 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                             pAction = rMtf.GetAction( i );
 
                             if( ( pAction->GetType() == META_COMMENT_ACTION ) &&
-                                     ( ( (const MetaCommentAction*) pAction )->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XPATHFILL_SEQ_END")) ) )
+                                     ( ( (const MetaCommentAction*) pAction )->GetComment().equalsIgnoreAsciiCase("XPATHFILL_SEQ_END") ) )
                             {
                                 bDone = sal_True;
                             }
                         }
                     }
                 }
-                else if( pA->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XPATHSTROKE_SEQ_BEGIN")) &&
-                         pData )
+                else if( pA->GetComment().equalsIgnoreAsciiCase("XPATHSTROKE_SEQ_BEGIN") && pData )
                 {
 
                     // this comment encapsulates all high level information for a filling that caused
@@ -1716,7 +1714,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                             pAction = rMtf.GetAction( i );
 
                             if( ( pAction->GetType() == META_COMMENT_ACTION ) &&
-                                     ( ( (const MetaCommentAction*) pAction )->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XPATHSTROKE_SEQ_END")) ) )
+                                     ( ( (const MetaCommentAction*) pAction )->GetComment().equalsIgnoreAsciiCase("XPATHSTROKE_SEQ_END") ) )
                             {
                                 bDone = sal_True;
                             }

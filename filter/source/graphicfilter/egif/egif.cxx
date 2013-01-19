@@ -108,7 +108,7 @@ sal_Bool GIFWriter::WriteGIF(const Graphic& rGraphic, FilterConfigItem* pFilterC
     m_pAcc = NULL;
 
     if ( pFilterConfigItem )
-        nInterlaced = pFilterConfigItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Interlaced" ) ), 0 );
+        nInterlaced = pFilterConfigItem->ReadInt32( "Interlaced", 0 );
 
     m_rGIF.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 

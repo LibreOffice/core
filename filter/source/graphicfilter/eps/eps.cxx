@@ -298,10 +298,10 @@ sal_Bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Fi
 
         if( pResMgr )
         {
-            String aPreviewStr( RTL_CONSTASCII_USTRINGPARAM( "Preview" ) );
-            String aVersionStr( RTL_CONSTASCII_USTRINGPARAM( "Version" ) );
-            String aColorStr( RTL_CONSTASCII_USTRINGPARAM( "ColorFormat" ) );
-            String aComprStr( RTL_CONSTASCII_USTRINGPARAM( "CompressionMode" ) );
+            String aPreviewStr( "Preview" );
+            String aVersionStr( "Version" );
+            String aColorStr( "ColorFormat" );
+            String aComprStr( "CompressionMode" );
 #ifdef UNX // don't put binary tiff preview ahead of postscript code by default on unix as ghostscript is unable to read it
             mnPreview = pFilterConfigItem->ReadInt32( aPreviewStr, 0 );
 #else
@@ -316,7 +316,7 @@ sal_Bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Fi
 #else
             mbCompression = pFilterConfigItem->ReadInt32( aComprStr, 1 ) == 1;
 #endif
-            String sTextMode( RTL_CONSTASCII_USTRINGPARAM( "TextMode" ) );
+            String sTextMode( "TextMode" );
             mnTextMode = pFilterConfigItem->ReadInt32( sTextMode, 0 );
             if ( mnTextMode > 2 )
                 mnTextMode = 0;
@@ -468,12 +468,9 @@ void PSWriter::ImplWriteProlog( const Graphic* pPreview )
     ImplWriteLong( aSizePoint.Width() );
     ImplWriteLong( aSizePoint.Height() ,PS_RET );
     ImplWriteLine( "%%Pages: 0" );
-    ::rtl::OUStringBuffer aCreator;
-    aCreator.appendAscii( RTL_CONSTASCII_STRINGPARAM( "%%Creator: " ) );
-    aCreator.append( utl::ConfigManager::getProductName() );
-    aCreator.appendAscii( RTL_CONSTASCII_STRINGPARAM( " " ) );
-    aCreator.append( utl::ConfigManager::getProductVersion() );
-    ImplWriteLine( ::rtl::OUStringToOString( aCreator.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ).getStr() );
+    OUString aCreator( "%%Creator: " + utl::ConfigManager::getProductName() + " " +
+                       utl::ConfigManager::getProductVersion() );
+    ImplWriteLine( OUStringToOString( aCreator, RTL_TEXTENCODING_UTF8 ).getStr() );
     ImplWriteLine( "%%Title: none" );
     ImplWriteLine( "%%CreationDate: none" );
 
@@ -1222,7 +1219,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
             case META_COMMENT_ACTION:
             {
                 const MetaCommentAction* pA = (const MetaCommentAction*) pMA;
-                if ( pA->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XGRAD_SEQ_BEGIN")) )
+                if ( pA->GetComment().equalsIgnoreAsciiCase("XGRAD_SEQ_BEGIN") )
                 {
                     const MetaGradientExAction* pGradAction = NULL;
                     while( ++nCurAction < nCount )
@@ -1231,7 +1228,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                         if( pAction->GetType() == META_GRADIENTEX_ACTION )
                             pGradAction = (const MetaGradientExAction*) pAction;
                         else if( ( pAction->GetType() == META_COMMENT_ACTION ) &&
-                                 ( ( (const MetaCommentAction*) pAction )->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XGRAD_SEQ_END")) ) )
+                                 ( ( (const MetaCommentAction*) pAction )->GetComment().equalsIgnoreAsciiCase("XGRAD_SEQ_END") ) )
                         {
                             break;
                         }
@@ -1239,7 +1236,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                     if( pGradAction )
                         ImplWriteGradient( pGradAction->GetPolyPolygon(), pGradAction->GetGradient(), rVDev );
                 }
-                else if ( pA->GetComment().equalsL(RTL_CONSTASCII_STRINGPARAM("XPATHFILL_SEQ_END")) )
+                else if ( pA->GetComment().equals("XPATHFILL_SEQ_END") )
                 {
                     if ( aFillPath.Count() )
                     {
@@ -1256,9 +1253,9 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                         sal_Bool        bSkipSequence = sal_False;
                         rtl::OString sSeqEnd;
 
-                        if( pA->GetComment().equalsL(RTL_CONSTASCII_STRINGPARAM( "XPATHSTROKE_SEQ_BEGIN" )) )
+                        if( pA->GetComment().equals( "XPATHSTROKE_SEQ_BEGIN" ) )
                         {
-                            sSeqEnd = rtl::OString(RTL_CONSTASCII_STRINGPARAM("XPATHSTROKE_SEQ_END"));
+                            sSeqEnd = "XPATHSTROKE_SEQ_END";
                             SvtGraphicStroke aStroke;
                             aMemStm >> aStroke;
 
@@ -1292,9 +1289,9 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                                 ImplPolyLine( aPath );
                             }
                         }
-                        else if (pA->GetComment().equalsL(RTL_CONSTASCII_STRINGPARAM("XPATHFILL_SEQ_BEGIN")))
+                        else if (pA->GetComment().equals("XPATHFILL_SEQ_BEGIN"))
                         {
-                            sSeqEnd = rtl::OString(RTL_CONSTASCII_STRINGPARAM("XPATHFILL_SEQ_END"));
+                            sSeqEnd = "XPATHFILL_SEQ_END";
                             SvtGraphicFill aFill;
                             aMemStm >> aFill;
                             switch( aFill.getFillType() )
@@ -1363,7 +1360,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                                             break;
                                             case META_COMMENT_ACTION :
                                             {
-                                                if (((const MetaCommentAction*)pAction)->GetComment().equalsL(RTL_CONSTASCII_STRINGPARAM("XPATHFILL_SEQ_END")))
+                                                if (((const MetaCommentAction*)pAction)->GetComment().equals("XPATHFILL_SEQ_END"))
                                                     bOk = sal_False;
                                             }
                                             break;
