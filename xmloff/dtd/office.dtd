@@ -17,6 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 
+<!-- This DTD and the entities it includes are for the
+     XML document format produced by OpenOffice.org 1.x.
+
+     This DTD is for reference from the XML prolog of documents
+     in that OpenOffice.org 1.x format.  It can be used for the
+     DTD validation of those XML documents.
+
+     This DTD is not applicable to ODF documents.  ODF support
+     began in OpenOffice.org 2.x releases.  ODF XML documents
+     have Relax NG Schemas.
+     -->
+
 <!ENTITY % dtypes-mod SYSTEM "dtypes.mod">
 %dtypes-mod;
 <!ENTITY % nmspace-mod SYSTEM "nmspace.mod">
