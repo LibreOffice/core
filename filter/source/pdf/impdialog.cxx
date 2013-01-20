@@ -585,8 +585,7 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( const ImpPDFTabDialog* paParent 
     maCbReduceImageResolution.SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleReduceImageResolutionHdl ) );
     const sal_Bool  bReduceImageResolution = paParent->mbReduceImageResolution;
     maCbReduceImageResolution.Check( bReduceImageResolution );
-    String aStrRes( String::CreateFromInt32( paParent->mnMaxImageResolution ) );
-    aStrRes.Append( String( RTL_CONSTASCII_USTRINGPARAM( " DPI" ) ) );
+    OUString aStrRes = OUString::number( paParent->mnMaxImageResolution ) + " DPI";
     maCoReduceImageResolution.SetText( aStrRes );
     maCoReduceImageResolution.Enable( bReduceImageResolution );
     maCbWatermark.SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleWatermarkHdl ) );

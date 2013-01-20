@@ -423,12 +423,12 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
                 {
                     long nData = (long) aDocTypeLB.GetEntryData(n);
                     OUString sCommand;
-                    sCommand = "matchByDocumentService=%1:iflags=";
-                    sCommand += String::CreateFromInt32(SFX_FILTER_IMPORT|SFX_FILTER_EXPORT);
-                    sCommand += ":eflags=";
-                    sCommand += String::CreateFromInt32(SFX_FILTER_NOTINFILEDLG);
-                    sCommand += ":default_first";
-                    String sReplace;
+                    sCommand = "matchByDocumentService=%1:iflags=" +
+                               OUString::number(SFX_FILTER_IMPORT|SFX_FILTER_EXPORT) +
+                               ":eflags=" +
+                               OUString::number(SFX_FILTER_NOTINFILEDLG) +
+                               ":default_first";
+                    OUString sReplace;
                     switch(nData)
                     {
                         case  APP_WRITER        : sReplace = "com.sun.star.text.TextDocument";  break;
@@ -440,8 +440,7 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
                         case  APP_MATH          : sReplace = "com.sun.star.formula.FormulaProperties";break;
                         default: OSL_FAIL("illegal user data");
                     }
-                    String sTmp(sCommand);
-                    sTmp.SearchAndReplaceAscii("%1", sReplace);
+                    OUString sTmp = sCommand.replaceFirst("%1", sReplace);
                     sCommand = sTmp;
                     Reference< XEnumeration > xList = xQuery->createSubSetEnumerationByQuery(sCommand);
                     SequenceAsVector< OUString > lList;

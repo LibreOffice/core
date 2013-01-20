@@ -269,8 +269,8 @@ void DffPropertyReader::ReadPropSet( SvStream& rIn, void* pClientData ) const
             {
                 if ( IsProperty( i ) )
                 {
-                    OString aString("Prop_adjustValue" + OString::valueOf((static_cast<sal_Int32>( ( i - DFF_Prop_adjustValue ) + 1 ) )) +
-                                    ":" + OString::valueOf(static_cast<sal_Int32>(GetPropertyValue(i))));
+                    OString aString("Prop_adjustValue" + OString::number( ( i - DFF_Prop_adjustValue ) + 1 ) +
+                                    ":" + OString::number(GetPropertyValue(i)) );
                     pOut->WriteLine(aString);
                 }
             }
@@ -288,7 +288,7 @@ void DffPropertyReader::ReadPropSet( SvStream& rIn, void* pClientData ) const
                         {
                             pOut->WriteLine( "" );
                             OStringBuffer aDesc("Property:" + OString::number(i) +
-                                                "  Size:" + OString::valueOf(nLen));
+                                                "  Size:" + OString::number(nLen));
                             pOut->WriteLine(aDesc.makeStringAndClear());
                             sal_Int16   nNumElem, nNumElemMem, nNumSize;
                             rIn >> nNumElem >> nNumElemMem >> nNumSize;
@@ -332,7 +332,7 @@ void DffPropertyReader::ReadPropSet( SvStream& rIn, void* pClientData ) const
                     else
                     {
                         OString aString("Property" + OString::number(i) +
-                                        ":" + OString::valueOf(static_cast<sal_Int32>(GetPropertyValue(i))));
+                                        ":" + OString::number(GetPropertyValue(i)));
                         pOut->WriteLine(aString);
                     }
                 }
@@ -6126,16 +6126,15 @@ sal_Bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, 
         // extract graphics from ole storage into "dbggfxNNN.*"
         static sal_Int32 nGrfCount;
 
-        String aFileName( "dbggfx" );
-        aFileName.Append( String::CreateFromInt32( nGrfCount++ ) );
+        OUString aFileName = "dbggfx" + OUString::number( nGrfCount++ );
         switch( nInst &~ 1 )
         {
-            case 0x216 : aFileName.Append( ".wmf" ); break;
-            case 0x3d4 : aFileName.Append( ".emf" ); break;
-            case 0x542 : aFileName.Append( ".pct" ); break;
-            case 0x46a : aFileName.Append( ".jpg" ); break;
-            case 0x6e0 : aFileName.Append( ".png" ); break;
-            case 0x7a8 : aFileName.Append( ".bmp" ); break;
+            case 0x216 : aFileName += ".wmf"; break;
+            case 0x3d4 : aFileName += ".emf"; break;
+            case 0x542 : aFileName += ".pct"; break;
+            case 0x46a : aFileName += ".jpg"; break;
+            case 0x6e0 : aFileName += ".png"; break;
+            case 0x7a8 : aFileName += ".bmp"; break;
         }
 
         rtl::OUString aURLStr;

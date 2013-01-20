@@ -115,9 +115,10 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
     // read description
     const sal_Unicode cDecimalDelimiter  = pConnection->getDecimalDelimiter();
     const sal_Unicode cThousandDelimiter = pConnection->getThousandDelimiter();
-    String aColumnName;
+    OUString aColumnName;
     ::comphelper::UStringMixEqual aCase(bCase);
-    ::std::vector<String> aColumnNames,m_aTypeNames;
+    ::std::vector<OUString> aColumnNames;
+    ::std::vector<String> m_aTypeNames;
     m_aTypeNames.resize(nFieldCount);
     const sal_Int32 nMaxRowsToScan = pConnection->getMaxRowsToScan();
     sal_Int32 nRowCount = 0;
@@ -133,17 +134,15 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
                 if ( bHasHeaderLine )
                 {
                     aColumnName = aHeaderLine.GetTokenSpecial(nStartPosHeaderLine,m_cFieldDelimiter,m_cStringDelimiter);
-                    if ( !aColumnName.Len() )
+                    if ( !aColumnName.getLength() )
                     {
-                        aColumnName = 'C';
-                        aColumnName += String::CreateFromInt32(i+1);
+                        aColumnName = "C" + OUString::number(i+1);
                     }
                 }
                 else
                 {
                     // no column name so ...
-                    aColumnName = 'C';
-                    aColumnName += String::CreateFromInt32(i+1);
+                    aColumnName = "C" + OUString::number(i+1);
                 }
                 aColumnNames.push_back(aColumnName);
             }
@@ -156,12 +155,12 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
     for (xub_StrLen i = 0; i < nFieldCount; i++)
     {
         // check if the columname already exists
-        String aAlias(aColumnNames[i]);
+        OUString aAlias(aColumnNames[i]);
         OSQLColumns::Vector::const_iterator aFind = connectivity::find(m_aColumns->get().begin(),m_aColumns->get().end(),aAlias,aCase);
         sal_Int32 nExprCnt = 0;
         while(aFind != m_aColumns->get().end())
         {
-            (aAlias = aColumnNames[i]) += String::CreateFromInt32(++nExprCnt);
+            aAlias = aColumnNames[i] + OUString::number(++nExprCnt);
             aFind = connectivity::find(m_aColumns->get().begin(),m_aColumns->get().end(),aAlias,aCase);
         }
 
@@ -705,7 +704,7 @@ sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sal
 
                     // #99178# OJ
                     if ( DataType::DECIMAL == nType || DataType::NUMERIC == nType )
-                        *(_rRow->get())[i] = ::rtl::OUString::valueOf(nVal);
+                        *(_rRow->get())[i] = OUString::number(nVal);
                     else
                         *(_rRow->get())[i] = nVal;
                 } break;

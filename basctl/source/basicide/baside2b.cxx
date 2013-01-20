@@ -106,7 +106,7 @@ OUString getTextEngineText (ExtTextEngine& rEngine)
 
 void setTextEngineText (ExtTextEngine& rEngine, OUString const& aStr)
 {
-    rEngine.SetText(String());
+    rEngine.SetText(OUString());
     OString aUTF8Str = OUStringToOString( aStr, RTL_TEXTENCODING_UTF8 );
     SvMemoryStream aMemStream( (void*)aUTF8Str.getStr(), aUTF8Str.getLength(),
         STREAM_READ | STREAM_SEEK_TO_BEGIN );
@@ -1549,20 +1549,19 @@ void StackWindow::UpdateCalls()
         SbxError eOld = SbxBase::GetError();
         aTreeListBox.SetSelectionMode( SINGLE_SELECTION );
 
-        sal_uInt16 nScope = 0;
+        sal_Int32 nScope = 0;
         SbMethod* pMethod = StarBASIC::GetActiveMethod( nScope );
         while ( pMethod )
         {
-            String aEntry( String::CreateFromInt32(nScope ));
-            if ( aEntry.Len() < 2 )
-                aEntry.Insert( ' ', 0 );
-            aEntry += OUString( ": " );
-            aEntry += pMethod->GetName();
+            OUString aEntry( OUString::number(nScope ));
+            if ( aEntry.getLength() < 2 )
+                aEntry = " " + aEntry;
+            aEntry += ": "  + pMethod->GetName();
             SbxArray* pParams = pMethod->GetParameters();
             SbxInfo* pInfo = pMethod->GetInfo();
             if ( pParams )
             {
-                aEntry += '(';
+                aEntry += "(";
                 // 0 is the sub's name...
                 for ( sal_uInt16 nParam = 1; nParam < pParams->Count(); nParam++ )
                 {
@@ -1580,11 +1579,11 @@ void StackWindow::UpdateCalls()
                             aEntry += pParam->aName;
                         }
                     }
-                    aEntry += '=';
+                    aEntry += "=";
                     SbxDataType eType = pVar->GetType();
                     if( eType & SbxARRAY )
                     {
-                        aEntry += OUString( "..." );
+                        aEntry += "..." ;
                     }
                     else if( eType != SbxOBJECT )
                     {
@@ -1592,10 +1591,10 @@ void StackWindow::UpdateCalls()
                     }
                     if ( nParam < ( pParams->Count() - 1 ) )
                     {
-                        aEntry += OUString( ", " );
+                        aEntry += ", ";
                     }
                 }
-                aEntry += ')';
+                aEntry += ")";
             }
             aTreeListBox.InsertEntry( aEntry, 0, false, LIST_APPEND );
             nScope++;
@@ -1814,23 +1813,21 @@ void WatchTreeListBox::RequestingChildren( SvTreeListEntry * pParent )
 
             // Copy data and create name
 
-            String aIndexStr = OUString( "(" );
+            OUString aIndexStr = "(";
             pChildItem->mpArrayParentItem = pItem;
             pChildItem->nDimLevel = nThisLevel;
             pChildItem->nDimCount = pItem->nDimCount;
             pChildItem->vIndices.resize(pChildItem->nDimCount);
-            sal_uInt16 j;
+            sal_Int32 j;
             for( j = 0 ; j < nParentLevel ; j++ )
             {
                 short n = pChildItem->vIndices[j] = pItem->vIndices[j];
-                aIndexStr += String::CreateFromInt32( n );
-                aIndexStr += OUString( "," );
+                aIndexStr += OUString::number( n ) + ",";
             }
             pChildItem->vIndices[nParentLevel] = sal::static_int_cast<short>( i );
-            aIndexStr += String::CreateFromInt32( i );
-            aIndexStr += OUString( ")" );
+            aIndexStr += OUString::number( i ) + ")";
 
-            String aDisplayName;
+            OUString aDisplayName;
             WatchItem* pArrayRootItem = pChildItem->GetRootItem();
             if( pArrayRootItem && pArrayRootItem->mpArrayParentItem )
                 aDisplayName = pItem->maDisplayName;
@@ -1981,7 +1978,7 @@ void implCollapseModifiedObjectEntry( SvTreeListEntry* pParent, WatchTreeListBox
 
 String implCreateTypeStringForDimArray( WatchItem* pItem, SbxDataType eType )
 {
-    String aRetStr = getBasicTypeName( eType );
+    OUString aRetStr = getBasicTypeName( eType );
 
     SbxDimArray* pArray = pItem->mpArray;
     if( !pArray )
@@ -1992,18 +1989,16 @@ String implCreateTypeStringForDimArray( WatchItem* pItem, SbxDataType eType )
         int nDims = pItem->nDimCount;
         if( nDimLevel < nDims )
         {
-            aRetStr += '(';
+            aRetStr += "(";
             for( int i = nDimLevel ; i < nDims ; i++ )
             {
                 short nMin, nMax;
                 pArray->GetDim( sal::static_int_cast<short>( i+1 ), nMin, nMax );
-                aRetStr += String::CreateFromInt32( nMin );
-                aRetStr += OUString( " to " );
-                aRetStr += String::CreateFromInt32( nMax );
+                aRetStr += OUString::number(nMin) + " to "  + OUString::number(nMax);
                 if( i < nDims - 1 )
-                    aRetStr += OUString( ", " );
+                    aRetStr += ", ";
             }
-            aRetStr += ')';
+            aRetStr += ")";
         }
     }
     return aRetStr;

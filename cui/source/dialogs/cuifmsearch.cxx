@@ -78,7 +78,7 @@ void FmSearchDialog::initCommon( const Reference< XResultSet >& _rxCursor )
     }
 
     // some initial record texts
-    m_ftRecord.SetText( String::CreateFromInt32( _rxCursor->getRow() ) );
+    m_ftRecord.SetText( OUString::number(_rxCursor->getRow()) );
     m_pbClose.SetHelpText(String());
 }
 
@@ -474,7 +474,7 @@ IMPL_LINK(FmSearchDialog, OnCheckBoxToggled, CheckBox*, pBox)
     // direction -> pass on and reset the checkbox-text for StartOver
     else if (pBox == &m_cbBackwards)
     {
-        m_cbStartOver.SetText( String( CUI_RES( bChecked ? RID_STR_FROM_BOTTOM : RID_STR_FROM_TOP ) ) );
+        m_cbStartOver.SetText( OUString( CUI_RES( bChecked ? RID_STR_FROM_BOTTOM : RID_STR_FROM_TOP ) ) );
         m_pSearchEngine->SetDirection(!bChecked);
     }
     // similarity-search or regular expression
@@ -590,7 +590,7 @@ void FmSearchDialog::InitContext(sal_Int16 nContext)
     m_pSearchEngine->SwitchToContext(fmscContext.xCursor, fmscContext.strUsedFields, fmscContext.arrFields,
         m_rbAllFields.IsChecked() ? -1 : 0);
 
-    m_ftRecord.SetText(String::CreateFromInt32(fmscContext.xCursor->getRow()));
+    m_ftRecord.SetText(OUString::number(fmscContext.xCursor->getRow()));
 }
 
 //------------------------------------------------------------------------
@@ -626,7 +626,7 @@ void FmSearchDialog::EnableSearchUI(sal_Bool bEnable)
     }
 
     // the search button has two functions -> adjust its text accordingly
-    String sButtonText( bEnable ? m_sSearch : m_sCancel );
+    OUString sButtonText( bEnable ? m_sSearch : m_sCancel );
     m_pbSearchAgain.SetText( sButtonText );
 
     if (m_pSearchEngine->GetSearchMode() != SM_BRUTE)
@@ -760,12 +760,12 @@ IMPL_LINK(FmSearchDialog, OnSearchProgress, FmSearchProgress*, pProgress)
         case FmSearchProgress::STATE_PROGRESS:
             if (pProgress->bOverflow)
             {
-                String sHint( CUI_RES( m_cbBackwards.IsChecked() ? RID_STR_OVERFLOW_BACKWARD : RID_STR_OVERFLOW_FORWARD ) );
+                OUString sHint( CUI_RES( m_cbBackwards.IsChecked() ? RID_STR_OVERFLOW_BACKWARD : RID_STR_OVERFLOW_FORWARD ) );
                 m_ftHint.SetText( sHint );
                 m_ftHint.Invalidate();
             }
 
-            m_ftRecord.SetText(String::CreateFromInt32(1 + pProgress->nCurrentRecord));
+            m_ftRecord.SetText(OUString::number(1 + pProgress->nCurrentRecord));
             m_ftRecord.Invalidate();
             break;
 
@@ -773,7 +773,7 @@ IMPL_LINK(FmSearchDialog, OnSearchProgress, FmSearchProgress*, pProgress)
             m_ftHint.SetText(CUI_RESSTR(RID_STR_SEARCH_COUNTING));
             m_ftHint.Invalidate();
 
-            m_ftRecord.SetText(String::CreateFromInt32(pProgress->nCurrentRecord));
+            m_ftRecord.SetText(OUString::number(pProgress->nCurrentRecord));
             m_ftRecord.Invalidate();
             break;
 
@@ -804,7 +804,7 @@ IMPL_LINK(FmSearchDialog, OnSearchProgress, FmSearchProgress*, pProgress)
             break;
     }
 
-    m_ftRecord.SetText(String::CreateFromInt32(1 + pProgress->nCurrentRecord));
+    m_ftRecord.SetText(OUString::number(1 + pProgress->nCurrentRecord));
 
     return 0L;
 }
