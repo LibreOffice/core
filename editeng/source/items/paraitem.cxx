@@ -878,7 +878,7 @@ XubString SvxTabStop::GetValueString() const
     XubString aStr;
 
     aStr += sal_Unicode( '(' );
-    aStr += rtl::OUString::valueOf(static_cast<sal_Int32>(nTabPos));
+    aStr += OUString::number(nTabPos);
     aStr += cpDelim;
     aStr += EE_RESSTR(RID_SVXITEMS_TAB_ADJUST_BEGIN + (sal_uInt16)eAdjustment);
 

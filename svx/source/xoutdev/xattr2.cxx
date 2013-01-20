@@ -99,7 +99,7 @@ SfxItemPresentation XLineTransparenceItem::GetPresentation
             rText = XubString( ResId( RID_SVXSTR_TRANSPARENCE, DIALOG_MGR() ) );
             rText.AppendAscii(": ");
         case SFX_ITEM_PRESENTATION_NAMELESS:
-            rText += OUString::valueOf(static_cast<sal_Int32>(GetValue()));
+            rText += OUString::number(GetValue());
             rText += sal_Unicode('%');
             return ePres;
         default:
@@ -495,7 +495,7 @@ SfxItemPresentation XFillTransparenceItem::GetPresentation
             rText = XubString( ResId( RID_SVXSTR_TRANSPARENCE, DIALOG_MGR() ) );
             rText.AppendAscii(": ");
         case SFX_ITEM_PRESENTATION_NAMELESS:
-            rText += OUString::valueOf(static_cast<sal_Int32>(GetValue()));
+            rText += OUString::number(GetValue());
             rText += sal_Unicode('%');
             return ePres;
         default:
@@ -622,7 +622,7 @@ SfxItemPresentation XGradientStepCountItem::GetPresentation
 //          rText = XubString( ResId( RID_SVXSTR_GRADIENTSTEPCOUNT, DIALOG_MGR() ) );
 //          rText += ": ";
         case SFX_ITEM_PRESENTATION_NAMELESS:
-            rText += OUString::valueOf(static_cast<sal_Int32>(GetValue()));
+            rText += OUString::number(GetValue());
             return ePres;
         default:
             return SFX_ITEM_PRESENTATION_NONE;

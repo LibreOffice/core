@@ -1018,7 +1018,7 @@ sal_uLong Sc10Import::Import()
 #if OSL_DEBUG_LEVEL > 0
     if (nError)
     {
-        OSL_FAIL( rtl::OString::valueOf(static_cast<sal_Int32>(nError)).getStr());
+        OSL_FAIL( OString::number(nError).getStr());
     }
 #endif
 

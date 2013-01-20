@@ -501,7 +501,7 @@ static sal_uInt16 lcl_html_fillEndNoteInfo( const SwEndNoteInfo& rInfo,
     }
     if( rInfo.nFtnOffset > 0 )
     {
-        pParts[1] = rtl::OUString::valueOf(static_cast<sal_Int32>(rInfo.nFtnOffset));
+        pParts[1] = OUString::number(rInfo.nFtnOffset);
         nParts = 2;
     }
     if( !rInfo.GetPrefix().isEmpty() )

@@ -815,8 +815,7 @@ SfxItemPresentation SdrPercentItem::GetPresentation(
     SfxItemPresentation ePres, SfxMapUnit /*eCoreMetric*/,
     SfxMapUnit /*ePresMetric*/, XubString& rText, const IntlWrapper *) const
 {
-    rText = OUString::valueOf( static_cast< sal_Int32 >(GetValue()));
-    rText += sal_Unicode('%');
+    rText = OUString::number(GetValue()) + "%";
 
     if(ePres == SFX_ITEM_PRESENTATION_COMPLETE)
     {
@@ -1299,9 +1298,7 @@ SfxItemPresentation SdrTextAniDelayItem::GetPresentation(
     SfxItemPresentation ePres, SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/,
     XubString& rText, const IntlWrapper *) const
 {
-    rText = OUString::valueOf( static_cast< sal_Int32 >( GetValue()));
-    rText += sal_Unicode('m');
-    rText += sal_Unicode('s');
+    rText = OUString::number(GetValue()) + "ms";
 
     if(ePres == SFX_ITEM_PRESENTATION_COMPLETE)
     {
@@ -1486,7 +1483,7 @@ SfxItemPresentation SdrCustomShapeAdjustmentItem::GetPresentation(
     SfxMapUnit /*ePresentationMetric*/, XubString &rText, const IntlWrapper *) const
 {
     sal_uInt32 i, nCount = GetCount();
-    rText.Append( OUString::valueOf( static_cast<sal_Int32>( nCount ) ) );
+    rText.Append( OUString::number( nCount ) );
     for ( i = 0; i < nCount; i++ )
     {
         rText += sal_Unicode( ' ' );
@@ -2055,8 +2052,7 @@ SfxItemPresentation SdrSignedPercentItem::GetPresentation(
     SfxItemPresentation ePres, SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/,
     XubString& rText, const IntlWrapper *) const
 {
-    rText = OUString::valueOf( static_cast< sal_Int32 >( GetValue()));
-    rText += sal_Unicode('%');
+    rText = OUString::number(GetValue()) + "%";
 
     if(ePres == SFX_ITEM_PRESENTATION_COMPLETE)
     {

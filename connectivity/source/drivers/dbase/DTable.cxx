@@ -1956,7 +1956,7 @@ sal_Bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow, 
                     if (!m_pMemoStream || !WriteMemo(thisColVal, nBlockNo))
                         break;
 
-                    rtl::OString aBlock(rtl::OString::valueOf(static_cast<sal_Int32>(nBlockNo)));
+                    rtl::OString aBlock(OString::number(nBlockNo));
                     //align aBlock at the right of a nLen sequence, fill to the left with '0'
                     rtl::OStringBuffer aStr;
                     comphelper::string::padToLength(aStr, nLen - aBlock.getLength(), '0');

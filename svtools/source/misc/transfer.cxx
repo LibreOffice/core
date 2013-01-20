@@ -186,7 +186,7 @@ static ::rtl::OUString ImplGetParameterString( const TransferableObjectDescripto
     }
 
     aParams += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ";viewaspect=\"" ));
-    aParams += ::rtl::OUString::valueOf( static_cast< sal_Int32 >( rObjDesc.mnViewAspect ) );
+    aParams += OUString::number( rObjDesc.mnViewAspect );
     aParams += aChar;
 
     aParams += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ";width=\"" ));

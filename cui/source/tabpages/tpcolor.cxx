@@ -1223,7 +1223,7 @@ sal_uInt16 SvxColorTabPage::PercentToColor_Impl( sal_uInt16 nPercent )
 void SvxColorTabPage::FillUserData()
 {
     // the color model is saved in the Ini-file
-    SetUserData( OUString::valueOf( static_cast<sal_Int32>(eCM) ) );
+    SetUserData( OUString::number( eCM ) );
 }
 
 //------------------------------------------------------------------------

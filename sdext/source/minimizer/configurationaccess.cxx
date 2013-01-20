@@ -299,7 +299,7 @@ void ConfigurationAccess::SaveConfiguration()
             for( k = 1; k < maSettings.size(); k++ )
             {
                 OptimizerSettings& rSettings( maSettings[ k ] );
-                OUString aElementName( TKGet( TK_Template ).concat( OUString::valueOf( static_cast< sal_Int32 >( k ) ) ) );
+                OUString aElementName( TKGet( TK_Template ).concat( OUString::number( k ) ) );
                 Reference< lang::XSingleServiceFactory > xChildFactory ( xSet, UNO_QUERY_THROW );
                 Reference< container::XNameReplace > xChild( xChildFactory->createInstance(), UNO_QUERY_THROW );
                 xNameContainer->insertByName( aElementName, Any( xChild ) );

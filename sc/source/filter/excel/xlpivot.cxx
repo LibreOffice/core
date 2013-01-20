@@ -79,7 +79,7 @@ void XclPCItem::SetDateTime( const DateTime& rDateTime )
 void XclPCItem::SetInteger( sal_Int16 nValue )
 {
     meType = EXC_PCITEM_INTEGER;
-    maText = rtl::OUString::valueOf(static_cast<sal_Int32>(nValue));
+    maText = OUString::number(nValue);
     mnValue = nValue;
 }
 

@@ -635,7 +635,7 @@ const Reference< XIndexContainer >&
             while( xNameCont->hasByName( sName ) )
             {
                 sName = sStdName;
-                sName += OUString::valueOf(static_cast<sal_Int32>(++n));
+                sName += OUString::number(++n);
             }
 
             const Reference< XMultiServiceFactory > &rServiceFactory

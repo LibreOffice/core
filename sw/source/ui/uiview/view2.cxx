@@ -1246,10 +1246,10 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
 
                 const sal_uInt32 stringId = selectionStats.nWord? STR_STATUSBAR_WORDCOUNT : STR_STATUSBAR_WORDCOUNT_NO_SELECTION;
                 rtl::OUString wordCount(SW_RES(stringId));
-                wordCount = wordCount.replaceAll("$1", rtl::OUString::valueOf(static_cast<sal_Int64>(documentStats.nWord)));
+                wordCount = wordCount.replaceAll("$1", OUString::number(documentStats.nWord));
                 if (selectionStats.nWord)
                 {
-                    wordCount = wordCount.replaceAll("$2", rtl::OUString::valueOf(static_cast<sal_Int64>(selectionStats.nWord)));
+                    wordCount = wordCount.replaceAll("$2", OUString::number(selectionStats.nWord));
                 }
                 rSet.Put(SfxStringItem(FN_STAT_WORDCOUNT, wordCount));
 

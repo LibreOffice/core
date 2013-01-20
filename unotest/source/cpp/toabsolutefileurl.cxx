@@ -37,7 +37,7 @@ rtl::OUString toAbsoluteFileUrl(rtl::OUString const & relativePathname) {
             (rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "osl_getProcessWorkingDir failed with ")) +
-             rtl::OUString::valueOf(static_cast< sal_Int32 >(e1))),
+             OUString::number(e1)),
             css::uno::Reference< css::uno::XInterface >());
     }
     rtl::OUString url;
@@ -50,7 +50,7 @@ rtl::OUString toAbsoluteFileUrl(rtl::OUString const & relativePathname) {
                     "osl::FileBase::getFileURLFromSystemPath(")) +
              relativePathname +
              rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(") failed with ")) +
-             rtl::OUString::valueOf(static_cast< sal_Int32 >(e2))),
+             OUString::number(e2)),
             css::uno::Reference< css::uno::XInterface >());
     }
     rtl::OUString absUrl;
@@ -62,7 +62,7 @@ rtl::OUString toAbsoluteFileUrl(rtl::OUString const & relativePathname) {
                     "osl::FileBase::getAbsoluteFileURL(")) +
              cwd + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(", ")) + url +
              rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(") failed with ")) +
-             rtl::OUString::valueOf(static_cast< sal_Int32 >(e2))),
+             OUString::number(e2)),
             css::uno::Reference< css::uno::XInterface >());
     }
     return absUrl;

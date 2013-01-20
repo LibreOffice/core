@@ -1875,7 +1875,7 @@ String ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
                 }
                 if ( bRefStrValid )
                 {
-                    if ( rtl::OUString::valueOf(static_cast<sal_Int32>(nSoundRef)) == aRefStr )
+                    if ( OUString::number(nSoundRef) == aRefStr )
                     {
                         rStCtrl.Seek( nPosMerk2 );
                         if ( SeekToRec( rStCtrl, PPT_PST_CString, nStrLen, NULL, 0 ) )

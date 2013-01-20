@@ -786,7 +786,7 @@ rtl::OUString ScDPDimensionSaveData::CreateGroupDimName(
     {
         rtl::OUString aDimName( rSourceName );
         if ( !bUseSource )
-            aDimName += rtl::OUString::valueOf(static_cast<sal_Int32>(nAdd));
+            aDimName += OUString::number(nAdd);
         bool bExists = false;
 
         // look for existing group dimensions

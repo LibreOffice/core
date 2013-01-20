@@ -238,7 +238,7 @@ void SfxAllEnumItem::InsertValue( sal_uInt16 nValue )
     DBG_CHKTHIS(SfxAllEnumItem, 0);
     SfxAllEnumValue_Impl *pVal = new SfxAllEnumValue_Impl;
     pVal->nValue = nValue;
-    pVal->aText = rtl::OUString::valueOf(static_cast<sal_Int32>(nValue));
+    pVal->aText = OUString::number(nValue);
     if ( !pValues )
         pValues = new SfxAllEnumValueArr;
 

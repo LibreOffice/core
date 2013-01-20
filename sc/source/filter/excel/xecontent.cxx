@@ -1233,7 +1233,7 @@ rtl::OString createHexStringFromDigit(sal_uInt8 nDigit)
 {
     rtl::OString aString = rtl::OString::valueOf( static_cast<sal_Int32>(nDigit), 16 );
     if(aString.getLength() == 1)
-        aString = aString + rtl::OString::valueOf(static_cast<sal_Int32>(0));
+        aString = aString + OString::number(0);
     return aString;
 }
 

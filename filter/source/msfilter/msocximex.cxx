@@ -112,7 +112,7 @@ const uno::Reference< container::XIndexContainer >&
             while( xNameCont->hasByName( sName ) )
             {
                 sName = sWW8_form;
-                sName += OUString::valueOf( static_cast<sal_Int32>(++n) );
+                sName += OUString::number( ++n );
             }
 
             const uno::Reference< lang::XMultiServiceFactory > &rServiceFactory

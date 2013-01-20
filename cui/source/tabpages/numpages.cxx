@@ -1266,7 +1266,7 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet& rSet )
     if(!m_pLevelLB->GetEntryCount())
     {
         for(sal_uInt16 i = 1; i <= pSaveNum->GetLevelCount(); i++)
-            m_pLevelLB->InsertEntry( OUString::valueOf(static_cast<sal_Int32>(i)));
+            m_pLevelLB->InsertEntry( OUString::number(i));
         if(pSaveNum->GetLevelCount() > 1)
         {
             OUString sEntry( "1 - " );
@@ -3018,7 +3018,7 @@ void SvxNumPositionTabPage::Reset( const SfxItemSet& rSet )
     if(!m_pLevelLB->GetEntryCount())
     {
         for(sal_uInt16 i = 1; i <= pSaveNum->GetLevelCount(); i++)
-            m_pLevelLB->InsertEntry( OUString::valueOf(static_cast<sal_Int32>(i)) );
+            m_pLevelLB->InsertEntry( OUString::number(i) );
         if(pSaveNum->GetLevelCount() > 1)
         {
             OUString sEntry( "1 - " );

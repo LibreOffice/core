@@ -262,7 +262,7 @@ static void impl_AddInt( sax_fastparser::FastAttributeList *pAttrList, sal_Int32
     if ( !pAttrList )
         return;
 
-    pAttrList->add( nElement, OString::valueOf( static_cast< sal_Int32 >( nValue ) ).getStr() );
+    pAttrList->add( nElement, OString::number( nValue ).getStr() );
 }
 
 inline sal_uInt16 impl_GetUInt16( const sal_uInt8* &pVal )

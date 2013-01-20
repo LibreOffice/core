@@ -1402,7 +1402,7 @@ void SvMetaType::WriteSfxItem(
     rtl::OStringBuffer aAttrArray;
     sal_uLong   nAttrCount = MakeSfx( aAttrArray );
     rtl::OString aAttrCount(
-        rtl::OString::valueOf(static_cast<sal_Int32>(nAttrCount)));
+        OString::number(nAttrCount));
     aTypeName.append(aAttrCount);
 
     rOutStm << "extern " << aTypeName.getStr()

@@ -1159,7 +1159,7 @@ void Export::InsertListEntry(const rtl::OString &rText, const rtl::OString &rLin
     if ( nListIndex + 1 > pList->size())
     {
         ExportListEntry *pNew = new ExportListEntry();
-        (*pNew)[LIST_REFID] = rtl::OString::valueOf(static_cast<sal_Int32>(REFID_NONE));
+        (*pNew)[LIST_REFID] = OString::number(REFID_NONE);
         pList->push_back(pNew);
     }
     ExportListEntry *pCurEntry = (*pList)[ nListIndex ];
@@ -1464,7 +1464,7 @@ sal_Bool Export::PrepareTextToMerge(rtl::OString &rText, sal_uInt16 nTyp,
             {
                pResData->sId = GetPairedListID( sLastListLine );
             }
-            else pResData->sId = rtl::OString::valueOf(static_cast<sal_Int32>(nListIndex));
+            else pResData->sId = OString::number(nListIndex);
 
             if (!pResData->sGId.isEmpty())
                 pResData->sGId = pResData->sGId + rtl::OString('.');
@@ -1692,7 +1692,7 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
                          */
                         sal_Bool bTranslateList = true;
                         if( !bPairedList ){
-                            pResData->sId = OString::valueOf(static_cast<sal_Int32>(nMaxIndex));
+                            pResData->sId = OString::number(nMaxIndex);
                             pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
                             if ( !pEntrys )
                                 bTranslateList = false;
@@ -1815,7 +1815,7 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
                                     }
                                 }
                                 else
-                                    pResData->sId = rtl::OString::valueOf(static_cast<sal_Int32>(nIdx));
+                                    pResData->sId = OString::number(nIdx);
                                 PFormEntrys *oldEntry = pEntrys;
                                 pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
                                 if( !pEntrys )

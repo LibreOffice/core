@@ -1946,7 +1946,7 @@ void SdrPathObj::TakeObjNameSingul(XubString& rName) const
             if(STRING_NOTFOUND != nPos)
             {
                 rName.Erase(nPos, 2);
-                rName.Insert(rtl::OUString::valueOf(static_cast<sal_Int32>(nPointCount)), nPos);
+                rName.Insert(OUString::number(nPointCount), nPos);
             }
         }
     }

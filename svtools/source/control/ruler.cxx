@@ -497,7 +497,7 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
         nMaxWidth /= nTickUnit;
     else
         nMaxWidth /= aImplRulerUnitTab[mnUnitIndex].nTickUnit;
-    OUString aNumStr = OUString::valueOf(static_cast<sal_Int32>(nMaxWidth));
+    OUString aNumStr = OUString::number(nMaxWidth);
     long nTxtWidth = GetTextWidth( aNumStr );
     const long nTextOff   = 4;
     if ( nTickWidth < nTxtWidth+nTextOff )

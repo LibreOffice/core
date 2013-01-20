@@ -919,7 +919,7 @@ void ScXMLExport::WriteSingleColumn(const sal_Int32 nRepeatColumns, const sal_In
         AddAttribute(XML_NAMESPACE_TABLE, XML_VISIBILITY, XML_COLLAPSE);
     if (nRepeatColumns > 1)
     {
-        OUString sOUEndCol(OUString::valueOf(static_cast <sal_Int32> (nRepeatColumns)));
+        OUString sOUEndCol(OUString::number(nRepeatColumns));
         AddAttribute(sAttrColumnsRepeated, sOUEndCol);
     }
     if (nIndex != -1)
@@ -4161,7 +4161,7 @@ void ScXMLExport::WriteExternalRefCaches()
             {
                 if (nMaxColsUsed > 1)
                     AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_REPEATED,
-                                    OUString::valueOf(static_cast<sal_Int32>(nMaxColsUsed)));
+                                    OUString::number(nMaxColsUsed));
                 SvXMLElementExport aElemColumn(*this, XML_NAMESPACE_TABLE, XML_TABLE_COLUMN, true, true);
             }
 

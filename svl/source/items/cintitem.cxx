@@ -463,7 +463,7 @@ SfxItemPresentation CntUInt32Item::GetPresentation(SfxItemPresentation,
     const
 {
     DBG_CHKTHIS(CntUInt32Item, 0);
-    rText = rtl::OUString::valueOf(static_cast<sal_Int64>(m_nValue));
+    rText = OUString::number(m_nValue);
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }
 

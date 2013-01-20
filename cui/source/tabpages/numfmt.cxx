@@ -972,8 +972,8 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( sal_Bool bCheckCatChange /*= sa
             m_pEdLeadZeroes->Enable();
             m_pBtnNegRed->Enable();
             m_pBtnThousand->Enable();
-            m_pEdDecimals->SetText( OUString::valueOf( static_cast<sal_Int32>(nDecimals) ) );
-            m_pEdLeadZeroes->SetText( OUString::valueOf( static_cast<sal_Int32>(nZeroes) ) );
+            m_pEdDecimals->SetText( OUString::number( nDecimals ) );
+            m_pEdLeadZeroes->SetText( OUString::number( nZeroes ) );
             m_pBtnNegRed->Check( bNegRed );
             m_pBtnThousand->Check( bThousand );
             break;
@@ -994,8 +994,8 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( sal_Bool bCheckCatChange /*= sa
             m_pEdLeadZeroes->Disable();
             m_pBtnNegRed->Disable();
             m_pBtnThousand->Disable();
-            m_pEdDecimals->SetText( OUString::valueOf( static_cast<sal_Int32>(0) ) );
-            m_pEdLeadZeroes->SetText( OUString::valueOf( static_cast<sal_Int32>(0) ) );
+            m_pEdDecimals->SetText( OUString::number( 0 ) );
+            m_pEdLeadZeroes->SetText( OUString::number( 0 ) );
             m_pBtnNegRed->Check( sal_False );
             m_pBtnThousand->Check( sal_False );
     }

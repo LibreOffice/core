@@ -1204,7 +1204,7 @@ PrinterGfx::DrawEPS( const Rectangle& rBoundingBox, void* pPtr, sal_uInt32 nSize
 
     static sal_uInt16 nEps = 0;
     if( aDocTitle.isEmpty() )
-        aDocTitle = rtl::OString::valueOf(static_cast<sal_Int32>(nEps++));
+        aDocTitle = OString::number(nEps++);
 
     if( fLeft != fRight && fTop != fBottom )
     {

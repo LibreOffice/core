@@ -1213,7 +1213,7 @@ void XclExpNumFmt::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
     rStyleSheet->singleElement( XML_numFmt,
-            XML_numFmtId,   OString::valueOf( static_cast<sal_Int32>(mnXclNumFmt) ).getStr(),
+            XML_numFmtId,   OString::number( mnXclNumFmt ).getStr(),
             XML_formatCode, rtl::OUStringToOString(maNumFmtString, RTL_TEXTENCODING_UTF8).getStr(),
             FSEND );
 }
@@ -2988,7 +2988,7 @@ void XclExpDxfs::SaveXml( XclExpXmlStream& rStrm )
 
     sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
     rStyleSheet->startElement( XML_dxfs,
-            XML_count, rtl::OString::valueOf( static_cast<sal_Int32>(maDxf.size())).getStr(),
+            XML_count, OString::number(maDxf.size()).getStr(),
             FSEND );
 
     for ( DxfContainer::iterator itr = maDxf.begin(); itr != maDxf.end(); ++itr )

@@ -702,7 +702,7 @@ UniString GetTypeRes_Impl( const ResId& rTypeId )
 {
     // Return on resource errors
     static int bInUse = sal_False;
-    rtl::OUString aTypStr(OUString::valueOf(static_cast<sal_Int32>(rTypeId.GetId())));
+    rtl::OUString aTypStr(OUString::number(rTypeId.GetId()));
 
     if ( !bInUse )
     {

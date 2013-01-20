@@ -835,7 +835,7 @@ ScColorScale3FrmtEntry::ScColorScale3FrmtEntry( Window* pParent, ScDocument* pDo
         maLbEntryTypeMin.SelectEntryPos(0);
         maLbEntryTypeMiddle.SelectEntryPos(2);
         maLbEntryTypeMax.SelectEntryPos(1);
-        maEdMiddle.SetText(rtl::OUString::valueOf(static_cast<sal_Int32>(50)));
+        maEdMiddle.SetText(OUString::number(50));
     }
     FreeResource();
 
