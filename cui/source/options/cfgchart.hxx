@@ -36,8 +36,8 @@ class SvxChartColorTable
 private:
     ::std::vector< XColorEntry >     m_aColorEntries;
     int                              nNextElementNumber;
-    String                           sDefaultNamePrefix;
-    String                           sDefaultNamePostfix;
+    OUString                         sDefaultNamePrefix;
+    OUString                         sDefaultNamePostfix;
 
 public:
     SvxChartColorTable();

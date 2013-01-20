@@ -380,8 +380,7 @@ void SvxPathTabPage::Reset( const SfxItemSet& )
 
 void SvxPathTabPage::FillUserData()
 {
-    String aUserData = String::CreateFromInt32( pHeaderBar->GetItemSize( ITEMID_TYPE ) );
-    aUserData += ';';
+    String aUserData = OUString::number( pHeaderBar->GetItemSize( ITEMID_TYPE ) ) + ";";
     HeaderBarItemBits nBits = pHeaderBar->GetItemBits( ITEMID_TYPE );
     sal_Bool bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
     aUserData += bUp ? '1' : '0';

@@ -702,8 +702,8 @@ void Condition::fillFormatCondition(const uno::Reference< report::XFormatConditi
 void Condition::setConditionIndex( size_t _nCondIndex, size_t _nCondCount )
 {
     m_nCondIndex = _nCondIndex;
-    String sHeader( ModuleRes( STR_NUMBERED_CONDITION ) );
-    sHeader.SearchAndReplaceAscii( "$number$", String::CreateFromInt32( _nCondIndex + 1 ) );
+    OUString sHeader( ModuleRes( STR_NUMBERED_CONDITION ) );
+    sHeader = sHeader.replaceFirst( "$number$", OUString::number( _nCondIndex + 1) );
     m_aHeader.SetText( sHeader );
 
     m_aMoveUp.Enable( _nCondIndex > 0 );

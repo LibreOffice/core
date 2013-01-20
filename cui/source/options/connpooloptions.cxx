@@ -225,7 +225,7 @@ namespace offapp
                 break;
             case 3:
                 if (_rPos->bEnabled)
-                    sReturn = String::CreateFromInt32(_rPos->nTimeoutSeconds);
+                    sReturn = OUString::number(_rPos->nTimeoutSeconds);
                 break;
             default:
                 OSL_FAIL("DriverListControl::implGetCellText: invalid column id!");
@@ -440,7 +440,7 @@ namespace offapp
 
             m_aDriver.SetText(pDriverPos->sName);
             m_aDriverPoolingEnabled.Check(pDriverPos->bEnabled);
-            m_aTimeout.SetText(String::CreateFromInt32(pDriverPos->nTimeoutSeconds));
+            m_aTimeout.SetText(OUString::number(pDriverPos->nTimeoutSeconds));
 
             OnEnabledDisabled(&m_aDriverPoolingEnabled);
         }

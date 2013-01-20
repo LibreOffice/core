@@ -253,7 +253,7 @@ IconChoiceDialog ::~IconChoiceDialog ()
 {
     // save configuration at INI-Manager
     // and remove pages
-    SvtViewOptions aTabDlgOpt( E_TABDIALOG, String::CreateFromInt32( nResId ) );
+    SvtViewOptions aTabDlgOpt( E_TABDIALOG, OUString::number(nResId) );
     aTabDlgOpt.SetWindowState(::rtl::OStringToOUString(GetWindowState((WINDOWSTATE_MASK_X | WINDOWSTATE_MASK_Y | WINDOWSTATE_MASK_STATE | WINDOWSTATE_MASK_MINIMIZED)), RTL_TEXTENCODING_ASCII_US));
     aTabDlgOpt.SetPageID( mnCurrentPageId );
 
@@ -267,7 +267,7 @@ IconChoiceDialog ::~IconChoiceDialog ()
             String aPageData(pData->pPage->GetUserData());
             if ( aPageData.Len() )
             {
-                SvtViewOptions aTabPageOpt( E_TABPAGE, String::CreateFromInt32( pData->nId ) );
+                SvtViewOptions aTabPageOpt( E_TABPAGE, OUString::number(pData->nId) );
 
                 SetViewOptUserItem( aTabPageOpt, aPageData );
             }
@@ -736,7 +736,7 @@ void IconChoiceDialog::ActivatePageImpl ()
             else
                 pData->pPage = (pData->fnCreatePage)( this, *CreateInputItemSet( mnCurrentPageId ) );
 
-            SvtViewOptions aTabPageOpt( E_TABPAGE, String::CreateFromInt32( pData->nId ) );
+            SvtViewOptions aTabPageOpt( E_TABPAGE, OUString::number(pData->nId) );
             pData->pPage->SetUserData( GetViewOptUserItem( aTabPageOpt ) );
             SetPosSizePages ( pData->nId );
 
@@ -998,7 +998,7 @@ void IconChoiceDialog::Start_Impl()
         nActPage = mnCurrentPageId;
 
     // configuration existing?
-    SvtViewOptions aTabDlgOpt( E_TABDIALOG, String::CreateFromInt32( nResId ) );
+    SvtViewOptions aTabDlgOpt( E_TABDIALOG, OUString::number(nResId) );
 
     if ( aTabDlgOpt.Exists() )
     {

@@ -82,8 +82,7 @@ BreakPointDialog::BreakPointDialog( Window* pParent, BreakPointList& rBrkPntList
     for ( size_t i = 0, n = m_aModifiedBreakPointList.size(); i < n; ++i )
     {
         BreakPoint* pBrk = m_aModifiedBreakPointList.at( i );
-        OUString aEntryStr( "# " );
-        aEntryStr += String::CreateFromInt32( pBrk->nLine );
+        OUString aEntryStr( "# " + OUString::number(pBrk->nLine) );
         aComboBox.InsertEntry( aEntryStr, COMBOBOX_APPEND );
     }
     aComboBox.SetUpdateMode(true);
@@ -111,8 +110,7 @@ BreakPointDialog::BreakPointDialog( Window* pParent, BreakPointList& rBrkPntList
 
 void BreakPointDialog::SetCurrentBreakPoint( BreakPoint* pBrk )
 {
-    String aStr( "# " );
-    aStr += String::CreateFromInt32( pBrk->nLine );
+    OUString aStr( "# " + OUString::number(pBrk->nLine) );
     aComboBox.SetText( aStr );
     UpdateFields( pBrk );
 }
@@ -191,7 +189,7 @@ IMPL_LINK( BreakPointDialog, ButtonHdl, Button *, pButton )
     else if ( pButton == &aNewButton )
     {
         // keep checkbox in mind!
-        String aText( aComboBox.GetText() );
+        OUString aText( aComboBox.GetText() );
         size_t nLine;
         bool bValid = lcl_ParseText( aText, nLine );
         if ( bValid )
@@ -200,8 +198,7 @@ IMPL_LINK( BreakPointDialog, ButtonHdl, Button *, pButton )
             pBrk->bEnabled = aCheckBox.IsChecked();
             pBrk->nStopAfter = (size_t) aNumericField.GetValue();
             m_aModifiedBreakPointList.InsertSorted( pBrk );
-            OUString aEntryStr( "# " );
-            aEntryStr += String::CreateFromInt32( pBrk->nLine );
+            OUString aEntryStr( "# " + OUString::number(pBrk->nLine) );
             aComboBox.InsertEntry( aEntryStr, COMBOBOX_APPEND );
             if (SfxDispatcher* pDispatcher = GetDispatcher())
                 pDispatcher->Execute( SID_BASICIDE_BRKPNTSCHANGED );
