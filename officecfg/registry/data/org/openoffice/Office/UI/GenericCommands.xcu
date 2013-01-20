@@ -5326,6 +5326,11 @@
                     <value xml:lang="en-US">~Tools</value>
                 </prop>
             </node>
+            <node oor:name=".uno:TemplateMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">~Templates</value>
+                </prop>
+           </node>
             <node oor:name=".uno:SpellingMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">~Spellcheck</value>
@@ -5503,7 +5508,7 @@
             </node>
             <node oor:name=".uno:TemplateManager" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Template Manager</value>
+                    <value xml:lang="en-US">Edit</value>
                 </prop>
             </node>
             <node oor:name=".uno:ExternalEdit" oor:op="replace">

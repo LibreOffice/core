@@ -48,6 +48,7 @@
 #define CMD_SID_CANCELCHECKOUT                      ".uno:CancelCheckOut"
 #define CMD_SID_CHECKIN                             ".uno:CheckIn"
 #define CMD_SID_OPENURL                             ".uno:OpenUrl"
+#define CMD_SID_TEMPLATE_MANAGER                    ".uno:TemplateManager"
 #define CMD_SID_OPTIONS                             ".uno:Options"
 #define CMD_SID_ORGANIZER                           ".uno:Organizer"
 #define CMD_SID_PASTE                               ".uno:Paste"
