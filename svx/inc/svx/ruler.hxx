@@ -184,14 +184,13 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     sal_uInt16 GetNextVisible(sal_uInt16 nColumn);
     sal_uInt16 GetPrevVisible(sal_uInt16 nColumn);
 
-    void Update();
-
 enum UpdateType {
     MOVE_ALL,
     MOVE_LEFT,
     MOVE_RIGHT
     };
     void UpdateParaContents_Impl(long lDiff, UpdateType = MOVE_ALL);
+
 protected:
     virtual void    Command( const CommandEvent& rCEvt );
     virtual void    Click();
@@ -202,6 +201,8 @@ protected:
     virtual void    MouseMove( const MouseEvent& rMEvt );
 
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+
+    virtual void    Update();
 
     // calculation of boundary values for object borders
     // values refer to the page

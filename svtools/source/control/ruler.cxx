@@ -2777,9 +2777,11 @@ void Ruler::SetTextRTL(sal_Bool bRTL)
 
 }
 long Ruler::GetPageOffset() const { return mpData->nPageOff; }
-long                Ruler::GetNullOffset() const { return mpData->nNullOff; }
-long                Ruler::GetMargin1() const { return mpData->nMargin1; }
-long                Ruler::GetMargin2() const { return mpData->nMargin2; }
+long Ruler::GetNullOffset() const { return mpData->nNullOff; }
+long    Ruler::GetMargin1() const { return mpData->nMargin1; }
+long    Ruler::GetMargin2() const { return mpData->nMargin2; }
+long Ruler::GetRulerWidth() const { return mpData->nRulWidth; }
+long Ruler::GetRulerVirHeight() const { return mnVirHeight; }
 
 void Ruler::DrawTicks()
 {
