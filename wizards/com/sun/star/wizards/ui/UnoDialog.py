@@ -262,91 +262,56 @@ class UnoDialog(object):
         control.Model.Enabled = enabled
 
     @classmethod
-    def getControlModelType(self, xServiceInfo):
+    def getDisplayProperty(self, xServiceInfo):
         if xServiceInfo.supportsService(
                 "com.sun.star.awt.UnoControlFixedTextModel"):
-            return UIConsts.CONTROLTYPE.FIXEDTEXT
+            return PropertyNames.PROPERTY_LABEL
         elif xServiceInfo.supportsService(
                 "com.sun.star.awt.UnoControlButtonModel"):
-            return UIConsts.CONTROLTYPE.BUTTON
+            return PropertyNames.PROPERTY_LABEL
         elif xServiceInfo.supportsService(
                 "com.sun.star.awt.UnoControlCurrencyFieldModel"):
-            return UIConsts.CONTROLTYPE.CURRENCYFIELD
+            return "Value"
         elif xServiceInfo.supportsService(
                 "com.sun.star.awt.UnoControlDateFieldModel"):
-            return UIConsts.CONTROLTYPE.DATEFIELD
+            return "Date"
         elif xServiceInfo.supportsService(
                 "com.sun.star.awt.UnoControlFixedLineModel"):
-            return UIConsts.CONTROLTYPE.FIXEDLINE
+            return PropertyNames.PROPERTY_LABEL
         elif xServiceInfo.supportsService(
                 "com.sun.star.awt.UnoControlFormattedFieldModel"):
-            return UIConsts.CONTROLTYPE.FORMATTEDFIELD
-        elif xServiceInfo.supportsService(
-                "com.sun.star.awt.UnoControlRoadmapModel"):
-            return UIConsts.CONTROLTYPE.ROADMAP
+            return "EffectiveValue"
         elif xServiceInfo.supportsService(
                 "com.sun.star.awt.UnoControlNumericFieldModel"):
-            return UIConsts.CONTROLTYPE.NUMERICFIELD
+            return "Value"
         elif xServiceInfo.supportsService(
                 "com.sun.star.awt.UnoControlPatternFieldModel"):
-            return UIConsts.CONTROLTYPE.PATTERNFIELD
-        elif xServiceInfo.supportsService(
-                "com.sun.star.awt.UnoControlHyperTextModel"):
-            return UIConsts.CONTROLTYPE.HYPERTEXT
+            return "Text"
         elif xServiceInfo.supportsService(
                 "com.sun.star.awt.UnoControlProgressBarModel"):
-            return UIConsts.CONTROLTYPE.PROGRESSBAR
+            return "ProgressValue"
         elif xServiceInfo.supportsService(
                 "com.sun.star.awt.UnoControlTimeFieldModel"):
-            return UIConsts.CONTROLTYPE.TIMEFIELD
+            return "Time"
         elif xServiceInfo.supportsService(
                 "com.sun.star.awt.UnoControlImageControlModel"):
-            return UIConsts.CONTROLTYPE.IMAGECONTROL
+            return PropertyNames.PROPERTY_IMAGEURL
         elif xServiceInfo.supportsService(
                 "com.sun.star.awt.UnoControlRadioButtonModel"):
-            return UIConsts.CONTROLTYPE.RADIOBUTTON
+            return PropertyNames.PROPERTY_STATE
         elif xServiceInfo.supportsService(
                 "com.sun.star.awt.UnoControlCheckBoxModel"):
-            return UIConsts.CONTROLTYPE.CHECKBOX
+            return PropertyNames.PROPERTY_STATE
         elif xServiceInfo.supportsService(
                 "com.sun.star.awt.UnoControlEditModel"):
-            return UIConsts.CONTROLTYPE.EDITCONTROL
+            return "Text"
         elif xServiceInfo.supportsService(
                 "com.sun.star.awt.UnoControlComboBoxModel"):
-            return UIConsts.CONTROLTYPE.COMBOBOX
+            return "Text"
         elif xServiceInfo.supportsService(
                 "com.sun.star.awt.UnoControlListBoxModel"):
-            return UIConsts.CONTROLTYPE.LISTBOX
+            return "SelectedItems"
         else:
-            return UIConsts.CONTROLTYPE.UNKNOWN
-
-    @classmethod
-    def getDisplayProperty(self, oControlModel):
-        itype = self.getControlModelType(oControlModel)
-        if not UnoDialog.createDict:
-            UnoDialog.createDict = True
-            UnoDialog.dictProperties = {
-                UIConsts.CONTROLTYPE.FIXEDTEXT:PropertyNames.PROPERTY_LABEL,
-                UIConsts.CONTROLTYPE.BUTTON:PropertyNames.PROPERTY_LABEL,
-                UIConsts.CONTROLTYPE.FIXEDLINE:PropertyNames.PROPERTY_LABEL,
-                UIConsts.CONTROLTYPE.NUMERICFIELD:"Value",
-                UIConsts.CONTROLTYPE.CURRENCYFIELD:"Value",
-                UIConsts.CONTROLTYPE.FORMATTEDFIELD:"EffectiveValue",
-                UIConsts.CONTROLTYPE.DATEFIELD:"Date",
-                UIConsts.CONTROLTYPE.TIMEFIELD:"Time",
-                UIConsts.CONTROLTYPE.SCROLLBAR:"ScrollValue",
-                UIConsts.CONTROLTYPE.PROGRESSBAR:"ProgressValue",
-                UIConsts.CONTROLTYPE.IMAGECONTROL:PropertyNames.PROPERTY_IMAGEURL,
-                UIConsts.CONTROLTYPE.RADIOBUTTON:PropertyNames.PROPERTY_STATE,
-                UIConsts.CONTROLTYPE.CHECKBOX:PropertyNames.PROPERTY_STATE,
-                UIConsts.CONTROLTYPE.EDITCONTROL:"Text",
-                UIConsts.CONTROLTYPE.COMBOBOX:"Text",
-                UIConsts.CONTROLTYPE.PATTERNFIELD:"Text",
-                UIConsts.CONTROLTYPE.LISTBOX:"SelectedItems"
-            }
-        try:
-            return UnoDialog.dictProperties[itype]
-        except KeyError:
             return ""
 
     def addResourceHandler(self, _Unit, _Module):

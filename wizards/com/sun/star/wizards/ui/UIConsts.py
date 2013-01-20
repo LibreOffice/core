@@ -45,28 +45,3 @@ class UIConsts():
     SOGROUPFILTERPAGE = 6
     SOTITLESPAGE = 7
     SOSUMMARYPAGE = 8
-
-    class CONTROLTYPE():
-
-        BUTTON = 1
-        IMAGECONTROL = 2
-        LISTBOX = 3
-        COMBOBOX = 4
-        CHECKBOX = 5
-        RADIOBUTTON = 6
-        DATEFIELD = 7
-        EDITCONTROL = 8
-        FILECONTROL = 9
-        FIXEDLINE = 10
-        FIXEDTEXT = 11
-        FORMATTEDFIELD = 12
-        GROUPBOX = 13
-        HYPERTEXT = 14
-        NUMERICFIELD = 15
-        PATTERNFIELD = 16
-        PROGRESSBAR = 17
-        ROADMAP = 18
-        SCROLLBAR = 19
-        TIMEFIELD = 20
-        CURRENCYFIELD = 21
-        UNKNOWN = -1

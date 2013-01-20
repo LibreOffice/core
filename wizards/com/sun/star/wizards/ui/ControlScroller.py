@@ -209,6 +209,7 @@ class ControlScroller(object):
             controlname).Model
         propertyname = UnoDialog.getDisplayProperty(oControlModel)
         if propertyname:
+            print(type(controlname))
             setattr(controlname, propertyname, newvalue)
 
     @classmethod

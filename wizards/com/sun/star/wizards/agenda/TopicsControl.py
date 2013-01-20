@@ -123,7 +123,6 @@ class TopicsControl(ControlScroller):
 
     '''
     initializes the data of the control.
-    @param agenda
     '''
 
     def initializeScrollFields(self, agenda):
