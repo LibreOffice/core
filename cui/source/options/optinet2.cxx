@@ -241,7 +241,7 @@ void SvxProxyTabPage::ReadConfigData_Impl()
 
         if( xNameAccess->getByName(aHttpPortPN) >>= nIntValue )
         {
-            aHttpPortED.SetText( String::CreateFromInt32( nIntValue ));
+            aHttpPortED.SetText( OUString::number( nIntValue ));
         }
 
         if( xNameAccess->getByName(aHttpsProxyPN) >>= aStringValue )
@@ -251,7 +251,7 @@ void SvxProxyTabPage::ReadConfigData_Impl()
 
         if( xNameAccess->getByName(aHttpsPortPN) >>= nIntValue )
         {
-            aHttpsPortED.SetText( String::CreateFromInt32( nIntValue ));
+            aHttpsPortED.SetText( OUString::number( nIntValue ));
         }
 
         if( xNameAccess->getByName(aFtpProxyPN) >>= aStringValue )
@@ -261,7 +261,7 @@ void SvxProxyTabPage::ReadConfigData_Impl()
 
         if( xNameAccess->getByName(aFtpPortPN) >>= nIntValue )
         {
-            aFtpPortED.SetText( String::CreateFromInt32( nIntValue ));
+            aFtpPortED.SetText( OUString::number( nIntValue ));
         }
 
         if( xNameAccess->getByName(aNoProxyDescPN) >>= aStringValue )
@@ -300,7 +300,7 @@ void SvxProxyTabPage::ReadConfigDefaults_Impl()
 
         if( xPropertyState->getPropertyDefault(aHttpPortPN) >>= nIntValue )
         {
-            aHttpPortED.SetText( String::CreateFromInt32( nIntValue ));
+            aHttpPortED.SetText( OUString::number( nIntValue ));
         }
 
         if( xPropertyState->getPropertyDefault(aHttpsProxyPN) >>= aStringValue )
@@ -310,7 +310,7 @@ void SvxProxyTabPage::ReadConfigDefaults_Impl()
 
         if( xPropertyState->getPropertyDefault(aHttpsPortPN) >>= nIntValue )
         {
-            aHttpsPortED.SetText( String::CreateFromInt32( nIntValue ));
+            aHttpsPortED.SetText( OUString::number( nIntValue ));
         }
 
         if( xPropertyState->getPropertyDefault(aFtpProxyPN) >>= aStringValue )
@@ -320,7 +320,7 @@ void SvxProxyTabPage::ReadConfigDefaults_Impl()
 
         if( xPropertyState->getPropertyDefault(aFtpPortPN) >>= nIntValue )
         {
-            aFtpPortED.SetText( String::CreateFromInt32( nIntValue ));
+            aFtpPortED.SetText( OUString::number( nIntValue ));
         }
 
         if( xPropertyState->getPropertyDefault(aNoProxyDescPN) >>= aStringValue )
@@ -609,11 +609,11 @@ void SvxScriptExecListBox::RequestHelp( const HelpEvent& rHEvt )
         }
      else // if not, nothing happens.
          return;
-     String aHelpText;
+     OUString aHelpText;
      if( nPos <= nTop+nCount-1 ) // if find the matching entry, get its content.
          aHelpText = GetEntry(nPos);
-    if( aHelpText.Len() && GetTextWidth(aHelpText)<GetOutputSizePixel().Width() )
-        aHelpText.Erase(); // if the entry is quite short, clear the helping tip content.
+    if( aHelpText.getLength() && GetTextWidth(aHelpText)<GetOutputSizePixel().Width() )
+        aHelpText = OUString(); // if the entry is quite short, clear the helping tip content.
     aItemRect = Rectangle(Point(0,0),GetSizePixel());
     aPt = Point(OutputToScreenPixel( aItemRect.TopLeft() ));
     aItemRect.Left()   = aPt.X();

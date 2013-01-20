@@ -124,16 +124,16 @@ void SvxChartColorTable::useDefault()
 
 String SvxChartColorTable::getDefaultName( size_t _nIndex )
 {
-    String aName;
+    OUString aName;
 
-    if (sDefaultNamePrefix.Len() == 0)
+    if (sDefaultNamePrefix.getLength() == 0)
     {
-        String aResName( CUI_RES( RID_SVXSTR_DIAGRAM_ROW ) );
-        xub_StrLen nPos = aResName.SearchAscii( "$(ROW)" );
-        if( nPos != STRING_NOTFOUND )
+        OUString aResName( CUI_RES( RID_SVXSTR_DIAGRAM_ROW ) );
+        sal_Int32 nPos = aResName.indexOf( "$(ROW)" );
+        if( nPos != -1 )
         {
-            sDefaultNamePrefix = String( aResName, 0, nPos );
-            sDefaultNamePostfix = String( aResName, nPos + sizeof( "$(ROW)" ) - 1, STRING_LEN );
+            sDefaultNamePrefix = aResName.copy( 0, nPos );
+            sDefaultNamePostfix = aResName.copy( nPos + sizeof( "$(ROW)" ) - 1 );
         }
         else
         {
@@ -141,9 +141,7 @@ String SvxChartColorTable::getDefaultName( size_t _nIndex )
         }
     }
 
-    aName = sDefaultNamePrefix;
-    aName.Append( String::CreateFromInt32 ( _nIndex + 1 ) );
-    aName.Append( sDefaultNamePostfix );
+    aName = sDefaultNamePrefix + OUString::number(_nIndex + 1) + sDefaultNamePostfix;
     nNextElementNumber++;
 
     return aName;
@@ -218,13 +216,14 @@ sal_Bool SvxChartOptions::RetrieveOptions()
         Color aCol;
 
         // create strings for entry names
-        String aResName( CUI_RES( RID_SVXSTR_DIAGRAM_ROW ) );
-        String aPrefix, aPostfix, aName;
-        xub_StrLen nPos = aResName.SearchAscii( "$(ROW)" );
-        if( nPos != STRING_NOTFOUND )
+        OUString aResName( CUI_RES( RID_SVXSTR_DIAGRAM_ROW ) );
+        OUString aPrefix, aPostfix, aName;
+        sal_Int32 nPos = aResName.indexOf( "$(ROW)" );
+        if( nPos != -1 )
         {
-            aPrefix = String( aResName, 0, nPos );
-            aPostfix = String( aResName, nPos + sizeof( "$(ROW)" ) - 1, STRING_LEN );
+            aPrefix = aResName.copy( 0, nPos );
+            sal_Int32 idx = nPos + sizeof( "$(ROW)" ) - 1;
+            aPostfix = aResName.copy( idx, aResName.getLength()-idx );
         }
         else
             aPrefix = aResName;
@@ -234,9 +233,7 @@ sal_Bool SvxChartOptions::RetrieveOptions()
         {
             aCol.SetColor( (static_cast< ColorData >(aColorSeq[ i ] )));
 
-            aName = aPrefix;
-            aName.Append( String::CreateFromInt32( i + 1 ));
-            aName.Append( aPostfix );
+            aName = aPrefix + OUString::number(i + 1) + aPostfix;
 
             maDefColors.append( XColorEntry( aCol, aName ));
         }

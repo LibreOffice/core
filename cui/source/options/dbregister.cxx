@@ -266,11 +266,10 @@ void DbRegistrationOptionsPage::Reset( const SfxItemSet& rSet )
 
 void DbRegistrationOptionsPage::FillUserData()
 {
-    String aUserData = String::CreateFromInt32( pHeaderBar->GetItemSize( ITEMID_TYPE ) );
-    aUserData += ';';
+    OUString aUserData = OUString::number( pHeaderBar->GetItemSize( ITEMID_TYPE ) ) + ";";
     HeaderBarItemBits nBits = pHeaderBar->GetItemBits( ITEMID_TYPE );
     sal_Bool bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
-    aUserData += (bUp ? '1' : '0');
+    aUserData += (bUp ? OUString("1") : OUString("0"));
     SetUserData( aUserData );
 }
 // -----------------------------------------------------------------------

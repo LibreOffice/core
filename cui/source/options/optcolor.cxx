@@ -1402,7 +1402,7 @@ IMPL_LINK(SvxColorOptionsTabPage, CheckNameHdl_Impl, AbstractSvxNameDialog*, pDi
 
 void SvxColorOptionsTabPage::FillUserData()
 {
-    SetUserData(String::CreateFromInt32(pColorConfigCT->GetScrollPosition()));
+    SetUserData(OUString::number(pColorConfigCT->GetScrollPosition()));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

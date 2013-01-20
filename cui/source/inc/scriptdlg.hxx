@@ -174,7 +174,7 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >
                 getBrowseNode( SvTreeListEntry* pEntry );
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > getModel( SvTreeListEntry* pEntry );
-    String      getListOfChildren( ::com::sun::star::uno::Reference< com::sun::star::script::browse::XBrowseNode > node, int depth );
+    OUString    getListOfChildren( ::com::sun::star::uno::Reference< com::sun::star::script::browse::XBrowseNode > node, int depth );
     void        StoreCurrentSelection();
     void        RestorePreviousSelection();
 

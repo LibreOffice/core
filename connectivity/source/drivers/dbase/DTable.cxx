@@ -350,13 +350,13 @@ OSL_TRACE("column type: %c",aDBFColumn.db_typ);
         {
             case 'C':
                 eType = DataType::VARCHAR;
-                aTypeName = ::rtl::OUString("VARCHAR");
+                aTypeName = "VARCHAR";
                 break;
             case 'F':
-                aTypeName = ::rtl::OUString("DECIMAL");
+                aTypeName = "DECIMAL";
             case 'N':
                 if ( aDBFColumn.db_typ == 'N' )
-                    aTypeName = ::rtl::OUString("NUMERIC");
+                    aTypeName = "NUMERIC";
                 eType = DataType::DECIMAL;
 
                 // for numeric fields two characters more are written, than the precision of the column description predescribes,
@@ -366,40 +366,40 @@ OSL_TRACE("column type: %c",aDBFColumn.db_typ);
                 break;
             case 'L':
                 eType = DataType::BIT;
-                aTypeName = ::rtl::OUString("BOOLEAN");
+                aTypeName = "BOOLEAN";
                 break;
             case 'Y':
                 bIsCurrency = sal_True;
                 eType = DataType::DOUBLE;
-                aTypeName = ::rtl::OUString("DOUBLE");
+                aTypeName = "DOUBLE";
                 break;
             case 'D':
                 eType = DataType::DATE;
-                aTypeName = ::rtl::OUString("DATE");
+                aTypeName = "DATE";
                 break;
             case 'T':
                 eType = DataType::TIMESTAMP;
-                aTypeName = ::rtl::OUString("TIMESTAMP");
+                aTypeName = "TIMESTAMP";
                 break;
             case 'I':
                 eType = DataType::INTEGER;
-                aTypeName = ::rtl::OUString("INTEGER");
+                aTypeName = "INTEGER";
                 break;
             case 'M':
                 if ( bFoxPro && ( aDBFColumn.db_frei2[0] & 0x04 ) == 0x04 )
                 {
                     eType = DataType::LONGVARBINARY;
-                    aTypeName = ::rtl::OUString("LONGVARBINARY");
+                    aTypeName = "LONGVARBINARY";
                 }
                 else
                 {
-                    aTypeName = ::rtl::OUString("LONGVARCHAR");
+                    aTypeName = "LONGVARCHAR";
                     eType = DataType::LONGVARCHAR;
                 }
                 nPrecision = 2147483647;
                 break;
             case 'P':
-                aTypeName = ::rtl::OUString("LONGVARBINARY");
+                aTypeName = "LONGVARBINARY";
                 eType = DataType::LONGVARBINARY;
                 nPrecision = 2147483647;
                 break;
@@ -407,12 +407,12 @@ OSL_TRACE("column type: %c",aDBFColumn.db_typ);
             case 'B':
                 if ( m_aHeader.db_typ == VisualFoxPro || m_aHeader.db_typ == VisualFoxProAuto )
                 {
-                    aTypeName = ::rtl::OUString("DOUBLE");
+                    aTypeName = "DOUBLE";
                     eType = DataType::DOUBLE;
                 }
                 else
                 {
-                    aTypeName = ::rtl::OUString("LONGVARBINARY");
+                    aTypeName = "LONGVARBINARY";
                     eType = DataType::LONGVARBINARY;
                     nPrecision = 2147483647;
                 }
@@ -513,9 +513,9 @@ void ODbaseTable::construct()
         // nyi: Ugly for Unix and Mac!
 
             if ( m_aHeader.db_typ == FoxProMemo || VisualFoxPro == m_aHeader.db_typ || VisualFoxProAuto == m_aHeader.db_typ ) // foxpro uses another extension
-                aURL.SetExtension(rtl::OUString("fpt"));
+                aURL.SetExtension("fpt");
             else
-                aURL.SetExtension(rtl::OUString("dbt"));
+                aURL.SetExtension("dbt");
 
             // If the memo file isn't found, the data will be displayed anyhow.
             // However, updates can't be done
@@ -679,7 +679,7 @@ void ODbaseTable::refreshIndexes()
         INetURLObject aURL;
         aURL.SetURL(getEntry(m_pConnection,m_Name));
 
-        aURL.setExtension(rtl::OUString("inf"));
+        aURL.setExtension("inf");
         Config aInfFile(aURL.getFSysPath(INetURLObject::FSYS_DETECT));
         aInfFile.SetGroup(dBASE_III_GROUP);
         sal_uInt16 nKeyCnt = aInfFile.GetKeyCount();
@@ -1042,7 +1042,7 @@ sal_Bool ODbaseTable::CreateImpl()
     {
         ::rtl::OUString aIdent = m_pConnection->getContent()->getIdentifier()->getContentIdentifier();
         if ( aIdent.lastIndexOf('/') != (aIdent.getLength()-1) )
-            aIdent += ::rtl::OUString("/");
+            aIdent += "/";
         aIdent += m_Name;
         aName = aIdent.getStr();
     }
@@ -1081,7 +1081,7 @@ sal_Bool ODbaseTable::CreateImpl()
         try
         {
             Content aContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
-            aContent.executeCommand( rtl::OUString("delete"),bool2any( sal_True ) );
+            aContent.executeCommand( "delete",bool2any( sal_True ) );
         }
         catch(const Exception&) // an exception is thrown when no file exists
         {
@@ -1092,7 +1092,7 @@ sal_Bool ODbaseTable::CreateImpl()
     if (bMemoFile)
     {
         String aExt = aURL.getExtension();
-        aURL.setExtension(rtl::OUString("dbt"));                      // extension for memo file
+        aURL.setExtension("dbt");                      // extension for memo file
         Content aMemo1Content(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
 
         sal_Bool bMemoAlreadyExists = sal_False;
@@ -1109,7 +1109,7 @@ sal_Bool ODbaseTable::CreateImpl()
             try
             {
                 Content aMemoContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
-                aMemoContent.executeCommand( rtl::OUString("delete"),bool2any( sal_True ) );
+                aMemoContent.executeCommand( "delete",bool2any( sal_True ) );
             }
             catch(const Exception&)
             {
@@ -1125,7 +1125,7 @@ sal_Bool ODbaseTable::CreateImpl()
         {
             aURL.setExtension(aExt);      // kill dbf file
             Content aMemoContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
-            aMemoContent.executeCommand( rtl::OUString("delete"),bool2any( sal_True ) );
+            aMemoContent.executeCommand( "delete",bool2any( sal_True ) );
             return sal_False;
         }
         m_aHeader.db_typ = dBaseIIIMemo;
@@ -1437,7 +1437,7 @@ sal_Bool ODbaseTable::Drop_Static(const ::rtl::OUString& _sUrl,sal_Bool _bHasMem
     {
         if (_bHasMemoFields)
         {  // delete the memo fields
-            aURL.setExtension(rtl::OUString("dbt"));
+            aURL.setExtension("dbt");
             bDropped = ::utl::UCBContentHelper::Kill(aURL.GetMainURL(INetURLObject::NO_DECODE));
         }
 
@@ -1457,13 +1457,13 @@ sal_Bool ODbaseTable::Drop_Static(const ::rtl::OUString& _sUrl,sal_Bool _bHasMem
                 {
                 }
             }
-            aURL.setExtension(rtl::OUString("inf"));
+            aURL.setExtension("inf");
 
             // as the inf file does not necessarily exist, we aren't allowed to use UCBContentHelper::Kill
             try
             {
                 ::ucbhelper::Content aDeleteContent( aURL.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext() );
-                aDeleteContent.executeCommand( ::rtl::OUString("delete"), makeAny( sal_Bool( sal_True ) ) );
+                aDeleteContent.executeCommand( "delete", makeAny( sal_Bool( sal_True ) ) );
             }
             catch(const Exception&)
             {
@@ -1929,8 +1929,8 @@ sal_Bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow, 
                         xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
                         ::std::list< ::std::pair<const sal_Char* , ::rtl::OUString > > aStringToSubstitutes;
                         aStringToSubstitutes.push_back(::std::pair<const sal_Char* , ::rtl::OUString >("$columnname$", aColName));
-                        aStringToSubstitutes.push_back(::std::pair<const sal_Char* , ::rtl::OUString >("$precision$", String::CreateFromInt32(nLen)));
-                        aStringToSubstitutes.push_back(::std::pair<const sal_Char* , ::rtl::OUString >("$scale$", String::CreateFromInt32(nScale)));
+                        aStringToSubstitutes.push_back(::std::pair<const sal_Char* , OUString >("$precision$", OUString::number(nLen)));
+                        aStringToSubstitutes.push_back(::std::pair<const sal_Char* , OUString >("$scale$", OUString::number(nScale)));
                         aStringToSubstitutes.push_back(::std::pair<const sal_Char* , ::rtl::OUString >("$value$", ::rtl::OStringToOUString(aDefaultValue,RTL_TEXTENCODING_UTF8)));
 
                         const ::rtl::OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
@@ -1956,7 +1956,7 @@ sal_Bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow, 
                     if (!m_pMemoStream || !WriteMemo(thisColVal, nBlockNo))
                         break;
 
-                    rtl::OString aBlock(rtl::OString::valueOf(static_cast<sal_Int32>(nBlockNo)));
+                    rtl::OString aBlock(OString::number(nBlockNo));
                     //align aBlock at the right of a nLen sequence, fill to the left with '0'
                     rtl::OStringBuffer aStr;
                     comphelper::string::padToLength(aStr, nLen - aBlock.getLength(), '0');
@@ -2162,7 +2162,7 @@ void SAL_CALL ODbaseTable::alterColumnByIndex( sal_Int32 index, const Reference<
     checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
 
     if(index < 0 || index >= m_pColumns->getCount())
-        throw IndexOutOfBoundsException(::rtl::OUString::valueOf(index),*this);
+        throw IndexOutOfBoundsException(OUString::number(index),*this);
 
     Reference<XDataDescriptorFactory> xOldColumn;
     m_pColumns->getByIndex(index) >>= xOldColumn;
@@ -2175,7 +2175,7 @@ void ODbaseTable::alterColumn(sal_Int32 index,
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::alterColumn" );
     if(index < 0 || index >= m_pColumns->getCount())
-        throw IndexOutOfBoundsException(::rtl::OUString::valueOf(index),*this);
+        throw IndexOutOfBoundsException(OUString::number(index),*this);
 
     ODbaseTable* pNewTable = NULL;
     try
@@ -2327,11 +2327,11 @@ namespace
             Content aContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
 
             Sequence< PropertyValue > aProps( 1 );
-            aProps[0].Name      = ::rtl::OUString("Title");
+            aProps[0].Name      = "Title";
             aProps[0].Handle    = -1; // n/a
             aProps[0].Value     = makeAny( ::rtl::OUString(sNewName) );
             Sequence< Any > aValues;
-            aContent.executeCommand( rtl::OUString("setPropertyValues"),makeAny(aProps) ) >>= aValues;
+            aContent.executeCommand( "setPropertyValues",makeAny(aProps) ) >>= aValues;
             if(aValues.getLength() && aValues[0].hasValue())
                 throw Exception();
         }
@@ -2469,7 +2469,7 @@ void ODbaseTable::dropColumn(sal_Int32 _nPos)
         xHold = pNewTable = NULL;
         const ::rtl::OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
                 STR_COLUMN_NOT_DROP,
-                "$position$", ::rtl::OUString::valueOf(_nPos)
+                "$position$", OUString::number(_nPos)
              ) );
         ::dbtools::throwGenericSQLException( sError, *this );
     }
@@ -2492,7 +2492,7 @@ String ODbaseTable::createTempFile()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::createTempFile" );
     ::rtl::OUString aIdent = m_pConnection->getContent()->getIdentifier()->getContentIdentifier();
     if ( aIdent.lastIndexOf('/') != (aIdent.getLength()-1) )
-        aIdent += ::rtl::OUString("/");
+        aIdent += "/";
     String sTempName(aIdent);
     String sExt;
     sExt.AssignAscii(".");
