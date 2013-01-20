@@ -214,11 +214,10 @@ AlternativesExtraData * ThesaurusAlternativesCtrl::GetExtraData(
 SvTreeListEntry * ThesaurusAlternativesCtrl::AddEntry( sal_Int32 nVal, const String &rText, bool bIsHeader )
 {
     SvTreeListEntry* pEntry = new SvTreeListEntry;
-    String aText;
+    OUString aText;
     if (bIsHeader && nVal >= 0)
     {
-        aText = String::CreateFromInt32( nVal );
-        aText += rtl::OUString(". ");
+        aText = OUString::number( nVal ) + ". ";
     }
     pEntry->AddItem( new SvLBoxString( pEntry, 0, String() ) ); // add empty column
     aText += rText;

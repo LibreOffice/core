@@ -342,7 +342,7 @@ void OReportController::disposing()
     }
     if ( m_pGroupsFloater )
     {
-        SvtViewOptions aDlgOpt( E_WINDOW, String::CreateFromInt32( RID_GROUPS_SORTING ) );
+        SvtViewOptions aDlgOpt( E_WINDOW, OUString::number( RID_GROUPS_SORTING ) );
         aDlgOpt.SetWindowState(::rtl::OStringToOUString(m_pGroupsFloater->GetWindowState(WINDOWSTATE_MASK_ALL), RTL_TEXTENCODING_ASCII_US));
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<FloatingWindow> aTemp(m_pGroupsFloater);
@@ -2546,7 +2546,7 @@ void OReportController::openSortingAndGroupingDialog()
     if ( !m_pGroupsFloater )
     {
         m_pGroupsFloater = new OGroupsSortingDialog(getView(),!isEditable(),this);
-        SvtViewOptions aDlgOpt( E_WINDOW, String::CreateFromInt32( RID_GROUPS_SORTING ) );
+        SvtViewOptions aDlgOpt( E_WINDOW, OUString::number( RID_GROUPS_SORTING) );
         if ( aDlgOpt.Exists() )
             m_pGroupsFloater->SetWindowState(::rtl::OUStringToOString(aDlgOpt.GetWindowState(), RTL_TEXTENCODING_ASCII_US));
         m_pGroupsFloater->AddEventListener(LINK(this,OReportController,EventLstHdl));
@@ -2752,7 +2752,7 @@ uno::Any SAL_CALL OReportController::getViewData(void) throw( uno::RuntimeExcept
             ::std::vector<sal_uInt16>::iterator aEnd = aCollapsedPositions.end();
             for (sal_Int32 i = 1; aIter != aEnd ; ++aIter,++pCollapsedIter,++i)
             {
-                pCollapsedIter->Name = PROPERTY_SECTION + ::rtl::OUString::valueOf(i);
+                pCollapsedIter->Name = PROPERTY_SECTION + OUString::number(i);
                 pCollapsedIter->Value <<= static_cast<sal_Int32>(*aIter);
             }
 

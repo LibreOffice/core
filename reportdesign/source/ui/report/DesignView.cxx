@@ -157,7 +157,7 @@ ODesignView::~ODesignView()
     }
     if ( m_pReportExplorer )
     {
-        SvtViewOptions aDlgOpt( E_WINDOW, String::CreateFromInt32( RID_NAVIGATOR ) );
+        SvtViewOptions aDlgOpt( E_WINDOW, OUString::number( RID_NAVIGATOR) );
         aDlgOpt.SetWindowState(::rtl::OStringToOUString(m_pReportExplorer->GetWindowState(WINDOWSTATE_MASK_ALL), RTL_TEXTENCODING_ASCII_US));
         notifySystemWindow(this,m_pReportExplorer,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -508,7 +508,7 @@ void ODesignView::toggleReportExplorer()
     {
         OReportController& rReportController = getController();
         m_pReportExplorer = new ONavigator(this,rReportController);
-        SvtViewOptions aDlgOpt( E_WINDOW, String::CreateFromInt32( RID_NAVIGATOR ) );
+        SvtViewOptions aDlgOpt( E_WINDOW, OUString::number( RID_NAVIGATOR) );
         if ( aDlgOpt.Exists() )
             m_pReportExplorer->SetWindowState(rtl::OUStringToOString(aDlgOpt.GetWindowState(), RTL_TEXTENCODING_ASCII_US));
         m_pReportExplorer->AddEventListener(LINK(&rReportController,OReportController,EventLstHdl));

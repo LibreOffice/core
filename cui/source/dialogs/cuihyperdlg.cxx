@@ -144,7 +144,7 @@ SvxHpLinkDlg::SvxHpLinkDlg (Window* pParent, SfxBindings* pBindings)
 SvxHpLinkDlg::~SvxHpLinkDlg ()
 {
     // delete config item, so the base class (IconChoiceDialog) can not load it on the next start
-    SvtViewOptions aViewOpt( E_TABDIALOG, String::CreateFromInt32( SID_HYPERLINK_DIALOG ) );
+    SvtViewOptions aViewOpt( E_TABDIALOG, OUString::number(SID_HYPERLINK_DIALOG) );
     aViewOpt.Delete();
 
     delete mpItemSet;

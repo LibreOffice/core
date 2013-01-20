@@ -669,10 +669,10 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
     pData = _pData;
 
     GalleryTheme*       pThm = pData->pTheme;
-    String              aOutStr( String::CreateFromInt32( pThm->GetObjectCount() ) );
+    OUString            aOutStr( OUString::number(pThm->GetObjectCount()) );
     String              aObjStr( CUI_RES( RID_SVXSTR_GALLERYPROPS_OBJECT ) );
-    String              aAccess;
-    String              aType( SVX_RES( RID_SVXSTR_GALLERYPROPS_GALTHEME ) );
+    OUString            aAccess;
+    OUString            aType( SVX_RES( RID_SVXSTR_GALLERYPROPS_GALTHEME ) );
     sal_Bool            bReadOnly = pThm->IsReadOnly();
 
     aEdtMSName.SetHelpId( HID_GALLERY_EDIT_MSNAME );
@@ -685,7 +685,7 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
         aEdtMSName.Enable();
 
     if( pThm->IsReadOnly() )
-        aType += String( CUI_RES( RID_SVXSTR_GALLERY_READONLY ) );
+        aType += CUI_RES( RID_SVXSTR_GALLERY_READONLY );
 
     aFtMSShowType.SetText( aType );
     aFtMSShowPath.SetText( pThm->GetSdgURL().GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) );
@@ -696,8 +696,7 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
     else
         aObjStr = aObjStr.GetToken( 1 );
 
-    aOutStr += ' ';
-    aOutStr += aObjStr;
+    aOutStr += " " + aObjStr;
 
     aFtMSShowContent.SetText( aOutStr );
 
@@ -706,9 +705,7 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
     const LocaleDataWrapper&    aLocaleData = aSysLocale.GetLocaleData();
 
     // ChangeDate/Time
-    aAccess = aLocaleData.getDate( pData->aThemeChangeDate );
-    aAccess += String( RTL_CONSTASCII_USTRINGPARAM( ", " ) );
-    aAccess += aLocaleData.getTime( pData->aThemeChangeTime );
+    aAccess = aLocaleData.getDate( pData->aThemeChangeDate ) + ", " + aLocaleData.getTime( pData->aThemeChangeTime );
     aFtMSShowChangeDate.SetText( aAccess );
 
     // set image

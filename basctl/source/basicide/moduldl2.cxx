@@ -1566,15 +1566,14 @@ void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
         return;
 
     // create library name
-    String aLibName;
-    String aLibStdName( String( "Library" ) );
+    OUString aLibName;
+    OUString aLibStdName( "Library" );
     //String aLibStdName( IDEResId( RID_STR_STDLIBNAME ) );
     bool bValid = false;
-    sal_uInt16 i = 1;
+    sal_Int32 i = 1;
     while ( !bValid )
     {
-        aLibName = aLibStdName;
-        aLibName += String::CreateFromInt32( i );
+        aLibName = aLibStdName + OUString::number( i );
         if ( !rDocument.hasLibrary( E_SCRIPTS, aLibName ) && !rDocument.hasLibrary( E_DIALOGS, aLibName ) )
             bValid = true;
         i++;
@@ -1588,7 +1587,7 @@ void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
         if (aNewDlg.GetObjectName().Len())
             aLibName = aNewDlg.GetObjectName();
 
-        if ( aLibName.Len() > 30 )
+        if ( aLibName.getLength() > 30 )
         {
             ErrorBox( pWin, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_LIBNAMETOLONG ) ) ).Execute();
         }

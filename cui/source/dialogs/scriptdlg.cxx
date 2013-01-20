@@ -151,7 +151,7 @@ void SFTreeListBox::deleteAllTree()
     }
 }
 
-void SFTreeListBox::Init( const ::rtl::OUString& language  )
+void SFTreeListBox::Init( const OUString& language  )
 {
     SetUpdateMode( sal_False );
 
@@ -163,10 +163,10 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
 
     Sequence< Reference< browse::XBrowseNode > > children;
 
-    ::rtl::OUString userStr( RTL_CONSTASCII_USTRINGPARAM("user") );
-    ::rtl::OUString shareStr( RTL_CONSTASCII_USTRINGPARAM("share") );
+    OUString userStr("user");
+    OUString shareStr("share");
 
-    ::rtl::OUString singleton( RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.script.browse.theBrowseNodeFactory" ) );
+    OUString singleton("/singletons/com.sun.star.script.browse.theBrowseNodeFactory");
 
     try
     {
@@ -184,7 +184,7 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
     catch( Exception& e )
     {
         OSL_TRACE("Exception getting root browse node from factory: %s",
-            ::rtl::OUStringToOString(
+            OUStringToOString(
                 e.Message , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         // TODO exception handling
     }
@@ -193,8 +193,8 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
     for ( sal_Int32 n = 0; n < children.getLength(); n++ )
     {
         bool app = false;
-        ::rtl::OUString uiName = children[ n ]->getName();
-        ::rtl::OUString factoryURL;
+        OUString uiName = children[ n ]->getName();
+        OUString factoryURL;
         if ( uiName.equals( userStr ) || uiName.equals( shareStr ) )
         {
             app = true;
@@ -218,7 +218,7 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
                 // get the long name of the document:
                 Sequence<beans::PropertyValue> moduleDescr;
                 try{
-                    ::rtl::OUString appModule = xModuleManager->identify( xDocumentModel );
+                    OUString appModule = xModuleManager->identify( xDocumentModel );
                     xModuleManager->getByName(appModule) >>= moduleDescr;
                 } catch(const uno::Exception&)
                     {}
@@ -236,7 +236,7 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
             }
         }
 
-        ::rtl::OUString lang( language );
+        OUString lang( language );
         Reference< browse::XBrowseNode > langEntries =
             getLangNodeFromRootNode( children[ n ], lang );
 
@@ -250,7 +250,7 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
 }
 
 Reference< XInterface  >
-SFTreeListBox::getDocumentModel( Reference< XComponentContext >& xCtx, ::rtl::OUString& docName )
+SFTreeListBox::getDocumentModel( Reference< XComponentContext >& xCtx, OUString& docName )
 {
     Reference< XInterface > xModel;
     Reference< frame::XDesktop2 > desktop  = frame::Desktop::create(xCtx);
@@ -265,7 +265,7 @@ SFTreeListBox::getDocumentModel( Reference< XComponentContext >& xCtx, ::rtl::OU
             components->nextElement(), UNO_QUERY );
         if ( model.is() )
         {
-            ::rtl::OUString sTdocUrl = ::comphelper::DocumentInfo::getDocumentTitle( model );
+            OUString sTdocUrl = ::comphelper::DocumentInfo::getDocumentTitle( model );
             if( sTdocUrl.equals( docName ) )
             {
                 xModel = model;
@@ -277,7 +277,7 @@ SFTreeListBox::getDocumentModel( Reference< XComponentContext >& xCtx, ::rtl::OU
 }
 
 Reference< browse::XBrowseNode >
-SFTreeListBox::getLangNodeFromRootNode( Reference< browse::XBrowseNode >& rootNode, ::rtl::OUString& language )
+SFTreeListBox::getLangNodeFromRootNode( Reference< browse::XBrowseNode >& rootNode, OUString& language )
 {
     Reference< browse::XBrowseNode > langNode;
 
@@ -321,7 +321,7 @@ void SFTreeListBox:: RequestSubEntries( SvTreeListEntry* pRootEntry, Reference< 
 
     for ( sal_Int32 n = 0; n < children.getLength(); n++ )
     {
-        ::rtl::OUString name( children[ n ]->getName() );
+        OUString name( children[ n ]->getName() );
         if (  children[ n ]->getType() !=  browse::BrowseNodeTypes::SCRIPT)
         {
             SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -353,7 +353,7 @@ void SFTreeListBox::ExpandAllTrees()
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
 SvTreeListEntry * SFTreeListBox::insertEntry(
     String const & rText, sal_uInt16 nBitmap, SvTreeListEntry * pParent,
-    bool bChildrenOnDemand, std::auto_ptr< SFEntry > aUserData, ::rtl::OUString factoryURL )
+    bool bChildrenOnDemand, std::auto_ptr< SFEntry > aUserData, OUString factoryURL )
 {
     SvTreeListEntry * p;
     if( nBitmap == RID_CUIIMG_DOC && !factoryURL.isEmpty() )
@@ -488,7 +488,7 @@ CuiInputDialog::~CuiInputDialog()
 // ----------------------------------------------------------------------------
 // ScriptOrgDialog ------------------------------------------------------------
 // ----------------------------------------------------------------------------
-SvxScriptOrgDialog::SvxScriptOrgDialog( Window* pParent, ::rtl::OUString language )
+SvxScriptOrgDialog::SvxScriptOrgDialog( Window* pParent, OUString language )
     : SfxModalDialog(pParent, "ScriptOrganizerDialog", "cui/ui/scriptorganizer.ui")
     , m_sLanguage(language)
     , m_delErrStr(CUI_RESSTR(RID_SVXSTR_DELFAILED))
@@ -511,7 +511,7 @@ SvxScriptOrgDialog::SvxScriptOrgDialog( Window* pParent, ::rtl::OUString languag
     // must be a neater way to deal with the strings than as above
     // append the language to the dialog title
     String winTitle( GetText() );
-    winTitle.SearchAndReplace( rtl::OUString( "%MACROLANG" ), m_sLanguage );
+    winTitle.SearchAndReplace( OUString( "%MACROLANG" ), m_sLanguage );
     SetText( winTitle );
 
     m_pScriptsBox->SetSelectHdl( LINK( this, SvxScriptOrgDialog, ScriptSelectHdl ) );
@@ -589,7 +589,7 @@ void SvxScriptOrgDialog::CheckButtons( Reference< browse::XBrowseNode >& node )
             return;
         }
 
-        ::rtl::OUString sName("Editable")  ;
+        OUString sName("Editable")  ;
 
         if ( getBoolProperty( xProps, sName ) )
         {
@@ -600,7 +600,7 @@ void SvxScriptOrgDialog::CheckButtons( Reference< browse::XBrowseNode >& node )
             m_pEditButton->Disable();
         }
 
-        sName = rtl::OUString("Deletable")  ;
+        sName = OUString("Deletable")  ;
 
         if ( getBoolProperty( xProps, sName ) )
         {
@@ -611,7 +611,7 @@ void SvxScriptOrgDialog::CheckButtons( Reference< browse::XBrowseNode >& node )
             m_pDelButton->Disable();
         }
 
-        sName = rtl::OUString("Creatable")  ;
+        sName = OUString("Creatable")  ;
 
         if ( getBoolProperty( xProps, sName ) )
         {
@@ -622,7 +622,7 @@ void SvxScriptOrgDialog::CheckButtons( Reference< browse::XBrowseNode >& node )
             m_pCreateButton->Disable();
         }
 
-        sName = rtl::OUString("Renamable")  ;
+        sName = OUString("Renamable")  ;
 
         if ( getBoolProperty( xProps, sName ) )
         {
@@ -708,7 +708,7 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton )
 
                 if ( pButton == m_pRunButton )
                 {
-                    ::rtl::OUString tmpString;
+                    OUString tmpString;
                     Reference< beans::XPropertySet > xProp( node, UNO_QUERY );
                     Reference< provider::XScriptProvider > mspNode;
                     if( !xProp.is() )
@@ -739,7 +739,7 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton )
                         mspNode.set( mspUserData->GetNode() , UNO_QUERY );
                         pParent = m_pScriptsBox->GetParent( pParent );
                     }
-                    xProp->getPropertyValue( rtl::OUString("URI" ) ) >>= tmpString;
+                    xProp->getPropertyValue( OUString("URI" ) ) >>= tmpString;
                     const String scriptURL( tmpString );
 
                     if ( mspNode.is() )
@@ -792,11 +792,11 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton )
                         try
                         {
                             // ISSUE need code to run script here
-                            xInv->invoke( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Editable" ) ), args, outIndex, outArgs );
+                            xInv->invoke( "Editable", args, outIndex, outArgs );
                         }
                         catch( Exception& e )
                         {
-                            OSL_TRACE("Caught exception trying to invoke %s", ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                            OSL_TRACE("Caught exception trying to invoke %s", OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
 
                         }
                     }
@@ -858,16 +858,16 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
 
     if ( xInv.is() )
     {
-        ::rtl::OUString aNewName;
-        ::rtl::OUString aNewStdName;
+        OUString aNewName;
+        OUString aNewStdName;
         sal_uInt16 nMode = INPUTMODE_NEWLIB;
         if( m_pScriptsBox->GetModel()->GetDepth( pEntry ) == 0 )
         {
-            aNewStdName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Library") ) ;
+            aNewStdName = "Library" ;
         }
         else
         {
-            aNewStdName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Macro") ) ;
+            aNewStdName = "Macro" ;
             nMode = INPUTMODE_NEWMACRO;
         }
         //do we need L10N for this? ie somethng like:
@@ -881,8 +881,7 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
         {
             if( node->hasChildNodes() == sal_False )
             {
-                aNewName = aNewStdName;
-                aNewName += String::CreateFromInt32( i );
+                aNewName = aNewStdName + OUString::number(i);
                 bValid = sal_True;
             }
             else
@@ -895,15 +894,14 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
             // ignore, will continue on with empty sequence
         }
 
-        ::rtl::OUString extn;
+        OUString extn;
         while ( !bValid )
         {
-            aNewName = aNewStdName;
-            aNewName += String::CreateFromInt32( i );
+            aNewName = aNewStdName + OUString::number(i);
             sal_Bool bFound = sal_False;
             if(childNodes.getLength() > 0 )
             {
-                ::rtl::OUString nodeName = childNodes[0]->getName();
+                OUString nodeName = childNodes[0]->getName();
                 sal_Int32 extnPos = nodeName.lastIndexOf( '.' );
                 if(extnPos>0)
                     extn = nodeName.copy(extnPos);
@@ -935,7 +933,7 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
         {
             if ( xNewDlg->Execute() && xNewDlg->GetObjectName().Len() )
             {
-                ::rtl::OUString aUserSuppliedName = xNewDlg->GetObjectName();
+                OUString aUserSuppliedName = xNewDlg->GetObjectName();
                 bValid = sal_True;
                 for( sal_Int32 index = 0; index < childNodes.getLength(); index++ )
                 {
@@ -973,7 +971,7 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
         try
         {
             Any aResult;
-            aResult = xInv->invoke( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Creatable") ), args, outIndex, outArgs );
+            aResult = xInv->invoke( "Creatable", args, outIndex, outArgs );
             Reference< browse::XBrowseNode > newNode( aResult, UNO_QUERY );
             aChildNode = newNode;
 
@@ -981,7 +979,7 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
         catch( Exception& e )
         {
             OSL_TRACE("Caught exception trying to Create %s",
-                ::rtl::OUStringToOString(
+                OUStringToOString(
                     e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         }
     }
@@ -991,7 +989,7 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
         SvTreeListEntry* pNewEntry = NULL;
 
 
-        ::rtl::OUString name( aChildName );
+        OUString name( aChildName );
         Reference<XModel> xDocumentModel = getModel( pEntry );
 
         // ISSUE do we need to remove all entries for parent
@@ -1032,7 +1030,7 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
     else
     {
         //ISSUE L10N & message from exception?
-        String aError( m_createErrStr );
+        OUString aError( m_createErrStr );
         ErrorBox aErrorBox( static_cast<Window*>(this), WB_OK | RET_OK, aError );
         aErrorBox.SetText( m_createErrTitleStr );
         aErrorBox.Execute();
@@ -1048,9 +1046,9 @@ void SvxScriptOrgDialog::renameEntry( SvTreeListEntry* pEntry )
 
     if ( xInv.is() )
     {
-        ::rtl::OUString aNewName = node->getName();
+        OUString aNewName = node->getName();
         sal_Int32 extnPos = aNewName.lastIndexOf( '.' );
-        ::rtl::OUString extn;
+        OUString extn;
         if(extnPos>0)
         {
             extn = aNewName.copy(extnPos);
@@ -1068,7 +1066,7 @@ void SvxScriptOrgDialog::renameEntry( SvTreeListEntry* pEntry )
         {
             if ( xNewDlg->Execute() && xNewDlg->GetObjectName().Len() )
             {
-                ::rtl::OUString aUserSuppliedName = xNewDlg->GetObjectName();
+                OUString aUserSuppliedName = xNewDlg->GetObjectName();
                 bValid = sal_True;
                 if( bValid )
                     aNewName = aUserSuppliedName;
@@ -1088,7 +1086,7 @@ void SvxScriptOrgDialog::renameEntry( SvTreeListEntry* pEntry )
         try
         {
             Any aResult;
-            aResult = xInv->invoke( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Renamable") ), args, outIndex, outArgs );
+            aResult = xInv->invoke( "Renamable", args, outIndex, outArgs );
             Reference< browse::XBrowseNode > newNode( aResult, UNO_QUERY );
             aChildNode = newNode;
 
@@ -1096,7 +1094,7 @@ void SvxScriptOrgDialog::renameEntry( SvTreeListEntry* pEntry )
         catch( Exception& e )
         {
             OSL_TRACE("Caught exception trying to Rename %s",
-                ::rtl::OUStringToOString(
+                OUStringToOString(
                     e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         }
     }
@@ -1121,8 +1119,7 @@ void SvxScriptOrgDialog::deleteEntry( SvTreeListEntry* pEntry )
     sal_Bool result = sal_False;
     Reference< browse::XBrowseNode > node = getBrowseNode( pEntry );
     // ISSUE L10N string & can we centre list?
-    String aQuery( m_delQueryStr );
-    aQuery.Append( getListOfChildren( node, 0 ) );
+    OUString aQuery = m_delQueryStr + getListOfChildren( node, 0 );
     QueryBox aQueryBox( static_cast<Window*>(this), WB_YES_NO | WB_DEF_YES, aQuery );
     aQueryBox.SetText( m_delQueryTitleStr );
     if ( aQueryBox.Execute() == RET_NO )
@@ -1139,13 +1136,13 @@ void SvxScriptOrgDialog::deleteEntry( SvTreeListEntry* pEntry )
         try
         {
             Any aResult;
-            aResult = xInv->invoke( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Deletable") ), args, outIndex, outArgs );
+            aResult = xInv->invoke( "Deletable", args, outIndex, outArgs );
             aResult >>= result; // or do we just assume true if no exception ?
         }
         catch( Exception& e )
         {
             OSL_TRACE("Caught exception trying to delete %s",
-                ::rtl::OUStringToOString(
+                OUStringToOString(
                     e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         }
     }
@@ -1166,7 +1163,7 @@ void SvxScriptOrgDialog::deleteEntry( SvTreeListEntry* pEntry )
 }
 
 sal_Bool SvxScriptOrgDialog::getBoolProperty( Reference< beans::XPropertySet >& xProps,
-                ::rtl::OUString& propName )
+                OUString& propName )
 {
     sal_Bool result = false;
     try
@@ -1182,15 +1179,14 @@ sal_Bool SvxScriptOrgDialog::getBoolProperty( Reference< beans::XPropertySet >& 
     return result;
 }
 
-String SvxScriptOrgDialog::getListOfChildren( Reference< browse::XBrowseNode > node, int depth )
+OUString SvxScriptOrgDialog::getListOfChildren( Reference< browse::XBrowseNode > node, int depth )
 {
-    String result;
-    result.Append( rtl::OUString( "\n" ) );
+    OUString result = "\n";
     for( int i=0;i<=depth;i++ )
     {
-        result.Append( rtl::OUString( "\t" ) );
+        result += "\t";
     }
-    result.Append( String( node->getName() ) );
+    result += node->getName();
 
     try
     {
@@ -1200,7 +1196,7 @@ String SvxScriptOrgDialog::getListOfChildren( Reference< browse::XBrowseNode > n
                 = node->getChildNodes();
             for ( sal_Int32 n = 0; n < children.getLength(); n++ )
             {
-                result.Append( getListOfChildren( children[ n ] , depth+1 ) );
+                result += getListOfChildren( children[ n ] , depth+1 );
             }
         }
     }
@@ -1216,18 +1212,18 @@ Selection_hash SvxScriptOrgDialog::m_lastSelection;
 
 void SvxScriptOrgDialog::StoreCurrentSelection()
 {
-    String aDescription;
+    OUString aDescription;
     if ( m_pScriptsBox->IsSelected( m_pScriptsBox->GetHdlEntry() ) )
     {
         SvTreeListEntry* pEntry = m_pScriptsBox->GetHdlEntry();
         while( pEntry )
         {
-            aDescription.Insert( m_pScriptsBox->GetEntryText( pEntry ), 0 );
+            aDescription = m_pScriptsBox->GetEntryText( pEntry ) + aDescription;
             pEntry = m_pScriptsBox->GetParent( pEntry );
             if ( pEntry )
-                aDescription.Insert( ';', 0 );
+                aDescription = ";" + aDescription;
         }
-        ::rtl::OUString sDesc( aDescription );
+        OUString sDesc( aDescription );
         m_lastSelection[ m_sLanguage ] = sDesc;
     }
 }
@@ -1259,10 +1255,10 @@ void SvxScriptOrgDialog::RestorePreviousSelection()
     m_pScriptsBox->SetCurEntry( pEntry );
 }
 
-::rtl::OUString ReplaceString(
-    const ::rtl::OUString& source,
-    const ::rtl::OUString& token,
-    const ::rtl::OUString& value )
+OUString ReplaceString(
+    const OUString& source,
+    const OUString& token,
+    const OUString& value )
 {
     sal_Int32 pos = source.indexOf( token );
 
@@ -1276,53 +1272,50 @@ void SvxScriptOrgDialog::RestorePreviousSelection()
     }
 }
 
-::rtl::OUString FormatErrorString(
-    const ::rtl::OUString& unformatted,
-    const ::rtl::OUString& language,
-    const ::rtl::OUString& script,
-    const ::rtl::OUString& line,
-    const ::rtl::OUString& type,
-    const ::rtl::OUString& message )
+OUString FormatErrorString(
+    const OUString& unformatted,
+    const OUString& language,
+    const OUString& script,
+    const OUString& line,
+    const OUString& type,
+    const OUString& message )
 {
-    ::rtl::OUString result = unformatted.copy( 0 );
+    OUString result = unformatted.copy( 0 );
 
-    result = ReplaceString(
-        result, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%LANGUAGENAME") ), language );
-    result = ReplaceString(
-        result, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%SCRIPTNAME") ), script );
-    result = ReplaceString(
-        result, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%LINENUMBER") ), line );
+    result = ReplaceString(result, "%LANGUAGENAME", language );
+    result = ReplaceString(result, "%SCRIPTNAME", script );
+    result = ReplaceString(result, "%LINENUMBER", line );
 
     if ( !type.isEmpty() )
     {
-        result += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\n\n") );
-        result += ::rtl::OUString(String(CUI_RES(RID_SVXSTR_ERROR_TYPE_LABEL)));
-        result += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ") );
-        result += type;
+        result += "\n\n" +
+                  OUString(CUI_RES(RID_SVXSTR_ERROR_TYPE_LABEL)) +
+                  " " +
+                  type;
     }
 
     if ( !message.isEmpty() )
     {
-        result += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\n\n") );
-        result += ::rtl::OUString(String(CUI_RES(RID_SVXSTR_ERROR_MESSAGE_LABEL)));
-        result += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ") );
-        result += message;
+        result += "\n\n" +
+                  OUString(CUI_RES(RID_SVXSTR_ERROR_MESSAGE_LABEL)) +
+                  " " +
+                  message;
     }
 
     return result;
 }
 
-::rtl::OUString GetErrorMessage(
+OUString GetErrorMessage(
     const provider::ScriptErrorRaisedException& eScriptError )
 {
-    ::rtl::OUString unformatted = String( CUI_RES( RID_SVXSTR_ERROR_AT_LINE ) );
+    OUString unformatted = CUI_RES( RID_SVXSTR_ERROR_AT_LINE );
 
-    ::rtl::OUString unknown( RTL_CONSTASCII_USTRINGPARAM("UNKNOWN") );
-    ::rtl::OUString language = unknown;
-    ::rtl::OUString script = unknown;
-    ::rtl::OUString line = unknown;
-    ::rtl::OUString type = ::rtl::OUString();
-    ::rtl::OUString message = eScriptError.Message;
+    OUString unknown("UNKNOWN");
+    OUString language = unknown;
+    OUString script = unknown;
+    OUString line = unknown;
+    OUString type = OUString();
+    OUString message = eScriptError.Message;
 
         if ( !eScriptError.language.isEmpty() )
         {
@@ -1340,32 +1333,29 @@ void SvxScriptOrgDialog::RestorePreviousSelection()
         }
         if ( eScriptError.lineNum != -1 )
         {
-            line = ::rtl::OUString::valueOf( eScriptError.lineNum );
-            unformatted = String(
-                CUI_RES( RID_SVXSTR_ERROR_AT_LINE ) );
+            line = OUString::valueOf( eScriptError.lineNum );
+            unformatted = CUI_RES( RID_SVXSTR_ERROR_AT_LINE );
         }
         else
         {
-            unformatted = String(
-                CUI_RES( RID_SVXSTR_ERROR_RUNNING ) );
+            unformatted = CUI_RES( RID_SVXSTR_ERROR_RUNNING );
         }
 
     return FormatErrorString(
         unformatted, language, script, line, type, message );
 }
 
-::rtl::OUString GetErrorMessage(
+OUString GetErrorMessage(
     const provider::ScriptExceptionRaisedException& eScriptException )
 {
-    ::rtl::OUString unformatted =
-          String( CUI_RES( RID_SVXSTR_EXCEPTION_AT_LINE ) );
+    OUString unformatted = CUI_RES( RID_SVXSTR_EXCEPTION_AT_LINE );
 
-    ::rtl::OUString unknown( RTL_CONSTASCII_USTRINGPARAM("UNKNOWN") );
-    ::rtl::OUString language = unknown;
-    ::rtl::OUString script = unknown;
-    ::rtl::OUString line = unknown;
-    ::rtl::OUString type = unknown;
-    ::rtl::OUString message = eScriptException.Message;
+    OUString unknown("UNKNOWN");
+    OUString language = unknown;
+    OUString script = unknown;
+    OUString line = unknown;
+    OUString type = unknown;
+    OUString message = eScriptException.Message;
 
     if ( !eScriptException.language.isEmpty() )
     {
@@ -1383,14 +1373,12 @@ void SvxScriptOrgDialog::RestorePreviousSelection()
 
     if ( eScriptException.lineNum != -1 )
     {
-        line = ::rtl::OUString::valueOf( eScriptException.lineNum );
-        unformatted = String(
-            CUI_RES( RID_SVXSTR_EXCEPTION_AT_LINE ) );
+        line = OUString::valueOf( eScriptException.lineNum );
+        unformatted = CUI_RES( RID_SVXSTR_EXCEPTION_AT_LINE );
     }
     else
     {
-        unformatted = String(
-            CUI_RES( RID_SVXSTR_EXCEPTION_RUNNING ) );
+        unformatted = CUI_RES( RID_SVXSTR_EXCEPTION_RUNNING );
     }
 
     if ( !eScriptException.exceptionType.isEmpty() )
@@ -1402,17 +1390,16 @@ void SvxScriptOrgDialog::RestorePreviousSelection()
         unformatted, language, script, line, type, message );
 
 }
-::rtl::OUString GetErrorMessage(
+OUString GetErrorMessage(
     const provider::ScriptFrameworkErrorException& sError )
 {
-    ::rtl::OUString unformatted = String(
-        CUI_RES( RID_SVXSTR_FRAMEWORK_ERROR_RUNNING ) );
+    OUString unformatted = CUI_RES( RID_SVXSTR_FRAMEWORK_ERROR_RUNNING );
 
-    ::rtl::OUString language( RTL_CONSTASCII_USTRINGPARAM("UNKNOWN") );
+    OUString language("UNKNOWN");
 
-    ::rtl::OUString script( RTL_CONSTASCII_USTRINGPARAM("UNKNOWN") );
+    OUString script("UNKNOWN");
 
-    ::rtl::OUString message;
+    OUString message;
 
     if ( !sError.scriptName.isEmpty() )
     {
@@ -1424,10 +1411,9 @@ void SvxScriptOrgDialog::RestorePreviousSelection()
     }
     if ( sError.errorType == provider::ScriptFrameworkErrorType::NOTSUPPORTED )
     {
-        message = String(
+        message = OUString(
             CUI_RES(  RID_SVXSTR_ERROR_LANG_NOT_SUPPORTED ) );
-        message =  ReplaceString(
-            message, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%LANGUAGENAME") ), language );
+        message = ReplaceString(message, "%LANGUAGENAME", language );
 
     }
     else
@@ -1435,28 +1421,28 @@ void SvxScriptOrgDialog::RestorePreviousSelection()
         message = sError.Message;
     }
     return FormatErrorString(
-        unformatted, language, script, ::rtl::OUString(), ::rtl::OUString(), message );
+        unformatted, language, script, OUString(), OUString(), message );
 }
 
-::rtl::OUString GetErrorMessage( const RuntimeException& re )
+OUString GetErrorMessage( const RuntimeException& re )
 {
     Type t = ::getCppuType( &re );
-    ::rtl::OUString message = t.getTypeName();
+    OUString message = t.getTypeName();
     message += re.Message;
 
     return message;
 }
 
-::rtl::OUString GetErrorMessage( const Exception& e )
+OUString GetErrorMessage( const Exception& e )
 {
     Type t = ::getCppuType( &e );
-    ::rtl::OUString message = t.getTypeName();
+    OUString message = t.getTypeName();
     message += e.Message;
 
     return message;
 }
 
-::rtl::OUString GetErrorMessage( const com::sun::star::uno::Any& aException )
+OUString GetErrorMessage( const com::sun::star::uno::Any& aException )
 {
     if ( aException.getValueType() ==
          ::getCppuType( (const reflection::InvocationTargetException* ) NULL ) )
@@ -1525,14 +1511,14 @@ short SvxScriptErrorDialog::Execute()
     // SvxScriptErrorDialog may be deleted before ShowDialog is called
     Application::PostUserEvent(
         LINK( this, SvxScriptErrorDialog, ShowDialog ),
-        new rtl::OUString( m_sMessage ) );
+        new OUString( m_sMessage ) );
 
     return 0;
 }
 
-IMPL_LINK( SvxScriptErrorDialog, ShowDialog, ::rtl::OUString*, pMessage )
+IMPL_LINK( SvxScriptErrorDialog, ShowDialog, OUString*, pMessage )
 {
-    ::rtl::OUString message;
+    OUString message;
 
     if ( pMessage && !pMessage->isEmpty() )
     {
@@ -1540,7 +1526,7 @@ IMPL_LINK( SvxScriptErrorDialog, ShowDialog, ::rtl::OUString*, pMessage )
     }
     else
     {
-        message = String( CUI_RES( RID_SVXSTR_ERROR_TITLE ) );
+        message = OUString( CUI_RES( RID_SVXSTR_ERROR_TITLE ) );
     }
 
     MessBox* pBox = new WarningBox( NULL, WB_OK, message );

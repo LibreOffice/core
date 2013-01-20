@@ -553,7 +553,7 @@ OfaTreeOptionsDialog::~OfaTreeOptionsDialog()
                 String aPageData(pPageInfo->m_pPage->GetUserData());
                 if ( aPageData.Len() )
                 {
-                    SvtViewOptions aTabPageOpt( E_TABPAGE, String::CreateFromInt32( pPageInfo->m_nPageId ) );
+                    SvtViewOptions aTabPageOpt( E_TABPAGE, OUString::number( pPageInfo->m_nPageId) );
                     SetViewOptUserItem( aTabPageOpt, aPageData );
                 }
                 delete pPageInfo->m_pPage;
@@ -1071,7 +1071,7 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
         DBG_ASSERT( pPageInfo->m_pPage, "tabpage could not created");
         if ( pPageInfo->m_pPage )
         {
-            SvtViewOptions aTabPageOpt( E_TABPAGE, String::CreateFromInt32( pPageInfo->m_nPageId ) );
+            SvtViewOptions aTabPageOpt( E_TABPAGE, OUString::number( pPageInfo->m_nPageId) );
             pPageInfo->m_pPage->SetUserData( GetViewOptUserItem( aTabPageOpt ) );
 
             Point aPagePos( aSeparatorFL.GetPosPixel().X(), aTreeLB.GetPosPixel().Y());

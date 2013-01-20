@@ -119,7 +119,7 @@ void ParaWin::UpdateArgDesc( sal_uInt16 nArg )
             aArgDesc  = pFuncDesc->getParameterDescription(nRealArg);
             aArgName  = pFuncDesc->getParameterName(nRealArg);
             if ( nArg >= nFix )
-                aArgName += String::CreateFromInt32(nArg-nFix+1);
+                aArgName += OUString::number( nArg-nFix+1 );
             aArgName += ' ';
 
             aArgName += (nArg > nFix || pFuncDesc->isParameterOptional(nRealArg)) ? m_sOptional : m_sRequired ;
@@ -137,7 +137,7 @@ void ParaWin::UpdateArgDesc( sal_uInt16 nArg )
             aArgDesc  = pFuncDesc->getParameterDescription(nRealArg);
             aArgName  = pFuncDesc->getParameterName(nRealArg);
             if ( nArg >= nFix )
-                aArgName += String::CreateFromInt32((nArg-nFix)/2 + 1);
+                aArgName += OUString::number( (nArg-nFix)/2 + 1 );
             aArgName += ' ';
 
             aArgName += (nArg > (nFix+1) || pFuncDesc->isParameterOptional(nRealArg)) ? m_sOptional : m_sRequired ;
@@ -173,7 +173,7 @@ void ParaWin::UpdateArgInput( sal_uInt16 nOffset, sal_uInt16 i )
         if ( nArg >= nFix )
         {
             String aArgName( pFuncDesc->getParameterName(nRealArg) );
-            aArgName += String::CreateFromInt32(nArg-nFix+1);
+            aArgName += OUString::number(nArg-nFix+1);
             SetArgName( i, aArgName );
         }
         else
@@ -195,7 +195,7 @@ void ParaWin::UpdateArgInput( sal_uInt16 nOffset, sal_uInt16 i )
         if ( nArg >= nFix )
         {
             String aArgName( pFuncDesc->getParameterName(nRealArg) );
-            aArgName += String::CreateFromInt32((nArg-nFix)/2 + 1);
+            aArgName += OUString::number( (nArg-nFix)/2 + 1 );
             SetArgName( i, aArgName );
         }
         else
