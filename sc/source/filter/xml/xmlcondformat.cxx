@@ -254,6 +254,14 @@ ScXMLDataBarFormatContext::ScXMLDataBarFormatContext( ScXMLImport& rImport, sal_
     else
         mpFormatData->mbNeg = false;
 
+    if(!sAxisPosition.isEmpty())
+    {
+        if(sAxisPosition == "middle")
+            mpFormatData->meAxisPosition = databar::MIDDLE;
+        else if (sAxisPosition == "none")
+            mpFormatData->meAxisPosition = databar::NONE;
+    }
+
     if(!sAxisColor.isEmpty())
     {
         sal_Int32 nColor = 0;
