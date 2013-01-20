@@ -267,14 +267,6 @@ public:
     virtual void SelectEntryPos(sal_uInt16 nIdx) = 0;   // inline
 };
 
-class AbstractSwSplitTableDlg :public VclAbstractDialog //add for SwSplitTableDlg
-{
-public:
-    virtual sal_Bool                IsHorizontal() const = 0;
-    virtual sal_Bool                IsProportional() const = 0;
-    virtual long                GetCount() const = 0;
-};
-
 class AbstractSwAutoFormatDlg : public VclAbstractDialog //add for SwAutoFormatDlg
 {
 public:
