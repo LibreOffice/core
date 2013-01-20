@@ -534,8 +534,9 @@ namespace
 
         TargetHolder& Current()
         {
+            static TargetHolder aDummy;
             OSL_ENSURE(maTargetHolders.size(), "TargetHolders: CURRENT with no property holders (!)");
-            return *maTargetHolders.back();
+            return maTargetHolders.empty() ? aDummy : *maTargetHolders.back();
         }
 
         ~TargetHolders()
