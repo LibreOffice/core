@@ -124,22 +124,22 @@ CopyDlg::~CopyDlg()
 {
     String& rStr = GetExtraData();
 
-    rStr = OUString::valueOf(static_cast<sal_Int64>(maNumFldCopies.GetValue()));
+    rStr = OUString::number(maNumFldCopies.GetValue());
     rStr.Append( TOKEN );
 
-    rStr += OUString::valueOf(static_cast<sal_Int64>(maMtrFldMoveX.GetValue()));
+    rStr += OUString::number(maMtrFldMoveX.GetValue());
     rStr.Append( TOKEN );
 
-    rStr += OUString::valueOf(static_cast<sal_Int64>(maMtrFldMoveY.GetValue()));
+    rStr += OUString::number(maMtrFldMoveY.GetValue());
     rStr.Append( TOKEN );
 
-    rStr += OUString::valueOf(static_cast<sal_Int64>(maMtrFldAngle.GetValue()));
+    rStr += OUString::number(maMtrFldAngle.GetValue());
     rStr.Append( TOKEN );
 
-    rStr += OUString::valueOf(static_cast<sal_Int64>(maMtrFldWidth.GetValue()));
+    rStr += OUString::number(maMtrFldWidth.GetValue());
     rStr.Append( TOKEN );
 
-    rStr += OUString::valueOf(static_cast<sal_Int64>(maMtrFldHeight.GetValue()));
+    rStr += OUString::number(maMtrFldHeight.GetValue());
     rStr.Append( TOKEN );
 
     rStr += OUString::valueOf( (long)maLbStartColor.GetSelectEntryColor().GetColor() );

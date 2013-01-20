@@ -73,7 +73,7 @@ XmlReader::XmlReader(rtl::OUString const & fileUrl)
         throw css::uno::RuntimeException(
             (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cannot open ")) +
              fileUrl_ + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(": ")) +
-             rtl::OUString::valueOf(static_cast< sal_Int32 >(e))),
+             OUString::number(e)),
             css::uno::Reference< css::uno::XInterface >());
     }
     e = osl_getFileSize(fileHandle_, &fileSize_);
@@ -91,7 +91,7 @@ XmlReader::XmlReader(rtl::OUString const & fileUrl)
         }
         throw css::uno::RuntimeException(
             ("cannot mmap " + fileUrl_ + " (" +
-             rtl::OUString::valueOf(static_cast< sal_Int32 >(e)) + ")"),
+             OUString::number(e) + ")"),
             css::uno::Reference< css::uno::XInterface >());
     }
     namespaceIris_.push_back(

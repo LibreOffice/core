@@ -1832,7 +1832,7 @@ sal_Int32 lclCreatePredefinedFormat( const Reference< XNumberFormats >& rxNumFmt
     catch( Exception& )
     {
         OSL_FAIL( OStringBuffer( "lclCreatePredefinedFormat - cannot create predefined number format " ).
-            append( OString::valueOf( static_cast< sal_Int32 >( nPredefId ) ) ).getStr() );
+            append( OString::number( nPredefId ) ).getStr() );
     }
     return nIndex;
 }

@@ -726,12 +726,12 @@ void BrowserScrollBar::Tracking( const TrackingEvent& rTEvt )
     sal_uLong nPos = GetThumbPos();
     if ( nPos != _nLastPos )
     {
-        String aTip( rtl::OUString::valueOf(static_cast<sal_Int32>(nPos)) );
+        String aTip( OUString::number(nPos) );
         aTip += '/';
         if ( _pDataWin->GetRealRowCount().Len() )
             aTip += _pDataWin->GetRealRowCount();
         else
-            aTip += rtl::OUString::valueOf(static_cast<sal_Int32>(GetRangeMax()));
+            aTip += OUString::number(GetRangeMax());
 
         Rectangle aRect( GetPointerPosPixel(), Size( GetTextHeight(), GetTextWidth( aTip ) ) );
         if ( _nTip )

@@ -3256,15 +3256,12 @@ sal_Bool SvxCharPositionPage::FillItemSet( SfxItemSet& rSet )
 
 void SvxCharPositionPage::FillUserData()
 {
-    const sal_Unicode cTok = ';';
+    const OUString cTok( ";" );
 
-    OUString sUser( OUString::valueOf( static_cast<sal_Int32>(m_nSuperEsc)) );
-    sUser += OUString( cTok );
-    sUser += OUString::valueOf( static_cast<sal_Int32>(m_nSubEsc) );
-    sUser += OUString (cTok );
-    sUser += OUString::valueOf( static_cast<sal_Int32>(m_nSuperProp) );
-    sUser += OUString ( cTok );
-    sUser += OUString::valueOf( static_cast<sal_Int32>(m_nSubProp) );
+    OUString sUser = OUString::number( m_nSuperEsc )  + cTok +
+                     OUString::number( m_nSubEsc )    + cTok +
+                     OUString::number( m_nSuperProp ) + cTok +
+                     OUString::number( m_nSubProp );
     SetUserData( sUser );
 }
 

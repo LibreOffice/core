@@ -271,9 +271,9 @@ IMPL_LINK_NOARG( ScDataBarSettingsDlg, TypeSelectHdl )
         if(!maEdMin.GetText().Len())
         {
             if(nSelectMin == COLORSCALE_PERCENTILE || nSelectMin == COLORSCALE_PERCENT)
-                maEdMin.SetText(rtl::OUString::valueOf(static_cast<sal_Int32>(50)));
+                maEdMin.SetText(OUString::number(50));
             else
-                maEdMin.SetText(rtl::OUString::valueOf(static_cast<sal_Int32>(0)));
+                maEdMin.SetText(OUString::number(0));
         }
     }
 
@@ -286,9 +286,9 @@ IMPL_LINK_NOARG( ScDataBarSettingsDlg, TypeSelectHdl )
         if(!maEdMax.GetText().Len())
         {
             if(nSelectMax == COLORSCALE_PERCENTILE || nSelectMax == COLORSCALE_PERCENT)
-                maEdMax.SetText(rtl::OUString::valueOf(static_cast<sal_Int32>(50)));
+                maEdMax.SetText(OUString::number(50));
             else
-                maEdMax.SetText(rtl::OUString::valueOf(static_cast<sal_Int32>(0)));
+                maEdMax.SetText(OUString::number(0));
         }
     }
     return 0;

@@ -262,7 +262,7 @@ void DffPropertyReader::ReadPropSet( SvStream& rIn, void* pClientData ) const
             if ( IsProperty( DFF_Prop_adjustValue ) || IsProperty( DFF_Prop_pVertices ) )
             {
                 pOut->WriteLine( "" );
-                OString aString("ShapeId: " + OString::valueOf(static_cast<sal_Int32>(nShapeId)));
+                OString aString("ShapeId: " + OString::number(nShapeId));
                 pOut->WriteLine(aString);
             }
             for ( sal_uInt32 i = DFF_Prop_adjustValue; i <= DFF_Prop_adjust10Value; i++ )
@@ -287,13 +287,13 @@ void DffPropertyReader::ReadPropSet( SvStream& rIn, void* pClientData ) const
                         if ( nLen )
                         {
                             pOut->WriteLine( "" );
-                            OStringBuffer aDesc("Property:" + OString::valueOf(static_cast<sal_Int32>(i)) +
+                            OStringBuffer aDesc("Property:" + OString::number(i) +
                                                 "  Size:" + OString::valueOf(nLen));
                             pOut->WriteLine(aDesc.makeStringAndClear());
                             sal_Int16   nNumElem, nNumElemMem, nNumSize;
                             rIn >> nNumElem >> nNumElemMem >> nNumSize;
-                            aDesc.append("Entries: " + OString::valueOf(static_cast<sal_Int32>(nNumElem)) +
-                                         "  Size:" + OString::valueOf(static_cast<sal_Int32>(nNumSize)));
+                            aDesc.append("Entries: " + OString::number(nNumElem) +
+                                         "  Size:" + OString::number(nNumSize));
                             pOut->WriteLine(aDesc.makeStringAndClear());
                             if ( nNumSize < 0 )
                                 nNumSize = ( ( -nNumSize ) >> 2 );
@@ -331,7 +331,7 @@ void DffPropertyReader::ReadPropSet( SvStream& rIn, void* pClientData ) const
                     }
                     else
                     {
-                        OString aString("Property" + OString::valueOf(static_cast<sal_Int32>(i)) +
+                        OString aString("Property" + OString::number(i) +
                                         ":" + OString::valueOf(static_cast<sal_Int32>(GetPropertyValue(i))));
                         pOut->WriteLine(aString);
                     }

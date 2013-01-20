@@ -1663,7 +1663,7 @@ void StarBASIC::MakeErrorText( SbError nId, const OUString& aMsg )
     }
     else if( nOldID != 0 )
     {
-        OUString aStdMsg = "Fehler " + OUString::valueOf(static_cast<sal_Int32>(nOldID)) +
+        OUString aStdMsg = "Fehler " + OUString::number(nOldID) +
                            ": Kein Fehlertext verfuegbar!";
         GetSbData()->aErrMsg = aStdMsg;
     }

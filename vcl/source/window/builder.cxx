@@ -808,7 +808,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
             //Make up a name for it
             OString sTabPageId = get_by_window(pParent) +
                 OString("-page") +
-                OString::valueOf(static_cast<sal_Int32>(nNewPageCount));
+                OString::number(nNewPageCount);
             m_aChildren.push_back(WinAndId(sTabPageId, pPage, false));
             pPage->SetHelpId(m_sHelpRoot + sTabPageId);
 

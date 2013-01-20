@@ -2119,7 +2119,7 @@ void XMLShapeExport::ImpExportMediaShape(
         const OUString aVolumeDBStr(  "VolumeDB"  );
         xPropSet->getPropertyValue( OUString(  "VolumeDB"  ) ) >>= nVolumeDB;
         mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aVolumeDBStr );
-        mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, OUString::valueOf( static_cast< sal_Int32 >( nVolumeDB ) ) );
+        mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, OUString::number( nVolumeDB ) );
         delete( new SvXMLElementExport( mrExport, XML_NAMESPACE_DRAW, XML_PARAM, sal_False, sal_True ) );
 
         media::ZoomLevel eZoom;

@@ -894,7 +894,7 @@ void Calendar::ImplDraw( sal_Bool bPaint )
             String aMonthText( maCalendarWrapper.getDisplayName(
                         i18n::CalendarDisplayIndex::MONTH, nMonth-1, 1));
             aMonthText += ' ';
-            aMonthText += rtl::OUString::valueOf(static_cast<sal_Int64>(nYear));
+            aMonthText += OUString::number(nYear);
             long nMonthTextWidth = GetTextWidth( aMonthText );
             long nMonthOffX1 = 0;
             long nMonthOffX2 = 0;
@@ -912,7 +912,7 @@ void Calendar::ImplDraw( sal_Bool bPaint )
                 aMonthText  = maCalendarWrapper.getDisplayName(
                         i18n::CalendarDisplayIndex::MONTH, nMonth-1, 0);
                 aMonthText += ' ';
-                aMonthText += rtl::OUString::valueOf(static_cast<sal_Int64>(nYear));
+                aMonthText += OUString::number(nYear);
                 nMonthTextWidth = GetTextWidth( aMonthText );
             }
             long nTempOff = (mnMonthWidth-nMonthTextWidth+1)/2;

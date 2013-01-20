@@ -114,7 +114,7 @@ void SwDateTimeField::SetPar2(const rtl::OUString& rStr)
 rtl::OUString SwDateTimeField::GetPar2() const
 {
     if (nOffset)
-        return rtl::OUString::valueOf(static_cast<sal_Int32>(nOffset));
+        return OUString::number(nOffset);
     return rtl::OUString();
 }
 

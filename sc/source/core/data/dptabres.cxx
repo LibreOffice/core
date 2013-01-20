@@ -2798,7 +2798,7 @@ void ScDPResultDimension::LateInitFrom(
 {
     if ( rParams.IsEnd( nPos ) )
         return;
-    OSL_ENSURE( nPos <= pItemData.size(), rtl::OString::valueOf(static_cast<sal_Int32>(pItemData.size())).getStr() );
+    OSL_ENSURE( nPos <= pItemData.size(), OString::number(pItemData.size()).getStr() );
     ScDPDimension* pThisDim = rParams.GetDim( nPos );
     ScDPLevel* pThisLevel = rParams.GetLevel( nPos );
     SCROW rThisData = pItemData[nPos];

@@ -413,9 +413,9 @@ sal_Bool SvVersion::ReadSvIdl( SvTokenStream & rInStm )
 sal_Bool SvVersion::WriteSvIdl( SvStream & rOutStm )
 {
     rOutStm << SvHash_Version()->GetName().getStr() << '('
-        << rtl::OString::valueOf(static_cast<sal_Int32>(nMajorVersion)).getStr()
+        << OString::number(nMajorVersion).getStr()
         << '.'
-        << rtl::OString::valueOf(static_cast<sal_Int32>(nMinorVersion)).getStr()
+        << OString::number(nMinorVersion).getStr()
         << ')';
     return sal_True;
 }

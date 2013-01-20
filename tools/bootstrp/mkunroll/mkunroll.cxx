@@ -201,7 +201,7 @@ void MkFilter::Filter()
                 for ( size_t i=0; i<nCount; i++ )
                 {
                     MkLine *pMkLine = (*pLine->pPrivateTnrLst)[ i ];
-                    rtl::OString aLine = pMkLine->aLine.replaceAll(aTnr, rtl::OString::valueOf(static_cast<sal_Int32>(n)));
+                    rtl::OString aLine = pMkLine->aLine.replaceAll(aTnr, OString::number(n));
                     fputs( aLine.getStr(), pOut );
                     fprintf( stderr, "o" );
                 }

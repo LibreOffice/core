@@ -78,7 +78,7 @@ sal_uInt32 ExSoundEntry::GetSize( sal_uInt32 nId ) const
     if ( !aExtension.isEmpty() )                    // String Atom          ( instance 1 - extension of sound )
         nSize += aExtension.getLength() * 2 + 8;
 
-    rtl::OUString aId( rtl::OUString::valueOf(static_cast<sal_Int32>(nId)) );   // String Atom          ( instance 2 - reference id )
+    rtl::OUString aId( OUString::number(nId) );   // String Atom          ( instance 2 - reference id )
     nSize += 2 * aId.getLength() + 8;
 
     nSize += nFileSize + 8;                         // SoundData Atom
@@ -116,7 +116,7 @@ void ExSoundEntry::Write( SvStream& rSt, sal_uInt32 nId ) const
                 rSt << aExtension[i];
         }
         // id of sound ( instance 2 )
-        rtl::OUString aId( rtl::OUString::valueOf(static_cast<sal_Int32>(nId) ) );
+        rtl::OUString aId( OUString::number(nId ) );
         sal_Int32 nIdLen = aId.getLength();
         rSt << (sal_uInt32)( ( EPP_CString << 16 ) | 32 ) << (sal_uInt32)( nIdLen * 2 );
         for ( i = 0; i < nIdLen; ++i )

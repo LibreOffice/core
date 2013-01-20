@@ -1152,7 +1152,7 @@ void SvMetaSlot::WriteSlot( const rtl::OString& rShellName, sal_uInt16 nCount,
     sal_Bool bIsEnumSlot = 0 != pEnumValue;
 
     rOutStm << "// Slot Nr. "
-        << rtl::OString::valueOf(static_cast<sal_Int32>(nListPos)).getStr()
+        << OString::number(nListPos).getStr()
         << " : ";
     rtl::OString aSlotIdValue(rtl::OString::valueOf(static_cast<sal_Int32>(
         GetSlotId().GetValue())));
@@ -1364,7 +1364,7 @@ void SvMetaSlot::WriteSlot( const rtl::OString& rShellName, sal_uInt16 nCount,
         rOutStm << ',' << endl;
         WriteTab( rOutStm, 4 );
         rOutStm
-            << rtl::OString::valueOf(static_cast<sal_Int32>(nCount)).getStr()
+            << OString::number(nCount).getStr()
             << "/*Offset*/, ";
 
         if( IsMethod() )
@@ -1494,7 +1494,7 @@ void SvMetaSlot::WriteHelpId( SvIdlDataBase & rBase, SvStream & rOutStm,
     {
         rTable[ nSId ] = this;
         rOutStm << "#define " << GetSlotId().getString().getStr() << '\t'
-            << rtl::OString::valueOf(static_cast<sal_Int32>(nSId)).getStr()
+            << OString::number(nSId).getStr()
             << endl;
     }
 
@@ -1519,7 +1519,7 @@ void SvMetaSlot::WriteHelpId( SvIdlDataBase & rBase, SvStream & rOutStm,
             sal_Bool bIdOk = sal_False;
             if( rBase.FindId( aSId, &nSId2 ) )
             {
-                aSId = rtl::OString::valueOf(static_cast<sal_Int32>(nSId2));
+                aSId = OString::number(nSId2);
                 bIdOk = sal_True;
             }
 

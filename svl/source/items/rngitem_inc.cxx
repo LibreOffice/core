@@ -71,9 +71,7 @@ SfxItemPresentation SfxXRangeItem::GetPresentation
     const IntlWrapper *
 )   const
 {
-    rText = rtl::OUString::valueOf(static_cast<sal_Int64>(nFrom));
-    rText += ':';
-    rText += rtl::OUString::valueOf(static_cast<sal_Int64>(nTo));
+    rText = OUString::number(nFrom) + ":" + OUString::number(nTo);
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }
 

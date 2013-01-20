@@ -395,7 +395,7 @@ void ODbaseIndex::createINFEntry()
     while (aNewEntry.isEmpty())
     {
         aNewEntry = rtl::OString(RTL_CONSTASCII_STRINGPARAM("NDX"));
-        aNewEntry += rtl::OString::valueOf(static_cast<sal_Int32>(++nSuffix));
+        aNewEntry += OString::number(++nSuffix);
         for (sal_uInt16 i = 0; i < aInfFile.GetKeyCount(); i++)
         {
             aKeyName = aInfFile.GetKeyName(i);

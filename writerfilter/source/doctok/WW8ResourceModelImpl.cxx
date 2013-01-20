@@ -300,7 +300,7 @@ int WW8IntValue::getInt() const
 
 OUString WW8IntValue::getString() const
 {
-    return OUString::valueOf(static_cast<sal_Int32>(mValue));
+    return OUString::number(mValue);
 }
 
 uno::Any WW8IntValue::getAny() const

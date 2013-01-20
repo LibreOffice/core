@@ -830,7 +830,7 @@ void SbxObject::Dump( SvStream& rStrm, sal_Bool bFill )
           << ( aNameStr.isEmpty() ?  "<unnamed>" : aNameStr.getStr() ) << "', "
           << "of class '" << aClassNameStr.getStr() << "', "
           << "counts "
-          << rtl::OString::valueOf(static_cast<sal_Int64>(GetRefCount())).getStr()
+          << OString::number(GetRefCount()).getStr()
           << " refs, ";
     if ( GetParent() )
     {

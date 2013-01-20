@@ -424,7 +424,7 @@ void ScHTMLExport::WriteOverview()
             {
                 pDoc->GetName( nTab, aStr );
                 rStrm << "<A HREF=\"#table"
-                    << rtl::OString::valueOf(static_cast<sal_Int32>(nTab)).getStr()
+                    << OString::number(nTab).getStr()
                     << "\">";
                 OUT_STR( aStr );
                 rStrm << "</A>";
@@ -686,7 +686,7 @@ void ScHTMLExport::WriteTables()
 
                 // Anker festlegen:
                 rStrm << "<A NAME=\"table"
-                    << rtl::OString::valueOf(static_cast<sal_Int32>(nTab)).getStr()
+                    << OString::number(nTab).getStr()
                     << "\">";
                 TAG_ON( OOO_STRING_SVTOOLS_HTML_head1 );
                 OUT_STR( aStrOut );

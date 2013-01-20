@@ -1066,7 +1066,7 @@ void UcbContent::open( const rtl::OUString & rName, const UniString& rInput,
                     {
                         OUString aId( xContentAccess->
                                           queryContentIdentifierString() );
-                        aText = OUString::valueOf( static_cast<sal_Int64>(++n) ) + ") " + aId + " : ";
+                        aText = OUString::number( ++n ) + ") " + aId + " : ";
                     }
 
                     // Title:
@@ -1150,7 +1150,7 @@ void UcbContent::open( const rtl::OUString & rName, const UniString& rInput,
     if ( bTiming )
     {
         nTime = Time::GetSystemTicks() - nTime;
-        OUString aText = "Operation took " + OUString::valueOf(static_cast<sal_Int64>(nTime)) + " ms.";
+        OUString aText = "Operation took " + OUString::number(nTime) + " ms.";
         print( aText );
     }
 }
@@ -1176,7 +1176,7 @@ void UcbContent::openAll( Ucb& rUCB, bool bPrint, bool bTiming, bool bSort,
             OUString aText;
             for ( sal_uInt32 i = aEntry.m_nLevel; i != 0; --i )
                 aText += '=';
-            aText = aText + "LEVEL " + OUString::valueOf(static_cast<sal_Int64>(aEntry.m_nLevel));
+            aText = aText + "LEVEL " + OUString::number(aEntry.m_nLevel);
 
             uno::Reference< ucb::XContentIdentifier > xID;
             if ( aEntry.m_bUseIdentifier )
@@ -1225,7 +1225,7 @@ void UcbContent::openAll( Ucb& rUCB, bool bPrint, bool bTiming, bool bSort,
     if ( bTiming )
     {
         nTime = Time::GetSystemTicks() - nTime;
-        OUString aText = "Operation took "  + OUString::valueOf(static_cast<sal_Int64>(nTime)) + " ms.";
+        OUString aText = "Operation took "  + OUString::number(nTime) + " ms.";
         print( aText );
     }
 }

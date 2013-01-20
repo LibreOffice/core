@@ -32,7 +32,7 @@ rtl::OUString uniquePipeName(rtl::OUString const & name) {
     CPPUNIT_ASSERT_EQUAL(
         osl_Process_E_None,
         osl_getProcessInfo(0, osl_Process_IDENTIFIER, &info));
-    return name + rtl::OUString::valueOf(static_cast< sal_Int64 >(info.Ident));
+    return name + OUString::number(info.Ident);
 }
 
 }

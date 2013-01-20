@@ -174,7 +174,7 @@ void writeValueContent(oslFileHandle handle, sal_Bool value) {
 }
 
 void writeValueContent(oslFileHandle handle, sal_Int16 value) {
-    writeData(handle, rtl::OString::valueOf(static_cast< sal_Int32 >(value)));
+    writeData(handle, OString::number(value));
 }
 
 void writeValueContent(oslFileHandle handle, sal_Int32 value) {
@@ -201,7 +201,7 @@ void writeValueContent(oslFileHandle handle, OUString const & value) {
             writeData(
                 handle, RTL_CONSTASCII_STRINGPARAM("<unicode oor:scalar=\""));
             writeData(
-                handle, rtl::OString::valueOf(static_cast< sal_Int32 >(c)));
+                handle, OString::number(c));
             writeData(handle, RTL_CONSTASCII_STRINGPARAM("\"/>"));
             i = j + 1;
         } else if (c == '\x0D') {

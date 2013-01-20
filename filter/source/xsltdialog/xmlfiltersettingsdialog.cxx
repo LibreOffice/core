@@ -418,7 +418,7 @@ OUString XMLFilterSettingsDialog::createUniqueInterfaceName( const OUString& rIn
     if( nDefaultNumber )
     {
         aInterfaceName += OUString( sal_Unicode( ' ' ) );
-        aInterfaceName += OUString::valueOf( static_cast<sal_Int32>(nDefaultNumber) );
+        aInterfaceName += OUString::number( nDefaultNumber );
     }
 
     return aInterfaceName;
@@ -922,7 +922,7 @@ void XMLFilterSettingsDialog::onSave()
         if( nFilters > 0 )
         {
             aMsg = RESIDSTR(STR_FILTERS_HAVE_BEEN_SAVED);
-            aMsg = aMsg.replaceFirst( sPlaceholder, OUString::valueOf( static_cast<sal_Int32>(nFilters) ) );
+            aMsg = aMsg.replaceFirst( sPlaceholder, OUString::number( nFilters ) );
             aMsg = aMsg.replaceFirst( sPlaceholder, aURL.GetName() );
         }
         else
@@ -997,7 +997,7 @@ void XMLFilterSettingsDialog::onOpen()
         else
         {
             aMsg = RESIDSTR(STR_FILTERS_INSTALLED);
-            aMsg = aMsg.replaceFirst( sPlaceholder, OUString::valueOf( static_cast<sal_Int32>(nFilters) ) );
+            aMsg = aMsg.replaceFirst( sPlaceholder, OUString::number( nFilters ) );
         }
 
         InfoBox aBox(this, aMsg );

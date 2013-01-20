@@ -237,7 +237,7 @@ SwField* SwPageNumberField::Copy() const
 
 rtl::OUString SwPageNumberField::GetPar2() const
 {
-    return rtl::OUString::valueOf(static_cast<sal_Int32>(nOffset));
+    return OUString::number(nOffset);
 }
 
 void SwPageNumberField::SetPar2(const rtl::OUString& rStr)
@@ -2126,7 +2126,7 @@ SwField* SwRefPageSetField::Copy() const
 
 rtl::OUString SwRefPageSetField::GetPar2() const
 {
-    return rtl::OUString::valueOf(static_cast<sal_Int32>(GetOffset()));
+    return OUString::number(GetOffset());
 }
 
 void SwRefPageSetField::SetPar2(const rtl::OUString& rStr)

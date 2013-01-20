@@ -1954,7 +1954,7 @@ void SdrMarkView::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, XubString& rStr,
     if(nPos != STRING_NOTFOUND)
     {
         rStr.Erase(nPos, 2);
-        rStr.Insert(OUString::valueOf( static_cast<sal_Int32>(nVal) ), nPos);
+        rStr.Insert(OUString::number( nVal ), nPos);
     }
 }
 

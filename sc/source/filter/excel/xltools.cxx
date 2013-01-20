@@ -484,7 +484,7 @@ OUString XclTools::GetXclBuiltInDefName( sal_Unicode cBuiltIn )
     if( cBuiltIn < SAL_N_ELEMENTS( ppcDefNames ) )
         return rtl::OUString::createFromAscii(ppcDefNames[cBuiltIn]);
     else
-        return rtl::OUString::valueOf(static_cast<sal_Int32>(cBuiltIn));
+        return OUString::number(cBuiltIn);
 }
 
 OUString XclTools::GetBuiltInDefName( sal_Unicode cBuiltIn )

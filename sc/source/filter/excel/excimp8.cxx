@@ -572,7 +572,7 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
         aEntry.eConnect = SC_AND;
 
         rItem.meType = ScQueryEntry::ByString;
-        rItem.maString = rtl::OUString::valueOf(static_cast<sal_Int32>(nCntOfTop10));
+        rItem.maString = OUString::number(nCntOfTop10);
 
         rStrm.Ignore(20);
         return;
@@ -640,7 +640,7 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
             case EXC_AFTYPE_BOOLERR:
                 rStrm >> nBoolErr >> nVal;
                 rStrm.Ignore( 6 );
-                rItem.maString = rtl::OUString::valueOf(static_cast<sal_Int32>(nVal));
+                rItem.maString = OUString::number(nVal);
                 bIgnore = (nBoolErr != 0);
             break;
             case EXC_AFTYPE_EMPTY:

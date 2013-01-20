@@ -2779,10 +2779,10 @@ void DocxAttributeOutput::SectionFormProtection( bool bProtected )
 void DocxAttributeOutput::SectionLineNumbering( sal_uLong nRestartNo, const SwLineNumberInfo& rLnNumInfo )
 {
     FastAttributeList* pAttr = m_pSerializer->createAttrList();
-    pAttr->add( FSNS( XML_w, XML_countBy ), OString::valueOf(static_cast<sal_Int32>(rLnNumInfo.GetCountBy())).getStr());
+    pAttr->add( FSNS( XML_w, XML_countBy ), OString::number(rLnNumInfo.GetCountBy()).getStr());
     pAttr->add( FSNS( XML_w, XML_restart ), rLnNumInfo.IsRestartEachPage() ? "newPage" : "continuous" );
     if( rLnNumInfo.GetPosFromLeft())
-        pAttr->add( FSNS( XML_w, XML_distance ), OString::valueOf(static_cast<sal_Int32>(rLnNumInfo.GetPosFromLeft())).getStr());
+        pAttr->add( FSNS( XML_w, XML_distance ), OString::number(rLnNumInfo.GetPosFromLeft()).getStr());
     if( nRestartNo )
         pAttr->add( FSNS( XML_w, XML_start ), OString::valueOf( long( nRestartNo )).getStr());
     XFastAttributeListRef xAttrs( pAttr );
@@ -2990,7 +2990,7 @@ void DocxAttributeOutput::EmbedFontStyle( const OUString& name, int tag, const c
     if( file.open( osl_File_OpenFlag_Write ) != osl::File::E_None )
         return;
     uno::Reference< com::sun::star::io::XOutputStream > xOutStream = m_rExport.GetFilter().openFragmentStream(
-        OUString( "word/fonts/font" ) + OUString::valueOf( static_cast< sal_Int32 >( m_nextFontId )) + ".ttf",
+        OUString( "word/fonts/font" ) + OUString::number(m_nextFontId) + ".ttf",
         "application/vnd.openxmlformats-officedocument.obfuscatedFont" );
     // Not much point in trying hard with the obfuscation key, whoever reads the spec can read the font anyway,
     // so just alter the first and last part of the key.
@@ -3041,7 +3041,7 @@ void DocxAttributeOutput::EmbedFontStyle( const OUString& name, int tag, const c
     xOutStream->closeOutput();
     OString relId = OUStringToOString( GetExport().GetFilter().addRelation( m_pSerializer->getOutputStream(),
         "http://schemas.openxmlformats.org/officeDocument/2006/relationships/font",
-        OUString( "fonts/font" ) + OUString::valueOf( static_cast< sal_Int32 >( m_nextFontId )) + ".ttf" ), RTL_TEXTENCODING_UTF8 );
+        OUString( "fonts/font" ) + OUString::number(m_nextFontId) + ".ttf" ), RTL_TEXTENCODING_UTF8 );
     m_pSerializer->singleElementNS( XML_w, tag,
         FSNS( XML_r, XML_id ), relId.getStr(),
         FSNS( XML_w, XML_fontKey ), fontKeyStr,
@@ -3178,7 +3178,7 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
         m_pSerializer->startElementNS( XML_w, XML_tabs, FSEND );
         m_pSerializer->singleElementNS( XML_w, XML_tab,
                 FSNS( XML_w, XML_val ), "num",
-                FSNS( XML_w, XML_pos ), OString::valueOf( static_cast<sal_Int32>(nListTabPos) ).getStr(),
+                FSNS( XML_w, XML_pos ), OString::number( nListTabPos ).getStr(),
                 FSEND );
         m_pSerializer->endElementNS( XML_w, XML_tabs );
     }

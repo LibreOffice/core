@@ -193,7 +193,7 @@ std::string RTFValue::toString() const
     if (!m_sValue.isEmpty() || m_bForceString)
         return OUStringToOString(m_sValue, RTL_TEXTENCODING_UTF8).getStr();
     else
-        return OString::valueOf(static_cast<sal_Int32>(m_nValue)).getStr();
+        return OString::number(m_nValue).getStr();
 }
 
 RTFValue* RTFValue::Clone()

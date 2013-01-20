@@ -1096,7 +1096,7 @@ void SdrObject::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, rtl::OUString& rSt
     if (nPos >= 0)
         // Replace '%2' with the passed value.
         rStr = rStr.replaceAt(
-            nPos, 2, rtl::OUString::valueOf(static_cast<sal_Int32>(nVal)));
+            nPos, 2, OUString::number(nVal));
 }
 
 void SdrObject::ImpForcePlusData()

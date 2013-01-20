@@ -1521,7 +1521,7 @@ sal_Bool BasicManager::LoadLib( sal_uInt16 nLib )
     else
     {
         StringErrorInfo* pErrInf = new StringErrorInfo( ERRCODE_BASMGR_LIBLOAD, OUString(), ERRCODE_BUTTON_OK );
-        aErrors.push_back(BasicError(*pErrInf, BASERR_REASON_LIBNOTFOUND, OUString::valueOf(static_cast<sal_Int32>(nLib))));
+        aErrors.push_back(BasicError(*pErrInf, BASERR_REASON_LIBNOTFOUND, OUString::number(nLib)));
     }
     return bDone;
 }

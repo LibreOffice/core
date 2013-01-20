@@ -278,7 +278,7 @@ css::registry::RegistryKeyType Key::getKeyType(rtl::OUString const & rKeyName)
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getKeyType:"
                     " underlying RegistryKey::getKeyType() = ")) +
-             rtl::OUString::valueOf(static_cast< sal_Int32 >(err))),
+             OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
     switch (type) {
@@ -311,7 +311,7 @@ css::registry::RegistryValueType Key::getValueType()
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getValueType:"
                     " underlying RegistryKey::getValueInfo() = ")) +
-             rtl::OUString::valueOf(static_cast< sal_Int32 >(err))),
+             OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
     switch (type) {
@@ -360,7 +360,7 @@ sal_Int32 Key::getLongValue() throw (
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getLongValue:"
                     " underlying RegistryKey::getValue() = ")) +
-             rtl::OUString::valueOf(static_cast< sal_Int32 >(err))),
+             OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
     return value;
@@ -378,7 +378,7 @@ void Key::setLongValue(sal_Int32 value)
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key setLongValue:"
                     " underlying RegistryKey::setValue() = ")) +
-             rtl::OUString::valueOf(static_cast< sal_Int32 >(err))),
+             OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
 }
@@ -409,7 +409,7 @@ css::uno::Sequence< sal_Int32 > Key::getLongListValue() throw (
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getLongListValue:"
                     " underlying RegistryKey::getLongListValue() = ")) +
-             rtl::OUString::valueOf(static_cast< sal_Int32 >(err))),
+             OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
     sal_uInt32 n = list.getLength();
@@ -445,7 +445,7 @@ void Key::setLongListValue(css::uno::Sequence< sal_Int32 > const & seqValue)
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key setLongListValue:"
                     " underlying RegistryKey::setLongListValue() = ")) +
-             rtl::OUString::valueOf(static_cast< sal_Int32 >(err))),
+             OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
 }
@@ -464,7 +464,7 @@ rtl::OUString Key::getAsciiValue() throw (
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getAsciiValue:"
                     " underlying RegistryKey::getValueInfo() = ")) +
-             rtl::OUString::valueOf(static_cast< sal_Int32 >(err))),
+             OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
     if (type != RG_VALUETYPE_STRING) {
@@ -473,7 +473,7 @@ rtl::OUString Key::getAsciiValue() throw (
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getAsciiValue:"
                     " underlying RegistryKey type = ")) +
-             rtl::OUString::valueOf(static_cast< sal_Int32 >(type))),
+             OUString::number(type)),
             static_cast< OWeakObject * >(this));
     }
     // size contains terminating null (error in underlying registry.cxx):
@@ -502,7 +502,7 @@ rtl::OUString Key::getAsciiValue() throw (
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getAsciiValue:"
                     " underlying RegistryKey::getValue() = ")) +
-             rtl::OUString::valueOf(static_cast< sal_Int32 >(err))),
+             OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
     if (list[size - 1] != '\0') {
@@ -559,7 +559,7 @@ void Key::setAsciiValue(rtl::OUString const & value)
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key setAsciiValue:"
                     " underlying RegistryKey::setValue() = ")) +
-             rtl::OUString::valueOf(static_cast< sal_Int32 >(err))),
+             OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
 }
@@ -591,7 +591,7 @@ css::uno::Sequence< rtl::OUString > Key::getAsciiListValue() throw (
                     "com.sun.star.registry.SimpleRegistry key"
                     " getAsciiListValue: underlying"
                     " RegistryKey::getStringListValue() = ")) +
-             rtl::OUString::valueOf(static_cast< sal_Int32 >(err))),
+             OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
     sal_uInt32 n = list.getLength();
@@ -665,7 +665,7 @@ void Key::setAsciiListValue(
                     "com.sun.star.registry.SimpleRegistry key"
                     " setAsciiListValue: underlying"
                     " RegistryKey::setStringListValue() = ")) +
-             rtl::OUString::valueOf(static_cast< sal_Int32 >(err))),
+             OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
 }
@@ -684,7 +684,7 @@ rtl::OUString Key::getStringValue() throw (
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getStringValue:"
                     " underlying RegistryKey::getValueInfo() = ")) +
-             rtl::OUString::valueOf(static_cast< sal_Int32 >(err))),
+             OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
     if (type != RG_VALUETYPE_UNICODE) {
@@ -693,7 +693,7 @@ rtl::OUString Key::getStringValue() throw (
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getStringValue:"
                     " underlying RegistryKey type = ")) +
-             rtl::OUString::valueOf(static_cast< sal_Int32 >(type))),
+             OUString::number(type)),
             static_cast< OWeakObject * >(this));
     }
     // size contains terminating null and is *2 (error in underlying
@@ -723,7 +723,7 @@ rtl::OUString Key::getStringValue() throw (
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getStringValue:"
                     " underlying RegistryKey::getValue() = ")) +
-             rtl::OUString::valueOf(static_cast< sal_Int32 >(err))),
+             OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
     if (list[size/2 - 1] != 0) {
@@ -753,7 +753,7 @@ void Key::setStringValue(rtl::OUString const & value)
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key setStringValue:"
                     " underlying RegistryKey::setValue() = ")) +
-             rtl::OUString::valueOf(static_cast< sal_Int32 >(err))),
+             OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
 }
@@ -785,7 +785,7 @@ css::uno::Sequence< rtl::OUString > Key::getStringListValue() throw (
                     "com.sun.star.registry.SimpleRegistry key"
                     " getStringListValue: underlying"
                     " RegistryKey::getUnicodeListValue() = ")) +
-             rtl::OUString::valueOf(static_cast< sal_Int32 >(err))),
+             OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
     sal_uInt32 n = list.getLength();
@@ -824,7 +824,7 @@ void Key::setStringListValue(
                     "com.sun.star.registry.SimpleRegistry key"
                     " setStringListValue: underlying"
                     " RegistryKey::setUnicodeListValue() = ")) +
-             rtl::OUString::valueOf(static_cast< sal_Int32 >(err))),
+             OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
 }
@@ -844,7 +844,7 @@ css::uno::Sequence< sal_Int8 > Key::getBinaryValue()
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getBinaryValue:"
                     " underlying RegistryKey::getValueInfo() = ")) +
-             rtl::OUString::valueOf(static_cast< sal_Int32 >(err))),
+             OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
     if (type != RG_VALUETYPE_BINARY) {
@@ -853,7 +853,7 @@ css::uno::Sequence< sal_Int8 > Key::getBinaryValue()
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getBinaryValue:"
                     " underlying RegistryKey type = ")) +
-             rtl::OUString::valueOf(static_cast< sal_Int32 >(type))),
+             OUString::number(type)),
             static_cast< OWeakObject * >(this));
     }
     if (size > SAL_MAX_INT32) {
@@ -872,7 +872,7 @@ css::uno::Sequence< sal_Int8 > Key::getBinaryValue()
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getBinaryValue:"
                     " underlying RegistryKey::getValue() = ")) +
-             rtl::OUString::valueOf(static_cast< sal_Int32 >(err))),
+             OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
     return value;
@@ -892,7 +892,7 @@ void Key::setBinaryValue(css::uno::Sequence< sal_Int8 > const & value)
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key setBinaryValue:"
                     " underlying RegistryKey::setValue() = ")) +
-             rtl::OUString::valueOf(static_cast< sal_Int32 >(err))),
+             OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
 }
@@ -915,7 +915,7 @@ css::uno::Reference< css::registry::XRegistryKey > Key::openKey(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key openKey:"
                     " underlying RegistryKey::openKey() = ")) +
-             rtl::OUString::valueOf(static_cast< sal_Int32 >(err))),
+             OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
 }
@@ -938,7 +938,7 @@ css::uno::Reference< css::registry::XRegistryKey > Key::createKey(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key createKey:"
                     " underlying RegistryKey::createKey() = ")) +
-             rtl::OUString::valueOf(static_cast< sal_Int32 >(err))),
+             OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
 }
@@ -954,7 +954,7 @@ void Key::closeKey()
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key closeKey:"
                     " underlying RegistryKey::closeKey() = ")) +
-             rtl::OUString::valueOf(static_cast< sal_Int32 >(err))),
+             OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
 }
@@ -970,7 +970,7 @@ void Key::deleteKey(rtl::OUString const & rKeyName)
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key deleteKey:"
                     " underlying RegistryKey::deleteKey() = ")) +
-             rtl::OUString::valueOf(static_cast< sal_Int32 >(err))),
+             OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
 }
@@ -988,7 +988,7 @@ Key::openKeys()
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key openKeys:"
                     " underlying RegistryKey::openSubKeys() = ")) +
-             rtl::OUString::valueOf(static_cast< sal_Int32 >(err))),
+             OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
     sal_uInt32 n = list.getLength();
@@ -1021,7 +1021,7 @@ css::uno::Sequence< rtl::OUString > Key::getKeyNames()
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getKeyNames:"
                     " underlying RegistryKey::getKeyNames() = ")) +
-             rtl::OUString::valueOf(static_cast< sal_Int32 >(err))),
+             OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
     sal_uInt32 n = list.getLength();
@@ -1056,7 +1056,7 @@ sal_Bool Key::createLink(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key createLink:"
                     " underlying RegistryKey::createLink() = ")) +
-             rtl::OUString::valueOf(static_cast< sal_Int32 >(err))),
+             OUString::number(err)),
             static_cast< OWeakObject * >(this));
     default:
         return false;
@@ -1074,7 +1074,7 @@ void Key::deleteLink(rtl::OUString const & rLinkName)
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key deleteLink:"
                     " underlying RegistryKey::deleteLink() = ")) +
-             rtl::OUString::valueOf(static_cast< sal_Int32 >(err))),
+             OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
 }
@@ -1091,7 +1091,7 @@ rtl::OUString Key::getLinkTarget(rtl::OUString const & rLinkName)
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getLinkTarget:"
                     " underlying RegistryKey::getLinkTarget() = ")) +
-             rtl::OUString::valueOf(static_cast< sal_Int32 >(err))),
+             OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
     return target;
@@ -1109,7 +1109,7 @@ rtl::OUString Key::getResolvedName(rtl::OUString const & aKeyName)
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getResolvedName:"
                     " underlying RegistryKey::getResolvedName() = ")) +
-             rtl::OUString::valueOf(static_cast< sal_Int32 >(err))),
+             OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
     return resolved;
@@ -1140,7 +1140,7 @@ void SimpleRegistry::open(
              rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "): underlying Registry::open/create() = ")) +
-             rtl::OUString::valueOf(static_cast< sal_Int32 >(err))),
+             OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
 }
@@ -1161,7 +1161,7 @@ void SimpleRegistry::close()
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry.close:"
                     " underlying Registry::close() = ")) +
-             rtl::OUString::valueOf(static_cast< sal_Int32 >(err))),
+             OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
 }
@@ -1177,7 +1177,7 @@ void SimpleRegistry::destroy()
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry.destroy:"
                     " underlying Registry::destroy() = ")) +
-             rtl::OUString::valueOf(static_cast< sal_Int32 >(err))),
+             OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
 }
@@ -1194,7 +1194,7 @@ css::uno::Reference< css::registry::XRegistryKey > SimpleRegistry::getRootKey()
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry.getRootKey:"
                     " underlying Registry::getRootKey() = ")) +
-             rtl::OUString::valueOf(static_cast< sal_Int32 >(err))),
+             OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
     return new Key(this, root);
@@ -1236,7 +1236,7 @@ void SimpleRegistry::mergeKey(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry.mergeKey:"
                     " underlying Registry::getRootKey/mergeKey() = ")) +
-             rtl::OUString::valueOf(static_cast< sal_Int32 >(err))),
+             OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
 }
