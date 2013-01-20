@@ -3162,7 +3162,7 @@ namespace drawinglayer
             // interpret the Metafile
             interpretMetafile(getMetaFile(), aTargetHolders, aPropertyHolders, rViewInformation);
 
-            // get the content. There should be ony one target, as in the start condition,
+            // get the content. There should be only one target, as in the start condition,
             // but iterating will be the right thing to do when some push/pop is not closed
             Primitive2DSequence xRetval;
 
