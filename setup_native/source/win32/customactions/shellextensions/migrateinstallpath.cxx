@@ -23,7 +23,7 @@
 #endif
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include <msiquery.h>
+#include <../tools/msiprop.hxx>
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
@@ -41,27 +41,6 @@
 
 using namespace std;
 
-namespace
-{
-    std::_tstring GetMsiProperty( MSIHANDLE handle, const std::_tstring& sProperty )
-    {
-        std::_tstring   result;
-        TCHAR   szDummy[1] = TEXT("");
-        DWORD   nChars = 0;
-
-        if ( MsiGetProperty( handle, sProperty.c_str(), szDummy, &nChars ) == ERROR_MORE_DATA )
-        {
-            DWORD nBytes = ++nChars * sizeof(TCHAR);
-            LPTSTR buffer = reinterpret_cast<LPTSTR>(_alloca(nBytes));
-            ZeroMemory( buffer, nBytes );
-            MsiGetProperty(handle, sProperty.c_str(), buffer, &nChars);
-            result = buffer;
-        }
-
-        return  result;
-    }
-} // namespace
-
 extern "C" UINT __stdcall MigrateInstallPath( MSIHANDLE handle )
 {
     TCHAR   szValue[8192];
@@ -69,10 +48,10 @@ extern "C" UINT __stdcall MigrateInstallPath( MSIHANDLE handle )
     HKEY    hKey;
     std::_tstring   sInstDir;
 
-    std::_tstring   sManufacturer = GetMsiProperty( handle, TEXT("Manufacturer") );
-    std::_tstring   sDefinedName = GetMsiProperty( handle, TEXT("DEFINEDPRODUCT") );
-    std::_tstring   sUpdateVersion = GetMsiProperty( handle, TEXT("DEFINEDVERSION") );
-    std::_tstring   sUpgradeCode = GetMsiProperty( handle, TEXT("UpgradeCode") );
+    std::_tstring   sManufacturer = GetMsiPropValue( handle, TEXT("Manufacturer") );
+    std::_tstring   sDefinedName = GetMsiPropValue( handle, TEXT("DEFINEDPRODUCT") );
+    std::_tstring   sUpdateVersion = GetMsiPropValue( handle, TEXT("DEFINEDVERSION") );
+    std::_tstring   sUpgradeCode = GetMsiPropValue( handle, TEXT("UpgradeCode") );
 
     std::_tstring   sProductKey = "Software\\" + sManufacturer + "\\" + sDefinedName +
                                         "\\" + sUpdateVersion + "\\" + sUpgradeCode;

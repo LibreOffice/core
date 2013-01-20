@@ -23,7 +23,7 @@
 #endif
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include <msiquery.h>
+#include <../tools/msiprop.hxx>
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
@@ -41,27 +41,6 @@
 
 using namespace std;
 
-namespace
-{
-    std::_tstring GetMsiProperty( MSIHANDLE handle, const std::_tstring& sProperty )
-    {
-        std::_tstring   result;
-        TCHAR   szDummy[1] = TEXT("");
-        DWORD   nChars = 0;
-
-        if ( MsiGetProperty( handle, sProperty.c_str(), szDummy, &nChars ) == ERROR_MORE_DATA )
-        {
-            DWORD nBytes = ++nChars * sizeof(TCHAR);
-            LPTSTR buffer = reinterpret_cast<LPTSTR>(_alloca(nBytes));
-            ZeroMemory( buffer, nBytes );
-            MsiGetProperty(handle, sProperty.c_str(), buffer, &nChars);
-            result = buffer;
-        }
-
-        return  result;
-    }
-} // namespace
-
 extern "C" UINT __stdcall CompleteInstallPath( MSIHANDLE handle )
 {
     // This CustomAction is necessary for updates from OOo 3.0, OOo 3.1 and OOo 3.2 to versions
@@ -76,8 +55,8 @@ extern "C" UINT __stdcall CompleteInstallPath( MSIHANDLE handle )
     // Reading property OFFICEDIRHOSTNAME_, that contains the part of the path behind
     // the program files folder.
 
-    std::_tstring   sInstallLocation = GetMsiProperty( handle, TEXT("INSTALLLOCATION") );
-    std::_tstring   sOfficeDirHostname = GetMsiProperty( handle, TEXT("OFFICEDIRHOSTNAME_") );
+    std::_tstring   sInstallLocation = GetMsiPropValue( handle, TEXT("INSTALLLOCATION") );
+    std::_tstring   sOfficeDirHostname = GetMsiPropValue( handle, TEXT("OFFICEDIRHOSTNAME_") );
 
     // If sInstallLocation ends with (contains) the string sOfficeDirHostname,
     // INSTALLLOCATION is good and nothing has to be done here.
@@ -94,9 +73,9 @@ extern "C" UINT __stdcall CompleteInstallPath( MSIHANDLE handle )
 
     if ( pathCompletionRequired )
     {
-        std::_tstring   sManufacturer = GetMsiProperty( handle, TEXT("Manufacturer") );
-        std::_tstring   sDefinedName = GetMsiProperty( handle, TEXT("DEFINEDPRODUCT") );
-        std::_tstring   sUpgradeCode = GetMsiProperty( handle, TEXT("UpgradeCode") );
+        std::_tstring   sManufacturer = GetMsiPropValue( handle, TEXT("Manufacturer") );
+        std::_tstring   sDefinedName = GetMsiPropValue( handle, TEXT("DEFINEDPRODUCT") );
+        std::_tstring   sUpgradeCode = GetMsiPropValue( handle, TEXT("UpgradeCode") );
 
         // sUpdateVersion can be "3.0", "3.1" or "3.2"
 

@@ -28,7 +28,7 @@
 #define WINVER 0x0500
 
 #include <windows.h>
-#include <msiquery.h>
+#include <../tools/msiprop.hxx>
 #include <malloc.h>
 
 #include <stdio.h>
@@ -39,21 +39,6 @@
 #include <systools/win32/uwinapi.h>
 
 #include "spellchecker_selection.hxx"
-
-BOOL GetMsiProp( MSIHANDLE hMSI, const char* pPropName, char** ppValue )
-{
-    DWORD sz = 0;
-    if ( MsiGetProperty( hMSI, pPropName, "", &sz ) == ERROR_MORE_DATA ) {
-        sz++;
-        DWORD nbytes = sz * sizeof( char );
-        char* buff = reinterpret_cast<char*>( malloc( nbytes ) );
-        ZeroMemory( buff, nbytes );
-        MsiGetProperty( hMSI, pPropName, buff, &sz );
-        *ppValue = buff;
-        return ( strlen(buff) > 0 );
-    }
-    return FALSE;
-}
 
 static const char *
 langid_to_string( LANGID langid )
@@ -314,8 +299,8 @@ extern "C" UINT __stdcall SelectLanguage( MSIHANDLE handle )
     /* Keep track of what UI languages are relevant, either the ones explicitly
      * requested with the UI_LANGS property, or all available on the system:
      */
-    char* pVal = NULL;
-    if ( (GetMsiProp( handle, "UI_LANGS", &pVal )) && pVal ) {
+    LPTSTR pVal = NULL;
+    if ( (GetMsiProp( handle, "UI_LANGS", &pVal )) ) {
         char *str_ptr;
         str_ptr = strtok(pVal, ",");
         for(; str_ptr != NULL ;) {

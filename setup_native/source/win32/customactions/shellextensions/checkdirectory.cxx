@@ -24,7 +24,7 @@
 #endif
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include <msiquery.h>
+#include <../tools/msiprop.hxx>
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
@@ -46,44 +46,17 @@
 #include <systools/win32/uwinapi.h>
 #include <../tools/seterror.hxx>
 
-static std::_tstring GetMsiProperty( MSIHANDLE handle, const std::_tstring& sProperty )
-{
-    std::_tstring result;
-    TCHAR szDummy[1] = TEXT("");
-    DWORD nChars = 0;
-
-    if ( MsiGetProperty( handle, sProperty.c_str(), szDummy, &nChars ) == ERROR_MORE_DATA )
-    {
-        DWORD nBytes = ++nChars * sizeof(TCHAR);
-        LPTSTR buffer = reinterpret_cast<LPTSTR>(_alloca(nBytes));
-        ZeroMemory( buffer, nBytes );
-        MsiGetProperty(handle, sProperty.c_str(), buffer, &nChars);
-        result = buffer;
-    }
-
-    return result;
-}
-
-static void UnsetMsiProperty(MSIHANDLE handle, const std::_tstring& sProperty)
-{
-    MsiSetProperty(handle, sProperty.c_str(), NULL);
-}
-
-static void SetMsiProperty(MSIHANDLE handle, const std::_tstring& sProperty, const std::_tstring&)
-{
-    MsiSetProperty(handle, sProperty.c_str(), TEXT("1"));
-}
 
 extern "C" UINT __stdcall CheckInstallDirectory(MSIHANDLE handle)
 {
-    std::_tstring sInstallPath = GetMsiProperty(handle, TEXT("INSTALLLOCATION"));
-    std::_tstring sOfficeHostnamePath = GetMsiProperty(handle, TEXT("OFFICEDIRHOSTNAME"));
+    std::_tstring sInstallPath = GetMsiPropValue(handle, TEXT("INSTALLLOCATION"));
+    std::_tstring sOfficeHostnamePath = GetMsiPropValue(handle, TEXT("OFFICEDIRHOSTNAME"));
 
     // MessageBox(NULL, sInstallPath.c_str(), "DEBUG", MB_OK);
 
     // unsetting all properties
 
-    UnsetMsiProperty( handle, TEXT("DIRECTORY_NOT_EMPTY") );
+    MsiSetProperty( handle, TEXT("DIRECTORY_NOT_EMPTY"), NULL );
 
     // 1. Searching for file setup.ini
 
@@ -98,7 +71,7 @@ extern "C" UINT __stdcall CheckInstallDirectory(MSIHANDLE handle)
     if ( IsValidHandle(hdl) )
     {
         // setup.ini found -> directory cannot be used for installation.
-        SetMsiProperty( handle, TEXT("DIRECTORY_NOT_EMPTY"), TEXT("1") );
+        MsiSetProperty( handle, TEXT("DIRECTORY_NOT_EMPTY"), TEXT("1") );
         SetMsiErrorCode( MSI_ERROR_DIRECTORY_NOT_EMPTY );
         // std::_tstring notEmptyStr = "Directory is not empty. Please choose another installation directory.";
         // std::_tstring notEmptyTitle = "Directory not empty";
