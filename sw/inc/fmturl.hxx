@@ -60,7 +60,7 @@ public:
     virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     void SetTargetFrameName( const String& rStr ) { sTargetFrameName = rStr; }
-    void SetURL( const String &rURL, sal_Bool bServerMap );
+    void SetURL(const OUString &rURL, bool bServerMap);
     void SetMap( const ImageMap *pM );  ///< Pointer will be copied.
 
     const String   &GetTargetFrameName()const { return sTargetFrameName; }

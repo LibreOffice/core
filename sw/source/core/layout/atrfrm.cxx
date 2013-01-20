@@ -1740,7 +1740,7 @@ SfxPoolItem* SwFmtURL::Clone( SfxItemPool* ) const
     return new SwFmtURL( *this );
 }
 
-void SwFmtURL::SetURL( const XubString &rURL, sal_Bool bServerMap )
+void SwFmtURL::SetURL(const OUString &rURL, bool bServerMap)
 {
     sURL = rURL;
     bIsServerMap = bServerMap;
@@ -1751,6 +1751,7 @@ void SwFmtURL::SetMap( const ImageMap *pM )
     delete pMap;
     pMap = pM ? new ImageMap( *pM ) : 0;
 }
+
 extern const SvEventDescription* sw_GetSupportedMacroItems();
 
 bool SwFmtURL::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -2086,7 +2087,7 @@ bool SwFmtChain::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     // here we convert always!
     nMemberId &= ~CONVERT_TWIPS;
     bool   bRet = true;
-    XubString aRet;
+    OUString aRet;
     switch ( nMemberId )
     {
         case MID_CHAIN_PREVNAME:
@@ -2101,7 +2102,7 @@ bool SwFmtChain::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             OSL_ENSURE( !this, "unknown MemberId" );
             bRet = false;
     }
-    rVal <<= OUString(aRet);
+    rVal <<= aRet;
     return bRet;
 }
 
