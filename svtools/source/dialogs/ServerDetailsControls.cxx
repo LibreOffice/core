@@ -134,9 +134,7 @@ INetURLObject HostDetailsContainer::getUrl( )
 
 bool HostDetailsContainer::setUrl( const INetURLObject& rUrl )
 {
-    bool bSuccess = false;
-
-    bSuccess = verifyScheme( INetURLObject::GetScheme( rUrl.GetProtocol( ) ) );
+    bool bSuccess = verifyScheme( INetURLObject::GetScheme( rUrl.GetProtocol( ) ) );
 
     if ( bSuccess )
     {

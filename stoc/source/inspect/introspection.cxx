@@ -313,7 +313,6 @@ sal_Int32 IntrospectionAccessStatic_Impl::getMethodIndex( const ::rtl::OUString&
     else
     {
         sal_Int32 nSearchFrom = aMethodName.getLength();
-        nSearchFrom = aMethodName.getLength();
         while( true )
         {
             // Strategy: Search back until the first '_' is found
