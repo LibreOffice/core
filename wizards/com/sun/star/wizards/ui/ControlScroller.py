@@ -99,7 +99,7 @@ class ControlScroller(object):
         if _ntotfieldcount is not None:
             self.setTotalFieldCount(_ntotfieldcount)
         if _nscrollvalue >= 0:
-            ControlScroller.xScrollBar.xDialogModel.ScrollValue = _nscrollvalue
+            ControlScroller.xScrollBar.Model.ScrollValue = _nscrollvalue
             self.scrollControls()
 
     @classmethod

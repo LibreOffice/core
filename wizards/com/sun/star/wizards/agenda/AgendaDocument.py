@@ -844,16 +844,18 @@ class Topics(object):
             # analyze the structure of the topic rows.
             while not cursor.RangeName == afterLastCell:
                 cell = Topics.table.getCellByName(cursor.RangeName)
+                # first I store the content and para style of the cell
+                ae = TextElement(cell, cell.String)
                 # if the cell contains a relevant <...>
                 # i add the text element to the hash,
                 # so it's text can be updated later.
                 try:
                     if items[cell.CellName] is not None:
-                        self.topicItems[cell.String.lower().lstrip()] = cell
+                        self.topicItems[cell.String.lower().lstrip()] = ae
                 except KeyError:
                     pass
 
-                Topics.topicCells.append(cell)
+                Topics.topicCells.append(ae)
                 # goto next cell.
                 cursor.goRight(1, False)
             '''
@@ -886,22 +888,25 @@ class Topics(object):
             size = topic - len(self.writtenTopics)
             self.writtenTopics += [None] * size
         self.writtenTopics.insert(topic, "")
-        # make sure threr are enough rows for me...
+        # make sure three are enough rows for me...
         rows = self.agenda.getRowCount(Topics.table)
         reqRows = 1 + (topic + 1) * Topics.rowsPerTopic
         firstRow = reqRows - Topics.rowsPerTopic + 1
         diff = reqRows - rows
         if diff > 0:
-            self.agenda.insertTableRows(Topics.table, rows, diff)
             # set the item's text...
-        '''self.setItemText(Topics.numCell, data[0].Value)
+            self.agenda.insertTableRows(Topics.table, rows, diff)
+
+        self.setItemText(Topics.numCell, data[0].Value)
         self.setItemText(Topics.topicCell, data[1].Value)
         self.setItemText(Topics.responsibleCell, data[2].Value)
-        self.setItemText(Topics.timeCell, data[3].Value)'''
+        self.setItemText(Topics.timeCell, data[3].Value)
         # now write !
         cursor = Topics.table.createCursorByCellName("A" + str(firstRow))
         for i in Topics.topicCells:
-            self.write(Topics.table.getCellByName(cursor.RangeName))
+            i.placeHolderText = \
+                Topics.table.getCellByName(cursor.RangeName).String
+            i.write()
             cursor.goRight(1, False)
         # now format !
         cursor.gotoCellByName("A" + str(firstRow), False)
@@ -961,7 +966,8 @@ class Topics(object):
             cursor.goRight(cursorMoves, False)
             xc = Topics.table.getCellByName(cursor.RangeName)
             # and write it !
-            te.write(xc)
+            te.placeHolderText = xc.String
+            te.write()
 
     '''writes the given topic.
     if the first topic was involved, reformat the

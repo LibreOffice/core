@@ -392,12 +392,12 @@ class TopicsControl(ControlScroller):
                     '''
                     while len(ControlScroller.scrollfields) > 1 \
                             and self.isRowEmpty(len(ControlScroller.scrollfields) - 2):
-                        removeLastRow()
+                        self.removeLastRow()
                     cr = self.ControlGroupVector[
-                        ControlScroller.scrollfields.size - ControlScroller.nscrollvalue - 1]
+                        len(ControlScroller.scrollfields) - ControlScroller.nscrollvalue - 1]
                     # if a remove was performed, set focus
                     #to the last row with some data in it...
-                    self.focus(getControl(cr, column))
+                    self.focus(self.getControl(cr, column))
                     # update the preview document.
                     self.reduceDocumentToTopics()
 
