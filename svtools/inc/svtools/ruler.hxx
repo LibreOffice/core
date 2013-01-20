@@ -681,6 +681,9 @@ private:
     Ruler (const Ruler &);
     Ruler & operator= (const Ruler &);
 
+protected:
+    long GetRulerVirHeight() const;
+
 public:
                         Ruler( Window* pParent, WinBits nWinStyle = WB_STDRULER );
     virtual             ~Ruler();
@@ -712,6 +715,9 @@ public:
     void                SetBorderPos( long nOff = 0 );
     long                GetBorderOffset() const { return mnBorderOff; }
     Rectangle           GetExtraRect() const { return maExtraRect; }
+    long                GetWidth() const { return mnWidth; }
+    long                GetHeight() const { return mnHeight; }
+    long                GetRulerWidth() const;
 
     void                SetUnit( FieldUnit eNewUnit );
     FieldUnit           GetUnit() const { return meUnit; }
