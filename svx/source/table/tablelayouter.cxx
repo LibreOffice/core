@@ -222,15 +222,16 @@ SvxBorderLine* TableLayouter::getBorderLine( sal_Int32 nEdgeX, sal_Int32 nEdgeY,
 sal_Int32 TableLayouter::getHorizontalEdge( int nEdgeY, sal_Int32* pnMin /*= 0*/, sal_Int32* pnMax /*= 0*/ )
 {
     sal_Int32 nRet = 0;
-    if( (nEdgeY >= 0) && (nEdgeY <= getRowCount() ) )
-        nRet = maRows[std::min((sal_Int32)nEdgeY,getRowCount()-1)].mnPos;
+    const sal_Int32 nRowCount = getRowCount();
+    if( (nEdgeY >= 0) && (nEdgeY <= nRowCount ) )
+        nRet = maRows[std::min((sal_Int32)nEdgeY,nRowCount-1)].mnPos;
 
-    if( nEdgeY == getRowCount() )
+    if( nEdgeY == nRowCount )
         nRet += maRows[nEdgeY - 1].mnSize;
 
     if( pnMin )
     {
-        if( (nEdgeY > 0) && (nEdgeY <= getRowCount() ) )
+        if( (nEdgeY > 0) && (nEdgeY <= nRowCount ) )
         {
             *pnMin = maRows[nEdgeY-1].mnPos + 600; // todo
         }
@@ -265,7 +266,7 @@ sal_Int32 TableLayouter::getVerticalEdge( int nEdgeX, sal_Int32* pnMin /*= 0*/, 
     }
     else
     {
-        if( nEdgeX == getColumnCount() )
+        if( nEdgeX == nColCount )
             nRet += maColumns[nEdgeX - 1].mnSize;
     }
 
