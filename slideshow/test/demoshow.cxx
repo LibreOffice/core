@@ -430,8 +430,7 @@ void DemoWindow::init()
     {
         if( !mxShow.is() )
         {
-            uno::Reference< uno::XComponentContext > xContext =(
-                ::comphelper::getProcessComponentContext());
+            uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 
             mxShow.set( presentation::SlideShow::create(xContext),
                         uno::UNO_QUERY_THROW );

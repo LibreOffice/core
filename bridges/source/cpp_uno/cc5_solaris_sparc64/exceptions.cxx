@@ -431,7 +431,7 @@ void fillUnoException(
     }
     if (type == NULL || type->eTypeClass != typelib_TypeClass_EXCEPTION) {
         css::uno::RuntimeException exc(
-            "Not a UNO exception type: " + name),
+            "Not a UNO exception type: " + name,
             css::uno::Reference< css::uno::XInterface >());
         uno_type_any_constructAndConvert(
             unoException, &exc, getCppuType(&exc).getTypeLibType(), cppToUno);
