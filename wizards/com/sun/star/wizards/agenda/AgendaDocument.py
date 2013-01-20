@@ -894,15 +894,14 @@ class Topics(object):
         if diff > 0:
             self.agenda.insertTableRows(Topics.table, rows, diff)
             # set the item's text...
-
-        self.setItemText(Topics.numCell, data[0].Value)
+        '''self.setItemText(Topics.numCell, data[0].Value)
         self.setItemText(Topics.topicCell, data[1].Value)
         self.setItemText(Topics.responsibleCell, data[2].Value)
-        self.setItemText(Topics.timeCell, data[3].Value)
+        self.setItemText(Topics.timeCell, data[3].Value)'''
         # now write !
         cursor = Topics.table.createCursorByCellName("A" + str(firstRow))
         for i in Topics.topicCells:
-            i.write(Topics.table.getCellByName(cursor.RangeName))
+            self.write(Topics.table.getCellByName(cursor.RangeName))
             cursor.goRight(1, False)
         # now format !
         cursor.gotoCellByName("A" + str(firstRow), False)

@@ -52,19 +52,7 @@ class ControlScroller(object):
         self.nlineincrement = 1
         self.sincSuffix = Desktop.getIncrementSuffix(
             ControlScroller.CurUnoDialog.xDialogModel, "imgBackground")
-        self.oImgControl = ControlScroller.CurUnoDialog.insertControlModel(
-            "com.sun.star.awt.UnoControlImageControlModel",
-            "imgBackground" + self.sincSuffix,
-            ("Border", PropertyNames.PROPERTY_HEIGHT,
-                PropertyNames.PROPERTY_POSITION_X,
-                PropertyNames.PROPERTY_POSITION_Y,
-                PropertyNames.PROPERTY_STEP,
-                PropertyNames.PROPERTY_WIDTH),
-            (1, self.iCompHeight, self.iCompPosX,
-                self.iCompPosY, ControlScroller.iStep, self.iCompWidth))
-        self.oImgControl = ControlScroller.CurUnoDialog.xUnoDialog.getControl(
-            "imgBackground" + self.sincSuffix)
-        self.setComponentMouseTransparent()
+
         ControlScroller.xScrollBar = ControlScroller.CurUnoDialog.insertScrollBar(
             "TitleScrollBar" + self.sincSuffix,
             ("Border", PropertyNames.PROPERTY_ENABLED,
@@ -86,10 +74,6 @@ class ControlScroller(object):
         for i in range(ControlScroller.nblockincrement):
             self.insertControlGroup(i, ypos)
             ypos += self.linedistance
-
-    def setComponentMouseTransparent(self):
-        ControlScroller.CurUnoDialog.getPeerConfiguration().\
-            setPeerProperties(self.oImgControl, "MouseTransparent", True)
 
     @classmethod
     def fillupControls(self, binitialize):
@@ -115,7 +99,7 @@ class ControlScroller(object):
         if _ntotfieldcount is not None:
             self.setTotalFieldCount(_ntotfieldcount)
         if _nscrollvalue >= 0:
-            ControlScroller.xScrollBar.Model.ScrollValue = _nscrollvalue
+            ControlScroller.xScrollBar.xDialogModel.ScrollValue = _nscrollvalue
             self.scrollControls()
 
     @classmethod
@@ -209,8 +193,7 @@ class ControlScroller(object):
             controlname).Model
         propertyname = UnoDialog.getDisplayProperty(oControlModel)
         if propertyname:
-            print(type(controlname))
-            setattr(controlname, propertyname, newvalue)
+            setattr(oControlModel, propertyname, newvalue)
 
     @classmethod
     def getControlData(self, controlname):
@@ -218,7 +201,7 @@ class ControlScroller(object):
             controlname).Model
         propertyname = UnoDialog.getDisplayProperty(oControlModel)
         if propertyname:
-            return getattr(controlname, propertyname)
+            return getattr(oControlModel, propertyname)
         else:
             return None
 
