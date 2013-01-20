@@ -23,7 +23,7 @@
 #define WINVER 0x0500
 
 #include <windows.h>
-#include <msiquery.h>
+#include <../tools/msiprop.hxx>
 #include <malloc.h>
 
 #include <stdio.h>
@@ -42,38 +42,6 @@
 using namespace std;
 namespace
 {
-
-    string GetMsiProperty(MSIHANDLE handle, const string& sProperty)
-    {
-        string  result;
-        TCHAR   szDummy[1] = TEXT("");
-        DWORD   nChars = 0;
-
-        if (MsiGetProperty(handle, sProperty.c_str(), szDummy, &nChars) == ERROR_MORE_DATA)
-        {
-            DWORD nBytes = ++nChars * sizeof(TCHAR);
-            LPTSTR buffer = reinterpret_cast<LPTSTR>(_alloca(nBytes));
-            ZeroMemory( buffer, nBytes );
-            MsiGetProperty(handle, sProperty.c_str(), buffer, &nChars);
-            result = buffer;
-        }
-        return result;
-    }
-
-    inline bool IsSetMsiProperty(MSIHANDLE handle, const string& sProperty)
-    {
-        return (GetMsiProperty(handle, sProperty).length() > 0);
-    }
-
-    inline void UnsetMsiProperty(MSIHANDLE handle, const string& sProperty)
-    {
-        MsiSetProperty(handle, sProperty.c_str(), NULL);
-    }
-
-    inline void SetMsiProperty(MSIHANDLE handle, const string& sProperty, const string&)
-    {
-        MsiSetProperty(handle, sProperty.c_str(), TEXT("1"));
-    }
 
     static const int MAXLINE = 1024*64;
 
@@ -193,7 +161,7 @@ namespace
 extern "C" UINT __stdcall CreateIndexes( MSIHANDLE handle )
 {
 
-    string sOfficeInstallPath = GetMsiProperty(handle, TEXT("INSTALLLOCATION"));
+    string sOfficeInstallPath = GetMsiPropValue(handle, TEXT("INSTALLLOCATION"));
     createIndexesForThesaurusFiles(sOfficeInstallPath);
     return ERROR_SUCCESS;
 }

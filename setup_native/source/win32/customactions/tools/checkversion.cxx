@@ -23,7 +23,7 @@
 #pragma warning(push,1) // disable warnings within system headers
 #endif
 #include <windows.h>
-#include <msiquery.h>
+#include <../tools/msiprop.hxx>
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
@@ -34,25 +34,6 @@
 #include "strsafe.h"
 
 #include <seterror.hxx>
-
-//----------------------------------------------------------
-BOOL GetMsiProp( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppValue )
-{
-    DWORD sz = 0;
-       if ( MsiGetProperty( hMSI, pPropName, L"", &sz ) == ERROR_MORE_DATA )
-       {
-           sz++;
-           DWORD nbytes = sz * sizeof( wchar_t );
-           wchar_t* buff = reinterpret_cast<wchar_t*>( malloc( nbytes ) );
-           ZeroMemory( buff, nbytes );
-           MsiGetProperty( hMSI, pPropName, buff, &sz );
-           *ppValue = buff;
-
-        return TRUE;
-    }
-
-    return FALSE;
-}
 
 //----------------------------------------------------------
 #ifdef DEBUG
@@ -78,7 +59,7 @@ extern "C" UINT __stdcall CheckVersions( MSIHANDLE hMSI )
 
     wchar_t* pVal = NULL;
 
-    if ( GetMsiProp( hMSI, L"NEWPRODUCTS", &pVal ) && pVal )
+    if ( GetMsiProp( hMSI, L"NEWPRODUCTS", &pVal ) )
     {
         OutputDebugStringFormat( TEXT("DEBUG: NEWPRODUCTS found [%s]"), pVal );
         if ( *pVal != 0 )
@@ -86,7 +67,7 @@ extern "C" UINT __stdcall CheckVersions( MSIHANDLE hMSI )
         free( pVal );
     }
     pVal = NULL;
-    if ( GetMsiProp( hMSI, L"SAMEPRODUCTS", &pVal ) && pVal )
+    if ( GetMsiProp( hMSI, L"SAMEPRODUCTS", &pVal ) )
     {
         OutputDebugStringFormat( TEXT("DEBUG: SAMEPRODUCTS found [%s]"), pVal );
         if ( *pVal != 0 )
@@ -94,7 +75,7 @@ extern "C" UINT __stdcall CheckVersions( MSIHANDLE hMSI )
         free( pVal );
     }
     pVal = NULL;
-    if ( GetMsiProp( hMSI, L"OLDPRODUCTS", &pVal ) && pVal )
+    if ( GetMsiProp( hMSI, L"OLDPRODUCTS", &pVal ) )
     {
         OutputDebugStringFormat( TEXT("DEBUG: OLDPRODUCTS found [%s]"), pVal );
         if ( *pVal != 0 )
@@ -102,7 +83,7 @@ extern "C" UINT __stdcall CheckVersions( MSIHANDLE hMSI )
         free( pVal );
     }
     pVal = NULL;
-    if ( GetMsiProp( hMSI, L"BETAPRODUCTS", &pVal ) && pVal )
+    if ( GetMsiProp( hMSI, L"BETAPRODUCTS", &pVal ) )
     {
         OutputDebugStringFormat( TEXT("DEBUG: BETAPRODUCTS found [%s]"), pVal );
         if ( *pVal != 0 )
@@ -111,7 +92,7 @@ extern "C" UINT __stdcall CheckVersions( MSIHANDLE hMSI )
     }
 
     pVal = NULL;
-    if ( GetMsiProp( hMSI, L"NEWPRODUCTSPATCH", &pVal ) && pVal )
+    if ( GetMsiProp( hMSI, L"NEWPRODUCTSPATCH", &pVal ) )
     {
         OutputDebugStringFormat( TEXT("DEBUG: NEWPRODUCTSPATCH found [%s]"), pVal );
         if ( *pVal != 0 )
@@ -119,7 +100,7 @@ extern "C" UINT __stdcall CheckVersions( MSIHANDLE hMSI )
         free( pVal );
     }
     pVal = NULL;
-    if ( GetMsiProp( hMSI, L"SAMEPRODUCTSPATCH", &pVal ) && pVal )
+    if ( GetMsiProp( hMSI, L"SAMEPRODUCTSPATCH", &pVal ) )
     {
         OutputDebugStringFormat( TEXT("DEBUG: SAMEPRODUCTSPATCH found [%s]"), pVal );
         if ( *pVal != 0 )
@@ -127,7 +108,7 @@ extern "C" UINT __stdcall CheckVersions( MSIHANDLE hMSI )
         free( pVal );
     }
     pVal = NULL;
-    if ( GetMsiProp( hMSI, L"OLDPRODUCTSPATCH", &pVal ) && pVal )
+    if ( GetMsiProp( hMSI, L"OLDPRODUCTSPATCH", &pVal ) )
     {
         OutputDebugStringFormat( TEXT("DEBUG: OLDPRODUCTSPATCH found [%s]"), pVal );
         if ( *pVal != 0 )

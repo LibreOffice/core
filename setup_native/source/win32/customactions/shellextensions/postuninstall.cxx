@@ -23,7 +23,7 @@
 #endif
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include <msiquery.h>
+#include <../tools/msiprop.hxx>
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
@@ -40,25 +40,6 @@
 #include <string>
 
 #include <io.h>
-
-static std::_tstring GetMsiProperty( MSIHANDLE handle, const std::_tstring& sProperty )
-{
-    std::_tstring   result;
-    TCHAR   szDummy[1] = TEXT("");
-    DWORD   nChars = 0;
-
-    if ( MsiGetProperty( handle, sProperty.c_str(), szDummy, &nChars ) == ERROR_MORE_DATA )
-    {
-        DWORD nBytes = ++nChars * sizeof(TCHAR);
-        LPTSTR buffer = reinterpret_cast<LPTSTR>(_alloca(nBytes));
-        ZeroMemory( buffer, nBytes );
-        MsiGetProperty(handle, sProperty.c_str(), buffer, &nChars);
-        result = buffer;
-    }
-
-    return  result;
-}
-
 
 static BOOL ExecuteCommand( LPCTSTR lpCommand, BOOL bSync )
 {
@@ -101,7 +82,7 @@ extern "C" UINT __stdcall ExecutePostUninstallScript( MSIHANDLE handle )
     HKEY    hKey;
     std::_tstring   sInstDir;
 
-    std::_tstring   sProductKey = GetMsiProperty( handle, TEXT("FINDPRODUCT") );
+    std::_tstring   sProductKey = GetMsiPropValue( handle, TEXT("FINDPRODUCT") );
 
     // MessageBox( NULL, sProductKey.c_str(), "Titel", MB_OK );
 

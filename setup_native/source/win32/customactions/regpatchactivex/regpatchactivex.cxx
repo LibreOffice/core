@@ -23,7 +23,7 @@
 #pragma warning(push,1) // disable warnings within system headers
 #endif
 #include <windows.h>
-#include <msiquery.h>
+#include <../tools/msiprop.hxx>
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
@@ -33,46 +33,13 @@
 #include <stdio.h>
 
 //----------------------------------------------------------
-BOOL UnicodeEquals( wchar_t* pStr1, wchar_t* pStr2 )
-{
-    if ( pStr1 == NULL && pStr2 == NULL )
-        return TRUE;
-    else if ( pStr1 == NULL || pStr2 == NULL )
-        return FALSE;
-
-    while( *pStr1 == *pStr2 && *pStr1 && *pStr2 )
-        pStr1++, pStr2++;
-
-    return ( *pStr1 == 0 && *pStr2 == 0 );
-}
-
-//----------------------------------------------------------
-BOOL GetMsiProp( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppValue )
-{
-    DWORD sz = 0;
-       if ( MsiGetProperty( hMSI, pPropName, L"", &sz ) == ERROR_MORE_DATA )
-       {
-           sz++;
-           DWORD nbytes = sz * sizeof( wchar_t );
-           wchar_t* buff = reinterpret_cast<wchar_t*>( malloc( nbytes ) );
-           ZeroMemory( buff, nbytes );
-           MsiGetProperty( hMSI, pPropName, buff, &sz );
-           *ppValue = buff;
-
-        return TRUE;
-    }
-
-    return FALSE;
-}
-
-//----------------------------------------------------------
 BOOL MakeInstallForAllUsers( MSIHANDLE hMSI )
 {
     BOOL bResult = FALSE;
-    wchar_t* pVal = NULL;
-    if ( GetMsiProp( hMSI, L"ALLUSERS", &pVal ) && pVal )
+    LPTSTR* pVal = NULL;
+    if ( GetMsiProp( hMSI, TEXT("ALLUSERS"), pVal ) )
     {
-        bResult = UnicodeEquals( pVal , L"1" );
+        bResult = ( int (pVal) == 1 );
         free( pVal );
     }
 

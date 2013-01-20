@@ -17,44 +17,46 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define _WIN32_WINNT 0x0401
-
-#ifdef _MSC_VER
-#pragma warning(push, 1) /* disable warnings within system headers */
-#endif
-#define WIN32_LEAN_AND_MEAN
+#pragma once
 #include <windows.h>
-#include <../tools/msiprop.hxx>
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
-
-#include <malloc.h>
-#include <assert.h>
-
+#include <string>
+//#include <malloc.h>
+#include <msiquery.h>
 #ifdef UNICODE
 #define _UNICODE
 #define _tstring    wstring
 #else
 #define _tstring    string
 #endif
-#include <tchar.h>
-#include <string>
-#include <queue>
-#include <stdio.h>
 
-#include <systools/win32/uwinapi.h>
-#include <../tools/seterror.hxx>
+using namespace std;
 
-static void SetMsiProperty(MSIHANDLE handle, const std::_tstring& sProperty)
+namespace {
+inline bool GetMsiProp(MSIHANDLE hMSI, LPCTSTR pPropName, LPTSTR* ppValue)
 {
-    MsiSetProperty(handle, sProperty.c_str(), TEXT("1"));
+    DWORD sz = 0;
+    ppValue = NULL;
+    if (MsiGetProperty(hMSI, pPropName, TEXT(""), &sz) == ERROR_MORE_DATA)
+    {
+        DWORD nBytes = ++sz * sizeof(TCHAR); // add 1 for null termination
+        LPTSTR buffer = reinterpret_cast<LPTSTR>(_alloca( nBytes ));
+        ZeroMemory(buffer, nBytes);
+        MsiGetProperty(hMSI, pPropName, buffer, &sz);
+        *ppValue = buffer;
+    }
+
+    return ppValue?true:false ;
+
 }
 
-extern "C" UINT __stdcall SetAdminInstallProperty(MSIHANDLE handle)
+//std::_tstring GMPV(  ,  const std::_tstring& sProperty)
+inline string GetMsiPropValue(MSIHANDLE hMSI, LPCTSTR pPropName)
 {
-    MsiSetProperty(handle, TEXT("ADMININSTALL"), TEXT("1"));
-    return ERROR_SUCCESS;
+    LPTSTR ppValue = NULL;
+    (void)GetMsiProp(hMSI, pPropName, &ppValue);
+    string toto =  reinterpret_cast<const char *> (ppValue);
+    return toto;
 }
 
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

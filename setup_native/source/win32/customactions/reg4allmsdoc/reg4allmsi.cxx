@@ -22,7 +22,7 @@
 #endif
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include <msiquery.h>
+#include <../tools/msiprop.hxx>
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
@@ -66,6 +66,9 @@ static const int EXCEL_START = 7;
 static const int POWERPOINT_START = 15;
 static const int VISIO_START = 23;
 static const int VISIO_END = 25;
+const string PROP_OFF = "0";
+const string PROP_ON = "1";
+
 
 //    ".xlam",    // Office Excel 2007 XML macro-enabled add-in
 //    ".ppam",    // Office PowerPoint 2007 macro-enabled XML add-in
@@ -174,30 +177,6 @@ static LONG DeleteSubKeyTree( HKEY RootKey, LPCSTR lpKey )
     }
 
     return rc;
-}
-
-bool GetMsiProp( MSIHANDLE handle, LPCSTR name, /*out*/std::string& value )
-{
-    DWORD sz = 0;
-    LPSTR dummy = "";
-    if (MsiGetPropertyA(handle, name, dummy, &sz) == ERROR_MORE_DATA)
-    {
-        sz++;
-        DWORD nbytes = sz * sizeof(TCHAR);
-        LPSTR buff = reinterpret_cast<LPSTR>(_alloca(nbytes));
-        ZeroMemory(buff, nbytes);
-        MsiGetPropertyA(handle, name, buff, &sz);
-        value = buff;
-        return true;
-    }
-    return false;
-}
-
-bool IsSetMsiProp( MSIHANDLE handle, LPCSTR name )
-{
-    std::string val;
-    GetMsiProp( handle, name, val );
-    return (val == "1");
 }
 
 static void registerForExtension( MSIHANDLE handle, const int nIndex, bool bRegister )
@@ -313,56 +292,16 @@ extern "C" UINT __stdcall LookForRegisteredExtensions( MSIHANDLE handle )
     bool bCalcEnabled = false;
     bool bImpressEnabled = false;
     bool bDrawEnabled = false;
-    bool bRegisterNone = IsSetMsiProp( handle, "REGISTER_NO_MSO_TYPES" );
-
-    if ( ( ERROR_SUCCESS == MsiGetFeatureState( handle, L"gm_p_Wrt", &current_state, &future_state ) ) &&
-         ( (future_state == INSTALLSTATE_LOCAL) || ((current_state == INSTALLSTATE_LOCAL) && (future_state == INSTALLSTATE_UNKNOWN) ) ) )
-        bWriterEnabled = true;
-
-    OutputDebugStringFormat( "LookForRegisteredExtensions: Install state Writer is [%d], will be [%d]", current_state, future_state );
-    if ( bWriterEnabled )
-        OutputDebugStringFormat( "LookForRegisteredExtensions: Writer is enabled" );
-    else
-        OutputDebugStringFormat( "LookForRegisteredExtensions: Writer is NOT enabled" );
-
-    if ( ( ERROR_SUCCESS == MsiGetFeatureState( handle, L"gm_p_Calc", &current_state, &future_state ) ) &&
-         ( (future_state == INSTALLSTATE_LOCAL) || ((current_state == INSTALLSTATE_LOCAL) && (future_state == INSTALLSTATE_UNKNOWN) ) ) )
-        bCalcEnabled = true;
-
-    OutputDebugStringFormat( "LookForRegisteredExtensions: Install state Calc is [%d], will be [%d]", current_state, future_state );
-    if ( bCalcEnabled )
-        OutputDebugStringFormat( "LookForRegisteredExtensions: Calc is enabled" );
-    else
-        OutputDebugStringFormat( "LookForRegisteredExtensions: Calc is NOT enabled" );
-
-    if ( ( ERROR_SUCCESS == MsiGetFeatureState( handle, L"gm_p_Impress", &current_state, &future_state ) ) &&
-         ( (future_state == INSTALLSTATE_LOCAL) || ((current_state == INSTALLSTATE_LOCAL) && (future_state == INSTALLSTATE_UNKNOWN) ) ) )
-        bImpressEnabled = true;
-
-    OutputDebugStringFormat( "LookForRegisteredExtensions: Install state Impress is [%d], will be [%d]", current_state, future_state );
-    if ( bImpressEnabled )
-        OutputDebugStringFormat( "LookForRegisteredExtensions: Impress is enabled" );
-    else
-        OutputDebugStringFormat( "LookForRegisteredExtensions: Impress is NOT enabled" );
-
-    if ( ( ERROR_SUCCESS == MsiGetFeatureState( handle, L"gm_p_Draw", &current_state, &future_state ) ) &&
-         ( (future_state == INSTALLSTATE_LOCAL) || ((current_state == INSTALLSTATE_LOCAL) && (future_state == INSTALLSTATE_UNKNOWN) ) ) )
-        bDrawEnabled = true;
-
-    OutputDebugStringFormat( "LookForRegisteredExtensions: Install state Draw is [%d], will be [%d]", current_state, future_state );
-    if ( bImpressEnabled )
-        OutputDebugStringFormat( "LookForRegisteredExtensions: Draw is enabled" );
-    else
-        OutputDebugStringFormat( "LookForRegisteredExtensions: Draw is NOT enabled" );
 
     MsiSetPropertyA( handle, "SELECT_WORD", "" );
     MsiSetPropertyA( handle, "SELECT_EXCEL", "" );
     MsiSetPropertyA( handle, "SELECT_POWERPOINT", "" );
     MsiSetPropertyA( handle, "SELECT_VISIO", "" );
 
-    if ( ! bRegisterNone )
+    if ( GetMsiPropValue( handle, TEXT("REGISTER_NO_MSO_TYPES") ).compare( PROP_OFF ) == 0 )
     {
-        if ( IsSetMsiProp( handle, "REGISTER_ALL_MSO_TYPES" ) )
+
+        if ( GetMsiPropValue( handle, TEXT("REGISTER_ALL_MSO_TYPES") ).compare( PROP_ON ) == 0 )
         {
             if ( bWriterEnabled )
                 MsiSetPropertyA( handle, "SELECT_WORD", "1" );
@@ -375,6 +314,47 @@ extern "C" UINT __stdcall LookForRegisteredExtensions( MSIHANDLE handle )
         }
         else
         {
+            if ( ( ERROR_SUCCESS == MsiGetFeatureState( handle, L"gm_p_Wrt", &current_state, &future_state ) ) &&
+                 ( (future_state == INSTALLSTATE_LOCAL) || ((current_state == INSTALLSTATE_LOCAL) && (future_state == INSTALLSTATE_UNKNOWN) ) ) )
+                bWriterEnabled = true;
+
+            OutputDebugStringFormat( "LookForRegisteredExtensions: Install state Writer is [%d], will be [%d]", current_state, future_state );
+            if ( bWriterEnabled )
+                OutputDebugStringFormat( "LookForRegisteredExtensions: Writer is enabled" );
+            else
+                OutputDebugStringFormat( "LookForRegisteredExtensions: Writer is NOT enabled" );
+
+            if ( ( ERROR_SUCCESS == MsiGetFeatureState( handle, L"gm_p_Calc", &current_state, &future_state ) ) &&
+                 ( (future_state == INSTALLSTATE_LOCAL) || ((current_state == INSTALLSTATE_LOCAL) && (future_state == INSTALLSTATE_UNKNOWN) ) ) )
+                bCalcEnabled = true;
+
+            OutputDebugStringFormat( "LookForRegisteredExtensions: Install state Calc is [%d], will be [%d]", current_state, future_state );
+            if ( bCalcEnabled )
+                OutputDebugStringFormat( "LookForRegisteredExtensions: Calc is enabled" );
+            else
+                OutputDebugStringFormat( "LookForRegisteredExtensions: Calc is NOT enabled" );
+
+            if ( ( ERROR_SUCCESS == MsiGetFeatureState( handle, L"gm_p_Impress", &current_state, &future_state ) ) &&
+                 ( (future_state == INSTALLSTATE_LOCAL) || ((current_state == INSTALLSTATE_LOCAL) && (future_state == INSTALLSTATE_UNKNOWN) ) ) )
+                bImpressEnabled = true;
+
+            OutputDebugStringFormat( "LookForRegisteredExtensions: Install state Impress is [%d], will be [%d]", current_state, future_state );
+            if ( bImpressEnabled )
+                OutputDebugStringFormat( "LookForRegisteredExtensions: Impress is enabled" );
+            else
+                OutputDebugStringFormat( "LookForRegisteredExtensions: Impress is NOT enabled" );
+
+            if ( ( ERROR_SUCCESS == MsiGetFeatureState( handle, L"gm_p_Draw", &current_state, &future_state ) ) &&
+                 ( (future_state == INSTALLSTATE_LOCAL) || ((current_state == INSTALLSTATE_LOCAL) && (future_state == INSTALLSTATE_UNKNOWN) ) ) )
+                bDrawEnabled = true;
+
+            OutputDebugStringFormat( "LookForRegisteredExtensions: Install state Draw is [%d], will be [%d]", current_state, future_state );
+            if ( bImpressEnabled )
+                OutputDebugStringFormat( "LookForRegisteredExtensions: Draw is enabled" );
+            else
+                OutputDebugStringFormat( "LookForRegisteredExtensions: Draw is NOT enabled" );
+
+
             if ( bWriterEnabled && ! checkSomeExtensionInRegistry( WORD_START, EXCEL_START ) )
             {
                 MsiSetPropertyA( handle, "SELECT_WORD", "1" );
@@ -390,7 +370,7 @@ extern "C" UINT __stdcall LookForRegisteredExtensions( MSIHANDLE handle )
                 MsiSetPropertyA( handle, "SELECT_POWERPOINT", "1" );
                 OutputDebugStringFormat( "LookForRegisteredExtensions: Register for Microsoft PowerPoint" );
             }
-            if ( bImpressEnabled && ! checkSomeExtensionInRegistry( VISIO_START, VISIO_END ) )
+            if ( bDrawEnabled && ! checkSomeExtensionInRegistry( VISIO_START, VISIO_END ) )
             {
                 MsiSetPropertyA( handle, "SELECT_VISIO", "1" );
                 OutputDebugStringFormat( "LookForRegisteredExtensions: Register for Microsoft Visio" );
@@ -407,7 +387,7 @@ extern "C" UINT __stdcall RegisterSomeExtensions( MSIHANDLE handle )
 {
     OutputDebugStringFormat( "RegisterSomeExtensions: " );
 
-    if ( IsSetMsiProp( handle, "SELECT_WORD" ) )
+    if ( GetMsiPropValue( handle, TEXT("SELECT_WORD") ).compare( PROP_ON ) == 0 )
     {
         registerSomeExtensions( handle, WORD_START, EXCEL_START, true );
         MsiSetFeatureState( handle, L"gm_p_Wrt_MSO_Reg", INSTALLSTATE_LOCAL );
@@ -419,7 +399,7 @@ extern "C" UINT __stdcall RegisterSomeExtensions( MSIHANDLE handle )
         MsiSetFeatureState( handle, L"gm_p_Wrt_MSO_Reg", INSTALLSTATE_ABSENT );
     }
 
-    if ( IsSetMsiProp( handle, "SELECT_EXCEL" ) )
+    if ( GetMsiPropValue( handle, TEXT("SELECT_EXCEL") ).compare( PROP_ON ) == 0 )
     {
         registerSomeExtensions( handle, EXCEL_START, POWERPOINT_START, true );
         MsiSetFeatureState( handle, L"gm_p_Calc_MSO_Reg", INSTALLSTATE_LOCAL );
@@ -431,7 +411,7 @@ extern "C" UINT __stdcall RegisterSomeExtensions( MSIHANDLE handle )
         MsiSetFeatureState( handle, L"gm_p_Calc_MSO_Reg", INSTALLSTATE_ABSENT );
     }
 
-    if ( IsSetMsiProp( handle, "SELECT_POWERPOINT" ) )
+    if ( GetMsiPropValue( handle, TEXT("SELECT_POWERPOINT") ).compare( PROP_ON ) == 0 )
     {
         registerSomeExtensions( handle, POWERPOINT_START, VISIO_START, true );
         MsiSetFeatureState( handle, L"gm_p_Impress_MSO_Reg", INSTALLSTATE_LOCAL );
@@ -443,7 +423,7 @@ extern "C" UINT __stdcall RegisterSomeExtensions( MSIHANDLE handle )
         MsiSetFeatureState( handle, L"gm_p_Impress_MSO_Reg", INSTALLSTATE_ABSENT );
     }
 
-    if ( IsSetMsiProp( handle, "SELECT_VISIO" ) )
+    if ( GetMsiPropValue( handle, TEXT("SELECT_VISIO") ).compare( PROP_ON ) == 0 )
     {
         registerSomeExtensions( handle, VISIO_START, VISIO_END, true );
         MsiSetFeatureState( handle, L"gm_p_Draw_MSO_Reg", INSTALLSTATE_LOCAL );
@@ -459,7 +439,7 @@ extern "C" UINT __stdcall RegisterSomeExtensions( MSIHANDLE handle )
 
 extern "C" UINT __stdcall FindRegisteredExtensions( MSIHANDLE handle )
 {
-    if ( IsSetMsiProp( handle, "FILETYPEDIALOGUSED" ) )
+    if ( GetMsiPropValue( handle, TEXT("FILETYPEDIALOGUSED") ).compare( PROP_ON ) == 0 )
     {
         OutputDebugStringFormat( "FindRegisteredExtensions: FILETYPEDIALOGUSED!" );
         return ERROR_SUCCESS;
@@ -467,9 +447,9 @@ extern "C" UINT __stdcall FindRegisteredExtensions( MSIHANDLE handle )
 
     OutputDebugStringFormat( "FindRegisteredExtensions:" );
 
-    bool bRegisterAll = IsSetMsiProp( handle, "REGISTER_ALL_MSO_TYPES" );
+    bool bRegisterAll = GetMsiPropValue( handle, TEXT("REGISTER_ALL_MSO_TYPES") ).compare( PROP_ON ) == 0;
 
-    if ( IsSetMsiProp( handle, "REGISTER_NO_MSO_TYPES" ) )
+    if ( GetMsiPropValue( handle, TEXT("REGISTER_NO_MSO_TYPES") ).compare( PROP_ON ) == 0 )
     {
         OutputDebugStringFormat( "FindRegisteredExtensions: Register none!" );
         return ERROR_SUCCESS;
@@ -481,13 +461,13 @@ extern "C" UINT __stdcall FindRegisteredExtensions( MSIHANDLE handle )
 
     // setting the msi properties SELECT_* will force registering for all corresponding
     // file types
-    if ( IsSetMsiProp( handle, "SELECT_WORD" ) )
+    if ( GetMsiPropValue( handle, TEXT("SELECT_WORD") ).compare( PROP_ON ) == 0 )
         registerSomeExtensions( handle, WORD_START, EXCEL_START, true );
-    if ( IsSetMsiProp( handle, "SELECT_EXCEL" ) )
+    if ( GetMsiPropValue( handle, TEXT("SELECT_EXCEL") ).compare( PROP_ON ) == 0 )
         registerSomeExtensions( handle, EXCEL_START, POWERPOINT_START, true );
-    if ( IsSetMsiProp( handle, "SELECT_POWERPOINT" ) )
+    if ( GetMsiPropValue( handle, TEXT("SELECT_POWERPOINT") ).compare( PROP_ON ) == 0)
         registerSomeExtensions( handle, POWERPOINT_START, VISIO_START, true );
-    if ( IsSetMsiProp( handle, "SELECT_VISIO" ) )
+    if ( GetMsiPropValue( handle, TEXT("SELECT_VISIO") ).compare( PROP_ON ) == 0)
         registerSomeExtensions( handle, VISIO_START, VISIO_END, true );
 
     registerForExtensions( handle, bRegisterAll );

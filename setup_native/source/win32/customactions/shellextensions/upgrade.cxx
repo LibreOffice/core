@@ -27,7 +27,7 @@
 #endif
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include <msiquery.h>
+#include <../tools/msiprop.hxx>
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
@@ -111,38 +111,6 @@ namespace
         return convertedGuid;
     }
 
-    string GetMsiProperty(MSIHANDLE handle, const string& sProperty)
-    {
-        string  result;
-        TCHAR   szDummy[1] = TEXT("");
-        DWORD   nChars = 0;
-
-        if (MsiGetProperty(handle, sProperty.c_str(), szDummy, &nChars) == ERROR_MORE_DATA)
-        {
-            DWORD nBytes = ++nChars * sizeof(TCHAR);
-            LPTSTR buffer = reinterpret_cast<LPTSTR>(_alloca(nBytes));
-            ZeroMemory( buffer, nBytes );
-            MsiGetProperty(handle, sProperty.c_str(), buffer, &nChars);
-            result = buffer;
-        }
-        return  result;
-    }
-
-    inline bool IsSetMsiProperty(MSIHANDLE handle, const string& sProperty)
-    {
-        return (GetMsiProperty(handle, sProperty).length() > 0);
-    }
-
-    inline void UnsetMsiProperty(MSIHANDLE handle, const string& sProperty)
-    {
-        MsiSetProperty(handle, sProperty.c_str(), NULL);
-    }
-
-    inline void SetMsiProperty(MSIHANDLE handle, const string& sProperty)
-    {
-        MsiSetProperty(handle, sProperty.c_str(), TEXT("1"));
-    }
-
     bool RegistryKeyHasUpgradeSubKey(
         HKEY hRootKey, const string& regKey, const string& upgradeKey)
     {
@@ -171,7 +139,7 @@ namespace
 
 extern "C" UINT __stdcall SetProductInstallMode(MSIHANDLE handle)
 {
-    string upgradeCode = GetMsiProperty(handle, TEXT("UpgradeCode"));
+    string upgradeCode = GetMsiPropValue(handle, TEXT("UpgradeCode"));
     upgradeCode = ConvertGuid(string(upgradeCode.c_str() + 1, upgradeCode.length() - 2));
 
     //MessageBox(NULL, upgradeCode.c_str(), TEXT("Debug"), MB_OK);
@@ -179,17 +147,17 @@ extern "C" UINT __stdcall SetProductInstallMode(MSIHANDLE handle)
     if (RegistryKeyHasUpgradeSubKey(
         HKEY_CURRENT_USER,
         TEXT("Software\\Microsoft\\Installer\\UpgradeCodes"),
-        upgradeCode) && IsSetMsiProperty(handle, TEXT("ALLUSERS")))
+        upgradeCode))
     {
-        UnsetMsiProperty(handle, TEXT("ALLUSERS"));
+        MsiSetProperty(handle, TEXT("ALLUSERS"), NULL);
         //MessageBox(NULL, "ALLUSERS removed", "DEBUG", MB_OK);
     }
     else if (RegistryKeyHasUpgradeSubKey(
              HKEY_LOCAL_MACHINE,
              TEXT("Software\\Classes\\Installer\\UpgradeCodes"),
-             upgradeCode) && !IsSetMsiProperty(handle, TEXT("ALLUSERS")))
+             upgradeCode))
     {
-        SetMsiProperty(handle, TEXT("ALLUSERS"));
+        MsiSetProperty(handle, TEXT("ALLUSERS"), TEXT("1"));
         //MessageBox(NULL, "ALLUSERS set", "DEBUG", MB_OK);
     }
     return ERROR_SUCCESS;
