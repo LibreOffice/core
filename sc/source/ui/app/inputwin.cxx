@@ -1373,7 +1373,7 @@ void ScMultiTextWnd::InitEditEngine()
     pEditEngine->SetUpdateMode( sal_True );
 
     //	aString ist die Wahrheit...
-    if ( bFilled && pEditEngine->GetText() == OUString(aString) )
+    if (bFilled && pEditEngine->GetText() == aString)
         Invalidate();						// Repaint fuer (hinterlegte) Felder
     else
         pEditEngine->SetText(aString);		// dann wenigstens den richtigen Text
@@ -1754,7 +1754,7 @@ void ScTextWnd::StartEditEngine()
         pEditEngine->SetUpdateMode( sal_True );
 
         //  aString ist die Wahrheit...
-        if ( bFilled && pEditEngine->GetText() == OUString(aString) )
+        if (bFilled && pEditEngine->GetText() == aString)
             Invalidate();                       // Repaint fuer (hinterlegte) Felder
         else
             pEditEngine->SetText(aString);      // dann wenigstens den richtigen Text
