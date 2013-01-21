@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <osl/diagnose.h>
+#include "sal/log.hxx"
 #include "CFStringUtilities.hxx"
 
 rtl::OUString CFStringToOUString(const CFStringRef sOrig) {
@@ -29,7 +29,7 @@ rtl::OUString CFStringToOUString(const CFStringRef sOrig) {
 
     CFRetain(sOrig);
     CFIndex nFileNameLength = CFStringGetLength(sOrig);
-    //OSL_TRACE("FH: string length: %d", (int)(nFileNameLength));
+    //SAL_INFO("fpicker.aqua","FH: string length: " << (int)(nFileNameLength));
     UniChar unichars[nFileNameLength+1];
     //'close' the string buffer correctly
     unichars[nFileNameLength] = '\0';
@@ -78,13 +78,13 @@ rtl::OUString CFURLRefToOUString(CFURLRef aUrlRef, InfoType info)
 
     switch(info) {
         case FULLPATH:
-            OSL_TRACE("Extracting the full path of an item");
+            SAL_INFO("fpicker.aqua","Extracting the full path of an item");
             sURLString = CFURLGetString(aUrlRef);
             CFRetain(sURLString);
             break;
         case FILENAME:
             {
-                OSL_TRACE("Extracting the file name of an item");
+                SAL_INFO("fpicker.aqua","Extracting the file name of an item");
                 CFStringRef fullString = CFURLGetString(aUrlRef);
                 CFURLRef dirRef = CFURLCreateCopyDeletingLastPathComponent(NULL,aUrlRef);
                 CFIndex dirLength = CFStringGetLength(CFURLGetString(dirRef));
@@ -96,7 +96,7 @@ rtl::OUString CFURLRefToOUString(CFURLRef aUrlRef, InfoType info)
             break;
         case PATHWITHOUTLASTCOMPONENT:
             {
-                OSL_TRACE("Extracting the last but one component of an item's path");
+                SAL_INFO("fpicker.aqua","Extracting the last but one component of an item's path");
                 CFURLRef directoryRef = CFURLCreateCopyDeletingLastPathComponent(NULL,aUrlRef);
                 sURLString = CFURLGetString(directoryRef);
                 CFRetain(sURLString);

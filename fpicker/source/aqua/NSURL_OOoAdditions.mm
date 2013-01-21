@@ -22,6 +22,7 @@
 #endif
 
 #include "NSURL_OOoAdditions.hxx"
+#include "sal/log.hxx"
 
 @implementation NSURL (OOoAdditions)
 - (rtl::OUString) OUStringForInfo:(InfoType)info
@@ -32,13 +33,13 @@
 
     switch(info) {
         case FULLPATH:
-            OSL_TRACE("Extracting the full path of an item");
+            SAL_INFO("fpicker.aqua","Extracting the full path of an item");
             sURLString = [self absoluteString];
             [sURLString retain];
             break;
         case FILENAME:
             {
-                OSL_TRACE("Extracting the file name of an item");
+                SAL_INFO("fpicker.aqua","Extracting the file name of an item");
                 NSString *path = [self path];
                 if (path == nil) {
                     sURLString = @"";
@@ -51,7 +52,7 @@
             break;
         case PATHWITHOUTLASTCOMPONENT:
             {
-                OSL_TRACE("Extracting the last but one component of an item's path");
+                SAL_INFO("fpicker.aqua","Extracting the last but one component of an item's path");
                 NSString *path = [self absoluteString];
                 if (path == nil) {
                     sURLString = @"";
