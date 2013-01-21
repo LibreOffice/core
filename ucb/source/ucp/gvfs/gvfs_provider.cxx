@@ -142,8 +142,10 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpgvfs1_component_getFactory( c
         osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
         if (!gnome_vfs_initialized ())
             gnome_vfs_init ();
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         if (!auth_queue)
             auth_queue = g_private_new( auth_queue_destroy );
+        SAL_WNODEPRECATED_DECLARATIONS_POP
     }
 
     uno::Reference< lang::XMultiServiceFactory > xSMgr
