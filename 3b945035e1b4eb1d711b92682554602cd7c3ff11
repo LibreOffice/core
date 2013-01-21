@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAATn///2c\u003d",
+        "filename": "basctl/source/basicide/baside2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 931,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-01-21T14:45:19Z",
+      "side": 1,
+      "message": "As the name suggests, makeStringAndClear() here clears the contents of aLine, so all but the first loop iterations will be incorrect.\n\nWhen I mentioned in the previous review that the code in the other function might be simpler when using OUStringBuffer, I meant using OUStringBuffer only temporarily in the function for the few operations, not necessarily going with the change as far as here.",
+      "revId": "3b945035e1b4eb1d711b92682554602cd7c3ff11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
