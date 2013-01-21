@@ -255,12 +255,6 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
 {
     // write the paragraph properties + the run, already in the correct order
     m_pSerializer->mergeTopMarks();
-    m_pSerializer->endElementNS( XML_w, XML_p );
-
-    // Check for end of cell, rows, tables here
-    FinishTableRowCell( pTextNodeInfoInner );
-
-    m_bParagraphOpened = false;
 
     // Write the anchored frame if any
     if ( m_pParentFrame )
@@ -278,12 +272,32 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
 
         m_rExport.mpParentFrame = pParentFrame;
 
+        m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
+        m_pSerializer->startElementNS( XML_w, XML_pict, FSEND );
+        m_pSerializer->startElementNS( XML_v, XML_rect, FSEND );
+        m_pSerializer->startElementNS( XML_v, XML_textbox, FSEND );
+        m_pSerializer->startElementNS( XML_w, XML_txbxContent, FSEND );
         m_rExport.WriteText( );
+        m_pSerializer->endElementNS( XML_w, XML_txbxContent );
+        m_pSerializer->endElementNS( XML_v, XML_textbox );
+        m_pSerializer->endElementNS( XML_v, XML_rect );
+        m_pSerializer->endElementNS( XML_w, XML_pict );
+        m_pSerializer->endElementNS( XML_w, XML_r );
 
         m_rExport.RestoreData();
 
+        m_rExport.mpParentFrame = NULL;
+
         delete pParentFrame;
     }
+
+    m_pSerializer->endElementNS( XML_w, XML_p );
+
+    // Check for end of cell, rows, tables here
+    FinishTableRowCell( pTextNodeInfoInner );
+
+    m_bParagraphOpened = false;
+
 }
 
 void DocxAttributeOutput::FinishTableRowCell( ww8::WW8TableNodeInfoInner::Pointer_t pInner, bool bForceEmptyParagraph )
