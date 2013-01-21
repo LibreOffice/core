@@ -3693,7 +3693,9 @@ bool ScCompiler::NextNewToken( bool bInArray )
             return true;
         if (IsDBRange( aUpper ))
             return true;
-        if (IsColRowName( aUpper ))
+        // If followed by '(' (with or without space inbetween) it can not be a
+        // column/row label. Prevent arbitrary content detection.
+        if (!bMayBeFuncName && IsColRowName( aUpper ))
             return true;
         if (bMayBeFuncName && IsMacro( aUpper ))
             return true;
