@@ -52,7 +52,7 @@
  
  #ifndef CURL_DISABLE_HTTP
    /* If proxy was not specified, we check for default proxy environment
-@@ -4138,7 +4158,58 @@ static char *detect_proxy(struct connectdata *conn)
+@@ -4138,7 +4158,62 @@ static char *detect_proxy(struct connectdata *conn)
     * For compatibility, the all-uppercase versions of these variables are
     * checked if the lowercase versions don't exist.
     */
@@ -71,29 +71,33 @@
 +      ieNoProxy = wstrToCstr(ieProxyConfig->lpszProxyBypass);
 +
 +      /* Convert the ieNoProxy into a proper no_proxy value */
-+      no_proxy = strdup(ieNoProxy);
-+      pos = strpbrk(no_proxy, "; ");
-+      while(NULL != pos) {
-+        no_proxy[pos-no_proxy] = ',';
++      if(NULL != ieNoProxy) {
++        no_proxy = strdup(ieNoProxy);
 +        pos = strpbrk(no_proxy, "; ");
++        while(NULL != pos) {
++          no_proxy[pos-no_proxy] = ',';
++          pos = strpbrk(no_proxy, "; ");
++        }
 +      }
 +
 +      if(!check_noproxy(conn->host.name, no_proxy)) {
 +        /* Look for the http proxy setting */
 +        char* tok;
 +
-+        tok = strtok(ieProxy, ";");
-+        if(strchr(tok, '=') == NULL) {
-+          proxy = strdup(ieProxy);
-+        }
-+        else {
-+          do {
-+            if(strncmp(tok, "http=", 5) == 0) {
-+              /* We found HTTP proxy value, then use it */
-+              proxy = strdup( tok + 5 );
-+            }
++        if (NULL != ieProxy) {
++          tok = strtok(ieProxy, ";");
++          if(strchr(tok, '=') == NULL) {
++            proxy = strdup(ieProxy);
 +          }
-+          while(NULL != strtok(NULL, ";"));
++          else {
++            do {
++              if(strncmp(tok, "http=", 5) == 0) {
++                /* We found HTTP proxy value, then use it */
++                proxy = strdup( tok + 5 );
++              }
++            }
++            while(NULL != strtok(NULL, ";"));
++          }
 +        }
 +      }
 +
@@ -112,7 +116,7 @@
    char proxy_env[128];
  
    no_proxy=curl_getenv("no_proxy");
-@@ -4189,9 +4259,9 @@ static char *detect_proxy(struct connectdata *conn)
+@@ -4189,9 +4264,9 @@ static char *detect_proxy(struct connectdata *conn)
      }
    } /* if(!check_noproxy(conn->host.name, no_proxy)) - it wasn't specified
         non-proxy */
