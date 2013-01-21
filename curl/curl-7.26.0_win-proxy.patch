@@ -22,7 +22,7 @@
  #include "urldata.h"
  #include "netrc.h"
  
-@@ -4111,6 +4115,21 @@ static bool check_noproxy(const char* name, const char* no_proxy)
+@@ -4111,6 +4115,22 @@ static bool check_noproxy(const char* name, const char* no_proxy)
    return FALSE;
  }
  
@@ -31,9 +31,10 @@
 +{
 +    int bufSize;
 +    char* out = NULL;
-+    if ( wStr != NULL )
++    if( wStr != NULL )
 +    {
-+        bufSize = WideCharToMultiByte( CP_ACP,  0, wStr, -1, NULL, 0, NULL, NULL );
++        bufSize = WideCharToMultiByte(
++            CP_ACP,  0, wStr, -1, NULL, 0, NULL, NULL );
 +        out = ( char* )malloc( bufSize * sizeof(char));
 +        WideCharToMultiByte( CP_ACP, 0, wStr, -1, out, bufSize, NULL, NULL );
 +    }
@@ -52,14 +53,15 @@
  
  #ifndef CURL_DISABLE_HTTP
    /* If proxy was not specified, we check for default proxy environment
-@@ -4138,7 +4158,57 @@ static char *detect_proxy(struct connectdata *conn)
+@@ -4138,7 +4158,58 @@ static char *detect_proxy(struct connectdata *conn)
     * For compatibility, the all-uppercase versions of these variables are
     * checked if the lowercase versions don't exist.
     */
 -  char *no_proxy=NULL;
 +#ifdef WIN32
 +  WINHTTP_CURRENT_USER_IE_PROXY_CONFIG *ieProxyConfig;
-+  ieProxyConfig = (WINHTTP_CURRENT_USER_IE_PROXY_CONFIG*)malloc(sizeof(WINHTTP_CURRENT_USER_IE_PROXY_CONFIG));
++  ieProxyConfig = (WINHTTP_CURRENT_USER_IE_PROXY_CONFIG*)
++    malloc(sizeof(WINHTTP_CURRENT_USER_IE_PROXY_CONFIG));
 +  if(WinHttpGetIEProxyConfigForCurrentUser(ieProxyConfig)) {
 +    if(!ieProxyConfig->fAutoDetect) {
 +      char *ieProxy;
@@ -72,7 +74,7 @@
 +      /* Convert the ieNoProxy into a proper no_proxy value */
 +      no_proxy = strdup(ieNoProxy);
 +      pos = strpbrk(no_proxy, "; ");
-+      while (NULL != pos) {
++      while(NULL != pos) {
 +        no_proxy[pos-no_proxy] = ',';
 +        pos = strpbrk(no_proxy, "; ");
 +      }
