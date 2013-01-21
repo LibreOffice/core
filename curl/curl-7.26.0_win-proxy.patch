@@ -52,7 +52,7 @@
  
  #ifndef CURL_DISABLE_HTTP
    /* If proxy was not specified, we check for default proxy environment
-@@ -4138,7 +4158,62 @@ static char *detect_proxy(struct connectdata *conn)
+@@ -4138,7 +4158,63 @@ static char *detect_proxy(struct connectdata *conn)
     * For compatibility, the all-uppercase versions of these variables are
     * checked if the lowercase versions don't exist.
     */
@@ -71,7 +71,7 @@
 +      ieNoProxy = wstrToCstr(ieProxyConfig->lpszProxyBypass);
 +
 +      /* Convert the ieNoProxy into a proper no_proxy value */
-+      if(NULL != no_proxy) {
++      if(NULL != ieNoProxy) {
 +        no_proxy = strdup(ieNoProxy);
 +        pos = strpbrk(no_proxy, "; ");
 +        while(NULL != pos) {
@@ -95,8 +95,9 @@
 +                /* We found HTTP proxy value, then use it */
 +                proxy = strdup( tok + 5 );
 +              }
++              tok = strtok(NULL, ";");
 +            }
-+            while(NULL != strtok(NULL, ";"));
++            while(NULL != tok);
 +          }
 +        }
 +      }
@@ -116,7 +117,7 @@
    char proxy_env[128];
  
    no_proxy=curl_getenv("no_proxy");
-@@ -4189,9 +4264,9 @@ static char *detect_proxy(struct connectdata *conn)
+@@ -4189,9 +4265,9 @@ static char *detect_proxy(struct connectdata *conn)
      }
    } /* if(!check_noproxy(conn->host.name, no_proxy)) - it wasn't specified
         non-proxy */
