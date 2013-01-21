@@ -4503,7 +4503,7 @@ fi
 AC_SUBST(DO_FETCH_TARBALLS)
 
 AC_MSG_CHECKING([whether to build help])
-if test "$with_help" != "no" -a $_os != iOS -a $_os != Android; then
+if test "$with_help" = "yes" -a $_os != iOS -a $_os != Android; then
     AC_MSG_RESULT([yes])
     BUILD_TYPE="$BUILD_TYPE HELP"
     SCPDEFS="$SCPDEFS -DWITH_HELP"
@@ -4515,7 +4515,7 @@ fi
 dnl Test whether to include MySpell dictionaries
 dnl ===================================================================
 AC_MSG_CHECKING([whether to include MySpell dictionaries])
-if test -z "$with_myspell_dicts" -o "$with_myspell_dicts" = "yes"; then
+if test "$with_myspell_dicts" = "yes"; then
     AC_MSG_RESULT([yes])
     WITH_MYSPELL_DICTS=YES
     BUILD_TYPE="$BUILD_TYPE DICTIONARIES"
