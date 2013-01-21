@@ -65,6 +65,24 @@ namespace vcl_sal {
     //
     // ====================================================================
 
+    static const struct KeysNameReplacement aImplReplacements_Asturian[] =
+    {
+        { KEY_BACK, "Retrocesu" },
+        { KEY_ENTER, "Intro" },
+        { KEY_SPACEBAR, "Espaciu" },
+        { KEY_HOME, "Aniciu" },
+        { KEY_UP, "Arriba" },
+        { KEY_PAGEUP, "Re Páx" },
+        { KEY_LEFT, "Izquierda" },
+        { KEY_RIGHT, "Drecha" },
+        { KEY_END, "Fin" },
+        { KEY_DOWN, "Abaxo" },
+        { KEY_PAGEDOWN, "Av Páx" },
+        { KEY_INSERT, "Ins" },
+        { KEY_DELETE, "Supr" },
+        { KEY_SHIFT, "Mayús" },
+    };
+
     static const struct KeysNameReplacement aImplReplacements_Catalan[] =
     {
         { KEY_BACK, "Retrocés" },
@@ -94,10 +112,52 @@ namespace vcl_sal {
         { KEY_SPACEBAR, "Tühik" },
     };
 
+    static const struct KeysNameReplacement aImplReplacements_Slovenian[] =
+    {
+        { KEY_ESC, "Ubežnica" },
+        { KEY_BACK, "Vračalka" },
+        { KEY_ENTER, "Vnašalka" },
+        { KEY_SPACEBAR, "Preslednica" },
+        { KEY_HOME, "Začetek" },
+        { KEY_UP, "Navzgor" },
+        { KEY_PAGEUP, "Prejšnja stran" },
+        { KEY_LEFT, "Levo" },
+        { KEY_RIGHT, "Desno" },
+        { KEY_END, "Konec" },
+        { KEY_DOWN, "Navzdol" },
+        { KEY_PAGEDOWN, "Naslednja stran" },
+        { KEY_INSERT, "Vrivalka" },
+        { KEY_DELETE, "Brisalka" },
+        { KEY_CONTROL, "Krmilka" },
+        { KEY_SHIFT, "Dvigalka" },
+        { KEY_ALT, "Izmenjalka" },
+    };
+
+    static const struct KeysNameReplacement aImplReplacements_Spanish[] =
+    {
+        { KEY_BACK, "Retroceso" },
+        { KEY_ENTER, "Intro" },
+        { KEY_SPACEBAR, "Espacio" },
+        { KEY_HOME, "Inicio" },
+        { KEY_UP, "Arriba" },
+        { KEY_PAGEUP, "Re Pág" },
+        { KEY_LEFT, "Izquierda" },
+        { KEY_RIGHT, "Derecha" },
+        { KEY_END, "Fin" },
+        { KEY_DOWN, "Abajo" },
+        { KEY_PAGEDOWN, "Av Pág" },
+        { KEY_INSERT, "Ins" },
+        { KEY_DELETE, "Supr" },
+        { KEY_SHIFT, "Mayús" },
+    };
+
     static const struct KeyboardReplacements aKeyboards[] =
     {
+        { "ast",aImplReplacements_Asturian, SAL_N_ELEMENTS(aImplReplacements_Asturian) },
         { "ca", aImplReplacements_Catalan, SAL_N_ELEMENTS(aImplReplacements_Catalan) },
         { "et", aImplReplacements_Estonian, SAL_N_ELEMENTS(aImplReplacements_Estonian) },
+        { "sl", aImplReplacements_Slovenian, SAL_N_ELEMENTS(aImplReplacements_Slovenian) },
+        { "es", aImplReplacements_Spanish, SAL_N_ELEMENTS(aImplReplacements_Spanish) },
     };
 
     // translate keycodes, used within the displayed menu shortcuts
