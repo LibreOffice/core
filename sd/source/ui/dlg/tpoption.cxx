@@ -444,7 +444,7 @@ sal_Bool SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
     }
 
     // Tabulatorabstand
-    if( aMtrFldTabstop.GetText() != aMtrFldTabstop.GetSavedValue() )
+    if( aMtrFldTabstop.GetText() != OUString(aMtrFldTabstop.GetSavedValue()) )
     {
         sal_uInt16 nWh = GetWhich( SID_ATTR_DEFTABSTOP );
         SfxMapUnit eUnit = rAttrs.GetPool()->GetMetric( nWh );

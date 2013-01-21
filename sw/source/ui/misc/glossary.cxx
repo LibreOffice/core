@@ -410,7 +410,7 @@ IMPL_LINK( SwGlossaryDlg, EnableHdl, Menu *, pMn )
     SvTreeListEntry* pEntry = m_pCategoryBox->FirstSelected();
 
     const String aEditText(m_pNameED->GetText());
-    const sal_Bool bHasEntry = aEditText.Len() && m_pShortNameEdit->GetText().Len();
+    const sal_Bool bHasEntry = aEditText.Len() && !m_pShortNameEdit->GetText().isEmpty();
     const sal_Bool bExists = 0 != DoesBlockExist(aEditText, m_pShortNameEdit->GetText());
     const sal_Bool bIsGroup = pEntry && !m_pCategoryBox->GetParent(pEntry);
     pMn->EnableItem("new", bSelection && bHasEntry && !bExists);
@@ -798,13 +798,13 @@ IMPL_LINK_NOARG_INLINE_END(SwGlossaryDlg, EditHdl)
 ------------------------------------------------------------------------*/
 IMPL_LINK( SwNewGlosNameDlg, Modify, Edit *, pBox )
 {
-    String aName(aNewName.GetText());
+    OUString aName(aNewName.GetText());
     SwGlossaryDlg* pDlg = (SwGlossaryDlg*)GetParent();
 
     if( pBox == &aNewName )
         aNewShort.SetText( lcl_GetValidShortCut( aName ) );
 
-    sal_Bool bEnable = aName.Len() && aNewShort.GetText().Len() &&
+    sal_Bool bEnable = !aName.isEmpty() && !aNewShort.GetText().isEmpty() &&
         (!pDlg->DoesBlockExist(aName, aNewShort.GetText())
             || aName == aOldName.GetText());
     aOk.Enable(bEnable);
@@ -814,7 +814,7 @@ IMPL_LINK( SwNewGlosNameDlg, Modify, Edit *, pBox )
 IMPL_LINK_NOARG(SwNewGlosNameDlg, Rename)
 {
     SwGlossaryDlg* pDlg = (SwGlossaryDlg*)GetParent();
-    String sNew = GetAppCharClass().uppercase(aNewShort.GetText());
+    OUString sNew = GetAppCharClass().uppercase(aNewShort.GetText());
     if( pDlg->pGlossaryHdl->HasShortName(aNewShort.GetText())
         && sNew != aOldShort.GetText() )
     {

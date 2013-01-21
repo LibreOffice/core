@@ -629,7 +629,7 @@ IMPL_LINK_NOARG(DataSourceTabPage, MainRangeButtonClickedHdl)
 {
     OSL_ASSERT( m_pCurrentRangeChoosingField == 0 );
     m_pCurrentRangeChoosingField = & m_aEDT_RANGE;
-    if( m_aEDT_RANGE.GetText().Len() > 0 &&
+    if( !m_aEDT_RANGE.GetText().isEmpty() &&
         ! updateModelFromControl( m_pCurrentRangeChoosingField ))
         return 0;
 
@@ -673,7 +673,7 @@ IMPL_LINK_NOARG(DataSourceTabPage, CategoriesRangeButtonClickedHdl)
 {
     OSL_ASSERT( m_pCurrentRangeChoosingField == 0 );
     m_pCurrentRangeChoosingField = & m_aEDT_CATEGORIES;
-    if( m_aEDT_CATEGORIES.GetText().Len() > 0 &&
+    if( !m_aEDT_CATEGORIES.GetText().isEmpty() &&
         ! updateModelFromControl( m_pCurrentRangeChoosingField ))
         return 0;
 

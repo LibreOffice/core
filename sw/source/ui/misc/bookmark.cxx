@@ -103,10 +103,9 @@ void SwInsertBookmarkDlg::Apply()
     }
 
     // insert text mark
-    sal_uInt16      nLen = m_pBookmarkBox->GetText().Len();
     SwBoxEntry  aTmpEntry(m_pBookmarkBox->GetText(), 0 );
 
-    if ( nLen && (m_pBookmarkBox->GetEntryPos(aTmpEntry) == COMBOBOX_ENTRY_NOTFOUND) )
+    if ( !m_pBookmarkBox->GetText().isEmpty() && (m_pBookmarkBox->GetEntryPos(aTmpEntry) == COMBOBOX_ENTRY_NOTFOUND) )
     {
         String sEntry(comphelper::string::remove(m_pBookmarkBox->GetText(),
             m_pBookmarkBox->GetMultiSelectionSeparator()));
@@ -177,7 +176,7 @@ sal_uInt16 BookmarkCombo::GetSelEntryPos(sal_uInt16 nPos) const
 
     for (; nPos < nCnt; nPos++)
     {
-        String sEntry(comphelper::string::strip(GetText().GetToken(nPos, cSep), ' '));
+        String sEntry(comphelper::string::strip(GetText().getToken(nPos, cSep), ' '));
         if (GetEntryPos(sEntry) != COMBOBOX_ENTRY_NOTFOUND)
             return nPos;
     }
@@ -212,7 +211,7 @@ sal_uInt16 BookmarkCombo::GetSelectEntryPos( sal_uInt16 nSelIndex ) const
         if (nSelIndex == nCnt)
         {
             sal_Unicode cSep = GetMultiSelectionSeparator();
-            String sEntry(comphelper::string::strip(GetText().GetToken(nPos, cSep), ' '));
+            String sEntry(comphelper::string::strip(GetText().getToken(nPos, cSep), ' '));
             return GetEntryPos(sEntry);
         }
         nPos = GetNextSelEntryPos(nPos);

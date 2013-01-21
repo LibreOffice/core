@@ -459,7 +459,7 @@ IMPL_LINK_NOARG(GotoLineDialog, OkButtonHandler)
     if ( GetLineNumber() )
         EndDialog(1);
     else
-        aEdit.SetText( aEdit.GetText(), Selection(0, aEdit.GetText().Len() ));
+        aEdit.SetText( aEdit.GetText(), Selection(0, aEdit.GetText().getLength() ));
     return 0;
 }
 

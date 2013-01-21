@@ -264,7 +264,7 @@ void SvxShowText::Resize()
 
 // -----------------------------------------------------------------------
 
-void SvxShowText::SetText( const String& rText )
+void SvxShowText::SetText( const OUString& rText )
 {
     Control::SetText( rText );
     Invalidate();

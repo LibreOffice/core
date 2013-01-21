@@ -189,7 +189,7 @@ sal_Bool SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
         bRet = sal_True;
     }
 
-    if(aTabMF.IsVisible() && aTabMF.GetText() != aTabMF.GetSavedValue())
+    if(aTabMF.IsVisible() && aTabMF.GetText() != OUString(aTabMF.GetSavedValue()))
     {
         rSet.Put(SfxUInt16Item(SID_ATTR_DEFTABSTOP,
                     (sal_uInt16)aTabMF.Denormalize(aTabMF.GetValue(FUNIT_TWIP))));
@@ -205,7 +205,7 @@ sal_Bool SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
         bRet = sal_True;
     }
 
-    if (aWordCountED.GetText() != aWordCountED.GetSavedValue())
+    if (aWordCountED.GetText() != OUString(aWordCountED.GetSavedValue()))
     {
         boost::shared_ptr< comphelper::ConfigurationChanges > batch(
             comphelper::ConfigurationChanges::create());
@@ -691,7 +691,7 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ShowEntryHdl)
         if (pOpt->GetCategory().Len() &&
             aCategoryBox.GetEntryPos(pOpt->GetCategory()) == COMBOBOX_ENTRY_NOTFOUND)
             aCategoryBox.InsertEntry(pOpt->GetCategory());
-        if (!aCategoryBox.GetText().Len())
+        if (aCategoryBox.GetText().isEmpty())
         {
             sal_uInt16 nPos = 0;
             switch(pOpt->GetObjType())
@@ -775,7 +775,7 @@ void SwCaptionOptPage::SaveEntry(SvTreeListEntry* pEntry)
         else
             pOpt->SetCategory(comphelper::string::strip(aName, ' '));
         pOpt->SetNumType((sal_uInt16)(sal_uLong)aFormatBox.GetEntryData(aFormatBox.GetSelectEntryPos()));
-        pOpt->SetCaption(aTextEdit.IsEnabled() ? aTextEdit.GetText() : aEmptyStr );
+        pOpt->SetCaption(aTextEdit.IsEnabled() ? aTextEdit.GetText() : OUString(aEmptyStr) );
         pOpt->SetPos(aPosBox.GetSelectEntryPos());
         sal_uInt16 nPos = aLbLevel.GetSelectEntryPos();
         sal_uInt16 nLevel = ( nPos > 0 && nPos != LISTBOX_ENTRY_NOTFOUND ) ? nPos - 1 : MAXLEVEL;
@@ -837,7 +837,7 @@ void SwCaptionOptPage::DrawSample()
 {
     String aStr;
 
-    if( aCategoryBox.GetText() != sNone)
+    if( aCategoryBox.GetText() != OUString(sNone))
     {
         //#i61007# order of captions
         bool bOrderNumberingFirst = aLbCaptionOrder.GetSelectEntryPos() == 1;

@@ -82,12 +82,12 @@ void NoSpaceEdit::KeyInput(const KeyEvent& rEvt)
 void NoSpaceEdit::Modify()
 {
     Selection aSel = GetSelection();
-    String sTemp = GetText();
+    OUString sTemp = GetText();
     for(sal_uInt16 i = 0; i < sForbiddenChars.Len(); i++)
     {
         sTemp = comphelper::string::remove(sTemp, sForbiddenChars.GetChar(i));
     }
-    sal_uInt16 nDiff = GetText().Len() - sTemp.Len();
+    sal_Int32 nDiff = GetText().getLength() - sTemp.getLength();
     if(nDiff)
     {
         aSel.setMin(aSel.getMin() - nDiff);

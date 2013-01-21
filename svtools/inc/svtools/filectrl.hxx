@@ -75,8 +75,8 @@ public:
     void            SetOpenDialog( sal_Bool bOpen )     { mbOpenDlg = bOpen; }
     sal_Bool            IsOpenDialog() const            { return mbOpenDlg; }
 
-    void            SetText( const XubString& rStr );
-    XubString       GetText() const;
+    void            SetText( const OUString& rStr );
+    OUString        GetText() const;
     rtl::OUString   GetSelectedText() const         { return maEdit.GetSelected(); }
 
     void            SetSelection( const Selection& rSelection ) { maEdit.SetSelection( rSelection ); }

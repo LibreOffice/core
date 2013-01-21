@@ -141,11 +141,11 @@ void ScAbstractTabDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
      pDlg->SetInputSet( pInSet );
 }
 //From class Window.
-void ScAbstractTabDialog_Impl::SetText( const XubString& rStr )
+void ScAbstractTabDialog_Impl::SetText( const OUString& rStr )
 {
     pDlg->SetText( rStr );
 }
-String ScAbstractTabDialog_Impl::GetText() const
+OUString ScAbstractTabDialog_Impl::GetText() const
 {
     return pDlg->GetText();
 }

@@ -378,8 +378,8 @@ class ScAbstractTabDialog_Impl : public SfxAbstractTabDialog
     virtual const sal_uInt16*       GetInputRanges( const SfxItemPool& pItem );
     virtual void                SetInputSet( const SfxItemSet* pInSet );
         //From class Window.
-    virtual void        SetText( const XubString& rStr );
-    virtual String      GetText() const;
+    virtual void        SetText( const OUString& rStr );
+    virtual OUString    GetText() const;
 };
 
 //------------------------------------------------------------------------

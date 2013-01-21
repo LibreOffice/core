@@ -67,7 +67,7 @@ void TitleImage::Paint( const Rectangle& )
 
 // -----------------------------------------------------------------------
 
-void TitleImage::SetText( const String& rText )
+void TitleImage::SetText( const OUString& rText )
 {
     m_aText = rText;
     m_bArranged = false;

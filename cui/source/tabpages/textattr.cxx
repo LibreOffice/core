@@ -343,25 +343,25 @@ sal_Bool SvxTextAttrPage::FillItemSet( SfxItemSet& rAttrs)
     sal_Int32    nValue;
     TriState eState;
 
-    if( aMtrFldLeft.GetText() != aMtrFldLeft.GetSavedValue() )
+    if( aMtrFldLeft.GetText() != OUString(aMtrFldLeft.GetSavedValue()) )
     {
         nValue = GetCoreValue( aMtrFldLeft, eUnit );
         rAttrs.Put( SdrTextLeftDistItem( nValue ) );
     }
 
-    if( aMtrFldRight.GetText() != aMtrFldRight.GetSavedValue() )
+    if( aMtrFldRight.GetText() != OUString(aMtrFldRight.GetSavedValue()) )
     {
         nValue = GetCoreValue( aMtrFldRight, eUnit );
         rAttrs.Put( SdrTextRightDistItem( nValue ) );
     }
 
-    if( aMtrFldTop.GetText() != aMtrFldTop.GetSavedValue() )
+    if( aMtrFldTop.GetText() != OUString(aMtrFldTop.GetSavedValue()) )
     {
         nValue = GetCoreValue( aMtrFldTop, eUnit );
         rAttrs.Put( SdrTextUpperDistItem( nValue ) );
     }
 
-    if( aMtrFldBottom.GetText() != aMtrFldBottom.GetSavedValue() )
+    if( aMtrFldBottom.GetText() != OUString(aMtrFldBottom.GetSavedValue()) )
     {
         nValue = GetCoreValue( aMtrFldBottom, eUnit );
         rAttrs.Put( SdrTextLowerDistItem( nValue ) );

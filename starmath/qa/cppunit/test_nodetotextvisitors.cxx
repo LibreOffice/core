@@ -532,7 +532,7 @@ void Test::testBinomInBinHor()
     aCursor.InsertText("d");
 
     sExpected.AppendAscii(" { { binom a b + c } + d } ");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Binom Node in BinHor Node", sExpected, xDocShRef->GetText());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Binom Node in BinHor Node", sExpected, String(xDocShRef->GetText()));
 
     delete pTree;
 }
@@ -563,7 +563,7 @@ void Test::testBinVerInUnary()
     aCursor.InsertText("2");
 
     sExpected.AppendAscii(" - { 1 over 2 } ");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Binary Vertical in Unary Operator", sExpected, xDocShRef->GetText());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Binary Vertical in Unary Operator", sExpected, String(xDocShRef->GetText()));
 
     delete pTree;
 }
@@ -641,7 +641,7 @@ void Test::testUnaryInMixedNumberAsNumerator()
     aCursor.InsertText("4");
 
     sExpected.AppendAscii(" { 2 { - 1 over 2 } + 4 } ");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unary in mixed number as Numerator", sExpected, xDocShRef->GetText());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unary in mixed number as Numerator", sExpected, String(xDocShRef->GetText()));
 
     delete pTree;
 }

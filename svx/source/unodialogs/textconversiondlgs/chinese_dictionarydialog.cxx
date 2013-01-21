@@ -675,7 +675,7 @@ IMPL_LINK_NOARG(ChineseDictionaryDialog, MappingSelectHdl)
 
 bool ChineseDictionaryDialog::isEditFieldsHaveContent() const
 {
-    return m_aED_Term.GetText().Len() && m_aED_Mapping.GetText().Len();
+    return !m_aED_Term.GetText().isEmpty() && !m_aED_Mapping.GetText().isEmpty();
 }
 
 bool ChineseDictionaryDialog::isEditFieldsContentEqualsSelectedListContent() const

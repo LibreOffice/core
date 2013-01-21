@@ -530,7 +530,7 @@ void HelpTextWindow::RequestHelp( const HelpEvent& /*rHEvt*/ )
 
 // -----------------------------------------------------------------------
 
-XubString HelpTextWindow::GetText() const
+OUString HelpTextWindow::GetText() const
 {
     return maHelpText;
 }

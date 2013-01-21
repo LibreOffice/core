@@ -318,7 +318,7 @@ DbGridControl::NavigationBar::AbsolutePos::AbsolutePos(Window* pParent, WinBits 
 //------------------------------------------------------------------------------
 void DbGridControl::NavigationBar::AbsolutePos::KeyInput(const KeyEvent& rEvt)
 {
-    if (rEvt.GetKeyCode() == KEY_RETURN && GetText().Len())
+    if (rEvt.GetKeyCode() == KEY_RETURN && !GetText().isEmpty())
     {
         sal_Int64 nRecord = GetValue();
         if (nRecord < GetMin() || nRecord > GetMax())

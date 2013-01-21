@@ -522,8 +522,8 @@ IMPL_LINK_NOARG(SwFldDokPage, FormatHdl)
         // Prev/Next - PageNumFields special treatment:
         sal_uInt16 nTmp = (sal_uInt16)(sal_uLong)aFormatLB.GetEntryData(
                                         aFormatLB.GetSelectEntryPos() );
-        String sOldTxt( aValueFT.GetText() );
-        String sNewTxt( SW_RES( SVX_NUM_CHAR_SPECIAL == nTmp  ? STR_VALUE
+        OUString sOldTxt( aValueFT.GetText() );
+        OUString sNewTxt( SW_RES( SVX_NUM_CHAR_SPECIAL == nTmp  ? STR_VALUE
                                                          : STR_OFFSET ));
 
         if( sOldTxt != sNewTxt )
@@ -600,7 +600,7 @@ sal_Bool SwFldDokPage::FillItemSet(SfxItemSet& )
             if( SVX_NUM_CHAR_SPECIAL != nFormat &&
                 (TYP_PREVPAGEFLD == nTypeId || TYP_NEXTPAGEFLD == nTypeId))
             {
-                sal_Int32 nVal = aValueED.GetText().ToInt32();
+                sal_Int32 nVal = aValueED.GetText().toInt32();
                 aVal = String::CreateFromInt32(nVal);
             }
             break;
@@ -618,9 +618,9 @@ sal_Bool SwFldDokPage::FillItemSet(SfxItemSet& )
         nOldSel != aSelectionLB.GetSelectEntryPos() ||
         nOldFormat != nFormat ||
         aFixedCB.GetState() != aFixedCB.GetSavedValue() ||
-        aValueED.GetText() != aValueED.GetSavedValue() ||
-        aLevelED.GetText() != aLevelED.GetSavedValue() ||
-        aDateOffsetED.GetText() != aDateOffsetED.GetSavedValue())
+        aValueED.GetText() != OUString(aValueED.GetSavedValue()) ||
+        aLevelED.GetText() != OUString(aLevelED.GetSavedValue()) ||
+        aDateOffsetED.GetText() != OUString(aDateOffsetED.GetSavedValue()))
     {
         InsertFld( nTypeId, nSubType, aEmptyStr, aVal, nFormat, ' ', aNumFormatLB.IsAutomaticLanguage() );
     }

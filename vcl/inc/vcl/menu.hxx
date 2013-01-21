@@ -137,7 +137,7 @@ private:
     VclEventListeners   maEventListeners;
     VclEventListeners   maChildEventListeners;
 
-    XubString           aTitleText;         // PopupMenu text
+    OUString            aTitleText;         // PopupMenu text
 
     sal_uLong           nEventId;
     sal_uInt16          mnHighlightedItemPos; // for native menus: keeps track of the highlighted item
@@ -482,8 +482,8 @@ public:
                         PopupMenu( const ResId& rResId );
                         ~PopupMenu();
 
-    void                SetText( const XubString& rTitle )  { aTitleText = rTitle; }
-    const XubString&    GetText() const                     { return aTitleText; }
+    void                SetText( const OUString& rTitle )  { aTitleText = rTitle; }
+    const OUString&     GetText() const                     { return aTitleText; }
 
     sal_uInt16              Execute( Window* pWindow, const Point& rPopupPos );
     sal_uInt16              Execute( Window* pWindow, const Rectangle& rRect, sal_uInt16 nFlags = 0 );

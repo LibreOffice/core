@@ -140,7 +140,7 @@ class SwInsertDBColAutoPilot : public SfxModalDialog, public utl::ConfigItem
 
     SfxItemSet*     pTblSet;
     SwTableRep*     pRep;
-    sal_uInt16          nGBFmtLen;
+    sal_Int32       nGBFmtLen;
 
     DECL_LINK( PageHdl, Button* );
     DECL_LINK( AutoFmtHdl, PushButton* );

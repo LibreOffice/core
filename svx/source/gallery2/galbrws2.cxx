@@ -352,7 +352,7 @@ GalleryBrowser2::GalleryBrowser2( GalleryBrowser* pParent, const ResId& rResId, 
 
     SetMode( ( GALLERYBROWSERMODE_PREVIEW != GalleryBrowser2::meInitMode ) ? GalleryBrowser2::meInitMode : GALLERYBROWSERMODE_ICON );
 
-    if(maInfoBar.GetText().Len() == 0)
+    if(maInfoBar.GetText().isEmpty())
         mpIconView->SetAccessibleRelationLabeledBy(mpIconView);
     else
         mpIconView->SetAccessibleRelationLabeledBy(&maInfoBar);
@@ -672,7 +672,7 @@ void GalleryBrowser2::SelectTheme( const String& rThemeName )
     maViewBox.EnableItem( TBX_ID_LIST, sal_True );
     maViewBox.CheckItem( ( GALLERYBROWSERMODE_ICON == GetMode() ) ? TBX_ID_ICON : TBX_ID_LIST, sal_True );
 
-    if(maInfoBar.GetText().Len() == 0)
+    if(maInfoBar.GetText().isEmpty())
         mpIconView->SetAccessibleRelationLabeledBy(mpIconView);
     else
         mpIconView->SetAccessibleRelationLabeledBy(&maInfoBar);

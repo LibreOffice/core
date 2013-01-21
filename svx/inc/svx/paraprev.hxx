@@ -79,7 +79,7 @@ public:
     void        SetLastLine( SvxAdjust eNew )   { eLastLine = eNew; }
     void        SetLineSpace( SvxPrevLineSpace eNew, sal_uInt16 nNew = 0 )
                     {   eLine = eNew; nLineVal = nNew; }
-    void        SetText( const String& rStr )   { aText = rStr; }
+    void        SetText( const OUString& rStr )   { aText = rStr; }
     void        SetSize( Size aNew )            { aSize = aNew; }
 
     short       GetFirstLineOfst() const        { return nFirstLineOfst; }
@@ -91,7 +91,7 @@ public:
 
     SvxPrevLineSpace    GetLineEnum() const     { return eLine; }
     sal_uInt16              GetLineValue() const    { return nLineVal; }
-    String              GetText() const         { return aText; }
+    OUString            GetText() const         { return aText; }
     Size                GetSize() const         { return aSize; }
 
     void        Draw( sal_Bool bAll )               { DrawParagraph( bAll ); }

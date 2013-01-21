@@ -70,7 +70,7 @@ namespace dbaui
         virtual ~OSqlEdit();
 
         // Edit overridables
-        virtual void SetText(const String& rNewText);
+        virtual void SetText(const OUString& rNewText);
         using MultiLineEditSyntaxHighlight::SetText;
 
         // own functionality

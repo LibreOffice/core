@@ -119,7 +119,7 @@
         OUString    GetURL() const;
 
         /** sets new text and recalculates the text length. */
-        virtual void SetText(const String& rNewDescription);
+        virtual void SetText(const OUString& rNewDescription);
     };
 
 #endif

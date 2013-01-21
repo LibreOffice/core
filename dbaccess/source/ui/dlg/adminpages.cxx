@@ -237,7 +237,7 @@ namespace dbaui
     // -----------------------------------------------------------------------
     void OGenericAdministrationPage::fillString(SfxItemSet& _rSet,Edit* _pEdit,sal_uInt16 _nID,sal_Bool& _bChangedSomething)
     {
-        if( (_pEdit != NULL) && (_pEdit->GetText() != _pEdit->GetSavedValue()) )
+        if( (_pEdit != NULL) && (_pEdit->GetText() != OUString(_pEdit->GetSavedValue())) )
         {
             _rSet.Put(SfxStringItem(_nID, _pEdit->GetText()));
             _bChangedSomething = sal_True;

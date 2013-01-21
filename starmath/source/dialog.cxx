@@ -2044,7 +2044,7 @@ void SmSymDefineDialog::UpdateButtons()
                     && aTmpSymbolName.equals(pOrigSymbol->GetName())
                     && aFonts.GetSelectEntry().EqualsIgnoreCaseAscii(
                             pOrigSymbol->GetFace().GetName())
-                    && aStyles.GetText().EqualsIgnoreCaseAscii(
+                    && aStyles.GetText().equalsIgnoreAsciiCase(
                             GetFontStyles().GetStyleName(pOrigSymbol->GetFace()))
                     && aCharsetDisplay.GetSelectCharacter() == pOrigSymbol->GetCharacter();
 

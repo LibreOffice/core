@@ -64,7 +64,7 @@ PasswordReenterEdit_Impl::~PasswordReenterEdit_Impl()
 
 void PasswordReenterEdit_Impl::Paint( const Rectangle& rRect )
 {
-    if (GetText().Len() == 0)
+    if (GetText().isEmpty())
     {
         Push( PUSH_TEXTCOLOR );
         SetTextColor( Color( COL_GRAY ) );
@@ -174,8 +174,8 @@ PasswordToOpenModifyDialog_Impl::~PasswordToOpenModifyDialog_Impl()
 IMPL_LINK( PasswordToOpenModifyDialog_Impl, OkBtnClickHdl, OKButton *, EMPTYARG /*pBtn*/ )
 {
     bool bInvalidState = !m_aOpenReadonlyCB.IsChecked() &&
-            m_aPasswdToOpenED.GetText().Len() == 0 &&
-            m_aPasswdToModifyED.GetText().Len() == 0;
+            m_aPasswdToOpenED.GetText().isEmpty() &&
+            m_aPasswdToModifyED.GetText().isEmpty();
     if (bInvalidState)
     {
         ErrorBox aErrorBox( m_pParent, WB_OK,
@@ -243,18 +243,18 @@ PasswordToOpenModifyDialog::~PasswordToOpenModifyDialog()
 String PasswordToOpenModifyDialog::GetPasswordToOpen() const
 {
     const bool bPasswdOk =
-            m_pImpl->m_aPasswdToOpenED.GetText().Len() > 0 &&
+            !m_pImpl->m_aPasswdToOpenED.GetText().isEmpty() &&
             m_pImpl->m_aPasswdToOpenED.GetText() == m_pImpl->m_aReenterPasswdToOpenED.GetText();
-    return bPasswdOk ? m_pImpl->m_aPasswdToOpenED.GetText() : String();
+    return bPasswdOk ? m_pImpl->m_aPasswdToOpenED.GetText() : OUString();
 }
 
 
 String PasswordToOpenModifyDialog::GetPasswordToModify() const
 {
     const bool bPasswdOk =
-            m_pImpl->m_aPasswdToModifyED.GetText().Len() > 0 &&
+            !m_pImpl->m_aPasswdToModifyED.GetText().isEmpty() &&
             m_pImpl->m_aPasswdToModifyED.GetText() == m_pImpl->m_aReenterPasswdToModifyED.GetText();
-    return bPasswdOk ? m_pImpl->m_aPasswdToModifyED.GetText() : String();
+    return bPasswdOk ? m_pImpl->m_aPasswdToModifyED.GetText() : OUString();
 }
 
 

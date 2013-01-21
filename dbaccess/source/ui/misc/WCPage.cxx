@@ -167,7 +167,7 @@ sal_Bool OCopyTable::LeavePage()
 {
     DBG_CHKTHIS(OCopyTable,NULL);
     m_pParent->m_bCreatePrimaryKeyColumn    = (m_bPKeyAllowed && m_aCB_PrimaryColumn.IsEnabled()) ? m_aCB_PrimaryColumn.IsChecked() : sal_False;
-    m_pParent->m_aKeyName                   = m_pParent->m_bCreatePrimaryKeyColumn ? m_edKeyName.GetText() : String();
+    m_pParent->m_aKeyName                   = m_pParent->m_bCreatePrimaryKeyColumn ? m_edKeyName.GetText() : OUString();
     m_pParent->setUseHeaderLine( m_aCB_UseHeaderLine.IsChecked() );
 
     // first check if the table already exists in the database

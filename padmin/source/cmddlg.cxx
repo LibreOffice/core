@@ -323,7 +323,7 @@ void RTSCommandPage::save()
 
     String aFeatures;
     sal_Int32 nIndex = 0;
-    String aOldPdfPath;
+    OUString aOldPdfPath;
     bool bOldFaxSwallow = false;
     bool bFaxSwallow = m_aFaxSwallowBox.IsChecked() ? true : false;
     bool bExternalDialog = m_aExternalCB.IsChecked() ? true : false;
@@ -531,7 +531,7 @@ void RTSCommandPage::UpdateCommands()
 
 void RTSCommandPage::ConnectCommand()
 {
-    String aString( m_aConnectedTo.GetText().GetToken( 0, ':' ) );
+    String aString( m_aConnectedTo.GetText().getToken( 0, ':' ) );
     aString.AppendAscii( ": " );
     aString += m_aCommandsCB.GetText();
 

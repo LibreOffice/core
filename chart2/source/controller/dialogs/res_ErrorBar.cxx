@@ -393,9 +393,8 @@ IMPL_LINK( ErrorBarResources, CategoryChosen, void *,  )
         eOldError != CHERROR_RANGE )
     {
         m_aCbSyncPosNeg.Check(
-            (m_aEdRangePositive.GetText().Len() > 0) &&
-            m_aEdRangePositive.GetText().Equals(
-                m_aEdRangeNegative.GetText()));
+            (!m_aEdRangePositive.GetText().isEmpty()) &&
+            m_aEdRangePositive.GetText() == m_aEdRangeNegative.GetText());
     }
     // changed from range
     else if( m_eErrorKind != CHERROR_RANGE &&

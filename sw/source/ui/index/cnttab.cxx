@@ -1059,7 +1059,7 @@ void    SwTOXSelectTabPage::ApplyTOXDescription()
     const CurTOXType aCurType = pTOXDlg->GetCurrentTOXType();
     SwTOXDescription& rDesc = pTOXDlg->GetTOXDescription(aCurType);
     aReadOnlyCB.Check(rDesc.IsReadonly());
-    if(aTitleED.GetText() == aTitleED.GetSavedValue())
+    if(aTitleED.GetText() == OUString(aTitleED.GetSavedValue()))
     {
         if(rDesc.GetTitle())
             aTitleED.SetText(*rDesc.GetTitle());
@@ -1625,9 +1625,9 @@ void    SwTOXEdit::RequestHelp( const HelpEvent& rHEvt )
 void    SwTOXEdit::KeyInput( const KeyEvent& rKEvt )
 {
     const Selection& rSel = GetSelection();
-    sal_uInt16 nTextLen = GetText().Len();
+    sal_Int32 nTextLen = GetText().getLength();
     if((rSel.A() == rSel.B() &&
-        !rSel.A()) || rSel.A() == nTextLen )
+        !rSel.A()) || rSel.A() == (sal_uInt16)nTextLen )
     {
         sal_Bool bCall = sal_False;
         KeyCode aCode = rKEvt.GetKeyCode();
@@ -2732,8 +2732,8 @@ IMPL_LINK(SwTOXEntryTabPage, FillCharHdl, ComboBox*, pBox)
     if(pCtrl && WINDOW_EDIT != pCtrl->GetType())
     {
         sal_Unicode cSet;
-        if( pBox->GetText().Len() )
-            cSet = pBox->GetText().GetChar(0);
+        if( !pBox->GetText().isEmpty() )
+            cSet = pBox->GetText()[0];
         else
             cSet = ' ';
         ((SwTOXButton*)pCtrl)->SetFillChar( cSet );
@@ -3602,10 +3602,10 @@ IMPL_LINK(SwTokenWindow, NextItemBtnHdl, SwTOXButton*, pBtn )
 
         if (!isNext)
         {
-            sal_uInt16 nLen = static_cast<SwTOXEdit*>(pCtrlFocus)->GetText().Len();
+            sal_Int32 nLen = static_cast<SwTOXEdit*>(pCtrlFocus)->GetText().getLength();
 
-            aSel.A() = nLen;
-            aSel.B() = nLen;
+            aSel.A() = (sal_uInt16)nLen;
+            aSel.B() = (sal_uInt16)nLen;
         }
 
         static_cast<SwTOXEdit*>(pCtrlFocus)->SetSelection(aSel);

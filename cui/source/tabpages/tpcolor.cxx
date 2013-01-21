@@ -513,7 +513,7 @@ long SvxColorTabPage::CheckChanges_Impl()
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         Color aColor = pColorList->GetColor( nPos )->GetColor();
-        String aString = aLbColor.GetSelectEntry();
+        OUString aString = aLbColor.GetSelectEntry();
 
         // aNewColor, because COL_USER != COL_something, even if RGB values are the same
         // Color aNewColor( aColor.GetRed(), aColor.GetGreen(), aColor.GetBlue() );

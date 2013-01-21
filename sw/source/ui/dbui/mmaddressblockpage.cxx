@@ -518,12 +518,12 @@ void SwRestrictedComboBox::KeyInput(const KeyEvent& rEvt)
 void SwRestrictedComboBox::Modify()
 {
     Selection aSel = GetSelection();
-    String sTemp = GetText();
+    OUString sTemp = GetText();
     for(sal_uInt16 i = 0; i < sForbiddenChars.Len(); i++)
     {
         sTemp = comphelper::string::remove(sTemp, sForbiddenChars.GetChar(i));
     }
-    sal_uInt16 nDiff = GetText().Len() - sTemp.Len();
+    sal_Int32 nDiff = GetText().getLength() - sTemp.getLength();
     if(nDiff)
     {
         aSel.setMin(aSel.getMin() - nDiff);
@@ -822,7 +822,7 @@ void SwCustomizeAddressBlockDialog::UpdateImageButtons_Impl()
     m_aRemoveFieldIB.Enable(m_aDragED.HasCurrentItem() ? sal_True : sal_False);
     SvTreeListEntry* pEntry = m_aAddressElementsLB.GetCurEntry();
     m_aInsertFieldIB.Enable( pEntry &&
-            (0 < (sal_Int32)(sal_IntPtr)pEntry->GetUserData() || m_aFieldCB.GetText().Len()));
+            (0 < (sal_Int32)(sal_IntPtr)pEntry->GetUserData() || !m_aFieldCB.GetText().isEmpty()));
 }
 
 void SwCustomizeAddressBlockDialog::SetAddress(const ::rtl::OUString& rAddress)
@@ -1427,7 +1427,7 @@ long  AddressMultiLineEdit::PreNotify( NotifyEvent& rNEvt )
 
 }
 
-void AddressMultiLineEdit::SetText( const String& rStr )
+void AddressMultiLineEdit::SetText( const OUString& rStr )
 {
     MultiLineEdit::SetText(rStr);
     //set attributes to all address tokens

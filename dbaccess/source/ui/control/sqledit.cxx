@@ -204,7 +204,7 @@ IMPL_LINK(OSqlEdit, ModifyHdl, void*, /*EMPTYTAG*/)
     return 0;
 }
 
-void OSqlEdit::SetText(const String& rNewText)
+void OSqlEdit::SetText(const OUString& rNewText)
 {
     DBG_CHKTHIS(OSqlEdit,NULL);
     if (m_timerUndoActionCreation.IsActive())

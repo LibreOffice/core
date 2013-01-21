@@ -480,12 +480,12 @@ void SvxSearchDialog::Construct_Impl()
         }
         catch(uno::Exception&){}
 
-        if(aSearchComponent1PB.GetText().Len() && bSearchComponent1 )
+        if(!aSearchComponent1PB.GetText().isEmpty() && bSearchComponent1 )
         {
             aSearchComponentFL.Show();
             aSearchComponent1PB.Show();
         }
-        if( aSearchComponent2PB.GetText().Len() )
+        if( !aSearchComponent2PB.GetText().isEmpty() )
         {
             if(!aSearchComponent1PB.IsVisible())
             {
@@ -1122,14 +1122,14 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
         else
             EnableControl_Impl( &aWordBtn );
 
-        String aSrchAttrTxt;
+        OUString aSrchAttrTxt;
 
         if ( pImpl->bMultiLineEdit )
             aSrchAttrTxt = pImpl->aSearchFormats.GetText();
         else
             aSrchAttrTxt = aSearchAttrText.GetText();
 
-        bDisableSearch = !aSearchLB.GetText().Len() && !aSrchAttrTxt.Len();
+        bDisableSearch = aSearchLB.GetText().isEmpty() && aSrchAttrTxt.isEmpty();
     }
     FocusHdl_Impl( &aSearchLB );
 
@@ -1159,8 +1159,8 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
         }
     }
 
-    if ( ( !pImpl->bMultiLineEdit && aSearchAttrText.GetText().Len() ) ||
-            ( pImpl->bMultiLineEdit && pImpl->aSearchFormats.GetText().Len() ) )
+    if ( ( !pImpl->bMultiLineEdit && !aSearchAttrText.GetText().isEmpty() ) ||
+            ( pImpl->bMultiLineEdit && !pImpl->aSearchFormats.GetText().isEmpty() ) )
         EnableControl_Impl( &aNoFormatBtn );
     else
         aNoFormatBtn.Disable();
@@ -1375,7 +1375,7 @@ IMPL_LINK( SvxSearchDialog, FlagHdl_Impl, Control *, pCtrl )
 
 IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
 {
-    bool bInclusive = ( aLayoutBtn.GetText() == aLayoutStr );
+    bool bInclusive = ( aLayoutBtn.GetText() == OUString(aLayoutStr) );
 
     if ( ( pBtn == &aSearchBtn )    ||
          ( pBtn == &aSearchAllBtn ) ||
@@ -1549,16 +1549,16 @@ IMPL_LINK( SvxSearchDialog, ModifyHdl_Impl, ComboBox *, pEd )
 
     if ( pEd == &aSearchLB || pEd == &aReplaceLB )
     {
-        xub_StrLen nSrchTxtLen = aSearchLB.GetText().Len();
-        xub_StrLen nReplTxtLen = 0;
+        sal_Int32 nSrchTxtLen = aSearchLB.GetText().getLength();
+        sal_Int32 nReplTxtLen = 0;
         if (bAllowEmptySearch)
-            nReplTxtLen = aReplaceLB.GetText().Len();
+            nReplTxtLen = aReplaceLB.GetText().getLength();
         xub_StrLen nAttrTxtLen = 0;
 
         if ( !pImpl->bMultiLineEdit )
-           nAttrTxtLen = aSearchAttrText.GetText().Len();
+           nAttrTxtLen = aSearchAttrText.GetText().getLength();
         else
-            nAttrTxtLen = pImpl->aSearchFormats.GetText().Len();
+            nAttrTxtLen = pImpl->aSearchFormats.GetText().getLength();
 
         if (nSrchTxtLen || nReplTxtLen || nAttrTxtLen)
         {
@@ -1984,12 +1984,12 @@ void SvxSearchDialog::SetItem_Impl( const SvxSearchItem* pItem )
 
 IMPL_LINK( SvxSearchDialog, FocusHdl_Impl, Control *, pCtrl )
 {
-    xub_StrLen nTxtLen;
+    sal_Int32 nTxtLen;
 
     if ( !pImpl->bMultiLineEdit )
-        nTxtLen = aSearchAttrText.GetText().Len();
+        nTxtLen = aSearchAttrText.GetText().getLength();
     else
-        nTxtLen = pImpl->aSearchFormats.GetText().Len();
+        nTxtLen = pImpl->aSearchFormats.GetText().getLength();
 
     if ( pCtrl == &aSearchLB || pCtrl == &pImpl->aSearchFormats )
     {
@@ -2010,8 +2010,8 @@ IMPL_LINK( SvxSearchDialog, FocusHdl_Impl, Control *, pCtrl )
         pCtrl = &aReplaceLB;
         bSearch = sal_False;
 
-        if ( ( !pImpl->bMultiLineEdit && aReplaceAttrText.GetText().Len() ) ||
-                ( pImpl->bMultiLineEdit && pImpl->aReplaceFormats.GetText().Len() ) )
+        if ( ( !pImpl->bMultiLineEdit && !aReplaceAttrText.GetText().isEmpty() ) ||
+                ( pImpl->bMultiLineEdit && !pImpl->aReplaceFormats.GetText().isEmpty() ) )
             EnableControl_Impl( &aNoFormatBtn );
         else
             aNoFormatBtn.Disable();

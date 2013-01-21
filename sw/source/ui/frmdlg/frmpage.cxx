@@ -979,7 +979,7 @@ sal_Bool SwFrmPage::FillItemSet(SfxItemSet &rSet)
         aHoriOrient.SetRelationOrient( eRel );
         aHoriOrient.SetPosToggle(aMirrorPagesCB.IsChecked());
 
-        sal_Bool bMod = aAtHorzPosED.GetText() != aAtHorzPosED.GetSavedValue();
+        sal_Bool bMod = aAtHorzPosED.GetText() != OUString(aAtHorzPosED.GetSavedValue());
         bMod |= aMirrorPagesCB.GetState() != aMirrorPagesCB.GetSavedValue();
 
         if ( eHOri == text::HoriOrientation::NONE &&
@@ -1017,7 +1017,7 @@ sal_Bool SwFrmPage::FillItemSet(SfxItemSet &rSet)
         aVertOrient.SetVertOrient    ( eVOri);
         aVertOrient.SetRelationOrient( eRel );
 
-        sal_Bool bMod = aAtVertPosED.GetText() != aAtVertPosED.GetSavedValue();
+        sal_Bool bMod = aAtVertPosED.GetText() != OUString(aAtVertPosED.GetSavedValue());
 
         if ( eVOri == text::VertOrientation::NONE &&
              ( bNew || (bAtVertPosModified || bMod) || nOldV != eVOri) )
@@ -2678,7 +2678,7 @@ sal_Bool SwFrmURLPage::FillItemSet(SfxItemSet &rSet)
         String sText = aURLED.GetText();
 
         if( pFmtURL->GetURL() != sText ||
-            pFmtURL->GetName() != aNameED.GetText() ||
+            OUString(pFmtURL->GetName()) != aNameED.GetText() ||
             aServerCB.IsChecked() != pFmtURL->IsServerMap() )
         {
             pFmtURL->SetURL( sText, aServerCB.IsChecked() );
@@ -2693,7 +2693,7 @@ sal_Bool SwFrmURLPage::FillItemSet(SfxItemSet &rSet)
         bModified = sal_True;
     }
 
-    if(pFmtURL->GetTargetFrameName() != aFrameCB.GetText())
+    if(OUString(pFmtURL->GetTargetFrameName()) != aFrameCB.GetText())
     {
         pFmtURL->SetTargetFrameName(aFrameCB.GetText());
         bModified = sal_True;
@@ -2982,9 +2982,9 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
 sal_Bool SwFrmAddPage::FillItemSet(SfxItemSet &rSet)
 {
     sal_Bool bRet = sal_False;
-    if (aNameED.GetText() != aNameED.GetSavedValue())
+    if (aNameED.GetText() != OUString(aNameED.GetSavedValue()))
         bRet |= 0 != rSet.Put(SfxStringItem(FN_SET_FRM_NAME, aNameED.GetText()));
-    if (aAltNameED.GetText()  != aAltNameED.GetSavedValue())
+    if (aAltNameED.GetText()  != OUString(aAltNameED.GetSavedValue()))
         bRet |= 0 != rSet.Put(SfxStringItem(FN_SET_FRM_ALT_NAME, aAltNameED.GetText()));
 
     const SfxPoolItem* pOldItem;
@@ -3048,7 +3048,7 @@ sal_uInt16* SwFrmAddPage::GetRanges()
 
 IMPL_LINK_NOARG(SwFrmAddPage, EditModifyHdl)
 {
-    sal_Bool bEnable = 0 != aNameED.GetText().Len();
+    sal_Bool bEnable = !aNameED.GetText().isEmpty();
     aAltNameED.Enable(bEnable);
     aAltNameFT.Enable(bEnable);
 

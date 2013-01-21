@@ -122,7 +122,7 @@ IMPL_LINK_NOARG(OPasswordDialog, OKHdl_Impl)
 // -----------------------------------------------------------------------------
 IMPL_LINK( OPasswordDialog, ModifiedHdl, Edit *, pEdit )
 {
-    aOKBtn.Enable(pEdit->GetText().Len() != 0);
+    aOKBtn.Enable(!pEdit->GetText().isEmpty());
     return 0;
 }
 

@@ -182,8 +182,8 @@ namespace abp
     void FinalPage::implCheckName()
     {
         sal_Bool bValidName = isValidName();
-        sal_Bool bEmptyName = 0 == m_aName.GetText().Len();
-        sal_Bool bEmptyLocation = 0 == m_aLocation.GetText().Len();
+        sal_Bool bEmptyName = m_aName.GetText().isEmpty();
+        sal_Bool bEmptyLocation = m_aLocation.GetText().isEmpty();
 
         // enable or disable the finish button
         getDialog()->enableButtons( WZB_FINISH, !bEmptyLocation && (!m_aRegisterName.IsChecked() || bValidName) );

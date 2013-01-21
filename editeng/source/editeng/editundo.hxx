@@ -262,7 +262,7 @@ public:
     EditUndoTransliteration(EditEngine* pEE, const ESelection& rESel, sal_Int32 nMode);
     virtual ~EditUndoTransliteration();
 
-    void                SetText( const String& rText ) { aText = rText; }
+    void                SetText( const OUString& rText ) { aText = rText; }
     void                SetText( EditTextObject* pObj ) { pTxtObj = pObj; }
     void                SetNewSelection( const ESelection& rSel ) { aNewESel = rSel; }
 

@@ -744,7 +744,7 @@ IMPL_LINK( ScTpUserLists, EdEntriesModHdl, MultiLineEdit*, pEd )
         aEdCopyFrom .Disable();
     }
 
-    if ( aEdEntries.GetText().Len() > 0 )
+    if ( !aEdEntries.GetText().isEmpty() )
     {
         if ( !bCancelMode && !bModifyMode )
         {

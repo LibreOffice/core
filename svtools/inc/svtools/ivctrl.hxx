@@ -65,7 +65,7 @@ class SvxIconChoiceCtrlEntry
 {
     Image aImage;
 
-    String aText;
+    OUString aText;
     String aQuickHelpText;
     void*  pUserData;
 
@@ -116,8 +116,8 @@ public:
 
     void                    SetImage ( const Image& rImage ) { aImage = rImage; }
     Image                   GetImage () const { return aImage; }
-    void                    SetText ( const String& rText ) { aText = rText; }
-    String                  GetText () const { return aText; }
+    void                    SetText ( const OUString& rText ) { aText = rText; }
+    OUString                GetText () const { return aText; }
     String SVT_DLLPUBLIC    GetDisplayText() const;
     void                    SetQuickHelpText( const String& rText ) { aQuickHelpText = rText; }
     String                  GetQuickHelpText() const { return aQuickHelpText; }
@@ -155,7 +155,7 @@ enum SvxIconChoiceCtrlColumnAlign
 
 class SvxIconChoiceCtrlColumnInfo
 {
-    String                  aColText;
+    OUString                aColText;
     Image                   aColImage;
     long                    nWidth;
     SvxIconChoiceCtrlColumnAlign    eAlignment;
@@ -167,13 +167,13 @@ public:
                                 nWidth( nWd ), eAlignment( eAlign ), nSubItem( nSub ) {}
                             SvxIconChoiceCtrlColumnInfo( const SvxIconChoiceCtrlColumnInfo& );
 
-    void                    SetText( const String& rText ) { aColText = rText; }
+    void                    SetText( const OUString& rText ) { aColText = rText; }
     void                    SetImage( const Image& rImg ) { aColImage = rImg; }
     void                    SetWidth( long nWd ) { nWidth = nWd; }
     void                    SetAlignment( SvxIconChoiceCtrlColumnAlign eAlign ) { eAlignment = eAlign; }
     void                    SetSubItem( sal_uInt16 nSub) { nSubItem = nSub; }
 
-    const String&           GetText() const { return aColText; }
+    const OUString&         GetText() const { return aColText; }
     const Image&            GetImage() const { return aColImage; }
     long                    GetWidth() const { return nWidth; }
     SvxIconChoiceCtrlColumnAlign    GetAlignment() const { return eAlignment; }

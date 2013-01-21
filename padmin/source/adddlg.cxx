@@ -346,7 +346,7 @@ APNamePage::~APNamePage()
 
 bool APNamePage::check()
 {
-    return m_aNameEdt.GetText().Len();
+    return !m_aNameEdt.GetText().isEmpty();
 }
 
 void APNamePage::fill( PrinterInfo& rInfo )
@@ -455,7 +455,7 @@ IMPL_LINK( APCommandPage, ModifyHdl, ComboBox*, pBox )
 {
     if( pBox == &m_aCommandBox )
     {
-        m_pParent->enableNext( m_aCommandBox.GetText().Len() );
+        m_pParent->enableNext( !m_aCommandBox.GetText().isEmpty() );
     }
     return 0;
 }

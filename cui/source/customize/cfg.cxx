@@ -2876,7 +2876,7 @@ IMPL_LINK(SvxMainMenuOrganizerDialog, ModifyHdl, Edit*, pEdit)
     (void)pEdit;
 
     // if the Edit control is empty do not change the name
-    if ( aMenuNameEdit.GetText().Equals( String() ) )
+    if ( aMenuNameEdit.GetText() == "" )
     {
         return 0;
     }

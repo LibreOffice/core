@@ -438,35 +438,35 @@ sal_Bool SvxMeasurePage::FillItemSet( SfxItemSet& rAttrs)
     sal_Int32    nValue;
     TriState eState;
 
-    if( aMtrFldLineDist.GetText() != aMtrFldLineDist.GetSavedValue() )
+    if( aMtrFldLineDist.GetText() != OUString(aMtrFldLineDist.GetSavedValue()) )
     {
         nValue = GetCoreValue( aMtrFldLineDist, eUnit );
         rAttrs.Put( SdrMeasureLineDistItem( nValue ) );
         bModified = sal_True;
     }
 
-    if( aMtrFldHelplineOverhang.GetText() != aMtrFldHelplineOverhang.GetSavedValue() )
+    if( aMtrFldHelplineOverhang.GetText() != OUString(aMtrFldHelplineOverhang.GetSavedValue()) )
     {
         nValue = GetCoreValue( aMtrFldHelplineOverhang, eUnit );
         rAttrs.Put( SdrMeasureHelplineOverhangItem( nValue ) );
         bModified = sal_True;
     }
 
-    if( aMtrFldHelplineDist.GetText() != aMtrFldHelplineDist.GetSavedValue() )
+    if( aMtrFldHelplineDist.GetText() != OUString(aMtrFldHelplineDist.GetSavedValue()) )
     {
         nValue = GetCoreValue( aMtrFldHelplineDist, eUnit );
         rAttrs.Put( SdrMeasureHelplineDistItem( nValue ) );
         bModified = sal_True;
     }
 
-    if( aMtrFldHelpline1Len.GetText() != aMtrFldHelpline1Len.GetSavedValue() )
+    if( aMtrFldHelpline1Len.GetText() != OUString(aMtrFldHelpline1Len.GetSavedValue()) )
     {
         nValue = GetCoreValue( aMtrFldHelpline1Len, eUnit );
         rAttrs.Put( SdrMeasureHelpline1LenItem( nValue ) );
         bModified = sal_True;
     }
 
-    if( aMtrFldHelpline2Len.GetText() != aMtrFldHelpline2Len.GetSavedValue() )
+    if( aMtrFldHelpline2Len.GetText() != OUString(aMtrFldHelpline2Len.GetSavedValue()) )
     {
         nValue = GetCoreValue( aMtrFldHelpline2Len, eUnit );
         rAttrs.Put( SdrMeasureHelpline2LenItem( nValue ) );
@@ -480,7 +480,7 @@ sal_Bool SvxMeasurePage::FillItemSet( SfxItemSet& rAttrs)
         bModified = sal_True;
     }
 
-    if( aMtrFldDecimalPlaces.GetText() != aMtrFldDecimalPlaces.GetSavedValue() )
+    if( aMtrFldDecimalPlaces.GetText() != OUString(aMtrFldDecimalPlaces.GetSavedValue()) )
     {
         nValue = static_cast<sal_Int32>(aMtrFldDecimalPlaces.GetValue());
         rAttrs.Put(

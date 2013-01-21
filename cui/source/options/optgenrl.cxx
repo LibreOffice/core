@@ -483,7 +483,7 @@ sal_Bool SvxGeneralTabPage::GetAddress_Impl()
 
     // modified?
     for (unsigned i = 0; i != vFields.size(); ++i)
-        if (vFields[i]->aEdit.GetSavedValue() != vFields[i]->aEdit.GetText())
+        if (OUString(vFields[i]->aEdit.GetSavedValue()) != vFields[i]->aEdit.GetText())
             return true;
     return false;
 }

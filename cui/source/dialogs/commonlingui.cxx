@@ -57,13 +57,13 @@ long SvxClickInfoCtr::PreNotify( NotifyEvent& rNEvt )
 }
 
 //-----------------------------------------------------------------------------
-void SvxClickInfoCtr::SetText( const XubString& rStr )
+void SvxClickInfoCtr::SetText( const OUString& rStr )
 {
     aFixedInfo.SetText(rStr );
 }
 
 //-----------------------------------------------------------------------------
-XubString SvxClickInfoCtr::GetText() const
+OUString SvxClickInfoCtr::GetText() const
 {
     return aFixedInfo.GetText();
 }

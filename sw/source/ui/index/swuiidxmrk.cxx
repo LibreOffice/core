@@ -488,7 +488,7 @@ void SwIndexMarkPane::InsertMark()
             aDesc.SetTOUName(aName);
         }
     }
-    if (aOrgStr != m_pEntryED->GetText())
+    if (OUString(aOrgStr) != m_pEntryED->GetText())
         aDesc.SetAltStr(m_pEntryED->GetText());
     sal_Bool bApplyAll = m_pApplyToAllCB->IsChecked();
     sal_Bool bWordOnly = m_pSearchCaseWordOnlyCB->IsChecked();
@@ -516,7 +516,7 @@ void SwIndexMarkPane::InsertMark()
 void SwIndexMarkPane::UpdateMark()
 {
     String  aAltText(m_pEntryED->GetText());
-    String* pAltText = aOrgStr != m_pEntryED->GetText() ? &aAltText : 0;
+    String* pAltText = OUString(aOrgStr) != m_pEntryED->GetText() ? &aAltText : 0;
     //empty alternative texts are not allowed
     if(pAltText && !pAltText->Len())
         return;
@@ -613,7 +613,7 @@ void SwNewUserIdxDlg::Apply()
 
 IMPL_LINK( SwNewUserIdxDlg, ModifyHdl, Edit*, pEdit)
 {
-    aOKPB.Enable(pEdit->GetText().Len() && !pDlg->IsTOXType(pEdit->GetText()));
+    aOKPB.Enable(!pEdit->GetText().isEmpty() && !pDlg->IsTOXType(pEdit->GetText()));
     return 0;
 }
 
@@ -680,19 +680,19 @@ IMPL_LINK( SwIndexMarkPane, ModifyHdl, ListBox *, pBox )
             bKey2HasText    = sal_False;
         if(nPos == POS_INDEX)
         {
-            if(m_pEntryED->GetText().Len())
+            if(!m_pEntryED->GetText().isEmpty())
                 bEntryHasText = sal_True;
             m_pPhoneticED0->SetText(GetDefaultPhoneticReading(m_pEntryED->GetText()));
 
             bKeyEnable = sal_True;
             m_pKey1DCB->SetText(m_pKey1DCB->GetEntry(nKey1Pos));
             m_pPhoneticED1->SetText(GetDefaultPhoneticReading(m_pKey1DCB->GetText()));
-            if(m_pKey1DCB->GetText().Len() > 0)
+            if(!m_pKey1DCB->GetText().isEmpty())
             {
                 bKey1HasText = bSetKey2 = bKey2Enable = sal_True;
                 m_pKey2DCB->SetText(m_pKey2DCB->GetEntry(nKey2Pos));
                 m_pPhoneticED2->SetText(GetDefaultPhoneticReading(m_pKey2DCB->GetText()));
-                if(m_pKey2DCB->GetText().Len())
+                if(!m_pKey2DCB->GetText().isEmpty())
                     bKey2HasText = sal_True;
             }
         }
@@ -723,7 +723,7 @@ IMPL_LINK( SwIndexMarkPane, ModifyHdl, ListBox *, pBox )
     }
     else //m_pEntryED  !!m_pEntryED is not a ListBox but a Edit
     {
-        sal_Bool bHasText = (m_pEntryED->GetText().Len()>0);
+        sal_Bool bHasText = (!m_pEntryED->GetText().isEmpty());
         if(!bHasText)
         {
             m_pPhoneticED0->SetText(aEmptyStr);
@@ -736,7 +736,7 @@ IMPL_LINK( SwIndexMarkPane, ModifyHdl, ListBox *, pBox )
         m_pPhoneticED0->Enable(bHasText&&bIsPhoneticReadingEnabled);
     }
     m_pOKBT->Enable(!pSh->HasReadonlySel() &&
-        (m_pEntryED->GetText().Len() || pSh->GetCrsrCnt(sal_False)));
+        (!m_pEntryED->GetText().isEmpty() || pSh->GetCrsrCnt(sal_False)));
     return 0;
 }
 
@@ -904,15 +904,15 @@ IMPL_LINK( SwIndexMarkPane, PhoneticEDModifyHdl, Edit *, pEdit )
 {
     if (m_pPhoneticED0 == pEdit)
     {
-        bPhoneticED0_ChangedByUser = pEdit->GetText().Len()>0;
+        bPhoneticED0_ChangedByUser = !pEdit->GetText().isEmpty();
     }
     else if (m_pPhoneticED1 == pEdit)
     {
-        bPhoneticED1_ChangedByUser = pEdit->GetText().Len()>0;
+        bPhoneticED1_ChangedByUser = !pEdit->GetText().isEmpty();
     }
     else if (m_pPhoneticED2 == pEdit)
     {
-        bPhoneticED2_ChangedByUser = pEdit->GetText().Len()>0;
+        bPhoneticED2_ChangedByUser = !pEdit->GetText().isEmpty();
     }
     return 0;
 }
@@ -924,7 +924,7 @@ IMPL_LINK( SwIndexMarkPane, KeyDCBModifyHdl, ComboBox *, pBox )
 {
     if (m_pKey1DCB == pBox)
     {
-        sal_Bool bEnable = pBox->GetText().Len() > 0;
+        sal_Bool bEnable = !pBox->GetText().isEmpty();
         if(!bEnable)
         {
             m_pKey2DCB->SetText(aEmptyStr);
@@ -948,7 +948,7 @@ IMPL_LINK( SwIndexMarkPane, KeyDCBModifyHdl, ComboBox *, pBox )
     }
     else if (m_pKey2DCB == pBox)
     {
-        if(!(pBox->GetText().Len()>0))
+        if(pBox->GetText().isEmpty())
         {
             m_pPhoneticED2->SetText(aEmptyStr);
             bPhoneticED2_ChangedByUser = sal_False;
@@ -964,8 +964,8 @@ IMPL_LINK( SwIndexMarkPane, KeyDCBModifyHdl, ComboBox *, pBox )
                 m_pPhoneticED2->SetText(GetDefaultPhoneticReading(pBox->GetText()));
         }
     }
-    sal_Bool    bKey1HasText    = (0 != m_pKey1DCB->GetText().Len());
-    sal_Bool    bKey2HasText    = (0 != m_pKey2DCB->GetText().Len());
+    sal_Bool    bKey1HasText    = (!m_pKey1DCB->GetText().isEmpty());
+    sal_Bool    bKey2HasText    = (!m_pKey2DCB->GetText().isEmpty());
 
     m_pPhoneticFT1->Enable(bKey1HasText&&bIsPhoneticReadingEnabled);
     m_pPhoneticED1->Enable(bKey1HasText&bIsPhoneticReadingEnabled);

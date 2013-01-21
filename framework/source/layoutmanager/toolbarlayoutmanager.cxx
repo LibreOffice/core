@@ -1055,7 +1055,7 @@ void ToolbarLayoutManager::implts_createAddonsToolBars()
                     // Set generic title for add-on toolbar
                     SolarMutexGuard aGuard;
                     Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
-                    if ( pWindow->GetText().Len() == 0 )
+                    if ( pWindow->GetText().isEmpty() )
                         pWindow->SetText( aGenericAddonTitle );
                     if ( pWindow->GetType() == WINDOW_TOOLBOX )
                     {

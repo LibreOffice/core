@@ -257,13 +257,13 @@ private:
 
 inline sal_Bool SvxSearchDialog::HasSearchAttributes() const
 {
-    int bLen = aSearchAttrText.GetText().Len();
+    sal_Bool bLen = !aSearchAttrText.GetText().isEmpty();
     return ( aSearchAttrText.IsEnabled() && bLen );
 }
 
 inline sal_Bool SvxSearchDialog::HasReplaceAttributes() const
 {
-    int bLen = aReplaceAttrText.GetText().Len();
+    sal_Bool bLen = !aReplaceAttrText.GetText().isEmpty();
     return ( aReplaceAttrText.IsEnabled() && bLen );
 }
 

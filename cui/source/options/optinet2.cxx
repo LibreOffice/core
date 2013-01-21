@@ -414,49 +414,49 @@ sal_Bool SvxProxyTabPage::FillItemSet(SfxItemSet& )
             bModified = sal_True;
         }
 
-        if(aHttpProxyED.GetSavedValue() != aHttpProxyED.GetText())
+        if(OUString(aHttpProxyED.GetSavedValue()) != aHttpProxyED.GetText())
         {
             xPropertySet->setPropertyValue( aHttpProxyPN,
                 makeAny(rtl::OUString(aHttpProxyED.GetText())));
             bModified = sal_True;
         }
 
-        if ( aHttpPortED.GetSavedValue() != aHttpPortED.GetText() )
+        if ( OUString(aHttpPortED.GetSavedValue()) != aHttpPortED.GetText() )
         {
             xPropertySet->setPropertyValue( aHttpPortPN,
-                makeAny(aHttpPortED.GetText().ToInt32()));
+                makeAny(aHttpPortED.GetText().toInt32()));
             bModified = sal_True;
         }
 
-        if(aHttpsProxyED.GetSavedValue() != aHttpsProxyED.GetText())
+        if(OUString(aHttpsProxyED.GetSavedValue()) != aHttpsProxyED.GetText())
         {
             xPropertySet->setPropertyValue( aHttpsProxyPN,
                 makeAny(rtl::OUString(aHttpsProxyED.GetText())));
             bModified = sal_True;
         }
 
-        if ( aHttpsPortED.GetSavedValue() != aHttpsPortED.GetText() )
+        if ( OUString(aHttpsPortED.GetSavedValue()) != aHttpsPortED.GetText() )
         {
             xPropertySet->setPropertyValue( aHttpsPortPN,
-                makeAny(aHttpsPortED.GetText().ToInt32()));
+                makeAny(aHttpsPortED.GetText().toInt32()));
             bModified = sal_True;
         }
 
-        if(aFtpProxyED.GetSavedValue() != aFtpProxyED.GetText())
+        if(OUString(aFtpProxyED.GetSavedValue()) != aFtpProxyED.GetText())
         {
             xPropertySet->setPropertyValue( aFtpProxyPN,
                 makeAny( rtl::OUString(aFtpProxyED.GetText())));
             bModified = sal_True;
         }
 
-        if ( aFtpPortED.GetSavedValue() != aFtpPortED.GetText() )
+        if ( OUString(aFtpPortED.GetSavedValue()) != aFtpPortED.GetText() )
         {
             xPropertySet->setPropertyValue( aFtpPortPN,
-                makeAny(aFtpPortED.GetText().ToInt32()));
+                makeAny(aFtpPortED.GetText().toInt32()));
             bModified = sal_True;
         }
 
-        if ( aNoProxyForED.GetSavedValue() != aNoProxyForED.GetText() )
+        if ( OUString(aNoProxyForED.GetSavedValue()) != aNoProxyForED.GetText() )
         {
             xPropertySet->setPropertyValue( aNoProxyDescPN,
                 makeAny( rtl::OUString(aNoProxyForED.GetText())));
@@ -1386,7 +1386,7 @@ SfxTabPage*  SvxEMailTabPage::Create( Window* pParent, const SfxItemSet& rAttrSe
 sal_Bool SvxEMailTabPage::FillItemSet( SfxItemSet& )
 {
     sal_Bool bMailModified = sal_False;
-    if(!pImpl->aMailConfig.bROProgram && aMailerURLED.GetSavedValue() != aMailerURLED.GetText())
+    if(!pImpl->aMailConfig.bROProgram && OUString(aMailerURLED.GetSavedValue()) != aMailerURLED.GetText())
     {
         pImpl->aMailConfig.sProgram = aMailerURLED.GetText();
         bMailModified = sal_True;

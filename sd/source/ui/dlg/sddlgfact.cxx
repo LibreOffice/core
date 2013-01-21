@@ -114,11 +114,11 @@ void SdAbstractTabDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
      pDlg->SetInputSet( pInSet );
 }
 //From class Window.
-void SdAbstractTabDialog_Impl::SetText( const XubString& rStr )
+void SdAbstractTabDialog_Impl::SetText( const OUString& rStr )
 {
     pDlg->SetText( rStr );
 }
-String SdAbstractTabDialog_Impl::GetText() const
+OUString SdAbstractTabDialog_Impl::GetText() const
 {
     return pDlg->GetText();
 }
@@ -150,11 +150,11 @@ void AbstractBulletDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
      static_cast< ::sd::OutlineBulletDlg*>(pDlg)->SetInputSet( pInSet );
 }
 //From class Window.
-void AbstractBulletDialog_Impl::SetText( const XubString& rStr )
+void AbstractBulletDialog_Impl::SetText( const OUString& rStr )
 {
     static_cast< ::sd::OutlineBulletDlg*>(pDlg)->SetText( rStr );
 }
-String AbstractBulletDialog_Impl::GetText() const
+OUString AbstractBulletDialog_Impl::GetText() const
 {
     return static_cast< ::sd::OutlineBulletDlg*>(pDlg)->GetText();
 }
@@ -187,12 +187,12 @@ void SdPresLayoutTemplateDlg_Impl::SetInputSet( const SfxItemSet* pInSet )
      pDlg->SetInputSet( pInSet );
 }
 
-void SdPresLayoutTemplateDlg_Impl::SetText( const XubString& rStr )
+void SdPresLayoutTemplateDlg_Impl::SetText( const OUString& rStr )
 {
     pDlg->SetText( rStr );
 }
 
-String SdPresLayoutTemplateDlg_Impl::GetText() const
+OUString SdPresLayoutTemplateDlg_Impl::GetText() const
 {
     return pDlg->GetText();
 }
@@ -262,7 +262,7 @@ void AbstractSdSnapLineDlg_Impl::SetInputFields(sal_Bool bEnableX, sal_Bool bEna
 {
     pDlg->SetInputFields(bEnableX, bEnableY);
 }
-void AbstractSdSnapLineDlg_Impl::SetText( const XubString& rStr )
+void AbstractSdSnapLineDlg_Impl::SetText( const OUString& rStr )
 {
     pDlg->SetText( rStr );
 }
@@ -344,11 +344,11 @@ const SfxItemSet* SdAbstractSfxDialog_Impl::GetOutputItemSet() const
 {
     return pDlg->GetOutputItemSet();
 }
-void SdAbstractSfxDialog_Impl::SetText( const XubString& rStr )
+void SdAbstractSfxDialog_Impl::SetText( const OUString& rStr )
 {
     pDlg->SetText( rStr );
 }
-String SdAbstractSfxDialog_Impl::GetText() const
+OUString SdAbstractSfxDialog_Impl::GetText() const
 {
     return pDlg->GetText();
 }

@@ -276,9 +276,9 @@ IMPL_LINK_NOARG(SwFldFuncPage, TypeHdl)
         if(bDropDown)
             ListEnableHdl(0);
 
-        if( aNameFT.GetText() != sOldNameFT )
+        if( aNameFT.GetText() != OUString(sOldNameFT) )
             aNameFT.SetText(sOldNameFT);
-        if (aValueFT.GetText() != sOldValueFT)
+        if (aValueFT.GetText() != OUString(sOldValueFT))
             aValueFT.SetText(sOldValueFT);
 
         switch (nTypeId)
@@ -354,7 +354,7 @@ IMPL_LINK_NOARG(SwFldFuncPage, TypeHdl)
                     aNameED.SetDropEnable(sal_True);
                     bName = sal_True;
 
-                    const sal_uInt16 nLen = aNameED.GetText().Len();
+                    const sal_Int32 nLen = aNameED.GetText().getLength();
                     if( !nLen || nLen > MAX_COMBINED_CHARACTERS )
                         bInsert = sal_False;
                     aNameED.SetAccessibleName(aNameFT.GetText());
@@ -464,7 +464,7 @@ IMPL_LINK( SwFldFuncPage, ListModifyHdl, Control*, pControl)
 IMPL_LINK_NOARG(SwFldFuncPage, ListEnableHdl)
 {
     //enable "Add" button when text is in the Edit that's not already member of the box
-    aListAddPB.Enable(aListItemED.GetText().Len() &&
+    aListAddPB.Enable(!aListItemED.GetText().isEmpty() &&
                 LISTBOX_ENTRY_NOTFOUND == aListItemsLB.GetEntryPos(aListItemED.GetText()));
     sal_Bool bEnableButtons = aListItemsLB.GetSelectEntryCount() > 0;
     aListRemovePB.Enable(bEnableButtons);
@@ -593,11 +593,11 @@ sal_Bool SwFldFuncPage::FillItemSet(SfxItemSet& )
     }
 
     if (!IsFldEdit() ||
-        aNameED.GetSavedValue() != aNameED.GetText() ||
-        aValueED.GetSavedValue() != aValueED.GetText() ||
-        aCond1ED.GetSavedValue() != aCond1ED.GetText() ||
-        aCond2ED.GetSavedValue() != aCond2ED.GetText() ||
-        aListNameED.GetSavedValue() != aListNameED.GetText() ||
+        OUString(aNameED.GetSavedValue()) != aNameED.GetText() ||
+        OUString(aValueED.GetSavedValue()) != aValueED.GetText() ||
+        OUString(aCond1ED.GetSavedValue()) != aCond1ED.GetText() ||
+        OUString(aCond2ED.GetSavedValue()) != aCond2ED.GetText() ||
+        OUString(aListNameED.GetSavedValue()) != aListNameED.GetText() ||
         bDropDownLBChanged ||
         nOldFormat != nFormat)
     {

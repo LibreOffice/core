@@ -549,7 +549,7 @@ xub_StrLen FormulaDlg_Impl::GetFunctionPos(xub_StrLen nPos)
                     {
                         if ( nBracketCount < 1 )
                         {
-                            nFuncPos= pMEdit->GetText().Len();
+                            nFuncPos= pMEdit->GetText().getLength();
                         }
                         else if ( !bFlag )
                         {

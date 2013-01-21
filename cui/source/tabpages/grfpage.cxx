@@ -237,8 +237,8 @@ sal_Bool SvxGrfCropPage::FillItemSet(SfxItemSet &rSet)
 {
     const SfxItemPool& rPool = *rSet.GetPool();
     sal_Bool bModified = sal_False;
-    if( aWidthMF.GetSavedValue() != aWidthMF.GetText() ||
-        aHeightMF.GetSavedValue() != aHeightMF.GetText() )
+    if( OUString(aWidthMF.GetSavedValue()) != aWidthMF.GetText() ||
+        OUString(aHeightMF.GetSavedValue()) != aHeightMF.GetText() )
     {
         sal_uInt16 nW = rPool.GetWhich( SID_ATTR_GRAF_FRMSIZE );
         FieldUnit eUnit = MapToFieldUnit( rSet.GetPool()->GetMetric( nW ));
@@ -256,9 +256,9 @@ sal_Bool SvxGrfCropPage::FillItemSet(SfxItemSet &rSet)
             aSz = (const SvxSizeItem&)GetItemSet().Get( nW );
 
         Size aTmpSz( aSz.GetSize() );
-        if( aWidthMF.GetText() != aWidthMF.GetSavedValue() )
+        if( aWidthMF.GetText() != OUString(aWidthMF.GetSavedValue()) )
             aTmpSz.Width() = lcl_GetValue( aWidthMF, eUnit );
-        if( aHeightMF.GetText() != aHeightMF.GetSavedValue() )
+        if( aHeightMF.GetText() != OUString(aHeightMF.GetSavedValue()) )
             aTmpSz.Height() = lcl_GetValue( aHeightMF, eUnit );
         aSz.SetSize( aTmpSz );
         aWidthMF.SaveValue();

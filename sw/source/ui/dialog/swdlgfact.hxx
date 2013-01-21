@@ -90,8 +90,8 @@ class SwAbstractSfxDialog_Impl :public SfxAbstractDialog
 {
     DECL_ABSTDLG_BASE(SwAbstractSfxDialog_Impl,SfxModalDialog)
     virtual const SfxItemSet*   GetOutputItemSet() const;
-    virtual void        SetText( const XubString& rStr );
-    virtual String      GetText() const;
+    virtual void        SetText( const OUString& rStr );
+    virtual OUString    GetText() const;
 };
 // add for SwAddrDlg,SwDropCapsDlg , SwBackgroundDlg  SwNumFmtDlg SwWrapDlg SwBorderDlg, SwFldEditDlg  end
 
@@ -138,8 +138,8 @@ class AbstractTabDialog_Impl : virtual public SfxAbstractTabDialog
     virtual const sal_uInt16*       GetInputRanges( const SfxItemPool& pItem );
     virtual void                SetInputSet( const SfxItemSet* pInSet );
         //From class Window.
-    virtual void        SetText( const XubString& rStr );
-    virtual String      GetText() const;
+    virtual void        SetText( const OUString& rStr );
+    virtual OUString    GetText() const;
 };
 //add for SwCharDlg, SwEnvDlg ,SwFootNoteOptionDlg SwParaDlg  SwTableTabDlg end
 
@@ -195,8 +195,8 @@ class AbstractSwLabDlg_Impl  : public AbstractSwLabDlg
     virtual const sal_uInt16*       GetInputRanges( const SfxItemPool& pItem );
     virtual void                SetInputSet( const SfxItemSet* pInSet );
         //From class Window.
-    virtual void        SetText( const XubString& rStr );
-    virtual String      GetText() const;
+    virtual void        SetText( const OUString& rStr );
+    virtual OUString    GetText() const;
      virtual const String& GetBusinessCardStr() const;
      virtual Printer *GetPrt();
 };
@@ -231,8 +231,8 @@ class AbstractSwFldDlg_Impl : public AbstractSwFldDlg //add for SwFldDlg
     virtual const sal_uInt16*       GetInputRanges( const SfxItemPool& pItem );
     virtual void                SetInputSet( const SfxItemSet* pInSet );
         //From class Window.
-    virtual void        SetText( const XubString& rStr );
-    virtual String      GetText() const;
+    virtual void        SetText( const OUString& rStr );
+    virtual OUString    GetText() const;
     virtual void                Start( sal_Bool bShow = sal_True );  //this method from SfxTabDialog
     virtual void                ShowPage( sal_uInt16 nId );// this method from SfxTabDialog
     virtual void                Initialize(SfxChildWinInfo *pInfo);
@@ -291,7 +291,7 @@ class AbstractInsFootNoteDlg_Impl : public AbstractInsFootNoteDlg
     virtual String          GetStr();
     //from class Window
     virtual void    SetHelpId( const rtl::OString& sHelpId );
-    virtual void    SetText( const XubString& rStr );
+    virtual void    SetText( const OUString& rStr );
 };
 //for SwInsFootNoteDlg end
 
@@ -311,7 +311,7 @@ class SwJavaEditDialog;
 class AbstractJavaEditDialog_Impl : public AbstractJavaEditDialog
 {
     DECL_ABSTDLG_BASE(AbstractJavaEditDialog_Impl,SwJavaEditDialog)
-    virtual String              GetText();
+    virtual OUString                GetText();
     virtual String              GetType();
     virtual sal_Bool                IsUrl();
     virtual sal_Bool                IsNew();

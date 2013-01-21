@@ -643,7 +643,7 @@ short SfxInsertFloatingFrameDialog::Execute()
     if ( bOK && ( nRet = Dialog::Execute() ) == RET_OK )
     {
         ::rtl::OUString aURL;
-        if ( m_pEDURL->GetText().Len() )
+        if ( !m_pEDURL->GetText().isEmpty() )
         {
             // URL can be a valid and absolute URL or a system file name
             INetURLObject aObj;
@@ -684,13 +684,13 @@ short SfxInsertFloatingFrameDialog::Execute()
 
                 long lMarginWidth;
                 if ( !m_pCBMarginWidthDefault->IsChecked() )
-                    lMarginWidth = (long) m_pNMMarginWidth->GetText().ToInt32();
+                    lMarginWidth = (long) m_pNMMarginWidth->GetText().toInt32();
                 else
                     lMarginWidth = SIZE_NOT_SET;
 
                 long lMarginHeight;
                 if ( !m_pCBMarginHeightDefault->IsChecked() )
-                    lMarginHeight = (long) m_pNMMarginHeight->GetText().ToInt32();
+                    lMarginHeight = (long) m_pNMMarginHeight->GetText().toInt32();
                 else
                     lMarginHeight = SIZE_NOT_SET;
 

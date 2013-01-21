@@ -244,7 +244,7 @@ public:
     const Size&     GetMaxAutoPaperSize() const;
     void            SetMaxAutoPaperSize( const Size& rSz );
 
-    String          GetText( LineEnd eEnd = LINEEND_LF ) const;
+    OUString        GetText( LineEnd eEnd = LINEEND_LF ) const;
     String          GetText( const ESelection& rSelection, const LineEnd eEnd = LINEEND_LF ) const;
     sal_uInt32      GetTextLen() const;
     sal_uInt32      GetTextHeight() const;
@@ -272,7 +272,7 @@ public:
     ESelection      GetWord( const ESelection& rSelection, sal_uInt16 nWordType ) const;
 
     void            Clear();
-    void            SetText( const String& rStr );
+    void            SetText( const OUString& rStr );
 
     EditTextObject* CreateTextObject();
     EditTextObject* CreateTextObject( sal_uInt16 nPara, sal_uInt16 nParas = 1 );

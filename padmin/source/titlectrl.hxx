@@ -46,8 +46,8 @@ public:
     void SetImage( const Image& rImage );
     const Image& GetImage() const { return m_aImage; }
 
-    virtual void SetText( const String& rText );
-    virtual String GetText() const { return m_aText; }
+    virtual void SetText( const OUString& rText );
+    virtual OUString GetText() const { return m_aText; }
 
     void SetBackgroundColor( const Color& rColor );
     const Color& GetBackgroundColor() const { return m_aBGColor; }

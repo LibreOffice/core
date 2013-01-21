@@ -1820,11 +1820,11 @@ void ToolBox::ImplFillLayoutData() const
 
 // -----------------------------------------------------------------------
 
-String ToolBox::GetDisplayText() const
+OUString ToolBox::GetDisplayText() const
 {
     if( ! mpData->m_pLayoutData )
         ImplFillLayoutData();
-    return mpData->m_pLayoutData ? mpData->m_pLayoutData->m_aDisplayText : String();
+    return mpData->m_pLayoutData ? OUString(mpData->m_pLayoutData->m_aDisplayText) : OUString();
 }
 
 // -----------------------------------------------------------------------

@@ -458,7 +458,7 @@ IMPL_LINK_NOARG(LicenseDialog, AcceptBtnHdl)
 void LicenseDialog::EnableControls()
 {
     if( !bEndReached &&
-        ( aLicenseML.IsEndReached() || !aLicenseML.GetText().Len() ) )
+        ( aLicenseML.IsEndReached() || aLicenseML.GetText().isEmpty() ) )
         bEndReached = sal_True;
 
     if ( bEndReached )

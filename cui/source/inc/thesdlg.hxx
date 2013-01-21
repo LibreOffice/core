@@ -58,8 +58,8 @@ public:
 
 class AlternativesExtraData
 {
-    String  sText;
-    bool    bHeader;
+    OUString  sText;
+    bool      bHeader;
 
 public:
     AlternativesExtraData() : bHeader( false ) {}
@@ -70,7 +70,7 @@ public:
         }
 
     bool  IsHeader() const          { return bHeader; }
-    const String& GetText() const   { return sText; }
+    const OUString& GetText() const   { return sText; }
 };
 
 class ThesaurusAlternativesCtrl
@@ -118,8 +118,8 @@ public:
 
     // Edit
     virtual void        Modify();
-    virtual void        SetText( const XubString& rStr );
-    virtual void        SetText( const XubString& rStr, const Selection& rNewSelection );
+    virtual void        SetText( const OUString& rStr );
+    virtual void        SetText( const OUString& rStr, const Selection& rNewSelection );
 };
 
 class SvxThesaurusDialog : public SvxStandardDialog

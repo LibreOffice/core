@@ -102,7 +102,7 @@ public:
     virtual void HideDeleteBtn() = 0;
     virtual void SetInputFields(sal_Bool bEnableX, sal_Bool bEnableY) = 0;
     //from class ::Window
-    virtual void    SetText( const XubString& rStr ) = 0;
+    virtual void    SetText( const OUString& rStr ) = 0;
 };
 
 class AbstractSdInsertLayerDlg : public VclAbstractDialog  //add for SdInsertLayerDlg

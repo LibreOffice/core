@@ -179,7 +179,7 @@ SwSaveWarningBox_Impl::~SwSaveWarningBox_Impl()
 
 IMPL_LINK( SwSaveWarningBox_Impl, ModifyHdl, Edit*, pEdit)
 {
-    aOKPB.Enable(pEdit->GetText().Len() > 0);
+    aOKPB.Enable(!pEdit->GetText().isEmpty());
     return 0;
 }
 
@@ -206,7 +206,7 @@ SwSendQueryBox_Impl::~SwSendQueryBox_Impl()
 
 IMPL_LINK( SwSendQueryBox_Impl, ModifyHdl, Edit*, pEdit)
 {
-    aOKPB.Enable(bIsEmptyAllowed  || (pEdit->GetText().Len() > 0));
+    aOKPB.Enable(bIsEmptyAllowed  || !pEdit->GetText().isEmpty());
     return 0;
 }
 
@@ -528,7 +528,7 @@ IMPL_LINK(SwMailMergeOutputPage, OutputTypeHdl_Impl, RadioButton*, pButton)
 
         if(!m_aFromRB.IsChecked())
             m_aSendAllRB.Check();
-        if(!m_aAttachmentED.GetText().Len())
+        if(m_aAttachmentED.GetText().isEmpty())
         {
             String sAttach( m_sDefaultAttachmentST );
             sAttach += '.';
@@ -626,7 +626,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveStartHdl_Impl, PushButton*, pButton)
         {
             INetURLObject aURL = pDocShell->GetMedium()->GetURLObject();
             //update the attachment name
-            if(!m_aAttachmentED.GetText().Len())
+            if(m_aAttachmentED.GetText().isEmpty())
             {
                 if ( pDocShell->HasName() )
                 {
@@ -1098,7 +1098,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         return 0;
     ::rtl::OUString sMimeType = pSfxFlt->GetMimeType();
 
-    if(!m_aSubjectED.GetText().Len())
+    if(m_aSubjectED.GetText().isEmpty())
     {
         SwSendQueryBox_Impl aQuery(pButton, m_sNoSubjectQueryST);
         aQuery.SetIsEmptyTextAllowed(true);
@@ -1111,7 +1111,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         else
             return 0;
     }
-    if(!bAsBody && !m_aAttachmentED.GetText().Len())
+    if(!bAsBody && m_aAttachmentED.GetText().isEmpty())
     {
         SwSendQueryBox_Impl aQuery(pButton, m_sNoAttachmentNameST);
         aQuery.SetIsEmptyTextAllowed(false);

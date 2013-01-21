@@ -385,7 +385,7 @@ void SvxFontSubstTabPage::CheckEnable()
         sEntry += aFont2CB.GetText();
 
         // because of OS/2 optimization error (Bug #56267) a bit more intricate:
-        if (!aFont1CB.GetText().Len() || !aFont2CB.GetText().Len())
+        if (aFont1CB.GetText().isEmpty() || aFont2CB.GetText().isEmpty())
             bApply = sal_False;
         else if(aFont1CB.GetText() == aFont2CB.GetText())
             bApply = sal_False;

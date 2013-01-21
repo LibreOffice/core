@@ -300,7 +300,7 @@ DBG_NAME(OTextConnectionHelper)
             aErrorText.SearchAndReplaceAscii("#1",m_aFieldSeparatorLabel.GetText());
             pErrorWin = &m_aFieldSeparator;
         }
-        else if (!m_aDecimalSeparator.GetText().Len())
+        else if (m_aDecimalSeparator.GetText().isEmpty())
         {   // No DecimalSeparator
             aErrorText = String(ModuleRes(STR_AUTODELIMITER_MISSING));
             aErrorText.SearchAndReplaceAscii("#1",m_aDecimalSeparatorLabel.GetText());
@@ -386,25 +386,25 @@ DBG_NAME(OTextConnectionHelper)
 
         if ( ( m_nAvailableSections & TC_SEPARATORS ) != 0 )
         {
-            if( m_aFieldSeparator.GetText() != m_aFieldSeparator.GetSavedValue() )
+            if( m_aFieldSeparator.GetText() != OUString(m_aFieldSeparator.GetSavedValue()) )
             {
                 rSet.Put( SfxStringItem(DSID_FIELDDELIMITER, GetSeparator( m_aFieldSeparator, m_aFieldSeparatorList) ) );
                 bChangedSomething = sal_True;
             }
-            if( m_aTextSeparator.GetText() != m_aTextSeparator.GetSavedValue() )
+            if( m_aTextSeparator.GetText() != OUString(m_aTextSeparator.GetSavedValue()) )
             {
                 rSet.Put( SfxStringItem(DSID_TEXTDELIMITER, GetSeparator( m_aTextSeparator, m_aTextSeparatorList) ) );
                 bChangedSomething = sal_True;
             }
 
-            if( m_aDecimalSeparator.GetText() != m_aDecimalSeparator.GetSavedValue() )
+            if( m_aDecimalSeparator.GetText() != OUString(m_aDecimalSeparator.GetSavedValue()) )
             {
-                rSet.Put( SfxStringItem(DSID_DECIMALDELIMITER, m_aDecimalSeparator.GetText().Copy(0, 1) ) );
+                rSet.Put( SfxStringItem(DSID_DECIMALDELIMITER, m_aDecimalSeparator.GetText().copy(0, 1) ) );
                 bChangedSomething = sal_True;
             }
-            if( m_aThousandsSeparator.GetText() != m_aThousandsSeparator.GetSavedValue() )
+            if( m_aThousandsSeparator.GetText() != OUString(m_aThousandsSeparator.GetSavedValue()) )
             {
-                rSet.Put( SfxStringItem(DSID_THOUSANDSDELIMITER, m_aThousandsSeparator.GetText().Copy(0,1) ) );
+                rSet.Put( SfxStringItem(DSID_THOUSANDSDELIMITER, m_aThousandsSeparator.GetText().copy(0,1) ) );
                 bChangedSomething = sal_True;
             }
         }
@@ -453,7 +453,7 @@ DBG_NAME(OTextConnectionHelper)
         xub_StrLen  nPos(rBox.GetEntryPos( rBox.GetText() ));
 
         if( nPos == COMBOBOX_ENTRY_NOTFOUND )
-            return rBox.GetText().Copy(0);
+            return rBox.GetText().copy(0);
 
         if ( !( &m_aTextSeparator == &rBox && nPos == (rBox.GetEntryCount()-1) ) )
             return rtl::OUString(

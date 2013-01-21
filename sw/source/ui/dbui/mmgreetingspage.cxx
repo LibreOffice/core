@@ -201,8 +201,8 @@ void SwMailMergeGreetingsPage::UpdatePreview()
         }
     }
 
-    String sPreview = bFemale ? m_aFemaleLB.GetSelectEntry() :
-        bNoValue ? m_aNeutralCB.GetText() : m_aMaleLB.GetSelectEntry();
+    String sPreview = bFemale ? OUString(m_aFemaleLB.GetSelectEntry()) :
+        bNoValue ? m_aNeutralCB.GetText() : OUString(m_aMaleLB.GetSelectEntry());
 
     sPreview = SwAddressPreview::FillData(sPreview, m_pWizard->GetConfigItem());
     m_aPreviewWIN.SetAddress(sPreview);
@@ -367,7 +367,7 @@ sal_Bool    SwMailMergeGreetingsPage::commitPage( ::svt::WizardTypes::CommitPage
         aAssignment[MM_PART_GENDER] = m_aFemaleColumnLB.GetSelectEntry();
         rConfig.SetColumnAssignment( rDBData, aAssignment );
     }
-    if(m_aFemaleFieldCB.GetText() != m_aFemaleFieldCB.GetSavedValue())
+    if(m_aFemaleFieldCB.GetText() != OUString(m_aFemaleFieldCB.GetSavedValue()))
         rConfig.SetFemaleGenderValue(m_aFemaleFieldCB.GetText());
 
     lcl_StoreGreetingsBox(m_aFemaleLB, rConfig, SwMailMergeConfigItem::FEMALE);
@@ -561,7 +561,7 @@ IMPL_LINK_NOARG(SwMailBodyDialog, OKHdl)
             aAssignment[MM_PART_GENDER] = ::rtl::OUString();
         rConfigItem.SetColumnAssignment( rDBData, aAssignment );
     }
-    if(m_aFemaleFieldCB.GetText() != m_aFemaleFieldCB.GetSavedValue())
+    if(m_aFemaleFieldCB.GetText() != OUString(m_aFemaleFieldCB.GetSavedValue()))
         rConfigItem.SetFemaleGenderValue(m_aFemaleFieldCB.GetText());
 
     EndDialog(RET_OK);

@@ -483,7 +483,7 @@ namespace
             aSize.Height() =
                 ItemToControl( nHeight, _pPage->GetItemSet().GetPool()->GetMetric( _nFontHeightWhich ), SFX_FUNIT_TWIP );
         }
-        else if ( _pFontSizeLB->GetText().Len() )
+        else if ( !_pFontSizeLB->GetText().isEmpty() )
             aSize.Height() = PointToTwips( static_cast<long>(_pFontSizeLB->GetValue() / 10) );
         else
             aSize.Height() = 200;   // default 10pt
@@ -1021,7 +1021,7 @@ sal_Bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLan
     // FontSize
     long nSize = static_cast<long>(pSizeBox->GetValue());
 
-    if ( !pSizeBox->GetText().Len() )   // GetValue() returns the min-value
+    if ( pSizeBox->GetText().isEmpty() )   // GetValue() returns the min-value
         nSize = 0;
     long nSavedSize = pSizeBox->GetSavedValue().ToInt32();
     bool bRel = true;
@@ -3223,7 +3223,7 @@ sal_Bool SvxCharPositionPage::FillItemSet( SfxItemSet& rSet )
 
     // Scale Width
     nWhich = GetWhich( SID_ATTR_CHAR_SCALEWIDTH );
-    if ( m_pScaleWidthMF->GetText() != m_pScaleWidthMF->GetSavedValue() )
+    if ( m_pScaleWidthMF->GetText() != OUString(m_pScaleWidthMF->GetSavedValue()) )
     {
         rSet.Put( SvxCharScaleWidthItem( (sal_uInt16)m_pScaleWidthMF->GetValue(), nWhich ) );
         bModified = sal_True;

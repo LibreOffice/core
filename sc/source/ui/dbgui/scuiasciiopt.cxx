@@ -670,7 +670,7 @@ IMPL_LINK( ScImportAsciiDlg, SeparatorHdl, Control*, pCtrl )
     if( (pCtrl == &aCkbOther) && aCkbOther.IsChecked() )
         aEdOther.GrabFocus();
     else if( pCtrl == &aEdOther )
-        aCkbOther.Check( aEdOther.GetText().Len() > 0 );
+        aCkbOther.Check( !aEdOther.GetText().isEmpty() );
 
     String aOldFldSeps( maFieldSeparators);
     maFieldSeparators = GetSeparators();

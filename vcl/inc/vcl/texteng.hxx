@@ -223,7 +223,7 @@ public:
                         TextEngine();
                         ~TextEngine();
 
-    void                SetText( const String& rStr );
+    void                SetText( const OUString& rStr );
     String              GetText( LineEnd aSeparator = LINEEND_LF ) const;
     String              GetText( const TextSelection& rSel, LineEnd aSeparator = LINEEND_LF ) const;
     String              GetTextLines( LineEnd aSeparator = LINEEND_LF ) const;

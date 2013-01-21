@@ -83,8 +83,8 @@ class SdAbstractTabDialog_Impl : public SfxAbstractTabDialog
     virtual const sal_uInt16*       GetInputRanges( const SfxItemPool& pItem );
     virtual void                SetInputSet( const SfxItemSet* pInSet );
         //From class Window.
-    virtual void        SetText( const XubString& rStr );
-    virtual String      GetText() const;
+    virtual void        SetText( const OUString& rStr );
+    virtual OUString    GetText() const;
 };
 //add for SdCharDlg end
 
@@ -100,8 +100,8 @@ class AbstractBulletDialog_Impl : public SfxAbstractTabDialog
     virtual const sal_uInt16*       GetInputRanges( const SfxItemPool& pItem );
     virtual void                SetInputSet( const SfxItemSet* pInSet );
         //From class Window.
-    virtual void        SetText( const XubString& rStr );
-    virtual String      GetText() const;
+    virtual void        SetText( const OUString& rStr );
+    virtual OUString    GetText() const;
 };
 //add for OutlineBulletDlg end
 
@@ -115,8 +115,8 @@ class SdPresLayoutTemplateDlg_Impl : public SfxAbstractTabDialog
     virtual const sal_uInt16*       GetInputRanges( const SfxItemPool& pItem );
     virtual void                SetInputSet( const SfxItemSet* pInSet );
         //From class Window.
-    virtual void        SetText( const XubString& rStr );
-    virtual String      GetText() const;
+    virtual void        SetText( const OUString& rStr );
+    virtual OUString    GetText() const;
 };
 
 // add for AssistentDlg
@@ -153,7 +153,7 @@ class AbstractSdSnapLineDlg_Impl : public AbstractSdSnapLineDlg
     virtual void HideDeleteBtn();
     virtual void SetInputFields(sal_Bool bEnableX, sal_Bool bEnableY);
     //from class Window
-    virtual void    SetText( const XubString& rStr );
+    virtual void    SetText( const OUString& rStr );
 };
 
 // add for SdInsertLayerDlg
@@ -216,8 +216,8 @@ class SdAbstractSfxDialog_Impl : public SfxAbstractDialog
 {
     DECL_ABSTDLG_BASE(SdAbstractSfxDialog_Impl,SfxModalDialog)
     virtual const SfxItemSet*   GetOutputItemSet() const;
-    virtual void        SetText( const XubString& rStr );
-    virtual String      GetText() const;
+    virtual void        SetText( const OUString& rStr );
+    virtual OUString    GetText() const;
 };
 
 // add for SdVectorizeDlg

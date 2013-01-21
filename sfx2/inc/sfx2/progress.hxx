@@ -24,6 +24,7 @@
 #include "sal/types.h"
 #include <tools/solar.h>
 #include <tools/link.hxx>
+#include <rtl/ustring.hxx>
 
 class String;
 class SfxObjectShell;
@@ -46,7 +47,7 @@ public:
                                          sal_Bool bWait = sal_True );
     virtual                 ~SfxProgress();
 
-    virtual void            SetText( const String& rText );
+    virtual void            SetText( const OUString& rText );
     sal_Bool                    SetStateText( sal_uIntPtr nVal, const String &rVal, sal_uIntPtr nNewRange = 0 );
     virtual sal_Bool            SetState( sal_uIntPtr nVal, sal_uIntPtr nNewRange = 0 );
     sal_uIntPtr                 GetState() const { return nVal; }

@@ -377,15 +377,15 @@ void SwSidebarWin::CheckMetaText()
 {
     const SvtSysLocale aSysLocale;
     const LocaleDataWrapper& rLocalData = aSysLocale.GetLocaleData();
-    String sMeta = GetAuthor();
-    if (sMeta.Len() == 0)
+    OUString sMeta = GetAuthor();
+    if (sMeta.isEmpty())
     {
-        sMeta = String(SW_RES(STR_NOAUTHOR));
+        sMeta = OUString(SW_RES(STR_NOAUTHOR));
     }
-    else if (sMeta.Len() > 22)
+    else if (sMeta.getLength() > 22)
     {
-        sMeta.Erase(20);
-        sMeta = sMeta + rtl::OUString("...");
+        sMeta.replaceAt(20, sMeta.getLength()-20, "");
+        sMeta = sMeta + OUString("...");
     }
     if ( mpMetadataAuthor->GetText() != sMeta )
     {
@@ -871,7 +871,7 @@ void SwSidebarWin::DeactivatePostIt()
 
 
     if ( !IsProtected() &&
-         Engine()->GetEditEngine().GetText()==String(EMPTYSTRING) )
+         Engine()->GetEditEngine().GetText()==OUString(EMPTYSTRING) )
     {
         mnEventId = Application::PostUserEvent( LINK( this, SwSidebarWin, DeleteHdl), 0 );
     }
@@ -903,7 +903,7 @@ void SwSidebarWin::ExecuteCommand(sal_uInt16 nSlot)
         {
             // if this note is empty, it will be deleted once losing the focus, so no reply, but only a new note
             // will be created
-            if (Engine()->GetEditEngine().GetText() != String(EMPTYSTRING))
+            if (Engine()->GetEditEngine().GetText() != OUString(EMPTYSTRING))
             {
                 OutlinerParaObject* pPara = new OutlinerParaObject(*GetOutlinerView()->GetEditView().CreateTextObject());
                 mrMgr.RegisterAnswer(pPara);

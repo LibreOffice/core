@@ -98,7 +98,7 @@ namespace sfx2
         virtual void Resize();
         virtual void StateChanged( StateChangedType i_nType );
         virtual void DataChanged( const DataChangedEvent& i_rDataChangedEvent );
-        virtual void SetText( const String& i_rText );
+        virtual void SetText( const OUString& i_rText );
 
         // DockingWindow overridables
         void EndDocking( const Rectangle& rRect, sal_Bool bFloatMode );
@@ -129,7 +129,7 @@ namespace sfx2
         void    impl_scheduleLayout();
 
     private:
-        String              m_sTitle;
+        OUString            m_sTitle;
         ToolBox             m_aToolbox;
         Window              m_aContentWindow;
 

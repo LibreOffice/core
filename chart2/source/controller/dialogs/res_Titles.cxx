@@ -188,13 +188,13 @@ void TitleResources::writeToResources( const TitleDialogData& rInput )
 
 void TitleResources::readFromResources( TitleDialogData& rOutput )
 {
-    rOutput.aExistenceList[0] = static_cast<sal_Bool>(m_aEd_Main.GetText().Len()!=0);
-    rOutput.aExistenceList[1] = static_cast<sal_Bool>(m_aEd_Sub.GetText().Len()!=0);
-    rOutput.aExistenceList[2] = static_cast<sal_Bool>(m_aEd_XAxis.GetText().Len()!=0);
-    rOutput.aExistenceList[3] = static_cast<sal_Bool>(m_aEd_YAxis.GetText().Len()!=0);
-    rOutput.aExistenceList[4] = static_cast<sal_Bool>(m_aEd_ZAxis.GetText().Len()!=0);
-    rOutput.aExistenceList[5] = static_cast<sal_Bool>(m_aEd_SecondaryXAxis.GetText().Len()!=0);
-    rOutput.aExistenceList[6] = static_cast<sal_Bool>(m_aEd_SecondaryYAxis.GetText().Len()!=0);
+    rOutput.aExistenceList[0] = static_cast<sal_Bool>(!m_aEd_Main.GetText().isEmpty());
+    rOutput.aExistenceList[1] = static_cast<sal_Bool>(!m_aEd_Sub.GetText().isEmpty());
+    rOutput.aExistenceList[2] = static_cast<sal_Bool>(!m_aEd_XAxis.GetText().isEmpty());
+    rOutput.aExistenceList[3] = static_cast<sal_Bool>(!m_aEd_YAxis.GetText().isEmpty());
+    rOutput.aExistenceList[4] = static_cast<sal_Bool>(!m_aEd_ZAxis.GetText().isEmpty());
+    rOutput.aExistenceList[5] = static_cast<sal_Bool>(!m_aEd_SecondaryXAxis.GetText().isEmpty());
+    rOutput.aExistenceList[6] = static_cast<sal_Bool>(!m_aEd_SecondaryYAxis.GetText().isEmpty());
 
     rOutput.aTextList[0] = m_aEd_Main.GetText();
     rOutput.aTextList[1] = m_aEd_Sub.GetText();

@@ -116,7 +116,7 @@ public:
     virtual String          GetStr() = 0;
     //from class Window
     virtual void    SetHelpId( const rtl::OString& sHelpId ) = 0;
-    virtual void    SetText( const XubString& rStr ) = 0;
+    virtual void    SetText( const OUString& rStr ) = 0;
 };
 
 class AbstractInsertGrfRulerDlg : public VclAbstractDialog  //add for SwInsertGrfRulerDlg
@@ -138,7 +138,7 @@ public:
 class AbstractJavaEditDialog : public VclAbstractDialog  //add for SwJavaEditDialog
 {
 public:
-    virtual String              GetText() = 0;
+    virtual OUString                GetText() = 0;
     virtual String              GetType() = 0;
     virtual sal_Bool                IsUrl() = 0;
     virtual sal_Bool                IsNew() = 0;

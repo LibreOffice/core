@@ -1619,7 +1619,7 @@ sal_Bool DbFormattedField::commitControl()
     DBG_ASSERT(&rField == m_pWindow, "DbFormattedField::commitControl : can't work with a window other than my own !");
     if (m_rColumn.IsNumeric())
     {
-        if (rField.GetText().Len() != 0)
+        if (!rField.GetText().isEmpty())
             aNewVal <<= rField.GetValue();
         // ein LeerString wird erst mal standardmaessig als void weitergereicht
     }

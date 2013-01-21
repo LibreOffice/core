@@ -1366,7 +1366,7 @@ void StatusBar::EndProgressMode()
 
 // -----------------------------------------------------------------------
 
-void StatusBar::SetText( const XubString& rText )
+void StatusBar::SetText( const OUString& rText )
 {
     if ( (!mbVisibleItems || (GetStyle() & WB_RIGHT)) && !mbProgressMode &&
          IsReallyVisible() && IsUpdateMode() )

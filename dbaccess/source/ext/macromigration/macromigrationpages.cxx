@@ -131,7 +131,7 @@ namespace dbmm
     void SaveDBDocPage::impl_updateLocationDependentItems()
     {
         updateDialogTravelUI();
-        m_aStartMigration.Show( m_aSaveAsLocation.GetText().Len() > 0 );
+        m_aStartMigration.Show( !m_aSaveAsLocation.GetText().isEmpty() );
     }
 
     //--------------------------------------------------------------------
@@ -172,7 +172,7 @@ namespace dbmm
         if ( !MacroMigrationPage::canAdvance() )
             return false;
 
-        return m_aSaveAsLocation.GetText().Len() > 0;
+        return !m_aSaveAsLocation.GetText().isEmpty();
     }
 
     //--------------------------------------------------------------------

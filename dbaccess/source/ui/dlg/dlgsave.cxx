@@ -355,7 +355,7 @@ IMPL_LINK(OSaveAsDlg, ButtonClickHdl, Button *, pButton)
 IMPL_LINK(OSaveAsDlg, EditModifyHdl, Edit *, pEdit )
 {
     if (pEdit == &m_pImpl->m_aTitle)
-        m_pImpl->m_aPB_OK.Enable(0 != m_pImpl->m_aTitle.GetText().Len());
+        m_pImpl->m_aPB_OK.Enable(!m_pImpl->m_aTitle.GetText().isEmpty());
     return 0;
 }
 // -----------------------------------------------------------------------------
@@ -429,7 +429,7 @@ void OSaveAsDlg::implInit()
 }
 // -----------------------------------------------------------------------------
 String OSaveAsDlg::getName() const      { return m_pImpl->m_aName; }
-String OSaveAsDlg::getCatalog() const   { return m_pImpl->m_aCatalog.IsVisible() ? m_pImpl->m_aCatalog.GetText() : String(); }
-String OSaveAsDlg::getSchema() const    { return m_pImpl->m_aSchema.IsVisible() ? m_pImpl->m_aSchema.GetText() : String(); }
+String OSaveAsDlg::getCatalog() const   { return m_pImpl->m_aCatalog.IsVisible() ? m_pImpl->m_aCatalog.GetText() : OUString(); }
+String OSaveAsDlg::getSchema() const    { return m_pImpl->m_aSchema.IsVisible() ? m_pImpl->m_aSchema.GetText() : OUString(); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

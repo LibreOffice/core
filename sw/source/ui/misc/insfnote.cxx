@@ -87,7 +87,7 @@ void SwInsFootNoteDlg::Apply()
 IMPL_LINK_NOARG_INLINE_START(SwInsFootNoteDlg, NumberCharHdl)
 {
     m_pNumberCharEdit->GrabFocus();
-    m_pOkBtn->Enable( m_pNumberCharEdit->GetText().Len() || bExtCharAvailable );
+    m_pOkBtn->Enable( !m_pNumberCharEdit->GetText().isEmpty() || bExtCharAvailable );
     return 0;
 }
 IMPL_LINK_NOARG_INLINE_END(SwInsFootNoteDlg, NumberCharHdl)
@@ -95,7 +95,7 @@ IMPL_LINK_NOARG_INLINE_END(SwInsFootNoteDlg, NumberCharHdl)
 IMPL_LINK_NOARG_INLINE_START(SwInsFootNoteDlg, NumberEditHdl)
 {
     m_pNumberCharBtn->Check( sal_True );
-    m_pOkBtn->Enable( 0 != m_pNumberCharEdit->GetText().Len() );
+    m_pOkBtn->Enable( !m_pNumberCharEdit->GetText().isEmpty() );
 
     return 0;
 }
@@ -143,7 +143,7 @@ IMPL_LINK_NOARG(SwInsFootNoteDlg, NumberExtCharHdl)
             }
 
             bExtCharAvailable = sal_True;
-            m_pOkBtn->Enable(0 != m_pNumberCharEdit->GetText().Len());
+            m_pOkBtn->Enable(!m_pNumberCharEdit->GetText().isEmpty());
         }
     }
     delete pDlg;

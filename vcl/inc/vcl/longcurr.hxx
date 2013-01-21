@@ -70,7 +70,7 @@ public:
     void                    SetValue( BigInt nNewValue );
     void                    SetUserValue( BigInt nNewValue );
     BigInt                  GetValue() const;
-    sal_Bool                    IsEmptyValue() const { return !GetField()->GetText().Len(); }
+    sal_Bool                IsEmptyValue() const { return GetField()->GetText().isEmpty(); }
 
     BigInt                  GetCorrectedValue() const { return mnCorrectedValue; }
 };

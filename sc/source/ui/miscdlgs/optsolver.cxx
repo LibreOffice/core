@@ -655,7 +655,7 @@ IMPL_LINK_NOARG(ScOptSolverDlg, TargetModifyHdl)
 {
     // modify handler for the target edit:
     //  select "Value of" if something is input into the edit
-    if ( maEdTargetValue.GetText().Len() )
+    if ( !maEdTargetValue.GetText().isEmpty() )
         maRbValue.Check();
     return 0;
 }

@@ -110,9 +110,9 @@ String SvDDELinkEditDialog::GetCmd() const
 IMPL_STATIC_LINK( SvDDELinkEditDialog, EditHdl_Impl, Edit *, pEdit )
 {
     (void)pEdit; // unused variable
-    pThis->aOKButton1.Enable( pThis->aEdDdeApp.GetText().Len() &&
-                              pThis->aEdDdeTopic.GetText().Len() &&
-                              pThis->aEdDdeItem.GetText().Len() );
+    pThis->aOKButton1.Enable( !pThis->aEdDdeApp.GetText().isEmpty() &&
+                              !pThis->aEdDdeTopic.GetText().isEmpty() &&
+                              !pThis->aEdDdeItem.GetText().isEmpty() );
     return 0;
 }
 

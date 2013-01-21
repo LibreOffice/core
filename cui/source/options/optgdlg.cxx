@@ -350,7 +350,7 @@ sal_Bool OfaMiscTabPage::FillItemSet( SfxItemSet& rSet )
 
     const SfxUInt16Item* pUInt16Item =
         PTR_CAST( SfxUInt16Item, GetOldItem( rSet, SID_ATTR_YEAR2000 ) );
-    sal_uInt16 nNum = (sal_uInt16)aYearValueField.GetText().ToInt32();
+    sal_uInt16 nNum = (sal_uInt16)aYearValueField.GetText().toInt32();
     if ( pUInt16Item && pUInt16Item->GetValue() != nNum )
     {
         bModified = sal_True;
@@ -1480,7 +1480,7 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
 
     // Configured date acceptance patterns, for example Y-M-D;M-D or empty for
     // locale default.
-    if (aDatePatternsED.GetText() != aDatePatternsED.GetSavedValue())
+    if (aDatePatternsED.GetText() != OUString(aDatePatternsED.GetSavedValue()))
         pLangConfig->aSysLocaleOptions.SetDatePatternsConfigString( aDatePatternsED.GetText());
 
     SfxObjectShell* pCurrentDocShell = SfxObjectShell::Current();

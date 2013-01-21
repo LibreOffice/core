@@ -1201,7 +1201,7 @@ String SearchTabPage_Impl::GetSelectEntry() const
 void SearchTabPage_Impl::ClearPage()
 {
     ClearSearchResults();
-    aSearchED.SetText( String() );
+    aSearchED.SetText( OUString() );
 }
 
 // -----------------------------------------------------------------------

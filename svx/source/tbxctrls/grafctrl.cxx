@@ -230,7 +230,7 @@ void ImplGrafMetricField::Update( const SfxPoolItem* pItem )
         SetValue( nValue );
     }
     else
-        SetText( String() );
+        SetText( OUString() );
 }
 
 // --------------------
@@ -292,7 +292,7 @@ public:
                             ~ImplGrafControl();
 
     void                    Update( const SfxPoolItem* pItem ) { maField.Update( pItem ); }
-    void                    SetText( const String& rStr ) { maField.SetText( rStr ); }
+    void                    SetText( const OUString& rStr ) { maField.SetText( rStr ); }
 };
 
 // -----------------------------------------------------------------------------
@@ -562,7 +562,7 @@ void SvxGrafToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const
     if( eState == SFX_ITEM_DISABLED )
     {
         pCtrl->Disable();
-        pCtrl->SetText( String() );
+        pCtrl->SetText( OUString() );
     }
     else
     {
@@ -703,7 +703,7 @@ void SvxGrafModeToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, c
     if( eState == SFX_ITEM_DISABLED )
     {
         pCtrl->Disable();
-        pCtrl->SetText( String() );
+        pCtrl->SetText( OUString() );
     }
     else
     {

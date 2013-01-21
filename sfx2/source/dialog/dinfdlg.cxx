@@ -762,13 +762,13 @@ SfxDocumentPage::SfxDocumentPage(Window* pParent, const SfxItemSet& rItemSet)
     get(m_pFileValFt, "showlocation");
     get(m_pShowSizeFT, "showsize");
     m_aUnknownSize = m_pShowSizeFT->GetText();
-    m_pShowSizeFT->SetText(OUString(""));
+    m_pShowSizeFT->SetText(OUString());
 
     get(m_pCreateValFt, "showcreate");
     get(m_pChangeValFt, "showmodify");
     get(m_pSignedValFt, "showsigned");
     m_aMultiSignedStr = m_pSignedValFt->GetText();
-    m_pSignedValFt->SetText(OUString(""));
+    m_pSignedValFt->SetText(OUString());
     get(m_pSignatureBtn, "signature");
     get(m_pPrintValFt, "showprint");
     get(m_pTimeLogValFt, "showedittime");
@@ -968,7 +968,7 @@ sal_Bool SfxDocumentPage::FillItemSet( SfxItemSet& rSet )
         }
     }
 
-    if ( m_pNameED->IsModified() && m_pNameED->GetText().Len() )
+    if ( m_pNameED->IsModified() && !m_pNameED->GetText().isEmpty() )
     {
         rSet.Put( SfxStringItem( ID_FILETP_TITLE, m_pNameED->GetText() ) );
         bRet = sal_True;
@@ -1415,7 +1415,7 @@ int SfxInternetPage::DeactivatePage( SfxItemSet* /*pSet*/ )
 {
     int nRet = LEAVE_PAGE;
 
-    if ( eState == S_Forward && !m_pEDForwardURL->GetText().Len() )
+    if ( eState == S_Forward && m_pEDForwardURL->GetText().isEmpty() )
     {
         ErrorBox aErrBox( this, WB_OK, aForwardErrorMessg );
         aErrBox.Execute();

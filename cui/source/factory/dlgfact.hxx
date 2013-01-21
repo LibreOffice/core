@@ -115,8 +115,8 @@ class CuiAbstractSfxDialog_Impl : public SfxAbstractDialog
     virtual const SfxItemSet*   GetOutputItemSet() const;
 
         //From class Window.
-    virtual void        SetText( const XubString& rStr );
-    virtual String      GetText() const ;
+    virtual void          SetText( const OUString& rStr );
+    virtual OUString      GetText() const ;
 };
 
 class CuiAbstractTabDialog_Impl : public SfxAbstractTabDialog
@@ -128,8 +128,8 @@ class CuiAbstractTabDialog_Impl : public SfxAbstractTabDialog
     virtual const sal_uInt16*       GetInputRanges( const SfxItemPool& pItem );
     virtual void                SetInputSet( const SfxItemSet* pInSet );
         //From class Window.
-    virtual void        SetText( const XubString& rStr );
-    virtual String      GetText() const;
+    virtual void        SetText( const OUString& rStr );
+    virtual OUString    GetText() const;
 };
 
 //for SvxDistributeDialog begin
@@ -346,8 +346,8 @@ class AbstractSvxTransformTabDialog_Impl : public AbstractSvxTransformTabDialog
     virtual const SfxItemSet*   GetOutputItemSet() const;
     virtual const sal_uInt16*       GetInputRanges( const SfxItemPool& pItem );
     virtual void                SetInputSet( const SfxItemSet* pInSet );
-    virtual void        SetText( const XubString& rStr );
-    virtual String      GetText() const;
+    virtual void        SetText( const OUString& rStr );
+    virtual OUString    GetText() const;
 };
 class AbstractSvxCaptionDialog_Impl : public AbstractSvxCaptionDialog
 {
@@ -358,8 +358,8 @@ class AbstractSvxCaptionDialog_Impl : public AbstractSvxCaptionDialog
     virtual const SfxItemSet*   GetOutputItemSet() const;
     virtual const sal_uInt16*       GetInputRanges( const SfxItemPool& pItem );
     virtual void                SetInputSet( const SfxItemSet* pInSet );
-    virtual void        SetText( const XubString& rStr );
-    virtual String      GetText() const;
+    virtual void        SetText( const OUString& rStr );
+    virtual OUString    GetText() const;
 };
 
 //for FmInputRecordNoDialog end
@@ -391,7 +391,7 @@ class AbstractSvxNameDialog_Impl :public AbstractSvxNameDialog
     virtual void    SetEditHelpId(const rtl::OString&) ;
     //from class Window
     virtual void    SetHelpId( const rtl::OString& ) ;
-    virtual void    SetText( const XubString& rStr ) ;
+    virtual void    SetText( const OUString& rStr ) ;
 private:
     Link aCheckNameHdl;
     DECL_LINK(CheckNameHdl, void *);
@@ -506,8 +506,8 @@ class AbstractSvxAreaTabDialog_Impl :public AbstractSvxAreaTabDialog
     virtual const sal_uInt16*       GetInputRanges( const SfxItemPool& pItem );
     virtual void                SetInputSet( const SfxItemSet* pInSet );
     // From class Window.
-    virtual void        SetText( const XubString& rStr );
-    virtual String      GetText() const;
+    virtual void        SetText( const OUString& rStr );
+    virtual OUString    GetText() const;
 };
 // add for SvxAreaTabDialog end
 
@@ -542,7 +542,7 @@ class SvxPostItDialog;
 class AbstractSvxPostItDialog_Impl :public AbstractSvxPostItDialog
 {
     DECL_ABSTDLG_BASE( AbstractSvxPostItDialog_Impl, SvxPostItDialog )
-    virtual void                SetText( const XubString& rStr );  //From class Window
+    virtual void                SetText( const OUString& rStr );  //From class Window
     virtual const SfxItemSet*   GetOutputItemSet() const;
     virtual void                SetPrevHdl( const Link& rLink ) ;
     virtual void                SetNextHdl( const Link& rLink ) ;

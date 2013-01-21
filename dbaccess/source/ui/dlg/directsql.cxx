@@ -356,7 +356,7 @@ DBG_NAME(DirectSQLDialog)
     //--------------------------------------------------------------------
     IMPL_LINK( DirectSQLDialog, OnStatementModified, void*, /*NOTINTERESTEDIN*/ )
     {
-        m_aExecute.Enable(0 != m_aSQL.GetText().Len());
+        m_aExecute.Enable(!m_aSQL.GetText().isEmpty());
         return 0L;
     }
 

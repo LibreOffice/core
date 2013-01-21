@@ -96,7 +96,7 @@ namespace svx
     void ODocumentLinkDialog::validate( )
     {
 
-        m_aOK.Enable( (0 != m_aName.GetText().Len()) && ( 0 != m_aURL.GetText().Len() ) );
+        m_aOK.Enable( ( !m_aName.GetText().isEmpty()) && ( !m_aURL.GetText().isEmpty() ) );
     }
 
     //------------------------------------------------------------------
@@ -179,7 +179,7 @@ namespace svx
         if (0 != aFileDlg.Execute())
             return 0L;
 
-        if (0 == m_aName.GetText().Len())
+        if (m_aName.GetText().isEmpty())
         {   // default the name to the base of the chosen URL
             INetURLObject aParser;
 
@@ -188,7 +188,7 @@ namespace svx
 
             m_aName.SetText(aParser.getBase(INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET));
 
-            m_aName.SetSelection(Selection(0,m_aName.GetText().Len()));
+            m_aName.SetSelection(Selection(0,m_aName.GetText().getLength()));
             m_aName.GrabFocus();
         }
         else

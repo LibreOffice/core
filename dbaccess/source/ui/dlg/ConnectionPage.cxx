@@ -252,7 +252,7 @@ namespace dbaui
             m_aJavaDriverLabel.Show(bEnableJDBC);
             m_aJavaDriver.Show(bEnableJDBC);
             m_aTestJavaDriver.Show(bEnableJDBC);
-            m_aTestJavaDriver.Enable( m_aJavaDriver.GetText().Len() != 0);
+            m_aTestJavaDriver.Enable( !m_aJavaDriver.GetText().isEmpty() );
             m_aFL3.Show(bEnableJDBC);
 
             checkTestConnection();
@@ -291,7 +291,7 @@ namespace dbaui
     {
         sal_Bool bChangedSomething = sal_False;
 
-        if (m_aUserName.GetText() != m_aUserName.GetSavedValue())
+        if (m_aUserName.GetText() != OUString(m_aUserName.GetSavedValue()))
         {
             _rSet.Put(SfxStringItem(DSID_USER, m_aUserName.GetText()));
             _rSet.Put(SfxStringItem(DSID_PASSWORD, String()));
@@ -316,7 +316,7 @@ namespace dbaui
         sal_Bool bSuccess = sal_False;
         try
         {
-            if ( m_aJavaDriver.GetText().Len() )
+            if ( !m_aJavaDriver.GetText().isEmpty() )
             {
                 ::rtl::Reference< jvmaccess::VirtualMachine > xJVM = ::connectivity::getJavaVM( Reference<XMultiServiceFactory>(m_pAdminDialog->getORB()->getServiceManager(), UNO_QUERY_THROW) );
                 bSuccess = ::connectivity::existsJavaClassByName(xJVM,m_aJavaDriver.GetText());
@@ -338,7 +338,7 @@ namespace dbaui
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
         sal_Bool bEnableTestConnection = !m_aConnectionURL.IsVisible() || (m_aConnectionURL.GetTextNoPrefix().Len() != 0);
         if ( m_pCollection->determineType(m_eType) ==  ::dbaccess::DST_JDBC )
-            bEnableTestConnection = bEnableTestConnection && (m_aJavaDriver.GetText().Len() != 0);
+            bEnableTestConnection = bEnableTestConnection && (!m_aJavaDriver.GetText().isEmpty());
         m_aTestConnection.Enable(bEnableTestConnection);
         return true;
     }
@@ -346,7 +346,7 @@ namespace dbaui
     IMPL_LINK(OConnectionTabPage, OnEditModified, Edit*, _pEdit)
     {
         if ( _pEdit == &m_aJavaDriver )
-            m_aTestJavaDriver.Enable( m_aJavaDriver.GetText().Len() != 0 );
+            m_aTestJavaDriver.Enable( !m_aJavaDriver.GetText().isEmpty() );
 
         checkTestConnection();
         // tell the listener we were modified

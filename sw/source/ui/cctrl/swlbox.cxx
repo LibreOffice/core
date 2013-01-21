@@ -157,9 +157,9 @@ void SwComboBox::KeyInput( const KeyEvent& rKEvt )
 }
 
 // Convert text according to option
-String SwComboBox::GetText() const
+OUString SwComboBox::GetText() const
 {
-    String aTxt( ComboBox::GetText() );
+    OUString aTxt( ComboBox::GetText() );
 
     if(nStyle & CBS_LOWER)
         aTxt = GetAppCharClass().lowercase( aTxt );

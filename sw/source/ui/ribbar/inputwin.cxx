@@ -550,7 +550,7 @@ void InputEdit::UpdateRange(const String& rBoxes,
     //OS: mit dem folgenden Ausdruck wird sichergestellt, dass im overwrite-Modus
     //die selektierte schliessende Klammer nicht geloescht wird
     if( nSel && ( nSel > 1 ||
-        GetText().GetChar( (sal_uInt16)aSelection.Min() ) != cClose ) )
+                  GetText()[ (sal_uInt16)aSelection.Min() ] != cClose ))
         Cut();
     else
         aSelection.Max() = aSelection.Min();
@@ -617,7 +617,7 @@ void InputEdit::UpdateRange(const String& rBoxes,
             aActText.Insert( aTmp, nPos );
             nPos = nPos + aTmp.getLength();
         }
-        if( GetText() != aActText )
+        if( GetText() != OUString(aActText) )
         {
             SetText( aActText );
             SetSelection( Selection( nPos, nPos ) );

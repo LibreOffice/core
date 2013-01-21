@@ -176,7 +176,7 @@ sal_Bool OfaMemoryOptionsPage::FillItemSet( SfxItemSet& rSet )
     boost::shared_ptr< comphelper::ConfigurationChanges > batch(
         comphelper::ConfigurationChanges::create());
 
-    if ( aUndoEdit.GetText() != aUndoEdit.GetSavedValue() )
+    if ( aUndoEdit.GetText() != OUString(aUndoEdit.GetSavedValue()) )
         officecfg::Office::Common::Undo::Steps::set(
             aUndoEdit.GetValue(), batch);
 

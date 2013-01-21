@@ -53,9 +53,9 @@ IMPL_LINK_INLINE_START( SfxPasswordDialog, EditModifyHdl, Edit *, pEdit )
         }
 
     }
-    bool bEnable = mpPassword1ED->GetText().Len() >= mnMinLen;
+    bool bEnable = mpPassword1ED->GetText().getLength() >= mnMinLen;
     if( mpPassword2ED->IsVisible() )
-        bEnable = (bEnable && (mpPassword2ED->GetText().Len() >= mnMinLen));
+        bEnable = (bEnable && (mpPassword2ED->GetText().getLength() >= mnMinLen));
     mpOKBtn->Enable( bEnable );
     return 0;
 }
@@ -73,7 +73,7 @@ IMPL_LINK_NOARG(SfxPasswordDialog, OKHdl)
     {
         ErrorBox aBox( this, SfxResId( MSG_ERROR_WRONG_CONFIRM ) );
         aBox.Execute();
-        mpConfirm1ED->SetText( String() );
+        mpConfirm1ED->SetText( OUString() );
         mpConfirm1ED->GrabFocus();
     }
     else

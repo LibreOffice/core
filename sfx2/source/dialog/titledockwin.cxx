@@ -88,10 +88,10 @@ namespace sfx2
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void TitledDockingWindow::SetText( const String& i_rText )
+    void TitledDockingWindow::SetText( const OUString& i_rText )
     {
         SfxDockingWindow::SetText( i_rText );
-        if ( m_sTitle.Len() == 0 )
+        if ( m_sTitle.isEmpty() )
             // our text is used as title, too => repaint
             Invalidate();
     }
@@ -222,7 +222,7 @@ namespace sfx2
     //------------------------------------------------------------------------------------------------------------------
     String TitledDockingWindow::impl_getTitle() const
     {
-        return m_sTitle.Len() ? m_sTitle : GetText();
+        return !m_sTitle.isEmpty() ? m_sTitle : GetText();
     }
 
     //------------------------------------------------------------------------------------------------------------------

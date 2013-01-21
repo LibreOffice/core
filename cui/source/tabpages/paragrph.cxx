@@ -802,7 +802,7 @@ IMPL_LINK( SvxStdParagraphTabPage, LineDistHdl_Impl, ListBox *, pBox )
             aLineDistAtMetricBox.SetMin(0);
 
 
-            if ( !aLineDistAtMetricBox.GetText().Len() )
+            if ( aLineDistAtMetricBox.GetText().isEmpty() )
                 aLineDistAtMetricBox.SetValue(
                     aLineDistAtMetricBox.Normalize( 1 ) );
             aLineDistAtPercentBox.Hide();
@@ -816,7 +816,7 @@ IMPL_LINK( SvxStdParagraphTabPage, LineDistHdl_Impl, ListBox *, pBox )
             pActLineDistFld = &aLineDistAtMetricBox;
             aLineDistAtMetricBox.SetMin(0);
 
-            if ( !aLineDistAtMetricBox.GetText().Len() )
+            if ( aLineDistAtMetricBox.GetText().isEmpty() )
                 aLineDistAtMetricBox.SetValue(
                     aLineDistAtMetricBox.Normalize( 10 ), FUNIT_TWIP );
             aLineDistAtPercentBox.Hide();
@@ -829,7 +829,7 @@ IMPL_LINK( SvxStdParagraphTabPage, LineDistHdl_Impl, ListBox *, pBox )
             aLineDistAtMetricBox.Hide();
             pActLineDistFld = &aLineDistAtPercentBox;
 
-            if ( !aLineDistAtPercentBox.GetText().Len() )
+            if ( aLineDistAtPercentBox.GetText().isEmpty() )
                 aLineDistAtPercentBox.SetValue(
                     aLineDistAtPercentBox.Normalize( 100 ), FUNIT_TWIP );
             aLineDistAtMetricBox.Hide();

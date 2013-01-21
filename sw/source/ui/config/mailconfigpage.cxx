@@ -170,15 +170,15 @@ SfxTabPage*  SwMailConfigPage::Create( Window* pParent, const SfxItemSet& rAttrS
 
 sal_Bool SwMailConfigPage::FillItemSet( SfxItemSet& /*rSet*/ )
 {
-    if(m_aDisplayNameED.GetText() != m_aDisplayNameED.GetSavedValue())
+    if(m_aDisplayNameED.GetText() != OUString(m_aDisplayNameED.GetSavedValue()))
         m_pConfigItem->SetMailDisplayName(m_aDisplayNameED.GetText());
-    if(m_aAddressED.GetText() != m_aAddressED.GetSavedValue())
+    if(m_aAddressED.GetText() != OUString(m_aAddressED.GetSavedValue()))
         m_pConfigItem->SetMailAddress(m_aAddressED.GetText());
     if( m_aReplyToCB.GetSavedValue() != m_aReplyToCB.IsChecked())
         m_pConfigItem->SetMailReplyTo(m_aReplyToCB.IsChecked());
-    if(m_aReplyToED.GetText() != m_aReplyToED.GetSavedValue())
+    if(m_aReplyToED.GetText() != OUString(m_aReplyToED.GetSavedValue()))
         m_pConfigItem->SetMailReplyTo(m_aReplyToED.GetText());
-    if(m_aServerED.GetText() != m_aServerED.GetSavedValue())
+    if(m_aServerED.GetText() != OUString(m_aServerED.GetSavedValue()))
         m_pConfigItem->SetMailServer(m_aServerED.GetText());
 
     if(m_aPortNF.IsModified())

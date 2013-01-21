@@ -391,16 +391,16 @@ DBG_NAME(OConnectionHelper)
     String OConnectionHelper::impl_getURL( sal_Bool _bPrefix ) const
     {
         // get the pure text
-        String sURL = _bPrefix ? m_aConnectionURL.GetText() : m_aConnectionURL.GetTextNoPrefix();
+        OUString sURL = _bPrefix ? m_aConnectionURL.GetText() : OUString(m_aConnectionURL.GetTextNoPrefix());
 
         OSL_ENSURE( m_pCollection, "OConnectionHelper::impl_getURL: have no interpreter for the URLs!" );
 
-        if ( m_pCollection && sURL.Len() )
+        if ( m_pCollection && !sURL.isEmpty() )
         {
             if ( m_pCollection->isFileSystemBased( m_eType ) )
             {
                 // get the two parts: prefix and file URL
-                String sTypePrefix, sFileURLDecoded;
+                OUString sTypePrefix, sFileURLDecoded;
                 if ( _bPrefix )
                 {
                     sTypePrefix = m_pCollection->getPrefix( m_eType );
@@ -412,7 +412,7 @@ DBG_NAME(OConnectionHelper)
                 }
 
                 sURL = sTypePrefix;
-                if ( sFileURLDecoded.Len() )
+                if ( !sFileURLDecoded.isEmpty() )
                 {
                     OFileNotation aFileNotation( sFileURLDecoded, OFileNotation::N_SYSTEM );
                     sURL += String( aFileNotation.get( OFileNotation::N_URL ) );

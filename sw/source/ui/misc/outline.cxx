@@ -117,7 +117,7 @@ void SwNumNamesDlg::SetUserNames(const String *pList[])
 ------------------------------------------------------------------------*/
 IMPL_LINK_INLINE_START( SwNumNamesDlg, ModifyHdl, Edit *, pBox )
 {
-    aOKBtn.Enable(0 != pBox->GetText().Len());
+    aOKBtn.Enable(!pBox->GetText().isEmpty());
     return 0;
 }
 IMPL_LINK_INLINE_END( SwNumNamesDlg, ModifyHdl, Edit *, pBox )

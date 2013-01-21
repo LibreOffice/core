@@ -41,8 +41,8 @@ public:
     SvxClickInfoCtr( Window* pParent, const ResId& rResId );
     ~SvxClickInfoCtr();
 
-    virtual void        SetText( const XubString& rStr );
-    virtual XubString   GetText() const;
+    virtual void        SetText( const OUString& rStr );
+    virtual OUString    GetText() const;
 
     void                SetActivateHdl( const Link& rLink ) { aActivateLink = rLink; }
     const Link&         GetActivateHdl() const { return aActivateLink; }

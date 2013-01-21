@@ -364,7 +364,7 @@ void SpellDialog::UpdateBoxes_Impl()
 
     m_pCheckGrammarCB->Show(rParent.HasGrammarChecking());
     m_pExplainLink->Show(!m_pExplainLink->GetURL().isEmpty());
-    if (m_pExplainFT->GetText().Len() == 0)
+    if (m_pExplainFT->GetText().isEmpty())
     {
         m_pExplainFT->Hide();
         m_pExplainLink->Hide();
@@ -706,7 +706,7 @@ void SpellDialog::Impl_Restore()
     //clear the "ChangeAllList"
     SvxGetChangeAllList()->clear();
     //get a new sentence
-    m_pSentenceED->SetText(rtl::OUString());
+    m_pSentenceED->SetText(OUString());
     m_pSentenceED->ResetModified();
     //Resolves: fdo#39348 refill the dialog with the currently spelled sentence
     SpellContinue_Impl(true);
@@ -959,7 +959,7 @@ IMPL_LINK(SpellDialog, ModifyHdl, SentenceEditWindow_Impl*, pEd)
         bModified = true;
         m_pSuggestionLB->SetNoSelection();
         m_pSuggestionLB->Disable();
-        String sNewText( m_pSentenceED->GetText() );
+        OUString sNewText( m_pSentenceED->GetText() );
         m_pAutoCorrPB->Enable( sNewText != m_pSentenceED->GetText() );
         SpellUndoAction_Impl* pSpellAction = new SpellUndoAction_Impl(SPELLUNDO_CHANGE_TEXTENGINE, aDialogUndoLink);
         if(!m_pChangeAllPB->IsEnabled())
@@ -1447,7 +1447,7 @@ long SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
                 break;
             }
             //save the current paragraph
-            sal_uInt16 nCurrentLen = GetText().Len();
+            sal_Int32 nCurrentLen = GetText().getLength();
             if(nAction != ACTION_SELECTFIELD)
                 pTextView->GetWindow()->KeyInput(rKeyEvt);
             else
@@ -1485,11 +1485,11 @@ long SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
                 else if(pErrorAttr)
                 {
                     //determine the change
-                    sal_uInt16 nAddedChars = GetText().Len() - nCurrentLen;
+                    sal_Int32 nAddedChars = GetText().getLength() - nCurrentLen;
 
                     TextAttrib* pNewError =  pErrorAttr->GetAttr().Clone();
-                    sal_uInt16 nStart = pErrorAttr->GetStart();
-                    sal_uInt16 nEnd = pErrorAttr->GetEnd();
+                    sal_Int32 nStart = pErrorAttr->GetStart();
+                    sal_Int32 nEnd = pErrorAttr->GetEnd();
                     pTextEngine->RemoveAttrib( 0, *pErrorAttr );
                     nStart = nStart - (sal_uInt16)nAddedChars;
                     SetAttrib( *pNewError, 0, nStart - nAddedChars, nEnd );
@@ -1772,7 +1772,7 @@ void SentenceEditWindow_Impl::SetAttrib( const TextAttrib& rAttr, sal_uLong nPar
 }
 
 //-----------------------------------------------------------------------
-void SentenceEditWindow_Impl::SetText( const String& rStr )
+void SentenceEditWindow_Impl::SetText( const OUString& rStr )
 {
     m_nErrorStart = m_nErrorEnd = 0;
     GetTextEngine()->SetText(rStr);

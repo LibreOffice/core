@@ -7833,9 +7833,9 @@ void Window::SetCursor( Cursor* pCursor )
 
 // -----------------------------------------------------------------------
 
-void Window::SetText( const XubString& rStr )
+void Window::SetText( const OUString& rStr )
 {
-    if (rStr == mpWindowImpl->maText)
+    if (rStr == OUString(mpWindowImpl->maText))
         return;
 
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
@@ -7866,7 +7866,7 @@ void Window::SetText( const XubString& rStr )
 
 // -----------------------------------------------------------------------
 
-String Window::GetText() const
+OUString Window::GetText() const
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
@@ -7875,7 +7875,7 @@ String Window::GetText() const
 
 // -----------------------------------------------------------------------
 
-String Window::GetDisplayText() const
+OUString Window::GetDisplayText() const
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 

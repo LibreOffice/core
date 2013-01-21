@@ -103,7 +103,7 @@ protected:
 
     virtual void    StartDrag( sal_Int8 nAction, const Point& rPosPixel );
 
-    virtual String  GetText() const;
+    virtual OUString  GetText() const;
 
     void            ImplInitSettings();
     void            UpdateAutoCorrFlag();
@@ -283,8 +283,8 @@ public:
     virtual void    MouseMove( const MouseEvent& rMEvt );
     bool            IsMultiLineInput() { return mbIsMultiLine; }
 protected:
-    virtual void    SetText( const String& rString );
-    virtual String  GetText() const;
+    virtual void    SetText( const OUString& rString );
+    virtual OUString  GetText() const;
 
     bool UseSubTotal( ScRangeList* pRangeList ) const;
     bool IsPointerAtResizePos();

@@ -463,7 +463,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
 
         sal_uLong nErr = pOutliner->Read( *pStream, pMedium->GetBaseURL(), nFormat, mpDocSh->GetHeaderAttributes() );
 
-        if (nErr || !pOutliner->GetEditEngine().GetText().Len())
+        if (nErr || pOutliner->GetEditEngine().GetText().isEmpty())
         {
             ErrorBox aErrorBox( mpWindow, (WinBits)WB_OK,
                       String(SdResId(STR_READ_DATA_ERROR)));
@@ -611,7 +611,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
 
     sal_uLong nErr = pOutliner->Read(*pStream, pMedium->GetBaseURL(), nFormat, mpDocSh->GetHeaderAttributes());
 
-    if (nErr || !pOutliner->GetEditEngine().GetText().Len())
+    if (nErr || pOutliner->GetEditEngine().GetText().isEmpty())
     {
         ErrorBox aErrorBox( mpWindow, (WinBits)WB_OK,
                   String(SdResId(STR_READ_DATA_ERROR)));

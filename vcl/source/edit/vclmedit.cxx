@@ -128,8 +128,8 @@ public:
     void        Copy();
     void        Paste();
 
-    void        SetText( const String& rStr );
-    String      GetText() const;
+    void        SetText( const OUString& rStr );
+    OUString    GetText() const;
     String      GetText( LineEnd aSeparator ) const;
     String      GetTextLines( LineEnd aSeparator ) const;
 
@@ -491,7 +491,7 @@ void ImpVclMEdit::Paste()
         mpTextWindow->GetTextView()->Paste();
 }
 
-void ImpVclMEdit::SetText( const String& rStr )
+void ImpVclMEdit::SetText( const OUString& rStr )
 {
     sal_Bool bWasModified = mpTextWindow->GetTextEngine()->IsModified();
     mpTextWindow->GetTextEngine()->SetText( rStr );
@@ -505,7 +505,7 @@ void ImpVclMEdit::SetText( const String& rStr )
         ImpUpdateSrollBarVis( nWinStyle );
 }
 
-String ImpVclMEdit::GetText() const
+OUString ImpVclMEdit::GetText() const
 {
     return mpTextWindow->GetTextEngine()->GetText();
 }
@@ -1161,17 +1161,17 @@ void VclMultiLineEdit::Paste()
     pImpVclMEdit->Paste();
 }
 
-void VclMultiLineEdit::SetText( const String& rStr )
+void VclMultiLineEdit::SetText( const OUString& rStr )
 {
     pImpVclMEdit->SetText( rStr );
 }
 
-String VclMultiLineEdit::GetText() const
+OUString VclMultiLineEdit::GetText() const
 {
     return pImpVclMEdit->GetText();
 }
 
-String VclMultiLineEdit::GetText( LineEnd aSeparator ) const
+OUString VclMultiLineEdit::GetText( LineEnd aSeparator ) const
 {
     return pImpVclMEdit->GetText( aSeparator );
 }

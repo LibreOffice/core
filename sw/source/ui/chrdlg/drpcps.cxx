@@ -119,7 +119,7 @@ public:
 
     void UpdatePaintSettings( void );       // also invalidates control!
 
-    inline void SetText( const String& rT );
+    inline void SetText( const OUString& rT );
     inline void SetLines( sal_uInt8 nL );
     inline void SetDistance( sal_uInt16 nD );
     inline void SetValues( const String& rText, sal_uInt8 nLines, sal_uInt16 nDistance );
@@ -127,7 +127,7 @@ public:
     void        DrawPrev( const Point& rPt );
 };
 
-inline void SwDropCapsPict::SetText( const String& rT )
+inline void SwDropCapsPict::SetText( const OUString& rT )
 {
     maText = rT;
     UpdatePaintSettings();
@@ -744,10 +744,10 @@ IMPL_LINK( SwDropCapsPage, ModifyHdl, Edit *, pEdit )
     }
     else if (pEdit == &aTextEdit)   // set quantity if applicable
     {
-        sal_uInt16 nTmp = aTextEdit.GetText().Len();
-        aDropCapsField.SetValue(Max((sal_uInt16)1, nTmp));
+        sal_Int32 nTmp = aTextEdit.GetText().getLength();
+        aDropCapsField.SetValue(Max((sal_uInt16)1, (sal_uInt16)nTmp));
 
-        sPreview = aTextEdit.GetText().Copy(0, nTmp);
+        sPreview = aTextEdit.GetText().copy(0, nTmp);
     }
 
     // adjust image

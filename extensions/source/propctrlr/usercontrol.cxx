@@ -155,7 +155,7 @@ namespace pcr
     Any SAL_CALL OFormatSampleControl::getValue() throw (RuntimeException)
     {
         Any aPropValue;
-        if ( getTypedControlWindow()->GetText().Len() )
+        if ( !getTypedControlWindow()->GetText().isEmpty() )
             aPropValue <<= (sal_Int32)getTypedControlWindow()->GetFormatKey();
         return aPropValue;
     }
@@ -201,7 +201,7 @@ namespace pcr
     Any SAL_CALL OFormattedNumericControl::getValue() throw (RuntimeException)
     {
         Any aPropValue;
-        if ( getTypedControlWindow()->GetText().Len() )
+        if ( !getTypedControlWindow()->GetText().isEmpty() )
             aPropValue <<= (double)getTypedControlWindow()->GetValue();
         return aPropValue;
     }
@@ -297,7 +297,7 @@ namespace pcr
     Any SAL_CALL OFileUrlControl::getValue() throw (RuntimeException)
     {
         Any aPropValue;
-        if ( getTypedControlWindow()->GetText().Len() )
+        if ( !getTypedControlWindow()->GetText().isEmpty() )
                 aPropValue <<= (::rtl::OUString)getTypedControlWindow()->GetURL();
         return aPropValue;
     }
