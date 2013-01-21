@@ -33,7 +33,7 @@ class SvRTLInputBox : public ModalDialog
     OKButton aOk;
     CancelButton aCancel;
     FixedText aPromptText;
-    String aText;
+    OUString aText;
 
     void PositionDialog( long nXTwips, long nYTwips, const Size& rDlgSize );
     void InitButtons( const Size& rDlgSize );
@@ -45,7 +45,7 @@ class SvRTLInputBox : public ModalDialog
 public:
     SvRTLInputBox( Window* pParent, const String& rPrompt, const String& rTitle,
         const String& rDefault, long nXTwips = -1, long nYTwips = -1 );
-    String GetText() const { return aText; }
+    OUString GetText() const { return aText; }
 };
 
 SvRTLInputBox::SvRTLInputBox( Window* pParent, const String& rPrompt,
@@ -65,12 +65,12 @@ SvRTLInputBox::SvRTLInputBox( Window* pParent, const String& rPrompt,
     aCancel.Show();
     aEdit.Show();
     aPromptText.Show();
-    SetText( rTitle );
+    SetText( OUString(rTitle) );
     Font aFont( GetFont());
     Color aColor( GetBackground().GetColor() );
     aFont.SetFillColor( aColor );
     aEdit.SetFont( aFont );
-    aEdit.SetText( rDefault );
+    aEdit.SetText( OUString(rDefault) );
     aEdit.SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
 }
 
@@ -109,7 +109,7 @@ void SvRTLInputBox::PositionPrompt(const String& rPrompt,const Size& rDlgSize)
         return;
     String aText_(convertLineEnd(rPrompt, LINEEND_CR));
     aPromptText.SetPosPixel( LogicToPixel(Point(5,5)));
-    aPromptText.SetText( aText_ );
+    aPromptText.SetText( OUString(aText_) );
     Size aSize( rDlgSize );
     aSize.Width() -= 70;
     aSize.Height() -= 50;
@@ -131,7 +131,7 @@ IMPL_LINK_INLINE_START( SvRTLInputBox, CancelHdl, Button *, pButton )
 {
     (void)pButton;
 
-    aText.Erase();
+    aText="";
     EndDialog( 0 );
     return 0;
 }

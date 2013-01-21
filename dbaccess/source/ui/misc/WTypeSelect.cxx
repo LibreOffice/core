@@ -355,7 +355,7 @@ IMPL_LINK( OWizTypeSelect, ButtonClickHdl, Button *, /*pButton*/ )
     DBG_CHKTHIS(OWizTypeSelect,NULL);
     sal_Int32 nBreakPos;
     m_pParent->CheckColumns(nBreakPos);
-    fillColumnList(m_etAuto.GetText().ToInt32());
+    fillColumnList(m_etAuto.GetText().toInt32());
 
     ActivatePage();
 

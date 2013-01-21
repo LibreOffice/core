@@ -459,7 +459,7 @@ IMPL_LINK( ScConsolidateDlg, ClickHdl, PushButton*, pBtn )
         Close();
     else if ( pBtn == &aBtnAdd )
     {
-        if ( aEdDataArea.GetText().Len() > 0 )
+        if ( !aEdDataArea.GetText().isEmpty() )
         {
             String      aNewEntry( aEdDataArea.GetText() );
             ScArea**    ppAreas = NULL;

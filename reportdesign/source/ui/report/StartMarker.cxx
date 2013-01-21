@@ -260,7 +260,7 @@ void OStartMarker::showRuler(sal_Bool _bShow)
 //------------------------------------------------------------------------------
 void OStartMarker::RequestHelp( const HelpEvent& rHEvt )
 {
-    if( m_aText.GetText().Len())
+    if( !m_aText.GetText().isEmpty())
     {
         // Hilfe anzeigen
         Rectangle aItemRect(rHEvt.GetMousePosPixel(),Size(GetSizePixel().Width(),getMinHeight()));

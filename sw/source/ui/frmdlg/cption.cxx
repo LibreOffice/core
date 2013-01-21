@@ -268,7 +268,7 @@ void SwCaptionDialog::Apply()
         aOpt.SetNumSeparator( m_pNumberingSeparatorED->GetText() );
     }
     aOpt.SetNumType( (sal_uInt16)(sal_uIntPtr)m_pFormatBox->GetEntryData( m_pFormatBox->GetSelectEntryPos() ) );
-    aOpt.SetSeparator( m_pSepEdit->IsEnabled() ? m_pSepEdit->GetText() : String() );
+    aOpt.SetSeparator( m_pSepEdit->IsEnabled() ? m_pSepEdit->GetText() : OUString() );
     aOpt.SetCaption( m_pTextEdit->GetText() );
     aOpt.SetPos( m_pPosBox->GetSelectEntryPos() );
     aOpt.IgnoreSeqOpts() = sal_True;
@@ -463,7 +463,7 @@ void SwSequenceOptionDialog::Apply()
                                         RES_SETEXPFLD, aFldTypeName );
 
     sal_Int8 nLvl = (sal_Int8)( m_pLbLevel->GetSelectEntryPos() - 1);
-    sal_Unicode cDelim = m_pEdDelim->GetText().GetChar(0);
+    sal_Unicode cDelim = m_pEdDelim->GetText()[0];
 
     sal_Bool bUpdate = sal_True;
     if( pFldType )

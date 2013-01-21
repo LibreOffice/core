@@ -129,9 +129,9 @@ namespace svt
         virtual Control&            GetControl() = 0;
 
         virtual String              GetText( LineEnd aSeparator ) const = 0;
-        virtual void                SetText( const String& _rStr ) = 0;
+        virtual void                SetText( const OUString& _rStr ) = 0;
 
-        virtual sal_Bool                IsReadOnly() const = 0;
+        virtual sal_Bool            IsReadOnly() const = 0;
         virtual void                SetReadOnly( sal_Bool bReadOnly ) = 0;
 
         virtual xub_StrLen          GetMaxTextLen() const = 0;
@@ -165,7 +165,7 @@ namespace svt
         virtual Control&            GetControl();
 
         virtual String              GetText( LineEnd aSeparator ) const;
-        virtual void                SetText( const String& _rStr );
+        virtual void                SetText( const OUString& _rStr );
 
         virtual sal_Bool                IsReadOnly() const;
         virtual void                SetReadOnly( sal_Bool bReadOnly );

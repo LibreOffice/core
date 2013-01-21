@@ -714,7 +714,7 @@ void Condition::setConditionIndex( size_t _nCondIndex, size_t _nCondCount )
 // -----------------------------------------------------------------------------
 bool Condition::isEmpty() const
 {
-    return m_aCondLHS.GetText().Len() == 0;
+    return m_aCondLHS.GetText().isEmpty();
 }
 
 // =============================================================================

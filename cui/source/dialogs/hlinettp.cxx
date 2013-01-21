@@ -193,7 +193,7 @@ String SvxHyperlinkInternetTp::CreateAbsoluteURL() const
     }
 
     // username and password for ftp-url
-    if( aURL.GetProtocol() == INET_PROT_FTP && maEdLogin.GetText().Len()!=0 )
+    if( aURL.GetProtocol() == INET_PROT_FTP && !maEdLogin.GetText().isEmpty() )
         aURL.SetUserAndPass ( maEdLogin.GetText(), maEdPassword.GetText() );
 
     if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
@@ -374,7 +374,7 @@ IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl)
     // disable login-editfields if checked
     if ( maCbAnonymous.IsChecked() )
     {
-        if ( maEdLogin.GetText().ToLowerAscii().SearchAscii ( sAnonymous ) == 0 )
+        if ( maEdLogin.GetText().toAsciiLowerCase().indexOf ( sAnonymous ) == 0 )
         {
             maStrOldUser = aEmptyStr;
             maStrOldPassword = aEmptyStr;

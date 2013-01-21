@@ -230,8 +230,8 @@ int SvxHatchTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 long SvxHatchTabPage::CheckChanges_Impl()
 {
-    if( aMtrDistance.GetText()           != aMtrDistance.GetSavedValue() ||
-        aMtrAngle.GetText()              != aMtrAngle.GetSavedValue() ||
+    if( aMtrDistance.GetText()           != OUString(aMtrDistance.GetSavedValue()) ||
+        aMtrAngle.GetText()              != OUString(aMtrAngle.GetSavedValue()) ||
         aLbLineType.GetSelectEntryPos()  != aLbLineType.GetSavedValue()  ||
         aLbLineColor.GetSelectEntryPos() != aLbLineColor.GetSavedValue() ||
         aLbHatchings.GetSelectEntryPos() != aLbHatchings.GetSavedValue() )

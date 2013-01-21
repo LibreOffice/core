@@ -159,7 +159,7 @@ String SvxHyperlinkMailTp::CreateAbsoluteURL() const
     // subject for EMail-url
     if( aURL.GetProtocol() == INET_PROT_MAILTO )
     {
-        if ( maEdSubject.GetText() != aEmptyStr )
+        if ( maEdSubject.GetText() != OUString(aEmptyStr) )
         {
             String aQuery = rtl::OUString("subject=");
             aQuery.Append( maEdSubject.GetText() );

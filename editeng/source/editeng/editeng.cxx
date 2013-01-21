@@ -606,7 +606,7 @@ void EditEngine::SetMaxAutoPaperSize( const Size& rSz )
     pImpEditEngine->SetMaxAutoPaperSize( rSz );
 }
 
-XubString EditEngine::GetText( LineEnd eEnd ) const
+OUString EditEngine::GetText( LineEnd eEnd ) const
 {
     DBG_CHKTHIS( EditEngine, 0 );
     return pImpEditEngine->GetEditDoc().GetText( eEnd );
@@ -1528,11 +1528,11 @@ void EditEngine::Clear()
     pImpEditEngine->Clear();
 }
 
-void EditEngine::SetText( const XubString& rText )
+void EditEngine::SetText( const OUString& rText )
 {
     DBG_CHKTHIS( EditEngine, 0 );
     pImpEditEngine->SetText( rText );
-    if ( rText.Len() )
+    if ( !rText.isEmpty() )
         pImpEditEngine->FormatAndUpdate();
 }
 

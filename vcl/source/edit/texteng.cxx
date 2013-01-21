@@ -445,7 +445,7 @@ void TextEngine::ImpRemoveText()
     ResetUndo();
 }
 
-void TextEngine::SetText( const XubString& rText )
+void TextEngine::SetText( const OUString& rText )
 {
     ImpRemoveText();
 
@@ -457,7 +457,7 @@ void TextEngine::SetText( const XubString& rText )
     TextSelection aEmptySel( aStartPaM, aStartPaM );
 
     TextPaM aPaM = aStartPaM;
-    if ( rText.Len() )
+    if ( !rText.isEmpty() )
         aPaM = ImpInsertText( aEmptySel, rText );
 
     for ( sal_uInt16 nView = 0; nView < mpViews->size(); nView++ )
@@ -467,11 +467,11 @@ void TextEngine::SetText( const XubString& rText )
 
         // Wenn kein Text, dann auch Kein Format&Update
         // => Der Text bleibt stehen.
-        if ( !rText.Len() && GetUpdateMode() )
+        if ( rText.isEmpty() && GetUpdateMode() )
             pView->Invalidate();
     }
 
-    if( !rText.Len() )  // sonst muss spaeter noch invalidiert werden, !bFormatted reicht.
+    if( rText.isEmpty() )  // sonst muss spaeter noch invalidiert werden, !bFormatted reicht.
         mnCurTextHeight = 0;
 
     FormatAndUpdate();

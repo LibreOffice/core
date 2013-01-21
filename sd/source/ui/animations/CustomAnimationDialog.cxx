@@ -2062,7 +2062,7 @@ void CustomAnimationDurationTabPage::update( STLPropertySet* pSet )
     // ---
 
     nPos = mpCBRepeat->GetSelectEntryPos();
-    if( (nPos != LISTBOX_ENTRY_NOTFOUND) || (mpCBRepeat->GetText().Len() != 0) )
+    if( (nPos != LISTBOX_ENTRY_NOTFOUND) || (!mpCBRepeat->GetText().isEmpty()) )
     {
         Any aRepeatCount;
         Any aEnd;

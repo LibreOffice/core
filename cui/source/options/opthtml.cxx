@@ -111,19 +111,19 @@ SfxTabPage* OfaHtmlTabPage::Create( Window* pParent,
 sal_Bool OfaHtmlTabPage::FillItemSet( SfxItemSet& )
 {
     SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
-    if(aSize1NF.GetSavedValue() != aSize1NF.GetText())
+    if(OUString(aSize1NF.GetSavedValue()) != aSize1NF.GetText())
         rHtmlOpt.SetFontSize(0, (sal_uInt16)aSize1NF.GetValue());
-    if(aSize2NF.GetSavedValue() != aSize2NF.GetText())
+    if(OUString(aSize2NF.GetSavedValue()) != aSize2NF.GetText())
         rHtmlOpt.SetFontSize(1, (sal_uInt16)aSize2NF.GetValue());
-    if(aSize3NF.GetSavedValue() != aSize3NF.GetText())
+    if(OUString(aSize3NF.GetSavedValue()) != aSize3NF.GetText())
         rHtmlOpt.SetFontSize(2, (sal_uInt16)aSize3NF.GetValue());
-    if(aSize4NF.GetSavedValue() != aSize4NF.GetText())
+    if(OUString(aSize4NF.GetSavedValue()) != aSize4NF.GetText())
         rHtmlOpt.SetFontSize(3, (sal_uInt16)aSize4NF.GetValue());
-    if(aSize5NF.GetSavedValue() != aSize5NF.GetText())
+    if(OUString(aSize5NF.GetSavedValue()) != aSize5NF.GetText())
         rHtmlOpt.SetFontSize(4, (sal_uInt16)aSize5NF.GetValue());
-    if(aSize6NF.GetSavedValue() != aSize6NF.GetText())
+    if(OUString(aSize6NF.GetSavedValue()) != aSize6NF.GetText())
         rHtmlOpt.SetFontSize(5, (sal_uInt16)aSize6NF.GetValue());
-    if(aSize7NF.GetSavedValue() != aSize7NF.GetText())
+    if(OUString(aSize7NF.GetSavedValue()) != aSize7NF.GetText())
         rHtmlOpt.SetFontSize(6, (sal_uInt16)aSize7NF.GetValue());
 
     if(aNumbersEnglishUSCB.IsChecked() != aNumbersEnglishUSCB.GetSavedValue())

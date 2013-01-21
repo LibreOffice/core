@@ -144,7 +144,7 @@ public:
                         SfxItemSet* pDefaults, sal_Bool bTakeOwnership = sal_True );
 
                     /// Overwritten method to be able to apply defaults already set
-    void            SetText( const String& rText );
+    void            SetText( const OUString& rText );
                     /// Current defaults are not applied, new defaults are applied
     void            SetTextNewDefaults( const String& rText,
                         const SfxItemSet& rDefaults, sal_Bool bRememberCopy = sal_True );

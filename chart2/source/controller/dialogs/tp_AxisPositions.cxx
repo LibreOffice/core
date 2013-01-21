@@ -454,7 +454,7 @@ IMPL_LINK_NOARG(AxisPositionsTabPage, CrossesAtSelectHdl)
     m_aED_CrossesAt.Show( (2==nPos) && !m_bCrossingAxisIsCategoryAxis );
     m_aED_CrossesAtCategory.Show( (2==nPos) && m_bCrossingAxisIsCategoryAxis );
 
-    if(! m_aED_CrossesAt.GetText().Len() )
+    if( m_aED_CrossesAt.GetText().isEmpty() )
         m_aED_CrossesAt.SetValue(0.0);
     if( 0 == m_aED_CrossesAtCategory.GetSelectEntryCount() )
         m_aED_CrossesAtCategory.SelectEntryPos(0);

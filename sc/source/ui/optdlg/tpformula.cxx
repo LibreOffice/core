@@ -115,8 +115,8 @@ void ScTpFormulaOptions::OnFocusSeparatorInput(Edit* pEdit)
         return;
 
     // Make sure the entire text is selected.
-    xub_StrLen nLen = pEdit->GetText().Len();
-    Selection aSel(0, nLen);
+    sal_Int32 nLen = pEdit->GetText().getLength();
+    Selection aSel(0, (sal_uInt16)nLen);
     pEdit->SetSelection(aSel);
     maOldSepValue = pEdit->GetText();
 }

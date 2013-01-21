@@ -216,11 +216,11 @@ void CuiAbstractTabDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
      pDlg->SetInputSet( pInSet );
 }
 //From class Window.
-void CuiAbstractTabDialog_Impl::SetText( const XubString& rStr )
+void CuiAbstractTabDialog_Impl::SetText( const OUString& rStr )
 {
     pDlg->SetText( rStr );
 }
-String CuiAbstractTabDialog_Impl::GetText() const
+OUString CuiAbstractTabDialog_Impl::GetText() const
 {
     return pDlg->GetText();
 }
@@ -231,12 +231,12 @@ const SfxItemSet* CuiAbstractSfxDialog_Impl::GetOutputItemSet() const
     return pDlg->GetOutputItemSet();
 }
 
-void CuiAbstractSfxDialog_Impl::SetText( const XubString& rStr )
+void CuiAbstractSfxDialog_Impl::SetText( const OUString& rStr )
 {
     pDlg->SetText( rStr );
 }
 
-String CuiAbstractSfxDialog_Impl::GetText() const
+OUString CuiAbstractSfxDialog_Impl::GetText() const
 {
     return pDlg->GetText();
 }
@@ -643,11 +643,11 @@ void AbstractSvxTransformTabDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
      pDlg->SetInputSet( pInSet );
 }
 //From class Window.
-void AbstractSvxTransformTabDialog_Impl::SetText( const XubString& rStr )
+void AbstractSvxTransformTabDialog_Impl::SetText( const OUString& rStr )
 {
     pDlg->SetText( rStr );
 }
-String AbstractSvxTransformTabDialog_Impl::GetText() const
+OUString AbstractSvxTransformTabDialog_Impl::GetText() const
 {
     return pDlg->GetText();
 }
@@ -682,11 +682,11 @@ void AbstractSvxCaptionDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
      pDlg->SetInputSet( pInSet );
 }
 //From class Window.
-void AbstractSvxCaptionDialog_Impl::SetText( const XubString& rStr )
+void AbstractSvxCaptionDialog_Impl::SetText( const OUString& rStr )
 {
     pDlg->SetText( rStr );
 }
-String AbstractSvxCaptionDialog_Impl::GetText() const
+OUString AbstractSvxCaptionDialog_Impl::GetText() const
 {
     return pDlg->GetText();
 }
@@ -737,7 +737,7 @@ void AbstractSvxNameDialog_Impl::SetHelpId( const rtl::OString& aHelpId )
 {
     pDlg->SetHelpId( aHelpId );
 }
-void AbstractSvxNameDialog_Impl::SetText( const XubString& rStr )
+void AbstractSvxNameDialog_Impl::SetText( const OUString& rStr )
 {
     pDlg->SetText( rStr );
 }
@@ -907,16 +907,16 @@ void AbstractSvxAreaTabDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
      pDlg->SetInputSet( pInSet );
 }
 //From class Window.
-void AbstractSvxAreaTabDialog_Impl::SetText( const XubString& rStr )
+void AbstractSvxAreaTabDialog_Impl::SetText( const OUString& rStr )
 {
     pDlg->SetText( rStr );
 }
-String AbstractSvxAreaTabDialog_Impl::GetText() const
+OUString AbstractSvxAreaTabDialog_Impl::GetText() const
 {
     return pDlg->GetText();
 }
 
-void AbstractSvxPostItDialog_Impl::SetText( const XubString& rStr )
+void AbstractSvxPostItDialog_Impl::SetText( const OUString& rStr )
 {
     pDlg->SetText( rStr );
 }

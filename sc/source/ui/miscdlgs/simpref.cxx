@@ -193,7 +193,7 @@ void ScSimpleRefDlg::StartRefInput()
     if ( bMultiSelection )
     {
         // initially select the whole string, so it gets replaced by default
-        aEdAssign.SetSelection( Selection( 0, aEdAssign.GetText().Len() ) );
+        aEdAssign.SetSelection( Selection( 0, aEdAssign.GetText().getLength() ) );
     }
 
     aRbAssign.DoRef();

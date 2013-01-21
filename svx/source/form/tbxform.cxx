@@ -73,7 +73,7 @@ SvxFmAbsRecWin::~SvxFmAbsRecWin()
 // -----------------------------------------------------------------------
 void SvxFmAbsRecWin::FirePosition( sal_Bool _bForce )
 {
-    if ( _bForce || ( GetText() != GetSavedValue() ) )
+    if ( _bForce || ( GetText() != OUString(GetSavedValue()) ) )
     {
         sal_Int64 nRecord = GetValue();
         if (nRecord < GetMin() || nRecord > GetMax())
@@ -105,7 +105,7 @@ void SvxFmAbsRecWin::LoseFocus()
 // -----------------------------------------------------------------------
 void SvxFmAbsRecWin::KeyInput( const KeyEvent& rKeyEvent )
 {
-    if( rKeyEvent.GetKeyCode() == KEY_RETURN && GetText().Len() )
+    if( rKeyEvent.GetKeyCode() == KEY_RETURN && !GetText().isEmpty() )
         FirePosition( sal_True );
     else
         NumericField::KeyInput( rKeyEvent );

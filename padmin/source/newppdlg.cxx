@@ -82,7 +82,7 @@ PPDImportDialog::PPDImportDialog( Window* pParent ) :
     m_aPathBox.SetSelectHdl( LINK( this, PPDImportDialog, SelectHdl ) );
     m_aPathBox.SetModifyHdl( LINK( this, PPDImportDialog, ModifyHdl ) );
 
-    if( m_aPathBox.GetText().Len() )
+    if( !m_aPathBox.GetText().isEmpty() )
         Import();
 }
 

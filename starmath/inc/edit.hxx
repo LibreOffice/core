@@ -97,8 +97,8 @@ public:
     SfxItemPool *   GetEditEngineItemPool();
 
     // Window
-    virtual void        SetText(const XubString &rText);
-    virtual String      GetText() const;
+    virtual void        SetText(const OUString &rText);
+    virtual OUString    GetText() const;
     virtual void        GetFocus();
     virtual void        LoseFocus();
 

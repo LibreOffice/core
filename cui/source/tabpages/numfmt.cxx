@@ -1348,7 +1348,7 @@ IMPL_LINK( SvxNumberFormatTabPage, ClickHdl_Impl, PushButton*, pIB)
                         SetCategory(nCatLbSelPos );
 
                     FillFormatListBox_Impl( aEntryList );
-                    if(m_pEdComment->GetText()!=m_pLbCategory->GetEntry(1))
+                    if(m_pEdComment->GetText()!=OUString(m_pLbCategory->GetEntry(1)))
                     {
                         pNumFmtShell->SetComment4Entry(nFmtLbSelPos,
                                                     m_pEdComment->GetText());
@@ -1459,12 +1459,12 @@ IMPL_LINK( SvxNumberFormatTabPage, EditHdl_Impl, Edit*, pEdFormat )
 {
     sal_uInt32 nCurKey = NUMKEY_UNDEFINED;
 
-    if ( m_pEdFormat->GetText().Len() == 0 )
+    if ( m_pEdFormat->GetText().isEmpty() )
     {
         m_pIbAdd->Enable(sal_False );
         m_pIbRemove->Enable(sal_False );
         m_pIbInfo->Enable(sal_False );
-        m_pFtComment->SetText(String());
+        m_pFtComment->SetText(OUString());
     }
     else
     {

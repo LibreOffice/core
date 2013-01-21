@@ -191,7 +191,7 @@ IMPL_LINK_NOARG(SwLineNumberingDlg, OKHdl)
  --------------------------------------------------------------------*/
 IMPL_LINK_NOARG(SwLineNumberingDlg, ModifyHdl)
 {
-    bool bEnable = m_pNumberingOnCB->IsChecked() && m_pDivisorED->GetText().Len() != 0;
+    bool bEnable = m_pNumberingOnCB->IsChecked() && !m_pDivisorED->GetText().isEmpty();
 
     m_pDivIntervalFT->Enable(bEnable);
     m_pDivIntervalNF->Enable(bEnable);

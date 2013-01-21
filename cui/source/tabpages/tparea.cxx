@@ -1165,7 +1165,7 @@ sal_Bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
             else
             {
                 // condition != Disabled ?
-                if( aNumFldStepCount.GetText().Len() > 0 )
+                if( !aNumFldStepCount.GetText().isEmpty() )
                 {
                     nValue = (sal_uInt16) aNumFldStepCount.GetValue();
                     if( nValue != (sal_uInt16) aNumFldStepCount.GetSavedValue().ToInt32() )
@@ -2234,7 +2234,7 @@ IMPL_LINK( SvxAreaTabPage, ModifyStepCountHdl_Impl, void *, p )
     {
         if( aTsbStepCount.GetState() == STATE_NOCHECK )
         {
-            if( aNumFldStepCount.GetText().Len() == 0 )
+            if( aNumFldStepCount.GetText().isEmpty() )
                 aNumFldStepCount.SetText(rtl::OUString("64"));
 
             aNumFldStepCount.Enable();
@@ -2247,7 +2247,7 @@ IMPL_LINK( SvxAreaTabPage, ModifyStepCountHdl_Impl, void *, p )
     if( aTsbStepCount.GetState() != STATE_CHECK )
     {
         // condition != Disabled ?
-        if( aNumFldStepCount.GetText().Len() > 0 )
+        if( !aNumFldStepCount.GetText().isEmpty() )
             nValue = (sal_uInt16) aNumFldStepCount.GetValue();
     }
     rXFSet.Put( XGradientStepCountItem( nValue ) );

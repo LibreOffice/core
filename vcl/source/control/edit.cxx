@@ -2813,7 +2813,7 @@ void Edit::Undo()
 
 // -----------------------------------------------------------------------
 
-void Edit::SetText( const XubString& rStr )
+void Edit::SetText( const OUString& rStr )
 {
     if ( mpSubEdit )
         mpSubEdit->SetText( rStr );     // not directly ImplSetText if SetText overloaded
@@ -2826,7 +2826,7 @@ void Edit::SetText( const XubString& rStr )
 
 // -----------------------------------------------------------------------
 
-void Edit::SetText( const XubString& rStr, const Selection& rSelection )
+void Edit::SetText( const OUString& rStr, const Selection& rSelection )
 {
     if ( mpSubEdit )
         mpSubEdit->SetText( rStr, rSelection );
@@ -2836,7 +2836,7 @@ void Edit::SetText( const XubString& rStr, const Selection& rSelection )
 
 // -----------------------------------------------------------------------
 
-XubString Edit::GetText() const
+OUString Edit::GetText() const
 {
     if ( mpSubEdit )
         return mpSubEdit->GetText();
@@ -2853,7 +2853,7 @@ void Edit::SetPlaceholderText( const OUString& rStr )
     else if ( maPlaceholderText != rStr )
     {
         maPlaceholderText = rStr;
-        if ( GetText().Len() == 0 )
+        if ( GetText().isEmpty() )
             Invalidate();
     }
 }

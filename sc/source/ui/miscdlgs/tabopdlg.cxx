@@ -252,10 +252,10 @@ IMPL_LINK( ScTabOpDlg, BtnHdl, PushButton*, pBtn )
         //    bzw. Einfachreferenz bei beidem?
         // 3. Ist mindestens Zeile oder Spalte und Formel voll?
 
-        if (aEdFormulaRange.GetText().Len() == 0)
+        if (aEdFormulaRange.GetText().isEmpty())
             nError = TABOPERR_NOFORMULA;
-        else if (aEdRowCell.GetText().Len() == 0 &&
-                 aEdColCell.GetText().Len() == 0)
+        else if (aEdRowCell.GetText().isEmpty() &&
+                 aEdColCell.GetText().isEmpty())
             nError = TABOPERR_NOCOLROW;
         else if ( !lcl_Parse( aEdFormulaRange.GetText(), pDoc, nCurTab,
                                 theFormulaCell, theFormulaEnd ) )
@@ -263,21 +263,21 @@ IMPL_LINK( ScTabOpDlg, BtnHdl, PushButton*, pBtn )
         else
         {
             const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
-            if (aEdRowCell.GetText().Len() > 0)
+            if (!aEdRowCell.GetText().isEmpty())
             {
                 if (!ConvertSingleRef( pDoc, aEdRowCell.GetText(), nCurTab,
                                        theRowCell, eConv ))
                     nError = TABOPERR_WRONGROW;
                 else
                 {
-                    if (aEdColCell.GetText().Len() == 0 &&
+                    if (aEdColCell.GetText().isEmpty() &&
                         theFormulaCell.Col() != theFormulaEnd.Col())
                         nError = TABOPERR_NOCOLFORMULA;
                     else
                         nMode = 1;
                 }
             }
-            if (aEdColCell.GetText().Len() > 0)
+            if (!aEdColCell.GetText().isEmpty())
             {
                 if (!ConvertSingleRef( pDoc, aEdColCell.GetText(), nCurTab,
                                        theColCell, eConv ))

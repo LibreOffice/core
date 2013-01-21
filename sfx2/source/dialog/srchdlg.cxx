@@ -154,7 +154,7 @@ IMPL_LINK_NOARG(SearchDialog, ToggleHdl)
 
 void SearchDialog::SetFocusOnEdit()
 {
-    Selection aSelection( 0, m_aSearchEdit.GetText().Len() );
+    Selection aSelection( 0, m_aSearchEdit.GetText().getLength() );
     m_aSearchEdit.SetSelection( aSelection );
     m_aSearchEdit.GrabFocus();
 }

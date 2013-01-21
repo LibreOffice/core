@@ -609,7 +609,7 @@ namespace dbaui
         OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
 
         // to get the correcxt value when saveValue was called by base class
-        if ( m_bUseClass && !m_aEDDriverClass.GetText().Len() )
+        if ( m_bUseClass && m_aEDDriverClass.GetText().isEmpty() )
         {
             m_aEDDriverClass.SetText(m_sDefaultJdbcDriverName);
             m_aEDDriverClass.SetModifyFlag();
@@ -624,7 +624,7 @@ namespace dbaui
         sal_Bool bSuccess = sal_False;
         try
         {
-            if ( m_aEDDriverClass.GetText().Len() )
+            if ( !m_aEDDriverClass.GetText().isEmpty() )
             {
 // TODO change jvmaccess
                 ::rtl::Reference< jvmaccess::VirtualMachine > xJVM = ::connectivity::getJavaVM( Reference<XMultiServiceFactory>(m_pAdminDialog->getORB()->getServiceManager(), UNO_QUERY_THROW) );
@@ -645,7 +645,7 @@ namespace dbaui
     IMPL_LINK(OGeneralSpecialJDBCDetailsPage, OnEditModified, Edit*, _pEdit)
     {
         if ( m_bUseClass && _pEdit == &m_aEDDriverClass )
-            m_aTestJavaDriver.Enable( m_aEDDriverClass.GetText().Len() != 0 );
+            m_aTestJavaDriver.Enable( !m_aEDDriverClass.GetText().isEmpty() );
 
         // tell the listener we were modified
         callModifiedHdl();
@@ -705,7 +705,7 @@ namespace dbaui
 
         bChangedSomething |= m_aMySQLSettings.FillItemSet( _rSet );
 
-        if ( m_aUserName.GetText() != m_aUserName.GetSavedValue() )
+        if ( m_aUserName.GetText() != OUString(m_aUserName.GetSavedValue()) )
         {
             _rSet.Put( SfxStringItem( DSID_USER, m_aUserName.GetText() ) );
             _rSet.Put( SfxStringItem( DSID_PASSWORD, String()));

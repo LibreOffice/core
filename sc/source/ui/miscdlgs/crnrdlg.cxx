@@ -920,7 +920,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range1SelectHdl)
             aRangeStr = aLbRange.GetSelectEntry();
         }
         else if ( nSelectPos > 2 && nSelectPos < nCnt && aRangeStr.Len()
-                && aRangeStr == aEdAssign.GetText() )
+                  && OUString(aRangeStr) == aEdAssign.GetText() )
         {   // nach oben wandern statt nach unten auf die vorherige Position
             nSelectPos -= 2;
             aLbRange.SelectEntryPos( nSelectPos );
@@ -938,9 +938,9 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range1SelectHdl)
     }
     else
     {
-        if ( aEdAssign.GetText().Len() > 0 )
+        if ( !aEdAssign.GetText().isEmpty() )
         {
-            if ( aEdAssign2.GetText().Len() > 0 )
+            if ( !aEdAssign2.GetText().isEmpty() )
                 aBtnAdd.Enable();
             else
                 aBtnAdd.Disable();

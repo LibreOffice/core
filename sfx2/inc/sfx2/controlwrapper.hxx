@@ -580,7 +580,7 @@ void NumericFieldWrapper< ValueT >::SetControlValue( ValueT nValue )
 template< typename ValueT >
 bool MetricFieldWrapper< ValueT >::IsControlDontKnow() const
 {
-    return this->GetControl().GetText().Len() == 0;
+    return this->GetControl().GetText().isEmpty();
 }
 
 template< typename ValueT >

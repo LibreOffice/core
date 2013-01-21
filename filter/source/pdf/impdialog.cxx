@@ -667,7 +667,7 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* paParent )
     paParent->mbUseLosslessCompression = maRbLosslessCompression.IsChecked();
     paParent->mnQuality = static_cast<sal_Int32>(maNfQuality.GetValue());
     paParent->mbReduceImageResolution = maCbReduceImageResolution.IsChecked();
-    paParent->mnMaxImageResolution = maCoReduceImageResolution.GetText().ToInt32();
+    paParent->mnMaxImageResolution = maCoReduceImageResolution.GetText().toInt32();
     paParent->mbExportNotes = maCbExportNotes.IsChecked();
     if ( mbIsPresentation )
         paParent->mbExportNotesPages = maCbExportNotesPages.IsChecked();

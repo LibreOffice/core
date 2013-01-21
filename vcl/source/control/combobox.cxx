@@ -606,7 +606,7 @@ void ComboBox::Resize()
     {
         mpSubEdit->SetSizePixel( Size( aOutSz.Width(), mnDDHeight ) );
         mpImplLB->setPosSizePixel( 0, mnDDHeight, aOutSz.Width(), aOutSz.Height() - mnDDHeight );
-        if ( GetText().Len() )
+        if ( !GetText().isEmpty() )
             ImplUpdateFloatSelection();
     }
 
@@ -824,7 +824,7 @@ long ComboBox::Notify( NotifyEvent& rNEvt )
 
 // -----------------------------------------------------------------------
 
-void ComboBox::SetText( const XubString& rStr )
+void ComboBox::SetText( const OUString& rStr )
 {
     ImplCallEventListeners( VCLEVENT_COMBOBOX_SETTEXT );
 
@@ -834,7 +834,7 @@ void ComboBox::SetText( const XubString& rStr )
 
 // -----------------------------------------------------------------------
 
-void ComboBox::SetText( const XubString& rStr, const Selection& rNewSelection )
+void ComboBox::SetText( const OUString& rStr, const Selection& rNewSelection )
 {
     ImplCallEventListeners( VCLEVENT_COMBOBOX_SETTEXT );
 

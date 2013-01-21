@@ -602,8 +602,8 @@ sal_Bool SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
         if( !mbUseMarginItem )
         {
             // #106224# all edits empty: do nothing
-            if( m_pLeftMF->GetText().Len() || m_pRightMF->GetText().Len() ||
-                m_pTopMF->GetText().Len() || m_pBottomMF->GetText().Len() )
+            if( !m_pLeftMF->GetText().isEmpty() || !m_pRightMF->GetText().isEmpty() ||
+                !m_pTopMF->GetText().isEmpty() || !m_pBottomMF->GetText().isEmpty() )
             {
                 if ( ((mbHorEnabled || mbVerEnabled || (nSWMode & SW_BORDER_MODE_TABLE)) &&
                         (m_pLeftMF->IsModified()||m_pRightMF->IsModified()||
@@ -617,10 +617,10 @@ sal_Bool SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
                                                         rCoreAttrs, SID_ATTR_BORDER_INNER );
                     if (
                         !pOldBoxItem ||
-                        m_pLeftMF->GetText() != m_pLeftMF->GetSavedValue() ||
-                        m_pRightMF->GetText() != m_pRightMF->GetSavedValue() ||
-                        m_pTopMF->GetText() != m_pTopMF->GetSavedValue() ||
-                        m_pBottomMF->GetText() != m_pBottomMF->GetSavedValue() ||
+                        m_pLeftMF->GetText() != OUString(m_pLeftMF->GetSavedValue()) ||
+                        m_pRightMF->GetText() != OUString(m_pRightMF->GetSavedValue()) ||
+                        m_pTopMF->GetText() != OUString(m_pTopMF->GetSavedValue()) ||
+                        m_pBottomMF->GetText() != OUString(m_pBottomMF->GetSavedValue()) ||
                         nMinValue == m_pLeftMF->GetValue() ||
                         nMinValue == m_pRightMF->GetValue() ||
                         nMinValue == m_pTopMF->GetValue() ||

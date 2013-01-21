@@ -173,7 +173,7 @@ public:
 
     void            SetSelectionChangedHdl( const Link& rLink ) {m_aSelectionLink = rLink;}
 
-    void            SetText( const String& rStr );
+    void            SetText( const OUString& rStr );
     String          GetAddress();
 
     void            InsertNewEntry( const String& rStr );

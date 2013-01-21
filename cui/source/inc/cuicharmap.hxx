@@ -44,7 +44,7 @@ public:
                     ~SvxShowText();
 
     void            SetFont( const Font& rFont );
-    void            SetText( const String& rText );
+    void            SetText( const OUString& rText );
     void            SetCentered(bool bCenter) { mbCenter = bCenter; }
 
     virtual void    Resize();

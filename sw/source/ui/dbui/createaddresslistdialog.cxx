@@ -744,7 +744,7 @@ IMPL_LINK_NOARG(SwFindEntryDialog, FindHdl_Impl)
 
 IMPL_LINK_NOARG(SwFindEntryDialog, FindEnableHdl_Impl)
 {
-    m_aFindPB.Enable(m_aFindED.GetText().Len() > 0);
+    m_aFindPB.Enable(!m_aFindED.GetText().isEmpty());
     return 0;
 }
 

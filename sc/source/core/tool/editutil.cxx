@@ -405,7 +405,7 @@ void ScEditEngineDefaulter::SetTextNewDefaults( const EditTextObject& rTextObjec
 }
 
 
-void ScEditEngineDefaulter::SetText( const String& rText )
+void ScEditEngineDefaulter::SetText( const OUString& rText )
 {
     sal_Bool bUpdateMode = GetUpdateMode();
     if ( bUpdateMode )

@@ -799,7 +799,7 @@ public:
     sal_Bool        KeyInput( const KeyEvent& rKEvt );
     void        LoseFocus();
     sal_Bool        EditingCanceled() const { return bCanceled; }
-    String      GetText() const;
+    OUString    GetText() const;
     String      GetSavedValue() const;
     void        StopEditing( sal_Bool bCancel = sal_False );
     void        Hide();

@@ -268,7 +268,7 @@ IMPL_LINK_NOARG( ScDataBarSettingsDlg, TypeSelectHdl )
     else
     {
         maEdMin.Enable();
-        if(!maEdMin.GetText().Len())
+        if(maEdMin.GetText().isEmpty())
         {
             if(nSelectMin == COLORSCALE_PERCENTILE || nSelectMin == COLORSCALE_PERCENT)
                 maEdMin.SetText(OUString::number(50));
@@ -283,7 +283,7 @@ IMPL_LINK_NOARG( ScDataBarSettingsDlg, TypeSelectHdl )
     else
     {
         maEdMax.Enable();
-        if(!maEdMax.GetText().Len())
+        if(maEdMax.GetText().isEmpty())
         {
             if(nSelectMax == COLORSCALE_PERCENTILE || nSelectMax == COLORSCALE_PERCENT)
                 maEdMax.SetText(OUString::number(50));

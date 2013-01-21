@@ -472,7 +472,7 @@ public:
     virtual void    LoseFocus();
     virtual void    Modify();
 
-    void            SetText( const XubString& rText );
+    void            SetText( const OUString& rText );
     void            Fill( const XubString& rName, const FontList* pList );
 
 private:
@@ -481,7 +481,7 @@ private:
     FontStyleBox&   operator =( const FontStyleBox& );
 };
 
-inline void FontStyleBox::SetText( const XubString& rText )
+inline void FontStyleBox::SetText( const OUString& rText )
 {
     aLastStyle = rText;
     ComboBox::SetText( rText );

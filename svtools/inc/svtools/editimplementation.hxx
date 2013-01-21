@@ -45,7 +45,7 @@ String GenericEditImplementation< EDIT >::GetText( LineEnd ) const
 
 //----------------------------------------------------------------------
 template <class EDIT>
-void GenericEditImplementation< EDIT >::SetText( const String& _rStr )
+void GenericEditImplementation< EDIT >::SetText( const OUString& _rStr )
 {
     m_rEdit.SetText( _rStr );
 }

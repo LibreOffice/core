@@ -206,14 +206,14 @@ void MoreButton::AddWindow( Window* pWindow )
 
 // -----------------------------------------------------------------------
 
-void MoreButton::SetText( const XubString& rText )
+void MoreButton::SetText( const OUString& rText )
 {
     PushButton::SetText( rText );
 }
 
 // -----------------------------------------------------------------------
 
-XubString MoreButton::GetText() const
+OUString MoreButton::GetText() const
 {
     return PushButton::GetText();
 }

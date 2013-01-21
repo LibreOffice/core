@@ -598,7 +598,7 @@ void SmEditWindow::InitScrollBars()
 }
 
 
-String SmEditWindow::GetText() const
+OUString SmEditWindow::GetText() const
 {
     String aText;
     EditEngine *pEditEngine = const_cast< SmEditWindow* >(this)->GetEditEngine();
@@ -609,7 +609,7 @@ String SmEditWindow::GetText() const
 }
 
 
-void SmEditWindow::SetText(const XubString& rText)
+void SmEditWindow::SetText(const OUString& rText)
 {
     EditEngine *pEditEngine = GetEditEngine();
     OSL_ENSURE( pEditEngine, "EditEngine missing" );
@@ -686,7 +686,7 @@ bool SmEditWindow::IsAllSelected() const
         sal_Int32 nParaCnt = pEditEngine->GetParagraphCount();
         if (!(nParaCnt - 1))
         {
-            sal_uInt16 nTextLen = pEditEngine->GetText( LINEEND_LF ).Len();
+            sal_Int32 nTextLen = pEditEngine->GetText( LINEEND_LF ).getLength();
             bRes = !eSelection.nStartPos && (eSelection.nEndPos == nTextLen - 1);
         }
         else

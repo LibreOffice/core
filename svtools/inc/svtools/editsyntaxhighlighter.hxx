@@ -44,8 +44,8 @@ class SVT_DLLPUBLIC MultiLineEditSyntaxHighlight : public MultiLineEdit
         ~MultiLineEditSyntaxHighlight();
 
         virtual void UpdateData();
-        virtual void SetText(const String& rNewText);
-        virtual void SetText( const XubString& rStr, const Selection& rNewSelection )
+        virtual void SetText(const OUString& rNewText);
+        virtual void SetText( const OUString& rStr, const Selection& rNewSelection )
                     { SetText( rStr ); SetSelection( rNewSelection ); }
 
         Color GetColorValue(TokenTypes aToken);

@@ -30,7 +30,7 @@
 
 IMPL_LINK_NOARG(MasterPasswordCreateDialog, EditHdl_Impl)
 {
-    aOKBtn.Enable( aEDMasterPasswordCrt.GetText().Len() >= nMinLen );
+    aOKBtn.Enable( aEDMasterPasswordCrt.GetText().getLength() >= nMinLen );
     return 0;
 }
 

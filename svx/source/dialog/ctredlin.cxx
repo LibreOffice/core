@@ -1183,7 +1183,7 @@ IMPL_LINK( SvxTPFilter, ModifyDate, void*,pTF)
     Time aTime(0);
     if(&aDfDate==pTF)
     {
-        if(aDfDate.GetText().Len()==0)
+        if(aDfDate.GetText().isEmpty())
            aDfDate.SetDate(aDate);
 
         if(pRedlinTable!=NULL)
@@ -1191,7 +1191,7 @@ IMPL_LINK( SvxTPFilter, ModifyDate, void*,pTF)
     }
     else if(&aDfDate2==pTF)
     {
-        if(aDfDate2.GetText().Len()==0)
+        if(aDfDate2.GetText().isEmpty())
            aDfDate2.SetDate(aDate);
 
         if(pRedlinTable!=NULL)
@@ -1199,7 +1199,7 @@ IMPL_LINK( SvxTPFilter, ModifyDate, void*,pTF)
     }
     else if(&aTfDate==pTF)
     {
-        if(aTfDate.GetText().Len()==0)
+        if(aTfDate.GetText().isEmpty())
            aTfDate.SetTime(aTime);
 
         if(pRedlinTable!=NULL)
@@ -1207,7 +1207,7 @@ IMPL_LINK( SvxTPFilter, ModifyDate, void*,pTF)
     }
     else if(&aTfDate2==pTF)
     {
-        if(aTfDate2.GetText().Len()==0)
+        if(aTfDate2.GetText().isEmpty())
            aTfDate2.SetTime(aTime);
 
         if(pRedlinTable!=NULL)

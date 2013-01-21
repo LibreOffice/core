@@ -226,9 +226,9 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
         aValueED.SetText(GetFldMgr().GetCurFldPar2());
     }
 
-    if (aNameFT.GetText() != sOldNameFT)
+    if (aNameFT.GetText() != OUString(sOldNameFT))
         aNameFT.SetText(sOldNameFT);
-    if (aValueFT.GetText() != sOldValueFT)
+    if (aValueFT.GetText() != OUString(sOldValueFT))
         aValueFT.SetText(sOldValueFT);
 
     aNumFormatLB.SetUpdateMode(sal_False);
@@ -1097,7 +1097,7 @@ IMPL_LINK_NOARG(SwFldVarPage, ChapterHdl)
 
 IMPL_LINK_NOARG(SwFldVarPage, SeparatorHdl)
 {
-    sal_Bool bEnable = aSeparatorED.GetText().Len() != 0 ||
+    sal_Bool bEnable = !aSeparatorED.GetText().isEmpty() ||
                     aChapterLevelLB.GetSelectEntryPos() == 0;
     EnableInsert(bEnable);
 
@@ -1203,8 +1203,8 @@ sal_Bool SwFldVarPage::FillItemSet(SfxItemSet& )
             else
             {
                 nSubType--;
-                String sSeparator = rtl::OUString(aSeparatorED.GetText().GetChar(0));
-                cSeparator = sSeparator.Len() ? sSeparator.GetChar(0) : ' ';
+                OUString sSeparator = rtl::OUString(aSeparatorED.GetText()[0]);
+                cSeparator = !sSeparator.isEmpty() ? sSeparator[0] : ' ';
             }
             break;
         }
@@ -1215,14 +1215,14 @@ sal_Bool SwFldVarPage::FillItemSet(SfxItemSet& )
     }
 
     if (!IsFldEdit() ||
-        aNameED.GetSavedValue() != aNameED.GetText() ||
-        aValueED.GetSavedValue() != aValueED.GetText() ||
+        OUString(aNameED.GetSavedValue()) != aNameED.GetText() ||
+        OUString(aValueED.GetSavedValue()) != aValueED.GetText() ||
         aSelectionLB.GetSavedValue() != aSelectionLB.GetSelectEntryPos() ||
         aFormatLB.GetSavedValue() != aFormatLB.GetSelectEntryPos() ||
         nOldFormat != aNumFormatLB.GetFormat() ||
         aInvisibleCB.GetState() != aInvisibleCB.GetSavedValue() ||
         aChapterLevelLB.GetSavedValue() != aChapterLevelLB.GetSelectEntryPos() ||
-        aSeparatorED.GetSavedValue() != aSeparatorED.GetText())
+        OUString(aSeparatorED.GetSavedValue()) != aSeparatorED.GetText())
     {
         InsertFld( nTypeId, nSubType, aName, aVal, nFormat,
                     cSeparator, aNumFormatLB.IsAutomaticLanguage() );

@@ -61,9 +61,9 @@ void SwConvertTableDlg::GetValues(  sal_Unicode& rDelim,
         rDelim = ';';
         nSaveButtonState = 1;
     }
-    else if( mpOtherBtn->IsChecked() && mpOtherEd->GetText().Len() )
+    else if( mpOtherBtn->IsChecked() && !mpOtherEd->GetText().isEmpty() )
     {
-        uOther = mpOtherEd->GetText().GetChar( 0 );
+        uOther = mpOtherEd->GetText()[0];
         rDelim = uOther;
         nSaveButtonState = 3;
     }

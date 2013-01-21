@@ -52,7 +52,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void InspectorHelpWindow::SetText( const XubString& _rStr )
+    void InspectorHelpWindow::SetText( const OUString& _rStr )
     {
         m_aHelpText.SetText( _rStr );
     }

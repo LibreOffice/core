@@ -42,7 +42,7 @@ MultiLineEditSyntaxHighlight::~MultiLineEditSyntaxHighlight()
 {
 }
 
-void MultiLineEditSyntaxHighlight::SetText(const String& rNewText)
+void MultiLineEditSyntaxHighlight::SetText(const OUString& rNewText)
 {
     MultiLineEdit::SetText(rNewText);
     UpdateData();

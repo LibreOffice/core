@@ -656,7 +656,7 @@ void FloatingWindow::StartPopupMode( const Rectangle& rRect, sal_uLong nFlags )
 
     // remove title
     mnOldTitle = mnTitle;
-    if ( ( mpWindowImpl->mnStyle & WB_POPUP ) && GetText().Len() )
+    if ( ( mpWindowImpl->mnStyle & WB_POPUP ) && !GetText().isEmpty() )
         SetTitleType( FLOATWIN_TITLE_POPUP );
     else if ( nFlags & FLOATWIN_POPUPMODE_ALLOWTEAROFF )
         SetTitleType( FLOATWIN_TITLE_TEAROFF );

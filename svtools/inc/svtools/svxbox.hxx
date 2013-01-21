@@ -159,7 +159,7 @@ public:
     sal_uInt16              GetStyle() const             { return nStyle; }
     void                SetStyle( const sal_uInt16 nSt ) { nStyle = nSt; }
 
-    String              GetText() const;
+    OUString            GetText() const;
 
 private:
     SvxEntryLst         aEntryLst;

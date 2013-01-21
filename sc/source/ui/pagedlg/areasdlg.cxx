@@ -623,7 +623,7 @@ IMPL_LINK( ScPrintAreasDlg, Impl_SelectHdl, ListBox*, pLb )
     // fill edit field according to list box selection
     if( (nSelPos == 0) || (nSelPos == nAllSheetPos) )
         pEd->SetText( EMPTY_STRING );
-    else if( nSelPos == nUserDefPos && !pLb->IsTravelSelect() && pEd->GetText().Len() == 0 )
+    else if( nSelPos == nUserDefPos && !pLb->IsTravelSelect() && pEd->GetText().isEmpty())
         pLb->SelectEntryPos( 0 );
     else if( nSelPos >= nFirstCustomPos )
         pEd->SetText( *static_cast< String* >( pLb->GetEntryData( nSelPos ) ) );

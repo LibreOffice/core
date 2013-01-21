@@ -174,7 +174,7 @@ IMPL_LINK( BreakPointDialog, EditModifyHdl, Edit *, pEdit )
     {
         BreakPoint* pBrk = GetSelectedBreakPoint();
         if ( pBrk )
-            pBrk->nStopAfter = pEdit->GetText().ToInt32();
+            pBrk->nStopAfter = pEdit->GetText().toInt32();
     }
     return 0;
 }

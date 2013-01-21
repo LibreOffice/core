@@ -907,7 +907,7 @@ sal_Bool SvtURLBox::ProcessKey( const KeyCode& rKey )
     }
 
     KeyCode aCode( rKey.GetCode() );
-    if ( aCode == KEY_RETURN && GetText().Len() )
+    if ( aCode == KEY_RETURN && !GetText().isEmpty() )
     {
         // wait for completion of matching thread
         ::osl::MutexGuard aGuard( theSvtMatchContextMutex::get() );
@@ -943,7 +943,7 @@ sal_Bool SvtURLBox::ProcessKey( const KeyCode& rKey )
         ClearModifyFlag();
         return bHandled;
     }
-    else if ( aCode == KEY_RETURN && !GetText().Len() && GetOpenHdl().IsSet() )
+    else if ( aCode == KEY_RETURN && GetText().isEmpty() && GetOpenHdl().IsSet() )
     {
         // for file dialog
         bAutoCompleteMode = sal_False;
@@ -1000,7 +1000,7 @@ long SvtURLBox::PreNotify( NotifyEvent& rNEvt )
             Selection aSelection( GetSelection() );
             sal_uInt16 nLen = (sal_uInt16)aSelection.Min();
             GetSubEdit()->KeyInput( rEvent );
-            SetSelection( Selection( nLen, GetText().Len() ) );
+            SetSelection( Selection( nLen, GetText().getLength() ) );
             return sal_True;
         }
 
@@ -1008,7 +1008,7 @@ long SvtURLBox::PreNotify( NotifyEvent& rNEvt )
         {
             // set the selection so a key stroke will overwrite
             // the placeholder rather than edit it
-            SetSelection( Selection( 0, GetText().Len() ) );
+            SetSelection( Selection( 0, GetText().getLength() ) );
         }
     }
 
@@ -1039,7 +1039,7 @@ long SvtURLBox::Notify( NotifyEvent &rEvt )
     }
     else if ( EVENT_LOSEFOCUS == rEvt.GetType() )
     {
-        if( !GetText().Len() )
+        if( GetText().isEmpty() )
             ClearModifyFlag();
         if ( pCtx.is() )
         {

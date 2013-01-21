@@ -51,9 +51,9 @@ public:
 
 public:
     // Edit overridables
-    virtual void    SetText(const String& _rStr);
-    virtual void    SetText(const String& _rStr, const Selection& _rNewSelection);
-    virtual String  GetText() const;
+    virtual void    SetText(const OUString& _rStr);
+    virtual void    SetText(const OUString& _rStr, const Selection& _rNewSelection);
+    virtual OUString  GetText() const;
 
 
     /** Showsthe Prefix

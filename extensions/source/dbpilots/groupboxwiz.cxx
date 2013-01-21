@@ -319,7 +319,7 @@ namespace dbp
     {
         sal_Bool bHaveSome = (0 != m_aExistingRadios.GetEntryCount());
         sal_Bool bSelectedSome = (0 != m_aExistingRadios.GetSelectEntryCount());
-        sal_Bool bUnfinishedInput = (0 != m_aRadioName.GetText().Len());
+        sal_Bool bUnfinishedInput = (!m_aRadioName.GetText().isEmpty());
 
         m_aMoveLeft.Enable(bSelectedSome);
         m_aMoveRight.Enable(bUnfinishedInput);

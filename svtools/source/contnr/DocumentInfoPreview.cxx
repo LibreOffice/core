@@ -126,7 +126,7 @@ void ODocumentInfoPreview::fill(
 void ODocumentInfoPreview::insertEntry(
     rtl::OUString const & title, rtl::OUString const & value)
 {
-    if (m_pEditWin.GetText().Len() != 0) {
+    if (!m_pEditWin.GetText().isEmpty()) {
         m_pEditWin.InsertText(rtl::OUString("\n\n"));
     }
     rtl::OUString caption(title + rtl::OUString(":\n"));

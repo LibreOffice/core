@@ -319,7 +319,7 @@ void LoginDialog::ClearPassword()
 {
     aPasswordED.SetText( String() );
 
-    if ( 0 == aNameED.GetText().Len() )
+    if ( aNameED.GetText().isEmpty() )
         aNameED.GrabFocus();
     else
         aPasswordED.GrabFocus();

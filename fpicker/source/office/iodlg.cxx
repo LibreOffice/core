@@ -980,7 +980,7 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
             return 0;                   // MBA->PB: seems to be called never ?!
 
         // get the URL from from the edit field ( if not empty )
-        if ( pThis->_pImp->_pEdFileName->GetText().Len() )
+        if ( !pThis->_pImp->_pEdFileName->GetText().isEmpty() )
         {
             String aText = pThis->_pImp->_pEdFileName->GetText();
 
@@ -2458,7 +2458,7 @@ std::vector<OUString> SvtFileDialog::GetPathList() const
 
     if ( ! pEntry )
     {
-        if ( _pImp->_pEdFileName->GetText().Len() && _bIsInExecute )
+        if ( !_pImp->_pEdFileName->GetText().isEmpty() && _bIsInExecute )
             aList.push_back(_pImp->_pEdFileName->GetURL());
         else
             aList.push_back(_aPath);

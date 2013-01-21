@@ -427,7 +427,7 @@ IMPL_LINK(FmSearchDialog, OnClickedSpecialSettings, Button*, pButton )
 //------------------------------------------------------------------------
 IMPL_LINK_NOARG(FmSearchDialog, OnSearchTextModified)
 {
-    if ((m_cmbSearchText.GetText().Len() != 0) || !m_rbSearchForText.IsChecked())
+    if ((!m_cmbSearchText.GetText().isEmpty()) || !m_rbSearchForText.IsChecked())
         m_pbSearchAgain.Enable();
     else
         m_pbSearchAgain.Disable();
@@ -668,7 +668,7 @@ void FmSearchDialog::EnableSearchUI(sal_Bool bEnable)
             if ( WINDOW_EDIT == m_pPreSearchFocus->GetType() )
             {
                 Edit* pEdit = static_cast< Edit* >( m_pPreSearchFocus );
-                pEdit->SetSelection( Selection( 0, pEdit->GetText().Len() ) );
+                pEdit->SetSelection( Selection( 0, pEdit->GetText().getLength() ) );
             }
         }
         m_pPreSearchFocus = NULL;
@@ -680,7 +680,7 @@ void FmSearchDialog::EnableSearchUI(sal_Bool bEnable)
 void FmSearchDialog::EnableSearchForDependees(sal_Bool bEnable)
 {
     sal_Bool bSearchingForText = m_rbSearchForText.IsChecked();
-    m_pbSearchAgain.Enable(bEnable && (!bSearchingForText || (m_cmbSearchText.GetText().Len() != 0)));
+    m_pbSearchAgain.Enable(bEnable && (!bSearchingForText || (!m_cmbSearchText.GetText().isEmpty())));
 
     bEnable = bEnable && bSearchingForText;
 

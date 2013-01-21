@@ -636,10 +636,10 @@ IMPL_LINK( SvxIMapDlg, InfoHdl, IMapWindow*, pWnd )
 
         aStbStatus.SetItemText( 1, rInfo.aMarkURL );
 
-        if ( maURLBox.GetText() != rInfo.aMarkURL )
+        if ( maURLBox.GetText() != OUString(rInfo.aMarkURL) )
             maURLBox.SetText( rInfo.aMarkURL );
 
-        if ( aEdtText.GetText() != rInfo.aMarkAltText )
+        if ( aEdtText.GetText() != OUString(rInfo.aMarkAltText) )
             aEdtText.SetText( rInfo.aMarkAltText );
 
         if ( !rInfo.aMarkTarget.Len() )

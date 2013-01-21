@@ -272,23 +272,23 @@ namespace dbaui
     //--------------------------------------------------------------------
     bool MySQLNativeSettings::canAdvance() const
     {
-        if ( m_aDatabaseName.GetText().Len() == 0 )
+        if ( m_aDatabaseName.GetText().isEmpty() )
             return false;
 
         if  (   m_aHostPortRadio.IsChecked()
-            &&  (   ( m_aHostName.GetText().Len() == 0 )
-                ||  ( m_aPort.GetText().Len() == 0 )
+            &&  (   ( m_aHostName.GetText().isEmpty() )
+                ||  ( m_aPort.GetText().isEmpty() )
                 )
             )
             return false;
 
 #ifdef UNX
         if  (   ( m_aSocketRadio.IsChecked() )
-            &&  ( m_aSocket.GetText().Len() == 0 )
+            &&  ( m_aSocket.GetText().isEmpty() )
             )
 #else
         if  (   ( m_aNamedPipeRadio.IsChecked() )
-            &&  ( m_aNamedPipe.GetText().Len() == 0 )
+            &&  ( m_aNamedPipe.GetText().isEmpty() )
             )
 #endif
             return false;

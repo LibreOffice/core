@@ -268,7 +268,7 @@ void SvInplaceEdit2::CallCallBackHdl_Impl()
     }
 }
 
-String SvInplaceEdit2::GetText() const
+OUString SvInplaceEdit2::GetText() const
 {
     return pEdit->GetText();
 }

@@ -194,7 +194,7 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl)
 
 IMPL_LINK_NOARG_INLINE_START(SvxNewDictionaryDialog, ModifyHdl_Impl)
 {
-    if ( aNameEdit.GetText().Len() )
+    if ( !aNameEdit.GetText().isEmpty() )
         aOKBtn.Enable();
     else
         aOKBtn.Disable();
@@ -552,7 +552,7 @@ IMPL_LINK(SvxEditDictionaryDialog, SelectHdl, SvTabListBox*, pBox)
         if(!bFirstSelect)
         {
             SvTreeListEntry* pEntry = pBox->FirstSelected();
-            String sTmpShort(pBox->GetEntryText(pEntry, 0));
+            OUString sTmpShort(pBox->GetEntryText(pEntry, 0));
             // without this the curser is always at the beginning of a word, if the text
             // is set over the ModifyHdl, although you're editing there at the moment
             if(aWordED.GetText() != sTmpShort)
@@ -761,7 +761,7 @@ IMPL_LINK(SvxEditDictionaryDialog, ModifyHdl, Edit*, pEdt)
         sal_Bool bIsChange =
                 CDE_EQUAL != cmpDicEntry_Impl(aWordED.GetText(), aWordText)
              || CDE_EQUAL != cmpDicEntry_Impl(aReplaceED.GetText(), aReplaceText);
-        if (aWordED.GetText().Len()  &&  bIsChange)
+        if (!aWordED.GetText().isEmpty()  &&  bIsChange)
             bEnableNewReplace = sal_True;
     }
 

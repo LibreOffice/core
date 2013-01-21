@@ -96,7 +96,7 @@ namespace pcr
     Any SAL_CALL OTimeControl::getValue() throw (RuntimeException)
     {
         Any aPropValue;
-        if ( getTypedControlWindow()->GetText().Len()>0 )
+        if ( !getTypedControlWindow()->GetText().isEmpty() )
         {
             ::Time aTime( getTypedControlWindow()->GetTime() );
             util::Time aUNOTime( aTime.Get100Sec(), aTime.GetSec(), aTime.GetMin(), aTime.GetHour() );
@@ -150,7 +150,7 @@ namespace pcr
     Any SAL_CALL ODateControl::getValue() throw (RuntimeException)
     {
         Any aPropValue;
-        if ( getTypedControlWindow()->GetText().Len() > 0 )
+        if ( !getTypedControlWindow()->GetText().isEmpty() )
         {
             ::Date aDate( getTypedControlWindow()->GetDate() );
             util::Date aUNODate( aDate.GetDay(), aDate.GetMonth(), aDate.GetYear() );
@@ -294,7 +294,7 @@ namespace pcr
     Any SAL_CALL ODateTimeControl::getValue() throw (RuntimeException)
     {
         Any aPropValue;
-        if ( getTypedControlWindow()->GetText().Len() )
+        if ( !getTypedControlWindow()->GetText().isEmpty() )
         {
             double nValue = getTypedControlWindow()->GetValue();
 
@@ -387,7 +387,7 @@ namespace pcr
     bool HyperlinkInput::impl_textHitTest( const ::Point& _rWindowPos )
     {
         xub_StrLen nPos = GetCharPos( _rWindowPos );
-        return ( ( nPos != STRING_LEN ) && ( nPos < GetText().Len() ) );
+        return ( ( nPos != STRING_LEN ) && ( nPos < GetText().getLength() ) );
     }
 
     //--------------------------------------------------------------------
@@ -631,7 +631,7 @@ namespace pcr
     Any SAL_CALL ONumericControl::getValue() throw (RuntimeException)
     {
         Any aPropValue;
-        if ( getTypedControlWindow()->GetText().Len() )
+        if ( !getTypedControlWindow()->GetText().isEmpty() )
         {
             double nValue = impl_fieldValueToApiValue_nothrow( getTypedControlWindow()->GetValue( m_eValueUnit ) );
             aPropValue <<= nValue;
@@ -1217,7 +1217,7 @@ namespace pcr
 
             m_pFloatingEdit->Show();
             m_pFloatingEdit->getEdit()->GrabFocus();
-            m_pFloatingEdit->getEdit()->SetSelection(Selection(m_pFloatingEdit->getEdit()->GetText().Len()));
+            m_pFloatingEdit->getEdit()->SetSelection(Selection(m_pFloatingEdit->getEdit()->GetText().getLength()));
             m_bDropdown=sal_True;
             if ( m_nOperationMode == eMultiLineText )
                 m_pFloatingEdit->getEdit()->SetText( m_pImplEdit->GetText() );

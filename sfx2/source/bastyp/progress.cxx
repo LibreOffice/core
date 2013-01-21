@@ -213,10 +213,7 @@ void SfxProgress::Stop()
 
 // -----------------------------------------------------------------------
 
-void SfxProgress::SetText
-(
-    const String&       /*      new Text */
-)
+void SfxProgress::SetText( const OUString&  /*      new Text */)
 
 /*  [Description]
 

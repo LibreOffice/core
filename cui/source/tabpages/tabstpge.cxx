@@ -536,7 +536,7 @@ IMPL_LINK( SvxTabulatorTabPage, NewHdl_Impl, Button *, pBtn )
     // If no RadioButton was clicked, we need to put anyway
     bCheck |= sal_True;
     // Set the selection into the position Edit
-    aTabBox.SetSelection(Selection(0, aTabBox.GetText().Len()));
+    aTabBox.SetSelection(Selection(0, aTabBox.GetText().getLength()));
     return 0;
 }
 

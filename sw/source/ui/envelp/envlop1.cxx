@@ -275,7 +275,7 @@ IMPL_LINK_NOARG(SwEnvPage, SenderHdl)
     if ( bEnable )
     {
         aSenderEdit.GrabFocus();
-        if(!aSenderEdit.GetText().Len())
+        if(aSenderEdit.GetText().isEmpty())
             aSenderEdit.SetText(MakeSender());
     }
     aPreview.Invalidate();

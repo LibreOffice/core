@@ -37,7 +37,7 @@
 
 void EmptyNumericField::Modify()
 {
-    if( GetText().Len() )
+    if( !GetText().isEmpty() )
         NumericField::Modify();
     else
         SetEmptyFieldValue();
@@ -335,7 +335,7 @@ sal_Bool ScTablePage::FillItemSet( SfxItemSet& rCoreSet )
     if (   WAS_DEFAULT(nWhichPageNo,rOldSet)
         && (    (!bUseValue && bUseValue == aBtnPageNo.GetSavedValue())
             || (   bUseValue && bUseValue == aBtnPageNo.GetSavedValue()
-                && aEdPageNo.GetText() == aEdPageNo.GetSavedValue() ) ) )
+                   && aEdPageNo.GetText() == OUString(aEdPageNo.GetSavedValue()) ) ) )
     {
             rCoreSet.ClearItem( nWhichPageNo );
     }
@@ -513,7 +513,7 @@ static sal_Bool lcl_PutScaleItem( sal_uInt16               nWhich,
 {
     sal_Bool bIsSel = (rListBox.GetSelectEntryPos() == nLBEntry);
     sal_Bool bDataChanged = (rListBox.GetSavedValue() != nLBEntry) ||
-                        (rEd.GetSavedValue() != rEd.GetText()) ||
+        (OUString(rEd.GetSavedValue()) != rEd.GetText()) ||
                         !WAS_DEFAULT( nWhich, rOldSet );
 
     if( bDataChanged )
@@ -537,8 +537,8 @@ static sal_Bool lcl_PutScaleItem2( sal_uInt16               nWhich,
     sal_uInt16 nValue2 = (sal_uInt16)rEd2.GetValue();
     sal_Bool bIsSel = (rListBox.GetSelectEntryPos() == nLBEntry);
     sal_Bool bDataChanged = (rListBox.GetSavedValue() != nLBEntry) ||
-                        (rEd1.GetSavedValue() != rEd1.GetText()) ||
-                        (rEd2.GetSavedValue() != rEd2.GetText()) ||
+        (OUString(rEd1.GetSavedValue()) != rEd1.GetText()) ||
+        (OUString(rEd2.GetSavedValue()) != rEd2.GetText()) ||
                         !WAS_DEFAULT( nWhich, rOldSet );
 
     if( bDataChanged )

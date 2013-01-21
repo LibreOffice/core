@@ -292,7 +292,7 @@ IMPL_LINK_NOARG(ScDataFormDlg, Impl_NewHdl)
         boost::ptr_vector<Edit>::iterator itr = maEdits.begin(), itrEnd = maEdits.end();
         for(; itr != itrEnd; ++itr)
             if (!boost::is_null(itr))
-                if ( (*itr).GetText().Len() != 0 )
+                if ( !(*itr).GetText().isEmpty() )
                 {
                     bHasData = true;
                     break;

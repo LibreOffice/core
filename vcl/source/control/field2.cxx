@@ -889,7 +889,7 @@ long PatternField::Notify( NotifyEvent& rNEvt )
         MarkToBeReformatted( sal_False );
     else if ( rNEvt.GetType() == EVENT_LOSEFOCUS )
     {
-        if ( MustBeReformatted() && (GetText().Len() || !IsEmptyFieldValueEnabled()) )
+        if ( MustBeReformatted() && (!GetText().isEmpty() || !IsEmptyFieldValueEnabled()) )
             Reformat();
     }
 
@@ -949,7 +949,7 @@ long PatternBox::Notify( NotifyEvent& rNEvt )
         MarkToBeReformatted( sal_False );
     else if ( rNEvt.GetType() == EVENT_LOSEFOCUS )
     {
-        if ( MustBeReformatted() && (GetText().Len() || !IsEmptyFieldValueEnabled()) )
+        if ( MustBeReformatted() && (!GetText().isEmpty() || !IsEmptyFieldValueEnabled()) )
             Reformat();
     }
 
@@ -1744,10 +1744,10 @@ void DateFormatter::ImplNewFieldValue( const Date& rDate )
     {
         Selection aSelection = GetField()->GetSelection();
         aSelection.Justify();
-        XubString aText = GetField()->GetText();
+        OUString aText = GetField()->GetText();
 
         // If selected until the end then keep it that way
-        if ( (xub_StrLen)aSelection.Max() == aText.Len() )
+        if ( (sal_Int32)aSelection.Max() == aText.getLength() )
         {
             if ( !aSelection.Len() )
                 aSelection.Min() = SELECTION_MAX;
@@ -1817,7 +1817,7 @@ sal_Bool DateFormatter::IsEmptyDate() const
 
     if ( GetField() && MustBeReformatted() && IsEmptyFieldValueEnabled() )
     {
-        if ( !GetField()->GetText().Len() )
+        if ( GetField()->GetText().isEmpty() )
         {
             bEmpty = sal_True;
         }
@@ -1837,7 +1837,7 @@ void DateFormatter::Reformat()
     if ( !GetField() )
         return;
 
-    if ( !GetField()->GetText().Len() && ImplGetEmptyFieldValue() )
+    if ( GetField()->GetText().isEmpty() && ImplGetEmptyFieldValue() )
         return;
 
     XubString aStr;
@@ -1979,7 +1979,7 @@ long DateField::Notify( NotifyEvent& rNEvt )
             // !!! We should find out why dates are treated differently than other fields (see
             // also bug: 52384)
 
-            sal_Bool bTextLen = GetText().Len() != 0;
+            sal_Bool bTextLen = !GetText().isEmpty();
             if ( bTextLen || !IsEmptyFieldValueEnabled() )
             {
                 if ( !ImplAllowMalformedInput() )
@@ -2113,7 +2113,7 @@ long DateBox::Notify( NotifyEvent& rNEvt )
     {
         if ( MustBeReformatted() )
         {
-            sal_Bool bTextLen = GetText().Len() != 0;
+            sal_Bool bTextLen = !GetText().isEmpty();
             if ( bTextLen || !IsEmptyFieldValueEnabled() )
                 Reformat();
             else if ( !bTextLen && IsEmptyFieldValueEnabled() )
@@ -2706,10 +2706,10 @@ void TimeFormatter::ImplNewFieldValue( const Time& rTime )
     {
         Selection aSelection = GetField()->GetSelection();
         aSelection.Justify();
-        XubString aText = GetField()->GetText();
+        OUString aText = GetField()->GetText();
 
         // If selected until the end then keep it that way
-        if ( (xub_StrLen)aSelection.Max() == aText.Len() )
+        if ( (sal_Int32)aSelection.Max() == aText.getLength() )
         {
             if ( !aSelection.Len() )
                 aSelection.Min() = SELECTION_MAX;
@@ -2829,7 +2829,7 @@ void TimeFormatter::Reformat()
     if ( !GetField() )
         return;
 
-    if ( !GetField()->GetText().Len() && ImplGetEmptyFieldValue() )
+    if ( GetField()->GetText().isEmpty() && ImplGetEmptyFieldValue() )
         return;
 
     XubString aStr;
@@ -2930,7 +2930,7 @@ long TimeField::Notify( NotifyEvent& rNEvt )
         MarkToBeReformatted( sal_False );
     else if ( rNEvt.GetType() == EVENT_LOSEFOCUS )
     {
-        if ( MustBeReformatted() && (GetText().Len() || !IsEmptyFieldValueEnabled()) )
+        if ( MustBeReformatted() && (!GetText().isEmpty() || !IsEmptyFieldValueEnabled()) )
         {
             if ( !ImplAllowMalformedInput() )
                 Reformat();
@@ -3051,7 +3051,7 @@ void TimeField::SetExtFormat( ExtTimeFieldFormat eFormat )
         default:    OSL_FAIL( "ExtTimeFieldFormat unknown!" );
     }
 
-    if ( GetField() && GetField()->GetText().Len() )
+    if ( GetField() && !GetField()->GetText().isEmpty() )
         SetUserTime( GetTime() );
     ReformatAll();
 }
@@ -3093,7 +3093,7 @@ long TimeBox::Notify( NotifyEvent& rNEvt )
         MarkToBeReformatted( sal_False );
     else if ( rNEvt.GetType() == EVENT_LOSEFOCUS )
     {
-        if ( MustBeReformatted() && (GetText().Len() || !IsEmptyFieldValueEnabled()) )
+        if ( MustBeReformatted() && (!GetText().isEmpty() || !IsEmptyFieldValueEnabled()) )
             Reformat();
     }
 

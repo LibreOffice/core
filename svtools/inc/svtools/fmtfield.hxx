@@ -179,8 +179,8 @@ public:
     void    TreatAsNumber(sal_Bool bDoSo) { m_bTreatAsNumber = bDoSo; }
 
 public:
-    virtual void SetText( const XubString& rStr );
-    virtual void SetText( const XubString& rStr, const Selection& rNewSelection );
+    virtual void SetText( const OUString& rStr );
+    virtual void SetText( const OUString& rStr, const Selection& rNewSelection );
 
     // die folgenden Methoden sind interesant, wenn m_bTreatAsNumber auf sal_False sitzt
     /** nehmen wir mal an, irgendjemand will das ganze schoene double-Handling gar nicht haben, sondern
@@ -244,7 +244,7 @@ protected:
     // any aspect of the current format has changed
     virtual void FormatChanged(FORMAT_CHANGE_TYPE nWhat);
 
-    void ImplSetTextImpl(const XubString& rNew, Selection* pNewSel);
+    void ImplSetTextImpl(const OUString& rNew, Selection* pNewSel);
     void ImplSetValue(double dValue, sal_Bool bForce);
     sal_Bool ImplGetValue(double& dNewVal);
 

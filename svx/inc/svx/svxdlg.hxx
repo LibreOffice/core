@@ -148,8 +148,8 @@ class AbstractSvxSearchFormatDialog : public SfxAbstractTabDialog   //for SvxSea
 {
 public:
     //From class Window.
-    virtual void        SetText( const XubString& rStr ) =0 ;
-    virtual String      GetText() const =0 ;
+    virtual void        SetText( const OUString& rStr ) =0 ;
+    virtual OUString    GetText() const =0 ;
 };
 
 class AbstractSvxSearchSimilarityDialog :public VclAbstractDialog  //add for SvxSearchSimilarityDialog
@@ -188,7 +188,7 @@ public:
     virtual void    SetEditHelpId(const rtl::OString&) = 0;
     //from class Window
     virtual void    SetHelpId( const rtl::OString& ) = 0;
-    virtual void    SetText( const XubString& rStr ) = 0;
+    virtual void    SetText( const OUString& rStr ) = 0;
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -276,7 +276,7 @@ public:
 class AbstractSvxPostItDialog :public VclAbstractDialog  //add for SvxPostItDialog
 {
 public:
-    virtual void                SetText( const XubString& rStr ) = 0;  //From class Window
+    virtual void                SetText( const OUString& rStr ) = 0;  //From class Window
     virtual const SfxItemSet*   GetOutputItemSet() const = 0;
     virtual void                SetPrevHdl( const Link& rLink ) = 0;
     virtual void                SetNextHdl( const Link& rLink ) = 0;

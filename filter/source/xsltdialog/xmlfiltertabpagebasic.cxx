@@ -86,16 +86,16 @@ bool XMLFilterTabPageBasic::FillInfo( filter_info_impl* pInfo )
 {
     if( pInfo )
     {
-        if( maEDFilterName.GetText().Len() )
+        if( !maEDFilterName.GetText().isEmpty() )
             pInfo->maFilterName = maEDFilterName.GetText();
 
-        if( maCBApplication.GetText().Len() )
+        if( !maCBApplication.GetText().isEmpty() )
             pInfo->maDocumentService = maCBApplication.GetText();
 
-        if( maEDInterfaceName.GetText().Len() )
+        if( !maEDInterfaceName.GetText().isEmpty() )
             pInfo->maInterfaceName = maEDInterfaceName.GetText();
 
-        if( maEDExtension.GetText().Len() )
+        if( !maEDExtension.GetText().isEmpty() )
             pInfo->maExtension = checkExtensions( maEDExtension.GetText() );
 
         pInfo->maComment = string_encode( maEDDescription.GetText() );

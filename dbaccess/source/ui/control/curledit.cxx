@@ -67,14 +67,14 @@ String OConnectionURLEdit::GetTextNoPrefix() const
 }
 
 //-------------------------------------------------------------------------
-void OConnectionURLEdit::SetText(const String& _rStr)
+void OConnectionURLEdit::SetText(const OUString& _rStr)
 {
     Selection aNoSelection(0,0);
     SetText(_rStr, aNoSelection);
 }
 
 //-------------------------------------------------------------------------
-void OConnectionURLEdit::SetText(const String& _rStr, const Selection& /*_rNewSelection*/)
+void OConnectionURLEdit::SetText(const OUString& _rStr, const Selection& /*_rNewSelection*/)
 {
     // create new sub controls, if necessary
     if (!GetSubEdit())
@@ -90,7 +90,7 @@ void OConnectionURLEdit::SetText(const String& _rStr, const Selection& /*_rNewSe
 
     m_pForcedPrefix->Show(m_bShowPrefix);
 
-    sal_Bool bIsEmpty = 0 == _rStr.Len();
+    sal_Bool bIsEmpty = _rStr.isEmpty();
     // calc the prefix
     String sPrefix;
     if (!bIsEmpty)
@@ -126,7 +126,7 @@ void OConnectionURLEdit::SetText(const String& _rStr, const Selection& /*_rNewSe
 }
 
 //-------------------------------------------------------------------------
-String OConnectionURLEdit::GetText() const
+OUString OConnectionURLEdit::GetText() const
 {
     if ( m_pForcedPrefix )
         return m_pForcedPrefix->GetText() += Edit::GetText();

@@ -753,7 +753,7 @@ sal_Bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
     }
     // Line width
     // GetSavedValue() returns String!
-    if( aMtrLineWidth.GetText() != aMtrLineWidth.GetSavedValue() )
+    if( aMtrLineWidth.GetText() != OUString(aMtrLineWidth.GetSavedValue()) )
     {
         XLineWidthItem aItem( GetCoreValue( aMtrLineWidth, ePoolUnit ) );
         pOld = GetOldItem( rAttrs, XATTR_LINEWIDTH );
@@ -764,7 +764,7 @@ sal_Bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
         }
     }
     // Width line start
-    if( aMtrStartWidth.GetText() != aMtrStartWidth.GetSavedValue() )
+    if( aMtrStartWidth.GetText() != OUString(aMtrStartWidth.GetSavedValue()) )
     {
         XLineStartWidthItem aItem( GetCoreValue( aMtrStartWidth, ePoolUnit ) );
         pOld = GetOldItem( rAttrs, XATTR_LINESTARTWIDTH );
@@ -775,7 +775,7 @@ sal_Bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
         }
     }
     // Width line end
-    if( aMtrEndWidth.GetText() != aMtrEndWidth.GetSavedValue() )
+    if( aMtrEndWidth.GetText() != OUString(aMtrEndWidth.GetSavedValue()) )
     {
         XLineEndWidthItem aItem( GetCoreValue( aMtrEndWidth, ePoolUnit ) );
         pOld = GetOldItem( rAttrs, XATTR_LINEENDWIDTH );
@@ -868,7 +868,7 @@ sal_Bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
     }
 
     // Width line start
-    if( aMtrStartWidth.GetText() != aMtrStartWidth.GetSavedValue() )
+    if( aMtrStartWidth.GetText() != OUString(aMtrStartWidth.GetSavedValue()) )
     {
         XLineStartWidthItem aItem( GetCoreValue( aMtrStartWidth, ePoolUnit ) );
         pOld = GetOldItem( rAttrs, XATTR_LINESTARTWIDTH );
@@ -879,7 +879,7 @@ sal_Bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
         }
     }
     // Width line end
-    if( aMtrEndWidth.GetText() != aMtrEndWidth.GetSavedValue() )
+    if( aMtrEndWidth.GetText() != OUString(aMtrEndWidth.GetSavedValue()) )
     {
         XLineEndWidthItem aItem( GetCoreValue( aMtrEndWidth, ePoolUnit ) );
         pOld = GetOldItem( rAttrs, XATTR_LINEENDWIDTH );

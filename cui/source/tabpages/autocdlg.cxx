@@ -1095,7 +1095,7 @@ IMPL_LINK(OfaAutocorrReplacePage, SelectHdl, SvTabListBox*, pBox)
     if(!bFirstSelect || !bHasSelectionText)
     {
         SvTreeListEntry* pEntry = pBox->FirstSelected();
-        String sTmpShort(pBox->GetEntryText(pEntry, 0));
+        OUString sTmpShort(pBox->GetEntryText(pEntry, 0));
         // if the text is set via ModifyHdl, the cursor is always at the beginning
         // of a word, although you're editing here
         sal_Bool bSameContent = 0 == pCompareClass->compareString( sTmpShort, aShortED.GetText() );
@@ -1197,7 +1197,7 @@ IMPL_LINK(OfaAutocorrReplacePage, NewDelHdl, PushButton*, pBtn)
     {
         SvTreeListEntry* _pNewEntry = aReplaceTLB.FirstSelected();
         String sEntry(aShortED.GetText());
-        if(sEntry.Len() && ( aReplaceED.GetText().Len() ||
+        if(sEntry.Len() && ( !aReplaceED.GetText().isEmpty() ||
                 ( bHasSelectionText && bSWriter ) ))
         {
             NewEntry(aShortED.GetText(), aReplaceED.GetText());
@@ -1630,7 +1630,7 @@ void OfaAutocorrExceptPage::Reset( const SfxItemSet& )
 IMPL_LINK(OfaAutocorrExceptPage, NewDelHdl, PushButton*, pBtn)
 {
     if((pBtn == &aNewAbbrevPB || pBtn == (PushButton*)&aAbbrevED )
-        && aAbbrevED.GetText().Len())
+        && !aAbbrevED.GetText().isEmpty())
     {
         aAbbrevLB.InsertEntry(aAbbrevED.GetText());
         ModifyHdl(&aAbbrevED);
@@ -1641,7 +1641,7 @@ IMPL_LINK(OfaAutocorrExceptPage, NewDelHdl, PushButton*, pBtn)
         ModifyHdl(&aAbbrevED);
     }
     else if((pBtn == &aNewDoublePB || pBtn == (PushButton*)&aDoubleCapsED )
-            && aDoubleCapsED.GetText().Len())
+            && !aDoubleCapsED.GetText().isEmpty())
     {
         aDoubleCapsLB.InsertEntry(aDoubleCapsED.GetText());
         ModifyHdl(&aDoubleCapsED);

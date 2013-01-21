@@ -257,7 +257,7 @@ sal_Int8 OFieldExpressionControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt
     if ( IsEditing() )
     {
         sal_uInt16 nPos = m_pComboCell->GetSelectEntryPos();
-        if ( COMBOBOX_ENTRY_NOTFOUND != nPos || m_pComboCell->GetText().Len() )
+        if ( COMBOBOX_ENTRY_NOTFOUND != nPos || !m_pComboCell->GetText().isEmpty() )
             SaveModified();
         DeactivateCell();
     }

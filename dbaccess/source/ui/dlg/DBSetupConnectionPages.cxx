@@ -182,7 +182,7 @@ DBG_NAME(OTextConnectionPageSetup)
         fillString(_rSet,&m_aETBaseDN,DSID_CONN_LDAP_BASEDN, bChangedSomething);
         fillInt32(_rSet,&m_aNFPortNumber,DSID_CONN_LDAP_PORTNUMBER,bChangedSomething);
 
-        if ( m_aETHostServer.GetText() != m_aETHostServer.GetSavedValue() )
+        if ( m_aETHostServer.GetText() != OUString(m_aETHostServer.GetSavedValue()) )
         {
             DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _rSet.GetItem(DSID_TYPECOLLECTION));
             ::dbaccess::ODsnTypeCollection* pCollection = NULL;
@@ -239,7 +239,7 @@ DBG_NAME(OTextConnectionPageSetup)
     // -----------------------------------------------------------------------
     IMPL_LINK(OLDAPConnectionPageSetup, OnEditModified, Edit*, /*_pEdit*/)
     {
-        sal_Bool bRoadmapState = ((m_aETHostServer.GetText().Len() != 0 ) && ( m_aETBaseDN.GetText().Len() != 0 ) && (m_aFTPortNumber.GetText().Len() != 0 ));
+        sal_Bool bRoadmapState = ((!m_aETHostServer.GetText().isEmpty() ) && ( !m_aETBaseDN.GetText().isEmpty() ) && (!m_aFTPortNumber.GetText().isEmpty() ));
         SetRoadmapStateValue(bRoadmapState);
         callModifiedHdl();
         return 0L;
@@ -535,14 +535,14 @@ DBG_NAME(OMySQLIntroPageSetup)
         OGenericAdministrationPage::implInitControls(_rSet, _bSaveValue);
 
         // to get the correct value when saveValue was called by base class
-        if ( !m_aETDriverClass.GetText().Len() )
+        if ( m_aETDriverClass.GetText().isEmpty() )
         {
             m_aETDriverClass.SetText(m_sDefaultJdbcDriverName);
             m_aETDriverClass.SetModifyFlag();
         }
         callModifiedHdl();
 
-        sal_Bool bRoadmapState = ((m_aETDatabasename.GetText().Len() != 0 ) && ( m_aETHostname.GetText().Len() != 0 ) && (m_aNFPortNumber.GetText().Len() != 0 ) && ( m_aETDriverClass.GetText().Len() != 0 ));
+        sal_Bool bRoadmapState = ((!m_aETDatabasename.GetText().isEmpty() ) && (!m_aETHostname.GetText().isEmpty()) && (!m_aNFPortNumber.GetText().isEmpty() ) && ( !m_aETDriverClass.GetText().isEmpty() ));
         SetRoadmapStateValue(bRoadmapState);
     }
 
@@ -554,7 +554,7 @@ DBG_NAME(OMySQLIntroPageSetup)
         sal_Bool bSuccess = sal_False;
         try
         {
-            if ( m_aETDriverClass.GetText().Len() )
+            if ( !m_aETDriverClass.GetText().isEmpty() )
             {
 // TODO change jvmaccess
                 ::rtl::Reference< jvmaccess::VirtualMachine > xJVM = ::connectivity::getJavaVM( uno::Reference<lang::XMultiServiceFactory>(m_pAdminDialog->getORB()->getServiceManager(), uno::UNO_QUERY_THROW) );
@@ -576,8 +576,8 @@ DBG_NAME(OMySQLIntroPageSetup)
     IMPL_LINK(OGeneralSpecialJDBCConnectionPageSetup, OnEditModified, Edit*, _pEdit)
     {
         if ( _pEdit == &m_aETDriverClass )
-            m_aPBTestJavaDriver.Enable( m_aETDriverClass.GetText().Len() != 0 );
-        sal_Bool bRoadmapState = ((m_aETDatabasename.GetText().Len() != 0 ) && ( m_aETHostname.GetText().Len() != 0 ) && (m_aNFPortNumber.GetText().Len() != 0 ) && ( m_aETDriverClass.GetText().Len() != 0 ));
+            m_aPBTestJavaDriver.Enable( !m_aETDriverClass.GetText().isEmpty() );
+        sal_Bool bRoadmapState = ((!m_aETDatabasename.GetText().isEmpty() ) && ( !m_aETHostname.GetText().isEmpty() ) && (!m_aNFPortNumber.GetText().isEmpty() ) && ( !m_aETDriverClass.GetText().isEmpty() ));
         SetRoadmapStateValue(bRoadmapState);
         callModifiedHdl();
         return 0L;
@@ -662,7 +662,7 @@ DBG_NAME(OMySQLIntroPageSetup)
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
         sal_Bool bEnableTestConnection = !m_aConnectionURL.IsVisible() || (m_aConnectionURL.GetTextNoPrefix().Len() != 0);
-        bEnableTestConnection = bEnableTestConnection && (m_aETDriverClass.GetText().Len() != 0);
+        bEnableTestConnection = bEnableTestConnection && (!m_aETDriverClass.GetText().isEmpty());
         return bEnableTestConnection;
     }
 
@@ -674,7 +674,7 @@ DBG_NAME(OMySQLIntroPageSetup)
         sal_Bool bSuccess = sal_False;
         try
         {
-            if ( m_aETDriverClass.GetText().Len() )
+            if ( !m_aETDriverClass.GetText().isEmpty() )
             {
 // TODO change jvmaccess
                 ::rtl::Reference< jvmaccess::VirtualMachine > xJVM = ::connectivity::getJavaVM( uno::Reference<lang::XMultiServiceFactory>(m_pAdminDialog->getORB()->getServiceManager(), uno::UNO_QUERY_THROW) );
@@ -695,7 +695,7 @@ DBG_NAME(OMySQLIntroPageSetup)
     IMPL_LINK(OJDBCConnectionPageSetup, OnEditModified, Edit*, _pEdit)
     {
         if ( _pEdit == &m_aETDriverClass )
-            m_aPBTestJavaDriver.Enable( m_aETDriverClass.GetText().Len() != 0 );
+            m_aPBTestJavaDriver.Enable( !m_aETDriverClass.GetText().isEmpty() );
         SetRoadmapStateValue(checkTestConnection());
         // tell the listener we were modified
         callModifiedHdl();
@@ -825,7 +825,7 @@ DBG_NAME(OAuthentificationPageSetup)
     {
         sal_Bool bChangedSomething = sal_False;
 
-        if (m_aETUserName.GetText() != m_aETUserName.GetSavedValue())
+        if (m_aETUserName.GetText() != OUString(m_aETUserName.GetSavedValue()))
         {
             _rSet.Put(SfxStringItem(DSID_USER, m_aETUserName.GetText()));
             _rSet.Put(SfxStringItem(DSID_PASSWORD, String()));

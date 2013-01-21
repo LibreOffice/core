@@ -134,7 +134,7 @@ sal_Bool    SwParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
     }
     if(aNewStartCB.GetState() != aNewStartCB.GetSavedValue() ||
         aNewStartNumberCB.GetState() != aNewStartNumberCB.GetSavedValue()||
-        aNewStartNF.GetText() != aNewStartNF.GetSavedValue())
+       aNewStartNF.GetText() != OUString(aNewStartNF.GetSavedValue()))
     {
         bModified = sal_True;
         sal_Bool bNewStartChecked = STATE_CHECK == aNewStartCB.GetState();
@@ -146,7 +146,7 @@ sal_Bool    SwParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
 
     if(aCountParaCB.GetSavedValue() != aCountParaCB.GetState() ||
         aRestartParaCountCB.GetSavedValue() != aRestartParaCountCB.GetState() ||
-            aRestartNF.GetSavedValue() != aRestartNF.GetText() )
+       OUString(aRestartNF.GetSavedValue()) != aRestartNF.GetText() )
     {
         SwFmtLineNumber aFmt;
         aFmt.SetStartValue( static_cast< sal_uLong >(aRestartParaCountCB.GetState() == STATE_CHECK ?

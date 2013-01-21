@@ -793,7 +793,7 @@ void SvxFontNameBox_Impl::Update( const SvxFontItem* pFontItem )
         aCurFont.SetPitch       ( pFontItem->GetPitch() );
         aCurFont.SetCharSet     ( pFontItem->GetCharSet() );
     }
-    String aCurName = aCurFont.GetName();
+    OUString aCurName = aCurFont.GetName();
     if ( GetText() != aCurName )
         SetText( aCurName );
 }

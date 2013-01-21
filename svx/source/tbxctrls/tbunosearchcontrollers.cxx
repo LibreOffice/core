@@ -453,7 +453,7 @@ IMPL_LINK_NOARG(FindTextToolbarController, EditModifyHdl)
     ToolBox* pToolBox = (ToolBox*)pWindow;
     if ( pToolBox && m_pFindTextFieldControl )
     {
-        if (m_pFindTextFieldControl->GetText().Len()>0)
+        if (!m_pFindTextFieldControl->GetText().isEmpty())
         {
             if ( !pToolBox->IsItemEnabled(m_nDownSearchId) )
                 pToolBox->EnableItem(m_nDownSearchId, sal_True);

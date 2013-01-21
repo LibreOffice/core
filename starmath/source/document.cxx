@@ -151,11 +151,11 @@ const String SmDocShell::GetComment() const
 }
 
 
-void SmDocShell::SetText(const String& rBuffer)
+void SmDocShell::SetText(const OUString& rBuffer)
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::SetText" );
 
-    if (rBuffer != aText)
+    if (rBuffer != OUString(aText))
     {
         bool bIsEnabled = IsEnableSetModified();
         if( bIsEnabled )
@@ -911,7 +911,7 @@ void SmDocShell::UpdateText()
 
     if (pEditEngine && pEditEngine->IsModified())
     {
-        String aEngTxt( pEditEngine->GetText( LINEEND_LF ) );
+        OUString aEngTxt( pEditEngine->GetText( LINEEND_LF ) );
         if (GetText() != aEngTxt)
             SetText( aEngTxt );
     }
@@ -1164,7 +1164,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
         case SID_TEXT:
         {
             const SfxStringItem& rItem = (const SfxStringItem&)rReq.GetArgs()->Get(SID_TEXT);
-            if (GetText() != rItem.GetValue())
+            if (GetText() != OUString(rItem.GetValue()))
                 SetText(rItem.GetValue());
         }
         break;

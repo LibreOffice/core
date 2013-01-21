@@ -42,7 +42,7 @@ namespace pcr
     public:
         InspectorHelpWindow( Window* _pParent );
 
-        virtual void    SetText( const XubString& rStr );
+        virtual void    SetText( const OUString& rStr );
 
         void            SetLimits( sal_Int32 _nMinLines, sal_Int32 _nMaxLines );
         long            GetMinimalHeightPixel();

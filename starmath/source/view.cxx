@@ -684,7 +684,7 @@ void SmEditController::StateChanged(sal_uInt16 nSID, SfxItemState eState, const 
 {
     const SfxStringItem *pItem = PTR_CAST(SfxStringItem, pState);
 
-    if ((pItem != NULL) && (rEdit.GetText() != pItem->GetValue()))
+    if ((pItem != NULL) && (rEdit.GetText() != OUString(pItem->GetValue())))
         rEdit.SetText(pItem->GetValue());
     SfxControllerItem::StateChanged (nSID, eState, pState);
 }
@@ -1778,7 +1778,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
 
         case SID_GETEDITTEXT:
             if (pWin)
-                if (pWin->GetText ().Len ()) GetDoc()->SetText( pWin->GetText() );
+                if (!pWin->GetText().isEmpty()) GetDoc()->SetText( pWin->GetText() );
             break;
 
         case SID_ATTR_ZOOM:

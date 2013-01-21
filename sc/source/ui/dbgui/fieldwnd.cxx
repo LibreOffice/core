@@ -581,9 +581,10 @@ void ScDPFieldControlBase::DrawBackground( OutputDevice& rDev )
 
     xub_StrLen nTokenCnt = comphelper::string::getTokenCount(GetText(), '\n');
     long nY = (aSize.Height() - nTokenCnt * rDev.GetTextHeight()) / 2;
-    for( xub_StrLen nToken = 0, nStringIx = 0; nToken < nTokenCnt; ++nToken )
+    sal_Int32 nStringIx = 0;
+    for( xub_StrLen nToken = 0; nToken < nTokenCnt; ++nToken )
     {
-        String aLine( GetText().GetToken( 0, '\n', nStringIx ) );
+        String aLine( GetText().getToken( 0, '\n', nStringIx ) );
         Point aLinePos( (aSize.Width() - rDev.GetCtrlTextWidth( aLine )) / 2, nY );
         rDev.DrawCtrlText( aLinePos, aLine );
         nY += rDev.GetTextHeight();

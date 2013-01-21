@@ -449,8 +449,8 @@ SfxViewVersionDialog_Impl::SfxViewVersionDialog_Impl ( Window *pParent, SfxVersi
     FreeResource();
 
     const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
-    aDateTimeText.SetText( aDateTimeText.GetText().Append(ConvertDateTime_Impl( pInfo->aCreationDate, rLocaleWrapper )) );
-    aSavedByText.SetText( aSavedByText.GetText().Append(pInfo->aAuthor) );
+    aDateTimeText.SetText( aDateTimeText.GetText() + ConvertDateTime_Impl( pInfo->aCreationDate, rLocaleWrapper ) );
+    aSavedByText.SetText( aSavedByText.GetText() + pInfo->aAuthor );
     aEdit.SetText( rInfo.aComment );
 
     aCloseButton.SetClickHdl ( LINK( this, SfxViewVersionDialog_Impl, ButtonHdl ) );

@@ -1605,7 +1605,7 @@ String SdDesignNameDlg::GetDesignName()
 
 IMPL_LINK_NOARG(SdDesignNameDlg, ModifyHdl)
 {
-    m_aBtnOK.Enable(m_aEdit.GetText().Len() != 0);
+    m_aBtnOK.Enable(!m_aEdit.GetText().isEmpty());
 
     return 0;
 }

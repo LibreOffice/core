@@ -93,11 +93,11 @@ public:
     virtual void    Copy();
     virtual void    Paste();
 
-    virtual void    SetText( const XubString& rStr );
-    virtual void    SetText( const XubString& rStr, const Selection& rNewSelection )
+    virtual void    SetText( const OUString& rStr );
+    virtual void    SetText( const OUString& rStr, const Selection& rNewSelection )
                     { SetText( rStr ); SetSelection( rNewSelection ); }
-    String          GetText() const;
-    String          GetText( LineEnd aSeparator ) const;
+    OUString        GetText() const;
+    OUString        GetText( LineEnd aSeparator ) const;
     String          GetTextLines( LineEnd aSeparator ) const;
 
     void            SetRightToLeft( sal_Bool bRightToLeft );

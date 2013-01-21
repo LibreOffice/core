@@ -243,7 +243,7 @@ long ComboboxToolbarController::PreNotify( NotifyEvent& rNEvt )
                 if(( rKeyCode.GetModifier() | rKeyCode.GetCode()) == KEY_RETURN )
                 {
                     // Call execute only with non-empty text
-                    if ( m_pComboBox->GetText().Len() > 0 )
+                    if ( !m_pComboBox->GetText().isEmpty() )
                         execute( rKeyCode.GetModifier() );
                     return 1;
                 }

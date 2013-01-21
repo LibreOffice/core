@@ -232,8 +232,8 @@ sal_Bool SwFldDBPage::FillItemSet(SfxItemSet& )
         sal_Bool bDBListBoxChanged = sOldDBName != sTempDBName ||
             sOldTableName != sTempTableName || sOldColumnName != sTempColumnName;
         if (!IsFldEdit() ||
-            aConditionED.GetSavedValue() != aConditionED.GetText() ||
-             aValueED.GetSavedValue() != aValueED.GetText() ||
+            OUString(aConditionED.GetSavedValue()) != aConditionED.GetText() ||
+            OUString(aValueED.GetSavedValue()) != aValueED.GetText() ||
              bDBListBoxChanged ||
              nOldFormat != nFormat || nOldSubType != nSubType)
         {
@@ -408,7 +408,7 @@ void SwFldDBPage::CheckInsert()
 
     if (nTypeId == TYP_DBNUMSETFLD)
     {
-        sal_Bool bHasValue = aValueED.GetText().Len() != 0;
+        sal_Bool bHasValue = !aValueED.GetText().isEmpty();
 
         bInsert &= bHasValue;
     }

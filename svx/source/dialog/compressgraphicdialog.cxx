@@ -235,7 +235,7 @@ IMPL_LINK_NOARG( CompressGraphicsDialog, NewHeightModifiedHdl )
 
 IMPL_LINK_NOARG( CompressGraphicsDialog, ResolutionModifiedHdl )
 {
-    m_dResolution = (double) m_pResolutionLB->GetText().ToInt32();
+    m_dResolution = (double) m_pResolutionLB->GetText().toInt32();
 
     UpdateNewWidthMF();
     UpdateNewHeightMF();

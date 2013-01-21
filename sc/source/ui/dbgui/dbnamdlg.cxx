@@ -595,13 +595,13 @@ IMPL_LINK_NOARG(ScDbNameDlg, RemoveBtnHdl)
 
 IMPL_LINK_NOARG(ScDbNameDlg, NameModifyHdl)
 {
-    String  theName     = aEdName.GetText();
+    OUString  theName     = aEdName.GetText();
     sal_Bool    bNameFound  = (COMBOBOX_ENTRY_NOTFOUND
                            != aEdName.GetEntryPos( theName ));
 
-    if ( theName.Len() == 0 )
+    if ( theName.isEmpty() )
     {
-        if ( aBtnAdd.GetText() != aStrAdd )
+        if ( aBtnAdd.GetText() != OUString(aStrAdd) )
             aBtnAdd.SetText( aStrAdd );
         aBtnAdd     .Disable();
         aBtnRemove  .Disable();
@@ -624,7 +624,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, NameModifyHdl)
     {
         if ( bNameFound )
         {
-            if ( aBtnAdd.GetText() != aStrModify )
+            if ( aBtnAdd.GetText() != OUString(aStrModify) )
                 aBtnAdd.SetText( aStrModify );
 
             if(!bSaved)
@@ -636,13 +636,13 @@ IMPL_LINK_NOARG(ScDbNameDlg, NameModifyHdl)
         }
         else
         {
-            if ( aBtnAdd.GetText() != aStrAdd )
+            if ( aBtnAdd.GetText() != OUString(aStrAdd) )
                 aBtnAdd.SetText( aStrAdd );
 
             bSaved=false;
             pSaveObj->Restore();
 
-            if ( aEdAssign.GetText().Len() > 0 )
+            if ( !aEdAssign.GetText().isEmpty() )
             {
                 aBtnAdd.Enable();
                 aBtnHeader.Enable();

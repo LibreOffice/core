@@ -113,16 +113,16 @@ ReplaceEdit::~ReplaceEdit()
 void ReplaceEdit::Modify()
 {
     if (m_pBtn)
-        m_pBtn->Enable( GetText().Len() > 0 );
+        m_pBtn->Enable( !GetText().isEmpty() );
 }
 
-void ReplaceEdit::SetText( const XubString& rStr )
+void ReplaceEdit::SetText( const OUString& rStr )
 {
     Edit::SetText( rStr );
     Modify();
 }
 
-void ReplaceEdit::SetText( const XubString& rStr, const Selection& rNewSelection )
+void ReplaceEdit::SetText( const OUString& rStr, const Selection& rNewSelection )
 {
     Edit::SetText( rStr, rNewSelection );
     Modify();
@@ -324,7 +324,7 @@ bool SvxThesaurusDialog::UpdateAlternativesBox_Impl()
 
 void SvxThesaurusDialog::LookUp( const String &rText )
 {
-    if (rText != m_pWordCB->GetText()) // avoid moving of the cursor if the text is the same
+    if (OUString(rText) != m_pWordCB->GetText()) // avoid moving of the cursor if the text is the same
         m_pWordCB->SetText( rText );
     LookUp_Impl();
 }

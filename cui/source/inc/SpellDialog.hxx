@@ -81,7 +81,7 @@ public:
     void            SetModifyHdl(const Link& rLink) { m_aModifyLink = rLink;}
 
     void            SetAttrib( const TextAttrib& rAttr, sal_uLong nPara, sal_uInt16 nStart, sal_uInt16 nEnd );
-    void            SetText( const String& rStr );
+    void            SetText( const OUString& rStr );
 
     bool            MarkNextError( bool bIgnoreCurrentError );
     void            ChangeMarkedWord(const String& rNewWord, LanguageType eLanguage);

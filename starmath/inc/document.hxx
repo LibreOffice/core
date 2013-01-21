@@ -185,8 +185,8 @@ public:
     sal_Bool    ReplaceBadChars();
 
     void        UpdateText();
-    void        SetText(const String& rBuffer);
-    String&     GetText() { return (aText); }
+    void        SetText(const OUString& rBuffer);
+    OUString    GetText() { return (OUString(aText)); }
     void        SetFormat(SmFormat& rFormat);
     const SmFormat&  GetFormat() { return (aFormat); }
 

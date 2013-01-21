@@ -242,7 +242,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
 {
     FreeResource();
 
-    nGBFmtLen = aFlFormat.GetText().Len();
+    nGBFmtLen = aFlFormat.GetText().getLength();
 
     if(xColSupp.is())
     {
@@ -799,7 +799,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, SelectHdl, ListBox*, pBox )
     {
         // set the selected FieldName at the FormatGroupBox, so that
         // it's clear what field is configured by the format!
-        String sTxt( aFlFormat.GetText().Copy( 0, nGBFmtLen ));
+        String sTxt( aFlFormat.GetText().copy( 0, nGBFmtLen ));
         if( aSrch.sColumn.isEmpty() )
         {
             aRbDbFmtFromDb.Enable( sal_False );

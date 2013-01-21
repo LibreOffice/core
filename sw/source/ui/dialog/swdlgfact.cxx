@@ -152,12 +152,12 @@ void AbstractTabDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
 }
 
 //From class Window.
-void AbstractTabDialog_Impl::SetText( const XubString& rStr )
+void AbstractTabDialog_Impl::SetText( const OUString& rStr )
 {
     pDlg->SetText( rStr );
 }
 
-String AbstractTabDialog_Impl::GetText() const
+OUString AbstractTabDialog_Impl::GetText() const
 {
     return pDlg->GetText();
 }
@@ -190,12 +190,12 @@ const SfxItemSet* SwAbstractSfxDialog_Impl::GetOutputItemSet() const
     return pDlg->GetOutputItemSet();
 }
 
-void SwAbstractSfxDialog_Impl::SetText( const XubString& rStr )
+void SwAbstractSfxDialog_Impl::SetText( const OUString& rStr )
 {
     pDlg->SetText( rStr );
 }
 
-String SwAbstractSfxDialog_Impl::GetText() const
+OUString SwAbstractSfxDialog_Impl::GetText() const
 {
     return pDlg->GetText();
 }
@@ -274,12 +274,12 @@ void AbstractSwLabDlg_Impl::SetInputSet( const SfxItemSet* pInSet )
      pDlg->SetInputSet( pInSet );
 }
 
-void AbstractSwLabDlg_Impl::SetText( const XubString& rStr )
+void AbstractSwLabDlg_Impl::SetText( const OUString& rStr )
 {
     pDlg->SetText( rStr );
 }
 
-String AbstractSwLabDlg_Impl::GetText() const
+OUString AbstractSwLabDlg_Impl::GetText() const
 {
     return pDlg->GetText();
 }
@@ -339,12 +339,12 @@ void AbstractSwFldDlg_Impl::SetInputSet( const SfxItemSet* pInSet )
      pDlg->SetInputSet( pInSet );
 }
 
-void AbstractSwFldDlg_Impl::SetText( const XubString& rStr )
+void AbstractSwFldDlg_Impl::SetText( const OUString& rStr )
 {
     pDlg->SetText( rStr );
 }
 
-String AbstractSwFldDlg_Impl::GetText() const
+OUString AbstractSwFldDlg_Impl::GetText() const
 {
     return pDlg->GetText();
 }
@@ -433,7 +433,7 @@ void AbstractInsFootNoteDlg_Impl::SetHelpId( const rtl::OString& sHelpId )
     pDlg->SetHelpId( sHelpId );
 }
 
-void AbstractInsFootNoteDlg_Impl::SetText( const XubString& rStr )
+void AbstractInsFootNoteDlg_Impl::SetText( const OUString& rStr )
 {
     pDlg->SetText( rStr );
 }
@@ -445,7 +445,7 @@ void AbstractInsTableDlg_Impl::GetValues( String& rName, sal_uInt16& rRow, sal_u
     pDlg->GetValues( rName, rRow, rCol, rInsTblFlags, rTableAutoFmtName, prTAFmt);
 }
 
-String AbstractJavaEditDialog_Impl::GetText()
+OUString AbstractJavaEditDialog_Impl::GetText()
 {
     return pDlg->GetText();
 }

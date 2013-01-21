@@ -79,7 +79,7 @@ FileControl::~FileControl()
 
 // -----------------------------------------------------------------------
 
-void FileControl::SetText( const XubString& rStr )
+void FileControl::SetText( const OUString& rStr )
 {
     maEdit.SetText( rStr );
     if ( mnFlags & FILECTRL_RESIZEBUTTONBYPATHLEN )
@@ -88,7 +88,7 @@ void FileControl::SetText( const XubString& rStr )
 
 // -----------------------------------------------------------------------
 
-XubString FileControl::GetText() const
+OUString FileControl::GetText() const
 {
     return maEdit.GetText();
 }

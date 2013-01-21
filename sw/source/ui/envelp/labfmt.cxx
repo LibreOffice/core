@@ -651,7 +651,7 @@ IMPL_LINK_NOARG(SwSaveLabelDlg, OkHdl)
 
 IMPL_LINK_NOARG(SwSaveLabelDlg, ModifyHdl)
 {
-    aOKPB.Enable(aMakeCB.GetText().Len() && aTypeED.GetText().Len());
+    aOKPB.Enable(!aMakeCB.GetText().isEmpty() && !aTypeED.GetText().isEmpty());
     return 0;
 }
 

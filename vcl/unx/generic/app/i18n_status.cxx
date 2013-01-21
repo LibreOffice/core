@@ -281,7 +281,7 @@ IMPL_LINK_NOARG(XIMStatusWindow, DelayedShowHdl)
 
 void XIMStatusWindow::show( bool bShow, I18NStatus::ShowReason eReason )
 {
-    if( bShow && ! m_aStatusText.GetText().Len() )
+    if( bShow && m_aStatusText.GetText().isEmpty() )
         bShow = false;
 
     m_bDelayedShow = bShow;
@@ -342,7 +342,7 @@ IIIMPStatusWindow::IIIMPStatusWindow( SalFrame* pParent, bool bOn ) :
         m_bShow( true ),
         m_bOn( bOn )
 {
-    SetText( String( RTL_CONSTASCII_USTRINGPARAM( "IME Status" ) ) );
+    SetText( OUString( "IME Status" ) );
 
     layout();
 

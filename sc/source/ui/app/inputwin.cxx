@@ -678,12 +678,12 @@ void ScInputWindow::SetFormulaMode( sal_Bool bSet )
     aTextWindow.SetFormulaMode(bSet);
 }
 
-void ScInputWindow::SetText( const String& rString )
+void ScInputWindow::SetText( const OUString& rString )
 {
     ToolBox::SetText(rString);
 }
 
-String ScInputWindow::GetText() const
+OUString ScInputWindow::GetText() const
 {
     return ToolBox::GetText();
 }
@@ -1373,7 +1373,7 @@ void ScMultiTextWnd::InitEditEngine()
     pEditEngine->SetUpdateMode( sal_True );
 
     //	aString ist die Wahrheit...
-    if ( bFilled && pEditEngine->GetText() == aString )
+    if ( bFilled && pEditEngine->GetText() == OUString(aString) )
         Invalidate();						// Repaint fuer (hinterlegte) Felder
     else
         pEditEngine->SetText(aString);		// dann wenigstens den richtigen Text
@@ -1665,7 +1665,7 @@ void ScTextWnd::LoseFocus()
 {
 }
 
-String ScTextWnd::GetText() const
+OUString ScTextWnd::GetText() const
 {
     //  ueberladen, um per Testtool an den Text heranzukommen
 
@@ -1754,7 +1754,7 @@ void ScTextWnd::StartEditEngine()
         pEditEngine->SetUpdateMode( sal_True );
 
         //  aString ist die Wahrheit...
-        if ( bFilled && pEditEngine->GetText() == aString )
+        if ( bFilled && pEditEngine->GetText() == OUString(aString) )
             Invalidate();                       // Repaint fuer (hinterlegte) Felder
         else
             pEditEngine->SetText(aString);      // dann wenigstens den richtigen Text

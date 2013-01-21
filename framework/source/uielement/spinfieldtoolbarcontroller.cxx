@@ -328,7 +328,7 @@ long SpinfieldToolbarController::PreNotify( NotifyEvent& rNEvt )
         if(( rKeyCode.GetModifier() | rKeyCode.GetCode()) == KEY_RETURN )
         {
             // Call execute only with non-empty text
-            if ( m_pSpinfieldControl->GetText().Len() > 0 )
+            if ( !m_pSpinfieldControl->GetText().isEmpty() )
                 execute( rKeyCode.GetModifier() );
             return 1;
         }
