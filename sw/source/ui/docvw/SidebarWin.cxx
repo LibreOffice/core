@@ -384,8 +384,7 @@ void SwSidebarWin::CheckMetaText()
     }
     else if (sMeta.getLength() > 22)
     {
-        sMeta.replaceAt(20, sMeta.getLength()-20, "");
-        sMeta = sMeta + OUString("...");
+        sMeta = sMeta.copy(0, 20) + OUString("...");
     }
     if ( mpMetadataAuthor->GetText() != sMeta )
     {

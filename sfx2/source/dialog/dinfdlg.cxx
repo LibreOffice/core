@@ -1340,7 +1340,8 @@ sal_Bool SfxInternetPage::FillItemSet( SfxItemSet& rSet )
             nDelay = static_cast<sal_uIntPtr>(m_pNFReload->GetValue());
             break;
         case S_Forward:
-            DBG_ASSERT( m_pEDForwardURL->GetText().Len(), "+SfxInternetPage::FillItemSet(): empty URL should be not possible for forward option!" );
+            SAL_WARN_IF(m_pEDForwardURL->GetText().isEmpty(), "sfx2",
+                "+SfxInternetPage::FillItemSet(): empty URL should be not possible for forward option!");
 
             bEnableReload = sal_True;
             SAL_WNODEPRECATED_DECLARATIONS_PUSH

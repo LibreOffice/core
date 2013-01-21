@@ -1491,7 +1491,7 @@ long SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
                     sal_Int32 nStart = pErrorAttr->GetStart();
                     sal_Int32 nEnd = pErrorAttr->GetEnd();
                     pTextEngine->RemoveAttrib( 0, *pErrorAttr );
-                    nStart = nStart - (sal_uInt16)nAddedChars;
+                    nStart = nStart - nAddedChars;
                     SetAttrib( *pNewError, 0, nStart - nAddedChars, nEnd );
                     //only if the error is active the mark is moved here
                     if(bIsErrorActive)
