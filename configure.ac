@@ -6944,6 +6944,33 @@ AC_SUBST(GPERF)
 dnl ===================================================================
 dnl Check for building ODK
 dnl ===================================================================
+if test "$enable_odk" = no; then
+    unset DOXYGEN
+else
+    if test "$with_doxygen" = no; then
+        AC_MSG_CHECKING([for doxygen])
+        unset DOXYGEN
+        AC_MSG_RESULT([no])
+    else
+        if test "$with_doxygen" = yes; then
+            AC_PATH_PROG([DOXYGEN], [doxygen])
+            if test -z "$DOXYGEN"; then
+                AC_MSG_RESULT([no])
+                if test "$enable_odk" = "" ; then
+                    enable_odk="no"
+                else
+                    AC_MSG_ERROR([doxygen not found in \$PATH; specify its pathname via --with-doxygen=..., or disable its use via --without-doxygen])
+                fi
+            fi
+        else
+            AC_MSG_CHECKING([for doxygen])
+            DOXYGEN=$with_doxygen
+            AC_MSG_RESULT([$DOXYGEN])
+        fi
+    fi
+fi
+AC_SUBST([DOXYGEN])
+
 AC_MSG_CHECKING([whether to build the ODK])
 if test "$enable_odk" = "" -o "$enable_odk" != "no"; then
     AC_MSG_RESULT([yes])
@@ -11655,28 +11682,6 @@ location (/usr/share/java), specify its pathname via
 fi
 AC_SUBST(OOO_JUNIT_JAR)
 
-if test "$enable_odk" = no; then
-    unset DOXYGEN
-else
-    if test "$with_doxygen" = no; then
-        AC_MSG_CHECKING([for doxygen])
-        unset DOXYGEN
-        AC_MSG_RESULT([no])
-    else
-        if test "$with_doxygen" = yes; then
-            AC_PATH_PROG([DOXYGEN], [doxygen])
-            if test -z "$DOXYGEN"; then
-                AC_MSG_RESULT([no])
-                AC_MSG_ERROR([doxygen not found in \$PATH; specify its pathname via --with-doxygen=..., or disable its use via --without-doxygen])
-            fi
-        else
-            AC_MSG_CHECKING([for doxygen])
-            DOXYGEN=$with_doxygen
-            AC_MSG_RESULT([$DOXYGEN])
-        fi
-    fi
-fi
-AC_SUBST([DOXYGEN])
 
 AC_SUBST(SCPDEFS)
 
