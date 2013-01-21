@@ -180,8 +180,8 @@ namespace
 
         const ::rtl::OUString& getNamespace() const { return maNamespace; }
         const ::rtl::OUString& getName() const { return maName; }
-        const WebDAVNamespace getWebDAVNamespace() const { return maWebDAVNamespace; }
-        const WebDAVName getWebDAVName() const { return maWebDAVName; }
+        WebDAVNamespace getWebDAVNamespace() const { return maWebDAVNamespace; }
+        WebDAVName getWebDAVName() const { return maWebDAVName; }
     };
 
     void WebDAVContext::parseForNamespaceTokens(const uno::Reference< xml::sax::XAttributeList >& xAttribs)

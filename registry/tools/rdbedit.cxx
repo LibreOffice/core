@@ -122,7 +122,7 @@ public:
         { return m_typeRegName; }
     const OString& getKeyName()
         { return m_keyName; }
-    const Command getCommand()
+    Command getCommand()
         { return m_command; }
     bool verbose()
         { return m_bVerbose; }

@@ -101,7 +101,7 @@ public:
     SwFmtCol( const SwFmtCol& );
     ~SwFmtCol();
     //i120133
-    const   sal_Int16 GetAdjustValue() const { return aWidthAdjustValue; }
+    sal_Int16 GetAdjustValue() const { return aWidthAdjustValue; }
     void    SetAdjustValue( const sal_Int16& n ) { aWidthAdjustValue = n; }
 
     SwFmtCol& operator=( const SwFmtCol& );

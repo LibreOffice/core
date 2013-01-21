@@ -302,7 +302,7 @@ const ::rtl::OUString& IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix
     return CrossRefHeadingBookmarkNamePrefix;
 }
 
-const bool SAL_DLLPUBLIC_EXPORT IDocumentMarkAccess::IsLegalPaMForCrossRefHeadingBookmark( const SwPaM& rPaM )
+bool SAL_DLLPUBLIC_EXPORT IDocumentMarkAccess::IsLegalPaMForCrossRefHeadingBookmark( const SwPaM& rPaM )
 {
     bool bRet( false );
 

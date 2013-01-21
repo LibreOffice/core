@@ -259,7 +259,7 @@ public:
     long GetHandle() const              { return mnHandle; }
     const String& GetName() const       { return maName; }
     const String& GetValSys() const     { return maVal; }
-    const bool IsTOCBookmark() const
+    bool IsTOCBookmark() const
     {
         return mbIsTOCBookmark;
     }
