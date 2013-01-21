@@ -1332,6 +1332,61 @@ Window* Window::GetAccessibleRelationLabeledBy() const
     return pWindow;
 }
 
+Window* Window::GetAccessibleRelationMemberOf() const
+{
+    Window* pWindow = NULL;
+    Window* pFrameWindow = GetParent();
+    if ( !pFrameWindow )
+    {
+        pFrameWindow = ImplGetFrameWindow();
+    }
+    // if( ! ( GetType() == WINDOW_FIXEDTEXT        ||
+    if( !( GetType() == WINDOW_FIXEDLINE ||
+        GetType() == WINDOW_GROUPBOX ) )
+    {
+        // search for a control that makes member of this window
+        // it is considered the last fixed line or group box
+        // that comes before this control; with the exception of push buttons
+        // which are labeled only if the fixed line or group box
+        // is directly before the control
+        // get form start and form end and index of this control
+        sal_uInt16 nIndex, nFormStart, nFormEnd;
+        Window* pSWindow = ::ImplFindDlgCtrlWindow( pFrameWindow,
+            const_cast<Window*>(this),
+            nIndex,
+            nFormStart,
+            nFormEnd );
+        if( pSWindow && nIndex != nFormStart )
+        {
+            if( GetType() == WINDOW_PUSHBUTTON      ||
+                GetType() == WINDOW_HELPBUTTON      ||
+                GetType() == WINDOW_OKBUTTON        ||
+                GetType() == WINDOW_CANCELBUTTON )
+            {
+                nFormStart = nIndex-1;
+            }
+            for( sal_uInt16 nSearchIndex = nIndex-1; nSearchIndex >= nFormStart; nSearchIndex-- )
+            {
+                sal_uInt16 nFoundIndex = 0;
+                pSWindow = ::ImplGetChildWindow( pFrameWindow,
+                    nSearchIndex,
+                    nFoundIndex,
+                    sal_False );
+                if( pSWindow && pSWindow->IsVisible() &&
+                    ( pSWindow->GetType() == WINDOW_FIXEDLINE   ||
+                    pSWindow->GetType() == WINDOW_GROUPBOX ) )
+                {
+                    pWindow = pSWindow;
+                    break;
+                }
+                if( nFoundIndex > nSearchIndex || nSearchIndex == 0 )
+                    break;
+            }
+        }
+    }
+    return pWindow;
+}
+
 // -----------------------------------------------------------------------
 
 KeyEvent Window::GetActivationKey() const

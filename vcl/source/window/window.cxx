@@ -8966,6 +8966,13 @@ void Window::SetAccessibleRelationLabeledBy( Window* pLabeledBy )
     mpWindowImpl->mpAccessibleInfos->pLabeledByWindow = pLabeledBy;
 }
 
+void Window::SetAccessibleRelationLabelFor( Window* pLabelFor )
+{
+    if ( !mpWindowImpl->mpAccessibleInfos )
+        mpWindowImpl->mpAccessibleInfos = new ImplAccessibleInfos;
+    mpWindowImpl->mpAccessibleInfos->pLabelForWindow = pLabelFor;
+}
+
 void Window::SetAccessibleRelationMemberOf( Window* pMemberOfWin )
 {
     if ( !mpWindowImpl->mpAccessibleInfos )
