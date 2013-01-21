@@ -1595,7 +1595,7 @@ public:
 class DirectoryCreationObserver
 {
 public:
-    virtual ~DirectoryCreationObserver() {};
+    virtual ~DirectoryCreationObserver() {}
 
     /** This method will be called when a new directory has been
         created and needs to be overwritten by derived classes.
@@ -1693,7 +1693,7 @@ public:
         @see close()
     */
 
-    inline sal_Bool isOpen() { return _pData != NULL; };
+    inline sal_Bool isOpen() { return _pData != NULL; }
 
     /** Close a directory.
 
