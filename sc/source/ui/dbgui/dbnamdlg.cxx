@@ -601,7 +601,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, NameModifyHdl)
 
     if ( theName.isEmpty() )
     {
-        if ( aBtnAdd.GetText() != OUString(aStrAdd) )
+        if (aBtnAdd.GetText() != aStrAdd)
             aBtnAdd.SetText( aStrAdd );
         aBtnAdd     .Disable();
         aBtnRemove  .Disable();
@@ -624,7 +624,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, NameModifyHdl)
     {
         if ( bNameFound )
         {
-            if ( aBtnAdd.GetText() != OUString(aStrModify) )
+            if (aBtnAdd.GetText() != aStrModify)
                 aBtnAdd.SetText( aStrModify );
 
             if(!bSaved)
@@ -636,7 +636,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, NameModifyHdl)
         }
         else
         {
-            if ( aBtnAdd.GetText() != OUString(aStrAdd) )
+            if (aBtnAdd.GetText() != aStrAdd)
                 aBtnAdd.SetText( aStrAdd );
 
             bSaved=false;

@@ -97,7 +97,7 @@ sal_Bool SdParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
 {
     if(maNewStartCB.GetState() != maNewStartCB.GetSavedValue() ||
         maNewStartNumberCB.GetState() != maNewStartNumberCB.GetSavedValue()||
-       maNewStartNF.GetText() != OUString(maNewStartNF.GetSavedValue()))
+       maNewStartNF.GetText() != maNewStartNF.GetSavedValue())
     {
         mbModified = true;
         sal_Bool bNewStartChecked = STATE_CHECK == maNewStartCB.GetState();

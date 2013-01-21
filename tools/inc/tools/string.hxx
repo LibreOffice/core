@@ -333,6 +333,28 @@ struct ToStringHelper< UniString >
 
 #endif
 
+// some compare operators, so that conversions from String to OUString don't
+// have to insert conversions all over the place
+inline bool operator==(UniString const& rLeft, ::rtl::OUString const& rRight)
+{
+    return ::rtl::OUString(rLeft) == rRight;
+}
+
+inline bool operator==(::rtl::OUString const& rLeft, UniString const& rRight)
+{
+    return rLeft == ::rtl::OUString(rRight);
+}
+
+inline bool operator!=(UniString const& rLeft, ::rtl::OUString const& rRight)
+{
+    return ::rtl::OUString(rLeft) != rRight;
+}
+
+inline bool operator!=(::rtl::OUString const& rLeft, UniString const& rRight)
+{
+    return rLeft != ::rtl::OUString(rRight);
+}
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
