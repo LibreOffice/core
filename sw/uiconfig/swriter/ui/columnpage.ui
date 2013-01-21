@@ -236,7 +236,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="swuilo:SwColExample" id="pageexample">
+              <object class="swlo:SwColExample" id="pageexample">
                 <property name="visible">True</property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>
@@ -249,7 +249,7 @@
               </packing>
             </child>
             <child>
-              <object class="swuilo:SwColumnOnlyExample" id="frameexample">
+              <object class="swlo:SwColumnOnlyExample" id="frameexample">
                 <property name="visible">True</property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>
