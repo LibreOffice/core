@@ -29,7 +29,7 @@ rtl::OUString CFStringToOUString(const CFStringRef sOrig) {
 
     CFRetain(sOrig);
     CFIndex nFileNameLength = CFStringGetLength(sOrig);
-    //OSL_TRACE("FH: string length: %d", (int)(nFileNameLength));
+    //SAL_INFO("fpicker","FH: string length: " << (int)(nFileNameLength));
     UniChar unichars[nFileNameLength+1];
     //'close' the string buffer correctly
     unichars[nFileNameLength] = '\0';
@@ -78,13 +78,13 @@ rtl::OUString CFURLRefToOUString(CFURLRef aUrlRef, InfoType info)
 
     switch(info) {
         case FULLPATH:
-            OSL_TRACE("Extracting the full path of an item");
+            SAL_INFO("fpicker","Extracting the full path of an item");
             sURLString = CFURLGetString(aUrlRef);
             CFRetain(sURLString);
             break;
         case FILENAME:
             {
-                OSL_TRACE("Extracting the file name of an item");
+                SAL_INFO("fpicker","Extracting the file name of an item");
                 CFStringRef fullString = CFURLGetString(aUrlRef);
                 CFURLRef dirRef = CFURLCreateCopyDeletingLastPathComponent(NULL,aUrlRef);
                 CFIndex dirLength = CFStringGetLength(CFURLGetString(dirRef));
@@ -96,7 +96,7 @@ rtl::OUString CFURLRefToOUString(CFURLRef aUrlRef, InfoType info)
             break;
         case PATHWITHOUTLASTCOMPONENT:
             {
-                OSL_TRACE("Extracting the last but one component of an item's path");
+                SAL_INFO("fpicker","Extracting the last but one component of an item's path");
                 CFURLRef directoryRef = CFURLCreateCopyDeletingLastPathComponent(NULL,aUrlRef);
                 sURLString = CFURLGetString(directoryRef);
                 CFRetain(sURLString);
