@@ -108,9 +108,7 @@ sal_uIntPtr FileStat::SetReadOnlyFlag( const DirEntry &rEntry, sal_Bool bRO )
     mode_t nMode;
     if (bRO)
     {
-        nMode = aBuf.st_mode & ~S_IWUSR;
-        nMode = aBuf.st_mode & ~S_IWGRP;
-        nMode = aBuf.st_mode & ~S_IWOTH;
+        nMode = aBuf.st_mode & ~(S_IWUSR | S_IWGRP | S_IWOTH);
     }
     else
         nMode = aBuf.st_mode | S_IWUSR;
