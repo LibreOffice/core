@@ -1510,6 +1510,55 @@ void VclBuilder::handleListStore(xmlreader::XmlReader &reader, const OString &rI
     }
 }
 
+void VclBuilder::handleAtkObject(xmlreader::XmlReader &reader, const OString &rID, Window *pWindow)
+{
+    assert(pWindow);
+
+    int nLevel = 1;
+
+    stringmap aProperties;
+
+    while(1)
+    {
+        xmlreader::Span name;
+        int nsId;
+
+        xmlreader::XmlReader::Result res = reader.nextItem(
+            xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+
+        if (res == xmlreader::XmlReader::RESULT_DONE)
+            break;
+
+        if (res == xmlreader::XmlReader::RESULT_BEGIN)
+        {
+            ++nLevel;
+            if (name.equals(RTL_CONSTASCII_STRINGPARAM("property")))
+                collectProperty(reader, rID, aProperties);
+        }
+
+        if (res == xmlreader::XmlReader::RESULT_END)
+        {
+            --nLevel;
+        }
+
+        if (!nLevel)
+            break;
+    }
+
+    for (stringmap::iterator aI = aProperties.begin(), aEnd = aProperties.end(); aI != aEnd; ++aI)
+    {
+        const OString &rKey = aI->first;
+        const OString &rValue = aI->second;
+
+        if (rKey.match("AtkObject::"))
+            pWindow->set_property(rKey.copy(RTL_CONSTASCII_LENGTH("AtkObject::")), rValue);
+        else
+            SAL_WARN("vcl.layout", "unhandled atk prop: " << rKey.getStr());
+
+        fprintf(stderr, "setting atk props on %p\n", pWindow);
+    }
+}
+
 std::vector<OString> VclBuilder::handleItems(xmlreader::XmlReader &reader, const OString &rID)
 {
     int nLevel = 1;
@@ -1900,6 +1949,11 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
     else if (sClass == "GtkSizeGroup")
     {
         handleSizeGroup(reader, sID);
+        return NULL;
+    }
+    else if (sClass == "AtkObject")
+    {
+        handleAtkObject(reader, sID, pParent);
         return NULL;
     }
 

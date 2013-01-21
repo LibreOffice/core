@@ -1968,6 +1968,14 @@ bool Window::set_property(const OString &rKey, const OString &rValue)
             nBits |= WB_AUTOVSCROLL;
         SetStyle(nBits);
     }
+    else if (rKey == "accessible-name")
+    {
+        SetAccessibleName(OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
+    }
+    else if (rKey == "accessible-description")
+    {
+        SetAccessibleDescription(OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
+    }
     else if (rKey == "use-markup")
     {
         //https://live.gnome.org/GnomeGoals/RemoveMarkupInMessages

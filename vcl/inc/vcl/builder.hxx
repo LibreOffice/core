@@ -283,6 +283,8 @@ private:
 
     void handleSizeGroup(xmlreader::XmlReader &reader, const OString &rID);
 
+    void handleAtkObject(xmlreader::XmlReader &reader, const OString &rID, Window *pWindow);
+
     PackingData get_window_packing_data(const Window *pWindow) const;
     void set_window_packing_position(const Window *pWindow, sal_Int32 nPosition);
 
