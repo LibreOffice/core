@@ -26,7 +26,7 @@
 #include <postmac.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
-#include <osl/diagnose.h>
+#include "sal/log.hxx"
 
 enum InfoType {
     FULLPATH,
@@ -43,71 +43,71 @@ CFStringRef CFStringCreateWithOUString(const OUString& aString);
 #define PARAMFILLER "\n                    "
 
 inline void DBG_PRINT_ENTRY() {
-    OSL_TRACE(">>> %s", __func__);
+    SAL_INFO("fpicker",">>> "<< __func__);
 }
 
 inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname) {
-    OSL_TRACE(">>> %s::%s", classname, methodname);
+    SAL_INFO("fpicker",">>> " << classname << "::" << methodname);
 }
 
 inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, const char* param1, const char* value1) {
-    OSL_TRACE(">>> %s::%s%s%s = %s", classname, methodname, PARAMFILLER, param1, value1);
+    SAL_INFO("fpicker",">>> " << classname << "::" << methodname << PARAMFILLER << param1 << " = " << value1);
 }
 
 inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, const char* param1, const OUString& value1) {
-    OSL_TRACE(">>> %s::%s%s%s = %s", classname, methodname, PARAMFILLER, param1, OUStringToOString(value1, RTL_TEXTENCODING_UTF8).getStr());
+    SAL_INFO("fpicker",">>> " << classname << "::" << methodname << PARAMFILLER << param1 << " = " << OUStringToOString(value1, RTL_TEXTENCODING_UTF8).getStr());
 }
 
 #if OSL_DEBUG_LEVEL > 1
 inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, const char* param1, const CFStringRef value1)
 {
-    OSL_TRACE(">>> %s::%s%s%s =", classname, methodname, PARAMFILLER, param1);
+    SAL_INFO("fpicker",">>> " << classname << "::" << methodname<< PARAMFILLER << param1 <<" =");
     CFShow(value1);
 
 }
 #else
 inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, const char* param1, const CFStringRef /* value1 */)
 {
-    OSL_TRACE(">>> %s::%s%s%s =", classname, methodname, PARAMFILLER, param1);
+    SAL_INFO("fpicker",">>> " << classname << "::" << methodname << PARAMFILLER << param1 << " =");
 }
 #endif
 
 #if OSL_DEBUG_LEVEL > 1
 inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, const char* param1, const NSString* value1)
 {
-    OSL_TRACE(">>> %s::%s%s%s =", classname, methodname, PARAMFILLER, param1);
+    SAL_INFO("fpicker",">>> " << classname << "::" << methodname << PARAMFILLER << param1 << " =");
     NSLog(value1);
 }
 #else
 inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, const char* param1, const NSString* /* value1 */)
 {
-    OSL_TRACE(">>> %s::%s%s%s =", classname, methodname, PARAMFILLER, param1);
+    SAL_INFO("fpicker",">>> " << classname << "::" << methodname << PARAMFILLER << param1 << " =");
 }
 #endif
 
 inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, const char* param1, const int value1) {
-    OSL_TRACE(">>> %s::%s%s%s = %d", classname, methodname, PARAMFILLER, param1, value1);
+    SAL_INFO("fpicker",">>> " << classname << "::" << methodname << PARAMFILLER << param1 << " = " << value1);
 }
 
 inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, const char* param1, const char* value1, const char* param2, const int value2) {
-    OSL_TRACE(">>> %s::%s%s%s = %s%s%s = %d", classname, methodname, PARAMFILLER, param1, value1, PARAMFILLER, param2, value2);
+    SAL_INFO("fpicker",">>> " << classname << "::" << methodname << PARAMFILLER << param1 <<" = " << value1 << PARAMFILLER << param2 << " = " << value2);
 }
 
 inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, const char* param1, const char* value1, const char* param2, const char* value2) {
-    OSL_TRACE(">>> %s::%s%s%s = %s%s%s = %s", classname, methodname, PARAMFILLER, param1, value1, PARAMFILLER, param2, value2);
+    SAL_INFO("fpicker",">>> " << classname << "::" << methodname << PARAMFILLER << param1 << " = " << value1 << PARAMFILLER << param2 << " = " << value2);
 }
 
 inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, const char* param1, const int value1, const char* param2, const int value2) {
-    OSL_TRACE(">>> %s::%s%s%s = %d%s%s = %d", classname, methodname, PARAMFILLER, param1, value1, PARAMFILLER, param2, value2);
+    SAL_INFO("fpicker",">>> " << classname << "::" << methodname << PARAMFILLER << param1 << " = " << value1 << PARAMFILLER << param2 << " = " << value2);
 }
 
 inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, const char* param1, const int value1, const char* param2, const char* value2) {
-    OSL_TRACE(">>> %s::%s%s%s = %d%s%s = %s", classname, methodname, PARAMFILLER, param1, value1, PARAMFILLER, param2, value2);
+    SAL_INFO("fpicker",">>> " << classname << "::" << methodname << PARAMFILLER << param1 << " = " << value1 << PARAMFILLER << param2 << " = " << value2);
 }
 
 inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, const char* param1, const int value1, const char* param2, const CFStringRef value2)
 {
-    OSL_TRACE(">>> %s::%s%s%s = %d%s%s =", classname, methodname, PARAMFILLER, param1, value1, PARAMFILLER, param2, value2);
+    SAL_INFO("fpicker",">>> " << classname << "::" << methodname << PARAMFILLER << param1 << " = " << value1 << PARAMFILLER << param2 << " =" << value2);
 #if OSL_DEBUG_LEVEL > 1
     CFShow(value2);
 #endif
@@ -115,7 +115,7 @@ inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, con
 
 inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, const char* param1, const int value1, const char* param2, const NSString* value2)
 {
-    OSL_TRACE(">>> %s::%s%s%s = %d%s%s =", classname, methodname, PARAMFILLER, param1, value1, PARAMFILLER, param2, value2);
+    SAL_INFO("fpicker",">>> " << classname << "::" << methodname << PARAMFILLER << param1 << " = " << value1 << PARAMFILLER << param2 << " =" << value2);
 #if OSL_DEBUG_LEVEL > 1
     NSLog(value2);
 #endif
@@ -123,59 +123,59 @@ inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, con
 
 
 inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, const char* param1, const OUString& value1, const char* param2, const OUString& value2) {
-    OSL_TRACE(">>> %s::%s%s%s = %s%s%s = %s", classname, methodname, PARAMFILLER, param1, OUStringToOString(value1, RTL_TEXTENCODING_UTF8).getStr(), PARAMFILLER, param2, OUStringToOString(value2, RTL_TEXTENCODING_UTF8).getStr());
+    SAL_INFO("fpicker",">>> " << classname << "::" << methodname <<  PARAMFILLER << param1 << " = " << OUStringToOString(value1, RTL_TEXTENCODING_UTF8).getStr() << PARAMFILLER << param2 << " = " << OUStringToOString(value2, RTL_TEXTENCODING_UTF8).getStr());
 }
 
 inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, const char* param1, const OUString& value1, const char* param2, const int value2) {
-    OSL_TRACE(">>> %s::%s%s%s = %s%s%s = %d", classname, methodname, PARAMFILLER, param1, OUStringToOString(value1, RTL_TEXTENCODING_UTF8).getStr(), PARAMFILLER, param2, value2);
+    SAL_INFO("fpicker",">>> " << classname << "::" << methodname << PARAMFILLER << param1 << " = " << OUStringToOString(value1, RTL_TEXTENCODING_UTF8).getStr() << PARAMFILLER << param2 <<" = " << value2);
 }
 
 //exit method debugs
 
 inline void DBG_PRINT_EXIT() {
-    OSL_TRACE("<<< %s", __func__);
+    SAL_INFO("fpicker","<<< " << __func__);
 }
 
 inline void DBG_PRINT_EXIT(const char * classname, const char * methodname) {
-    OSL_TRACE("<<< %s::%s", classname, methodname);
+    SAL_INFO("fpicker","<<< " << classname << "::" << methodname);
 }
 
 inline void DBG_PRINT_EXIT(const char * classname, const char * methodname, const char* retVal) {
-    OSL_TRACE("<<< %s::%s%sreturnValue = %s", classname, methodname, PARAMFILLER, retVal);
+    SAL_INFO("fpicker","<<< " << classname << "::" << methodname << PARAMFILLER << "returnValue = " << retVal);
 }
 
 inline void DBG_PRINT_EXIT(const char * classname, const char * methodname, int retVal) {
-    OSL_TRACE("<<< %s::%s%sreturnValue = %d", classname, methodname, PARAMFILLER, retVal);
+    SAL_INFO("fpicker","<<< " << classname << "::" << methodname << PARAMFILLER << "returnValue = " << retVal);
 }
 
 #if OSL_DEBUG_LEVEL > 1
 inline void DBG_PRINT_EXIT(const char * classname, const char * methodname, const CFStringRef retVal)
 {
-    OSL_TRACE("<<< %s::%s%sreturnValue = ", classname, methodname, PARAMFILLER);
+    SAL_INFO("fpicker","<<< " << classname << "::" << methodname << PARAMFILLER << "returnValue = ");
     CFShow(retVal);
 }
 #else
 inline void DBG_PRINT_EXIT(const char * classname, const char * methodname, const CFStringRef /* retVal */)
 {
-    OSL_TRACE("<<< %s::%s%sreturnValue = ", classname, methodname, PARAMFILLER);
+    SAL_INFO("fpicker","<<< " << classname << "::" << methodname << PARAMFILLER << "returnValue = ");
 }
 #endif
 
 #if OSL_DEBUG_LEVEL > 1
 inline void DBG_PRINT_EXIT(const char * classname, const char * methodname, const NSString* retVal)
 {
-    OSL_TRACE("<<< %s::%s%sreturnValue = ", classname, methodname, PARAMFILLER);
+    SAL_INFO("fpicker","<<< " << classname << "::" << methodname << PARAMFILLER << "returnValue = ");
     NSLog(retVal);
 }
 #else
 inline void DBG_PRINT_EXIT(const char * classname, const char * methodname, const NSString* /* retVal */ )
 {
-    OSL_TRACE("<<< %s::%s%sreturnValue = ", classname, methodname, PARAMFILLER);
+    SAL_INFO("fpicker","<<< " << classname << "::" << methodname << PARAMFILLER << "returnValue = ");
 }
 #endif
 
 inline void DBG_PRINT_EXIT(const char * classname, const char * methodname, const OUString& retVal) {
-    OSL_TRACE("<<< %s::%s%sreturnValue = %s", classname, methodname, PARAMFILLER, OUStringToOString(retVal, RTL_TEXTENCODING_UTF8).getStr());
+    OSL_TRACE("<<< " << classname << "::" << methodname << PARAMFILLER << "returnValue = " << OUStringToOString(retVal, RTL_TEXTENCODING_UTF8).getStr());
 }
 
 #endif //_CFSTRINGUTILITIES_HXX_

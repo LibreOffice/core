@@ -26,6 +26,7 @@
 #include "CFStringUtilities.hxx"
 #include "resourceprovider.hxx"
 #include "NSString_OOoAdditions.hxx"
+#include "sal/log.hxx"
 
 #include "ControlHelper.hxx"
 
@@ -163,7 +164,7 @@ void ControlHelper::enableControl( const sal_Int16 nControlId, const sal_Bool bE
     SolarMutexGuard aGuard;
 
     if (nControlId == ExtendedFilePickerElementIds::CHECKBOX_PREVIEW) {
-        OSL_TRACE(" preview checkbox cannot be changed");
+        SAL_INFO("fpicker"," preview checkbox cannot be changed");
         DBG_PRINT_EXIT(CLASS_NAME, __func__);
         return;
     }
@@ -172,13 +173,13 @@ void ControlHelper::enableControl( const sal_Int16 nControlId, const sal_Bool bE
 
     if( pControl != nil ) {
         if( bEnable ) {
-            OSL_TRACE( "enable" );
+            SAL_INFO("fpicker", "enable" );
         } else {
-            OSL_TRACE( "disable" );
+            SAL_INFO("fpicker", "disable" );
         }
         [pControl setEnabled:bEnable];
     } else {
-        OSL_TRACE("enable unknown control %d", nControlId );
+        SAL_INFO("fpicker","enable unknown control " << nControlId );
     }
 
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
@@ -193,7 +194,7 @@ OUString ControlHelper::getLabel( sal_Int16 nControlId )
     NSControl* pControl = getControl( nControlId );
 
     if( pControl == nil ) {
-        OSL_TRACE("Get label for unknown control %d", nControlId);
+        SAL_INFO("fpicker","Get label for unknown control " << nControlId);
         return OUString();
     }
 
@@ -235,7 +236,7 @@ void ControlHelper::setLabel( sal_Int16 nControlId, NSString* aLabel )
             [[pControl cell] setTitle:aLabel];
         }
     } else {
-        OSL_TRACE("Control not found to set label for");
+        SAL_INFO("fpicker","Control not found to set label for");
     }
 
     layoutControls();
@@ -252,25 +253,24 @@ void ControlHelper::setValue( sal_Int16 nControlId, sal_Int16 nControlAction, co
     SolarMutexGuard aGuard;
 
     if (nControlId == ExtendedFilePickerElementIds::CHECKBOX_PREVIEW) {
-        OSL_TRACE(" value for preview is unchangeable");
+        SAL_INFO("fpicker"," value for preview is unchangeable");
     }
     else {
         NSControl* pControl = getControl( nControlId );
 
         if( pControl == nil ) {
-            OSL_TRACE("enable unknown control %d", nControlId);
+            SAL_INFO("fpicker","enable unknown control " << nControlId);
         } else {
             if( [pControl class] == [NSPopUpButton class] ) {
                 HandleSetListValue(pControl, nControlAction, rValue);
             } else if( [pControl class] == [NSButton class] ) {
                 sal_Bool bChecked = false;
                 rValue >>= bChecked;
-                OSL_TRACE(" value is a bool: %d", bChecked);
+                SAL_INFO("fpicker"," value is a bool: " << bChecked);
                 [(NSButton*)pControl setState:(bChecked ? NSOnState : NSOffState)];
             } else
             {
-                OSL_TRACE("Can't set value on button / list %d %d",
-                          nControlId, nControlAction);
+                SAL_INFO("fpicker","Can't set value on button / list " << nControlId << " " << nControlAction);
             }
         }
     }
@@ -288,7 +288,7 @@ uno::Any ControlHelper::getValue( sal_Int16 nControlId, sal_Int16 nControlAction
     NSControl* pControl = getControl( nControlId );
 
     if( pControl == nil ) {
-        OSL_TRACE("get value for unknown control %d", nControlId);
+        SAL_INFO("fpicker","get value for unknown control " << nControlId);
         aRetval <<= sal_True;
     } else {
         if( [pControl class] == [NSPopUpButton class] ) {
@@ -297,7 +297,7 @@ uno::Any ControlHelper::getValue( sal_Int16 nControlId, sal_Int16 nControlAction
             //NSLog(@"control: %@", [[pControl cell] title]);
             sal_Bool bValue = [(NSButton*)pControl state] == NSOnState ? sal_True : sal_False;
             aRetval <<= bValue;
-            OSL_TRACE("value is a bool (checkbox): %d", bValue);
+            SAL_INFO("fpicker","value is a bool (checkbox): " << bValue);
         }
     }
 
@@ -311,13 +311,13 @@ void ControlHelper::createUserPane()
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
     if (m_bUserPaneNeeded == false) {
-        OSL_TRACE("no user pane needed");
+        SAL_INFO("fpicker","no user pane needed");
         DBG_PRINT_EXIT(CLASS_NAME, __func__);
         return;
     }
 
     if (nil != m_pUserPane) {
-        OSL_TRACE("user pane already exists");
+        SAL_INFO("fpicker","user pane already exists");
         DBG_PRINT_EXIT(CLASS_NAME, __func__);
         return;
     }
@@ -340,7 +340,7 @@ void ControlHelper::createUserPane()
     int nPopupLabelMaxWidth = 0;
 
     for (::std::list<NSControl*>::iterator child = m_aActiveControls.begin(); child != m_aActiveControls.end(); child++) {
-        OSL_TRACE("currentHeight: %d", currentHeight);
+        SAL_INFO("fpicker","currentHeight: " << currentHeight);
 
         NSControl* pControl = *child;
 
@@ -348,7 +348,7 @@ void ControlHelper::createUserPane()
         [pControl sizeToFit];
 
         NSRect frame = [pControl frame];
-        OSL_TRACE("frame for control %s is {%f, %f, %f, %f}", [[pControl description] UTF8String], frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
+        SAL_INFO("fpicker","frame for control " << [[pControl description] UTF8String] << " is {" << frame.origin.x << ", " << frame.origin.y << ", " << frame.size.width << ", " << frame.size.height << "}");
 
         int nControlHeight = frame.size.height;
         int nControlWidth = frame.size.width;
@@ -374,7 +374,7 @@ void ControlHelper::createUserPane()
             [m_pUserPane addSubview:textField];
 
             NSRect tfRect = [textField frame];
-            OSL_TRACE("frame for textfield %s is {%f, %f, %f, %f}", [[textField description] UTF8String], tfRect.origin.x, tfRect.origin.y, tfRect.size.width, tfRect.size.height);
+            SAL_INFO("fpicker","frame for textfield " << [[textField description] UTF8String] << " is {" << tfRect.origin.x << ", " << tfRect.origin.y << ", " << tfRect.size.width << ", " << tfRect.size.height << "}");
 
             int tfWidth = tfRect.size.width;
 
@@ -432,20 +432,20 @@ void ControlHelper::createUserPane()
         [m_pUserPane addSubview:pControl];
     }
 
-    OSL_TRACE("height after adding all controls: %d", currentHeight);
+    SAL_INFO("fpicker","height after adding all controls: " << currentHeight);
 
     if (bPopupControlPresent && bButtonControlPresent)
     {
         //after a popup button (array) and before a different kind of control we need some extra space instead of the standard
         currentHeight -= kAquaSpaceBetweenControls;
         currentHeight += kAquaSpaceAfterPopupButtonsV;
-        OSL_TRACE("popup extra space added, currentHeight: %d", currentHeight);
+        SAL_INFO("fpicker","popup extra space added, currentHeight: " << currentHeight);
     }
 
     int nLongestPopupWidth = nPopupMaxWidth + nPopupLabelMaxWidth + kAquaSpaceBetweenControls - kAquaSpacePopupMenuFrameBoundsDiffLeft - kAquaSpaceLabelFrameBoundsDiffH;
 
     currentWidth = nLongestPopupWidth > nCheckboxMaxWidth ? nLongestPopupWidth : nCheckboxMaxWidth;
-    OSL_TRACE("longest control width: %d", currentWidth);
+    SAL_INFO("fpicker","longest control width: " << currentWidth);
 
     currentWidth += 2* kAquaSpaceInsideGroupH;
 
@@ -456,7 +456,7 @@ void ControlHelper::createUserPane()
         currentHeight = minRect.size.height;
 
     NSRect upRect = NSMakeRect(0, 0, currentWidth, currentHeight );
-    OSL_TRACE("setting user pane rect to {%f, %f, %f, %f}",upRect.origin.x, upRect.origin.y, upRect.size.width, upRect.size.height);
+    SAL_INFO("fpicker","setting user pane rect to {" << upRect.origin.x << ", " << upRect.origin.y << ", " << upRect.size.width << ", " << upRect.size.height << "}");
 
     [m_pUserPane setFrame:upRect];
 
@@ -584,7 +584,7 @@ void ControlHelper::HandleSetListValue(const NSControl* pControl, const sal_Int1
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "controlAction", nControlAction);
 
     if ([pControl class] != [NSPopUpButton class]) {
-        OSL_TRACE("not a popup menu");
+        SAL_INFO("fpicker","not a popup menu");
         DBG_PRINT_EXIT(CLASS_NAME, __func__);
         return;
     }
@@ -592,7 +592,7 @@ void ControlHelper::HandleSetListValue(const NSControl* pControl, const sal_Int1
     NSPopUpButton *pButton = (NSPopUpButton*)pControl;
     NSMenu *rMenu = [pButton menu];
     if (nil == rMenu) {
-        OSL_TRACE("button has no menu");
+        SAL_INFO("fpicker","button has no menu");
         DBG_PRINT_EXIT(CLASS_NAME, __func__);
         return;
     }
@@ -601,44 +601,44 @@ void ControlHelper::HandleSetListValue(const NSControl* pControl, const sal_Int1
     {
         case ControlActions::ADD_ITEM:
         {
-            OSL_TRACE("ADD_ITEMS");
+            SAL_INFO("fpicker","ADD_ITEMS");
             OUString sItem;
             rValue >>= sItem;
 
             NSString* sCFItem = [NSString stringWithOUString:sItem];
-            OSL_TRACE("Adding menu item: %s", OUStringToOString(sItem, RTL_TEXTENCODING_UTF8).getStr());
+            SAL_INFO("fpicker","Adding menu item: " << OUStringToOString(sItem, RTL_TEXTENCODING_UTF8).getStr());
             [pButton addItemWithTitle:sCFItem];
         }
             break;
         case ControlActions::ADD_ITEMS:
         {
-            OSL_TRACE("ADD_ITEMS");
+            SAL_INFO("fpicker","ADD_ITEMS");
             uno::Sequence< OUString > aStringList;
             rValue >>= aStringList;
             sal_Int32 nItemCount = aStringList.getLength();
             for (sal_Int32 i = 0; i < nItemCount; ++i)
             {
                 NSString* sCFItem = [NSString stringWithOUString:aStringList[i]];
-                OSL_TRACE("Adding menu item: %s", OUStringToOString(aStringList[i], RTL_TEXTENCODING_UTF8).getStr());
+                SAL_INFO("fpicker","Adding menu item: " << OUStringToOString(aStringList[i], RTL_TEXTENCODING_UTF8).getStr());
                 [pButton addItemWithTitle:sCFItem];
             }
         }
             break;
         case ControlActions::DELETE_ITEM:
         {
-            OSL_TRACE("DELETE_ITEM");
+            SAL_INFO("fpicker","DELETE_ITEM");
             sal_Int32 nPos = -1;
             rValue >>= nPos;
-            OSL_TRACE("Deleting item at position %d", (nPos));
+            SAL_INFO("fpicker","Deleting item at position " << (nPos));
             [rMenu removeItemAtIndex:nPos];
         }
             break;
         case ControlActions::DELETE_ITEMS:
         {
-            OSL_TRACE("DELETE_ITEMS");
+            SAL_INFO("fpicker","DELETE_ITEMS");
             int nItems = [rMenu numberOfItems];
             if (nItems == 0) {
-                OSL_TRACE("no menu items to delete");
+                SAL_INFO("fpicker","no menu items to delete");
                 DBG_PRINT_EXIT(CLASS_NAME, __func__);
                 return;
             }
@@ -651,12 +651,12 @@ void ControlHelper::HandleSetListValue(const NSControl* pControl, const sal_Int1
         {
             sal_Int32 nPos = -1;
             rValue >>= nPos;
-            OSL_TRACE("Selecting item at position %d", nPos);
+            SAL_INFO("fpicker","Selecting item at position " << nPos);
             [pButton selectItemAtIndex:nPos];
         }
             break;
         default:
-            OSL_TRACE("undocumented/unimplemented ControlAction for a list");
+            SAL_INFO("fpicker","undocumented/unimplemented ControlAction for a list");
             break;
     }
 
@@ -673,7 +673,7 @@ uno::Any ControlHelper::HandleGetListValue(const NSControl* pControl, const sal_
     uno::Any aAny;
 
     if ([pControl class] != [NSPopUpButton class]) {
-        OSL_TRACE("not a popup button");
+        SAL_INFO("fpicker","not a popup button");
         DBG_PRINT_EXIT(CLASS_NAME, __func__);
         return aAny;
     }
@@ -681,7 +681,7 @@ uno::Any ControlHelper::HandleGetListValue(const NSControl* pControl, const sal_
     NSPopUpButton *pButton = (NSPopUpButton*)pControl;
     NSMenu *rMenu = [pButton menu];
     if (nil == rMenu) {
-        OSL_TRACE("button has no menu");
+        SAL_INFO("fpicker","button has no menu");
         DBG_PRINT_EXIT(CLASS_NAME, __func__);
         return aAny;
     }
@@ -690,7 +690,7 @@ uno::Any ControlHelper::HandleGetListValue(const NSControl* pControl, const sal_
     {
         case ControlActions::GET_ITEMS:
         {
-            OSL_TRACE("GET_ITEMS");
+            SAL_INFO("fpicker","GET_ITEMS");
             uno::Sequence< OUString > aItemList;
 
             int nItems = [rMenu numberOfItems];
@@ -701,7 +701,7 @@ uno::Any ControlHelper::HandleGetListValue(const NSControl* pControl, const sal_
                 NSString* sCFItem = [pButton itemTitleAtIndex:i];
                 if (nil != sCFItem) {
                     aItemList[i] = [sCFItem OUString];
-                    OSL_TRACE("Return value[%d]: %s", (i - 1), OUStringToOString(aItemList[i - 1], RTL_TEXTENCODING_UTF8).getStr());
+                    SAL_INFO("fpicker","Return value[" << (i - 1) << "]: " << OUStringToOString(aItemList[i - 1], RTL_TEXTENCODING_UTF8).getStr());
                 }
             }
 
@@ -710,25 +710,25 @@ uno::Any ControlHelper::HandleGetListValue(const NSControl* pControl, const sal_
             break;
         case ControlActions::GET_SELECTED_ITEM:
         {
-            OSL_TRACE("GET_SELECTED_ITEM");
+            SAL_INFO("fpicker","GET_SELECTED_ITEM");
             NSString* sCFItem = [pButton titleOfSelectedItem];
             if (nil != sCFItem) {
                 OUString sString = [sCFItem OUString];
-                OSL_TRACE("Return value: %s", OUStringToOString(sString, RTL_TEXTENCODING_UTF8).getStr());
+                SAL_INFO("fpicker","Return value: " << OUStringToOString(sString, RTL_TEXTENCODING_UTF8).getStr());
                 aAny <<= sString;
             }
         }
             break;
         case ControlActions::GET_SELECTED_ITEM_INDEX:
         {
-            OSL_TRACE("GET_SELECTED_ITEM_INDEX");
+            SAL_INFO("fpicker","GET_SELECTED_ITEM_INDEX");
             sal_Int32 nActive = [pButton indexOfSelectedItem];
-            OSL_TRACE("Return value: %d", nActive);
+            SAL_INFO("fpicker","Return value: " << nActive);
             aAny <<= nActive;
         }
             break;
         default:
-            OSL_TRACE("undocumented/unimplemented ControlAction for a list");
+            SAL_INFO("fpicker","undocumented/unimplemented ControlAction for a list");
             break;
     }
 
@@ -782,7 +782,7 @@ case ExtendedFilePickerElementIds::LISTBOX_##elem##_LABEL: \
             MAP_LIST_LABEL( TEMPLATE );
             MAP_LIST_LABEL( IMAGE_TEMPLATE );
         default:
-            OSL_TRACE("Handle unknown control %d", nControlId);
+            SAL_INFO("fpicker","Handle unknown control " << nControlId);
             break;
     }
 #undef MAP
@@ -799,19 +799,19 @@ void ControlHelper::layoutControls()
     SolarMutexGuard aGuard;
 
     if (nil == m_pUserPane) {
-        OSL_TRACE("no user pane to layout");
+        SAL_INFO("fpicker","no user pane to layout");
         DBG_PRINT_EXIT(CLASS_NAME, __func__);
         return;
     }
 
     if (m_bIsUserPaneLaidOut == true) {
-        OSL_TRACE("user pane already laid out");
+        SAL_INFO("fpicker","user pane already laid out");
         DBG_PRINT_EXIT(CLASS_NAME, __func__);
         return;
     }
 
     NSRect userPaneRect = [m_pUserPane frame];
-    OSL_TRACE("userPane frame: {%f, %f, %f, %f}",userPaneRect.origin.x, userPaneRect.origin.y, userPaneRect.size.width, userPaneRect.size.height);
+    SAL_INFO("fpicker","userPane frame: {" << userPaneRect.origin.x << ", " << userPaneRect.origin.y << ", " << userPaneRect.size.width << ", " << userPaneRect.size.height << "}");
 
     int nUsableWidth = userPaneRect.size.width;
 
@@ -848,7 +848,7 @@ void ControlHelper::layoutControls()
     }
 
     int nLongestPopupWidth = nPopupMaxWidth + nPopupLabelMaxWidth + kAquaSpaceBetweenControls - kAquaSpacePopupMenuFrameBoundsDiffLeft - kAquaSpaceLabelFrameBoundsDiffH;
-    OSL_TRACE("longest popup width: %d", nLongestPopupWidth);
+    SAL_INFO("fpicker","longest popup width: " << nLongestPopupWidth);
 
     NSControl* previousControl = nil;
 
@@ -869,7 +869,7 @@ void ControlHelper::layoutControls()
 
         //add space between the previous control and this control according to Apple's HIG
         nDistBetweenControls = getVerticalDistance(previousControl, pControl);
-        OSL_TRACE("vertical distance: %d", nDistBetweenControls);
+        SAL_INFO("fpicker","vertical distance: " << nDistBetweenControls);
         currenttop -= nDistBetweenControls;
 
         previousControl = pControl;
@@ -882,19 +882,19 @@ void ControlHelper::layoutControls()
             NSTextField *label = m_aMapListLabelFields[(NSPopUpButton*)pControl];
             NSRect labelFrame = [label frame];
             int totalWidth = nPopupMaxWidth + labelFrame.size.width + kAquaSpaceBetweenControls - kAquaSpacePopupMenuFrameBoundsDiffLeft - kAquaSpaceLabelFrameBoundsDiffH;
-            OSL_TRACE("totalWidth: %d", totalWidth);
+            SAL_INFO("fpicker","totalWidth: " << totalWidth);
             //let's center popups
             int left = (nUsableWidth + nLongestPopupWidth) / 2 - totalWidth;
-            OSL_TRACE("left: %d", left);
+            SAL_INFO("fpicker","left: " << left);
             labelFrame.origin.x = left;
             labelFrame.origin.y = currenttop + kAquaSpaceLabelPopupDiffV;
-            OSL_TRACE("setting label at: {%f, %f, %f, %f}",labelFrame.origin.x, labelFrame.origin.y, labelFrame.size.width, labelFrame.size.height);
+            SAL_INFO("fpicker","setting label at: {" << labelFrame.origin.x << ", " << labelFrame.origin.y << ", " << labelFrame.size.width << ", " << labelFrame.size.height << "}");
             [label setFrame:labelFrame];
 
             controlRect.origin.x = left + labelFrame.size.width + kAquaSpaceBetweenControls - kAquaSpaceLabelFrameBoundsDiffH - kAquaSpacePopupMenuFrameBoundsDiffLeft;
             controlRect.origin.y = currenttop;
             controlRect.size.width = nPopupMaxWidth;
-            OSL_TRACE("setting popup at: {%f, %f, %f, %f}",controlRect.origin.x, controlRect.origin.y, controlRect.size.width, controlRect.size.height);
+            SAL_INFO("fpicker","setting popup at: {" << controlRect.origin.x << ", " << controlRect.origin.y << ", " << controlRect.size.width << ", " << controlRect.size.height << "}");
             [pControl setFrame:controlRect];
 
             //add some space to place the vertical position right below the popup's visual bounds
@@ -908,7 +908,7 @@ void ControlHelper::layoutControls()
             controlRect.origin.y = currenttop;
             controlRect.size.width = nPopupMaxWidth;
             [pControl setFrame:controlRect];
-            OSL_TRACE("setting checkbox at: {%f, %f, %f, %f}",controlRect.origin.x, controlRect.origin.y, controlRect.size.width, controlRect.size.height);
+            SAL_INFO("fpicker","setting checkbox at: {" << controlRect.origin.x << ", " << controlRect.origin.y << ", " << controlRect.size.width << ", " << controlRect.size.height << "}");
 
             currenttop += kAquaSpaceSwitchButtonFrameBoundsDiff;
         }
@@ -934,7 +934,7 @@ void ControlHelper::createFilterControl() {
 
     for (NSStringList::iterator iter = m_pFilterHelper->getFilterNames()->begin(); iter != m_pFilterHelper->getFilterNames()->end(); iter++) {
         NSString *filterName = *iter;
-        OSL_TRACE("adding filter name: %s", [filterName UTF8String]);
+        SAL_INFO("fpicker","adding filter name: " << [filterName UTF8String]);
         if ([filterName isEqualToString:@"-"]) {
             [menu addItem:[NSMenuItem separatorItem]];
         }
@@ -994,7 +994,7 @@ void ControlHelper::updateFilterUI()
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
     if (m_bIsFilterControlNeeded == false || m_pFilterHelper == NULL) {
-        OSL_TRACE("no filter control needed or no filter helper present");
+        SAL_INFO("fpicker","no filter control needed or no filter helper present");
         DBG_PRINT_EXIT(CLASS_NAME, __func__);
         return;
     }
