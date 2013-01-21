@@ -324,6 +324,8 @@ public:
     SvStream&       operator<<( sal_Int32 nInt32 );
     SvStream&       operator<<( sal_Int64 nInt64 );
 
+    SvStream&       operator<<( bool b )
+    { return operator<<(static_cast< sal_Bool >(b)); }
     SvStream&       operator<<( signed char nChar );
     SvStream&       operator<<( char nChar );
     SvStream&       operator<<( unsigned char nChar );
