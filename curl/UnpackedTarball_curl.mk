@@ -23,6 +23,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,curl,\
 	curl/curl-aix.patch \
 	curl/curl-7.26.0_win.patch \
 	curl/curl-7.26.0_mingw.patch \
+	curl/curl-7.26.0_win-proxy.patch \
 ))
 ifeq ($(OS),ANDROID)
 $(eval $(call gb_UnpackedTarball_add_patches,curl,\
