@@ -22,23 +22,22 @@
  #include "urldata.h"
  #include "netrc.h"
  
-@@ -4111,6 +4115,22 @@ static bool check_noproxy(const char* name, const char* no_proxy)
+@@ -4111,6 +4115,21 @@ static bool check_noproxy(const char* name, const char* no_proxy)
    return FALSE;
  }
  
 +#ifdef WIN32
 +static char* wstrToCstr( LPWSTR wStr )
 +{
-+    int bufSize;
-+    char* out = NULL;
-+    if( wStr != NULL )
-+    {
-+        bufSize = WideCharToMultiByte(
-+            CP_ACP,  0, wStr, -1, NULL, 0, NULL, NULL );
-+        out = ( char* )malloc( bufSize * sizeof(char));
-+        WideCharToMultiByte( CP_ACP, 0, wStr, -1, out, bufSize, NULL, NULL );
-+    }
-+    return out;
++  int bufSize;
++  char* out = NULL;
++  if(wStr != NULL) {
++    bufSize = WideCharToMultiByte(
++      CP_ACP,  0, wStr, -1, NULL, 0, NULL, NULL );
++    out = ( char* )malloc( bufSize * sizeof(char));
++    WideCharToMultiByte( CP_ACP, 0, wStr, -1, out, bufSize, NULL, NULL );
++  }
++  return out;
 +}
 +#endif
 +
